@@ -1,129 +1,446 @@
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBED24E4B4
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 15:08:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779980920; cv=pass; b=M1LgcIY3aJC9apc3SHFvw5ikdeahFkX3J8/8FaSBS7Eh5E7+2qkm0bvANpq/AUlZMTDy5IQOS7Yro5Lw5tXdmoaVRykwSkh1VgUFyoAbzG0Vo71VPpgdRDXqoCXQ+Vwiy7syu16yD4wwgSeIfEUxpW0OZQZX+FVwsLuqHWZq/0k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779980920; c=relaxed/simple;
-	bh=4WZ4iIUPajl4NJp75JywruKIPXJf+O+1EbtTSz98TYI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lZcwKs5hoRyth8Xc71S1SgHtxJGmuUUXzHMMl1n501biyKVlixh1/EnQkPW96GsdNkF8yf8GI2ZnI056vJIPjP1MbWEFju2O9dmlbQ81Rb4ufkGHXqkKCt94c90IHyr0Y4vKYeFlvXXbk6Aess4h8m8e0efCLjmSEx5MPl3sK7s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=waiMAjKM; arc=pass smtp.client-ip=209.85.221.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198CE2877E8;
+	Thu, 28 May 2026 15:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779981450; cv=none; b=WG6bfGPaBEiEDjKtB1SMaYm4P4PfenR1btXUUX7juSuHTuPzSCD4lHL7L95YmDIimW+z6/w0uZyYnXKJjzu95XDvpPfampPEs8JFmnQGz4aXqYzuyNwbHokSrt1mSP59PXtcnnjAfCGMwVMP+/xkAbvjGE6p31COirQLu91vdKM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779981450; c=relaxed/simple;
+	bh=MbMfxPdOEFKdci/ouK/2xsgxbMoCfhZJc4bRTSfLiQA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XhHVwnYrHspeuOoSLGHmLcEdw5E7rhsuNSxonuVbw9CrcEnQbjiddMXJ/ueNB237Qob/r/dT9nAyM2ZsDDYdrRkgxEPWKaocGXjXYOkLCmNj7pYQKtyNbecx8VRIws9eE/tlSqyQbYnbghkY4sdLPsk5hxlmsofTYHsivr0btmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+Lk/Vou; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="waiMAjKM"
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-575124e716fso4517223e0c.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 08:08:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779980910; cv=none;
-        d=google.com; s=arc-20240605;
-        b=d+MrJKy6AtBuKVINolniv5z4L6aaHkOOUaw4Qmesp8uxLWXAp3VwQxk0JPOWefXdt6
-         qUUK4ouJso2b6nlb7A1D0g2s9OyILM6cf1iHTE2dbOdqGqRpBQCBV0p041g1VMUCMz+7
-         ir48UL9nabA+g4wNovfy5VKNc2Y6skbkWaf8No2fJoZvSCaxx8mgus+sbw6sDBVjbrya
-         8Jy9TblVYuIpo6P6BgkTgURekHJre1rf8/x14RLMY6ajPg7ZQv5ZLh4NzdDlzeAP4gI2
-         lFu2JlNUn/f+C8DsNcI46outJ7SGD12rs3ZheEXT2rZev/rkXteekjCM3sfRhcIbZNFE
-         QOdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4WZ4iIUPajl4NJp75JywruKIPXJf+O+1EbtTSz98TYI=;
-        fh=7Dly0BwzTp8xL/sQO63E/p23C+YMYsS7nlIHDyedaeM=;
-        b=QQKJ9KxAfUsRIiUy/2IkPJwsLmr4nn9W7UKY+rFn6LnxY63itRed5aipya7jjnR8Pp
-         hKOSZlmsbdzomPTL+F2qyWgSY2R2rOv4uBlJVass3CZHkOnkrIm1Ln/G1W9p5i7y80tW
-         6YM8Qxwrc9rxmYlkwmBCaXltM1TMUTAwgUYfc2qUsHbZmgZDDnxZRmGck/NqQnMyFM45
-         il8BIqTLwKAaC/3c69K6lETjPU9xnasV7S7n/oFm4vn9P9nYwruEi+54SftVNC2s8n4U
-         rrLnXh0sUgVqvwjvLvPDeIhTi1Q6eEzSm18Iu4SzwCsIZpH49Cw+PwnJBCGgb6en9JJz
-         L33w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779980910; x=1780585710; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4WZ4iIUPajl4NJp75JywruKIPXJf+O+1EbtTSz98TYI=;
-        b=waiMAjKMyMQ/F0gq/JN3nYu8tMGRuRr2b2omRFKXVPVlZOV+k27aBAO3KDzxkW8GlI
-         1X14PJjsWyBR89t95KvIr9gQeWtgfvecUZxFDrsHDnJTSH73ZN8XuMcy47nwygk8vKHA
-         gvxxJn/9DKWCbbdk5dFYw7I/o5azwQtBdbtm8unAgOEon42OYez3fgyN2/aQTpJJk3eM
-         IfO7nD8z9ytSM5z+Dv4FmDdOwekmrwksMGS49DIyC9vJ8496+SNA1QrxRAhrWpL4TNEG
-         1JrqrTw7lZnrWa39U3vXcUW49+WXT4+tUURREVVyvsBW6nSY71TYu/oMkiXWfjDBNtLB
-         19dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779980910; x=1780585710;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4WZ4iIUPajl4NJp75JywruKIPXJf+O+1EbtTSz98TYI=;
-        b=lwwo1nFbFGXTk5OO0px7MiMAqRXDmn2oTuRifLZlwfN09aYsJ+Rwg8XRFifwFysdgF
-         BRW1YoqHWsFSQoYL4xINXD2MKuv3Cj2E2U0BpxU7xORzRCZEYVWGKB/YOc7+j4MRdvuR
-         yFl7MoHVp14ZlUuLffi+QQdhKPRWP7p7smIIYVBQmSIJWNVI69YMZhXAF1d9WSGPldX1
-         zrOv311ODwXvchUX3rhi0xezBStX/0AEngupb1VK8+qZV8rz1o2Uk3+yB9UrnCTTqkLC
-         wdi5edMHJjXqVceJxq8hxisNFpzjbHS22T4X4cUDCl08aRTJaK+rdZ058xuxIHahdZfn
-         cOXw==
-X-Forwarded-Encrypted: i=1; AFNElJ/B71+xxjfVJiefccXbxHRMM7R090hFC9AmSZhmosS2zMmfjXOmbh8BeUURRi0Hefm1bhhn20p/sT+1uDx2Wpo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylsSdSXdLe865w4kqA3Gqx3XezRmN1x48drYplNnUoJYWuZlaW
-	baMEzr7uDJc7ZrgEOdWStmjJDysnOsENFlMrfw+WSvy4s+/++YGyaQaX8HysPwOkxrtCSAgDtkx
-	uj/d6jb+W0k32BaYqnttxGI46HpkBuvMV2HGl8TO/
-X-Gm-Gg: Acq92OFsX6s9Nk58FEhLEWRtLl4vKROBQFcqNmjgLH17J4O/0W5w8+PZyGyuNmEROYc
-	2A8GwNsh43V2tLYg1PD0atIEizdAU+tvq416n4okvDcPdxjvMNK314VdEMavqnDyx6VO9HOdaq8
-	wTQqh8Il62DfVOXAYI/SvX0SmnvdhmipjI1RLA5lhQlpyzDzyXu+QdvYaM+NQlBBgRsBoyiSFGG
-	9u6lAVEbk4rWU510nCwzh8/IPYJ1XNfImAjXWjIrWMzXgk5Wg0HKE42RG7vlVQUH1AyEHOqXpgl
-	YNw6KF4F6AKGjFr1TGowOUgHROzNHeqBHXAIwSSva3pdHbf4wqI+
-X-Received: by 2002:a05:6122:4d89:b0:572:36f3:e792 with SMTP id
- 71dfb90a1353d-5866403bae1mr13660976e0c.14.1779980909356; Thu, 28 May 2026
- 08:08:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+Lk/Vou"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E5A1F000E9;
+	Thu, 28 May 2026 15:17:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779981449;
+	bh=RW3Y2Ha3gqM7/bLJDb0CSWGAyMmc2M3HAzXjApfc9PM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=V+Lk/Vou8B4X4HqKhqT9Yn91rGugeQspM1gum0DLyaS9FC+jMMFAK0skYZwGkeM7o
+	 amjmF8Kthrzdm/5as3ZkZB67RBDtXlXZvC1OWt/Cjop3vKfsoxqnZETvdg5PDb5ZOI
+	 oTvR2Fr6NfSPP0qYY6/w6rtVMxMzH9GgvNySqyurabsrzTqfSh3gvmwa1GJiec1BIx
+	 8rYCJPOcUdXAUS8GXurZDLDOo1pf4ZONuPnAviengmNcbNK4QJQ7nq+pJZTZR+afo9
+	 4okXd+ZSoi/Xp8IFXgSj/HiKLx5W9fCwflA0+w0BrF4ayUFqKKgMGjuI9zDNGyrFDu
+	 5PbwDv7gowrIA==
+Date: Thu, 28 May 2026 16:17:22 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, liam@infradead.org, vbabka@kernel.org, 
+	david@redhat.com, willy@infradead.org, jannh@google.com, paulmck@kernel.org, 
+	pfalcato@suse.de, shuah@kernel.org, hsukrut3@gmail.com, richard.weiyang@gmail.com, 
+	reddybalavignesh9979@gmail.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] fs/proc/task_mmu: read proc/pid/{smaps|numa_maps}
+ under per-vma lock
+Message-ID: <ahhMEBYM9bixF2Lg@lucifer>
+References: <20260426062718.1238437-1-surenb@google.com>
+ <20260426062718.1238437-2-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260515071504.2054786-2-yuyanghuang@google.com>
- <2e08eb1ca27a9a2f8ad29e1c24f779b579621b0a648589f7044799d91c5e00f5@mail.kernel.org>
- <CADXeF1GVtFHNZJb8xwFh6aadR=H19S+kja8rF185XB5=fg0D0Q@mail.gmail.com>
- <CAADnVQ+42+Th6OFGq2KawzvyKUAykazb4fXh2_uqss-T+R8VCg@mail.gmail.com>
- <CADXeF1F=7RcxAsW38w_mpFeKCLxTAh5p_XYHd=x2Ru+oajoN3Q@mail.gmail.com>
- <34b18a3e-50c0-4b0c-8ee6-d7a291619231@linux.dev> <CADXeF1HRe=U7aWx2yx6RFZ_uH-mMbdsxMheofr2tMD9wae46oQ@mail.gmail.com>
- <6083831a-dc6d-42e4-a1c8-8b7f6b966650@linux.dev>
-In-Reply-To: <6083831a-dc6d-42e4-a1c8-8b7f6b966650@linux.dev>
-From: Lorenzo Colitti <lorenzo@google.com>
-Date: Fri, 29 May 2026 00:08:18 +0900
-X-Gm-Features: AVHnY4LmMjMha3LiIe968snQ7eRPeJFvP-knCBaHuX3iqopfu6QUUqbxOHtspnA
-Message-ID: <CAKD1Yr32VMefwq7Bo6_hmhFrDVsttNFwZJZcaXS4P-ACOwWobw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: align syscall writeback behavior with
- caller-declared size
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Yuyang Huang <yuyanghuang@google.com>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	bot+bpf-ci@kernel.org, Alexei Starovoitov <ast@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260426062718.1238437-2-surenb@google.com>
 
-On Thu, May 28, 2026 at 11:37=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
-wrote:
-> To avoid such stack corruption, you should reserve enough space for the
-> query, e.g., by extracting union bpf_attr from kernel BTF vmlinux.
+On Sat, Apr 25, 2026 at 11:27:16PM -0700, Suren Baghdasaryan wrote:
+> proc/pid/{smaps|numa_maps} can be read using the combination of RCU and
+> VMA read locks, similar to proc/pid/maps. RCU is required to safely
+> traverse the VMA tree and VMA lock stabilizes the VMA being processed
+> and the pagetable walk.
+>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Reviewed-by: Liam R. Howlett <liam@infradead.org>
 
-That seems unreasonable. There's already a size in the bpf syscall,
-why can't the kernel respect that?
+The logic LGTM, some nitty things below but in general:
 
-Also, the length of bpf_attr has increased over time as the kernel
-adds more elements. Doesn't that mean that even if the userspace
-program passes a sufficient size, a future kernel could start writing
-more bytes and start overwriting memory? Breaking userspace on kernel
-upgrades should never happen.
+Reviewed-by: Lorenzo Stoakes <ljs@kernel.org>
+
+> ---
+>  fs/proc/task_mmu.c | 195 ++++++++++++++++++++++++++++++++++++---------
+>  1 file changed, 156 insertions(+), 39 deletions(-)
+>
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 751b9ba160fb..1e3a15bf46f4 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -132,6 +132,22 @@ static void release_task_mempolicy(struct proc_maps_private *priv)
+>
+>  #ifdef CONFIG_PER_VMA_LOCK
+>
+> +static inline int lock_ctx_mm(struct proc_maps_locking_ctx *lock_ctx)
+
+NIT: But these inlines are unnecessary in a C file. At the kernel optimisation
+level the compiler already decides whether to inline or not.
+
+However in the kernel we redefine this so we lose function tracing and also we
+don't get warnings about unused functions [0], so this is actually a bit harmful
+- you can end up with dead code and not know abou tit.
+
+Same goes for all the other static inline's in task_mmu.c.
+
+[0]: https://elixir.bootlin.com/linux/v7.0.10/source/include/linux/compiler_types.h#L235
+
+> +{
+> +	int ret = mmap_read_lock_killable(lock_ctx->mm);
+> +
+> +	if (!ret)
+> +		lock_ctx->mmap_locked = true;
+> +
+> +	return ret;
+> +}
+> +
+> +static inline void unlock_ctx_mm(struct proc_maps_locking_ctx *lock_ctx)
+> +{
+> +	mmap_read_unlock(lock_ctx->mm);
+> +	lock_ctx->mmap_locked = false;
+> +}
+> +
+>  static void reset_lock_ctx(struct proc_maps_locking_ctx *lock_ctx)
+>  {
+>  	lock_ctx->locked_vma = NULL;
+> @@ -146,25 +162,11 @@ static void unlock_ctx_vma(struct proc_maps_locking_ctx *lock_ctx)
+>  	}
+>  }
+>
+> -static const struct seq_operations proc_pid_maps_op;
+> -
+>  static inline bool lock_vma_range(struct seq_file *m,
+>  				  struct proc_maps_locking_ctx *lock_ctx)
+>  {
+> -	/*
+> -	 * smaps and numa_maps perform page table walk, therefore require
+> -	 * mmap_lock but maps can be read with locking just the vma and
+> -	 * walking the vma tree under rcu read protection.
+> -	 */
+> -	if (m->op != &proc_pid_maps_op) {
+> -		if (mmap_read_lock_killable(lock_ctx->mm))
+> -			return false;
+> -
+> -		lock_ctx->mmap_locked = true;
+> -	} else {
+> -		rcu_read_lock();
+> -		reset_lock_ctx(lock_ctx);
+> -	}
+> +	rcu_read_lock();
+> +	reset_lock_ctx(lock_ctx);
+>
+>  	return true;
+>  }
+> @@ -172,7 +174,7 @@ static inline bool lock_vma_range(struct seq_file *m,
+>  static inline void unlock_vma_range(struct proc_maps_locking_ctx *lock_ctx)
+>  {
+>  	if (lock_ctx->mmap_locked) {
+> -		mmap_read_unlock(lock_ctx->mm);
+> +		unlock_ctx_mm(lock_ctx);
+>  	} else {
+>  		unlock_ctx_vma(lock_ctx);
+>  		rcu_read_unlock();
+> @@ -213,17 +215,45 @@ static inline bool fallback_to_mmap_lock(struct proc_maps_private *priv,
+>  	return true;
+>  }
+>
+> +static inline void drop_rcu(struct proc_maps_private *priv)
+> +{
+> +	if (priv->lock_ctx.mmap_locked)
+> +		return;
+> +
+> +	rcu_read_unlock();
+> +}
+> +
+> +static inline void reacquire_rcu(struct proc_maps_private *priv)
+> +{
+> +	if (priv->lock_ctx.mmap_locked)
+> +		return;
+> +
+> +	rcu_read_lock();
+> +	/* Reinitialize the iterator. */
+> +	vma_iter_set(&priv->iter, priv->lock_ctx.locked_vma->vm_end);
+
+OK good that we reset this :)
+
+> +}
+> +
+>  #else /* CONFIG_PER_VMA_LOCK */
+>
+
+We need to pull out the patches from Dave's series and remove this option and
+default VMA locks on by default :)
+
+> +static inline int lock_ctx_mm(struct proc_maps_locking_ctx *lock_ctx)
+> +{
+> +	return mmap_read_lock_killable(lock_ctx->mm);
+> +}
+> +
+> +static inline void unlock_ctx_mm(struct proc_maps_locking_ctx *lock_ctx)
+> +{
+> +	mmap_read_unlock(lock_ctx->mm);
+> +}
+> +
+>  static inline bool lock_vma_range(struct seq_file *m,
+>  				  struct proc_maps_locking_ctx *lock_ctx)
+>  {
+> -	return mmap_read_lock_killable(lock_ctx->mm) == 0;
+> +	return lock_ctx_mm(lock_ctx) == 0;
+>  }
+>
+>  static inline void unlock_vma_range(struct proc_maps_locking_ctx *lock_ctx)
+>  {
+> -	mmap_read_unlock(lock_ctx->mm);
+> +	unlock_ctx_mm(lock_ctx);
+>  }
+>
+>  static struct vm_area_struct *get_next_vma(struct proc_maps_private *priv,
+> @@ -238,6 +268,9 @@ static inline bool fallback_to_mmap_lock(struct proc_maps_private *priv,
+>  	return false;
+>  }
+>
+> +static inline void drop_rcu(struct proc_maps_private *priv) {}
+> +static inline void reacquire_rcu(struct proc_maps_private *priv) {}
+> +
+>  #endif /* CONFIG_PER_VMA_LOCK */
+>
+>  static struct vm_area_struct *proc_get_vma(struct seq_file *m, loff_t *ppos)
+> @@ -538,12 +571,10 @@ static int query_vma_setup(struct proc_maps_locking_ctx *lock_ctx)
+>
+>  static void query_vma_teardown(struct proc_maps_locking_ctx *lock_ctx)
+>  {
+> -	if (lock_ctx->mmap_locked) {
+> -		mmap_read_unlock(lock_ctx->mm);
+> -		lock_ctx->mmap_locked = false;
+> -	} else {
+> +	if (lock_ctx->mmap_locked)
+> +		unlock_ctx_mm(lock_ctx);
+> +	else
+>  		unlock_ctx_vma(lock_ctx);
+> -	}
+>  }
+>
+>  static struct vm_area_struct *query_vma_find_by_addr(struct proc_maps_locking_ctx *lock_ctx,
+> @@ -1280,21 +1311,75 @@ static const struct mm_walk_ops smaps_shmem_walk_ops = {
+>  	.walk_lock		= PGWALK_RDLOCK,
+>  };
+>
+> +#ifdef CONFIG_PER_VMA_LOCK
+> +
+> +static const struct mm_walk_ops smaps_walk_vma_lock_ops = {
+> +	.pmd_entry		= smaps_pte_range,
+> +	.hugetlb_entry		= smaps_hugetlb_range,
+> +	.walk_lock		= PGWALK_VMA_RDLOCK_VERIFY,
+> +};
+> +
+> +static const struct mm_walk_ops smaps_shmem_walk_vma_lock_ops = {
+> +	.pmd_entry		= smaps_pte_range,
+> +	.hugetlb_entry		= smaps_hugetlb_range,
+> +	.pte_hole		= smaps_pte_hole,
+> +	.walk_lock		= PGWALK_VMA_RDLOCK_VERIFY,
+> +};
+> +
+> +static inline const struct mm_walk_ops *
+> +get_smaps_walk_ops(struct proc_maps_private *priv)
+> +{
+> +	if (priv->lock_ctx.mmap_locked)
+> +		return &smaps_walk_ops;
+> +	return &smaps_walk_vma_lock_ops;
+> +}
+> +
+> +static inline const struct mm_walk_ops *
+> +get_smaps_shmem_walk_ops(struct proc_maps_private *priv)
+> +{
+> +	if (priv->lock_ctx.mmap_locked)
+> +		return  &smaps_shmem_walk_ops;
+> +	return &smaps_shmem_walk_vma_lock_ops;
+> +}
+> +
+> +#else /* CONFIG_PER_VMA_LOCK */
+> +
+> +static inline const struct mm_walk_ops *
+> +get_smaps_walk_ops(struct proc_maps_private *priv)
+> +{
+> +	return &smaps_walk_ops;
+> +}
+> +
+> +static inline const struct mm_walk_ops *
+> +get_smaps_shmem_walk_ops(struct proc_maps_private *priv)
+> +{
+> +	return &smaps_shmem_walk_ops;
+> +}
+> +
+> +#endif /* CONFIG_PER_VMA_LOCK */
+> +
+>  /*
+>   * Gather mem stats from @vma with the indicated beginning
+>   * address @start, and keep them in @mss.
+>   *
+>   * Use vm_start of @vma as the beginning address if @start is 0.
+>   */
+> -static void smap_gather_stats(struct vm_area_struct *vma,
+> -		struct mem_size_stats *mss, unsigned long start)
+> +static void smap_gather_stats(struct proc_maps_private *priv,
+> +			      struct vm_area_struct *vma,
+> +			      struct mem_size_stats *mss, unsigned long start)
+>  {
+> -	const struct mm_walk_ops *ops = &smaps_walk_ops;
+> +	const struct mm_walk_ops *ops = get_smaps_walk_ops(priv);
+>
+>  	/* Invalid start */
+>  	if (start >= vma->vm_end)
+>  		return;
+>
+> +	if (vma == get_gate_vma(priv->lock_ctx.mm))
+> +		return;
+> +
+> +	/* Might sleep. Drop RCU read lock but keep the VMA locked. */
+> +	drop_rcu(priv);
+> +
+>  	if (vma->vm_file && shmem_mapping(vma->vm_file->f_mapping)) {
+>  		/*
+>  		 * For shared or readonly shmem mappings we know that all
+> @@ -1312,15 +1397,16 @@ static void smap_gather_stats(struct vm_area_struct *vma,
+>  					!(vma->vm_flags & VM_WRITE))) {
+>  			mss->swap += shmem_swapped;
+>  		} else {
+> -			ops = &smaps_shmem_walk_ops;
+> +			ops = get_smaps_shmem_walk_ops(priv);
+>  		}
+>  	}
+>
+> -	/* mmap_lock is held in m_start */
+>  	if (!start)
+>  		walk_page_vma(vma, ops, mss);
+>  	else
+>  		walk_page_range(vma->vm_mm, start, vma->vm_end, ops, mss);
+> +
+> +	reacquire_rcu(priv);
+
+OK I was going to say that this RCU lock dance is a bit iffy, but I see
+that we're sharing code such that this is necessary.
+
+>  }
+>
+>  #define SEQ_PUT_DEC(str, val) \
+> @@ -1369,10 +1455,11 @@ static void __show_smap(struct seq_file *m, const struct mem_size_stats *mss,
+>
+>  static int show_smap(struct seq_file *m, void *v)
+>  {
+> +	struct proc_maps_private *priv = m->private;
+>  	struct vm_area_struct *vma = v;
+>  	struct mem_size_stats mss = {};
+>
+> -	smap_gather_stats(vma, &mss, 0);
+> +	smap_gather_stats(priv, vma, &mss, 0);
+>
+>  	show_map_vma(m, vma);
+>
+> @@ -1413,7 +1500,7 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
+>  		goto out_put_task;
+>  	}
+>
+> -	ret = mmap_read_lock_killable(mm);
+> +	ret = lock_ctx_mm(&priv->lock_ctx);
+>  	if (ret)
+>  		goto out_put_mm;
+>
+> @@ -1425,7 +1512,7 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
+>
+>  	vma_start = vma->vm_start;
+>  	do {
+> -		smap_gather_stats(vma, &mss, 0);
+> +		smap_gather_stats(priv, vma, &mss, 0);
+>  		last_vma_end = vma->vm_end;
+>
+>  		/*
+> @@ -1434,8 +1521,8 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
+>  		 */
+>  		if (mmap_lock_is_contended(mm)) {
+>  			vma_iter_invalidate(&vmi);
+> -			mmap_read_unlock(mm);
+> -			ret = mmap_read_lock_killable(mm);
+> +			unlock_ctx_mm(&priv->lock_ctx);
+> +			ret = lock_ctx_mm(&priv->lock_ctx);
+>  			if (ret) {
+>  				release_task_mempolicy(priv);
+>  				goto out_put_mm;
+> @@ -1484,14 +1571,14 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
+>
+>  			/* Case 1 and 2 above */
+>  			if (vma->vm_start >= last_vma_end) {
+> -				smap_gather_stats(vma, &mss, 0);
+> +				smap_gather_stats(priv, vma, &mss, 0);
+>  				last_vma_end = vma->vm_end;
+>  				continue;
+>  			}
+>
+>  			/* Case 4 above */
+>  			if (vma->vm_end > last_vma_end) {
+> -				smap_gather_stats(vma, &mss, last_vma_end);
+> +				smap_gather_stats(priv, vma, &mss, last_vma_end);
+>  				last_vma_end = vma->vm_end;
+>  			}
+>  		}
+> @@ -1505,7 +1592,7 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
+>  	__show_smap(m, &mss, true);
+>
+>  	release_task_mempolicy(priv);
+> -	mmap_read_unlock(mm);
+> +	unlock_ctx_mm(&priv->lock_ctx);
+>
+>  out_put_mm:
+>  	mmput(mm);
+> @@ -3291,6 +3378,31 @@ static const struct mm_walk_ops show_numa_ops = {
+>  	.walk_lock = PGWALK_RDLOCK,
+>  };
+>
+> +#ifdef CONFIG_PER_VMA_LOCK
+> +static const struct mm_walk_ops show_numa_vma_lock_ops = {
+> +	.hugetlb_entry = gather_hugetlb_stats,
+> +	.pmd_entry = gather_pte_stats,
+> +	.walk_lock = PGWALK_VMA_RDLOCK_VERIFY,
+> +};
+> +
+> +static inline const struct mm_walk_ops *
+> +get_show_numa_ops(struct proc_maps_private *priv)
+> +{
+> +	if (priv->lock_ctx.mmap_locked)
+> +		return &show_numa_ops;
+> +	return &show_numa_vma_lock_ops;
+> +}
+> +
+> +#else /* CONFIG_PER_VMA_LOCK */
+> +
+> +static inline const struct mm_walk_ops *
+> +get_show_numa_ops(struct proc_maps_private *priv)
+> +{
+> +	return &show_numa_ops;
+> +}
+> +
+> +#endif /* CONFIG_PER_VMA_LOCK */
+> +
+>  /*
+>   * Display pages allocated per node and memory policy via /proc.
+>   */
+> @@ -3335,8 +3447,13 @@ static int show_numa_map(struct seq_file *m, void *v)
+>  	if (is_vm_hugetlb_page(vma))
+>  		seq_puts(m, " huge");
+>
+> -	/* mmap_lock is held by m_start */
+> -	walk_page_vma(vma, &show_numa_ops, md);
+> +	/* Skip walking pages if gate VMA */
+> +	if (vma != get_gate_vma(proc_priv->lock_ctx.mm)) {
+> +		/* Might sleep. Drop RCU read lock but keep the VMA locked. */
+> +		drop_rcu(proc_priv);
+> +		walk_page_vma(vma, get_show_numa_ops(proc_priv), md);
+> +		reacquire_rcu(proc_priv);
+> +	}
+>
+>  	if (!md->pages)
+>  		goto out;
+> --
+> 2.54.0.545.g6539524ca2-goog
+>
