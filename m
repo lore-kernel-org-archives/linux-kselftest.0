@@ -1,166 +1,84 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EAAA3EE1C7
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 13:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7BDA3F39CE
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 13:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779974855; cv=none; b=XQcn2TeMN08RGP0UpLzIySOKck9IQbCfxOv7Og6iGmAF4HRMG5bvyE9+LbZB3KzEH105x7s1OG09XoPO6pS9hRhEPLvLyEeucaVwlkZEnMjOo7ogUJoUjfi0wNwNBqVH+Xe6DlrlPif2vNf0yVwasB6syLZpkMPfZd2qm0UfR4I=
+	t=1779974856; cv=none; b=WEQY5TLvxIgLHxWHezlbLygwjmwzlTEPTrPi58EytX8W5jtHk6uPa8cdGeu73/WZoaHXdzjhVpDb5skQKYrJkYB3Nv4wBV9C/t4nLIHXtafsjojzB1mys9Kt/wyoQpljP3V9JnUnbrjzFry3I2FUAcv/qLtfjEY51eTHpT+dUSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779974855; c=relaxed/simple;
-	bh=ErEADfQOwDlWtt6JS5EWWVcHvzZmKepOIS+pG6dpPG4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VzYiPhM46GJI+2iTRcOyPWuPr/9sT/5HOEPKiwi28FRbv60WH8v/3BL8TNsxPMbrRkLrN6NYzLpxXYtqJItqqbulD3VWdV9ntfDW7afQRw6EfgONxH+oIGUiyhUD9yfR0HPf2ptq3EBAQ2jLYQOGNU8iNf07dlRJUmj0B9CGpw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HJkD2tJQ; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1779974856; c=relaxed/simple;
+	bh=RIaFU2XJHtIVIU1Q+1dhMPDocgMYReg2MIrRHb6jNU8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Y2OYuPkUMH6mWzz5wi2ytNzwWe8yESEPSuZO2awy2qo5PqzNjm02MtQi3lWC4MtcI8V6lWk/QITw/D0AzZwodb3CEUJS2RFGmPuT7wHNf2R1TnNdglz+Kv4E+hZ7ul1lg5OS43ORibqHVde1SbddgSOhaemycaZy51CCoL4WH38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=josbuxqj; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HJkD2tJQ"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id A7F8FC62449;
-	Thu, 28 May 2026 13:27:27 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 5D5F460495;
-	Thu, 28 May 2026 13:27:27 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CEA0E10888651;
-	Thu, 28 May 2026 15:27:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1779974846; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=bUCYTw5/XnfGzC1/mlK4v3TBgGjqIbE2kIxY+RaExGo=;
-	b=HJkD2tJQJs1+Na8iUH1RTqRtv55zWLu7gx2GXSuyGU18WvD2LUv9Gfca+RoURgDJ6CDb6J
-	GcUZfDMHarZDzV14TN6Mp/J3ACkLbWILQ2pQyGfB+Jdkyqaw2DNwWIA0mmRAR8JYCnkL6S
-	2RcVnbNxpihfzyAcx1jvRuevd4na82qoZ5FKrv2/8yFTh6rfJwvCPjykO3VfQl6zdxdMz6
-	mvtety8vujMgwqvlKomPJiXaGozqOd3hPOlC2kG2QoGw9GR+GIlQqYMloRhWV3SBf6pRhW
-	jqEUR9SN4QjY+4z67e6tjDjFvgFARc064vupKEae/l+DY0xlfuaSf9GF9RLAmg==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Thu, 28 May 2026 15:27:14 +0200
-Subject: [PATCH bpf-next] selftests/bpf: ignore call depth accounting for
- retbleed in verifier tests
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="josbuxqj"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779974848;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RIaFU2XJHtIVIU1Q+1dhMPDocgMYReg2MIrRHb6jNU8=;
+	b=josbuxqjhdehCdKhRzCAofaZT19xUuNwvPu4XI9pv5Rw6SamLbNKucKkEI4Wb1/H3gyJbI
+	l80ijGXpaziRBx6DZ8+SUi2O0JTyy1IlEV17nK3TwuhmoFskCTLjgEw0Bx8H03v67+m9Mw
+	tjAEe8Oa46o35M9DXOW9m13hw7z1f6c=
+From: George Guo <dongtai.guo@linux.dev>
+To: pratyush@kernel.org
+Cc: chenhuacai@kernel.org,
+	dongtai.guo@linux.dev,
+	graf@amazon.com,
+	guodongtai@kylinos.cn,
+	kernel@xen0n.name,
+	kexec@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	liukexin@kylinos.cn,
+	loongarch@lists.linux.dev,
+	pasha.tatashin@soleen.com,
+	rppt@kernel.org,
+	shuah@kernel.org
+Subject: Re: [PATCH 1/7] LoongArch: Add KHO basic support
+Date: Thu, 28 May 2026 21:26:53 +0800
+Message-Id: <20260528132653.190981-1-dongtai.guo@linux.dev>
+In-Reply-To: <2vxztsrv5r6y.fsf@kernel.org>
+References: <2vxztsrv5r6y.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260528-fix_tests_for_retbleed_stuff-v1-1-c2022a1f3bee@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMUQrCMBCE4auUfTYQU2qjVxEJTTrRiKQlu5VC6
- d2N+vgzw7cRoyQwXZqNCt6J05RrHA8NhceQ71BprE1Gm5PujFUxrU7Awi5OxRWIfwGjY1liVKE
- N9uz71qLXVIm5oP5//JX8HFXGKnT7L7z4J4J8ddr3DyY30keKAAAA
-X-Change-ID: 20260528-fix_tests_for_retbleed_stuff-c3c89b738e70
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Last-TLS-Session-Version: TLSv1.3
+X-Migadu-Flow: FLOW_OUT
 
-When running the selftests on a retbleed-affected platform (eg:
-Skylake), with call depth accounting enabled
-(CONFIG_CALL_DEPTH_TRACKING=y) _and_ with retbleed=stuff, some verifier
-selftests fail to validate the jited instructions. For example:
+On Mon, May 25 2026, Pratyush Yadav wrote:
 
-  MATCHED    SUBSTR: '	endbr64'
-  MATCHED    SUBSTR: '	nopl	(%rax,%rax)'
-  MATCHED    SUBSTR: '	xorq	%rax, %rax'
-  MATCHED    SUBSTR: '	pushq	%rbp'
-  MATCHED    SUBSTR: '	movq	%rsp, %rbp'
-  MATCHED    SUBSTR: '	endbr64'
-  MATCHED    SUBSTR: '	cmpq	$0x21, %rax'
-  MATCHED    SUBSTR: '	ja	L0'
-  MATCHED    SUBSTR: '	pushq	%rax'
-  MATCHED    SUBSTR: '	movq	%rsp, %rax'
-  MATCHED    SUBSTR: '	jmp	L1'
-  MATCHED    SUBSTR: 'L0:	pushq	%rax'
-  MATCHED    SUBSTR: 'L1:	pushq	%rax'
-  MATCHED    SUBSTR: '	movq	-0x10(%rbp), %rax'
-  WRONG LINE  REGEX: '	callq	0x{{.*}}'
+Hi Pratyush,
 
-Those affected selftests allways fail on some call instruction: this
-failure is due to the JIT compiler emitting call depth accounting for
-retbleed mitigation (see x86_call_depth_emit_accounting calls in
-bpf_jit_comp.c), resulting in an additional instruction being inserted
-in front of every call instruction, similar to this one:
+> Do you have nothing else for a bootloader to pass data to the kernel?
+> Passing this via the command line seems crazy... All these addresses are
+> now available directly to unprivileged userspace. Can't you use the
+> device tree like we do on ARM64?
+>
+> Also, this commandline parameter isn't documented anywhere.
 
-  sarq    $0x5, %gs:-0x39882741(%rip)
+I have tried the FDT /chosen approach, storing the KHO metadata as
+linux,kho-fdt and linux,kho-scratch properties (the same properties
+that drivers/of/kexec.c:kho_add_chosen() writes
+and drivers/of/fdt.c:early_init_dt_check_kho() reads).
 
-Fix those selftests by allowing them to ignore this possibly present
-call depth accounting instruction.
+This passes the KHO selftest when the system boots with FDT.
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
- tools/testing/selftests/bpf/progs/verifier_private_stack.c | 5 +++++
- tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c  | 1 +
- 2 files changed, 6 insertions(+)
+I am currently debugging the ACPI boot case.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-index 046f7445a458..bb8206e10880 100644
---- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-@@ -94,6 +94,7 @@ __jited("	addq	%gs:{{.*}}, %r9")
- __jited("	movl	$0x2a, %edi")
- __jited("	movq	%rdi, -0x200(%r9)")
- __jited("	pushq	%r9")
-+__jited("...")
- __jited("	callq	0x{{.*}}")
- __jited("	popq	%r9")
- __jited("	xorl	%eax, %eax")
-@@ -153,11 +154,13 @@ __jited("	endbr64")
- __jited("	movabsq	$0x{{.*}}, %r9")
- __jited("	addq	%gs:{{.*}}, %r9")
- __jited("	pushq	%r9")
-+__jited("...")
- __jited("	callq")
- __jited("	popq	%r9")
- __jited("	movl	$0x2a, %edi")
- __jited("	movq	%rdi, -0x200(%r9)")
- __jited("	pushq	%r9")
-+__jited("...")
- __jited("	callq")
- __jited("	popq	%r9")
- __arch_arm64
-@@ -199,6 +202,7 @@ __description("Private stack, exception in main prog")
- __success __retval(0)
- __arch_x86_64
- __jited("	pushq	%r9")
-+__jited("...")
- __jited("	callq")
- __jited("	popq	%r9")
- __arch_arm64
-@@ -246,6 +250,7 @@ __success __retval(0)
- __arch_x86_64
- __jited("	movq	%rdi, -0x200(%r9)")
- __jited("	pushq	%r9")
-+__jited("...")
- __jited("	callq")
- __jited("	popq	%r9")
- __arch_arm64
-diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-index 8d60c634a114..48fa34d2959f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-@@ -56,6 +56,7 @@ __jited("L1:	pushq	%rax")			/* rbp[-16] = rax         */
-  * (cause original rax might be clobbered by this point)
-  */
- __jited("	movq	-0x10(%rbp), %rax")
-+__jited("...")
- __jited("	callq	0x{{.*}}")		/* call to sub()          */
- __jited("	xorl	%eax, %eax")
- __jited("	leave")
+Thanks for your advice!
 
----
-base-commit: 4a8eaccfdd6f4ae4b0e8735664e9d3e5ce826329
-change-id: 20260528-fix_tests_for_retbleed_stuff-c3c89b738e70
-
-Best regards,
---  
-Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-
+--
+Regards,
+George Guo
