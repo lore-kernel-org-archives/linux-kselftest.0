@@ -1,162 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B584D3F0AA0
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 13:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBE93EDADA
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 13:13:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779973364; cv=none; b=GQF7J6o+dCtTbHiJLfRKH7tT8zuG0mSfo802ih3z3uxPDX7b4qLO0cZwcW6Ui5dM+dITe+yucKpaYUg7VJNRMtgTQvhdWv9MAamtq+432dYRUAL0pXIexhopGwa4DR4wNjO2YzQy6+sLyJdJmj7vK+T+HRZM3y2oHH4ueV0hhdA=
+	t=1779973999; cv=none; b=biP4bVNnzurIqY7ythq9KwtexZC1fiYBZAtmFw/xN8k/Qk19MjGvAVCdnHGXIo3/gPJhHGTKe5xQT8vMZR8iuXwS4V+bb3K246ATz9wHaAz5tVLk5uSZaaQzJNlrg3L7Q5ISEpw+njxd9zX6LHH4/sZyc7leGBAwp4giQ7nTimI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779973364; c=relaxed/simple;
-	bh=JbwTBt83ShZ5kXC4RbuEVOVObJs8mXYf9mXUSPu9q2M=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iCpc/6EKTftlC8JB9YhyXPs0vHdhPRhWHjT8/eYo+27hEiYBvMOcNIcLXPgXEzm7Yl2bKCtGWFCOq3641qeKzcN+N8W05bEEnfatHvVcKAtytmLVBQR1VbuVu3b+xUWgw/S0fPgjzbgiX7HgxhrYoWkZS6fBtLk7XZyM6NUvgCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BxuRmE4p; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779973999; c=relaxed/simple;
+	bh=TZLmQ/KYY1udKoBKGzp70J/oplmxxcPGnNNgRx6uJ8s=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=TrSb9FVIOHl9bCxTgiKvwwEdelLZQc9I6cJXTS1xe25wWqwSP8x8S3hNHM6ZH7VWhjMM3duj125rNfC9HCJ2/KXKBiHiZF1pMnt8py5mYQyA0QJxP3ovAnc1alHCme/7kEUiFnzm9xF+D7FxEeia22ZFsvSXnkXbDVQNANKVx1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SdeiiZeU; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BxuRmE4p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9047F1F0155D
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 13:02:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779973362;
-	bh=9zBMRM7knJbV+B5IyzIOMW8VBuVs+q0LiO/Usw/gaBw=;
-	h=From:In-Reply-To:References:Date:Subject:To:Cc;
-	b=BxuRmE4pOfjvzE4Zz5o9zLilN741qISwWNB9t6fWz4iCJqX3tVV7endadRmESzVtn
-	 1orlfZqkTg1VmQ+Cukq4RmFJfGuHHCF/zIOcDD1uGc69DR8zfGvWPelYvG9qGFXJEW
-	 WKYrtPoU14PzR/MQjGFlmDjng67cXVNYxOho6DdZlZLAxUvVzKPuMY0aY/5Saqj3L4
-	 UAar+++JJdqVTtgmabzmsHSzuPdwnlLOwS4b8V0LEp6XHZwNnhQ5+nmiOdjtlYKuyD
-	 K4IveBukR1Dst/ahOzodRHbjmNTdZDua3wf9PU8EMmD3Q3yCiaA1plrDhSCxLT03WD
-	 y8+yiI8l8+4dA==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5a877510541so13961498e87.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 06:02:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ9oX4aqUu/LA7BQofk459QOY68mPqNTCBs8iSC34zHLZSdi0+CCnAdVFpAcl/e9iCJCkjBNzGWRZMNigU52gSQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yznbr2xoZL3US6OkagsrXKbzVq5cX+gpTzhY3webDJMZ1OkxkUI
-	6lnGvv5+fBLMz88JDBQAIOaMm7ZsAtpKnp9vkLPmYUblhGs5ESVGSaU18KNG6wwijfRjjnwDcXh
-	QDFUTsmXKQWLcqjsJmckNd/Ew5sNIhDUB1jivsoWSkg==
-X-Received: by 2002:a05:6512:61d8:10b0:5a3:ffed:8443 with SMTP id
- 2adb3069b0e04-5aa323bbfd8mr6446301e87.23.1779973361190; Thu, 28 May 2026
- 06:02:41 -0700 (PDT)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 28 May 2026 09:02:40 -0400
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 28 May 2026 09:02:40 -0400
-From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <9a0d0e01-adf8-e111-49a0-580239265dbf@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SdeiiZeU"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c8281d4cef8so6071045a12.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 06:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779973998; x=1780578798; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=C0iI9c87twl9a+8/4I6jTFHT53Suni3Jvj4xWPyZqc8=;
+        b=SdeiiZeUSBKfvBWxEyDLQkTGT8MvwomAWsT8XFQ3dpj1QICxfLFjFHZYkZ7aDWjGcY
+         VCcYtVeqqyVgs2RgEJYc/LWklMhyCnB8FPME7nU8EHVE8tGfvDMZs4fhgnEDylbqXOJU
+         +dLpWV45ec3K3C4cRTO/2o5m4D6AznfZGRIDXVwxJudqD3MHOGPk9mtLOHBTxE/Mert/
+         rgXFs3a7y3xiAPHwTFuj/HMKIIE6UK1r5iYYsE17yIbBxaw531hbQjQTFyHVkMPHORnK
+         9Lwt0qXSRvL9zXlqmfw4Ra3F2fiYVo5wYfGPEXSt3sjwYX5cUP959IIus0nuGlsWm5rJ
+         qpiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779973998; x=1780578798;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C0iI9c87twl9a+8/4I6jTFHT53Suni3Jvj4xWPyZqc8=;
+        b=M8kcB07yy1Y+EM1qBzTKapE/qoz8C/Y97BP+S94hqVzqLwcpEr4tzgdl60/2jZviEz
+         O8UIVVjuLfO4Z5Y3gst1rrMccmbFevP8cUeoj5sAueextcrshHYW9tVm/jssTwEH/pdA
+         NKNrVOftFmGQ8B4HGi4p4Vyvpypb2CWSdc8GF5kDCNivOssdDt5eP1QftEKS8vkVAzWA
+         0lCZxTSJ/iImcxHCnS6P6UbtLI9PiRjOMSyazsYbEBPlh8gQ25Cbvrrvf7/NTnlDkYsT
+         YTFR/hc4YsIFZsdKPnEtA9fiyZJ4sgDVBoNkSvoApjffdxx2qLNVSLjO4vdYaSvJs9Fq
+         CZ4A==
+X-Forwarded-Encrypted: i=1; AFNElJ8/bIB34PNEEC418RScTrCu9t0V8ZuK927ZDNMjcrROgX96TS++jC6NM95RGEoACT1T7Of9VDRC5jI0/W1F6UY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+QRvZvlE5YSDlbgpYuew5VSWPkx9t8VPOoQDZRXVrE5JoY6Hf
+	Xw166ttjnD4iAP6iFY/LnUIZXZ1PPaDzBNA15wAFH/x3V3jOSRIoqqWLNkTw/pXfbzyKnczZxpO
+	aMLshGw==
+X-Received: from pgvt6.prod.google.com ([2002:a65:64c6:0:b0:c7f:cb0a:3b6b])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:a06:b0:3a3:90d8:fd7f
+ with SMTP id adf61e73a8af0-3b328c3af24mr28729183637.8.1779973997582; Thu, 28
+ May 2026 06:13:17 -0700 (PDT)
+Date: Thu, 28 May 2026 06:13:16 -0700
+In-Reply-To: <20260528094542.2529735-1-piotr.zarycki@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260513-swnode-remove-on-dev-unreg-v6-0-f9c58939df27@oss.qualcomm.com>
- <20260513-swnode-remove-on-dev-unreg-v6-2-f9c58939df27@oss.qualcomm.com> <9a0d0e01-adf8-e111-49a0-580239265dbf@linux.intel.com>
-Date: Thu, 28 May 2026 09:02:40 -0400
-X-Gmail-Original-Message-ID: <CAMRc=MfX+f4OVSsE9gnEccWiX2jccomhdJeMMGbVPcyzTi4SZQ@mail.gmail.com>
-X-Gm-Features: AVHnY4JLKSlVBf56eLZQmpAeLQcFReum4FF_eA-wI4Fc7-vVe2WQrN5HmsTNijA
-Message-ID: <CAMRc=MfX+f4OVSsE9gnEccWiX2jccomhdJeMMGbVPcyzTi4SZQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/6] platform/surface: gpe: use platform_device_register_full()
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
-	Rae Moar <raemoar63@gmail.com>, Andy Shevchenko <andy@kernel.org>, 
-	Maximilian Luz <luzmaximilian@gmail.com>, Hans de Goede <hansg@kernel.org>, 
-	Matthew Brost <matthew.brost@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, brgl@kernel.org, driver-core@lists.linux.dev, 
-	LKML <linux-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, platform-driver-x86@vger.kernel.org, 
-	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20260528094542.2529735-1-piotr.zarycki@gmail.com>
+Message-ID: <ahg_bNoktd0XOKV8@google.com>
+Subject: Re: [PATCH] KVM: selftests: hyperv_tlb_flush: use swap() to swap PTEs
+From: Sean Christopherson <seanjc@google.com>
+To: Piotr Zarycki <piotr.zarycki@gmail.com>
+Cc: pbonzini@redhat.com, shuah@kernel.org, dmatlack@google.com, 
+	vkuznets@redhat.com, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu, 28 May 2026 14:35:50 +0200, "Ilpo J=C3=A4rvinen"
-<ilpo.jarvinen@linux.intel.com> said:
-> On Wed, 13 May 2026, Bartosz Golaszewski wrote:
->
->> Creating a software node for a given set of properties and adding it to
->> a platform device can be achieved with a single call to
->> platform_device_register_full(). There's nothing in this driver that
->> suggests using the more fine-grained interfaces was intentional so
->> switch to using the high-level helper.
->>
->> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com=
->
->> ---
->>  drivers/platform/surface/surface_gpe.c | 36 +++++++++++----------------=
--------
->>  1 file changed, 11 insertions(+), 25 deletions(-)
->>
->> diff --git a/drivers/platform/surface/surface_gpe.c b/drivers/platform/s=
-urface/surface_gpe.c
->> index b359413903b13c4f8e8b284ef7ae6f6db3f47d72..b8bb47b0d91f036ee5073d21=
-534f8f26a4d5ed15 100644
->> --- a/drivers/platform/surface/surface_gpe.c
->> +++ b/drivers/platform/surface/surface_gpe.c
->> @@ -290,9 +290,9 @@ static struct platform_device *surface_gpe_device;
->>
->>  static int __init surface_gpe_init(void)
->>  {
->> +	struct platform_device_info pdevinfo;
->>  	const struct dmi_system_id *match;
->>  	struct platform_device *pdev;
->> -	struct fwnode_handle *fwnode;
->>  	int status;
->>
->>  	match =3D dmi_first_match(dmi_lid_device_table);
->> @@ -305,34 +305,20 @@ static int __init surface_gpe_init(void)
->>  	if (status)
->>  		return status;
->>
->> -	fwnode =3D fwnode_create_software_node(match->driver_data, NULL);
->> -	if (IS_ERR(fwnode)) {
->> -		status =3D PTR_ERR(fwnode);
->> -		goto err_node;
->> -	}
->> -
->> -	pdev =3D platform_device_alloc("surface_gpe", PLATFORM_DEVID_NONE);
->> -	if (!pdev) {
->> -		status =3D -ENOMEM;
->> -		goto err_alloc;
->> +	pdevinfo =3D (struct platform_device_info){
->> +		.name =3D "surface_gpe",
->> +		.id =3D PLATFORM_DEVID_NONE,
->> +		.properties =3D match->driver_data,
->> +	};
->> +
->> +	pdev =3D platform_device_register_full(&pdevinfo);
->> +	if (IS_ERR(pdev)) {
->> +		platform_driver_unregister(&surface_gpe_driver);
->> +		return PTR_ERR(pdev);
->>  	}
->>
->> -	pdev->dev.fwnode =3D fwnode;
->> -
->> -	status =3D platform_device_add(pdev);
->> -	if (status)
->> -		goto err_add;
->> -
->>  	surface_gpe_device =3D pdev;
->>  	return 0;
->> -
->> -err_add:
->> -	platform_device_put(pdev);
->> -err_alloc:
->> -	fwnode_remove_software_node(fwnode);
->> -err_node:
->> -	platform_driver_unregister(&surface_gpe_driver);
->> -	return status;
->>  }
->>  module_init(surface_gpe_init);
->
-> Acked-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
->
+On Thu, May 28, 2026, Piotr Zarycki wrote:
+> Replace the open-coded swap with the swap() macro.
+> 
+> Signed-off-by: Piotr Zarycki <piotr.zarycki@gmail.com>
+> ---
+>  tools/testing/selftests/kvm/include/test_util.h    | 2 ++
+>  tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c | 6 +-----
+>  2 files changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+> index d9b433b834f1..a66bc9ccba65 100644
+> --- a/tools/testing/selftests/kvm/include/test_util.h
+> +++ b/tools/testing/selftests/kvm/include/test_util.h
+> @@ -26,6 +26,8 @@
+>  
+>  #define msecs_to_usecs(msec)    ((msec) * 1000ULL)
+>  
+> +#define swap(a, b)  do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
 
-Hi!
-
-Thanks but FYI: I will replace this series with a different approach once t=
-he
-rework of node assignment for platform devices lands upstream.
-
-Bart
+This belongs in a common tools/ header, not in KVM's test_util.h.  I don't see
+an obvious place, maybe tools/include/linux/kernel.h?
