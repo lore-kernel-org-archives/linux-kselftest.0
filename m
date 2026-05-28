@@ -1,268 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96C02EA172;
-	Thu, 28 May 2026 03:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0848BEEA8;
+	Thu, 28 May 2026 03:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779937969; cv=none; b=Hzbp0B9+0h0GD0BBCVNbNWk1sZAfIbF8RyvRvISiEQqsEsDjx0u0uaL8pTctd41r2I61KECVPgsVUlP3kR7Q9fzJtIiey45i+/TwSHqzmzT48AWw2B87+xcROwjnb1NUZ/HG2JpuMHwNyy7tldEYt4u37ETU2Gzmb9XesyWMZdA=
+	t=1779939102; cv=none; b=e2djABRs3TC4b1KLcOZf2aX7fdP6LW2s3U+T/XbbYMnoZoYnWP6+r1RbQ89YljPHDkJgWNk9Pg1mS94YrGSVGKineXEb74FW1TZfmHjgVYX9fea/Ea7bnv+N4Khgllc6XRLe8BIPFt9UTtHPnbBE2mxvC5qw/q/OJcZfA7MFfJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779937969; c=relaxed/simple;
-	bh=BtpyOFLdptcWMoYqt0VLzwL3iZwobfw6mj2yYqyJ+Pc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n9sqbk1Y0APWV03uEZ9CliwG3RdlWHCM14PTkGdhtmVxa5h2naDWOy4Gbs+yn9ynETmF6TcEXIYs4xMMlc9qJhFexx/Dx7e9RPshhHRZFOs9TXyD6R4GWifKQZpKozO6SRVxvYgZzByL0rcJvWQg6hj3rwbOqFdLCj3PJyvFJA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ndAmRDUn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779939102; c=relaxed/simple;
+	bh=DMPnp/jyAet9uJC9R6NBEgWBUA5/5QsJUGswhhYrs/Q=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=Hu9Gzkam9Zkl1HzWdpYKIqia4uzbLeyCjU7dJV7Xhg6GYkD2fQkBotgAySdDWgUnBjYh/UPzaGwnqkgYp51PfvUHsg+W6h7z3/+I5Sue1uvRTjbARcBEKQfOhWW044yPEH+nqa1HcbPwXbH0JvoauIMBZwgb9DQ4ks1TJQy2/VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=AGMvFtGV; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ndAmRDUn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 110021F000E9;
-	Thu, 28 May 2026 03:12:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779937967;
-	bh=uHcHw+Zgx2c/yCnrl2bglqEmsfzND1F6CvMpIf7CaV8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ndAmRDUn9eSi6DtQhDo0hSiI/fw4XFynY8pWiq5FJ6DwxfN923xu9o9pQP6UDliYP
-	 QY9DmaX7fc4dwEzhvTu/0d+NhUU4emN2kZ6gLD4vRqS5xMreQ+7EvD0EMBfIK9qqqr
-	 pNOXBjItdQOTgVcD9pqe2aJWFdb3zlpH9ZjiU+UAwD4Rt8ZkGXepdCDHtD1jWug3kp
-	 56QEkMOo7z4y5hUT8X+hIx/qDGnWeY4FNIvUV54Z9RYdt+sPPf6U/G4m/W64mKRGo3
-	 8XiUtg1mFzLm6faSuqNTXpeZmWDzlUfu8377iKmqe62oBThAi77k1MWyrJPZEr7WpY
-	 2+W3dX5xBbwDA==
-From: Geliang Tang <geliang@kernel.org>
-To: Keith Busch <kbusch@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	Chaitanya Kulkarni <kch@nvidia.com>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	linux-nvme@lists.infradead.org,
-	netdev@vger.kernel.org,
-	mptcp@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	Hannes Reinecke <hare@suse.de>,
-	John Meneghini <jmeneghi@redhat.com>,
-	Randy Jennings <randyj@purestorage.com>,
-	Nilay Shroff <nilay@linux.ibm.com>,
-	zhenwei pi <zhenwei.pi@linux.dev>,
-	Hui Zhu <zhuhui@kylinos.cn>,
-	Gang Yan <yangang@kylinos.cn>
-Subject: [PATCH 11/11] selftests: mptcp: nvme: add iopolicy tests
-Date: Thu, 28 May 2026 11:10:45 +0800
-Message-ID: <51f054a6a573b9a771ed927eef34fa5ca083d009.1779934709.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <cover.1779934709.git.tanggeliang@kylinos.cn>
-References: <cover.1779934709.git.tanggeliang@kylinos.cn>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="AGMvFtGV"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=c5Hk8QYPMIPNx8ud4lNIyGEeROuyNFJv+XxWeF1fn+k=;
+	b=AGMvFtGVwo6Y0FHx8ka/ETADMQfqFwzqcD1HYVjhSZUd6/XUeReV/gHwMQJIZ09YEab+gT9Fg
+	NmLag4kgDCv/OxazIufHenWHXQV2yvL/55BwNXDX39TJgPoP+nERrRPgbhocQRBhk9SFKAIYR1q
+	Oe/hLUGX4t/K+Dr9p/UNT6w=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4gQsJq6rdbz1prMF;
+	Thu, 28 May 2026 11:23:39 +0800 (CST)
+Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
+	by mail.maildlp.com (Postfix) with ESMTPS id 951064056A;
+	Thu, 28 May 2026 11:31:28 +0800 (CST)
+Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
+ dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 28 May 2026 11:31:28 +0800
+Received: from [10.173.124.160] (10.173.124.160) by
+ kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 28 May 2026 11:31:26 +0800
+Subject: Re: [PATCH RFC v3 5/7] mm: selftests: Add shmem into memory failure
+ test
+To: Lisa Wang <wyihan@google.com>
+CC: <rientjes@google.com>, <seanjc@google.com>, <ackerleytng@google.com>,
+	<vannapurve@google.com>, <michael.roth@amd.com>, <jiaqiyan@google.com>,
+	<tabba@google.com>, <dave.hansen@linux.intel.com>, Naoya Horiguchi
+	<nao.horiguchi@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, "Paolo
+ Bonzini" <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Hugh Dickins
+	<hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, "David
+ Hildenbrand" <david@kernel.org>, Lorenzo Stoakes
+	<lorenzo.stoakes@oracle.com>, <linux-kselftest@vger.kernel.org>, "Liam R.
+ Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, Mike
+ Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal
+ Hocko <mhocko@suse.com>, <linux-mm@kvack.org>,
+	<linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
+References: <20260408-memory-failure-mf-delayed-fix-rfc-v3-v3-0-718f45eb7c75@google.com>
+ <20260408-memory-failure-mf-delayed-fix-rfc-v3-v3-5-718f45eb7c75@google.com>
+ <9effbeca-3453-f0fe-571f-85f8923e1385@huawei.com>
+ <ahcjRGwLFEN2NH3b@google.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <85ae0dea-3f49-3102-059f-55f5f67c91ac@huawei.com>
+Date: Thu, 28 May 2026 11:31:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <ahcjRGwLFEN2NH3b@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemq500010.china.huawei.com (7.202.194.235)
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On 2026/5/28 1:00, Lisa Wang wrote:
+>> On Mon, Apr 13, 2026 at 07:57:55PM +0800, Miaohe Lin wrote:
+> [...snip...]
+>>> -
+>>> +	case MADV_SOFT_DIRTY_SHMEM:
+>>>  		/* The page content should remain unchanged. */
+>>>  		ASSERT_TRUE(check_memory(vaddr, self->page_size));
+>>
+>> Why we skip check_memory() for case MADV_SOFT_CLEAN_SHMEM?
+> 
+> Because we did not write 0xce to clean_shmem.
+> The difference between clean and dirty pagecache is whether we synced
+> the dirty pages to disk. However, the difference between clean and dirty
+> shmem is whether we initialized it with 0xce. Thus, we need to skip
+> check_memory(), which checking 0xce,  for clean_shmem.
 
-Add NVMe iopolicy testing to mptcp_nvme.sh, with the default set to
-"numa". It can be set to "round-robin" or "queue-depth".
+Got it.
 
-Test results with 4 NVMe multipath paths and round-robin iopolicy show
-that TCP and MPTCP achieve similar bandwidth:
+> 
+>>> +	case MADV_HARD_CLEAN_SHMEM:
+>>> +	case MADV_SOFT_CLEAN_SHMEM:
+>>> +		/* It is not expected to receive a SIGBUS signal. */
+>>> +		ASSERT_EQ(setjmp, 0);
+> [...snip...]
+>>> +   if (variant->type == MADV_HARD) {
+>>> +           check(_metadata, self, addr, MADV_HARD_DIRTY_SHMEM, ret);
+>>> +		ret = sigsetjmp(signal_jmp_buf, 1);
+>>> +		if (ret == 0)
+>>> +			FORCE_READ(*addr);
+>>> +		check(_metadata, self, addr, READ_ERROR, ret);
+>>> +	} else {
+>>
+>> Should we always add a FORCE_READ() just after variant->inject to verify the accessibility
+>> to the addr for soft-offline case ?
+>>
+>> Thanks.
+> 
+> In dirty_shmem, check() already verifies accessibility to the address
+> through memcmp(). Thus, we only need FORCE_READ() in clean_shmem. Will
+> add this in the next version. Thanks !
 
- # ./mptcp_nvme.sh tcp 4 round-robin
-   READ: bw=455MiB/s (478MB/s), 455MiB/s-455MiB/s (478MB/s-478MB/s),
-		io=4665MiB (4891MB), run=10242-10242msec
-  WRITE: bw=455MiB/s (477MB/s), 455MiB/s-455MiB/s (477MB/s-477MB/s),
-		io=4633MiB (4858MB), run=10184-10184msec
-
- # ./mptcp_nvme.sh mptcp 4 round-robin
-   READ: bw=445MiB/s (466MB/s), 445MiB/s-445MiB/s (466MB/s-466MB/s),
-		io=4575MiB (4797MB), run=10287-10287msec
-  WRITE: bw=445MiB/s (467MB/s), 445MiB/s-445MiB/s (467MB/s-467MB/s),
-		io=4572MiB (4794MB), run=10267-10267msec
-
-A "loss" argument is added to simulate network packet loss. When loss=1,
-each veth interface is configured with "delay 5ms loss 0.5%" using tc
-qdisc. Under this scenario, TCP performance is reduced by multiples
-compared to MPTCP:
-
- # ./mptcp_nvme.sh tcp 4 round-robin 1
-   READ: bw=144MiB/s (151MB/s), 144MiB/s-144MiB/s (151MB/s-151MB/s),
-		io=1909MiB (2001MB), run=13231-13231msec
-  WRITE: bw=100.0MiB/s (105MB/s), 100.0MiB/s-100.0MiB/s (105MB/s-105MB/s),
-		io=1397MiB (1465MB), run=13980-13980msec
-
- # ./mptcp_nvme.sh mptcp 4 round-robin 1
-   READ: bw=428MiB/s (449MB/s), 428MiB/s-428MiB/s (449MB/s-449MB/s),
-		io=4524MiB (4743MB), run=10564-10564msec
-  WRITE: bw=431MiB/s (452MB/s), 431MiB/s-431MiB/s (452MB/s-452MB/s),
-		io=4513MiB (4732MB), run=10481-10481msec
-
-These results demonstrate that MPTCP has better resilience against
-packet loss compared to TCP, as it can leverage multiple subflows to
-mitigate network degradation.
-
-Cc: Hannes Reinecke <hare@suse.de>
-Cc: John Meneghini <jmeneghi@redhat.com>
-Cc: Randy Jennings <randyj@purestorage.com>
-Cc: Nilay Shroff <nilay@linux.ibm.com>
-Co-developed-by: zhenwei pi <zhenwei.pi@linux.dev>
-Signed-off-by: zhenwei pi <zhenwei.pi@linux.dev>
-Co-developed-by: Hui Zhu <zhuhui@kylinos.cn>
-Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-Co-developed-by: Gang Yan <yangang@kylinos.cn>
-Signed-off-by: Gang Yan <yangang@kylinos.cn>
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
- .../testing/selftests/net/mptcp/mptcp_nvme.sh | 70 ++++++++++++++++++-
- 1 file changed, 69 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_nvme.sh b/tools/testing/selftests/net/mptcp/mptcp_nvme.sh
-index 5b1133dbc2d5..3ab04be05dff 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_nvme.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_nvme.sh
-@@ -6,6 +6,8 @@
- ret=0
- trtype="${1:-mptcp}"
- path="${2:-1}"
-+iopolicy=${3:-"numa"} # round-robin, queue-depth
-+loss=${4:-0}
- nqn="nqn.2014-08.org.nvmexpress.${trtype}dev.$$.${RANDOM}"
- ns=1
- port=$((RANDOM % 10000 + 20000))
-@@ -17,6 +19,7 @@ loop_dev=""
- 
- export trtype path nqn ns port trsvcid
- export loop_dev temp_file
-+export iopolicy loss
- 
- usage()
- {
-@@ -24,10 +27,12 @@ usage()
- 
- Usage:
- 
--	$(basename "$0") [trtype] [path]
-+	$(basename "$0") [trtype] [path] [iopolicy] [loss]
- 
- 	trtype   Transport type (tcp|mptcp) - default: mptcp
- 	path     Number of multipath (1-4) - default: 1
-+	iopolicy I/O policy (numa|round-robin|queue-depth) - default: numa
-+	loss     Enable packet loss (0|1) - default: 0
- 
- EOF
- exit ${KSFT_FAIL}
-@@ -44,6 +49,16 @@ validate_params()
- 		echo "Invalid path count ${path}. Must be between 1 and 4"
- 		usage
- 	fi
-+
-+	if [[ ! "${iopolicy}" =~ ^(numa|round-robin|queue-depth)$ ]]; then
-+		echo "Invalid iopolicy ${iopolicy}."
-+		usage
-+	fi
-+
-+	if [[ ! "${loss}" =~ ^[01]$ ]]; then
-+		echo "Invalid loss value ${loss}. Must be 0 or 1"
-+		usage
-+	fi
- }
- 
- # This function is invoked indirectly
-@@ -105,6 +120,7 @@ cleanup()
- 
- 	unset -v trtype path nqn ns port trsvcid
- 	unset -v loop_dev temp_file
-+	unset -v iopolicy loss
- }
- 
- # $tc_args needs word splitting to pass multiple arguments to netem
-@@ -113,6 +129,10 @@ init()
- {
- 	local tc_args="rate 1000mbit"
- 
-+	if [ "${loss}" -eq 1 ]; then
-+		tc_args+=" delay 5ms loss 0.5%"
-+	fi
-+
- 	mptcp_lib_ns_init ns1 ns2
- 
- 	# ns1		ns2
-@@ -193,6 +213,48 @@ run_target()
- 	done
- }
- 
-+# This function is invoked indirectly
-+#shellcheck disable=SC2317,SC2329
-+set_io_policy()
-+{
-+	local nqn="$1"
-+	local iopolicy="$2"
-+	local subname
-+	local policy
-+	local current
-+
-+	subname=$(nvme list-subsys 2>/dev/null | grep "${nqn}" |
-+		  grep -o 'nvme-subsys[0-9]*' | head -1)
-+	if [ -z "$subname" ]; then
-+		return 1
-+	fi
-+
-+	policy="/sys/class/nvme-subsystem/${subname}/iopolicy"
-+	if [ ! -e "$policy" ]; then
-+		# NVMe multipath not supported, skip iopolicy setting
-+		return 0
-+	fi
-+
-+	if [ ! -w "$policy" ]; then
-+		return 1
-+	fi
-+
-+	if ! echo "${iopolicy}" > "$policy" 2>/dev/null; then
-+		return 1
-+	fi
-+
-+	current=$(cat "$policy" 2>/dev/null)
-+	if [ -z "$current" ]; then
-+		return 1
-+	fi
-+
-+	if [[ "$current" != *"${iopolicy}"* ]]; then
-+		return 1
-+	fi
-+
-+	return 0
-+}
-+
- # This function is invoked indirectly
- #shellcheck disable=SC2317,SC2329
- run_host()
-@@ -242,6 +304,11 @@ run_host()
- 		return 1
- 	fi
- 
-+	if ! set_io_policy "${nqn}" "${iopolicy}"; then
-+		echo "Failed to set I/O policy to ${iopolicy}"
-+		return 1
-+	fi
-+
- 	sleep 1
- 
- 	echo "fio randread /dev/${devname}"
-@@ -306,6 +373,7 @@ run_test()
- 	fi
- 
- 	if ! ip netns exec "$ns2" bash <<- EOF
-+		$(declare -f set_io_policy)
- 		$(declare -f run_host)
- 		run_host
- 		exit \$?
--- 
-2.53.0
+Thanks for your work.
+.
 
