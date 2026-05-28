@@ -1,126 +1,87 @@
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374A31A680F;
-	Thu, 28 May 2026 05:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F8E31F996
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 05:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779946698; cv=none; b=SJgVFGRKhTC8mUyPOq1Dsor/FQbTfWZ1vR1qghBngYFz6r36xWwR9lGm6SXKRpNrN74CBbjgTN8a1tkSNSmlYYHYvtNEX999HgOvj+3bpkigwYAxF4EbWFXA5rxOURmW9u5WziFJ6yYFSIx+wTl0KybRbuEXu/JPHnHS/+5lNqA=
+	t=1779947010; cv=none; b=l5D4Wt/wNvRJQw3EqgAUBqR72t2oeVLWMATaM9xT8Xdsnsl/h1hK1H3k9QmImfgGS9qOuQMh9CBj5jMOHYikhB1avKYfH+z8KZwIvO6aLD4veAfRzFmIqZkmJxbKqRnlT72KbaiZjd9xrjSd/ckY7VcTUncN6Y0pa7B2V2Izp2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779946698; c=relaxed/simple;
-	bh=KzgnllfJFQ+v4lXzMi8bI9BcYh/VEPg5mHFqINwn6ik=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ie0AwwDjSQkwDRVQwnuWydRUExkeifhA4NgkCfl4SQSL1yLfUPaHIAG4EP/z1uofJQDXwN8CBH2kgfNUW8aNAVK28Umci+RrHokvygdXhaAG0tg2WfyPkb4KISPZln9+qfTF/ulHhzH1+q55TkqLNtiFuwzBULiAggq6v8+zcBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=EaSUVzRC; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1779947010; c=relaxed/simple;
+	bh=3+2kHB7xatzySevM7gTiAUUaPJ1VXmBosZw9dubFN1k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Efj7ciqBUVLn9m0BlOLWKFrbUEb+SR+cPXx1n1zgfJOFZkagKrOO19YltaRagXWnNmJikhUSTiZxqInPEY1C04pZtPDBKKm+Xc5ZV0nhHnkQfUvYieh9zX06q43q4wyd33nl1dy/+2WWlOXvACf8qD4mzhBrch8HKo2SsSMvHH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=E83/Uq6x; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="EaSUVzRC"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1779946693; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	bh=g9xXdOEeD6a9QCmlif50MRE5E3DhBPqmO64p4ySl0/c=;
-	b=EaSUVzRCf2pR9AZoP0ovS2qOpYU3tTTIDnnn80Xv4o0v9zgeZElevPZpqIlaWvmf4W1aMe2/pzx1qShphfRsMYF5H1u357heUzbkVTvQCPuVJOY5VSUNZ39M3JdX1pLXfCHJU/srK3Kb+4ir5/8aazFRdLaQgSvto7qT+JgDHUY=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=30;SR=0;TI=SMTPD_---0X3lY9RP_1779946689;
-Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X3lY9RP_1779946689 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 28 May 2026 13:38:11 +0800
-From: Wang Han <wanghan@linux.alibaba.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Chen Pei <cp0613@linux.alibaba.com>,
-	Andy Chiu <andybnac@gmail.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 1/8] scripts/sorttable: Handle RISC-V patchable ftrace entries
-Date: Thu, 28 May 2026 13:38:06 +0800
-Message-ID: <20260528053807.1511742-1-wanghan@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260527113028.4b21a5de@fedora>
-References: <20260527123530.2593918-1-wanghan@linux.alibaba.com> <20260527123530.2593918-2-wanghan@linux.alibaba.com> <20260527113028.4b21a5de@fedora>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="E83/Uq6x"
+Message-ID: <34b18a3e-50c0-4b0c-8ee6-d7a291619231@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779946997;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=z9MM3Y2Qx7TZns2bRxhLBJKfpUN8+EXhIH0wXQGN7SM=;
+	b=E83/Uq6xFRMZLXHh68vtrKfbFf7EdTNwTqtKOO8LknYlzMhk+IVIUiXNqPnCNAb6Fx5tTD
+	Da1NgMC3YaBJM/KbHh/6/ah/HSUiM9fWKolnirRifbPdr0f+2H9hr46Gs/W1e5e7IA5LJ5
+	JY2Uuytq31I9ajPzQOEvkDszj08JcBo=
+Date: Thu, 28 May 2026 13:42:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next 1/2] bpf: align syscall writeback behavior with
+ caller-declared size
+Content-Language: en-US
+To: Yuyang Huang <yuyanghuang@google.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, bot+bpf-ci@kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Nikolay Aleksandrov <razor@blackwall.org>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+ Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ Network Development <netdev@vger.kernel.org>,
+ =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
+ Lorenzo Colitti <lorenzo@google.com>,
+ Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+References: <20260515071504.2054786-2-yuyanghuang@google.com>
+ <2e08eb1ca27a9a2f8ad29e1c24f779b579621b0a648589f7044799d91c5e00f5@mail.kernel.org>
+ <CADXeF1GVtFHNZJb8xwFh6aadR=H19S+kja8rF185XB5=fg0D0Q@mail.gmail.com>
+ <CAADnVQ+42+Th6OFGq2KawzvyKUAykazb4fXh2_uqss-T+R8VCg@mail.gmail.com>
+ <CADXeF1F=7RcxAsW38w_mpFeKCLxTAh5p_XYHd=x2Ru+oajoN3Q@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CADXeF1F=7RcxAsW38w_mpFeKCLxTAh5p_XYHd=x2Ru+oajoN3Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-[Resend: my first reply went out as a private message to Steve only,
-due to a local git send-email config quirk that dropped the Cc list.
-Re-sending now with the original cc list so the discussion is
-on-record. Sorry for the duplicate, Steve.]
-
-On Wed, 27 May 2026 11:30:28 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> So basically RISCV has the same problem as ARM64 with patchable
-> entries. As this may happen for other archs in the future, I would like
-> to group them together like this:
+On 25/5/26 15:21, Yuyang Huang wrote:
 [...]
-> does the above work for you? (Although I didn't even compile test it).
+> 
+> Feel free to let us know your thoughts.
+> 
+I believe this is a user space issue instead of a kernel bug.
 
-Yes, this is clearly better - a single grouped block makes future
-patchable-entry architectures trivial to add. I will fold it into v2
-with two small adjustments to keep it compiling cleanly:
+I tried to use mmap() memory as uattr that got -EFAULT instead of crash.
 
-  - s/case RISCV/case EM_RISCV/ (two places).
-  - Put the shared "before_func = 8" on its own line under
-    case EM_RISCV: with a standard /* fallthrough */ comment,
-    otherwise GCC -Wimplicit-fallthrough warns between EM_AARCH64
-    and EM_RISCV.
+[................] /* mmap() memory */
+             ^ tail 40B as uattr
+                    ^ 56B offset for copy_to_user()
 
-Resulting switch:
+Thanks,
+Leon
 
-	switch (elf_map_machine(ehdr)) {
-	#ifdef MCOUNT_SORT_ENABLED
-	case EM_AARCH64:
-		sort_reloc = true;
-		rela_type = 0x403;
-		/* fallthrough */
-	case EM_RISCV:
-		/* arm64 and RISC-V place patchable entries before the function */
-		before_func = 8;
-	#else
-	case EM_AARCH64:
-	case EM_RISCV:
-	#endif
-		/* fallthrough */
-	case EM_386:
-	case EM_LOONGARCH:
-	case EM_S390:
-	case EM_X86_64:
-		custom_sort = sort_relative_table_with_data;
-		break;
-
-Built scripts/sorttable with the kernel host build (both with and
-without MCOUNT_SORT_ENABLED), no warnings. I'll add your Suggested-by
-and send v2 shortly.
-
-Thanks!
-Wang Han
