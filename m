@@ -1,192 +1,96 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4B43F4DEC
-	for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 21:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F370EEA8
+	for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 22:47:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780091087; cv=none; b=lCgrsG+OuptvXyH0War2x8dbqCzUUj47fLTMyt+cJrMe+7FfUt/eJJuyrCW6wkZnBijAW7oJV4Gc72GLne//kMf/oeSipEBj819DnttUOwIBRSV6rJvuaXx0jkDloHMw+mM8I5nvNOE1UyYdW69sAVXdBaK12mDB6GdXNFm0b0A=
+	t=1780094876; cv=none; b=eBx35Ob2yQ+R/qbR0d549v5/BLxYHfVc2Buv4Zsvae0Gjr1O2IqIGiq20F6qVlmXxX1PN8BpWXUpjSjnKBI3N7ure6k1W7uhLbqS9yXoY4uxiWrTJU/+G/uSArnOSJnsbNspgeajHdO9baASQB6gK2pShTDEWNmZrLIbJFSwB1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780091087; c=relaxed/simple;
-	bh=9ztBHi69dTvfIbkPqcEl1msz3Fn7k9rrFW2VNPhV/B0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OBrk0Xa+X4eXl+DavawG2xEX1wK3pNfGsvMsUoPnp+fePLiOBV2ls2GSdkxlJVn9flCYYM/H33D88hcpOZuz3pgJ2LSKUuWMQcpvHgcbWojCKzLSTyjrnkOV96BqC8EC+tWQ/OEeuSrBKNkA+ltLJx/UfKdXOcUZGuQzYwLlb94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fwgVQbH4; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780094876; c=relaxed/simple;
+	bh=EhXkRw0+3FPNY3jkfcQ8Ugbl3bFu9YVeGT9yETM4UQ8=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Content-Type; b=JU+F5M+s0MWsBzzFwx0v71Ztd6ywp1tLhTSF5FnN+g+hJZT5zmA2lFsjnWcAygEW3d5o6LOcn/Hv0iZhdipFQCE+LhBYTJRxMlFhnX7hpfBtL54rmeZtrhu4Hcmx+UC0LsgZSSnTDaxw6/CeUcFAfC49QlU3d6gSZpXJiJrvz0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M4zk/1hm; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fwgVQbH4"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48d146705b4so151410615e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 14:44:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M4zk/1hm"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c8279604464so17270989a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 15:47:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780091085; x=1780695885; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wclCqKMzu4g1WLNsGWFcKOde7ruW79bP7ckJPFHNnw4=;
-        b=fwgVQbH4FyVJHYo/TgVDXeJt0HtCakNScQWx1FvLXcAuXBPKNaI7U1Jd54/hTYq1rf
-         YPmV9lZWUIOyeHMJ9O9pCWqFP3gFvPm9xWe9IGCR5kuh9NRfRYnK2UvLmYrVTxsz0hUB
-         c6HsLsvICUZrWsdwUdtb0A8fdQJJwUbxJFYkmNujbuXbckOONywIBh2lyrbbBIZpF6Lk
-         ADj6uGERGP2rMz61vCK5RUoB3atrsEdLtMAmTH4x9SHOdBNn/fvwDFE3GKOgD44Idv5k
-         vEnGmTSzQ9vnD+ZcSLhd5178NDVbINYMSxMHOxIVbcXuNQPMdXewubeIF2W6vY2CiYMD
-         XI0g==
+        d=google.com; s=20251104; t=1780094874; x=1780699674; darn=vger.kernel.org;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LBoaHKw1uhDp/VWR8jKcQP5YxjdLIxlGKMU+QUhdwms=;
+        b=M4zk/1hm5PyXjrNnQd3SMH+0YaUzqWqUJkYbC3zEt45FDiTmne9Kp6/88OKj3dk4uw
+         Tjpi34spAUvSnkd0bMD2Ujv0S1Xk61gQU5jD7ixDfHe0H/izgIRgo5L/YdpglXu2rsnP
+         +JmQNCr6stxIM0Tez9l0muPPXL2M1MxmPyc3/s6MdEzw5czRQSj3nWRumMOnW11z4Xqo
+         mT1NRA9ATUH5jVWogfG6K4sBuE/aomh6/+Ozhg5APszHcpkWPZIdlObVmd+GLN4Sds+3
+         osE2eJ9tNSz2seg457UrOuyVcP/om6FifHyPhdM9jTofHn27soqDHKtiCYSvQUrS+B8w
+         nHDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780091085; x=1780695885;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wclCqKMzu4g1WLNsGWFcKOde7ruW79bP7ckJPFHNnw4=;
-        b=QJPVHsz7jlIhgQCRNoXJ0pcOpTG3ct1+TU1b/coOq3zggQlDbcOpYcn3Ioj1kEiubh
-         ft6v41UARXryXLNdZY/9bKGEUZ9RI6WzFG9cadH47245ni4tqqZQP2dn8b61jZ0o+90O
-         amCSfkbEgYh4Q5+5SADIRRmuD952cdcUAfU5KIly8TvFNa50nVySK5VtsR8wkl5y/Uo0
-         6yax9I/svRJjvodUNYkspWoFtgBTvvHnWhF9Ps6s+epq4v7/6/3nozQ7bCArIUKLONGX
-         inwlvjECz0HKpPJIRb5JEzvjYJcor5J07VjbbFSxr1TY7ZDvjtX3QbfzGSLphNYGWjzG
-         crNQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/6RYLGxamTfrNCEzv14OSJiMSVX2cBnmrLBolX7vh303qdrDOmGPPMDC3Br4/zTa4PVrWwXErZSiYBPyN7Vfk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz72qyyRdwTIh9Bh6jSruN0GtoatPIhycHP2znkSBK2erQo5WVz
-	+sHcJC3S7+Ds6HCxFaq0qomH3asQJsqBSEEuw00fOv/qiFkVCZNss3jz
-X-Gm-Gg: Acq92OFcq5wRPQ9OrA4FhemiHGB27G992jd4G1yqgS1RXuA8HqehIJWSa4x4+cOiW7l
-	AoNWDoWZq1ErbNVvW8U2eCeLOPRZQhAkFN7Pp9fG8LP1EkOdjWuQxZ7B45RdkzlntEZZ5EA4TuW
-	5lgFEjAFRRQEpOykmOaYn52MadiufkeyCvclnnPyE/wmnMDlqBJ3XfiLQLsLnCUwHi0G56IADsr
-	1GyvpPWW4xsmKVVnVWvy8sx7WzldiHp6/Vnul8WKGl/nHKP9mQHd2KsYv1+furO+qRPnT9X4fsT
-	FzASRg8E9PaRAalkgXqypun0hxEXdG11HXxxDtC2cZ4xDyEpQ2kSMODbkTfSG/1DuqYF24bxzSb
-	kICp9E2/7quA8RMKgO5hSTnbusMebVhpU56TxbBhQeiWXSzDpTZ5ZMda6OwjSeb0ik2o2ZwxQxn
-	mihjMdC0r2tdm2mHnTXepI/idm8P2tp74EwFUtD2rN5lVbuVv0wwiEA1ZpDYImVrnPQUgPw3VWg
-	FvVwKHpQg==
-X-Received: by 2002:a05:600c:41c7:b0:485:30d4:6b9e with SMTP id 5b1f17b1804b1-490a293e0c2mr13857975e9.21.1780091084768;
-        Fri, 29 May 2026 14:44:44 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909c0aecdfsm22172265e9.13.2026.05.29.14.44.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2026 14:44:44 -0700 (PDT)
-Date: Fri, 29 May 2026 22:44:42 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>,
- kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org, Mark Bloch
- <mbloch@nvidia.com>, netdev@vger.kernel.org, Saeed Mahameed
- <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>, Tariq Toukan
- <tariqt@nvidia.com>, patches@lists.linux.dev
-Subject: Re: [PATCH v2 06/11] selftests: Fix arm64 IO barriers to match
- kernel
-Message-ID: <20260529224442.11d7320d@pumpkin>
-In-Reply-To: <20260529192933.GD3195266@nvidia.com>
-References: <0-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
-	<6-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
-	<ahiFxtmspbETiqWw@google.com>
-	<20260529134947.GA128816@nvidia.com>
-	<20260529175516.06d5788f@pumpkin>
-	<20260529192933.GD3195266@nvidia.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        d=1e100.net; s=20251104; t=1780094874; x=1780699674;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LBoaHKw1uhDp/VWR8jKcQP5YxjdLIxlGKMU+QUhdwms=;
+        b=f4eJDTLzfeoxVA1mI0o9yw0bJfr5ATCaR6ZYCzn1LqF6YVE9Zz3KJYgPOC4PQQCt9d
+         FQEULyS+HknSE1Fv6FZ5p8dn8UIsQHgAKP1xlzEfHOUgHxvGYaVV8WHpERtfc3o5Fja3
+         q8LxWUXFvcASnt0HhyU3Por6EwZsBsVmfwFlSNXwTS4Pe0o+0PdoKG2okUawq+kk4HpN
+         88lgf+V0o7BoYnF23XcQCtbuxnNF1Re6vKidfpjq0Qc02iJ+dIZl/gnAzuIx5rKPH0pL
+         6Lvizy2RTLVVjpIMgwT2BcoVScH6ElnCouG4AKfRSQUYuIsuFHXyQomx1VbC0VdHinXJ
+         syMw==
+X-Forwarded-Encrypted: i=1; AFNElJ9TQaaHwwO8Spx4wVlKElEqEddp1A3JBw4rq2pRs0S5emIQwh+OlcaMAQqxfja6yiz6yOCc9AxSkc1AacqdLOY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywfl8BHQnH4r9Hx8vPSsa3FXFXbOI93il0Yz0Y+aLVg+rBTI8w4
+	IcDwiDfIGu/w3GbymuDPg66faDjj214hD1oa+TkNQaHFzhHguj92VVvKT/gHcVcsdu62FKJYZpB
+	IlpzEKg==
+X-Received: from pgbcr12.prod.google.com ([2002:a05:6a02:410c:b0:c85:812d:cbfd])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:8ccb:b0:38b:eadd:449a
+ with SMTP id adf61e73a8af0-3b428242975mr1406350637.38.1780094874162; Fri, 29
+ May 2026 15:47:54 -0700 (PDT)
+Date: Fri, 29 May 2026 15:47:46 -0700
+In-Reply-To: <20260527174347.2356165-1-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260527174347.2356165-1-jmattson@google.com>
+X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
+Message-ID: <178009472318.880870.7878635650921105255.b4-ty@google.com>
+Subject: Re: [PATCH v4 0/5] KVM: x86: Virtualize AMD's "disable CPUID in usermode"
+From: Sean Christopherson <seanjc@google.com>
+To: Sean Christopherson <seanjc@google.com>, pbonzini@redhat.com, tglx@kernel.org, 
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, 
+	hpa@zytor.com, shuah@kernel.org, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	ctpence@google.com, David.Kaplan@amd.com, binbin.wu@linux.intel.com, 
+	Jim Mattson <jmattson@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Fri, 29 May 2026 16:29:34 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
-
-> On Fri, May 29, 2026 at 05:55:16PM +0100, David Laight wrote:
-> > On Fri, 29 May 2026 10:49:47 -0300
-> > Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >   
-> > > On Thu, May 28, 2026 at 06:13:26PM +0000, David Matlack wrote:
-> > >   
-> > > > Let's put these in tools/arch/arm64/include/asm/io.h so that the tools
-> > > > headers are more aligned with the kernel headers, and so that the arm64
-> > > > io.h overrides are done in the same way as the x86 overrides in
-> > > > tools/arch/x86/include/asm/io.h.
-> > > > 
-> > > > Something like this (untested):    
-> > > 
-> > > Okay, the disassembly says it works:
-> > > 
-> > >     1db8:       ca080108        eor     x8, x8, x8
-> > >     1dbc:       b5000008        cbnz    x8, 1dbc <readl+0x58>
-> > >     1dc0:       f9000fe8        str     x8, [sp, #24]  
-> > 
-> > That looks strange, I suspect the C didn't match any usual pattern.
-> > Normally 'tmp' would get thrown away and 'v' would get kept.
-> > But you seem to have discarded 'v' and written 'tmp' to stack.  
+On Wed, 27 May 2026 10:43:42 -0700, Jim Mattson wrote:
+> AMD's "disable CPUID in usermode" feature is analogous to Intel's "CPUID
+> faulting" feature, but it is advertised and activated differently.  The AMD
+> feature is advertised via CPUID.80000021H:EAX.CpuidUserDis[bit 17] and
+> activated by setting HWCR.CpuidUserDis[bit 35].
 > 
-> Oh interesting the optimizer isn't turned on for selftest builds. So
-> the str is dutifully writing tmp to the stack. Another register has
-> the actual value.
-
-I've never seen any point testing with compilation options that are
-different from those used in a final/release build.
-Otherwise you aren't testing what you are going to release.
-This is particularly true for badly written code that might be
-relying on uninitialised stack (etc).
-
+> Add virtualization support for the AMD feature.
 > 
-> > I'm probably being stupid again, but how does that work?
-> > The cpu can speculate straight through the control dependency into
-> > the following instructions.
-> > An 'eor x1, x8, x8' may not even have a data-dependency on x8.
-> > (Most x86 cpus just generate a zero for the equivalent instruction.)  
-> 
-> I can't say, this is copied from the kernel and Will made it:
-> 
->     arm64: io: Ensure calls to delay routines are ordered against prior readX()
->     
->     A relatively standard idiom for ensuring that a pair of MMIO writes to a
->     device arrive at that device with a specified minimum delay between them
->     is as follows:
->     
->             writel_relaxed(42, dev_base + CTL1);
->             readl(dev_base + CTL1);
->             udelay(10);
->             writel_relaxed(42, dev_base + CTL2);
->     
->     the intention being that the read-back from the device will push the
->     prior write to CTL1, and the udelay will hold up the write to CTL1 until
->     at least 10us have elapsed.
->     
->     Unfortunately, on arm64 where the underlying delay loop is implemented
->     as a read of the architected counter, the CPU does not guarantee
->     ordering from the readl() to the delay loop and therefore the delay loop
->     could in theory be speculated and not provide the desired interval
->     between the two writes.
->     
->     Fix this in a similar manner to PowerPC by introducing a dummy control
->     dependency on the output of readX() which, combined with the ISB in the
->     read of the architected counter, guarantees that a subsequent delay loop
->     can not be executed until the readX() has returned its result.
+> [...]
 
-Hmmm...
+Applied to kvm-x86 misc, thanks!
 
-Ok so there is some subtlety with the read of the counter that might
-make it all work.
+[1/5] KVM: x86: Consolidate CPUID fault handling for emulator and interception logic
+      https://github.com/kvm-x86/linux/commit/cf7d65d1d6f5
+[2/5] KVM: x86: Prioritize CPUID faulting over CPUID VM-exits in nested VMX
+      https://github.com/kvm-x86/linux/commit/be7fd7c3e8bc
+[3/5] KVM: x86: Remove supports_cpuid_fault() helper
+      https://github.com/kvm-x86/linux/commit/d1bc99885a59
+[4/5] KVM: x86: Virtualize AMD CPUID faulting
+      https://github.com/kvm-x86/linux/commit/e93a93f11490
+[5/5] KVM: selftests: Update hwcr_msr_test for CPUID faulting bit
+      https://github.com/kvm-x86/linux/commit/b16c2aca369d
 
-It is better to make the delay loop have a data dependency on the result
-of the readl().
-Something like:
-	u32 z = 0;
-	OPTIMIZER_HIDE_VAR(z);
-	writel_relaxed(42, dev_base + CTL1);
-	udelay(10 + (z & readl(dev_base + CTL1)));
-	writel_relaxed(42, dev_base + CTL2);
-That avoids the potentially mispredicted branch and only adds instructions
-when a delay follows.
-That sequence is safe for all cpu and doesn't cost much for cpu (like x86)
-where it (probably) isn't needed (maybe unless you patch the scale for udelay
-into the code so there are no memory reads, just code).
-
-Probably best refactored as udelay_depends(10, readl(dev_base + CTL1)).
-Or maybe udelay_after().
-
--- David
-
->     
->     Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
->     Cc: Arnd Bergmann <arnd@arndb.de>
->     Signed-off-by: Will Deacon <will.deacon@arm.com>
-> 
-> Jason
-
+--
+https://github.com/kvm-x86/linux/tree/next
