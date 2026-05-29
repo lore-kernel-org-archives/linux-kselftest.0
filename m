@@ -1,149 +1,165 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBE473BB9E0;
-	Fri, 29 May 2026 11:17:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B8FE4964F
+	for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 12:46:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780053440; cv=none; b=Ox0sP5vmOKjmfOIaDi6vEPdza0il+2C9MgtK5fz7PGqGjsts1/PUxoBqfC7RibwCZv9Zx2ZWCEx83lU6k5k70DH3z6dR7bAUVaW3eV2pZ8+ItSaeNqZHm3qF31eYx5F1idHVU/ZvNVJVBOi1MAupZgAgC8W0pcTrZEC/SWV2RSg=
+	t=1780058766; cv=none; b=T47Jhi1wRhwxe5q1Lqq8jILRwfHKXCsLUdWJb0fI1hVs6PFXnymV2PLi/2mkIefEIYKLC+0g4UtlIhEs/IEQdfHmr3fFaTVY0l6LIslkJcf1sbRK+qiF1aKVsmwLJb7c5eYa9UnHlFOtzfhYl3USU9y2ONkKkUZ6Efi8jkOxY68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780053440; c=relaxed/simple;
-	bh=cx9bkGJ2eDRyMtzNNbeuK1dl0e/7tAqg3VyKX3JjrwQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MgD4Byx5vPAUnZMrxoXLDhTXGlJvcyQ/dEKUaCNMpZCyGLPX/iEp4mUJirs+jAg60WdqTfh99MKq1yUHrQzR5QHZyvBq3ZREdkz/o+YkrwYRUJDhR3pbfUA9m/3vuRZ9Up2zdybatxyTJ7FsGvy5aYBYW1lHK+2Cbf9cKmQFnRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=cmig+QQR; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1780058766; c=relaxed/simple;
+	bh=NSn5sR6O4Rt7B3/YqbAiK3fq+qyObIB738wGJZL72Vk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AVKhwAM5lKb7nlE3G1CuLwHZmj9aY/tvOoiKShbtZE21jO2LRUgkzeOSA2r+hog3NX9XMGLYT6QsOIhlSzL5GXjNrMBA+mOdN8QjGPxcEqFsAB08dlf2f8nlcG44pa/n+pJgjwBH9UvbhpxoestJCtuNwikAxfzfQCgEU8rQS8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HA/xLD7K; arc=none smtp.client-ip=209.85.210.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="cmig+QQR"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 40F072247;
-	Fri, 29 May 2026 04:17:13 -0700 (PDT)
-Received: from cesw-amp-gbt-1s-m12830-01.blr.arm.com (cesw-amp-gbt-1s-m12830-01.blr.arm.com [10.164.195.31])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 30ED13F905;
-	Fri, 29 May 2026 04:17:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1780053438; bh=cx9bkGJ2eDRyMtzNNbeuK1dl0e/7tAqg3VyKX3JjrwQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=cmig+QQRNEziskriXoC4pzo9VhXrb3OFQb0apJK+kRtxnbwjtcgcZktmT193CNieV
-	 233HUHFvMNrJwFG/lOUU41/ZbqMDIhECIBUhNb4/7jDeCbDbnGLyA22ih+GePPa+Eg
-	 Ycwv0YyxmHAIdnPjbSWPowjJt+L/O73CN84pDsuM=
-From: Dev Jain <dev.jain@arm.com>
-To: akpm@linux-foundation.org,
-	liam@infradead.org,
-	ljs@kernel.org,
-	jgg@ziepe.ca,
-	leon@kernel.org,
-	david@kernel.org,
-	shuah@kernel.org
-Cc: Dev Jain <dev.jain@arm.com>,
-	vbabka@kernel.org,
-	jannh@google.com,
-	pfalcato@suse.de,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	balbirs@nvidia.com,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ryan.roberts@arm.com,
-	anshuman.khandual@arm.com,
-	stable@vger.kernel.org
-Subject: [PATCH] fs/proc/task_mmu: do not warn on seeing non-migration pmd entry
-Date: Fri, 29 May 2026 11:17:03 +0000
-Message-ID: <20260529111704.1078346-1-dev.jain@arm.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HA/xLD7K"
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7e55b95ba13so7081035a34.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 05:46:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780058763; x=1780663563; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FOaj7kJy+BccHhWOj/+aUOc8E/TW5v19gnCmqaTZgac=;
+        b=HA/xLD7Kwxrz+AgsGk+FAdm4QhMyYI5zcD0Pm8uvJNUOekol1Je9GOhQvij24ZIZHV
+         nWireIuGELyORTSD5VCx8W6jE2hVHPLi2x3zxD9xP/Yv8Nnhb7Ywsyxb1RGb42xrgOQj
+         AttW5+XFRYMmBAw+oLFQOm7mkMJnwZDTe5jIFd4y+KGi0MrdfBZpQfmXw4YUG4vAgaMU
+         IorllKx5RhgUVMYTMmgLlupKRIWlNDY8Y+o0hzyhRaIwiTF6Uyddb29/AOXBNQtyDkr+
+         nLgjsAdoS4m8BgCfNseudmmuu3VB8GZ9USOX2MR668Bua42WLQRVTVFwbwQx+uU+FEHq
+         5UVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780058763; x=1780663563;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FOaj7kJy+BccHhWOj/+aUOc8E/TW5v19gnCmqaTZgac=;
+        b=m2L7AeGrLApJ9nMc3nDJu+OzP5ntV5NTadqAnYZpfXHt/6ArUEOR0ZLXyNFR9fnbq3
+         2tHtmOwPqjJwvTLl5KbaGHRqnlC43dDy+NoamNOiV6+KBXflMsktO1QO4Ke6A+RJGQwf
+         8NkqW5EBT8eeIsnU/bZtTHoQKdUc/9uCf4Q98GPdaeX0ZmCmaG/ku5juXxJGeWTY92B1
+         24MqzN7R6/UwHAirXpAP9D6nV7k7IfEfbNfSdEimgAkaox030WzCv47N8fT7fTIgoXtR
+         XYfMMgQQI7jxHKVSSUi1PwAHTyUGYQ+9HZPndMRrqpAj6QLgxLgKquMi7scEZ5HpCuE9
+         9dwQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8v+iP2lrCm4k8fi8dDww3JA9NllwRPR1ArJb6gYnvw1o8N9VqG5W52aK2z3lOhbEoXhIH7MlgGJympkCrmfQ0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvI22Wq9lr1PzRCkVpI/MXr5aAaRJj9XHrEtmy5v3rk5Nu5BUE
+	B2PAfffhj1W0BrgE0NB49hoGKCJmanA3tIL0smTgBNtEjTxP2daL+518
+X-Gm-Gg: Acq92OG7k4eA7LqZ7RD4l5D4zdxCs/7dP97Fdk+AjeHdiPwZ4U0vDGmh4ivcoJhrKxm
+	2oCB70WZmx+79Z/iRvswda/hRHTN7YC0MPw0D40aiRqa3MQkUG+/GfQlueHewqVOGykGWORvxTP
+	NS2j7vNOaiAHz3dcLcH3lJEeqJ8EVdm3gu3SmOxiIw8EhdWzCC+xWL94haTE7yCCm1wrPq8ZZtM
+	MLix4VDIZCuJUc8ltG0F9eutOXoL4q56wFUvXq+kYBGvNr1xorpRRdiajFJzNwCwSbw/qSBAk1c
+	E6tS7XuBdULzVd//CFhvOcsYsPVN35a+WDPyLjUpFkcTE+OiO+xVsUqa+9/dZe3tDhN0hnjP1mS
+	HlWXp2NphQOE+a76Lc6ZIEVToWj9+e4BvqlfmPJG2asNzK+nJsmvc2g2irYcb3S3Zxg5ySotuAj
+	legFAEqm3UjZGLW0B4VLav18fCsZv0Qw==
+X-Received: by 2002:a05:6830:438d:b0:7e1:90a:97c2 with SMTP id 46e09a7af769-7e694e4bf8bmr1720403a34.23.1780058762922;
+        Fri, 29 May 2026 05:46:02 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:1::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e695bd9c9csm1381119a34.11.2026.05.29.05.46.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2026 05:46:02 -0700 (PDT)
+From: Daniel Zahka <daniel.zahka@gmail.com>
+Date: Fri, 29 May 2026 05:45:55 -0700
+Subject: [PATCH net-next] selftests: drv-net: tso: add new tests for
+ ip6tnl, ipip, and sit tunnels
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260529-tso-tunnels-v1-1-3771ee9eaaa9@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAIOKGWoC/x3MSwqAMAwA0atI1gZqRaVeRVz4STUgUZoqgnh3i
+ 8u3mHlAKTAptNkDgS5W3iWhyDOY1kEWQp6TwRpbm8o6jLpjPEVoUyz9UIzOm8Y4B6k4Anm+/1s
+ HQhGF7gj9+37rKQKAZwAAAA==
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+X-Mailer: b4 0.13.0
 
-pagemap_pmd_range_thp() warns if a non-present PMD is not a migration
-entry. This became false once device-private entries at the PMD level were
-added.
+Add new tunnel test cases for ip6tnl, ipip, and sit. ip6tnl supports
+ipv[46] as inner l3 header, and the other two tunnels only support a
+single inner l3 type.
 
-One can hit the warning by patching hmm-tests.c with the following:
-
-diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
-index e1c8a679a4cf3..7f0a3384f3c5f 100644
---- a/tools/testing/selftests/mm/hmm-tests.c
-+++ b/tools/testing/selftests/mm/hmm-tests.c
-@@ -209,6 +209,37 @@ static int hmm_dmirror_cmd(int fd,
- 	return 0;
- }
-
-+static int hmm_read_self_pagemap(void *addr, unsigned long npages,
-+				 unsigned long page_size)
-+{
-+	const size_t entry_size = sizeof(uint64_t);
-+	const off_t offset = ((uintptr_t)addr / page_size) * entry_size;
-+	uint64_t *entries;
-+	ssize_t nread;
-+	int fd;
-+
-+	entries = malloc(npages * entry_size);
-+	if (!entries)
-+		return -ENOMEM;
-+
-+	fd = open("/proc/self/pagemap", O_RDONLY);
-+	if (fd < 0) {
-+		free(entries);
-+		return -errno;
-+	}
-+
-+	nread = pread(fd, entries, npages * entry_size, offset);
-+	close(fd);
-+	free(entries);
-+
-+	if (nread < 0)
-+		return -errno;
-+	if ((size_t)nread != npages * entry_size)
-+		return -EIO;
-+
-+	return 0;
-+}
-+
- static void hmm_buffer_free(struct hmm_buffer *buffer)
- {
- 	if (buffer == NULL)
-@@ -2314,6 +2345,10 @@ TEST_F(hmm, migrate_anon_huge_fault)
- 	ASSERT_EQ(ret, 0);
- 	ASSERT_EQ(buffer->cpages, npages);
-
-+	/* Exercise pagemap on a PMD device-private entry. */
-+	ret = hmm_read_self_pagemap(buffer->ptr, npages, self->page_size);
-+	ASSERT_EQ(ret, 0);
-+
- 	/* Check what the device read. */
- 	for (i = 0, ptr = buffer->mirror; i < size / sizeof(*ptr); ++i)
- 		ASSERT_EQ(ptr[i], i);
-
-
-Therefore, remove the stale migration-only assertion.
-
-Fixes: a30b48bf1b24 ("mm/migrate_device: implement THP migration of zone device pages")
-Cc: stable@vger.kernel.org
-Signed-off-by: Dev Jain <dev.jain@arm.com>
+Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 ---
-Applies on mm-unstable (404fb4f38e8f).
+Example run:
 
- fs/proc/task_mmu.c | 1 -
- 1 file changed, 1 deletion(-)
+  # Detected qstat for LSO wire-packets
+  TAP version 13
+  1..18
+  ok 1 tso.ipv4
+  # Testing with mangleid enabled
+  ok 2 tso.vxlan4_ipv4
+  ok 3 tso.vxlan4_ipv6
+  # Testing with mangleid enabled
+  ok 4 tso.vxlan_csum4_ipv4
+  ok 5 tso.vxlan_csum4_ipv6
+  # Testing with mangleid enabled
+  ok 6 tso.gre4_ipv4
+  ok 7 tso.gre4_ipv6
+  ok 8 tso.ip4_ipv6
+  # Testing with mangleid enabled
+  ok 9 tso.ip4_ipv4
+  ok 10 tso.ipv6
+  # Testing with mangleid enabled
+  ok 11 tso.vxlan6_ipv4
+  ok 12 tso.vxlan6_ipv6
+  # Testing with mangleid enabled
+  ok 13 tso.vxlan_csum6_ipv4
+  ok 14 tso.vxlan_csum6_ipv6
+  # Testing with mangleid enabled
+  ok 15 tso.gre6_ipv4
+  ok 16 tso.gre6_ipv6
+  ok 17 tso.ip6_ipv4
+  ok 18 tso.ip6_ipv6
+  # Totals: pass:18 fail:0 xfail:0 xpass:0 skip:0 error:0
+---
+ tools/testing/selftests/drivers/net/hw/config | 3 +++
+ tools/testing/selftests/drivers/net/hw/tso.py | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 1e3a15bf46f4e..58938e62154d9 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -2129,7 +2129,6 @@ static int pagemap_pmd_range_thp(pmd_t *pmdp, unsigned long addr,
- 			flags |= PM_SOFT_DIRTY;
- 		if (pmd_swp_uffd_wp(pmd))
- 			flags |= PM_UFFD_WP;
--		VM_WARN_ON_ONCE(!pmd_is_migration_entry(pmd));
- 		page = softleaf_to_page(entry);
- 	}
+diff --git a/tools/testing/selftests/drivers/net/hw/config b/tools/testing/selftests/drivers/net/hw/config
+index 8c132ace2b8d..b9f406dd7282 100644
+--- a/tools/testing/selftests/drivers/net/hw/config
++++ b/tools/testing/selftests/drivers/net/hw/config
+@@ -10,10 +10,13 @@ CONFIG_INET_ESP_OFFLOAD=y
+ CONFIG_IO_URING=y
+ CONFIG_IPV6=y
+ CONFIG_IPV6_GRE=y
++CONFIG_IPV6_SIT=y
++CONFIG_IPV6_TUNNEL=y
+ CONFIG_NET_CLS_ACT=y
+ CONFIG_NET_CLS_BPF=y
+ CONFIG_NET_IPGRE=y
+ CONFIG_NET_IPGRE_DEMUX=y
++CONFIG_NET_IPIP=y
+ CONFIG_NETKIT=y
+ CONFIG_NET_SCH_INGRESS=y
+ CONFIG_UDMABUF=y
+diff --git a/tools/testing/selftests/drivers/net/hw/tso.py b/tools/testing/selftests/drivers/net/hw/tso.py
+index bb675e3dac88..1b789fea8929 100755
+--- a/tools/testing/selftests/drivers/net/hw/tso.py
++++ b/tools/testing/selftests/drivers/net/hw/tso.py
+@@ -239,6 +239,9 @@ def main() -> None:
+             ("vxlan_csum", "", "tx-udp_tnl-csum-segmentation", ("vxlan", "id 100 dstport 4789 udpcsum", ("4", "6"))),
+             ("gre",        "4", "tx-gre-segmentation",         ("gre",   "", ("4", "6"))),
+             ("gre",        "6", "tx-gre-segmentation",         ("ip6gre","", ("4", "6"))),
++            ("ip",         "6", "tx-ipxip6-segmentation",      ("ip6tnl","mode any", ("4", "6"))),
++            ("ip",         "4", "tx-ipxip4-segmentation",      ("sit","", ("6", ))),
++            ("ip",         "4", "tx-ipxip4-segmentation",      ("ipip","", ("4", ))),
+         )
  
+         cases = []
+
+---
+base-commit: 8415598365503ced2e3d019491b0a2756c85c494
+change-id: 20260529-tso-tunnels-3fa1b9f07099
+
+Best regards,
 -- 
-2.43.0
+Daniel Zahka <daniel.zahka@gmail.com>
 
