@@ -1,120 +1,125 @@
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414FB367F58;
-	Fri, 29 May 2026 03:41:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C29F35E1B6;
+	Fri, 29 May 2026 03:57:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780026087; cv=none; b=O06719//HLY0zwlGPOFCc5/NwBcYDUGDu7Sll2kn4HO+awjYaxFbh20iD+WSEG585AHEHgsgybJr6NDtrT6IixtUBR3ThqnQk5CeJNrU5FD2c9HVetVj/6OshGdo5hkPpK/OrYzMQsONG5PcopZpO61L8dBInKfJZBh70Ohf7DI=
+	t=1780027080; cv=none; b=YFoZhEckGy50+dWmxLnNTf+Pn3uH1OpApndDUH1E/pQtx6RcN4j2gO82tBFx1pQrUMQQbHvu8/FRhvhyjqXj3Vj6gl+Q+l2IZsbCmKZFdpLMoUJrX8vx2tHRul2DINB5QtGvfpXQH9uI5i58FME5tL4oMWX6k+X5OEeoXMRVcwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780026087; c=relaxed/simple;
-	bh=OsS1e+Qw/QnKrZzlo/+MNIKnYxQSH/Bs/+Zy/VsCM9k=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=O7q+8n6hZMbh0buYVBuq1XRxmdUJeFxayglxqgW+Mgpa3KXIEkz3zFrNEuj8759za16/zTL5tntmgsAoMCCOaTAvLLefWwOlt0BYb7bDNsru+wLQdiQ1KnUM37BAXJ+eAKrDmaPLqHune/pe0b5MADi/FtPe3b/KLtTLWaYh/34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Ou2aIZQT; arc=none smtp.client-ip=113.46.200.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1780027080; c=relaxed/simple;
+	bh=Oyeoxe1XzpOqRaa89dE431wIMRydupXVkaO/ZY1IBxE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=mRtDw56NzPnNaZkFVHKbD86xTVscXYVWA5L3rbYmhp55oMCvuioW9dOkLL9pNUMmISoSK60JaamxiAPqkR90/ggkdX7fKmGmiSlbdlxALINeHqHL38TAFMP92Ujon2+xz+MqWgf4+kzJZ/iGO4QC08EQeofZDTElLqX91V6LGhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SoAQVJyi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Ou2aIZQT"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=uwFcWOwJkeegfR4BbQvBChM0ATs2whx7uh0xno0g6bQ=;
-	b=Ou2aIZQTUFpHcWM+GeEoYlPUKFbytDZomcHoIvdgX1B/fp6vmhzUnHBLV6dN1fgZWhRAvfO00
-	yyrmQqLpqo5kVx1iIuJMLmbbI7BFCRtFoxGVY+meJQsjXzhnrE9tpFozx8Yl/KY+cL5W/0poiWo
-	ZeMftN5tD1TtYSkCuGzTk0g=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4gRTTY4FLKz12Lgj;
-	Fri, 29 May 2026 11:33:21 +0800 (CST)
-Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5496D40561;
-	Fri, 29 May 2026 11:41:20 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 29 May 2026 11:41:20 +0800
-Received: from [10.173.124.160] (10.173.124.160) by
- kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 29 May 2026 11:41:18 +0800
-Subject: Re: [PATCH RFC v2 6/7] KVM: selftests: Add memory failure tests in
- guest_memfd_test
-To: Lisa Wang <wyihan@google.com>
-CC: <rientjes@google.com>, <seanjc@google.com>, <ackerleytng@google.com>,
-	<vannapurve@google.com>, <michael.roth@amd.com>, <jiaqiyan@google.com>,
-	<tabba@google.com>, <dave.hansen@linux.intel.com>, Naoya Horiguchi
-	<nao.horiguchi@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, "Paolo
- Bonzini" <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Hugh Dickins
-	<hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, "David
- Hildenbrand" <david@kernel.org>, Lorenzo Stoakes
-	<lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren
- Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-0-92c596402a7a@google.com>
- <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-6-92c596402a7a@google.com>
- <149c954e-dfe1-6bdd-295c-792642a9d915@huawei.com>
- <ahjw6l7uznZ2bYfz@google.com>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <fceb92c3-3648-418f-6a07-0148d8690bd6@huawei.com>
-Date: Fri, 29 May 2026 11:41:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SoAQVJyi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A490E1F00893;
+	Fri, 29 May 2026 03:57:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780027078;
+	bh=TF8oMuyolNgIYhK+/+aFl6olLARMqck5qvrRMxXKrSM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=SoAQVJyi4H5AJiu4rSmit8l96dzm/O2Upq5sJU3c9mL+tOuazrXA1l5UkmhtOV2xw
+	 nmajanA1l/K2v5mwg72AxlGTqPxWFtaCEVxtMe8MDHAQbv5kAwAcl98kaB7xVPXSiu
+	 Hh5Gkd+zhgSIYGaXqVqw2xCYs4/JrS3+oAaPIjAxQBdGub39rqGscjkpH1tko2x8Fg
+	 NtNHSulYt7FdyVr8jRkw+QAqD1aqyz4mysArnU+hN90oelMauQg47aMMPl/3iDybO9
+	 cDgnB54LLlbE1UX3lBR0SGNQyK8uqoq6QrZkZfgw7smQu9YxJjcl4kvqdBA/Z1LFjT
+	 XCpcqc61lJXyw==
+Content-Type: multipart/mixed; boundary="===============3412909997394935995=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <ahjw6l7uznZ2bYfz@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Message-Id: <2a681961e97de6243f45aec51ba3ab8051055d1daf55c2f2b5ae2a31ee7f2d66@mail.kernel.org>
+In-Reply-To: <20260529031604.888137-1-chenyuan_fl@163.com>
+References: <20260529031604.888137-1-chenyuan_fl@163.com>
+Subject: Re: [PATCH] selftests/bpf: fix token tests for bpf_object__prepare() probe_loading
+From: bot+bpf-ci@kernel.org
+To: chenyuan_fl@163.com,bpf@vger.kernel.org
+Cc: andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,chenyuan@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 29 May 2026 03:57:58 +0000 (UTC)
+
+--===============3412909997394935995==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemq500010.china.huawei.com (7.202.194.235)
 
-On 2026/5/29 9:50, Lisa Wang wrote:
-> On Mon, Mar 30, 2026 at 03:20:15PM +0800, Miaohe Lin wrote:
->> On 2026/3/20 7:30, Lisa Wang wrote:
->>> After modifying truncate_error_folio(), we expect memory_failure() will
->>> return 0 instead of MF_FAILED. Also, we want to make sure memory_failure()
->>> signaling function is same.
->>>
->>> Test that memory_failure() returns 0 for guest_memfd, where
->>> .error_remove_folio() is handled by not actually truncating, and returning
->>> MF_DELAYED.
->>>
->>> In addition, test that SIGBUS signaling behavior is not changed before
->>> and after this modification.
->>>
->>> There are two kinds of guest memory failure injections - madvise or
->>> debugfs. When memory failure is injected using madvise, the
->>> MF_ACTION_REQUIRED flag is set, and the page is mapped and dirty, the
->>> process should get a SIGBUS. When memory is failure is injected using
->>> debugfs, the KILL_EARLY machine check memory corruption kill policy is
->>> set, and the page is mapped and dirty, the process should get a SIGBUS.
->>>
->>> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
->>> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
->>> Signed-off-by: Lisa Wang <wyihan@google.com>
->>
->> Should we add a testcase for hugetlbfs? It seems hugetlbfs_error_remove_folio() behaves same as shmem.
-> 
-> I agree that it would be more consistent to modify
-> hugetlbfs_error_remove_folio() to return MF_DELAYED and update
-> me_huge_page() to align with me_pagecache_clean().
-> 
-> However, I prefer to let this patch series focus on the
-> me_pagecache_clean() path (affecting shmem, guest_memfd and generic
-> pagecache), because the hugepage memory failure test is not working now
-> (hugetlb-read-hwpoison.c). Commit 66802526298e changed madvise()
-> behavior to always force-deliver a SIGBUS to the calling process if it
-> has the poisoned dirty page mapped. Aligning HugeTLB would require us to
-> fix this part together.
-> 
-> To keep this series focused, I would like to handle the HugeTLB
-> alignment in the follow-up series. Would you be okay with this approach?
+> The bpf_object__prepare() function internally calls bpf_object__probe_loading(),
+> which attempts to load SOCKET_FILTER and TRACEPOINT programs to verify the BPF
+> environment. Without these permissions in the token, the probe fails and causes
+> the tests to fail.
+> Fix the following test cases by adding SOCKET_FILTER and TRACEPOINT permissions:
+> - obj_priv_map
+> - obj_priv_prog
+> - obj_priv_freplace_prog
+> - obj_priv_freplace_prog_fail
+> - obj_priv_btf_fail
+> - obj_priv_btf_success
+> - obj_priv_implicit_token
+> - obj_priv_implicit_token_envvar
+> - obj_priv_prog_kallsyms
+> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 
-Sure, this will be better. Thanks for your work. It's really helpful. :)
+The commit message describes adding SOCKET_FILTER and TRACEPOINT
+permissions, but the patch also adds bit(BPF_PROG_LOAD) to the
+obj_priv_map test and bit(BPF_MAP_TYPE_ARRAY) to obj_priv_btf_success,
+obj_priv_implicit_token, and obj_priv_implicit_token_envvar.
 
+Could the commit message be updated to describe these additional changes,
+or should they be dropped if they are not needed?
+
+This fixes failing token selftests but does not carry a Fixes: tag. The
+tests began depending on the probe permissions once they started routing
+through bpf_object__prepare(). Commit a024843d92cc introduced the
+bpf_object__prepare() call into prog_tests/token.c. Should this include:
+
+  Fixes: a024843d92cc ("selftests/bpf: Test freplace from user namespace")
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testing/selftests/bpf/prog_tests/token.c
+> index f2f5d36ae00a..25a76e09a3c9 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/token.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/token.c
+> @@ -1168,8 +1168,13 @@ void serial_test_token(void)
+>  	}
+>  	if (test__start_subtest("obj_priv_map")) {
+>  		struct bpffs_opts opts = {
+> -			.cmds = bit(BPF_MAP_CREATE),
+> +			/* BPF_PROG_LOAD is needed for bpf_object__probe_loading */
+> +			.cmds = bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
+>  			.maps = bit(BPF_MAP_TYPE_QUEUE),
+> +			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
+> +			.progs = bit(BPF_PROG_TYPE_SOCKET_FILTER) |
+> +					 bit(BPF_PROG_TYPE_TRACEPOINT),
+> +			.attachs = ~0ULL,
+>  		};
+>
+>  		subtest_userns(&opts, userns_obj_priv_map);
+
+The obj_priv_map test is meant to verify a token restricted to
+BPF_MAP_CREATE. Widening it with BPF_PROG_LOAD, SOCKET_FILTER, TRACEPOINT
+and .attachs = ~0ULL relaxes the very restriction the test was checking.
+
+If bpf_object__probe_loading() aborts the entire object load with -EPERM
+under a confined token, is that better handled in libbpf, for example by
+treating the probe -EPERM gracefully or skipping the probe for objects
+that have no programs, rather than expanding the token privileges in the
+test?
+
+This was raised on the v1 posting and does not appear to have been
+addressed:
+
+  https://lore.kernel.org/bpf/20260529031604.888137-1-chenyuan_fl@163.com/
+
+> @@ -1177,7 +1182,10 @@ void serial_test_token(void)
+
+[ ... ]
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26616379941
+--===============3412909997394935995==--
