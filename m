@@ -1,180 +1,192 @@
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938E1376BFB
-	for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 20:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4B43F4DEC
+	for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 21:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780086997; cv=none; b=i5zUoYtGeu3xpL4XW5LvA6ZG6juZlCcuI6GbrOhDxcVHxNnAZb99N0oAQN75AxJzvzeTZ+X5XYWczBwtUvRAdg2hjos000m3WA3CmMXw6L2Bcr1RAucrwW2RH4/WkXYJZyvm1t9UcPudnEoNQ8QhfRaHtRYuIVOjgZc6u7rWE/s=
+	t=1780091087; cv=none; b=lCgrsG+OuptvXyH0War2x8dbqCzUUj47fLTMyt+cJrMe+7FfUt/eJJuyrCW6wkZnBijAW7oJV4Gc72GLne//kMf/oeSipEBj819DnttUOwIBRSV6rJvuaXx0jkDloHMw+mM8I5nvNOE1UyYdW69sAVXdBaK12mDB6GdXNFm0b0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780086997; c=relaxed/simple;
-	bh=iQNyPSB6d4pRiCH+WP5fQJzoEg3EGVgrTx0xcFYHvCs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=TGqlP8fqJ6HCR5OTZ7o2amLi9RQOk/PdueLavS08J1pm13rFCXNwAyGTPKuHBBmHIt6wt8cGGouulYMyBbPJgfU0O0+ToQkl38rII+bRGOTzjlJg7U0jueHmd/jWUFZKrhILRIHrEN3bQ8iVQLnaqzCynC1jrcr/nZDgudbl2Oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hz4fwJ/Y; arc=none smtp.client-ip=209.85.210.54
+	s=arc-20240116; t=1780091087; c=relaxed/simple;
+	bh=9ztBHi69dTvfIbkPqcEl1msz3Fn7k9rrFW2VNPhV/B0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OBrk0Xa+X4eXl+DavawG2xEX1wK3pNfGsvMsUoPnp+fePLiOBV2ls2GSdkxlJVn9flCYYM/H33D88hcpOZuz3pgJ2LSKUuWMQcpvHgcbWojCKzLSTyjrnkOV96BqC8EC+tWQ/OEeuSrBKNkA+ltLJx/UfKdXOcUZGuQzYwLlb94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fwgVQbH4; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hz4fwJ/Y"
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7e36bb16a92so7262075a34.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 13:36:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fwgVQbH4"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48d146705b4so151410615e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 14:44:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780086995; x=1780691795; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1780091085; x=1780695885; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b/dZIPQs4IpSSy6mNi2UlIteDsWuWh8/BhCXqaiofzE=;
-        b=hz4fwJ/Y5FWns2VZpClGk7XG3rEM0K4QjryTwxpXjr92kecDDjcQBQPx2ii0SjOvwY
-         ef9b3pI0CBb9fshM8haK9IGNu/M7GcRPl7OIVuGgRmlYImRwXjkWRQ4+efn9p49aZkxS
-         oYfOc4vR4p3XQX/dgYK8zMQ8TgkjvUuik9kQ3guYkJHODqRWTdPlrkGiVKuD3Xc+fk1h
-         vLP1FdF3M/nd4HzwWtJ0LcyncAKOjdo4YXx5hZ797IhqLXo267zqTvKr4FidvsRlBRDK
-         Ao4spF3iSaQVSnrTHvkMoeh9qpT90SybT3eaES++37rN5VJKL9zoBaRt2iTIvMmpYSri
-         +QKA==
+        bh=wclCqKMzu4g1WLNsGWFcKOde7ruW79bP7ckJPFHNnw4=;
+        b=fwgVQbH4FyVJHYo/TgVDXeJt0HtCakNScQWx1FvLXcAuXBPKNaI7U1Jd54/hTYq1rf
+         YPmV9lZWUIOyeHMJ9O9pCWqFP3gFvPm9xWe9IGCR5kuh9NRfRYnK2UvLmYrVTxsz0hUB
+         c6HsLsvICUZrWsdwUdtb0A8fdQJJwUbxJFYkmNujbuXbckOONywIBh2lyrbbBIZpF6Lk
+         ADj6uGERGP2rMz61vCK5RUoB3atrsEdLtMAmTH4x9SHOdBNn/fvwDFE3GKOgD44Idv5k
+         vEnGmTSzQ9vnD+ZcSLhd5178NDVbINYMSxMHOxIVbcXuNQPMdXewubeIF2W6vY2CiYMD
+         XI0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780086995; x=1780691795;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b/dZIPQs4IpSSy6mNi2UlIteDsWuWh8/BhCXqaiofzE=;
-        b=Blduf6eh6ePSIamUteya/CE/eMPd9oq17x1MENKlOklgNMEYSKHExh6Haelz4f2Dia
-         4d4kR2YdSsp6zOs270rx/R6DWGrPfyMOkwC+BKb8f/058S4TPsSYbL124qtjLJ9T9beb
-         bFaevvDKgJ+gk66IUw7bnIIeU1xFJsaA/1Y1aDqkZ+ajA/5AvxNja4OF2mXdMs2sJi1T
-         bTA4FtU6BtvdA9pngTgLrjF84hwIDt36nD0x+voc+2OESwgTvvu2mrKkvx0ey4FX6rxk
-         rk+j74m3w1t+nwBh6pRGvFIgRvW6sG2mj5b0VXvmwc1qzIWaerNWwyFXszjGl3VzkdPr
-         IhpA==
-X-Forwarded-Encrypted: i=1; AFNElJ+3pG9DMMDEpibGMQ3yyjUdIMamtT15KYSFj8+985LULCV1h8XW5by+5rciur+m9/1IqZIo0cD7/qE/SOqoSdU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgksXYNVApTuNjNVLtW1Lt+Fip0qqruPFI+KeifPOMLYm38mGG
-	vxYWCkSWAToQswcp29DAIC+LPGO+A/3nQo9LG+HyDUzn7E+kc//py5+Q
-X-Gm-Gg: Acq92OGiY0eW9maI0q6HUh7KxKFvc+mLeP8sMWsHHme8PyykkAnWdep/DVm+yvoNj0b
-	zu/0ka80w92DjJd8uaCw5EKapFBPGew9NIuklUdIH8hZmViyjAfmfbHiHwqMfMDeOgRf63z4fIc
-	ieC7zlVnWqO6lZpA/fhCaW0Tnpu812Z6KTLYsZbMlyhzfKbi28H7J43X+3iCPJfruwoGYt2YSQr
-	HcAYaaBjx/gEOEMG/JU2zTWKHKgpcJYE1L98B27RphFHwFu4rWi/Z8sDA4GOEv6qbPP6Mdwzp/x
-	VpBP6zUz9Cy7jCEU1yvRB/P0E5iojE13c/EEipbvfN0vdUjV+u1PKNF5WRZbxgaQohgdeXRT1EH
-	vLMAUB7E5P6eC0j6Scs3pSK9Og5FihBqMJLEyZaRfWyBp/Yf00s41fB1hkwkFrP2e69u5K69vez
-	pnPprQqK1r4sldhN6QXaG3OoGfqiOkjNRgUunDWpSg+EfTUibaI/8Mx9/Jb9byGu8vENlPYhmKi
-	OLC4zyDIpy09Q+GbCoLlrrjejSH
-X-Received: by 2002:a05:6830:4884:b0:7de:a2cc:9dde with SMTP id 46e09a7af769-7e6a1df5c12mr902807a34.15.1780086995443;
-        Fri, 29 May 2026 13:36:35 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:53::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e695bb393bsm2116002a34.7.2026.05.29.13.36.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2026 13:36:34 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780091085; x=1780695885;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=wclCqKMzu4g1WLNsGWFcKOde7ruW79bP7ckJPFHNnw4=;
+        b=QJPVHsz7jlIhgQCRNoXJ0pcOpTG3ct1+TU1b/coOq3zggQlDbcOpYcn3Ioj1kEiubh
+         ft6v41UARXryXLNdZY/9bKGEUZ9RI6WzFG9cadH47245ni4tqqZQP2dn8b61jZ0o+90O
+         amCSfkbEgYh4Q5+5SADIRRmuD952cdcUAfU5KIly8TvFNa50nVySK5VtsR8wkl5y/Uo0
+         6yax9I/svRJjvodUNYkspWoFtgBTvvHnWhF9Ps6s+epq4v7/6/3nozQ7bCArIUKLONGX
+         inwlvjECz0HKpPJIRb5JEzvjYJcor5J07VjbbFSxr1TY7ZDvjtX3QbfzGSLphNYGWjzG
+         crNQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/6RYLGxamTfrNCEzv14OSJiMSVX2cBnmrLBolX7vh303qdrDOmGPPMDC3Br4/zTa4PVrWwXErZSiYBPyN7Vfk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz72qyyRdwTIh9Bh6jSruN0GtoatPIhycHP2znkSBK2erQo5WVz
+	+sHcJC3S7+Ds6HCxFaq0qomH3asQJsqBSEEuw00fOv/qiFkVCZNss3jz
+X-Gm-Gg: Acq92OFcq5wRPQ9OrA4FhemiHGB27G992jd4G1yqgS1RXuA8HqehIJWSa4x4+cOiW7l
+	AoNWDoWZq1ErbNVvW8U2eCeLOPRZQhAkFN7Pp9fG8LP1EkOdjWuQxZ7B45RdkzlntEZZ5EA4TuW
+	5lgFEjAFRRQEpOykmOaYn52MadiufkeyCvclnnPyE/wmnMDlqBJ3XfiLQLsLnCUwHi0G56IADsr
+	1GyvpPWW4xsmKVVnVWvy8sx7WzldiHp6/Vnul8WKGl/nHKP9mQHd2KsYv1+furO+qRPnT9X4fsT
+	FzASRg8E9PaRAalkgXqypun0hxEXdG11HXxxDtC2cZ4xDyEpQ2kSMODbkTfSG/1DuqYF24bxzSb
+	kICp9E2/7quA8RMKgO5hSTnbusMebVhpU56TxbBhQeiWXSzDpTZ5ZMda6OwjSeb0ik2o2ZwxQxn
+	mihjMdC0r2tdm2mHnTXepI/idm8P2tp74EwFUtD2rN5lVbuVv0wwiEA1ZpDYImVrnPQUgPw3VWg
+	FvVwKHpQg==
+X-Received: by 2002:a05:600c:41c7:b0:485:30d4:6b9e with SMTP id 5b1f17b1804b1-490a293e0c2mr13857975e9.21.1780091084768;
+        Fri, 29 May 2026 14:44:44 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909c0aecdfsm22172265e9.13.2026.05.29.14.44.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2026 14:44:44 -0700 (PDT)
+Date: Fri, 29 May 2026 22:44:42 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>,
+ kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org, Mark Bloch
+ <mbloch@nvidia.com>, netdev@vger.kernel.org, Saeed Mahameed
+ <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>, Tariq Toukan
+ <tariqt@nvidia.com>, patches@lists.linux.dev
+Subject: Re: [PATCH v2 06/11] selftests: Fix arm64 IO barriers to match
+ kernel
+Message-ID: <20260529224442.11d7320d@pumpkin>
+In-Reply-To: <20260529192933.GD3195266@nvidia.com>
+References: <0-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
+	<6-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
+	<ahiFxtmspbETiqWw@google.com>
+	<20260529134947.GA128816@nvidia.com>
+	<20260529175516.06d5788f@pumpkin>
+	<20260529192933.GD3195266@nvidia.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 29 May 2026 13:36:31 -0700
-Message-Id: <DIVG6ANND95G.2MC7WWJG1P01A@gmail.com>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, <bot+bpf-ci@kernel.org>,
- "Alexei Starovoitov" <ast@kernel.org>, "Andrew Lunn"
- <andrew+netdev@lunn.ch>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard"
- <eddyz87@gmail.com>, "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski"
- <kuba@kernel.org>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Nikolay Aleksandrov"
- <razor@blackwall.org>, "Paolo Abeni" <pabeni@redhat.com>, "Shuah Khan"
- <shuah@kernel.org>, "Simon Horman" <horms@kernel.org>, "Song Liu"
- <song@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Yonghong Song"
- <yonghong.song@linux.dev>, "bpf" <bpf@vger.kernel.org>, "LKML"
- <linux-kernel@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>, "Network Development"
- <netdev@vger.kernel.org>, =?utf-8?q?Maciej_=C5=BBenczykowski?=
- <maze@google.com>, "Lorenzo Colitti" <lorenzo@google.com>, "Martin KaFai
- Lau" <martin.lau@kernel.org>, "Chris Mason" <clm@meta.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Todd Kjos" <tkjos@google.com>, "Carlos Llamas"
- <cmllamas@google.com>, "Kalesh Singh" <kaleshsingh@google.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: align syscall writeback behavior with
- caller-declared size
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Yuyang Huang" <yuyanghuang@google.com>
-X-Mailer: aerc
-References: <20260515071504.2054786-2-yuyanghuang@google.com>
- <2e08eb1ca27a9a2f8ad29e1c24f779b579621b0a648589f7044799d91c5e00f5@mail.kernel.org> <CADXeF1GVtFHNZJb8xwFh6aadR=H19S+kja8rF185XB5=fg0D0Q@mail.gmail.com> <CAADnVQ+42+Th6OFGq2KawzvyKUAykazb4fXh2_uqss-T+R8VCg@mail.gmail.com> <CADXeF1F=7RcxAsW38w_mpFeKCLxTAh5p_XYHd=x2Ru+oajoN3Q@mail.gmail.com> <DIUR88219HWQ.26T4D7ZX8CNTC@gmail.com> <CADXeF1E-QpKj-37T5ghiycXrVR_YN72fOc3M4OQg-Arz7JNjsQ@mail.gmail.com>
-In-Reply-To: <CADXeF1E-QpKj-37T5ghiycXrVR_YN72fOc3M4OQg-Arz7JNjsQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu May 28, 2026 at 9:44 PM PDT, Yuyang Huang wrote:
-> On Fri, May 29, 2026 at 9:03=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->>
->> On Mon May 25, 2026 at 12:21 AM PDT, Yuyang Huang wrote:
->
-> Thanks for the reply.
->
->> Ok. This is fair. 120933984460 is indeed problematic.
->
-> I'm glad to hear we agree that 120933984460 is problematic.
->
->> Not really. Your patch adds checks to what looks like "random" copy_to_u=
-ser()
->> places. This thread is clear indication that it's not a "robust architec=
-tural path".
->>
->> True robust path would be to wrap every copy_to_user() into another help=
-er
->> that takes uattr start pointer and size, does extra check, and
->> returns something like ENOSPC (and not EFAULT),
->> but that would be a significant churn.
->
-> I agree that the truly robust path would be a proper copy_to_user()
-> wrapper instead of doing the ad-hoc check in the current path, but
-> indeed, that will be a big change.
->
->> So I prefer a minimal patch that add single check in bpf_prog_query()
->> that checks that user space supplied buffer is large enough for attr->qu=
-ery.
->> If not -> EFAULT. That would be better than overwritting.
->> One can argue that partial copy_to_user() in __cgroup_bpf_query()
->> should still be allowed, but I'm against partial and
->> inconsistent queries.
->> query.revision might seem benign, but if we do it for all copy_to_user()
->> we better return ENOSPC to differentiate vs EFAULT to tell user space
->> to fix itself.
->
-> Okay, I understand the preference is for a minimal patch to implement
-> the fix. Just to make sure I fully understand your suggestion:
->
-> Are you proposing that we add a single check at the entry gate in
-> `bpf_prog_query()` like this?
->
-> ```c
-> static int bpf_prog_query(const union bpf_attr *attr,
->                           union bpf_attr __user *uattr, u32 uattr_size)
-> {
->         if (uattr_size < offsetofend(union bpf_attr, query.revision))
->                 return -EFAULT;
->         ...
-> }
-> ```
->
-> If we implement this, I want to confirm if you are okay with the
-> consequence for legacy cgroup queries (e.g.,
-> `BPF_CGROUP_INET_INGRESS`):
->
-> 1. Before 120933984460: Legacy userspace compiled years ago with a
-> 40-byte `bpf_attr` layout (ending at `prog_attach_flags`) regularly
-> queries cgroups passing `size =3D 40`, and it worked perfectly.
-> 2. With this check: These unmodified legacy applications will now fail
-> with `-EFAULT` on newer kernels because they pass `size =3D 40` which is
-> less than 64. This means all user-space applicaion is expected to
-> "fix" their code when along with the kernel upgrade.
+On Fri, 29 May 2026 16:29:34 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-I bet you fixed your android setup long ago,
-so all of these "but what about backward compat" is getting annoying.
-Whatever kernel patch get merged android won't even backport, so enough of =
-it.
+> On Fri, May 29, 2026 at 05:55:16PM +0100, David Laight wrote:
+> > On Fri, 29 May 2026 10:49:47 -0300
+> > Jason Gunthorpe <jgg@nvidia.com> wrote:
+> >   
+> > > On Thu, May 28, 2026 at 06:13:26PM +0000, David Matlack wrote:
+> > >   
+> > > > Let's put these in tools/arch/arm64/include/asm/io.h so that the tools
+> > > > headers are more aligned with the kernel headers, and so that the arm64
+> > > > io.h overrides are done in the same way as the x86 overrides in
+> > > > tools/arch/x86/include/asm/io.h.
+> > > > 
+> > > > Something like this (untested):    
+> > > 
+> > > Okay, the disassembly says it works:
+> > > 
+> > >     1db8:       ca080108        eor     x8, x8, x8
+> > >     1dbc:       b5000008        cbnz    x8, 1dbc <readl+0x58>
+> > >     1dc0:       f9000fe8        str     x8, [sp, #24]  
+> > 
+> > That looks strange, I suspect the C didn't match any usual pattern.
+> > Normally 'tmp' would get thrown away and 'v' would get kept.
+> > But you seem to have discarded 'v' and written 'tmp' to stack.  
+> 
+> Oh interesting the optimizer isn't turned on for selftest builds. So
+> the str is dutifully writing tmp to the stack. Another register has
+> the actual value.
 
-> Is your preference to explicitly fail these legacy `size =3D 40` cgroup
-> queries (breaking backward compatibility for them) to avoid "partial
-> and inconsistent queries"?
->
-> If we want to keep these legacy queries working safely (without
-> failing them and without causing memory corruption), we cannot use a
-> single check in `bpf_prog_query()`. We would still be forced to plumb
-> `uattr_size` to `__cgroup_bpf_query()` so we can conditionally skip
-> the `revision` writeback when `size < 64`.
+I've never seen any point testing with compilation options that are
+different from those used in a final/release build.
+Otherwise you aren't testing what you are going to release.
+This is particularly true for badly written code that might be
+relying on uninitialised stack (etc).
 
-Replied earlier that I don't like random checks like this through the code.
+> 
+> > I'm probably being stupid again, but how does that work?
+> > The cpu can speculate straight through the control dependency into
+> > the following instructions.
+> > An 'eor x1, x8, x8' may not even have a data-dependency on x8.
+> > (Most x86 cpus just generate a zero for the equivalent instruction.)  
+> 
+> I can't say, this is copied from the kernel and Will made it:
+> 
+>     arm64: io: Ensure calls to delay routines are ordered against prior readX()
+>     
+>     A relatively standard idiom for ensuring that a pair of MMIO writes to a
+>     device arrive at that device with a specified minimum delay between them
+>     is as follows:
+>     
+>             writel_relaxed(42, dev_base + CTL1);
+>             readl(dev_base + CTL1);
+>             udelay(10);
+>             writel_relaxed(42, dev_base + CTL2);
+>     
+>     the intention being that the read-back from the device will push the
+>     prior write to CTL1, and the udelay will hold up the write to CTL1 until
+>     at least 10us have elapsed.
+>     
+>     Unfortunately, on arm64 where the underlying delay loop is implemented
+>     as a read of the architected counter, the CPU does not guarantee
+>     ordering from the readl() to the delay loop and therefore the delay loop
+>     could in theory be speculated and not provide the desired interval
+>     between the two writes.
+>     
+>     Fix this in a similar manner to PowerPC by introducing a dummy control
+>     dependency on the output of readX() which, combined with the ISB in the
+>     read of the architected counter, guarantees that a subsequent delay loop
+>     can not be executed until the readX() has returned its result.
+
+Hmmm...
+
+Ok so there is some subtlety with the read of the counter that might
+make it all work.
+
+It is better to make the delay loop have a data dependency on the result
+of the readl().
+Something like:
+	u32 z = 0;
+	OPTIMIZER_HIDE_VAR(z);
+	writel_relaxed(42, dev_base + CTL1);
+	udelay(10 + (z & readl(dev_base + CTL1)));
+	writel_relaxed(42, dev_base + CTL2);
+That avoids the potentially mispredicted branch and only adds instructions
+when a delay follows.
+That sequence is safe for all cpu and doesn't cost much for cpu (like x86)
+where it (probably) isn't needed (maybe unless you patch the scale for udelay
+into the code so there are no memory reads, just code).
+
+Probably best refactored as udelay_depends(10, readl(dev_base + CTL1)).
+Or maybe udelay_after().
+
+-- David
+
+>     
+>     Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>     Cc: Arnd Bergmann <arnd@arndb.de>
+>     Signed-off-by: Will Deacon <will.deacon@arm.com>
+> 
+> Jason
+
