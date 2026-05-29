@@ -1,96 +1,256 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F370EEA8
-	for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 22:47:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40BE228506C;
+	Fri, 29 May 2026 23:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780094876; cv=none; b=eBx35Ob2yQ+R/qbR0d549v5/BLxYHfVc2Buv4Zsvae0Gjr1O2IqIGiq20F6qVlmXxX1PN8BpWXUpjSjnKBI3N7ure6k1W7uhLbqS9yXoY4uxiWrTJU/+G/uSArnOSJnsbNspgeajHdO9baASQB6gK2pShTDEWNmZrLIbJFSwB1U=
+	t=1780097596; cv=none; b=uJwtcx6gmpGCKLzA/Pl4pSXZd3qRGoEiUqMTnJJ3tUAz9GHQ5wcnf6oYMwmBrhUflJ/mgoYToi/0F0++Nw0GCfXDCfWMkOCV+x+xw4bDMDHSN54SPDJLqE0A7wWleqlpsijhsb0ayEfcFqlBYXlgOLF0aWlLGSbwja8VNkfHCnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780094876; c=relaxed/simple;
-	bh=EhXkRw0+3FPNY3jkfcQ8Ugbl3bFu9YVeGT9yETM4UQ8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=JU+F5M+s0MWsBzzFwx0v71Ztd6ywp1tLhTSF5FnN+g+hJZT5zmA2lFsjnWcAygEW3d5o6LOcn/Hv0iZhdipFQCE+LhBYTJRxMlFhnX7hpfBtL54rmeZtrhu4Hcmx+UC0LsgZSSnTDaxw6/CeUcFAfC49QlU3d6gSZpXJiJrvz0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M4zk/1hm; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1780097596; c=relaxed/simple;
+	bh=cr2J61wIRbdLJ8JeVUMZMRpYithBTTq8UapgpGnMiyc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=m85PTOUd3GYpi/edYCdAfWDnR7lIL4DeaCjrmH6Q3FrXF4KoYb7r9wbWCOFqMCwga5xNrAI5x1KZQj7qZNT4UtrIW+EArR9goSxMP8hEfXqheneSqt0Sco9quHUXEt2yBul2ztnGFvzqv+ocaQDZG3uERXvJ8/qgtHJdcOk2qUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZ11a3QO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M4zk/1hm"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c8279604464so17270989a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 15:47:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780094874; x=1780699674; darn=vger.kernel.org;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LBoaHKw1uhDp/VWR8jKcQP5YxjdLIxlGKMU+QUhdwms=;
-        b=M4zk/1hm5PyXjrNnQd3SMH+0YaUzqWqUJkYbC3zEt45FDiTmne9Kp6/88OKj3dk4uw
-         Tjpi34spAUvSnkd0bMD2Ujv0S1Xk61gQU5jD7ixDfHe0H/izgIRgo5L/YdpglXu2rsnP
-         +JmQNCr6stxIM0Tez9l0muPPXL2M1MxmPyc3/s6MdEzw5czRQSj3nWRumMOnW11z4Xqo
-         mT1NRA9ATUH5jVWogfG6K4sBuE/aomh6/+Ozhg5APszHcpkWPZIdlObVmd+GLN4Sds+3
-         osE2eJ9tNSz2seg457UrOuyVcP/om6FifHyPhdM9jTofHn27soqDHKtiCYSvQUrS+B8w
-         nHDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780094874; x=1780699674;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LBoaHKw1uhDp/VWR8jKcQP5YxjdLIxlGKMU+QUhdwms=;
-        b=f4eJDTLzfeoxVA1mI0o9yw0bJfr5ATCaR6ZYCzn1LqF6YVE9Zz3KJYgPOC4PQQCt9d
-         FQEULyS+HknSE1Fv6FZ5p8dn8UIsQHgAKP1xlzEfHOUgHxvGYaVV8WHpERtfc3o5Fja3
-         q8LxWUXFvcASnt0HhyU3Por6EwZsBsVmfwFlSNXwTS4Pe0o+0PdoKG2okUawq+kk4HpN
-         88lgf+V0o7BoYnF23XcQCtbuxnNF1Re6vKidfpjq0Qc02iJ+dIZl/gnAzuIx5rKPH0pL
-         6Lvizy2RTLVVjpIMgwT2BcoVScH6ElnCouG4AKfRSQUYuIsuFHXyQomx1VbC0VdHinXJ
-         syMw==
-X-Forwarded-Encrypted: i=1; AFNElJ9TQaaHwwO8Spx4wVlKElEqEddp1A3JBw4rq2pRs0S5emIQwh+OlcaMAQqxfja6yiz6yOCc9AxSkc1AacqdLOY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywfl8BHQnH4r9Hx8vPSsa3FXFXbOI93il0Yz0Y+aLVg+rBTI8w4
-	IcDwiDfIGu/w3GbymuDPg66faDjj214hD1oa+TkNQaHFzhHguj92VVvKT/gHcVcsdu62FKJYZpB
-	IlpzEKg==
-X-Received: from pgbcr12.prod.google.com ([2002:a05:6a02:410c:b0:c85:812d:cbfd])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:8ccb:b0:38b:eadd:449a
- with SMTP id adf61e73a8af0-3b428242975mr1406350637.38.1780094874162; Fri, 29
- May 2026 15:47:54 -0700 (PDT)
-Date: Fri, 29 May 2026 15:47:46 -0700
-In-Reply-To: <20260527174347.2356165-1-jmattson@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZ11a3QO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52DA91F00893;
+	Fri, 29 May 2026 23:33:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780097595;
+	bh=M2EDTxvUOf0FbYXWsVSHXg6R0s2buLubx0e5ZZg5Khk=;
+	h=From:To:Cc:Subject:Date;
+	b=hZ11a3QOKXffID46ltLUxrUd2cCaPk+eMhXGx8u5J1Lqig1jyCbNWvY8IBsmmvGge
+	 0DXFCUBpnaFeMyS74W4xq2LFH2odLikObxUKzbmJh/8GNG4bUfu6svDhirg+YeyNJX
+	 WMVucwiyOf6xkXAt9f00+Lv44Aon5eUvDeyY4v+GA+2D+aDUX2WAYlez231N0t8pjy
+	 9RAW5DgtYZ9o8Bz559WbMHBzbrE2Y1RkJUTnvS8vTAlhvqZJtIUw8lwmoQoRSP7Vi1
+	 wSqkymW4r18VqTS+PAmMxYrHeFKRqZq5HpaiXQhgiBMjQM5yoX91gGtjdeVpLa/Zy4
+	 2MAFG5gCsEeZg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-api@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	workflows@vger.kernel.org,
+	tools@kernel.org,
+	x86@kernel.org,
+	Thomas Gleixner <tglx@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Cyril Hrubis <chrubis@suse.cz>,
+	Kees Cook <kees@kernel.org>,
+	Jake Edge <jake@lwn.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Gabriele Paoloni <gpaoloni@redhat.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH v4 00/11] Kernel API Specification Framework
+Date: Fri, 29 May 2026 19:32:59 -0400
+Message-ID: <20260529233311.1901670-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260527174347.2356165-1-jmattson@google.com>
-X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
-Message-ID: <178009472318.880870.7878635650921105255.b4-ty@google.com>
-Subject: Re: [PATCH v4 0/5] KVM: x86: Virtualize AMD's "disable CPUID in usermode"
-From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, pbonzini@redhat.com, tglx@kernel.org, 
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, 
-	hpa@zytor.com, shuah@kernel.org, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	ctpence@google.com, David.Kaplan@amd.com, binbin.wu@linux.intel.com, 
-	Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 27 May 2026 10:43:42 -0700, Jim Mattson wrote:
-> AMD's "disable CPUID in usermode" feature is analogous to Intel's "CPUID
-> faulting" feature, but it is advertised and activated differently.  The AMD
-> feature is advertised via CPUID.80000021H:EAX.CpuidUserDis[bit 17] and
-> activated by setting HWCR.CpuidUserDis[bit 35].
-> 
-> Add virtualization support for the AMD feature.
-> 
-> [...]
+This proposal introduces machinery for documenting kernel APIs, addressing the
+long-standing challenge of maintaining stable interfaces between the kernel and
+user-space programs. Despite the kernel's commitment to never breaking user
+space, the lack of machine-readable API specifications has led to breakages
+across kernel interfaces.
 
-Applied to kvm-x86 misc, thanks!
+Specifications can document parameter types, valid ranges, constraints, and
+alignment requirements. They capture return value semantics including success
+conditions and error codes with their meaning. Execution context requirements,
+capabilities, locking constraints, signal handling behavior, and side effects
+can all be formally specified.
 
-[1/5] KVM: x86: Consolidate CPUID fault handling for emulator and interception logic
-      https://github.com/kvm-x86/linux/commit/cf7d65d1d6f5
-[2/5] KVM: x86: Prioritize CPUID faulting over CPUID VM-exits in nested VMX
-      https://github.com/kvm-x86/linux/commit/be7fd7c3e8bc
-[3/5] KVM: x86: Remove supports_cpuid_fault() helper
-      https://github.com/kvm-x86/linux/commit/d1bc99885a59
-[4/5] KVM: x86: Virtualize AMD CPUID faulting
-      https://github.com/kvm-x86/linux/commit/e93a93f11490
-[5/5] KVM: selftests: Update hwcr_msr_test for CPUID faulting bit
-      https://github.com/kvm-x86/linux/commit/b16c2aca369d
+These specifications live alongside the code they document and are both
+human-readable and machine-parseable. They can be validated at runtime when
+CONFIG_KAPI_RUNTIME_CHECKS is enabled, exported via debugfs for userspace
+tools, and extracted from either vmlinux or source code.
 
---
-https://github.com/kvm-x86/linux/tree/next
+This enables static analysis tools to verify userspace API usage at compile
+time, test generation based on formal specifications, consistent error handling
+validation, automated documentation generation, and formal verification of
+kernel interfaces.
+
+The implementation includes a core framework with ELF section storage,
+kerneldoc integration for inline specification, a debugfs interface for runtime
+querying, ftrace tracepoints that report each spec'd syscall's parameters and
+return value, and a Rust-based extraction tool (tools/kapi) supporting JSON,
+RST, and plain text output formats. Example specifications are provided for the
+four fundamental file syscalls (sys_open, sys_close, sys_read, sys_write) and
+for sys_madvise. The series also includes a KUnit test suite with 27 tests and
+a runtime verification selftest with 29 TAP tests.
+
+The series with runtime testing enabled (CONFIG_KAPI_RUNTIME_CHECKS=y)
+currently survives LTP tests in a KVM VM.
+
+Changes since v3:
+
+- Fix the build with CONFIG_KAPI_SPEC=y: scripts/Makefile.build now derives the
+  list of instrumented sources from $(real-obj-y)/$(real-obj-m) instead of a
+  recursive find, and the detection regex matches "contexts:" (the token the
+  syscalls actually use). The previous "context-flags:"-only match found no
+  files, so no *.apispec.h was generated and the guarded includes failed to
+  compile.
+
+- Force-include the generated *.apispec.h via a per-object -include cflag in
+  scripts/Makefile.build rather than a manual "#include" at the end of each
+  instrumented source; the include blocks are dropped from fs/open.c and
+  fs/read_write.c.
+
+- kernel/Makefile: drop the redundant "obj- += api/"; the
+  obj-$(CONFIG_KAPI_SPEC) gate already covers 'make clean'.
+
+- kernel/api/Makefile: build kernel_api_spec.o with obj-y now that the subdir
+  gate lives in kernel/Makefile.
+
+- kernel/api/Kconfig: drop the tautological "default n" from KAPI_SPEC,
+  KAPI_RUNTIME_CHECKS and KAPI_SPEC_DEBUGFS.
+
+- Add an API specification for sys_madvise.
+
+- Add ftrace tracepoints on the runtime-check path: kapi_syscall_enter (spec
+  name and named parameter values) and kapi_syscall_exit (return value and
+  spec match).
+
+Changes since v2:
+
+- Replace statically sized arrays in the spec structs with const char *
+  pointers to reduce memory footprint and remove string truncation.
+
+- Simplify the kerneldoc DSL to short tokens (e.g. `type: uint, input`,
+  `contexts: process, softirq`, `constraint-type: range(0, KMAX)`,
+  `side-effect: alloc_memory`) in place of raw KAPI_* enum names.
+
+- tools/kapi: commit Cargo.lock for reproducible offline builds, add a
+  Makefile and README, expand the kerneldoc parser to cover the full
+  DSL, and refactor the vmlinux extractor for the const-pointer layout.
+
+- tools/lib/python/kdoc/kdoc_apispec.py expanded to match the DSL so
+  scripts/kernel-doc --apispec emits the structure the extractor consumes.
+
+References:
+
+  v3: https://lore.kernel.org/all/20260424165130.2306833-1-sashal@kernel.org/
+  v2: https://lore.kernel.org/all/20260322121026.869758-1-sashal@kernel.org/
+  v1: https://lore.kernel.org/all/20260313150928.2637368-1-sashal@kernel.org/
+  RFC v5: https://lore.kernel.org/lkml/20251218204239.4159453-1-sashal@kernel.org/
+  RFC v4: https://lore.kernel.org/lkml/20250825181434.3340805-1-sashal@kernel.org/
+  RFC v3: https://lore.kernel.org/lkml/20250711114248.2288591-1-sashal@kernel.org/
+  RFC v2: https://lore.kernel.org/lkml/20250624180742.5795-1-sashal@kernel.org/
+  RFC v1: https://lore.kernel.org/lkml/20250614134858.790460-1-sashal@kernel.org/
+
+Sasha Levin (11):
+  kernel/api: introduce kernel API specification framework
+  kernel/api: enable kerneldoc-based API specifications
+  kernel/api: add debugfs interface for kernel API specifications
+  tools/kapi: add kernel API specification extraction tool
+  kernel/api: add API specification for sys_open
+  kernel/api: add API specification for sys_close
+  kernel/api: add API specification for sys_read
+  kernel/api: add API specification for sys_write
+  kernel/api: add runtime verification selftest
+  kernel/api: add API specification for sys_madvise
+  kernel/api: add syscall enter/exit tracepoints
+
+ .gitignore                                    |    1 +
+ Documentation/dev-tools/index.rst             |    1 +
+ Documentation/dev-tools/kernel-api-spec.rst   |  746 +++++
+ MAINTAINERS                                   |   12 +
+ Makefile                                      |    1 +
+ arch/x86/include/asm/syscall_wrapper.h        |   40 +
+ fs/open.c                                     |  561 ++++
+ fs/read_write.c                               |  692 ++++
+ include/asm-generic/vmlinux.lds.h             |   28 +
+ include/linux/kernel_api_spec.h               | 1270 ++++++++
+ include/linux/syscalls.h                      |   38 +
+ include/trace/events/kapi.h                   |   74 +
+ init/Kconfig                                  |    2 +
+ kernel/Makefile                               |    1 +
+ kernel/api/Kconfig                            |   74 +
+ kernel/api/Makefile                           |   14 +
+ kernel/api/internal.h                         |   21 +
+ kernel/api/kapi_debugfs.c                     |  553 ++++
+ kernel/api/kapi_kunit.c                       |  538 ++++
+ kernel/api/kernel_api_spec.c                  | 1424 +++++++++
+ mm/madvise.c                                  |  575 ++++
+ scripts/Makefile.build                        |   20 +
+ tools/docs/kernel-doc                         |    5 +
+ tools/kapi/.gitignore                         |    4 +
+ tools/kapi/Cargo.lock                         |  679 ++++
+ tools/kapi/Cargo.toml                         |   20 +
+ tools/kapi/Makefile                           |   33 +
+ tools/kapi/README.md                          |   32 +
+ tools/kapi/src/extractor/debugfs.rs           |  849 +++++
+ tools/kapi/src/extractor/kerneldoc_parser.rs  | 2831 +++++++++++++++++
+ tools/kapi/src/extractor/mod.rs               |  388 +++
+ tools/kapi/src/extractor/source_parser.rs     |  415 +++
+ .../src/extractor/vmlinux/binary_utils.rs     |  462 +++
+ .../src/extractor/vmlinux/magic_finder.rs     |  115 +
+ tools/kapi/src/extractor/vmlinux/mod.rs       |  857 +++++
+ tools/kapi/src/formatter/json.rs              |  634 ++++
+ tools/kapi/src/formatter/mod.rs               |  122 +
+ tools/kapi/src/formatter/plain.rs             |  646 ++++
+ tools/kapi/src/formatter/rst.rs               |  726 +++++
+ tools/kapi/src/main.rs                        |  123 +
+ tools/lib/python/kdoc/kdoc_apispec.py         | 1313 ++++++++
+ tools/lib/python/kdoc/kdoc_output.py          |    9 +-
+ tools/lib/python/kdoc/kdoc_parser.py          |   86 +-
+ tools/testing/selftests/Makefile              |    1 +
+ tools/testing/selftests/kapi/Makefile         |    7 +
+ tools/testing/selftests/kapi/kapi_test_util.h |   33 +
+ tools/testing/selftests/kapi/test_kapi.c      | 1096 +++++++
+ 47 files changed, 18167 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/dev-tools/kernel-api-spec.rst
+ create mode 100644 include/linux/kernel_api_spec.h
+ create mode 100644 include/trace/events/kapi.h
+ create mode 100644 kernel/api/Kconfig
+ create mode 100644 kernel/api/Makefile
+ create mode 100644 kernel/api/internal.h
+ create mode 100644 kernel/api/kapi_debugfs.c
+ create mode 100644 kernel/api/kapi_kunit.c
+ create mode 100644 kernel/api/kernel_api_spec.c
+ create mode 100644 tools/kapi/.gitignore
+ create mode 100644 tools/kapi/Cargo.lock
+ create mode 100644 tools/kapi/Cargo.toml
+ create mode 100644 tools/kapi/Makefile
+ create mode 100644 tools/kapi/README.md
+ create mode 100644 tools/kapi/src/extractor/debugfs.rs
+ create mode 100644 tools/kapi/src/extractor/kerneldoc_parser.rs
+ create mode 100644 tools/kapi/src/extractor/mod.rs
+ create mode 100644 tools/kapi/src/extractor/source_parser.rs
+ create mode 100644 tools/kapi/src/extractor/vmlinux/binary_utils.rs
+ create mode 100644 tools/kapi/src/extractor/vmlinux/magic_finder.rs
+ create mode 100644 tools/kapi/src/extractor/vmlinux/mod.rs
+ create mode 100644 tools/kapi/src/formatter/json.rs
+ create mode 100644 tools/kapi/src/formatter/mod.rs
+ create mode 100644 tools/kapi/src/formatter/plain.rs
+ create mode 100644 tools/kapi/src/formatter/rst.rs
+ create mode 100644 tools/kapi/src/main.rs
+ create mode 100644 tools/lib/python/kdoc/kdoc_apispec.py
+ create mode 100644 tools/testing/selftests/kapi/Makefile
+ create mode 100644 tools/testing/selftests/kapi/kapi_test_util.h
+ create mode 100644 tools/testing/selftests/kapi/test_kapi.c
+
+-- 
+2.53.0
+
