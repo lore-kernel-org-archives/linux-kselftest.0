@@ -1,35 +1,52 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A6F35F60B;
-	Fri, 29 May 2026 03:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A766285CB6;
+	Fri, 29 May 2026 03:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780024203; cv=none; b=LLIGcw1SfhTASVcskeL6HEBlq1nI7riaGAwqHtwyyGv9zrPb6SVbdW5H1Ol7U5C99bIfmHXwyA7/M01WihOWsJqog0cvuWE9ui/XMzouQxykKUmP832Ir/0xC+TDFCs3/u9wR6N5FOk2JEVK6myeQQbFAXfmsAsL0Zvsw7l0W2g=
+	t=1780024497; cv=none; b=WguKH0jE2XOlckVyI4sQwUAo4Mlu7/7eMeJYV3QkR+TDMWrkDMYlZbc0JD97tRF4UcS4N/7ygPTyJUn00FgxxXpjFL10PRUAIEQ0uhXP7kOiu8oOjZ7ZU6llCr4ETRLIOZNOQZ+XuPX1fpRajGIJDdGJsxi7J8kqAd54mbKZwuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780024203; c=relaxed/simple;
-	bh=CeUjJBo2ThFr8CJnMkzb/TaXhZ9WUPYhbjXq9A95FXg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=LIBx9dc/kuZKdGHEER6c/3UtGkd4NslCb/lFxRs3iFmSymi4AEuzaWHJuCnJLYPtkcmTAcqe/Twql+20ZNsTe9DcopXWrv+SiR79/JN/oNUb21F8dyvElE5nmjT3bv7JlkzdfkUaGu+fdYlmewJme4l7ok8CQuE1wNqqA0jaVYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kdA8Y8ke; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780024497; c=relaxed/simple;
+	bh=P159uH2GnHpx1f/K6RIp2Ng/JOidNMBccUc3c8UJwe8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=r7Ubi9uySkaoe1pjvWwDFv706vFZxCOpw5dse9JCiVaTIKlJeonuqZJliGTCxlReQ8UXOBSxujZ2kJxRnCfTHamDG6OiaWJNzNX1vHU+ESIBwDG/TnuVcf2srz+r0yaNji0yPGdriGAd3qhquOgnWXuyxcYEldg68CTBCAcI9GQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=hSygT6wp; arc=none smtp.client-ip=54.207.19.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kdA8Y8ke"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFD081F000E9;
-	Fri, 29 May 2026 03:10:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780024201;
-	bh=xy6FbJEA5HmyjHXP9O75txhq8iEh6IsT/3Y2mVqRyk0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=kdA8Y8kerGDEXkd4iOyIMBmOChBSFv26qGU0bqqv2rZ3b5djkKM/smOJ0e37HmpLO
-	 l4awfRW42m23gd5MIGmf76DF/c471XdN6WyHeDQLSa/EZH1exn3vkZVq2HmQREaJxo
-	 /XFI4xbfP7EYby0EXWqnk6ZiM0tB1MQiAiZHd3vwxuura2IdJMpvWnkwKPTL7VDYZ4
-	 7QyirWaw/W2NDSlj3k3ZQDTL1GD3cQ7RnORUwUVAt2a+I89dtr5e8On2nvaNQr7ETk
-	 cDDiJ4OSWPX4LtiP7aolFqZWjIeUI3+6fy42tl+893sgM+KehcAbfpr+OzIiE1Pw/O
-	 hubQpfNClXE7Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198033930002;
-	Fri, 29 May 2026 03:10:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="hSygT6wp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1780024439;
+	bh=CU69WStLtGAWmV5p5leKWoSrd8qZoQFw5WIljhNTZh0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=hSygT6wphI3wHyqn2S439qQWo8bidGk5lgSBf81Q+ScAh8Aki8SQDpY49m7swqhEY
+	 CPP2ODlBkppIECSuWgON5aDMWCDN65Tzhcbe1sYxm3otYaWxg1YYHw9jPYYsSJ3lXt
+	 rMvEfbe4IdiNcEhDHmF+u69nzvbV+fpa7H9Lf1rE=
+X-QQ-mid: zesmtpsz4t1780024428t02c7e8c4
+X-QQ-Originating-IP: QkKCqQClWI3qa0TeV9Rf59jWGZpwIZjpbR9H8YeNnRY=
+Received: from PEN1097 ( [61.183.83.60])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 29 May 2026 11:13:46 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 15054842607548688614
+EX-QQ-RecipientCnt: 8
+From: Cheng Nie <niecheng1@uniontech.com>
+To: sj@kernel.org
+Cc: damon@lists.linux.dev,
+	kernel@uniontech.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	niecheng1@uniontech.com,
+	shuah@kernel.org
+Subject: Re: [PATCH 1/2] selftests/damon: fix DamosFilter memcg_path assignment
+Date: Fri, 29 May 2026 11:13:45 +0800
+Message-ID: <26BC7B013363FF9E+20260529031345.1560812-1-niecheng1@uniontech.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260528141718.153376-1-sj@kernel.org>
+References: <20260528141718.153376-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,43 +54,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] bpf: replace pop/push emptiness check with
- bpf_list_empty()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178002420565.1611545.6374072020383806220.git-patchwork-notify@kernel.org>
-Date: Fri, 29 May 2026 03:10:05 +0000
-References: <20260524025853.13786-1-suchitkarunakaran@gmail.com>
-In-Reply-To: <20260524025853.13786-1-suchitkarunakaran@gmail.com>
-To: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, shuah@kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpsz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
+X-QQ-XMAILINFO: OTaQrRjuGKLtqc26YYXlCWeHHJsRFoYs/0zz9UziTbwRPwFDTnbN423Y
+	qw2PULOGw04SIdsw0ouoK1RbQqYKPhq1GuHkUL2VyDzBKcCEexP5AVxgb5WTiRyL9jAkdEm
+	Z/ZxnOdUvGXFS6UqA2SYv8j5UmHyXScHkMgAHZTkJNeIv1LxdUnVPI8Ynm+k50CIq9RKoB6
+	8n7y2HA6xwW+BJ+CfVudFcPaFiB8n9HSogy0LIJF0aohuZCD+LH7Oa1BYv41AJx4l77geoh
+	08DgCG/D7ICXnyWgZMQ7YasGQDKPxiDLZgfH/VrsaJOXjISiaz613fYSeYLmBecQe/DLoA+
+	y4ixdjGh4ykf5zQofyOQQc8wiKakOoO3kMS3qRBWRoiOHbvhVbnoaErkxOPIYpEzKdaAVtR
+	QnrHJF888+GIhVC5Y9KqbJD0fDTIzQ1C6dDeaO0UxFV2AleH6hkoYCQRYjT5DhcZ4zQDN3p
+	jzzq3QobW/nnB3ZPb9scHrUzja5c7mkMBXnFWSQd6dWLKuqmAvvii+yvt9OqNc57oSD30Si
+	PeNdHAP+E5zS+43d4uaHnSJd3uHbWX3URnSJcN4IgL5fhIu4vi6SZQZDLQjM6j59OcE5i37
+	5VvK3DJFDxPuiIGoAUTztBsfFQd5u+fo7KQ5hXDdtBdvEcqyP3aaXeAwExV33blpqD11aPf
+	a01Wm4oFCP0fiWleJikmzMkCvvcaw1nlV11cG3Sf/9NaUmvrELDeL8gSvfdz9mRi19w1iyj
+	XU+DKDFY09VXJEXmvbj1re2iuLIA+4pClTpPV7FipJkE1y2KkiCiPLBDnZtOx6nJ6vpZBua
+	ootFcF20rM2ZOT+oapxZQkmAO5QoNAtWVtNcNnqCk4l/89EWfvVlBT3lJKyx9hZEp/Hn5qi
+	OMke4sPimc4/IbAL/0sm3keu2PbM2xfGyqzRWRCoN2CHbDOc+fN9ryjyJbXFh64TFmcq70x
+	8guY0DoDUBMsHQEYYm+0zNBfRUz3ssnNpyyWVIMvdEd1qb4uZ0jlmPnBpVPKrt/WE033rTi
+	IkUZnSr7vx5pxsrLop2b2yZoVtajM=
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+X-QQ-RECHKSPAM: 0
 
-Hello:
+On Thu, 28 May 2026 07:17:17 -0700 SeongJae Park wrote:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+> Could you please update the subject to 'selftets/ddamon/_damon_sysfs.py'?
 
-On Sun, 24 May 2026 08:28:53 +0530 you wrote:
-> Simplify fq_flows_is_empty() by replacing the pop/push based emptiness
-> check with a direct call to bpf_list_empty().
-> This avoids unnecessary list mutation and simplifies the code while
-> preserving correctness.
-> 
-> Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-> 
-> [...]
+Will do in v2.
 
-Here is the summary with links:
-  - [v2] bpf: replace pop/push emptiness check with bpf_list_empty()
-    https://git.kernel.org/bpf/bpf-next/c/9a720e090eb5
+> From the git log, I found it seems you also use 'Cheng Nie' as your name.
+> Are you intentionally use 'niecheng' as your identity?  We disallow
+> anonymous but allow using known identity, so I'm just checking if this
+> is an unintended mistake.  Some of us (mm community) prefer real name,
+> though.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Sorry for the confusion.  In China we usually write names with the family
+name first (Nie Cheng), while the Western order is Cheng Nie.  I had
+also used "niecheng" as a compact form from my email username, which
+was not ideal for upstream.  I will use Cheng Nie consistently from
+v2 onward.
 
+> The change looks good!
 
+Thank you!
+
+Thanks,
+Cheng Nie
