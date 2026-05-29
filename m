@@ -1,52 +1,57 @@
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77E132692C;
-	Fri, 29 May 2026 09:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBE473BB9E0;
+	Fri, 29 May 2026 11:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780046539; cv=none; b=ERoBQmk4wPCjEv2LlBM11AivJwj2X5d1HCJETFqvFjQ0LLoFqbkL54f1tAhoZYpkHBuyd/HFR8gE+aWUgwZ2MGlcyj1ZR8afOgnGHDZrjp0LliDCC2lZqixLv2JrretkwSe5Wb2duzy6NRtHGI7jAgUN0HZh9jN4vlNoTrygYn4=
+	t=1780053440; cv=none; b=Ox0sP5vmOKjmfOIaDi6vEPdza0il+2C9MgtK5fz7PGqGjsts1/PUxoBqfC7RibwCZv9Zx2ZWCEx83lU6k5k70DH3z6dR7bAUVaW3eV2pZ8+ItSaeNqZHm3qF31eYx5F1idHVU/ZvNVJVBOi1MAupZgAgC8W0pcTrZEC/SWV2RSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780046539; c=relaxed/simple;
-	bh=CSKQ1mUJep3xo5dtlv6+IPIZTxEkOQs4c5ARJks54ZI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Eflk14NAPqvnarJNnWFo0x+UMxrukYr9ZxhvDZyESSrsOQHNAHPwy3YxZubs2j8mF47H/1xITDy8sXOGTQnsId55dHfnPi1CskwUSvAFHOHOi6qC8R3xaI9sZeSUR4gtSO+SX3FGmJCPXk9RZ7C201yMhB6HjUKGQtU1uOj6ogA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=ZLt3VEXe; arc=none smtp.client-ip=18.194.254.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1780053440; c=relaxed/simple;
+	bh=cx9bkGJ2eDRyMtzNNbeuK1dl0e/7tAqg3VyKX3JjrwQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MgD4Byx5vPAUnZMrxoXLDhTXGlJvcyQ/dEKUaCNMpZCyGLPX/iEp4mUJirs+jAg60WdqTfh99MKq1yUHrQzR5QHZyvBq3ZREdkz/o+YkrwYRUJDhR3pbfUA9m/3vuRZ9Up2zdybatxyTJ7FsGvy5aYBYW1lHK+2Cbf9cKmQFnRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=cmig+QQR; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="ZLt3VEXe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1780046507;
-	bh=HylwJTKDEjdoNKKWZ6Eg8/02B5viIR23i6MNlY5fspM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=ZLt3VEXe9hzaPs8160QBczBg7KZjf8Ju/zdWS4Mf0LsT8wUAVZiPSJ9MkFhLUdcbA
-	 szQKyto/d+wtOM96/9K1E8fT1XvokuZHQNnFGRUl62EkH414gR/7/J8jnD8jc7FY8Z
-	 xAdLZdEw3SSvXSe7jLceOtX0oOcMocUr5w7xuMuA=
-X-QQ-mid: esmtpsz17t1780046496t9cd9bc45
-X-QQ-Originating-IP: 5UBRpNotQxnNW9HKXjVMAySgKETLGGMgdHkYNKWLoeQ=
-Received: from PEN1097 ( [61.183.83.60])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 29 May 2026 17:21:34 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 8261288960962780039
-EX-QQ-RecipientCnt: 8
-From: Cheng Nie <niecheng1@uniontech.com>
-To: sj@kernel.org
-Cc: shuah@kernel.org,
-	damon@lists.linux.dev,
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="cmig+QQR"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 40F072247;
+	Fri, 29 May 2026 04:17:13 -0700 (PDT)
+Received: from cesw-amp-gbt-1s-m12830-01.blr.arm.com (cesw-amp-gbt-1s-m12830-01.blr.arm.com [10.164.195.31])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 30ED13F905;
+	Fri, 29 May 2026 04:17:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1780053438; bh=cx9bkGJ2eDRyMtzNNbeuK1dl0e/7tAqg3VyKX3JjrwQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=cmig+QQRNEziskriXoC4pzo9VhXrb3OFQb0apJK+kRtxnbwjtcgcZktmT193CNieV
+	 233HUHFvMNrJwFG/lOUU41/ZbqMDIhECIBUhNb4/7jDeCbDbnGLyA22ih+GePPa+Eg
+	 Ycwv0YyxmHAIdnPjbSWPowjJt+L/O73CN84pDsuM=
+From: Dev Jain <dev.jain@arm.com>
+To: akpm@linux-foundation.org,
+	liam@infradead.org,
+	ljs@kernel.org,
+	jgg@ziepe.ca,
+	leon@kernel.org,
+	david@kernel.org,
+	shuah@kernel.org
+Cc: Dev Jain <dev.jain@arm.com>,
+	vbabka@kernel.org,
+	jannh@google.com,
+	pfalcato@suse.de,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	balbirs@nvidia.com,
 	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	kernel@uniontech.com,
-	niecheng1@uniontech.com
-Subject: [PATCH v2 2/2] selftests/damon/sysfs.py: validate memcg_path staging readback
-Date: Fri, 29 May 2026 17:21:31 +0800
-Message-ID: <FF9A1552C03B7C88+20260529092131.1703337-1-niecheng1@uniontech.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <4CDA28DC581FDCF8+20260529090845.1696845-1-niecheng1@uniontech.com>
-References: <4CDA28DC581FDCF8+20260529090845.1696845-1-niecheng1@uniontech.com>
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ryan.roberts@arm.com,
+	anshuman.khandual@arm.com,
+	stable@vger.kernel.org
+Subject: [PATCH] fs/proc/task_mmu: do not warn on seeing non-migration pmd entry
+Date: Fri, 29 May 2026 11:17:03 +0000
+Message-ID: <20260529111704.1078346-1-dev.jain@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,94 +59,91 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
-X-QQ-XMAILINFO: M3Y38+foqXFqd39Vo05m7qqe1YkKOZngwhy+l2ffA7pcW6jfMqGpJjzB
-	3KmYSq3A63PwrFSX+bWRH7E4IlAKxox0ib9LBwEdqzvyODozryMhPpk5MNjPfHeUuDZ6rHi
-	KTB9h3s556hS+7ywgvL3Q+SUi2Z7TgzKtTHF3HZNfzhsVfjCzCskxvwkV/OQWFOsPcV/ybO
-	d7NHAf8Ue2LGas9wxBKrf3iWfHbPorjwYF8gnGcgQRCBMIyGe3ap3G0sDlfsXDsZW0uI9Z8
-	C/xObQMV07FjhlS7BqWNG9bHYNPuCMGkWWM2yy45SXlfuaSgwoAXjFNkWPZfRvHhBIuLKXw
-	R1NC0mpRp0ur4cvmHK2gqoWCFrhcWz/G6cBAXiPevB+ICiaT/c2QNsvMuQ1ryEoN5n7Y8Ll
-	QlkghK694W0gnQgG+Fz5iwE1am3Ny8C9rc/4/nyMter/gTEClCi4NHtOJUa9ppyH0Jdnh+t
-	l9VaACBXcEUZ8nAWfwmS3yQeJAiZsCVlc6bV6YusJNo/1igYs4XXUAi3nwR433/1+i28AwF
-	AVnMtxME1o4RyFIW7hMZI2fOJdl9o7U9xdZCQkVNUcwjVElCcEm1hBz411hVqJd33flinXL
-	TimRNiFfH2fqZndp8zSkMsZ9jIV5d3z5mDuWx03dGm52WRUafQVEi/E6TubQbDHUMBDPzxc
-	IBAaVYHQmZckLghhRKt+en2+yo1FrCSRFnXVrs8S+21B9BObKQ9BqDKCsXkgeGPtswVNN5G
-	cXzJspMyVZ8xIpNGBgJuDWrOsPWJFV/KNvOuWd6AWRjKM3hdSyS64frQMf52DL2kKjQMzV7
-	C3s4ehOn2C8ANakVyZ2qIthsibmMvePA7otnh4B0ITsdEizhWBb1eK7ifzDCcByW0oF88ga
-	/Ohytup8Bv0eKcKJYPe/9wD98ktSguhgteUKUQ2Bc5myTP08PosLb3oyzIvLG7nbP1Hxfnc
-	AqBFdqmbwONJwdBz0e/Sl0Eyzma9YyoLMTo2VUKlmDG5yx3ljS1ZY0tKT8PH9DwQfnE0F2G
-	ITQTeZlAxfojIwPLaxq03D3J2551DlMj4PGrU3+wuMxVH//YaysUqEb60xn4oc9DSgMMLZQ
-	g==
-X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
-X-QQ-RECHKSPAM: 0
 
-Add a dedicated test at the end of main() that writes memcg_path to
-sysfs and checks the readback path.  Validate the readback rather than
-a derived memcg_id so the test stays focused on DAMON sysfs behavior
-and avoids depending on the local userspace cgroup mount layout.
+pagemap_pmd_range_thp() warns if a non-present PMD is not a migration
+entry. This became false once device-private entries at the PMD level were
+added.
 
-Signed-off-by: Cheng Nie <niecheng1@uniontech.com>
+One can hit the warning by patching hmm-tests.c with the following:
+
+diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+index e1c8a679a4cf3..7f0a3384f3c5f 100644
+--- a/tools/testing/selftests/mm/hmm-tests.c
++++ b/tools/testing/selftests/mm/hmm-tests.c
+@@ -209,6 +209,37 @@ static int hmm_dmirror_cmd(int fd,
+ 	return 0;
+ }
+
++static int hmm_read_self_pagemap(void *addr, unsigned long npages,
++				 unsigned long page_size)
++{
++	const size_t entry_size = sizeof(uint64_t);
++	const off_t offset = ((uintptr_t)addr / page_size) * entry_size;
++	uint64_t *entries;
++	ssize_t nread;
++	int fd;
++
++	entries = malloc(npages * entry_size);
++	if (!entries)
++		return -ENOMEM;
++
++	fd = open("/proc/self/pagemap", O_RDONLY);
++	if (fd < 0) {
++		free(entries);
++		return -errno;
++	}
++
++	nread = pread(fd, entries, npages * entry_size, offset);
++	close(fd);
++	free(entries);
++
++	if (nread < 0)
++		return -errno;
++	if ((size_t)nread != npages * entry_size)
++		return -EIO;
++
++	return 0;
++}
++
+ static void hmm_buffer_free(struct hmm_buffer *buffer)
+ {
+ 	if (buffer == NULL)
+@@ -2314,6 +2345,10 @@ TEST_F(hmm, migrate_anon_huge_fault)
+ 	ASSERT_EQ(ret, 0);
+ 	ASSERT_EQ(buffer->cpages, npages);
+
++	/* Exercise pagemap on a PMD device-private entry. */
++	ret = hmm_read_self_pagemap(buffer->ptr, npages, self->page_size);
++	ASSERT_EQ(ret, 0);
++
+ 	/* Check what the device read. */
+ 	for (i = 0, ptr = buffer->mirror; i < size / sizeof(*ptr); ++i)
+ 		ASSERT_EQ(ptr[i], i);
+
+
+Therefore, remove the stale migration-only assertion.
+
+Fixes: a30b48bf1b24 ("mm/migrate_device: implement THP migration of zone device pages")
+Cc: stable@vger.kernel.org
+Signed-off-by: Dev Jain <dev.jain@arm.com>
 ---
- tools/testing/selftests/damon/sysfs.py | 39 ++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+Applies on mm-unstable (404fb4f38e8f).
 
-diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-index aa03a1187489..0f20bc9c46b7 100755
---- a/tools/testing/selftests/damon/sysfs.py
-+++ b/tools/testing/selftests/damon/sysfs.py
-@@ -250,6 +250,43 @@ def assert_ctxs_committed(kdamonds):
-             if ctx in ctxs_paused_for_dump:
-                 ctx.pause = False
+ fs/proc/task_mmu.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 1e3a15bf46f4e..58938e62154d9 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -2129,7 +2129,6 @@ static int pagemap_pmd_range_thp(pmd_t *pmdp, unsigned long addr,
+ 			flags |= PM_SOFT_DIRTY;
+ 		if (pmd_swp_uffd_wp(pmd))
+ 			flags |= PM_UFFD_WP;
+-		VM_WARN_ON_ONCE(!pmd_is_migration_entry(pmd));
+ 		page = softleaf_to_page(entry);
+ 	}
  
-+def test_memcg_filter_memcg_path_staging():
-+    global kdamonds
-+    memcg_filter = _damon_sysfs.DamosFilter(
-+            type_='memcg', matching=True, allow=True, memcg_path='/')
-+    kdamonds = _damon_sysfs.Kdamonds(
-+            [_damon_sysfs.Kdamond(
-+                contexts=[_damon_sysfs.DamonCtx(
-+                    targets=[_damon_sysfs.DamonTarget(pid=-1)],
-+                    schemes=[_damon_sysfs.Damos()],
-+                    )])])
-+    err = kdamonds.start()
-+    if err is not None:
-+        fail('memcg_path staging: kdamond start', {'error': err})
-+
-+    context = _damon_sysfs.DamonCtx(
-+            targets=[_damon_sysfs.DamonTarget(pid=-1)],
-+            schemes=[_damon_sysfs.Damos(ops_filters=[memcg_filter])])
-+    context.idx = 0
-+    context.kdamond = kdamonds.kdamonds[0]
-+    kdamonds.kdamonds[0].contexts = [context]
-+
-+    err = kdamonds.kdamonds[0].commit()
-+    if err is not None:
-+        fail('memcg_path staging: kdamond commit', {'error': err})
-+
-+    shown, rd_err = _damon_sysfs.read_file(
-+            os.path.join(memcg_filter.sysfs_dir(), 'memcg_path'))
-+    if rd_err is not None:
-+        fail('memcg_path staging: sysfs read', {'error': rd_err})
-+    assert_true(shown.rstrip('\n') == memcg_filter.memcg_path,
-+                'memcg_path readback', {'shown': shown})
-+
-+    err = kdamonds.stop()
-+    if err is not None:
-+        fail('memcg_path staging: kdamond stop', {'error': err})
-+    kdamonds = None
-+
- def main():
-     global kdamonds
-     kdamonds = _damon_sysfs.Kdamonds(
-@@ -356,5 +393,7 @@ def main():
-     assert_ctxs_committed(kdamonds)
-     kdamonds.stop()
- 
-+    test_memcg_filter_memcg_path_staging()
-+
- if __name__ == '__main__':
-     main()
 -- 
-2.51.0
+2.43.0
 
