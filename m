@@ -1,101 +1,120 @@
-Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53FF617D6;
-	Fri, 29 May 2026 03:28:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414FB367F58;
+	Fri, 29 May 2026 03:41:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780025319; cv=none; b=kNgrPBmlSDBKWFam/jaEV7STL5ccqzBX66fITTvaUps+I2szWZM2JpGpleFgCT+SvZkqzX++KN7C+Cx5tSssQUqKAxyKopfrV/C1+sx0DRwTB6hAy3ECGC2cKTpEKsT9WMhtTCERv4igpQjA4FJq2FJolpT/RoLz7WY8ua4cwPI=
+	t=1780026087; cv=none; b=O06719//HLY0zwlGPOFCc5/NwBcYDUGDu7Sll2kn4HO+awjYaxFbh20iD+WSEG585AHEHgsgybJr6NDtrT6IixtUBR3ThqnQk5CeJNrU5FD2c9HVetVj/6OshGdo5hkPpK/OrYzMQsONG5PcopZpO61L8dBInKfJZBh70Ohf7DI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780025319; c=relaxed/simple;
-	bh=8IwdZBEOJI2Wcts5o2gq4JYgAraGcS8hh110z10xhLY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DBiHRi2ISISE8KAs3yrbYQHpHq3C0p39mrkZURMLaB4/eQralqNd4554n69CUF31vuTAOztUeb8/jgDN+A1inPk5exvaEHMRIPSXjtFjKQ0T5NHU2jhg0tNZMTorQUpugxPk4pF3fei4SMqyduy41OenHTFumvw6a+IP38gn3ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Qdh394vT; arc=none smtp.client-ip=54.207.22.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1780026087; c=relaxed/simple;
+	bh=OsS1e+Qw/QnKrZzlo/+MNIKnYxQSH/Bs/+Zy/VsCM9k=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=O7q+8n6hZMbh0buYVBuq1XRxmdUJeFxayglxqgW+Mgpa3KXIEkz3zFrNEuj8759za16/zTL5tntmgsAoMCCOaTAvLLefWwOlt0BYb7bDNsru+wLQdiQ1KnUM37BAXJ+eAKrDmaPLqHune/pe0b5MADi/FtPe3b/KLtTLWaYh/34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Ou2aIZQT; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Qdh394vT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1780025268;
-	bh=h6PEc5psigEz/kH0bVSk2Y2gyiMDJw494/MMiO7Z36M=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=Qdh394vT/vI/ySlc5OYI2nLiVE1WQ4H0HGAeJAj3ReyLOIw7R3pSyvs3GxuUR4jOg
-	 YdBJk+4sCv9Jxf+k601Y3qNq2443wn0oW4CX2J22tHNnLYUvwN+2KzKB7222erR5Vl
-	 82IOLEedAghxebDHOB+aq0NNbtuQc6kO3+iJL/Vc=
-X-QQ-mid: zesmtpgz9t1780025257ta18e5e23
-X-QQ-Originating-IP: i22l7cR4uab6Epn6Jsxfji0CDWCVfMPMotNMblrXw6c=
-Received: from PEN1097 ( [61.183.83.60])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 29 May 2026 11:27:35 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 8449337721891734476
-EX-QQ-RecipientCnt: 8
-From: Cheng Nie <niecheng1@uniontech.com>
-To: sj@kernel.org
-Cc: damon@lists.linux.dev,
-	kernel@uniontech.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	niecheng1@uniontech.com,
-	shuah@kernel.org
-Subject: Re: [PATCH 2/2] selftests/damon: validate memcg filter sysfs readback
-Date: Fri, 29 May 2026 11:27:35 +0800
-Message-ID: <AEAE007AE486E7ED+20260529032735.1564733-1-niecheng1@uniontech.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260528142819.153573-1-sj@kernel.org>
-References: <20260528142819.153573-1-sj@kernel.org>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Ou2aIZQT"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=uwFcWOwJkeegfR4BbQvBChM0ATs2whx7uh0xno0g6bQ=;
+	b=Ou2aIZQTUFpHcWM+GeEoYlPUKFbytDZomcHoIvdgX1B/fp6vmhzUnHBLV6dN1fgZWhRAvfO00
+	yyrmQqLpqo5kVx1iIuJMLmbbI7BFCRtFoxGVY+meJQsjXzhnrE9tpFozx8Yl/KY+cL5W/0poiWo
+	ZeMftN5tD1TtYSkCuGzTk0g=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4gRTTY4FLKz12Lgj;
+	Fri, 29 May 2026 11:33:21 +0800 (CST)
+Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5496D40561;
+	Fri, 29 May 2026 11:41:20 +0800 (CST)
+Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
+ dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 29 May 2026 11:41:20 +0800
+Received: from [10.173.124.160] (10.173.124.160) by
+ kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 29 May 2026 11:41:18 +0800
+Subject: Re: [PATCH RFC v2 6/7] KVM: selftests: Add memory failure tests in
+ guest_memfd_test
+To: Lisa Wang <wyihan@google.com>
+CC: <rientjes@google.com>, <seanjc@google.com>, <ackerleytng@google.com>,
+	<vannapurve@google.com>, <michael.roth@amd.com>, <jiaqiyan@google.com>,
+	<tabba@google.com>, <dave.hansen@linux.intel.com>, Naoya Horiguchi
+	<nao.horiguchi@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, "Paolo
+ Bonzini" <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Hugh Dickins
+	<hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, "David
+ Hildenbrand" <david@kernel.org>, Lorenzo Stoakes
+	<lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren
+ Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-0-92c596402a7a@google.com>
+ <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-6-92c596402a7a@google.com>
+ <149c954e-dfe1-6bdd-295c-792642a9d915@huawei.com>
+ <ahjw6l7uznZ2bYfz@google.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <fceb92c3-3648-418f-6a07-0148d8690bd6@huawei.com>
+Date: Fri, 29 May 2026 11:41:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
-X-QQ-XMAILINFO: NJC1vxR0K3U+co+ZB9/PBPXOqB4jNN5WenhxLVWhlk+8QM68mOyHqYM4
-	j9MeKvnbki5bkipvzhr5vfdwcHYQ4c2KnfWYl+jyJke0QeiY//HjP0XAF1nC70eqDzLuk+D
-	62xQVBwTMwGNhZDxIwNnz8Pny3s4B4ZMUZgo/5LR5JtkOHzCrVczb3UodQbVmW+JVYN7zNb
-	HDG/wW4m66EuXrW9S+ZNGvzOqhsuRGIjcCOZn5l6iAjpKNv2BzujN/IKnxQYyyM9pUzST5G
-	JSYtZjufe14avYO6YyR3MQqB1OMkJ27A68thlbB+Rl30q9kbKSAYN5Zkb7Pg644ZwHmyMzy
-	gfHpeZV7wSVp5e2+KlxR2CTlh+SSIbpCjHb2m5dC3kWKQOlh0WYD3zuDX4V6TNJigPUP2/p
-	fAfaZn4R0FVwsTCkBfoFuuOJBjawtc3N+TU14P8+SoRpWqkJf0ZQavEUNKVVrD78avrUAz6
-	r1Xcw4TVbr648szQAZvq9dEn0cHIrFiTkWFhetiIb2DBQL9/c5JY/Yaj5pNbolJPFiLqvoA
-	qfqnkjq4K5JXNNi6MdAY8RPMr9YkwIG/ppNHe8jUbIA2fFRcyVqNNmcxmPBugZoOplhfKt8
-	tKk/Lxinsn5b9lcBJYUQELzRf7S01SM9lmp8NodEEeSOSjTaDjJ9c7BDaI962BB08suzupd
-	L4vnG2oLgiLO5gm1szyS5dIhMQyS5u6h9zI3cR0brFG0XV/LsoV/XLYlDpz8bJAa59cKeME
-	VVG+dyLYar/TkVnMp/gI06n/3dXBUNjgc0Jg69NoowUial6YnClhAtYyrUgzeqoaPVjEmVt
-	3uw0CUasQp044hpGozP0fhFbvWqY5lCwVEeAAjWg2tGCctiGSV9NTQc4WudmxSyMzfach8d
-	qImEbW0gl/CukjU5J1KjBAOrgaB4nDSR8wyR5ermHcqpesIfK1TA+9geiUwEj8Ox/1J955a
-	WQ9uwGolkr1R3bEEaJU2g6TRthcN5IWBufyOEJByuxUdujsZd6y+BiYZvWfjNwsAnSNc3OZ
-	TzkZmnK0yR/TJLq6ZLCJDuQglRv/2pRi89oQBbgdhLjRIGcIZiifxzucP/ARkf+ae4BC2Ht
-	MwsqptsSty/gDOTTyUdEaCTmA+jKJuiSIa4YkEOvcWXeYNQ7WhLePM=
-X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
-X-QQ-RECHKSPAM: 0
+In-Reply-To: <ahjw6l7uznZ2bYfz@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemq500010.china.huawei.com (7.202.194.235)
 
-On Thu, 28 May 2026 07:28:18 -0700 SeongJae Park wrote:
+On 2026/5/29 9:50, Lisa Wang wrote:
+> On Mon, Mar 30, 2026 at 03:20:15PM +0800, Miaohe Lin wrote:
+>> On 2026/3/20 7:30, Lisa Wang wrote:
+>>> After modifying truncate_error_folio(), we expect memory_failure() will
+>>> return 0 instead of MF_FAILED. Also, we want to make sure memory_failure()
+>>> signaling function is same.
+>>>
+>>> Test that memory_failure() returns 0 for guest_memfd, where
+>>> .error_remove_folio() is handled by not actually truncating, and returning
+>>> MF_DELAYED.
+>>>
+>>> In addition, test that SIGBUS signaling behavior is not changed before
+>>> and after this modification.
+>>>
+>>> There are two kinds of guest memory failure injections - madvise or
+>>> debugfs. When memory failure is injected using madvise, the
+>>> MF_ACTION_REQUIRED flag is set, and the page is mapped and dirty, the
+>>> process should get a SIGBUS. When memory is failure is injected using
+>>> debugfs, the KILL_EARLY machine check memory corruption kill policy is
+>>> set, and the page is mapped and dirty, the process should get a SIGBUS.
+>>>
+>>> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
+>>> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+>>> Signed-off-by: Lisa Wang <wyihan@google.com>
+>>
+>> Should we add a testcase for hugetlbfs? It seems hugetlbfs_error_remove_folio() behaves same as shmem.
+> 
+> I agree that it would be more consistent to modify
+> hugetlbfs_error_remove_folio() to return MF_DELAYED and update
+> me_huge_page() to align with me_pagecache_clean().
+> 
+> However, I prefer to let this patch series focus on the
+> me_pagecache_clean() path (affecting shmem, guest_memfd and generic
+> pagecache), because the hugepage memory failure test is not working now
+> (hugetlb-read-hwpoison.c). Commit 66802526298e changed madvise()
+> behavior to always force-deliver a SIGBUS to the calling process if it
+> has the poisoned dirty page mapped. Aligning HugeTLB would require us to
+> fix this part together.
+> 
+> To keep this series focused, I would like to handle the HugeTLB
+> alignment in the follow-up series. Would you be okay with this approach?
 
-> Could we use 'selftests/damn/sysfs.py:' as the prefix of the subject?
-> That will make it consistent with other commits and let us easily know
-> to what test this change is made.
+Sure, this will be better. Thanks for your work. It's really helpful. :)
 
-Will do in v2.
-
-> But this is in the middle of assert_filter_committed().  As the name
-> says, this is for validating if the user inputs are passed to DAMON
-> internal.  I think this is not the right place to test its 'staging'
-> functionality.
-
-Will do.  I will remove the memcg_path readback check from
-assert_filter_committed() in v2.
-
-> What about adding another test case at the end of the main() function
-> for the validation of memcg string staging functionality?
-
-Will do.  I will add a dedicated test case at the end of main() in v2.
-
-Thanks,
-Cheng Nie
