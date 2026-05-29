@@ -1,66 +1,67 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E62C93A4538
-	for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 06:28:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBA83A873C
+	for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 06:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780036131; cv=none; b=S2Z6iDppYkUhGdUfatlpYrlrRy8aAU4Zn7oaG+bH2G6vxls30v1HAmR2iqLe6J766JSHYNdUji30BSkMbxzfyIAb+OpKWt0Vp8ViaanSRTjuTbDBtWNH6xlVtcyc8fskH6lPih66mT1/QnIB4rmP4DBtGyicaDMj+qSouWK8wxQ=
+	t=1780036141; cv=none; b=FdXizU7Ly70A3Z3LV3Nx2FoW6i/9lh2jxBQLHBf2n/Yi6JqGjtyEMqbvjyIQmB+3qbdg5GOwrLd2xrYq9wTQ/ESa16SORcS+ssbJOL/xNaHkL5z/RRNU0+UDSCKoGuEf4R6fWYTwmPtvUA5WFZ5/2TNvi6hspJw4vuPhmFpGqc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780036131; c=relaxed/simple;
-	bh=VBg6eYh18X5PDnPO9DIhzM31fE7SG2D5HIs6cG6KOkA=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=m+5FF+rZcMhCcihHcYflY8PQudl4bQgk4YD+qKHachqaQQ3VhtLK4lq0AzpWkBKONrkF78CwywXkHRz/YhqMA4icHz9EC84RCjjddWILwr3yrTjEwuAoX/MnSjGZQMnW69nYUVTa+ubY8XNfdm+MXmvMAjCOSWeLRhRY4hLEwDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=YpJQqztq; arc=none smtp.client-ip=74.125.82.174
+	s=arc-20240116; t=1780036141; c=relaxed/simple;
+	bh=FNI4e0Y9g5FK2/4DBzvxjuh05HswRPQCPmugp/FnJwg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=NNoHSXV+bam1LMk7kXf9sMLr+Sl0D99ZQtV02Bt9d+HBaZtWT2Kay2UKMIGkXuCAo4PoofakqA2aClNHx9wqkneMuquUYA0jNj6M0Lna555iPkx8a+ptgrhoYSCcae1mBAReu0PPPxKWaZc0ttIrJZoRrR2uDWjYGTR6ncbsUhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=bbyHOMGm; arc=none smtp.client-ip=74.125.82.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="YpJQqztq"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-304d555293aso124765eec.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 23:28:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="bbyHOMGm"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-304df7ff4c2so706303eec.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 23:28:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1780036123; x=1780640923; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yc3+Um0q/cLzforp36o+SIYNj+jJ+pe+LLCc2WA5hpM=;
-        b=YpJQqztqtb7Hv3FrMZkaCcuJHIGSeFLKh18/RjW6TooHgwGwW3Vg0wxCdOWePFJgUC
-         8syyYkgwuwKMpCdIVvrSrGqsSFgPS2r9Apo5Uky/rHPdRtGgRo2Vn0iPRqOqHu+Aqga2
-         tPCvlWeY+9OTv5BklBSLrnqz+oG+5aRU7UDg4lFjdQjTaU3/zc+sxfd/gZvXjdSQ3lZh
-         3MATtjyc5+Jj/xKduRYgn8kdmvbBn7wSUbcxyR66dWXEZxUQXaSAWYUaeUaIJY/Dyk/D
-         hxwgAx484ivwNmmjAOmU8iIDhf/U4CWNo9O1qaNAEG0n0uI2T4luF+T0lxOWQHqXd8u+
-         qMVw==
+        d=sifive.com; s=google; t=1780036125; x=1780640925; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v45EvKOKpiUmWI/368ayn/Qc0smHoYJt4UbJf2J9agE=;
+        b=bbyHOMGmafaOJ54uzljC0W/8L9aiQPYLSkosZ5dYrdthnzRSOKjzefqz7n99cr0FdJ
+         gdxP6EJV6ejCYo7WgEUMGUokLyRR1976Wg+cA4UGwpqL2mTdl1PoS6K+Mj8Nx1mBDN5T
+         47aKlf0BosO5SZVlNy8xbQnUHnfLcgm1NoWMwel6chH3rJ95VsuGEi53h1bFkBryeEu/
+         1fHv6K3HSHczDUcMxP9L9Qev0OBi0pAJkMcKz3TJZX5vSvMSMzHtT/wZQN7S0OvJ9ryY
+         WdGtAxC0Y9kza/+W1Z7ZGkjrp1WdR6GPVBFRY+9VYIGB9wX3aRLmbuUOzIIdmXYlOyDl
+         gfwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780036123; x=1780640923;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yc3+Um0q/cLzforp36o+SIYNj+jJ+pe+LLCc2WA5hpM=;
-        b=E27fTJnLB0x8q/qosXzLwShq1aUHl05tFKncGI7vN4tNOIe8EPabuzKExpdCzi9KKN
-         SvqjxHsRt0DxOIR/6MDcI5fkmITmTnEHY1G+GMQudCENy2I2dfVkaF5btySBec/a8+Mp
-         bkltsdLfUkbPyrAAqTveWXxcx7PMSXzVo1PrZcHPh3o//dMXD6CzPPXxBOWMsNOinn66
-         0+bJtQHBZtmysdAdh3AANOy1NVBJiH8Hwo2HC3B6KEJCHRVOeVRcrFjzLoDDwIGG9Ozg
-         +8Qy5eLiE6qsOBur7iWVTD7bB2Zbj/mHTnEN51v0KrxSb9TMa1KBbMNYSHS272gvpxbG
-         XGsw==
-X-Forwarded-Encrypted: i=1; AFNElJ/SnJjW1i86HcsVLuASjPty7L04smCBjIFv05cTIh/2Y1SC190vIAfyeMOv9rqayhJsauw1AAwlcMrEH6lxmBc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZRl6ZqPPO6k0qvhBLybMOZ+OG9ICogsskiQ9/scwB3MmPYHUT
-	JZCRyD/2nxhoeTfbg0X97tKjD7uC3UTibVmzi4NbullrAtOtKoLRb5OGhAYohgEjb58=
-X-Gm-Gg: Acq92OHLq3ma65d/8EzcKPnbzVFkCDfFYvTeP9GfGSdz2HvvQLBeTXOj4l5aXh6RCL/
-	HdxkOKyVq8J8yHGLBdBfPUIqbAB1hU5/dlie/PWyXLxz1PZ1ATyPSRI66MvgLJgKWuvIwZXS117
-	0SVVvRBx2LHPRD7Qbgl1ycWSdWvCyZF8Xk7sSiH4OUu2/aD+YffAlfAwNePCCjZxMmycKlRj5PB
-	Uz+2M8wjcvR+5f2JS+7kM1mKuRxoMhEVnNYSAePrmhUm1XoW0zxbFXfLSchoRV2SeLrDXtEiVDN
-	/A2KSnObFU4enpARa9x7w6JNAFf4mJf3FhIprFyOiI5j1KCXfg9v4GdLQpLOlzEYS4fEMR2j40f
-	clTXUu8GLW7g9ty/iRVfKJRwbLcd/driAQzCqRhlAtBX7Kk0sErZA+2v0hQZPjT7ajI5CDxQtua
-	udtnDc+R94PBxukA09JNby60+DXxNtI/dkDr+BjzHf+Z54xZ/iQ5w3Mg==
-X-Received: by 2002:a05:7301:3f16:b0:304:8366:7456 with SMTP id 5a478bee46e88-304eb0f0b91mr881488eec.3.1780036123025;
-        Thu, 28 May 2026 23:28:43 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780036125; x=1780640925;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=v45EvKOKpiUmWI/368ayn/Qc0smHoYJt4UbJf2J9agE=;
+        b=g/dYBWK1BOlj9kWNWzhAfHOjt4guugieLeNEDtEUo5m2pqevGcb53ZitbvzOe00b6q
+         PJslbRillM73NYc7U5LplgFq52eAvJ/DcXcROYVSMag9xCnbVWqDZHruM7ZnpMXGRSkT
+         I/alTT5vw65SrA2SJx0KrnYsg6JuWCk6iGoddfvtF8VcZBgMiXNALstf3DC14/2Yu5my
+         zunJHwQiFzvr2IpaaBO29gBOIWoVGee7BgTNDLpJIGz5bgHM/KzHnX10TJhxScpuynpe
+         S2icUpLgGKPGs/bFJ3KWug8kPpnXToowRr5CJZXfvCOYRiEbOmUrhWgCZFgzQIqO3Tgw
+         6tSA==
+X-Forwarded-Encrypted: i=1; AFNElJ/Ure6rjmOR6lDUWi3jL2SKvI54G4eUwiv94u7/gCPwDSpcp7adsG4igx4Wv+mi5e437Att7ZRQfiTPRpDPH00=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3KdR7n0BdwcZtF2uM5hlBM3N7zqkL5u6tJWQn2BVgrfkkFyFh
+	AuWuvKPdZeGdEui/TzhEVJ3wZfjjTLr1hLzxFbeUWJU4wi1U2YiKD0AcqXeGYTl3oyU=
+X-Gm-Gg: Acq92OGYRPlOMeiLykf4Yb3skAkLu/SijhmpNMyRN46m75GmKz8I1KwySUEH8MjReqN
+	mDkY7BuIrAFgZ6GAG02LD6O1jEtpfG4+TsOfsZJ8P6yYNkpjEa/kdTk2N3NUcfCUc+l/wZDe6LB
+	CdjRa4c7boNg159a6tf9E8WZJYdL8YtOWz25iC8sisCRH46SfCMR1XyuM9bUwz9ixJpJXC3Emp5
+	5h2D9dldVCLV0SVTMEDUGNsRhUlFNayu2h+chIQ9NpAC0fVIew7vMcW8rHbspBO6stCjNuM3mro
+	Aw3y7aqzRqCGPg6JNFA9v89Niox7bxpCTqJfAWWYafZd+I5knvoc6BgSL18iWtlIol2gyAJzgBX
+	5N/zzpFTYo9g2aNnT1+tnNALYfC97uVq7g63aNwrpqP77O3gcjSHongCSk2EDzI1y2U9oyiW2qE
+	NzK+PD2hijmxyVy22i1fIBcpqjjuL/i0TwJBjaZB2RGbGkyTclNCO8M345QEPzHbSg
+X-Received: by 2002:a05:7300:5b9e:b0:2c6:67b6:3acc with SMTP id 5a478bee46e88-304eb1e9955mr723799eec.15.1780036125527;
+        Thu, 28 May 2026 23:28:45 -0700 (PDT)
 Received: from sw07.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed3358b1sm694607eec.13.2026.05.28.23.28.42
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed3358b1sm694607eec.13.2026.05.28.23.28.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 23:28:42 -0700 (PDT)
+        Thu, 28 May 2026 23:28:44 -0700 (PDT)
 From: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-Subject: [PATCH v3 0/3] KVM: riscv: add check_supported_reg() into
- get-reg-list test
-Date: Thu, 28 May 2026 23:28:26 -0700
-Message-Id: <20260528-kvm-get_reg_list-v2-v3-0-170969a8599f@sifive.com>
+Date: Thu, 28 May 2026 23:28:28 -0700
+Subject: [PATCH v3 2/3] KVM: riscv: selftests: Refactor ISA and SBI
+ extension sublist macros
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,12 +69,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAoyGWoC/32NQQ6CMBREr0L+2ppSSg2uvIchpNbf8lXAtNhoS
- O9uwb3JbF4yb2aBgJ4wwLFYwGOkQNOYodoVYHo9OmR0zQyCC8Vrodg9Dszh3Hl03YPCzKJgtrG
- ValSpjTKQzadHS+9t9dz+OLwuNzTzOrU2+mxO/rPdRrH2/j/kcHZoJNeSl7KW+hTIUsS9mQZoU
- 0pfK5R+F8kAAAA=
-X-Change-ID: 20260526-kvm-get_reg_list-v2-f9f36961ac6c
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260528-kvm-get_reg_list-v2-v3-2-170969a8599f@sifive.com>
+References: <20260528-kvm-get_reg_list-v2-v3-0-170969a8599f@sifive.com>
+In-Reply-To: <20260528-kvm-get_reg_list-v2-v3-0-170969a8599f@sifive.com>
 To: Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, 
  Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
  Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
@@ -85,73 +84,172 @@ Cc: greentime.hu@sifive.com, vincent.chen@sifive.com, zong.li@sifive.com,
  linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Yong-Xuan Wang <yongxuan.wang@sifive.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780036122; l=2682;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780036122; l=6365;
  i=yongxuan.wang@sifive.com; s=20260424; h=from:subject:message-id;
- bh=VBg6eYh18X5PDnPO9DIhzM31fE7SG2D5HIs6cG6KOkA=;
- b=WZoiBediPqeVKPQUkdFvp7yI3jn8I3iTjYJoIKq4mGWSe2Kp/W2UGojEd5uTJ0uuEmyPqLRcj
- 7rI61rm9xdwBJrDzyxmPQWX4j2oJx3ZKHkGz5kt7Z7XalBAlPFk0bj0
+ bh=FNI4e0Y9g5FK2/4DBzvxjuh05HswRPQCPmugp/FnJwg=;
+ b=NKxY/K/jSMMPh4VOKPxki0ZAqPzHMvzBwMys9X+hufCVuPO2SlBYQdwbdx51iAE7NCNc4BsvI
+ erwQW5palAMAEvy5VzcG592+Krbg/C9IfU8jixjzXN+8FcTyaehY+ut
 X-Developer-Key: i=yongxuan.wang@sifive.com; a=ed25519;
  pk=+8NCHB1ZJvZthQAmZspOAaqjo+/snaW8mFSiDx45HxY=
 
-This series addresses a bug in the SBI FWFT (Firmware Features) extension
-where features could remain exposed to guests after their dependent ISA
-extensions are disabled at runtime, and improves the related selftest
-infrastructure.
+Refactor the get-reg-list test to use unified sublist macros for ISA
+and SBI extensions, eliminating code duplication and improving
+maintainability.
 
-The bug (patch 1) occurred because FWFT feature support was cached at vCPU
-initialization time. When userspace subsequently disabled ISA extensions
-via KVM ONE_REG, the cached support status was not updated, leading to
-stale feature exposure.
+Previously, each extension had its own hand-coded sublist definition
+(e.g., SUBLIST_ZICBOM, SUBLIST_AIA, etc.) and the config structures
+repeated the same pattern. This made the code verbose and error-prone.
 
-The selftest improvements (patches 2-3) enhance the get-reg-list test by
-refactoring the extension sublist infrastructure and splitting FWFT
-feature testing into separate, properly-gated sublists.
-
+Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
 ---
-Changes in v3:
-- Restore 'supported' field with init() callback for initialization probing
-  (sashiko-bot)
-- Add NULL checks before calling feature->supported() in all functions
-- Fix isa_ext_enabled tracking logic and restore isa_ext_cant_disable array
-- Add sbi_ext_enabled tracking and enhance dependency checking (sashiko-bot)
-- Refine code organization and variable naming consistency (sashiko-bot)
-- Link to v2: https://patch.msgid.link/20260526-kvm-get_reg_list-v2-v2-0-7940a401454a@sifive.com
+ tools/testing/selftests/kvm/riscv/get-reg-list.c | 78 +++++++++---------------
+ 1 file changed, 28 insertions(+), 50 deletions(-)
 
-Changes in v2:
-- Fix FWFT stale feature exposure by removing static 'supported' field
-- Refactor get-reg-list test to use unified extension sublist macros
-- Split FWFT testing into per-feature sublists with runtime checks
-  (Andrew)
+diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+index 8d6fdb5d38b8..5033c09201ef 100644
+--- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
++++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+@@ -1013,7 +1013,7 @@ static __u64 fp_d_regs[] = {
+ };
+ 
+ /* Define a default vector registers with length. This will be overwritten at runtime */
+-static __u64 vector_regs[] = {
++static __u64 v_regs[] = {
+ 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_CSR_REG(vstart),
+ 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_CSR_REG(vl),
+ 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_CSR_REG(vtype),
+@@ -1057,37 +1057,17 @@ static __u64 vector_regs[] = {
+ #define SUBLIST_BASE \
+ 	{"base", .regs = base_regs, .regs_n = ARRAY_SIZE(base_regs), \
+ 	 .skips_set = base_skips_set, .skips_set_n = ARRAY_SIZE(base_skips_set),}
+-#define SUBLIST_SBI_BASE \
+-	{"sbi-base", .feature_type = VCPU_FEATURE_SBI_EXT, .feature = KVM_RISCV_SBI_EXT_V01, \
+-	 .regs = sbi_base_regs, .regs_n = ARRAY_SIZE(sbi_base_regs),}
+-#define SUBLIST_SBI_STA \
+-	{"sbi-sta", .feature_type = VCPU_FEATURE_SBI_EXT, .feature = KVM_RISCV_SBI_EXT_STA, \
+-	 .regs = sbi_sta_regs, .regs_n = ARRAY_SIZE(sbi_sta_regs),}
+-#define SUBLIST_SBI_FWFT \
+-	{"sbi-fwft", .feature_type = VCPU_FEATURE_SBI_EXT, .feature = KVM_RISCV_SBI_EXT_FWFT, \
+-	 .regs = sbi_fwft_regs, .regs_n = ARRAY_SIZE(sbi_fwft_regs),}
+-#define SUBLIST_ZICBOM \
+-	{"zicbom", .feature = KVM_RISCV_ISA_EXT_ZICBOM, .regs = zicbom_regs, .regs_n = ARRAY_SIZE(zicbom_regs),}
+-#define SUBLIST_ZICBOP \
+-	{"zicbop", .feature = KVM_RISCV_ISA_EXT_ZICBOP, .regs = zicbop_regs, .regs_n = ARRAY_SIZE(zicbop_regs),}
+-#define SUBLIST_ZICBOZ \
+-	{"zicboz", .feature = KVM_RISCV_ISA_EXT_ZICBOZ, .regs = zicboz_regs, .regs_n = ARRAY_SIZE(zicboz_regs),}
+-#define SUBLIST_AIA \
+-	{"aia", .feature = KVM_RISCV_ISA_EXT_SSAIA, .regs = aia_regs, .regs_n = ARRAY_SIZE(aia_regs),}
+-#define SUBLIST_SMSTATEEN \
+-	{"smstateen", .feature = KVM_RISCV_ISA_EXT_SMSTATEEN, .regs = smstateen_regs, .regs_n = ARRAY_SIZE(smstateen_regs),}
+-#define SUBLIST_FP_F \
+-	{"fp_f", .feature = KVM_RISCV_ISA_EXT_F, .regs = fp_f_regs, \
+-		.regs_n = ARRAY_SIZE(fp_f_regs),}
+-#define SUBLIST_FP_D \
+-	{"fp_d", .feature = KVM_RISCV_ISA_EXT_D, .regs = fp_d_regs, \
+-		.regs_n = ARRAY_SIZE(fp_d_regs),}
+-
+-#define SUBLIST_V \
+-	{"v", .feature = KVM_RISCV_ISA_EXT_V, .regs = vector_regs, .regs_n = ARRAY_SIZE(vector_regs),}
++
++#define SUBLIST_ISA(ext, extu)				\
++	{						\
++		.name = #ext,				\
++		.feature = KVM_RISCV_ISA_EXT_##extu,	\
++		.regs = ext##_regs,			\
++		.regs_n = ARRAY_SIZE(ext##_regs),	\
++	}
+ 
+ #define KVM_ISA_EXT_SIMPLE_CONFIG(ext, extu)			\
+-static __u64 regs_##ext[] = {					\
++static __u64 ext##_regs[] = {					\
+ 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG |			\
+ 	KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE |	\
+ 	KVM_RISCV_ISA_EXT_##extu,				\
+@@ -1095,18 +1075,22 @@ static __u64 regs_##ext[] = {					\
+ static struct vcpu_reg_list config_##ext = {			\
+ 	.sublists = {						\
+ 		SUBLIST_BASE,					\
+-		{						\
+-			.name = #ext,				\
+-			.feature = KVM_RISCV_ISA_EXT_##extu,	\
+-			.regs = regs_##ext,			\
+-			.regs_n = ARRAY_SIZE(regs_##ext),	\
+-		},						\
++		SUBLIST_ISA(ext, extu),				\
+ 		{0},						\
+ 	},							\
+ }								\
+ 
++#define SUBLIST_SBI(ext, extu)					\
++	{							\
++		.name = "sbi-"#ext,				\
++		.feature_type = VCPU_FEATURE_SBI_EXT,		\
++		.feature = KVM_RISCV_SBI_EXT_##extu,		\
++		.regs = sbi_##ext##_regs,			\
++		.regs_n = ARRAY_SIZE(sbi_##ext##_regs),		\
++	}
++
+ #define KVM_SBI_EXT_SIMPLE_CONFIG(ext, extu)			\
+-static __u64 regs_sbi_##ext[] = {				\
++static __u64 sbi_##ext##_regs[] = {				\
+ 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG |			\
+ 	KVM_REG_RISCV_SBI_EXT | KVM_REG_RISCV_SBI_SINGLE |	\
+ 	KVM_RISCV_SBI_EXT_##extu,				\
+@@ -1114,13 +1098,7 @@ static __u64 regs_sbi_##ext[] = {				\
+ static struct vcpu_reg_list config_sbi_##ext = {		\
+ 	.sublists = {						\
+ 		SUBLIST_BASE,					\
+-		{						\
+-			.name = "sbi-"#ext,			\
+-			.feature_type = VCPU_FEATURE_SBI_EXT,	\
+-			.feature = KVM_RISCV_SBI_EXT_##extu,	\
+-			.regs = regs_sbi_##ext,			\
+-			.regs_n = ARRAY_SIZE(regs_sbi_##ext),	\
+-		},						\
++		SUBLIST_SBI(ext, extu),				\
+ 		{0},						\
+ 	},							\
+ }								\
+@@ -1129,7 +1107,7 @@ static struct vcpu_reg_list config_sbi_##ext = {		\
+ static struct vcpu_reg_list config_##ext = {			\
+ 	.sublists = {						\
+ 		SUBLIST_BASE,					\
+-		SUBLIST_##extu,					\
++		SUBLIST_ISA(ext, extu),				\
+ 		{0},						\
+ 	},							\
+ }								\
+@@ -1138,14 +1116,14 @@ static struct vcpu_reg_list config_##ext = {			\
+ static struct vcpu_reg_list config_sbi_##ext = {		\
+ 	.sublists = {						\
+ 		SUBLIST_BASE,					\
+-		SUBLIST_SBI_##extu,				\
++		SUBLIST_SBI(ext, extu),				\
+ 		{0},						\
+ 	},							\
+ }								\
+ 
+ /* Note: The below list is alphabetically sorted. */
+ 
+-KVM_SBI_EXT_SUBLIST_CONFIG(base, BASE);
++KVM_SBI_EXT_SUBLIST_CONFIG(base, V01);
+ KVM_SBI_EXT_SUBLIST_CONFIG(sta, STA);
+ KVM_SBI_EXT_SIMPLE_CONFIG(pmu, PMU);
+ KVM_SBI_EXT_SIMPLE_CONFIG(dbcn, DBCN);
+@@ -1153,9 +1131,9 @@ KVM_SBI_EXT_SIMPLE_CONFIG(susp, SUSP);
+ KVM_SBI_EXT_SIMPLE_CONFIG(mpxy, MPXY);
+ KVM_SBI_EXT_SUBLIST_CONFIG(fwft, FWFT);
+ 
+-KVM_ISA_EXT_SUBLIST_CONFIG(aia, AIA);
+-KVM_ISA_EXT_SUBLIST_CONFIG(fp_f, FP_F);
+-KVM_ISA_EXT_SUBLIST_CONFIG(fp_d, FP_D);
++KVM_ISA_EXT_SUBLIST_CONFIG(aia, SSAIA);
++KVM_ISA_EXT_SUBLIST_CONFIG(fp_f, F);
++KVM_ISA_EXT_SUBLIST_CONFIG(fp_d, D);
+ KVM_ISA_EXT_SUBLIST_CONFIG(v, V);
+ KVM_ISA_EXT_SIMPLE_CONFIG(h, H);
+ KVM_ISA_EXT_SIMPLE_CONFIG(smnpm, SMNPM);
 
-To: Anup Patel <anup@brainfault.org>
-To: Atish Patra <atish.patra@linux.dev>
-To: Paul Walmsley <pjw@kernel.org>
-To: Palmer Dabbelt <palmer@dabbelt.com>
-To: Albert Ou <aou@eecs.berkeley.edu>
-To: Alexandre Ghiti <alex@ghiti.fr>
-To: Clément Léger <cleger@rivosinc.com>
-To: Andrew Jones <ajones@ventanamicro.com>
-To: Paolo Bonzini <pbonzini@redhat.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: greentime.hu@sifive.com
-Cc: vincent.chen@sifive.com
-Cc: zong.li@sifive.com
-Cc: kvm@vger.kernel.org
-Cc: kvm-riscv@lists.infradead.org
-Cc: linux-riscv@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-
----
-Yong-Xuan Wang (3):
-      KVM: RISC-V: SBI FWFT: Fix stale feature exposure after runtime extension changes
-      KVM: riscv: selftests: Refactor ISA and SBI extension sublist macros
-      KVM: riscv: selftests: Split SBI FWFT into separate feature-specific sublists
-
- arch/riscv/kvm/vcpu_sbi_fwft.c                   |  32 ++++-
- tools/testing/selftests/kvm/riscv/get-reg-list.c | 168 +++++++++++++++--------
- 2 files changed, 140 insertions(+), 60 deletions(-)
----
-base-commit: c7832534a8160276cccb9a8cc8cafb5614c579d0
-change-id: 20260526-kvm-get_reg_list-v2-f9f36961ac6c
+-- 
+2.43.7
 
