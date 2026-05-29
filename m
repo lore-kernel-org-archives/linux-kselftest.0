@@ -1,87 +1,44 @@
-Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C892E7378;
-	Fri, 29 May 2026 16:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C10D3F1673;
+	Fri, 29 May 2026 16:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780071003; cv=none; b=BEy/tu7kcWlrjoE8D0TS8MncgKP/JhA2iiesYiOb2Hyq+V+geEWholu7Fn+E2zyOhaNozH5tyMWNhbcjQ30p2wFMEOPuO0Wz8t3CYxOoobEGgEFZXpe5LsgR6neaDLmY3gTNn9rMEl11SLF1PMNtNPptz5nuDya7ixFZL0NobAU=
+	t=1780073133; cv=none; b=L4lk5dpCVOZufMoboURr2uzKJkDeLVPVp7TOFYczohrFILQi8uzIUx4cSSVbDBRZrCeAnVXQ3Ijpb7Mv/Fm3YU3Ssbi/PM3pwa92oRgt0F1Czkj4fzvlf9+7c+SxjLi3HHeCnC2VlaHlbyGqyV8lEuVxO5EnJorjSLqPRw+cXxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780071003; c=relaxed/simple;
-	bh=ueMbKYDnjG/pPkozcvq1hNvLbgzbX4F0xs9sWbgMRyY=;
+	s=arc-20240116; t=1780073133; c=relaxed/simple;
+	bh=adm4Xg68sOp6Hdjli3T7/GamU7ER4+2eHQAszvxhcg8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KeymAD8vU/EqAqGdBQH5y+FjwEJf9tVEbSsQmaltwoUGp0aWFjgzLq09Iib70xWXst6IsT8/Ey0Z5r3oGob+KE8YcVcI83KYHxLQOPM/14Jd8HZGGZQ7IEzL7CerARXUxNARZn9nsodxD05kuyn7GNVjheavAHQ+wG7M+d3t+Hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=dx790+gm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=XzjWYWA2; arc=none smtp.client-ip=202.12.124.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	 Content-Type:Content-Disposition:In-Reply-To; b=USMSMMqJj0yWdvTrV0eAJRgMmqR0aV14hn8Oe+g//pky7TbuzVrUJ37C94RKv4ZCsWeZN5N8HJ11zsXpcGL9BMX+N+LKTm/HAM9cbq1IvmJmKSWN5+wplw4Ew1lLH9LDO7BtpMBP4i5GvbwMuQPvQrTNRfpUjsLUDziQm/2wtfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+6m3z+x; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="dx790+gm";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XzjWYWA2"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailflow.stl.internal (Postfix) with ESMTP id 8E219130017C;
-	Fri, 29 May 2026 12:09:59 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Fri, 29 May 2026 12:10:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1780070999; x=
-	1780078199; bh=yCQGxE2VwZ7TPyH1GENnw64ogNKLMsypG7SdY7O7HyY=; b=d
-	x790+gmFOOG9v4AuVJP4ne6bRgdnfCQusA6mDuRfxN+aMBZm0kvt3wnU/pQeM+CN
-	39g8UHT39sT3ktgE8mrVsSybi6u7Suk6K3GB9lcXIBDLJEys60v8ontI4U+s9zlp
-	T4iYlyY8kt4aEBJQjexUP35BvIns5SAO8obRtFrCE9Gxj+axX+y3ZKofNhMxwCjV
-	DIagvUTLnSYY0OxSfoJGdFu1qmeFAf4jHNxhwKyCENto6+BWUOIm0CsMglsEg7G9
-	oTXff5K8+JWKdrVUY2sO0CS7nleoceCZNXqN3QeXpV06teB7zZMxM9+th1ladti8
-	Q7hVeSIefKnCrOg2vr4cw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1780070999; x=1780078199; bh=yCQGxE2VwZ7TPyH1GENnw64ogNKLMsypG7S
-	dY7O7HyY=; b=XzjWYWA2FQxK/sdjf3Ns4xQt2XwlqavTtO/b0i7jHjVEqQs6IZs
-	Xk7OtncmEJccbLGx1TCq3HrtmigP24BtojTYLnv8lx2ZD2SmxuE3jZKVeNQmp7Zr
-	C/w+DA7rWDavQvu0xbUGqKJs7XFerdMLnhYma25urvVM6Y1mzGupa9PK9QJ/Xiql
-	6xGhGQzdieRgB/BM+rx3CJPad6rotOF2nD0+5orpWJ1GCqyu2oVJ360Q3h4gD6Dh
-	xmtcR6868TTK1n/hVvQLHe6/UaMCM8eTf4jPydMZNjwGMcznykbrVKtDHefoLeHF
-	Vk2zvjzlgy08XXRhJg2F/Sf3LrFpWqjSStA==
-X-ME-Sender: <xms:VroZaiYsZ3s217W5f-7Yot472V3xNeypxcJfdq-lZPZ2zBxLt6w_Yg>
-    <xme:VroZatx4_egnkCHb_9gr2HO1f1PndNcIn_8GDr8p4vAyTGCHbKghHY3ERldVpZfOv
-    KxKvvjO7gaUh52NcFGbq_XFEVREFwQT87gUuoJBQ1_V3teLy8I3QlM>
-X-ME-Received: <xmr:VroZanNjicJKD2ueeW2Q6rlSuSxp5Lu2S-vvGEQzskUPdPuR_-EbQULwg9JeVA>
-X-ME-Proxy-Cause: dmFkZTF5GxdEr1yCvZ6kyFvOzvHVs6SwkJfUGREcVnkg1W8F4OQC1NfE6tZFRjuAEYN7CY
-    oaeGvqirqC7MgUTCKRTPqriH20k/xhHdv+L9upsVMvX2G0Ehd95vRdHta+K3je4rJQBnCS
-    qAV7t2idhxq2AHeyEs7ThD8S9VwoF45Rgg20qllo34+oUy3TVn6bXp7RhbnqeiMkplmiE/
-    vGDHTQ4fr6VkZ3xwGpfyV8Fpf0aTgcR3ui/oOuiF8Lrc3gIpmXEAc8KbPGQDXs4ubh5AVO
-    aEDwiSBAL68wmfFNOohGfrv5tNlzCqN22kr28c1/AEq5T/PDAjboCyvAd+YtMlbSzDrvOg
-    5ffwJyVINgO0G/FnM7vN04WA3yPEDhlzsEEWsbxItMdALnS7Req6yihD4HKG27eTCIUWsi
-    3K35QliMA7OJhexc3hMbSlu15zDC0Ubi56fAUo9qu3dhOy/zSAoOCX78c6uLEoWiaYn6Qm
-    1Vtru0/IdBDvXgaSzsTuIQKqN61p4z/8JVhFETigfRfSgLIn2zrqhBrKyvPS+j/OE7l0uK
-    zt0o7mgm8lOF+uurUs+vz7W5PONJEoIfYm8ADY7juvGiZRjRVsGCwxWLRRQQD+H2Gpi5Am
-    znL2bTp4ZHh2vuBrcQHiY+cq5PFRj9a9Ihe7Ee/0ulN4xQH1W5I8EGaE6ZmA
-X-ME-Proxy: <xmx:VroZapOzu8MWwtCKHQeztbejLKFN4MQi2TnVxrs6R92pa5qus8PKtw>
-    <xmx:VroZaq8GzdXftzn4ApgZ8sKdAvtx8eSwHlqhZpMMapGCXvpVmYH_LQ>
-    <xmx:VroZaoby_NAFtPQhj2dWHtxsDxUZOjCaUjcleAVcgLGn3bFEAKibdw>
-    <xmx:VroZaoGOrnNd-hzG95vFOmevM9g64xdpwHnB_WIsMegvtQ8ub5XU7Q>
-    <xmx:V7oZav4VZ1ZfLoykJzfe7aSwIPEi_N--zGIiXJ_TCAdDHftwfbCVW3x8>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 29 May 2026 12:09:57 -0400 (EDT)
-Date: Fri, 29 May 2026 17:09:56 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: Lorenzo Stoakes <ljs@kernel.org>
-Cc: akpm@linux-foundation.org, rppt@kernel.org, peterx@redhat.com, 
-	david@kernel.org, surenb@google.com, vbabka@kernel.org, Liam.Howlett@oracle.com, 
-	ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, seanjc@google.com, 
-	pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, sj@kernel.org, 
-	usama.arif@linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
-	kernel-team@meta.com, stable@vger.kernel.org
-Subject: Re: [PATCH v5 04/18] mm: skip out-of-range bits in mk_vma_flags()
-Message-ID: <ahmoH9v6_DA2i_zn@thinkstation>
-References: <20260526130509.2748441-1-kirill@shutemov.name>
- <20260526130509.2748441-5-kirill@shutemov.name>
- <ahmQvfNk7S4F0LBj@lucifer>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+6m3z+x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8389C1F00899;
+	Fri, 29 May 2026 16:45:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780073132;
+	bh=GI/3CxbtRcVE+9zBOcv6zZDBqjLvSiyQcrxy+I1s2kY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=F+6m3z+xQ394skheiMjunzJhlBgB+CzilkptCdn5ktna0OC9prPxP1/JKJw82p+YI
+	 UXVqD0hCer/BB0QybutXjH03Y5iQs+hfrBjQIOsoUaUwmy4zCcGVTKTiD+3qLFeILI
+	 dJosqiE6T+i1kzFoqbVlDw9pf1t0BnX6hulULUji5sihczml9EFhDc/VCXiPMlB47N
+	 nn0n2fVF7KDRNWHHf6uD4hn09Uo+C96XSmN4PRA67PjSlObXIW+qgLxqzYFOm82NRZ
+	 x+UgPpKrUPQW82c2RprpiyLwOu2aYKuxRl1lSijFKgSHKXlSixB2r4swYDEj+GDr4H
+	 7sD6NQXv88zBg==
+Date: Fri, 29 May 2026 17:45:24 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Dev Jain <dev.jain@arm.com>
+Cc: akpm@linux-foundation.org, liam@infradead.org, jgg@ziepe.ca, 
+	leon@kernel.org, david@kernel.org, shuah@kernel.org, vbabka@kernel.org, 
+	jannh@google.com, pfalcato@suse.de, rppt@kernel.org, surenb@google.com, 
+	mhocko@suse.com, balbirs@nvidia.com, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	ryan.roberts@arm.com, anshuman.khandual@arm.com, stable@vger.kernel.org
+Subject: Re: [PATCH] fs/proc/task_mmu: do not warn on seeing non-migration
+ pmd entry
+Message-ID: <ahmdJFCw2arBdsd9@lucifer>
+References: <20260529111704.1078346-1-dev.jain@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,37 +47,109 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ahmQvfNk7S4F0LBj@lucifer>
+In-Reply-To: <20260529111704.1078346-1-dev.jain@arm.com>
 
-On Fri, May 29, 2026 at 03:00:14PM +0100, Lorenzo Stoakes wrote:
-> > Add VMA_NO_BIT and have DECLARE_VMA_BIT() resolve any bitnum out
-> > of range to it. vma_flags_set_flag() drops negative bit values.
-> > The ternary collapses at compile time, the runtime check folds
-> > away when the bit is in range, and the common path is unchanged.
-> 
-> Hmm are you sure it does?
+On Fri, May 29, 2026 at 11:17:03AM +0000, Dev Jain wrote:
+> pagemap_pmd_range_thp() warns if a non-present PMD is not a migration
+> entry. This became false once device-private entries at the PMD level were
+> added.
+>
+> One can hit the warning by patching hmm-tests.c with the following:
+>
+> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+> index e1c8a679a4cf3..7f0a3384f3c5f 100644
+> --- a/tools/testing/selftests/mm/hmm-tests.c
+> +++ b/tools/testing/selftests/mm/hmm-tests.c
+> @@ -209,6 +209,37 @@ static int hmm_dmirror_cmd(int fd,
+>  	return 0;
+>  }
+>
+> +static int hmm_read_self_pagemap(void *addr, unsigned long npages,
+> +				 unsigned long page_size)
+> +{
+> +	const size_t entry_size = sizeof(uint64_t);
+> +	const off_t offset = ((uintptr_t)addr / page_size) * entry_size;
+> +	uint64_t *entries;
+> +	ssize_t nread;
+> +	int fd;
+> +
+> +	entries = malloc(npages * entry_size);
+> +	if (!entries)
+> +		return -ENOMEM;
+> +
+> +	fd = open("/proc/self/pagemap", O_RDONLY);
+> +	if (fd < 0) {
+> +		free(entries);
+> +		return -errno;
+> +	}
+> +
+> +	nread = pread(fd, entries, npages * entry_size, offset);
+> +	close(fd);
+> +	free(entries);
+> +
+> +	if (nread < 0)
+> +		return -errno;
+> +	if ((size_t)nread != npages * entry_size)
+> +		return -EIO;
+> +
+> +	return 0;
+> +}
+> +
+>  static void hmm_buffer_free(struct hmm_buffer *buffer)
+>  {
+>  	if (buffer == NULL)
+> @@ -2314,6 +2345,10 @@ TEST_F(hmm, migrate_anon_huge_fault)
+>  	ASSERT_EQ(ret, 0);
+>  	ASSERT_EQ(buffer->cpages, npages);
+>
+> +	/* Exercise pagemap on a PMD device-private entry. */
+> +	ret = hmm_read_self_pagemap(buffer->ptr, npages, self->page_size);
+> +	ASSERT_EQ(ret, 0);
+> +
+>  	/* Check what the device read. */
+>  	for (i = 0, ptr = buffer->mirror; i < size / sizeof(*ptr); ++i)
+>  		ASSERT_EQ(ptr[i], i);
 
-You were right - I measured it (gcc 15.2, clang 21.1.8, -O2). The
-DECLARE_VMA_BIT() ternary is fine, but the "if (bit < 0)" guard does not
-reliably fold: with it, clang stops folding __VMA_UFFD_FLAGS to a constant
-and gcc keeps a rolled loop; without it, both fold.
+Thanks for this!
 
-So I've dropped VMA_NO_BIT and gone with your config-gated-mask approach
-instead: mk_vma_flags_from_masks() plus VMA_UFFD_{MISSING,WP,MINOR,RWP}
-masks that collapse to EMPTY_VMA_FLAGS when unavailable, so no out-of-range
-bit ever reaches mk_vma_flags(). __VMA_UFFD_FLAGS now folds to a single
-constant on both compilers, 32- and 64-bit. Added your Suggested-by.
+though, hmm it really feels like you maybe want to add this as a test and
+make this a series :)
 
-I also took your "use the new API" hint and added a prep patch converting
-the existing userfaultfd_*() helpers to vma_test_any_mask() (Suggested-by
-you as well). One deviation: vma_test(vma, VMA_UFFD_RWP_BIT) is itself an
-out-of-bounds *read* on 32-bit (test_bit(43, &one_long)), so the helpers
-use vma_test_any_mask() with the masks rather than the bit.
+Andrew is usually fine with adding tests as part of a fix I believe!
 
-> Either way, I think we should break out any fix like this from the series.
+>
+>
+> Therefore, remove the stale migration-only assertion.
+>
+> Fixes: a30b48bf1b24 ("mm/migrate_device: implement THP migration of zone device pages")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Dev Jain <dev.jain@arm.com>
 
-Agreed - the OOB fix and the other pre-existing fixes will go as a separate
-series with the RWP work rebased on top.
+The logic does seem sense, it does seem like something of an oversight here
+and I can repro the assert (though I have to fix something else first on my
+system, patch incoming for that...!)
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+> ---
+> Applies on mm-unstable (404fb4f38e8f).
+>
+>  fs/proc/task_mmu.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 1e3a15bf46f4e..58938e62154d9 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -2129,7 +2129,6 @@ static int pagemap_pmd_range_thp(pmd_t *pmdp, unsigned long addr,
+>  			flags |= PM_SOFT_DIRTY;
+>  		if (pmd_swp_uffd_wp(pmd))
+>  			flags |= PM_UFFD_WP;
+> -		VM_WARN_ON_ONCE(!pmd_is_migration_entry(pmd));
+>  		page = softleaf_to_page(entry);
+
+>  	}
+>
+> --
+> 2.43.0
+>
+
+Cheers, Lorenzo
