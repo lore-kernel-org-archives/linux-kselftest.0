@@ -1,125 +1,68 @@
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B131405F7;
-	Fri, 29 May 2026 14:24:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E44093ECBFB;
+	Fri, 29 May 2026 14:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780064674; cv=none; b=H03xVrikM3p1U97IqqswUad98hJd8uPrkAz6cnOdn+w+ermzhgSEqgS96wEQuFkql8rHhQG8HLHuJnasRHDnSb9mjOoqG6AdbmlxKm0LoqZI1+1Sc1HD++s+pFfPmTAdogeJG6EYA9t96wGzzSKTmK/zTCTluA5tPNWvmNATWJA=
+	t=1780065129; cv=none; b=f4OOTsnsMY9ND7X11M8WBzFAaM7Y77qWoMYwHOnKt7RpN6NnCj13K6+/t6SFMM5o9qosXbr8guYbrNaw65t9VumjXIANr068KRHsvtSFC+U4PXOKuUKuNcsXpxS30BtEwTPKxzKR5PPCB3oRw+nnlnCuvVa6KE+Qz8cxry/cH5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780064674; c=relaxed/simple;
-	bh=hqQ5NSJon3qGEmy6u57pOpDKo2UkXlyMcl+d6yZ4QEg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=r3ammHjjQ2Xh6nZzbWwBV/Ru4U6Kveq0rBD83c/hGKU4WPEcy9Vc/4Hk21ZVez0aTdgUdoddkw57D3U42+cFOOM0zlf2tH4XYrJyLk+pA4Tjrcu8MWR4V4KAnL+xX+t2r3L/+1OOevViREjDvY0pTDhatXh54Naob3bq0KqTj3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf02.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id C3B6DA0170;
-	Fri, 29 May 2026 14:24:25 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id AB06E8000E;
-	Fri, 29 May 2026 14:24:23 +0000 (UTC)
-Date: Fri, 29 May 2026 10:24:22 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: CaoRuichuang <create0818@163.com>, Shuah Khan
- <skhan@linuxfoundation.org>
-Cc: mhiramat@kernel.org, mathieu.desnoyers@efficios.com, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/ftrace: Drop invalid top-level local in
- test_ownership
-Message-ID: <20260529102422.6ae29ab6@fedora>
-In-Reply-To: <20260513110208.3c14878b@gandalf.local.home>
-References: <20260407102613.81419-1-create0818@163.com>
-	<20260407203727.442b583c@gandalf.local.home>
-	<20260513110208.3c14878b@gandalf.local.home>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1780065129; c=relaxed/simple;
+	bh=nGtd+DVlXHUdUZmpRGiHCZsFgz+aRf95Dwcx+EFRgr4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bQIb5OtmAnwVveNA6zGwDfMhEFE/+e/Dz0t4zN0TzzYwnaDHYv3moIktX/XYOwegK+kgisGJ3KZOIsjUo+KJ61VzwL0pV/ehlUY7RtmD+nrQwPaIJHEwH8+0OBKeS1sBbuOm+RBjis3zIIs/TYqs6VgLCbHZwtRQMQ3dkZ3pOA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YiWa20TQ; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YiWa20TQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DECF11F00893;
+	Fri, 29 May 2026 14:31:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780065127;
+	bh=0w6zYF8AbOQ414/tNXkjIf7qAh21STz/SV17oxV/kCk=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=YiWa20TQmrue5rLRFPE/D4ifPV5/SCxDxgghPPLtsjKAiyVEdyeFwQ+e0HNArc4pn
+	 nyrRFvE6ioDqGWoppVoqZqc/Vvvbl5bd0MXs7+cPB1jFJT1CNgBeEGBu3QHlH5Cbay
+	 pJaGLBYeEVa1IqM77C8N4lqFzMmtKcXt+GYHdcNICcFcCK/RfhxIh8l4amEroAVviu
+	 mmICUniiqEnUfCcGSR4r3GUcKKjYvgaOX2/T8Lzx4BO1uiAr2DQARaSRjVZc86wj7i
+	 yvApIl+TbaJhEOT4X3uNmwRsdOm2hkObFGKBPJwxQJjPdCRZemfDAf9sFZjzlZnFfa
+	 g2wrHRpEo4IXQ==
+Message-ID: <f9125ef792fa3182983efe287175777a134e8696.camel@kernel.org>
+Subject: Re: [PATCH 00/11] NVMe over MPTCP
+From: Geliang Tang <geliang@kernel.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, Sagi
+ Grimberg <sagi@grimberg.me>, Chaitanya Kulkarni <kch@nvidia.com>, Matthieu
+ Baerts <matttbe@kernel.org>,  Mat Martineau <martineau@kernel.org>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet	 <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni	 <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Shuah Khan	 <shuah@kernel.org>, Geliang Tang
+ <tanggeliang@kylinos.cn>, 	linux-nvme@lists.infradead.org,
+ netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, Hannes Reinecke <hare@suse.de>, John
+ Meneghini	 <jmeneghi@redhat.com>, Randy Jennings <randyj@purestorage.com>,
+ Nilay Shroff	 <nilay@linux.ibm.com>, zhenwei pi <zhenwei.pi@linux.dev>, Hui
+ Zhu	 <zhuhui@kylinos.cn>, Gang Yan <yangang@kylinos.cn>
+Date: Fri, 29 May 2026 22:31:56 +0800
+In-Reply-To: <20260528084210.GA8141@lst.de>
+References: <cover.1779934709.git.tanggeliang@kylinos.cn>
+	 <20260528084210.GA8141@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.56.2-9 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: AB06E8000E
-X-Stat-Signature: h5edgcquxw648jzpfk84tm1b367w9a7e
-X-Rspamd-Server: rspamout03
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/2DKC1J7X5I69+HQZYBowIeeF1Tln6Wlk=
-X-HE-Tag: 1780064663-384254
-X-HE-Meta: U2FsdGVkX1+ExW2iCgtS8Scm8fAW7przZLqt31hNTneQ1HN3M0k5CfzRHFUhT/3+Wa3Jzs8Pnhc+nilo7GEbaRuIVrf0JQDGJeu9PQ9dm6eN28D3Rqc4MC8BMIrBFpcZeUcliMp21PHpv+4Z9J32GLfmVL8hD2xMv5Kcrza5vfxxKtHCts041IJk4ha1WziH0sdaWXuQLB03amVMRJD6UezEgeg/CfLgPo05odsD+dHT2X0ix9AavfjmXfJIOCYMcErpW0Na2r8UgSh/+KZhubOP2womWngKbajq+fLzczz2JcRPODNVNRpeVd1cX21QG3JSLlizjY6tRj4N49GMYH6lEo6frda3rP/x7wcbxe9YPJbmncoQ2OYRP0gYerPrz1HaMsRSaWICr4XqX3pJWitSwZGsY4dO8Ak7vXfs7Xo=
 
+Hi Christoph,
 
-Shuah,
-
-Ping?
-
--- Steve
-
-
-On Wed, 13 May 2026 11:02:08 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> Shuah,
-> 
-> Can you pull this into your urgent branch?
-> 
-> Thanks,
-> 
-> -- Steve
-> 
-> 
-> On Tue, 7 Apr 2026 20:37:27 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > Shuah,
-> > 
-> > Care to take this through your tree. Probably could even add:
-> > 
-> > Cc: stable@vger.kernel.org
-> > Fixes: 8b55572e51805 ("tracing/selftests: Add tracefs mount options test")
-> > 
-> > As well as:
-> > 
-> > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > 
-> > -- Steve
-> > 
-> > 
-> > On Tue,  7 Apr 2026 18:26:13 +0800
-> > CaoRuichuang <create0818@163.com> wrote:
-> >   
-> > > From: Cao Ruichuang <create0818@163.com>
-> > > 
-> > > test_ownership.tc is sourced by ftracetest under /bin/sh.
-> > > 
-> > > The script currently declares mount_point with local at file scope,
-> > > which makes /bin/sh abort with "local: not in a function" before the
-> > > test can reach the eventfs ownership checks.
-> > > 
-> > > Replace the top-level local declaration with a normal shell variable so
-> > > kernels that support the gid= tracefs mount option can run the test at
-> > > all.
-> > > 
-> > > Signed-off-by: Cao Ruichuang <create0818@163.com>
-> > > ---
-> > >  tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc b/tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc
-> > > index e71cc3ad0..6d00d3c0f 100644
-> > > --- a/tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc
-> > > +++ b/tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc
-> > > @@ -6,7 +6,7 @@
-> > >  original_group=`stat -c "%g" .`
-> > >  original_owner=`stat -c "%u" .`
-> > >  
-> > > -local mount_point=$(get_mount_point)
-> > > +mount_point=$(get_mount_point)
-> > >  
-> > >  mount_options=$(get_mnt_options "$mount_point")
-> > >      
-> >   
+On Thu, 2026-05-28 at 10:42 +0200, Christoph Hellwig wrote:
+> You need to talk to the NVMe technical working group, not us.
 > 
 
+Sure. Thanks. I'm already pushing forward with the NVMe membership and
+trying to reach the NVMe technical working group.
+
+-Geliang
