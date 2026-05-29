@@ -1,165 +1,204 @@
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B8FE4964F
-	for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 12:46:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 087782D063E;
+	Fri, 29 May 2026 13:07:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780058766; cv=none; b=T47Jhi1wRhwxe5q1Lqq8jILRwfHKXCsLUdWJb0fI1hVs6PFXnymV2PLi/2mkIefEIYKLC+0g4UtlIhEs/IEQdfHmr3fFaTVY0l6LIslkJcf1sbRK+qiF1aKVsmwLJb7c5eYa9UnHlFOtzfhYl3USU9y2ONkKkUZ6Efi8jkOxY68=
+	t=1780060047; cv=none; b=TGUGyBHbTPF4DXOLgak9Xlli6r3gffYUmescT74mUNYPA1SbtIqvukwnMTz7tbDd+GMSGy0lMohVtRmG10yY8fS37B3CnFVT5uxDkeTCQsqdbE/1jHH93phohKefyJ3i+qz2Q9Mc0OFrYHpbUNBFBdoDhlFlcpPic9vJ2qlBABs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780058766; c=relaxed/simple;
-	bh=NSn5sR6O4Rt7B3/YqbAiK3fq+qyObIB738wGJZL72Vk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AVKhwAM5lKb7nlE3G1CuLwHZmj9aY/tvOoiKShbtZE21jO2LRUgkzeOSA2r+hog3NX9XMGLYT6QsOIhlSzL5GXjNrMBA+mOdN8QjGPxcEqFsAB08dlf2f8nlcG44pa/n+pJgjwBH9UvbhpxoestJCtuNwikAxfzfQCgEU8rQS8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HA/xLD7K; arc=none smtp.client-ip=209.85.210.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780060047; c=relaxed/simple;
+	bh=4qsrnF1RfP3MZMjilFLq+zuqdzdWfUpno/MtBeqXYOE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kOUmetAB9hhqWt2x4gnF1fF4nHP5PJVNwGHFvNqvpxwFdwZYA34eAqL1Q0LEcqy4rEcTYJCR8SBxLI8aiDPtpv+HURv/dwg1NEQSL36DYKhOXxwHZ2+4rT1WksaFqvRxuotGuj4Lid4iBmlfg/qPXg4Xl3guUhXHj6xZUujJzmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Aqlkbu3n; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Vz88yi8a; arc=none smtp.client-ip=202.12.124.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HA/xLD7K"
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7e55b95ba13so7081035a34.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 05:46:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780058763; x=1780663563; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FOaj7kJy+BccHhWOj/+aUOc8E/TW5v19gnCmqaTZgac=;
-        b=HA/xLD7Kwxrz+AgsGk+FAdm4QhMyYI5zcD0Pm8uvJNUOekol1Je9GOhQvij24ZIZHV
-         nWireIuGELyORTSD5VCx8W6jE2hVHPLi2x3zxD9xP/Yv8Nnhb7Ywsyxb1RGb42xrgOQj
-         AttW5+XFRYMmBAw+oLFQOm7mkMJnwZDTe5jIFd4y+KGi0MrdfBZpQfmXw4YUG4vAgaMU
-         IorllKx5RhgUVMYTMmgLlupKRIWlNDY8Y+o0hzyhRaIwiTF6Uyddb29/AOXBNQtyDkr+
-         nLgjsAdoS4m8BgCfNseudmmuu3VB8GZ9USOX2MR668Bua42WLQRVTVFwbwQx+uU+FEHq
-         5UVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780058763; x=1780663563;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FOaj7kJy+BccHhWOj/+aUOc8E/TW5v19gnCmqaTZgac=;
-        b=m2L7AeGrLApJ9nMc3nDJu+OzP5ntV5NTadqAnYZpfXHt/6ArUEOR0ZLXyNFR9fnbq3
-         2tHtmOwPqjJwvTLl5KbaGHRqnlC43dDy+NoamNOiV6+KBXflMsktO1QO4Ke6A+RJGQwf
-         8NkqW5EBT8eeIsnU/bZtTHoQKdUc/9uCf4Q98GPdaeX0ZmCmaG/ku5juXxJGeWTY92B1
-         24MqzN7R6/UwHAirXpAP9D6nV7k7IfEfbNfSdEimgAkaox030WzCv47N8fT7fTIgoXtR
-         XYfMMgQQI7jxHKVSSUi1PwAHTyUGYQ+9HZPndMRrqpAj6QLgxLgKquMi7scEZ5HpCuE9
-         9dwQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8v+iP2lrCm4k8fi8dDww3JA9NllwRPR1ArJb6gYnvw1o8N9VqG5W52aK2z3lOhbEoXhIH7MlgGJympkCrmfQ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvI22Wq9lr1PzRCkVpI/MXr5aAaRJj9XHrEtmy5v3rk5Nu5BUE
-	B2PAfffhj1W0BrgE0NB49hoGKCJmanA3tIL0smTgBNtEjTxP2daL+518
-X-Gm-Gg: Acq92OG7k4eA7LqZ7RD4l5D4zdxCs/7dP97Fdk+AjeHdiPwZ4U0vDGmh4ivcoJhrKxm
-	2oCB70WZmx+79Z/iRvswda/hRHTN7YC0MPw0D40aiRqa3MQkUG+/GfQlueHewqVOGykGWORvxTP
-	NS2j7vNOaiAHz3dcLcH3lJEeqJ8EVdm3gu3SmOxiIw8EhdWzCC+xWL94haTE7yCCm1wrPq8ZZtM
-	MLix4VDIZCuJUc8ltG0F9eutOXoL4q56wFUvXq+kYBGvNr1xorpRRdiajFJzNwCwSbw/qSBAk1c
-	E6tS7XuBdULzVd//CFhvOcsYsPVN35a+WDPyLjUpFkcTE+OiO+xVsUqa+9/dZe3tDhN0hnjP1mS
-	HlWXp2NphQOE+a76Lc6ZIEVToWj9+e4BvqlfmPJG2asNzK+nJsmvc2g2irYcb3S3Zxg5ySotuAj
-	legFAEqm3UjZGLW0B4VLav18fCsZv0Qw==
-X-Received: by 2002:a05:6830:438d:b0:7e1:90a:97c2 with SMTP id 46e09a7af769-7e694e4bf8bmr1720403a34.23.1780058762922;
-        Fri, 29 May 2026 05:46:02 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:1::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e695bd9c9csm1381119a34.11.2026.05.29.05.46.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2026 05:46:02 -0700 (PDT)
-From: Daniel Zahka <daniel.zahka@gmail.com>
-Date: Fri, 29 May 2026 05:45:55 -0700
-Subject: [PATCH net-next] selftests: drv-net: tso: add new tests for
- ip6tnl, ipip, and sit tunnels
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Aqlkbu3n";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Vz88yi8a"
+Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
+	by mailflow.stl.internal (Postfix) with ESMTP id B4CE51300170;
+	Fri, 29 May 2026 09:07:23 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-08.internal (MEProxy); Fri, 29 May 2026 09:07:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1780060043; x=
+	1780067243; bh=eJMpW2hSB+jc3Eyo7jLlqbS5uTNSQSSe1MRVXWkIVGI=; b=A
+	qlkbu3ntW3+2ZuNtKSO9TYVsaJmJi2Ts/rEd0kAc1N8RQX9IuuBlKtz0SW3t85S7
+	5vJQsuzoYGLFukh74IlIeL0+PfIl8ARzT5hamXc8GL9cgN41FhalybVKK8EgiwKV
+	ltRKlnSYzCKg4e+QU5gkmSHIU0/ULvKzkm2Dtft00GP6P5m7UGqkXUuG/eJx3rYq
+	nVcFCsObnUzGIFcBm/ty7CjlXecbWP7efkd+wWv/9+a1+vEHm4hCUgcW4KpJxTLr
+	kOB+bnKC3c4gWhJPhgKJR/kvQfm6FjPEyWepoMJ13pf+V0u50R2+3p4sHn6TAFxa
+	Oe6EPRRmNX+1vFDNmCafw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1780060043; x=1780067243; bh=eJMpW2hSB+jc3Eyo7jLlqbS5uTNSQSSe1MR
+	VXWkIVGI=; b=Vz88yi8asPzEYqiaJPJVw5TGNG4OkQzmQ6/u5BNSo4OxHHqt8j6
+	9lYO7byEMoTTbVcbVSsuBLfCJL4YZ+AtVuJKOxysLbzNlQ19sMwM4GFavLo0fRpY
+	hvjBDVCtg3wP4i+dgyLka4Q7lBs47wxwvLkH0Kn8dvyj6RE9vnoWSiITgD9Xb63I
+	BEE+hORe7Xf6rchGwZa/2sdHG/Mf7wpN0n+tMk5mc/2CREAyRAJ4g3SqpknFv11r
+	QcZ+lJZq3oh9lB7bmbU8fTvimeQnOjGe+WUCHf24JeUOb/+B4ouzrztbCz+xrel+
+	GboHAMUT7O6m6JYNaZa07kOLMzXF2CoJbXg==
+X-ME-Sender: <xms:i48ZamiyR4TJFCKeETpK0fupcUSI48U-aKFcwl8hdc-yadXIIcEDgQ>
+    <xme:i48ZakrxZYHuxXFFTf-wEY9LtxmweZa-ycUy7qdfvVA6tYbg-xz1fSKYCMvpBPSYh
+    ex_DIgVl-5ECEjySy8bVx1vVcDckjER-U9zV88SDEnWcow3JQ9jKQ4>
+X-ME-Received: <xmr:i48Zajr-3qIMUyu-uNsOwWWoSqBazgcXkx5WnJ2jq80zD419GT_ybLALc1Ho7Q>
+X-ME-Proxy-Cause: dmFkZTFAXH2AA1V/nISjcsAHVnuN9A/cQtlMi1fzE7O/cA4ypeDmxnBZg5TurfVPS8S9kH
+    Idl7mOQ4mUWF2+2rvs6jrb6+USWJ0MtALSt9jwsgBx77XOdTRlP7hRKPWBegpWUy5GnWer
+    4+wQXjC8oPOgHVotJfpOUQ16S/F9UDKdcLc/fcMT0mWO/KXvKDKqsLRI+8X2bYSzRnmDOU
+    Sq5ftV09IsALoNh+0FN2cRDZLExI+uJ2rexuYMdXqXaZkXoXNhectZPiD8FLweTqpPjgsk
+    ko2t82X3OzqjmCYsiBobOxzorIkY2aqwC64JMJjxNPUrstmZdeTN7JV5Tu5xu2AwEUfnqT
+    nX93nkxbELa2TRjXls66dn/U8GzhVZw8Nl8f67bc/BtP5PSMQv+GHqYmSSGi/043BQMQId
+    xviimONmYUxkj1LxzIOFcW3J6AqfcXotjvb6Dmw+kKPejcc8njSynM/VUy4TsZo1pmQ/Zm
+    4f4aodsJY6KcIAtsyx2DqkFHVrh7np8+yISvUWnMyQ0xQcVuP4A4J4LUTmuY9Gyh7Q77g8
+    z4VXYmgF/P4qRCns/dVxXMygSMcnkeZMslpOssUT0pCxbHbGVkUavIfAKVe9WbAXp0BTJN
+    2RYrh2aEmIJuHgsmd2q/gmZU0hfplp9qFxauv/2ylXJoaNEYkSjb+N47tY8w
+X-ME-Proxy: <xmx:i48Zai5urxGJdMaLkU4r3LI_qyZUePtIDRLjlRTMhsJMgE9KwheOMQ>
+    <xmx:i48Zai2NY78TgeDjWcTkzKJi_NDZV648qPCl1wv2L1NcjvJoPX50pA>
+    <xmx:i48ZammmfNsu5jHXs56eaiX5cXKHzeNSGPxiHjEPt5RFiwpWZxAbXA>
+    <xmx:i48Zaji_eZ0GBm2G6k_pQO8yjvYG3ER1uLLZLiITJ1ZeB0pznqqI7Q>
+    <xmx:i48ZajEc6-EeZGZcEN-13USyozFkGPZZ3I05AHPwXixJzrItS6EuK2_K>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 29 May 2026 09:07:21 -0400 (EDT)
+Date: Fri, 29 May 2026 14:07:16 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: Lorenzo Stoakes <ljs@kernel.org>
+Cc: akpm@linux-foundation.org, rppt@kernel.org, peterx@redhat.com, 
+	david@kernel.org, surenb@google.com, vbabka@kernel.org, Liam.Howlett@oracle.com, 
+	ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, seanjc@google.com, 
+	pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, sj@kernel.org, 
+	usama.arif@linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH v5 08/18] mm: add VM_UFFD_RWP VMA flag
+Message-ID: <ahmM8LzrzX-qP_5s@thinkstation>
+References: <20260526130509.2748441-1-kirill@shutemov.name>
+ <20260526130509.2748441-9-kirill@shutemov.name>
+ <ahk60ViRq4q2g4uz@lucifer>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260529-tso-tunnels-v1-1-3771ee9eaaa9@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAIOKGWoC/x3MSwqAMAwA0atI1gZqRaVeRVz4STUgUZoqgnh3i
- 8u3mHlAKTAptNkDgS5W3iWhyDOY1kEWQp6TwRpbm8o6jLpjPEVoUyz9UIzOm8Y4B6k4Anm+/1s
- HQhGF7gj9+37rKQKAZwAAAA==
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ahk60ViRq4q2g4uz@lucifer>
 
-Add new tunnel test cases for ip6tnl, ipip, and sit. ip6tnl supports
-ipv[46] as inner l3 header, and the other two tunnels only support a
-single inner l3 type.
+On Fri, May 29, 2026 at 08:24:55AM +0100, Lorenzo Stoakes wrote:
+> On Tue, May 26, 2026 at 02:04:56PM +0100, Kiryl Shutsemau wrote:
+> > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> >
+> > Preparatory patch for userfaultfd read-write protection (RWP). RWP
+> > extends userfaultfd protection from plain write-protection (WP) to
+> > full read-write protection: accesses to an RWP-protected range --
+> > reads as well as writes -- trap through userfaultfd.
+> >
+> > Reserve VM_UFFD_RWP, add the userfaultfd_rwp() and
+> > userfaultfd_protected() helpers, and wire up the smaps "ur" entry and
+> > the trace-flag table the rest of the series will use. The flag is
+> > gated on CONFIG_USERFAULTFD_RWP, which is introduced together with the
+> > UAPI in a later patch; until then VM_UFFD_RWP aliases VM_NONE and
+> > every downstream check folds to dead code.
+> >
+> > Nothing sets or queries the flag yet.
+> >
+> > Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+> > Assisted-by: Claude:claude-opus-4-6
+> 
+> Hm, if you've just used claude to bounce ideas off, I'm really not sure if
+> it's necessary to disclose, though I respect your thoroughness for doing so
+> :)
 
-Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
----
-Example run:
+I've elaborated on how I used Claude in reply to Andrew:
 
-  # Detected qstat for LSO wire-packets
-  TAP version 13
-  1..18
-  ok 1 tso.ipv4
-  # Testing with mangleid enabled
-  ok 2 tso.vxlan4_ipv4
-  ok 3 tso.vxlan4_ipv6
-  # Testing with mangleid enabled
-  ok 4 tso.vxlan_csum4_ipv4
-  ok 5 tso.vxlan_csum4_ipv6
-  # Testing with mangleid enabled
-  ok 6 tso.gre4_ipv4
-  ok 7 tso.gre4_ipv6
-  ok 8 tso.ip4_ipv6
-  # Testing with mangleid enabled
-  ok 9 tso.ip4_ipv4
-  ok 10 tso.ipv6
-  # Testing with mangleid enabled
-  ok 11 tso.vxlan6_ipv4
-  ok 12 tso.vxlan6_ipv6
-  # Testing with mangleid enabled
-  ok 13 tso.vxlan_csum6_ipv4
-  ok 14 tso.vxlan_csum6_ipv6
-  # Testing with mangleid enabled
-  ok 15 tso.gre6_ipv4
-  ok 16 tso.gre6_ipv6
-  ok 17 tso.ip6_ipv4
-  ok 18 tso.ip6_ipv6
-  # Totals: pass:18 fail:0 xfail:0 xpass:0 skip:0 error:0
----
- tools/testing/selftests/drivers/net/hw/config | 3 +++
- tools/testing/selftests/drivers/net/hw/tso.py | 3 +++
- 2 files changed, 6 insertions(+)
+https://lore.kernel.org/all/af5eALk9yO8pPcHv@thinkstation
 
-diff --git a/tools/testing/selftests/drivers/net/hw/config b/tools/testing/selftests/drivers/net/hw/config
-index 8c132ace2b8d..b9f406dd7282 100644
---- a/tools/testing/selftests/drivers/net/hw/config
-+++ b/tools/testing/selftests/drivers/net/hw/config
-@@ -10,10 +10,13 @@ CONFIG_INET_ESP_OFFLOAD=y
- CONFIG_IO_URING=y
- CONFIG_IPV6=y
- CONFIG_IPV6_GRE=y
-+CONFIG_IPV6_SIT=y
-+CONFIG_IPV6_TUNNEL=y
- CONFIG_NET_CLS_ACT=y
- CONFIG_NET_CLS_BPF=y
- CONFIG_NET_IPGRE=y
- CONFIG_NET_IPGRE_DEMUX=y
-+CONFIG_NET_IPIP=y
- CONFIG_NETKIT=y
- CONFIG_NET_SCH_INGRESS=y
- CONFIG_UDMABUF=y
-diff --git a/tools/testing/selftests/drivers/net/hw/tso.py b/tools/testing/selftests/drivers/net/hw/tso.py
-index bb675e3dac88..1b789fea8929 100755
---- a/tools/testing/selftests/drivers/net/hw/tso.py
-+++ b/tools/testing/selftests/drivers/net/hw/tso.py
-@@ -239,6 +239,9 @@ def main() -> None:
-             ("vxlan_csum", "", "tx-udp_tnl-csum-segmentation", ("vxlan", "id 100 dstport 4789 udpcsum", ("4", "6"))),
-             ("gre",        "4", "tx-gre-segmentation",         ("gre",   "", ("4", "6"))),
-             ("gre",        "6", "tx-gre-segmentation",         ("ip6gre","", ("4", "6"))),
-+            ("ip",         "6", "tx-ipxip6-segmentation",      ("ip6tnl","mode any", ("4", "6"))),
-+            ("ip",         "4", "tx-ipxip4-segmentation",      ("sit","", ("6", ))),
-+            ("ip",         "4", "tx-ipxip4-segmentation",      ("ipip","", ("4", ))),
-         )
- 
-         cases = []
+It is more than bouncing ideas.
 
----
-base-commit: 8415598365503ced2e3d019491b0a2756c85c494
-change-id: 20260529-tso-tunnels-3fa1b9f07099
+> > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > index 71b11945e4fc..6499cfb61dc4 100644
+> > --- a/include/linux/mm.h
+> > +++ b/include/linux/mm.h
+> > @@ -362,6 +362,7 @@ enum {
+> >  #endif
+> >  	DECLARE_VMA_BIT(UFFD_MINOR, 41),
+> >  	DECLARE_VMA_BIT(SEALED, 42),
+> > +	DECLARE_VMA_BIT(UFFD_RWP, 43),
+> 
+> I'm guessing CONFIG_USERFAULTFD_RWP is predicated on CONFIG_64BIT?
 
-Best regards,
+Yes:
+	depends on 64BIT && ARCH_HAS_PTE_PROTNONE && HAVE_ARCH_USERFAULTFD_WP
+> 
+> It's a silly situation and once my VMA flags stuff is done it'll be
+> eliminated but for now... :)
+
+Yeah. I actually would appreciate your take on 04/18. It is related.
+
+> > diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> > index f4cf5763f92c..0aef628514df 100644
+> > --- a/include/linux/userfaultfd_k.h
+> > +++ b/include/linux/userfaultfd_k.h
+> > @@ -21,10 +21,11 @@
+> >  #include <linux/hugetlb_inline.h>
+> >
+> >  /* The set of all possible UFFD-related VM flags. */
+> > -#define __VM_UFFD_FLAGS (VM_UFFD_MISSING | VM_UFFD_WP | VM_UFFD_MINOR)
+> > +#define __VM_UFFD_FLAGS (VM_UFFD_MISSING | VM_UFFD_MINOR | \
+> > +			 VM_UFFD_WP | VM_UFFD_RWP)
+> >
+> >  #define __VMA_UFFD_FLAGS mk_vma_flags(VMA_UFFD_MISSING_BIT, VMA_UFFD_WP_BIT, \
+> > -				      VMA_UFFD_MINOR_BIT)
+> > +				      VMA_UFFD_MINOR_BIT, VMA_UFFD_RWP_BIT)
+> >
+> >  /*
+> >   * CAREFUL: Check include/uapi/asm-generic/fcntl.h when defining
+> > @@ -178,7 +179,7 @@ static inline bool is_mergeable_vm_userfaultfd_ctx(struct vm_area_struct *vma,
+> >   */
+> >  static inline bool uffd_disable_huge_pmd_share(struct vm_area_struct *vma)
+> >  {
+> > -	return vma->vm_flags & (VM_UFFD_WP | VM_UFFD_MINOR);
+> > +	return vma->vm_flags & (VM_UFFD_MINOR | VM_UFFD_WP | VM_UFFD_RWP);
+> 
+> While we're here we might as well switch to using the new API?
+> 
+> Can do:
+> 
+> 	return vma_test_any_mask(vma, __VMA_UFFD_FLAGS);
+> 
+> One unfortunate thing is using bit values means we can't do the VM_NONE
+> trick, but if !CONFIG_USERFAULTFD_RWP then VMA_UFFD_RWP_BIT wouldn't be set
+> anyway, same for minor so this should be fine?
+
+I think we need to decide first if the 04/18 direction is right.
+We can define VMA_UFFD_RWP_BIT to VMA_NO_BIT if !CONFIG_USERFAULTFD_RWP.
+
+> >  }
+> >
+> >  /*
+> > @@ -208,6 +209,16 @@ static inline bool userfaultfd_minor(struct vm_area_struct *vma)
+> >  	return vma->vm_flags & VM_UFFD_MINOR;
+> >  }
+> >
+> > +static inline bool userfaultfd_rwp(struct vm_area_struct *vma)
+> > +{
+> > +	return vma->vm_flags & VM_UFFD_RWP;
+> > +}
+> 
+> Can be:
+> 
+> 	return vma_test(vma, VMA_UFFD_RWP_BIT);
+
+Yep.
+
+
 -- 
-Daniel Zahka <daniel.zahka@gmail.com>
-
+  Kiryl Shutsemau / Kirill A. Shutemov
