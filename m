@@ -1,42 +1,81 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB7F367F5F;
-	Fri, 29 May 2026 03:17:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35DE736A351
+	for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2026 03:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780024659; cv=none; b=dF6MBwP+VN8j1SDI1U9rDyvc/7/F5HuKAwnr1UeVaM+Gjcu2LZQoyacjAhiw5BcKs+dUKEGVEUXF/EZ6voq0LmLUzUSBbmOcRHkh9JxM1OD/YIdFu9+qYTrtfD4IVHcsm1ihoCskD3Bd89GR2xbyeGTbvzPuARTT2p2gqkpVuY8=
+	t=1780024870; cv=none; b=cVBUKF5DmOUgOATXucerMot+Wlht+z9mBwX7yppikS6EMz97DNp8MQF/j3XzhUdluPTc3l2jFoMeDmMRa8ort2/kEG/gkRIXYdDssp0RYaYG9WezOyKDJk7MCs2E5cAoSqWeHmVDMAY48Hx11B5TR3c8ANOVMjRZuSmUMXqfK1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780024659; c=relaxed/simple;
-	bh=xQ2OkSs8riTHwHt2or05rVMp1SXSKQg2BtIKfLkEWWM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s7ixPvuzmIsITnu0Kp1HAWZyk8T+anWC9iTYAIBECI7GkgUI+CxtRM5E1VNtSOOdE/mWfLVNmipC3c0uS0jLkKnaaEujvFTqxNo+aZUtBDJQ22o6i6D3vQrnw5M75VvFaRcYd9pEHBcb2Kd1tgYDT6067Rb9uAn+aQeW5FVYwNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=pNH33B5v; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1780024870; c=relaxed/simple;
+	bh=+K36CKUUJJfYFairGEtPDYAa/fOj2p+J3bNArJT9bz4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=XgDExdYAt5YgH5+915+RSLsXBWw44TaUNCqoido0N5gRucZDa3WHniN0WamkfhuFByi+4f9rJ8onkD/9qaBWB6gpdoWyT1YEll5IZJ2VjzZQF38iqISP7r0R3bwEuJceIxcLXouTyqqR4XHf3sTONeDBpsN9upZ53zzaLSGSTqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Tfm1q1fY; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="pNH33B5v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=pB
-	UYS5/1hD1njZ+SRg/h+C/eOlx8ep4fSlGa9e+pEQA=; b=pNH33B5vVmXFFWLeIE
-	wvWUlh41w4t8Y1IlRGhw8ZSRzyBmFt4kk6r5TFkW+lSRV7NflHvlAdWxX7Yj0xku
-	0j/F2cH6Ml9MT/yf34aIrLoM2DxIOfLips8mWBnTgfHUk/nUJo++dWkisDzyyiZt
-	qOtmzIe/13tn3WXDnvibO3gkM=
-Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3vwD_BBlq5RfOAA--.34835S2;
-	Fri, 29 May 2026 11:16:15 +0800 (CST)
-From: chenyuan_fl@163.com
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Tfm1q1fY"
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8cccdf044e7so16621426d6.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 20:21:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1780024868; x=1780629668; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VWz/Ba0zwzmUZSFYwq/eHsbiY7hxxlyTIzOmzVE8aUU=;
+        b=Tfm1q1fYuAZdmICata9Mt6B9GKN4zeSQf5hRHtpzOPOczqMyHnKm9tZVmnDKv0ZJkG
+         aoy8sYZAUqjk8xDQn9IOtEY6tnZxs6+3c8euU9vLCeFrDVr83aBZQGBaVwBo4mdf6WAW
+         aweUu5g0caI45zc0jHo/n31kS+t4N/NichqyQK/Cc9M1c88145W1n826csGmNLF1hW2A
+         ouIFsifkmu7aQQyzI995v9h+LlZVQdc3MPlPUiw/ub4Z+oDhlY5wK8ylkztBXTkdbT5U
+         +N+MfIbE5Iqus5ZUhdRs1vzxWJcj0EN3HbYX4GVZqOYqVTHc8s0SbcOL4rINMjiTzcKn
+         pd1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780024868; x=1780629668;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VWz/Ba0zwzmUZSFYwq/eHsbiY7hxxlyTIzOmzVE8aUU=;
+        b=kQZF/9lze7ClphZe2ES3+5XwQu/PoxqnUOYKbIRurasAFkjK1fuLDwanP/c757GuDj
+         6823PnkjmGlTGNYuwk0ZBHuVDSNsDjia0PklT5q93UAcXOczEX/Me+pyRN+uullLuml5
+         WF7UumIU/b6jsKBkg25di+uODpFpNGATpuY+tZWARXJXd3vof5fwHaRz29MI2Ji26tk3
+         WPV9Mx/eQXXjLz6sOhIAOOQkvqKrZbYNEfJmmqa6DzVD/obruzTRIBmzM6wmgQz9WnoG
+         a/2cc8acv7DRJNeZ0miXBPmDjzh08qYMtisX+MCB/K7n2+qNjHiFriHbX0+cRTK3UkNw
+         EHDg==
+X-Gm-Message-State: AOJu0Yxc5jSVviXRjf74C3SkAdUwOq4gf9qqGefX3Q/sucrC0D3yQqHj
+	jdrLIkrmV8Iw4tCsCWeXQeWUOttK79puNsk9G69WVzVErVswVl0dANuY+pX5ciWgCZjcKI8FTFD
+	jAy8l
+X-Gm-Gg: Acq92OHZlV6996CW3+5d/CvRdq6BgaF4avWVWtmYRCBWafYFlzFMd/K5rba86J019MA
+	tD99dl+G0KfgHTzaT8LB+bCU2K1MkhdmgyfBsJRUTSxKPToMrqC874d/8dApRnkFBY8QJCA6cqe
+	oEi55OWOlEP8BR+MtUJ+Y1YKYu5UjtPr9UqldCCtnEyfCkJ14K4ra/bt/duhv+azRP73HITttmT
+	N7qjxD1CrfVWUAx0JSbki+07uOO+DyBJw4lPDPOJdn1N/wMgaSHR5+VmtgA3c9Bhcp07w/5qNZN
+	QC6ZfWAgSULTpOSRbv0Z14MuZjRresyAjOdyoVU2h9nMKq5odKF1XB4c+uGiqIKjlewsiQqUWvw
+	zu97ptmZbFbUlixFkYQ7+NARRkF64ho3ccB+KIv6+0vnhH4EYYxQKomJawVca0sbbguwiCnPmNS
+	pkktLBpfbN2XSpeC7JTsSiYW4nlwp85PETxLP638F5/HNdDQ3UgG1vAPMQAv2jVQ==
+X-Received: by 2002:a05:6214:2f13:b0:8a0:d08c:a720 with SMTP id 6a1803df08f44-8cce8009ba3mr14944206d6.17.1780024868221;
+        Thu, 28 May 2026 20:21:08 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ccea26d286sm1179476d6.48.2026.05.28.20.21.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2026 20:21:07 -0700 (PDT)
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: linux-kselftest@vger.kernel.org,
+	rppt@kernel.org,
 	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Yuan Chen <chenyuan@kylinos.cn>
-Subject: [PATCH] selftests/bpf: fix token tests for bpf_object__prepare() probe_loading
-Date: Fri, 29 May 2026 11:16:04 +0800
-Message-ID: <20260529031604.888137-1-chenyuan_fl@163.com>
-X-Mailer: git-send-email 2.54.0
+	akpm@linux-foundation.org,
+	linux-mm@kvack.org,
+	skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	corbet@lwn.net,
+	pasha.tatashin@soleen.com,
+	dmatlack@google.com,
+	kexec@lists.infradead.org,
+	pratyush@kernel.org,
+	skhawaja@google.com,
+	graf@amazon.com
+Subject: [PATCH v3 00/11] liveupdate: Remove limits on the number of files and sessions
+Date: Fri, 29 May 2026 03:20:55 +0000
+Message-ID: <20260529032106.1505796-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,171 +83,84 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3vwD_BBlq5RfOAA--.34835S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Ar4rJFWxtF43ur4rJFWxXrb_yoWxWr4Upr
-	1vga9rtw1UJFWUJr40qay7ur9YkF4jyF1UKFnIvw1UZFsFvrs5tF1qv34vywnIqrW5Gr9I
-	v3WY9rn7ZFyruF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jrkucUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAQAi32oZBQC6VAAA3k
 
-From: Yuan Chen <chenyuan@kylinos.cn>
+This series removes the fixed limits on the number of files that can
+be preserved within a single session, and the total number of sessions
+managed by the Live Update Orchestrator (LUO).
 
-The bpf_object__prepare() function internally calls bpf_object__probe_loading(),
-which attempts to load SOCKET_FILTER and TRACEPOINT programs to verify the BPF
-environment. Without these permissions in the token, the probe fails and causes
-the tests to fail.
+The core of the change is a transition from single contiguous memory
+blocks for metadata serialization to a chain of linked blocks. This
+allows LUO to scale dynamically.
 
-Fix the following test cases by adding SOCKET_FILTER and TRACEPOINT permissions:
-- obj_priv_map
-- obj_priv_prog
-- obj_priv_freplace_prog
-- obj_priv_freplace_prog_fail
-- obj_priv_btf_fail
-- obj_priv_btf_success
-- obj_priv_implicit_token
-- obj_priv_implicit_token_envvar
-- obj_priv_prog_kallsyms
+1.  ABI Evolution:
+    - Introduced linked-block headers for both file and session
+      serialization.
+    - Bumped session ABI version to v4.
 
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- .../testing/selftests/bpf/prog_tests/token.c  | 68 ++++++++++++++-----
- 1 file changed, 51 insertions(+), 17 deletions(-)
+2.  Memory Management & Security:
+    - Implemented a dynamic block allocation and reuse strategy. Blocks
+      are allocated only when existing ones are exhausted and are reused
+      during session/file removal cycles.
+    - Introduced KHO_MAX_BLOCKS (10000) as a safeguard against stupid
+      excessive allocations or corrupted cyclic lists during restore.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testing/selftests/bpf/prog_tests/token.c
-index f2f5d36ae00a..25a76e09a3c9 100644
---- a/tools/testing/selftests/bpf/prog_tests/token.c
-+++ b/tools/testing/selftests/bpf/prog_tests/token.c
-@@ -1168,8 +1168,13 @@ void serial_test_token(void)
- 	}
- 	if (test__start_subtest("obj_priv_map")) {
- 		struct bpffs_opts opts = {
--			.cmds = bit(BPF_MAP_CREATE),
-+			/* BPF_PROG_LOAD is needed for bpf_object__probe_loading */
-+			.cmds = bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
- 			.maps = bit(BPF_MAP_TYPE_QUEUE),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
-+			.attachs = ~0ULL,
- 		};
- 
- 		subtest_userns(&opts, userns_obj_priv_map);
-@@ -1177,7 +1182,10 @@ void serial_test_token(void)
- 	if (test__start_subtest("obj_priv_prog")) {
- 		struct bpffs_opts opts = {
- 			.cmds = bit(BPF_PROG_LOAD),
--			.progs = bit(BPF_PROG_TYPE_XDP),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_XDP) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 
-@@ -1185,16 +1193,24 @@ void serial_test_token(void)
- 	}
- 	if (test__start_subtest("obj_priv_freplace_prog")) {
- 		struct bpffs_opts opts = {
--			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD) | bit(BPF_BTF_GET_FD_BY_ID),
--			.progs = bit(BPF_PROG_TYPE_EXT) | bit(BPF_PROG_TYPE_XDP),
-+			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD) |
-+					bit(BPF_BTF_GET_FD_BY_ID),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_EXT) | bit(BPF_PROG_TYPE_XDP) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 		subtest_userns(&opts, userns_obj_priv_freplace_prog);
- 	}
- 	if (test__start_subtest("obj_priv_freplace_prog_fail")) {
- 		struct bpffs_opts opts = {
--			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD) | bit(BPF_BTF_GET_FD_BY_ID),
--			.progs = bit(BPF_PROG_TYPE_EXT) | bit(BPF_PROG_TYPE_XDP),
-+			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD) |
-+					bit(BPF_BTF_GET_FD_BY_ID),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_EXT) | bit(BPF_PROG_TYPE_XDP) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 		subtest_userns(&opts, userns_obj_priv_freplace_prog_fail);
-@@ -1204,7 +1220,10 @@ void serial_test_token(void)
- 			/* disallow BTF loading */
- 			.cmds = bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
- 			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
--			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 
-@@ -1213,9 +1232,13 @@ void serial_test_token(void)
- 	if (test__start_subtest("obj_priv_btf_success")) {
- 		struct bpffs_opts opts = {
- 			/* allow BTF loading */
--			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
--			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
--			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
-+			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) |
-+					bit(BPF_PROG_LOAD),
-+			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 
-@@ -1224,9 +1247,13 @@ void serial_test_token(void)
- 	if (test__start_subtest("obj_priv_implicit_token")) {
- 		struct bpffs_opts opts = {
- 			/* allow BTF loading */
--			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
--			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
--			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
-+			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) |
-+					bit(BPF_PROG_LOAD),
-+			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 
-@@ -1235,9 +1262,13 @@ void serial_test_token(void)
- 	if (test__start_subtest("obj_priv_implicit_token_envvar")) {
- 		struct bpffs_opts opts = {
- 			/* allow BTF loading */
--			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
--			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
--			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
-+			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) |
-+					bit(BPF_PROG_LOAD),
-+			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 
-@@ -1257,7 +1288,10 @@ void serial_test_token(void)
- 		char kptr_restrict_orig[32] = {};
- 		struct bpffs_opts opts = {
- 			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD),
--			.progs = bit(BPF_PROG_TYPE_XDP),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_XDP) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 
+3.  Expanded Selftests:
+    - Added new kexec-based tests verifying preservation of
+      2000 sessions and 500 files per session.
+    - Added self-tests for many sessions and many files management.
+
+Tree: git.kernel.org/pub/scm/linux/kernel/git/tatashin/linux.git
+Branch: luo-remove-max-files-sessions-limits/v3
+
+Changes v3:
+    - Moved the linked-block serialization infrastructure from LUO-specific
+      (luo_block.c) to generic KHO helper infrastructure (kho_block.c,
+      include/linux/kho_block.h, include/linux/kho/abi/block.h).
+    - Registered luo_ser directly as a raw KHO subtree instead of wrapping
+      it inside FDT.
+    - Collected Acked-by tags from Mike Rapoport.
+
+Pasha Tatashin (11):
+  liveupdate: centralize state management into struct luo_ser
+  liveupdate: register luo_ser as KHO subtree
+  liveupdate: Extract luo_file_deserialize_one helper
+  liveupdate: Extract luo_session_deserialize_one helper
+  kho: add support for linked-block serialization
+  liveupdate: defer session block allocation and PA setting
+  liveupdate: Remove limit on the number of sessions
+  liveupdate: Remove limit on the number of files per session
+  selftests/liveupdate: Test session and file limit removal
+  selftests/liveupdate: Add stress-sessions kexec test
+  selftests/liveupdate: Add stress-files kexec test
+
+ Documentation/core-api/kho/abi.rst            |   5 +
+ Documentation/core-api/kho/index.rst          |  11 +
+ MAINTAINERS                                   |   1 +
+ include/linux/kho/abi/block.h                 |  56 +++
+ include/linux/kho/abi/luo.h                   | 149 ++-----
+ include/linux/kho_block.h                     |  79 ++++
+ kernel/liveupdate/Makefile                    |   1 +
+ kernel/liveupdate/kho_block.c                 | 382 ++++++++++++++++++
+ kernel/liveupdate/luo_core.c                  |  95 ++---
+ kernel/liveupdate/luo_file.c                  | 209 +++++-----
+ kernel/liveupdate/luo_flb.c                   |  65 +--
+ kernel/liveupdate/luo_internal.h              |  14 +-
+ kernel/liveupdate/luo_session.c               | 214 +++++-----
+ tools/testing/selftests/liveupdate/Makefile   |   2 +
+ .../testing/selftests/liveupdate/liveupdate.c |  75 ++++
+ .../selftests/liveupdate/luo_stress_files.c   | 101 +++++
+ .../liveupdate/luo_stress_sessions.c          | 102 +++++
+ .../selftests/liveupdate/luo_test_utils.c     |  24 ++
+ .../selftests/liveupdate/luo_test_utils.h     |   2 +
+ 19 files changed, 1142 insertions(+), 445 deletions(-)
+ create mode 100644 include/linux/kho/abi/block.h
+ create mode 100644 include/linux/kho_block.h
+ create mode 100644 kernel/liveupdate/kho_block.c
+ create mode 100644 tools/testing/selftests/liveupdate/luo_stress_files.c
+ create mode 100644 tools/testing/selftests/liveupdate/luo_stress_sessions.c
+
+
+base-commit: 5428435567cbe06c19914592fc22ca23c9ca1de5
 -- 
-2.54.0
+2.53.0
 
