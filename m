@@ -1,35 +1,52 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7CC367F4D;
-	Fri, 29 May 2026 03:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C71348C45;
+	Fri, 29 May 2026 03:03:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780023603; cv=none; b=QkA/+ZEPOaUti+b91D3W+UL3uLR05NYDQKH+2vyy7SlPO+c3eVuckTHOVRN+xJT4OKPT+ATaINdoSHZtIyWv2wKxWb8Ea5nxZAW9L1IvtpkztiNxeBN0HDKv5WoSSpiRiM1zIdt3l2aJet+BvXXItDJ1vIJXflurv8L9Uf5ryCI=
+	t=1780023839; cv=none; b=M2OIfdBAh4FAtuixI3QD4n9BOtB3lmeKGaxCef9CLF6l2P9qEbC8/iBqcvzfuqvN1J8lzRqapb7ZVzsaivpRTzmIbDiI/WrDUO7SlKEIivE8GZA4Rcv5D00bwLUkg5MiXuD8tez1zzVyzYDVn8No8RBILk1LySYl9DEyxfOEzOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780023603; c=relaxed/simple;
-	bh=fjJCo/0DY3jR+O6dJWDFVvBlJTjgwAFKovCUPiDzo6E=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=S0pl2N5ZqtweBU5fgwvceT9aGfjDAKupZU9RKnHyhRCtL+PvPHPVBFmR37HaOrunssFlfLlP7u6An2ThbDOQaycBjKdEdzEy+5hJbvDv8ZuiGmIPS8H9vuEByqDAzXtaK1diZ7hROPXxwS7mkhdAebP5q7xbBIe+qkBEjteaVgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=km9ET9M9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780023839; c=relaxed/simple;
+	bh=9TLqx+AJ6QO/WhHnwYwSUxGksU1h65dvhTK7ehp1nJ0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sILcnpOhpPGPWU3j3vJqvzyfV1ewgL8q5i267yqbjW0gNrOpuAhn0O11T+6yqhWDVDoda1Y7GXyWm3IZcez0q0dtKqoTNr9UUTbRiXL+vnVCTg398VjQOMSXkToAAdhry34iGp5CruCAbz5UsV3PDvMgvqwkf8nJSxgRxrhFRGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=kVk/euDV; arc=none smtp.client-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="km9ET9M9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DD51F000E9;
-	Fri, 29 May 2026 03:00:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780023602;
-	bh=XYlzvqm85Rbq77lq4XnpB2ASnVX4qZQ6n9atg2WJw2w=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=km9ET9M9/KUAvqV+uHXjw0Bpae87dAEvq6Ibn/aHTa16XnpfDVaY5J4ef1MrVUuND
-	 Pqa3OGwMCqFHCUf+A5PM1FdbZmekAFUL0Ccwcja/tvOs80oZmueG2bASOzw+/N0vRC
-	 WVbS9QvVzGgGLTUyN2DpiMkEu9O08hmTDivmo2Ol31xQehJuUPVf/Vx5W4CUY9PjPb
-	 bafZFXf0/snCVAvoZ5B/uYBym9cEMMonUJtysoSbdLOVTiDP2fDwi9dd/apgIm4UoD
-	 teAq/LVGj4GZzbdzFUXvEoJqRcoS2obaV9PVTxCgwi2HolmmKMNldiZPFDov6awOqo
-	 BZcarVL8HJclQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9395C3930002;
-	Fri, 29 May 2026 03:00:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="kVk/euDV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1780023778;
+	bh=UO25NXFfDr1JQbaCIs3jucG8rynGMrbJHIu0alItT/Y=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=kVk/euDVNUIjx0cu5qU99sYMYIfIZZUnQCYtHPTU8cmJ2wpbFw/1E6g1xUKTiqCQR
+	 TIW+z9XctVHJnGZajAM/NOjSVVrW+eMrce7NnnUMguXS3+k2/VjiHiO5BJ8/7xyRBY
+	 H4w+s+fFePFG88rMsGo/+BB8MG6PTpk4Hzc0bsxA=
+X-QQ-mid: zesmtpsz1t1780023764tac51051f
+X-QQ-Originating-IP: MfmWebu0CGkWeYxMGyswxnR9rxACMxe/KsnSWW94zTo=
+Received: from PEN1097 ( [61.183.83.60])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 29 May 2026 11:02:42 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 772953753065975309
+EX-QQ-RecipientCnt: 8
+From: niecheng <niecheng1@uniontech.com>
+To: sj@kernel.org
+Cc: damon@lists.linux.dev,
+	kernel@uniontech.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	niecheng1@uniontech.com,
+	shuah@kernel.org
+Subject: Re: [PATCH 0/2] selftests/damon: fix and validate memcg filter memcg_path handling
+Date: Fri, 29 May 2026 11:02:41 +0800
+Message-ID: <7C41953A77335257+20260529030241.1554009-1-niecheng1@uniontech.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260528143204.153713-1-sj@kernel.org>
+References: <20260528143204.153713-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,42 +54,43 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] bpf: Fix concurrent regression in
- map_create()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178002360615.1609362.7462519212273516752.git-patchwork-notify@kernel.org>
-Date: Fri, 29 May 2026 03:00:06 +0000
-References: <20260521142909.95818-1-leon.hwang@linux.dev>
-In-Reply-To: <20260521142909.95818-1-leon.hwang@linux.dev>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpsz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
+X-QQ-XMAILINFO: N9ftk+EKvgGZRNFpA5ZkVMwXFBAZUMF2lE8x9u/XxaiHv/lREbo/jm1B
+	wWVf8/WOPK7qJM44SZsww58VvLgaCYqeQchTwXiWR+1i0Sa0j4iQHQyqHaaUQXyXqRXGZTs
+	nB8bKXUQu+xFlZtGLfngs+2mEz6Mr1X3mpfkAJPI7zOb8nHoFN7T44/jYxsZd6NFMJao5yf
+	iVX/WlvKvPO6iF556bHMQWctQc0XDsjdrIoEovOAm/JgvxYsI8kroF9vzKe9Ygl9BeCMgK8
+	mJN0FviM+FekvDZFHnkwMkBVTaI7xdBaAYl4rsXBvjjj4c/uWAP6G3g+lBrXsgtmJ7bHRzn
+	FtVmPrAv7cAUNoZTw6ZJWVjUMdyzcXRQ+qQ0rU/9z+qNFxZ508QQL/XYDRGSu1CMeLU0Ahi
+	+4ozrwMQL4FFsF8MgRjM/CAH5p7Kqv8fmln7FvdSSPRQCKdJxhkvYAcUfXG/MPOzl2T+4lN
+	KFfKiPG4HKJugXmoNPJ2tHqkdMRvKOv2uDiPYOkMMWW2uMrZUBX1DFklHnLJEKzEHkpFMkP
+	GF18ELSuqAWb4AkFyz0By7hTOZAVQ66cWYIMsXDf/KuCqGtoFWbITTx4F9tjuv3D6dyj7VD
+	JHGdi/EPRLmXc/zT/RqsXqXyV6D/A4qgWH/vRMh2w4a968+HTLAf/jXaMGaPZDtCYDBPs2q
+	SdL63oDu3daj2V7kGfCX0SUu0t9L2RZb+q3K26pNNwIGT8RpNNRt8D9UR2lDU5n7An1/rvE
+	glLxYPJ1zQ12u85bcvBnUY7Bm42LK5ZFaiv14CYXGztKfiDGyohyK1BMIGk5SZnYSTconbx
+	OywVhFG3Uba/puGEMVo2l5DOX2rbL32dlqhydsZ/tIvixk/3rn9oZJHYZKEWTVsfA2DXaPD
+	rndK2aDm76txi3MhT6HOKJ+2YUqpQ+wVa4GHbouvHZU7gAzqTB4JsTzRYiG+CpqhJsdt1Ug
+	W7PSero523YMtAe6xeH8j5hUuwEpd2JoLuFevemAto4iSQTjJ8aZMGpFbZ+86Xc3bMi2ntT
+	vfJvy6/JPTRVs4emMniRs9ktjKaIE53+Il3ZTWfUmb2HJ1Yhibthiq9V27Jpv3yUzaXnJ9/
+	tohxeDTO9sEdKLYvca1FrE=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+X-QQ-RECHKSPAM: 0
 
-Hello:
+On Thu, 28 May 2026 07:32:03 -0700 SeongJae Park wrote:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+> Somehow the mails of this series don't have correct 'in-reply-to' field,
+> and therefore not constructed as a single thread but three individual
+> threads.  Please check your setup for next time.
 
-On Thu, 21 May 2026 22:29:09 +0800 you wrote:
-> Because there is time gap between bpf_map_new_fd() and close_fd(), a
-> concurrent thread is able to close the new fd and opens a new, unrelated
-> file with the exact same fd number. Thereafter, this close_fd() might
-> inadvertently close the unrelated file.
-> 
-> To avoid such regression, do finalize log before security_bpf_map_create().
-> 
-> [...]
+Sorry about that.  I will be more careful when sending patches going
+forward.
 
-Here is the summary with links:
-  - [bpf-next,v2] bpf: Fix concurrent regression in map_create()
-    https://git.kernel.org/bpf/bpf-next/c/9b435d23f51e
+> Nice catches and improvements, thank you!
+>
+> I left a few comments on individual pattches, though.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thank you!  I will address the comments on the individual patches and
+send a v2 soon.
 
-
+Thanks,
+Cheng Nie
