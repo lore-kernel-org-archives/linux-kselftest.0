@@ -1,52 +1,35 @@
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C71348C45;
-	Fri, 29 May 2026 03:03:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A6F35F60B;
+	Fri, 29 May 2026 03:10:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780023839; cv=none; b=M2OIfdBAh4FAtuixI3QD4n9BOtB3lmeKGaxCef9CLF6l2P9qEbC8/iBqcvzfuqvN1J8lzRqapb7ZVzsaivpRTzmIbDiI/WrDUO7SlKEIivE8GZA4Rcv5D00bwLUkg5MiXuD8tez1zzVyzYDVn8No8RBILk1LySYl9DEyxfOEzOI=
+	t=1780024203; cv=none; b=LLIGcw1SfhTASVcskeL6HEBlq1nI7riaGAwqHtwyyGv9zrPb6SVbdW5H1Ol7U5C99bIfmHXwyA7/M01WihOWsJqog0cvuWE9ui/XMzouQxykKUmP832Ir/0xC+TDFCs3/u9wR6N5FOk2JEVK6myeQQbFAXfmsAsL0Zvsw7l0W2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780023839; c=relaxed/simple;
-	bh=9TLqx+AJ6QO/WhHnwYwSUxGksU1h65dvhTK7ehp1nJ0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sILcnpOhpPGPWU3j3vJqvzyfV1ewgL8q5i267yqbjW0gNrOpuAhn0O11T+6yqhWDVDoda1Y7GXyWm3IZcez0q0dtKqoTNr9UUTbRiXL+vnVCTg398VjQOMSXkToAAdhry34iGp5CruCAbz5UsV3PDvMgvqwkf8nJSxgRxrhFRGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=kVk/euDV; arc=none smtp.client-ip=54.243.244.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1780024203; c=relaxed/simple;
+	bh=CeUjJBo2ThFr8CJnMkzb/TaXhZ9WUPYhbjXq9A95FXg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=LIBx9dc/kuZKdGHEER6c/3UtGkd4NslCb/lFxRs3iFmSymi4AEuzaWHJuCnJLYPtkcmTAcqe/Twql+20ZNsTe9DcopXWrv+SiR79/JN/oNUb21F8dyvElE5nmjT3bv7JlkzdfkUaGu+fdYlmewJme4l7ok8CQuE1wNqqA0jaVYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kdA8Y8ke; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="kVk/euDV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1780023778;
-	bh=UO25NXFfDr1JQbaCIs3jucG8rynGMrbJHIu0alItT/Y=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=kVk/euDVNUIjx0cu5qU99sYMYIfIZZUnQCYtHPTU8cmJ2wpbFw/1E6g1xUKTiqCQR
-	 TIW+z9XctVHJnGZajAM/NOjSVVrW+eMrce7NnnUMguXS3+k2/VjiHiO5BJ8/7xyRBY
-	 H4w+s+fFePFG88rMsGo/+BB8MG6PTpk4Hzc0bsxA=
-X-QQ-mid: zesmtpsz1t1780023764tac51051f
-X-QQ-Originating-IP: MfmWebu0CGkWeYxMGyswxnR9rxACMxe/KsnSWW94zTo=
-Received: from PEN1097 ( [61.183.83.60])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 29 May 2026 11:02:42 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 772953753065975309
-EX-QQ-RecipientCnt: 8
-From: niecheng <niecheng1@uniontech.com>
-To: sj@kernel.org
-Cc: damon@lists.linux.dev,
-	kernel@uniontech.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	niecheng1@uniontech.com,
-	shuah@kernel.org
-Subject: Re: [PATCH 0/2] selftests/damon: fix and validate memcg filter memcg_path handling
-Date: Fri, 29 May 2026 11:02:41 +0800
-Message-ID: <7C41953A77335257+20260529030241.1554009-1-niecheng1@uniontech.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260528143204.153713-1-sj@kernel.org>
-References: <20260528143204.153713-1-sj@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kdA8Y8ke"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFD081F000E9;
+	Fri, 29 May 2026 03:10:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780024201;
+	bh=xy6FbJEA5HmyjHXP9O75txhq8iEh6IsT/3Y2mVqRyk0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=kdA8Y8kerGDEXkd4iOyIMBmOChBSFv26qGU0bqqv2rZ3b5djkKM/smOJ0e37HmpLO
+	 l4awfRW42m23gd5MIGmf76DF/c471XdN6WyHeDQLSa/EZH1exn3vkZVq2HmQREaJxo
+	 /XFI4xbfP7EYby0EXWqnk6ZiM0tB1MQiAiZHd3vwxuura2IdJMpvWnkwKPTL7VDYZ4
+	 7QyirWaw/W2NDSlj3k3ZQDTL1GD3cQ7RnORUwUVAt2a+I89dtr5e8On2nvaNQr7ETk
+	 cDDiJ4OSWPX4LtiP7aolFqZWjIeUI3+6fy42tl+893sgM+KehcAbfpr+OzIiE1Pw/O
+	 hubQpfNClXE7Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198033930002;
+	Fri, 29 May 2026 03:10:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,43 +37,43 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
-X-QQ-XMAILINFO: N9ftk+EKvgGZRNFpA5ZkVMwXFBAZUMF2lE8x9u/XxaiHv/lREbo/jm1B
-	wWVf8/WOPK7qJM44SZsww58VvLgaCYqeQchTwXiWR+1i0Sa0j4iQHQyqHaaUQXyXqRXGZTs
-	nB8bKXUQu+xFlZtGLfngs+2mEz6Mr1X3mpfkAJPI7zOb8nHoFN7T44/jYxsZd6NFMJao5yf
-	iVX/WlvKvPO6iF556bHMQWctQc0XDsjdrIoEovOAm/JgvxYsI8kroF9vzKe9Ygl9BeCMgK8
-	mJN0FviM+FekvDZFHnkwMkBVTaI7xdBaAYl4rsXBvjjj4c/uWAP6G3g+lBrXsgtmJ7bHRzn
-	FtVmPrAv7cAUNoZTw6ZJWVjUMdyzcXRQ+qQ0rU/9z+qNFxZ508QQL/XYDRGSu1CMeLU0Ahi
-	+4ozrwMQL4FFsF8MgRjM/CAH5p7Kqv8fmln7FvdSSPRQCKdJxhkvYAcUfXG/MPOzl2T+4lN
-	KFfKiPG4HKJugXmoNPJ2tHqkdMRvKOv2uDiPYOkMMWW2uMrZUBX1DFklHnLJEKzEHkpFMkP
-	GF18ELSuqAWb4AkFyz0By7hTOZAVQ66cWYIMsXDf/KuCqGtoFWbITTx4F9tjuv3D6dyj7VD
-	JHGdi/EPRLmXc/zT/RqsXqXyV6D/A4qgWH/vRMh2w4a968+HTLAf/jXaMGaPZDtCYDBPs2q
-	SdL63oDu3daj2V7kGfCX0SUu0t9L2RZb+q3K26pNNwIGT8RpNNRt8D9UR2lDU5n7An1/rvE
-	glLxYPJ1zQ12u85bcvBnUY7Bm42LK5ZFaiv14CYXGztKfiDGyohyK1BMIGk5SZnYSTconbx
-	OywVhFG3Uba/puGEMVo2l5DOX2rbL32dlqhydsZ/tIvixk/3rn9oZJHYZKEWTVsfA2DXaPD
-	rndK2aDm76txi3MhT6HOKJ+2YUqpQ+wVa4GHbouvHZU7gAzqTB4JsTzRYiG+CpqhJsdt1Ug
-	W7PSero523YMtAe6xeH8j5hUuwEpd2JoLuFevemAto4iSQTjJ8aZMGpFbZ+86Xc3bMi2ntT
-	vfJvy6/JPTRVs4emMniRs9ktjKaIE53+Il3ZTWfUmb2HJ1Yhibthiq9V27Jpv3yUzaXnJ9/
-	tohxeDTO9sEdKLYvca1FrE=
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
-X-QQ-RECHKSPAM: 0
+Subject: Re: [PATCH v2] bpf: replace pop/push emptiness check with
+ bpf_list_empty()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178002420565.1611545.6374072020383806220.git-patchwork-notify@kernel.org>
+Date: Fri, 29 May 2026 03:10:05 +0000
+References: <20260524025853.13786-1-suchitkarunakaran@gmail.com>
+In-Reply-To: <20260524025853.13786-1-suchitkarunakaran@gmail.com>
+To: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, shuah@kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On Thu, 28 May 2026 07:32:03 -0700 SeongJae Park wrote:
+Hello:
 
-> Somehow the mails of this series don't have correct 'in-reply-to' field,
-> and therefore not constructed as a single thread but three individual
-> threads.  Please check your setup for next time.
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Sorry about that.  I will be more careful when sending patches going
-forward.
+On Sun, 24 May 2026 08:28:53 +0530 you wrote:
+> Simplify fq_flows_is_empty() by replacing the pop/push based emptiness
+> check with a direct call to bpf_list_empty().
+> This avoids unnecessary list mutation and simplifies the code while
+> preserving correctness.
+> 
+> Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+> 
+> [...]
 
-> Nice catches and improvements, thank you!
->
-> I left a few comments on individual pattches, though.
+Here is the summary with links:
+  - [v2] bpf: replace pop/push emptiness check with bpf_list_empty()
+    https://git.kernel.org/bpf/bpf-next/c/9a720e090eb5
 
-Thank you!  I will address the comments on the individual patches and
-send a v2 soon.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thanks,
-Cheng Nie
+
