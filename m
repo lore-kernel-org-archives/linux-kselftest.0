@@ -1,208 +1,81 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752CF369D79;
-	Sat, 30 May 2026 09:38:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9441799F;
+	Sat, 30 May 2026 13:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780133931; cv=none; b=ZXb99pz97Elw9Vn1RlW+Sbu7Y0SThZCa8lbDFs6glBqN+xfhbeASAFVTekeU+UotggOlthX+F08F4SLG3w+ZoKAz4NcltKSsW8haMEPHNHxO/+HrBhI+5g9AovaDYE8dtSdxPbb5VgHtDoT9HexbO/pN/ozh6AxlH4AXNeqdmEE=
+	t=1780148805; cv=none; b=A89KM//F2j377EDB851oiSzIvT+EJEnXu/xUbotfyLaAuOv8ZgXDofqUZt+YGhaHMcyoT9iCqBrSGkliNHm2TuZYMsbm/v5YLCQ1jvm9x25Y4Q0x83D71M07yC+ZDJBCvxK0ydruVyzqnIDWE46jfkvdN8sdNp5XFPk3sSY+3dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780133931; c=relaxed/simple;
-	bh=QsQdsNIoFR1555oDa3GUNCVMgvmy34178PlWtLaq9pc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jdLNrSQQXirpaa9PRRTixQenlklBdc+hx6mPEOJYqA1I6YRr9cLWkYV4WQJi8cussXAeZ4q/Tb0uXMPNxCJFyGS0fOqTUBtad3XoI+w3s9PCK1LYKpwUhmqzTdiqZic1DcCbk1w2teoigH8OZbu1AiuVUSpa7/WzqhvSxjkZwgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1XIsxWrF; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=N7R4UQLI; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1780148805; c=relaxed/simple;
+	bh=7vy97Nw1auW3TRwhcZ5UGejrsgzN/Enn1bD2SOPa/SM=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=BIauGpzSujaAmTqfOEswPHsm3gXVQoBXLQUZTAdIOPCJnGehtPrtfwxKx/IB97ePlPnN0Fw06hqBXOKPQ7plW5bjqb/kvt++aS9BYTzPdPbu4coBvufWXQDj2zmLTSVj/nHG/1xfdcUl99z/ARrbxZp3pln1na7C/kDKvSx7d08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WoL5DWjv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1XIsxWrF";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="N7R4UQLI"
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1780133922;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HjRzonH4lrOcAeFBkSlTRxm4za4mUMOgtiS6VkGSjis=;
-	b=1XIsxWrF+WtLg5mVwCnQKlhJdfcBHDdASMLxTsgtzJNQ99YdfMwUvPz8DFT77ibNKN7xEH
-	XAHEbwiGTCF68/zfM4PDy/jhgsa/L+AO7P9huc6CP9s3h8W/lLks8sMRb9VuFZSBsK0eVs
-	/WC0vtYZahkeRT/J6kr1gF+rjQ0pbZ5zjwFJMHNdzx2wBSUMQoOnU2AO0enz9Tly6EXYcz
-	bNPKE1ho5/A7WfYBz6xBp3jcFQdXYG1o6F8NeOnr/82vDN8jZDFmbJ23LXp38xOVIOsH6K
-	wJxI75w+OrbUXSlKaeCvtV0z7oo1pTCUxOnvfFexu9C+d/DmYVDnWheHVklmGQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1780133922;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HjRzonH4lrOcAeFBkSlTRxm4za4mUMOgtiS6VkGSjis=;
-	b=N7R4UQLIG4QxtgycWs0IzvJPLvviqAvU0BSchKRh7KgSYuAnRVG/4ZaSiqBfYSgA7BlDAf
-	+GBkas3UNoYp1bBQ==
-To: Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	Shuah Khan <shuah@kernel.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Soheil Hassas Yeganeh <soheil@google.com>,
-	Mateusz Guzik <mjguzik@gmail.com>,
-	David Laight <david.laight.linux@gmail.com>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Nam Cao <namcao@linutronix.de>,
-	stable@vger.kernel.org
-Subject: [PATCH v2 2/2] eventpoll: Fix epoll_wait() report false negative
-Date: Sat, 30 May 2026 11:37:32 +0200
-Message-ID: <f773406fd0a6979e94921900d4428e8da1a71523.1780133499.git.namcao@linutronix.de>
-In-Reply-To: <cover.1780133499.git.namcao@linutronix.de>
-References: <cover.1780133499.git.namcao@linutronix.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WoL5DWjv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C41F1F00893;
+	Sat, 30 May 2026 13:46:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780148804;
+	bh=vImyCeKfsgeILX1MZc0y5+Hf1HuWGrdd4W6QYHLEb38=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=WoL5DWjvKIB24dRtHVT2+HpCQ+2txM8ucJAmeXJlGPTcvFg/l6IHmr4Di0dB16f5T
+	 c5D9M/NZRJDjH1wISAg6nhrMXrprMkAJvF+j1hiYqs1mn7hhA9iEDIChTqOHmukVGA
+	 aQcIwvP1AeYKtcSgep9xkudl5AmM8B1CHBMtLgtFrpG7bnadZFoqLG6X6xNA+4r1OB
+	 odOcAizIojX17sybRny+1v2E7IhfqjnR9turIkv3fTTmSm/7aWA2K5qs1K90yxGPeU
+	 0YI/zbdMu5YfxLd1XkNdlIeyJ2gs9HxZ0Xgi1FBaYKnatDXuPFCcd5RltmmC3CJex9
+	 h3WHXmg0FbuRw==
+Date: Sat, 30 May 2026 22:46:39 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] tracing/probes: Point the error offset correctly for
+ eprobe argument error
+Message-Id: <20260530224639.49fada6cd098985a799d21e5@kernel.org>
+In-Reply-To: <20260528222934.7d0b1881@fedora>
+References: <177967567399.209006.1451571244515632097.stgit@devnote2>
+	<20260528222934.7d0b1881@fedora>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-ep_events_available() checks for available events by looking at ep->rdllist
-and ep->ovflist. However, this is done without a lock and can report false
-negative if rdllist and ovflist are changed in ep_start_scan() or
-ep_done_scan() by another task. For example:
-___________________________________________________________________________=
-_________
-                                           |ep_start_scan()
-                                           |  list_splice_init(&ep->rdllist=
-, txlist)
-ep_events_available()                      |
-  !list_empty_careful(&ep->rdllist) ||     |
-  READ_ONCE(ep->ovflist) !=3D EP_UNACTIVE_PTR|
-	                                   |  WRITE_ONCE(ep->ovflist, NULL)
-___________________________________________|_______________________________=
-_________
+On Thu, 28 May 2026 22:29:34 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Another example:
-___________________________________________________________________________=
-_________
-ep_events_available()                      |
-                                           |ep_start_scan()
-                                           |  list_splice_init(&ep->rdllist=
-, txlist);
-	                                   |  WRITE_ONCE(ep->ovflist, NULL);
-  !list_empty_careful(&ep->rdllist) ||     |
-                                           |ep_done_scan()
-                                           |  WRITE_ONCE(ep->ovflist, EP_UN=
-ACTIVE_PTR);
-                                           |  list_splice(txlist, &ep->rdll=
-ist);
-  READ_ONCE(ep->ovflist) !=3D EP_UNACTIVE_PTR|
-___________________________________________|_______________________________=
-_________
+> On Mon, 25 May 2026 11:21:14 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+> 
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Fix to point the error offset correctly for eprobe argument error.
+> > In the cleanup commit 1b8b0cd754cd ("tracing/probes: Move event parameter
+> > fetching code to common parser"), due to incorrect backward compatibility
+> > aimed at conforming to the test specifications, the error location was set
+> > to 0 when a non-existent formal parameter was specified for Eprobe.
+> > However, this should be corrected in both the test and the implementation
+> > to point correct error position.
+> > 
+> > Fixes: 1b8b0cd754cd ("tracing/probes: Move event parameter fetching code to common parser")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
+> 
 
-In the above examples, ep_events_available() sees no event from both
-rdllist and ovflist despite event being available.
+Thanks! Let me pick this to probes/fixes branch.
 
-Introduce a sequence lock to resolve this issue.
 
-Measuring the time consumption of 10 million loop iterations doing
-epoll_wait(), the following performance drop is observed:
+> -- Steve
 
-   timeout  #event  before    after    diff
-     0ms      0     3727ms   3974ms   +6.6%
-     0ms      1     8099ms   9134ms    +13%
-     1ms      1    13525ms  13586ms  +0.45%
 
-Considering the use case of epoll_wait() (wait for events, do something
-with the events, repeat), it should only contribute to a small portion of
-user's CPU consumption. Therefore this performance drop is not alarming.
-
-Fixes: c5a282e9635e ("fs/epoll: reduce the scope of wq lock in epoll_wait()=
-")
-Suggested-by: Mateusz Guzik <mjguzik@gmail.com>
-Signed-off-by: Nam Cao <namcao@linutronix.de>
-Cc: stable@vger.kernel.org
----
- fs/eventpoll.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-index a3090b446af1..58248862e5ee 100644
---- a/fs/eventpoll.c
-+++ b/fs/eventpoll.c
-@@ -38,6 +38,7 @@
- #include <linux/compat.h>
- #include <linux/rculist.h>
- #include <linux/capability.h>
-+#include <linux/seqlock.h>
- #include <net/busy_poll.h>
-=20
- /*
-@@ -190,6 +191,9 @@ struct eventpoll {
- 	/* Lock which protects rdllist and ovflist */
- 	spinlock_t lock;
-=20
-+	/* Protect switching between rdllist and ovflist */
-+	seqcount_spinlock_t seq;
-+
- 	/* RB tree root used to store monitored fd structs */
- 	struct rb_root_cached rbr;
-=20
-@@ -382,8 +386,11 @@ static inline struct epitem *ep_item_from_wait(wait_qu=
-eue_entry_t *p)
-  */
- static inline int ep_events_available(struct eventpoll *ep)
- {
-+	unsigned int seq =3D read_seqcount_begin(&ep->seq);
-+
- 	return !list_empty_careful(&ep->rdllist) ||
--		READ_ONCE(ep->ovflist) !=3D EP_UNACTIVE_PTR;
-+		READ_ONCE(ep->ovflist) !=3D EP_UNACTIVE_PTR ||
-+		read_seqcount_retry(&ep->seq, seq);
- }
-=20
- #ifdef CONFIG_NET_RX_BUSY_POLL
-@@ -735,8 +742,12 @@ static void ep_start_scan(struct eventpoll *ep, struct=
- list_head *txlist)
- 	 */
- 	lockdep_assert_irqs_enabled();
- 	spin_lock_irq(&ep->lock);
-+	write_seqcount_begin(&ep->seq);
-+
- 	list_splice_init(&ep->rdllist, txlist);
- 	WRITE_ONCE(ep->ovflist, NULL);
-+
-+	write_seqcount_end(&ep->seq);
- 	spin_unlock_irq(&ep->lock);
- }
-=20
-@@ -768,6 +779,9 @@ static void ep_done_scan(struct eventpoll *ep,
- 			ep_pm_stay_awake(epi);
- 		}
- 	}
-+
-+	write_seqcount_begin(&ep->seq);
-+
- 	/*
- 	 * We need to set back ep->ovflist to EP_UNACTIVE_PTR, so that after
- 	 * releasing the lock, events will be queued in the normal way inside
-@@ -779,6 +793,9 @@ static void ep_done_scan(struct eventpoll *ep,
- 	 * Quickly re-inject items left on "txlist".
- 	 */
- 	list_splice(txlist, &ep->rdllist);
-+
-+	write_seqcount_end(&ep->seq);
-+
- 	__pm_relax(ep->ws);
-=20
- 	if (!list_empty(&ep->rdllist)) {
-@@ -1155,6 +1172,7 @@ static int ep_alloc(struct eventpoll **pep)
-=20
- 	mutex_init(&ep->mtx);
- 	spin_lock_init(&ep->lock);
-+	seqcount_spinlock_init(&ep->seq, &ep->lock);
- 	init_waitqueue_head(&ep->wq);
- 	init_waitqueue_head(&ep->poll_wait);
- 	INIT_LIST_HEAD(&ep->rdllist);
---=20
-2.47.3
-
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
