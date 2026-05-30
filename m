@@ -1,128 +1,125 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DD45397E89;
-	Sat, 30 May 2026 08:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B311B808;
+	Sat, 30 May 2026 09:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780131288; cv=none; b=IS7+WTekr10FH1/liuH+/SBnO8dyTJ5JLq8RBc4/keTX4+jxioIb/dV92nBImJgbbdzsx9ybtXEi4ALQ/WFM0wFPVLLZEepbq4Bh07g5o5GMUgRjqKSS4eY9E8uDhuEEq5Fz1FLsKsvW+XfrlqqaJWQqYalcfj9Yhv1fesQ3kFk=
+	t=1780132432; cv=none; b=hfNc8Cnww3G+zFNLOFTSEDnnN65MmeFvDH5d3lgqtph+cyIZyElRLq8IXx9TG+o6PlOV2SnSp1I6ATA1js7BmO+rS22vPd41KubB8p74VNTcPlD1uDJBqjUWT7SIGyNVlFI8x5hu1MfMkk6lqfRbsYaPTlpcAtaPvsRh2Aorh0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780131288; c=relaxed/simple;
-	bh=4cZov+A3y+NozKLYxMCn9IIRmUK0h0TSROhccA5wsa0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j/ZisUFNXoiqrCL8b246cxL1wM9uMKdRP+iWmmrRaSxbzB5G8mGBVfZodFKjoTOPGVHhkJcjzEOV3ZxtM/hOQ4N18TKhGzFZh/CjYBnV0E4sO2QiU/6RelmViwP7YKOyOF/EczKQ7d/a1d33dw/es6GT4WrMlGSbQFHIXzx2tI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=J7vXrRCj; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1780132432; c=relaxed/simple;
+	bh=22tmpD69P1URiswlRoWhBg/BX2jx5Dn1SpOE5c+SaRw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E5SXsXXMSgap2JAQorn4TIjNqcM7rMZyVCsd6LgdbDiWvm0ZAx5GAkDyf//xV3ePMiQH30TEh+kZg2u7Low5eQN4h3Z+8HyRHcDIuykGpwHTxYyF/HIWQ7wZWAhY/WW7DnJZmVt7I3mw1x2NWTLv3PIgo1WNGlcSIX6MYkPpTAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fCs4gOiE; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="J7vXrRCj"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A27CF3515;
-	Sat, 30 May 2026 01:54:38 -0700 (PDT)
-Received: from cesw-amp-gbt-1s-m12830-01.blr.arm.com (cesw-amp-gbt-1s-m12830-01.blr.arm.com [10.164.195.31])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 443803F632;
-	Sat, 30 May 2026 01:54:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1780131283; bh=4cZov+A3y+NozKLYxMCn9IIRmUK0h0TSROhccA5wsa0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=J7vXrRCjeTz2K4K0t8Fb3OQAuJPDHX31KDGsmxXofYv0yvYJf/qvZ2wnpRROnnaYP
-	 e04nFWjsRPDSwCg1cDKvzlSgwdatl7o2A8PHdvJc0b/SICzm4S0K6Wp56KYICONENR
-	 zMn57gcJqiGle9dAxIDEtfCYkzdGByEtp95V17l0=
-From: Dev Jain <dev.jain@arm.com>
-To: akpm@linux-foundation.org,
-	liam@infradead.org,
-	ljs@kernel.org,
-	jgg@ziepe.ca,
-	leon@kernel.org,
-	david@kernel.org,
-	shuah@kernel.org
-Cc: Dev Jain <dev.jain@arm.com>,
-	vbabka@kernel.org,
-	jannh@google.com,
-	pfalcato@suse.de,
-	balbirs@nvidia.com,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	linux-kselftest@vger.kernel.org,
-	usama.arif@linux.dev,
-	ryan.roberts@arm.com,
-	anshuman.khandual@arm.com
-Subject: [PATCH v2 2/2] selftests/mm/hmm-tests: test pagemap reads of PMD device-private entries
-Date: Sat, 30 May 2026 08:54:12 +0000
-Message-ID: <20260530085413.1270139-3-dev.jain@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260530085413.1270139-1-dev.jain@arm.com>
-References: <20260530085413.1270139-1-dev.jain@arm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fCs4gOiE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780132431; x=1811668431;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=22tmpD69P1URiswlRoWhBg/BX2jx5Dn1SpOE5c+SaRw=;
+  b=fCs4gOiEebh1evuXFgL9v/wuh8s1Uc5Ih2dCKAvvgb4PQSBuemwOtt2x
+   lCJUNc/wgQ6CmLtaoVttRYGa/auyVgHvzD3oBOeFnEADkklKFsbeZFCVh
+   1syyu0QlMAYZ8OpLSoS/UcTKHcP3NteogfbOa1itF1fJKJqo13ePxYH8D
+   wnIX5ZVwSHNCW8KN4wpg0aSjPnCCa9a+WsCCGSvbGzuQKfccaU/7l6r1f
+   p+3ZmMCDpgWmfXv4husiM8iciS6bQFen51q26vnzZWbPQaMBBEOXMYWoZ
+   /cxjmmDpknLkdJWnRk3nwpMSgmL2M6qPG2RRHeGyfFFrqOqCvdgdFVfn7
+   g==;
+X-CSE-ConnectionGUID: A/CFJ1XRTkqinKi613nK+Q==
+X-CSE-MsgGUID: T5KaacTqSwi/QtefxhQkew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="80112665"
+X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
+   d="scan'208";a="80112665"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 02:13:51 -0700
+X-CSE-ConnectionGUID: mDD6+TLDRNeHEF6Qv2iPgw==
+X-CSE-MsgGUID: UrfCGkIIQG23p/OWwKiWPQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
+   d="scan'208";a="240528979"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa008.fm.intel.com with ESMTP; 30 May 2026 02:13:47 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wTFlJ-00000000169-0kTS;
+	Sat, 30 May 2026 09:13:45 +0000
+Date: Sat, 30 May 2026 11:13:18 +0200
+From: kernel test robot <lkp@intel.com>
+To: Neil Spring <ntspring@meta.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
+	davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org,
+	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, ntspring@meta.com,
+	bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net
+Subject: Re: [PATCH net-next v10 2/2] selftests: net: add local ECMP rehash
+ test
+Message-ID: <202605301121.q28WSYib-lkp@intel.com>
+References: <20260529160136.1010064-3-ntspring@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260529160136.1010064-3-ntspring@meta.com>
 
-To cover pagemap paths scanning PMD entries, add assertions to check
-whether a device-private PMD entry has the correct pagemap information -
-the PM_SWAP bit must be on in the pagemap entry. Before that, we must
-assert through HMM_DMIRROR_SNAPSHOT snapshot that the leaf entry is
-at PMD level and not PTE level.
+Hi Neil,
 
-Signed-off-by: Dev Jain <dev.jain@arm.com>
----
- tools/testing/selftests/mm/hmm-tests.c | 29 ++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+kernel test robot noticed the following build errors:
 
-diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
-index e1c8a679a4cf3..d09d4a9081de1 100644
---- a/tools/testing/selftests/mm/hmm-tests.c
-+++ b/tools/testing/selftests/mm/hmm-tests.c
-@@ -2276,8 +2276,11 @@ TEST_F(hmm, migrate_anon_huge_fault)
- 	unsigned long npages;
- 	unsigned long size;
- 	unsigned long i;
-+	unsigned char *m;
-+	uint64_t entry;
- 	void *old_ptr;
- 	void *map;
-+	int pagemap_fd;
- 	int *ptr;
- 	int ret;
- 
-@@ -2318,6 +2321,32 @@ TEST_F(hmm, migrate_anon_huge_fault)
- 	for (i = 0, ptr = buffer->mirror; i < size / sizeof(*ptr); ++i)
- 		ASSERT_EQ(ptr[i], i);
- 
-+	if (!hmm_is_coherent_type(variant->device_number)) {
-+		ret = hmm_dmirror_cmd(self->fd, HMM_DMIRROR_SNAPSHOT,
-+				      buffer, npages);
-+		ASSERT_EQ(ret, 0);
-+		ASSERT_EQ(buffer->cpages, npages);
-+
-+		m = buffer->mirror;
-+		for (i = 0; i < npages; ++i)
-+			ASSERT_EQ(m[i], HMM_DMIRROR_PROT_DEV_PRIVATE_LOCAL |
-+					HMM_DMIRROR_PROT_WRITE |
-+					HMM_DMIRROR_PROT_PMD);
-+
-+		pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
-+		ASSERT_GE(pagemap_fd, 0);
-+
-+		for (i = 0; i < npages; ++i) {
-+			entry = pagemap_get_entry(pagemap_fd,
-+					(char *)buffer->ptr + i * self->page_size);
-+
-+			ASSERT_NE(entry & PM_SWAP, 0);
-+			ASSERT_EQ(entry & PM_PRESENT, 0);
-+		}
-+
-+		close(pagemap_fd);
-+	}
-+
- 	/* Fault pages back to system memory and check them. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ASSERT_EQ(ptr[i], i);
--- 
-2.43.0
+[auto build test ERROR on net-next/main]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Neil-Spring/tcp-rehash-onto-different-local-ECMP-path-on-retransmit-timeout/20260530-005334
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260529160136.1010064-3-ntspring%40meta.com
+patch subject: [PATCH net-next v10 2/2] selftests: net: add local ECMP rehash test
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260530/202605301121.q28WSYib-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260530/202605301121.q28WSYib-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605301121.q28WSYib-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/net/slip/slhc.c:74:
+>> include/net/tcp.h:2557:2: error: call to undeclared function 'tcp_synq_overflow'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2557 |         tcp_synq_overflow(sk);
+         |         ^
+   1 error generated.
+--
+   In file included from drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:48:
+>> include/net/tcp.h:2557:2: error: call to undeclared function 'tcp_synq_overflow'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2557 |         tcp_synq_overflow(sk);
+         |         ^
+   drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:15197:26: warning: shift count >= width of type [-Wshift-count-overflow]
+    15197 |         bp->cyclecounter.mask = CYCLECOUNTER_MASK(64);
+          |                                 ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/timecounter.h:14:59: note: expanded from macro 'CYCLECOUNTER_MASK'
+      14 | #define CYCLECOUNTER_MASK(bits) (u64)((bits) < 64 ? ((1ULL<<(bits))-1) : -1)
+         |                                                           ^ ~~~~~~
+   1 warning and 1 error generated.
+
+
+vim +/tcp_synq_overflow +2557 include/net/tcp.h
+
+  2554	
+  2555	static inline void cookie_record_sent(const struct sock *sk)
+  2556	{
+> 2557		tcp_synq_overflow(sk);
+  2558		__NET_INC_STATS(sock_net(sk), LINUX_MIB_SYNCOOKIESSENT);
+  2559	}
+  2560	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
