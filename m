@@ -1,155 +1,81 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5CCE381B01
-	for <linux-kselftest@vger.kernel.org>; Sat, 30 May 2026 09:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7524136920D;
+	Sat, 30 May 2026 09:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780133309; cv=none; b=FUIycJKeKDSkNI3RYf/w685a9HjCkU+qolgDIo6G5orj9iJgqdaZOlApfD/TalWIvHfcE5UwYqfGAiRzaeaGv1MYJwh+gTijmn2B1ei2pU8ITd/VMk5d5wKcfhqL5nb15jlk1MmWrVgBJ2KZIu0D5f3mI5ASPCOHYEEtSvzN5nc=
+	t=1780133931; cv=none; b=nhVhFAg/EpK0AwyEB+Q2s5kUiIonXfZdrKKWgXxpxJ9vJy3+LG3KAnptxX1jYErRs7UmI+zUfUjK9B+JSWAWk6hqBY8CREG8u++GFweLoTol6LOzLXKc4PM19JHg+YFcYl40Zlox3xxneSTwmDIwvVjtHwRr3gC9EKVVVOyXHkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780133309; c=relaxed/simple;
-	bh=Axu2q9OiQlW7NrUR5/tN+MxVX+YXj5nOsIeGUL7II+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YTIEeXpMRMUQI/G18QjNU9VSfRdkHduK2Ph/YhHe7Odbq2LFDcQME+Rr5Mbn4otIVdwskuL3u2WiNnnIXlGPggSbWaiWIQCGht4/16K7W9IFVcN0yiM3vCM59JPB4jSuswOJKMmdZuocQIGu0J8eH/EHVLMmwabPN5NEdpRcRiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aEiIiZ8g; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780133931; c=relaxed/simple;
+	bh=pWTLBwiGlrxcyJ+0RK+Ry99mfk6JSH5M0IlflqTGqiM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=byk8H2F8fci8Oki+wPydYavAh0Uea5L0KU5urCQh4H7BF1PSjh5/S8g/kVk1DuIo7h2uAMcK5Agb6cGmUDbrRSACzYfTjKWbNb7gNjkIvkRNz96mTH1TdcBOgiaQOiFZN3GETdBAHPouVQXWWZ52pu8MXCl5/wo3mwG/6P481Mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TQxDAuJN; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=S7Z9AnG/; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aEiIiZ8g"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4891c0620bcso94716875e9.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 30 May 2026 02:28:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780133307; x=1780738107; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AVGWNyN/0YK3gFgYNwL3zKk91DjUbWVPzRQNZkauQoA=;
-        b=aEiIiZ8g0hy0yB/O+bDn7Qw4lOfN43CRMMIOFofGOKWKSLeutjNpsZecxl1PpF6dGq
-         XUr13spfzUEBtwv04kv+5AwqvczVql4/rFzglnoFDWJiGLSUG9LMAKcVLLAPgsa/kU9t
-         zluLvPFhdhGFedsiuZiYQhWDrDHb6RPbzb+RIt1hN1uaQ4DaUE4c2eOFaiBq+m6UXu62
-         vqjV0taBTZDPRazx4yOVz0wossMHj2fIJMBAmv/mXMjZ1WgM365BRb+3Zxn9aYNcpHXd
-         0Zcst7R72wcLfComJvvpx853k9BfRth+OczB8+jks6+1OILp1F2ltb7V2sIbLEMprH8k
-         Me6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780133307; x=1780738107;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=AVGWNyN/0YK3gFgYNwL3zKk91DjUbWVPzRQNZkauQoA=;
-        b=Ek0kCTabM6avPjsvKYkG/S8vDj4PvpC0bmk5m0Yf4gzXJzOGiZ1lOdX+1kLgZZDrWa
-         5qws4NW2a5aMGVqztLugurjI5lJg1uWDpUchIgo2I21vxOLn+7qEJwnMuUnuHjaRXVH/
-         nJBwHgrq6Dv0PAm0LMLePIg2sjadEhdmTpz6S4wfaTZWcwReoLLGZbhY3rjJpMKQNGz5
-         x60a3fCbT9oDSw+Lam8VBL2mJ5gCn/XbdRd89+P1IESCxxn0XsaR0GtGBHflOdegRjXZ
-         GDjX9IFlADa//jc3LK+fRB1dbIgYFCxg8NOhWYDlghfJs4S4f9LnpsMrjrz8XDeU3fGs
-         lplw==
-X-Forwarded-Encrypted: i=1; AFNElJ/Mu7fFLDqhC3LotM6xf2C8LJLZYEfCKzsir6/GlQiyYk5qBE7cXPuAuzdv9fkzNaR0zVewybiwu095MQXe1EY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxngg/qjJeTk4gVOgYVckNApGbDrTHaYk30Ay+ig5trio2K0cJh
-	z3X70hCH9F1wrWInyBX2kao0K9dBxxGdOL23NFSSnPX/nnMNZi0TNKw+
-X-Gm-Gg: Acq92OFPJtIl5GCQWxlNQ0wYzDySpl4GunNXdXje4NdjUn/GhCqsbBdpwM264GzHq/8
-	SgbdYM/FJDMwdDk9gC2LdjdK9ahCenlG2E0EQ6VlbUVTolUE9agk8s1EvaqXx5MS1tUtlmnMad1
-	rxM2RYPXdGwubgYpRqcdS8jB3h+2wsg7sfwIlr6IT04oMgp/eCD8qzZxWgNLPfyXUDQshTaWh9g
-	hktULgWkMyhIiHXsuZhQr9xugzNXieHF2nGwDKSajkHAzgQ0MGgDACtGVZdxFW8taWjqzpm/znV
-	COM43b/sAm6NOLTu5cWrtYlC4B8IRajx8epLX8eRmOleKYOOsz43r0QWZYaqYAHQkEGbRpNXb4s
-	g5FmcbWR4YAMnEsajQM18SuthUTYV7QgH6HZs+JFlyBsZuy0f0fSr/pzSZhMbCx86xF8Aijx7C8
-	jbCvUzRNThHrFwVZ9Ktjca5/du/kf69aceBEfdo2Z3XEbyqnyStamCGCszSZyO59Uv3LtLt3c=
-X-Received: by 2002:a05:600c:3147:b0:48f:e230:80a3 with SMTP id 5b1f17b1804b1-490a297304bmr47960185e9.33.1780133306950;
-        Sat, 30 May 2026 02:28:26 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909c09acd3sm30659185e9.4.2026.05.30.02.28.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 May 2026 02:28:26 -0700 (PDT)
-Date: Sat, 30 May 2026 10:28:24 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>,
- kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org, Mark Bloch
- <mbloch@nvidia.com>, netdev@vger.kernel.org, Saeed Mahameed
- <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>, Tariq Toukan
- <tariqt@nvidia.com>, patches@lists.linux.dev
-Subject: Re: [PATCH v2 06/11] selftests: Fix arm64 IO barriers to match
- kernel
-Message-ID: <20260530102824.65ceb098@pumpkin>
-In-Reply-To: <20260529224442.11d7320d@pumpkin>
-References: <0-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
-	<6-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
-	<ahiFxtmspbETiqWw@google.com>
-	<20260529134947.GA128816@nvidia.com>
-	<20260529175516.06d5788f@pumpkin>
-	<20260529192933.GD3195266@nvidia.com>
-	<20260529224442.11d7320d@pumpkin>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TQxDAuJN";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="S7Z9AnG/"
+From: Nam Cao <namcao@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1780133921;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FVZrerUcr6b8wyTsKl742IIvubpJCahaogmndvD3sJg=;
+	b=TQxDAuJNZWjcrPpoz5NB/gnDo/0UrB440P4hJDdLCWrb3BsF9sRW9PaPq2Wi1uWXlS89h8
+	uExb6C+O5RKRFHEZB1Gro7FxGuc2IQkULEMJKmWzuurNbsZhC3sYLObCTTAJBsUjk3twZg
+	vbkda7eeKitRiFTTVCfeFTUIyYlgKNWMk/2bo9Cq9rsEZza9H3WF0vJuVSSt4KSozZTixa
+	pPas16k/CEofUitc+O3Xe4oyxm797LKlc1/RH2rUAxJvKIkekvo8YT5p26Mc44ES+uu8PR
+	EwRapVqYRM8qfejxHWAjMrIc8882WOQX2e+nZIQR4fopWMCp+RmjLryBkKh+/g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1780133921;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FVZrerUcr6b8wyTsKl742IIvubpJCahaogmndvD3sJg=;
+	b=S7Z9AnG/pcQf4DHHQL3nD1mCArjgMGlTJ0laoqP/fY7upY+vImkh6EJ1ydMLqx/6XFZ2ca
+	NlAdMvE2ULYr9TBg==
+To: Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>,
+	Shuah Khan <shuah@kernel.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Soheil Hassas Yeganeh <soheil@google.com>,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	David Laight <david.laight.linux@gmail.com>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Nam Cao <namcao@linutronix.de>
+Subject: [PATCH v2 0/2] eventpoll: Fix epoll_wait() report false negative
+Date: Sat, 30 May 2026 11:37:30 +0200
+Message-ID: <cover.1780133499.git.namcao@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 29 May 2026 22:44:42 +0100
-David Laight <david.laight.linux@gmail.com> wrote:
+Hi,
 
-> On Fri, 29 May 2026 16:29:34 -0300
-> Jason Gunthorpe <jgg@nvidia.com> wrote:
-> 
-> > On Fri, May 29, 2026 at 05:55:16PM +0100, David Laight wrote:  
-...
-> > I can't say, this is copied from the kernel and Will made it:
-> > 
-> >     arm64: io: Ensure calls to delay routines are ordered against prior readX()
-> >     
-> >     A relatively standard idiom for ensuring that a pair of MMIO writes to a
-> >     device arrive at that device with a specified minimum delay between them
-> >     is as follows:
-> >     
-> >             writel_relaxed(42, dev_base + CTL1);
-> >             readl(dev_base + CTL1);
-> >             udelay(10);
-> >             writel_relaxed(42, dev_base + CTL2);
-> >     
-> >     the intention being that the read-back from the device will push the
-> >     prior write to CTL1, and the udelay will hold up the write to CTL1 until
-> >     at least 10us have elapsed.
-> >     
-> >     Unfortunately, on arm64 where the underlying delay loop is implemented
-> >     as a read of the architected counter, the CPU does not guarantee
-> >     ordering from the readl() to the delay loop and therefore the delay loop
-> >     could in theory be speculated and not provide the desired interval
-> >     between the two writes.
-> >     
-> >     Fix this in a similar manner to PowerPC by introducing a dummy control
-> >     dependency on the output of readX() which, combined with the ISB in the
-> >     read of the architected counter, guarantees that a subsequent delay loop
-> >     can not be executed until the readX() has returned its result.  
-> 
-> Hmmm...
-> 
-> Ok so there is some subtlety with the read of the counter that might
-> make it all work.
-> 
-> It is better to make the delay loop have a data dependency on the result
-> of the readl().
-> Something like:
-> 	u32 z = 0;
-> 	OPTIMIZER_HIDE_VAR(z);
-> 	writel_relaxed(42, dev_base + CTL1);
-> 	udelay(10 + (z & readl(dev_base + CTL1)));
-> 	writel_relaxed(42, dev_base + CTL2);
-> That avoids the potentially mispredicted branch and only adds instructions
-> when a delay follows.
-> That sequence is safe for all cpu and doesn't cost much for cpu (like x86)
-> where it (probably) isn't needed (maybe unless you patch the scale for udelay
-> into the code so there are no memory reads, just code).
-> 
-> Probably best refactored as udelay_depends(10, readl(dev_base + CTL1)).
-> Or maybe udelay_after().
+While staring at epoll, I noticed ep_events_available() looks wrong. I
+wrote a small program to confirm, and yes it is definitely wrong.
 
-Sleeping on it, all the code can be put in udelay().
-You just need a read memory barrier, followed by a memory read (of anywhere
-'hot') and then use a data dependency (as above) from the second read
-into the delay loop.
+This series adds a reproducer to kselftest, and fix the bug.
 
--- David
+v2: Switch to seqlock solution
+
+Nam Cao (2):
+  selftests/eventpoll: Add test for multiple waiters
+  eventpoll: Fix epoll_wait() report false negative
+
+ fs/eventpoll.c                                | 20 ++++++++-
+ .../filesystems/epoll/epoll_wakeup_test.c     | 45 +++++++++++++++++++
+ 2 files changed, 64 insertions(+), 1 deletion(-)
+
+--=20
+2.47.3
 
