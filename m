@@ -1,138 +1,140 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76315277C88
-	for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 12:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7362C031E
+	for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 13:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780232113; cv=none; b=awnnItw/tkDJMfwRQRA0Ufc3G8ZhUXtLALQKOeQ8NUpkU+3fiZBs7b7d47NIO4ZkrEYSo9YCJCJKwPqRVuudoKseIfjrwCWmt0ziXvmQF4yz8Ap/P7WdLQr2KKKJ9CJy/G15m3px0QxMT6SQ+cV9z8jwly/I3vEH4+ylSQ2IHCM=
+	t=1780234553; cv=none; b=TQuiyaUmoNILdETSDvhOwAoyVyB/EUqXhT7V36sJ3s0SEd9c1CLnh+3SvjcUT0Y8PrA0Xs8JqCkUMHOix4icmICbWEgAzgPiFJmzze5571re6+l2SnR4+0cEnoL/LmCfSFJE0H61H6frcEUxn1rnPS2sWVajYumRrQAVy8wKQrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780232113; c=relaxed/simple;
-	bh=8k0HUUGrKQdbm2dXES9LOTuJCiHdtOvz6RVV14YqWAM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KdlGXTeoKPx/l96lq02w6sffGwz9PzWWQgpxEXv+vi4Kgdcwxd3pSM3yySFzxZfCNlzdhZKCAnI2CV7nL0iRes6RwJlqbkxk6jxFgI545INhnrIufdH6STXwrOdjavniLT7tcjoGprOZh9U5GNQVI+SWdlfoOtI0UHOx7qrnSmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fKtgVfW9; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780234553; c=relaxed/simple;
+	bh=wSZz+AzdlVOHc9rG+lsEwhIOCICN5R2ptJEM8nrsYKM=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PBtjaprBfAuc14ZgoRdDAP/zuSy7tXAqXFM3GL/j18WjpjNlYKgLkPUhn4qhbj9VmmqlD8OWIbLJSYcVyZDveqZKjz7Z83QiohhL2PZ9hkirBm0dK8KZFqq8GkXdTP08GXSOw1Tu8IUmJjSNdONRtQmCv6JN96n0mTenL1kX/gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=kG99phYZ; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fKtgVfW9"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-36da8439078so172503a91.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 05:55:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="kG99phYZ"
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-8ce0f17a69cso6740846d6.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 06:35:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780232112; x=1780836912; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9jvjYYorspJJuCQZSL29dgMwijPlrOWsuologm7lz9E=;
-        b=fKtgVfW9i+MlSfvJRHfHTgJEPEM+j3X7T75A4dt4fnwoBHTA/3BXxs7F8RmckvjNZm
-         5tOcMeT5UtJcgI/hD3Iww+2KAglh1Xqqy0II9bq1n1GMXv9vx4d9Akd01vfSj9+Flvqk
-         a5q6P1RI+r+27wazP3EUMWQY8PozZsgvWC9iP5nQaKVEIjyrVcEanGzYcsWkunvWeUQG
-         jJR0DulX1/vXwm+D3hFD75hJ3AOR+Z4rKTVJHZwpNCPkN0rwEvFIapzIZ7LiPWkJ6ON+
-         ZlEswBVSkswPOb9+e9VOWvJcVxU7PQm/rRk6fcLkXEPK0oJD8jYcpN/aj0DDaEhFULqZ
-         of8A==
+        d=soleen.com; s=google; t=1780234550; x=1780839350; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ecmbfN6Hxv0wzfAQ6MM3bdc8Nu3WaBbGIPmE7GrM3yA=;
+        b=kG99phYZ+rEyxpR1LQJ6oRzQ/wUnAdfJvSc+pplmMsP6OiJbEPKB0fnOOz6qSSkUUJ
+         UYC5jvzU6RUZypAOoLyRHgKh8wzG0aUR9JPYWgoAKvX3LA6KmRjt4mNVwxNBHgF+qbPj
+         SAbRIAT9YisQBcNZe8bjncHvd/AK0TvkiQYu77yGgza6aXi3WgfbF03gm6h02eaMVP59
+         6KKcDWKEEHoTae1TctROW/mAmdkJiuRiv+OYnL0UwmESdW2UgNyj5yh/a/uwCmttRz5y
+         UgXtMTVmQ0sBM04jv827GywAIpuxG9PpSHhKIvkM5bW+ehcuj57IozUNUNGSB5abip7s
+         qghQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780232112; x=1780836912;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9jvjYYorspJJuCQZSL29dgMwijPlrOWsuologm7lz9E=;
-        b=KValCwaHsVh2EahBr7E749QK6yeahTPkrweX6vjKv1opy142nBhETaOwreobZgPHkH
-         WsA5wBXoiIA2NJmwRW5gVB1o1r7KM1qJBL8QtlgVLdbQ37j+Ou3OjVQq8X9mzwe9rP2w
-         NyAMlkbm77rK2hk/2CykhhZELdTcSuXaygDtrKpvImhRtltSlUIr6K0WE0T9nISTi23V
-         kNaPNHfCt38rNT4J2b3Edh/5dzjSs/ngMT8MYKd7plGu0ob7p8htKpora+Gt/+H5XQ0l
-         wJutEDJlGOCGNMxXGdR1ef///pLxJqCwqlzHx9yLZllg3BsSUmCaDB2ifFFjk6GV0YJm
-         S9bQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/tQqfvx4nlO15zfji9G3hr5f44698dw/PLwTXkWcKhvK9m8v+scmj2Wgr6Jz9KojXop5frgKCiFutnsudvKeo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3FD8Z7mtJPUGOb/fXxHFGnk+r1Im1vH7Azpjyr23+BPqAk6Lb
-	hY2pltu3s1LkwAVcOMahyzYC44i9FEoMSO/XNxhsgpkIeNB9Db/U0LzL
-X-Gm-Gg: Acq92OH/KkB2/+8Y3bTaF1caAPmS6Gl4CfIsGzvKLWHMFZmolZSryH/RBFNhje42qNi
-	6PUoodkONNm/X6plB6OiX//0LIXkNMBoyMYZDsenTaRINrgsXLoDDCToaQeK7iwtvn1pDYvPs4E
-	x3WX1rKn/G4SuxSOy4f++07s6JUBBhw0lLnWdIySBKOLNmIzCR80c4jTQ7ItyuDKKmcdqTCtB+k
-	MJzyd17ohaT3/kjs/9J8o1X4/n/rJhepX0sT8jJMYmlGePGw91TNJ7jT1mStv3epqm+DkIaDwhg
-	eUy5nd497JoucELzf1Rie2JCqrHvUFsIXLwCwk+Stm6tbOskogGcESbofWp6vSiL2L8EYQ3A5LB
-	BHvid4C7va4uYZLMofd4An9RUs7/Wgb/M1kx5oXKmHAxUCmQemrF9F2BBRBRFMUwvmdMqdQNrq5
-	WyDJdIZT8vqzaGMYMdC+D84/4H6+5SDEFKdu1ZFjV2UyS38/uF6blP21wV8f9Z
-X-Received: by 2002:a17:90b:57e7:b0:36d:70c8:3a3 with SMTP id 98e67ed59e1d1-36d70c80687mr5091181a91.15.1780232111729;
-        Sun, 31 May 2026 05:55:11 -0700 (PDT)
-Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:7f12:602a:a4c6:2b38])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36bbfec391bsm7766670a91.2.2026.05.31.05.55.07
+        d=1e100.net; s=20251104; t=1780234550; x=1780839350;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ecmbfN6Hxv0wzfAQ6MM3bdc8Nu3WaBbGIPmE7GrM3yA=;
+        b=tKOhtBmpxZedCGK0BR74DoqzHfaepnCM4gryyy5VG1o0wfcp4CJXNTXwOGQDMGzLed
+         V7+b5M7CgW70eHiilFeDUXY7Sg4XWiZMXMoq23Z2o0feOaiJOwpGu0NkIeeuTDYdwDKW
+         ReCedGy9D//3JpDKkTHxUykXNeluqg31Usi6oun2w8HnuP8L3ryZoBtgPZq6+BE14XqQ
+         Q5ZVs4Uo9nH3DueNHakpMF5t+puFhzbxW+u6lnPtdWHxpl8mONAxM6TWHawND2xiq3OH
+         EYZcPcqybIQQMC4k1fxj5NLdLgM4Ou/51mSh6HloKR3cK1yDDnfUO4yuLBZ4kyvV7zHR
+         j7JQ==
+X-Gm-Message-State: AOJu0Yyq1h72YHS436r+rCo/4QAZ92Xia43Zglf4Mnnz88lDVc6zLJ4j
+	LblPLfeVtPKXkWhif8Zuvh6AuG8jh9jw87Y9pY2fVF+UtSqpVBxN0kWtR8v/6EoTyBgYrYJi1jo
+	SUYqI
+X-Gm-Gg: Acq92OGGDk3CJzC/Dm2jTwtn87hkvro2tsxQJlT2HIEP09trFO4/BOjoc+boOQhJ5WG
+	9bOC6hAsyfDzTCJ2lC5N75nk1ZO5FC+SG3dbMoWww+C5gz+tmcEi+fN8GZDhVGB223a4ekzEgXh
+	oy/qxIE2vfofQqYNoHzFpCDADDs/iSRdy3s7zMnpqFMuTfz+kVZiZCESAkQOTO/3jYnjQvlS0k5
+	RzdTw2o4XnXyEoE5hZM0yReBsWg/l+tJwn/TNAA8O8/a8is/3jnF0zVOrJnQkeO3u62ON4ANiKo
+	bxhFBI95GI2d27b+Ai2CgpQlyimC4BsYZ7RD5IjssNRUtXw+iVO4cFwrXatBgvCEaZ9AsXX2jnb
+	ssWLcIUosgqMzAcLy8Y9cs3zRu8NZdyeXYW03PPNbaTUqIlBqp4tmBdbMBJWWnvSAbngUT5S68q
+	6eBqlskGfOgCpzstvhzAoutPmQpHRd4JwOCvK8xgHgVL928NjeZH7tBYKP8tLJSg==
+X-Received: by 2002:ad4:5f8e:0:b0:8cc:ee2e:8d9b with SMTP id 6a1803df08f44-8ccefd58403mr113278696d6.18.1780234549737;
+        Sun, 31 May 2026 06:35:49 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ccea0425dfsm69984996d6.3.2026.05.31.06.35.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 May 2026 05:55:11 -0700 (PDT)
-From: "Hemendra M. Naik" <hemendranaik@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	jiri@resnulli.us,
-	jhs@mojatatu.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	vishy0777@gmail.com,
-	tahiliani@nitk.edu.in,
-	"Hemendra M. Naik" <hemendranaik@gmail.com>
-Subject: [PATCH net-next 2/2] selftests: tc-testing: add fq_pie per-flow class stats test
-Date: Sun, 31 May 2026 18:23:14 +0530
-Message-Id: <20260531125314.22492-3-hemendranaik@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260531125314.22492-1-hemendranaik@gmail.com>
-References: <20260531125314.22492-1-hemendranaik@gmail.com>
+        Sun, 31 May 2026 06:35:49 -0700 (PDT)
+Date: Sun, 31 May 2026 13:35:48 +0000
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org, 
+	akpm@linux-foundation.org, linux-mm@kvack.org, skhan@linuxfoundation.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, corbet@lwn.net, 
+	pasha.tatashin@soleen.com, dmatlack@google.com, kexec@lists.infradead.org, 
+	pratyush@kernel.org, skhawaja@google.com, graf@amazon.com
+Subject: Re: [PATCH v4 01/13] liveupdate: change file_set->count type to u64
+ for type safety
+Message-ID: <ahwv0ZiyQ6TzoCah@plex>
+References: <20260530221938.115978-1-pasha.tatashin@soleen.com>
+ <20260530221938.115978-2-pasha.tatashin@soleen.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260530221938.115978-2-pasha.tatashin@soleen.com>
 
-Add a tc-testing entry (id: 83c0) to verify the fq_pie class ops
-wired up in the previous patch do not crash and integrate cleanly
-with the tc class show path.
+On 05-30 22:19, Pasha Tatashin wrote:
+> This improves type safety and aligns the in-memory file_set->count with
+> the serialized count type. It avoids potential truncation or sign
+> conversion mismatch issues.
+> 
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> ---
+>  kernel/liveupdate/luo_internal.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
+> index dd53d4a7277e..ae58206f14ac 100644
+> --- a/kernel/liveupdate/luo_internal.h
+> +++ b/kernel/liveupdate/luo_internal.h
+> @@ -52,7 +52,7 @@ static inline int luo_ucmd_respond(struct luo_ucmd *ucmd,
+>  struct luo_file_set {
+>  	struct list_head files_list;
+>  	struct luo_file_ser *files;
+> -	long count;
+> +	u64 count;
 
-The test creates an fq_pie root qdisc on a dummy interface and runs
-'tc -s class show'.
+From Sashiko 1:
+...
+Since FLBs use a single contiguous block for serialization, an untrusted
+KHO payload could provide an abnormally large count.
+...
 
-Signed-off-by: Hemendra M. Naik <hemendranaik@gmail.com>
-Signed-off-by: Vishal Kamath <vishy0777@gmail.com>
-Signed-off-by: Mohit P. Tahiliani <tahiliani@nitk.edu.in>
----
- .../tc-testing/tc-tests/qdiscs/fq_pie.json    | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Answer: NO, there is a chain of trust during live update. The previous 
+kernel acts as a boot loader for the next kernel, and performs all the 
+necessary verifications. We trust the previous kernel to pass the right 
+things if compatability strings and format matches. KHO payload has the 
+same trust as the previous kernel.
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-index 229fe1bf4a90..3ef2fafa52b8 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-@@ -40,5 +40,27 @@
-         "matchPattern": "qdisc fq_pie 1: root refcnt [0-9]+ limit 1p",
-         "matchCount": "1",
-         "teardown": ["$TC qdisc del dev $DEV1 handle 1: root"]
-+    },
-+    {
-+        "id": "83c0",
-+        "name": "FQ-PIE class stats accessible via tc class show",
-+        "category": [
-+            "qdisc",
-+            "fq_pie"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DUMMY handle 1: root fq_pie"
-+        ],
-+        "cmdUnderTest": "$TC -s class show dev $DUMMY",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC -s class show dev $DUMMY",
-+        "matchPattern": "class fq_pie",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root"
-+        ]
-     }
- ]
--- 
-2.34.1
+Therefore, we assume the serialized metadata is well-formed and valid. 
+Defending against a malicious or hostile KHO payload is outside the 
+threat model of this system.
 
+From Sashiko 2:
+...
+If luo_session_finish_one() fails (for example, if a file handler returns
+-EBUSY), the early return skips luo_session_remove() and
+luo_session_free(). Since this is called during the VFS release operation
+via fput(), VFS will unconditionally destroy the file descriptor regardless
+of the return value.
+...
+
+Answer: NO. A finish failure means that we cannot safely release 
+resources, as they might be associated with devices and DMA activity. We 
+deliberately leak these resources to avoid memory corruption and data 
+leaks. When userspace fails to finish properly and closes the session, 
+the only way to recover these resources is to perform a cold reboot or 
+another live update.
+
+>  };
+>  
+>  /**
+> -- 
+> 2.53.0
+> 
