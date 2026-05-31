@@ -1,200 +1,112 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830A91BD9D0;
-	Sun, 31 May 2026 14:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F15038E8C9
+	for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 14:53:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780239115; cv=none; b=jDDbYpGcwGE9OZDEG9WEJSFbQQNODr+ahXvNsqrnGPEpP4DLCYXvpc4lUzaE/teuctZAYq/GG0D1vPKEg5VFm0dT3jtVXueA9fFJbx3x8DfF2ck2dVot0NR4HJh5fmhj0zJljmlaWGgsS1fmTuiX6pCaiw6a31SiRuuWdARzwI4=
+	t=1780239228; cv=none; b=UslbzZC37nQuS0JDiJvCQj5PJz/ONgXDMIZkOEjUIXXaAVXdIKHUUMdlC3kazNAuigAObVivIv6xL8jBPIrE2GlPj7x3QxW5asFYVhYgzOIlqhkfFRjOLZSCxNIeHXWq8hLfBBe1GoSfPpYc5h8zf00W0Pfpn1QT6gByig0/IPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780239115; c=relaxed/simple;
-	bh=nADtvSbxwkyG7uIPKZjvw90LakZ8dSHmT0hvP+smpEo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=fWU9lg4CQvQep0j/C1NaA4k0G9hHTheRmvgybvdR+BhH97yPek753vxyKum0HmjRsgMjp9rGcnqtxVL+ds5AFEVWJ/HOu/ldnKnQw53sWNjRpyzqhs6iH3gtL3MRP3AGt5A5KrlplrdCOTyQznaaLBfhMnd0oNYK8DYdmF2lJD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=LuJVW/9x; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1780239228; c=relaxed/simple;
+	bh=XK51geeL3+peWDyqzG1dtEA1t9N0Y1/v6t0z4dZe6eA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u5NfFAip0PHAT8zhAeROc5twNParqQiUG12cB9CIq74oK0sN+HafqZVfpm8RPO1s4LFo/I8yvV7ajy1SfjHC9N+xpCmzG1h5BpFwzKgYY5Ed0w2lipF06MxosYjFVKmO3oxX0TRRm/WslF8o9+G0ItZQGVVqL96D1yqPek6MEq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Saow/BR8; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LuJVW/9x"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64UDF20D3018752;
-	Sun, 31 May 2026 14:51:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=fq46AE
-	+7jPfzsRmfmu+1wmuHUKMsVipvb8JZsj0osfg=; b=LuJVW/9x9IrnXfmogmPk8S
-	/AHS90wSPXxY/aNwduo3ui+Uh4dYK8B5exlXi+2ziPww5H0ahiJDvzzeyCNvVmtx
-	y5GmgWiZNRqRGz1X8+DDi0gO+q3KbYNRULyiLORemiIyv1dtps0ky5lY8eHBrqUw
-	po4OynEOa22+B5YKNyijR1a4MC6UawspumrSWYCel2ffw1uEfx8fWTSDl54QH6KC
-	IVQ++z/xl0qcO/ibTaN0y7cq10JlTb+XfeIbT1KDwEBHjwboU72A96S2cXGzLYRk
-	SvOBFc2Ssyr/WDrEb5Pfd4aMOYgd1aBMh4FjWNxAfviCi2/NIeWC58RS4/9Wfzpw
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4efqm4mv31-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 31 May 2026 14:51:05 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64VEda0L013909;
-	Sun, 31 May 2026 14:51:03 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4egakvj6jt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 31 May 2026 14:51:03 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64VEp2ac18416368
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 31 May 2026 14:51:03 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C308F58055;
-	Sun, 31 May 2026 14:51:02 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 78EE75804B;
-	Sun, 31 May 2026 14:50:53 +0000 (GMT)
-Received: from [9.43.126.202] (unknown [9.43.126.202])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Sun, 31 May 2026 14:50:53 +0000 (GMT)
-Message-ID: <872e80e9-ab11-461c-8b4b-630a8bd03bbc@linux.ibm.com>
-Date: Sun, 31 May 2026 20:20:51 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Saow/BR8"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-490a7876f8cso4143505e9.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 07:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780239224; x=1780844024; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cFQehZMTwDLdoBhXrsPY8v0PLCjeGjVTdtI7THwMy3A=;
+        b=Saow/BR8NSyqvKaQWIzsTHW7f1LgOJ92i0jflT+Xlvl6nE1Jqmg0nb4ZaVqFzG6mjR
+         R6anqEJKi07bTKLlpIHZGSY0Rdv4oDBrP0HP0I/cRmoT2H57EiKddAyX1jYikiYTcR6d
+         5qQwkekUZNQ4yPkIMX3RjYYc36NtTxQ3xznoH4AGbZKDAqxIszHjUvrOqna9M75OBaZ7
+         BGAUHYIABUaNsdukFnPaxubj3sY4+AZh7I3q9YXsf44NXzl090s9YwHKFeMUfGS15iTU
+         LgSnPCeX1ec7AMVFt+jH3WqLBUDUo/v40dMxUMv594+1/oHeqdV5rIZz1DgwPC6Pu5tN
+         EVGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780239224; x=1780844024;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cFQehZMTwDLdoBhXrsPY8v0PLCjeGjVTdtI7THwMy3A=;
+        b=hBYTuPQCR/jcbVynbMi2saGfBCwQ2UXBfvpU78hS9zOFK13UEKH2b5PObeRh2T4OJc
+         Fo8f7WColMbsw5oi37vt42tZckPIStiPaVkiRDtdVQyaZBN2eHiTsNNDlq+CTzvpmxus
+         rkFxZsjznB0vFnS6UBV/gBi0wVtH5NrW2UYistZ6rR34Nu+QtsUqEqW8vHeNYXDg3jnJ
+         tfcMFAG7JhuHhF8f0h5vVgl2tA6NmWeFih9yNR23gzum1qaCWO2RmlnEMGjGQdW8rbk+
+         +gsDXiRyE/NdarZC16LBZwTteUKKViaSe8w4dxqUrhxdwD58RQLQmZ9+dHJ0b7T/ah6l
+         J18w==
+X-Forwarded-Encrypted: i=1; AFNElJ9+pDzl1jPJrgpDC8cSOC4TxPhruKRJlZDqkMMRiZ9T6sdHglmUVFSrei0ZX9wVTCjI97mvdSagDIEmgTgNWFU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKKe7QdkOQYNpnQX9PnRDr11+KUtPwf52uHS0+Cuufww3Khz2W
+	fulaotS++tZKFi0WSQBrLqal7/u7kMzpJJMUm+GAcJH7wQw4BQPSUcum
+X-Gm-Gg: Acq92OFEc6rCmg4AQJvx+1/FE+ZTghAN+l4H2hURX5induSyvZWbyQXSuaxlSsysSS7
+	qa8BKn+c/ABAITLZClFjZGivMQSmwjEYE2V/9ZntEpK4cXeDWzIOVJo/L2ulaQzUuph2OkAN9ct
+	Y8ZEbw2b0uKyU5t93xktXmS+lR24Ve6f7CuwwYAfjxoouEtN8BL4KGBmOwPQJNsK2M2NS+CaNgs
+	UL3iotEnwiXtzUYsALvcvsxkApzFxDBuSkHMWga2xXwHkzWAjRWH/dbdN777+Z0rY/xVt9GwuRy
+	jwv8f/pon9hr/zzO/ayZgkFinYm/t85s7Uo6vHemv4oimTog69I6ReRsx+mkrl2KNnTyPWWroGW
+	K02hEfmqDY1fAoXc0Djp3ghyRx9JyPfijRAaqj6Oe1f1d9rzpO226vreYMKMP2EvCeo5BD/SHXj
+	ZKsSKdwKyt8UZ5mmcyaY+53bA=
+X-Received: by 2002:a05:600c:4f89:b0:489:e696:8362 with SMTP id 5b1f17b1804b1-490a292ed68mr133428765e9.13.1780239223323;
+        Sun, 31 May 2026 07:53:43 -0700 (PDT)
+Received: from hisam ([39.40.47.211])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909c0ad269sm59217195e9.11.2026.05.31.07.53.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 May 2026 07:53:42 -0700 (PDT)
+From: Hisam Mehboob <hisamshar@gmail.com>
+To: pbonzini@redhat.com
+Cc: seanjc@google.com,
+	shuah@kernel.org,
+	me@brighamcampbell.com,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	Hisam Mehboob <hisamshar@gmail.com>
+Subject: [PATCH] tools/include/linux/types.h: add ulong typedef for musl compatibility
+Date: Sun, 31 May 2026 19:49:36 +0500
+Message-ID: <20260531144934.403888-3-hisamshar@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/11] selftests: mptcp: nvme: add iopolicy tests
-From: Nilay Shroff <nilay@linux.ibm.com>
-To: Geliang Tang <geliang@kernel.org>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>, Chaitanya Kulkarni <kch@nvidia.com>,
-        Matthieu Baerts <matttbe@kernel.org>,
-        Mat Martineau <martineau@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>, linux-nvme@lists.infradead.org,
-        netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        John Meneghini <jmeneghi@redhat.com>,
-        Randy Jennings
- <randyj@purestorage.com>,
-        zhenwei pi <zhenwei.pi@linux.dev>, Hui Zhu <zhuhui@kylinos.cn>,
-        Gang Yan <yangang@kylinos.cn>
-References: <cover.1779934709.git.tanggeliang@kylinos.cn>
- <51f054a6a573b9a771ed927eef34fa5ca083d009.1779934709.git.tanggeliang@kylinos.cn>
- <d23bcec0-70e6-484b-8c41-0174d1b5d09d@linux.ibm.com>
-Content-Language: en-US
-In-Reply-To: <d23bcec0-70e6-484b-8c41-0174d1b5d09d@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: 4uqHCHqil5OAiqmp-ZRdaOjvwooT4hu_
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTMxMDE1OSBTYWx0ZWRfX8LHa1n/vgrlu
- sriiZA4R/ctkA96fiKdKFM+qkvQ5XE+DbJwGa1z+8vygJ5X1eU+ANLxvFV+ovPs+jA8rxOnPsZO
- G496Z0bAHys7w/Fk18K5y94R/7BWbW9ApMwfIAj49DzaD82Pxk9B3+qqpW9TrpyW18N5MoPDFyx
- 4eV9v9Y3FS2aq5bJETxWyHT5f1ojRcXEP9N9oqa/b6ciA3pys+RPMXbwLglXd3OU/0E3D/DI6Wh
- Aavo9mQYQ2SDNaPa8EfkhbzeJH3SXFi4KZkgy/2QQD00fCsiEkGE2xA7bYJWBwuSrILRCY3BNAY
- Sk4S05NoXNdI+N80oFwKCCUdshjyVt6XJGj3NF/Y+L4fG8iN0Z4yMj/HFQVqSlynMsz8prulc5K
- TsfF7mPNhy/gwf7cx83OvA63q24Le8Y/+b/Yo1tss1pUwpI+jm03LnSDvzTyVOy9xmgVvoY1TwW
- x+dHcOIQyGjmqe9N+Hw==
-X-Proofpoint-ORIG-GUID: L_Klrh7BPvFMaGqu_uBtkcXYqxRL0wZx
-X-Authority-Analysis: v=2.4 cv=Vf3H+lp9 c=1 sm=1 tr=0 ts=6a1c4ad9 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=tG9-xVZLEdW8CX7s4vEA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-05-31_05,2026-05-28_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 adultscore=0 bulkscore=0 impostorscore=0
- phishscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1015 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2605310159
 
-On 5/31/26 7:34 PM, Nilay Shroff wrote:
-> On 5/28/26 8:40 AM, Geliang Tang wrote:
->> From: Geliang Tang<tanggeliang@kylinos.cn>
->>
->> Add NVMe iopolicy testing to mptcp_nvme.sh, with the default set to
->> "numa". It can be set to "round-robin" or "queue-depth".
->>
->> Test results with 4 NVMe multipath paths and round-robin iopolicy show
->> that TCP and MPTCP achieve similar bandwidth:
->>
->>   # ./mptcp_nvme.sh tcp 4 round-robin
->>     READ: bw=455MiB/s (478MB/s), 455MiB/s-455MiB/s (478MB/s-478MB/s),
->>         io=4665MiB (4891MB), run=10242-10242msec
->>    WRITE: bw=455MiB/s (477MB/s), 455MiB/s-455MiB/s (477MB/s-477MB/s),
->>         io=4633MiB (4858MB), run=10184-10184msec
->>
->>   # ./mptcp_nvme.sh mptcp 4 round-robin
->>     READ: bw=445MiB/s (466MB/s), 445MiB/s-445MiB/s (466MB/s-466MB/s),
->>         io=4575MiB (4797MB), run=10287-10287msec
->>    WRITE: bw=445MiB/s (467MB/s), 445MiB/s-445MiB/s (467MB/s-467MB/s),
->>         io=4572MiB (4794MB), run=10267-10267msec
->>
->> A "loss" argument is added to simulate network packet loss. When loss=1,
->> each veth interface is configured with "delay 5ms loss 0.5%" using tc
->> qdisc. Under this scenario, TCP performance is reduced by multiples
->> compared to MPTCP:
->>
->>   # ./mptcp_nvme.sh tcp 4 round-robin 1
->>     READ: bw=144MiB/s (151MB/s), 144MiB/s-144MiB/s (151MB/s-151MB/s),
->>         io=1909MiB (2001MB), run=13231-13231msec
->>    WRITE: bw=100.0MiB/s (105MB/s), 100.0MiB/s-100.0MiB/s (105MB/s-105MB/s),
->>         io=1397MiB (1465MB), run=13980-13980msec
->>
->>   # ./mptcp_nvme.sh mptcp 4 round-robin 1
->>     READ: bw=428MiB/s (449MB/s), 428MiB/s-428MiB/s (449MB/s-449MB/s),
->>         io=4524MiB (4743MB), run=10564-10564msec
->>    WRITE: bw=431MiB/s (452MB/s), 431MiB/s-431MiB/s (452MB/s-452MB/s),
->>         io=4513MiB (4732MB), run=10481-10481msec
->>
->> These results demonstrate that MPTCP has better resilience against
->> packet loss compared to TCP, as it can leverage multiple subflows to
->> mitigate network degradation.
-> 
-> There are a few observations I'd like to raise:
-> 
-> 1. It is difficult to reason about the throughput results when NVMe native
->     multipath is enabled together with MPTCP. In this topology, four NVMe paths
->     are created and the round-robin I/O policy is configured. As a result, each
->     I/O first goes through the NVMe multipath scheduler, which selects a path,
->     and is then further subjected to the MPTCP scheduler, which selects a TCP
->     subflow. This means there are two independent schedulers influencing I/O
->     placement, making it difficult to attribute the observed throughput
->     improvements to either NVMe multipath or MPTCP.
-> 
->     For throughput comparisons, it may be more meaningful to disable NVMe native
->     multipath (e.g., modprobe nvme_core multipath=n) when testing MPTCP. This would
->     ensure that all I/O is sent through a single NVMe/TCP path while allowing MPTCP
->     alone to distribute traffic across available subflows. Such a setup would
->     provide a clearer comparison between TCP and MPTCP.
-> 
-> 2. The current test uses only a 128 KiB I/O size. It would be useful to include
->     additional I/O sizes as well, such as 4 KiB, 8 KiB, and 32 KiB, since MPTCP and
->     NVMe multipath may behave differently under different workload characteristics.
-> 
-> 3. The fio runtime is only 10 seconds, which is relatively short for performance
->     evaluation. The results may be influenced by startup transients and may not
->     accurately reflect steady-state behavior. It would be preferable to run the tests
->     for a longer duration, for example 120 seconds, to obtain more stable measurements.
-> 
-> 4. The tests are run on the same host by setting up veth interfaces and running
->     host and target under different network namespaces. It'd be useful if you could
->     run this tests between real host and target systems.
-> 
-One more point forgot to add:
-Current tests uses symmetric path characteristics (i.e. all paths experiences
-same loos or ratelimit). However it'd be useful to simulate a scenario where
-paths exhibit asymmetric behavior (for instance, one path experiences loss
-or increased latency compared to other). This would demonstrate the real world
-network failures and it'd be interesting to see how mptcp performs compared to
-native NVMe multiapth.
+Building KVM selftests with musl libc fails across multiple files
+(e.g. memslot_perf_test.c, cpuid_test.c) with 'ulong' undeclared.
 
-Thanks,
---Nilay
+Under glibc, <semaphore.h> includes <sys/types.h>, which exposes ulong.
+Under musl, <semaphore.h> includes only <features.h>, <bits/alltypes.h>
+and <fcntl.h>, and does not include <sys/types.h>. As a result, ulong is
+not visible through the current selftests include chain.
+
+include/linux/types.h already defines both ulong and ullong in its sysv
+aliases block. tools/include/linux/types.h mirrors ullong but omits
+ulong. Add ulong alongside ullong to close the gap.
+
+Signed-off-by: Hisam Mehboob <hisamshar@gmail.com>
+---
+ tools/include/linux/types.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/include/linux/types.h b/tools/include/linux/types.h
+index d41f8a261bce..ccc90dd4baeb 100644
+--- a/tools/include/linux/types.h
++++ b/tools/include/linux/types.h
+@@ -42,6 +42,7 @@ typedef __s16 s16;
+ typedef __u8  u8;
+ typedef __s8  s8;
+ 
++typedef unsigned long		ulong;
+ typedef unsigned long long	ullong;
+ 
+ #ifdef __CHECKER__
+-- 
+2.51.0
 
