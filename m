@@ -1,93 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E0E3438A7;
-	Sun, 31 May 2026 01:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8402D379C3C
+	for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 07:56:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780190928; cv=none; b=M58gCweXIEFSCw3K5nSwqnbtlHE4LNgijZ04BTSrdXkDATDuAD2XRie/FEFK/1LTn9Sn3EJi4oWnEjmUwRHvwUIWEV8lEsY8p3ycOHaqStDOd7UiX+6fgaGNoU84h6cIw0VfAv4m1evsDW9+BaGsxcOb3aF8pZ/a+Ja5ypxg5QI=
+	t=1780214166; cv=none; b=RaQkjijg7VVnri5Wbk59UmD7KyuF9PIKzT1hjI/a996uZrft1aY/0i6L2bysi8JMcoi/bw4T5fSaWrINrzlE9GtdNclN0SHqcHt4ICkF9m984gZ+lsd7PABY0twgTLg9Sqy8ZVuARgHFyL2HfW4Cd+lu7k+HvnrPQtTEZ0qNUwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780190928; c=relaxed/simple;
-	bh=OAzN3seHohf2BTo65MsaHTpFXdEGGsanaTwCTvt08o0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=KHhZqbBcOUpqljeZ30q3d/tDe/y5FJErbg/3dZmFYTd3eEG6/+d5pnCcYliwschXOzGz9HFRZs4oQF5h+F4oc+N0NCjjry4e7fDHhK+N8oxuDuphTm2C8iwq95GVPi0VmhHOA3MDRuAscPXbWotHKbwPmgjudHipHyox4oLyWus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n55PjfID; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780214166; c=relaxed/simple;
+	bh=0ZTzmpsL/SyhVqtE6wYgN91abnB599baUcenUwOH+F0=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=g88rZlir4rWEDvoX8rHyflhzZrOqdjqLGGi6APcydpidTXhTzn4vSL9N+80m2GqqDNY1JqP3v5rTVPVAJdCfL0nBut7osVuYRY53XzimYaCPC8lIHCyyctebHOnW7a9UPMQnK3GecAHChkbZGtUfeDTvR++lPu6D7NdkBeVE9y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qAMJk8jL; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n55PjfID"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 574001F00893;
-	Sun, 31 May 2026 01:28:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780190926;
-	bh=X+BaGJHz8uZETrQTdbTxbXnOm7f0ecn7Si9q2XGqq1o=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=n55PjfIDrn90/cbu7xhUBXTfql035EL1zqn6tswCuuKWr0uelCpTDuitSZvEMeK//
-	 qV1WAfjnzzog7xhY05GuBcCs++xivczObXyAkehNI2NoF7bKjGAB0tsQeelvBElcCZ
-	 bXE78tjO706Rf/zWY1ERSMeob+tofmS/gcZBDYZjNoq8TWbU3bmvjkYqhqEJpSEoBW
-	 PpAVHrw6cyiER9gypwWNQnmMDJbUIJDpgGR4gRiZ9MwZrdmPtGCGvyOeoM1qOX96bv
-	 SRrynnLq1Gnd7KVBSSoc3Kaw1H67Vvv+dnqe0QdfOy5dIGcuW6VTlRUuQIWG0tS8bx
-	 nq8sPoxzkz5ow==
-Content-Type: multipart/mixed; boundary="===============2073181152847420204=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qAMJk8jL"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2bf0453031aso44869305ad.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 00:56:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780214164; x=1780818964; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Ww2TKAwQFzWKllAfke4cPw7GXPWVedMoRg4O7J0u2ac=;
+        b=qAMJk8jLgHUwbcEmcA+JJfeHfgZlbdSNWmg6vCBdRmTDYxVjSZGjaKHB5qXyWCEaxH
+         5bfpm3zfOytZ9ejNKyFxrY/p1GsmV1/UmDuAOYto4E2pw1FxsQE/x3J0Bd4FC/XyJdGl
+         An7eepQhEXW5jfri1d202DEQkegcoUVjEu52xAiofioZeFpf7yczPU9a5cPu02qLW61p
+         Lsmvte25czgcbhaic8c/Xq/I+GmVYJ59oGSwX5WOrEt8OHTC+gEGn7byeQDjpisaPPlu
+         p5ZUArN/91iFNS8oN1/BgYCZ+Jn0odZ/E6jYAFMMsmRK3qivzVGQvKDoliplv+EQS90t
+         TcqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780214164; x=1780818964;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ww2TKAwQFzWKllAfke4cPw7GXPWVedMoRg4O7J0u2ac=;
+        b=WmRqKPNQxa3qw6cdS23RGPrm6QaaDggsDJJ7fXfZpkJlu4ZvbIkgDP/jSIlHOpmeXM
+         sx3oeKiy6WGkDeC1IbD4CKnxL2KRPisQRxkgtVGFptviFGPj/PHFK+G6nyiAeKA69ZZE
+         uq50VlzZ9eLZ4uVACYREqfN3t00AfuaPzBqL4rTODvvPdFwRUusJHAnMl/XiWTmpdKsp
+         ik1VMx9PU364qGmnLRPYDDiaMx2iJAd2lBTCCzTYV4YDlc/LgW/8ECGeQXm3TEXq27wk
+         Qp6RoQudjWwV7E3iGBDnIc6yztLKRVZ4WMUsV1cq8RH4aYJntqB2GEt2FMpOxNgtpZ8X
+         qhtA==
+X-Forwarded-Encrypted: i=1; AFNElJ8oelw50UhOmAdYKoYbUWLpf+Pmww7AsXRYCaVX3eUlGf9gXf8rEIfMun5m0/QwOW6Nz3VbNLvHz8T9WsRXTjw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycYd4UHdTgwAcOKjWhps9wRdg3LAqtZzqtwZQh+q6cCkmWNlSD
+	hRJ9QI9qZZcpKSfu6knc30mUPoi2QxmerviA8VXyDQ2zhWaci1WGkap0E8uvwhX8pDI1FjJiQdw
+	z0BfrMlFB1tw387KKPUm7KAJ/Tg==
+X-Received: from pleg17.prod.google.com ([2002:a17:902:e391:b0:2bd:40d4:e407])
+ (user=yuyanghuang job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:e543:b0:2bd:6e1c:3ce with SMTP id d9443c01a7336-2bf3684e3e8mr75086395ad.20.1780214163562;
+ Sun, 31 May 2026 00:56:03 -0700 (PDT)
+Date: Sun, 31 May 2026 15:55:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <2024c87ec926ea4a4c7c5c811d649d0c9c23f0f40144fe33ca38e90a3b2c86b9@mail.kernel.org>
-In-Reply-To: <20260531004748.3567875-3-yuyanghuang@google.com>
-References: <20260531004748.3567875-3-yuyanghuang@google.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add verification for BPF_PROG_QUERY attr size boundaries
-From: bot+bpf-ci@kernel.org
-To: yuyanghuang@google.com,yuyanghuang@google.com
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,jolsa@kernel.org,john.fastabend@gmail.com,memxor@gmail.com,martin.lau@linux.dev,shuah@kernel.org,song@kernel.org,yonghong.song@linux.dev,leon.hwang@linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,maze@google.com,lorenzo@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun, 31 May 2026 01:28:46 +0000 (UTC)
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
+Message-ID: <20260531075600.4058207-1-yuyanghuang@google.com>
+Subject: [PATCH bpf-next v3 0/2] bpf: Align syscall writeback behavior with
+ user-declared size
+From: Yuyang Huang <yuyanghuang@google.com>
+To: Yuyang Huang <yuyanghuang@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
---===============2073181152847420204==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+This series fixes an out-of-bounds write vulnerability in BPF_PROG_QUERY
+while maintaining backward compatibility for older userspace applications.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c b/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
-> new file mode 100644
-> index 000000000000..4fbe56cb29d4
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
-> @@ -0,0 +1,65 @@
+BPF_PROG_QUERY unconditionally writes back the 'query.revision' field
+to userspace. If userspace passes a smaller 'bpf_attr' structure (e.g. 40
+bytes, which was the cgroup query layout before 'query.revision' was
+added), the kernel performs an out-of-bounds write.
 
-[ ... ]
+We address this by propagating the user-provided 'uattr_size' down to
+the cgroup query handlers and conditionally skipping the write-back of
+'query.revision' if the buffer is too small. This allows legacy cgroup
+queries to succeed safely.
 
-> +	err = syscall(__NR_bpf, BPF_PROG_QUERY, &attr, OLD_QUERY_SIZE);
-> +	ASSERT_EQ(err, -1, "query_old_size_fails");
-> +	ASSERT_EQ(errno, EFAULT, "query_old_size_efault");
+tcx and netkit queries are left unchanged since they were introduced in
+the same merge window as 'query.revision' and have no legacy callers.
 
-This test asserts errno == EFAULT for a short query size. A v2 review
-comment on the companion kernel patch (bpf: reject BPF_PROG_QUERY with
-short uattr size) questioned whether -EFAULT is the right error code for
-a structure size mismatch, noting that -EINVAL or -E2BIG is the more
-conventional return code and that -EFAULT usually indicates an invalid
-memory address during a copy.
+Finally, we add a selftest to verify these boundary behaviors.
 
-That comment was not answered on the v2 thread. If the kernel patch's
-error code changes to -EINVAL or -E2BIG, would this assertion need to
-change too?
+Changes since v2:
+- Propagate uattr_size to __cgroup_bpf_query() and conditionally write
+  revision (instead of unconditionally rejecting smaller sizes in front-gate).
+- Update BPF selftests to verify that cgroup queries succeed with
+  OLD_QUERY_SIZE without writing revision, and succeed with FULL_QUERY_SIZE.
+- Remove early size checks in the front-gate to keep the patch minimal.
 
-  https://lore.kernel.org/all/20260531004748.3567875-2-yuyanghuang@google.com/
+Changes since v1:
+- Simplify the kernel fix to checking the size only in bpf_prog_query().
+- Revert all other subsystem query plumbing changes.
+- Update BPF selftest to target BPF_CGROUP_INET_INGRESS cgroup query, and
+  add verification for attr size boundaries.
 
-[ ... ]
+Yuyang Huang (2):
+  bpf: fix BPF_PROG_QUERY OOB write and cgroup backward compat
+  selftests/bpf: add verification for BPF_PROG_QUERY attr size
+    boundaries
 
-This selftest verifies the fix for an out-of-bounds write to userspace in
-BPF_PROG_QUERY, where __cgroup_bpf_query() unconditionally wrote
-uattr->query.revision even when userspace passed a smaller bpf_attr. The
-companion kernel fix carries a Fixes: tag, but this selftest commit does
-not.
+ include/linux/bpf-cgroup.h                    |  5 +-
+ kernel/bpf/cgroup.c                           | 13 ++--
+ kernel/bpf/syscall.c                          |  6 +-
+ .../selftests/bpf/prog_tests/bpf_attr_size.c  | 69 +++++++++++++++++++
+ 4 files changed, 82 insertions(+), 11 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
 
-Should this include:
-
-  Fixes: 120933984460 ("bpf: Implement mprog API on top of existing cgroup progs")
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26699503418
---===============2073181152847420204==--
+-- 
+2.54.0.823.g6e5bcc1fc9-goog
