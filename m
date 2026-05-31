@@ -1,198 +1,133 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A8C3242BA
-	for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 09:18:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE783242BA;
+	Sun, 31 May 2026 09:28:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780219136; cv=none; b=iydIqnj2WuenxNHWYC9uhPvNMlMmKBulTXbp3l1hHOJiG+gKhiYilisReW7Dx4mPl66uSGTpr7NnVMiUW9QuDF5UDe19TVvlCBkxz4g4apC67gWFXxaRn+wUXHQndYJ/nDtTdS4j1PoWdlV5IsKTxYJPzUXqL/xHx25K2bmbGzA=
+	t=1780219736; cv=none; b=Shd2jK77ot3uXeAVrtpucSyGn5as2wxAD8a/30AzbjfPFKejQrDlnd63zWIxE0IHNhiJlDnfcGAgvulcJyW7Q1mk8fIkrME+5+zwBQbswp+VPNH7HzQZEeBPhRdJndp80sTmcaFKSY/Y0mVep0CsVEm4Rj9nmOyjwma7Snht87A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780219136; c=relaxed/simple;
-	bh=K7fPXFVb/QyWPKkk4TLfB8mj0H/k+VRiTVXBTBDszzg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uh9jRBJDhxOYYgF/WyxypBZBfoEJoNxNHzwY72fDA9BROwuvCWDBhw4oOsD/nolHHUdrSelKWmmcEVQi+FbKZhWnKUvZajNAl4xL4YkOh0gGiDxHDBKrWWaAi2mxnqvAgJC+mEnciNeWE/Dpqp40ffvoXooMJC/n5q7BKatVhE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=d/8f+0uD; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780219736; c=relaxed/simple;
+	bh=mpvZfsQeHvn569z1As7CtJtrMrjCYL/bEmdkPJGN0E8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V3moXmnGWgNklNz/PUEfXtrE08wdIqsRf1W4p9aJZ3qeuHpMAkhBSlAhFeMZU3riMXUhcJqa+2jF+6WsmSs8r7pkFABBrWu+JHvoyTX/lgY4Rcc3hsVSUfYnA2ZmQOYTm72jykc7QIctglvoJGHp+d9xyjEw+MfwJm2aCgJlw74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rez7EVFp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="d/8f+0uD"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780219132;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8c73Z4hv4/CKJDxP9kzFzTdfkG52gPQ/Jrnw7LzjDMA=;
-	b=d/8f+0uDwWbuA3X2xfmvYnMbg88VKE4FnjOauxKjCUiH21hyn6XWVRe28ZzBcULUMhnI95
-	MSvEvnYnZ11oH4Y0IjNo3bpC6RfZk7ULP/BMs78ATeJrapyBUy/buk4VDbQOOWI8w6coXx
-	ezbTEVjV1c9HKP7hPs0O80h5/e8ODQg=
-From: Kunwu Chan <kunwu.chan@linux.dev>
-To: sj@kernel.org,
-	shuah@kernel.org
-Cc: damon@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	Kunwu Chan <kunwu.chan@gmail.com>,
-	Wang Lian <lianux.mm@gmail.com>,
-	Kunwu Chan <chentao@kylinos.cn>
-Subject: [PATCH 5/5] selftests/damon: fix dead code, skipped checks, and broken lookups
-Date: Sun, 31 May 2026 17:17:24 +0800
-Message-ID: <20260531091724.84381-5-kunwu.chan@linux.dev>
-In-Reply-To: <20260531091724.84381-1-kunwu.chan@linux.dev>
-References: <20260531085633.48626-1-kunwu.chan@linux.dev>
- <20260531091724.84381-1-kunwu.chan@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rez7EVFp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF0A11F00893;
+	Sun, 31 May 2026 09:28:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780219735;
+	bh=sKVLCLu8XTfsvb4XdRoPm7KvsQtWzPp56I8MFy8zhao=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Rez7EVFpovoH5ATL25xVJfV9kmDIZar9McePukksCWV9f6z3A32X4rp/Miehff7Pu
+	 pSh6vOduka57MCJpt/oqUNBbev7WkZ5mUBS0z3YjxCJ+35wmJDqb3J8CGYMuup9CyX
+	 RW3OhrJVLdjgyVZqAD6WN68jTQ2yPuTvwRu3G2tA5TrCR0kPk9trY3R4kZ1Xj5jGJc
+	 Jd0iGSgxC68WFOdG3BFEzZ9IK9qw7cLjJ3CBAMzBGNbAuJ2ynJO1HTugu1aLHbuHTu
+	 HBjZu/5dhv30F1d9FKs5DpoYZRJMKkKwAAyr8947gK76H1CPrR+CsHX00AZJ1MBpbD
+	 hm+oilmW9WQTA==
+Date: Sun, 31 May 2026 12:28:47 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: George Guo <dongtai.guo@linux.dev>
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pratyush Yadav <pratyush@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>, Alexander Graf <graf@amazon.com>,
+	loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+	kexec@lists.infradead.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, George Guo <guodongtai@kylinos.cn>
+Subject: Re:
+Message-ID: <ahv_T6WwFEysgIeg@kernel.org>
+References: <20260529143238.169169-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260529143238.169169-1-dongtai.guo@linux.dev>
 
-From: Kunwu Chan <kunwu.chan@gmail.com>
+Hi,
 
-'hugeapge_size' in drgn_dump_damon_status.py was a dead elif branch.
-$fail_reason in sysfs.sh was undefined, silently emptying the error
-message.  'exit' instead of 'exist' in sysfs.sh skipped a file
-existence check.  'nohugeapge' in sysfs.py broke an action dict
-lookup.
+On Fri, May 29, 2026 at 10:32:34PM +0800, George Guo wrote:
+> From: George Guo <guodongtai@kylinos.cn>
+> 
+> WARNING: Prefer a maximum 75 chars per line (possible unwrapped commit description?)
+> #26: 
+> containing only /chosen with the two KHO properties.  Since DEVICE_TREE_GUID
+> 
+> ERROR: Invalid commit separator - some tools may have problems applying this
+> #34: 
+> -------------------------------
+> 
+> total: 2 errors, 1 warnings, 0 lines checked
 
-Fix other wrong strings in the same files.
+I believe something went wrong with sending the emails :)
 
-Co-developed-by: Wang Lian <lianux.mm@gmail.com>
-Signed-off-by: Wang Lian <lianux.mm@gmail.com>
-Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
----
- tools/testing/selftests/damon/_damon_sysfs.py               | 2 +-
- tools/testing/selftests/damon/damos_apply_interval.py       | 2 +-
- tools/testing/selftests/damon/damos_quota_goal.py           | 2 +-
- tools/testing/selftests/damon/drgn_dump_damon_status.py     | 2 +-
- tools/testing/selftests/damon/sysfs.py                      | 4 ++--
- tools/testing/selftests/damon/sysfs.sh                      | 6 +++---
- .../sysfs_update_schemes_tried_regions_wss_estimation.py    | 2 +-
- 7 files changed, 10 insertions(+), 10 deletions(-)
+Please include changes from revision to revision in the cover letter next
+time.
 
-diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
-index 006c92a76ebe..c197ab99bcc0 100644
---- a/tools/testing/selftests/damon/_damon_sysfs.py
-+++ b/tools/testing/selftests/damon/_damon_sysfs.py
-@@ -837,7 +837,7 @@ class Kdamond:
-                 for goal in scheme.quota.goals:
-                     err = goal.stage()
-                     if err is not None:
--                        print('commit_schemes_quota_goals failed stagign: %s'%
-+                        print('commit_schemes_quota_goals failed staging: %s'%
-                               err)
-                         exit(1)
-         return write_file(os.path.join(self.sysfs_dir(), 'state'),
-diff --git a/tools/testing/selftests/damon/damos_apply_interval.py b/tools/testing/selftests/damon/damos_apply_interval.py
-index f04d43702481..0f2f36584e48 100755
---- a/tools/testing/selftests/damon/damos_apply_interval.py
-+++ b/tools/testing/selftests/damon/damos_apply_interval.py
-@@ -56,7 +56,7 @@ def main():
-     # Because the second scheme was having the apply interval that is ten times
-     # lower than that of the first scheme, the second scheme should be tried
-     # about ten times more frequently than the first scheme.  For possible
--    # timing errors, check if it was at least nine times more freuqnetly tried.
-+    # timing errors, check if it was at least nine times more frequently tried.
-     ratio = nr_tried_stats[1] / nr_tried_stats[0]
-     if ratio < 9:
-         print('%d / %d = %f (< 9)' %
-diff --git a/tools/testing/selftests/damon/damos_quota_goal.py b/tools/testing/selftests/damon/damos_quota_goal.py
-index f76e0412b564..661e4ba4765a 100755
---- a/tools/testing/selftests/damon/damos_quota_goal.py
-+++ b/tools/testing/selftests/damon/damos_quota_goal.py
-@@ -66,7 +66,7 @@ def main():
-             # effective quota was already minimum that cannot be more reduced
-             if expect_increase is False and last_effective_bytes == 1:
-                 continue
--            print('efective bytes not changed: %d' % goal.effective_bytes)
-+            print('effective bytes not changed: %d' % goal.effective_bytes)
-             exit(1)
+You also may want to consider using b4 prep/send for sending the patches.
+
+> >
+> Date: Fri, 29 May 2026 21:54:01 +0800
+> Subject: [PATCH v2 0/4] LoongArch: add KHO support and selftests
+> 
+> This series adds Kexec Handover (KHO) support for LoongArch and extends
+> the KHO selftest infrastructure to run on LoongArch under QEMU.
+> 
+> KHO passes metadata (the KHO state FDT and scratch area addresses) to the
+> second kernel via the FDT /chosen node, using the linux,kho-fdt and
+> linux,kho-scratch properties that drivers/of/kexec.c:kho_add_chosen()
+> writes and drivers/of/fdt.c:early_init_dt_check_kho() reads.
+> 
+> Selftest support (patches 3-4):
+> 
+> Patch 3 adds loongarch.conf and extends vmtest.sh to recognise loongarch64
+> as a build target.  The LoongArch virt machine is FDT-only (no ACPI), so
+> 'earlycon' must appear on the kernel cmdline or the console UART is never
+> discovered.  PS/2 input devices are also disabled since QEMU's LoongArch
+> virt machine has no i8042 controller; the fallback port probe hits a page
+> fault and panics before reaching userspace.
+
+Patch 3 should not introduce regressions
  
-         increased = last_effective_bytes < goal.effective_bytes
-diff --git a/tools/testing/selftests/damon/drgn_dump_damon_status.py b/tools/testing/selftests/damon/drgn_dump_damon_status.py
-index 972948e6215f..26b207e44268 100755
---- a/tools/testing/selftests/damon/drgn_dump_damon_status.py
-+++ b/tools/testing/selftests/damon/drgn_dump_damon_status.py
-@@ -163,7 +163,7 @@ def damos_filter_to_dict(damos_filter):
-                                int(damos_filter.addr_range.end)]
-     elif type_ == 'target':
-         dict_['target_idx'] = int(damos_filter.target_idx)
--    elif type_ == 'hugeapge_size':
-+    elif type_ == 'hugepage_size':
-         dict_['sz_range'] = [int(damos_filter.sz_range.min),
-                              int(damos_filter.sz_range.max)]
-     return dict_
-diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-index aa03a1187489..99412f0d31f3 100755
---- a/tools/testing/selftests/damon/sysfs.py
-+++ b/tools/testing/selftests/damon/sysfs.py
-@@ -119,7 +119,7 @@ def assert_access_pattern_committed(pattern, dump):
-                 'max_nr_accesses', dump)
-     assert_true(dump['min_age_region'] == pattern.age[0], 'min_age_region',
-                 dump)
--    assert_true(dump['max_age_region'] == pattern.age[1], 'miaxage_region',
-+    assert_true(dump['max_age_region'] == pattern.age[1], 'max_age_region',
-                 dump)
+> Patch 4 handles QEMU not exiting after kexec on LoongArch.  QEMU provides
+> no EFI runtime services, so machine_restart() falls through to an infinite
+> idle loop.  QEMU_NEEDS_KILL=1 in loongarch.conf signals vmtest.sh to run
+> QEMU in the background, poll the serial output for the test verdict, and
+> kill QEMU once it appears, so the test completes unattended.
+
+And patch 4 should be folded into patch 3.
+As I said during v1 review, the whole wait and kill loop can be replaced
+with 'timeout' command which does not need to be specific for LoongArch.
+The actual timeout value might, though.
+
+Will wait for v3 for more detailed review.
  
- def assert_scheme_committed(scheme, dump):
-@@ -129,7 +129,7 @@ def assert_scheme_committed(scheme, dump):
-             'cold': 1,
-             'pageout': 2,
-             'hugepage': 3,
--            'nohugeapge': 4,
-+            'nohugepage': 4,
-             'collapse': 5,
-             'lru_prio': 6,
-             'lru_deprio': 7,
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-index 78f4badb5beb..2eaaa5ae3c5e 100755
---- a/tools/testing/selftests/damon/sysfs.sh
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -3,7 +3,7 @@
- 
- source _common.sh
- 
--# Kselftest frmework requirement - SKIP code is 4.
-+# Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
- 
- ensure_write_succ()
-@@ -28,7 +28,7 @@ ensure_write_fail()
- 
- 	if (echo "$content" > "$file") 2> /dev/null
- 	then
--		echo "writing $content to $file succeed ($fail_reason)"
-+		echo "writing $content to $file succeeded ($reason)"
- 		echo "expected failure because $reason"
- 		exit 1
- 	fi
-@@ -363,7 +363,7 @@ test_context()
- {
- 	context_dir=$1
- 	ensure_dir "$context_dir" "exist"
--	ensure_file "$context_dir/avail_operations" "exit" 400
-+	ensure_file "$context_dir/avail_operations" "exist" 400
- 	ensure_file "$context_dir/operations" "exist" 600
- 	ensure_file "$context_dir/addr_unit" "exist" 600
- 	ensure_file "$context_dir/pause" "exist" 600
-diff --git a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-index 35c724a63f6c..16fdc6e7fc56 100755
---- a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-+++ b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-@@ -7,7 +7,7 @@ import time
- import _damon_sysfs
- 
- def pass_wss_estimation(sz_region):
--    # access two regions of given size, 2 seocnds per each region
-+    # access two regions of given size, 2 seconds per each region
-     proc = subprocess.Popen(
-             ['./access_memory', '2', '%d' % sz_region, '2000', 'repeat'])
-     kdamonds = _damon_sysfs.Kdamonds([_damon_sysfs.Kdamond(
+> George Guo (4):
+>   LoongArch: kexec: add KHO support for FDT-based systems
+>   LoongArch: kexec: add KHO support for ACPI-only systems
+>   selftests/kho: add LoongArch vmtest support
+>   selftests/kho: handle QEMU not exiting after kexec on LoongArch
+> 
+>  arch/loongarch/Kconfig                     |   3 +
+>  arch/loongarch/include/asm/kexec.h         |   7 +
+>  arch/loongarch/kernel/machine_kexec.c      |  38 +++
+>  arch/loongarch/kernel/machine_kexec_file.c | 256 +++++++++++++++++++++
+>  arch/loongarch/kernel/setup.c              |  21 +-
+>  tools/testing/selftests/kho/loongarch.conf |  13 ++
+>  tools/testing/selftests/kho/vmtest.sh      |  35 ++-
+>  7 files changed, 365 insertions(+), 8 deletions(-)
+>  create mode 100644 tools/testing/selftests/kho/loongarch.conf
+> 
+> -- 
+> 2.25.1
+> 
+> 
+
 -- 
-2.43.0
-
+Sincerely yours,
+Mike.
