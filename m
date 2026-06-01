@@ -1,63 +1,63 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D70388E63
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 08:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A52F38D3E2
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 08:44:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780303454; cv=none; b=RUq44EsU+V2yn5T1U17f6u3/neaFJrOjxhpOIKv5R+fVvBY6DPL1uqNWlOn0Egho9RwyWAH4iHGtiVk+M3Un0OCrbGTIndzrPV3fuAVE2Xoh29+dAUXlr1Y/0BZp9mLCGv5P9RDZMrHWJrd279kFADJ7UhFEot9xCowuLS/egMc=
+	t=1780303456; cv=none; b=rUwxMwGmHlIeUAY4AGu9f0lLPNBk7sQgwusuVUE9UcHp147W+LdgF4o83qDfFlAQNaRNParIQM7N+1DLCsVRWfS9YrDcj1+hjeYeMwYk1j6vVGSNBpv1ZC5ZjWTuOrZQvs/XmN3odbNM14a1mvt2H2IM1+JMZx+BfbfdUKmKSqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780303454; c=relaxed/simple;
-	bh=mkUN0v4wN8ccInklomw+u0PqoFI3IrpqBi/5VrkxjsE=;
+	s=arc-20240116; t=1780303456; c=relaxed/simple;
+	bh=CATGD4oGrzQh1/EsHsvVFO8RwSsQAdGWsawSj+YcGoI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=befZNIosIEoD8zxZRoIlMYoCFFJVVbVl3fm9l7rmv/dVrcPu+ZyZABH2eTy5yAMJOaKd+6mSwQd0/ZhLbe9DDm5VcQZ/V/ibUvRCUwJJTwqyMIvbALTzfMCHKrwDpHW8FEg7n5KZAHaVCoQF3388Z0nEk9OT4QsRfZ0y2rMb4Z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FFXASw9V; arc=none smtp.client-ip=209.85.214.175
+	 MIME-Version; b=h8QgKkJxQinfSXo9W7hsQe0Pkmz26h30CKbcuHP0yVHQmflN28K9Csi9QMEqXaqNb2mhEgbLb52SjNiE0TlmTIpQaLVRoOSdBoDbx6fGuKmnx0G2KHXBK2QQ7zAiTvmubM9Xe20KGtF3bKl5Wt9nHX2CV8wZo1Ost1JRruUf7DI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fgvdr/qd; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FFXASw9V"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2c0c2a68d01so6961105ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 01:44:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fgvdr/qd"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2bf30d530bdso24807605ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 01:44:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780303448; x=1780908248; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780303452; x=1780908252; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EmdSZ4nBLUBMfkWYeMqXhgmIblXvsbFhjdlvAKdM29c=;
-        b=FFXASw9VfTj6IyEFGTjyGbRJ1H5Ac9jM4tm3YZeGAe65x61h5Jw0JpWsOIsY0KXnWe
-         eCNJ6eGg8GFIqVBbCnAUvjRYWaYhrRMrAH2HpV6KIsFQiaw3RzJz8qQ9CC1EZzGkBSV+
-         YCJ6t5Y/DIEal/ihropjnagPuFx3xvbpossdgD33763VoZpwlTb7TBAU7U22rnEosbYB
-         hc8tQA3TiUe66GTfVXbP8119/4APPxrQrjnAM3kd1DCwBKe1Chre2E/32wBFSRk+USym
-         V0mXqDgEluKFQgrfZPoNu8bHEBZLRkZBy0i2RJ8+5iXNgRTJsAED5ws4k4jUXAJ5fOHk
-         eWeA==
+        bh=6RmuO/Bh/pyYNP3lYnfVLduBl3NGvkZrBTGIwUHKLT0=;
+        b=Fgvdr/qduOaN2q0nr7nHzDMUatg7H3zZrCitT7tDVsVs7ktgDgakNxrrCSaTstJhmD
+         4yfdVtJXoM2ow8G6tvFpXXOo4rM3q9NgwnZ/7minPSSWOrD3CpWK4HaXnY4uV5RwLS1V
+         Ck0mpH5XpdkqA9LoybifKm8q3GwLT36mwZq9ZzE6OZ4iuiYkaXj8F4PYrbPIblhiSIP4
+         ql5Tg9GxpA6XGJrJrm7Yug50sCMQhsv4NNlAfFR6nAg4hXbfpPSAub/L6PZpBLEeV97V
+         IXKAblVsqQZgsnt02ZM8FdXhuDMV3TWe21Uvovp6rvsuFaksGJ5RKpG2s04azMeVz9+N
+         zhaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780303448; x=1780908248;
+        d=1e100.net; s=20251104; t=1780303452; x=1780908252;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=EmdSZ4nBLUBMfkWYeMqXhgmIblXvsbFhjdlvAKdM29c=;
-        b=Iaqun2Y7iSMcwU7LnSwJS+k/4Ttn/bPoUjU8mgMfrESF5u2aJ64PQLuxhZfhFebmQ1
-         W2aNGUUsLlGSOLfxkjpyFIAA53UmhLtJcD/rtch3NQuiYSBMbqm3X+b3kktnJSBjADmC
-         fe5bbfBzJCosASCLQYRIrWNz3T2aPNfS1QuB8hDnrabOXiAZVmft4YnAjMzwFo/TnjCU
-         p0FV+yfxJ+IDWs0qcqhOrHBp9gpME2gu4FOqMbVWttsSkfakqrvYMDxD38CZopB13enj
-         cvRdGZN2KyAq39Ikcp2oTrEY3YkXzcWQCCtwMJe0U9Rxv8FNb0en2+j+i4OSUFsjdpBS
-         BG+Q==
-X-Forwarded-Encrypted: i=1; AFNElJ9C1or6VDVD4FR4ivYUlKHSxTCtiJlodItUAV6i9oLNcI41QaruEHcoVQFui5/EFSQzkyAOdtqaBTcjsPPljQs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YziP8L1Zcs5zXjucYlEB9jho8o8HCvolCGxPAZ9ab0DkR40Q8bi
-	ACr6+jEp2TgeGPsnwcLkNdhmoSHh78O4xiffQcxBAlo8Wsk915WiBqqA
-X-Gm-Gg: Acq92OH8ws8P0bYkby+LzxlHMrRe3ZjciXGsV5d10A7N3/s5b8um63rGJORVIcfqQhH
-	20Wt+jxbLnfW+J89oa/Ize4kCM0bCS2Vh6800nqqWxBv4hmiDISLNWYKrm1i/Ejm1wPzlFPgSbH
-	59kbs26m3yQl42TcS1AsoZauWytPQdnAm6AxreV+BugMV0vZRj0NogmcjBw2IY26t59gmD2sF9z
-	l/Hb9k+Mu9i/8htFS1bzY2s6BxAKuJrwIYcIo4hVw3AgXBK3WfRP2XbtQlmslDUHlkT3BB27gaf
-	tVdJFMY5fInVA1PyrFVwzoCBPQ3oClquBG/fFHo54bKGrqcRUQmqnhffVCVoOmyeU1QjRtpOn4R
-	psLTYwnVmCkMwoypLaJzqhyXan/bNggKlNuGExcoKk5J94CyBfMEuw3PE0b5pgHjokxgOYH2p1g
-	bxuPuvDuzhfUJNExXjBFW9HEoPoHl89T0YVw==
-X-Received: by 2002:a17:903:3585:b0:2b0:b016:773f with SMTP id d9443c01a7336-2bf367c21a9mr124575685ad.11.1780303448528;
-        Mon, 01 Jun 2026 01:44:08 -0700 (PDT)
+        bh=6RmuO/Bh/pyYNP3lYnfVLduBl3NGvkZrBTGIwUHKLT0=;
+        b=HCND371Yi+GxcsjQuHneZw1psavWRogrxIl+yL60A1gpLCblzX8QBkNQC8ZYn0Hc4H
+         qS9QJ5kP8700gwwWdrJ8bBKrEAs9qD3v2LjVLzcoEAHcDE7Uj0UPzUt/wPPcAL3xYyev
+         L44ynEUiJ3K6U940RVOA4Qnrf1iSYKuEu8Z/BP6rVOOB+M3J7InSXH9BZLyRvk21oDeQ
+         xca61PzM2xvyIEj4Opb2IpoTIz4UjyaBA4U9g0zPLdeLG4/OkHGyets1qz1TbC5Tl7tP
+         VCDN0OF8UDy7EKa9+jTlYs8+gmqB1wvFZu1js0cWit3zR33tY3gNpECpiJ9/UeV0fCN2
+         UwPQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9ofcgaRZwsml4rTNmuA18RHTYuH1t39DkDEgc+EhxHc0nu+HuZG6KX+gQQg2akifDxTTcxj/pmIDk8XS9ugrc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyvad4+GkWD53STtJpRYgUC2QcUIbbXMUaQIQcqAnxR40ebTtwL
+	5mrCeM0TtP6D7X2YBsW2eLlWwvnzGtUy2Qh2UCsnrtFUSt8nnUfkawjhcX/NqLt/
+X-Gm-Gg: Acq92OGUUyBHKL+pkBU/CWXATVFCRwWCpruDDwsmineopx9ES68fsCVVVPomdqbN2Tx
+	4whk1Az6IsVlNmuvS+CTXcr8LxL4Ai+UzX36IlH+nAAJ7eau6qdofv9ZmlJZebeqXs1kOjyMOzX
+	uXnOg8G2CU01tAT5zESPyTGyQftWk6mnz7EoIy+Id6JnMqPe+oUHMGjqd5ZNKg/ICfFT+ofcZPF
+	3AkgItTVg/1pBbZ/58YP+uYyngbi5lOlo4+X5GJsbMVC7hymuLQDguo63dJwWhBNlQLyL6EaMT1
+	uPWt2C4zfhL4eKek/1VW5+WRFtzNwNbuTfVisx/zNwaAdFHsrHguVU3xQgt76hWI1KSwuZfq5Dh
+	jjepWo0yYFhidrBHPsEf3THt51DTYcFIoxBL/6gkVWnR+j7l4XAChyYkA69AXNIuZLkL+IgsRNi
+	/YCCd3q8heyJFcEDXff89QezpULjGa0Pdyu7OhlAhUlT92
+X-Received: by 2002:a17:903:41ce:b0:2c0:bcff:e198 with SMTP id d9443c01a7336-2c0bcffe31cmr77989875ad.41.1780303451867;
+        Mon, 01 Jun 2026 01:44:11 -0700 (PDT)
 Received: from localhost ([2001:19f0:8001:1b2d:5400:5ff:fefa:a95d])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf23c43f0asm137898535ad.77.2026.06.01.01.44.07
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf239fd8dbsm101815365ad.21.2026.06.01.01.44.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 01:44:08 -0700 (PDT)
+        Mon, 01 Jun 2026 01:44:11 -0700 (PDT)
 From: Inochi Amaoto <inochiama@gmail.com>
 To: Paul Walmsley <pjw@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -80,9 +80,9 @@ Cc: linux-riscv@lists.infradead.org,
 	Yixun Lan <dlan@gentoo.org>,
 	Longbin Li <looong.bin@gmail.com>,
 	Quan Zhou <zhouquan@iscas.ac.cn>
-Subject: [PATCH v2 4/7] RISC-V: KVM: Allow Zicfiss/Zicfilp extensions for Guest/VM
-Date: Mon,  1 Jun 2026 16:43:32 +0800
-Message-ID: <20260601084336.2601675-5-inochiama@gmail.com>
+Subject: [PATCH v2 5/7] RISC-V: KVM: Handle software-check exits for VCPU
+Date: Mon,  1 Jun 2026 16:43:33 +0800
+Message-ID: <20260601084336.2601675-6-inochiama@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260601084336.2601675-1-inochiama@gmail.com>
 References: <20260601084336.2601675-1-inochiama@gmail.com>
@@ -94,44 +94,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Extend the KVM ISA extension array to allow KVM userspace to
-detect and enable Zicfiss/Zicfilp extensions for Guest/VM.
+The extension Zicfiss/Zicfilp introduces a software-check exception
+to the privilege architecture. Delegate this exception to VS mode so
+the CFI violations in VU/VS could be reported.
 
 Assisted-by: YuanSheng:claude-4.7-opus
 Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
 Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
 Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
 ---
- arch/riscv/include/uapi/asm/kvm.h | 2 ++
- arch/riscv/kvm/isa.c              | 2 ++
- 2 files changed, 4 insertions(+)
+ arch/riscv/include/asm/csr.h | 1 +
+ arch/riscv/kvm/vcpu_config.c | 4 ++++
+ arch/riscv/kvm/vcpu_exit.c   | 3 +++
+ 3 files changed, 8 insertions(+)
 
-diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-index 501e4fc60dd2..9f9c5ababd1e 100644
---- a/arch/riscv/include/uapi/asm/kvm.h
-+++ b/arch/riscv/include/uapi/asm/kvm.h
-@@ -199,6 +199,8 @@ enum KVM_RISCV_ISA_EXT_ID {
- 	KVM_RISCV_ISA_EXT_ZCLSD,
- 	KVM_RISCV_ISA_EXT_ZILSD,
- 	KVM_RISCV_ISA_EXT_ZALASR,
-+	KVM_RISCV_ISA_EXT_ZICFILP,
-+	KVM_RISCV_ISA_EXT_ZICFISS,
- 	KVM_RISCV_ISA_EXT_MAX,
- };
+diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+index 31b8988f4488..224af9facf1f 100644
+--- a/arch/riscv/include/asm/csr.h
++++ b/arch/riscv/include/asm/csr.h
+@@ -117,6 +117,7 @@
+ #define EXC_INST_PAGE_FAULT	12
+ #define EXC_LOAD_PAGE_FAULT	13
+ #define EXC_STORE_PAGE_FAULT	15
++#define EXC_SOFTWARE_CHECK		18
+ #define EXC_INST_GUEST_PAGE_FAULT	20
+ #define EXC_LOAD_GUEST_PAGE_FAULT	21
+ #define EXC_VIRTUAL_INST_FAULT		22
+diff --git a/arch/riscv/kvm/vcpu_config.c b/arch/riscv/kvm/vcpu_config.c
+index b2a1028106d5..dbe4167ac4f1 100644
+--- a/arch/riscv/kvm/vcpu_config.c
++++ b/arch/riscv/kvm/vcpu_config.c
+@@ -65,6 +65,10 @@ void kvm_riscv_vcpu_config_ran_once(struct kvm_vcpu *vcpu)
  
-diff --git a/arch/riscv/kvm/isa.c b/arch/riscv/kvm/isa.c
-index 1132d909cc25..9852a91fdecc 100644
---- a/arch/riscv/kvm/isa.c
-+++ b/arch/riscv/kvm/isa.c
-@@ -65,6 +65,8 @@ static const unsigned long kvm_isa_ext_arr[] = {
- 	KVM_ISA_EXT_ARR(ZICBOP),
- 	KVM_ISA_EXT_ARR(ZICBOZ),
- 	KVM_ISA_EXT_ARR(ZICCRSE),
-+	KVM_ISA_EXT_ARR(ZICFILP),
-+	KVM_ISA_EXT_ARR(ZICFISS),
- 	KVM_ISA_EXT_ARR(ZICNTR),
- 	KVM_ISA_EXT_ARR(ZICOND),
- 	KVM_ISA_EXT_ARR(ZICSR),
+ 	if (vcpu->guest_debug)
+ 		cfg->hedeleg &= ~BIT(EXC_BREAKPOINT);
++
++	if (riscv_isa_extension_available(isa, ZICFILP) ||
++	    riscv_isa_extension_available(isa, ZICFISS))
++		cfg->hedeleg |= BIT(EXC_SOFTWARE_CHECK);
+ }
+ 
+ void kvm_riscv_vcpu_config_load(struct kvm_vcpu *vcpu)
+diff --git a/arch/riscv/kvm/vcpu_exit.c b/arch/riscv/kvm/vcpu_exit.c
+index 0bb0c51e3c89..5ab8e87ed248 100644
+--- a/arch/riscv/kvm/vcpu_exit.c
++++ b/arch/riscv/kvm/vcpu_exit.c
+@@ -243,6 +243,9 @@ int kvm_riscv_vcpu_exit(struct kvm_vcpu *vcpu, struct kvm_run *run,
+ 		run->exit_reason = KVM_EXIT_DEBUG;
+ 		ret = 0;
+ 		break;
++	case EXC_SOFTWARE_CHECK:
++		ret = vcpu_redirect(vcpu, trap);
++		break;
+ 	default:
+ 		break;
+ 	}
 -- 
 2.54.0
 
