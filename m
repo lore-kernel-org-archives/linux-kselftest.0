@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6EB1F0991;
-	Mon,  1 Jun 2026 05:24:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E35833F5A5;
+	Mon,  1 Jun 2026 05:24:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780291482; cv=none; b=QvANGBlt6h7H1B8V9o2onoboiO1b/UHNAnHgq9SqXEJDDaJjyGy0DgrD7yWAeZdaFjg28XhlXyeDSYlevEiJq5Ljrsa66wDlQyWZHb/e2gAb600Le37dceBeBa30SJf9aIcCpfOEWL5wgWjIiQ1uSPTaWPmQh5nGv1uUvvNvrKc=
+	t=1780291500; cv=none; b=J+DGHcUEaHTmU7RYKytl2VT06G5t5G3a47sHduCOVDWX/HIFNRXUumOV15Y5rAz4AkFyWiWHGO1UiPNn1JZo22xAL4Vus/8k0Zka7I5bJGKikbkIBXipAfSyc5YkbdCII96b8skR555KlDG9qos9+wEM0r+YxwjMBtTeXWRN7m8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780291482; c=relaxed/simple;
-	bh=HahcD1u1+FojtaEhXSSKdWBmlAsj5fU+MU7PgwzYArE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hBpsPwgrAVLEs1vNRSyATuvObOx3fO8F6MUGJvlLLgxHvtZqaFwMHN60n3nYH5bUCYw5VocjFZruaDGEpLWmzj4Otmdp3paA8iv9dZ3peR3FIg0A9SLMuucgVCyLxGUlWNVHifl5maeRrWvpY5kS12A9JMOZIQ+WljsKkbXSxq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X6gsa/B3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780291500; c=relaxed/simple;
+	bh=ryR1USqxZj75x5uYl7635eoJrAMhaCO5hEkGGfuxiUw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=KVLhTpCXCajvbTVT9B4goqKJXjXiWApJ202s4qmoF/ehGw33jHZ8PT+6Uw2cQXYKPkwFT0SjzS3c3vchP+NH9r3Gh4bLLQ4WQaDw8s3BRHxE8hgJdQ3HRXKeprErsEm7ZkYNBEm1fnAj05FUNmGgKn99dhChHwJV3VMkTn7OowE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IRFx57/2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X6gsa/B3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C5E1F00893;
-	Mon,  1 Jun 2026 05:24:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IRFx57/2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E82B1F00898;
+	Mon,  1 Jun 2026 05:24:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780291481;
-	bh=RNBCl095uTrDn/8o8UiadOiayG3gB724BCnI+j/g8pY=;
-	h=From:Subject:Date:To:Cc;
-	b=X6gsa/B3KeGw4TcoWfvdwjFBDcdMSRqMYfaSfXDcEjV9iPGPuT7t01ZKpAPem1SqM
-	 q/KSICCKW9qzS2UvL96USjSZWqTOLwFOKy5JKjFE/9qPMz0yKwreULpw0KRI29Yo4W
-	 8/xQMcIrR3AHoBK6D+qqZKK+5rOj+95hwfDUgtG925GZeSzvUShxXykq2RgVQVVG3x
-	 F7NpFmeFkojkNJw4zNVhEVHJsOYonuYLNl349czAkyZ+HuW/6NF+4OVWyijFtWd8vx
-	 6OR/LnYMvBpmhroyHC2GyWvnV16zzXG0l4Dzv/pxSPjsmmw+t8yHXmbVCukRbO0C8p
-	 Dltf6t0TmMeJg==
+	s=k20260515; t=1780291498;
+	bh=nHQ25U4bEkOBE82ITW6DfiX75k6gpoBg22fDsTWZBgA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=IRFx57/2F21pQU0yWj+xLRckoUuLFdPeof0MnIqX+hTkLtEgkPTZV6s1dB0s8c6bz
+	 2Qh+MWDRIi79n55prEsX52+ZRtNAZuQHow0vmB9WpizTrU7a1oGIz/Ju2XBXr+AAhW
+	 KBqUVp8wj9ovD6WvOp8lmGA3m9TJLHarPyTeVcA9JGwXKNRwa/6DU9Ot4GAGGXa77A
+	 bW/rQOACX7i+1p0keulfud36AbtCcwzHZVwmjhwFCzzrji58grUBLBqEIrEslRI4TE
+	 WBGHupVp8ydXoHgIKvfSu7eRV/6RWMi9VGut5aF3frOTs2sqkdqnCecQFBndLZEc+C
+	 5B71UoCHofmIw==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net-next 00/11] mptcp: pm: drop TCP TS with ADD_ADDRv6 +
- port
-Date: Mon, 01 Jun 2026 15:22:07 +1000
-Message-Id: <20260601-net-next-mptcp-add-addr6-port-ts-v1-0-4fc25dfef62e@kernel.org>
+Date: Mon, 01 Jun 2026 15:22:11 +1000
+Subject: [PATCH net-next 04/11] mptcp: introduce add_addr_v6_port_drop_ts
+ sysctl knob
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,10 +38,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/zWNwQrCMBBEf6Xs2YVtKLH4K+KhZte6gmlItlIo/
- XdTpYc5PIaZt0KRrFLg0qyQ5aNFp1ihPTUQnkMcBZUrgyPnyVOLUaxmMXwnCwkH5j3ZY5qyoRX
- siHs+d9yLI6g3KctDl5/iCscabv+mzPeXBNsNsG1fihrAkY4AAAA=
-X-Change-ID: 20260601-net-next-mptcp-add-addr6-port-ts-40d8d74d8e20
+Message-Id: <20260601-net-next-mptcp-add-addr6-port-ts-v1-4-4fc25dfef62e@kernel.org>
+References: <20260601-net-next-mptcp-add-addr6-port-ts-v1-0-4fc25dfef62e@kernel.org>
+In-Reply-To: <20260601-net-next-mptcp-add-addr6-port-ts-v1-0-4fc25dfef62e@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -49,78 +48,162 @@ To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
 Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
  linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
- Shuah Khan <shuah@kernel.org>
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2531; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=HahcD1u1+FojtaEhXSSKdWBmlAsj5fU+MU7PgwzYArE=;
- b=kA0DAAgB9reCT0JpoHMByyZiAGodF5KixVMUi7zgzg5pDB4kpR979DGvbvj1bLpWbETBtMreQ
- IkCMwQAAQgAHRYhBOjLhfdodwV6bif3eva3gk9CaaBzBQJqHReSAAoJEPa3gk9CaaBzp1wQAN2J
- cXW6VW0+fHcK/4T5kxA4BU08U/53LNs5nUgJp6JdixiQxuqHKMLtf5vhdaQQPKsHDp1RXeuEdPB
- eQSo15caInFbDw/C+9DlJ2PEyYhM2PsJg9nqRgEfH5GxgZgfV1g/ePmJcI6edQd1BEbv5VBr5rC
- guLyHvy/4WG0Tg8BBVTj+sarKErPkzL0019V55LWzZyjyz4x63WAlIlBx4+eH7QcFLyBcyOhDT2
- pCTn8CbYXqGBQx2JHbxA/H5tNkOxTvXWbSQ29vMQbiRSvkXcpIJLi5VkaBHej61gEzgDfi3awPd
- TAo9IEo4wFJNcAFPa7lwVmiWf0T32lkJTyGAgpaXZAoqAAPWtBiih7OD6Tok0cdkAU5HkvSIpHO
- 5YvTZhVvKl1+j38the3CNbAgc3N+Kj75UqO5SWT0XlWzo7iKa/PjNXpmjd0XRfQVrbiizZtV3EP
- ZHRKe4/oku9Z8IXfKd3n50nPD0yY9MmCL1NmF4Nz7fJjqQnp8SfvIKfl0ek3sGaVCHFWzE6x1rX
- 8Ih/tJiuPbOzGgK0i0oK0FdZ/duoqhjzhad9uqeGCr2Qb8f/FZaOsgJ1oVWai+J0xESmHF6R2WZ
- MnKlLKXq+uILk/nAmY+YGQxTaJn8BR8dA+6BjsHZJmM05QpBquwVc0l78ku0Gj4gLD55G1oReLH
- /9HCN
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5655; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=ryR1USqxZj75x5uYl7635eoJrAMhaCO5hEkGGfuxiUw=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBqHReS3b5XNU6mBMT2uZmcUhCkBDOIqQ42djrJ4
+ RiNIqfDNyqJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCah0XkgAKCRD2t4JPQmmg
+ c0kBD/9EaO9VOn7sWqjyRodm9CfFNlXRaQK9Kl4em3Tu7Lyku9xAYkT5KEswS6eO4YN6zEdmy1K
+ JiDdLfCSrD3/JGCeSivVdOyBnqnk3w9gfqY3za0GAN5uSqArEiBoXiDgLnjfmNSl3n2HT7HiQw1
+ EAP/pjXaW+TtE5M7MHMXn68v+JVwfRZ+eihhGcGXr9Lkdv/mlgL1dcG3RyreU++kzVkxlnPEQ7t
+ 9Qq8axTDqfWTdu18eWHDzDgsX5M6inFk1KjjZZTpDTDQ7QQE+n4yZILEIoXvt9swDNrJCDN2WdD
+ JItQOBAj+1C35Ct5/Yg6m2TPAXHsKew3+COJUf7zJ2Irwoq9ozoZRNZok3DAHrUW8t09DWCLw/G
+ myBwruYQvy8mb38IaH6u536ERSRxCVqZsc83vCuhJ1T/NM/QeTKOuiJM/xmJshilmdiQUu1A5Kg
+ sQQ0TYjNjjKyQTre7RzPDGxTmKfgBseCrHheczfEF2V0M6jmgXrBdVAuveEt8fRH2FLUqbU2VXK
+ eUHLemnw+ynDn9SuaugK5IPLA+nUtm7d730gmNRwQqjClMSR7YKQrVJrABzQQ17IIlvviuBiwix
+ DGcRFq1AIeDcjKYOoFT9FPpHi2X9Bnq8gXSJuCXEazsyPeEfPkNm4wZPv7R9pLnuqqjVej5rhl0
+ KUTqBpWCklJe9dQ==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Up to this series, it was possible to add a "signal" MPTCP endpoint with
-an IPv6 address and a port, or to directly request to send an ADD_ADDR
-with a v6 address and a port, but the expected ADD_ADDR wasn't sent when
-TCP timestamps was used for the connection.
+This sysctl is going to be used in the next commits to drop TCP
+timestamps option, to be able to send an ADD_ADDR with a v6 IP address
+and a port number. It is enabled by default.
 
-In fact, such signalling option cannot be sent when TCP timestamps is
-used due to a lack of option space: the limit is at 40 bytes, and, with
-padding, TCP timestamps is taking 12 bytes, while an ADD_ADDR IPv6 +
-port is taking 30 bytes. The selected solution here is to simply drop
-the TCP timestamps option when such ADD_ADDR of 30 bytes needs to be
-sent.
+This knob is explicitly disabled in the MPTCP Join selftest, with the
+"signal addr list progresses after tx drop" subtest, to continue
+verifying the previous behaviour where the ADD_ADDR is not sent due to a
+lack of space.
 
-- Patches 1-3: small cleanups to avoid computing ADD/RM_ADDR twice.
+While at it, move syn_retrans_before_tcp_fallback down from struct
+mptcp_pernet, to avoid creating another 3 bytes hole.
 
-- Patches 4-7: the new feature, controlled by a new sysctl knob.
-
-- Patch 8: extra checks in the MPTCP Join selftests.
-
-- Patches 9-11: small pcap-related improvements in the selftests.
-
+Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Matthieu Baerts (NGI0) (11):
-      mptcp: options: suboptions sizes can be negative
-      mptcp: pm: avoid computing rm_addr size twice
-      mptcp: pm: avoid computing add_addr size twice
-      mptcp: introduce add_addr_v6_port_drop_ts sysctl knob
-      tcp: allow mptcp to drop TS for some packets
-      mptcp: pm: drop TCP TS with ADD_ADDRv6 + port
-      selftests: mptcp: validate ADD_ADDRv6 + TS + port
-      selftests: mptcp: always check sent/dropped ADD_ADDRs
-      selftests: mptcp: connect: test name in pcap file
-      selftests: mptcp: simult_flow: test name in pcap file
-      selftests: mptcp: pcap: drop most of the payload
-
- Documentation/networking/mptcp-sysctl.rst          | 13 ++++
- include/net/mptcp.h                                |  3 +-
- net/ipv4/tcp_output.c                              |  6 +-
- net/mptcp/ctrl.c                                   | 18 ++++-
- net/mptcp/options.c                                | 64 ++++++----------
- net/mptcp/pm.c                                     | 49 +++++++++++--
- net/mptcp/protocol.h                               | 30 +-------
- tools/testing/selftests/net/mptcp/mptcp_connect.sh |  8 +-
- tools/testing/selftests/net/mptcp/mptcp_join.sh    | 85 ++++++++++------------
- tools/testing/selftests/net/mptcp/simult_flows.sh  | 11 ++-
- 10 files changed, 159 insertions(+), 128 deletions(-)
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
 ---
-base-commit: 8415598365503ced2e3d019491b0a2756c85c494
-change-id: 20260601-net-next-mptcp-add-addr6-port-ts-40d8d74d8e20
+ Documentation/networking/mptcp-sysctl.rst       | 13 +++++++++++++
+ net/mptcp/ctrl.c                                | 18 +++++++++++++++++-
+ net/mptcp/protocol.h                            |  1 +
+ tools/testing/selftests/net/mptcp/mptcp_join.sh |  1 +
+ 4 files changed, 32 insertions(+), 1 deletion(-)
 
-Best regards,
---  
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+diff --git a/Documentation/networking/mptcp-sysctl.rst b/Documentation/networking/mptcp-sysctl.rst
+index 1eb6af26b4a7..b9b5f58e0625 100644
+--- a/Documentation/networking/mptcp-sysctl.rst
++++ b/Documentation/networking/mptcp-sysctl.rst
+@@ -21,6 +21,19 @@ add_addr_timeout - INTEGER (seconds)
+ 
+ 	Default: 120
+ 
++add_addr_v6_port_drop_ts - BOOLEAN
++	Control whether preparing an ADD_ADDR with an IPv6 address and a port
++	should drop the TCP timestamps option to have enough option space to
++	send the signal.
++
++	If there is not enough option space, and the TCP timestamps option
++	cannot be dropped, the signal cannot be sent. Note that dropping the TCP
++	timestamps option for one packet of the connection could disrupt some
++	middleboxes: even if it should be unlikely, they could drop the packet
++	or block the connection. This is a per-namespace sysctl.
++
++	Default: 1 (enabled)
++
+ allow_join_initial_addr_port - BOOLEAN
+ 	Allow peers to send join requests to the IP address and port number used
+ 	by the initial subflow if the value is 1. This controls a flag that is
+diff --git a/net/mptcp/ctrl.c b/net/mptcp/ctrl.c
+index d96130e49942..c94a192f4118 100644
+--- a/net/mptcp/ctrl.c
++++ b/net/mptcp/ctrl.c
+@@ -32,12 +32,13 @@ struct mptcp_pernet {
+ 	unsigned int close_timeout;
+ 	unsigned int stale_loss_cnt;
+ 	atomic_t active_disable_times;
+-	u8 syn_retrans_before_tcp_fallback;
+ 	unsigned long active_disable_stamp;
++	u8 syn_retrans_before_tcp_fallback;
+ 	u8 mptcp_enabled;
+ 	u8 checksum_enabled;
+ 	u8 allow_join_initial_addr_port;
+ 	u8 pm_type;
++	u8 add_addr_v6_port_drop_ts;
+ 	char scheduler[MPTCP_SCHED_NAME_MAX];
+ 	char path_manager[MPTCP_PM_NAME_MAX];
+ };
+@@ -94,6 +95,11 @@ const char *mptcp_get_scheduler(const struct net *net)
+ 	return mptcp_get_pernet(net)->scheduler;
+ }
+ 
++unsigned int mptcp_add_addr_v6_port_drop_ts(const struct net *net)
++{
++	return mptcp_get_pernet(net)->add_addr_v6_port_drop_ts;
++}
++
+ static void mptcp_pernet_set_defaults(struct mptcp_pernet *pernet)
+ {
+ 	pernet->mptcp_enabled = 1;
+@@ -108,6 +114,7 @@ static void mptcp_pernet_set_defaults(struct mptcp_pernet *pernet)
+ 	pernet->pm_type = MPTCP_PM_TYPE_KERNEL;
+ 	strscpy(pernet->scheduler, "default", sizeof(pernet->scheduler));
+ 	strscpy(pernet->path_manager, "kernel", sizeof(pernet->path_manager));
++	pernet->add_addr_v6_port_drop_ts = 1;
+ }
+ 
+ #ifdef CONFIG_SYSCTL
+@@ -362,6 +369,14 @@ static struct ctl_table mptcp_sysctl_table[] = {
+ 		.mode = 0444,
+ 		.proc_handler = proc_available_path_managers,
+ 	},
++	{
++		.procname = "add_addr_v6_port_drop_ts",
++		.maxlen = sizeof(u8),
++		.mode = 0644,
++		.proc_handler = proc_dou8vec_minmax,
++		.extra1       = SYSCTL_ZERO,
++		.extra2       = SYSCTL_ONE
++	},
+ };
+ 
+ static int mptcp_pernet_new_table(struct net *net, struct mptcp_pernet *pernet)
+@@ -389,6 +404,7 @@ static int mptcp_pernet_new_table(struct net *net, struct mptcp_pernet *pernet)
+ 	table[10].data = &pernet->syn_retrans_before_tcp_fallback;
+ 	table[11].data = &pernet->path_manager;
+ 	/* table[12] is for available_path_managers which is read-only info */
++	table[13].data = &pernet->add_addr_v6_port_drop_ts;
+ 
+ 	hdr = register_net_sysctl_sz(net, MPTCP_SYSCTL_PATH, table,
+ 				     ARRAY_SIZE(mptcp_sysctl_table));
+diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+index e0ffebaa6795..f4276980d78a 100644
+--- a/net/mptcp/protocol.h
++++ b/net/mptcp/protocol.h
+@@ -798,6 +798,7 @@ unsigned int mptcp_close_timeout(const struct sock *sk);
+ int mptcp_get_pm_type(const struct net *net);
+ const char *mptcp_get_path_manager(const struct net *net);
+ const char *mptcp_get_scheduler(const struct net *net);
++unsigned int mptcp_add_addr_v6_port_drop_ts(const struct net *net);
+ 
+ void mptcp_active_disable(struct sock *sk);
+ bool mptcp_active_should_disable(struct sock *ssk);
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index 5d4d0f127f79..23b17957686a 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -3313,6 +3313,7 @@ add_addr_ports_tests()
+ 	if reset "signal addr list progresses after tx drop"; then
+ 		pm_nl_set_limits $ns1 0 2
+ 		pm_nl_set_limits $ns2 1 0
++		ip netns exec $ns1 sysctl -q net.mptcp.add_addr_v6_port_drop_ts=0 2>/dev/null || true
+ 		ip netns exec $ns1 sysctl -q net.ipv4.tcp_timestamps=1
+ 		ip netns exec $ns2 sysctl -q net.ipv4.tcp_timestamps=1
+ 
+
+-- 
+2.53.0
 
