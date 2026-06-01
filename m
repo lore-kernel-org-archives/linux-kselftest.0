@@ -1,118 +1,92 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294F918FC97
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 09:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36287285417;
+	Mon,  1 Jun 2026 09:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780306141; cv=none; b=IhrxnDKupZs5Ae08UvptOIihGWUNgAQDsNWLDPV3Li30+SSipL1HKk1W+j7iWjsQ6sybz9W/jZVh48iqhbav4udklympqBHkFBVsplMIRqQyaCFylIVKp2j5PPa9yaZLXX/VIRm+2iPxrHO4xGtBuYtOY5aokcUo4nuRojFtTKk=
+	t=1780306659; cv=none; b=E2wUD7FsNR39966H1/7DgMifBl+I8EsnVEWhcInBjqlvBQDU3de8hLzsdpZVHnfNNcRgDAzrXFadBX4JJf8yUBzjMWQ1aXRH8Bkt4o0Eq/DhqpWhs00qQ9G6upoqu7CGlbeFV+kMl4GXkWDgvQroZYDETt0VvdYSAfDIbN9LV1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780306141; c=relaxed/simple;
-	bh=CqKfad+2TXBowfjWkNJ/8et34wmy9C6mL+x/1Jr1+Gs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hmZlDm0ckxt01/5VKhrlE/LDY1xLCo6ykLVy55ZnGxbWZEY60myp7Kq1p+LyFs6+SROdIBfCpPFMz/PeVYe83JY4ZSlI68Bw8YPD1EiAA1TJv9kD2xdBwfNqTtIdp6BmgY27qNFYIEp8WiAuTeFPhbkA3kOpfkFMYZYVRrYZD+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G1yanIRS; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780306659; c=relaxed/simple;
+	bh=9eE/88fQSqXK3PWBhQXJt59pjMmydVz4iFC/+YtdLa8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B23/PMkmUcpc7yUOdCxQ5E7PJ74Lz7u55rBP41mrYdQqLIP18xfvQgu0seABKRjEvU75ZTrZDjT7PFRMx6YK699jKckpP35AuzvrvRw06d7oyW35mR4M7ZybehvyLdXvL7s/fpbSteOy4q3EBgYE1YUf2YxAJqj/4+hVMA1wI4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c1PJZNWT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G1yanIRS"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780306128;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=g29uDzwGW0NTcSuFfWko8xrjZg7XxEg7NOcp6XGp35E=;
-	b=G1yanIRS6yXPZoIwX1L76zEI/J+Uwmu2iCm4414ti+w1YVL+TEmhRDZxnTfDwVpz4RQ1Ks
-	RgQds/2HYs8jVcZzx93YbUarTOCWkNz5RANvpCjGdcmpwLQstUfaAmlYGrb2E27rjO/Dna
-	OiiPa7ufzdr9fGuygNemUGjCcQ/nspc=
-From: George Guo <dongtai.guo@linux.dev>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: George Guo <guodongtai@kylinos.cn>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Alexander Graf <graf@amazon.com>,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	kexec@lists.infradead.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 0/3] LoongArch: add KHO support and selftests
-Date: Mon,  1 Jun 2026 17:28:20 +0800
-Message-Id: <20260601092823.110362-1-dongtai.guo@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c1PJZNWT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F2F01F00893;
+	Mon,  1 Jun 2026 09:37:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780306658;
+	bh=AzbXwY67i7orrJSYLIcDP2MIfpMzq9fPfuSJU14oS7I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=c1PJZNWT6Jhrtsti0/iLRUjmX2p41TJJfRVGF/3HNXBQB7PyKa2x9bRmyaeFYhkph
+	 S/XYHC6xhKx56Ya51Xak5ZkdEYl7w6jJ5CHtlZipgiVBNEdAMNHH/iRIH0rE/rdUWu
+	 0NcYKv9W6ljVMkX338Av9+n5cEDMlkvl9EyHcrfG4IQCWXZKImq9ht9DNl8Bv5zvtM
+	 ATehWylJaNN+9d/XXQwwW29cYaUrS+pOaBG4dYswLQ5k9wG0aOJ57MhEFaYf6nU2l8
+	 SGi6xk/XJwSfllo85W6VmcGnxePA0rHGqKLm46uy+j9fAJrU+3ZTv7yeI+eHKuE7At
+	 N4eY0MFKY1p+w==
+Date: Mon, 1 Jun 2026 10:37:30 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: akpm@linux-foundation.org, rppt@kernel.org, peterx@redhat.com, 
+	david@kernel.org, surenb@google.com, vbabka@kernel.org, Liam.Howlett@oracle.com, 
+	ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, seanjc@google.com, 
+	pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, sj@kernel.org, 
+	usama.arif@linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
+	kernel-team@meta.com, stable@vger.kernel.org
+Subject: Re: [PATCH v5 04/18] mm: skip out-of-range bits in mk_vma_flags()
+Message-ID: <ah1Sxn5VHLF6jlcU@lucifer>
+References: <20260526130509.2748441-1-kirill@shutemov.name>
+ <20260526130509.2748441-5-kirill@shutemov.name>
+ <ahmQvfNk7S4F0LBj@lucifer>
+ <ahmoH9v6_DA2i_zn@thinkstation>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ahmoH9v6_DA2i_zn@thinkstation>
 
-From: George Guo <guodongtai@kylinos.cn>
+On Fri, May 29, 2026 at 05:09:56PM +0100, Kiryl Shutsemau wrote:
+> On Fri, May 29, 2026 at 03:00:14PM +0100, Lorenzo Stoakes wrote:
+> > > Add VMA_NO_BIT and have DECLARE_VMA_BIT() resolve any bitnum out
+> > > of range to it. vma_flags_set_flag() drops negative bit values.
+> > > The ternary collapses at compile time, the runtime check folds
+> > > away when the bit is in range, and the common path is unchanged.
+> >
+> > Hmm are you sure it does?
+>
+> You were right - I measured it (gcc 15.2, clang 21.1.8, -O2). The
+> DECLARE_VMA_BIT() ternary is fine, but the "if (bit < 0)" guard does not
+> reliably fold: with it, clang stops folding __VMA_UFFD_FLAGS to a constant
+> and gcc keeps a rolled loop; without it, both fold.
+>
+> So I've dropped VMA_NO_BIT and gone with your config-gated-mask approach
+> instead: mk_vma_flags_from_masks() plus VMA_UFFD_{MISSING,WP,MINOR,RWP}
+> masks that collapse to EMPTY_VMA_FLAGS when unavailable, so no out-of-range
+> bit ever reaches mk_vma_flags(). __VMA_UFFD_FLAGS now folds to a single
+> constant on both compilers, 32- and 64-bit. Added your Suggested-by.
+>
+> I also took your "use the new API" hint and added a prep patch converting
+> the existing userfaultfd_*() helpers to vma_test_any_mask() (Suggested-by
+> you as well). One deviation: vma_test(vma, VMA_UFFD_RWP_BIT) is itself an
+> out-of-bounds *read* on 32-bit (test_bit(43, &one_long)), so the helpers
+> use vma_test_any_mask() with the masks rather than the bit.
+>
+> > Either way, I think we should break out any fix like this from the series.
+>
+> Agreed - the OOB fix and the other pre-existing fixes will go as a separate
+> series with the RWP work rebased on top.
 
-This series adds Kexec Handover (KHO) support for LoongArch and extends
-the KHO selftest infrastructure to run on LoongArch under QEMU.
+Ack on all and thanks! :)
 
-KHO passes metadata (the KHO state FDT and scratch area addresses) to the
-second kernel via the FDT /chosen node, using the linux,kho-fdt and
-linux,kho-scratch properties that drivers/of/kexec.c:kho_add_chosen()
-writes and drivers/of/fdt.c:early_init_dt_check_kho() reads.
+>
+> --
+>   Kiryl Shutsemau / Kirill A. Shutemov
 
-KHO support (patches 1-2):
-
-Patch 1 adds KHO support for FDT-based systems (initial_boot_params !=
-NULL, e.g. QEMU virt without OVMF).  kho_load_fdt() copies the running
-kernel's FDT, appends linux,kho-fdt and linux,kho-scratch to /chosen,
-and loads the result as a kexec segment.  machine_kexec() updates the
-DEVICE_TREE_GUID entry in the EFI config table to point to this segment
-so the second kernel's fdt_setup() can find and parse it.
-
-Patch 2 adds KHO support for ACPI-only systems (initial_boot_params ==
-NULL, e.g. LoongArch servers with UEFI or QEMU with OVMF).  Because no
-system FDT is available, kho_load_fdt() builds a minimal FDT from
-scratch containing only /chosen with the two KHO properties.  Since
-DEVICE_TREE_GUID is absent from the EFI config table on ACPI-only
-systems, a new extended config table is built with the entry appended
-and loaded as a kexec segment; machine_kexec() switches st->tables to
-point to it before jumping.  The second kernel's fdt_setup() calls
-efi_fdt_pointer() to detect the KHO FDT and passes it to
-early_init_dt_check_kho().
-
-Selftest support (patch 3):
-
-Patch 3 adds loongarch.conf and extends vmtest.sh to recognise loongarch64
-as a build target.  The LoongArch virt machine is FDT-only (no ACPI), so
-'earlycon' must appear on the kernel cmdline or the console UART is never
-discovered.  PS/2 input devices are disabled since QEMU's LoongArch virt
-machine has no i8042 controller; the fallback port probe hits a page fault
-and panics before reaching userspace.  QEMU provides no EFI runtime
-services on LoongArch, so machine_restart() falls through to an infinite
-idle loop after kexec; QEMU_TIMEOUT=120 in loongarch.conf lets timeout(1)
-terminate QEMU once the time limit is reached.
-
-Changes in v3:
-- Merge selftest patches 3 and 4 from v2 into a single patch
-- Replace QEMU_NEEDS_KILL/background kill loop with QEMU_TIMEOUT/timeout(1);
-  the timeout value is set per-arch in the conf file.
-
-George Guo (3):
-  LoongArch: kexec: add KHO support for FDT-based systems
-  LoongArch: kexec: add KHO support for ACPI-only systems
-  selftests/kho: add LoongArch vmtest support
-
- arch/loongarch/Kconfig                     |   3 +
- arch/loongarch/include/asm/kexec.h         |   7 +
- arch/loongarch/kernel/machine_kexec.c      |  38 +++
- arch/loongarch/kernel/machine_kexec_file.c | 256 +++++++++++++++++++++
- arch/loongarch/kernel/setup.c              |  21 +-
- tools/testing/selftests/kho/loongarch.conf |  13 ++
- tools/testing/selftests/kho/vmtest.sh      |  23 +-
- 7 files changed, 353 insertions(+), 8 deletions(-)
- create mode 100644 tools/testing/selftests/kho/loongarch.conf
-
---
-2.25.1
-
+Cheers, Lorenzo
