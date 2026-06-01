@@ -1,135 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A91E341AC7;
-	Mon,  1 Jun 2026 07:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01FD3438BE;
+	Mon,  1 Jun 2026 07:43:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780299778; cv=none; b=jhjk0OWkuVVf9xZGYKOeFSb9JWrkVaefyIkjTi9PkgdxBURT2YqDM3pVRtuVHAzzy2ZROeCwaIhcQNOs8O+Z3yLdAVpCncZE29+W/kPPaNQF/8Y1+4O9WeEoIFzGbeHIbzFPAs3oXLoNsKIEyRliMgyvc5p7S7mDy9ghw5yoHCg=
+	t=1780299823; cv=none; b=hqX91t0OVtVorvuEtQMnrRBEpkIVa8v9WA94FvWGwpS8RrbNNZPxUbEyi3kFO9S0qLtcX+PP5URLkwSLPKshe1tb6aSvcxWKIC3A2EKIQqbc2UhTcNK0Eiu/MlGHMjS0AP6ylyTe88txUuoBYp165nosryfnJZmHADque7PuWpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780299778; c=relaxed/simple;
-	bh=LBRASCQNybdy4by4isiOs6IW4BLbct2fZE2vZspbdHw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IzgNpXg4SzHqkEV3jy6DD1xs65JuT0TnZa9qYD3NlCqFhUOktQYQKvtFGQMkj2KGi4kzMXQPusDRA6QA+aPnSSbTtjee6efqBxpDnT9d14dyKHlr7cpDJc3XKIbfLlVZjvmMFGTqRVtYsxhg6xJH9yS5umG8Lg6NEAWbgeysW0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RJ1pWFC1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780299823; c=relaxed/simple;
+	bh=vklZS+F0UdfrHjMTBGchkgs5NC7WdZIykknOrYnrgD0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FDqEsePtxwkXnc+bd9dIO0N8wkmWb02K2mdlxoySyz64ylQ1Rb53W6962uq7wgBg3kKXKaEJoYhPFOHm4YcINfEDccYoQwKU+orD5CVc7x76c/wL50B2sOnUOdL08rkXYTTFs3gFtU01bx8Q6iVs5ZAeoqwA5TPdC7LJYWXr2do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=nUjIU/Bu; arc=none smtp.client-ip=54.254.200.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RJ1pWFC1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 342CD1F00893;
-	Mon,  1 Jun 2026 07:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780299777;
-	bh=G6E/427vKjNMrNFnfzJ5w/oioAQsHShjLOWHUrX6Zb8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=RJ1pWFC19TPXp/omPArHxv5x2qOq16KOXdKlqOHHweNUSE0B0kXCuHNmYIa29VeAv
-	 x1xukkrYT0vEFqTjKybI9CMv+G5k3YQfnYB7JlHdtGpKnzVF72J3cklM5PUgBuWYPT
-	 Zb85JfREbCwhnT+mX5TVtU5r6x789OLRNYsvMsTkvBSMq9BEmXMyFMwfSMfWkTM+YD
-	 zJfWmnK/xP4OSww3ENvvdeuDgg8mYVJjxGxRuRKS8rHEcyubNuUc6uwlcM8SfIhTRP
-	 fN0lzfo7D0m4HnqdibY2CcGk5s9ocXceGp/B64TNx44+GE5hErGZbYDwEUb79kCi5M
-	 xO2iV1myeeJyw==
-Date: Mon, 1 Jun 2026 08:42:48 +0100
-From: Lorenzo Stoakes <ljs@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Kiryl Shutsemau <kirill@shutemov.name>, akpm@linux-foundation.org, 
-	peterx@redhat.com, david@kernel.org, surenb@google.com, vbabka@kernel.org, 
-	Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, 
-	seanjc@google.com, pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, 
-	sj@kernel.org, usama.arif@linux.dev, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kvm@vger.kernel.org, kernel-team@meta.com, "Kiryl Shutsemau (Meta)" <kas@kernel.org>, 
-	stable@vger.kernel.org
-Subject: Re: [PATCH v5 04/18] mm: skip out-of-range bits in mk_vma_flags()
-Message-ID: <ah03yn_FLO_ca6eE@lucifer>
-References: <20260526130509.2748441-1-kirill@shutemov.name>
- <20260526130509.2748441-5-kirill@shutemov.name>
- <ahmQvfNk7S4F0LBj@lucifer>
- <ahsVyQZ5UXhJLct2@kernel.org>
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="nUjIU/Bu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1780299789;
+	bh=pwZkHXqKqxkxLcfcppEkvJjtNsDiBPN5huDHZl9Eqqc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=nUjIU/BukiOGcfae12Pr28aUl+p7bkLozg4sxgd4o8ZJiKyDFujVZ9Zbcst6Rbiqd
+	 ojTzr09SCiQ+fQxkV8GgnmD3zAABG2cYWj0j0rotDcLRB1BxTq6867r73Y6JbbzEH1
+	 wQhQEpeH68mdJ8fidJc/4E7ZiJkCmAiRYNPyL2fs=
+X-QQ-mid: zesmtpsz8t1780299777te9dd8a35
+X-QQ-Originating-IP: sj9qZnDxjOiHmc+F6pDsHm4ywVs4+jfPh2wpfeznSRs=
+Received: from PEN1097 ( [1.202.39.170])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 01 Jun 2026 15:42:55 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 12067453659540289926
+EX-QQ-RecipientCnt: 8
+From: Cheng Nie <niecheng1@uniontech.com>
+To: sj@kernel.org
+Cc: shuah@kernel.org,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel@uniontech.com,
+	niecheng1@uniontech.com
+Subject: [PATCH v3 1/2] selftests/damon/_damon_sysfs.py: fix memcg_path assignment
+Date: Mon,  1 Jun 2026 15:42:49 +0800
+Message-ID: <E4B88E7D4879D1B1+20260601074250.203583-1-niecheng1@uniontech.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260601073635.200015-1-niecheng1@uniontech.com>
+References: <20260601073635.200015-1-niecheng1@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ahsVyQZ5UXhJLct2@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpsz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
+X-QQ-XMAILINFO: NfCiKUdyqwvYVH7Nc7tPkOYzQ0ufTexoNNJxrhOV6EJBqROmP0f/esBV
+	cnU3lvM4a0LZW4zMD3rZ5hClxBlyP7/RlocgN8MaMriPHpp+mkxgx1NSXDPxFX7rXxmwnFU
+	X/CIl/Me+0njusvVMgeko0kI73Wh2L5NrcRCisNDJ2SHH8uMinXsN8VgPakUDUzTjblnHPe
+	tt4RSH/aScOrPl+21R95uhh9H53W9En0DRr9VM5yy1zgXm1DhRyLHLp8Fb8o241t49bfN0A
+	mu6DE/sTxJ8RLJODwQY1Q9Ok5Q8vUGaJvr3zZ96xRpjnGKhw2aMapxk/nvu4w9thY6L+/j8
+	SxQ0YCCPzIFRpdUxUlQkjxKKIDaCuVHf28rN1st6OO/rd7RN0/mjjp+2pYaeP2v3qr7l9jL
+	NSyT3ATCGm4wyR7pIjvJgQtck2Q0+ElMtUJsfztZ2OPqz1UmasZSTauzU1tj1ULap31lVmv
+	FpiCr8bJuaJqQDoppqEx5DgUfwqKbVMmsyEtisCa5QThxbvmi7gktdT8DdQlZeg1xYL+lWg
+	FreBEiw/UlOVIuiUHXYikF6VjbxSbzV1MdntIu8I5k6GNrWIxmiPdpFD//qhx55RKyZth1L
+	Xb0YMpFy/e9Mzc8YUws9NaxcP99yKKNqziJ64YUPGuPL9FSeAR9PAOGwyP8WeZXM7CqGY4H
+	Z3w5vky9JDtPXrmsaBhFHCxoecpJiRDtBnX2/+f5fRmfOm03vz4Z+D/QbeLyhh8vkRB+68v
+	u6+0VeOplNEit0VuWgyRDMbMZtZEdhGcuND1bIvqpL4KH9sWHEUb6/TKkVkhHnfB9DI2CCi
+	7k/J03vYOulxKZa2KFZm6FQuvcuumAhjcK0+//a4Sbjl1AMsR2a4YtbWF8uUU2udOfAMdzF
+	Ga+ghoPwcindFrw8lAaa6AVFvXOefrcFVd2dhXXfmo3Fi2MU5f197KmwGgsZPGkenefm50U
+	U+It/df0E++OIer2ttaRZFzDFrDJDpmU4peboFv1cpy142VCxzNdhIGrPIWdaGd+7QRCPIO
+	ja8PPlCVF2UMrmPTkp+QtYpe7Dh4w78xxPYpejWEDAuvdJCXzNSGn0Ze+o3js=
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+X-QQ-RECHKSPAM: 0
 
-On Sat, May 30, 2026 at 07:52:25PM +0300, Mike Rapoport wrote:
-> On Fri, May 29, 2026 at 03:00:14PM +0100, Lorenzo Stoakes wrote:
-> > On Tue, May 26, 2026 at 02:04:52PM +0100, Kiryl Shutsemau wrote:
-> > > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-> > >
-> > > vma_flags_t is one unsigned long on 32-bit -- NUM_VMA_FLAG_BITS ==
-> > > BITS_PER_LONG by design, so VM_xxx-declared bits sit in the first
-> > > word and hit the single-long fast path. But the bit enum declares
-> > > some bits unconditionally above BITS_PER_LONG (VMA_UFFD_MINOR_BIT
-> > > == 41 today, with VM_UFFD_MINOR == VM_NONE on 32-bit so no VMA
-> > > actually carries the bit).
-> >
-> > Yeah ugh.
-> >
-> > > Passing such a bit to mk_vma_flags() goes through __set_bit(41,
-> > > &one_long) and writes one word past the end. The compiler folds
-> > > the OOB store with wraparound (1UL << (41 % 32) == bit 9) into
-> > > the first word. Bit 9 is already in __VMA_UFFD_FLAGS so the mask
-> > > happens to come out right today, but any high-numbered bit whose
-> >
-> > That is... helpful :) but not great that this is the situation, an
-> > oversight, clearly! How I hate 32-bit kernels :)
-> >
-> > > mod-BITS_PER_LONG position is otherwise unused would silently OR
-> > > an extra bit into the mask.
-> > >
-> > > Add VMA_NO_BIT and have DECLARE_VMA_BIT() resolve any bitnum out
-> > > of range to it. vma_flags_set_flag() drops negative bit values.
-> > > The ternary collapses at compile time, the runtime check folds
-> > > away when the bit is in range, and the common path is unchanged.
-> >
-> > Hmm are you sure it does?
-> >
-> > A key design goal was that mk_vma_flags() generates compile-time constants
-> > the same as if the bitmap were constructed independently.
-> >
-> > This surely must generate code? Or at least runs a significant risk of it?
->
-> ...
->
-> > A simple solution that doesn't require change to the core is to just uglify
-> > userfaultfd_k.h a bit with:
-> >
-> > #ifdef HAVE_ARCH_USERFAULTFD_MINOR
-> > #define __VMA_UFFD_FLAGS mk_vma_flags(VMA_UFFD_MISSING_BIT, VMA_UFFD_WP_BIT, \
-> > 				      VMA_UFFD_MINOR_BIT)
-> > #else
-> > #define __VMA_UFFD_FLAGS mk_vma_flags(VMA_UFFD_MISSING_BIT, VMA_UFFD_WP_BIT)
-> > #endif
-> >
-> > But of course that becomes much more horrible with your changes...
-> >
-> > Another alternative, which I used for VMA_DROPPABLE is to add something
-> > like this in mm.h:
-> >
-> > #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
-> > #define VM_UFFD_MINOR	INIT_VM_FLAG(UFFD_MINOR)
-> > +define VMA_UFFD_MINOR	mk_vma_flags(VMA_UFFD_MINOR_BIT)
-> > #else
-> > #define VM_UFFD_MINOR	VM_NONE
-> > +define VMA_UFFD_MINOR	EMPTY_VMA_FLAGS
-> > #endif
->
-> I have a PoC of yet another alternative:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=uffd/vm-flags
->
-> The idea there is to keep a single VMA flag, VMA_UFFD_BIT/VM_UFFD and move
-> all the rest into what's now struct vm_userfaultfd_ctx.
+DamosFilter stores memcg_path for sysfs staging, but the constructor
+assigns it with a trailing comma and therefore turns it into a tuple.
 
-*Gives Mike a big kiss*
+Fix the assignment so memcg_path is stored as the intended string.
+This makes memcg filter staging and follow-up validation use the
+written path correctly.
 
-YES PLEASE!
+Signed-off-by: Cheng Nie <niecheng1@uniontech.com>
+---
+ tools/testing/selftests/damon/_damon_sysfs.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> --
-> Sincerely yours,
-> Mike.
+diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
+index 8b12cc048440..43075892215e 100644
+--- a/tools/testing/selftests/damon/_damon_sysfs.py
++++ b/tools/testing/selftests/damon/_damon_sysfs.py
+@@ -271,7 +271,7 @@ class DamosFilter:
+         self.type_ = type_
+         self.matching = matching
+         self.allow = allow
+-        self.memcg_path = memcg_path,
++        self.memcg_path = memcg_path
+         self.addr_start = addr_start
+         self.addr_end = addr_end
+         self.target_idx = target_idx
+-- 
+2.51.0
 
-Thanks, Lorenzo
