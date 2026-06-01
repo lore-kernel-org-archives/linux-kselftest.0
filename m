@@ -1,104 +1,115 @@
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BAC6221277;
-	Mon,  1 Jun 2026 02:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74A2212D86;
+	Mon,  1 Jun 2026 02:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780281185; cv=none; b=X2kWzKCjj++3VO7GpcmnhiYsKw0T1oEAPF06y7uv8sbQJAg5exAznc19mzJunistzeTRBygclul5TKJL4oqP4rPfRtpLmsSUQmJ/bDcgHvxD0TOd7ZSWxyMW5EPUTGOISsdHOKTk0e1owxR20W3kCOEoyQghvQI5KgMIzbiRNTY=
+	t=1780281240; cv=none; b=PTg1OszUn+tP0g9rVGgWf8mHrhalQrIe+AOBSr7Jwb4qGor6MKfan5VG8ifPRAe51biCcnNBz+Ny07jd6MHzJyjKoKmcBGi62RQqS/eBZJMOFvUjbU3pj5vh6kPthUg2UHE4ORT5N4J4MzIqOowLGwryiH9A3IEe1d3pm3E2ucU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780281185; c=relaxed/simple;
-	bh=9ChulMQ4HtwDaNNSM6XekXLk7VY4BhagcCO1SkNrBkI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iTbHutJmG+Ulo/HMzvO/vqugPnOZ9FfUteQUmYY/nq63a7FRUiu/VBpF3QIb6RhNZfAcxUY14uU2MhlTkOw67XVy6tXP21msrWj0H/Y5Mu4kk8w0spoPEd7s4gJgYzgzLjxVNSQ7kyqcAUykjMkF/LRvFDdBYK//Cr/4UiCFFx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=qXxiuJeb; arc=none smtp.client-ip=115.124.30.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1780281240; c=relaxed/simple;
+	bh=JqDHJVAKyGpl+ngYGBc4rz9MtrD0LjNaznhwCYkd3R8=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=MYtZowmUPhGpxmOgU56TXmuOcuOOYWZVkazCDX4RNAz5BBQUYRIDkVKscnNxzGdZlz02uvZuQnmOcIYuDUnyVhgS99uVNCiz3zzVmyfVcAB9W3QetA1x6Vu+zOiiAh/f/twl/XWUWJivxkkMFqD8RMQ48X++z2TU9AQjwj6vOnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=USGIKcbS; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="qXxiuJeb"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1780281179; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=nzR0aLCA9B2xvAkabMir/P0TKLQ1O0jOUYJXMmo9WcQ=;
-	b=qXxiuJebWbP96FMXs1UsluMRU5pzNWU0/GT/em9eZjroRCCijuU7VSAz5kVRMO/jXf9mdVIHaGcO5z6mhlwh2TBw6ypOmekOEdAEODDYlHtJRqPQ1RgVZpiDH3Gk97qM8oD+QcPg6ecdL/xZ/xO0KuSaKqGZTSLpZxKAsx+/RuM=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0X3vJxdj_1780281171;
-Received: from localhost.localdomain(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0X3vJxdj_1780281171 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 01 Jun 2026 10:32:59 +0800
-From: Tianchen Ding <dtcccc@linux.alibaba.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3] selftests/ftrace: Fix trace_marker_raw test on 64K page kernels
-Date: Mon,  1 Jun 2026 10:32:51 +0800
-Message-Id: <20260601023251.1916483-1-dtcccc@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20260527095438.1794905-1-dtcccc@linux.alibaba.com>
-References: <20260527095438.1794905-1-dtcccc@linux.alibaba.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="USGIKcbS"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780281236;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TMHgRM2VgLCMfYV/Kx1tsJefCoHRzu2kO6ZVF0TG+Ng=;
+	b=USGIKcbS9nOCEqYdBNcQ0LJXZKLix/4zkNsDQi4I/bTsjwkJ15Jjc1l9ouC84+s+uKAKQx
+	peltIFP+3sBipJu0MValVmndBCloOGVXp684I5NEdj9O7B438dTOT+Xa87xcFq25H6G3bX
+	eOWzpOa7XvD1Dae3zeJmayev2iA3IrQ=
+Date: Mon, 01 Jun 2026 02:33:50 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Kunwu Chan" <kunwu.chan@linux.dev>
+Message-ID: <4915dbdd42711403f1781e3c7a71a11a53b0249d@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH 4/5] selftests/damon/damos_tried_regions: handle empty
+ tried regions in early cycles
+To: "SeongJae Park" <sj@kernel.org>
+Cc: "SeongJae Park" <sj@kernel.org>, shuah@kernel.org, damon@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, "Kunwu Chan" <kunwu.chan@gmail.com>, "Wang Lian"
+ <lianux.mm@gmail.com>, "Kunwu Chan" <chentao@kylinos.cn>
+In-Reply-To: <20260531165437.99410-1-sj@kernel.org>
+References: <20260531165437.99410-1-sj@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-On ARM64 kernels with 64K pages, the trace_marker_raw test fails because
-bash's printf builtin uses stdio buffering which splits output into
-multiple small write() calls to the tracefs file. Since each individual
-write is within TRACE_MARKER_MAX_SIZE (4096), they all succeed, causing
-the "too big" write test to incorrectly pass.
+June 1, 2026 at 12:54 AM, "SeongJae Park" <sj@kernel.org mailto:sj@kernel=
+.org?to=3D%22SeongJae%20Park%22%20%3Csj%40kernel.org%3E > wrote:
 
-Fix by writing through dd with iflag=fullblock to guarantee a single
-atomic write() syscall to trace_marker_raw.
 
-Fixes: 37f46601383a ("selftests/tracing: Add basic test for trace_marker_raw file")
-Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
----
-v3:
-Measure the binary length via wc -c instead of hard-coding "size + 4".
+>=20
+>=20On Sun, 31 May 2026 17:17:23 +0800 Kunwu Chan <kunwu.chan@linux.dev> =
+wrote:
+>=20
+>=20>=20
+>=20> From: Kunwu Chan <kunwu.chan@gmail.com>
+> >=20=20
+>=20>  The test aborts if the initial aggregation cycles produce zero
+> >  tried regions. This can happen on slow machines, causing false
+> >  failures. Skip empty cycles and retry up to 200 times before
+> >  giving up. Also check that enough samples were collected before
+> >  computing the 50th percentile.
+> >=20
+>=20I agree this will make the test be more reliable. I'm bit concerned i=
+f 200
+> times retry can make the test run too long, though.
+>=20
+>=20Also, could you further elaborate why this can fail on slow machines?=
+ That is,
+> DAMON will check the access of 'access_memory_even' process every 5ms. =
+Are you
+> thinking the 5ms is too short for 'access_memory_event' to make the exp=
+ected
+> access (accessing the 7 regins of 10 MiB size) within? If so, should we
+> increase the sampling interval before retrying?
+>=20
+>=20I also suspect if the unreliable results you seen is due to the fact =
+that DAMON
+> is not flushing TLB, like we discussed before. If that's the case, coul=
+d we
+> increase the working set size of this test, similar to the wss_estimati=
+on test?
+>=20
+Thanks,=20SJ.
 
-v2:
-Update comment about 64K pages.
----
- .../ftrace/test.d/00basic/trace_marker_raw.tc      | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+Good points.
 
-diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-index 8e905d4fe6dd..f985ff391463 100644
---- a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-+++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-@@ -36,15 +36,23 @@ make_str() {
- 
- 	data=`printf -- 'X%.0s' $(seq $cnt)`
- 
--	printf "${val}${data}"
-+	# Return escape-sequence text (e.g. "\003\000..."); the caller
-+	# converts to binary. Shell command substitution strips NUL bytes,
-+	# so the binary form cannot survive being captured into a variable.
-+	printf '%s' "${val}${data}"
- }
- 
- write_buffer() {
- 	id=$1
- 	size=$2
- 
--	# write the string into the raw marker
--	make_str $id $size > trace_marker_raw
-+	str=`make_str $id $size`
-+	len=`printf "$str" | wc -c`
-+	# Pipe through dd to ensure a single atomic write() syscall
-+	# on architectures with 64K pages, where shell's printf builtin
-+	# uses stdio buffering which may split the output into multiple
-+	# writes.
-+	printf "$str" | dd of=trace_marker_raw bs=$len iflag=fullblock
- }
- 
- 
--- 
-2.39.3
+I don't yet have enough evidence to say whether this is primarily due to
+scheduling delays, a too-short sampling interval, or effects from not
+flushing TLB.
 
+I'll investigate the root cause and see if increasing the working set
+size or adjusting the test configuration may be a cleaner solution than
+adding retries.
+
+I'll drop this patch from v2 for now and revisit it once I better
+understand the root cause.
+
+Thanks,
+Kunwu
+
+> [1] https://lore.kernel.org/20260525144846.604907-1-kunwu.chan@linux.de=
+v
+>=20
+>=20Thanks,
+> SJ
+>=20
+>=20[...]
+>
