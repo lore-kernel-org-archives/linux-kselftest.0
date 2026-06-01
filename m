@@ -1,149 +1,219 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D7536607D
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 11:53:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDBC3644C6
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 12:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780314810; cv=none; b=qh0klOQZ8yAymd+9HIlVOzUJgp+x2fz/GokqJp02pNBBJVKrTIWrbCOhAS1WoXSG4WcjGUxln2X/Y08g/bWzyK6MChoW7zl1VJqgjFIFo6adYreW2I+hJxlMlYa8Wx0STLvucKYdSrAKYOfE4nch8/y85a9g9X2lUe/7ptdyX4g=
+	t=1780315502; cv=none; b=tCPRgVQc/9ECSzUfG5zs6k/PHus8EhrUBGV0qC/Gw/6nUrpemSZme3n4QS9UcJeqZ+SIA4raOhpVW3HUS2TVRS0Gmk2GI8ubWveHAR4zqU5zvL9Wq/zS/rKN5Tj98xi7Ip6U12CIbX1axSpV/1lzM4ZRNzVzmLbwO0Z+scEcZJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780314810; c=relaxed/simple;
-	bh=vjcSHu3SEn3zw1F72ieiZBESgN6+HtFjGQ33EPazq4k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U9niN/4Pzb2b4YTVx62B8R+ZWAX0L3boeIfigSUNS9fjAnVI9l6U3/E3oyiNe1hv/gz66JUWo+IqE7b4Mb7j4/jygz8x7x4m9miSjNe8wr0YQD9y9zP48IPqjJbOEKn9IFNEvVqFXQk0F3Ge9j1wvjB6C+GNNqmTmuAe5Z/clQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I+38rvAD; arc=none smtp.client-ip=74.125.82.175
+	s=arc-20240116; t=1780315502; c=relaxed/simple;
+	bh=UexA6IlALDsQZOTV0hLwfWpaRW3TbsQLPhPBboqis4A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=oTZkDCMdvSvsSXNR+yfV4CN3e71jAF8j03KJti31gzgyH6Ar7zdnN2OIsHxVfHTpNzeu5ZqV3akqX7r5bBZxybf2eKh+BRH0dZhBG3U+3n9iC+ItoauYQj3S8xTalSC8TxvVoIAlUAi8A88drCrBuoGvJNUd4Slb228Cvpg+cqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JQ7F7Xxq; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I+38rvAD"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-304ec41197bso2716896eec.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 04:53:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JQ7F7Xxq"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4909e3fa4b2so29255505e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 05:05:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780314807; x=1780919607; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yvmTG9qbl7v0LMiRxV9jUkuqNSrPO0HlW1meTsVlSmM=;
-        b=I+38rvADVD0yWOCdbE3kvfw0xgTmakjc2kOOmRQfVU4nI+p5RbX29Tyu7xBf+fR+Fj
-         SXpGEym8Slh1Jk9dEfHOtzRa66Q+rI4/nQIbdaOAHBPz19EQ4euq+rVcrj+Yzq1K1TrH
-         NEgDyFluBNhwQPjEeNkhEW5coNLxmkC56blb15yugRhy1o2XZpKlAywPEQcn3USJdx5t
-         fm3iIX1QROqzJkzQ2Jzo2T0+5DjCgq3HLNESURDJkBwbTh1CPw0MU08U/f+Bbx85ylSN
-         6CCwqlo4oPw0ghmo4Hsr8xKkF5C9i3UCdJVMhwMtsnygQB8CBISBVHSjCxF5FD0sLpy7
-         kJMA==
+        d=gmail.com; s=20251104; t=1780315499; x=1780920299; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n5qzKyfnccgdjCAGXdsv8yWwGixxrImvsfnV142aaYI=;
+        b=JQ7F7XxqW9g6DVtsZTVcda+KjsdeNYn03hmt1o6VGeG8nxxIPttdGcU2M3XHOG1i/o
+         j8BQD+cSziDz2A3oOPRlYD8cXBkW3gRsJZup1Z7KrLkD+8yKuGZpMdGg0HFyOcHHErNj
+         pPn8msShsZmISyTLfGbxQRUWehoHPj0nbB/knuRc2A5NIzEWaW87Kwn73G/eFSwpwz/p
+         08mQMiTn/KI/RXo3qWKj9Wk7aX7Mu7l7MeuDUpln6AsUedO1PVyF/10kJZSLJX96Z8dq
+         GxdF5jRwpCqMnWT3Bj1SkWjBR/xpawinuD53I1lZypcGGqPuiafesvGeIuqtaipOtIbb
+         fQgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780314807; x=1780919607;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1780315499; x=1780920299;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yvmTG9qbl7v0LMiRxV9jUkuqNSrPO0HlW1meTsVlSmM=;
-        b=NNfWExAUF/F0VTwJsKh5rFFDD6jLUopRgw+ofTTEsJ6QEBgjSPCNC3hW7YTph3unga
-         PaO3awJ/PUkYrrP9R3tRsZ0N6DI1TWFskzs1EE55yEmgLEWKfO7shYiwi/3YwRhYDJ1n
-         6aOK3KGjKO87JPNKeefZxcnXHG0tLq1DsnpEDlS32oRd6ty0FN6YyUXZIy34bO9hi2qL
-         b9PtLZqmddXBB6SdpbWqwkLeBNhBtC9vymORbWdoL7rlNIOuOwDFGm/jX4HxOmkLFKGY
-         Hh3++yLgFtOnoMFa1DraHDpAMm2eyv38eGKukPBgl/i3mjbSSh6qFyc1pvEWLZUjnSu3
-         heEw==
-X-Forwarded-Encrypted: i=1; AFNElJ9BeLrF+8Lk3nbMGy72ybwDORbC+R13G9mDV8QyBM2jISUhum/jLowoo0PE9sJEbjuEbzn+iZMkD5kfgwVneQE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkIc4Ppor01TPuPHO0fh/tHaUJZwrWVSM0MHaAmj7Fug4HnDaU
-	0X3s+LNiuVHRFFs+l6raDJMOgFJ54kpK5/oBDDJfpc254FqeWyU4wzb+
-X-Gm-Gg: Acq92OGVSKoM8vSK6dcWg5jvxm18KuGnIiq3ZG7RviinIX+UFeLc4+lX7MdoT5tCneA
-	hZC6EgiomJUSiY2/spWoF9LkkQbEdyKKkzudIbpsSw8KJVm4EMmILvKRibbu7+yz5FShxLJ/xh+
-	JZHtSqpaDsSsuNLKSO9olZsgBNDB/IdSzufwSFWodaQSwoTdeZvijtHn7sWob9bNCbDHFM4CIcS
-	ZtNducLEUNWKPhuSw/s5I8X25lvn5IfS6rPAenHmwRUgLJqfQXLIslpzCwtV10jz05LsGWffCiD
-	mEsGdRqEHVLucEJG04IOe6qTtmsbZ+NpBjQ0WMrqE+1jaYAftnU9/sYjG+kzCVJ8PSN+XPvCqnY
-	uCKQyCh/BIHxOARPEIMDB94tdVyj6wj6eJQGS7l3DiTU94YxbWinoKt2JoZxx6VmhyGmVjPKEPr
-	JyJCcc5bwLP/xObw5emv/n9B/9zi4ddMiYyhI0
-X-Received: by 2002:a05:7300:cc0e:b0:2f2:c336:7736 with SMTP id 5a478bee46e88-304fa694de5mr4462843eec.29.1780314806950;
-        Mon, 01 Jun 2026 04:53:26 -0700 (PDT)
-Received: from houminxi ([166.0.188.190])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed53f316sm8335330eec.19.2026.06.01.04.53.19
+        bh=n5qzKyfnccgdjCAGXdsv8yWwGixxrImvsfnV142aaYI=;
+        b=NlteLO/yTQfgzw/Rr2JwS6EplWB6cZaZOg3aVokW/kULY+uI+EVD2KLVrV0OvsebnP
+         gwttQcaqNMOfIsP83UKxCXd5q5gLXoxikdD2D6ppMsKFffCs9PP8g4JPf3+qEXc27zKp
+         DVrAftu9nx0OIg4wsD4bIfJ2euYkkU4X8w5KpwisSPKgZ/0P1xPs7qrHkx3jo/yueyaW
+         aVYFCKGrNP44Xm9x0C28QJ8K6EBje2UwHUIq4/o84z38Op7bjtsm5FRjbq9ki8kRurqR
+         Dd0EzqUrZEOjAvlf1QrUTQOskK58s77Gfv1ble2mqROE/A+dgX/M18YrvBI4omMAuQmM
+         CItw==
+X-Forwarded-Encrypted: i=1; AFNElJ/hs1cBb+h5papM0vx/JRKpWU4VJfZDHwSWxZ/bHpnBjl4puxi21FF3IP+erIEJbjNCCV91VXChUvhvSpIM7t8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJlvbugYEbR1NTceHlftIu4y3ztVAd5o8wf8ngER56WZNk/7nO
+	d9lNMviJc0YtRLA/fY6uf8RWlwwPEUaNIH32j99eDAZxztGAS3JWSIyG
+X-Gm-Gg: Acq92OGrBXX5lW9fWMYYOSvembJM4fb0hI++FPvFSyPxqqm0nzzsNU96fb4TEJzfdxk
+	lhDd4p9gMXFnwOk1Z4E3k4D0OPiwWScMUEy7Ruhvt7Yw1sfsvOuPUBZWLtOGMGmQAVk+mH/1nbk
+	0qFoe6smyu/ycEU2KOLNn64WSo5LLxZhoRnMIKv2kUoWdz5ce7/Zr/5lovfuf1nrH+r1tXSuKGs
+	e852sk33PIQbCXtghHqlLzZ9eMvHjFt5ieIM+c7WkzQ3w9E2fYglxbf0vZ9GM+ciEM+fNE/WaD0
+	d5uQyMZwWsqY4pyOILbTv+ulwhvvzTFHcOeLHvj5vuoXXIupSiYVNBa+9baZXMZAsroggUSXVGZ
+	iuAzjrvzjE3Hb895IkJ3Ns7okTG9H0eMGa+bH5eIunwzUG0BEPlvdwL7EMjml6YbTpORmH8Gg6p
+	Kof6YL7dPtc9Ce8nW8fZ89+t7Lcd4/N5HLn5789FyUHQ==
+X-Received: by 2002:a05:600c:3487:b0:48f:e1ac:c94f with SMTP id 5b1f17b1804b1-490a2918103mr212890145e9.10.1780315498448;
+        Mon, 01 Jun 2026 05:04:58 -0700 (PDT)
+Received: from [172.16.188.153] ([213.181.114.83])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4909c152570sm103972805e9.9.2026.06.01.05.04.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 04:53:26 -0700 (PDT)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: aconole@redhat.com,
-	davem@davemloft.net,
-	echaudro@redhat.com,
-	edumazet@google.com,
-	horms@kernel.org,
-	i.maximets@ovn.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	dev@openvswitch.org,
-	linux-kselftest@vger.kernel.org,
-	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH] selftests/openvswitch: guard command substitutions against empty output
-Date: Mon,  1 Jun 2026 19:53:07 +0800
-Message-ID: <20260601115307.1411211-1-houminxi@gmail.com>
-X-Mailer: git-send-email 2.54.0
+        Mon, 01 Jun 2026 05:04:57 -0700 (PDT)
+From: Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH v3 00/24] dynamic-debug cleanups refactors maintenance +
+ alignment fix
+Date: Mon, 01 Jun 2026 12:04:46 +0000
+Message-Id: <20260601-dd-maint-2-v3-0-4a15b241bd3c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/02MwQrCMBBEf6Xs2ZV0Yxvryf+QHmIS2wWblKQEp
+ fTfjQXBy8CbYd4KyUV2CS7VCtFlThx8AXmowIzaDw7ZFgYS1IqGarQWJ81+QULVmuZEQnUloBz
+ m6B782mW3vvDIaQnxvbszfdufRv5rMqHAeyeVrElrcZbXoUzPowkT9Nu2fQATd1+rpAAAAA==
+X-Change-ID: 20260521-dd-maint-2-76c542079420
+To: Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Jason Baron <jbaron@akamai.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ Jim Cromie <jim.cromie@gmail.com>, 
+ Louis Chauvet <louis.chauvet@bootlin.com>, 
+ =?utf-8?q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780315495; l=5739;
+ i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
+ bh=UexA6IlALDsQZOTV0hLwfWpaRW3TbsQLPhPBboqis4A=;
+ b=lvmgQ8g7xkH604t4KBSwylbWD7BLSeGoj0N94EqFttk+uNoSZ34wsVJ4kCQjAP+56C7j9e8+r
+ 8/livVa5JYuDL7dtGrwkxv+mPMASsWpXe10/NQqoJFwX0pqQwFAG0+r
+X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
+ pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-When ip-link output is unavailable, when the upcall daemon log has not
-been written yet, or when pahole does not know the OVS drop subsystem
-ID, the affected command substitutions silently produce empty strings.
-The caller then passes empty sha= or pid= arguments to ovs_add_flow,
-or matches against wrong drop reason codes, all without a diagnostic.
+This series starts with 2 doc-only patches updating the current state
+of dynamic-debug, they were posted separately here, without pushback.
 
-Add [ -z ] guards immediately after each assignment. For test_arp_ping,
-also align the MAC extraction to use awk '/link\/ether/' as in
-test_pop_vlan. The drop_reason guard returns ksft_skip because an
-absent subsystem ID is an environment issue, not a test failure.
+https://lore.kernel.org/linux-doc/20260502-dyndbg-doc-v1-0-67cc4a93a77e@gmail.com/
+    
+Next 5 are a fix to a linker-script alignment problem in 32bit arches
+causing a null-ptr scanning dyndbg-descriptor section on i386.  These
+were reviewed by Petr Pavlu.
 
-Signed-off-by: Minxi Hou <houminxi@gmail.com>
+The remaining patches are cleanups, refactors in preparation for an
+API change needed to fix a regression in DRM when it uses classmaps.
+I split these out for easier review, I will follow up with the API
+change afterwards.
+
+The biggest revision vs V2 is the new patch: 25.  It addresses a flaw
+detected by sashiko which is best described by example.
+
+Dyndbg uses KBUILD_MODNAME to provide module-name, this works well for
+loadable modules (module loader requires unique module names), but for
+builtin modules, is effectively kbasename, and not unique.
+
+So we get 4 modules named "main": init/main, kernel/power/main,
+kernel/base/poser/main.  This ambiguity is visible in user-space since
+the beginning of dyndbg.
+
+Now suppose kernel/{,base}/power/main want to define classmaps to
+categorize the various pr-debugs they have.  The current code finds a
+module's classmaps by strcmp on modname, so init/main will match
+against classmaps defined by both kernel/{,base}/power/main.
+
+The current code will also map "main" classes to kernel/*/power/main,
+so they will probably work at first, but 2 independent classmaps can
+both use class-ids 0-N, but will conflict if they're both used by a
+module.  Then we have classmap overlaps and unpredictable results.
+
+patch-25 eliminates the ambiguity by using KBUILD_MODFILE to provide a
+unique module-name, then adds matching against kbasename(modname) to
+restore the legacy query behavior.  It *does* change the modname
+exposed in /proc/dynamic_debug/control, but not the result of a query
+like "module main +p".
+
+OLDER VERSIONS:
+
+V2 primarily revises:
+ https://lore.kernel.org/lkml/20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com/
+    
+V2 addressed most of sashiko's feedback on V1:
+ https://sashiko.dev/#/patchset/20260504-dd-cleanups-2-v1-0-6fdd24040642%40gmail.com
+    
+It dropped the pr-fmt patch, as not reproducible,
+advanced the drop-NAMES patch to reduce subsequent churn,
+and fixed the classmaps PARAMs to u64 to avoid 32bit flags on 32bit arches
+    
+For easy one-stop-shopping, V2 also included 2 smaller series:
+    
+1st fixes a section alignment problem, with Reviewed-by from Petr Pavlu
+ https://lore.kernel.org/lkml/20260515-asm-generic-1-v3-0-680b273666d4@gmail.com/
+    
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+    
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- .../selftests/net/openvswitch/openvswitch.sh     | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+Changes in v3:
+- EDITME: describe what is new in this series revision.
+- EDITME: use bulletpoints and terse descriptions.
+- Link to v2: https://lore.kernel.org/r/20260523-dd-maint-2-v2-0-b937312aa083@gmail.com
 
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index 8cd5b3d894ab..67f508facc91 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -305,6 +305,8 @@ test_psample() {
- 	# sFlow / IPFIX.
- 	nlpid=$(grep -E "listening on upcall packet handler" \
-             $ovs_dir/s0.out | cut -d ":" -f 2 | tr -d ' ')
-+	[ -z "$nlpid" ] && \
-+		{ info "failed to get upcall PID"; return 1; }
- 
- 	ovs_add_flow "test_psample" psample \
-             "in_port(2),eth(),eth_type(0x0800),ipv4()" \
-@@ -338,6 +340,10 @@ test_drop_reason() {
- 	ovs_drop_subsys=$(pahole -C skb_drop_reason_subsys |
- 			      awk '/OPENVSWITCH/ { print $3; }' |
- 			      tr -d ,)
-+	if [ -z "$ovs_drop_subsys" ]; then
-+		info "failed to get OVS drop subsys ID"
-+		return $ksft_skip
-+	fi
- 
- 	sbx_add "test_drop_reason" || return $?
- 
-@@ -436,13 +442,19 @@ test_arp_ping () {
- 	# Setup client namespace
- 	ip netns exec client ip addr add 172.31.110.10/24 dev c1
- 	ip netns exec client ip link set c1 up
--	HW_CLIENT=`ip netns exec client ip link show dev c1 | grep -E 'link/ether [0-9a-f:]+' | awk '{print $2;}'`
-+	HW_CLIENT=$(ip netns exec client ip link show dev c1 \
-+		| awk '/link\/ether/ {print $2}')
-+	[ -z "$HW_CLIENT" ] && \
-+		{ info "failed to get client hwaddr"; return 1; }
- 	info "Client hwaddr: $HW_CLIENT"
- 
- 	# Setup server namespace
- 	ip netns exec server ip addr add 172.31.110.20/24 dev s1
- 	ip netns exec server ip link set s1 up
--	HW_SERVER=`ip netns exec server ip link show dev s1 | grep -E 'link/ether [0-9a-f:]+' | awk '{print $2;}'`
-+	HW_SERVER=$(ip netns exec server ip link show dev s1 \
-+		| awk '/link\/ether/ {print $2}')
-+	[ -z "$HW_SERVER" ] && \
-+		{ info "failed to get server hwaddr"; return 1; }
- 	info "Server hwaddr: $HW_SERVER"
- 
- 	ovs_add_flow "test_arp_ping" arpping \
+---
+Jim Cromie (24):
+      docs/dyndbg: update examples \012 to \n
+      docs/dyndbg: explain flags parse 1st
+      vmlinux.lds.h: refactor BOUNDED_SECTION_* macros into bounded_sections.lds.h
+      vmlinux.lds.h: drop unused HEADERED_SECTION* macros
+      vmlinux.lds.h: Fix ALIGN(8) omission causing NULL ptr on i386
+      vmlinux.lds.h: remove redundant ALIGN(8) directives
+      dyndbg.lds.S: fix lost dyndbg sections in modules
+      dyndbg: factor ddebug_match_desc out from ddebug_change
+      dyndbg: add stub macro for DECLARE_DYNDBG_CLASSMAP
+      dyndbg: reword "class unknown," to "class:_UNKNOWN_"
+      dyndbg-API: remove DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES and code
+      dyndbg: drop NUM_TYPE_ARGS
+      dyndbg: reduce verbose/debug clutter
+      dyndbg: refactor param_set_dyndbg_classes and below
+      dyndbg: tighten fn-sig of ddebug_apply_class_bitmap
+      dyndbg: replace classmap list with an array-slice
+      dyndbg: macrofy a 2-index for-loop pattern
+      dyndbg: Upgrade class param storage to u64 for 64-bit classmaps
+      dyndbg,module: make proper substructs in _ddebug_info
+      dyndbg: move mod_name down from struct ddebug_table to _ddebug_info
+      dyndbg: hoist classmap-filter-by-modname up to ddebug_add_module
+      selftests-dyndbg: add a dynamic_debug run_tests target
+      dyndbg: change __dynamic_func_call_cls* macros into expressions
+      dynamic_debug: use KBUILD_MODFILE for unique builtin module names
+
+ Documentation/admin-guide/dynamic-debug-howto.rst  |  55 ++-
+ MAINTAINERS                                        |   2 +
+ drivers/gpu/drm/drm_print.c                        |   6 +-
+ include/asm-generic/bounded_sections.lds.h         |  32 ++
+ include/asm-generic/dyndbg.lds.h                   |  18 +
+ include/asm-generic/vmlinux.lds.h                  |  68 +--
+ include/drm/drm_print.h                            |   2 +-
+ include/linux/dynamic_debug.h                      | 133 +++---
+ kernel/module/main.c                               |  12 +-
+ lib/dynamic_debug.c                                | 501 ++++++++++-----------
+ lib/test_dynamic_debug.c                           |  30 +-
+ scripts/module.lds.S                               |   2 +
+ tools/testing/selftests/Makefile                   |   1 +
+ tools/testing/selftests/dynamic_debug/Makefile     |   9 +
+ tools/testing/selftests/dynamic_debug/config       |   8 +
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     | 294 ++++++++++++
+ 16 files changed, 736 insertions(+), 437 deletions(-)
+---
+base-commit: e43ffb69e0438cddd72aaa30898b4dc446f664f8
+change-id: 20260521-dd-maint-2-76c542079420
+
+Best regards,
 -- 
-2.54.0
+Jim Cromie <jim.cromie@gmail.com>
 
