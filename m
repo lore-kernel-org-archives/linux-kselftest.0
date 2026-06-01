@@ -1,384 +1,83 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6EA37DE9D
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 19:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FAE537DAB3;
+	Mon,  1 Jun 2026 19:55:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780341886; cv=none; b=sOBAZTzDBxumjQVF6+V7knsfkTf2vQYySaZ6YeafU9luolAQoqQw5jWQIHsUacVr4n/t2D2v7xC9SNjieVbWn3fO6Qw31msGnxXSyd8PTlp0STXfxkFPuM/ZobyFnpTPoEITqXEsuj2rzhU6gQfCKUvD6TLFwSPN8hKlV+IWAz4=
+	t=1780343738; cv=none; b=CScj5SsNyuusvmcPA8x78oNwtxLe9avqburXjRSbDHyLgUh608XNVJ689fOMwW+7YjapdZkxGljrrRouVZ1yJJjp1VjlfTPlmtxf2L9CUztihcDbEo9dS+p0Z72ebFIRSm0IRUTc6VAxw2zonFVzVhEmOjDhHrpRnwaeTVACPKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780341886; c=relaxed/simple;
-	bh=jVuw5EjU5tCYizHznvHPTOEU3be/b9VcUMLV9hcnLs4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PLvBU7KBti0kweg5E+9grwXofrdjDx9G/ADZhQadX4XdILcoe6CN2D3xI/LjY+GBh/zPbBqD5sCMbfT7Ltn9VLzLplMdnCCXhvUxTsqWpQj7Q8K3g71vYqos/Z+S30FhiYqP1hcTbqw4HMMAXIwFsF28vQKPFW+KOzX3gSPbQxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IAPixNMg; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780343738; c=relaxed/simple;
+	bh=uW8BgLcKXeWCr1hOUHfg6YdmNr/u6dKf80Ywx087aaw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I5mM77AhBhSBOr3TwU+Eq27QxClXQgqyJ2Jb16KNw4VHumKbNFBmNNLgd1XjZDo+Nxxk2AR3bSU3HrNgXNNZPNeV2BLdR9NdQq44JBYnCYFJ3fiNG5xjzwrlwNMoMfR0sgn8Ylzf2qOUCO8e8vOYdh02KUz+2v+yoW27pfQi4Ns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQajPwgU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IAPixNMg"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c8583b8fd89so1587232a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 12:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780341879; x=1780946679; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w6oyn/opTXc3qNaiYrGm87ZPTedwK1fmyCVPQB5WlRQ=;
-        b=IAPixNMgkSUK696qSg1AavZ62Hnqy47hBSiAgSxwDb2C7kJ1pMUPZwKmONmcd2IHOL
-         kcXckF2jtafQbJJlpe1hWQ+7ntuW5kRUTRz7oAX3hLAzP1jt7QgXoIQ+VInnLUF5PNG/
-         GPhw8UXNzx8lGkoOWXl1V9zEfKL93fa2arLWoy4PAqx2R6Whdl1/Q2xlErJKQJQewk9k
-         2y7h10DcTJLVTyGXIS+51/Cd+BgguGF/8Cb4QTMt1LRblytVoC455JEu7d2p/SNLrB9n
-         0KIwLSc7FL/RntvOHzu2ZfpOiIKb8RQawMKh0NwK6sGI4NgPfv8yhicUb2KLEjvUT/iy
-         G4JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780341879; x=1780946679;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=w6oyn/opTXc3qNaiYrGm87ZPTedwK1fmyCVPQB5WlRQ=;
-        b=mD5/EMaY/HeUiCOk/mSHAGBGQrxLGKtmJ3O1b0G9bNPG2xw61BPdkhy3gslk7ryXJl
-         FFaEatUARYSATq3eZ/6olzkgp9rJJPYSRbB29hgZdWZU+8ALKoMszb+HCFlMyg0rJVVq
-         j/y0fRX0xfiL/vEVaFLAuGg9wiiqImyggtsuzaPsXlxbeGwXdtkM6ZWUXEPlyWCEcE+9
-         mkVGrizH1q8KFCfV94h5ZN+IxxB1yY4Xh2wD4k92cjaWrtyCx006eQow7nIlegEkNqLa
-         10M2w3Hwm9TeNcIQUAndwGuYrHbYNrui9vREUG23Fow6Iksi6SHTN/A6yPGEdDjR8BaF
-         zoOg==
-X-Forwarded-Encrypted: i=1; AFNElJ9/hPwX72sV8+y/kf5wNDyy+qi+tu2Fbs3gaR/zfHL/juwgA8WW1JoMZvU5tsl5DMCjFns0w74xKs/4a2JL+Jg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCFxx/AdRUDphqPbrjOHDQNfT/uiDNtVJHaTsW0l9wqK39ryOX
-	T0mbzKBrcuPwEQGXsz+5Ih6ZPi9ie7l1tZ+kzFnofNxFSPxx9UTxLPrn
-X-Gm-Gg: Acq92OFZJQBbdjXWP0v2iRKprzMz0yAQ3SJn7Z6YAHlrI93we/Gsa87O/9WhDb0s2Pu
-	Ni7uefhHkfMgp49vRWMiUzCT3OhwMmA9vViNlV3SKJFphbFfvEBh/jn0/ZMq9bM2njHj2sSRN/p
-	mAqcw8d3/57/GoH26K5XH6B5UsWzp4ifYhsaUOj+78CP20kfBS6M80o7M6XzZBmUTG5+WzK3OaA
-	5XH7JdR4cEsYBtxz+F8pcY/ZrH5X50l/vOEdLEWp4Z+bpiPPCQ9svVJizd/VwtPlkPlF1vOa8jT
-	+d3l1wIOjCBKkiaouR6yoLhcH6l8QE49Mnh0r1oRpGnGpMFfuuzGHyp+mlcdqWYdqKT9AsAAJfy
-	gbsCSpqu0Mnb/w5NqoJ+DCnDV8bu+phV18VDq6oDlJLCivh8RXCwDe3yDEeQTnXJhBpMKNd7SXY
-	5cxLS8NCNLrzzSzUjz/wbH5Tg9edGsEg==
-X-Received: by 2002:a05:6a20:4386:b0:398:8870:b58f with SMTP id adf61e73a8af0-3b427fb8528mr13017558637.14.1780341878840;
-        Mon, 01 Jun 2026 12:24:38 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:4d::])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c857fb0b31dsm8997113a12.32.2026.06.01.12.24.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 12:24:38 -0700 (PDT)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Mon, 01 Jun 2026 12:24:28 -0700
-Subject: [PATCH net-next 2/2] selftests: drv-net: add userns devmem RX test
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQajPwgU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF631F00893;
+	Mon,  1 Jun 2026 19:55:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780343737;
+	bh=rzAAcVnBObtsD4DzRUXCCaUoF+wigWmV5eP+yceRm6Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=BQajPwgUvU6B9J4ZcgsDDOzuz5NUEl/Cdbm63kkJ0ppoFFiVpz33fqC9Y8FYW5m/v
+	 sCvvIFMmJSPZOVTLFtboEUk83KdJrNEUJcjHRKVjN4dnmtzuGuIWumxncjlnvLj98X
+	 0jY4mrC+QiTFrLox+sg2+t4sGY7v0rqV9IUDTsPQdrUwT84MHvC4nYTEDNrEya9RSo
+	 Zon9PWYBjXAG2Ho2RqQhIwfgg1R76bU7JIPRbgXbHNdUT79zoAXielIIVMN/CHDCp4
+	 GMUL7nWdvoDesnKGStsEmO+VWgqoA9uqJhT10xS1OvogwOVOvo9DFhhBo1U6FzIYCe
+	 M9+J9tkesQeMQ==
+Date: Mon, 1 Jun 2026 12:55:37 -0700
+From: Kees Cook <kees@kernel.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Li Chen <me@linux.beauty>, Alexander Viro <viro@zeniv.linux.org.uk>,
+	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, x86@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Jan Kara <jack@suse.cz>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [RFC PATCH v1 00/13] exec: add spawn templates for repeated
+ executable startup
+Message-ID: <202606011254.5FCBD65@keescook>
+References: <20260528095235.2491226-1-me@linux.beauty>
+ <20260528-madig-fachrichtung-fehlinformation-61117ba640da@brauner>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260601-nl-prov-v1-2-9bc57d6ca3f3@meta.com>
-References: <20260601-nl-prov-v1-0-9bc57d6ca3f3@meta.com>
-In-Reply-To: <20260601-nl-prov-v1-0-9bc57d6ca3f3@meta.com>
-To: Donald Hunter <donald.hunter@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Stanislav Fomichev <sdf@fomichev.me>, 
- Mina Almasry <almasrymina@google.com>, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260528-madig-fachrichtung-fehlinformation-61117ba640da@brauner>
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
+On Thu, May 28, 2026 at 01:02:53PM +0200, Christian Brauner wrote:
+> On Thu, May 28, 2026 at 05:52:21PM +0800, Li Chen wrote:
+> > Hi,
+> > 
+> > This is an early RFC for an idea that is probably still rough in both the
+> > UAPI and implementation details. Sorry for the rough edges; I am sending
+> > it now to check whether this direction is worth pursuing and to get
+> > feedback on the kernel/userspace boundary.
+> 
+> The idea of having a builder api for exec isn't all that crazy. But it
+> should simply be built on top of pidfds and thus pidfs itself instead.
+> It has all the basic infrastructure in place already. Any implementation
+> should also allow userspace to implement posix_spawn() on top of it.
+> 
+> fd = pidfd_open(0, PIDFD_EMPTY /* or better name */)
+> 
+> pidfd_config(fd, ...) // modeled similar to fsconfig()
 
-Add userns_devmem.py, which mirrors nk_devmem.py but places the netkit
-guest in a netns whose owning user_ns is non-init. ncdevmem is ran there
-via nsenter so the bind-rx call is issued with creds that hold
-CAP_NET_ADMIN only in the child user_ns.
+FWIW, I agree this should be modelled after fsconfig and built on pidfs.
+Doing so will avoid a bunch of design issues, etc.
 
-Without the preceding GENL_UNS_ADMIN_PERM patch the test fails at
-bind-rx with EPERM, but with the patch the transfer completes and tests
-pass.
-
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
- tools/testing/selftests/drivers/net/hw/Makefile    |  1 +
- tools/testing/selftests/drivers/net/hw/config      |  1 +
- .../selftests/drivers/net/hw/lib/py/__init__.py    |  4 +-
- .../selftests/drivers/net/hw/userns_devmem.py      | 48 +++++++++++++
- tools/testing/selftests/drivers/net/lib/py/env.py  |  8 ++-
- tools/testing/selftests/net/lib/py/__init__.py     |  4 +-
- tools/testing/selftests/net/lib/py/netns.py        | 79 ++++++++++++++++++++++
- tools/testing/selftests/net/lib/py/utils.py        |  7 +-
- 8 files changed, 144 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index c7a1206880ea..fd0535a96d84 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -47,6 +47,7 @@ TEST_PROGS = \
- 	rss_input_xfrm.py \
- 	toeplitz.py \
- 	tso.py \
-+	userns_devmem.py \
- 	uso.py \
- 	xdp_metadata.py \
- 	xsk_reconfig.py \
-diff --git a/tools/testing/selftests/drivers/net/hw/config b/tools/testing/selftests/drivers/net/hw/config
-index 8c132ace2b8d..3da6d3e39960 100644
---- a/tools/testing/selftests/drivers/net/hw/config
-+++ b/tools/testing/selftests/drivers/net/hw/config
-@@ -17,5 +17,6 @@ CONFIG_NET_IPGRE_DEMUX=y
- CONFIG_NETKIT=y
- CONFIG_NET_SCH_INGRESS=y
- CONFIG_UDMABUF=y
-+CONFIG_USER_NS=y
- CONFIG_VXLAN=y
- CONFIG_XFRM_USER=y
-diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-index 84a4dab6c649..8a58cb17cc06 100644
---- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-+++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-@@ -18,7 +18,7 @@ try:
-     sys.path.append(KSFT_DIR.as_posix())
- 
-     # Import one by one to avoid pylint false positives
--    from net.lib.py import NetNS, NetNSEnter, NetdevSimDev
-+    from net.lib.py import NetNS, NetNSEnter, NetdevSimDev, UserNetNS
-     from net.lib.py import EthtoolFamily, NetdevFamily, NetshaperFamily, \
-         NlError, RtnlFamily, DevlinkFamily, PSPFamily, Netlink
-     from net.lib.py import CmdExitFailure
-@@ -34,7 +34,7 @@ try:
-     from drivers.net.lib.py import GenerateTraffic, Remote, Iperf3Runner
-     from drivers.net.lib.py import NetDrvEnv, NetDrvEpEnv, NetDrvContEnv
- 
--    __all__ = ["NetNS", "NetNSEnter", "NetdevSimDev",
-+    __all__ = ["NetNS", "NetNSEnter", "NetdevSimDev", "UserNetNS",
-                "EthtoolFamily", "NetdevFamily", "NetshaperFamily",
-                "NlError", "RtnlFamily", "DevlinkFamily", "PSPFamily", "Netlink",
-                "CmdExitFailure",
-diff --git a/tools/testing/selftests/drivers/net/hw/userns_devmem.py b/tools/testing/selftests/drivers/net/hw/userns_devmem.py
-new file mode 100755
-index 000000000000..f824cc9ed3c6
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/userns_devmem.py
-@@ -0,0 +1,48 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+"""
-+Devmem tests for non-init userns.
-+"""
-+
-+import os
-+
-+from devmem_lib import run_rx, run_rx_hds, run_tx, run_tx_chunks, setup_test
-+from lib.py import NetDrvContEnv, ksft_disruptive, ksft_exit, ksft_run
-+
-+
-+@ksft_disruptive
-+def check_userns_rx(cfg) -> None:
-+    """Run the devmem RX test through non-init userns netkit."""
-+    run_rx(cfg)
-+
-+
-+@ksft_disruptive
-+def check_userns_tx(cfg) -> None:
-+    """Run the devmem TX test through non-init userns netkit."""
-+    run_tx(cfg)
-+
-+
-+@ksft_disruptive
-+def check_userns_tx_chunks(cfg) -> None:
-+    """Run the devmem TX chunking test through non-init userns netkit."""
-+    run_tx_chunks(cfg)
-+
-+
-+def check_userns_rx_hds(cfg) -> None:
-+    """Run the HDS test through non-init userns netkit."""
-+    run_rx_hds(cfg)
-+
-+
-+def main() -> None:
-+    with NetDrvContEnv(__file__, userns=True, rxqueues=2,
-+                       primary_rx_redirect=True) as cfg:
-+        setup_test(cfg,
-+                   os.path.join(os.path.dirname(os.path.abspath(__file__)),
-+                                "ncdevmem"))
-+        ksft_run([check_userns_rx, check_userns_tx, check_userns_tx_chunks,
-+                  check_userns_rx_hds], args=(cfg,))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
-diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-index ef317aef3a0a..2cc78b8a2152 100644
---- a/tools/testing/selftests/drivers/net/lib/py/env.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-@@ -9,7 +9,7 @@ from pathlib import Path
- from lib.py import KsftSkipEx, KsftXfailEx
- from lib.py import ksft_setup, wait_file
- from lib.py import cmd, ethtool, ip, CmdExitFailure
--from lib.py import NetNS, NetdevSimDev
-+from lib.py import NetNS, NetdevSimDev, UserNetNS
- from .remote import Remote
- from . import bpftool, RtnlFamily, Netlink
- 
-@@ -337,8 +337,10 @@ class NetDrvContEnv(NetDrvEpEnv):
-               +---------------+
-     """
- 
--    def __init__(self, src_path, rxqueues=1, primary_rx_redirect=False, **kwargs):
-+    def __init__(self, src_path, rxqueues=1, primary_rx_redirect=False,
-+                 userns=False, **kwargs):
-         self.netns = None
-+        self._userns = userns
-         self._nk_host_ifname = None
-         self.nk_guest_ifname = None
-         self._tc_clsact_added = False
-@@ -463,7 +465,7 @@ class NetDrvContEnv(NetDrvEpEnv):
-         with open(ra_path, "w", encoding="utf-8") as f:
-             f.write("2")
- 
--        self.netns = NetNS()
-+        self.netns = UserNetNS() if self._userns else NetNS()
-         cmd("ip netns attach init 1")
-         self._init_ns_attached = True
-         ip("netns set init 0", ns=self.netns)
-diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
-index 64a8c1ed4950..e58bdbdc58ee 100644
---- a/tools/testing/selftests/net/lib/py/__init__.py
-+++ b/tools/testing/selftests/net/lib/py/__init__.py
-@@ -10,7 +10,7 @@ from .ksft import KsftFailEx, KsftSkipEx, KsftXfailEx, ksft_pr, ksft_eq, \
-     ksft_ge, ksft_gt, ksft_lt, ksft_raises, ksft_busy_wait, \
-     ktap_result, ksft_disruptive, ksft_setup, ksft_run, ksft_exit, \
-     ksft_variants, KsftNamedVariant
--from .netns import NetNS, NetNSEnter
-+from .netns import NetNS, NetNSEnter, UserNetNS
- from .nsim import NetdevSim, NetdevSimDev
- from .utils import CmdExitFailure, fd_read_timeout, cmd, bkg, defer, \
-     bpftool, ip, ethtool, bpftrace, rand_port, rand_ports, wait_port_listen, \
-@@ -26,7 +26,7 @@ __all__ = ["KSRC",
-            "ksft_is", "ksft_ge", "ksft_gt", "ksft_lt", "ksft_raises",
-            "ksft_busy_wait", "ktap_result", "ksft_disruptive", "ksft_setup",
-            "ksft_run", "ksft_exit", "ksft_variants", "KsftNamedVariant",
--           "NetNS", "NetNSEnter",
-+           "NetNS", "NetNSEnter", "UserNetNS",
-            "CmdExitFailure", "fd_read_timeout", "cmd", "bkg", "defer",
-            "bpftool", "ip", "ethtool", "bpftrace", "rand_port", "rand_ports",
-            "wait_port_listen", "wait_file", "tool", "tc",
-diff --git a/tools/testing/selftests/net/lib/py/netns.py b/tools/testing/selftests/net/lib/py/netns.py
-index 8e9317044eef..965f5802bef2 100644
---- a/tools/testing/selftests/net/lib/py/netns.py
-+++ b/tools/testing/selftests/net/lib/py/netns.py
-@@ -2,8 +2,12 @@
- 
- from .utils import ip
- import ctypes
-+import os
- import random
- import string
-+import subprocess
-+import time
-+from pathlib import Path
- 
- libc = ctypes.cdll.LoadLibrary('libc.so.6')
- 
-@@ -34,6 +38,81 @@ class NetNS:
-         return f"NetNS({self.name})"
- 
- 
-+class UserNetNS:
-+    """Network namespace owned by a non-init user namespace."""
-+
-+    def __init__(self):
-+        self.name = ''.join(
-+            random.choice(string.ascii_lowercase) for _ in range(8))
-+        self.user_ns_path = f"/run/userns/{self.name}"
-+        self.net_ns_path = f"/run/netns/{self.name}"
-+        self._user_mounted = False
-+        self._net_mounted = False
-+        self._unshare = None
-+
-+        os.makedirs("/run/userns", exist_ok=True)
-+        os.makedirs("/run/netns", exist_ok=True)
-+
-+        Path(self.user_ns_path).touch()
-+        Path(self.net_ns_path).touch()
-+
-+        self._unshare = subprocess.Popen(
-+            ["unshare", "--user", "--net", "--map-root-user",
-+             "sleep", "infinity"])
-+
-+        try:
-+            pid = self._unshare.pid
-+            init_user = os.readlink("/proc/self/ns/user")
-+            for _ in range(200):
-+                try:
-+                    if os.readlink(f"/proc/{pid}/ns/user") != init_user:
-+                        break
-+                except OSError:
-+                    pass
-+                time.sleep(0.01)
-+            else:
-+                raise RuntimeError("unshare child did not create userns")
-+
-+            subprocess.run(["mount", "--bind", f"/proc/{pid}/ns/user",
-+                            self.user_ns_path], check=True)
-+            self._user_mounted = True
-+            subprocess.run(["mount", "--bind", f"/proc/{pid}/ns/net",
-+                            self.net_ns_path], check=True)
-+            self._net_mounted = True
-+        except (OSError, RuntimeError, subprocess.CalledProcessError):
-+            self._unshare.kill()
-+            self._unshare.wait()
-+            raise
-+
-+    def __del__(self):
-+        if self._net_mounted:
-+            subprocess.run(["umount", self.net_ns_path], check=False)
-+            self._net_mounted = False
-+        if self._user_mounted:
-+            subprocess.run(["umount", self.user_ns_path], check=False)
-+            self._user_mounted = False
-+        if self._unshare and self._unshare.poll() is None:
-+            self._unshare.kill()
-+            self._unshare.wait()
-+        for path in (self.net_ns_path, self.user_ns_path):
-+            try:
-+                os.unlink(path)
-+            except OSError:
-+                pass
-+
-+    def __enter__(self):
-+        return self
-+
-+    def __exit__(self, ex_type, ex_value, ex_tb):
-+        self.__del__()
-+
-+    def __str__(self):
-+        return self.name
-+
-+    def __repr__(self):
-+        return f"UserNetNS({self.name})"
-+
-+
- class NetNSEnter:
-     def __init__(self, ns_name):
-         self.ns_path = f"/run/netns/{ns_name}"
-diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
-index be9408a77168..87eae79d01c1 100644
---- a/tools/testing/selftests/net/lib/py/utils.py
-+++ b/tools/testing/selftests/net/lib/py/utils.py
-@@ -47,7 +47,12 @@ class cmd:
-                  background=False, host=None, timeout=5, ksft_ready=None,
-                  ksft_wait=None):
-         if ns:
--            comm = f'ip netns exec {ns} ' + comm
-+            if hasattr(ns, 'user_ns_path'):
-+                comm = (f'nsenter --user={ns.user_ns_path} '
-+                        f'--net={ns.net_ns_path} --setuid=0 --setgid=0 -- '
-+                        + comm)
-+            else:
-+                comm = f'ip netns exec {ns} ' + comm
- 
-         self.stdout = None
-         self.stderr = None
+-Kees
 
 -- 
-2.53.0-Meta
-
+Kees Cook
