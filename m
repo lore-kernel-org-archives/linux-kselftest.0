@@ -1,141 +1,109 @@
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010023.outbound.protection.outlook.com [52.101.201.23])
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582703FB052;
-	Mon,  1 Jun 2026 20:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.23
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780346610; cv=fail; b=MP1aDJU7vEapHnQbpYsV/RgNJXPsZ/z+EaItOUuJA864fwprHuLL0aitZHMeUjI6aNZcek+GVNw0hT1NZRMreyHV5GFciAxETT29QVlbFVbJpsyIOBsfEaYTw3zi1VFrEuHGzXNJ5U1lCyVx/9OH1CBnjzKm1Yaos1fmaIoxEGM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780346610; c=relaxed/simple;
-	bh=l8DRyxc3BEGZ+DtrKLh89xFQrScMLfOWL508uSTYE1g=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sjr0EqBg0j8ZU06GBoyDeWasxbP+ANW3zIvSs4hzjG4N1XiHs1FoHk5pUYe1xLY+lsnQCmcfdhjtIhIdW/3fTTJ5/COhP6bBup7OojlN/L2DxMxwCw7aH1EWFsw940/vcvB2TVy18YELOkERBwoTfRLgeVZqsdCUQtTPMzC+9Tk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HUuY5Adk; arc=fail smtp.client-ip=52.101.201.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HUuY5Adk"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YtB4OQKezgcjO9y/CdRGW3zURsFv/G4d+G3EajpWw0BTTsnp8lSfSqSWdKbJG6pYrw1aYdDdsbK2r/7kbouXUqCqbcRpkwNH6DOgtcSetA1qQuCGiREuZTxV9xd6/C+HgoMzzimgIjmw395KsMPavkgEpPBw1GUjf5bxRJxfkXpXtXfKClYSQlauo8a3AVrEStj/3gfFCtCNC1F75puIYopGZmoNQwCiZiOW2y/zaEIasEXwOMJ1t+VC7X9uhV+PpvYVgbRs8mT4in2zrCJ7+hgFY5KFemWg6AsMjrIOKizhnb6tQnYNaprauz9Sf7PLxDykOOTE8U9fTUAj6A/l6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oHzPqikahsSOHDfoWnamNXsKZE7HD2IguEH+X5fM06s=;
- b=ydsxPnI/mngGMUf+PZkMpRAdpdQVHTJynbub84Y1JiNQKyVIMR41JmDlx0W0GPxW4xd3RJHo+B1xXgek1WFkXcSfJskxyTcTeZB5idPtYa6QgFNkOAgjtMJKcNGMCRgN/HnHxEcsQfWqJ/yZkFjgVCOYdIbedI31+Hy0nHNbnTw9e0EJMzlF47MzHeoqMr/dbHKBRAbPGXXEHvOKwixA1U64CIZWmN3mZ3E9VaXDX2l9XjEKzPjdvfBDmX7jclvHuL2lzQGssH2Xomrv7PquPWHpFf4c8XCvlexCSyfWebSHozFycs4Lzi2HPoGJ5Kcp+2tsLNv7it1qnwDOHnRkXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oHzPqikahsSOHDfoWnamNXsKZE7HD2IguEH+X5fM06s=;
- b=HUuY5Adkfz2cx2GmJOuRDCgWeJ5+yjiMMutnJ2zG8huK19sXupwWqZFuzE5Yqy5IbDPfJMD1G06WgWMdbKHREz8DQiGO0MGPTV9jdZSHr+r6DnOrlQu3XmgRcQd5YKq3WqXqvayeA5Fdga1a5cw2KS8Bh4XMoFYp5h6q3CFmLn8dnDsEYMek1LEgArnivVeQAPQubGZBMHv26M/C3AchO25A0RTdiu2An827JhNySzHER315b0HdT7FTdoqBGeZW1BKQqr3wJensgg2uKnUYEeyyP49AObgUDLK7gBO1vsuEbOb4NOCpwp7lwtyAMksG+iNpXg02zXLjlwMkHr1VCQ==
-Received: from MN2PR22CA0030.namprd22.prod.outlook.com (2603:10b6:208:238::35)
- by SJ0PR12MB6736.namprd12.prod.outlook.com (2603:10b6:a03:47a::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.15; Mon, 1 Jun 2026
- 20:43:21 +0000
-Received: from MN1PEPF0000ECDB.namprd02.prod.outlook.com
- (2603:10b6:208:238:cafe::2c) by MN2PR22CA0030.outlook.office365.com
- (2603:10b6:208:238::35) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.71.17 via Frontend Transport; Mon, 1
- Jun 2026 20:43:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- MN1PEPF0000ECDB.mail.protection.outlook.com (10.167.242.139) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.92.5 via Frontend Transport; Mon, 1 Jun 2026 20:43:21 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 1 Jun
- 2026 13:42:57 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 1 Jun
- 2026 13:42:56 -0700
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Mon, 1 Jun 2026 13:42:56 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: <jgg@nvidia.com>, <kevin.tian@intel.com>
-CC: <joro@8bytes.org>, <baolu.lu@linux.intel.com>, <iommu@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH v1 5/7] iommufd: Break the loop on failure in iommufd_fault_fops_read()
-Date: Mon, 1 Jun 2026 13:42:36 -0700
-Message-ID: <336a9b6e44fe66a24199d3be777c405c85c98622.1780343944.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1780343944.git.nicolinc@nvidia.com>
-References: <cover.1780343944.git.nicolinc@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC388386C25;
+	Mon,  1 Jun 2026 20:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.18.0.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780347546; cv=none; b=J/eaMYw1+XYQqGKM+IvLqRQ/oy9FRz69nN4ah/+T/WwgG8xpx1oXOtmiF2Kcq7V6LTVsFGQ9ggCh2hgKp3gGo8TJg2/sGPJseJy7TxPxWPb3mkMcEkY5KqpGLQwZ12vzqHxgzNKy818lw0M6fC/imvgfUiv4555SabcOoC67sr0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780347546; c=relaxed/simple;
+	bh=JSuMB78WGrnAVsJ7teKH/zI0mt19h3G7ax62Fj2NvyE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=plFGTNz0M+lvKSLMn6n2ix1XPXVL95qy2avLq0cwLkBD8yW5ySkb7Q2XbwPOF6cSSzSBQONY1JaJ59ulOvoNY31IDPzdzLFbSZE563gsgHEcI5TDrmjrD8Fqzj4vzX0Uv1IOYRQFtgBJr9ZnmfsVb9KHJGipKI36RFqpsKLL09k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=nefkom.net; arc=none smtp.client-ip=212.18.0.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nefkom.net
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.10])
+	by mail-out.m-online.net (Postfix) with ESMTP id 4gTmXZ1PYGz1sGWy;
+	Mon,  1 Jun 2026 22:58:54 +0200 (CEST)
+Received: from frontend03.mail.m-online.net (unknown [192.168.6.182])
+	by mail-out.m-online.net (Postfix) with ESMTP id 4gTmXY53gdz1sG8c;
+	Mon,  1 Jun 2026 22:58:53 +0200 (CEST)
+Received: from localhost (dynscan3.mnet-online.de [192.168.6.87])
+	by mail.m-online.net (Postfix) with ESMTP id 4gTmXY3vBrz1qqlS;
+	Mon,  1 Jun 2026 22:58:53 +0200 (CEST)
+X-Virus-Scanned: amavis at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.6.182])
+ by localhost (dynscan3.mail.m-online.net [192.168.6.87]) (amavis, port 10024)
+ with ESMTP id e1EAzhraFHWf; Mon,  1 Jun 2026 22:58:52 +0200 (CEST)
+X-Auth-Info: FqnxIDPc+CejjKHAe9u56JUkf8btEszKYhyFrkdtC5LkcdNUzyTOWALY7FYpYrLU
+Received: from igel.home (aftr-82-135-83-133.dynamic.mnet-online.de [82.135.83.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.mnet-online.de (Postfix) with ESMTPSA;
+	Mon,  1 Jun 2026 22:58:52 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+	id 6F0742C16DB; Mon,  1 Jun 2026 22:58:52 +0200 (CEST)
+From: Andreas Schwab <schwab@linux-m68k.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Deepak Gupta via B4 Relay <devnull+debug.rivosinc.com@kernel.org>,
+  Thomas Gleixner <tglx@linutronix.de>,  Ingo Molnar <mingo@redhat.com>,
+  Borislav Petkov <bp@alien8.de>,  Dave Hansen
+ <dave.hansen@linux.intel.com>,  x86@kernel.org,  "H. Peter Anvin"
+ <hpa@zytor.com>,  Andrew Morton <akpm@linux-foundation.org>,  "Liam R.
+ Howlett" <Liam.Howlett@oracle.com>,  Vlastimil Babka <vbabka@suse.cz>,
+  Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,  Paul Walmsley
+ <paul.walmsley@sifive.com>,  Palmer Dabbelt <palmer@dabbelt.com>,  Albert
+ Ou <aou@eecs.berkeley.edu>,  Conor Dooley <conor@kernel.org>,  Rob Herring
+ <robh@kernel.org>,  Krzysztof Kozlowski <krzk+dt@kernel.org>,  Arnd
+ Bergmann <arnd@arndb.de>,  Christian Brauner <brauner@kernel.org>,  Peter
+ Zijlstra <peterz@infradead.org>,  Oleg Nesterov <oleg@redhat.com>,  Eric
+ Biederman <ebiederm@xmission.com>,  Kees Cook <kees@kernel.org>,  Jonathan
+ Corbet <corbet@lwn.net>,  Shuah Khan <shuah@kernel.org>,  Jann Horn
+ <jannh@google.com>,  Conor Dooley <conor+dt@kernel.org>,  Miguel Ojeda
+ <ojeda@kernel.org>,  Alex Gaynor <alex.gaynor@gmail.com>,  Boqun Feng
+ <boqun.feng@gmail.com>,  Gary Guo <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6?=
+ =?utf-8?Q?rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>,  Andreas Hindborg <a.hindborg@kernel.org>,
+  Alice Ryhl <aliceryhl@google.com>,  Trevor Gross <tmgross@umich.edu>,
+  Benno Lossin <lossin@kernel.org>,  linux-kernel@vger.kernel.org,
+  linux-fsdevel@vger.kernel.org,  linux-mm@kvack.org,
+  linux-riscv@lists.infradead.org,  devicetree@vger.kernel.org,
+  linux-arch@vger.kernel.org,  linux-doc@vger.kernel.org,
+  linux-kselftest@vger.kernel.org,  alistair.francis@wdc.com,
+  richard.henderson@linaro.org,  jim.shu@sifive.com,  andybnac@gmail.com,
+  kito.cheng@sifive.com,  charlie@rivosinc.com,  atishp@rivosinc.com,
+  evan@rivosinc.com,  cleger@rivosinc.com,  alexghiti@rivosinc.com,
+  samitolvanen@google.com,  broonie@kernel.org,
+  rick.p.edgecombe@intel.com,  rust-for-linux@vger.kernel.org,  Zong Li
+ <zong.li@sifive.com>
+Subject: Re: [PATCH v23 06/28] riscv/mm : ensure PROT_WRITE leads to VM_READ
+ | VM_WRITE
+In-Reply-To: <CAKC1njR+dTdvp+BmLGPtgd8dufiUwBtkQ9a-qinELT_Fmi13sQ@mail.gmail.com>
+	(Deepak Gupta's message of "Mon, 1 Jun 2026 10:57:41 -0700")
+References: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com>
+	<20251112-v5_user_cfi_series-v23-6-b55691eacf4f@rivosinc.com>
+	<87jyslndo4.fsf@igel.home>
+	<CAKC1njS=AHu6uHrH4ae8VxcdEbhgiPXYCAoN3F_mnppBd3SwOA@mail.gmail.com>
+	<875x44o9hj.fsf@igel.home>
+	<CAKC1njSn_rtCj8ii876PNQTk0nsCTfWsb4DzdymufHVthh1Rkg@mail.gmail.com>
+	<871peqgp9v.fsf@igel.home>
+	<CAKC1njR+dTdvp+BmLGPtgd8dufiUwBtkQ9a-qinELT_Fmi13sQ@mail.gmail.com>
+Date: Mon, 01 Jun 2026 22:58:52 +0200
+Message-ID: <87wlwif04z.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECDB:EE_|SJ0PR12MB6736:EE_
-X-MS-Office365-Filtering-Correlation-Id: e2fe9f7a-533d-4db8-944a-08dec01e6b22
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|36860700016|82310400026|22082099003|18002099003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	nucHATeke0wpMyNJBbgGZjMxDllBRZc7kaqe1bsATNAXw+QxMyAlwYcM/iEG4MYLDRRz1jolBC0MJ5ROgWvRybl0V3q/loBZWxoq3657KedlX6mT7xK3gc6omCpgtAFp4a7odAnasKsw8rUvp2f98iRAnN5JYKhqGUnw87n+GXfgDqKh90CnW8wcfDgqL/5seu84sYTiHfL7IH97PAKFeW3xDofB4fBlrX26aZwY+NP0nA+nU+67FPW4C+2CtZdLXaOrNG6a/vQuFXgSNv5DeWRHowGhcmoj3q8CbKKulDq6gq6TjCFhPD7WJM89nybQ63p8t+oGYCnsq4Rz8HhzLDnBXalq6sDyu3xV/mhSj1yxazERYLzUeBu9sQ/ZthhsxDDEdtVBJ/ERt+h52GqRgUfP01d/8Go/6KiQ59wQH9oaH3KcZmer8U4/odK8F6iH2DPGNlr6t3xjv8Q2WM7d56dMTzOIJh47QaPzrM7TnOp0JZREA94il5cMEGHbo92hEzmZHEqjKA9Y8kTfNlVRlLkd7wpedtaTYlcA4CiDKGp2kiYIjbn7d6u7Y5JO6ZFpI4jWlegi5qMs7fKt5FiEAGiRE9LSFILcE/Kyqn977VWY5wJwYdgZvsA7HYXqMWPzvOWQMOXi6Wn1bpWoYUwVp4e23GLElX8swLuSC0y26DZbHWRz0Yqd+6j6WApSOB+sRdMWAOJ4fyqu8fBR76RF7J4sbbvUjN/fsp26MYOPNvc=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700016)(82310400026)(22082099003)(18002099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	uscitzQ5U4+bvGkQSQgNFlx0yQsNoaUBtWfEpa2IxJB8wE4nJIFW/qEcQHjDmsTl8HIQOPMehn7PY/oB0vAJRV66IDyfJ3wHETNoKLLk/Rhv2tsgZmC6wRksFZrU7IzTqYCUQVHS6oDAIUarAYur/Vtp9RjSe0x/L/G2QXMEy0isCdluZVRfiWjvYP9IfwNUR/eBTemNvCvFIMxCSIFaFIN5HYjQGMyR9u3pfpxo7gliYVyLRcxknGxOHS49H7PEkYwzQCWD5YgGojahSq1qXlN6v4PWTvPUTpOsH5Ey8K99glonkUvQmq8y1APo8AGMaZadtM/SpLMwj6SbJJFKfV6mLqXzUn4t+oQmromN5nuBNrQif4rbRu+kEZ7p9ldae06oreFCmOSqibLsGdVjOGsmwex0I9M7b+Nfc2pkUIbxv5B9RDFgKKF4ypw86ECX
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2026 20:43:21.0109
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e2fe9f7a-533d-4db8-944a-08dec01e6b22
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000ECDB.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6736
 
-On a copy_to_user() failure inside the inner list_for_each_entry, only the
-inner loop breaks; the outer while re-fetches the just-restored fault group
-and retries the failing copy_to_user() forever, spinning the reader at 100%
-CPU with fault->mutex held.
+On Jun 01 2026, Deepak Gupta wrote:
 
-Check rc after the inner loop and break the outer while as well.
+> riscv uses `VM_SHADOW_STACK`. It's just very simple to use `protection_map`
+> with just `VM_WRITE`. On RISC-V, `-W-` is a shadow stack mapping. It's not same
+> on x86 or arm64. So `protection_map[VM_WRITE]` simply picks shadow stack
+> encoding. We just ensure that PROT_WRITE is converted to
+> "VM_READ | VM_WRITE" at vma level.
 
-Fixes: 07838f7fd529 ("iommufd: Add iommufd fault object")
-Cc: stable@vger.kernel.org
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
----
- drivers/iommu/iommufd/eventq.c | 2 ++
- 1 file changed, 2 insertions(+)
+That does not explain _why_ you need to make that user visible change,
+when others can get away without it.
 
-diff --git a/drivers/iommu/iommufd/eventq.c b/drivers/iommu/iommufd/eventq.c
-index 613024ca8f1ff..1c010e691f972 100644
---- a/drivers/iommu/iommufd/eventq.c
-+++ b/drivers/iommu/iommufd/eventq.c
-@@ -168,6 +168,8 @@ static ssize_t iommufd_fault_fops_read(struct file *filep, char __user *buf,
- 			}
- 			done += fault_size;
- 		}
-+		if (rc)
-+			break;
- 	}
- 	mutex_unlock(&fault->mutex);
- 
 -- 
-2.43.0
-
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
