@@ -1,148 +1,85 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714BA175A79;
-	Mon,  1 Jun 2026 14:21:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D7C3AEB39;
+	Mon,  1 Jun 2026 14:22:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780323710; cv=none; b=dvku+MaY8ST1l4DDkEQ7GXG6teL6HnmXSQlCnKoazmQKpllh3+JpD0JItNumPmkGFAUmNnUACL/mrIaeg8xrsshEMupGncapeOLXsuWs35J1OUiNc3/9XmJNl6HVOl5JrJjV+q68PyLq2zFktSieAnS2lLWBVm3FVLvQC646wqc=
+	t=1780323764; cv=none; b=Bl5mj/2o1bn+QvtAphewTlYxOUCzVIuaplg/AOcqA8AYAJNOzSuq2fLRVdP6vEtqDiHims/B18o0p1OgOcu6aSeHrDxgq2PfsiuzXHv8wU5g54/IWsExjJXNXy/qLbZlBY22qmppNR2RxfHFBdorbkGTQ3E4rLk3zaDvZjdRAKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780323710; c=relaxed/simple;
-	bh=IOcxPEHICCL51BKS06FyAFs8cw1ni6OLEKerno7YO5o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R9rR5cSqPpbrzNzfGjNlVgLyAj/7gIGvWp5qcItScWM+ykNrYGbaHJ7uZBBwXetbO1d1EH15MQ9QH7XEOUDNPBK8/xLPpaaHqYU8pApVhSSY++uKZ6V3ni75EBu6bBJ/RPeWO+8i1Y+MsIKvlF1ArLQYnql91QlAqm4noF81af0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=sSAUDiDC; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1780323764; c=relaxed/simple;
+	bh=CJq2cFBmG14UvwiCxmgjiHnVptheGLoBGxcsHnoFS2M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=e26RvbM63P4Uuh3zFu/ylwIf2o47AHO4/vmjeBpWQoB1nVgVzi6ChUXLRan9tVB05H8TXbB7kEti5WbjdLoH/vNBibIKPsGqAm7NkxOL9B1AgGFApGjK6jWyJw1usa1Y7D/7ImOXYcd/YMRFov/Jp08FRBou6t9ksG/0ynN+/K8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RiKQ15m8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="sSAUDiDC"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=ld8GsU1c1V5Fz4U8E6o0CkhW7dY85l6LqJOFpHNFmks=; b=sSAUDiDCq5NGSHv+nC+l+qz+Vj
-	lC/Gmk8HutkP0z9ZfJbS8rJEh8J7xUVl582c6HkKJVRq4S0o1oJpWTpb9fFhfz6XjIUl2HU1pMVUd
-	pPDiqBOmGN+ctv5derWtH/PoW7qvNXwZEk/b4m7CxwdUB9Tl9tFYWR+pKM2taEn+TDEB7WksASSn2
-	bzXvFegZfjXeVMk4ODi5RwzC5gQR3SiWB8jBNdVjy2W4FEKQUxImN/OC3wfnRXo4ZzghmUf+rg/aj
-	AJy8zonYFpgJYYdUAm7eJgpZJ04D3d15Ejn3Yj2XAIqfzo/OhlX2dBWTtRviXFr6+JbTB4iSyZ5ci
-	VAv81dWQ==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wU3WI-002Eg1-34;
-	Mon, 01 Jun 2026 14:21:35 +0000
-Date: Mon, 1 Jun 2026 07:21:29 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc: Marcel Holtmann <marcel@holtmann.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 0/6] Bluetooth: convert remaining bluetooth
- socket families to getsockopt_iter
-Message-ID: <ah2GaClhUehy5ys9@gmail.com>
-References: <20260512-getsock_three-v2-0-30b7b22ef14c@debian.org>
- <CABBYNZ+nvtMHcU9but5VEG891vyO=K0MF3OAGofANxzdLVmw-g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RiKQ15m8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A4F51F00893;
+	Mon,  1 Jun 2026 14:22:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780323763;
+	bh=Xb9w3aa2+NN2w8mM3XFth5LPOZJyIKQb/PyqpCrSq3o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=RiKQ15m8NA69rpL0S4tXOXueTA3Eh2CzXehotde7DEgbVF5txXf3QUHJp5BwrH+Ef
+	 PCOMLFoHhJpLTXJVgA0PWwWf6RrcQRUvaNu44/zbMSaIrBolFDAeajSLxhcmEjl27a
+	 TcQQxGDb7p7Cml00flwhT++TDnL1MFD2/q5x97xvN8frnQhtVJKA+7HbLZhpGxy3iH
+	 lyy6Rbu8DNx/59AcgsExWyLrY2A3D3gNgSjukrSlDBEIMqF6T8o9rMkf8iCbfzJUQG
+	 B8pxHQYeZ6Q+IM/gqiycdg7FoV4Q/JB57emE7DraJLqTSpBT7JLNDiE4F0Lkxy4ebY
+	 vpB9TzxvO6fpw==
+From: SeongJae Park <sj@kernel.org>
+To: Kunwu Chan <kunwu.chan@linux.dev>
+Cc: SeongJae Park <sj@kernel.org>,
+	shuah@kernel.org,
+	damon@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	Kunwu Chan <chentao@kylinos.cn>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2 0/3] selftests/damon: misc fixes for test bugs
+Date: Mon,  1 Jun 2026 07:22:33 -0700
+Message-ID: <20260601142234.111301-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260601032314.424013-1-kunwu.chan@linux.dev>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABBYNZ+nvtMHcU9but5VEG891vyO=K0MF3OAGofANxzdLVmw-g@mail.gmail.com>
-X-Debian-User: leitao
 
-Hello Luiz,
+On Mon,  1 Jun 2026 11:23:11 +0800 Kunwu Chan <kunwu.chan@linux.dev> wrote:
 
-On Thu, May 14, 2026 at 01:51:16PM -0400, Luiz Augusto von Dentz wrote:
-> On Tue, May 12, 2026 at 7:12 AM Breno Leitao <leitao@debian.org> wrote:
-> >
-> > Continue the conversion to .getsockopt_iter for the Bluetooth socket
-> > families: hci_sock, ISO, RFCOMM, SCO and L2CAP. The first patch is a
-> > small precursor that fixes a long-standing 1-byte put_user write in
-> > hci_sock_getsockopt_old() so the subsequent conversion stays mechanical.
-> >
-> > The riskiest change in this series is the SCO BT_CODEC conversion: it
-> > is the only one that drops an open-coded ptr cursor in favour of
-> > relying on iter_out advancing naturally on every copy_to_iter() call.
-> > Every other socket option is a near-mechanical s/copy_to_user/
-> > copy_to_iter/ rewrite, but BT_CODEC walks a variable-length list of
-> > codecs + capabilities and previously tracked its own write offset by
-> > hand. Getting the cursor semantics wrong here would silently truncate
-> > or misalign user-visible codec data.
-> >
-> > For more context about the motivation for this change, please check
-> > commit 67fab22a7ad ("net: add getsockopt_iter callback to proto_ops")
-> >
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > ---
-> > Changes in v2:
-> > - rebase the tree on top of bluetooth-next.
-> > - Remove the selftest, which was mixing network and bluetooth together.
-> > - Link to v1: https://patch.msgid.link/20260511-getsock_three-v1-0-1461fa8786ab@debian.org
-> >
-> > To: Marcel Holtmann <marcel@holtmann.org>
-> > To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-> > Cc: linux-bluetooth@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> >
-> > ---
-> > Breno Leitao (6):
-> >       Bluetooth: hci_sock: write the full optval for getsockopt
-> >       Bluetooth: hci_sock: convert to getsockopt_iter
-> >       Bluetooth: ISO: convert to getsockopt_iter
-> >       Bluetooth: RFCOMM: convert to getsockopt_iter
-> >       Bluetooth: L2CAP: convert to getsockopt_iter
-> >       Bluetooth: SCO: convert to getsockopt_iter
-> >
-> >  net/bluetooth/hci_sock.c    | 26 +++++++++++--------
-> >  net/bluetooth/iso.c         | 27 ++++++++++----------
-> >  net/bluetooth/l2cap_sock.c  | 61 +++++++++++++++++++++++++++------------------
-> >  net/bluetooth/rfcomm/sock.c | 30 ++++++++++++----------
-> >  net/bluetooth/sco.c         | 59 ++++++++++++++++++++++---------------------
-> >  5 files changed, 114 insertions(+), 89 deletions(-)
-> > ---
-> > base-commit: c2f0079e8c42fd6814c8d6b1491e3ce0a0e3b3fa
-> > change-id: 20260511-getsock_three-d0d7f1b2629e
-> >
-> > Best regards,
-> > --
-> > Breno Leitao <leitao@debian.org>
->
-> There are some comments from sashiko on this:
->
-> https://sashiko.dev/#/patchset/20260512-getsock_three-v2-0-30b7b22ef14c%40debian.org
->
-> Now Im not sure the truncating is actually used by our tools, but that
-> sounds like it could break userspace if we don't check properly, or
-> have you already done this for other socket families and it was
-> considered to be ok?
+> From: Kunwu Chan <chentao@kylinos.cn>
+> 
+> This series fixes several bugs in the DAMON selftests.  Most are
+> trivial but cause tests to silently pass when they shouldn't, or
+> fail prematurely on slow machines.
 
-You're right — to clarify, the patch changes behavior when the user
-provides a short optlen, preventing the overflow that existed before:
+Nit.  Only patch 3 fixes a fake test pass for "avail_operations" file existence
+test, and the series is not doing something for slow machines, right?  I think
+the last sentence should be updated, for example:
 
- - Old code: put_user(opt, (u32 __user *)optval) unconditionally
-   writes sizeof(*ptr) bytes regardless of optlen, so optlen < 4
-   would overflow the user buffer and return 0.
+'''
+Most are trivial but makes test output wrong or even silently pass the one for
+'avail_operation' file existence check.
+'''
 
- - New code: copy_to_iter() respects the optlen boundary, eliminating
-   the overflow — but now a short buffer fails the strict length check
-   and returns -EFAULT instead of 0.
+Other than that, all look good to me, and already have my Reviewed-by: tag.
 
-I don't believe any legitimate userspace relies on the old overflow
-behavior, though there's a theoretical risk of breakage. I'm not deeply
-familiar with the Bluetooth ecosystem specifically, but, I would prefer to
-avoid the buffer overflow in such case.
+Asssuming you are ok with the above change, I applied this series to damon/next
+[1] tree with the above change.  If this series is not added to mm.git in short
+term (~1 week?), I will ask mm.git maintainer (Andrew Morton) to pick this.
+So, no action from your side is needed for now.  If it seems I also forgot
+doing that or you cannot wait for my action, please feel free to directly ask
+that to Andrew.
 
-I've addressed a similar issue in another subsystem recently:
+[1] https://origin.kernel.org/doc/html/latest/mm/damon/maintainer-profile.html#scm-trees
 
-https://lore.kernel.org/all/20260521-fix_llc-v2-1-ab44cc09179c@debian.org/
 
-Anyway, let me know if you need me to change it.
---breno
+Thanks,
+SJ
 
+[...]
