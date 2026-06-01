@@ -1,46 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4F23CBE96;
-	Mon,  1 Jun 2026 14:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095B03D7D60
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 15:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780325707; cv=none; b=oS5nCHKHBipmc7K1R6uenY2odU0NbICeOnf4r9NIbZZnuVDxq/GTlYn3Vt/qWnI2h/K7aekKYi6NbfVLp6UadfQ8VtBml3eqvzj0vtK0LureB2bkIRF4sWdw2Dzh4Lx9ftCwU5HUou4xZWKhtmBiez4HF/E1WaNvIprZZCh07Ts=
+	t=1780326179; cv=none; b=RQkzjMIrhvmdweoH+DBfS3P98jj9Uy0f7gFgmTUAnrCvskD7cEJzoDBokiVdYrIFdrsmeIFq+n+SjissDmsinsIrRU6nba+Yaq/fXxn8KrE3FK1J0L4ukd4lfakbx1rYsSE99m5kgWhA8508Dj7k44ZDHj5SNzqwXWS0SIsXVZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780325707; c=relaxed/simple;
-	bh=g3L2vnZdWxQCOYAsUPfnT9syV+tmv3JLNZgI0eqgIoM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NzQB7KsWDhMz/pvhn/SEMF9xc6FjXteUsjBs2DC9LtSDYTAzU9a7ehiGl24jtAlKBwT2Cic9g9qii/5rakFGe7FLDHSldaAQhn6iEvRdTUu4VmMRcFifbdjDxNcQC84RGUiFE7BMJvPgoqJkMd0+KMTkklvd2UWBNAfF92KAQCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dWA01ekr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780326179; c=relaxed/simple;
+	bh=wi4uhkHTWPvW3vtOQi3U5Uu+t3OBcXcFzrWJpvUCSxo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aUPuMDw63CoPCGEl+etYFbeBYVWx5bOj/eFHqZWaErZwA3h0bmpVntH6z6z6f19YDFwcz/pTKhVXrvI2X/mPGW5OJxdPFD/fP62z2INz0RDXXrYFT/nhHrp5mGkJIyjwx6xoJem6jMqLnrb6VzfVeWdwfi5GPpSufzJVLhSbv7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wf9x7CW9; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dWA01ekr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB751F00893;
-	Mon,  1 Jun 2026 14:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780325705;
-	bh=XG5RfpJwti7dylwLwxXSrJ1QM98QSD9PaVrRVudv0Hs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=dWA01ekriVpl9LuiMtnhLBxVRpoAQnrdChloT38CbGJDV3n46PNj9lXgod7r7P1TR
-	 vQr2c7hP3Stey87+7vLgfxaJ/wkIuejsS8ukh+QSf9PPPc2fWoZ/5ruLFKkjHjomyG
-	 7YvvnFHrNssF9j31/K3Pvfi97TIV+gUiIDHQFeprTz+DFnSDwRX06x+qPEPn1goxFW
-	 7PwV4gJLoWq86CSywNOXMq2Tf9/vgQNtlwOgFPHxOEvdTqfkZb23MwWCrC0ScUl/uL
-	 4KqIiRiTTV9t+z/dqXuehSsauPWhwHy4sLZTByGhnifdJvJ6QEsIm9FVf9zfp0LQpB
-	 I26fQQqcCx6Eg==
-From: SeongJae Park <sj@kernel.org>
-To: Cheng Nie <niecheng1@uniontech.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	shuah@kernel.org,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wf9x7CW9"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780326165;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7ZoYADBK9XZFEaglIzgjbTAZy+ZzDPXzGK/FiK5cnTo=;
+	b=wf9x7CW9ZbRShz2Ok32SwBJqzI+YJWVKA3sdoULQu23tDiJ7z9Rel1wKHUilB7fDQYOFkJ
+	5xVkMU+2ukQ09fQc8WK7rNQKAxcRJZGVYtsdf6PC1z/hzQhAebIwm9iM4IvhgcI62Ta1v4
+	xKlMqm+G+tIjL/AMon2Yngu6E4V+M54=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Guillaume Nault <gnault@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Fernando Fernandez Mancera <fmancera@suse.de>,
+	Peter Oskolkov <posk@google.com>,
 	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v4 0/2] selftests/damon: fix memcg_path staging handling
-Date: Mon,  1 Jun 2026 07:55:00 -0700
-Message-ID: <20260601145501.116884-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <7E6EAB7C1BE04DEA+20260601090119.238457-1-niecheng1@uniontech.com>
-References: 
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf v3 0/2] bpf: Update transport_header when encapsulating UDP tunnel in lwt
+Date: Mon,  1 Jun 2026 23:02:01 +0800
+Message-ID: <20260601150203.20352-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,52 +61,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon,  1 Jun 2026 17:01:19 +0800 Cheng Nie <niecheng1@uniontech.com> wrote:
+Currently, bpf_lwt_push_ip_encap() does not update skb->transport_header.
+When a driver, e.g. ice, reuses the stale skb->transport_header to
+offload checksum computation to NIC hardware, VxLAN packets encapsulated
+by bpf_lwt_push_encap() helper may be dropped due to incorrect checksum.
 
-Having a sentence for the cover letter would be nice.  E.g.,
+Update skb->transport_header in bpf_lwt_push_ip_encap() whenever the
+encapsulated packet uses UDP, so checksum offload works correctly.
 
-'''
-Fix a bug in _damon_sysfs.py for damos_filter memcg_path setup, and add a test
-case of it in sysfs.py.
-'''
+Changes:
+v2 -> v3:
+* Drop patch #1 and #2 of v2 that aim to resolve potential issues
+  reported by sashiko (per Alexei).
+* Check target IP version and UDP tunnel in test (per sashiko).
+* v2: https://lore.kernel.org/bpf/20260529151351.69911-1-leon.hwang@linux.dev/
 
-> Changes from v3:
-> - call stop() for cleanup without checking its return value
-> 
-> Changes from v2:
-> - configure memcg filter before start(), remove commit(), ignore
->   start() failure, verify memcg_path staging readback only
-> - use print-style error messages as suggested
-> 
-> Cheng Nie (2):
->   selftests/damon/_damon_sysfs.py: fix memcg_path assignment
->   selftests/damon/sysfs.py: validate memcg_path staging readback
+v1 -> v2:
+* Address sashiko's reviews:
+  * Fix TOCTOU issue in lwt to avoid changing hdr after checks.
+  * Add check iph->ihl < 5 in lwt to avoid infinite-loop in MIPS driver.
+  * Update comment style in selftests with BPF comment style.
+* v1: https://lore.kernel.org/bpf/20260525142650.2569-1-leon.hwang@linux.dev/
 
-From the next time, please add links to the previous revisions [1].
+Leon Hwang (2):
+  bpf: Update transport_header when encapsulating UDP tunnel in lwt
+  selftests/bpf: Add tests to verify the fix of encapsulating VxLAN in
+    lwt
 
-For other readers,
-v3: https://lore.kernel.org/E4B88E7D4879D1B1+20260601074250.203583-1-niecheng1@uniontech.com
-v2: https://lore.kernel.org/4CDA28DC581FDCF8+20260529090845.1696845-1-niecheng1@uniontech.com
-v1: https://lore.kernel.org/406BD1BA0F6AE326+20260528081039.1192194-3-niecheng1@uniontech.com
+ net/core/lwt_bpf.c                            |  11 ++
+ .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 164 ++++++++++++++++++
+ .../selftests/bpf/progs/test_lwt_ip_encap.c   | 112 ++++++++++++
+ .../bpf/progs/test_lwt_ip_encap_fix.c         |  44 +++++
+ 4 files changed, 331 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_lwt_ip_encap_fix.c
 
-I applied this series with the cover letter sentence change to damon/next [2]
-tree.  If this patch is not added to mm.git in short term (~1 week?), I will
-ask mm.git maintainer (Andrew Morton) to pick this.
+-- 
+2.54.0
 
-Andrew might want us to repost this series after next rc1, though, as we are
-apparently wanting to make mm.git more stabilized at this point.  Andrew, pleae
-let me know if so.
-
-So, no action from your side is needed for now.  If it seems I also forgot
-doing that or you cannot wait for my action, please feel free to directly ask
-that to Andrew.
-
-[1] https://docs.kernel.org/process/submitting-patches.html#commentary
-[2] https://origin.kernel.org/doc/html/latest/mm/damon/maintainer-profile.html#scm-trees
-
-
-Thanks,
-SJ
-
-[...]
