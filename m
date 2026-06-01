@@ -1,173 +1,223 @@
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E664A377553;
-	Mon,  1 Jun 2026 12:28:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8F437754B;
+	Mon,  1 Jun 2026 12:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780316942; cv=none; b=B6haL1cVYjthUxI9izXHVCuukF/aBneDYFXnC8x+QT02x3b83hN2vIXlNIrBpelE+gkoEa2J83BXTG9PCxWC2gnikwdhy+UjIqHyrFpUjy20eq5QOlgGx4qQLIbbp8YuSiSgMI/0M/wRemxrvi6LxjmD1vO8VO+nz/laOqm5ZHg=
+	t=1780317597; cv=none; b=ll5e+rI+b3fBu7nX+r7lHAnomUIzSvdM4CUSogt+3OREl1A+BSlcG9M+V0LCeO74mVfnOT805JeIoZFhThHQ54At3R+NHO2fxIerLqX7rIQqmdfOoere9FivLiwEpAub3yt5SCRJIGIsS/iMQ0H1ATzbTDrV6KO3VwTga+vmCKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780316942; c=relaxed/simple;
-	bh=cpZgAN/MGy/3NF9gxMObMXDYl8Ge6z4esSx9KnOh0VI=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=OC+8wRxP1eOObWN9erIDGCm2C0VBB7UKRfvkBCQeFZuf4Yy3cSaMxQfFJNfjPnh3nviSwF45++dLkTtc53VxE0rkeRQo6D3N3PTS0ZRyMbX1Cwr7nMEkAtyiPPYtXie6Cn6qka8Ga/mz3VZ2KPs8yg6FVcVChXl1dee+FerS+W4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Cnn6g6+O; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1780317597; c=relaxed/simple;
+	bh=8FDdCBa3mFu5PzpJBEZmG7EwGjSH2R0HYFOA3JpIlK4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=rajRXx5eQugNU2KnEFHt325IRMK6m1SPo19NDYIhPtgH4JizfWdxGsFZeEVC5la9bYUWXQmGNh96h3klTilBwD3mPkbSpG2J1QjX9OV/m4NZIYE37j428V2I6v9qt/kXrw72qRQHMLBFW7iliVy0aGwkVIWWNR/wgm9D1iH/Nak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c7aBDC/c; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Cnn6g6+O"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=RHRyrguBPu7WjFl1OHUlddAxvq9NBpFCk9kVGplZSR0=;
-	b=Cnn6g6+ODFK5wT4XaBHnaTObdw/QAowqd8m5e/D1t6KdWIMpekWyf/wMlVDUoi/FgBj4WI8sL
-	hHTe87/L/JKvtrBfk8gISf7rANXbXLO23ONE0J5rx7EC9zCFKxs9/faVTOqGiV8K+ul03BlKouf
-	owJHccQmj/dOTETfgKp3ewE=
-Received: from mail.maildlp.com (unknown [172.19.162.144])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4gTY2c5HP5z1T4GP;
-	Mon,  1 Jun 2026 20:20:40 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2D9DC4056D;
-	Mon,  1 Jun 2026 20:28:49 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 1 Jun 2026 20:28:49 +0800
-Received: from [10.173.124.160] (10.173.124.160) by
- kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 1 Jun 2026 20:28:47 +0800
-Subject: Re: [PATCH v8 2/6] mm/memory-failure: surface unhandlable kernel
- pages as -ENOTRECOVERABLE
-To: Breno Leitao <leitao@debian.org>
-CC: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <kernel-team@meta.com>, Lance Yang
-	<lance.yang@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, "David
- Hildenbrand" <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, "Vlastimil
- Babka" <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, "Suren
- Baghdasaryan" <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan
-	<shuah@kernel.org>, Naoya Horiguchi <nao.horiguchi@gmail.com>, Steven Rostedt
-	<rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, "Mathieu
- Desnoyers" <mathieu.desnoyers@efficios.com>, Jonathan Corbet
-	<corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, "Liam R. Howlett"
-	<liam@infradead.org>
-References: <20260527-ecc_panic-v8-0-9ea0cfa16bb0@debian.org>
- <20260527-ecc_panic-v8-2-9ea0cfa16bb0@debian.org>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <19f968f5-1289-f573-4406-e5c91dcd8923@huawei.com>
-Date: Mon, 1 Jun 2026 20:28:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c7aBDC/c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC5071F00893;
+	Mon,  1 Jun 2026 12:39:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780317596;
+	bh=GMHn02Tjy2SdQBVIwA3Bmk2f/2F1IAnksPozdoamybA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=c7aBDC/c/MWTX0ZGZ6TLVaMpVltABlGICOm8LKMfQgFNhl+1IZoGLUbEydpTgi5pI
+	 HmVzxJN+Dy7AcSDN2RIfX2ahy8aM5ncR//wi1q7FZHQ18O0DsYTQtZMJuZ1qnCN9i0
+	 bZDr9KBOPViV0PTwS7B9VMqjnY96NzToK2e7R2pQlILeBqTtoSLkxsqqi4nfAxV9NZ
+	 A/sqxHNghKzXKoikgpCDiYrX4O9OpZgcPZkFL6fOFMBzd+oIj6Y1teDGq9BRz6V+5/
+	 p4J4GxI2jnDB6u1BeqZTp+zVGbXkE7DoG0kZHG1WMeeCEvmNnJuAPpATRC3MS34FHe
+	 IvGv4TMMeYKtg==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org,  rppt@kernel.org,  shuah@kernel.org,
+  akpm@linux-foundation.org,  linux-mm@kvack.org,
+  skhan@linuxfoundation.org,  linux-doc@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  corbet@lwn.net,  dmatlack@google.com,
+  kexec@lists.infradead.org,  pratyush@kernel.org,  skhawaja@google.com,
+  graf@amazon.com
+Subject: Re: [PATCH v4 04/13] liveupdate: register luo_ser as KHO subtree
+In-Reply-To: <20260530221938.115978-5-pasha.tatashin@soleen.com> (Pasha
+	Tatashin's message of "Sat, 30 May 2026 22:19:29 +0000")
+References: <20260530221938.115978-1-pasha.tatashin@soleen.com>
+	<20260530221938.115978-5-pasha.tatashin@soleen.com>
+Date: Mon, 01 Jun 2026 14:39:52 +0200
+Message-ID: <2vxzv7c2fn8n.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260527-ecc_panic-v8-2-9ea0cfa16bb0@debian.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemq500010.china.huawei.com (7.202.194.235)
+Content-Type: text/plain
 
-On 2026/5/27 22:06, Breno Leitao wrote:
-> get_any_page() collapses every HWPoisonHandlable() rejection into a
-> single -EIO via the __get_hwpoison_page() -> -EBUSY -> shake_page()
-> -> retry path.  That is correct for the transient case (a userspace
-> folio briefly off LRU during migration or compaction, which a later
-> shake can drag back), but wrong for stable kernel-owned pages: slab,
-> page-table, large-kmalloc and PG_reserved pages will never become
-> HWPoisonHandlable(), so the retry loop is wasted work and the final
-> -EIO loses the "this is structurally unrecoverable" information.
-> memory_failure() then maps -EIO into MF_MSG_GET_HWPOISON, which the
-> panic-on-unrecoverable sysctl deliberately does not act on.
-> 
-> Introduce HWPoisonKernelOwned(), a small predicate that positively
-> identifies pages the hwpoison handler cannot recover from:
-> 
->   HWPoisonKernelOwned(p, flags) :=
->       !(MF_SOFT_OFFLINE && page_has_movable_ops(p)) &&
->       (PageReserved(p) || PageSlab(p) ||
->        PageTable(p)    || PageLargeKmalloc(p))
-> 
-> The MF_SOFT_OFFLINE / page_has_movable_ops() opt-out mirrors the
-> same exception in HWPoisonHandlable(): soft-offline is allowed to
-> migrate movable_ops pages even though they are not on the LRU, and
-> we must not pre-empt that with an unrecoverable verdict.
-> 
-> The list is intentionally not exhaustive.  vmalloc and kernel-stack
-> pages, for example, do not carry a page_type bit and would need a
-> different oracle; they keep going through the existing retry path
-> unchanged.  This is the smallest set we can identify with certainty
-> by page type.
-> 
-> Wire the helper into the top of get_any_page() to short-circuit
-> those pages before the retry loop runs.  On a hit, drop the caller's
-> MF_COUNT_INCREASED reference (if any) and return -ENOTRECOVERABLE
-> straight away.  Pages outside the helper's positive list still take
-> the existing retry path and return -EIO, leaving operator-visible
-> behaviour for those cases unchanged.
-> 
-> Extend the unhandlable-page pr_err() to fire for either errno and
-> update the get_hwpoison_page() kerneldoc to document the new return.
-> 
-> memory_failure() still folds every negative return into
-> MF_MSG_GET_HWPOISON via its existing "else if (res < 0)" branch, so
-> this patch on its own only changes the errno that soft_offline_page()
-> can propagate to its callers.  A follow-up wires -ENOTRECOVERABLE
-> through memory_failure() and reports MF_MSG_KERNEL for the
-> unrecoverable cases, which is what the
-> panic_on_unrecoverable_memory_failure sysctl observes.
+On Sat, May 30 2026, Pasha Tatashin wrote:
 
-Thanks for your patch.
-
-> 
-> Suggested-by: David Hildenbrand <david@kernel.org>
-> Suggested-by: Lance Yang <lance.yang@linux.dev>
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+> Entirely remove the LUO FDT wrapper since the FDT only carries the
+> compatible string and the pointer to the centralized struct luo_ser.
+> Instead, register the struct luo_ser via the KHO raw subtree
+> API, placing the compatibility string inside the structure itself.
+>
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 > ---
->  mm/memory-failure.c | 42 ++++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 40 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index f4d3e6e20e13..8f63bdfeff8f 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -1325,6 +1325,28 @@ static inline bool HWPoisonHandlable(struct page *page, unsigned long flags)
->  	return PageLRU(page) || is_free_buddy_page(page);
->  }
+>  include/linux/kho/abi/luo.h  | 57 +++++++++---------------
+>  kernel/liveupdate/luo_core.c | 85 +++++++++++-------------------------
+>  2 files changed, 46 insertions(+), 96 deletions(-)
+>
+> diff --git a/include/linux/kho/abi/luo.h b/include/linux/kho/abi/luo.h
+> index 1b2f865a771a..9a4fe491812b 100644
+> --- a/include/linux/kho/abi/luo.h
+> +++ b/include/linux/kho/abi/luo.h
+> @@ -10,11 +10,11 @@
+>   *
+>   * Live Update Orchestrator uses the stable Application Binary Interface
+>   * defined below to pass state from a pre-update kernel to a post-update
+> - * kernel. The ABI is built upon the Kexec HandOver framework and uses a
+> - * Flattened Device Tree to describe the preserved data.
+> + * kernel. The ABI is built upon the Kexec HandOver framework and registers
+> + * the central `struct luo_ser` via the KHO raw subtree API.
+>   *
+> - * This interface is a contract. Any modification to the FDT structure, node
+> - * properties, compatible strings, or the layout of the `__packed` serialization
+> + * This interface is a contract. Any modification to the structure fields,
+> + * compatible strings, or the layout of the `__packed` serialization
+>   * structures defined here constitutes a breaking change. Such changes require
+>   * incrementing the version number in the relevant `_COMPATIBLE` string to
+>   * prevent a new kernel from misinterpreting data from an old kernel.
+> @@ -23,31 +23,15 @@
+>   * however, backward/forward compatibility is only guaranteed for kernels
+>   * supporting the same ABI version.
+>   *
+> - * FDT Structure Overview:
+> + * KHO Structure Overview:
+>   *   The entire LUO state is encapsulated within a single KHO entry named "LUO".
+> - *   This entry contains an FDT with the following layout:
+> - *
+> - *   .. code-block:: none
+> - *
+> - *     / {
+> - *         compatible = "luo-v2";
+> - *         luo-abi-header = <phys_addr_of_luo_ser>;
+> - *     };
+> - *
+> - * Main LUO Node (/):
+> - *
+> - *   - compatible: "luo-v2"
+> - *     Identifies the overall LUO ABI version.
+> - *   - luo-abi-header: u64
+> - *     The physical address of `struct luo_ser`.
+> + *   This entry contains the `struct luo_ser` structure.
+>   *
+>   * Serialization Structures:
+> - *   The FDT properties point to memory regions containing arrays of simple,
+> - *   `__packed` structures. These structures contain the actual preserved state.
+> - *
+>   *   - struct luo_ser:
+>   *     The central ABI structure that contains the overall state of the LUO.
+> - *     It includes the liveupdate-number and pointers to sessions and FLBs.
+> + *     It includes the compatibility string, the liveupdate-number, and pointers
+> + *     to sessions and FLBs.
+>   *
+>   *   - struct luo_session_header_ser:
+>   *     Header for the session array. Contains the total page count of the
+> @@ -78,26 +62,27 @@
+>  #ifndef _LINUX_KHO_ABI_LUO_H
+>  #define _LINUX_KHO_ABI_LUO_H
 >  
-> +/*
-> + * Positive identification of pages the hwpoison handler cannot recover.
-> + * These page types are owned by kernel internals (no userspace mapping
-> + * to unmap, no file mapping to invalidate, no migration target), so the
-> + * shake_page() / retry loop in get_any_page() can never turn them into
-> + * something HWPoisonHandlable() will accept.  Short-circuit them to
-> + * -ENOTRECOVERABLE so callers can panic on operator request instead of
-> + * spinning through retries that exit as a transient-looking -EIO.
-> + *
-> + * The MF_SOFT_OFFLINE / page_has_movable_ops() opt-out mirrors
-> + * HWPoisonHandlable(): soft-offline is allowed to migrate movable_ops
-> + * pages even though they are not on the LRU.
-> + */
-> +static inline bool HWPoisonKernelOwned(struct page *page, unsigned long flags)
-> +{
-> +	if ((flags & MF_SOFT_OFFLINE) && page_has_movable_ops(page))
-> +		return false;
-> +
-> +	return PageReserved(page) || PageSlab(page) ||
+> +#include <linux/align.h>
+>  #include <uapi/linux/liveupdate.h>
+>  
+>  /*
+> - * The LUO FDT hooks all LUO state for sessions, fds, etc.
+> + * The LUO state is registered under this KHO entry name.
+>   */
+> -#define LUO_FDT_SIZE		PAGE_SIZE
+> -#define LUO_FDT_KHO_ENTRY_NAME	"LUO"
+> -#define LUO_FDT_COMPATIBLE	"luo-v2"
+> -#define LUO_FDT_ABI_HEADER	"luo-abi-header"
+> +#define LUO_KHO_ENTRY_NAME	"LUO"
+> +#define LUO_ABI_COMPATIBLE	"luo-v3"
+> +#define LUO_ABI_COMPAT_LEN	ALIGN(sizeof(LUO_ABI_COMPATIBLE), 8)
 
-Once shake_page finds a lightweight range-based way to shrink slab, slab pages could be freed
-into buddy and above PageSlab test should be removed then. Maybe add a TODO or XXX here?
+The length of the compatible field will change depending on the length
+of the string. While that is technically fine since a new ABI version is
+allowed to change the layout, it feels odd. I think it would be better
+if we define a static size here, say 64 bytes. This way you can avoid
+all the weirdness that can happen when you move from one version to
+another.
 
-> +	       PageTable(page) || PageLargeKmalloc(page);
+>  
+>  /**
+>   * struct luo_ser - Centralized LUO ABI header.
+> + * @compatible:     Compatibility string identifying the LUO ABI version.
+>   * @liveupdate_num: A counter tracking the number of successful live updates.
+>   * @sessions_pa:    Physical address of the first session block header.
+>   * @flbs_pa:        Physical address of the FLB header.
+>   *
+> - * This structure is the root of all preserved LUO state. It is pointed to by
+> - * the "luo-abi-header" property in the LUO FDT.
+> + * This structure is the root of all preserved LUO state.
+>   */
+>  struct luo_ser {
+> +	char compatible[LUO_ABI_COMPAT_LEN];
+>  	u64 liveupdate_num;
+>  	u64 sessions_pa;
+>  	u64 flbs_pa;
+[...]
+> @@ -94,40 +91,29 @@ static int __init luo_early_startup(void)
+>  		return 0;
+>  	}
+>  
+> -	/* Retrieve LUO subtree, and verify its format. */
+> -	err = kho_retrieve_subtree(LUO_FDT_KHO_ENTRY_NAME, &fdt_phys, NULL);
+> +	/* Retrieve LUO state from KHO. */
+> +	err = kho_retrieve_subtree(LUO_KHO_ENTRY_NAME, &luo_ser_phys, &len);
+>  	if (err) {
+>  		if (err != -ENOENT) {
+> -			pr_err("failed to retrieve FDT '%s' from KHO: %pe\n",
+> -			       LUO_FDT_KHO_ENTRY_NAME, ERR_PTR(err));
+> +			pr_err("failed to retrieve LUO state '%s' from KHO: %pe\n",
+> +			       LUO_KHO_ENTRY_NAME, ERR_PTR(err));
+>  			return err;
+>  		}
+>  
+>  		return 0;
+>  	}
+>  
+> -	luo_global.fdt_in = phys_to_virt(fdt_phys);
+> -	err = fdt_node_check_compatible(luo_global.fdt_in, 0,
+> -					LUO_FDT_COMPATIBLE);
+> -	if (err) {
+> -		pr_err("FDT '%s' is incompatible with '%s' [%d]\n",
+> -		       LUO_FDT_KHO_ENTRY_NAME, LUO_FDT_COMPATIBLE, err);
+> -
+> +	if (len < sizeof(*luo_ser)) {
 
-I'm not sure but is it safe or a common way to test PageReserved, PageSlab,
-PageTable and PageLargeKmalloc without extra page refcnt?
+len != sizeof(*luo_ser) here?
 
-Apart from the above nits, this patch looks good to me.
+> +		pr_err("LUO state is too small (%zu < %zu)\n", len, sizeof(*luo_ser));
+>  		return -EINVAL;
+>  	}
+>  
+> -	header_size = 0;
+> -	ptr = fdt_getprop(luo_global.fdt_in, 0, LUO_FDT_ABI_HEADER, &header_size);
+> -	if (!ptr || header_size != sizeof(u64)) {
+> -		pr_err("Unable to get ABI header '%s' [%d]\n",
+> -		       LUO_FDT_ABI_HEADER, header_size);
+> -
+> +	luo_ser = phys_to_virt(luo_ser_phys);
+> +	if (strncmp(luo_ser->compatible, LUO_ABI_COMPATIBLE, LUO_ABI_COMPAT_LEN)) {
+> +		pr_err("LUO state is incompatible with '%s'\n", LUO_ABI_COMPATIBLE);
+>  		return -EINVAL;
+>  	}
+>  
+> -	luo_ser_pa = get_unaligned((u64 *)ptr);
+> -	luo_ser = phys_to_virt(luo_ser_pa);
+> -
+>  	luo_global.liveupdate_num = luo_ser->liveupdate_num;
+>  	pr_info("Retrieved live update data, liveupdate number: %lld\n",
+>  		luo_global.liveupdate_num);
+[...]
 
-Thanks.
-.
+-- 
+Regards,
+Pratyush Yadav
