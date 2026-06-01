@@ -1,223 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8F437754B;
-	Mon,  1 Jun 2026 12:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CE4371D08;
+	Mon,  1 Jun 2026 12:58:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780317597; cv=none; b=ll5e+rI+b3fBu7nX+r7lHAnomUIzSvdM4CUSogt+3OREl1A+BSlcG9M+V0LCeO74mVfnOT805JeIoZFhThHQ54At3R+NHO2fxIerLqX7rIQqmdfOoere9FivLiwEpAub3yt5SCRJIGIsS/iMQ0H1ATzbTDrV6KO3VwTga+vmCKk=
+	t=1780318725; cv=none; b=rLAUFs3kC+6Zl644CyZWLrZjOnFGGdED6hgSDZosCul3EPaY2SfxtXTrmtpQ0I+L89TJJ74qmyp5Vq4NL2WSGurc0DciKuIvbrV0hfUEUYq4sZvJ1MX9kYo5N+SxE4LvgBTHUx1ZwNOUAt91nUKBst8Me8JpoPud2btNiE8P7Mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780317597; c=relaxed/simple;
-	bh=8FDdCBa3mFu5PzpJBEZmG7EwGjSH2R0HYFOA3JpIlK4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=rajRXx5eQugNU2KnEFHt325IRMK6m1SPo19NDYIhPtgH4JizfWdxGsFZeEVC5la9bYUWXQmGNh96h3klTilBwD3mPkbSpG2J1QjX9OV/m4NZIYE37j428V2I6v9qt/kXrw72qRQHMLBFW7iliVy0aGwkVIWWNR/wgm9D1iH/Nak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c7aBDC/c; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780318725; c=relaxed/simple;
+	bh=6Y5HJCUfZOnFUQa4AatktWigr2XfKiuV2TQs0zIUxQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c9G0pGdc7erakn/YZhCyuiYUMmTvYxjE1WMa6NXT1FxXYRWvZ7Dh0fa+Rwu5X0h0j/M4imgKbvfmvOQD0R+j/SmE4E6Seh6CZTUH4vsU5sMSnUUm9BH+6+FgWchiPoBU8WMV6xOjT1HY4MnDUOLofQSWvmQYODTMOHSNwboGJEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MYNNB4HN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c7aBDC/c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC5071F00893;
-	Mon,  1 Jun 2026 12:39:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MYNNB4HN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCC2D1F00893;
+	Mon,  1 Jun 2026 12:58:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780317596;
-	bh=GMHn02Tjy2SdQBVIwA3Bmk2f/2F1IAnksPozdoamybA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=c7aBDC/c/MWTX0ZGZ6TLVaMpVltABlGICOm8LKMfQgFNhl+1IZoGLUbEydpTgi5pI
-	 HmVzxJN+Dy7AcSDN2RIfX2ahy8aM5ncR//wi1q7FZHQ18O0DsYTQtZMJuZ1qnCN9i0
-	 bZDr9KBOPViV0PTwS7B9VMqjnY96NzToK2e7R2pQlILeBqTtoSLkxsqqi4nfAxV9NZ
-	 A/sqxHNghKzXKoikgpCDiYrX4O9OpZgcPZkFL6fOFMBzd+oIj6Y1teDGq9BRz6V+5/
-	 p4J4GxI2jnDB6u1BeqZTp+zVGbXkE7DoG0kZHG1WMeeCEvmNnJuAPpATRC3MS34FHe
-	 IvGv4TMMeYKtg==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kselftest@vger.kernel.org,  rppt@kernel.org,  shuah@kernel.org,
-  akpm@linux-foundation.org,  linux-mm@kvack.org,
-  skhan@linuxfoundation.org,  linux-doc@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  corbet@lwn.net,  dmatlack@google.com,
-  kexec@lists.infradead.org,  pratyush@kernel.org,  skhawaja@google.com,
-  graf@amazon.com
-Subject: Re: [PATCH v4 04/13] liveupdate: register luo_ser as KHO subtree
-In-Reply-To: <20260530221938.115978-5-pasha.tatashin@soleen.com> (Pasha
-	Tatashin's message of "Sat, 30 May 2026 22:19:29 +0000")
-References: <20260530221938.115978-1-pasha.tatashin@soleen.com>
-	<20260530221938.115978-5-pasha.tatashin@soleen.com>
-Date: Mon, 01 Jun 2026 14:39:52 +0200
-Message-ID: <2vxzv7c2fn8n.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=k20260515; t=1780318724;
+	bh=P7rDevCZnFjkWVTnN7LsLiTYCzqFkr5n/NYFmJGjz+Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=MYNNB4HNONIG/b/z1lxMw17uWiLW2/iSk8HouiQQvxi78qlWwzikTRMoBb7l90tSz
+	 +yALZ1WhIRogzCT/8TU7Yy+fASCh5FyB1xSuLK3blHn8EH3qy6eCJS9oDlpMHSRB4y
+	 TDjG53L/Kwzksych4gwMlq6pL8BLvpllYnskDDR7eAgmh4C/vbryfSnxlVSc8YmJy6
+	 tvKxgulPJKf9Mv9rgVVkVa2WWULCoSijzdNE94pKHd7szHUoVI6B2nNROge7Q8qnOE
+	 HslnChmi3f0sBiU1naABH6YB3OZRAn9+OklyQ9LHPg7pKObukwMF0pO0mTMUffKf37
+	 NqOvD3uNTumXw==
+Date: Mon, 1 Jun 2026 13:58:38 +0100
+From: Will Deacon <will@kernel.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: David Laight <david.laight.linux@gmail.com>,
+	David Matlack <dmatlack@google.com>,
+	Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
+	Leon Romanovsky <leon@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+	Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+	patches@lists.linux.dev
+Subject: Re: [PATCH v2 06/11] selftests: Fix arm64 IO barriers to match kernel
+Message-ID: <ah2B_mzQabiEYSWt@willie-the-truck>
+References: <0-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
+ <6-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
+ <ahiFxtmspbETiqWw@google.com>
+ <20260529134947.GA128816@nvidia.com>
+ <20260529175516.06d5788f@pumpkin>
+ <20260529192933.GD3195266@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260529192933.GD3195266@nvidia.com>
 
-On Sat, May 30 2026, Pasha Tatashin wrote:
+On Fri, May 29, 2026 at 04:29:34PM -0300, Jason Gunthorpe wrote:
+> On Fri, May 29, 2026 at 05:55:16PM +0100, David Laight wrote:
+> > On Fri, 29 May 2026 10:49:47 -0300
+> > Jason Gunthorpe <jgg@nvidia.com> wrote:
+> > 
+> > > On Thu, May 28, 2026 at 06:13:26PM +0000, David Matlack wrote:
+> > > 
+> > > > Let's put these in tools/arch/arm64/include/asm/io.h so that the tools
+> > > > headers are more aligned with the kernel headers, and so that the arm64
+> > > > io.h overrides are done in the same way as the x86 overrides in
+> > > > tools/arch/x86/include/asm/io.h.
+> > > > 
+> > > > Something like this (untested):  
+> > > 
+> > > Okay, the disassembly says it works:
+> > > 
+> > >     1db8:       ca080108        eor     x8, x8, x8
+> > >     1dbc:       b5000008        cbnz    x8, 1dbc <readl+0x58>
+> > >     1dc0:       f9000fe8        str     x8, [sp, #24]
+> > 
+> > That looks strange, I suspect the C didn't match any usual pattern.
+> > Normally 'tmp' would get thrown away and 'v' would get kept.
+> > But you seem to have discarded 'v' and written 'tmp' to stack.
+> 
+> Oh interesting the optimizer isn't turned on for selftest builds. So
+> the str is dutifully writing tmp to the stack. Another register has
+> the actual value.
+> 
+> > I'm probably being stupid again, but how does that work?
+> > The cpu can speculate straight through the control dependency into
+> > the following instructions.
+> > An 'eor x1, x8, x8' may not even have a data-dependency on x8.
+> > (Most x86 cpus just generate a zero for the equivalent instruction.)
+> 
+> I can't say, this is copied from the kernel and Will made it:
+> 
+>     arm64: io: Ensure calls to delay routines are ordered against prior readX()
 
-> Entirely remove the LUO FDT wrapper since the FDT only carries the
-> compatible string and the pointer to the centralized struct luo_ser.
-> Instead, register the struct luo_ser via the KHO raw subtree
-> API, placing the compatibility string inside the structure itself.
->
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> ---
->  include/linux/kho/abi/luo.h  | 57 +++++++++---------------
->  kernel/liveupdate/luo_core.c | 85 +++++++++++-------------------------
->  2 files changed, 46 insertions(+), 96 deletions(-)
->
-> diff --git a/include/linux/kho/abi/luo.h b/include/linux/kho/abi/luo.h
-> index 1b2f865a771a..9a4fe491812b 100644
-> --- a/include/linux/kho/abi/luo.h
-> +++ b/include/linux/kho/abi/luo.h
-> @@ -10,11 +10,11 @@
->   *
->   * Live Update Orchestrator uses the stable Application Binary Interface
->   * defined below to pass state from a pre-update kernel to a post-update
-> - * kernel. The ABI is built upon the Kexec HandOver framework and uses a
-> - * Flattened Device Tree to describe the preserved data.
-> + * kernel. The ABI is built upon the Kexec HandOver framework and registers
-> + * the central `struct luo_ser` via the KHO raw subtree API.
->   *
-> - * This interface is a contract. Any modification to the FDT structure, node
-> - * properties, compatible strings, or the layout of the `__packed` serialization
-> + * This interface is a contract. Any modification to the structure fields,
-> + * compatible strings, or the layout of the `__packed` serialization
->   * structures defined here constitutes a breaking change. Such changes require
->   * incrementing the version number in the relevant `_COMPATIBLE` string to
->   * prevent a new kernel from misinterpreting data from an old kernel.
-> @@ -23,31 +23,15 @@
->   * however, backward/forward compatibility is only guaranteed for kernels
->   * supporting the same ABI version.
->   *
-> - * FDT Structure Overview:
-> + * KHO Structure Overview:
->   *   The entire LUO state is encapsulated within a single KHO entry named "LUO".
-> - *   This entry contains an FDT with the following layout:
-> - *
-> - *   .. code-block:: none
-> - *
-> - *     / {
-> - *         compatible = "luo-v2";
-> - *         luo-abi-header = <phys_addr_of_luo_ser>;
-> - *     };
-> - *
-> - * Main LUO Node (/):
-> - *
-> - *   - compatible: "luo-v2"
-> - *     Identifies the overall LUO ABI version.
-> - *   - luo-abi-header: u64
-> - *     The physical address of `struct luo_ser`.
-> + *   This entry contains the `struct luo_ser` structure.
->   *
->   * Serialization Structures:
-> - *   The FDT properties point to memory regions containing arrays of simple,
-> - *   `__packed` structures. These structures contain the actual preserved state.
-> - *
->   *   - struct luo_ser:
->   *     The central ABI structure that contains the overall state of the LUO.
-> - *     It includes the liveupdate-number and pointers to sessions and FLBs.
-> + *     It includes the compatibility string, the liveupdate-number, and pointers
-> + *     to sessions and FLBs.
->   *
->   *   - struct luo_session_header_ser:
->   *     Header for the session array. Contains the total page count of the
-> @@ -78,26 +62,27 @@
->  #ifndef _LINUX_KHO_ABI_LUO_H
->  #define _LINUX_KHO_ABI_LUO_H
->  
-> +#include <linux/align.h>
->  #include <uapi/linux/liveupdate.h>
->  
->  /*
-> - * The LUO FDT hooks all LUO state for sessions, fds, etc.
-> + * The LUO state is registered under this KHO entry name.
->   */
-> -#define LUO_FDT_SIZE		PAGE_SIZE
-> -#define LUO_FDT_KHO_ENTRY_NAME	"LUO"
-> -#define LUO_FDT_COMPATIBLE	"luo-v2"
-> -#define LUO_FDT_ABI_HEADER	"luo-abi-header"
-> +#define LUO_KHO_ENTRY_NAME	"LUO"
-> +#define LUO_ABI_COMPATIBLE	"luo-v3"
-> +#define LUO_ABI_COMPAT_LEN	ALIGN(sizeof(LUO_ABI_COMPATIBLE), 8)
+This is specifically for ordering counter accesses against prior
+barriered MMIO reads. Userspace should really be using the vDSO instead
+of accessing the counter directly, so you could probably drop this for
+the tools headers tbh and just have the dma_rmb().
 
-The length of the compatible field will change depending on the length
-of the string. While that is technically fine since a new ABI version is
-allowed to change the layout, it feels odd. I think it would be better
-if we define a static size here, say 64 bytes. This way you can avoid
-all the weirdness that can happen when you move from one version to
-another.
-
->  
->  /**
->   * struct luo_ser - Centralized LUO ABI header.
-> + * @compatible:     Compatibility string identifying the LUO ABI version.
->   * @liveupdate_num: A counter tracking the number of successful live updates.
->   * @sessions_pa:    Physical address of the first session block header.
->   * @flbs_pa:        Physical address of the FLB header.
->   *
-> - * This structure is the root of all preserved LUO state. It is pointed to by
-> - * the "luo-abi-header" property in the LUO FDT.
-> + * This structure is the root of all preserved LUO state.
->   */
->  struct luo_ser {
-> +	char compatible[LUO_ABI_COMPAT_LEN];
->  	u64 liveupdate_num;
->  	u64 sessions_pa;
->  	u64 flbs_pa;
-[...]
-> @@ -94,40 +91,29 @@ static int __init luo_early_startup(void)
->  		return 0;
->  	}
->  
-> -	/* Retrieve LUO subtree, and verify its format. */
-> -	err = kho_retrieve_subtree(LUO_FDT_KHO_ENTRY_NAME, &fdt_phys, NULL);
-> +	/* Retrieve LUO state from KHO. */
-> +	err = kho_retrieve_subtree(LUO_KHO_ENTRY_NAME, &luo_ser_phys, &len);
->  	if (err) {
->  		if (err != -ENOENT) {
-> -			pr_err("failed to retrieve FDT '%s' from KHO: %pe\n",
-> -			       LUO_FDT_KHO_ENTRY_NAME, ERR_PTR(err));
-> +			pr_err("failed to retrieve LUO state '%s' from KHO: %pe\n",
-> +			       LUO_KHO_ENTRY_NAME, ERR_PTR(err));
->  			return err;
->  		}
->  
->  		return 0;
->  	}
->  
-> -	luo_global.fdt_in = phys_to_virt(fdt_phys);
-> -	err = fdt_node_check_compatible(luo_global.fdt_in, 0,
-> -					LUO_FDT_COMPATIBLE);
-> -	if (err) {
-> -		pr_err("FDT '%s' is incompatible with '%s' [%d]\n",
-> -		       LUO_FDT_KHO_ENTRY_NAME, LUO_FDT_COMPATIBLE, err);
-> -
-> +	if (len < sizeof(*luo_ser)) {
-
-len != sizeof(*luo_ser) here?
-
-> +		pr_err("LUO state is too small (%zu < %zu)\n", len, sizeof(*luo_ser));
->  		return -EINVAL;
->  	}
->  
-> -	header_size = 0;
-> -	ptr = fdt_getprop(luo_global.fdt_in, 0, LUO_FDT_ABI_HEADER, &header_size);
-> -	if (!ptr || header_size != sizeof(u64)) {
-> -		pr_err("Unable to get ABI header '%s' [%d]\n",
-> -		       LUO_FDT_ABI_HEADER, header_size);
-> -
-> +	luo_ser = phys_to_virt(luo_ser_phys);
-> +	if (strncmp(luo_ser->compatible, LUO_ABI_COMPATIBLE, LUO_ABI_COMPAT_LEN)) {
-> +		pr_err("LUO state is incompatible with '%s'\n", LUO_ABI_COMPATIBLE);
->  		return -EINVAL;
->  	}
->  
-> -	luo_ser_pa = get_unaligned((u64 *)ptr);
-> -	luo_ser = phys_to_virt(luo_ser_pa);
-> -
->  	luo_global.liveupdate_num = luo_ser->liveupdate_num;
->  	pr_info("Retrieved live update data, liveupdate number: %lld\n",
->  		luo_global.liveupdate_num);
-[...]
-
--- 
-Regards,
-Pratyush Yadav
+Will
