@@ -1,101 +1,216 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CE4371D08;
-	Mon,  1 Jun 2026 12:58:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF837372057;
+	Mon,  1 Jun 2026 13:22:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780318725; cv=none; b=rLAUFs3kC+6Zl644CyZWLrZjOnFGGdED6hgSDZosCul3EPaY2SfxtXTrmtpQ0I+L89TJJ74qmyp5Vq4NL2WSGurc0DciKuIvbrV0hfUEUYq4sZvJ1MX9kYo5N+SxE4LvgBTHUx1ZwNOUAt91nUKBst8Me8JpoPud2btNiE8P7Mc=
+	t=1780320144; cv=none; b=fm79VS2X+LquguZj4/UWV4bxvJizsTQre+Dp1EpQDv57T9MxP2WXb61KDP9MkJTT9TdZ963c9IGxmPlfyc6c+vknUMsI2idWJ4AZJLqL+W91qrH74fERMwAwws+24WI7k+YRnyxBa524d60ldIY/CPE3YZHf1vBUNuL9DuQyXA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780318725; c=relaxed/simple;
-	bh=6Y5HJCUfZOnFUQa4AatktWigr2XfKiuV2TQs0zIUxQo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c9G0pGdc7erakn/YZhCyuiYUMmTvYxjE1WMa6NXT1FxXYRWvZ7Dh0fa+Rwu5X0h0j/M4imgKbvfmvOQD0R+j/SmE4E6Seh6CZTUH4vsU5sMSnUUm9BH+6+FgWchiPoBU8WMV6xOjT1HY4MnDUOLofQSWvmQYODTMOHSNwboGJEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MYNNB4HN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780320144; c=relaxed/simple;
+	bh=5IO3E8xNHF91kis6t4ZlSQgt9FsTb8dYFvmANv7NBsw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=I5/n9dHIXUUHKyxCpXvYhKJxUXVEtl/pvVKedFA6oC6QlRT393Lq/auro9dx1dHP2C1nG7PmjKex41ZVisZu/TT85rvVIAnkwxH05MEOZzcDI3aYXF83VhaAnC+ubvBILiRlTXa/w2RnHdJR6vKxU7/kOnXBGQDVMMVPjwxBwHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LU6AW3wK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MYNNB4HN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCC2D1F00893;
-	Mon,  1 Jun 2026 12:58:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LU6AW3wK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DBE31F00893;
+	Mon,  1 Jun 2026 13:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780318724;
-	bh=P7rDevCZnFjkWVTnN7LsLiTYCzqFkr5n/NYFmJGjz+Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MYNNB4HNONIG/b/z1lxMw17uWiLW2/iSk8HouiQQvxi78qlWwzikTRMoBb7l90tSz
-	 +yALZ1WhIRogzCT/8TU7Yy+fASCh5FyB1xSuLK3blHn8EH3qy6eCJS9oDlpMHSRB4y
-	 TDjG53L/Kwzksych4gwMlq6pL8BLvpllYnskDDR7eAgmh4C/vbryfSnxlVSc8YmJy6
-	 tvKxgulPJKf9Mv9rgVVkVa2WWULCoSijzdNE94pKHd7szHUoVI6B2nNROge7Q8qnOE
-	 HslnChmi3f0sBiU1naABH6YB3OZRAn9+OklyQ9LHPg7pKObukwMF0pO0mTMUffKf37
-	 NqOvD3uNTumXw==
-Date: Mon, 1 Jun 2026 13:58:38 +0100
-From: Will Deacon <will@kernel.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: David Laight <david.laight.linux@gmail.com>,
-	David Matlack <dmatlack@google.com>,
-	Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
-	Leon Romanovsky <leon@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
-	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-	Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v2 06/11] selftests: Fix arm64 IO barriers to match kernel
-Message-ID: <ah2B_mzQabiEYSWt@willie-the-truck>
-References: <0-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
- <6-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
- <ahiFxtmspbETiqWw@google.com>
- <20260529134947.GA128816@nvidia.com>
- <20260529175516.06d5788f@pumpkin>
- <20260529192933.GD3195266@nvidia.com>
+	s=k20260515; t=1780320142;
+	bh=WDT+8+ETf4Oj92XwVc++A5fr+CCglKoLUu0D8KimQ84=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=LU6AW3wKuu8SCk7DkUOYOGjAikqXBQEAcRgbGOhMTZuzzL/jEjz6W1NAmcd6J71nD
+	 f1J9yPoVcNbopDcXDC/tRcytt3DWozJFC9hp37ufoeat0oPOYbTnmMQuustGcQE3Jl
+	 PQ4S5jvRVPvXPa5T686eyp57lLX/9XOLhfmd+hvxtNThxOlIsz+ycJGq9VmnAeVdCa
+	 p53tUKhy7GipyNvMCP3/OESrPe2OjXaHKvEbJoFGg0onrA/I81UnFMddcqeSHXxXdK
+	 IWJiln4pvPHWl61ksfS3UuHn5NoD/Fb5Hyo1PX5J8sBDZjYxsOycLs822PbzqdfcIb
+	 8USWAXGFgogGg==
+Message-ID: <e3d023f1-ab6e-4424-b304-55f1294480c3@kernel.org>
+Date: Mon, 1 Jun 2026 15:22:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260529192933.GD3195266@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 2/6] mm/memory-failure: surface unhandlable kernel
+ pages as -ENOTRECOVERABLE
+To: Miaohe Lin <linmiaohe@huawei.com>, Breno Leitao <leitao@debian.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, kernel-team@meta.com,
+ Lance Yang <lance.yang@linux.dev>, Andrew Morton
+ <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Naoya Horiguchi <nao.horiguchi@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ "Liam R. Howlett" <liam@infradead.org>
+References: <20260527-ecc_panic-v8-0-9ea0cfa16bb0@debian.org>
+ <20260527-ecc_panic-v8-2-9ea0cfa16bb0@debian.org>
+ <19f968f5-1289-f573-4406-e5c91dcd8923@huawei.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <19f968f5-1289-f573-4406-e5c91dcd8923@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 29, 2026 at 04:29:34PM -0300, Jason Gunthorpe wrote:
-> On Fri, May 29, 2026 at 05:55:16PM +0100, David Laight wrote:
-> > On Fri, 29 May 2026 10:49:47 -0300
-> > Jason Gunthorpe <jgg@nvidia.com> wrote:
-> > 
-> > > On Thu, May 28, 2026 at 06:13:26PM +0000, David Matlack wrote:
-> > > 
-> > > > Let's put these in tools/arch/arm64/include/asm/io.h so that the tools
-> > > > headers are more aligned with the kernel headers, and so that the arm64
-> > > > io.h overrides are done in the same way as the x86 overrides in
-> > > > tools/arch/x86/include/asm/io.h.
-> > > > 
-> > > > Something like this (untested):  
-> > > 
-> > > Okay, the disassembly says it works:
-> > > 
-> > >     1db8:       ca080108        eor     x8, x8, x8
-> > >     1dbc:       b5000008        cbnz    x8, 1dbc <readl+0x58>
-> > >     1dc0:       f9000fe8        str     x8, [sp, #24]
-> > 
-> > That looks strange, I suspect the C didn't match any usual pattern.
-> > Normally 'tmp' would get thrown away and 'v' would get kept.
-> > But you seem to have discarded 'v' and written 'tmp' to stack.
+On 6/1/26 14:28, Miaohe Lin wrote:
+> On 2026/5/27 22:06, Breno Leitao wrote:
+>> get_any_page() collapses every HWPoisonHandlable() rejection into a
+>> single -EIO via the __get_hwpoison_page() -> -EBUSY -> shake_page()
+>> -> retry path.  That is correct for the transient case (a userspace
+>> folio briefly off LRU during migration or compaction, which a later
+>> shake can drag back), but wrong for stable kernel-owned pages: slab,
+>> page-table, large-kmalloc and PG_reserved pages will never become
+>> HWPoisonHandlable(), so the retry loop is wasted work and the final
+>> -EIO loses the "this is structurally unrecoverable" information.
+>> memory_failure() then maps -EIO into MF_MSG_GET_HWPOISON, which the
+>> panic-on-unrecoverable sysctl deliberately does not act on.
+>>
+>> Introduce HWPoisonKernelOwned(), a small predicate that positively
+>> identifies pages the hwpoison handler cannot recover from:
+>>
+>>   HWPoisonKernelOwned(p, flags) :=
+>>       !(MF_SOFT_OFFLINE && page_has_movable_ops(p)) &&
+>>       (PageReserved(p) || PageSlab(p) ||
+>>        PageTable(p)    || PageLargeKmalloc(p))
+>>
+>> The MF_SOFT_OFFLINE / page_has_movable_ops() opt-out mirrors the
+>> same exception in HWPoisonHandlable(): soft-offline is allowed to
+>> migrate movable_ops pages even though they are not on the LRU, and
+>> we must not pre-empt that with an unrecoverable verdict.
+>>
+>> The list is intentionally not exhaustive.  vmalloc and kernel-stack
+>> pages, for example, do not carry a page_type bit and would need a
+>> different oracle; they keep going through the existing retry path
+>> unchanged.  This is the smallest set we can identify with certainty
+>> by page type.
+>>
+>> Wire the helper into the top of get_any_page() to short-circuit
+>> those pages before the retry loop runs.  On a hit, drop the caller's
+>> MF_COUNT_INCREASED reference (if any) and return -ENOTRECOVERABLE
+>> straight away.  Pages outside the helper's positive list still take
+>> the existing retry path and return -EIO, leaving operator-visible
+>> behaviour for those cases unchanged.
+>>
+>> Extend the unhandlable-page pr_err() to fire for either errno and
+>> update the get_hwpoison_page() kerneldoc to document the new return.
+>>
+>> memory_failure() still folds every negative return into
+>> MF_MSG_GET_HWPOISON via its existing "else if (res < 0)" branch, so
+>> this patch on its own only changes the errno that soft_offline_page()
+>> can propagate to its callers.  A follow-up wires -ENOTRECOVERABLE
+>> through memory_failure() and reports MF_MSG_KERNEL for the
+>> unrecoverable cases, which is what the
+>> panic_on_unrecoverable_memory_failure sysctl observes.
 > 
-> Oh interesting the optimizer isn't turned on for selftest builds. So
-> the str is dutifully writing tmp to the stack. Another register has
-> the actual value.
+> Thanks for your patch.
 > 
-> > I'm probably being stupid again, but how does that work?
-> > The cpu can speculate straight through the control dependency into
-> > the following instructions.
-> > An 'eor x1, x8, x8' may not even have a data-dependency on x8.
-> > (Most x86 cpus just generate a zero for the equivalent instruction.)
+>>
+>> Suggested-by: David Hildenbrand <david@kernel.org>
+>> Suggested-by: Lance Yang <lance.yang@linux.dev>
+>> Signed-off-by: Breno Leitao <leitao@debian.org>
+>> ---
+>>  mm/memory-failure.c | 42 ++++++++++++++++++++++++++++++++++++++++--
+>>  1 file changed, 40 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index f4d3e6e20e13..8f63bdfeff8f 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -1325,6 +1325,28 @@ static inline bool HWPoisonHandlable(struct page *page, unsigned long flags)
+>>  	return PageLRU(page) || is_free_buddy_page(page);
+>>  }
+>>  
+>> +/*
+>> + * Positive identification of pages the hwpoison handler cannot recover.
+>> + * These page types are owned by kernel internals (no userspace mapping
+>> + * to unmap, no file mapping to invalidate, no migration target), so the
+>> + * shake_page() / retry loop in get_any_page() can never turn them into
+>> + * something HWPoisonHandlable() will accept.  Short-circuit them to
+>> + * -ENOTRECOVERABLE so callers can panic on operator request instead of
+>> + * spinning through retries that exit as a transient-looking -EIO.
+>> + *
+>> + * The MF_SOFT_OFFLINE / page_has_movable_ops() opt-out mirrors
+>> + * HWPoisonHandlable(): soft-offline is allowed to migrate movable_ops
+>> + * pages even though they are not on the LRU.
+>> + */
+>> +static inline bool HWPoisonKernelOwned(struct page *page, unsigned long flags)
+>> +{
+>> +	if ((flags & MF_SOFT_OFFLINE) && page_has_movable_ops(page))
+>> +		return false;
+>> +
+>> +	return PageReserved(page) || PageSlab(page) ||
 > 
-> I can't say, this is copied from the kernel and Will made it:
+> Once shake_page finds a lightweight range-based way to shrink slab, slab pages could be freed
+> into buddy and above PageSlab test should be removed then. Maybe add a TODO or XXX here?
 > 
->     arm64: io: Ensure calls to delay routines are ordered against prior readX()
+>> +	       PageTable(page) || PageLargeKmalloc(page);
+> 
+> I'm not sure but is it safe or a common way to test PageReserved, PageSlab,
+> PageTable and PageLargeKmalloc without extra page refcnt?
 
-This is specifically for ordering counter accesses against prior
-barriered MMIO reads. Userspace should really be using the vDSO instead
-of accessing the counter directly, so you could probably drop this for
-the tools headers tbh and just have the dma_rmb().
+Checking typed pages in a racy fashion is fine (PageSlab, PageTable,
+PageLargeKmalloc).
+Checking PageReserved in a racy fashion is fine as well. TESTPAGEFLAG() will
+allow checking it on compound pages.
 
-Will
+For PageLargeKmalloc, we would want to check the head page, though. The page
+type is only stored for the head page.
+
+So maybe we want to lookup the compound head (if any) and perform the type
+checks against that?
+
+-- 
+Cheers,
+
+David
