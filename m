@@ -1,197 +1,118 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4C11A6831
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 03:24:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45144314B63;
+	Mon,  1 Jun 2026 04:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780284277; cv=none; b=c1/kGZNbpGQcRPlhI11JpLzgo8Qwh7Yh4ApeeMaPTVVb/4VF9fK1VoRfg+6Sev70Wuuj138bPBgnAfhQpPkX8Wn1JqQxHpYRF9WGJtWmv1et3fLe/skMM+FGrRVaA0RIM/zniU/I0BeLGMbvKmaYeJlkJRtsE1bsXkR7IGigkK4=
+	t=1780288310; cv=none; b=pHoMWjhfyartAu5/VxT3+Ete+4ugqXYcOazRBMbO3zLX9OcMD+HJnFGx0KNVY/nVDbYJzSj3p5wvn8+8RXkbl46b4DU6VyAD2bwfFE3d1ccT761VKV2KPCOQm7YG97BCNaTg+vo34WbXEOXqDwG+dP2jZYB+Qn88nFAkegEXYtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780284277; c=relaxed/simple;
-	bh=/KH3aChOBfgFlGGyfxL03i9RqigtaHLERZayfOZo/vg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SJbgFC4eyydHUVd4sFGJtbBtKxM9z+SzfI+X5SQBytdmjYCAfCFfVL+2ZTbnMNk4CoR61+3rrvxQAzTpvbtF6lDBcOQvRGaq0sls7fNkQ+wB0VzPbDBEYQAP4dPOX1NjyIZZZ7+VYGgJqDkOoZgzyKKoPIfvC4dxBQWGEgFVr3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HgE+EHcj; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780288310; c=relaxed/simple;
+	bh=s0BX45L0sWVIGDOh1RTHQxm2WUKeqKfvcWhCuik3r8k=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=H5Swym48vb4eN6ocFH9XwDiQH+fs6rS/7kPAtfGBUdQQFkKekuRK+FhHrXXgZeIzjSsg4houc2CAKzjbgfd2o/Fp0xtbZrNvUDas4unxWzrC+QcvZa/aAU60sBc+X1C219xvqO8jxmmd1KpEPpVtj8sybF1PgkT2avCAbAjZAcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nFDlc9XN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HgE+EHcj"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780284274;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BpJqpbF9ApLNylCyq0RsExKHsHO66f1ta9bSPuMNQvg=;
-	b=HgE+EHcjd9c4DxL4XphF3dM/ndwLGCizdi8lItx1SrPwXrYb0ojr3vggiEfDPROoDdjIo4
-	h9ZewjJ0EUXsA7PB3zHQzti+N9cdyjcDxfE3dCbdsZBJdxempVZFSvLWXRV7xMKgerXYuz
-	b+WxxGyyG/VOzV3D6+urxj1qmMuLJq4=
-From: Kunwu Chan <kunwu.chan@linux.dev>
-To: sj@kernel.org,
-	shuah@kernel.org
-Cc: damon@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	Kunwu Chan <chentao@kylinos.cn>,
-	Wang Lian <lianux.mm@gmail.com>
-Subject: [PATCH v2 3/3] selftests/damon: fix dead code, skipped checks, and broken lookups
-Date: Mon,  1 Jun 2026 11:23:14 +0800
-Message-ID: <20260601032314.424013-4-kunwu.chan@linux.dev>
-In-Reply-To: <20260601032314.424013-1-kunwu.chan@linux.dev>
-References: <20260601032314.424013-1-kunwu.chan@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nFDlc9XN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B436F1F00893;
+	Mon,  1 Jun 2026 04:31:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780288309;
+	bh=37qGQZaPw/dWTrWCnULlgc4kI4ji2bvU7/GpzFmiqGM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=nFDlc9XNgbBE6MxvyJy7sWjwPuT9XtQOr0hw2JL4Vg7uayD+8GQOjGIKULjamXWqP
+	 f8GWgLdp7Wj8ZvI1DSYqqlxLpFzn3jPtjMCPwDex89xlUzWBGa/E73NDS3CP0bujCb
+	 YO5/Zl1IUddJ3Pp7t9B5cYs3lvtCZH+mAGZ2kdyr4eIdqhPhLHj12GgLl4sGGV2X8q
+	 o0ldlhjIFVytayeN0YwG6OuSM94p/P+XGWKx326tgxK4N/kCu/xeiKBY7etMzRtZul
+	 Ed1R8SMs+Gj25jqCQNtdS9gles7OEfcD7ZU7HDqm23BX2mskjy/m8DqMsZ2eX7LUT2
+	 nfpQeur5pffaw==
+Date: Mon, 1 Jun 2026 13:31:46 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: CaoRuichuang <create0818@163.com>, Shuah Khan
+ <skhan@linuxfoundation.org>, mhiramat@kernel.org,
+ mathieu.desnoyers@efficios.com, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/ftrace: Drop invalid top-level local in
+ test_ownership
+Message-Id: <20260601133146.b16b0ad7c2204adcc168c945@kernel.org>
+In-Reply-To: <20260407203727.442b583c@gandalf.local.home>
+References: <20260407102613.81419-1-create0818@163.com>
+	<20260407203727.442b583c@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Kunwu Chan <chentao@kylinos.cn>
+On Tue, 7 Apr 2026 20:37:27 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-'hugeapge_size' in drgn_dump_damon_status.py was a dead elif branch.
-$fail_reason in sysfs.sh was undefined, silently emptying the error
-message.  'exit' instead of 'exist' in sysfs.sh skipped a file
-existence check.  'nohugeapge' in sysfs.py broke an action dict
-lookup.
+> 
+> Shuah,
+> 
+> Care to take this through your tree. Probably could even add:
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 8b55572e51805 ("tracing/selftests: Add tracefs mount options test")
+> 
+> As well as:
+> 
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> 
 
-Fix other wrong strings in the same files.
+Shuah, here is my ack too.
 
-Co-developed-by: Wang Lian <lianux.mm@gmail.com>
-Signed-off-by: Wang Lian <lianux.mm@gmail.com>
-Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
-Reviewed-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/_damon_sysfs.py               | 2 +-
- tools/testing/selftests/damon/damos_apply_interval.py       | 2 +-
- tools/testing/selftests/damon/damos_quota_goal.py           | 2 +-
- tools/testing/selftests/damon/drgn_dump_damon_status.py     | 2 +-
- tools/testing/selftests/damon/sysfs.py                      | 4 ++--
- tools/testing/selftests/damon/sysfs.sh                      | 6 +++---
- .../sysfs_update_schemes_tried_regions_wss_estimation.py    | 2 +-
- 7 files changed, 10 insertions(+), 10 deletions(-)
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
-index 2f6f2699db25..f6127081dfb2 100644
---- a/tools/testing/selftests/damon/_damon_sysfs.py
-+++ b/tools/testing/selftests/damon/_damon_sysfs.py
-@@ -837,7 +837,7 @@ class Kdamond:
-                 for goal in scheme.quota.goals:
-                     err = goal.stage()
-                     if err is not None:
--                        print('commit_schemes_quota_goals failed stagign: %s'%
-+                        print('commit_schemes_quota_goals failed staging: %s'%
-                               err)
-                         exit(1)
-         return write_file(os.path.join(self.sysfs_dir(), 'state'),
-diff --git a/tools/testing/selftests/damon/damos_apply_interval.py b/tools/testing/selftests/damon/damos_apply_interval.py
-index f04d43702481..0f2f36584e48 100755
---- a/tools/testing/selftests/damon/damos_apply_interval.py
-+++ b/tools/testing/selftests/damon/damos_apply_interval.py
-@@ -56,7 +56,7 @@ def main():
-     # Because the second scheme was having the apply interval that is ten times
-     # lower than that of the first scheme, the second scheme should be tried
-     # about ten times more frequently than the first scheme.  For possible
--    # timing errors, check if it was at least nine times more freuqnetly tried.
-+    # timing errors, check if it was at least nine times more frequently tried.
-     ratio = nr_tried_stats[1] / nr_tried_stats[0]
-     if ratio < 9:
-         print('%d / %d = %f (< 9)' %
-diff --git a/tools/testing/selftests/damon/damos_quota_goal.py b/tools/testing/selftests/damon/damos_quota_goal.py
-index f76e0412b564..661e4ba4765a 100755
---- a/tools/testing/selftests/damon/damos_quota_goal.py
-+++ b/tools/testing/selftests/damon/damos_quota_goal.py
-@@ -66,7 +66,7 @@ def main():
-             # effective quota was already minimum that cannot be more reduced
-             if expect_increase is False and last_effective_bytes == 1:
-                 continue
--            print('efective bytes not changed: %d' % goal.effective_bytes)
-+            print('effective bytes not changed: %d' % goal.effective_bytes)
-             exit(1)
- 
-         increased = last_effective_bytes < goal.effective_bytes
-diff --git a/tools/testing/selftests/damon/drgn_dump_damon_status.py b/tools/testing/selftests/damon/drgn_dump_damon_status.py
-index 972948e6215f..26b207e44268 100755
---- a/tools/testing/selftests/damon/drgn_dump_damon_status.py
-+++ b/tools/testing/selftests/damon/drgn_dump_damon_status.py
-@@ -163,7 +163,7 @@ def damos_filter_to_dict(damos_filter):
-                                int(damos_filter.addr_range.end)]
-     elif type_ == 'target':
-         dict_['target_idx'] = int(damos_filter.target_idx)
--    elif type_ == 'hugeapge_size':
-+    elif type_ == 'hugepage_size':
-         dict_['sz_range'] = [int(damos_filter.sz_range.min),
-                              int(damos_filter.sz_range.max)]
-     return dict_
-diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-index aa03a1187489..99412f0d31f3 100755
---- a/tools/testing/selftests/damon/sysfs.py
-+++ b/tools/testing/selftests/damon/sysfs.py
-@@ -119,7 +119,7 @@ def assert_access_pattern_committed(pattern, dump):
-                 'max_nr_accesses', dump)
-     assert_true(dump['min_age_region'] == pattern.age[0], 'min_age_region',
-                 dump)
--    assert_true(dump['max_age_region'] == pattern.age[1], 'miaxage_region',
-+    assert_true(dump['max_age_region'] == pattern.age[1], 'max_age_region',
-                 dump)
- 
- def assert_scheme_committed(scheme, dump):
-@@ -129,7 +129,7 @@ def assert_scheme_committed(scheme, dump):
-             'cold': 1,
-             'pageout': 2,
-             'hugepage': 3,
--            'nohugeapge': 4,
-+            'nohugepage': 4,
-             'collapse': 5,
-             'lru_prio': 6,
-             'lru_deprio': 7,
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-index 78f4badb5beb..2eaaa5ae3c5e 100755
---- a/tools/testing/selftests/damon/sysfs.sh
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -3,7 +3,7 @@
- 
- source _common.sh
- 
--# Kselftest frmework requirement - SKIP code is 4.
-+# Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
- 
- ensure_write_succ()
-@@ -28,7 +28,7 @@ ensure_write_fail()
- 
- 	if (echo "$content" > "$file") 2> /dev/null
- 	then
--		echo "writing $content to $file succeed ($fail_reason)"
-+		echo "writing $content to $file succeeded ($reason)"
- 		echo "expected failure because $reason"
- 		exit 1
- 	fi
-@@ -363,7 +363,7 @@ test_context()
- {
- 	context_dir=$1
- 	ensure_dir "$context_dir" "exist"
--	ensure_file "$context_dir/avail_operations" "exit" 400
-+	ensure_file "$context_dir/avail_operations" "exist" 400
- 	ensure_file "$context_dir/operations" "exist" 600
- 	ensure_file "$context_dir/addr_unit" "exist" 600
- 	ensure_file "$context_dir/pause" "exist" 600
-diff --git a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-index 35c724a63f6c..16fdc6e7fc56 100755
---- a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-+++ b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-@@ -7,7 +7,7 @@ import time
- import _damon_sysfs
- 
- def pass_wss_estimation(sz_region):
--    # access two regions of given size, 2 seocnds per each region
-+    # access two regions of given size, 2 seconds per each region
-     proc = subprocess.Popen(
-             ['./access_memory', '2', '%d' % sz_region, '2000', 'repeat'])
-     kdamonds = _damon_sysfs.Kdamonds([_damon_sysfs.Kdamond(
+BTW, to avoid similar issue, 
+
+Thanks, 
+
+> -- Steve
+> 
+> 
+> On Tue,  7 Apr 2026 18:26:13 +0800
+> CaoRuichuang <create0818@163.com> wrote:
+> 
+> > From: Cao Ruichuang <create0818@163.com>
+> > 
+> > test_ownership.tc is sourced by ftracetest under /bin/sh.
+> > 
+> > The script currently declares mount_point with local at file scope,
+> > which makes /bin/sh abort with "local: not in a function" before the
+> > test can reach the eventfs ownership checks.
+> > 
+> > Replace the top-level local declaration with a normal shell variable so
+> > kernels that support the gid= tracefs mount option can run the test at
+> > all.
+> > 
+> > Signed-off-by: Cao Ruichuang <create0818@163.com>
+> > ---
+> >  tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc b/tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc
+> > index e71cc3ad0..6d00d3c0f 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc
+> > @@ -6,7 +6,7 @@
+> >  original_group=`stat -c "%g" .`
+> >  original_owner=`stat -c "%u" .`
+> >  
+> > -local mount_point=$(get_mount_point)
+> > +mount_point=$(get_mount_point)
+> >  
+> >  mount_options=$(get_mnt_options "$mount_point")
+> >  
+> 
+> 
+
+
 -- 
-2.43.0
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
