@@ -1,54 +1,54 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACE638237A
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 06:51:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E453E382F0F
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 06:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780296705; cv=none; b=fFly/FeI+CWIlDf44RQ5HZ04UboYqpG8nPQjsdM9sTYtZBnmZOpiFT3F3bw/oMIY8bSpbY28hOPKaR9K0Ok4caxY6CA4mkT35+/p3tjB0ECAIUWL+jBwxX44cJhAf68hWyoXXf3KxdccX16CJbbU88Lt+CCEe9HyawZAgxOXE+w=
+	t=1780296707; cv=none; b=Lew4i9Z2htI+teeevEssfro0Ynfcb7moS/bKFl43ZgUDIvS/uSCHXxY3Is8q4Xg7s960RK0NtVQIF1zRx/gDBgUI5f0nb1fNZSiXRpFCpDtjhZmWiLgTFEHIxmQ2lXZM9S0IJ2DiochXaTSAIfppFtyb5wvFaLb8DZZxVHtEfuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780296705; c=relaxed/simple;
-	bh=RhbZjldDEvRmcXRUgBq8zs621qLiWWhWxGM9YPdTZFU=;
+	s=arc-20240116; t=1780296707; c=relaxed/simple;
+	bh=pDvCT3nXHlU7+Qmyj6Da0J3AxTPetMwuXX+Hgvkvx00=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PRmmwm7o4zC/V6+kwItBFgEXWQKOEGcJirCplruWhVWhCNT0zfKI18Etfihe00rbdIrtJpP/x70Ew7dkKQGwV5LIif5nWgFtmkEFbiW/YHpV/CpWSN9CJq0oGZU7GobYOHJNEAxHp8ZOuP2X5k7qXffuGtY6D7dKzkbIOfoNmCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H50tEFWA; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=J9fmJhJ8rIovvICaqux5vXv4v4tfgpfs6vK9iQno07mtFB363Jl6pppiBlZ2RdfQaQPy7+2hJeIMPTKC1mnECeSfi5+ZCCda0l0o2EmzthgbFnt7FCPUK8uLLPPJDKvS3XDhwJnMr1Xq8O07RyXKjj/jh27O329Ysq2f3A6bY3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fQX0gAyh; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H50tEFWA"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c85a2ed88c8so1312359a12.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 23:51:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fQX0gAyh"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-842308adb3bso2090498b3a.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 23:51:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780296700; x=1780901500; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1780296702; x=1780901502; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dEuvk7i7rqZfwCAbLKkptmIQlUbXcNoFD9xb5HxF2jE=;
-        b=H50tEFWA33pctHyuQVj9SMjh6JyyFxqHYMOxjEWbUvlPRkXzKS12aDApJFHSjv+XT7
-         1OjHXSVjbXefW9Joh31OeqcVDz5uANqnItU6GGRfkrghbT86tqBBIkLsbeqGiMF4Gnpv
-         TyE9eKSfDZ5lnLhVmvw/qGYBVkIVVVA9ueOACUl6t89VfB4KF5m7XIi1ObcZkSJcq7iy
-         CNEoQwLlECfvu5jYjKGyvJc5KqEjTAbmqA4/DGXm3WBFa2CRzkD8bvrRNNvLmXYVgQlZ
-         i02X44R1IVK94KLXwuRAejRhsFQv9R01xbNUzQsIYEoEvJqjA8UUYgOeQ6zLuVU58XU1
-         obFw==
+        bh=LsfNw+BauM7fB3mJaL1tUgJDsLO/ObAtcy7sWXgWNLE=;
+        b=fQX0gAyhwl3aqVks2IX+htjaUOWpxS/Hn/DTp0jLyh8ne+hLtvEfPwOZCwAgaBHwxX
+         kZgjk7XEkoe8eV4/rqNfDjsXyHJ4qW9iDoXdRpPRd3E/bQV5L6KBCB4/nuh0EKjYznsG
+         wP3k636Qxfrij4ErfUjCKcmgGRaJUwKU8462meKmiVDSTJ+rDZLZvJJIiNbdfUQgzpqk
+         QUAGs7Wyl8RatZkyoc19OAC0+7/Xi4HX0jFeH6h+7XvibbgOjWufKra4C6LRI7E1AoGG
+         KzMn5oF0uEzTlMXdTq44P0CGWXcfKrqKmui8kh7+UMOl3Czrl1OcwrH4cLolgD7h/RNR
+         AVnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780296700; x=1780901500;
+        d=1e100.net; s=20251104; t=1780296702; x=1780901502;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dEuvk7i7rqZfwCAbLKkptmIQlUbXcNoFD9xb5HxF2jE=;
-        b=lS6nI4c7QPcpqGRIG7sE1UTQFJAcQb/U4MWF6GoGoBjbL+jqHlRTeq8NBY1gMy/xs0
-         QeTK34M4eSw3St/GEvLpePvymJ6BmkhDKVXNcVxi6gwf2mtrxTCiljdvxWuAV6xVk07o
-         YZb871DL3L7MIHqDCyFoEVa1V5btsn9V6YuRhT7GkSTO7/WcafQ3GGZLZNTWRXZAnFlY
-         3GhuM9xMdNj4lkxYXWq+dKE0AUfC3YOv30uC2yEClZ6H+Kx2+Kq6TfJ7WdSFyNmvBq4n
-         PzLhnx3z+/zLEgLt5N/sIbEouVbG9+cfNflkVOFlEOKG9426d45/Jj88yPO1RjqWMmtd
-         BIzw==
-X-Forwarded-Encrypted: i=1; AFNElJ9j153wjilMnW/lscLaozVFaUxND3iW5OwnEYIbKCBhbnN6wv7maHmAvresK0DsWzgUpE1ldKoBEsiJ/mZ0zDc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8dHzKihwrsJ7g24gco0Anlw9tozWoXk5NNLewzXlbYCx/69Mg
-	KC+yvb112ZMblhY+sqMuq6G6ApCG172OKMu7nnkqxu/e7wW21Tle3MYH/Gamdg692SgpV/mvqN9
-	yqg==
-X-Received: from pgng19.prod.google.com ([2002:a63:3753:0:b0:c85:7a10:54e4])
- (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:5482:b0:3b2:8675:4866
- with SMTP id adf61e73a8af0-3b4280a5aa4mr8928004637.31.1780296699772; Sun, 31
- May 2026 23:51:39 -0700 (PDT)
-Date: Mon,  1 Jun 2026 06:51:24 +0000
+        bh=LsfNw+BauM7fB3mJaL1tUgJDsLO/ObAtcy7sWXgWNLE=;
+        b=snAoH08HsHtcD1HjgD2HTaIBRwIJkvWwcP+fSXAhXJm1BWtnGmDKXbxDJzegZHLyYj
+         Fw56uNia5JF0S5MhUjRE3g9DrMX3G/BL/OjYWHrjE+1lvjoRjVqSevbaacmgEUKQg9In
+         VKSCQ17mM7KpDDmCjl96bS6jU1R8uBMjTJgXwa5uoZdBHx0s1ZxN8i9jtCToTL/Agcjt
+         2YRTAOC0BB/t26g8BPGF5SUOzOH16Xqmad3AZMiyYSAXtTgUoR4r1bHTISuU4U1STnUg
+         i9OzNO9qN56kCdzAAIaeX2yAc1Dx2d9pmPFGhmaRY4Jx1yaHf3nfcSCFae3VeKPnqsy+
+         7D+Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+HEbQO9hmg0FNA1uaBrZrDieGuElQZG5urlAszD8ClIUvWsMCv0kysuCYPyUK793a2QCSM2rH/sFobM1RF8wQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuDYvOMxmibScUXdNCwpCUsHu5gbdz/N9LtDFGOOLeqwvYSUXA
+	VyFvLyWgywZDm05tzgAN6WHy5Ih+croa/NYTauYA+OljiiuUvWZrVqrmF3rQRil2Mtca/OxWXqF
+	boQ==
+X-Received: from pfsy9.prod.google.com ([2002:a05:6a00:389:b0:842:1c68:3772])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3a17:b0:82f:355a:857e
+ with SMTP id d2e1a72fcca58-842257098f3mr9099839b3a.47.1780296701652; Sun, 31
+ May 2026 23:51:41 -0700 (PDT)
+Date: Mon,  1 Jun 2026 06:51:25 +0000
 In-Reply-To: <20260601065126.3623867-1-wakel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260601065126.3623867-1-wakel@google.com>
 X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
-Message-ID: <20260601065126.3623867-6-wakel@google.com>
-Subject: [PATCH 5/7] selftests/futex: Migrate futex_numa_mpol to harness
+Message-ID: <20260601065126.3623867-7-wakel@google.com>
+Subject: [PATCH 6/7] selftests/futex: Migrate futex_priv_hash to harness
 From: Wake Liu <wakel@google.com>
 To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>, 
 	linux-kselftest@vger.kernel.org
@@ -69,42 +69,84 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
 	linux-kernel@vger.kernel.org, wakel@google.com
 Content-Type: text/plain; charset="UTF-8"
 
-Migrate futex_numa_mpol test to the kselftest harness framework,
-removing mixed legacy ksft_* API usages and passing test metadata to helper functions.
+Migrate futex_priv_hash test to the kselftest harness framework,
+removing mixed legacy ksft_* API usages and passing test metadata
+to all helper functions.
 
 Signed-off-by: Wake Liu <wakel@google.com>
 ---
- .../futex/functional/futex_numa_mpol.c        | 109 ++++++++----------
- 1 file changed, 51 insertions(+), 58 deletions(-)
+ .../futex/functional/futex_priv_hash.c        | 160 +++++++++---------
+ 1 file changed, 78 insertions(+), 82 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/futex_numa_mpol.c b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
-index 78c0f7a59e17..18dc8e54aa96 100644
---- a/tools/testing/selftests/futex/functional/futex_numa_mpol.c
-+++ b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+diff --git a/tools/testing/selftests/futex/functional/futex_priv_hash.c b/tools/testing/selftests/futex/functional/futex_priv_hash.c
+index e8079d7c65e8..60d500598f2b 100644
+--- a/tools/testing/selftests/futex/functional/futex_priv_hash.c
++++ b/tools/testing/selftests/futex/functional/futex_priv_hash.c
 @@ -10,6 +10,7 @@
  #include <stdio.h>
  #include <stdlib.h>
  #include <unistd.h>
 +#include <string.h>
- #ifdef LIBNUMA_VER_SUFFICIENT
- #include <numa.h>
- #include <numaif.h>
-@@ -54,7 +55,7 @@ static void *thread_lock_fn(void *arg)
+ 
+ #include <linux/prctl.h>
+ #include <sys/prctl.h>
+@@ -39,31 +40,27 @@ static int futex_hash_slots_get(void)
+ 	return prctl(PR_FUTEX_HASH, PR_FUTEX_HASH_GET_SLOTS);
+ }
+ 
+-static void futex_hash_slots_set_verify(int slots)
++static void futex_hash_slots_set_verify(struct __test_metadata *_metadata, int slots)
+ {
+ 	int ret;
+ 
+ 	ret = futex_hash_slots_set(slots);
+-	if (ret != 0) {
+-		ksft_test_result_fail("Failed to set slots to %d: %m\n", slots);
+-		ksft_finished();
+-	}
++	ASSERT_EQ(ret, 0)
++		TH_LOG("Failed to set slots to %d: %s", slots, strerror(errno));
++
+ 	ret = futex_hash_slots_get();
+-	if (ret != slots) {
+-		ksft_test_result_fail("Set %d slots but PR_FUTEX_HASH_GET_SLOTS returns: %d, %m\n",
+-		       slots, ret);
+-		ksft_finished();
+-	}
+-	ksft_test_result_pass("SET and GET slots %d passed\n", slots);
++	ASSERT_EQ(ret, slots)
++		TH_LOG("Set %d slots but PR_FUTEX_HASH_GET_SLOTS returns: %d, %s",
++		       slots, ret, strerror(errno));
+ }
+ 
+-static void futex_hash_slots_set_must_fail(int slots)
++static void futex_hash_slots_set_must_fail(struct __test_metadata *_metadata, int slots)
+ {
+ 	int ret;
+ 
+ 	ret = futex_hash_slots_set(slots);
+-	ksft_test_result(ret < 0, "futex_hash_slots_set(%d)\n",
+-			 slots);
++	EXPECT_LT(ret, 0)
++		TH_LOG("futex_hash_slots_set(%d) should fail but succeeded", slots);
+ }
+ 
+ static void *thread_return_fn(void *arg)
+@@ -82,32 +79,32 @@ static void *thread_lock_fn(void *arg)
  	return NULL;
  }
  
--static void create_max_threads(void *futex_ptr)
-+static void create_max_threads(struct __test_metadata *_metadata, void *futex_ptr)
+-static void create_max_threads(void *(*thread_fn)(void *))
++static void create_max_threads(struct __test_metadata *_metadata, void *(*thread_fn)(void *))
  {
  	int i, ret;
  
-@@ -63,28 +64,26 @@ static void create_max_threads(void *futex_ptr)
- 		thread_args[i].flags = FUTEX2_SIZE_U32 | FUTEX_PRIVATE_FLAG | FUTEX2_NUMA;
- 		thread_args[i].result = 0;
- 		ret = pthread_create(&threads[i], NULL, thread_lock_fn, &thread_args[i]);
+ 	for (i = 0; i < MAX_THREADS; i++) {
+ 		ret = pthread_create(&threads[i], NULL, thread_fn, NULL);
 -		if (ret)
--			ksft_exit_fail_msg("pthread_create failed\n");
-+		ASSERT_EQ(ret, 0) TH_LOG("pthread_create failed");
+-			ksft_exit_fail_msg("pthread_create failed: %m\n");
++		ASSERT_EQ(ret, 0)
++			TH_LOG("pthread_create failed: %s", strerror(errno));
  	}
  }
  
@@ -117,181 +159,214 @@ index 78c0f7a59e17..18dc8e54aa96 100644
  		ret = pthread_join(threads[i], NULL);
 -		if (ret)
 -			ksft_exit_fail_msg("pthread_join failed for thread %d\n", i);
-+		ASSERT_EQ(ret, 0) TH_LOG("pthread_join failed for thread %d", i);
++		ASSERT_EQ(ret, 0)
++			TH_LOG("pthread_join failed for thread %d: %s", i, strerror(errno));
  	}
  }
  
--static void __test_futex(void *futex_ptr, int err_value, unsigned int futex_flags)
-+static void __test_futex(struct __test_metadata *_metadata, void *futex_ptr, int err_value, unsigned int futex_flags)
+ #define SEC_IN_NSEC	1000000000
+ #define MSEC_IN_NSEC	1000000
+ 
+-static void futex_dummy_op(void)
++static void futex_dummy_op(struct __test_metadata *_metadata)
  {
--	int to_wake, ret, i, need_exit = 0;
-+	int to_wake, ret, i;
+ 	pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+ 	struct timespec timeout;
+@@ -121,11 +118,11 @@ static void futex_dummy_op(void)
+ 		timeout.tv_sec++;
+ 	}
+ 	ret = pthread_mutex_timedlock(&lock, &timeout);
+-	if (ret == 0)
+-		ksft_exit_fail_msg("Successfully locked an already locked mutex.\n");
++	ASSERT_NE(ret, 0)
++		TH_LOG("Successfully locked an already locked mutex");
  
- 	pthread_barrier_init(&barrier_main, NULL, MAX_THREADS + 1);
--	create_max_threads(futex_ptr);
-+	create_max_threads(_metadata, futex_ptr);
+-	if (ret != ETIMEDOUT)
+-		ksft_exit_fail_msg("pthread_mutex_timedlock() did not timeout: %d.\n", ret);
++	ASSERT_EQ(ret, ETIMEDOUT)
++		TH_LOG("pthread_mutex_timedlock() did not timeout: %d", ret);
+ }
+ 
+ static const char *test_msg_auto_create = "Automatic hash bucket init on thread creation.\n";
+@@ -140,50 +137,45 @@ TEST(priv_hash)
+ 	ret = pthread_mutexattr_init(&mutex_attr_pi);
+ 	ret |= pthread_mutexattr_setprotocol(&mutex_attr_pi, PTHREAD_PRIO_INHERIT);
+ 	ret |= pthread_mutex_init(&global_lock, &mutex_attr_pi);
+-	if (ret != 0) {
+-		ksft_exit_fail_msg("Failed to initialize pthread mutex.\n");
+-	}
++	ASSERT_EQ(ret, 0)
++		TH_LOG("Failed to initialize pthread mutex");
++
+ 	/* First thread, expect to be 0, not yet initialized */
+ 	ret = futex_hash_slots_get();
+-	if (ret != 0)
+-		ksft_exit_fail_msg("futex_hash_slots_get() failed: %d, %m\n", ret);
++	ASSERT_EQ(ret, 0)
++		TH_LOG("futex_hash_slots_get() failed: %d, %s", ret, strerror(errno));
+ 
+-	ksft_test_result_pass("Basic get slots and immutable status.\n");
+ 	ret = pthread_create(&threads[0], NULL, thread_return_fn, NULL);
+-	if (ret != 0)
+-		ksft_exit_fail_msg("pthread_create() failed: %d, %m\n", ret);
++	ASSERT_EQ(ret, 0)
++		TH_LOG("pthread_create() failed: %d, %s", ret, strerror(errno));
+ 
+ 	ret = pthread_join(threads[0], NULL);
+-	if (ret != 0)
+-		ksft_exit_fail_msg("pthread_join() failed: %d, %m\n", ret);
++	ASSERT_EQ(ret, 0)
++		TH_LOG("pthread_join() failed: %d, %s", ret, strerror(errno));
+ 
+ 	/* First thread, has to initialize private hash */
+ 	futex_slots1 = futex_hash_slots_get();
+-	if (futex_slots1 <= 0) {
+-		ksft_print_msg("Current hash buckets: %d\n", futex_slots1);
+-		ksft_exit_fail_msg("%s", test_msg_auto_create);
+-	}
+-
+-	ksft_test_result_pass("%s", test_msg_auto_create);
++	EXPECT_GT(futex_slots1, 0)
++		TH_LOG("Current hash buckets: %d. %s", futex_slots1, test_msg_auto_create);
+ 
+ 	online_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+ 	ret = pthread_barrier_init(&barrier_main, NULL, MAX_THREADS + 1);
+-	if (ret != 0)
+-		ksft_exit_fail_msg("pthread_barrier_init failed: %m.\n");
++	ASSERT_EQ(ret, 0)
++		TH_LOG("pthread_barrier_init failed: %s", strerror(errno));
+ 
+ 	ret = pthread_mutex_lock(&global_lock);
+-	if (ret != 0)
+-		ksft_exit_fail_msg("pthread_mutex_lock failed: %m.\n");
++	ASSERT_EQ(ret, 0)
++		TH_LOG("pthread_mutex_lock failed: %s", strerror(errno));
+ 
+ 	counter = 0;
+-	create_max_threads(thread_lock_fn);
++	create_max_threads(_metadata, thread_lock_fn);
  	pthread_barrier_wait(&barrier_main);
- 	to_wake = MAX_THREADS;
  
-@@ -92,45 +91,43 @@ static void __test_futex(void *futex_ptr, int err_value, unsigned int futex_flag
- 		ret = futex2_wake(futex_ptr, to_wake, futex_flags);
- 
- 		if (err_value) {
--			if (ret >= 0)
--				ksft_exit_fail_msg("futex2_wake(%d, 0x%x) should fail, but didn't\n",
--						   to_wake, futex_flags);
-+			EXPECT_LT(ret, 0)
-+				TH_LOG("futex2_wake(%d, 0x%x) should fail, but didn't",
-+				       to_wake, futex_flags);
- 
--			if (errno != err_value)
--				ksft_exit_fail_msg("futex2_wake(%d, 0x%x) expected error was %d, but returned %d (%s)\n",
--						   to_wake, futex_flags, err_value, errno, strerror(errno));
-+			EXPECT_EQ(errno, err_value)
-+				TH_LOG("futex2_wake(%d, 0x%x) expected error was %d, but returned %d (%s)",
-+				       to_wake, futex_flags, err_value, errno, strerror(errno));
- 
- 			break;
+ 	/*
+ 	 * The current default size of hash buckets is 16. The auto increase
+ 	 * works only if more than 16 CPUs are available.
+ 	 */
+-	ksft_print_msg("Online CPUs: %d\n", online_cpus);
++	TH_LOG("Online CPUs: %d", online_cpus);
+ 	if (online_cpus > 16) {
+ retry_getslots:
+ 		futex_slotsn = futex_hash_slots_get();
+@@ -200,71 +192,75 @@ TEST(priv_hash)
+ 			 * sleep for 100ms and issue a futex operation.
+ 			 */
+ 			if (retry > 0) {
+-				futex_dummy_op();
++				futex_dummy_op(_metadata);
+ 				goto retry_getslots;
+ 			}
+-			ksft_print_msg("Expected increase of hash buckets but got: %d -> %d\n",
+-				       futex_slots1, futex_slotsn);
+-			ksft_exit_fail_msg("%s", test_msg_auto_inc);
++			EXPECT_NE(futex_slots1, futex_slotsn)
++				TH_LOG("Expected increase of hash buckets but got: %d -> %d. %s",
++				       futex_slots1, futex_slotsn, test_msg_auto_inc);
  		}
- 		if (ret < 0) {
--			ksft_exit_fail_msg("Failed futex2_wake(%d, 0x%x): %m\n",
--					   to_wake, futex_flags);
-+			ASSERT_GE(ret, 0)
-+				TH_LOG("Failed futex2_wake(%d, 0x%x): %s",
-+				       to_wake, futex_flags, strerror(errno));
- 		}
- 		if (!ret)
- 			usleep(50);
- 		to_wake -= ret;
+-		ksft_test_result_pass("%s", test_msg_auto_inc);
+ 	} else {
+-		ksft_test_result_skip("%s", test_msg_auto_inc);
++		SKIP(return, "Automatic increase with more than 16 CPUs (only %d online)", online_cpus);
+ 	}
+ 	ret = pthread_mutex_unlock(&global_lock);
  
- 	} while (to_wake);
+ 	/* Once the user changes it, it has to be what is set */
+-	futex_hash_slots_set_verify(2);
+-	futex_hash_slots_set_verify(4);
+-	futex_hash_slots_set_verify(8);
+-	futex_hash_slots_set_verify(32);
+-	futex_hash_slots_set_verify(16);
++	futex_hash_slots_set_verify(_metadata, 2);
++	futex_hash_slots_set_verify(_metadata, 4);
++	futex_hash_slots_set_verify(_metadata, 8);
++	futex_hash_slots_set_verify(_metadata, 32);
++	futex_hash_slots_set_verify(_metadata, 16);
+ 
+ 	ret = futex_hash_slots_set(15);
+-	ksft_test_result(ret < 0, "Use 15 slots\n");
++	EXPECT_LT(ret, 0)
++		TH_LOG("Use 15 slots should fail but succeeded");
++
++	futex_hash_slots_set_verify(_metadata, 2);
++	join_max_threads(_metadata);
++
++	EXPECT_EQ(counter, MAX_THREADS)
++		TH_LOG("Created and waited for %d of %d threads", counter, MAX_THREADS);
+ 
+-	futex_hash_slots_set_verify(2);
 -	join_max_threads();
+-	ksft_test_result(counter == MAX_THREADS, "Created and waited for %d of %d threads\n",
+-			 counter, MAX_THREADS);
+ 	counter = 0;
+ 	/* Once the user set something, auto resize must be disabled */
+ 	ret = pthread_barrier_init(&barrier_main, NULL, MAX_THREADS);
++	ASSERT_EQ(ret, 0)
++		TH_LOG("pthread_barrier_init failed: %s", strerror(errno));
+ 
+-	create_max_threads(thread_lock_fn);
+-	join_max_threads();
++	create_max_threads(_metadata, thread_lock_fn);
 +	join_max_threads(_metadata);
  
- 	for (i = 0; i < MAX_THREADS; i++) {
--		if (err_value && thread_args[i].result != -1) {
--			ksft_print_msg("Thread %d should fail but succeeded (%d)\n",
-+		if (err_value) {
-+			EXPECT_EQ(thread_args[i].result, -1)
-+				TH_LOG("Thread %d should fail but succeeded (%d)",
- 				       i, thread_args[i].result);
--			need_exit = 1;
--		}
--		if (!err_value && thread_args[i].result != 0) {
--			ksft_print_msg("Thread %d failed (%d)\n", i, thread_args[i].result);
--			need_exit = 1;
-+		} else {
-+			EXPECT_EQ(thread_args[i].result, 0)
-+				TH_LOG("Thread %d failed (%d)", i, thread_args[i].result);
- 		}
- 	}
--	if (need_exit)
--		ksft_exit_fail_msg("Aborting due to earlier errors.\n");
+ 	ret = futex_hash_slots_get();
+-	ksft_test_result(ret == 2, "No more auto-resize after manual setting, got %d\n",
+-			 ret);
++	EXPECT_EQ(ret, 2)
++		TH_LOG("No more auto-resize after manual setting, got %d", ret);
+ 
+-	futex_hash_slots_set_must_fail(1 << 29);
+-	futex_hash_slots_set_verify(4);
++	futex_hash_slots_set_must_fail(_metadata, 1 << 29);
++	futex_hash_slots_set_verify(_metadata, 4);
+ 
+ 	/*
+ 	 * Once the global hash has been requested, then this requested can not
+ 	 * be undone.
+ 	 */
+ 	ret = futex_hash_slots_set(0);
+-	ksft_test_result(ret == 0, "Global hash request\n");
+-	if (ret != 0)
+-		return;
++	ASSERT_EQ(ret, 0)
++		TH_LOG("Global hash request failed: %s", strerror(errno));
+ 
+-	futex_hash_slots_set_must_fail(4);
+-	futex_hash_slots_set_must_fail(8);
+-	futex_hash_slots_set_must_fail(8);
+-	futex_hash_slots_set_must_fail(0);
+-	futex_hash_slots_set_must_fail(6);
++	futex_hash_slots_set_must_fail(_metadata, 4);
++	futex_hash_slots_set_must_fail(_metadata, 8);
++	futex_hash_slots_set_must_fail(_metadata, 8);
++	futex_hash_slots_set_must_fail(_metadata, 0);
++	futex_hash_slots_set_must_fail(_metadata, 6);
+ 
+ 	ret = pthread_barrier_init(&barrier_main, NULL, MAX_THREADS);
+-	if (ret != 0)
+-		ksft_exit_fail_msg("pthread_barrier_init failed: %m\n");
++	ASSERT_EQ(ret, 0)
++		TH_LOG("pthread_barrier_init failed: %s", strerror(errno));
+ 
+-	create_max_threads(thread_lock_fn);
+-	join_max_threads();
++	create_max_threads(_metadata, thread_lock_fn);
++	join_max_threads(_metadata);
+ 
+ 	ret = futex_hash_slots_get();
+-	ksft_test_result(ret == 0, "Continue to use global hash\n");
++	EXPECT_EQ(ret, 0)
++		TH_LOG("Continue to use global hash failed");
  }
  
--static void test_futex(void *futex_ptr, int err_value)
-+static void test_futex(struct __test_metadata *_metadata, void *futex_ptr, int err_value)
- {
--	__test_futex(futex_ptr, err_value, FUTEX2_SIZE_U32 | FUTEX_PRIVATE_FLAG | FUTEX2_NUMA);
-+	__test_futex(_metadata, futex_ptr, err_value, FUTEX2_SIZE_U32 | FUTEX_PRIVATE_FLAG | FUTEX2_NUMA);
- }
- 
- TEST(futex_numa_mpol)
-@@ -141,43 +138,41 @@ TEST(futex_numa_mpol)
- 
- 	mem_size = sysconf(_SC_PAGE_SIZE);
- 	futex_ptr = mmap(NULL, mem_size * 2, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
--	if (futex_ptr == MAP_FAILED)
--		ksft_exit_fail_msg("mmap() for %d bytes failed\n", mem_size);
-+	ASSERT_NE(futex_ptr, MAP_FAILED)
-+		TH_LOG("mmap() for %d bytes failed: %s", mem_size, strerror(errno));
- 
- 	/* Create an invalid memory region for the "Memory out of range" test */
- 	mprotect(futex_ptr + mem_size, mem_size, PROT_NONE);
- 
- 	futex_numa = futex_ptr;
- 
--	ksft_print_msg("Regular test\n");
-+	TH_LOG("Regular test");
- 	futex_numa->futex = 0;
- 	futex_numa->numa = FUTEX_NO_NODE;
--	test_futex(futex_ptr, 0);
-+	test_futex(_metadata, futex_ptr, 0);
- 
--	if (futex_numa->numa == FUTEX_NO_NODE)
--		ksft_exit_fail_msg("NUMA node is left uninitialized\n");
-+	EXPECT_NE(futex_numa->numa, FUTEX_NO_NODE)
-+		TH_LOG("NUMA node is left uninitialized");
- 
- 	/* FUTEX2_NUMA futex must be 8-byte aligned */
--	ksft_print_msg("Mis-aligned futex\n");
--	test_futex(futex_ptr + mem_size - 4, EINVAL);
-+	TH_LOG("Mis-aligned futex");
-+	test_futex(_metadata, futex_ptr + mem_size - 4, EINVAL);
- 
--	ksft_print_msg("Memory out of range\n");
--	test_futex(futex_ptr + mem_size, EFAULT);
-+	TH_LOG("Memory out of range");
-+	test_futex(_metadata, futex_ptr + mem_size, EFAULT);
- 
- 	futex_numa->numa = FUTEX_NO_NODE;
- 	mprotect(futex_ptr, mem_size, PROT_READ);
--	ksft_print_msg("Memory, RO\n");
--	test_futex(futex_ptr, EFAULT);
-+	TH_LOG("Memory, RO");
-+	test_futex(_metadata, futex_ptr, EFAULT);
- 
- 	mprotect(futex_ptr, mem_size, PROT_NONE);
--	ksft_print_msg("Memory, no access\n");
--	test_futex(futex_ptr, EFAULT);
-+	TH_LOG("Memory, no access");
-+	test_futex(_metadata, futex_ptr, EFAULT);
- 
- 	mprotect(futex_ptr, mem_size, PROT_READ | PROT_WRITE);
--	ksft_print_msg("Memory back to RW\n");
--	test_futex(futex_ptr, 0);
--
--	ksft_test_result_pass("futex2 memory boundary tests passed\n");
-+	TH_LOG("Memory back to RW");
-+	test_futex(_metadata, futex_ptr, 0);
- 
- 	/* MPOL test. Does not work as expected */
- #ifdef LIBNUMA_VER_SUFFICIENT
-@@ -190,25 +185,23 @@ TEST(futex_numa_mpol)
- 			    sizeof(nodemask) * 8, 0);
- 		if (ret == 0) {
- 			ret = numa_set_mempolicy_home_node(futex_ptr, mem_size, i, 0);
--			if (ret != 0)
--				ksft_exit_fail_msg("Failed to set home node: %m, %d\n", errno);
-+			ASSERT_EQ(ret, 0)
-+				TH_LOG("Failed to set home node: %s, %d", strerror(errno), errno);
- 
--			ksft_print_msg("Node %d test\n", i);
-+			TH_LOG("Node %d test", i);
- 			futex_numa->futex = 0;
- 			futex_numa->numa = FUTEX_NO_NODE;
- 
- 			ret = futex2_wake(futex_ptr, 0, FUTEX2_SIZE_U32 | FUTEX_PRIVATE_FLAG | FUTEX2_NUMA | FUTEX2_MPOL);
--			if (ret < 0)
--				ksft_test_result_fail("Failed to wake 0 with MPOL: %m\n");
--			if (futex_numa->numa != i) {
--				ksft_exit_fail_msg("Returned NUMA node is %d expected %d\n",
--						   futex_numa->numa, i);
--			}
-+			EXPECT_GE(ret, 0)
-+				TH_LOG("Failed to wake 0 with MPOL: %s", strerror(errno));
-+			EXPECT_EQ(futex_numa->numa, i)
-+				TH_LOG("Returned NUMA node is %d expected %d",
-+				       futex_numa->numa, i);
- 		}
- 	}
--	ksft_test_result_pass("futex2 MPOL hints test passed\n");
- #else
--	ksft_test_result_skip("futex2 MPOL hints test requires libnuma 2.0.18+\n");
-+	SKIP(return, "futex2 MPOL hints test requires libnuma 2.0.18+");
- #endif
- 	munmap(futex_ptr, mem_size * 2);
- }
+ TEST_HARNESS_MAIN
 -- 
 2.54.0.823.g6e5bcc1fc9-goog
 
