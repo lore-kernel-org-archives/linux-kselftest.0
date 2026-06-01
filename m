@@ -1,145 +1,242 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013050.outbound.protection.outlook.com [40.107.162.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0223519C553;
-	Mon,  1 Jun 2026 06:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780293869; cv=none; b=YERAbMv5EoAak3dzWoMqVTeEF8HVlrHde4bdCelP2gHJySGTe2uVeOqkw4yk6KP4n1qGgAFlKcFuf/eH7w7abnYRrDhviTplHiXfMG1spaybkYx3guvCsqTgsvMxNP9SEPuJjtCSX0VKAVHt1qoM/H6jlE9XFAPkpbwI9h/Nh94=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780293869; c=relaxed/simple;
-	bh=c9+TcK2OtgFtEotwTZh5fV3sISeDmk1GpFw5vVSwgD4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dli6+DOsi+CEiVbGtSa+n+icm/tOClyw+a92OWWgwGYWy1mbCtYXSBwQ3SqCAfAdJ81Ea7aMtCZb0bkzFyyy9BFBTd/tlNups3Jm9gCu//76ckaTfPlRRmfx2QRXMYcReECnUeilmwwY/m1TfKBToSM1Rn+akerLGD3r+oyucU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4Ta9VL3; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6775B273D6D;
+	Mon,  1 Jun 2026 06:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.50
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780294335; cv=fail; b=dq05xRV7lF1ZUU3vdtqoG1p9fJ+thFta6Qfust9vSyw/+Bn549DietJUFSYgxRdsqnQLQHm7i5lWVrdWevzs2+9DC+KAv6rQOq6FBCo4NEQ3PDR5qum1XRbIUMQycWEenLz5y2lMAXhhnFDb+j4nJ9obZZl74I+MsgvJCl7S6qA=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780294335; c=relaxed/simple;
+	bh=KqJoLYPHzatBRSchTfoK6gqqnUQ3PK55DDMtB3Q0Ado=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=BAdyP4hhZccYO8L1sZRq9iTI9qE3+SNSdNswHElJG2gGi+WnJ8UK5AEB/u+9KhUS4IPzbLECahJ9+rdhOY+szU5JFMqkwL3j7etge59Dm2p0b4NguKeiAdp2uUyIGEjudep9yfq0EvPCezBrGEm9KG72PARuPesQAEhrVMDtOxk=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=mO/M/LZV; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=mO/M/LZV; arc=fail smtp.client-ip=40.107.162.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4Ta9VL3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D1051F00893;
-	Mon,  1 Jun 2026 06:04:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780293868;
-	bh=D91toEs75tfN2e3agWNlpL06x7LHPBsNnDRozKPi7mM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=F4Ta9VL3XzCuEHdjY5e3+OEz1hvm7ZmYt5kOdRjFkz/4lWwmjkozEtjxtnvmmXVtr
-	 Yj5ZV9IrVXdHy83y6ZVqS9L4BRHJh/fMADHZMuwFKtojUbJtuzld5+4G2Uf3hVIQpL
-	 lS25IwIVK5O5fndqv9N5qiEtx/+HrvcBEMm935Ql4Nebzho6JAtyFOHUt8m75OW0fv
-	 9gk4qh9kkfFAUWVZeX/tpYLuDSgkzyctRyHmAPak7Ff+rKa9Y/vf0j2iHBmFWbiS57
-	 LOdJ1Y7DRBDTN6FAb+e8g/SrlYa2tW+Z8nFwy4zAMb92w9jwsbsWz6kezrVVU8KwdN
-	 qbYXUx7k5xm/Q==
-Message-ID: <4af33a1a-2bd5-4be7-90f0-2bb3bc88fa81@kernel.org>
-Date: Mon, 1 Jun 2026 16:04:20 +1000
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="mO/M/LZV";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="mO/M/LZV"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=m5ctUeBQwhdCiQs4ZmWfyRo/ZG98dRMSkwESgFZIWE4UtrzFHjGgwN8X/1efh4oh71uaYHXeLvu9MYMrBykIkmvm9U1xRARYKdsg85QgY2WVLTj6SUrusa9ynSbHV2kyrtcrCVQYEYsaiYg8iM7bHSPsivxtmhH/B/mTTeuFUsTeZ5ItHwcIIQmcCJOAGxkAMLZnJyTXTis0EJQg0TkUau6wuqZfbgYfA9QdtGzIIw8jpeUWUE+3TLtNAWW8rObMnxHQZVFp0jChCSkWS7LjbJHWU4GpaKmtG/yH008x1TbDUY2ls2JpNO7si9YBIGYpo4wKo5iP+1UPNgfkaC2GAA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FIFhD1Pm/OLK1rocMnaCyE20TqXRGC+76pWX/JIJ7gc=;
+ b=FIZMaYI1jX6EpOmT+oJFbqNWHVJ23auT+WxI6iWo3sbU1siY87XYKhqyAXRkvZgQzTbxF6GuL3+IRRuSNBfJy5SsklEhTk/fbDbzpbZqr2muCKl1Tai5x8mgZunUNzU+R9r1MkeEkkmVEV4lH326wjsA+4LOy6Ij0nRjfpapVk+MV+zWFKupYBZsN+rnX3JNY61YblpxmQLjITiHCgJ0SsWlMeFsp3Ce8x1wE55MxWwp2SyF45EH27iCTchvUvpdXQhuMTZ3TQTd15cvtIMBddW/KA3p2A77QnU4gVTebgVNt2/2UHxvgCiYXxu0i947TRHyvp5pOpoctqeu7wPaww==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=arm.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
+ dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FIFhD1Pm/OLK1rocMnaCyE20TqXRGC+76pWX/JIJ7gc=;
+ b=mO/M/LZVg3610UbyTWFmR6/cS1Ho87YcTkReDyYr+tcoa+GZOwu1OdhLIeVjMqU2wLx7rN9CnBvAqBrnpncJ9/kuqMl2yYk/6CsliX/MoYihECaSrCGfCWS5EAlfMuYexZl8iCa1cu9i+tTvigiGttJHaGqwAb+fciuo1hMOb2s=
+Received: from AM9P250CA0021.EURP250.PROD.OUTLOOK.COM (2603:10a6:20b:21c::26)
+ by DU0PR08MB9935.eurprd08.prod.outlook.com (2603:10a6:10:401::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.16; Mon, 1 Jun 2026
+ 06:12:05 +0000
+Received: from AM3PEPF0000A791.eurprd04.prod.outlook.com
+ (2603:10a6:20b:21c:cafe::1b) by AM9P250CA0021.outlook.office365.com
+ (2603:10a6:20b:21c::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.71.15 via Frontend Transport; Mon, 1
+ Jun 2026 06:12:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AM3PEPF0000A791.mail.protection.outlook.com (10.167.16.120) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.92.5 via
+ Frontend Transport; Mon, 1 Jun 2026 06:12:04 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cl4wGNi9ch596tvr8UzLKGkHjjCnGPpANBsKSY5yd+Ggf8Vbl7Vtcnf7EHtjCAd/YD3Sw6Wx7Ca6DIhyhxv+rUPbBCW7zNZAkm1+gNIGhLuS6ahetmT9O4Jv/rLhpOipEAZfXvxfLKBRgNb63Sr8m/pAIHtdx3vxH+Ch+UlPGvjy3++luhQIIQ1TbZ0TOP1OKh2i+YWlT2YCpn2XmhqzZ4YB1a6y4S2oOM7Q7i3e/gNHonQYVfZD6FiINv6kdF9f8KUJZ6M7hNr/wdVllS2DvnqpxdcZ/CBQCej+dnR1c+pv9uMJ66kiprJmHWL4elPkOTYT2MoRQB1ZN1QV+0+fjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FIFhD1Pm/OLK1rocMnaCyE20TqXRGC+76pWX/JIJ7gc=;
+ b=iu9MXVOYNtz+V3vQwcBLg5TFqmSq0Bh3InPc0C/7mEgYjVijvewJ+5/iSjybsOPEUd+g7mmPQypNKDrK+AnkviYhDC/0satfRcSd+yqew5i/yZz62PPGa6ggDOvnIRqL89lmRGi2nECm34ezLODmsmw6bplMhHZ+FdlrGyrzoSDrWZC99jBp7ushwvokXLmnJmDufJjUMbnigbpBfx7ADxUVfpWGISkqwkFu5EZaX9QM4K4St37jAgsTgca1U5sILzLVKaU5Tv8myQosLgDqCC3wn4m5+mFehRyQwzwP9JsfJ+FE6q4BxnC9TVdcFbNF8bH7QE1cNA9DKPN2HGPDmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FIFhD1Pm/OLK1rocMnaCyE20TqXRGC+76pWX/JIJ7gc=;
+ b=mO/M/LZVg3610UbyTWFmR6/cS1Ho87YcTkReDyYr+tcoa+GZOwu1OdhLIeVjMqU2wLx7rN9CnBvAqBrnpncJ9/kuqMl2yYk/6CsliX/MoYihECaSrCGfCWS5EAlfMuYexZl8iCa1cu9i+tTvigiGttJHaGqwAb+fciuo1hMOb2s=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
+ by DB9PR08MB11363.eurprd08.prod.outlook.com (2603:10a6:10:60f::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.16; Mon, 1 Jun 2026
+ 06:11:02 +0000
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047%5]) with mapi id 15.21.0071.014; Mon, 1 Jun 2026
+ 06:11:02 +0000
+Message-ID: <2fb753d0-a9cd-48f3-a24d-ea0b54330279@arm.com>
+Date: Mon, 1 Jun 2026 11:40:52 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/5] tools/lib/mm: add shared file helpers
+To: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Mark Brown <broonie@kernel.org>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260527142432.230127-1-sarthak.sharma@arm.com>
+ <20260527142432.230127-3-sarthak.sharma@arm.com>
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+Content-Language: en-US
+In-Reply-To: <20260527142432.230127-3-sarthak.sharma@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA5P287CA0045.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:175::11) To DU0PR08MB9203.eurprd08.prod.outlook.com
+ (2603:10a6:10:417::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next 04/11] mptcp: introduce add_addr_v6_port_drop_ts
- sysctl knob
-Content-Language: fr
-To: Eric Dumazet <edumazet@google.com>
-Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- netdev@vger.kernel.org, mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260601-net-next-mptcp-add-addr6-port-ts-v1-0-4fc25dfef62e@kernel.org>
- <20260601-net-next-mptcp-add-addr6-port-ts-v1-4-4fc25dfef62e@kernel.org>
- <CANn89iL=os-60kDKqMDdyiXuPF5CG=eejS0vmthwpDGXz_Bp8A@mail.gmail.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <CANn89iL=os-60kDKqMDdyiXuPF5CG=eejS0vmthwpDGXz_Bp8A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-TrafficTypeDiagnostic:
+	DU0PR08MB9203:EE_|DB9PR08MB11363:EE_|AM3PEPF0000A791:EE_|DU0PR08MB9935:EE_
+X-MS-Office365-Filtering-Correlation-Id: b9a64851-84b2-4b41-64ff-08debfa4b422
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|376014|7416014|366016|1800799024|56012099006|4143699003|3023799007|11063799006|17002099007|18002099003|22082099003|6133799003;
+X-Microsoft-Antispam-Message-Info-Original:
+ a36pfYYh0XPhCeoYTbqoS+1wk7/XtN49ty+t6fJSCaT3elZDR0AiEVHRZ8vu9cEJRqXn7GoszrS1G//bHvqBACyw5v9TH243QYeFywnlykER/9/ckmxxf5JvcrJeUB1UUncN52j2zhn7lND02Kj7OFbqgUXEvD62HFuRWROX0m8CvH+UI58ky4iWcHW9K8zcB7Nmyyc/GTiRmoqPgiRkmYTQGhJpRfXG8JK4G4zmFUFJh7SL5TVTSRCcKI19tuOLHAfF1wGKx2/kBQF+PVnWtOr2Jvq4RZroZ0Wg6mLY+OK8QJew//L31R6Z0FrF2ywN7MvJijbaKygsY/WCvhRNvPA5q+t3Cn/mIW+PBcq7ESjhuJOdSj1EFLF9Z8Q5lfmrTJWVw9HAmpZOhAeZlpKV7fQ9xrrm40b51dEM+1p2bTRETMfbbS91qbkPrM8P30MpWJ49C0NQgGeHoQQOx4lOrY04JvmUc73g71FS7cLHN3iY3CW3LWoXrVMAhhRf/FVR4K7RgAQg52g/DG1SOeHyGq3kr7LP8gEDD0W46Jo3CPFv+OptRbOH5HCA35S22HCV2Hf+5ZWcjWy7mrJOL9rRmzylhkGOFna77S+DIRnKhqnY3Wf6V4myl+EyTGPSFfQ2T4PtxqN1bEIRNrnzwtdUp5fmTS4vBlhHAJvof54JVPnbCpa4/xBwTUz9ohxvI+d4mDKxk4z87kz1cc4OGwVEFw==
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(56012099006)(4143699003)(3023799007)(11063799006)(17002099007)(18002099003)(22082099003)(6133799003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ dIRZKOiOxbe85rM8VGbc4aJAmjNiV//KVrvf/6lo9eC00DMEVrr0kvhlXL34LjITw3r1Xdu7DXrxirT7UxpsByrq19AO/rjlVgS/1dMNCFSNZ+fM56O6qZ17h0hh3OKwelZznHg5NDdgLEg8lWmdOk6RVswX66pEImxVgBD14elupiY+KLof1rEvWyd4X7mHJ3AeLHnqRqaY7fq81ovMEbinhaUwJd3Bak8Y5Lwju5I7w55n96G4qf9klvQ2bMgVDtMr9Z/OeU1bK1nJ7BzdDWyd2lQnOjpVT2auP8wi+JNY0djldJSpdxwgXxiDe6jQCcmBeEMKv6KrnF/HwG0o0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB11363
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AM3PEPF0000A791.eurprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	0bfe7390-c4bc-4071-9481-08debfa48e45
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700016|82310400026|376014|7416014|14060799003|35042699022|6133799003|3023799007|4143699003|17002099007|22082099003|18002099003|56012099006|11063799006;
+X-Microsoft-Antispam-Message-Info:
+	CF7ZzBKUnYZZdYUe9aThuV+IFi9OQAFFYWIHRGUIROvEwYP2GnVi6fwWDq7wrpb02c65K4UeSJcmYe9h10rRYHKGUsoUCm9MbjOW0EUhaMLwG0XRKfi2SuVuN3VfWBKFaXkjesJqKc7dooZGUWjxqEWAEvK2MItET/h3Sjj3+euDXE9lvcflrc86aQrT9OxHAlTfD4DtAXfK8BAGrsMsjUB2s4JzfpaA0pilu5jXsinLA8D59QBMEHOYwlqU4vsW2amoCZ2/1Yqpb07lDJRQPIVGbwF3Lmh5ukXMm5xDO4A+lmVmLgCaQzvARqpkhqoUb72kEhUPGCRghTMvns6G3Ji5rVnGizWE/D4c1R3igUQCFOHadny/3v7u7ElUyTS9QAzpIuhGfetSsKmVZwpUc25BKgyEWi6+wLXIcBfe6KL75tid5ue0ERuEAa06zg1Ggeor+StJt1a1eQMTaPtSXJ6cWP6OUx5Je+8sQlzNuRQ/94D7DqHkTNbad0tnLj9c8dn/xyN5WseiWUxvE9CML72nTrWIZSqsvKi/Awzezw/psIJMAig1+jJnAgI2/7Z6/BclcBGkZKanr+sXhayb+YRwudNtZpzoqxHGq+322vgjs0SaSHERJzZuMRPkWhXuS1EI/DlaU1AvjKXLagLuNk97odZBymus9H3CsmmvJpSFDcZPsSlAaur5zXj49yk7bfHexTL9MHysrLCyCzWR2n8ldKC8l5sBgKRM8v89y5U=
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700016)(82310400026)(376014)(7416014)(14060799003)(35042699022)(6133799003)(3023799007)(4143699003)(17002099007)(22082099003)(18002099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	mxdGSnasUTpn49XO42gW8UwCet5uioM3nrL8qXAJzXJTu4dSYc2XJ0FtaI5ei6Y45Em8QAL842eb42zj+MmoOEQ5XufXz9QWVOw07OVo+WmkwVV/qlRCy0VfG6qo36RsPC6pJq6md6/P5yF5LyHwx1NgE+CjjP4f040OpeJvXKC88eheAF3lgLZTa7uwH9CfKkIg9LVags8iwO5BQowhxmVE41Xf8CGR/QgiWyG9YHF49IBIRkftiHgWiNX/WTUIZs8AfuXjfhS68Bi9QzcExv6SXVLmN1r33X33tsROp2hgeQeJ+MHzyOc+z3cF5ymoDbDmrX+0ctlDGXWZsG62T0TyhH9C99yAMNchRUb8R+vU2OE9WZkApui7lykEZdyuyTOCkbm9Iy1RsJIhNUqSwyFeY5UzkWL8SQKr50PNC6DpaPTop1O8HYAlfXCn0hip
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2026 06:12:04.9974
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9a64851-84b2-4b41-64ff-08debfa4b422
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM3PEPF0000A791.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB9935
 
-Hi Eric,
 
-On 01/06/2026 15:44, Eric Dumazet wrote:
-> On Sun, May 31, 2026 at 10:24 PM Matthieu Baerts (NGI0)
-> <matttbe@kernel.org> wrote:
->>
->> This sysctl is going to be used in the next commits to drop TCP
->> timestamps option, to be able to send an ADD_ADDR with a v6 IP address
->> and a port number. It is enabled by default.
->>
->> This knob is explicitly disabled in the MPTCP Join selftest, with the
->> "signal addr list progresses after tx drop" subtest, to continue
->> verifying the previous behaviour where the ADD_ADDR is not sent due to a
->> lack of space.
->>
->> While at it, move syn_retrans_before_tcp_fallback down from struct
->> mptcp_pernet, to avoid creating another 3 bytes hole.
->>
->> Reviewed-by: Mat Martineau <martineau@kernel.org>
->> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
+On 5/27/26 7:54 PM, Sarthak Sharma wrote:
+> Move read_file(), write_file(), read_num(), and write_num() out of
+> tools/testing/selftests/mm/vm_util.c into a new shared helper under
+> tools/lib/mm/.
 > 
-> ...
+> These helpers are used by mm selftests today and will also be needed by
+> shared hugepage helpers in subsequent patches. Move them to a generic
+> location so they can be reused outside selftests as well.
 > 
->>  };
->> @@ -94,6 +95,11 @@ const char *mptcp_get_scheduler(const struct net *net)
->>         return mptcp_get_pernet(net)->scheduler;
->>  }
->>
->> +unsigned int mptcp_add_addr_v6_port_drop_ts(const struct net *net)
->> +{
->> +       return mptcp_get_pernet(net)->add_addr_v6_port_drop_ts;
->> +}
+> Keep the helpers exposed to mm selftests through vm_util.h by including
+> the new shared header there, and link the new helper into the
+> selftests/mm build.
 > 
-> Please use READ_ONCE() over sysctls.
-> This will avoid future patches from KCSAN bots.
+> Add tools/lib/mm/ to the MEMORY MANAGEMENT - MISC entry in MAINTAINERS.
+> 
+> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> ---
 
-Good point, I will do that.
+Hi Andrew!
 
-I see READ_ONCE() should be used over all other MPTCP sysctls. I can
-send fixes to net for those.
+Can you please fold the below fixlet into patch 2, as suggested by
+Sashiko.
 
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+This moves the x86 Makefile prerequisite path fix earlier in the series,
+so patch 2 remains buildable on its own. The same hunk is already
+present in patch 3 of v4, so if this is folded into patch 2, the
+duplicate hunk and the corresponding commit message sentence should be
+dropped from patch 3.
 
+If a larger respin is needed after reviewer feedback, I will fold this
+into patch 2 in v5 myself.
+
+---
+From 1ce0654749f17ae55d7fefefe86bbc55eb3c06d5 Mon Sep 17 00:00:00 2001
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+Date: Mon, 1 Jun 2026 05:03:53 +0000
+Subject: [PATCH v4 fix] selftests/mm: preserve prerequisite paths in x86
+build rules
+
+Patch 2 adds tools/lib/mm/file_utils.c as a prerequisite using its full
+path. The explicit x86 protection_keys build rules still use $(notdir
+$^), which strips that path and makes the compiler look for file_utils.c
+in tools/testing/selftests/mm/.
+
+Use $^ instead so pathful prerequisites are preserved.
+
+This fixes the patch 2 bisectability issue reported by Sashiko. The same
+hunk is already present in patch 3 of v4. If this is folded into patch
+2, that duplicate hunk should be dropped from patch 3.
+
+Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+---
+ tools/testing/selftests/mm/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/Makefile
+b/tools/testing/selftests/mm/Makefile
+index b5fb4b6ab31b..4254200d1cef 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -217,7 +217,7 @@ $(BINARIES_32): CFLAGS += -m32 -mxsave
+ $(BINARIES_32): LDLIBS += -lrt -ldl -lm
+ $(BINARIES_32): $(OUTPUT)/%_32: %.c
+ 	$(call msg,CC,,$@)
+-	$(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
++	$(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $^ $(LDLIBS) -o $@
+ $(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-32,$(t))))
+ endif
+
+@@ -226,7 +226,7 @@ $(BINARIES_64): CFLAGS += -m64 -mxsave
+ $(BINARIES_64): LDLIBS += -lrt -ldl
+ $(BINARIES_64): $(OUTPUT)/%_64: %.c
+ 	$(call msg,CC,,$@)
+-	$(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
++	$(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $^ $(LDLIBS) -o $@
+ $(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-64,$(t))))
+ endif
+
+--
+2.39.5
