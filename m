@@ -1,104 +1,104 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F961B86C7
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 02:19:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BAC6221277;
+	Mon,  1 Jun 2026 02:33:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780280397; cv=none; b=FM3XR917EYbyrIydpq4cNEHZEo9wNV5f8x5tNdbRoCq4jpqAwNjc8FrJfFJEVgLXb6JuPcPMindeu4GFUOXIJbcUBlRD94/kI7lTfG90cOsAO2jnuTsa4vKP9G34chuSQFHlrRl4UpCw4YgXe03mBHGwLFphu17YqMma5eh5Sgw=
+	t=1780281185; cv=none; b=X2kWzKCjj++3VO7GpcmnhiYsKw0T1oEAPF06y7uv8sbQJAg5exAznc19mzJunistzeTRBygclul5TKJL4oqP4rPfRtpLmsSUQmJ/bDcgHvxD0TOd7ZSWxyMW5EPUTGOISsdHOKTk0e1owxR20W3kCOEoyQghvQI5KgMIzbiRNTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780280397; c=relaxed/simple;
-	bh=DkbiK7xTkQnd4WrcYAgERkfg/wT3aw19YfKCSvhWPiY=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=eUbZjdG8VbMnRM0eCqljDyIzqKOztbRp39VAhFBYJkO5on1U6tQHxIXqtTrQC7fboeBJwwmZQ5y+Qsw4hn6PRb0byhRsco9xxRYTBPMCgmWslDHoJ3LAwxM9mpLusMRwFgm9k3xAxFVwaFLPt6vXGKurCtzP1E+bsFqF5wiaBO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hLftl0Gl; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780281185; c=relaxed/simple;
+	bh=9ChulMQ4HtwDaNNSM6XekXLk7VY4BhagcCO1SkNrBkI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=iTbHutJmG+Ulo/HMzvO/vqugPnOZ9FfUteQUmYY/nq63a7FRUiu/VBpF3QIb6RhNZfAcxUY14uU2MhlTkOw67XVy6tXP21msrWj0H/Y5Mu4kk8w0spoPEd7s4gJgYzgzLjxVNSQ7kyqcAUykjMkF/LRvFDdBYK//Cr/4UiCFFx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=qXxiuJeb; arc=none smtp.client-ip=115.124.30.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hLftl0Gl"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="qXxiuJeb"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1780281179; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=nzR0aLCA9B2xvAkabMir/P0TKLQ1O0jOUYJXMmo9WcQ=;
+	b=qXxiuJebWbP96FMXs1UsluMRU5pzNWU0/GT/em9eZjroRCCijuU7VSAz5kVRMO/jXf9mdVIHaGcO5z6mhlwh2TBw6ypOmekOEdAEODDYlHtJRqPQ1RgVZpiDH3Gk97qM8oD+QcPg6ecdL/xZ/xO0KuSaKqGZTSLpZxKAsx+/RuM=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0X3vJxdj_1780281171;
+Received: from localhost.localdomain(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0X3vJxdj_1780281171 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 01 Jun 2026 10:32:59 +0800
+From: Tianchen Ding <dtcccc@linux.alibaba.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v3] selftests/ftrace: Fix trace_marker_raw test on 64K page kernels
+Date: Mon,  1 Jun 2026 10:32:51 +0800
+Message-Id: <20260601023251.1916483-1-dtcccc@linux.alibaba.com>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20260527095438.1794905-1-dtcccc@linux.alibaba.com>
+References: <20260527095438.1794905-1-dtcccc@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780280394;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nefyT5OBxsTCuKDlG/KjCrlTz0zZS2F3Z2D5SQfViTU=;
-	b=hLftl0GlB63Jiph1E4xmIkxrKeqSb360RDRyLjAJRYHNGnc8hWoRkYA4tqsQZEx2eWaRgM
-	e3PcRH2+Apep+uxasvb31jPHo7l3tr4KVaGSkIZiO0TmUkgm1RuITE0QASkL1FAMkjPtqX
-	QG1WOYawC+iijEAXY55OMsSLMFrEnrE=
-Date: Mon, 01 Jun 2026 02:19:48 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Kunwu Chan" <kunwu.chan@linux.dev>
-Message-ID: <075c80f2482b358705292a2557defdf384c94f7c@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH 2/5] selftests/damon: fix memcg filter path handling
-To: "SeongJae Park" <sj@kernel.org>
-Cc: "SeongJae Park" <sj@kernel.org>, shuah@kernel.org, damon@lists.linux.dev,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, "Kunwu Chan" <kunwu.chan@gmail.com>, "Wang Lian"
- <lianux.mm@gmail.com>, "Kunwu Chan" <chentao@kylinos.cn>, "Cheng Nie"
- <niecheng1@uniontech.com>
-In-Reply-To: <20260531163607.99063-1-sj@kernel.org>
-References: <20260531163607.99063-1-sj@kernel.org>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-June 1, 2026 at 12:36 AM, "SeongJae Park" <sj@kernel.org mailto:sj@kernel=
-.org?to=3D%22SeongJae%20Park%22%20%3Csj%40kernel.org%3E > wrote:
+On ARM64 kernels with 64K pages, the trace_marker_raw test fails because
+bash's printf builtin uses stdio buffering which splits output into
+multiple small write() calls to the tracefs file. Since each individual
+write is within TRACE_MARKER_MAX_SIZE (4096), they all succeed, causing
+the "too big" write test to incorrectly pass.
 
+Fix by writing through dd with iflag=fullblock to guarantee a single
+atomic write() syscall to trace_marker_raw.
 
->=20
->=20Conventionally, this mail should be sent as a direct reply to the cov=
-erletter.
-> But somehow this was sent as a reply to the first patch of the series. =
-Please
-> send all patches of a series as a direct reply to the coverletter from =
-the next
-> time.
->=20
-Thanks,=20SJ.
+Fixes: 37f46601383a ("selftests/tracing: Add basic test for trace_marker_raw file")
+Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
+---
+v3:
+Measure the binary length via wc -c instead of hard-coding "size + 4".
 
-Sorry about that. I'll make sure future revisions are sent as direct
-replies to the cover letter.
+v2:
+Update comment about 64K pages.
+---
+ .../ftrace/test.d/00basic/trace_marker_raw.tc      | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-> On Sun, 31 May 2026 17:17:21 +0800 Kunwu Chan <kunwu.chan@linux.dev> wr=
-ote:
->=20
->=20>=20
->=20> From: Kunwu Chan <kunwu.chan@gmail.com>
-> >=20=20
->=20>  A trailing comma in the memcg_path assignment makes
-> >  memcg_path a single-element tuple instead of a string.
-> >=20=20
->=20>  As a result, an invalid value is written to sysfs and memcg
-> >  filter configuration fails.
-> >=20=20
->=20>  Remove the comma.
-> >=20
->=20Good findinng! But, Cheng sent [1] a same patch earlier. I believe Ch=
-eng is
-> working on revisioning it. I think we should give Cheng more time for t=
-hat.
->=20
-Yes,=20I noticed that after sending the series and saw that Cheng had
-already posted the same fix.
+diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+index 8e905d4fe6dd..f985ff391463 100644
+--- a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
++++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+@@ -36,15 +36,23 @@ make_str() {
+ 
+ 	data=`printf -- 'X%.0s' $(seq $cnt)`
+ 
+-	printf "${val}${data}"
++	# Return escape-sequence text (e.g. "\003\000..."); the caller
++	# converts to binary. Shell command substitution strips NUL bytes,
++	# so the binary form cannot survive being captured into a variable.
++	printf '%s' "${val}${data}"
+ }
+ 
+ write_buffer() {
+ 	id=$1
+ 	size=$2
+ 
+-	# write the string into the raw marker
+-	make_str $id $size > trace_marker_raw
++	str=`make_str $id $size`
++	len=`printf "$str" | wc -c`
++	# Pipe through dd to ensure a single atomic write() syscall
++	# on architectures with 64K pages, where shell's printf builtin
++	# uses stdio buffering which may split the output into multiple
++	# writes.
++	printf "$str" | dd of=trace_marker_raw bs=$len iflag=fullblock
+ }
+ 
+ 
+-- 
+2.39.3
 
-I'll drop this patch from v2 and let Cheng continue with his version.
-
-Thanks,
-Kunwu
-
-> [1] https://lore.kernel.org/20260529145248.84593-1-sj@kernel.org
->=20
->=20Thanks,
-> SJ
->=20
->=20[...]
->
