@@ -1,32 +1,32 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361F438C2DE
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 09:39:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A253921E4
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 09:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780306784; cv=none; b=nSnU6jx+JJDxCTaIBcbyORcOo29Nx728+SY5qfvFjw/cXpNrJc9UtHMrL/fz8P1Qp+JQ682C1dYEO9NRz3ukn+18ZngJACPOHb40QKp/N2I6N5teNd74L568HFj4xCYTAEwcSN3FDrK9Izs072u4LzKWCrV/3k12lbSqLBJfaY8=
+	t=1780306787; cv=none; b=n0ZcyjHBH9HMTBBm5WGQq36XRgS5PYJiHuoAP5L5vd75OTlw3sIauLx9X1z7U3tRKMjfZ5BMnBRU7jPKM07GkCI6PRpwf2GOCUgYyJQAnLvf4Mm5UyiyVdi8Gx4BhDIIjTdPELecqdzJSJq0L3mhPFyXQlFg9dRDibBEInbOv94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780306784; c=relaxed/simple;
-	bh=CxSN74mE4HAX/ktcTw/k5018JtTzz1lylWbrHq8ED/4=;
+	s=arc-20240116; t=1780306787; c=relaxed/simple;
+	bh=L1ihjQxJmTlVGZIes5hvYzRqzbvMqswr1mVjJ4iy0es=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YG0zEPWGUxfa7p410WjbkGWb00K/v28d1fu0pWz5o8yE4X9UEyTCjtyrPOiaWB/41d2OnhQgjtVfka4vQvDKvF3dlYyBK/WQ5otHnd4r58wqwGWIaoOqn3QUOGZz3AM7a7vfdwTticSxbBaJAgLo6ksqcFvFeeIfYDCu1i09Zb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Lt0+zFjE; arc=none smtp.client-ip=91.218.175.172
+	 MIME-Version; b=sYstvslSZP+aQUhj47qkDNUg9eiu3DtPSMqz/ooX6BWjEMuE8yyStIaTuBBfU/1jEumv2N9lZtm9jpkPWrhg19kg58TYAWGl4bz8EaLtFk7vbt/okZlXJnsqEQw9YoDYCBkjz/bcsFYQ3BuYBkROBbKq3b0zd2cQy3hnndn8ZF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N1D+zJeO; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Lt0+zFjE"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N1D+zJeO"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780306778;
+	t=1780306781;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1ZJJJUWM/UdeM9EpxSsLVE41gZLrE+ZKIyNNK6qg31U=;
-	b=Lt0+zFjE9CvRxpiXw93TaC39I4onXUXiD2gVk3pI5jSwa0eIamXRmsHkCB2YePTOPpN7fC
-	pkkqqtxE1FvwLrCDmR98YFpg34ZXtWmQi2CZJGvukLnGkqsKxKy7jrnKMRSBsbeqbVxSpn
-	eOeRjkvV27He+bjo9Llb/UvNmRbLRK8=
+	bh=1kKzOePWmOb72Fw2UAE5kwvihq4Z2qKpIQem7EU7FNE=;
+	b=N1D+zJeOv1rRlzchItvYocwA5pUU/8XQMjaZhaeKiM9blyno+t6poIYYdn4aDYubX+crFT
+	HKxDP5NP6FJO72SGwq3LGsvxgKSTANiaVfW1I24v88u8b+KGJqVjryGzJj4a+/H4mL1yLK
+	2qIbZgCo97GzPf2GPpM0rAl7qwq73zw=
 From: George Guo <dongtai.guo@linux.dev>
 To: Huacai Chen <chenhuacai@kernel.org>,
 	Mike Rapoport <rppt@kernel.org>,
@@ -41,13 +41,13 @@ Cc: George Guo <guodongtai@kylinos.cn>,
 	kexec@lists.infradead.org,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	systems,
-	Kexin Liu <liukexin@kylinos.cn>
-Subject: [PATCH v3 1/3] LoongArch: kexec: add KHO support for FDT-based
-Date: Mon,  1 Jun 2026 17:39:28 +0800
-Message-Id: <20260601093930.112758-1-dongtai.guo@linux.dev>
-In-Reply-To: <20260601092823.110362-1-dongtai.guo@linux.dev>
+	systems
+Subject: [PATCH v3 2/3] LoongArch: kexec: add KHO support for ACPI-only
+Date: Mon,  1 Jun 2026 17:39:29 +0800
+Message-Id: <20260601093930.112758-2-dongtai.guo@linux.dev>
+In-Reply-To: <20260601093930.112758-1-dongtai.guo@linux.dev>
 References: <20260601092823.110362-1-dongtai.guo@linux.dev>
+ <20260601093930.112758-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,257 +59,322 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-Enable Kexec Handover (KHO) on LoongArch64 for FDT-based systems.
+On ACPI-only systems fdt_setup() returns early when it detects ACPI,
+so initial_boot_params remains NULL and the FDT-based kho_load_fdt()
+path cannot be used.
 
-- Kconfig: select ARCH_SUPPORTS_KEXEC_HANDOVER for CONFIG_64BIT
-- kexec.h: add fdt/fdt_mem fields to kimage_arch to hold the KHO FDT
-  kexec segment virtual and physical addresses
-- machine_kexec_file.c: add kho_load_fdt() which copies the running
-  kernel's FDT (initial_boot_params), appends linux,kho-fdt and
-  linux,kho-scratch properties to /chosen, and loads the result as a
-  kexec segment; called from load_other_segments().  Returns -EINVAL
-  when initial_boot_params is NULL (ACPI-only boot) since that path
-  requires separate handling.
-- machine_kexec.c: before jumping to the new kernel, update the
-  DEVICE_TREE_GUID entry in the EFI config table to point to the KHO
-  FDT segment so the second kernel finds it via efi_fdt_pointer() and
-  early_init_dt_check_kho() calls kho_populate()
+machine_kexec_file.c:
+- kho_load_fdt(): add an else branch that builds a minimal FDT from
+  scratch (SZ_1K) containing only a /chosen node with linux,kho-fdt
+  and linux,kho-scratch properties, using the libfdt creation API.
+- Since DEVICE_TREE_GUID is absent from the EFI config table on
+  ACPI-only systems, build a new config table with DEVICE_TREE_GUID
+  appended and load it as a kexec segment.  Store the result in
+  kimage_arch so machine_kexec() can switch st->tables before jumping.
+- arch_kimage_file_post_load_cleanup(): free the efi_tables kvmalloc
+  buffer once the kexec image has been loaded.
 
-Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
+machine_kexec.c:
+- Before jumping, update the EFI system table pointer: for FDT-based
+  systems update the existing DEVICE_TREE_GUID entry; for ACPI-only
+  systems switch st->tables / st->nr_tables to the new extended table.
+
+setup.c:
+- fdt_setup(): when ACPI is detected, use efi_fdt_pointer() to detect
+  whether this is a KHO kexec boot.  The first kernel switches the EFI
+  config table to a new one that includes a DEVICE_TREE_GUID entry
+  pointing to the minimal KHO FDT.  If found, call early_init_dt_scan()
+  so early_init_dt_check_kho() can consume linux,kho-fdt and
+  linux,kho-scratch, then reset initial_boot_params to NULL so the rest
+  of the ACPI boot path is unaffected.
+
+kexec.h:
+- Add efi_tables, efi_tables_mem, efi_tables_cnt to kimage_arch.
+
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- arch/loongarch/Kconfig                     |   3 +
- arch/loongarch/include/asm/kexec.h         |   4 +
- arch/loongarch/kernel/machine_kexec.c      |  27 +++++
- arch/loongarch/kernel/machine_kexec_file.c | 118 +++++++++++++++++++++
- 4 files changed, 152 insertions(+)
+ arch/loongarch/include/asm/kexec.h         |   3 +
+ arch/loongarch/kernel/machine_kexec.c      |  11 ++
+ arch/loongarch/kernel/machine_kexec_file.c | 162 +++++++++++++++++++--
+ arch/loongarch/kernel/setup.c              |  21 ++-
+ 4 files changed, 184 insertions(+), 13 deletions(-)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 606597da46b8..d494418545f5 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -684,6 +684,9 @@ config ARCH_SUPPORTS_KEXEC
- config ARCH_SUPPORTS_KEXEC_FILE
- 	def_bool 64BIT
- 
-+config ARCH_SUPPORTS_KEXEC_HANDOVER
-+	def_bool 64BIT
-+
- config ARCH_SELECTS_KEXEC_FILE
- 	def_bool 64BIT
- 	depends on KEXEC_FILE
 diff --git a/arch/loongarch/include/asm/kexec.h b/arch/loongarch/include/asm/kexec.h
-index 209fa43222e1..adf54bfcdd49 100644
+index adf54bfcdd49..e1abaf40b06a 100644
 --- a/arch/loongarch/include/asm/kexec.h
 +++ b/arch/loongarch/include/asm/kexec.h
-@@ -39,6 +39,10 @@ struct kimage_arch {
- 	unsigned long efi_boot;
- 	unsigned long cmdline_ptr;
- 	unsigned long systable_ptr;
-+#ifdef CONFIG_KEXEC_HANDOVER
-+	void *fdt;		/* virtual address of KHO FDT segment buffer */
-+	unsigned long fdt_mem;	/* physical address of KHO FDT segment */
-+#endif
+@@ -42,6 +42,9 @@ struct kimage_arch {
+ #ifdef CONFIG_KEXEC_HANDOVER
+ 	void *fdt;		/* virtual address of KHO FDT segment buffer */
+ 	unsigned long fdt_mem;	/* physical address of KHO FDT segment */
++	void *efi_tables;		/* new EFI config table buffer (virtual) */
++	unsigned long efi_tables_mem;	/* physical address of new EFI config table */
++	unsigned long efi_tables_cnt;	/* number of entries in new EFI config table */
+ #endif
  };
  
- #ifdef CONFIG_KEXEC_FILE
 diff --git a/arch/loongarch/kernel/machine_kexec.c b/arch/loongarch/kernel/machine_kexec.c
-index ad27fef098f1..98529c71d001 100644
+index 98529c71d001..cbb7f8368843 100644
 --- a/arch/loongarch/kernel/machine_kexec.c
 +++ b/arch/loongarch/kernel/machine_kexec.c
-@@ -6,6 +6,7 @@
-  */
- #include <linux/compiler.h>
- #include <linux/cpu.h>
-+#include <linux/efi.h>
- #include <linux/kexec.h>
- #include <linux/crash_dump.h>
- #include <linux/delay.h>
-@@ -289,6 +290,32 @@ void machine_kexec(struct kimage *image)
- 	pr_notice("We will call new kernel at 0x%lx\n", start_addr);
- 	pr_notice("Bye ...\n");
- 
-+#ifdef CONFIG_KEXEC_HANDOVER
-+	/*
-+	 * Point the EFI FDTPTR config table entry at the modified FDT so the
-+	 * second kernel picks up the linux,kho-fdt and linux,kho-scratch
-+	 * properties via early_init_dt_check_kho().
-+	 */
-+	if (internal->fdt_mem) {
+@@ -313,6 +313,17 @@ void machine_kexec(struct kimage *image)
+ 				break;
+ 			}
+ 		}
++	} else if (internal->efi_tables_mem) {
 +		/*
-+		 * FDT-based system: DEVICE_TREE_GUID already exists in the EFI
-+		 * config table; just update its pointer to our KHO FDT.
++		 * ACPI-only system: DEVICE_TREE_GUID was not in the original
++		 * EFI config table.  Switch to the new table that was built in
++		 * kho_load_fdt() with DEVICE_TREE_GUID appended.
 +		 */
 +		efi_system_table_t *st =
 +			(efi_system_table_t *)TO_CACHE(systable_ptr);
-+		efi_config_table_t *ct =
-+			(efi_config_table_t *)TO_CACHE((unsigned long)st->tables);
-+		unsigned long i;
 +
-+		for (i = 0; i < st->nr_tables; i++) {
-+			if (!efi_guidcmp(ct[i].guid, DEVICE_TREE_GUID)) {
-+				ct[i].table = (void *)internal->fdt_mem;
-+				break;
-+			}
-+		}
-+	}
-+#endif
-+
- 	/* Make reboot code buffer available to the boot CPU. */
- 	flush_cache_all();
++		st->tables    = internal->efi_tables_mem;
++		st->nr_tables = internal->efi_tables_cnt;
+ 	}
+ #endif
  
 diff --git a/arch/loongarch/kernel/machine_kexec_file.c b/arch/loongarch/kernel/machine_kexec_file.c
-index 5584b798ba46..bf1e8c1c7e70 100644
+index bf1e8c1c7e70..c1955d991061 100644
 --- a/arch/loongarch/kernel/machine_kexec_file.c
 +++ b/arch/loongarch/kernel/machine_kexec_file.c
-@@ -13,7 +13,9 @@
+@@ -10,6 +10,7 @@
+ 
+ #define pr_fmt(fmt) "kexec_file: " fmt
+ 
++#include <linux/efi.h>
  #include <linux/ioport.h>
  #include <linux/kernel.h>
  #include <linux/kexec.h>
-+#include <linux/libfdt.h>
- #include <linux/memblock.h>
-+#include <linux/of_fdt.h>
- #include <linux/slab.h>
+@@ -20,6 +21,7 @@
  #include <linux/string.h>
  #include <linux/types.h>
-@@ -32,6 +34,11 @@ int arch_kimage_file_post_load_cleanup(struct kimage *image)
- 	image->elf_headers = NULL;
- 	image->elf_headers_sz = 0;
+ #include <linux/vmalloc.h>
++#include <asm/addrspace.h>
+ #include <asm/bootinfo.h>
  
-+#ifdef CONFIG_KEXEC_HANDOVER
-+	kvfree(image->arch.fdt);
-+	image->arch.fdt = NULL;
-+#endif
-+
+ const struct kexec_file_ops * const kexec_file_loaders[] = {
+@@ -37,6 +39,8 @@ int arch_kimage_file_post_load_cleanup(struct kimage *image)
+ #ifdef CONFIG_KEXEC_HANDOVER
+ 	kvfree(image->arch.fdt);
+ 	image->arch.fdt = NULL;
++	kvfree(image->arch.efi_tables);
++	image->arch.efi_tables = NULL;
+ #endif
+ 
  	return kexec_image_post_load_cleanup_default(image);
- }
- 
-@@ -55,6 +62,111 @@ static void cmdline_add_initrd(struct kimage *image, unsigned long *cmdline_tmpl
- 	*cmdline_tmplen += initrd_strlen;
- }
- 
-+#ifdef CONFIG_KEXEC_HANDOVER
-+/*
-+ * Add KHO metadata to an FDT /chosen node and load the FDT as a kexec
-+ * segment.  The second kernel reads linux,kho-fdt and linux,kho-scratch
-+ * from /chosen via early_init_dt_check_kho() and calls kho_populate().
+@@ -68,6 +72,13 @@ static void cmdline_add_initrd(struct kimage *image, unsigned long *cmdline_tmpl
+  * segment.  The second kernel reads linux,kho-fdt and linux,kho-scratch
+  * from /chosen via early_init_dt_check_kho() and calls kho_populate().
+  *
++ * On FDT-based systems (initial_boot_params != NULL), the current FDT is
++ * copied and the KHO properties are appended to /chosen.
 + *
-+ */
-+static int kho_load_fdt(struct kimage *image)
-+{
-+	void *fdt;
-+	int ret, chosen_node;
-+	size_t fdt_size;
-+	struct kexec_buf kbuf = {
-+		.image		= image,
-+		.buf_min	= 0,
-+		.buf_max	= ULONG_MAX,
-+		.top_down	= true,
-+	};
-+
-+	if (!image->kho.fdt || !image->kho.scratch)
-+		return 0;
-+
-+	if (initial_boot_params) {
++ * On ACPI-only systems (initial_boot_params == NULL), a minimal FDT
++ * containing only /chosen is built from scratch.  machine_kexec() updates
++ * the EFI config table DEVICE_TREE_GUID entry to point to this segment so
++ * that the second kernel's fdt_setup() can find and parse it.
+  */
+ static int kho_load_fdt(struct kimage *image)
+ {
+@@ -143,24 +154,151 @@ static int kho_load_fdt(struct kimage *image)
+ 		 * once the kexec image has been loaded.
+ 		 */
+ 		fdt_pack(fdt);
++	} else {
 +		/*
-+		 * FDT boot: copy the running kernel's FDT and append KHO
-+		 * properties to /chosen.
++		 * ACPI boot: build a minimal FDT containing only /chosen with
++		 * the two KHO properties.  No system FDT is available to copy.
 +		 */
-+
-+		/*
-+		 * Only two KHO properties are added to /chosen (linux,kho-fdt
-+		 * and linux,kho-scratch), so SZ_1K of extra space is
-+		 * sufficient.
-+		 */
-+		fdt_size = fdt_totalsize(initial_boot_params) + SZ_1K;
+ 
+-		kbuf.buffer	= fdt;
+-		kbuf.bufsz	= fdt_totalsize(fdt);
+-		kbuf.memsz	= kbuf.bufsz;
+-		kbuf.buf_align	= PAGE_SIZE;
+-		kbuf.mem	= KEXEC_BUF_MEM_UNKNOWN;
++		__be64 prop[2];
+ 
+-		ret = kexec_add_buffer(&kbuf);
+-		if (ret)
++		fdt_size = SZ_1K;
 +		fdt = kvmalloc(fdt_size, GFP_KERNEL);
 +		if (!fdt)
 +			return -ENOMEM;
 +
-+		ret = fdt_open_into(initial_boot_params, fdt, fdt_size);
-+		if (ret < 0) {
-+			pr_err("Failed to open FDT: %d\n", ret);
++		ret = fdt_create(fdt, fdt_size);
++		if (ret < 0)
 +			goto out_free;
-+		}
-+
-+		chosen_node = fdt_path_offset(fdt, "/chosen");
-+		if (chosen_node == -FDT_ERR_NOTFOUND) {
-+			pr_debug("No /chosen node in FDT, creating one\n");
-+			chosen_node = fdt_add_subnode(fdt,
-+						      fdt_path_offset(fdt, "/"),
-+						      "chosen");
-+		}
-+		if (chosen_node < 0) {
-+			ret = chosen_node;
++		ret = fdt_finish_reservemap(fdt);
++		if (ret < 0)
 +			goto out_free;
-+		}
-+
-+		/* Remove stale KHO properties left by a previous kexec load */
-+		fdt_delprop(fdt, chosen_node, "linux,kho-fdt");
-+		fdt_delprop(fdt, chosen_node, "linux,kho-scratch");
-+
-+		ret = fdt_appendprop_addrrange(fdt, 0, chosen_node,
-+					       "linux,kho-fdt",
-+					       image->kho.fdt, PAGE_SIZE);
-+		if (ret)
++		ret = fdt_begin_node(fdt, "");	/* root */
++		if (ret < 0)
++			goto out_free;
++		ret = fdt_property_u32(fdt, "#address-cells", 2);
++		if (ret < 0)
++			goto out_free;
++		ret = fdt_property_u32(fdt, "#size-cells", 2);
++		if (ret < 0)
++			goto out_free;
++		ret = fdt_begin_node(fdt, "chosen");
++		if (ret < 0)
+ 			goto out_free;
+ 
+-		image->arch.fdt     = fdt;
+-		image->arch.fdt_mem = kbuf.mem;
+-		return 0;
+-	} else {
+-		return -EINVAL;
++		prop[0] = cpu_to_be64(image->kho.fdt);
++		prop[1] = cpu_to_be64(PAGE_SIZE);
++		ret = fdt_property(fdt, "linux,kho-fdt", prop, sizeof(prop));
++		if (ret < 0)
 +			goto out_free;
 +
-+		ret = fdt_appendprop_addrrange(fdt, 0, chosen_node,
-+					       "linux,kho-scratch",
-+					       image->kho.scratch->mem,
-+					       image->kho.scratch->bufsz);
-+		if (ret)
++		prop[0] = cpu_to_be64(image->kho.scratch->mem);
++		prop[1] = cpu_to_be64(image->kho.scratch->bufsz);
++		ret = fdt_property(fdt, "linux,kho-scratch", prop, sizeof(prop));
++		if (ret < 0)
 +			goto out_free;
++
++		ret = fdt_end_node(fdt);	/* chosen */
++		if (ret < 0)
++			goto out_free;
++		ret = fdt_end_node(fdt);	/* root */
++		if (ret < 0)
++			goto out_free;
++		ret = fdt_finish(fdt);
++		if (ret < 0)
++			goto out_free;
+ 	}
+ 
++	kbuf.buffer	= fdt;
++	kbuf.bufsz	= fdt_totalsize(fdt);
++	kbuf.memsz	= kbuf.bufsz;
++	kbuf.buf_align	= PAGE_SIZE;
++	kbuf.mem	= KEXEC_BUF_MEM_UNKNOWN;
++
++	ret = kexec_add_buffer(&kbuf);
++	if (ret)
++		goto out_free;
++
++	image->arch.fdt     = fdt;
++	image->arch.fdt_mem = kbuf.mem;
++
++	/*
++	 * On ACPI-only systems DEVICE_TREE_GUID is not in the EFI config
++	 * table, so the second kernel's efi_fdt_pointer() cannot locate the
++	 * KHO FDT.  Build a new EFI config table with DEVICE_TREE_GUID added
++	 * and load it as a kexec segment; machine_kexec() will update
++	 * st->tables / st->nr_tables to point to it before jumping.
++	 */
++
++	/*
++	 * fw_arg2 is the EFI system table physical address passed by the
++	 * firmware/bootloader.  Use it directly here because
++	 * image->arch.systable_ptr is set later in machine_kexec_prepare(),
++	 * which runs after load_other_segments() / kho_load_fdt().
++	 */
++	if (!initial_boot_params && fw_arg2) {
++		efi_system_table_t *st =
++			(efi_system_table_t *)TO_CACHE(fw_arg2);
++		efi_config_table_t *ct =
++			(efi_config_table_t *)TO_CACHE((unsigned long)st->tables);
++		unsigned long i;
++		bool found = false;
 +
 +		/*
-+		 * Shrink totalsize to the actual data size so the kexec segment
-+		 * allocated by kexec_add_buffer() covers only the packed FDT data.
-+		 * The slack added above for property insertion is part of the
-+		 * kvmalloc'd buffer, which is freed by kimage_file_post_load_cleanup()
-+		 * once the kexec image has been loaded.
++		 * Scan the original config table;
++		 * DEVICE_TREE_GUID is absent on ACPI-only systems.
 +		 */
-+		fdt_pack(fdt);
++		for (i = 0; i < st->nr_tables; i++) {
++			if (!efi_guidcmp(ct[i].guid, DEVICE_TREE_GUID)) {
++				found = true;
++				break;
++			}
++		}
 +
-+		kbuf.buffer	= fdt;
-+		kbuf.bufsz	= fdt_totalsize(fdt);
-+		kbuf.memsz	= kbuf.bufsz;
-+		kbuf.buf_align	= PAGE_SIZE;
-+		kbuf.mem	= KEXEC_BUF_MEM_UNKNOWN;
++		if (!found) {
++			size_t old_sz = st->nr_tables * sizeof(efi_config_table_t);
++			size_t new_sz = old_sz + sizeof(efi_config_table_t);
++			efi_config_table_t *new_ct;
++			struct kexec_buf tbuf = {
++				.image		= image,
++				.buf_min	= 0,
++				.buf_max	= ULONG_MAX,
++				.top_down	= true,
++			};
 +
-+		ret = kexec_add_buffer(&kbuf);
-+		if (ret)
-+			goto out_free;
++			/*
++			 * Allocate a new table with n+1 entries and append
++			 * the DEVICE_TREE_GUID entry.
++			 */
++			new_ct = kvmalloc(new_sz, GFP_KERNEL);
++			if (!new_ct)
++				return -ENOMEM;
 +
-+		image->arch.fdt     = fdt;
-+		image->arch.fdt_mem = kbuf.mem;
-+		return 0;
-+	} else {
-+		return -EINVAL;
++			memcpy(new_ct, ct, old_sz);
++			new_ct[st->nr_tables].guid  = DEVICE_TREE_GUID;
++			new_ct[st->nr_tables].table = (void *)image->arch.fdt_mem;
++
++			/* Register the new config table as a kexec segment. */
++			tbuf.buffer   = new_ct;
++			tbuf.bufsz    = new_sz;
++			tbuf.memsz    = new_sz;
++			tbuf.buf_align = sizeof(void *);
++			tbuf.mem      = KEXEC_BUF_MEM_UNKNOWN;
++
++			ret = kexec_add_buffer(&tbuf);
++			if (ret) {
++				kvfree(new_ct);
++				return ret;
++			}
++
++			image->arch.efi_tables     = new_ct;
++			image->arch.efi_tables_mem = tbuf.mem;
++			image->arch.efi_tables_cnt = st->nr_tables + 1;
++		}
 +	}
 +
-+out_free:
-+	kvfree(fdt);
-+	return ret;
-+}
-+#endif
++	return 0;
 +
- #ifdef CONFIG_CRASH_DUMP
+ out_free:
+ 	kvfree(fdt);
+ 	return ret;
+diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+index 839b23edee87..c82067d1dc75 100644
+--- a/arch/loongarch/kernel/setup.c
++++ b/arch/loongarch/kernel/setup.c
+@@ -286,8 +286,27 @@ static void __init fdt_setup(void)
+ 	void *fdt_pointer;
  
- static int prepare_elf_headers(void **addr, unsigned long *sz)
-@@ -230,6 +342,12 @@ int load_other_segments(struct kimage *image,
- 	cmdline = modified_cmdline;
- 	image->arch.cmdline_ptr = (unsigned long)cmdline;
- 
+ 	/* ACPI-based systems do not require parsing fdt */
+-	if (acpi_os_get_root_pointer())
++	if (acpi_os_get_root_pointer()) {
 +#ifdef CONFIG_KEXEC_HANDOVER
-+	ret = kho_load_fdt(image);
-+	if (ret)
-+		goto out_err;
++		/*
++		 * On a KHO kexec boot the first kernel builds a minimal FDT
++		 * containing only /chosen with linux,kho-fdt and
++		 * linux,kho-scratch, and switches the EFI config table to a
++		 * new one that includes a DEVICE_TREE_GUID entry pointing to
++		 * it.  Use efi_fdt_pointer() to detect this case.
++		 *
++		 * Call early_init_dt_scan() to let early_init_dt_check_kho()
++		 * consume the KHO data, then reset initial_boot_params so the
++		 * rest of the ACPI boot path is not confused by this FDT.
++		 */
++		fdt_pointer = efi_fdt_pointer();
++		if (fdt_pointer && !fdt_check_header(fdt_pointer)) {
++			early_init_dt_scan(fdt_pointer, __pa(fdt_pointer));
++			initial_boot_params = NULL;
++		}
 +#endif
-+
- 	return 0;
+ 		return;
++	}
  
- out_err:
+ 	/* Prefer to use built-in dtb, checking its legality first. */
+ 	if (IS_ENABLED(CONFIG_BUILTIN_DTB) && !fdt_check_header(__dtb_start))
 -- 
 2.25.1
 
