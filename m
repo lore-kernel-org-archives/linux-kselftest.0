@@ -1,175 +1,181 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA27F33C52F
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 09:39:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4DCC38B149
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 10:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780306791; cv=none; b=jAm+kN3h2xwq8NSY3Gar7Sm5B+yshzLSjgUyRiEpM0PtXSEri4xyrMMUTDfGfy7osCgxiYep05hkDtilIGjE2CH7J7sMrwYfAcD6NyKY0rQ+VxPReJGbDUFQSn4dZ6y1ECO2VPRg9aCHOaWkuQpRau5WctlrKp90TQQ87obciI8=
+	t=1780309596; cv=none; b=vDugnk6nmQqKJY71n8FlfunqWQtEAnmoWZKOHGAa4OF82epdA2mYA8wO54iAabpriNg3igHLoNjAAEuuf7NoJEfjYslU0EhsG8NBlmnQZeuCH4ZnUbcIoISdRMVzbOAfVKKUwIQx79KYqasPHLZk7J1E6IbnXwVDJSnWksMkI0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780306791; c=relaxed/simple;
-	bh=fSoail2EkWyGWSi1CWajAIGJN6D4ooirRpWpLF+SObg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CUjogVVv9C+lJLm1CxZjftDBJgeNihP9jujYIsNtY5oqYGO/A+uOIr6WUk6dS8VVxTlohuSBZdnWSpEV3rkBQHgQ/W8umoW/OqnNpsdQF8dhA2BOd6+zEeiN6SkjBjDUhByt0oy0IP1AaBsriG5OePMnicTyCGzscTUPcwMWoLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rDt+H9kr; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780309596; c=relaxed/simple;
+	bh=i22xps6LCObUD2kqUTEDbNF8C3JLN3ZsednxQoPzcsw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jEvFgqB9kdy6frSGN0COiQAyjeh54K0GNTOJSojAieTRscuShKu1rAPvb08ewfFZ6RCOzuhLAf5UAOSNaVeuYTJ737eHacjjGFzFI44DWyXU1XXLbBgLbR7ADdCQ02FhMmyGbfYBedHiXSgNDAp8zNRc5sSoDVYdpWiuapMsr/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=NupZPTNE; arc=none smtp.client-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rDt+H9kr"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780306784;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Sk4h4g29M85uJUDYWr0m/BnA8wl5x57lY+aGRwoFkNo=;
-	b=rDt+H9kr8vc/k8aVhFk+5C+D1jpOj/mQ8GRN3/YLVVxbF8aNwD5/8wkSuqdu1bi5sbiVph
-	AVKe5+FOFMEChjBYo/sm/96gbBtPlF5+SXkpLC8QQrLn0NjhvHNydpajyRTRohB0uhuAw5
-	sOCCzcCcRHDSOEnmPg9oKaInHdH16ek=
-From: George Guo <dongtai.guo@linux.dev>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: George Guo <guodongtai@kylinos.cn>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Alexander Graf <graf@amazon.com>,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	kexec@lists.infradead.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	Kexin Liu <liukexin@kylinos.cn>
-Subject: [PATCH v3 3/3] selftests/kho: add LoongArch vmtest support
-Date: Mon,  1 Jun 2026 17:39:30 +0800
-Message-Id: <20260601093930.112758-3-dongtai.guo@linux.dev>
-In-Reply-To: <20260601093930.112758-1-dongtai.guo@linux.dev>
-References: <20260601092823.110362-1-dongtai.guo@linux.dev>
- <20260601093930.112758-1-dongtai.guo@linux.dev>
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="NupZPTNE"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-304e58292d3so6285156eec.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 03:26:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1780309594; x=1780914394; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w+2YxV+6v8HxHah8ejk5xIUKcFmR0bUuiOdbEsVMnZo=;
+        b=NupZPTNEnACt2rPmSZ2tHUbxyiGQFcr03S1flHmh13BV8at80fPm6AGwt+g+fi6zu1
+         woIos6B/kUeV/G22aQGxp8fH8DdYF2Nk6Fzu6iISDVNGUkdbGm2QgitY0GukuAfcuggj
+         4wXm1fRb5kz7f9pd1SeKHRixULxiAxEYAYDrDrbE/+LFRPc6OYcDRN/nQd4PMsVjh7GA
+         ui7IGJRZzOQjl/8TfuffThxNe9zLJVtCQsQusHoLsARHCM701K6v+qqWG3zR51iAZZXj
+         CyuxkojrElwIgbp8oYxfvxowls9B+BYp3b5xOuz310nWnenziMsTzpMl8qJgxmz4mkcF
+         VcpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780309594; x=1780914394;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w+2YxV+6v8HxHah8ejk5xIUKcFmR0bUuiOdbEsVMnZo=;
+        b=B/3U1EKMGaA18dWmq7m1mTogWsiVBkjwM3n9SiIpu7ba91khFD/uX0bUvXJQAlmnG3
+         AdHQ5veLo0BoMhwTuCgS4HgW+ZjF3WFZnOVQo/qQQXvpNRvs/SQiLd93+xA0p/aczW1k
+         7JSdQYfgdOs3yGrFjqbCx4uslpAaqOGGEUAlrJGoStcxAPcGh9QTUYYugtXXHvXgaFnd
+         2zohTgzCmWtTyjSMOWzHGSnLXxKYW0FCusPzLSGhQKwbKZxrVzgTX3Dzkezxhu6T0WGF
+         gAgq5Z9t5b52LWlFPHjKt5c7Vzun2pxExyHt++Jtv3ZWXPlLs6+PscjO/10q89q0LwA9
+         DtVA==
+X-Forwarded-Encrypted: i=1; AFNElJ/STErgwbQfIFQIrBRqoO2kVhcbmZ+DIpk8RiE2h0cKXs+FojR462At7vj+QfJDHR4R8g+XAoI+YySAjyCQ8k4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxp4Jfq0tml8v8Dpomd0tDDgKlFQW6+OnDwubEg8v4yKUYwxUv4
+	CKiIDbETTACfjuE3pOY/bTa5vCP2xCR++K6f74PE9KIkB8T4FALSKqu0KSbzcr8AnB0=
+X-Gm-Gg: Acq92OFlvsoT+6l9tIi31q47EqMD3Lbb58vxuTEgunI3MVn80mdYfs8LDAV//UKczky
+	CUhPrCOY4cxVVVqMCfIcmfc0iyZ9KzfJyebMI2dyKVPzqhEZlJiz5xp9THy0SJGVtpAym5yFPFi
+	v927Qlcgi3M+n0+HEuIxwvn3ijbDpUusqSBSbxSxosxvfOu1RaJQLEkNlwx5jHGMjbsbxKPQOkY
+	SYN8/NBJ5r6BoiqHobEz0O1imhNZ7+S1o3wrFulKbtWTulE3cCXntUvIpiknrn7VHhOGN4QVYvR
+	/Wc1+qlwciWzGAkhGrgtDVQW5c4CwyLvqXvif2tziTDIeQGwcSSrNP5Zt51QoUBGndkNPMaHd3t
+	OgBDMB82v8oxs16h4azRw446LNtd3v3yEr5ynYxeL8yLnMGHmlP/WTqgGgjlYENfxSiQZqGXQf2
+	tZoRWU/jO0IPzrd/Ggn9L7sOSaDuDRlMA8lAdRq526L0x6/iKSImzExA==
+X-Received: by 2002:a05:7300:6d21:b0:304:188d:d0be with SMTP id 5a478bee46e88-304fa674743mr5259150eec.16.1780309593836;
+        Mon, 01 Jun 2026 03:26:33 -0700 (PDT)
+Received: from sw07.internal.sifive.com ([4.53.31.132])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5b9be7sm8176001eec.27.2026.06.01.03.26.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 03:26:33 -0700 (PDT)
+From: Yong-Xuan Wang <yongxuan.wang@sifive.com>
+Subject: [PATCH v5 0/5] KVM: riscv: Fix stale FWFT feature exposure and
+ enhance selftests
+Date: Mon, 01 Jun 2026 03:26:21 -0700
+Message-Id: <20260601-kvm-get_reg_list-v2-v5-0-415d08a2813b@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-B4-Tracking: v=1; b=H4sIAE1eHWoC/33OTQ7CIBAF4Ks0rMUApQiuvIcxDaVDi381UImm6
+ d2ldaFGYzKbl8x8bwYUwDsIaJ0NyEN0wXXnFIpFhkyrzw1gV6eMGGGCFEzgQzzhBvrSQ1MeXeh
+ xZNgqmwslqDbCoHR58WDdbVa3u2cO12oPpp+oaaNNl52/z7WRTXv/G9IQvFKcaE4oL7jeBGddh
+ KXpTmiqiPk7In8jeULoiiihtCyUsl8IfyGC0N8IT4iRUldGUqjqz0/GcXwA5nx8slMBAAA=
+X-Change-ID: 20260526-kvm-get_reg_list-v2-f9f36961ac6c
+To: Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger?= <cleger@rivosinc.com>, 
+ Andrew Jones <ajones@ventanamicro.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: greentime.hu@sifive.com, vincent.chen@sifive.com, zong.li@sifive.com, 
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, inochiama@gmail.com, 
+ Yong-Xuan Wang <yongxuan.wang@sifive.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780309592; l=3974;
+ i=yongxuan.wang@sifive.com; s=20260424; h=from:subject:message-id;
+ bh=i22xps6LCObUD2kqUTEDbNF8C3JLN3ZsednxQoPzcsw=;
+ b=wdJr7Ln1xzni8KnSJ57h+PPvQD5PuXrTrrX5ZA4mQYHmh+QPZPvxnYPYi+lb2+zyAgaCjKJRl
+ lN/F+1MpxnlB2jG6KWSp0moShK6wfjKHRsHXLH+It30jxPYAzrEpTN0
+X-Developer-Key: i=yongxuan.wang@sifive.com; a=ed25519;
+ pk=+8NCHB1ZJvZthQAmZspOAaqjo+/snaW8mFSiDx45HxY=
 
-From: George Guo <guodongtai@kylinos.cn>
+This series fixes three bugs in the SBI FWFT (Firmware Features) extension
+and improves the related selftest infrastructure.
+The bugs are:
+1. Missing CSR dirty marking: When userspace sets FWFT feature values via
+   KVM_SET_ONE_REG, modified CSRs (e.g., henvcfg.PMM for pointer masking)
+   are not marked dirty, leading to stale state after vCPU scheduling or
+   migration.
+2. Hardware probing side effects: The try_to_set_pmm() function modifies
+   HENVCFG.PMM during hardware capability detection but fails to restore
+   the original value, leaving the CSR in an altered state that affects
+   subsequent operations.
+3. Stale feature exposure: FWFT feature support is cached at vCPU
+   initialization time. When userspace subsequently disables ISA extensions
+   via KVM_SET_ONE_REG, the cached support status is not updated, allowing
+   guests to access features that depend on disabled extensions.
+Patches 1-3 fix these bugs separately.
 
-Add loongarch.conf to configure QEMU's LoongArch virt machine with a
-la464 CPU, enable the 8250 serial console, and set the kernel image
-to vmlinux.efi.  Extend vmtest.sh to recognise loongarch64 as a
-supported target and map it to the 'loongarch' kernel arch name.
+The selftest improvements (patches 4-5) enhance the get-reg-list test by
+refactoring the extension sublist infrastructure and splitting FWFT
+feature testing into separate, properly-gated sublists.
 
-QEMU's LoongArch virt machine provides no ACPI tables and relies on
-FDT to describe hardware.  Without 'earlycon' on the kernel command
-line, the FDT is not scanned for a console UART, no output reaches
-the console, and vmtest.sh's console log stays empty causing the test
-to always fail.  Add 'earlycon' to KERNEL_CMDLINE in loongarch.conf.
-
-QEMU's LoongArch virt machine has no i8042 PS/2 controller.  When PNP
-detection finds nothing, i8042_init() falls back to probing the ports
-directly.  On LoongArch the I/O ports are memory-mapped, and the i8042
-port addresses are not backed by any device on the virt machine, so
-i8042_flush() takes a page fault and the kernel panics:
-
-  i8042: PNP: No PS/2 controller found.
-  i8042: Probing ports directly.
-  CPU 0 Unable to handle kernel paging request at virtual address ffff800000008064
-  ERA: i8042_flush+0x50/0x198
-   RA: i8042_init+0x2a8/0x35c
-  Kernel panic - not syncing: Attempted to kill init!
-
-Disable SERIO_I8042 and its dependents (KEYBOARD_ATKBD, MOUSE_PS2) in
-the QEMU_KCONFIG fragment to prevent the driver from being built.
-All three options are scoped to loongarch.conf; no other architecture
-is affected.
-
-QEMU provides no EFI runtime services on LoongArch, so machine_restart()
-falls through to an infinite idle loop after kexec.  Set QEMU_TIMEOUT=120
-in loongarch.conf so vmtest.sh wraps the QEMU invocation with timeout(1),
-which terminates QEMU after 120 seconds if it does not exit on its own.
-Architectures that do not set QEMU_TIMEOUT are unaffected.
-
-Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- tools/testing/selftests/kho/loongarch.conf | 13 ++++++++++++
- tools/testing/selftests/kho/vmtest.sh      | 23 +++++++++++++++-------
- 2 files changed, 29 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/kho/loongarch.conf
+Changes in v5:
+- Add CSR dirty marking fix (new patch 1/5) (sashiko-bot)
+- Split original FWFT bug fix into two focused patches
+  - Add init() callback with try_to_set_pmm() restoration fix (new patch
+    2/5) (sashiko-bot)
+  - Keep runtime supported() checks as separate patch (patch 3/5)
+- Link to v4: https://patch.msgid.link/20260601-kvm-get_reg_list-v2-v4-0-c88abc81ebda@sifive.com
 
-diff --git a/tools/testing/selftests/kho/loongarch.conf b/tools/testing/selftests/kho/loongarch.conf
-new file mode 100644
-index 000000000000..68727654578d
---- /dev/null
-+++ b/tools/testing/selftests/kho/loongarch.conf
-@@ -0,0 +1,13 @@
-+QEMU_CMD="qemu-system-loongarch64 -M virt -cpu la464"
-+QEMU_KCONFIG="
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+# CONFIG_KEYBOARD_ATKBD is not set
-+# CONFIG_MOUSE_PS2 is not set
-+# CONFIG_SERIO_I8042 is not set
-+"
-+KERNEL_IMAGE="vmlinux.efi"
-+KERNEL_CMDLINE="console=ttyS0 earlycon"
-+# QEMU never exits after kexec on LoongArch (no EFI runtime services);
-+# give the test a fixed time limit and let timeout(1) terminate QEMU.
-+QEMU_TIMEOUT=120
-diff --git a/tools/testing/selftests/kho/vmtest.sh b/tools/testing/selftests/kho/vmtest.sh
-index 49fdac8e8b15..918698b6dd2a 100755
---- a/tools/testing/selftests/kho/vmtest.sh
-+++ b/tools/testing/selftests/kho/vmtest.sh
-@@ -21,7 +21,7 @@ Options:
- 	-d)	path to the kernel build directory
- 	-j)	number of jobs for compilation, similar to -j in make
- 	-t)	run test for target_arch, requires CROSS_COMPILE set
--		supported targets: aarch64, x86_64
-+		supported targets: aarch64, x86_64, loongarch64
- 	-h)	display this help
- EOF
- }
-@@ -107,12 +107,20 @@ function run_qemu() {
- 
- 	cmdline="$cmdline kho=on panic=-1"
- 
--	$qemu_cmd -m 1G -smp 2 -no-reboot -nographic -nodefaults \
--		  -accel kvm -accel hvf -accel tcg  \
--		  -serial file:"$serial" \
--		  -append "$cmdline" \
--		  -kernel "$kernel" \
--		  -initrd "$initrd"
-+	local qemu_args=(
-+		-m 1G -smp 2 -no-reboot -nographic -nodefaults
-+		-accel kvm -accel hvf -accel tcg
-+		-serial file:"$serial"
-+		-append "$cmdline"
-+		-kernel "$kernel"
-+		-initrd "$initrd"
-+	)
-+
-+	if [[ -n "${QEMU_TIMEOUT:-}" ]]; then
-+		timeout "$QEMU_TIMEOUT" $qemu_cmd "${qemu_args[@]}" || true
-+	else
-+		$qemu_cmd "${qemu_args[@]}"
-+	fi
- 
- 	grep "KHO restore succeeded" "$serial" &> /dev/null || fail "KHO failed"
- }
-@@ -123,6 +131,7 @@ function target_to_arch() {
- 	case $target in
- 	     aarch64) echo "arm64" ;;
- 	     x86_64) echo "x86" ;;
-+	     loongarch64) echo "loongarch" ;;
- 	     *) skip "architecture $target is not supported"
- 	esac
- }
--- 
-2.25.1
+Changes in v4:
+- Rename the title of cover letter
+- Disable preemption when running try_to_set_pmm() (sashiko-bot)
+- Remove check_supported_reg() (sashiko-bot)
+- Link to v3: https://patch.msgid.link/20260528-kvm-get_reg_list-v2-v3-0-170969a8599f@sifive.com
+
+Changes in v3:
+- Restore 'supported' field with init() callback for initialization probing
+  (sashiko-bot)
+- Add NULL checks before calling feature->supported() in all functions
+- Fix isa_ext_enabled tracking logic and restore isa_ext_cant_disable array
+- Add sbi_ext_enabled tracking and enhance dependency checking (sashiko-bot)
+- Refine code organization and variable naming consistency (sashiko-bot)
+- Link to v2: https://patch.msgid.link/20260526-kvm-get_reg_list-v2-v2-0-7940a401454a@sifive.com
+
+Changes in v2:
+- Fix FWFT stale feature exposure by removing static 'supported' field
+- Refactor get-reg-list test to use unified extension sublist macros
+- Split FWFT testing into per-feature sublists with runtime checks
+  (Andrew)
+
+To: Anup Patel <anup@brainfault.org>
+To: Atish Patra <atish.patra@linux.dev>
+To: Paul Walmsley <pjw@kernel.org>
+To: Palmer Dabbelt <palmer@dabbelt.com>
+To: Albert Ou <aou@eecs.berkeley.edu>
+To: Alexandre Ghiti <alex@ghiti.fr>
+To: Clément Léger <cleger@rivosinc.com>
+To: Andrew Jones <ajones@ventanamicro.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: greentime.hu@sifive.com
+Cc: vincent.chen@sifive.com
+Cc: zong.li@sifive.com
+Cc: kvm@vger.kernel.org
+Cc: kvm-riscv@lists.infradead.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+---
+Yong-Xuan Wang (5):
+      KVM: RISC-V: SBI FWFT: Mark vCPU CSRs dirty after setting feature value
+      KVM: RISC-V: SBI FWFT: Add optional init() callback for hardware probing
+      KVM: RISC-V: SBI FWFT: Fix stale feature exposure after runtime extension changes
+      KVM: riscv: selftests: Refactor ISA and SBI extension sublist macros
+      KVM: riscv: selftests: Split SBI FWFT into separate feature-specific sublists
+
+ arch/riscv/kvm/vcpu_sbi_fwft.c                   |  44 +++++++-
+ tools/testing/selftests/kvm/riscv/get-reg-list.c | 138 ++++++++++++++---------
+ 2 files changed, 125 insertions(+), 57 deletions(-)
+---
+base-commit: c7832534a8160276cccb9a8cc8cafb5614c579d0
+change-id: 20260526-kvm-get_reg_list-v2-f9f36961ac6c
 
