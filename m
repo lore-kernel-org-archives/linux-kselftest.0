@@ -1,142 +1,145 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6E73314B9
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 06:04:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780293865; cv=pass; b=NcVic3LxwqdPMJGThok6VYWRQsZTSi/ikYqmgeCeqSc9kZQNjZw8cJTV8qyvcQzmu8AR6swJKsyfhooe+h1INMDXuhXHrBPHtFe4NUckJOUMU2ItmW612J73GolpTHeT+y7KX5dL53DojFGJtPglgJfwSlm4Kb5nfRx6XihjMX0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780293865; c=relaxed/simple;
-	bh=loicyaSIKacT3UFMUJ19/QYRzlY6aMDV2pQS+mvBMAM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lqkBZiwyED3MKDSXDjJYfUreB+dYM37FlEndJUW+uEKQzSYkP1a+UqChNXdvCUi4nD2a6M7GvwyPvEZl2VrBml6hX1yk3KcO1+PtHXSTg4ml1SEsEqRXGgK3mkCbA6NGtYVBNeX9FICKqJCvV3sOvp/He8KMQZeWQLbxi0Su+NU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pnikqe7Q; arc=pass smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0223519C553;
+	Mon,  1 Jun 2026 06:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780293869; cv=none; b=YERAbMv5EoAak3dzWoMqVTeEF8HVlrHde4bdCelP2gHJySGTe2uVeOqkw4yk6KP4n1qGgAFlKcFuf/eH7w7abnYRrDhviTplHiXfMG1spaybkYx3guvCsqTgsvMxNP9SEPuJjtCSX0VKAVHt1qoM/H6jlE9XFAPkpbwI9h/Nh94=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780293869; c=relaxed/simple;
+	bh=c9+TcK2OtgFtEotwTZh5fV3sISeDmk1GpFw5vVSwgD4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Dli6+DOsi+CEiVbGtSa+n+icm/tOClyw+a92OWWgwGYWy1mbCtYXSBwQ3SqCAfAdJ81Ea7aMtCZb0bkzFyyy9BFBTd/tlNups3Jm9gCu//76ckaTfPlRRmfx2QRXMYcReECnUeilmwwY/m1TfKBToSM1Rn+akerLGD3r+oyucU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4Ta9VL3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pnikqe7Q"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-68c76fb8009so2681529a12.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 23:04:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780293863; cv=none;
-        d=google.com; s=arc-20240605;
-        b=gAS1xrjaCxI9LPof2BYIxZNtb5LFMl5ZGxYoLSqDjTRbm9HQDhdJ2JgQ2EeLTgER8h
-         3TH5BDllgA+XsNuk1DgRxJ5GqAp5M1Zj30epW4IRDGcVf5fPWl/1j/fu54my1CtyQFNP
-         C5KsqD6EKj6YASmj/NwxD/ZO5aVYTNMPgjQHPV7U0/rmeeMnhxZIAdW+nALWxieExG2u
-         J9D02k5mAAAjCxU4COpiH5yPR1oiiR6akAIjSL5x3r7hk3wWPM9gLt7R2m2kUJ10UNSs
-         F591tF+8z9xyfjHxa9j2X+bkdNhTPepxMF5c4jDTpCcv7CGIMfSp+oLQegjxKQxkeE0h
-         1GnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=k5U4blnuS29gnJMSouEBsqgnyTt51NshtQjYFcOoY6o=;
-        fh=FPUZi8QN1y/pWqcaVpq6MCB+7iL5YwqS87PO+uy7Ff0=;
-        b=GfVVFW4uL7uaXVEPblisMjrLqUZQEc0FO5CptPJU2fmMT9ZZVMxTTwJslR42jJEzKr
-         2UgQrNxUoztdVYKaTvqRBDIte/FPK83lEYs7hXj0tU06R58yOxvLnWs0Ph/g8MHjjVZu
-         AZbAXaZ3kzxZ4aA51ObbRIA67ybnIbzeTc3Oh8goFlPJLJdPWrtjtdfSSQpu1vwHnmi8
-         XbXmH5gOnEpf1iXCT5JQB3bYo0voQ/TJqvsYhyN0UAthsowTKaTP+9EBlWPgKTDANL5j
-         RGfVhxgNV9ah6J05Gh1CR2PZNHUUCrn/8LsBrJH09/kdH33JMODzLQbNoCww0fh3JGQB
-         hcRg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780293863; x=1780898663; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k5U4blnuS29gnJMSouEBsqgnyTt51NshtQjYFcOoY6o=;
-        b=pnikqe7Qq91TAn4cU9343o72h7PtT9Atxd73kFP8xjC3Ck9tZqtIrxux0NsiqQ2n9w
-         45+RGhG7vyf0yQ5mBXpZNCFPlyOtKZBBBxQTz+P6jdNYWDjMgmpUNG8OJt6HVeCC9IT4
-         RhstF/lC2D6tmw3qKZE6XyU/CWu71Z/0sZZvtfedz1PMWfT6OtDbQAqZp6+x9seWPqJ/
-         bKJreUMSp8TZ3tMUF/T5bO6Y1zpx8nDSLIgRHUUa0HQP8DpPN3zHiOj2eaQPsj4OZRs5
-         JyXLbSiT3s5RsIddCNQmrbhFcgVvbyjmvySG4zCKVRwio2mBYk7saHnY0NNnZ4xfITzQ
-         3QPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780293863; x=1780898663;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=k5U4blnuS29gnJMSouEBsqgnyTt51NshtQjYFcOoY6o=;
-        b=A57fTSa07sDnzljiglIaLcUSoq+oqgKWF3a0XRg76+6cAfs9SVinT2dWmqZYt1EMUM
-         0mAXZ+t7Djh8EeqXMQySauAApd/MOvyJB8XIeDNiFB/7wbOv3BFw9y/xcjoUhGKHThVl
-         71aKPBptTF4qMYsPng1vZKXByCzQcJ+nZzvNGD8tP14Etu9osJRxf/uSdVA+msnk6h5k
-         SeSn/fTUuwZHl3OprGjHopTnF8/FDZzFRkJ9+1NOxpmCSh4JT+fZTJqwGbHRu2P2u0FD
-         Pt5TIvtTtR76hSdDbhy/xxondHbuhiJ/auwgbF7mz5P3Mi6PBF/RvSKt2zZCyl3ZGW/8
-         +/aQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/qe1pO0qn27Ia6ZxF8yBbnXcbcSSyJnvR0jSBqRpX2esMRULAq0OvhSIK0tWnaqDIX5va9CnUDmPtkdnc0c2A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznuI9Ns7Kv8pUzkO+70Cn407ImR9pwD5lJIIQj0CunReR//iEG
-	mi8xNnmaoev0+ZfK5ea7Wphvvzk6W1TYojLcJA8IlvsU0hKcYfv5KmMk08io79aDcLl4SRQxh/N
-	5HhmSVM+56+FET93gJ2i/UGFcSKyEWDg=
-X-Gm-Gg: Acq92OH7QWgMFPmdphZV9Pj7U5l8+nHBrhXpwqHzrlBXTTWBMXb/oCFSjDaOJy/N85+
-	7VI1JzseDrUnnBw8G4nmwtK0CFao581Iysijrg9ShtfhxqcQ+0fP/mL0GErX+xvC3FAyfnn5xd0
-	l0Qkwe3PreIpySfRlNSqQ6hUThp2NUPGhHnzhmXAjy2Hy4P7G6pOauA1xXoJj+JbEdqXy/g4bUi
-	GZNYjWQ9XqZ68rppvYQKNSdgfolvQb6PlLjHpmFeoL9zmcJx8vgnm/eUiN2O9tVsNF6h4M2SNjn
-	NbTePxw4maNqO3/0cA4=
-X-Received: by 2002:a05:6402:4510:b0:687:74de:985b with SMTP id
- 4fb4d7f45d1cf-68c8c561c0fmr4537725a12.14.1780293863001; Sun, 31 May 2026
- 23:04:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4Ta9VL3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D1051F00893;
+	Mon,  1 Jun 2026 06:04:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780293868;
+	bh=D91toEs75tfN2e3agWNlpL06x7LHPBsNnDRozKPi7mM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=F4Ta9VL3XzCuEHdjY5e3+OEz1hvm7ZmYt5kOdRjFkz/4lWwmjkozEtjxtnvmmXVtr
+	 Yj5ZV9IrVXdHy83y6ZVqS9L4BRHJh/fMADHZMuwFKtojUbJtuzld5+4G2Uf3hVIQpL
+	 lS25IwIVK5O5fndqv9N5qiEtx/+HrvcBEMm935Ql4Nebzho6JAtyFOHUt8m75OW0fv
+	 9gk4qh9kkfFAUWVZeX/tpYLuDSgkzyctRyHmAPak7Ff+rKa9Y/vf0j2iHBmFWbiS57
+	 LOdJ1Y7DRBDTN6FAb+e8g/SrlYa2tW+Z8nFwy4zAMb92w9jwsbsWz6kezrVVU8KwdN
+	 qbYXUx7k5xm/Q==
+Message-ID: <4af33a1a-2bd5-4be7-90f0-2bb3bc88fa81@kernel.org>
+Date: Mon, 1 Jun 2026 16:04:20 +1000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260528062155.3988156-1-hataegu0826@gmail.com> <178027560516.3443781.11705215616764330591.git-patchwork-notify@kernel.org>
-In-Reply-To: <178027560516.3443781.11705215616764330591.git-patchwork-notify@kernel.org>
-From: =?UTF-8?B?7ZWY7YOc6rWs?= <hataegu0826@gmail.com>
-Date: Mon, 1 Jun 2026 15:04:09 +0900
-X-Gm-Features: AVHnY4LCt-nmaivQzYgUXJGt-M1rknYJfRCxdAzPDptWZgfPUztbYR3IA_6FPwE
-Message-ID: <CAPa51z=boV2KH3Xkh8y0jrcENA+ZeS+5HsO=Pxdb7V2HFCVbeA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] bpf: reject overlarge global subprog argument sizes
-To: patchwork-bot+netdevbpf@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	yonghong.song@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
-	shuah@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org, 
-	yatsenko@meta.com, song@kernel.org, puranjay@kernel.org, emil@etsalapatis.com, 
-	martin.lau@linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net-next 04/11] mptcp: introduce add_addr_v6_port_drop_ts
+ sysctl knob
+Content-Language: fr
+To: Eric Dumazet <edumazet@google.com>
+Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org, mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260601-net-next-mptcp-add-addr6-port-ts-v1-0-4fc25dfef62e@kernel.org>
+ <20260601-net-next-mptcp-add-addr6-port-ts-v1-4-4fc25dfef62e@kernel.org>
+ <CANn89iL=os-60kDKqMDdyiXuPF5CG=eejS0vmthwpDGXz_Bp8A@mail.gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <CANn89iL=os-60kDKqMDdyiXuPF5CG=eejS0vmthwpDGXz_Bp8A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thanks Pavan, that answers my question.
+Hi Eric,
 
-I will drop this as a security issue and will not pursue the defensive
-data-path checks for bnxt_en.
-Thanks for clarifying the HW completion contract.
+On 01/06/2026 15:44, Eric Dumazet wrote:
+> On Sun, May 31, 2026 at 10:24 PM Matthieu Baerts (NGI0)
+> <matttbe@kernel.org> wrote:
+>>
+>> This sysctl is going to be used in the next commits to drop TCP
+>> timestamps option, to be able to send an ADD_ADDR with a v6 IP address
+>> and a port number. It is enabled by default.
+>>
+>> This knob is explicitly disabled in the MPTCP Join selftest, with the
+>> "signal addr list progresses after tx drop" subtest, to continue
+>> verifying the previous behaviour where the ADD_ADDR is not sent due to a
+>> lack of space.
+>>
+>> While at it, move syn_retrans_before_tcp_fallback down from struct
+>> mptcp_pernet, to avoid creating another 3 bytes hole.
+>>
+>> Reviewed-by: Mat Martineau <martineau@kernel.org>
+>> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> 
+> ...
+> 
+>>  };
+>> @@ -94,6 +95,11 @@ const char *mptcp_get_scheduler(const struct net *net)
+>>         return mptcp_get_pernet(net)->scheduler;
+>>  }
+>>
+>> +unsigned int mptcp_add_addr_v6_port_drop_ts(const struct net *net)
+>> +{
+>> +       return mptcp_get_pernet(net)->add_addr_v6_port_drop_ts;
+>> +}
+> 
+> Please use READ_ONCE() over sysctls.
+> This will avoid future patches from KCSAN bots.
 
-Regards,
-Taegu
+Good point, I will do that.
 
-2026=EB=85=84 6=EC=9B=94 1=EC=9D=BC (=EC=9B=94) =EC=98=A4=EC=A0=84 10:00, <=
-patchwork-bot+netdevbpf@kernel.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> Hello:
->
-> This patch was applied to bpf/bpf-next.git (master)
-> by Alexei Starovoitov <ast@kernel.org>:
->
-> On Thu, 28 May 2026 15:21:55 +0900 you wrote:
-> > Global subprogram argument checking derives generic pointer sizes from =
-BTF
-> > and passes the resolved size to check_mem_reg() as a u32. The access-si=
-ze
-> > validation path then uses a signed int, and stack pointers negate the v=
-alue
-> > before calling check_helper_mem_access().
-> >
-> > This creates a wrap when BTF describes a pointee size larger than S32_M=
-AX.
-> > For example, a global subprogram argument of type:
-> >
-> > [...]
->
-> Here is the summary with links:
->   - [bpf-next,v3] bpf: reject overlarge global subprog argument sizes
->     https://git.kernel.org/bpf/bpf-next/c/de36adca6346
->
-> You are awesome, thank you!
-> --
-> Deet-doot-dot, I am a bot.
-> https://korg.docs.kernel.org/patchwork/pwbot.html
->
->
+I see READ_ONCE() should be used over all other MPTCP sysctls. I can
+send fixes to net for those.
+
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
+
