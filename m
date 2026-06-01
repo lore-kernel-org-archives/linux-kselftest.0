@@ -1,124 +1,137 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7323A18B0A;
-	Mon,  1 Jun 2026 02:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780282058; cv=pass; b=qWXDoZ1TeDC1hgTj8qFAG/jPDDnijm2I+0l/gxHR9UMHJMkOkWEPKyAY7XOCXDUfTtQWCMRBtXEObrmwTaJYAGoIWuTfCTIiBEXKSrIopsWh5M5TXLOVuKxCRcQO1gUM0N28IUPQWlIDOhd2fvzc9/0F5XoUwjDmfgzhc+yuZvY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780282058; c=relaxed/simple;
-	bh=+cvRLTMfGFbpnFcw0p+gJeOVuz5qvmXtedBnn0RfWWg=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=TlZXSo6YenwDM3/8ozDN5KS45uUnsR/Z/Jlq5EllS/4Wsi+vOZHtNrgOYpSzpQkiyivQwP5ZyH2s7nsw1AgJf9cIuzrzWXw6y7eGhTCj5jMqPVQcVg6WEGVYb0yeH9x3iaSvd54p6sMCynsrywCye4LnbMzuSLt0h3fx2WjraZ8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=i4uWgPWD; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.beauty
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D27821257E;
+	Mon,  1 Jun 2026 03:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780283431; cv=none; b=hNNpQIbx1BNI74ooJkOLXRkH4h4wnrWJ8pIJtcBpkpBpLta5i3KTJQkQxJCuGemyfD+dgFmj6Ff3RwfJO5gbt7p6ygv9DpakHBinWO3dTMBeu8pop8hO7YyjqKUUHJ3lkY3HWVycTgxek9M5ZNTqcujL13IDkERFFJTjAIhOi/Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780283431; c=relaxed/simple;
+	bh=ne+DJHD93LLyymoAeSSDLgFRQhj1Q3IEaR9V1l8aPNA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BDPCWdYbiMv+9wrsY8Olo8vj7OV0T0yqbK2pSN839eLFxlxMsrm4PeliC64QC22FnM1xOHiqQWb3D60GWbtMNPBedUqAYNC4cjyW3u4jjSdO9on1VuDrrs49/RNER+9gWpeT8gsZqGn8uNDG8Wcj5MQTENjDChQNj6hoWCfwsGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XQhM+l1k; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b="i4uWgPWD"
-ARC-Seal: i=1; a=rsa-sha256; t=1780282022; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=VhevDLX+jcvxZX+UlQ+Wxz0FCFg+LjBiWzNfXWyC6bp6Q9wQBLfvAwEx84FhSc/2nYZEKzb5DRlJDZSC+u9RX6eI3lcoTwaTP+bngDtffMdxgy0dHAfNBeTwuHnvSQlf8j9fVwRw11AyP6yxXw5XpOCkIiIvlEkwtWG/5/Z4d9A=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1780282022; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=0j5y4eHjA2s58keIUCJbqELrbC/VcqvqjEm+eO/tp38=; 
-	b=lSbIdqfNnvt2r8wfFWL9TJ+mSRjbsNaoUAeAFJg3rV8UeQlrUH8z8wrM2DJBd7PlbInrPAjQ4JwEphoQnD7v2eRO2MXq2PDbzWRcJaeXyF4L0qVs4Bqqb8Svz7eFAY2K5Y3KGnaH4I4H5pxLkHOCyGl6Q85F+yD/E/pRtJko0Ok=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=linux.beauty;
-	spf=pass  smtp.mailfrom=me@linux.beauty;
-	dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1780282022;
-	s=zmail; d=linux.beauty; i=me@linux.beauty;
-	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=0j5y4eHjA2s58keIUCJbqELrbC/VcqvqjEm+eO/tp38=;
-	b=i4uWgPWDiFQiBL7nZhR4Fm2f/IlUPCFd62QikIjgStAEislo+YBK6vlj5POZsB6L
-	SDFxCJQfURcxOAO4XbXQQHGZW6alw1m02iJZzYSa4l2UMWxuMeb+PCHrQ/VfjKbqJsW
-	AK8cifPY6TEdUz6yVwpoT7hbCaJbJ8wLp6um5Q8k=
-Received: from mail.zoho.com by mx.zohomail.com
-	with SMTP id 178028202051664.08529719843057; Sun, 31 May 2026 19:47:00 -0700 (PDT)
-Date: Mon, 01 Jun 2026 10:47:00 +0800
-From: Li Chen <me@linux.beauty>
-To: "Christian Brauner" <brauner@kernel.org>
-Cc: "Kees Cook" <kees@kernel.org>,
-	"Alexander Viro" <viro@zeniv.linux.org.uk>,
-	"linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
-	"linux-api" <linux-api@vger.kernel.org>,
-	"linux-kernel" <linux-kernel@vger.kernel.org>,
-	"linux-mm" <linux-mm@kvack.org>,
-	"linux-arch" <linux-arch@vger.kernel.org>,
-	"linux-doc" <linux-doc@vger.kernel.org>,
-	"linux-kselftest" <linux-kselftest@vger.kernel.org>,
-	"x86" <x86@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
-	"Andy Lutomirski" <luto@kernel.org>,
-	"Thomas Gleixner" <tglx@kernel.org>,
-	"Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-	"Dave Hansen" <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, "Jan Kara" <jack@suse.cz>,
-	"Jonathan Corbet" <corbet@lwn.net>,
-	"Shuah Khan" <skhan@linuxfoundation.org>
-Message-ID: <19e8113d290.893abab26142069.5024234139508454104@linux.beauty>
-In-Reply-To: <20260528-madig-fachrichtung-fehlinformation-61117ba640da@brauner>
-References: <20260528095235.2491226-1-me@linux.beauty> <20260528-madig-fachrichtung-fehlinformation-61117ba640da@brauner>
-Subject: Re: [RFC PATCH v1 00/13] exec: add spawn templates for repeated
- executable startup
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XQhM+l1k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 839C21F00893;
+	Mon,  1 Jun 2026 03:10:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780283430;
+	bh=qOInkgrH4hk12Hs+AqpAJkTYyJwCGH22KfY2gfjsZ0w=;
+	h=From:Subject:Date:To:Cc;
+	b=XQhM+l1kZD0iM581UzqiOx2CvebDkvV9bc2TuP6IsgXpYpDrg0u2IAo3hvHeoak1H
+	 +rIwYhhtlKEOnWeS4n1wQ07MmeyuTSVPNSjxwVBn0JtGOTfUSNvUNMmWVDadB08Ww2
+	 m5zMifo1ZtXrtsvpIvkhBMoraFEvBny+NmkWriY1Yz3w+DsoSacqg8CM9PfKoRq6zp
+	 67ZageuR7Mozq5Rkaf1LselAgMm2cYBMT9j27TyVKHvCgcxavH7MbuXZW4HIeqiRM7
+	 v/v1CKR/FDDNRIomFt0SXkoU5Toi9sjzhavzoBCvO9zwjTodrsb6qODV1xeg/j6RFq
+	 nheZJDSf9KKUg==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net 00/10] mptcp: misc fixes for v7.1-rc7
+Date: Mon, 01 Jun 2026 13:09:56 +1000
+Message-Id: <20260601-net-mptcp-misc-fixes-7-1-rc7-v1-0-a5ae7791754b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWM0Q6CMAxFf4X02SZsTEB/hfggpWpNmMs6CQnh3
+ 636eG7uORsoZ2GFc7VB5kVUXtHAHSqgxzXeGWUyBl/7tj42DiMXnFOhhLMo4U1WVuzQYaYOm9D
+ 3gU6jD+0ElkiZfwcrDGAmXP6jvscnU/mGYd8/HaOACYUAAAA=
+X-Change-ID: 20260531-net-mptcp-misc-fixes-7-1-rc7-34884c9b246d
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Florian Westphal <fw@strlen.de>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org, 
+ Tao Cui <cuitao@kylinos.cn>, Shuah Khan <shuah@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+ Hannes Reinecke <hare@kernel.org>, linux-rt-devel@lists.linux.dev, 
+ Gang Yan <yangang@kylinos.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2224; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=ne+DJHD93LLyymoAeSSDLgFRQhj1Q3IEaR9V1l8aPNA=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBqHPgetCAlRRs5NJvuXuaCLQNMSOUzpOYc+yyIK
+ YyOEqVBbcGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCahz4HgAKCRD2t4JPQmmg
+ c96RD/46EzUoWxTwKhuU47LoUgTR+tUa4qxJc+WagSu32vb2ISXt1yibna8sVpSu3kJjF3/abxH
+ XALPE8bZK3zhDRvvV8WsFYTZqeDAa8SlVQZRx1Why93vtFkUdXqu0QVt24Pg7DHasksNQ40isl7
+ fDo1HtzKoKhci0c6+5buJY9rDcTXz1K/xnKUzF5XvlgtivLfP1RT07jCCX8WU0D9tXqtYyCBiFN
+ w0irMcLVjd489SEVig0/aUR8aSipWa7r16UK0DkXnqKJ/q/0BWVql8Cj9lMYyXRUDlEVTlPXIY0
+ U5qcW//ZiunkUylea4EmPyq+2XKfjr0KjtHHErIx/Geihe6kAQYXvqiG2GYjJ8xBmXkBvgHEJKV
+ w2jnnXL6FfmQsEFFtrm8XauYLgXHWiq1b6ilM8T9eq6Dhtxgqprw/m4UdAPuy3CWugbSF6RK7TT
+ d49d26ikFLnH4JikxhC4pxGsPfq30Lx4c9UgSpOtqQuh00DHHdHwV2xC/X6BFDvnkbXyAxptPQ4
+ p8hVMuljjAJpBfUPjMkHoabbKwskqoAkoL/34gVrJdRr3xbQ2eK7C30/82BCQGzMtPoq4ZkRvez
+ olfPKUvPAbAhi/thfnf7h3UuZ0r89v3Gtp4ZPvNpY9JUXJE0i1KXNyf3wItko4ZWCVOzNmkPusk
+ wh1JOfZ4chCXvTQ==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Hi Christian,
+Here are various unrelated fixes:
 
-Thanks a lot for your great review!
+- Patch 1: fix missing wakeups when multiple threads are reading from
+  the same fd. A fix for v5.7.
 
- ---- On Thu, 28 May 2026 19:02:53 +0800  Christian Brauner <brauner@kernel=
-.org> wrote ---=20
- > On Thu, May 28, 2026 at 05:52:21PM +0800, Li Chen wrote:
- > > Hi,
- > >=20
- > > This is an early RFC for an idea that is probably still rough in both =
-the
- > > UAPI and implementation details. Sorry for the rough edges; I am sendi=
-ng
- > > it now to check whether this direction is worth pursuing and to get
- > > feedback on the kernel/userspace boundary.
- >=20
- > The idea of having a builder api for exec isn't all that crazy. But it
- > should simply be built on top of pidfds and thus pidfs itself instead.
- > It has all the basic infrastructure in place already.
+- Patch 2: fix retransmission loop when MPTCP checksum is enabled. A fix
+  for v5.14.
 
-Yes, that makes a lot more sense. I was staring too hard at the "hot
-executable" part and made the cache/template the API, which was probably
-the wrong thing to expose. Sorry about that.
+- Patch 3: fix a TOCTOU race while computing rcv_wnd. A fix for v5.11.
 
- > Any implementation
- > should also allow userspace to implement posix_spawn() on top of it.
+- Patch 4: allow subflows receive window to shrink if needed. A fix for
+  v5.19.
 
-That's so cool, and this is a really useful point. I had not thought about =
-this as
-something that could sit under posix_spawn(), but that makes the target
-much clearer. It should be a generic exec/spawn builder first, and the
-agent use case should just be one user of it.
+- Patches 5-6: avoid 'extra_subflows' to underflow with the userspace
+  PM. A fix for v5.19.
 
- > fd =3D pidfd_open(0, PIDFD_EMPTY /* or better name */)
- >=20
- > pidfd_config(fd, ...) // modeled similar to fsconfig()
+- Patch 7: report errors if one subflow cannot set SO_TIMESTAMPING. A
+  fix for v5.14.
 
-Reusing pidfd_open() with an empty target is nice because it keeps the API =
-close
-to pidfds, but I wonder if a separate entry point such as
-pidfd_spawn_open() or pidfd_create() would make the "new process
-builder" case a bit more explicit? Either way, the configuration side
-being fsconfig-like makes sense to me.
+- Patch 8: try to set TCP_MAXSEG on all subflows, before reporting
+  errors, if any. A fix for v6.17.
 
-Thanks again for pointing me in this direction. It helps a lot.
+- Patch 9: avoid a lockdep splat when PREEMPT_RT is used. A fix for
+  v5.10.
 
-Regards,
-Li=E2=80=8B
+- Patch 10: check desc->count in read_sock, to act as expected. A fix
+  for v7.0.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Gang Yan (1):
+      mptcp: check desc->count in read_sock
+
+Matthieu Baerts (NGI0) (3):
+      mptcp: sockopt: check timestamping ret value
+      mptcp: sockopt: set sockopt on all subflows
+      mptcp: pm: avoid sleeping while holding rcu_read_lock
+
+Paolo Abeni (4):
+      mptcp: fix missing wakeups in edge scenarios
+      mptcp: fix retransmission loop when csum is enabled
+      mptcp: close TOCTOU race while computing rcv_wnd
+      mptcp: allow subflow rcv wnd to shrink
+
+Tao Cui (2):
+      mptcp: pm: fix extra_subflows underflow on userspace PM subflow creation
+      selftests: mptcp: add test for extra_subflows underflow on userspace PM
+
+ net/mptcp/options.c                             | 43 ++++++++++++++-----------
+ net/mptcp/pm.c                                  | 18 +++++------
+ net/mptcp/pm_userspace.c                        | 14 ++++----
+ net/mptcp/protocol.c                            | 10 ++++++
+ net/mptcp/sockopt.c                             | 15 ++++++---
+ tools/testing/selftests/net/mptcp/mptcp_join.sh |  4 +++
+ 6 files changed, 66 insertions(+), 38 deletions(-)
+---
+base-commit: 78ef59e7a6459b16f8102e0ee1c718443323d1af
+change-id: 20260531-net-mptcp-misc-fixes-7-1-rc7-34884c9b246d
+
+Best regards,
+--  
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
