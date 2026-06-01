@@ -1,91 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5603BCD21;
-	Mon,  1 Jun 2026 14:28:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B993BB665;
+	Mon,  1 Jun 2026 14:28:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780324094; cv=none; b=ga1tAql6CVtvcEEXAw1Czj05Qa7kfRQKgO6A3YbjmHypy3Dx0FrcR7+nSQdqiidcemCrq5d+JHtpULW44er9sm6+FJl7WzRfi3VpdxDiqIoz0SVs6HD6cmCXgEWVqPUOZ5HXrPBPo6H8i3MGFDV1jDGs6cw0YpSKq+JqtmaBAZo=
+	t=1780324137; cv=none; b=Ov5CQhHMeQU8gorssuyrh0dO51ccep31Wg2U33btUPkm/1KnVytlOhwnXyiTT0RKGtlVt+25wVv2EaWRvQeoOqcf2R6lf6puPSwtvypJ7V/Bjg3v9h+K+fvW54RKw7egPxMf89D069QlsKzNafXmrKsVBilDkxtUpT61xUMlybY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780324094; c=relaxed/simple;
-	bh=10APA1ND6c/CRRfTMXxUj+BVUJHTq7rw9W9oc99qujk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NZz+JaisxRmh+PO7m498cx7LWmtGKuD/clAi+3cp0aeFnqqjwBADjYBYzEP+gE4iruulBA5rlb/3r9H3qft3PwZ72QJNF/FqD/ACoY58BFQWFEnhX3bb5ov1ycSJ8CtLBSoBD9PPx3mg4/f2uFrDgyZ15iiiDDG1qNUF1GYsP6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mlOKopaJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780324137; c=relaxed/simple;
+	bh=8/ca+0M4SBA42pS5FYJaE05C0A9HuumcGZpX/LoJbSY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o3W1u9XaGvnL2g8wg99JuBDpaM8ka+cxVXd21cdfYYT49ARxYGhLOStNIey9V4o54JVU6QiNYDVd63gjZq8zf0B/OSg5u3li+iSoxWeu0ACTDqIJAelOKhxjv1lClEccuS4/bt4Ofi+6N/Ca9mDkk3qRvWnAj/qiSHA4peA4CIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MFBQ3wnU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mlOKopaJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E14C31F00893;
-	Mon,  1 Jun 2026 14:28:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MFBQ3wnU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B6321F00893;
+	Mon,  1 Jun 2026 14:28:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780324093;
-	bh=3OLRhnatnK7tdv0pe9AybKgTFqBAbVUiK1/01rd5ffk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=mlOKopaJwZrsEmH007+4VQ5cd0S0KeDv82LVgOMZQVobyb8WDoFT15krOPiRD0FG2
-	 dbpUWcP6Hwa/kT+rY2HzXjDMC7XwDWi3vdIge2IonOiDJT3yrIs56TquV1QmqrjWYw
-	 F/DaM9/UfP3f+/HVoQApbVZKHopIBhfQux6o+1qDz+rbLjh8he1iDp2QA/7ZqoXx1p
-	 Msb/8/+Wwkr87ynTGDyZn71BY5aq0mhWVs/kSeSLD1d5yZS7z6rKWDljdsE54Q2Ywt
-	 lEf/HuusMPdgh9Aqp5AMTU3VKLR60fPuNaumCPqx+jukcLLKcFnl1WNXHTFFD4WRck
-	 japyYGDDlZUOw==
-From: SeongJae Park <sj@kernel.org>
-To: Kunwu Chan <kunwu.chan@linux.dev>
-Cc: SeongJae Park <sj@kernel.org>,
-	shuah@kernel.org,
-	damon@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	Kunwu Chan <chentao@kylinos.cn>
-Subject: Re: [PATCH v2 0/3] selftests/damon: misc fixes for test bugs
-Date: Mon,  1 Jun 2026 07:28:01 -0700
-Message-ID: <20260601142802.111592-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260601032314.424013-1-kunwu.chan@linux.dev>
-References: 
+	s=k20260515; t=1780324136;
+	bh=QcytDXYzPwKDUDdHT+N4i8ojI54d4gwtkmZUP60KdkM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=MFBQ3wnUVZEzgVXBP7n6BLHSXSE0qD9Bm7vwoXNVZtdHWBlM9NTq0i+K9RQXuhWw9
+	 mBZioXbaFvlvWuL3ExgLdSna7SwlLK2S8Qy1eI6fmf7bFYCb2kPhK2H7MGPfkRbcWk
+	 R1q8n30NM6cuQZA09wD2pSFpVduh/yZgcmHrKV7JBRTpa+YrDoE/bKJ2AOHrTpFQYT
+	 dFsQTkYS0tr4YjM0Ge0bCWiaErT/4amvCgJjqwaNBn6asSlXPArhxDM1uDzTAst/Pz
+	 u7c9uwrYL4zA9u3HHEHZGX29EjtDsaOPQmZxaR8BcGfuodvdzymTg8ObRVJENl1as/
+	 6sORXGX2T0SjA==
+Date: Mon, 1 Jun 2026 17:28:45 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, akpm@linux-foundation.org,
+	peterx@redhat.com, david@kernel.org, surenb@google.com,
+	vbabka@kernel.org, Liam.Howlett@oracle.com, ziy@nvidia.com,
+	corbet@lwn.net, skhan@linuxfoundation.org, seanjc@google.com,
+	pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com,
+	sj@kernel.org, usama.arif@linux.dev, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+	kernel-team@meta.com, stable@vger.kernel.org
+Subject: Re: [PATCH v5 04/18] mm: skip out-of-range bits in mk_vma_flags()
+Message-ID: <ah2XHd4SQOj6iG8Y@kernel.org>
+References: <20260526130509.2748441-1-kirill@shutemov.name>
+ <20260526130509.2748441-5-kirill@shutemov.name>
+ <ahmQvfNk7S4F0LBj@lucifer>
+ <ahsVyQZ5UXhJLct2@kernel.org>
+ <ah2SL2c0nMj0KBtP@thinkstation>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ah2SL2c0nMj0KBtP@thinkstation>
 
-On Mon,  1 Jun 2026 11:23:11 +0800 Kunwu Chan <kunwu.chan@linux.dev> wrote:
-
-> From: Kunwu Chan <chentao@kylinos.cn>
+On Mon, Jun 01, 2026 at 03:08:19PM +0100, Kiryl Shutsemau wrote:
+> On Sat, May 30, 2026 at 07:52:25PM +0300, Mike Rapoport wrote:
+> > I have a PoC of yet another alternative:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=uffd/vm-flags
+> > 
+> > The idea there is to keep a single VMA flag, VMA_UFFD_BIT/VM_UFFD and move
+> > all the rest into what's now struct vm_userfaultfd_ctx.
 > 
-> This series fixes several bugs in the DAMON selftests.  Most are
-> trivial but cause tests to silently pass when they shouldn't, or
-> fail prematurely on slow machines.
+> Nice!
 > 
-> Patch 1 fixes mutable default arguments in DamonCtx.__init__()
-> that cause state to leak between test instances.
-> 
-> Patch 2 fixes wrong operator precedence and join TypeError in
-> damos_tried_regions.py.
-> 
-> Patch 3 fixes several wrong strings that produce dead elif
-> branches, skipped file existence checks, and broken dict key
-> lookups.
-> 
-> Based on next-20260529.
-> base-commit: 7da7f07112610a520567421dd2ffcb51beaefbcc
-> ---
-> Changes in v2:
-> - Fix From:/Signed-off-by mismatch.
-> - Add Reviewed-by tags from SeongJae Park.
-> - Drop the duplicate memcg_path fix.
-> - Drop the empty aggregation-cycle retry fix pending root-cause
->   investigation.
-> - No code change
+> I assume it can go on top what I did, right?
 
-From the next time, please add links to previous versions [1].  For other
-readers, the v1 of this series is available on the mailing list [2].
+Yes, it's already on top of a previous version of RWP.
+ 
+> -- 
+>   Kiryl Shutsemau / Kirill A. Shutemov
 
-[1] https://docs.kernel.org/process/submitting-patches.html#commentary
-[2] https://lore.kernel.org/20260531085633.48626-1-kunwu.chan@linux.dev
-
-
-Thanks,
-SJ
-
-[....]
+-- 
+Sincerely yours,
+Mike.
