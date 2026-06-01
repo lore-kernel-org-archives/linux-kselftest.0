@@ -1,167 +1,166 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF59133DEE0;
-	Mon,  1 Jun 2026 17:31:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1393E1718
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 17:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.170
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780335073; cv=pass; b=j7MtPpu5dZ7cgHLQluLjUYIFyDRBxB2iYJHULqHKRgUwYbbopefX+oDaZZlOuaQCV3r52i6ycp3pD1vGHZr7H7YIjTs0yKrHjdPCoIDIuBNrJtXQFOHI6s2S06HfBVA+v793VHt6j8BptbWZlEEZUR9CJOImcL8biVizQJFAPyw=
+	t=1780336674; cv=pass; b=duTRyS8UhmE1Hi8GqtSMggjvolQwaAIDvAfTuN4DNp3LW0J1qRBsIHi5TRpftYcYTeYBX2iTSwCVn9GrKvMBHCrVzHX4KYbMVd4WpgBj6AGkSIFgvCodC8Nf7SB6TxjMvk7zA0M4qRRkdtjmTL3YyDPHiBryFeeJQcJ1Ei2OCdI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780335073; c=relaxed/simple;
-	bh=gVs1fQHCTMN8AaO4JEtra9mFsuHwycI0WcRQ0JYWYEw=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:Content-Type:Date:
-	 MIME-Version; b=WTEunf8MMjHbr/OVBQkosWdSzOVRfon/TC03YTPkdOIesDtH/No5Hn+hSL3W1/lT+3dMdQJYZi7WIIFp8nedjcUW7yJRF2quhTwMX/+5CwiOcakPmHsyTDNIVTKkjNrYD8mejZo2UD5R5r3H22JJVzzYfvVPtvfAap9sk5gEqDo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b=Mkuc/zZb; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
+	s=arc-20240116; t=1780336674; c=relaxed/simple;
+	bh=jS/ZEKJo2ddAZIP+307JZp0uZcdcPAaQg1XEpdiajmQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hrxTNcN8YJv0v0b3FIQC6LGnrtoLZeL45NHRWxutJV64AbxsZLzTp8TgHfZao5w5Du+8XmvTn3G/AaXdQvzxPfe7TlvfrrN8JyN74WF/WNLJOm+JvcCskQ1mOm1skiMBOTt6DZ5iYXAYa71OVLseRpOyCtex6Mp5M4xVbJtPSV0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=Y8gObGVn; arc=pass smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b="Mkuc/zZb"
-ARC-Seal: i=1; a=rsa-sha256; t=1780335066; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=HuTdqn9Wz6hgF79OOyZqoFGXN3/9TaodJEettxDk6mXOnaRcLyuUX0i8Rn62X5ZyNdtK5QhvIczzSZFixEFacGgwnj41HqsVoSBTB5DIghlV4F+CHTPHLnkVTRdlBO4X9AUkjo8drj6LoxfEUJvYB3s8P0QU2wW1fWOztN5AP+s=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1780335066; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=TErnEhvYQocHA/w+yxxFJm1xhoVlzroH2fCaIXyAGr4=; 
-	b=AnqnNMQEKIKQxpdZRquJl7ioOnfbdOIb0hPCyTkd2FxkmOlYcC11djQ81CMSEkqTl3PVbib5tInG9lU9gOE62FTtLFteLvH8GOYFSoM3EsS7fEqc/9eYeISIBwli/dEdo3cR4Z2qQKmiVdU3Ejr18UZORVAOX+74Toz3/3LIDGI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=rong.moe;
-	spf=pass  smtp.mailfrom=i@rong.moe;
-	dmarc=pass header.from=<i@rong.moe>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1780335066;
-	s=zmail2048; d=rong.moe; i=i@rong.moe;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:In-Reply-To:Content-Type:Content-Transfer-Encoding:Date:Date:MIME-Version:Message-Id:Reply-To;
-	bh=TErnEhvYQocHA/w+yxxFJm1xhoVlzroH2fCaIXyAGr4=;
-	b=Mkuc/zZbwCwH5vN1yJ1fQKgVl76/tFfAPnJUmtuxd/oP+fWaZlQ6opAJsrTTKDZO
-	AAKdHyH600dVW3IjmgfctaIzP94bfaun0YPXsbSS5HQBGPRxhOREzIdxopOuX79e8dB
-	IdQv2Tk0ymw6nsquiVvHHdhPgSYwOdv7768ll3IjpNo6wjzx/tEJ955D3ipIRA+qIdG
-	/6LxtniwtCGIqoU7Jkz80kNKqJ7OWrtR2Vm+pSRCren8du98s8Wbq9bg+DPei21JRMq
-	pfGguxzPEqe5xu1aiv/iLxYw/YxdbpDDcU4uiuYbrTVFXsoFd/gTtYkWJyj9nmxQtKb
-	7S2Wt5nu9A==
-Received: by mx.zohomail.com with SMTPS id 1780335064918433.33760150363105;
-	Mon, 1 Jun 2026 10:31:04 -0700 (PDT)
-Message-ID: <fb198851093477d958eae61665e9cfda0be5b48f.camel@rong.moe>
-Subject: Re: [PATCH v2 1/4] HID: multitouch: set INPUT_PROP_PRESSUREPAD
- based on Digitizer/Button Type
-From: Rong Zhang <i@rong.moe>
-To: devnull+peter.hutterer.who-t.net@kernel.org
-Cc: bentiss@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org, 
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, peter.hutterer@who-t.net,
- shuah@kernel.org, 	vadim@cirque.com
-In-Reply-To: <20251222-wip-hid-pressurepad-v2-1-054ac9689bb7@who-t.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 02 Jun 2026 01:25:57 +0800
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="Y8gObGVn"
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-7e3b2a435ecso14760767b3.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 10:57:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780336672; cv=none;
+        d=google.com; s=arc-20240605;
+        b=CoNH0Vx8iyGVr0HzFZSrPYg79oCU1q5dLeR8OcH+Mxev3UglTkHxta5IfZq+3FC1yM
+         g95ufwqabU/chtqTDUnnGFj0EpD4et5IxSSDvmMNPRUNwg22tP/I5LspmVq/At3jpX/R
+         rIni86YsCzLeXJl1+YS5U7JzcaV5ssf9HvXeeDbO84vWKj+UBMfh0ryAek1MVWCqnKk9
+         vQp5JD5YNN+WIp3C3Gmv7oP1PVHpIHuNjD61WLVeT/u1HkiXUByZjd1kWG+iOPK2PWqX
+         l1J5+00r8z2+Bn99hbG793pks/ZAqQfH/AQjbQK1Hy1Yhgqd0YxboX1LYJHl0ATqBxof
+         qQQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=FfE0OEt10KoqyrBxkVX83evIZS2y+17Dt49yMyisaOQ=;
+        fh=DxvRGCEPB2afRa7Hm5UKEqMvs3CYg2Hdpnmf+aqyE8Q=;
+        b=GcWW/TwSzrRJtjJrp2FlPT8hzGd81TDANcerp55oE53WAO4ow4PO6ev+0aTYG/WBRa
+         jn9hr5J9WMBevW4oVI9N221VrcqIpOOpnOcx7goRLi8SJ7FuaQZO+pwCbM/y5Ro8wod3
+         owSHaQ9BWuszGzmrs6HOkfH31y690CXo0f2q9EEyqHwJYPkEPA2JWX3VHDo4I5oDEJKG
+         cdCI8/Ym+5NDsPTsFldyoqKa8pgwyD677QN0WuaPJfi3BxhdHilMvsbJ+J9rgbZYWWNy
+         3iGBwN5SQ1tH7+U9nKhWZZ5IzpWDLFgDtVK8pYa5p906Zezw767o5cJflj8UZgXgtiVd
+         LZtw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc.com; s=google; t=1780336672; x=1780941472; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FfE0OEt10KoqyrBxkVX83evIZS2y+17Dt49yMyisaOQ=;
+        b=Y8gObGVnIQEkypCR7OU54mIgGNbVOHe4Lc+1yn54ancdyLNe/ih/f4zzt4VmsHT7EB
+         RcPsTBQfqLYFQ6z9qGGt6Hnp4NdvbwA1OzEBLeC/STfKaFf6nQgEoDYPf1ZdUW9tXXYj
+         wK6bHimi4TPbAe2xSk0JJgnRZupzA30ZYcNUazyMd5RuTQQ4xAmpSZUzzsyxW2d845tZ
+         JeGBx8MP8Ex75k/0VfMVmqYFjS+ayM+mX3glfVuyIGxADVqmHlK2DF/NCYjZJNrQhBfL
+         1lgIuk4qmCInUBEv5T1GCUMJs7lsB0TUmfS5l0zFgGPja4SnPZO/pZ6g4p35D2qoPDIM
+         mQUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780336672; x=1780941472;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=FfE0OEt10KoqyrBxkVX83evIZS2y+17Dt49yMyisaOQ=;
+        b=LWl9R7lQ0yCEuduy2Zrac0f34h2LfZmo5rfbMMrCCEn+CDU7mxZdKu23Stnhp2arW4
+         XSgJ6C7KI063O0hU539/fDj7KKrh1kc72i3DwI8VtFye7KWeDI1DnxdIrIldB2KUr2Du
+         sibVnVfcIYcOs4OkfDozLM03cVSUmtpvU0Hof3kD8b/gPTwDxcjN79iT7BBa8bEHVHNp
+         khrHz2kJ6qDXcKOerMHwlM4xCad7eYTosMRWsexYxACBEK+xMjFhWW5GYrspTelsWJ3T
+         UZ6I5QIAokTlJ8wfx7aSIlhkM9m09il4LZ7BySnKjeJXXK9W9F0MCcnTCmSgLlBLRSn3
+         obNg==
+X-Forwarded-Encrypted: i=1; AFNElJ+Dc0X8ywv/TlJ1rG7y2WoV/X27ThZEtllYdoQ+zFwf4kjtqLqDu5uGl8DRiysZROQ/Jk5UO47bG6QsxnKATZg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhvJZ5nebkPRoYOJtCnksA0MmwrFcWUthyvGNWGmaI3MIRu54l
+	p6sOtH8VkvTFSembl4XNjFxvo7E0QZh14admuVhilHLAdh47Tg8JgjCWCR726tWoQWMh9ThZCUk
+	8EnBWYXSFRrF3xcLkBd3SF4kltpb8gAB6QkYRTDXgFA==
+X-Gm-Gg: Acq92OGrrY9Q8JFwYLnhGbq8kCyWLuVrDiwg4V8Vshlh1IdTDnvI7aRb83U6wB64lhS
+	vxsRk4zu8OpkCSHYZjygLCZ6EjBnmIUPhqL6lR5S/tX7Hldm8GhtC4QInq1kvWOG88UZdr4Ldz+
+	Ov9Io+WkUTlMoMn5LJozp558AThUeghO/C+flOB6yztTc3xMBy5z4FTfghxjPQFLEzVGs/s61pC
+	bXp56HfRDKMlwc833E3oUyFwC2If/dze6lgeU2tBqYtIhQJk6hsYRQwdygli1qi/kj9N5INvg+y
+	QMAiF6pZe2QNDEuskITrcvLTmambM7Y6P++3UC4cucOkCb/WEyc=
+X-Received: by 2002:a05:690c:30a:b0:7be:5f3e:5309 with SMTP id
+ 00721157ae682-7e05e853e5amr107636127b3.38.1780336672104; Mon, 01 Jun 2026
+ 10:57:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.56.2-9 
-X-ZohoMailClient: External
+References: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com>
+ <20251112-v5_user_cfi_series-v23-6-b55691eacf4f@rivosinc.com>
+ <87jyslndo4.fsf@igel.home> <CAKC1njS=AHu6uHrH4ae8VxcdEbhgiPXYCAoN3F_mnppBd3SwOA@mail.gmail.com>
+ <875x44o9hj.fsf@igel.home> <CAKC1njSn_rtCj8ii876PNQTk0nsCTfWsb4DzdymufHVthh1Rkg@mail.gmail.com>
+ <871peqgp9v.fsf@igel.home>
+In-Reply-To: <871peqgp9v.fsf@igel.home>
+From: Deepak Gupta <debug@rivosinc.com>
+Date: Mon, 1 Jun 2026 10:57:41 -0700
+X-Gm-Features: AVHnY4J9AUNhuz056EYoPs-ULzO8_fe_9tgwbVh_N3bHNsdR65FJv6ifxqCKuXk
+Message-ID: <CAKC1njR+dTdvp+BmLGPtgd8dufiUwBtkQ9a-qinELT_Fmi13sQ@mail.gmail.com>
+Subject: Re: [PATCH v23 06/28] riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
+To: Andreas Schwab <schwab@linux-m68k.org>
+Cc: Deepak Gupta via B4 Relay <devnull+debug.rivosinc.com@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
+	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
+	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
+	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
+	rust-for-linux@vger.kernel.org, Zong Li <zong.li@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Jun 1, 2026 at 10:10=E2=80=AFAM Andreas Schwab <schwab@linux-m68k.o=
+rg> wrote:
+>
+> On Jun 01 2026, Deepak Gupta wrote:
+>
+> > This was settled when x86 introduced shadow stack. Instead of having
+> > new `PROT_`, it was agreed to create a new syscall for mapping shadow
+> > stack memory (syscall: `map_shadow_stack`). Scenarios like `clone3` or
+> > co-routines required manufacturing a shadow stack, thus necessitating a
+> > new mechanism to create shadow stack style memory in demand. Instead
+> > of having a new PROT_ flag,  a new syscall was created.
+>
+> So what prevents riscv from making use of VM_SHADOW_STACK similar as
+> x86, without the user visible effects?
 
-Hi all,
+riscv uses `VM_SHADOW_STACK`. It's just very simple to use `protection_map`
+with just `VM_WRITE`. On RISC-V, `-W-` is a shadow stack mapping. It's not =
+same
+on x86 or arm64. So `protection_map[VM_WRITE]` simply picks shadow stack
+encoding. We just ensure that PROT_WRITE is converted to
+"VM_READ | VM_WRITE" at vma level.
 
-Hopefully I'm not too late to show up here.
+see commit message
 
-> From: Peter Hutterer <peter.hutterer@who-t.net>
->=20
-> A Digitizer/Button Type value of 1 indicates the device is a
-> pressurepad, see
-> https://learn.microsoft.com/en-us/windows-hardware/design/component-guide=
-lines/touchpad-windows-precision-touchpad-collection#device-capabilities-fe=
-ature-report
->=20
-> Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
-> ---
->  drivers/hid/hid-multitouch.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-> index 179dc316b4b518d78bdc900d9fd15756c5eba83e..382e6f50c4f7e663af7d028ab=
-b8be7cb2e6e7b8e 100644
-> --- a/drivers/hid/hid-multitouch.c
-> +++ b/drivers/hid/hid-multitouch.c
-> @@ -81,6 +81,7 @@ MODULE_LICENSE("GPL");
->  #define MT_INPUTMODE_TOUCHPAD		0x03
-> =20
->  #define MT_BUTTONTYPE_CLICKPAD		0
-> +#define MT_BUTTONTYPE_PRESSUREPAD	1
-> =20
->  enum latency_mode {
->  	HID_LATENCY_NORMAL =3D 0,
-> @@ -179,6 +180,7 @@ struct mt_device {
->  	__u8 inputmode_value;	/* InputMode HID feature value */
->  	__u8 maxcontacts;
->  	bool is_buttonpad;	/* is this device a button pad? */
-> +	bool is_pressurepad;	/* is this device a pressurepad? */
->  	bool is_haptic_touchpad;	/* is this device a haptic touchpad? */
->  	bool serial_maybe;	/* need to check for serial protocol */
-> =20
-> @@ -530,8 +532,14 @@ static void mt_feature_mapping(struct hid_device *hd=
-ev,
->  		}
-> =20
->  		mt_get_feature(hdev, field->report);
-> -		if (field->value[usage->usage_index] =3D=3D MT_BUTTONTYPE_CLICKPAD)
-> +		switch (field->value[usage->usage_index]) {
-> +		case MT_BUTTONTYPE_CLICKPAD:
->  			td->is_buttonpad =3D true;
-> +			break;
-> +		case MT_BUTTONTYPE_PRESSUREPAD:
-> +			td->is_pressurepad =3D true;
-> +			break;
-> +		}
-> =20
->  		break;
->  	case 0xff0000c5:
-> @@ -1393,6 +1401,8 @@ static int mt_touch_input_configured(struct hid_dev=
-ice *hdev,
-> =20
->  	if (td->is_buttonpad)
->  		__set_bit(INPUT_PROP_BUTTONPAD, input->propbit);
-> +	if (td->is_pressurepad)
-> +		__set_bit(INPUT_PROP_PRESSUREPAD, input->propbit);
+"""
+Earlier `protection_map[VM_WRITE]` used to pick read-write PTE encodings.
+Now `protection_map[VM_WRITE]` will always pick PAGE_SHADOWSTACK PTE
+encodings for shadow stack. Above changes ensure that existing apps
+continue to work because underneath kernel will be picking
+`protection_map[VM_WRITE|VM_READ]` PTE encodings.
+"""
 
-I noticed that this leads to dual reporting on my device.
+As I said other arches have a VMA flag for shadow stack range but PTE encod=
+ings
+and overlays are complicated.
 
-Consider previous checks:
-
-	if (application =3D=3D HID_DG_TOUCHPAD) {
-		mt_application->mt_flags |=3D INPUT_MT_POINTER;
-		td->inputmode_value =3D MT_INPUTMODE_TOUCHPAD;
-	}
-
-...
-
-	/* check for clickpads */
-	if ((app->mt_flags & INPUT_MT_POINTER) &&
-	    (app->buttons_count =3D=3D 1))
-		td->is_buttonpad =3D true;
-
-... where `td->is_buttonpad' is set to true when a pressure pad has only
-one button, i.e., the "touchpad button integrated with digitizer" [1].
-Most (if not all) pressure pads fall into this category. As a result,
-the presence of INPUT_PROP_PRESSUREPAD is always accompanied by the
-presence of INPUT_PROP_BUTTONPAD.
-
-Since the corresponding testcase neither expects dual reporting nor
-prohibits it, I am confused of the intended properties to expose. Is it
-a mistake or an intended behavior? If it's the former, I am going to
-submit a patch to fix it.=20
-
-[1]: https://learn.microsoft.com/en-us/windows-hardware/design/component-gu=
-idelines/touchpad-buttons-report-level-usages
-
-Thanks,
-Rong
-
-> =20
->  	app->pending_palm_slots =3D devm_kcalloc(&hi->input->dev,
->  					       BITS_TO_LONGS(td->maxcontacts),
->=20
-> --=20
-> 2.51.1
->=20
+>
+> --
+> Andreas Schwab, schwab@linux-m68k.org
+> GPG Key fingerprint =3D 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC=
+1
+> "And now for something completely different."
