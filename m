@@ -1,193 +1,173 @@
-Received: from outbound.st.icloud.com (p-east2-cluster2-host7-snip4-10.eps.apple.com [57.103.78.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838E025B090
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 04:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.78.53
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E1B25B0B9;
+	Mon,  1 Jun 2026 04:56:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780288703; cv=none; b=YUU950fgaYxu9aXa1kwoBkYj25/QxRnZoobr+Kh503C3pUaa0N9esL+MpfWPjCyCy7gzdWOvUwfAZxOoTJOOZFBVXYWppZ/n8mhsZx3lASiy9qQLGqECW7no0+imMcNdk3MoQN5ruUAvC9nLYactDsspjFWz7alk5cSKl+RRAbI=
+	t=1780289819; cv=none; b=jlqxH4GAvlITHcnf1COrus/dKiwRPQxGmvWLH/x5byrJ+utMb+j9HI2nTDJk3RmGkOr6fRaDfgkTj9XmDFZ2RYvYYbuyyNh8NVIhtTDPW7qGOgIUlt/FbkdCcaq9fc+1ptuMPcMT/9N3W18ghB20F6Z/n187GvaX45ChMxpdymM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780288703; c=relaxed/simple;
-	bh=M5KXcHZLLCjiSOAXT/6Zty8mqvZnR+CJHcL1M48YmZg=;
-	h=Content-Type:From:Mime-Version:Date:Message-Id:Cc:To; b=bWB6kkzO4ZBDmiRJbCGitkVjg0JLno9Jf3fuePR/NME0QHYXhQzHW0qw/Zs1Pe3TGrLSSiTOT15u5IJRm5k/lIXq4zNoJbwu+lPQb6sGGycRNmUGPJUmuD0HClcw19X5i+YFtSqA/dwLwsRZp8Ijcs9U+OC2RZ/b2h9+hk3KMVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=p7RM5uWB; arc=none smtp.client-ip=57.103.78.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+	s=arc-20240116; t=1780289819; c=relaxed/simple;
+	bh=uh04jOx1nBkRcF0Uf+qmlp1xwS9hdzC1jSrjru2+IQE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nrqZOaimYef0mIAzO/J1pV0wM+L6AwBN7QjasKeZXnxCw8nANRHzCbitudpGY2rAiqIND6Mki/hEil1DrQNVaQwnwrNEGbuBv6aIqvmi/EximpeI2FdsNRioeTrJm0AsR4JW/fYpUkPObDGr20bszUL2Z4IpHxNp/BJcU4kykpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=HaUyy/Q3; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="p7RM5uWB"
-Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-20-percent-1 (Postfix) with ESMTPS id 49107180035B;
-	Mon, 01 Jun 2026 04:38:19 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhACkMFWwFeCEgFQwZeAFBcHA4OXxlbAxcfRghFGVcCVkgEVAIrWxNVF0YJGQhdHRkeV1BeCF4fTBwdDlgGEgJaRQJZFwNXHFZFXBhDCV0FVxwdHkNFWxNVF0YJGQhdHRkIRx8KMANCDlYDQwdFAC0ZHFdQXgheH0wcHQ5YBhIdUBwOUXIvCkcBPAFaGltxNHtVB1wGWB8xD0wLQHYuBkZ8OXBZASoDNHkRUAFYHlZeWhdeUxcfSwBcRVoOWwRHFA==
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1780288701; x=1782880701; bh=8HjiOho8L2jW+i0Jru4sQZRWcNoS66uzGYMY1giqctw=; h=Content-Type:From:Mime-Version:Date:Message-Id:To:x-icloud-hme; b=p7RM5uWBL+MIGMX8hVmyvr1btwE4BTJ1Z+qG+aHhVPcIqBI//Rm+IkIOCkeQ6fy5IXUd3v+ks3fgLqMiQZJh8BLy6PDyXL4At3Skh3LHNkfgsaREqQ34mhcmrnoiH9RVLKmVDc3TZBpKVUZFiNfK8IA5fga6A3AmwJqlABDiZS4xJ1CYezpG5xIHxQKh4y4uzj+32JQofU//wC7xrCiQAzjtoNlFh2sCwhtQXDmG1AJ+Au/sIaivuYmHxwD8GbxeCZLfz0oFFaa4tZjZHwvdh9gVpy9ckRIAipTwnrFPHEkrCySGtm8oRgIc4N6j2HKVkz9nnTPsGr5jvIPi89CuMw==
-Received: from smtpclient.apple (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-20-percent-1 (Postfix) with ESMTPSA id 9C3661800176;
-	Mon, 01 Jun 2026 04:38:18 +0000 (UTC)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From: Christian C Guerrero <chris.guerrero0795@icloud.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="HaUyy/Q3"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 169751E8D;
+	Sun, 31 May 2026 21:56:50 -0700 (PDT)
+Received: from [10.164.19.28] (unknown [10.164.19.28])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB7FB3F93E;
+	Sun, 31 May 2026 21:56:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1780289815; bh=uh04jOx1nBkRcF0Uf+qmlp1xwS9hdzC1jSrjru2+IQE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HaUyy/Q3QQY8LFo0HHWNssQu++Ryy4dWmAHD4fasvlTInFEZouDCQj/vtZBX+P2ZC
+	 VtrFIsX83pVwwuosFxTpDu3u1Et3kGCE7TcgrBQlrgqw5orWkEXPYGukRONyM8mxS9
+	 fpXC/jZe5fUPVnPzy7oIKCbV0BibT+oV/WFEDKT4=
+Message-ID: <9d13d62f-df3d-46aa-8411-4abebb92c35e@arm.com>
+Date: Mon, 1 Jun 2026 10:26:45 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (1.0)
-Date: Sun, 31 May 2026 22:38:15 -0600
-Message-Id: <ED878D27-0CDB-4113-A648-AE46EAC46A1D@icloud.com>
-Cc: Mat Martineau <martineau@kernel.org>,
- Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Abeni Paolo <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
- mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
- Matthieu Baerts <matttbe@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-X-Mailer: iPhone Mail (23F77)
-X-Proofpoint-GUID: Nle5phvKo13CcyuSwDi8Wvtyg11rnvbW
-X-Authority-Info-Out: v=2.4 cv=E9fAZKdl c=1 sm=1 tr=0 ts=6a1d0cbc
- cx=c_apl:c_pps:t_out a=YrL12D//S6tul8v/L+6tKg==:117
- a=YrL12D//S6tul8v/L+6tKg==:17 a=s5jvgZ67dGcA:10 a=IkcTkHD0fZMA:10
- a=FelO9ux0wxsA:10 a=x7bEGLp0ZPQA:10 a=tn3to7fOw0sA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=20KFwNOVAAAA:8
- a=KZnKJZhHIq7TdMh2gb4A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjAxMDA0NCBTYWx0ZWRfXx6MmOzvelBFU
- K7e5nQMShm6ZI8yvEO9dySU9jr/YBSpxu0FMYDj/rTTVu6MxUxvy0TN1gPqEVZMAvjE1x2iQOnV
- GD7xuuhdyJPJXHVjmrM+1p6FOHXAqu4hPgVTIl4L/Uz7ad9tp9VTWkdlrQ2piGF48p90cxqgK7v
- Y1hAV3M2n/PpfT8zIkUP5hOaKIRptgSbm70HVhQKPJzF456O9mx32t2/LIRaTX7TbSA7xmgGFvE
- D/wcTUCcHhRTboUkoEU2qfF9A5BIUtuCiOh2jPoWgkska2bXfKRxvFiWCY9OcHQnbJAn95ma2So
- APN0ywtHBeBzjtbt6wpwCHxxAC5mOOcJLoKr2RReYJhNkPJP61aA92SHdm8WZo=
-X-Proofpoint-ORIG-GUID: Nle5phvKo13CcyuSwDi8Wvtyg11rnvbW
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] fs/proc/task_mmu: do not warn on seeing non-migration pmd
+ entry
+To: "David Hildenbrand (Arm)" <david@kernel.org>, akpm@linux-foundation.org,
+ liam@infradead.org, ljs@kernel.org, jgg@ziepe.ca, leon@kernel.org,
+ shuah@kernel.org
+Cc: vbabka@kernel.org, jannh@google.com, pfalcato@suse.de, rppt@kernel.org,
+ surenb@google.com, mhocko@suse.com, balbirs@nvidia.com, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, ryan.roberts@arm.com,
+ anshuman.khandual@arm.com, stable@vger.kernel.org
+References: <20260529111704.1078346-1-dev.jain@arm.com>
+ <a62302f8-24ea-4d21-963d-48bec766766b@kernel.org>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <a62302f8-24ea-4d21-963d-48bec766766b@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-> On May 31, 2026, at 9:11=E2=80=AFPM, Matthieu Baerts (NGI0) <matttbe@kerne=
-l.org> wrote:
->=20
-> =EF=BB=BFFrom: Paolo Abeni <pabeni@redhat.com>
->=20
-> The MPTCP output path access locklessly the MPTCP-level ack_seq
-> in multiple times, using possibly different values for the data_ack
-> in the DSS option and to compute the announced rcv wnd for the same
-> packet.
->=20
-> Refactor the cote to avoid inconsistencies which may confuse the
-> peer. Also ensure that the MPTCP level rcv wnd is updated only when
-> the egress packet actually contains a DSS ack.
->=20
-> Fixes: fa3fe2b15031 ("mptcp: track window announced to peer")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-> Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> ---
-> net/mptcp/options.c | 36 ++++++++++++++++++------------------
-> 1 file changed, 18 insertions(+), 18 deletions(-)
->=20
-> diff --git a/net/mptcp/options.c b/net/mptcp/options.c
-> index 8a1c5698983c..5c228344e83f 100644
-> --- a/net/mptcp/options.c
-> +++ b/net/mptcp/options.c
-> @@ -570,7 +570,6 @@ static bool mptcp_established_options_dss(struct sock *=
-sk, struct sk_buff *skb,
->    struct mptcp_ext *mpext;
->    unsigned int ack_size;
->    bool ret =3D false;
-> -    u64 ack_seq;
->=20
->    opts->csum_reqd =3D READ_ONCE(msk->csum_enabled);
->    mpext =3D skb ? mptcp_get_ext(skb) : NULL;
-> @@ -601,14 +600,11 @@ static bool mptcp_established_options_dss(struct soc=
-k *sk, struct sk_buff *skb,
->        return ret;
->    }
->=20
-> -    ack_seq =3D READ_ONCE(msk->ack_seq);
->    if (READ_ONCE(msk->use_64bit_ack)) {
->        ack_size =3D TCPOLEN_MPTCP_DSS_ACK64;
-> -        opts->ext_copy.data_ack =3D ack_seq;
->        opts->ext_copy.ack64 =3D 1;
->    } else {
->        ack_size =3D TCPOLEN_MPTCP_DSS_ACK32;
-> -        opts->ext_copy.data_ack32 =3D (uint32_t)ack_seq;
->        opts->ext_copy.ack64 =3D 0;
->    }
->    opts->ext_copy.use_ack =3D 1;
-> @@ -1297,19 +1293,14 @@ bool mptcp_incoming_options(struct sock *sk, struc=
-t sk_buff *skb)
->    return true;
-> }
->=20
-> -static void mptcp_set_rwin(struct tcp_sock *tp, struct tcphdr *th)
-> +static u64 mptcp_set_rwin(struct mptcp_sock *msk, struct tcp_sock *tp,
-> +              struct tcphdr *th, u64 ack_seq)
-> {
->    const struct sock *ssk =3D (const struct sock *)tp;
-> -    struct mptcp_subflow_context *subflow;
-> -    u64 ack_seq, rcv_wnd_old, rcv_wnd_new;
-> -    struct mptcp_sock *msk;
-> +    u64 rcv_wnd_old, rcv_wnd_new;
->    u32 new_win;
->    u64 win;
->=20
-> -    subflow =3D mptcp_subflow_ctx(ssk);
-> -    msk =3D mptcp_sk(subflow->conn);
-> -
-> -    ack_seq =3D READ_ONCE(msk->ack_seq);
->    rcv_wnd_new =3D ack_seq + tp->rcv_wnd;
->=20
->    rcv_wnd_old =3D atomic64_read(&msk->rcv_wnd_sent);
-> @@ -1362,7 +1353,7 @@ static void mptcp_set_rwin(struct tcp_sock *tp, stru=
-ct tcphdr *th)
->=20
-> update_wspace:
->    WRITE_ONCE(msk->old_wspace, tp->rcv_wnd);
-> -    subflow->rcv_wnd_sent =3D rcv_wnd_new;
-> +    return rcv_wnd_new;
-> }
->=20
-> static void mptcp_track_rwin(struct tcp_sock *tp)
-> @@ -1474,13 +1465,25 @@ void mptcp_write_options(struct tcphdr *th, __be32=
- *ptr, struct tcp_sock *tp,
->        *ptr++ =3D mptcp_option(MPTCPOPT_DSS, len, 0, flags);
->=20
->        if (mpext->use_ack) {
-> +            struct mptcp_sock *msk;
-> +            u64 ack_seq;
-> +
-> +            /* DSS option is set only by mptcp_established_option,
-> +             * the caller is __tcp_transmit_skb() and ssk is always
-> +             * not NULL.
-> +             */
-> +            subflow =3D mptcp_subflow_ctx(ssk);
-> +            msk =3D mptcp_sk(subflow->conn);
-> +            ack_seq =3D READ_ONCE(msk->ack_seq);
->            if (mpext->ack64) {
-> -                put_unaligned_be64(mpext->data_ack, ptr);
-> +                put_unaligned_be64(ack_seq, ptr);
->                ptr +=3D 2;
->            } else {
-> -                put_unaligned_be32(mpext->data_ack32, ptr);
-> +                put_unaligned_be32(ack_seq, ptr);
->                ptr +=3D 1;
->            }
-> +            subflow->rcv_wnd_sent =3D mptcp_set_rwin(msk, tp, th,
-> +                                   ack_seq);
->        }
->=20
->        if (mpext->use_map) {
-> @@ -1708,9 +1711,6 @@ void mptcp_write_options(struct tcphdr *th, __be32 *=
-ptr, struct tcp_sock *tp,
->            i +=3D 4;
->        }
->    }
-> -
-> -    if (tp)
-> -        mptcp_set_rwin(tp, th);
-> }
->=20
-> __be32 mptcp_get_reset_option(const struct sk_buff *skb)
->=20
-> --
-> 2.53.0
->=20
->=20
+
+On 01/06/26 12:41 am, David Hildenbrand (Arm) wrote:
+> On 5/29/26 13:17, Dev Jain wrote:
+>> pagemap_pmd_range_thp() warns if a non-present PMD is not a migration
+>> entry. This became false once device-private entries at the PMD level were
+>> added.
+>>
+>> One can hit the warning by patching hmm-tests.c with the following:
+>>
+>> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+>> index e1c8a679a4cf3..7f0a3384f3c5f 100644
+>> --- a/tools/testing/selftests/mm/hmm-tests.c
+>> +++ b/tools/testing/selftests/mm/hmm-tests.c
+>> @@ -209,6 +209,37 @@ static int hmm_dmirror_cmd(int fd,
+>>  	return 0;
+>>  }
+>>
+>> +static int hmm_read_self_pagemap(void *addr, unsigned long npages,
+>> +				 unsigned long page_size)
+>> +{
+>> +	const size_t entry_size = sizeof(uint64_t);
+>> +	const off_t offset = ((uintptr_t)addr / page_size) * entry_size;
+>> +	uint64_t *entries;
+>> +	ssize_t nread;
+>> +	int fd;
+>> +
+>> +	entries = malloc(npages * entry_size);
+>> +	if (!entries)
+>> +		return -ENOMEM;
+>> +
+>> +	fd = open("/proc/self/pagemap", O_RDONLY);
+>> +	if (fd < 0) {
+>> +		free(entries);
+>> +		return -errno;
+>> +	}
+>> +
+>> +	nread = pread(fd, entries, npages * entry_size, offset);
+>> +	close(fd);
+>> +	free(entries);
+>> +
+>> +	if (nread < 0)
+>> +		return -errno;
+>> +	if ((size_t)nread != npages * entry_size)
+>> +		return -EIO;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>  static void hmm_buffer_free(struct hmm_buffer *buffer)
+>>  {
+>>  	if (buffer == NULL)
+>> @@ -2314,6 +2345,10 @@ TEST_F(hmm, migrate_anon_huge_fault)
+>>  	ASSERT_EQ(ret, 0);
+>>  	ASSERT_EQ(buffer->cpages, npages);
+>>
+>> +	/* Exercise pagemap on a PMD device-private entry. */
+>> +	ret = hmm_read_self_pagemap(buffer->ptr, npages, self->page_size);
+>> +	ASSERT_EQ(ret, 0);
+>> +
+>>  	/* Check what the device read. */
+>>  	for (i = 0, ptr = buffer->mirror; i < size / sizeof(*ptr); ++i)
+>>  		ASSERT_EQ(ptr[i], i);
+>>
+>>
+> 
+> 
+>> Therefore, remove the stale migration-only assertion.
+>>
+>> Fixes: a30b48bf1b24 ("mm/migrate_device: implement THP migration of zone device pages")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Dev Jain <dev.jain@arm.com>
+>> ---
+>> Applies on mm-unstable (404fb4f38e8f).
+>>
+>>  fs/proc/task_mmu.c | 1 -
+>>  1 file changed, 1 deletion(-)
+>>
+>> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+>> index 1e3a15bf46f4e..58938e62154d9 100644
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+>> @@ -2129,7 +2129,6 @@ static int pagemap_pmd_range_thp(pmd_t *pmdp, unsigned long addr,
+>>  			flags |= PM_SOFT_DIRTY;
+>>  		if (pmd_swp_uffd_wp(pmd))
+>>  			flags |= PM_UFFD_WP;
+>> -		VM_WARN_ON_ONCE(!pmd_is_migration_entry(pmd));
+>>  		page = softleaf_to_page(entry);
+>>  	}
+>>  
+> 
+> The whole thp_migration_supported() guard is a bit shaky, right?
+
+I think if you remove this, then you will trigger a WARN_ON in softleaf_to_page(),
+for the case of !CONFIG_ARCH_ENABLE_THP_MIGRATION.
+> 
+> I guess device-private entries currently imply thp_migration_supported(), but
+> that thp_migration_supported() check is really questionable and should likely
+> just go away (else if -> else).
+> 
+> Staring at pte_to_pagemap_entry(), likely we'd also want
+> 
+> if (softleaf_has_pfn(entry))
+> 	page = softleaf_to_page(entry);
+> 
+> to prepare for PMD swap entries.
+
+Correct, and this is done in
+https://lore.kernel.org/all/20260427100553.2754667-4-usama.arif@linux.dev/
+
+I think in addition to that, Usama can also remove the thp_migration_supported() check.
+> 
+> 
+> Anyhow, both are unrelated (can you send patches to clean it up?)
+> 
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> 
+
