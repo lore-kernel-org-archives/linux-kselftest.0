@@ -1,54 +1,54 @@
 Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E903A381AEB
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 06:51:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACE638237A
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 06:51:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780296704; cv=none; b=T57G9OeXxRuAai/mxt17/QUbfjE4DH8FKTGunXhXu4FEsDmUg2gcp0H6eZhKKo4SCZzsIWTiCEB9LRtKs3pgfsxpf576LZFR9G5nEzcYCFpDTICGEZJ2WlPC5FS92ECvEbiBeksnIzW5O+yhH72FpuARWXF7NQY5iwe+Gcfhy6Q=
+	t=1780296705; cv=none; b=fFly/FeI+CWIlDf44RQ5HZ04UboYqpG8nPQjsdM9sTYtZBnmZOpiFT3F3bw/oMIY8bSpbY28hOPKaR9K0Ok4caxY6CA4mkT35+/p3tjB0ECAIUWL+jBwxX44cJhAf68hWyoXXf3KxdccX16CJbbU88Lt+CCEe9HyawZAgxOXE+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780296704; c=relaxed/simple;
-	bh=ABYUNeq5jggGjdHC1N3KhsSD1Eg+ZJUhKBpwrvEvOUg=;
+	s=arc-20240116; t=1780296705; c=relaxed/simple;
+	bh=RhbZjldDEvRmcXRUgBq8zs621qLiWWhWxGM9YPdTZFU=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=kZGJWR1b+8CCSLWHlWEj3k69zWjUc6XdRP3kYGf5uN9AZe+acz/1cFnUc3awUrnnV5V78kcGMiAYcOKQAB0zVqviX1m1Fs1E8S1IUEvxnDooVVcuIIAeKueqjw0D+eZDokeYY0fz2fXIDteQ+467LfvgV4wVvRVZvkV+STOQhJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s0cnTx90; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=PRmmwm7o4zC/V6+kwItBFgEXWQKOEGcJirCplruWhVWhCNT0zfKI18Etfihe00rbdIrtJpP/x70Ew7dkKQGwV5LIif5nWgFtmkEFbiW/YHpV/CpWSN9CJq0oGZU7GobYOHJNEAxHp8ZOuP2X5k7qXffuGtY6D7dKzkbIOfoNmCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H50tEFWA; arc=none smtp.client-ip=209.85.215.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s0cnTx90"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c85a1e9c616so515694a12.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 23:51:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H50tEFWA"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c85a2ed88c8so1312359a12.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 31 May 2026 23:51:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780296698; x=1780901498; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1780296700; x=1780901500; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b8X/ZMOC3R4zjF20OsNMGuI7f1VgwjsLyl+ryXVYUmA=;
-        b=s0cnTx90wrkqbuZnDDxRKzFeE3NxVCVIQX4STfYgTQkLGGC4ylet1nkp/G557KbSIg
-         /rpghqFAYsdjFF4/8hfSrW+T31glYnZ489cX4j4HuS4iyokZc1qfFG525G+cogdGy+O7
-         qNsLHNKZe6nIC2SC1xgIWI3ktScnX48Nf7vU82ojMX2BDthNr8rdxhUDu8v0jU9nM4YL
-         kGBIsBNjg6drgofNeeNhVd1CKQ8ZdcFeP7k2p7mqafKBinGYGXHYH99qRG+VEPppvPvw
-         iw8lj7V5SJj0dnJnBdMuKPLAPdjGvpKmXIJLjhAtQWvup9Ov/9r2DWswycmgtqfmTGei
-         JC0w==
+        bh=dEuvk7i7rqZfwCAbLKkptmIQlUbXcNoFD9xb5HxF2jE=;
+        b=H50tEFWA33pctHyuQVj9SMjh6JyyFxqHYMOxjEWbUvlPRkXzKS12aDApJFHSjv+XT7
+         1OjHXSVjbXefW9Joh31OeqcVDz5uANqnItU6GGRfkrghbT86tqBBIkLsbeqGiMF4Gnpv
+         TyE9eKSfDZ5lnLhVmvw/qGYBVkIVVVA9ueOACUl6t89VfB4KF5m7XIi1ObcZkSJcq7iy
+         CNEoQwLlECfvu5jYjKGyvJc5KqEjTAbmqA4/DGXm3WBFa2CRzkD8bvrRNNvLmXYVgQlZ
+         i02X44R1IVK94KLXwuRAejRhsFQv9R01xbNUzQsIYEoEvJqjA8UUYgOeQ6zLuVU58XU1
+         obFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780296698; x=1780901498;
+        d=1e100.net; s=20251104; t=1780296700; x=1780901500;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b8X/ZMOC3R4zjF20OsNMGuI7f1VgwjsLyl+ryXVYUmA=;
-        b=ZJtQI7R6GxWruVUn+8vxbFTMbLz3+S3nbjrDoAXMjzO0dkmX4arwSwL7eCzYGKKHIL
-         KptmfvRM1r5YYrnr+Fz5xMPtIRmlLynBJB00sHcj8wVGoHyEvvtmeYCt/5Gnc1r5Rx+R
-         5kyzT9Eb47+HmvhjFSOr+gDqcz8DdraOUb0q/cfR3F/VHBwfpURLPJlMZa71ZNgj39jf
-         KCyZVGZeQU6SBlS9XR6zR9QywTrMnUgjHdnBowmjsWlK0hPTUMKnK0yAyazKkVjS+C1W
-         4y0GVLepi9OLt4x88Q94afWJz0rdYXNCiiDheA/acMH+zmFEuOk2DMIbTncUKgt7fhp8
-         FHbQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/xd+BmCM6jEfC01J7yerrvapV7QAUsBtzeKAFJOxshy3vIU55HD1zGOa1IOx3FjWpRrIP99Llvy9/feagvQmg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPZa5GkleeQM7j+6Eu6FEV81+338ay/9VdLYTkayIWiIiZHZzd
-	iQuNGrGvNwoESJsKmFM+Vd5h6FqKPjob4O8xYGOtSB90pfpufGFV3D6Tq8UT9expO4dWAfwnD2t
-	1Ng==
-X-Received: from pgbdw17.prod.google.com ([2002:a05:6a02:4491:b0:c0e:3543:bdb0])
- (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:6497:b0:3a2:dabf:fef6
- with SMTP id adf61e73a8af0-3b427f5b066mr9976790637.35.1780296697723; Sun, 31
- May 2026 23:51:37 -0700 (PDT)
-Date: Mon,  1 Jun 2026 06:51:23 +0000
+        bh=dEuvk7i7rqZfwCAbLKkptmIQlUbXcNoFD9xb5HxF2jE=;
+        b=lS6nI4c7QPcpqGRIG7sE1UTQFJAcQb/U4MWF6GoGoBjbL+jqHlRTeq8NBY1gMy/xs0
+         QeTK34M4eSw3St/GEvLpePvymJ6BmkhDKVXNcVxi6gwf2mtrxTCiljdvxWuAV6xVk07o
+         YZb871DL3L7MIHqDCyFoEVa1V5btsn9V6YuRhT7GkSTO7/WcafQ3GGZLZNTWRXZAnFlY
+         3GhuM9xMdNj4lkxYXWq+dKE0AUfC3YOv30uC2yEClZ6H+Kx2+Kq6TfJ7WdSFyNmvBq4n
+         PzLhnx3z+/zLEgLt5N/sIbEouVbG9+cfNflkVOFlEOKG9426d45/Jj88yPO1RjqWMmtd
+         BIzw==
+X-Forwarded-Encrypted: i=1; AFNElJ9j153wjilMnW/lscLaozVFaUxND3iW5OwnEYIbKCBhbnN6wv7maHmAvresK0DsWzgUpE1ldKoBEsiJ/mZ0zDc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8dHzKihwrsJ7g24gco0Anlw9tozWoXk5NNLewzXlbYCx/69Mg
+	KC+yvb112ZMblhY+sqMuq6G6ApCG172OKMu7nnkqxu/e7wW21Tle3MYH/Gamdg692SgpV/mvqN9
+	yqg==
+X-Received: from pgng19.prod.google.com ([2002:a63:3753:0:b0:c85:7a10:54e4])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:5482:b0:3b2:8675:4866
+ with SMTP id adf61e73a8af0-3b4280a5aa4mr8928004637.31.1780296699772; Sun, 31
+ May 2026 23:51:39 -0700 (PDT)
+Date: Mon,  1 Jun 2026 06:51:24 +0000
 In-Reply-To: <20260601065126.3623867-1-wakel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,9 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260601065126.3623867-1-wakel@google.com>
 X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
-Message-ID: <20260601065126.3623867-5-wakel@google.com>
-Subject: [PATCH 4/7] selftests/futex: Migrate futex_requeue_pi_signal_restart
- to harness
+Message-ID: <20260601065126.3623867-6-wakel@google.com>
+Subject: [PATCH 5/7] selftests/futex: Migrate futex_numa_mpol to harness
 From: Wake Liu <wakel@google.com>
 To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>, 
 	linux-kselftest@vger.kernel.org
@@ -70,171 +69,229 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
 	linux-kernel@vger.kernel.org, wakel@google.com
 Content-Type: text/plain; charset="UTF-8"
 
-Migrate futex_requeue_pi_signal_restart test to the kselftest harness framework,
-removing mixed legacy ksft_* API usages and ensuring proper thread joining.
+Migrate futex_numa_mpol test to the kselftest harness framework,
+removing mixed legacy ksft_* API usages and passing test metadata to helper functions.
 
 Signed-off-by: Wake Liu <wakel@google.com>
 ---
- .../futex_requeue_pi_signal_restart.c         | 67 +++++++++----------
- 1 file changed, 31 insertions(+), 36 deletions(-)
+ .../futex/functional/futex_numa_mpol.c        | 109 ++++++++----------
+ 1 file changed, 51 insertions(+), 58 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c b/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
-index a18ccae73eb1..e301beb4b202 100644
---- a/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
-+++ b/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
-@@ -35,9 +35,9 @@ futex_t f1 = FUTEX_INITIALIZER;
- futex_t f2 = FUTEX_INITIALIZER;
- atomic_t requeued = ATOMIC_INITIALIZER;
- 
--int waiter_ret = 0;
-+int waiter_ret;
- 
--int create_rt_thread(pthread_t *pth, void*(*func)(void *), void *arg,
-+int create_rt_thread(struct __test_metadata *_metadata, pthread_t *pth, void*(*func)(void *), void *arg,
- 		     int policy, int prio)
- {
- 	struct sched_param schedp;
-@@ -48,45 +48,43 @@ int create_rt_thread(pthread_t *pth, void*(*func)(void *), void *arg,
- 	memset(&schedp, 0, sizeof(schedp));
- 
- 	ret = pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
--	if (ret)
--		ksft_exit_fail_msg("pthread_attr_setinheritsched\n");
-+	ASSERT_EQ(ret, 0) TH_LOG("pthread_attr_setinheritsched failed");
- 
- 	ret = pthread_attr_setschedpolicy(&attr, policy);
--	if (ret)
--		ksft_exit_fail_msg("pthread_attr_setschedpolicy\n");
-+	ASSERT_EQ(ret, 0) TH_LOG("pthread_attr_setschedpolicy failed");
- 
- 	schedp.sched_priority = prio;
- 	ret = pthread_attr_setschedparam(&attr, &schedp);
--	if (ret)
--		ksft_exit_fail_msg("pthread_attr_setschedparam\n");
-+	ASSERT_EQ(ret, 0) TH_LOG("pthread_attr_setschedparam failed");
- 
- 	ret = pthread_create(pth, &attr, func, arg);
--	if (ret)
--		ksft_exit_fail_msg("pthread_create\n");
-+	ASSERT_EQ(ret, 0) TH_LOG("pthread_create failed");
- 
- 	return 0;
+diff --git a/tools/testing/selftests/futex/functional/futex_numa_mpol.c b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+index 78c0f7a59e17..18dc8e54aa96 100644
+--- a/tools/testing/selftests/futex/functional/futex_numa_mpol.c
++++ b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+@@ -10,6 +10,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
++#include <string.h>
+ #ifdef LIBNUMA_VER_SUFFICIENT
+ #include <numa.h>
+ #include <numaif.h>
+@@ -54,7 +55,7 @@ static void *thread_lock_fn(void *arg)
+ 	return NULL;
  }
  
- void handle_signal(int signo)
+-static void create_max_threads(void *futex_ptr)
++static void create_max_threads(struct __test_metadata *_metadata, void *futex_ptr)
  {
--	ksft_print_dbg_msg("signal received %s requeue\n",
--	     requeued.val ? "after" : "prior to");
-+	printf("INFO: signal received %s requeue\n",
-+	       requeued.val ? "after" : "prior to");
- }
+ 	int i, ret;
  
- void *waiterfn(void *arg)
- {
-+	struct __test_metadata *_metadata = (struct __test_metadata *)arg;
- 	unsigned int old_val;
- 	int res;
- 
--	ksft_print_dbg_msg("Waiter running\n");
--	ksft_print_dbg_msg("Calling FUTEX_LOCK_PI on f2=%x @ %p\n", f2, &f2);
-+	TH_LOG("Waiter running");
-+	TH_LOG("Calling FUTEX_LOCK_PI on f2=%x @ %p", f2, &f2);
- 	old_val = f1;
- 	res = futex_wait_requeue_pi(&f1, old_val, &(f2), NULL,
- 				    FUTEX_PRIVATE_FLAG);
- 	if (!requeued.val || errno != EWOULDBLOCK) {
--		ksft_test_result_fail("unexpected return from futex_wait_requeue_pi: %d (%s)\n",
--		     res, strerror(errno));
--		ksft_print_dbg_msg("w2:futex: %x\n", f2);
-+		EXPECT_TRUE(0)
-+			TH_LOG("unexpected return from futex_wait_requeue_pi: %d (%s)",
-+			       res, strerror(errno));
-+		TH_LOG("w2:futex: %x", f2);
- 		if (!res)
- 			futex_unlock_pi(&f2, FUTEX_PRIVATE_FLAG);
+@@ -63,28 +64,26 @@ static void create_max_threads(void *futex_ptr)
+ 		thread_args[i].flags = FUTEX2_SIZE_U32 | FUTEX_PRIVATE_FLAG | FUTEX2_NUMA;
+ 		thread_args[i].result = 0;
+ 		ret = pthread_create(&threads[i], NULL, thread_lock_fn, &thread_args[i]);
+-		if (ret)
+-			ksft_exit_fail_msg("pthread_create failed\n");
++		ASSERT_EQ(ret, 0) TH_LOG("pthread_create failed");
  	}
-@@ -94,7 +92,6 @@ void *waiterfn(void *arg)
- 	pthread_exit(NULL);
  }
  
--
- TEST(futex_requeue_pi_signal_restart)
+-static void join_max_threads(void)
++static void join_max_threads(struct __test_metadata *_metadata)
  {
- 	unsigned int old_val;
-@@ -105,19 +102,16 @@ TEST(futex_requeue_pi_signal_restart)
- 	sa.sa_handler = handle_signal;
- 	sigemptyset(&sa.sa_mask);
- 	sa.sa_flags = 0;
--	if (sigaction(SIGUSR1, &sa, NULL))
--		ksft_exit_fail_msg("sigaction\n");
-+	ASSERT_EQ(sigaction(SIGUSR1, &sa, NULL), 0) TH_LOG("sigaction failed");
+ 	int i, ret;
  
--	ksft_print_dbg_msg("m1:f2: %x\n", f2);
--	ksft_print_dbg_msg("Creating waiter\n");
--	res = create_rt_thread(&waiter, waiterfn, NULL, SCHED_FIFO, 1);
--	if (res)
--		ksft_exit_fail_msg("Creating waiting thread failed");
-+	TH_LOG("m1:f2: %x", f2);
-+	TH_LOG("Creating waiter");
-+	create_rt_thread(_metadata, &waiter, waiterfn, _metadata, SCHED_FIFO, 1);
+ 	for (i = 0; i < MAX_THREADS; i++) {
+ 		ret = pthread_join(threads[i], NULL);
+-		if (ret)
+-			ksft_exit_fail_msg("pthread_join failed for thread %d\n", i);
++		ASSERT_EQ(ret, 0) TH_LOG("pthread_join failed for thread %d", i);
+ 	}
+ }
  
--	ksft_print_dbg_msg("Calling FUTEX_LOCK_PI on f2=%x @ %p\n", f2, &f2);
--	ksft_print_dbg_msg("m2:f2: %x\n", f2);
-+	TH_LOG("Calling FUTEX_LOCK_PI on f2=%x @ %p", f2, &f2);
-+	TH_LOG("m2:f2: %x", f2);
- 	futex_lock_pi(&f2, 0, 0, FUTEX_PRIVATE_FLAG);
--	ksft_print_dbg_msg("m3:f2: %x\n", f2);
-+	TH_LOG("m3:f2: %x", f2);
+-static void __test_futex(void *futex_ptr, int err_value, unsigned int futex_flags)
++static void __test_futex(struct __test_metadata *_metadata, void *futex_ptr, int err_value, unsigned int futex_flags)
+ {
+-	int to_wake, ret, i, need_exit = 0;
++	int to_wake, ret, i;
  
- 	while (1) {
- 		/*
-@@ -125,11 +119,11 @@ TEST(futex_requeue_pi_signal_restart)
- 		 * restart futex_wait_requeue_pi() in the kernel. Wait for the
- 		 * waiter to block on f1 again.
- 		 */
--		ksft_print_dbg_msg("Issuing SIGUSR1 to waiter\n");
-+		TH_LOG("Issuing SIGUSR1 to waiter");
- 		pthread_kill(waiter, SIGUSR1);
- 		usleep(DELAY_US);
+ 	pthread_barrier_init(&barrier_main, NULL, MAX_THREADS + 1);
+-	create_max_threads(futex_ptr);
++	create_max_threads(_metadata, futex_ptr);
+ 	pthread_barrier_wait(&barrier_main);
+ 	to_wake = MAX_THREADS;
  
--		ksft_print_dbg_msg("Requeueing waiter via FUTEX_CMP_REQUEUE_PI\n");
-+		TH_LOG("Requeueing waiter via FUTEX_CMP_REQUEUE_PI");
- 		old_val = f1;
- 		res = futex_cmp_requeue_pi(&f1, old_val, &(f2), 1, 0,
- 					   FUTEX_PRIVATE_FLAG);
-@@ -143,10 +137,11 @@ TEST(futex_requeue_pi_signal_restart)
- 			atomic_set(&requeued, 1);
+@@ -92,45 +91,43 @@ static void __test_futex(void *futex_ptr, int err_value, unsigned int futex_flag
+ 		ret = futex2_wake(futex_ptr, to_wake, futex_flags);
+ 
+ 		if (err_value) {
+-			if (ret >= 0)
+-				ksft_exit_fail_msg("futex2_wake(%d, 0x%x) should fail, but didn't\n",
+-						   to_wake, futex_flags);
++			EXPECT_LT(ret, 0)
++				TH_LOG("futex2_wake(%d, 0x%x) should fail, but didn't",
++				       to_wake, futex_flags);
+ 
+-			if (errno != err_value)
+-				ksft_exit_fail_msg("futex2_wake(%d, 0x%x) expected error was %d, but returned %d (%s)\n",
+-						   to_wake, futex_flags, err_value, errno, strerror(errno));
++			EXPECT_EQ(errno, err_value)
++				TH_LOG("futex2_wake(%d, 0x%x) expected error was %d, but returned %d (%s)",
++				       to_wake, futex_flags, err_value, errno, strerror(errno));
+ 
  			break;
- 		} else if (res < 0) {
--			ksft_exit_fail_msg("FUTEX_CMP_REQUEUE_PI failed\n");
-+			ASSERT_GE(res, 0)
-+				TH_LOG("FUTEX_CMP_REQUEUE_PI failed: %s", strerror(errno));
+ 		}
+ 		if (ret < 0) {
+-			ksft_exit_fail_msg("Failed futex2_wake(%d, 0x%x): %m\n",
+-					   to_wake, futex_flags);
++			ASSERT_GE(ret, 0)
++				TH_LOG("Failed futex2_wake(%d, 0x%x): %s",
++				       to_wake, futex_flags, strerror(errno));
+ 		}
+ 		if (!ret)
+ 			usleep(50);
+ 		to_wake -= ret;
+ 
+ 	} while (to_wake);
+-	join_max_threads();
++	join_max_threads(_metadata);
+ 
+ 	for (i = 0; i < MAX_THREADS; i++) {
+-		if (err_value && thread_args[i].result != -1) {
+-			ksft_print_msg("Thread %d should fail but succeeded (%d)\n",
++		if (err_value) {
++			EXPECT_EQ(thread_args[i].result, -1)
++				TH_LOG("Thread %d should fail but succeeded (%d)",
+ 				       i, thread_args[i].result);
+-			need_exit = 1;
+-		}
+-		if (!err_value && thread_args[i].result != 0) {
+-			ksft_print_msg("Thread %d failed (%d)\n", i, thread_args[i].result);
+-			need_exit = 1;
++		} else {
++			EXPECT_EQ(thread_args[i].result, 0)
++				TH_LOG("Thread %d failed (%d)", i, thread_args[i].result);
  		}
  	}
--	ksft_print_dbg_msg("m4:f2: %x\n", f2);
-+	TH_LOG("m4:f2: %x", f2);
- 
- 	/*
- 	 * Signal the waiter after requeue, waiter should return from
-@@ -154,14 +149,14 @@ TEST(futex_requeue_pi_signal_restart)
- 	 * futex_unlock_pi() can't happen before the signal wakeup is detected
- 	 * in the kernel.
- 	 */
--	ksft_print_dbg_msg("Issuing SIGUSR1 to waiter\n");
-+	TH_LOG("Issuing SIGUSR1 to waiter");
- 	pthread_kill(waiter, SIGUSR1);
--	ksft_print_dbg_msg("Waiting for waiter to return\n");
-+	TH_LOG("Waiting for waiter to return");
- 	pthread_join(waiter, NULL);
- 
--	ksft_print_dbg_msg("Calling FUTEX_UNLOCK_PI on mutex=%x @ %p\n", f2, &f2);
-+	TH_LOG("Calling FUTEX_UNLOCK_PI on mutex=%x @ %p", f2, &f2);
- 	futex_unlock_pi(&f2, FUTEX_PRIVATE_FLAG);
--	ksft_print_dbg_msg("m5:f2: %x\n", f2);
-+	TH_LOG("m5:f2: %x", f2);
+-	if (need_exit)
+-		ksft_exit_fail_msg("Aborting due to earlier errors.\n");
  }
  
- TEST_HARNESS_MAIN
+-static void test_futex(void *futex_ptr, int err_value)
++static void test_futex(struct __test_metadata *_metadata, void *futex_ptr, int err_value)
+ {
+-	__test_futex(futex_ptr, err_value, FUTEX2_SIZE_U32 | FUTEX_PRIVATE_FLAG | FUTEX2_NUMA);
++	__test_futex(_metadata, futex_ptr, err_value, FUTEX2_SIZE_U32 | FUTEX_PRIVATE_FLAG | FUTEX2_NUMA);
+ }
+ 
+ TEST(futex_numa_mpol)
+@@ -141,43 +138,41 @@ TEST(futex_numa_mpol)
+ 
+ 	mem_size = sysconf(_SC_PAGE_SIZE);
+ 	futex_ptr = mmap(NULL, mem_size * 2, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
+-	if (futex_ptr == MAP_FAILED)
+-		ksft_exit_fail_msg("mmap() for %d bytes failed\n", mem_size);
++	ASSERT_NE(futex_ptr, MAP_FAILED)
++		TH_LOG("mmap() for %d bytes failed: %s", mem_size, strerror(errno));
+ 
+ 	/* Create an invalid memory region for the "Memory out of range" test */
+ 	mprotect(futex_ptr + mem_size, mem_size, PROT_NONE);
+ 
+ 	futex_numa = futex_ptr;
+ 
+-	ksft_print_msg("Regular test\n");
++	TH_LOG("Regular test");
+ 	futex_numa->futex = 0;
+ 	futex_numa->numa = FUTEX_NO_NODE;
+-	test_futex(futex_ptr, 0);
++	test_futex(_metadata, futex_ptr, 0);
+ 
+-	if (futex_numa->numa == FUTEX_NO_NODE)
+-		ksft_exit_fail_msg("NUMA node is left uninitialized\n");
++	EXPECT_NE(futex_numa->numa, FUTEX_NO_NODE)
++		TH_LOG("NUMA node is left uninitialized");
+ 
+ 	/* FUTEX2_NUMA futex must be 8-byte aligned */
+-	ksft_print_msg("Mis-aligned futex\n");
+-	test_futex(futex_ptr + mem_size - 4, EINVAL);
++	TH_LOG("Mis-aligned futex");
++	test_futex(_metadata, futex_ptr + mem_size - 4, EINVAL);
+ 
+-	ksft_print_msg("Memory out of range\n");
+-	test_futex(futex_ptr + mem_size, EFAULT);
++	TH_LOG("Memory out of range");
++	test_futex(_metadata, futex_ptr + mem_size, EFAULT);
+ 
+ 	futex_numa->numa = FUTEX_NO_NODE;
+ 	mprotect(futex_ptr, mem_size, PROT_READ);
+-	ksft_print_msg("Memory, RO\n");
+-	test_futex(futex_ptr, EFAULT);
++	TH_LOG("Memory, RO");
++	test_futex(_metadata, futex_ptr, EFAULT);
+ 
+ 	mprotect(futex_ptr, mem_size, PROT_NONE);
+-	ksft_print_msg("Memory, no access\n");
+-	test_futex(futex_ptr, EFAULT);
++	TH_LOG("Memory, no access");
++	test_futex(_metadata, futex_ptr, EFAULT);
+ 
+ 	mprotect(futex_ptr, mem_size, PROT_READ | PROT_WRITE);
+-	ksft_print_msg("Memory back to RW\n");
+-	test_futex(futex_ptr, 0);
+-
+-	ksft_test_result_pass("futex2 memory boundary tests passed\n");
++	TH_LOG("Memory back to RW");
++	test_futex(_metadata, futex_ptr, 0);
+ 
+ 	/* MPOL test. Does not work as expected */
+ #ifdef LIBNUMA_VER_SUFFICIENT
+@@ -190,25 +185,23 @@ TEST(futex_numa_mpol)
+ 			    sizeof(nodemask) * 8, 0);
+ 		if (ret == 0) {
+ 			ret = numa_set_mempolicy_home_node(futex_ptr, mem_size, i, 0);
+-			if (ret != 0)
+-				ksft_exit_fail_msg("Failed to set home node: %m, %d\n", errno);
++			ASSERT_EQ(ret, 0)
++				TH_LOG("Failed to set home node: %s, %d", strerror(errno), errno);
+ 
+-			ksft_print_msg("Node %d test\n", i);
++			TH_LOG("Node %d test", i);
+ 			futex_numa->futex = 0;
+ 			futex_numa->numa = FUTEX_NO_NODE;
+ 
+ 			ret = futex2_wake(futex_ptr, 0, FUTEX2_SIZE_U32 | FUTEX_PRIVATE_FLAG | FUTEX2_NUMA | FUTEX2_MPOL);
+-			if (ret < 0)
+-				ksft_test_result_fail("Failed to wake 0 with MPOL: %m\n");
+-			if (futex_numa->numa != i) {
+-				ksft_exit_fail_msg("Returned NUMA node is %d expected %d\n",
+-						   futex_numa->numa, i);
+-			}
++			EXPECT_GE(ret, 0)
++				TH_LOG("Failed to wake 0 with MPOL: %s", strerror(errno));
++			EXPECT_EQ(futex_numa->numa, i)
++				TH_LOG("Returned NUMA node is %d expected %d",
++				       futex_numa->numa, i);
+ 		}
+ 	}
+-	ksft_test_result_pass("futex2 MPOL hints test passed\n");
+ #else
+-	ksft_test_result_skip("futex2 MPOL hints test requires libnuma 2.0.18+\n");
++	SKIP(return, "futex2 MPOL hints test requires libnuma 2.0.18+");
+ #endif
+ 	munmap(futex_ptr, mem_size * 2);
+ }
 -- 
 2.54.0.823.g6e5bcc1fc9-goog
 
