@@ -1,52 +1,35 @@
-Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043625733E;
-	Mon,  1 Jun 2026 00:55:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C741E1C8604;
+	Mon,  1 Jun 2026 01:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780275313; cv=none; b=b/ygWtaZM2crc7BDDlx4seDzuP8Ic56zM2xb5wYq8GvE2ydhb1O5jkhaFv19X4IrM+F+ezwMfvVJMaoiFpx+iIWG8u/jCaY+iuHOfRo6LGgm8115vbloK7f+UDQ6E3Li05vCUQuTRI66/u7uoMnizFk21U+qo6UU6A3QCmvF6Lw=
+	t=1780275603; cv=none; b=gFCKUa9kKmxnHrf6rqbb1hmvCxYLV3+fID9UlIpyr+x+HV8lZeMLysWGIn9hvcZyuCtRJx74pDB0B+5f0nP2pYBaUpTM2xb/8k7NzsC5QCKuVQyzBlgVJGOAEHrj7gjvVtVaGWgl5fIii729MRML6PRLzWZ8epaMzpHOsRE+l60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780275313; c=relaxed/simple;
-	bh=IEJJEqNCkLJW/qCul0Gskb/AUCzPBTL3PE8VRk1n02g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SNhsXg6aqj8Yxm5YTlNp9ED6ImyY3e0zImZ1meoYUwnefm6QjC/2KE3qwDKAjKUb9l9Z9qm+csP6yHXYFUDjNowjylkr9QReze9+Vb9tVQrVZBLY1KsGWOysn4etr0RFflzH6kgz9sammrPsWslVBdwGvj19G++uVVb3jGLIbqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=ZdLvSXr6; arc=none smtp.client-ip=54.204.34.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1780275603; c=relaxed/simple;
+	bh=i5YAzci5+MFVaIUytsTdAoGYSAMG5T/E4rWsss7EN8Q=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=gpPyqqjlzmEqKK+8T1DRNuOg0yvPjOhXoh2nosyieAsN3sMWtwdbLK5dAlXrQUTZMaHJfKYyu5R/DpA31AMVN5gZd3YVY4/8LN7stFgtVelSeP2MWjpukQ8xFx30+St80ZmJ7aw8BIqRhQX76g0OdJjTqNQwtCuZB9UrTRJGwpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gxnQpSDD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="ZdLvSXr6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1780275256;
-	bh=wplUvBwwSZUkE/1pF8JoDJVBT5NIk5fxpFOgyy27ARw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=ZdLvSXr6IN0sOxjm16/fc4DJSCHCiT69okgiqQhMfJUTxQbrF3i3et/IO36XyF6TH
-	 0ra8LkjUZnqDJSsCzy0ySqO9F7g5jKbCXIFRcBNXnwLi4gvDUDsZ1BeyjLfbkobD4y
-	 cLJnr0azS3cO1UT6o77oR2P2BTgTPR3qDgre34As=
-X-QQ-mid: zesmtpip2t1780275245t0423d3d2
-X-QQ-Originating-IP: UErp3taaIoj7K2ov1DmKucmDovlP8o3qkbRO6SlocXQ=
-Received: from PEN1097 ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 01 Jun 2026 08:54:02 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 14429530627096407333
-EX-QQ-RecipientCnt: 8
-From: Cheng Nie <niecheng1@uniontech.com>
-To: sj@kernel.org
-Cc: damon@lists.linux.dev,
-	kernel@uniontech.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	niecheng1@uniontech.com,
-	shuah@kernel.org
-Subject: Re: [PATCH v2 2/2] selftests/damon/sysfs.py: validate memcg_path staging readback
-Date: Mon,  1 Jun 2026 08:53:59 +0800
-Message-ID: <4378862A53A443AF+20260601005359.26544-1-niecheng1@uniontech.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260529150057.84753-1-sj@kernel.org>
-References: <20260529150057.84753-1-sj@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gxnQpSDD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A34331F00893;
+	Mon,  1 Jun 2026 01:00:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780275602;
+	bh=uTaOW3D4noqv0h3HC1G3bXBBcpHsycUtAyv/8pF7/9s=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=gxnQpSDD/GYtIYa1Zp+JHVsbqbcU1vQeFWvfrSap2HUdL/6tV79AFC0r6vK4FGdy+
+	 kdc05G2dX1TqPTz53UiHXBEv+gMoVtjDbw7lBOdR7r2LTC3BbhDVJuiEFomR5JJ0Bd
+	 s4LCuOx8+TjDaP5QmV3+7kvhtShIZwce0c1JShLQBl1SgHhx+EzLiIkGual3cTD8V9
+	 Voj27ZUfY6hXtH2O8RlG7DhJ7n78IinSA44zhA2wOp25DevVbURUeYiUJ/efqz9uno
+	 H3PlltklDME6PeHIPRcgk4ly1FvfObZha/JW7JiiP38pUS3INn2iDVGUj+yVLBu7Rx
+	 CcmlcCgx5aCmw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 938FB39302FC;
+	Mon,  1 Jun 2026 01:00:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,46 +37,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
-X-QQ-XMAILINFO: MwJMCv7IGsyW0OMjaOMs13To4Fl6JKOmG69lSHdjIrVjZBU1BVNdCRZG
-	sv1ixIIM65x/dClUwvTMWttdwXpoollDXnXDNtePtQ+n5jBkKW5Vv/z9wPmJeiwRO78nKW1
-	MH/QPBut+g9cueTOns4G6b2S8hNXYaDlWs6HkqFBRLuOpFl7AXf93qpFe5dgsMBUb8WjWCz
-	2XjYUIk0uQow3r0a8EilOKyvMVRRT7qAFwj9ne5I5BZcuttflgifDeHcM5quBuLLFgXWQSy
-	0AecNgp4etO9fcmSujBc4K3lL8AWylvIGeM6kl30IXvL49Tu7tdmI1OU+/EFfPUzzcl4bYZ
-	hqEMjrbdJyCOnrKY4KTXgtIK+ha4acTl6CDAi0RdPImrBflCiAJaNoUDSncKJKKcW1OcH38
-	1kYWzE6L5ca3Tz74cw2cOxPSJcOKaWnw+SDC9kW192kmxKBTQQMHxQIn8OVUCIOwC66gmSm
-	Sa58QUHMXPu6weva50gf3xTAyg6k8EGBpJwx7UwgnbyGKeMgyFAY6mHZx5iM+7AG+PWLN7w
-	MQFgTjvS0R3002E285i9bvPG5t9qFfpclsrs6GtD2LbMssZrWQtL2cdKxwMn9S9jKPVOXw4
-	o/+Cop0daXds69HneOta4BDAafLpHV1lKiAE95Y0czCzWG+smyUD6+RG8jxFX5o1c4I/ZmT
-	M55JSi6t3ggZxYwHoszkZO5kom7zqOrBqHMwq6Nc3yFobJbon/FPVz4YHIVSSH3sumFVl++
-	fJppNDnZ5oL5iispPGPDmhQq/MuPdgPdl6PclEkC2BIXmRZcjwa/5ZWFUcmuxCfdBFr4CYu
-	DdpSrUdCUayxnnsBTcVQ3Cz5C5IaezzEIXciJSFzOxL7p4s0jMDXpqHvlCzccj9KkYMxgnK
-	i/94buMvUrdugPkTMU1DmEmt6yUwxW6+9nDGkbH6MtVVi6BAl/wjO0bUWCuVsB04wylcpof
-	syvVkWDgme93LUS7j4Q3XSTyfvCto2uTsH89Ul1xxgLbO1jvm+o6xijFx3FTVCbfdIUhCwI
-	t+XPKmld3FjgfF4GHl0mT6Lepg+YaFcdzLsdEZIuZfyju3+Le6MvIlYAsu9L8=
-X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
-X-QQ-RECHKSPAM: 0
+Subject: Re: [PATCH bpf-next v3] bpf: reject overlarge global subprog argument
+ sizes
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178027560516.3443781.11705215616764330591.git-patchwork-notify@kernel.org>
+Date: Mon, 01 Jun 2026 01:00:05 +0000
+References: <20260528062155.3988156-1-hataegu0826@gmail.com>
+In-Reply-To: <20260528062155.3988156-1-hataegu0826@gmail.com>
+To: Taegu Ha <hataegu0826@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ yonghong.song@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ shuah@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org,
+ yatsenko@meta.com, song@kernel.org, puranjay@kernel.org,
+ emil@etsalapatis.com, martin.lau@linux.dev, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-On Fri, 29 May 2026 08:00:56 -0700 SeongJae Park wrote:
+Hello:
 
-> I'd prefer the error message to be in form of something like "'memcg_path
-> staging: kdamond start (%s)' % err" for consistency.
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Will do.
+On Thu, 28 May 2026 15:21:55 +0900 you wrote:
+> Global subprogram argument checking derives generic pointer sizes from BTF
+> and passes the resolved size to check_mem_reg() as a u32. The access-size
+> validation path then uses a signed int, and stack pointers negate the value
+> before calling check_helper_mem_access().
+> 
+> This creates a wrap when BTF describes a pointee size larger than S32_MAX.
+> For example, a global subprogram argument of type:
+> 
+> [...]
 
-> It seems we don't really need to do commit().  As Sashiko mentioned [1], it
-> also depends on CONFIG_MEMCG and active cgroup configuration.   It would be
-> suffice to simply 'stage'.  We don't have stage() method on Kdamonds, though.
-> What about setting all parameters including the memcg filter at the beginning,
-> do 'kdamonds.start()', but ignore the failure, and check the content of the
-> memcg_path file?
+Here is the summary with links:
+  - [bpf-next,v3] bpf: reject overlarge global subprog argument sizes
+    https://git.kernel.org/bpf/bpf-next/c/de36adca6346
 
-Agreed, thanks for the suggestion.  I will drop commit() and configure the
-memcg filter up front, then verify memcg_path readback after staging via
-start() as you suggested.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-I will send a follow-up patch with these changes.
 
-Thanks,
-Cheng Nie
