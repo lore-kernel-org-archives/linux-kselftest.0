@@ -1,67 +1,81 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011006.outbound.protection.outlook.com [52.101.62.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5494839DBD0
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 10:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780309603; cv=none; b=j17QeQF7szi2ntl744iLcBSZsZkH+UEiQ9eGZx/hIBa7/lAp6JIC3eOClBvfpwOyTIGLqycuu0JE07csNr61eilBCsPVa6T1Rh6ThPc+A5wqsxQm1XDTo0YpNgwIWijkQtvjhylv982euulO4bxytFTxQQVhfD8B9QWKoxObGk4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780309603; c=relaxed/simple;
-	bh=dvopGRgDaRky18g/xnQDE1UFxOqmLWbk1vHTjPzPMBI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dA9bKisKVZgeFF0CJg1TeGn9OY8OQyojQ2ayAAvD5deveL8uL5GG2nCaDNm8RwPJzyKnOWthmDXzho2WmV4nuIIJQyk9HNRkYC57z+Ba6PlT43iMEUx0BGO6alPKysPmbvOcz4TKWA/5g72QgPtlmnXFP3oRic4R2I1bzWZlL9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=j/742p2T; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15932392823;
+	Mon,  1 Jun 2026 10:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.6
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780310470; cv=fail; b=OAxpOSxJuKcVySywuceIQ/xVDiQp9iGT2OafkQUkUIjq3SwtYtbEsFrN4dUUnYM/XjBXMUGBL5ij+q4aW1rBa9ykZOZkBDKEolEtiCO43Mmi69wgREF/2WEciGAUWBYiyrTAGmNAV1Itvg/lvnu0/YX/mV/68Bangb5VrxACVo0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780310470; c=relaxed/simple;
+	bh=gcqMrjxS/37Jcf+m7U97YpNT3/C3gjJgKdoFLfPCTAw=;
+	h=From:To:CC:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=NF/5kSNZnrVr+2PkvmySuG9/kGsc7AdROaI7pFvtQdc0XNYQ3DOZbXzC6TpR/Pc3LoktFkciCZ3eVqdTo4NCboeCJI1kK+KYsWQ4T2PKnpPiXiibPZWoUbk4hjcyNccbG+ImK9ByQJlJiOf/SWFsxFE920BglbRXt1LdKcNyneE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=PMbaULee; arc=fail smtp.client-ip=52.101.62.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="j/742p2T"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-307263ad0cbso464189eec.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 03:26:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1780309600; x=1780914400; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZpUjEIn4ZuMPGVsNdGCP5Htku1Dpr8xmIsStUVmQFFI=;
-        b=j/742p2T/qPMH00Q43a7LU6OH07orb07XGQ8nm+/aPUz2v9YgLKssmDGor9tbzfShC
-         0aMoUxh6Y/LNR3Y2S9Iz+ndKV/IXX2TzgdXluEmmMMqkxT1txyFI4+rQf1/Tn2tGect5
-         sy8moLVBUhtAkHsIIsJNxzpi9A5fKyup6E52HhbXt7f/xYP9/CO1ncIcql4IC9PA0FPv
-         JBCaWHQJkkIc8esguxKx2FNduLMNYcbKeQGCaVMWULXiToSb5TiDardwlS/N5Nf2xVUu
-         8cryObDuqgQXS/g26/GKHyeSt2CQ19ID66M4LijRRLk6JeJrhIbIjszhmWuppifI2AFT
-         eIlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780309600; x=1780914400;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZpUjEIn4ZuMPGVsNdGCP5Htku1Dpr8xmIsStUVmQFFI=;
-        b=LpOhoPV+vpHXWaCMW2KJ/FZxC7vAceevCRN9V29H9Us2QAT43mO1x1TXZPlc7CRnNp
-         BoVr0Mipohn6c0hPTvSqaGwUPi1qnggzYAZiEu3nv9P/Yr6gmjasvToQkwIUbaoRILwO
-         PVV2GKNbjLDTu3TuMXMRbs9+1JCmGlS1E5o38wuRi8e4EjKXGWwXyAiEj9fpBizXRv+s
-         4qVMPbzlhzkGWO5HXfLfRTbFCqqYEHzTfXhdK9VfVWxdE282gRARgjZM2socf7DEEO/I
-         fhdakdvtGbP1T5A7IS8oJ35chljdvnLochJWITA7dHq0ba362Z5pqaNxxtbmyP4RMqkj
-         ecJA==
-X-Forwarded-Encrypted: i=1; AFNElJ+rnWifC7GhGEMM18eVOXOxCWGXxGuB++4ShYR9A6XL0ofw/3hA17DovBH7XqKnYj3WGVeba4Ea+VTy2AKQ5C8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKXndbC4sljvpihiPQdygpuuO03kPn2QYQAP/PDxN5huSv3OiR
-	uWeRYwJOGc1pMJysx1Ypp0W6KQvsAulZGA3/xLXIQ636t41V7le0lnQYRm4c2LFV2zY=
-X-Gm-Gg: Acq92OEzd6hVzmjZTWy3CI33A/AvAGAqGZ7YUIlo667+YOtC7xfTFWVhJdohqudSY8l
-	93D8jwiyDCUwLUAp161JfMkD8BiLyfAS7zY+Rqbe4XueRCsa3jtsxxdol70bH/YgXQsuPBdB5Kj
-	FYyuRGGzNeM4mm10cPG2+IJgBhFzyLhLSYNgG/U7RBn5ar4Bc0FhJrR/w/51103CfgabMZj/IYH
-	mC5V1Y/M01Z5KqITQ0R7YqPFsemzuexQlwUoYSFzqEaG+eFnUJyDk8MTpIGf2TvgqeQNWtMYr5j
-	n9W8MoZ72jnrIFtKLjS/VlnctLga5JgnkQxGkfKhlO2tjdih9ZaLvVSSUFUx5Nx6Wbn+G4NFdqS
-	OFB2j1OqdiuIoNGT8+bLsS2e/DZJJvJaF7lK9e3eYbJsYpDfBekIp9EQt3YWqrrgk3uwRDT5f/N
-	IJhDOLdNjZANjNpVGvO5AZPgrLK2JRpaWQ3tp63jcsLcdsDnZGpqt3HQ==
-X-Received: by 2002:a05:7300:a44c:b0:2da:2ec2:64e5 with SMTP id 5a478bee46e88-304fa5e320cmr3916930eec.18.1780309600522;
-        Mon, 01 Jun 2026 03:26:40 -0700 (PDT)
-Received: from sw07.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5b9be7sm8176001eec.27.2026.06.01.03.26.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 03:26:39 -0700 (PDT)
-From: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-Date: Mon, 01 Jun 2026 03:26:26 -0700
-Subject: [PATCH v5 5/5] KVM: riscv: selftests: Split SBI FWFT into separate
- feature-specific sublists
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="PMbaULee"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=seliv3gXzHqtcJ2yj7FKvggMxCZsBcFBqj2Kf+JApCckp2Qd3jED3B5DmApBpiOJ743d5DscR29o76Jf3RFiHcVBmHBgOcHJjxo5h0yxO15hFTXOIk38jMjbUqRxi9Ff4qqX3hfSCceIOnTLqtGqebrki6vSP/EQ0aTO80jmCu50Rnts4kpYefTa/l0XgGre7JvJTMmBaBJXed515uEBLXOvVvQ12e1bcA7mMq2sB88dIz+ckKSxBmp4BU9zpKPPNC0Md3cl9QZURCgBYaQDA5xtrwVEJb6USp0Kxb2e+IGy9gaxqzL6h0MH6RHKIsprKUbc+/uH54GdwUNKmGs4+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=el4RK+7qcGwTehOhzw7cH04JaMQx27gX1w20bw5pWPw=;
+ b=rhr8LtpFCwlF78J3Z2eheRNcmG2XpytYVvYoH2dwpALhjfyiufpvA3CJjjM0cGinxkEoeKdoWBQ5XE6MYs23VthLJqc75m5fs0Ojc36ek+fPg/2Vjek5zi8QwoJCMILuI7EoMjiSaiGYMe6aqfS+guNbM84UVGjyc0Q+OuU+qR0+0UIA7wiHPBd1sbsjEc0C+0lEHlOOMrK2LykihqIb4zo4cOCB6YvMMr/Wjg7oFSfbi2mYhZZKlIAZcAQxBXQeAmbvDCzK7h078fEFcJsrr5/vypdrUrFm9nOvgk/H8yIZ4vqkjWlMt488buusNLCJLqxQiabK/2SoWcdgOa9sQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=el4RK+7qcGwTehOhzw7cH04JaMQx27gX1w20bw5pWPw=;
+ b=PMbaULeeBtXP1P53XIKAJwXezvyxtOL9wWStzdm7xh8wvEuoKJAEOjYzkEZ9K1kNsXkgIWlRVryprvUvN6CJn932SDBPSxqELAdvcFlbAg3pWzBHpgqzKmV1rqsIMQSpfQLigU9RiBswOR7+FMd2r6rJgPt2GSFdAZFC21Nqb5Q=
+Received: from BL1PR13CA0285.namprd13.prod.outlook.com (2603:10b6:208:2bc::20)
+ by MW6PR12MB8952.namprd12.prod.outlook.com (2603:10b6:303:246::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.14; Mon, 1 Jun 2026
+ 10:41:01 +0000
+Received: from BL6PEPF0001AB72.namprd02.prod.outlook.com
+ (2603:10b6:208:2bc:cafe::64) by BL1PR13CA0285.outlook.office365.com
+ (2603:10b6:208:2bc::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.92.6 via Frontend Transport; Mon, 1
+ Jun 2026 10:41:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ BL6PEPF0001AB72.mail.protection.outlook.com (10.167.242.165) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.92.5 via Frontend Transport; Mon, 1 Jun 2026 10:41:00 +0000
+Received: from BLR-L1-NDADHANI (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.41; Mon, 1 Jun
+ 2026 05:40:55 -0500
+From: Nikunj A Dadhania <nikunj@amd.com>
+To: Sean Christopherson <seanjc@google.com>, Andrew Cooper
+	<andrew.cooper3@citrix.com>
+CC: David Woodhouse <dwmw2@infradead.org>, Paolo Bonzini
+	<pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
+	<hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, <kvm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, "Saenz
+ Julienne, Nicolas" <nsaenz@amazon.es>, Maciej Wieczor-Retman
+	<maciej.wieczor-retman@intel.com>, Tom Lendacky <thomas.lendacky@amd.com>,
+	Shivansh Dhiman <shivansh.dhiman@amd.com>, Neeraj Upadhyay
+	<Neeraj.Upadhyay@amd.com>
+Subject: Re: [PATCH] KVM: SVM: Always intercept ICEBP, add INT1 selftests
+In-Reply-To: <afy2h3RxiKSBh_Ym@google.com>
+References: <e03f092dfbb7d391a6bf2797ba01e122ba080bcd.camel@infradead.org>
+ <afycwi4KT6xrQhMX@google.com>
+ <beff5bd9-ae7c-4f2e-a718-7c8e92e78e4e@citrix.com>
+ <afysu56g2dTFla6-@google.com> <afy2h3RxiKSBh_Ym@google.com>
+Date: Mon, 1 Jun 2026 10:40:52 +0000
+Message-ID: <85o6hu4k7f.fsf@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,177 +83,93 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260601-kvm-get_reg_list-v2-v5-5-415d08a2813b@sifive.com>
-References: <20260601-kvm-get_reg_list-v2-v5-0-415d08a2813b@sifive.com>
-In-Reply-To: <20260601-kvm-get_reg_list-v2-v5-0-415d08a2813b@sifive.com>
-To: Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger?= <cleger@rivosinc.com>, 
- Andrew Jones <ajones@ventanamicro.com>, Paolo Bonzini <pbonzini@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: greentime.hu@sifive.com, vincent.chen@sifive.com, zong.li@sifive.com, 
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, inochiama@gmail.com, 
- Yong-Xuan Wang <yongxuan.wang@sifive.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780309592; l=6157;
- i=yongxuan.wang@sifive.com; s=20260424; h=from:subject:message-id;
- bh=dvopGRgDaRky18g/xnQDE1UFxOqmLWbk1vHTjPzPMBI=;
- b=Olw29Tmd5roLVBLWWP49d+h5thdSBlPI0OZxQt2vjWmCkx7EuWs1TdMjVMOQKpouSKkjMyimr
- wTecLpqPhRoCpumKzUBuxJhFUA60FQQDmUile8JquKjB1uNad5HoPnR
-X-Developer-Key: i=yongxuan.wang@sifive.com; a=ed25519;
- pk=+8NCHB1ZJvZthQAmZspOAaqjo+/snaW8mFSiDx45HxY=
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB72:EE_|MW6PR12MB8952:EE_
+X-MS-Office365-Filtering-Correlation-Id: 82a28917-381d-4cba-6ee0-08debfca45d4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700016|376014|7416014|82310400026|22082099003|18002099003|11063799006|4143699003|3023799007|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	KWrDt6GNCJC46AmP7RviVq89pq9V9VYZE/ynOoXXydEnm4rlcxVsMG7F0AWFwS6vsTYFzKs0bXOQFL28rY1I3IEp8Z9aoHgHp9C1coGslVZobtyaTUS86fWTjQPjCeLw4614uIXbhywGIEdRL55DHh2xnyJh/LBbuwoxzJgQcHLC5H+sM5aKEyDU3jB1HbHBc/gImDuiUgqvHuZlYfGHAUmLVZf6+pe+FiIpHqgJWvXgk2kpyoPDoLr0LjQhrMeXzqddmrzYcyplCk0mv2+2FH97IAIQN1GtobIH9wljqG1mrNgn9vTFkvDDS7ozqNpsmubiTBYqfYVml+kb68R1yeOc/28QRcOcwI+tlb6qeCg95PEAENHiktO2ahT6+Vfomy1lRdYDmJQ7sCNZlB0T+uLv0k49Vqk63TMPttd0LkM3SXCSvnWCHp76vUZXkC6UJkF4nIpUXzQY1IDoGI99TkYKOag+Xy0E+liXSm2dflDi1z48nTz55pfK3btNngSYHWuywxxAuwetVd/w6AzexhCICchPK/zrjaQtZK2+TzdD53pTSXBdrwbVKxCogqpxdRabWdFW61j1JJOw8d23hcoajjMnU+x595JQqYtpsaMGIVVBC32+JsedRIXM2EOynKB3YywpSD3N3FBNoewcykxqCDpJN3gVpp1ffdtGyQvpHNWlNlxRwpsfMWOUw9yDAiXUH0HTKVMYVQ1tx0g+UFm5KWyAMUfzVKazVVio2vc=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700016)(376014)(7416014)(82310400026)(22082099003)(18002099003)(11063799006)(4143699003)(3023799007)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	sChymLikBxSrDxGuCIHnd8JoJisZSfTergaHGzldq6TCf8ptyMnvUb+DcypV+2kCG6ZGWJjpwnMOmeklTDYRt8i1y+D+3EJEeU0QKJR773hqNdNcd4IUk+SFOGMCyFN5dWyq6KjTMjaVgtqW28AsIEqS2+r1t6NdXPjrso/Kb98BmKf/NUfNpE9tLxZ3CxEgGQkMQQyrUdjfEAQINONFVrEhcY5cvaxmiBiXBxPM/JrTaW1bSOyGmTKgbwHj3gCi+ISypFmaepEair4/FYDNkAaJrmjJvUcJZimxbsGxPWKuPHdRCNstDBSM8VbopeCNy1LSkpJUTtTWsQXeXXZsw6AuRpEuY89Sz4DKciZDNZYE3lGh5dErQK9OsIK3XqTnaQKLB+hr5+stHrSl7AMo7fHZufkFc6g2wkTm/zHcjxpQVnMLISRlDauBmO0dnT/a
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2026 10:41:00.8591
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82a28917-381d-4cba-6ee0-08debfca45d4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB72.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8952
 
-Divide the monolithic SBI FWFT (Firmware Features) register list into
-separate sublists, each testing a specific FWFT feature independently
-with proper dependency checking.
+Sean Christopherson <seanjc@google.com> writes:
 
-Previously, all FWFT features were tested together in a single sublist.
-This caused issues because:
-1. Not all FWFT features are available on all platforms
-2. Some features depend on specific ISA extensions (e.g., pointer_masking
-requires Smnpm)
-3. Tests would fail if any single feature was unavailable
+> +AMD folks
+>
+> On Thu, May 07, 2026, Sean Christopherson wrote:
+>> On Thu, May 07, 2026, Andrew Cooper wrote:
+>> > On 07/05/2026 3:08 pm, Sean Christopherson wrote:
+>> > > On Thu, May 07, 2026, David Woodhouse wrote:
+>> > >> From: David Woodhouse <dwmw@amazon.co.uk>
+>> > >>
+>> > >> ICEBP (INT1, opcode 0xF1) generates a #DB that is architecturally a
+>> > >> trap, but on SVM it was not always intercepted. Unconditionally
+>> > >> intercept ICEBP on SVM to match VMX behaviour and ensure correct
+>> > >> event delivery semantics.
+>> > >>
+>> > >> Add two selftests exercising ICEBP:
+>> > >>
+>> > >>  - int1_ept_test: verifies that ICEBP works correctly when the
+>> > >>    exception stack page is not present (EPT/NPT fault during #DB
+>> > >>    delivery). The IST stack is evicted via MADV_DONTNEED before
+>> > >>    executing INT1.
+>> > >>
+>> > >>  - int1_task_gate_test: verifies ICEBP delivery through a 32-bit
+>> > >>    task gate, exercising the legacy task-switch path for #DB.
+>> > >>
+>> > >> Tested on Intel Sapphire Rapids and AMD Genoa. Without the SVM fix,
+>> > >> int1_task_gate_test fails on AMD with EIP pointing at ICEBP instead
+>> > >> of after it. With the fix, both tests pass on both platforms.
+>> > > Hmm, but KVM unconditionally intercepts task switches.  Is this effe=
+ctively working
+>> > > around a bug in task_switch_interception()?
+>> >=20
+>> > Not really.=C2=A0 It's a bug/misfeature in AMD CPUs.
+>> >=20
+>> > When you get TASK_SWITCH (which always has fault semantics), you look =
+at
+>> > the vectoring event type to decide whether it was logically caused by a
+>> > trap, and therefore whether to move %rip forwards before entering the
+>> > new task.
+>> >=20
+>> > AMD CPUs don't distinguish instruction-induced #DBs (i.e. ICEBP) from
+>> > exception-induced #DBs (all others), and also don't report an
+>> > instruction length for an ICEBP-induced TASK_SWITCH.
+>>=20
+>> Heh, that explains why I couldn't find an equivalent of INTR_TYPE_PRIV_S=
+W_EXCEPTION
+>> in the SVM code.
+>
+> Dragging in a comment/concern Andrew raised offlist.  If AMD doesn't prov=
+ide or
+> *allow* the equivalent of INTR_TYPE_PRIV_SW_EXCEPTION, i.e. type 5, then =
+what
+> happens when KVM needs to inject an INT1 #DB with FRED enabled?
 
-Add the feature-specific SBI FWFT sublists with the following
-improvements:
-- Add check_fwft_feature() helper to verify FWFT feature availability
-  at runtime
-- Update filter_reg() to handle per-feature FWFT register filtering
+I'm checking internally to get clarification on this. Will follow up
+once I have more details.
 
-Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
----
- tools/testing/selftests/kvm/riscv/get-reg-list.c | 60 ++++++++++++++++++++++--
- 1 file changed, 57 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index 5033c09201ef..cb86cb6b3635 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -27,6 +27,7 @@ enum {
- };
- 
- static bool isa_ext_cant_disable[KVM_RISCV_ISA_EXT_MAX];
-+static bool sbi_ext_enabled[KVM_RISCV_SBI_EXT_MAX];
- 
- bool filter_reg(__u64 reg)
- {
-@@ -149,6 +150,14 @@ bool filter_reg(__u64 reg)
- 	case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(iprio1h):
- 	case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(iprio2h):
- 		return isa_ext_cant_disable[KVM_RISCV_ISA_EXT_SSAIA];
-+	/*
-+	 * FWFT misaligned delegation registers are always visible when the SBI FWFT
-+	 * extension is enable and the host supports the misaligned delegation.
-+	 */
-+	case KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.enable):
-+	case KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.flags):
-+	case KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.value):
-+		return sbi_ext_enabled[KVM_RISCV_SBI_EXT_FWFT];
- 	default:
- 		break;
- 	}
-@@ -193,6 +202,27 @@ static int override_vector_reg_size(struct kvm_vcpu *vcpu, struct vcpu_reg_subli
- 	return 0;
- }
- 
-+void check_fwft_feature(struct kvm_vcpu *vcpu, struct vcpu_reg_sublist *s, u64 feature)
-+{
-+	unsigned long value;
-+	int rc;
-+
-+	/* Enable SBI FWFT extension so that we can check the supported register */
-+	rc = __vcpu_set_reg(vcpu, feature, 1);
-+	if (rc)
-+		return;
-+
-+	for (int i = 0; i < s->regs_n; i++) {
-+		if ((s->regs[i] & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_SBI_STATE) {
-+			rc = __vcpu_get_reg(vcpu, s->regs[i], &value);
-+			__TEST_REQUIRE(!rc, "%s not available, skipping tests", s->name);
-+		}
-+	}
-+
-+	/* We should assert if disabling failed here while enabling succeeded before */
-+	vcpu_set_reg(vcpu, feature, 0);
-+}
-+
- void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
- {
- 	unsigned long isa_ext_state[KVM_RISCV_ISA_EXT_MAX] = { 0 };
-@@ -235,6 +265,9 @@ void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
- 			break;
- 		case VCPU_FEATURE_SBI_EXT:
- 			feature = RISCV_SBI_EXT_REG(s->feature);
-+			if (s->feature == KVM_RISCV_SBI_EXT_FWFT)
-+				check_fwft_feature(vcpu, s, feature);
-+			sbi_ext_enabled[s->feature] = true;
- 			break;
- 		default:
- 			TEST_FAIL("Unknown feature type");
-@@ -897,11 +930,15 @@ static __u64 sbi_sta_regs[] = {
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_STA | KVM_REG_RISCV_SBI_STA_REG(shmem_hi),
- };
- 
--static __u64 sbi_fwft_regs[] = {
-+static __u64 sbi_fwft_misaligned_deleg_regs[] = {
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_FWFT,
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.enable),
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.flags),
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.value),
-+};
-+
-+static __u64 sbi_fwft_pointer_masking_regs[] = {
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_FWFT,
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.enable),
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.flags),
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.value),
-@@ -1129,7 +1166,6 @@ KVM_SBI_EXT_SIMPLE_CONFIG(pmu, PMU);
- KVM_SBI_EXT_SIMPLE_CONFIG(dbcn, DBCN);
- KVM_SBI_EXT_SIMPLE_CONFIG(susp, SUSP);
- KVM_SBI_EXT_SIMPLE_CONFIG(mpxy, MPXY);
--KVM_SBI_EXT_SUBLIST_CONFIG(fwft, FWFT);
- 
- KVM_ISA_EXT_SUBLIST_CONFIG(aia, SSAIA);
- KVM_ISA_EXT_SUBLIST_CONFIG(fp_f, F);
-@@ -1206,6 +1242,23 @@ KVM_ISA_EXT_SIMPLE_CONFIG(zvksed, ZVKSED);
- KVM_ISA_EXT_SIMPLE_CONFIG(zvksh, ZVKSH);
- KVM_ISA_EXT_SIMPLE_CONFIG(zvkt, ZVKT);
- 
-+static struct vcpu_reg_list config_sbi_fwft_misaligned_deleg = {
-+	.sublists = {
-+		SUBLIST_BASE,
-+		SUBLIST_SBI(fwft_misaligned_deleg, FWFT),
-+		{0},
-+	},
-+};
-+
-+static struct vcpu_reg_list config_sbi_fwft_pointer_masking = {
-+	.sublists = {
-+		SUBLIST_BASE,
-+		SUBLIST_ISA(smnpm, SMNPM),
-+		SUBLIST_SBI(fwft_pointer_masking, FWFT),
-+		{0},
-+	},
-+};
-+
- struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_sbi_base,
- 	&config_sbi_sta,
-@@ -1213,7 +1266,8 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_sbi_dbcn,
- 	&config_sbi_susp,
- 	&config_sbi_mpxy,
--	&config_sbi_fwft,
-+	&config_sbi_fwft_misaligned_deleg,
-+	&config_sbi_fwft_pointer_masking,
- 	&config_aia,
- 	&config_fp_f,
- 	&config_fp_d,
-
--- 
-2.43.7
+Regards,
+Nikunj
 
