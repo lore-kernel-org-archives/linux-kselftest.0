@@ -1,70 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497B91C84DC;
-	Mon,  1 Jun 2026 14:20:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714BA175A79;
+	Mon,  1 Jun 2026 14:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780323602; cv=none; b=XMhFcNEEACWAMctEoJBCqpxMxhKe0FuD2eKQsG3ojMxZqrh6Nq8cK5iYB3I4jTBUPPQlPSjhPMf475C4dj3H0qlIcbZ9ECzLKsJSwe+8tpcUln0g/W3tr3zdnY8FqZDZu/QBjmmZgDMocS89+JKoV6YAbpI3bIATcnX/T/gjeDE=
+	t=1780323710; cv=none; b=dvku+MaY8ST1l4DDkEQ7GXG6teL6HnmXSQlCnKoazmQKpllh3+JpD0JItNumPmkGFAUmNnUACL/mrIaeg8xrsshEMupGncapeOLXsuWs35J1OUiNc3/9XmJNl6HVOl5JrJjV+q68PyLq2zFktSieAnS2lLWBVm3FVLvQC646wqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780323602; c=relaxed/simple;
-	bh=gTcBWNbT9agy0S8H/JO3qkMSLHQCDoW6gAoJAtnC1/E=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=k6b8gjphzZIKPH3Ld/GQRxSMqs+gIH5xtVbJL18Mftc6c64JZiza2jDvVk1SduPt7TtxwLj1sylE7luxAixZFcPsEgZOupLOu4I1Dv8UbMcg42TI29ndZhPMGlwFPHiXJmMdJ4LQ1hU7EljXy/4NnHVUp3+oirJuIvzMsH+t0R4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aBxSk4mH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780323710; c=relaxed/simple;
+	bh=IOcxPEHICCL51BKS06FyAFs8cw1ni6OLEKerno7YO5o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R9rR5cSqPpbrzNzfGjNlVgLyAj/7gIGvWp5qcItScWM+ykNrYGbaHJ7uZBBwXetbO1d1EH15MQ9QH7XEOUDNPBK8/xLPpaaHqYU8pApVhSSY++uKZ6V3ni75EBu6bBJ/RPeWO+8i1Y+MsIKvlF1ArLQYnql91QlAqm4noF81af0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=sSAUDiDC; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aBxSk4mH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A8611F00893;
-	Mon,  1 Jun 2026 14:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780323601;
-	bh=UOzybEzeLExkH9mUl9oBfp93NZv2EoV0lRz4YiNg45Y=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=aBxSk4mHUoODPHO12PREt7EgMTEXEXpHHJMcvZe3Vj+AIchbsf4rNiraqBIyY6eX1
-	 2lIPQiH14ZViB/aO962wV/vfy2NPH5cUJNjbg4Ueb+xFdvhfkoqf4C/0LmHee76TPw
-	 G1y7++6qdg4AhI5A44YjrrmPBR4TBL+6BrlMjWCdFXRP22vxxThNpHfDx5LwxHNOTb
-	 6rqVRRP/vSRSya8f84xsWMqmbd/4DhaxZKbnXzCjvTBl+gbBCkPkG88joWnHnS5o/L
-	 lnX3Wg28hqTzwxADnDOMWa93KPLkugVqAmXGl5IAUJfJUU0fxBhNcZ07/Jw6CsU6b+
-	 05evwhABEcYyA==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kselftest@vger.kernel.org,  rppt@kernel.org,  shuah@kernel.org,
-  akpm@linux-foundation.org,  linux-mm@kvack.org,
-  skhan@linuxfoundation.org,  linux-doc@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  corbet@lwn.net,  dmatlack@google.com,
-  kexec@lists.infradead.org,  pratyush@kernel.org,  skhawaja@google.com,
-  graf@amazon.com
-Subject: Re: [PATCH v4 12/13] selftests/liveupdate: Add stress-sessions
- kexec test
-In-Reply-To: <20260530221938.115978-13-pasha.tatashin@soleen.com> (Pasha
-	Tatashin's message of "Sat, 30 May 2026 22:19:37 +0000")
-References: <20260530221938.115978-1-pasha.tatashin@soleen.com>
-	<20260530221938.115978-13-pasha.tatashin@soleen.com>
-Date: Mon, 01 Jun 2026 16:19:57 +0200
-Message-ID: <2vxz33z6filu.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="sSAUDiDC"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Reply-To:Content-ID:Content-Description;
+	bh=ld8GsU1c1V5Fz4U8E6o0CkhW7dY85l6LqJOFpHNFmks=; b=sSAUDiDCq5NGSHv+nC+l+qz+Vj
+	lC/Gmk8HutkP0z9ZfJbS8rJEh8J7xUVl582c6HkKJVRq4S0o1oJpWTpb9fFhfz6XjIUl2HU1pMVUd
+	pPDiqBOmGN+ctv5derWtH/PoW7qvNXwZEk/b4m7CxwdUB9Tl9tFYWR+pKM2taEn+TDEB7WksASSn2
+	bzXvFegZfjXeVMk4ODi5RwzC5gQR3SiWB8jBNdVjy2W4FEKQUxImN/OC3wfnRXo4ZzghmUf+rg/aj
+	AJy8zonYFpgJYYdUAm7eJgpZJ04D3d15Ejn3Yj2XAIqfzo/OhlX2dBWTtRviXFr6+JbTB4iSyZ5ci
+	VAv81dWQ==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wU3WI-002Eg1-34;
+	Mon, 01 Jun 2026 14:21:35 +0000
+Date: Mon, 1 Jun 2026 07:21:29 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc: Marcel Holtmann <marcel@holtmann.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2 0/6] Bluetooth: convert remaining bluetooth
+ socket families to getsockopt_iter
+Message-ID: <ah2GaClhUehy5ys9@gmail.com>
+References: <20260512-getsock_three-v2-0-30b7b22ef14c@debian.org>
+ <CABBYNZ+nvtMHcU9but5VEG891vyO=K0MF3OAGofANxzdLVmw-g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABBYNZ+nvtMHcU9but5VEG891vyO=K0MF3OAGofANxzdLVmw-g@mail.gmail.com>
+X-Debian-User: leitao
 
-On Sat, May 30 2026, Pasha Tatashin wrote:
+Hello Luiz,
 
-> Add a new test that creates 2000 LUO sessions before a kexec
-> reboot and verifies their presence after the reboot. This ensures
-> that the linked-block serialization mechanism works correctly for
-> a large number of sessions.
+On Thu, May 14, 2026 at 01:51:16PM -0400, Luiz Augusto von Dentz wrote:
+> On Tue, May 12, 2026 at 7:12 AM Breno Leitao <leitao@debian.org> wrote:
+> >
+> > Continue the conversion to .getsockopt_iter for the Bluetooth socket
+> > families: hci_sock, ISO, RFCOMM, SCO and L2CAP. The first patch is a
+> > small precursor that fixes a long-standing 1-byte put_user write in
+> > hci_sock_getsockopt_old() so the subsequent conversion stays mechanical.
+> >
+> > The riskiest change in this series is the SCO BT_CODEC conversion: it
+> > is the only one that drops an open-coded ptr cursor in favour of
+> > relying on iter_out advancing naturally on every copy_to_iter() call.
+> > Every other socket option is a near-mechanical s/copy_to_user/
+> > copy_to_iter/ rewrite, but BT_CODEC walks a variable-length list of
+> > codecs + capabilities and previously tracked its own write offset by
+> > hand. Getting the cursor semantics wrong here would silently truncate
+> > or misalign user-visible codec data.
+> >
+> > For more context about the motivation for this change, please check
+> > commit 67fab22a7ad ("net: add getsockopt_iter callback to proto_ops")
+> >
+> > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > ---
+> > Changes in v2:
+> > - rebase the tree on top of bluetooth-next.
+> > - Remove the selftest, which was mixing network and bluetooth together.
+> > - Link to v1: https://patch.msgid.link/20260511-getsock_three-v1-0-1461fa8786ab@debian.org
+> >
+> > To: Marcel Holtmann <marcel@holtmann.org>
+> > To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+> > Cc: linux-bluetooth@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> >
+> > ---
+> > Breno Leitao (6):
+> >       Bluetooth: hci_sock: write the full optval for getsockopt
+> >       Bluetooth: hci_sock: convert to getsockopt_iter
+> >       Bluetooth: ISO: convert to getsockopt_iter
+> >       Bluetooth: RFCOMM: convert to getsockopt_iter
+> >       Bluetooth: L2CAP: convert to getsockopt_iter
+> >       Bluetooth: SCO: convert to getsockopt_iter
+> >
+> >  net/bluetooth/hci_sock.c    | 26 +++++++++++--------
+> >  net/bluetooth/iso.c         | 27 ++++++++++----------
+> >  net/bluetooth/l2cap_sock.c  | 61 +++++++++++++++++++++++++++------------------
+> >  net/bluetooth/rfcomm/sock.c | 30 ++++++++++++----------
+> >  net/bluetooth/sco.c         | 59 ++++++++++++++++++++++---------------------
+> >  5 files changed, 114 insertions(+), 89 deletions(-)
+> > ---
+> > base-commit: c2f0079e8c42fd6814c8d6b1491e3ce0a0e3b3fa
+> > change-id: 20260511-getsock_three-d0d7f1b2629e
+> >
+> > Best regards,
+> > --
+> > Breno Leitao <leitao@debian.org>
 >
-> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> There are some comments from sashiko on this:
+>
+> https://sashiko.dev/#/patchset/20260512-getsock_three-v2-0-30b7b22ef14c%40debian.org
+>
+> Now Im not sure the truncating is actually used by our tools, but that
+> sounds like it could break userspace if we don't check properly, or
+> have you already done this for other socket families and it was
+> considered to be ok?
 
-Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+You're right — to clarify, the patch changes behavior when the user
+provides a short optlen, preventing the overflow that existed before:
 
-[...]
+ - Old code: put_user(opt, (u32 __user *)optval) unconditionally
+   writes sizeof(*ptr) bytes regardless of optlen, so optlen < 4
+   would overflow the user buffer and return 0.
 
--- 
-Regards,
-Pratyush Yadav
+ - New code: copy_to_iter() respects the optlen boundary, eliminating
+   the overflow — but now a short buffer fails the strict length check
+   and returns -EFAULT instead of 0.
+
+I don't believe any legitimate userspace relies on the old overflow
+behavior, though there's a theoretical risk of breakage. I'm not deeply
+familiar with the Bluetooth ecosystem specifically, but, I would prefer to
+avoid the buffer overflow in such case.
+
+I've addressed a similar issue in another subsystem recently:
+
+https://lore.kernel.org/all/20260521-fix_llc-v2-1-ab44cc09179c@debian.org/
+
+Anyway, let me know if you need me to change it.
+--breno
+
