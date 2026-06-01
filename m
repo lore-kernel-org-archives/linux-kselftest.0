@@ -1,173 +1,116 @@
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59E933F385;
-	Mon,  1 Jun 2026 06:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ABE733E351;
+	Mon,  1 Jun 2026 06:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780294641; cv=none; b=a/Bll3KdURWxWVSdUeZFtiaLT0DTmSeVLF3xTXq05piSkbnwx6iLfThJ4ODcdz5dWbDy63Yyjdqe4dpxy5VzUn9ZeQ3XejK3BT1PDmJUgW691P76rWyTBU+hIAlSlQlsP5na7W09p+UyWWDOyFa6malseeV8iJQWTyHP4KL7GdI=
+	t=1780294829; cv=none; b=COpb6MGeQB4alTsOIPRnqJONQTNenKJXx0cYfeakBgrN3sjZ5sE3W5hGcsXIA9gfhrXiyeFiwS50jbM/0ACu507dF1BD55Nk5zkAzfi0YRuCkp7ivhE9TaLUqPPdmwR2lBufvAPWbg7fYmLaqGJz2hpK75eHuHtpAsxCkkoNyzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780294641; c=relaxed/simple;
-	bh=UihMiOTfDJRfJjmqfhqu9gvy6Q895RAgpxzCYDzc5Xg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jjt4f2a57ChlDetDpuke60XZRwcA6Ffb8+MfDg//4ibIDXa7PpBHFMKDuKZ3iS3dR5GOtq6AH2o6KTsmfNEGR7RQSGHPCLoJMxKLHKGIhSSVXJm6AiXl101fH1tgKuFWViGt2tvDLKtwUwa5/Z3XmWzef9Kxidufh5M5r0JS9cM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=uUPDJhqc; arc=none smtp.client-ip=115.124.30.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="uUPDJhqc"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1780294633; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=trvE0xJ84EkBQvsLZo8DiAzrmg+egpDX0iqFxhFhu0A=;
-	b=uUPDJhqc1Wbtrv6PwpsHm7cdO50RUSy9BVePrEJz+e+bCbbEGV2SAv+uL0sCVS86xcnNNlA+9Y0s9oLt1AxYMNO0lj7LlD4FRWvhdMiULGq1kFuDkTMHkyZ3YAx3abCLLpbMmZQsTKkQ2CrhpfjSeAVhd1GUlzintqNbR25MkP4=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X3x9b9C_1780294629;
-Received: from 30.246.178.94(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X3x9b9C_1780294629 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 01 Jun 2026 14:17:11 +0800
-Message-ID: <0a913398-3d0c-472e-89c4-062052eae04d@linux.alibaba.com>
-Date: Mon, 1 Jun 2026 14:17:08 +0800
+	s=arc-20240116; t=1780294829; c=relaxed/simple;
+	bh=fuyJm1stv7mtfFOUq7RyTFMr8nGgGxOrXi+4hZcLf+I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TfVr9MdbhBHopdQoUTB7PJbt57o66XMt05vOzyFnsM/kTmM0m5Em/DkHPWMJH3lPV3SS0UHK4EKa+8bkr6DUAroN5xRfo/6we3Eo7Ps72U+Tz2P+2zWYheNaYlwPXYf/ZQd0HRFLtzJsuPHSxvS4a4amnV7TWfmeloBKhVNsV4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: f5ce4aa65d8111f1aa26b74ffac11d73-20260601
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
+	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_T1, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:c09750be-4d5d-47d0-ab43-158f09b2c832,IP:10,
+	URL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:-15
+X-CID-INFO: VERSION:1.3.12,REQID:c09750be-4d5d-47d0-ab43-158f09b2c832,IP:10,UR
+	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-15
+X-CID-META: VersionHash:e7bac3a,CLOUDID:b95280df6f48efbbcc9c4b1867cf65a9,BulkI
+	D:260601142020HHSVIJTN,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
+	850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,File:nil,RT:nil,B
+	ulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR
+	:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: f5ce4aa65d8111f1aa26b74ffac11d73-20260601
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1611578840; Mon, 01 Jun 2026 14:20:18 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hongfu Li <lihongfu@kylinos.cn>
+Subject: [PATCH v5 0/4] selftests/mm: refactor pkey helpers and fix mmap error handling
+Date: Mon,  1 Jun 2026 14:19:49 +0800
+Message-Id: <20260601061953.696844-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/8] scripts/sorttable: Handle RISC-V patchable ftrace
- entries
-To: Wang Han <wanghan@linux.alibaba.com>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Alexandre Ghiti <alex@ghiti.fr>,
- Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Chen Pei <cp0613@linux.alibaba.com>, Andy Chiu <andybnac@gmail.com>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
- Deepak Gupta <debug@rivosinc.com>, Puranjay Mohan <puranjay@kernel.org>,
- Conor Dooley <conor.dooley@microchip.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
- Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
- Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, oliver.yang@linux.alibaba.com,
- zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
- <20260528082310.1994388-2-wanghan@linux.alibaba.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20260528082310.1994388-2-wanghan@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+The main changes in this series are to refactor shared tracing and assertion
+helpers into a common file, unify both pkey selftests on pkey_assert() and 
+per-test tracing for consistent diagnostics, and add missing mmap() return 
+checks with MAP_FAILED used throughout for readability and consistency.
 
+Hongfu Li (4):
+  selftests/mm: move pkey selftest helpers to pkey_util.c
+  selftests/mm: unify pkey sighandler selftest assertions and tracing
+  selftests/mm: use pkey_assert on clone_raw failure in pkey test
+  selftests/mm: add missing mmap() return checks in pkey tests
 
-On 5/28/26 4:23 PM, Wang Han wrote:
-> RISC-V uses -fpatchable-function-entry=8,4 when the compressed ISA is
-> enabled and -fpatchable-function-entry=4,2 otherwise. In both cases, the
-> patchable NOP area starts 8 bytes before the function symbol address.
-> The __mcount_loc entries therefore point at the patchable NOP area
-> associated with a function, while nm reports the function symbol at the
-> entry address used for the function range check.
-> 
-> After RISC-V selected HAVE_BUILDTIME_MCOUNT_SORT, sorttable started
-> applying that range check at build time. Without allowing entries just
-> before the reported function address, the mcount sorter treats valid
-> RISC-V ftrace callsites as invalid weak-function entries and writes
-> them back as zero. The resulting kernel boots with no ftrace entries,
-> breaking dynamic ftrace and users such as livepatch.
-> 
-> The failure is silent during the final link because zeroing weak-function
-> entries is an expected sorttable operation. At boot, those zero entries
-> are skipped by ftrace_process_locs(), so the only obvious symptom is that
-> the vmlinux ftrace table has lost valid callsites and ftrace users cannot
-> attach to them.
-> 
-> CONFIG_FTRACE_SORT_STARTUP_TEST also reports the table as sorted in this
-> state: it only checks that the __mcount_loc entries are in ascending
-> order, which a fully zeroed table trivially satisfies. The original
-> commit relied on this check and did not see the regression.
-> 
-> On an affected RISC-V QEMU boot with both CONFIG_FTRACE_SORT_STARTUP_TEST
-> and CONFIG_FTRACE_STARTUP_TEST enabled, the sort check still passes
-> while ftrace reports zero usable entries and the early selftests fail:
-> 
->    [    0.000000] ftrace section at ffffffff8101da98 sorted properly
->    [    0.000000] ftrace: allocating 0 entries in 128 pages
->    [    0.054999] Testing tracer function: .. no entries found ..FAILED!
->    [    0.172407] tracer: function failed selftest, disabling
->    [    0.178186] Failed to init function_graph tracer, init returned -19
-> 
-> Handle RISC-V like arm64 for the function-range check and allow
-> patchable entries up to 8 bytes before the function address.
-> 
-> With this fix, a RISC-V QEMU smoke boot with ftrace startup tests shows
-> the vmlinux ftrace table is populated and dynamic ftrace still works:
-> 
->    [    0.000000] ftrace: allocating 46749 entries in 184 pages
->    [    0.051115] Testing tracer function: PASSED
->    [    1.283782] Testing dynamic ftrace: PASSED
->    [    6.275456] Testing tracer function_graph: PASSED
-> 
-> Fixes: 0ca1724b56af ("riscv: ftrace: select HAVE_BUILDTIME_MCOUNT_SORT")
-> Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Link: https://lore.kernel.org/all/20260527113028.4b21a5de@fedora/
-> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
-> ---
->   scripts/sorttable.c | 10 +++++++---
->   1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-> index e8ed11c680c6..4c10e85bb5af 100644
-> --- a/scripts/sorttable.c
-> +++ b/scripts/sorttable.c
-> @@ -891,17 +891,21 @@ static int do_file(char const *const fname, void *addr)
->   	table_sort_t custom_sort = NULL;
->   
->   	switch (elf_map_machine(ehdr)) {
-> -	case EM_AARCH64:
->   #ifdef MCOUNT_SORT_ENABLED
-> +	case EM_AARCH64:
->   		sort_reloc = true;
->   		rela_type = 0x403;
-> -		/* arm64 uses patchable function entry placing before function */
-> +		/* fallthrough */
-> +	case EM_RISCV:
-> +		/* arm64 and RISC-V place patchable entries before the function */
->   		before_func = 8;
+ tools/testing/selftests/mm/pkey-helpers.h     |  4 +-
+ tools/testing/selftests/mm/pkey-powerpc.h     |  2 +-
+ .../selftests/mm/pkey_sighandler_tests.c      | 69 +++++++-------
+ tools/testing/selftests/mm/pkey_util.c        | 86 +++++++++++++++++
+ tools/testing/selftests/mm/protection_keys.c  | 95 ++-----------------
+ 5 files changed, 131 insertions(+), 125 deletions(-)
 
-Nit: The shared comment now sits under `case EM_RISCV:` but the two
-lines above it (sort_reloc / rela_type = 0x403) are strictly
-arm64-only — they configure the RELA-based weak-function fixup that
-RISC-V does not need. On a quick read it is easy to wonder if RISC-V
-is implicitly inheriting that path. Splitting the comments would
-help, e.g.:
+---
+v5:
+- Use ret instead of child_pid to hold the return value of clone_raw().
+- Make tracing_on(), tracing_off() non-static.
+  Remove cat_into_file() declaration from pkey-helpers.h.
+v4:
+- Base changes on top of the latest mm-unstable branch.
+- Split the first patch into three:
+  patch 1: move pkey selftest helpers to shared code;
+  patch 2: unify sighandler selftest assertions and per-test tracing;
+  patch 3: use pkey_assert() on clone_raw() failure.
+- Use ksft_exit_fail_perror() in main() for mmap() failure.
+v3:
+- Use pkey_assert() for remaining sigaction() and clone_raw() error
+  checks for consistency.
+v2:
+- Update commit message
+- Move shared tracing and assertion helpers to a common file,
+  replace assert() with pkey_assert() in sighandler tests
+- Drop assert() from main() in protection_keys.c and add a proper error
+  message instead.
+- Link to v1: https://lore.kernel.org/all/20260518082120.3890552-1-lihongfu@kylinos.cn/
+-- 
+2.50.1
 
-        case EM_AARCH64:
-            /* arm64 needs RELA-based weak-function fixup */
-            sort_reloc = true;
-            rela_type = 0x403;
-            /* fallthrough */
-        case EM_RISCV:
-            /* arm64 and RISC-V place patchable entries before the function */
-            before_func = 8;
-
-
-> +#else
-> +	case EM_AARCH64:
-> +	case EM_RISCV:
->   #endif
->   		/* fallthrough */
->   	case EM_386:
->   	case EM_LOONGARCH:
-> -	case EM_RISCV:
->   	case EM_S390:
->   	case EM_X86_64:
->   		custom_sort = sort_relative_table_with_data;
-
-Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
-
-Thanks.
-Shuai
