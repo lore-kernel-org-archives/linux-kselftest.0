@@ -1,94 +1,84 @@
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCD035972;
-	Mon,  1 Jun 2026 08:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C192A349CFA;
+	Mon,  1 Jun 2026 08:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780300890; cv=none; b=iidBAQJs4gyFgxGhJwr53y4x/Dvcm0+xf7PRq5ZwBrw932so91/kfITqgfTKWbalbSTJmOPdzX0WU37y2SYzEzCVoRa4EbURLIZtxxgtqyFPuNoiGaSORjj96XEO7OV3EYbq4SYYVUUJgf+PdovoB9LKxUjtNQhPadJZtvvCz0E=
+	t=1780302256; cv=none; b=K/7cHirQp6ZNcD+qYzUR3Tx0iM3qNL3rv3E48uKueQPGlMETmOMEQdEzXAk7bP1ej/QJ5KMWXdcNtA9ima8DcsV5xjwNIuvopZw1spxZ4AV5dDbY/d6jj+G4/WyoMiSXPySsiHrNuSqSpQ4NKmsXSE6OTLoLVYAQ57Mbr+3+gl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780300890; c=relaxed/simple;
-	bh=hiGSqWdaKHtoPoaJNIXkxgho3SwPWyYReWIzlKiW4zc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IIZhRaTf1cZ9dk2SXKeiZ01zDa3OFrVHiDjc5DV/GzJnm43Fz12WkT+1v9AIlLAeOn2yyTiGL+l1F/rgOd/vADIoGlqkI5znpI7U0F+2eIxVj5VWefmkrOsfNWAbR6BdA3eV6G2LeAcoj/VQV88WHVJDXzKMoeLkyOUSBw584Go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=TQtEXInh; arc=none smtp.client-ip=54.243.244.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1780302256; c=relaxed/simple;
+	bh=zPU6w23aFER8IWg/Fvfyk9aQxBddnpE2+iGO4vOHv1k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lAohLUe0dJhJ0OI4qrWi1zGiBWl5iGap1f7EwmsJLMu9fVKlYIs3wxUY//5zR72zvYJy6RH4sEDG0Vf0orY49DKrQMpexs2heqMrfAuPbS4w2SIJLGG+iM+NlqGiN6g1hnoAhD2PkLRBNOItHV8HKsUXehJDL0vDvFibb0bl31M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=FGUS5xvc; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="TQtEXInh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1780300844;
-	bh=GLPi/m3WQdmSBKWIOTMLaV276KDW7VEnDXW4StkpGCQ=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=TQtEXInhVYsWxjpKM8S4NfnNPKeIhAaYmUZ6XCvmlL/+EVEntz7hZhxfoIWbWLkj7
-	 2kGWq1+LyLVp+uS9gsL/siNM/PfBo+2ERej+NhErdVWVKws8xLxt1yVuac0O9aNSb8
-	 qBhmaslhRPinPRyaVvqNjRgdefq0otMNBbjN9VVk=
-X-QQ-mid: esmtpsz11t1780300832t04d11e47
-X-QQ-Originating-IP: 3H4NN0ARhUWAe2T8BF5/hf0ZboV2Pv02TxsvReBukVw=
-Received: from PEN1097 ( [124.126.19.250])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 01 Jun 2026 16:00:29 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 12924311070648685928
-EX-QQ-RecipientCnt: 8
-From: Cheng Nie <niecheng1@uniontech.com>
-To: niecheng1@uniontech.com,
-	sj@kernel.org
-Cc: damon@lists.linux.dev,
-	kernel@uniontech.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	shuah@kernel.org
-Subject: Re: [PATCH v3 1/2] selftests/damon/_damon_sysfs.py: fix memcg_path assignment
-Date: Mon,  1 Jun 2026 16:00:28 +0800
-Message-ID: <79F7B6B20207E976+20260601080028.217269-1-niecheng1@uniontech.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <A374E0020B17741D+20260601074408.204630-1-niecheng1@uniontech.com>
-References: <A374E0020B17741D+20260601074408.204630-1-niecheng1@uniontech.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="FGUS5xvc"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=FsbCYVgNlFSNbUTHLiQSiCvVo3yyBrqSr9aK6qXPioE=; b=FGUS5xvcNp7+LmeoKZ///0wb/s
+	WEXN7hGr7VkgTpU/5Hhiqjf/6GP3AFUJhpMDeIEdEZUwoNvS5YWwDn+DmsYdwSzvRlozy/wPwhATz
+	LgJABgr7GaLvZHkF32SJNeORY+B6xqwEO1wfkaV8nmKdc/g/atTvQZAVPD4D1al3WGQ8Ohh1kfl7j
+	3WMBxfCz3pO61lXboprM3A8blB7Q/+SRgST5OOCEF3vg194iL489VMaAjE8Ur1pIqxGi74Iridi1t
+	L3fsqjDcKIXGs6sVyA/vYNdLrT96eXgcO1XGYjx0miyjSwuo5rOLSDlz12IVibOJ2UDG4PwLQvF/N
+	MTJMReBg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wTxwO-0000000AtDg-1UOg;
+	Mon, 01 Jun 2026 08:24:08 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id C7490300454; Mon, 01 Jun 2026 10:24:06 +0200 (CEST)
+Date: Mon, 1 Jun 2026 10:24:06 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Wake Liu <wakel@google.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	Carlos Llamas <cmllamas@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] selftests/futex: Migrate requeue, NUMA and robust
+ list tests to harness
+Message-ID: <20260601082406.GJ3102624@noisy.programming.kicks-ass.net>
+References: <20260601065126.3623867-1-wakel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
-X-QQ-XMAILINFO: M6Wwv1ws7JqNANWwCaBdpNz2/EBKknL+pDZ753tLdW7HAv6qihpgYXmT
-	9bwF42I5XLnqWjkPRqZlx/5E9Wky8kMLW2Xyo38LFSzrPwZy3Vl718axHnGpaT2aFrbXOjC
-	UulwIKA1hs3Pfp+j0qqaFR+VKv+HpAaFnhJ5xOjwBx7myg9NHtrKRHIZRBw+AZ1vuTL04+N
-	8ykAJwyLflb56iNSYED5r3NnsO1AIo0QlsnZHjVm6+bocuULUvvXhS1eeXCsDPJUdYzzg1J
-	6m53nERB6Bj0zaqoipX20oLwJ7tyWEUCcxkvofQxm822HvhTpL7aYTXtjuBgC1hT/WlFmda
-	xTl2xmE+irA2QBRmWeZv0463eBuTG1fx9hWNk2EOZXdre2E8779d82g7Yf2n4gpG8NB8TYM
-	cgOIdYoqSx/qLkdyggICyvNE30ts2XreWq56VzIJbSmre1Y/hG6oHGYWyyEt62kpNPBs7ao
-	8xm6hHkEGQZ1y0JmMiqEV8wXFnbtKRikG+yVP4oet9aHCPBrfJF3oU/3seuA/DLFh970Tlq
-	X/lmTOKTVTH/GnpUKxKHK2hjDDaRFVk1Sb2Sk1qJ1luiadfo9MiwRREMka6jGvtJP/1vf7k
-	E0A7HKi337iNmB9Q49+2j2suwcKq8+pfAEbKEt5tUWUH05i/0KqeOBKIWMlxTJ5dZ7C6umc
-	Cqo9SosXOJrEPKpoP5Qz3aKXZXRwbHd9Z8CfciBsrUfvN5GfDp2SURueqR+38yX60+riPq0
-	jYjFcZjj6F4xZH1ad2NEzPAzrKKDHmZsgL835SDN8XAq9UTyKbXbdD5WK/VWbOnxFtx61rp
-	2l2qeiP2gP4C3QBHLr1mSdf+M2gVjSFtZKXNWp/mekFt0xJtYWYKq3p3sTsPHTexbzn1z2T
-	VAP4vwG1hH+gaI/K9DNBiLiTN9UeAQq5yktqvyq+kxsOLeblkKMM6YoPj3bIH36ZntKrXKH
-	6a2fm+bg2aOUCqakV/D7t+gyzf5UqRv25D0MPD9CQe7WyfPslliJh7qzeHOqJc78sJfmWg9
-	6XzrloCMqjvpJ6KD/DcOR/M0spbGXB1KZm8btR6C+wBNSZBcURfRi4LH2/Y7feoCde6wEy/
-	Vhj1Co2jbvLVe2/7otF34LnvX9EVwi4wu5DNTOg5MDG
-X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260601065126.3623867-1-wakel@google.com>
 
-Hi SJ,
+On Mon, Jun 01, 2026 at 06:51:19AM +0000, Wake Liu wrote:
+> This series refactors the requeue, NUMA, and robust list futex functional
+> tests to exclusively use the kselftest_harness.h framework, completing
+> the remaining unsent functional test migrations in this directory.
+> 
+> This eliminates mixed usage of legacy ksft_* APIs and high-level harness
+> asserts, preventing crashes on older kernels, and ensures proper thread
+> joining.
+> 
+> For context, the previous wait-related migrations are in these states:
+> - Series 1 v2 (wait_timeout, wait_wouldblock, waitv): Sent, awaiting review.
+>   Link: https://lore.kernel.org/linux-kselftest/20260526010635.23980-1-wakel@google.com/
+> - Series 2 v1 (wait, private_mapped, uninitialized_heap): Sent, discussion ongoing.
+>   Link: https://lore.kernel.org/linux-kselftest/20260525092002.3762888-1-wakel@google.com/
+> 
+> Descriptions of individual patches:
+> Patch 1-4: Migrate requeue, requeue_pi, mismatched_ops, and signal_restart tests.
+> Patch 5: Migrates futex_numa_mpol.
+> Patch 6: Migrates futex_priv_hash.
+> Patch 7: Migrates robust_list (and fixes an out-of-bounds waitpid bug).
 
-Sorry for the noise.  This patch email was sent by mistake with incorrect
-send-email settings (wrong To and In-Reply-To).  Please ignore this message
-and any other duplicate v3 patch emails outside the cover thread below.
+Does this affect being able to build tools/testing/selftests/futex/
+without having to do the ludicrous batshit 'make headers' thing?
 
-The correct v3 series is here:
-
-  https://lore.kernel.org/damon/D4787203018006D6+20260601073635.200015-1-niecheng1@uniontech.com/T/
-
-Please use the latest [PATCH v3 1/2] and [PATCH v3 2/2] in that thread.
-
-Sorry for the confusion.
-
-Thanks,
-Cheng Nie
+If I cannot build the futex selftests in a virgin tree, then they're
+broken. The selftests maintainers have time and time again shown their
+incompetence and I'm sick of it.
