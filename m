@@ -1,133 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EEB32ABCD;
-	Mon,  1 Jun 2026 05:25:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99C71B87C0;
+	Mon,  1 Jun 2026 05:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780291530; cv=none; b=ihxqfc66oPXcdHRjl9sSkLOL2Rbxe6YLmTRs5LWLuJasBos8OfKCBj00tCdB4Qzb5uMkc56QUfdGyJ1k9FMHJpIvyNgt2/kAI9oYJq3ss4Ia1ObD7Z8XDCaX/xDEC8s58O2/mANf3EaMYxDJRSIuqBrD/ROOaB9F9aXGWxvuAGg=
+	t=1780291952; cv=none; b=jZCfi90AFv6EW1Me4Aniusbq0eVD1X5z+NjrhulkuoYAEnJvLStaLtcgcLzzCdl576aua9wn6wqwDFPh9P8Lv7edPl6RcJ8WYze64tqgdko3CQM7GUrwNimytD2FXkwRHZV00hTutRiNlmkv9udw6a5PBuUBlqpI1g+zKb/Vagw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780291530; c=relaxed/simple;
-	bh=EiMZs2Sj7GeMUFETXfuoemuuMtoO87StFk8Crr3cmxY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Gmbf4cCezDw3m1XDK2Ess8B8FxKlwP1NgLk1S9dGjmuQv+lpjUx1VslnpVbosJuSl59lTxb0OEwKjLaib3YjNYJoUEg390YEfoEO+wE6IhvYI2sRBiORrxSHBR/y6o0FnxjIjTOa4kXPOnwDg06gDg6Dnlsp0K5T8A12xGy4gUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nmxrRJ8K; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nmxrRJ8K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1D031F00893;
-	Mon,  1 Jun 2026 05:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780291529;
-	bh=7Z9XT0MMfLHkChXCdfot4uAPLLhV28bVyUYj6AsXbrk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=nmxrRJ8Kacrkn1QYEGOwyQuXfPyTrmkpaGLJHXuLv1AwtYE1NglDs6xogIOKUlqCl
-	 emU9Na0cPgjq2Lj51zXWPiJwLNeel6zlLyVtu6+8K+FOf3yHmLLzDqymgZBuM1wIOL
-	 adQDnIPAJiCS3KebhAaZA6W69ARwSp4riGWA9t9RR6CLuo58NfWF+QLd6MdQXbnAVu
-	 NeNuo6lR3o9oElPXuA68xTtKYhtfCvMqZCpSwFQvLLaBwZ3I5c8l+xZQbq2R04jjua
-	 C3EZHD3pKOJCaWOZ6n13LuVdRPdjEjiTYU0/qYjWxN75Dpj5aHDJwsBRRwMa27Xnss
-	 R0JLRYVApKuIw==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 01 Jun 2026 15:22:18 +1000
-Subject: [PATCH net-next 11/11] selftests: mptcp: pcap: drop most of the
- payload
+	s=arc-20240116; t=1780291952; c=relaxed/simple;
+	bh=x4GxtTJL1lpZh5tW1GJZS2IpvoLpEbglejxqhGGfAKw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=gc88XZmj7pZItID8XGeoD+rwrSu0VxSADJORL6BUu6CxOFlR9bax9sT7xc5CgmSuJ7tkGgiLX+1qmcUjxaKOiNdUrkdd7PZvJp1dgGV0POeV0jpWvikKY4//u+pWpitN9fY3jv5/gAQLAEqPF+1GR2Tj+c1B/zLvbEVDrTlF6RY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 42bb7a5c5d7b11f1aa26b74ffac11d73-20260601
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
+	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:67b7feb0-d64a-495c-87ca-85a5ffcb6bb8,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-INFO: VERSION:1.3.12,REQID:67b7feb0-d64a-495c-87ca-85a5ffcb6bb8,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:10
+X-CID-META: VersionHash:e7bac3a,CLOUDID:77c46c0f76eba2ad31f3af4e4c28aa77,BulkI
+	D:260531223641LAAN3BV1,BulkQuantity:1,Recheck:0,SF:17|19|64|66|78|80|81|82
+	|83|102|127|841|850|865|898,TC:nil,Content:-10|0|15|50,EDM:-3,IP:-2,URL:0,
+	File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+	,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 42bb7a5c5d7b11f1aa26b74ffac11d73-20260601
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1581226732; Mon, 01 Jun 2026 13:32:20 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: rppt@kernel.org
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	liam@infradead.org,
+	lihongfu@kylinos.cn,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	ljs@kernel.org,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	surenb@google.com,
+	vbabka@kernel.org
+Subject: Re: [PATCH v4 3/4] selftests/mm: use pkey_assert on clone_raw failure in pkey test
+Date: Mon,  1 Jun 2026 13:32:30 +0800
+Message-Id: <20260601053230.671606-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <ahxHaQFr3Uer2GBP@kernel.org>
+References: <ahxHaQFr3Uer2GBP@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260601-net-next-mptcp-add-addr6-port-ts-v1-11-4fc25dfef62e@kernel.org>
-References: <20260601-net-next-mptcp-add-addr6-port-ts-v1-0-4fc25dfef62e@kernel.org>
-In-Reply-To: <20260601-net-next-mptcp-add-addr6-port-ts-v1-0-4fc25dfef62e@kernel.org>
-To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
- linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2841; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=EiMZs2Sj7GeMUFETXfuoemuuMtoO87StFk8Crr3cmxY=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBqHReT/E3i69Y9c5t8bGKYawQeHnJNgq/uFUe02
- AvrqX09Iu+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCah0XkwAKCRD2t4JPQmmg
- c0heEADuCFdazGaU0f8a3MFngIlV9WSjoWn0BnY7cosDt9nYN4CamdJw6OXSp/CX9b9ytjOkPyY
- /xr1mC5TDrYksqHIW6zagcA+lK2sVq1k3hEQhkY76grBSIBK94rd+G4f/+HfFlMef2j1K9I0jpl
- cMU2CfoWHcS+l/QqNJE5c907n3LKTRR6xdRojC3xdabezHtscNRgD3fh63nqJiru6V0yQeJ5Pr/
- X770d6CB3XW5MB3Ubs+LP6CLdjd4d6WCRCD/+b/xkwAaVk7O01xutLiA95OcNaXH/6wxM64Wf2t
- rIZjRMfHC9Y6ki/2+AyY8Q+6Ts73l4yeRYbo39QtY7FNfPBPQRriFl4qGCFZm0KMSt5P4E1vNiV
- +2HXhcIuYUZrlpz4p35j3xrU1COoK1gbACNXTK0FpKgp0+Jz22ppnj+amIeyqMQrkVJo0or74S5
- s4gx38bt0e2MCJ9U42zppsULP/umWMUA/HJoNryHWNyvrwvV7S+zijnuqiRcbFMpiDockbVnm3A
- qBF8jtrVfl0MklIjthf/pJLHa3gTWJDWrwf/Viock8uUAKeN4dBMqvZobT6t3dC0vlEWSQ4lxnW
- NDls0xJTAYdyw5HuT0Qx5MQaC7P4Xy2B8DoTPtpA/4sWbsnl91oXVkCOSlF+ohw58ACLuYD6d2C
- 1gtTx1AyWCTbSPg==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Transfer-Encoding: 8bit
 
-Limit the size of each captured packet to 108B (IPv4 only) or 128B (a
-mix of v4 and v6): this should drop most of the payload that is
-generally not needed when debugging an issue.
+Hi,
 
-8 bytes are left in this payload, to be able to inspect the beginning,
-just in case.
+> > Use pkey_assert(0) instead of perror("clone") when clone_raw() fails.
+> > The old path only printed an error and continued; the test now exits
+> > via pkey_assert() on failure so it does not hang or proceed with an
+> > invalid child.
+> 
+> Looks like clone() invocation changes in patch 2 belong here.
+> But is there actually a need to change ret = clone_raw() to
+> child_pid = clone_raw()?
 
-Please also note that generally, this payload is usually mostly filled
-with 0, except at the end. This reduces the .pcap sizes, and reduce IO
-usage, which helps debugging issues.
-
-Reviewed-by: Mat Martineau <martineau@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/net/mptcp/mptcp_connect.sh | 2 +-
- tools/testing/selftests/net/mptcp/mptcp_join.sh    | 2 +-
- tools/testing/selftests/net/mptcp/simult_flows.sh  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.sh b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-index 5befd8584a4d..7a2a851fa0ad 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-@@ -373,7 +373,7 @@ do_transfer()
- 		fi
- 
- 		local capfile="${capprefix}-${connector_ns:0:3}-${listener_ns:0:3}-${cl_proto}-${srv_proto}-${connect_addr}-${port}"
--		local capopt="-i any -s 65535 -B 32768 ${capuser}"
-+		local capopt="-i any -s 128 -B 32768 ${capuser}"
- 
- 		ip netns exec ${listener_ns} tcpdump ${capopt} \
- 			-w "${capfile}-listener.pcap" >> "${capout}" 2>&1 &
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 82c0f7df3be2..600eddb1796f 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -971,7 +971,7 @@ cond_start_capture()
- 		capfile=$(printf "mp_join-%02u-%s.pcap" "$MPTCP_LIB_TEST_COUNTER" "$ns")
- 
- 		echo "Capturing traffic for test $MPTCP_LIB_TEST_COUNTER into $capfile"
--		ip netns exec "$ns" tcpdump -i any -s 65535 -B 32768 $capuser -w "$capfile" > "$capout" 2>&1 &
-+		ip netns exec "$ns" tcpdump -i any -s 128 -B 32768 $capuser -w "$capfile" > "$capout" 2>&1 &
- 		cappid=$!
- 
- 		sleep 1
-diff --git a/tools/testing/selftests/net/mptcp/simult_flows.sh b/tools/testing/selftests/net/mptcp/simult_flows.sh
-index d723261bdc62..3ea3d1efe32e 100755
---- a/tools/testing/selftests/net/mptcp/simult_flows.sh
-+++ b/tools/testing/selftests/net/mptcp/simult_flows.sh
-@@ -149,7 +149,7 @@ do_transfer()
- 		fi
- 
- 		local capfile="${capprefix}-${port}"
--		local capopt="-i any -s 65535 -B 32768 ${capuser}"
-+		local capopt="-i any -s 108 -B 32768 ${capuser}"
- 
- 		ip netns exec ${ns3}  tcpdump ${capopt} -w "${capfile}-listener.pcap"  >> "${capout}" 2>&1 &
- 		local cappid_listener=$!
-
--- 
-2.53.0
-
+You're right. This variable change seems pointless, and I'll revert
+it in the next patch version.
