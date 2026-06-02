@@ -1,177 +1,94 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us.padl.com (us.padl.com [216.154.215.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2EB13988FB
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 20:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF8F243367;
+	Tue,  2 Jun 2026 21:13:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.154.215.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780433976; cv=none; b=iRLWECMzElPNBfds7leyfl4LeKug9fiP3uv9i1E3guDPatMPl3LXVppXh8d/eIdyBcVRSJqDP5WDHBvfhelX10AIii7qYFqhQsvbZwv7aroZI8Sdm+J/OBHfACEJ0M+rYBKtUY/If8b8gCh6yU6qxASrcvdVsrLJYzw5MDhWmrI=
+	t=1780434800; cv=none; b=oGe748h16tq+v9duntL1oDVFgaQh/gcaERJklKNPQZF/5GYuurUyTv32s4UEj/jXn9H3oWOrJQ/83h0mmxhhXaES+krXlmix8HC272ibbRYxMAjgFH/mYVdppS+cHRrEslYpz8SeImH9UeJ6XPgL3xMScPhpMM3gwlXY4C0MJCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780433976; c=relaxed/simple;
-	bh=40YuMegnizHDre5rP/J67ecYybi5tbv7U9hYJ5stFqg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CIWxnoNGMByjc33X2q/jVlqN4NtVGPgiPLqKVRLy1Y1UVVTWeNDV5Lcne+t3ykeZ7u8vhaqF/28ztpPU7q8huPku/IgPIdkN/cp8rMS7VLCimf5x2cL8rArZg0GfFSMeW2/cLw4tyGyLeqSMqKgjAOtmvKVEmeb4o5LMhtGK/ZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dBajUGmu; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780434800; c=relaxed/simple;
+	bh=HtE+CUeOQe9K5828UtNu62LtqQ103MigfZnxhbdVnDk=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=MmpGZLsGwUOP0iemaNi9G41XMEHlgYwri7IHo7Mmb5qFT+TE4qmfreqjf49LsUY2vv/hNrRkx+hOZM27laNAF08QZ2l7aI/V6ueDazezf0CBpBUpU5j4Hzf7lqDb3+xRm2TLpDKpf3vBhxtn02vLAgvMQlJ7j1plEwrU7A39PyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=padl.com; spf=pass smtp.mailfrom=padl.com; dkim=pass (2048-bit key) header.d=padl.com header.i=@padl.com header.b=leG9Z8FI; arc=none smtp.client-ip=216.154.215.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=padl.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=padl.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dBajUGmu"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c85d4b4245aso618788a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 13:59:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780433974; x=1781038774; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FtyaF8m6RLOpOeiX8WoJduU1Pm23yBD2PG4I02qCKQE=;
-        b=dBajUGmuXiduNnxYDigsK0NW+O8Y0gSoOAmVS3+WiUenfpr0m/M6EgXnWjAuEXMSze
-         wvhmLXm0EpuZoCaNUut9lxp/bEN/iuHNxDDOcktz/V+Z1GrJHToBDWrAXEQJgvtgLZ4v
-         R2liSxLhe0nXYad/K/tA2Sso0bBotJAE/AZIEbF9IKXxLCPjeDsLbmgIS1aFH+c7QbzV
-         zLFlxTjvsuJCiJ0L6h0mM7uwdUMoXt+0FU/LvCbahl01MXA/TrQlVaeP7Gbqw9ooN/1D
-         Xtw/ShTek/R/dcnrIumDF3X7BfakIIBsW/Tgxt7lmEhD/VkGWTsWv4Rvm1FAcGIs0OdV
-         vF0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780433974; x=1781038774;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FtyaF8m6RLOpOeiX8WoJduU1Pm23yBD2PG4I02qCKQE=;
-        b=gzWUlo5QXXn3fKK1cng+cWKOVhGAKb5rA5qe5N/1NQV9bnYL+W41fembVFnIcfAjH0
-         PYkKzjhFqaoIMUeUnM1EGLWZwI9kiFntqZCLGC7Q6DhBcbOLrs2x+y3hYlJSylJKfqtJ
-         DvtRhd86EMCA638my6/NWonrg4isauxoaq+wksMaZb7VdSN0FDZwdWvqphNvXeacrL1S
-         gaRmfmfOlTU0BKfV91OZU4sJ62HXsxY7A9fejlMm3TyJYIuQ3zhQEsk+1MPOBb0BZ2MV
-         6rY1tWZEHvaxjWkQYYTuz6+FI64AqosI7bMoYSL9YjoHATI42ZQj4w1orVpxFWVF1nhq
-         K51g==
-X-Forwarded-Encrypted: i=1; AFNElJ8r0n64z3uVa9ILgYphH4WK3o5LTi0O5Wduw5fAS8tTbcE332fmoWadxucQLGeNx8+4aMJApKs+XK8nxYnNFwk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywx0qJvSLgyRWtk3osk48xPiyIL+f3w9q5adO90p8DkdJLWcfgh
-	bqHWj6bQKCcy9dNrL78LziKWPAiRWHaUbBF5ov6rF9xpdxVG5ScZJEmF
-X-Gm-Gg: Acq92OH5IuhsPTLLh57uded62s/71TL6P4m4g4N4OzLkdaedQe3ruwPKWSGY1Er8Gkx
-	nQdmnscRXc2pDFmM8mn4xK2LbiDD/80wdcDmbo+rFjV+JtWAqWrZeuVAwv+PW96ocnZczc/3SUp
-	boyWxmx8L8wpsMFT2qcCoRP+RRUJ9NnzS2NLyCj6JDjB+MAAHkvDgHKNiCJ3w+AFgoomHcIlI8p
-	4QJeQKuS4s0p5GSseJ1B7Q3xrRS5mUxDmgZY01AVIltxmUuN9PCbL2XNuG6j5SvXzE9mseJfX1h
-	SQVCVBKMxDWia3YeNti9Zh3nUKPTA5ZaCK3gmj5ROflUvlJskJt1wDyos9acu4+HyAf70wVOjsL
-	UTJsZd5RCPxVv7Mc94Zd5qy7iTsv8trBsNqC9hLP3LbYSHt1dBZo3pqpFIAwIEAPXYSPuBJ+F0S
-	/z577UeZnaOjiH7EazfL6ppTY5y3t/iv2NGKx9O0h4V0ur8jr8zEcLGSosYOJM3nziGmo4WLRg/
-	pTk5025xOcbz5d0
-X-Received: by 2002:a05:6a20:b598:b0:39c:126c:93b4 with SMTP id adf61e73a8af0-3b497449d82mr542621637.9.1780433973930;
-        Tue, 02 Jun 2026 13:59:33 -0700 (PDT)
-Received: from computer.goose-salary.ts.net ([2a09:bac5:3b4a:11cd::1c6:2])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df043223sm157354a12.8.2026.06.02.13.59.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 13:59:33 -0700 (PDT)
-From: Varun R Mallya <varunrmallya@gmail.com>
-To: bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	bjorn@kernel.org,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	puranjay@kernel.org,
-	menglong8.dong@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	pulehui@huawei.com,
-	alex@ghiti.fr,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	varunrmallya@gmail.com
-Subject: [PATCH bpf-next 2/2] bpf, riscv: inline bpf_get_current_task() and bpf_get_current_task_btf()
-Date: Wed,  3 Jun 2026 02:28:47 +0530
-Message-ID: <20260602205847.102825-3-varunrmallya@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260602205847.102825-1-varunrmallya@gmail.com>
-References: <20260602205847.102825-1-varunrmallya@gmail.com>
+	dkim=pass (2048-bit key) header.d=padl.com header.i=@padl.com header.b="leG9Z8FI"
+Received: from auth (localhost [127.0.0.1]) by us.padl.com (8.14.7/8.14.7) with ESMTP id 652LCNev015764
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Tue, 2 Jun 2026 22:12:25 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 us.padl.com 652LCNev015764
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=padl.com; s=default;
+	t=1780434768; bh=HtE+CUeOQe9K5828UtNu62LtqQ103MigfZnxhbdVnDk=;
+	h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+	b=leG9Z8FIM3pJZ4l6nIiMqriryyD81HF1WcqASUuCAQC8YfQnmGHBXnHR5AcsC0Jrq
+	 gSqqwc7tYZzHhwa2HhW62nORQsr6432wwfL8PK6DaY1cayHxN86pW/bM/HUZO/pK7m
+	 nleseDQe6n0C+CHprDUyKRtdYjFjCVezsm/+DG4MRDHmhD2SLKIjGpH5THZ7Gh8B63
+	 4zU3b21yxROV26YPWKFd85WM4/0H8Oa2DEmZRw8XwDvQqDMZIpD1+gf1JCRvs7KtYj
+	 so1tCNwj9CwPQDYR+Kgjni5Zw1fwzKeSTqUSRYG0mA9lKZYHvTQ6cTINnN0Dz9wpB5
+	 jTOqOPufiACwQ==
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH net-next v2 5/6] net: dsa: mv88e6xxx: MQPRIO support
+From: Luke Howard <lukeh@padl.com>
+In-Reply-To: <t44kmhk6gqxnwhdvo7svouexwelwsya7zgukpbv3cxpfsmutqa@y3rjoj3tvqce>
+Date: Wed, 3 Jun 2026 07:12:12 +1000
+Cc: Jiri Pirko <jiri@resnulli.us>, Ivan Vecera <ivecera@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+        David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bridge@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        Max Hunter <max@huntershome.org>, Kieran Tyrrell <kieran@sienda.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A662D3F9-18DD-43C9-A43D-912E5A8A4360@padl.com>
+References: <20260602-mv88e6xxx-8021qat-mqprio-v2-0-72be14522e7c@padl.com>
+ <20260602-mv88e6xxx-8021qat-mqprio-v2-5-72be14522e7c@padl.com>
+ <t44kmhk6gqxnwhdvo7svouexwelwsya7zgukpbv3cxpfsmutqa@y3rjoj3tvqce>
+To: Cedric Jehasse <cedric.jehasse@gmail.com>
+X-Mailer: Apple Mail (2.3826.700.81)
 
-On RISC-V, the current task pointer is stored in the thread pointer
-register (tp). Emit a single `mv a5, tp` instead of a full helper
-call for BPF_FUNC_get_current_task and BPF_FUNC_get_current_task_btf.
+> In case of per port priority mapping, i don't know if this is working =
+as
+> expected, as the IEEE priority mapping is done at ingress.
+> Eg. i think if MQPRIO channel mode is used to configure a pcp to queue =
+mapping
+> on port 1 and a different mapping on port 2. Traffic received on port =
+1 that
+> gets forwarded to port 2 and egresses port 2 will end up in the queue
+> configured by the mapping on port 1. As mqprio is an egress qdisc, i =
+don't
+> think that's expected.
 
-Register bpf_jit_inlines_helper_call() entries for both helpers so the
-verifier treats them as inlined, and add the expected `mv a5, tp`
-annotation to the riscv64 selftests.
+Good point, it=E2=80=99s interesting there is egress mapping on the 6390 =
+but only for FPri to DSCP. The Frame Priority Table set ordinal one =
+would expect for egress QPri mapping is =E2=80=9Creserved for future =
+use=E2=80=9D. (Be nice if it were an undocumented feature.)
 
-The following show changes before and after this patch.
+I will remove the per-port mapping for the 6390 so all ports share the =
+same mapping as they do on the 6352.
 
-Before patch:
+> I have a patch that hasn't been submitted to the mailing list yet =
+which
+> implements support for the dcb app pcp-prio command. This is also done =
+by
+> configuring the IEEE priority mapping table.
 
-      auipc  t1,0x817a    # load upper PC-relative address
-      jalr   -2004(t1)    # call bpf_get_current_task helper
-      mv     a5,a0        # move return value to BPF_REG_0
+Definitely happy to take a look if and when you submit, but I do plan to =
+continue with this patch series (originally proposed as an RFC in =
+September 2025).
 
-After patch:
-
-      mv     a5,tp        # directly: a5 = current (tp = thread pointer)
-
-Benchmark (bpf_prog_test_run wrapping bpf_get_current_task in loop,
-batch=100, 10s, QEMU RISC-V):
-
-              | runs/sec  | helper-calls/sec | ns/call
- -------------+-----------+------------------+---------
- Before patch |   173,490 |       17,349,090 |      57
- After patch  |   320,497 |       32,049,780 |      31
- -------------+-----------+------------------+---------
- Improvement  |   +84.7%  |          +84.7%  |  -45.6%
-
-Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
----
- arch/riscv/net/bpf_jit_comp64.c                         | 9 +++++++++
- tools/testing/selftests/bpf/progs/verifier_jit_inline.c | 2 ++
- 2 files changed, 11 insertions(+)
-
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 2f1109dbf105..e2c70c70cca8 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1808,6 +1808,13 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			break;
- 		}
- 
-+		/* Implement helper call to bpf_get_current_task/_btf() inline */
-+		if (insn->src_reg == 0 && (insn->imm == BPF_FUNC_get_current_task ||
-+					   insn->imm == BPF_FUNC_get_current_task_btf)) {
-+			emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_TP, ctx);
-+			break;
-+		}
-+
- 		mark_call(ctx);
- 		ret = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass,
- 					    &addr, &fixed_addr);
-@@ -2138,6 +2145,8 @@ bool bpf_jit_inlines_helper_call(s32 imm)
- {
- 	switch (imm) {
- 	case BPF_FUNC_get_smp_processor_id:
-+	case BPF_FUNC_get_current_task:
-+	case BPF_FUNC_get_current_task_btf:
- 		return true;
- 	default:
- 		return false;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_jit_inline.c b/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
-index 885ff69a3a62..76d80605ec7f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
-@@ -10,6 +10,8 @@ __arch_x86_64
- __jited("	addq	%gs:{{.*}}, %rax")
- __arch_arm64
- __jited("	mrs	x8, SP_EL0")
-+__arch_riscv64
-+__jited("	mv	a5, tp")
- int inline_bpf_get_current_task(void)
- {
- 	bpf_get_current_task();
--- 
-2.54.0
-
+Cheers,
+Luke=
