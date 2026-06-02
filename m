@@ -1,135 +1,181 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2142136F91F;
-	Tue,  2 Jun 2026 10:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC68A3CEB9E
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 10:09:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780394854; cv=none; b=p3smZ7jpVCnbDNLYCG84hY34fNTcAKCFLHVVRw51142IYdCnswol4PQE9K1tbzmWFdIq6Wb1CmFqadkcwezfOY1MELHS9Va/R6lQ1DeQ3Uv9m7uuCOfTwLcZdXzOT+BaZS+aGvmnWCM2/oqu7uR+DEGXopKaQYo5fJXgOFq3aps=
+	t=1780394995; cv=none; b=TGFNiPdjchPAxm/J/UiTn9+6YKH6oC7EeQWh3nngnEtvYFP+o5lexTckJhZD7wumYvRh0vavHwMpxKJ6UHli1uOty2zw71cBUjeeBziLYalo18N5bd43hKeflAouCTBvaxcDmH1KQLhrTIW16xRrZTKO+LBZlyakCBwxg1r7sFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780394854; c=relaxed/simple;
-	bh=DJ+YNfigE8pzfyVTIvkGTp3g8dr7vHyfhNo60hzahAQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HLKkdwPBPzRP6l+m23g75lUY7x5T2+jF83lt+i1490CSOJR5pjFdfd3nGPauKfBkt1QyvUbDwCO9IIQm8pIAlqg1jWRPnwk6NdjouZPUTBbDmOcoEbRB+zZIm3vKOYIdIi9yV+lLWmY0OdfYYM6wVu5w/AR/vCVxykh2Z8nxf88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kv2fE0bp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780394995; c=relaxed/simple;
+	bh=GdEPdC8O6mnioehfbWdEulDzTJWl+wOu+nz32bJ1yZo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NxbVsDiIHLWX2JvW9Kd6h5rjSBWSIGwtQFggbeDAwenTkYQCyTExB5710GMdFPOb/c5QhWnsbckAlx6Zlcbx8uGRr3Z1KgaWnMptdoGYs7JE7JMcc5FIaBPXsSjSn6Do31LZzh5NSUj+RUdPK5RBT2gxlKGCdSj9DBiiFCZmYbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qkmpkoR/; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kv2fE0bp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B312A1F00893;
-	Tue,  2 Jun 2026 10:07:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780394852;
-	bh=FArUgwzqGxSIYq6nsRbDRcCSW+jo1FsCY7Blcc7Vo5I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Kv2fE0bpyQXoK2UWojz99uTNM13VMJzQY8pttiWpI5b8+40hTJICG1z6mCK4HxzOt
-	 WGAj2y5SJlJoIl+N9iHLKqVRWu9OrrHnx+/tz3FlIfzs7MJKFsAGpGxzFWxuyG8cBM
-	 WrYnPscz8yfDI3CjGm3n7wUsfcglUz6lNDXUt3emdSCW12sVz1MKY0/BHu5mWG7lyI
-	 dN+nfzkHl4QQvZFfAGkcO2JVbFceEzmni/FhHhQ1tddV0QOElD5gWZUecDoh8qPAX+
-	 6wu9anSgJc0s666UALU4wXlDajOMwgfjPzHsI45oaFeSPwD+x8KBz2GcGUJ7aJGPII
-	 gOS5yhOmWv2XA==
-Date: Tue, 2 Jun 2026 13:07:24 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-Cc: akpm@linux-foundation.org, peterx@redhat.com, david@kernel.org,
-	ljs@kernel.org, surenb@google.com, vbabka@kernel.org,
-	Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net,
-	skhan@linuxfoundation.org, seanjc@google.com, pbonzini@redhat.com,
-	jthoughton@google.com, aarcange@redhat.com, sj@kernel.org,
-	usama.arif@linux.dev, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH v6 04/15] userfaultfd: test uffd VMA flags through the
- vma_flags_t API
-Message-ID: <ah6rXJEYUsGfzPgi@kernel.org>
-References: <20260529172716.357179-1-kas@kernel.org>
- <20260529172716.357179-5-kas@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qkmpkoR/"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-45fe59255beso1342351f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 03:09:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780394992; x=1780999792; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=hLX9Bb+0vsl3gqtKqEOJsR8jG1pZJXh/fm/ACRLNz4I=;
+        b=qkmpkoR/cfnzoUU4RWowuNZiUOZaNVdURr6Lj+b2XoOFVBytfV33vGqappvl2kV73W
+         jpbB0jH2zUXRNlbGyAV3RTwgfDAatRbMW4v/gm3y4SbrCX/SZ+pDkchX9MBEQA5ptWhO
+         Pxy4IPqvl1ecuOHmYvnn7/iARZITwhYrWP+rssfUAdf2+uKDkOAmzsOLsic81rJedv8c
+         iHtKmAL4mCIPWWpto7l6sl6mI7v6Ag+cI5S5TcN07Dt2UC1Sujqh9lsJErkBIt5AX2g7
+         c+t5nXoBSIwk5TewclUfAgn5xkfJ7p5t3csWJIi1DyRG3TnKksbWZ8T3vZrgEvd4piAZ
+         s9Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780394992; x=1780999792;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hLX9Bb+0vsl3gqtKqEOJsR8jG1pZJXh/fm/ACRLNz4I=;
+        b=i5f3FXr0xTtPOGXQu5L8JZZYTWYj9IzAu9VzUVpLhAlr+GiHiPxNW769BT4t272s/l
+         MzNDJo5E23hUbXO92gDUWcf163/WkVLIA9vxSMQva4E9R5bacGHS8t5NEKqobzNUO6Xr
+         MsACISuDUeTP8P6aivDWbZnDy2EgyPTP3BaFtauQm62FJShoJ+GPI5IBSIm57ltai+6B
+         AKBRCR1zknC8ggjyk9vMYDE4serixQ1fypC/6RKFzwjXn2xuJvsMzJVILghiuazQrDa8
+         hm63YJpPhJ9EhJ5TmMMvGKeDkBmeAZYNiEKIQDkck/qlj+k3o4fFhQLR+eJBm8hPwwKY
+         XIuQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/Nqcdv/yGPWE6/hi9WEhZqs6/8uvS6G9Td2NQfVzP2vlXEEKr5pGmS4hR+VCoGaIZgETW2pZNm7iOEXQWi1GU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygC2Srs7OnaPr4OVEdPyQgpPNrT9Uj8PbFiOWQrZ1m/gBr6B3q
+	7rO2j3JMVlanQSiJalheyQohcnwuB89/ud/eS/8Q+bbmexUZ1oPGHu+1
+X-Gm-Gg: Acq92OEC9Fj4lQo7eYkq5mk3KI1+Gm9py//KCs1QtEKJ3y++Qj7InnlpIN+wORwK+p6
+	NDCggfq/N+LywT2upPFrOyVEJe5b6qiW9yKvc/6mQoVQlPA6oHFmYC23Hy+YLK2d/Vk+FB5JaWM
+	W0TM7z2oxolFiUYTQGd/a8YBEcFLCmf07XweFfQmjrVzErK4BiHYTrXFwktGhaR9tkpRfGXKBFt
+	HqazJQ7XnLDav/zVz0ejx3q9jkHMIrgnO/bob1ZHMOYOqg+xkUjxv2aD5GsrkmMWpnz/m5qRTRD
+	ly6xH7P8gNdaub0nDMd1iJxcJmq4gx8SDBCW1e18gS6rwzeLqXVcq57rtkk7IXHAsqa9Eztot+0
+	R/16NyuMVuvF1xEq+6DbxiiRpFqoq+8eH6HiHS8qEfvXFR+Nvt2Y+LFOA0LTxHcn15VhcAP1hJu
+	6dPx8UE6Z0lD/A5wtMP4BhacmmwO7goR7+FLigfLqdMZPSHg==
+X-Received: by 2002:a05:6000:25f6:b0:45e:fb69:f02b with SMTP id ffacd0b85a97d-45efb69f3afmr21424039f8f.1.1780394992164;
+        Tue, 02 Jun 2026 03:09:52 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:8308:b093:bb00::d167])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef354cd87sm30636722f8f.24.2026.06.02.03.09.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jun 2026 03:09:51 -0700 (PDT)
+Sender: Alban Crequy <muadda@gmail.com>
+From: Alban Crequy <alban.crequy@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Christian Brauner <brauner@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	Alban Crequy <alban.crequy@gmail.com>,
+	Alban Crequy <albancrequy@microsoft.com>,
+	Peter Xu <peterx@redhat.com>,
+	Willy Tarreau <w@1wt.eu>,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	Usama Arif <usama.arif@linux.dev>,
+	David Laight <david.laight.linux@gmail.com>
+Subject: [PATCH v5 0/2] mm/process_vm_access: pidfd and nowait support for process_vm_readv/writev
+Date: Tue,  2 Jun 2026 12:09:15 +0200
+Message-ID: <20260602100917.3641359-1-alban.crequy@gmail.com>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260529172716.357179-5-kas@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 29, 2026 at 06:26:33PM +0100, Kiryl Shutsemau (Meta) wrote:
-> The uffd VMA-flag helpers read vma->vm_flags directly. Now that
-> config-gated per-mode masks exist, switch them to the vma_flags_t
-> accessor vma_test_any_mask(), which is the going-forward API and keeps a
-> single place (the VMA_UFFD_* masks) that knows which modes are available
-> on the current build.
-> 
-> No functional change: vma_flags_t is in union with vm_flags, so the same
-> bits are read, and the masks fold to the same code the open-coded
-> vm_flags tests produced -- verified identical on gcc and clang, 32- and
-> 64-bit.
-> 
-> Suggested-by: Lorenzo Stoakes <ljs@kernel.org>
-> Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
-> Assisted-by: Claude:claude-opus-4-8
+This adds two flags to process_vm_readv/writev:
 
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+- PROCESS_VM_PIDFD: refer to the remote process via PID file descriptor
+  instead of PID.
+- PROCESS_VM_NOWAIT: do not block on IO if the memory access causes a
+  page fault.
 
-> ---
->  include/linux/userfaultfd_k.h | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-> index 658740df2978..c4f2cc6dfcf0 100644
-> --- a/include/linux/userfaultfd_k.h
-> +++ b/include/linux/userfaultfd_k.h
-> @@ -178,7 +178,8 @@ static inline bool is_mergeable_vm_userfaultfd_ctx(struct vm_area_struct *vma,
->   */
->  static inline bool uffd_disable_huge_pmd_share(struct vm_area_struct *vma)
->  {
-> -	return vma->vm_flags & (VM_UFFD_WP | VM_UFFD_MINOR);
-> +	return vma_test_any_mask(vma,
-> +		mk_vma_flags_from_masks(VMA_UFFD_WP, VMA_UFFD_MINOR));
->  }
->  
->  /*
-> @@ -190,22 +191,23 @@ static inline bool uffd_disable_huge_pmd_share(struct vm_area_struct *vma)
->   */
->  static inline bool uffd_disable_fault_around(struct vm_area_struct *vma)
->  {
-> -	return vma->vm_flags & (VM_UFFD_WP | VM_UFFD_MINOR);
-> +	return vma_test_any_mask(vma,
-> +		mk_vma_flags_from_masks(VMA_UFFD_WP, VMA_UFFD_MINOR));
->  }
->  
->  static inline bool userfaultfd_missing(struct vm_area_struct *vma)
->  {
-> -	return vma->vm_flags & VM_UFFD_MISSING;
-> +	return vma_test_any_mask(vma, VMA_UFFD_MISSING);
->  }
->  
->  static inline bool userfaultfd_wp(struct vm_area_struct *vma)
->  {
-> -	return vma->vm_flags & VM_UFFD_WP;
-> +	return vma_test_any_mask(vma, VMA_UFFD_WP);
->  }
->  
->  static inline bool userfaultfd_minor(struct vm_area_struct *vma)
->  {
-> -	return vma->vm_flags & VM_UFFD_MINOR;
-> +	return vma_test_any_mask(vma, VMA_UFFD_MINOR);
->  }
->  
->  static inline bool userfaultfd_pte_wp(struct vm_area_struct *vma,
-> @@ -222,7 +224,7 @@ static inline bool userfaultfd_huge_pmd_wp(struct vm_area_struct *vma,
->  
->  static inline bool userfaultfd_armed(struct vm_area_struct *vma)
->  {
-> -	return vma->vm_flags & __VM_UFFD_FLAGS;
-> +	return vma_test_any_mask(vma, __VMA_UFFD_FLAGS);
->  }
->  
->  static inline bool vma_has_uffd_without_event_remap(struct vm_area_struct *vma)
-> -- 
-> 2.54.0
-> 
+v4: https://lore.kernel.org/lkml/20260515143335.739511-1-alban.crequy@gmail.com/
+v3: https://lore.kernel.org/lkml/20260428122826.339550-1-alban.crequy@gmail.com/
+v2: https://lore.kernel.org/lkml/20260408145436.843538-1-alban.crequy@gmail.com/
+v1: https://lore.kernel.org/lkml/20251118132348.2415603-1-alban.crequy@gmail.com/
+Sashiko review of v4: https://sashiko.dev/#/patchset/20260515143335.739511-1-alban.crequy@gmail.com
+Sashiko review of v3: https://sashiko.dev/#/patchset/20260428122826.339550-1-alban.crequy@gmail.com
+Sashiko review of v2: https://sashiko.dev/#/patchset/20260408145436.843538-1-alban.crequy@gmail.com
+
+Related man-pages fix (corrects pre-existing partial transfer documentation,
+not the new flags proposed here):
+https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/commit/?id=a0b1df86b0c951beb896d468f200be7fd44631e3
+
+Changes since v4:
+- Add process_vm_readv to .gitignore (Sashiko)
+- Use ~0UL instead of 255 for invalid flags tests (Sashiko)
+- Use volatile uint8_t instead of volatile uint64_t for page fault-in
+  to avoid alignment issues on strict-alignment architectures (Sashiko)
+- Use UFFDIO_UNREGISTER in uffd handler error path to safely unblock
+  the main thread without double-close (Sashiko)
+- Rebase onto v7.1-rc6
+
+Changes since v3:
+- Rename include/uapi/linux/process_vm.h to process_vm_access.h to
+  match mm/process_vm_access.c (David Hildenbrand)
+- Fix MAINTAINERS alphabetical sort order (David Hildenbrand)
+- Document NOWAIT return value in commit message (David Hildenbrand)
+- Document PIDFD EBADF error in commit message (David Hildenbrand)
+- Add suggested man page update text in commit message
+  (David Hildenbrand, Christian Brauner, Mike Rapoport)
+- Keep (1UL << N) in UAPI header: BIT() is defined in vdso/bits.h
+  which is not exported to userspace (David Hildenbrand)
+- Add selftests for NOWAIT partial reads across resident and
+  non-resident pages (single iovec and two iovecs)
+- SKIP tests gracefully on kernels without flag support (Sashiko)
+- Verify content of partial reads in selftests
+- Rebase onto v7.1-rc3
+
+Changes since v2:
+- Fix ERR_PTR handling for pidfd_get_task(): use IS_ERR()/PTR_ERR()
+  for the pidfd path, matching process_madvise() (Usama Arif, Sashiko)
+- Add selftest for invalid pidfd (David Hildenbrand)
+- Add selftest for invalid pid
+- Remove hardcoded __NR_pidfd_open fallback, use <sys/syscall.h> (Sashiko)
+- SKIP pidfd tests on kernels without pidfd_open (ENOSYS) (Sashiko)
+- SKIP userfaultfd tests when unprivileged userfaultfd is disabled (EPERM) (Sashiko)
+- Fault in test_data before NOWAIT tests to ensure page is resident (Sashiko)
+- Add ksft_process_vm_readv.sh wrapper and run_vmtests.sh entry
+  so the test runs in CI
+- Rebase onto v7.1-rc1
+
+Not addressed:
+- 64-bit process reading 32-bit process high addresses: pre-existing
+  concern in the existing process_vm_readv code, not introduced by this
+  patch (David Laight)
+- EAGAIN instead of short read/EFAULT for non-resident pages: short-read
+  semantics are more informative and consistent with O_NONBLOCK
+  conventions; the profiler use case does not intend to retry (Sashiko)
+- mmap_read_trylock with NOWAIT: would expand scope significantly and is
+  not how other FOLL_NOWAIT users in the kernel work (Sashiko)
+- GFP_NOWAIT for page array allocation: the allocation is small and
+  rarely blocks; not on the data path (Sashiko)
+
+Alban Crequy (2):
+  mm/process_vm_access: pidfd and nowait support for
+    process_vm_readv/writev
+  selftests/mm: add tests for process_vm_readv flags
+
+ MAINTAINERS                                   |   1 +
+ include/uapi/linux/process_vm_access.h        |   9 +
+ mm/process_vm_access.c                        |  34 +-
+ tools/testing/selftests/mm/.gitignore         |   1 +
+ tools/testing/selftests/mm/Makefile           |   2 +
+ .../selftests/mm/ksft_process_vm_readv.sh     |   4 +
+ tools/testing/selftests/mm/process_vm_readv.c | 591 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |   4 +
+ 8 files changed, 637 insertions(+), 9 deletions(-)
+ create mode 100644 include/uapi/linux/process_vm_access.h
+ create mode 100755 tools/testing/selftests/mm/ksft_process_vm_readv.sh
+ create mode 100644 tools/testing/selftests/mm/process_vm_readv.c
 
 -- 
-Sincerely yours,
-Mike.
+2.45.0
+
