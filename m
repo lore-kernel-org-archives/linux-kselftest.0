@@ -1,63 +1,63 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AFF733A70A
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 03:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4A270836
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 03:17:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780370242; cv=none; b=hMDtQUxFNVKawZx07Tf/U9VvPO3lg4I0ZBEEErVOLg5s2QprcF/9xJud5fKAzcrQJWr4CHMJVu4VgDzhCbG/pLGsbt9UU6VrbiFfimipnu8TT4PzE34jDMW4G99JEB6IT40bdJWQ+opvnp4izM1iigbOvx6CmyKCuFW7+aozFgI=
+	t=1780370243; cv=none; b=gNzgKLOycV1HgOoYqDOh1kDiokFYAzgJRHEGfY543XR4ZrEjyxTw4KeWLn0799Y06Rh1LMg4m8dkeFx0gvCQKwJ2Fm2Xi4T2fdM2wvNXrI6tFmnR6AkFFyrfgcUVl9+G6X0ey5y1JI8h99MIfjNi8C06bhWnFjfiCy2cKZ14Tvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780370242; c=relaxed/simple;
-	bh=iLcdCc0te5fqBZzAelrcWbzlLEUfrhfSCvMibuoqogY=;
+	s=arc-20240116; t=1780370243; c=relaxed/simple;
+	bh=Dt2dFPyPh1ts6XuKsSKJICPZIpbd882zbThrm/OEsps=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dAR+OZ3jt/E+qsHJxHyN1MgnTDAWf4hwz1M6jeos67CZMRs/O7qyzaymXq42/c/6z7550ujOgd2L3nQWLADacveTetkkuNmw7eybcq4ulENdaMRwQqRt5qjZ1GMfPHxcQ7JWRhfpZC5TbiPfbA8TxTss/T0/97KzGtCb7vmfTCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=B7dKe+we; arc=none smtp.client-ip=209.85.160.177
+	 MIME-Version; b=vBMOBQd14cHOzZlhj/8VZoobn5ZLmnLnF8JFgGLJW8BStfsCjWdTKPXYfU+rpcNry5JvxutD+5JGF6O4un4d7hRDnae9TtUtiJvOMM/i+7MR/sa796mJ3BPp61HGHp9upmYKz5OUDnVW3NGZpvCKVDQGcOk4JyFOPOE4lsjmFAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Jc0goBFa; arc=none smtp.client-ip=209.85.160.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="B7dKe+we"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-5176b9c476aso1447311cf.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 20:17:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Jc0goBFa"
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-517654b8e28so5494571cf.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 20:17:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1780370240; x=1780975040; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1780370241; x=1780975041; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=57XHE07VPesg/638uO62i0q1esIWZpU9ZAzOqv5wFOw=;
-        b=B7dKe+wemC9eOcrpQ48Ze1TDlRVjIA8tbs8n/SNsel1eg8SZwWYR6ToQxp7CzhYFGs
-         urR+XeArtQEjq5eXFph/aEMCqELs6Rg9jnO/RkeyPP7ld4pJ/fKHxWXZCJsqnZAOLByz
-         bmshjpimuJYCgjot2OVq+Gbe4s6pOPqPDKwd99cWkLvTWNZ52CPaZDgu4aM+3cTe4DO/
-         Nfhb0FYf1bR4IcV3UzgYgN+wXhm4Gs95B5tgWgoH7faOB5wgyhwrnj5KXxcdRR7K8UvS
-         JkK3JlvMwiCkCKs+HMMmAQok9pq2Md2JLkI5KUlR7zSDdh61IoWk7axZZ6XqTGluxnyl
-         HWhQ==
+        bh=6tW8ZkJFH1s/aeCdAEiQB7eOXHeRrYqV2OpgEHHCsa8=;
+        b=Jc0goBFaHhvMOUNWHpB2OFY1+3Z2ZG2bVrLp14LmjWpFEj1F96fEgV4sx+AfBbDxkf
+         YAL9w4sbxE0n179cV8HIBOXxYZLCn552xtJBnI2r4inWzzDmJAIgZiVPMVTUrmPRPfEt
+         LCsnkIksFMmQspiZ+6wGR7RFgRdezeKLasxtN+XMC3WMOr5HAQP03sRtIpObnjhGRoKp
+         1vrwm2vK/a05QiJrI6PNXrZ9ZXvnbE53j1pTb0zKXr3Ip7FT/x8DdBadERgxeB96KGFF
+         WDAFJYRc246m2lQRdvMR39bvLdXOY24f3DyPwtuH3kW/Q0P3qokC9B6Pb52f9ZN1c8F0
+         WfnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780370240; x=1780975040;
+        d=1e100.net; s=20251104; t=1780370241; x=1780975041;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=57XHE07VPesg/638uO62i0q1esIWZpU9ZAzOqv5wFOw=;
-        b=WRcO7tUhZdILCIYO1V8PWG6tpnk0xZJNopwdvX1KWBJcNhTuCOhTNASuoxPk+Gz4Yx
-         ipHiLVqB+zgai4dX6PegPPjUzDzWApYUEqRh/ECdiZTE7GgriN2N6CAZ9kAvJAxyqFKB
-         lZuIRA1b7r5jvKVgxpICbtWc2rKXKCjxSd9/a9HDuv5t4M/q0pH2Rex65nUVEK4Pzznn
-         E4TXYI2DvmiNCOe86/Glo+S4X7F75R9XihbEL8km1xypn57TeS0rMOTEKsdYXuxK2GPr
-         h+aug/a36SkmBKpdV3FO64iKKvcHhUUX2ASd8u3a3GQHY/E3B9m4ncnT25bbXTvXaFUW
-         imeQ==
-X-Gm-Message-State: AOJu0YznsnbrZ+9QfwzM8vrUyDddgsWklWhdkPX4EGk3NbHHQCjmJTN5
-	c2EImbLj8gxcGLhAiIlUUGzhZofYc6PUAnrv2pnpnGSJgw/2MvM1bexelhUYVIRA67ec4vs8SC6
-	NPVSk
-X-Gm-Gg: Acq92OFEBkPTJ9GmfRv3xYe2BNSUkfOvbzYkTRU/GecSJScnP6A+5UCfXR59s6YkBI7
-	vDTk4Ex/dOTI5VWSK+nqfzDJsgs6NlszmCrSVUcRBvLG2fP23mP1iSgGND4ZnG746D3D/euInvX
-	sCiF8Rg5GNKz0G342HOKd/yTu/tTcgLuITFdNnVmz9sjIRHkKFdo+GLBl/hIims7gUBRrSLaZKt
-	Xbrf7AxdFJPrkIC1rHmpWr1FxDI9QnmjSbe55L50lda3udrBqYDWrLsFOZnks20NuL/blAwnkTg
-	AaxTLCGur4W1g1p446sYvMRPoWYunu1GRfBNAXPzCoegemnwfFnN1qO6tspH/GWDMY0DXe7Qhdy
-	q/8FPAEDRneLtHI9s6vNdqgwX4B6AWcqe/4LuVslNlv9/Y3S1QRM1z0VeKCDhtfm15EwoxKfDzj
-	9BK+1xDV1OWXHP1DYFN8JV1Jdh2rHB6vzjhMQMbcvrmq9Yj+niFSi+hKgh2dXnKw==
-X-Received: by 2002:ac8:5dd1:0:b0:50f:6415:1eb4 with SMTP id d75a77b69052e-5173a97fdd5mr181349891cf.49.1780370240533;
-        Mon, 01 Jun 2026 20:17:20 -0700 (PDT)
+        bh=6tW8ZkJFH1s/aeCdAEiQB7eOXHeRrYqV2OpgEHHCsa8=;
+        b=W0DQI3lgXGIvn71esjjbXqNq8LypI94atXqyeLIWr9NWGINrq+oVQJwS32K0SdmAgv
+         5hmsp0o4RWREHSPzt89NVe/0C41PeHo8QiViD0zZEqpL8Nol+dr8EIzyGBGewEAz5kG3
+         eeVysyMUCSfOapD/ApfJuAoi90V1IgGBlHBn8uPBVpjoHkjc5QWV9LVZpW02qGBh1V98
+         54mYCeyyUcL1lR2H1MHaw/ZhdQ3y3Q4fQzbNHdAEDDYsSqekqTBJdCMrW9omdHQtZ2i/
+         CGH/P0pOxvKwA9e7mZ1pB9GGUwfLbdlqnxJC5OKDzSbH4McKVhRmyXFMCzFiwkTCfcZy
+         4zBQ==
+X-Gm-Message-State: AOJu0YzmJvmBsRrXxXQyhL1otVm89iL9meRdClvRSubaLpWRAr593FOy
+	ex0WQ3c1N/Ua6vxYfMfTnkJ7zVtWkD1YcG5QY7eo5YGHiV0QYtldhF6n/eDi4k6i7hnGd4s/j4U
+	e7Wzl
+X-Gm-Gg: Acq92OETQ4d5fXSjf3EFlJqCVL+2xVk0ZBXFixsMSqncfHdDX6ToXXTZHlQN8/y8izj
+	OjLCOABFhbrgnLFmd2DCnZYmgnVkXL3ozRlWF5k3B9VO/PmBceZbStL+BuU1vlehMsL3NTwVXLJ
+	iUUS3Xn7x601YgyHjFhtgApwnivStXlSWn6mCIbu+WPQC7xVCalyZxaUIFwHDpOkeWfGL5CNGrj
+	l0AnjK2Tx4Np8nezg0FV3fx2JRzzbDhUVoR8Nb7jKezBa07lk2xf0ANAgIEYWZEeUTdd0jfpG5y
+	7xou7C0uVBJ3PKcu+i7GPzbMo8HK00Xnp7nlu10+Pp+KgN8HMbwvIolqnPMvtdS1SRrSnqX7Wzl
+	dF3QfE186D8n97Q3iwvDg14XpqarpL6YPXJebhOaj0jhhHOqIWqoF3rwXibluuQvnrbC8yagiP6
+	orcUiLzfWd1C4+65KBTvCQXrLQy/pKYgPNjZUmPEiJssaDx0YV76Ons5fvEKamtg==
+X-Received: by 2002:a05:622a:4c14:b0:50e:6377:197d with SMTP id d75a77b69052e-5173a6197f2mr192694801cf.8.1780370241637;
+        Mon, 01 Jun 2026 20:17:21 -0700 (PDT)
 Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51741b29745sm71219081cf.8.2026.06.01.20.17.19
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51741b29745sm71219081cf.8.2026.06.01.20.17.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 20:17:20 -0700 (PDT)
+        Mon, 01 Jun 2026 20:17:21 -0700 (PDT)
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 To: linux-kselftest@vger.kernel.org,
 	rppt@kernel.org,
@@ -74,9 +74,9 @@ To: linux-kselftest@vger.kernel.org,
 	pratyush@kernel.org,
 	skhawaja@google.com,
 	graf@amazon.com
-Subject: [PATCH v5 01/13] liveupdate: change file_set->count type to u64 for type safety
-Date: Tue,  2 Jun 2026 03:17:05 +0000
-Message-ID: <20260602031717.197696-2-pasha.tatashin@soleen.com>
+Subject: [PATCH v5 02/13] liveupdate: avoid mixing cleanup guards with goto in luo_session_retrieve_fd
+Date: Tue,  2 Jun 2026 03:17:06 +0000
+Message-ID: <20260602031717.197696-3-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260602031717.197696-1-pasha.tatashin@soleen.com>
 References: <20260602031717.197696-1-pasha.tatashin@soleen.com>
@@ -88,29 +88,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This improves type safety and aligns the in-memory file_set->count with
-the serialized count type. It avoids potential truncation or sign
-conversion mismatch issues.
+Refactoring luo_session_retrieve_fd() to avoid mixing automated
+cleanup-style guards with goto-based resource release, which is not
+recommended under the Linux kernel coding style.
 
 Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- kernel/liveupdate/luo_internal.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/liveupdate/luo_session.c | 25 ++++++++++++-------------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
 
-diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
-index dd53d4a7277e..ae58206f14ac 100644
---- a/kernel/liveupdate/luo_internal.h
-+++ b/kernel/liveupdate/luo_internal.h
-@@ -52,7 +52,7 @@ static inline int luo_ucmd_respond(struct luo_ucmd *ucmd,
- struct luo_file_set {
- 	struct list_head files_list;
- 	struct luo_file_ser *files;
--	long count;
-+	u64 count;
- };
+diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+index 5c6cebc6e326..7b2f9cbabb05 100644
+--- a/kernel/liveupdate/luo_session.c
++++ b/kernel/liveupdate/luo_session.c
+@@ -291,25 +291,24 @@ static int luo_session_retrieve_fd(struct luo_session *session,
+ 	if (argp->fd < 0)
+ 		return argp->fd;
  
- /**
+-	guard(mutex)(&session->mutex);
+-	err = luo_retrieve_file(&session->file_set, argp->token, &file);
+-	if (err < 0)
+-		goto  err_put_fd;
++	scoped_guard(mutex, &session->mutex) {
++		err = luo_retrieve_file(&session->file_set, argp->token, &file);
++		if (err < 0) {
++			put_unused_fd(argp->fd);
++			return err;
++		}
++	}
+ 
+ 	err = luo_ucmd_respond(ucmd, sizeof(*argp));
+-	if (err)
+-		goto err_put_file;
++	if (err) {
++		fput(file);
++		put_unused_fd(argp->fd);
++		return err;
++	}
+ 
+ 	fd_install(argp->fd, file);
+ 
+ 	return 0;
+-
+-err_put_file:
+-	fput(file);
+-err_put_fd:
+-	put_unused_fd(argp->fd);
+-
+-	return err;
+ }
+ 
+ static int luo_session_finish(struct luo_session *session,
 -- 
 2.53.0
 
