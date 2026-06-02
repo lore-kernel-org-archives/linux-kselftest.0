@@ -1,62 +1,64 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858AE382394
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 20:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62D13939D7
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 20:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780433951; cv=none; b=XVdHAnsXte4E++UrrtRN4v/hZ6aW+muZCX2+ehamfkSfRyI6fdMpzYQTf3XJ4OLGMOS0wlLULbi7MIjOd6Vaanp/ePnZpuYMWW+vPJ9R53v6+7dcjx5nhE8IL6Imktgvwjj7OEBNnzyPxKkoGPv2bhnSyZsEqJeOqleGpKX2Exg=
+	t=1780433965; cv=none; b=T3B6OoRbGvewFoOmmsC1tpk8jM1/OUieST5j4ZHHOVj9Warv0maT4+jeUm4EMJZeY/Pyn7+Vlcxq7YsXC86lZr3Y3MamSfpuj1R8PQmYyp4846+eJDyuUhaGjhPt/rMSY+W9xyyVD4sSFNyFJuZtBw6RniYEESTd2tOwzG+umOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780433951; c=relaxed/simple;
-	bh=+jtKDsdspxU/PcXSW3DyLJRlMvpgXNbAEVECdmHVt7I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IxmzbYOWDkX5Q4/KqsfUTZSkP0qs01LDqy+HquyyugqMexpFzP3zId5wdqlBuBBISn7uvP+WGT+eba7hGScaCVRDroy1vJ6Q90OpKqEMzdJBLO1Lv+vN+RRefRJ5qu00FokHi8CP21Qm25ckE2O5OvqL6VeaOpp/boveDrEASIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iAmhpdOU; arc=none smtp.client-ip=209.85.215.181
+	s=arc-20240116; t=1780433965; c=relaxed/simple;
+	bh=OIL4u1059wQePR4fBxdtuuk+4+q2KWiT2f5tiuzz13M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sHkpkTBjMUB7T0OzBVW89TPmERcGI0CcFEZTfSn+cY5J1u+q3QFDjil8gvgVB+4uLVhQajHA00ep4kkmbhwLPQy5ei59Y2eloIRuFvYUWhlDC2pkpwEOog42qX5+BLcw8mwxlH41ammMTfb8vmMnSXoEjroZZPfd/qI1A6rBjyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X3rnsinv; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iAmhpdOU"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c85b73ffb52so1136281a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 13:59:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X3rnsinv"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-36b95eb4bb4so2730101a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 13:59:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780433950; x=1781038750; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0LsFwosRJQ7xuFenuTgaUzNnNnhs7WZU/8+qcwovvf0=;
-        b=iAmhpdOUQ9B+bw7TIWvxoIFWpdvLvoW6kDNUKy+l8fysF0F6tler+7ubzKMnscHCe5
-         t61U8m2+6D8AjzMMkd2mHTynBJ5DA574tRJ87wLNo7pYHICUkYABAeIjPJlteMMkouF/
-         JrqR5LKZ3wlHxnT7ifaNO9Er6aJdxCS/BbjpSRDD6hHsBltUSsrur3wnrb/sJRHN4cT5
-         d2dHe/OHRDyGsdAPX2cdlXyzSj0+p4biHx87Npg9QfnCp9JmyjuQnuj2RgvHTbEGsVBj
-         aB5cgLr9+FAbPZno1jJF1PNLWLQlJ5h3Uh7QBKqoMR9Ou3I9PEF2hGHLKf7FWeWaIefj
-         49iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780433950; x=1781038750;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1780433963; x=1781038763; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0LsFwosRJQ7xuFenuTgaUzNnNnhs7WZU/8+qcwovvf0=;
-        b=DLCc+3v6HmdCRm4X5iCTpzpYcla7MxSjWXHbErczFdk8LzDK+UqfHxByR93U6INkgV
-         m15yrQHvazQnrtggjV1i8lFLInZKFPUuwpgzR1eqylRP3imdCS4B3wZNPZdUJtbvaMf8
-         91rlUBhQAGo0I//auA3qQMMYl+NgFQ3s32aGDPgpFeu/J6iO/b5EF39OMPRkWdFUbori
-         H0r8Mp56XYOdAAJ3CmgWbcG1z99kV5dCFgN84NSQwghjQOF3cMKqz2TXIa5LoQYXmYQC
-         F5mn9K1nVmA/Iuz8/Mkd3JzbRE/H3SfBOKlSRKVUffdHnv9o5qddP6T7uKygBBRlvTZK
-         MqNQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+htIe8MB8+EE+dJBnmrKLGiqJEdpScj1PTK0E9jA22v/cAxhSzgHz2QNyasW+DQkbMuc7rl+3YFSB/p5+KpW4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZY4pIreajZX2Qc2rcgLCEDZDCTwER7LscCWaoCfscjHbCaPJC
-	w89WKtv693CN7muhJgKmwIy55qRbEE9zjAJKHo5FKq2qoeT3OLaq9NBC
-X-Gm-Gg: Acq92OFDMbsKFShLb8lMbiq4DM8MASuvd94+tOZ38Al8BDSWHY23dNp+AbeKNqmY7Qf
-	B9pm0E02tSFeNk1MHduFXb2EmzxvdJlJ30QoCUaSNYBeJOb7JavTFcv64m6WSPcvrnAMCWXDlG/
-	xXG9frNycKmpJr/H3A2+y/ZnWT3O3Pz774rXSVwD4427TMtHo5Cl81jUKjAS6OsTDt8s2cXYBnn
-	6Nsyrm/TUzdx0ingGS9lnK2SWtgovAI1i3zxO8ynwJb9euNTGI0kJFegTkVcSoTH9QtY/6Ap0yQ
-	syjZ0UrFsUpeJuJUyTwmW/Vvi2MqX8muRqQ/oqcUb3QnEeIQkWWOZWOkcV+TpuxNUlPsfh8VMYV
-	3MHwhLJOZiOkW/d5FHe4wneQBm5NnGoUbNUcvDI8BCmUG50Me7gOKetPmC5HJfzFACvoowLOazV
-	+KIbiSVSiiqqFfHJY6p9ehDm4ucokvKFowkZiS6+oZXYZZ0i78hxKYVbO49PsDPlp95s52q8Fuj
-	EC/8A==
-X-Received: by 2002:a05:6a21:6c11:b0:3b0:7771:ca57 with SMTP id adf61e73a8af0-3b497669eacmr475117637.38.1780433949708;
-        Tue, 02 Jun 2026 13:59:09 -0700 (PDT)
+        bh=ea3yw5dmVH/Wal3jfG05beYzbzDpKpyYIVD2MX/4oR4=;
+        b=X3rnsinvLeEIbf83NUNYYy7Bw6LQVHa4Gzuz18eiLNaRBPAOb0hxcZRtAxMmS82VoW
+         VNt5SI0rXyKiZ8TzkU26gzdKqQt9zNCuVuiE1ohrQiLz45y5M8J6ow2CIOnFnaag8NIv
+         idNygrWig9WQQQE8e+kJLtkXnjG6qTIvoq6kSzL3U1fan1UWimk5L8XlnD+9vUQurT75
+         LCrdFnZk8CDksdgOFEkYsmSdbJqowzHsWa7ZLzLQCwtDhCvUAV8aEwnmXmt3LkUhsUyP
+         Zj3q5FP1eRY7plChpcPolE56iUyDNYvDt7J8haU54C9rjAV23qywgk9/iBL2/vozY2pC
+         GN8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780433963; x=1781038763;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ea3yw5dmVH/Wal3jfG05beYzbzDpKpyYIVD2MX/4oR4=;
+        b=fPZlo+LlyStoFXI3+axwOU56ACeoNc0PV/eE4jy/sH9Zw6fcdlNmBkxdYB3qRDVJg5
+         B/PNWRcw2/1afbXiLerdC5pfQ2l41clevMvQJnbXRvAzA6tH5EQ4l5PCMJPwox6EQx77
+         0MiKi19/wq0GNo+/Hq4Pbaz7rcP2+A2sHFkZ53tMo6cWQ+b/FdlpXyG8FRbhZwih+bcb
+         1EXOwFMwxd5ZIJYS3IJcxxSD2tF1YeSSMxYhxajQm4whqc284DwrRKWlsGlbJMaiwUdC
+         3+XIiFAvx4V1eAFOD8pTkQE0URtdTXya9J9DmjKU8uBBPqCzDIRLS9PLsm4AQxt/YwhF
+         L/Yg==
+X-Forwarded-Encrypted: i=1; AFNElJ9YgIzo6me7SfTgoj0CaJ3N7J8CEtjxxnYtY8Z1D7RRWIJgKwbm8Gw2WEZQi6OjgUJMRi9WIKLgreAz6kNvrks=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQCWNfx5zj21Wb6KVsfaxiGBGHrBjESAfccj13e+YNPycc5AF1
+	4yX2oB4Rlt+eisQVxUywbBgyPamYDe3nnM22x+6FDfehAg2oz91A99Xv
+X-Gm-Gg: Acq92OGgxpT8Kq10a9LWtVkVEi6p817ym0cIkQaynFg4JGh6aJapc7FT2FZCLCtMtWJ
+	MujxhQg1yZIaq+OIRQ2dvmWNYdMjjrknPgcioYNhomDRVSQs5NQqfQ6c1LbCXlPTqoC9HkLF5/1
+	UC3pnaNcSSALV3pUbnwZnMnlTsatHXQRzgVGmFPNez6EuSo7Qjo262ziV2j5+xjdvbNKZs2OwFm
+	OIgeFTcdnIt5caxoiy7r9OfxClCjsQzdnfcCuG7p5Vre78AGOjXvDMI6fjBkHuFPt0j2gA2Lrup
+	r4znOXQFDzHnYCEi2LqxG9NJ1fOZ4pv3L8u+Aev+TA15P3SSET5iV2sx/8ishsfGtwUZ536B6ZE
+	sXJCQRcBPaVTNnZ6xyPnz/w21ENFN+f0ODIht4cD8iLc88MyxkLaYukHBfgMRZUhX1N2+DYbLRz
+	Ej1XyibiQKCJOz1WHM/j4/O+aT1Tu/R/ffr2IAfx0Z/QTiWaZkyZqUPHIuXOM+0f6UC3EHu9L6E
+	pFCjEILTjsMkBFY
+X-Received: by 2002:a17:90a:b401:b0:36b:5b82:4834 with SMTP id 98e67ed59e1d1-36e30c213bfmr311928a91.7.1780433963026;
+        Tue, 02 Jun 2026 13:59:23 -0700 (PDT)
 Received: from computer.goose-salary.ts.net ([2a09:bac5:3b4a:11cd::1c6:2])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df043223sm157354a12.8.2026.06.02.13.58.58
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df043223sm157354a12.8.2026.06.02.13.59.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 13:59:09 -0700 (PDT)
+        Tue, 02 Jun 2026 13:59:22 -0700 (PDT)
 From: Varun R Mallya <varunrmallya@gmail.com>
 To: bpf@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
@@ -80,10 +82,12 @@ Cc: martin.lau@linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	varunrmallya@gmail.com
-Subject: [PATCH bpf-next 0/2] RISC-V JIT support for bpf_get_current_task/_btf
-Date: Wed,  3 Jun 2026 02:28:45 +0530
-Message-ID: <20260602205847.102825-1-varunrmallya@gmail.com>
+Subject: [PATCH bpf-next 1/2] selftests/bpf: use host CPU features in JIT disassembler
+Date: Wed,  3 Jun 2026 02:28:46 +0530
+Message-ID: <20260602205847.102825-2-varunrmallya@gmail.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260602205847.102825-1-varunrmallya@gmail.com>
+References: <20260602205847.102825-1-varunrmallya@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,34 +96,42 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-These two patches add support for the bpf_get_current_task and
-bpf_get_current_task_btf kfuncs in RISC-V JIT and add a selftest.
+Pass the host CPU name and feature string to
+LLVMCreateDisasmCPUFeatures() instead of using LLVMCreateDisasm(), so
+the disassembler correctly decodes CPU-specific instructions and
+extensions such as RISC-V compressed and vector instructions.
 
-The first patch adds support for cpu and feature detection on
-the JIT disassembly helper function as RISC-V JITed code was not
-being disassembled using `LLVMCreateDisasm` as it was missing the
-"+c" CPU feature and JITed code contained RISC-V Compressed (C)
-Extension. This patch generalizes that to detect CPU features and
-enables testing on more RISC-V JIT work ahead.
+Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
+---
+ tools/testing/selftests/bpf/jit_disasm_helpers.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-The second patch, which actually adds this support has been benchmarked
-on QEMU RISC-V and shows significant improvements.
-It was benchmarked using a simple loop inside a bpf program that ran
-bpf_get_current_task() and execution time was measured. It used
-bpf_prog_test_run_opts() to repeatedly trigger the BPF program. The loop
-ran in 1 second intervals and it kept firing bpf_prog_test_run_opts() as
-fast as possible until a second had elapsed and then reported statistics.
-
-Varun R Mallya (2):
-  selftests/bpf: use host CPU features in JIT disassembler
-  bpf, riscv: inline bpf_get_current_task() and
-    bpf_get_current_task_btf()
-
- arch/riscv/net/bpf_jit_comp64.c                     |  9 +++++++++
- tools/testing/selftests/bpf/jit_disasm_helpers.c    | 13 +++++++++++--
- .../selftests/bpf/progs/verifier_jit_inline.c       |  2 ++
- 3 files changed, 22 insertions(+), 2 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+index 364c557c5115..3558fe10e28c 100644
+--- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
++++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+@@ -96,10 +96,19 @@ static int disasm_one_func(FILE *text_out, uint8_t *image, __u32 len)
+ 	__u32 *label_pc, pc;
+ 	int i, cnt, err = 0;
+ 	char buf[64];
++	char *cpu, *features;
+ 
+ 	triple = LLVMGetDefaultTargetTriple();
+-	ctx = LLVMCreateDisasm(triple, &labels, 0, NULL, lookup_symbol);
+-	if (!ASSERT_OK_PTR(ctx, "LLVMCreateDisasm")) {
++
++	cpu = LLVMGetHostCPUName();
++	features = LLVMGetHostCPUFeatures();
++
++	ctx = LLVMCreateDisasmCPUFeatures(triple, cpu, features, &labels, 0, NULL, lookup_symbol);
++
++	LLVMDisposeMessage(cpu);
++	LLVMDisposeMessage(features);
++
++	if (!ASSERT_OK_PTR(ctx, "LLVMCreateDisasmCPUFeatures")) {
+ 		err = -EINVAL;
+ 		goto out;
+ 	}
 -- 
 2.54.0
 
