@@ -1,20 +1,20 @@
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224E53A9861;
-	Tue,  2 Jun 2026 07:01:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15714392C20;
+	Tue,  2 Jun 2026 07:01:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780383695; cv=none; b=bWlgb6ECHi+xZtcUOlQ/lEfEvOL/CuGsFbrnUQQrOesTPFyvAe7ZFuy+/1Cu0aTgm/Ke7xGVH0BiO4TUVVhLqgouU5SZoFJm7ioqEjp5BG2QL+zZ3b++iFkuHvhIp9Askj/vBT4qzrkc5vNm55pupEH0retrTtVLaYpN7vKn+g4=
+	t=1780383695; cv=none; b=CtP35Nbr44fqU/zaLFWFs5SqwJ9bDaCow8ZUw3C60dK2jb1MWL98TROFRai8V2/8jRoq5IdaKqjtfexW+iuT2FZFOjeQKJS/xuFlxEi695LNQyuw+5ZMXZfWZEVBtUDjs691lfoc/T98PwdyNYtPBOp2ClJAZGFQLpwTdbbC72U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780383695; c=relaxed/simple;
-	bh=eWDA4wI3Ydz5Nq3USZjSChsChbkm2cA1GhWU0Z5jHKI=;
+	bh=5IRlofSrVPboQlop4d9YB1jg6RNszFLOzJiRENG35BQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=g9BBVSAK/KQ/2pE0HzDQbyztF2iTmfWBHv7Ns0lKTySm6Z4HTy3GKoln/cJmV88vITit6bh6OmW447612ik/xwW9nXJ0igwkVzra08pTH0jw2kpA/qwWkPB+qP2hXzf3gZAddhhnxdEQGGlMjD9QMDSMFWu+AFLzBq9cb1WpBcw=
+	 MIME-Version; b=PZpiMBnGgcFSra7idv9VDIhMSkWD4pdm3k926hpzs5gx7ITTmOeKlYhmWEXqBD5trDznBG0eH960wSQpXNs+rb++CDKS8d2gjHxVF8Aesy9mWYbLf45tABgyqWBbXioZV4TqfpmFmaDjW8fR57xidgK4MV9Rwi8AiDIUr0C69DQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: e02bbc7c5e5011f1aa26b74ffac11d73-20260602
+X-UUID: de7a1b765e5011f1aa26b74ffac11d73-20260602
 X-CTIC-Tags:
 	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
 	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
@@ -24,14 +24,14 @@ X-CTIC-Tags:
 	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
 	DMARC_NOPASS
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:549077d5-bd28-41a8-9020-6dc2e5d020eb,IP:10,
-	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:5
-X-CID-INFO: VERSION:1.3.12,REQID:549077d5-bd28-41a8-9020-6dc2e5d020eb,IP:10,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:5
-X-CID-META: VersionHash:e7bac3a,CLOUDID:ad801bb9f6dbb48635de2fd65192f5b9,BulkI
-	D:260602150130PCANUYKE,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
+X-CID-O-INFO: VERSION:1.3.12,REQID:9365df35-eb04-47c9-92b9-bc7c395351fe,IP:10,
+	URL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:-15
+X-CID-INFO: VERSION:1.3.12,REQID:9365df35-eb04-47c9-92b9-bc7c395351fe,IP:10,UR
+	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-15
+X-CID-META: VersionHash:e7bac3a,CLOUDID:8def62c301d44e256f4815b234f29436,BulkI
+	D:2606021501276KQVYNDK,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
 	2|127|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:ni
 	l,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,
 	BRR:0,BRE:0,ARC:0
@@ -39,12 +39,12 @@ X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: e02bbc7c5e5011f1aa26b74ffac11d73-20260602
+X-UUID: de7a1b765e5011f1aa26b74ffac11d73-20260602
 X-User: lihongfu@kylinos.cn
 Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
 	(envelope-from <lihongfu@kylinos.cn>)
 	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 776362238; Tue, 02 Jun 2026 15:01:27 +0800
+	with ESMTP id 968047319; Tue, 02 Jun 2026 15:01:24 +0800
 From: Hongfu Li <lihongfu@kylinos.cn>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -59,9 +59,9 @@ Cc: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Hongfu Li <lihongfu@kylinos.cn>
-Subject: [PATCH v6 5/5] selftests/mm: add missing pthread_create() return checks in pkey tests
-Date: Tue,  2 Jun 2026 15:01:19 +0800
-Message-Id: <20260602070119.1452308-6-lihongfu@kylinos.cn>
+Subject: [PATCH v6 4/5] selftests/mm: add missing mmap() return checks in pkey tests
+Date: Tue,  2 Jun 2026 15:01:18 +0800
+Message-Id: <20260602070119.1452308-5-lihongfu@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260602070119.1452308-1-lihongfu@kylinos.cn>
 References: <20260602070119.1452308-1-lihongfu@kylinos.cn>
@@ -73,38 +73,107 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add missing pthread_create() return checks in pkey sighandler tests
-to avoid hanging in pthread_cond_wait() when thread creation fails.
+Add missing checks against mmap() return value, replace (void *)-1
+with MAP_FAILED for better readability and consistency.
 
 Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
 ---
- tools/testing/selftests/mm/pkey_sighandler_tests.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/pkey-powerpc.h          |  2 +-
+ tools/testing/selftests/mm/pkey_sighandler_tests.c |  2 ++
+ tools/testing/selftests/mm/protection_keys.c       | 12 +++++++-----
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
+diff --git a/tools/testing/selftests/mm/pkey-powerpc.h b/tools/testing/selftests/mm/pkey-powerpc.h
+index 17bf2d1b0192..2ce85580b404 100644
+--- a/tools/testing/selftests/mm/pkey-powerpc.h
++++ b/tools/testing/selftests/mm/pkey-powerpc.h
+@@ -126,7 +126,7 @@ static inline void *malloc_pkey_with_mprotect_subpage(long size, int prot, u16 p
+ 			size, prot, pkey);
+ 	pkey_assert(pkey < NR_PKEYS);
+ 	ptr = mmap(NULL, size, prot, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+-	pkey_assert(ptr != (void *)-1);
++	pkey_assert(ptr != MAP_FAILED);
+ 
+ 	ret = syscall(__NR_subpage_prot, ptr, size, NULL);
+ 	if (ret) {
 diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-index d185d3da26cf..f30c9965a561 100644
+index 882928f2912b..d185d3da26cf 100644
 --- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
 +++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-@@ -224,7 +224,8 @@ static void test_sigsegv_handler_with_pkey0_disabled(void)
- 	pthread_attr_init(&attr);
- 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+@@ -317,6 +317,7 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
+ 	/* Set up alternate signal stack that will use the default MPK */
+ 	sigstack.ss_sp = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
+ 			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	pkey_assert(sigstack.ss_sp != MAP_FAILED);
+ 	sigstack.ss_flags = 0;
+ 	sigstack.ss_size = STACK_SIZE;
  
--	pthread_create(&thr, &attr, thread_segv_with_pkey0_disabled, NULL);
-+	ret = pthread_create(&thr, &attr, thread_segv_with_pkey0_disabled, NULL);
-+	pkey_assert(ret == 0);
+@@ -492,6 +493,7 @@ static void test_pkru_sigreturn(void)
+ 	/* Set up alternate signal stack that will use the default MPK */
+ 	sigstack.ss_sp = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
+ 			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	pkey_assert(sigstack.ss_sp != MAP_FAILED);
+ 	sigstack.ss_flags = 0;
+ 	sigstack.ss_size = STACK_SIZE;
  
- 	pthread_mutex_lock(&mutex);
- 	while (siginfo.si_signo == 0)
-@@ -263,7 +264,8 @@ static void test_sigsegv_handler_cannot_access_stack(void)
- 	pthread_attr_init(&attr);
- 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
+index e504544e2197..96a4eb26f326 100644
+--- a/tools/testing/selftests/mm/protection_keys.c
++++ b/tools/testing/selftests/mm/protection_keys.c
+@@ -586,7 +586,7 @@ static void *malloc_pkey_with_mprotect(long size, int prot, u16 pkey)
+ 			size, prot, pkey);
+ 	pkey_assert(pkey < NR_PKEYS);
+ 	ptr = mmap(NULL, size, prot, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+-	pkey_assert(ptr != (void *)-1);
++	pkey_assert(ptr != MAP_FAILED);
+ 	ret = mprotect_pkey((void *)ptr, PAGE_SIZE, prot, pkey);
+ 	pkey_assert(!ret);
+ 	record_pkey_malloc(ptr, size, prot);
+@@ -609,7 +609,7 @@ static void *malloc_pkey_anon_huge(long size, int prot, u16 pkey)
+ 	 */
+ 	size = ALIGN_UP(size, HPAGE_SIZE * 2);
+ 	ptr = mmap(NULL, size, PROT_NONE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+-	pkey_assert(ptr != (void *)-1);
++	pkey_assert(ptr != MAP_FAILED);
+ 	record_pkey_malloc(ptr, size, prot);
+ 	mprotect_pkey(ptr, size, prot, pkey);
  
--	pthread_create(&thr, &attr, thread_segv_pkuerr_stack, NULL);
-+	ret = pthread_create(&thr, &attr, thread_segv_pkuerr_stack, NULL);
-+	pkey_assert(ret == 0);
+@@ -667,7 +667,7 @@ static void *malloc_pkey_hugetlb(long size, int prot, u16 pkey)
+ 	size = ALIGN_UP(size, HPAGE_SIZE * 2);
+ 	pkey_assert(pkey < NR_PKEYS);
+ 	ptr = mmap(NULL, size, PROT_NONE, flags, -1, 0);
+-	pkey_assert(ptr != (void *)-1);
++	pkey_assert(ptr != MAP_FAILED);
+ 	mprotect_pkey(ptr, size, prot, pkey);
  
- 	pthread_mutex_lock(&mutex);
- 	while (siginfo.si_signo == 0)
+ 	record_pkey_malloc(ptr, size, prot);
+@@ -696,7 +696,7 @@ static void *malloc_pkey(long size, int prot, u16 pkey)
+ 		pkey_assert(malloc_type < nr_malloc_types);
+ 
+ 		ret = pkey_malloc[malloc_type](size, prot, pkey);
+-		pkey_assert(ret != (void *)-1);
++		pkey_assert(ret != MAP_FAILED);
+ 
+ 		malloc_type++;
+ 		if (malloc_type >= nr_malloc_types)
+@@ -1114,6 +1114,7 @@ static void arch_force_pkey_reg_init(void)
+ 	 * doing the XSAVE size enumeration dance.
+ 	 */
+ 	buf = mmap(NULL, 1*MB, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
++	pkey_assert(buf != MAP_FAILED);
+ 
+ 	/* These __builtins require compiling with -mxsave */
+ 
+@@ -1680,7 +1681,8 @@ int main(void)
+ 		ksft_print_msg("running PKEY tests for unsupported CPU/OS\n");
+ 
+ 		ptr  = mmap(NULL, size, PROT_NONE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+-		assert(ptr != (void *)-1);
++		if (ptr == MAP_FAILED)
++			ksft_exit_fail_perror("mmap");
+ 		test_mprotect_pkey_on_unsupported_cpu(ptr, 1);
+ 		ksft_test_result_pass("pkey on unsupported CPU/OS\n");
+ 		ksft_finished();
 -- 
 2.25.1
 
