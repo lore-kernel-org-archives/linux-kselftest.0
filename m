@@ -1,180 +1,137 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013038.outbound.protection.outlook.com [40.93.196.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CBE3064B5;
-	Tue,  2 Jun 2026 05:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780379214; cv=none; b=kUd46xDyS32iDGvz9NXA4EdiKpI/Sgj9RdsQuZ8az5IaASZbnndmivY8u0CFwMNAhzeIkecrbKnN+dcIKNNC/WRAyrYRpogvo/eP4A27Yi2L66uSSthTt2+dfeetc8Re3Qez1xMWybvluDoQeQPms1DzbLJoc0f3hKH6lGUjPXA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780379214; c=relaxed/simple;
-	bh=1zAqYg60GAZgU4KKXvACIRybU0aAzPr4a/WkAX8AOak=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ppl9QS2txJQB/tLBwQp5Q0ZXLbczwXK4XDmybIZ7pvtLHHlla8XQCk/wuXFZMuY1H2J1n+WAFpUorL0hcPR0xU1Ou6BQ+C0JzAPZzS/2qlTI85QzfeQsdzkfvizqkEcP7NoNBTGPwqfi17kpUF793Lr4Hh9ytvMysG6bkVMkyoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=2ho+sF/d; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4963A7193;
+	Tue,  2 Jun 2026 06:27:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.38
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780381656; cv=fail; b=ieI/GnyFXgQOB+QWm43eOUUxTOoqbho4STDHdOMi1rz2pM8zIWIDpvV8W9vk12QuxNY1YPGfufcutpc7ZOyM+sHDpyhtpO02nv40Z3dbXt1F2kEFBWBDXCaW1kHrStT4uQoLkSivBAuN4fmE8ZTJqLk5IYt2C1qg9Kpdao7SiuE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780381656; c=relaxed/simple;
+	bh=N1zr68Mu/mU2BHofpiHvXeYXcwY3zoq9Z+v45WE5IpI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uT9bJTl11oekOlZDpjhX4xrv6l/oXZnD8VYY8A+/vGhymz6SSPwSm6/zC51IsQHkeYS+m+RbqDdySmIJTtaHv0J/JzwgL+wD1YkylylGPTfzsivD8rSfATpP/asYCMOuy7xPLQEbLA62y4yM+iW7d0SPZiiqBqCInncgAslBa8Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Oxv1IHIE; arc=fail smtp.client-ip=40.93.196.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="2ho+sF/d"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=QU8vL5BYsgr14/B5ViSJNohvg+HvTPRDGcs97wxt6N4=; b=2ho+sF/dXbdRWYOPg7dh8Z77vx
-	IbJgqTikKNRmyPyzI/GI96CMlSXMAunHx4P2s/DrMdKfhOe1sBAQnHVyhnIRjBDtHOIQVjSoUljSQ
-	EBZlloKyAkFs7QyUkmBcIUjZiqxfixC3m4BuRJiSmUHmPCZeBlhqeEh7IKU1KqxEKvnvItSigZPdH
-	F3etd5PDsXElIBZUzIz3m+Dd8ZWIxdBcCaR1YqQhRxbtLkC7cCjK2BLYxS2fA/Q59zSJJCQWi/wbc
-	GIvXM20oiTJKM+UouN7BHummWuPCthfsW4+4K5FRLNMmfD2Kl3/RJfBD3FZieeU8+NtpaBnHT017B
-	LrvX/oaQ==;
-Received: from 2a02-8389-2341-5b80-decc-1a96-daaa-a2cc.cable.dynamic.v6.surfer.at ([2a02:8389:2341:5b80:decc:1a96:daaa:a2cc] helo=localhost)
-	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wUHxj-0000000CLCN-2pey;
-	Tue, 02 Jun 2026 05:46:52 +0000
-From: Christoph Hellwig <hch@lst.de>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	linux-block@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 9/9] block: move the fail request code
-Date: Tue,  2 Jun 2026 07:45:41 +0200
-Message-ID: <20260602054615.3788425-10-hch@lst.de>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260602054615.3788425-1-hch@lst.de>
-References: <20260602054615.3788425-1-hch@lst.de>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Oxv1IHIE"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=McJRapWolL12TbgVZkORbLMfoKQBaxXH2kmurBKkU0DEUrs8rzbqAjH3JNMuZ8CSy4/wCf0Gwv2RMPt8swUWcB6WlGJxnKxVaCgg34IgwbGZLPGXwDQ2tiz2siebp01ZEx/r8IxtmfZtPLoxTpPxDE5GNIjYHfm4tVNNGAM0FlOE3SC2UqPFzXnzIQsQgvKDdLkzIU26RqqNmjd4Adil8YG1LrccqeeaPRFrI2RXCEobKxDAOz9WYUnUVsXWLm9xkKLy5iYwcB7PWRFzlsN6h9/wrkvqIA8rNQpYKZuNbJ6MqU47fsRriJdYWLv0wQJk8/tulpYSq1S55NsyVUefeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SWsoqaXogcJzHjpSn0ijDMHF2kz7Q8SKMNXb9noTTjs=;
+ b=LmZAH0NvZiEG38Xf+4yxpbVCHXnZp6HwzSmLtflIZWMZeFV7gKYgXvExubDZIe8mWIEEKKXL8kN1v0pJf4YekO56wat/jToOfadQmkTQgITp93AaaXzlux0PrjUff1qecINuvtz62i0xvyKtA9d9QJSQVsbttdS1EXSaRjCslKhMH2hMamDNakSSyMvWITt06g3Tgj8s9+8/KoLDDjyBJli3Afox4XFWB9aQr4EzRAyyTCrFAwjHHsGuf0NBkVoV2NAnvuhYpCTW0UvZGeEIGPvPDzXnOX/TiIzC4JDsTNP6XY0IITNz+YFFv/peIp5E7z1bXr/MNVFkqnNbvFLXwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SWsoqaXogcJzHjpSn0ijDMHF2kz7Q8SKMNXb9noTTjs=;
+ b=Oxv1IHIEe5Qx41eTaoTBEAzNvBC74qozWKfM8rBeyrxaggOZQboexnR/mEI/+vvFQ52vFQLs3q04XSU8p+anDdTsmVSW8n2F8Gr4U9Z6j5dFmGHWQwH8lzpVfiYDhzgtw5SIImXpV8JrcUAEFhnU+pqCT7xBjafaXhJS503u2AndpueUmPUP1Z2Zhp382laDqD1iL6+UrfH53N8LHKrpQxU3P8onIxtoK5n+D4iaWpcau7pMO4bng4H1XKeWIKF6J5SOtApkLkxc3DBTkZOLwYQFBkKz9ByY8/Pay9vJMd6xnGRnNV7SfWdHjqdeeH/oVIXlkxjIM3krzDotYKxF0g==
+Received: from MW4PR03CA0059.namprd03.prod.outlook.com (2603:10b6:303:8e::34)
+ by PH0PR12MB7982.namprd12.prod.outlook.com (2603:10b6:510:28d::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.14; Tue, 2 Jun 2026
+ 06:27:27 +0000
+Received: from CO1PEPF00012E7F.namprd03.prod.outlook.com
+ (2603:10b6:303:8e:cafe::53) by MW4PR03CA0059.outlook.office365.com
+ (2603:10b6:303:8e::34) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.71.17 via Frontend Transport; Tue, 2
+ Jun 2026 06:27:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ CO1PEPF00012E7F.mail.protection.outlook.com (10.167.249.54) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.92.5 via Frontend Transport; Tue, 2 Jun 2026 06:27:26 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 1 Jun
+ 2026 23:27:17 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Mon, 1 Jun 2026 23:27:17 -0700
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.181)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Mon, 1 Jun 2026 23:27:16 -0700
+Date: Mon, 1 Jun 2026 23:27:15 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>, <kevin.tian@intel.com>
+CC: <joro@8bytes.org>, <baolu.lu@linux.intel.com>, <iommu@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v1 0/7] iommufd: Fix bugs in eventq fops_read paths
+Message-ID: <ah53w7NLyxoOO6PU@Asurada-Nvidia>
+References: <cover.1780343944.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <cover.1780343944.git.nicolinc@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF00012E7F:EE_|PH0PR12MB7982:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5888aff8-f5f9-4ec3-4a51-08dec0700401
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700016|82310400026|376014|13003099007|22082099003|18002099003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	aPRceF7ScxuZpQ9BawVElHwWF2mZhpEK+CZjGaIfusQuRnTi7NUvQbH9ddC425OfsNDATo0P0ctyKHtUeK8nTnxCCDU/JaDYEUwhIuKrsI3JRvnaXkVRBxl4rDPGTPZZTZo42D2dlpDrBXbN/DeLff2mC57JOMjyl0nBtzU8OhIbs9OfgWeYxVEy+cQCQkLK72CGjUq1IB7BR8L0WUbiDkdP+jb+AiTlRWFColuxlSBYyi8vc8/tHzSv4MElECMxIrRAnAq3dLMmBvasWRLxMa55tAPvpfU0zLaHHjlSUOdyyYnn4B8BOhOaMxigtZhwytb/ncxeIEySDQqWQv6KZbGHoCyrG1hPR7hunGMtEKYj3p7yfeECZo+/2H3iKQzm7whqIBshZ7TOLDEBhh5Mz+KbqZVA2vnC+MR/6DrYrG1QoZrQMmgdhbIAXDgqKMR+wG6qL3BJjNhWhNy27GYaLCgressmu7pq3a3y+tOBby4Ss8CymDJNGsulRCCsjzmc+y0wN3QWrLYKPVp1/i6Nx1AlEma+ACl137v07D/7+GMGP3bClon/H/jlO5hRfrHT+TiQtqI2EvuQ8zn4KQnPLAlCm/1MKXmX+s/QtYP79++9iDhupeiH231sTwiW1Nq8u/a5fBpc/dYjPzubq1IFhbMnOkZVJ23JSwWCTe4IHJmSMqCYvcSEhjKWN6oUQNSxm1LheMxYOlI1nCKdx6A6GpA9DtG7BmHQl4PyIZQsA5g=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700016)(82310400026)(376014)(13003099007)(22082099003)(18002099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	ntCwbW3f0D0kBkEKW9GqJ4qcug30QMCeWHJ6Sr/gLOnMAlnNa3pD2m7e58BwbGWed+z70bLc3KO2Il55jphMmDCPuvM5br+QVe8jZ/K2nqWEDy1gag23NM54yGUcbTkKKqDCAlJNE0oVD8u9JSSbYgraDVoOdGci5ceSZeRMFZ4Am5WrTV1D0Ihxpj2T4rwdmwwJvO8l5NCZVnDo5Oh9LPuFGJQOjVkM+zraEMyu4jecNoLLUSUDefzy9iAusA2We2aKgsizE5lsdaU6Umg0aa4a7LJNrT8FGrEbGU79B894lO4hmyR+bnxReQzQqdsD6fIGWTGEnUbebqJf7sv2t7i0gRITa417AIJtbuW2qijOPcLs2Y6W9MsuZFJcWaLgGkoHs5gl1h8eTz5eEjUzCDHn3bYNkz5w/1KSYO3V2gr1x8/5R2069qV3OBDPTDcS
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2026 06:27:26.8193
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5888aff8-f5f9-4ec3-4a51-08dec0700401
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF00012E7F.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7982
 
-Keep all error injection in one place, and out of line for the main
-I/O submission fast path.
+On Mon, Jun 01, 2026 at 01:42:31PM -0700, Nicolin Chen wrote:
+> Bugs were found in iommufd_veventq/fault_fops_read(), where userspace may:
+>  - Receive a corrupted byte stream after a partial copy_to_user
+>  - Spin in a poll/read loop when reading with an undersized buffer
+>  - Miss notifications when the kernel cannot allocate a lost-events copy
+>  - Receive duplicate faults with stale cookies after a mid-group failure
+>  - Cause the kernel to retry the same failed copy_to_user indefinitely
+> 
+> Fix them, then add selftest coverage for the vEVENTQ count validation.
+> 
+> This is on github:
+> https://github.com/nicolinc/iommufd/commits/fix_eventq_read_bugs-v1
+> 
+> Rebased on Jason's for-next tree with the veventq_depth series applied.
+[...]
+> base-commit: f25989c19028e8bf81e26e1133a99e3436c3afc2
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- block/blk-core.c        | 37 ++-----------------------------------
- block/error-injection.c | 30 ++++++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+), 35 deletions(-)
+I realized that I sent this too fast, before Jason's for-next tree
+is available in linux-next. So maybe this is why Sashiko failed to
+review.
 
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 04a392849ab0..7465dd291272 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -29,7 +29,6 @@
- #include <linux/swap.h>
- #include <linux/writeback.h>
- #include <linux/task_io_accounting_ops.h>
--#include <linux/fault-inject.h>
- #include <linux/list_sort.h>
- #include <linux/delay.h>
- #include <linux/ratelimit.h>
-@@ -534,32 +533,6 @@ bool blk_get_queue(struct request_queue *q)
- }
- EXPORT_SYMBOL(blk_get_queue);
- 
--#ifdef CONFIG_FAIL_MAKE_REQUEST
--
--static DECLARE_FAULT_ATTR(fail_make_request);
--
--static int __init setup_fail_make_request(char *str)
--{
--	return setup_fault_attr(&fail_make_request, str);
--}
--__setup("fail_make_request=", setup_fail_make_request);
--
--bool should_fail_request(unsigned int bytes)
--{
--	return should_fail(&fail_make_request, bytes);
--}
--
--static int __init fail_make_request_debugfs(void)
--{
--	struct dentry *dir = fault_create_debugfs_attr("fail_make_request",
--						NULL, &fail_make_request);
--
--	return PTR_ERR_OR_ZERO(dir);
--}
--
--late_initcall(fail_make_request_debugfs);
--#endif /* CONFIG_FAIL_MAKE_REQUEST */
--
- static inline void bio_check_ro(struct bio *bio)
- {
- 	if (op_is_write(bio_op(bio)) && bdev_read_only(bio->bi_bdev)) {
-@@ -764,14 +737,8 @@ static void __submit_bio_noacct_mq(struct bio *bio)
- 
- void submit_bio_noacct_nocheck(struct bio *bio, bool split)
- {
--	if (unlikely(may_fail_bio(bio))) {
--		if (blk_error_inject(bio))
--			return;
--		if (should_fail_request(bio->bi_iter.bi_size)) {
--			bio_io_error(bio);
--			return;
--		}
--	}
-+	if (unlikely(may_fail_bio(bio)) && blk_error_inject(bio))
-+		return;
- 
- 	blk_cgroup_bio_start(bio);
- 
-diff --git a/block/error-injection.c b/block/error-injection.c
-index dc0420c4eb58..45f2454d0bca 100644
---- a/block/error-injection.c
-+++ b/block/error-injection.c
-@@ -4,6 +4,7 @@
-  */
- #include <linux/debugfs.h>
- #include <linux/blkdev.h>
-+#include <linux/fault-inject.h>
- #include <linux/parser.h>
- #include <linux/seq_file.h>
- #include "blk.h"
-@@ -47,6 +48,13 @@ bool __blk_error_inject(struct bio *bio)
- 		}
- 	}
- 	rcu_read_unlock();
-+
-+	/* legacy I/O error injection */
-+	if (should_fail_request(bio->bi_iter.bi_size)) {
-+		bio_io_error(bio);
-+		return true;
-+	}
-+
- 	return false;
- }
- 
-@@ -297,3 +305,25 @@ void blk_error_injection_exit(struct gendisk *disk)
- {
- 	error_inject_removall(disk);
- }
-+
-+static DECLARE_FAULT_ATTR(fail_make_request);
-+
-+bool should_fail_request(unsigned int bytes)
-+{
-+	return should_fail(&fail_make_request, bytes);
-+}
-+
-+static int __init setup_fail_make_request(char *str)
-+{
-+	return setup_fault_attr(&fail_make_request, str);
-+}
-+__setup("fail_make_request=", setup_fail_make_request);
-+
-+static int __init fail_make_request_debugfs(void)
-+{
-+	struct dentry *dir = fault_create_debugfs_attr("fail_make_request",
-+						NULL, &fail_make_request);
-+
-+	return PTR_ERR_OR_ZERO(dir);
-+}
-+late_initcall(fail_make_request_debugfs);
--- 
-2.53.0
+FWIW, I've done a local Sashiko review, which came out clean. But,
+maybe we can respin a v2 once it collects some comments and tags.
 
+Thanks
+Nicolin
