@@ -1,326 +1,153 @@
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE4E3AFAEA;
-	Tue,  2 Jun 2026 07:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780385754; cv=none; b=QlwG34Yk0zZDigqW6NZPMKv8WsxSHIKaa12c5E1y/MOLrdKVCWij2/bfQ43gt+9Y7wQyMGOo7ySYTkenTI7/ZEJUqPWOnipV58a6rMFU1REaGQVIA/FknLzM9VmXTzNNxsPKT9bLe984d5eEZOLEWlJnFLPeUSmzRTBTlUtG08w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780385754; c=relaxed/simple;
-	bh=t7T33buFJMTAh2cAdsVW3rHGqlJvG9uco8gKZsPF61A=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RhdXat/4BA0eKQQCiM9qQbeEm9V9kahohrSflmDM4Lgs6+pEcj23ueTDqR+RWFoRooKZJ8LQuWIrlNpR76iJVvM7wexDRi9fan5NokYMt1XInxommF8q7nk8ffjbhRRvb0gpT7r2FGFNAqVavrWg6mnC8KRRVqv2o1r2kVFyvVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=OFgVet1A; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB5F3B9D84
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 08:00:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780387249; cv=pass; b=Xjh8FJriwp+4bJem+YoCC24Ldq3KuEEoRJjs/93pl5yE1uOOU/NO29OWN3MlcRxSroV+qkLktztZ113UsgqSpDB1aLHwLdV4aBGiXHq+YHsblmdJHWH5qlXM/5dNB+H9GOye3HoYRkztuAEfKTofSpX34rt8Is9YhVPH9iW/r2I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780387249; c=relaxed/simple;
+	bh=0QwXYwBvg675psDiJIcuodozupH0wLewizlDulSLAJI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pgf5fPUcGnzWGVaYARo2T/Udui+U4FywhMdu1Sbn4Eg0Wl35hTKIKJ46h78Rnl14HDug3dVUtjbk4HaIGvlffZQdXyr/f/iqjP+TPtENgmYLNqQGD7H1kPfO4dlGCb8W0N2UkHYK3WZrOkFQHXDEqjjhFQLAWdHVXvdLgKgNBJY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20251104.gappssmtp.com header.i=@brainfault-org.20251104.gappssmtp.com header.b=ORxXpxaz; arc=pass smtp.client-ip=209.85.210.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="OFgVet1A"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=8TvYpMVKoYuIv5WGmMhwH/nmmSXsKr2Cr/inCUFBoZA=;
-	b=OFgVet1AG10B4WUWcYc+GNCy7/sgayE+H1ImmCkU/XPplQQ5GE0LFxIVHsRdljYD69Ngo5LrS
-	/sdZIKSfNAL1SUGN7AfFXn0wBTmO59rk4/MRqg8k7cmgr4dxd4kW5nw2GzqWMBAmpb3nCjFITMn
-	H9KZp5MrdDs7oJLSUBDHBj4=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4gV2Tz0SHVz1T4Jf;
-	Tue,  2 Jun 2026 15:27:35 +0800 (CST)
-Received: from kwepemr200017.china.huawei.com (unknown [7.202.195.7])
-	by mail.maildlp.com (Postfix) with ESMTPS id 983F540537;
-	Tue,  2 Jun 2026 15:35:44 +0800 (CST)
-Received: from huawei.com (7.227.44.14) by kwepemr200017.china.huawei.com
- (7.202.195.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 2 Jun
- 2026 15:35:43 +0800
-From: Lin Ma <malin89@huawei.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, <bpf@vger.kernel.org>
-CC: Andrii Nakryiko <andrii@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri
- Olsa <jolsa@kernel.org>, YiFei Zhu <zhuyifei@google.com>, Shuah Khan
-	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Amery Hung <ameryhung@gmail.com>, Lin Ma
-	<malin89@huawei.com>, Rongzhen Cui <cuirongzhen@huawei.com>, Jingguo Tan
-	<tanjingguo@huawei.com>, <cenxianlong@huawei.com>, <chenzhe@huawei.com>
-Subject: [PATCH v2 2/2] selftests/bpf: Cover tail-call cgroup storage prog-array checks
-Date: Tue, 2 Jun 2026 15:35:39 +0800
-Message-ID: <20260602073539.1567846-2-malin89@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260602073539.1567846-1-malin89@huawei.com>
-References: <20260602073539.1567846-1-malin89@huawei.com>
+	dkim=pass (2048-bit key) header.d=brainfault-org.20251104.gappssmtp.com header.i=@brainfault-org.20251104.gappssmtp.com header.b="ORxXpxaz"
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7e6a306fec0so1665981a34.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 01:00:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780387247; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KNjJlN/N9aIhKqsTNuh3dE+KqRYM9u5g00Z6O7p+fHPWkOjxRTjE+FMxHxEizUp1bV
+         rtjTg54rCzPcwNT1+7hIEnRs0on6R+ovoO2pQ2513yy/4+5EhdQReA8Q98jjRDfPhwds
+         2yhiKLlq12Tqd1yaGE4voyjLFcjULxevJUs0opz00AaVAGcPBtJvX5/dFGCS5JObt3/j
+         5wDNL4Va/t9RfCjyCsgRz4pXY/I80am9rmW4I0ytUVi1EEPPISlb3RyQS/6M6BD3QEwk
+         MUIHUsGvrTTUaX3hqZphA72ibzyD8eQxzbje2mGatonje2UaDqCHre8hro5hfXGoUBS0
+         J9Iw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=IgrLvh/X4k97Px4HlbHkqTDpeesPxMpXfPyUt4B4fe8=;
+        fh=BDoC7uZHtKJ9oe/xxs69Om25PeW0h3FCuz5MgpM2fpc=;
+        b=KXw3vvRx8dzb2AI/y/mU9QokbC3icixTFWJO4bReNA8W5C3u+mPxL7VNMvQGhMCPWr
+         rg5w+n/KCnMMjGj4rFEmstbOOCZhXOm98YNQC65H9Ye9iuVM79pXbOiVOo8OnK+S7JLs
+         FzKDMzzYKskfYPSSZU1NGoAJfDeUl/K4UVTM1p2HOFd4ysJjRuhsulV5LyMPVu2MVoLZ
+         d81tJqiKfBy4WACRGjvGTym+VdDhAAWTT5Tqpl1Q8YfBs3tHqpp2McddojIME0tgjr9n
+         LHiHRsvYPTg1ZS9B36l+z2glcz32r5u0FCAKqw6b4HmBt+vEARGRJkn+HkxaofPo5VNy
+         3mHw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20251104.gappssmtp.com; s=20251104; t=1780387247; x=1780992047; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IgrLvh/X4k97Px4HlbHkqTDpeesPxMpXfPyUt4B4fe8=;
+        b=ORxXpxazX1GZW/gAMGVnTDgkK2Z0euMod3awh8yJ5XkSzKJg/fUeKn0RUUr+ygvOCo
+         tQKvVNhPPwm+0mq/zlz9odjTYlH+VV+DoJ4c3S8yFFb4rSmR6HU2mHQvBd9O//w0agLv
+         ISmGobt4FHytmbOEG/QtlkIlvvi20AZEJ3PlkyCpW2HslL8/5SUupCO1qgHHYpnr6lSc
+         JxAeEpN40ckMUWEhCnDdzcet02AzPqlszoe144LsmxbWL2tVrXV0Z1Qf8pncxKLIKvZd
+         +9evwLe4FBEz+7NgrWbZSFdQ7RuhXKA9ffQaGqxQaZu529oz3CHU6WMTzQO9K6PP82QK
+         EszA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780387247; x=1780992047;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=IgrLvh/X4k97Px4HlbHkqTDpeesPxMpXfPyUt4B4fe8=;
+        b=gS+mrunOUPl1e0AGmXygrcWM+Uk9D8/RB32XBq8f8YEcYi67M9MXAITa9bNH4iMvgK
+         Xx5+P5p2locmcHMIk+rRuHo+Cmbvi4iQAicX3ASnQDq/N5fg2hasDq+Pn68ilnTpBj1C
+         vSLXJn5Vy5sci4EQ/nDbpxy9GzxDOEiJ1xw5O3+OBH/xbf2aTmXwIbxKeZZpS1hQ0HT7
+         NxQf8FT4mQABmWrwi/zPU6YFd0c41yl9qA7hnKQTfgBTBgoHpdAWc2OK/PXdiR24Vw6N
+         gX6+MIaKgaVLmp1xSAOXlAVpWxMAhVkCHykN/WxmOOlkrXcdeQ+qXr9MDYKyod5iKnIE
+         TaeA==
+X-Gm-Message-State: AOJu0YxaMBgP7AE92jvP7lJoNO1OaMlcs0T3hB5d13/SqpSDB6T9pEds
+	/ZymAmzj8i7WAP4jHqGKgJqBJSxN6S5B1WEYP1ECudatMq8oC8tqmOqjkXfubluyMKGqjj+MH7W
+	/qpKsLnKz8/4kfZMrfmoLvfiVfyxP7tXFCo3t7I778w==
+X-Gm-Gg: Acq92OGVXM/XgNx785P3KdRS1fNyyY4LQYAfQZ0gBaaOTE0jZZIJKfxDButRmKjMfZ2
+	HDhazomgyV6/Qnx0fmpP1DMbjZpF+fXzqjxZpj9L2UfJm6nGIg1BJ/+R5LIsSO+7r5QYhfPam5R
+	qBaqgF7qSL7wePJFjvae/4zl5XxM5kodpaDpKBH+tEDxXy6YzV6G7lL91slO1Yc98T5+4/ve5Xd
+	sJ75ZilRSgaF5eY6BaSIgBoNHUYtO4U5pF7XHlKmQNRBPcFt+lO8LUSCknhjSFg6r/ZtgpLzSRX
+	Ta+NQt/uLzZAhxqH9ddJSV/aY6xJK6CHDmhJV07mwjwf2OyGDs/pgwa68E4s1udFxW1/FlLMeTu
+	/VFUCSpmzmXgImP53CeyVz2eIi9Lxi0zOnG09wx7yKyK06Fb0
+X-Received: by 2002:a05:6820:4d06:b0:69d:5138:5540 with SMTP id
+ 006d021491bc7-69e368628ecmr1455529eaf.9.1780387246859; Tue, 02 Jun 2026
+ 01:00:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemr200017.china.huawei.com (7.202.195.7)
+References: <202605111849442561v1a0B_7W1L2Z-ENusLaP@zte.com.cn> <202605111130.64BBUjU6013213@mse-fl2.zte.com.cn>
+In-Reply-To: <202605111130.64BBUjU6013213@mse-fl2.zte.com.cn>
+From: Anup Patel <anup@brainfault.org>
+Date: Tue, 2 Jun 2026 13:30:34 +0530
+X-Gm-Features: AVHnY4Ly_ncquhNUG3b2y2WGAOsB8396bhb2a_G3mSJVFu24acqBWILI6kpavM8
+Message-ID: <CAAhSdy25JUiM2QnJbvqsQBu5eaB4L2TdSNfkmaaqFMjNOk+Stg@mail.gmail.com>
+Subject: =?UTF-8?Q?Re=3A_=5BPATCH_2=2F3=5D_RISC=2DV=3A_KVM=3A_Fix_skip_of_valid_pages?=
+	=?UTF-8?Q?_in=C2=A0kvm=5Friscv=5Fgstage=5Fwp=5Frange?=
+To: wu.fei9@sanechips.com.cn
+Cc: linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, atish.patra@linux.dev, pjw@kernel.org, 
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, pbonzini@redhat.com, 
+	shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add tail-call selftests for prog-array ownership when cgroup storage is
-in use. Verify that loading succeeds when callers and callees reuse the
-owner's cgroup storage map, and that loading fails for a different
-storage map or for a storage-less bridge program.
+On Mon, May 11, 2026 at 5:00=E2=80=AFPM <wu.fei9@sanechips.com.cn> wrote:
+>
+> The current gstage range walker unconditionally advances by 'page_size'
+> when a leaf PTE is not found, e.g. when the range to wp is
+> [0xfffff01fc000, 0xfffff023c000) and page_size is 2MB, if found_leaf of
+> 0xfffff01fc000 returns false, it skip the whole range, but it's possible
+> to have valid entries in [0xfffff0200000, 0xfffff023c000).
+>
+> Signed-off-by: Wu Fei <wu.fei9@sanechips.com.cn>
 
-Signed-off-by: Lin Ma <malin89@huawei.com>
-Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
-Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
----
- .../selftests/bpf/prog_tests/tailcalls.c      | 103 ++++++++++++++++++
- .../bpf/progs/tailcall_cgrp_storage.c         |  44 ++++++++
- .../progs/tailcall_cgrp_storage_no_storage.c  |  20 ++++
- .../bpf/progs/tailcall_cgrp_storage_owner.c   |  32 ++++++
- 4 files changed, 199 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_cgrp_storage.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_no_storage.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_owner.c
+I see all tabs converted to spaces. Looks like this patch was
+not send using git send-email.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-index 7d534fde0af9..c1403ab20eae 100644
---- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-@@ -8,6 +8,9 @@
- #include "tailcall_freplace.skel.h"
- #include "tc_bpf2bpf.skel.h"
- #include "tailcall_fail.skel.h"
-+#include "tailcall_cgrp_storage_owner.skel.h"
-+#include "tailcall_cgrp_storage_no_storage.skel.h"
-+#include "tailcall_cgrp_storage.skel.h"
- #include "tailcall_sleepable.skel.h"
- 
- /* test_tailcall_1 checks basic functionality by patching multiple locations
-@@ -1654,6 +1657,100 @@ static void test_tailcall_failure()
- 	RUN_TESTS(tailcall_fail);
- }
- 
-+static void test_tailcall_cgrp_storage(void)
-+{
-+	struct tailcall_cgrp_storage_owner *owner_skel = NULL;
-+	struct tailcall_cgrp_storage *skel = NULL;
-+	int err, key = 0, prog_array_fd, prog_fd, storage_map_fd;
-+
-+	owner_skel = tailcall_cgrp_storage_owner__open_and_load();
-+	if (!ASSERT_OK_PTR(owner_skel, "owner_open_and_load"))
-+		return;
-+
-+	prog_array_fd = bpf_map__fd(owner_skel->maps.prog_array);
-+	storage_map_fd = bpf_map__fd(owner_skel->maps.storage_map);
-+
-+	skel = tailcall_cgrp_storage__open();
-+	if (!ASSERT_OK_PTR(skel, "tailcall_cgrp_storage__open"))
-+		goto out;
-+
-+	err = bpf_map__reuse_fd(skel->maps.prog_array, prog_array_fd);
-+	if (!ASSERT_OK(err, "reuse_prog_array"))
-+		goto out;
-+
-+	err = bpf_map__reuse_fd(skel->maps.storage_map, storage_map_fd);
-+	if (!ASSERT_OK(err, "reuse_storage_map"))
-+		goto out;
-+
-+	err = bpf_object__load(skel->obj);
-+	if (!ASSERT_OK(err, "tailcall_cgrp_storage__load"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(skel->progs.callee_prog);
-+	err = bpf_map_update_elem(prog_array_fd, &key, &prog_fd, BPF_ANY);
-+	ASSERT_OK(err, "update_prog_array");
-+
-+out:
-+	tailcall_cgrp_storage__destroy(skel);
-+	tailcall_cgrp_storage_owner__destroy(owner_skel);
-+}
-+
-+static void test_tailcall_cgrp_storage_diff_storage(void)
-+{
-+	struct tailcall_cgrp_storage_owner *owner_skel = NULL;
-+	struct tailcall_cgrp_storage *skel = NULL;
-+	int err, prog_array_fd;
-+
-+	owner_skel = tailcall_cgrp_storage_owner__open_and_load();
-+	if (!ASSERT_OK_PTR(owner_skel, "owner_open_and_load"))
-+		return;
-+
-+	prog_array_fd = bpf_map__fd(owner_skel->maps.prog_array);
-+
-+	skel = tailcall_cgrp_storage__open();
-+	if (!ASSERT_OK_PTR(skel, "tailcall_cgrp_storage__open"))
-+		goto out;
-+
-+	err = bpf_map__reuse_fd(skel->maps.prog_array, prog_array_fd);
-+	if (!ASSERT_OK(err, "reuse_prog_array"))
-+		goto out;
-+
-+	err = bpf_object__load(skel->obj);
-+	ASSERT_ERR(err, "tailcall_cgrp_storage__load");
-+
-+out:
-+	tailcall_cgrp_storage__destroy(skel);
-+	tailcall_cgrp_storage_owner__destroy(owner_skel);
-+}
-+
-+static void test_tailcall_cgrp_storage_no_storage(void)
-+{
-+	struct tailcall_cgrp_storage_owner *owner_skel = NULL;
-+	struct tailcall_cgrp_storage_no_storage *skel = NULL;
-+	int err, prog_array_fd;
-+
-+	owner_skel = tailcall_cgrp_storage_owner__open_and_load();
-+	if (!ASSERT_OK_PTR(owner_skel, "owner_open_and_load"))
-+		return;
-+
-+	prog_array_fd = bpf_map__fd(owner_skel->maps.prog_array);
-+
-+	skel = tailcall_cgrp_storage_no_storage__open();
-+	if (!ASSERT_OK_PTR(skel, "tailcall_cgrp_storage_no_storage__open"))
-+		goto out;
-+
-+	err = bpf_map__reuse_fd(skel->maps.prog_array, prog_array_fd);
-+	if (!ASSERT_OK(err, "reuse_prog_array"))
-+		goto out;
-+
-+	err = bpf_object__load(skel->obj);
-+	ASSERT_ERR(err, "tailcall_cgrp_storage_no_storage__load");
-+
-+out:
-+	tailcall_cgrp_storage_no_storage__destroy(skel);
-+	tailcall_cgrp_storage_owner__destroy(owner_skel);
-+}
-+
- noinline void uprobe_sleepable_trigger(void)
- {
- 	asm volatile ("");
-@@ -1777,6 +1874,12 @@ void test_tailcalls(void)
- 		test_tailcall_freplace();
- 	if (test__start_subtest("tailcall_bpf2bpf_freplace"))
- 		test_tailcall_bpf2bpf_freplace();
-+	if (test__start_subtest("tailcall_cgrp_storage"))
-+		test_tailcall_cgrp_storage();
-+	if (test__start_subtest("tailcall_cgrp_storage_diff_storage"))
-+		test_tailcall_cgrp_storage_diff_storage();
-+	if (test__start_subtest("tailcall_cgrp_storage_no_storage"))
-+		test_tailcall_cgrp_storage_no_storage();
- 	if (test__start_subtest("tailcall_failure"))
- 		test_tailcall_failure();
- 	if (test__start_subtest("tailcall_sleepable"))
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage.c b/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage.c
-new file mode 100644
-index 000000000000..4dd3a0033d75
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE);
-+	__type(key, struct bpf_cgroup_storage_key);
-+	__type(value, __u64);
-+} storage_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} prog_array SEC(".maps");
-+
-+SEC("cgroup_skb/egress")
-+int caller_prog(struct __sk_buff *skb)
-+{
-+	__u64 *storage;
-+
-+	storage = bpf_get_local_storage(&storage_map, 0);
-+	if (storage)
-+		*storage = 1;
-+
-+	bpf_tail_call(skb, &prog_array, 0);
-+	return 1;
-+}
-+
-+SEC("cgroup_skb/egress")
-+int callee_prog(struct __sk_buff *skb)
-+{
-+	__u64 *storage;
-+
-+	storage = bpf_get_local_storage(&storage_map, 0);
-+	if (storage)
-+		*storage = 1;
-+
-+	return 1;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_no_storage.c b/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_no_storage.c
-new file mode 100644
-index 000000000000..f95166dad7c5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_no_storage.c
-@@ -0,0 +1,20 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} prog_array SEC(".maps");
-+
-+SEC("cgroup_skb/egress")
-+int caller_prog(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &prog_array, 0);
-+	return 1;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_owner.c b/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_owner.c
-new file mode 100644
-index 000000000000..d7e8ec9855c5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_owner.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE);
-+	__type(key, struct bpf_cgroup_storage_key);
-+	__type(value, __u64);
-+} storage_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} prog_array SEC(".maps");
-+
-+SEC("cgroup_skb/egress")
-+int prog_array_owner(struct __sk_buff *skb)
-+{
-+	__u64 *storage;
-+
-+	storage = bpf_get_local_storage(&storage_map, 0);
-+	if (storage)
-+		*storage = 1;
-+
-+	bpf_tail_call(skb, &prog_array, 0);
-+	return 1;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.53.0
+Please rebase and send updated series using git send-email.
+
+Regards,
+Anup
+
+> ---
+>  arch/riscv/kvm/gstage.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/riscv/kvm/gstage.c b/arch/riscv/kvm/gstage.c
+> index d9fe8be2a151..2b141a78ecac 100644
+> --- a/arch/riscv/kvm/gstage.c
+> +++ b/arch/riscv/kvm/gstage.c
+> @@ -429,14 +429,14 @@ void kvm_riscv_gstage_wp_range(struct kvm_gstage *g=
+stage, gpa_t start, gpa_t end
+>                 if (ret)
+>                         break;
+>
+> -               if (!found_leaf)
+> -                       goto next;
+> -
+> -               addr =3D ALIGN_DOWN(addr, page_size);
+> -               kvm_riscv_gstage_op_pte(gstage, addr, ptep,
+> -                                       ptep_level, GSTAGE_OP_WP);
+> -next:
+> -               addr +=3D page_size;
+> +               if (!found_leaf) {
+> +                       addr =3D ALIGN(addr + 1, page_size);
+> +               } else {
+> +                       addr =3D ALIGN_DOWN(addr, page_size);
+> +                       kvm_riscv_gstage_op_pte(gstage, addr, ptep,
+> +                                               ptep_level, GSTAGE_OP_WP)=
+;
+> +                       addr +=3D page_size;
+> +               }
+>         }
+>  }
+>
+> --
+> 2.43.0
