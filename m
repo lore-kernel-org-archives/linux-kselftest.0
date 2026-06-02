@@ -1,67 +1,67 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE943D6662
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 22:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2AD3D8113
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 22:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780440559; cv=none; b=I7x2C7vysh338bRScg57YFvDQBPmm0O16ivuLvVH4gDHSkmnyckyCgNxpO8c/vqy1gPZ2sWBcrNLdmEVfGcZOpNtAkKD4GFf6cvxZ9KOlr36A1KKvaBEFZUrnLJaZb6JnDZPfwAMaxpx8PKUBbG1ECsYd052WDxIeELFwXte5l4=
+	t=1780440561; cv=none; b=ATJ3RbQO+PuDFaz4TrvuLIA5Ak7ssjD1vCSax3LB0gYpLCZFMUeRl2vrMtm/SydQS/Rk3xQQVU5DrMgJyp2t3HTO9mSi86Bx3VQyyJB+5/DFzFMTWWQJ92MBZxSPdHXhNw/Y4BcQp10U2dozBqRvCsvMf9LTArsM5vKtefAsD/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780440559; c=relaxed/simple;
-	bh=h10PnN9dZij/9KIShcmtDym4aMWTMKg/65aOZIHej50=;
+	s=arc-20240116; t=1780440561; c=relaxed/simple;
+	bh=mS8zYCuPveoKc7T4Im/jzVvP1HCLKypYVHp0g2j6Skw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eizwSapFgd7UUtxuoLH6XV6/Y/xrFgcD2QoJmAHaNahUT1hZ2Fnj7gFxkDP7B0wxuNhIIvqW6z+9o4WIXpsTu5duqhaGYYFenMFVdv7C9bLo4bOA/Nj5m1YGK8aNK3j8fnywgmzqJJyf85iVPwfJvYYh2plZ+/6sQXsSvDgIV6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hVsUFmZo; arc=none smtp.client-ip=209.85.221.50
+	 In-Reply-To:To:Cc; b=PQn2keFmziB97RsDhtMexvHz0pF8nqha/gaiJLE6B5ZY61jwHCwSF738bQbE9I0UKxpXjuNGzPIekqepGU6D5Qd7+aZ7O8wy6gw8WvjUoKeidPOjepg5YqEJUR0qKK+IwlpT/B6Sqn1TPUjjh5mn6fYyKzB9KJAyX6ihQyXF7xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qFsqdD53; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hVsUFmZo"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-45eecb8bf67so4336049f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 15:49:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qFsqdD53"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-45eecb8bf67so4336081f8f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 15:49:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780440556; x=1781045356; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780440558; x=1781045358; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yYycUh0v045JLMzHv+cDjWaRSMlpTVGG8/fmLB5h0j8=;
-        b=hVsUFmZo9NhegcRQLm4XlNHcL1hCCoseELCkAlexbymlZF2+OcJ8KQmWV+w0ZRFPxc
-         ntWjw0FIf69vg73Nx5I9VXoTjQRU82RYB97ofed2vBVjK8w9hewnD7JCTYbZPAyDv2r9
-         mOeYpJILzA+u+EjY5s47KUBrbLP9enwlDUWmQnGZyLYUkJnlU12GMDERuWfF++7QpI6T
-         sO9h2IcqQ48WEWc6ZoRWUZzINVrOOHrhVC+nBP+/mlDfFnwzkfOxDVa7Vv6OC+HAMESf
-         Bi25bMRLF1+9AaUfrD5RixkeBDtIO/+q8fH91IkHIm/mRxMwCd7FTGzG7kJ9YVgQfmkR
-         0Ghg==
+        bh=FNu2VyRhrQI8zsAEpIkLCzKPvvxJoe9LgPS0NWOwvYU=;
+        b=qFsqdD53t5NGf40QWrX0VJm44bJkQvgEQrlqBu6+91KE8LYiZoTL8Yn34JnWaSU4qv
+         zeanv5V4qQkF3qQyYXPwmmiN4bHaUkDBxeBQKl/E6npWCLzbOC4ZP+JSj3cEgXLOy/Zx
+         XraVuDxKJlCIQ7415hlry2sG9FFqXvdikpdDbeELfUfwWMotTG0nMlDWYARIt+4KWFMt
+         qlWYN3VFI2jXusrcncPe5oLwAK0fos9EGax4TBEP5YhlFTAhimLJxQXzDA7Ez06Av8Yf
+         kYR/tW0RK94QluNL2LPgSkTrpZ7WyfQ/Cth9hDCpUp/OvLJ+m2lE0W2LxOBkOFf5smyv
+         QI2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780440556; x=1781045356;
+        d=1e100.net; s=20251104; t=1780440558; x=1781045358;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=yYycUh0v045JLMzHv+cDjWaRSMlpTVGG8/fmLB5h0j8=;
-        b=SfkMbRxEnlfbyPdTK5o0vmWf5pFC5jsoK7po+XiDKGXxUW7iuFyjU+IvUnp5TglHxi
-         Riuc7TmsaN0m3YYUcjJ8MboWXZrwd28UZgXY6K67WSSHhPEdCtINyQlIPr0kq2tB2J5I
-         7Pis04M2q6fPrqdm7Ujhm3Fuui2hK3GeeW7bdbs0JL32K+/KJPMPyXlmwRGbCZN/btJK
-         G2a+bjCF0nxSBpslqERr2LICdWAE02aTtl+bfCuXkxciifM0dDGGqMTMgTZLBXadOSSd
-         PIoMCTzT7lTC7lcmkgIz3glL2/MjAAGNAzIh4g+CDZutjvZnC+PSQh4FFbvcN/IyNeV4
-         Qo+Q==
-X-Forwarded-Encrypted: i=1; AFNElJ80dAfZxT1kFzJYhkhqh7I93SRnHUo8k3kbRtw/RQikLiMdvQ4Xnet7WJf8/IuiQOk2GTNIkZfsnwCzv/hdFnM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZgr6OnemGQuWtiA8Pjg2QGBJgYOmYmMJApBEsikE6eYYP/Xe7
-	s8CggrX1bz6RfkD+SQ2ALAo78YWShgn8AODEu9nA1+5rA328MoK6Kgjb
-X-Gm-Gg: Acq92OFwcFQidxfG6GJd9BPKsvyDYy05AjgFExQKMEWZ7XZhzbwVymYqyyruTjBfQp5
-	A8qqOBoLzK1WOlkKz8AK97UbXrBuI26VHaDx+8QeI2chJG/xeGWOTiG+3BfIYEp1RO2BiD3uxRF
-	6sT/lrdVsxrLWbedRsRFNUTmke261HgDusVJI3I/5vq02n8QxvSH5xOfQ+Uc/H19jWQzsYq6C0i
-	aO4CZetI6IlvMVXHzhhITaxLW9hlAxoH5CoQ5U907ggmPNwHvXciOihnI9bZ1dLkGV9dA7yoicO
-	w8SUIdKGksnJhSrK0lAu0ulTHlhFokuV+oUmiPEWIESXEk7kQ4E+fSmwP25HpF5CRAbkpMcUE33
-	kq6bLA8mtOTETOLFUlbQ8v1DkKlKkD6BWlESRRbS5h8345pRxzg4xj6h/UsCerMtyhLc8bPXweW
-	Kmk3lD3VVdP64NkgEpuHXFPTHCzH8AX5wwtH6Kc0WIxw==
-X-Received: by 2002:a05:6000:186:b0:45e:ce49:43d8 with SMTP id ffacd0b85a97d-460217815a2mr476777f8f.4.1780440555875;
-        Tue, 02 Jun 2026 15:49:15 -0700 (PDT)
+        bh=FNu2VyRhrQI8zsAEpIkLCzKPvvxJoe9LgPS0NWOwvYU=;
+        b=PFQEEPO6nvxJCbCiJYfcQF8Gf4BvDJSwsi9EdcDRDFOBa1xePI4BwCPimEAKCHEfPv
+         GNQGtwt5R5qpwciCBSe8JIhlGJpacRzV1GSCbkkwe9EROSNo17pGEWhtlFs0Kjv+x68u
+         QVApWbF791tBweB66MKx7qs326uBsiMOFOaW85IR3itKW9zEdszpK/HZyTGm1Kekvo1Q
+         OHWhczx5tAiaOwDsF2VY5x+Oz2HqtdwIbrP3sIdY5ksdFPBilEhLhNYHAnaDzTYrTh6R
+         56MOJFu1YY55zGHwFlN8r7Ve/0x7kicYuaikrfBefbyJygDderlorbdH71xKyctnKGos
+         ZvYA==
+X-Forwarded-Encrypted: i=1; AFNElJ+zmzswKqDJTudK06W2aFaI5yO94FgtnXIDM6Nr52zNAyBn/ccRuZI1cMhEWuAlAYCV3koTWAhrr0OtOl3dS90=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLGH2tlgSwKnNBrSyaA/8NsXEGhJt4IFA615Pav4Zp1RMKlhhD
+	/9Bx09IgEULYwUR1iqP13O4uM7sulxKyQc6jFwZuIEH1F6Tql/El+bIc
+X-Gm-Gg: Acq92OF6RFani1NYEB71l4yyPfst9qwfpMq/a7fQvKwNtYodQYZEFLGuzcLUTSldEjS
+	xyOLvsDrP9CGRZspyb56oiSzI1okc8sYpz8RzijFjp4D5B0d8quDnxN6hn4ZAoNJwvytfZjiYOx
+	aailFRCXDOjXmCCpsPenpymK6Tpl0DCX74NPrvR4Dco0B4SRdqDWm9cLXrgCLGGP0HlZiWkt7vY
+	hJU4ZC6Z9qY86SxWm1hG9kBo1r+yfPM0RrZZl8co6p30FfID8Pt2kTCZhvYGjMuwyNM/608cfqK
+	3h5ESQqFo67tN25+JxpAh+4BpxVbtjxCIy0+KM3IrS3oIiXZwbpFfG1eT+HqzFiyEnx9557KrGC
+	93wF38HPiP5sAzsDdsNBWTc6CxHqKq3r/ibZ/Rl4jixtDo7YqW/EYs8/eG9AkFUPpewud2BB2E3
+	5Tv+pwtZ8mKW5ybOuBQxqc95yCnD2T/7be22344Cqtig==
+X-Received: by 2002:a5d:44d2:0:b0:45e:651c:47bb with SMTP id ffacd0b85a97d-460218513b2mr497138f8f.28.1780440558379;
+        Tue, 02 Jun 2026 15:49:18 -0700 (PDT)
 Received: from [172.16.188.153] ([213.181.114.83])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4601f2f2710sm1999791f8f.14.2026.06.02.15.49.13
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4601f2f2710sm1999791f8f.14.2026.06.02.15.49.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 15:49:15 -0700 (PDT)
+        Tue, 02 Jun 2026 15:49:17 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Tue, 02 Jun 2026 22:48:20 +0000
-Subject: [PATCH v4 23/25] dyndbg: change __dynamic_func_call_cls* macros
- into expressions
+Date: Tue, 02 Jun 2026 22:48:21 +0000
+Subject: [PATCH v4 24/25] lib/parser: add match_wildcard_hyphen() for
+ agnostic matching
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260602-dd-maint-2-v4-23-19a1445585a8@gmail.com>
+Message-Id: <20260602-dd-maint-2-v4-24-19a1445585a8@gmail.com>
 References: <20260602-dd-maint-2-v4-0-19a1445585a8@gmail.com>
 In-Reply-To: <20260602-dd-maint-2-v4-0-19a1445585a8@gmail.com>
 To: Jonathan Corbet <corbet@lwn.net>, 
@@ -85,99 +85,133 @@ To: Jonathan Corbet <corbet@lwn.net>,
 Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- Jim Cromie <jim.cromie@gmail.com>, 
- Louis Chauvet <louis.chauvet@bootlin.com>
+ Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780440488; l=3131;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780440488; l=4121;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=h10PnN9dZij/9KIShcmtDym4aMWTMKg/65aOZIHej50=;
- b=nNRaRJnI6DmZfuQY2gv8wXs0tGfSMAFNC8nitrIbwD9TVpVCkTFOsGImAavGQUVyhdgdI2ALY
- opxK2UqBAt6C3hL60gGtbqcEnPcfAnMLTunbF8bSh/6ISOWnc9ixKTB
+ bh=mS8zYCuPveoKc7T4Im/jzVvP1HCLKypYVHp0g2j6Skw=;
+ b=VXb9s6BILwbRYg9yQV7eipRGBEsG95GCuf6QT72hEVacy+qZBYi7X8O5FuSb5Iz5M4W1FDq67
+ p9yjueJ/OsVCVSt5ROCmYhB9K2zwhc/6uV7MVoRWpT2QeQ8U6P+qRVG
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-The Xe driver's XE_IOCTL_DBG macro calls drm_dbg() from inside an if
-(expression).  This breaks when CONFIG_DRM_USE_DYNAMIC_DEBUG=y because
-the invoked macro has a do-while-0 wrapper, and is not an expression.
+This commit introduces match_wildcard_hyphen() as a variant of the
+existing match_wildcard() function. It treats hyphens and underscores
+as identical characters during the matching process.
 
-   if (cond && (drm_dbg("expr-form"),1)) {
-      ... do some more stuff
-   }
+This is necessary for subsystems like dynamic_debug that need to match
+module names provided by users (who often use underscores) against
+names stored in the kernel (which may use hyphens, especially when
+using KBUILD_MODFILE for built-ins).
 
-Fix for this usage by changing __dynamic_func_call_cls{,_no_desc}
-macros into expressions, by replacing the do-while-0s with a ({ })
-wrapper.  In the common usage, the trailing ';' converts the
-expression into a statement.
-
-   drm_dbg("statement form");
+To avoid code duplication, the core logic is refactored into a private
+__match_wildcard() function marked as __always_inline. This allows the
+compiler to generate optimized versions for both the strict and agnostic
+callsites with zero runtime overhead.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
-v2:
+ include/linux/parser.h |  1 +
+ lib/parser.c           | 58 +++++++++++++++++++++++++++++++++++++-------------
+ 2 files changed, 44 insertions(+), 15 deletions(-)
 
-fix statement-expressions to return 0 (not void) like their respective fallbacks
-
-   1. Add 0; to __dynamic_func_call_cls
-   2. Add 0; to __dynamic_func_call_cls_no_desc
-   3. Convert the disabled fallback of dynamic_hex_dump from do { ... } while(0) to ({ ... 0; })
-
-move RvB after SoB
----
- include/linux/dynamic_debug.h | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
-
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index e4a62cb73267..2d6983186f37 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -224,24 +224,26 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
-  * (|_cls):	adds in _DPRINT_CLASS_DFLT as needed
-  * (|_no_desc):	former gets callsite descriptor as 1st arg (for prdbgs)
-  */
--#define __dynamic_func_call_cls(id, cls, fmt, func, ...) do {	\
-+#define __dynamic_func_call_cls(id, cls, fmt, func, ...) ({	\
- 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);	\
- 	if (DYNAMIC_DEBUG_BRANCH(id)) {				\
- 		func(&id, ##__VA_ARGS__);			\
- 		__dynamic_dump_stack(id);			\
- 	}							\
--} while (0)
-+	0; /* match no_printk return value */			\
-+})
- #define __dynamic_func_call(id, fmt, func, ...)				\
- 	__dynamic_func_call_cls(id, _DPRINTK_CLASS_DFLT, fmt,		\
- 				func, ##__VA_ARGS__)
+diff --git a/include/linux/parser.h b/include/linux/parser.h
+index dd79f45a37b8..a3cc7bc5fb93 100644
+--- a/include/linux/parser.h
++++ b/include/linux/parser.h
+@@ -34,6 +34,7 @@ int match_u64(substring_t *, u64 *result);
+ int match_octal(substring_t *, int *result);
+ int match_hex(substring_t *, int *result);
+ bool match_wildcard(const char *pattern, const char *str);
++bool match_wildcard_hyphen(const char *pattern, const char *str);
+ size_t match_strlcpy(char *, const substring_t *, size_t);
+ char *match_strdup(const substring_t *);
  
--#define __dynamic_func_call_cls_no_desc(id, cls, fmt, func, ...) do {	\
-+#define __dynamic_func_call_cls_no_desc(id, cls, fmt, func, ...) ({	\
- 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);		\
- 	if (DYNAMIC_DEBUG_BRANCH(id)) {					\
- 		func(__VA_ARGS__);					\
- 		__dynamic_dump_stack(id);				\
- 	}								\
--} while (0)
-+	0; /* match no_printk return value */				\
-+})
- #define __dynamic_func_call_no_desc(id, fmt, func, ...)			\
- 	__dynamic_func_call_cls_no_desc(id, _DPRINTK_CLASS_DFLT,	\
- 					fmt, func, ##__VA_ARGS__)
-@@ -321,10 +323,12 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- 	dev_no_printk(KERN_DEBUG, dev, fmt, ##__VA_ARGS__)
- #define dynamic_hex_dump(prefix_str, prefix_type, rowsize,		\
- 			 groupsize, buf, len, ascii)			\
--	do { if (0)							\
-+({									\
-+	if (0)								\
- 		print_hex_dump(KERN_DEBUG, prefix_str, prefix_type,	\
--				rowsize, groupsize, buf, len, ascii);	\
--	} while (0)
-+			       rowsize, groupsize, buf, len, ascii);	\
-+	0;								\
-+})
+diff --git a/lib/parser.c b/lib/parser.c
+index 62da0ac0d438..d5be01fa9adf 100644
+--- a/lib/parser.c
++++ b/lib/parser.c
+@@ -268,20 +268,13 @@ int match_hex(substring_t *s, int *result)
+ }
+ EXPORT_SYMBOL(match_hex);
  
- #endif /* CONFIG_DYNAMIC_DEBUG || (CONFIG_DYNAMIC_DEBUG_CORE && DYNAMIC_DEBUG_MODULE) */
+-/**
+- * match_wildcard - parse if a string matches given wildcard pattern
+- * @pattern: wildcard pattern
+- * @str: the string to be parsed
+- *
+- * Description: Parse the string @str to check if matches wildcard
+- * pattern @pattern. The pattern may contain two types of wildcards:
+- *
+- * * '*' - matches zero or more characters
+- * * '?' - matches one character
+- *
+- * Return: If the @str matches the @pattern, return true, else return false.
+- */
+-bool match_wildcard(const char *pattern, const char *str)
++static inline char dash2underscore(char c)
++{
++	return (c == '-') ? '_' : c;
++}
++
++static __always_inline bool __match_wildcard(const char *pattern, const char *str,
++					     bool hyphen_agnostic)
+ {
+ 	const char *s = str;
+ 	const char *p = pattern;
+@@ -301,7 +294,9 @@ bool match_wildcard(const char *pattern, const char *str)
+ 			pattern = p;
+ 			break;
+ 		default:
+-			if (*s == *p) {
++			if (hyphen_agnostic ?
++			    (dash2underscore(*s) == dash2underscore(*p)) :
++			    (*s == *p)) {
+ 				s++;
+ 				p++;
+ 			} else {
+@@ -319,8 +314,41 @@ bool match_wildcard(const char *pattern, const char *str)
+ 		++p;
+ 	return !*p;
+ }
++
++/**
++ * match_wildcard - parse if a string matches given wildcard pattern
++ * @pattern: wildcard pattern
++ * @str: the string to be parsed
++ *
++ * Description: Parse the string @str to check if matches wildcard
++ * pattern @pattern. The pattern may contain two types of wildcards:
++ *
++ * * '*' - matches zero or more characters
++ * * '?' - matches one character
++ *
++ * Return: If the @str matches the @pattern, return true, else return false.
++ */
++bool match_wildcard(const char *pattern, const char *str)
++{
++	return __match_wildcard(pattern, str, false);
++}
+ EXPORT_SYMBOL(match_wildcard);
  
++/**
++ * match_wildcard_hyphen - parse if a string matches given wildcard pattern
++ * @pattern: wildcard pattern
++ * @str: the string to be parsed
++ *
++ * Description: Same as match_wildcard, but treats '-' and '_' as identical.
++ *
++ * Return: If the @str matches the @pattern, return true, else return false.
++ */
++bool match_wildcard_hyphen(const char *pattern, const char *str)
++{
++	return __match_wildcard(pattern, str, true);
++}
++EXPORT_SYMBOL(match_wildcard_hyphen);
++
+ /**
+  * match_strlcpy - Copy the characters from a substring_t to a sized buffer
+  * @dest: where to copy to
 
 -- 
 2.54.0
