@@ -1,100 +1,78 @@
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFF72D7814;
-	Tue,  2 Jun 2026 03:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6EFA280CE5;
+	Tue,  2 Jun 2026 04:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780371091; cv=none; b=ms4qRzq5iJkcnx5iBgTSPx/KSGA6WSlJ0NnecgCqSJejT9LD/3ObqN7vytT82UVKJfom5l72ZWrAi+3GSjJiNULcref04tDp1QDqGBlqOfdIrXueyVigz+LEs5CbHNmMJA5Cye/w5dh6mA4X2IhY5BLFy4258ffpgWScUfTiRjc=
+	t=1780374036; cv=none; b=ZenIH9Ibzfc4m0dlgPj/P9HzEZX24zw43itz6Hh7JubwqVstau7yAYMG1uiptdftgIDZPep1nJC5NnrQnNXgOkfTG6cjzxO0b9CcFMYhiY7at9jXH4XuzKALlUV/uu+t/KpKSpjWkzuiCId3OivWjGBm5Kizoa7xakED11pD65c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780371091; c=relaxed/simple;
-	bh=H+LYvqr7shSZ2FXiWbX0Oc1bgeW/7ID/d53Wfv1nfxM=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=UiJV5bkJC2k1yT4Umh4DKmVFTy6HpAdZoKtvHryowDiiMOQs2Jm/mXRUYFpAnRDv9vLEI3UKWTgDf4NeHfvrP8aypf+WG5JK2NdWqqWjd/fix8hhdU80hFdXVd+l3Hyg2uUXAwEp1oXNVDXePId0kQ5JCwd6TJ6DODaYEHDtNq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=rUbsWu8t; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1780374036; c=relaxed/simple;
+	bh=/Axp2tTWOa4qnLPLjdaE4y+OctHPfIampNfZWnQlAZE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aeECSDOO5YaRF6pfnT1V2rKl6sHHBX8WHGQT7NCNXhfr0PAbdpvhcpKlG21Q177gJpxV/6xGWiM2qm3y8243mlXT/KZ9sioWkk61/bGuOmH6KVyUNLpS6tDtRDqZfe2KjO3OB3hOcyZZdj/ghu5TGUFp4ksNKKV3h+kFnVCHM0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aIsWNXIT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="rUbsWu8t"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=eKjT6Zg4boSSOeRK+U8oV+FxAjxZtDyhnFgmKfmpDas=;
-	b=rUbsWu8t2d2azz8Ev4bysq6LLCcJ/SHmOo0GFrdvlUOILVf2ZXLEW8XEljU1G4WVXJ3vLafjF
-	YX68s2tIiko1MsBkDrbA7z1MYsikporFc7syk5ZlzwtT7H9hvc1crRbFfWDTmaDWX245QZQ/0B+
-	PCcJvZW5kHYoz43eLR/pMXQ=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4gTx4H0Gt7zcb0N;
-	Tue,  2 Jun 2026 11:23:27 +0800 (CST)
-Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1D0274056A;
-	Tue,  2 Jun 2026 11:31:24 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 2 Jun 2026 11:31:23 +0800
-Received: from [10.173.124.160] (10.173.124.160) by
- kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 2 Jun 2026 11:31:22 +0800
-Subject: Re: [PATCH v8 3/6] mm/memory-failure: report MF_MSG_KERNEL for
- unrecoverable kernel pages
-To: Breno Leitao <leitao@debian.org>
-CC: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <kernel-team@meta.com>, Andrew Morton
-	<akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, "Lorenzo
- Stoakes" <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport
-	<rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
-	<mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Naoya Horiguchi
-	<nao.horiguchi@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, "Masami
- Hiramatsu" <mhiramat@kernel.org>, Mathieu Desnoyers
-	<mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, "Shuah
- Khan" <skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>
-References: <20260527-ecc_panic-v8-0-9ea0cfa16bb0@debian.org>
- <20260527-ecc_panic-v8-3-9ea0cfa16bb0@debian.org>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <642852e1-933a-a6f6-b6e8-2ef3339bcd58@huawei.com>
-Date: Tue, 2 Jun 2026 11:31:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aIsWNXIT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 941901F00893;
+	Tue,  2 Jun 2026 04:20:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780374035;
+	bh=nq78X8IAsN7c2Wk69I/yZyMLzhG6wRb/glfd/8QjMe4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=aIsWNXIT0arPzB1Vjog/511JNudsPc5qce+mGYKUxfD9tKkHalM99dQFzilcyIdl6
+	 WNBQR7HxXfXH2G3CjUVBfFoLuN3JAbhzPBQvXNvuFghufZy1Dt7blpE9nfTW0IWeZo
+	 zXaoee+0c8gu/ghD3ByKNSWOG04HcBuWWoI3ib5eFwR2fdzYt8B3coKsIMab9e2DPW
+	 amU/H9/sPNFTt1XNwL1XyqdNhcHnZpk3h/7j944IXu3FS6IoWpijoMpEJUUKvtnOxW
+	 tqhw+Zc9SulL4+EleWlXefyvBLD9iSQ6ZajRUgKEERrOcMauttyzkhSH7jgrrNc0Gg
+	 PAlLMc7td6uVA==
+Date: Tue, 2 Jun 2026 06:20:26 +0200
+From: "Oscar Salvador (SUSE)" <osalvador@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Dev Jain <dev.jain@arm.com>, akpm@linux-foundation.org,
+	liam@infradead.org, ljs@kernel.org, jgg@ziepe.ca, leon@kernel.org,
+	shuah@kernel.org, vbabka@kernel.org, jannh@google.com,
+	pfalcato@suse.de, rppt@kernel.org, surenb@google.com,
+	mhocko@suse.com, balbirs@nvidia.com, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, ryan.roberts@arm.com,
+	anshuman.khandual@arm.com, stable@vger.kernel.org
+Subject: Re: [PATCH] fs/proc/task_mmu: do not warn on seeing non-migration
+ pmd entry
+Message-ID: <ah5aCjLl1dx546SQ@localhost.localdomain>
+References: <20260529111704.1078346-1-dev.jain@arm.com>
+ <a62302f8-24ea-4d21-963d-48bec766766b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260527-ecc_panic-v8-3-9ea0cfa16bb0@debian.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemq500010.china.huawei.com (7.202.194.235)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a62302f8-24ea-4d21-963d-48bec766766b@kernel.org>
 
-On 2026/5/27 22:06, Breno Leitao wrote:
-> The previous patch teaches get_any_page() to return -ENOTRECOVERABLE
-> for stable unhandlable kernel pages (PG_reserved, slab, page tables,
-> large-kmalloc).  memory_failure() still folds every negative return
-> into MF_MSG_GET_HWPOISON, so callers that want to react to the
-> unrecoverable cases (a panic option, smarter logging) cannot tell
-> them apart from transient page-allocator races.
+On Sun, May 31, 2026 at 09:11:53PM +0200, David Hildenbrand (Arm) wrote:
+> The whole thp_migration_supported() guard is a bit shaky, right?
 > 
-> Turn the post-call branch into a switch over the get_hwpoison_page()
-> return code: map -ENOTRECOVERABLE to MF_MSG_KERNEL and any other
-> negative return to MF_MSG_GET_HWPOISON.  case 0 keeps the existing
-> free-buddy / kernel-high-order handling and case 1 falls through to
-> the rest of memory_failure() unchanged.
+> I guess device-private entries currently imply thp_migration_supported(), but
+> that thp_migration_supported() check is really questionable and should likely
+> just go away (else if -> else).
 > 
-> The MF_MSG_KERNEL label and tracepoint string are kept as
-> "reserved kernel page" to avoid breaking userspace tools that match
-> on those literals; the enum value still adequately tags the failure
-> even though it now also covers slab, page tables and large-kmalloc
-> pages.
+> Staring at pte_to_pagemap_entry(), likely we'd also want
 > 
-> Suggested-by: David Hildenbrand <david@kernel.org>
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+> if (softleaf_has_pfn(entry))
+> 	page = softleaf_to_page(entry);
+> 
+> to prepare for PMD swap entries.
 
-Acked-by: Miaohe Lin <linmiaohe@huawei.com>
+Yes, that is what I was doing for non-present PMDs when implementing the
+new API [1].
 
-Thanks.
-.
+[1] https://lore.kernel.org/linux-mm/20260525165528.184397-5-osalvador@suse.de/
+
+ 
+
+-- 
+Oscar Salvador
+SUSE Labs
