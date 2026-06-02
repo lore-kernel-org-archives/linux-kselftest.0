@@ -1,220 +1,124 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B493837756A
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 03:17:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217E63546E9;
+	Tue,  2 Jun 2026 03:17:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780370260; cv=none; b=JOLomcOIIwhcS7dsW1ODiLTH2Y0sivGsa/t5Oh+PUVq0Hwh3EQKhYlubrQhqOO4jD2B6j4KFa8VpqIau5MSdZXgjI8akmgWiHByA3F5G95xGTvXmxQj+CZae/U/SqWoNEAaR6dUctlWdGvz/f6uYAnFp+E2tvJwu7O8DyV15rng=
+	t=1780370265; cv=none; b=guVSP1NFipUIqTYJVgM71VKSqJtlk2EQK0FpBl8xqS5O5mnkYjlKt5qKTwI3SBk4Smw/yO6bs+CV+0EiiUJUFN4+6PJy9cyZLcbzQlsCF/ClVykbKPnhiESczvlJsq9UZK8OdrxjiPHh1xU/hxhx9Mm27tpSVlawqM5fx90PRWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780370260; c=relaxed/simple;
-	bh=PI26M0khAE7StCXBHeuwdUicbhLFrZpiZfsokDq9n88=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PKW53Ym1NgoK8+C60OKb8ujfTLwuzxzSfvGZNIXvr9E/P0s2cp2QXMGLq20PELl3q/5amX6Zni7ztqXRidUSO70+hHb+l9qHnFIH2oTx/ehUIZq5YMF9tjuFSYjY7UHGLrSWvOBtdCbyGMpeupKm4qSDabIjmA4bjgJn9JQ2NqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=C4QE7CGJ; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	s=arc-20240116; t=1780370265; c=relaxed/simple;
+	bh=gvgIJo9m/HUHg9gk2qU3NCinlFuIOES/GGZ227Us+6Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZgN0PoKN3Tr2NnC0wtMWJgmKhZdkNqNgEL1S4P79cwM8dGnu/+AaZ100RxSTbI/r4grTz3DDukViLc0q4g8Fu3uEg6Xu1qe9+AWPkTPGe0qa9Fq1vBfVPq7D6QLt0/58vhMICOW0EiVG4b/OD5SSg8uzUndUISE4rCUAEUU6mvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WHV8r6eo; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="C4QE7CGJ"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-5174a133bc3so23485211cf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 20:17:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1780370258; x=1780975058; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LZ44uuKaEudMkx03Nujcoh6Uuv+6Qpcd4aVYSw8wkq4=;
-        b=C4QE7CGJcAqV2/zrxG4d7x5xbeua9cAzc8XndG7qWl+L2/hZHZtwC7KVyRhQOHJtE2
-         T5aa8xwbPWfZWI/R3j9XoppRcgaiVHxQchY6sZbaAA+ttazu8Noy/OjpCNYvp47T2lmA
-         ZCnaq8pJJvZhm2AuCfdmY7S+SOjeHVCHAXmBsNoIV+7xFK6fDdbmKn7k/pcJXyn0RTDZ
-         vLEkbNpVZpRkU/KKG+m32NosX5hB6SY1uAlyxa+0J5k4wEdDgrbdzgmBTlTH2ADz+Y7c
-         amIJE8MeSkwcqOSVYF9Rm0B4OYx6wYU1OADR4DRsbZt5d1SczG8KnENG06drf9vNaOV6
-         1niw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780370258; x=1780975058;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LZ44uuKaEudMkx03Nujcoh6Uuv+6Qpcd4aVYSw8wkq4=;
-        b=JPaomdVk01oTJYjgZBN1UOhyeTTQpMkRIvsblxNvO2Wp8jpf1HekCkXgGwHR+3tb0P
-         lHObR4olXVSsQGCaGAxMxi9GvShmH/dWbP1OfFXLUdkebYQlHVcQ3N0oAJn0K5rAivFc
-         iB2/nMMln+9A6MYedR2Eqh5w/NJIJsBuRMJX5X0PjbKMRZzgrTPhvIezfwhNluD0hmO7
-         QZZFC0nJFdC+nUbE0OuEGIuZXdl1fs6yfjCY2AM5DYtcHVbG/s3esBIQ5K2eAi28uHlN
-         QYpBolJzeu6FdcE/RoV4xFu+1tpBMr9FnHEfvWF8ILClS8F8F+Qt9/9Jru7O/iWkS/gd
-         PDwA==
-X-Gm-Message-State: AOJu0YyIiRfvJDFYt+aPDWWf1xy/XPE9+RDnveTSrlOKKMNaCIFXIl+9
-	LUocF5IK0YQB0GKbq23Vzq350UcYZb32bjXei2WPI9UYMZaMqUtY5h+vtPtcnA0vtJGYLzAj2DM
-	bUuw4
-X-Gm-Gg: Acq92OG3NyMxRkAiziDefZPNgAQQv4uj2mq9gqNV2cJS9ZeYJ9c3xCwo1oxqGfP/21E
-	fn/GZmxlYPMp/VdhWhGqhNz+jWANYStWSope2rWyZQCDQh5dlr0wSAmpdveab+fBKDy2rpTQE5/
-	+BunyMfzmUHdYavHJeaMeQepDDXWS/TmgdkTsn06zXxJBu65D6rmiGA4g69f4ah4kf+hOYOVk5A
-	auiN0caVE2Q+1mR+VzzU5Eo9D9rwJQ2VewSGV3aINMxXQKYY6uL8Vp/iHg5VZ7GqJgcR+adD61J
-	knl4UZITkZUFb1QimpVh8RXUPtTJzo+96SIspluSKrCvxpwv06qsRAhieEcxJqkE15awWPHo/oX
-	9qXk7U5xWFP4ahCv0u1qxrgIHs/lJjLlwP5ZxsoTu1QCFarvVcHcJ/BoNw3bWGmAN9auO9CoX/X
-	ODKSfnEZJU0/vD4L6m/x+3gc9y6UvUJfsF1fjXYoFOHAf9JYxheNonwunhC/fTV76eL7PrF5iA
-X-Received: by 2002:a05:622a:1f9a:b0:516:d781:589a with SMTP id d75a77b69052e-5173a73b0aemr208229881cf.22.1780370257673;
-        Mon, 01 Jun 2026 20:17:37 -0700 (PDT)
-Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51741b29745sm71219081cf.8.2026.06.01.20.17.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 20:17:37 -0700 (PDT)
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: linux-kselftest@vger.kernel.org,
-	rppt@kernel.org,
-	shuah@kernel.org,
-	akpm@linux-foundation.org,
-	linux-mm@kvack.org,
-	skhan@linuxfoundation.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	corbet@lwn.net,
-	pasha.tatashin@soleen.com,
-	dmatlack@google.com,
-	kexec@lists.infradead.org,
-	pratyush@kernel.org,
-	skhawaja@google.com,
-	graf@amazon.com
-Subject: [PATCH v5 13/13] selftests/liveupdate: Add stress-files kexec test
-Date: Tue,  2 Jun 2026 03:17:17 +0000
-Message-ID: <20260602031717.197696-14-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260602031717.197696-1-pasha.tatashin@soleen.com>
-References: <20260602031717.197696-1-pasha.tatashin@soleen.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WHV8r6eo"
+Message-ID: <0fecd90a-d218-48dc-86d1-860ab2e7f6d5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780370252;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q31l8Uyd8/waps4/zvDwbRE+yDFblOOOVBggVCClT4g=;
+	b=WHV8r6eoERREXxCCRWjY2eCmtSkAlgARpuzh0h1dndgYom86wLyWawWBQ0ihkvMvPM7O8Y
+	5cVT0y3iBdevFuRq4D8aCpnspn3R8dARNJRC1RJ2IlsEfPrjyK1U0LLqP9omm4Gs+xoJYg
+	ANKtSjCbOfW8avUq3gZ/XtK1pfIwO+A=
+Date: Tue, 2 Jun 2026 11:17:15 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v3 1/2] bpf: Update transport_header when
+ encapsulating UDP tunnel in lwt
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Guillaume Nault <gnault@redhat.com>,
+ Ido Schimmel <idosch@nvidia.com>,
+ Fernando Fernandez Mancera <fmancera@suse.de>,
+ Peter Oskolkov <posk@google.com>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com, Leon Hwang <leon.huangfu@shopee.com>
+References: <20260601150203.20352-1-leon.hwang@linux.dev>
+ <20260601150203.20352-2-leon.hwang@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260601150203.20352-2-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Add a new luo_stress_files kexec test that verifies preserving and
-retrieving 500 files across a kexec reboot.
 
-Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
----
- tools/testing/selftests/liveupdate/Makefile   |  1 +
- .../selftests/liveupdate/luo_stress_files.c   | 97 +++++++++++++++++++
- 2 files changed, 98 insertions(+)
- create mode 100644 tools/testing/selftests/liveupdate/luo_stress_files.c
+On 6/1/26 11:02 PM, Leon Hwang wrote:
+> Currently, bpf_lwt_push_ip_encap() does not update skb->transport_header.
+> When a driver, e.g. ice, reuses the stale skb->transport_header to
+> offload checksum computation to NIC hardware, VxLAN packets encapsulated
+> by bpf_lwt_push_encap() helper may be dropped due to incorrect checksum.
+>
+> Update skb->transport_header in bpf_lwt_push_ip_encap() whenever the
+> encapsulated packet uses UDP, so checksum offload works correctly.
+>
+> Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
+> Cc: Leon Hwang <leon.huangfu@shopee.com>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>   net/core/lwt_bpf.c | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+>
+> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+> index f71ef82a5f3d..65d1dfbf3312 100644
+> --- a/net/core/lwt_bpf.c
+> +++ b/net/core/lwt_bpf.c
+> @@ -599,6 +599,7 @@ static int handle_gso_encap(struct sk_buff *skb, bool ipv4, int encap_len)
+>   
+>   int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+>   {
+> +	bool is_udp_tunnel;
+>   	struct iphdr *iph;
+>   	bool ipv4;
+>   	int err;
+> @@ -612,10 +613,16 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+>   		ipv4 = true;
+>   		if (unlikely(len < iph->ihl * 4))
+>   			return -EINVAL;
+> +		is_udp_tunnel = iph->protocol == IPPROTO_UDP;
+> +		if (unlikely(is_udp_tunnel && len < iph->ihl * 4 + sizeof(struct udphdr)))
+> +			return -EINVAL;
+>   	} else if (iph->version == 6) {
+>   		ipv4 = false;
+>   		if (unlikely(len < sizeof(struct ipv6hdr)))
+>   			return -EINVAL;
+> +		is_udp_tunnel = ((struct ipv6hdr *)iph)->nexthdr == NEXTHDR_UDP;
+> +		if (unlikely(is_udp_tunnel && len < sizeof(struct ipv6hdr) + sizeof(struct udphdr)))
+> +			return -EINVAL;
+>   	} else {
+>   		return -EINVAL;
+>   	}
+> @@ -637,6 +644,10 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+>   	if (ingress)
+>   		skb_postpush_rcsum(skb, iph, len);
+>   	skb_reset_network_header(skb);
+> +	if (ipv4 && is_udp_tunnel)
+> +		skb_set_transport_header(skb, skb_network_offset(skb) + iph->ihl * 4);
+> +	else if (!ipv4 && is_udp_tunnel)
+> +		skb_set_transport_header(skb, skb_network_offset(skb) + sizeof(struct ipv6hdr));
 
-diff --git a/tools/testing/selftests/liveupdate/Makefile b/tools/testing/selftests/liveupdate/Makefile
-index ed7534468386..30689d22cb02 100644
---- a/tools/testing/selftests/liveupdate/Makefile
-+++ b/tools/testing/selftests/liveupdate/Makefile
-@@ -7,6 +7,7 @@ TEST_GEN_PROGS += liveupdate
- TEST_GEN_PROGS_EXTENDED += luo_kexec_simple
- TEST_GEN_PROGS_EXTENDED += luo_multi_session
- TEST_GEN_PROGS_EXTENDED += luo_stress_sessions
-+TEST_GEN_PROGS_EXTENDED += luo_stress_files
- 
- TEST_FILES += do_kexec.sh
- 
-diff --git a/tools/testing/selftests/liveupdate/luo_stress_files.c b/tools/testing/selftests/liveupdate/luo_stress_files.c
-new file mode 100644
-index 000000000000..0cdf9cd4bac7
---- /dev/null
-+++ b/tools/testing/selftests/liveupdate/luo_stress_files.c
-@@ -0,0 +1,97 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * Copyright (c) 2026, Google LLC.
-+ * Pasha Tatashin <pasha.tatashin@soleen.com>
-+ *
-+ * Validate that LUO can handle a large number of files per session across
-+ * a kexec reboot.
-+ */
-+
-+#include <stdio.h>
-+#include <unistd.h>
-+#include "luo_test_utils.h"
-+
-+#define NUM_FILES 500
-+#define STATE_SESSION_NAME "kexec_many_files_state"
-+#define STATE_MEMFD_TOKEN 9999
-+#define TEST_SESSION_NAME "many_files_session"
-+
-+/* Stage 1: Executed before the kexec reboot. */
-+static void run_stage_1(int luo_fd)
-+{
-+	int session_fd, i;
-+
-+	ksft_print_msg("[STAGE 1] Creating state file for next stage (2)...\n");
-+	create_state_file(luo_fd, STATE_SESSION_NAME, STATE_MEMFD_TOKEN, 2);
-+
-+	ksft_print_msg("[STAGE 1] Creating test session '%s'...\n", TEST_SESSION_NAME);
-+	session_fd = luo_create_session(luo_fd, TEST_SESSION_NAME);
-+	if (session_fd < 0)
-+		fail_exit("luo_create_session");
-+
-+	ksft_print_msg("[STAGE 1] Preserving %d files...\n", NUM_FILES);
-+	for (i = 0; i < NUM_FILES; i++) {
-+		char data[64];
-+
-+		snprintf(data, sizeof(data), "file-data-%d", i);
-+		if (create_and_preserve_memfd(session_fd, i, data) < 0)
-+			fail_exit("create_and_preserve_memfd for index %d", i);
-+	}
-+
-+	ksft_print_msg("[STAGE 1] Successfully preserved %d files.\n", NUM_FILES);
-+
-+	close(luo_fd);
-+	daemonize_and_wait();
-+}
-+
-+/* Stage 2: Executed after the kexec reboot. */
-+static void run_stage_2(int luo_fd, int state_session_fd)
-+{
-+	int session_fd;
-+	int i, stage;
-+
-+	ksft_print_msg("[STAGE 2] Starting post-kexec verification...\n");
-+
-+	restore_and_read_stage(state_session_fd, STATE_MEMFD_TOKEN, &stage);
-+	if (stage != 2) {
-+		fail_exit("Expected stage 2, but state file contains %d",
-+			  stage);
-+	}
-+
-+	ksft_print_msg("[STAGE 2] Retrieving test session '%s'...\n", TEST_SESSION_NAME);
-+	session_fd = luo_retrieve_session(luo_fd, TEST_SESSION_NAME);
-+	if (session_fd < 0)
-+		fail_exit("luo_retrieve_session");
-+
-+	ksft_print_msg("[STAGE 2] Verifying %d files...\n", NUM_FILES);
-+	for (i = 0; i < NUM_FILES; i++) {
-+		char data[64];
-+		int fd;
-+
-+		snprintf(data, sizeof(data), "file-data-%d", i);
-+		fd = restore_and_verify_memfd(session_fd, i, data);
-+		if (fd < 0)
-+			fail_exit("restore_and_verify_memfd for index %d", i);
-+		close(fd);
-+	}
-+
-+	ksft_print_msg("[STAGE 2] Finishing test session...\n");
-+	if (luo_session_finish(session_fd) < 0)
-+		fail_exit("luo_session_finish for test session");
-+	close(session_fd);
-+
-+	ksft_print_msg("[STAGE 2] Finalizing state session...\n");
-+	if (luo_session_finish(state_session_fd) < 0)
-+		fail_exit("luo_session_finish for state session");
-+	close(state_session_fd);
-+
-+	ksft_print_msg("\n--- MANY-FILES KEXEC TEST PASSED (%d files) ---\n",
-+		       NUM_FILES);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	return luo_test(argc, argv, STATE_SESSION_NAME,
-+			run_stage_1, run_stage_2);
-+}
--- 
-2.53.0
 
+I think GRE is also affected, why not unconditionally set transport 
+header to network_offset + outer_ip_ihl regardless of outer protocol??
+
+>   	memcpy(skb_network_header(skb), hdr, len);
+>   	bpf_compute_data_pointers(skb);
+>   	skb_clear_hash(skb);
