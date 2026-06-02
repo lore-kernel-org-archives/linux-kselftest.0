@@ -1,223 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B03AE15B971;
-	Mon,  1 Jun 2026 14:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4DC3B9600
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2026 14:18:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780323444; cv=none; b=JmpsttXewICQNKhydGCpTSwQjfcvIfNIB9YTN0OTeQo9FEoHYECKjjekD0DSjkKPXMrM0Hc52UprCB+fRS90hXlRNhEszLwsPmV4oaS5fmZep1tFlqYrhUOl0EVBz5y/+3u3dsKjI187ALhFOzzAaOqtXBryzan/yiBiddfVZoo=
+	t=1780323504; cv=none; b=KdlXs0vEmCnBDBNuwfAiT3ZdYHL3glwC3GrjURpU9MQKn1EbLOb/rkkzpKJ+qjf20RgE7GXN65fDIMUtn9gvNkTOayaM3SBc3alKDPeyWhWTCaI3cEeG0t2sqIJCG8UDpEk3roymKdE0VfYZ1Cb8XACES9moMx3T5lbkBK7ipW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780323444; c=relaxed/simple;
-	bh=GI+OhZJywkw8qVO4rIJlR/3EPVnTzp/61jTYPIDGoQU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=mAzMcSbeac8faEcGZsC0ruw+m8a4jhalFFZFZ/iwOb5EcAAZqIZudZmUiCq/ESAkjqIPgsaAJdDivUWpvXs1g7I/DlUzSGq2FyPyevZIZo6xqc+O+96BY6tgvfltQ2fB0lW4tuoZLgYggCMxyH8UKNL1pCFk2Td7DsbTwj7PpuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bCsLsbpF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780323504; c=relaxed/simple;
+	bh=W1xQ7RR3f6W2gygq8YRntn2oji9dZ7t4CiasDB970Y0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OlJQnn+nbE7cBcQmg67gli4dH6CdGeqekRk4K4BDWxFpeZLtq4POy0mejvb8DPyXgTL6/WnReGlxFsaq0YVcJM1V4FvvwHfe9odsV+Yl1tTDmkS1/TgmujaudVSlW4/hjBouNr3usbeM9Ah60A7s18Fwm08mtx4lrMYyxJA6aLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ahzTl8Jt; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bCsLsbpF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E34081F00893;
-	Mon,  1 Jun 2026 14:17:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780323443;
-	bh=2hF44QBQfUGRJ9iAPSXn6oHYpoPJZaLfD83FbTWLpNs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=bCsLsbpFf1I2jIhql6W7+uBxnx3jEUKFN5cFzZWZo6CIsF+hI2WutwsDUEbUPviJJ
-	 oRV9Ueh2aOziXxB+xBQbTl8qQi1ygOSeQJn8sPgZBnp/q98drLJgRrzSjs2sZjUbKp
-	 dWl9vlcRbvItA9+hdOCEXt95ytfWSdkos5XeWE20pDKnlXw1iL3XPENRPNKj8d95g2
-	 Y0z9UgPbkn92Elp9yfffpJnylqQ19mbq3+h1N9eeOxp0e8itjuXTZ0bk+knwrzEVe2
-	 Vq7KfwOqmH1gpKR3r4zRdBtwkSC7N1g01XBW3ixKM6x/rKTI0vf6+uV3xT26yDU7C0
-	 SXGetPm8P9v/A==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kselftest@vger.kernel.org,  rppt@kernel.org,  shuah@kernel.org,
-  akpm@linux-foundation.org,  linux-mm@kvack.org,
-  skhan@linuxfoundation.org,  linux-doc@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  corbet@lwn.net,  dmatlack@google.com,
-  kexec@lists.infradead.org,  pratyush@kernel.org,  skhawaja@google.com,
-  graf@amazon.com
-Subject: Re: [PATCH v4 11/13] selftests/liveupdate: Test session and file
- limit removal
-In-Reply-To: <20260530221938.115978-12-pasha.tatashin@soleen.com> (Pasha
-	Tatashin's message of "Sat, 30 May 2026 22:19:36 +0000")
-References: <20260530221938.115978-1-pasha.tatashin@soleen.com>
-	<20260530221938.115978-12-pasha.tatashin@soleen.com>
-Date: Mon, 01 Jun 2026 16:17:19 +0200
-Message-ID: <2vxz7boifiq8.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ahzTl8Jt"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2bf2e8ccca1so16866105ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 07:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780323502; x=1780928302; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W1xQ7RR3f6W2gygq8YRntn2oji9dZ7t4CiasDB970Y0=;
+        b=ahzTl8JtnOtAGdwVfWPYnEz4Y7keBb60tTuXNBGU/m6nVYPY5TaEnehVmvv9LQZCYq
+         PbaOC2oVwIK3vpVGf9fli1FRakJlZGp+sOAEjvqzN0IzWp/aHOvgRC+WuBrrR1u39g4Z
+         ah5N8u9sqRMtIKsvR2wKLjiKdFNySmKzqy+iyTWHch9nmlO6ORd0VttdJGSZjYvXt5WW
+         nkh3cfGvleHLpmKhVNzFuGKDRGSQNIBZmPlCTR6Ld7sS1oY4WmoYnRzkEgNjFMRIxPB3
+         FC4jOxREW5PHMxNEMKAO9nLQXksDRjtnX4xj0VVu+PTwMM3vPWgZc1FFYxh+tpE4XLwX
+         p4xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780323502; x=1780928302;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=W1xQ7RR3f6W2gygq8YRntn2oji9dZ7t4CiasDB970Y0=;
+        b=QcwlPwmF3v0ZxLho0XzLl+VWh6s43Wc+Iyx3DZB9x41ZrI70P75ILrFSXHCqyeumow
+         I0Zt/aSTSTvhRS7GicWaml2kID2kD1op2G9ZMMhe1hQXJVtSsgiub+Mi5OlQgcjv3ww+
+         aSI3sdFh1IX1XFw91VbLD0wQYgol8VnbN75s6EG0JNRXpyX4HcbTqH6+TUL6e1BaQ//J
+         x91HL1bIbJcL98ixpTOqEXCHcWFE4ymfe3guPL6xMiAXRLJAbee8C7VkEnT9bEVxQTJI
+         sAMOZ3MmDHRJ8mjIpOqPxrtbiPEGk1x7MOr5+zElLryVojYSL9FEp0qqjmnVp/wuS1u8
+         UoNg==
+X-Forwarded-Encrypted: i=1; AFNElJ8rbKSd+irL6jAMFBls6WlsG3b+iGOUWobaWWmRS1KsgLilKA4bHHukRzv5fuWlwFB3BBcFc8ZHNZOlJMpshNY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxI4ZMvXSa1dQGWlR0L/8Wozc+vVCcxi5q+QYcDcGV9K4OcqAeJ
+	Z8XWUNudE2JXhnsBlEBMh9zb0/NULiKqakPcQ+tg1o02qWdcVYz3dZxH
+X-Gm-Gg: Acq92OF8KXvf4Ny8WQHySR9BhGFTSEcVjSY712LedF8JwGHE7a4M7Ql+kbmGxfeDuw3
+	KafJzoDQB8Y4nhAL8K6CWod8PWGJYQ5RwjLRfbfk+LrmARuT269/QI0L9yZWkM+8wmJtnvo+KjX
+	2Z/dv4BX241OC/ELKC0N9ek74msSeqsuqpLgnvxm57nJJXd8l1lsSRbjDrAo9PygBj1MbpdQic7
+	0EYmVA7PV0mTR55eImSanN+XQbRC1yeSVL4vgyzdDNEhGHdZyR20D4e7/ZVnycC+E7DW8SWcnk2
+	RT0NBug6wQzPveDfUrMzPOqxPZOLIwc5+CPPoF6X63IaByr61JvyAJzbgDsr3hQxhicU2SYe1Bv
+	L773rUZMabvCCjB+vIezF3HHcZkiXyXF7Y0LAiUmEoXP6grg9tW2xHYdYF6TZo5vDtu+NkBdkWB
+	BlSDByUm+mPshN74K8/a9FCySWwrVOXDF9tg==
+X-Received: by 2002:a17:903:286:b0:2bf:2369:a131 with SMTP id d9443c01a7336-2bf368786bbmr133870415ad.34.1780323502187;
+        Mon, 01 Jun 2026 07:18:22 -0700 (PDT)
+Received: from localhost.localdomain ([2a12:a305:4::40e8])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf23c2da36sm134646855ad.69.2026.06.01.07.18.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 07:18:21 -0700 (PDT)
+From: Guodong Xu <docular.xu@gmail.com>
+To: Anup Patel <anup@brainfault.org>,
+	Paul Walmsley <pjw@kernel.org>
+Cc: Guodong Xu <docular.xu@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Shuah Khan <shuah@kernel.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Zong Li <zong.li@sifive.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Andrew Jones <andrew.jones@oss.qualcomm.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Charlie Jenkins <thecharlesjenkins@gmail.com>,
+	linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 03/10] riscv: Standardize extension capitalization
+Date: Mon,  1 Jun 2026 22:11:50 -0400
+Message-ID: <20260602021638.158707-1-docular.xu@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CAAhSdy0pHPAMRRR-Mri735zLu3ymr=ePQ7gA6zZ11BkHEXj+AA@mail.gmail.com>
+References: <20260511-rva23u64-hwprobe-v2-v2-0-21c5a544f1dc@riscstar.com> <20260511-rva23u64-hwprobe-v2-v2-3-21c5a544f1dc@riscstar.com> <CAAhSdy0pHPAMRRR-Mri735zLu3ymr=ePQ7gA6zZ11BkHEXj+AA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Sat, May 30 2026, Pasha Tatashin wrote:
+Hi Anup,
 
-> With the removal of static limits on the number of sessions and files per
-> session, the orchestrator now uses dynamic allocation.
->
-> Add new test cases to verify that the system can handle a large number of
-> sessions and files. These tests ensure that the dynamic block allocation
-> and reuse logic for session metadata and outgoing files work correctly
-> beyond the previous static limits.
->
-> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Acked-by: Anup Patel <anup@brainfault.org>
+> Reviewed-by: Anup Patel <anup@brainfault.org>
 
-Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+Thanks for the review.
 
-> ---
->  .../testing/selftests/liveupdate/liveupdate.c | 75 +++++++++++++++++++
->  .../selftests/liveupdate/luo_test_utils.c     | 24 ++++++
->  .../selftests/liveupdate/luo_test_utils.h     |  2 +
->  3 files changed, 101 insertions(+)
->
-> diff --git a/tools/testing/selftests/liveupdate/liveupdate.c b/tools/testing/selftests/liveupdate/liveupdate.c
-> index c7d94b9181e1..502fb3567e38 100644
-> --- a/tools/testing/selftests/liveupdate/liveupdate.c
-> +++ b/tools/testing/selftests/liveupdate/liveupdate.c
-> @@ -26,6 +26,7 @@
->  
->  #include <linux/liveupdate.h>
->  
-> +#include "luo_test_utils.h"
->  #include "../kselftest.h"
->  #include "../kselftest_harness.h"
->  
-> @@ -499,4 +500,78 @@ TEST_F(liveupdate_device, get_session_name_max_length)
->  	ASSERT_EQ(close(session_fd), 0);
->  }
->  
-> +/*
-> + * Test Case: Manage Many Sessions
-> + *
-> + * Verifies that a large number of sessions can be created and then
-> + * destroyed during normal system operation. This specifically tests the
-> + * dynamic block allocation and reuse logic for session metadata management
-> + * without preserving any files.
-> + */
-> +TEST_F(liveupdate_device, preserve_many_sessions)
-> +{
-> +#define MANY_SESSIONS 2000
-> +	int session_fds[MANY_SESSIONS];
-> +	int ret, i;
-> +
-> +	self->fd1 = open(LIVEUPDATE_DEV, O_RDWR);
-> +	if (self->fd1 < 0 && errno == ENOENT)
-> +		SKIP(return, "%s does not exist", LIVEUPDATE_DEV);
-> +	ASSERT_GE(self->fd1, 0);
-> +
-> +	ret = luo_ensure_nofile_limit(MANY_SESSIONS);
-> +	if (ret == -EPERM)
-> +		SKIP(return, "Insufficient privileges to set RLIMIT_NOFILE");
-> +	ASSERT_EQ(ret, 0);
-> +
-> +	for (i = 0; i < MANY_SESSIONS; i++) {
-> +		char name[64];
-> +
-> +		snprintf(name, sizeof(name), "many-session-%d", i);
-> +		session_fds[i] = create_session(self->fd1, name);
-> +		ASSERT_GE(session_fds[i], 0);
-> +	}
-> +
-> +	for (i = 0; i < MANY_SESSIONS; i++)
-> +		ASSERT_EQ(close(session_fds[i]), 0);
-> +}
-> +
-> +/*
-> + * Test Case: Preserve Many Files
-> + *
-> + * Verifies that a large number of files can be preserved in a single session
-> + * and then destroyed during normal system operation. This tests the dynamic
-> + * block allocation and management for outgoing files.
-> + */
-> +TEST_F(liveupdate_device, preserve_many_files)
-> +{
-> +#define MANY_FILES 500
-> +	int mem_fds[MANY_FILES];
-> +	int session_fd, ret, i;
-> +
-> +	self->fd1 = open(LIVEUPDATE_DEV, O_RDWR);
-> +	if (self->fd1 < 0 && errno == ENOENT)
-> +		SKIP(return, "%s does not exist", LIVEUPDATE_DEV);
-> +	ASSERT_GE(self->fd1, 0);
-> +
-> +	session_fd = create_session(self->fd1, "many-files-test");
-> +	ASSERT_GE(session_fd, 0);
-> +
-> +	ret = luo_ensure_nofile_limit(MANY_FILES + 10);
-> +	if (ret == -EPERM)
-> +		SKIP(return, "Insufficient privileges to set RLIMIT_NOFILE");
-> +	ASSERT_EQ(ret, 0);
-> +
-> +	for (i = 0; i < MANY_FILES; i++) {
-> +		mem_fds[i] = memfd_create("test-memfd", 0);
-> +		ASSERT_GE(mem_fds[i], 0);
-> +		ASSERT_EQ(preserve_fd(session_fd, mem_fds[i], i), 0);
-> +	}
-> +
-> +	for (i = 0; i < MANY_FILES; i++)
-> +		ASSERT_EQ(close(mem_fds[i]), 0);
-> +
-> +	ASSERT_EQ(close(session_fd), 0);
-> +}
-> +
->  TEST_HARNESS_MAIN
-> diff --git a/tools/testing/selftests/liveupdate/luo_test_utils.c b/tools/testing/selftests/liveupdate/luo_test_utils.c
-> index 3c8721c505df..333a3530051b 100644
-> --- a/tools/testing/selftests/liveupdate/luo_test_utils.c
-> +++ b/tools/testing/selftests/liveupdate/luo_test_utils.c
-> @@ -17,6 +17,7 @@
->  #include <sys/syscall.h>
->  #include <sys/mman.h>
->  #include <sys/types.h>
-> +#include <sys/resource.h>
->  #include <sys/stat.h>
->  #include <errno.h>
->  #include <stdarg.h>
-> @@ -28,6 +29,29 @@ int luo_open_device(void)
->  	return open(LUO_DEVICE, O_RDWR);
->  }
->  
-> +int luo_ensure_nofile_limit(long min_limit)
-> +{
-> +	struct rlimit hl;
-> +
-> +	/* Allow to extra files to be used by test itself */
-> +	min_limit += 32;
-> +
-> +	if (getrlimit(RLIMIT_NOFILE, &hl) < 0)
-> +		return -errno;
-> +
-> +	if (hl.rlim_cur >= min_limit)
-> +		return 0;
-> +
-> +	hl.rlim_cur = min_limit;
-> +	if (hl.rlim_cur > hl.rlim_max)
-> +		hl.rlim_max = hl.rlim_cur;
-> +
-> +	if (setrlimit(RLIMIT_NOFILE, &hl) < 0)
-> +		return -errno;
-> +
-> +	return 0;
-> +}
-> +
->  int luo_create_session(int luo_fd, const char *name)
->  {
->  	struct liveupdate_ioctl_create_session arg = { .size = sizeof(arg) };
-> diff --git a/tools/testing/selftests/liveupdate/luo_test_utils.h b/tools/testing/selftests/liveupdate/luo_test_utils.h
-> index 90099bf49577..6a0d85386613 100644
-> --- a/tools/testing/selftests/liveupdate/luo_test_utils.h
-> +++ b/tools/testing/selftests/liveupdate/luo_test_utils.h
-> @@ -26,6 +26,8 @@ int luo_create_session(int luo_fd, const char *name);
->  int luo_retrieve_session(int luo_fd, const char *name);
->  int luo_session_finish(int session_fd);
->  
-> +int luo_ensure_nofile_limit(long min_limit);
-> +
->  int create_and_preserve_memfd(int session_fd, int token, const char *data);
->  int restore_and_verify_memfd(int session_fd, int token, const char *expected_data);
+> @Paul, This patch is independent of other changes
+> in this series. If you are okay then I can take this single
+> patch through KVM RISC-V tree.
 
--- 
-Regards,
-Pratyush Yadav
+There is a dependency ordering I should point out. Patch 08
+("riscv: cpufeature: Introduce ISA bases bitmap and rva23u64 detection")
+uses the upper-case RISCV_ISA_EXT_I/M/A... macros introduced in this patch,
+so it won't build without patch 03. I mean, if patch 03 goes into a
+different tree on its own.
+
+But of course, I can rebase them onto your tree if patch 03 lands earlier
+than the other patches.
+
+Either way should be fine with me, your call.
+
+Thanks,
+Guodong Xu
+docular.xu@gmail.com
