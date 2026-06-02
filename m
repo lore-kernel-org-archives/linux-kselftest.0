@@ -1,150 +1,100 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2CC3E63BF
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 13:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880873E5EF6
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 13:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780407027; cv=none; b=lgPDmi6gyT1zaweGmPGfwmyKOSjYXPdpbLYsuXAQRnjET23sS2kb0h2q5po2sDYcD28lcyKQGjibS+gvYDiEnUzzotmMU9CoT4nNdOsr7siky4Des0rzEkHryWeO1PdVvqnW2frUnAmsMBPizpeSCv/J6u3aGKKcFDclAd3gZRI=
+	t=1780407264; cv=none; b=E8ukDHVQZ9apIbIaqapNC0QjF/xkNJ760ixxqB5LV0KbqNt/tEefvnSZaCPr7dEOF5+rgRdg6TWedMZ9mB4KkiyQSn6bmU7/9ew3oz7esfSZUPNt8R01T4Rr/3X9/r9jhUxREoE4ugGGLxQsYlwDTwwC+7xN6qBnk4ZdGtq7ids=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780407027; c=relaxed/simple;
-	bh=SitCQ9zThQAtGcEa+tRdZdKq/jWeXPhLMXixdM3Cywg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VMzbAIkKYWfsQ+V6p67xLoQ+sOa8K0azSCkPH7Fszs65sbqa5iuiqGft88q+ks5bLxK7vyVwrQCNdE7moE0kcjfqrnPox/DDEYMCU1ZN7DMBGBt8pqu3zz8ESMHg4PwmLEe5z74Hkv9grc8gYTJxjOpzu8z0+yPk/Z6XKD7EOQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OHKROyBb; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780407264; c=relaxed/simple;
+	bh=kBnX/+0c7ITyMO0P3knR00sfYCRT+0BHh1YQn7jrn64=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=DgK2HFmBNe/KOqC37ahtjEfUWA7eg+1qNDszDgFlQttUWRsagPa2zD/EVylY+JE8sfdwRb3Xol/LxvYBJ/PekBykxiqmVjZHE0UGu7+fXcXJEjiUfYmsQIxp86S/jlxSp+caqudvajrdcAdTGIyJVIRefkIa1TyUzTRrn2au1ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fY0WgkbR; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OHKROyBb"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-490a7629380so25418275e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 06:30:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fY0WgkbR"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-490b3637b90so4842575e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 06:34:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780407025; x=1781011825; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=px5683SUlyJ1WXtEe80xKFeQYckWTBD6LaRrb178pOo=;
-        b=OHKROyBbgILPzC2Tk226dblWCwlfF4n0L2+taVutUo/TYOT7Non6/k2xHRq0e+pGBv
-         aUEUlLlDKQzWwec7+OUyb3cJzDUh9QCQeaE2hPnk7/VZP3XZ86yhz/tAvXvCYAAaHDSD
-         EYp0G3CJIrJopITGi3iT61Berozi8VsOxteBMiyPm84dOpO6n+HU9r9esz9LHcQF3s27
-         ic9l0UhN0CGddz3CS0HYgRRZYAsD+1p0yZ1KYCUbpBR6j1vdvYrMgL4zHUjhenoklovz
-         VOTJi0BuU9mTzM9qyw+S7jtzYsbRhsmX0F1cvzvUjgecJlxwRqfIpPos0LjfQSzXlMkQ
-         UgMA==
+        d=suse.com; s=google; t=1780407262; x=1781012062; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:subject:from:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lM9eMUk/jCkJgL/kA3ALW8afdDw3W85juVsOkTKRsaM=;
+        b=fY0WgkbR6mkHahbU5G1lBdwUcnuXXa+x22HRpQwKdZJ47LbSVw0FFARCi9F5PXuwQp
+         OEKdC/FvlXzcVjluIaaBlIJ2VW7jNjvMVdOCRHTy+vN4QWxQsLIeliUlV8xoq8ll1gqy
+         u0rGP1QzcPwUe+zsVHL6zfiz0WZ9vYUkh2pfzDMz/G4yg5tfO2yIy5A0QJfLnWs8GUre
+         FePhuo0S/yoFlLXtuhWLKd+E4u4FwpXvvjD/8xnYRO0ZY461EJZ+rf98RBE9K5Fq3NUU
+         zs7G5hQTzLe0RXBULuk9WXy7RNXQvXJIjSwHo5NPIGqDXDvEEOt4N3/iTI2tsnfhIBFQ
+         Scvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780407025; x=1781011825;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=px5683SUlyJ1WXtEe80xKFeQYckWTBD6LaRrb178pOo=;
-        b=aqgrctx0ft/H3evkDrrcBren9EAiK3GF1bjUkvSWKJnUDNhMlH0E0aKqaInUmSs6Sb
-         LM81yRwJdzf8pdRhxRSVVARFq3WH8LGI551buz4t7FbgcD2bYVYbru82ihnfc8yaciaa
-         rhTDDYiy812vxtKsMVLfBJIm/Xvn0Uup3hvcTHVvm/0Vl+PHpdd/jloIbEZhKLC4Zu6W
-         RHAcmAvZea58QuhTY+FPv+syWzXWZfh350yNmkAKn4e2G6LrLKCrdr1/JE/RzSlRuitj
-         q0jxu1mypC6MYy8/OTcarTr3WsUW1PAemYB8NhrPPZfpl1+wj8p6oga5NVo4dl+xs0Je
-         e4BA==
-X-Forwarded-Encrypted: i=1; AFNElJ8n2jZa45idO4vrloHpqM+ve+wLE1OS1OgQ7AtfjfrypLef+bUqXwKTHjucfsnamch/fHobSEk0K5XSnPz5MMg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaLDPEI2ChirKs3AkWYKOhQXu+crpR8WhWUynLvREYu7ABG/iR
-	+nvT+xPfPZDOwemhleMtqJrwrpmOonYHpEN25PcWFNSrL78nV3MjBoCD
-X-Gm-Gg: Acq92OG43XHCBcOkEwEsqECyDI2YTV2VvDDznE+f0NtQZJ3Aj/c0XmNcWEdUnbfNVsm
-	D2ygY57elmrRKYO67607my/7W7kzhiup5BUP+zSEB8issYqdssmxtxm8ckR04VrAUQycAXMcmfK
-	4ja3x/ihf9dFRLk2RUCt33cOvZG/so7t9Y5VeppOc8F5Tp3zJCMt3llmJmVrf5tJXDpu/pkMq5l
-	cLphUi+v6CvTy+9uYEwxYoTHS62CpaCdzVpAIzyMx+bIzBDvu50Iuvvock0Che4UXiWZBoiVll/
-	S15KWtxdm0KT/vhtkdw5Gx8ZyY+I5ftzOLs8Ynfra+93EGWK8w6/p5P0EMQP/oRlCarf8HfZtHy
-	VgqUsZXWDKKdoWCp75Ml9C4gR6wibCX8Bdy66aznVeqM8Jt0oyCJWZFgtDbGTl5Zeqq+T/rTni+
-	8LyxJN0dUR/8BxNS5fa268ShywDNKl+i9VzSA5Rb/vrr57godojmg4Ya+0e5ibnhNPI3imKTiOU
-	oyy/+PTq8G/kZImGE8UFA==
-X-Received: by 2002:a05:600c:c108:b0:48a:7a10:4f17 with SMTP id 5b1f17b1804b1-490a290db4fmr248807115e9.6.1780407024589;
-        Tue, 02 Jun 2026 06:30:24 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490b0e0f343sm70579915e9.1.2026.06.02.06.30.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jun 2026 06:30:23 -0700 (PDT)
-Message-ID: <be8c41c9-17c7-4e1c-87f0-9036b0de4b58@gmail.com>
-Date: Tue, 2 Jun 2026 14:30:23 +0100
+        d=1e100.net; s=20251104; t=1780407262; x=1781012062;
+        h=in-reply-to:references:cc:subject:from:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lM9eMUk/jCkJgL/kA3ALW8afdDw3W85juVsOkTKRsaM=;
+        b=bVXqVQbfh6OxFWoKHIrgjXkshNuHXfrM4jHgAqxw5rajxaAzheLgAjG6uGnAEYuG2O
+         Xrt2NlGkqjbD5C2FmQjC/Sg98Y4HfgQnJ8jGOZd7++isoZdfhRnkawhNJ9+biJpP3AwD
+         TkyWHCUDIzAveObfz52BNenvO6vidyt/G4lG4DzxecprcM2iv05q3NI7hHb6LJ2DqI++
+         Hrfqwyss/+ew0F7MW2FRcUUPA2r4wGFRLSnCRJkt3gYYkgNHLtGcX5Ed2gp6XiVvs5ST
+         MuHODWMkuPmEZJG+/PcXJ8gi13Orhik3UsuvPJKbSy80SG4AYeYTfZG24XF4ZsXSh0Iy
+         TVoQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+SSTy9YdRBqNLNR6QxpilBj5HGynHfdEhfuoyhhLfOH/HOTaq4V4wGULAtMJS1Zi8dcp5z57I/A0kJhl4/TcQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxdj9SIZQH1gboyiZHli51VlsV4Fv6qz+nZk4JH/gV/M4sPYa0v
+	zk48rKVauDBkRD/U9XXgmhQOZUG5fq6jE+lkTH/g0DSyZ7FIsAf3YSOuP9suxNztx+8=
+X-Gm-Gg: Acq92OHeUmXwAEPH6uy4p3A/RuOCLHNTmegPIsyjRMXBfSkbVKia8Az/w5dEQj8e+fJ
+	Grnam5zHQnCKJtrJ6qm9oiv1W1wU/vjtRVNP+xv6K8N8/XNBqbR+Y59zuPIKjGAx6+DWmMW5VFz
+	CVmvs8ox2SqmRJkOiCGG9yFvjmVCZ6fEAx55Yd1+bWxUJdjxZstixczong7DFHO0v3ec7VijoOM
+	jN9Dpw/A30qncLA1xkd5DwU44lbrXBWr7DdZ0GtY4n388wO2Z3MvzEa3Z7yn1YzyumY3bBhApZr
+	KnM/c82+QnfhcQ3kgkhAVb3vZX5QIsr5FzII37Ph40PCbrO5YEHFbgXr+HkQrB7NZzBCocKqCWg
+	9bWt4SqHDMs7iP9U83maFAPE3j88aXjBmx4ah1v082GZXTKVABva4bzlyCwTcTRLRB1SMPSW5Ek
+	1j/NJfed1HAXDZvWsw1EpH
+X-Received: by 2002:a05:600d:640f:10b0:48f:f7cc:f6f5 with SMTP id 5b1f17b1804b1-490a2945b99mr208508155e9.31.1780407262005;
+        Tue, 02 Jun 2026 06:34:22 -0700 (PDT)
+Received: from localhost ([2804:7f0:b765:e15:2ecf:67ff:fe81:9da0])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5a9d27sm11444232eec.25.2026.06.02.06.34.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jun 2026 06:34:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/bpf: Page out as late a possible in file_reader
-To: Jerome Marchand <jmarchan@redhat.com>,
- Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260420134637.2513867-1-jmarchan@redhat.com>
- <f02fd939-85f7-414a-8b03-a9ebe56c7660@gmail.com>
- <836b0ce8-f427-434f-984b-4fc60b02c810@redhat.com> <ah6g7JSYOWGp2oAG@u94a>
- <939aae44-5901-4f2d-99c8-ad9bd5173f0f@redhat.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <939aae44-5901-4f2d-99c8-ad9bd5173f0f@redhat.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Tue, 02 Jun 2026 10:34:18 -0300
+Message-Id: <DIYLP74JLI7O.11GW15J2LC01Q@suse.com>
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Shuah Khan" <shuah@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>, "Bill Wendling"
+ <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>
+From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+Subject: Re: [PATCH bpf-next RESEND v12 00/11] selftests/bpf: Tolerate
+ partial builds across kernel configs
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, "Alan Maguire"
+ <alan.maguire@oracle.com>
+X-Mailer: aerc 0.21.0-146-g87073a0460e3
+References: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
+In-Reply-To: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
 
-On 6/2/26 10:51 AM, Jerome Marchand wrote:
-> On 02/06/2026 11:26, Shung-Hsi Yu wrote:
->> On Tue, Apr 21, 2026 at 07:59:08AM +0200, Jerome Marchand wrote:
->>> On 4/20/26 6:52 PM, Mykyta Yatsenko wrote:
->>>> On 4/20/26 2:46 PM, Jerome Marchand wrote:
->>>>> The file_reader/on_open_expect_fault fails consistently on my system.
->>>>> It expects a page fault on first dynptr read of some range the exe
->>>>> file of the current process because it has paged out that page range
->>>>> earlier. However a lot can happen to that range (which depending on
->>>>> the actual memory layout could contain text section, data section,
->>>>> sections )related to dynamic linking...) between the moment it was
->>>>> paged out and the moment the bpf program expected to hit a pagefault
->>>>> actually run.
->>>>>
->>>>> A bit of instrumentation with mincore() shows that pages from that
->>>>> range were accessed several times before the program is run. In
->>>>> particular the call of file_reader__load() seems to fault all the
->>>>> range in.
->>>>>
->>>>> Move the call to madvise(MADV_PAGEOUT) to just before attaching the
->>>>> program to minimize the risk of having those page pulled back in from
->>>>> under our feet.
->>>>>
->>>>> Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
->>>>> ---
->>>>
->>>> Thank you for the patch, the change looks good. Does it fail
->>>> consistently on 4K page size?
->>>
->>> It did when I ran the test manually. On our automated testing system, it
->>> failed intermittently.
->>
->> On my fork of BPF CI the test was failing[1] consistently, even when
->> this commit is applied. However I wasn't able to reproduce locally on my
->> laptop when I ran manually.
->>
->> Any hints regarding where to look and how to reproduce?
-> 
-> To investigate the failure I witnessed I instrumented the test with some calls to mincore(). You can do that to see whether madvise(PAGEOUT) didn't successfully paged out those pages, or if they were paged back in by the MM subsystem. I'm afraid that this test isn't very robust: the MM subsystem is the one that ultimately decides which pages are in or out and it might not work in the way that this test assumes.
-> 
+On Tue Jun 2, 2026 at 10:02 AM -03, Ricardo B. Marli=C3=A8re wrote:
+> Changes in v12:
+> - Rebase from 11 to 8 commits: split the test_kmods KDIR patch into a
+>   pure KDIR fix (no PERMISSIVE) and a separate tolerance patch; squash
+>   the BPF_STRICT_BUILD toggle with its first PERMISSIVE user; squash
+>   the four test_progs partial-build patches into one; move the install
+>   fix to immediately follow the first PERMISSIVE user
 
-thanks for the reports, this test is indeed flaky.
-I'll take a look if it's possible to fix it, or we
-should just delete it.
-
-> Thanks,
-> Jerome
-> 
->>
->> Thanks,
->> Shung-Hsi
->>
->> 1: https://github.com/shunghsiyu/libbpf/actions/runs/26807198259/job/79027625188
->>
->> ...
->>
-> 
+And of course just as I sent I realized this was left behind by mistake.
+This was scrapped and the series is still v11 :(
 
