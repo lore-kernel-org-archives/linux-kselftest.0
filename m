@@ -1,184 +1,217 @@
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C340330D25
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 16:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780417204; cv=pass; b=D3rVEiRs0IiEWVgrhy6huVj+06JyYbxw9EqEsOqynJYRPKTljAIbFAd7N99h17Nbc0OzjjHvru/mBBt+/kF/MOVshhIyMB/SvgvQ2Q8XgDlMf00t7LVH+FSynyC1VgLeOc32Oeod4hv4mIApctInvc7jOQ3LbvgcevuIsWIeL30=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780417204; c=relaxed/simple;
-	bh=ydH4/QV/1+IbTAhdeYNLwa8ygu64uWvWhoVur27Jo/0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PfchiQnvfiJlKdJASw4wVIr7r8WTWZHviX5XOsI1poROm37ogsKo7N1aX1vWSLjFmvKFdzOowDLL4w9h3ffvy+ASJWmGvBRIQ2iBxtuLFEYLnUwLBOtO2RB757b3yutC7ROA3x4hKylC/pBF6aXLtxJFGhoOkShximH36TREgfY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=c/VE6Dfq; arc=pass smtp.client-ip=74.125.224.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CF4373BF6
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 16:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780418570; cv=none; b=qOmQmd5zUlDWQ1ctpyGmdAm8VlmNbEx8dbeJBjTgIDzXa46bHl1O4T2ypzb2rJohLKZXveV1w0t+OjZ88/EI/TV7aAp+ICPxNwIOm9DlcGWvrlvZYSx0RvOPb/yx7UnSdt65CG+Yg1DcZ/7XMuXJlsKYOWn6CM0Xk20ifu3AndA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780418570; c=relaxed/simple;
+	bh=1Q4E5ugLFeJeSqMTNmTxNJVKMeVqqoBkHh0j6q0NUic=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K0SVlNh5+8dTIgHYHvIXb0yaPtK/8CMB5GRGvb68qJBaSxcOC+piPBUOSRyIqlPO4p9V1Ui8nyemYvAp0pDJIUu7E/dOY5IfsdiFO4JEphUAu4uIrVlesrGnCnwquWNGY7UFwBcWiuyEEgPJrZCBhvuEDadEZBEpl31YOc21KCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r6Secql4; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="c/VE6Dfq"
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-660390a8999so6360151d50.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 09:20:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780417202; cv=none;
-        d=google.com; s=arc-20240605;
-        b=OU5v2zMHJeyI8DqxbhfnLMKpA/0HAyCI+VBmvJnstkHNJfx8SCITqqi6FQ9IGrhQ8D
-         LneVu6McavinaMgXhDAswhyUM+1ZpdcE5rggFAurNoCjr4xQjL9rHDv6GVnN90s89el8
-         YMsKDFMm8ulTzOEEALg5evaF9XxCyLHFL6CLyajRQkgKkzLJ9BcEuw0WJAQt4NFYvuBr
-         V2oGbTKzklKsV/KkhpM+vj2kiuEi+4F/OYBjexmnscoUmv4Es/rBxGA7Titoz8NmhsyD
-         Rc2PiTwLh0oWcQflgZye67yyZC/f2q8EgbF4HjI4uNWUOA3L4E1+yIITfXeqZ6kJVcee
-         AXLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=qYFMKnZkfNnmRXGo0xQ4eN2VdP8xCoBWS52ZR4ARnJo=;
-        fh=5NDtkMDZQvGzF/suAosC8uk+LFmaMa6GBtqPhrlijNI=;
-        b=AO+DDm1LkxlfiymnogHFy+JiveXkNs0gtd0lqZ+bdrrY0LV8z1V+BddV3Zg4FbH4kO
-         g5ar+axKokkg+qotBeLzMknxM/h2QpNNvqy65UvGTDW6ls/5w/XzKsX6kQWmE2LtITBg
-         diV1m/WRyx1sru6y2LSKzh5jWUPsTCUeEDyl3J2HdmGLwOPXQ0xg0Jah9TtISRHTfeZe
-         EZWvRkBTSGMNA1lmFmynCYORk/IQjP9YuZBnIe7k+TueTte9lAy494IQrFt370Beq4Yf
-         9i3XDKIVNOfVuR22ACuRMpntT3MoIEaMwZokFosrbnxHj7wunstsV01kRujbRkGowVRE
-         iWNQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1780417202; x=1781022002; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qYFMKnZkfNnmRXGo0xQ4eN2VdP8xCoBWS52ZR4ARnJo=;
-        b=c/VE6DfqYn4w+HWhelXW5cH3cKDMBvmmPkVsAt1mRpbe/kx0fpJhdpax/nVFBksa/q
-         kWQOQ3TaZTqarShkrrTJKHivLOSIJRlP5ChFQxVgYC5hqdi3Kwy6ThI+1cQiLvakbV5r
-         EN2CKw4yqeAbNirJuDwnGr7HREmnRWw1TVqQR6cWIWIwpsKjofo4YQYGqkv4kX6L0rF1
-         3FeGiu6Xyw+dqrRgyICL5NayCKUBiSvyHv3Mf2Vtla8HNIKYLEAD6fI0S3XIcPnRNC6e
-         U9PgeKeKvgpuY8awo8S5+XjMCS2FR7ESbtR2gvFFaxrelzBcqVhqbvmX5lzxFG3CThxE
-         SolQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780417202; x=1781022002;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qYFMKnZkfNnmRXGo0xQ4eN2VdP8xCoBWS52ZR4ARnJo=;
-        b=m6SyoVJQT41M5OR9jKIWB1zBi9RBHES4rKdZ98mGzNBdUmVBK66D55X9GiulzY67Kj
-         o4c4PpKw6cCz67c2fWnKEPRy3Zqm92Sf6T5O0lb82o6o6QHf+tj0l1AezZraBrz4Uv/3
-         at9zcfL48ugzavlLG5qyeG+0Iy8cRRrz8VqsZhBs7PoMhRganmlJ+dPKJRsOi4tXQDwl
-         WzF/TXwSjxRvU+/1rLjngadxWbfWtkbiyQiOFIxKd6lKB/xSXmRR++i82/fY17XiVgXp
-         Edn82czmqW1Vz3Pfx58vtUAr6qapA9H10cjlFfddbXjbUG2AnZ7xeXbhGoPdtJRWr0RS
-         cC/w==
-X-Forwarded-Encrypted: i=1; AFNElJ9MLLGTqo6JiYWO5sBqNI71s9efnsnSLjrDd2ZwxvqxfUGUEqMgYB6lO20mGWxBOGm5EG0qGhukoaIM5D9QWqc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfjDjdIm4ZGsCbzqabg4kQd5ybupaoSV2L7GK7cJX3+YZicddC
-	fkUH1yYNCrIDO5JEj6x+k0XecYHEnTbjE+FWb/Ao6pYB4LZeiAPBl0o+C2USU8Wwla0sJM3rbH2
-	9LWEs+heGP8ERTTJxitJUz4G/rW2ceGZ5CrB6xnjAAA==
-X-Gm-Gg: Acq92OGacDPDsyZJchsWiRjcASZ6KvRx7mthjyy+J0krZM5TUjxewd6bPahtG5x3mpD
-	h/iDGy6g9V7wn3cCiB50lSohIKDPfIUMQk2RNQV8OpTsCFojhdRSLrF0D3Cm4d5nOI5ZWpWRleW
-	VAkvZBJYX8Pg7PEDlKG+pZvmyN5JxMcX5F54+HRmb8onNNuXEGe667dAiQFQkAukW6IvVkQm3QM
-	u5IQVInrBQuMvB2NRFBpz26+B/+xK3E7Ko8T1+9/v7rrdiQh1idx9I1aN5NTs0HBRBfn8xeuQgC
-	B/t4yixbP/OXyG76gzx063y9JrZ9iKGOOQ==
-X-Received: by 2002:a05:690e:23c7:b0:660:367d:539c with SMTP id
- 956f58d0204a3-660d61a5f90mr366583d50.65.1780417201973; Tue, 02 Jun 2026
- 09:20:01 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r6Secql4"
+Message-ID: <7978c4f6-2833-45b5-80e0-c1eeb99cb646@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780418525;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=32nvXdOr5Zqzm+JE/2T+z/XC4PoDSPmFWVa63PU6X6w=;
+	b=r6Secql4R1wTjP2dRjDWrNBgz6GDVYBeLvcZbMPfCShcCgU9dWiNCjB3TIOtkq1tjs0z/e
+	7qYTzhHRwpjeI2l2JJfPDuR1IWGAREqQKgppzhNmnXLjCJKlL9S1IHWX4eXJtOLqLYjeIf
+	t/+Uq/ku3BYWX35ENxGYuEvCqe37rPY=
+Date: Tue, 2 Jun 2026 09:41:51 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com>
- <20251112-v5_user_cfi_series-v23-6-b55691eacf4f@rivosinc.com>
- <87jyslndo4.fsf@igel.home> <CAKC1njS=AHu6uHrH4ae8VxcdEbhgiPXYCAoN3F_mnppBd3SwOA@mail.gmail.com>
- <875x44o9hj.fsf@igel.home> <CAKC1njSn_rtCj8ii876PNQTk0nsCTfWsb4DzdymufHVthh1Rkg@mail.gmail.com>
- <871peqgp9v.fsf@igel.home> <CAKC1njR+dTdvp+BmLGPtgd8dufiUwBtkQ9a-qinELT_Fmi13sQ@mail.gmail.com>
- <87wlwif04z.fsf@igel.home> <87tsrli6lt.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87tsrli6lt.fsf@email.froward.int.ebiederm.org>
-From: Deepak Gupta <debug@rivosinc.com>
-Date: Tue, 2 Jun 2026 09:19:50 -0700
-X-Gm-Features: AVHnY4LGzvAggFLA4mHNoi-t9ivcZhZK65HitG7Axu1HWjT50Q9msXqH7dSmtzU
-Message-ID: <CAKC1njRapOxS6ibQdCuES1E3aAjsA+yGz4yZ1xJAZHU2vkAm_A@mail.gmail.com>
-Subject: Re: [PATCH v23 06/28] riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
-To: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: Andreas Schwab <schwab@linux-m68k.org>, 
-	Deepak Gupta via B4 Relay <devnull+debug.rivosinc.com@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Kees Cook <kees@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
-	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
-	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
-	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
-	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
-	rust-for-linux@vger.kernel.org, Zong Li <zong.li@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 2/2] selftests/bpf: Cover tail-call cgroup storage
+ prog-array checks
+Content-Language: en-GB
+To: Lin Ma <malin89@huawei.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+ YiFei Zhu <zhuyifei@google.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Amery Hung <ameryhung@gmail.com>, Rongzhen Cui <cuirongzhen@huawei.com>,
+ Jingguo Tan <tanjingguo@huawei.com>, cenxianlong@huawei.com,
+ chenzhe@huawei.com
+References: <20260602073539.1567846-1-malin89@huawei.com>
+ <20260602073539.1567846-2-malin89@huawei.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260602073539.1567846-2-malin89@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Jun 2, 2026 at 3:23=E2=80=AFAM Eric W. Biederman <ebiederm@xmission=
-.com> wrote:
->
-> Andreas Schwab <schwab@linux-m68k.org> writes:
->
-> > On Jun 01 2026, Deepak Gupta wrote:
-> >
-> >> riscv uses `VM_SHADOW_STACK`. It's just very simple to use `protection=
-_map`
-> >> with just `VM_WRITE`. On RISC-V, `-W-` is a shadow stack mapping. It's=
- not same
-> >> on x86 or arm64. So `protection_map[VM_WRITE]` simply picks shadow sta=
-ck
-> >> encoding. We just ensure that PROT_WRITE is converted to
-> >> "VM_READ | VM_WRITE" at vma level.
-> >
-> > That does not explain _why_ you need to make that user visible change,
-> > when others can get away without it.
->
-> Especially since as I recall the decision was made was that the user
-> visible protection bits would match the mmap call.  If there is some
-> combination an architecture does not support that would simply not be
-> reflected in hardware until some future version of the hardware gets
-> around to supporting it.
->
-> This is what happened with executable page permissions on x86 for
-> example.  It used to be that it was not possible to deny execute
-> permission on a readable page.  Later that proved sufficiently valuable
-> that support for denying execute permission was added to the hardware.
->
-> That all happened quite transparently to userspace, that wasn't trying
-> to assuming PROT_READ implied PROT_EXEC.
->
-> So I am at a complete loss why someone would choose to break userspace
-> by confusing hardware limitations with what userspace asks for in mmap.
 
-Initially my plan was to re-use (only) VM_WRITE as (alias to) VM_SHADOW_STA=
-CK
-on risc-v to match hardware Write-only PTE encoding and I didn't see
-any opposition
-to that initially. Until later when it was suggested to  use distinct
-VM_SHADOW_STACK
-encoding.
-Although there wasn't any oppostion to this patch, seems like it made it in=
-.
 
-Now that I take a look at it, I think it can be made to work. Sorry about t=
-hat.
-
-Now that I have switched my affiliation to meta, I'll have to spend
-some time to set
-up risc-v dev environment.
-
-I'll send a patch. Thanks.
-
+On 6/2/26 12:35 AM, Lin Ma wrote:
+> Add tail-call selftests for prog-array ownership when cgroup storage is
+> in use. Verify that loading succeeds when callers and callees reuse the
+> owner's cgroup storage map, and that loading fails for a different
+> storage map or for a storage-less bridge program.
 >
-> Eric
+> Signed-off-by: Lin Ma <malin89@huawei.com>
+> Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
+> Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
+> ---
+>   .../selftests/bpf/prog_tests/tailcalls.c      | 103 ++++++++++++++++++
+>   .../bpf/progs/tailcall_cgrp_storage.c         |  44 ++++++++
+>   .../progs/tailcall_cgrp_storage_no_storage.c  |  20 ++++
+>   .../bpf/progs/tailcall_cgrp_storage_owner.c   |  32 ++++++
+>   4 files changed, 199 insertions(+)
+>   create mode 100644 tools/testing/selftests/bpf/progs/tailcall_cgrp_storage.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_no_storage.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_owner.c
 >
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+> index 7d534fde0af9..c1403ab20eae 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+> @@ -8,6 +8,9 @@
+>   #include "tailcall_freplace.skel.h"
+>   #include "tc_bpf2bpf.skel.h"
+>   #include "tailcall_fail.skel.h"
+> +#include "tailcall_cgrp_storage_owner.skel.h"
+> +#include "tailcall_cgrp_storage_no_storage.skel.h"
+> +#include "tailcall_cgrp_storage.skel.h"
+>   #include "tailcall_sleepable.skel.h"
+>   
+>   /* test_tailcall_1 checks basic functionality by patching multiple locations
+> @@ -1654,6 +1657,100 @@ static void test_tailcall_failure()
+>   	RUN_TESTS(tailcall_fail);
+>   }
+>   
+> +static void test_tailcall_cgrp_storage(void)
+> +{
+> +	struct tailcall_cgrp_storage_owner *owner_skel = NULL;
+> +	struct tailcall_cgrp_storage *skel = NULL;
+> +	int err, key = 0, prog_array_fd, prog_fd, storage_map_fd;
+> +
+> +	owner_skel = tailcall_cgrp_storage_owner__open_and_load();
+> +	if (!ASSERT_OK_PTR(owner_skel, "owner_open_and_load"))
+> +		return;
+> +
+> +	prog_array_fd = bpf_map__fd(owner_skel->maps.prog_array);
+> +	storage_map_fd = bpf_map__fd(owner_skel->maps.storage_map);
+> +
+> +	skel = tailcall_cgrp_storage__open();
+> +	if (!ASSERT_OK_PTR(skel, "tailcall_cgrp_storage__open"))
+> +		goto out;
+> +
+> +	err = bpf_map__reuse_fd(skel->maps.prog_array, prog_array_fd);
+> +	if (!ASSERT_OK(err, "reuse_prog_array"))
+> +		goto out;
+> +
+> +	err = bpf_map__reuse_fd(skel->maps.storage_map, storage_map_fd);
+> +	if (!ASSERT_OK(err, "reuse_storage_map"))
+> +		goto out;
+> +
+> +	err = bpf_object__load(skel->obj);
+> +	if (!ASSERT_OK(err, "tailcall_cgrp_storage__load"))
+> +		goto out;
+> +
+> +	prog_fd = bpf_program__fd(skel->progs.callee_prog);
+> +	err = bpf_map_update_elem(prog_array_fd, &key, &prog_fd, BPF_ANY);
+> +	ASSERT_OK(err, "update_prog_array");
+> +
+> +out:
+> +	tailcall_cgrp_storage__destroy(skel);
+> +	tailcall_cgrp_storage_owner__destroy(owner_skel);
+> +}
+> +
+> +static void test_tailcall_cgrp_storage_diff_storage(void)
+> +{
+> +	struct tailcall_cgrp_storage_owner *owner_skel = NULL;
+> +	struct tailcall_cgrp_storage *skel = NULL;
+> +	int err, prog_array_fd;
+> +
+> +	owner_skel = tailcall_cgrp_storage_owner__open_and_load();
+> +	if (!ASSERT_OK_PTR(owner_skel, "owner_open_and_load"))
+> +		return;
+> +
+> +	prog_array_fd = bpf_map__fd(owner_skel->maps.prog_array);
+> +
+> +	skel = tailcall_cgrp_storage__open();
+> +	if (!ASSERT_OK_PTR(skel, "tailcall_cgrp_storage__open"))
+> +		goto out;
+> +
+> +	err = bpf_map__reuse_fd(skel->maps.prog_array, prog_array_fd);
+> +	if (!ASSERT_OK(err, "reuse_prog_array"))
+> +		goto out;
+> +
+> +	err = bpf_object__load(skel->obj);
+> +	ASSERT_ERR(err, "tailcall_cgrp_storage__load");
+> +
+> +out:
+> +	tailcall_cgrp_storage__destroy(skel);
+> +	tailcall_cgrp_storage_owner__destroy(owner_skel);
+> +}
+> +
+> +static void test_tailcall_cgrp_storage_no_storage(void)
+> +{
+> +	struct tailcall_cgrp_storage_owner *owner_skel = NULL;
+> +	struct tailcall_cgrp_storage_no_storage *skel = NULL;
+> +	int err, prog_array_fd;
+> +
+> +	owner_skel = tailcall_cgrp_storage_owner__open_and_load();
+> +	if (!ASSERT_OK_PTR(owner_skel, "owner_open_and_load"))
+> +		return;
+> +
+> +	prog_array_fd = bpf_map__fd(owner_skel->maps.prog_array);
+> +
+> +	skel = tailcall_cgrp_storage_no_storage__open();
+> +	if (!ASSERT_OK_PTR(skel, "tailcall_cgrp_storage_no_storage__open"))
+> +		goto out;
+> +
+> +	err = bpf_map__reuse_fd(skel->maps.prog_array, prog_array_fd);
+> +	if (!ASSERT_OK(err, "reuse_prog_array"))
+> +		goto out;
+> +
+> +	err = bpf_object__load(skel->obj);
+> +	ASSERT_ERR(err, "tailcall_cgrp_storage_no_storage__load");
+> +
+> +out:
+> +	tailcall_cgrp_storage_no_storage__destroy(skel);
+> +	tailcall_cgrp_storage_owner__destroy(owner_skel);
+> +}
+> +
+>   noinline void uprobe_sleepable_trigger(void)
+>   {
+>   	asm volatile ("");
+> @@ -1777,6 +1874,12 @@ void test_tailcalls(void)
+>   		test_tailcall_freplace();
+>   	if (test__start_subtest("tailcall_bpf2bpf_freplace"))
+>   		test_tailcall_bpf2bpf_freplace();
+> +	if (test__start_subtest("tailcall_cgrp_storage"))
+> +		test_tailcall_cgrp_storage();
+> +	if (test__start_subtest("tailcall_cgrp_storage_diff_storage"))
+> +		test_tailcall_cgrp_storage_diff_storage();
+> +	if (test__start_subtest("tailcall_cgrp_storage_no_storage"))
+> +		test_tailcall_cgrp_storage_no_storage();
+
+Since the failure is due to 'A -> B(no storage) -> C(storage)' in your commit message,
+you should create a selftest for that. Current selftests are good but not addressing
+the issue in patch 1.
+
+>   	if (test__start_subtest("tailcall_failure"))
+>   		test_tailcall_failure();
+>   	if (test__start_subtest("tailcall_sleepable"))
+>
+[...]
+
