@@ -1,66 +1,67 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4353126DA
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 13:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05F53E1231
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 13:03:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780405402; cv=none; b=pnG5I1mSatHWM/boMYTbW0Pb3ZgmL0yCMZSj/YYmxgNUeQ6QAa5kxCFZ4McSx8rFER7iJdT+XhhGqTu3Go/I0bamAWZ2g1BXwO6sxwP9itu64gz89HOiP/cLeDWqpb20r9Kk8vM1QB0DQLxGX2PAADSolziE3+yGeUcTxhEn364=
+	t=1780405406; cv=none; b=q5rJKOnmTP3jBmIXjDD0rYlrOrwadO70ZWViF52YGJT/LkMQi8Y65xi/Aw6hLQqPaXZ+zgkvIjBlLheRGPtqy7qr6DQZkFHD9miFjZcLqtHASdu142GCGLXRQK1XQ2nu/67gQ6RTdxXZjNrqejHylcsjAdfECMSXdMSmMyNvYak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780405402; c=relaxed/simple;
-	bh=rJsmItp2I+IsMvRWdNLHtOcwfpWnzpUY+Dzn99vyML4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CAWkBCaYRpZrib73ZzTQXpANMEzF2+7aiOw9xz3+cTyLxeOeZQibEjsv+fxZRvYnquV3WqMwJa+htq7sxuKJF1FOmO0XT66G8VNKtgAcvbGkhkjAgMRbdeZoAk4BLF21hNRRGZkRevsxwXx82o9USCNOUlkzcbSbR3pX/OdGB70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cgMAJSjy; arc=none smtp.client-ip=209.85.208.48
+	s=arc-20240116; t=1780405406; c=relaxed/simple;
+	bh=GDZbYvQUamOFYqe+wDRuXBL1KE4AYy5pkKArBFAUAWs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=LvwZwoQIjJmtl8vYx1uPR6DOhJjh3m89NOS2ROpJS4skIdqdjzDvyinWEacgSQ3O3XFMutC+J6UG5vrcXvrSYL3lze21Ivh5/ZzKs42WHA7WrXlUE6vinv7GBN37iQxMVTakYqB6j7TUgV7AbeYgqkiAiuKskL6wogGi0OpcK+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VvcGyynQ; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cgMAJSjy"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-68be16c61d1so8259106a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 06:03:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VvcGyynQ"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-befd83e0521so94340166b.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 06:03:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1780405399; x=1781010199; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0CbjwfPGz7Z6S5cKpxIXcT7bWJOB7qDRzRoA/RSxXZI=;
-        b=cgMAJSjyiAgtSalRrabl/By3vlB0q014UGw3fJhxMAWIX1R1c5VkGOuC/XtCoePwIO
-         1bX3I5EiofrNmwsugi4OAQeQc3bsiLmLsTgY+VzMKLwXXjgYz9TMdAEuB983w2ZVxuIl
-         vhIQe7np09CO+t6vv3IpWdZPlxNU6So8WVRk/pEu3AmXajqIrgmSd+NcAmYK4BnnsGp/
-         0uYyQabryzBaLHYHVbMsrJZbq6OPqj6F0QqXkjGBWb9fd2wzHNGawlEvZ5ktmwjZZCTn
-         qvLz0DclgdykNJoVRkcNlBTHXaoT+B3mOgWI1JJTngZa7plcCTsQRk+/QApVZQmaqsAh
-         fT0Q==
+        d=suse.com; s=google; t=1780405403; x=1781010203; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MZypcCVdQoLHHXNUwPT3EyFR3TdxTd7mb2pLyq2WFR0=;
+        b=VvcGyynQ2HtbsI3DV4lCMhzcq42FWTy3LtGVqZoMbZrSJIGhi/wsoB8wby/L7MPRv+
+         K3ganoO5F227NgfF68y7nctlqEKvpTbSUSg7CMM3p9OWUTi5XFQpHm4gF1xknwyBaArG
+         UknMjsIF1uH5f/r26Yujs2t+uE7rpc/Gc8pBalQvK+Ln+orqt5RKJFlASPpcq5UdC3lC
+         g4/DI7ZyCeHdN6Epw4w50INMQKidOj90c1WNVWTyxhveJvnkQ5hJjVaN/ypsPkc9ikVW
+         BEt3YExf4xso0rKgGer+xMiJOSnNRd+oQLL1ZtZJENXbo32zhZyr3aGvHkzcif3lgZrc
+         K6gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780405399; x=1781010199;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0CbjwfPGz7Z6S5cKpxIXcT7bWJOB7qDRzRoA/RSxXZI=;
-        b=fkmxsysFL8uO1yJOm9wn52IgKUsXlzn0WjK5LYjw0XNTuJutqy80FTNwttfBNpdv60
-         4mhSVpiqfgi+MvlBLBUTvx2tL9KPWO++WXJtcQQrZWIAaI69ky8pGzr63lLtt6o8zdWr
-         /sn89tQd8dYIDzFIoBhe0AXi/4TTCYlFrM2UKDuRIaZzPsp+Go4sU7MUkzIkIr1l5wRK
-         LzNrYkcWuBcrMGm0Ae/TavIHP8WhOeRAAfilhIuKIp5gx5GitFdGjxxJrSpmEO64l7+E
-         FvHBoWj9ZxUFf0fHffx/eUFJwBz6N1lOnT0wZpl6oUWwyJjkHnjzYyREzoXNBpDD4hBN
-         et0w==
-X-Forwarded-Encrypted: i=1; AFNElJ+U4oLV6x7BJsWsWi6pXby+20KGFJHAMMMDPg+w3Lvg7x3syENz2DlWCIPzojiDz+wPPk8LfMi5VFHzFG2ZQt8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSbj4mioEDxznPFwO/6ZOcTWxW3FLmemdaKgsjf4xRsddQFEuK
-	Y16KZXPqAcuxlF6SPRiKn19NhKcAo3s+DrHbf3wUITAQukmpZgp3ofI/cc0bUAo8Zc4=
-X-Gm-Gg: Acq92OH7VlpM1ecfSn7EV+hGFXG4AOBX0gwfawWk9kVA9gNTnpDW9KhgeLKtFXIApHR
-	pIKcWxbr1y0aiYAVdpBRmOmogOR775J+3CNo9SaQW1Ylk16syUsohk0LYhuweHy8G6ZWKvQn6ea
-	b9YmuakD2Gbcer9FdkEitOeW0TgTSakp7xrxiFVKc4WmeQtzv270rQGStBe7OSqm+C0DzKwjIiz
-	H+12tpD82qtkH+sxFMOYUXi2XIbgIBLjQc+J6ZAji+QOexQI9MCrrX6JMLeSBMgCC203Hs7IvN8
-	oRdDgw99nKjje6NBiU6Z0enFbNanWWDKKDmRiHHwSDbp3rGP+PkHDAr2+mRURpP3YulhuRrjaly
-	7JbsnPNt60pfkC/urh81efG1fwrX8Ajj6rpaLkaQ+vw9LdhRIR8keWYuY9rwDaMDJq5liEAU9T8
-	uppDtnBVmLBQcQ/Y/gvl05MA==
-X-Received: by 2002:a05:6402:26d3:b0:68c:eb73:391a with SMTP id 4fb4d7f45d1cf-68ceb733d45mr7355871a12.11.1780405399001;
-        Tue, 02 Jun 2026 06:03:19 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780405403; x=1781010203;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MZypcCVdQoLHHXNUwPT3EyFR3TdxTd7mb2pLyq2WFR0=;
+        b=IzfhKDnwn7S2kzBW6EVgIx9iINbQRDN+7XfbNTkHyDdF4QnMvMSkVbYxNhOJQmoRdX
+         8fitJf/pAkkUjFl96zYwyXFA6MBP+eak2hVqqYPrE2TYbM5Qm9yCUHh3nlqg9mSBm+b3
+         tpAv62hE/zBHr4EQE6OShdOIQ+8IaMIcaGrNnuCB1vknFNk6nmTOeoldPvGGOwwG+4Yw
+         Pxfnjlu7ZnTFzTWLCU7OR4rcmp4spF787HQCUcjFK5knCH7sDi57FVY5LPwZtm30STpU
+         ppcPNxmodmty+Dbw+WjyLwKAQP580KVa3MUGkQCDZOpLD5pofRBjQqtZhi+3WTuFJJ02
+         X4yw==
+X-Forwarded-Encrypted: i=1; AFNElJ+yqIA0VR5VVuGmrCL7kay1yMwZX4G1zEO/lyMQWhMk7Clv+X3CB3xt1M5h6jIVPc0T+TJbgsYUTN9o0VKZUwA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yye0eBxeIos0PpGDXSm6rgrklxQ/sCrKAleIXfcHnRpASQ+PhY6
+	QNifX5G73/KUWuYdkGMG0Gw9JEWVgxxnsCpFI9nuQxPiNi7p0hvkoARqAvXaQKQ1a3k=
+X-Gm-Gg: Acq92OHEfk11HmsSU4oRNgJ8heEjXcum4pzvJR9k9HDIy6i+jivxGVd+TUGUFyjqTN1
+	0ctxSJe9QBq+9v0C+Xe5Ko3K/cPLPkkH6aL0EdIkA47cYqj0uRAoFb19TXzRG6/LdUT30RdN7CV
+	DWtDtkRKBo0b6uL0tPMpvM0qfd5PCR5fg5GrhAYqrlcCkGGw14WDSP7HTOng701MCDBY1bVS8oO
+	5WQWyuX1Ac93bJYCt5o+U4huxd84Lcajhjcspusx0zHaEVPkZYlpMcWrjkhvujqLjyZw73RZpae
+	5ljgZWHYAeD9GXpkm9RWp7ylJvNO+knpPPj8LVA/nR/hWOacf5EnD3KW3Klu+QK9ZWGHyoCSfNE
+	LYXd5ukn3cxI9qAXnutcAFMQYB7XmOU8VhcAmeYYyVKW5D3dhCyts8zRQXwpPyJeesI0rCBUaqZ
+	exJJ8t6RkAzc+M8WltTClBuPiTLFyb5PDt
+X-Received: by 2002:a17:906:c14d:b0:bee:d554:f33c with SMTP id a640c23a62f3a-beef57fbdebmr208259266b.0.1780405401970;
+        Tue, 02 Jun 2026 06:03:21 -0700 (PDT)
 Received: from localhost ([2804:7f0:b765:e15:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-68ceb867d22sm3376320a12.27.2026.06.02.06.03.17
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bee8899dd5bsm176361766b.23.2026.06.02.06.03.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 06:03:18 -0700 (PDT)
+        Tue, 02 Jun 2026 06:03:21 -0700 (PDT)
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Subject: [PATCH bpf-next RESEND v12 00/11] selftests/bpf: Tolerate partial
- builds across kernel configs
-Date: Tue, 02 Jun 2026 10:02:49 -0300
-Message-Id: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
+Date: Tue, 02 Jun 2026 10:02:50 -0300
+Subject: [PATCH bpf-next RESEND v12 01/11] selftests/bpf: Add
+ BPF_STRICT_BUILD toggle
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,14 +70,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAHnUHmoC/43STU/jMBAG4L+CcibsjL/NiQNcOcARrdDYGbdBN
- EVxqECo/32dopUiS4EebY8fv7bnq8k89pyb64uvZuRDn/v9UAYoLi+auKVhw23flYlGgDCgANv
- Mr2niPOU2vKXnXZ/jfkj9plVRSk46atNRU3a/jZz6jxP91JTSduCPaV54uHu8u79t/n7X5Pfww
- nGaj5gXA2Vuw0hD3M5T//f92VGeeJwrtn2e9uPnKfEBT/qv2Q7YQiuJlYhAyZp0k98zX8X97hT
- jIJaMXGdEYRIYCyAdkO8qRi4Zs87IwmhnCRGVMDJWjDqTUYXxHlXSwKlLtmL0gkG9zujCgOyAt
- CDnHVWMWTI/pDGFsZyYggZFCSvGnsnYwhBYx+gABauKcQtGuHXGFSYkEDF524UYKsYvGb/O+MJ
- EiVg+PSjr60shLBwJP/QfzFAnQZDE8jimhvBcaO5kLoEsuahSt+yd4/H4D5vX6EnQAwAA
-X-Change-ID: 20260401-selftests-bpf_misconfig-4c33ef5c56da
+Message-Id: <20260602-selftests-bpf_misconfig-v12-1-27f898b3ba26@suse.com>
+References: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
+In-Reply-To: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -91,247 +87,55 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Alan Maguire <alan.maguire@oracle.com>, 
  "Ricardo B. Marliere" <rbm@suse.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1780405395; l=11389;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1780405395; l=1573;
  i=rbm@suse.com; h=from:subject:message-id;
- bh=rJsmItp2I+IsMvRWdNLHtOcwfpWnzpUY+Dzn99vyML4=;
+ bh=GDZbYvQUamOFYqe+wDRuXBL1KE4AYy5pkKArBFAUAWs=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QCvp45dsT9eotFjwweBoT25rLKWkQVQaU7hfj5yBNZRJL1vCP23jcS45Bl6gTUGeJNVu2JpEVj9
- g2LAGiv7acA4=
+ QPZE5O73neptr/nVHQlz6qoj/gAhVpUqQ41Slol1ZYyw3dxCoSxmAPVUrEPlcTP7dTwRAKVf8wo
+ JaX29rXsJVQk=
 X-Developer-Key: i=rbm@suse.com; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-Currently the BPF selftests can only be built by using the minimum kernel
-configuration defined in tools/testing/selftests/bpf/config*. This poses a
-problem in distribution kernels that may have some of the flags disabled or
-set as module. For example, we have been running the tests regularly in
-openSUSE Tumbleweed [1] [2] but to work around this fact we created a
-special package [3] that build the tests against an auxiliary vmlinux with
-the BPF Kconfig. We keep a list of known issues that may happen due to,
-amongst other things, configuration mismatches [4] [5].
+Distro kernels often lack BTF types or kernel features required by some BPF
+selftests, causing the build to abort on the first failure and preventing
+the remaining tests from running.
 
-The maintenance of this package is far from ideal, especially for
-enterprise kernels. The goal of this series is to enable the common usecase
-of running the following in any system:
+Add BPF_STRICT_BUILD (default 1) to control build failure tolerance. When
+set to 0, the PERMISSIVE make variable is assigned a non-empty value that
+subsequent Makefile rules use to make individual build steps non-fatal.
+When set to 1 (the default), the build fails on any error, preserving the
+existing behavior for CI and direct builds.
 
-```sh
-make -C tools/testing/selftests install \
-     SKIP_TARGETS= \
-     TARGETS=bpf \
-     BPF_STRICT_BUILD=0 \
-     O=/lib/modules/$(uname -r)/build
-```
+Users can opt in to permissive mode on the command line:
 
-As an example, the following script targeting a minimal config can be used
-for testing:
+  make -C tools/testing/selftests \
+       TARGETS=bpf SKIP_TARGETS= BPF_STRICT_BUILD=0
 
-```sh
-make defconfig
-scripts/config --file .config \
-               --enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
-               --enable DEBUG_INFO_BTF \
-               --enable BPF_SYSCALL \
-               --enable BPF_JIT
-make olddefconfig
-make -j$(nproc)
-make -j$(nproc) -C tools/testing/selftests install \
-     SKIP_TARGETS= \
-     TARGETS=bpf \
-     BPF_STRICT_BUILD=0
-```
-
-This produces a test_progs binary with 592 subtests, against the total of
-727. Many of them will still fail or be skipped at runtime due to lack of
-symbols, but at least there will be a clear way of building the tests.
-
-[1]: https://openqa.opensuse.org/tests/5811715
-[2]: https://openqa.opensuse.org/tests/5811730
-[3]: https://src.opensuse.org/rmarliere/kselftests
-[4]: https://github.com/openSUSE/kernel-qe/blob/main/kselftests_known_issues.yaml
-[5]: https://openqa.opensuse.org/tests/5811730/logfile?filename=run_kselftests-config_mismatches.txt
-
+Suggested-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 ---
-Changes in v12:
-- Rebase from 11 to 8 commits: split the test_kmods KDIR patch into a
-  pure KDIR fix (no PERMISSIVE) and a separate tolerance patch; squash
-  the BPF_STRICT_BUILD toggle with its first PERMISSIVE user; squash
-  the four test_progs partial-build patches into one; move the install
-  fix to immediately follow the first PERMISSIVE user
-- Link to v11: https://patch.msgid.link/20260430-selftests-bpf_misconfig-v11-0-e11f7a8c4fdc@suse.com
+ tools/testing/selftests/bpf/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Changes in v11:
-- Gate the BTFIDS pretty-print on $(filter 1,$(V)) so V=0 and V=2 still
-  print the marker; only V=1 suppresses it (patch 6)
-- Use asm volatile ("") in the uprobe_multi_func_{1,2,3} weak stubs to
-  match the strong definitions in prog_tests/uprobe_multi_test.c
-  (patch 10)
-- Link to v10: https://patch.msgid.link/20260430-selftests-bpf_misconfig-v10-0-cd302a31af16@suse.com
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index bc049620c774..75036c1b5c4f 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -44,6 +44,12 @@ SKIP_LLVM	?=
+ SKIP_LIBBFD	?=
+ SKIP_CRYPTO	?=
+ 
++# When BPF_STRICT_BUILD is 1, any BPF object, skeleton, test object, or
++# benchmark compilation failure is fatal. Set to 0 to tolerate failures
++# and continue building the remaining tests.
++BPF_STRICT_BUILD ?= 1
++PERMISSIVE := $(filter 0,$(BPF_STRICT_BUILD))
++
+ ifeq ($(srctree),)
+ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+ srctree := $(patsubst %/,%,$(dir $(srctree)))
 
-Changes in v10:
-- Drop $(wildcard $^) from the bench link recipe so cc fails cleanly on
-  the first missing input and the || fallback emits one SKIP-LINK line
-  instead of a wall of undefined-reference errors; also makes make -n
-  accurate (patch 9)
-- Include <alloca.h> in testing_helpers.c for alloca() (patch 10)
-- Link to v9: https://patch.msgid.link/20260429-selftests-bpf_misconfig-v9-0-c311f06b4791@suse.com
-
-Changes in v9:
-- Also pass KBUILD_OUTPUT=$(KMOD_O_VALID) when invoking kbuild so an
-  inherited command-line KBUILD_OUTPUT cannot disagree with O= (patch 2)
-- Note BPFOBJ remains a normal prereq intentionally (patch 5)
-- Sub-shell isolate cd/CC and use $@ for $(RM); gate the BTFIDS
-  pretty-print on $(V) so verbose mode does not double-print (patch 6)
-- Restrict permissive compile-failure tolerance and partial-link to
-  test_progs%; runners with strong cross-object references (test_maps)
-  keep strict semantics (patches 6 and 8)
-- Link to v8: https://patch.msgid.link/20260428-selftests-bpf_misconfig-v8-0-bf02cf97dbcb@suse.com
-
-Changes in v8:
-- In permissive mode, keep source changes to already-built tests
-  triggering relinks, while using recipe-time $(wildcard ...) to pick
-  up fresh .test.o files without duplicate linker inputs (patch 8)
-- Resolve relative O=/KBUILD_OUTPUT before recursing into test_kmods,
-  and only treat it as a kernel build dir when it contains
-  Module.symvers (patch 2)
-- Note in the commit message that PERMISSIVE-mode bisecting here needs
-  the next two patches (patch 6)
-- Clarify in the commit message that order-only skeleton prereqs do not
-  break the new-skel-via-local-header case (patch 5)
-- Exclude not-built tests from the success count so summary and JSON
-  report them only as skipped (patch 7)
-- Tighten commit messages for accuracy and clarity
-- Link to v7: https://patch.msgid.link/20260416-selftests-bpf_misconfig-v7-0-a078e18012e4@suse.com
-
-Changes in v7:
-- Use $(abspath) for KMOD_O so relative O= paths resolve correctly
-  when make -C changes directory (patch 2)
-- Guard make clean against missing KDIR unconditionally; there is
-  nothing to clean when kernel headers are absent (patch 2)
-- Drop explicit $(TRUNNER_TEST_OBJS) from linker filter in strict mode;
-  $^ already contains them as normal prerequisites (patch 8)
-- Link to v6: https://patch.msgid.link/20260416-selftests-bpf_misconfig-v6-0-7efeab504af1@suse.com
-
-Changes in v6:
-- Add --ignore-missing-args to -extras rsync so out-of-tree permissive
-  builds do not abort when .ko files are absent (patch 2)
-- Use $(abspath) for KMOD_O so relative O= paths resolve correctly
-  when make -C changes directory (patch 2)
-- Guard make clean against missing KDIR unconditionally so cleaning
-  does not abort when kernel headers are absent (patch 2)
-- Remove stale skeleton headers in early-exit paths when .bpf.o is
-  missing on incremental builds (patch 3)
-- Fix strict-mode skeleton rules: use && before temp file cleanup so
-  bpftool failures are not masked by rm -f exit code (patch 3)
-- Track test filter selection separately from not_built so -t/-n flags
-  are respected for unbuilt tests (patch 7)
-- Make TRUNNER_TEST_OBJS order-only only in permissive mode, preserving
-  incremental relinking in strict builds (patch 8)
-- Drop explicit $(TRUNNER_TEST_OBJS) from linker filter in strict mode;
-  they are already in $^ as normal prerequisites (patch 8)
-- Reorder: move skip-unbuilt-tests patch before partial-linking patch
-  for bisectability
-- Link to v5: https://patch.msgid.link/20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com
-
-Changes in v5:
-- Add BPF_STRICT_BUILD toggle as patch 1 so every subsequent patch
-  gates tolerance behind PERMISSIVE from the start, making the series
-  bisectable with strict-by-default at every point
-- Fix O= commit message; make parent cp conditional (patch 2)
-- Tolerate linked skeleton failures (patch 3)
-- Skip feature detection for emit_tests (patch 4)
-- Clarify bench is all-or-nothing in commit message (patch 8)
-- Move stack_mprotect() to testing_helpers.c, drop weak stubs (patch 9)
-- Report not-built tests as "SKIP (not built)" in output (patch 10)
-- Drop overly broad 2>/dev/null || true from install rsync; rely solely
-  on --ignore-missing-args which already handles absent files (patch 11)
-- Link to v4: https://patch.msgid.link/20260406-selftests-bpf_misconfig-v4-0-9914f50efdf7@suse.com
-
-Changes in v4:
-- Drop the test_kmods kselftest module flow patch: lib.mk gen_mods_dir
-  invokes $(MAKE) -C $(TEST_GEN_MODS_DIR) without forwarding
-  RESOLVE_BTFIDS, breaking ASAN and GCC BPF CI builds (Makefile.modfinal
-  cannot find resolve_btfids in the kbuild output tree)
-- Link to v3:
-  https://patch.msgid.link/20260406-selftests-bpf_misconfig-v3-0-587a1114263c@suse.com
-
-Changes in v3:
-- Split test_kmods patch into two: fix KDIR handling (O= passthrough,
-  EXTRA_CFLAGS/EXTRA_LDFLAGS clearing) and wire into lib.mk via
-  TEST_GEN_MODS_DIR
-- Pass O= through to the kernel module build so artifacts land in the
-  output tree, not the source tree
-- Clear EXTRA_CFLAGS and EXTRA_LDFLAGS when invoking the kernel build to
-  prevent host flags (e.g. -static) leaking into module compilation
-- Replace the bespoke test_kmods pattern rule with lib.mk module
-  infrastructure (TEST_GEN_MODS_DIR); lib.mk now drives build and clean
-  lifecycle
-- Make the .ko copy step resilient: emit SKIP instead of failing when a
-  module is absent
-- Expand the uprobe weak stub comment in bpf_cookie.c to explain why
-  noinline is required
-- Link to v2:
-  https://patch.msgid.link/20260403-selftests-bpf_misconfig-v2-0-f06700380a9d@suse.com
-
-Changes in v2:
-- Skip test_kmods build/clean when KDIR directory does not exist
-- Use `Module.symvers` instead of `.config` for in-tree detection
-- Fix skeleton order-only prereqs commit message
-- Guard BTFIDS step when .test.o is absent
-- Add `__weak stack_mprotect()` stubs in `bpf_cookie.c` and `iters.c`
-- Link to v1:
-  https://patch.msgid.link/20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com
-
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Shuah Khan <shuah@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-To: Bill Wendling <morbo@google.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev
-Assisted-by: {codex,claude}
-Tested-by: Alan Maguire <alan.maguire@oracle.com>
-Signed-off-by: Ricardo B. Marliere <rbm@suse.com>
-
----
-Ricardo B. Marlière (11):
-      selftests/bpf: Add BPF_STRICT_BUILD toggle
-      selftests/bpf: Fix test_kmods KDIR to honor O= and distro kernels
-      selftests/bpf: Tolerate BPF and skeleton generation failures
-      selftests/bpf: Avoid rebuilds when running emit_tests
-      selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
-      selftests/bpf: Tolerate test file compilation failures
-      selftests/bpf: Skip tests whose objects were not built
-      selftests/bpf: Allow test_progs to link with a partial object set
-      selftests/bpf: Tolerate benchmark build failures
-      selftests/bpf: Provide weak definitions for cross-test functions
-      selftests/bpf: Tolerate missing files during install
-
- tools/testing/selftests/bpf/Makefile               | 177 ++++++++++++++-------
- .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  17 +-
- tools/testing/selftests/bpf/prog_tests/iters.c     |   2 -
- tools/testing/selftests/bpf/prog_tests/test_lsm.c  |  22 ---
- tools/testing/selftests/bpf/test_kmods/Makefile    |  30 +++-
- tools/testing/selftests/bpf/test_progs.c           |  53 +++++-
- tools/testing/selftests/bpf/test_progs.h           |   1 +
- tools/testing/selftests/bpf/testing_helpers.c      |  18 +++
- tools/testing/selftests/bpf/testing_helpers.h      |   1 +
- 9 files changed, 226 insertions(+), 95 deletions(-)
----
-base-commit: b93c55b4932dd7e32dca8cf34a3443cc87a02906
-change-id: 20260401-selftests-bpf_misconfig-4c33ef5c56da
-
-Best regards,
---  
-Ricardo B. Marlière <rbm@suse.com>
+-- 
+2.54.0
 
