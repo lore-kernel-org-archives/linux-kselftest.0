@@ -1,58 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB371DF73C;
-	Tue,  2 Jun 2026 13:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2CC3E63BF
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 13:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780406453; cv=none; b=h8lhfVKkgdsxuRJ8LO2HTzVp5zc2kuS3WWQINdehURWqDRj2Dvz8b1o80irZbH+wKA9sgg9njvHANI9yArkxxNyDdTrUD3Q6Kgs/ujfGjJshVt2DxMgiR6Hgs5xMNnp6kdSKWVVDwsw9wGvK5TIsMSGo/Glf7ygeOTzySyMAWKM=
+	t=1780407027; cv=none; b=lgPDmi6gyT1zaweGmPGfwmyKOSjYXPdpbLYsuXAQRnjET23sS2kb0h2q5po2sDYcD28lcyKQGjibS+gvYDiEnUzzotmMU9CoT4nNdOsr7siky4Des0rzEkHryWeO1PdVvqnW2frUnAmsMBPizpeSCv/J6u3aGKKcFDclAd3gZRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780406453; c=relaxed/simple;
-	bh=rVnUnQX8yaFrENwslTUe2ZtTG7KwuK2PR4aHa1oac2U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qy2f9Q/Ovc31nm+ZaNvpt8ofrmN5DFSF/FD9/kxLCj8cTylPFcITKL1jLF2ycg1MSrtysLVHIVBYsSmubOWyyQur/3e0jdU4CS50b+c1PATRWgoa8pX43O9sJluKvm9+HwRLUsXcDu6edtr0wbVAVIbdnCO9ckxzRw2/EkFyX4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IlDZ70D4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780407027; c=relaxed/simple;
+	bh=SitCQ9zThQAtGcEa+tRdZdKq/jWeXPhLMXixdM3Cywg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VMzbAIkKYWfsQ+V6p67xLoQ+sOa8K0azSCkPH7Fszs65sbqa5iuiqGft88q+ks5bLxK7vyVwrQCNdE7moE0kcjfqrnPox/DDEYMCU1ZN7DMBGBt8pqu3zz8ESMHg4PwmLEe5z74Hkv9grc8gYTJxjOpzu8z0+yPk/Z6XKD7EOQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OHKROyBb; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IlDZ70D4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 106F21F00893;
-	Tue,  2 Jun 2026 13:20:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780406452;
-	bh=3fBXQTkgYwlxF/WwCZe3LkMFK0cUfjEsfId1KNEul14=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=IlDZ70D4sSBLxNHaOyPmcUENfjwZ6wFb9PlabDF3GQjw73Qvcfy7CIplqxDijnbRV
-	 YSM3yjZ0mE0HRC6qNHh+uiRVjMlZOxLo6EbJOYgp8Q81cqQ73CQT0FT+EpR62XovuI
-	 ymgrMgT1IS8qwIuQFgY2gxYJnhqmTG8WaxFtSiwfqbnVnNXq7xaT29tNhnWp0YAPLg
-	 b9Bfxeucj7hyvMpVrfm4s3AvqjgoDZLZWaTN/rQFoUW5rEPHrdZhMC3AiAJ2Hn7tnW
-	 FqSxk3REbXUswTtidvWA2QTLNjpgVzVVBKwW2RFf2oMkN2cn8VUOj7TgB/4nZvGsxX
-	 lbL/bG45Q7doQ==
-Date: Tue, 2 Jun 2026 15:20:48 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Nam Cao <namcao@linutronix.de>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, 
-	Soheil Hassas Yeganeh <soheil@google.com>, Mateusz Guzik <mjguzik@gmail.com>, 
-	David Laight <david.laight.linux@gmail.com>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] eventpoll: Fix epoll_wait() report false negative
-Message-ID: <20260602-entmachten-stegreif-wohlverdient-23303e323f54@brauner>
-References: <cover.1780133499.git.namcao@linutronix.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OHKROyBb"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-490a7629380so25418275e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 06:30:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780407025; x=1781011825; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=px5683SUlyJ1WXtEe80xKFeQYckWTBD6LaRrb178pOo=;
+        b=OHKROyBbgILPzC2Tk226dblWCwlfF4n0L2+taVutUo/TYOT7Non6/k2xHRq0e+pGBv
+         aUEUlLlDKQzWwec7+OUyb3cJzDUh9QCQeaE2hPnk7/VZP3XZ86yhz/tAvXvCYAAaHDSD
+         EYp0G3CJIrJopITGi3iT61Berozi8VsOxteBMiyPm84dOpO6n+HU9r9esz9LHcQF3s27
+         ic9l0UhN0CGddz3CS0HYgRRZYAsD+1p0yZ1KYCUbpBR6j1vdvYrMgL4zHUjhenoklovz
+         VOTJi0BuU9mTzM9qyw+S7jtzYsbRhsmX0F1cvzvUjgecJlxwRqfIpPos0LjfQSzXlMkQ
+         UgMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780407025; x=1781011825;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=px5683SUlyJ1WXtEe80xKFeQYckWTBD6LaRrb178pOo=;
+        b=aqgrctx0ft/H3evkDrrcBren9EAiK3GF1bjUkvSWKJnUDNhMlH0E0aKqaInUmSs6Sb
+         LM81yRwJdzf8pdRhxRSVVARFq3WH8LGI551buz4t7FbgcD2bYVYbru82ihnfc8yaciaa
+         rhTDDYiy812vxtKsMVLfBJIm/Xvn0Uup3hvcTHVvm/0Vl+PHpdd/jloIbEZhKLC4Zu6W
+         RHAcmAvZea58QuhTY+FPv+syWzXWZfh350yNmkAKn4e2G6LrLKCrdr1/JE/RzSlRuitj
+         q0jxu1mypC6MYy8/OTcarTr3WsUW1PAemYB8NhrPPZfpl1+wj8p6oga5NVo4dl+xs0Je
+         e4BA==
+X-Forwarded-Encrypted: i=1; AFNElJ8n2jZa45idO4vrloHpqM+ve+wLE1OS1OgQ7AtfjfrypLef+bUqXwKTHjucfsnamch/fHobSEk0K5XSnPz5MMg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaLDPEI2ChirKs3AkWYKOhQXu+crpR8WhWUynLvREYu7ABG/iR
+	+nvT+xPfPZDOwemhleMtqJrwrpmOonYHpEN25PcWFNSrL78nV3MjBoCD
+X-Gm-Gg: Acq92OG43XHCBcOkEwEsqECyDI2YTV2VvDDznE+f0NtQZJ3Aj/c0XmNcWEdUnbfNVsm
+	D2ygY57elmrRKYO67607my/7W7kzhiup5BUP+zSEB8issYqdssmxtxm8ckR04VrAUQycAXMcmfK
+	4ja3x/ihf9dFRLk2RUCt33cOvZG/so7t9Y5VeppOc8F5Tp3zJCMt3llmJmVrf5tJXDpu/pkMq5l
+	cLphUi+v6CvTy+9uYEwxYoTHS62CpaCdzVpAIzyMx+bIzBDvu50Iuvvock0Che4UXiWZBoiVll/
+	S15KWtxdm0KT/vhtkdw5Gx8ZyY+I5ftzOLs8Ynfra+93EGWK8w6/p5P0EMQP/oRlCarf8HfZtHy
+	VgqUsZXWDKKdoWCp75Ml9C4gR6wibCX8Bdy66aznVeqM8Jt0oyCJWZFgtDbGTl5Zeqq+T/rTni+
+	8LyxJN0dUR/8BxNS5fa268ShywDNKl+i9VzSA5Rb/vrr57godojmg4Ya+0e5ibnhNPI3imKTiOU
+	oyy/+PTq8G/kZImGE8UFA==
+X-Received: by 2002:a05:600c:c108:b0:48a:7a10:4f17 with SMTP id 5b1f17b1804b1-490a290db4fmr248807115e9.6.1780407024589;
+        Tue, 02 Jun 2026 06:30:24 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490b0e0f343sm70579915e9.1.2026.06.02.06.30.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Jun 2026 06:30:23 -0700 (PDT)
+Message-ID: <be8c41c9-17c7-4e1c-87f0-9036b0de4b58@gmail.com>
+Date: Tue, 2 Jun 2026 14:30:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cover.1780133499.git.namcao@linutronix.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/bpf: Page out as late a possible in file_reader
+To: Jerome Marchand <jmarchan@redhat.com>,
+ Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260420134637.2513867-1-jmarchan@redhat.com>
+ <f02fd939-85f7-414a-8b03-a9ebe56c7660@gmail.com>
+ <836b0ce8-f427-434f-984b-4fc60b02c810@redhat.com> <ah6g7JSYOWGp2oAG@u94a>
+ <939aae44-5901-4f2d-99c8-ad9bd5173f0f@redhat.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <939aae44-5901-4f2d-99c8-ad9bd5173f0f@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, May 30, 2026 at 11:37:30AM +0200, Nam Cao wrote:
-> Hi,
+On 6/2/26 10:51 AM, Jerome Marchand wrote:
+> On 02/06/2026 11:26, Shung-Hsi Yu wrote:
+>> On Tue, Apr 21, 2026 at 07:59:08AM +0200, Jerome Marchand wrote:
+>>> On 4/20/26 6:52 PM, Mykyta Yatsenko wrote:
+>>>> On 4/20/26 2:46 PM, Jerome Marchand wrote:
+>>>>> The file_reader/on_open_expect_fault fails consistently on my system.
+>>>>> It expects a page fault on first dynptr read of some range the exe
+>>>>> file of the current process because it has paged out that page range
+>>>>> earlier. However a lot can happen to that range (which depending on
+>>>>> the actual memory layout could contain text section, data section,
+>>>>> sections )related to dynamic linking...) between the moment it was
+>>>>> paged out and the moment the bpf program expected to hit a pagefault
+>>>>> actually run.
+>>>>>
+>>>>> A bit of instrumentation with mincore() shows that pages from that
+>>>>> range were accessed several times before the program is run. In
+>>>>> particular the call of file_reader__load() seems to fault all the
+>>>>> range in.
+>>>>>
+>>>>> Move the call to madvise(MADV_PAGEOUT) to just before attaching the
+>>>>> program to minimize the risk of having those page pulled back in from
+>>>>> under our feet.
+>>>>>
+>>>>> Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
+>>>>> ---
+>>>>
+>>>> Thank you for the patch, the change looks good. Does it fail
+>>>> consistently on 4K page size?
+>>>
+>>> It did when I ran the test manually. On our automated testing system, it
+>>> failed intermittently.
+>>
+>> On my fork of BPF CI the test was failing[1] consistently, even when
+>> this commit is applied. However I wasn't able to reproduce locally on my
+>> laptop when I ran manually.
+>>
+>> Any hints regarding where to look and how to reproduce?
 > 
-> While staring at epoll, I noticed ep_events_available() looks wrong. I
-> wrote a small program to confirm, and yes it is definitely wrong.
+> To investigate the failure I witnessed I instrumented the test with some calls to mincore(). You can do that to see whether madvise(PAGEOUT) didn't successfully paged out those pages, or if they were paged back in by the MM subsystem. I'm afraid that this test isn't very robust: the MM subsystem is the one that ultimately decides which pages are in or out and it might not work in the way that this test assumes.
 > 
-> This series adds a reproducer to kselftest, and fix the bug.
 
-Please resend on top of vfs-7.2.eventpoll... :)
+thanks for the reports, this test is indeed flaky.
+I'll take a look if it's possible to fix it, or we
+should just delete it.
+
+> Thanks,
+> Jerome
+> 
+>>
+>> Thanks,
+>> Shung-Hsi
+>>
+>> 1: https://github.com/shunghsiyu/libbpf/actions/runs/26807198259/job/79027625188
+>>
+>> ...
+>>
+> 
+
