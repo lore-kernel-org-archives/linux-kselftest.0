@@ -1,204 +1,178 @@
-Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C37C23EAAF;
-	Tue,  2 Jun 2026 03:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2E718AFE
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 03:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780369744; cv=none; b=WHgTeJ9Z8U8KCJSMOELEJmykkHl+oIhdFRRkB8pe2dwbky8dXHIhGxOvZ95a0hfjA0hIjmZQ9jH7pAi0XThio1G+ExQl/xcGBNJCl/VA8s4UEk4mGreOJPVmC1+VOkvLyVW81xhIDFDecd91bhWxjLbvSOyR+zXregruVkNL43E=
+	t=1780370241; cv=none; b=hVulHUjWOKS+DM4ejfYyY8+ZSTRjsioXhViHrfszJox4ISpftIkU2AuFD3aiL5tZZam4DB7S+1LnZV12m3CULZ/ZU481qGGeb5gTdBOFw7am9zGWHFMvxNOIHnqGhpIKsNcJ+2dsJnwb6q/nmrqi5ADP4t29VBSj7t2AeYPbDqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780369744; c=relaxed/simple;
-	bh=JdtkIHo86r93mLpvlA9hHSrLiBIeaKQl1noIOfoI+HQ=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=KgXfMNseG42T3c0plh4jexlidqwzmdHbBPWKbW86AZAwnNk+2Rckuz2RTB/sZ8p8O9nf4bYGnXx8T+4dprxOzge7o7gB5CTWjezdOT9nzQNzzrGsi16SZ2hrSPCuqS4sN53SeN4G0OfXHrRzPqWaBfiwyrd6LmxIn9rE3d6ik5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Te/fsP91; arc=none smtp.client-ip=113.46.200.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1780370241; c=relaxed/simple;
+	bh=UFlTWNbUvzwCLymITQWsd2wQWBNsij3IqqVuiYdePpk=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=h+22FatyTxsGof1K3CWBoB6dIoWARm1WczN3C1ihcPgDqeIwV9CraFFpKFbg/9trWLe5Twd1QpywguTcWOZrR0qdZx80o+wjNy0TL+Htc4dzAiqOzuyJks57jQgK2vgVW4ClnTeAXM6I4zoOHyG9bXzw8cV9ZQ2kIXb6RLpitF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=CEenTv2r; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Te/fsP91"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=YbsuXNQSSzUTtgq4oSp1vzBur9x6afidpwasn1swHTs=;
-	b=Te/fsP91KX55l1Gbb+C9+u0k3lsQtDmYEzt1UfTZmzElSuKtGIKMJz5MC4kV2vuTKn97krApj
-	J66MNqF9SwWz/noaN6xm4l+pGq4tJSV1syNQETRFigZbQF53yFLWCqq6qJOg3GjxofiQLcH7wlJ
-	zkKwe43mzvaluygA+VwNMXY=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4gTwZf55jlzpStZ;
-	Tue,  2 Jun 2026 11:01:14 +0800 (CST)
-Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
-	by mail.maildlp.com (Postfix) with ESMTPS id E8F224056F;
-	Tue,  2 Jun 2026 11:08:50 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 2 Jun 2026 11:08:50 +0800
-Received: from [10.173.124.160] (10.173.124.160) by
- kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 2 Jun 2026 11:08:49 +0800
-Subject: Re: [PATCH v8 2/6] mm/memory-failure: surface unhandlable kernel
- pages as -ENOTRECOVERABLE
-To: "David Hildenbrand (Arm)" <david@kernel.org>, Breno Leitao
-	<leitao@debian.org>
-CC: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <kernel-team@meta.com>, Lance Yang
-	<lance.yang@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, "Lorenzo
- Stoakes" <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport
-	<rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
-	<mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Naoya Horiguchi
-	<nao.horiguchi@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, "Masami
- Hiramatsu" <mhiramat@kernel.org>, Mathieu Desnoyers
-	<mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, "Shuah
- Khan" <skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>
-References: <20260527-ecc_panic-v8-0-9ea0cfa16bb0@debian.org>
- <20260527-ecc_panic-v8-2-9ea0cfa16bb0@debian.org>
- <19f968f5-1289-f573-4406-e5c91dcd8923@huawei.com>
- <e3d023f1-ab6e-4424-b304-55f1294480c3@kernel.org>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <33ef8821-c809-b7d1-ea77-6e8a07a6e784@huawei.com>
-Date: Tue, 2 Jun 2026 11:08:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="CEenTv2r"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-5174a1f2d45so10951581cf.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2026 20:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1780370239; x=1780975039; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M1YZ6pkpMukmY0PpCar7lQ0cU7Gg/pAjVgGHiG98i3c=;
+        b=CEenTv2rNnmtcJLtT5AupTwi7SsWz2GJNVhOFuf6rbh9YROnzSmaKeMgRb6luESEBl
+         YXyIAGx/CYXfeKo7AEUbiUMNk8//dYriqPu9KpoaxpM+M9Rrum6aWUny36NZyKvACv5V
+         pX39y1wU2x7K1Dm3lEviZTOioKwBlSYyRF5+Pi5eChVqNjsBMOkcnGRVEtFU2v1h4Gom
+         WKjmYHF/O1QBxI+ZN94tX0RuOtuBHCUpJMnUwbvNfoKtpPDdmgUdh6YTE7GkcxlDZmoi
+         wCMEThwgD2zr/NXu73aDcxcLy3Bb0jGKsl1QXNbRgGKDobSA6ZZV7X7qEjngYbbMbuSq
+         JTSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780370239; x=1780975039;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M1YZ6pkpMukmY0PpCar7lQ0cU7Gg/pAjVgGHiG98i3c=;
+        b=lssIa9rHCChofeCY/BNE4EM99qbmzuEDwm8xq7OJw9YD4mdnSlYv+jX1RDGfIImTyL
+         sv3VU5SBmAdGkcuaMERKF7HkkXK3V4w737PzuotDI7wKdMOb5ngDF0aB4+Le+gAT/fZA
+         ABuYcorjw1PBniei5jWCJXt68VLrkHUmyQ6aOTT5Ek7JxYtz2l20UsdjkB1ExbE51Pjz
+         nb3GodCzgWgFhpON0877fPA6nvLPfRSvlNiRqxecAJB1CJEsMEoHrNXY3YFnFaLh1Equ
+         QatlqvNfewGHwWJvvuvRBosQek2CvKEGXmQGbQfh7dMZ0X2ZmqSTwYDd3S1LgSKwGMAL
+         sFUw==
+X-Gm-Message-State: AOJu0YyFQXn2crHEZ1RF0T6WbjzrZrp+HxIVvqaQ7XLK6Dzc0bYQ3B+o
+	5gG2Qm0BtehrTozhqcD9l61N0JuwuPtLkwVSGVp+k3FDpTpRYa9/AiucPxGstY7gbYMDTY/Xoae
+	QR9DD
+X-Gm-Gg: Acq92OEZ2z0YHZ85Ub9dXsTt4Gq8tF/yqg0Cf/JnYWKCkvHXV0HRsWohPK2k4JUT2ZS
+	AMXnlm53jN3sZ/i5/1pjKT1G7uP4h8SLDLptvSskXWc9bNB892Vlql1yY3+wpWqjpsainZJPGlY
+	1mZDg2kqwkW6cPaYkE59tLivhIfuvlrexgyNByEp78QAvz2mQQYxMyMi9P3t1iheilNoKpQ8bfR
+	16wl1rAQdlYtfPiKNtvIXCZBpxoK5z74cE5MCKAEbHWN+vLmkSUqXDcoR9XemKYZojXMVAsrI/V
+	03/NYAxJc327sXWAlcSyPe6TNJMFLdCElNxD3HfOOpl9i+f6Y4xS7oGKuPTS5uhp3L0GjUl1Sj0
+	MkHU4Fpt3wf/71jzNUe3NjJHiARtgSWdakP28aXkou0dnGzjCgddn3A/juHQ+D1n9zc0XHOFQdQ
+	XFPEnlxJMFWQyhuYuw7GrbJAAAvyypuq7zoNr84X3WbbHncPKho4QOrCb3RBxXWNSWEUglnz5K
+X-Received: by 2002:a05:622a:a9c9:20b0:50f:f0be:dc7b with SMTP id d75a77b69052e-5173a7fe8aemr158846631cf.39.1780370239332;
+        Mon, 01 Jun 2026 20:17:19 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51741b29745sm71219081cf.8.2026.06.01.20.17.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 20:17:18 -0700 (PDT)
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: linux-kselftest@vger.kernel.org,
+	rppt@kernel.org,
+	shuah@kernel.org,
+	akpm@linux-foundation.org,
+	linux-mm@kvack.org,
+	skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	corbet@lwn.net,
+	pasha.tatashin@soleen.com,
+	dmatlack@google.com,
+	kexec@lists.infradead.org,
+	pratyush@kernel.org,
+	skhawaja@google.com,
+	graf@amazon.com
+Subject: [PATCH v5 00/13] liveupdate: Remove limits on sessions and files
+Date: Tue,  2 Jun 2026 03:17:04 +0000
+Message-ID: <20260602031717.197696-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <e3d023f1-ab6e-4424-b304-55f1294480c3@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemq500010.china.huawei.com (7.202.194.235)
+Content-Transfer-Encoding: 8bit
 
-On 2026/6/1 21:22, David Hildenbrand (Arm) wrote:
-> On 6/1/26 14:28, Miaohe Lin wrote:
->> On 2026/5/27 22:06, Breno Leitao wrote:
->>> get_any_page() collapses every HWPoisonHandlable() rejection into a
->>> single -EIO via the __get_hwpoison_page() -> -EBUSY -> shake_page()
->>> -> retry path.  That is correct for the transient case (a userspace
->>> folio briefly off LRU during migration or compaction, which a later
->>> shake can drag back), but wrong for stable kernel-owned pages: slab,
->>> page-table, large-kmalloc and PG_reserved pages will never become
->>> HWPoisonHandlable(), so the retry loop is wasted work and the final
->>> -EIO loses the "this is structurally unrecoverable" information.
->>> memory_failure() then maps -EIO into MF_MSG_GET_HWPOISON, which the
->>> panic-on-unrecoverable sysctl deliberately does not act on.
->>>
->>> Introduce HWPoisonKernelOwned(), a small predicate that positively
->>> identifies pages the hwpoison handler cannot recover from:
->>>
->>>   HWPoisonKernelOwned(p, flags) :=
->>>       !(MF_SOFT_OFFLINE && page_has_movable_ops(p)) &&
->>>       (PageReserved(p) || PageSlab(p) ||
->>>        PageTable(p)    || PageLargeKmalloc(p))
->>>
->>> The MF_SOFT_OFFLINE / page_has_movable_ops() opt-out mirrors the
->>> same exception in HWPoisonHandlable(): soft-offline is allowed to
->>> migrate movable_ops pages even though they are not on the LRU, and
->>> we must not pre-empt that with an unrecoverable verdict.
->>>
->>> The list is intentionally not exhaustive.  vmalloc and kernel-stack
->>> pages, for example, do not carry a page_type bit and would need a
->>> different oracle; they keep going through the existing retry path
->>> unchanged.  This is the smallest set we can identify with certainty
->>> by page type.
->>>
->>> Wire the helper into the top of get_any_page() to short-circuit
->>> those pages before the retry loop runs.  On a hit, drop the caller's
->>> MF_COUNT_INCREASED reference (if any) and return -ENOTRECOVERABLE
->>> straight away.  Pages outside the helper's positive list still take
->>> the existing retry path and return -EIO, leaving operator-visible
->>> behaviour for those cases unchanged.
->>>
->>> Extend the unhandlable-page pr_err() to fire for either errno and
->>> update the get_hwpoison_page() kerneldoc to document the new return.
->>>
->>> memory_failure() still folds every negative return into
->>> MF_MSG_GET_HWPOISON via its existing "else if (res < 0)" branch, so
->>> this patch on its own only changes the errno that soft_offline_page()
->>> can propagate to its callers.  A follow-up wires -ENOTRECOVERABLE
->>> through memory_failure() and reports MF_MSG_KERNEL for the
->>> unrecoverable cases, which is what the
->>> panic_on_unrecoverable_memory_failure sysctl observes.
->>
->> Thanks for your patch.
->>
->>>
->>> Suggested-by: David Hildenbrand <david@kernel.org>
->>> Suggested-by: Lance Yang <lance.yang@linux.dev>
->>> Signed-off-by: Breno Leitao <leitao@debian.org>
->>> ---
->>>  mm/memory-failure.c | 42 ++++++++++++++++++++++++++++++++++++++++--
->>>  1 file changed, 40 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->>> index f4d3e6e20e13..8f63bdfeff8f 100644
->>> --- a/mm/memory-failure.c
->>> +++ b/mm/memory-failure.c
->>> @@ -1325,6 +1325,28 @@ static inline bool HWPoisonHandlable(struct page *page, unsigned long flags)
->>>  	return PageLRU(page) || is_free_buddy_page(page);
->>>  }
->>>  
->>> +/*
->>> + * Positive identification of pages the hwpoison handler cannot recover.
->>> + * These page types are owned by kernel internals (no userspace mapping
->>> + * to unmap, no file mapping to invalidate, no migration target), so the
->>> + * shake_page() / retry loop in get_any_page() can never turn them into
->>> + * something HWPoisonHandlable() will accept.  Short-circuit them to
->>> + * -ENOTRECOVERABLE so callers can panic on operator request instead of
->>> + * spinning through retries that exit as a transient-looking -EIO.
->>> + *
->>> + * The MF_SOFT_OFFLINE / page_has_movable_ops() opt-out mirrors
->>> + * HWPoisonHandlable(): soft-offline is allowed to migrate movable_ops
->>> + * pages even though they are not on the LRU.
->>> + */
->>> +static inline bool HWPoisonKernelOwned(struct page *page, unsigned long flags)
->>> +{
->>> +	if ((flags & MF_SOFT_OFFLINE) && page_has_movable_ops(page))
->>> +		return false;
->>> +
->>> +	return PageReserved(page) || PageSlab(page) ||
->>
->> Once shake_page finds a lightweight range-based way to shrink slab, slab pages could be freed
->> into buddy and above PageSlab test should be removed then. Maybe add a TODO or XXX here?
->>
->>> +	       PageTable(page) || PageLargeKmalloc(page);
->>
->> I'm not sure but is it safe or a common way to test PageReserved, PageSlab,
->> PageTable and PageLargeKmalloc without extra page refcnt?
-> 
-> Checking typed pages in a racy fashion is fine (PageSlab, PageTable,
-> PageLargeKmalloc).
+Hi all,
 
-Got it. Thanks.
+This series removes the fixed limits on the number of files that can
+be preserved within a single session, and the total number of sessions
+managed by the Live Update Orchestrator (LUO).
 
-> Checking PageReserved in a racy fashion is fine as well. TESTPAGEFLAG() will
-> allow checking it on compound pages.
+The core of the change is a transition from single contiguous memory
+blocks for metadata serialization to a chain of linked blocks. This
+allows LUO to scale dynamically.
 
-It seems PageReserved is not intended to be set on compound pages. I see there are PF_NO_COMPOUND
-in its definition: PAGEFLAG(Reserved, reserved, PF_NO_COMPOUND).
+1.  ABI Evolution:
+    - Introduced linked-block headers for both file and session
+      serialization.
+    - Bumped session ABI version to v4.
 
-> 
-> For PageLargeKmalloc, we would want to check the head page, though. The page
-> type is only stored for the head page.
+2.  Memory Management & Security:
+    - Implemented a dynamic block allocation and reuse strategy. Blocks
+      are allocated only when existing ones are exhausted and are reused
+      during session/file removal cycles.
+    - Introduced KHO_MAX_BLOCKS (10000) as a safeguard against stupid
+      excessive allocations or corrupted cyclic lists during restore.
 
-Maybe we should check the head page for PageSlab and PageTable too? alloc_slab_page only
-set PageSlab on the head page and __pagetable_ctor uses __folio_set_pgtable to set PageTable
-on folio.
+3.  Expanded Selftests:
+    - Added new kexec-based tests verifying preservation of
+      2000 sessions and 500 files per session.
+    - Added self-tests for many sessions and many files management.
 
-> 
-> So maybe we want to lookup the compound head (if any) and perform the type
-> checks against that?
+Tree: git.kernel.org/pub/scm/linux/kernel/git/tatashin/linux.git
+Branch: luo-remove-max-files-sessions-limits/v5
 
-Maybe we should or we might miss some pages that could have been handled. And
-if compound head is required, should we hold an extra page refcnt to guard against
-possible folio split race?
+Changes v5:
+- Addressed comments from Pratyush:
+  - Renamed kho_block_restore -> kho_block_set_restore, kho_block_destroy -> kho_block_set_destroy.
+  - Renamed block iterator next/read functions to reserve_entry/read_entry.
+  - Added public helpers kho_block_set_head_pa() and kho_block_set_is_empty().
+  - Added validation to treat zero-count blocks as errors during restoration.
+  - Simplified block iterator reading loop from a while to an if statement.
+  - Changed standard WARN_ON macros to WARN_ON_ONCE on iterator allocation checks, and added warning details.
+  - Simplified session serialization by removing a redundant NULL check on sessions_pa.
 
-Thanks.
-.
+Please review.
 
+Thanks,
+Pasha
+
+Pasha Tatashin (13):
+  liveupdate: change file_set->count type to u64 for type safety
+  liveupdate: avoid mixing cleanup guards with goto in
+    luo_session_retrieve_fd
+  liveupdate: centralize state management into struct luo_ser
+  liveupdate: register luo_ser as KHO subtree
+  liveupdate: Extract luo_file_deserialize_one helper
+  liveupdate: Extract luo_session_deserialize_one helper
+  kho: add support for linked-block serialization
+  liveupdate: defer session block allocation and PA setting
+  liveupdate: Remove limit on the number of sessions
+  liveupdate: Remove limit on the number of files per session
+  selftests/liveupdate: Test session and file limit removal
+  selftests/liveupdate: Add stress-sessions kexec test
+  selftests/liveupdate: Add stress-files kexec test
+
+ Documentation/core-api/kho/abi.rst            |   5 +
+ Documentation/core-api/kho/index.rst          |  11 +
+ MAINTAINERS                                   |   1 +
+ include/linux/kho/abi/block.h                 |  56 +++
+ include/linux/kho/abi/luo.h                   | 149 ++-----
+ include/linux/kho_block.h                     | 101 +++++
+ kernel/liveupdate/Makefile                    |   1 +
+ kernel/liveupdate/kho_block.c                 | 390 ++++++++++++++++++
+ kernel/liveupdate/luo_core.c                  |  99 ++---
+ kernel/liveupdate/luo_file.c                  | 206 ++++-----
+ kernel/liveupdate/luo_flb.c                   |  65 +--
+ kernel/liveupdate/luo_internal.h              |  16 +-
+ kernel/liveupdate/luo_session.c               | 241 +++++------
+ tools/testing/selftests/liveupdate/Makefile   |   2 +
+ .../testing/selftests/liveupdate/liveupdate.c |  75 ++++
+ .../selftests/liveupdate/luo_stress_files.c   |  97 +++++
+ .../liveupdate/luo_stress_sessions.c          | 102 +++++
+ .../selftests/liveupdate/luo_test_utils.c     |  24 ++
+ .../selftests/liveupdate/luo_test_utils.h     |   2 +
+ 19 files changed, 1184 insertions(+), 459 deletions(-)
+ create mode 100644 include/linux/kho/abi/block.h
+ create mode 100644 include/linux/kho_block.h
+ create mode 100644 kernel/liveupdate/kho_block.c
+ create mode 100644 tools/testing/selftests/liveupdate/luo_stress_files.c
+ create mode 100644 tools/testing/selftests/liveupdate/luo_stress_sessions.c
+
+
+base-commit: 2935777b418d2bfcbfe96705bb2c0fa6c0d94e18
+-- 
+2.53.0
 
