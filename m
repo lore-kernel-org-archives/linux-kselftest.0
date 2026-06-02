@@ -1,106 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5039D301704;
-	Tue,  2 Jun 2026 05:07:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0555431F9B7
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 05:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780376823; cv=none; b=QTJEqfXADppX1vy84t6lZHcV+oOB1WEZ9EPRTF7OYKuxUVHyRavmTzmtqH6xT6ZQKULnFMzIJCH0W3OnkLeoHzz6orRFbdJXoIR4HCthoLCh2+UeWYFAo15+g6OtCre7J8r8VbQiy+yjOUZeENzbM8Zkq3p2k+7EuFo0IcdtVlw=
+	t=1780378771; cv=none; b=CvsldK0yrHu0ulvQnH9mkhedOmhYVMrAF5GZ/QodMgxpG5VIz6fU2MBGCqeeHXvllaPHNdGjBOa33MRCWeQ/mSdDlB9oWYcj8Yk0kMmyOfpwEGjCuIg+xyvwXkHxbvl99YKftHTO+eP6uEDQq3V2zXYSRb4UM/kvift7wCYaSO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780376823; c=relaxed/simple;
-	bh=2xw4z+denoQtaqUQTWsmf3BYesfCsapdpHSs5vga+Qw=;
-	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MrPUQJtQSKCabMLYUeBDgJgKaboDrLCJm7rOrUPQRBWmjp8b2t3MIoh+4lrnRoELJfAvmH4YoWijfI6sO6vSu2Or+JQ4UYb2aD4XVtIiOOEVWvibavU34ups20/2ygj/5E+HFmxUkRwXzoUejYF/h/40/uYd7xCWzPMHGf04UoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UeN/pKUs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780378771; c=relaxed/simple;
+	bh=+FElo7X9gQac48qz+OcS4RcKHsZ021R7wgrdRHvjKbU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Sm+LA4sW2pC3sOiluD6zVZwJa7TDShE9Ejtc6cpqUbIiIrIDAeUxfT285IbUinyyuCZ5/ISPebjWhNXpadxL/3ZAtmmrXxaMO8X0y0iJEulg8w4LwqzKfC46V3eK8TvfToA1q+DnKDk0FxkoacQ1TcO7rWlhqqPKWIvTCVzhDag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OQYxl1j0; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UeN/pKUs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4321F0089A;
-	Tue,  2 Jun 2026 05:07:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780376822;
-	bh=gFJ8W6CrDyhZmev0pJLOWqhXjFC1ddwFDwPpjpyRgXk=;
-	h=From:To:Subject:Date:In-Reply-To:References;
-	b=UeN/pKUsymmpU95tafi+ZF8dofQOQsE2iqGDbtkpmfL7NVdZEbOMciEjFhT/kzxPn
-	 ppclcD9USPu5PSxvLNDwjt0UP+LDB6yvYMzGz9/13SmVyvB6iBWpMkHmN3NednYMsu
-	 +ecQsIextJsXphEZq1ysJcfk7AEi1CMixPscqCzub8CA4gygG6WKQfqVHm86F6lVsq
-	 TgyFrEHSBMwUXxMpl+D+vxiZj86uuUdfY701D9I4nVecuNkGfP2Nkx41exoFcPyM1D
-	 NGgkYo6f2cF7jATVFFQ57/Rv+A6dCQVZY4m0eEBXquP4azu10y4RS4YETS5qqZfux3
-	 J5J8VG2WyGsdg==
-From: Allison Henderson <achender@kernel.org>
-To: netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	kuba@kernel.org,
-	horms@kernel.org,
-	linux-rdma@vger.kernel.org,
-	achender@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org
-Subject: [PATCH net-next v3 4/4] selftests: rds: report missing RDMA prereqs as XFAIL
-Date: Mon,  1 Jun 2026 22:06:57 -0700
-Message-Id: <20260602050657.26389-5-achender@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260602050657.26389-1-achender@kernel.org>
-References: <20260602050657.26389-1-achender@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OQYxl1j0"
+Message-ID: <f0dde6aa-5e03-4f3d-8fb0-adfdd10cb173@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780378767;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bXk9VIGnTaHw+bzMRwdLOaFGSrYXgWsGbXFL2Z2hI60=;
+	b=OQYxl1j0kkGXsb4fcq2bEWrcwAPahnM9g002pPiQj2JBdN9GHBmEnRpW9R/e5QweUVEgo3
+	N2z2Xan0JKbpjTEpQ7ivdrMi67x/B1LOGlFFMbRZA4CCjwtu5Bh1sftIwXOTo6ABvOZfdm
+	sfn9R3vMcAm13gSarI+aliCm/S5PKI4=
+Date: Tue, 2 Jun 2026 13:38:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf v3 1/2] bpf: Update transport_header when
+ encapsulating UDP tunnel in lwt
+Content-Language: en-US
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Guillaume Nault <gnault@redhat.com>,
+ Ido Schimmel <idosch@nvidia.com>,
+ Fernando Fernandez Mancera <fmancera@suse.de>,
+ Peter Oskolkov <posk@google.com>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com, Leon Hwang <leon.huangfu@shopee.com>
+References: <20260601150203.20352-1-leon.hwang@linux.dev>
+ <20260601150203.20352-2-leon.hwang@linux.dev>
+ <0fecd90a-d218-48dc-86d1-860ab2e7f6d5@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <0fecd90a-d218-48dc-86d1-860ab2e7f6d5@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Make the RDMA test return XFAIL rather than skip when RXE is not
-available, since the RDMA datapath is not run in netdev CI.
+On 2/6/26 11:17, Jiayuan Chen wrote:
+> 
+> On 6/1/26 11:02 PM, Leon Hwang wrote:
+[...]
+>> @@ -637,6 +644,10 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb,
+>> void *hdr, u32 len, bool ingress)
+>>       if (ingress)
+>>           skb_postpush_rcsum(skb, iph, len);
+>>       skb_reset_network_header(skb);
+>> +    if (ipv4 && is_udp_tunnel)
+>> +        skb_set_transport_header(skb, skb_network_offset(skb) + iph-
+>> >ihl * 4);
+>> +    else if (!ipv4 && is_udp_tunnel)
+>> +        skb_set_transport_header(skb, skb_network_offset(skb) +
+>> sizeof(struct ipv6hdr));
+> 
+> 
+> I think GRE is also affected, why not unconditionally set transport
+> header to network_offset + outer_ip_ihl regardless of outer protocol??
+> 
 
-Change the three RDMA-prerequisite checks in check_rdma_conf() and
-check_rdma_conf_enabled() to exit with KSFT_XFAIL (2) and tag their
-messages [XFAIL] instead of [SKIP].
+Probably, yes. But, I'm not sure about this.
 
-Signed-off-by: Allison Henderson <achender@kernel.org>
----
- tools/testing/selftests/net/rds/rds_run.sh | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+At Shopee, we encountered the issue that the VxLAN packets encapsulated
+with lwt-bpf were dropped on ice driver. And, it is to be fixed by this
+patch.
 
-diff --git a/tools/testing/selftests/net/rds/rds_run.sh b/tools/testing/selftests/net/rds/rds_run.sh
-index f01c81415331f..cdf487ec97dcc 100755
---- a/tools/testing/selftests/net/rds/rds_run.sh
-+++ b/tools/testing/selftests/net/rds/rds_run.sh
-@@ -123,10 +123,10 @@ check_rdma_conf_enabled() {
- 		probe_module "$2"
- 		return
- 	fi
--	echo "selftests: [SKIP] rdma transport requires $1 enabled"
-+	echo "selftests: [XFAIL] rdma transport requires $1 enabled"
- 	echo "To enable, run" \
- 	     "tools/testing/selftests/net/rds/config.sh -r and rebuild"
--	exit 4
-+	exit 2
- }
- 
- # Load the module backing a config that is built as a loadable module
-@@ -148,7 +148,7 @@ check_conf() {
- }
- 
- # Check kernel config and host environment for RDS-RDMA support.
--# Exits with SKIP (4) if the user requested rdma but prerequisites
-+# Exits with XFAIL (2) if the user requested rdma but prerequisites
- # are not met.
- check_rdma_conf()
- {
-@@ -163,9 +163,9 @@ check_rdma_conf()
- 	check_rdma_conf_enabled CONFIG_RDS_RDMA rds_rdma
- 
- 	if ! which rdma > /dev/null 2>&1; then
--		echo "selftests: [SKIP] rdma transport requires the 'rdma'" \
--		      " tool (iproute2)"
--		exit 4
-+		echo "selftests: [XFAIL] rdma transport requires the 'rdma'" \
-+		      "tool (iproute2)"
-+		exit 2
- 	fi
- }
- 
--- 
-2.25.1
+IOW, if someone encounter the same issue for GRE packets, he can fix the
+issue by the same way.
+
+Thanks,
+Leon
+
+>>       memcpy(skb_network_header(skb), hdr, len);
+>>       bpf_compute_data_pointers(skb);
+>>       skb_clear_hash(skb);
 
