@@ -1,164 +1,162 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6013C3D16F5;
-	Tue,  2 Jun 2026 09:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3438A3D1AA0;
+	Tue,  2 Jun 2026 09:42:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780393317; cv=none; b=d4exKQ8VKXTt0H9m4GQnjOj3JGueXv5sG8Eo6nwUO1zyTf10Rx6S5JasDkIAwSktkP9Rg6721pJWw2crhtjNprkhqP25AlNtnl6UEfNrEW1HF8K1SCyYcJJ8UFoxgQ1k5FUEBbuG/msZAESFYwzx7Hdcb7itQfb4alciiABakjc=
+	t=1780393363; cv=none; b=EEipHemI2eg/LNfH240L6lczFiN0qG2hw2FZIKJrcyRbjZi5wGwPFQthfogJ+9iYGO0Lu0YePqaMQSK1wQy24G9n2BFPdNtihCj7/FvG17ekUFwvwTS5fVIzv2iTbmvqBQ8pDFuPOgJdH4NFPPTIWYcRFseBzYBso1ppEtVmtMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780393317; c=relaxed/simple;
-	bh=+VZaNIRt8hQU4ylEHndWxmW1KleEAsKp7O5WEsHnvMg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hOQ4gW6P10ZE1JkZ+0wHfeaDvPmNdWyNEk9D5jHbkJQdLzpbDwgJquB1yBTTWXBh9fTIlQ+exJXk4XyRlI56Wd5pqr+SfS3CfyPiY2QsA+S3z+Tv08mwAXaHtYTDjMpqr+wamgRt8lrGS0fXgj3MbmjULVdWqgGZDVgcj7MO2/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NB4tv7lD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780393363; c=relaxed/simple;
+	bh=h2KZe2EmYRBf5jakX+ffYVY0B/63VVQcW+dzSu28EAI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BeLr+3zrCzpz1z0lq/H9tKYvw2PfnC7kC0mMQuL6yN2LtxJUSwr4uHDmG4D10G1VWKPz2qCdOw++En6W6mCQeuHmoX68jH8OQJikj4HGmJO1T47VPxg1hWb+Ovl1aSS6oiFgp38827MA2q3nAWq5blZpyJNn2m5l7eSeIA3abI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CVD+mg+C; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NB4tv7lD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727E01F00893;
-	Tue,  2 Jun 2026 09:41:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CVD+mg+C"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 616C71F00893;
+	Tue,  2 Jun 2026 09:42:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780393315;
-	bh=vT4GhybZ63q/C77icFjfDw2+SgkthJIdZFmZoFl7XsQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=NB4tv7lD0sn2xWMbkfISkEKc9+jTV/l+aDD2meGk9UhivS0/j4YBKNhZDevi7M0Hq
-	 qnao6MXfp6z9UH1rB+ftvHDJtJJ2KhlbvD64xsvjyeSeRvoLWGGiAonzpitEYoJjZH
-	 NPU4azq1xakAFt8Io5EAj7o1BEiJRy2iNquMic1cAgj/CgQyTBj5ffPr37OxMGy8cv
-	 7nLLRmwioFPYLpV8oPN6pYDl7a7SmRyzXZz2f3MdMT7qBcsh8oF1nmqr0t6guwiK55
-	 O8pEYPH4wDyKPzpRcgHHm/LE4HY8cavsevtuqm/AjlJZuMzeld5kaVBY9Uo6buYPmq
-	 cNS2kxQTNcTTA==
-Message-ID: <21732071-14a1-486a-951c-34de97b7c757@kernel.org>
-Date: Tue, 2 Jun 2026 11:41:50 +0200
+	s=k20260515; t=1780393361;
+	bh=tQYJrVMLZWh9yIT7btTVUgpKt7qkNI8vd7jCerpn1yg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=CVD+mg+CESoolImg1Imn7In3BgToyvXQdkwaN6Fc3LpVLmjodUVI51+Juv8gAghmo
+	 jjMIAIFLZc2M/BMqhcEbYAluSF0M96tWWJs2djlqnyX5M7/GkXr0/FaQNyF0DXD+bH
+	 A1HUD9XyNPGwLIRci+szwn4jZEZWT7/x9XzkLWiPFKLOpDL+CD2me2gaspMzBlgQu1
+	 ToJHfxh7NymTEH6PxGxCuezyRUzpG0sowq3GTP4ZSszHYohXe9VxspvORrfMfETw+T
+	 lUZakefMNzQ5pHR1FFjAWnr9qtV6G6j2IiQs1W6efOf0s2w2M8Om9D6KyzMlio4kTU
+	 em0JW45AkWgRQ==
+Date: Tue, 2 Jun 2026 10:42:35 +0100
+From: Keith Busch <kbusch@kernel.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
+	linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 8/9] block: add configurable error injection
+Message-ID: <ah6li1JOGrpXor9W@kbusch-mbp>
+References: <20260602054615.3788425-1-hch@lst.de>
+ <20260602054615.3788425-9-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 2/6] mm/memory-failure: surface unhandlable kernel
- pages as -ENOTRECOVERABLE
-To: Miaohe Lin <linmiaohe@huawei.com>, Breno Leitao <leitao@debian.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, kernel-team@meta.com,
- Lance Yang <lance.yang@linux.dev>, Andrew Morton
- <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Naoya Horiguchi <nao.horiguchi@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- "Liam R. Howlett" <liam@infradead.org>
-References: <20260527-ecc_panic-v8-0-9ea0cfa16bb0@debian.org>
- <20260527-ecc_panic-v8-2-9ea0cfa16bb0@debian.org>
- <19f968f5-1289-f573-4406-e5c91dcd8923@huawei.com>
- <e3d023f1-ab6e-4424-b304-55f1294480c3@kernel.org>
- <33ef8821-c809-b7d1-ea77-6e8a07a6e784@huawei.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <33ef8821-c809-b7d1-ea77-6e8a07a6e784@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260602054615.3788425-9-hch@lst.de>
 
-On 6/2/26 05:08, Miaohe Lin wrote:
-> On 2026/6/1 21:22, David Hildenbrand (Arm) wrote:
->> On 6/1/26 14:28, Miaohe Lin wrote:
->>>
->>> Thanks for your patch.
->>>
->>>
->>> Once shake_page finds a lightweight range-based way to shrink slab, slab pages could be freed
->>> into buddy and above PageSlab test should be removed then. Maybe add a TODO or XXX here?
->>>
->>>
->>> I'm not sure but is it safe or a common way to test PageReserved, PageSlab,
->>> PageTable and PageLargeKmalloc without extra page refcnt?
->>
->> Checking typed pages in a racy fashion is fine (PageSlab, PageTable,
->> PageLargeKmalloc).
-> 
-> Got it. Thanks.
-> 
->> Checking PageReserved in a racy fashion is fine as well. TESTPAGEFLAG() will
->> allow checking it on compound pages.
-> 
-> It seems PageReserved is not intended to be set on compound pages. I see there are PF_NO_COMPOUND
-> in its definition: PAGEFLAG(Reserved, reserved, PF_NO_COMPOUND).
-> 
->>
->> For PageLargeKmalloc, we would want to check the head page, though. The page
->> type is only stored for the head page.
-> 
-> Maybe we should check the head page for PageSlab and PageTable too? alloc_slab_page only
-> set PageSlab on the head page and __pagetable_ctor uses __folio_set_pgtable to set PageTable
-> on folio.
-> 
->>
->> So maybe we want to lookup the compound head (if any) and perform the type
->> checks against that?
-> 
-> Maybe we should or we might miss some pages that could have been handled. And
-> if compound head is required, should we hold an extra page refcnt to guard against
-> possible folio split race?
+On Tue, Jun 03, 2026 at 07:45:40AM +0200, Christoph Hellwig wrote:
+> +static int error_inject_add(struct gendisk *disk, enum req_op op,
+> +		sector_t start, u64 nr_sectors, blk_status_t status,
+> +		unsigned int chance)
+> +{
+> +	struct blk_error_inject *inj;
+> +
+> +	if (op == REQ_OP_LAST)
+> +		return -EINVAL;
+> +	if (status == BLK_STS_OK)
+> +		return -EINVAL;
+> +	if (U64_MAX - nr_sectors < start)
+> +		return -EINVAL;
+> +
+> +	if (!nr_sectors)
+> +		nr_sectors = U64_MAX;
+> +
 
-Races are fine. We might miss some pages, but that can happen on races either way.
+...
 
+> +
+> +	inj->op = op;
+> +	inj->start = start;
+> +	inj->end = start + nr_sectors - 1;
 
-I'd just do something like
+When nr_sectors is 0, it is reset to U64_MAX so overflows if start > 1.
+I think you want to remove overriding nr_sectors to U64_MAX and do:
 
-if (PageReserved(page))
-	return true;
+	if (!nr_sectors)
+		inj->end = U64_MAX;
+	else if (U64_MAX - nr_sectors < start )
+		return -EINVAL;
+	else
+		inj->end = start + nr_sectors - 1;
 
-head = compound_head(page);
-return PageSlab(head) || ...;
-	
+> +	inj->status = status;
+> +	inj->chance = chance;
+> +
+> +	/*
+> +	 * Add to the front of the list so that newer entries can partially
+> +	 * override other entries.  This also intentional allows duplicate
+> +	 * entries as there is no real reason to reject them.
+> +	 */
+> +	mutex_lock(&disk->error_injection_lock);
+> +	if (!disk_live(disk)) {
+> +		mutex_unlock(&disk->error_injection_lock);
+> +		return -EINVAL;
 
--- 
-Cheers,
+I think we've leaked 'inj' in this error case.
 
-David
+> +	}
+> +	list_add(&inj->entry, &disk->error_injection_list);
+
+The __blk_error_inject interates this list with
+"list_for_each_entry_rcu", so shouldn't this be list_add_rcu to match?
+
+> +	mutex_unlock(&disk->error_injection_lock);
+> +
+> +	bdev_set_flag(disk->part0, BD_MAKE_IT_FAIL);
+> +	return 0;
+> +}
+
+<snip>
+
+> +static const match_table_t opt_tokens = {
+> +	{ Opt_add,			"add",			},
+> +	{ Opt_removeall,		"removeall",		},
+> +	{ Opt_op,			"op=%s",		},
+> +	{ Opt_start,			"start=%u"		},
+> +	{ Opt_nr_sectors,		"nr_sectors=%u"		},
+
+Shouldn't start and nr_sectors use %llu?
+
+> +static ssize_t blk_error_injection_write(struct file *file,
+> +		const char __user *ubuf, size_t count, loff_t *pos)
+> +{
+
+...
+
+> +	options = memdup_user_nul(ubuf, count);
+> +	if (!options)
+> +		return -ENOMEM;
+> +
+
+On failure, memdup_user_nul returns an ERR_PTR rather than NULL.
+
+	if (IS_ERR(options))
+		return PTR_ERR(options);
+
+> +	case Removeall:
+> +		if (option_mask & ~Opt_removeall)
+> +			return -EINVAL;
+
+Leaking "options"? Should this be:
+
+		if (option_mask & ~Opt_removeall) {
+			ret = -EINVAL;
+			goto out_free_options;
+		}
+
+?
+
+> +		error_inject_removall(disk);
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	if (!ret)
+> +		ret = count;
+> +out_free_options:
+> +	kfree(options);
+> +	return ret;
+> +}
