@@ -1,20 +1,20 @@
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB72E376BDE;
-	Tue,  2 Jun 2026 07:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E183D37881F;
+	Tue,  2 Jun 2026 07:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780383688; cv=none; b=aOh/VfqU5esVXUuPC54X2QfrTtdQdyoBmsumKngRO7BTm9hwdVHe6t4bN1sS4t9i0aPwAhsMcOfy13W/yEBE+tPa8ALl8DC9/d5IzY5BJ9axyK+SZnsCEexKsnVbZYtWT1FkxhNZARIlIBhfJ/ywXIe8INGNq8SwI/eDYvSeWx8=
+	t=1780383692; cv=none; b=t3QlOJpur+YG/rJXwkW733T1o/jn5ozqY2sbMpwqPPFerMLd+s0xLeRVN5ejxh7i8+1jKhuLoQd9mgsVmClh5Qp9mfGyNQrQCYXP7JTeULsvumW72nFrbhu61TEjaVSL/6mWwo2cb2PGr9hpbctTsqynsm/HTiaXicNcF+DzFng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780383688; c=relaxed/simple;
-	bh=n7SEmrNf7oYBmWM7AqdM+cz0amqbl0zRVVHo50J9kyY=;
+	s=arc-20240116; t=1780383692; c=relaxed/simple;
+	bh=rYzzgMIenavqv3fLe1ykLvdra6+nW+cwsCVuYgErpsE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qkD6pjQDYpIzSaq3tbd789ZlV5qKI40oY3X0BAmUKtYO0woKJFvFbcRALvMlSxHVRmu6qfa9VNYxbBKNJIplveAhbaSG0lL3k7pG8ugHCdvPwj9+ZcPBykCA60GKi2vzzkifB+hX8Ap+tivoizte+cNDn5hq9jka+IumHllM+2I=
+	 MIME-Version; b=hKO/33X7eiskzsE/zORK0/I2Mz8xScqoW+ahrL7YgE7cvjnAfwoc8uO4n2hz+0I8G2Bu6uoFmwwxF+IYb87AV06dxfLHsJW+rvLqrmNCBRXuHrCik/Hhvvbbsdi7cOGLIfmMOLhGNDUR3mBR3V7+Th22vP0V5KYH2nitBz03eps=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: dbadac1e5e5011f1aa26b74ffac11d73-20260602
+X-UUID: dd1643185e5011f1aa26b74ffac11d73-20260602
 X-CTIC-Tags:
 	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
 	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
@@ -24,27 +24,27 @@ X-CTIC-Tags:
 	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
 	DMARC_NOPASS
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:29db0387-8b76-4ec5-b199-cd19f83432fa,IP:10,
-	URL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:-15
-X-CID-INFO: VERSION:1.3.12,REQID:29db0387-8b76-4ec5-b199-cd19f83432fa,IP:10,UR
-	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-15
-X-CID-META: VersionHash:e7bac3a,CLOUDID:c3dddf1240dad5b35a2cf5d45f6fa65b,BulkI
-	D:260602150121V761FI59,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
-	2|127|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:ni
-	l,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,
-	BRR:0,BRE:0,ARC:0
+X-CID-O-INFO: VERSION:1.3.12,REQID:2ecbba3a-7ab7-4152-bc62-d9f6de53d407,IP:10,
+	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:5
+X-CID-INFO: VERSION:1.3.12,REQID:2ecbba3a-7ab7-4152-bc62-d9f6de53d407,IP:10,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:5
+X-CID-META: VersionHash:e7bac3a,CLOUDID:c4300c857a7c370f3b1234fe22f7ea71,BulkI
+	D:260602150124O4N0VTTT,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
+	2|127|136|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,R
+	T:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DK
+	P:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: dbadac1e5e5011f1aa26b74ffac11d73-20260602
+X-UUID: dd1643185e5011f1aa26b74ffac11d73-20260602
 X-User: lihongfu@kylinos.cn
 Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
 	(envelope-from <lihongfu@kylinos.cn>)
 	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1179263228; Tue, 02 Jun 2026 15:01:20 +0800
+	with ESMTP id 148449013; Tue, 02 Jun 2026 15:01:22 +0800
 From: Hongfu Li <lihongfu@kylinos.cn>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -59,9 +59,9 @@ Cc: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Hongfu Li <lihongfu@kylinos.cn>
-Subject: [PATCH v6 2/5] selftests/mm: unify pkey sighandler selftest assertions and tracing
-Date: Tue,  2 Jun 2026 15:01:16 +0800
-Message-Id: <20260602070119.1452308-3-lihongfu@kylinos.cn>
+Subject: [PATCH v6 3/5] selftests/mm: use pkey_assert on clone_raw failure in pkey test
+Date: Tue,  2 Jun 2026 15:01:17 +0800
+Message-Id: <20260602070119.1452308-4-lihongfu@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260602070119.1452308-1-lihongfu@kylinos.cn>
 References: <20260602070119.1452308-1-lihongfu@kylinos.cn>
@@ -73,208 +73,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add per-test tracing to the pkey signal-handler selftest and use
-pkey_assert() for error handling. Each test enables tracing at start
-and disables it at end; on failure, pkey_assert() calls abort_hooks()
-to turn tracing off so ftrace is not left enabled.
+Use pkey_assert(0) instead of perror("clone") when clone_raw() fails.
+The old path only printed an error and continued; the test now exits
+via pkey_assert() on failure so it does not hang or proceed with an
+invalid child.
 
 Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
 ---
- .../selftests/mm/pkey_sighandler_tests.c      | 69 ++++++++++---------
- 1 file changed, 36 insertions(+), 33 deletions(-)
+ tools/testing/selftests/mm/pkey_sighandler_tests.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-index 302fef54049c..085e771227fb 100644
+index 085e771227fb..882928f2912b 100644
 --- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
 +++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-@@ -19,7 +19,6 @@
- #include <stdint.h>
- #include <stdbool.h>
- #include <signal.h>
--#include <assert.h>
- #include <stdlib.h>
- #include <sys/mman.h>
- #include <sys/types.h>
-@@ -36,6 +35,10 @@ static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
- static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
- static siginfo_t siginfo = {0};
+@@ -333,7 +333,7 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
  
-+int iteration_nr = 1;
-+int test_nr;
-+int dprint_in_signal;
-+
- /*
-  * We need to use inline assembly instead of glibc's syscall because glibc's
-  * syscall will attempt to access the PLT in order to call a library function
-@@ -207,15 +210,14 @@ static void test_sigsegv_handler_with_pkey0_disabled(void)
- 	struct sigaction sa;
- 	pthread_attr_t attr;
- 	pthread_t thr;
-+	int ret;
+ 	if (ret < 0) {
+ 		errno = -ret;
+-		perror("clone");
++		pkey_assert(0);
+ 	} else if (ret == 0) {
+ 		thread_segv_maperr_ptr(&sigstack);
+ 		syscall_raw(SYS_exit, 0, 0, 0, 0, 0, 0);
+@@ -506,7 +506,7 @@ static void test_pkru_sigreturn(void)
  
- 	sa.sa_flags = SA_SIGINFO;
- 
- 	sa.sa_sigaction = sigsegv_handler;
- 	sigemptyset(&sa.sa_mask);
--	if (sigaction(SIGSEGV, &sa, NULL) == -1) {
--		perror("sigaction");
--		exit(EXIT_FAILURE);
--	}
-+	ret = sigaction(SIGSEGV, &sa, NULL);
-+	pkey_assert(ret == 0);
- 
- 	memset(&siginfo, 0, sizeof(siginfo));
- 
-@@ -247,15 +249,14 @@ static void test_sigsegv_handler_cannot_access_stack(void)
- 	struct sigaction sa;
- 	pthread_attr_t attr;
- 	pthread_t thr;
-+	int ret;
- 
- 	sa.sa_flags = SA_SIGINFO;
- 
- 	sa.sa_sigaction = sigsegv_handler;
- 	sigemptyset(&sa.sa_mask);
--	if (sigaction(SIGSEGV, &sa, NULL) == -1) {
--		perror("sigaction");
--		exit(EXIT_FAILURE);
--	}
-+	ret = sigaction(SIGSEGV, &sa, NULL);
-+	pkey_assert(ret == 0);
- 
- 	memset(&siginfo, 0, sizeof(siginfo));
- 
-@@ -288,21 +289,20 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
- 	int parent_pid = 0;
- 	int child_pid = 0;
- 	u64 pkey_reg;
-+	long ret;
- 
- 	sa.sa_flags = SA_SIGINFO | SA_ONSTACK;
- 
- 	sa.sa_sigaction = sigsegv_handler;
- 
- 	sigemptyset(&sa.sa_mask);
--	if (sigaction(SIGSEGV, &sa, NULL) == -1) {
--		perror("sigaction");
--		exit(EXIT_FAILURE);
--	}
-+	ret = sigaction(SIGSEGV, &sa, NULL);
-+	pkey_assert(ret == 0);
- 
- 	stack = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
- 		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
- 
--	assert(stack != MAP_FAILED);
-+	pkey_assert(stack != MAP_FAILED);
- 
- 	/* Allow access to MPK 0 and MPK 1 */
- 	pkey_reg = pkey_reg_restrictive_default();
-@@ -323,7 +323,7 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
- 	memset(&siginfo, 0, sizeof(siginfo));
- 
- 	/* Use clone to avoid newer glibcs using rseq on new threads */
--	long ret = clone_raw(CLONE_VM | CLONE_FS | CLONE_FILES |
-+	ret = clone_raw(CLONE_VM | CLONE_FS | CLONE_FILES |
- 			     CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
- 			     CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
- 			     CLONE_DETACHED,
-@@ -358,6 +358,7 @@ static void test_pkru_preserved_after_sigusr1(void)
- {
- 	struct sigaction sa;
- 	u64 pkey_reg;
-+	int ret;
- 
- 	/* Allow access to MPK 0 and an arbitrary set of keys */
- 	pkey_reg = pkey_reg_restrictive_default();
-@@ -369,10 +370,8 @@ static void test_pkru_preserved_after_sigusr1(void)
- 
- 	sa.sa_sigaction = sigusr1_handler;
- 	sigemptyset(&sa.sa_mask);
--	if (sigaction(SIGUSR1, &sa, NULL) == -1) {
--		perror("sigaction");
--		exit(EXIT_FAILURE);
--	}
-+	ret = sigaction(SIGUSR1, &sa, NULL);
-+	pkey_assert(ret == 0);
- 
- 	memset(&siginfo, 0, sizeof(siginfo));
- 
-@@ -444,6 +443,13 @@ static void test_pkru_sigreturn(void)
- 	int parent_pid = 0;
- 	int child_pid = 0;
- 	u64 pkey_reg;
-+	long ret;
-+
-+	/*
-+	 * SIGSEGV handler is reset to SIG_DFL below; turn tracing off first
-+	 * so a crash does not leave ftrace enabled.
-+	 */
-+	tracing_off();
- 
- 	sa.sa_handler = SIG_DFL;
- 	sa.sa_flags = 0;
-@@ -453,24 +459,20 @@ static void test_pkru_sigreturn(void)
- 	 * For this testcase, we do not want to handle SIGSEGV. Reset handler
- 	 * to default so that the application can crash if it receives SIGSEGV.
- 	 */
--	if (sigaction(SIGSEGV, &sa, NULL) == -1) {
--		perror("sigaction");
--		exit(EXIT_FAILURE);
--	}
-+	ret = sigaction(SIGSEGV, &sa, NULL);
-+	pkey_assert(ret == 0);
- 
- 	sa.sa_flags = SA_SIGINFO | SA_ONSTACK;
- 	sa.sa_sigaction = sigusr2_handler;
- 	sigemptyset(&sa.sa_mask);
- 
--	if (sigaction(SIGUSR2, &sa, NULL) == -1) {
--		perror("sigaction");
--		exit(EXIT_FAILURE);
--	}
-+	ret = sigaction(SIGUSR2, &sa, NULL);
-+	pkey_assert(ret == 0);
- 
- 	stack = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
- 		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
- 
--	assert(stack != MAP_FAILED);
-+	pkey_assert(stack != MAP_FAILED);
- 
- 	/*
- 	 * Allow access to MPK 0 and MPK 2. The child thread (to be created
-@@ -494,7 +496,7 @@ static void test_pkru_sigreturn(void)
- 	sigstack.ss_size = STACK_SIZE;
- 
- 	/* Use clone to avoid newer glibcs using rseq on new threads */
--	long ret = clone_raw(CLONE_VM | CLONE_FS | CLONE_FILES |
-+	ret = clone_raw(CLONE_VM | CLONE_FS | CLONE_FILES |
- 			     CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
- 			     CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
- 			     CLONE_DETACHED,
-@@ -530,16 +532,17 @@ static void (*pkey_tests[])(void) = {
- 
- int main(int argc, char *argv[])
- {
--	int i;
--
- 	ksft_print_header();
- 	ksft_set_plan(ARRAY_SIZE(pkey_tests));
- 
- 	if (!is_pkeys_supported())
- 		ksft_exit_skip("pkeys not supported\n");
- 
--	for (i = 0; i < ARRAY_SIZE(pkey_tests); i++)
--		(*pkey_tests[i])();
-+	for (test_nr = 0; test_nr < ARRAY_SIZE(pkey_tests); test_nr++) {
-+		tracing_on();
-+		(*pkey_tests[test_nr])();
-+		tracing_off();
-+	}
- 
- 	ksft_finished();
- 	return 0;
+ 	if (ret < 0) {
+ 		errno = -ret;
+-		perror("clone");
++		pkey_assert(0);
+ 	}  else if (ret == 0) {
+ 		thread_sigusr2_self(&sigstack);
+ 		syscall_raw(SYS_exit, 0, 0, 0, 0, 0, 0);
 -- 
 2.25.1
 
