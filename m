@@ -1,85 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43FB367B66;
-	Tue,  2 Jun 2026 21:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314FA38B122
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 21:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780436413; cv=none; b=qwKMzDiuPoCFKIxa4dQcsTjTdqXWBJEMFfHjIQyF1ZFZ16gTg8DbUvNACoFCUeGeKAFN5Qp71joAOWQyEkM5LDqOwl0aufSOBkKuhaQ7Jo4hkkDYe+JaTnTXlHbEnGrz4HmUh22vPUzdjlHUWp+cAVB3/QhALQAjdxAsE44ti0o=
+	t=1780437366; cv=none; b=uGwLxqUSwaXqzt1dNUPI/mlZs8AGUl9yrT3BfJiSEPyk5lIB+dtqintumHedSq23UeoCsEpIcDREDB2l+h2iqoiIYUu0v2dALAnsNnglVH54lmA4xPx9txVA7nHuN0AkAd8WUn0wyK8+JMpIQ/eXzk+ZoFzZhz4dkZlhWjrmCw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780436413; c=relaxed/simple;
-	bh=6cKaEOaoo1bEteb2wlOi3/V5XATgUszrwu2Rv7lF7Ok=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=X0eadwoPtkHrfNRbC0vMB8y6Yh5B1j0Q8/Dfh1r4yDKYkH8KEql782kLq786Uz2wLOFFwa33g1oVR9V6JpVj/WEe8n+VxK4mKpcHZHCnTpl7ArRD8Yquc2Gz2TKE7ajsno50YH2VehUyXVEb3zsW+SiWV/IlXeAaCNhr/AZ+2SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RoXqJAii; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780437366; c=relaxed/simple;
+	bh=hNGRPXZPv9VsFGCFlzGsilsBaOfx9YAE5+5vnJAC+ps=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=FcSGlH5MPvqsaMbPYCu7z2AcvaYsZUTp9mOK20+vV2+Fit0TYd7ZqyMKiiOVs5wLWiisxyMM19IMSMxbSaToh75iawlP7BSGTreUV+OIlnhPe92xaHyTsEw+p1eTYwNOSM6877wcK9lu2Sz43vKTBTD0ojfYhelCRxDXGj9vSkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s7X6SGo2; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RoXqJAii"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 897B11F00893;
-	Tue,  2 Jun 2026 21:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780436412;
-	bh=95pCHA2AVt+MKJZiKdXWN6AGeolznLP12Am6KewOb4A=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=RoXqJAiiY040OGICFwjwOhG9gRrZadvwxIskO+Ck4iydkbTfxBj5bbKQ7bGaLZl+8
-	 LlSXADi3IiTswxmcJ7Ok5/sQ42rV+tDgWryKFj0ShP9plUSU7XsnUSsEp4gQIqBc+q
-	 jqOtSM70/Jd36LZO34VMgVSMTtiR5mc8vPvy2pSgbF+I1l3ze+CKjixCf54Wn1ffW6
-	 wYY3h/uNM/1FIWa/Rdc9N62djKMUQpZvi2CXmwg3GGEa6UQkcf41tpRHBJQS2CYDRL
-	 qdf7qx2VZPozGFv62oQ4PR0TxS5/MRoWGaTGb9TooU0M7NqiWpBGLNag/M3EFnwDHI
-	 Ug/D7gDauVaMQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A8D3811A76;
-	Tue,  2 Jun 2026 21:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s7X6SGo2"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2c0c32faa62so53873705ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 14:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780437364; x=1781042164; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=y7tMKLqZLoUguahKVkzXwJunwH2CC8Y+lNvapE/6WPM=;
+        b=s7X6SGo2eyAveVu+TUdTSMp8gBuV+ImpQGVebhJRxmab11A4TNO6Nndo3540M4AtwZ
+         UbnZ0AVnF5gL2K3nPb+moFKsNIbptYBsfbZ4GGiVtmcY4qnOJgHHujeKXX17V4YKTu0U
+         fZBsg6ZBhTpIjv8PowTdFBDvnI3nbREtKDTWqksFiCVH6YtModnKW3aeGhF1oyW+cYPS
+         iT9YDCULFyoxVaXGW2z26pURPRIHuTT76hu3nDSz5PTCHc9qjYcYNejdVUkwge/rXZMV
+         q/TdwEAB2QNZUTLSEuDiu6SmQGMgTq0R2OneZAwR1Rt00eoEnvEGo7gKgHxBDV4GgEsM
+         w4jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780437364; x=1781042164;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y7tMKLqZLoUguahKVkzXwJunwH2CC8Y+lNvapE/6WPM=;
+        b=OeVKVqXKHjFYwo3OKUv/V3gN9/f3MO4ffHLgP3LRF34ah//bkSxT91i7zFzpE3LI7R
+         2v6fLooOE2/ESLM5XjMd6ppHoVNQnaK5XEIU2tCiDaaq2Y9zsnTEW2XrFVYWzPstw11L
+         Hwn5Btltw7DCabNQ4EIumB6nGD72u8xchXdgPA/LbwdzrnMaZwCo4i7TEbKaGf3QRf0V
+         uukN4ch7ZpVEROfRRjh4sFQBPQ6XherjuyigbEUwxzdB26BZv6hv4X5Lmg/BuKqwl0Sm
+         1Fg7zR53VPPCrWf+SqKLEvE3iFqh7AzAU5RpNDkYo2MqIFcNp3mqdgxWYArmJdwwC88b
+         niEQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9j7sHyhMgb8+caQcsc0c5Xo5XqrHWYeG2As6+tSuEvn9Fe8aqcIqMoMn2CtddXj0hhzajL/DU/CSU29ID8fTs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVLFC5R1rwEXzLL4m7mes6mSFaLVV71PNIBociCigPwll102Au
+	35RYzTsBsp0Un26QR57WSp10EZl4L8SoQzEkOcCQ7YwjnRJteGJz2kn5eNx2jybE0OKxg6c15WY
+	S+XaT0g==
+X-Received: from plbbh1.prod.google.com ([2002:a17:902:a981:b0:2bd:bfca:529b])
+ (user=wyihan job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:c948:b0:2b2:4d36:7aa
+ with SMTP id d9443c01a7336-2c1644cab59mr5323895ad.35.1780437364217; Tue, 02
+ Jun 2026 14:56:04 -0700 (PDT)
+Date: Tue, 02 Jun 2026 21:55:40 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v5] selftests: openvswitch: add dec_ttl action
- support and test
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178043641414.1060922.17896897180668119864.git-patchwork-notify@kernel.org>
-Date: Tue, 02 Jun 2026 21:40:14 +0000
-References: <20260530021443.1734484-1-houminxi@gmail.com>
-In-Reply-To: <20260530021443.1734484-1-houminxi@gmail.com>
-To: Minxi Hou <houminxi@gmail.com>
-Cc: netdev@vger.kernel.org, aconole@redhat.com, davem@davemloft.net,
- echaudro@redhat.com, edumazet@google.com, horms@kernel.org,
- i.maximets@ovn.org, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
- dev@openvswitch.org, linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAFxRH2oC/x3MQQqDMBBG4avIrDsgQWvwKuJiav60A0ZlQqUi3
+ t3Q5fcW76QMU2Tqq5MMu2Zdl4LmUdH0keUN1lBMrnbPunUdJ6TVDo6i89fAKXLALAcCR/1xF1r xsREv/kXlsRlK/v+H8bpu5AUH/28AAAA=
+X-Change-Id: 20260527-memory-failure-mf-delayed-fix-7d5a8f4a8a8b
+X-Developer-Key: i=wyihan@google.com; a=ed25519; pk=cRi0fKzS5BMxlHyHY2pJv3w/1zcgfYKr6EYGYppdMYc=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780437363; l=2245;
+ i=wyihan@google.com; s=20260319; h=from:subject:message-id;
+ bh=fRnbbxlBDk4YfThNS9s3/pmtvrbRvFIdtObDaBTv/hU=; b=D5bk2bmUWWudEj1T7hfEsakTn+vs93FjxKXokW9ffFkWPkCyo4/U4PI0D+/WRcNzSfFoIDCq0
+ DrI7ZczMCBoD8NfOhTuMdcBZJb+mUexkYE+ixEiHfOjRm1AvyTZ5eaw
+X-Mailer: b4 0.14.3
+Message-ID: <20260602-memory-failure-mf-delayed-fix-v4-0-a5bc7db5a9b2@google.com>
+Subject: [PATCH v4 0/7] mm: Fix MF_DELAYED handling on memory failure
+From: Lisa Wang <wyihan@google.com>
+To: Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi <nao.horiguchi@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: rientjes@google.com, seanjc@google.com, ackerleytng@google.com, 
+	vannapurve@google.com, michael.roth@amd.com, jiaqiyan@google.com, 
+	tabba@google.com, dave.hansen@linux.intel.com, Lisa Wang <wyihan@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+Here's a fourth revision to fix MF_DELAYED handling on memory failure.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+This patch series addresses an issue in the memory failure handling path
+where MF_DELAYED is incorrectly treated as an error. This issue was
+discovered while testing memory failure handling for guest_memfd.
 
-On Sat, 30 May 2026 10:14:43 +0800 you wrote:
-> Add dec_ttl action support to the OVS kernel datapath selftest
-> framework:
-> 
->   - Add dec_ttl nested NLA class to ovs-dpctl.py with proper
->     OVS_DEC_TTL_ATTR_ACTION sub-attribute handling
->   - Add parse support for dec_ttl(le_1(<inner_actions>)) action
->     string, consistent with the odp-util.c format where le_1()
->     holds the actions taken when TTL reaches 1
->   - Add dpstr output formatting for dec_ttl actions
->   - Add test_dec_ttl() to openvswitch.sh that verifies:
->     * Normal TTL packets are forwarded after decrement
->     * TTL=1 packets are dropped (TTL expiry)
->     * Graceful skip via ksft_skip if kernel lacks dec_ttl support
-> 
-> [...]
+The proposed solution involves -
+1. Clarifying the definition of MF_DELAYED to mean that memory failure
+   handling is only partially completed, and that the metadata for the
+   memory that failed (as in struct page/folio) is still referenced.
+2. Updating shmem=E2=80=99s handling to align with the clarified definition=
+.
+3. Updating how the result of .error_remove_folio() is interpreted.
 
-Here is the summary with links:
-  - [net-next,v5] selftests: openvswitch: add dec_ttl action support and test
-    https://git.kernel.org/netdev/net-next/c/d6f6d7123355
+Changes from v3:
++ Split an independent guest_memfd_memory_failure_test, as suggested by
+  Ackerley and Sean
++ Align error logging style in truncate_error_folio, as suggested by
+  Miaohe and David
++ Verify a clean shmem page can be read successfully after soft-offline
+  memory failure, as suggested by Miaohe
+Thanks!
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
++ RFC v3: https://lore.kernel.org/all/20260408-memory-failure-mf-delayed-fi=
+x-rfc-v3-v3-0-718f45eb7c75@google.com/
 
+Signed-off-by: Lisa Wang <wyihan@google.com>
+---
+Lisa Wang (7):
+      mm: memory_failure: Clarify the MF_DELAYED definition
+      mm: memory_failure: Allow truncate_error_folio to return MF_DELAYED
+      mm: shmem: Update shmem handler to the MF_DELAYED definition
+      mm: memory_failure: Generalize extra_pins handling to all MF_DELAYED =
+cases
+      mm: selftests: Add shmem into memory failure test
+      KVM: selftests: Add the guest_memfd memory failure test
+      KVM: selftests: Test guest_memfd behavior with respect to stage 2 pag=
+e tables
+
+ mm/memory-failure.c                                |  29 +-
+ mm/shmem.c                                         |   2 +-
+ tools/testing/selftests/kvm/Makefile.kvm           |   2 +
+ .../kvm/guest_memfd_memory_failure_test.c          | 402 +++++++++++++++++=
+++++
+ tools/testing/selftests/mm/memory-failure.c        | 111 +++++-
+ 5 files changed, 527 insertions(+), 19 deletions(-)
+---
+base-commit: 38741a8e3bc1b809d64f8c8885ab15c3e40700ff
+change-id: 20260527-memory-failure-mf-delayed-fix-7d5a8f4a8a8b
+
+Best regards,
+--=20
+Lisa Wang <wyihan@google.com>
 
