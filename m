@@ -1,130 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C48273314D9;
-	Tue,  2 Jun 2026 04:21:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9C42DC332;
+	Tue,  2 Jun 2026 04:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780374083; cv=none; b=srDYFG9KaXHpxzrAeuQWs9ddUS7qEA2nt6ygr6e1P4c4gDB2yuHlivOBEJH65lV0M7/mzzTOOj8qUZc7otHGPjQ0LKW2WmSiNZwG0PANfjuxRYzfvIqSSiU3GaF83EBbEUS3p9E+wxamg9yI8IpT3cTsfMcP8gaCJ/yQNX754yA=
+	t=1780376325; cv=none; b=stL0OQnkSVy/43tQ1jHZ/gNWMTasZ8Qidch11Y5d6lM8MF8PEc+dtqFnjC/2TSd5QfqTRylbNxiGosCA2xeADPKcGPjEHDh0cshcF5SkM6XRm8+UiAGHYPfx9/OxuppZN/iw96MUbKPYE27zqErIhmB6XKLEcn1CxsWcjOqdkUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780374083; c=relaxed/simple;
-	bh=H7kv1oVIGNpG97wf67N8yQnZ3vaX7YWckS62O7uo4+M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VNMKEb9osU+xq6H5+bL79qCk+M9Y+kkZUlH+3njGLu8+HvdxW/DCCr4pkfY8gcIQ3wprlXkoMExYWB2eI/snsmHOj5LkyDnywWBO5yzwWbcxOC3222U65r1ykH90MgGgrcO78NhnKU6hyAxG2/ubE2fW4S16EjiTa5YDgbiSQEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tpqk5/rq; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tpqk5/rq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C4351F00893;
-	Tue,  2 Jun 2026 04:21:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780374082;
-	bh=FG6uaynttx+7wL75om2XoMHvK6wM5vAOEXDW7jnm7sE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Tpqk5/rqismZ1mVczwfr+hex8navjFRtNT0GQdQ+HL8MmufzKlsGp2JNqYb1PgVLg
-	 tpeRX80+x+GwnujKarHY8k97sZSSJ5Y29Oka3hY/ApvhdWUUTcnYvDQI8ylGoYkCJ7
-	 7G7M7+Yv627VnZqwvJJbpuX7fdkb5mj+N/MkoY2DxHlxHLm6hRcy1uVRBQwQ71TC33
-	 DzEOH/c5EPU7OfNuGfMAaQ3cK++DKIVhYjkjbVxXEMRnR7a5v/6mDWphe9rLV1Iqoi
-	 4uxzTGNruCd1kecpId37rMNDYPtUfdn61JqBbDPv+2SzQ1PkUdnbVMentg7sInUfbt
-	 BeouJ7KXMBo6A==
-Date: Tue, 2 Jun 2026 06:21:14 +0200
-From: "Oscar Salvador (SUSE)" <osalvador@kernel.org>
-To: Dev Jain <dev.jain@arm.com>
-Cc: akpm@linux-foundation.org, liam@infradead.org, ljs@kernel.org,
-	jgg@ziepe.ca, leon@kernel.org, david@kernel.org, shuah@kernel.org,
-	vbabka@kernel.org, jannh@google.com, pfalcato@suse.de,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	balbirs@nvidia.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, ryan.roberts@arm.com,
-	anshuman.khandual@arm.com, stable@vger.kernel.org
-Subject: Re: [PATCH] fs/proc/task_mmu: do not warn on seeing non-migration
- pmd entry
-Message-ID: <ah5aOoroOs2FpLhr@localhost.localdomain>
-References: <20260529111704.1078346-1-dev.jain@arm.com>
+	s=arc-20240116; t=1780376325; c=relaxed/simple;
+	bh=djkWX4Hi1PC3akGAsoUVJU4ekn4QqRF0xahihutbiKI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ZUiXC/P74FeMFZxoviKF24txo4IYR3KZxkBE2a5lv3yAbHvvU2BHsOm6niFEhLejdQc+ErfsEQO6UfyEiJ9h5xEV66iujwN6NMG8wn8FeMMByg3FeLL85MkBeBD7KQubxDlmYVgT7D5Trw2u67gxakA8OFfaBcFx23gFt23HEvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: b5d3bd5a5e3f11f1aa26b74ffac11d73-20260602
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
+	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, UD_TRUSTED, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
+	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:5042bfde-d3af-422d-b906-80343846f216,IP:20,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:20
+X-CID-INFO: VERSION:1.3.12,REQID:5042bfde-d3af-422d-b906-80343846f216,IP:20,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:20
+X-CID-META: VersionHash:e7bac3a,CLOUDID:468d7e58709b32c741750523244e7009,BulkI
+	D:260602071707M3QLEKGM,BulkQuantity:1,Recheck:0,SF:17|19|64|66|78|80|81|82
+	|83|102|127|136|817|841|850|865|898,TC:nil,Content:-10|-8|-5|14|50,EDM:-3,
+	IP:-2,URL:11|94|82|1,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OS
+	A:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULN
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: b5d3bd5a5e3f11f1aa26b74ffac11d73-20260602
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 420245183; Tue, 02 Jun 2026 12:58:35 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: akpm@linux-foundation.org
+Cc: david@kernel.org,
+	liam@infradead.org,
+	lihongfu@kylinos.cn,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	ljs@kernel.org,
+	mhocko@suse.com,
+	rppt@kernel.org,
+	shuah@kernel.org,
+	surenb@google.com,
+	vbabka@kernel.org
+Subject: Re: [PATCH v5 0/4] selftests/mm: refactor pkey helpers and fix mmap error handling
+Date: Tue,  2 Jun 2026 12:58:31 +0800
+Message-Id: <20260602045831.1385324-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260601161656.203154d9f53c2861f1bb2623@linux-foundation.org>
+References: <20260601161656.203154d9f53c2861f1bb2623@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260529111704.1078346-1-dev.jain@arm.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 29, 2026 at 11:17:03AM +0000, Dev Jain wrote:
-> pagemap_pmd_range_thp() warns if a non-present PMD is not a migration
-> entry. This became false once device-private entries at the PMD level were
-> added.
+> > The main changes in this series are to refactor shared tracing and assertion
+> > helpers into a common file, unify both pkey selftests on pkey_assert() and 
+> > per-test tracing for consistent diagnostics, and add missing mmap() return 
+> > checks with MAP_FAILED used throughout for readability and consistency.
 > 
-> One can hit the warning by patching hmm-tests.c with the following:
+> Thanks.  AI review found a couple of legitimate-looking issues.  At
+> least one of these was also reported against the v2(?) series and you
+> said you'd take a look.  Were these things false positives?
 > 
-> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
-> index e1c8a679a4cf3..7f0a3384f3c5f 100644
-> --- a/tools/testing/selftests/mm/hmm-tests.c
-> +++ b/tools/testing/selftests/mm/hmm-tests.c
-> @@ -209,6 +209,37 @@ static int hmm_dmirror_cmd(int fd,
->  	return 0;
->  }
-> 
-> +static int hmm_read_self_pagemap(void *addr, unsigned long npages,
-> +				 unsigned long page_size)
-> +{
-> +	const size_t entry_size = sizeof(uint64_t);
-> +	const off_t offset = ((uintptr_t)addr / page_size) * entry_size;
-> +	uint64_t *entries;
-> +	ssize_t nread;
-> +	int fd;
-> +
-> +	entries = malloc(npages * entry_size);
-> +	if (!entries)
-> +		return -ENOMEM;
-> +
-> +	fd = open("/proc/self/pagemap", O_RDONLY);
-> +	if (fd < 0) {
-> +		free(entries);
-> +		return -errno;
-> +	}
-> +
-> +	nread = pread(fd, entries, npages * entry_size, offset);
-> +	close(fd);
-> +	free(entries);
-> +
-> +	if (nread < 0)
-> +		return -errno;
-> +	if ((size_t)nread != npages * entry_size)
-> +		return -EIO;
-> +
-> +	return 0;
-> +}
-> +
->  static void hmm_buffer_free(struct hmm_buffer *buffer)
->  {
->  	if (buffer == NULL)
-> @@ -2314,6 +2345,10 @@ TEST_F(hmm, migrate_anon_huge_fault)
->  	ASSERT_EQ(ret, 0);
->  	ASSERT_EQ(buffer->cpages, npages);
-> 
-> +	/* Exercise pagemap on a PMD device-private entry. */
-> +	ret = hmm_read_self_pagemap(buffer->ptr, npages, self->page_size);
-> +	ASSERT_EQ(ret, 0);
-> +
->  	/* Check what the device read. */
->  	for (i = 0, ptr = buffer->mirror; i < size / sizeof(*ptr); ++i)
->  		ASSERT_EQ(ptr[i], i);
-> 
-> 
-> Therefore, remove the stale migration-only assertion.
-> 
-> Fixes: a30b48bf1b24 ("mm/migrate_device: implement THP migration of zone device pages")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Dev Jain <dev.jain@arm.com>
+> 	https://sashiko.dev/#/patchset/20260601061953.696844-1-lihongfu@kylinos.cn
 
-LGTM,
+Thanks for pointing these out.
+I initially suspected this one was a false positive, but upon recheck, 
+it also needs a fix. I will address both issues in the next revision.
 
-Reviewed-by: Oscar Salvador (SUSE) <osalvador@kernel.org>
-
-
-
--- 
-Oscar Salvador
-SUSE Labs
+Best regards,
+Hongfu
