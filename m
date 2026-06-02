@@ -1,20 +1,20 @@
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E183D37881F;
-	Tue,  2 Jun 2026 07:01:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224E53A9861;
+	Tue,  2 Jun 2026 07:01:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780383692; cv=none; b=t3QlOJpur+YG/rJXwkW733T1o/jn5ozqY2sbMpwqPPFerMLd+s0xLeRVN5ejxh7i8+1jKhuLoQd9mgsVmClh5Qp9mfGyNQrQCYXP7JTeULsvumW72nFrbhu61TEjaVSL/6mWwo2cb2PGr9hpbctTsqynsm/HTiaXicNcF+DzFng=
+	t=1780383695; cv=none; b=bWlgb6ECHi+xZtcUOlQ/lEfEvOL/CuGsFbrnUQQrOesTPFyvAe7ZFuy+/1Cu0aTgm/Ke7xGVH0BiO4TUVVhLqgouU5SZoFJm7ioqEjp5BG2QL+zZ3b++iFkuHvhIp9Askj/vBT4qzrkc5vNm55pupEH0retrTtVLaYpN7vKn+g4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780383692; c=relaxed/simple;
-	bh=rYzzgMIenavqv3fLe1ykLvdra6+nW+cwsCVuYgErpsE=;
+	s=arc-20240116; t=1780383695; c=relaxed/simple;
+	bh=eWDA4wI3Ydz5Nq3USZjSChsChbkm2cA1GhWU0Z5jHKI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hKO/33X7eiskzsE/zORK0/I2Mz8xScqoW+ahrL7YgE7cvjnAfwoc8uO4n2hz+0I8G2Bu6uoFmwwxF+IYb87AV06dxfLHsJW+rvLqrmNCBRXuHrCik/Hhvvbbsdi7cOGLIfmMOLhGNDUR3mBR3V7+Th22vP0V5KYH2nitBz03eps=
+	 MIME-Version; b=g9BBVSAK/KQ/2pE0HzDQbyztF2iTmfWBHv7Ns0lKTySm6Z4HTy3GKoln/cJmV88vITit6bh6OmW447612ik/xwW9nXJ0igwkVzra08pTH0jw2kpA/qwWkPB+qP2hXzf3gZAddhhnxdEQGGlMjD9QMDSMFWu+AFLzBq9cb1WpBcw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: dd1643185e5011f1aa26b74ffac11d73-20260602
+X-UUID: e02bbc7c5e5011f1aa26b74ffac11d73-20260602
 X-CTIC-Tags:
 	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
 	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
@@ -24,27 +24,27 @@ X-CTIC-Tags:
 	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
 	DMARC_NOPASS
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:2ecbba3a-7ab7-4152-bc62-d9f6de53d407,IP:10,
+X-CID-O-INFO: VERSION:1.3.12,REQID:549077d5-bd28-41a8-9020-6dc2e5d020eb,IP:10,
 	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
 	N:release,TS:5
-X-CID-INFO: VERSION:1.3.12,REQID:2ecbba3a-7ab7-4152-bc62-d9f6de53d407,IP:10,UR
+X-CID-INFO: VERSION:1.3.12,REQID:549077d5-bd28-41a8-9020-6dc2e5d020eb,IP:10,UR
 	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
 	release,TS:5
-X-CID-META: VersionHash:e7bac3a,CLOUDID:c4300c857a7c370f3b1234fe22f7ea71,BulkI
-	D:260602150124O4N0VTTT,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
-	2|127|136|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,R
-	T:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DK
-	P:0,BRR:0,BRE:0,ARC:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:ad801bb9f6dbb48635de2fd65192f5b9,BulkI
+	D:260602150130PCANUYKE,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
+	2|127|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:ni
+	l,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,
+	BRR:0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: dd1643185e5011f1aa26b74ffac11d73-20260602
+X-UUID: e02bbc7c5e5011f1aa26b74ffac11d73-20260602
 X-User: lihongfu@kylinos.cn
 Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
 	(envelope-from <lihongfu@kylinos.cn>)
 	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 148449013; Tue, 02 Jun 2026 15:01:22 +0800
+	with ESMTP id 776362238; Tue, 02 Jun 2026 15:01:27 +0800
 From: Hongfu Li <lihongfu@kylinos.cn>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -59,9 +59,9 @@ Cc: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Hongfu Li <lihongfu@kylinos.cn>
-Subject: [PATCH v6 3/5] selftests/mm: use pkey_assert on clone_raw failure in pkey test
-Date: Tue,  2 Jun 2026 15:01:17 +0800
-Message-Id: <20260602070119.1452308-4-lihongfu@kylinos.cn>
+Subject: [PATCH v6 5/5] selftests/mm: add missing pthread_create() return checks in pkey tests
+Date: Tue,  2 Jun 2026 15:01:19 +0800
+Message-Id: <20260602070119.1452308-6-lihongfu@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260602070119.1452308-1-lihongfu@kylinos.cn>
 References: <20260602070119.1452308-1-lihongfu@kylinos.cn>
@@ -73,38 +73,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use pkey_assert(0) instead of perror("clone") when clone_raw() fails.
-The old path only printed an error and continued; the test now exits
-via pkey_assert() on failure so it does not hang or proceed with an
-invalid child.
+Add missing pthread_create() return checks in pkey sighandler tests
+to avoid hanging in pthread_cond_wait() when thread creation fails.
 
 Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
 ---
- tools/testing/selftests/mm/pkey_sighandler_tests.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/pkey_sighandler_tests.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-index 085e771227fb..882928f2912b 100644
+index d185d3da26cf..f30c9965a561 100644
 --- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
 +++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-@@ -333,7 +333,7 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
+@@ -224,7 +224,8 @@ static void test_sigsegv_handler_with_pkey0_disabled(void)
+ 	pthread_attr_init(&attr);
+ 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
  
- 	if (ret < 0) {
- 		errno = -ret;
--		perror("clone");
-+		pkey_assert(0);
- 	} else if (ret == 0) {
- 		thread_segv_maperr_ptr(&sigstack);
- 		syscall_raw(SYS_exit, 0, 0, 0, 0, 0, 0);
-@@ -506,7 +506,7 @@ static void test_pkru_sigreturn(void)
+-	pthread_create(&thr, &attr, thread_segv_with_pkey0_disabled, NULL);
++	ret = pthread_create(&thr, &attr, thread_segv_with_pkey0_disabled, NULL);
++	pkey_assert(ret == 0);
  
- 	if (ret < 0) {
- 		errno = -ret;
--		perror("clone");
-+		pkey_assert(0);
- 	}  else if (ret == 0) {
- 		thread_sigusr2_self(&sigstack);
- 		syscall_raw(SYS_exit, 0, 0, 0, 0, 0, 0);
+ 	pthread_mutex_lock(&mutex);
+ 	while (siginfo.si_signo == 0)
+@@ -263,7 +264,8 @@ static void test_sigsegv_handler_cannot_access_stack(void)
+ 	pthread_attr_init(&attr);
+ 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+ 
+-	pthread_create(&thr, &attr, thread_segv_pkuerr_stack, NULL);
++	ret = pthread_create(&thr, &attr, thread_segv_pkuerr_stack, NULL);
++	pkey_assert(ret == 0);
+ 
+ 	pthread_mutex_lock(&mutex);
+ 	while (siginfo.si_signo == 0)
 -- 
 2.25.1
 
