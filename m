@@ -1,158 +1,449 @@
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D0D3D5C0C;
-	Tue,  2 Jun 2026 11:12:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2ACB3939AF;
+	Tue,  2 Jun 2026 11:18:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780398772; cv=none; b=qgLH/i0NL+XBarjIdlPH26etRAHkrP97UHzrntyNLC5oncKOTQ56u/Hbit3C/yGw9AbsgyVFMGhiI55krm/VUZnxlSpn+XtA1kgPr3Mi4fTcsONTYM5FXCuVeFZAWL0TeyGqQRRos1uey/2Xu3ctT2FX1EqBBx/eTvY28KbbfUQ=
+	t=1780399114; cv=none; b=s4wUwPEqsOaXukbbBF6LiLKkivSiGcuyQcAyCtfMxnmsMfYbW5Ih1BBcXz4nKPoCVhstEk3u7drA0ltBqZGy0pQgu0NCwaKLeDMD3vgDGraKlDi4dE/ggkwBiRWjFz0XHyLeccOIvTv6UYvIVmuZxNTR292Mmuewh8cG7Vt2LfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780398772; c=relaxed/simple;
-	bh=vvILlsXaVQShutp1p5WceQi2Eaf3pB4ovG/S15HHsU4=;
-	h=From:To:Cc:In-Reply-To:References:Date:Message-ID:MIME-Version:
-	 Content-Type:Subject; b=cNHkPHmtouJJRpCZK+UhcqWNnVG5Lnj/ejJkkyBb5FzLTOY4+tGJEfbHDPiD/c+8vGwiYeHAUgNjc0CC3//sCAJFkNx0uwE8zfSpNt6jFeXySlJHlHrdViH9FrHGsc9zhd0iiVVL9o91EUAYtQCKiwa1XB3bZ3PFo73l6liDFYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; dkim=pass (1024-bit key) header.d=xmission.com header.i=@xmission.com header.b=PT1nwI4K; arc=none smtp.client-ip=166.70.13.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
+	s=arc-20240116; t=1780399114; c=relaxed/simple;
+	bh=ilFK4yQPZYLFYk0uM3eLL1YO5hEB0Sk0/m5Gv9HEqE4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AGcIn7/WR/Pqhz+EEzctNc79LIr6gOufOuZBHwlCD4cWnsgKHnOyASgw0pziCUd03vBGXUdO7/y1eDB1vmpyG3J9Cc6jLexmQ6AmNEofmZTMf/uj9iF8uCnhPyDoh3LFM8SkfqezQzU2wdCLLiIpMrIdcb8CqmuMNgjc2UP3NAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=YenA2L1N; arc=none smtp.client-ip=115.124.30.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xmission.com header.i=@xmission.com header.b="PT1nwI4K"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/simple; d=xmission.com;
-	 s=xmission; h=Subject:Content-Type:MIME-Version:Message-ID:Date:References:
-	In-Reply-To:Cc:To:From:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=vvILlsXaVQShutp1p5WceQi2Eaf3pB4ovG/S15HHsU4=; b=PT1nwI4K/LueK0DDSNL+s4C13J
-	wCISW9cQ6Rku1p5e71v6LNcH9E8BpNOErgTq20OxsIi/JohdQWrgMebuwQrMKgen7pJXROs+AsRqv
-	q/PDtUrCrIsMZAHrVRiLpwUsOkpysGxuDIlQz4e1uDX5u9eweqgYZDbb9a8545EZNJqI=;
-Received: from in01.mta.xmission.com ([166.70.13.51]:57296)
-	by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1wUMHI-00EQUk-Sf; Tue, 02 Jun 2026 04:23:20 -0600
-Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:37600 helo=email.froward.int.ebiederm.org.xmission.com)
-	by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1wUMHF-002RRp-JI; Tue, 02 Jun 2026 04:23:20 -0600
-From: "Eric W. Biederman" <ebiederm@xmission.com>
-To: Andreas Schwab <schwab@linux-m68k.org>
-Cc: Deepak Gupta <debug@rivosinc.com>,  Deepak Gupta via B4 Relay
- <devnull+debug.rivosinc.com@kernel.org>,  Thomas Gleixner
- <tglx@linutronix.de>,  Ingo Molnar <mingo@redhat.com>,  Borislav Petkov
- <bp@alien8.de>,  Dave Hansen <dave.hansen@linux.intel.com>,
-  x86@kernel.org,  "H. Peter Anvin" <hpa@zytor.com>,  Andrew Morton
- <akpm@linux-foundation.org>,  "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-  Vlastimil Babka <vbabka@suse.cz>,  Lorenzo Stoakes
- <lorenzo.stoakes@oracle.com>,  Paul Walmsley <paul.walmsley@sifive.com>,
-  Palmer Dabbelt <palmer@dabbelt.com>,  Albert Ou <aou@eecs.berkeley.edu>,
-  Conor Dooley <conor@kernel.org>,  Rob Herring <robh@kernel.org>,
-  Krzysztof Kozlowski <krzk+dt@kernel.org>,  Arnd Bergmann <arnd@arndb.de>,
-  Christian Brauner <brauner@kernel.org>,  Peter Zijlstra
- <peterz@infradead.org>,  Oleg Nesterov <oleg@redhat.com>,  Kees Cook
- <kees@kernel.org>,  Jonathan Corbet <corbet@lwn.net>,  Shuah Khan
- <shuah@kernel.org>,  Jann Horn <jannh@google.com>,  Conor Dooley
- <conor+dt@kernel.org>,  Miguel Ojeda <ojeda@kernel.org>,  Alex Gaynor
- <alex.gaynor@gmail.com>,  Boqun Feng <boqun.feng@gmail.com>,  Gary Guo
- <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>,  Andreas
- Hindborg <a.hindborg@kernel.org>,  Alice Ryhl <aliceryhl@google.com>,
-  Trevor Gross <tmgross@umich.edu>,  Benno Lossin <lossin@kernel.org>,
-  linux-kernel@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
-  linux-mm@kvack.org,  linux-riscv@lists.infradead.org,
-  devicetree@vger.kernel.org,  linux-arch@vger.kernel.org,
-  linux-doc@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  alistair.francis@wdc.com,  richard.henderson@linaro.org,
-  jim.shu@sifive.com,  andybnac@gmail.com,  kito.cheng@sifive.com,
-  charlie@rivosinc.com,  atishp@rivosinc.com,  evan@rivosinc.com,
-  cleger@rivosinc.com,  alexghiti@rivosinc.com,  samitolvanen@google.com,
-  broonie@kernel.org,  rick.p.edgecombe@intel.com,
-  rust-for-linux@vger.kernel.org,  Zong Li <zong.li@sifive.com>
-In-Reply-To: <87wlwif04z.fsf@igel.home> (Andreas Schwab's message of "Mon, 01
-	Jun 2026 22:58:52 +0200")
-References: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com>
-	<20251112-v5_user_cfi_series-v23-6-b55691eacf4f@rivosinc.com>
-	<87jyslndo4.fsf@igel.home>
-	<CAKC1njS=AHu6uHrH4ae8VxcdEbhgiPXYCAoN3F_mnppBd3SwOA@mail.gmail.com>
-	<875x44o9hj.fsf@igel.home>
-	<CAKC1njSn_rtCj8ii876PNQTk0nsCTfWsb4DzdymufHVthh1Rkg@mail.gmail.com>
-	<871peqgp9v.fsf@igel.home>
-	<CAKC1njR+dTdvp+BmLGPtgd8dufiUwBtkQ9a-qinELT_Fmi13sQ@mail.gmail.com>
-	<87wlwif04z.fsf@igel.home>
-Date: Tue, 02 Jun 2026 05:23:10 -0500
-Message-ID: <87tsrli6lt.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="YenA2L1N"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1780399102; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=ws7qGhlw3CmmKGFGVKopwlLd0gA4vT4eK0El0Pe0xPg=;
+	b=YenA2L1NYn6iogApH/qarp7611ei7TRNWwJJJLiVXm/u5hm71iCKs6bT5/eQtSmJ3mMj0NHu/8NLp0SIa7pbRHqh0GJASQLChG+3f/axk+go0hUaDnmEFf/RV1gsL9ZDFO5PQ6EGGr0e/entKYkc2vLez745iW2JT7pm/3wpTQA=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R311e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X44Nt1W_1780399098;
+Received: from 30.100.154.88(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X44Nt1W_1780399098 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 02 Jun 2026 19:18:20 +0800
+Message-ID: <425ce2d4-bf35-4bff-8dc8-93093b8aaba2@linux.alibaba.com>
+Date: Tue, 2 Jun 2026 19:18:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1wUMHF-002RRp-JI;;;mid=<87tsrli6lt.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX19J6tpF2AGRJ9xglxGPNzSSZeVg13KZsgY=
-X-Spam-Level: 
-X-Spam-Virus: No
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	*  0.1 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-	*      [score: 0.4997]
-	*  0.7 XMSubLong Long Subject
-	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-	*      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
-	*  0.0 T_TooManySym_01 4+ unique symbols in subject
-	*  0.0 T_TooManySym_02 5+ unique symbols in subject
-X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Andreas Schwab <schwab@linux-m68k.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 2774 ms - load_scoreonly_sql: 0.03 (0.0%),
-	signal_user_changed: 3.6 (0.1%), b_tie_ro: 2.5 (0.1%), parse: 0.84
-	(0.0%), extract_message_metadata: 8 (0.3%), get_uri_detail_list: 0.86
-	(0.0%), tests_pri_-2000: 7 (0.3%), tests_pri_-1000: 8 (0.3%),
-	tests_pri_-950: 1.02 (0.0%), tests_pri_-900: 0.92 (0.0%),
-	tests_pri_-90: 62 (2.2%), check_bayes: 61 (2.2%), b_tokenize: 13
-	(0.5%), b_tok_get_all: 9 (0.3%), b_comp_prob: 1.76 (0.1%),
-	b_tok_touch_all: 35 (1.3%), b_finish: 0.56 (0.0%), tests_pri_0: 297
-	(10.7%), check_dkim_signature: 0.41 (0.0%), check_dkim_adsp: 3.2
-	(0.1%), poll_dns_idle: 2367 (85.3%), tests_pri_10: 2.7 (0.1%),
-	tests_pri_500: 2379 (85.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v23 06/28] riscv/mm : ensure PROT_WRITE leads to VM_READ
- | VM_WRITE
-X-SA-Exim-Connect-IP: 166.70.13.51
-X-SA-Exim-Rcpt-To: too long (recipient list exceeded maximum allowed size of 512 bytes)
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-SA-Exim-Scanned: No (on out02.mta.xmission.com); SAEximRunCond expanded to false
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/8] riscv: stacktrace: Add frame record metadata
+To: Wang Han <wanghan@linux.alibaba.com>, Paul Walmsley <pjw@kernel.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Alexandre Ghiti <alex@ghiti.fr>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Chen Pei <cp0613@linux.alibaba.com>, Andy Chiu <andybnac@gmail.com>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+ Deepak Gupta <debug@rivosinc.com>, Puranjay Mohan <puranjay@kernel.org>,
+ Conor Dooley <conor.dooley@microchip.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+ Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
+ Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, oliver.yang@linux.alibaba.com,
+ zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
+ <20260528082310.1994388-3-wanghan@linux.alibaba.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20260528082310.1994388-3-wanghan@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Andreas Schwab <schwab@linux-m68k.org> writes:
 
-> On Jun 01 2026, Deepak Gupta wrote:
->
->> riscv uses `VM_SHADOW_STACK`. It's just very simple to use `protection_map`
->> with just `VM_WRITE`. On RISC-V, `-W-` is a shadow stack mapping. It's not same
->> on x86 or arm64. So `protection_map[VM_WRITE]` simply picks shadow stack
->> encoding. We just ensure that PROT_WRITE is converted to
->> "VM_READ | VM_WRITE" at vma level.
->
-> That does not explain _why_ you need to make that user visible change,
-> when others can get away without it.
 
-Especially since as I recall the decision was made was that the user
-visible protection bits would match the mmap call.  If there is some
-combination an architecture does not support that would simply not be
-reflected in hardware until some future version of the hardware gets
-around to supporting it.
+On 5/28/26 4:23 PM, Wang Han wrote:
+> Reliable frame-pointer unwinding needs an explicit way to identify
+> exception boundaries and the final entry frame. The existing unwinder
+> infers those boundaries from return addresses, which is too loose for a
+> future reliable unwinder.
+> 
+> Add a small metadata frame record to pt_regs and initialize it on
+> exception entry, kernel thread fork, user fork, and early idle task
+> setup. The record uses a zero {fp, ra} sentinel plus a type field so a
+> later unwinder can distinguish a final user-to-kernel boundary from a
+> nested kernel pt_regs boundary.
+> 
+> This follows the arm64 metadata frame-record model, adapted to the
+> RISC-V {fp, ra} frame record convention.
+> 
+> The metadata is established at the RISC-V entry boundaries that need an
+> explicit unwind marker:
+> 
+>    * exception entry clears the metadata {fp, ra} pair and uses SPP
+>      (or MPP in M-mode) to record whether the pt_regs frame is the final
+>      user-to-kernel boundary or a nested kernel boundary;
+>    * _start_kernel builds the init task's final metadata record, while
+>      the secondary CPU path sets up s0 before smp_callin() so idle-task
+>      unwinding does not inherit an undefined caller frame;
+>    * copy_thread creates matching final metadata records for new kernel
+>      and user tasks, and keeps s0 available for the frame-pointer chain;
+>    * call_on_irq_stack still reserves an aligned stack slot, but links the
+>      saved {fp, ra} with the raw frame-record size so s0 points at the
+>      RISC-V frame record rather than past the alignment padding.
+> 
+> These changes keep s0 reserved for the frame-pointer chain at task and
+> stack-switch boundaries.
+> 
+> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
+> ---
+>   arch/riscv/include/asm/ptrace.h           |  9 ++++
+>   arch/riscv/include/asm/stacktrace/frame.h | 53 +++++++++++++++++++++++
+>   arch/riscv/kernel/asm-offsets.c           |  4 ++
+>   arch/riscv/kernel/entry.S                 | 30 +++++++++++--
+>   arch/riscv/kernel/head.S                  | 23 ++++++++++
+>   arch/riscv/kernel/process.c               | 31 ++++++++++++-
+>   6 files changed, 144 insertions(+), 6 deletions(-)
+>   create mode 100644 arch/riscv/include/asm/stacktrace/frame.h
+> 
+> diff --git a/arch/riscv/include/asm/ptrace.h b/arch/riscv/include/asm/ptrace.h
+> index addc8188152f..4b9b0f279214 100644
+> --- a/arch/riscv/include/asm/ptrace.h
+> +++ b/arch/riscv/include/asm/ptrace.h
+> @@ -8,6 +8,7 @@
+>   
+>   #include <uapi/asm/ptrace.h>
+>   #include <asm/csr.h>
+> +#include <asm/stacktrace/frame.h>
+>   #include <linux/compiler.h>
+>   
+>   #ifndef __ASSEMBLER__
+> @@ -53,6 +54,14 @@ struct pt_regs {
+>   	unsigned long cause;
+>   	/* a0 value before the syscall */
+>   	unsigned long orig_a0;
+> +
+> +	/*
+> +	 * This frame record is entirely zeroed on exception entry, allowing the
+> +	 * unwinder to identify exception boundaries. The type field encodes
+> +	 * whether the exception was taken from user (FINAL) or kernel (PT_REGS)
+> +	 * mode.
+> +	 */
+> +	struct frame_record_meta stackframe;
+>   };
+>   
+>   #define PTRACE_SYSEMU			0x1f
+> diff --git a/arch/riscv/include/asm/stacktrace/frame.h b/arch/riscv/include/asm/stacktrace/frame.h
+> new file mode 100644
+> index 000000000000..5720a6c65fe8
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/stacktrace/frame.h
+> @@ -0,0 +1,53 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef __ASM_RISCV_STACKTRACE_FRAME_H
+> +#define __ASM_RISCV_STACKTRACE_FRAME_H
+> +
+> +/*
+> + * See: arch/arm64/include/asm/stacktrace/frame.h for the reference
+> + * implementation.
+> + */
+> +
+> +/*
+> + * - FRAME_META_TYPE_NONE
+> + *
+> + *   This value is reserved.
+> + *
+> + * - FRAME_META_TYPE_FINAL
+> + *
+> + *   The record is the last entry on the stack.
+> + *   Unwinding should terminate successfully.
+> + *
+> + * - FRAME_META_TYPE_PT_REGS
+> + *
+> + *   The record is embedded within a struct pt_regs, recording the registers at
+> + *   an arbitrary point in time.
+> + *   Unwinding should consume pt_regs::epc, followed by pt_regs::ra.
+> + *
+> + * Note: all other values are reserved and should result in unwinding
+> + * terminating with an error.
+> + */
+> +#define FRAME_META_TYPE_NONE		0
+> +#define FRAME_META_TYPE_FINAL		1
+> +#define FRAME_META_TYPE_PT_REGS		2
+> +
+> +#ifndef __ASSEMBLER__
+> +/*
+> + * A standard RISC-V frame record.
+> + */
+> +struct frame_record {
+> +	unsigned long fp;
+> +	unsigned long ra;
+> +};
+> +
+> +/*
+> + * A metadata frame record indicating a special unwind.
+> + * The record::{fp,ra} fields must be zero to indicate the presence of
+> + * metadata.
+> + */
+> +struct frame_record_meta {
+> +	struct frame_record record;
+> +	unsigned long type;
+> +};
+> +#endif /* __ASSEMBLER__ */
+> +
+> +#endif /* __ASM_RISCV_STACKTRACE_FRAME_H */
+> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> index af827448a609..8dfcb5a44bb8 100644
+> --- a/arch/riscv/kernel/asm-offsets.c
+> +++ b/arch/riscv/kernel/asm-offsets.c
+> @@ -131,6 +131,9 @@ void asm_offsets(void)
+>   	OFFSET(PT_BADADDR, pt_regs, badaddr);
+>   	OFFSET(PT_CAUSE, pt_regs, cause);
+>   
+> +	DEFINE(S_STACKFRAME,		offsetof(struct pt_regs, stackframe));
+> +	DEFINE(S_STACKFRAME_TYPE,	offsetof(struct pt_regs, stackframe.type));
+> +
+>   	OFFSET(SUSPEND_CONTEXT_REGS, suspend_context, regs);
+>   
+>   	OFFSET(HIBERN_PBE_ADDR, pbe, address);
+> @@ -501,6 +504,7 @@ void asm_offsets(void)
+>   	OFFSET(SBI_HART_BOOT_STACK_PTR_OFFSET, sbi_hart_boot_data, stack_ptr);
+>   
+>   	DEFINE(STACKFRAME_SIZE_ON_STACK, ALIGN(sizeof(struct stackframe), STACK_ALIGN));
+> +	DEFINE(STACKFRAME_RECORD_SIZE, sizeof(struct stackframe));
+>   	OFFSET(STACKFRAME_FP, stackframe, fp);
+>   	OFFSET(STACKFRAME_RA, stackframe, ra);
+>   #ifdef CONFIG_FUNCTION_TRACER
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index d011fb51c59a..9cae0e1eba1c 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -11,6 +11,7 @@
+>   #include <asm/asm.h>
+>   #include <asm/csr.h>
+>   #include <asm/scs.h>
+> +#include <asm/stacktrace/frame.h>
+>   #include <asm/unistd.h>
+>   #include <asm/page.h>
+>   #include <asm/thread_info.h>
+> @@ -193,6 +194,27 @@ SYM_CODE_START(handle_exception)
+>   	REG_S s4, PT_CAUSE(sp)
+>   	REG_S s5, PT_TP(sp)
+>   
+> +	/*
+> +	 * Create a metadata frame record. The unwinder will use this to
+> +	 * identify and unwind exception boundaries.
+> +	 */
+> +	REG_S zero, (S_STACKFRAME + STACKFRAME_FP)(sp) /* stackframe.record.fp = 0 */
+> +	REG_S zero, (S_STACKFRAME + STACKFRAME_RA)(sp) /* stackframe.record.ra = 0 */
+> +#ifdef CONFIG_RISCV_M_MODE
+> +	li t0, SR_MPP
+> +	and t0, s1, t0
+> +#else
+> +	andi t0, s1, SR_SPP
+> +#endif
+> +	bnez t0, 1f
+> +	li t0, FRAME_META_TYPE_FINAL
+> +	j 2f
+> +1:
+> +	li t0, FRAME_META_TYPE_PT_REGS
+> +2:
+> +	REG_S t0, S_STACKFRAME_TYPE(sp)
+> +	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
+> +
 
-This is what happened with executable page permissions on x86 for
-example.  It used to be that it was not possible to deny execute
-permission on a readable page.  Later that proved sufficiently valuable
-that support for denying execute permission was added to the hardware.
+One spot for symmetry (non-blocking, robustness only):
 
-That all happened quite transparently to userspace, that wasn't trying
-to assuming PROT_READ implied PROT_EXEC.
+handle_kernel_stack_overflow in entry.S allocates a full
+PT_SIZE_ON_STACK frame (including the new stackframe metadata fields)
+but, unlike .Lsave_context, never initialises stackframe.{record,type}
+nor repoints s0 at the metadata. Those three words are therefore left
+as whatever was on the overflow_stack.
 
-So I am at a complete loss why someone would choose to break userspace
-by confusing hardware limitations with what userspace asks for in mmap.
+In practice this is currently harmless: handle_bad_stack() only calls
+__show_regs() (register dump, no unwind) followed by panic(), so the
+reliable unwinder never actually consumes that metadata today. So this
+is not an active bug — purely a robustness / symmetry gap.
 
-Eric
+It would still be worth initialising it, because the moment someone
+adds a dump_stack() here, or another CPU NMI-backtraces this task, or a
+kdump image is walked offline via the frame-record chain, the garbage
+type byte would mislead the unwinder. Since the overflow path is by
+definition entered from kernel context, FRAME_META_TYPE_PT_REGS is the
+right type, and it has the nice property that the unwinder will resume
+from frame_pointer(regs)==regs->s0 (the pre-overflow s0 is already
+saved into PT_S0 by save_from_x6_to_x31), giving the pre-overflow call
+chain instead of a hard stop.
 
+
+>   	/*
+>   	 * Set the scratch register to 0, so that if a recursive exception
+>   	 * occurs, the exception vector knows it came from the kernel
+> @@ -357,8 +379,8 @@ ASM_NOKPROBE(handle_kernel_stack_overflow)
+>   
+>   SYM_CODE_START(ret_from_fork_kernel_asm)
+>   	call schedule_tail
+> -	move a0, s1 /* fn_arg */
+> -	move a1, s0 /* fn */
+> +	move a0, s3 /* fn_arg */
+> +	move a1, s2 /* fn */
+>   	move a2, sp /* pt_regs */
+>   	call ret_from_fork_kernel
+>   	j ret_from_exception
+> @@ -383,7 +405,7 @@ SYM_FUNC_START(call_on_irq_stack)
+>   	addi	sp, sp, -STACKFRAME_SIZE_ON_STACK
+>   	REG_S	ra, STACKFRAME_RA(sp)
+>   	REG_S	s0, STACKFRAME_FP(sp)
+> -	addi	s0, sp, STACKFRAME_SIZE_ON_STACK
+> +	addi	s0, sp, STACKFRAME_RECORD_SIZE
+>   
+>   	/* Switch to the per-CPU shadow call stack */
+>   	scs_save_current
+> @@ -399,7 +421,7 @@ SYM_FUNC_START(call_on_irq_stack)
+>   	scs_load_current
+>   
+>   	/* Switch back to the thread stack and restore ra and s0 */
+> -	addi	sp, s0, -STACKFRAME_SIZE_ON_STACK
+> +	addi	sp, s0, -STACKFRAME_RECORD_SIZE
+
+Worth calling out explicitly that this is more than a cosmetic refactor:
+on RV32 the previous code is actually wrong, and this hunk fixes it.
+
+   STACKFRAME_SIZE_ON_STACK = ALIGN(sizeof(struct stackframe), STACK_ALIGN)
+   STACKFRAME_RECORD_SIZE   = sizeof(struct stackframe)
+
+   RV64: sizeof(stackframe) == STACK_ALIGN == 16, so the two are equal
+         and the old code happened to work.
+   RV32: sizeof(stackframe) == 8 but STACK_ALIGN == 16, so the old
+         "addi s0, sp, STACKFRAME_SIZE_ON_STACK" left s0 pointing 8 bytes
+         past the saved {fp, ra} pair, into the alignment padding. An FP
+         unwinder that derives the frame record from s0 (e.g. via
+         "(struct stackframe *)s0 - 1" or fixed -8/-16(s0) loads) would
+         then read garbage instead of the saved fp/ra at the IRQ-stack
+
+After the change s0 lands exactly at the end of the {fp, ra} record on
+both RV32 and RV64, while the aligned slot is still reserved by the
+unchanged "addi sp, sp, -STACKFRAME_SIZE_ON_STACK" / matching restore.
+
+Could you mention this in the v3 commit message? It's load-bearing
+context for anyone bisecting an RV32 unwind regression later, and it
+also justifies why the change is correct to apply ahead of the reliable
+unwinder rather than folded into it.
+
+>   	REG_L	ra, STACKFRAME_RA(sp)
+>   	REG_L	s0, STACKFRAME_FP(sp)
+>   	addi	sp, sp, STACKFRAME_SIZE_ON_STACK
+> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+> index f6a8ca49e627..00e16a24f149 100644
+> --- a/arch/riscv/kernel/head.S
+> +++ b/arch/riscv/kernel/head.S
+> @@ -14,6 +14,7 @@
+>   #include <asm/hwcap.h>
+>   #include <asm/image.h>
+>   #include <asm/scs.h>
+> +#include <asm/stacktrace/frame.h>
+>   #include <asm/usercfi.h>
+>   #include "efi-header.S"
+>   
+> @@ -177,6 +178,14 @@ secondary_start_sbi:
+>   	REG_S a0, (a1)
+>   1:
+>   #endif
+> +
+> +	/*
+> +	 * Set up the frame pointer for the secondary idle task so reliable
+> +	 * stack unwinding terminates at the metadata frame in task_pt_regs().
+> +	 * Without this, the first frame records can inherit an undefined caller
+> +	 * fp and unwind past smp_callin() into .Lsecondary_park.
+> +	 */
+> +	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
+>   	scs_load_current
+>   	call smp_callin
+>   #endif /* CONFIG_SMP */
+> @@ -305,6 +314,20 @@ SYM_CODE_START(_start_kernel)
+>   	la tp, init_task
+>   	la sp, init_thread_union + THREAD_SIZE
+>   	addi sp, sp, -PT_SIZE_ON_STACK
+> +
+> +	/*
+> +	 * Set up a metadata frame record for the init task so that
+> +	 * the unwinder can identify the outermost frame by its
+> +	 * {fp, ra} = {0, 0} sentinel at the bottom of pt_regs.
+> +	 * fp/s0 points above the metadata record (RISC-V
+> +	 * convention).
+> +	 */
+> +	REG_S zero, (S_STACKFRAME + STACKFRAME_FP)(sp)
+> +	REG_S zero, (S_STACKFRAME + STACKFRAME_RA)(sp)
+> +	li t0, FRAME_META_TYPE_FINAL
+> +	REG_S t0, S_STACKFRAME_TYPE(sp)
+> +	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
+> +
+>   #if defined(CONFIG_RISCV_SBI) && defined(CONFIG_RISCV_USER_CFI)
+>   	li a7, SBI_EXT_FWFT
+>   	li a6, SBI_EXT_FWFT_SET
+> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> index b2df7f72241a..5212926b926b 100644
+> --- a/arch/riscv/kernel/process.c
+> +++ b/arch/riscv/kernel/process.c
+> @@ -258,8 +258,23 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>   		/* Supervisor/Machine, irqs on: */
+>   		childregs->status = SR_PP | SR_PIE;
+>   
+> -		p->thread.s[0] = (unsigned long)args->fn;
+> -		p->thread.s[1] = (unsigned long)args->fn_arg;
+> +		/*
+> +		 * Set up a metadata frame record at the bottom of the
+> +		 * stack for the unwinder. Use FRAME_META_TYPE_FINAL
+> +		 * since this is the outermost kernel entry for the new
+> +		 * task. The frame_record::{fp,ra} are already zero from
+> +		 * memset().
+> +		 *
+> +		 * fp/s0 points above the metadata record (RISC-V
+> +		 * convention). fn and fn_arg are passed via s2/s3,
+> +		 * keeping s0 available for the frame pointer chain.
+> +		 */
+> +		childregs->stackframe.type = FRAME_META_TYPE_FINAL;
+> +
+> +		p->thread.s[0] = (unsigned long)(&childregs->stackframe)
+> +				+ sizeof(struct frame_record);
+> +		p->thread.s[2] = (unsigned long)args->fn;
+> +		p->thread.s[3] = (unsigned long)args->fn_arg;
+>   		p->thread.ra = (unsigned long)ret_from_fork_kernel_asm;
+>   	} else {
+>   		/* allocate new shadow stack if needed. In case of CLONE_VM we have to */
+> @@ -278,6 +293,18 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>   		if (clone_flags & CLONE_SETTLS)
+>   			childregs->tp = tls;
+>   		childregs->a0 = 0; /* Return value of fork() */
+> +
+> +		/*
+> +		 * Set up the unwind boundary: ensure the metadata
+> +		 * frame record has its {fp,ra} sentinel zeroed and
+> +		 * point fp/s0 above the metadata record. The type
+> +		 * field is inherited from the parent's pt_regs.
+> +		 */
+> +		childregs->stackframe.record.fp = 0;
+> +		childregs->stackframe.record.ra = 0;
+
+This relies on the parent always entering kernel via handle_exception
+on a user->kernel boundary (which writes FRAME_META_TYPE_FINAL).
+That is true for fork()/clone() today, but:
+
+   - The kernel-thread path right above explicitly assigns type =
+     FINAL, so the user-thread path looks asymmetric and like a
+     possible omission to anyone reading it cold.
+   - A future caller invoking kernel_clone() from a nested-kernel
+     context (parent pt_regs.type == PT_REGS) would silently produce
+     a broken unwind boundary on the new task.
+
+Recommend explicitly setting it here too:
+
+       childregs->stackframe.type = FRAME_META_TYPE_FINAL;
+
+Even if currently redundant, it is one assignment, costs nothing, is
+self-documenting, and fails closed instead of open.
+
+
+Thanks.
+Shuai
