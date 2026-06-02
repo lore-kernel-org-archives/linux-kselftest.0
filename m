@@ -1,197 +1,58 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19033E1D08
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 13:12:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB371DF73C;
+	Tue,  2 Jun 2026 13:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780405944; cv=none; b=bnmak016xMubzvfhTWhq62nHuRHQ5NViP79edrQ3wfF2azfelndbSXyFOH3F1XId1cqdjLvWM67MKFbEO/O9UOZKOEBykR98gqBY8hpZevZRclV7TsqJn7lk4eJXqreZqtwrE++QdICqtsPNwuuL3s+KdrMenmbiCOrUXD4gVKM=
+	t=1780406453; cv=none; b=h8lhfVKkgdsxuRJ8LO2HTzVp5zc2kuS3WWQINdehURWqDRj2Dvz8b1o80irZbH+wKA9sgg9njvHANI9yArkxxNyDdTrUD3Q6Kgs/ujfGjJshVt2DxMgiR6Hgs5xMNnp6kdSKWVVDwsw9wGvK5TIsMSGo/Glf7ygeOTzySyMAWKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780405944; c=relaxed/simple;
-	bh=lvc7mybribNI0qKM6N5/FmJL7igj+yb2/P4ASaICf40=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oSuj/JcbKIlOl47PwALAlC41mOSTYatYfb7M9q4yIJ0Y3pQ7CI8TgQbupflcWL7r+9+q/za4hZGtH2FNjfyV8UtbGUckUK+oMaFHWDikNPMjmJqa3GGii/LdppAV7cxRXEnCQiewSr/bHlO5dJx4SdhFeBIWkzRM+pM3DukfrXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FXTslTRY; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780406453; c=relaxed/simple;
+	bh=rVnUnQX8yaFrENwslTUe2ZtTG7KwuK2PR4aHa1oac2U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qy2f9Q/Ovc31nm+ZaNvpt8ofrmN5DFSF/FD9/kxLCj8cTylPFcITKL1jLF2ycg1MSrtysLVHIVBYsSmubOWyyQur/3e0jdU4CS50b+c1PATRWgoa8pX43O9sJluKvm9+HwRLUsXcDu6edtr0wbVAVIbdnCO9ckxzRw2/EkFyX4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IlDZ70D4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FXTslTRY"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-490ac357c55so20158755e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 06:12:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780405941; x=1781010741; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xufbH6/LW8nomXQ4PybUK63N3KgJQEA2McZ4fEZ1QJw=;
-        b=FXTslTRYMCiY9qEA0U0k6qvwVI/rZBZuRnj0VL9LI3fSKc3sbFDkQRUR/dgWEE36l+
-         Njdg8p0f0wh6tNu+Nwl8AMGgnUumL0Do0zkERSIXNzR0MO/c+/8wFjO56HKKTBQrvIN0
-         xf3fh9eJ2elqk0edS8JQlD4JrN3sJzNJCMSwN0hpdFDzUAS7RHt9KJh9qS6ZNEu9xUol
-         7AZqjaRHIpzVU9Cd6I7LGlwEQ6OE5U+87yliNdx+Dc5rnRyXOovf4WxgPHLlHUvnISFP
-         9aPbZJuPMzf6EUCeAGOrj52R1BxtZdBKUGHKXvW8MWpGcL46Yx8bId9ANOOSmDRt9g4q
-         i8wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780405941; x=1781010741;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xufbH6/LW8nomXQ4PybUK63N3KgJQEA2McZ4fEZ1QJw=;
-        b=Vgz5dvW/c2FVLOaz3ihzlm1mBz3zvEPzihb8DBGimRql2tZDTpdqjzDadZTIDuNOSU
-         D42LA/X140HgNg/BM/sBM5R5WF7ZKLxS2KmgNJf/zUq8wJjn1ZaDpwdVMXzrCPQvslvg
-         tj8d0pi4f6R24aHlZYj+y4t1MIYKBnaqypks4F6knqCdIMsm30XpQbBBdqeGe5qWtmpc
-         Vz4FTIIcdmcVnUAByQQMbyyUxsaOMtDFHq3LOloGcvp3E2oAoaE1iMJqcGm6zQtIDWcy
-         q8poKd6GpBp40jEVPqLRjw7N40vO5Sh95myZdLNCBCDJWnTIY72PMwjPTnFHSFPGYkSP
-         5CAw==
-X-Forwarded-Encrypted: i=1; AFNElJ94EEvRtw/txdb8PtJFz8+XVrtyJZIasRLU8w3LX3733pPxijVVYAhoNOsG0QP3PIWqGebM6T197sUlCHtgusY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxw3GNkxT4tmISqqSwpnD9QEb2KhocwGXCEhMpPA8afKyyg6/lx
-	hzRA2GFci5ftwnrerNJGFdHHRQG0dS7Yl571jzAVcEJZyvYEu9YGm9dD
-X-Gm-Gg: Acq92OEwt4t2AS36Hse1PdoRLJMFqhqqtzZ9a7ON3lSJzrYpI7wKX8HBqvey/DcWTGX
-	OUAROHNSiS+Jtx+PpfrSN5KaIGot3H60st9TeQhbAzi0JEqbV3gWUkWUKM39WY82VTuvOKH4O3z
-	twCA6zjEUW6fbXmoEq6XgtlX+mcojurmvLzqO+H9fzgZoC1MVvTFwdSCFqao0Zt7ebxiDD/foVL
-	gCueaIE94kVLUktyoNNln8OuICQaK57C/SC/M20aD+8rVonBxfsDAYRef37iDQSdjRxHptpx2vw
-	GLRkKNiAbD9Dpo4cuOllWm6WtKLIQ/2NXcOMrbfrdSW3ILWWhFz5TRgcbIl/xPz5tgD2Bq220r5
-	mab/nUFiXQwtO0lfLH2eG4L2B+JPQtYCOEA7FXBVHXFyRmTo/x7QOUSYQDPCTAzxVwn7+L3xgpB
-	wkjZlTgnfXOPIUSVQ+kh3H/iZN4ZZaFlkklnhNLXOa+Q==
-X-Received: by 2002:a05:600c:5915:b0:490:958f:2a5e with SMTP id 5b1f17b1804b1-490b071aa9dmr56258675e9.13.1780405940691;
-        Tue, 02 Jun 2026 06:12:20 -0700 (PDT)
-Received: from x1.tail0e71db.ts.net ([46.140.7.198])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef34c3081sm33234665f8f.15.2026.06.02.06.12.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 06:12:20 -0700 (PDT)
-From: Ruslan Valiyev <linuxoid@gmail.com>
-To: SeongJae Park <sj@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linuxoid@gmail.com
-Subject: [PATCH 2/2] selftests/damon/sysfs_refresh: test kdamond refresh_ms
-Date: Tue,  2 Jun 2026 15:12:17 +0200
-Message-ID: <20260602131217.2210912-3-linuxoid@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260602131217.2210912-1-linuxoid@gmail.com>
-References: <20260602131217.2210912-1-linuxoid@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IlDZ70D4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 106F21F00893;
+	Tue,  2 Jun 2026 13:20:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780406452;
+	bh=3fBXQTkgYwlxF/WwCZe3LkMFK0cUfjEsfId1KNEul14=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=IlDZ70D4sSBLxNHaOyPmcUENfjwZ6wFb9PlabDF3GQjw73Qvcfy7CIplqxDijnbRV
+	 YSM3yjZ0mE0HRC6qNHh+uiRVjMlZOxLo6EbJOYgp8Q81cqQ73CQT0FT+EpR62XovuI
+	 ymgrMgT1IS8qwIuQFgY2gxYJnhqmTG8WaxFtSiwfqbnVnNXq7xaT29tNhnWp0YAPLg
+	 b9Bfxeucj7hyvMpVrfm4s3AvqjgoDZLZWaTN/rQFoUW5rEPHrdZhMC3AiAJ2Hn7tnW
+	 FqSxk3REbXUswTtidvWA2QTLNjpgVzVVBKwW2RFf2oMkN2cn8VUOj7TgB/4nZvGsxX
+	 lbL/bG45Q7doQ==
+Date: Tue, 2 Jun 2026 15:20:48 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Nam Cao <namcao@linutronix.de>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Shuah Khan <shuah@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, 
+	Soheil Hassas Yeganeh <soheil@google.com>, Mateusz Guzik <mjguzik@gmail.com>, 
+	David Laight <david.laight.linux@gmail.com>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] eventpoll: Fix epoll_wait() report false negative
+Message-ID: <20260602-entmachten-stegreif-wohlverdient-23303e323f54@brauner>
+References: <cover.1780133499.git.namcao@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cover.1780133499.git.namcao@linutronix.de>
 
-Writing a non-zero value to a kdamond's 'refresh_ms' sysfs file should
-make DAMON periodically update the read-only sysfs files on its own,
-without the user writing update keywords such as 'update_schemes_stats'
-to the 'state' file.  This behavior has no test coverage.
+On Sat, May 30, 2026 at 11:37:30AM +0200, Nam Cao wrote:
+> Hi,
+> 
+> While staring at epoll, I noticed ep_events_available() looks wrong. I
+> wrote a small program to confirm, and yes it is definitely wrong.
+> 
+> This series adds a reproducer to kselftest, and fix the bug.
 
-Add a test that starts a kdamond with refresh_ms set and a 'stat' scheme
-whose default access pattern matches every monitored region, then polls
-the scheme's 'nr_tried' stats file directly, without requesting an
-update.  The value can become non-zero only via the periodic refresh, so
-the test confirms refresh_ms works; with refresh_ms disabled the stat
-stays zero and the test fails.
-
-Signed-off-by: Ruslan Valiyev <linuxoid@gmail.com>
----
- tools/testing/selftests/damon/Makefile        |  1 +
- .../testing/selftests/damon/sysfs_refresh.py  | 75 +++++++++++++++++++
- 2 files changed, 76 insertions(+)
- create mode 100755 tools/testing/selftests/damon/sysfs_refresh.py
-
-diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
-index 2180c328a8252..ece244e5c5b95 100644
---- a/tools/testing/selftests/damon/Makefile
-+++ b/tools/testing/selftests/damon/Makefile
-@@ -13,6 +13,7 @@ TEST_PROGS += sysfs.py
- TEST_PROGS += sysfs_update_schemes_tried_regions_wss_estimation.py
- TEST_PROGS += damos_quota.py damos_quota_goal.py damos_apply_interval.py
- TEST_PROGS += damos_tried_regions.py damon_nr_regions.py
-+TEST_PROGS += sysfs_refresh.py
- TEST_PROGS += reclaim.sh lru_sort.sh
- 
- # regression tests (reproducers of previously found bugs)
-diff --git a/tools/testing/selftests/damon/sysfs_refresh.py b/tools/testing/selftests/damon/sysfs_refresh.py
-new file mode 100755
-index 0000000000000..012b7e8f509f5
---- /dev/null
-+++ b/tools/testing/selftests/damon/sysfs_refresh.py
-@@ -0,0 +1,75 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+import os
-+import subprocess
-+import time
-+
-+import _damon_sysfs
-+
-+def main():
-+    # Continuously access a memory region for far longer than the test needs,
-+    # so the kdamond always has a live target to monitor while we poll.
-+    sz_region = 10 * 1024 * 1024
-+    proc = subprocess.Popen(
-+            ['./access_memory', '1', '%d' % sz_region, '60000', 'repeat'])
-+
-+    # A 'stat' scheme with the default (maximally wide) access pattern matches
-+    # every monitored region, so its 'nr_tried' stat increases as the kdamond
-+    # runs.  refresh_ms should make DAMON update the schemes' stats files under
-+    # sysfs on its own, without a manual 'update_schemes_stats' request.
-+    kdamond = _damon_sysfs.Kdamond(
-+            refresh_ms=100,
-+            contexts=[_damon_sysfs.DamonCtx(
-+                ops='vaddr',
-+                targets=[_damon_sysfs.DamonTarget(pid=proc.pid)],
-+                schemes=[_damon_sysfs.Damos(action='stat')],
-+                )])
-+    kdamonds = _damon_sysfs.Kdamonds([kdamond])
-+
-+    err = kdamonds.start()
-+    if err is not None:
-+        # Kernels older than the refresh_ms feature have no such file; treat
-+        # that as unsupported rather than a failure.
-+        if not os.path.exists(os.path.join(kdamond.sysfs_dir(), 'refresh_ms')):
-+            proc.terminate()
-+            proc.wait()
-+            print('kdamond has no refresh_ms file; skipping')
-+            exit(_damon_sysfs.ksft_skip)
-+        proc.terminate()
-+        proc.wait()
-+        print('kdamond start failed: %s' % err)
-+        exit(1)
-+
-+    scheme = kdamond.contexts[0].schemes[0]
-+    nr_tried_path = os.path.join(scheme.sysfs_dir(), 'stats', 'nr_tried')
-+
-+    try:
-+        # Poll the stat file directly.  We never request an update (e.g.
-+        # 'update_schemes_stats'), so 'nr_tried' can become non-zero only
-+        # through the periodic refresh that refresh_ms enables.
-+        nr_tried = 0
-+        deadline = time.monotonic() + 10
-+        while time.monotonic() < deadline:
-+            if proc.poll() is not None:
-+                print('the access_memory target exited unexpectedly')
-+                exit(1)
-+            content, err = _damon_sysfs.read_file(nr_tried_path)
-+            if err is not None:
-+                print('reading %s failed: %s' % (nr_tried_path, err))
-+                exit(1)
-+            nr_tried = int(content)
-+            if nr_tried > 0:
-+                break
-+            time.sleep(0.1)
-+    finally:
-+        kdamonds.stop()
-+        proc.terminate()
-+        proc.wait()
-+
-+    if nr_tried == 0:
-+        print('refresh_ms did not auto-update the schemes stats')
-+        exit(1)
-+
-+if __name__ == '__main__':
-+    main()
--- 
-2.43.0
-
+Please resend on top of vfs-7.2.eventpoll... :)
