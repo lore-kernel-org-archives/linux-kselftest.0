@@ -1,447 +1,124 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B4C3ED3DA
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 15:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E63364E85
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2026 15:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780413021; cv=none; b=b+Rfz6eHKo1rFBIHLta8yy1Th7bmYPPt4ou6Az2c+Nxrtg7UzDXgSVSf6tXSNlojLNI70dhj+KyJdFfeM6Lk/6CUVt5t7voIlDafs14SjrpH6Ezh10zGBCFrmJtUmAH8a2GM5bFcpP6Fqx7de4LknLJ+wvNAQNeVtGhH2vtJFqs=
+	t=1780413315; cv=none; b=HnT+Hw+CBX6dRQmihqBzqIZNxTXcMrQRcIWlI/7LtXVIFPCFHqBZuW65LlBh5bHpyGnTokz5VtWsbi9iwqfgpjGo7J5PE8X+X/23AyFa2LdT0u4FaJz+Rae5IEAiHggW1vYv5d6Xzx5GcBvphpanY2gSQRfAqgpWioToIVDJzD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780413021; c=relaxed/simple;
-	bh=aNiYV6eks9AWxansqt7a9QeRU2sU+D70Y0WnA0lziDo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JWxu3PnSw2RAo8QDpllLk3DgaG5EgSm5uNKsyriDhXMaFkc9/6vyKHVCKmZKJwKAWXUZh+TqXOWm3YonbwMqaA05fiSuzHBc53iRTG5xXiOhW8k4wVhiAknaMGVHkOpYAUcVPElJ3b7yyOG1bb0MPmTy0obH1cljRqho42cabJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jdT7PDDu; arc=none smtp.client-ip=95.215.58.188
+	s=arc-20240116; t=1780413315; c=relaxed/simple;
+	bh=bpIG0DviQzocBMgRg42jS5U+ruDAK6mwOZOQQBeRaU8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jjWtKm6Eu12xOKc6Rj48P3X1Aura/+N8HfFt9N5nZEW3vEP/osKFedPHfsxkBG5VSLenHdnObJQRNNez0coA6T/ZdvvOSoq7j15H8JWFrAF/fxHlkM016zMY4w5Y+418TfsaectRCzotRzC9FmR3PyzcDOh0AIg0CLPAtIMN3jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JgpbOM2j; arc=none smtp.client-ip=95.215.58.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jdT7PDDu"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JgpbOM2j"
+Message-ID: <31927f33-9db0-4a39-b38a-72b33487979e@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780413016;
+	t=1780413310;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=7aJ8UsRt56L+UYhTOTDwNHFuUJw1GXfsMzTmYDtBGsY=;
-	b=jdT7PDDuoUBBQo9vX8UK2mlR1YlfyHkCkQhFNYNlUGZdj34nr6omYD6XEFaIAK/vlB6BTz
-	PgRUACgK7aud4KT0vuQLD27IY4pnwlc3tjudNIQskuVSZ8bJMZcJ0Z5Jaa3gHVyX9uMdaR
-	95cPZ+P7W9aIUmfzH5YL2btFrv+XyPc=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Guillaume Nault <gnault@redhat.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	Peter Oskolkov <posk@google.com>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com,
-	Leon Hwang <leon.huangfu@shopee.com>
-Subject: [PATCH bpf v4 2/2] selftests/bpf: Add tests to verify the fix of encapsulating VxLAN in lwt
-Date: Tue,  2 Jun 2026 23:09:31 +0800
-Message-ID: <20260602150931.49629-3-leon.hwang@linux.dev>
-In-Reply-To: <20260602150931.49629-1-leon.hwang@linux.dev>
-References: <20260602150931.49629-1-leon.hwang@linux.dev>
+	bh=2rcXbFWZh1YISDu4YKt/p/Fc46FTcRHnUU3a2LRMUBY=;
+	b=JgpbOM2j1wvWzKR2GnvnAbT2ahufzSwYysuT7mqPtWaCYS9WfR0+WEabGL2tcVM0AXGOuH
+	WQ8ihJhhmKlrMo44Gyb9T17HXVwsgx4UalmznGpGSr/r2X0G8UE0ROGycmLjq/DJvObJSz
+	e5Vk/W9N1W9w9gMwXEBS0OkXpTXP3q0=
+Date: Tue, 2 Jun 2026 08:14:58 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 1/2] bpf: Tighten cgroup storage cookie checks for prog
+ arrays
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, malin89@huawei.com, ast@kernel.org,
+ daniel@iogearbox.net, bpf@vger.kernel.org
+Cc: andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, jolsa@kernel.org,
+ zhuyifei@google.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, ameryhung@gmail.com, cuirongzhen@huawei.com,
+ tanjingguo@huawei.com, cenxianlong@huawei.com, chenzhe@huawei.com,
+ martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260602073539.1567846-1-malin89@huawei.com>
+ <4f4661e6d1d9eaa6b05b0e6499562ad10ff8fa3b7bc6d44ec4019119fb547bd9@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <4f4661e6d1d9eaa6b05b0e6499562ad10ff8fa3b7bc6d44ec4019119fb547bd9@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-Add two tests to verify the transport header of skb has been set when
-encapsulate VxLAN using bpf_lwt_push_encap() helper.
 
-1. VxLAN over IPv4.
-2. VxLAN over IPv6.
 
-Without the fix, the tests would fail:
+On 6/2/26 1:15 AM, bot+bpf-ci@kernel.org wrote:
+>> bpf: Tighten cgroup storage cookie checks for prog arrays
+>>
+>> The recent KCTF-reported cgroup local storage issue assigned
+>> CVE-2025-38502 was fixed by commit abad3d0bad72 ("bpf: Fix oob access
+>> in cgroup local storage").
+>>
+>> However, the previous fixes are still incomplete. The current prog-array
+>> compatibility check treats a program with no cgroup storage as
+>> compatible with any stored storage cookie. This allows a storage-less
+>> program to bridge a tail-call chain between an entry program and a
+>> storage-using callee even though runtime cgroup local storage still
+>> follows the caller context.
+>>
+>> Require exact per-type storage_cookie equality when checking prog-array
+>> compatibility. This blocks zero-storage bridge programs from joining a
+>> prog-array owned by a storage-using program and closes the residual
+>> A -> B(no storage) -> C(storage) path.
+>>
+>> This also aligns with Amery Hung's earlier NULL-storage tail-call fix by
+>> requiring storage use to match consistently across prog-array users.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 7d9c3427894f ("bpf: Make cgroup storages shared between programs on the same cgroup")
+>> Tested-by: Amery Hung <ameryhung@gmail.com>
+>> Signed-off-by: Lin Ma <malin89@huawei.com>
+>> Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
+>> Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
+> Should the Fixes: tag point to abad3d0bad72 instead of 7d9c3427894f?
+>
+> The code this patch removes is the '|| !cookie' clause in
+> __bpf_prog_map_compatible():
+>
+>    ret = map->owner->storage_cookie[i] == cookie ||
+>          !cookie;
+>
+> That permissive '|| !cookie' clause, which treats a storage-less program
+> as compatible with any stored cookie, was introduced by abad3d0bad72
+> ("bpf: Fix oob access in cgroup local storage").
+>
+> The commit referenced by the current tag, 7d9c3427894f ("bpf: Make
+> cgroup storages shared between programs on the same cgroup"), only added
+> the shared cgroup-storage feature and does not touch
+> __bpf_prog_map_compatible() or add the storage_cookie[] check.
+>
+> Would this be more accurate?
+>
+>    Fixes: abad3d0bad72 ("bpf: Fix oob access in cgroup local storage")
 
- lwt_ip_encap_vxlan:FAIL:transport_hdr offset unexpected transport_hdr offset: actual 70 != expected 20
- #208     lwt_ip_encap_vxlan_ipv4:FAIL
- lwt_ip_encap_vxlan:FAIL:transport_hdr offset unexpected transport_hdr offset: actual 110 != expected 40
- #209     lwt_ip_encap_vxlan_ipv6:FAIL
+Agree. The above fix tag seems better.
 
-The unexpected offsets are: outer encap headers
-(IPv4: iphdr+udp+vxlan+eth = 50 bytes, IPv6: ipv6hdr+udp+vxlan+eth = 70 bytes)
-plus the inner IP header (20 or 40 bytes), because without the fix
-transport_header still points at the inner transport layer instead of the
-outer UDP header.
-
-Assisted-by: Claude:claude-sonnet-4-6
-Cc: Leon Hwang <leon.huangfu@shopee.com>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 145 ++++++++++++++++
- .../selftests/bpf/progs/test_lwt_ip_encap.c   | 155 ++++++++++++++++--
- 2 files changed, 290 insertions(+), 10 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-index b6391af5f6f9..6606f0ed9a9a 100644
---- a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-@@ -3,6 +3,7 @@
- 
- #include "network_helpers.h"
- #include "test_progs.h"
-+#include "test_lwt_ip_encap.skel.h"
- 
- #define BPF_FILE "test_lwt_ip_encap.bpf.o"
- 
-@@ -32,6 +33,9 @@
- #define IP6_ADDR_8 "fb08::1"
- #define IP6_ADDR_GRE "fb10::1"
- 
-+#define IP4_ADDR_VXLAN  "172.16.17.100"
-+#define IP6_ADDR_VXLAN  "fb11::1"
-+
- #define IP6_ADDR_SRC IP6_ADDR_1
- #define IP6_ADDR_DST IP6_ADDR_4
- 
-@@ -538,3 +542,144 @@ void test_lwt_ip_encap_ipv4(void)
- 	if (test__start_subtest("ingress"))
- 		lwt_ip_encap(IPV4_ENCAP, INGRESS, "");
- }
-+
-+/*
-+ * VxLAN Setup/topology:
-+ *
-+ * NS1 (IP*_ADDR_1)                NS2                  NS3 (IP*_ADDR_4)
-+ *       [ping src]
-+ *           |                          top route
-+ *         veth1 (LWT encap)  <<-- veth2        veth3  <<-- veth4 (ping dst)
-+ *           |                                                ^
-+ *       (bottom route)                                       | (inner pkt)
-+ *           v                        bottom route            |
-+ *         veth5              -->> veth6        veth7  -->> veth8 (vxlan decap)
-+ *                                                          (IP*_ADDR_VXLAN)
-+ *
-+ * Add the VxLAN endpoint addresses to NS3's veth8, create standard
-+ * VxLAN decap devices bound to those addresses, and install routes so
-+ * NS1/NS2 can reach the endpoints via the bottom route.  NS2 here is to
-+ * make sure the LWT-encap VxLAN packets are routed to NS3 correctly.
-+ */
-+static int setup_vxlan_routes(const char *ns3, const char *ns1, const char *ns2)
-+{
-+	struct nstoken *nstoken;
-+
-+	nstoken = open_netns(ns3);
-+	if (!ASSERT_OK_PTR(nstoken, "open ns3 for vxlan"))
-+		return -1;
-+
-+	SYS(fail_close, "ip    a add %s/32  dev veth8", IP4_ADDR_VXLAN);
-+	SYS(fail_close, "ip -6 a add %s/128 dev veth8", IP6_ADDR_VXLAN);
-+	/*
-+	 * Standard VxLAN devices to decap the encapsulated packets.  The inner
-+	 * Ethernet frame uses a broadcast dst MAC so the IP stack accepts it
-+	 * without ARP or FDB configuration.
-+	 */
-+	SYS(fail_close, "ip link add vxlan4 type vxlan id 1 dstport 4789 local %s dev veth8 nolearning noudpcsum",
-+	    IP4_ADDR_VXLAN);
-+	SYS(fail_close, "ip link set vxlan4 up");
-+	SYS(fail_close, "ip link add vxlan6 type vxlan id 1 dstport 4789 local %s dev veth8 nolearning udp6zerocsumrx",
-+	    IP6_ADDR_VXLAN);
-+	SYS(fail_close, "ip link set vxlan6 up");
-+	close_netns(nstoken);
-+
-+	SYS(fail, "ip -n %s    route add %s/32  dev veth5 via %s",
-+	    ns1, IP4_ADDR_VXLAN, IP4_ADDR_6);
-+	SYS(fail, "ip -n %s    route add %s/32  dev veth7 via %s",
-+	    ns2, IP4_ADDR_VXLAN, IP4_ADDR_8);
-+	SYS(fail, "ip -n %s -6 route add %s/128 dev veth5 via %s",
-+	    ns1, IP6_ADDR_VXLAN, IP6_ADDR_6);
-+	SYS(fail, "ip -n %s -6 route add %s/128 dev veth7 via %s",
-+	    ns2, IP6_ADDR_VXLAN, IP6_ADDR_8);
-+	return 0;
-+
-+fail_close:
-+	close_netns(nstoken);
-+fail:
-+	return -1;
-+}
-+
-+static void lwt_ip_encap_vxlan(bool ipv4_encap)
-+{
-+	char ns1[NETNS_NAME_SIZE] = NETNS_BASE "-1-";
-+	char ns2[NETNS_NAME_SIZE] = NETNS_BASE "-2-";
-+	char ns3[NETNS_NAME_SIZE] = NETNS_BASE "-3-";
-+	const char *sec = ipv4_encap ? "encap_vxlan" : "encap_vxlan6";
-+	int expected_offset = ipv4_encap ? (int)sizeof(struct iphdr)
-+					 : (int)sizeof(struct ipv6hdr);
-+	struct test_lwt_ip_encap *skel = NULL;
-+	int thdr_offset, err;
-+
-+	if (!ASSERT_OK(create_ns(ns1, NETNS_NAME_SIZE), "create ns1"))
-+		goto out;
-+	if (!ASSERT_OK(create_ns(ns2, NETNS_NAME_SIZE), "create ns2"))
-+		goto out;
-+	if (!ASSERT_OK(create_ns(ns3, NETNS_NAME_SIZE), "create ns3"))
-+		goto out;
-+
-+	if (!ASSERT_OK(setup_network(ns1, ns2, ns3, ""), "setup network"))
-+		goto out;
-+
-+	if (!ASSERT_OK(setup_vxlan_routes(ns3, ns1, ns2), "setup vxlan routes"))
-+		goto out;
-+
-+	skel = test_lwt_ip_encap__open();
-+	if (!ASSERT_OK_PTR(skel, "test_lwt_ip_encap__open"))
-+		goto out;
-+
-+	bpf_program__set_autoload(skel->progs.bpf_lwt_encap_gre, false);
-+	bpf_program__set_autoload(skel->progs.bpf_lwt_encap_gre6, false);
-+	bpf_program__set_autoload(skel->progs.bpf_lwt_encap_vxlan, false);
-+	bpf_program__set_autoload(skel->progs.bpf_lwt_encap_vxlan6, false);
-+	bpf_program__set_autoload(skel->progs.fexit_lwt_push_ip_encap, true);
-+	skel->rodata->tgt_ip_version = ipv4_encap ? 4 : 6;
-+
-+	err = test_lwt_ip_encap__load(skel);
-+	if (!ASSERT_OK(err, "test_lwt_ip_encap__load"))
-+		goto out;
-+
-+	err = test_lwt_ip_encap__attach(skel);
-+	if (!ASSERT_OK(err, "test_lwt_ip_encap__attach"))
-+		goto out;
-+
-+	/* Remove the direct NS2->DST route so packets must go via LWT encap. */
-+	SYS(out, "ip -n %s    route del %s/32  dev veth3", ns2, IP4_ADDR_DST);
-+	SYS(out, "ip -n %s -6 route del %s/128 dev veth3", ns2, IP6_ADDR_DST);
-+
-+	if (ipv4_encap)
-+		SYS(out, "ip -n %s route add %s encap bpf xmit obj %s sec %s dev veth1",
-+		    ns1, IP4_ADDR_DST, BPF_FILE, sec);
-+	else
-+		SYS(out, "ip -n %s -6 route add %s encap bpf xmit obj %s sec %s dev veth1",
-+		    ns1, IP6_ADDR_DST, BPF_FILE, sec);
-+
-+	skel->bss->fexit_triggered = false;
-+
-+	if (ipv4_encap)
-+		SYS(out, "ip netns exec %s ping  -c 1 -W1 %s", ns1, IP4_ADDR_DST);
-+	else
-+		SYS(out, "ip netns exec %s ping6 -c 1 -W1 %s", ns1, IP6_ADDR_DST);
-+
-+	if (!ASSERT_TRUE(skel->bss->fexit_triggered, "fexit_triggered"))
-+		goto out;
-+
-+	thdr_offset = (int)skel->bss->transport_hdr - (int)skel->bss->network_hdr;
-+	ASSERT_EQ(thdr_offset, expected_offset, "transport_hdr offset");
-+
-+out:
-+	test_lwt_ip_encap__destroy(skel);
-+	SYS_NOFAIL("ip netns del %s", ns1);
-+	SYS_NOFAIL("ip netns del %s", ns2);
-+	SYS_NOFAIL("ip netns del %s", ns3);
-+}
-+
-+void test_lwt_ip_encap_vxlan_ipv4(void)
-+{
-+	lwt_ip_encap_vxlan(IPV4_ENCAP);
-+}
-+
-+void test_lwt_ip_encap_vxlan_ipv6(void)
-+{
-+	lwt_ip_encap_vxlan(IPV6_ENCAP);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c b/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-index d6cb986e7533..4a934fccf8f5 100644
---- a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-+++ b/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-@@ -1,11 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0
--#include <stddef.h>
-+#include "vmlinux.h"
- #include <string.h>
--#include <linux/bpf.h>
--#include <linux/ip.h>
--#include <linux/ipv6.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
-+#include <bpf/bpf_tracing.h>
- 
- struct grehdr {
- 	__be16 flags;
-@@ -64,13 +62,13 @@ int bpf_lwt_encap_gre6(struct __sk_buff *skb)
- 	hdr.ip6hdr.nexthdr = 47;  /* IPPROTO_GRE */
- 	hdr.ip6hdr.hop_limit = 0x40;
- 	/* fb01::1 */
--	hdr.ip6hdr.saddr.s6_addr[0] = 0xfb;
--	hdr.ip6hdr.saddr.s6_addr[1] = 1;
--	hdr.ip6hdr.saddr.s6_addr[15] = 1;
-+	hdr.ip6hdr.saddr.in6_u.u6_addr8[0] = 0xfb;
-+	hdr.ip6hdr.saddr.in6_u.u6_addr8[1] = 1;
-+	hdr.ip6hdr.saddr.in6_u.u6_addr8[15] = 1;
- 	/* fb10::1 */
--	hdr.ip6hdr.daddr.s6_addr[0] = 0xfb;
--	hdr.ip6hdr.daddr.s6_addr[1] = 0x10;
--	hdr.ip6hdr.daddr.s6_addr[15] = 1;
-+	hdr.ip6hdr.daddr.in6_u.u6_addr8[0] = 0xfb;
-+	hdr.ip6hdr.daddr.in6_u.u6_addr8[1] = 0x10;
-+	hdr.ip6hdr.daddr.in6_u.u6_addr8[15] = 1;
- 
- 	hdr.greh.protocol = skb->protocol;
- 
-@@ -82,4 +80,141 @@ int bpf_lwt_encap_gre6(struct __sk_buff *skb)
- 	return BPF_LWT_REROUTE;
- }
- 
-+#define VXLAN_PORT  4789
-+#define VXLAN_FLAGS 0x08000000
-+#define VXLAN_VNI   1
-+
-+#define ETH_ALEN	6		/* Octets in one ethernet addr	 */
-+#define ETH_P_IP	0x0800		/* Internet Protocol packet	*/
-+#define ETH_P_IPV6	0x86DD		/* IPv6 over bluebook		*/
-+
-+static const __u8 bcast[ETH_ALEN] = {
-+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-+};
-+
-+static const __u8 srcmac[ETH_ALEN] = {
-+	0x02, 0x00, 0x00, 0x00, 0x00, 0x01,
-+};
-+
-+SEC("encap_vxlan")
-+int bpf_lwt_encap_vxlan(struct __sk_buff *skb)
-+{
-+	struct encap_hdr {
-+		struct iphdr    iph;
-+		struct udphdr   udph;
-+		struct vxlanhdr vxh;
-+		struct ethhdr   eth;
-+	} __attribute__((__packed__)) hdr;
-+	int err;
-+
-+	memset(&hdr, 0, sizeof(hdr));
-+
-+	hdr.iph.ihl      = 5;
-+	hdr.iph.version  = 4;
-+	hdr.iph.ttl      = 0x40;
-+	hdr.iph.protocol = 17; /* IPPROTO_UDP */
-+	hdr.iph.tot_len  = bpf_htons(skb->len + sizeof(hdr));
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	hdr.iph.saddr = 0x640510ac;  /* 172.16.5.100  */
-+	hdr.iph.daddr = 0x641110ac;  /* 172.16.17.100 */
-+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-+	hdr.iph.saddr = 0xac100564;  /* 172.16.5.100 */
-+	hdr.iph.daddr = 0xac101164;  /* 172.16.17.100 */
-+#else
-+#error "Fix your compiler's __BYTE_ORDER__?!"
-+#endif
-+
-+	hdr.udph.source = bpf_htons(VXLAN_PORT);
-+	hdr.udph.dest   = bpf_htons(VXLAN_PORT);
-+	hdr.udph.len    = bpf_htons(skb->len + sizeof(hdr.udph) + sizeof(hdr.vxh) +
-+				    sizeof(hdr.eth));
-+
-+	hdr.vxh.vx_flags = bpf_htonl(VXLAN_FLAGS);
-+	hdr.vxh.vx_vni   = bpf_htonl(VXLAN_VNI << 8);
-+
-+	__builtin_memcpy(hdr.eth.h_dest, bcast, ETH_ALEN);
-+	__builtin_memcpy(hdr.eth.h_source, srcmac, ETH_ALEN);
-+	hdr.eth.h_proto = bpf_htons(ETH_P_IP);
-+
-+	err = bpf_lwt_push_encap(skb, BPF_LWT_ENCAP_IP, &hdr, sizeof(hdr));
-+	if (err)
-+		return BPF_DROP;
-+
-+	return BPF_LWT_REROUTE;
-+}
-+
-+SEC("encap_vxlan6")
-+int bpf_lwt_encap_vxlan6(struct __sk_buff *skb)
-+{
-+	struct encap_hdr {
-+		struct ipv6hdr  ip6hdr;
-+		struct udphdr   udph;
-+		struct vxlanhdr vxh;
-+		struct ethhdr   eth;
-+	} __attribute__((__packed__)) hdr;
-+	int err;
-+
-+	memset(&hdr, 0, sizeof(hdr));
-+
-+	hdr.ip6hdr.version     = 6;
-+	hdr.ip6hdr.nexthdr     = 17; /* IPPROTO_UDP */
-+	hdr.ip6hdr.hop_limit   = 0x40;
-+	hdr.ip6hdr.payload_len = bpf_htons(skb->len + sizeof(hdr.udph) + sizeof(hdr.vxh) +
-+					   sizeof(hdr.eth));
-+	/* fb05::1 */
-+	hdr.ip6hdr.saddr.in6_u.u6_addr8[0]  = 0xfb;
-+	hdr.ip6hdr.saddr.in6_u.u6_addr8[1]  = 0x05;
-+	hdr.ip6hdr.saddr.in6_u.u6_addr8[15] = 1;
-+	/* fb11::1 */
-+	hdr.ip6hdr.daddr.in6_u.u6_addr8[0]  = 0xfb;
-+	hdr.ip6hdr.daddr.in6_u.u6_addr8[1]  = 0x11;
-+	hdr.ip6hdr.daddr.in6_u.u6_addr8[15] = 1;
-+
-+	hdr.udph.source = bpf_htons(VXLAN_PORT);
-+	hdr.udph.dest   = bpf_htons(VXLAN_PORT);
-+	hdr.udph.len    = bpf_htons(skb->len + sizeof(hdr.udph) + sizeof(hdr.vxh) +
-+				    sizeof(hdr.eth));
-+
-+	hdr.vxh.vx_flags = bpf_htonl(VXLAN_FLAGS);
-+	hdr.vxh.vx_vni   = bpf_htonl(VXLAN_VNI << 8);
-+
-+	__builtin_memcpy(hdr.eth.h_dest, bcast, ETH_ALEN);
-+	__builtin_memcpy(hdr.eth.h_source, srcmac, ETH_ALEN);
-+	hdr.eth.h_proto = bpf_htons(ETH_P_IPV6);
-+
-+	err = bpf_lwt_push_encap(skb, BPF_LWT_ENCAP_IP, &hdr, sizeof(hdr));
-+	if (err)
-+		return BPF_DROP;
-+
-+	return BPF_LWT_REROUTE;
-+}
-+
-+volatile const int tgt_ip_version;
-+
-+__u16 transport_hdr = 0;
-+__u16 network_hdr = 0;
-+bool fexit_triggered = false;
-+
-+SEC("?fexit/bpf_lwt_push_ip_encap")
-+int BPF_PROG(fexit_lwt_push_ip_encap, struct sk_buff *skb, void *hdr, u32 len, bool ingress,
-+	     int retval)
-+{
-+	struct iphdr *iph;
-+
-+	if (retval || fexit_triggered)
-+		return 0;
-+
-+	iph = (typeof(iph)) (skb->head + skb->network_header);
-+	if (iph->version != tgt_ip_version)
-+		return 0;
-+
-+	if ((iph->version == 4 && iph->protocol == 17 /* IPPROTO_UDP */) ||
-+	    (iph->version == 6 && ((struct ipv6hdr *)iph)->nexthdr == 17 /* IPPROTO_UDP */)) {
-+		fexit_triggered = true;
-+		transport_hdr   = skb->transport_header;
-+		network_hdr     = skb->network_header;
-+	}
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.54.0
+>
+> This same question was raised on the v1 thread by the bpf-ci review bot
+> (https://lore.kernel.org/bpf/20260601095158.1186318-1-malin89@huawei.com/),
+> noting that the patch removes the '|| !cookie' logic introduced in
+> abad3d0bad72 rather than the original shared storage feature.  The reply
+> disagreed and kept the tag pointing at 7d9c3427894f in v2, but the
+> reviewer did not acknowledge that explanation, so it may be worth
+> settling before this is applied.
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26806034423
 
