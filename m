@@ -1,100 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEBE93D3D03;
-	Tue,  2 Jun 2026 09:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2142136F91F;
+	Tue,  2 Jun 2026 10:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780394310; cv=none; b=k23dwNUXhVzVS1r5r/jxup8U2wRbr+sUWMAQVRSW7QVaKt2hzlBZNdivJM09iz0XDge5kYqVDv8slj8P+EZroVfq3A8ivW9cixVIOjAAiIOy7ZqCovrpcAUU9qvh2r4ftWEMwiEMRCSZRPTHpdX8Xs9pGi1geqwKPnjp47zPRDE=
+	t=1780394854; cv=none; b=p3smZ7jpVCnbDNLYCG84hY34fNTcAKCFLHVVRw51142IYdCnswol4PQE9K1tbzmWFdIq6Wb1CmFqadkcwezfOY1MELHS9Va/R6lQ1DeQ3Uv9m7uuCOfTwLcZdXzOT+BaZS+aGvmnWCM2/oqu7uR+DEGXopKaQYo5fJXgOFq3aps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780394310; c=relaxed/simple;
-	bh=rj8exp7Amd9Ol8HJ44cvBYkEXAiW5cNwu7/fcWUYLW0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NngY2FeFq2Owx+11alUF1YwNq6gdGlc3qS/X5zo5iGpPK9KlBM9WFkDiCORXP923jhOiSaom6Ho3dQ35VVRqJUfAgJsqW1jeuxqXwySkt0H/LKDUqxJTqVtmNtAQqKIiVtuwgZyddaXzCu4yhhYtQXSPvghObCThLiQwmi76YvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G2WUXT9j; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780394854; c=relaxed/simple;
+	bh=DJ+YNfigE8pzfyVTIvkGTp3g8dr7vHyfhNo60hzahAQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HLKkdwPBPzRP6l+m23g75lUY7x5T2+jF83lt+i1490CSOJR5pjFdfd3nGPauKfBkt1QyvUbDwCO9IIQm8pIAlqg1jWRPnwk6NdjouZPUTBbDmOcoEbRB+zZIm3vKOYIdIi9yV+lLWmY0OdfYYM6wVu5w/AR/vCVxykh2Z8nxf88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kv2fE0bp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G2WUXT9j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C444E1F00898;
-	Tue,  2 Jun 2026 09:58:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kv2fE0bp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B312A1F00893;
+	Tue,  2 Jun 2026 10:07:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780394309;
-	bh=ATzXC1zmaZ/vfuDrUdct+l2gZdFTjFwyYzm+mZ+8ldE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=G2WUXT9juyCz3FhbTrS5sMLYCg+ZzFkZiN5Xfor4oN5EyxLpFUAyGxxjyYo2BT+7y
-	 6BRDFbckSxYfQr/vPI9hU0ffJtpookD4g020tFhwVt83RYEdwWoaDZ0mzLcffBO93S
-	 4SnZQXIwM998Abvzd3Rdbc4+v16+5ZkHvJHddENeF3bMWfHzSIinE/HDYU0La039Gg
-	 MkJj58fPoVKCBSaBzv/zxoxUBBV6TmQfAD/zAEdJB2HllsH48gNukHjnhXvPtEYAOY
-	 JnqVooRum7EUcmFL2jTwDBQFMGB62cFPz1TMQ8jrQuzNDn0oJIvd/yCmWAFZfaboWh
-	 oxN1yt01zYBGw==
-Message-ID: <e4c653ec-dfb4-4dce-a565-2a43520fc44f@kernel.org>
-Date: Tue, 2 Jun 2026 11:58:25 +0200
+	s=k20260515; t=1780394852;
+	bh=FArUgwzqGxSIYq6nsRbDRcCSW+jo1FsCY7Blcc7Vo5I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Kv2fE0bpyQXoK2UWojz99uTNM13VMJzQY8pttiWpI5b8+40hTJICG1z6mCK4HxzOt
+	 WGAj2y5SJlJoIl+N9iHLKqVRWu9OrrHnx+/tz3FlIfzs7MJKFsAGpGxzFWxuyG8cBM
+	 WrYnPscz8yfDI3CjGm3n7wUsfcglUz6lNDXUt3emdSCW12sVz1MKY0/BHu5mWG7lyI
+	 dN+nfzkHl4QQvZFfAGkcO2JVbFceEzmni/FhHhQ1tddV0QOElD5gWZUecDoh8qPAX+
+	 6wu9anSgJc0s666UALU4wXlDajOMwgfjPzHsI45oaFeSPwD+x8KBz2GcGUJ7aJGPII
+	 gOS5yhOmWv2XA==
+Date: Tue, 2 Jun 2026 13:07:24 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+Cc: akpm@linux-foundation.org, peterx@redhat.com, david@kernel.org,
+	ljs@kernel.org, surenb@google.com, vbabka@kernel.org,
+	Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net,
+	skhan@linuxfoundation.org, seanjc@google.com, pbonzini@redhat.com,
+	jthoughton@google.com, aarcange@redhat.com, sj@kernel.org,
+	usama.arif@linux.dev, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH v6 04/15] userfaultfd: test uffd VMA flags through the
+ vma_flags_t API
+Message-ID: <ah6rXJEYUsGfzPgi@kernel.org>
+References: <20260529172716.357179-1-kas@kernel.org>
+ <20260529172716.357179-5-kas@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: configurable block error injection
-To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Cc: Jonathan Corbet <corbet@lwn.net>, linux-block@vger.kernel.org,
- linux-doc@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Brendan Gregg <brendan.d.gregg@gmail.com>, GOST <gost.dev@samsung.com>
-References: <20260602054615.3788425-1-hch@lst.de>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-In-Reply-To: <20260602054615.3788425-1-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260529172716.357179-5-kas@kernel.org>
 
-On 02/06/2026 07.45, Christoph Hellwig wrote:
-> Hi all,
+On Fri, May 29, 2026 at 06:26:33PM +0100, Kiryl Shutsemau (Meta) wrote:
+> The uffd VMA-flag helpers read vma->vm_flags directly. Now that
+> config-gated per-mode masks exist, switch them to the vma_flags_t
+> accessor vma_test_any_mask(), which is the going-forward API and keeps a
+> single place (the VMA_UFFD_* masks) that knows which modes are available
+> on the current build.
 > 
-> this series adds a new configurable block error injection facility.
-> We already have a few to inject block errors, but unfortunately most
-> of them are either not very useful or hard to use, or both:
+> No functional change: vma_flags_t is in union with vm_flags, so the same
+> bits are read, and the masks fold to the same code the open-coded
+> vm_flags tests produced -- verified identical on gcc and clang, 32- and
+> 64-bit.
 > 
->  - The fail_make_request failure injection point can't distinguish
->    different commands, different ranges in the file and can only injection
->    plain I/O errors.
->  - the should_fail_bio 'dynamic' failure injection has all the same issues
->    as fail_make_request
->  - dm-error can only fail all command in the table using BLK_STS_IOERR
->    and requires setting up a new block device
->  - dm-flakey and dm-dust allow all kinds of configurability, but still
->    don't have good error selection, no good support for non-read/write
->    commands and are limited to the dm table alignment requirements,
->    which for zoned devices enforces setting them up for an entire zone.
->    They also once again require setting up a stacked block device,
->    which is really annoying in harnesses like xfstests
+> Suggested-by: Lorenzo Stoakes <ljs@kernel.org>
+> Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+> Assisted-by: Claude:claude-opus-4-8
+
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+
+> ---
+>  include/linux/userfaultfd_k.h | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
 > 
-> This series adds a new debugfs-based block layer error injection
-> that allows to configure what operations and ranges the injection
-> applied to, and what status to return.  It also allows to configure a
-> failure ratio similar to the xfs errortag injection.
+> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> index 658740df2978..c4f2cc6dfcf0 100644
+> --- a/include/linux/userfaultfd_k.h
+> +++ b/include/linux/userfaultfd_k.h
+> @@ -178,7 +178,8 @@ static inline bool is_mergeable_vm_userfaultfd_ctx(struct vm_area_struct *vma,
+>   */
+>  static inline bool uffd_disable_huge_pmd_share(struct vm_area_struct *vma)
+>  {
+> -	return vma->vm_flags & (VM_UFFD_WP | VM_UFFD_MINOR);
+> +	return vma_test_any_mask(vma,
+> +		mk_vma_flags_from_masks(VMA_UFFD_WP, VMA_UFFD_MINOR));
+>  }
+>  
+>  /*
+> @@ -190,22 +191,23 @@ static inline bool uffd_disable_huge_pmd_share(struct vm_area_struct *vma)
+>   */
+>  static inline bool uffd_disable_fault_around(struct vm_area_struct *vma)
+>  {
+> -	return vma->vm_flags & (VM_UFFD_WP | VM_UFFD_MINOR);
+> +	return vma_test_any_mask(vma,
+> +		mk_vma_flags_from_masks(VMA_UFFD_WP, VMA_UFFD_MINOR));
+>  }
+>  
+>  static inline bool userfaultfd_missing(struct vm_area_struct *vma)
+>  {
+> -	return vma->vm_flags & VM_UFFD_MISSING;
+> +	return vma_test_any_mask(vma, VMA_UFFD_MISSING);
+>  }
+>  
+>  static inline bool userfaultfd_wp(struct vm_area_struct *vma)
+>  {
+> -	return vma->vm_flags & VM_UFFD_WP;
+> +	return vma_test_any_mask(vma, VMA_UFFD_WP);
+>  }
+>  
+>  static inline bool userfaultfd_minor(struct vm_area_struct *vma)
+>  {
+> -	return vma->vm_flags & VM_UFFD_MINOR;
+> +	return vma_test_any_mask(vma, VMA_UFFD_MINOR);
+>  }
+>  
+>  static inline bool userfaultfd_pte_wp(struct vm_area_struct *vma,
+> @@ -222,7 +224,7 @@ static inline bool userfaultfd_huge_pmd_wp(struct vm_area_struct *vma,
+>  
+>  static inline bool userfaultfd_armed(struct vm_area_struct *vma)
+>  {
+> -	return vma->vm_flags & __VM_UFFD_FLAGS;
+> +	return vma_test_any_mask(vma, __VMA_UFFD_FLAGS);
+>  }
+>  
+>  static inline bool vma_has_uffd_without_event_remap(struct vm_area_struct *vma)
+> -- 
+> 2.54.0
+> 
 
-I wonder if the block layer would be interested in moving block error
-injection off the should_fail() fault injection framework and extending
-the ALLOW_ERROR_INJECTION annotation instead and offloading all the
-debugfs configuration logic (block/error-injection.c) into eBPF?
-
-I talked about moderr [1] at LPC 2025. It's a simple error injection
-tool in eBPF for the module subsystem. The suggested direction there was
-to generalize the tool to ideally to no tool at all, and leverage
-bpftrace to describe the error injection conditions a given
-subsystem needs to be tested under. That would let blktests, for
-example, absorb that and simplify the configuration logic this series
-adds in the kernel for debugfs.
-
-A previous attempt to add inline error injection [2] was rejected as too
-intrusive / source-polluting; the eBPF approach solves that, since the
-injection logic lives in a standalone tool/script rather than in the
-kernel sources.
-
-What do you guys think?
-
-[1] https://lpc.events/event/19/contributions/2204/
-[2] https://lore.kernel.org/all/20210512064629.13899-1-mcgrof@kernel.org/
-
+-- 
+Sincerely yours,
+Mike.
