@@ -1,179 +1,152 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15714392C20;
-	Tue,  2 Jun 2026 07:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0249D34CFD3;
+	Tue,  2 Jun 2026 07:05:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780383695; cv=none; b=CtP35Nbr44fqU/zaLFWFs5SqwJ9bDaCow8ZUw3C60dK2jb1MWL98TROFRai8V2/8jRoq5IdaKqjtfexW+iuT2FZFOjeQKJS/xuFlxEi695LNQyuw+5ZMXZfWZEVBtUDjs691lfoc/T98PwdyNYtPBOp2ClJAZGFQLpwTdbbC72U=
+	t=1780383940; cv=none; b=px4oaP0bPqGebFiyo7ry2ySCDA/yn845ra6Nc+5e1jvguO+wfBMPXn5UG3XM7qj3AEkO8vQ0ipNetSI8vpu5NnAfK0N6WP2x/ZqbmWJwjgSENX9j36IYOMXQQvtfg3tI2Xejq4IGz5vQDP0Kl/n0apHB2ETRerjk6NwGMlHEBIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780383695; c=relaxed/simple;
-	bh=5IRlofSrVPboQlop4d9YB1jg6RNszFLOzJiRENG35BQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PZpiMBnGgcFSra7idv9VDIhMSkWD4pdm3k926hpzs5gx7ITTmOeKlYhmWEXqBD5trDznBG0eH960wSQpXNs+rb++CDKS8d2gjHxVF8Aesy9mWYbLf45tABgyqWBbXioZV4TqfpmFmaDjW8fR57xidgK4MV9Rwi8AiDIUr0C69DQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: de7a1b765e5011f1aa26b74ffac11d73-20260602
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:9365df35-eb04-47c9-92b9-bc7c395351fe,IP:10,
-	URL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:-15
-X-CID-INFO: VERSION:1.3.12,REQID:9365df35-eb04-47c9-92b9-bc7c395351fe,IP:10,UR
-	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-15
-X-CID-META: VersionHash:e7bac3a,CLOUDID:8def62c301d44e256f4815b234f29436,BulkI
-	D:2606021501276KQVYNDK,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
-	2|127|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:ni
-	l,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,
-	BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: de7a1b765e5011f1aa26b74ffac11d73-20260602
-X-User: lihongfu@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lihongfu@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 968047319; Tue, 02 Jun 2026 15:01:24 +0800
-From: Hongfu Li <lihongfu@kylinos.cn>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org
-Cc: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hongfu Li <lihongfu@kylinos.cn>
-Subject: [PATCH v6 4/5] selftests/mm: add missing mmap() return checks in pkey tests
-Date: Tue,  2 Jun 2026 15:01:18 +0800
-Message-Id: <20260602070119.1452308-5-lihongfu@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260602070119.1452308-1-lihongfu@kylinos.cn>
-References: <20260602070119.1452308-1-lihongfu@kylinos.cn>
+	s=arc-20240116; t=1780383940; c=relaxed/simple;
+	bh=IYeo6c8VaIc0I6De68d9Dc6uoh6+x0T5ZPPO2A/0xnY=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=CYFTwAc6XqpjTQjNEWplBVmE8IdztowjGtAgRUuL5m7ADadP4MwA/ueuY3EnpbUA+/SFWHONbcpVi9lQoO3b6q6Ek4F7yxVHRFEzWHSv4iHnazNSXBEHFA4aSc1I/UB9A0JItUMPsIVBW7P/iz2hCthiIg6JqnDXXRluW/krPQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Bs1n6fFK; arc=none smtp.client-ip=113.46.200.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Bs1n6fFK"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=ywNJBGpmmj9NFHoVdWRVSdCZGNodVCyyTVIIC+PjNKE=;
+	b=Bs1n6fFKha43sqYhA2tcjSKsQDx7BaUGA6NUMdju6QLI/zIcoj6MivYNkd4KB5UzwgTwlRGRz
+	DBaCYzG3lmH9nMWSDaCaN/QE0DF2txBBIS+FXHu0AyqAciCTvM6wFX81QkZB7TvYIsS+e91oBXo
+	OMxjbX/ncrB1e4iZFAn9le4=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4gV1q845Hhz1T4fx;
+	Tue,  2 Jun 2026 14:57:24 +0800 (CST)
+Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 1C5BA4056D;
+	Tue,  2 Jun 2026 15:05:34 +0800 (CST)
+Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
+ dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 2 Jun 2026 15:05:33 +0800
+Received: from [10.173.124.160] (10.173.124.160) by
+ kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 2 Jun 2026 15:05:32 +0800
+Subject: Re: [PATCH v8 4/6] mm/memory-failure: add panic option for
+ unrecoverable pages
+To: Breno Leitao <leitao@debian.org>
+CC: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <kernel-team@meta.com>, Andrew Morton
+	<akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, "Lorenzo
+ Stoakes" <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport
+	<rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
+	<mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Naoya Horiguchi
+	<nao.horiguchi@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, "Masami
+ Hiramatsu" <mhiramat@kernel.org>, Mathieu Desnoyers
+	<mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, "Shuah
+ Khan" <skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>
+References: <20260527-ecc_panic-v8-0-9ea0cfa16bb0@debian.org>
+ <20260527-ecc_panic-v8-4-9ea0cfa16bb0@debian.org>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <4d7b720a-7975-8a4d-a00e-e888d63812a0@huawei.com>
+Date: Tue, 2 Jun 2026 15:05:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260527-ecc_panic-v8-4-9ea0cfa16bb0@debian.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemq500010.china.huawei.com (7.202.194.235)
 
-Add missing checks against mmap() return value, replace (void *)-1
-with MAP_FAILED for better readability and consistency.
+On 2026/5/27 22:06, Breno Leitao wrote:
+> Add a sysctl panic_on_unrecoverable_memory_failure (disabled by
+> default) that triggers a kernel panic when memory_failure()
+> encounters pages that cannot be recovered.  This provides a clean
+> crash with useful debug information rather than allowing silent
+> data corruption or a delayed crash at an unrelated code path.
+> 
+> Panic eligibility is intentionally narrow: only MF_MSG_KERNEL with
+> result == MF_IGNORED panics.  After the previous patch, MF_MSG_KERNEL
+> covers PG_reserved pages and the kernel-owned pages promoted from
+> get_hwpoison_page() via -ENOTRECOVERABLE (slab, page tables,
+> large-kmalloc).
+> 
+> All other action types are excluded:
+> 
+> - MF_MSG_GET_HWPOISON and MF_MSG_KERNEL_HIGH_ORDER can be reached by
+>   transient refcount races with the page allocator (an in-flight buddy
+>   allocation has refcount 0 and is no longer on the buddy free list,
+>   briefly), and panicking on them would risk killing the box for what
+>   is actually a recoverable userspace page.
+> 
+> - MF_MSG_UNKNOWN means identify_page_state() could not classify the
+>   page; that is precisely the wrong basis for a panic decision.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  mm/memory-failure.c | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 14c0a958638c..dcd53dbc6aec 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -74,6 +74,8 @@ static int sysctl_memory_failure_recovery __read_mostly = 1;
+>  
+>  static int sysctl_enable_soft_offline __read_mostly = 1;
+>  
+> +static int sysctl_panic_on_unrecoverable_mf __read_mostly;
+> +
+>  atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
+>  
+>  static bool hw_memory_failure __read_mostly = false;
+> @@ -155,6 +157,15 @@ static const struct ctl_table memory_failure_table[] = {
+>  		.proc_handler	= proc_dointvec_minmax,
+>  		.extra1		= SYSCTL_ZERO,
+>  		.extra2		= SYSCTL_ONE,
+> +	},
+> +	{
+> +		.procname	= "panic_on_unrecoverable_memory_failure",
+> +		.data		= &sysctl_panic_on_unrecoverable_mf,
+> +		.maxlen		= sizeof(sysctl_panic_on_unrecoverable_mf),
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_dointvec_minmax,
+> +		.extra1		= SYSCTL_ZERO,
+> +		.extra2		= SYSCTL_ONE,
+>  	}
+>  };
+>  
+> @@ -1255,6 +1266,15 @@ static void update_per_node_mf_stats(unsigned long pfn,
+>  	++mf_stats->total;
+>  }
+>  
+> +static bool panic_on_unrecoverable_mf(enum mf_action_page_type type,
+> +				      enum mf_result result)
+> +{
+> +	if (!sysctl_panic_on_unrecoverable_mf || result != MF_IGNORED)
+> +		return false;
+> +
+> +	return type == MF_MSG_KERNEL;
 
-Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
----
- tools/testing/selftests/mm/pkey-powerpc.h          |  2 +-
- tools/testing/selftests/mm/pkey_sighandler_tests.c |  2 ++
- tools/testing/selftests/mm/protection_keys.c       | 12 +++++++-----
- 3 files changed, 10 insertions(+), 6 deletions(-)
+Would it be more straightforward to write as something like:
 
-diff --git a/tools/testing/selftests/mm/pkey-powerpc.h b/tools/testing/selftests/mm/pkey-powerpc.h
-index 17bf2d1b0192..2ce85580b404 100644
---- a/tools/testing/selftests/mm/pkey-powerpc.h
-+++ b/tools/testing/selftests/mm/pkey-powerpc.h
-@@ -126,7 +126,7 @@ static inline void *malloc_pkey_with_mprotect_subpage(long size, int prot, u16 p
- 			size, prot, pkey);
- 	pkey_assert(pkey < NR_PKEYS);
- 	ptr = mmap(NULL, size, prot, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
--	pkey_assert(ptr != (void *)-1);
-+	pkey_assert(ptr != MAP_FAILED);
- 
- 	ret = syscall(__NR_subpage_prot, ptr, size, NULL);
- 	if (ret) {
-diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-index 882928f2912b..d185d3da26cf 100644
---- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
-+++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-@@ -317,6 +317,7 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
- 	/* Set up alternate signal stack that will use the default MPK */
- 	sigstack.ss_sp = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
- 			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	pkey_assert(sigstack.ss_sp != MAP_FAILED);
- 	sigstack.ss_flags = 0;
- 	sigstack.ss_size = STACK_SIZE;
- 
-@@ -492,6 +493,7 @@ static void test_pkru_sigreturn(void)
- 	/* Set up alternate signal stack that will use the default MPK */
- 	sigstack.ss_sp = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
- 			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	pkey_assert(sigstack.ss_sp != MAP_FAILED);
- 	sigstack.ss_flags = 0;
- 	sigstack.ss_size = STACK_SIZE;
- 
-diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
-index e504544e2197..96a4eb26f326 100644
---- a/tools/testing/selftests/mm/protection_keys.c
-+++ b/tools/testing/selftests/mm/protection_keys.c
-@@ -586,7 +586,7 @@ static void *malloc_pkey_with_mprotect(long size, int prot, u16 pkey)
- 			size, prot, pkey);
- 	pkey_assert(pkey < NR_PKEYS);
- 	ptr = mmap(NULL, size, prot, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
--	pkey_assert(ptr != (void *)-1);
-+	pkey_assert(ptr != MAP_FAILED);
- 	ret = mprotect_pkey((void *)ptr, PAGE_SIZE, prot, pkey);
- 	pkey_assert(!ret);
- 	record_pkey_malloc(ptr, size, prot);
-@@ -609,7 +609,7 @@ static void *malloc_pkey_anon_huge(long size, int prot, u16 pkey)
- 	 */
- 	size = ALIGN_UP(size, HPAGE_SIZE * 2);
- 	ptr = mmap(NULL, size, PROT_NONE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
--	pkey_assert(ptr != (void *)-1);
-+	pkey_assert(ptr != MAP_FAILED);
- 	record_pkey_malloc(ptr, size, prot);
- 	mprotect_pkey(ptr, size, prot, pkey);
- 
-@@ -667,7 +667,7 @@ static void *malloc_pkey_hugetlb(long size, int prot, u16 pkey)
- 	size = ALIGN_UP(size, HPAGE_SIZE * 2);
- 	pkey_assert(pkey < NR_PKEYS);
- 	ptr = mmap(NULL, size, PROT_NONE, flags, -1, 0);
--	pkey_assert(ptr != (void *)-1);
-+	pkey_assert(ptr != MAP_FAILED);
- 	mprotect_pkey(ptr, size, prot, pkey);
- 
- 	record_pkey_malloc(ptr, size, prot);
-@@ -696,7 +696,7 @@ static void *malloc_pkey(long size, int prot, u16 pkey)
- 		pkey_assert(malloc_type < nr_malloc_types);
- 
- 		ret = pkey_malloc[malloc_type](size, prot, pkey);
--		pkey_assert(ret != (void *)-1);
-+		pkey_assert(ret != MAP_FAILED);
- 
- 		malloc_type++;
- 		if (malloc_type >= nr_malloc_types)
-@@ -1114,6 +1114,7 @@ static void arch_force_pkey_reg_init(void)
- 	 * doing the XSAVE size enumeration dance.
- 	 */
- 	buf = mmap(NULL, 1*MB, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
-+	pkey_assert(buf != MAP_FAILED);
- 
- 	/* These __builtins require compiling with -mxsave */
- 
-@@ -1680,7 +1681,8 @@ int main(void)
- 		ksft_print_msg("running PKEY tests for unsupported CPU/OS\n");
- 
- 		ptr  = mmap(NULL, size, PROT_NONE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
--		assert(ptr != (void *)-1);
-+		if (ptr == MAP_FAILED)
-+			ksft_exit_fail_perror("mmap");
- 		test_mprotect_pkey_on_unsupported_cpu(ptr, 1);
- 		ksft_test_result_pass("pkey on unsupported CPU/OS\n");
- 		ksft_finished();
--- 
-2.25.1
+if (!sysctl_panic_on_unrecoverable_mf)
+	return false;
 
+return (type == MF_MSG_KERNEL && result == MF_IGNORED);
+
+Thanks.
+.
