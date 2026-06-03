@@ -1,220 +1,216 @@
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A7A3DC878
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 15:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6669F3D5668
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 15:47:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780501603; cv=none; b=DegFXgWg+GPm6N/9EHFXpkfYW/NZFDS1NDZRX7Q5Rr7mFwvDyDLntgYqQBH3wlptIKZ8/Td7fe5kS9SdoAuPSXap+1I0/sPIKPa40o3rDnkxA55fp3/Ns/ykGJ2JRG56Xym3LDmqEJ3hoSv7ooLIRphIEPkFmcolFkRchtx4Trc=
+	t=1780501653; cv=none; b=YjPJXKuQ5h40CRpaj8QmD6Wx1IzOg4YHHbOyjR9mZVX4l17N9GZAUdNiTV28UWY01apKHC1UBXTbG8McbQ3VE+f6DawYTGoETvVexlIQ3cKtcK8aHJ6OTi0dfPz+xmjnJJNNMUfiJxGVF5lzC0C0JYyuap8lNffd090yiXtk1yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780501603; c=relaxed/simple;
-	bh=PI26M0khAE7StCXBHeuwdUicbhLFrZpiZfsokDq9n88=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mp0egUy4gkvN62MssEp9AIVCZq/SQHqladD3FwOlfbEAB/ZrMP67hFfCAfZXqZt+/5+ABZNQ4TbL58L89XPXMOCvTouIkR70AACvKPi336RNUPbWyq/LZeBpBEWmrzYdyd0J93dmofWqEeMoFhTfvDZ+zq/Ywuceg2/y4+xWwjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=UfnMU9x4; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	s=arc-20240116; t=1780501653; c=relaxed/simple;
+	bh=IcpSSUCKBGQUSdE+H5gN8j3wYQNF9Y2ULFOr0fIfha8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=rtk32h4vC5BFq9f6NcDRpNvx6Yqf14w+7V63AeevS2bmTUK3GlAGR1nXj3JLUH9qWZZRCdP+bcAH+G3aHh7RpdiRFwWhN7KzsVHH+t1rnG/gf+5ZzpfAoh0lGnNP4/UAhcHPG6oPSKZOeX2jhojYK+8RI2uUWQZ9AKx3Y5cNAcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=yIvvwYP2; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="UfnMU9x4"
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8ce9df4732cso37080976d6.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 08:46:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="yIvvwYP2"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2bf77d4a4e2so4974705ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 08:47:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1780501598; x=1781106398; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LZ44uuKaEudMkx03Nujcoh6Uuv+6Qpcd4aVYSw8wkq4=;
-        b=UfnMU9x4HQ5qiHtFUE0lTFss8h/kLwIwM83j9GbTZhGvGXszQl8tr6XSAJY1tNAKlw
-         Qj1G0CU3SJrnxCoUmRu6p7idE7BGqb7YKlchkUMwVRnw22z0d3QESJuxbP2ypf/u77vu
-         RBvxBD8885JZf9GhT7X8H8WnQ9637cQIUNDlKvfzngK72pRBy4fryDXVv2hyEAWtFRU1
-         IAtQfDrX0YGSZr2BHgW1t9gddbSUofKjyl1DfIKKugoWQKu+u5q1PH+I5USpNtniWECr
-         oF7XJ71VAo2DubK9lgqpW4u2pNUm2egb5BUI4CgGO0oiKgUzKBv2WZ/HRQowF0u0snfs
-         EnXw==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780501649; x=1781106449; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F3a2aniZHfh0TzPY/t367ZwwfKRhGahNfob+QbDNifc=;
+        b=yIvvwYP2Z66ImHERprbpDesD1oTMBkHMd7H/16XWSG4cXtr84LH+fErGI4Fw0SBnX+
+         QxSxZvkn0XpOblgd64VbsiL8+sDcKJNHVhfzkRjyxkBF7DNlT7Lkg4mbmANsUCy4syVG
+         nGHaMCaSI2KZkpDy1xfKFOCRZ6UbSEydjFPhiEcDVYcmzi3VO6InFVUp8yT0UteHvxXD
+         mqIfi45CqCBXMjIynLLOUqxpr1LzUpnfN8DqKwllzFU1c9KVbf41w1KDw67z7HAy0qAd
+         NXHmX19/RH5ebNNxMY/EZfYiZELCai8mY1V4kGfQ1oI1zmpkgvz0bjwlmNFWweoKYhlo
+         tgXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780501598; x=1781106398;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LZ44uuKaEudMkx03Nujcoh6Uuv+6Qpcd4aVYSw8wkq4=;
-        b=H5N+5r67bN+h9W9iIoD8Bb7doPRuOgOCB2EHOuiuqy8OdIGcO4z7bOpDu+/63fOdxI
-         vLtk4ipfwKXsP2vaj0q+57HhxMCCWzMOoOFkqTOsq0m35i72mwTA+GNHzYYdMZiOQFOg
-         Ej7mQpyzbGLBunJbhLPDOWSUu/Qs7GYMiCHXcawwsA1mMcdJW5ucUBeJu9QcK+u4dyWY
-         PSudNo0TwIhmDYxTb3nenv1NJ8AEoZZ8aEgoa6/HHdXtJkWxvNjPcR1O7tTsCjI2k+o4
-         JFN9eGCRwhUZ+HHW3XJoXBtIPL0PL0LaHQjYagVMOOkDXdvZs46BwuksEf/HPJb1rHks
-         yNjg==
-X-Gm-Message-State: AOJu0YwrZ3rD2sv+3i5KH2rtuYI0TBO5A13URrtAGAvSfBoectkYM14k
-	NweGa68szjtiyzpmKXK9uiiyWITdB2a/hsLH4iOfcjq8UrHEhnyl2AjzgFiY2gVI7F7qOf2Gpml
-	OOdUc
-X-Gm-Gg: Acq92OFyusE3zsoqvDXR86/D49V4oTnQgdDRemo+p3/vxA1TmQjawXxBho/SYgcIfT1
-	jWzChZpx2BGsU6W4XrHCXZLeNKJiMUQNpFpzDW9DPQGdxq/WMHKPxvpCtdEVH0D2eDrbYHirmnG
-	HP117omqAmQqr5Rt6gY6RuOX7WMjP+SaKhj0F3G187XPU/tiibxqQuUFi+cBrYh6+qjSqwhATen
-	KsZJJNebe6qC6wvoPPXg9yVYaLxVg4/ERfIQgI4OlEeA5lk9XThe/0uxPdlBB53pn+ErAXnvDLS
-	6LVrjXw9CuK9eANq+Bumdze7xeMhb1rRSaTHrxh5SjpaLhKtVmrfL7/hizEKRb2EHOJE0AtxN1b
-	WhwAAcz4IdM7xS3U24DhzrrzPUboyBBWhAKZeTtv7FYEDI1wtAlJ4cyE6SBuB2wLvRupXKzw251
-	uElymq6Ejoeo1oEmyD+zshdHpCWQ7yjkUPI97fEeoOxFhGpTUvIsXVsBAeSYwGA//N9qSMW54G
-X-Received: by 2002:a05:6214:dce:b0:8ac:a6bd:503b with SMTP id 6a1803df08f44-8cecde9c8admr53195506d6.15.1780501598131;
-        Wed, 03 Jun 2026 08:46:38 -0700 (PDT)
-Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cecd277070sm22665326d6.48.2026.06.03.08.46.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2026 08:46:37 -0700 (PDT)
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: linux-kselftest@vger.kernel.org,
-	rppt@kernel.org,
-	shuah@kernel.org,
-	akpm@linux-foundation.org,
-	linux-mm@kvack.org,
-	skhan@linuxfoundation.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	corbet@lwn.net,
-	pasha.tatashin@soleen.com,
-	dmatlack@google.com,
-	kexec@lists.infradead.org,
-	pratyush@kernel.org,
-	skhawaja@google.com,
-	graf@amazon.com
-Subject: [PATCH v7 13/13] selftests/liveupdate: Add stress-files kexec test
-Date: Wed,  3 Jun 2026 15:44:02 +0000
-Message-ID: <20260603154402.468928-14-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260603154402.468928-1-pasha.tatashin@soleen.com>
-References: <20260603154402.468928-1-pasha.tatashin@soleen.com>
+        d=1e100.net; s=20251104; t=1780501649; x=1781106449;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F3a2aniZHfh0TzPY/t367ZwwfKRhGahNfob+QbDNifc=;
+        b=gXZCZT5fG0NqVbDOkFVmOA8R/uMQ6Ej0mTMU9QHMiNJu2CrSw+Ilb093dlH2uclMNu
+         Wqn4Ue7AEq4YAkr9Wl/DBhHuhtioPGxy3cmwJsA/tPuNWRsbSl32lPuqQeYL3vBV/ZJt
+         rz2ieBZE9dlBhY9PQJ4eavYaIl0Mmv3BcxAun4wxI8wWQ+5Mtp6N08IoVYFIw01GcpRq
+         wGm+ym9//BefOFBI6+N7EPyF2Gt9Utv/bByKejx3fBOWMf5dG9RKn4zxr+GZHY5AwC1V
+         kZ56I8v1+eSAqhbdWyGhypdW6QMrzL8Pu64VYIUa5j8I7rgaHdI8TZfHzqOE4E/CKD5I
+         +d5w==
+X-Forwarded-Encrypted: i=1; AFNElJ9sM0h1hx6taVHfs2EWr41W9J3A7cxvJm7dCKuc5Q+SZsMDf6P9cdXzRy0ax+X4U3utFS9GwoIVRgwtycUt0LI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1e+7IkiRzrB/71xjORrnyBu1HOSLeGBBfNsu8ExiK2/yBQNkw
+	oE88a/+J3+WEizzYj58JkK5zURJHZVMth7rKDa7v1X5wgGphYga0Rn8Bo6xqCd+JmSE=
+X-Gm-Gg: Acq92OEwkDnj54V8IS5EHdwNy95QSsv5wgZtmMEbDlH74j2xESoGBrnlOrczhtk7jVU
+	GUZEt5hC4nKAxXazSlt5tToT0fedxYs2EZiduafqm49ySf370Fc/hAqnCcO8d7IZm7P6AlcniFe
+	KFGhbIEyBoGHEre+3jVtJEf9s37dsgtz6yQ0Q7rGlnFUxsbQ602W+S6a1/GYsOA26tF6rNPQaIl
+	tTd1ARczNZyE/47VIzE2c3qrYMWty8Jl8btQLOHHYhCuJtEBCf4gdwjduFdUivzFlaIW6cQ5td7
+	u8qrBkmvEDzX2KcYs7g4w50CXAqh9sgHD7EXk33+cQiXXKVo0DAT7891S/8qkR0MpHmQz8ojv9b
+	Von/DvswMQUNp/ASjmSNn5YMfJd5qcv2+ePev00qYBtr569OInW4q0kDzkrRxa8/+BghRXNpmyf
+	xzoXCPXDsx+i7OcmlAaDCPYqhrnvFoLcFCgVM=
+X-Received: by 2002:a17:903:37ce:b0:2c0:d29b:34ff with SMTP id d9443c01a7336-2c1646eaeacmr32703955ad.10.1780501649327;
+        Wed, 03 Jun 2026 08:47:29 -0700 (PDT)
+Received: from localhost ([2001:569:58a0:da00:a5c8:c4ce:f7c1:40c1])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f84335sm29666995ad.19.2026.06.03.08.47.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Jun 2026 08:47:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 03 Jun 2026 11:47:27 -0400
+Message-Id: <DIZJ5P33U6YT.14OWBKG3T9LVD@etsalapatis.com>
+Cc: <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Add arena direct-value
+ one-past-end reject test
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Woojin Ji" <random6.xyz@gmail.com>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260603-arena-direct-value-v1-v1-1-7b31cc0a8cac@gmail.com>
+In-Reply-To: <20260603-arena-direct-value-v1-v1-1-7b31cc0a8cac@gmail.com>
 
-Add a new luo_stress_files kexec test that verifies preserving and
-retrieving 500 files across a kexec reboot.
+On Wed Jun 3, 2026 at 8:09 AM EDT, Woojin Ji wrote:
+> BPF_MAP_TYPE_ARENA supports direct-value pseudo loads, but unlike array
+> maps its map value_size is zero and the valid direct-value range is the
+> arena mmap size, max_entries * PAGE_SIZE.
+>
+> Commit 3ac1a467e376 ("bpf: Fix off-by-one boundary validation in arena
+> direct-value access") fixed arena_map_direct_value_addr() to reject an
+> offset exactly at the end of the arena mapping. Add a regression test
+> that loads a BPF_PSEUDO_MAP_VALUE with off =3D=3D arena_size and verifies
+> that the verifier rejects it with the expected offset in the log.
+>
+> Unlike __arena global relocation, where insn[1].imm depends on
+> compiler/layout, this raw instruction directly drives
+> map_direct_value_addr(map, &addr, off) with off =3D=3D arena_size, so the
+> boundary check is exercised directly.
+>
+> Assisted-by: ChatGPT:gpt-5.5
+> Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+> ---
 
-Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
----
- tools/testing/selftests/liveupdate/Makefile   |  1 +
- .../selftests/liveupdate/luo_stress_files.c   | 97 +++++++++++++++++++
- 2 files changed, 98 insertions(+)
- create mode 100644 tools/testing/selftests/liveupdate/luo_stress_files.c
+Makes sense to add this, but I don't see why this isn't a single test
+program in verifier_arena.c and requires a whole new userspace test.
 
-diff --git a/tools/testing/selftests/liveupdate/Makefile b/tools/testing/selftests/liveupdate/Makefile
-index ed7534468386..30689d22cb02 100644
---- a/tools/testing/selftests/liveupdate/Makefile
-+++ b/tools/testing/selftests/liveupdate/Makefile
-@@ -7,6 +7,7 @@ TEST_GEN_PROGS += liveupdate
- TEST_GEN_PROGS_EXTENDED += luo_kexec_simple
- TEST_GEN_PROGS_EXTENDED += luo_multi_session
- TEST_GEN_PROGS_EXTENDED += luo_stress_sessions
-+TEST_GEN_PROGS_EXTENDED += luo_stress_files
- 
- TEST_FILES += do_kexec.sh
- 
-diff --git a/tools/testing/selftests/liveupdate/luo_stress_files.c b/tools/testing/selftests/liveupdate/luo_stress_files.c
-new file mode 100644
-index 000000000000..0cdf9cd4bac7
---- /dev/null
-+++ b/tools/testing/selftests/liveupdate/luo_stress_files.c
-@@ -0,0 +1,97 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * Copyright (c) 2026, Google LLC.
-+ * Pasha Tatashin <pasha.tatashin@soleen.com>
-+ *
-+ * Validate that LUO can handle a large number of files per session across
-+ * a kexec reboot.
-+ */
-+
-+#include <stdio.h>
-+#include <unistd.h>
-+#include "luo_test_utils.h"
-+
-+#define NUM_FILES 500
-+#define STATE_SESSION_NAME "kexec_many_files_state"
-+#define STATE_MEMFD_TOKEN 9999
-+#define TEST_SESSION_NAME "many_files_session"
-+
-+/* Stage 1: Executed before the kexec reboot. */
-+static void run_stage_1(int luo_fd)
-+{
-+	int session_fd, i;
-+
-+	ksft_print_msg("[STAGE 1] Creating state file for next stage (2)...\n");
-+	create_state_file(luo_fd, STATE_SESSION_NAME, STATE_MEMFD_TOKEN, 2);
-+
-+	ksft_print_msg("[STAGE 1] Creating test session '%s'...\n", TEST_SESSION_NAME);
-+	session_fd = luo_create_session(luo_fd, TEST_SESSION_NAME);
-+	if (session_fd < 0)
-+		fail_exit("luo_create_session");
-+
-+	ksft_print_msg("[STAGE 1] Preserving %d files...\n", NUM_FILES);
-+	for (i = 0; i < NUM_FILES; i++) {
-+		char data[64];
-+
-+		snprintf(data, sizeof(data), "file-data-%d", i);
-+		if (create_and_preserve_memfd(session_fd, i, data) < 0)
-+			fail_exit("create_and_preserve_memfd for index %d", i);
-+	}
-+
-+	ksft_print_msg("[STAGE 1] Successfully preserved %d files.\n", NUM_FILES);
-+
-+	close(luo_fd);
-+	daemonize_and_wait();
-+}
-+
-+/* Stage 2: Executed after the kexec reboot. */
-+static void run_stage_2(int luo_fd, int state_session_fd)
-+{
-+	int session_fd;
-+	int i, stage;
-+
-+	ksft_print_msg("[STAGE 2] Starting post-kexec verification...\n");
-+
-+	restore_and_read_stage(state_session_fd, STATE_MEMFD_TOKEN, &stage);
-+	if (stage != 2) {
-+		fail_exit("Expected stage 2, but state file contains %d",
-+			  stage);
-+	}
-+
-+	ksft_print_msg("[STAGE 2] Retrieving test session '%s'...\n", TEST_SESSION_NAME);
-+	session_fd = luo_retrieve_session(luo_fd, TEST_SESSION_NAME);
-+	if (session_fd < 0)
-+		fail_exit("luo_retrieve_session");
-+
-+	ksft_print_msg("[STAGE 2] Verifying %d files...\n", NUM_FILES);
-+	for (i = 0; i < NUM_FILES; i++) {
-+		char data[64];
-+		int fd;
-+
-+		snprintf(data, sizeof(data), "file-data-%d", i);
-+		fd = restore_and_verify_memfd(session_fd, i, data);
-+		if (fd < 0)
-+			fail_exit("restore_and_verify_memfd for index %d", i);
-+		close(fd);
-+	}
-+
-+	ksft_print_msg("[STAGE 2] Finishing test session...\n");
-+	if (luo_session_finish(session_fd) < 0)
-+		fail_exit("luo_session_finish for test session");
-+	close(session_fd);
-+
-+	ksft_print_msg("[STAGE 2] Finalizing state session...\n");
-+	if (luo_session_finish(state_session_fd) < 0)
-+		fail_exit("luo_session_finish for state session");
-+	close(state_session_fd);
-+
-+	ksft_print_msg("\n--- MANY-FILES KEXEC TEST PASSED (%d files) ---\n",
-+		       NUM_FILES);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	return luo_test(argc, argv, STATE_SESSION_NAME,
-+			run_stage_1, run_stage_2);
-+}
--- 
-2.53.0
+> Tested with a reduced test_progs runner because the local source/output
+> combination has unrelated build failures in progs/bpf_cubic.c and
+> test_kmods/bpf_testmod.ko, so the stock full test_progs binary is not
+> produced.
+>
+> Before fix, on host Arch kernel 7.0.10-arch1-1:
+>   arena_direct_value/one_past_end: FAIL, prog_load returned fd 5
+>
+> After fix, on QEMU guest 7.1.0-rc6-00063-gba3e43a9e601:
+>   #1/1     arena_direct_value/one_past_end:OK
+>   #1       arena_direct_value:OK
+>   Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+> ---
+>  .../selftests/bpf/prog_tests/arena_direct_value.c  | 73 ++++++++++++++++=
+++++++
+>  1 file changed, 73 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c =
+b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
+> new file mode 100644
+> index 000000000000..b7760b021670
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
+> @@ -0,0 +1,73 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <test_progs.h>
+> +#include <bpf/bpf.h>
+> +#include <errno.h>
+> +#include <sys/mman.h>
+> +#include <unistd.h>
+> +
+> +#define ARENA_PAGES 32
+> +
+> +static void test_arena_direct_value_one_past_end(void)
+> +{
+> +	char log_buf[16384] =3D {}, expected[128];
+> +	__u32 arena_sz =3D ARENA_PAGES * getpagesize();
+> +	struct bpf_insn insns[] =3D {
+> +		BPF_LD_IMM64_RAW(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, 0),
+> +		BPF_MOV64_IMM(BPF_REG_0, 0),
+> +		BPF_EXIT_INSN(),
+> +	};
+> +	LIBBPF_OPTS(bpf_map_create_opts, map_opts);
+> +	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts);
+> +	void *arena =3D MAP_FAILED;
+> +	int map_fd, prog_fd;
+> +
+> +	map_opts.map_flags =3D BPF_F_MMAPABLE;
+> +	prog_opts.log_buf =3D log_buf;
+> +	prog_opts.log_size =3D sizeof(log_buf);
+> +	prog_opts.log_level =3D 1;
+> +
+> +	map_fd =3D bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_direct_value",
+> +				0, 0, ARENA_PAGES, &map_opts);
+> +	if (map_fd < 0) {
+> +		if (errno =3D=3D EOPNOTSUPP || errno =3D=3D EINVAL) {
+> +			test__skip();
+> +			return;
+> +		}
+> +		ASSERT_GE(map_fd, 0, "bpf_map_create");
+> +		return;
+> +	}
+> +
+> +	arena =3D mmap(NULL, arena_sz, PROT_READ | PROT_WRITE, MAP_SHARED, map_=
+fd, 0);
+> +	if (!ASSERT_NEQ(arena, MAP_FAILED, "arena_mmap"))
+> +		goto cleanup;
+> +
+> +	insns[0].imm =3D map_fd;
+> +	insns[1].imm =3D arena_sz;
+> +
+> +	prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT,
+> +				"arena_direct_value", "GPL", insns,
+> +				ARRAY_SIZE(insns), &prog_opts);
+> +	if (!ASSERT_LT(prog_fd, 0, "prog_load")) {
+> +		if (prog_fd >=3D 0)
+> +			close(prog_fd);
+> +		prog_fd =3D -1;
+> +		goto cleanup;
+> +	}
+> +
+> +	snprintf(expected, sizeof(expected),
+> +		 "invalid access to map value pointer, value_size=3D0 off=3D%u",
+> +		 arena_sz);
+> +	ASSERT_HAS_SUBSTR(log_buf, expected, "verifier_log");
+> +
+> +cleanup:
+> +	if (arena !=3D MAP_FAILED)
+> +		munmap(arena, arena_sz);
+> +	close(map_fd);
+> +}
+> +
+> +void test_arena_direct_value(void)
+> +{
+> +	if (test__start_subtest("one_past_end"))
+> +		test_arena_direct_value_one_past_end();
+> +}
+>
+> ---
+> base-commit: ba3e43a9e601636f5edb54e259a74f96ca3b8fd8
+> change-id: 20260603-arena-direct-value-v1-ef4df857b98b
+>
+> Best regards,
+> -- =20
+> Woojin Ji <random6.xyz@gmail.com>
 
