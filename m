@@ -1,63 +1,63 @@
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6FC3F164E
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 03:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7941C3FBEC4
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 03:29:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780457362; cv=none; b=KaC6lU4XyuG+v93inCLs3yWZy7VVtxIZ1Lk1tIRLLVUxFaUSTYztaN6cmL4nhJNcZvnpbpSrm8My+evUMKFiDu/sCigagM1fueosIkrJl8WwRkmrdTN0aUqkr/Fx+9Oi7bhprSTNfAl/8xrTO9yMFDVY2uV5o+mM1hO4QMu7ox0=
+	t=1780457363; cv=none; b=CHH2zpeTvwj3OIebNeXVbLc33rIUQtPnsFfWb7YZ8Z/DnDEC8wLsHEWQ3iASdIp553AxHtmCRerBhuxDc13Akqwvjz8YyrdiA1HaQPLw/T9u1NJxCg/VLN/WRowrqXDM1q43MNKRjgKxb11P2bcRRbIokRFVzUGh/8JU0zVrzvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780457362; c=relaxed/simple;
-	bh=X8O2xGSxVUU/uhSS620e6JMm9XpjobUa1luaKPnuR1I=;
+	s=arc-20240116; t=1780457363; c=relaxed/simple;
+	bh=0gwKyQQYDBUnv0UGfVWyXc49IlrArrhgteCjS6YB3K4=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tp4Ve634jZ5X4DaCnd+70rqSUICHXLTgwI80nkMLR/o89uzUjgSsho+HRR3jLd1hGGs9/VIZ3Sd+G8m2jdzRyQT7M8GfpvaQxCi258BSwmXZp/FhStE22iOxCX6spKdo5o07L//DIfsd6p9GvX07aWL4a7VvWZN1ASrB+d0UtJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=itDUNNR+; arc=none smtp.client-ip=209.85.219.52
+	 MIME-Version; b=M/96M4v5fOu2myLVRUUmv9fK1zlk5GUOCWVjl6iAwVBGbBLKSOgoEtMaHU3U+xrL/wmPSZ2okqsbkI+n1cVWTBXF+DPmkC2jeaZqfKj5mz7e/sln2EDhC2Y3R7mbcBYmAfhQVmAQ1pKrz7JhC5VZp/RurqHObQDZWypoYfnShGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=J3vWjEOK; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="itDUNNR+"
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-8ccea53f35cso55746206d6.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 20:29:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="J3vWjEOK"
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-8ce0f17a69cso28155786d6.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 20:29:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1780457357; x=1781062157; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1780457360; x=1781062160; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/+goXyLuH/FqZHKbCrnKG3Jp0DPoER679XEYr9/CPoc=;
-        b=itDUNNR+xgnDTCDB0nfAv6EXkf+CeEVbo//FtfsW+dbF8Xl81GTM0Em2eaG/JTEwoe
-         fH9WpJqg2fIOUZwy/fv8WxCEebML8M65QQEGmS6ctakx7ObDoTtXYZ5SeE4RE1tYct7g
-         WK60MHuXzaPsFSk7wUfawULh+PCjfF3B73CE0t9fkkxbthVVi9ipbMuqDgs+0TdkLMoW
-         +zspFMiB4ms3PLbMkHBsdJpYpP+tQV2tWNY9JxlYFqPyGDZBUFhRXVdgLmFz/mD74TMU
-         6k4q04+nFPxIPFB65r+WhPW3S3CEF7zZiIn+jXcIR1EtKfyURGZFacaaCY2JncMCSqgo
-         sP7g==
+        bh=Tz2WlgQShBzc08rHE8f9hPH77UCMh/X7xv20EWPP2Uw=;
+        b=J3vWjEOKG7oiAv0W7ehKe7u292uQLR+KlnBMR/KlZWsAWSpC1vPHC4YxiqXpBX+Hyo
+         Web5s6QOMZcFWDuB3ktxcH4couHxcy30PyXfjS/2HuLc3zvxA/D9GV1Tbz7MvgyGx6js
+         AfBV5zckYv1lC1mQC/hUD31ZrJeA0mxmIG4ColZGhJNDVdQWhEn3enGs2/DrzGffR9Nf
+         +VgOdzcuFSdn1igZz//sFByftOs5OQuyLosr4nVQ8qHCq7cE/KsFIqDdHHsaVrzhxzbn
+         vNRyUUKW/qR/qAEMGF8fl+VD2L9Un+7l8msnuOU2H1lhLcm0sRt/iDii71485Utai+hs
+         npLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780457357; x=1781062157;
+        d=1e100.net; s=20251104; t=1780457360; x=1781062160;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=/+goXyLuH/FqZHKbCrnKG3Jp0DPoER679XEYr9/CPoc=;
-        b=hysZBOGh34fAwPNqiHds+WbQrW/EAJRD7jZDeOkWfcsWsNb0N+fBqdYhZbG50l2F4M
-         aNwz7vxPpQwlzno1ypfBLmNN7c6PlMVe3HB0YZs6RaUWxzBMWGG7/S0zCd270iFuogaa
-         05teCqRUPw9bUKnrd8oOSXdDk6jcj4Zm3fQ/uWO6OHsWgvSGhdZltse2FPgv/z2rej+E
-         aHvM5rR4MSYLZVP1FQYsC9caAC3JCiPfGz/5AoLU4E82yiJwoP+1niI5aa9bzGX43RPc
-         4mjsEVEPD1JGrZWvZyq1smoWS8r2HeQ5gOZD4Gr/nKebne7pDSjtGeImiHElthjjRvwm
-         FQWA==
-X-Gm-Message-State: AOJu0Yw1TzMChXy9aPF2LAljBuExS405RL/+RDJTPPFAfopFIpe43bD7
-	AkezBh5NUycbXjY/WGjjtVLN9f0H1ThgMnZuzAWX9dEchIud+9AhSYWiE0Sn/3zvvfDh2Jcggyh
-	YAI1y
-X-Gm-Gg: Acq92OHvnuvWsKTtlTZ+AWjoKgHvY890WqJuHwx9uBlP7EJUcKqetfB0iclXYZ4na1Q
-	wrs8wVrCUy787eaLdiTStb7VJGALcBbFnKBWPXKMxlMdpRiL6sYP0j+O6+cvdmyu6gup0CngwHl
-	/zow6tlU7dsJaUC3DNsMZbKbILZJEsGDWVmzOJQkkSY0F+8bTmnmsF+4c6TgpcKDAUjQBMDVW/D
-	D7s9bH/kQuNm/sW3R+T9RBOp0GLQGoXkJJbjv+6v88e+ZPVpEd9L3sa55XJi79rjZT7YXUcx++/
-	BJiMVVAbhHMbHASWQWCQPJ1KJ/B41fBeMFzaSOYX2wa2dKeju/vqy6p640LeA0IwTs96TvWwg2I
-	E6B0+K2yBGqwMtFy/HW/NHf+5XkgjYJ+mNp7He/88iBnSRdXaNJdOIqS61dJsmuSMqnN9M0Tz0a
-	ZxYeuhOJXZDUNYUSzM1W1uI3aGLr50V7GQcpTD8EIhusVZUBVyKPgbxwctYjkcDQ==
-X-Received: by 2002:a05:6214:5708:b0:8cc:ed49:bdd0 with SMTP id 6a1803df08f44-8cecdcd11c4mr25000596d6.22.1780457356873;
-        Tue, 02 Jun 2026 20:29:16 -0700 (PDT)
+        bh=Tz2WlgQShBzc08rHE8f9hPH77UCMh/X7xv20EWPP2Uw=;
+        b=Vd5xiDsBY/XH/nOfFq9OZMwzHeiOgnAOz/NkQ1yQlLj/fBycwA2Fbg6cCrnPEMeRIu
+         STo20iU5zeqHK/OmYDreLjGNLr1VuRiNZSQxrqFP6X16hXcjzOQ6IPoWaJHcCueR4Dws
+         uWqn8GWL8ph8DS6UndVnHny+mawN9/Wa5r3vCYSkw0Q8wiT1qwUZlc9h5t+08epvFMET
+         5sHOF4dzsJbV0fAZsleCHa47UiXP5TA3EDkfxUKcRXOgICce6Yj8n9k+Dc9QIYtQysGQ
+         si6ja8/kiEg5EkTacbml+oTMUr1NKBHMZLmXldMowSx3BqB0XnDFM9cjwVZfRDuoApfR
+         lFbQ==
+X-Gm-Message-State: AOJu0YxO2gz/AIPgNpkI+GfHgcnftWGaOqiI+jg6AGmPiSgomftZamuQ
+	n/Js//b4oPgy1Ypa+N1ZcJg6gKPNeHzunaG8+JAN2nCvDwY2OjWl0DvhsZNJRbMfwPtN/q/2/Ue
+	sQ8im
+X-Gm-Gg: Acq92OFMmCSCytSDiPxQNrPpOFj6MbXUkzXlooYeje1MtEAhySJWsJWeEQ7QSRbDR/E
+	JY7VXWXnZc6L52ZVu4ecJJygwnOO+vyUi/AqKHRd94K/6v2T7g6wudpOTf6Nlvvl13s7MtkuWm1
+	VgsHvGB054rJWaArkybxCznKC8GhAMj0yybidD1zc0gPKN/9vPgC0HqMBKGDGncri+w83X+3pDm
+	XDR19gk6Xr1UFPKC1+NLoaAPh89oq0dyIgOg2nwjZZDhkqp5k+zqF6/B3YpUMxwA9pRnFtsMyTz
+	f2w3Z9mysC3JSOnmsToMokPPK9EftPlm7/HwDly1CSv/c/Fy1+Bpj/7ZGI1aH9Rd5SJg0Q1pF6W
+	AM0QEXev45GddPFDmVZg2f6g/mnrnTvAd30fG8WroPvOG1k3rp86Mu8iMb3uKZ9HUekq5evZ69M
+	ATITnek2OlfcPK9cGTQlZtIhdIWPqrn+IFCCFnhltzcRJWyQz8rzi/f/0TKIGzfA==
+X-Received: by 2002:a05:6214:260e:b0:8ac:a154:e156 with SMTP id 6a1803df08f44-8cecdca3c5emr23602316d6.29.1780457360528;
+        Tue, 02 Jun 2026 20:29:20 -0700 (PDT)
 Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cecd26b3b9sm9244566d6.45.2026.06.02.20.29.15
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cecd26b3b9sm9244566d6.45.2026.06.02.20.29.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 20:29:16 -0700 (PDT)
+        Tue, 02 Jun 2026 20:29:19 -0700 (PDT)
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 To: linux-kselftest@vger.kernel.org,
 	rppt@kernel.org,
@@ -74,9 +74,9 @@ To: linux-kselftest@vger.kernel.org,
 	pratyush@kernel.org,
 	skhawaja@google.com,
 	graf@amazon.com
-Subject: [PATCH v6 07/13] kho: add support for linked-block serialization
-Date: Wed,  3 Jun 2026 03:28:58 +0000
-Message-ID: <20260603032905.344462-8-pasha.tatashin@soleen.com>
+Subject: [PATCH v6 09/13] liveupdate: Remove limit on the number of sessions
+Date: Wed,  3 Jun 2026 03:29:00 +0000
+Message-ID: <20260603032905.344462-10-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260603032905.344462-1-pasha.tatashin@soleen.com>
 References: <20260603032905.344462-1-pasha.tatashin@soleen.com>
@@ -88,684 +88,321 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce a linked-block serialization mechanism for state handover.
+Currently, the number of LUO sessions is limited by a fixed number of
+pre-allocated pages for serialization (16 pages, allowing for ~819
+sessions).
 
-Previously, LUO used contiguous memory blocks for serializing sessions
-and files, which imposed limits on the total number of items that could
-be preserved across a live update.
+This limitation is problematic if LUO is used to support things such as
+systemd file descriptor store, and would be used not just as VM memory
+but to save other states on the machine.
 
-This commit adds the infrastructure for a more flexible, block-based
-approach where serialized data is stored in a chain of linked blocks.
-This is a generic KHO serialization block infrastructure that can be
-used by multiple subsystems.
+Remove this limit by transitioning to a linked-block approach for
+session metadata serialization. Instead of a single contiguous block,
+session metadata is now stored in a chain of 16-page blocks. Each block
+starts with a header containing the physical address of the next block
+and the number of session entries in the current block.
 
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- Documentation/core-api/kho/abi.rst   |   5 +
- Documentation/core-api/kho/index.rst |  11 +
- MAINTAINERS                          |   1 +
- include/linux/kho/abi/block.h        |  56 ++++
- include/linux/kho_block.h            | 106 +++++++
- kernel/liveupdate/Makefile           |   1 +
- kernel/liveupdate/kho_block.c        | 411 +++++++++++++++++++++++++++
- 7 files changed, 591 insertions(+)
- create mode 100644 include/linux/kho/abi/block.h
- create mode 100644 include/linux/kho_block.h
- create mode 100644 kernel/liveupdate/kho_block.c
+ include/linux/kho/abi/luo.h     |  24 +------
+ kernel/liveupdate/luo_session.c | 113 +++++++++++++++-----------------
+ 2 files changed, 56 insertions(+), 81 deletions(-)
 
-diff --git a/Documentation/core-api/kho/abi.rst b/Documentation/core-api/kho/abi.rst
-index 799d743105a6..edeb5b311963 100644
---- a/Documentation/core-api/kho/abi.rst
-+++ b/Documentation/core-api/kho/abi.rst
-@@ -28,6 +28,11 @@ KHO persistent memory tracker ABI
- .. kernel-doc:: include/linux/kho/abi/kexec_handover.h
-   :doc: KHO persistent memory tracker
+diff --git a/include/linux/kho/abi/luo.h b/include/linux/kho/abi/luo.h
+index 9a4fe491812b..79758d92ed5f 100644
+--- a/include/linux/kho/abi/luo.h
++++ b/include/linux/kho/abi/luo.h
+@@ -33,11 +33,6 @@
+  *     It includes the compatibility string, the liveupdate-number, and pointers
+  *     to sessions and FLBs.
+  *
+- *   - struct luo_session_header_ser:
+- *     Header for the session array. Contains the total page count of the
+- *     preserved memory block and the number of `struct luo_session_ser`
+- *     entries that follow.
+- *
+  *   - struct luo_session_ser:
+  *     Metadata for a single session, including its name and a physical pointer
+  *     to another preserved memory block containing an array of
+@@ -63,13 +58,15 @@
+ #define _LINUX_KHO_ABI_LUO_H
  
-+KHO serialization block ABI
-+===========================
-+
-+.. kernel-doc:: include/linux/kho/abi/block.h
-+
- See Also
- ========
- 
-diff --git a/Documentation/core-api/kho/index.rst b/Documentation/core-api/kho/index.rst
-index 0a2dee4f8e7d..320914a42178 100644
---- a/Documentation/core-api/kho/index.rst
-+++ b/Documentation/core-api/kho/index.rst
-@@ -83,6 +83,17 @@ Public API
- .. kernel-doc:: kernel/liveupdate/kexec_handover.c
-   :export:
- 
-+KHO Serialization Blocks API
-+============================
-+
-+.. kernel-doc:: kernel/liveupdate/kho_block.c
-+  :doc: KHO Serialization Blocks
-+
-+.. kernel-doc:: include/linux/kho_block.h
-+
-+.. kernel-doc:: kernel/liveupdate/kho_block.c
-+  :internal:
-+
- See Also
- ========
- 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9ec290e38b44..920ba7622afa 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14208,6 +14208,7 @@ F:	Documentation/admin-guide/mm/kho.rst
- F:	Documentation/core-api/kho/*
- F:	include/linux/kexec_handover.h
- F:	include/linux/kho/
-+F:	include/linux/kho_block.h
- F:	kernel/liveupdate/kexec_handover*
- F:	lib/test_kho.c
- F:	tools/testing/selftests/kho/
-diff --git a/include/linux/kho/abi/block.h b/include/linux/kho/abi/block.h
-new file mode 100644
-index 000000000000..8641c20b379b
---- /dev/null
-+++ b/include/linux/kho/abi/block.h
-@@ -0,0 +1,56 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2026, Google LLC.
-+ * Pasha Tatashin <pasha.tatashin@soleen.com>
-+ */
-+
-+/**
-+ * DOC: KHO Serialization Blocks ABI
-+ *
-+ * Subsystems using the KHO Serialization Blocks framework rely on the stable
-+ * Application Binary Interface defined below to pass serialized state from a
-+ * pre-update kernel to a post-update kernel.
-+ *
-+ * This interface is a contract. Any modification to the structure fields,
-+ * compatible strings, or the layout of the `__packed` serialization
-+ * structures defined here constitutes a breaking change. Such changes require
-+ * incrementing the version number in the `KHO_BLOCK_ABI_COMPATIBLE` string to
-+ * prevent a new kernel from misinterpreting data from an old kernel.
-+ *
-+ * Changes are allowed provided the compatibility version is incremented;
-+ * however, backward/forward compatibility is only guaranteed for kernels
-+ * supporting the same ABI version.
-+ */
-+
-+#ifndef _LINUX_KHO_ABI_BLOCK_H
-+#define _LINUX_KHO_ABI_BLOCK_H
-+
-+#include <asm/page.h>
-+#include <linux/types.h>
-+
-+#define KHO_BLOCK_ABI_COMPATIBLE	"kho-block-v1"
-+
-+/**
-+ * KHO_BLOCK_SIZE - The size of each serialization block.
-+ *
-+ * This is defined as PAGE_SIZE. PAGE_SIZE is ABI compliant because live
-+ * update between kernels with different page sizes is not supported by KHO.
-+ */
-+#define KHO_BLOCK_SIZE			PAGE_SIZE
-+
-+/**
-+ * struct kho_block_header_ser - Header for the serialized data block.
-+ * @next:  Physical address of the next struct kho_block_header_ser.
-+ * @count: The number of entries that immediately follow this header in the
-+ *         memory block.
-+ *
-+ * This structure is located at the beginning of a block of physical memory
-+ * preserved across a kexec. It provides the necessary metadata to interpret
-+ * the array of entries that follow.
-+ */
-+struct kho_block_header_ser {
-+	u64 next;
-+	u64 count;
-+} __packed;
-+
-+#endif /* _LINUX_KHO_ABI_BLOCK_H */
-diff --git a/include/linux/kho_block.h b/include/linux/kho_block.h
-new file mode 100644
-index 000000000000..93a7cc2be5f5
---- /dev/null
-+++ b/include/linux/kho_block.h
-@@ -0,0 +1,106 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2026, Google LLC.
-+ * Pasha Tatashin <pasha.tatashin@soleen.com>
-+ */
-+
-+#ifndef _LINUX_KHO_BLOCK_H
-+#define _LINUX_KHO_BLOCK_H
-+
-+#include <linux/list.h>
-+#include <linux/types.h>
+ #include <linux/align.h>
 +#include <linux/kho/abi/block.h>
-+
-+/**
-+ * struct kho_block - Internal representation of a serialization block.
-+ * @list: List head for linking blocks in memory.
-+ * @ser:  Pointer to the serialized header in preserved memory.
-+ */
-+struct kho_block {
-+	struct list_head list;
-+	struct kho_block_header_ser *ser;
-+};
-+
-+/**
-+ * struct kho_block_set - A set of blocks containing serialized entries of the same type.
-+ * @blocks:          The list of serialization blocks (struct kho_block).
-+ * @nblocks:         The number of allocated serialization blocks.
-+ * @head_pa:         Physical address of the first block header.
-+ * @entry_size:      The size of each entry in the blocks.
-+ * @count_per_block: The maximum number of entries each block can hold.
-+ * @incoming:        True if this block set was restored from the previous kernel.
-+ *
-+ * Note: Synchronization and locking are the responsibility of the caller.
-+ * The block set structure itself is not internally synchronized.
-+ */
-+struct kho_block_set {
-+	struct list_head blocks;
-+	long nblocks;
-+	u64 head_pa;
-+	size_t entry_size;
-+	u64 count_per_block;
-+	bool incoming;
-+};
-+
-+/**
-+ * struct kho_block_set_it - Iterator for serializing entries into blocks.
-+ * @bs:         The block set being iterated.
-+ * @block:      The current block.
-+ * @i:          The current entry index within @block.
-+ */
-+struct kho_block_set_it {
-+	struct kho_block_set *bs;
-+	struct kho_block *block;
-+	u64 i;
-+};
-+
-+/**
-+ * KHO_BLOCK_SET_INIT - Initialize a static kho_block_set.
-+ * @_name:       Name of the kho_block_set variable.
-+ * @_entry_size: The size of each entry in the block set.
-+ */
-+#define KHO_BLOCK_SET_INIT(_name, _entry_size) {			\
-+	.blocks = LIST_HEAD_INIT((_name).blocks),			\
-+	.entry_size = _entry_size,					\
-+	.count_per_block = (KHO_BLOCK_SIZE -				\
-+			    sizeof(struct kho_block_header_ser)) /	\
-+			   (_entry_size),				\
-+}
-+
-+void kho_block_set_init(struct kho_block_set *bs, size_t entry_size);
-+
-+int kho_block_set_grow(struct kho_block_set *bs, u64 count);
-+void kho_block_set_shrink(struct kho_block_set *bs, u64 count);
-+
-+int kho_block_set_restore(struct kho_block_set *bs, u64 head_pa);
-+void kho_block_set_destroy(struct kho_block_set *bs);
-+void kho_block_set_clear(struct kho_block_set *bs);
-+
-+/**
-+ * kho_block_set_head_pa - Get the physical address of the first block header.
-+ * @bs: The block set.
-+ *
-+ * Return: The physical address of the first block header, or 0 if empty.
-+ */
-+static inline u64 kho_block_set_head_pa(struct kho_block_set *bs)
-+{
-+	return bs->head_pa;
-+}
-+
-+/**
-+ * kho_block_set_is_empty - Check if the block set has no allocated blocks.
-+ * @bs: The block set.
-+ *
-+ * Return: True if there are no blocks in the set, false otherwise.
-+ */
-+static inline bool kho_block_set_is_empty(struct kho_block_set *bs)
-+{
-+	return list_empty(&bs->blocks);
-+}
-+
-+void kho_block_set_it_init(struct kho_block_set_it *it, struct kho_block_set *bs);
-+void *kho_block_set_it_reserve_entry(struct kho_block_set_it *it);
-+void *kho_block_set_it_read_entry(struct kho_block_set_it *it);
-+void *kho_block_set_it_prev(struct kho_block_set_it *it);
-+
-+#endif /* _LINUX_KHO_BLOCK_H */
-diff --git a/kernel/liveupdate/Makefile b/kernel/liveupdate/Makefile
-index d2f779cbe279..eec9d3ae07eb 100644
---- a/kernel/liveupdate/Makefile
-+++ b/kernel/liveupdate/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
+ #include <uapi/linux/liveupdate.h>
  
- luo-y :=								\
-+		kho_block.o						\
- 		luo_core.o						\
- 		luo_file.o						\
- 		luo_flb.o						\
-diff --git a/kernel/liveupdate/kho_block.c b/kernel/liveupdate/kho_block.c
-new file mode 100644
-index 000000000000..4f147c308e6b
---- /dev/null
-+++ b/kernel/liveupdate/kho_block.c
-@@ -0,0 +1,411 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (c) 2026, Google LLC.
-+ * Pasha Tatashin <pasha.tatashin@soleen.com>
-+ */
-+
-+/**
-+ * DOC: KHO Serialization Blocks
-+ *
-+ * KHO provides a mechanism to preserve stateful data across a kexec handover
-+ * by serializing it into memory blocks, and provides the common
-+ * infrastructure for managing these blocks.
-+ *
-+ * Each block consists of a header (struct kho_block_header_ser) followed by an
-+ * array of serialized entries. Multiple blocks are linked together via a
-+ * physical pointer in the header, forming a linked list that can be easily
-+ * traversed in both the current and the next kernel.
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/io.h>
-+#include <linux/kexec_handover.h>
-+#include <linux/kho/abi/block.h>
+ /*
+  * The LUO state is registered under this KHO entry name.
+  */
+ #define LUO_KHO_ENTRY_NAME	"LUO"
+-#define LUO_ABI_COMPATIBLE	"luo-v3"
++#define LUO_COMPAT_BASE		"luo-v3"
++#define LUO_ABI_COMPATIBLE	LUO_COMPAT_BASE "-" KHO_BLOCK_ABI_COMPATIBLE
+ #define LUO_ABI_COMPAT_LEN	ALIGN(sizeof(LUO_ABI_COMPATIBLE), 8)
+ 
+ /**
+@@ -118,21 +115,6 @@ struct luo_file_set_ser {
+ 	u64 count;
+ } __packed;
+ 
+-/**
+- * struct luo_session_header_ser - Header for the serialized session data block.
+- * @count: The number of `struct luo_session_ser` entries that immediately
+- *         follow this header in the memory block.
+- *
+- * This structure is located at the beginning of a contiguous block of
+- * physical memory preserved across the kexec. It provides the necessary
+- * metadata to interpret the array of session entries that follow.
+- *
+- * If this structure is modified, `LUO_ABI_COMPATIBLE` must be updated.
+- */
+-struct luo_session_header_ser {
+-	u64 count;
+-} __packed;
+-
+ /**
+  * struct luo_session_ser - Represents the serialized metadata for a LUO session.
+  * @name:         The unique name of the session, provided by the userspace at
+diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+index 2411849a34e3..b79b2a488974 100644
+--- a/kernel/liveupdate/luo_session.c
++++ b/kernel/liveupdate/luo_session.c
+@@ -24,9 +24,10 @@
+  *   ioctls on /dev/liveupdate.
+  *
+  * - Serialization: Session metadata is preserved using the KHO framework. When
+- *   a live update is triggered via kexec, an array of `struct luo_session_ser`
+- *   is populated and placed in a preserved memory region. The physical address
+- *   of this array is stored in the centralized `struct luo_ser` structure.
++ *   a live update is triggered via kexec, session metadata is serialized into
++ *   a chain of linked-blocks and placed in a preserved memory region. The
++ *   physical address of the first block header is stored in the centralized
++ *   `struct luo_ser` structure.
+  *
+  * Session Lifecycle:
+  *
+@@ -89,6 +90,7 @@
+ #include <linux/fs.h>
+ #include <linux/io.h>
+ #include <linux/kexec_handover.h>
 +#include <linux/kho_block.h>
-+#include <linux/slab.h>
-+
-+/*
-+ * Safeguard limit for the number of serialization blocks. This is used to
-+ * prevent infinite loops and excessive memory allocation in case of memory
-+ * corruption in the preserved state.
-+ *
-+ * With a 4KB page size, 10k blocks is about 40MB. For 32-byte entries
-+ * (e.g. 4 u64s), each block holds up to 127 entries (accounting for the
-+ * 16-byte header), allowing the block set to hold up to 1.27M entries.
-+ */
-+#define KHO_MAX_BLOCKS 10000
-+
-+/**
-+ * kho_block_set_init - Initialize a block set.
-+ * @bs:         The block set to initialize.
-+ * @entry_size: The size of each entry in the blocks.
-+ */
-+void kho_block_set_init(struct kho_block_set *bs, size_t entry_size)
-+{
-+	*bs = (struct kho_block_set)KHO_BLOCK_SET_INIT(*bs, entry_size);
-+	WARN_ON_ONCE(!bs->count_per_block);
-+}
-+
-+/* Serialized entries start immediately after the block header */
-+static void *kho_block_entries(struct kho_block *block)
-+{
-+	return (void *)(block->ser + 1);
-+}
-+
-+/* Get the address of the serialized entry at the specified index */
-+static void *kho_block_entry(struct kho_block_set_it *it, u64 index)
-+{
-+	return kho_block_entries(it->block) + (index * it->bs->entry_size);
-+}
-+
-+/* Free serialized data */
-+static void kho_block_free_ser(struct kho_block_set *bs,
-+			       struct kho_block_header_ser *ser)
-+{
-+	if (bs->incoming)
-+		kho_restore_free(ser);
-+	else
-+		kho_unpreserve_free(ser);
-+}
-+
-+static struct kho_block_header_ser *kho_block_alloc_ser(struct kho_block_set *bs)
-+{
-+	WARN_ON_ONCE(bs->incoming);
-+	return kho_alloc_preserve(KHO_BLOCK_SIZE);
-+}
-+
-+static int kho_block_add(struct kho_block_set *bs,
-+			 struct kho_block_header_ser *ser)
-+{
-+	struct kho_block *block, *last;
-+
-+	if (bs->nblocks >= KHO_MAX_BLOCKS)
-+		return -ENOSPC;
-+
-+	block = kzalloc_obj(*block);
-+	if (!block)
-+		return -ENOMEM;
-+
-+	block->ser = ser;
-+	last = list_last_entry_or_null(&bs->blocks, struct kho_block, list);
-+	list_add_tail(&block->list, &bs->blocks);
-+	bs->nblocks++;
-+
-+	if (last)
-+		last->ser->next = virt_to_phys(ser);
-+	else
-+		bs->head_pa = virt_to_phys(ser);
-+
-+	return 0;
-+}
-+
-+static int kho_block_set_grow_one(struct kho_block_set *bs)
-+{
-+	struct kho_block_header_ser *ser;
+ #include <linux/kho/abi/luo.h>
+ #include <linux/list.h>
+ #include <linux/liveupdate.h>
+@@ -98,23 +100,14 @@
+ #include <uapi/linux/liveupdate.h>
+ #include "luo_internal.h"
+ 
+-/* 16 4K pages, give space for 744 sessions */
+-#define LUO_SESSION_PGCNT	16ul
+-#define LUO_SESSION_MAX		(((LUO_SESSION_PGCNT << PAGE_SHIFT) -	\
+-		sizeof(struct luo_session_header_ser)) /		\
+-		sizeof(struct luo_session_ser))
+-
+ static DECLARE_RWSEM(luo_session_serialize_rwsem);
+-
+ /**
+  * struct luo_session_header - Header struct for managing LUO sessions.
+  * @count:       The number of sessions currently tracked in the @list.
+  * @list:        The head of the linked list of `struct luo_session` instances.
+  * @rwsem:       A read-write semaphore providing synchronized access to the
+  *               session list and other fields in this structure.
+- * @header_ser:  The header data of serialization array.
+- * @ser:         The serialized session data (an array of
+- *               `struct luo_session_ser`).
++ * @block_set:   The set of serialization blocks.
+  * @sessions_pa: Points to the location of sessions_pa within struct luo_ser.
+  * @active:      Set to true when first initialized. If previous kernel did not
+  *               send session data, active stays false for incoming.
+@@ -123,8 +116,7 @@ struct luo_session_header {
+ 	long count;
+ 	struct list_head list;
+ 	struct rw_semaphore rwsem;
+-	struct luo_session_header_ser *header_ser;
+-	struct luo_session_ser *ser;
++	struct kho_block_set block_set;
+ 	u64 *sessions_pa;
+ 	bool active;
+ };
+@@ -143,10 +135,14 @@ static struct luo_session_global luo_session_global = {
+ 	.incoming = {
+ 		.list = LIST_HEAD_INIT(luo_session_global.incoming.list),
+ 		.rwsem = __RWSEM_INITIALIZER(luo_session_global.incoming.rwsem),
++		.block_set = KHO_BLOCK_SET_INIT(luo_session_global.incoming.block_set,
++						sizeof(struct luo_session_ser)),
+ 	},
+ 	.outgoing = {
+ 		.list = LIST_HEAD_INIT(luo_session_global.outgoing.list),
+ 		.rwsem = __RWSEM_INITIALIZER(luo_session_global.outgoing.rwsem),
++		.block_set = KHO_BLOCK_SET_INIT(luo_session_global.outgoing.block_set,
++						sizeof(struct luo_session_ser)),
+ 	},
+ };
+ 
+@@ -173,25 +169,6 @@ static void luo_session_free(struct luo_session *session)
+ 	kfree(session);
+ }
+ 
+-static int luo_session_grow_ser(struct luo_session_header *sh)
+-{
+-	struct luo_session_header_ser *header_ser;
+-
+-	if (sh->count == LUO_SESSION_MAX)
+-		return -ENOMEM;
+-
+-	if (sh->header_ser)
+-		return 0;
+-
+-	header_ser = kho_alloc_preserve(LUO_SESSION_PGCNT << PAGE_SHIFT);
+-	if (IS_ERR(header_ser))
+-		return PTR_ERR(header_ser);
+-
+-	sh->header_ser = header_ser;
+-	sh->ser = (void *)(header_ser + 1);
+-	return 0;
+-}
+-
+ static int luo_session_insert(struct luo_session_header *sh,
+ 			      struct luo_session *session)
+ {
+@@ -205,7 +182,7 @@ static int luo_session_insert(struct luo_session_header *sh,
+ 	 * for new session.
+ 	 */
+ 	if (sh == &luo_session_global.outgoing) {
+-		err = luo_session_grow_ser(sh);
++		err = kho_block_set_grow(&sh->block_set, sh->count + 1);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -232,6 +209,8 @@ static void luo_session_remove(struct luo_session_header *sh,
+ 	guard(rwsem_write)(&sh->rwsem);
+ 	list_del(&session->list);
+ 	sh->count--;
++	if (sh == &luo_session_global.outgoing)
++		kho_block_set_shrink(&sh->block_set, sh->count);
+ }
+ 
+ static int luo_session_finish_one(struct luo_session *session)
+@@ -555,15 +534,17 @@ void __init luo_session_setup_outgoing(u64 *sessions_pa)
+ 
+ int __init luo_session_setup_incoming(u64 sessions_pa)
+ {
+-	struct luo_session_header_ser *header_ser;
++	struct luo_session_header *sh = &luo_session_global.incoming;
 +	int err;
-+
-+	ser = kho_block_alloc_ser(bs);
-+	if (IS_ERR(ser))
-+		return PTR_ERR(ser);
-+
-+	err = kho_block_add(bs, ser);
-+	if (err) {
-+		kho_block_free_ser(bs, ser);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * kho_block_set_grow - Expand the block set to accommodate the target count.
-+ * @bs:    The block set.
-+ * @count: The target number of valid entries to accommodate.
-+ *
-+ * Acts as a runtime notifier when new resources (such as files or sessions)
-+ * are registered. Dynamically preallocates and links preserved memory blocks
-+ * if the target entry count exceeds the current total capacity of the set,
-+ * ensuring they are available during serialization/deserialization.
-+ *
-+ * Context: Caller must hold a lock protecting the block set.
-+ * Return: 0 on success, or a negative errno on failure.
-+ */
-+int kho_block_set_grow(struct kho_block_set *bs, u64 count)
-+{
-+	if (WARN_ON_ONCE(bs->incoming))
-+		return -EINVAL;
-+
-+	while (count > bs->nblocks * bs->count_per_block) {
-+		int err = kho_block_set_grow_one(bs);
-+
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static void kho_block_set_shrink_one(struct kho_block_set *bs)
-+{
-+	struct kho_block *last, *new_last;
-+
-+	if (list_empty(&bs->blocks))
-+		return;
-+
-+	last = list_last_entry(&bs->blocks, struct kho_block, list);
-+	list_del(&last->list);
-+	bs->nblocks--;
-+	kho_block_free_ser(bs, last->ser);
-+	kfree(last);
-+
-+	new_last = list_last_entry_or_null(&bs->blocks, struct kho_block, list);
-+	if (new_last)
-+		new_last->ser->next = 0;
-+	else
-+		bs->head_pa = 0;
-+}
-+
-+/**
-+ * kho_block_set_shrink - Shrink the block set to accommodate the target count.
-+ * @bs:              The block set.
-+ * @count:           The target number of valid entries to accommodate.
-+ *
-+ * Acts as a runtime notifier when resources (such as files or sessions) are
-+ * unregistered, allowing the block set to release and unallocate redundant
-+ * preserved memory blocks. Checks if the last block in the set can be removed
-+ * because the remaining entry count is fully accommodated by the preceding blocks.
-+ *
-+ * Note: It is the caller's responsibility to ensure that entries are removed
-+ * in LIFO (last-in, first-out) order (the reverse order of their insertion).
-+ * Because shrinking destroys the last block in the set, removing entries in
-+ * any other order would corrupt active data.
-+ *
-+ * Context: Caller must hold a lock protecting the block set.
-+ */
-+void kho_block_set_shrink(struct kho_block_set *bs, u64 count)
-+{
-+	while (bs->nblocks > 0 && count <= (bs->nblocks - 1) * bs->count_per_block)
-+		kho_block_set_shrink_one(bs);
-+}
-+
-+/*
-+ * kho_block_set_is_cyclic - Check for cycles in a linked list of blocks.
-+ * Uses Floyd's cycle-finding algorithm to ensure sanity of the incoming list.
-+ *
-+ * Return: true if a cycle or corruption is detected, false otherwise.
-+ */
-+static bool kho_block_set_is_cyclic(struct kho_block_set *bs)
-+{
-+	struct kho_block_header_ser *fast;
-+	struct kho_block_header_ser *slow;
-+	int count = 0;
-+
-+	fast = phys_to_virt(bs->head_pa);
-+	slow = fast;
-+
-+	while (fast) {
-+		if (count++ >= KHO_MAX_BLOCKS) {
-+			pr_err("Block set is corrupted\n");
-+			return true;
-+		}
-+
-+		if (!fast->next)
-+			break;
-+
-+		fast = phys_to_virt(fast->next);
-+		if (!fast->next)
-+			break;
-+
-+		fast = phys_to_virt(fast->next);
-+		slow = phys_to_virt(slow->next);
-+
-+		if (slow == fast) {
-+			pr_err("Block set is corrupted\n");
-+			return true;
-+		}
-+	}
-+
-+	return false;
-+}
-+
-+/**
-+ * kho_block_set_restore - Restore a block set from a physical address.
-+ * @bs:      The block set to restore.
-+ * @head_pa: Physical address of the first block header.
-+ *
-+ * Restores a serialized block set from a given physical address. The caller is
-+ * responsible for ensuring that the block set @bs has been allocated and
-+ * initialized prior to calling this function.
-+ *
-+ * Return: 0 on success, or a negative errno on failure.
-+ */
-+int kho_block_set_restore(struct kho_block_set *bs, u64 head_pa)
-+{
-+	struct kho_block_header_ser *ser;
-+	u64 next_pa = head_pa;
-+	int err;
-+
-+	/* Restored block sets use size from the previous kernel */
-+	bs->incoming = true;
-+	if (!head_pa)
+ 
+-	if (sessions_pa) {
+-		header_ser = phys_to_virt(sessions_pa);
+-		luo_session_global.incoming.header_ser = header_ser;
+-		luo_session_global.incoming.ser = (void *)(header_ser + 1);
+-		luo_session_global.incoming.active = true;
+-	}
++	if (!sessions_pa)
 +		return 0;
+ 
++	err = kho_block_set_restore(&sh->block_set, sessions_pa);
++	if (err)
++		return err;
 +
-+	bs->head_pa = head_pa;
-+	if (kho_block_set_is_cyclic(bs)) {
-+		bs->head_pa = 0;
-+		return -EINVAL;
-+	}
++	sh->active = true;
+ 	return 0;
+ }
+ 
+@@ -605,6 +586,8 @@ int luo_session_deserialize(void)
+ {
+ 	struct luo_session_header *sh = &luo_session_global.incoming;
+ 	static bool is_deserialized;
++	struct luo_session_ser *ser;
++	struct kho_block_set_it it;
+ 	static int saved_err;
+ 	int err;
+ 
+@@ -631,18 +614,19 @@ int luo_session_deserialize(void)
+ 	 * userspace to detect the failure and trigger a reboot, which will
+ 	 * reliably reset devices and reclaim memory.
+ 	 */
+-	for (int i = 0; i < sh->header_ser->count; i++) {
+-		err = luo_session_deserialize_one(sh, &sh->ser[i]);
++	kho_block_set_it_init(&it, &sh->block_set);
++	while ((ser = kho_block_set_it_read_entry(&it))) {
++		err = luo_session_deserialize_one(sh, ser);
+ 		if (err)
+ 			goto save_err;
+ 	}
+ 
+-	kho_restore_free(sh->header_ser);
+-	sh->header_ser = NULL;
+-	sh->ser = NULL;
++	kho_block_set_destroy(&sh->block_set);
+ 
+ 	return 0;
 +
-+	while (next_pa) {
-+		ser = phys_to_virt(next_pa);
-+		if (!ser->count || ser->count > bs->count_per_block) {
-+			pr_warn("Block contains invalid entry count: %llu\n",
-+				ser->count);
-+			err = -EINVAL;
-+			goto err_destroy;
+ save_err:
++	kho_block_set_destroy(&sh->block_set);
+ 	saved_err = err;
+ 	return err;
+ }
+@@ -651,36 +635,45 @@ int luo_session_serialize(void)
+ {
+ 	struct luo_session_header *sh = &luo_session_global.outgoing;
+ 	struct luo_session *session;
+-	int i = 0;
++	struct kho_block_set_it it;
+ 	int err;
+ 
+ 	down_write(&luo_session_serialize_rwsem);
+ 	down_write(&sh->rwsem);
+ 	*sh->sessions_pa = 0;
+ 
++	kho_block_set_it_init(&it, &sh->block_set);
++
+ 	list_for_each_entry(session, &sh->list, list) {
+-		err = luo_session_freeze_one(session, &sh->ser[i]);
+-		if (err)
++		struct luo_session_ser *ser = kho_block_set_it_reserve_entry(&it);
++
++		/* This should not fail normally as blocks were pre-allocated */
++		if (WARN_ON_ONCE(!ser)) {
++			err = -ENOSPC;
+ 			goto err_undo;
 +		}
-+		err = kho_block_add(bs, ser);
-+		if (err)
-+			goto err_destroy;
-+		next_pa = ser->next;
-+	}
+ 
+-		strscpy(sh->ser[i].name, session->name,
+-			sizeof(sh->ser[i].name));
+-		i++;
+-	}
++		err = luo_session_freeze_one(session, ser);
++		if (err) {
++			kho_block_set_it_prev(&it);
++			goto err_undo;
++		}
+ 
+-	if (sh->header_ser && sh->count > 0) {
+-		sh->header_ser->count = sh->count;
+-		*sh->sessions_pa = virt_to_phys(sh->header_ser);
++		strscpy(ser->name, session->name, sizeof(ser->name));
+ 	}
 +
-+	return 0;
++	if (sh->count > 0)
++		*sh->sessions_pa = kho_block_set_head_pa(&sh->block_set);
+ 	up_write(&sh->rwsem);
+ 
+ 	return 0;
+ 
+ err_undo:
+ 	list_for_each_entry_continue_reverse(session, &sh->list, list) {
+-		i--;
+-		luo_session_unfreeze_one(session, &sh->ser[i]);
+-		memset(sh->ser[i].name, 0, sizeof(sh->ser[i].name));
++		struct luo_session_ser *ser = kho_block_set_it_prev(&it);
 +
-+err_destroy:
-+	kho_block_set_destroy(bs);
-+
-+	/* Free the remaining un-restored blocks in the physical chain */
-+	while (next_pa) {
-+		struct kho_block_header_ser *next_ser = phys_to_virt(next_pa);
-+
-+		next_pa = next_ser->next;
-+		kho_block_free_ser(bs, next_ser);
-+	}
-+	return err;
-+}
-+
-+/**
-+ * kho_block_set_destroy - Destroy all blocks in a block set.
-+ * @bs:          The block set.
-+ */
-+void kho_block_set_destroy(struct kho_block_set *bs)
-+{
-+	struct kho_block *block, *tmp;
-+
-+	list_for_each_entry_safe(block, tmp, &bs->blocks, list) {
-+		list_del(&block->list);
-+		kho_block_free_ser(bs, block->ser);
-+		kfree(block);
-+	}
-+	bs->nblocks = 0;
-+	bs->head_pa = 0;
-+}
-+
-+/**
-+ * kho_block_set_clear - Clear all serialized data in a block set.
-+ * @bs: The block set to clear.
-+ */
-+void kho_block_set_clear(struct kho_block_set *bs)
-+{
-+	struct kho_block *block;
-+
-+	list_for_each_entry(block, &bs->blocks, list) {
-+		block->ser->count = 0;
-+		memset(block->ser + 1, 0, KHO_BLOCK_SIZE - sizeof(*block->ser));
-+	}
-+}
-+
-+/**
-+ * kho_block_set_it_init - Initialize a block set iterator.
-+ * @it:         The iterator to initialize.
-+ * @bs:         The block set to iterate over.
-+ */
-+void kho_block_set_it_init(struct kho_block_set_it *it, struct kho_block_set *bs)
-+{
-+	it->bs = bs;
-+	it->block = list_first_entry_or_null(&bs->blocks, struct kho_block, list);
-+	it->i = 0;
-+}
-+
-+/**
-+ * kho_block_set_it_reserve_entry - Reserve and return the next available slot for writing.
-+ * @it: The block iterator.
-+ *
-+ * Reserves a slot in the current block during state serialization to add a new
-+ * entry, advancing the internal index. If the current block is full, it
-+ * automatically moves to the next block in the set.
-+ *
-+ * Return: A pointer to the reserved entry slot, or NULL if the block set's
-+ * capacity is fully exhausted.
-+ */
-+void *kho_block_set_it_reserve_entry(struct kho_block_set_it *it)
-+{
-+	void *entry;
-+
-+	if (!it->block)
-+		return NULL;
-+
-+	if (it->i == it->bs->count_per_block) {
-+		if (list_is_last(&it->block->list, &it->bs->blocks))
-+			return NULL;
-+		it->block = list_next_entry(it->block, list);
-+		it->i = 0;
-+	}
-+
-+	entry = kho_block_entry(it, it->i++);
-+	it->block->ser->count = it->i;
-+	return entry;
-+}
-+
-+/**
-+ * kho_block_set_it_read_entry - Read the next serialized entry from the block set.
-+ * @it: The block iterator.
-+ *
-+ * Iterates through previously written entries during state deserialization,
-+ * respecting the actual count stored in each block's header.
-+ *
-+ * Return: A pointer to the next serialized entry, or NULL if all serialized
-+ * entries have been read.
-+ */
-+void *kho_block_set_it_read_entry(struct kho_block_set_it *it)
-+{
-+	if (!it->block)
-+		return NULL;
-+
-+	if (it->i == it->block->ser->count) {
-+		if (list_is_last(&it->block->list, &it->bs->blocks))
-+			return NULL;
-+		it->block = list_next_entry(it->block, list);
-+		it->i = 0;
-+	}
-+
-+	return kho_block_entry(it, it->i++);
-+}
-+
-+/**
-+ * kho_block_set_it_prev - Return the previous entry slot in the block set.
-+ * @it: The block iterator.
-+ *
-+ * If the current index is at the start of a block, it automatically moves to
-+ * the end of the previous block.
-+ *
-+ * Return: A pointer to the previous entry slot, or NULL if at the very
-+ * beginning of the block set.
-+ */
-+void *kho_block_set_it_prev(struct kho_block_set_it *it)
-+{
-+	if (!it->block)
-+		return NULL;
-+
-+	if (it->i == 0) {
-+		if (list_is_first(&it->block->list, &it->bs->blocks))
-+			return NULL;
-+		it->block = list_prev_entry(it->block, list);
-+		it->i = it->bs->count_per_block;
-+	}
-+
-+	return kho_block_entry(it, --it->i);
-+}
++		luo_session_unfreeze_one(session, ser);
++		memset(ser->name, 0, sizeof(ser->name));
+ 	}
+ 	up_write(&sh->rwsem);
+ 	up_write(&luo_session_serialize_rwsem);
 -- 
 2.53.0
 
