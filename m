@@ -1,331 +1,129 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 219EA3E4C94;
-	Wed,  3 Jun 2026 16:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780503122; cv=none; b=lCbhzgymj3oDVCZ/zJsJFroCpLdoXKHAJrBMgDBPLVHGx73bQo1KwAKgKsb1XPreo9a+enVbEz0PcDMNVMlVzQ03rpkKh8SUWRHX9gdim6EulY0QxQFIf+AJdUzwACxDEh73ygNVmv+w0D5XHNh5bHCH5pOIZBFHUC4Klsx3W8g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780503122; c=relaxed/simple;
-	bh=vgaIXB9ODb1iWfG/DxrrQY6ja3Nb0by41Ez40fau7zQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FVkC8ouh+3csnUhX3INC447obe2z6RRxCSUDD4yoMxrbZoqkb41zt17B1vKAurXWKATagZtneK98PNhX+V8GukgrSD9BFWF17dsVSBVTOHwCoMn2g+COV35bBSCm0dOrqLPKEOIyRcLHBTV0oVZDu6fY/eSEDbiYLTRFxlsnOgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=RzPAShWT; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA0023CF058
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 17:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780508521; cv=pass; b=pXMop6BwYc1GqgBOd0hHPJystVha5GdFFYAqob3SzA/xDhyhRl/UndgPQh7S4wIKHetZ8ZGT40Kk36j7SJtDe9AC3uoyfw21xLcHIcJfUXkAdJaviTU06fH1gFLreyDYIjXtemQ+146PKaVBSY4rVLzgcv+y/koZx7l1j8zIT2w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780508521; c=relaxed/simple;
+	bh=ktTZU/YyZ90NPmOMiaPjVO1+hM5aHam3On9tCHw45GY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nzfmXXI7HtaDemOgWq5oxgDKPCAw6uZ2Amsi7L8Y7H6eJ1vQ7kZStV5vSnchmZmu77iNb7HndySGVlib/aANH5ufV7kwkrD+5KNIJ64NGoY0KIz2QiBee5BsDR/el+0JbMVpwRzKOT+Lo26ITiI99PRdhT1sfjlLALktXF1440M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UleC0klB; arc=pass smtp.client-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="RzPAShWT"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=7brWS/9bcNV3+TdU1s0SdLQUSR+tgsRw5rTeUkYjkys=; b=RzPAShWTg/IUJLYWfH0ZR9A9vZ
-	VwwHThEjEcEZcMJylSwxiIGKp2tHhTSvEl9DTGDuwdT5x9tWQ+CuuzwD6W2468Arouj6VZyvNG49Q
-	X0mCN1eJ4OIzjszpEj0VKf57cPJDA1EqaSz5qw0HGmh9bn/1MEN9+F9bHprrWscAkyq7DCpIfiGzL
-	WIpDJXZFoT2w3JNmyGhJ7omJewlJtKPXV+ssFOv1rdVK9AotK8YPFATG5CFB1xwXNlZERaU8UbuCI
-	Env8/lnf75UQQvc8quxuBvpL+7w158SR4pcXDiLc/wmoPXoUMqE/2cmlc5wLQDLYHkNSfGj2Smg6J
-	oDEhi2Aw==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wUoC8-003rAe-0G;
-	Wed, 03 Jun 2026 16:11:52 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Wed, 03 Jun 2026 09:11:34 -0700
-Subject: [PATCH net-next 2/2] selftests: net: rds: add getsockopt()
- conversion test
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UleC0klB"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-137ed2e66faso2314223c88.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 10:41:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780508519; cv=none;
+        d=google.com; s=arc-20240605;
+        b=b+xyUrF5g8/vOLhpmDu2+PllTK14rpyNlKczziPpSakustycemauVvr57aE/AgNJk6
+         HMQILzke+wWZoByKZ9lzTRD3+Xvk7OMWlFggKZd+iE7cz/tmkLBsunbs12Av+0c8yJDz
+         +zymKonYTWngDukalKctYTI+J16ve6wa2Ux+jzI8uaCeMat7j9IOvwOD3Zka4dh54Lr6
+         u3n9GHkYdpH30RHeRn1xinxpHsAmOKNftbykI57ul7X9fcyqdgvbCQbUlxc9NAXPzN8e
+         rSX4DXJvXIGrsorl72ET/FTFzaVXf318N7bXTYjsW0DJHtvexE5W8OyJhX9WN+QAIPWH
+         zRXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ktTZU/YyZ90NPmOMiaPjVO1+hM5aHam3On9tCHw45GY=;
+        fh=oBRpK5r4IJkCMqM82VPS1vpUgQEVABmeT5uuK1UGSKQ=;
+        b=dz05uQ5m9QGQQyOCq1IYnFpTd0DvLWEKHBbwnfZoxIGcBRCS+0cQDW/YMMthEwDtqW
+         KSsMQS8Q/Hs+02eWZAW/Y5ICfpkQwxvWqFeOhp0l+uEBd3pYJqArm8GbEWR5Y+D0MCPN
+         FXHo9SMOFgfZMPTFy2mIMME7z7N7ZjomyzW3DfUqxq895Mq9YEKw5KsOkg9eSO9UHnRo
+         KVNJRlIwyDJTN2vM+KJXhyamCEAuaxTpEOO7N3wW17njN4HCLPO65wtVLiHK4nXGXXsZ
+         0zk3sczeFJ6cB1TJDr/TZ9iXQepY+77vGDcaALFKenh/uMsuni+oA7cSBAzNOAvY2vpL
+         tvOQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780508519; x=1781113319; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ktTZU/YyZ90NPmOMiaPjVO1+hM5aHam3On9tCHw45GY=;
+        b=UleC0klBktienY7MZxZWkJaOexZ4tWk/PVCsNibKM1RMMW+MZDhaeZ/5ZbUCJwTPAP
+         n0zHfIxfHJng/6rlFl4ivCWT0u7nCE0osbb3GOaBEEHwK+g9tf+L9BzOZlCchPGjFrdG
+         cidxxEG6ESDWWpyufz2yVc1XY0XHOzQspPYLnl5sZ3qdtACeZyXcRPhQgzNXw534rxtQ
+         Xb2YCDGRIu0HAX1x4M/X6HZaScBScJGgrwnr6PZjxX6ZoUhleVTgbvP9zLcCEZdLMvMG
+         qpgo7O+z1h+N5N9eKn6ke968Re5utdQfnQoPsq/4ooj1I7s1m4CBwGXJFlLU7HU4XBEu
+         yAIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780508519; x=1781113319;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ktTZU/YyZ90NPmOMiaPjVO1+hM5aHam3On9tCHw45GY=;
+        b=Jt/n/G+zL1RWAbsYjuuELAjlIIoKuFPe8uWfiRTA2ldzUWef8qkb+sqglbG6X9cdPb
+         7uTSNQFuK0n8gE6zXhAc+BzLdH5K5MNYY+pYbFQeIn5Xcwmj4aVdaUSS2vYqc6giCkfP
+         l5/L8d8/nhGOh9XrXjTxEO1BJ9K7ovDA+byiDXXGZvDamoh37S6qIkPZCzNpKh9A7doo
+         1ZzyvulPoyQKbYVR1smKAv+EtUPsICKl3Rf9e9e1d6VErEZRztAmhRfrPrnj5Vy42Nis
+         5GhNm/7PuAvPUO3FQrK6F4QWqvhdGXfa/9SikB7FRZtlx8EbV2rqu/0toWxR2NlnyZAm
+         0Vvg==
+X-Forwarded-Encrypted: i=1; AFNElJ/vBsLSr6np4VcyAEpQXZdbvPnfVj9EbImleHOAtapM3AG2M2MDCi5pDFiHBdERvQu+LJToQYyXMuohMzM6sGk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUcQKwfkZ0/3Iw2u+jLkDJv4CM+r6YKGyFGmpNwyX3qjQZ1R4O
+	RB47/88gxGkn+e7F9/M6HIzdxR1THNCU/9AQePoWX+mRkF5sk3JKBSEckQLsBMNiTTnv6X9cmY0
+	Er02+V5zokW8UseTacKu3jDmLI+vyNwKDTVHzkzw=
+X-Gm-Gg: Acq92OHD2YLNZsuqXXWkGPk7S6tFQTkwp2y6uR4ev75/oTMRbY2to2GPRdpgw+/YS5F
+	w5jEbq2fw+vg+htNo1y862HYtIUl7CvRDpYfuAzJIduUIsS4KlznjbyT5MsY7XrqmakkgA4TbnD
+	R3JIRBj++LUgA4nilY9II+vuMez36ZQ6fpAXW2AoQ2WUYakEzQa98ZB4NUJ7NLA7nikg9V5qeQC
+	jF5kZv/DfzpjHrgLIxlhlvMhOBTDKGnT1YlAgxq+xl4EIJZcZxCiEkkXO4CSqmlff+T1Wm1ofYc
+	OdWwzjrNMxWiWchlw5RfLcKz1IZ4nfqvzCXcbsNFLGkNNcH7ubg/nUxe7oj8oZpkUKoubBOuUJm
+	MZELeNbb1hnedovXD02ahTfZqvSqri9BF5l4NCJ4D9SFd
+X-Received: by 2002:a05:7022:6185:b0:137:ae1d:5b41 with SMTP id
+ a92af1059eb24-137f6939d20mr1945329c88.2.1780508518224; Wed, 03 Jun 2026
+ 10:41:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260603-getsock_more-v1-2-43b8d40c8849@debian.org>
-References: <20260603-getsock_more-v1-0-43b8d40c8849@debian.org>
-In-Reply-To: <20260603-getsock_more-v1-0-43b8d40c8849@debian.org>
-To: Allison Henderson <achender@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com, 
- linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
- kernel-team@meta.com
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7647; i=leitao@debian.org;
- h=from:subject:message-id; bh=vgaIXB9ODb1iWfG/DxrrQY6ja3Nb0by41Ez40fau7zQ=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqIFI5CNb/hVz4+ZqPhHvxFT4QgHtChY4rzcvZ9
- V1AVfOyXl2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaiBSOQAKCRA1o5Of/Hh3
- bRhUD/44srPU3UoeRnwAMlrnZxIFh8PC1Po2Hknw/W4cU/JEcsYYqbR9noaBR1JX2Qan85S5+X5
- NgJgkz4UwInSVyyiM2pa/plD+oBX1PsEDLZbPROM71MZU89bsiDNBRb6qnnf5VZ69H95bu6X6LQ
- 2+iONkEXT1miMn7ZR73/ahMKTRABG/nMPOQA9/xEC48lePe/Dzh7TbniOtkRa4R414E2la3YVG2
- ikrMpf2DLBOlcomShN8T4rJkV0KrO/81rdRU+iVmAn77Ck2ouFlAKqm6H1T0LvczXYPOpzAgx2H
- 0xjHR9dCdxwZdjpBxPw5hsY2T5CQ/4i7AnG/W4Y/ZaxPBowW+zOAQyaMRaeja6c4XQYQLLLOZpD
- QN1DF4ssWo+ScC0jQ4OEZ2oOOMV5a5AmiuBeHKfWaP6XXS4b+VEymmHjkmRjIEfd5VXbac5exlz
- Fh60KjS0mPc4jReZTtVFktAVwFnoo4Y6BCYXqL9kvrAVkmzmTroKaelxK2eI6g1TERPg95urleL
- 4HlsNgbmPD6dZDUqNQ0M1FihR16/sKtpr89/EcY8Iw6GVcWwIxUE1Ix+WaYsMLONlfd0MFXxFvW
- MG0Jzj8LKEOt32+Mi+VqkTphF2eAqAmMoOcvbM5KkUztYdqiAxHvY6IOD752X7YZsB3t3W8jCJW
- 1g33RbRE69+w7Gg==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+References: <20260603075540.659524-1-wakel@google.com>
+In-Reply-To: <20260603075540.659524-1-wakel@google.com>
+From: John Stultz <jstultz@google.com>
+Date: Wed, 3 Jun 2026 10:41:46 -0700
+X-Gm-Features: AVHnY4LI5CArKQytxrkS3crkUmy8AisHg1SJgHNdISFPijxZcCVZYo8iGeJIjtI
+Message-ID: <CANDhNCqpWoQcPqyvg2VBHUmC0Y2mw2qMH5eU15gBouCOPbX5VA@mail.gmail.com>
+Subject: Re: [PATCH] selftests: timers: Fix integer overflows in 32-bit mode
+To: Wake Liu <wakel@google.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	cmllamas@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a kselftest that exercises the RDS getsockopt() paths converted to
-the getsockopt_iter() / sockopt_t callback:
+On Wed, Jun 3, 2026 at 12:55=E2=80=AFAM Wake Liu <wakel@google.com> wrote:
+>
+> Several timer tests use NSEC_PER_SEC for arithmetic. Since NSEC_PER_SEC
+> is defined as 1000000000L in vdso/time64.h, it is 32-bit on 32-bit
+> architectures. Multiplications like NSEC_PER_SEC * 10 or 5 * NSEC_PER_SEC
+> overflow 32-bit signed long.
+>
+> Fix this by using LL suffixes or casting NSEC_PER_SEC to long long to
+> force 64-bit multiplication.
+>
+> Signed-off-by: Wake Liu <wakel@google.com>
 
-- RDS_RECVERR and SO_RDS_TRANSPORT, which return their int value through
-  copy_to_iter() and report the written length in opt->optlen.
+I feel like this has come up a few ways since commit 80fa614e2fbc
+("selftests: timers: Remove local NSEC_PER_SEC and USEC_PER_SEC
+defines"), and I definitely missed in that patch that the
+include/vdso/time64.h NSEC_PER_SEC is defined as a long instead of a
+long long.
 
-- RDS_INFO_*, which obtains the userspace buffer pages with
-  iov_iter_extract_pages() (including a non-zero starting page offset)
-  and lets the info producers copy the snapshot in under a spinlock.
+Setting include/vdso/time64.h NSEC_PER_SEC to a long long probably
+isn't a great idea as its a value that gets divided & used as a
+divisor, so we want to keep it cheaper on 32bit systems, but anywhere
+its multiplied you are really close to an overflow without explicit
+casts (which has been a pretty good foot gun over the years).
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/net/rds/.gitignore   |   1 +
- tools/testing/selftests/net/rds/Makefile     |   4 +
- tools/testing/selftests/net/rds/getsockopt.c | 201 +++++++++++++++++++++++++++
- 3 files changed, 206 insertions(+)
+So I'm wondering if it would be simpler to just revert 80fa614e2fbc
+for the selftests as we don't have to worry about the performance cost
+of doing the 64bit math everywhere there?
 
-diff --git a/tools/testing/selftests/net/rds/.gitignore b/tools/testing/selftests/net/rds/.gitignore
-index 1c6f04e2aa11..7ca4b1440f51 100644
---- a/tools/testing/selftests/net/rds/.gitignore
-+++ b/tools/testing/selftests/net/rds/.gitignore
-@@ -1 +1,2 @@
- include.sh
-+getsockopt
-diff --git a/tools/testing/selftests/net/rds/Makefile b/tools/testing/selftests/net/rds/Makefile
-index fe363be8e358..0700d8298eec 100644
---- a/tools/testing/selftests/net/rds/Makefile
-+++ b/tools/testing/selftests/net/rds/Makefile
-@@ -5,6 +5,8 @@ all:
- 
- TEST_PROGS := run.sh
- 
-+TEST_GEN_PROGS := getsockopt
-+
- TEST_FILES := \
- 	include.sh \
- 	settings \
-@@ -16,4 +18,6 @@ EXTRA_CLEAN := \
- 	/tmp/rds_logs \
- # end of EXTRA_CLEAN
- 
-+CFLAGS += $(KHDR_INCLUDES)
-+
- include ../../lib.mk
-diff --git a/tools/testing/selftests/net/rds/getsockopt.c b/tools/testing/selftests/net/rds/getsockopt.c
-new file mode 100644
-index 000000000000..a82ffe4871c2
---- /dev/null
-+++ b/tools/testing/selftests/net/rds/getsockopt.c
-@@ -0,0 +1,201 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Exercise the RDS getsockopt() paths that were converted to the
-+ * getsockopt_iter() / sockopt_t callback.
-+ *
-+ * Three distinct paths are covered:
-+ *
-+ *   - RDS_RECVERR and SO_RDS_TRANSPORT, which now return their int value
-+ *     through copy_to_iter() and report the written length in opt->optlen.
-+ *
-+ *   - RDS_INFO_*, which pins the userspace buffer with
-+ *     iov_iter_extract_pages() (including a non-zero starting page offset)
-+ *     and lets the info producers memcpy the snapshot in under a spinlock.
-+ *
-+ * The kvec (in-kernel buffer) -> -EOPNOTSUPP path of rds_info_getsockopt()
-+ * is not reachable from a userspace getsockopt() and so is not tested here.
-+ */
-+#include <errno.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/mman.h>
-+#include <sys/socket.h>
-+#include <linux/rds.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+#ifndef AF_RDS
-+#define AF_RDS 21
-+#endif
-+
-+FIXTURE(rds) {
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(rds)
-+{
-+	self->fd = socket(AF_RDS, SOCK_SEQPACKET, 0);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_RDS unavailable (errno %d) - load the rds module",
-+		     errno);
-+}
-+
-+FIXTURE_TEARDOWN(rds)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+/* RDS_RECVERR defaults to 0 and is reported back as a 4-byte int. */
-+TEST_F(rds, recverr_default)
-+{
-+	socklen_t len = sizeof(int);
-+	int val = 0xdeadbeef;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_RDS, RDS_RECVERR, &val, &len));
-+	EXPECT_EQ(sizeof(int), len);
-+	EXPECT_EQ(0, val);
-+}
-+
-+/* A value set via setsockopt() must be readable back unchanged. */
-+TEST_F(rds, recverr_set_get)
-+{
-+	socklen_t len = sizeof(int);
-+	int val = 1;
-+
-+	ASSERT_EQ(0, setsockopt(self->fd, SOL_RDS, RDS_RECVERR, &val, len));
-+
-+	val = 0;
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_RDS, RDS_RECVERR, &val, &len));
-+	EXPECT_EQ(sizeof(int), len);
-+	EXPECT_EQ(1, val);
-+}
-+
-+/* A buffer smaller than an int is rejected with EINVAL, not silently. */
-+TEST_F(rds, recverr_short_buffer)
-+{
-+	socklen_t len = sizeof(int) - 1;
-+	char buf[sizeof(int)];
-+
-+	EXPECT_EQ(-1, getsockopt(self->fd, SOL_RDS, RDS_RECVERR, buf, &len));
-+	EXPECT_EQ(EINVAL, errno);
-+}
-+
-+/* An unbound socket reports RDS_TRANS_NONE for SO_RDS_TRANSPORT. */
-+TEST_F(rds, transport_unbound)
-+{
-+	socklen_t len = sizeof(int);
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_RDS, SO_RDS_TRANSPORT, &val,
-+				&len));
-+	EXPECT_EQ(sizeof(int), len);
-+	EXPECT_EQ(RDS_TRANS_NONE, (unsigned int)val);
-+}
-+
-+TEST_F(rds, transport_short_buffer)
-+{
-+	socklen_t len = sizeof(int) - 1;
-+	char buf[sizeof(int)];
-+
-+	EXPECT_EQ(-1, getsockopt(self->fd, SOL_RDS, SO_RDS_TRANSPORT, buf,
-+				 &len));
-+	EXPECT_EQ(EINVAL, errno);
-+}
-+
-+/*
-+ * RDS_INFO_COUNTERS with a zero-length buffer is the "probe" call: it must
-+ * fail with ENOSPC and report the required snapshot size in optlen.
-+ */
-+TEST_F(rds, info_counters_probe)
-+{
-+	socklen_t len = 0;
-+
-+	EXPECT_EQ(-1, getsockopt(self->fd, SOL_RDS, RDS_INFO_COUNTERS, NULL,
-+				 &len));
-+	EXPECT_EQ(ENOSPC, errno);
-+	EXPECT_GT(len, 0);
-+	/* The snapshot is an array of fixed-size counter records. */
-+	EXPECT_EQ(0, len % (socklen_t)sizeof(struct rds_info_counter));
-+}
-+
-+/*
-+ * A real snapshot into an unaligned userspace buffer exercises the
-+ * iov_iter_extract_pages() path, including the non-zero offset0 handling
-+ * that the patch reworked. Place the buffer at a non-page-aligned address
-+ * spanning into the next page to make sure multi-page pinning works too.
-+ */
-+TEST_F(rds, info_counters_snapshot)
-+{
-+	struct rds_info_counter *ctr;
-+	socklen_t need = 0, len;
-+	long pagesz = sysconf(_SC_PAGESIZE);
-+	unsigned int i, n;
-+	char *region, *buf;
-+	int ret;
-+
-+	/* Probe for the required size. */
-+	getsockopt(self->fd, SOL_RDS, RDS_INFO_COUNTERS, NULL, &need);
-+	ASSERT_GT(need, 0);
-+
-+	region = mmap(NULL, 2 * pagesz, PROT_READ | PROT_WRITE,
-+		      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(MAP_FAILED, region);
-+
-+	/* Unaligned start that runs past the first page boundary. */
-+	buf = region + pagesz - 64;
-+	ASSERT_LE(need, (socklen_t)(pagesz + 64));
-+
-+	/*
-+	 * On success the RDS_INFO path returns the positive per-element size
-+	 * (lens.each) rather than 0, and writes the full snapshot length back
-+	 * into optlen.
-+	 */
-+	len = need;
-+	ret = getsockopt(self->fd, SOL_RDS, RDS_INFO_COUNTERS, buf, &len);
-+	ASSERT_GE(ret, 0) {
-+		TH_LOG("getsockopt snapshot failed: errno %d", errno);
-+	}
-+	EXPECT_EQ(sizeof(struct rds_info_counter), ret);
-+	EXPECT_EQ(need, len);
-+
-+	/* The counter names must be NUL-terminated, non-empty strings. */
-+	ctr = (struct rds_info_counter *)buf;
-+	n = len / sizeof(*ctr);
-+	ASSERT_GT(n, 0);
-+	for (i = 0; i < n; i++) {
-+		size_t namelen = strnlen((char *)ctr[i].name,
-+					 sizeof(ctr[i].name));
-+
-+		EXPECT_GT(namelen, 0);
-+		EXPECT_LT(namelen, sizeof(ctr[i].name));
-+	}
-+
-+	munmap(region, 2 * pagesz);
-+}
-+
-+/*
-+ * A non-zero but too-small buffer must report ENOSPC and the full required
-+ * length, without corrupting memory past the buffer.
-+ */
-+TEST_F(rds, info_counters_short_buffer)
-+{
-+	socklen_t need = 0, len;
-+	char small[sizeof(struct rds_info_counter)];
-+
-+	getsockopt(self->fd, SOL_RDS, RDS_INFO_COUNTERS, NULL, &need);
-+	ASSERT_GT(need, 0);
-+
-+	/* Ask with a buffer guaranteed smaller than the full snapshot. */
-+	if (need <= (socklen_t)sizeof(small))
-+		SKIP(return, "snapshot fits in one record; nothing to test");
-+
-+	len = 1; /* < sizeof(struct rds_info_counter) */
-+	EXPECT_EQ(-1, getsockopt(self->fd, SOL_RDS, RDS_INFO_COUNTERS, small,
-+				 &len));
-+	EXPECT_EQ(ENOSPC, errno);
-+	EXPECT_EQ(need, len);
-+}
-+
-+TEST_HARNESS_MAIN
-
--- 
-2.54.0
-
+thanks
+-john
