@@ -1,129 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58C93D47D0;
-	Wed,  3 Jun 2026 22:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B137F325495
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 23:05:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780527326; cv=none; b=XM0D/dwDc2UVBarK0aRa25OHpIcwqPHsWbjfYrJPxoTotiwyUf1M8WPA4AFJ0Kg9nXHGpbu4hBkZSqQWXo9NX99RjzZn7/fMihrJ4sEKB3AoU3xy+44L1W7NZs60q+nMKtq4QoSr2duK8+Xc91CPSWNVJgOfPh6QCnY9f+50hhc=
+	t=1780527929; cv=none; b=hMLyYulFx25e6FRiJUuEekyY7c+vJ/Fv8kz1wMdVtsgO10xfYaJTKPdqRFkm5YRhjxIexeV+A5Bz/Z301OK2Sc+YAD2MxgfbnWzlehvawjEqokc6ChsYzDJKbK/avzYsRFaYc96+hIaV0DephBN/CnYZ1D3r/zDKGe3qFuNjNJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780527326; c=relaxed/simple;
-	bh=0i3HKfKAZEXkzt5Zxsa5pJ9oMm/FULATvfyLmZeRLbI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Q8JqNKtVojZoS1ReSuSo1xvjhbHIgQGI4EdKwnBvweDVpWSJNfL6An53560HhD1oJcbrGeLaqH0xiAO2qAjh7Wsqy2QOt214EUY1/2FQteUk7axs6TJBxBQznb+pgMBwm7piBMgyui1GZOzSIYGSc90ka610LTWpmTAG0WcirEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JUy9xq5a; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1780527929; c=relaxed/simple;
+	bh=FOTbKkTXFqCfnmkiCIO0Haw1vdPADRRItZxNEblPyBI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=V/BPNt5ARZ6fSLewVCOoPyV7wkD6I9c+JE8qnRUrw9P4mkQnEOJi6avgkSeTXgFTWG3KNk2EKAZR0m8zBZPoaffYqbFQh41tOmCQMyU86ANPeQy5RMPlfaSduAuT8n1Cg9ODDDeyV42szQUVvlNwz2PEJpOzQVKPoAG6Xht6rzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DZnRNctw; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JUy9xq5a"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8414AC2BCB0;
-	Wed,  3 Jun 2026 22:55:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1780527325;
-	bh=0i3HKfKAZEXkzt5Zxsa5pJ9oMm/FULATvfyLmZeRLbI=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=JUy9xq5aZdn/uyWq0bBhj/SqczMvCRjvTDqbS7z6HDAxEPapsKhZOBqZ6uUXdAtaV
-	 8MG5898fqziJf2FVqpNHODrGVl5kPc8hsneQ+K+0kMKO7PUdUTESSMNHaiWOqX5Qp+
-	 LfArQ2H8PClk/Up/Yhyiq7QMDmVB41GCPO4VwZSJ9+LykoRsxvhdnNv5KvCtW4L0ps
-	 KGRsOfKXLHh3gkcTyry00twTu/T1nfALFQvVZ7gPfGljwac4HX4N+CXh/Xwd87ZvI6
-	 3QUzKgyD8E7TJLt1uP9Ttpp2sdqskgT4IqsqI+wAAHmP7DTqCmjjbKmdIwVgSAnVYg
-	 6k6WY52KQ6d/g==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 791F2CD6E6B;
-	Wed,  3 Jun 2026 22:55:25 +0000 (UTC)
-From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Wed, 03 Jun 2026 15:55:24 -0700
-Subject: [PATCH] KVM: selftests: Make guest_code_xsave more friendly
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DZnRNctw"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2bfdd99f6b7so1572385ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 16:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780527926; x=1781132726; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+3s+E4xxG7mauxLjz9Wjjj+rgbDiBrMTMhVLzEeXd/g=;
+        b=DZnRNctwhFC/U6d3RL9PAotjezVQMt6DA57PPVJKtnfxZmP9RIvGTKFcwOY6v8wDRk
+         HInFltNhmdjPxCLImNEuDvdRDC6hRLGvBCezKvFHSftabOJNt/jdgzYW6yZBlLlWLBf+
+         E10htIRjvYqKKjfzG71RpL6TuUCHaYYFdhMgUmV/11PePaFf8jD/JZpt+jIwrFoKWsfg
+         /DtIzUnOobZNJGckDN5NhTpmp5nGPYUFd7CC1OyKYsJUjbq+nnu1WX+n046NVhQnn1Pt
+         QChH5h0D3bvGItndf+8oatX+NwY5tVpy/OVvS/GIS1zLjImekOqp8uNOsJZ8h+Mc/sqy
+         5BYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780527926; x=1781132726;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+3s+E4xxG7mauxLjz9Wjjj+rgbDiBrMTMhVLzEeXd/g=;
+        b=DSroAOChwo9Owcs+cWi4cRDt/D0JvehH03cZfeLSmAvHDlhx8wgayXZXYdKvq0pJ9s
+         usr0bjJcX38OXfyFIU25+wLv5ZpJLTErywimpBG0vmR+MwaRPtU5Aj6/cFuaoVtvvCj+
+         dmvS/u83/uJWudL0EUJma8M6lUlZVJrwwZypkS+pj33uMllBTtbMw9ITGIriMC5RvkW6
+         8O/4d0k5hGtnATJB4X5KBZV40IwQt7enIP4Nb0pDjvoZ8zs354u3vCzNBx5G2CWccbBO
+         Igb0zP6uaYkI4n1nwzgiSXioSlcmQg5wQUbgLAlnMlWvnNO1Y67cXbcIpumLMyfAGe1x
+         FN2g==
+X-Forwarded-Encrypted: i=1; AFNElJ/UYlRIPV75pFRrEvYFoTSTqf6DbhZSHy0VvmZf+5gDLjZD7sV0srXSKinTLmBop6RD3kUqYD47k3hBKStYdmc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMz9gYixQw55K2MHdP8PHCy9LWf8HpbPoWwSF/176vs7Xa/EfZ
+	7Xe5dWPYl9LBjRqIxEOWgsvBNr1nOcIfntysPo06Nr/ZIis37rnNJvrZ77IsPHuJ9oItkiu6GdB
+	dqY4RLw==
+X-Received: from pltg8.prod.google.com ([2002:a17:902:6b48:b0:2b9:a1d0:9f13])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:42c4:b0:2c0:af09:f3c7
+ with SMTP id d9443c01a7336-2c1640ae3demr32304785ad.30.1780527925809; Wed, 03
+ Jun 2026 16:05:25 -0700 (PDT)
+Date: Wed, 3 Jun 2026 16:05:25 -0700
+In-Reply-To: <20260603-snp-selftest-cleanup-v1-1-73b29fe31ce6@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260603-snp-selftest-cleanup-v1-1-73b29fe31ce6@google.com>
-X-B4-Tracking: v=1; b=H4sIANuwIGoC/x3MQQqAIBBA0avErBswC6OuEi3MxhoIE6ciiO6et
- HyL/x8QSkwCffFAoouF95BRlQW41YaFkOds0EobZVSNEiIKbf4gOdBtZMMZcfJd29aNM53SkNO
- YyPP9b4fxfT/B4FE7ZgAAAA==
-X-Change-ID: 20260603-snp-selftest-cleanup-bf97734c6902
-To: Sean Christopherson <seanjc@google.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, michael.roth@amd.com, jackyli@google.com, 
- liruxin@google.com, darwinguo@google.com, jacobhxu@google.com, 
- Ackerley Tng <ackerleytng@google.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780527325; l=1941;
- i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=/w5y02MR7E1dim1B0Oo2RpreZBil+9LNll44ViP3HBc=;
- b=5CKyYK19jWHUfGp2Y6HXQ0ZQcngpoxvT0Q+7ZVA0QMK5zsvF115Aszm5FtTOW7E/Cmo4FqtD6
- MFsYn64TSngAJhx6TLdgsAr6OVfBIhDMEatBKrRueS/YkG1H93xunlQ
-X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
- pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
-X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
- auth_id=649
-X-Original-From: Ackerley Tng <ackerleytng@google.com>
-Reply-To: ackerleytng@google.com
+Mime-Version: 1.0
+References: <20260603-snp-selftest-cleanup-v1-1-73b29fe31ce6@google.com>
+Message-ID: <aiCzNbtQ4FPu2yCR@google.com>
+Subject: Re: [PATCH] KVM: selftests: Make guest_code_xsave more friendly
+From: Sean Christopherson <seanjc@google.com>
+To: ackerleytng@google.com
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	michael.roth@amd.com, jackyli@google.com, liruxin@google.com, 
+	darwinguo@google.com, jacobhxu@google.com
+Content-Type: text/plain; charset="us-ascii"
 
-From: Ackerley Tng <ackerleytng@google.com>
+On Wed, Jun 03, 2026, Ackerley Tng via B4 Relay wrote:
+> From: Ackerley Tng <ackerleytng@google.com>
+> 
+> The original implementation of guest_code_xsave makes a jmp to
+> guest_sev_es_code in inline assembly. When code that uses guest_sev_es_code
+> is removed, guest_sev_es_code will be optimized out, leading to a linking
+> error since guest_code_xsave still tries to jmp to guest_sev_es_code.
 
-The original implementation of guest_code_xsave makes a jmp to
-guest_sev_es_code in inline assembly. When code that uses guest_sev_es_code
-is removed, guest_sev_es_code will be optimized out, leading to a linking
-error since guest_code_xsave still tries to jmp to guest_sev_es_code.
+So, don't do that?
 
-Rewrite guest_code_xsave() to instead make a call, in C, to
-guest_sev_es_code(), so that usage of guest_sev_es_code() is made known to
-the compiler.
+> Rewrite guest_code_xsave() to instead make a call, in C, to
+> guest_sev_es_code(), so that usage of guest_sev_es_code() is made known to
+> the compiler.
+> 
+> This rewriting also gives a name to the xsave inline assembly, improving
+> readability.
+> 
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+>  tools/testing/selftests/kvm/x86/sev_smoke_test.c | 24 +++++++++++++++++-------
+>  1 file changed, 17 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86/sev_smoke_test.c b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+> index 1a49ee3915864..8b859adf4cf6f 100644
+> --- a/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+> +++ b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+> @@ -80,13 +80,23 @@ static void guest_sev_code(void)
+>  	GUEST_DONE();
+>  }
+>  
+> -/* Stash state passed via VMSA before any compiled code runs.  */
 
-This rewriting also gives a name to the xsave inline assembly, improving
-readability.
+Uh, so as the comment says, the goal is to stash state before _any_ compiled
+code runs.  Shoving the code into inline asm breaks that.  The compiler *probably*
+won't shove anything before the first inline assembly, but there are absolutely
+no guarantees.  E.g. you're subtly relying on a tail-call optimization to avoid
+any stack operations.  If I force guest_sev_es_code() to be inlined, then the
+prologue becomes:
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- tools/testing/selftests/kvm/x86/sev_smoke_test.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+0000000000402a10 <guest_code_xsave>:
+  402a10:       48 83 ec 08                                     sub    $0x8,%rsp
+  402a14:       b8 07 00 00 00                                  mov    $0x7,%eax
+  402a19:       31 d2                                           xor    %edx,%edx
+  402a1b:       0f ae 27                                        xsave  (%rdi)
+  402a1e:       b9 31 01 01 c0                                  mov    $0xc0010131,%ecx
 
-diff --git a/tools/testing/selftests/kvm/x86/sev_smoke_test.c b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
-index 1a49ee3915864..8b859adf4cf6f 100644
---- a/tools/testing/selftests/kvm/x86/sev_smoke_test.c
-+++ b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
-@@ -80,13 +80,23 @@ static void guest_sev_code(void)
- 	GUEST_DONE();
- }
- 
--/* Stash state passed via VMSA before any compiled code runs.  */
--extern void guest_code_xsave(void);
--asm("guest_code_xsave:\n"
--    "mov $" __stringify(XFEATURE_MASK_X87_AVX) ", %eax\n"
--    "xor %edx, %edx\n"
--    "xsave (%rdi)\n"
--    "jmp guest_sev_es_code");
-+static void xsave_all_registers(void *addr)
-+{
-+	__asm__ __volatile__(
-+		"mov $" __stringify(XFEATURE_MASK_X87_AVX) ", %eax\n"
-+		"xor %edx, %edx\n"
-+		"xsave (%0)"
-+		:
-+		: "r"(addr)
-+		: "eax", "edx", "memory"
-+	 );
-+}
-+
-+static void guest_code_xsave(void *vmsa_gva)
-+{
-+	xsave_all_registers(vmsa_gva);
-+	guest_sev_es_code();
-+}
- 
- static void compare_xsave(u8 *from_host, u8 *from_guest)
- {
+and we're hosed.
 
----
-base-commit: 0d9b37717aaa4a73362520af5ba4db7febf09123
-change-id: 20260603-snp-selftest-cleanup-bf97734c6902
+> -extern void guest_code_xsave(void);
+> -asm("guest_code_xsave:\n"
+> -    "mov $" __stringify(XFEATURE_MASK_X87_AVX) ", %eax\n"
+> -    "xor %edx, %edx\n"
+> -    "xsave (%rdi)\n"
+> -    "jmp guest_sev_es_code");
+> +static void xsave_all_registers(void *addr)
+> +{
+> +	__asm__ __volatile__(
+> +		"mov $" __stringify(XFEATURE_MASK_X87_AVX) ", %eax\n"
+> +		"xor %edx, %edx\n"
 
-Best regards,
---
-Ackerley Tng <ackerleytng@google.com>
+This doesn't even build.  When using input and/or output params, named registers
+like eax and edx need an extra '%' to escape them, e.g.
 
+	asm volatile("mov $" __stringify(XFEATURE_MASK_X87_AVX) ", %%eax\n\t"
+		     "xor %%edx, %%edx\n\t"
+		     "xsave (%0)"
+		:
+		: "r"(addr)
+		: "eax", "edx", "memory"
+	 );
 
+> +		"xsave (%0)"
+> +		:
+> +		: "r"(addr)
+> +		: "eax", "edx", "memory"
+> +	 );
+> +}
+> +
+> +static void guest_code_xsave(void *vmsa_gva)
+> +{
+> +	xsave_all_registers(vmsa_gva);
+> +	guest_sev_es_code();
+> +}
+>  
+>  static void compare_xsave(u8 *from_host, u8 *from_guest)
+>  {
+> 
+> ---
+> base-commit: 0d9b37717aaa4a73362520af5ba4db7febf09123
+> change-id: 20260603-snp-selftest-cleanup-bf97734c6902
+> 
+> Best regards,
+> --
+> Ackerley Tng <ackerleytng@google.com>
+> 
+> 
