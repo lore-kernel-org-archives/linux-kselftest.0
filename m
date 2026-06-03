@@ -1,86 +1,68 @@
-Received: from us.padl.com (us.padl.com [216.154.215.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E29238C2A;
-	Wed,  3 Jun 2026 00:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.154.215.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F191F26E71E;
+	Wed,  3 Jun 2026 00:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780445788; cv=none; b=rXLcNNSZtM8JFpJfMgOMN4oJ9ctxiO7075chy7uA2lozY55ok935SxxbzfvSP17MPbHv8qP0wQzN7/NEIQy8t2GTnCZ1Aj0W7xPKay6jB2BMgbpvshbOZXB5vvHgZfcb6ECY65pHRsvk/hdSDJ8ZDR5edkSKywb5yYzrDMfKuew=
+	t=1780447870; cv=none; b=S+ViS4UEgYx594ZxpW1j99Z4KOBbtoyFOZbpyMMAev2kfsV5AFas1uXxHQFQcXo8rNF0mMS8eVzhXA/xSxdp1sw9q80sVQoVMKNSRHFqTzmjmLzYs+on2lWvF8gj1hjC+2He1ANVuecBrCQE4bGwNpLWl2ljT0kyzlvdWK4Fzts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780445788; c=relaxed/simple;
-	bh=LVAztwwvwVTuW1CFjVXsItGMpJmHC2uv3ruQzgYn1fM=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=LVXm/WpltmOnH5d+p0euT7O1zOES2ODSHGR5Y5y8kNsslWUnXpOkdHNuhfyV6e9f1cbExeSR/L0iJi61lB7HVX3/rOtT7pFhuex59yHS4xqvqiHu60nVnsmQhwSo5JsT+2RwBhJy/55M0ywQ8q2IW4SRS5m7d6HH1WsaQjAwA/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=padl.com; spf=pass smtp.mailfrom=padl.com; dkim=pass (2048-bit key) header.d=padl.com header.i=@padl.com header.b=SGH5zm9F; arc=none smtp.client-ip=216.154.215.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=padl.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=padl.com
+	s=arc-20240116; t=1780447870; c=relaxed/simple;
+	bh=Cuu0zt1E2g4zBrWtkh6YZleB43ciQHvWHB3qcO3HWBw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FnK+1Uf8dn5LnqCNvCu9Nlywa8X9/wqwqaFXYUAQF+VWJl5ofI3jbM5W+y1QpmRid4sao3b1eM84CB+xb1L4yUihnie9yQdc+8wh+PYrQnsMAC2KIzDtzfRrnE2rle5K9JHfiFr4gdkLSY32jHN2ulxP5SrUqZYlE1s+XlIwrrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U0CGVXk7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=padl.com header.i=@padl.com header.b="SGH5zm9F"
-Received: from auth (localhost [127.0.0.1]) by us.padl.com (8.14.7/8.14.7) with ESMTP id 6530FlGu015207
-	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Wed, 3 Jun 2026 01:15:50 +0100
-DKIM-Filter: OpenDKIM Filter v2.11.0 us.padl.com 6530FlGu015207
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=padl.com; s=default;
-	t=1780445762; bh=LVAztwwvwVTuW1CFjVXsItGMpJmHC2uv3ruQzgYn1fM=;
-	h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-	b=SGH5zm9FfO+VgmI9KfnzrYlkK1zWS8U0bRuqXQatH7CNiilZS2+NFlgAujKpYELXI
-	 fPcpfhzT7cbSU7y6XvV6YgIznvSWnK4qaYQ64LPUWUIOoebEcfk3yBjLGM0N7dSIFp
-	 bGQR3g2n0xC7KXW7nvy15iQSzgAijWSd0DNnHwgNXFD3JmMEWST1d/t9c9/vzjqsBW
-	 0scX4W1mXDRmB6PXZDGgSF9iFfFVOO3e0qJQnaN4dzNRtVk3b7fKPcPORd5qUXNRHl
-	 F6bdpTa1UtTFUHj7XwhANR9GyhImJz1zrJx74LMn6C8Av9IvDdQE734cQxQ4kKgd+j
-	 1Gp2QZMSdDZEA==
-Content-Type: text/plain;
-	charset=utf-8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U0CGVXk7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B1BC1F00893;
+	Wed,  3 Jun 2026 00:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780447868;
+	bh=vpWej4lHI3Jzfw+An+vLn1ofBTEB35ebLfh2RvR4+T4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=U0CGVXk71mgV4sgYlfGTQozo/k3BVaiPah6GH42duukBz9SaIScfVFebBJGqDlaxL
+	 dReP5BgZtSZojHesOkuGTePCbuQUu0BB78ZAlV/5IoVKP1O/DSbHegF2j/Wy5tXmJe
+	 9HM3l4vMv61cWhCYGI71diAHgL9tya1STOKNth1s4t+nElpXNFW+2s4EFsKf4Wku4Z
+	 nltgyfk9V3VNGuS61boY9imhKc0FM8qqfQr/+o7e2rLWjDtYr4UgsF/0xVnMpx9iRN
+	 Na4eapBXoDtNC+EDU5nkuC1sNxbLuOVEkrx6Z9Gr00D76jkcJ37Zh/7bVezzQcLt/t
+	 KirOD6dBms8xw==
+From: SeongJae Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SeongJae Park <sj@kernel.org>,
+	Ruslan Valiyev <linuxoid@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] selftests/damon: test kdamond refresh_ms
+Date: Tue,  2 Jun 2026 17:50:44 -0700
+Message-ID: <20260603005045.90000-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260602100308.749f8ae894efc3bb73fa02e8@linux-foundation.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH net-next v2 5/6] net: dsa: mv88e6xxx: MQPRIO support
-From: Luke Howard <lukeh@padl.com>
-In-Reply-To: <29c09316-c911-456e-acc5-e18402da4bd4@lunn.ch>
-Date: Wed, 3 Jun 2026 10:15:37 +1000
-Cc: Cedric Jehasse <cedric.jehasse@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-        David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bridge@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, Max Hunter <max@huntershome.org>,
-        Kieran Tyrrell <kieran@sienda.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0402DFFF-634A-40C4-BC1E-B038F20926FF@padl.com>
-References: <20260602-mv88e6xxx-8021qat-mqprio-v2-0-72be14522e7c@padl.com>
- <20260602-mv88e6xxx-8021qat-mqprio-v2-5-72be14522e7c@padl.com>
- <t44kmhk6gqxnwhdvo7svouexwelwsya7zgukpbv3cxpfsmutqa@y3rjoj3tvqce>
- <A662D3F9-18DD-43C9-A43D-912E5A8A4360@padl.com>
- <8C6AD966-2C28-4BEF-95C4-1B2AC3751513@padl.com>
- <29c09316-c911-456e-acc5-e18402da4bd4@lunn.ch>
-To: Andrew Lunn <andrew@lunn.ch>
-X-Mailer: Apple Mail (2.3826.700.81)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+
+On Tue, 2 Jun 2026 10:03:08 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+
+> On Tue,  2 Jun 2026 07:28:03 -0700 SeongJae Park <sj@kernel.org> wrote:
+> 
+> > Andrew might want us to wait until next rc1 release, though, as
+> > apparently now we want to keep more time on stabilizing mm.git for the next
+> > merge window.  Andrew, please let me know if so.
+> 
+> Yes, awaiting -rc1 would be preferred please.
+
+Thank you for letting me know.  I will hold reposting of this until the -rc1.
+
+Ruslan, please let us know if you think this series cannot wait.
 
 
-
-> On 3 Jun 2026, at 9:55=E2=80=AFam, Andrew Lunn <andrew@lunn.ch> wrote:
->=20
->> But there=E2=80=99s an alternative, more invasive, solution where the =
-MQPRIO
->> configuration is attached to the bridge itself.
->=20
-> What about ports which are not attached to a bridge? They are just
-> standalone, have an IP address of their own, etc.
-
-That is a good point. So, barring a switch feature I=E2=80=99ve not yet =
-found, I think the only options are either to drop MQPRIO offload, or to =
-accept that ports with no MQPRIO mapping inherit the per-switch mapping. =
-Arguably that=E2=80=99s the case today anyway (each chip has its own =
-default frame priority to queue mapping), so the user should have no =
-expectation of queue assignment on a port that hasn=E2=80=99t been =
-configured.
-
-Luke=
+Thanks,
+SJ
