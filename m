@@ -1,110 +1,66 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 276A8385535;
-	Wed,  3 Jun 2026 09:22:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E4643CEFA;
+	Wed,  3 Jun 2026 09:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780478526; cv=none; b=tyhP4/6T+KRMKp00GAV++i4P6t0VUb5IihizpDUxDLqB1RgrTgittgEyj8Cl0L6WonKkQA5ZXBFHyLQS3sPxymebNOf836Y2DhnPuvp+y67kXfi8LdPQUuKE4Sx/FA2wec4ILuHhHqAfVZzPACn1wUEQBVME0s5vv3tnxKIPX0Y=
+	t=1780479188; cv=none; b=EgD2N5hgDFmnODBTvkzIy0fkdKlRAv00KWQxuJRa7MDUq6OvPWIZGVPI37MOkAPH08V10d6K0Jobk1/QVZxm7xngPvbn8EgqU5vsUth2q3HlnRFkgS738Yt72Kw+w5S21CyaLfH5g21s9Ils0jf9HE2R+9YKv9CD0LnTFF8LxAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780478526; c=relaxed/simple;
-	bh=LdQejOz1IAnEcJAOumKNKrxcqY2PK3y43OQ3sjX7IAo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HiOhKLvKTwlCkhLPT6Pp9twzNAUEMW+KS/FwtxGgiEhXXaCG9ne+ucM9EzuP6edk4HReta2fbXyLZIle0UekA2JcaKcM0VrgVGPYbzXVjtXMyJXd4wUtHazp2TW/5udk6PIlpFqrDWyOzFkWDgSR4n+Itc/XVmm6aphHn4cXSC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MS7eDG/G; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780479188; c=relaxed/simple;
+	bh=lt+j2EZwfuCvS9VqopiUtmumkELCLq8z+NMaWo6dPRo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HMd34LgHQqQYw1o07piaxVuWNnpbu180E95LlyW7wUupPdMvq3O8KoRlMqV4ELxUt5HXA7MxiQFbb/umMr2wXr+unpl4zg3uloL+C8D2CBcT5ROJXz7aZy/LPKtlavvtrhBJZodU122+r/88k90/GaovNN7WvzaRbccPStV3+0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rx1cSpJl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MS7eDG/G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6260E1F00893;
-	Wed,  3 Jun 2026 09:21:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rx1cSpJl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61FAF1F00893;
+	Wed,  3 Jun 2026 09:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780478523;
-	bh=9KPpHmif7uT13SYzZOScP8ZXHj+daUOWD5CJb4ZWcmg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=MS7eDG/GouIHIPQmW7/3M1HBKF/aNNJDtbfrd9i4qhasluoLq2Dp+W9bfux3IkQIl
-	 y+myZ+HGUtT391bfB0nWl/7ZzmDY6sd05KY7T6v3jZ3Me1W3/fTkUstxiIXqSNRI7j
-	 lxYUkNQJ1hWHKqbVPkBbHel3ogjxnu0zzq1XITJItbCI5RpCrtKrc2FL/Zg7LCWRaa
-	 JLDfxNFtfslLUD+WRb9eYrgTCmQJxYXtTPM8G7AE2/YIQOmFWygczVhjALYqggjusn
-	 v80J9YaCM7zAajSejmfLDRyqj8JCg1ZLOYBybe0mmvPYnCXA6VkfvtPiBM0V9DVkhR
-	 B0lCZivckwzQg==
-Message-ID: <2b72da46-bf83-406f-bf5b-022f8e0ac04f@kernel.org>
-Date: Wed, 3 Jun 2026 10:21:58 +0100
+	s=k20260515; t=1780479182;
+	bh=R3CPe9L+Xkc56uXDetG+lvovbz0JWP1jQopKoFbSJqc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Rx1cSpJlGAM0YKvGloDx4NCqR14Zez0e6wNchackcfyp3UWVdcBZSI9zTWDzbxJ9K
+	 0bxYsTiuDHtW/iHnjIsxs7z7YmLa/cvEP67GMnbC5TqLxuuYjSd9o2npCUDV6PIt54
+	 kYFUq53Ow4olqnLx+dT8XKv53t10rlH8/YbanQ4smjEdtkzz+MkZIos8WgrWvz8Hgv
+	 GdrOWQQWdzDSFzD42zxtkp5aHFnN/hw/tz7d4s5PJ4OE4yrRKkGRclDGlKGRnYIs+2
+	 4M9Mq4C9Ui6I3VnVRfzjhRHXZlFvXiHaWX4z0hcmznIOTu5avK9NWnL1AmPAJAPNMh
+	 H47PAq9cno9jA==
+Date: Wed, 3 Jun 2026 12:32:54 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org, shuah@kernel.org,
+	akpm@linux-foundation.org, linux-mm@kvack.org,
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, corbet@lwn.net, dmatlack@google.com,
+	kexec@lists.infradead.org, pratyush@kernel.org, skhawaja@google.com,
+	graf@amazon.com
+Subject: Re: [PATCH v6 04/13] liveupdate: register luo_ser as KHO subtree
+Message-ID: <ah_0xsPC_oNPewVk@kernel.org>
+References: <20260603032905.344462-1-pasha.tatashin@soleen.com>
+ <20260603032905.344462-5-pasha.tatashin@soleen.com>
+ <178046942429.468621.9591914636403075487.b4-review@b4>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/8] bpftool: Pass host flags to bootstrap
- libbpf
-To: Leo Yan <leo.yan@arm.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Lorenz Bauer <lmb@isovalent.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-References: <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
- <20260602-tools_build_fix_zero_init_bpf_only-v2-1-c76e5250ea1c@arm.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260602-tools_build_fix_zero_init_bpf_only-v2-1-c76e5250ea1c@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <178046942429.468621.9591914636403075487.b4-review@b4>
 
-2026-06-02 15:47 UTC+0100 ~ Leo Yan <leo.yan@arm.com>
-> bpftool builds a bootstrap libbpf with HOSTCC, but the libbpf submake can
-> still inherit target build flags through CFLAGS. This can break cross
-> builds when host objects are compiled with target-only options.
-> 
-> Since HOST_CFLAGS contains warning options that are not suitable for
-> building libbpf, use LIBBPF_BOOTSTRAP_CFLAGS with the warning options
-> removed to build the bootstrap libbpf. Clear EXTRA_CFLAGS so target
-> extra flags are not mixed into the host bootstrap libbpf build.
-> 
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->  tools/bpf/bpftool/Makefile | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index 0febf60e1b64656035dfe93cd15cba090015587a..1f033e578f90a2d6b93168ab41399de758bdf659 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -47,7 +47,8 @@ $(LIBBPF_INTERNAL_HDRS): $(LIBBPF_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_HDRS_
->  $(LIBBPF_BOOTSTRAP): $(wildcard $(BPF_DIR)/*.[ch] $(BPF_DIR)/Makefile) | $(LIBBPF_BOOTSTRAP_OUTPUT)
->  	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) \
->  		DESTDIR=$(LIBBPF_BOOTSTRAP_DESTDIR:/=) prefix= \
-> -		ARCH= CROSS_COMPILE= CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" $@ install_headers
-> +		ARCH= CROSS_COMPILE= CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" \
-> +		CFLAGS="$(LIBBPF_BOOTSTRAP_CFLAGS)" EXTRA_CFLAGS= $@ install_headers
->  
->  $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS): $(LIBBPF_BOOTSTRAP_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_BOOTSTRAP_HDRS_DIR)
->  	$(call QUIET_INSTALL, $@)
-> @@ -92,6 +93,9 @@ HOST_CFLAGS := $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
->  		$(subst $(CLANG_CROSS_FLAGS),,$(CFLAGS)))
->  HOST_LDFLAGS := $(LDFLAGS)
->  
-> +# Remove warnings for libbpf bootstrap build
+On Wed, Jun 03, 2026 at 09:50:24AM +0300, Mike Rapoport wrote:
+> # Add your code comments below. There is no need to trim or delete
+> # any existing content -- just insert your comments under the relevant
+> # lines of code. Lines starting with "> " are quoted diff context and
+> # lines starting with "| " are comments from other reviewers.
+> # The final email will be reformatted automatically to include only
+> # the sections that have your comments.
+> #
 
-Nitpick: We could expand this comment to briefly explain why. Not sure
-it's worth a respin, though.
+looks like b4 review bug or misuse from my side :)
 
-> +LIBBPF_BOOTSTRAP_CFLAGS := $(filter-out -W -Wall -Wextra -Wformat -Wformat-signedness,$(HOST_CFLAGS))
-
-Do we need to remove all warnings, or would it be sufficient to take out
--Wformat and -Wformat-signedness? I don't mind removing them all if
-necessary, just asking.
-
-Acked-by: Quentin Monnet <qmo@kernel.org>
-
-Thanks!
+-- 
+Sincerely yours,
+Mike.
