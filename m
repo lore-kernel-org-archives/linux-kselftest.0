@@ -1,178 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91363998B2;
-	Wed,  3 Jun 2026 19:20:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EAE3FE37B;
+	Wed,  3 Jun 2026 20:48:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780514451; cv=none; b=hkG2Z8mP6acHDgJRYDEjQY6ezkMBvSQ5LICQT+YzZC6UqNq1ISE8vvx48qtFcZAwN34Q5iWxthgSiGeVQd/HCrAtT8qFDHgxJhPtXWIWW1NEiclURpnpGvPrPDlWwiMfEbq2OJ+Gi84dwRCf8/tpYldDPhlQBWITk6ZUeAiBVvs=
+	t=1780519715; cv=none; b=cTQfbjo0sAAglDW4zrKHWGvStQL4qEQDbXgcGOQ3HdECHGK94rGptItlFAvEbOwe5RLXA9hEE6ZMsf6w3RYxxrhQB4HMdFCMmLOIwt3B9+Jpig3AoyY62iaJ180zM6dyVtAk5fiNCl+oGbVOndauuV2JpcDGECk+tQcsAL75tAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780514451; c=relaxed/simple;
-	bh=fcF2L2qJqR2J21wKlux/XhaLbrXjW+w0lA8W8N2pVNw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=olR8Mdgqpy7vs0M4D1kh/u8+kC0mAimlm59aQ05nCM8eNDJsmOVQ3qE0sEEKABfoNdZM0Pj6HXGM4iHwwjxz6nZlGZj+mq2nuTyq63pyp7J2Sc9Tv8NZcnnNkA/btcJlItscG3ffgfwLN186xWyc3AFR7z7eX8ILxsUZkmRIHwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D3vsA/4Z; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780519715; c=relaxed/simple;
+	bh=GNhenlBL0E9REIOyjFvPr8CtOZ0gUBPCOa3T7sivZSE=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=FrcgawP4EP+8fHo843KP1nqcJlJXNt/lkt2ThJ5EFZYF1d2Xm7REBnGpf+h8aKwf4BlGdwZq9KS/dhRZO2JQigqGEJrZFQD2DQal+kNdoKdDHU6kCH/Gez4t1h73mE0TQto5o3OY/XPyLT8ZnfB3V2+zmrayhi+eyKheWxHzvUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=fYXrVgq6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D3vsA/4Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C82211F00893;
-	Wed,  3 Jun 2026 19:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780514450;
-	bh=MtjugWZzUUxCR/pWyiEIyzLKQZNA0zi91c/pvTORnJM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=D3vsA/4Z35OrFgCjgF40/eXW5TJAQt/6K5xRMUlikV5XNelSI2ac8CNw3Zvwj7h8m
-	 nuYuycK3K2X048XKTLEhV6VNA1rVQFTMZBieZErbsYdVNKnLLiFrTsWjCbd59vdDmh
-	 XbnT/cNoDkDJ1LG9GBazWWBBRNBtEbG9MXX898PeRdxQ94hUS1jWJ1BP6c+3Ikjmf8
-	 mwFk9zG6KpacopBieevces+QQWYAsGujLChs329wN5Rn3JoVC17ri9yWm6t7MZZiNn
-	 SuZt2DWTNZxP6X6Cy2uX8Jw2iyLUuj0MGtPqHW7vNIqzjJjPL1phaDNN3hhdveJLWV
-	 Az2tXqaTNbsuA==
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfauth.phl.internal (Postfix) with ESMTP id E6188F4007A;
-	Wed,  3 Jun 2026 15:20:47 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Wed, 03 Jun 2026 15:20:47 -0400
-X-ME-Sender: <xms:j34gasQL4-Fd_zCg6zoUAew_Xfe2Tu-mM6kWak4fuCYZc3XEzysW7w>
-    <xme:j34gauqpYK4MaASRZNRD9-LBvokpRFzAb6LBOCO8_ij3q6-cr8jFq843CT5kVkd-H
-    k2PmHl7k3-Ro20QQJL02aoNQHj6QKq9oYoTdzV8veLpxIIv9zgsZw>
-X-ME-Received: <xmr:j34gavsqMidDdxLXOSYcHEO-efGdp0Ke1g-VX-JKmRjf8VIBCJtTCh19I_4>
-X-ME-Proxy-Cause: dmFkZTEeKZPKaxEW7sI+Y0OjRzaTROUW6RyGxvT1JY5zke8k7MdMeqjg5c3T8fCY/y7cWI
-    j189K4S4lRXCvuW5BKdmiZ9flLa/Fp/BwLhxLdkpITLAAAHtEOChqQHhh39QPW0zEpiW9X
-    qSGozLU6iDQyostAWt5KJUHnZDit/hu8dIn86X3JZQxg6wdJb1GrQzxuTLCyK3oUG6IAr4
-    pA05MXi4+NjX2ZoyYefPheB+TPrymPSqGDOr+CgAAJddhHa49XUIPsiByV7vq4hOEKWskK
-    Yu1enfoCKCyoPA3E/cV9cQEoN32DMeCrsN4HMNtD5WETRMRYCdN8ifZkJu5o7GJtbGgwQA
-    tzd1q0CuKP6VWNIojSIWR4qkzbondVmNLu9zoDeAf8jlTdEJqku1mjELUs+derQnRNqtRP
-    G78II45sF1gi4xAlp7aBtJ3SVdwV+LorBCq8nvlmWQ/sK9LCoOTIEujTVRB0uRGERSdBC8
-    vEVKF7o7adHUQwV4aUQBOxDiyzeuua9nvw4uR+EfnO5xqSBuI730Yxy027VJgnvdgGGZ/h
-    9gm5IpclBU9LqeZmDprL8aXAGLDlT4H1k9mU3F9PdsbfBm1FAFUUDg/Y5dtUWXVnunMtvX
-    9StD62X568WMdQZLz4Zpldz1ousET1wIueR9kkQrmHyNHEFM68Y+n9mEBM8w
-X-ME-Proxy: <xmx:j34gaieV-s9jS_1suoBu0diQkBqqRwVQeqAAHqS43hPkBW89eLo2LQ>
-    <xmx:j34garni2sI6kdIt9hQV7XYrTaJ2-GeC83C2HsfJD7FNc2KMlnMEZw>
-    <xmx:j34gamErStH6IlZpYki_qtN2QbRf3DZBWZ00VyuCwywqtc_mljYZ_A>
-    <xmx:j34gahJjWQdzRQzwPLdR6Wtko0SDyFKaNy8IWYNEtTRhDWnJ2cnxGg>
-    <xmx:j34gasviCm1UhxSR58jaTzzwL_2XMGhoX23niAhA_l4jblw_HAK9tiH_>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 3 Jun 2026 15:20:46 -0400 (EDT)
-Date: Wed, 3 Jun 2026 12:20:45 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
- Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,	Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>,	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,	Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>,	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Waiman Long <longman@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,	Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,	Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>,	Miguel Ojeda <ojeda@kernel.org>,
- Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,	Jinjie Ruan <ruanjinjie@huawei.com>,
- Lyude Paul <lyude@redhat.com>,	Thomas Huth <thuth@redhat.com>,
- Sohil Mehta <sohil.mehta@intel.com>,	"Xin Li (Intel)" <xin@zytor.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Nikunj A Dadhania <nikunj@amd.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,	Yury Norov <ynorov@nvidia.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kernel@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Daniel Almeida <daniel.almeida@collabora.com>
-Subject: Re: [PATCH v2 00/12] Refcounted interrupt disable and SpinLockIrq
- for rust (Part 1)
-Message-ID: <aiB-jQqWRmKqqH_7@tardis-2.local>
-References: <20260526152148.30514-1-boqun@kernel.org>
- <20260527161844.GG3102624@noisy.programming.kicks-ass.net>
- <ahcc8Tudh4TJI5UM@tardis.local>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="fYXrVgq6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DCA51F00893;
+	Wed,  3 Jun 2026 20:48:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1780519712;
+	bh=aWq8G2lqw2RpyQfsEvmjqd0W9Ut7hRZ/L/1V1a9YGeo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=fYXrVgq6VwBui5CH3f66ph+YRAl8BrNXjRgTtjbvmyh2QsCIioaBSNTbDAAt4dWT3
+	 mKmlFk69pBVUjkA+nM94EVfEbmOkDzUep6ki+2imHJW70w1ggs8/f/s1Um+kXs48U3
+	 V87j6OBoF0TRT9IjuO5ICyN7KEXfNMjclAJy1A2Q=
+Date: Wed, 3 Jun 2026 13:48:30 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Lisa Wang <wyihan@google.com>
+Cc: Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
+ <nao.horiguchi@gmail.com>, Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Hugh Dickins <hughd@google.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, David Hildenbrand <david@kernel.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, Mike
+ Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal
+ Hocko <mhocko@suse.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, rientjes@google.com,
+ seanjc@google.com, ackerleytng@google.com, vannapurve@google.com,
+ michael.roth@amd.com, jiaqiyan@google.com, tabba@google.com,
+ dave.hansen@linux.intel.com
+Subject: Re: [PATCH v4 0/7] mm: Fix MF_DELAYED handling on memory failure
+Message-Id: <20260603134830.ef8caf48aff794da581d0d02@linux-foundation.org>
+In-Reply-To: <20260602-memory-failure-mf-delayed-fix-v4-0-a5bc7db5a9b2@google.com>
+References: <20260602-memory-failure-mf-delayed-fix-v4-0-a5bc7db5a9b2@google.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ahcc8Tudh4TJI5UM@tardis.local>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 27, 2026 at 09:33:53AM -0700, Boqun Feng wrote:
-> On Wed, May 27, 2026 at 06:18:44PM +0200, Peter Zijlstra wrote:
-> > On Tue, May 26, 2026 at 08:21:36AM -0700, Boqun Feng wrote:
-> > > Hi Peter,
-> > > 
-> > > This is a follow-up for Lyude's work [1]. After learning the current
-> > > preempt_count() usage and how ARM64 handle this, I came up with this
-> > > series that could resolve your feedback [2]. The basic idea is based on:
-> > > 
-> > > 1) preempt_count() previously already masks our NEED_RESCHED bit, so the
-> > >    effective bits is 31bits
-> > > 2) with a 64bit preempt count implementation (as in your PREEMPT_LONG
-> > >    proposal), the effective bits that record "whether we CAN preempt or
-> > >    not" still fit in 32bit (i.e. an int)
-> > > 
-> > > as a result, I don't think we need to change the existing
-> > > preempt_count() API, but rather keep "32bit vs 64bit" as an
-> > > implementation detail. This saves us the need to change the printk code
-> > > for preempt_count().
-> > 
-> > > 
-> > > v1: https://lore.kernel.org/rust-for-linux/20260508042111.24358-1-boqun@kernel.org/
-> > > 
-> > > Changes since v1:
-> > > 
-> > > * Rename PREEMPT_COUNT_64BIT to HAS_SEPARATE_PREEMPT_RESCHED_BITS per
-> > >   Mark Rutland.
-> > 
-> > Blergh, so I really don't like that new name. It isn't that
-> > PREEMPT_RESCHED is separate, it really is a 64bit preempt count.
-> > 
-> > Shashiko has a few fits, but its mostly being stupid. Although I think
-> > it might be useful to perhaps put a WARN_ON_ONCE(in_nmi()) in
-> > local_interrupt_disable().
-> 
-> Yes, that's also what I'm thinking of, and also we need to check
-> local_softirq_pending() in local_interrupt_enable() I think, because now
-> HARDIRQ_DISABLE bits being non-zero means deferring softirq. (Shashiko
-> also reported this as well).
-> 
+On Tue, 02 Jun 2026 21:55:40 +0000 Lisa Wang <wyihan@google.com> wrote:
 
-After some thoughts on this, I will postpone the idea of checking of
-local_softirq_pending() in local_interrupt_enable(), because that
-essientially makes every interrupt enabling a point to trigger softirq,
-and that's different from the current local_irq_{enable,restore}().
-
-Regards,
-Boqun
-
-> > 
-> > Anyway, I'll re-read things again tomorrow, but I suppose this will do.
-> > 
+> Here's a fourth revision to fix MF_DELAYED handling on memory failure.
 > 
-> Thank you!
-> 
-> Regards,
-> Boqun
+> This patch series addresses an issue in the memory failure handling path
+> where MF_DELAYED is incorrectly treated as an error. This issue was
+> discovered while testing memory failure handling for guest_memfd.
+
+Please include a description of the userspace-visible effects of the issue?
+
+> The proposed solution involves -
+> 1. Clarifying the definition of MF_DELAYED to mean that memory failure
+>    handling is only partially completed, and that the metadata for the
+>    memory that failed (as in struct page/folio) is still referenced.
+> 2. Updating shmem’s handling to align with the clarified definition.
+> 3. Updating how the result of .error_remove_folio() is interpreted.
+
+Thanks.  I'll take no action at this time - it's late in the cycle and we
+lack review.
+
+For some reason Sashiko wasn't able to apply this series to the various
+branches which it attempts.  Click on the "baseline" thingy at
+	https://sashiko.dev/#/patchset/20260602-memory-failure-mf-delayed-fix-v4-0-a5bc7db5a9b2@google.com
+to see what it tried to apply this to.
