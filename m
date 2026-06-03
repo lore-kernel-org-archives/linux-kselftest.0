@@ -1,63 +1,63 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F71D3F5BCE
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 03:29:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4EE3F5BFE
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 03:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780457356; cv=none; b=oBmfwfUoqh1W3TQDrKw/H9yDEBbRxRyT2C5CbhwPQ4CJBG2THsQosly8je6bS0m1Wg75+yfDhD055RT17zToZYnvARwZYN/b1sXmpal2I6K9ADsQBWinS2eWjvMfg5kAfDvmHFEiIIbCsx/FyiqXMbm/s94hRMBTHkh2rjYnSJ0=
+	t=1780457357; cv=none; b=pneU+7xCX9o3t++wA/mus1rMO8pAPuR09+7/Mm8GHyb3RQh9fo1zwDsdzzclqDCXSZ6iQgd5MvH4jZMVSH/Lb7c+HRWdBlPQrO7Z0mhZ+xbjN5+52vW3Zsm7OSrOdHLzSFVklxVAFMJrDNu11ONugd8OekbY9oWAwlUvMz4COtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780457356; c=relaxed/simple;
-	bh=wbPvJ6zLEMPEBQmI480sC62H/gokkzXNQLojRPu46g4=;
+	s=arc-20240116; t=1780457357; c=relaxed/simple;
+	bh=bhQWLj7PPI9UClPVVfb3CJJP1nHiv+tJKCbUyOi+1+A=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P/SY7VsEe61qnnAvELxVfMWANj9wJdAa+vP7dBpHzl7sVKJm7w1DecznAak/n1t5KCkmurpvOVl+eEf+yAfDYATX13mFX1NuVZ6k0ckJ3lhXqeCunOzzQPI0iYYVrloFkX2wwRzJ+S4odaaTiuB0S4czMseocHMxw2DxCApYWaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=if1xgr7u; arc=none smtp.client-ip=209.85.219.50
+	 MIME-Version; b=XuBBwveaCHmOFzvEzuL+xz6Sufnt6XeJiiHj7UkM4H2548a9U68uK9wyMfAOlux34+iRCif7gH4ejP+L2vp5ARGIbtuFWRKN+U/kRoyEgKDPb7JM/m6F2mtup/rt/ztBj4DjuZCZNCJG+uzBcaqFueNSU30p8Iu7Eiy2nfcLyP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=b0UihE1q; arc=none smtp.client-ip=209.85.219.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="if1xgr7u"
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-8ce9ddeddefso34728516d6.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 20:29:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="b0UihE1q"
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8ce9df48e1bso31844646d6.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 20:29:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1780457353; x=1781062153; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1780457354; x=1781062154; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6dIvXcFtnsq21AdbL6IuUE0knwOnoW1aNxCP2lCoxdM=;
-        b=if1xgr7uw4OdW+oxyjnzZgledw4qnYGzP17SmhjnK6QE6No915o+40c0p3hyabHh6i
-         84cPayBjLYTjWxM/dp6GP6X3S/BYbTrmtvTfMYMgjtPCM+/6+dbNF7iRNSDSZErMrCnT
-         He1YcdPB9IOaRVvJLH8VCM6ZHl8cE3SBlpWxPhJ+o86nwMWM6mmx9k9KI48vkeL0s55G
-         QbB/zfc2ivO6OfMayxb/FPtvp1624C8Xp9S6mTkkM1bV2QDAPwdRDhx3Kxvyi55l+XyL
-         Fq1hJrCH0zvdux4tInH7wsIDVhveTbbYN/eTlwQSz9tcBR3AzuZzNqw3iKGc5dLxbWzm
-         tRoA==
+        bh=M0UeBGKKNpBDiXtsHx+XK9ecjuYaKOuvdeJHksP7ylQ=;
+        b=b0UihE1qbydPBT3aAxZax/HNmDv6aVh/BfpF5M6dC/MZAOl0zPU0b7mtwrkgiPUINa
+         faI354ziYU+ZOk5Hu0LwV3ePqC7XGQgwYhI/Vz247YkT2x1xhIaK55Esp+a3dIUyfaE9
+         rQkgQR3GWxiyMnVxodlg1jaao+k4lWM3HlNIZiK8JAKIG8x3b5Y1Etnz2lBEi+RWimDV
+         WD9fMfzeVvUawywEpwZzOXVaJBduWQtYvtr3H1OMTYIkFysJ3PrEckrVrAtXMuK2sa/j
+         w1ytAYnYMvRJufAdGWI8oJFv6owf0QBWAmsOhdjo7iOuQxPKWKnS0BGiA3ZhsT0ko9x8
+         PJXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780457353; x=1781062153;
+        d=1e100.net; s=20251104; t=1780457354; x=1781062154;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=6dIvXcFtnsq21AdbL6IuUE0knwOnoW1aNxCP2lCoxdM=;
-        b=ssk9k2ZCErsqRKFMOFS8xpmlsQry+lU4PvhTNyhiKHfx5YYMJzSXmQWg+j55Zoel2R
-         I5DkFruOW6/ZbQreheiYcYj0kHum8lgH6Xe2EY/hDQVfj9ebPWiqHBxI8A/9mlWzFGiI
-         v6R+YOAod2vW71sTbtjr0ZPtizrqE5FxJIZoRl+YJJVGZ1uBo2OmEQah42jOdIqr1jqO
-         39XvBL9F9FJs4hGb4KG3Brh0uHzoIhBQqE7Cn8qQQHa6I1qlYQEjVNQ9jvfLi7Ci9D6G
-         iskK7BYijHjX7+OxzUK3RlaZonbkq91MIBjKxEo9SKrKbyMPGE81GT7qSytMNP0hMjAP
-         X3Fw==
-X-Gm-Message-State: AOJu0YzG2u4hi0I/RAmHunj9wTu1ziuDYoW3hbLko+aOmZMWKVnzvGNT
-	YHIxpfwaqoNGCUYNVjZk+wxNk/0PPHUg7L/nyoal8DyJ21hCfUe0O7lGLmTHJt62B/soLAX+RPr
-	mw52Z
-X-Gm-Gg: Acq92OGypvvG7SjhFu7FHsWyvL4FSO1AFGeyLKwWvddDlO26oxJJOWyXFd0nPGNBBnL
-	q2fBsPLg23RO5frYI703l30hJU0FozBLMGaFvbQUKnbgcUpqXTxvQcs0YJF2jhaM6Y5YUKe+Y9C
-	irHQZDIATM1rjR4Hxjj41jFZ666wjfwGwFW3arINp/vzt6SZCX/SKiQRdI1HwPHoCk0dcY/qxbg
-	OSjynGfALVFatS0fEaJX02nwCU2S8sMCYy4buDtXc8dqslBPyznuPSU75dw4OmCEBXHdnN905dd
-	C4tvLhg/IzPVCb6b3YgvB+OIzU+5geTimH27ckgGIsqc1w6GSYHkViVZRBFSpXg6AFGRT0ECMIe
-	rVCQRrg5LXJZvhIFB5kJ5l2GbBAtb/E5vh9XmPDctfn80FQNdEB8Fab8fy3UKTW7WqutaaGuwJ3
-	IZ+kVtuHw9xXIrDGSIojpmxigovgz/X+5gTcVfn/ULhDBjPS1mchd8ah7JMaGOLg==
-X-Received: by 2002:a05:6214:3d10:b0:8ce:b018:89e1 with SMTP id 6a1803df08f44-8cecdcbfd20mr21165026d6.32.1780457353365;
-        Tue, 02 Jun 2026 20:29:13 -0700 (PDT)
+        bh=M0UeBGKKNpBDiXtsHx+XK9ecjuYaKOuvdeJHksP7ylQ=;
+        b=X2fJqavvhkAscGIyrNi93jFD4sBKOEUD5BaFOfyY+K4dY6aFwb/Ax7xuWLd6gNtSiw
+         i1eMQKUafgwQQZdOo2v6qakBCH3PNzynowvrXfJqqL03I7UtJdQWsccvPY/GjfKvw2hq
+         LztjoeN6uYxAct3fKXj+qH9gywUBv2KMevQXL1CjR5bcRLOXComNX5jJsnxdTeJbOuEZ
+         FeL7u0LqYJQ+LIbxD58ZWMp8iaGVYzS5HniQmMPGG9+bqTyl1AMn0fQVm97XNtwrOLR7
+         OCFxK34SxOXEwVlqtYMPLyuqDkJMX1q5I3CTn1Bou2i/Hlc7+QM5VUbs2Hx+3iBkG+xh
+         ynjg==
+X-Gm-Message-State: AOJu0Yx9ryOb4HKe9EeLATasFIB0wHeLN98U5A5upOSW8uv552dgN2PF
+	tRKkF9z51qFoinioMAc5vxvLckdW0E/q628C5rfZm/NsiIUk1TRdQNiBeHfjKc3lUSTNzAZhXgs
+	SfzTz
+X-Gm-Gg: Acq92OHpBpY1EvlIE+7pYLm0SMH6OiTOGbjpB1VNaTZMX/QgLYjFZe1Dgj71eWRhHVf
+	sshnpiggc/vgXbvoQvjfiwqmNiRhOsqQRDTyWU2Ok80j3UYiyFUd3sbN7o+pRy9XLZZfaSIzYM2
+	vuF9bNksHaCOequV3U3gf+CK7mLN8fPAaCiH31cLIK8R0RYxEzsBW1KIiqWJpboZxM2Sy/DIweK
+	RYyDQ0Pqjoas42IM2qQCXJE7qfoWzaeZ1UFfVkFobOrA1umM3f/rlGYR+p7UHdb/Djcgqf+t6Bs
+	1kgp5ddE1DqLI5Me/xFAx5425jde9wqU8QkiDVz2zQaZliiasC5RiDUXHR1KE4Ghb336RztVF+4
+	rqUSpbxYjaMCRbzprUmIQ+weTtoy2j/GTVSKb7Nk81cJ/atnwaXTmpxMT5CDuDsWxeoDF7kqEwb
+	KsFpVQ6w1+/U7H0g8zElDoGk80vz12m5ujDktaqvhknOKs85lhVODZBfIR7szQuw==
+X-Received: by 2002:ad4:5be8:0:b0:8ac:b4d5:50ec with SMTP id 6a1803df08f44-8cecdcc5dd2mr23007136d6.38.1780457354509;
+        Tue, 02 Jun 2026 20:29:14 -0700 (PDT)
 Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cecd26b3b9sm9244566d6.45.2026.06.02.20.29.12
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cecd26b3b9sm9244566d6.45.2026.06.02.20.29.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 20:29:12 -0700 (PDT)
+        Tue, 02 Jun 2026 20:29:14 -0700 (PDT)
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 To: linux-kselftest@vger.kernel.org,
 	rppt@kernel.org,
@@ -74,9 +74,9 @@ To: linux-kselftest@vger.kernel.org,
 	pratyush@kernel.org,
 	skhawaja@google.com,
 	graf@amazon.com
-Subject: [PATCH v6 04/13] liveupdate: register luo_ser as KHO subtree
-Date: Wed,  3 Jun 2026 03:28:55 +0000
-Message-ID: <20260603032905.344462-5-pasha.tatashin@soleen.com>
+Subject: [PATCH v6 05/13] liveupdate: Extract luo_file_deserialize_one helper
+Date: Wed,  3 Jun 2026 03:28:56 +0000
+Message-ID: <20260603032905.344462-6-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260603032905.344462-1-pasha.tatashin@soleen.com>
 References: <20260603032905.344462-1-pasha.tatashin@soleen.com>
@@ -88,320 +88,121 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Entirely remove the LUO FDT wrapper since the FDT only carries the
-compatible string and the pointer to the centralized struct luo_ser.
-Instead, register the struct luo_ser via the KHO raw subtree
-API, placing the compatibility string inside the structure itself.
+Extract the logic for deserializing single entries for files into
+separate helper functions. In preparation to a linked-block
+serialization for files.
 
+This is a pure code movement, no other changes intended.
+
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- include/linux/kho/abi/luo.h  | 57 +++++++++---------------
- kernel/liveupdate/luo_core.c | 85 +++++++++++-------------------------
- 2 files changed, 46 insertions(+), 96 deletions(-)
+ kernel/liveupdate/luo_file.c | 77 ++++++++++++++++++++----------------
+ 1 file changed, 44 insertions(+), 33 deletions(-)
 
-diff --git a/include/linux/kho/abi/luo.h b/include/linux/kho/abi/luo.h
-index 1b2f865a771a..9a4fe491812b 100644
---- a/include/linux/kho/abi/luo.h
-+++ b/include/linux/kho/abi/luo.h
-@@ -10,11 +10,11 @@
-  *
-  * Live Update Orchestrator uses the stable Application Binary Interface
-  * defined below to pass state from a pre-update kernel to a post-update
-- * kernel. The ABI is built upon the Kexec HandOver framework and uses a
-- * Flattened Device Tree to describe the preserved data.
-+ * kernel. The ABI is built upon the Kexec HandOver framework and registers
-+ * the central `struct luo_ser` via the KHO raw subtree API.
-  *
-- * This interface is a contract. Any modification to the FDT structure, node
-- * properties, compatible strings, or the layout of the `__packed` serialization
-+ * This interface is a contract. Any modification to the structure fields,
-+ * compatible strings, or the layout of the `__packed` serialization
-  * structures defined here constitutes a breaking change. Such changes require
-  * incrementing the version number in the relevant `_COMPATIBLE` string to
-  * prevent a new kernel from misinterpreting data from an old kernel.
-@@ -23,31 +23,15 @@
-  * however, backward/forward compatibility is only guaranteed for kernels
-  * supporting the same ABI version.
-  *
-- * FDT Structure Overview:
-+ * KHO Structure Overview:
-  *   The entire LUO state is encapsulated within a single KHO entry named "LUO".
-- *   This entry contains an FDT with the following layout:
-- *
-- *   .. code-block:: none
-- *
-- *     / {
-- *         compatible = "luo-v2";
-- *         luo-abi-header = <phys_addr_of_luo_ser>;
-- *     };
-- *
-- * Main LUO Node (/):
-- *
-- *   - compatible: "luo-v2"
-- *     Identifies the overall LUO ABI version.
-- *   - luo-abi-header: u64
-- *     The physical address of `struct luo_ser`.
-+ *   This entry contains the `struct luo_ser` structure.
-  *
-  * Serialization Structures:
-- *   The FDT properties point to memory regions containing arrays of simple,
-- *   `__packed` structures. These structures contain the actual preserved state.
-- *
-  *   - struct luo_ser:
-  *     The central ABI structure that contains the overall state of the LUO.
-- *     It includes the liveupdate-number and pointers to sessions and FLBs.
-+ *     It includes the compatibility string, the liveupdate-number, and pointers
-+ *     to sessions and FLBs.
-  *
-  *   - struct luo_session_header_ser:
-  *     Header for the session array. Contains the total page count of the
-@@ -78,26 +62,27 @@
- #ifndef _LINUX_KHO_ABI_LUO_H
- #define _LINUX_KHO_ABI_LUO_H
- 
-+#include <linux/align.h>
- #include <uapi/linux/liveupdate.h>
- 
- /*
-- * The LUO FDT hooks all LUO state for sessions, fds, etc.
-+ * The LUO state is registered under this KHO entry name.
-  */
--#define LUO_FDT_SIZE		PAGE_SIZE
--#define LUO_FDT_KHO_ENTRY_NAME	"LUO"
--#define LUO_FDT_COMPATIBLE	"luo-v2"
--#define LUO_FDT_ABI_HEADER	"luo-abi-header"
-+#define LUO_KHO_ENTRY_NAME	"LUO"
-+#define LUO_ABI_COMPATIBLE	"luo-v3"
-+#define LUO_ABI_COMPAT_LEN	ALIGN(sizeof(LUO_ABI_COMPATIBLE), 8)
- 
- /**
-  * struct luo_ser - Centralized LUO ABI header.
-+ * @compatible:     Compatibility string identifying the LUO ABI version.
-  * @liveupdate_num: A counter tracking the number of successful live updates.
-  * @sessions_pa:    Physical address of the first session block header.
-  * @flbs_pa:        Physical address of the FLB header.
-  *
-- * This structure is the root of all preserved LUO state. It is pointed to by
-- * the "luo-abi-header" property in the LUO FDT.
-+ * This structure is the root of all preserved LUO state.
-  */
- struct luo_ser {
-+	char compatible[LUO_ABI_COMPAT_LEN];
- 	u64 liveupdate_num;
- 	u64 sessions_pa;
- 	u64 flbs_pa;
-@@ -111,7 +96,7 @@ struct luo_ser {
-  * @data:        Private data
-  * @token:       User provided token for this file
-  *
-- * If this structure is modified, LUO_SESSION_COMPATIBLE must be updated.
-+ * If this structure is modified, `LUO_ABI_COMPATIBLE` must be updated.
-  */
- struct luo_file_ser {
- 	char compatible[LIVEUPDATE_HNDL_COMPAT_LENGTH];
-@@ -142,7 +127,7 @@ struct luo_file_set_ser {
-  * physical memory preserved across the kexec. It provides the necessary
-  * metadata to interpret the array of session entries that follow.
-  *
-- * If this structure is modified, `LUO_FDT_COMPATIBLE` must be updated.
-+ * If this structure is modified, `LUO_ABI_COMPATIBLE` must be updated.
-  */
- struct luo_session_header_ser {
- 	u64 count;
-@@ -159,7 +144,7 @@ struct luo_session_header_ser {
-  * session) is created and passed to the new kernel, allowing it to reconstruct
-  * the session context.
-  *
-- * If this structure is modified, `LUO_FDT_COMPATIBLE` must be updated.
-+ * If this structure is modified, `LUO_ABI_COMPATIBLE` must be updated.
-  */
- struct luo_session_ser {
- 	char name[LIVEUPDATE_SESSION_NAME_LENGTH];
-@@ -180,7 +165,7 @@ struct luo_session_ser {
-  * This structure is located at the physical address specified by the
-  * flbs_pa in luo_ser.
-  *
-- * If this structure is modified, `LUO_FDT_COMPATIBLE` must be updated.
-+ * If this structure is modified, `LUO_ABI_COMPATIBLE` must be updated.
-  */
- struct luo_flb_header_ser {
- 	u64 pgcnt;
-@@ -202,7 +187,7 @@ struct luo_flb_header_ser {
-  * passed to the new kernel. Each entry allows the LUO core to restore one
-  * global, shared object.
-  *
-- * If this structure is modified, `LUO_FDT_COMPATIBLE` must be updated.
-+ * If this structure is modified, `LUO_ABI_COMPATIBLE` must be updated.
-  */
- struct luo_flb_ser {
- 	char name[LIVEUPDATE_FLB_COMPAT_LENGTH];
-diff --git a/kernel/liveupdate/luo_core.c b/kernel/liveupdate/luo_core.c
-index 085c0dfc1ef1..69b00e7d0f8f 100644
---- a/kernel/liveupdate/luo_core.c
-+++ b/kernel/liveupdate/luo_core.c
-@@ -54,7 +54,6 @@
- #include <linux/kexec_handover.h>
- #include <linux/kho/abi/luo.h>
- #include <linux/kobject.h>
--#include <linux/libfdt.h>
- #include <linux/liveupdate.h>
- #include <linux/miscdevice.h>
- #include <linux/mm.h>
-@@ -67,8 +66,7 @@
- 
- static struct {
- 	bool enabled;
--	void *fdt_out;
--	void *fdt_in;
-+	struct luo_ser *luo_ser_out;
- 	u64 liveupdate_num;
- } luo_global;
- 
-@@ -85,11 +83,10 @@ early_param("liveupdate", early_liveupdate_param);
- 
- static int __init luo_early_startup(void)
- {
-+	phys_addr_t luo_ser_phys;
- 	struct luo_ser *luo_ser;
--	int err, header_size;
--	phys_addr_t fdt_phys;
--	const void *ptr;
--	u64 luo_ser_pa;
-+	size_t len;
-+	int err;
- 
- 	if (!kho_is_enabled()) {
- 		if (liveupdate_enabled())
-@@ -98,40 +95,29 @@ static int __init luo_early_startup(void)
- 		return 0;
- 	}
- 
--	/* Retrieve LUO subtree, and verify its format. */
--	err = kho_retrieve_subtree(LUO_FDT_KHO_ENTRY_NAME, &fdt_phys, NULL);
-+	/* Retrieve LUO state from KHO. */
-+	err = kho_retrieve_subtree(LUO_KHO_ENTRY_NAME, &luo_ser_phys, &len);
- 	if (err) {
- 		if (err != -ENOENT) {
--			pr_err("failed to retrieve FDT '%s' from KHO: %pe\n",
--			       LUO_FDT_KHO_ENTRY_NAME, ERR_PTR(err));
-+			pr_err("failed to retrieve LUO state '%s' from KHO: %pe\n",
-+			       LUO_KHO_ENTRY_NAME, ERR_PTR(err));
- 			return err;
- 		}
- 
- 		return 0;
- 	}
- 
--	luo_global.fdt_in = phys_to_virt(fdt_phys);
--	err = fdt_node_check_compatible(luo_global.fdt_in, 0,
--					LUO_FDT_COMPATIBLE);
--	if (err) {
--		pr_err("FDT '%s' is incompatible with '%s' [%d]\n",
--		       LUO_FDT_KHO_ENTRY_NAME, LUO_FDT_COMPATIBLE, err);
--
-+	if (len < sizeof(*luo_ser)) {
-+		pr_err("LUO state is too small (%zu < %zu)\n", len, sizeof(*luo_ser));
- 		return -EINVAL;
- 	}
- 
--	header_size = 0;
--	ptr = fdt_getprop(luo_global.fdt_in, 0, LUO_FDT_ABI_HEADER, &header_size);
--	if (!ptr || header_size != sizeof(u64)) {
--		pr_err("Unable to get ABI header '%s' [%d]\n",
--		       LUO_FDT_ABI_HEADER, header_size);
--
-+	luo_ser = phys_to_virt(luo_ser_phys);
-+	if (strncmp(luo_ser->compatible, LUO_ABI_COMPATIBLE, LUO_ABI_COMPAT_LEN)) {
-+		pr_err("LUO state is incompatible with '%s'\n", LUO_ABI_COMPATIBLE);
- 		return -EINVAL;
- 	}
- 
--	luo_ser_pa = get_unaligned((u64 *)ptr);
--	luo_ser = phys_to_virt(luo_ser_pa);
--
- 	luo_global.liveupdate_num = luo_ser->liveupdate_num;
- 	pr_info("Retrieved live update data, liveupdate number: %lld\n",
- 		luo_global.liveupdate_num);
-@@ -164,37 +150,20 @@ static int __init liveupdate_early_init(void)
+diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+index 208987502f73..9eec07a9e9fc 100644
+--- a/kernel/liveupdate/luo_file.c
++++ b/kernel/liveupdate/luo_file.c
+@@ -753,6 +753,46 @@ int luo_file_finish(struct luo_file_set *file_set)
+ 	return 0;
  }
- early_initcall(liveupdate_early_init);
  
--/* Called during boot to create outgoing LUO fdt tree */
--static int __init luo_fdt_setup(void)
-+/* Called during boot to create outgoing LUO state */
-+static int __init luo_state_setup(void)
++static int luo_file_deserialize_one(struct luo_file_set *file_set,
++				    struct luo_file_ser *ser)
++{
++	struct liveupdate_file_handler *fh;
++	bool handler_found = false;
++	struct luo_file *luo_file;
++
++	down_read(&luo_register_rwlock);
++	list_private_for_each_entry(fh, &luo_file_handler_list, list) {
++		if (!strcmp(fh->compatible, ser->compatible)) {
++			if (try_module_get(fh->ops->owner))
++				handler_found = true;
++			break;
++		}
++	}
++	up_read(&luo_register_rwlock);
++
++	if (!handler_found) {
++		pr_warn("No registered handler for compatible '%.*s'\n",
++			(int)sizeof(ser->compatible),
++			ser->compatible);
++		return -ENOENT;
++	}
++
++	luo_file = kzalloc_obj(*luo_file);
++	if (!luo_file) {
++		module_put(fh->ops->owner);
++		return -ENOMEM;
++	}
++
++	luo_file->fh = fh;
++	luo_file->file = NULL;
++	luo_file->serialized_data = ser->data;
++	luo_file->token = ser->token;
++	mutex_init(&luo_file->mutex);
++	list_add_tail(&luo_file->list, &file_set->files_list);
++
++	return 0;
++}
++
+ /**
+  * luo_file_deserialize - Reconstructs the list of preserved files in the new kernel.
+  * @file_set:     The incoming file_set to fill with deserialized data.
+@@ -782,6 +822,7 @@ int luo_file_deserialize(struct luo_file_set *file_set,
+ 			 struct luo_file_set_ser *file_set_ser)
  {
- 	struct luo_ser *luo_ser;
--	u64 luo_ser_pa;
--	void *fdt_out;
- 	int err;
+ 	struct luo_file_ser *file_ser;
++	int err;
+ 	u64 i;
  
--	fdt_out = kho_alloc_preserve(LUO_FDT_SIZE);
--	if (IS_ERR(fdt_out)) {
--		pr_err("failed to allocate/preserve FDT memory\n");
--		return PTR_ERR(fdt_out);
--	}
+ 	if (!file_set_ser->files) {
+@@ -809,39 +850,9 @@ int luo_file_deserialize(struct luo_file_set *file_set,
+ 	 */
+ 	file_ser = file_set->files;
+ 	for (i = 0; i < file_set->count; i++) {
+-		struct liveupdate_file_handler *fh;
+-		bool handler_found = false;
+-		struct luo_file *luo_file;
 -
- 	luo_ser = kho_alloc_preserve(sizeof(*luo_ser));
- 	if (IS_ERR(luo_ser)) {
--		err = PTR_ERR(luo_ser);
--		goto exit_free_fdt;
-+		pr_err("failed to allocate/preserve LUO state memory\n");
-+		return PTR_ERR(luo_ser);
+-		down_read(&luo_register_rwlock);
+-		list_private_for_each_entry(fh, &luo_file_handler_list, list) {
+-			if (!strcmp(fh->compatible, file_ser[i].compatible)) {
+-				if (try_module_get(fh->ops->owner))
+-					handler_found = true;
+-				break;
+-			}
+-		}
+-		up_read(&luo_register_rwlock);
+-
+-		if (!handler_found) {
+-			pr_warn("No registered handler for compatible '%.*s'\n",
+-				(int)sizeof(file_ser[i].compatible),
+-				file_ser[i].compatible);
+-			return -ENOENT;
+-		}
+-
+-		luo_file = kzalloc_obj(*luo_file);
+-		if (!luo_file) {
+-			module_put(fh->ops->owner);
+-			return -ENOMEM;
+-		}
+-
+-		luo_file->fh = fh;
+-		luo_file->file = NULL;
+-		luo_file->serialized_data = file_ser[i].data;
+-		luo_file->token = file_ser[i].token;
+-		mutex_init(&luo_file->mutex);
+-		list_add_tail(&luo_file->list, &file_set->files_list);
++		err = luo_file_deserialize_one(file_set, &file_ser[i]);
++		if (err)
++			return err;
  	}
--	luo_ser_pa = virt_to_phys(luo_ser);
--
--	err = fdt_create(fdt_out, LUO_FDT_SIZE);
--	err |= fdt_finish_reservemap(fdt_out);
--	err |= fdt_begin_node(fdt_out, "");
--	err |= fdt_property_string(fdt_out, "compatible", LUO_FDT_COMPATIBLE);
--	err |= fdt_property(fdt_out, LUO_FDT_ABI_HEADER, &luo_ser_pa,
--			    sizeof(luo_ser_pa));
--	err |= fdt_end_node(fdt_out);
--	err |= fdt_finish(fdt_out);
--	if (err)
--		goto exit_free_luo_ser;
-+
-+	strscpy(luo_ser->compatible, LUO_ABI_COMPATIBLE, sizeof(luo_ser->compatible));
-+	luo_ser->liveupdate_num = luo_global.liveupdate_num + 1;
- 
- 	err = luo_session_setup_outgoing(&luo_ser->sessions_pa);
- 	if (err)
-@@ -204,21 +173,17 @@ static int __init luo_fdt_setup(void)
- 	if (err)
- 		goto exit_free_luo_ser;
- 
--	luo_ser->liveupdate_num = luo_global.liveupdate_num + 1;
--
--	err = kho_add_subtree(LUO_FDT_KHO_ENTRY_NAME, fdt_out,
--			      fdt_totalsize(fdt_out));
-+	err = kho_add_subtree(LUO_KHO_ENTRY_NAME, luo_ser, sizeof(*luo_ser));
- 	if (err)
- 		goto exit_free_luo_ser;
--	luo_global.fdt_out = fdt_out;
-+
-+	luo_global.luo_ser_out = luo_ser;
  
  	return 0;
- 
- exit_free_luo_ser:
- 	kho_unpreserve_free(luo_ser);
--exit_free_fdt:
--	kho_unpreserve_free(fdt_out);
--	pr_err("failed to prepare LUO FDT: %d\n", err);
-+	pr_err("failed to prepare LUO state: %d\n", err);
- 
- 	return err;
- }
-@@ -234,7 +199,7 @@ static int __init luo_late_startup(void)
- 	if (!liveupdate_enabled())
- 		return 0;
- 
--	err = luo_fdt_setup();
-+	err = luo_state_setup();
- 	if (err)
- 		luo_global.enabled = false;
- 
 -- 
 2.53.0
 
