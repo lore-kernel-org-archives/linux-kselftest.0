@@ -1,130 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5779C33970F;
-	Wed,  3 Jun 2026 14:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB18480979
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 14:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780497261; cv=none; b=X9AS3ZpY/xDT/l9Pm/lIvALXw1vKHJ6viJK5rjIdTPf/S6o22EyGk18Wolbu69LaaZNiJhShpQ+t+QWfb1xCpgybFD0sicihshc6hwlFsMSGZklIa2SY37rc65m2AGtwZFK6503zHpxH4t3LCZbKJSyID0l4uXGzEdI3yrjOGW4=
+	t=1780497952; cv=none; b=J2L9mBic533EMYgjlhXrdfWWu/s5psYXGNFehOB79ijpM6Th380rXRxZkiPJk0IPP/WuaslEDj4c9yvrC9UHkap2dSVgbeWXBMHVAEL5X3MSrBuUWmp/3u6MJXilAcdS/Phw+DWdllMse1h7O6bOz7Mo2yD5OgDX37x2Vx6VmIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780497261; c=relaxed/simple;
-	bh=3WikHp9gRVkuVp8+7UzM84rcmvZ3obzhbv7GBYqSIbU=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=Y2YToHYWldf96SVu4/v/kuUWjya99SVAOVIP3V9TmvyKCdxv9Et5/L3Asfp+Gr00rjHAPZHTDAHPEAB85zVKY0f0YGyUEsBbfqCSGYr66vxqu4qTS25YgPkvlmR6gG1J4cPoSASGpGutCVwnkc4rYGmwGR9d8rb1Pp43Fcpbp2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RncmSrbY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780497952; c=relaxed/simple;
+	bh=qrblDqB4/8UTNvwsfuUvtB8MQ8mzMY7zUiDc+Mbzycs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hupyWLOkpHLASWN9xonE9uhi2cXryHag0L/LhKVCkpk5uLw7lzTduztdA4f2ElwravnkeCz834wQ816h/MtNdXcJ6K41WIy3vG54a2lCNKArnr7+rogEZLZCdg2QqiyFS1LqEvi1vY4TgJNaahMiwkzxU80B0TcTB95tELyp0Uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MQqEf4xo; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RncmSrbY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA2ED1F00893;
-	Wed,  3 Jun 2026 14:34:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780497260;
-	bh=yu2f5FIaIpPGb9LsISKA98pvWiCaazPbEtHtZWNusVY=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=RncmSrbYsIH29DH7UOSflSaLWXVrOKpLLAkTNCb1nluOnMdGip2i37TURU6W4HJeJ
-	 TZmp9pFP/lbNDNr3NmDkkjJQARDS1Em4yc4OBjvD/HMqo5Kld1S1vJuw7KOZcI/GDd
-	 IjXr1uUeuaJ6ivMy9Kcf1kEZLJ30C1L9MYns8jf2EuhRyGX6snzePBcWJ0eCFfN0FT
-	 focV5Pz8fwOO1Xg4xet9jBisJNLqZE3MMFs794fvDkya9D/WUwSrHHZT26Bl5MLnrR
-	 fi6kk90xXakTHdzzz88I1gudGHOY/XZtbx+xIuSYhxAJQiCjkJycHRHBYMAZXRurbj
-	 7KVS/pipaYesw==
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MQqEf4xo"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780497949;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I8qiNtbqWgHQYGAUM0S9VH2blx8YU6TzskWNL0hFkek=;
+	b=MQqEf4xoFIcpXEy97BWN13L2YnJq7b8UasO2tv25zetxF3l6LgsOWuKg4Gdxk81+1BNx9G
+	DQNdhbZTe7nxBDJG6xZXtZZ17mmAHdA8yaAMFsHR0rKUuYOAinvrhvrgSy+QMq9jKuPIW6
+	jSgcqZC+f0TjB3mHeqY8UiAe0sIfBYc=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Yuyang Huang <yuyanghuang@google.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next 1/3] bpf: Check tail zero of bpf_map_info
+Date: Wed,  3 Jun 2026 22:45:16 +0800
+Message-ID: <20260603144518.67065-2-leon.hwang@linux.dev>
+In-Reply-To: <20260603144518.67065-1-leon.hwang@linux.dev>
+References: <20260603144518.67065-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v6 07/13] kho: add support for linked-block
- serialization
-From: Mike Rapoport <rppt@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: Mike Rapoport <rppt@kernel.org>, linux-kselftest@vger.kernel.org, 
- shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org, 
- skhan@linuxfoundation.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, corbet@lwn.net, dmatlack@google.com, 
- kexec@lists.infradead.org, pratyush@kernel.org, skhawaja@google.com, 
- graf@amazon.com
-In-Reply-To: <aiA1slnqPnC4_8XY@plex>
-References: <20260603032905.344462-1-pasha.tatashin@soleen.com>
- <20260603032905.344462-8-pasha.tatashin@soleen.com>
- <178046937151.468621.13398573538792303093.b4-review@b4>
- <aiANtYRRDr5iO5QR@plex> <aiAzT9TvGYjITiB8@kernel.org>
- <aiA1slnqPnC4_8XY@plex>
-Date: Wed, 03 Jun 2026 17:34:14 +0300
-Message-Id: <178049725439.475072.11560134126837430744.b4-reply@b4>
-X-Mailer: b4 0.15.2
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 2026-06-03 14:11 +0000, Pasha Tatashin wrote:
-> On 06-03 16:59, Mike Rapoport wrote:
-> > On Wed, Jun 03, 2026 at 12:05:04PM +0000, Pasha Tatashin wrote:
-> > > On 06-03 09:49, Mike Rapoport wrote:
-> > > > On Wed, 03 Jun 2026 03:28:58 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
-> > > > > diff --git a/include/linux/kho/abi/block.h b/include/linux/kho/abi/block.h
-> > > > > new file mode 100644
-> > > > > index 000000000000..8641c20b379b
-> > > > > --- /dev/null
-> > > > > +++ b/include/linux/kho/abi/block.h
-> > > > > @@ -0,0 +1,56 @@
-> > > > > [ ... skip 25 lines ... ]
-> > > > > +#define _LINUX_KHO_ABI_BLOCK_H
-> > > > > +
-> > > > > +#include <asm/page.h>
-> > > > > +#include <linux/types.h>
-> > > > > +
-> > > > > +#define KHO_BLOCK_ABI_COMPATIBLE	"kho-block-v1"
-> > > > 
-> > > > It's never used by block set and after looking at the following patches I
-> > > > found that it's appended to LUO compatible string.
-> > > > 
-> > > > While this works for LUO, I think it should be kho_block_set_restore()
-> > > > responsibility to verify the compatibility.
-> > > 
-> > > It should work for any component that relies on  kho_block. My proposal 
-> > > is to use this method for other common KHO data structures (e.g.,  kho 
-> > > vmalloc,  kho radix, future kho xarray). There is no need for them to 
-> > > carry the compatibility string in their metadata, as whoever uses them 
-> > > will include their compatibility string.
-> > 
-> > So if, say, memfd_luo uses kho vmalloc, xarray and blocks it'll have five
-> > compatibility strings glued together?
-> 
-> That is correct, but it will be in only one place: the header of the 
-> client's KHO subtree. Since it is dynamically sized and 8-byte aligned, 
-> it should be safe to include in any struct.
+Since there're 4 bytes padding at the end of struct bpf_map_info, they
+won't be checked by bpf_check_uarg_tail_zero().
 
-This is safe, you are right.
-But I have more usability concerns from one side and the duplication it
-causes from the other.
+pahole -C bpf_map_info ./vmlinux
+struct bpf_map_info {
+	...
+	__u64                      hash __attribute__((__aligned__(8))); /*    88     8 */
+	__u32                      hash_size;            /*    96     4 */
 
-I can see the downside of putting the version information in the data
-structure itself as it either requires a different header for the first
-element or needlessly increases all the headers.
+	/* size: 104, cachelines: 2, members: 18 */
+	/* padding: 4 */
+	/* forced alignments: 1 */
+	/* last cacheline: 40 bytes */
+} __attribute__((__aligned__(8)));
 
-But 
+If a future kernel extension adds a new 4-byte field, older userspace
+programs allocating this structure on the stack might inadvertently pass
+uninitialized stack garbage into the new field, permanently breaking
+backward compatibility. -- sashiko [1]
 
-#define LUO_ABI_COMPATIBLE     LUO_COMPAT_BASE "-" KHO_BLOCK_ABI_COMPATIBLE "-" KHO_VMALLOC_ABI_COMPATIBLE "-" KHO_RADIX_COMPATIBLE
+Fix it by changing sizeof(info) to
+offsetofend(struct bpf_map_info, hash_size).
 
-is not really digestible too. And it forces KHO users to potentially
-track KHO internal changes.
+[1] https://lore.kernel.org/bpf/20260513224823.6494FC19425@smtp.kernel.org/
 
-We still don't promise any compatibility between different kernel
-versions so to avoid blocking this series on the decision what is the
-best way to convey KHO data structures compatibility I suggest to bump
-kho ABI version in v6.2* of the patch that adds KHO blocks and postpone
-this discussion to after rc1 when we'll have plenty of time.
+Fixes: ea2e6467ac36 ("bpf: Return hashes of maps in BPF_OBJ_GET_INFO_BY_FD")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/syscall.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-* sending a new version of a single file does same email traffic, but it
-confuses b4 and quite possibly other tools, so I think v7 is better.
-
-> Pasha
-> 
-> >  
-> > > For now, reviewers will have to make sure that if the ABI header content 
-> > > is changed, the compatibility string is updated.
-> > 
-> -- 
-> > Sincerely yours,
-> > Mike.
-> 
-
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 625a4366fe6d..1007fb7c87e9 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -5400,10 +5400,11 @@ static int bpf_map_get_info_by_fd(struct file *file,
+ {
+ 	struct bpf_map_info __user *uinfo = u64_to_user_ptr(attr->info.info);
+ 	struct bpf_map_info info;
+-	u32 info_len = attr->info.info_len;
++	u32 info_len = attr->info.info_len, len;
+ 	int err;
+ 
+-	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), sizeof(info), info_len);
++	len = offsetofend(struct bpf_map_info, hash_size);
++	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), len, info_len);
+ 	if (err)
+ 		return err;
+ 	info_len = min_t(u32, sizeof(info), info_len);
+-- 
+2.54.0
 
