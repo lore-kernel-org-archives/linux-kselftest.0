@@ -1,105 +1,186 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09DA3481228
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 13:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67E6481FCB
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 13:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780492390; cv=none; b=uSzgiHyfwH83I9aRHgidhHp8ZR6U+KxUMJvLj6KuADKYoPy3Alo91NIokiXor5alWlILjG/HCPYlI0OCM6eSJsYR4Is7ZWz5ofTOYmlzkzZ+nvc8Sd51fIw9dnSHixHsmEAW2G36pmi+tvneQyowEFoynWX/bhGPhkf1gswC1F4=
+	t=1780492889; cv=none; b=s818WbNEGg8DNj1FLTA8mZ3o8bD9J2LCFuzBLaa5Wt/6uQYb2isFRSygoXdV6oHFMrq3+0W5FMOvtGj3LfW0ZyHU9KPFiyJYr+PgJoEgN7/Qm/Dstwv+U1w1kCANv0tD3oux38dHz5jD1D+gl3FacRkNdn+RR15QtAHKKDc11dA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780492390; c=relaxed/simple;
-	bh=WW2wDfU3rnVBaaI+fGCSWfTRuMYvZQ+UdYJSw/wuQp0=;
+	s=arc-20240116; t=1780492889; c=relaxed/simple;
+	bh=AbYFedEpd0T6+t0RhCLrGsUjXQJYEa4eUNcPa+BCBzw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uVjbwTAq3es3FrDbb3dseaAjR5UOse0lHTJ2x8wXU3Mlr0DH0COYFjrtszu9qKYVLWswKfCNAGuyDJHx9zBnqOW+2Hjml/gTODDYR4lcvfLPesD8CjTzZNz/4z0CVVQ52LfNqnF9bam+8j64MKu2N9aIZD6b6PyEPZ/KCSny/xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZdXcDzDK; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=iOGc4f4wq3qFKfGC29V5lg6y10TgpFHQK1vm11WLMAwJ9u3uN+Ip0OIXb6vkhzcBOK80qvV4bCQ0ITX6v3HpTJ7lxbG24WweXZBkCHsKFIig0Z3A/llQUaY96k2UxdqrK7tw/9r0qMgbTvkaYvnJg+rgGlr5Vmpqs1mMNOoUeRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=JTogK67W; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZdXcDzDK"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-46013161068so1776240f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 06:13:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="JTogK67W"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-9154ca1aa1dso95779485a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 06:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1780492382; x=1781097182; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yq2UHVEOUzdIFU3R/Oloopokibw3ZVQerM+BGv9opQE=;
-        b=ZdXcDzDK6y1ROvv/Q38nRZ8CLfk7VwWDD0kC+i0is9zpz7+NNg41V9WaMr4ytE/whJ
-         4B7EnptelKcQ8y4nJRhyNz9nVFTOgo5RaNvWC4513zeqC731hIauD7UWLZZOAE0I5AoM
-         6s0bHF3FYpDs7/akHsfZrNbTwV4EXX5Itra2q+0R+GGNG4Seqsz8kuvm10mPAFk+Sy5+
-         /wvZdl6B6b/iVPVnvrcTqqo5UvkuMAirEsBWRSnRID7tOFVfCSjjcn9OUxMj2fet4xTS
-         rzB+/h51A84BV5lMTQc1koFjR99niBLfFDxWJxTLQXHHKc3bZeRhVmhx2ndb5wsgzBMX
-         X1Ag==
+        d=soleen.com; s=google; t=1780492887; x=1781097687; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EYzLxXCyFp78st9iZvxHkpqPKyf62haaChBN9xQvBYM=;
+        b=JTogK67WOYMYxiqn70yK6W/abrFldDN+UfFthmYFVg0xUdOfiHcPWwY+jP4ny5t1Zz
+         lWIZsgbCf+tzCqwij1P73VuuukZpQ4/agHjULoBQhs3/laysYgEK+uHjHooV/TcX//lX
+         LtkblWuJZ59fTX5+hilhGPjy4hVr66XUAj34ca58gI0xv8ULyEUHlWkuNJ11YNdaZUeA
+         WMvJ8IWo8uuL0JHUSQA1KSZeL8QZkRyTU5L3TbZ6woMVBlSm3n1u7MKYOoQfiK9YSAHx
+         blBf7mu6HE14CVE5sc1I6tKgoAmojYvAl+BYWY2fIj18sgokHacLEHbVUyLpgDkfQNKe
+         lXvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780492382; x=1781097182;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yq2UHVEOUzdIFU3R/Oloopokibw3ZVQerM+BGv9opQE=;
-        b=mQPWigH7TEk9E/ahCQyhqCJvomlUV1eMxgPldgPcfgbG/1IQOp0uLSjAq2Gn7ciru1
-         rqvCpPvPwSzoGUnhfC41FQ4wHf8t3obQJ2eOQraV8MfGleNAw7f9BXxVfvV6shuOxyTp
-         tXvsUkKi3qA1PA1yvn/tcXCdBqzMTmUgPNbKfDFWeToDP2eKl+Wwy/MDAdg26ux6X9Jb
-         bEYVCO9w6T6i7dESoeCuudvkb9AneDTG2upMgKXlAcSSW1KkCWIXMRlFwZm4Gt8UwtNl
-         75e5iftmnS3c2WPSoCRl1c1V5YxiM2YkBbRpALgNE71agIYz+Nhc2Mkes2pcgZZA3KYz
-         JD4w==
-X-Forwarded-Encrypted: i=1; AFNElJ+Thlg8kpBFGJiYJLPI31j0drqaXNWr5ubk4Iov7BMLuJXspA6vrI5UmgEEMHGhEiPjygSXyOCL7HdxjyqjfYg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3sXpM/CPXozGbXQkGfkE01bsu7jTqlzB0jN7jCm+2PHcKEdK6
-	YHxIsWyk7j5uDTPKfjX598f6lM71L4M8cPGjf0dS1c9y4ud9qKkj/l2JlISKN/0rT+M=
-X-Gm-Gg: Acq92OFPgTBEywBULCJ17lfR/IpWQ60YTtW+y5NffSGXi6BCgp6gk1XGeksaYPj5ee4
-	xfum2hss3K2v8CXMD6ChkKGtj9uSOasLOHZ6KR8htrh4MReH+Vt/j4ypVqM4lvGW+qP7GBvaIjk
-	VUB2QuRRbWoSDjRyBvC0vPuuak9vrTE1RcVtJJrD/hDOUOoGj3oKEEyW24pqBh1FbD8T8+aL6Ex
-	3RNg3syWzU5nD7TvdNUIdEGqYtuMgvSWDEZK7NzDtS4ovVrRJD+Q/gzWmjq0acMoSCu1JPnZE2b
-	zFStyFWOU0/R6vgHA5hspTG3i3yFi7BfktpT0mswnqnlz3L3PWUlkQpHpDFGbbPtzRMSnJolPqy
-	dQ+R2/MSjw/Nei2oioWEIg9hlCYPCJLsxTmZ0W9OQGiHFb8xYmMIwq3jzC19XZP4AnhrlaQXHDs
-	J0hrgnxec8uxi/ZmwD6/MiVXrf8VflFDdH0NZKU0ztu5V4WBU=
-X-Received: by 2002:a5d:44d2:0:b0:45e:9431:ee3c with SMTP id ffacd0b85a97d-46021792538mr3739740f8f.10.1780492382374;
-        Wed, 03 Jun 2026 06:13:02 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f351d40sm7479703f8f.26.2026.06.03.06.13.01
+        d=1e100.net; s=20251104; t=1780492887; x=1781097687;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EYzLxXCyFp78st9iZvxHkpqPKyf62haaChBN9xQvBYM=;
+        b=QeNTnlfWi/HRIOlg9oh0Y1H0U0Rs9ZBvdG3PPdnNw3VDUE+haxvkG8KHdW6OLSuhJd
+         QSIoLRs044v2i3XNlt7giFwKCSOaMZArcGhSjIGdXhdnWxmRGqENntRGpiezf+4mTp/2
+         316vxzxmh2ot4ClrCq6WX2GPU2qW+BfiHidGFxqyJGhYi09TWGmiBSOqoEhK+jIfqKje
+         gcEXqdQw1EItZ744sT+8jWIBgfkHGwdxzgKo4UIhlVn9K+m4Pb7nxTLellru4xgZZ9F7
+         Na6vxv3bZMXYUPTQkB3hqqCHg1sIFEmh3e7aQJChoKN5GgTsv8M23RO+imKwWf58vIXZ
+         7U1g==
+X-Forwarded-Encrypted: i=1; AFNElJ9HPX5aj+GovRS2wQ17PrvOy3WQPfSkBgiIhhKtgN7ly+ehhFgH9F8nCTo0w5KGkob/hyp85jueaB85Tz8MSLk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2WN2Zga62Q8q96u38YIIY4ZbdONPU71RG0YZaIRi+aXsdfAiO
+	aBuOBEr9+elPRj2PWND3k2ryWSlJkERc63JVnSR0eKimNjv9eMT28UyVmerlyVRAlME=
+X-Gm-Gg: Acq92OHpA/emZ3OGqWTlaYquPW272Uobl1UNIHXgFSF/kJT8ZOfGHiBIokckcN4GIHq
+	B29vN2npXPQ0jXovJlkimSWJYj2KlFZj6kAm94EUMG2NDGlGGfFGN8XkUfqyVjYOXOunSZ6gsKs
+	7uGJSPyLN7igasbXUZCp7sJ6gzrz5ASOr97XhjSYbnJcUYr+pdfnx94PgONDhqMUI9oMEmBuWGf
+	k/Ns+l/j0FOy8oYljDwxyNIezIXxFZdvOM1hGd6CTFniMs6+HEQi/Ipy7FIy+tb54gg//b9h4H8
+	Pw7VCx6fF7vWAuHcMEs1hEGpR2ZqbjN0OgyHxYRTiUfxg1PVDNOZUUOWNjcZonbQpm0QGIdikDu
+	LpVyf8XfF5hK60u/jaNm4FdHSe5Y+T1atpFDZxnaKIG3idUDziSXGcWltVHbbxOG2X7FQZcsWN8
+	AErko2KxwSsSsXOPNNfOURyx3Vjo3IjViDE3ElXlNAhIggJkbthaj3aSc9GerzRQ==
+X-Received: by 2002:a05:620a:414a:b0:8ef:6b87:5c52 with SMTP id af79cd13be357-9158b76c157mr410625285a.38.1780492886503;
+        Wed, 03 Jun 2026 06:21:26 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9158a37cae4sm240219185a.29.2026.06.03.06.21.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2026 06:13:01 -0700 (PDT)
-Date: Wed, 3 Jun 2026 15:12:59 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Qiang Ma <maqianga@uniontech.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, shuah@kernel.org,
-	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: livepatch: set LC_ALL=C to fix
- locale-dependent test failure
-Message-ID: <aiAoW4bdorRlWZs9@pathway.suse.cz>
-References: <20260527095929.1504032-1-maqianga@uniontech.com>
+        Wed, 03 Jun 2026 06:21:26 -0700 (PDT)
+Date: Wed, 3 Jun 2026 13:21:24 +0000
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	linux-kselftest@vger.kernel.org, shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org, 
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	corbet@lwn.net, dmatlack@google.com, kexec@lists.infradead.org, 
+	pratyush@kernel.org, skhawaja@google.com, graf@amazon.com
+Subject: Re: [PATCH v6 07/13] kho: add support for linked-block serialization
+Message-ID: <aiAqOaA_J4PrIoow@plex>
+References: <20260603032905.344462-1-pasha.tatashin@soleen.com>
+ <20260603032905.344462-8-pasha.tatashin@soleen.com>
+ <178046937151.468621.13398573538792303093.b4-review@b4>
+ <aiANtYRRDr5iO5QR@plex>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260527095929.1504032-1-maqianga@uniontech.com>
+In-Reply-To: <aiANtYRRDr5iO5QR@plex>
 
-On Wed 2026-05-27 17:59:29, Qiang Ma wrote:
-> When executing the command
-> "make -C tools/testing/selftests TARGETS=livepatch run_tests",
-> the following error message was reported.
+On 06-03 12:05, Pasha Tatashin wrote:
+> On 06-03 09:49, Mike Rapoport wrote:
+> > On Wed, 03 Jun 2026 03:28:58 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
+> > > diff --git a/include/linux/kho/abi/block.h b/include/linux/kho/abi/block.h
+> > > new file mode 100644
+> > > index 000000000000..8641c20b379b
+> > > --- /dev/null
+> > > +++ b/include/linux/kho/abi/block.h
+> > > @@ -0,0 +1,56 @@
+> > > [ ... skip 25 lines ... ]
+> > > +#define _LINUX_KHO_ABI_BLOCK_H
+> > > +
+> > > +#include <asm/page.h>
+> > > +#include <linux/types.h>
+> > > +
+> > > +#define KHO_BLOCK_ABI_COMPATIBLE	"kho-block-v1"
+> > 
+> > It's never used by block set and after looking at the following patches I
+> > found that it's appended to LUO compatible string.
+> > 
+> > While this works for LUO, I think it should be kho_block_set_restore()
+> > responsibility to verify the compatibility.
 > 
-> TEST: livepatch interaction with ftrace_enabled sysctl ... not ok
-> ...
-> livepatch: sysctlo
-> : setting key "kernel.ftrace_enabled": Device or resource busy
-> livepatch: sysctl: setting key "kernel.ftrace_enabled": 设备或资源忙
-> ...
-> ERROR: livepatch kselftest(s) failed
-> not ok 5 selftests: livepatch: test-ftrace.sh # exit=1
+> It should work for any component that relies on  kho_block. My proposal 
+> is to use this method for other common KHO data structures (e.g.,  kho 
+> vmalloc,  kho radix, future kho xarray). There is no need for them to 
+> carry the compatibility string in their metadata, as whoever uses them 
+> will include their compatibility string.
 > 
-> To fix it, set LC_ALL=C.
+> For now, reviewers will have to make sure that if the ABI header content 
+> is changed, the compatibility string is updated.
 > 
-> Signed-off-by: Qiang Ma <maqianga@uniontech.com>
+> > > diff --git a/kernel/liveupdate/kho_block.c b/kernel/liveupdate/kho_block.c
+> > > new file mode 100644
+> > > index 000000000000..4f147c308e6b
+> > > --- /dev/null
+> > > +++ b/kernel/liveupdate/kho_block.c
+> > > @@ -0,0 +1,411 @@
+> > > [ ... skip 121 lines ... ]
+> > > +/**
+> > > + * kho_block_set_grow - Expand the block set to accommodate the target count.
+> > > + * @bs:    The block set.
+> > > + * @count: The target number of valid entries to accommodate.
+> > > + *
+> > > + * Acts as a runtime notifier when new resources (such as files or sessions)
+> > 
+> > Not sure I understand what "runtime notifier" means in this context.
+> 
+> It came from discussion with Pratyush, but I think we are on the same 
+> page what they are, and I will just remove this.
+> 
+> > 
+> > > [ ... skip 11 lines ... ]
+> > > +
+> > > +	while (count > bs->nblocks * bs->count_per_block) {
+> > > +		int err = kho_block_set_grow_one(bs);
+> > > +
+> > > +		if (err)
+> > > +			return err;
+> > 
+> > This leaks memory if more than one block is added.
+> > 
+> > > [ ... skip 31 lines ... ]
+> > > + * unregistered, allowing the block set to release and unallocate redundant
+> > > + * preserved memory blocks. Checks if the last block in the set can be removed
+> > > + * because the remaining entry count is fully accommodated by the preceding blocks.
+> > > + *
+> > > + * Note: It is the caller's responsibility to ensure that entries are removed
+> > > + * in LIFO (last-in, first-out) order (the reverse order of their insertion).
+> > 
+> > I think "in LIFO order" is sufficient :)
+> 
+> Oh, I keep removing those :-)
+> 
+> > > [ ... skip 173 lines ... ]
+> > > +		it->i = 0;
+> > > +	}
+> > > +
+> > > +	entry = kho_block_entry(it, it->i++);
+> > > +	it->block->ser->count = it->i;
+> > > +	return entry;
+> > 
+> > This looks way better than the previous version :)
+> > Thanks!
+> 
+> Thank you. I will send a new version of this patch as a reply to this 
+> email to avoid cluttering the mailing list.
 
-JFYI, the patch has been committed into livepatching.git,
-branch for-7.2-selftests.
+The patch is here:
+https://lore.kernel.org/all/20260603130612.397948-1-pasha.tatashin@soleen.com/
 
-Best Regards,
-Petr
+I messed up in-reply-to field with wrong message-id.
+
+Pasha
+
+> 
+> Pasha
+> 
+> > 
+> > -- 
+> > Sincerely yours,
+> > Mike.
+> > 
