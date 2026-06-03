@@ -1,121 +1,146 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B472A26D4C3
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 08:02:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60620413220
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 08:28:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780473778; cv=none; b=FgsE5Ulv/w81XgCFu34u8reFxF76sRR3chS7/GDsSXHjlBJQHVEmcobRVXDojHj1gszushirbPieJaR6spEFwtY/SZsNaqxrQdsCI1kvRLun4bHci7og+dwVA45/ZfJgFShWMNWbaoU1i8EkNrN0tVEpUvWXRG5mHAsNuRHEcm0=
+	t=1780475304; cv=none; b=iRBVfbPNP/phcDhyJQ5oTH4RaxftY8XCpzZ55xGoKUkWZHUFmPH2G2CEgjdnEVxjsC4MoKhz+s2Q+7Q4cwX0I2IWH8zIEI+G0CH+UxbXutsI49ZJh5QtmrfR3JfVaUwZ25TVyRggIqUbz7PxlbeimLAdxiEk3hAYRhn2flKTTns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780473778; c=relaxed/simple;
-	bh=CUdxL2GR7o7ESdxlvLNeuY25sGeQO0E/Cs7P2N2ze6I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pb/JzXTjkbt1G29TDwJHWUiFyDKaa8VzqfNd7buQvS6gAU3bBsY4+vseTsDcRY8ApDjlHPMckCt1OdmxzcgmA/3pQ26WcYNLg+onkEyeBT4k2oai5meOlfiIxGcjRAZly9HojmFIh4ReGYOfTzsU3yVQIm13suxhv2BeoPB3nzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=redB96i4; arc=none smtp.client-ip=209.85.216.42
+	s=arc-20240116; t=1780475304; c=relaxed/simple;
+	bh=/vvfHDSLABQ+E5JmDpAswFhQgvfDtgjcru5f/Fsb5uk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ln+Wt4lm467KvDk/eJJ4yZ6btEwoCEIvVZMs8QPXbF+akD19lxAu2251VxUJMNGRmAM5MEy7dMUZ6kbVn5qHCsY56dwIyUx7bYvuqnYkofU8I7BGlhxLiPAQLpOozepQIKpmJAIgqHgnwwPqbHudxJMvb5IZcMbS/+9I2NiXrF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D/F12xdA; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="redB96i4"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-36d9794d82aso2009997a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 01:02:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D/F12xdA"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-490b915ded5so2547395e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 01:28:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780473775; x=1781078575; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9MuF+yWJKjzDQs0kKZtPPTCGk9WmA5u/lg0Mr9iL+po=;
-        b=redB96i4IoIWjKQkEou4hGT+62PH2deHP8oZe2sjYtkJBQ4DC7IKbnJehh1KE25Yje
-         iKxmeIXWqHoQzdxenTgktacq8nD4CEEwxrmF+OKAc081SADNd2hfK89k1dRgThWDqrFt
-         yRSzaYvoAcXR188CLUIDjEKKc0AkpKJV3AxB3f+PuAgTtC6ta4vfaFuLNeXd3wRhwhp+
-         k7Ow1fDsCYhsyzSa9fj9FpIXrPxta6iqWcez4jEBCFkfjpZJBB7NC+ZgdWIZu6s7li0o
-         AbnFFhUL5KjAbDjh22DgoeVEF1AThligVvNCdqd26c+qx+NkNRhu8bhacKvxyskMOS+q
-         pV1g==
+        d=gmail.com; s=20251104; t=1780475300; x=1781080100; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IbxFhf/whaY2/lpRVxDROPHQUt8kRLkmb/44SJOLV3A=;
+        b=D/F12xdAGI0DADzU79YJQNMoe6+paTIVQbGzrTZynVhDH0El8pRljk/kE1lqfh4a+x
+         GS/M9Nv/Nd2ETNlbGZsXK8a4i91uQw4cosY+Y3AgH7luzoolN3A5Wt1ggUCLRdnZmeS/
+         GBob9fke0a/Bx90xbSiZ/0d8BKEBznWhcvc9/u9s6P83RhlyDWFa42V+UStPGeCICHiI
+         gPpCDWcjvI+oxqu1s3i+D5MVBEYhQi6SMOEUMjwV4VogQLqDuh9y/JSCMV5Vp4f3K5Im
+         o3lWgbdUHUIVQPAJYFISqAZtI+0rVWW8imsgRlT3kalrKNF7Sz8cwDN4D7fd6udddkan
+         8t3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780473775; x=1781078575;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1780475300; x=1781080100;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9MuF+yWJKjzDQs0kKZtPPTCGk9WmA5u/lg0Mr9iL+po=;
-        b=WouODR6tRzZkfsKNaO2dB4575oOFkPdfuOsEW1Cb5z4D/QtPyu7vaFcpatd6NXensf
-         X3UM/Ar5S5Wq4T215fu5eqd/qiMaZ/dBESFm2N61M0WvEqZiP2zmC9HZ56+qFQK+NPgG
-         WCdFWE41I9D1IcXBmq28BHcQ7PS59pRbz/oYN7lMPMdU0qPz08vnXWbdCCyetcOz8DYB
-         YsMTOama5BT9bMmjr3kggpRcfV45iUqJjyjxaUPDVWhxKaIZmw+gBDX/+zIQ0dCSLnpP
-         hIksZck/OuJOkf+DWtacSNWnIP5rmZlQE+5XWonQE3gQy3P88fZV2TBV9rLUBzi8Ba6m
-         KQUQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9P6Eq5/Lry8fC2hsmXHVAnvEo3PJ+oeVIr0GOIKgHUnxHk8i1isUoc3lbOv44MtH9al8IR3rtixwWkBhgq8MM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxx83cz6b83Ajde29CbT9uPdewRfPZOCw2OFu4ayAn2lbWxPaDx
-	FPBc44+sfYzq9f3DZpq1mTmL4QQg1c+leJEZCwQd6s28gLx4wfMCnOUI
-X-Gm-Gg: Acq92OGzBM/QS815vvbi0sTR/3QIqgjtF7x2ZtfbFgRMivDehxNk7YrrrS80oCp1AbF
-	4o+6l+5DhRnivZdcRv7MdNpI4imJhvXWcasASD/DJmSQ3hAYUJG6BewlOKtAKIPrcirMEALh83D
-	j1CouJ/H30nYPvPvEBIdXO4fxkAo8bi+LPyx/zDj9wM3GCHmT+/yvYTzD8EZV5EbkS8EjMBW69d
-	4GWcWbasW82EUB4x6PHGoV2yMCRsfXXYNoMfrhlcMLtH3u5v4CykGWax6u1JV5yP8On2eL0uHD9
-	WeJtnUvnV1u6RHHZOi+P0M4sJadjEoeaEFdlAwDY1NXgWlE2hN6Pyv+PGC4OtfvuDT+ScoTvtOk
-	9pVdIUutj5HPdLIZAdQXAIpXCTzgSp81qfP9q0k3NPW4Nox0nNLxI+71HpYoM43FcgtXajNOZRW
-	Y47MYG7+Yzb3U9gXVOZ0R0AHpUo9Jxlx0SbQ==
-X-Received: by 2002:a17:90b:5610:b0:36d:9e0b:3801 with SMTP id 98e67ed59e1d1-36e30d1c00fmr2269817a91.8.1780473774886;
-        Wed, 03 Jun 2026 01:02:54 -0700 (PDT)
-Received: from localhost ([2001:19f0:8001:1b2d:5400:5ff:fefa:a95d])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36dd98797fesm5144475a91.13.2026.06.03.01.02.54
+        bh=IbxFhf/whaY2/lpRVxDROPHQUt8kRLkmb/44SJOLV3A=;
+        b=Ne+dZ6eOzCHDaSeh+Rz/FkNyuU3Zcvdn0cruE0qF6BEFq7Roawl4NSTBOaInMnT0Xm
+         YSBLW0X/WLWEB4VdwDyrc/BkkqMvKAnq+ZC2yUh2DtqPgXX2bGOCKyjOgVVmFtU2XSur
+         AEM/7bpUQhEmIHwR5RcNwvSeDsDrAFpZ+nZZkxe917vUJNdvTRT2YRtEQH3ibSXGQZAo
+         oQ4qcEhBka7r71hESBp6L9/xMRAyGPBEpmvtoV6T7l2iHPR0XV0/JT1clqGl6cW/83h1
+         pY1qviZAKwQR9kvcYpsH27GQ2oh2rxsWOXm7FIxBMeOBsi6BvGh3WohUrc8dyyvjqeOc
+         27hw==
+X-Forwarded-Encrypted: i=1; AFNElJ+8/255EWPh2OfsZeX7HsGu+IwsJctDNjFbNjK2CjdZe529IFMVb1r1ui7bVVVegZ1H8bPqYvt/hDpDOs5f+Bg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzybvRuGlisFPUL1O65e/OKrWH7iWokmxvZm2fNnG5nkt/ci4QW
+	xRZNJ0JpFkvT5zPOp64rlNRSXjriLENmK7qmkfm8MzQX2B4woakKADj+
+X-Gm-Gg: Acq92OEr3foTLqJRifMLjzitWNDRU6FKU1h/Jhr31rw65EW0Y1LGDgUx/M0GcqgQKYG
+	T0SUyJ3uF17SyweLWJKCVcw5Zafx7X70AZBfNV+pmZ5HvWlBMG4o5bVmX0rK1KpyVWooIrNnZCG
+	Pnp2V73I72+co0ZjCa8pGfd9apdlnnCoTFX1A1lJ30EcfwHlRFxZiPoi7+i6jV7aLhKHNom+Xu4
+	tFE6JWxgnOfdPGJwD5YRblFyOywIr3c3BaIqZ2NN7ZecjQcL1tEFX/k3hG0BBe36dnWTAcVDz2d
+	ojTo6Vs4X7wMENsab/HvHMW+PGyS0ih9rt5658yA7WzsUN/46UTAt+VyLwBpdxJQc2wDutSmL41
+	IWvIbGCR0Zf4XH3O8KHfpPaCgcYApcFEFOMl+s0XtX1+fTysJGYxMl9GRiSWOUvR/udQ+06jpMO
+	4wxgMcVBJ0PhZuqWYFWfPfaLJMcqYHs2rP5WI=
+X-Received: by 2002:a05:600c:3b10:b0:490:b1df:de4 with SMTP id 5b1f17b1804b1-490b60eca9fmr32057675e9.22.1780475299613;
+        Wed, 03 Jun 2026 01:28:19 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:8308:b093:bb00::d167])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f351d69sm9083431f8f.29.2026.06.03.01.28.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2026 01:02:54 -0700 (PDT)
-Date: Wed, 3 Jun 2026 16:02:35 +0800
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Anup Patel <anup@brainfault.org>, Inochi Amaoto <inochiama@gmail.com>
-Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Atish Patra <atish.patra@linux.dev>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Deepak Gupta <debug@rivosinc.com>, 
-	Thomas Huth <thuth@redhat.com>, Charlie Jenkins <charlie@rivosinc.com>, 
-	Sergey Matyukevich <geomatsi@gmail.com>, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
-	Yixun Lan <dlan@gentoo.org>, Longbin Li <looong.bin@gmail.com>, 
-	Quan Zhou <zhouquan@iscas.ac.cn>
-Subject: Re: [PATCH v2 4/7] RISC-V: KVM: Allow Zicfiss/Zicfilp extensions for
- Guest/VM
-Message-ID: <ah_fkXOLpNHvnmNM@inochi.infowork>
-References: <20260601084336.2601675-1-inochiama@gmail.com>
- <20260601084336.2601675-5-inochiama@gmail.com>
- <ah1pgb4S-UoSWhC_@inochi.infowork>
- <CAAhSdy0ZycwjYrKowzaydKhh=fcEDD9-C6TKmb838s0hq8a2hA@mail.gmail.com>
+        Wed, 03 Jun 2026 01:28:19 -0700 (PDT)
+Sender: Alban Crequy <muadda@gmail.com>
+From: Alban Crequy <alban.crequy@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Christian Brauner <brauner@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	Alban Crequy <albancrequy@microsoft.com>,
+	Peter Xu <peterx@redhat.com>,
+	Willy Tarreau <w@1wt.eu>,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	Usama Arif <usama.arif@linux.dev>,
+	David Laight <david.laight.linux@gmail.com>,
+	Alban Crequy <alban.crequy@gmail.com>
+Subject: Re: [PATCH v5 1/2] mm/process_vm_access: pidfd and nowait support for process_vm_readv/writev
+Date: Wed,  3 Jun 2026 10:27:07 +0200
+Message-ID: <20260603082707.3831525-1-alban.crequy@gmail.com>
+X-Mailer: git-send-email 2.45.0
+In-Reply-To: <20260602100917.3641359-2-alban.crequy@gmail.com>
+References: <20260602100917.3641359-1-alban.crequy@gmail.com> <20260602100917.3641359-2-alban.crequy@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhSdy0ZycwjYrKowzaydKhh=fcEDD9-C6TKmb838s0hq8a2hA@mail.gmail.com>
 
-On Wed, Jun 03, 2026 at 01:16:14PM +0530, Anup Patel wrote:
-> On Mon, Jun 1, 2026 at 4:46 PM Inochi Amaoto <inochiama@gmail.com> wrote:
-> >
-> > On Mon, Jun 01, 2026 at 04:43:32PM +0800, Inochi Amaoto wrote:
-> > > Extend the KVM ISA extension array to allow KVM userspace to
-> > > detect and enable Zicfiss/Zicfilp extensions for Guest/VM.
-> > >
-> > > Assisted-by: YuanSheng:claude-4.7-opus
-> > > Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> > > Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> > > Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
-> > > ---
-> > >  arch/riscv/include/uapi/asm/kvm.h | 2 ++
-> > >  arch/riscv/kvm/isa.c              | 2 ++
-> > >  2 files changed, 4 insertions(+)
-> > >
-> >
-> > I have forgot to add CSR_SSP to the context, will add in the next
-> > version. But I have a small question for it: could I reuse the
-> > generic subtype or use a new CSR subtype?
-> >
-> 
-> Add another CSR subtype for Zicfiss.
-> 
-> Regards,
-> Anup
+Sashiko raised a question about pidfd_get_task() and PIDFD_THREAD [1],
+so I ran some tests to understand the behavior.
+[1] https://sashiko.dev/#/patchset/20260602100917.3641359-1-alban.crequy@gmail.com
 
-Thanks, I will do it.
+pidfd_get_task() always resolves pidfds using PIDTYPE_TGID (kernel/pid.c
+line 640), regardless of whether the pidfd was created with PIDFD_THREAD.
+This means:
 
-Regards,
-Inochi
+ - A PIDFD_THREAD pidfd for a non-leader thread fails with ESRCH.
+ - A regular pidfd for a process whose leader has exited (pthread_exit
+   in main, secondary thread still alive) also fails with ESRCH.
+
+This is not specific to my patch: process_madvise() uses pidfd_get_task()
+in the same way and has the same behavior. I wrote a test program
+confirming this:
+
+  https://github.com/alban/tests/tree/alban_pvm_flags/pvm_flags/pidfd_thread_test
+
+Results summary:
+
+  All threads alive:
+    pidfd_open(pid, 0)              + process_vm_readv: OK
+    pidfd_open(tid, PIDFD_THREAD)   + process_vm_readv: OK (leader tid)
+    pidfd_open(tid, PIDFD_THREAD)   + process_vm_readv: ESRCH (non-leader)
+
+  Leader thread exited (secondary still alive):
+    pidfd_open(pid, 0)              + process_vm_readv: ESRCH
+    pidfd_open(pid, PIDFD_THREAD)   + process_vm_readv: ESRCH
+    pidfd_open(tid, PIDFD_THREAD)   + process_vm_readv: ESRCH (non-leader)
+    process_vm_readv(tid, flags=0)                    : OK (plain TID path)
+
+  process_madvise() behaves identically in all cases above.
+
+For the non-leader thread case when all threads are alive, this is fine in
+practice: all threads share the same mm_struct, so profilers just use a regular
+pidfd for the thread-group leader.
+
+However, the exited-leader case is a real limitation for profilers.
+OpenTelemetry eBPF Profiler wants to profile a process where the main thread
+has exited but secondary threads are still running [2].
+[2] https://github.com/open-telemetry/opentelemetry-ebpf-profiler/pull/376
+
+Using plain TIDs (flags=0) would work, but it means users cannot use
+PROCESS_VM_PIDFD in this scenario.
+
+What do you think this patch should do? I see two options:
+ - Address this limitation in a separate future patch that fixes
+   pidfd_get_task() to use PIDTYPE_PID when PIDFD_THREAD is detected in
+   f_flags, benefiting all callers (process_vm_readv, process_madvise,
+   and any future users).
+ - Address it in this patch series.
