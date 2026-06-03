@@ -1,77 +1,74 @@
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38043382F31
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 14:11:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348AA331222
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 14:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780495895; cv=none; b=b1J1JoGftnyGfBxEjbA4GgrpPHxD+p8vXibkeo9n9BaCim6m6zW7t+QcGT4SEFdtgWyVxaY+cuYMd7P8L5S9rPCY7+roBy4rVS8mUvMWYD5LHSUHNRP82aYt4Mxf+VHtrLP2kLC40kIDyqPkQDofMmbDXt21cFryWrMTOqVP8PQ=
+	t=1780496001; cv=none; b=GzQn7/5pL2dcWZr9VlvNUp7c95VjkIlHsPOJaY6mDxXWFMpSJ7leWvC7lO2DncgAXHVpEGj8BBcN+B7avWVSBwdibmhVlJGl+0+At2AktVi1ftInYZpH8oHeKdoX2b5kjzW6YjnA7GEONGK5Rz78eC33ngeZRFmVwoftM1W2Jys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780495895; c=relaxed/simple;
-	bh=b/SIUriVsuGQ8+K9ks4Bx6z61f4Zp4N9nO9DkwNZvL8=;
+	s=arc-20240116; t=1780496001; c=relaxed/simple;
+	bh=CRJtyzPVwZ27iPdMdn+YffG3q+hwHsP+3emZ2ABQJ2k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bKRoXPphyN4r58R9SOAEMaoftZdxgk/4mWPKrn/e2E8fTwA3vaGEmKLDyVBmI34BIPAuKCaZK+tvPEcS9FLx4prG4jM2Kpi13dsrhvo9DZh8MEFyhbfWmeLn0zRxAxyQ0qVGz7G7Mow7Rw5E4TrbODpUATD8lZWp5jYUgDi4ut8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Jj/gXNQz; arc=none smtp.client-ip=209.85.222.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=qCRDrLa/UHhjeTLbY5Z9ibpbhqHd7EgMrnqZiFaGe/4iOtvI1t8sRYu6E/tnGDPQRWuZNPtiLArtAXrhebHOGshGbyXDEncyHAJ1zucwNldKjjNiC0Pxs3NddhP7OqglQebgWMFII4SPebr3iBYhDM3X8LoyAO/ol6gSoQBOeEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s9UBvQuY; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Jj/gXNQz"
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-91587626ae1so160429385a.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 07:11:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s9UBvQuY"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2bf2911f93cso61385ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 07:13:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1780495893; x=1781100693; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1780495999; x=1781100799; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3JBFLHHchSf6Ugt56GZlS5cZe18tTPuP1JId2xHEinc=;
-        b=Jj/gXNQz9PzMyt/Qlt6Q2M3R245DJFs2mznVy5gaKaJpgI6Fzs3uffqHQTVciPDiON
-         c+gXtmpnbP//2nGpOWRG1DMuK+KCG+q3QbHfdMsZZXdMbqT6KDziuumMr9bKwVcQLtYj
-         nY5fZbjcBpBy4vQmg7riJpMdsd849LjZkUG+7LSsHGj50odIXBLfu3ZC2RQRsjK8NC21
-         BtVbmz/mfj5A9eQvlDuUmtmfAuejT773Z40C6Sxy8s9e+jVFgBdYMiciPrJ0BWapP8c2
-         1+n6edbMVArRWJMh1g1hFb824kkVkjvXDQfVU2j5TAucSqkOiDOgCkcYYZoSShEFAA9B
-         OYoA==
+        bh=Gl2/sR4bOkCw/IHgANyX/OAo2qKH6Z+1HugGtGKRHMc=;
+        b=s9UBvQuYGBcu/GYN6flzhLuPFQT/RZGWPbpxYIRaRgR7PXXN62nXrYbZlUNzDTJ1xD
+         0zQyf9gIsJBVL9wADHy+4U1dM2UOrg1vO1AjaNVE4EfGGHET2RoUGuonR93NsAJtLSOq
+         FHwQzxOBYZ1QDIOK9drOC42CFKaek50TLMTHOzCoY2Ztb9SxcXMmABCK/Yalgi5RkYib
+         GlOKncRbrMWwbqxjckanjfjjm3fpt4tOa3ltYyTNnl8r1fc+i5BgCENQPgPfFs/q2bag
+         Hakv2fxui4EyDq4cIxIsT7vuk7AcTGCARTlwY22GHRZnTufBYGzKyZiWPkoX+Jy5afbM
+         3vUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780495893; x=1781100693;
+        d=1e100.net; s=20251104; t=1780495999; x=1781100799;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3JBFLHHchSf6Ugt56GZlS5cZe18tTPuP1JId2xHEinc=;
-        b=sh2UUgu94rTrCjp7SdoOmJZ+sWdIS3AFrkS8lRUfl0h3OGwsca26FmJzosywg212BO
-         krYuGDNG+w7CNgVFfIUNoPhaIDWIsYwaQDRNx2GpnmQ+A57fcn78GTy/RpRun52W2G9W
-         smLM5jl7fHE1rqPnDn9JQdo5yhF01proVY1SHAuK7JyOUABQ/4yDvUp5S9M+zbMyhWmo
-         p1CxrluiRMFSoVZk/Rko+cm/U1kC3nMnBRTIjW0AAKe0Tbs6v8BXxx844ZBQAxOgh9Vg
-         M3afSsbv/1kUd6Eh77R+KdUrcu/x4mcMEDO6nIE67YZyrmVI45UTUubMEFbj2cjjXOQD
-         hk8w==
-X-Forwarded-Encrypted: i=1; AFNElJ+Tl1vw2Kjc520xkpWN4aG2GeXGwLMAdrjPNyQJZh9ETuSnAt6BHZ5WsBBbIdDtTShyY3nFHiXffuhbeceq1h8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6wDYRYyFkYvPwXCwcZ7a0nNWtGzOCIjdsm6cSoc7SAq10gN2y
-	0Zh1k4NaivP3IoBszoRHrd4U+Csdc91Ij05MOeLwypRNECzqqXHCSQFJkSNrH8pwlO0=
-X-Gm-Gg: Acq92OFw71nX38UXO3hftfRMnpE9oCxVETwumEHYHJ87QgW+vPufODtvpwCJLghohlV
-	blvTWhIzELeHwnrjZsyzjBjhsZ2U2anbWqZD/lk5daUI+/x6sUHAf2+kf3mLD1EzbIutw7V0hjL
-	XtMaL2FPxkawwU2aJQYJxSeJEgifjPZsRSw74ZquMXbz3VPAtJOg0o7duR5amxYbEc+7r8zSaXN
-	YJCN10dt/UtGHDZOl8zuH9YpkqwxwY6H5qdFmRbKHD5i3F0xpXVHhlQgBIxj1o3xAdopiGyCX0s
-	TgsbuDwze5MVeXBxr0POflOLYH9hEV+MstNkUKGPAAW8eZJjDWhbrAPPOGHKqwHNhPa2sfI6+Ja
-	Hw6XW7ELk0DeRVFuuKjp3TdscxAy9CPJ6mdvxT+7jozH1udi1pVQoZQJq7OUVPzL3G7N7TL7lcm
-	Ta1jXWdVLgInZZ0ih/ahJ1gmDyfY5a5a9q76MpHuSWaglfLAWRh0INWIQqm6mxKA==
-X-Received: by 2002:a05:620a:4613:b0:915:4ca3:61bd with SMTP id af79cd13be357-9158a83f992mr602997485a.59.1780495893289;
-        Wed, 03 Jun 2026 07:11:33 -0700 (PDT)
-Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9158a402ff9sm248774285a.45.2026.06.03.07.11.32
+        bh=Gl2/sR4bOkCw/IHgANyX/OAo2qKH6Z+1HugGtGKRHMc=;
+        b=Pww9f8PXQIiwyeZN0oxheEw9nYmXIyRssKc4LCNGtZT3xaufeSXaGm+CCXaERkxG62
+         0KT0G3g9qNHXadrSQ5TERWA9c77tVzw0/Hm+JrU0gN8PPufY3bnydNvbcBzvKXDOmhXj
+         9H3jB+auKVZWWrvhnepJ/L64/95Nr4MzMOAV2vhy3rRJyV04SXPpN+gGAki7wZ2CgPEL
+         m4ibcPZva7zuJB9HOh+i5cLa7j8r+3ComlclZ/D7VDz5pqowg9MfoRRwoKcZqzfjoEpo
+         1AL96IE/YgGt6vc8t3jYxJot+ioP1k0CPH3O2aRb8yBnOsxTChr7ndxfgAhliyC5uqVJ
+         y+GQ==
+X-Forwarded-Encrypted: i=1; AFNElJ89UKXvN0XNjswU1OxSK41PCcxOgvXntp1O3H4mlZiTGKYJmtKLARPurUS2xf3uxfzND8MsLMAgAfpaaBBkviA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeHoA4Ue0Rno2AMYQLZ29p+sfg7qmumP8M2cfIgh45O7x4BSqX
+	4VzJ2Q1C2CltLXNbNa//OTzRaynMwOfMStGXAmcPaUFHrkTzMXGscgDm0OVWUYsV7w==
+X-Gm-Gg: Acq92OELQdDX41pARKa275Y7xM3+dtVBeSgmZxYJGqkPSqTHizv+UVtMR22v2dRi9CM
+	dNeGUTQOpv6GhMqLER4go4FOq7LqVvaDoGFKkP62zc0YrxncCedvuD3AGRRTDCoGnLq+e2sNwW9
+	Ro4tyscNSRyA1wNs1Zb+G6E2EY11UqKMwGp6Oo8x2zZgpZ1vJ3EnJ08Zt9tz/EWytiBoXkFJOE0
+	xIrar8D3Pso3hWevrkRZpb24vstcj4oeVaRpo9nb9p5B56Zbz8bqqThhJStmmFez7eb7YafRina
+	JZbv875oPCRz7UOdqxz6iDjuSg9uECT/UPqAAXhgh13WC/Gkf5eIhiPYcxGmTl9eKUHleR0Lidv
+	6MMNgYEMbMa4dwX5Hgp1A77vCP23NOjYPCa6md3WcVyixr1y9QmB4MnKHXELTaAytnZCBieLdLA
+	YNRCeZZ2fsOAnQDQUwPtE951i8qizTZY4Lvn0BpG1VtykwgdiajDQvN/lNLy//urO8jZ7yZBY0W
+	/hoWXSsUg==
+X-Received: by 2002:a17:902:ecc3:b0:2c0:c14c:bf37 with SMTP id d9443c01a7336-2c16c13a022mr1861355ad.16.1780495998924;
+        Wed, 03 Jun 2026 07:13:18 -0700 (PDT)
+Received: from google.com (199.255.142.34.bc.googleusercontent.com. [34.142.255.199])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-842828d6bc5sm3061356b3a.43.2026.06.03.07.13.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2026 07:11:32 -0700 (PDT)
-Date: Wed, 3 Jun 2026 14:11:31 +0000
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	linux-kselftest@vger.kernel.org, shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org, 
-	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	corbet@lwn.net, dmatlack@google.com, kexec@lists.infradead.org, 
-	pratyush@kernel.org, skhawaja@google.com, graf@amazon.com
-Subject: Re: [PATCH v6 07/13] kho: add support for linked-block serialization
-Message-ID: <aiA1slnqPnC4_8XY@plex>
-References: <20260603032905.344462-1-pasha.tatashin@soleen.com>
- <20260603032905.344462-8-pasha.tatashin@soleen.com>
- <178046937151.468621.13398573538792303093.b4-review@b4>
- <aiANtYRRDr5iO5QR@plex>
- <aiAzT9TvGYjITiB8@kernel.org>
+        Wed, 03 Jun 2026 07:13:18 -0700 (PDT)
+Date: Wed, 3 Jun 2026 14:13:13 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: jgg@nvidia.com, kevin.tian@intel.com, joro@8bytes.org,
+	baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 3/7] iommufd: Propagate allocation failure in
+ iommufd_veventq_deliver_fetch()
+Message-ID: <aiA2ee3lqxFgXZLO@google.com>
+References: <cover.1780343944.git.nicolinc@nvidia.com>
+ <25d29feac909e36f78c145fa99ef2d4cb7a415da.1780343944.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,51 +77,19 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aiAzT9TvGYjITiB8@kernel.org>
+In-Reply-To: <25d29feac909e36f78c145fa99ef2d4cb7a415da.1780343944.git.nicolinc@nvidia.com>
 
-On 06-03 16:59, Mike Rapoport wrote:
-> On Wed, Jun 03, 2026 at 12:05:04PM +0000, Pasha Tatashin wrote:
-> > On 06-03 09:49, Mike Rapoport wrote:
-> > > On Wed, 03 Jun 2026 03:28:58 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
-> > > > diff --git a/include/linux/kho/abi/block.h b/include/linux/kho/abi/block.h
-> > > > new file mode 100644
-> > > > index 000000000000..8641c20b379b
-> > > > --- /dev/null
-> > > > +++ b/include/linux/kho/abi/block.h
-> > > > @@ -0,0 +1,56 @@
-> > > > [ ... skip 25 lines ... ]
-> > > > +#define _LINUX_KHO_ABI_BLOCK_H
-> > > > +
-> > > > +#include <asm/page.h>
-> > > > +#include <linux/types.h>
-> > > > +
-> > > > +#define KHO_BLOCK_ABI_COMPATIBLE	"kho-block-v1"
-> > > 
-> > > It's never used by block set and after looking at the following patches I
-> > > found that it's appended to LUO compatible string.
-> > > 
-> > > While this works for LUO, I think it should be kho_block_set_restore()
-> > > responsibility to verify the compatibility.
-> > 
-> > It should work for any component that relies on  kho_block. My proposal 
-> > is to use this method for other common KHO data structures (e.g.,  kho 
-> > vmalloc,  kho radix, future kho xarray). There is no need for them to 
-> > carry the compatibility string in their metadata, as whoever uses them 
-> > will include their compatibility string.
+On Mon, Jun 01, 2026 at 01:42:34PM -0700, Nicolin Chen wrote:
+> When the kzalloc_obj() fails in iommufd_veventq_deliver_fetch(), it returns
+> NULL, falsely advertising to userspace that the queue is empty.
 > 
-> So if, say, memfd_luo uses kho vmalloc, xarray and blocks it'll have five
-> compatibility strings glued together?
-
-That is correct, but it will be in only one place: the header of the 
-client's KHO subtree. Since it is dynamically sized and 8-byte aligned, 
-it should be safe to include in any struct.
-
-Pasha
-
->  
-> > For now, reviewers will have to make sure that if the ABI header content 
-> > is changed, the compatibility string is updated.
+> Propagate the -ENOMEM properly to the caller.
 > 
-> -- 
-> Sincerely yours,
-> Mike.
+> Fixes: e36ba5ab808e ("iommufd: Add IOMMUFD_OBJ_VEVENTQ and IOMMUFD_CMD_VEVENTQ_ALLOC")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+
+Reviewed-by: Pranjal Shrivastava <praan@google.com>
+
+Thanks,
+Praan
