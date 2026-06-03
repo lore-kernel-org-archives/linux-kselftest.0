@@ -1,46 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EEFB344DA0;
-	Wed,  3 Jun 2026 13:59:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B975A339705
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 14:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780495197; cv=none; b=bfotCxqSFfhuBlUPAdbM9zvT4Es6y02c5fTMG2JJvkG0Tf+WYQbkf672uLKIpExyclsWPPH/gYSB0Etiduc9RuxUCsc2Y232CM2PnNqN0h3qTJQeoVAbNQG7SHaRwtH3Oodl11yyrfFrXjzPuvYhnD05XPk/ETus5ud6/U0B+7g=
+	t=1780495281; cv=none; b=LpWdwJbIzjaI+72gzjbSPnLukbSZra/FKPBtSl5ZcuhfLhFsB1uINW2Eia7ShtsRuBCFrl4pf9a9XFnp59Hww0ws5bGd52HSenhGbWRcxWgWyJNtM/4WU69dTj6md8ExmlsMj5hQ2ONvaHWrPCvIy/nn+6uF6NEh5HEoB1npXug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780495197; c=relaxed/simple;
-	bh=B1+WLzpuj0CWKKgYCrl78Wy/eOtgg+hWl/7+WxVAfP0=;
+	s=arc-20240116; t=1780495281; c=relaxed/simple;
+	bh=0SPmCaZS/EgZ0V0kI9JhDAG319HQSuZSW2ZRzTouxwI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sQpuEigz/tSj5K7tlRwM9ZddHcZwxUxiY/ExOLPgaHmC8MoAFXEDH7hi99jysZiZ3uuFD2hqHcSCbAUwKAJ5NiOBuGiF7llrRCLiUq1cNSpTcrCt12cO2u+/IX/zrr9oNdUl+qtT+oL29FpfkhgH1R25rE+BTucvxeFEBqQy4cE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=etVZk3/a; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=HX7Hb1omNcB8I/JsH3NS1R3Gzhfgm4TVdnlctiOkeXwE57uJmcvyneVdYg0mSm2F7XuAHEpcgw07VBDRQ55/UTTXrIE3wnBVvXU1T/YIOidWlPz8RaLACW+Iqk9Yg7IfHa85bl6gHifhh2/KPGtv93asUbs3AGD3nprAoJ083as=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UHhMuuOJ; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="etVZk3/a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 948C71F00893;
-	Wed,  3 Jun 2026 13:59:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780495190;
-	bh=AhF+jUpU1E0204EIQ63W4XnUB7T83kejus0i2mjqkkQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=etVZk3/aXRNhvGcH3Bm6kbdy06t+JcMXHeruO2GnT/u6CtGXxBz8gfWLcADNEMK+W
-	 TrgH1b1J0MvahPjHWsUzff9yQnoRg1zcYs4RD762G651aDk+OSt8A1CowDDE8at8R2
-	 ytUnXImjFNGI1IoeZMrkD39QqUJHdMTAMWeoIJCpyABH9UHsJirRprFUWWOroEHiuM
-	 lEzJwr5Hpirzmly1jAEX5EDKKn3TwLd/iP3y/wuvPqUJISIi/JVf0XiiG3di9Mmawm
-	 NOlnD0DFIRpnMHBYzHIZq2SbVwtglNMvID+T04ePOW5h3np1YwRp0rEHVNzWVWoutH
-	 Y2cnIDgib1x5w==
-Date: Wed, 3 Jun 2026 16:59:43 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kselftest@vger.kernel.org, shuah@kernel.org,
-	akpm@linux-foundation.org, linux-mm@kvack.org,
-	skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, corbet@lwn.net, dmatlack@google.com,
-	kexec@lists.infradead.org, pratyush@kernel.org, skhawaja@google.com,
-	graf@amazon.com
-Subject: Re: [PATCH v6 07/13] kho: add support for linked-block serialization
-Message-ID: <aiAzT9TvGYjITiB8@kernel.org>
-References: <20260603032905.344462-1-pasha.tatashin@soleen.com>
- <20260603032905.344462-8-pasha.tatashin@soleen.com>
- <178046937151.468621.13398573538792303093.b4-review@b4>
- <aiANtYRRDr5iO5QR@plex>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UHhMuuOJ"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2bf2d865383so69295ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 07:01:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780495273; x=1781100073; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aIQgZlVSwyLoihF2al8NLtNtB2ubHrdRhrWZHSeU/cs=;
+        b=UHhMuuOJfBN6k7kGD5Qob55FKJWSHnHgeyYyfsCd9XGEuepU7T26LpyDyMyUfEAPQ+
+         q+VsJZ5ijLFcfUXF8qkHDEBLm82K9vFRYsBlASUbrGvO0HLRXAaiCAwmeOHgU+0k2wK4
+         HpLR14ynHN4avwEMh/ubgkB2ol5nR4Dya/gzBnVHeM236KOQsUxzTL+EnHU23T4hSr1W
+         n7V7Xx3d88wdaui3w3J0vrEe6KTUBJz+3A0RkKTlhWG8+flohMY9xlduEE8Ti8bZJBXL
+         VlN16y4jQqUjXOfY8u5GsujzOwZfQBKJ1qCDN+Wb3corBKlszhEuuTA9HPQNYWHFQFeh
+         bQdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780495273; x=1781100073;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aIQgZlVSwyLoihF2al8NLtNtB2ubHrdRhrWZHSeU/cs=;
+        b=iuGS8XiNKM8BT89VJfoOdd8WNvnqW5KOQDS3WmsdugXXZHOK/YU3ApOZBB66ehv2Qa
+         rCgaocX0PPF4qkBUphII1/l/jlAx8Hv0hjFEd/MMMHeFcOZiYw2GqxIJB/J1KvMQbAT1
+         w20RecUw5vJ8kdbKNYahgyCgBn1dCFhZnkv8iHpCcY0AKXjU3pZtKNIUAD+iIE0VZ6d6
+         pGd+VyGzvC3H2rkUi9Ijoii2AEVshBAaj8hqu98MRbxbY7iB8UPPKgokLbnhxLYLhsnB
+         nRw3V6TsolL2I6LgIudoiU8UjKD3IMYK/Cdd7kJ9phufYuhA/sjujluHsh9zmh5doASu
+         6CCQ==
+X-Forwarded-Encrypted: i=1; AFNElJ88zi8w7V5mhtHvrwnqOlBMRqF2HdFPmwaa80tPotByLHlKCL0OzrHowTl53km8lNk5OW9EnAHRqR6J6K5fE88=@vger.kernel.org
+X-Gm-Message-State: AOJu0YztyMH1BogBro4wqAazqp1Oaeen8Ih3RPy6G7bRR3jAAlcRPGOp
+	dD9TK5TcCY4Z1g1fquvvn5fszVjEVawzMU7qZiii7MpWLia8vM1y+Co2y56KqjiCIQ==
+X-Gm-Gg: Acq92OEFHGS5TQjl5rqFe7oAhWCtS97JMCGYqHjrxzNhANLFW7hlmQ0PSZ3qQt7NxQn
+	b2JTRbWm/eClM2/8ZIlTfQN5COv3jfxNX4OWYH53Txbzx66QkcID+Hh8AKwVrTBFBiXpDlLaBwK
+	f2kXlsz4+6oaDHVQDo+/GImUnj5bRUzzoUkmp+LMURLKtJy5r9EdpUCqxhNetVrbVk+CMhUbDtk
+	pc6sm+vLJOlwQqJIUr+t4uiVK6WDIHrQvPH36X2ErMi37zgvdhN3INmssf+CSGz4zXR2Yupu0kg
+	i2xxNTrAkYT+Z0U1AKuTCcqn7+y39YCmuMd+dLqDE+378KzQC9a13ldfR+3dr2bBIOzeI/wNM6r
+	X810vX4Lfbuty3FYwDeSQMsHGdyTOqzVy4AYaDU36xlxaP/rI7VHqx5mr0KaSWD0d0F7pgOlFL7
+	H4zKpZ+fPZspEtVtyoIIUzMLvBIv2r2ejeqmIvn2/i7ps312MR5SjwK4GlRdJRAa6kWkIe+QD4X
+	EWh+PqwNA==
+X-Received: by 2002:a17:902:ea03:b0:2b7:b03d:9dce with SMTP id d9443c01a7336-2c16c13fc72mr1885615ad.18.1780495271752;
+        Wed, 03 Jun 2026 07:01:11 -0700 (PDT)
+Received: from google.com (199.255.142.34.bc.googleusercontent.com. [34.142.255.199])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36dd9877d85sm6188825a91.14.2026.06.03.07.01.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jun 2026 07:01:10 -0700 (PDT)
+Date: Wed, 3 Jun 2026 14:01:04 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: jgg@nvidia.com, kevin.tian@intel.com, joro@8bytes.org,
+	baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 1/7] iommufd: Rewind header length in done if
+ iommufd_veventq_fops_read() fails
+Message-ID: <aiAzoKRCgF6Ddbm8@google.com>
+References: <cover.1780343944.git.nicolinc@nvidia.com>
+ <78f8caeb6a5d667a26b870e3068cec47dd4b5be1.1780343944.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,43 +77,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aiANtYRRDr5iO5QR@plex>
+In-Reply-To: <78f8caeb6a5d667a26b870e3068cec47dd4b5be1.1780343944.git.nicolinc@nvidia.com>
 
-On Wed, Jun 03, 2026 at 12:05:04PM +0000, Pasha Tatashin wrote:
-> On 06-03 09:49, Mike Rapoport wrote:
-> > On Wed, 03 Jun 2026 03:28:58 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
-> > > diff --git a/include/linux/kho/abi/block.h b/include/linux/kho/abi/block.h
-> > > new file mode 100644
-> > > index 000000000000..8641c20b379b
-> > > --- /dev/null
-> > > +++ b/include/linux/kho/abi/block.h
-> > > @@ -0,0 +1,56 @@
-> > > [ ... skip 25 lines ... ]
-> > > +#define _LINUX_KHO_ABI_BLOCK_H
-> > > +
-> > > +#include <asm/page.h>
-> > > +#include <linux/types.h>
-> > > +
-> > > +#define KHO_BLOCK_ABI_COMPATIBLE	"kho-block-v1"
-> > 
-> > It's never used by block set and after looking at the following patches I
-> > found that it's appended to LUO compatible string.
-> > 
-> > While this works for LUO, I think it should be kho_block_set_restore()
-> > responsibility to verify the compatibility.
+On Mon, Jun 01, 2026 at 01:42:32PM -0700, Nicolin Chen wrote:
+> When the first event copy fails, rc = -EFAULT will not be reported as done
+> is set to the length of the copied header.
 > 
-> It should work for any component that relies on  kho_block. My proposal 
-> is to use this method for other common KHO data structures (e.g.,  kho 
-> vmalloc,  kho radix, future kho xarray). There is no need for them to 
-> carry the compatibility string in their metadata, as whoever uses them 
-> will include their compatibility string.
+> Rewind it to report rc correctly.
+> 
+> Fixes: e36ba5ab808e ("iommufd: Add IOMMUFD_OBJ_VEVENTQ and IOMMUFD_CMD_VEVENTQ_ALLOC")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  drivers/iommu/iommufd/eventq.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/iommu/iommufd/eventq.c b/drivers/iommu/iommufd/eventq.c
+> index 1f1e415285b1a..896f45be0d2ee 100644
+> --- a/drivers/iommu/iommufd/eventq.c
+> +++ b/drivers/iommu/iommufd/eventq.c
+> @@ -336,6 +336,7 @@ static ssize_t iommufd_veventq_fops_read(struct file *filep, char __user *buf,
+>  		if (cur->data_len &&
+>  		    copy_to_user(buf + done, cur->event_data, cur->data_len)) {
+>  			iommufd_veventq_deliver_restore(veventq, cur);
+> +			done -= sizeof(*hdr);
+>  			rc = -EFAULT;
+>  			break;
+>  		}
 
-So if, say, memfd_luo uses kho vmalloc, xarray and blocks it'll have five
-compatibility strings glued together?
- 
-> For now, reviewers will have to make sure that if the ABI header content 
-> is changed, the compatibility string is updated.
+Reviewed-by: Pranjal Shrivastava <praan@google.com>
 
--- 
-Sincerely yours,
-Mike.
+Thanks,
+Praan
