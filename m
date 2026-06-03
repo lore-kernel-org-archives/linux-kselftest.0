@@ -1,168 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A073D1CC1;
-	Wed,  3 Jun 2026 15:18:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65B439A4DF;
+	Wed,  3 Jun 2026 15:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780499927; cv=none; b=ATm/tIbHXrbZNgeJXPluqRO2U2rYHcBhIjyrh1Wpn8e0S0RgQH67L+djvWQ86yq7XRHERKp2dxtzfZQzJeG3VfNIrt6mYPay/ehwaqB2sN7n3KebrVobt1ocXq+9g3ll0F9cCUBAE0AcsB+NTrcXMXSxkg5XopkY0YKu1e9MIHU=
+	t=1780501079; cv=none; b=NQoz4bUKSoQI6VeknzvvUPp5aRMMHtGNgRnerkS93aBApfdarDGY5vZ/OnyrHGGif0Grde3hHCT4St2BOpWwMRjDSdpiZYMG2umHXF8qJMMLzWLlLoI9i94qaTWib57V1FqUGoqLNLAaTQ+aMgZsckH86Ah8r/e1EYitRTNQb+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780499927; c=relaxed/simple;
-	bh=YF7xn7hgjPsOhYw+YjiF/ybr1IQd0XiGCqBnPwAR5+c=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=XlcydNHjLoEEoiJ5q/6MzmBQZA/zIjUkGaDj1fKV2YDkUNaGikfpAJZtwOPcv2d+krYs1qjRY0RYQft8UU5/CmMgN0w8/dsup23lOo6eJJGu3gmd1wuifwJambMEmRlvAP3LJ3B8MwHl2gFzUulTXP5rOTTOIlBiVFqO97gGFZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqiDx2XI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780501079; c=relaxed/simple;
+	bh=UYIHIKXIz0+ejeQhFA2lVGmco53VrDzyB+IejbdghWU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Ev2CM3TucUpbAg0BB/Yq60nCbY+8qzg/XpsX1k/M+jrVomNLImCqM9+6WJKQqZE2jduYVjvN2N7FhzLzOEs8ARQKcw69RqJOOgbQcDW9DAM7U8wjT5iXzCb8Y55oUnBmJYYJ+iFUHkkfpYJG21ZPWZCzhBpZauMqLO2PwjKIjTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TE7kZh+v; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqiDx2XI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D17521F00898;
-	Wed,  3 Jun 2026 15:18:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TE7kZh+v"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA0A1F00893;
+	Wed,  3 Jun 2026 15:37:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780499926;
-	bh=Row1/ZMLh6mM+sigh4dqTjgwYgOfCp9sUzuCj7aY0Fw=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=gqiDx2XIJ6TAOhH6COyc85O7nZTepQiHDoIwbNNC292yB9TuNTxpGhJ/VrhM5MgSG
-	 hCV+5zMk9sWy8BJLb6mJEiXT/PFhFr/ysO1atbo7egQSNjeeYYqVvW3/maP6WuQDLl
-	 4ksBKHdCFbbC0xk3Wc6+1V91XA5ji5JyMED+9Rqs+mbNNtuzP4kry6+rq0iFxpuMv9
-	 QzEbzzSDWUgCIhTx4qU+EXMSm3EoPiuHSgHqN00eIC2jOYah12EaiVGODawZwWRz12
-	 01NbzKgqcrqvjs5B7e9buR3+Wf9D07ezTSb5wyK22sUjVLWU7hMtWJvkm2AbPEunzS
-	 0JKuLIzwWry2w==
+	s=k20260515; t=1780501078;
+	bh=ADPgBjwcLjmyPGPP0rHgYcfV7gHxRwIPU6raHkwl1h0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=TE7kZh+vWq4hksrlWdrAzuDuWvIMzdpVcgxs98uIQ1xzd9zDhBHGYy+1HelR2fSCO
+	 BuGGH5lY1bG3H3EZ3tkF3a5a7z6NqgyN02Aml6uEdia1NjJcd3EtTRF/0luiwseHQx
+	 CrjqnXD0bx6ivcq9BHd0Et9v4AubgfURTWVyGOJa4xHAPL0ikvrGy0piNivA5BeAvS
+	 2tV67hmOD8enPN0hwPOfv54cDSbm+6Z887ZGgnuI11rS2SqjRbWacaQH9lzyQkJVob
+	 e3tQKcPvGWrbMNh/gKIJ4oBaf7FLl2OUPrwRPWgOhMQtMrOjaA3IpRiuZQRwGbcjiE
+	 gLWpwNQsRJ2Bw==
+Content-Type: multipart/mixed; boundary="===============7932078082801127775=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v6 07/13] kho: add support for linked-block
- serialization
-From: Mike Rapoport <rppt@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: Mike Rapoport <rppt@kernel.org>, linux-kselftest@vger.kernel.org, 
- shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org, 
- skhan@linuxfoundation.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, corbet@lwn.net, dmatlack@google.com, 
- kexec@lists.infradead.org, pratyush@kernel.org, skhawaja@google.com, 
- graf@amazon.com
-In-Reply-To: <aiA_j7udFaO9TRBP@plex>
-References: <20260603032905.344462-1-pasha.tatashin@soleen.com>
- <20260603032905.344462-8-pasha.tatashin@soleen.com>
- <178046937151.468621.13398573538792303093.b4-review@b4>
- <aiANtYRRDr5iO5QR@plex> <aiAzT9TvGYjITiB8@kernel.org>
- <aiA1slnqPnC4_8XY@plex>
- <178049725439.475072.11560134126837430744.b4-reply@b4>
- <aiA_j7udFaO9TRBP@plex>
-Date: Wed, 03 Jun 2026 18:18:38 +0300
-Message-Id: <178049991886.481270.8804649242857550471.b4-reply@b4>
-X-Mailer: b4 0.15.2
+Message-Id: <d4a64c5dffb0ebedc7460a21a52f2d94af931fda6c21d039bd71327a4cf79fce@mail.kernel.org>
+In-Reply-To: <20260603144518.67065-3-leon.hwang@linux.dev>
+References: <20260603144518.67065-3-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next 2/3] bpf: Check tail zero of bpf_prog_info
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,yuyanghuang@google.com,leon.hwang@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  3 Jun 2026 15:37:58 +0000 (UTC)
 
-On 2026-06-03 15:03 +0000, Pasha Tatashin wrote:
-> On 06-03 17:34, Mike Rapoport wrote:
-> > On 2026-06-03 14:11 +0000, Pasha Tatashin wrote:
-> > > On 06-03 16:59, Mike Rapoport wrote:
-> > > > On Wed, Jun 03, 2026 at 12:05:04PM +0000, Pasha Tatashin wrote:
-> > > > > On 06-03 09:49, Mike Rapoport wrote:
-> > > > > > On Wed, 03 Jun 2026 03:28:58 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
-> > > > > > > diff --git a/include/linux/kho/abi/block.h b/include/linux/kho/abi/block.h
-> > > > > > > new file mode 100644
-> > > > > > > index 000000000000..8641c20b379b
-> > > > > > > --- /dev/null
-> > > > > > > +++ b/include/linux/kho/abi/block.h
-> > > > > > > @@ -0,0 +1,56 @@
-> > > > > > > [ ... skip 25 lines ... ]
-> > > > > > > +#define _LINUX_KHO_ABI_BLOCK_H
-> > > > > > > +
-> > > > > > > +#include <asm/page.h>
-> > > > > > > +#include <linux/types.h>
-> > > > > > > +
-> > > > > > > +#define KHO_BLOCK_ABI_COMPATIBLE	"kho-block-v1"
-> > > > > > 
-> > > > > > It's never used by block set and after looking at the following patches I
-> > > > > > found that it's appended to LUO compatible string.
-> > > > > > 
-> > > > > > While this works for LUO, I think it should be kho_block_set_restore()
-> > > > > > responsibility to verify the compatibility.
-> > > > > 
-> > > > > It should work for any component that relies on  kho_block. My proposal 
-> > > > > is to use this method for other common KHO data structures (e.g.,  kho 
-> > > > > vmalloc,  kho radix, future kho xarray). There is no need for them to 
-> > > > > carry the compatibility string in their metadata, as whoever uses them 
-> > > > > will include their compatibility string.
-> > > > 
-> > > > So if, say, memfd_luo uses kho vmalloc, xarray and blocks it'll have five
-> > > > compatibility strings glued together?
-> > > 
-> > > That is correct, but it will be in only one place: the header of the 
-> > > client's KHO subtree. Since it is dynamically sized and 8-byte aligned, 
-> > > it should be safe to include in any struct.
-> > 
-> > This is safe, you are right.
-> > But I have more usability concerns from one side and the duplication it
-> > causes from the other.
-> > 
-> > I can see the downside of putting the version information in the data
-> > structure itself as it either requires a different header for the first
-> > element or needlessly increases all the headers.
-> > 
-> > But 
-> > 
-> > #define LUO_ABI_COMPATIBLE     LUO_COMPAT_BASE "-" KHO_BLOCK_ABI_COMPATIBLE "-" KHO_VMALLOC_ABI_COMPATIBLE "-" KHO_RADIX_COMPATIBLE
-> > 
-> > is not really digestible too. And it forces KHO users to potentially
-> > track KHO internal changes.
-> 
-> These are compatibilities; I think they are quite digestible, both to 
-> write and also when the  LUO_ABI_COMPATIBLE  string is printed out for 
-> debugging/info purposes.
+--===============7932078082801127775==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I agree to disagree :)
+> Fix it by changing sizeof(info) to
+> offsetofend(struct bpf_prog_info, attach_btf_id).
+>
+> Fixes: b79c9fc9551b ("bpf: implement BPF_PROG_QUERY for BPF_LSM_CGROUP")
 
-It's KHO property, not it's users.
+Is this the right commit for the Fixes: tag?
 
-> > We still don't promise any compatibility between different kernel
-> > versions so to avoid blocking this series on the decision what is the
-> > best way to convey KHO data structures compatibility I suggest to bump
-> > kho ABI version in v6.2* of the patch that adds KHO blocks and postpone
-> > this discussion to after rc1 when we'll have plenty of time.
-> 
-> Let's keep this patch as is for now. We will have a broader discussion 
-> when we convert other participants to this new scheme. If we decide not 
-> to pursue this approach, we will change this code to use an independent 
-> compatibility string. However, having this in place as a template will 
-> help us convert other components correctly, ensuring proper alignment 
-> and that correct string helpers like  strncmp / strscpy are used—which I 
-> have already ensured is the case in LUO.
+The change avoids the trailing padding that exists because struct
+bpf_prog_info has 4 bytes of padding at its end, so sizeof(info) (232)
+differs from offsetofend(struct bpf_prog_info, attach_btf_id) (228).
 
-Pasha, this sounds like salami approach :)
+That trailing padding first appeared when __u32 verified_insns was
+appended after the last __u64 member (recursion_misses).  Before that,
+the struct ended on an 8-byte-aligned member and had no trailing
+padding.
 
-We didn't agree yet to convert other components and even to use this
-scheme globally. Changing this during -rc does not seem a good practice.
-So whatever new versioning scheme we'll come up with, it'll have to wait
-until v7.3.
+b79c9fc9551b only appended two further __u32 fields (attach_btf_obj_id,
+attach_btf_id), while the 4-byte trailing padding already existed and
+was unchanged.
 
-Let's bump kho and LUO ABI versions and drop the concatenation for now.
-It's a small change to the patches, so I don't see it as a blocker for
-merging them in v7.2.
+Would this be more accurate?
 
-> > * sending a new version of a single file does same email traffic, but it
-> > confuses b4 and quite possibly other tools, so I think v7 is better.
-> 
-> Agreed, I also prefer re-sending the whole series...
-> 
-> Pasha
-> 
-> > > Pasha
-> > > 
-> > > >  
-> > > > > For now, reviewers will have to make sure that if the ABI header content 
-> > > > > is changed, the compatibility string is updated.
-> > > > 
-> > > -- 
-> > > > Sincerely yours,
-> > > > Mike.
-> > > 
-> > 
-> > 
-> 
+  Fixes: aba64c7da983 ("bpf: Add verified_insns to bpf_prog_info and fdinfo")
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26893539599
+--===============7932078082801127775==--
