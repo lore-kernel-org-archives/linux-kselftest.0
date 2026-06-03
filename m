@@ -1,101 +1,99 @@
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0125939B4BB;
-	Wed,  3 Jun 2026 07:14:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511AF39DBF4
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 07:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780470896; cv=none; b=IBeXSs6xJG59AOmqDrJODvfoF8+kfUEx979phQw1JrjKOTxfha8quamC7tflG6hnKw7G5a3iN1U1QMl1qDTe0IYxYMEOnNYhvC5oE+7hyr9A2+OJ8ijKE0UEvvoOoGNiiSiGh+uVJIlrnDVpaWGoiKuZlEng0V+2Ojx9s5mkLds=
+	t=1780471030; cv=none; b=pvkpDzNv7E5+9Wwc7PzcOi9l2eQ5C6FLyODNvykg/cBZa0ZJBdQSQYfYNuTWsG0lOXi5RpMvI+6mIGWjCgRbOxUE9UR514ykHeSG0L0cE/DRE7ty3ILKnQFeiGDgrxuTpoWByDOVl/cqx3tGE1Ne5MEc4hI0cq20hlYXdzXKmQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780470896; c=relaxed/simple;
-	bh=rDxOehn6sudiAxRrHRT66Kpef5+QJrVaK09yRPwMOOM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jGpxF5YyVAMIYOIktPXj4SsNp9uEQsWF9MHnB1wjMgM6+YzXDRVoF4JxCSKa95KoCRC4kqthhzn+Sjim3kaGvzgexrUfGVjcKAod19N6pNsOlJGL2HWM+SyI5hMirPqJmV2AB9paWi3BEM2qWk4n9PdliKkyksDk1g/cB9N6qmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=gl6upFNn; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1780471030; c=relaxed/simple;
+	bh=o4CM9jidaRxABIiphg7sxo3HEhfjJVDYZrP+FZfzMnc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tdDwhaRV+6UPl9XlOKIyxifFmEDx9mrw+SNN5rna7/6gEavsC0FImCJo1JUhgA9icUqpp6rJGQMiJpc6PUEDeZS/nN7Za9ulWUFOsqG9UzBGksPViTiDUAbf/S0DfxcKQqCAo+qBTPHvCvKLWseqD29EWnyTQlHNCJ/dOQvP+Rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PAYInVB4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="gl6upFNn"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1780470884; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=S3SFKFoWcboEPyPNGOUmpMlqfzFH7srYWpl0FUhqNPI=;
-	b=gl6upFNnzDhHgvU+qiSg9Y/QA3GA1MuqGKfxArPk75YFM4ejp3tz97Nv9GY9erqV8pK/6XqCI6tCPEw7XwqncUpINiDz52JKcyE7ojWOLYeh6EVbNH7Z2otNhFCdFhLDMZsEno22oyOEwF7OB3wRM4SJ14Rz0NqsFViDdTNexQU=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R611e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0X46a5-T_1780470878;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0X46a5-T_1780470878 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 03 Jun 2026 15:14:42 +0800
-From: Chen Pei <cp0613@linux.alibaba.com>
-To: wanghan@linux.alibaba.com
-Cc: acme@kernel.org,
-	alex@ghiti.fr,
-	andybnac@gmail.com,
-	aou@eecs.berkeley.edu,
-	bjorn@rivosinc.com,
-	catalin.marinas@arm.com,
-	conor.dooley@microchip.com,
-	cp0613@linux.alibaba.com,
-	debug@rivosinc.com,
-	jikos@kernel.org,
-	joe.lawrence@redhat.com,
-	jpoimboe@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	mark.rutland@arm.com,
-	mbenes@suse.cz,
-	mhiramat@kernel.org,
-	mingo@redhat.com,
-	namhyung@kernel.org,
-	palmer@dabbelt.com,
-	peterz@infradead.org,
-	pjw@kernel.org,
-	pmladek@suse.com,
-	puranjay@kernel.org,
-	rostedt@goodmis.org,
-	shuah@kernel.org
-Subject: Re: [PATCH 1/8] scripts/sorttable: Handle RISC-V patchable ftrace entries
-Date: Wed,  3 Jun 2026 15:14:29 +0800
-Message-ID: <20260603071430.59794-1-cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260527123530.2593918-2-wanghan@linux.alibaba.com>
-References: <20260527123530.2593918-2-wanghan@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PAYInVB4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C5201F008A7
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 07:17:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780471029;
+	bh=B9gE9LR8WZKp5FJX5lQdc0Rrvfx5JZgnmoXVQiOoRCA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=PAYInVB46E2dDqjJ29B2BFLzz9Gn67N2C6rxnXCE4mCy5tzp43H/Subkl0sjKINMa
+	 Z94fNReCDxYcbFCWvtkj/+jeMebrXXCBJya3kkPi16BQ9xIhCXYfPb8IuBG401Gcd+
+	 RdkT4/Tbmh2/H+EhCzm1nM1HLi59Jk8zzgMdciWKfI777EfwMb8VKfus3qctWQvOlj
+	 iIvHpLBpS6Y8VP9YXxCxVV4eH7YLtSjqOisRCdHdHPHe6ecKsC0itUSrT4XKqRG7vO
+	 Xlv2QxD3TKfoqK3zVOSRa7RC7xqXoYR6noYXtaoPf48InL7n+GmDyChtYCR8hx51Xe
+	 45d0bZammIeVQ==
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-5174a1d78f8so30966221cf.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 00:17:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ9IGT7eBMysH//GJFaS50T+VAFfjR3aFFq+9S0nVR76BsJU0gRPhIwpgTsHj1HvqVE1SJCV13MbcOc1eM4osts=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzY3N5IYMbdUK+0IbBF3OiFJz/bdzex/5Tj7ZNnf0XERfkbfeA
+	TgF5CpBWgpqL+ZNCfG0HOarpErdvI8XBBTWuUaFKQFY1UAQ0fdKUvDHirlT7UyxT+SMIoIbsTWK
+	nETw4MfNl28eJYmPzDXqtwosUCTAG21A=
+X-Received: by 2002:a05:622a:5c14:b0:517:29b1:5433 with SMTP id
+ d75a77b69052e-51778635927mr34758491cf.24.1780471028254; Wed, 03 Jun 2026
+ 00:17:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260602205847.102825-1-varunrmallya@gmail.com> <20260602205847.102825-3-varunrmallya@gmail.com>
+In-Reply-To: <20260602205847.102825-3-varunrmallya@gmail.com>
+From: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Date: Wed, 3 Jun 2026 09:16:56 +0200
+X-Gmail-Original-Message-ID: <CAJ+HfNgWvufshCz2CwTeJ=NyjGKVhCrkTLz_v0g+34K=5MEC1A@mail.gmail.com>
+X-Gm-Features: AVHnY4JoiPpI56R-HIsCyr_W1-sI4CUWK3ue5cXpYoYT5evyAosvlghYOrHtCUw
+Message-ID: <CAJ+HfNgWvufshCz2CwTeJ=NyjGKVhCrkTLz_v0g+34K=5MEC1A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] bpf, riscv: inline bpf_get_current_task()
+ and bpf_get_current_task_btf()
+To: Varun R Mallya <varunrmallya@gmail.com>
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+	puranjay@kernel.org, menglong8.dong@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
+	pulehui@huawei.com, alex@ghiti.fr, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 27 May 2026 20:35:23 +0800, wanghan@linux.alibaba.com wrote:
+On Tue, 2 Jun 2026 at 22:59, Varun R Mallya <varunrmallya@gmail.com> wrote:
+>
+> On RISC-V, the current task pointer is stored in the thread pointer
+> register (tp). Emit a single `mv a5, tp` instead of a full helper
+> call for BPF_FUNC_get_current_task and BPF_FUNC_get_current_task_btf.
+>
+> Register bpf_jit_inlines_helper_call() entries for both helpers so the
+> verifier treats them as inlined, and add the expected `mv a5, tp`
+> annotation to the riscv64 selftests.
+>
+> The following show changes before and after this patch.
+>
+> Before patch:
+>
+>       auipc  t1,0x817a    # load upper PC-relative address
+>       jalr   -2004(t1)    # call bpf_get_current_task helper
+>       mv     a5,a0        # move return value to BPF_REG_0
+>
+> After patch:
+>
+>       mv     a5,tp        # directly: a5 =3D current (tp =3D thread point=
+er)
+>
+> Benchmark (bpf_prog_test_run wrapping bpf_get_current_task in loop,
+> batch=3D100, 10s, QEMU RISC-V):
+>
+>               | runs/sec  | helper-calls/sec | ns/call
+>  -------------+-----------+------------------+---------
+>  Before patch |   173,490 |       17,349,090 |      57
+>  After patch  |   320,497 |       32,049,780 |      31
+>  -------------+-----------+------------------+---------
+>  Improvement  |   +84.7%  |          +84.7%  |  -45.6%
+>
+> Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
 
-> On an affected RISC-V QEMU boot with both CONFIG_FTRACE_SORT_STARTUP_TEST
-> and CONFIG_FTRACE_STARTUP_TEST enabled, the sort check still passes
-> while ftrace reports zero usable entries and the early selftests fail:
-> 
->   [    0.000000] ftrace section at ffffffff8101da98 sorted properly
->   [    0.000000] ftrace: allocating 0 entries in 128 pages
->   [    0.054999] Testing tracer function: .. no entries found ..FAILED!
->   [    0.172407] tracer: function failed selftest, disabling
->   [    0.178186] Failed to init function_graph tracer, init returned -19
-> 
-> Handle RISC-V like arm64 for the function-range check and allow
-> patchable entries up to 8 bytes before the function address.
-> 
-> With this fix, a RISC-V QEMU smoke boot with ftrace startup tests shows
-> the vmlinux ftrace table is populated and dynamic ftrace still works:
-> 
->   [    0.000000] ftrace: allocating 46749 entries in 184 pages
->   [    0.051115] Testing tracer function: PASSED
->   [    1.283782] Testing dynamic ftrace: PASSED
->   [    6.275456] Testing tracer function_graph: PASSED
-> 
-> Fixes: 0ca1724b56af ("riscv: ftrace: select HAVE_BUILDTIME_MCOUNT_SORT")
-
-Oops, sorry for missing that. Thanks for the quick fix!
-
-Reviewed-by: Chen Pei <cp0613@linux.alibaba.com>
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
