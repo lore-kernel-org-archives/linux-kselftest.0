@@ -1,137 +1,129 @@
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58AA631E85B
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 22:17:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780525030; cv=pass; b=Rk/c9uIJx8VcloTnuSHck/8DuWaGZ/F1kyhruReZNDTeoIYXDdoikKksDoppMtIgHcrtSdvt33WPB9NQmtzKkVMKKxETrSWA3dvuiJ7QINdNHqbV0M9GFBsZ7nZeeo4HsRwnvEKiHPqVtMzUIQROPBxuG5MGXkw6OUcp1SRoYB0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780525030; c=relaxed/simple;
-	bh=gx3Oklyhw4/29KJrqtyCgK2OIzmZLnxgN7Pih2TRWig=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QFjEi7N6h8dGidyq7FjT/gvlotWZbi428GGYNFOERhTDej/Y3ckV26XI+pjFdsARKCNDZZ8kq48sdDRbywr5kYpG66QTiG7ArhpBdq1rSruUG+UQJcexubQBq61SiqXio2qMB/xU4iIAQ+xPu1RE0RA3cIlT8ajx4t0l7xW1a+I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H4SYhr2u; arc=pass smtp.client-ip=74.125.82.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58C93D47D0;
+	Wed,  3 Jun 2026 22:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780527326; cv=none; b=XM0D/dwDc2UVBarK0aRa25OHpIcwqPHsWbjfYrJPxoTotiwyUf1M8WPA4AFJ0Kg9nXHGpbu4hBkZSqQWXo9NX99RjzZn7/fMihrJ4sEKB3AoU3xy+44L1W7NZs60q+nMKtq4QoSr2duK8+Xc91CPSWNVJgOfPh6QCnY9f+50hhc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780527326; c=relaxed/simple;
+	bh=0i3HKfKAZEXkzt5Zxsa5pJ9oMm/FULATvfyLmZeRLbI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Q8JqNKtVojZoS1ReSuSo1xvjhbHIgQGI4EdKwnBvweDVpWSJNfL6An53560HhD1oJcbrGeLaqH0xiAO2qAjh7Wsqy2QOt214EUY1/2FQteUk7axs6TJBxBQznb+pgMBwm7piBMgyui1GZOzSIYGSc90ka610LTWpmTAG0WcirEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JUy9xq5a; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H4SYhr2u"
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-13721dfd471so59609c88.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 15:17:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780525028; cv=none;
-        d=google.com; s=arc-20240605;
-        b=TirDJ0v/J9d7G7kQPoCZfCPHLFmoDGLBqzy0W5wpYOnnWHPA2QQSn6rEPi1rarJiaY
-         uKR9cZISCJWwRTQdZOpuINQeEGXscQbV3yQwXuyONBdNXuCOjxTqGApD01PHYqd2S+1n
-         xG2xXSDfYsR5FgtP3ivFeIgvwdcGlxSuExkkLnKoUjM+eHwZ95h0M2x8FPLJQZbjb+m1
-         qeYJS7wOa7Tw/6bY3mYTdDMWjkV9mDXZPkko8Ygkc4MIbvYchmzvI1r8YeNaUYxwL3MG
-         z1BbTEhTC55ef2gEXnHx8eOIxIH2qxF3cqm8TDdGkR7JCy0mnssmRh0yOZxFyeWfElcz
-         /F/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=V6pazkEL6DFXw7u78OwlQURha9CAXkBpjIcDT/R6oxE=;
-        fh=DjwjZqbA2o9wy5+c/4zIHeDSepfyElNLs74I0nWdSKs=;
-        b=JATb+wjOQI8gLC9iXuKZ60mSvFdqee+TiMVyvUiceFVYgD1VszuJ84BhR1avNfduQj
-         6CR6wUAoTHNanDykcYQ3uDpuEIsuLuCpe8dcPpzCoesBYXoFZjv5QNfVg5BmO5qNk1gw
-         4qiaNHKAlj/jZjSZFbzeO6tB4PbzYm5Hd4OFOak7VD6S2lF2tn9g/kswh1dyzkQQTCpl
-         e63VhzG1AI4aBNC+OA1AhU/m4T1+tkmQcZPMPblmrcKLqxKVJrMiUD1jvnu3SDwpcNWM
-         +OaXbHYFNBx0LdwSr8tqFIN5fa3GpfayOw9jquA1Qr5Q97pLhgqqWbxFYGe5d874HLFd
-         8Z/g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780525028; x=1781129828; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=V6pazkEL6DFXw7u78OwlQURha9CAXkBpjIcDT/R6oxE=;
-        b=H4SYhr2uRLDPzz6f83p5O1Fer8tULbvijZOnixRCgPM2XuQ0Qqm5bkxekfoA6O8pLU
-         LFu3tR/Bggkc21XKyBY+nkh/9nrbQPsTzbaDis9Q49I08+fHEMCyRwNOmUjhiA313Utc
-         NV6f9RLeJJ/LzV9JePM/H9ttJjHsB65yPV+wzNZuYk0u7XXxB50nbqrZgVCv1A7RcYWb
-         jA597R8xdbOAu5HX3aob4HCoogIXuiLckfzkbj70Z9O1fbigqRCZYEaYmEoGTo3Z2fZG
-         IAmxnjjpD8+NzCHCQvk0aUHc/aT3L3RMJP9IrzykbUn0h5t7A4DWdciV5l04/UKpB6ng
-         m23Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780525028; x=1781129828;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V6pazkEL6DFXw7u78OwlQURha9CAXkBpjIcDT/R6oxE=;
-        b=N1g/PSZ6BHItG5KkVDUzBd/Z04Yd+o1BF+Jq1z75z4qNROYdu75GOwB2iQPj4S1mKW
-         oJj5YspIz5lrnatBQzytNv5sypCHBkst0lQRj1/mPsCvpwED1fNJy8U8kAknOJkrnOJG
-         4ARQhhvOj0UZCn8yf0nVyx0PVnrWkwDp6fk4FuvmGy42UE3P2g0NuYL6DnzUmcP/CD57
-         nMJNr2WBGJbPZXdSYfzrzoGhYYpWwdGJCShTmnN1HXj6sTNWvgPvIV9G3g0pQTWwpDA3
-         srSOfzeD2HklGnJX8H80SwG2DCnY3CPb2Zo4hrUPRFetSc3BQm5HscdC05hIK2aIXgjG
-         eArA==
-X-Forwarded-Encrypted: i=1; AFNElJ91H3cXKuqXX80tjGh28scGIY3CFVLOWy1YfiZoH36610BI5H/qQ3TYB/RVVnAphIM+j8qtNBDU2pjTm+e73ww=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDXWW5sfvQS6ycOjpmJMynuk4u2gNv9hxD8ITFe6+GCGDbDUmW
-	eewOivAAQjrIYlNHy4f/W9TKcwaMiMC4SKgF8m2BETvcsb2skJbkPx98o6f2KPWiJunL4InkMx6
-	yHlFm9J37rrOW8Gb4Ti0fkJYNJUKzv92Ry5hp6nYp
-X-Gm-Gg: Acq92OFN108kWfZVR1Lmb9P0fUOJ3TPIjqd0LmjWcLwf1GWUw0YVWjmltk7ff8JqJMk
-	ManuAHUJVQcaoJeQKaXndOhOu7uNJIT4ZP/ZAo8LJMZdFPmCQgWIVJFptUDuSkzIw2/1NONIERZ
-	04lpprOhi8+JTBID6/R4kBQ14WwRl9bI5NT4PHwa2nnHAB1doHFjr8t5uKAO73DpgD+vjARrLYi
-	TKmoVZ/4nVPkBtYs+nvLW5ZwzWVzOLMw72jQDzA1cvk2MqZ01HlQ/yUP5QiTwTKMTfcrvwID/KS
-	fkABzbOuHUSnp7m/upSHgN1UGAwYrMn6XKMX5CYZC2syCwUDNG8X3JnwgAY0Qv/XwoRwmmr+JWq
-	C8xFB
-X-Received: by 2002:a05:7022:7f19:b0:137:ef27:e29d with SMTP id
- a92af1059eb24-137f6c126b1mr1478374c88.31.1780525027812; Wed, 03 Jun 2026
- 15:17:07 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 3 Jun 2026 15:17:06 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 3 Jun 2026 15:17:06 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <ahmbVaCUcBrYK8qO@google.com>
-References: <cover.1779080766.git.tarunsahu@google.com> <9huzwlwnbgdd.fsf@tarunix.c.googlers.com>
- <ahmbVaCUcBrYK8qO@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JUy9xq5a"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8414AC2BCB0;
+	Wed,  3 Jun 2026 22:55:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1780527325;
+	bh=0i3HKfKAZEXkzt5Zxsa5pJ9oMm/FULATvfyLmZeRLbI=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=JUy9xq5aZdn/uyWq0bBhj/SqczMvCRjvTDqbS7z6HDAxEPapsKhZOBqZ6uUXdAtaV
+	 8MG5898fqziJf2FVqpNHODrGVl5kPc8hsneQ+K+0kMKO7PUdUTESSMNHaiWOqX5Qp+
+	 LfArQ2H8PClk/Up/Yhyiq7QMDmVB41GCPO4VwZSJ9+LykoRsxvhdnNv5KvCtW4L0ps
+	 KGRsOfKXLHh3gkcTyry00twTu/T1nfALFQvVZ7gPfGljwac4HX4N+CXh/Xwd87ZvI6
+	 3QUzKgyD8E7TJLt1uP9Ttpp2sdqskgT4IqsqI+wAAHmP7DTqCmjjbKmdIwVgSAnVYg
+	 6k6WY52KQ6d/g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 791F2CD6E6B;
+	Wed,  3 Jun 2026 22:55:25 +0000 (UTC)
+From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
+Date: Wed, 03 Jun 2026 15:55:24 -0700
+Subject: [PATCH] KVM: selftests: Make guest_code_xsave more friendly
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 3 Jun 2026 15:17:06 -0700
-X-Gm-Features: AVHnY4KwIBznOQxPeeZp-k-7DNYvQD8SHlCWDjhKoWsxt_QvgGRs8hmrB0P3Bno
-Message-ID: <CAEvNRgHsJbGz8k8vgCn_HSxeeQ8agEm4oBYQQ0+b3gFb-aVokg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 0/8] liveupdate: kvm: Guest_memfd preservation
-To: Sean Christopherson <seanjc@google.com>, tarunsahu@google.com
-Cc: axelrasmussen@google.com, mark.rutland@arm.com, skhawaja@google.com, 
-	Mike Rapoport <rppt@kernel.org>, sagis@google.com, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Shuah Khan <shuah@kernel.org>, corbet@lwn.net, dmatlack@google.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, vannapurve@google.com, 
-	Pratyush Yadav <pratyush@kernel.org>, david@redhat.com, aneesh.kumar@kernel.org, 
-	vipinsh@google.com, Alexander Graf <graf@amazon.com>, David Hildenbrand <david@kernel.org>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, kexec@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260603-snp-selftest-cleanup-v1-1-73b29fe31ce6@google.com>
+X-B4-Tracking: v=1; b=H4sIANuwIGoC/x3MQQqAIBBA0avErBswC6OuEi3MxhoIE6ciiO6et
+ HyL/x8QSkwCffFAoouF95BRlQW41YaFkOds0EobZVSNEiIKbf4gOdBtZMMZcfJd29aNM53SkNO
+ YyPP9b4fxfT/B4FE7ZgAAAA==
+X-Change-ID: 20260603-snp-selftest-cleanup-bf97734c6902
+To: Sean Christopherson <seanjc@google.com>, 
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, michael.roth@amd.com, jackyli@google.com, 
+ liruxin@google.com, darwinguo@google.com, jacobhxu@google.com, 
+ Ackerley Tng <ackerleytng@google.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780527325; l=1941;
+ i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
+ bh=/w5y02MR7E1dim1B0Oo2RpreZBil+9LNll44ViP3HBc=;
+ b=5CKyYK19jWHUfGp2Y6HXQ0ZQcngpoxvT0Q+7ZVA0QMK5zsvF115Aszm5FtTOW7E/Cmo4FqtD6
+ MFsYn64TSngAJhx6TLdgsAr6OVfBIhDMEatBKrRueS/YkG1H93xunlQ
+X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
+ pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
+X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
+ auth_id=649
+X-Original-From: Ackerley Tng <ackerleytng@google.com>
+Reply-To: ackerleytng@google.com
 
-Sean Christopherson <seanjc@google.com> writes:
+From: Ackerley Tng <ackerleytng@google.com>
 
->>
->> [...snip...]
->>
->> we have one open Question left:
->> 1. How to check guest_memfd is fully shared.
->>
->> [...snip...]
->>
->
-> Given that lack of support isn't going to be limited to _just_ guest_memfd,
-> simply disallow preservation if the VM supports private memory:
->
-> 	if (kvm_arch_has_private_mem(kvm))
-> 		return -EOPNOTSUPP;
+The original implementation of guest_code_xsave makes a jmp to
+guest_sev_es_code in inline assembly. When code that uses guest_sev_es_code
+is removed, guest_sev_es_code will be optimized out, leading to a linking
+error since guest_code_xsave still tries to jmp to guest_sev_es_code.
 
-Makes sense. Tarun this was the other option that I was suggesting when
-we discussed offline.
+Rewrite guest_code_xsave() to instead make a call, in C, to
+guest_sev_es_code(), so that usage of guest_sev_es_code() is made known to
+the compiler.
 
-I think (?) it is possible to create a fully-private guest_memfd for a
-non-Confidential VM, and even after conversion lands, for both
-vm_memory_attributes=true and vm_memory_attributes=false.
+This rewriting also gives a name to the xsave inline assembly, improving
+readability.
 
-In that case, your preservation series can still preserve memory tracked
-as private by guest_memfd but not used as private, right?
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+---
+ tools/testing/selftests/kvm/x86/sev_smoke_test.c | 24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
 
-I don't think anyone will use this combination before guest_memfd
-write() support lands, we just need to make sure there's no kernel crash
-or corruption in this case.
+diff --git a/tools/testing/selftests/kvm/x86/sev_smoke_test.c b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+index 1a49ee3915864..8b859adf4cf6f 100644
+--- a/tools/testing/selftests/kvm/x86/sev_smoke_test.c
++++ b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+@@ -80,13 +80,23 @@ static void guest_sev_code(void)
+ 	GUEST_DONE();
+ }
+ 
+-/* Stash state passed via VMSA before any compiled code runs.  */
+-extern void guest_code_xsave(void);
+-asm("guest_code_xsave:\n"
+-    "mov $" __stringify(XFEATURE_MASK_X87_AVX) ", %eax\n"
+-    "xor %edx, %edx\n"
+-    "xsave (%rdi)\n"
+-    "jmp guest_sev_es_code");
++static void xsave_all_registers(void *addr)
++{
++	__asm__ __volatile__(
++		"mov $" __stringify(XFEATURE_MASK_X87_AVX) ", %eax\n"
++		"xor %edx, %edx\n"
++		"xsave (%0)"
++		:
++		: "r"(addr)
++		: "eax", "edx", "memory"
++	 );
++}
++
++static void guest_code_xsave(void *vmsa_gva)
++{
++	xsave_all_registers(vmsa_gva);
++	guest_sev_es_code();
++}
+ 
+ static void compare_xsave(u8 *from_host, u8 *from_guest)
+ {
+
+---
+base-commit: 0d9b37717aaa4a73362520af5ba4db7febf09123
+change-id: 20260603-snp-selftest-cleanup-bf97734c6902
+
+Best regards,
+--
+Ackerley Tng <ackerleytng@google.com>
+
+
