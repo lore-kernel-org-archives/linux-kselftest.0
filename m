@@ -1,61 +1,63 @@
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1538A3D3CFF
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 15:44:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59103D25A6
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 15:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780501449; cv=none; b=Etyl2jMI/uOzGTQDchQ0uH13POA5uK5DGvGTbW9MIPM70ian4LH2/9olhZcGnhWOqHWZEbbCqu/ERP08fXapWpfeKM0N5MAdgGgPGQQckfMvj5kBQVYzdj7EdGiP57RDJtnrG3GN9z6v8vQ9lYIHK0O/jM8hf7TP2JxpCZ0GXq0=
+	t=1780501458; cv=none; b=lSIfi8qA8lpMBZHNsFE+tcL3QRF8sXzudsHcdlWRbacarH1khaBMM9TfDXLBQihvAIYzfeOjp4EEiSWYDWO8VITMbt4ytd0Yj+sgWRKo0yq7tPvLZSgqhYNUmksP7qqMVwbM4qObO/TdvATbGmTV+G7unHGZPYWUfrysybxJXBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780501449; c=relaxed/simple;
-	bh=b2e1N3WNuvDqJwLy2iHEiZO66j92zWhizs+pziHMFdc=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=HCDYy/2hzdjPeFR9yF7ovY6qTwbC4uTUF1pc3j19tGQEbhKnq1/Im62o09ripzn4yHmYNtzcYeuFRaCWKG7T5A/AqPTb/2I1mT0a6V2jhjChRMKD5CTUy6vECEbzK8Lph0kR+bA6MCsjo68h9o2m10jpfuwpSgelN8J2NEnuz4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=WaSeCsuW; arc=none smtp.client-ip=209.85.160.170
+	s=arc-20240116; t=1780501458; c=relaxed/simple;
+	bh=IMbuGTukyT8IG40YTi+316UrswHf2CnDFbSS3RnRmnE=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bQhgLiMFgqgk5/a0XsorZjL+4FKqYI4xpE7IM+ojShnmXiquML5UNSeAp7LiItN1t4UoAOhG2oEtUHpWApGwvSYrjx2QR6NW6KNTvUBjMnuP5Z3Duo0YG02gZwp3UyapTSINztE8uOe7gFZt/rxs0uX9pEAe2Luone5tfYO1i8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=DdNbKUsI; arc=none smtp.client-ip=209.85.222.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="WaSeCsuW"
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-5177945a279so10232551cf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 08:44:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="DdNbKUsI"
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-9157b895c57so153130485a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 08:44:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1780501447; x=1781106247; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MIUnOidiefXcspEuuyeBWqUN2o/RTn4ccvxerf6qmvg=;
-        b=WaSeCsuWfZtJxbkwwOAUr4FJxov6LtJDrmTWkXloVPwomZRIAMT4UiY3S3qQkQOt5Q
-         3/BuZ3We/zj0oC0Bx1jKW3ah3xwiI9vHNdqCOCU+xq7abCpxT/vI9sQ9mXF688rN4saa
-         J0wzAj+d9QJ0yrcujJEVY4AMx3VeYhFK1AaVUjXKlM8ysHONQpQQVn1jJ0nQfm3WeUoC
-         GNLm7aOL4OqJVfPyRm/XiMkalFSKQ/tb3pebgp5VQZoXgcTepsumETKe0Awvep4yfPtp
-         odMYVELq9NKwzbf+oMM2iY45IEqPo8dJCMV1BJr/QDDyp39YD529897Pnv5H14HlKkKo
-         kEuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780501447; x=1781106247;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=soleen.com; s=google; t=1780501456; x=1781106256; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MIUnOidiefXcspEuuyeBWqUN2o/RTn4ccvxerf6qmvg=;
-        b=XRGzMI8OMA1FwtTgSSor28l4DFow7GFTKOt4a2YysAORUsIDlJFr42SAv/y98RIg5F
-         w49SRT6PgyZhupMp1RzlAn8OWUQh2S+XrD0ugsOrh2XwBFnXT3eXsFdLU44IjdqDm3X4
-         t9EsIjq0aod3aQf6sxON138Bh1oQ6mwzrE7a1+6M1gJkvFYNoTO9PGAufruv2UCpLaqk
-         fDHzNpkIP0yTUCOeE0FbyKrZE8XsKKw6OLpafe9LwI9ctpVSpy2ZEIPdN/SIPrJf08ke
-         GI17SwRIA0KzXC1DQX7Lsaccc4l5hbyJpVcNcZI4xCznZwjLUOVJwr2me4rlTXoR0whx
-         eRBQ==
-X-Gm-Message-State: AOJu0Yz1n1hPXRAE2aJhI1q0IlGCkh5mnyUWot/c+6HRx8tKX16MMYR8
-	6hk08DF/V23yIxRGPnrTt36amJRNP6YphdfPQ5/v6fYGvzn2Z5yGQHjkQxKL4c4UMKMzykcVUol
-	yM8i7
-X-Gm-Gg: Acq92OGaVoVxtAJ+IIw5Q/ezWNM80/QEVnR+Nzk/wSexe11R5q6xlKF5ZqMMOhEnUpU
-	rQmEJt9xgGgW5XiuT6nov/n/4RAsy+PpR9HMQXMA67KFA/qqLZ//+ExDUHr3RCCVXnuZCxmuiaW
-	2+b4NQCFyCwanLqYhLQbGajOSk5gJfcNizshFMIclFkk9WoQ0kA0f9zxWSWdf7X6e0O09rvgRHS
-	6azPz3jhPXjudZxoVc7ge6Z7PY/nlUdzfVJ/pYykYK8jLAe1YXTd85v94ulQEvOtRiNvGDEZ3FT
-	72Pn6iAIjUMMve6d/1WOEIIBZ/X1Gqo9W8bb4SXrLLSEsAA1oBW+sNM8zeAaOFcku691H/uHxyz
-	kil7i6qQwihJ5NnRFjt/57u9oJrDkYpXRmblOgI867eYaBsXuori+oSlwqkM16+Td97iNIUUops
-	fnIH5Bfm1cBrYhVGCXLVHic0Nxs+V5GnYLRxqsneTZS0tyWrqhj1jyTZFJ63wJrA==
-X-Received: by 2002:a05:622a:313:b0:516:508b:bf4d with SMTP id d75a77b69052e-51778789b11mr58906021cf.56.1780501444077;
-        Wed, 03 Jun 2026 08:44:04 -0700 (PDT)
+        bh=yVlCXZe8SHDSOJUkKVBaYBikNvs5G4Pkl6SfmcOaAr0=;
+        b=DdNbKUsIU5cZRabA2KkMfpHsJx9+gbaLDAO2hsFZTQLwT+dPPU50h1GalJSF0s6SDJ
+         vgsUSLpdZ6P62da6JT+InKSSvkZzRZ4qQiDXuEKqazYyR63P0GV/ju7Ghz08/QnOUgn4
+         bLlPGJ6S2ptv4MvgK7ZMC9aSA2aIJ9quqSZtEce1SupHyqHVdYRRQ/PrX5uCavtGKAZw
+         uWHU53+LUXvUqntaw/aMI6AIptwGBZn4cIz7LLJmminRZWNp09HWlJyNbEPExt4opphg
+         64OQOoCwQ4I+YN4yhoMiu8wG5AqAFUL45z0htUs5iLXW37xRBLHMn4RHSSpGPdcLtk7i
+         aPug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780501456; x=1781106256;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yVlCXZe8SHDSOJUkKVBaYBikNvs5G4Pkl6SfmcOaAr0=;
+        b=HzvJq/JjXSyKj3W/t1r7G5vDHzx2gnGw71gISTM8Jl1ycf1zwA8B2vg08K8iCtolUF
+         jf0WQtdGoEu3To+2a+7d/U9a1IpA+zxazz6AQZ3ZpeqxcTsf1R2b3BZMODk3N8idjRrR
+         62aMTkT9yVopwgeLYSur1VNky+YkXdpJflRUTygFKYP8ERUc7/KwwWSb16jJuyVEcfFn
+         RzzRK6U1VtiCcAC0QxTXxqUAzetMeFPtxQMeO4Gu5tqMP3/DJtXvfyQO7FYUEieGK3fg
+         UzQGPI4zTYBWPyBav99lG3wyaeZ/LG5WhsKH4WPgM7FW45fSO71/gDBFUK8C1MDXe3hm
+         +CLw==
+X-Gm-Message-State: AOJu0YznSW572S7XQKHKSxptJi+vS4mOTPrgRRSJGO6d8YkPiJIPTO1T
+	4JFZMCmlyte4YUZNRWOxy8ptY0gq4Lr//1d5zC+xgDlXcM1ZC7jcsoSsSO8QIz5uKsS9E2j3zhm
+	zcpsD
+X-Gm-Gg: Acq92OFaeKQnSzZPE1tV5YZCk/F+/5lXYSmmumZasuUbHn4YbWBnwt7+FHKuZNEVfCf
+	nOXbeutmegjqH4mFRwegn5Qenria+eAXhkUFKY1oxd5cdFTe0m/uc1LIhyyMOIw1srJPrPex4Ih
+	DDo/PTagHoXi6GX0LMmari5uhBAT9cI+5EhfFksB7zyhrWHdJGmFI+md/ZiYcNfWidm0iETjVES
+	kJzgLTLtd22RqMrIAFqmfcNXfAgr+3CjBG05YTGlQzrxYRC7O6WRm2i+SnvBkPJFfqhMlkEdWrV
+	4uJVAyY7gCFf++femX1jl+VMMF5phLn4py1wtb/bvNbK5i1iIe1MIJq4FhBsOH8NzJZZ6MYVQPt
+	QrZQVmvZGQpI2ck+1ByxaLoWBLdmcGz7/MN49qz2W1jIjN8DeIGyYw2hShCkrwcHRhCvnmImOJe
+	sdjuy+Utyu7G7laDSBPN1XBN4qYIWqq1wbJASEBKNXu9Uz08PL/p32QoZISe0Xaw==
+X-Received: by 2002:a05:620a:2890:b0:915:6cab:768e with SMTP id af79cd13be357-9158a849a62mr658252485a.60.1780501455872;
+        Wed, 03 Jun 2026 08:44:15 -0700 (PDT)
 Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51775c07e91sm26996561cf.4.2026.06.03.08.44.02
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9158a40d566sm266574585a.47.2026.06.03.08.44.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2026 08:44:03 -0700 (PDT)
+        Wed, 03 Jun 2026 08:44:15 -0700 (PDT)
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 To: linux-kselftest@vger.kernel.org,
 	rppt@kernel.org,
@@ -72,10 +74,12 @@ To: linux-kselftest@vger.kernel.org,
 	pratyush@kernel.org,
 	skhawaja@google.com,
 	graf@amazon.com
-Subject: [PATCH v7 00/13] liveupdate: Remove limits on sessions and files
-Date: Wed,  3 Jun 2026 15:43:49 +0000
-Message-ID: <20260603154402.468928-1-pasha.tatashin@soleen.com>
+Subject: [PATCH v7 01/13] liveupdate: change file_set->count type to u64 for type safety
+Date: Wed,  3 Jun 2026 15:43:50 +0000
+Message-ID: <20260603154402.468928-2-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260603154402.468928-1-pasha.tatashin@soleen.com>
+References: <20260603154402.468928-1-pasha.tatashin@soleen.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,92 +88,30 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi all,
+This improves type safety and aligns the in-memory file_set->count with
+the serialized count type. It avoids potential truncation or sign
+conversion mismatch issues.
 
-This series removes the fixed limits on the number of files that can
-be preserved within a single session, and the total number of sessions
-managed by the Live Update Orchestrator (LUO).
+Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+---
+ kernel/liveupdate/luo_internal.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The core of the change is a transition from single contiguous memory
-blocks for metadata serialization to a chain of linked blocks. This
-allows LUO to scale dynamically.
-
-1.  ABI Evolution:
-    - Introduced linked-block headers for both file and session
-      serialization.
-    - Bumped session ABI version to v4.
-
-2.  Memory Management & Security:
-    - Implemented a dynamic block allocation and reuse strategy. Blocks
-      are allocated only when existing ones are exhausted and are reused
-      during session/file removal cycles.
-    - Introduced KHO_MAX_BLOCKS (10000) as a safeguard against stupid
-      excessive allocations or corrupted cyclic lists during restore.
-
-3.  Expanded Selftests:
-    - Added new kexec-based tests verifying preservation of
-      2000 sessions and 500 files per session.
-    - Added self-tests for many sessions and many files management.
-
-Tree: git.kernel.org/pub/scm/linux/kernel/git/tatashin/linux.git
-Branch: luo-remove-max-files-sessions-limits/v6
-
-Changes v7:
-- Addressed comments from Mike.
-- For changes in kho_block.c, and updated to use gloval KHO compatability.
-- Collected review-by's and acks.
-
-Please review.
-
-Thanks,
-Pasha
-
-Pasha Tatashin (13):
-  liveupdate: change file_set->count type to u64 for type safety
-  liveupdate: avoid mixing cleanup guards with goto in
-    luo_session_retrieve_fd
-  liveupdate: centralize state management into struct luo_ser
-  liveupdate: register luo_ser as KHO subtree
-  liveupdate: Extract luo_file_deserialize_one helper
-  liveupdate: Extract luo_session_deserialize_one helper
-  kho: add support for linked-block serialization
-  liveupdate: defer session block allocation and physical address
-    setting
-  liveupdate: Remove limit on the number of sessions
-  liveupdate: Remove limit on the number of files per session
-  selftests/liveupdate: Test session and file limit removal
-  selftests/liveupdate: Add stress-sessions kexec test
-  selftests/liveupdate: Add stress-files kexec test
-
- Documentation/core-api/kho/abi.rst            |   5 +
- Documentation/core-api/kho/index.rst          |  11 +
- MAINTAINERS                                   |   1 +
- include/linux/kho/abi/block.h                 |  54 +++
- include/linux/kho/abi/kexec_handover.h        |   2 +-
- include/linux/kho/abi/luo.h                   | 148 ++-----
- include/linux/kho_block.h                     | 106 +++++
- kernel/liveupdate/Makefile                    |   1 +
- kernel/liveupdate/kho_block.c                 | 416 ++++++++++++++++++
- kernel/liveupdate/luo_core.c                  |  99 ++---
- kernel/liveupdate/luo_file.c                  | 205 ++++-----
- kernel/liveupdate/luo_flb.c                   |  60 +--
- kernel/liveupdate/luo_internal.h              |  16 +-
- kernel/liveupdate/luo_session.c               | 219 +++++----
- tools/testing/selftests/liveupdate/Makefile   |   2 +
- .../testing/selftests/liveupdate/liveupdate.c |  75 ++++
- .../selftests/liveupdate/luo_stress_files.c   |  97 ++++
- .../liveupdate/luo_stress_sessions.c          | 102 +++++
- .../selftests/liveupdate/luo_test_utils.c     |  24 +
- .../selftests/liveupdate/luo_test_utils.h     |   2 +
- 20 files changed, 1199 insertions(+), 446 deletions(-)
- create mode 100644 include/linux/kho/abi/block.h
- create mode 100644 include/linux/kho_block.h
- create mode 100644 kernel/liveupdate/kho_block.c
- create mode 100644 tools/testing/selftests/liveupdate/luo_stress_files.c
- create mode 100644 tools/testing/selftests/liveupdate/luo_stress_sessions.c
-
-
-base-commit: 2935777b418d2bfcbfe96705bb2c0fa6c0d94e18
+diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
+index dd53d4a7277e..ae58206f14ac 100644
+--- a/kernel/liveupdate/luo_internal.h
++++ b/kernel/liveupdate/luo_internal.h
+@@ -52,7 +52,7 @@ static inline int luo_ucmd_respond(struct luo_ucmd *ucmd,
+ struct luo_file_set {
+ 	struct list_head files_list;
+ 	struct luo_file_ser *files;
+-	long count;
++	u64 count;
+ };
+ 
+ /**
 -- 
 2.53.0
 
