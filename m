@@ -1,101 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1FFE35E1C0;
-	Wed,  3 Jun 2026 05:04:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F213793BC
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 05:36:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780463077; cv=none; b=op6o/PdpwJC0wHYwsD7G7qmw1cA8nIbVAmeyCPu04/zp5R45NtQLMQJiYNhS1fTwVmhNDo46ejCbT617So5RK6BDdM+YeT6QC0QyWWIuDLAUjsoRQF0O/ArqJipdxjPRNlAMKvwEXHXiHfQgFQ7A+dEC/WZWaIoKTxA5TIM6OMY=
+	t=1780464972; cv=none; b=ncfE6Jl0j312lF+NgRgb69BgIyXyBRx9IuSLSDT26ekBtQBah4pCjWOlHVK+oyz7Pf3LH/PMN25DBDsTYheKpqF4UfP7qZJofXIzGRypmJYoW6CAqy7F5QWZAnMGK9g1/WWjyq8Pzb02KOWHyu3IulBJBIaYB/QJMfW0y0SZgSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780463077; c=relaxed/simple;
-	bh=6mserEIyITYcFDXitVwYiWvYED02QbaWKmDXqXaHUNc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QZOamkw7dnmOgqrzePzb04VpTeDD8YOx5YBujLFQwiJuIrgwQ7gQ9EMMM62wqizpSxJEWKGca2HWioLxKkPZT+8zw++/9fj2X0dVP0OAG+MVrDkChkASdPuZdFBeQTvvigrXx84ysSUU3PhWFzCYEsLoyr4YQ6kga88zhroH0NM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=daeM3HzH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780464972; c=relaxed/simple;
+	bh=QZdWL8TW93hBVmRCbf+wTaax3/MrgBmqC4IKbOxsDW4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BcTiLMJcYfFWj6mM3+ZdU3i3o07GcK7PFbbqrCEZ7ztimJ7/oZ6tvo+Pn0X/C9GT9m+zoiQ0DhVHP36asoJf5Isi6TcF+m7jG/PKriKKVYV9OEcaTf5J/tnR6HgTTALO08Svjj6esT1SZnmV9nEmF3ONzki5d0god2Ac5I4yTFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pKT1gyCR; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="daeM3HzH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 756B41F00893;
-	Wed,  3 Jun 2026 05:04:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780463076;
-	bh=+xQ2puumFJ/2qiURGzPXh82LgAz5H1aStJvJVqAWBJE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=daeM3HzHogcgvKfFDLjYf3G1ILtAH98A4F7+Inlhar4Wicp1Pbpy4AfFwVCHwFkPj
-	 +qcf/Gbr3N4gbgDDIEpBEdkOXUwYR0sqhBicrHA252SfGIt2KGS5ypdhFz7JJTVQRg
-	 cv3AFOvaNK6vv4iJcj4GfKC3aDERXjNDDSgMUkwRosfXrO3Vy2VZEuoWaLcEEwcBvI
-	 EJ4JKmCEAzNIol3zyVHGMDiC2zNbx4henShoYE+xnDJ2g43yJRXULLeG+P74/WZIOM
-	 JU60UQBgEn8pO9ndZX3zCB7dbq91swWI6vG0b7tIBV2LbnCQcJZ3Zzkvro9row33e5
-	 N+IXQrJzXfmDg==
-From: SeongJae Park <sj@kernel.org>
-To: SeongJae Park <sj@kernel.org>
-Cc: Cheng Nie <niecheng1@uniontech.com>,
-	shuah@kernel.org,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v4 0/2] selftests/damon: fix memcg_path staging handling
-Date: Tue,  2 Jun 2026 22:04:26 -0700
-Message-ID: <20260603050427.91866-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260601145501.116884-1-sj@kernel.org>
-References: 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pKT1gyCR"
+Message-ID: <752224bd-bada-4729-846a-c5684de38101@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780464954;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=a7v3/xj0c3pZJZawiq+jPLnhvqm6ys3j0ue/XKbnFgQ=;
+	b=pKT1gyCR+Ei4hlApb7vqQMC2wJtAwBBWeZ+eO+LXf/dK4zrC14XL0hmcapFQpyJsCc97hI
+	9+g7Vkg6nFJfLDKTDvj4kDweb0q/0/TpZ/+3ri3hgGz8mGbgQnle8QRwO6XrfsQ4AB28fy
+	eEgwzMEboRadZZTekCcd76QPabN/paQ=
+Date: Wed, 3 Jun 2026 13:35:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] selftests: net: add socat syslog for PPPoL2TP
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-ppp@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260529021146.5739-1-qingfang.deng@linux.dev>
+ <f4a18ecf-4810-45a9-bf2a-1add45623248@kernel.org>
+ <8233aae4-42d4-4fac-90aa-240fadd9a39b@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Qingfang Deng <qingfang.deng@linux.dev>
+In-Reply-To: <8233aae4-42d4-4fac-90aa-240fadd9a39b@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon,  1 Jun 2026 07:55:00 -0700 SeongJae Park <sj@kernel.org> wrote:
+On 2026/6/3 12:04, Matthieu Baerts wrote:
+> Hi Qingfang,
+> It looks like the issue happened once since this patch is being tested:
+>
+> https://netdev-ctrl.bots.linux.dev/logs/vmksft/net-extra/results/668501/11-pppol2tp-sh/stdout
+>
+> Is it enough for you to understand what's wrong and how to fix it?
 
-> On Mon,  1 Jun 2026 17:01:19 +0800 Cheng Nie <niecheng1@uniontech.com> wrote:
-> 
-> Having a sentence for the cover letter would be nice.  E.g.,
-> 
-> '''
-> Fix a bug in _damon_sysfs.py for damos_filter memcg_path setup, and add a test
-> case of it in sysfs.py.
-> '''
-> 
-> > Changes from v3:
-> > - call stop() for cleanup without checking its return value
-> > 
-> > Changes from v2:
-> > - configure memcg filter before start(), remove commit(), ignore
-> >   start() failure, verify memcg_path staging readback only
-> > - use print-style error messages as suggested
-> > 
-> > Cheng Nie (2):
-> >   selftests/damon/_damon_sysfs.py: fix memcg_path assignment
-> >   selftests/damon/sysfs.py: validate memcg_path staging readback
-> 
-> From the next time, please add links to the previous revisions [1].
-> 
-> For other readers,
-> v3: https://lore.kernel.org/E4B88E7D4879D1B1+20260601074250.203583-1-niecheng1@uniontech.com
-> v2: https://lore.kernel.org/4CDA28DC581FDCF8+20260529090845.1696845-1-niecheng1@uniontech.com
-> v1: https://lore.kernel.org/406BD1BA0F6AE326+20260528081039.1192194-3-niecheng1@uniontech.com
-> 
-> I applied this series with the cover letter sentence change to damon/next [2]
-> tree.  If this patch is not added to mm.git in short term (~1 week?), I will
-> ask mm.git maintainer (Andrew Morton) to pick this.
-> 
-> Andrew might want us to repost this series after next rc1, though, as we are
-> apparently wanting to make mm.git more stabilized at this point.  Andrew, pleae
-> let me know if so.
+Yes. Both pppd instances detected a false loopback, possibly because 
+they happened to use the same PRNG seed to generate the magic number. 
+I'll send a patch to disable this detection.
 
-Apparently that's the case.  That is, we are now quite close to next merge
-window.  We want to focus on making mm.git more stabilized and therefore ready
-for the next merge window, rather than adding more changes that no really
-urgent.  I understand this series is not really urgent.  Hence, I will request
-adding this to mm.git after next -rc1 release.  Let me know if you think this
-is really  urgent.
+Regards,
 
+Qingfang
 
-Thanks,
-SJ
-
-[...]
