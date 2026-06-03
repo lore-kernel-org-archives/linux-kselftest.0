@@ -1,160 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DCD428841;
-	Wed,  3 Jun 2026 10:59:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6073F13D51E
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 12:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780484350; cv=none; b=ocL0Rnl4AmA2s5IiO0U35EoQ8SnTpU/IQzZW0Zo0u6TX95IexfwyjkA6IjjDnEIvKSvpx2ogOXe0cc4OHVo+ipENYzXUyn/LZg98ghxg/dGIrI13vV7b1Xcblgb2gZBbgSsXsQ8u5FElDFuRgHLmFM+ZHs/DQQF3gDetsK1KYcg=
+	t=1780488309; cv=none; b=u5otvfIxyTYS10KYhsPaS5tX913EbBZNda4RRXs5bhWU+kHM57hXeBcf+/jxZ1PUBrNfJ6S9ui7WEU6z7oH3NdmrCMDzt6S02Usn2JgX7bQznnvZTsMJbQRmMPEA5D2cmoNDdBs1aACvwLJ8zfOTAu53UetqZI95/YFbSq1YGVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780484350; c=relaxed/simple;
-	bh=t+cki3wXIG0nscmYAdmLLaMlAxKQc6RtuMI9PKrZleA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HkaBbw7W2eFnOklMpF/tTra+CX9YhHK03YMGVp4h0hclArjL6NwcKGgsqkn14yn1rGisn/mh7eg49F1FW++bmVYuJHv+pEvIAIkZSoVGdrE3p9VsD/+hwPwUNrc45JvPUtC0Ha7dvSF3+gmmnhLTUKL5wV1Xvf/Jc7zMBUFEuYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDgUhWjm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780488309; c=relaxed/simple;
+	bh=OwDhAFJOHEAGx56sW7AtIsSE/hkAKo5OcDReMvQULCk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nzmb+C1+tQ/b60RJlTkBbgxscmvCW/PP1fRnMil9LOmwdr+gbWc3r8pQLikFf1yp4NDac1SeAveUItigpC4XQL97eTxfCPlK7DMzMRgymhetqf0dKwPGHxaOgQHfC/QurZVK3ElEy4NT6Wj9b7Kgg6YE4b1/26KOEKyFz9tgs6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=hKOpIF7d; arc=none smtp.client-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BDgUhWjm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA6291F00893;
-	Wed,  3 Jun 2026 10:59:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780484349;
-	bh=IBHUlSohGwOSoD+kQjNRJAfO05UWKQegIZEd4SWaE4U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=BDgUhWjmGy8lESU54FHetczAY5zD2a1lZ12KSi7XrnfqI5LjaO4rOH4lrX70mVsq4
-	 OYjCeemYDKaH0qhlW/LGzyov6Lg2O05mXoqt8D6AT9gkQT2LJJGxcLXsVjzybi+LVf
-	 DzRhfG7U3vnS4PSCfX9ju2aDAOfygdzPbmbb8GKibleMuTAVOMlMeDhqMd+bkUrSca
-	 PtOfoJMZ5ELr7TXQeKfJ3+Yz6G0YQj/xBqOR3Y8RQ3gPjgMQ2OEZVktsW6Nkoj1vZr
-	 GkqgsShGTFwhWxX9pkSG4KuazJ92MkslcQv7rIqQH9jhFrycfHoiCuZblLhRBcuWLT
-	 OkIUBEHDcWGtA==
-Content-Type: multipart/mixed; boundary="===============4628976069350686524=="
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="hKOpIF7d"
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-8ce65629acaso44099186d6.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 05:05:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1780488306; x=1781093106; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1X7rdmAsUUmk8fm1lXinqRbOJ2Rb1qcFGzfHrd7zSSw=;
+        b=hKOpIF7dorP9INndDLGyuKFBdaPFKloZkTRRB0pBhfXg5RJmiLvCh9x/se1CqXJW18
+         e37iAYfiHVClUE1Qql0WqJoWyb1iRb1tFPr0ng78fisDFVJ/2VF/akwMTWLjRATEmRzn
+         PFFUQNdOT7BVZMOQU7g3N9tv0dh7QgF27ZZPzcSsTWF5UiVtZ2akkk8hqfKMcbuZ3IBr
+         0Pc3lecr/7TcnnDm6hSGWSAwApZAOS9v0pT1FS57oEk3+3lHjErXXeBTOTnzjqBisARG
+         I1BdZkqrBrLUPhHoWq5cmRRqCq2EZoOLPC2iSQVUNjW0txoFuLaQtc31ZTkAH5WFSZE+
+         bLwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780488306; x=1781093106;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1X7rdmAsUUmk8fm1lXinqRbOJ2Rb1qcFGzfHrd7zSSw=;
+        b=FZipifyLiA3rEkxdDqNqeKgDCGYECSJVWob/2ywrrCY6CEyquwNQVakYJIdXvDNwVO
+         tJCa4vxO/Txa/AwvrPCFw7IieCj4KglZPecCcOoYXM8uH2/FO4CTBnDTcl5vVjTvX24U
+         iLIVYEC8M9TPNVKv0XiBARREpe73FJTS0rmVwckk0EzPpv/2p6/zufQJQhFQxkQyKovH
+         LulgyAlvY0KCwIy4aGbJnrzsD2qGgdKeiHxIW2dgI4iIN92De6ciSeV9TC9WPPEYTqzb
+         D96SgxhWhns9FkFptR+/py+5GJXBBTlNw/En6VAANXq3pmkTQRPm5oMPqeYuGVTbuHby
+         CQbw==
+X-Forwarded-Encrypted: i=1; AFNElJ9fJKbgSv3Wky6AAM6mn6AuEYMlifcr3cc8P0Z5xU6HW8RPHkciYV/5vqU9ZQAayHKaRpJbU7PpxkXONakWewA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRDyMeeIj598e7O9aXdyk5ChfMfEh4q2OXHJQXEfgopdT8SPWP
+	9AUmU2HpaMmW57WL3WI2daWMKicNNGgjvSZ0inrqIAXw/FrXTp6fHSyo9BBoQJc4i4M=
+X-Gm-Gg: Acq92OFI6z+D5MriAEkcu88ig96v+uQU3NPZEsK/77NdS3mX7wBt+0NhyQ1YzbJc2ig
+	STYOJZZyWS7Mx9szBinMVSrBUwvCgX/L8JRX+X+T6nXPIIgd1BUxf/JozvC3wIbLJGO0wk7/Alj
+	TQXIIBs19ZIiq4Zne85hO4u7sEgLgLFni4wFfEnklKB3iluxPh7+CcrDOElR6oKcUNmCkkV7Ysg
+	bxdgQEw6Xf4GFNUTLjJc65afHYD1Uhtni2R8M3w4mzT0Yxgd1iPPVteY9TvNAIEYD5eEfqmfNFv
+	sybZZTNPK7QcEaXQcB0tlOGAfY8DUQOuS7qJZ1Tl9URwztyXHRGuPvBQUhgtC4YXQ1xXyl3xGNf
+	FqCDamqDM9Sm4bLmlyidZNrnI/7TkNiWJcsZsTb7I+7SkZC4bjSBOEWXylDgsvWvBG1vGqUDYnL
+	Z3119vxTywDt/ck0tCrB9WfjLfsr0iYMS2D0LbJUhzm5Wna0TdcOTDQl3I17uJVw==
+X-Received: by 2002:ad4:5851:0:b0:8cc:f012:f42c with SMTP id 6a1803df08f44-8cecdc09461mr34569126d6.6.1780488306396;
+        Wed, 03 Jun 2026 05:05:06 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cecd2682f8sm18054716d6.43.2026.06.03.05.05.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jun 2026 05:05:05 -0700 (PDT)
+Date: Wed, 3 Jun 2026 12:05:04 +0000
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	linux-kselftest@vger.kernel.org, shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org, 
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	corbet@lwn.net, dmatlack@google.com, kexec@lists.infradead.org, 
+	pratyush@kernel.org, skhawaja@google.com, graf@amazon.com
+Subject: Re: [PATCH v6 07/13] kho: add support for linked-block serialization
+Message-ID: <aiANtYRRDr5iO5QR@plex>
+References: <20260603032905.344462-1-pasha.tatashin@soleen.com>
+ <20260603032905.344462-8-pasha.tatashin@soleen.com>
+ <178046937151.468621.13398573538792303093.b4-review@b4>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <af8f8f318aae78a9534bef53e3b753bcf9767bff15aaf92f59e69e847db6b65c@mail.kernel.org>
-In-Reply-To: <20260603100438.2177817-2-zhaochenguang@kylinos.cn>
-References: <20260603100438.2177817-2-zhaochenguang@kylinos.cn>
-Subject: Re: [PATCH v2 1/4] LoongArch: bpf: Use amswap_db for BPF atomic xchg
-From: bot+bpf-ci@kernel.org
-To: zhaochenguang@kylinos.cn,chenhuacai@kernel.org,kernel@xen0n.name,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,yangtiezhu@loongson.cn
-Cc: zhaochenguang@kylinos.cn,hengqi.chen@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,loongarch@lists.linux.dev,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  3 Jun 2026 10:59:08 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <178046937151.468621.13398573538792303093.b4-review@b4>
 
---===============4628976069350686524==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 06-03 09:49, Mike Rapoport wrote:
+> On Wed, 03 Jun 2026 03:28:58 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
+> > diff --git a/include/linux/kho/abi/block.h b/include/linux/kho/abi/block.h
+> > new file mode 100644
+> > index 000000000000..8641c20b379b
+> > --- /dev/null
+> > +++ b/include/linux/kho/abi/block.h
+> > @@ -0,0 +1,56 @@
+> > [ ... skip 25 lines ... ]
+> > +#define _LINUX_KHO_ABI_BLOCK_H
+> > +
+> > +#include <asm/page.h>
+> > +#include <linux/types.h>
+> > +
+> > +#define KHO_BLOCK_ABI_COMPATIBLE	"kho-block-v1"
+> 
+> It's never used by block set and after looking at the following patches I
+> found that it's appended to LUO compatible string.
+> 
+> While this works for LUO, I think it should be kho_block_set_restore()
+> responsibility to verify the compatibility.
 
-> diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
-> index 76b723590023..636cfc524b02 100644
-> --- a/arch/loongarch/include/asm/inst.h
-> +++ b/arch/loongarch/include/asm/inst.h
-> @@ -783,6 +783,8 @@ DEF_EMIT_REG3_FORMAT(amswapb, amswapb_op)
->  DEF_EMIT_REG3_FORMAT(amswaph, amswaph_op)
->  DEF_EMIT_REG3_FORMAT(amswapw, amswapw_op)
->  DEF_EMIT_REG3_FORMAT(amswapd, amswapd_op)
-> +DEF_EMIT_REG3_FORMAT(amswapdbw, amswapdbw_op)
-> +DEF_EMIT_REG3_FORMAT(amswapdbd, amswapdbd_op)
->
->  #define DEF_EMIT_REG3SA2_FORMAT(NAME, OP)				\
->  static inline void emit_##NAME(union loongarch_instruction *insn,	\
+It should work for any component that relies on  kho_block. My proposal 
+is to use this method for other common KHO data structures (e.g.,  kho 
+vmalloc,  kho radix, future kho xarray). There is no need for them to 
+carry the compatibility string in their metadata, as whoever uses them 
+will include their compatibility string.
 
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index 24913dc7f4e8..f071d913e054 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -482,11 +482,11 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
->  			emit_zext_32(ctx, src, true);
->  			break;
->  		case BPF_W:
-> -			emit_insn(ctx, amswapw, src, t1, t3);
-> +			emit_insn(ctx, amswapdbw, src, t1, t3);
->  			emit_zext_32(ctx, src, true);
->  			break;
->  		case BPF_DW:
-> -			emit_insn(ctx, amswapd, src, t1, t3);
-> +			emit_insn(ctx, amswapdbd, src, t1, t3);
->  			break;
->  		}
->  		break;
+For now, reviewers will have to make sure that if the ABI header content 
+is changed, the compatibility string is updated.
 
-The commit message states that value-returning atomic RMW instructions
-imply a full barrier per the LKMM.
+> > diff --git a/kernel/liveupdate/kho_block.c b/kernel/liveupdate/kho_block.c
+> > new file mode 100644
+> > index 000000000000..4f147c308e6b
+> > --- /dev/null
+> > +++ b/kernel/liveupdate/kho_block.c
+> > @@ -0,0 +1,411 @@
+> > [ ... skip 121 lines ... ]
+> > +/**
+> > + * kho_block_set_grow - Expand the block set to accommodate the target count.
+> > + * @bs:    The block set.
+> > + * @count: The target number of valid entries to accommodate.
+> > + *
+> > + * Acts as a runtime notifier when new resources (such as files or sessions)
+> 
+> Not sure I understand what "runtime notifier" means in this context.
 
-This change only updates the BPF_W and BPF_DW BPF_XCHG cases.  Should the
-other value-returning atomics in emit_atomic_rmw() get the same treatment?
+It came from discussion with Pratyush, but I think we are on the same 
+page what they are, and I will just remove this.
 
-The BPF_*_FETCH cases still emit the plain amadd/amand/amor/amxor variants:
+> 
+> > [ ... skip 11 lines ... ]
+> > +
+> > +	while (count > bs->nblocks * bs->count_per_block) {
+> > +		int err = kho_block_set_grow_one(bs);
+> > +
+> > +		if (err)
+> > +			return err;
+> 
+> This leaks memory if more than one block is added.
+> 
+> > [ ... skip 31 lines ... ]
+> > + * unregistered, allowing the block set to release and unallocate redundant
+> > + * preserved memory blocks. Checks if the last block in the set can be removed
+> > + * because the remaining entry count is fully accommodated by the preceding blocks.
+> > + *
+> > + * Note: It is the caller's responsibility to ensure that entries are removed
+> > + * in LIFO (last-in, first-out) order (the reverse order of their insertion).
+> 
+> I think "in LIFO order" is sufficient :)
 
-arch/loongarch/net/bpf_jit.c:emit_atomic_rmw() {
-	...
-	case BPF_W:
-		emit_insn(ctx, amaddw, src, t1, t3);
-		emit_zext_32(ctx, src, true);
-		break;
-	case BPF_DW:
-		emit_insn(ctx, amaddd, src, t1, t3);
-		break;
-	...
-	case BPF_AND | BPF_FETCH:
-		if (isdw) {
-			emit_insn(ctx, amandd, src, t1, t3);
-		} else {
-			emit_insn(ctx, amandw, src, t1, t3);
-	...
-}
+Oh, I keep removing those :-)
 
-The sub-word BPF_XCHG cases (BPF_B and BPF_H) still emit plain
-amswap.b/amswap.h:
+> > [ ... skip 173 lines ... ]
+> > +		it->i = 0;
+> > +	}
+> > +
+> > +	entry = kho_block_entry(it, it->i++);
+> > +	it->block->ser->count = it->i;
+> > +	return entry;
+> 
+> This looks way better than the previous version :)
+> Thanks!
 
-arch/loongarch/net/bpf_jit.c:emit_atomic_rmw() {
-	...
-	case BPF_B:
-		...
-		emit_insn(ctx, amswapb, src, t1, t3);
-	...
-	case BPF_H:
-		...
-		emit_insn(ctx, amswaph, src, t1, t3);
-	...
-}
+Thank you. I will send a new version of this patch as a reply to this 
+email to avoid cluttering the mailing list.
 
-And BPF_CMPXCHG uses an ll/sc loop with no dbar barrier:
+Pasha
 
-arch/loongarch/net/bpf_jit.c:emit_atomic_rmw() {
-	...
-	case BPF_CMPXCHG:
-		move_reg(ctx, t2, r0);
-		if (isdw) {
-			emit_insn(ctx, lld, r0, t1, 0);
-			emit_insn(ctx, bne, t2, r0, 4);
-			move_reg(ctx, t3, src);
-			emit_insn(ctx, scd, t3, t1, 0);
-			emit_insn(ctx, beq, t3, LOONGARCH_GPR_ZERO, -4);
-		} else {
-	...
-}
-
-These are also value-returning atomics.  If the LKMM requires a full
-barrier for all of them, would these cases need updating too so that
-lockless BPF algorithms stay sequentially consistent?
-
-This was also raised by the Sashiko AI review on v2:
-https://lore.kernel.org/bpf/20260603101633.25FFA1F00893@smtp.kernel.org
-
-There is no Fixes: tag on this commit.
-
-The amswap.{w,d} BPF_XCHG path was introduced when the LoongArch BPF JIT
-first implemented BPF_XCHG.  Should this carry:
-
-  Fixes: 5dc615520c4d ("LoongArch: Add BPF JIT support")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26878707871
---===============4628976069350686524==--
+> 
+> -- 
+> Sincerely yours,
+> Mike.
+> 
