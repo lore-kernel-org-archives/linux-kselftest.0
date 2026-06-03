@@ -1,94 +1,89 @@
-Received: from us.padl.com (us.padl.com [216.154.215.154])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868B437E319;
-	Wed,  3 Jun 2026 01:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.154.215.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF8A384CCF;
+	Wed,  3 Jun 2026 01:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780450896; cv=none; b=mhav45RB047tPlkJGjxn1juDzOWAss8bnd6wc5gzMvDifid9w+xDykEzd1ZKgJyFNGdAEtwe+41Ggl20osWauoRaCqLWro2+mHsFR/yJB/ion33DMuljnKMdp2BPT0rltZbtI0u4R/taK9KRx2YNExQLxzV3cxaar38yEIEVjRo=
+	t=1780451376; cv=none; b=X+PJKTy8AxA7NI6Ocki365S5Wfgwjo1VWsrmPHgmFFPQDjW1FZmhIhQWg3Fz2QciD/Bu682f8DpWVJieFCpI25LBy+ONtcM2zbLowVw6lhnWAMcnKq2El4iv79zx22LDRIJ18QzMVTKA6kZNbAZyF2Z5o8F+liOeTvjFkHmS/g0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780450896; c=relaxed/simple;
-	bh=antjUfKm4W1pYTqXE3aEg6NNOtkzJSasuEtZZhVeWPo=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=f0uoNX9SG7AZGQ5yBwo5CCpm5gE7sIMVUqvnsWi5UDksgxMIqSpl2SWky8H4dKQ8BkAmv2MzthAGjAO3+VFhQ9I2KCZME7U6Jibz+SsBgvbB2/S3CvGHSIEtLJ0M12gTus4bS5/OrMe8au+TZovmPvWON+Cl4vIaVDdhXeKHuoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=padl.com; spf=pass smtp.mailfrom=padl.com; dkim=pass (2048-bit key) header.d=padl.com header.i=@padl.com header.b=HZYcnj18; arc=none smtp.client-ip=216.154.215.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=padl.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=padl.com
+	s=arc-20240116; t=1780451376; c=relaxed/simple;
+	bh=eiiIVuINwTsPUnnbhML53HJVRhKPFYxi6Yxalf/+Ddw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R1Y3NLN2M3I4dxePoi5e5O4fS4LHOWi1VHURL0UWXU+pBm0fqdsFo4B8iuABosBY7Y+CBAMDZB6gpnTdjaL3ArZ3R1L7VJILJ5XGpssXLtsYAsvhtfy3q59umupxrkwb6uMvL5e+POMDHTMFPlPpzZQtgxnMRtF2gsfZSYN3SOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=T2B6uQJN; arc=none smtp.client-ip=115.124.30.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=padl.com header.i=@padl.com header.b="HZYcnj18"
-Received: from auth (localhost [127.0.0.1]) by us.padl.com (8.14.7/8.14.7) with ESMTP id 6531ejR5029996
-	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Wed, 3 Jun 2026 02:40:48 +0100
-DKIM-Filter: OpenDKIM Filter v2.11.0 us.padl.com 6531ejR5029996
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=padl.com; s=default;
-	t=1780450862; bh=antjUfKm4W1pYTqXE3aEg6NNOtkzJSasuEtZZhVeWPo=;
-	h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-	b=HZYcnj18IitgOS7y9h3kj9PC7MkBsLr0ZomZLhWAz6cVgJAEBnvbPmmhk/86wwVZ/
-	 fhbmfhGqW9Ivv20UURwfmRjBkrlTvzmEsQPvws7Vv1WeWXVfnF1qbfow2nr/TjiLWo
-	 REhTyfcWjq+1dZA7TI6viZfkcojvQiXaXlkKIqpRWZnvsQqrWxp7rFjJFxCjyQxK8/
-	 SNAx9/AWWsgR8nI0jHJNBVA4lP155dM8eqOJGp6ZZCUCHsPddHwgwckc30IUrhHrLb
-	 nGUAEwZL91Ic69VLMzokm1Y8lL5AuRW+YIiUYzyThIgudVoOsPdHymkJo63BOODK9v
-	 +Z/Z7+fiMAF8g==
-Content-Type: text/plain;
-	charset=utf-8
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="T2B6uQJN"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1780451371; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=5c6u0pQsZNF6kyUVcoFwMxuHgokBKqWxj4uNhSsZtgs=;
+	b=T2B6uQJNfcQ7+4Ra0bmuSasZ64k9hyrb8bNbYBr5aS9xmtki1xthED7h3CBkOv0CgEG8hJooqymsek/LKhsqszcbpmNPBdGfcOviHxRdxRtcgXIbM5Nagn4nc9SIpCryyClYA0u8nG9qeSUHIuQ95MLd5JWqjLwJagotzJvu+LE=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X45nr59_1780451367;
+Received: from 30.246.177.175(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X45nr59_1780451367 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 03 Jun 2026 09:49:28 +0800
+Message-ID: <a88b8245-04d1-41db-9507-aaddfbd8e042@linux.alibaba.com>
+Date: Wed, 3 Jun 2026 09:49:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.500.181.1.5\))
-Subject: Re: [PATCH net-next v2 5/6] net: dsa: mv88e6xxx: MQPRIO support
-From: Luke Howard <lukeh@padl.com>
-In-Reply-To: <0402DFFF-634A-40C4-BC1E-B038F20926FF@padl.com>
-Date: Wed, 3 Jun 2026 11:40:35 +1000
-Cc: Cedric Jehasse <cedric.jehasse@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-        David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bridge@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, Max Hunter <max@huntershome.org>,
-        Kieran Tyrrell <kieran@sienda.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <89BA4203-110E-4767-895C-A2808602FAF8@padl.com>
-References: <20260602-mv88e6xxx-8021qat-mqprio-v2-0-72be14522e7c@padl.com>
- <20260602-mv88e6xxx-8021qat-mqprio-v2-5-72be14522e7c@padl.com>
- <t44kmhk6gqxnwhdvo7svouexwelwsya7zgukpbv3cxpfsmutqa@y3rjoj3tvqce>
- <A662D3F9-18DD-43C9-A43D-912E5A8A4360@padl.com>
- <8C6AD966-2C28-4BEF-95C4-1B2AC3751513@padl.com>
- <29c09316-c911-456e-acc5-e18402da4bd4@lunn.ch>
- <0402DFFF-634A-40C4-BC1E-B038F20926FF@padl.com>
-To: Andrew Lunn <andrew@lunn.ch>
-X-Mailer: Apple Mail (2.3826.500.181.1.5)
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 7/8] riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE
+ and HAVE_LIVEPATCH
+To: Wang Han <wanghan@linux.alibaba.com>, Paul Walmsley <pjw@kernel.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Alexandre Ghiti <alex@ghiti.fr>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Chen Pei <cp0613@linux.alibaba.com>, Andy Chiu <andybnac@gmail.com>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+ Deepak Gupta <debug@rivosinc.com>, Puranjay Mohan <puranjay@kernel.org>,
+ Conor Dooley <conor.dooley@microchip.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+ Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
+ Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, oliver.yang@linux.alibaba.com,
+ zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
+ <20260528082310.1994388-8-wanghan@linux.alibaba.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20260528082310.1994388-8-wanghan@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-> On 3 Jun 2026, at 10:15=E2=80=AFam, Luke Howard <lukeh@padl.com> =
-wrote:
->=20
->> On 3 Jun 2026, at 9:55=E2=80=AFam, Andrew Lunn <andrew@lunn.ch> =
-wrote:
->>=20
->>> But there=E2=80=99s an alternative, more invasive, solution where =
-the MQPRIO
->>> configuration is attached to the bridge itself.
->>=20
->> What about ports which are not attached to a bridge? They are just
->> standalone, have an IP address of their own, etc.
->=20
-> That is a good point. So, barring a switch feature I=E2=80=99ve not =
-yet found, I think the only options are either to drop MQPRIO offload, =
-or to accept that ports with no MQPRIO mapping inherit the per-switch =
-mapping. Arguably that=E2=80=99s the case today anyway (each chip has =
-its own default frame priority to queue mapping), so the user should =
-have no expectation of queue assignment on a port that hasn=E2=80=99t =
-been configured.
 
-We could add (e.g.) bridge_setup_tc to dsa_switch_ops, which (in the =
-mv88e6xxx implementation) could validate the bridge contained all user =
-ports. But it would not be possible to block a port from leaving as =
-port_bridge_leave cannot return an error, and tearing MQPRIO config down =
-silently would be a different sort of bad.=
+On 5/28/26 4:23 PM, Wang Han wrote:
+> Now that the metadata frame records, the kunwind state machine and
+> arch_stack_walk_reliable() are all in place, advertise the capability
+> to the rest of the kernel:
+> 
+>    * select HAVE_RELIABLE_STACKTRACE under FRAME_POINTER && 64BIT, so
+>      only the configurations that actually have the metadata records
+>      and the FP-based reliable walker enable it.
+
+
+The 64BIT gate is conservative scoping rather than a hard technical
+requirement: the metadata frame record, kunwind state machine and
+arch_stack_walk_reliable() all build on RV32 too (and the
+call_on_irq_stack change in patch 2/8 actually fixes a latent RV32
+issue). However, the syscall livepatch selftest and module relocation
+path have only been exercised on RV64 (QEMU virt SMP=2/4/8). The
+64BIT gate can be dropped in a follow-up once RV32 has equivalent
+coverage.
+
+Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+
+Thanks.
+Shuai
