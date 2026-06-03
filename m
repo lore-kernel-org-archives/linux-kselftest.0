@@ -1,162 +1,156 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010054.outbound.protection.outlook.com [52.101.46.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2447C401485
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 21:27:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70DB3E5A2C;
+	Wed,  3 Jun 2026 21:27:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780522028; cv=pass; b=fAZLkmxCEamTzmC3EW1OnYLKNlYjn/lHZ6ogoCOBxwLPvNF4n3yFaYclwCrHX/1NzLhaOuvw9CtDJA58XLKwKrCawa6bu07A2WZ9cRYFJIP8SHBU7uxhNYCm4Xl3kgYh948SR4aYZY+5KPnvIAnk2S8zgBEiI4RsZ36+P1k69uY=
+	t=1780522059; cv=fail; b=YNHT2EkRfvM4ftty15TfFZISDYwuS9eKfzj8uKgI75CucleC/J6ccuxln4uLNYgqC8qkNOFl2ozytJVsk5hEXgfwPLlRr7exo6j1gUKEqPjJC44q1MRy1Eq0FQhRObh7mrMvAAxQsiwhW1Z0pEcGfWm0YSWtw0P23yH9v8cOiyw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780522028; c=relaxed/simple;
-	bh=R6WSQnJIsA+v35uGQtkq6O8mYZ7zBggzE/oxP9twkYg=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JqbNbktL+HkfLOFpFEH9HlCi2vrx+zd/uD2ke65X15vrGOjekPNgSS18Cr4/H1zgmvjNXOlmT1cggNu1Slo8LXu44+P5Mwc+hxHLhxmLdLzn93bCWOB62NoZb1a/tgVIL59p0/+K9Ujl5v1uZyzOXZPw+IWVDXovt1N2wc1gUC4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WbpOTiLd; arc=pass smtp.client-ip=74.125.82.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1780522059; c=relaxed/simple;
+	bh=GlluWPAvxqarxEiZ/YtSMwj+nr6Wew39RVtshk12Pyo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lhMc2AHfaty3vG/h/Tb77nc0EkXHhOBV0htN/KCtrcrBpWcKdbKNRV4WNz1PLa/KAYLNujFO966XQkYSo46QBOXIJKadwiyioTeT+OAlf6QzvpW7irkFemua63F4lfEki6lNaW3fHuN8DlGsnoCMjDi105Mn+pg2dtYcM4gGw1E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=pMSGpjcN; arc=fail smtp.client-ip=52.101.46.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WbpOTiLd"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-137f0aa125bso36396c88.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 14:27:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780522026; cv=none;
-        d=google.com; s=arc-20240605;
-        b=HJM7I3WDytBvo6zr0d5ZX11w4VXYX9vTqE8LQTpvTJKdoRqI/RWAsi9eS1VEEkf8sj
-         hloRR0DoziHWUwOsEvYfIVpQqCz6ll+vW19iIlIu7M0MwF9zYawE4m+cd3YPKmMMG6C0
-         12TORUZX3LeWIgIEktFAPuUvVhNTDGLAMiyf0lCqsVa/dxqwLaT7T/ic8GYKSqnEZ0ad
-         R8u2jJx0nGHsKidGx8QBKsvt+kIkswE7HYJv/rnp+VHzGRq1QjeC2l4iR5pcS1K6/TQ5
-         Dtk0XxwyRAJFqekfqL7ioTO7xiDuh19FlMNucrjUdXSX4HT5ZB0r5PfNyztqRu+W6ACe
-         cR+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=kXmCClVJ6sffKdNaL7Yv6BlzVuWsmG/JEBjIeBbKKjE=;
-        fh=Vx/rji01Jib9awx6LBPn89gkkG2qenE28T3kr4JqN/M=;
-        b=LJNB6FwbGzx+cfjnczTwuqv+i6F2aaMnBhaMgbu674SZYa9AOA7VnGHqYUxjLyfUnU
-         qsMVytIAywcJsjUd++si4EaycXrXAxnN2sNAlUsnAdYVk1iYmDNcyvtsArZJHO3LYXjj
-         NaJ5zZelhyrc2J7uPPhMV8eF5Gi45wkxGM9UvMNU+3xS7h643plRxAhufhuk4m+EZLZi
-         zUPvvCjqGCE7Bz1AeUA5dDTOaff2iqnjFWLql68PHzCwaL77d5Lr1PixONj9oCr8ADmp
-         qKUOmOVcJmJiESlnVrVg8EkMqXyowPxm/WDbMG9ncVxbPM2peSQw+S4iN1Ene5ae/hGt
-         QQ7A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780522026; x=1781126826; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kXmCClVJ6sffKdNaL7Yv6BlzVuWsmG/JEBjIeBbKKjE=;
-        b=WbpOTiLdHBvzmwiTpMPVgbnII3vNyO3SNsoPLH6VIEBacZOPD4FZRi9ouBmHzGfdyz
-         qQr4UPLmfVX0Mna1x41GMFNRiJ8Tp5lxjh0qK2tOVIkO1Qx2eu5e61n9gM0VwSqQRiXz
-         inzjmgz0zLFYc43ghOoSHDJoDaSuI0qkD/ZgDe543j47DoVn3kqcDvcT2bIpL4xc8VDq
-         CEB7XicOiRBqR7dVAPk+kgjQJYxCxZ93tk/Ljic4NKSKnTRB+EEYoFl6psuEc5NDjHnC
-         B6iSDmEgjThK1D/INgd02VnCj/BaRFqwLruf0W6rr6YaUbM/nHavujSCNm9JhcxARVqE
-         AYlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780522026; x=1781126826;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kXmCClVJ6sffKdNaL7Yv6BlzVuWsmG/JEBjIeBbKKjE=;
-        b=F0UoJfZwR9WDt6VzJfhZ1/+i0fYKZNSize14CgL461kz86gKfZ5JkWn9rXbVrelXrm
-         nEyTjsaycKZbo15QfkOEyBwMSvAYuPtZNyHOs1my+Ny/QrGYaVoQ57sAxOTkS20eqMzZ
-         eCJNG+NcVqlMrst4EzW6O06TS9JGfLTJYXPV0kDZmYpqCly2mZ7CsjlbFd7/EfiPZGi1
-         rJDuKnO10teS49h5yhBdRdvYnvpKJCRIB1pY91GHu1ipGQoJpLG08NoNtn9fDf2lKJk3
-         03NoaY2nShgVhYfMEq0orMyPl6221HNw7I6TZrDzlFxrd7786l73SZcnYAjif3vz1NwI
-         L30g==
-X-Forwarded-Encrypted: i=1; AFNElJ83z8vZ2XrTCUe+h16FuEgDIu25dfKqxGgaMsnPsWnVm+cTk+ZB1dfjdHwoxXf916kDyFC8xx/hGey12gWP1DQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7wlazIWxROkCowX6lUVtydBeMf5lf5QrVd4lmAu91GcQvvrak
-	Ug7o3GF/HTa+ziMDh3qVJHdX+FsPCpW1bFNCi6ANAiL9i44d/Q+CW67UBuTwOv/FwBuDAeiU8dX
-	kWkx2TJmUdqesz0DZDkoXhJsnTpK7SeKtGIAJFmw/
-X-Gm-Gg: Acq92OF4qB/2AAOdsCq5QWrNAyeAoTeCZCs6owDKGjwhfdP28Wp57yDWfbW0xCMX3C+
-	tDrEY2Wh4xulw0tsuZB2Ub5ifMfUKCNS6JCgH+ZbfJwrk/bMzxqriWXHE/dwE+KP2kqdlBjVF6O
-	hKdE7+fBaqTjxmrQJbO3m93iTSzTDrK9T1koktDBE85Fr9EDuT/h67VwHjKH/81qhoL3Q+PBeb4
-	l1NpuOBxsXa7zbmgC2mEjMtMy+Yz/+DKY0i46BPvzlThKY4L835AZBcZHcPAfXMQrHNEKABI6j/
-	Pp+Qj/dQ+IggRT0nZYpr2APP/EpgsC7AbYXirJXml6DyY0knAQHPCPEX5S7XqDhv+i9hVqyKBOi
-	zrgGF2e/ApnrSBIQ=
-X-Received: by 2002:a05:7022:1285:b0:130:9b78:b17b with SMTP id
- a92af1059eb24-137f6befdaamr2412541c88.38.1780522025275; Wed, 03 Jun 2026
- 14:27:05 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 3 Jun 2026 14:27:04 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 3 Jun 2026 14:27:04 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <20260522-gmem-inplace-conversion-v7-0-2f0fae496530@google.com>
-References: <20260522-gmem-inplace-conversion-v7-0-2f0fae496530@google.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="pMSGpjcN"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=y6OdzGIFtXhydB4xw5f5WVmJAJ+lraTnJrTYrdg76ZWTeGOKCRQI1PYeZKU2Apgu59PZhuUzERd/XPoKlvaAA69Xna/mLTqz0Uk8aaupdXjQl74q3TZIdhpEz8O+DbkIqgRbjjvPvA1dTgPGFrM46BUromq7X69yhOYoWeemes9Z7+mTWjVbhRbnPGdnX48i4HHZyj5aAVkPx4E+NMxLFb7Z8jra9iRgw7iFF2pR/CQf9qY9yZsvZMrdc7bXrLMHNbvD70RzQtGByv1i227HZpIFz+8t6r7YdHFZ9AgKaXuZsz4gkzKy6tt520SDUq8SXheu6yMD1T0CA9iKcPHKaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BJDXbc81T+hkbpxmKbDVlqYyQXz+8BEQuucdfVqpurs=;
+ b=cO1V2ErSct7vgXe4nauJ+mNLH/WrK+gAwJKcNpvkPxXy/UckJGZ00dElAJgBpmdkhYU2KLlhnwCrim4VbB+fYXmFC1UrRQHa2IKPPcrwZA1s9Lu2DyEN+a193r9cYO+0tww8JoSUowxb0GygyaZiR+LnwvFFt0dQGTnNAetKs9StbSKqwkuxuuHGYa7unS7Y+5CfSofeuV509ynjKW0VaVeuW5rm/5sxe3wkBk92Mvxej7OBMWYi1pr2lN2m6KlsA/UrI20wwPZCREMe9/vrP76xL2yLOgC05R4jrtn0xUO8MQuYJ4svG3Oc9HfWIWe1dqA8cROqErwYbGdC5NjXlg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BJDXbc81T+hkbpxmKbDVlqYyQXz+8BEQuucdfVqpurs=;
+ b=pMSGpjcNuPLtmSNs+KzMt7kOxG0D44oO4/lJ9nZuqi2mSzSfoNXi/9CP8A2xA4uIBhTKUQTuu1GcmynW4YcQjn4vjtk9q6wAUbdkhRuy+UyzUWIwVstmPkPFmdKHKO3vhpLc5j+dhll6MzVwgc3sH/LmWXepEmxy5GRT9vdjaR/PX14OTvbAmY2UgMKZ6yuJ4ToVG4mvDX1dl0MX32yZnGqlSuNdpu5w9kcKjKbMMwnyqyRRXBZZ4r/0d/2t1qhqIyePn9uP919PPEjcCqOimW18YulUyDEbKTIifU6ffbg1666eDk3xSH/HX83WW8YvfQqSh3q+niOIk4+p+sWscQ==
+Received: from DM6PR04CA0016.namprd04.prod.outlook.com (2603:10b6:5:334::21)
+ by SN7PR12MB8103.namprd12.prod.outlook.com (2603:10b6:806:355::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.7; Wed, 3 Jun 2026
+ 21:27:33 +0000
+Received: from CY4PEPF0000EDD6.namprd03.prod.outlook.com
+ (2603:10b6:5:334:cafe::55) by DM6PR04CA0016.outlook.office365.com
+ (2603:10b6:5:334::21) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.92.7 via Frontend Transport; Wed, 3
+ Jun 2026 21:27:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CY4PEPF0000EDD6.mail.protection.outlook.com (10.167.241.202) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.92.5 via Frontend Transport; Wed, 3 Jun 2026 21:27:32 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 3 Jun
+ 2026 14:27:18 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 3 Jun
+ 2026 14:27:18 -0700
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Wed, 3 Jun 2026 14:27:17 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Will Deacon <will@kernel.org>, Jason Gunthorpe <jgg@nvidia.com>, "Kevin
+ Tian" <kevin.tian@intel.com>
+CC: Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+	"Shuah Khan" <shuah@kernel.org>, Pranjal Shrivastava <praan@google.com>, Kees
+ Cook <kees@kernel.org>, Yi Liu <yi.l.liu@intel.com>, Eric Auger
+	<eric.auger@redhat.com>, <linux-arm-kernel@lists.infradead.org>,
+	<iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH v1 0/4] iommufd: Cache invalidation hardening and SMMUv3 batching rework
+Date: Wed, 3 Jun 2026 14:26:52 -0700
+Message-ID: <cover.1780521606.git.nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 3 Jun 2026 14:27:04 -0700
-X-Gm-Features: AVHnY4LsErH-4tZ18bsf2DQ3mNo93pDC9YYwJb_gB-LjwgbEb6k0MtNG-ciXWJs
-Message-ID: <CAEvNRgGpaggjd3=ooyzv7iEbmA-x1mWJHgjLSjPi8=5CPrk-yQ@mail.gmail.com>
-Subject: Re: [PATCH v7 00/42] guest_memfd: In-place conversion support
-To: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>, aik@amd.com, 
-	andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org, 
-	chao.p.peng@linux.intel.com, david@kernel.org, ira.weiny@intel.com, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD6:EE_|SN7PR12MB8103:EE_
+X-MS-Office365-Filtering-Correlation-Id: d8c57470-b901-4161-fb87-08dec1b6ec8e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|1800799024|7416014|376014|82310400026|13003099007|3023799007|18002099003|6133799003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	YwQ/cdrY6Sq1yMdrpTbejO21JcQRQBw534Su8hY0ffcz0+Z7ZOiZ8H5oQXGuwFgpbdCDuaRLcePfnGGrdF7k7VmHSHzePqyweR95mz7oqN6AZSeHv2jKF97E/JiK0CrkjzWkkwxED5i50Q7+cQ83BgnNWsebfXgmDorpB+lpYFqBEqjBu/gtVaQirLUoar4WuiQEznLCxMc7TcVAapBtzPGlEPQTBeBLDM8WD19Vk4jcfX5RfPKNDG10tP/VDLV54jwBJgrTqJtHynqMwpMJiq/TlV2to+qEzABT1OEDTg3WV9s2YmjOEXqg5JvEcAk/XdSCY3w8UROCAZPJezhHbKcUdvuPIyT+J/b9bzz0YjlFPFlN40VeN2QSkHikAlaPARhJpzloVWlzZHp/Z9zyQrCtlAA6Cq8n9d3tfyixdCgcb7p5DWX+2RvuCms0kscmwDlK1/rtGBNht5p2O9s1lSeaUOV+TFQeCGykM3uDlmjK3YjydpSlTG83fIMSDh7oltVM79hml9yU9GGTl4SQURTIDSY77Jme475aM5MfFvKhCYLuZKCRrQSzGAPSJhwuNHBHCgRvW6TIJcBnraFWt3/6wylpTKMAO5uMJjB5wAQMnjuVqtrhrvwzPwe/9fQrHQqOKy5GZPoeeGAywqRoXXihdIWokxoqXuT2+bt44WkJjPUksgRAu+WUbT1IhP3UjKzbbzlTITU6URo4kk4lYpqGKc8nY7RBgtTIV/Xw0mE=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(1800799024)(7416014)(376014)(82310400026)(13003099007)(3023799007)(18002099003)(6133799003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	B4Iqs3ym2tcE8547TzHSCQxfiV9xH0mYwq9V9SmPP1HOecQmZq7/+tlr+s8kfi1lSecUzd3lOC/YaNYF6yVtkTG/6rQeBHlldT8H4rcyvZj70g8p6XxANKEtoLcPBG0JCo3S+XjEruNHO+C0mfXLKBW3V5f8DAI33r0qDQnt8L5j1LFo6i30N1Gb9LcDfNqqULHwQ/JSPhDeiJcKZLJ1RHuNX8jsHJyr087E0OQOXqXo1Xt+hzDwZKt9h0JIkbgISW4DpRl9fC8YVwdelXXjX61TsdRY2/+Bgb4MclvJeXuvqt8JrXQvAMR77cez1+E0jjnEsmRS1/LKgmQiuCKUFDIW8lFAiQuOTW7QxnfJWNznwkWmbQ0A3dWmN0YLQhaxvOtxnH3RK0Edrk9FHVUVFjjPZFNtYFGFORQqMXfDAEWfjMMXyX0JWuVthr1X4sGJ
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2026 21:27:32.8870
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8c57470-b901-4161-fb87-08dec1b6ec8e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EDD6.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8103
 
-Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-writes:
+Sashiko pointed out several issues in the iommufd invalidation path, which
+also prompted a rework of the ARM SMMUv3 vIOMMU invalidation handler:
 
-> This is v7 of guest_memfd in-place conversion support.
->
+ - entry_len is user-controlled and unbounded, so the trailing-zero check
+   for its forward-compat fields can scan gigabytes of user memory without
+   yielding, long enough to trip the soft-lockup watchdog.
 
-Here's the outstanding items after going over everyone's comments
-including Sashiko's:
+ - A large entry_num drives a backend's per-entry invalidation loop with no
+   reschedule, e.g. the VT-d nested path, pinning the CPU.
 
-+ KVM: TDX: Make source page optional for KVM_TDX_INIT_MEM_REGION
-    + Need to move page clearing into __kvm_gmem_get_pfn to resolve
-      leak where populate can put initialized kernel memory into TDX
-      guest
-    + See suggested fix at [1]
-+ KVM: guest_memfd: Only prepare folios for private pages,
-    + s/non-CoCo/CoCo in commit message "INIT_SHARED is about to be
-      supported for non-CoCo VMs in a later patch in this series
-    + Use Suggested-by: Michael Roth <michael.roth@amd.com>
-+ KVM: selftests: Test that shared/private status is consistent across
-  processes
-    + Improve test reliability using pthread_mutex
-    + I have a fixup patch offline.
-	
-I would like feedback on these:
-	
-+ KVM: selftests: Test conversion with elevated page refcount
-    + Askar pointed out that soon vmsplice may not pin pages. Should I
-      pin pages through CONFIG_GUP_TEST like in [2]? I prefer not to
-      take a dependency on CONFIG_GUP_TEST.
-+ KVM: selftests: Add script to exercise private_mem_conversions_test
-    + Would like to know what people think of a wrapper script before
-      I address Sashiko's comments.
+ - The full-array copy helper copies the array twice on the equal-size fast
+   path: once in bulk, then again entry by entry.
 
-[1] https://lore.kernel.org/all/CAEvNRgEVC=fFuKVgZYvWyZD7t_zvUZihFG8hrACjvtkD5cwugw@mail.gmail.com/
-[2] https://lore.kernel.org/all/baa8838f623102931e755cf34c86314b305af49c.1747264138.git.ackerleytng@google.com/
+ - arm_vsmmu_cache_invalidate() reports converted-but-unsubmitted commands
+   as handled on its error paths.
 
->
-> [...snip...]
->
+ - It sizes a single kernel allocation from the user-controlled entry_num.
+
+ - It rejects an empty-array data_type probe that the uAPI allows.
+
+Fix them properly.
+
+This is on Github:
+https://github.com/nicolinc/iommufd/commits/smmuv3_fix_iommufd-v1
+
+Nicolin Chen (4):
+  iommufd: Set upper bounds on cache invalidation entry_num and
+    entry_len
+  iommufd/selftest: Add invalidation entry_num and entry_len boundary
+    tests
+  iommu: Avoid copying the user array twice in the full-array copy
+    helper
+  iommu/arm-smmu-v3: Process vIOMMU invalidations in batches
+
+ include/linux/iommu.h                         |  1 +
+ .../arm/arm-smmu-v3/arm-smmu-v3-iommufd.c     | 91 +++++++++++--------
+ drivers/iommu/iommufd/hw_pagetable.c          | 11 ++-
+ tools/testing/selftests/iommu/iommufd.c       | 15 +++
+ 4 files changed, 81 insertions(+), 37 deletions(-)
+
+-- 
+2.43.0
+
