@@ -1,133 +1,111 @@
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C4B283FCF;
-	Wed,  3 Jun 2026 02:10:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59833D7D77
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 02:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780452653; cv=none; b=Xj0l9Px7x3h0iRb97l+x48cNVj5r3Vq0EcPwSpgKD67ltPHv1ooIz+LITpeQRKawhuu81K0NIz5cGuOkiqMEeHPLQkf4jQdsSaMew3tSxx0hrNKwEnT50n+z3HXPKgQLxfN3p6Em2YuDlsucNpL0xmGPh+dKP4g4eECkKyHiSEg=
+	t=1780452700; cv=none; b=qZNY1iuIM3cMfKUdbvNdYBr2FF3+DXWaK44IcYiGjLGDV4wSDFk2jHim25q97ooCNbqbWVwGUyxIJrlWOR7ardzzdJEWPDhAG0+EouPq3d5MqlzmcmBtmImO3SwgMSHg8mEqAZhSp0RK5g4wAu4/HvStu0CDcByXtu9LPh5Xjgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780452653; c=relaxed/simple;
-	bh=sXwvZ3wYOxFDQXt0kfCdHokeQDrQ2QizOVau/+esg4M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qWDWxz6AiV8iCBXj/A6DFAq9zYy+GFSrApi7UcseFA/59ubesf7KQyK2iqbPKGGOO+00QCgHNnTF6OG+Mgt68iZCaeH0c0oJLREPjsl6O/HYT8BPPxm2L45R9TWLKuTJeJaWEhZDtI9km5xvTD0UZUaclr+bFhgAKxlqv6X8svU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=PdQ9892K; arc=none smtp.client-ip=115.124.30.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1780452700; c=relaxed/simple;
+	bh=lQhnx1Sc9lVzGUfF2mzbQ61SmFZDB6lO5OckYW0liV8=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=c2IojHVmgW9yES5+LiHxW4PGnl86SBQU25BnWBY4Pi7EALC14Xq/6dhyqWqSQLoNSmUsT08tTLhkE1z9eRkDNrtd4VA/SoSD2dMFrgK0cmEg5PvY1lLLdnzpfqEkPRVmzB0QyvP5CP1xDvduxQt8yz1v5axlUc9LGNedQOu8xgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Fet6fDSY; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="PdQ9892K"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1780452649; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=Jv3cJulouSWGCvGi6TS1IMCaE/rqytDPu3rilFU0XAM=;
-	b=PdQ9892KisRjKniNqwNvBrPBbRq95IfB9m4CDMSoqRaJtuAVVn0WhQNcM5u5UjO5axes7st/Dz3DfepyMAEiSF/KRgCj3uX6niBrXtSvXhKicchdpXFj4vfXLoU4qir6AgvEifNR8+X9DQgBeg50mjCS5k+cwvqfd+e54wK6boQ=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X45l.8N_1780452644;
-Received: from 30.246.180.204(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X45l.8N_1780452644 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 03 Jun 2026 10:10:47 +0800
-Message-ID: <6753385b-c2ab-4ed0-9400-78ce967450ba@linux.alibaba.com>
-Date: Wed, 3 Jun 2026 10:10:44 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Fet6fDSY"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/8] scripts/sorttable: Handle RISC-V patchable ftrace
- entries
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Wang Han <wanghan@linux.alibaba.com>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Chen Pei <cp0613@linux.alibaba.com>, Andy Chiu <andybnac@gmail.com>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
- Deepak Gupta <debug@rivosinc.com>, Puranjay Mohan <puranjay@kernel.org>,
- Conor Dooley <conor.dooley@microchip.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
- Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
- Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, oliver.yang@linux.alibaba.com,
- zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
- <20260528082310.1994388-2-wanghan@linux.alibaba.com>
- <0a913398-3d0c-472e-89c4-062052eae04d@linux.alibaba.com>
- <20260601095746.70c01d24@fedora>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20260601095746.70c01d24@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780452696;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fWcXO5uoIwwgO4Aa+YYZakt6JMfCreyx3cspW4io9Lw=;
+	b=Fet6fDSYiGjeiF+vRO7z6BJFZX/dR9CMeWUIFtJFE9creS+yD0JQBGuWgGQUhyP6XrNmHh
+	Z965wlncTfP1tOwChoVENLJB8dzP9PWkSK2e+l9omXLG0HKsFd6y4J8uyFX83oe+kM9BtW
+	uFt/qF9a1de8Y91NqhGy9DIvSJvw7gE=
+Date: Wed, 03 Jun 2026 02:11:33 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Kunwu Chan" <kunwu.chan@linux.dev>
+Message-ID: <38c4d77974349f9783478a04c46df6f975d41c84@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH v2 0/3] selftests/damon: misc fixes for test bugs
+To: "SeongJae Park" <sj@kernel.org>
+Cc: "SeongJae Park" <sj@kernel.org>, shuah@kernel.org, damon@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, "Kunwu Chan" <chentao@kylinos.cn>, "Andrew Morton"
+ <akpm@linux-foundation.org>
+In-Reply-To: <20260601142234.111301-1-sj@kernel.org>
+References: <20260601142234.111301-1-sj@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+
+2026=E5=B9=B46=E6=9C=881=E6=97=A5 22:22, "SeongJae Park" <sj@kernel.org m=
+ailto:sj@kernel.org?to=3D%22SeongJae%20Park%22%20%3Csj%40kernel.org%3E > =
+=E5=86=99=E5=88=B0:
 
 
+>=20
+>=20On Mon, 1 Jun 2026 11:23:11 +0800 Kunwu Chan <kunwu.chan@linux.dev> w=
+rote:
+>=20
+>=20>=20
+>=20> From: Kunwu Chan <chentao@kylinos.cn>
+> >=20=20
+>=20>  This series fixes several bugs in the DAMON selftests. Most are
+> >  trivial but cause tests to silently pass when they shouldn't, or
+> >  fail prematurely on slow machines.
+> >=20
+>=20Nit. Only patch 3 fixes a fake test pass for "avail_operations" file =
+existence
+> test, and the series is not doing something for slow machines, right? I=
+ think
+> the last sentence should be updated, for example:
+>=20
+>=20'''
+> Most are trivial but makes test output wrong or even silently pass the =
+one for
+> 'avail_operation' file existence check.
+> '''
+>=20
+>=20Other than that, all look good to me, and already have my Reviewed-by=
+: tag.
+>=20
+>=20Asssuming you are ok with the above change, I applied this series to =
+damon/next
+> [1] tree with the above change. If this series is not added to mm.git i=
+n short
+> term (~1 week?), I will ask mm.git maintainer (Andrew Morton) to pick t=
+his.
+> So, no action from your side is needed for now. If it seems I also forg=
+ot
+> doing that or you cannot wait for my action, please feel free to direct=
+ly ask
+> that to Andrew.
+>=20
+>=20[1] https://origin.kernel.org/doc/html/latest/mm/damon/maintainer-pro=
+file.html#scm-trees
+>=20
+Hi=20SJ,
 
-On 6/1/26 9:57 PM, Steven Rostedt wrote:
-> On Mon, 1 Jun 2026 14:17:08 +0800
-> Shuai Xue <xueshuai@linux.alibaba.com> wrote:
-> 
->>> diff --git a/scripts/sorttable.c b/scripts/sorttable.c
->>> index e8ed11c680c6..4c10e85bb5af 100644
->>> --- a/scripts/sorttable.c
->>> +++ b/scripts/sorttable.c
->>> @@ -891,17 +891,21 @@ static int do_file(char const *const fname, void *addr)
->>>    	table_sort_t custom_sort = NULL;
->>>    
->>>    	switch (elf_map_machine(ehdr)) {
->>> -	case EM_AARCH64:
->>>    #ifdef MCOUNT_SORT_ENABLED
->>> +	case EM_AARCH64:
->>>    		sort_reloc = true;
->>>    		rela_type = 0x403;
->>> -		/* arm64 uses patchable function entry placing before function */
->>> +		/* fallthrough */
->>> +	case EM_RISCV:
->>> +		/* arm64 and RISC-V place patchable entries before the function */
->>>    		before_func = 8;
->>
->> Nit: The shared comment now sits under `case EM_RISCV:` but the two
->> lines above it (sort_reloc / rela_type = 0x403) are strictly
->> arm64-only — they configure the RELA-based weak-function fixup that
->> RISC-V does not need. On a quick read it is easy to wonder if RISC-V
->> is implicitly inheriting that path. Splitting the comments would
->> help, e.g.:
->>
->>          case EM_AARCH64:
->>              /* arm64 needs RELA-based weak-function fixup */
->>              sort_reloc = true;
->>              rela_type = 0x403;
->>              /* fallthrough */
->>          case EM_RISCV:
->>              /* arm64 and RISC-V place patchable entries before the function */
->>              before_func = 8;
-> 
-> Makes sense.
-> 
-> Care to send a v3?
-> 
-> -- Steve
+The updated cover letter looks good to me, thanks for fixing it.=20=20
+Thanks=20also for applying to damon/next.=20=20
+No=20further action needed on my side.
 
-Hi, Steve,
+Regards,
+Kunwu
 
-It's a pure comment cosmetic, not worth a respin on its own. But for the
-rest of the feedback on this series (the frame-record metadata contract
-in patch 2 and the dead state->regs field / Call Trace output change in
-patch 6) are the ones actually worth a new version.
-
-Just to get the routing straight: are you planning to pick this one up
-through the tracing tree on its own?
-
-It feels like a good candidate for that -- it's an independent
-regression fix (Fixes: 0ca1724b56af) that breaks *all* RISC-V dynamic
-ftrace, not just livepatch, so it shouldn't have to wait on the rest of
-the livepatch series.
-
-Thanks.
-Shuai
-
-
+> Thanks,
+> SJ
+>=20
+>=20[...]
+>
