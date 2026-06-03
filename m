@@ -1,220 +1,82 @@
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us.padl.com (us.padl.com [216.154.215.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B0F3FD96B
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 03:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92BE435A3B8;
+	Wed,  3 Jun 2026 03:30:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.154.215.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780457368; cv=none; b=jwT1AX/IxquZ79fKJ3cA1cwwPCAPQ1gQ9rRXhpl2z/G3UgTnVlO/dwmRkXX/DZQziNL0CxMuCSbrMtEJRqJKWZZJwKo+EWNSCs/rncrkLvEiw7yzonhPlzywLqhHS2IriMD+oEoM6xQ2I8ULtJmfDPcK//J/WTa4UQk5gvSxcdE=
+	t=1780457450; cv=none; b=sjchPXjfd8SV/cnf71Ma6k2tZe/GFyD5bPBPnmG5NRbUGKpplyh2NoHHATNXPhZ+3g3U5yTS+vECdwSmsrT6zyIPyH4UX4EZpKxT27cPJCYBjPFvPmwP9sIHOKeWD3n3GAhThZP4CA1EVYomAR7Slg70HXOfe6UDMHXKdil11vQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780457368; c=relaxed/simple;
-	bh=PI26M0khAE7StCXBHeuwdUicbhLFrZpiZfsokDq9n88=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=orENzMA57mEkSZdbakU4nFayAL9OOcSpi+z4r9JYIlwtcYBpenuE0WT2l0L6lPXh+FFMU93UO3BG8Wf5bWETLWa7fwawC+ehCmicdrKCL5rB28v+F/wqjQ4W0c1uk495YjoIxdcxRvi9VqKPOTjv1QKQ/Wp/oWXgfBSF/+pJwdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=H3gBJSfy; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	s=arc-20240116; t=1780457450; c=relaxed/simple;
+	bh=HckXV8SgUm6gBOsERf+KnMnS8zcCmg+Nd4fBgn+6UKE=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=LyNQyJx3GjnANAjf8KmChfpnGYH2l1FKZ1Am69wN1Mzba0R9UscoKQF6q5xOyAkRvCht6Aos5DG04m55ToEpaDP4hZqoTRSJD58QXN/yfq5P+cEZyMtJaBZBi1t2ScfA8cR1dli91ZGCWGHEZLPah6hwPQcoKe6Sd9l5WrzR84U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=padl.com; spf=pass smtp.mailfrom=padl.com; dkim=pass (2048-bit key) header.d=padl.com header.i=@padl.com header.b=d8rdz33I; arc=none smtp.client-ip=216.154.215.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=padl.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=padl.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="H3gBJSfy"
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-8ce9df31840so25832856d6.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 20:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1780457366; x=1781062166; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LZ44uuKaEudMkx03Nujcoh6Uuv+6Qpcd4aVYSw8wkq4=;
-        b=H3gBJSfyhNg/d6xu8tLy3zhPjq0CIcVT/vNWBe0DuibKH55/qS4e6LLCg+5zeqDmhR
-         hhwZQIsVo57hM55ZQDivV6QthQNfw6vBcVPhYuUS7p8LAiYLOE6N/cGo6VOaJ6epJPgU
-         0wCwLZcspfeG20llEo2UvjtXyGe3J/5zBiPPolqLtA6J8xbD9wZeseSIW0sC2K+cs47z
-         CxuvDvrCq4BiuXhYBof1v6DlVLI+JpGuVPPDiczcylwEmSjiay76x8Ax1qSl5eoUqHbL
-         FgkfC+fYpuMSDtd2RcKttTwoU7FMSUgarS6naaReiZmhx5didspEY4QLcu+jFsE06j9R
-         NVXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780457366; x=1781062166;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LZ44uuKaEudMkx03Nujcoh6Uuv+6Qpcd4aVYSw8wkq4=;
-        b=REZNs1jErVHqNAxvOk0MU/Xvdy5L1YraGXWHcJYZXc5Ft4i2cIEVTy96Sc0SsBCRqo
-         fXuYq7gFa3COob6D2gnsEgVcUASIW0nSMElk9Qvus9DYc7ZsMvzCZCKSkX+BsWrQBvfW
-         S3/qNAufaRs2pLmavzE+WJXykdQ7XVIkhebX0+jR0ISi+72BUKRzH2sI2akLLwhDLde3
-         r0+om+gbzgQgNbMKsFTNhzv9bJ6jntHIsLHwmjk5lCeFZ6C3p3dnCj2ngkI+7fLIrr6v
-         UetbpkWfiEInn7Jr5Izot/wwEPNszGRYU1ZMciGLVtuyESwqmkQA3D2Brik+bcdJgeIb
-         UlPQ==
-X-Gm-Message-State: AOJu0Yw8yRhZNRA2HGE7e8RgMLrfk0XTKY2UPEFynIeBh/DWbVkKR7k6
-	2h/TZ2IhYakkZmVvDIyTO7LrqNiyUs7Otuw38ovA9lblL9U3zYxR87eom8da+EvAI7xzFcJXUHm
-	6njiR
-X-Gm-Gg: Acq92OGUIcuHMDR96q/18qs7s7oSquOMznT6ou+SBm1z2EnQ7QJIR9Uj0JzI5MH5jKB
-	5TX3Kc44sitRtao2iQJDGGfKCMmbD2mvku9hGtZDjxZiDBpeEI7kTMQ9BefaqaCqIe+WenwFAQ3
-	/mnnoN+5ivdLRBsLEr9PRFo3gMBAD+8Eol7OHCWlw/ozFT6BspLzGXLc5aXZLtS/xG4an5WWNch
-	pe1ULZMWyDX8cbaUwnzxzf3UekvniZ2CGlp4FaO+UThkNkY6VqsSj2Qkg6p65BDaG2FWQ2hvrTH
-	jCrh0LR+7eolOa/TdfWQg2pOoxgfXHGRnK+maBaWBCA3ZNm4IJ+xbiBu0tWeEaHwbJ6ghRJ9c0f
-	+d0ZOsVhy4F8w5PQ1OW/o9QZwT1nvjhqaVcilhi7SEmrBvDDo7IFdbLEen1qOvot88ZtO3wzaBi
-	mFhvRmx+lOyAJyy+n12OXToo+tYhPS4neUVNysdVlTVzgZMMkloso2FW4YchiZgg==
-X-Received: by 2002:a05:6214:500e:b0:8a0:4e92:c45f with SMTP id 6a1803df08f44-8cecdc18097mr21849986d6.11.1780457365747;
-        Tue, 02 Jun 2026 20:29:25 -0700 (PDT)
-Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cecd26b3b9sm9244566d6.45.2026.06.02.20.29.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 20:29:25 -0700 (PDT)
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: linux-kselftest@vger.kernel.org,
-	rppt@kernel.org,
-	shuah@kernel.org,
-	akpm@linux-foundation.org,
-	linux-mm@kvack.org,
-	skhan@linuxfoundation.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	corbet@lwn.net,
-	pasha.tatashin@soleen.com,
-	dmatlack@google.com,
-	kexec@lists.infradead.org,
-	pratyush@kernel.org,
-	skhawaja@google.com,
-	graf@amazon.com
-Subject: [PATCH v6 13/13] selftests/liveupdate: Add stress-files kexec test
-Date: Wed,  3 Jun 2026 03:29:04 +0000
-Message-ID: <20260603032905.344462-14-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260603032905.344462-1-pasha.tatashin@soleen.com>
-References: <20260603032905.344462-1-pasha.tatashin@soleen.com>
+	dkim=pass (2048-bit key) header.d=padl.com header.i=@padl.com header.b="d8rdz33I"
+Received: from auth (localhost [127.0.0.1]) by us.padl.com (8.14.7/8.14.7) with ESMTP id 6533U3NL016913
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Wed, 3 Jun 2026 04:30:28 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 us.padl.com 6533U3NL016913
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=padl.com; s=default;
+	t=1780457433; bh=HckXV8SgUm6gBOsERf+KnMnS8zcCmg+Nd4fBgn+6UKE=;
+	h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+	b=d8rdz33IM4nuvC2/SuI5GfmrcXoUs7Y+TClzQ9w/tqCO76IXp8eP+1V77i1IbHrfL
+	 TYAi+ZIBdZbbTv68ZfRXmhwsDc3k2ify599r8hP/NEVGJ8bkmIZossNsjQ/TIW3TJs
+	 kbqtkEByC+SkJxeGOnQBV8UExxPI22phHCxEOPtYn3mYrRap8Fns8DwJ1bZpXnB5Ln
+	 Wy+cqdZ5dKhJXZMJuOosMd7efPWTG5pVLAWf8/8QOGD0RC2hSae3AURl9EcAnhRQc9
+	 4erwzfqDqJ/HFntNib8RkbVFNZwQoWzqo1EO3/Yg9Nd59zuO0ba5j8KF+N8KkDWKxj
+	 PmXH62RMp/vWw==
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH net-next v2 5/6] net: dsa: mv88e6xxx: MQPRIO support
+From: Luke Howard <lukeh@padl.com>
+In-Reply-To: <2AC04CE3-1760-49B4-A25D-170629AAD38A@padl.com>
+Date: Wed, 3 Jun 2026 13:30:17 +1000
+Cc: Jiri Pirko <jiri@resnulli.us>, Ivan Vecera <ivecera@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+        David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bridge@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        Max Hunter <max@huntershome.org>, Kieran Tyrrell <kieran@sienda.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C9A205F0-0F73-423D-86C4-A0062E8475C9@padl.com>
+References: <20260602-mv88e6xxx-8021qat-mqprio-v2-0-72be14522e7c@padl.com>
+ <20260602-mv88e6xxx-8021qat-mqprio-v2-5-72be14522e7c@padl.com>
+ <t44kmhk6gqxnwhdvo7svouexwelwsya7zgukpbv3cxpfsmutqa@y3rjoj3tvqce>
+ <A662D3F9-18DD-43C9-A43D-912E5A8A4360@padl.com>
+ <2AC04CE3-1760-49B4-A25D-170629AAD38A@padl.com>
+To: Cedric Jehasse <cedric.jehasse@gmail.com>
+X-Mailer: Apple Mail (2.3826.700.81)
 
-Add a new luo_stress_files kexec test that verifies preserving and
-retrieving 500 files across a kexec reboot.
 
-Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
----
- tools/testing/selftests/liveupdate/Makefile   |  1 +
- .../selftests/liveupdate/luo_stress_files.c   | 97 +++++++++++++++++++
- 2 files changed, 98 insertions(+)
- create mode 100644 tools/testing/selftests/liveupdate/luo_stress_files.c
+>> Good point, it=E2=80=99s interesting there is egress mapping on the =
+6390 but only for FPri to DSCP. The Frame Priority Table set ordinal one =
+would expect for egress QPri mapping is =E2=80=9Creserved for future =
+use=E2=80=9D. (Be nice if it were an undocumented feature.)
+>=20
+> I misread the data sheet. Egress PCP to FPRI mapping is possible =
+per-port on the 6390 family. This doesn=E2=80=99t resolve the other =
+issue (MQPRIO-less ports on the 6352 family). But it is good news and I =
+will revise accordingly in the next patch revision.
 
-diff --git a/tools/testing/selftests/liveupdate/Makefile b/tools/testing/selftests/liveupdate/Makefile
-index ed7534468386..30689d22cb02 100644
---- a/tools/testing/selftests/liveupdate/Makefile
-+++ b/tools/testing/selftests/liveupdate/Makefile
-@@ -7,6 +7,7 @@ TEST_GEN_PROGS += liveupdate
- TEST_GEN_PROGS_EXTENDED += luo_kexec_simple
- TEST_GEN_PROGS_EXTENDED += luo_multi_session
- TEST_GEN_PROGS_EXTENDED += luo_stress_sessions
-+TEST_GEN_PROGS_EXTENDED += luo_stress_files
- 
- TEST_FILES += do_kexec.sh
- 
-diff --git a/tools/testing/selftests/liveupdate/luo_stress_files.c b/tools/testing/selftests/liveupdate/luo_stress_files.c
-new file mode 100644
-index 000000000000..0cdf9cd4bac7
---- /dev/null
-+++ b/tools/testing/selftests/liveupdate/luo_stress_files.c
-@@ -0,0 +1,97 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * Copyright (c) 2026, Google LLC.
-+ * Pasha Tatashin <pasha.tatashin@soleen.com>
-+ *
-+ * Validate that LUO can handle a large number of files per session across
-+ * a kexec reboot.
-+ */
-+
-+#include <stdio.h>
-+#include <unistd.h>
-+#include "luo_test_utils.h"
-+
-+#define NUM_FILES 500
-+#define STATE_SESSION_NAME "kexec_many_files_state"
-+#define STATE_MEMFD_TOKEN 9999
-+#define TEST_SESSION_NAME "many_files_session"
-+
-+/* Stage 1: Executed before the kexec reboot. */
-+static void run_stage_1(int luo_fd)
-+{
-+	int session_fd, i;
-+
-+	ksft_print_msg("[STAGE 1] Creating state file for next stage (2)...\n");
-+	create_state_file(luo_fd, STATE_SESSION_NAME, STATE_MEMFD_TOKEN, 2);
-+
-+	ksft_print_msg("[STAGE 1] Creating test session '%s'...\n", TEST_SESSION_NAME);
-+	session_fd = luo_create_session(luo_fd, TEST_SESSION_NAME);
-+	if (session_fd < 0)
-+		fail_exit("luo_create_session");
-+
-+	ksft_print_msg("[STAGE 1] Preserving %d files...\n", NUM_FILES);
-+	for (i = 0; i < NUM_FILES; i++) {
-+		char data[64];
-+
-+		snprintf(data, sizeof(data), "file-data-%d", i);
-+		if (create_and_preserve_memfd(session_fd, i, data) < 0)
-+			fail_exit("create_and_preserve_memfd for index %d", i);
-+	}
-+
-+	ksft_print_msg("[STAGE 1] Successfully preserved %d files.\n", NUM_FILES);
-+
-+	close(luo_fd);
-+	daemonize_and_wait();
-+}
-+
-+/* Stage 2: Executed after the kexec reboot. */
-+static void run_stage_2(int luo_fd, int state_session_fd)
-+{
-+	int session_fd;
-+	int i, stage;
-+
-+	ksft_print_msg("[STAGE 2] Starting post-kexec verification...\n");
-+
-+	restore_and_read_stage(state_session_fd, STATE_MEMFD_TOKEN, &stage);
-+	if (stage != 2) {
-+		fail_exit("Expected stage 2, but state file contains %d",
-+			  stage);
-+	}
-+
-+	ksft_print_msg("[STAGE 2] Retrieving test session '%s'...\n", TEST_SESSION_NAME);
-+	session_fd = luo_retrieve_session(luo_fd, TEST_SESSION_NAME);
-+	if (session_fd < 0)
-+		fail_exit("luo_retrieve_session");
-+
-+	ksft_print_msg("[STAGE 2] Verifying %d files...\n", NUM_FILES);
-+	for (i = 0; i < NUM_FILES; i++) {
-+		char data[64];
-+		int fd;
-+
-+		snprintf(data, sizeof(data), "file-data-%d", i);
-+		fd = restore_and_verify_memfd(session_fd, i, data);
-+		if (fd < 0)
-+			fail_exit("restore_and_verify_memfd for index %d", i);
-+		close(fd);
-+	}
-+
-+	ksft_print_msg("[STAGE 2] Finishing test session...\n");
-+	if (luo_session_finish(session_fd) < 0)
-+		fail_exit("luo_session_finish for test session");
-+	close(session_fd);
-+
-+	ksft_print_msg("[STAGE 2] Finalizing state session...\n");
-+	if (luo_session_finish(state_session_fd) < 0)
-+		fail_exit("luo_session_finish for state session");
-+	close(state_session_fd);
-+
-+	ksft_print_msg("\n--- MANY-FILES KEXEC TEST PASSED (%d files) ---\n",
-+		       NUM_FILES);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	return luo_test(argc, argv, STATE_SESSION_NAME,
-+			run_stage_1, run_stage_2);
-+}
--- 
-2.53.0
 
+I did not misread the data sheet. The 6390 family does not support =
+egress FPri to QPri mapping. It supports egress FPri to _PCP_ mapping =
+(i.e. the internal and wire representations of the priority can differ). =
+Clearly needed a third coffee.
+
+Luke=
