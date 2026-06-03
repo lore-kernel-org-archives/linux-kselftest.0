@@ -1,59 +1,77 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD563822AA;
-	Wed,  3 Jun 2026 02:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0381E3DC4C2
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 02:44:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780454491; cv=none; b=D4w1uu6QkJzuc9ZhHJL1nfuSYUHKc32fmsyNi2JVWx95sfxl3AShvfuOWtV2ZxTyNKjRyvDf6xgzzJOBBQhKt64NUmXSHsiU83tFVVzXNG8gLBXnBNIpSTjBHM0erIFhBsmpGc7lQdwOeNzksnqrr7TjEoGogILxXr86pbbJpx0=
+	t=1780454670; cv=none; b=riul3Pxg7McdiQ/GSB5PVi3fYdGou6jdRR9hoia7iqki94ZQnZsMhmD6yrhc0RXrxO9Kf7hCSTLXl1wcm5UxRcLMBZKsO/npELem4Er+oUrjM+50dB5omI5UgeVF2/JBPlYUb86B5fjJWZTyFBVzuokgE6hlKPxFXF47PxpwFiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780454491; c=relaxed/simple;
-	bh=SvFxDoSmTme3bag0LC+3wu3y0fsNiyyEDYrRWLDqLMA=;
+	s=arc-20240116; t=1780454670; c=relaxed/simple;
+	bh=e8XkcAK6a9VQNX5mx5PgZLGXBxqS/oy5U0ubqAWn0gY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hdg6qjk1YQKkM0sxnoAK9jgIktcJ3/fLVgCA45Qlqljgg5eKfeXSOZWS6PQZjCPvE/2tuBDdI71tnDFBW+iw32nrvjH8P+fK2sGXbwJvmmKbz+w2b0nxr1bFSPJsGyUQfMNFi9LBEbwW+LhqSXNOwBnKj9Ve1BmaSCHHbZMd7Os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Wi4ymjTG; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	 Content-Type:Content-Disposition:In-Reply-To; b=nvpCH5jlZPaSTWjpvj0cJeFOI40vaKA2819lVBq/IZ7SboK1aD5hL6Yy9qUC0jx0tQMYfZhDXRiBabS4Xv4sIOWt5D5eqx0gswrVAoa/EtdQC9h4C6yU6B8oyryJldxqgLN8lven0bPTrzji7Iwq3arAsUK0foo1URJ07CoJJq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Yo0dPBbY; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Wi4ymjTG"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=D37xiTtxF0fUm4ed9JLFHPGoRO7k+Z17+W07ncHTMTA=; b=Wi4ymjTGgcL6Ix7S3gtL1OKlPx
-	KA4C5pr9335Z6phBWyyaPL+5LzUJIMLp0xmFaSPnX04ukvu2fkHfNjv6jzf2/kqJZ8wNJQBTWsxyL
-	Hna0AAGbu9fJYTdWFbtXtOLTEbOcHSnmQvnudP8Wtu91I9a1jJADImoMs+XhBCaNewvY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wUbXd-005oLe-LW; Wed, 03 Jun 2026 04:41:13 +0200
-Date: Wed, 3 Jun 2026 04:41:13 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Luke Howard <lukeh@padl.com>
-Cc: Cedric Jehasse <cedric.jehasse@gmail.com>,
-	Jiri Pirko <jiri@resnulli.us>, Ivan Vecera <ivecera@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bridge@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, Max Hunter <max@huntershome.org>,
-	Kieran Tyrrell <kieran@sienda.com>
-Subject: Re: [PATCH net-next v2 5/6] net: dsa: mv88e6xxx: MQPRIO support
-Message-ID: <72af0cfc-9011-4713-9862-710eea5f1cb0@lunn.ch>
-References: <20260602-mv88e6xxx-8021qat-mqprio-v2-0-72be14522e7c@padl.com>
- <20260602-mv88e6xxx-8021qat-mqprio-v2-5-72be14522e7c@padl.com>
- <t44kmhk6gqxnwhdvo7svouexwelwsya7zgukpbv3cxpfsmutqa@y3rjoj3tvqce>
- <A662D3F9-18DD-43C9-A43D-912E5A8A4360@padl.com>
- <8C6AD966-2C28-4BEF-95C4-1B2AC3751513@padl.com>
- <29c09316-c911-456e-acc5-e18402da4bd4@lunn.ch>
- <0402DFFF-634A-40C4-BC1E-B038F20926FF@padl.com>
- <89BA4203-110E-4767-895C-A2808602FAF8@padl.com>
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Yo0dPBbY"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-842358aaf36so1319593b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2026 19:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1780454668; x=1781059468; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tcJUWEM17xr95CuXHQAYaU7dL0/ztgzuxkWQEIuPEA8=;
+        b=Yo0dPBbYITfpD5TX776z7ypMSrA7Fv/ezMwiAaPyS0B5awIDoPYKiJsrAq1TWNISL+
+         uiQHltpEQ3/NleC5vlP1cSVWcxIlB0B3JkQG05wOet2vYJjTPIRD7pzRdYuv+MqNzt8X
+         IyX+bEp+U6N6MFhlzrWQsSrjOeY6vttE82gKkGFe51BEC8EQJw4Ts3lDODhDDB0zS/wk
+         dWGreyIEh+0ED4QfT3yiTKcvkfiYUinxODRKFGK/bgvz7wit64CjCdkXbVn38n8/Zk54
+         dz68smQFqNWzXLesH6olorqlDaDu0XhI74qD6GMSXIn80O+vvmljtAAlKlCY4ylhxH9A
+         v1Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780454668; x=1781059468;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tcJUWEM17xr95CuXHQAYaU7dL0/ztgzuxkWQEIuPEA8=;
+        b=MPEhQ9Lt3yjFjJ4M3wifw1obeiTp67I4FqYFPAQe18H7JjXkoWaLhd1JS4gXaPgWbs
+         NEugaKqgeJL/SOOkfsWvZvNXM/s5Pc7Ey6m+uR7teyZ5u5tlCGR1m5u9rdgYotuOEfs4
+         UGp2+rowQxti+gWp/a5WL1Qf8u5kM1gV2wCGFY+rMEd4BH3/FrxGSYkZAyZC4Qv1V2SC
+         AiUkE/MwEKf6rNobVo1iN4iUbxVmkgxyXXg/urWr+8WJrPt0R6sXc2TQczUgrA3d1fA9
+         gL/mRxzqn6ntephEgYB7gEQLojVFuhiUWPAzKQHVXCy6Aq00f9mNudK3wZklQWrZ8rvC
+         xLog==
+X-Forwarded-Encrypted: i=1; AFNElJ+WnLhABvlFi+sqOTGXUg+o8oGe+rIOmdN2Jok2dlw00LBK67VB48PDc6YO/FPkOG2HndW9AmVAPVMrxh+pry8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLr0cH/m4ltLzB4NxUl8Zw8dRfRv20bBhHJzBGYDPrJ6Re74Np
+	iIhiZxDIZBSP6dA9qvblbXzhz6TDHH8C+Xf+8GBCxJmOS8vSkgULzrUnJmwGDvmFFc0=
+X-Gm-Gg: Acq92OHPsiPIkuVVy0VA8haDUhK9nGRzmBtBhNLySm1XBrs8aCxw3ht/NhEgOUENOjM
+	fKu6DhwVR+hBp2rg3vWU8ItimDfcaRS/FFkYtATwkokL7tULZ7E8emxrPYEaVYTiTxw0WL9DBdy
+	t9QRsK75M/BOp2KBGQ5NOvuadX2xeLC74osguiBjo12QxGTWy/yKgW+5bOO5oxZEyMRyXHKbhh+
+	PZ4mJAIL+oEW46vV5GSJ0UGY/O8dzs5CZpnxfRTMkLAGDGtxrz5PmNqI9QGoSJw0fRJMLWSg94h
+	Ta2GvTU/Hmu3CzGw2K0rY2sbaBoWrKDYMamhDQxYgWkTwyNCxryVLUH1KEdM2cFadyXcm9kcudb
+	8awRp5B/RuRU0YTkPMbG9MwAXA3FqwXnfRCVLFKkcHMZy1WjNCwVpCiU5mda1JSAO/KMquIybUu
+	bM7c09sqhZCFgZnlDVJUFvivvuPLz4eeiaKVT7zz1xyZ3QKBoPgoGciPMDezAtqg==
+X-Received: by 2002:aa7:88c1:0:b0:831:7f71:c810 with SMTP id d2e1a72fcca58-84284fbd441mr1411085b3a.35.1780454668067;
+        Tue, 02 Jun 2026 19:44:28 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84282350f8csm1314806b3a.14.2026.06.02.19.44.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jun 2026 19:44:27 -0700 (PDT)
+Date: Wed, 3 Jun 2026 02:44:25 +0000
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org, akpm@linux-foundation.org, 
+	linux-mm@kvack.org, skhan@linuxfoundation.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, corbet@lwn.net, dmatlack@google.com, kexec@lists.infradead.org, 
+	skhawaja@google.com, graf@amazon.com
+Subject: Re: [PATCH v4 07/13] kho: add support for linked-block serialization
+Message-ID: <ah-QtVHQpvqqlPT5@plex>
+References: <20260530221938.115978-1-pasha.tatashin@soleen.com>
+ <20260530221938.115978-8-pasha.tatashin@soleen.com>
+ <2vxzqzmqfkit.fsf@kernel.org>
+ <ah2OeTDFltPWwsik@google.com>
+ <2vxzcxy8evuo.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,23 +80,402 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <89BA4203-110E-4767-895C-A2808602FAF8@padl.com>
+In-Reply-To: <2vxzcxy8evuo.fsf@kernel.org>
 
-> We could add (e.g.) bridge_setup_tc to dsa_switch_ops, which (in the
-> mv88e6xxx implementation) could validate the bridge contained all
-> user ports. But it would not be possible to block a port from
-> leaving as port_bridge_leave cannot return an error, and tearing
-> MQPRIO config down silently would be a different sort of bad.
+On 06-02 18:43, Pratyush Yadav wrote:
+> On Mon, Jun 01 2026, Pasha Tatashin wrote:
+> 
+> > On 06-01 15:38, Pratyush Yadav wrote:
+> >> On Sat, May 30 2026, Pasha Tatashin wrote:
+> >> 
+> >> > Introduce a linked-block serialization mechanism for state handover.
+> >> >
+> >> > Previously, LUO used contiguous memory blocks for serializing sessions
+> >> > and files, which imposed limits on the total number of items that could
+> >> > be preserved across a live update.
+> >> >
+> >> > This commit adds the infrastructure for a more flexible, block-based
+> >> > approach where serialized data is stored in a chain of linked blocks.
+> >> > This is a generic KHO serialization block infrastructure that can be
+> >> > used by multiple subsystems.
+> >> >
+> >> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> [...]
+> >> > +/**
+> >> > + * DOC: KHO Serialization Blocks ABI
+> >> > + *
+> >> > + * Subsystems using the KHO Serialization Blocks framework rely on the stable
+> >> > + * Application Binary Interface defined below to pass serialized state from a
+> >> > + * pre-update kernel to a post-update kernel.
+> >> > + *
+> >> > + * This interface is a contract. Any modification to the structure fields,
+> >> > + * compatible strings, or the layout of the `__packed` serialization
+> >> > + * structures defined here constitutes a breaking change. Such changes require
+> >> > + * incrementing the version number in the `KHO_BLOCK_ABI_COMPATIBLE` string to
+> >> > + * prevent a new kernel from misinterpreting data from an old kernel.
+> >> > + *
+> >> > + * Changes are allowed provided the compatibility version is incremented;
+> >> > + * however, backward/forward compatibility is only guaranteed for kernels
+> >> > + * supporting the same ABI version.
+> >> > + */
+> >> > +
+> >> > +#ifndef _LINUX_KHO_ABI_BLOCK_H
+> >> > +#define _LINUX_KHO_ABI_BLOCK_H
+> >> > +
+> >> > +#include <asm/page.h>
+> >> > +#include <linux/types.h>
+> >> > +
+> >> > +#define KHO_BLOCK_ABI_COMPATIBLE	"kho-block-v1"
+> >> 
+> >> During KHO radix development, I argued for a separate compatible for the
+> >> radix tree, but at that time, we tied the radix tree to core KHO ABI.
+> >> The argument being that all core KHO data structures belong to the KHO
+> >> ABI set. I imagine this will be used by kho_vmalloc, so it will also be
+> >> end up being used by a core KHO API.
+> >> 
+> >> So, do we want separate ABI? I don't much have a preference myself, but
+> >> I do think the compatible management will be a bit easier if this relied
+> >> on KHO compatible, especially once kho_vmalloc starts using it.
+> >
+> > I prefer to make them fine-grained, now that we are adding more and more 
+> > features: kho vmalloc, kho radix, and kho block should all have their 
+> > own compatibility strings. Furthermore, any components that depend on 
+> > them should include these compatibility strings in their own 
+> > compatibility strings, in the same manner I have done in this series.
+> 
+> Sure, sounds good.
+> 
+> >
+> >> 
+> >> > +
+> >> > +/**
+> >> > + * KHO_BLOCK_SIZE - The size of each serialization block.
+> >> > + *
+> >> > + * This is defined as PAGE_SIZE. PAGE_SIZE is ABI compliant because live
+> >> > + * update between kernels with different page sizes is not supported by KHO.
+> >> > + */
+> >> > +#define KHO_BLOCK_SIZE			PAGE_SIZE
+> >> > +
+> >> > +/**
+> >> > + * struct kho_block_header_ser - Header for the serialized data block.
+> >> > + * @next:  Physical address of the next struct kho_block_header_ser.
+> >> > + * @count: The number of entries that immediately follow this header in the
+> >> > + *         memory block.
+> >> > + *
+> >> > + * This structure is located at the beginning of a block of physical memory
+> >> > + * preserved across a kexec. It provides the necessary metadata to interpret
+> >> > + * the array of entries that follow.
+> >> > + */
+> >> > +struct kho_block_header_ser {
+> >> > +	u64 next;
+> >> > +	u64 count;
+> >> > +} __packed;
+> >> > +
+> >> > +#endif /* _LINUX_KHO_ABI_BLOCK_H */
+> >> > diff --git a/include/linux/kho_block.h b/include/linux/kho_block.h
+> >> > new file mode 100644
+> >> > index 000000000000..5e6b87b1befa
+> >> > --- /dev/null
+> >> > +++ b/include/linux/kho_block.h
+> >> > @@ -0,0 +1,79 @@
+> >> > +/* SPDX-License-Identifier: GPL-2.0 */
+> >> > +/*
+> >> > + * Copyright (c) 2026, Google LLC.
+> >> > + * Pasha Tatashin <pasha.tatashin@soleen.com>
+> >> > + */
+> >> > +
+> >> > +#ifndef _LINUX_KHO_BLOCK_H
+> >> > +#define _LINUX_KHO_BLOCK_H
+> >> > +
+> >> > +#include <linux/list.h>
+> >> > +#include <linux/types.h>
+> >> > +#include <linux/kho/abi/block.h>
+> >> > +
+> >> > +/**
+> >> > + * struct kho_block - Internal representation of a serialization block.
+> >> > + * @list: List head for linking blocks in memory.
+> >> > + * @ser:  Pointer to the serialized header in preserved memory.
+> >> > + */
+> >> > +struct kho_block {
+> >> > +	struct list_head list;
+> >> > +	struct kho_block_header_ser *ser;
+> >> > +};
+> >> > +
+> >> > +/**
+> >> > + * struct kho_block_set - A set of blocks that belong to the same object.
+> >> > + * @blocks:          The list of serialization blocks (struct kho_block).
+> >> > + * @nblocks:         The number of allocated serialization blocks.
+> >> > + * @head_pa:         Physical address of the first block header.
+> >> > + * @entry_size:      The size of each entry in the blocks.
+> >> > + * @count_per_block: The maximum number of entries each block can hold.
+> >> > + * @incoming:        True if this block set was restored from the previous kernel.
+> >> > + */
+> >> > +struct kho_block_set {
+> >> > +	struct list_head blocks;
+> >> > +	long nblocks;
+> >> > +	u64 head_pa;
+> >> > +	size_t entry_size;
+> >> 
+> >> I think we should add the entry_size to kho_block_header_ser? I think it
+> >> is a part of the ABI of the block set. If this changes, we cannot parse
+> >> a block set with a different size. If a subsystem wants to change entry
+> >> size, they create a new block set with different entry size, and then
+> >> they bump their compatible version.
+> >
+> > I have considered that, and we can certainly do it; however, I do not 
+> > see how it would affect the current implementation. If luo_file or 
+> > luo_session change entry_size, they must change the LUO compatibility 
+> > version, which would prevent LU from one kernel to the next. However, 
+> > for flexibility and future extensibility, I believe it would be useful 
+> > to add entry_size and block_size (which is PAGE_SIZE, but could be 
+> > larger for some users) to the header. This is more of a feature request 
+> > than an issue with the current series.
+> 
+> My suggestion was mainly for sanity checking. So if LUO or another user
+> inadvertently changes entry size, it gets caught. But thinking about it
+> more, there are a million other ways to break compatibility while
+> keeping the entry size same so perhaps it doesn't matter as much...
+> 
+> >
+> >> 
+> >> > +	u64 count_per_block;
+> >> > +	bool incoming;
+> >> > +};
+> >> > +
+> >> > +/**
+> >> > + * struct kho_block_it - Iterator for serializing entries into blocks.
+> >> > + * @bs:         The block set being iterated.
+> >> > + * @block:      The current block.
+> >> > + * @i:          The current entry index within @block.
+> >> > + */
+> >> > +struct kho_block_it {
+> >> > +	struct kho_block_set *bs;
+> >> > +	struct kho_block *block;
+> >> > +	u64 i;
+> >> > +};
+> >> > +
+> >> > +/**
+> >> > + * KHO_BLOCK_SET_INIT - Initialize a static kho_block_set.
+> >> > + * @_name:       Name of the kho_block_set variable.
+> >> > + * @_entry_size: The size of each entry in the block set.
+> >> > + */
+> >> > +#define KHO_BLOCK_SET_INIT(_name, _entry_size) {                        \
+> >> > +	.blocks = LIST_HEAD_INIT((_name).blocks),                       \
+> >> > +	.entry_size = _entry_size,                                      \
+> >> > +}
+> >> > +
+> >> > +void kho_block_set_init(struct kho_block_set *bs, size_t entry_size);
+> >> > +
+> >> > +int kho_block_grow(struct kho_block_set *bs, u64 count);
+> >> > +void kho_block_shrink(struct kho_block_set *bs, u64 count);
+> >> 
+> >> These block management functions seem like internal details of the block
+> >
+> > This is not so. The confusion here is that they must be allocated and 
+> > preserved at runtime as resources are registered/unregistered, while 
+> > these blocks are only used serialization phase, 
+> >
+> > These calls are more like notifiers that more files/sessions are created 
+> > removed, so we can adjust block count accordingly if necessary (allocate 
+> > preserver memory), and have them available durign 
+> > serialization/deserialization
+> 
+> Yeah, I got that when reading the later patches that use these.
+> 
+> Perhaps kho_block_prealloc() and kho_block_unalloc() is more clear,
+> although it does not sound as nice. If not, then I suppose at least add
+> a comment explaining the intended usage.
 
-There can be multiple bridges, even as far as one bridge per port.
+Done
 
-For switch wide properties, you basically have to allow the first user
-to configure it, refcount additional users get added and removed, and
-only allow the last user to change it.
+> 
+> >
+> >> set API. Do we need to export them? I think users should not have to
+> >> worry about block management. They should read, set, or clear entries
+> >> using the iterators, and internally the block management should take of
+> >> allocation or freeing. So here for example, I th
+> >
+> > something is missing :-)
+> 
+> I don't remember what I meant to say anymore :-/
+> 
+> [...]
+> >> > +/**
+> >> > + * kho_block_set_init - Initialize a block set.
+> >> > + * @bs:         The block set to initialize.
+> >> > + * @entry_size: The size of each entry in the blocks.
+> >> > + */
+> >> > +void kho_block_set_init(struct kho_block_set *bs, size_t entry_size)
+> >> > +{
+> >> > +	*bs = (struct kho_block_set)KHO_BLOCK_SET_INIT(*bs, entry_size);
+> >> > +}
+> >> > +
+> >> > +static inline u64 kho_block_count_per_block(struct kho_block_set *bs)
+> >> > +{
+> >> > +	if (unlikely(!bs->count_per_block)) {
+> >> > +		bs->count_per_block = (KHO_BLOCK_SIZE -
+> >> > +				       sizeof(struct kho_block_header_ser)) /
+> >> > +				      bs->entry_size;
+> >> > +		WARN_ON(!bs->count_per_block);
+> >> > +	}
+> >> > +	return bs->count_per_block;
+> >> > +}
+> >> 
+> >> This looks odd. I don't see a reason to calculate this lazily. Why not
+> >> just do it when initializing the block set, in kho_block_set_init() or
+> >> kho_block_restore()? And then use bs->count_per_block directly.
+> >
+> > This allows for blocks to use static initilziation, I like static inits 
+> > :-)
+> 
+> You can do this:
+> 
+> #define KHO_BLOCK_SET_INIT(_name, _entry_size) {                        \
+> 	.blocks = LIST_HEAD_INIT((_name).blocks),                       \
+> 	.entry_size = _entry_size,                                      \
+> 	.count_per_block = (KHO_BLOCK_SIZE - sizeof(struct kho_block_header_ser)) / (_entry_size), \
+> }
+> 
+> Compiles for me.
 
-The alternative is return -EOPNOTSUPP, and let the kernel do it in
-software, if a user wants something different to the global
-setting. The hardware is only there to accelerate what Linux can
-already do in software. That is the model we use.
+You are correct, done.
 
-     Andrew
+> 
+> [...]
+> >> > +void kho_block_destroy(struct kho_block_set *bs)
+> >> > +{
+> >> > +	u64 head_pa = bs->head_pa;
+> >> > +	struct kho_block *block;
+> >> > +
+> >> > +	while (!list_empty(&bs->blocks)) {
+> >> > +		block = list_first_entry(&bs->blocks, struct kho_block, list);
+> >> > +		list_del(&block->list);
+> >> > +		kfree(block);
+> >> > +	}
+> >> 
+> >> Nit:
+> >> 
+> >> 	list_for_each_entry_safe(block, tmp, &bs->blocks, list) {
+> >> 		list_del(&block->list);
+> >> 		kfree(block);
+> >> 	}
+> >> 
+> >> is a bit more idiomatic (and IMO easier to read).
+> >
+> > Sure
+> >
+> >> 
+> >> > +	bs->nblocks = 0;
+> >> > +	bs->head_pa = 0;
+> >> > +
+> >> > +	while (head_pa) {
+> >> > +		struct kho_block_header_ser *ser = phys_to_virt(head_pa);
+> >> > +
+> >> > +		head_pa = ser->next;
+> >> > +		kho_block_free_ser(bs, ser);
+> >> 
+> >> Nit: also, can't you put this also in the previous loop? Something like:
+> >> 
+> >> 	list_for_each_entry_safe(block, tmp, &bs->blocks, list) {
+> >> 		list_del(&block->list);
+> >> 		kho_block_free_ser(block->ser);
+> >> 		kfree(block);
+> >> 	}
+> >
+> > We actually can't merge these into a single loop because of partial 
+> > restoration failures handling in kho_block_restore().
+> >
+> > If kho_block_restore fails halfway through restoring a chain of blocks 
+> > (for example, if kho_block_add fails on block 3 of 5), we jump to the 
+> > err_destroy cleanup path which calls kho_block_destroy().
+> >
+> > At this point:
+> > - bs->blocks only contains the tracked blocks we successfully added 
+> >   (blocks 1 and 2).
+> > - bs->head_pa still points to the physical head of the entire 5-block 
+> >   incoming chain.
+> >
+> > But, this is a good place to add a comment.
+> 
+> IMO it would be cleaner for kho_block_destroy() to destroy the currently
+> initialized block set, and then the error handling path in restore path
+> can clean up the rest.
+
+Sounds good, done.
+
+> 
+> >
+> >> > +	}
+> >> > +}
+> [...]
+> >> > +/**
+> >> > + * kho_block_it_prev - Return the previous entry slot in the block set.
+> >> > + * @it: The block iterator.
+> >> > + *
+> >> > + * If the current index is at the start of a block, it automatically moves to
+> >> > + * the end of the previous block.
+> >> > + *
+> >> > + * Return: A pointer to the previous entry slot, or NULL if at the very
+> >> > + * beginning of the block set.
+> >> > + */
+> >> > +void *kho_block_it_prev(struct kho_block_it *it)
+> >> > +{
+> >> > +	if (!it->block)
+> >> > +		return NULL;
+> >> > +
+> >> > +	if (it->i == 0) {
+> >> > +		if (list_is_first(&it->block->list, &it->bs->blocks))
+> >> > +			return NULL;
+> >> > +		it->block = list_prev_entry(it->block, list);
+> >> > +		it->i = kho_block_count_per_block(it->bs);
+> >> > +	}
+> >> > +
+> >> > +	return (void *)(it->block->ser + 1) + (--it->i * it->bs->entry_size);
+> >> > +}
+> >> > +
+> >> > +/**
+> >> > + * kho_block_it_finalize - Finalize the current block by setting its entry count.
+> >> > + * @it: The block iterator.
+> >> > + */
+> >> > +void kho_block_it_finalize(struct kho_block_it *it)
+> >> > +{
+> >> > +	if (it->block)
+> >> > +		it->block->ser->count = it->i;
+> >> > +}
+> >> 
+> >> Doesn't kho_block_it_next() already do this when you add an entry? So
+> >> this seems redundant.
+> >
+> > It is not redundant because of how the final partially-fille block is handled.
+> >
+> > kho_block_it_next() only writes the count into the block header when a block is completely full and it is advancing to the next one:
+> >
+> > if (it->i == kho_block_count_per_block(it->bs)) {
+> >     it->block->ser->count = it->i;
+> >     ...
+> >
+> > But for the very last block in the set, it is usually only partially
+> > filled (e.g., we write 10 entries into a block with a capacity of 64).
+> > Since it->i never reaches the maximum capacity, kho_block_it_next()
+> > never commits its count.
+> >
+> > Pasha
+> 
+> I think we can make kho_block_it_next() always write it. I think it
+> makes sense from an API point of view, since I see this API as "adding
+> an entry to the block set", so updating its internal counters makes
+> sense.
+> 
+> Requiring the finalize will be error prone, since it is easy to forget.
+> Then you silently lose some entries on the next boot.
+
+Good suggetion, cleaned-up.
+
+Thank you!
+
+Pasha
+
+> 
+> -- 
+> Regards,
+> Pratyush Yadav
