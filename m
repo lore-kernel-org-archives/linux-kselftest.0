@@ -1,89 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368FA41C30A;
-	Wed,  3 Jun 2026 10:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E35137BE9C;
+	Wed,  3 Jun 2026 10:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780480887; cv=none; b=uYyKzQ25xJnrrveKalw/gG4V0At6x0/l2eCTeorYVmust3QfKAQyWSOXH3uR6mZZhHW0ktKcZIq3qJS9+a3Dr9QiCDsT29EQkSzIjc+LRYwL353XLFy53MpTM4vHQVIjXM7QCKsk8taJx0spzjSgiAiBm8vLpQVenCYFlEjlwoU=
+	t=1780481093; cv=none; b=cZ4Okip+AtB5NMjAQJmR8Sv89KDH0K1SFGcc3h7WwaSkUXPNdzp8XOX6UKrt0m2Yt9UVpbo8Si51UMLcxMgI3OUjCTNZ0gxg2hXC05wwbS3Xc10BqpOciIhB6Q3ZyORWW+/hIcotSEVp35ZksQLBQfkgvBqWFa6l9WPXLkQlAlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780480887; c=relaxed/simple;
-	bh=WuK/tTXXRfQfzR0os4Uf52HJC3ngO5lYJQYa1wcv65Y=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=CXoxabBEuSfbOjtz6jfh5AJZNod2M0Vk9VJNZL6+mXFIoTh7oJhfP9VMn3hiACAfKSWHmXW7iQ7RL3rN3ICRQ2eS/KC2OodN9LYnwfKAqila/eIIqBsBaIzVVx4tofbOkUaF6vI48W6jVkb+cwPLyZUSQlGbqsR66ynRG3xF4jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SyifO2RL; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SyifO2RL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF4731F00898;
-	Wed,  3 Jun 2026 10:01:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780480884;
-	bh=u1CTZ7oc5S2yw/byDNkdoYymx9kciSIu5go090hsMMI=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=SyifO2RLgJot/0nMvhvebvZ/j/IRFCanYUIghVG+LecIPnvv31bTofLbYJCdFR5jR
-	 eHUL1BEW1bYQYByZpVEHqkS/Nf7pH2oFgN1tnCQhh5NztHp6xik7J33WIaVohaLpZQ
-	 e2D0siiXHg0zYu7oYW/3nCF23tX2dexeV1fmEbT4TGYJeMB04JBodaLk4UZrzyfChY
-	 +c1D0j+wr6/L5xTUEKa5BwPmBI65fQiwTvy4YCMHynUuGLLrkMhyVSFK1Zq6LDhx3b
-	 EVJpVA3U8rY3NM3t4yrMdWg4Yh2Ivu7Dh9PEMjVNfnGDdYoZZNo7GOF0JB+uSKXMKA
-	 4ZIDapTzVijkQ==
+	s=arc-20240116; t=1780481093; c=relaxed/simple;
+	bh=75FmPZ4SgrH5dtsS4HbBcKGXJh+WnZD7Nx4gPfkZ3zI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NQ0qJWN/jMpVdwI6PQ2h47DYjzBwLrrobidGHT9OdX+lZf29rZST8Lz/OzKWTM3bBq914c2UG8CMpKixvuhIqbHgakVCL9LREbvArJv1Io1+xrb+hptm3v9GnTJeZ6OcaJBoGkX0Khk2gB7r7S8tjqTkqrHKwK0h05RZq0muTtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: a49f5c5c5f3311f1aa26b74ffac11d73-20260603
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR
+	DN_TRUSTED, SRC_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD_SPF
+	CIE_UNKNOWN, GTI_FG_BS, GTI_FG_IT, GTI_RG_INFO, GTI_C_BU
+	AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:2620c5eb-c7da-49fa-96c5-f716f9a182d9,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-INFO: VERSION:1.3.12,REQID:2620c5eb-c7da-49fa-96c5-f716f9a182d9,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:10
+X-CID-META: VersionHash:e7bac3a,CLOUDID:f3fc05245646d9ccde8d563a31e11098,BulkI
+	D:260603180444F4F9Z7IE,BulkQuantity:0,Recheck:0,SF:10|38|66|78|102|127|136
+	|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,File:nil,RT:nil,
+	Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BR
+	R:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: a49f5c5c5f3311f1aa26b74ffac11d73-20260603
+X-User: zhaochenguang@kylinos.cn
+Received: from localhost.localdomain [(223.160.128.85)] by mailgw.kylinos.cn
+	(envelope-from <zhaochenguang@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1172457377; Wed, 03 Jun 2026 18:04:43 +0800
+From: Chenguang Zhao <zhaochenguang@kylinos.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Chenguang Zhao <zhaochenguang@kylinos.cn>,
+	Hengqi Chen <hengqi.chen@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/4] LoongArch bpf kptr xchg inline support
+Date: Wed,  3 Jun 2026 18:04:34 +0800
+Message-Id: <20260603100438.2177817-1-zhaochenguang@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v4 3/5] tools/lib/mm: move hugepage_settings out of
- selftests
-From: Mike Rapoport <rppt@kernel.org>
-To: Sarthak Sharma <sarthak.sharma@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>, Zi Yan <ziy@nvidia.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, 
- Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Mark Brown <broonie@kernel.org>, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20260527142432.230127-4-sarthak.sharma@arm.com>
-References: <20260527142432.230127-1-sarthak.sharma@arm.com>
- <20260527142432.230127-4-sarthak.sharma@arm.com>
-Date: Wed, 03 Jun 2026 13:01:08 +0300
-Message-Id: <178048086822.472368.16880248677532938003.b4-review@b4>
-X-Mailer: b4 0.15.2
+Content-Transfer-Encoding: 8bit
 
-On Wed, 27 May 2026 19:54:30 +0530, Sarthak Sharma <sarthak.sharma@arm.com> wrote:
+This series replaces the single patch "LoongArch: bpf: Support kptr xchg
+inline" with four logically separate changes as requested during review.
 
-Hi Sarthak,
+Patch 1 fixes BPF JIT atomic xchg to use amswap_db.{w,d}, which provide
+the full barrier semantics required by LKMM for value-returning atomic RMW.
+This is independent of kptr inlining.
 
->
-> diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/lib/mm/hugepage_settings.c
-> similarity index 97%
-> rename from tools/testing/selftests/mm/hugepage_settings.c
-> rename to tools/lib/mm/hugepage_settings.c
-> index c2f97fe97e58..c75b9c8f4a74 100644
-> --- a/tools/testing/selftests/mm/hugepage_settings.c
-> +++ b/tools/lib/mm/hugepage_settings.c
-> @@ -419,8 +424,8 @@ int detect_hugetlb_page_sizes(unsigned long sizes[], int max)
->  		if (sscanf(entry->d_name, "hugepages-%zukB", &kb) != 1)
->  			continue;
->  		sizes[count++] = kb * 1024;
-> -		ksft_print_msg("[INFO] detected hugetlb page size: %zu KiB\n",
-> -			       kb);
-> +		fprintf(stderr, "# [INFO] detected hugetlb page size: %zu KiB\n",
-> +			kb);
+Patch 2 advertises bpf_jit_supports_ptr_xchg() so the verifier may inline
+bpf_kptr_xchg() to BPF_XCHG on LoongArch.
 
-ksft_print_msg() prints to stdout, let's keep it for now.
+Patches 3 and 4 extend bpf selftests: functional coverage via
+./bench -d 30 -w 5 -p 1 kptr-xchg --nr-loops 256
+
+Chenguang Zhao (4):
+  LoongArch: bpf: Use amswap_db for BPF atomic xchg
+  LoongArch: bpf: Advertise JIT support for kptr xchg inline
+  selftests/bpf: Enable kptr_xchg_inline test on LoongArch
+  selftests/bpf: Add kptr-xchg benchmark
+
+ arch/loongarch/include/asm/inst.h             |  2 +
+ arch/loongarch/net/bpf_jit.c                  |  9 +-
+ tools/testing/selftests/bpf/Makefile          |  2 +
+ tools/testing/selftests/bpf/bench.c           |  2 +
+ .../selftests/bpf/benchs/bench_kptr_xchg.c    | 96 +++++++++++++++++++
+ .../bpf/prog_tests/kptr_xchg_inline.c         |  3 +-
+ .../selftests/bpf/progs/kptr_xchg_bench.c     | 48 ++++++++++
+ 7 files changed, 159 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
+
+---
+v2:
+ - Split the original single patch into four separate commits. 
+ - Switch BPF_W/BPF_DW atomic xchg from plain amswap{w,d} to barrier-aware amswapdbw/amswapdbd.
+
+v1:
+ - https://lore.kernel.org/all/20260602021515.214560-1-zhaochenguang@kylinos.cn/
 
 -- 
-Sincerely yours,
-Mike.
+2.25.1
 
