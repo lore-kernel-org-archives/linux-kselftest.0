@@ -1,74 +1,75 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348AA331222
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 14:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148E7382F31
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 14:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780496001; cv=none; b=GzQn7/5pL2dcWZr9VlvNUp7c95VjkIlHsPOJaY6mDxXWFMpSJ7leWvC7lO2DncgAXHVpEGj8BBcN+B7avWVSBwdibmhVlJGl+0+At2AktVi1ftInYZpH8oHeKdoX2b5kjzW6YjnA7GEONGK5Rz78eC33ngeZRFmVwoftM1W2Jys=
+	t=1780496113; cv=none; b=D7TiteFmbsISvUGI5SdhdBy1lKOvcwl/OiUQGYJcHrQIC9g4IYPzCHIiuk4MzAhw+PwLx5d9ELQYFl0rZh1UDb6JnSsx4LE+vqAb7xFIeNggWMRxNt1QFujOe1EltnA0pdaz/RxVuIgRi0LfH21JT3hSv4wgRBDc2FmHoL5khjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780496001; c=relaxed/simple;
-	bh=CRJtyzPVwZ27iPdMdn+YffG3q+hwHsP+3emZ2ABQJ2k=;
+	s=arc-20240116; t=1780496113; c=relaxed/simple;
+	bh=np8yTAGyoHyKjiswZIV0dx/wnbvVdMEDawhwZGw0qTY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qCRDrLa/UHhjeTLbY5Z9ibpbhqHd7EgMrnqZiFaGe/4iOtvI1t8sRYu6E/tnGDPQRWuZNPtiLArtAXrhebHOGshGbyXDEncyHAJ1zucwNldKjjNiC0Pxs3NddhP7OqglQebgWMFII4SPebr3iBYhDM3X8LoyAO/ol6gSoQBOeEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s9UBvQuY; arc=none smtp.client-ip=209.85.214.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=l/JA45tCi2LriBcHOpUhO+eNTG2AVTwSs6z3qHveR1s2bkJa8oROtoCZxPcbg8hPVadhovtCBmWZLlibY/md3eyaYFb7IJGJLQCb2LztSPMEQ2s3THgoDFUhflhUdtL2NOYaS+ZC0VS/7Q5HqBqrPNSNLuVm/fFFkEyr3vLeXyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hmjGPsCg; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s9UBvQuY"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2bf2911f93cso61385ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 07:13:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hmjGPsCg"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2c0b1a48855so89655ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 07:15:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780495999; x=1781100799; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1780496111; x=1781100911; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gl2/sR4bOkCw/IHgANyX/OAo2qKH6Z+1HugGtGKRHMc=;
-        b=s9UBvQuYGBcu/GYN6flzhLuPFQT/RZGWPbpxYIRaRgR7PXXN62nXrYbZlUNzDTJ1xD
-         0zQyf9gIsJBVL9wADHy+4U1dM2UOrg1vO1AjaNVE4EfGGHET2RoUGuonR93NsAJtLSOq
-         FHwQzxOBYZ1QDIOK9drOC42CFKaek50TLMTHOzCoY2Ztb9SxcXMmABCK/Yalgi5RkYib
-         GlOKncRbrMWwbqxjckanjfjjm3fpt4tOa3ltYyTNnl8r1fc+i5BgCENQPgPfFs/q2bag
-         Hakv2fxui4EyDq4cIxIsT7vuk7AcTGCARTlwY22GHRZnTufBYGzKyZiWPkoX+Jy5afbM
-         3vUA==
+        bh=6eaHVbDYv4hX/p3BkMc9yoT5MuLzy6Lq3RWtBuTNxcE=;
+        b=hmjGPsCg1liRDzIKs2eWjset5lC/gH1E8c05Fj0ZygZiJr+e9nOXECrN6+9/abOGLF
+         78wasu2LaQibM3erTF1FrKXO043gfSWJlX527gROJhD5J7/x43wm78ybWKuWci/THnHS
+         rWWZq3B9oRaW9L3u3oz6m9HBPbf0gM6F5Cg7sWsrxOfuhVfVjRxkbfoUNiZAPCU4A6kP
+         aYoK2pMRz0xpNy8767THIoW6eGRJThMfOnyDcwSXjXKmjVDPF3Eds3KC9UnBsJjuO6Jd
+         CUHDubEik6FwS45omUJPEbxlC2Zqs8vjSLjAuliA86hpE3c3txYXJoT9oa2RH917COoj
+         aNuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780495999; x=1781100799;
+        d=1e100.net; s=20251104; t=1780496111; x=1781100911;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Gl2/sR4bOkCw/IHgANyX/OAo2qKH6Z+1HugGtGKRHMc=;
-        b=Pww9f8PXQIiwyeZN0oxheEw9nYmXIyRssKc4LCNGtZT3xaufeSXaGm+CCXaERkxG62
-         0KT0G3g9qNHXadrSQ5TERWA9c77tVzw0/Hm+JrU0gN8PPufY3bnydNvbcBzvKXDOmhXj
-         9H3jB+auKVZWWrvhnepJ/L64/95Nr4MzMOAV2vhy3rRJyV04SXPpN+gGAki7wZ2CgPEL
-         m4ibcPZva7zuJB9HOh+i5cLa7j8r+3ComlclZ/D7VDz5pqowg9MfoRRwoKcZqzfjoEpo
-         1AL96IE/YgGt6vc8t3jYxJot+ioP1k0CPH3O2aRb8yBnOsxTChr7ndxfgAhliyC5uqVJ
-         y+GQ==
-X-Forwarded-Encrypted: i=1; AFNElJ89UKXvN0XNjswU1OxSK41PCcxOgvXntp1O3H4mlZiTGKYJmtKLARPurUS2xf3uxfzND8MsLMAgAfpaaBBkviA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeHoA4Ue0Rno2AMYQLZ29p+sfg7qmumP8M2cfIgh45O7x4BSqX
-	4VzJ2Q1C2CltLXNbNa//OTzRaynMwOfMStGXAmcPaUFHrkTzMXGscgDm0OVWUYsV7w==
-X-Gm-Gg: Acq92OELQdDX41pARKa275Y7xM3+dtVBeSgmZxYJGqkPSqTHizv+UVtMR22v2dRi9CM
-	dNeGUTQOpv6GhMqLER4go4FOq7LqVvaDoGFKkP62zc0YrxncCedvuD3AGRRTDCoGnLq+e2sNwW9
-	Ro4tyscNSRyA1wNs1Zb+G6E2EY11UqKMwGp6Oo8x2zZgpZ1vJ3EnJ08Zt9tz/EWytiBoXkFJOE0
-	xIrar8D3Pso3hWevrkRZpb24vstcj4oeVaRpo9nb9p5B56Zbz8bqqThhJStmmFez7eb7YafRina
-	JZbv875oPCRz7UOdqxz6iDjuSg9uECT/UPqAAXhgh13WC/Gkf5eIhiPYcxGmTl9eKUHleR0Lidv
-	6MMNgYEMbMa4dwX5Hgp1A77vCP23NOjYPCa6md3WcVyixr1y9QmB4MnKHXELTaAytnZCBieLdLA
-	YNRCeZZ2fsOAnQDQUwPtE951i8qizTZY4Lvn0BpG1VtykwgdiajDQvN/lNLy//urO8jZ7yZBY0W
-	/hoWXSsUg==
-X-Received: by 2002:a17:902:ecc3:b0:2c0:c14c:bf37 with SMTP id d9443c01a7336-2c16c13a022mr1861355ad.16.1780495998924;
-        Wed, 03 Jun 2026 07:13:18 -0700 (PDT)
+        bh=6eaHVbDYv4hX/p3BkMc9yoT5MuLzy6Lq3RWtBuTNxcE=;
+        b=PPqFx96sePrHMkDctlYiEfiBqdzoYQ/AfxwxCmfWaucdlCOU5b++yxh/kIwZMlg2HC
+         gkH79DFQ1ebIGcdR0HkcYakmQIYpP7hZBEaduiUa57Wd/4MU8ewa5Fkw3frNHUilfN06
+         jT8I70KtTqdq0uzCo6Yd/jMdpcWrY5xM/a393LMv6zI5hA2RIsSDRt682P9ZU7OP0v2A
+         7VvzLhCWnKhON8DAB2THBK+8HpDiLxlsK/JzQmiKI3rPuI0593dLC1m6udiORCsFAB4u
+         ScYdvwZkxFB5R26/p0e0dU1rx0tFU2jwcVrTjpUDBYzT00k+a2+xcTS/zf0qZSmHcNJy
+         32FA==
+X-Forwarded-Encrypted: i=1; AFNElJ9U5D55i4/sVKEypMBmJVEtCCZOEvyTn/ofO6lmZzvODtB8TWJmoYAAwhHP26iSz3LN5zf2ttd+N7Ph1Kpi7Dg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPAUi8+I00ZJDilx4IO244PrtHGas1s2+TEOfxrPS6ZNMgvNaP
+	t7SfV0oSsyHal5J2U6K4sB/fH6D1Fr05mRJ9w8xskUAHeX+ubjADVZZPDcJcLEmUMWUx2tqN+ys
+	q3AflgQ==
+X-Gm-Gg: Acq92OEiJHbQvaSsuKPlhbj5AG2BXCk76FmpZ/q8+/qouN0MV4ydLKvMBSFz3jNFCe8
+	wvD5oJGD10+G7h+DYAF7LPee/LLYOrABudT5C9vmYU2fi2CxB4GtuaMG30I+Ws79xyVKcDxMO90
+	jTyPOgD33NCfXcBFa73bJpt+pdUL4MrjS0UFx4dS/c1JUOEdZbXWFun09ZEV04dVT2KOohG5nWz
+	e7i4j3p3kT4CPL/hiI8ZrSEEWB+H9NCAJ2nSrsRfqdM7CKRXZZvSg0KpDmzQDpkVGKe7oTtgige
+	NTcWBGdy17gQf24yhlCR3V8SOrj9P0kcu9SHjIsw4bDYJKlF0/EBzfye8bGBV4kZ2d8zoLWu2IV
+	vjijfyWdDhxFmp4CNPbGiMs47DYEFtgsaz85PTJf6p+Wf7BRS4deAUOl0v2eazFIEbskjwZv1aI
+	40YdNcfFBAW0r6FlZ7Ok/k4Ji+pbeL3nwj3R8lpvUsg5TiVVxITDzIA+kbVwQV0X7dZqxQNLfCu
+	fZva9j0yw==
+X-Received: by 2002:a17:902:c405:b0:2bd:5fc9:27b9 with SMTP id d9443c01a7336-2c16fa720bamr1530475ad.3.1780496110631;
+        Wed, 03 Jun 2026 07:15:10 -0700 (PDT)
 Received: from google.com (199.255.142.34.bc.googleusercontent.com. [34.142.255.199])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-842828d6bc5sm3061356b3a.43.2026.06.03.07.13.16
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16629d40asm25583475ad.64.2026.06.03.07.15.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2026 07:13:18 -0700 (PDT)
-Date: Wed, 3 Jun 2026 14:13:13 +0000
+        Wed, 03 Jun 2026 07:15:10 -0700 (PDT)
+Date: Wed, 3 Jun 2026 14:15:04 +0000
 From: Pranjal Shrivastava <praan@google.com>
 To: Nicolin Chen <nicolinc@nvidia.com>
 Cc: jgg@nvidia.com, kevin.tian@intel.com, joro@8bytes.org,
 	baolu.lu@linux.intel.com, iommu@lists.linux.dev,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 3/7] iommufd: Propagate allocation failure in
- iommufd_veventq_deliver_fetch()
-Message-ID: <aiA2ee3lqxFgXZLO@google.com>
+Subject: Re: [PATCH v1 4/7] iommufd: Reject invalid read count in
+ iommufd_fault_fops_read()
+Message-ID: <aiA26J0wfuRrepCQ@google.com>
 References: <cover.1780343944.git.nicolinc@nvidia.com>
- <25d29feac909e36f78c145fa99ef2d4cb7a415da.1780343944.git.nicolinc@nvidia.com>
+ <85c118a606fbedc5c132a1f5ec223a5ba23b92d2.1780343944.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,15 +78,17 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <25d29feac909e36f78c145fa99ef2d4cb7a415da.1780343944.git.nicolinc@nvidia.com>
+In-Reply-To: <85c118a606fbedc5c132a1f5ec223a5ba23b92d2.1780343944.git.nicolinc@nvidia.com>
 
-On Mon, Jun 01, 2026 at 01:42:34PM -0700, Nicolin Chen wrote:
-> When the kzalloc_obj() fails in iommufd_veventq_deliver_fetch(), it returns
-> NULL, falsely advertising to userspace that the queue is empty.
+On Mon, Jun 01, 2026 at 01:42:35PM -0700, Nicolin Chen wrote:
+> The read count must be large enough to hold one fault or a group's faults.
 > 
-> Propagate the -ENOMEM properly to the caller.
+> iommufd_fault_fops_read() does not validate the count, but returns 0 as if
+> the read had succeeded while leaving the pending fault in the queue.
 > 
-> Fixes: e36ba5ab808e ("iommufd: Add IOMMUFD_OBJ_VEVENTQ and IOMMUFD_CMD_VEVENTQ_ALLOC")
+> Return -EINVAL in the undersize cases.
+> 
+> Fixes: 07838f7fd529 ("iommufd: Add iommufd fault object")
 > Cc: stable@vger.kernel.org
 > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 
