@@ -1,180 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84AF22EEE95;
-	Thu,  4 Jun 2026 21:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5722F7F00
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 22:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780609548; cv=none; b=ToyaYQeI27nQqF8r3GTmI/572wLad7FUbFxk3sWG2505WjjkI4wjsgdBCqUCy3qP38Yg8m3zP8dyHxhfn1J6O6+RPLa/mIuBs9+HIk3Y3s+rYrgVcUNGRGRGNH028VMrdMnaYHoDq70H9Qsqx5/crZNAavm4keL0Q+nnV+W9NM8=
+	t=1780610758; cv=none; b=Vg8btDK7TFmtC4sP4e6oukWW77SxS/i9r3wxTiAhmwDWgC8wLj9HkFSnG74/zGTCvPBiDiNTrbsqBg3ciTCZZee6JtxrnVBGfnQ+HvoRGh+92b4wXYddaGJpbeI5FRDpih3FwmRigpWqIIpdHdpGtLqvPk87OO5/BOyFiJZ4cXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780609548; c=relaxed/simple;
-	bh=V9UFMa5+nldWmjgWKB1o9lJHWZQfdJ/LkPe10o6evzs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=QyT4FpLNiwaJnk12pfEh1623tI/hKBmRvlCnvZOUKiVjXvGOz78DaJZJ4fm5Z1T/PWE3ET9lznYXj0A/c0jMGPJT+4n0vh4BMIQLgu6GngnT0Szcjpx+pXSnoxPCjYQP9UYdZe+0uTZcvD3YuLZTEmCd+wS3XxENInU2KqLOpVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RjNt1Zfl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780610758; c=relaxed/simple;
+	bh=nXhHh/pGOI9rE0nMJVROQ5vq8c4fkI8n0N/AJuztcZw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rDaGLXhCYzyX4/viPIdYt/7iZ+B/m3hkznU77qPnMpxEz/UYpntw6y3cMBP+OLW+q+qDPYRClQ4Yzah9kos11NdRwywOuSorCMtrC75Wt2F2y2ApCW1oQwKvHbfjLrDsqC9tAIdo2EJ7dOiWvo3zmJcr3GHl7vVjo3MkKrIRK3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l0r70Opl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RjNt1Zfl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 076631F00893;
-	Thu,  4 Jun 2026 21:45:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l0r70Opl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 929761F00893;
+	Thu,  4 Jun 2026 22:05:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780609546;
-	bh=eVPQ3M4nO2cjo4ZvlqJcXIehT4M5f0oVzasV566Wey4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=RjNt1ZflgPOa3QCB1uhADhvuCHHeOhF9pb550vZ9YhQF47A5HGMNfdXAD6wxT6o+s
-	 p4yLBkWFUmqeLxAf9JXAQbeSadGip4m6WTwSx2j06mVZMs9pomJwf6IfpxpYiCHg21
-	 IOGpNWMEzRQC8XyjgcyV0q3vxkS6BIv8fYcuoXvsYbCAXYN89OK5WhQzDzXCOs+g4Q
-	 xwXWWiO9by1OWL2iRaX38Y/NQ00OAFPcya0uwNOVdJwcJrhNU+tTEDOVJ1emi5GEqm
-	 zGBt9qCmETG8CPbSSquApDhNk7saGl8cVIPS2ZUL4J0j3LCWkl964PCyneEPHWJ89M
-	 XFYcOKm3Ai2jw==
-Content-Type: multipart/mixed; boundary="===============3493038701439416165=="
+	s=k20260515; t=1780610756;
+	bh=Ldsl4/N6RsLmg8QiM9DUc+MdKQHVb1oeZd08FXXFOzw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=l0r70Opl4/BG285G2ge2YZd4Ch7f/M0h0jY45qJxtQCo81OIfXevyXFor7c+TMVo2
+	 xBMZxiCLs3iAgIMXJlhZn9wwxE7n7E5cBOUTjgRjqQ4eQ5AxhXFJx71nAM83SuADdv
+	 /SVEBmjFkKbaeEJskumvUFiO/fb9m6Z2DjG1XNbtW5Fj+eS+9ZVCXP62mpg4z3dsIm
+	 jRl4YwpWYtiLzjxaafI/ttMw7fLrxe64llXi8apkCMcYWh7+CgojmgWbn+g/PNUp/0
+	 ejTzlUbjISpK1wAYTOZVcOYjasGqRNdhGmnl/S6PIJ5E47sE2V9nb4RD8ChVQ0mTcz
+	 k4GGJ9gp/R1Mg==
+Date: Thu, 4 Jun 2026 15:05:53 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuni1840@gmail.com>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH kselftest] selftests: harness: Add __maybe_unused to
+ _##fixture_name##_##test_name##_object.
+Message-ID: <20260604220553.GA3936720@ax162>
+References: <20260530054722.271157-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8642178be3be8efc7f19ac4a9aa37e699f2baa82cab200909b99997068c6ae7b@mail.kernel.org>
-In-Reply-To: <20260604-kasan-v2-8-c066e627fda8@bootlin.com>
-References: <20260604-kasan-v2-8-c066e627fda8@bootlin.com>
-Subject: Re: [PATCH bpf-next v2 8/8] selftests/bpf: add tests to validate KASAN on JIT programs
-From: bot+bpf-ci@kernel.org
-To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,tglx@kernel.org,mingo@redhat.com,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,hpa@zytor.com,shuah@kernel.org,mcoquelin.stm32@gmail.com,alexandre.torgue@foss.st.com,ihor.solodrai@linux.dev
-Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-stm32@st-md-mailman.stormreply.com,linux-arm-kernel@lists.infradead.org,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  4 Jun 2026 21:45:46 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260530054722.271157-1-kuniyu@google.com>
 
---===============3493038701439416165==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Sat, May 30, 2026 at 05:47:20AM +0000, Kuniyuki Iwashima wrote:
+> tools/testing/selftests/net/Makefile adds -Wall to CFLAGS.
+> 
+> With clang supporting -Wunused-but-set-global, building kselftest
+> gets too noisy:
+> 
+>   bind_timewait.c:76:1: warning: variable '_bind_timewait_1_object' set but not used [-Wunused-but-set-global]
+>      76 | TEST_F(bind_timewait, 1)
+>         | ^
+>   ../kselftest_harness.h:398:2: note: expanded from macro 'TEST_F'
+>     398 |         __TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEOUT_DEFAULT)
+>         |         ^
+>   ../kselftest_harness.h:470:33: note: expanded from macro '__TEST_F_IMPL'
+>     470 |         static struct __test_metadata *_##fixture_name##_##test_name##_object; \
+>         |                                        ^
+>   <scratch space>:155:1: note: expanded from here
+>     155 | _bind_timewait_1_object
+>         | ^
+> 
+> The global variable _##fixture_name##_##test_name##_object is not
+> used if a test does not use XFAIL_ADD().
+> 
+> Let's add __maybe_unused to it.
+> 
+> Link: https://github.com/llvm/llvm-project/commit/3e011457055bd3868bd05cf80bc1a4482777809b
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/kasan.c b/tools/testing/selftests/bpf/prog_tests/kasan.c
-> new file mode 100644
-> index 000000000000..0000000000000
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/kasan.c
-> @@ -0,0 +1,356 @@
+Seems reasonable.
 
-[ ... ]
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-> +	ctx->klog_fd = open_kernel_logs();
-> +	if (!ASSERT_OK_FD(ctx->klog_fd, "open kernel logs"))
-> +		goto destroy;
+> ---
+>  tools/testing/selftests/kselftest_harness.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+> index cfdce9cd252e..a2e104f7fb52 100644
+> --- a/tools/testing/selftests/kselftest_harness.h
+> +++ b/tools/testing/selftests/kselftest_harness.h
+> @@ -467,7 +467,7 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
+>  				!__atomic_test_and_set(_metadata->no_teardown, __ATOMIC_RELAXED)) \
+>  			fixture_name##_teardown(_metadata, self, variant); \
+>  	} \
+> -	static struct __test_metadata *_##fixture_name##_##test_name##_object; \
+> +	static struct __test_metadata *_##fixture_name##_##test_name##_object __maybe_unused; \
+>  	static void __attribute__((constructor(KSELFTEST_PRIO_TEST))) \
+>  			_register_##fixture_name##_##test_name(void) \
+>  	{ \
+> -- 
+> 2.54.0.823.g6e5bcc1fc9-goog
+> 
 
-[ ... ]
-
-> +	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-> +		test = &tests[i];
-> +		run_subtest(ctx, test);
-> +	}
-
-The Sashiko AI review on the RFC v1 8/8 posting raised a concern here that
-does not seem to have been addressed in v2:
-
-  https://lore.kernel.org/bpf/20260425065049.BEC63C2BCB0@smtp.kernel.org
-
-The original question was:
-
-  KASAN operates in single-shot mode by default. After the first subtest
-  triggers a report, will subsequent reports be suppressed, causing the
-  remaining subtests to fail? Also, since BPF CI runs with panic_on_warn=1,
-  will the first KASAN splat invoke check_panic_on_warn() and immediately
-  panic the CI runner?
-
-KASAN runs in single-shot mode by default. mm/kasan/report.c suppresses
-reports after the first one unless kasan_multi_shot is set.
-
-This loop runs roughly 50 subtests, and each one expects a fresh KASAN
-report emitted via the JIT-inserted __asan_load/__asan_store calls that go
-through kasan_report().
-
-Under default single-shot KASAN, would the subtests after the first one see
-no report and fail the positive assertions?
-
-Separately, BPF CI runs with panic_on_warn=1 (config.ppc64el still sets
-panic_on_warn=1). Would the first KASAN splat reach check_panic_on_warn()
-and panic the runner?
-
-Nothing in v2 appears to enable kasan_multi_shot or guard against
-panic_on_warn. Was this intended to be handled somewhere?
-
-> diff --git a/tools/testing/selftests/bpf/progs/kasan.c b/tools/testing/selftests/bpf/progs/kasan.c
-> new file mode 100644
-> index 000000000000..670318a956a4
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/kasan.c
-> @@ -0,0 +1,382 @@
-
-[ ... ]
-
-> +SEC("tcx/ingress")
-> +int stx_on_stack(struct __sk_buff *skb)
-> +{
-> +	struct kasan_write_val val;
-> +
-> +	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_write_val));
-> +	switch (access_size) {
-> +	case 1:
-> +		val.data_1 = access_size;
-> +		break;
-> +	case 2:
-> +		val.data_2 = access_size;
-> +		break;
-> +	case 4:
-> +		val.data_4 = access_size;
-> +		break;
-> +	case 8:
-> +		val.data_8 = access_size;
-> +		break;
-> +	}
-> +	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_write_val));
-
-This isn't a bug, but should this second call be
-bpf_kfunc_kasan_unpoison() rather than bpf_kfunc_kasan_poison()?
-
-Every other program in this file (st_on_stack, st_not_on_stack, ldx_*,
-simple_atomic_*, load_acquire_*, store_release_*) calls
-bpf_kfunc_kasan_unpoison() after the access, and stx_not_on_stack below
-repeats the same poison-twice pattern.
-
-> +	return 0;
-> +}
-
-[ ... ]
-
-> +SEC("tcx/ingress")
-> +int stx_not_on_stack(struct __sk_buff *skb)
-> +{
-
-[ ... ]
-
-> +	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val));
-> +	switch (access_size) {
-> +	case 1:
-> +		val->data_1 = access_size;
-> +		break;
-
-[ ... ]
-
-> +	}
-> +	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val));
-
-Same question here as in stx_on_stack: the second call is
-bpf_kfunc_kasan_poison() where the other programs use
-bpf_kfunc_kasan_unpoison().
-
-The intended store still happens while the memory is poisoned, so the
-expected KASAN report is still generated and the positive assertion still
-passes. The effect is that the leftover poison stays on the test_map slab
-value (and on the stack region for stx_on_stack) until the next subtest
-re-poisons and unpoisons the same region. Was poisoning a second time here
-intentional?
-
-> +	return 0;
-> +}
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26978380520
---===============3493038701439416165==--
+-- 
+Cheers,
+Nathan
