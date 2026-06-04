@@ -1,67 +1,66 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064B020459A
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 00:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91D321638D
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 00:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780533790; cv=none; b=VmQCGboHud7Qv9btxsLG52/amdNtL4hvpljj2EgDwT7mymWnb7iLAUlbLUeFc+kX9OJvDQuMhJSXdoVx4EI5OlQY07KSWYUofekI17GBdDRy1pHpwFaw2Mt1ZxnUoDZZYJT9SuQXx8e18XND73RBazlxemq0gPL0EPrWzzN6VVE=
+	t=1780533790; cv=none; b=VKWO+ZzyzhfIh+DlLrhJmIBWB5ahTalpYSqKCBxY8rDE8InpLgOragw0BlIe+E01rJkJNJb6PuGg09YQtms9s40e/SsSz9SXyKR+mgpdRtCQNVyAAC2AAD9ESJj++Ac+J5V3tpcM8XGGdLvVt1lFa4q+P/7nbH/iBOjK4+k5LnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780533790; c=relaxed/simple;
-	bh=u8CLOIiiL03Jn4LaBdDJYWviByZ6A69MVt+eIqh+9w0=;
+	bh=FGmZPfBI/+gfTbbn4qo1X8ydVMFTuK5Qubrpu7cBrNU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VRu6gjNewkut+7vax+y3uLRBKC96BHY3G/7HgbQNj8419CZvK915APzWRWUJA/GzMhN4jehvjHCBqQcRsm1HYZ1iowtfAabjECD1hMIjkelnNLWHphkCaMga2KIdaCdj3CKZQiX1lG3JsrXVDfs6qjMqQ1q4A15OW5rMi3jh9Yw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JgwjkCY7; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:To:Cc; b=KAwzK+3+s660UWrKX+N4S55/uR8AqT9f68e+SOLbdUuZ+G2fSyk/ERAyI24Uvs6qxAysUb65s3g/7zJMPFrXJ/mUFwtYSLn7Yf8akbzddJUpZqbYfYPLH+/826R5uy7Ok/UjTwAmgAvV5QW/rvO4PYGyKdnbPaW0V7SqLNB4SiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z9jR7y/n; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JgwjkCY7"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2c0c379e8ffso815045ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 17:43:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z9jR7y/n"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-842358aaf36so46294b3a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 17:43:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780533787; x=1781138587; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780533788; x=1781138588; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DMXdy1WUN6bY3q1z5SmXOuLnvJqwfrxGDALvO9pXctw=;
-        b=JgwjkCY74lytAxhRPp4xJOYqcSotL1GFGMNylRPpfmGVT11CTT6JBz8HTzh+4uKQgg
-         +ltcmmIOA6qWfRqVgBFIleqvz0dWKXITzk/rWMPARagQvQz+Sevz5UEcHDEF/+RFCPTz
-         sS2yQ1ebSfXlKfX72q9bJ+Pf6/6LCnqyJaC/vQEyg1CBRrdPPFo0JoU5otBTCC6c4RCU
-         cWJLFCcpGX18kTcQa5yX01JLT5E0pW1iyc1SoG2zvbrqQiLmgO+hXFk5DypcO70meLmb
-         sgfqis005YOBcQl0zd7HT+FclgrAmCJ9Wf5xYh96A0bFJS39tfiLbGU5FmcOMTnOZI6j
-         Tf0Q==
+        bh=vsTKuujCl0cTIDmjasTaeO7+rGb2Yh+GT+02Pw0KJmo=;
+        b=Z9jR7y/nf2qUO/HoPZMiABndEyuUZTo74mRia3We3WnYmExDCwvXJY6XWCxnjXcf+5
+         mLbDiOw+XDkT75TDo386vhgaI4U22ZNlndS+qBfnIc276EakiVpvsRsanLaLyDaSjWgp
+         mCcQQRlAy3vEkEjsH+bzA2C5iNsL1LmwNfQCeZkSDCdycnq+Gywh6Wph3lQcrKc4Qsxh
+         0CSdJI5TKGijjwSEvV5zdWFFKcV8a9tNvl9EfDIClKO2veuLHWvhP+QnfurW1ZFHIxAe
+         zhxVoVwGDAS9PFgkmHeaE2eQKzUMlolihYBdXpukiYrIFGMy8J+oZXcEZlwI8Mz80JwB
+         R/aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780533787; x=1781138587;
+        d=1e100.net; s=20251104; t=1780533788; x=1781138588;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=DMXdy1WUN6bY3q1z5SmXOuLnvJqwfrxGDALvO9pXctw=;
-        b=F1Ms5EJbxK7sTZUkulgNg1rYuUmOtLHj4QAletkrwfRrwxCRz+0onDaNQq5VrJHhf6
-         QK4I6/M07/kUEkA1ZQ3fo5wulLRch3E1DWVlh1u9OSYoVUXx6NBK5s0GRSA4oKcR2rRA
-         4BK/rsc3ya5Z25VXQs01fTz5CT0poyhRq21Y+Pc24bnwezhJlWHV4tnjTr/dyHP6d4RQ
-         c4QybCrDJxw+7YLyG1BaIszoM9KOUvdOA67VCWDVGxDIkGixQC7puJOh/8VD7w92Z/fb
-         CVDuiCJzpGcfEjH86Sc8iksPObjucbiGAtMicfdel6BR3G2T/x+Xt1UO3br1EHmEEOd5
-         2jyg==
-X-Forwarded-Encrypted: i=1; AFNElJ8QOdl4nPPL+5HSE1SEc6FuvWp5UnV3Ha+aNd7w90hV3+s3D4mZXMdiiXE/qSpdoiWJxqQWWjvUH76kbKU6Fbw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzy5G+/AQjfcFZlG/iWxkGG22uzOphjBzFMfxK8Myq4Vwargp8t
-	8j85XSSxdn3si4CUKHQs9RbbEdQSSzhTChQI5/NG2LRWHax58OPYMPdR
-X-Gm-Gg: Acq92OFbXgEjjDdI2hexGtjQs7h/ziin/dfu29ED6olcebX4OF7xawCtaFpvyg3LZHC
-	TXvjxhAyWyn1P8Q4sX0iGPiz6eQdX5DCDMKPRCZ896QNmX5lYUNH0kew8gS1r9zI7bN7JCZyoKc
-	qlEljb27qPKzriv9/ORNEeyQMHfJ2oYObfIwiDrKzsan0YBkn83ufzTbBgjuO+BuFNmfStmI6Bo
-	yCJ8pndaDjnxnWkIzXaQT7oPz91leorHanhSFciT+yvb9auavaPZHW6R6bp5K8iZGihSnUoiFfd
-	d2scpHUZaG+w2ZQhfBdM2CnVHO7oOHIX0Dun5noIGJkmZOPpo5UUX/UG41tsTa0p2YZ8tD9XgRv
-	m1+o+yPsX4+fLyzYouL96e5tjqmlMRSd9GEQ+RRimvmLNU9nwO+fUKjUH0D+Uh94Kp+5laCKRZH
-	W9LZUMKkCfxZ7Z0p5BXYTldGGN/mG8/A==
-X-Received: by 2002:a17:903:2a8b:b0:2c1:1685:b8f with SMTP id d9443c01a7336-2c163a10116mr71998895ad.9.1780533787168;
-        Wed, 03 Jun 2026 17:43:07 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:55::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f6d2bbsm38725645ad.1.2026.06.03.17.43.06
+        bh=vsTKuujCl0cTIDmjasTaeO7+rGb2Yh+GT+02Pw0KJmo=;
+        b=tKnQ7s20nhrlE+5jjdHMX7a14fqj0oq2R4A6hAN5vEnKND9BMHoSd3Ja+nKQxzGn15
+         h7l2WYCPdzZEmduff7fZRJEOWuPxmJBew4r738+QHW27l8aZlZQkiqfXB2JShUmPmRQa
+         yi38Wbb1n2f/6sFpj1gtJuIBO7VVqI0fpxGdmxXGRjChbjo3VmXYNfkTOti7syL2I0yz
+         tObyyG0+22bMOhRh4YhuGmbE3mM2B9FOTygyumq2sD4/GtZykqKyPfKKAORLSJMNA6Q2
+         PVSTacJQOf73fGtNvyfoXjJ64dG/KeiPmEP5NQV0Ennf5dX6wV0KIQ9teLRjZLYJW5LI
+         fpDA==
+X-Forwarded-Encrypted: i=1; AFNElJ+sIW6hXO8Q565QsNarLA1TLz6HYmAEhdBHbPcmEKCSBUz60Iogb8+zF18ExC4dxAhqSVFxdgk39EpOcPwTUQQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw75V0SNdigTHyVR1YA6u+wlJ2b6GKachuNV22JVbw2E0n8YdyQ
+	xAYGlQd+oU3wDEczcYnJrxXb0wlBUh+P7tHZEHVqvVojczerj+i/YI98
+X-Gm-Gg: Acq92OHIJjXGQrJ+sUVequfIOO+cxMgfKNAt9S6pmKSIdIfOJKjMYlnUZqbkT++YT7B
+	Aret+QZWJ0WuUc7OoJF+RCd/3wNieEOa0nXWaS6oQvQd2fwOXjXOkseKKwA04VI5sh/gAmHMVOY
+	Bc0dkdN0H45RG17LuqKNGxji+8msmqLe5IJ+ba2l5Ye2bhyAin/0Nu/toO3PYIRZH8nriwW9HYW
+	IXOEvD7ywYwozNR0u+TyjistpEQwfDnr6fp4Y7ZQrrHbyCP0WfZ1OYw5vKYPUMoV25Ee38100zk
+	ncUlR14C2BzPM7yI1EeN0ujVkEJ1iV9wnlhTEysShu9Bt2x9+DTXhHvKnIi5OTEScNUGqsUJQRW
+	b83SryjoCmTGgFNqsLl9Am+wGPCeKh3uiwWm8RpHeBZSQ44OLzl6Lhov17cPsrKT1ZP20ha9qdz
+	/sdOdx+0wr0ndySHsKlU4jvoqVkJnR9w==
+X-Received: by 2002:a05:6a00:139e:b0:842:77ab:35c8 with SMTP id d2e1a72fcca58-84284fe7c61mr5429878b3a.44.1780533788133;
+        Wed, 03 Jun 2026 17:43:08 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:52::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84282372502sm4584728b3a.16.2026.06.03.17.43.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2026 17:43:06 -0700 (PDT)
+        Wed, 03 Jun 2026 17:43:07 -0700 (PDT)
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Wed, 03 Jun 2026 17:42:58 -0700
-Subject: [PATCH net-next 1/4] net: devmem: allow rx-buf-size > PAGE_SIZE
- per dmabuf binding
+Date: Wed, 03 Jun 2026 17:42:59 -0700
+Subject: [PATCH net-next 2/4] udmabuf: emit one sg entry per pinned folio
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +69,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260603-tcpdm-large-niovs-v1-1-f37a4ac6726c@meta.com>
+Message-Id: <20260603-tcpdm-large-niovs-v1-2-f37a4ac6726c@meta.com>
 References: <20260603-tcpdm-large-niovs-v1-0-f37a4ac6726c@meta.com>
 In-Reply-To: <20260603-tcpdm-large-niovs-v1-0-f37a4ac6726c@meta.com>
 To: Donald Hunter <donald.hunter@gmail.com>, 
@@ -92,395 +91,94 @@ X-Mailer: b4 0.14.3
 
 From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Every devmem dmabuf binding today hands the page_pool PAGE_SIZE niovs.
-This caps a single RX descriptor at PAGE_SIZE, burning CPU on buffer
-churn for large flows.
+get_sg_table() emitted one PAGE_SIZE sg entry per page even when the
+underlying folio was larger.
 
-Add a bind-time netlink attribute, NETDEV_A_DMABUF_RX_BUF_SIZE, that
-lets userspace request a larger niov size. The value must be a power of
-two >= PAGE_SIZE.
+Instead, walk folios[] and emit one sg entry per folio. When folios
+represent large pages (as is for MFD_HUGETLB), each sg entry is a large
+page. Normal PAGE_SIZE sg tables are unchanged.
 
-Measurements
-------------
-Setup: kperf in devmem RX/TX cuda mode, 4 flows, 64 MB messages, 60s,
-dctcp, num-rx-queues=4, dmabuf-rx/tx-size-mb=2048, 10 runs per niov
-size, mlx5.
-
-CPU Util:
-
-   niov        net sirq %        net idle %         app sys %        app idle %
-  -----  ----------------  ----------------  ----------------  ----------------
-     4K   62.38 +/-  8.27   33.40 +/-  7.51   54.15 +/- 10.23   43.67 +/- 10.53
-    16K   58.91 +/-  5.35   35.23 +/-  5.88   41.05 +/-  8.87   56.42 +/-  9.24
-    32K   64.12 +/-  0.68   31.09 +/-  1.48   44.54 +/-  3.51   52.63 +/-  3.65
-    64K   54.69 +/-  5.54   39.67 +/-  5.81   35.47 +/-  3.11   61.97 +/-  3.27
-
-RX app sys % drops ~19% from 4K to 64K.
-
-Throughput:
-
-   niov       RX dev Gbps   RX flow avg Gbps
-  -----  ----------------  -----------------
-     4K  300.63 +/- 53.21    75.16 +/- 13.30
-    16K  321.35 +/- 28.20    80.34 +/-  7.05
-    32K  347.63 +/-  2.20    86.91 +/-  0.55
-    64K  332.11 +/- 14.26    83.03 +/-  3.56
-
-Throughput seems to increase, but the stdev is pretty wide so could just
-be noise.
-
-kperf support (not yet merged):
-https://github.com/facebookexperimental/kperf/commit/8837577f920876bce6986ec18869ac04439ebcd2
+Required by net/core/devmem to support rx-buf-size > PAGE_SIZE with
+udmabuf.
 
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- Documentation/netlink/specs/netdev.yaml |  8 +++++
- include/uapi/linux/netdev.h             |  1 +
- net/core/devmem.c                       | 52 +++++++++++++++++++--------------
- net/core/devmem.h                       | 13 ++++++---
- net/core/netdev-genl-gen.c              |  5 ++--
- net/core/netdev-genl.c                  | 18 ++++++++++--
- tools/include/uapi/linux/netdev.h       |  1 +
- 7 files changed, 68 insertions(+), 30 deletions(-)
+ drivers/dma-buf/udmabuf.c | 47 ++++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 42 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index a1f4c5a561e9..063119907983 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -591,6 +591,13 @@ attribute-sets:
-         type: u32
-         checks:
-           min: 1
-+      -
-+        name: rx-buf-size
-+        doc: |
-+          Size in bytes of each RX buffer the NIC writes into from the bound
-+          dmabuf. Must be a power of two and >= PAGE_SIZE; defaults to
-+          PAGE_SIZE.
-+        type: u32
- 
- operations:
-   list:
-@@ -805,6 +812,7 @@ operations:
-             - ifindex
-             - fd
-             - queues
-+            - rx-buf-size
-         reply:
-           attributes:
-             - id
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index 7df1056a35fd..180a4ffffd60 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -217,6 +217,7 @@ enum {
- 	NETDEV_A_DMABUF_QUEUES,
- 	NETDEV_A_DMABUF_FD,
- 	NETDEV_A_DMABUF_ID,
-+	NETDEV_A_DMABUF_RX_BUF_SIZE,
- 
- 	__NETDEV_A_DMABUF_MAX,
- 	NETDEV_A_DMABUF_MAX = (__NETDEV_A_DMABUF_MAX - 1)
-diff --git a/net/core/devmem.c b/net/core/devmem.c
-index 957d6b96216b..5a1c0d7984a8 100644
---- a/net/core/devmem.c
-+++ b/net/core/devmem.c
-@@ -46,7 +46,7 @@ static dma_addr_t net_devmem_get_dma_addr(const struct net_iov *niov)
- 
- 	owner = net_devmem_iov_to_chunk_owner(niov);
- 	return owner->base_dma_addr +
--	       ((dma_addr_t)net_iov_idx(niov) << PAGE_SHIFT);
-+	       ((dma_addr_t)net_iov_idx(niov) << owner->binding->niov_shift);
+diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+index 94b8ecb892bb..f28dd3788ada 100644
+--- a/drivers/dma-buf/udmabuf.c
++++ b/drivers/dma-buf/udmabuf.c
+@@ -141,26 +141,63 @@ static void vunmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
+ 	vm_unmap_ram(map->vaddr, ubuf->pagecount);
  }
  
- static void net_devmem_dmabuf_binding_release(struct percpu_ref *ref)
-@@ -93,13 +93,14 @@ net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding)
- 	ssize_t offset;
- 	ssize_t index;
- 
--	dma_addr = gen_pool_alloc_owner(binding->chunk_pool, PAGE_SIZE,
-+	dma_addr = gen_pool_alloc_owner(binding->chunk_pool,
-+					1UL << binding->niov_shift,
- 					(void **)&owner);
- 	if (!dma_addr)
- 		return NULL;
- 
- 	offset = dma_addr - owner->base_dma_addr;
--	index = offset / PAGE_SIZE;
-+	index = offset >> binding->niov_shift;
- 	niov = &owner->area.niovs[index];
- 
- 	niov->desc.pp_magic = 0;
-@@ -113,12 +114,13 @@ void net_devmem_free_dmabuf(struct net_iov *niov)
- {
- 	struct net_devmem_dmabuf_binding *binding = net_devmem_iov_binding(niov);
- 	unsigned long dma_addr = net_devmem_get_dma_addr(niov);
-+	size_t niov_size = 1UL << binding->niov_shift;
- 
- 	if (WARN_ON(!gen_pool_has_addr(binding->chunk_pool, dma_addr,
--				       PAGE_SIZE)))
-+				       niov_size)))
- 		return;
- 
--	gen_pool_free(binding->chunk_pool, dma_addr, PAGE_SIZE);
-+	gen_pool_free(binding->chunk_pool, dma_addr, niov_size);
- }
- 
- void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
-@@ -163,6 +165,9 @@ int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
- 	u32 xa_idx;
- 	int err;
- 
-+	if (binding->niov_shift != PAGE_SHIFT)
-+		mp_params.rx_page_size = 1U << binding->niov_shift;
++/* Return the number of contiguous pages backed by the folio at @i.
++ * A udmabuf may map only part of a folio, or reference the same folio
++ * in multiple non-contiguous runs, so folio_nr_pages() can't be used.
++ */
++static pgoff_t udmabuf_folio_nr_pages(struct udmabuf *ubuf, pgoff_t i)
++{
++	struct folio *f = ubuf->folios[i];
++	pgoff_t j;
 +
- 	err = netif_mp_open_rxq(dev, rxq_idx, &mp_params, extack);
- 	if (err)
- 		return err;
-@@ -184,14 +189,16 @@ struct net_devmem_dmabuf_binding *
- net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
- 		       struct device *dma_dev,
- 		       enum dma_data_direction direction,
--		       unsigned int dmabuf_fd, struct netdev_nl_sock *priv,
-+		       unsigned int dmabuf_fd, unsigned int niov_shift,
-+		       struct netdev_nl_sock *priv,
- 		       struct netlink_ext_ack *extack)
- {
- 	struct net_devmem_dmabuf_binding *binding;
-+	size_t niov_size = 1UL << niov_shift;
- 	static u32 id_alloc_next;
-+	unsigned int sg_idx, i;
- 	struct scatterlist *sg;
- 	struct dma_buf *dmabuf;
--	unsigned int sg_idx, i;
- 	unsigned long virtual;
- 	int err;
- 
-@@ -213,6 +220,7 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
- 
- 	binding->dev = dev;
- 	binding->vdev = vdev;
-+	binding->niov_shift = niov_shift;
- 	xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
- 
- 	err = percpu_ref_init(&binding->ref,
-@@ -248,18 +256,14 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
- 			goto err_unmap;
- 		}
- 		binding->tx_vec = kvmalloc_objs(struct net_iov *,
--						dmabuf->size / PAGE_SIZE);
-+						dmabuf->size >> niov_shift);
- 		if (!binding->tx_vec) {
- 			err = -ENOMEM;
- 			goto err_unmap;
- 		}
- 	}
- 
--	/* For simplicity we expect to make PAGE_SIZE allocations, but the
--	 * binding can be much more flexible than that. We may be able to
--	 * allocate MTU sized chunks here. Leave that for future work...
--	 */
--	binding->chunk_pool = gen_pool_create(PAGE_SHIFT,
-+	binding->chunk_pool = gen_pool_create(niov_shift,
- 					      dev_to_node(&dev->dev));
- 	if (!binding->chunk_pool) {
- 		err = -ENOMEM;
-@@ -273,9 +277,11 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
- 		size_t len = sg_dma_len(sg);
- 		struct net_iov *niov;
- 
--		if (!IS_ALIGNED(len, PAGE_SIZE)) {
-+		if (!IS_ALIGNED(dma_addr, niov_size) ||
-+		    !IS_ALIGNED(len, niov_size)) {
- 			err = -EINVAL;
--			NL_SET_ERR_MSG(extack, "dma-buf SG length must be PAGE_SIZE aligned");
-+			NL_SET_ERR_MSG(extack,
-+				       "dmabuf sg entry not aligned to niov size");
- 			goto err_free_chunks;
- 		}
- 
-@@ -288,7 +294,7 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
- 
- 		owner->area.base_virtual = virtual;
- 		owner->base_dma_addr = dma_addr;
--		owner->area.num_niovs = len / PAGE_SIZE;
-+		owner->area.num_niovs = len >> niov_shift;
- 		owner->binding = binding;
- 
- 		err = gen_pool_add_owner(binding->chunk_pool, dma_addr,
-@@ -313,7 +319,7 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
- 			page_pool_set_dma_addr_netmem(net_iov_to_netmem(niov),
- 						      net_devmem_get_dma_addr(niov));
- 			if (direction == DMA_TO_DEVICE)
--				binding->tx_vec[owner->area.base_virtual / PAGE_SIZE + i] = niov;
-+				binding->tx_vec[(owner->area.base_virtual >> niov_shift) + i] = niov;
- 		}
- 
- 		virtual += len;
-@@ -430,13 +436,15 @@ struct net_iov *
- net_devmem_get_niov_at(struct net_devmem_dmabuf_binding *binding,
- 		       size_t virt_addr, size_t *off, size_t *size)
- {
-+	size_t niov_size = 1UL << binding->niov_shift;
-+
- 	if (virt_addr >= binding->dmabuf->size)
- 		return NULL;
- 
--	*off = virt_addr % PAGE_SIZE;
--	*size = PAGE_SIZE - *off;
-+	*off = virt_addr & (niov_size - 1);
-+	*size = niov_size - *off;
- 
--	return binding->tx_vec[virt_addr / PAGE_SIZE];
-+	return binding->tx_vec[virt_addr >> binding->niov_shift];
- }
- 
- /*** "Dmabuf devmem memory provider" ***/
-@@ -454,8 +462,8 @@ int mp_dmabuf_devmem_init(struct page_pool *pool)
- 	pool->dma_sync = false;
- 	pool->dma_sync_for_cpu = false;
- 
--	if (pool->p.order != 0)
--		return -E2BIG;
-+	if (pool->p.order != binding->niov_shift - PAGE_SHIFT)
-+		return -EINVAL;
- 
- 	net_devmem_dmabuf_binding_get(binding);
- 	return 0;
-diff --git a/net/core/devmem.h b/net/core/devmem.h
-index 3852a56036cb..4a293a7d1149 100644
---- a/net/core/devmem.h
-+++ b/net/core/devmem.h
-@@ -71,6 +71,8 @@ struct net_devmem_dmabuf_binding {
- 	 */
- 	struct net_iov **tx_vec;
- 
-+	unsigned int niov_shift;
-+
- 	struct work_struct unbind_w;
- };
- 
-@@ -93,7 +95,8 @@ struct net_devmem_dmabuf_binding *
- net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
- 		       struct device *dma_dev,
- 		       enum dma_data_direction direction,
--		       unsigned int dmabuf_fd, struct netdev_nl_sock *priv,
-+		       unsigned int dmabuf_fd, unsigned int niov_shift,
-+		       struct netdev_nl_sock *priv,
- 		       struct netlink_ext_ack *extack);
- struct net_devmem_dmabuf_binding *net_devmem_lookup_dmabuf(u32 id);
- void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding);
-@@ -122,10 +125,11 @@ static inline u32 net_devmem_iov_binding_id(const struct net_iov *niov)
- 
- static inline unsigned long net_iov_virtual_addr(const struct net_iov *niov)
- {
--	struct net_iov_area *owner = net_iov_owner(niov);
-+	struct dmabuf_genpool_chunk_owner *co =
-+		net_devmem_iov_to_chunk_owner(niov);
- 
--	return owner->base_virtual +
--	       ((unsigned long)net_iov_idx(niov) << PAGE_SHIFT);
-+	return net_iov_owner(niov)->base_virtual +
-+	       ((unsigned long)net_iov_idx(niov) << co->binding->niov_shift);
- }
- 
- static inline bool
-@@ -175,6 +179,7 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
- 		       struct device *dma_dev,
- 		       enum dma_data_direction direction,
- 		       unsigned int dmabuf_fd,
-+		       unsigned int niov_shift,
- 		       struct netdev_nl_sock *priv,
- 		       struct netlink_ext_ack *extack)
- {
-diff --git a/net/core/netdev-genl-gen.c b/net/core/netdev-genl-gen.c
-index c7e138bfe345..55e03b9cd227 100644
---- a/net/core/netdev-genl-gen.c
-+++ b/net/core/netdev-genl-gen.c
-@@ -106,10 +106,11 @@ static const struct nla_policy netdev_qstats_get_nl_policy[NETDEV_A_QSTATS_SCOPE
- };
- 
- /* NETDEV_CMD_BIND_RX - do */
--static const struct nla_policy netdev_bind_rx_nl_policy[NETDEV_A_DMABUF_FD + 1] = {
-+static const struct nla_policy netdev_bind_rx_nl_policy[NETDEV_A_DMABUF_RX_BUF_SIZE + 1] = {
- 	[NETDEV_A_DMABUF_IFINDEX] = NLA_POLICY_MIN(NLA_U32, 1),
- 	[NETDEV_A_DMABUF_FD] = { .type = NLA_U32, },
- 	[NETDEV_A_DMABUF_QUEUES] = NLA_POLICY_NESTED(netdev_queue_id_nl_policy),
-+	[NETDEV_A_DMABUF_RX_BUF_SIZE] = { .type = NLA_U32, },
- };
- 
- /* NETDEV_CMD_NAPI_SET - do */
-@@ -219,7 +220,7 @@ static const struct genl_split_ops netdev_nl_ops[] = {
- 		.cmd		= NETDEV_CMD_BIND_RX,
- 		.doit		= netdev_nl_bind_rx_doit,
- 		.policy		= netdev_bind_rx_nl_policy,
--		.maxattr	= NETDEV_A_DMABUF_FD,
-+		.maxattr	= NETDEV_A_DMABUF_RX_BUF_SIZE,
- 		.flags		= GENL_ADMIN_PERM | GENL_CMD_CAP_DO,
- 	},
- 	{
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index b4d48f3672a5..9902a97698f5 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -1012,6 +1012,7 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
- {
- 	struct net_devmem_dmabuf_binding *binding;
- 	u32 ifindex, dmabuf_fd, rxq_idx;
-+	unsigned int niov_shift = PAGE_SHIFT;
- 	struct netdev_nl_sock *priv;
- 	struct net_device *netdev;
- 	unsigned long *rxq_bitmap;
-@@ -1028,6 +1029,18 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
- 	ifindex = nla_get_u32(info->attrs[NETDEV_A_DEV_IFINDEX]);
- 	dmabuf_fd = nla_get_u32(info->attrs[NETDEV_A_DMABUF_FD]);
- 
-+	if (info->attrs[NETDEV_A_DMABUF_RX_BUF_SIZE]) {
-+		u32 rx_buf_size = nla_get_u32(info->attrs[NETDEV_A_DMABUF_RX_BUF_SIZE]);
-+
-+		if (!rx_buf_size || !is_power_of_2(rx_buf_size) ||
-+		    rx_buf_size < PAGE_SIZE) {
-+			NL_SET_ERR_MSG(info->extack,
-+				       "rx_buf_size must be a power of 2 >= PAGE_SIZE");
-+			return -EINVAL;
-+		}
-+		niov_shift = ilog2(rx_buf_size);
++	for (j = 1; i + j < ubuf->pagecount; j++) {
++		if (ubuf->folios[i + j] != f)
++			break;
++		/* Same folio, but not a sequential offset within it. */
++		if (ubuf->offsets[i + j] != ubuf->offsets[i] + j * PAGE_SIZE)
++			break;
 +	}
++	return j;
++}
 +
- 	priv = genl_sk_priv_get(&netdev_nl_family, NETLINK_CB(skb).sk);
- 	if (IS_ERR(priv))
- 		return PTR_ERR(priv);
-@@ -1078,7 +1091,8 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
- 	}
++/* Count the contiguous folio runs in @ubuf, one sg entry per run. */
++static unsigned int udmabuf_sg_nents(struct udmabuf *ubuf)
++{
++	unsigned int nents = 0;
++	pgoff_t i;
++
++	for (i = 0; i < ubuf->pagecount; i += udmabuf_folio_nr_pages(ubuf, i))
++		nents++;
++	return nents;
++}
++
+ static struct sg_table *get_sg_table(struct device *dev, struct dma_buf *buf,
+ 				     enum dma_data_direction direction)
+ {
+ 	struct udmabuf *ubuf = buf->priv;
+-	struct sg_table *sg;
+ 	struct scatterlist *sgl;
+-	unsigned int i = 0;
++	struct sg_table *sg;
++	pgoff_t i, run;
++	unsigned int nents;
+ 	int ret;
  
- 	binding = net_devmem_bind_dmabuf(netdev, NULL, dma_dev, DMA_FROM_DEVICE,
--					 dmabuf_fd, priv, info->extack);
-+					 dmabuf_fd, niov_shift, priv,
-+					 info->extack);
- 	if (IS_ERR(binding)) {
- 		err = PTR_ERR(binding);
- 		goto err_rxq_bitmap;
-@@ -1221,7 +1235,7 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
- 	binding = net_devmem_bind_dmabuf(bind_dev,
- 					 bind_dev != netdev ? netdev : NULL,
- 					 dma_dev, DMA_TO_DEVICE, dmabuf_fd,
--					 priv, info->extack);
-+					 PAGE_SHIFT, priv, info->extack);
- 	if (IS_ERR(binding)) {
- 		err = PTR_ERR(binding);
- 		goto err_unlock_bind_dev;
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index 7df1056a35fd..180a4ffffd60 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -217,6 +217,7 @@ enum {
- 	NETDEV_A_DMABUF_QUEUES,
- 	NETDEV_A_DMABUF_FD,
- 	NETDEV_A_DMABUF_ID,
-+	NETDEV_A_DMABUF_RX_BUF_SIZE,
++	nents = udmabuf_sg_nents(ubuf);
++
+ 	sg = kzalloc_obj(*sg);
+ 	if (!sg)
+ 		return ERR_PTR(-ENOMEM);
  
- 	__NETDEV_A_DMABUF_MAX,
- 	NETDEV_A_DMABUF_MAX = (__NETDEV_A_DMABUF_MAX - 1)
+-	ret = sg_alloc_table(sg, ubuf->pagecount, GFP_KERNEL);
++	ret = sg_alloc_table(sg, nents, GFP_KERNEL);
+ 	if (ret < 0)
+ 		goto err_alloc;
+ 
+-	for_each_sg(sg->sgl, sgl, ubuf->pagecount, i)
+-		sg_set_folio(sgl, ubuf->folios[i], PAGE_SIZE,
++	sgl = sg->sgl;
++	for (i = 0; i < ubuf->pagecount; i += run) {
++		run = udmabuf_folio_nr_pages(ubuf, i);
++		sg_set_folio(sgl, ubuf->folios[i], run << PAGE_SHIFT,
+ 			     ubuf->offsets[i]);
++		sgl = sg_next(sgl);
++	}
+ 
+ 	ret = dma_map_sgtable(dev, sg, direction, 0);
+ 	if (ret < 0)
 
 -- 
 2.53.0-Meta
