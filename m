@@ -1,102 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5722F7F00
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 22:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C868772617;
+	Thu,  4 Jun 2026 22:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780610758; cv=none; b=Vg8btDK7TFmtC4sP4e6oukWW77SxS/i9r3wxTiAhmwDWgC8wLj9HkFSnG74/zGTCvPBiDiNTrbsqBg3ciTCZZee6JtxrnVBGfnQ+HvoRGh+92b4wXYddaGJpbeI5FRDpih3FwmRigpWqIIpdHdpGtLqvPk87OO5/BOyFiJZ4cXQ=
+	t=1780612834; cv=none; b=Rg2OzADKKwxKnJ9LT04YgQR5mGxSZiuDpDci5K75RP7NnTa1yRUctc1B/4rme/W7wFdhB8UE785gAaxIOK9/neI4oB0w1o5mZs6msnPRyqg/EOWVzl/rF/UVPSMYP/CTeeiQn9h7vNV70AvM8tWNvaMiRXYGi3ifNGszcu5ajOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780610758; c=relaxed/simple;
-	bh=nXhHh/pGOI9rE0nMJVROQ5vq8c4fkI8n0N/AJuztcZw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rDaGLXhCYzyX4/viPIdYt/7iZ+B/m3hkznU77qPnMpxEz/UYpntw6y3cMBP+OLW+q+qDPYRClQ4Yzah9kos11NdRwywOuSorCMtrC75Wt2F2y2ApCW1oQwKvHbfjLrDsqC9tAIdo2EJ7dOiWvo3zmJcr3GHl7vVjo3MkKrIRK3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l0r70Opl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780612834; c=relaxed/simple;
+	bh=oJysmof0Pd2YptQ6KHl2YdNapmY78mNRfypO9pdHXQM=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=VQvVZJ1pFpUMo+0BovT0AJGSZo1YX1K9h1gSTHnDkDFSiwKR7QEBFQq1SnUK0czLQ1XOCcX+43SBeZzSPWcWr32wkgnJ08LrSNcPPwirG53jW0ytb1k+lz/vzkfvGRP9TTkrYX6LoGyGnRJwyShTyD+qvXWGZb/pqHdyPzD8uQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JjQkOmxZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l0r70Opl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 929761F00893;
-	Thu,  4 Jun 2026 22:05:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JjQkOmxZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA00C1F00893;
+	Thu,  4 Jun 2026 22:40:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780610756;
-	bh=Ldsl4/N6RsLmg8QiM9DUc+MdKQHVb1oeZd08FXXFOzw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=l0r70Opl4/BG285G2ge2YZd4Ch7f/M0h0jY45qJxtQCo81OIfXevyXFor7c+TMVo2
-	 xBMZxiCLs3iAgIMXJlhZn9wwxE7n7E5cBOUTjgRjqQ4eQ5AxhXFJx71nAM83SuADdv
-	 /SVEBmjFkKbaeEJskumvUFiO/fb9m6Z2DjG1XNbtW5Fj+eS+9ZVCXP62mpg4z3dsIm
-	 jRl4YwpWYtiLzjxaafI/ttMw7fLrxe64llXi8apkCMcYWh7+CgojmgWbn+g/PNUp/0
-	 ejTzlUbjISpK1wAYTOZVcOYjasGqRNdhGmnl/S6PIJ5E47sE2V9nb4RD8ChVQ0mTcz
-	 k4GGJ9gp/R1Mg==
-Date: Thu, 4 Jun 2026 15:05:53 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuni1840@gmail.com>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH kselftest] selftests: harness: Add __maybe_unused to
- _##fixture_name##_##test_name##_object.
-Message-ID: <20260604220553.GA3936720@ax162>
-References: <20260530054722.271157-1-kuniyu@google.com>
+	s=k20260515; t=1780612833;
+	bh=pcf+/TQHSC1lT4PMAPLFzMjabSqrHnTT7tT2IMtCJBI=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References;
+	b=JjQkOmxZJM/3c7vpeiNFCYBI3RPfO6e2JyqEIQmTb9vf6Lj9nW3Mr6jVox9VLHe+N
+	 wk4saK2/au2ta8MS77MYbw8fgxK0J+yYlqizalZODqNVhD0JxZ/1tQVFAQHrsl/88i
+	 CdxkclQQVTniXlQhFor/J2Eb2pFmVF8Oc27oANcjer7nbet69bNRIIaDZSh19TglAr
+	 VDmjQUw6AkAMDPC5W17fp6kFvThRzNEZgb4ayUgUHBY4VIg7QFUIDGrtmFEwRShkj0
+	 6hEwugdka3lCEveyulV6YpWndGBtvItmEwutPNoLy8xYj4Iv2f99WO/y8HS0UDI5iV
+	 zgyQTnBRTUKcg==
+Date: Thu, 4 Jun 2026 16:40:31 -0600 (MDT)
+From: Paul Walmsley <pjw@kernel.org>
+To: Richard Patel <ripatel@wii.dev>
+cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+    Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+    Deepak Gupta <debug@rivosinc.com>, Zong Li <zong.li@sifive.com>, 
+    Charlie Jenkins <charlie@rivosinc.com>, Shuah Khan <shuah@kernel.org>, 
+    linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] riscv: cfi: reject unknown flags in PR_SET_CFI
+In-Reply-To: <20260518183918.322545-1-ripatel@wii.dev>
+Message-ID: <3f2d4628-a95d-89c3-2fd7-3e1a407d698a@kernel.org>
+References: <20260518183918.322545-1-ripatel@wii.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260530054722.271157-1-kuniyu@google.com>
+Content-Type: text/plain; charset=US-ASCII
 
-On Sat, May 30, 2026 at 05:47:20AM +0000, Kuniyuki Iwashima wrote:
-> tools/testing/selftests/net/Makefile adds -Wall to CFLAGS.
-> 
-> With clang supporting -Wunused-but-set-global, building kselftest
-> gets too noisy:
-> 
->   bind_timewait.c:76:1: warning: variable '_bind_timewait_1_object' set but not used [-Wunused-but-set-global]
->      76 | TEST_F(bind_timewait, 1)
->         | ^
->   ../kselftest_harness.h:398:2: note: expanded from macro 'TEST_F'
->     398 |         __TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEOUT_DEFAULT)
->         |         ^
->   ../kselftest_harness.h:470:33: note: expanded from macro '__TEST_F_IMPL'
->     470 |         static struct __test_metadata *_##fixture_name##_##test_name##_object; \
->         |                                        ^
->   <scratch space>:155:1: note: expanded from here
->     155 | _bind_timewait_1_object
->         | ^
-> 
-> The global variable _##fixture_name##_##test_name##_object is not
-> used if a test does not use XFAIL_ADD().
-> 
-> Let's add __maybe_unused to it.
-> 
-> Link: https://github.com/llvm/llvm-project/commit/3e011457055bd3868bd05cf80bc1a4482777809b
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+Hi,
 
-Seems reasonable.
+On Mon, 18 May 2026, Richard Patel wrote:
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> prctl(PR_SET_CFI,PR_CFI_BRANCH_LANDING_PADS) silently ignored
+> unknown control values. Only PR_CFI_{ENABLE,DISABLE,LOCK} should
+> be permitted.
+<
+> This is a uABI breaking change (fails previously accepted bits
+> with EINVAL).
 
-> ---
->  tools/testing/selftests/kselftest_harness.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index cfdce9cd252e..a2e104f7fb52 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -467,7 +467,7 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
->  				!__atomic_test_and_set(_metadata->no_teardown, __ATOMIC_RELAXED)) \
->  			fixture_name##_teardown(_metadata, self, variant); \
->  	} \
-> -	static struct __test_metadata *_##fixture_name##_##test_name##_object; \
-> +	static struct __test_metadata *_##fixture_name##_##test_name##_object __maybe_unused; \
->  	static void __attribute__((constructor(KSELFTEST_PRIO_TEST))) \
->  			_register_##fixture_name##_##test_name(void) \
->  	{ \
-> -- 
-> 2.54.0.823.g6e5bcc1fc9-goog
-> 
+Thanks for the patch.  However, I'm not convinced that this actually 
+breaks anything.  The behavior of the interface changes when unknown flags 
+are specified, but I'm not aware of anything that relies on this specific 
+behavior.
 
--- 
-Cheers,
-Nathan
+Does that match your understanding?
+
+
+- Paul
+
