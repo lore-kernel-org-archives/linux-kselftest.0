@@ -1,200 +1,156 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3137E49252E
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jun 2026 23:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780531047; cv=pass; b=Dn3ZsS2i3Xs5Ndxa/a6naoewgX45Te9N9OoaSCwhgiiLyLHRxSbN2AELGlnMB9vq/vtLKgKF7CkrCkB/EPekI2TsRTnQzJVuynriAfQbMIBkeA72+MqasSbWsTw+lnI93hM6hpT5dpTV9KcrhjUByg44hoJBLBf6bBP80A4Z9Bc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780531047; c=relaxed/simple;
-	bh=/lSKt2U7pIdCGE7tCBBdr2fjoEgXYHG3evo2fbmpAxg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k+OPI3ga1o8PEZykBrBBlxvXgRnypA+Sjr2v3sONSZeBpe3wm3Eg9RoamTATfvVm5enJLb9csg8oJyR0Gy6sX3UjgGqmUhfDxcl52qS59u5lojpO6uh8hxOcVJLVoyZ4T7iOSVoTKfjRTusvMaheNSLm0Z8W6gUSyvBho+nHvhw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E/KuuepF; arc=pass smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8741FBEA6
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 00:43:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780533788; cv=none; b=ZVQfc/poCTSs6PKutmIN2ZCdXEnXzpz01Rn6MttOdtBE/EDIpJTX/NATCXFzcj/+miBdXciHO0MIW1OU92uc40SfGZ7MUmxwT9ld7B4U1rV+L6xOta1HzLPgUReIbN5t1yVmNEem+XQRbKdTPn1Ymp73PP9K7bT3hQpkQsPXsNA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780533788; c=relaxed/simple;
+	bh=pCtD5k7MvypEZUxpDcKQoAVqj5RgSw7ja09QgVIBbN4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=V7o7W+o/IBhgMM8fiaqBqDoSkscZklBV5KpDebJwRqxWndfgv8VjafK8ch9SRRIRifSqSyMWehXaz1F4Rz2+jiJeSNclVeAwwj44SF5/uEy1S9rDryZCSbr8GkNCcFqT2OmTnIgv1I/X08dTWFPs2RpUL1vqQ1i/32g0DG/dJBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ogj0RTpi; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E/KuuepF"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-5175d339e8bso243631cf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 16:57:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780531044; cv=none;
-        d=google.com; s=arc-20240605;
-        b=AAXVekImO4hB1NWLJVFvhzL6ZlKx/7yAdgQC0pIVligmo1RPQdrKnDSZzHoF9W8Lkv
-         UMlMr/E7bJ0pSvGIJ1XOl1ZQrSKyryVoC8H/F5G7Dryt/8lLxP15A0RWeabTpybjrAFp
-         ZGP7s7Jq6LtDg1FmMsK1A1KO/iSgtTqn/qtq2c73PKvmxT0aGWnId7lLMMThJ1Tm1lTb
-         TPY3y42Nb4VqrviR5ZHMaC3NPVbpXhJXG1rYeDzTyTZx+NA5CzmMF6cnyzs/2tH4ENW/
-         dIe2gn5uKxIVkEOnSFcMUsQJL2rqLxfMMtGVSX2zjU4G+QwzqwZS/A87dK8E6ApW1w7z
-         Tv9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=mNur1Fonoy8Eha+exfChjghnGVF1uWKh6Gmh7Ox8d4A=;
-        fh=4glkyNRwJ9HnZqoEYZpua2M+/8H4mHyZ6SgKsZSQ3+M=;
-        b=YXLkK9FvEHdEVfNYZFfhzmXrI52bvZhVhHrC6f7pTOUsEcwmJO3BH3VFAChNRqzXFP
-         XVAH+c8k8PEIw5Nh5BbhMloHObfQahCHrpEKUiOgvocfHGFVXwNLdmaor7Z13DBDRiMJ
-         4Zp/VC9BkVAxgTtzyNGww5vkFh2CvGQB4zFPn35Xb8D0IPxmXtciAYAyhTDwJ+pFlSVG
-         hSPHxMfnd6VqwrtqOjvGOseOaVY2rXKkqRiXBjia0BmxUZBmVfqO9TKf35CkzD3zn1GR
-         rbhUDU+yVPVuUvELHACRwYLeDuqdYAs+pyFiKTHq1m8/Wr7KS99UWVwwidC9R7DzfpJj
-         Y9ew==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ogj0RTpi"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-36b900f350fso112912a91.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jun 2026 17:43:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780531044; x=1781135844; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mNur1Fonoy8Eha+exfChjghnGVF1uWKh6Gmh7Ox8d4A=;
-        b=E/KuuepFdT8P0TPfuUCXCk4ptijBDb9YrZJjH15BkQf4mtcjJT9IiSbtDuyJv8dzD9
-         9zgChnASmeERVe7Ss+6zzHODxZg5hyL68PRUb2Jdk3mvzKCtde2GCof+6ou2LVErid6N
-         Hge4tOXT28PTqT6R2lGjOUSWScXtxghWzRDECcafER7P0arsyxLp2geYwiAR4459+GYc
-         e2Um7vExV1jSc2IJ5hM2DD7L2tcuDXvU6nvD7yPGWv58+bYiAHkYckBG6Wrm+5t8pYbT
-         9GtMw+GxX9TbXMdEERPeNv+CTuWi+2QsiUevfjkO3UFiB7xWNCbVXUnN9lfE/+mvJGc5
-         g3nA==
+        d=gmail.com; s=20251104; t=1780533786; x=1781138586; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gaSc57t4jmRqWa/tEAw7kwxJOfsrDztjZyVRXA4uTHc=;
+        b=Ogj0RTpivOJUvr8Zy0r+IPYIPQc1Bdl59jmYxy8eIm64cQ73dw59GBuHCWHyTKIbj6
+         l58ctYeDELnSZwJQ+IH38k1Wlht5Mei5r6/LlX0Zg06FyGs8JJG7E7jRA4MFwhjdYaUb
+         B372yyUXm/0ab2qklABS2uZOKObRlordKNhlkYyURBKlC7ytXLKvMpXFAVNZGs5+0IM0
+         17v7xYEKix4XOqdxOIhf2cI3bmly2bqEN1Zgsj096s7ckrbgNjRxWnVkCN7pHpjs+fYY
+         Ppr5c5mZkVvbjDqmwUpFgBeduOuchYeUDlKsp5YMhjhCh8z4g8xbXoZ78M6ixWIZGB5J
+         9o8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780531044; x=1781135844;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mNur1Fonoy8Eha+exfChjghnGVF1uWKh6Gmh7Ox8d4A=;
-        b=RtheykyRPx9yoyevF/QCVoJY/mZcytN003YYwbbAZzEipiIANoEHhK0iucBI/HezNf
-         rgBIdKpRoOa6un+2fIBSPc476P1/y7Va9Kmw2YSN2XBree8ABeaZ/B9kPjhSgL3MkyeN
-         uN7QEc0QyW0QjIGfSKzKcaW2w6YUXSFz37Rlb/a4iMBXZPR7Us8UQXWyvQ8V4EO/X+AK
-         WDr13lO0RKwV53TbB7Zkp6l2e4fsApEE+IFiJKX22+pO2SlKb4TLYiE+YraKvJ8+816b
-         v5HkJVNmUO2xjG0mI2InvljQS2XqfhRFc/UT8DImuR2l501D2FmFee9tDI4boVv2CNfP
-         r+xA==
-X-Forwarded-Encrypted: i=1; AFNElJ996zgHZ69Rvp4Zn8iQFYuWfTltoswSBV9sxjtoy64J/nsE4FJE/53gCVJqe2nd0DrpiBlzwa0KwUFqz5ZXj2c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzF27pygcD9TiPibXjJoX6W8BT6HjmRxUqM8M+NKZje28EAkeNl
-	s43E8uhPhNAQoi05vhSZyFKmdHvCQD4jdGpRJ0NoDjA2qikntzgBwwHVviUqB5nxqezPcY4SNlT
-	0/M16pZH5+IBwbwlRgGVTu2AUT343O9BjRYdt8RPi
-X-Gm-Gg: Acq92OF9IRgXOAJep+9z7tBbmEKWvCBREjZXdMZ+4mSgx88Jt4zUyLkX2tVnluu0u/1
-	bTR7QRQ76mE1LwBydcD+Zey+7IUhQlnY5GmZDm6UjvWzEBL7+JT7tVN8UrfVGgXTVJUKYyRC5AG
-	XM2uhTZteklCJNNbQ3Owa0oVkGesC2Y+cW8wkHibPYA0dQ/XtCwbd+9hWrS7o/JeyqrCB0gNN+V
-	ogE2x7LXcBn5QeWzU/h3K8LT6L8SQLiSsj33wd6N9CZksfk9+jnfu/qptvkr528igdBRVQ8/lff
-	PDwLAdG8ly4YCHQq
-X-Received: by 2002:ac8:4651:0:b0:516:4f62:85ed with SMTP id
- d75a77b69052e-51787a79f2dmr3993231cf.18.1780531043458; Wed, 03 Jun 2026
- 16:57:23 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780533786; x=1781138586;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gaSc57t4jmRqWa/tEAw7kwxJOfsrDztjZyVRXA4uTHc=;
+        b=mHXK0oMWlewHBpE59aD5wr2VEFYU/Pap2mGTcuHCp049TulY1VypaGaZ5uZ132dsHe
+         l8jJTJr/7RcY8mxMzrTjNoLw1RRMaFupfWCtNrLXw6DXoUSzgd5LYaZejCiTEd6WUK0g
+         EKY8Db4fzXgHqeR1faoraV+6G9WhJXIpRUCHNvPJER9FrHm5ANnjmszOinQaAa3QFQ4W
+         Yb0U48RQU2VYSi9TBZk0bXAIfdR5VEZkIvw2SPt3U5U0aaWEFU2dfLFRYTehz42QwtjH
+         ATttKgbHM8L2LU+5bm6UgCZmYXKM7RC7x13pg0twhIfk+Vj6XPk/W7Dnb9kzr2gUjSqs
+         5I+A==
+X-Forwarded-Encrypted: i=1; AFNElJ+Ny/7hmVi960x3DpXEqjMd4XwHgx9CHlz/b+J2BUCLwl/Ny9LYF4EAAeKrinPgkzW3LObyxvuTVAqyAyu+nzg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAwSo6fd2tMC9PiZS3O7G907imaXOPLY2ciGlA9gEb56swe2MS
+	Vvi4qSzYC/MMmhnAZ63q0jaL+mxeGvsWA6N2fbMZlYgA8FyYHAXXWjum
+X-Gm-Gg: Acq92OEHhkMEWA5pbmfrkwZai5uKb+UEwHuSy/3suqKdyvfu/7egHzbUH7dtXQgI95o
+	TaPq6R6xmUDgOvTo5tk0BlqWQu+fMIdQiOi55XWJDsyLsrz5MRut2pXE2IAPoN5nYL442pFDfQJ
+	B8c0qP3gRZm6IXunXZQ8/b/XYgqRCzLQgwiSmfF0+DMIhNNvO3SsCG6IdY5Le2bpmlzsXjfD9Lh
+	R+aTqkIQQxlnc/8SM2HXSIjRTjqpivZh6Dt7XiZLNhdeBKHpFYdc/3FDb9zMrJ25lIEmgpaSv+j
+	jxlBELGqx2rLP6lOm05BvNf4XqnAi9wQptXKRFCH8AKNl1IL7N26nzlU7d9m9ela5aiov6eHahW
+	/4RqzlsYMD3jQYvtC0snKX0xbM5GVY+z88hxwEgxFZH23hcsUZHasAw6IYPGPALNFp+xUcLtSym
+	//kJWpt3+kMVyMNhUQMGccFH7pSyuyr61c6AvU30Y=
+X-Received: by 2002:a17:90b:3d4e:b0:36b:b3f4:d578 with SMTP id 98e67ed59e1d1-36e30e17847mr5798820a91.15.1780533786256;
+        Wed, 03 Jun 2026 17:43:06 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:2::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f6c668f90sm1067665a91.6.2026.06.03.17.43.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jun 2026 17:43:05 -0700 (PDT)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: [PATCH net-next 0/4] net: devmem: allow rx-buf-size > PAGE_SIZE
+ per binding
+Date: Wed, 03 Jun 2026 17:42:57 -0700
+Message-Id: <20260603-tcpdm-large-niovs-v1-0-f37a4ac6726c@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260426062718.1238437-1-surenb@google.com> <a27344e1-6f0c-4686-99ac-fc2cfcc5bb06@kernel.org>
- <CAJuCfpG3xZhL94E=yR1KsWs6fVwcdoAECoOaV3UOeB10TXmOeg@mail.gmail.com>
- <0ce6071b-0c99-4119-9ab4-a2d9c00b99a8@kernel.org> <CAJuCfpHPs54_hc_U9DCxtv=xikKHJMtqCEDN_4Y5aDqKhoBDnA@mail.gmail.com>
- <20260526184944.18c28d6980fd29ff12fbbe22@linux-foundation.org> <ahhdeYDAY7BvqxYU@lucifer>
-In-Reply-To: <ahhdeYDAY7BvqxYU@lucifer>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 3 Jun 2026 16:57:12 -0700
-X-Gm-Features: AVHnY4LIv-CCSzubXeLRacENeIWLGZDTxSTnCRRjCibVInHfLzdXyTHGiqn3Ug0
-Message-ID: <CAJuCfpHqNJWVt2DUB_yi0Yj7Y=bB1xV4qYeAKM2RZZMW6xBFKw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] use vma locks for proc/pid/{smaps|numa_maps} reads
-To: Lorenzo Stoakes <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, "David Hildenbrand (Arm)" <david@kernel.org>, liam@infradead.org, 
-	vbabka@kernel.org, willy@infradead.org, jannh@google.com, paulmck@kernel.org, 
-	pfalcato@suse.de, shuah@kernel.org, hsukrut3@gmail.com, 
-	richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABLKIGoC/x3MQQqEMAwF0KuEvzZQK1boVcRF0YwTmInSFhHEu
+ wu+A7wLRbJKQaQLWQ4tuhkitQ1h/iZbhXVBJHjngwvOc5335c+/lFdh0+0o3Ifed6lLrRsGNIQ
+ 9y0fP9xxhUtnkrJju+wGj3Y/WbQAAAA==
+X-Change-ID: 20260602-tcpdm-large-niovs-56523a3a1077
+To: Donald Hunter <donald.hunter@gmail.com>, 
+ Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Gerd Hoffmann <kraxel@redhat.com>, 
+ Vivek Kasireddy <vivek.kasireddy@intel.com>, 
+ Sumit Semwal <sumit.semwal@linaro.org>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+ linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org, 
+ sdf@fomichev.me, razor@blackwall.org, daniel@iogearbox.net, 
+ almasrymina@google.com, matttbe@kernel.org, skhawaja@google.com, 
+ dw@davidwei.uk, Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
 
-On Thu, May 28, 2026 at 8:37=E2=80=AFAM Lorenzo Stoakes <ljs@kernel.org> wr=
-ote:
->
-> On Tue, May 26, 2026 at 06:49:44PM -0700, Andrew Morton wrote:
-> > On Thu, 21 May 2026 08:16:01 -0700 Suren Baghdasaryan <surenb@google.co=
-m> wrote:
-> >
-> > > > > It might be but the point of this patchset (and the previous one =
-that
-> > > > > made a similar change for /proc/pid/maps) is to reduce mmap_lock
-> > > > > contention, not to speed up the read operation, which is not a
-> > > > > performance critical part.
-> > > >
-> > > > Well, this interface has been around .. forever, so if there is a n=
-oticeable
-> > > > change in performance it should be called out.
-> > >
-> > > Sorry, I missed your reply. I'll see if I can adopt Paul's test for
-> > > /proc/pid/maps [1] for benchmarking smaps but I would expect similar
-> > > results as was reported in [2].
-> >
-> > How's it coming along ;)
-> >
-> > > [1] https://github.com/paulmckrcu/proc-mmap_sem-test
-> > > [2] https://lore.kernel.org/all/20250719182854.3166724-1-surenb@googl=
-e.com/
-> >
-> > I've moved this series to the tail of mm-unstable to permit more time.
->
-> Well I'm not sure it's _vital_ to get stats for this, it's pretty much an
-> extension of existing VMA lock work in /proc/$pid/maps -> smaps, and the
-> logic is sound.
->
-> There's no reason to believe there will be anything other than a reductio=
-n
-> in lock contention here at least under whichever workloads happen to hamm=
-er
-> smaps, but doesn't feel like there's a downside!
+Every devmem dmabuf binding hands the page_pool PAGE_SIZE niovs today.
+On NICs that consume one descriptor per netmem, this caps a single RX
+descriptor at PAGE_SIZE and burns CPU on buffer churn.
 
-Just finished running Paul's test. I ran a smaller number of
-iterations (20 instead of 100) because it takes lots of time but
-results are quite convincing.
-In the baseline, all runs had maximum latencies exceeding 9.7
-milliseconds. In contrast, the patched version has maximum latencies
-in the range of 1.8-3.2 milliseconds.
-Median performance of the baseline is at 1.135 milliseconds and patch
-series at 7 microseconds.
+In this series, we add a bind-time netlink attribute,
+NETDEV_A_DMABUF_RX_BUF_SIZE, that lets userspace request a larger niov size
+(power of two >= PAGE_SIZE). Drivers must opt in via
+queue_mgmt_ops.QCFG_RX_PAGE_SIZE.
 
-Baseline
-./run-proc-vs-map.sh --nsamples 20 --rawdata -- --busyduration 2
-    1.135     1.078     9.737
-    1.135     1.086     9.834
-    1.135     1.090     9.890
-    1.135     1.091     9.892
-    1.135     1.111     9.894
-    1.135     1.119     9.896
-    1.135     1.120     9.918
-    1.135     1.123     9.927
-    1.135     1.130     9.937
-    1.135     1.132     9.940
-    1.135     1.138     9.942
-    1.135     1.140     9.944
-    1.135     1.141     9.952
-    1.135     1.148     9.952
-    1.135     1.153     9.958
-    1.135     1.153     9.967
-    1.135     1.167     9.974
-    1.135     1.168     9.975
-    1.135     1.173     9.982
-    1.135     1.199    10.014
+Selftests use udmabuf, but udmabuf sgtables were previously hardcoded to
+PAGE_SIZE. This series modifies udmabuf to respect folio sizes in its exported
+sgtable. The result is that when backing udmabuf with MFD_HUGETLB 2MB pages,
+the sgtable is populated with 2MB entries, allowing devmem's gen_pool to carve
+out large (eg. 64K) niovs.
 
-Patched
-./run-proc-vs-map.sh --nsamples 20 --rawdata -- --busyduration 2
-    0.007     0.006     1.862
-    0.007     0.006     1.937
-    0.007     0.006     1.947
-    0.007     0.007     1.956
-    0.007     0.007     1.956
-    0.007     0.007     1.998
-    0.007     0.007     2.020
-    0.007     0.007     2.027
-    0.007     0.007     2.085
-    0.007     0.007     2.100
-    0.007     0.007     2.115
-    0.007     0.007     2.233
-    0.007     0.007     2.304
-    0.007     0.007     2.325
-    0.007     0.007     2.327
-    0.007     0.007     2.427
-    0.007     0.007     2.489
-    0.007     0.007     2.500
-    0.007     0.007     3.123
-    0.007     0.007     3.151
+Measurements
+------------
 
+Setup: kperf devmem RX/TX cuda, 4 flows, 64 MB messages, 60s, dctcp,
+num-rx-queues=4, dmabuf-rx/tx-size-mb=2048, 10 runs per niov size,
+mlx5.
 
->
-> Cheers, Lorenzo
+   niov       RX dev Gbps   RX flow avg Gbps         app sys %
+  -----  ----------------  -----------------  ----------------
+     4K  300.63 +/- 53.21    75.16 +/- 13.30   54.15 +/- 10.23
+    16K  321.35 +/- 28.20    80.34 +/-  7.05   41.05 +/-  8.87
+    32K  347.63 +/-  2.20    86.91 +/-  0.55   44.54 +/-  3.51
+    64K  332.11 +/- 14.26    83.03 +/-  3.56   35.47 +/-  3.11
+
+RX app sys % drops ~19% from 4K to 64K.
+
+kperf support (not yet merged):
+https://github.com/facebookexperimental/kperf/commit/8837577f920876bce6986ec18869ac04439ebcd2
+
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+---
+Bobby Eshleman (4):
+      net: devmem: allow rx-buf-size > PAGE_SIZE per dmabuf binding
+      udmabuf: emit one sg entry per pinned folio
+      selftests/net: ncdevmem: add -b option to set rx-buf-size on bind
+      selftests/net: devmem.py: add check_rx_large_niov
+
+ Documentation/netlink/specs/netdev.yaml            |  8 ++++
+ drivers/dma-buf/udmabuf.c                          | 47 ++++++++++++++++---
+ include/uapi/linux/netdev.h                        |  1 +
+ net/core/devmem.c                                  | 52 +++++++++++++---------
+ net/core/devmem.h                                  | 13 ++++--
+ net/core/netdev-genl-gen.c                         |  5 ++-
+ net/core/netdev-genl.c                             | 18 +++++++-
+ tools/include/uapi/linux/netdev.h                  |  1 +
+ tools/testing/selftests/drivers/net/hw/config      |  1 +
+ tools/testing/selftests/drivers/net/hw/devmem.py   | 12 ++++-
+ .../testing/selftests/drivers/net/hw/devmem_lib.py | 46 ++++++++++++++++++-
+ tools/testing/selftests/drivers/net/hw/ncdevmem.c  | 49 ++++++++++++++++++--
+ .../testing/selftests/drivers/net/hw/nk_devmem.py  | 11 ++++-
+ 13 files changed, 220 insertions(+), 44 deletions(-)
+---
+base-commit: dfcc2ff12925d99e858eaf539eaa4aaaf81fe2a6
+change-id: 20260602-tcpdm-large-niovs-56523a3a1077
+
+Best regards,
+-- 
+Bobby Eshleman <bobbyeshleman@meta.com>
+
