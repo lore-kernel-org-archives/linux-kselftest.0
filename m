@@ -1,92 +1,100 @@
-Received: from mail-pg1-f194.google.com (mail-pg1-f194.google.com [209.85.215.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C8234DB46
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 15:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC4E8274B39;
+	Thu,  4 Jun 2026 15:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780587438; cv=none; b=H/4SerNfLtbC+h+CHaJYipsnv2NCSAa6eqLxWbSA/ora1qaTEH9x7LNHOqCUrW2UCBXgoOXJGF/UaZ7dOBPUGu+nq6u2jtIpZJ4q6GcxL+kyg1TRPH5rcFKhky1ExCvaISknPwNvgZXfkgdkeeFc1jVAq2CkQgRDEM0EgNMSMt0=
+	t=1780587938; cv=none; b=QOQ6HRWCj2Jt7LBHlUdrBVoy36BZZ8tSRJD+1aDArKKgUqqJUyKHT4QOyOewnWzR43Uml1zEGQz/IypFlqgnO54ZscGuwWvx4q/+dgp7iTixkLBdDrunXJdEMkw5/BC15uITgnrOxiOsCjCTBZBWBEAQg5KYoDpq9irJxrbcJEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780587438; c=relaxed/simple;
-	bh=nY6/njLe0UgFMoo9e4udwPdESJgHeK8pFOEaepKtfx8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jVDdnp+1b3fXLoyeYm5zl70OTzvnLQkYajjYGOaAu+OF+iPQd5WikJKh2r8tKnj4GTGp0baxELPrVMRrf6i5oyimHGAxQ2J9P35+X0dkaWu6PosD5L5XjWlIdh4GXlZBxNx0eGYlu3U0o9u+lDMZOQrB06dp7iDenIVXRn3ywqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lo5XpSr7; arc=none smtp.client-ip=209.85.215.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780587938; c=relaxed/simple;
+	bh=cyalNU4QWStfLZaG9ieifjV1y+ep7KKqQLl4LywpOss=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Dwquw3eJsM5tm4Nu3B9FiuFfkdrIIC38u1VaV21GA9p3kL/mTA4AFry1LKD0t/lcOZN4OZAqGQAFU9h2vywWShl+4vjuGdb1Uui1CGBpZ27QwAUXqJTanhPTDGCcbGtEWvJ8Z4Cp2NaW7yQUoO1O63Z/rNBtQBjAoeCIqojBhKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E1Xoui0U; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lo5XpSr7"
-Received: by mail-pg1-f194.google.com with SMTP id 41be03b00d2f7-c85822059d8so585472a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 08:37:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780587436; x=1781192236; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nY6/njLe0UgFMoo9e4udwPdESJgHeK8pFOEaepKtfx8=;
-        b=Lo5XpSr7DkvL5Up68ZMUVAf7yB1OGHrS8qFYMhCxWptn4A23IL+jcvOESR8vwrXoLZ
-         xfZbN6gX/7BejqGNUoL93Bfj+lQSqdi5fxh/uWcN2n9LQ3/7Q9zzM7Yy7ZIzKe3rsskd
-         ztDknvjq29YFb7z4dYaI+SbZMxRpaRzSnloHk/K1jFxyX1nxm44W8c9r15E3cgkpUMhq
-         RluFKWV+q7OCoNGPuSaKEuNYc5IdKEaCwgqUva7nyFlJLTLsH7wR0NyS4lwtVbHgX0KN
-         TGmHI/+x4x3t25Coje2x7Oz9uNeLxc7WRVhvvgdg4nWaXemUlTc59SUMuvDpL3npkNT9
-         psxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780587436; x=1781192236;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=nY6/njLe0UgFMoo9e4udwPdESJgHeK8pFOEaepKtfx8=;
-        b=n299lG2APpaI/lelxyzJmIRX/9S4o+uSKCjVZM/2g8TwJHHnhhDtWSqK46eAq2RSL2
-         0xSAS8uIcJA55TJOJDoyV5aP96Tf7lzw7+ah6tIXptZMSwc7iCB7F6jhTik7fpZqxuhQ
-         mGXgm4n76PtcfDVZbG/Qr9F5U22X02zkbLNexaSHbTLj4rioBBzEze1qgqpMbo7oaFnQ
-         LLAYUAfQskrMouPq1czlT1fKl0h6aGa67Ggj38gaBP6rOWCk1gt4DICEV1Y3aJQwBFJQ
-         NiwSmMK22BUTvGQCEp86H5ipLbyp20+K/b1C9mDy8ZeVTPaCDlsDbR44UCntsyz7OW6I
-         4vfQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8DWmUZ0ifO5fSiI0xDF4LYwIShDtr1bFn8cC8zD04QXEKhqMbqkhYso8pfrAnh0PZ3QOSfvFmcaoiho5d85FQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzD3iuLKr5sCGmPLURmsVw5oyz/u1Mbj2fJRbrSW2T9dce+RKzT
-	NL0UDuEqFwO4WwQ83vyVOqYbIYTaIrAz5bkwXskLbKauuaE3nnpOrOpS
-X-Gm-Gg: Acq92OFrqBYyl1KzH8tp5Z7oGE6g9A5Kd0FPtTBQiih21Gz5kryoBxTfSc3xPmc5Ldw
-	TZJzd2/UJLR58qExzRCSgM//QOv5g2/5f808OJM6010nITDoWkKaRjiY84znOGf5THS8pb6NCh6
-	rR/ybMWRUNhPwxCy/rJwb+ellbPl0jr5pIhyiV5TCZ8EMgJCbfk1PZJfL947h3xzWHid30MidXA
-	oqBUFih2OXCo7cE9cuO0ZVwS6RuoIk3TPi7/mWAbMydUGKb7QFNCCbk6H/+o3mADQ2VDxSGACSV
-	rkoSkFAfEtMqj5iM5lkwq0IeWnHQCM0IbznLnVGDm/oESh/C9aKVcq8IcFasaMWL4I9sTZgxQBf
-	hFxU82unkyfmfbSYClokeYkzorltQoLiVcxIEYlefiDIPhpOpXKqg4Xwfvqa5f/C8mkAVIRzVUw
-	vB5hEshcNp10x50yftF+REjW795OuEQLA=
-X-Received: by 2002:a05:6a20:d52a:b0:3a2:d838:bfdb with SMTP id adf61e73a8af0-3b49782ebdcmr9551112637.29.1780587436380;
-        Thu, 04 Jun 2026 08:37:16 -0700 (PDT)
-Received: from laptop ([223.131.147.119])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df0b374fsm5526657a12.25.2026.06.04.08.37.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 08:37:15 -0700 (PDT)
-From: Woojin Ji <random6.xyz@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Woojin Ji <random6.xyz@gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add arena direct-value one-past-end reject test
-Date: Fri,  5 Jun 2026 00:37:10 +0900
-Message-ID: <20260604153712.199362-1-random6.xyz@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <DIZJ5P33U6YT.14OWBKG3T9LVD@etsalapatis.com>
-References: <20260603-arena-direct-value-v1-v1-1-7b31cc0a8cac@gmail.com> <DIZJ5P33U6YT.14OWBKG3T9LVD@etsalapatis.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E1Xoui0U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B511F00893;
+	Thu,  4 Jun 2026 15:45:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780587937;
+	bh=qTVRTql+uquEceDTyFNYH+ewQpPgP12icd/3VkFjv2c=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=E1Xoui0U7SlTT5R4mL2R1wW2t597agUymseDQQRd1FmsW242o9RLwrThvHrrPkVVy
+	 Li9q5Hdj65O3gCnB6YrLoAkBn7HVWiCxNLvq255VyAuRSNkrOCJX+M7Bep3IERqD8V
+	 ko8EcVG2bv67RUh4qQGhzlGWoW8oLkKi3Ukegp2UK1lvCI7y6yyC/efabituFYKnCi
+	 jyC+OZMSqN0jsX6LNvaXbAmWbKgfELJMr9Ry8Ervpv1ryKRciguO2DUxv06OG1+MJC
+	 xsOI5+csoIx+rkPEYH2VlvSHupD7UBtPOLnOflcYok9CpKnyyNIbgv4NV+fFZN/P/Y
+	 gPIQCvZYWp+rA==
+Content-Type: multipart/mixed; boundary="===============0244661512033162205=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <bf694ae5eb97196472331649ac188cc13e5072c227a3741f8b67fa42e65b3451@mail.kernel.org>
+In-Reply-To: <20260604150505.99129-3-leon.hwang@linux.dev>
+References: <20260604150505.99129-3-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v2 2/3] bpf: Check tail zero of bpf_prog_info
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,yuyanghuang@google.com,leon.hwang@linux.dev,kpsingh@kernel.org,davemarchevsky@fb.com,sdf@fomichev.me,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  4 Jun 2026 15:45:37 +0000 (UTC)
 
-Thanks for the review.
+--===============0244661512033162205==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I tried moving this into verifier_arena.c, but this test needs to set the
-second BPF_PSEUDO_MAP_VALUE ldimm64 immediate to arena_size exactly. The
-__arena C forms I checked materialize the arena-end offset as a separate ALU
-add or memory access offset instead, so they do not exercise
-arena_map_direct_value_addr() with off == arena_size.
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 1007fb7c87e9..0c86a70d31c1 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -5115,10 +5115,11 @@ static int bpf_prog_get_info_by_fd(struct file *file,
+>  	u32 info_len = attr->info.info_len;
+>  	struct bpf_prog_kstats stats;
+>  	char __user *uinsns;
+> -	u32 ulen;
+> +	u32 ulen, len;
+>  	int err;
+>
+> -	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), sizeof(info), info_len);
+> +	len = offsetofend(struct bpf_prog_info, attach_btf_id);
+> +	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), len, info_len);
 
-So v2 keeps the userspace raw-instruction test and expands the commit message
-to explain why it is needed.
+A concern raised during the v1 review on the list does not appear to
+have been resolved in the code, so it seems worth raising again here.
 
-v2: https://lore.kernel.org/all/20260605-arena-direct-value-v1-v2-1-a92cb281e376@gmail.com/
+With len now equal to 228 instead of sizeof(info) == 232, a caller that
+passes info_len == 232 will have actual_size (232) greater than
+expected_size (228), so bpf_check_uarg_tail_zero() will actively check
+the 4 padding bytes and return -E2BIG when they contain garbage.
+
+Could this reject callers that work today?  An existing binary that
+allocates struct bpf_prog_info on the stack and passes info_len == 232
+without zeroing the trailing padding would have hit the fast path
+(actual_size <= expected_size) before this change and returned 0.
+
+There was also a question about whether this actually prevents the
+future-field scenario described in the commit message.  If a later
+kernel adds a new 4-byte field, the struct size stays 232 and that
+kernel's expected_size becomes 232, so an old binary passing
+info_len == 232 hits the fast path again and the uninitialized padding
+is consumed as the new field.
+
+For reference, the original discussion is here:
+
+  https://lore.kernel.org/bpf/20260603151405.6DB111F00893@smtp.kernel.org/
+
+>  	if (err)
+>  		return err;
+>  	info_len = min_t(u32, sizeof(info), info_len);
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26960942650
+--===============0244661512033162205==--
