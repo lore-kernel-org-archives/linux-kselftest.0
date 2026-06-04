@@ -1,204 +1,138 @@
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D703E3143
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 21:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780607676; cv=pass; b=pt+f6pHYNu4YX4qQ1Od4WMVoytF1ZFad+VYL/fFbzIXk/FnQMCiRwWhBPc3p07H3xV/FT8UxRY2efLwtdWw99yeb3ESTBYd5haG1ESE0ntfm9YLcsh+J6qROeZH0zU/llJkUVK6Km1p6yQ6Zwxqj+INdC2ay09VPESX3KzOxR3s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780607676; c=relaxed/simple;
-	bh=3EQQ6v/Jh1n3vmJAx1K0KnEtPJfjxcjgCdoh94k7jVc=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NdZkIlcypAS0PHkBLEsyZmL89LS6ZaUq+arPdEI025OuuMoncGre000kuyoVdOln7cgP4LSVlGcPeaVr5JDGJ57Tg1b0UTk1dE35Tpj9P4lYAN2aSWJ5AVN+gX4QIPxd65vaYmCTj0SCm/Ug82HebUYwcNAE3Zu77KtU//vGknM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HSRVmStj; arc=pass smtp.client-ip=74.125.82.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265393FA5D2
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 21:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780607938; cv=none; b=GbV1PVLZajzN/hGCSJxQKMK/b/9DPYj/xihMsPgg/hTnXLdctOBbzeRmnunnqFYrUHw+ADSA1dDrRwaQF+GuXHu8+xAx9Wf1W9Zd7WegU+zHKf8fIAfCo9WZyrumv1Ds3wP48IRpBTKDnpiIB2nCsQoK8cu6eBFSB2HZo5mc/FM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780607938; c=relaxed/simple;
+	bh=j5Va7+gmykjYF242T1iZbiZTv44+SJJypaxifOh0AUw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RfFLTvaN0GYnNohR/5Rlv8C7hsi6doaFKTqjJIIABEHjVurBGelgQxSSqaqVTIZ7jlrXLXbrHDfndSEJRpd4M2TnneEVl4GtWeN7bzlPrN3YpP12mapwYFMi8jz/FhmIqbjUMKAcd8qDcYfxLjB0wVB7fCTJ2gUAdRulJoRd0Hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f6Iwf48g; arc=none smtp.client-ip=74.125.224.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HSRVmStj"
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-137f3cb3f46so2189029c88.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 14:14:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780607674; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Iw8M+dOgvc6KsqTg9pbhGy1rNRnuG2apOZdvaf8ll6msMxCSENRQ4wL/1kAe4KqyuB
-         IesMhAHUTj1bePpEN3L6A1rvakYBywvvWDRmRYF83cW0CEsUSj4k/qdBOf4c7qhPatUz
-         qLLN2u4MXsFAy5Kh6ymZrb4WgVXHnCIVjHbGyJJ3wAR7k+rer+zT+9s1EvWbnL7yqDof
-         ALNK+PCLGx3HG0i/vDmpPp1o3X88m5c/jEdsCV+RtlJwWj7F4bCn0hJSvGdddRzHtRGU
-         XpXSDm36KzCu/hwHjkafzLz3jptsYeBfdP/YZFk+6rr2UWfiAb0gGuzKRBoOdd//P442
-         elfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=lyPEsnWgMEwVBTMM4vHE6GHrBW2HxmanLD1B4poadMk=;
-        fh=R8b46qx52luHPBJ4t/QiSX6HEEXj/Dv58Vr71PrDLoo=;
-        b=ejJXWMvJSxMsSGkl81ETkEhV8Qh/6sRSVb3onvZ29sNBzWjo9vGKcwZ5OLkzME10AH
-         WIRq5ZXNTCvWCzIdFAYgL6zWhQkCPxNtOw77qKK46asgttRy7dYE4tSyKB41fw3l8upS
-         kdsrPQImDKEhA0ki76XXpToSpCgND+bflqrl1GZxoG4PIUhLLb281SBCI+HIp/FzxE21
-         k7fpLL9lhU7cwa1CRO9tpefmXCuW9ofRxXadzPbZ9dcBNEbR/CGGGdwD/71zqpKxX98U
-         CUwDxio8Ej559c2fFTyWcwubZnC7YQz6mYe7AVuAEz7HksU3KsEB+3EknmtH+MlfhNMh
-         SusQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f6Iwf48g"
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-660456349d9so1596774d50.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 14:18:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780607674; x=1781212474; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lyPEsnWgMEwVBTMM4vHE6GHrBW2HxmanLD1B4poadMk=;
-        b=HSRVmStjClcx3bpB0Nbb1WbyCagVBGV1o7cutwUR264MGwQtzC2eb77Y4bg1tLolFP
-         UxRJgZO+x7uVz755belwPYpkKr0fa/sLsswY6U1FbRuGSq+FRLZFV9E37egIdz3AcdQD
-         Y6oth/EnlnZP+/as2xeBZe3f7YSCyOc+HK+OHIlR+MxlsswubTEXHxmnK/Y/SXtN+RNO
-         jjIk9ygzfucGJ4Lbodc642V544cS1eVP+enD/KpsMBJXgJncUfmlXv1lk0kIwxMlnR97
-         hDrSM1KDXGTYGLzCh7o2tGiU31yb/ExLLod3UWlbUSsGzNOsH+nfF8R4e8YKs+r5EgoY
-         Z6og==
+        d=gmail.com; s=20251104; t=1780607936; x=1781212736; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=m2J8USZDL7/DpTIcuYHRyNZJXHApGCptCywopvKKKw0=;
+        b=f6Iwf48g0sV8eFbaZLcfnfr49MvzIaKGKwgcqlifmYPouS15GCriYWKZBmyjHTmuzE
+         zjyEb/65tqbtpv+uvM1STrUQ4ohRKKbNqvAdYScq0AP58i8eViSLl7y9eXrhBJLMPk4b
+         v4IPBECBBEtfa9hc5CXR83YHg4q7n6bGKdhQlu8qU9Ybwv20FlAFkAHQsTUAmixwupZP
+         sNXGO8teGzeRUFpJQkqDlyjDgU35kk7BO0ILO3T3VWR1fpcBUuvz7Dff3TKaQJTtgPKt
+         vhwY+cm8yBYVDli1ckPgytEZo6fMcITwrLoUhTXHvtvbutcw7lWkW1kyrbdvyHuNex5h
+         Pbpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780607674; x=1781212474;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lyPEsnWgMEwVBTMM4vHE6GHrBW2HxmanLD1B4poadMk=;
-        b=TDPSpFiL4BQjwCkcAqXof8c/SjZ50cP0iWz2UVnKjttDEIqrBRiZJjidLipYGkm9IN
-         1RqFYzePMC/XR50Le4xkzi7xq6lvBNUw3TooRxgcndIMtrGY7cZBhchrb+A81Yg6u8JX
-         qkjRGJY44h8zpxoOTuxFKAqnA+ZLj4/uNpuE5P0GM12AjtdvWXmPZldBGQLiT8huaKIE
-         swcR7izrXB1FvOkO4YxQVq3uR80mJcJENEeQ+WijdCU64xwUrqjuytvix8MYwsWjySbN
-         oKcAHXPSTBrce63WMeZKh/ku10iWz231uDEs15NTJmkgCyX+k5K2z8WtmV0XIpyc563n
-         ++tQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9AJj16rE22cnW/e3XH1dSHmq/RWU1ieUwoDAaC5PrzYph+SFsQN+BvjH2Mrkci/96Ca8QvJ2YjKoFKLOzu7Xg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaWdZCrzcpZrDZIIbsrXmyi0yTC51PQvWCsD/RoY4BPcQAfU/R
-	ujsh6+A9MMl9mGM/kEOrcpeyFAf9Kc1sfwu/Fyt4yrG3BBhcewgqT3in2k84OdTr5m+xq47keLr
-	fZ3Yg/4STI7+1TdkR7EOB+GDD4petktjPEwjo+lNy
-X-Gm-Gg: Acq92OGpU69bGsuN95g1BXhy3Sv4dxJ3+EMs9sHug8L7ThVva8p3no++4B9NtWlQseX
-	4Wtn8D3qdJCLDJBPprSXFoVzR5omWxAmbF6YYppF2AVjgHjysYHM3tr4g+l/QisOefhWDXxyAVA
-	T59/1llEA+IDcajF171DqfTTNyRcdpktWt8+QIJebxbND0cSLgP3sARkNYl8sHUXma/NlOsvKlY
-	nHg1y80L5wvDouURt9DC55Aonjjexv/5p9Hq6cZ9FS2tZdneoVWNFG1Ctdcb4zoKe0JuW3aM0ZC
-	lnxAJ4uEW3whcZTTW6+9kyUIxGW6/aHZnDfc7U2ysf6L2zpNfHZ6YAhJINmSw0bLZ/xwLgw7I5c
-	miqs=
-X-Received: by 2002:a05:7300:5b83:b0:304:acc:f086 with SMTP id
- 5a478bee46e88-3077b7ec417mr207174eec.33.1780607673246; Thu, 04 Jun 2026
- 14:14:33 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 4 Jun 2026 14:14:32 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 4 Jun 2026 14:14:32 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <aiHeDZEPkAcWcSkn@google.com>
-References: <20260522-gmem-inplace-conversion-v7-0-2f0fae496530@google.com>
- <CAEvNRgGpaggjd3=ooyzv7iEbmA-x1mWJHgjLSjPi8=5CPrk-yQ@mail.gmail.com> <aiHeDZEPkAcWcSkn@google.com>
+        d=1e100.net; s=20251104; t=1780607936; x=1781212736;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m2J8USZDL7/DpTIcuYHRyNZJXHApGCptCywopvKKKw0=;
+        b=cGi/83fTDjIEu6osK2cVSmnkK9Veai/QFCDyKZ/74sK2paDVaKZGKz4SnWgDxwV9Kd
+         YHgpPG3yRrIMfr/lgdzOxfk5uXV8LBozDXf5/u/HNJt4J8gxBcCQK806vw2I8YRgpUcz
+         xR7rIOHhQQkKOmC217v1bEOM6/9U0RA29lOsxhqvyrZhrRu1sJ7/WmukxRNpUT8l1pZB
+         JUgKEJjeR7mk8o3lrU96w4bhsb0HAAzzyu7Njj2yeU02aAq+Y8p+d6zUcNbgf9FsJHnS
+         36FCUzeNNzuvo+YG3Urqb+Q4rdnsolb7PqmV7hSax7zgciOM691e8nTYkwrvowlRnwh2
+         fs3Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9OBduMvr65ty9hLTHiqaGlUmD1qVMaj8Z+tJiDM5VfNz5a92AbT/Ct0cNMU0hWByDc/ir0AuHYFNLlCudTIvo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yye2BOCXVnNr8i7W1j0mgnIWUnx3eJtVTCH8FYyG+M8Kae+Bo7i
+	KE5sdKLpx2caF7DqPuaiEW5NBh/n1jLej3aVbtambEdvhiF/3CMkrcpT
+X-Gm-Gg: Acq92OEKV7SzgebKNzExWPzhXY/hEgckZBkjBaznZWRkZPY9Z79X53owv2hHgBEicXq
+	c7zddGwh5SCRnmaFcx0wbUi0Gzm0zrNF9XCqtYQsKZvh+QPn0hGAEiuo7GEjbzQwnJqhh/jcsQC
+	crOIwUDsEgaqbKjyipDJ1jbNmVZeehdOtl8zkIp+iVBW7JzqlynHo0/vT3v5ychddeJe8yopIt7
+	tOoo+Yq4WthMMibiC/WwZubiZXRa5i9U5pYj1W9HSonXKpw5nP72O/gzeQ6rykTsjwXG0qtCMhl
+	Cyjr7r9vRzDaCVFc0YVrc0zPpLJzDdcNECQQfbxHyNpnkCXdkehDWhMxX3IvaabIufBzDK3dNCH
+	9upcgZt5tTesyc0fIuGqfzX7HqsV34t6l67Xrws+UvPSUIOGuFSWAl9jIKj3haL9IWXxJTAYRFw
+	mTfbcJpuPvGzoQZ+cMUje7PfkqyWdxszv1uUcxP+2x2CidoPZPnzllN891EliaA4Ajj34=
+X-Received: by 2002:a05:690e:4805:b0:660:8e61:1a49 with SMTP id 956f58d0204a3-66106e4abb7mr376567d50.18.1780607936124;
+        Thu, 04 Jun 2026 14:18:56 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:6d35:e45:54a5:6b0f])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-660d5f883e2sm4500821d50.6.2026.06.04.14.18.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jun 2026 14:18:55 -0700 (PDT)
+Date: Thu, 4 Jun 2026 17:18:55 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
+	live-patching@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Joshua Peisach <jpeisach@ubuntu.com>, 
+	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>, 
+	Anthony Iliopoulos <ailiop@suse.com>, Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <aiHgdw_fBv8RTgC2@zenbox>
+References: <20260508195749.1885522-1-sashal@kernel.org>
+ <20260517134858.146569-1-sashal@kernel.org>
+ <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
+ <agsVDqdALBoHEHlv@laps>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 4 Jun 2026 14:14:32 -0700
-X-Gm-Features: AVHnY4J7O-BvLwAbWwmNVfQCapmW0Jz58QA9MN7lFJVjBHp7oGK-p6NKEbfSA24
-Message-ID: <CAEvNRgHz5GDjq0GqRmpQdHc-X45gCNr39VYWZH-T7XhPEtN5CQ@mail.gmail.com>
-Subject: Re: [PATCH v7 00/42] guest_memfd: In-place conversion support
-To: Sean Christopherson <seanjc@google.com>
-Cc: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>, aik@amd.com, 
-	andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org, 
-	chao.p.peng@linux.intel.com, david@kernel.org, ira.weiny@intel.com, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <agsVDqdALBoHEHlv@laps>
 
-Sean Christopherson <seanjc@google.com> writes:
-
-> On Wed, Jun 03, 2026, Ackerley Tng wrote:
->> Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
->> writes:
->>
->> > This is v7 of guest_memfd in-place conversion support.
->> >
->>
->> Here's the outstanding items after going over everyone's comments
->> including Sashiko's:
->>
->> + KVM: TDX: Make source page optional for KVM_TDX_INIT_MEM_REGION
->>     + Need to move page clearing into __kvm_gmem_get_pfn to resolve
->>       leak where populate can put initialized kernel memory into TDX
->>       guest
->>     + See suggested fix at [1]
+On Mon, May 18, 2026 at 09:33:02AM -0400, Sasha Levin wrote:
+> On Sun, May 17, 2026 at 11:37:36PM -0700, Song Liu wrote:
+> > On Sun, May 17, 2026 at 6:49 AM Sasha Levin <sashal@kernel.org> wrote:
+> > > * fail_function (CONFIG_FUNCTION_ERROR_INJECTION) is disabled in
+> > >   most production kernels. Even where enabled, it only works on
+> > >   functions pre-annotated with ALLOW_ERROR_INJECTION() in source -
+> > >   no help for a freshly-disclosed CVE. The debugfs UI is blocked by
+> > >   lockdown=integrity and the override is probabilistic.
+> > > 
+> > > * BPF override (bpf_override_return) honors the same
+> > >   ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
+> > >   production kernels. Even where on, the operator interface is
+> > >   "load a verified BPF program," not a one-line write.
+> > 
+> > If it is OK for killswitch to attach to any kernel functions, do we still
+> > need ALLOW_ERROR_INJECTION() for fail_function and BPF
+> > override? Shall we instead also allow fail_function and BPF override
+> > to attach to any kernel functions?
+> 
+> I don't think so. ALLOW_ERROR_INJECTION is not a security mechanism, it's an
+> integrity/safety mechanism for both bpf and fault injection.
+> 
+> It protects against a "developer or CI script doing legitimate fault injection
+> accidentally panics the box" scenario, not an "attacker gets in" one.
 >
-> That fix works for me.  The initial guest image will typically be a tiny subset
-> of guest memory, so unnecessarily zeroing a few pages isn't a performance concern.
->
+At that point why not just make this entire killswitch mechanism an expanded
+version of the bpf_override_return helper that doesn't care about ALLOW_ERROR_INJECTION?
 
-In regular usage moving the zeroing in [1] doesn't change anything,
-since the same zeroing would have first happened when the host faults
-the pages to put the initial image. When populating, there's no more
-zeroing since it was zeroed.
+Then killswitch mitigations are just BPF programs.
 
-[1] covers the case where the host doesn't write anything to the pages
-and directly tries to populate the pages to the guest.
+This could be paired with a userspace tool for building and
+loading the killswitch programs conveniently.
 
->> + KVM: guest_memfd: Only prepare folios for private pages,
->>     + s/non-CoCo/CoCo in commit message "INIT_SHARED is about to be
->>       supported for non-CoCo VMs in a later patch in this series
->>     + Use Suggested-by: Michael Roth <michael.roth@amd.com>
->> + KVM: selftests: Test that shared/private status is consistent across
->>   processes
->>     + Improve test reliability using pthread_mutex
->>     + I have a fixup patch offline.
->> 	
->> I would like feedback on these:
->> 	
->> + KVM: selftests: Test conversion with elevated page refcount
->>     + Askar pointed out that soon vmsplice may not pin pages. Should I
->>       pin pages through CONFIG_GUP_TEST like in [2]? I prefer not to
->>       take a dependency on CONFIG_GUP_TEST.
->
-> I'm not exactly excited about taking a dependency on CONFIG_GUP_TEST either, but
-> it probably is the least awful choice.  E.g. KVM also pins pages is certain flows,
-> but we're _also_ actively working to remove the need to pin.
->
-> Hmm, maybe IORING_REGISTER_PBUF_RING?  AFAICT, it's almost literally a "pin user
-> memory" syscall.
->
+You can make the helper function only succeed if (CONFIG_KILLSWITCH=y
+CONFIG_BPF_KPROBE_OVERRIDE=y etc.) and taint the kernel on the first call.
 
-Hmm that takes a dependency on io_uring, which isn't always compiled
-in. Between CONFIG_IO_URING and CONFIG_GUP_TEST, I'd rather
-CONFIG_GUP_TEST.
+BPF has the crash_kexec kfunc already that can take down the kernel.
+Thus it's not crazy in my opinion to add a helper with a similar intentional
+intentional footgun in another kfunc/helper.
 
->> + KVM: selftests: Add script to exercise private_mem_conversions_test
->>     + Would like to know what people think of a wrapper script before
->>       I address Sashiko's comments.
->
-> NAK to a wrapper script.  This sounds like a perfect fit for Vipin's selftest
-> runner (which I'm like 4 months overdue for reviewing, testing, and merging).
-> If the runner _can't_ do what you want, then I'd rather improve the runner.
->
-> [*] https://lore.kernel.org/all/20260331194202.1722082-1-vipinsh@google.com
->
+We can automatically benefit from BPF signing mechanisms to prevent
+unauthorized loading of programs. If killswitch is enabled, users can
+restrict unauthorized use of it by restricting the loading of all BPF
+programs to those signed w/ the key.
 
-Good to know we have this!
-
-Thanks, I'll work on a v8 to clean up the above.
-
->>
->> [1] https://lore.kernel.org/all/CAEvNRgEVC=fFuKVgZYvWyZD7t_zvUZihFG8hrACjvtkD5cwugw@mail.gmail.com/
->> [2] https://lore.kernel.org/all/baa8838f623102931e755cf34c86314b305af49c.1747264138.git.ackerleytng@google.com/
->>
->> >
->> > [...snip...]
->> >
+Thanks,
+Justin
+> -- 
+> Thanks,
+> Sasha
