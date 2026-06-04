@@ -1,138 +1,307 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265393FA5D2
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 21:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5092A3C7E17
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 21:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780607938; cv=none; b=GbV1PVLZajzN/hGCSJxQKMK/b/9DPYj/xihMsPgg/hTnXLdctOBbzeRmnunnqFYrUHw+ADSA1dDrRwaQF+GuXHu8+xAx9Wf1W9Zd7WegU+zHKf8fIAfCo9WZyrumv1Ds3wP48IRpBTKDnpiIB2nCsQoK8cu6eBFSB2HZo5mc/FM=
+	t=1780608174; cv=none; b=NGQ8jpYpqFB9QzItBrJCwntn4kTAkXE9WwUuVGmnw7pcDCEAl9qyL+1IWCGzSimjvDJ3DNOC5qF9ItugjGYpMrcNg1rcfhEW25WXfMBnhi0pN2Q1HHu4yY/kyvFcpbgK6PU6zZqS8UQp9VcFvYwE88yKYbOBQFOc5d6Wu4Mx+gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780607938; c=relaxed/simple;
-	bh=j5Va7+gmykjYF242T1iZbiZTv44+SJJypaxifOh0AUw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RfFLTvaN0GYnNohR/5Rlv8C7hsi6doaFKTqjJIIABEHjVurBGelgQxSSqaqVTIZ7jlrXLXbrHDfndSEJRpd4M2TnneEVl4GtWeN7bzlPrN3YpP12mapwYFMi8jz/FhmIqbjUMKAcd8qDcYfxLjB0wVB7fCTJ2gUAdRulJoRd0Hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f6Iwf48g; arc=none smtp.client-ip=74.125.224.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780608174; c=relaxed/simple;
+	bh=Kdjr65lbHG3qucTiiQPPGK2T43njYsjG6p3w/MesfY0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nVDOdJ0skotfHlzyhnIeIXbb8AAOopjPad2orFafkNtQqqHrfZgDdc730CrD0CGgIN5AkltdPPoq4Bxf31O7RWY9Zm7k4BABxnKHl6aajxp1MTqYNf61mqRsmk25EJVGkdgY/oDRQjMEHz6JlECgHnjRe2vNVFeKx2aUYYFELl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=ACNbzEFh; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f6Iwf48g"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-660456349d9so1596774d50.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 14:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780607936; x=1781212736; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=m2J8USZDL7/DpTIcuYHRyNZJXHApGCptCywopvKKKw0=;
-        b=f6Iwf48g0sV8eFbaZLcfnfr49MvzIaKGKwgcqlifmYPouS15GCriYWKZBmyjHTmuzE
-         zjyEb/65tqbtpv+uvM1STrUQ4ohRKKbNqvAdYScq0AP58i8eViSLl7y9eXrhBJLMPk4b
-         v4IPBECBBEtfa9hc5CXR83YHg4q7n6bGKdhQlu8qU9Ybwv20FlAFkAHQsTUAmixwupZP
-         sNXGO8teGzeRUFpJQkqDlyjDgU35kk7BO0ILO3T3VWR1fpcBUuvz7Dff3TKaQJTtgPKt
-         vhwY+cm8yBYVDli1ckPgytEZo6fMcITwrLoUhTXHvtvbutcw7lWkW1kyrbdvyHuNex5h
-         Pbpg==
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="ACNbzEFh"
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.18.1.11/8.18.1.11) with ESMTP id 654Iegb04120845
+	for <linux-kselftest@vger.kernel.org>; Thu, 4 Jun 2026 14:22:51 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=s2048-2025-q2; bh=e4bu41aIp9KB0oOttkR2S8a39KtXyhF
+	MpFg5ISnDgJA=; b=ACNbzEFhHsooe6ojNyrU7nWRrVi7ZHKpxTi8X8rtxMJxeDT
+	oQqDBPkEjiLPDYznZ6limEV7sGu0J5SNuku2K+zvbj+K7QmI01aVTFtZkF/NF6B3
+	XMYnFx7BkcbOeJq7r6zTViy6ff/ZMUNit5vKemAO11zPHGb5szV18pNgDa7TNqO0
+	0zrqKVRxCLh0oAKsKeoY+Ao9hbJ3CRwydZGPjlWOcj7syDWfIfrlhUiZqvrtsPz2
+	cwnEKj01nVoWbFWU97GE7OfZkmKlyknoX4L1o86ftwpu5SvwtYVwrydNpQvIg85o
+	ZSdt1vPCFwGcICZ2qkwJx3tf4xVnIT02k3Bjxjg==
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
+	by m0001303.ppops.net (PPS) with ESMTPS id 4ekeuns219-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 14:22:51 -0700 (PDT)
+Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-7e6da8558a6so1346958a34.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 14:22:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780607936; x=1781212736;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m2J8USZDL7/DpTIcuYHRyNZJXHApGCptCywopvKKKw0=;
-        b=cGi/83fTDjIEu6osK2cVSmnkK9Veai/QFCDyKZ/74sK2paDVaKZGKz4SnWgDxwV9Kd
-         YHgpPG3yRrIMfr/lgdzOxfk5uXV8LBozDXf5/u/HNJt4J8gxBcCQK806vw2I8YRgpUcz
-         xR7rIOHhQQkKOmC217v1bEOM6/9U0RA29lOsxhqvyrZhrRu1sJ7/WmukxRNpUT8l1pZB
-         JUgKEJjeR7mk8o3lrU96w4bhsb0HAAzzyu7Njj2yeU02aAq+Y8p+d6zUcNbgf9FsJHnS
-         36FCUzeNNzuvo+YG3Urqb+Q4rdnsolb7PqmV7hSax7zgciOM691e8nTYkwrvowlRnwh2
-         fs3Q==
-X-Forwarded-Encrypted: i=1; AFNElJ9OBduMvr65ty9hLTHiqaGlUmD1qVMaj8Z+tJiDM5VfNz5a92AbT/Ct0cNMU0hWByDc/ir0AuHYFNLlCudTIvo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yye2BOCXVnNr8i7W1j0mgnIWUnx3eJtVTCH8FYyG+M8Kae+Bo7i
-	KE5sdKLpx2caF7DqPuaiEW5NBh/n1jLej3aVbtambEdvhiF/3CMkrcpT
-X-Gm-Gg: Acq92OEKV7SzgebKNzExWPzhXY/hEgckZBkjBaznZWRkZPY9Z79X53owv2hHgBEicXq
-	c7zddGwh5SCRnmaFcx0wbUi0Gzm0zrNF9XCqtYQsKZvh+QPn0hGAEiuo7GEjbzQwnJqhh/jcsQC
-	crOIwUDsEgaqbKjyipDJ1jbNmVZeehdOtl8zkIp+iVBW7JzqlynHo0/vT3v5ychddeJe8yopIt7
-	tOoo+Yq4WthMMibiC/WwZubiZXRa5i9U5pYj1W9HSonXKpw5nP72O/gzeQ6rykTsjwXG0qtCMhl
-	Cyjr7r9vRzDaCVFc0YVrc0zPpLJzDdcNECQQfbxHyNpnkCXdkehDWhMxX3IvaabIufBzDK3dNCH
-	9upcgZt5tTesyc0fIuGqfzX7HqsV34t6l67Xrws+UvPSUIOGuFSWAl9jIKj3haL9IWXxJTAYRFw
-	mTfbcJpuPvGzoQZ+cMUje7PfkqyWdxszv1uUcxP+2x2CidoPZPnzllN891EliaA4Ajj34=
-X-Received: by 2002:a05:690e:4805:b0:660:8e61:1a49 with SMTP id 956f58d0204a3-66106e4abb7mr376567d50.18.1780607936124;
-        Thu, 04 Jun 2026 14:18:56 -0700 (PDT)
-Received: from zenbox ([2600:1700:18fb:6011:6d35:e45:54a5:6b0f])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-660d5f883e2sm4500821d50.6.2026.06.04.14.18.55
+        d=1e100.net; s=20251104; t=1780608170; x=1781212970;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e4bu41aIp9KB0oOttkR2S8a39KtXyhFMpFg5ISnDgJA=;
+        b=m79jSqMvQr+IJmEAl0UD5XytuQSpjL3LbQgjaOJkGruRYfpJ7x8Jdjeq/LJ6+tORMS
+         zoPE4ZUTKYiQKJXsMKVmpqerdi3YX3T1HXxgpawtX6oYwRLBU0IzmdE4kYGvdOTkLIwG
+         xZnb+8sF1EjdXff0JP5L4HL3vPfwpW/M1nqG1yybW0uVu/MF6kPQtKWW6t70AWM+94O9
+         peeyDfxAm9WYyPbHGe085Vx/PHF5T9eKgpFSaw5QPiKl1uOjC+Dyb3jQqGU9tKj12Uy5
+         yW4QClv3emuLbDAPglI8QrGlumUY6T6H+nW/7iiiMNdII5WEpC4EIlQlgrGtr/nl/JcJ
+         xRLw==
+X-Forwarded-Encrypted: i=1; AFNElJ/P10LIRo6Acidmh/bF704WNuJ0w2Z6qOrKrpD34Z5d82aGVOVHwQK/sTd02PJNwQiSnJgItFvPl9gnVfPNu0c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoRnGWIfAxyzq8c97GmyPuYrQ8c2XofL5cZ8HJcvkApNASevuY
+	dnxsghl/TIdriUMQK1ZkRUs9Pijh2j/m04pL+58dF9W8AAo6lWShhjpxY4Ih6NfjSL9g8PyUdJr
+	HoiPedRpKx4De5r+L57X3a0BwgeH/6A7A/0sfOMr/XKhuoNCfyBa9lrYziTdp/EcAnUU=
+X-Gm-Gg: Acq92OEilzBdBNIEhJSfY7QYaiK9W6RSIgK6GCYe13JS2N31IYIwPpKFGlWLO409mOs
+	7mA9ls+PTyTg1tJPBmmtDfjCSf+uuhoDn4u+lqq1nlyVEHdVjUlCSmv+evt3xQaeZAP9haeOcd5
+	CoDgkff+SMRi/u6qgLEBMF07VlNwsJhRFRanutR0aEfYLHzUI/bF3jW/Lv3L5sWTbG97oK0+DL8
+	WQByWaza3pp+WYHD5FWhNsBr3rMVmqWiMTlj8Fo08SbLbHdBjZd0B9Z+lShQQYtpSjazIcDhxNF
+	9Sllq/hAe1yhRG4D3gH6kgLsKanESmIiBTTF/yQRCBsyJI6VoCgwxL2crpNt+lYm3g3FFow4XgP
+	nx9d3lFIgf29A98XnmG3fLg==
+X-Received: by 2002:a05:6830:4986:b0:7e6:f2ef:e232 with SMTP id 46e09a7af769-7e70ca9bccdmr260231a34.19.1780608170215;
+        Thu, 04 Jun 2026 14:22:50 -0700 (PDT)
+X-Received: by 2002:a05:6830:4986:b0:7e6:f2ef:e232 with SMTP id 46e09a7af769-7e70ca9bccdmr260203a34.19.1780608169739;
+        Thu, 04 Jun 2026 14:22:49 -0700 (PDT)
+Received: from localhost ([2a03:2880:12ff:40::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e6e78e14b9sm4692298a34.13.2026.06.04.14.22.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 14:18:55 -0700 (PDT)
-Date: Thu, 4 Jun 2026 17:18:55 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
-	live-patching@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Joshua Peisach <jpeisach@ubuntu.com>, 
-	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>, 
-	Anthony Iliopoulos <ailiop@suse.com>, Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
- primitive
-Message-ID: <aiHgdw_fBv8RTgC2@zenbox>
-References: <20260508195749.1885522-1-sashal@kernel.org>
- <20260517134858.146569-1-sashal@kernel.org>
- <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
- <agsVDqdALBoHEHlv@laps>
+        Thu, 04 Jun 2026 14:22:49 -0700 (PDT)
+From: Neil Spring <ntspring@meta.com>
+To: netdev@vger.kernel.org
+Cc: edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
+        davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org,
+        pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, ntspring@meta.com,
+        bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net
+Subject: [PATCH net-next v12 0/2] tcp: rehash onto different local ECMP path on retransmit timeout
+Date: Thu,  4 Jun 2026 14:22:44 -0700
+Message-ID: <20260604212246.265079-1-ntspring@meta.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <agsVDqdALBoHEHlv@laps>
+X-Authority-Analysis: v=2.4 cv=Af2B2XXG c=1 sm=1 tr=0 ts=6a21ecab cx=c_pps
+ a=+3WqYijBVYhDct2f5Fivkw==:117 a=xqWC_Br6kY4A:10 a=FelO9ux0wxsA:10
+ a=f7IdgyKtn90A:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
+ a=_78whYxrdx1mplLwxq1U:22 a=VwQbUJbxAAAA:8 a=VabnemYjAAAA:8
+ a=UiyovihmSlTbsT8-nD0A:9 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-ORIG-GUID: r6qt-6qM2fthUVfs41cSJfjTJ6e7umEJ
+X-Proofpoint-GUID: r6qt-6qM2fthUVfs41cSJfjTJ6e7umEJ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjA0MDIwOSBTYWx0ZWRfX00xjGTJkeEs1
+ Nr8oQJ74HBFq12jAhsZGCX3gb33/Q1wvkaUj9/V3FfyJRCbzOFjALjhRh1F4ikwMRTKWV+11ewb
+ IVkvaRILBq/AuT3b9UECQHcd3INp/4VLQANqM5AkixfbnpGYQJ1wOpIXO0UD2rNU2DpOT4ae8Fd
+ /WNmGJcd53Ac4QF3Wf6ESuLOOyaZINarVLsxpcxIWNgSkSCrC+3S8P3Axmq5sUbj5LXtV/CybCM
+ Yc0QeQ8q5+IDy0jjdi3Q58m+O/SGJ10uYCVFQ94n4+qBHl+3InD2Oj/z1cn0Tzo3HNzJWUwQ/yr
+ apc3CLTpQWRlfbvE3eITKRvPysbIqAnmjwkjM9DD0lYsBCYRCW9qZA/bCI/rQTDJvMow13LCJ7D
+ 9EqE7woPxFP7LL7BF6QmbOq8C6wsxIfCe/Yo53U+IY3To6hUlMOr5H8BHktqN2y1r1eLGNNR9T2
+ QHKW7efbZqT0S5PX9Ng==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-04_06,2026-05-28_03,2025-10-01_01
 
-On Mon, May 18, 2026 at 09:33:02AM -0400, Sasha Levin wrote:
-> On Sun, May 17, 2026 at 11:37:36PM -0700, Song Liu wrote:
-> > On Sun, May 17, 2026 at 6:49 AM Sasha Levin <sashal@kernel.org> wrote:
-> > > * fail_function (CONFIG_FUNCTION_ERROR_INJECTION) is disabled in
-> > >   most production kernels. Even where enabled, it only works on
-> > >   functions pre-annotated with ALLOW_ERROR_INJECTION() in source -
-> > >   no help for a freshly-disclosed CVE. The debugfs UI is blocked by
-> > >   lockdown=integrity and the override is probabilistic.
-> > > 
-> > > * BPF override (bpf_override_return) honors the same
-> > >   ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
-> > >   production kernels. Even where on, the operator interface is
-> > >   "load a verified BPF program," not a one-line write.
-> > 
-> > If it is OK for killswitch to attach to any kernel functions, do we still
-> > need ALLOW_ERROR_INJECTION() for fail_function and BPF
-> > override? Shall we instead also allow fail_function and BPF override
-> > to attach to any kernel functions?
-> 
-> I don't think so. ALLOW_ERROR_INJECTION is not a security mechanism, it's an
-> integrity/safety mechanism for both bpf and fault injection.
-> 
-> It protects against a "developer or CI script doing legitimate fault injection
-> accidentally panics the box" scenario, not an "attacker gets in" one.
->
-At that point why not just make this entire killswitch mechanism an expanded
-version of the bpf_override_return helper that doesn't care about ALLOW_ERROR_INJECTION?
+Currently sk_rethink_txhash() re-rolls the socket's txhash on RTO,
+PLB, and spurious-retransmission events, but the new hash is not
+propagated into the IPv6 ECMP path selection logic.  The cached
+route is reused and fib6_select_path() is never re-invoked, so
+the connection uses the same local ECMP decision.
 
-Then killswitch mitigations are just BPF programs.
+This series adds the two missing pieces:
 
-This could be paired with a userspace tool for building and
-loading the killswitch programs conveniently.
+1. __sk_dst_reset() alongside sk_rethink_txhash() so the cached dst
+   is invalidated and the next transmit triggers a fresh route lookup.
 
-You can make the helper function only succeed if (CONFIG_KILLSWITCH=y
-CONFIG_BPF_KPROBE_OVERRIDE=y etc.) and taint the kernel on the first call.
+2. fl6->mp_hash set from sk_txhash before each route lookup so
+   fib6_select_path() picks a path based on the (potentially re-rolled)
+   hash.  This only applies to fib_multipath_hash_policy 0 (the
+   default L3 policy).  Policy 0 is already asymmetric for TCP: with
+   auto_flowlabels enabled (the default), each socket gets a per-socket
+   flowlabel, so the hash is already per-connection and unidirectional.
+   For policy 0 the local ECMP path now follows sk_txhash even when a
+   flow label is present (reflected REPFLOW or explicitly set); only
+   local path selection changes, the on-wire flow label is unaffected.
+   Policies 1-3 exist for operators who need deterministic symmetric
+   hashing (e.g., for stateful middleboxes) and are left unchanged.
 
-BPF has the crash_kexec kfunc already that can take down the kernel.
-Thus it's not crazy in my opinion to add a helper with a similar intentional
-intentional footgun in another kfunc/helper.
+Patch 1 is the kernel change; patch 2 adds selftests covering SYN
+rehash, SYN/ACK rehash, midstream RTO rehash, midstream ACK rehash
+(spurious retransmission), PLB rehash, a policy 1 negative test,
+a flowlabel leak regression test, two dst rebuild consistency
+tests (normal and syncookie) verifying that natural route
+invalidation does not cause unintended path changes, and a
+syncookie server path consistency test verifying that the SYN-ACK
+and post-cookie ACKs use the same ECMP nexthop.
 
-We can automatically benefit from BPF signing mechanisms to prevent
-unauthorized loading of programs. If killswitch is enabled, users can
-restrict unauthorized use of it by restricting the loading of all BPF
-programs to those signed w/ the key.
+Changes since v11: https://lore.kernel.org/netdev/20260602181428.2318919-1-ntspring@meta.com/
+Patch 1:
+- Fix the IPv6-only rule to exclude IPv4-mapped connections: key the
+  cookie txhash on skb->protocol, not sk->sk_family (Sashiko AI review)
+- Set fl6->mp_hash in tcp_v6_send_response() so RSTs and time-wait
+  ACKs use the connection's ECMP path (Sashiko AI review)
+- Remove the bpf_sk_assign_tcp_reqsk() txhash init added in v7; it is
+  redundant, as cookie_tcp_reqsk_init() always sets txhash before the
+  request socket is routed (verified by poisoning txhash and running
+  the tcp_custom_syncookie BPF selftest: the route lookup never saw
+  the poison)
+- Document that policy 0 IPv6 TCP ECMP selection follows txhash over a
+  reflected/explicit flow label (on-wire flow label unchanged)
+Patch 2:
+- Drain TCP teardown between rounds so late FIN/RST packets do not
+  pollute the next round's tc filter counters (bot+bpf-ci)
+- Skip the syncookie tests when CONFIG_SYN_COOKIES is unavailable;
+  select it in selftests/net/config
 
-Thanks,
-Justin
-> -- 
-> Thanks,
-> Sasha
+Changes since v10: https://lore.kernel.org/netdev/20260529160136.1010064-1-ntspring@meta.com/
+Patch 1:
+- Fix build without CONFIG_SYN_COOKIES
+- Leave IPv4 syncookie txhash unmodified (`net_tx_rndhash()`)
+- Document the IPv6 TCP policy 0 behavior change in ip-sysctl.rst
+Patch 2:
+- Correct runtime estimate from ~15s to ~60s
+- Build DCTCP as `=y` instead of `=m` to avoid module load races
+- Fix false failure of the midstream ACK test by limiting the send
+  buffer to avoid a closed receive window; window probes do not
+  cause rehash
+
+Changes since v9: https://lore.kernel.org/netdev/20260526203403.3517607-1-ntspring@meta.com/
+Patch 1:
+- Split cookie_init_sequence() into pure computation and a new
+  cookie_record_sent() helper for the side effects; call
+  cookie_record_sent() after route_req() succeeds so the overflow
+  timestamp and SYNCOOKIESSENT counter are not bumped when no
+  SYN-ACK is sent
+Patch 2:
+- Make midstream ACK rehash test more reliable by blocking the unused
+  path first
+- Fix port overlap when ECMP_REBUILD_ROUNDS exceeds the default
+
+Changes since v8: https://lore.kernel.org/netdev/20260522215733.929238-1-ntspring@meta.com/
+Patch 1:
+- Fix REPFLOW flowlabel reflection for syncookie SYN-ACKs: pass 0 as
+  tw_isn to route_req() so tcp_v6_init_req() saves ireq->pktopts
+Patch 2:
+- Give midstream and ACK rehash attempt helpers distinct failure
+  messages (no TX activity vs no data on alternate path vs counter
+  not incrementing) instead of a single generic error
+- Drop unused ns_server parameter from ecmp_dst_rebuild_check()
+- Clean up server socat before break on setup failure in the dst
+  rebuild loop
+
+Changes since v7: https://lore.kernel.org/netdev/20260520064310.4154268-1-ntspring@meta.com/
+Patch 1:
+- Remove #if IS_ENABLED(CONFIG_IPV6) guards around __sk_dst_reset()
+  in tcp_plb.c and tcp_timer.c (Eric Dumazet)
+- Guard mp_hash in inet6_csk_route_socket() on sk_protocol == IPPROTO_TCP
+  instead of txhash != 0, since non-TCP callers like L2TP set sk_txhash
+  in __ip6_datagram_connect() and should retain flow-key-based ECMP
+- Use the syncookie (ISN) as txhash for both the SYN-ACK route lookup
+  and cookie_v6_check() socket creation, so the server's ECMP selection is
+  consistent across the stateless SYN-ACK and the subsequent full socket.
+  Move cookie_init_sequence() before route_req() in tcp_conn_request()
+  so the SYN-ACK dst is computed with the cookie-derived txhash; derive
+  txhash from snt_isn in cookie_tcp_reqsk_init() to match
+Patch 2:
+- Invalidate dst via dummy route add/del instead of route replace to
+  avoid a transient single-nexthop state during multipath replacement
+- Add syncookie server path consistency test verifying the SYN-ACK and
+  post-cookie ACKs use the same ECMP path
+- Strengthen policy 1 negative test to wait for multiple rehash attempts
+  and verify SYNs landed on exactly one interface
+
+Changes since v6: https://lore.kernel.org/netdev/20260517174522.2232057-1-ntspring@meta.com/
+- Guard mp_hash assignment so that non-TCP callers of
+  inet6_csk_route_socket() fall through to rt6_multipath_hash()
+  (superseded in v8 by sk_protocol == IPPROTO_TCP guard)
+- Initialize txhash in bpf_sk_assign_tcp_reqsk() to avoid reading
+  uninitialized slab memory in inet6_csk_route_req() (reverted in v12
+  as redundant)
+- Check post-rebuild busywait return status to avoid silent false pass
+
+Changes since v5: https://lore.kernel.org/netdev/20260513204048.2721843-1-ntspring@meta.com/
+- Improve selftest reliability: suppress __dst_negative_advice() via
+  tcp_retries1=255 in dst rebuild tests so a real RTO cannot trigger
+  an unintended rehash; add internal retry to midstream and ACK
+  rehash tests to tolerate probabilistic ECMP path selection; fix
+  midstream baseline capture to account for packets that bypass tc
+  filters during the prio qdisc's TCQ_F_CAN_BYPASS window
+- Increase ECMP_REBUILD_ROUNDS default to 10 for reliable regression
+  detection with 2-way ECMP; replace sleep with busywait
+- Use tcp_allowed_congestion_control instead of changing the host's
+  default congestion control for PLB test
+- Use (txhash >> 1) ?: 1 to guarantee non-zero mp_hash, since zero
+  falls back to rt6_multipath_hash()
+
+Changes since v4: https://lore.kernel.org/netdev/20260507171319.1259115-1-ntspring@meta.com/
+- Condition fl6->mp_hash on fib_multipath_hash_policy == 0 to preserve
+  deterministic hash policies 1-3 (e.g., symmetric 5-tuple for policy 1)
+- Set fl6->mp_hash in tcp_v6_connect() and cookie_v6_check() for
+  initial route lookup consistency; move sk_set_txhash() earlier
+  (Jakub Kicinski)
+- Add policy 1 negative test; improve sysctl save/restore
+- Add flowlabel leak test confirming mp_hash does not alter the
+  on-wire IPv6 flow label
+- Add dst rebuild consistency tests (normal and syncookie) verifying
+  that route table changes do not cause unintended ECMP path changes
+
+Changes since v3: https://lore.kernel.org/netdev/20260505193824.2791642-1-ntspring@meta.com/
+- Use __sk_dst_reset() instead of sk_dst_reset() since the socket lock
+  is held in all three call sites (Eric Dumazet)
+- Guard __sk_dst_reset() with sk->sk_family == AF_INET6 since IPv4 ECMP
+  does not use sk_txhash for path selection
+- Guard __sk_dst_reset() in tcp_plb_check_rehash() with the return value
+  of sk_rethink_txhash()
+- Move tcp_rsk(req)->txhash initialization before route_req() in
+  tcp_conn_request() to avoid reading uninitialized memory
+- Add CONFIG_TCP_CONG_DCTCP=m to selftests/net/config for PLB test
+- Skip PLB test gracefully if DCTCP is not available
+- Save and restore original congestion control algorithm in PLB test
+- Default get_netstat_counter() to 0 when counter is not found
+- Skip all tests if tcp_syn_linear_timeouts is not available
+- Replace bash/pipe data sources with socat OPEN:/dev/zero for
+  cleaner process cleanup
+- Fix shellcheck warnings
+
+Changes since v2: https://lore.kernel.org/netdev/20260408070514.1840227-1-ntspring@meta.com/
+- Retitle "ECMP" to "local ECMP" to distinguish from remote ECMP
+  (Neal Cardwell)
+- Add fl6->mp_hash propagation in inet6_sk_rebuild_header() (af_inet6.c),
+  covering the dst rebuild path used on established sockets
+- Remove incorrect ir_iif update from tcp_check_req() in tcp_minisocks.c;
+  the SYN/ACK rehash is already handled by tcp_rtx_synack() re-rolling
+  txhash which feeds into inet6_csk_route_req()'s mp_hash
+  (Eric Dumazet)
+- Add ACK rehash and PLB rehash selftests
+- Improve selftest reliability
+
+Changes since v1: https://lore.kernel.org/netdev/20260408002802.2448424-1-ntspring@meta.com/
+- Use tcp_rsk(req)->txhash instead of jhash_1word(req->num_retrans, ...)
+  for ECMP path selection in inet6_csk_route_req(), making the request
+  socket path consistent with the established socket path (Eric Dumazet)
+- Add comments explaining the >> 1 shift for 31-bit mp_hash range
+- Use socat -u (unidirectional) in selftest to avoid SIGPIPE race
+- Increase tcp_syn_retries and tcp_syn_linear_timeouts to 25 for
+  better rehash coverage
+
+Neil Spring (2):
+  tcp: rehash onto different local ECMP path on retransmit timeout
+  selftests: net: add local ECMP rehash test
+
+ Documentation/networking/ip-sysctl.rst     |    6 +-
+ include/net/tcp.h                          |   20 +-
+ net/ipv4/syncookies.c                      |   11 +-
+ net/ipv4/tcp_input.c                       |   19 +-
+ net/ipv4/tcp_plb.c                         |    5 +-
+ net/ipv4/tcp_timer.c                       |    2 +
+ net/ipv6/af_inet6.c                        |    3 +
+ net/ipv6/inet6_connection_sock.c           |    8 +
+ net/ipv6/syncookies.c                      |    4 +
+ net/ipv6/tcp_ipv6.c                        |   21 +-
+ tools/testing/selftests/net/Makefile       |    1 +
+ tools/testing/selftests/net/config         |    2 +
+ tools/testing/selftests/net/ecmp_rehash.sh | 1106 ++++++++++++++++++++
+ 13 files changed, 1193 insertions(+), 15 deletions(-)
+ create mode 100755 tools/testing/selftests/net/ecmp_rehash.sh
+
+-- 
+2.53.0-Meta
+
