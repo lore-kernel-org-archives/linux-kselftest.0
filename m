@@ -1,474 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9E91A6822;
-	Thu,  4 Jun 2026 07:14:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E3A3C277C;
+	Thu,  4 Jun 2026 07:48:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780557297; cv=none; b=CGUNrADgUpS9vPLJU9mEzLv+U4I5QLdyul9LfQItOMeV0c1aUuf34xHhg1LIYNX3xXxa6ZJHaD8/FikQ0E3Wx3Z09GWHtc8KOp/6zonRMgDQcWF90KNbfO0yjlKybwsf80LmkJWeHUVix38qnUmXvjqUZYrIZzP7Q+PkMd86CZQ=
+	t=1780559319; cv=none; b=G3pW4w/2zZ1Qkiue0WIrZWRQca1D71KR8CCuOTHY1Z4twUMKMaXdmh7Fm37aN7VeZO9SEMrj+gzWCeb1WKb6EXQfRbsoDzopTOk+wAjZbOATzpfUZx9GTNNJgbTte31XQx/Tr8FEux2P9HavlNmo3D3MDhk2QU+S3lyMBFttU7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780557297; c=relaxed/simple;
-	bh=6r1K8mcPsPD6196B3eZY9y47FyQPIVRpzJOVkcWJr0M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fLXsaPa2KkhXkkhCAbxEq/YJ+gURMXit0IRolgAxQ+X+I9BH0AEUSE/OhdFMx2Z5ZdZlEpq9AbF40jJFsFkN9yXMqC4tTzjDrkpRwVLQxQOz4Gy4yEYwuFwpqBlVlvDyZOAIC8f5pGZ3uLGUL8nkJaoxkfv1tKyvKQFir0nQwnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U0+CqvLi; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780559319; c=relaxed/simple;
+	bh=oEG5J/LOk15YQLjgKKPFlsfm/cTbVS+2gW1ZpK8mrAU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=D/QzsCjbLWwBw4HEQO4OzYZgxODXSpCaamXmjo9XhYBYFJtnTR3G1Dh92XQp4Bnp5l16/DyuKvrJBZSHh0VKlFVihelVJAhsExHNerT9hqpwIri/v5E/DO9WohSW0JCcwh/9qCuvnCOlWykUOZ3WLgemSWo/Knt20bg8U21dTMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j3ksA2dc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U0+CqvLi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DEA1F00893;
-	Thu,  4 Jun 2026 07:14:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j3ksA2dc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C855F1F00899;
+	Thu,  4 Jun 2026 07:48:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780557296;
-	bh=8m2wBlqrNniJuXWjPa5emnSIuk3xsl0CXNJOG/LcpNg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=U0+CqvLiNn1W0H5nExQKsf8773YkpbNiH0ZuQcS3bDXRKk9Fk/cmVBGkrMyQLbDQ6
-	 Shhca1wkgKb24ZJIH6CQF9xYwvOVxwG9DzzLXa7C3yJKatBS8TW+ue7lELmtaB1fKX
-	 6C8f0iKoPB3oaMkD7FTL78fAoe0yXWIO/e+CqFEEJQa4r8aQXKN5m6RZp1f7+CIBvm
-	 0tv5f8Knyg5WiAoeyDLRUfQt/8BDS16nciICeSIHMlUUIw0jCBYZ/i7PNMMmC8C4Zo
-	 U9xwSKN2kN4BDJI574TsbUnErOaAyUlUwD89lpa1idnNOvw+LZCaj0vIP0btoyRwS5
-	 O0n1KgkVJHe3w==
-Date: Thu, 4 Jun 2026 08:14:49 +0100
-From: Lorenzo Stoakes <ljs@kernel.org>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: akpm@linux-foundation.org, liam@infradead.org, vbabka@kernel.org, 
-	david@redhat.com, willy@infradead.org, jannh@google.com, paulmck@kernel.org, 
-	pfalcato@suse.de, shuah@kernel.org, hsukrut3@gmail.com, richard.weiyang@gmail.com, 
-	reddybalavignesh9979@gmail.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] fs/proc/task_mmu: read proc/pid/{smaps|numa_maps}
- under per-vma lock
-Message-ID: <aiElxkLHn2yC3W_3@lucifer>
-References: <20260426062718.1238437-1-surenb@google.com>
- <20260426062718.1238437-2-surenb@google.com>
- <ahhMEBYM9bixF2Lg@lucifer>
- <CAJuCfpFJvuFZkgKwJ11RjDXYhTz-a31HO9-5C+Yc=KxbsGvB-w@mail.gmail.com>
+	s=k20260515; t=1780559318;
+	bh=rkgzbBvaofa7xvPAt3Mvw0ddVSkfgCC7wnxvFFq+Z70=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=j3ksA2dcrQA2eCA7XruAlQ+CosomVg/PbSGgeWaLSbsz3k44nukE6DFuvIuBK7g4u
+	 o1BExgdQnYbR4oC1DN2PlNtfKfddDKJfE96f3XmgZtVCo1/5dfGvZzy6jhCfK6lMhY
+	 4I4B/qt28rrnm004DeL7stu3ZWYNOXvTU0Kgh7TptukwPaSDAcYDp5QGt3RjrnccOT
+	 ytDK7L1AQ826R5uzc7JJirXfdqtuOX4Cdw0bFXl7q3ZGvEkgy19mhKZ+EaF4Wiqh6m
+	 X5gQlyaQ2urzCUJjniRBUJFTQbHh3LprIWTd+43BPzkUvR2nlK4xbjR/mmqDw+mEE7
+	 PmAkMSfkYAMVA==
+Content-Type: multipart/mixed; boundary="===============6195489814518535589=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpFJvuFZkgKwJ11RjDXYhTz-a31HO9-5C+Yc=KxbsGvB-w@mail.gmail.com>
+Message-Id: <ed3f03d2f6e66ffe1ed007d976b402e5453045a53a91b36555f59ff481710fa6@mail.kernel.org>
+In-Reply-To: <20260604070318.2869813-1-malin89@huawei.com>
+References: <20260604070318.2869813-1-malin89@huawei.com>
+Subject: Re: [PATCH v4 1/2] bpf: Tighten cgroup storage cookie checks for prog arrays
+From: bot+bpf-ci@kernel.org
+To: malin89@huawei.com,ast@kernel.org,daniel@iogearbox.net,bpf@vger.kernel.org
+Cc: andrii@kernel.org,john.fastabend@gmail.com,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,zhuyifei@google.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ameryhung@gmail.com,malin89@huawei.com,cuirongzhen@huawei.com,tanjingguo@huawei.com,cenxianlong@huawei.com,chenzhe@huawei.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  4 Jun 2026 07:48:37 +0000 (UTC)
 
-On Wed, Jun 03, 2026 at 04:49:48PM -0700, Suren Baghdasaryan wrote:
-> On Thu, May 28, 2026 at 8:17 AM Lorenzo Stoakes <ljs@kernel.org> wrote:
-> >
-> > On Sat, Apr 25, 2026 at 11:27:16PM -0700, Suren Baghdasaryan wrote:
-> > > proc/pid/{smaps|numa_maps} can be read using the combination of RCU and
-> > > VMA read locks, similar to proc/pid/maps. RCU is required to safely
-> > > traverse the VMA tree and VMA lock stabilizes the VMA being processed
-> > > and the pagetable walk.
-> > >
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > Reviewed-by: Liam R. Howlett <liam@infradead.org>
-> >
-> > The logic LGTM, some nitty things below but in general:
-> >
-> > Reviewed-by: Lorenzo Stoakes <ljs@kernel.org>
->
-> Thanks!
->
-> >
-> > > ---
-> > >  fs/proc/task_mmu.c | 195 ++++++++++++++++++++++++++++++++++++---------
-> > >  1 file changed, 156 insertions(+), 39 deletions(-)
-> > >
-> > > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> > > index 751b9ba160fb..1e3a15bf46f4 100644
-> > > --- a/fs/proc/task_mmu.c
-> > > +++ b/fs/proc/task_mmu.c
-> > > @@ -132,6 +132,22 @@ static void release_task_mempolicy(struct proc_maps_private *priv)
-> > >
-> > >  #ifdef CONFIG_PER_VMA_LOCK
-> > >
-> > > +static inline int lock_ctx_mm(struct proc_maps_locking_ctx *lock_ctx)
-> >
-> > NIT: But these inlines are unnecessary in a C file. At the kernel optimisation
-> > level the compiler already decides whether to inline or not.
-> >
-> > However in the kernel we redefine this so we lose function tracing and also we
-> > don't get warnings about unused functions [0], so this is actually a bit harmful
-> > - you can end up with dead code and not know abou tit.
-> >
-> > Same goes for all the other static inline's in task_mmu.c.
->
-> I see. There are a bunch of these small inline functions. Once the
-> dust settles, I can clean them up. Dave's series and my folloup patch
-> to change smaps_rollup will be changing this code. Maybe after all
-> that is done?
+--===============6195489814518535589==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Yeah that's fine this obviously isn't urgent! :) tiny nits really.
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index a656a8572bdb..d85869544dc8 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2480,8 +2480,12 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+>  				break;
+>  			cookie = aux->cgroup_storage[i] ?
+>  				 aux->cgroup_storage[i]->cookie : 0;
+> -			ret = map->owner->storage_cookie[i] == cookie ||
+> -			      !cookie;
+> +			/*
+> +			 * Tail calls keep using the caller cgroup storage
+> +			 * context, so prog-array members must use the same
+> +			 * storage cookie.
+> +			 */
+> +			ret = map->owner->storage_cookie[i] == cookie;
 
->
-> >
-> > [0]: https://elixir.bootlin.com/linux/v7.0.10/source/include/linux/compiler_types.h#L235
-> >
-> > > +{
-> > > +     int ret = mmap_read_lock_killable(lock_ctx->mm);
-> > > +
-> > > +     if (!ret)
-> > > +             lock_ctx->mmap_locked = true;
-> > > +
-> > > +     return ret;
-> > > +}
-> > > +
-> > > +static inline void unlock_ctx_mm(struct proc_maps_locking_ctx *lock_ctx)
-> > > +{
-> > > +     mmap_read_unlock(lock_ctx->mm);
-> > > +     lock_ctx->mmap_locked = false;
-> > > +}
-> > > +
-> > >  static void reset_lock_ctx(struct proc_maps_locking_ctx *lock_ctx)
-> > >  {
-> > >       lock_ctx->locked_vma = NULL;
-> > > @@ -146,25 +162,11 @@ static void unlock_ctx_vma(struct proc_maps_locking_ctx *lock_ctx)
-> > >       }
-> > >  }
-> > >
-> > > -static const struct seq_operations proc_pid_maps_op;
-> > > -
-> > >  static inline bool lock_vma_range(struct seq_file *m,
-> > >                                 struct proc_maps_locking_ctx *lock_ctx)
-> > >  {
-> > > -     /*
-> > > -      * smaps and numa_maps perform page table walk, therefore require
-> > > -      * mmap_lock but maps can be read with locking just the vma and
-> > > -      * walking the vma tree under rcu read protection.
-> > > -      */
-> > > -     if (m->op != &proc_pid_maps_op) {
-> > > -             if (mmap_read_lock_killable(lock_ctx->mm))
-> > > -                     return false;
-> > > -
-> > > -             lock_ctx->mmap_locked = true;
-> > > -     } else {
-> > > -             rcu_read_lock();
-> > > -             reset_lock_ctx(lock_ctx);
-> > > -     }
-> > > +     rcu_read_lock();
-> > > +     reset_lock_ctx(lock_ctx);
-> > >
-> > >       return true;
-> > >  }
-> > > @@ -172,7 +174,7 @@ static inline bool lock_vma_range(struct seq_file *m,
-> > >  static inline void unlock_vma_range(struct proc_maps_locking_ctx *lock_ctx)
-> > >  {
-> > >       if (lock_ctx->mmap_locked) {
-> > > -             mmap_read_unlock(lock_ctx->mm);
-> > > +             unlock_ctx_mm(lock_ctx);
-> > >       } else {
-> > >               unlock_ctx_vma(lock_ctx);
-> > >               rcu_read_unlock();
-> > > @@ -213,17 +215,45 @@ static inline bool fallback_to_mmap_lock(struct proc_maps_private *priv,
-> > >       return true;
-> > >  }
-> > >
-> > > +static inline void drop_rcu(struct proc_maps_private *priv)
-> > > +{
-> > > +     if (priv->lock_ctx.mmap_locked)
-> > > +             return;
-> > > +
-> > > +     rcu_read_unlock();
-> > > +}
-> > > +
-> > > +static inline void reacquire_rcu(struct proc_maps_private *priv)
-> > > +{
-> > > +     if (priv->lock_ctx.mmap_locked)
-> > > +             return;
-> > > +
-> > > +     rcu_read_lock();
-> > > +     /* Reinitialize the iterator. */
-> > > +     vma_iter_set(&priv->iter, priv->lock_ctx.locked_vma->vm_end);
-> >
-> > OK good that we reset this :)
-> >
-> > > +}
-> > > +
-> > >  #else /* CONFIG_PER_VMA_LOCK */
-> > >
-> >
-> > We need to pull out the patches from Dave's series and remove this option and
-> > default VMA locks on by default :)
->
-> I didn't see any followup after Dave posted his v1. I agree it would
-> make things much simpler but I don't want to delay these changes too
-> much.
-> I'll ask Dave if he plans to continue his cleanup. If not, I'll pick it up.
+Does dropping the "!cookie" term here reject a configuration that was
+previously valid and safe?
 
-Great thanks!
+With the old check, a program that uses no cgroup local storage (cookie
+== 0) could join a prog-array whose owner uses cgroup storage
+(storage_cookie[i] != 0), because "!cookie" was true. With the new check,
+"storage_cookie[i] == 0" is false for that owner, so the storage-less
+program is now rejected with -EINVAL:
 
->
->
-> >
-> > > +static inline int lock_ctx_mm(struct proc_maps_locking_ctx *lock_ctx)
-> > > +{
-> > > +     return mmap_read_lock_killable(lock_ctx->mm);
-> > > +}
-> > > +
-> > > +static inline void unlock_ctx_mm(struct proc_maps_locking_ctx *lock_ctx)
-> > > +{
-> > > +     mmap_read_unlock(lock_ctx->mm);
-> > > +}
-> > > +
-> > >  static inline bool lock_vma_range(struct seq_file *m,
-> > >                                 struct proc_maps_locking_ctx *lock_ctx)
-> > >  {
-> > > -     return mmap_read_lock_killable(lock_ctx->mm) == 0;
-> > > +     return lock_ctx_mm(lock_ctx) == 0;
-> > >  }
-> > >
-> > >  static inline void unlock_vma_range(struct proc_maps_locking_ctx *lock_ctx)
-> > >  {
-> > > -     mmap_read_unlock(lock_ctx->mm);
-> > > +     unlock_ctx_mm(lock_ctx);
-> > >  }
-> > >
-> > >  static struct vm_area_struct *get_next_vma(struct proc_maps_private *priv,
-> > > @@ -238,6 +268,9 @@ static inline bool fallback_to_mmap_lock(struct proc_maps_private *priv,
-> > >       return false;
-> > >  }
-> > >
-> > > +static inline void drop_rcu(struct proc_maps_private *priv) {}
-> > > +static inline void reacquire_rcu(struct proc_maps_private *priv) {}
-> > > +
-> > >  #endif /* CONFIG_PER_VMA_LOCK */
-> > >
-> > >  static struct vm_area_struct *proc_get_vma(struct seq_file *m, loff_t *ppos)
-> > > @@ -538,12 +571,10 @@ static int query_vma_setup(struct proc_maps_locking_ctx *lock_ctx)
-> > >
-> > >  static void query_vma_teardown(struct proc_maps_locking_ctx *lock_ctx)
-> > >  {
-> > > -     if (lock_ctx->mmap_locked) {
-> > > -             mmap_read_unlock(lock_ctx->mm);
-> > > -             lock_ctx->mmap_locked = false;
-> > > -     } else {
-> > > +     if (lock_ctx->mmap_locked)
-> > > +             unlock_ctx_mm(lock_ctx);
-> > > +     else
-> > >               unlock_ctx_vma(lock_ctx);
-> > > -     }
-> > >  }
-> > >
-> > >  static struct vm_area_struct *query_vma_find_by_addr(struct proc_maps_locking_ctx *lock_ctx,
-> > > @@ -1280,21 +1311,75 @@ static const struct mm_walk_ops smaps_shmem_walk_ops = {
-> > >       .walk_lock              = PGWALK_RDLOCK,
-> > >  };
-> > >
-> > > +#ifdef CONFIG_PER_VMA_LOCK
-> > > +
-> > > +static const struct mm_walk_ops smaps_walk_vma_lock_ops = {
-> > > +     .pmd_entry              = smaps_pte_range,
-> > > +     .hugetlb_entry          = smaps_hugetlb_range,
-> > > +     .walk_lock              = PGWALK_VMA_RDLOCK_VERIFY,
-> > > +};
-> > > +
-> > > +static const struct mm_walk_ops smaps_shmem_walk_vma_lock_ops = {
-> > > +     .pmd_entry              = smaps_pte_range,
-> > > +     .hugetlb_entry          = smaps_hugetlb_range,
-> > > +     .pte_hole               = smaps_pte_hole,
-> > > +     .walk_lock              = PGWALK_VMA_RDLOCK_VERIFY,
-> > > +};
-> > > +
-> > > +static inline const struct mm_walk_ops *
-> > > +get_smaps_walk_ops(struct proc_maps_private *priv)
-> > > +{
-> > > +     if (priv->lock_ctx.mmap_locked)
-> > > +             return &smaps_walk_ops;
-> > > +     return &smaps_walk_vma_lock_ops;
-> > > +}
-> > > +
-> > > +static inline const struct mm_walk_ops *
-> > > +get_smaps_shmem_walk_ops(struct proc_maps_private *priv)
-> > > +{
-> > > +     if (priv->lock_ctx.mmap_locked)
-> > > +             return  &smaps_shmem_walk_ops;
-> > > +     return &smaps_shmem_walk_vma_lock_ops;
-> > > +}
-> > > +
-> > > +#else /* CONFIG_PER_VMA_LOCK */
-> > > +
-> > > +static inline const struct mm_walk_ops *
-> > > +get_smaps_walk_ops(struct proc_maps_private *priv)
-> > > +{
-> > > +     return &smaps_walk_ops;
-> > > +}
-> > > +
-> > > +static inline const struct mm_walk_ops *
-> > > +get_smaps_shmem_walk_ops(struct proc_maps_private *priv)
-> > > +{
-> > > +     return &smaps_shmem_walk_ops;
-> > > +}
-> > > +
-> > > +#endif /* CONFIG_PER_VMA_LOCK */
-> > > +
-> > >  /*
-> > >   * Gather mem stats from @vma with the indicated beginning
-> > >   * address @start, and keep them in @mss.
-> > >   *
-> > >   * Use vm_start of @vma as the beginning address if @start is 0.
-> > >   */
-> > > -static void smap_gather_stats(struct vm_area_struct *vma,
-> > > -             struct mem_size_stats *mss, unsigned long start)
-> > > +static void smap_gather_stats(struct proc_maps_private *priv,
-> > > +                           struct vm_area_struct *vma,
-> > > +                           struct mem_size_stats *mss, unsigned long start)
-> > >  {
-> > > -     const struct mm_walk_ops *ops = &smaps_walk_ops;
-> > > +     const struct mm_walk_ops *ops = get_smaps_walk_ops(priv);
-> > >
-> > >       /* Invalid start */
-> > >       if (start >= vma->vm_end)
-> > >               return;
-> > >
-> > > +     if (vma == get_gate_vma(priv->lock_ctx.mm))
-> > > +             return;
-> > > +
-> > > +     /* Might sleep. Drop RCU read lock but keep the VMA locked. */
-> > > +     drop_rcu(priv);
-> > > +
-> > >       if (vma->vm_file && shmem_mapping(vma->vm_file->f_mapping)) {
-> > >               /*
-> > >                * For shared or readonly shmem mappings we know that all
-> > > @@ -1312,15 +1397,16 @@ static void smap_gather_stats(struct vm_area_struct *vma,
-> > >                                       !(vma->vm_flags & VM_WRITE))) {
-> > >                       mss->swap += shmem_swapped;
-> > >               } else {
-> > > -                     ops = &smaps_shmem_walk_ops;
-> > > +                     ops = get_smaps_shmem_walk_ops(priv);
-> > >               }
-> > >       }
-> > >
-> > > -     /* mmap_lock is held in m_start */
-> > >       if (!start)
-> > >               walk_page_vma(vma, ops, mss);
-> > >       else
-> > >               walk_page_range(vma->vm_mm, start, vma->vm_end, ops, mss);
-> > > +
-> > > +     reacquire_rcu(priv);
-> >
-> > OK I was going to say that this RCU lock dance is a bit iffy, but I see
-> > that we're sharing code such that this is necessary.
-> >
-> > >  }
-> > >
-> > >  #define SEQ_PUT_DEC(str, val) \
-> > > @@ -1369,10 +1455,11 @@ static void __show_smap(struct seq_file *m, const struct mem_size_stats *mss,
-> > >
-> > >  static int show_smap(struct seq_file *m, void *v)
-> > >  {
-> > > +     struct proc_maps_private *priv = m->private;
-> > >       struct vm_area_struct *vma = v;
-> > >       struct mem_size_stats mss = {};
-> > >
-> > > -     smap_gather_stats(vma, &mss, 0);
-> > > +     smap_gather_stats(priv, vma, &mss, 0);
-> > >
-> > >       show_map_vma(m, vma);
-> > >
-> > > @@ -1413,7 +1500,7 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
-> > >               goto out_put_task;
-> > >       }
-> > >
-> > > -     ret = mmap_read_lock_killable(mm);
-> > > +     ret = lock_ctx_mm(&priv->lock_ctx);
-> > >       if (ret)
-> > >               goto out_put_mm;
-> > >
-> > > @@ -1425,7 +1512,7 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
-> > >
-> > >       vma_start = vma->vm_start;
-> > >       do {
-> > > -             smap_gather_stats(vma, &mss, 0);
-> > > +             smap_gather_stats(priv, vma, &mss, 0);
-> > >               last_vma_end = vma->vm_end;
-> > >
-> > >               /*
-> > > @@ -1434,8 +1521,8 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
-> > >                */
-> > >               if (mmap_lock_is_contended(mm)) {
-> > >                       vma_iter_invalidate(&vmi);
-> > > -                     mmap_read_unlock(mm);
-> > > -                     ret = mmap_read_lock_killable(mm);
-> > > +                     unlock_ctx_mm(&priv->lock_ctx);
-> > > +                     ret = lock_ctx_mm(&priv->lock_ctx);
-> > >                       if (ret) {
-> > >                               release_task_mempolicy(priv);
-> > >                               goto out_put_mm;
-> > > @@ -1484,14 +1571,14 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
-> > >
-> > >                       /* Case 1 and 2 above */
-> > >                       if (vma->vm_start >= last_vma_end) {
-> > > -                             smap_gather_stats(vma, &mss, 0);
-> > > +                             smap_gather_stats(priv, vma, &mss, 0);
-> > >                               last_vma_end = vma->vm_end;
-> > >                               continue;
-> > >                       }
-> > >
-> > >                       /* Case 4 above */
-> > >                       if (vma->vm_end > last_vma_end) {
-> > > -                             smap_gather_stats(vma, &mss, last_vma_end);
-> > > +                             smap_gather_stats(priv, vma, &mss, last_vma_end);
-> > >                               last_vma_end = vma->vm_end;
-> > >                       }
-> > >               }
-> > > @@ -1505,7 +1592,7 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
-> > >       __show_smap(m, &mss, true);
-> > >
-> > >       release_task_mempolicy(priv);
-> > > -     mmap_read_unlock(mm);
-> > > +     unlock_ctx_mm(&priv->lock_ctx);
-> > >
-> > >  out_put_mm:
-> > >       mmput(mm);
-> > > @@ -3291,6 +3378,31 @@ static const struct mm_walk_ops show_numa_ops = {
-> > >       .walk_lock = PGWALK_RDLOCK,
-> > >  };
-> > >
-> > > +#ifdef CONFIG_PER_VMA_LOCK
-> > > +static const struct mm_walk_ops show_numa_vma_lock_ops = {
-> > > +     .hugetlb_entry = gather_hugetlb_stats,
-> > > +     .pmd_entry = gather_pte_stats,
-> > > +     .walk_lock = PGWALK_VMA_RDLOCK_VERIFY,
-> > > +};
-> > > +
-> > > +static inline const struct mm_walk_ops *
-> > > +get_show_numa_ops(struct proc_maps_private *priv)
-> > > +{
-> > > +     if (priv->lock_ctx.mmap_locked)
-> > > +             return &show_numa_ops;
-> > > +     return &show_numa_vma_lock_ops;
-> > > +}
-> > > +
-> > > +#else /* CONFIG_PER_VMA_LOCK */
-> > > +
-> > > +static inline const struct mm_walk_ops *
-> > > +get_show_numa_ops(struct proc_maps_private *priv)
-> > > +{
-> > > +     return &show_numa_ops;
-> > > +}
-> > > +
-> > > +#endif /* CONFIG_PER_VMA_LOCK */
-> > > +
-> > >  /*
-> > >   * Display pages allocated per node and memory policy via /proc.
-> > >   */
-> > > @@ -3335,8 +3447,13 @@ static int show_numa_map(struct seq_file *m, void *v)
-> > >       if (is_vm_hugetlb_page(vma))
-> > >               seq_puts(m, " huge");
-> > >
-> > > -     /* mmap_lock is held by m_start */
-> > > -     walk_page_vma(vma, &show_numa_ops, md);
-> > > +     /* Skip walking pages if gate VMA */
-> > > +     if (vma != get_gate_vma(proc_priv->lock_ctx.mm)) {
-> > > +             /* Might sleep. Drop RCU read lock but keep the VMA locked. */
-> > > +             drop_rcu(proc_priv);
-> > > +             walk_page_vma(vma, get_show_numa_ops(proc_priv), md);
-> > > +             reacquire_rcu(proc_priv);
-> > > +     }
-> > >
-> > >       if (!md->pages)
-> > >               goto out;
-> > > --
-> > > 2.54.0.545.g6539524ca2-goog
-> > >
+prog_fd_array_get_ptr()            (kernel/bpf/arraymap.c)
+  bpf_prog_map_compatible()        (kernel/bpf/core.c)
+    __bpf_prog_map_compatible()
+
+The original fix in abad3d0bad72 ("bpf: Fix oob access in cgroup local
+storage") appears to document this allowance as intended, describing case
+(ii) as "allow the tail call combination if the second program was not
+using any of the cgroup local storage maps."
+
+The out-of-bounds access that fix targets happens when a program that
+calls bpf_get_local_storage() runs under a mismatched-size entry-program
+run context. bpf_get_local_storage() in kernel/bpf/cgroup.c reads the
+entry program's pinned run context:
+
+	storage = this_cpu_read(bpf_cgroup_storage[stype]);
+
+A program that uses no cgroup local storage never calls that helper, so
+can it actually trigger the out-of-bounds access?
+
+For the A -> B(no storage) -> C(storage) path in the commit message, would
+C still need to match the owner cookie to join the prog-array, since
+C's cookie is nonzero and "!cookie" is false for it? If so, is the bridge
+path that this patch aims to close already blocked by the existing check
+on C?
+
+This change is Cc: stable and applies under CONFIG_CGROUP_BPF=y, so could
+it break existing BPF applications that mix storage-using and storage-less
+programs in a single prog-array?
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26936884530
+--===============6195489814518535589==--
