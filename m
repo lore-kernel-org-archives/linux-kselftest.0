@@ -1,53 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CC71917FB;
-	Thu,  4 Jun 2026 13:21:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CE713B293;
+	Thu,  4 Jun 2026 14:28:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780579318; cv=none; b=CfMgF9s6HiWVFFZ+dv1kZEJ/2tIPrbah5JnXITY9DbslJOMcPp1lyPoX39re92TJ7KcytmwtmMY+noNz5GiLv/FU+xpbcloTZDXzMU1xp2DUn6SWMTdO6G71f74IOgLiGiCQldIkgpm55sp9nNqEc3kf38Qr5+gZ8YtaCDtJmwQ=
+	t=1780583309; cv=none; b=BWISr4vqRztIEacG6suYkE+/QzNuZwc61lqNSs5S1X10BJzIthVb8mVUEZblBbMl7897ub34KIimwYi10clYbt3Hh143FIXz7N9Usis8vQiJAcAzQz2f5Uunn4Ny5/HDH6JvRiMu4W/upIDXHKYqUOQ6xnAQsJ1lQFFAnrRCTBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780579318; c=relaxed/simple;
-	bh=pXUNbEWCMR85osdK/op/ojECmWrGtQTXkPsbVoZ2ZUk=;
+	s=arc-20240116; t=1780583309; c=relaxed/simple;
+	bh=ivHNBQTGnEQXFYnN8jBy21wmCGtuGwbD5xr0g6kS38w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LN3UD9rjBQ4qLRPHMXw258ScKSZqvzeJvx0ttSIoDJ1zNnds7HtUzktVitBdTmpfRCIO1WFdzLF7McrvHFoA8am7v6BMEHj4swfJ05Vt2FA9f33oE2YD6Q0CQbyt9laz35inYaFGytImJf9BaszwOec0l2Ny1tXzEQ99SnPJJkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XxzqfsTJ; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=I0I1Eb4sssOrYL8lUugGbGUobE5hcpXc4OEbm+5zwzBRqQepzY8js6PoqZgG7KFaDLtfoD9iLSSWUe6XRZ0oUaBg1abGIK5+Aa4hw1PfariX2jgsymFEEIGCZ0owb/Ke1yxM7tNdwSuzbVaQ75oB/27GMuSTEehge8ocpQ3r84c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=azP3yeTY; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XxzqfsTJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245FD1F00893;
-	Thu,  4 Jun 2026 13:21:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780579316;
-	bh=ve97dki2PV3LjRGiFHzMYMHrM8bU+3Hy/Ds/lCO8I2c=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XxzqfsTJlSthH0Q8C+QmnFn+QeSZWliUvafSEEcMxGLGoGjNig6UC96HYtANo6kIh
-	 xFhGqKajU916+21pSWploQGt5yk3S16jrpkjt5oXDvWDh4IYWngMRMmAS30QoUXD6/
-	 j2shD5UP1fkMr1rgEutm3FvI+RhWX1hLKHjuCc/L4haRbfbdAda4Wda9iu6fEUe5Rf
-	 w/0TeFVXNwkrwavsgcu8Xl2kh51TO/UJgSRWvbtJ9Icn7XL0cWU5GxejTNgBJQFbRD
-	 JWXmp01PdBjwXDzfQTA+bgH5v4bVbSErhwMSePrB0QyK1yyAq6kljbk43B2dBYva4A
-	 yxzRxzFuvNP0A==
-From: Simon Horman <horms@kernel.org>
-To: aroulin@nvidia.com
-Cc: 'Simon Horman' <horms@kernel.org>,
-	netdev@vger.kernel.org,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	roopa@nvidia.com,
-	petrm@nvidia.com,
-	idosch@nvidia.com,
-	chirag@nvidia.com,
-	shuah@kernel.org,
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="azP3yeTY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=4z
+	HbRJ4AiR5mFPQ8rQUHGwM8CN+rCT/lxSBfEBPuX4s=; b=azP3yeTYBfb5P9yAXH
+	C5vss+RW1tu0+rguZUXsYXjj3LYYwAfmmmuVqkb3szJmBGjJL1CgUEHCa5Pd4ggY
+	62HPkR/6lO5TZwCJMmO5LFJuihkBLpZ3iYkLTptXcgjtw/oiScERGM864Ne9QSKF
+	ROqFfqC27mjslfOYiSitC4qvU=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgC3VJAIiyFqSKmLAQ--.50067S3;
+	Thu, 04 Jun 2026 22:26:20 +0800 (CST)
+From: Jinyu Tang <tjytimi@163.com>
+To: Anup Patel <anup@brainfault.org>,
+	Anup Patel <apatel@ventanamicro.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Cc: Atish Patra <atish.patra@linux.dev>,
+	Paul Walmsley <pjw@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Shuah Khan <shuah@kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	=?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <radim.krcmar@oss.qualcomm.com>,
+	Andrew Jones <andrew.jones@oss.qualcomm.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Yong-Xuan Wang <yongxuan.wang@sifive.com>,
+	Nutty Liu <nutty.liu@hotmail.com>,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2 3/3] selftests: net: add vxlan vnifilter notification test
-Date: Thu,  4 Jun 2026 14:19:25 +0100
-Message-ID: <20260604131922.3928241-4-horms@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260602185138.253265-4-aroulin@nvidia.com>
-References: <20260602185138.253265-4-aroulin@nvidia.com>
+	Jinyu Tang <tjytimi@163.com>
+Subject: [PATCH v2 1/2] KVM: riscv: Check hugetlb block mappings against memslot bounds
+Date: Thu,  4 Jun 2026 22:26:01 +0800
+Message-ID: <20260604142602.3582602-2-tjytimi@163.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260604142602.3582602-1-tjytimi@163.com>
+References: <20260604142602.3582602-1-tjytimi@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,129 +61,177 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PCgvCgC3VJAIiyFqSKmLAQ--.50067S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW3XFy7ZF1rAw4Dtw43Gr4fuFg_yoWxJw1DpF
+	47Ga15CrW5try3Kr4xAwnru345Zw4rW34UAFyfJa90vrsxKFyagaykAay5XrWrZrn3XF4x
+	ZFsxZFWUurZ0g3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_AwI7UUUUU=
+X-CM-SenderInfo: xwm13xlpl6il2tof0z/xtbC8QzIQWohiwxZhQAA3k
 
-From: 'Simon Horman' <horms@kernel.org>
+RISC-V KVM has used the hugetlb VMA size directly as the G-stage
+mapping size since stage-2 page table support was added. That is safe
+only if the block covered by the fault is fully contained in the
+memslot and the userspace address has the same offset as the GPA
+within that block.
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
-Full review at: https://netdev-ai.bots.linux.dev/sashiko/
+The THP path already checks those constraints before installing a PMD
+block mapping. The hugetlb path did not, so an unaligned memslot could
+make KVM install a PMD or PUD sized G-stage block that covers memory
+outside the slot or maps the wrong host pages.
 
-Simon says:
+Pass the target mapping size into fault_supports_gstage_huge_mapping().
+The same helper can be used for both THP PMD mappings and hugetlb
+PMD/PUD mappings.
 
-There is also an AI-generated review of this patch on sashiko.dev.
-And AI-generated reviews of other patches of this series.
-But I believe what is forwarded here covers what should
-be considered in the context of this patch-set.
+Select hugetlb mapping sizes through the same memslot-boundary check,
+falling back from PUD to PMD to PAGE_SIZE. When a smaller hugetlb
+mapping size is selected, fault the GFN aligned to that selected size
+instead of the original VMA size.
 
+Also keep hugetlb mappings out of transparent_hugepage_adjust(). Once
+the hugetlb path has chosen PAGE_SIZE, promoting it again through the
+THP helper would miss the hugetlb fallback decision.
+
+Fixes: 9d05c1fee837 ("RISC-V: KVM: Implement stage2 page table programming")
+Signed-off-by: Jinyu Tang <tjytimi@163.com>
+Reviewed-by: Nutty Liu <nutty.liu@hotmail.com>
 ---
-selftests: net: add vxlan vnifilter notification test
+v1 -> v2:
+  - Squash the helper parameterization into this hugetlb fix.
+  - Use the ALIGN()/ALIGN_DOWN() form suggested by Nutty Liu and Anup
+    for the memslot boundary check.
 
-This patch adds a selftest that exercises VXLAN vnifilter netlink
-notifications by running bridge monitor vni in the background while
-adding, updating, deleting and re-adding VNIs, then counting the
-matching lines in the captured output.
+ arch/riscv/kvm/mmu.c | 54 ++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 44 insertions(+), 10 deletions(-)
 
-> diff --git a/tools/testing/selftests/net/test_vxlan_vnifilter_notify.sh b/tools/testing/selftests/net/test_vxlan_vnifilter_notify.sh
-> new file mode 100755
-> index 000000000000..9d51a9e02ae0
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/test_vxlan_vnifilter_notify.sh
-> @@ -0,0 +1,184 @@
+diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+index 2d3def024..0adf017a2 100644
+--- a/arch/riscv/kvm/mmu.c
++++ b/arch/riscv/kvm/mmu.c
+@@ -286,7 +286,8 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ }
+ 
+ static bool fault_supports_gstage_huge_mapping(struct kvm_memory_slot *memslot,
+-					       unsigned long hva)
++					       unsigned long hva,
++					       unsigned long map_size)
+ {
+ 	hva_t uaddr_start, uaddr_end;
+ 	gpa_t gpa_start;
+@@ -300,8 +301,8 @@ static bool fault_supports_gstage_huge_mapping(struct kvm_memory_slot *memslot,
+ 
+ 	/*
+ 	 * Pages belonging to memslots that don't have the same alignment
+-	 * within a PMD for userspace and GPA cannot be mapped with g-stage
+-	 * PMD entries, because we'll end up mapping the wrong pages.
++	 * within a huge page for userspace and GPA cannot be mapped with
++	 * g-stage block entries, because we'll end up mapping the wrong pages.
+ 	 *
+ 	 * Consider a layout like the following:
+ 	 *
+@@ -321,7 +322,7 @@ static bool fault_supports_gstage_huge_mapping(struct kvm_memory_slot *memslot,
+ 	 *   e -> g
+ 	 *   f -> h
+ 	 */
+-	if ((gpa_start & (PMD_SIZE - 1)) != (uaddr_start & (PMD_SIZE - 1)))
++	if ((gpa_start & (map_size - 1)) != (uaddr_start & (map_size - 1)))
+ 		return false;
+ 
+ 	/*
+@@ -336,7 +337,8 @@ static bool fault_supports_gstage_huge_mapping(struct kvm_memory_slot *memslot,
+ 	 * userspace_addr or the base_gfn, as both are equally aligned (per
+ 	 * the check above) and equally sized.
+ 	 */
+-	return (hva >= ALIGN(uaddr_start, PMD_SIZE)) && (hva < ALIGN_DOWN(uaddr_end, PMD_SIZE));
++	return (hva >= ALIGN(uaddr_start, map_size)) &&
++	       (hva < ALIGN_DOWN(uaddr_end, map_size));
+ }
+ 
+ static int get_hva_mapping_size(struct kvm *kvm,
+@@ -404,7 +406,7 @@ static unsigned long transparent_hugepage_adjust(struct kvm *kvm,
+ 	 * sure that the HVA and GPA are sufficiently aligned and that the
+ 	 * block map is contained within the memslot.
+ 	 */
+-	if (fault_supports_gstage_huge_mapping(memslot, hva)) {
++	if (fault_supports_gstage_huge_mapping(memslot, hva, PMD_SIZE)) {
+ 		int sz;
+ 
+ 		sz = get_hva_mapping_size(kvm, hva);
+@@ -421,12 +423,33 @@ static unsigned long transparent_hugepage_adjust(struct kvm *kvm,
+ 	return PAGE_SIZE;
+ }
+ 
++static unsigned long hugetlb_mapping_size(struct kvm_memory_slot *memslot,
++					  unsigned long hva,
++					  unsigned long map_size)
++{
++	switch (map_size) {
++	case PUD_SIZE:
++		if (fault_supports_gstage_huge_mapping(memslot, hva, PUD_SIZE))
++			return PUD_SIZE;
++		fallthrough;
++	case PMD_SIZE:
++		if (fault_supports_gstage_huge_mapping(memslot, hva, PMD_SIZE))
++			return PMD_SIZE;
++		fallthrough;
++	case PAGE_SIZE:
++		return PAGE_SIZE;
++	default:
++		return map_size;
++	}
++}
++
+ int kvm_riscv_mmu_map(struct kvm_vcpu *vcpu, struct kvm_memory_slot *memslot,
+ 		      gpa_t gpa, unsigned long hva, bool is_write,
+ 		      struct kvm_gstage_mapping *out_map)
+ {
+ 	int ret;
+ 	kvm_pfn_t hfn;
++	bool is_hugetlb;
+ 	bool writable;
+ 	short vma_pageshift;
+ 	gfn_t gfn = gpa >> PAGE_SHIFT;
+@@ -460,16 +483,23 @@ int kvm_riscv_mmu_map(struct kvm_vcpu *vcpu, struct kvm_memory_slot *memslot,
+ 		return -EFAULT;
+ 	}
+ 
+-	if (is_vm_hugetlb_page(vma))
++	is_hugetlb = is_vm_hugetlb_page(vma);
++	if (is_hugetlb)
+ 		vma_pageshift = huge_page_shift(hstate_vma(vma));
+ 	else
+ 		vma_pageshift = PAGE_SHIFT;
+ 	vma_pagesize = 1ULL << vma_pageshift;
+ 	if (logging || (vma->vm_flags & VM_PFNMAP))
+ 		vma_pagesize = PAGE_SIZE;
++	else if (is_hugetlb)
++		vma_pagesize = hugetlb_mapping_size(memslot, hva, vma_pagesize);
+ 
++	/*
++	 * For hugetlb mappings, vma_pagesize might have been reduced from the
++	 * VMA size to a smaller safe mapping size.
++	 */
+ 	if (vma_pagesize == PMD_SIZE || vma_pagesize == PUD_SIZE)
+-		gfn = (gpa & huge_page_mask(hstate_vma(vma))) >> PAGE_SHIFT;
++		gfn = ALIGN_DOWN(gpa, vma_pagesize) >> PAGE_SHIFT;
+ 
+ 	/*
+ 	 * Read mmu_invalidate_seq so that KVM can detect if the results of
+@@ -511,8 +541,12 @@ int kvm_riscv_mmu_map(struct kvm_vcpu *vcpu, struct kvm_memory_slot *memslot,
+ 	if (mmu_invalidate_retry(kvm, mmu_seq))
+ 		goto out_unlock;
+ 
+-	/* Check if we are backed by a THP and thus use block mapping if possible */
+-	if (!logging && (vma_pagesize == PAGE_SIZE))
++	/*
++	 * Check if we are backed by a THP and thus use block mapping if
++	 * possible. Hugetlb mappings already selected their target size above,
++	 * so do not promote them through the THP helper.
++	 */
++	if (!logging && !is_hugetlb && vma_pagesize == PAGE_SIZE)
+ 		vma_pagesize = transparent_hugepage_adjust(kvm, memslot, hva, &hfn, &gpa);
+ 
+ 	if (writable) {
+-- 
+2.43.0
 
-[ ... ]
-
-> +# Run bridge monitor in the background, execute a command, then count
-> +# the notification lines.
-> +# Usage: vni_notify_check <command> [args...]
-> +# Sets: NOTIFY_COUNT with the number of notifications observed.
-> +vni_notify_check()
-> +{
-> +	local tmpf cmd_ret monitor_pid
-> +
-> +	tmpf=$(mktemp)
-> +	defer rm "$tmpf"
-> +
-> +	defer_scope_push
-> +		ip netns exec "$NS1" bridge monitor vni > "$tmpf" 2>/dev/null &
-> +		monitor_pid=$!
-> +		defer kill_process "$monitor_pid"
-> +
-> +		sleep 0.5
-> +		if [ ! -e "/proc/$monitor_pid" ]; then
-> +			RET=$ksft_skip
-> +			log_test "iproute2 'bridge monitor vni' not supported"
-> +			return "$RET"
-> +		fi
-
-[Medium]
-Could the skip path here turn a legitimate skip into a failure?
-
-When bridge monitor vni is not supported, the helper sets RET=$ksft_skip,
-calls log_test from inside the helper, and then returns ksft_skip (4).
-Every caller follows the helper with:
-
-    vni_notify_check \
-        bridge -n "$NS1" vni add vni 1000 dev "$VXLAN_DEV"
-    check_err $? "Failed to add VNI"
-
-Since ksft_skip is non-zero, check_err treats the return as a failure
-and calls ret_set_ksft_status with ksft_fail. Per the merge weights in
-ksft_status_merge (pass < xfail < skip < fail), that demotes RET from
-skip to fail.
-
-NOTIFY_COUNT is also never assigned because the function returned
-before the grep, so the next:
-
-    [ "$NOTIFY_COUNT" -eq 1 ]
-    check_err $? "Expected 1 notification for VNI add, got $NOTIFY_COUNT"
-
-also records a failure, and the caller's log_test then prints FAIL for
-the real test name in addition to the SKIP printed by the helper. The
-script ends up reporting both a SKIP and a FAIL line for the same case
-and exits with a failure status.
-
-Two related observations on this same path:
-
-The bare return is issued between defer_scope_push and defer_scope_pop,
-so defer_scope_pop is skipped on the skip path. Does that leave
-__DEFER__SCOPE_ID off by one and the registered defer kill_process
-"$monitor_pid" only unwound through the EXIT trap rather than the
-normal scope unwind?
-
-Would it be cleaner to signal skip back to the caller without going
-through check_err (for example, set RET plus a flag and have the caller
-short-circuit), and either move log_test to the caller or restructure
-the skip path so it does not straddle defer_scope_push/defer_scope_pop?
-fdb_notify.sh uses a similar pattern without mixing log_test and an
-early return inside the scope.
-
-> +
-> +		"$@"
-> +		cmd_ret=$?
-> +		sleep 0.2
-> +	defer_scope_pop
-> +
-> +	NOTIFY_COUNT=$(grep -c "$VXLAN_DEV" "$tmpf")
-> +	NOTIFY_COUNT=${NOTIFY_COUNT:-0}
-> +	return "$cmd_ret"
-> +}
-
-[Low]
-Does this counting strategy actually distinguish RTM_NEWTUNNEL from
-RTM_DELTUNNEL?
-
-The commit message states:
-
-    verifies that RTM_NEWTUNNEL and RTM_DELTUNNEL are sent correctly
-    when VNIs are added, deleted, or updated
-
-but NOTIFY_COUNT comes from:
-
-    NOTIFY_COUNT=$(grep -c "$VXLAN_DEV" "$tmpf")
-
-which matches both add and delete events emitted by bridge monitor vni.
-A regression that emitted RTM_NEWTUNNEL on delete (or vice versa) would
-still produce NOTIFY_COUNT=1 and pass every positive test. Would
-differentiating the two (for instance, by separately counting lines
-that begin with "Deleted " versus those that do not) make the test
-match what the commit message describes?
