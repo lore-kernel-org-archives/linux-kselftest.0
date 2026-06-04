@@ -1,54 +1,52 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBD033019C3;
-	Thu,  4 Jun 2026 15:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2F8D330D43;
+	Thu,  4 Jun 2026 15:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780585721; cv=none; b=S4frW5352KbuiMe8lYx2jNkMMagmth9wZCaJpbZrOTmi/bWhSe49S+vAvFVdbvseVeQJOvXRP+8fTWTVen7bgiyM2rRlZwfYbm9Y7M0/QgRMHzAVaC+WP9q6OwzS9OfEu3umq/D/kWFTDC0lOOpYEmaMF85Vdv6qYp/cn+HnlHQ=
+	t=1780585943; cv=none; b=OpPenVheoBjJhTRStZzTkIvx1dDCNbmKJ3ThYLs9Ak/4XBSprPzBWB5R8032w1crEL3h87uSGkKZZlias2LTj+fZRce4xcm28pllOzTPvNCc0ngsA47HvkORsUMksjsyYvF2aX5FhuiSIfT+SLoxsFxAOXBgAMOrfGVVNlBwat4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780585721; c=relaxed/simple;
-	bh=zjcAYw5xW78pIPIHsqvOpWgvlgFanQLgz4tl90E/4DU=;
+	s=arc-20240116; t=1780585943; c=relaxed/simple;
+	bh=HeX5k4pnGPPviIUMfkIjZGk3TsOAm8TvZMX1sxRcuMc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gvsi2mh3rpw7QzPrgqmW220OEahcx4oHj9/IxPKHjU4bgSYdtutya0559h04OixjlUXDtTP0BymI7loPicjgIrJeSeZc9PJzAbawNltxtmDqmLuVvbE/HwmAydTMGiOn41FA951NUGa8pH4Sz5qAzmrmsaP6BDa4KYGrXeQb7hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=h+eBwVXM; arc=none smtp.client-ip=13.75.44.102
+	 MIME-Version; b=ELdz+fwKoRThyD8CyxQmuvBaxxJ9EUX1iG0qO6/aui8vB4l5TKaXU8q9EpFeNmekYV6OqmjffwVfPHImG0U78Zq2Z2FP3tf3VMUa8l3O6FVBDc2gVbKHepsmzji6JR7ykVpmMusTlurBDr5oeu5rYcTBJUw4yYqPzi/xdzjhsKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=h1IUetbA; arc=none smtp.client-ip=209.97.182.222
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="h+eBwVXM"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="h1IUetbA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
 	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=hIv1X4xguXanfkVHUjSLm4k5svJg+xA565
-	WhpN02GJk=; b=h+eBwVXMvfwMCV42r4hUhWXmiWiqJiNP11rlpAUCUFs1rnemEl
-	rpSBWv6S84N346LTs/WWjCo9rB0ph9wtmQ9jAckD2bxzYIxG+vYuvFcizt/wk4fR
-	K3jlJYBwHm4a+va0kC29fyGcF6Gbx7ZGHwTLRqk9+EmvT3G+hpVDGNB4U=
+	Content-Transfer-Encoding; bh=JQMTdjRgDQqlF/lm6SBARFq5841IfBBAuL
+	WPUUDsrk0=; b=h1IUetbAK0MofjuE1IvgOf8nUFUKZIwpMBGyUNkN5l2aiHbnqd
+	ZnodWiyxc3LoEmBbeL2c0RMdUdulkAFIrEYzriZr6N3nIp9b2wZrRRhypNmlberd
+	MqOxCcGOdz6jziIzsBwburtoqaV4SlkL3gf/ln1wvW6XHSD4Th7gE6PoU=
 Received: from dumpling.. (unknown [101.6.30.195])
-	by web3 (Coremail) with SMTP id ygQGZQDHE5HQlCFqqyQrAg--.52018S4;
-	Thu, 04 Jun 2026 23:08:14 +0800 (CST)
+	by web5 (Coremail) with SMTP id zAQGZQDnnr65lSFqvf8mAg--.4748S4;
+	Thu, 04 Jun 2026 23:11:59 +0800 (CST)
 From: Nuiqi Gui <gnq25@mails.tsinghua.edu.cn>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
 	andrii@kernel.org
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
+Cc: dxu@dxuuu.xyz,
 	Nuiqi Gui <gnq25@mails.tsinghua.edu.cn>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Shenghao Yuan <shenghaoyuan0928@163.com>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Yazhou Tang <tangyazhou518@outlook.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	linux-kernel@vger.kernel.org,
+	Ihor Solodrai <isolodrai@meta.com>,
 	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 2/2] selftests/bpf: add tests for PTR_TO_FLOW_KEYS constant offset bounds
-Date: Thu,  4 Jun 2026 23:07:55 +0800
-Message-Id: <20260604150755.2487555-3-gnq25@mails.tsinghua.edu.cn>
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf 2/2] selftests/bpf: Cover dynamic inner array lookup nullability
+Date: Thu,  4 Jun 2026 23:11:53 +0800
+Message-Id: <20260604151153.2488051-3-gnq25@mails.tsinghua.edu.cn>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260604150755.2487555-1-gnq25@mails.tsinghua.edu.cn>
-References: <20260604150755.2487555-1-gnq25@mails.tsinghua.edu.cn>
+In-Reply-To: <20260604151153.2488051-1-gnq25@mails.tsinghua.edu.cn>
+References: <20260604151153.2488051-1-gnq25@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,11 +54,11 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ygQGZQDHE5HQlCFqqyQrAg--.52018S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxWFWDWryxXF48AryDGFWfKrg_yoWrtFW8pF
-	n5u3ZIgFWkZr13Wa17AF4UZFyFqa1kX3W5AFyrA345ZF1DJwn7Wr4kKrW8Gr1fCrs8Z3yY
-	vr4Fqr13AF4DAFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9m1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+X-CM-TRANSID:zAQGZQDnnr65lSFqvf8mAg--.4748S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw4DuFyxKryUXw45Gw1xZrb_yoW8uF1Upr
+	ykWa43CFW8ur12g34fJay8uF4akF1vgry5A3WFyw1YvFsrWryxXr4xuFW7tr1ayw18ArWF
+	vF17ta48Cay8JFDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
 	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
 	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
@@ -70,134 +68,81 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxWFWDWryxXF48AryDGFWfKrg_yoWrtFW8pF
 	Y4AK67AK6ryrMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
 	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
 	6r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-	AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-	0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQ0edUUUUU=
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgEIA2ohcoE8IwAAsv
+	AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8I
+	cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
+	4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOq2MUUUUU
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgQIA2ohcoE9RAABsN
 
-Add verifier tests covering constant pointer arithmetic on a
-PTR_TO_FLOW_KEYS register, which regressed with commit 022ac0750883
-("bpf: use reg->var_off instead of reg->off for pointers"): an
-out-of-bounds offset introduced as flow_keys += K and then dereferenced
-at insn->off 0 was accepted, while the equivalent flow_keys + K direct
-offset was rejected.
+Add a verifier regression test that looks up a constant key through a
+dynamic inner array template and dereferences the result without a NULL
+check.
 
-The tests check that:
- - in-bounds constant arithmetic on the keys pointer is still accepted,
- - an out-of-bounds offset introduced via constant arithmetic is rejected
-   for both read and write, with the same diagnostic as the direct
-   insn->off form.
+The verifier must reject the program because BPF_F_INNER_MAP allows the
+concrete runtime array to have fewer entries than the template.
 
 Signed-off-by: Nuiqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../selftests/bpf/progs/verifier_flow_keys.c  | 77 +++++++++++++++++++
- 2 files changed, 79 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_flow_keys.c
+ .../selftests/bpf/progs/verifier_map_in_map.c | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 06cd24e37b3f..feaee223689b 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -38,6 +38,7 @@
- #include "verifier_div0.skel.h"
- #include "verifier_div_mod_bounds.skel.h"
- #include "verifier_div_overflow.skel.h"
-+#include "verifier_flow_keys.skel.h"
- #include "verifier_global_subprogs.skel.h"
- #include "verifier_global_ptr_args.skel.h"
- #include "verifier_gotol.skel.h"
-@@ -187,6 +188,7 @@ void test_verifier_direct_stack_access_wraparound(void) { RUN(verifier_direct_st
- void test_verifier_div0(void)                 { RUN(verifier_div0); }
- void test_verifier_div_mod_bounds(void)       { RUN(verifier_div_mod_bounds); }
- void test_verifier_div_overflow(void)         { RUN(verifier_div_overflow); }
-+void test_verifier_flow_keys(void)            { RUN(verifier_flow_keys); }
- void test_verifier_global_subprogs(void)      { RUN(verifier_global_subprogs); }
- void test_verifier_global_ptr_args(void)      { RUN(verifier_global_ptr_args); }
- void test_verifier_gotol(void)                { RUN(verifier_gotol); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_flow_keys.c b/tools/testing/selftests/bpf/progs/verifier_flow_keys.c
-new file mode 100644
-index 000000000000..512e5d1d2665
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_flow_keys.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Constant-offset bounds checks for PTR_TO_FLOW_KEYS pointer arithmetic. */
+diff --git a/tools/testing/selftests/bpf/progs/verifier_map_in_map.c b/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
+index 16b761e510f0d..b606b5dca7340 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
++++ b/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
+@@ -18,6 +18,20 @@ struct {
+ 	});
+ } map_in_map SEC(".maps");
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, int);
++	__array(values, struct {
++		__uint(type, BPF_MAP_TYPE_ARRAY);
++		__uint(map_flags, BPF_F_INNER_MAP);
++		__uint(max_entries, 8);
++		__type(key, int);
++		__type(value, long);
++	});
++} map_in_map_dyn SEC(".maps");
 +
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+/* sizeof(struct bpf_flow_keys) is well under 4096, so +0x1000 is OOB. */
-+
-+SEC("flow_dissector")
-+__description("flow_keys: in-bounds constant pointer arithmetic accepted")
-+__success
-+__naked void flow_keys_const_inbounds(void)
+ SEC("socket")
+ __description("map in map access")
+ __success __success_unpriv __retval(0)
+@@ -45,6 +59,32 @@ l0_%=:	r0 = 0;						\
+ 	: __clobber_all);
+ }
+ 
++SEC("socket")
++__description("map in map dynamic inner array lookup is nullable")
++__failure __msg("invalid mem access 'map_value_or_null'")
++__naked void map_in_map_dynamic_inner_array_lookup_is_nullable(void)
 +{
 +	asm volatile ("					\
-+	r1 = *(u64 *)(r1 + %[flow_keys]);		\
-+	r1 += 8;					\
-+	r0 = *(u64 *)(r1 + 0);				\
-+	r0 = 0;						\
-+	exit;						\
++	r1 = 0;						\
++	*(u32*)(r10 - 4) = r1;				\
++	r2 = r10;					\
++	r2 += -4;					\
++	r1 = %[map_in_map_dyn] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	*(u32*)(r10 - 8) = 4;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = r0;					\
++	call %[bpf_map_lookup_elem];			\
++	r0 = *(u64 *)(r0 + 0);				\
++l0_%=:	exit;						\
 +"	:
-+	: __imm_const(flow_keys, offsetof(struct __sk_buff, flow_keys))
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_in_map_dyn)
 +	: __clobber_all);
 +}
 +
-+SEC("flow_dissector")
-+__description("flow_keys: OOB via constant pointer arithmetic rejected")
-+__failure __msg("invalid access to flow keys off=4096 size=8")
-+__naked void flow_keys_const_oob_read(void)
-+{
-+	asm volatile ("					\
-+	r1 = *(u64 *)(r1 + %[flow_keys]);		\
-+	r1 += 4096;					\
-+	r0 = *(u64 *)(r1 + 0);				\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_const(flow_keys, offsetof(struct __sk_buff, flow_keys))
-+	: __clobber_all);
-+}
-+
-+SEC("flow_dissector")
-+__description("flow_keys: OOB write via constant pointer arithmetic rejected")
-+__failure __msg("invalid access to flow keys off=4096 size=8")
-+__naked void flow_keys_const_oob_write(void)
-+{
-+	asm volatile ("					\
-+	r1 = *(u64 *)(r1 + %[flow_keys]);		\
-+	r1 += 4096;					\
-+	r2 = 0;						\
-+	*(u64 *)(r1 + 0) = r2;				\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_const(flow_keys, offsetof(struct __sk_buff, flow_keys))
-+	: __clobber_all);
-+}
-+
-+/* Equivalent OOB expressed directly in insn->off; this form was always
-+ * rejected and is kept to show both forms now share one diagnostic.
-+ */
-+SEC("flow_dissector")
-+__description("flow_keys: OOB via insn->off rejected")
-+__failure __msg("invalid access to flow keys off=4096 size=8")
-+__naked void flow_keys_insn_off_oob(void)
-+{
-+	asm volatile ("					\
-+	r1 = *(u64 *)(r1 + %[flow_keys]);		\
-+	r0 = *(u64 *)(r1 + 4096);			\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_const(flow_keys, offsetof(struct __sk_buff, flow_keys))
-+	: __clobber_all);
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ SEC("xdp")
+ __description("map in map state pruning")
+ __success __msg("processed 15 insns")
 -- 
 2.34.1
 
