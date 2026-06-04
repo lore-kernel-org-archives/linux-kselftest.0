@@ -1,108 +1,159 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F5B23F4DFE;
-	Thu,  4 Jun 2026 08:58:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01E525487C;
+	Thu,  4 Jun 2026 11:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780563483; cv=none; b=bigP5SeYkhva+TtOWSrLmgzBDu7gFTlRx5VtGHVHEI8tUWc8X0YWxzN0bM7YfFJvfsr/PtozXt7YDdjiNyilF3sjWj5QHPin4LWfNpNBLAvXKoFlsaWErI+PA+oTO9HzCiCwkbFSp6Um8Z8k57cx1yxkG9HxIPOb55Tjj+KJOu0=
+	t=1780571179; cv=none; b=W0C2D6FC8FzoAYE1rSb8QsstXrjRJ3tpALoGQCx7NhZ+GtOPbEqLveCtA9ar/Nx5mTmKZ3Phf0iT3a0AkFrI/5Tje9nqBzMh7lWP6CLYmwjHXyV2r93lfd2I4SWnJeOPVA/tXFx80Wf0iuzpq6QghGrEcW+HZFCqXQJ7DhqaKNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780563483; c=relaxed/simple;
-	bh=4VNbeuAEBxmJSqCtxGL09pPzAi93oBcZmmlW/auoegw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fob+9E4sBZzmaJfdmrPRXaN+skqrOi03ilJ2a4QyiTaCTuvkewz0cDu7VWDvFGPIn+5MRkIGSBuoVAxMlyWOVb+UStA+6EYb28/2HCj/kUMTVN4KmVDgEhqWedUSPkjBXX8U5xqujwVck3wFcywlANpuzmJ5qsY3BPzCqzFRWwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.2.5.213])
-	by gateway (Coremail) with SMTP id _____8BxJekUPiFq8HkQAA--.39489S3;
-	Thu, 04 Jun 2026 16:57:56 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.213])
-	by front1 (Coremail) with SMTP id qMiowJAx28ERPiFqlIObAA--.31690S3;
-	Thu, 04 Jun 2026 16:57:55 +0800 (CST)
-From: Bibo Mao <maobibo@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: kvm@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 1/2] KVM: LoongArch: selftests: Enable LASX feature by auto detect method
-Date: Thu,  4 Jun 2026 16:57:51 +0800
-Message-Id: <20260604085752.2820331-2-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20260604085752.2820331-1-maobibo@loongson.cn>
-References: <20260604085752.2820331-1-maobibo@loongson.cn>
+	s=arc-20240116; t=1780571179; c=relaxed/simple;
+	bh=dH+wiHkP8iEzh5gjrFU7ky8o47LBkOK8WqG8Ty8gAms=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cpgxSahhTfrtzZSc+kvAuV70v1LFfhI+Lmsr6e1aPrZy0GpwRkCJSzxWrHVBgIsuDeGL89AgTGU71qPUEIDWuPqs6EJuISjG/YsfrGmhhZbHtrnt3+N/RKoJZ9FPFBaEYBPFqFZuLOExCAPa3Z3CX/ZDx6E3JFEbwbsWjb9sM90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ej8KZlE7; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ej8KZlE7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 161461F00893;
+	Thu,  4 Jun 2026 11:06:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780571178;
+	bh=79aCtUFvNEq/48Dn+njy/SJ3Q9e631A8d0gXU4oyCMg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Ej8KZlE7ixNLHhWexR/7SMz1WYRbidIsd/ciNFKyVssHeMx1PvCR6YtbOf3ojXq61
+	 G6cqaJK4TdCE2st/1CInbVwy+xANj09bCZ5Zd3xaSBUmS9/FiH/CrgE0+LBbk1t50w
+	 B++d1O8j+hpsqCj04LEeRwITFMuyv9hKqai/CiDFDy29lXSK+5NIs+pMNm15KIkSaZ
+	 PPbtw7AIvHPoxyJd73isoN9LwjzhBBpaCwZ2QGdFyy8DPEP6xXua5c4kpKCh25cTkJ
+	 KwvBbfcQyYqROPZcPaae61Wgs7UdsFL2nalr4kKMWNUAXM/8ObwIdM06aBoya4WM/7
+	 jMIyWP5kAe22A==
+Message-ID: <d9a5b911-7692-4df2-b67c-c33bc80b61aa@kernel.org>
+Date: Thu, 4 Jun 2026 13:06:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAx28ERPiFqlIObAA--.31690S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-	nUUI43ZEXa7xR_UUUUUUUUU==
+User-Agent: Mozilla Thunderbird
+Subject: Re: configurable block error injection
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc: Jonathan Corbet <corbet@lwn.net>, linux-block@vger.kernel.org,
+ linux-doc@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Brendan Gregg <brendan.d.gregg@gmail.com>, GOST <gost.dev@samsung.com>,
+ Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+References: <20260602054615.3788425-1-hch@lst.de>
+ <e4c653ec-dfb4-4dce-a565-2a43520fc44f@kernel.org>
+ <20260602150503.GA6887@lst.de>
+Content-Language: en-US
+From: Daniel Gomez <da.gomez@kernel.org>
+In-Reply-To: <20260602150503.GA6887@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add LSX and LASX features when VM is created. These features are detected
-firstly, enable it if it is available on host machine.
+On 02/06/2026 17.05, Christoph Hellwig wrote:
+> On Tue, Jun 02, 2026 at 11:58:25AM +0200, Daniel Gomez wrote:
+>> I wonder if the block layer would be interested in moving block error
+>> injection off the should_fail() fault injection framework and extending
+>> the ALLOW_ERROR_INJECTION annotation instead and offloading all the
+>> debugfs configuration logic (block/error-injection.c) into eBPF?
+> 
+> I've looked into plain ALLOW_ERROR_INJECTION-based injection and it
+> is not very useful.  I didn't even now eBPF could use it, 
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- .../selftests/kvm/include/loongarch/processor.h      | 10 ++++++++++
- .../testing/selftests/kvm/lib/loongarch/processor.c  | 12 +++++++++++-
- 2 files changed, 21 insertions(+), 1 deletion(-)
+For context: Josef Bacik introduced it first for BPF only
+(BPF_ALLOW_ERROR_INJECTION). Masami Hiramatsu then generalized it into
+the error injection framework, renaming it to ALLOW_ERROR_INJECTION
+and adding the fail_function debugfs interface (which calls
+should_fail()). So annotating a function with ALLOW_ERROR_INJECTION
+gives you both backends at once: debugfs (fail_function) and eBPF
+(bpf_override_return()).
 
-diff --git a/tools/testing/selftests/kvm/include/loongarch/processor.h b/tools/testing/selftests/kvm/include/loongarch/processor.h
-index 93dc1fbd2e79..2324e311180f 100644
---- a/tools/testing/selftests/kvm/include/loongarch/processor.h
-+++ b/tools/testing/selftests/kvm/include/loongarch/processor.h
-@@ -131,6 +131,16 @@
- #define  CSR_TLBREHI_PS_SHIFT		0
- #define  CSR_TLBREHI_PS			(0x3fUL << CSR_TLBREHI_PS_SHIFT)
- 
-+#define LOONGARCH_CPUCFG2		0x2
-+#define  CPUCFG2_FP			BIT(0)
-+#define  CPUCFG2_FPSP			BIT(1)
-+#define  CPUCFG2_FPDP			BIT(2)
-+#define  CPUCFG2_FPVERS			GENMASK(5, 3)
-+#define  CPUCFG2_LSX			BIT(6)
-+#define  CPUCFG2_LASX			BIT(7)
-+#define  CPUCFG2_LLFTP			BIT(14)
-+#define  CPUCFG2_LLFTPREV		GENMASK(17, 15)
-+
- #define read_cpucfg(reg)			\
- ({						\
- 	register unsigned long __v;		\
-diff --git a/tools/testing/selftests/kvm/lib/loongarch/processor.c b/tools/testing/selftests/kvm/lib/loongarch/processor.c
-index 64d91fb76522..e7fb54d746f4 100644
---- a/tools/testing/selftests/kvm/lib/loongarch/processor.c
-+++ b/tools/testing/selftests/kvm/lib/loongarch/processor.c
-@@ -278,7 +278,7 @@ static void loongarch_set_csr(struct kvm_vcpu *vcpu, u64 id, u64 val)
- 
- void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
- {
--	int width;
-+	int width, ret;
- 	unsigned int cfg;
- 	unsigned long val;
- 	struct kvm_vm *vm = vcpu->vm;
-@@ -292,6 +292,16 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
- 		TEST_FAIL("Unknown guest mode, mode: 0x%x", vm->mode);
- 	}
- 
-+	/* Enable LSX/LASX feature by detecting host capability */
-+	cfg = CPUCFG2_FP | CPUCFG2_FPSP | CPUCFG2_FPDP | CPUCFG2_LLFTP;
-+	ret = __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL, KVM_LOONGARCH_VM_FEAT_LSX);
-+	if (!ret)
-+		cfg |= CPUCFG2_LSX;
-+
-+	ret = __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL, KVM_LOONGARCH_VM_FEAT_LASX);
-+	if (!ret)
-+		cfg |= CPUCFG2_LASX;
-+	loongarch_set_cpucfg(vcpu, LOONGARCH_CPUCFG2, cfg);
- 	cfg = read_cpucfg(LOONGARCH_CPUCFG6);
- 	loongarch_set_cpucfg(vcpu, LOONGARCH_CPUCFG6, cfg);
- 
--- 
-2.39.3
+> but I
+> looked into other eBPF injections and at least for my uses cases
+> it was a bit of a mess.  
 
+Agreed, and I had not looked closely enough at the series
+before proposing the wrong primitives. ALLOW_ERROR_INJECTION /
+bpf_override_return() are not sufficient here: bpf_override_return()
+cannot set bio->bi_status or call bio_endio(), which I think is the
+key operation here.
+
+IIU the series correctly, and oversimplifying: when
+injection is enabled and a bio matches, the block layer completes the
+bio inline with the chosen blk_status_t (the status= rule from debugfs)
+via bio_endio_status(). The submission path returns to the caller
+immediately, with the bio already in the error state. Nothing is ever
+sent to the device, but the completion path sees the injected error.
+
+submit_bio() -> submit_bio_noacct() -> submit_bio_noacct_nocheck()
+      +-- Path 1: no match -> continue normal IO submission
+      +-- Path 2: match (diskN) -> blk_error_inject()
+                     -> bio_endio_status(bio, inj->status)
+                          -> bio_endio()
+                     // error injected. bio completed
+
+So this is bio mutating + a bio_endio() call, not a return override.
+That can't be solved with ALLOW_ERROR_INJECTION. But we can use
+BPF_PROG_TYPE_STRUCT_OPS instead: the kernel keeps ownership of the
+bio_endio_status() call, and the eBPF program only drives the policy,
+ie. which blk_status_t to return for a given bio, based on whatever 
+heuristics it implements.
+
+> I'd have to allow access to certain bio
+
+With struct_ops the bio is passed to the ebpf side as read-only, bio 
+fields can be read to decide the policy but cannot write them. Is 
+read-only access to bio fields itself a concern?
+
+> fields and would have create a stable UAPI for commands and status
+> using the fake BTF struct access which really would not be a good
+> idea here as we need to be able to change internals.  
+
+That should not be a problem at all. With CO-RE (compile once, run
+everywhere) the program resolves the bio field offsets against the
+BTF of the kernel it loads on, so it adapts dynamically if the layout
+changes. The contract is just the struct_ops callback signature: a
+struct bio * argument and a blk_status_t return. And that doesn't imply
+any UAPI commitment AFAIK.
+
+> Additionally
+> having fully BTF-enabled toolchains in test VMs is not great either.
+
+Are you referring to the old BCC toolchain requirements [1]? This is
+solved in CO-RE [2]. The toolchain (Clang/LLVM, pahole) stays on the
+build host; the test VM only needs the prebuilt BPF object, libbpf at
+runtime, and the kernel's own BTF (CONFIG_DEBUG_INFO_BTF). No compiler
+or BTF toolchain is required inside the VM. Clang/LLVM 10+ is enough to
+build CO-RE libbpf tools [3].
+
+Link: https://ebpf.io/what-is-ebpf/#how-are-ebpf-programs-written [1]
+Link: https://nakryiko.com/posts/bpf-portability-and-co-re/ [2]
+Link: https://github.com/libbpf/libbpf#bpf-co-re-compile-once--run-everywhere [1]
+
+> 
+> I've also not actually found any good map type for range lookups,
+> which is kinda essential here.
+
+Are you referring to the bio sector range comparison in
+__blk_error_inject()? I don't think that needs to be delegated to a
+BPF map (Documentation/bpf/maps.rst). The ebpf side has direct access
+to the bio fields, so it can apply the same sector/op filtering
+__blk_error_inject() does today. That match is already a linear list
+walk, so the ebpf program just runs the same [start, end] condition
+check.
+
+In summary: what do you think of evolving this series
+into eBPF, but BPF_PROG_TYPE_STRUCT_OPS instead of
+ALLOW_ERROR_INJECTION/bpf_override_return()?. The configurable debugfs
+injection is a nice enhancement over what we had, but the matching is
+static (op/start/nr_sectors/status/chance) per gendisk. A struct_ops
+hook would expand the failure model to anything derivable from the bio
+(plus any state the program keeps), with the kernel still owning the
+bio_endio_status() mutation and only the policy moving out of the tree.
+The benefit is the flexibility to express the policy without hard-coding
+the model in the kernel.
+
+The open question is whether programmable injection is something we want
+to support in-tree, or whether more debugfs knobs suffice. Thoughts?
