@@ -1,216 +1,92 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B2D533C1B4;
-	Thu,  4 Jun 2026 15:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pg1-f194.google.com (mail-pg1-f194.google.com [209.85.215.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C8234DB46
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 15:37:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780586973; cv=none; b=IyUyr7M/098p8/Dkb7MT6Xy6ouoRkpUEXpNFy+DOastyqzrxPUmctU7spjLFvh1YH2b7FKNsqD3yRo7p4/u0+fK9hefWg+hkt9cMuItJsZYG7FsR8sBuSgjHDtroSqIGA3fAF87TrHP09BI1+2Aj0BiDOq69blrLaqcfP7cpWoA=
+	t=1780587438; cv=none; b=H/4SerNfLtbC+h+CHaJYipsnv2NCSAa6eqLxWbSA/ora1qaTEH9x7LNHOqCUrW2UCBXgoOXJGF/UaZ7dOBPUGu+nq6u2jtIpZJ4q6GcxL+kyg1TRPH5rcFKhky1ExCvaISknPwNvgZXfkgdkeeFc1jVAq2CkQgRDEM0EgNMSMt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780586973; c=relaxed/simple;
-	bh=bsr5b2gpdP7Z02h1Njek9qwNAkWcpQjmCyE6Te0xtUY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QfSfb2QN/TQjIYnCGmvvJlZrz5ktf0A7Qj9zps+ug+UG412h5m6a3h6VT0QzXPBz38Ip4uuiGeQ6JTeeeumhImce9pckXbOXBXMTy7oGb1TN3QlBnTvPf+83mg4MoR/ekZYblhwe8z6s4BS2aCr+BRtFgEiR0yxBvk9y16bZqzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=u5tYSEK0; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1780587438; c=relaxed/simple;
+	bh=nY6/njLe0UgFMoo9e4udwPdESJgHeK8pFOEaepKtfx8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jVDdnp+1b3fXLoyeYm5zl70OTzvnLQkYajjYGOaAu+OF+iPQd5WikJKh2r8tKnj4GTGp0baxELPrVMRrf6i5oyimHGAxQ2J9P35+X0dkaWu6PosD5L5XjWlIdh4GXlZBxNx0eGYlu3U0o9u+lDMZOQrB06dp7iDenIVXRn3ywqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lo5XpSr7; arc=none smtp.client-ip=209.85.215.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="u5tYSEK0"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C5F644993;
-	Thu,  4 Jun 2026 08:29:26 -0700 (PDT)
-Received: from [10.57.95.39] (unknown [10.57.95.39])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA02C3F86F;
-	Thu,  4 Jun 2026 08:29:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1780586971; bh=bsr5b2gpdP7Z02h1Njek9qwNAkWcpQjmCyE6Te0xtUY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=u5tYSEK0WD6FzVygVZ2inUsRE7KPNU6aiooHb7WFFytVH7MwdY+o3iH91d3sWJQym
-	 G77ajQTrso6CQR5994wgSjTDCEuz6fiiAdnuNQFgcq6pkYJfcMWf+6whcM46UC6c2z
-	 1s46Od/7JFr/FBCHQRzYdrTjrodXGQYEF9NX3838=
-Message-ID: <9d15479e-e36b-4865-804c-7d93eb339e4e@arm.com>
-Date: Thu, 4 Jun 2026 16:29:19 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lo5XpSr7"
+Received: by mail-pg1-f194.google.com with SMTP id 41be03b00d2f7-c85822059d8so585472a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 08:37:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780587436; x=1781192236; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nY6/njLe0UgFMoo9e4udwPdESJgHeK8pFOEaepKtfx8=;
+        b=Lo5XpSr7DkvL5Up68ZMUVAf7yB1OGHrS8qFYMhCxWptn4A23IL+jcvOESR8vwrXoLZ
+         xfZbN6gX/7BejqGNUoL93Bfj+lQSqdi5fxh/uWcN2n9LQ3/7Q9zzM7Yy7ZIzKe3rsskd
+         ztDknvjq29YFb7z4dYaI+SbZMxRpaRzSnloHk/K1jFxyX1nxm44W8c9r15E3cgkpUMhq
+         RluFKWV+q7OCoNGPuSaKEuNYc5IdKEaCwgqUva7nyFlJLTLsH7wR0NyS4lwtVbHgX0KN
+         TGmHI/+x4x3t25Coje2x7Oz9uNeLxc7WRVhvvgdg4nWaXemUlTc59SUMuvDpL3npkNT9
+         psxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780587436; x=1781192236;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nY6/njLe0UgFMoo9e4udwPdESJgHeK8pFOEaepKtfx8=;
+        b=n299lG2APpaI/lelxyzJmIRX/9S4o+uSKCjVZM/2g8TwJHHnhhDtWSqK46eAq2RSL2
+         0xSAS8uIcJA55TJOJDoyV5aP96Tf7lzw7+ah6tIXptZMSwc7iCB7F6jhTik7fpZqxuhQ
+         mGXgm4n76PtcfDVZbG/Qr9F5U22X02zkbLNexaSHbTLj4rioBBzEze1qgqpMbo7oaFnQ
+         LLAYUAfQskrMouPq1czlT1fKl0h6aGa67Ggj38gaBP6rOWCk1gt4DICEV1Y3aJQwBFJQ
+         NiwSmMK22BUTvGQCEp86H5ipLbyp20+K/b1C9mDy8ZeVTPaCDlsDbR44UCntsyz7OW6I
+         4vfQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8DWmUZ0ifO5fSiI0xDF4LYwIShDtr1bFn8cC8zD04QXEKhqMbqkhYso8pfrAnh0PZ3QOSfvFmcaoiho5d85FQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzD3iuLKr5sCGmPLURmsVw5oyz/u1Mbj2fJRbrSW2T9dce+RKzT
+	NL0UDuEqFwO4WwQ83vyVOqYbIYTaIrAz5bkwXskLbKauuaE3nnpOrOpS
+X-Gm-Gg: Acq92OFrqBYyl1KzH8tp5Z7oGE6g9A5Kd0FPtTBQiih21Gz5kryoBxTfSc3xPmc5Ldw
+	TZJzd2/UJLR58qExzRCSgM//QOv5g2/5f808OJM6010nITDoWkKaRjiY84znOGf5THS8pb6NCh6
+	rR/ybMWRUNhPwxCy/rJwb+ellbPl0jr5pIhyiV5TCZ8EMgJCbfk1PZJfL947h3xzWHid30MidXA
+	oqBUFih2OXCo7cE9cuO0ZVwS6RuoIk3TPi7/mWAbMydUGKb7QFNCCbk6H/+o3mADQ2VDxSGACSV
+	rkoSkFAfEtMqj5iM5lkwq0IeWnHQCM0IbznLnVGDm/oESh/C9aKVcq8IcFasaMWL4I9sTZgxQBf
+	hFxU82unkyfmfbSYClokeYkzorltQoLiVcxIEYlefiDIPhpOpXKqg4Xwfvqa5f/C8mkAVIRzVUw
+	vB5hEshcNp10x50yftF+REjW795OuEQLA=
+X-Received: by 2002:a05:6a20:d52a:b0:3a2:d838:bfdb with SMTP id adf61e73a8af0-3b49782ebdcmr9551112637.29.1780587436380;
+        Thu, 04 Jun 2026 08:37:16 -0700 (PDT)
+Received: from laptop ([223.131.147.119])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df0b374fsm5526657a12.25.2026.06.04.08.37.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jun 2026 08:37:15 -0700 (PDT)
+From: Woojin Ji <random6.xyz@gmail.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Woojin Ji <random6.xyz@gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Add arena direct-value one-past-end reject test
+Date: Fri,  5 Jun 2026 00:37:10 +0900
+Message-ID: <20260604153712.199362-1-random6.xyz@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <DIZJ5P33U6YT.14OWBKG3T9LVD@etsalapatis.com>
+References: <20260603-arena-direct-value-v1-v1-1-7b31cc0a8cac@gmail.com> <DIZJ5P33U6YT.14OWBKG3T9LVD@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 20/42] KVM: SEV: Make 'uaddr' parameter optional for
- KVM_SEV_SNP_LAUNCH_UPDATE
-Content-Language: en-GB
-To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- david@kernel.org, ira.weiny@intel.com, jmattson@google.com,
- jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
- pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
- rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
- tabba@google.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>,
- Barry Song <baohua@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>,
- Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
- Youngjun Park <youngjun.park@lge.com>, Qi Zheng <qi.zheng@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260522-gmem-inplace-conversion-v7-0-2f0fae496530@google.com>
- <20260522-gmem-inplace-conversion-v7-20-2f0fae496530@google.com>
-From: Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20260522-gmem-inplace-conversion-v7-20-2f0fae496530@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 23/05/2026 01:18, Ackerley Tng via B4 Relay wrote:
-> From: Michael Roth <michael.roth@amd.com>
-> 
-> For vm_memory_attributes=1, in-place conversion/population is not
-> supported, so the initial contents necessarily must need to come
-> from a separate src address, which is enforced by the current
-> implementation. However, for vm_memory_attributes=0, it is possible for
-> guest memory to be initialized directly from userspace by mmap()'ing the
-> guest_memfd and writing to it while the corresponding GPA ranges are in
-> a 'shared' state before converting them to the 'private' state expected
-> by KVM_SEV_SNP_LAUNCH_UPDATE.
-> 
-> Update the handling/documentation for KVM_SEV_SNP_LAUNCH_UPDATE to allow
-> for 'uaddr' to be set to NULL when vm_memory_attributes=0, which
-> SNP_LAUNCH_UPDATE will then use to determine when it should/shouldn't
-> copy in data from a separate memory location. Continue to enforce
-> non-NULL for the original vm_memory_attributes=1 case.
-> 
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> [Added src_page check in error handling path when the firmware command fails]
-> [Dropped ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES]
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+Thanks for the review.
 
+I tried moving this into verifier_arena.c, but this test needs to set the
+second BPF_PSEUDO_MAP_VALUE ldimm64 immediate to arena_size exactly. The
+__arena C forms I checked materialize the arena-end offset as a separate ALU
+add or memory access offset instead, so they do not exercise
+arena_map_direct_value_addr() with off == arena_size.
 
+So v2 keeps the userspace raw-instruction test and expands the commit message
+to explain why it is needed.
 
-
-> ---
->   Documentation/virt/kvm/x86/amd-memory-encryption.rst | 15 +++++++++++----
->   arch/x86/kvm/svm/sev.c                               | 18 +++++++++++++-----
->   virt/kvm/kvm_main.c                                  |  1 +
->   3 files changed, 25 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/virt/kvm/x86/amd-memory-encryption.rst b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> index b2395dd4769de..43085f65b2d85 100644
-> --- a/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> +++ b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> @@ -503,7 +503,8 @@ secrets.
->   
->   It is required that the GPA ranges initialized by this command have had the
->   KVM_MEMORY_ATTRIBUTE_PRIVATE attribute set in advance. See the documentation
-> -for KVM_SET_MEMORY_ATTRIBUTES for more details on this aspect.
-> +for KVM_SET_MEMORY_ATTRIBUTES/KVM_SET_MEMORY_ATTRIBUTES2 for more details on
-> +this aspect.
->   
->   Upon success, this command is not guaranteed to have processed the entire
->   range requested. Instead, the ``gfn_start``, ``uaddr``, and ``len`` fields of
-> @@ -511,9 +512,15 @@ range requested. Instead, the ``gfn_start``, ``uaddr``, and ``len`` fields of
->   remaining range that has yet to be processed. The caller should continue
->   calling this command until those fields indicate the entire range has been
->   processed, e.g. ``len`` is 0, ``gfn_start`` is equal to the last GFN in the
-> -range plus 1, and ``uaddr`` is the last byte of the userspace-provided source
-> -buffer address plus 1. In the case where ``type`` is KVM_SEV_SNP_PAGE_TYPE_ZERO,
-> -``uaddr`` will be ignored completely.
-> +range plus 1, and ``uaddr`` (if specified) is the last byte of the
-> +userspace-provided source buffer address plus 1.
-> +
-> +In the case where ``type`` is KVM_SEV_SNP_PAGE_TYPE_ZERO, ``uaddr`` will be
-> +ignored completely. Otherwise, ``uaddr`` is required if
-> +kvm.vm_memory_attributes=1 and optional if kvm.vm_memory_attributes=0, since
-> +in the latter case guest memory can be initialized directly from userspace
-> +prior to converting it to private and passing the GPA range on to this
-> +interface.
-
-Just to confirm, so the sev_gmem_prepare doesn't destroy the contents in 
-the process of making it "private" ? i.e., the contents of a SNP shared
-page are preserved while transitioning to "SNP Private" (via RMP
-update).
-
-Suzuki
-
-
-
->   
->   Parameters (in): struct  kvm_sev_snp_launch_update
->   
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 1a361f08c7a3d..e1dbc827c2807 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -2343,7 +2343,15 @@ static int sev_gmem_post_populate(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
->   	int level;
->   	int ret;
->   
-> -	if (WARN_ON_ONCE(sev_populate_args->type != KVM_SEV_SNP_PAGE_TYPE_ZERO && !src_page))
-> +	/*
-> +	 * For vm_memory_attributes=1, in-place conversion/population is not
-> +	 * supported, so the initial contents necessarily need to come from a
-> +	 * separate src address. For vm_memory_attributes=0, this isn't
-> +	 * necessarily the case, since the pages may have been populated
-> +	 * directly from userspace before calling KVM_SEV_SNP_LAUNCH_UPDATE.
-> +	 */
-> +	if (vm_memory_attributes &&
-> +	    sev_populate_args->type != KVM_SEV_SNP_PAGE_TYPE_ZERO && !src_page)
->   		return -EINVAL;
->   
->   	ret = snp_lookup_rmpentry((u64)pfn, &assigned, &level);
-> @@ -2390,7 +2398,7 @@ static int sev_gmem_post_populate(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
->   	 */
->   	if (ret && !snp_page_reclaim(kvm, pfn) &&
->   	    sev_populate_args->type == KVM_SEV_SNP_PAGE_TYPE_CPUID &&
-> -	    sev_populate_args->fw_error == SEV_RET_INVALID_PARAM) {
-> +	    sev_populate_args->fw_error == SEV_RET_INVALID_PARAM && src_page) {
->   		void *src_vaddr = kmap_local_page(src_page);
->   		void *dst_vaddr = kmap_local_pfn(pfn);
->   
-> @@ -2423,8 +2431,8 @@ static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
->   	if (copy_from_user(&params, u64_to_user_ptr(argp->data), sizeof(params)))
->   		return -EFAULT;
->   
-> -	pr_debug("%s: GFN start 0x%llx length 0x%llx type %d flags %d\n", __func__,
-> -		 params.gfn_start, params.len, params.type, params.flags);
-> +	pr_debug("%s: GFN start 0x%llx length 0x%llx type %d flags %d src %llx\n", __func__,
-> +		 params.gfn_start, params.len, params.type, params.flags, params.uaddr);
->   
->   	if (!params.len || !PAGE_ALIGNED(params.len) || params.flags ||
->   	    (params.type != KVM_SEV_SNP_PAGE_TYPE_NORMAL &&
-> @@ -2481,7 +2489,7 @@ static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
->   
->   	params.gfn_start += count;
->   	params.len -= count * PAGE_SIZE;
-> -	if (params.type != KVM_SEV_SNP_PAGE_TYPE_ZERO)
-> +	if (src && params.type != KVM_SEV_SNP_PAGE_TYPE_ZERO)
->   		params.uaddr += count * PAGE_SIZE;
->   
->   	if (copy_to_user(u64_to_user_ptr(argp->data), &params, sizeof(params)))
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index ba195bb239aaa..3bf212fd99193 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -105,6 +105,7 @@ module_param(allow_unsafe_mappings, bool, 0444);
->   #ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
->   bool vm_memory_attributes = true;
->   module_param(vm_memory_attributes, bool, 0444);
-> +EXPORT_SYMBOL_FOR_KVM_INTERNAL(vm_memory_attributes);
->   #endif
->   DEFINE_STATIC_CALL_RET0(__kvm_get_memory_attributes, kvm_get_memory_attributes_t);
->   EXPORT_SYMBOL_FOR_KVM_INTERNAL(STATIC_CALL_KEY(__kvm_get_memory_attributes));
-> 
-
+v2: https://lore.kernel.org/all/20260605-arena-direct-value-v1-v2-1-a92cb281e376@gmail.com/
