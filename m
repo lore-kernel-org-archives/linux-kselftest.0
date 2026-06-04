@@ -1,96 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87299492539;
-	Thu,  4 Jun 2026 16:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6E52DF15C
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 16:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780591817; cv=none; b=byejXMX6VRWB2n3dmACX+EqQ9U+S3OYJJk9bVdTjiDeL/zHeF4IKEciq5oncOiNxF6xyeb7972R6yX81xd8sCCnvxPNAB0Ri5uHLbn/hZrs6cUw7lSd73zh3yMIO7mhIgNuikd+M5xRVL+DxruTszrNDMoH4RFUQNr7WvQIKd3M=
+	t=1780592221; cv=none; b=qKcS6dLkW1lIlRnyef9Aid72jFuy27CtZAhq0YJn8p9q3xGKWhYm4aP7R0Fp5xsb1jcESqGjy9BZAIoNdFvrEUUcEq/FhYR7IAF/oqdZUQ+aglqbGPXcgqB+7h8+KQSKF7sJ4D5mZwHygf83u9W6RSroWFMjrqbv982OAXhLJ0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780591817; c=relaxed/simple;
-	bh=EWsxN+/lUbnqwhZP0Rgc0rHGQoqion+jXM7PA8ek6t8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Aiu3s9lzWicJA/bIKLP38u7McsR62KEpBm6oh8Ehx1dw+3HV3XDFJee2lgBQ8yZoIEHODnSru6bm9SLPx4g4NUPxwF6vmvbE08Xeteuf4e+7OW2sRiduQjqU6Gv3CHe3Zwq6+Z9gzcpEoUEe7+ogyj/jVgeYWZWEQ6shCNtkut8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OyGUj2gK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780592221; c=relaxed/simple;
+	bh=CN61fHW9q8Vfc8JNB7Ry27PV1Dw9+wgISN0uTZdc15k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ExD6TR6FEtnKFd1XIOaYez4pI8NS3hEs28YcTyPjfg2jg9Z1yYEnf5yOcE5pLYRF35TYZmQuQz8xV5qbwiTibawkzGir6B5FL2ouf/Ns7+/Lp8CVWwQpScWnWqrrhnOg+XvuuAXveu/hSVIUfGYg1P5wWYYhj5Ja/yxbihU+4N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tAD+g9xm; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OyGUj2gK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8D211F00893;
-	Thu,  4 Jun 2026 16:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780591814;
-	bh=PeC55/8TJlUll3PzjhXf4oLJdtQRejIy20Nor0AjlYM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=OyGUj2gKo2vty4mfsxE/rnQpg7xXCgWdt4wymdnjrmfKXy/LXumWWJjP1C92Ciudu
-	 NlmtScm9CctwMTNTE8wFbEJlE++Ph32oxr5/YzGSBLExIsPyM/U+r1HDDNjVMa9eY/
-	 bk9D9azbl/wBVbg0OwS7gyD9w2p9tg/ZHCsjqKQ7fSt+VjbgdrhPL+x6qAOD+0vg9b
-	 7aUiF9u7mpentvHUyXlj2/vvpW2Thay0Tk2blJ2+LBSY4I84q18WdUUXxBiXnzs0nU
-	 +sZ8fTVfmauDVpbXGQZXNvLpdRq0F7tMaP7SVZ4dQTbaEh60KjsD9uEz27hSqxLmDt
-	 sZ0phiundg0UA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0B8C3930A0F;
-	Thu,  4 Jun 2026 16:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tAD+g9xm"
+Message-ID: <a8342b94-9732-4878-b794-086106c93585@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780592216;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Jd62oR5Rbj5LPA+m5ROMXCDiXCcuHe2GoNOKcpHhXWU=;
+	b=tAD+g9xmBhdOHpNrFpvlaa6BkwEjNjljQge37KdXTUeo6jDwO2xr1rYsupLo8+l8Fcp0xd
+	Bn327yFCvimpB080zLGh7u6votSF3CbnhZAhd+jeFLsDeSyTw/orLjHMwojrysAkhy1zlT
+	ZDlauf0P89tKOD29saWGcFZ2yf9PxCE=
+Date: Thu, 4 Jun 2026 09:56:46 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: ignore call depth accounting for
- retbleed in verifier tests
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178059181541.2942053.15567465384217176140.git-patchwork-notify@kernel.org>
-Date: Thu, 04 Jun 2026 16:50:15 +0000
-References: 
- <20260528-fix_tests_for_retbleed_stuff-v1-1-c2022a1f3bee@bootlin.com>
-In-Reply-To: 
- <20260528-fix_tests_for_retbleed_stuff-v1-1-c2022a1f3bee@bootlin.com>
-To: =?utf-8?q?Alexis_Lothor=C3=A9_=3Calexis=2Elothore=40bootlin=2Ecom=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
- ebpf@linuxfoundation.org, bastien.curutchet@bootlin.com,
- thomas.petazzoni@bootlin.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] bpf: Tighten cgroup storage cookie checks for prog
+ arrays
+Content-Language: en-GB
+To: Lin Ma <malin89@huawei.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+ YiFei Zhu <zhuyifei@google.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Amery Hung <ameryhung@gmail.com>, Rongzhen Cui <cuirongzhen@huawei.com>,
+ Jingguo Tan <tanjingguo@huawei.com>, cenxianlong@huawei.com,
+ chenzhe@huawei.com
+References: <20260604070318.2869813-1-malin89@huawei.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260604070318.2869813-1-malin89@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
 
-On Thu, 28 May 2026 15:27:14 +0200 you wrote:
-> When running the selftests on a retbleed-affected platform (eg:
-> Skylake), with call depth accounting enabled
-> (CONFIG_CALL_DEPTH_TRACKING=y) _and_ with retbleed=stuff, some verifier
-> selftests fail to validate the jited instructions. For example:
-> 
->   MATCHED    SUBSTR: '	endbr64'
->   MATCHED    SUBSTR: '	nopl	(%rax,%rax)'
->   MATCHED    SUBSTR: '	xorq	%rax, %rax'
->   MATCHED    SUBSTR: '	pushq	%rbp'
->   MATCHED    SUBSTR: '	movq	%rsp, %rbp'
->   MATCHED    SUBSTR: '	endbr64'
->   MATCHED    SUBSTR: '	cmpq	$0x21, %rax'
->   MATCHED    SUBSTR: '	ja	L0'
->   MATCHED    SUBSTR: '	pushq	%rax'
->   MATCHED    SUBSTR: '	movq	%rsp, %rax'
->   MATCHED    SUBSTR: '	jmp	L1'
->   MATCHED    SUBSTR: 'L0:	pushq	%rax'
->   MATCHED    SUBSTR: 'L1:	pushq	%rax'
->   MATCHED    SUBSTR: '	movq	-0x10(%rbp), %rax'
->   WRONG LINE  REGEX: '	callq	0x{{.*}}'
-> 
-> [...]
+On 6/4/26 12:03 AM, Lin Ma wrote:
+> The recent KCTF-reported cgroup local storage issue assigned
+> CVE-2025-38502 was fixed by commit abad3d0bad72 ("bpf: Fix oob access
+> in cgroup local storage").
+>
+> However, the previous fixes are still incomplete. The current prog-array
+> compatibility check treats a program with no cgroup storage as
+> compatible with any stored storage cookie. This allows a storage-less
+> program to bridge a tail-call chain between an entry program and a
+> storage-using callee even though runtime cgroup local storage still
+> follows the caller context.
+>
+> Require exact per-type storage_cookie equality when checking prog-array
+> compatibility. This blocks zero-storage bridge programs from joining a
+> prog-array owned by a storage-using program and closes the residual
+> A -> B(no storage) -> C(storage) path.
+>
+> This also aligns with Amery Hung's earlier NULL-storage tail-call fix by
+> requiring storage use to match consistently across prog-array users.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: abad3d0bad72 ("bpf: Fix oob access in cgroup local storage")
+> Tested-by: Amery Hung <ameryhung@gmail.com>
+> Signed-off-by: Lin Ma <malin89@huawei.com>
+> Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
+> Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: ignore call depth accounting for retbleed in verifier tests
-    https://git.kernel.org/bpf/bpf-next/c/bf29346fc393
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+> ---
+> v1: https://lore.kernel.org/bpf/20260601095158.1186318-1-malin89@huawei.com/
+> v1 -> v2:
+>   - refine the commit message and mention the relation to Amery Hung's
+>     NULL-storage tail-call fix
+>   - add patch 2/2 selftests for tail-call cgroup storage prog-array
+>     checks
+> v2: https://lore.kernel.org/bpf/31927f33-9db0-4a39-b38a-72b33487979e@linux.dev/T/#t
+> v2 -> v3:
+>   - use abad3d0bad72 as the Fixes tag
+> v3: https://lore.kernel.org/bpf/7b3e1adae5c92153e991ac406b2d334609c36d866b5bf81e4465cf63bde0a79c@mail.kernel.org/T/#t
+> v3 -> v4:
+>   - no changes
+> ---
+>   kernel/bpf/core.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 6aa2a8b24030..f0b61b10f30e 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2470,8 +2470,12 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+>   				break;
+>   			cookie = aux->cgroup_storage[i] ?
+>   				 aux->cgroup_storage[i]->cookie : 0;
+> -			ret = map->owner->storage_cookie[i] == cookie ||
+> -			      !cookie;
+> +			/*
+> +			 * Tail calls keep using the caller cgroup storage
+> +			 * context, so prog-array members must use the same
+> +			 * storage cookie.
+> +			 */
+> +			ret = map->owner->storage_cookie[i] == cookie;
+>   		}
+>   		if (ret &&
+>   		    map->owner->attach_func_proto != aux->attach_func_proto) {
 
