@@ -1,173 +1,362 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E43477E27;
-	Thu,  4 Jun 2026 12:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4FA43D508;
+	Thu,  4 Jun 2026 12:42:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780576845; cv=none; b=qxDh6iBXB6jpFui2u5CBm8ga4fGmQZ3hUI3cvUNAoLtM8Z9M7wbYgMvVMAHH30FAppBlw7uMUq+NE39ZPDaAaXriZw4XjNS6boBI/Pw9xtJox6JoMuVEkgCsEuqS1VBIhHc21BkEfYCgd6Xe2AHKyPE/cCqd9jW1lBkFSYOmFak=
+	t=1780576956; cv=none; b=qJ4SrXo/Kt+MnzBqwjQoloNR0P+fqBD3k6nUasnQM6LWGdwCiGCqXBzCoZakFmSi2Gi1IsLf/sfr9FRegAYD2JDXgpgL5kzBU3gE6tPbYKckcByIbtpy8uzpGtghD4Ufb83LjM9bsBmkuZy+CvTWwizIZ9NYSpFz9Dwhn8zIvp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780576845; c=relaxed/simple;
-	bh=3motd/Kk9tEcEy98c5ncAGr3nNkb1fzwM1uTOGz4Qus=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HOuF4qX2t3NGwFO0ZOoMcapWh9joO59NiGpznsEYiIqEe4xkgGUcxY1dde1x1PCjklA5TAruWNniyFs3x8qY6gxM2VdE6UGg5sPuDPcOybU3TaJeN3SMyXKm2Y43wf9mZoTKJLWpv03OaaC9kfxrYL9T1n3Hwq3EHwEdUwvSGO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l2/Ly8io; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780576956; c=relaxed/simple;
+	bh=DyEqa6XEM9Mffh9hjQjZla5OH87SfMsISMtk2ABEBFM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=btPRXBeZlhDoVtYaLBEhKIGNDfRSN0z1ar5ZbRN1CNHe7OLeGhoTqTgTBA+/5ScTKxUlhyyUWCrgp0XRW+/233K2OG/ItNXKhJVXPpmyyTc7tNV/X0Gy0uZ9H60f5BCOyyQdIQwp5ldpPHEThop9eGbkQsQBRFlap9nMITdvZDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=kxgg3K90; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=P/8RTayF; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l2/Ly8io"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA0731F00898;
-	Thu,  4 Jun 2026 12:40:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780576844;
-	bh=GnOm+v7F1LKSbVaBQReSZi8hz25Kzy0nepO4bxrUVcs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=l2/Ly8io+6pNgjeg3NB14IEfCQfKWpweb0eJKJ7SQ6Gz0ITGa2NRnQDCDfdq1vs76
-	 eHVSagFXGbe8QOVvnOPbK9NuA5I0IQcf+zQsmc0JOA7AwaNOpgOWuhEtUDsBqYIDN0
-	 dBGBSHprHOUkKCgU4ocuSlMwbNpsIb0/KLN+gKujZ6LUrMc/cjbCR2FoWkllYsEDpC
-	 yhqTp3rcfpntt1TN/9elHktGTNTqDTdciG8rjJgFtedK12OZEhbgb0koUg+DkKwHYJ
-	 M2hY0H01Fe9S27uWItliJRn/RpqB8p54OLhqVIByLr8IpnStfxTk/vPmwkrOqgI5Vf
-	 rHrnkuClyogqQ==
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id F3A80F40084;
-	Thu,  4 Jun 2026 08:40:40 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Thu, 04 Jun 2026 08:40:41 -0400
-X-ME-Sender: <xms:SHIhakSnCrdg9gx5m4iHzTicKaK_DQbZUK11E3bhlG_5yYmLh4HVcA>
-    <xme:SHIhamrf8l8qqXn5spEz_3zIQSqGxPGzydYKiqYC1Ad9mQIGDEO2BI-tVRzQTjo8L
-    N8dPE-jHh3R_hm5kGq61j-lWA9098jHtcxIXHtK6lSOM5b04J8>
-X-ME-Received: <xmr:SHIhanvyg3DUTUpzz1Tr6mmNDYVvEMOWhgBEhBREpTYdxxCkkBVJjshxDdQ>
-X-ME-Proxy-Cause: dmFkZTF1BaCWatKURocL+NpcgGk8YfcgR1XBShgJesrvsvC2cG3vlDNwoRLKuuKWvI9wgr
-    KG4Un6Q8MLsUhJ7qUby0lAaArhUaGksZuyniOIcFRF3jBJfW9luEJSa356GyMvadHeAIUB
-    F7Fsk6uIaYS9/XUo/AHbvEW2iTXW7UQHwAiD96JBraglfj5eFgrMXQqkhBFZpo5fmGG/eI
-    AQb5l6O4b5u+PthGYCRYvuYPUJXdmWKqj7KOhX79C+va6qRUJSnqWA/slW9fvEtsxZflmn
-    cZYxt7SIfaZSY+71gr8mRZqSZhlvD3ofSHh//MmWZCDH7C7YuX5/Ca4yauFP5gCXu8R5e8
-    ATuCazD5w14RyGhUDf8kJ2nnJlgWRO3UwgsRWPcouZeOlihQh5D8nnxfIJXtuCyTTW3jlv
-    7TsEq+dkGy+hPVqy5gzBhzu74DPvX0twDJI7dlB6ID2+z1ZSG+J1UYSs61b9WIUb4ttyzS
-    TjZSEePWTPWlDNq9PoUQQWqdzHgd48jCUCsvE2SpVwPE7xmxBMRNl9jVOmXJglehoDpXd9
-    z7WWsk64xF+a6MwNoBsFE/yKMv6OSIpaAByuh/5HYUXC1C2pht/LVhYAvicEDOwXVeAMyN
-    6QHhq6XTEBwnqHjw+vWgmxJE8KWrktttFqSpXIHL+Ldl3JEWwh3FcBx1FKuw
-X-ME-Proxy: <xmx:SHIhaqeGCWvoTr6Zf4A7VuqQKHMJAl9R7ARuuX7SWO3hikB0EABGqw>
-    <xmx:SHIhajm2MNfjagJxh9VKB7kVOB1FHuJFe5pi_tBuhyOPef0APhlWJA>
-    <xmx:SHIhauE42o8acVl_EkD0i90rEiqekyJ5wDDuuU7N0Uc-cMcHHEKKFA>
-    <xmx:SHIhapIi0Aj_i8f5RMMHTUFMJs_gmylfCV5Mpk-2TVrJhlM3iZONJw>
-    <xmx:SHIhaktsp0bNSEQQ_zMYZ1h3aUBSoUkTxD9FkfVknP1rAqe0eaUb8bXA>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 4 Jun 2026 08:40:40 -0400 (EDT)
-Date: Thu, 4 Jun 2026 05:40:39 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
- Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,	Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>,	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,	Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>,	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Waiman Long <longman@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,	Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,	Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>,	Miguel Ojeda <ojeda@kernel.org>,
- Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,	Jinjie Ruan <ruanjinjie@huawei.com>,
- Lyude Paul <lyude@redhat.com>,	Thomas Huth <thuth@redhat.com>,
- Sohil Mehta <sohil.mehta@intel.com>,	"Xin Li (Intel)" <xin@zytor.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Nikunj A Dadhania <nikunj@amd.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,	Yury Norov <ynorov@nvidia.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kernel@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Daniel Almeida <daniel.almeida@collabora.com>
-Subject: Re: [PATCH v2 10/12] preempt: Introduce
- HAS_SEPARATE_PREEMPT_RESCHED_BITS
-Message-ID: <aiFyR-9rSGx38tWi@tardis-2.local>
-References: <20260526152148.30514-1-boqun@kernel.org>
- <20260526152148.30514-11-boqun@kernel.org>
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="kxgg3K90";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="P/8RTayF"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1780576346;
+	bh=DyEqa6XEM9Mffh9hjQjZla5OH87SfMsISMtk2ABEBFM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=kxgg3K90ae2MK/bRFvxiKPhI5jlWG4JxkzR9yjNAb0ouYK3S28XbisjQcs2V4RLlp
+	 vuo81fUF/se84K7w//8J40em5QkqchMdFuKfXFH3Gqf4QCCFVIZ9PExFaDsSVqF7yT
+	 ZSNr6XByGyBvlWCprGel4/YOtr6axnc+e4Q8i4T5TfmY6MUtc2mHaGLh6w5vQFUSRE
+	 pkAoHmXYNa5F/yWNpoggzp4Cel2TttTZStCfXZa/7CSqZztgfD1xzanrEUxz2+1eMj
+	 lThTYphFh+ZSk0gqh53A7uC1oVj2hrNHjlEzzDQ/V8d3XD1HvZbWMZv6+JLI31uuQ3
+	 sjgK+h7DjyLYjGfOBf+zeOUJWlz/rbe2f5LnIYJEv7vu9+P/lTE5maWsp3bQ54su/X
+	 NoBPTZHlkBEF36YFs1hI0zSeMBFbTtMQfrSmaSQH6kuE7LKbl6+gwrxKOQwczQsKu7
+	 wOcy/h0QWdv7CQf9zr3fPTBfZ1/073BStK+BPxEcya17q6PzpsqrHJ68CwQDBed/4A
+	 FIh1nfSDX9piwpgqxUYe8xdo0HdcwiFD/ajIBkFfiHqqK7a3v/yxcO7XGlz8uvrrne
+	 Y90fNCpYtYJPtMLa1C9/4ZrX/I3xi21tRWawLOHNbTtFeochfiwDif3/DN+9eCExSl
+	 GpEetZS2c03RnFA27kEgBYhs=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 803981E917E; Thu,  4 Jun 2026 20:32:26 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1780576342;
+	bh=DyEqa6XEM9Mffh9hjQjZla5OH87SfMsISMtk2ABEBFM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=P/8RTayFWd6v0ntaPPtJTMsnMjt/1SYfepJDUL3W2hnXOYh+VCADBcUipCdiK0vr5
+	 HUfuor5E3XRvTs5h6VHCYh/WfwPfbAknAHk+DGJ5Kg4y8nt4RnDuQxnRAlpklBZApc
+	 MxLM5qKAbt5d19YvaR7aq0r4bVEAwXzbwSQOPku+FS84cwpm2n9wANk6mRFQ8gOgbu
+	 g5Sax14JyQgK9/iT1duAA3WgNOOTE4JhAQBQENQNPoETXqOnB785r/Xz/BPtW1/ndM
+	 3Dif6/EbNfwfKBvInrXAm8FCr6sL9gTZlEj609RlXeypZIgLYFr7SW+Ks2Xd6Q2HLZ
+	 lZPclY9SvMtx+fmJ8nNx4ZwTsgNa8JsLSHpNSdNO7Aac5D1dxEnHxcHvq3URA5iTXz
+	 L/BZHcQeEH816AjVcfCs98Gh2eM4jNcdaHgDZ8EoHDHTw3rB1tv9pkMIlKyeMKFXIP
+	 c7AXpyYG02R2G/NUZvRud9s7VUVIL5QluKnH/rNMGCrRxJpdcETykIWmod8p6CCQ7A
+	 5yyU47BIstvX0/+dN+5uo21c4cNDId0noM1oc+mcJ6su/QB39sKahlv2VUWpROaHrM
+	 5ZQBwf535EuE/JHmIwpQxIFCrLxluL9ivaH+2Oitpi3A/xi3zqLHNONSFDWCwesxsR
+	 yaIz38Q8RCoytBrKcsY6VpLM=
+Received: from sparky.lan (unknown [IPv6:2001:8003:8810:ea00:ed87:ca88:5326:e11d])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id 813931E917A;
+	Thu,  4 Jun 2026 20:32:22 +0800 (AWST)
+From: David Gow <david@davidgow.net>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	Rae Moar <raemoar63@gmail.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: David Gow <david@davidgow.net>,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	workflows@vger.kernel.org
+Subject: [PATCH v3 2/2] kunit: tool: Add (primitive) support for outputting JUnit XML
+Date: Thu,  4 Jun 2026 20:32:05 +0800
+Message-ID: <20260604123207.2615485-2-david@davidgow.net>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260604123207.2615485-1-david@davidgow.net>
+References: <20260604123207.2615485-1-david@davidgow.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260526152148.30514-11-boqun@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 26, 2026 at 08:21:46AM -0700, Boqun Feng wrote:
-[...]
-> +#ifdef CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS
-> +static __always_inline void __preempt_count_nmi_enter(void)
-> +{
-> +	__preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);
-> +}
-> +
-> +static __always_inline void __preempt_count_nmi_exit(void)
-> +{
-> +	__preempt_count_sub(NMI_OFFSET + HARDIRQ_OFFSET);
-> +}
-> +#else
-> +DECLARE_PER_CPU(unsigned int, nmi_nesting);
-> +
-> +#define __preempt_count_nmi_enter()				\
-> +	do {							\
-> +		unsigned int _o = NMI_MASK + HARDIRQ_OFFSET;	\
-> +		/* Maximum NMI nesting is 15. */		\
-> +		BUG_ON(__this_cpu_read(nmi_nesting) >= 15);	\
-> +		__this_cpu_inc(nmi_nesting);			\
-> +		_o -= (preempt_count() & NMI_MASK);		\
-> +		__preempt_count_add(_o);			\
-> +	} while (0)
-> +
-> +#define __preempt_count_nmi_exit()				\
-> +	do {							\
-> +		unsigned int _o = HARDIRQ_OFFSET;		\
-> +		if (!__this_cpu_dec_return(nmi_nesting))	\
-> +			_o += NMI_MASK;				\
-> +		__preempt_count_sub(_o);			\
-> +	} while (0)
+This is used by things like Jenkins and other CI systems, which can
+pretty-print the test output and potentially provide test-level comparisons
+between runs.
 
-This needs to be:
+The implementation here is pretty basic: it only provides the raw results,
+split into tests and test suites, and doesn't provide any overall metadata.
+However, CI systems like Jenkins can ingest it and it is already useful.
 
-#define __preempt_count_nmi_exit()				\
-	do {							\
-		__preempt_count_sub(HARDIRQ_OFFSET);		\
-		if (!__this_cpu_dec_return(nmi_nesting))	\
-			preempt_count_set(preempt_count() & ~NMI_MASK); \
-	} while (0)
+Signed-off-by: David Gow <david@davidgow.net>
+---
+Here's version 3 of the JUnit support patch. This one uses python's ElementTree
+API to generate the XML, rather than writing strings directly. The only real
+difference in the output is that this escapes any log lines, rather than using
+CDATA sections. (There are both advantages and disadvantages to this, but
+they're all pretty minor. Equally, the option of using the
+xml.sax.saxutils.XMLGenerator API instead is a possibility. ElementTree ended
+up being slightly more aligned with the way the JSON version worked.)
 
-otherwise we would have an underflow issue if an NMI happen between
-the "if" being true and __preempt_count_sub(_o);
+The other big change is that skipped tests now include their skip reason, rather
+than hardcoding "Test skipped", hence the introduction of patch 1.
 
-Regards,
-Boqun
+Changes since v2:
+https://lore.kernel.org/all/20260502024918.1056954-1-david@davidgow.net/
+- Rework to use Python's ElementTree XML writing API (Thanks Thomas)
+- Output the reason for a test to be skipped.
 
-> +
-> +#endif
-> +
-> +
-[...]
+Changes since v1:
+https://lore.kernel.org/all/20260119073426.1952867-1-davidgow@google.com/
+- Use python's provided XML quote escaping, rather than coding our own (Thanks Thomas)
+- Output proper <skipped> tags for skipped tests
+- Report crashed tests as <error>
+- Don't output <system-out> tags if there are no lines of log data
+
+ Documentation/dev-tools/kunit/run_wrapper.rst |  3 +
+ tools/testing/kunit/kunit.py                  | 21 ++++++-
+ tools/testing/kunit/kunit_junit.py            | 61 +++++++++++++++++++
+ tools/testing/kunit/kunit_tool_test.py        | 39 +++++++++++-
+ 4 files changed, 120 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/kunit/kunit_junit.py
+
+diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
+index 770bb09a475a..cecc110a3399 100644
+--- a/Documentation/dev-tools/kunit/run_wrapper.rst
++++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+@@ -324,6 +324,9 @@ command line arguments:
+ - ``--json``: If set, stores the test results in a JSON format and prints to `stdout` or
+   saves to a file if a filename is specified.
+ 
++- ``--junit``: If set, stores the test results in JUnit XML format and prints to `stdout` or
++  saves to a file if a filename is specified.
++
+ - ``--filter``: Specifies filters on test attributes, for example, ``speed!=slow``.
+   Multiple filters can be used by wrapping input in quotes and separating filters
+   by commas. Example: ``--filter "speed>slow, module=example"``.
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 742f5c555666..ac3f7159e67f 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -21,6 +21,7 @@ from enum import Enum, auto
+ from typing import Iterable, List, Optional, Sequence, Tuple
+ 
+ import kunit_json
++import kunit_junit
+ import kunit_kernel
+ import kunit_parser
+ from kunit_printer import stdout, null_printer
+@@ -49,6 +50,7 @@ class KunitBuildRequest(KunitConfigRequest):
+ class KunitParseRequest:
+ 	raw_output: Optional[str]
+ 	json: Optional[str]
++	junit: Optional[str]
+ 	summary: bool
+ 	failed: bool
+ 
+@@ -268,6 +270,13 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
+ 			stdout.print_with_timestamp("Test results stored in %s" %
+ 				os.path.abspath(request.json))
+ 
++	if request.junit:
++		if request.junit == 'stdout':
++			kunit_junit.print_junit_result(test=test)
++		else:
++			kunit_junit.write_junit_result(test=test,filename=request.junit)
++			stdout.print_with_timestamp(f"Test results stored in {os.path.abspath(request.junit)}")
++
+ 	if test.status != kunit_parser.TestStatus.SUCCESS:
+ 		return KunitResult(KunitStatus.TEST_FAILURE, parse_time), test
+ 
+@@ -309,6 +318,7 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ # So we hackily automatically rewrite --json => --json=stdout
+ pseudo_bool_flag_defaults = {
+ 		'--json': 'stdout',
++		'--junit': 'stdout',
+ 		'--raw_output': 'kunit',
+ }
+ def massage_argv(argv: Sequence[str]) -> Sequence[str]:
+@@ -459,6 +469,11 @@ def add_parse_opts(parser: argparse.ArgumentParser) -> None:
+ 			    help='Prints parsed test results as JSON to stdout or a file if '
+ 			    'a filename is specified. Does nothing if --raw_output is set.',
+ 			    type=str, const='stdout', default=None, metavar='FILE')
++	parser.add_argument('--junit',
++			    nargs='?',
++			    help='Prints parsed test results as JUnit XML to stdout or a file if '
++			    'a filename is specified. Does nothing if --raw_output is set.',
++			    type=str, const='stdout', default=None, metavar='FILE')
+ 	parser.add_argument('--summary',
+ 			    help='Prints only the summary line for parsed test results.'
+ 				'Does nothing if --raw_output is set.',
+@@ -502,6 +517,7 @@ def run_handler(cli_args: argparse.Namespace) -> None:
+ 					jobs=cli_args.jobs,
+ 					raw_output=cli_args.raw_output,
+ 					json=cli_args.json,
++					junit=cli_args.junit,
+ 					summary=cli_args.summary,
+ 					failed=cli_args.failed,
+ 					timeout=cli_args.timeout,
+@@ -552,6 +568,7 @@ def exec_handler(cli_args: argparse.Namespace) -> None:
+ 	exec_request = KunitExecRequest(raw_output=cli_args.raw_output,
+ 					build_dir=cli_args.build_dir,
+ 					json=cli_args.json,
++					junit=cli_args.junit,
+ 					summary=cli_args.summary,
+ 					failed=cli_args.failed,
+ 					timeout=cli_args.timeout,
+@@ -580,7 +597,9 @@ def parse_handler(cli_args: argparse.Namespace) -> None:
+ 	# We know nothing about how the result was created!
+ 	metadata = kunit_json.Metadata()
+ 	request = KunitParseRequest(raw_output=cli_args.raw_output,
+-					json=cli_args.json, summary=cli_args.summary,
++					json=cli_args.json,
++					junit=cli_args.junit,
++					summary=cli_args.summary,
+ 					failed=cli_args.failed)
+ 	result, _ = parse_tests(request, metadata, kunit_output)
+ 	if result.status != KunitStatus.SUCCESS:
+diff --git a/tools/testing/kunit/kunit_junit.py b/tools/testing/kunit/kunit_junit.py
+new file mode 100644
+index 000000000000..3622070358e7
+--- /dev/null
++++ b/tools/testing/kunit/kunit_junit.py
+@@ -0,0 +1,61 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Generates JUnit XML files from KUnit test results
++#
++# Copyright (C) 2026, Google LLC and David Gow.
++
++from xml.sax.saxutils import quoteattr, XMLGenerator
++import xml.etree.ElementTree as ET
++from kunit_parser import Test, TestStatus
++from typing import Optional
++
++# Get a string representing a tes suite (including subtests) in JUnit XML
++def get_test_suite(test: Test, parent: Optional[ET.Element]) -> ET.Element:
++	suite_attrs = {
++		'name': test.name,
++		'tests': str(test.counts.total()),
++		'failures': str(test.counts.failed),
++		'skipped': str(test.counts.skipped),
++		'errors': str(test.counts.crashed + test.counts.errors),
++	}
++
++	if parent is not None:
++		test_suite_element = ET.SubElement(parent, 'testsuite', suite_attrs)
++	else:
++		test_suite_element = ET.Element('testsuite', suite_attrs)
++
++	for subtest in test.subtests:
++		if subtest.subtests:
++			get_test_suite(subtest, test_suite_element)
++			continue
++		test_case_element = ET.SubElement(test_suite_element, 'testcase', {'name': subtest.name})
++		if subtest.status == TestStatus.FAILURE:
++			ET.SubElement(test_case_element, 'failure', {}).text = 'Test Failed'
++		elif subtest.status == TestStatus.SKIPPED:
++			ET.SubElement(test_case_element, 'skipped', {}).text = subtest.skip_reason
++		elif subtest.status == TestStatus.TEST_CRASHED:
++			ET.SubElement(test_case_element, 'error', {}).text = 'Test Crashed'
++
++		if subtest.log:
++			ET.SubElement(test_case_element, 'system-out', {}).text = "\n".join(subtest.log)
++
++	return test_suite_element
++
++# Get a string for an entire XML file for the test structure starting at test
++def get_junit_result(test: Test) -> str:
++	root_element = get_test_suite(test, None)
++	ET.indent(root_element)
++	return ET.tostring(root_element, encoding="unicode", xml_declaration=True)
++
++# Print a JUnit result to stdout.
++def print_junit_result(test: Test) -> None:
++	root_element = get_test_suite(test, None)
++	ET.indent(root_element)
++	ET.dump(root_element)
++
++# Write an entire XML file for the test structure starting at test
++def write_junit_result(test: Test, filename: str) -> None:
++	root_element = get_test_suite(test, None)
++	ET.indent(root_element)
++	root_et = ET.ElementTree(root_element)
++	root_et.write(filename, encoding='utf-8', xml_declaration=True)
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 267c33cecf87..9797c26d981f 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -24,6 +24,7 @@ import kunit_config
+ import kunit_parser
+ import kunit_kernel
+ import kunit_json
++import kunit_junit
+ import kunit
+ from kunit_printer import stdout
+ 
+@@ -676,6 +677,38 @@ class StrContains(str):
+ 	def __eq__(self, other):
+ 		return self in other
+ 
++class KUnitJUnitTest(unittest.TestCase):
++	def setUp(self):
++		self.print_mock = mock.patch('kunit_printer.Printer.print').start()
++		self.addCleanup(mock.patch.stopall)
++
++	def _junit_string(self, log_file):
++		with open(_test_data_path(log_file)) as file:
++			test_result = kunit_parser.parse_run_tests(file, stdout)
++			junit_string = kunit_junit.get_junit_result(
++					test=test_result)
++		print(junit_string)
++		return junit_string
++
++	def test_failed_test_junit(self):
++		result = self._junit_string('test_is_test_passed-failure.log')
++		self.assertTrue("<failure>" in result)
++
++	def test_skipped_test_junit(self):
++		result = self._junit_string('test_skip_tests.log')
++		self.assertTrue("<skipped>" in result)
++		self.assertTrue("skipped=\"1\"" in result)
++
++	def test_crashed_test_junit(self):
++		result = self._junit_string('test_kernel_panic_interrupt.log')
++		self.assertTrue("<error>" in result);
++
++	def test_no_tests_junit(self):
++		result = self._junit_string('test_is_test_passed-no_tests_run_with_header.log')
++		self.assertTrue("tests=\"0\"" in result)
++		self.assertFalse("testcase" in result)
++
++
+ class KUnitMainTest(unittest.TestCase):
+ 	def setUp(self):
+ 		path = _test_data_path('test_is_test_passed-all_passed.log')
+@@ -923,7 +956,7 @@ class KUnitMainTest(unittest.TestCase):
+ 		self.linux_source_mock.run_kernel.return_value = ['TAP version 14', 'init: random output'] + want
+ 
+ 		got = kunit._list_tests(self.linux_source_mock,
+-				     kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'suite', False, False, False))
++				     kunit.KunitExecRequest(None, None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'suite', False, False, False))
+ 		self.assertEqual(got, want)
+ 		# Should respect the user's filter glob when listing tests.
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+@@ -936,7 +969,7 @@ class KUnitMainTest(unittest.TestCase):
+ 
+ 		# Should respect the user's filter glob when listing tests.
+ 		mock_tests.assert_called_once_with(mock.ANY,
+-				     kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*.test*', '', None, None, 'suite', False, False, False))
++				     kunit.KunitExecRequest(None, None, None, False, False, '.kunit', 300, 'suite*.test*', '', None, None, 'suite', False, False, False))
+ 		self.linux_source_mock.run_kernel.assert_has_calls([
+ 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test*', filter='', filter_action=None, timeout=300),
+ 			mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test*', filter='', filter_action=None, timeout=300),
+@@ -949,7 +982,7 @@ class KUnitMainTest(unittest.TestCase):
+ 
+ 		# Should respect the user's filter glob when listing tests.
+ 		mock_tests.assert_called_once_with(mock.ANY,
+-				     kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'test', False, False, False))
++				     kunit.KunitExecRequest(None, None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'test', False, False, False))
+ 		self.linux_source_mock.run_kernel.assert_has_calls([
+ 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test1', filter='', filter_action=None, timeout=300),
+ 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test2', filter='', filter_action=None, timeout=300),
+-- 
+2.54.0
+
