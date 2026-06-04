@@ -1,296 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF6A31197B;
-	Thu,  4 Jun 2026 12:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60144472798;
+	Thu,  4 Jun 2026 12:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780576603; cv=none; b=OWDZzva1oFizPIBPhLjbJRk/Huk5gNOwRrGcQuowmFiqalc16nqLgAvgMqeF/DPa0qqjC/W1MuW2AFOogwwpXSlSQSoiaVW+eWcmLfxU0tgj1TQIubvjXvxOynzwglSY0GIPmJk7QJNrTwfIKjwqLi5wuhOGlEe3+I5oANJ6dDo=
+	t=1780576657; cv=none; b=QzO06R6ePhA3QB2Q1aDPADzoRiKfznP+MQYL9nfuMeryb5XNhDXWQkAGVdzqf0MqbGS5LSXmoqPdUO5NSJSPillS3Kn2rHaUm9HpMn4dwJQOMhILHe53rtReL6hfVlsSWqYjQ32dtxrLFuE+Ph2TfV9p6G3maqGUUjp6pIZe5GI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780576603; c=relaxed/simple;
-	bh=fb/j4RhN61MLa1Qk9TfcPzZk/H+4QghW1asCur8EklE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PhAo+v2j5mrB/1Z8zbI71IalJcZHmc3nqICzfwslnSmLMPUPWo2UZGv2iQ9Zf1zAGRo2ulFS87i/TADP+nMzyNRsroNaX7jXicEyqFmz2OKPz1EL7Xv3/1FkpGljs4JbwhW39V7cWCl3UmpAGrS86wx68vk4CbjrhY2EmgXdvfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cZohoTIV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780576657; c=relaxed/simple;
+	bh=dqIDEslQCzd6fKJ5g2l3UD1jEDxQ3jg0RqPV3z5hhOg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lNTKRCxS8QnHsXKgSIz5pTV+TyWe//2UhTP5VNxj4YEy6emNlrpEDtnMwNYWvXu5VNR5WskZcBShC6TH03xyrUb2f/jtu4Uq4WMbM33u5rtSt2OTHtEl9QJIM0pvpsRAnPm3F9Oee4cGaXRfwINX2DC/zmmjL9arHHjEuPS/D2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=UJAsmfBt; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=fJBgxfd9; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cZohoTIV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F291E1F00893;
-	Thu,  4 Jun 2026 12:36:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780576601;
-	bh=G2t4b9T7YKjL70px21BHpISBAJ1CJJ2CGRX8h/3pybQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=cZohoTIV4/o8HeJ21SCR2m5HRE+ERD8pFdijkHTlkYZKikCEtfT27nNAOkFPwUhPP
-	 DaV1hx0f1PQhM7Ln/ZPPceQHZ7yI8e/KgD5z/sbq1mxzzu/Gb+t85ALF95lHmbK7lU
-	 I6dzcbyWXZYzzxed0Lp9dhSRzf8mqefiPfEtOuiqXi0d+rj5W6DINuf4El1yEz1yR8
-	 +rLRWkcyQmreMc96WebedQZslJSFd+FYEmcw438qQxHBrPqE0wjyfH1hBdNw42QMy9
-	 ficZOBPH3I4uQCcfSrfh9S4IJoV1EA3C3ODu5tvEjsuxBv3YSbgA+uVLSSAvGLBekW
-	 YsRfzJTQ+qWAQ==
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 09DD4F4007C;
-	Thu,  4 Jun 2026 08:36:39 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Thu, 04 Jun 2026 08:36:39 -0400
-X-ME-Sender: <xms:VnEhagZzao9gyXUu93RNckXpTAxkfVObN80Ho1taOPQdYigkCroIBQ>
-    <xme:VnEhavbXeglNrO6gWeheBztORlLIBm2SMURYwDXzzM_SL5eI0pk_CA2Gco4nlikhz
-    W0Xvo3cVnaMgIWfEKX7osPMd1CxMs1j__MLs3lNlZrg-zVvwuRc>
-X-ME-Received: <xmr:VnEhaqAuPs88Zher25i5NkFsA4Hi6Md1NcEbWxn1Llk4vHkGLNy8rw7mwnw>
-X-ME-Proxy-Cause: dmFkZTEQFwMtfD0LSxw/EWQ8kkWfNDbO1B39r8wgdzVN7edb5KWhufCaURpXW1jgf2CWrq
-    XBWW3gIZcyl0yhjmX9ikFd4Pe/uurQpbuBtyZuFc3PXRL2zv2UA2M3gGkc55jKgRT9qAep
-    WLiJtZPvNiYOsRfbJ/9+uNp4HhrZydvVwlIEGJiUspc/R12m8keG0+WcmEwV/bQBeVTM2r
-    liekhxajBnCWjhAzVNgbVvojIzxbYqXCK1IdigNF/VMcqZ5YAbhiRFFvYqEjsoEdZ+UuHz
-    ZgVQAr4ekHEvTUTFBwnby/fHqxidy/2fM0P9Wo0Gd0s6JapT6jXiJdVohmQHyTkiMdcWEi
-    eVv+Y58tefCJqOIOwT9NqYVRgh4gjhLf6m/a8LLzr51MIW2WMhP/1EHC5R5VCf8T/p1S9P
-    RmlE9um5TKSyWkyIfftuWVwigR6EuuNk6ekL/pl7XrJwXhJ53ljdQkqZh3N6+j+Qm72vyL
-    g+n6IrLdjLnIO13IARat26zoWiOdc/k8JSsseB9HJKBOlvLGqjWe94CgA6dBT8oWfVv/tH
-    8q9xwURjC9cGNy2sQX3Vr5GgYyd98cl+sKu19Ppr1eUcnZcsK4z8sqGwg4jESVuYZLE95g
-    g6Ng4Iu4pf9wCnl6aD5b0AVVsNRevDZ1RJWlttuWhEaM64BIkluVYxjdjY0w
-X-ME-Proxy: <xmx:VnEhasYQwHH8M6tRqmwkHnYMdgRjZziFsaIa09cda3HKlsvutRBK8Q>
-    <xmx:VnEhajgh0Is2Pfttoi2bSpCGxHnKrhRkm0t0QDqqiJA9lU4EHLxSKQ>
-    <xmx:VnEhasZTKobjv4pnrW4-aHoSRssGNMAqp_SWIZ-7-aLw6ae2OjppkQ>
-    <xmx:VnEhal58u1XFkuHD6Z3Ut19o05Fwf1u_t4YWKglkALSHjIA_SdioRQ>
-    <xmx:V3EhavVdLobtvhpiE4ac3NxE4XTOHF5WoOBYnFkGgjHSeF0bn8gH_Z5K>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 4 Jun 2026 08:36:37 -0400 (EDT)
-Date: Thu, 4 Jun 2026 05:36:36 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
- Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,	Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>,	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,	Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>,	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Waiman Long <longman@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,	Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,	Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>,	Miguel Ojeda <ojeda@kernel.org>,
- Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,	Jinjie Ruan <ruanjinjie@huawei.com>,
- Lyude Paul <lyude@redhat.com>,	Thomas Huth <thuth@redhat.com>,
- Sohil Mehta <sohil.mehta@intel.com>,	"Xin Li (Intel)" <xin@zytor.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Nikunj A Dadhania <nikunj@amd.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,	Yury Norov <ynorov@nvidia.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kernel@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH v2 01/12] preempt: Track NMI nesting to separate per-CPU
- counter
-Message-ID: <aiFxVG3epMKAva76@tardis-2.local>
-References: <20260526152148.30514-1-boqun@kernel.org>
- <20260526152148.30514-2-boqun@kernel.org>
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="UJAsmfBt";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="fJBgxfd9"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1780576343;
+	bh=dqIDEslQCzd6fKJ5g2l3UD1jEDxQ3jg0RqPV3z5hhOg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=UJAsmfBtILK9VUY8wTRTnibw6vcemj+25LaiTSA9eeLlqSeFJGflqXqXsdcTJXq8i
+	 kpY9n/HkkKyo1oI6sYVKl1NH5jO4XNpF6yB+n48aNgC7hnYYayncW6+pkPfvKyU5Yw
+	 y8KAAtz5dGdVrZYNLvK2E4c6iVPEq9ymEX2b+x+m7X63zgxn2xNz/EMkCl3IocrV30
+	 K/DCsSlj4SgymYOLxRILDFxbWJCzPdh2W3WJ5hjWkeqcVvkZqZ+j2Uhl7+weIdC/nK
+	 RVYdbJUYcAnKriU0BJMP1OXFzxQjwfM0DsqtDdEvLFa15bPlfAhc2t6YtmY5Gt92vc
+	 LXwEYh+FWJAr9vjHanNcwbLnHIH4B5ShHBmVdGMUAxW3y9KVmD56olAe8R0z4XYlxY
+	 J6eWEdxGHx4SGQCnWnv5G/mlg+bf8gi0N/QXmjUZ27ZJRQAxzyDGlRtrwDZbLl5VXt
+	 pvNTa0vIP/ypitTBnaMg3V/22PSFuaxEU2z5xQbpc9nxEWuwm0BGqq9ViWYyy7hDLU
+	 4IlbD6ViW3gemafDrkbVWNjxxe4JtD6CHtiODEgpDHun6rLQ0hB7YrU6U3IW9/zcSA
+	 kI1VTcK+V7T76mDm+CzKGb1M+FMEKDCAYc/Q7iZjvkBQ36A4kwEoPLQa7Ib0Ac0Bpz
+	 38E/lkaBY7C2t1Vv/0JTg/+E=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id EE6801E9180; Thu,  4 Jun 2026 20:32:23 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1780576341;
+	bh=dqIDEslQCzd6fKJ5g2l3UD1jEDxQ3jg0RqPV3z5hhOg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fJBgxfd9EdyzhOuq1vdMd+PEkdHuJBmVRaHD8jfoP0GeXjuETaZJ19vq4EjINUHif
+	 lDhG2g3Ve3y2qpgtwr7IpDFMK7FCE2wZ3FmKQbxZzQPa33Eh+M6/Yam8I5cf4/cieC
+	 12bOn44xlToGq9TXSWXQCSc+RT1vb9aF9Spzs2TZduAmR90XtHnUro7omN3ef6SGEG
+	 kOvP0RHvpSQZ5I7xSIpVIo/NbhTzYCe8PPPyZx9GGIo37iYIJA0ebg2OMucA2ZoBRv
+	 7ttIuYf2Qwc0Nqa57e92SzygXnJP+SUPOF4Imsi5VpkOJdsZ/Gt1wYh2uM/rfHCwrf
+	 TH875QB8AzPXS5vwDcNnebc5oZd96MdU6qAPdFFy9DfZQKyVvwR5l0GceUv+sRNNkl
+	 /PT7vJ5Lwb7NFv6xX2BR1SxlpOAJkA2PH5haFOaRTaUt4wEmYWH9NH9PsGaxnGEGI+
+	 PLF7n5onLBPvpb3X8HjPmEAmlgWG53BokWU0IwWTqcOoB/BO9STBF8ZAeQi0SHng4V
+	 KjKtwfg7LBC4bkFAQRxpq/n7zwDGMbGlsgGudloXtgMW1OT1imN1UGCkTeuKQ71WH0
+	 PvLwhQMpbx5qKLcoJnhQydWbsL8dMdna74+YU5Rn1vhw7tc34u9UIU1c7MbS35e7ju
+	 u8lT7gLvc7DnexPPYphfDYHg=
+Received: from sparky.lan (unknown [IPv6:2001:8003:8810:ea00:ed87:ca88:5326:e11d])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id 9D8151E9177;
+	Thu,  4 Jun 2026 20:32:21 +0800 (AWST)
+From: David Gow <david@davidgow.net>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	Rae Moar <raemoar63@gmail.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: David Gow <david@davidgow.net>,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	workflows@vger.kernel.org
+Subject: [PATCH v3 1/2] kunit: tool: Parse and print the reason tests are skipped
+Date: Thu,  4 Jun 2026 20:32:04 +0800
+Message-ID: <20260604123207.2615485-1-david@davidgow.net>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260526152148.30514-2-boqun@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 26, 2026 at 08:21:37AM -0700, Boqun Feng wrote:
-> From: Joel Fernandes <joelagnelf@nvidia.com>
-> 
-> Move NMI nesting tracking from the preempt_count bits to a separate per-CPU
-> counter (nmi_nesting). This is to free up the NMI bits in the preempt_count,
-> allowing those bits to be repurposed for other uses.
-> 
-> Reduce NMI_BITS from 4 to 1, using it only to detect if we're in an NMI.
-> The per-CPU counter currently caps nesting at 15.
-> 
-> [boqun: Solve Steven Rostedt's comment on the BUG_ON() condition]
-> 
-> Suggested-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
-> Signed-off-by: Lyude Paul <lyude@redhat.com>
-> Signed-off-by: Boqun Feng <boqun@kernel.org>
-> Link: https://patch.msgid.link/20260121223933.1568682-3-lyude@redhat.com
-> ---
->  include/linux/hardirq.h                        | 17 +++++++++++++----
->  include/linux/preempt.h                        |  9 +++++++--
->  kernel/softirq.c                               |  2 ++
->  tools/testing/selftests/bpf/bpf_experimental.h |  2 +-
->  4 files changed, 23 insertions(+), 7 deletions(-)
-> 
-> diff --git a/include/linux/hardirq.h b/include/linux/hardirq.h
-> index d57cab4d4c06..1a0360a1000f 100644
-> --- a/include/linux/hardirq.h
-> +++ b/include/linux/hardirq.h
-> @@ -10,6 +10,8 @@
->  #include <linux/vtime.h>
->  #include <asm/hardirq.h>
->  
-> +DECLARE_PER_CPU(unsigned int, nmi_nesting);
-> +
->  extern void synchronize_irq(unsigned int irq);
->  extern bool synchronize_hardirq(unsigned int irq);
->  
-> @@ -102,14 +104,17 @@ void irq_exit_rcu(void);
->   */
->  
->  /*
-> - * nmi_enter() can nest up to 15 times; see NMI_BITS.
-> + * nmi_enter() can nest - nesting is tracked in a per-CPU counter.
->   */
->  #define __nmi_enter()						\
->  	do {							\
->  		lockdep_off();					\
->  		arch_nmi_enter();				\
-> -		BUG_ON(in_nmi() == NMI_MASK);			\
-> -		__preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);	\
-> +		/* Maximum NMI nesting is 15. */		\
-> +		BUG_ON(__this_cpu_read(nmi_nesting) >= 15);	\
-> +		__this_cpu_inc(nmi_nesting);			\
-> +		__preempt_count_add(HARDIRQ_OFFSET);		\
-> +		preempt_count_set(preempt_count() | NMI_MASK);	\
->  	} while (0)
->  
->  #define nmi_enter()						\
-> @@ -124,8 +129,12 @@ void irq_exit_rcu(void);
->  
->  #define __nmi_exit()						\
->  	do {							\
-> +		unsigned int nesting;				\
->  		BUG_ON(!in_nmi());				\
-> -		__preempt_count_sub(NMI_OFFSET + HARDIRQ_OFFSET);	\
-> +		__preempt_count_sub(HARDIRQ_OFFSET);		\
-> +		nesting = __this_cpu_dec_return(nmi_nesting);	\
-> +		if (!nesting)					\
-> +			__preempt_count_sub(NMI_OFFSET);	\
+When a KUnit test (or other KTAP test) is skipped, a "skip reason" can be
+provided. kunit.py has never done anything with this, ignoring anything
+included in the KTAP output after the 'SKIP' directive.
 
-We have an issue here in the following case:
+Since we have it, and it's used, print it in a nice friendly yellow in
+parentheses after a skipped test's name.
 
-  // nmi_nesting == 1
-  __nmi_exit():
-    ..
-    nesting = __this_cpu_dec_return(nmi_nesting); // <- nesting == 0
-    <another NMI comes>
-      __nmi_enter()
-      // nmi_nesting becomes 1
-      __nmi_exit():
-        nesting = __this_cpu_dec_return(nmi_nesting); // <- nesting == 0
-        if (!nesting)
-	  __preempt_count_sub(NMI_OFFSET);
-	// NMI_OFFSET bit is 0
-    if (!nesting)
-       __preempt_count_sub(NMI_OFFSET); // underflow!
+(And, by parsing it, it can be included in the JUnit results as well.)
 
-I think we need to do:
-      
-#define __nmi_exit()						\
-	do {							\
-		unsigned int nesting;				\
-		BUG_ON(!in_nmi());				\
-		__preempt_count_sub(HARDIRQ_OFFSET);		\
-		nesting = __this_cpu_dec_return(nmi_nesting);	\
-		if (!nesting)					\
-			preempt_count_set(preempt_count() & ~NMI_MASK);	\
-		arch_nmi_exit();				\
-  		lockdep_on();					\
-	} while (0)
+Signed-off-by: David Gow <david@davidgow.net>
+---
 
-@Joel, thoughts?
+There are a few bits of KTAP that kunit.py has never actually parsed, and
+this is one of them. It's also nice to have a good way of quickly seeing
+why a test has been skipped, given most tests do provide good reason
+strings.
 
-Similarly, we have this issue in patch #10 as well.
+Happy to hear comments about the style: yellow in parentheses looks pretty
+good here, but could be a bit confusing if KUnit do
 
-Regards,
-Boqun
+This is the first version of this patch, as it's a new dependency of v3 of
+patch 2, the JUnit support, which also includes the skip reason.
 
->  		arch_nmi_exit();				\
->  		lockdep_on();					\
->  	} while (0)
-> diff --git a/include/linux/preempt.h b/include/linux/preempt.h
-> index d964f965c8ff..586f96688325 100644
-> --- a/include/linux/preempt.h
-> +++ b/include/linux/preempt.h
-> @@ -17,6 +17,8 @@
->   *
->   * - bits 0-7 are the preemption count (max preemption depth: 256)
->   * - bits 8-15 are the softirq count (max # of softirqs: 256)
-> + * - bits 16-19 are the hardirq count (max # of hardirqs: 16)
-> + * - bit 20 is the NMI flag (no nesting count, tracked separately)
->   *
->   * The hardirq count could in theory be the same as the number of
->   * interrupts in the system, but we run all interrupt handlers with
-> @@ -24,16 +26,19 @@
->   * there are a few palaeontologic drivers which reenable interrupts in
->   * the handler, so we need more than one bit here.
->   *
-> + * NMI nesting depth is tracked in a separate per-CPU variable
-> + * (nmi_nesting) to save bits in preempt_count.
-> + *
->   *         PREEMPT_MASK:	0x000000ff
->   *         SOFTIRQ_MASK:	0x0000ff00
->   *         HARDIRQ_MASK:	0x000f0000
-> - *             NMI_MASK:	0x00f00000
-> + *             NMI_MASK:	0x00100000
->   * PREEMPT_NEED_RESCHED:	0x80000000
->   */
->  #define PREEMPT_BITS	8
->  #define SOFTIRQ_BITS	8
->  #define HARDIRQ_BITS	4
-> -#define NMI_BITS	4
-> +#define NMI_BITS	1
->  
->  #define PREEMPT_SHIFT	0
->  #define SOFTIRQ_SHIFT	(PREEMPT_SHIFT + PREEMPT_BITS)
-> diff --git a/kernel/softirq.c b/kernel/softirq.c
-> index 4425d8dce44b..10af5ed859e7 100644
-> --- a/kernel/softirq.c
-> +++ b/kernel/softirq.c
-> @@ -88,6 +88,8 @@ EXPORT_PER_CPU_SYMBOL_GPL(hardirqs_enabled);
->  EXPORT_PER_CPU_SYMBOL_GPL(hardirq_context);
->  #endif
->  
-> +DEFINE_PER_CPU(unsigned int, nmi_nesting);
-> +
->  /*
->   * SOFTIRQ_OFFSET usage:
->   *
-> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-> index 2234bd6bc9d3..2d4256ff471f 100644
-> --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> @@ -449,7 +449,7 @@ extern int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__str,
->  #define PREEMPT_BITS	8
->  #define SOFTIRQ_BITS	8
->  #define HARDIRQ_BITS	4
-> -#define NMI_BITS	4
-> +#define NMI_BITS	1
->  
->  #define PREEMPT_SHIFT	0
->  #define SOFTIRQ_SHIFT	(PREEMPT_SHIFT + PREEMPT_BITS)
-> -- 
-> 2.50.1 (Apple Git-155)
-> 
+--
+ tools/testing/kunit/kunit_parser.py | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 0e1d2f4985eb..22b8464c6383 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -44,11 +44,12 @@ class Test:
+ 		self.subtests = []  # type: List[Test]
+ 		self.log = []  # type: List[str]
+ 		self.counts = TestCounts()
++		self.skip_reason = ''
+ 
+ 	def __str__(self) -> str:
+ 		"""Returns string representation of a Test class object."""
+ 		return (f'Test({self.status}, {self.name}, {self.expected_count}, '
+-			f'{self.subtests}, {self.log}, {self.counts})')
++			f'{self.subtests}, {self.log}, {self.counts}, {self.skip_reason})')
+ 
+ 	def __repr__(self) -> str:
+ 		"""Returns string representation of a Test class object."""
+@@ -352,9 +353,9 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
+ 	lines.pop()
+ 	return True
+ 
+-TEST_RESULT = re.compile(r'^\s*(ok|not ok) ([0-9]+) ?(- )?([^#]*)( # .*)?$')
++TEST_RESULT = re.compile(r'^\s*(ok|not ok) ([0-9]+) ?(:?- )?([^#]*)( # .*)?$')
+ 
+-TEST_RESULT_SKIP = re.compile(r'^\s*(ok|not ok) ([0-9]+) ?(- )?(.*) # SKIP ?(.*)$')
++TEST_RESULT_SKIP = re.compile(r'^\s*(ok|not ok) ([0-9]+) ?(:?- )?(.*) # SKIP ?(.*)$')
+ 
+ def peek_test_name_match(lines: LineStream, test: Test) -> bool:
+ 	"""
+@@ -418,7 +419,7 @@ def parse_test_result(lines: LineStream, test: Test,
+ 
+ 	# Set name of test object
+ 	if skip_match:
+-		test.name = skip_match.group(4) or skip_match.group(5)
++		test.name = skip_match.group(4)
+ 	else:
+ 		test.name = match.group(4)
+ 
+@@ -431,6 +432,7 @@ def parse_test_result(lines: LineStream, test: Test,
+ 	status = match.group(1)
+ 	if skip_match:
+ 		test.status = TestStatus.SKIPPED
++		test.skip_reason = skip_match.group(5) or ''
+ 	elif status == 'ok':
+ 		test.status = TestStatus.SUCCESS
+ 	else:
+@@ -539,7 +541,7 @@ def format_test_result(test: Test, printer: Printer) -> str:
+ 	if test.status == TestStatus.SUCCESS:
+ 		return printer.green('[PASSED] ') + test.name
+ 	if test.status == TestStatus.SKIPPED:
+-		return printer.yellow('[SKIPPED] ') + test.name
++		return printer.yellow('[SKIPPED] ') + test.name + ' (' +  printer.yellow(test.skip_reason) + ')'
+ 	if test.status == TestStatus.NO_TESTS:
+ 		return printer.yellow('[NO TESTS RUN] ') + test.name
+ 	if test.status == TestStatus.TEST_CRASHED:
+-- 
+2.54.0
+
