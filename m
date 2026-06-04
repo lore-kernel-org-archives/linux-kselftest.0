@@ -1,133 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA4833F8A3;
-	Thu,  4 Jun 2026 12:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C92B3F23D7
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 13:09:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780577989; cv=none; b=VHaqS3aBMCKXNQQMc+P4MlaEeLGiSxoYfGySvuc/5I72OllsANNIDlM5INLuXATdAXi6QGNGz5sJYMw3wL0j0pDQp/wg7IVj0kJ4MXhJfo88zr28gHG7cDuj1kTk0iPAL5vuFki97nqlFr/cacdl48Jf66nPFqiRro71O8lZDOQ=
+	t=1780578591; cv=none; b=C9lBMyV5Dd+ayTM2kxYAF/68i55dDEHEYnhXO94cffTs2CHq7h7/+DDMlZIMVKWMm/o9MM+l18rYuGQwkQLXZSiDDFLjXK4iRSbC0Lnrl//H5IuW4y7e7XF0v8BGNiPgw3x4kF8UfTeN0fht1iyFY/LzFMlHgLCoy1SJBHK3ZCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780577989; c=relaxed/simple;
-	bh=cdG9DKfiE9TSscxA54BmqzLb+7QHcmi8WUqp8p4DBuw=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=pAr91m+1f8fpLB/JVBneaDl1pE8x8Wrejo5h15G2eofLzi//hv3qb7uMPTDy0TQ0UMm/NKWg3KfJGp8YciqBKUDMhPg/s576fZKl81+z0mGqtyI+ujbPaKJjS9OTNOnovkftBLnxHBTUW2onNh8g3g8dBm/TejsT55//xueTAeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9WYg3ti; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780578591; c=relaxed/simple;
+	bh=Sn3lKQIudwwunx7+Nr0y3ITWmEl6iVkiYlEfVNv7FTA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TQspmQcPAawdovbz7k7v/YcRhlsDdWYMM+gNfW7wQbkA45kpk/24VY766/F2Fr0EsBuJoKrXGW7ScxKkTlaoaDnE9spLilz1APS7uACXp2/3j/PvVto5S9EZMV1fucqr7t1imviUKDXVqCjocuBfOFJ7Z1xCx77ogyJbUztItMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=I1+C9Fhw; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9WYg3ti"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 105D51F00893;
-	Thu,  4 Jun 2026 12:59:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780577987;
-	bh=vAkbvi1aE+QuBjLTRFf9k039ZmQ4xmk/MiltR3U18QQ=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=n9WYg3ti2USEyvDmhdD8MJKM6GOI1SjZ+1dpo1Z+JuyBOyKrTwIWuElHBh5bhwPd7
-	 6lqoZh0U5ojY/idqOffI/bT+pTa1VQgUzyP/FUgwKqdZy57DGZ7er9XRLSk1WLUtst
-	 wcYOSyFvrQwQZLLWVk4cWIMd1muMKvsuqWJVY1RDnFMh+GqKjp15cYdC+Kx2Wegu51
-	 V5EeuCp8iigg6dT7v06oOPI5hh/JbogFmfVHzT3Hs/+XZxqAOIJNBD15X5wsMZUkbx
-	 3+LjykpYLqCCyuZH4SJ9jzEhM51VsZLOslEXL9Yz0S5W5HjmKNNV3nCb2WORqROSWr
-	 Ig3M3ip9bUBzA==
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="I1+C9Fhw"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-45ef5146b56so1204073f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 06:09:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1780578588; x=1781183388; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+oY1VKwPkVFKv4NeE5kqwicRyh8+m7qj+rD/u5rkZKI=;
+        b=I1+C9FhwSKlTVgV2tmzzwiRlAQlw/v+NCgiM8nHiUPaR70V1hvY0x9TB0MN+Qh7S8g
+         7NWwYVehC//64Q4mR2JTBYE7iTiFo9p5Svq4OMx3vKw7+ICtIHXgvhmXC0hhAjRK1L6c
+         jB2mGWD4DBuCAWinz6TajPUlZP6KorIi0s+rFZXyKlx8PqvoNeDdpMKYjHPpX2/kcz/b
+         DCY1TM7YwpBLgEXHeMDXLcD/fAkHyUldY/aMcshAWGvmH4q16wQRBGzLH3nYJRyLdZnE
+         R8g2igiktfeWHEMG++8GNnkgG/TnDqY7EJ4Sr4NNb6Lonv5xbBsUCca+eHFu4U8xfcR0
+         fldw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780578588; x=1781183388;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+oY1VKwPkVFKv4NeE5kqwicRyh8+m7qj+rD/u5rkZKI=;
+        b=mhxpYpWIOUF0FdA36hIzgotaZNSxutfLWadAPx1E2q99eMgBns9ddFzfPzlrp6tMyo
+         tgLuIqH0q+3Gwk/Wg7YmAAy3+mR/ubyR6zb4fTg7cNVk4FkjY8VXUWyrNpOa/vgvjHMz
+         CqmAg0TLJJujumRJnRva6a/og5KHb+G8k3ylNHH0EB1VgmVWfqlcpl6UputPOEfm4vTO
+         YQfEiIzF6gzdXQSYDV5WlMDsp8ZeJiq5UwLARA17n3NFT7W/l/K5LcRJk2xiCSekhHqt
+         Mv5jthUIz3O/or+81ib7YDuK6dLtEIctKZsIPbUSQJtoo33nfPt6gFKXmg962YJv7qJt
+         owdg==
+X-Forwarded-Encrypted: i=1; AFNElJ+sM92CXUh50WkmecQpXTCDiyQW4mNDMSxk0CoEJvHs+AZwZfSNwGFvV/w8hrj7j9/Tl+UVurd6Rukd0j3AuJI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzzx8JaeK+FzqAXrV79tPRNmbxhVTLRRvf1ChodC0NIPadifZIb
+	yIT5HWefinx2bv9ylXg5lvxwY05LKHe2/92RDzgOmt42IwZGvw/hyWh1OlnxjV6MyIw=
+X-Gm-Gg: Acq92OHraNeyBzbjW8fOUqCXI58r5jOcAjMkvXmb3lJXHHe61TX5iZVquX99ZqepgAi
+	PL3Xkq0NGrEpdGZ4bMaseX/POJSdp9pJPgpZ4IskTAvZsY60p9BRhj0N333eGRfBKlHqwc0wgMB
+	vc/aFnaDTCbUYjqZ7BhOJqVLtozmSymQKM1jkS1Upc8GnrNPJgjxPIMQzRa5H9AMlBRsvUQBNTu
+	lEBDxpcEIjTvJfBoIU9fRuMz9GwxtJcXwDlXzsumFIGJnk3MbrJu/S9dh5b4Ca9/itTu3ioJwpw
+	lwuEy4W6+WoLW4yOJiH0H1lL650TRjAPotgc4Et/8gHTAOMAFIOZWPHy9sh/jOqLxuxrMKPStls
+	ipNaIqmC4DWBauKznvpxOCgVO2KkFIrAc3T3uerpz+wuPLSXINBdM8ay0Bvk5ugdEMl4VF+y+nW
+	nE4D9GqtkUFZdrJh8cDpqF6pFT70+Z8k4+09cfqR/OfI8MKkI=
+X-Received: by 2002:a05:6000:2082:b0:460:1c93:6eb6 with SMTP id ffacd0b85a97d-4602743465dmr5736255f8f.20.1780578588549;
+        Thu, 04 Jun 2026 06:09:48 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f0a43e9sm16351006f8f.0.2026.06.04.06.09.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jun 2026 06:09:48 -0700 (PDT)
+Date: Thu, 4 Jun 2026 15:09:46 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: mbenes@suse.cz, live-patching@vger.kernel.org, jpoimboe@kernel.org,
+	Rui Qi <qirui.001@bytedance.com>, joe.lawrence@redhat.com,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	jikos@kernel.org, shuah@kernel.org
+Subject: Re: [PATCH v2] selftests/livepatch: fix resource leak in
+ test_klp_syscall init error path
+Message-ID: <aiF5GjePTYmLrpg0@pathway.suse.cz>
+References: <20260604083208.1071428-1-qirui.001@bytedance.com>
+ <20260604084214.4F9751F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v5 1/2] mm/process_vm_access: pidfd and nowait support
- for process_vm_readv/writev
-From: Christian Brauner <brauner@kernel.org>
-To: Alban Crequy <alban.crequy@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, 
- Christian Brauner <brauner@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R . Howlett" <liam@infradead.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- Alban Crequy <albancrequy@microsoft.com>, Peter Xu <peterx@redhat.com>, 
- Willy Tarreau <w@1wt.eu>, linux-kselftest@vger.kernel.org, shuah@kernel.org, 
- Usama Arif <usama.arif@linux.dev>, 
- David Laight <david.laight.linux@gmail.com>
-In-Reply-To: <20260603082707.3831525-1-alban.crequy@gmail.com>
-References: <20260602100917.3641359-1-alban.crequy@gmail.com>
- <20260602100917.3641359-2-alban.crequy@gmail.com>
- <20260603082707.3831525-1-alban.crequy@gmail.com>
-Date: Thu, 04 Jun 2026 14:59:41 +0200
-Message-Id: <20260604-pudding-postieren-situation-f52745691fdb@brauner>
-X-Mailer: b4 0.16-dev-f5839
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3173; i=brauner@kernel.org;
- h=from:subject:message-id; bh=cdG9DKfiE9TSscxA54BmqzLb+7QHcmi8WUqp8p4DBuw=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQplu1P9087ESYhcOLby0pPm+77Z5x/5bwRuD119zGzh
- WZBX3fu6yhlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZjIQQZGhotXfj6RrOz9evip
- wwTvOfsuF7j5rglxPLcnv/WNrrLO5C+MDJvmPdu1Zv6UE5Nmbbz+7aX9rzW+yYpSpeKRX5X/rT4
- 0r4cLAA==
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260604084214.4F9751F00893@smtp.kernel.org>
 
-On 2026-06-03 10:27 +0200, Alban Crequy wrote:
-> Sashiko raised a question about pidfd_get_task() and PIDFD_THREAD [1],
-> so I ran some tests to understand the behavior.
-> [1] https://sashiko.dev/#/patchset/20260602100917.3641359-1-alban.crequy@gmail.com
+On Thu 2026-06-04 08:42:13, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
 > 
-> pidfd_get_task() always resolves pidfds using PIDTYPE_TGID (kernel/pid.c
-> line 640), regardless of whether the pidfd was created with PIDFD_THREAD.
-> This means:
+> Pre-existing issues:
+> - [High] Relying exclusively on kobject_put() to clean up sysfs attributes backed by module memory introduces a use-after-free window during module unload if CONFIG_DEBUG_KOBJECT_RELEASE is enabled.
+> --
 > 
->  - A PIDFD_THREAD pidfd for a non-leader thread fails with ESRCH.
->  - A regular pidfd for a process whose leader has exited (pthread_exit
->    in main, secondary thread still alive) also fails with ESRCH.
+> commit 89541aa9ecd8e356eaf4884fa2b111bc605a7933
+> Author: Rui Qi <qirui.001@bytedance.com>
 > 
-> This is not specific to my patch: process_madvise() uses pidfd_get_task()
-> in the same way and has the same behavior. I wrote a test program
-> confirming this:
+> selftests/livepatch: fix resource leak in test_klp_syscall init error path
 > 
->   https://github.com/alban/tests/tree/alban_pvm_flags/pvm_flags/pidfd_thread_test
+> This commit attempts to fix a resource leak in livepatch_init() by calling
+> kobject_put() on the error path if klp_enable_patch() fails.
 > 
-> Results summary:
+> > --- a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> > +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> [ ... ]
+> > @@ -98,7 +98,11 @@ static int livepatch_init(void)
+> >  	 */
+> >  	npids = npids_pending;
+> >  
+> > -	return klp_enable_patch(&patch);
+> > +	ret = klp_enable_patch(&patch);
+> > +	if (ret)
+> > +		kobject_put(klp_kobj);
 > 
->   All threads alive:
->     pidfd_open(pid, 0)              + process_vm_readv: OK
->     pidfd_open(tid, PIDFD_THREAD)   + process_vm_readv: OK (leader tid)
->     pidfd_open(tid, PIDFD_THREAD)   + process_vm_readv: ESRCH (non-leader)
+> [Severity: High]
+> This isn't a bug introduced by this patch, but it replicates a pre-existing
+> issue into the error path.
 > 
->   Leader thread exited (secondary still alive):
->     pidfd_open(pid, 0)              + process_vm_readv: ESRCH
->     pidfd_open(pid, PIDFD_THREAD)   + process_vm_readv: ESRCH
->     pidfd_open(tid, PIDFD_THREAD)   + process_vm_readv: ESRCH (non-leader)
->     process_vm_readv(tid, flags=0)                    : OK (plain TID path)
-> 
->   process_madvise() behaves identically in all cases above.
-> 
-> For the non-leader thread case when all threads are alive, this is fine in
-> practice: all threads share the same mm_struct, so profilers just use a regular
-> pidfd for the thread-group leader.
+> Does relying exclusively on kobject_put() here create a use-after-free window
+> during module unload?
 
-This was an intentional limitation back then because pidfds only came in
-thread-group flavor. I only added subthread pidfds much later.
-pidfd_get_task() should drop the flags argument btw. I think that's
-unused.
+Sigh, I always get lost when looking at kobject-related API.
 
-> However, the exited-leader case is a real limitation for profilers.
-> OpenTelemetry eBPF Profiler wants to profile a process where the main thread
-> has exited but secondary threads are still running [2].
-> [2] https://github.com/open-telemetry/opentelemetry-ebpf-profiler/pull/376
+> If CONFIG_DEBUG_KOBJECT_RELEASE is enabled, kobject_put() drops the refcount
+> but schedules kobject_cleanup() (and thus sysfs_remove_dir()) to run
+> asynchronously via a workqueue after a 1 to 4 second delay. Because klp_attr
+> and its show callback are allocated in the module's memory, returning an error
+> here causes the module loader to free that memory immediately.
+>
+> During this delay, the sysfs file remains fully accessible. If a user reads
+> this file, would sysfs_kf_seq_show() dereference the attribute and callback
+> that now point to unmapped module memory?
 
-If the thread-group leader exists before all of it's subthreads exit
-then this is a broken program - even if it is a legal state. The
-thread-group leader cannot be reaped while there are live subthreads and
-it also means that any subthread exec "resurrects" the thread-group
-leader struct pid. So that's going to make for fun profiling...
+This sounds correct.
 
-> Using plain TIDs (flags=0) would work, but it means users cannot use
-> PROCESS_VM_PIDFD in this scenario.
+> Should kobject_del(klp_kobj) be called prior to kobject_put() to
+> synchronously remove the sysfs entries?
+
+I am not sure if this would be a complete solution. I do not see
+anywhere that kobject_del() would be synchronous. I think that
+the file still might stay opened.
+
+> > +
+> > +	return ret;
+> >  }
+> >  
+> >  static void livepatch_exit(void)
+> >  {
+> >  	kobject_put(klp_kobj);
+> >  }
 > 
-> What do you think this patch should do? I see two options:
->  - Address this limitation in a separate future patch that fixes
->    pidfd_get_task() to use PIDTYPE_PID when PIDFD_THREAD is detected in
->    f_flags, benefiting all callers (process_vm_readv, process_madvise,
->    and any future users).
+> [Severity: High]
+> This is a pre-existing issue, but the exact same vulnerability exists here in
+> the unmodified module exit path where kobject_put() is the only cleanup
+> mechanism before the module unloads.
+> 
+> Could we also add kobject_del(klp_kobj) before kobject_put() in
+> livepatch_exit() to ensure sysfs entries are synchronously removed before
+> module memory is freed?
 
-As long as all users of the interface are fine with operating on
-subthreads this should be perfectly fine.
+I would ignore this. The same code (just kobject_put()) is used in
+samples/kobject/kobject-example.c which is supposed to show how
+the API should be used.
 
+It is just a test module. The interface is used only by the selftest.
+
+I believe that this is a problem of the kobject API and should
+be fixed there.
+
+Best Regards,
+Petr
