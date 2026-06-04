@@ -1,184 +1,169 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D8B477993;
-	Thu,  4 Jun 2026 14:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6643747F2E0
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jun 2026 14:40:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780583329; cv=none; b=FMxW+jgfRJjMfUfEMnlaw8J95r0/GHO31XA5V4jOWqY9wQC6Trfsy5alw+mKmaH6peHEepe8tgDb3GTA5jsAKQ4D8FJL3QE0+dbvCxNLWOOTutCG+7QQhfgFF7okgAvml+5x8lt2wCgmt3Y4die06x5Xe84miGQnlYVYRAk+LfE=
+	t=1780584031; cv=none; b=UvahCxxdQDh6DvRkSxixIpkj2f9KWx4hqg+Q6Rknhe0STL6aBWXPQH++nkEKCDGW4bwJB4DsAcoAUR5K9swjhg1B91BPdaiQgC6z38tp4+Yf5SSxoUM+LKQUVqI3+Y6+hrXbh4Lish97cPEKSo+reNDCnXnLuOiZQkGzyFyyWk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780583329; c=relaxed/simple;
-	bh=U5PHaW/NPKVl54JXFI9c/aoJqwYVm3tj9fpkxNb2Dd8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=my1k2UBldksO4wKbG2Ue7pUnsN+5MjDaHe4tFrDrZsQMzo5l3XYqeIoU4HSk+cnqVDefm+gnJDaxzsayzFJ2TMwcOHgkNBOZacdA2u5AXgtuaBeXwtVzCjLKBgQh1DO3GLawz6skk4kfCwXNKEXhHGqFdjyYiKWYIAkV64hMWyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WjW1oxJg; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1780584031; c=relaxed/simple;
+	bh=BNAZwQZJVY9OVUoe4dSoMQ8Na1rDaA1pcoJwNW+cpgc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oSGPUfit+rBFuE0Ng4BV5Gr+Fy/rZwzhtgQswfUKP4r+XtsyXQi5YnT22/M/Gm9+xtDalSl/DdbycSWEB97877uJV57G7RYbLH43ACJawLg3OBTcRrqGVQqMrR/e3ynmoTkI32KjDMMZPQ9lpIodpTMC00n5nesI4R3G+m7Z4ZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oyg/doQr; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WjW1oxJg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=SS
-	qjx2KGowuc/Phvlx0zInzCGKJ5fZ8xC0eJIquVxlE=; b=WjW1oxJg3qXYn0dab/
-	EsS3+OcV3Kn2jwXw92iHAp+rDDty3aMEppM2T1NHuC7m6Y4pvJIDhpf4KEIm+t8Q
-	f5AKnrnF0UK9upYo3SZS4olruJ62cXhux94XH5pKikjebe0QutCVYAAkcH6M6X5M
-	hqKpLNPOnRMlBhDq/YUcQUCxw=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp1 (Coremail) with SMTP id PCgvCgC3VJAIiyFqSKmLAQ--.50067S4;
-	Thu, 04 Jun 2026 22:26:22 +0800 (CST)
-From: Jinyu Tang <tjytimi@163.com>
-To: Anup Patel <anup@brainfault.org>,
-	Anup Patel <apatel@ventanamicro.com>,
-	Paolo Bonzini <pbonzini@redhat.com>
-Cc: Atish Patra <atish.patra@linux.dev>,
-	Paul Walmsley <pjw@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Shuah Khan <shuah@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	=?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <radim.krcmar@oss.qualcomm.com>,
-	Andrew Jones <andrew.jones@oss.qualcomm.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Yong-Xuan Wang <yongxuan.wang@sifive.com>,
-	Nutty Liu <nutty.liu@hotmail.com>,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Jinyu Tang <tjytimi@163.com>
-Subject: [PATCH v2 2/2] KVM: selftests: Add a hugetlb memslot alignment test mode
-Date: Thu,  4 Jun 2026 22:26:02 +0800
-Message-ID: <20260604142602.3582602-3-tjytimi@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260604142602.3582602-1-tjytimi@163.com>
-References: <20260604142602.3582602-1-tjytimi@163.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oyg/doQr"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-490bb83a3f6so7075725e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 07:40:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780584029; x=1781188829; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fI2w0aqx0Zo0yYOa6RcVEd5ybeR8jkTynJbnMtMyXk8=;
+        b=oyg/doQrRHZT67YT7CexGuDslI02/YXBOBFdL6lrvRsDUpccv+djRS59rhnfw7eosM
+         hapamsbznZC1T3VqmSjeYJpRCH7Fc7W/H6ltl91gJb8QdG8LmMXqafWLnqq2f0QbpXe4
+         9NSuEe97BiEhDu30qSRIK/IeEO/QvM3v3ADYLJEY3ePrjvErTxfGVsFEkTWWga7jPAsp
+         xauJ7nNChbD8oppIsfLCv0PLid8kzy178KG6kLHnKKVcYe58JjSjoYw4hX6j+iruMw4k
+         IZa7aV+3yAOMQTLD6qTufY6nSQ5SD6rlFRJH27Uh3TBxHN4qmxuhwtb7wDeu0qwxwzOZ
+         968g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780584029; x=1781188829;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fI2w0aqx0Zo0yYOa6RcVEd5ybeR8jkTynJbnMtMyXk8=;
+        b=IZ70wlTg58TVMFtX5LpVBhvL2UTTc8tLw/MANGliUUSz+dH0TMgN8Mdue7p7gbOV7D
+         hYzMpuovBOYdgOaF7j4Not16SS7NWyuJP9AY/5a5BxfkzvCn+A76s41jDwnXhIc+duWb
+         atCW65nYAcxnTClDWS1RhVL6WMdq4afzGQ4DxwACEtyoJo6t3JAe+wFrpnY/jTzVvkw3
+         /QSMlWfI344U4kbTGVl7BvIC+nZC2M000T2fFP5gYRE97ZwzFqA1pI9d4G1Ih8FzRTTU
+         7x3cVhGXbBRo/C9jYWUg2OEJM+sN/fRBOl7kBAoZg94CKnifss8xURGEXOT/k0kceR/I
+         NwVA==
+X-Forwarded-Encrypted: i=1; AFNElJ+zyf/nyE2TFi8i4jxR+LjCpdore/MdpvC+wDkLlO91oUvElPixrTkXWOYRZZg6ZmaplRp5hmlpR2W8upyL1EM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyfqm5mgn5eZZl0Un2XDOSNEiWYgFwunHx9YM5Z9XjQOrlkNsWi
+	HyOnUuakHMIi5UTYwWiBy9jD8FWUlvFXBSnLvSMkSfxiKCGcUraOVZVu3fiCU4IEK5c=
+X-Gm-Gg: Acq92OE7XN0lhHdsmPzJ6KI/Vlm7xexgUFAXafrHvxqMg34bzjKMSddQoQEX9mGnEGa
+	0L80gRvSzldgyIRLdA1YnyzmZW5dsshPRLclelEsNmo5LOFPk+3MUqm+PWNIqyochcc4Fhn56cK
+	X2GdqUpOKkgmFEYOcWImgoWZO816iS8gWxg2Z+oHLmVHggHrLziir1wkjqLjxuI8Sit22DDRwU7
+	Z3XuzVOV3Qc5f4kVPGxTmkqWobuqh3dtj1HZVGS5FC2kmqTKgP6gGt9/uxegzBMUocQdi+BtbQt
+	Dy5vy1TqZx0BR4Aoio75qdh62poTsv5HD3+ctTgD66ul91KYte/NCqGM5xbXp6sT2pw2kdH2Mer
+	ftxqCW6GWZ+/gZEpSCdeZZvFuLLfUW2yARZ2mSZcAz9uskZ3Wb6xvN28BhqL+N6bnEd2LnQeL35
+	oyDyryFgJtKYzjsWFzJfbafW1vGkVzQ4vwfLvJU3jZTSoHzv6MDcPImQTY4QjPFn+XQujeFmsgB
+	d5cAO/hMx38jfURjcd/2w==
+X-Received: by 2002:a05:600c:6288:b0:488:aa33:dcbd with SMTP id 5b1f17b1804b1-490b5fdb17amr136963255e9.26.1780584028536;
+        Thu, 04 Jun 2026 07:40:28 -0700 (PDT)
+Received: from ?IPV6:2a02:8109:a307:d900:9c30:fc5f:5bdd:2e3f? ([2a02:8109:a307:d900:9c30:fc5f:5bdd:2e3f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490be1f69bcsm57131815e9.8.2026.06.04.07.40.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Jun 2026 07:40:28 -0700 (PDT)
+Message-ID: <a1561e36-08dc-4ad1-848b-88974f529d10@gmail.com>
+Date: Thu, 4 Jun 2026 15:40:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PCgvCgC3VJAIiyFqSKmLAQ--.50067S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCF15Kw47tr45JFWxuw4rKrg_yoWrZr4kpF
-	Z5AFn8KFsrJrWfXF4xGw1vkr1Sy3ykGrW0kryYg3yj93y2y3WIvF4xC3W7ZF93CrZ3Zr9a
-	va15tF17Wa4DJF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziyrWrUUUUU=
-X-CM-SenderInfo: xwm13xlpl6il2tof0z/xtbC8Q7IQWohiw5ZvgAA3f
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 3/3] libbpf: fix feature probe failures for
+ implicit BPF tokens
+To: chenyuan_fl@163.com
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+ chenyuan@kylinos.cn, daniel@iogearbox.net, eddyz87@gmail.com,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org
+References: <20260529031604.888137-1-chenyuan_fl@163.com>
+ <20260604031033.806727-1-chenyuan_fl@163.com>
+ <20260604031033.806727-4-chenyuan_fl@163.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260604031033.806727-4-chenyuan_fl@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-kvm_page_table_test can already exercise hugetlb-backed guest memory,
-but it always creates the test memslot with GPA alignment matching the
-hugetlb backing size. That misses the case where a valid hugetlb
-memslot is later moved so that the memslot GPA and HVA no longer have
-the same offset within the backing huge page.
+On 6/4/26 4:10 AM, chenyuan_fl@163.com wrote:
+> From: Yuan Chen <chenyuan@kylinos.cn>
+> 
+> probe_fd() converts BPF syscall failures to return value 0,
+> which feat_supported() interprets as 'feature absent' (ret==0),
+> even when the probe failed due to a BPF token's restricted
+> program/map type mask.
+> 
+> In a user namespace with an implicit BPF token, the sequence is:
+>   1. bpf_object_open() -> no feat_cache yet -> global cache used
+>   2. bpf_object_prepare_token() -> creates token, sets feat_cache->token_fd
+>   3. bpf_object__create_maps() -> feat_supported() runs probe
+>      -> bpf_prog_load(SOCKET_FILTER) with token -> -EPERM
+>      -> probe_fd(-EPERM) -> returns 0
+>      -> feat_supported sees ret==0 -> FEAT_MISSING
+>      -> internal maps (global data) skipped -> verifier EINVAL
+> 
+> Fix by making probe_fd() return the negative error on failure
+> instead of 0, so feat_supported() enters the ret<0 path.
+> 
+> Additionally add a token_fd rescue in feat_supported() for the
+> ret<0 case: when a BPF token is present, a failed feature probe
+> is treated as 'feature supported' because token creation itself
+> proves the kernel BPF subsystem works.  Real BPF issues will
+> be caught during actual program/map loading.
+> 
+> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+> ---
 
-Add a -u option that moves the test memslot GPA by one guest page after
-creating the hugetlb memslot. The memslot is created through the normal
-helper first, so the backing allocation remains valid and hugetlb aligned.
-Moving the memslot then creates a deliberate HVA/GPA offset mismatch
-before the guest mapping is installed.
+It looks wrong to say that any feature is supported just because there is
+token_fd present. In patch 1 we only checked that BPF is available, so
+it was ok skipping probing. This one looks a bit more risky.
+Is the reason this code fails because of BPF_PROG_TYPE_SOCKET_FILTER not enabled
+in the token? I suggest fetch the first supported program type from the token and
+pass it down to bpf_prog_load().
 
-This mode is useful for checking that architecture MMUs do not install
-a block mapping when the block would map the wrong host pages or cover
-memory outside the memslot. The option is restricted to hugetlb-backed
-test memory because it's specifically about hugetlb block mapping 
-eligibility.
-
-Signed-off-by: Jinyu Tang <tjytimi@163.com>
----
-v1 -> v2:
-  - Keep the selftest change unchanged from v1
-
- .../selftests/kvm/kvm_page_table_test.c       | 28 +++++++++++++++----
- 1 file changed, 22 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/kvm_page_table_test.c b/tools/testing/selftests/kvm/kvm_page_table_test.c
-index fc5242fb9..a910e3abb 100644
---- a/tools/testing/selftests/kvm/kvm_page_table_test.c
-+++ b/tools/testing/selftests/kvm/kvm_page_table_test.c
-@@ -230,6 +230,7 @@ struct test_params {
- 	u64 phys_offset;
- 	u64 test_mem_size;
- 	enum vm_mem_backing_src_type src_type;
-+	bool misalign_slot_gpa;
- };
- 
- static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
-@@ -244,6 +245,7 @@ static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
- 	u64 guest_num_pages;
- 	u64 alignment;
- 	void *host_test_mem;
-+	struct userspace_mem_region *region;
- 	struct kvm_vm *vm;
- 
- 	/* Align up the test memory size */
-@@ -276,13 +278,22 @@ static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
- 	/* Add an extra memory slot with specified backing src type */
- 	vm_userspace_mem_region_add(vm, src_type, guest_test_phys_mem,
- 				    TEST_MEM_SLOT_INDEX, guest_num_pages, 0);
-+	region = memslot2region(vm, TEST_MEM_SLOT_INDEX);
-+	host_test_mem = region->host_mem;
-+
-+	if (p->misalign_slot_gpa) {
-+		TEST_ASSERT(is_backing_src_hugetlb(src_type),
-+			    "Memslot GPA misalignment requires hugetlb backing");
-+		TEST_ASSERT(guest_num_pages > 1,
-+			    "Need at least two guest pages to misalign memslot GPA");
-+
-+		guest_test_phys_mem += guest_page_size;
-+		vm_mem_region_move(vm, TEST_MEM_SLOT_INDEX, guest_test_phys_mem);
-+	}
- 
- 	/* Do mapping(GVA->GPA) for the testing memory slot */
- 	virt_map(vm, guest_test_virt_mem, guest_test_phys_mem, guest_num_pages);
- 
--	/* Cache the HVA pointer of the region */
--	host_test_mem = addr_gpa2hva(vm, (gpa_t)guest_test_phys_mem);
--
- 	/* Export shared structure test_args to guest */
- 	sync_global_to_guest(vm, test_args);
- 
-@@ -417,8 +428,8 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- static void help(char *name)
- {
- 	puts("");
--	printf("usage: %s [-h] [-p offset] [-m mode] "
--	       "[-b mem-size] [-v vcpus] [-s mem-type]\n", name);
-+	printf("usage: %s [-h] [-p offset] [-m mode] [-b mem-size]\n", name);
-+	printf("          [-v vcpus] [-s mem-type] [-u]\n");
- 	puts("");
- 	printf(" -p: specify guest physical test memory offset\n"
- 	       "     Warning: a low offset can conflict with the loaded test code.\n");
-@@ -428,6 +439,8 @@ static void help(char *name)
- 	printf(" -v: specify the number of vCPUs to run\n"
- 	       "     (default: 1)\n");
- 	backing_src_help("-s");
-+	printf(" -u: move the test memslot GPA by one guest page after creating\n"
-+	       "     the memslot, forcing a hugetlb HVA/GPA offset mismatch\n");
- 	puts("");
- }
- 
-@@ -442,7 +455,7 @@ int main(int argc, char *argv[])
- 
- 	guest_modes_append_default();
- 
--	while ((opt = getopt(argc, argv, "hp:m:b:v:s:")) != -1) {
-+	while ((opt = getopt(argc, argv, "hp:m:b:v:s:u")) != -1) {
- 		switch (opt) {
- 		case 'p':
- 			p.phys_offset = strtoull(optarg, NULL, 0);
-@@ -461,6 +474,9 @@ int main(int argc, char *argv[])
- 		case 's':
- 			p.src_type = parse_backing_src_type(optarg);
- 			break;
-+		case 'u':
-+			p.misalign_slot_gpa = true;
-+			break;
- 		case 'h':
- 		default:
- 			help(argv[0]);
--- 
-2.43.0
+>  tools/lib/bpf/features.c | 23 +++++++++++++++++++++--
+>  1 file changed, 21 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> index b7e388f99d0b..f934452e52f0 100644
+> --- a/tools/lib/bpf/features.c
+> +++ b/tools/lib/bpf/features.c
+> @@ -16,7 +16,14 @@ int probe_fd(int fd)
+>  {
+>  	if (fd >= 0)
+>  		close(fd);
+> -	return fd >= 0;
+> +	/* Return 1 on success, negative error on failure, so
+> +	 * feat_supported() can distinguish probe errors from
+> +	 * genuine feature absence.  When a BPF token is present,
+> +	 * a negative return triggers the rescue path that marks
+> +	 * the feature as SUPPORTED (token creation itself proves
+> +	 * the kernel BPF subsystem works).
+> +	 */
+> +	return fd >= 0 ? 1 : fd;
+>  }
+>  
+>  static int probe_kern_prog_name(int token_fd)
+> @@ -725,9 +732,21 @@ bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_id feat_
+>  		} else if (ret == 0) {
+>  			WRITE_ONCE(cache->res[feat_id], FEAT_MISSING);
+>  		} else {
+> +			/*
+> +			 * A BPF token may restrict which program/map types
+> +			 * are permitted, causing the probe to fail even
+> +			 * though the kernel supports the feature.  When a
+> +			 * token is present the probe is best-effort: BPF
+> +			 * token creation itself proves the kernel has a
+> +			 * working BPF subsystem.  Real BPF issues will be
+> +			 * caught during actual program/map loading.
+> +			 */
+> +			if (cache->token_fd)
+> +				WRITE_ONCE(cache->res[feat_id], FEAT_SUPPORTED);
+> +			else
+> +				WRITE_ONCE(cache->res[feat_id], FEAT_MISSING);
+>  			pr_warn("Detection of kernel %s support failed: %s\n",
+>  				feat->desc, errstr(ret));
+> -			WRITE_ONCE(cache->res[feat_id], FEAT_MISSING);
+>  		}
+>  	}
+>  
 
