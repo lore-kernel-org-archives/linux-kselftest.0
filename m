@@ -1,103 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A8F71B4224;
-	Thu,  4 Jun 2026 02:10:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E51355F41;
+	Thu,  4 Jun 2026 02:24:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780539026; cv=none; b=ICogqLVXXWLx2nIwCMHxZI01k33GIzOH27OS5swymTvq9dXIthiiJDYVz0QeA6iYyOYfN5NpLVz9JLtvfzEiTYDjxsshRsm4yqt2Fdr/OIidRowmWlrwE0Vq0udJuCcpmikZMPpRW89Ky6ICRrpmQrTL3lqzduMo8yvzX0cyvjw=
+	t=1780539896; cv=none; b=dp+J2fj5yEGtP7FPsJ3SPAvFGtWJJjU/wkxHP/mvZJnSUYzpcTEOoSAxR4TAgLddfcAtvIXjzpIaRbPle9AV97tYSPjnWxWJc0wJl0flKmSwGk1GMR31d6x/Okp9Tler8FgrMja0Hb1fGH56kB1Kro3QMOC8uicvrIQYU3sKGfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780539026; c=relaxed/simple;
-	bh=4DLDconD/2DGw3LHooyZ8PUWvQ0OAuqVemZ6dg8/ag0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=eOtL8M5pZRY6v6VcwQeomJUJeyMCJ7b/Atxfmk2bZSW7y7YdzIeLMklMvw/Ck2W1hTCKyqRIIB1j6Rhh7O6q6SbjxA3hWmRjd416rVu/O1o8y3m3XmVZT1CtdU33W0ZMFD4AcTdDG0RxApq7slb1/Vy/9RaWNezoyYWQRsc+GQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HfpdbyGw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780539896; c=relaxed/simple;
+	bh=RyFo8FVfiw4cD67y4iwFAZgG/PJUKXkWPV92F9XCv1w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ko1p31SLXcjMNoBgYjWIIL2jsWrb8BYU7AjG0w7OPD626hEAnZk6AYQQVaT02e0Z/TQV2zG/2pTej5cZNDWb7B7URx+quW+kJvPeziPy1NyUakpQRqqkako4bkE2gfxURsA9uB8sPitDt3YWTVXhNVlK8TKuziz+LvvWqXHpRIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=csW7CxN2; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HfpdbyGw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32FA21F00893;
-	Thu,  4 Jun 2026 02:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780539025;
-	bh=pG79E8kqKE0hDvq0vf8BpvVSi3rFLjhO+VC4wu7V3go=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=HfpdbyGwKQokHbllafN4TwAung9wwtQg/MLIVNKYj1dsiFc635nQBUUEUpc3S6GdO
-	 qZiIiaxq2ld2N9V2rEPeQTnnw+h8VKeiKzLhC8PfT43z6LtdwLMI/tqs9IJaEeclWb
-	 N78Sy7RYvjRmtZO+NZiIMVugT4r8hXrC1q4UchdMdcakdBr5l3ixtvk5mSEHeXKngb
-	 H/+isGn7crOt3eEew153jeehsS+OLZgq08RnP3r8YKVofAEyCbvRm2ZI+MsiipQ2JE
-	 WIOyeFnINnfMdtjwBybvGmfovc9MTbds6DRMA8l50wbveSXBCozUdsxHHphqeVQQL5
-	 us2Me+wcG0U4A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93AC839308E0;
-	Thu,  4 Jun 2026 02:10:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="csW7CxN2"
+Message-ID: <9fb5840e-fb05-4c9c-b6d6-73455a30e244@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780539893;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b3OgiHd02I6U6/2i2gVEQh386Qg32wCGlwxwgJcoS+8=;
+	b=csW7CxN2OS37uYJn4UgGEtQF0Vr6XCRDO3aKGKbBDjzA/XaBsPBFzkaJpzegLFIgaQX3BP
+	Z4NUuY5i+bAtKB3kgoxHx40zLZo8FwQzzCFiST58ikNufkXqPdM9eCT9ZXRgX6zIh2zG0p
+	qpdwn0H0veOwhITdfJlkB9nQgcmW9/E=
+Date: Thu, 4 Jun 2026 10:24:40 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 00/11] mptcp: misc fixes for v7.1-rc7
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178053902614.2204548.2424372511848234047.git-patchwork-notify@kernel.org>
-Date: Thu, 04 Jun 2026 02:10:26 +0000
-References: 
- <20260602-net-mptcp-misc-fixes-7-1-rc7-v2-0-856831229976@kernel.org>
-In-Reply-To: 
- <20260602-net-mptcp-misc-fixes-7-1-rc7-v2-0-856831229976@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- fw@strlen.de, netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- stable@vger.kernel.org, cuitao@kylinos.cn, shuah@kernel.org,
- willemdebruijn.kernel@gmail.com, yangang@kylinos.cn,
- syzbot+ff020673c5e3d94d9478@syzkaller.appspotmail.com
+Subject: Re: [PATCH bpf-next 2/3] bpf: Check tail zero of bpf_prog_info
+Content-Language: en-US
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, shuah@kernel.org, yuyanghuang@google.com,
+ kpsingh@kernel.org, sdf@fomichev.me, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com,
+ martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260603144518.67065-3-leon.hwang@linux.dev>
+ <d4a64c5dffb0ebedc7460a21a52f2d94af931fda6c21d039bd71327a4cf79fce@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <d4a64c5dffb0ebedc7460a21a52f2d94af931fda6c21d039bd71327a4cf79fce@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 02 Jun 2026 22:14:07 +1000 you wrote:
-> Here are various unrelated fixes:
+On 3/6/26 23:37, bot+bpf-ci@kernel.org wrote:
+>> Fix it by changing sizeof(info) to
+>> offsetofend(struct bpf_prog_info, attach_btf_id).
+>>
+>> Fixes: b79c9fc9551b ("bpf: implement BPF_PROG_QUERY for BPF_LSM_CGROUP")
 > 
-> - Patch 1: fix missing wakeups when multiple threads are reading from
->   the same fd. A fix for v5.7.
+> Is this the right commit for the Fixes: tag?
 > 
-> - Patch 2: fix retransmission loop when MPTCP checksum is enabled. A fix
->   for v5.14.
+> The change avoids the trailing padding that exists because struct
+> bpf_prog_info has 4 bytes of padding at its end, so sizeof(info) (232)
+> differs from offsetofend(struct bpf_prog_info, attach_btf_id) (228).
 > 
-> [...]
+> That trailing padding first appeared when __u32 verified_insns was
+> appended after the last __u64 member (recursion_misses).  Before that,
+> the struct ended on an 8-byte-aligned member and had no trailing
+> padding.
+> 
+> b79c9fc9551b only appended two further __u32 fields (attach_btf_obj_id,
+> attach_btf_id), while the 4-byte trailing padding already existed and
+> was unchanged.
+> 
+> Would this be more accurate?
+> 
+>   Fixes: aba64c7da983 ("bpf: Add verified_insns to bpf_prog_info and fdinfo")
+> 
+> 
+Agreed.
 
-Here is the summary with links:
-  - [net,v2,01/11] mptcp: fix missing wakeups in edge scenarios
-    https://git.kernel.org/netdev/net/c/9d8d28738f24
-  - [net,v2,02/11] mptcp: fix retransmission loop when csum is enabled
-    https://git.kernel.org/netdev/net/c/d1918b36edca
-  - [net,v2,03/11] mptcp: close TOCTOU race while computing rcv_wnd
-    https://git.kernel.org/netdev/net/c/8ab24fdebc36
-  - [net,v2,04/11] mptcp: allow subflow rcv wnd to shrink
-    https://git.kernel.org/netdev/net/c/da23be77e129
-  - [net,v2,05/11] mptcp: pm: fix extra_subflows underflow on userspace PM subflow creation
-    https://git.kernel.org/netdev/net/c/14e9fea30b68
-  - [net,v2,06/11] selftests: mptcp: add test for extra_subflows underflow on userspace PM
-    https://git.kernel.org/netdev/net/c/06fd2bec7aeb
-  - [net,v2,07/11] mptcp: sockopt: check timestamping ret value
-    https://git.kernel.org/netdev/net/c/57132affbc89
-  - [net,v2,08/11] mptcp: sockopt: set sockopt on all subflows
-    https://git.kernel.org/netdev/net/c/7690137e70ab
-  - [net,v2,09/11] mptcp: check desc->count in read_sock
-    https://git.kernel.org/netdev/net/c/c378b1a6f8dd
-  - [net,v2,10/11] mptcp: fix uninit-value in mptcp_established_options
-    https://git.kernel.org/netdev/net/c/5e939544f9d2
-  - [net,v2,11/11] mptcp: add-addr: always drop other suboptions
-    https://git.kernel.org/netdev/net/c/bd34fa025726
+Will update the Fixes tag in the next revision.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Thanks,
+Leon
 
