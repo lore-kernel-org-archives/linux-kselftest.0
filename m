@@ -1,85 +1,89 @@
-Received: from us.padl.com (us.padl.com [216.154.215.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9393C09EA;
-	Thu,  4 Jun 2026 05:39:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.154.215.154
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27CAB35028C;
+	Thu,  4 Jun 2026 05:53:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780551597; cv=none; b=D/U7XP6Ofqgpi8nkGxOUCue+x0mFqCvBC84IRKDpgcO9482yUttoWkEpT1Yx+StHKPRK9hjSfVOJJUga9v8zJqInuvPbP4rCRMQKK1miqsjXc8+Lbx+NDgDB/jZJXLL/U4fNW1PRngmaCL14lTgzpl6ZasiZdxbY/4NJBgX3roA=
+	t=1780552408; cv=none; b=pqLWx2xJjpVrATHjIb/N0ekPKNJpw3C4lAJ+RYNRl2RUrfCHur808ttU9fsaDtszDVm/S8U2THlTbqOlbqRHZmfscSReH8Zy2gJioXvgyflzB0GFnmx8o/C7RMgN3V6XcawT1NdQL6MFYdsvROM3nxa/WTvz6r31wySTUD4RzSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780551597; c=relaxed/simple;
-	bh=/71IDNAYlaYhMk27O2rluNJgQT68JB+md99aDpuFqFw=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=YvBx2pRKDhaZUcQkpD7M6vfUPlEgH5ypeGB48MtAKcrf+HkRM144rT3b1o06SZ9c0qEdqX15RtubXnPAUOyyAhsJdBIcSw8xHDff84AgtuUlRfY/vO3daylk7Lt5RqP48tij3963D4s5Ox6OGrpzieEBZthu+4PPxZjQ0YfHwn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=padl.com; spf=pass smtp.mailfrom=padl.com; arc=none smtp.client-ip=216.154.215.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=padl.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=padl.com
-Received: from smtpclient.apple (border.lukktone.com [139.130.100.52])
-	by us.padl.com (Postfix) with ESMTPSA id 7471B60058;
-	Thu,  4 Jun 2026 01:39:38 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 us.padl.com 7471B60058
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1780552408; c=relaxed/simple;
+	bh=EEYF8O7AEUhjF+sbv704hFcrFcRtIyD5CazH5tKQkzY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Fz4G/vJBCj26JbKZYQr+f8NgjTtk8SZyp0Gndm+WEZrGm+M/TrdBe6xU057FW4esKUKGJJ/tL2TrwoisB+vljBURD1JHtFKHEQ6QAUZ7RaZOpBhsCQCIOYy/p3IMw55mf4Mo18ikiehGAKSSQCncn8gQwIA1TCMq528M+BnGHlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=D1a37+sI; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="D1a37+sI"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D59DD302F;
+	Wed,  3 Jun 2026 22:53:18 -0700 (PDT)
+Received: from cesw-amp-gbt-1s-m12830-01.blr.arm.com (cesw-amp-gbt-1s-m12830-01.blr.arm.com [10.164.195.31])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3FB453F632;
+	Wed,  3 Jun 2026 22:53:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1780552403; bh=EEYF8O7AEUhjF+sbv704hFcrFcRtIyD5CazH5tKQkzY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=D1a37+sIbot7rEMsl+X7Bzskf3G5TgA/GAw/D7RevEV0fp8qxIkJ2B/uhYSoMm5ar
+	 aDtSYl6v07F611Ilnq4KyRnscxl0KPU8m7l2eHqyeEFZH/SeT/Hx7H6mM8GFLlrNnO
+	 Hu1p38L1w2w5Hzzx4Ptv6FeP2BFRzlCEmJq9P+bQ=
+From: Dev Jain <dev.jain@arm.com>
+To: akpm@linux-foundation.org,
+	liam@infradead.org,
+	ljs@kernel.org,
+	jgg@ziepe.ca,
+	leon@kernel.org,
+	david@kernel.org,
+	shuah@kernel.org
+Cc: Dev Jain <dev.jain@arm.com>,
+	vbabka@kernel.org,
+	jannh@google.com,
+	pfalcato@suse.de,
+	balbirs@nvidia.com,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	linux-kselftest@vger.kernel.org,
+	ryan.roberts@arm.com,
+	anshuman.khandual@arm.com,
+	usama.arif@linux.dev
+Subject: [PATCH v3 0/2] mm/hmm: A fix and a selftest
+Date: Thu,  4 Jun 2026 05:53:04 +0000
+Message-ID: <20260604055308.1947679-1-dev.jain@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH net-next v2 3/6] net: bridge: add 802.1Qat stream
- reservation admission control
-From: Luke Howard <lukeh@padl.com>
-In-Reply-To: <537410c3-ff4e-43fd-834e-775cd1bbe89e@blackwall.org>
-Date: Thu, 4 Jun 2026 15:39:25 +1000
-Cc: Jiri Pirko <jiri@resnulli.us>,
- Ivan Vecera <ivecera@redhat.com>,
- "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>,
- Ido Schimmel <idosch@nvidia.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>,
- David Ahern <dsahern@kernel.org>,
- Shuah Khan <shuah@kernel.org>,
- Andrew Lunn <andrew@lunn.ch>,
- Vladimir Oltean <olteanv@gmail.com>,
- netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- bridge@lists.linux.dev,
- linux-kselftest@vger.kernel.org,
- Max Hunter <max@huntershome.org>,
- Kieran Tyrrell <kieran@sienda.com>,
- Cedric Jehasse <cedric.jehasse@gmail.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <E1253C6D-F6F0-407A-AABF-FCAB57100A1C@padl.com>
-References: <20260602-mv88e6xxx-8021qat-mqprio-v2-0-72be14522e7c@padl.com>
- <20260602-mv88e6xxx-8021qat-mqprio-v2-3-72be14522e7c@padl.com>
- <537410c3-ff4e-43fd-834e-775cd1bbe89e@blackwall.org>
-To: Nikolay Aleksandrov <razor@blackwall.org>
-X-Mailer: Apple Mail (2.3826.700.81)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 3 Jun 2026, at 5:35=E2=80=AFpm, Nikolay Aleksandrov =
-<razor@blackwall.org> wrote:
-> So looking at how this is implemented, why not put most of it in TC?
-> It is testing for skb class, for tc qdisc, I don't see a reason for it
-> to be in the bridge at all. You can filter the mcast groups and =
-simulate
-> the "reserved" flag, it has to be set manually anyway. Adding new
-> tests in the bridge software fast-path just for this is a waste.
+Patch 1 fixes a stale warning present from the time when only migration
+softleaf entries were supported at the PMD level.
 
-This makes sense. Maybe it=E2=80=99s better to use flower+TCAM to =
-implement this, and have our SRP daemon manage flower entries in =
-addition to MDB entries. The mv88e6xxx driver=E2=80=99s TCAM support is =
-recent (hi Cedric!) and does not yet appear to support the 6352 or =
-matching on PCP/DA, but one presumes this is possible to add.
+Patch 2 adds some code into hmm-tests.c which exercises the pagemap path
+for PMD device-private entries.
 
-Alternatively, responding to your comments, the bridge could mark frames =
-with a =E2=80=9Cstream reserved=E2=80=9D DA with a new tc_skb_ext bit, =
-which would be surfaced to flower similarly to l2_miss. The rest of the =
-policy would live in the flower rule. MDB_FLAGS_STREAM_RESERVED would =
-remain but IFLA_BRPORT_FILTER_STREAM_RESERVED could go (we would =
-dynamically enable the equivalent in mv88e6xxx by refcounting =
-MDB_FLAGS_STREAM_RESERVED entries).
+---
+Applies on mm-unstable (d17fe8a046a2).
 
-Luke=
+v2->v3:
+ - Use MADV_COLLAPSE, use PAGEMAP_PRESENT
+
+v1->v2:
+ - Add test
+
+Dev Jain (2):
+  fs/proc/task_mmu: do not warn on seeing non-migration pmd entry
+  selftests/mm/hmm-tests: test pagemap reads of PMD device-private
+    entries
+
+ fs/proc/task_mmu.c                     |  1 -
+ tools/testing/selftests/mm/hmm-tests.c | 34 ++++++++++++++++++++++++--
+ 2 files changed, 32 insertions(+), 3 deletions(-)
+
+-- 
+2.43.0
+
