@@ -1,253 +1,184 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4F23B1EFD
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 02:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D1643D7D8D
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 03:32:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780626232; cv=none; b=c5IB1Q+J2Amg5YAknMOdUwqbuLv9eDDaA2oNy6ln7PbnWnIo/7DlLq91hjdByKpseV/CEd2zjmaE8sVraQsarIe7X1x3IijQhw7XNDk7LcTyv3q51f/iElh5iwzbt/abWenlYxvqL313hv/2d/BpHcgFdiugs31Oy1AVDNemums=
+	t=1780630361; cv=none; b=JmumDKHEsX3DOVIfHd2+t4UgP5BmGcrHf34ymtXbVRmBUZBTKj8iH+40iTcEJx4HHxk+N27+I7PjC4zKoKx48w72vSd5kujTl7k8vI7fVKFRfbD9Qpdt3Yp+32skdhcbpxg1CbM67tWx4NjoU+T7NhZ9dsev8sGasD4tmV4C41I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780626232; c=relaxed/simple;
-	bh=mxUasxguHI4I1J3VgO0bjGRfO1OqUmjNTobWTICeulw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZRfLTLlSrkBOl7V0oYQh+vR9CbODgcP6xMm5eLShNmFJY0xLHnDzNKDJF4cAuhbgxM7loTkiXbUbiOBiIVuWuwbhYJFdIIV0s0Rl5BXCBNyf1bCMnEY2P2ScW0kCYtiiIlUIYsJ0h8D9yTCmpkmC7lMBzzWXSUCi20VanmM+Ub0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o3t7w0G5; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780630361; c=relaxed/simple;
+	bh=1LwQcHct4xAgSyTlooLN5j+p8rVdMKhmicQCXkD6pPE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=AdDHPJy1RMk3vQtfTWzEwcUt1Ry1RVSm1yYEQaKyk3GyEc3N5HQR5kt+SRGEO12Mobd61PcaH1RV3GxCvjfmncgEGWrVa1DhWSThIXpdQnhX2L3h2yfSwnrxVvHfhz2GJQLgurMPkKnuBZ7LGlBtyqMaqe6v+BxgAxCI5FIbyuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=LeNBnUrs; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o3t7w0G5"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2c0c3546924so9323505ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 19:23:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="LeNBnUrs"
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-8ce65629acaso16375346d6.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 20:32:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780626225; x=1781231025; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=t5vi9iUbaYp47So/5b+Sc9Hq5gN5IzZ46oO7u2xtI8w=;
-        b=o3t7w0G5WqsaqW4kZn3tZtvcFrsw+vOODyAPuiWW9NkRPoNK88eIUroSsTV+TkxFhx
-         adsOqEJiEvFTjOOkVGN7S0j5idqTOf1z1C1ITXSuPE4aK55xZC/tDQ4sdyD1u+uryr8t
-         16+5/i4a1Im3gDCJlnTE8Ukm0tr3+zJ8If4FWrnA0X3oZLuvSJT3cqmc7ygRPzRZJPFK
-         oQsgN23Dbb2tPQFhcRxHk03Kfz5k7kIXIiXRJ9KwcUeizKSbdhkXsLyeUQPlU4Qza3KL
-         eJ7cSIWMKvOElVhB6+4I+8qdtSizXZOjlbBkwQNonBXQiPP9AOvwtWgTF9+at0y31e3J
-         2q0g==
+        d=soleen.com; s=google; t=1780630357; x=1781235157; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iv2aPKIPLb4egTBCESQqff8jQhyqWNFkX14M23BwCsY=;
+        b=LeNBnUrsteeGlCEQ7+0IUNgOD26ESmfuC7nDrdBgq/ZteMgFAq74hNaYynk+xiWYBY
+         xdCVH9mDvYQE1BrUQtJPxvbl9lrB/PGHEwyD0c8rPTIGYi60A5I/rf4zNO0XinVLSzN3
+         xpaSB/wRqi7IUTyjUaMtwjJTZvrV2xfR66VWnJkWi3/+UEF0mTFYhOjhzLuzjWtZZ8rz
+         70y3fJVrRPAZr7+nHqctewvtA1YY5N08ntA/UV6ZvQZ1nA7QxiGFlnR22x/pMhXVF1+U
+         8bDX/UULIu4Z3CL18iKZcAsv3k/kK3ADN5OS9Izm6VNpAiMziY2Ykja2scNv1f0Pa0Wc
+         ZOfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780626225; x=1781231025;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t5vi9iUbaYp47So/5b+Sc9Hq5gN5IzZ46oO7u2xtI8w=;
-        b=gWYjnrCrNZE2EPLcFF8C+XtDWMmL/P3H6Rt6SM8W40wguyLJH6uEe1S6oP4mpZQMA5
-         F1F44xAXsxFgMnFim9hzfGAoNwFAlLnobZU3oMMGTmm/n82YRdwidJVuzNeMayaMKGfz
-         /65DXySJtT/JyYQt5edV8D2byI3vem5tljcj0Ki0f8KxLxrTXVr2UToUaGKhDkGe/+4W
-         omAmH3jvxMQrl4tru/cuSF4eiLogakPiwqaOWa/AjfLZJSHSVF9/W32RykNOhwghBrKG
-         6RxNXjGwxSocrXzgRxnrtCWboeeQj5PuafmRxCzOJ36yO/HOlQyU1JpUZvVErpd2obpZ
-         i4JQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8Q1QzuxCbKK9erANpQzFmsB13HOOFniC0MJyXza0biNhh3sKl3ngvDYeEuf06AtMJ7ek5aqeTMnED1tOcrzIo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZNSt4Lbkn6oi7kE/MDGGR5xShBUWNIerrnPtGI5vF2zSvGzBo
-	7upRFfPloZIoWlFp60YsQxKt9U04mFNGUprqfbRkzHooB38CU+8yvqYx
-X-Gm-Gg: Acq92OHoIslChdm5fndaJK0rxJ0TZeAXbsteAMvnDk/3lV39JaCVO1mNiLvWpEByloB
-	xBrfjpKWCN8yfuqI2kXj+9nlnKbuKA5yiLSo1NdpM+wg8NKHnB7QjIME8H9wTL1SbfLzIY9zFVy
-	219j1iWaE4JnTEZcwNLfqARofzwhZxco74s02zcdriZq193LtSiPO0uXv6P2V5ruE2nOoPDKbJW
-	X+ts4SY5oJVTnKLuIvrc8M64f3XXIzuq21wMZjOMP44Ymd21q9huGzcdCYq2mC35pPkl/9ylEpv
-	cC59HKm2B7HyY9sdYLt3vQJls/eFy8JqD+DYLwm0+xLwvQXNgBGre1dm8u0PiaKXd1HN1Uut9RA
-	632cT55pv7xgpMaeymVoN3Gp2rIK8IGcEfJap+aMCM04CIxxhaArNdkbwUeitRgmaSPTcZk7EGy
-	8A1H/f2z+cNM/8C5YYYHlFG61aI6BCWI+WPwVAE4H/Pwol6jwejiA/mlEOTR0Ekg==
-X-Received: by 2002:a17:903:2ac3:b0:2c0:b932:866e with SMTP id d9443c01a7336-2c1e8934f70mr12295925ad.27.1780626225420;
-        Thu, 04 Jun 2026 19:23:45 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f6e2adsm79171785ad.5.2026.06.04.19.23.44
+        d=1e100.net; s=20251104; t=1780630357; x=1781235157;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iv2aPKIPLb4egTBCESQqff8jQhyqWNFkX14M23BwCsY=;
+        b=K+V/b4X5nDw67997SqyG/54fd4B9IA6XzajLU07Vc/XOoWZp3X+G2tbYuLV8DUl42x
+         alZvx6bzmAc/ywBlvOGwcJS8hiVQuzfdYlZGHcPMmlLc1wgjNCL8jbNn7KHf6oA96zL/
+         BJ46xtlW0SuO3wjzmsC70sFpy7iGJzR6s6GoYGsArjHokxg1eEsIrrgc+7u+CdeDDLYI
+         2M7S2FV1k0aPXiFeyVih4wkHmLhkePdBAtxTAvgJ299wcKRZbTkKG8L95YzhAYA6GVMk
+         3yA50eTNsZU5x77/dk/QJnbOYMLTiBLL8T6r91V5erxhmLMAHZIXZ4yVLFJEZqK6FKOI
+         DxXQ==
+X-Gm-Message-State: AOJu0YzzuIxmgFuXoexS6BLG3Le8AguxU7NcyynqpKFRfZtQMCv/iPYW
+	5yteFSvK3vY6Tn9cf80egJnbOWii405CxafqGbHZk96QmPcF+N3ZyzEdfgtcWyXFc3bhzkW7ynr
+	FfIYt
+X-Gm-Gg: Acq92OGqLyqMtSOv2cvR24oftKrH8O0AuCjtzsAMEMoWfNPQRDS5a9NzAv6cJczE9+H
+	0y4ZPuseQFFBOAbO3TgOY3lBGwUykX97JaJ3MsnuheH9latyW9PlwpFo3PF3ogTcFF6ExOndZZ6
+	1fZMiwBFynndaA+dXbj1K8mDx4eBmSb16vJPmDBPinydF4/5pmQrF4PC1NjOv67uEiwlMym3Zcb
+	SpoBsd1eZs2MiS4n5XKnykm2L5iZCTWXmuNckorSHdeG6H5zwCLsCNbnwX4XS9lwLUZtCYRK9GN
+	yQO71hJVV8S9VWl+Werq5zTdaZXS1vTXYnhlIevj3OQkT/57jLkkAMdtfanBppq/lc/sIXEBVM2
+	j8ylxHF+l9OtQMYYWP/pVi9Tr/iRKM/cg7l5Aqa5V8dvLPuMASRmCiaHU9/dc9KaG3n1j1F71up
+	6UoxWWwiVdu8VHRT739WeP+Y7xL/3tBr0Xh0wlC8fMk8Yw8fjqz7RFsWVrRNzeYDt9bUuYkZvn
+X-Received: by 2002:ac8:4809:0:b0:517:905d:dc78 with SMTP id d75a77b69052e-51795bbf697mr17436291cf.37.1780630357252;
+        Thu, 04 Jun 2026 20:32:37 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cecd053210sm69052176d6.26.2026.06.04.20.32.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 19:23:44 -0700 (PDT)
-Message-ID: <3a45b9648a59651ce4206e839050d2f3d76325cd.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add tests for
- PTR_TO_FLOW_KEYS constant offset bounds
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi	
- <memxor@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan	
- <shuah@kernel.org>, Shenghao Yuan <shenghaoyuan0928@163.com>, Yazhou Tang	
- <tangyazhou518@outlook.com>, Matt Bobrowski <mattbobrowski@google.com>,
- Emil Tsalapatis <emil@etsalapatis.com>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, 	linux-kselftest@vger.kernel.org
-Date: Thu, 04 Jun 2026 19:23:41 -0700
-In-Reply-To: <20260604180730.2518088-3-gnq25@mails.tsinghua.edu.cn>
-References: <20260604180730.2518088-1-gnq25@mails.tsinghua.edu.cn>
-	 <20260604180730.2518088-3-gnq25@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-9 
+        Thu, 04 Jun 2026 20:32:36 -0700 (PDT)
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: linux-kselftest@vger.kernel.org,
+	rppt@kernel.org,
+	shuah@kernel.org,
+	akpm@linux-foundation.org,
+	linux-mm@kvack.org,
+	skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org,
+	jasonmiu@google.com,
+	linux-kernel@vger.kernel.org,
+	corbet@lwn.net,
+	ran.xiaokai@zte.com.cn,
+	pasha.tatashin@soleen.com,
+	kexec@lists.infradead.org,
+	pratyush@kernel.org,
+	graf@amazon.com
+Subject: [RFC v1 0/9] kho: granular compatibility and header decoupling
+Date: Fri,  5 Jun 2026 03:32:26 +0000
+Message-ID: <20260605033235.717351-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2026-06-05 at 02:07 +0800, Nuoqi Gui wrote:
-> Add verifier tests covering constant pointer arithmetic on a
-> PTR_TO_FLOW_KEYS register, which regressed with commit 022ac0750883
-> ("bpf: use reg->var_off instead of reg->off for pointers"): an
-> out-of-bounds offset introduced as flow_keys +=3D K and then dereferenced
-> at insn->off 0 was accepted, while the equivalent flow_keys + K direct
-> offset was rejected.
->=20
-> The tests check that:
-> =C2=A0- in-bounds constant arithmetic on the keys pointer is still accept=
-ed,
-> =C2=A0- an out-of-bounds offset introduced via constant arithmetic is rej=
-ected
-> =C2=A0=C2=A0 for both read and write, with the same diagnostic as the dir=
-ect
-> =C2=A0=C2=A0 insn->off form.
->=20
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> ---
-> =C2=A0.../selftests/bpf/prog_tests/verifier.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0 2 +
-> =C2=A0.../selftests/bpf/progs/verifier_flow_keys.c=C2=A0 | 77 +++++++++++=
-++++++++
-> =C2=A02 files changed, 79 insertions(+)
-> =C2=A0create mode 100644 tools/testing/selftests/bpf/progs/verifier_flow_=
-keys.c
->=20
-> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-> index 219ff2969868..dae26dda3782 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-> @@ -38,6 +38,7 @@
-> =C2=A0#include "verifier_div0.skel.h"
-> =C2=A0#include "verifier_div_mod_bounds.skel.h"
-> =C2=A0#include "verifier_div_overflow.skel.h"
-> +#include "verifier_flow_keys.skel.h"
-> =C2=A0#include "verifier_global_subprogs.skel.h"
-> =C2=A0#include "verifier_global_ptr_args.skel.h"
-> =C2=A0#include "verifier_gotol.skel.h"
-> @@ -189,6 +190,7 @@ void test_verifier_direct_stack_access_wraparound(voi=
-d) { RUN(verifier_direct_st
-> =C2=A0void test_verifier_div0(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { RUN(verifier=
-_div0); }
-> =C2=A0void test_verifier_div_mod_bounds(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 { RUN(verifier_div_mod_bounds); }
-> =C2=A0void test_verifier_div_overflow(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 { RUN(verifier_div_overflow); }
-> +void test_verifier_flow_keys(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { RUN(verifier_flow_keys); }
-> =C2=A0void test_verifier_global_subprogs(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 { RUN(verifier_global_subprogs); }
-> =C2=A0void test_verifier_global_ptr_args(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 { RUN(verifier_global_ptr_args); }
-> =C2=A0void test_verifier_gotol(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { RUN(verifier_gotol=
-); }
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_flow_keys.c b/too=
-ls/testing/selftests/bpf/progs/verifier_flow_keys.c
-> new file mode 100644
-> index 000000000000..512e5d1d2665
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_flow_keys.c
-> @@ -0,0 +1,77 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Constant-offset bounds checks for PTR_TO_FLOW_KEYS pointer arithmetic=
-. */
-> +
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_misc.h"
-> +
-> +/* sizeof(struct bpf_flow_keys) is well under 4096, so +0x1000 is OOB. *=
-/
-> +
-> +SEC("flow_dissector")
-> +__description("flow_keys: in-bounds constant pointer arithmetic accepted=
-")
-> +__success
-> +__naked void flow_keys_const_inbounds(void)
-> +{
-> +	asm volatile ("					\
-> +	r1 =3D *(u64 *)(r1 + %[flow_keys]);		\
-> +	r1 +=3D 8;					\
-> +	r0 =3D *(u64 *)(r1 + 0);				\
-> +	r0 =3D 0;						\
-> +	exit;						\
-> +"	:
-> +	: __imm_const(flow_keys, offsetof(struct __sk_buff, flow_keys))
-> +	: __clobber_all);
-> +}
-> +
-> +SEC("flow_dissector")
-> +__description("flow_keys: OOB via constant pointer arithmetic rejected")
-> +__failure __msg("invalid access to flow keys off=3D4096 size=3D8")
-> +__naked void flow_keys_const_oob_read(void)
-> +{
-> +	asm volatile ("					\
-> +	r1 =3D *(u64 *)(r1 + %[flow_keys]);		\
-> +	r1 +=3D 4096;					\
-> +	r0 =3D *(u64 *)(r1 + 0);				\
-> +	r0 =3D 0;						\
-> +	exit;						\
-> +"	:
-> +	: __imm_const(flow_keys, offsetof(struct __sk_buff, flow_keys))
-> +	: __clobber_all);
-> +}
-> +
-> +SEC("flow_dissector")
-> +__description("flow_keys: OOB write via constant pointer arithmetic reje=
-cted")
-> +__failure __msg("invalid access to flow keys off=3D4096 size=3D8")
-> +__naked void flow_keys_const_oob_write(void)
-> +{
-> +	asm volatile ("					\
-> +	r1 =3D *(u64 *)(r1 + %[flow_keys]);		\
-> +	r1 +=3D 4096;					\
-> +	r2 =3D 0;						\
-> +	*(u64 *)(r1 + 0) =3D r2;				\
-> +	r0 =3D 0;						\
-> +	exit;						\
-> +"	:
-> +	: __imm_const(flow_keys, offsetof(struct __sk_buff, flow_keys))
-> +	: __clobber_all);
-> +}
-> +
-> +/* Equivalent OOB expressed directly in insn->off; this form was always
-> + * rejected and is kept to show both forms now share one diagnostic.
-> + */
-> +SEC("flow_dissector")
-> +__description("flow_keys: OOB via insn->off rejected")
-> +__failure __msg("invalid access to flow keys off=3D4096 size=3D8")
-> +__naked void flow_keys_insn_off_oob(void)
-> +{
-> +	asm volatile ("					\
-> +	r1 =3D *(u64 *)(r1 + %[flow_keys]);		\
-> +	r0 =3D *(u64 *)(r1 + 4096);			\
-> +	r0 =3D 0;						\
-> +	exit;						\
-> +"	:
-> +	: __imm_const(flow_keys, offsetof(struct __sk_buff, flow_keys))
-> +	: __clobber_all);
-> +}
-> +
-> +char _license[] SEC("license") =3D "GPL";
+This series decouples the compatibility tracking and code organization
+of individual KHO subsystems (radix tree, vmalloc, and block device).
 
-Could you please also add a test with a truly varying offset?
-Like below:
+The diff here is a bit larger than I'd like, but most of it is just
+refactoring and moving code around to modularize the subsystems rather
+than functional changes.
 
-__naked void flow_keys_var_read(void)
-{
-	asm volatile ("					\
-	r6 =3D r1;					\
-	call %[bpf_get_prandom_u32];			\
-	r0 &=3D 0xFFFF;					\
-	r1 =3D *(u64 *)(r6 + %[flow_keys]);		\
-	r1 +=3D r0;					\
-	r0 =3D *(u64 *)(r1 + 0);				\
-	r0 =3D 0;						\
-	exit;						\
-"	:
-	: __imm_const(flow_keys, offsetof(struct __sk_buff, flow_keys)),
-	  __imm(bpf_get_prandom_u32)
-	: __clobber_all);
-}
+Specifically, this series separates KHO data structures from KHO
+core functionality:
+- KHO data structures are those that have ABI checks between kernel
+  versions (e.g., vmalloc, radix trees, and block devices).
+- KHO core is the functionality that involves passing the memory
+  from one kernel to another.
+
+KHO core depends on some of these data structures, but other users
+of KHO also depend on them. The number of data structures keeps
+growing: first we introduced vmalloc, then radix trees, then
+linked blocks, and next we are planning to add an xarray-like
+data structure. Keeping all of this within the same `kexec_handover.c`
+file, and also under the same global version, is no longer sustainable.
+
+To address this, this series:
+1. Refactors and reorganizes the code by splitting out radix tree
+   and vmalloc into separate files.
+2. Moves and organizes internal and ABI headers into structured
+   directories under include/linux/kho/ and include/linux/kho/abi/.
+   Instead of cluttering include/linux/ with prefix-styled headers like
+   kho_block.h or kho_radix_tree.h, we use the already existing
+   include/linux/kho/ directory (e.g., kho/block.h and
+   kho/radix_tree.h).
+3. Introduces a standard set of compatibility helpers in
+   kho/abi/compat.h.
+4. Decouples the compatibility strings of individual KHO subsystems
+   (radix tree, vmalloc, and block) from the global KHO version.
+   This enables independent, granular compatibility versioning.
+5. Adds a KUnit test suite to verify that the composite compatibility
+   strings of different subsystems remain unique and sorted in
+   alphabetical order, guaranteeing a consistent and predictable
+   representation across configurations.
+
+This series is to gather feedback on the overall design and layout
+of the granular compatibility mechanism.
+
+Pasha Tatashin (9):
+  kho: split out radix tree tracker into kho_radix.c
+  kho: split radix tree headers out of kexec_handover.h
+  kho: split out vmalloc preservation into kho_vmalloc.c
+  kho: split vmalloc headers out of kexec_handover.h
+  kho: move kho_block.h to kho/block.h
+  kho: introduce compatibility helpers and decouple block version
+  kho: decouple radix tree compatibility from global KHO version
+  kho: decouple vmalloc compatibility from global KHO version and update
+    memfd
+  liveupdate: add KUnit test to verify alphabetical order of
+    compatibility strings
+
+ Documentation/core-api/kho/abi.rst            |  11 +-
+ Documentation/core-api/kho/index.rst          |  10 +-
+ MAINTAINERS                                   |   1 -
+ include/linux/kexec_handover.h                |  18 -
+ include/linux/kho/abi/block.h                 |   4 +-
+ include/linux/kho/abi/compat.h                |  33 ++
+ include/linux/kho/abi/kexec_handover.h        | 203 +------
+ include/linux/kho/abi/luo.h                   |   8 +-
+ include/linux/kho/abi/memfd.h                 |  12 +-
+ include/linux/kho/abi/radix_tree.h            | 133 +++++
+ include/linux/kho/abi/vmalloc.h               | 101 ++++
+ include/linux/{kho_block.h => kho/block.h}    |   2 +-
+ .../{kho_radix_tree.h => kho/radix_tree.h}    |   5 +-
+ include/linux/kho/vmalloc.h                   |  34 ++
+ kernel/liveupdate/Kconfig                     |  15 +
+ kernel/liveupdate/Makefile                    |   9 +-
+ kernel/liveupdate/kexec_handover.c            | 531 +-----------------
+ kernel/liveupdate/kho_block.c                 |   2 +-
+ kernel/liveupdate/kho_radix.c                 | 290 ++++++++++
+ kernel/liveupdate/kho_vmalloc.c               | 274 +++++++++
+ kernel/liveupdate/liveupdate_test.c           |  56 ++
+ kernel/liveupdate/luo_internal.h              |   2 +-
+ kernel/liveupdate/luo_session.c               |   2 +-
+ lib/test_kho.c                                |   1 +
+ mm/memfd_luo.c                                |   1 +
+ tools/testing/selftests/liveupdate/config     |   1 +
+ 26 files changed, 997 insertions(+), 762 deletions(-)
+ create mode 100644 include/linux/kho/abi/compat.h
+ create mode 100644 include/linux/kho/abi/radix_tree.h
+ create mode 100644 include/linux/kho/abi/vmalloc.h
+ rename include/linux/{kho_block.h => kho/block.h} (100%)
+ rename include/linux/{kho_radix_tree.h => kho/radix_tree.h} (96%)
+ create mode 100644 include/linux/kho/vmalloc.h
+ create mode 100644 kernel/liveupdate/kho_radix.c
+ create mode 100644 kernel/liveupdate/kho_vmalloc.c
+ create mode 100644 kernel/liveupdate/liveupdate_test.c
+
+
+base-commit: 5fb813ae0009d97fc414f08ad73286f562e9a123
+-- 
+2.53.0
+
