@@ -1,166 +1,159 @@
-Received: from mail-108-mta113.mxroute.com (mail-108-mta113.mxroute.com [136.175.108.113])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAAFB3AFB09
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 20:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B41384CFE
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 20:48:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780691890; cv=none; b=ohoOa0zGQDj8U0MAN5SkhOcRYiCxcjGKmUTOhc/kaerGwKz/OjePadAxBnohzLqYwQpHvoJtfhHqd0CLQRrCvuNflSCHY0FVCNLL7MbWlkYpapi726N9ytcDXDurd9uvEJHSuLyxnrFALZH+hgW98WH+iECXr28yn9jRQRsJbtM=
+	t=1780692536; cv=none; b=gzLWMG8t/vHdBVTVeQRyHLH00gC0nvrwjOO5+5l0qINyRYSKZTwhVpV9t0yrCYYtnmUtNYhPcdpo0QL7mRviuSXgDTAoJMZ+0KWU54YEwHXT0kz1kJWHMZIN1hf27vnjyuFHD20CLircFcs4mDTFdt73zFvb5tl+/oJJqM/Rc/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780691890; c=relaxed/simple;
-	bh=mtRFSkWblm61wGrh/wpoZ7P+qtpA7tqnNoCqk9zA3O8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dwPxDnIRMXxLVHTJC2W/QAGfwHX6BJadvwSOlWYK9/usaWAZxOo6n0hSJWraJ39tysRv90FfHrjd6MTZ17pVBdgnk2uHpfiIRgDVwbtrjqJmkG2jNdkJG517pn46u90VP0YxMqsusMsbOhvWgKzIOExWonE51x6vswyXo6zpSGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=cnA+rOMB; arc=none smtp.client-ip=136.175.108.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
+	s=arc-20240116; t=1780692536; c=relaxed/simple;
+	bh=u4fko0paQcZtAksUjeK+qBbXQtJI5ESw1gxeXRzR6nc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=UybtbMb2Q6eYWGU444YWWe0OfbykYkBZA9qtSLCXp9iX57apU5Z4vkqDfT6TuaHxGbDfnQ5q5ujQF1JPWGlHtWSm09YeyUw17cHW7vSDc3feDsxr+ijYW4ZGE0u5QnWEOA5VI4E+LljPoq22EyF1Oo5aFuAYvZFL2YEsPr0sLqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CFukV/Tw; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="cnA+rOMB"
-Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
- (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta113.mxroute.com (ZoneMTA) with ESMTPSA id 19e997d22bd00067f7.012
- for <linux-kselftest@vger.kernel.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 05 Jun 2026 20:32:55 +0000
-X-Zone-Loop: 6c18e8b27f9a509c9d2e0257428bdebb04c1d1d8c22f
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
-	s=x; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc
-	:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=WcZzNqmpt6jHPh6vf5iW0qnbE08NIl2+GlfUTtZVfjI=; b=cnA+rOMBGmo8XuDqWhFFinwish
-	9fTECOf7ox3lVvB/P8JYFx3kfBDQGOn7SGnwMm0pBKWkn3Q2KKp/6f5yWB/ehThI5dh7ZVExpbAqm
-	agmru/doC17m8GUP6NJtGQM5b5jqr+lJQoc1vpWEXJkdINvQrjT6SvG4GGmGZYR4DcVEn3MQoGdl8
-	7S13simPnPtCwkXOOLe4+1Tzo6c8MYGLgceeEB5NWezUXpnmo8XEvVe0f7Yxb8GspZ2ewGQy70s9T
-	KH6vIgODllVhzkRHTPfZU4yaL7sbiTYMXTqmBCHXFhirB6w+xne7k9+q+kxkcPvJ/PupyLivmur1V
-	dMiFzx3A==;
-Date: Fri, 5 Jun 2026 20:32:40 +0000
-From: Richard Patel <ripatel@wii.dev>
-To: Florian Weimer <fweimer@redhat.com>
-Cc: x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Yu-cheng Yu <yu-cheng.yu@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>, Kees Cook <kees@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, libc-alpha@sourceware.org,
-	linux-api@vger.kernel.org, Arjun Shankar <ashankar@redhat.com>
-Subject: Re: [PATCH v2 0/5] Usermode Indirect Branch Tracking
-Message-ID: <aiMyaJ8zDl76YOVN@wii.dev>
-References: <20260605184715.3383415-2-ripatel@wii.dev>
- <lhu1pek4w89.fsf@oldenburg.str.redhat.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CFukV/Tw"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-8428384f31fso1612654b3a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 13:48:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780692535; x=1781297335; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CPB6Ty3aEBots6OrnX5Whlsfo7rcobyK8YPdkP8GAcM=;
+        b=CFukV/TwF8m2UNbxNjuZFylWn3TI3o4QDOm+u+ZwsEY6o8WZIf+07QP9lHVbiW6M+f
+         vgg42qWIVqu/Yr+e1ENkc0L8oSMhKE6753m8FHWff97yFNZc+OKFiz7HeMcjmqkVfHuR
+         rPMDJrBRaydq6ZUXWd7wr9XIUPQPgWd9OfuJSeB3vSzW0eyf1VC3q8LaN2jXso8+5P6o
+         wv0BdkrN6GNgNQiGX6sFafM6IoyynRQZl2iyQ19NA4Y/Em1yPeHVDv0DEvjtZ+BBnHof
+         ppFm4vXWmIoHt2iRjpvZYbuKl6U1DWWZCkgxclDHnbIRGFfrsxRoYjuTQZa8G68QAOLS
+         AklQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780692535; x=1781297335;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CPB6Ty3aEBots6OrnX5Whlsfo7rcobyK8YPdkP8GAcM=;
+        b=ngfYmZU6iPDCAxnZkpbwrGE9pqou3FYq+mEtAMZGYX2+tdSdmGpSCZxck4aKBX12Bw
+         vmd8wF7mj1CmSoiTaZxcuhb9ib6yjURNN3ZCDejkXqLZtLrvkOxJ2zTlf+3I2QYeTm7L
+         w9ow1rX1Ir53+5kQPgRjrdmuWQzuRf23ZWMLvAOxFRN8Zg7rhB9qLYkpb86X0dew/6AJ
+         Nd1aJVbJZHXWHkxMylUn3V71GXYHgAXMqd/dKPFV/mfa5TPtlgygWD45E/eilNosf0Ur
+         Dw3qfdJa1E6cz5MYtu57oaiH0hgjxavzXE5Z4x39Nn2wnzsyuiiuERRwS1yWnWZtHLwt
+         JZtw==
+X-Forwarded-Encrypted: i=1; AFNElJ/XPTS8nqpT3leGQmEy/nc4tz+NCg89hlfwzSWAth2ZIpBYItkjU/Smhtq3TMq1WPgGzDURFVkdYLhbnHXFIk0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxxe8ktm+zGwQoJaBXL7vmcJy7c78Hva8uuDMDXUsjTOibkCKUM
+	Gg21wl0xQNLjNHxTx3Sr3aT2K7FuuItx7SV737A+KfRsXqoskKlH83uWJDDtZPLWiPRpowugvHf
+	9CyLriQ==
+X-Received: from pfnz10.prod.google.com ([2002:aa7:85ca:0:b0:842:650a:1d62])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2d07:b0:842:4bf8:cfdb
+ with SMTP id d2e1a72fcca58-842b0f83825mr5392458b3a.32.1780692534760; Fri, 05
+ Jun 2026 13:48:54 -0700 (PDT)
+Date: Fri, 5 Jun 2026 13:48:54 -0700
+In-Reply-To: <CAEvNRgF09SfDm=OgbrS8-wpfxbNecQkqAQwf1ELq1jWu7NjbUA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <lhu1pek4w89.fsf@oldenburg.str.redhat.com>
-X-Authenticated-Id: ripatel@wii.dev
+Mime-Version: 1.0
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-19-6983ae4c3a4d@google.com>
+ <CAEvNRgHEq-hHcTivUw8TYBeMu-RpS=Ho4DXaNXKQKLPL_biTgg@mail.gmail.com>
+ <aiMOWkiVBqoQDAPd@google.com> <CAEvNRgF09SfDm=OgbrS8-wpfxbNecQkqAQwf1ELq1jWu7NjbUA@mail.gmail.com>
+Message-ID: <aiM2Nm9Eh68mIVX3@google.com>
+Subject: Re: [PATCH v13 19/22] KVM: selftests: Finalize TD memory as part of kvm_arch_vm_finalize_vcpus
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
+	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>, 
+	linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, 
+	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, 
+	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri, Jun 05, 2026 at 09:34:46PM +0200, Florian Weimer wrote:
-
-> How do you detect that handling a signal is complete and IBT can be
-> re-enabled?  Or is it re-enabled before entering the userspace signal
-> handler?
-
-Hi Florian,
-
-In v1, we backed up the IBT CPU state into the (user-accessible) signal
-frame from FRED/XSAVE, then restored it:
-https://lore.kernel.org/lkml/20260517183024.16292-4-ripatel@wii.dev/
-
-In v2, when entering the signal handler, the kernel just context switches
-to the new user rip, bypassing IBT checks (continues executing if the
-signal handler does not begin with endbr).
-
-IBT stays enabled in both designs, just the IBT state is preserved in v1,
-and lost in v2.
-
-The same thing happens when doing a sigreturn in v2 (e.g. via trampoline),
-again IBT is not enforced.  IBT stays enabled when doing a siglongjmp,
-though.
-
-Some time in the future, ideally:
-- signal handler is *required* to start with endbr (this is easy)
-- sigreturn as in my asm example enforces endbr after returning from a
-  signal handler to a in-progres indirect branc
-- libc (sig)longjmp is made IBT-compatible
-
-Btw, I had self-tests for the v1 design, and {signal handle,rt_sigreturn,
-siglongjmp} with {success case,violation} works flawlessly with Fedora 44
-glibc amd64. With glibc i686 I ran into PLT issues, probably my fault.
-
-It is quite surprised that siglongjmp was working, btw, since the glibc
-longjmp code uses 'jmp *reg' (without notrack prefix). I guess you do an
-endbr64 at the setjmp side?
-
-> > The main question is whether glibc is happy with this prctl syscall API.
+On Fri, Jun 05, 2026, Ackerley Tng wrote:
+> Sean Christopherson <seanjc@google.com> writes:
 > 
-> As far as I can tell, the prctl works for glibc.  Re-use of an
-> arch_prctl constant might have been problematic, but the series is not
-> doing that.
-
-Nice :-)
-The alternative would have been to bolt on stuff to ARCH_SHSTK, or create
-an entirely new arch_prctl. Open to any API.
-
-> Adding the ELF GNU note parsing can be added later, but perhaps not
-> cleanly.  I'm still a bit worried we might have to rev the markup
-> because too many binaries are in circulation that claim compatibility,
-> have never been tested, and are actually broken.  If the kernel does not
-> look at the ELF bits, things a slightly simpler.
-
-Phew, I was hoping you'd say that.
-
-If you want, I can sketch out glibc IBT enabling and test it on Debian
-and Fedora, which IIRC already emit compile with -fcf-protection=branch
-for all OS packages.
-
-> > There is one notable gap in this patch series, to do with signals:
 > >
-> >   000a: mov rax, 0x100a
-> >   000f: jmp rax
-> >   *** signal occurs ***
-> >   *** signal handler runs, does sigreturn ***
-> >   100a: nop
+> > [...snip...]
 > >
-> > The above sequence does not crash.
+> >> Was kvm_arch_vm_finalize_vcpus() supposed to be for finalizing vCPUs
+> >> instead?
+> >>
+> >> The awkward part is that kvm_arch_vm_finalize_vcpus() is called from
+> >> __vm_create_with_vcpus().
+> >>
+> >> While building this POC to test conversions [1] I only wanted to create
+> >> the vm and vcpus and didn't want to finalize yet, since I still needed
+> >> to do more mappings in the guest (and I needed the vm pointer to do
+> >> mappings in the guest).
 > >
-> > With IBT, it should crash at the nop (because an endr64 is expected there).
-> > The IBT state (WAIT_FOR_ENDBR in IA32_U_CET MSR) is not backed up to the
-> > signal frame though.  So, when userland does a sigreturn, the CPU has
-> > forgotten that it was doing an indirect branch before the signal.
-> > (This specifically only occurs with signal handlers that sigreturn.)
+> > Hmm, I would argue this is a flaw in the selftests infrastructure.  IMO, as a
+> > developer, it's quite surprising that the current value of a global variable
+> > doesn't show up in the VM automagically.  I totally understand why selftests
+> > work that way, but it's certainly odd and annoying.  If _that_ were solved, then
+> > the kludginess of what you're doing goes away.
 > >
-> > This is because IA32_U_CET is part of XSAVE 'supervisor' state, so
-> > regular XSAVE/XRSTOR can't access it.  Doing a manual backup is tricky.
+> > The other way this could be solved is by adding support for annotating globals
+> > with a __shared flag, a la the kernel's __bss_decrypted, so that loading memory
+> > into the VM can automatically mark the associated globals' pages as shared.
+> >
 > 
-> That's a bit annoying.  Is this restricted to signal handlers, or does
-> it apply to page faults, too?
+> More generally, is your opinion that tests should not have to add extra
+> memslots?
 
-Only signal handlers, page faults don't reset IBT.
+I don't care?  What I care about is making it as easy and intuitive as possible
+for people to write tests, and to minimize maintenance costs.
 
-> > A related problem is that the signal handler routine is not checked for
-> > endbr preamble.
+> If I wanted a shared page, would I have to do
 > 
-> That's not necessarily a problem because its address cannot be directly
-> overwritten in userspace.  Not all indirect branches need to be checked,
-> only those that have tweakable targets.  In fact, fewer ENDBR64 markers
-> are better (although we wouldn't drop the marker from a signal handler
-> specifically, of course).
+>   static __shared test_page[4096] = {0};
+> 
+> and then rely on ELF loading to put that in the guest for me? Are there
+> some compiler flags/how will I require that test_page be page aligned?
 
-Just one concern I have is that people start relying on signal handlers
-not requiring endbr64, and then a future kernel version breaking them once
-we enforce it.
+Compilere and linker shenanigans.
 
-Really appreciate your review,
+> If I mark 10 globals as __shared, would the compiler automatically
+> consolidate the shared memory together?
 
--Richard
+Yes, follow the __bss_decrypted breadcrumbs.
+
+  #define __bss_decrypted __section(".bss..decrypted")
+
+> I think it's a bit constraining to require that all guest memory be set
+> up statically. It's nice to have but I'd like another option...
+
+You do have options, they just require more work.
+
+> Many tests use vm_userspace_mem_region_add(), CoCo tests that require
+> finalizing shouldn't be disallowed that option.
+
+What does that have to do with finalizing the VM?
+
+> >> It's also possible to have some kvm_vm_finalize() call that can be
+> >> explicitly and manually invoked from selftests just for CoCo selftests.
+> >
+> > Why bother?  It's obviously possible to all kvm_arch_vm_finalize_vcpus() directly.
+> 
+> Works for me to call directly. Do you mean kvm_arch_vm_finalize_vcpus()
+> is the right function where the TD is finalized?
+> 
+> For tests that need to do more setup after creating a vm, is the only
+> way out to call __vm_create() then vm_vcpu_add() to avoid premature
+> finalization in __vm_create_with_vcpus() when
+> kvm_arch_vm_finalize_vcpus() is called?
+
+Depends on what you're doing.  Sometimes, the answer will be yes.  That's why
+there are "low level" APIs, so that some tests can do fancy things, while most
+tests can leave the details to the infrastructure.
+
+If there's a recurring problem, or we anticipate one, then we can and should
+figure out how to minimize the pain so that tests don't have to deal with the
+same boilerplate issues over and over.  Hence the __shared idea.
