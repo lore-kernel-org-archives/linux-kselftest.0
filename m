@@ -1,212 +1,96 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CF2330324
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 13:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8EA740E8DB;
+	Fri,  5 Jun 2026 13:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780667061; cv=none; b=Gg/aCIcv2Hp34uCAmkviOldqeV3LClJQzH7Q8FPSqjRm0lh8XgDuU6P8lxOtwAvzdf5aEFxf/YoWlaICXEFZADk5f4wM7NhimCIFtcxOJuK0JV8NAZXAlQ+d7CgNLFAkQWbZvC3Vv+ouSqWzJFIeNbFt1VQEClVGDvdcm95ZP88=
+	t=1780667633; cv=none; b=L9g1ozr+F6GHSLT0EACBvm600eiq9EZgVgJwgKFbfA9i1VDcTmTYb+zCUDNSgnB73VqWfndWHML69tQ+Z+LEOpTHHUBDmZwd/yQJUlXWeIMMoUjAdSh3Ib+NAbJ6Ol+SZ112H0fsxxtd19LVpRaKcBCDhpF7KaaFAK0Bbwemj7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780667061; c=relaxed/simple;
-	bh=fjf1uQejVeOJ9fn7LjyfkZZCewgephLotbm/g892LTc=;
+	s=arc-20240116; t=1780667633; c=relaxed/simple;
+	bh=dv7w7V243Ir0z2lVM+UUtdm7LPvO4BCpPqes1rH4Faw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=THckcMUaGzUcSGrIxyMWgWVLRD24Ivxk+GaY+MfxkhYuEMjlThbyyZGw4E+cYTCy172lroztxOf8rh/YBS5OLO+5PTW1JQezJuJQjiZHq6HyRB1qK3Bt3h9ahN/zitIQ6Bf6KeLJ6nyaWIUjCAjxfzjCHjSsHl2+p3kT8BWv1dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gu4TpXc+; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=CbeK39PLi7m4sk7F0mY8ANUTQrhtLEfKsICZRSIvXB59UbJR2tNItKydpnAFYfwuCzHzBltIiyQg7rmS1CtrtKuYhTRVKS5FPhd2iBcIeuY6AkpoVzS1+yJIYfmyhnYXAySWPyQpvcgxd4gGdi9aEK3fr2Q219LmjBE5VaC7zEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A9St+RvV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gu4TpXc+"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-490b8a97b11so21379095e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 06:44:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1780667056; x=1781271856; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PdsfWOnLuuY9elhMzfIfrh1St5S/FY4B3lK+KDhQ7jU=;
-        b=gu4TpXc+Rn/qccRJB+wAYY/J8RdHyO/xnlpbuyXLYNwTqD09D4M2ROJ0puNIoakD8V
-         I/v/wFHPXJluRLH0NnzlZvOtm8TKnxfadYz1lXqsYlDMwMh9Eo9lW6Qi2CpmpqDFLh6T
-         Xdwx43nb6XHiE7t11TUE1k+gwB0MgWY8WcPvxjmxpSUIpUauauxdzlDmRpkMeX5wE5gJ
-         PsHhEMdLjVpO/S3cQ6wUmNWf6yo3eBjQMSk1bimo8+AWebf5bIOSY0NxEszK4X8/663q
-         tpXsUzXZqaOxM9fc3M6+54o3aCeHJ9571zUl4THnoMdBxzSq+Uyqn+G+50NCzPeO2H85
-         Pspg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780667056; x=1781271856;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PdsfWOnLuuY9elhMzfIfrh1St5S/FY4B3lK+KDhQ7jU=;
-        b=TBYXsjaaO2wGSqFPxDKdHnicLeBmK+5zuhIbnhOHxxHwLmK8sSyfjyFutAgJeQNRI5
-         JU5+1J4cXepHsQMoe+CrOlucktJmvb3pTgYdHWBBkisXEEO3YGRhiZendlGY2lxwhZn2
-         MIVu8dpZkg/ys7MgfWDpF2eyEvcDU6s7XrN1sYf9QNc8fMyCyvY0Of/X4IEVujwfYILe
-         PubfgZS3kZvGb6HsJ9RbvmKORJ6pR9kntYAmOASaE8QUVSOH/oo4DpDsmH9F8xBHJDJj
-         mNf9mWKLDGYuOaH8njrLH+N2UNm/p8r+jm/lj7VUZysYgWlXvAL9VnKjbXiGkZwyh3GN
-         cL6A==
-X-Forwarded-Encrypted: i=1; AFNElJ/HpX+kMe2GQXtvuQcPndEaMqnM6d3/a1qaJGIqT543pkE1oiwQt+79hfBDx1gT6QGl/ru5Ojd05qGBuxYjhFU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwxNgdoViI5oJKAiTLF08v0hGGSqZ0idjDeQdy6G10nEHN4XWo
-	FM2TcLEytkTDKhT4LWNo4u2WrAYDh380F2ozoK7SrkrOt2rMlzXLhatRMV9ZVRD9ezM=
-X-Gm-Gg: Acq92OEuiEQloQjFfMLbBJx7e6yGli1nes2tJF1Sg4ppy3wFUuVx7NQr4ygbcyogk/7
-	P1lBhxWyRFsPs77+mgY/auHE6cCQ/Dc/g9oHQbWxmPAguySYLWqRv9i6zqEaOL864Eq3NPSC40g
-	TjBZOXOJVm5xHVUmQEEgSXOyBIm+KOjaGDOEp/31UxF0b1ns5//TmrZUSNB/ZR6O0zNstiCWMPy
-	277GVIOUmg55cu3carSZI19A/N8/rw7TYfeEVL8a0FwUyjIZDvHKoheUr5OXlAkON1INWT+NGM1
-	pcTuBfT0gJONJU+7TplyFuGwVKXThpNvo7SzpQZkPN5knQXKi9gU9bG9UaugxS7jLHZYd+qsKkb
-	8veqQ0TlK5OflfvAyima4I/Ae1ZAIBkysqbUYO1EsHVmy9I+naStV53LxkF7Q7Jc1Xj+x4OqqTC
-	pRqyszFZqAyp463xjP54lDc87siiCIuRj+2C+0
-X-Received: by 2002:a05:600c:828f:b0:490:b3fe:9732 with SMTP id 5b1f17b1804b1-490c25dd6aamr54022405e9.16.1780667056226;
-        Fri, 05 Jun 2026 06:44:16 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490c2d2d11asm63158325e9.1.2026.06.05.06.44.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 06:44:15 -0700 (PDT)
-Date: Fri, 5 Jun 2026 15:44:13 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: sashiko-reviews@lists.linux.dev, Jiri Kosina <jikos@kernel.org>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-	Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org
-Subject: Re: [PATCH 1/4] selftests: livepatch: Introduce _remove_mod function
-Message-ID: <aiLSraCKXmqYExqA@pathway.suse.cz>
-References: <20260524-livepatch-unload-on-fail-v1-1-7465de7f741d@suse.com>
- <20260524235906.267EF1F000E9@smtp.kernel.org>
- <d329f22e75fd01f2250490e4cba87f064a726f52.camel@suse.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A9St+RvV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82EE71F00898;
+	Fri,  5 Jun 2026 13:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780667632;
+	bh=J0R4eBG2pFYNvoAv6aArk0OSJ05uyndW9ZEtAs++bJk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=A9St+RvVrzyZl1ZMltNKutIQ4v56AK9zs+Vr6o/Gw9W8YZzAgleY83Gj5tnrWqydv
+	 AdT056a/FPR/9138v3+ImH4wqZtMbBAYNqbYRQPuIe9Tt4Q8tsPXSyqMYCwyrd4RMv
+	 A77jBow2Hfw7i08PjR8ogFZQ9YU3f7fvI7U+y+5KYtTh6fESF/Ezz9WCfT+21oizXA
+	 5vS0IiejhSADD+AjeTi1nsCORC1GBX2JrZy+nrPEcfktzLtTj85ZM7HuO9kxmfAgeO
+	 abA/pREttTxluz8Ydipn9WHLOzoipIwUI1hZwuS7laf3zAoMttwO/y/Z0OatWqDVf9
+	 sc9zAKaZVrkOQ==
+Date: Fri, 5 Jun 2026 08:53:51 -0500
+From: Rob Herring <robh@kernel.org>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Leo Yan <leo.yan@arm.com>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Shuah Khan <shuah@kernel.org>, Breno Leitao <leitao@debian.org>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Stephane Eranian <eranian@google.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Usama Arif <usama.arif@linux.dev>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v4 3/4] perf/arm64: Add BRBE support for
+ bpf_get_branch_snapshot()
+Message-ID: <20260605135351.GA3587043-robh@kernel.org>
+References: <20260527121207.2312181-1-puranjay@kernel.org>
+ <20260527121207.2312181-4-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d329f22e75fd01f2250490e4cba87f064a726f52.camel@suse.com>
+In-Reply-To: <20260527121207.2312181-4-puranjay@kernel.org>
 
-On Mon 2026-05-25 08:49:10, Marcos Paulo de Souza wrote:
-> On Sun, 2026-05-24 at 23:59 +0000, sashiko-bot@kernel.org wrote:
-> > Thank you for your contribution! Sashiko AI review found 1 potential
-> > issue(s) to consider:
-> > - [Medium] `_remove_mod` uses `die()` which will terminate the script
-> > during cleanup operations.
-> > --
-> > 
-> > commit 7b1591f4e5c3b351136e7fe2821eb2e15ae59ad0
-> > Author: Marcos Paulo de Souza <mpdesouza@suse.com>
-> > 
-> > selftests: livepatch: Introduce _remove_mod function
-> > 
-> > This commit introduces the _remove_mod internal function to remove a
-> > loaded
-> > module, intended to be used during cleanup when a testcase fails. It
-> > also
-> > refactors unload_mod to use this new helper function.
-> > 
-> > > diff --git a/tools/testing/selftests/livepatch/functions.sh
-> > > b/tools/testing/selftests/livepatch/functions.sh
-> > > index 2bc50271729c6..3ec0b7962fc5c 100644
-> > > --- a/tools/testing/selftests/livepatch/functions.sh
-> > > +++ b/tools/testing/selftests/livepatch/functions.sh
-> > 
-> > [ ... ]
-> > 
-> > > @@ -241,9 +241,10 @@ function load_failing_mod() {
-> > >  	log "$ret"
-> > >  }
-> > >  
-> > > -# unload_mod(modname) - unload a kernel module
-> > > +# _remove_mod(modname) - Internal function to remove a loaded
-> > > module.
-> > > +#                        Use unload_mod() instead, which also
-> > > updates TEST_MODS tracking.
-> > >  #	modname - module name to unload
-> > > -function unload_mod() {
-> > > +function _remove_mod() {
-> > >  	local mod="$1"
-> > >  
-> > >  	# Wait for module reference count to clear ...
-> > > @@ -261,6 +262,14 @@ function unload_mod() {
-> > >  		die "failed to unload module $mod (/sys/module)"
-> > 
-> > [Severity: Medium]
-> > The commit message notes this function will be used to remove loaded
-> > modules
-> > when a testcase fails. If used in a cleanup path (such as a bash EXIT
-> > trap),
-> > will calling die() here terminate the script prematurely?
-> > 
-> > If a module fails to unload (for example, if its refcount doesn't
-> > drop),
-> > die() executes exit 1. Inside a trap, this aborts the rest of the
-> > cleanup process. This could skip unloading any remaining modules and
-> > prevent final cleanup operations like pop_config() from running,
-> > potentially
-> > leaving kernel tracing persistently enabled and polluting the system
-> > state
-> > for subsequent tests.
+On Wed, May 27, 2026 at 05:11:59AM -0700, Puranjay Mohan wrote:
+> Enable bpf_get_branch_snapshot() on ARM64 by implementing the
+> perf_snapshot_branch_stack static call for BRBE.
 > 
-> The system is already polluted when a testcase fails nowadays, since a
-> module is kept loaded either way, making the next tests to fail if they
-> also try to lead the same modules.
+> BRBE is paused before masking exceptions to avoid branch buffer
+> pollution from trace_hardirqs_off(). Exceptions are then masked with
+> local_daif_save() to prevent PMU overflow pseudo-NMIs from interfering.
+> If an overflow between pause and DAIF save re-enables BRBE, the snapshot
+> detects this via BRBFCR_EL1.PAUSED and bails out.
 > 
-> The current approach is trying to make it more reliable.
+> Branch records are read using perf_entry_from_brbe_regset() with a NULL
+> event pointer to bypass event-specific filtering. The buffer is
+> invalidated after reading.
+> 
+> Introduce a for_each_brbe_entry() iterator to deduplicate bank
+> iteration between brbe_read_filtered_entries() and the snapshot.
+> 
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> ---
+>  drivers/perf/arm_brbe.c  | 127 ++++++++++++++++++++++++++++++++-------
+>  drivers/perf/arm_brbe.h  |   9 +++
+>  drivers/perf/arm_pmuv3.c |   5 +-
+>  3 files changed, 119 insertions(+), 22 deletions(-)
 
-I believe that Sashiko suggested that the clean up path should not
-use "die" or "exit" when something fails. It should try to continue
-with the next cleanup task.
-
-I remember that we even used the following in rpm post install scripts:
-
-    command || true
-
-It is useful when the script does several independent actions
-and we would like to process as many of them as possible.
-
-For example, in our case, if one module can't be unloaded
-then we might still try to remove other modules and
-call pop_config.
-
-So, we should somehow distinguish when some code paths are
-called in the script and when in the clean up part.
-
-I would export some variable in the cleanup() function and
-check it in the called code paths, for example:
-
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 9c98bbb8b725..eebc7f193d98 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -62,7 +62,9 @@ function has_kdir() {
- function die() {
- 	log "ERROR: $1"
- 	echo "ERROR: $1" >&2
--	exit 1
-+	if [ -z "$in_klp_cleanup" ] ; then
-+	    exit 1
-+	fi
- }
- 
- function push_config() {
-@@ -128,6 +130,8 @@ function set_ftrace_enabled() {
- }
- 
- function cleanup() {
-+	export in_klp_cleanup=1
-+
- 	# Remove leftover modules in reverse order to handle dependencies
- 	for mod_item in "${TEST_MODS[@]}"; do
- 		if is_livepatch_mod "$mod_item"; then
-
-
-Finally, I think how to split the changes into patches.
-
-I think that the above changes which add "in_klp_cleanup" might be a
-separate patch,
-
-But the original 1st patch looked weird. It did split _remove_mod()
-and talked about TEST_MODS tracking but the tracking was added in
-2nd patch. I would prefer to split the function and add the tracking
-in the same patch so that it is obvious why it is split and what
-is the difference.
-
-Best Regards,
-Petr
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
