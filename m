@@ -1,154 +1,212 @@
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010015.outbound.protection.outlook.com [52.101.61.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E1734CFA7;
-	Fri,  5 Jun 2026 13:43:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780667037; cv=fail; b=L6EdmeUBfSqnxKYsPGf54WWYlG7EaRCOrn2H7H8wzZ4EHBcrXddfiEGlxLeTuv+OSTwfQpuOI/IeAg0bdOuPWzMM3rW73pHITx+glps62lnLAhFde8bZrXMKLd30dl+LBp/W2DjmIzFwa3kj6t6bMsG2bYoAlsQ3cZuvYmPI6x4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780667037; c=relaxed/simple;
-	bh=8JWWaFnYcqZHesCltn8kcxoT6+Z6YLjVbt6Xy0LGU6g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=bRjNdByuZGa78k3vpEx8TIhRQ9VLsZJCpTYusapFr/6kdQDXlC/ezK/h9ETRAqfixouNl8RsTNvlcRXM9wWp9Q7Iz0DZi/kNyRwhP8SQJaLi6IhCr9IFOovJ7JHRotCkAYRkvVvaHuk/lkPWv+DtPwwR1olTUoXAAn78I2Cigs0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bDtJLRry; arc=fail smtp.client-ip=52.101.61.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CF2330324
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 13:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780667061; cv=none; b=Gg/aCIcv2Hp34uCAmkviOldqeV3LClJQzH7Q8FPSqjRm0lh8XgDuU6P8lxOtwAvzdf5aEFxf/YoWlaICXEFZADk5f4wM7NhimCIFtcxOJuK0JV8NAZXAlQ+d7CgNLFAkQWbZvC3Vv+ouSqWzJFIeNbFt1VQEClVGDvdcm95ZP88=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780667061; c=relaxed/simple;
+	bh=fjf1uQejVeOJ9fn7LjyfkZZCewgephLotbm/g892LTc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=THckcMUaGzUcSGrIxyMWgWVLRD24Ivxk+GaY+MfxkhYuEMjlThbyyZGw4E+cYTCy172lroztxOf8rh/YBS5OLO+5PTW1JQezJuJQjiZHq6HyRB1qK3Bt3h9ahN/zitIQ6Bf6KeLJ6nyaWIUjCAjxfzjCHjSsHl2+p3kT8BWv1dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gu4TpXc+; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bDtJLRry"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MMurUyUo7KcKVPmp6hVh0jtzBsD1d+w89ckuUQ6dFNXKaExJtX4NkZhFq6v6IWz2BFxDixYD9vUqDMt/5POCAVmNELJx2VdjJekrU6f+hpQ8UjVvaVaD2LysmtUvWUwJHU1zlbBxiP1Fj2h3vV8nY9GlmbvSE/i/i813GYjwH7xJAUSc6scVe46S5NhWoYukAResKuroyYmauJmRVoJJpwRm88TELuwJGQWT5cWgdng+WpFJMGAbmtYeL6dEqo0uWgC2GWGKVVJqdYOadAW9iwuBmb41G04EM6eAZdo7+4osoIqTjJEEcmjszqhm49qYbmwQNgzrZ9XsUwWUiCZNIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WcE6gBbhJyVeu398ZFnt3pm2/AQIwzOFzykTe2+U5h8=;
- b=tyh8kckHC5eQaTkCVqMir0mvCt5rcuqHZzSF9bIJ3efgDX+X6h9y5To1VpzsaAOGbI805E3rpkXKUlEPE5Pit7YXgO7Gn4aS+3lGJiY+P/8lJS/QOOsvtKS4J3ne8pA05aifmzbVktxVcAMWmjeYU1/79ACHTi/7JlkF0ifn0VqnYCy5OOLc+aZNyDXLGZ02efGwVjE5ZSxszeRrDQAL32NyNij92ABYoSSWnF0Noq0/nsvQvxACMClCVAdnSNUV6KTkunzK6Kvs3TVL238/+Iv0cqDtNAY1Dgb+WoN4WzA106tuCEWDqX7mCfpPtBcdNYjwClbETrSaZbf66MCt1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WcE6gBbhJyVeu398ZFnt3pm2/AQIwzOFzykTe2+U5h8=;
- b=bDtJLRrySG58AvoT8KUntEc/cKleRn13ZMuMhOw9Z7Ob20Mv99jtpTqsCi07GhJ+iEr+llOuyFxbxl9XzFUDzPaLlF7yXecHzoYFNDnHIZFMhg85BXGmoqqwwrf+YByDCtauZYwE0eKOCw6YMaUtlAbbGsnqxpHm5+qba344LuqOPwDmDLvAiUVgpgziBzRTRj8ln0A8Ax+ypu3Wh1lWrmIh7J/seK6drFwoBKOW8+b3oaYGfjwRxYWP9laC6C0sUQk5sL3TaV6MPr9ntPRPOOzHc14qok3kdqvtEynw8uAetCZo1eJLt8fGAyUFrQ6qtTeLpazVEbUqcIfq/74aXQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
- by CY8PR12MB7217.namprd12.prod.outlook.com (2603:10b6:930:5b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.9; Fri, 5 Jun 2026
- 13:43:49 +0000
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::299d:f5e0:3550:1528%4]) with mapi id 15.21.0092.007; Fri, 5 Jun 2026
- 13:43:48 +0000
-Date: Fri, 5 Jun 2026 10:43:47 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: kevin.tian@intel.com, iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH rc v2 0/4] iommufd: Fix veventq_depth boundary
-Message-ID: <20260605134347.GA1962447@nvidia.com>
-References: <cover.1779408671.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1779408671.git.nicolinc@nvidia.com>
-X-ClientProxiedBy: YT4PR01CA0009.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:d1::21) To LV8PR12MB9620.namprd12.prod.outlook.com
- (2603:10b6:408:2a1::19)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gu4TpXc+"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-490b8a97b11so21379095e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 06:44:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1780667056; x=1781271856; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PdsfWOnLuuY9elhMzfIfrh1St5S/FY4B3lK+KDhQ7jU=;
+        b=gu4TpXc+Rn/qccRJB+wAYY/J8RdHyO/xnlpbuyXLYNwTqD09D4M2ROJ0puNIoakD8V
+         I/v/wFHPXJluRLH0NnzlZvOtm8TKnxfadYz1lXqsYlDMwMh9Eo9lW6Qi2CpmpqDFLh6T
+         Xdwx43nb6XHiE7t11TUE1k+gwB0MgWY8WcPvxjmxpSUIpUauauxdzlDmRpkMeX5wE5gJ
+         PsHhEMdLjVpO/S3cQ6wUmNWf6yo3eBjQMSk1bimo8+AWebf5bIOSY0NxEszK4X8/663q
+         tpXsUzXZqaOxM9fc3M6+54o3aCeHJ9571zUl4THnoMdBxzSq+Uyqn+G+50NCzPeO2H85
+         Pspg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780667056; x=1781271856;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PdsfWOnLuuY9elhMzfIfrh1St5S/FY4B3lK+KDhQ7jU=;
+        b=TBYXsjaaO2wGSqFPxDKdHnicLeBmK+5zuhIbnhOHxxHwLmK8sSyfjyFutAgJeQNRI5
+         JU5+1J4cXepHsQMoe+CrOlucktJmvb3pTgYdHWBBkisXEEO3YGRhiZendlGY2lxwhZn2
+         MIVu8dpZkg/ys7MgfWDpF2eyEvcDU6s7XrN1sYf9QNc8fMyCyvY0Of/X4IEVujwfYILe
+         PubfgZS3kZvGb6HsJ9RbvmKORJ6pR9kntYAmOASaE8QUVSOH/oo4DpDsmH9F8xBHJDJj
+         mNf9mWKLDGYuOaH8njrLH+N2UNm/p8r+jm/lj7VUZysYgWlXvAL9VnKjbXiGkZwyh3GN
+         cL6A==
+X-Forwarded-Encrypted: i=1; AFNElJ/HpX+kMe2GQXtvuQcPndEaMqnM6d3/a1qaJGIqT543pkE1oiwQt+79hfBDx1gT6QGl/ru5Ojd05qGBuxYjhFU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwxNgdoViI5oJKAiTLF08v0hGGSqZ0idjDeQdy6G10nEHN4XWo
+	FM2TcLEytkTDKhT4LWNo4u2WrAYDh380F2ozoK7SrkrOt2rMlzXLhatRMV9ZVRD9ezM=
+X-Gm-Gg: Acq92OEuiEQloQjFfMLbBJx7e6yGli1nes2tJF1Sg4ppy3wFUuVx7NQr4ygbcyogk/7
+	P1lBhxWyRFsPs77+mgY/auHE6cCQ/Dc/g9oHQbWxmPAguySYLWqRv9i6zqEaOL864Eq3NPSC40g
+	TjBZOXOJVm5xHVUmQEEgSXOyBIm+KOjaGDOEp/31UxF0b1ns5//TmrZUSNB/ZR6O0zNstiCWMPy
+	277GVIOUmg55cu3carSZI19A/N8/rw7TYfeEVL8a0FwUyjIZDvHKoheUr5OXlAkON1INWT+NGM1
+	pcTuBfT0gJONJU+7TplyFuGwVKXThpNvo7SzpQZkPN5knQXKi9gU9bG9UaugxS7jLHZYd+qsKkb
+	8veqQ0TlK5OflfvAyima4I/Ae1ZAIBkysqbUYO1EsHVmy9I+naStV53LxkF7Q7Jc1Xj+x4OqqTC
+	pRqyszFZqAyp463xjP54lDc87siiCIuRj+2C+0
+X-Received: by 2002:a05:600c:828f:b0:490:b3fe:9732 with SMTP id 5b1f17b1804b1-490c25dd6aamr54022405e9.16.1780667056226;
+        Fri, 05 Jun 2026 06:44:16 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490c2d2d11asm63158325e9.1.2026.06.05.06.44.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jun 2026 06:44:15 -0700 (PDT)
+Date: Fri, 5 Jun 2026 15:44:13 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: sashiko-reviews@lists.linux.dev, Jiri Kosina <jikos@kernel.org>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+	Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org
+Subject: Re: [PATCH 1/4] selftests: livepatch: Introduce _remove_mod function
+Message-ID: <aiLSraCKXmqYExqA@pathway.suse.cz>
+References: <20260524-livepatch-unload-on-fail-v1-1-7465de7f741d@suse.com>
+ <20260524235906.267EF1F000E9@smtp.kernel.org>
+ <d329f22e75fd01f2250490e4cba87f064a726f52.camel@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|CY8PR12MB7217:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6c941a80-37de-4be9-1245-08dec30878bf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|6133799003|22082099003|18002099003|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	bR1bJ9clLtTBCQFgY1ZTyZPNH3aZkyrynR8aN6eOTLWzNC5kfFFnuN2jii7TOn0X6r0GHBwGWy8tUSD+LdkYbdy63JmWj5F2aN6sn3atO94DjWVbBn9LwSPRkJEBchykvXOjjEYCwMInpHAAzFa3WStAEqp90pt2OGPQL26oCMeiBDnI3bQBK6czeQo0rtHGCPM7b/z8UaA0mTIoNchOehLmaWV2TMZM1N+CnpNarUG9JRXIxZa5SicmR60Bk4eBtCDMhfKPagYGT88ROs2DRqVhHgnqgTdhNWEt7ElXdUXYFPdrUN9LJjErDQOyer2/ik4853fRvOvU44vJHet6NIbqn3BFLjy7qn+2h+lWxAzNPc975/+5mkmBGsnEY4nTwGoiNW8c64wzBMnIciLpRd1TdimPeLE2smfQz0m5xS1e1Zs8vRptucidcfwPnFmDNodfMOwitSghT4U3d3+dDdBjQcNUJGWFI0Qcion3G3xi+k5AxQ6RtUZFuqiJXHOQheWwvoc3W0RDm/290gcY7oftzqasZ3HeN/I3g5qFukUJQv5axdlJXUl45+vWF8RN7V2d3A0hCoNw66YKltQchXXSn30QdHWLFW4jJBktjqewGp2/uMIw/fE4wR8Hhzx54C4K8Aqckr5THmWB1q+vv2cbZAj69tHiB9IVoiKfRypPTPCXU/vuOd24LRDNOIkOKaefE8yd3yPYHDAt+CtZMg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(6133799003)(22082099003)(18002099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?l6FgqGgKdzR8z9JXI+MTLCEOoqnfp/sFXywU3BBLPxcsMgoJDw/TJXPWYIIy?=
- =?us-ascii?Q?4svguSFikQLFBaF58DkI0nwC9XNdImCi7hQpQuf4qY+YADKktbWHxJh83fqL?=
- =?us-ascii?Q?oiR2RbO94k9I2atMMZlyTIK72wmSIQ5uDRjK8or1+l1EKgC/r2ZwJur1strA?=
- =?us-ascii?Q?09mmtmBXaVxXihNTXyQupYfevJ5WVKSGkrKaLvV/zeT18oG5HshqBRNMALLK?=
- =?us-ascii?Q?Eq93U8mexMduHpTddavw2qRSiaJkt7fTrD8tlXmPzAUogkEjzeaa/CO5iX5H?=
- =?us-ascii?Q?VZP0ygKdBM1nBX8keb9WgNj3KDvpv1gKn32psBdNWO6wEwrFBhPmCniTBSyg?=
- =?us-ascii?Q?aBt7+2TNmQAWYfWEQV8c2vg/jtiMjeMAcRTuIgJNz5unloXLC7U8uHBYj/9A?=
- =?us-ascii?Q?XtApyg2MJdh0x7/EYkXosthnZFLUDGNCycYm3XF6uf9ZmWE9j9QypVN8r8GW?=
- =?us-ascii?Q?iqcfqOXWF6/GycVG5pFZPZ4wPXbgItVfjecvwSzUb0cgcAsY4NjaHTyqnHD5?=
- =?us-ascii?Q?t37D/TJS6jFzanZbT+sI2lIJWUXIDsKbejhazzKUZCj7oII3i5x3RsNbOO11?=
- =?us-ascii?Q?5G670mCJ9OaZyHC2tmODyGGfH7Ogyvp/tcnrCxDQEcuVHiRNLsC1C6NnSjA/?=
- =?us-ascii?Q?aR64BgQRy8SvgOZ5bgeS3xN7s05aOs2iT5vpavanr3QbZnev/4s+adw1dp+m?=
- =?us-ascii?Q?bbQ1P3a7l5D6TYILMRY2EE3XWvZVluGHXPpaTBcFph9m2o4Iqq/O08ib/ywd?=
- =?us-ascii?Q?ParYMPmM75FMY2UKigKVtGIdiq/49ccd2kAmaHDpk1v3olt7DgOzKtfrzuRx?=
- =?us-ascii?Q?tTgQ17QFCzbxqcHG3uHDKzDyZiUwFjA/enYdvx81NqdD51yIP9eYjpHbxgPF?=
- =?us-ascii?Q?z7NboiC7Hg2yIOCHpg/9vSLRQ7ie3QpumbXg1/KHAW14+xbK/myr3xxBXOFP?=
- =?us-ascii?Q?Ucbe/ot1C3DDaacyOsGzfaAPxT1/3bai87UhkT3GLpyt8Xqh0ebuHQ559QvL?=
- =?us-ascii?Q?YkmGQ/55iTRAZss75sNtZ4C867qClshHxcasNT+AnONUvoKC8wA3Gj3BCPOX?=
- =?us-ascii?Q?2Cyk0yXYcKk4QAG2p9DKmGjWbiiHiC1az+e6rXRTJQFnGGuLMzlr9GfXqIrD?=
- =?us-ascii?Q?ziuFcA+rvh6QjBfsg8iyO01jbpMSOcyBve3DDkTdUKWRQFZ373Zepor+pSMJ?=
- =?us-ascii?Q?L73Cja5hUwAz+G7wTTcgMLCJ0mBF/pq0S8uGwZj6Djsha23nNqICftSfg3Kp?=
- =?us-ascii?Q?aI8txQDBIYttqqRTUJpH7uWR0asUjPNhUQvu6x5R4c60neqdKF87kcdlfZbh?=
- =?us-ascii?Q?9yqez1g7jCwTQn+txJheRaclIs6EHrwpIqnYsMH5+iktAqE7BDvmW+MJG1L6?=
- =?us-ascii?Q?19XZvq9i9Hm9kGhZP8y1vKYkBIHGyMA2arqXzyfKCYXnM0aUewOWl3hbDYkY?=
- =?us-ascii?Q?UplVQ8LUA3k1gD30ocAum5Fxu4MS7UZbl48YuRZXbWqeHckhzGFcNjHp3qtl?=
- =?us-ascii?Q?5O2S00xw9rFQmoVNueZweLSBp4dK0gfM63cRg4y3OywE6O9s1uG10ZjWxuk1?=
- =?us-ascii?Q?mUtNuOMe9eAJDTk9PNf1rk8Ofoe5TvBt8pZ1Ah385MiZFpguAreaduibeKLl?=
- =?us-ascii?Q?t6R4qgKz5LxeJZpFNYb8RfZ8Ovrw4bjlXn0BMDsZvTii4wznhDjMD3UAiKgs?=
- =?us-ascii?Q?U0i/gHqQDOEoc8g7wiUZNxhhgfuSMzDphuNcuHTINYTMxDob?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c941a80-37de-4be9-1245-08dec30878bf
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2026 13:43:48.8044
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: v/ghFZmfsj5gW6Yi7Uxm/ICv0DSvOwwYjmLkYCvks46OvIvCOWswdu9gg4XzySKj
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7217
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d329f22e75fd01f2250490e4cba87f064a726f52.camel@suse.com>
 
-On Thu, May 21, 2026 at 05:36:31PM -0700, Nicolin Chen wrote:
-> The upper bound of veventq_depth has been missing for veventq allocation,
-> leaving a vulnerability where userspace could exhaust atomic memory pool.
+On Mon 2026-05-25 08:49:10, Marcos Paulo de Souza wrote:
+> On Sun, 2026-05-24 at 23:59 +0000, sashiko-bot@kernel.org wrote:
+> > Thank you for your contribution! Sashiko AI review found 1 potential
+> > issue(s) to consider:
+> > - [Medium] `_remove_mod` uses `die()` which will terminate the script
+> > during cleanup operations.
+> > --
+> > 
+> > commit 7b1591f4e5c3b351136e7fe2821eb2e15ae59ad0
+> > Author: Marcos Paulo de Souza <mpdesouza@suse.com>
+> > 
+> > selftests: livepatch: Introduce _remove_mod function
+> > 
+> > This commit introduces the _remove_mod internal function to remove a
+> > loaded
+> > module, intended to be used during cleanup when a testcase fails. It
+> > also
+> > refactors unload_mod to use this new helper function.
+> > 
+> > > diff --git a/tools/testing/selftests/livepatch/functions.sh
+> > > b/tools/testing/selftests/livepatch/functions.sh
+> > > index 2bc50271729c6..3ec0b7962fc5c 100644
+> > > --- a/tools/testing/selftests/livepatch/functions.sh
+> > > +++ b/tools/testing/selftests/livepatch/functions.sh
+> > 
+> > [ ... ]
+> > 
+> > > @@ -241,9 +241,10 @@ function load_failing_mod() {
+> > >  	log "$ret"
+> > >  }
+> > >  
+> > > -# unload_mod(modname) - unload a kernel module
+> > > +# _remove_mod(modname) - Internal function to remove a loaded
+> > > module.
+> > > +#                        Use unload_mod() instead, which also
+> > > updates TEST_MODS tracking.
+> > >  #	modname - module name to unload
+> > > -function unload_mod() {
+> > > +function _remove_mod() {
+> > >  	local mod="$1"
+> > >  
+> > >  	# Wait for module reference count to clear ...
+> > > @@ -261,6 +262,14 @@ function unload_mod() {
+> > >  		die "failed to unload module $mod (/sys/module)"
+> > 
+> > [Severity: Medium]
+> > The commit message notes this function will be used to remove loaded
+> > modules
+> > when a testcase fails. If used in a cleanup path (such as a bash EXIT
+> > trap),
+> > will calling die() here terminate the script prematurely?
+> > 
+> > If a module fails to unload (for example, if its refcount doesn't
+> > drop),
+> > die() executes exit 1. Inside a trap, this aborts the rest of the
+> > cleanup process. This could skip unloading any remaining modules and
+> > prevent final cleanup operations like pop_config() from running,
+> > potentially
+> > leaving kernel tracing persistently enabled and polluting the system
+> > state
+> > for subsequent tests.
 > 
-> Fix it properly:
->  - Allocate outside the spinlock to avoid GFP_ATOMIC
->  - Cap the veventq_depth upper bound
->  - Fix event_data byte-count
->  - Add selftest coverage
+> The system is already polluted when a testcase fails nowadays, since a
+> module is kept loaded either way, making the next tests to fail if they
+> also try to lead the same modules.
 > 
-> Note that QEMU's SMMU has been already allocating veventq using a "HW"
-> EVTQ entry number. So, picking 19 as the known use case, for a minimal
-> level of ABI consistency.
-> 
-> This is on github:
-> https://github.com/nicolinc/iommufd/commits/fix_veventq_depth-v2
-> 
-> Changelog:
-> v2
->  * Add Reviewed-by from Jason
->  * Rebase on Jason's for-rc tree
->  * Update commit message for clarification
->  * Move "data_len byte-count" to the first
->  * Drop optimistic read in the allocation path
-> v1
->  https://lore.kernel.org/all/cover.1779070992.git.nicolinc@nvidia.com/
-> 
-> Nicolin Chen (4):
->   iommufd: Fix data_len byte-count vs element-count mismatch
->   iommufd: Move vevent memory allocation outside spinlock
->   iommufd: Set veventq_depth upper bound
->   iommufd/selftest: Add boundary tests for veventq_depth
+> The current approach is trying to make it more reliable.
 
-I applied this a few days ago
+I believe that Sashiko suggested that the clean up path should not
+use "die" or "exit" when something fails. It should try to continue
+with the next cleanup task.
 
-Jason
+I remember that we even used the following in rpm post install scripts:
+
+    command || true
+
+It is useful when the script does several independent actions
+and we would like to process as many of them as possible.
+
+For example, in our case, if one module can't be unloaded
+then we might still try to remove other modules and
+call pop_config.
+
+So, we should somehow distinguish when some code paths are
+called in the script and when in the clean up part.
+
+I would export some variable in the cleanup() function and
+check it in the called code paths, for example:
+
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 9c98bbb8b725..eebc7f193d98 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -62,7 +62,9 @@ function has_kdir() {
+ function die() {
+ 	log "ERROR: $1"
+ 	echo "ERROR: $1" >&2
+-	exit 1
++	if [ -z "$in_klp_cleanup" ] ; then
++	    exit 1
++	fi
+ }
+ 
+ function push_config() {
+@@ -128,6 +130,8 @@ function set_ftrace_enabled() {
+ }
+ 
+ function cleanup() {
++	export in_klp_cleanup=1
++
+ 	# Remove leftover modules in reverse order to handle dependencies
+ 	for mod_item in "${TEST_MODS[@]}"; do
+ 		if is_livepatch_mod "$mod_item"; then
+
+
+Finally, I think how to split the changes into patches.
+
+I think that the above changes which add "in_klp_cleanup" might be a
+separate patch,
+
+But the original 1st patch looked weird. It did split _remove_mod()
+and talked about TEST_MODS tracking but the tracking was added in
+2nd patch. I would prefer to split the function and add the tracking
+in the same patch so that it is obvious why it is split and what
+is the difference.
+
+Best Regards,
+Petr
