@@ -1,40 +1,40 @@
-Received: from mail-108-mta118.mxroute.com (mail-108-mta118.mxroute.com [136.175.108.118])
+Received: from mail-108-mta227.mxroute.com (mail-108-mta227.mxroute.com [136.175.108.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A1F1C84A6
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 18:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7113F4115
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 18:53:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780685621; cv=none; b=P/Z0+WkKO983eGq1vvrmrlhNHX4fGXonLwInjrtx9g4EtRS1B02nnRDHldKQbPn/YFfhCW/FjsWyPZs4nVC5hxYn5ONG/MVpnGUetP5uAY6HdEQSIPx+4hzHiqHUSRe4GXHRQAbEHkc3IaclvQrTvqaEPe5LRJ76gF5SDjrWm0U=
+	t=1780685625; cv=none; b=LozkiHXcEwPB7gN7en8RXdkqg5zf/fbtlHv66uGqSu47TEtpZPP4kv+xUVB9DHiUUd2mJRq+BQhM2j48h2F9nGERhGGkFCQKMN/gJIz0Rg6MjmcyFYvdgPZQlCuv8ddymcMmS9NQXiHcal8neX6Lave2H2pdRDgJF9tXg6DTGXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780685621; c=relaxed/simple;
-	bh=3mYBSwPm2HNzbZQx6T/QDwCg0Hi1eJoSiWrbJcT/GQw=;
+	s=arc-20240116; t=1780685625; c=relaxed/simple;
+	bh=7dF/Jnx0wdxiKwad9kq3Ay0lwkGHxkajtV3MvLcJ5q0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KFeVsslmoYN1O7zPu14jWoetvO1dP6QPtoNrbp8uBRI+AB/QKNF5UfiP4XftLwlQ46gZjxKoqTCSnm+fULiIEBlKMk7VtZOp6WiF6OrEis81pqQipaMxanv2zmtT/i/IAgrDjQfpzw7WSl5N4J+5BkyCYiqnzEHgDAFRhIrpWzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=dI1wX2vX; arc=none smtp.client-ip=136.175.108.118
+	 MIME-Version; b=Ic60Sgcl8VpcVm776JIBqQ6s20NE4uvtYzzH50rxabYismcGC+D5Nmk1B+QIK2HAyGSu+dbI6WEwRaDMLJZBb5XIlDRoksH914OBVokbrYq0+PkXyc8/NbbeUfGCZjD4JA8PC4m5SXzT/DEDb4ywCoOCv8uSiAsq1zYIOkJ6a+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=oGUhd9TM; arc=none smtp.client-ip=136.175.108.227
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="dI1wX2vX"
+	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="oGUhd9TM"
 Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
  (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta118.mxroute.com (ZoneMTA) with ESMTPSA id 19e991d738f00067f7.00f
+ by mail-108-mta227.mxroute.com (ZoneMTA) with ESMTPSA id 19e991d8f6800067f7.00f
  for <linux-kselftest@vger.kernel.org>
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 05 Jun 2026 18:48:24 +0000
-X-Zone-Loop: d194f6147c240024550dfca9e346e809efaff17193c2
+ Fri, 05 Jun 2026 18:48:31 +0000
+X-Zone-Loop: db0ac47c17b29128e850b1ecbd30ac656be35a855353
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
 	s=x; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
 	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=B+Wl9Myy0ESgVPp15bKDoA4p/EMRfvxhxgVs0DeRndM=; b=dI1wX2vX+bpLSCQhuv1si7NznO
-	ytc+BpziZqVuYYirVZD9a44yIKUXdxWF1bsV0I2a4Nv1YB7I77d1TSDtiJ9hYcKmd5to/DA9BzppH
-	6GT8jgOuGIJqkXziMSazdN+1bk47mJ9o0ET6Fwz3CZTtrKVZkXF9RlL0ipDcU8HFojq1P4J8M4yKE
-	gfgwNcVO6wSSY03BPAVi6cgj5yk+/OF3ny5C4B9IZ+BMeibdRKk5q2Ln8XS+ouHR3afJuz2q8eel2
-	U18sejcQQECgcc1+2Zqn6y0IXBvzVWzdrEF7zulu010xnBoUpGWCPpWXuT4Glp+pFhB7Z03zyhNn+
-	SbXpbvcg==;
+	bh=ZDXhhuq8nE1DCfiIOEaeZ0HqYW34V80BJ+yWskuv/Z0=; b=oGUhd9TMu7zTssEJT28yWbyMet
+	wVda/NKP6QAFXL5ekm+rovvn0wi4QpmWN819qf4lJwsH/+UbuORvY0MwU/Oc880GiyG1HnWPzEFf/
+	nE4RWEyRgbzCwo+NL2DuFJrPNTMg/p6ZxiDvGxOTHTEJ5GC8p+/muCTMua50xCuy/eM9Q8OwbaExG
+	pV3eA7DwFLt6Zq/+qnnQxX0yRrQ7lvqjC9w0VFrcyW4kkomMZjio+ou6+x2LakiSqufURMEwqJQkx
+	P+VWucl2wT0SPvrJNVS/E+ABMYNSYYQBMgCcjXxKZ1tFfTutXe+06WC4rQxVg89Kbc07hR6t/RPNA
+	TzzZhy7w==;
 From: Richard Patel <ripatel@wii.dev>
 To: x86@kernel.org,
 	"H. Peter Anvin" <hpa@zytor.com>,
@@ -53,9 +53,9 @@ Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>,
 	linux-kernel@vger.kernel.org,
 	Florian Weimer <fweimer@redhat.com>,
 	Richard Patel <ripatel@wii.dev>
-Subject: [PATCH v2 1/5] x86: add userspace IBT config option
-Date: Fri,  5 Jun 2026 18:47:12 +0000
-Message-ID: <20260605184715.3383415-3-ripatel@wii.dev>
+Subject: [PATCH v2 3/5] x86: expose user IBT via PR_CFI_BRANCH_LANDING_PADS
+Date: Fri,  5 Jun 2026 18:47:14 +0000
+Message-ID: <20260605184715.3383415-5-ripatel@wii.dev>
 In-Reply-To: <20260605184715.3383415-2-ripatel@wii.dev>
 References: <20260605184715.3383415-2-ripatel@wii.dev>
 Precedence: bulk
@@ -67,146 +67,204 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Id: ripatel@wii.dev
 
-Adds a X86_USER_IBT Kconfig option and "nouseribt" command-line
-option. Default disabled for now.
+Allows userspace applications to enable IBT (forward-edge control
+flow integrity protection) using the portable PR_CFI prctl API.
 
-These prepare for userspace support for IBT (forward-edge control
-flow integrity protection).
+The name 'branch landing pads' is RISC-V specific, but the mechanism
+is nearly identical in x86.
 
-User IBT works even if kernel IBT is disabled. However, ibt=off
-also disables user IBT.
+This setting enables the following MSR_IA32_U_CET bits:
+- CET_ENDBR_EN (enforce endbr as indirect branch target)
+- CET_NOTRACK_EN (jump modifier to opt-out of IBT checking)
 
-Depends on usermode shadow stack, which enables XSAVES for the
-IA32_U_CET MSR, containing both SHSTK and IBT state.
+Kernel-mode IBT (as part of CFI) bans notrack. A future prctl flag
+could be introduced to ban notrack in usermode too.
 
 Signed-off-by: Richard Patel <ripatel@wii.dev>
 ---
- arch/x86/Kconfig                         | 18 ++++++++++++++++++
- arch/x86/include/asm/cpufeatures.h       |  1 +
- arch/x86/kernel/cet.c                    |  3 ++-
- arch/x86/kernel/cpu/common.c             | 14 ++++++++++++--
- tools/arch/x86/include/asm/cpufeatures.h |  1 +
- 5 files changed, 34 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/ibt.h       | 14 +++++
+ arch/x86/include/asm/processor.h |  5 ++
+ arch/x86/kernel/Makefile         |  1 +
+ arch/x86/kernel/ibt.c            | 98 ++++++++++++++++++++++++++++++++
+ arch/x86/kernel/process_64.c     |  2 +
+ 5 files changed, 120 insertions(+)
+ create mode 100644 arch/x86/kernel/ibt.c
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f3f7cb01d69d..90d5d14fd407 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1901,6 +1901,24 @@ config X86_USER_SHADOW_STACK
+diff --git a/arch/x86/include/asm/ibt.h b/arch/x86/include/asm/ibt.h
+index 5e45d6424722..586e5fadf844 100644
+--- a/arch/x86/include/asm/ibt.h
++++ b/arch/x86/include/asm/ibt.h
+@@ -114,4 +114,18 @@ static inline void ibt_restore(u64 save) { }
  
- 	  If unsure, say N.
+ #define ENDBR_INSN_SIZE		(4*HAS_KERNEL_IBT)
  
-+config X86_USER_IBT
-+	bool "X86 userspace indirect branch tracking"
-+	depends on X86_64
-+	depends on X86_USER_SHADOW_STACK
-+	select X86_CET
-+	help
-+	  Support Indirect Branch Tracking protection for userspace
-+	  applications. IBT is a hardware-supported coarse-grained
-+	  forward-edge Control Flow Integrity protection feature.
-+	  It enforces that all indirect calls must land on an ENDBR
-+	  instruction. Applications must be enabled to use it, and old
-+	  userspace does not get protection "for free". Enables the
-+	  PR_CFI_BRANCH_LANDING_PADS prctl CFI option.
++#ifndef __ASSEMBLER__
 +
-+	  CPUs supporting IBT were first released in 2021.
++#include <linux/prctl.h>
 +
-+	  If unsure, say N.
++#define PR_CFI_SUPPORTED_STATUS_MASK (PR_CFI_ENABLE | PR_CFI_DISABLE | PR_CFI_LOCK)
 +
- config INTEL_TDX_HOST
- 	bool "Intel Trust Domain Extensions (TDX) host support"
- 	depends on CPU_SUP_INTEL
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 1d506e5d6f46..1825cbf864c0 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -516,6 +516,7 @@
- 						      * and purposes if CLEAR_CPU_BUF_VM is set).
- 						      */
- #define X86_FEATURE_X2AVIC_EXT		(21*32+20) /* AMD SVM x2AVIC support for 4k vCPUs */
-+#define X86_FEATURE_USER_IBT		(21*32+21) /* Indirect Branch Tracking for user mode applications */
- 
- /*
-  * BUG word(s)
-diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
-index 99444409c026..3ccf47e82da1 100644
---- a/arch/x86/kernel/cet.c
-+++ b/arch/x86/kernel/cet.c
-@@ -149,7 +149,8 @@ __setup("ibt=", ibt_setup);
- DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
- {
- 	if (user_mode(regs)) {
--		if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
-+		if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK) ||
-+		    cpu_feature_enabled(X86_FEATURE_USER_IBT))
- 			do_user_cp_fault(regs, error_code);
- 		else
- 			do_unexpected_cp(regs, error_code);
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index a4268c47f2bc..2839edd92331 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -634,7 +634,7 @@ __noendbr void ibt_restore(u64 save)
- 
- static __always_inline void setup_cet(struct cpuinfo_x86 *c)
- {
--	bool user_shstk, kernel_ibt;
-+	bool user_shstk, kernel_ibt, user_ibt;
- 
- 	if (!IS_ENABLED(CONFIG_X86_CET))
- 		return;
-@@ -642,13 +642,19 @@ static __always_inline void setup_cet(struct cpuinfo_x86 *c)
- 	kernel_ibt = HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT);
- 	user_shstk = cpu_feature_enabled(X86_FEATURE_SHSTK) &&
- 		     IS_ENABLED(CONFIG_X86_USER_SHADOW_STACK);
-+	/* User IBT only needs hardware IBT, not kernel-enabled IBT. */
-+	user_ibt = cpu_has(c, X86_FEATURE_IBT) &&
-+		   IS_ENABLED(CONFIG_X86_USER_IBT);
- 
--	if (!kernel_ibt && !user_shstk)
-+	if (!kernel_ibt && !user_shstk && !user_ibt)
- 		return;
- 
- 	if (user_shstk)
- 		set_cpu_cap(c, X86_FEATURE_USER_SHSTK);
- 
-+	if (user_ibt)
-+		set_cpu_cap(c, X86_FEATURE_USER_IBT);
++#ifdef CONFIG_X86_USER_IBT
++void reset_thread_ibt(void);
++#else
++static inline void reset_thread_ibt(void) {}
++#endif /* CONFIG_X86_USER_IBT */
 +
- 	if (kernel_ibt)
- 		wrmsrq(MSR_IA32_S_CET, CET_ENDBR_EN);
- 	else
-@@ -666,6 +672,7 @@ static __always_inline void setup_cet(struct cpuinfo_x86 *c)
- __noendbr void cet_disable(void)
- {
- 	if (!(cpu_feature_enabled(X86_FEATURE_IBT) ||
-+	      cpu_feature_enabled(X86_FEATURE_USER_IBT) ||
- 	      cpu_feature_enabled(X86_FEATURE_SHSTK)))
- 		return;
- 
-@@ -1760,6 +1767,9 @@ static void __init cpu_parse_early_param(void)
- 	if (cmdline_find_option_bool(boot_command_line, "nousershstk"))
- 		setup_clear_cpu_cap(X86_FEATURE_USER_SHSTK);
- 
-+	if (cmdline_find_option_bool(boot_command_line, "nouseribt"))
-+		setup_clear_cpu_cap(X86_FEATURE_USER_IBT);
++#endif /* __ASSEMBLER__ */
 +
- 	/* Minimize the gap between FRED is available and available but disabled. */
- 	arglen = cmdline_find_option(boot_command_line, "fred", arg, sizeof(arg));
- 	if (arglen == 3 && !strncmp(arg, "off", 3))
-diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
-index 86d17b195e79..1cf22d27c7a1 100644
---- a/tools/arch/x86/include/asm/cpufeatures.h
-+++ b/tools/arch/x86/include/asm/cpufeatures.h
-@@ -515,6 +515,7 @@
- 						      * and purposes if CLEAR_CPU_BUF_VM is set).
- 						      */
- #define X86_FEATURE_X2AVIC_EXT		(21*32+20) /* AMD SVM x2AVIC support for 4k vCPUs */
-+#define X86_FEATURE_USER_IBT		(21*32+21) /* Indirect Branch Tracking for user mode applications */
+ #endif /* _ASM_X86_IBT_H */
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 67dd932305db..7fbf10410973 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -504,6 +504,11 @@ struct thread_struct {
  
- /*
-  * BUG word(s)
+ 	unsigned int		iopl_warn:1;
+ 
++#ifdef CONFIG_X86_USER_IBT
++	unsigned int		ibt:1;
++	unsigned int		ibt_locked:1;
++#endif
++
+ 	/*
+ 	 * Protection Keys Register for Userspace.  Loaded immediately on
+ 	 * context switch. Store it in thread_struct to avoid a lookup in
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 47a32f583930..05c87f014552 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -169,6 +169,7 @@ obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
+ obj-$(CONFIG_X86_CET)			+= cet.o
+ 
+ obj-$(CONFIG_X86_USER_SHADOW_STACK)	+= shstk.o
++obj-$(CONFIG_X86_USER_IBT)		+= ibt.o
+ 
+ ###
+ # 64 bit specific files
+diff --git a/arch/x86/kernel/ibt.c b/arch/x86/kernel/ibt.c
+new file mode 100644
+index 000000000000..682414fde5a4
+--- /dev/null
++++ b/arch/x86/kernel/ibt.c
+@@ -0,0 +1,98 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/types.h>
++#include <linux/cpu.h>
++#include <linux/prctl.h>
++#include <asm/msr.h>
++
++static bool user_ibt_enabled(struct task_struct *task)
++{
++	return task->thread.ibt;
++}
++
++static bool user_ibt_locked(struct task_struct *task)
++{
++	return task->thread.ibt_locked;
++}
++
++static void user_ibt_set_lock(struct task_struct *task, bool lock)
++{
++	task->thread.ibt_locked = lock;
++}
++
++static void user_ibt_set_enable(bool enable)
++{
++	u64 msrval;
++
++	/* Already enabled */
++	if (user_ibt_enabled(current) == enable)
++		return;
++
++	current->thread.ibt = !!enable;
++
++	fpregs_lock_and_load();
++	rdmsrq(MSR_IA32_U_CET, msrval);
++	if (enable)
++		msrval |= CET_ENDBR_EN | CET_NO_TRACK_EN;
++	else
++		msrval &= ~(CET_ENDBR_EN | CET_NO_TRACK_EN);
++	msrval &= ~CET_WAIT_ENDBR;
++	wrmsrq(MSR_IA32_U_CET, msrval);
++	fpregs_unlock();
++}
++
++int arch_prctl_get_branch_landing_pad_state(struct task_struct *t,
++					    unsigned long __user *state)
++{
++	unsigned long status = 0;
++
++	if (!cpu_feature_enabled(X86_FEATURE_USER_IBT))
++		return -EINVAL;
++
++	status = (user_ibt_enabled(t) ? PR_CFI_ENABLE : PR_CFI_DISABLE);
++	status |= (user_ibt_locked(t) ? PR_CFI_LOCK : 0);
++
++	return copy_to_user(state, &status, sizeof(status)) ? -EFAULT : 0;
++}
++
++int arch_prctl_set_branch_landing_pad_state(struct task_struct *t, unsigned long state)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_USER_IBT))
++		return -EINVAL;
++
++	if (t != current)
++		return -EINVAL;
++
++	if (state & ~PR_CFI_SUPPORTED_STATUS_MASK)
++		return -EINVAL;
++
++	if (user_ibt_locked(t))
++		return -EINVAL;
++
++	if (!(state & (PR_CFI_ENABLE | PR_CFI_DISABLE)))
++		return -EINVAL;
++
++	if (state & PR_CFI_ENABLE && state & PR_CFI_DISABLE)
++		return -EINVAL;
++
++	user_ibt_set_enable(!!(state & PR_CFI_ENABLE));
++
++	return 0;
++}
++
++int arch_prctl_lock_branch_landing_pad_state(struct task_struct *task)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_USER_IBT) ||
++	    !user_ibt_enabled(task))
++		return -EINVAL;
++
++	user_ibt_set_lock(task, true);
++
++	return 0;
++}
++
++void reset_thread_ibt(void)
++{
++	current->thread.ibt = false;
++	current->thread.ibt_locked = false;
++}
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index b85e715ebb30..4b727cc7bccb 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -59,6 +59,7 @@
+ #include <asm/fsgsbase.h>
+ #include <asm/fred.h>
+ #include <asm/msr.h>
++#include <asm/ibt.h>
+ #ifdef CONFIG_IA32_EMULATION
+ /* Not included via unistd.h */
+ #include <asm/unistd_32_ia32.h>
+@@ -540,6 +541,7 @@ start_thread_common(struct pt_regs *regs, unsigned long new_ip,
+ 	}
+ 
+ 	reset_thread_features();
++	reset_thread_ibt();
+ 
+ 	loadsegment(fs, 0);
+ 	loadsegment(es, _ds);
 -- 
 2.47.3
 
