@@ -1,142 +1,94 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2934279FC
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 06:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BA3402B96;
+	Fri,  5 Jun 2026 06:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780642271; cv=none; b=KLD28mF3kb+JcurZb5KMPrYefx3eS1Mm6/av0K1ECqoZgjLU9lTybsYQaRBFm25tYklKKyyz1EQp60VxR1ydUVAW7dDD0EQEaLVs0oFPGUov1Q++oxd747404lWuV+3wgCRezDZkJlk14CD4wEQ34aD+DerZFqXj8rRcFaT4CeI=
+	t=1780642731; cv=none; b=UUiQLeAP/gwLlfGHaXIuBiraz/vpiAAGYD49cjvYdjzYnIGOCyiq+u9EwgDS1QBjCUvEvKLtapjmrJxXg63JMYRIHzvM+46/JvgNxFOw6IZgMTBJ4UFY7mUGI+s9k9Tn+a+9aed2crbj4tf5w7cLBxvhf0PEEff2Mr3jUCBYKN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780642271; c=relaxed/simple;
-	bh=TfLsETz7Q6l0FsZne6CcwqKFbkV6sQbdJ3G/Uxbs0sc=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=XZvSEf3+5iPfKkyPiEdrWbTHOQP6pGjRoW2mKTDhkBnVrz8s6AY0W/BFMw059UvqPV/msIgCunzfikZ+DTQdsakG/h4s0h4GTdHp5O6/vp6WHeGoBJUQf2f67lfOX8Tl7FpAvNBqsSE+a70CkFT67R8KbuIKSNHe0Ubb6rxJtNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cqbLhYbX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=OCZPDZRv; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cqbLhYbX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=OCZPDZRv; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1780642731; c=relaxed/simple;
+	bh=WQaWwkDX9YbrW3OgalS/+vNXcVeQrsyG4JZN4PIbFnE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DXQwVfYxgyaFO9/HbSeLyGbtWL22y0oKTuHGyg0gCV/RpfSSg7A7dL+ms9ZJFv5DPHglsUbYA2aZhbCejKaUbMuURRcXLT8pbLQja8ECInqcvWZCS6rOfTHCZ+RIT26IpVkxICcXo5NKIKGDHfb9n87SWNL3AphxiF+nrJprw3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wg3zHL/g; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=X2UE6cZp; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cqbLhYbX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="OCZPDZRv";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cqbLhYbX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="OCZPDZRv"
-Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
-	by smtp-out2.suse.de (Postfix) with ESMTP id 9F40275828;
-	Fri,  5 Jun 2026 06:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1780642266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wg3zHL/g";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="X2UE6cZp"
+Date: Fri, 5 Jun 2026 08:58:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1780642727;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
-	b=cqbLhYbXqQ5DmSgOueZ40o4uwiC4l/F9yChE0ijzilkPc/NZ/8h52m+nyNo8Z927hNC/nD
-	h6uzKXUMPL2BLimxcA5vZYv8vWHupqNuhJrPtnMUdXjgiwj5AWdsmgTIs6A6COYS3G0Zlb
-	iMXt4baTpTkOZvgu3gj+t71ooYaDVvE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1780642266;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
+	bh=M3EmMILu+ye1yiJ+olGsUWVQFGrk57Nj8f/4vKU+M4w=;
+	b=wg3zHL/g4yWowoJH1VUHWMtZJbLez/0b4n4JH7lMcptiJS49P3DiW7hSDBpdFE/dsyn1vd
+	53jkAUcMcAQ1eqexAVgY7ymgWX1junkDdD7eKRnn8miYLEzdpevdKkRWhk6mUiVkepm/Ti
+	HJJ1s48rsnuQcWU39NbQz36inKcZwowhBZV4xDDHeLrKZewCHh5BC2f3HR8SVxujJ2mHUD
+	e8P8bkeCM784412F8N9KUIKtGvK/yyBcFiVkSQrw2wGYqRVGXUWiA8bHI8/Qc4j7UKtMcl
+	ZuhATnPNd7jJQof7ao859y6GvidAX4vpd11CycaknsJCHGEQQieQ9pIL+VS6XQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1780642727;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
-	b=OCZPDZRvWlmxIPniJy+nNqaoe+0kcLrgcasJ8Go1l+GIVhUVnBeOC0znbu9O78tPyCl0QS
-	8G9lsmxfaw4MinDA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=cqbLhYbX;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=OCZPDZRv
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1780642266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
-	b=cqbLhYbXqQ5DmSgOueZ40o4uwiC4l/F9yChE0ijzilkPc/NZ/8h52m+nyNo8Z927hNC/nD
-	h6uzKXUMPL2BLimxcA5vZYv8vWHupqNuhJrPtnMUdXjgiwj5AWdsmgTIs6A6COYS3G0Zlb
-	iMXt4baTpTkOZvgu3gj+t71ooYaDVvE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1780642266;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
-	b=OCZPDZRvWlmxIPniJy+nNqaoe+0kcLrgcasJ8Go1l+GIVhUVnBeOC0znbu9O78tPyCl0QS
-	8G9lsmxfaw4MinDA==
+	bh=M3EmMILu+ye1yiJ+olGsUWVQFGrk57Nj8f/4vKU+M4w=;
+	b=X2UE6cZp5F8b8OrD1jFCi8eg8vHjG39PcrdgBxPrpbRXWRmDdj1dW7Rn42IH07cwVqHkiZ
+	2WInfx1zZRIruZCg==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: David Gow <david@davidgow.net>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, 
+	Rae Moar <raemoar63@gmail.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	workflows@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] kunit: tool: Parse and print the reason tests are
+ skipped
+Message-ID: <20260605085615-8c7c7024-3af8-4016-8d9f-7c7af30734e4@linutronix.de>
+References: <20260604123207.2615485-1-david@davidgow.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2] selftests/livepatch: fix resource leak in
- test_klp_syscall init error path
-From: Miroslav Benes <mbenes@suse.cz>
-To: Rui Qi <qirui.001@bytedance.com>
-Cc: mbenes@suse.cz, jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com, 
- joe.lawrence@redhat.com, shuah@kernel.org, live-patching@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20260604083208.1071428-1-qirui.001@bytedance.com>
-References: <20260602124509.365996-1-qirui.001@bytedance.com>
- <20260604083208.1071428-1-qirui.001@bytedance.com>
-Date: Fri, 05 Jun 2026 08:51:03 +0200
-Message-Id: <178064226303.69035.586790401674446574.b4-reply@b4>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=364; i=mbenes@suse.cz;
- h=from:subject:message-id; bh=TfLsETz7Q6l0FsZne6CcwqKFbkV6sQbdJ3G/Uxbs0sc=;
- b=owGbwMvMwMHYWJt9x2W1tA7jabUkhiylwutFJk+tdz8/ZSHzif3Y9Uiuw3eeqVoE/jow/6Cq9
- OfYr0syOhn9WRgYORgsxRRZXu91ljOckmugWf3uLswgViaQKdIiDQxAwMLAl5uYV2qkY6Rnqm2o
- Zwhk6BgxcHEKwFRfkuZg2Lwm+ZaJBffnP2v8LO9N+h9Tn/fCrmVrzr0cr89CPzZZ8R6te5nxd6N
- szckECZe/fIuNdTjfsa9tOv7QRb+nbumjA82eov+cwjYlPbUXmHBo0QLHPk4Hzyl/A1ljJH49Ev
- 635b/Wwv2GMo3BmmJrPSQTzTxlwuvu7t3boZgpLzv56JXrnee3r2K8Ws0XkZ5nslqcw8666LSD9
- 6XSdsZGd/fmH/yTVlw9skWPwb7+steOOx08/w8e4n+U3JQcbLBP9pe7W5LKhHrxhKrIWjUZmX2H
- 5wYuDQ4N/z/9myl/0ePD5aIvFLTevc6/vJTt4ImEU1cUNromvVKV6MywMWrade33FvvUlWeLZoX
- cjUkFAA==
-X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
- fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
-X-Spam-Flag: YES
-X-Rspamd-Action: add header
-X-Spam-Level: *****************
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [17.64 / 50.00];
-	SPAM_FLAG(5.00)[];
-	NEURAL_SPAM_LONG(3.50)[1.000];
-	HFILTER_HELO_5(3.00)[localhost.localdomain];
-	NEURAL_SPAM_SHORT(2.99)[0.998];
-	BAYES_HAM(-2.75)[98.90%];
-	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
-	RDNS_NONE(2.00)[];
-	ONCE_RECEIVED(1.20)[];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DIRECT_TO_MX(0.00)[b4 0.15.2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:1b::12ef:from];
-	RCVD_COUNT_ZERO(0.00)[0];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:dkim]
-X-Spamd-Bar: +++++++++++++++++
-X-Rspamd-Queue-Id: 9F40275828
-X-Spam-Score: 17.64
-X-Spam: Yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260604123207.2615485-1-david@davidgow.net>
 
-On 2026-06-04 16:32 +0800, Rui Qi wrote:
-> In livepatch_init(), if klp_enable_patch() fails, the previously
-> created kobject and sysfs file are never cleaned up, causing a
-> resource leak. Capture the return value and add proper cleanup
-> on the error path.
+On Thu, Jun 04, 2026 at 08:32:04PM +0800, David Gow wrote:
+> When a KUnit test (or other KTAP test) is skipped, a "skip reason" can be
+> provided. kunit.py has never done anything with this, ignoring anything
+> included in the KTAP output after the 'SKIP' directive.
 > 
-> Signed-off-by: Rui Qi <qirui.001@bytedance.com>
+> Since we have it, and it's used, print it in a nice friendly yellow in
+> parentheses after a skipped test's name.
+> 
+> (And, by parsing it, it can be included in the JUnit results as well.)
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+Some tests would be nice.
 
+> Signed-off-by: David Gow <david@davidgow.net>
+> ---
+> 
+> There are a few bits of KTAP that kunit.py has never actually parsed, and
+> this is one of them. It's also nice to have a good way of quickly seeing
+> why a test has been skipped, given most tests do provide good reason
+> strings.
+> 
+> Happy to hear comments about the style: yellow in parentheses looks pretty
+> good here, but could be a bit confusing if KUnit do
+
+Something is missing here?
+
+For [SKIPPED] the brackets are colored, too.
+
+> This is the first version of this patch, as it's a new dependency of v3 of
+> patch 2, the JUnit support, which also includes the skip reason.
+> 
+> --
+>  tools/testing/kunit/kunit_parser.py | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+
+(...)
