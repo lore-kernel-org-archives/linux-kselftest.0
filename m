@@ -1,249 +1,166 @@
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+Received: from mail-108-mta113.mxroute.com (mail-108-mta113.mxroute.com [136.175.108.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3383143DA48
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 20:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780689906; cv=pass; b=sd94FNP3DgYe87Um08EGXjg0LXN6JDF3cxGt+C4Vq2jkLoeDsRcVYfdH6+ox00jHq7KUOxgb7TU3CTtfqP0fJzTZS/Jp4ZBJmBP3d7Ptqxs5arI6ucC8SqJEPD8PH6XOhd9kIEfmVIXIgQDydonQTvip6Nwgq9ZzMvTaBbPXpVA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780689906; c=relaxed/simple;
-	bh=7/mWzWxPI8oQqXNv3WJswfOhn6IHE6PhTtx+2SIzYJQ=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=juga5kk0emSRyubcCgP9PtZDQbfDUv+i/64MkBTIR/wHBkVj0kaR+aUrkxmosaPStdrZl+6WKis937OIc/M8w31UhBmLF9PZiG+9n66CQlje+DvsQGPU7DhmajGQYQA5kkTfGibJ8cTnCVdhrfxbTPSt5yjXyOM1RjRC7m3Xk6Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cZsIH11h; arc=pass smtp.client-ip=74.125.82.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAAFB3AFB09
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 20:38:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.113
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780691890; cv=none; b=ohoOa0zGQDj8U0MAN5SkhOcRYiCxcjGKmUTOhc/kaerGwKz/OjePadAxBnohzLqYwQpHvoJtfhHqd0CLQRrCvuNflSCHY0FVCNLL7MbWlkYpapi726N9ytcDXDurd9uvEJHSuLyxnrFALZH+hgW98WH+iECXr28yn9jRQRsJbtM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780691890; c=relaxed/simple;
+	bh=mtRFSkWblm61wGrh/wpoZ7P+qtpA7tqnNoCqk9zA3O8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dwPxDnIRMXxLVHTJC2W/QAGfwHX6BJadvwSOlWYK9/usaWAZxOo6n0hSJWraJ39tysRv90FfHrjd6MTZ17pVBdgnk2uHpfiIRgDVwbtrjqJmkG2jNdkJG517pn46u90VP0YxMqsusMsbOhvWgKzIOExWonE51x6vswyXo6zpSGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=cnA+rOMB; arc=none smtp.client-ip=136.175.108.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cZsIH11h"
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-138129a622dso1058174c88.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 13:05:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780689904; cv=none;
-        d=google.com; s=arc-20240605;
-        b=DlflmfCfw1Lgbwu08Sst9bOoFAxeA8HKQu1JYJvabyjR8AhazxOHs6dyUzhyjUbP8x
-         9S6jUKSvCNO0O8C72B2Kd4XiWy8ZTaMN3sKSNCDRVNHzlwVKjZG21HklzgaUSpW00PyF
-         pwyfkm6IG76lq7g9yNWl9zpltBkBgpbxprwjOwfQjNUmnbUiEq+jVtBqMKEFUU9qSQb4
-         vkj4+Xoj55Uges+vQvpqti2L9VBDOgWq7WfweKzfiRszCX320kfj8B0wcDr1CepKBwz3
-         ckHDlSkbgKfZvIEMebpQDiF1za/KtFGjGpKEne/X/wS7hb5ooZdMFVw7gK56d2uuvIya
-         3XVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=ETQ/gp71oQXS00v/q0CniX+rY+uk3xd7pEHCdqYInDI=;
-        fh=afyZcpVXS8uN24GB5cCjqXiUtFChbm6u0EKInAvXogo=;
-        b=YZW1MnmlR/FFs42Uo3Tu2Q6ZFEq81hM3BF7VKHOPeYTKpAsoaESE8nuzW2i0HDSip8
-         Q6u+MUPQDspZjPC6KA1+DHdHOs9OXARoVoBmDz5u9YkiHSripQpcZXdSNrrNxljzJXnA
-         VNsI2RcqygfmRVvIMz1Nb7AIcm9r7bFiDxe3aFjtQNBUOtq8ZftiEJmhc3VnY9ZJ+78P
-         hGVjeDMLtGTNSrFmG9tHDgCCgqqKnHG9/lhpq1R2GxVrYxHVkS5vv36qiikhuU7m3jcK
-         NhdJD6B/3IrKGoOnKxsdbXXsje6YKBgXnGXIGP5XYdcgmssq4/YzbCdSz7sZH0F4/New
-         TWPA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780689904; x=1781294704; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ETQ/gp71oQXS00v/q0CniX+rY+uk3xd7pEHCdqYInDI=;
-        b=cZsIH11hl8Pdobufke957AihMbed5MXpSGt7Gff1hSgGSzEVGRz0j/viw2pa71T+tp
-         4JYd1lrf8pFSqRRl10B9gl9aXbbvTlSF9omdmPjPzTzzbWtgjLbkBkq91omp2mTrYYwr
-         S2hk6mlwukIOb+ogfw/l+Bc7VnMeovR5za2M64xdIIGz4TsR/ttTMZKJDeVwdW+0SUDm
-         riVUAVQKgCfhPUDtzhtVjNwNgIgtXaj+8TUZXX9sw/Pc5EbZmj3hs8vh9qvOQa9odfDt
-         f656oLM2SSNr6mloTWWY77N2Ydk0pQmNtAtQzGgFvNvxiUmoBvVMiVaIyGnY7LXTQ0y3
-         tHXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780689904; x=1781294704;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ETQ/gp71oQXS00v/q0CniX+rY+uk3xd7pEHCdqYInDI=;
-        b=iFgmAl2EicSULKkn6CTzzUU+PBqBRypTw/QrzkjMwAqmuep1Z5m/pfNbUQHtmzOCOH
-         qp9VadEd2at2jJXD7+uHfyaeDh5MEYrd8Amn67Gl6kPUJaGjPnN0LSh/LkZTBPTcSGho
-         k954Fj3jkiZYeN0FxLc+ZgtHOX42u8b4rnVmzj3FcRi0au7H4A73mG5Ra0M4rS7UzIfw
-         /UE9uTEw531Ggsl7u/YME84eG/N52Jk4o3fNWSYiXDWS7FqgMjgXlpDfEkaK4rdN24N/
-         mZ2FhIpp5CcdWUQRlTkM5S3FM4+9YHND0DYaCfwpsVf2jsbgtzQTaQlN4fA2CxqxWuVQ
-         jy5A==
-X-Forwarded-Encrypted: i=1; AFNElJ/E/PvdtN0HH5R4A4TGfVoQf42+ba2fC3UYGqNdJLA92uNVGNVxuHj9xzlJVlfPMASGzTuPTOgqRsnakrOJe6E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxgk9+DPy/owb6WhvxY4UjmBNR9k7KK9pRHafU0kiYfx0Sqd+C6
-	KEyGLdoTnKejzzwbwollqXMu38ycQhYRuVfilp3sxaxH5P00/tt2KT+S/Pv4sIEGp80RNCuQ1qR
-	y9enpliAH6CYn+s7iT89hOCVF3lHMlM+3r18+VZx3
-X-Gm-Gg: Acq92OEyaewh4njtM0n7awsoFx1TtkJXE2L3YGNO6TACBHkTLdZg02quq3bnioLG7wp
-	Wnk9ZcY8BXm3O4otUajuelDwZbru4GA+KjoyxB0kTcMxLwPhF6voQSArsDolvVlJVzMd/AykAE+
-	3xTqfa8T4aUOxjyCoegnAOpkKep42nVyX1uqD1hN1nb0DkzPdetCh5n2u5OT7sF0eEvrseUmjDh
-	fPEIA1X9q0PcmYJQ56+Ifkx1qReuJ/OQpP8Rn/eNfV34FQg1ac6Bx1GZxDTQIG1AEFlqqshUmm3
-	2WpFn5GIP0ZDvvBjmU0o9vmkpaAUeepCMXtzOwHkmrTYuqDduwxaXpi/Ik6Jml0z4EdJ79JpQVg
-	y4kS+
-X-Received: by 2002:a05:7022:6a6:b0:137:8921:4fe1 with SMTP id
- a92af1059eb24-1380674296dmr2844699c88.37.1780689903477; Fri, 05 Jun 2026
- 13:05:03 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 5 Jun 2026 13:05:02 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 5 Jun 2026 13:05:02 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <9huz33z06bu1.fsf@tarunix.c.googlers.com>
-References: <cover.1779080766.git.tarunsahu@google.com> <9huzwlwnbgdd.fsf@tarunix.c.googlers.com>
- <ahmbVaCUcBrYK8qO@google.com> <CAEvNRgHsJbGz8k8vgCn_HSxeeQ8agEm4oBYQQ0+b3gFb-aVokg@mail.gmail.com>
- <9huz33z06bu1.fsf@tarunix.c.googlers.com>
+	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="cnA+rOMB"
+Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
+ (Authenticated sender: mN4UYu2MZsgR)
+ by mail-108-mta113.mxroute.com (ZoneMTA) with ESMTPSA id 19e997d22bd00067f7.012
+ for <linux-kselftest@vger.kernel.org>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 05 Jun 2026 20:32:55 +0000
+X-Zone-Loop: 6c18e8b27f9a509c9d2e0257428bdebb04c1d1d8c22f
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
+	s=x; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc
+	:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=WcZzNqmpt6jHPh6vf5iW0qnbE08NIl2+GlfUTtZVfjI=; b=cnA+rOMBGmo8XuDqWhFFinwish
+	9fTECOf7ox3lVvB/P8JYFx3kfBDQGOn7SGnwMm0pBKWkn3Q2KKp/6f5yWB/ehThI5dh7ZVExpbAqm
+	agmru/doC17m8GUP6NJtGQM5b5jqr+lJQoc1vpWEXJkdINvQrjT6SvG4GGmGZYR4DcVEn3MQoGdl8
+	7S13simPnPtCwkXOOLe4+1Tzo6c8MYGLgceeEB5NWezUXpnmo8XEvVe0f7Yxb8GspZ2ewGQy70s9T
+	KH6vIgODllVhzkRHTPfZU4yaL7sbiTYMXTqmBCHXFhirB6w+xne7k9+q+kxkcPvJ/PupyLivmur1V
+	dMiFzx3A==;
+Date: Fri, 5 Jun 2026 20:32:40 +0000
+From: Richard Patel <ripatel@wii.dev>
+To: Florian Weimer <fweimer@redhat.com>
+Cc: x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Yu-cheng Yu <yu-cheng.yu@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>, Kees Cook <kees@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, libc-alpha@sourceware.org,
+	linux-api@vger.kernel.org, Arjun Shankar <ashankar@redhat.com>
+Subject: Re: [PATCH v2 0/5] Usermode Indirect Branch Tracking
+Message-ID: <aiMyaJ8zDl76YOVN@wii.dev>
+References: <20260605184715.3383415-2-ripatel@wii.dev>
+ <lhu1pek4w89.fsf@oldenburg.str.redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 5 Jun 2026 13:05:02 -0700
-X-Gm-Features: AVHnY4L2Vz8Me8pcWVFAkqKnhq9-w0SZ89mR2JAxVASVs_8LCadd0XSvG-O3nmY
-Message-ID: <CAEvNRgEQ8SbqOL3yAri2NO7BoPd=-tqura9O5MKq57m1OLwkGw@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 0/8] liveupdate: kvm: Guest_memfd preservation
-To: tarunsahu@google.com, Sean Christopherson <seanjc@google.com>
-Cc: axelrasmussen@google.com, mark.rutland@arm.com, skhawaja@google.com, 
-	Mike Rapoport <rppt@kernel.org>, sagis@google.com, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Shuah Khan <shuah@kernel.org>, corbet@lwn.net, dmatlack@google.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, vannapurve@google.com, 
-	Pratyush Yadav <pratyush@kernel.org>, david@redhat.com, aneesh.kumar@kernel.org, 
-	vipinsh@google.com, Alexander Graf <graf@amazon.com>, David Hildenbrand <david@kernel.org>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, kexec@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <lhu1pek4w89.fsf@oldenburg.str.redhat.com>
+X-Authenticated-Id: ripatel@wii.dev
 
-tarunsahu@google.com writes:
+On Fri, Jun 05, 2026 at 09:34:46PM +0200, Florian Weimer wrote:
 
-> Hi,
->
-> Ackerley Tng <ackerleytng@google.com> writes:
->
->> Sean Christopherson <seanjc@google.com> writes:
->>
->>>>
->>>> [...snip...]
->>>>
->>>> we have one open Question left:
->>>> 1. How to check guest_memfd is fully shared.
->>>>
->>>> [...snip...]
->>>>
->>>
->>> Given that lack of support isn't going to be limited to _just_ guest_memfd,
->>> simply disallow preservation if the VM supports private memory:
->>>
->>> 	if (kvm_arch_has_private_mem(kvm))
->>> 		return -EOPNOTSUPP;
->>
-> This is a good idea, I have implemented it in V2 (sent it recently).
->
+> How do you detect that handling a signal is complete and IBT can be
+> re-enabled?  Or is it re-enabled before entering the userspace signal
+> handler?
 
-Will look at RFC v2 in a bit :) Thanks!
+Hi Florian,
 
-> Below, I have mentioned a detailed analysis. Please let me know your thoughts.
->
->> Makes sense. Tarun this was the other option that I was suggesting when
->> we discussed offline.
->>
->> I think (?) it is possible to create a fully-private guest_memfd for a
->> non-Confidential VM, and even after conversion lands, for both
->> vm_memory_attributes=true and vm_memory_attributes=false.
->>
->> In that case, your preservation series can still preserve memory tracked
->> as private by guest_memfd but not used as private, right?
->>
->> I don't think anyone will use this combination before guest_memfd
->> write() support lands, we just need to make sure there's no kernel crash
->> or corruption in this case.
->
-> IIUC, currently, private memory definition is where cocovm with HW based
-> private memory is supported. Which is directly checked by
-> kvm_arch_has_private_mem and this return false incase ARCH does not
-> support it in HW (SEV/SNP, TDX).
->
-> So about the combination where a guest_memfd is tracked as private but
-> not actually private. (Created without the INIT_SHARED flags). Even
-> though kvm_arch_has_private_mem is false.
->
-> In this case the luo will preserve the guest_memfd. But it will not
-> preserve any attributes, because
-> 1. during creation, we dont populate any attributes, so by default
-> guest_memfd memory always considered to be shared. (Even though no
-> INIT_SHARED is passed). Conversion to private IOCTL will fail as
-> kvm_arch_has_private_mem check will fail for non-COCOVM.
-> for COCOVM,
-> presevation will not be supported and conversion to private memory will
-> be succeded. (No corruption and kernel crash in this case)
->
->
-> ==== WHAT IF CONVERSION SERIES LANDS =========
->
+In v1, we backed up the IBT CPU state into the (user-accessible) signal
+frame from FRED/XSAVE, then restored it:
+https://lore.kernel.org/lkml/20260517183024.16292-4-ripatel@wii.dev/
 
-I think there are quite many cases to consider if we consider both
-before and after conversion series lands. For preservation, shall we
-assume it will go after conversion? :) This way we can avoid discussing
-some cases.
+In v2, when entering the signal handler, the kernel just context switches
+to the new user rip, bypassing IBT checks (continues executing if the
+signal handler does not begin with endbr).
 
-> In this case, we have two scenerio
-> 1. kvm->attributes
->    In this case, Every logic remains same as above.
+IBT stays enabled in both designs, just the IBT state is preserved in v1,
+and lost in v2.
 
-This is the vm_memory_attributes=true case.
+The same thing happens when doing a sigreturn in v2 (e.g. via trampoline),
+again IBT is not enforced.  IBT stays enabled when doing a siglongjmp,
+though.
 
-Since kvm_supported_mem_attributes(kvm) returns 0 when
-kvm_arch_has_private_mem(kvm) returns false, the vm's mem_attr_array
-will always say shared for any vm where kvm_arch_has_private_mem() is
-false.
+Some time in the future, ideally:
+- signal handler is *required* to start with endbr (this is easy)
+- sigreturn as in my asm example enforces endbr after returning from a
+  signal handler to a in-progres indirect branc
+- libc (sig)longjmp is made IBT-compatible
 
-So yup, preservation doesn't preserve attributes but that's also
-effectively preserving always-shared attributes, so all is good.
+Btw, I had self-tests for the v1 design, and {signal handle,rt_sigreturn,
+siglongjmp} with {success case,violation} works flawlessly with Fedora 44
+glibc amd64. With glibc i686 I ran into PLT issues, probably my fault.
 
-> 2. gmem->attributes
->    if INIT_SHARED: memory is initially shared and no entry in maple tree, and if
->    kvm_arch_has_private_mem returns false (non-COCOVM), this will just
->    fails any conversion request. hence preserving the guest_memfd wont
->    have any problem (fully shared case).
->
+It is quite surprised that siglongjmp was working, btw, since the glibc
+longjmp code uses 'jmp *reg' (without notrack prefix). I guess you do an
+endbr64 at the setjmp side?
 
-Yup, preservation doesn't preserve attributes but that's also
-effectively preserving always-shared attributes, so all is good.
+> > The main question is whether glibc is happy with this prctl syscall API.
+> 
+> As far as I can tell, the prctl works for glibc.  Re-use of an
+> arch_prctl constant might have been problematic, but the series is not
+> doing that.
 
->    if INIT_SHARED not set: memory is initially private, and there is an
->    entry in maple tree, marked the memory as private. During conversion:
->    A. To private: it fails as kvm_arch_has_private_mem return false.
->                   Preservation is safe and there will be no problem. as in preservation
->                   we dont preserve any attributes, but on retrieval, when a new gmem
->                   file is created, identical entry to attributes will also be assigned
->                   as INIT_SHARED flag is not set. So we wont have any issues in this case.
->    B. TO shared: it passes, and update the maple tree. preservation will
->    not be preserving the attributes with current patches, and it will
->    also allow the preservation as kvm_arch_has_private_mem is false. So
->    in this case, on retrieval, we will lose the data regarding the
->    private vs shared (non-cocovm). So if host want to access the shared
->    memory, it will try MMAP and which will fail in new kernel (which was
->    successful in old kernel as conversion happened). But I dont see any
->    kernel crash or corruption.
+Nice :-)
+The alternative would have been to bolt on stuff to ARCH_SHSTK, or create
+an entirely new arch_prctl. Open to any API.
 
-Perhaps it should be this way: the process of preserving should first
-freeze further conversions, then check for private/shared status, and if
-private, return error to userspace.
+> Adding the ELF GNU note parsing can be added later, but perhaps not
+> cleanly.  I'm still a bit worried we might have to rev the markup
+> because too many binaries are in circulation that claim compatibility,
+> have never been tested, and are actually broken.  If the kernel does not
+> look at the ELF bits, things a slightly simpler.
 
-I haven't looked at RFC v2 yet, but IIUC this is kind of in line with
-the other issue where we freeze allocations:
+Phew, I was hoping you'd say that.
 
-+ When preserving, freeze further allocations, preserve all pages that
-  are already allocated. If there are pages that weren't allocated, too
-  bad - allocations are frozen until unpreserve.
-+ When preserving, freeze further conversions, preserve all shared
-  pages. If there are private pages, fail preservation.
+If you want, I can sketch out glibc IBT enabling and test it on Debian
+and Fedora, which IIRC already emit compile with -fcf-protection=branch
+for all OS packages.
 
-This way, there's no loss of any private/shared state, since only shared
-pages are preserved.
+> > There is one notable gap in this patch series, to do with signals:
+> >
+> >   000a: mov rax, 0x100a
+> >   000f: jmp rax
+> >   *** signal occurs ***
+> >   *** signal handler runs, does sigreturn ***
+> >   100a: nop
+> >
+> > The above sequence does not crash.
+> >
+> > With IBT, it should crash at the nop (because an endr64 is expected there).
+> > The IBT state (WAIT_FOR_ENDBR in IA32_U_CET MSR) is not backed up to the
+> > signal frame though.  So, when userland does a sigreturn, the CPU has
+> > forgotten that it was doing an indirect branch before the signal.
+> > (This specifically only occurs with signal handlers that sigreturn.)
+> >
+> > This is because IA32_U_CET is part of XSAVE 'supervisor' state, so
+> > regular XSAVE/XRSTOR can't access it.  Doing a manual backup is tricky.
+> 
+> That's a bit annoying.  Is this restricted to signal handlers, or does
+> it apply to page faults, too?
 
->    This is an issue with only non-cocoVM support with conversion series
->    having the gmem attribute enabled without INIT_SHARED flag. I am not
->    sure, if there will be any user for this very soon (is it SW_PROTECTED_VM ?? ).
->
+Only signal handlers, page faults don't reset IBT.
 
-So if a non-CoCo VM does use an all-private guest_memfd (didn't specify
-INIT_SHARED) (don't think anyone will use this before guest_memfd
-write() support), it'll just always fail preservation unless before
-preserving everything was converted to shared.
+> > A related problem is that the signal handler routine is not checked for
+> > endbr preamble.
+> 
+> That's not necessarily a problem because its address cannot be directly
+> overwritten in userspace.  Not all indirect branches need to be checked,
+> only those that have tweakable targets.  In fact, fewer ENDBR64 markers
+> are better (although we wouldn't drop the marker from a signal handler
+> specifically, of course).
 
-> Let me know, If my understanding is correct. Should we add INIT_SHARED
-> along with kvm_arch_has_private_mem check to make Above case 2.B.
-> impossible in future for the current support of guest_memfd.
+Just one concern I have is that people start relying on signal handlers
+not requiring endbr64, and then a future kernel version breaking them once
+we enforce it.
+
+Really appreciate your review,
+
+-Richard
