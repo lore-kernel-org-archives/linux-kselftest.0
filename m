@@ -1,297 +1,277 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB0E4DBD6E;
-	Fri,  5 Jun 2026 12:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5392E975E
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 12:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780661629; cv=none; b=jkswB90olzg0xcBB1wE9c+7MB6UTt4Uy0wqrKsqhL1eBD2iw8Jbn42tl44WdoUQK5BEIdwNIra0Do49iJWkqHUNe7xDxY2trh8EuIUX5ulh58G9CmVIl79pt77GnLJYyUmwXuf1h2ao6fPAsz9BVhUuxn59LuV4BmigY/cuTio4=
+	t=1780663365; cv=none; b=cEGOnSPbCEWYHiEQ628h7a3bBgs7EmtzBlNbFnhGNd7X/A2J+/Av+8iHGGqsnzF5/mUeQYjlOfCSu/Mh6ppZ3KOl6gsHbdFGhnFEYy5z7hDgb12HTRKmign35VfsVG+LgyGX4I7wAuTElLlQo/3bCtfGos/kdx9B8A7EQ4v1hTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780661629; c=relaxed/simple;
-	bh=3dPr7qEVvxmzqp5Fa68RHp4F3vW5/2Q/V40NwuplFpg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PMP4WQESAkf3EOBTewO84kuvSHyU2u3izrV/+5hi4Zahkl4eWS+0wmMJLn5C2amWllzW/2oQoh2dnGeeCB8KiXK3wojHnlFGq4CUJ6CIwlSrO4vl7G9H3dU6kCTzupbqVsoE7kz//Cf8Gfi3EkKj7d/VrXq/hQUOIobayT9TpUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Cg+RrNWC; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1780663365; c=relaxed/simple;
+	bh=Pem7FrMpCZKUNwLK6sAyJL5pwQ5WPLPrP7HowcZm8A0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sJiNwGyf5sIcRa+2iBbhVHRkFAHjaiixZhsd/V3/tA0cJ9qVpG39198SQ8Mdc43uP79DC+4xY8I/ejxaUI1m7K/2sALmKX9kfZYcjK8fhl/GAvNvLPOW9hVVJcgjeMAm9ZFEQnIbPg2RyyDHrxda0KL26k3VRzcKlKgCji9rAok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QoYMhQUi; arc=none smtp.client-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Cg+RrNWC"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=kFUydBL2VOJZxCjSY8+wesOl5nfUP1qHfnXLPzIPWck=; b=Cg+RrNWC1/3+bkJkbTflL8ztDI
-	go10PZKiqgyCXY+ZgJ85TJniJwKYe7lOncmV6ur/xkQDLhGRarJ4KqUBiNoY2j9Q+eLEH/+dvBI8B
-	7aLDkGXm1u5ziV+SnwE4KLgjnfFCtXVPcLlDO2Hz4HYAPQL3NgAe53G6Q4dVi3A+d4WpUnDkmQrfX
-	YiPtvqv0fgwecZHZKvyZffAm9Tvf2cSxo23GP23r3GHmFm7hNtkSYGvxNri3UJpv/t372ioqRcp3C
-	lPy1jvwErc9oKrq5cxTZv0rgAH+n1L4NSIPyNzDG6cHKQT/WowD0Mzo1PtvNEc19cyj4HKSqwlFK9
-	zYwMa0hg==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wVTQm-005HWG-1Y;
-	Fri, 05 Jun 2026 12:13:44 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Fri, 05 Jun 2026 05:13:26 -0700
-Subject: [PATCH net-next 2/2] selftests: net: add SMC getsockopt_iter
- conversion test
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QoYMhQUi"
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-135e7f4a295so1104943c88.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 05:42:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780663362; x=1781268162; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oG1vXqHQcbiuYcwvNOUmuFadaY3mRNi0k+ecX5oMwMA=;
+        b=QoYMhQUi7VygD/FrVY7weBe397UME8w5vO1fkJawt+cf/MQf0IQiUWzMN9zY9Gw3tX
+         I5Gm7V0lerFbY0FKVmh2XTwZ9CCCcmMuWE0WsZ3Gp6Ch35HSp9U/iHzVaDlZ/xECANlk
+         bwUU1NZwqlNiEtmf0xPrcA+E6HATXBfrxCGrRgoSq3qmwp5Es+7PWL3Qoox4TmldZuLX
+         VLEfh1ZyQTLwsG9I29WL4YSKoLpJ6ZFe/qELJHCqwMhmGNAartHe136ITw8ZxhIOah8s
+         mw+0rGwpAT89Dli8H6Vn3GeV3EfEE9O8/x8gganYN3WJHZm7jKIwhKvhuD4F8kDMk0tq
+         KQZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780663362; x=1781268162;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oG1vXqHQcbiuYcwvNOUmuFadaY3mRNi0k+ecX5oMwMA=;
+        b=nEcZp15AQK7xoQW/5E5OkfvHtuqmP3USfnTm9XiSeybqA12RKNiJy+Q8nmWgror2jT
+         rOgDYXvLs3OOAKX06N2Xb1yGI2foBskyymKeGnfPVvlmiJH93ss3XwW1yYcHAO1Cy+iM
+         vi8hg55E30KPc52ncIntm47EFoVPZ7Zlh2t4DZ9fv2/TPmqFIJ7yiJ925vY3u8ANAlmZ
+         pC+JLvMcFDp03rCZM4j5SumFdIJt5cSyH6ffBBkkKBzsG8404uQyH2DqNdzn4/vdsvLB
+         87/HdPhoSQrnlc4sCuMJW4sBlGM89vz32LUbquvftMDvMWrdoIRVB34pbAGoPdK4gnKp
+         Cr/Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9km6jdO3uaio0zSLURJAjUdY1Iuz7T+qmlS/u2IXEddys/ediNP6JfHNvekerNeXzknTffcGmH/AtOT+3Sr3s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAMB7lhe+XOaRD1vV4jB+qy8pAG2/ZTDWpe3x7WKBWsbWGMujv
+	Rg7WtIfrMBTsnVqpMtCutgLJlaytPRm4GbC7bNBqfRvtHQ/QUWNB4COE
+X-Gm-Gg: Acq92OE301XtSpVgu4PiLNVHgV9Q7LzEK2mYur8ShwaT5gCxvr2SGXH8G5EYkCuZIHO
+	WTLy9lVb6IM+BFT+N3lwpfH3EBpFUFWzBao0tBT+3xwoN2lcY/h7m/Wm+eE7823od/vkWI2lBBz
+	o0zkTBGBQsJmfHJdgRsIYq7R7M6ghLPVUo4g+MKGIRZfc5Lc+vyFXIbdggqjd522viYNvIKf3ib
+	1S6GDpqIBB1Td6OMQ3/LGWb6sJiBDXr88FayI1E1EZjlmV28qAX8MwDTzOw3Z3onjX2tNEQOkm3
+	w/ULv1vZJlm/FpPzWJWHObZ+UNfbyFGsccDXKuZsShWB3MAdOMzoCeber2Ndcvf24W63hvJYSNq
+	vUfpOLDm0+9nKTwSRSwa8CFMtf830tCNg4ssBJ/9hO3QuhHbpyBy+Y+9rZm0hpxAuf89/C80z7h
+	eyaov7QD1cPZkS+IdvnL8tKA31fgqO1wlN/PJGiA==
+X-Received: by 2002:a05:7022:439a:b0:12d:c4b7:5625 with SMTP id a92af1059eb24-13807d373f0mr849609c88.9.1780663362025;
+        Fri, 05 Jun 2026 05:42:42 -0700 (PDT)
+Received: from houminxi ([64.118.153.39])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137f5489d17sm5495109c88.1.2026.06.05.05.42.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jun 2026 05:42:41 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
+To: aconole@redhat.com,
+	echaudro@redhat.com,
+	i.maximets@ovn.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	netdev@vger.kernel.org,
+	dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
+	amorenoz@redhat.com,
+	Minxi Hou <houminxi@gmail.com>
+Subject: [PATCH net-next] selftests/net/openvswitch: add flow modify test
+Date: Fri,  5 Jun 2026 20:42:22 +0800
+Message-ID: <20260605124222.963815-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260605-getsockopt_smc-v1-2-65da62fa44c4@debian.org>
-References: <20260605-getsockopt_smc-v1-0-65da62fa44c4@debian.org>
-In-Reply-To: <20260605-getsockopt_smc-v1-0-65da62fa44c4@debian.org>
-To: "D. Wythe" <alibuda@linux.alibaba.com>, 
- Dust Li <dust.li@linux.alibaba.com>, 
- Sidraya Jayagond <sidraya@linux.ibm.com>, 
- Wenjia Zhang <wenjia@linux.ibm.com>, 
- Mahanta Jambigi <mjambigi@linux.ibm.com>, 
- Tony Lu <tonylu@linux.alibaba.com>, Wen Gu <guwen@linux.alibaba.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org, 
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
- kernel-team@meta.com
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6628; i=leitao@debian.org;
- h=from:subject:message-id; bh=3dPr7qEVvxmzqp5Fa68RHp4F3vW5/2Q/V40NwuplFpg=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqIr1qlb+aNt6A0tAWKYvap0Vpdt/edGJZQ6XHG
- i0dJttj2k6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaiK9agAKCRA1o5Of/Hh3
- bSqnD/9aZpOTD0RZsKZbziT9z+aDoKf+Xw1RatCpANzHyubQazRzHF+T13BySpQNQvrQDLl94Z8
- jXErk1WB1mcxWZ+wXKTvXT9CS74NP6O+PsAKYyObIC5z2HGMPtwzEWVCKxCarolZuXERmf2zu4K
- ABLPLo2bZbR4YVeXjX8e3RBbq9IG/vFb5U+4+mh/24qHAAv/W8i3tp2M8mn89ngmW+hhmwQJPHr
- aXevJKErr5GDvnFl3ho9EK5dq4xBpFWE7vsic5hv9482jfsb8/9Epsne75OesKyzMdXmt40Am7h
- JW+0EQfsiqz1nu0K78Oe+P21SHQa7ITtmq0vK1Hz5wwsef3ijPkTns555IVz6w4jMfFBAB0KSRy
- 0+xj0O24HFwWfuBBHJ/IJfY58BlKFCN6K9eguSvCc7ma7BHwrNUjQUFFHSvU7CZLS7kqMUeASPI
- GVI+nuRT1FbAnrSVaggd+JdgBafZWywzzMmxq8f9LggEOz0/1jur4o8Wkn9XWuPKfgMc9mNK9df
- inlYDAukb8PfDlN0GuL4T4pP3KnYLH/rhpNLsPMwh4r6nkIV3FiftoQkFao8xjvx/NEbIdcZIAa
- XVsMJ3n+DHAo3psms8LII+EcNq1IjLPLe0V2R09CpHVuWeZMcdxu684wd7O7LMlO14D3RQl5D2M
- j3/liRQy2BBJIpw==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
 
-Add a kselftest that exercises the SMC getsockopt() paths converted to
-the getsockopt_iter() / sockopt_t callback:
+Add mod_flow() and the mod-flow CLI command to ovs-dpctl.py, exercising
+OVS_FLOW_CMD_SET. Add test_flow_set which first modifies an existing
+flow with new actions and verifies the change via traffic, then modifies
+the same flow without actions and verifies the kernel handles the
+no-actions case gracefully.
 
-- SOL_SMC options (SMC_LIMIT_HS), handled directly by smc_getsockopt(),
-  which returns the int value through copy_to_iter() and reports the
-  written length in opt->optlen.
+The no-actions path is unreachable from userspace OVS tools (dpctl
+mod-flow requires actions) but reachable via raw netlink. This is the
+code path where Adrian Moreno found a possible kfree_skb of ERR_PTR
+when reply allocation fails after locking.
 
-- The CLC pass-through (e.g. SOL_TCP), where smc_getsockopt() forwards to
-  the underlying TCP socket: optval is reconstructed from iter_out, the
-  optlen pointer is forwarded, and the clamped length is mirrored back
-  through opt->optlen. The oversized-buffer case (input optlen differs
-  from output) specifically guards against a missing writeback sync.
+Make parse() skip OVS_FLOW_ATTR_ACTIONS when actstr is None so the
+kernel enters the post-lock allocation branch in ovs_flow_cmd_set().
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
+Suggested-by: Aaron Conole <aconole@redhat.com>
+Signed-off-by: Minxi Hou <houminxi@gmail.com>
 ---
- tools/testing/selftests/net/Makefile         |   1 +
- tools/testing/selftests/net/getsockopt_smc.c | 175 +++++++++++++++++++++++++++
- 2 files changed, 176 insertions(+)
+ .../selftests/net/openvswitch/openvswitch.sh  | 72 +++++++++++++++++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 39 +++++++++-
+ 2 files changed, 108 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 5ca6c557fc3f..5b50f718dbde 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -177,6 +177,7 @@ TEST_GEN_PROGS := \
- 	bind_wildcard \
- 	epoll_busy_poll \
- 	getsockopt_iter \
-+	getsockopt_smc \
- 	icmp_rfc4884 \
- 	ipv6_fragmentation \
- 	proc_net_pktgen \
-diff --git a/tools/testing/selftests/net/getsockopt_smc.c b/tools/testing/selftests/net/getsockopt_smc.c
-new file mode 100644
-index 000000000000..239deefb3187
---- /dev/null
-+++ b/tools/testing/selftests/net/getsockopt_smc.c
-@@ -0,0 +1,175 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Exercise the SMC getsockopt() paths that were converted to the
-+ * getsockopt_iter() / sockopt_t callback.
-+ *
-+ * Two distinct paths are covered:
-+ *
-+ *   - SOL_SMC options (SMC_LIMIT_HS) are handled directly by
-+ *     smc_getsockopt(), which returns the int value through copy_to_iter()
-+ *     and reports the written length in opt->optlen.
-+ *
-+ *   - Other levels (e.g. SOL_TCP) are forwarded to the underlying CLC (TCP)
-+ *     socket, whose getsockopt() still operates on __user buffers. The
-+ *     converted smc_getsockopt() reconstructs the userspace optval from
-+ *     iter_out, forwards the original optlen pointer, and mirrors the length
-+ *     the clcsock reported back into opt->optlen so the core writes the right
-+ *     value to userspace.
-+ *
-+ * The kernel-buffer (kvec) path of the CLC pass-through returns -EOPNOTSUPP
-+ * and is not reachable from a userspace getsockopt(), so it is not tested
-+ * here.
-+ *
-+ * Author: Breno Leitao <leitao@debian.org>
-+ */
-+#include <errno.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <netinet/in.h>
-+#include <netinet/tcp.h>
-+#include <sys/socket.h>
-+
-+#include "kselftest_harness.h"
-+
-+#ifndef AF_SMC
-+#define AF_SMC 43
-+#endif
-+#ifndef SMCPROTO_SMC
-+#define SMCPROTO_SMC 0
-+#endif
-+#ifndef SOL_SMC
-+#define SOL_SMC 286
-+#endif
-+#ifndef SMC_LIMIT_HS
-+#define SMC_LIMIT_HS 1
-+#endif
-+
-+FIXTURE(smc) {
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(smc)
-+{
-+	self->fd = socket(AF_SMC, SOCK_STREAM, SMCPROTO_SMC);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_SMC unavailable (errno %d) - load the smc module",
-+		     errno);
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index a415e9dec8cd..71190bc662f9 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -30,6 +30,7 @@ tests="
+ 	drop_reason				drop: test drop reasons are emitted
+ 	pop_vlan				vlan: POP_VLAN action strips tag
+ 	dec_ttl					ttl: dec_ttl decrements IP TTL
++	flow_set				flow-set: Flow modify
+ 	psample					psample: Sampling packets with psample"
+ 
+ info() {
+@@ -193,6 +194,23 @@ ovs_add_flow () {
+ 	return 0
+ }
+ 
++ovs_mod_flow () {
++	if [ -n "$4" ]; then
++		info "Modifying flow: sbx:$1 br:$2 flow:$3 act:$4"
++		ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py \
++			mod-flow "$2" "$3" "$4"
++	else
++		info "Modifying flow (no actions): sbx:$1 br:$2 flow:$3"
++		ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py \
++			mod-flow "$2" "$3"
++	fi
++	if [ $? -ne 0 ]; then
++		info "Flow modify [ $3 ] failed"
++		return 1
++	fi
++	return 0
 +}
 +
-+FIXTURE_TEARDOWN(smc)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
+ ovs_del_flows () {
+ 	info "Deleting all flows from DP: sbx:$1 br:$2"
+ 	ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py del-flows "$2"
+@@ -300,6 +318,60 @@ test_dec_ttl() {
+ 	return 0
+ }
+ 
++test_flow_set() {
++	sbx_add "test_flow_set" || return $?
++	ovs_add_dp "test_flow_set" flowset || return 1
++
++	info "create namespaces"
++	for ns in client server; do
++		ovs_add_netns_and_veths "test_flow_set" "flowset" "$ns" \
++			"${ns:0:1}0" "${ns:0:1}1" || return 1
++	done
++
++	ip netns exec client ip addr add 10.0.0.1/24 dev c1
++	ip netns exec client ip link set c1 up
++	ip netns exec server ip addr add 10.0.0.2/24 dev s1
++	ip netns exec server ip link set s1 up
++
++	ovs_add_flow "test_flow_set" flowset \
++		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
++	ovs_add_flow "test_flow_set" flowset \
++		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
++
++	local fwd_flow="ufid:00000001-0002-0003-0004-000500060007"
++	fwd_flow="$fwd_flow,in_port(1),eth(),eth_type(0x0800),ipv4()"
++
++	ovs_add_flow "test_flow_set" flowset "$fwd_flow" '2' \
++		|| return 1
++	ovs_add_flow "test_flow_set" flowset \
++		'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return 1
++
++	info "verify initial forwarding"
++	ovs_sbx "test_flow_set" ip netns exec client ping -c 1 -W 2 \
++		10.0.0.2 || return 1
++
++	info "mod-flow with new actions (change to drop)"
++	ovs_mod_flow "test_flow_set" flowset "$fwd_flow" 'drop' \
++		|| return 1
++
++	info "verify traffic is now dropped"
++	ovs_sbx "test_flow_set" ip netns exec client ping -c 1 -W 2 \
++		10.0.0.2 >/dev/null 2>&1 \
++		&& { info "FAIL: ping should fail after mod-flow to drop"
++		     return 1; }
++
++	info "mod-flow without actions"
++	ovs_mod_flow "test_flow_set" flowset "$fwd_flow" || return 1
++
++	info "verify drop actions unchanged"
++	ovs_sbx "test_flow_set" ip netns exec client ping -c 1 -W 2 \
++		10.0.0.2 >/dev/null 2>&1 \
++		&& { info "FAIL: ping should still fail after no-actions set"
++		     return 1; }
++
++	return 0
 +}
 +
-+/* ---------- SOL_SMC: handled directly by smc_getsockopt() ---------- */
+ # psample test
+ # - use psample to observe packets
+ test_psample() {
+diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+index 3342e295293d..9113473d425f 100644
+--- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
++++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+@@ -2702,9 +2702,10 @@ class OvsFlow(GenericNetlinkSocket):
+             self["attrs"].append(["OVS_FLOW_ATTR_KEY", k])
+             self["attrs"].append(["OVS_FLOW_ATTR_MASK", m])
+ 
+-            a = ovsactions()
+-            a.parse(actstr)
+-            self["attrs"].append(["OVS_FLOW_ATTR_ACTIONS", a])
++            if actstr is not None:
++                a = ovsactions()
++                a.parse(actstr)
++                self["attrs"].append(["OVS_FLOW_ATTR_ACTIONS", a])
+ 
+     def __init__(self):
+         GenericNetlinkSocket.__init__(self)
+@@ -2738,6 +2739,24 @@ class OvsFlow(GenericNetlinkSocket):
+             raise ne
+         return reply
+ 
++    def mod_flow(self, dpifindex, flowmsg):
++        flowmsg["cmd"] = OVS_FLOW_CMD_SET
++        flowmsg["version"] = OVS_DATAPATH_VERSION
++        flowmsg["reserved"] = 0
++        flowmsg["dpifindex"] = dpifindex
 +
-+/* SMC_LIMIT_HS is reported back as a 4-byte int via copy_to_iter(). */
-+TEST_F(smc, limit_hs_default)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val = 0xdeadbeef;
++        try:
++            reply = self.nlm_request(
++                flowmsg,
++                msg_type=self.prid,
++                msg_flags=NLM_F_REQUEST | NLM_F_ACK,
++            )
++            reply = reply[0]
++        except NetlinkError as ne:
++            print(flowmsg)
++            raise ne
++        return reply
 +
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_SMC, SMC_LIMIT_HS, &val, &optlen));
-+	EXPECT_EQ(sizeof(int), optlen);
-+	EXPECT_TRUE(val == 0 || val == 1);
-+}
+     def del_flows(self, dpifindex):
+         """
+         Send a del message to the kernel that will drop all flows.
+@@ -3013,6 +3032,12 @@ def main(argv):
+     addflcmd.add_argument("flow", help="Flow specification")
+     addflcmd.add_argument("acts", help="Flow actions")
+ 
++    modflcmd = subparsers.add_parser("mod-flow")
++    modflcmd.add_argument("modbr", help="Datapath name")
++    modflcmd.add_argument("modflow", help="Flow specification")
++    modflcmd.add_argument("modacts", help="Flow actions",
++                          nargs="?", default=None)
 +
-+/* A value set via setsockopt() must be readable back unchanged. */
-+TEST_F(smc, limit_hs_set_get)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val = 1;
-+
-+	ASSERT_EQ(0, setsockopt(self->fd, SOL_SMC, SMC_LIMIT_HS, &val, optlen));
-+
-+	val = -1;
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_SMC, SMC_LIMIT_HS, &val, &optlen));
-+	EXPECT_EQ(sizeof(int), optlen);
-+	EXPECT_EQ(1, val);
-+}
-+
-+/* setsockopt() stores !!val, so a non-1 truthy value reads back as 1. */
-+TEST_F(smc, limit_hs_set_get_clear)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val = 0;
-+
-+	ASSERT_EQ(0, setsockopt(self->fd, SOL_SMC, SMC_LIMIT_HS, &val, optlen));
-+
-+	val = -1;
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_SMC, SMC_LIMIT_HS, &val, &optlen));
-+	EXPECT_EQ(sizeof(int), optlen);
-+	EXPECT_EQ(0, val);
-+}
-+
-+/* An oversized buffer is clamped: optlen is reported back as sizeof(int). */
-+TEST_F(smc, limit_hs_oversize_clamped)
-+{
-+	socklen_t optlen;
-+	char buf[16] = {};
-+
-+	optlen = sizeof(buf);
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_SMC, SMC_LIMIT_HS, buf, &optlen));
-+	EXPECT_EQ(sizeof(int), optlen);
-+}
-+
-+/* An unknown SOL_SMC option is rejected with -EOPNOTSUPP. */
-+TEST_F(smc, bad_optname)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_SMC, 0x7fff, &val, &optlen));
-+	EXPECT_EQ(EOPNOTSUPP, errno);
-+}
-+
-+/* ---------- CLC pass-through: forwarded to the underlying TCP socket ------ */
-+
-+/* A TCP option set on the SMC socket is applied to the CLC socket and must be
-+ * readable back through the pass-through, exercising optval reconstruction.
-+ */
-+TEST_F(smc, clc_tcp_nodelay_set_get)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val = 1;
-+
-+	ASSERT_EQ(0, setsockopt(self->fd, IPPROTO_TCP, TCP_NODELAY,
-+				&val, optlen));
-+
-+	val = -1;
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_NODELAY,
-+				&val, &optlen));
-+	EXPECT_EQ(sizeof(int), optlen);
-+	EXPECT_EQ(1, val);
-+}
-+
-+/* With an oversized buffer the clcsock clamps the reported length to
-+ * sizeof(int). That length is produced by the clcsock writing the user optlen
-+ * pointer, and must be mirrored back through opt->optlen; since the input
-+ * optlen (16) differs from the output (4), this fails if the writeback sync
-+ * in smc_getsockopt() is missing.
-+ */
-+TEST_F(smc, clc_tcp_nodelay_oversize_clamped)
-+{
-+	socklen_t optlen;
-+	char buf[16] = {};
-+
-+	optlen = sizeof(buf);
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_NODELAY,
-+				buf, &optlen));
-+	EXPECT_EQ(sizeof(int), optlen);
-+}
-+
-+/* An error from the clcsock (unknown TCP option) is propagated unchanged. */
-+TEST_F(smc, clc_bad_optname)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, IPPROTO_TCP, 0x7fff, &val, &optlen));
-+	EXPECT_EQ(ENOPROTOOPT, errno);
-+}
-+
-+TEST_HARNESS_MAIN
-
+     delfscmd = subparsers.add_parser("del-flows")
+     delfscmd.add_argument("flsbr", help="Datapath name")
+ 
+@@ -3110,6 +3135,14 @@ def main(argv):
+         flow = OvsFlow.ovs_flow_msg()
+         flow.parse(args.flow, args.acts, rep["dpifindex"])
+         ovsflow.add_flow(rep["dpifindex"], flow)
++    elif hasattr(args, "modbr"):
++        rep = ovsdp.info(args.modbr, 0)
++        if rep is None:
++            print("DP '%s' not found." % args.modbr)
++            return 1
++        flow = OvsFlow.ovs_flow_msg()
++        flow.parse(args.modflow, args.modacts, rep["dpifindex"])
++        ovsflow.mod_flow(rep["dpifindex"], flow)
+     elif hasattr(args, "flsbr"):
+         rep = ovsdp.info(args.flsbr, 0)
+         if rep is None:
 -- 
-2.53.0-Meta
+2.54.0
 
