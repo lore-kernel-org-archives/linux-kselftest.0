@@ -1,115 +1,90 @@
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0CF47A0D8;
-	Fri,  5 Jun 2026 07:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9792477998;
+	Fri,  5 Jun 2026 07:32:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780644224; cv=none; b=HqjIoRYzTvDm847PLj/oOchW2qE6+ucbzHJL8g+UQuS+MTOTv3oorP26KIO8VFQceY05aoisNgWXA+UfTqVXW5MkBESkItKwCa2fMhjSsMhZoV+T/TxIDr1eUGS5ljWSFuuhSmkZJdj87nFmIMBHiGPJIa9rVpwN0/thEcwf34U=
+	t=1780644751; cv=none; b=oSnHuvH+Jq4AmrDmk1SR77CSQjX1DHYB0H9aFEfOz/Rn9hGmGrunFLTw9uFifZ9A7ldZhNqLfL9tzqK/+7VL33haRN0DEBWij0bPqJalAAHr9ebhELRmvti6sIHcijP+rVTqfGV7KvHCfmdk7vt6Ca7lJc8Zg2/tBTjbgdilndk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780644224; c=relaxed/simple;
-	bh=SzEPry+LtRQK9RnenP8PEmy3kLGCRANJ0Qf7LtUgfik=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VJe43DpZqLpp6ZbUKhfu9cYdmdYHSXrb/ceA3AvhLExRL/8afH/ygE2MamhKxVkCaULWHW17xPdH61RPQstsGvp7YepbpTt9v6py/fVmCerqmrpHEmicn9SvJT5+/pP3sQ5W5IQlTAHuyZCyuz6NnAv2HFNw6zYZ8e48mRGuD3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id 0BDEE6732A; Fri,  5 Jun 2026 09:23:39 +0200 (CEST)
-Date: Fri, 5 Jun 2026 09:23:38 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Daniel Gomez <da.gomez@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-	Jonathan Corbet <corbet@lwn.net>, linux-block@vger.kernel.org,
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org,
+	s=arc-20240116; t=1780644751; c=relaxed/simple;
+	bh=4gvT3FCBL73A8S47cNNBhSV8lJwyBM65WbzUmfTLkjI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=RUl8yCMOQjOH3s+mpA85XNsdmjG2j3mtP6Ix+Z6KfpVf//9kYsjVkpF2IEnhtbhfUoGTrGmDSEVimeZKNVKDKvSXPA9BK+P5k4+urEDB6M8enhy5xNGWfCfD9j+ctTBZFosSrwG/COk6ojlJN5QCediiOeifxw+Dhi5rmR8mYpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: ad37f3be60b011f1aa26b74ffac11d73-20260605
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
+	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:d34d469a-b484-462c-80f9-b86681936b6b,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-INFO: VERSION:1.3.12,REQID:d34d469a-b484-462c-80f9-b86681936b6b,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:10
+X-CID-META: VersionHash:e7bac3a,CLOUDID:5923cc7bdcd84bba77df77d5a2ef169b,BulkI
+	D:260605141901UOKBUKVR,BulkQuantity:1,Recheck:0,SF:17|19|64|66|78|80|81|82
+	|83|102|127|136|841|850|865|898,TC:nil,Content:-10|0|15|50,EDM:-3,IP:-2,UR
+	L:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SP
+	R:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: ad37f3be60b011f1aa26b74ffac11d73-20260605
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 2054823437; Fri, 05 Jun 2026 15:32:16 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: rppt@kernel.org
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	liam@infradead.org,
+	lihongfu@kylinos.cn,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Brendan Gregg <brendan.d.gregg@gmail.com>,
-	GOST <gost.dev@samsung.com>,
-	Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Subject: Re: configurable block error injection
-Message-ID: <20260605072338.GA26929@lst.de>
-References: <20260602054615.3788425-1-hch@lst.de> <e4c653ec-dfb4-4dce-a565-2a43520fc44f@kernel.org> <20260602150503.GA6887@lst.de> <d9a5b911-7692-4df2-b67c-c33bc80b61aa@kernel.org>
+	linux-mm@kvack.org,
+	ljs@kernel.org,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	surenb@google.com,
+	vbabka@kernel.org
+Subject: Re: [PATCH v6 0/5] selftests/mm: refactor pkey helpers and fix mmap error handling
+Date: Fri,  5 Jun 2026 15:32:19 +0800
+Message-Id: <20260605073219.55795-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <aiJqRNerYkMIo8kV@kernel.org>
+References: <aiJqRNerYkMIo8kV@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d9a5b911-7692-4df2-b67c-c33bc80b61aa@kernel.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 04, 2026 at 01:06:13PM +0200, Daniel Gomez wrote:
-> IIU the series correctly, and oversimplifying: when
-> injection is enabled and a bio matches, the block layer completes the
-> bio inline with the chosen blk_status_t (the status= rule from debugfs)
-> via bio_endio_status(). The submission path returns to the caller
-> immediately, with the bio already in the error state. Nothing is ever
-> sent to the device, but the completion path sees the injected error.
+Hi,
 
-Yes.
-
-> > I'd have to allow access to certain bio
+> > The main changes in this series are to refactor shared tracing and assertion
+> > helpers into a common file, unify both pkey selftests on pkey_assert() and 
+> > per-test tracing for consistent diagnostics, and add missing mmap() return 
+> > checks with MAP_FAILED used throughout for readability and consistency.
 > 
-> With struct_ops the bio is passed to the ebpf side as read-only, bio 
-> fields can be read to decide the policy but cannot write them. Is 
-> read-only access to bio fields itself a concern?
+> We are too close to the merge window and this is not an urgent fix.
+> Please wait until -rc1 and then rebase and resend you patches.
 
-Yes, for the reason state below.
+Got it. Will rebase and resend after -rc1. Thanks.
 
-> 
-> > fields and would have create a stable UAPI for commands and status
-> > using the fake BTF struct access which really would not be a good
-> > idea here as we need to be able to change internals.  
-> 
-> That should not be a problem at all. With CO-RE (compile once, run
-> everywhere) the program resolves the bio field offsets against the
-> BTF of the kernel it loads on, so it adapts dynamically if the layout
-> changes. The contract is just the struct_ops callback signature: a
-> struct bio * argument and a blk_status_t return. And that doesn't imply
-> any UAPI commitment AFAIK.
-
-That assumes the fields even exists in this form.  And we definitively
-need to do things about the iter going ahead.  In other words we have
-to build up a huge abstraction here first.
-
-> > Additionally
-> > having fully BTF-enabled toolchains in test VMs is not great either.
-> 
-> Are you referring to the old BCC toolchain requirements [1]? This is
-> solved in CO-RE [2]. The toolchain (Clang/LLVM, pahole) stays on the
-> build host; the test VM only needs the prebuilt BPF object, libbpf at
-> runtime, and the kernel's own BTF (CONFIG_DEBUG_INFO_BTF). No compiler
-> or BTF toolchain is required inside the VM. Clang/LLVM 10+ is enough to
-> build CO-RE libbpf tools [3].
-
-libbpf and BTF support is what I mean.  And of course whatever code
-you write to communicate with it as a simple shell script won't work
-any more.
-
-> Are you referring to the bio sector range comparison in
-> __blk_error_inject()?
-
-Yes.
-
-> I don't think that needs to be delegated to a
-> BPF map (Documentation/bpf/maps.rst). The ebpf side has direct access
-> to the bio fields, so it can apply the same sector/op filtering
-> __blk_error_inject() does today. That match is already a linear list
-> walk, so the ebpf program just runs the same [start, end] condition
-> check.
-
-Which means I need to write eBPF code for every specific range I
-want to inject, which makes the thing very hard to use.
-
-> In summary: what do you think of evolving this series
-> into eBPF, but BPF_PROG_TYPE_STRUCT_OPS instead of
-> ALLOW_ERROR_INJECTION/bpf_override_return()?.
-
-As said before, I prototyped it and it was a mess.  Having about 300
-lines of simple code that can be directly used from a shell script
-seems much preferable.
-
+Best regards,
+Hongfu
