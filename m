@@ -1,79 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39FC6366542;
-	Fri,  5 Jun 2026 06:18:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99BF408018;
+	Fri,  5 Jun 2026 06:30:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780640333; cv=none; b=KurBphEXtvWCRp/UkpR91fZ2jNZDvUZv+5HYS6KS5Ka61Cguq/YkFxUPf+fbV1+4fLWTomOtcDdTnmeDHBocle2YwlkgjROqaBKL6VzFd920TrpAsH4ykLPAr9jhAd+8lHpHuzIaD5r7E3iWmLXrjwdXpvrzof/Y5YxnwYiy5gw=
+	t=1780641016; cv=none; b=H29GPa3EuaeNeeDaznXVY51QhWXbYLVNJs9NqugHXYSJalVECvY/t5MCUMBYiXgOL3JRA7pvptxidBnV6GpAk/MYHUUhMnUldAGaKDcXtcG5oOvmQ6BA+pSwEmR8v2B0WjfrO2mNSmn8mm0z8MOIBDyaVgkDkgxQ6i/SraxagJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780640333; c=relaxed/simple;
-	bh=qNbY8EOIDApHSjssqyGjxDYX9La/EKMCV9AdlkYm8bk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HArmBizlpRLzA8EfJddcahtDRlwkEkkuFr1+cQ/KcyDABtjcwnWQnGJhlMnF2hp1MyyHb6Z7RdY8zwciNVISDZJPOfIGaRz3YiNhcMr9Q7bB/xxwprJmfzFTm5RKmWVzxqgXCeRDsE6fEqHb+4qBD/EkmiTzXJ5XCP0p4re77e4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FT3tc2pQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780641016; c=relaxed/simple;
+	bh=ZcuHm5PmefJp333Pgnlc3IJF2BvWCrLzrezMIRR4Ud8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=MSiovY0gjEQk8nYIaS0F/k0IdUtjYQpmLX0xk/NqSpjOgBn9oUirAT8OTyFtPikcPECZM5wRLw9nOr0uyPIoPGZqTISr9ESmm1trzAum951Hb4hu5B5XMve2Zv5KI3D3S93qvrDOcB1P23cs+iSiGShShJbUYIzLv6kfkTbo4+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2tMLtor reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FT3tc2pQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31EAB1F00893;
-	Fri,  5 Jun 2026 06:18:47 +0000 (UTC)
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2tMLtor"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5638E1F00893;
+	Fri,  5 Jun 2026 06:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780640331;
-	bh=ljlhAD+FthrnWm6kHVmP5LfpGexV5pKH196BR3ZEKv0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=FT3tc2pQo4qcYECndowkFVcJjTXk8lbUB6+Gp3P9GFOaIyDZWlWQJc83biab9wTGh
-	 L/5jo+QNkgrfBNRpWwJe2tc1IVrGgxBBtH0eieuXnUoJF6btMLd6HOG/DHMjxn1ck+
-	 rmqcKv5csTs438PnPUtgOTb5xkfZcLGgoP9SH/XG29Q4YxCGAlFoU1HJRGrRMNVwOO
-	 /oNXpIzPR8ln/fJrmZ71eDj5vtbWio0gOG1KJs13OgTvHajTTssQXY0jolrHtz8dFL
-	 Iy71twMK/4dXkk9qUMXs25m+EUZPHAaxk2t9V6G/eTNWHTy2XHgXYdx1e9D6sncZJW
-	 bLwjENrvVhi7A==
-Date: Fri, 5 Jun 2026 09:18:44 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Hongfu Li <lihongfu@kylinos.cn>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
-	liam@infradead.org, vbabka@kernel.org, surenb@google.com,
-	mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/5] selftests/mm: refactor pkey helpers and fix mmap
- error handling
-Message-ID: <aiJqRNerYkMIo8kV@kernel.org>
-References: <20260602070119.1452308-1-lihongfu@kylinos.cn>
+	s=k20260515; t=1780641015;
+	bh=1kmJujliLWVq7SOJBW3cWpP8f1QD6kuoKMKtva7T/Sg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=F2tMLtorPtM0DziWwetQVWW0dnCeQUud3yhfQuX3SA5AUpl689AFfeDlF8l53B7PP
+	 LYVKy6sY81k0KuCLZ+xgwKBXWatB7oJwi/1noaW7889959j9WHRH/w4rJKRgghAbes
+	 eMx5yfS4FJQRlyyiOjPMS2FDoMEK8n6Os4PJsPjOjk4ZuaIcYpB0Iz5MeUeOTLO0mh
+	 GDHJd7ewIg+u2dwZeeUadLL4HA14oMUPa/uI7nfPwWCUtW00d2wiZ/MihU+RHQ9AYQ
+	 Rj5tZC8ajFdrj4Nl+VftW/5+xScZM4xE3PKk4RZTXkPf1llII1ZkudsYKbs3b6f+0U
+	 dl5U3IM5yuqTg==
+Content-Type: multipart/mixed; boundary="===============7761534993717686254=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260602070119.1452308-1-lihongfu@kylinos.cn>
+Message-Id: <d3e91d227b0e1b777a85806e54b03d46581e4460f893e5b45baa9168f5319fbf@mail.kernel.org>
+In-Reply-To: <20260605054128.5925-4-boqun@kernel.org>
+References: <20260605054128.5925-4-boqun@kernel.org>
+Subject: Re: [PATCH v3 03/13] preempt: Introduce __preempt_count_{sub, add}_return()
+From: bot+bpf-ci@kernel.org
+To: boqun@kernel.org,peterz@infradead.org
+Cc: catalin.marinas@arm.com,will@kernel.org,jonas@southpole.se,stefan.kristiansson@saunalahti.fi,shorne@gmail.com,hca@linux.ibm.com,gor@linux.ibm.com,agordeev@linux.ibm.com,borntraeger@linux.ibm.com,svens@linux.ibm.com,tglx@kernel.org,mingo@redhat.com,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,hpa@zytor.com,arnd@arndb.de,juri.lelli@redhat.com,vincent.guittot@linaro.org,dietmar.eggemann@arm.com,rostedt@goodmis.org,bsegall@google.com,mgorman@suse.de,vschneid@redhat.com,kprateek.nayak@amd.com,boqun@kernel.org,longman@redhat.com,akpm@linux-foundation.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,ojeda@kernel.org,gary@garyguo.net,bjorn3_gh@protonmail.com,lossin@kernel.org,a.hindborg@kernel.org,aliceryhl@google.com,tmgross@umich.edu,dakr@kernel.org,ruanjinjie@huawei.com,lyude@redhat.com,thuth@redhat.com,sohil.mehta@intel.com,pawan.kumar.
+ gupta@linux.intel.com,seanjc@google.com,nikunj@amd.com,xin@zytor.com,joelagnelf@nvidia.com,andriy.shevchenko@linux.intel.com,rdunlap@infradead.org,ynorov@nvidia.com,bigeasy@linutronix.de,linux-kernel@vger.kernel.org,linux-openrisc@vger.kernel.org,linux-s390@vger.kernel.org,linux-arch@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,rust-for-linux@vger.kernel.org,boqun.feng@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  5 Jun 2026 06:30:14 +0000 (UTC)
 
-Hi,
+--===============7761534993717686254==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 02, 2026 at 03:01:14PM +0800, Hongfu Li wrote:
-> The main changes in this series are to refactor shared tracing and assertion
-> helpers into a common file, unify both pkey selftests on pkey_assert() and 
-> per-test tracing for consistent diagnostics, and add missing mmap() return 
-> checks with MAP_FAILED used throughout for readability and consistency.
+>     preempt: Introduce __preempt_count_{sub, add}_return()
+>
+>     In order to use preempt_count() to tracking the interrupt disable
+>     nesting level, __preempt_count_{add,sub}_return() are introduced, as
+>     their name suggest, these primitives return the new value of the
+>     preempt_count() after changing it. The following example shows the usage
+>     of it in local_interrupt_disable():
+>
+>             // increase the HARDIRQ_DISABLE bit
+>             new_count = __preempt_count_add_return(HARDIRQ_DISABLE_OFFSET);
+>
+>             // if it's the first-time increment, then disable the interrupt
+>             // at hardware level.
+>             if (new_count & HARDIRQ_DISABLE_MASK == HARDIRQ_DISABLE_OFFSET) {
+                                                    ^^
 
-We are too close to the merge window and this is not an urgent fix.
-Please wait until -rc1 and then rebase and resend you patches.
+The operator precedence in this example appears incorrect. In C, the equality
+operator == has higher precedence than the bitwise AND operator &, so this
+evaluates as:
 
-Thanks!
- 
-> Hongfu Li (5):
->   selftests/mm: move pkey selftest helpers to pkey_util.c
->   selftests/mm: unify pkey sighandler selftest assertions and tracing
->   selftests/mm: use pkey_assert on clone_raw failure in pkey test
->   selftests/mm: add missing mmap() return checks in pkey tests
->   selftests/mm: add missing pthread_create() return checks in pkey tests
-> 
->  tools/testing/selftests/mm/pkey-helpers.h     |  4 +-
->  tools/testing/selftests/mm/pkey-powerpc.h     |  2 +-
->  .../selftests/mm/pkey_sighandler_tests.c      | 81 ++++++++--------
->  tools/testing/selftests/mm/pkey_util.c        | 86 +++++++++++++++++
->  tools/testing/selftests/mm/protection_keys.c  | 95 ++-----------------
->  5 files changed, 141 insertions(+), 127 deletions(-)
+    new_count & (HARDIRQ_DISABLE_MASK == HARDIRQ_DISABLE_OFFSET)
 
--- 
-Sincerely yours,
-Mike.
+Since the mask does not equal the offset, the equality evaluates to 0, making
+the entire condition always false.
+
+Should this be written with explicit parentheses to prevent readers from
+copying flawed logic into downstream implementations?
+
+    if ((new_count & HARDIRQ_DISABLE_MASK) == HARDIRQ_DISABLE_OFFSET) {
+
+This was raised by sashiko-bot@kernel.org in v3 review:
+https://lore.kernel.org/all/20260605055933.EDF3D1F00898@smtp.kernel.org/
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26998319662
+--===============7761534993717686254==--
