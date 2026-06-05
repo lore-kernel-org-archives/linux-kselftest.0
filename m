@@ -1,63 +1,63 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3000D356747
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 03:33:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1BA379ED5
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 03:33:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780630407; cv=none; b=ZocVyOurchcu/12TxhgVnJHUxhMx02rVDUiJ7P6ic/2UUCLQrr7iB7hnTDzi5pFSNNPS/6wpd0NdccDpy28qFCflow20G2lTRiskCWD3hSj7ZSvV/tkz4aGK0i0Et+1tqjWjC35I7PjnoRL6vcauTLn8Dv2IPwA/c0RN4KxKzL8=
+	t=1780630418; cv=none; b=Os+lmMrLQg5nsO0tozQZpaQ+UVKquxj1qa8+/Jg6q6yZJI/avWXaw4MRFfBeyaipXsvE5+uFXMtGgkZlfa14n/NOOX1G1ppTdqfTM9fPMUQR3fnUXAQwog4y5V87S8UuH5zXt/NZ3qAN3zMPKXYQUBD6kOteLXTLPGbAZawHvnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780630407; c=relaxed/simple;
-	bh=4VnGiJfrZQCqXxaU6ZsqSy06u9XeMGJXWufGnIgPPj8=;
+	s=arc-20240116; t=1780630418; c=relaxed/simple;
+	bh=DtZ9V8MH8JsGyHu6CF1ttsD49Zp4ajpPdH0dtGBNsU4=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EufbqRywYeZC+V6SoCC2IMrbxjrdu/V2u3AP107DCi9SoZy6x4sfXa7/feh+TeKtBJO7VQwku9Ml91uYf5EbBwKQcHKt2+NO7OILGaWXxo3G/KC9HnQnaqaebDKjWhRCZA9BWhPvey73X/g1jUerZKheeUxK4bn7Dw8lSoGLLYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=IG7dbthv; arc=none smtp.client-ip=209.85.219.51
+	 MIME-Version; b=JCsbYq/NKEORltQhy9BWKOxAqRQNjmevWoG0D5Xftm/EpawYZ9s/g+pCyQrp9ZntwfhmTnGofX3QYKrdMPbdwhbfQPY9Wc+dOebwnwbpwjdlor6SAEH5vhtDW2KRdLNJSVnODkAHa7vVJrMcdUHoqLPPF9vKVmD3zOEgJ7nOOs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=FxvLg3S9; arc=none smtp.client-ip=209.85.222.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="IG7dbthv"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-8ccd1f57b32so13876156d6.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 20:33:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="FxvLg3S9"
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-915336b83adso175773085a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 20:33:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1780630404; x=1781235204; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1780630416; x=1781235216; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=burVgKt+U0bNdZ+S4i+8PCamSBgPUcyGmVaC5AfN7II=;
-        b=IG7dbthvtwOgTcsbdpqQD5BzOVj/s4prSAq675YXZ6lx4ZNX8+9F93OHKf/RmcQrs2
-         MZuodwKBSXSLYTphbsRsx6hesWi2uf55VDfYQBCvX9FDydGCs4aR3DOqwwuRfyEWnA57
-         4wWbdW/AwhoykqZw8Fv7egOO8vjfSdkPF1ajQysCo27tzUHAUaiiIXgQZUr15oM1bucE
-         LxvF8i8bRnUlc6QWOpvX3K4bjkY7jOPOlNash4ykwm28Y0ISGnS6Yxv8AVRrSn4c75wM
-         04DahOvYN7QHiSgWHF5flM9kSHDzElbvhDXfQCuh5YbQvoIjVIykizUMNrgrQVIRhJcB
-         ebDg==
+        bh=J9VRMQ5Ef8ulqUN7FHiGBWdV1K/iIYqxWaAhgeSwRK0=;
+        b=FxvLg3S9vw3x4H+gYi6tndasKxlu+a/73bv82RhwcMtzPyTrvG6tJgjLDQTRs0k+1L
+         rnKnxSUupV4jDW2OalnjkH+evs0mBBOdYE2OvkeriJMvJlA7CD+sW8t4A/FLmHQT1Fvq
+         DCgCr/dmmu9YkqRbLo4KCB/dvPxw9vAWt9RtqQshMqXpr99ux+XZ0oVPia+fkGXzS4Ef
+         qAEWO9+lcCBs6zAOdUyYW9IBbrCJWQz6nBhIHwOu8RlSjK/l6EtnkjzNHAZZ693wL7qH
+         +owZzr0A7a800rgIRLNhdDFY4wluap92g8dp7h6iXDazGzguAtQT1KqEnkizCD8NkedQ
+         NhBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780630404; x=1781235204;
+        d=1e100.net; s=20251104; t=1780630416; x=1781235216;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=burVgKt+U0bNdZ+S4i+8PCamSBgPUcyGmVaC5AfN7II=;
-        b=FpMVSuj1AF2RBjVpF4XnI04cmuqyAnf/WN6QJm8/FTZv1UcPnir345+1+QhBmQy7jX
-         fPjbzXdjMa2ytAUaUApNFbP0eNVzaV5+8sAyEe+EUfDePX/0R4HalZMpjjAaqSPBMjl/
-         JLhq7hb/HYY2A58t1XACMaOWcARDFsRB54ct79funX8MAwlHPBhcSsC1H6WSSvzYqIlp
-         k6V6uoYjG3rdRlhPUhmRB6YCVx/jZcyFyur2eH6ZQ1SFbsd5KyMa7iVjDTSAEil+r8WF
-         xjc1oONin3Ah9GmvMG9PpjVCOTmmzzkT6A4vVlgYKlMMSJfCvaDE7Mo1lS3rBfecMNda
-         jzWA==
-X-Gm-Message-State: AOJu0Yzth1R9DzrTZzXjuNM/gkm/XV30AWQxzsSPupewgbhOh2wcqR7j
-	Rhtwa2P9mENLd98xvgbK32k1HBtNxAtdvYW2i5zDYj6hTZJJYajHgVJ5SEtx0hMwUPX2rYRQwoT
-	iXi/6
-X-Gm-Gg: Acq92OF5Y2K/Q/79u13bsbQKi7CeMr8j5K93/ETRUENlnc2usumqD1lLCGvrP0mCzco
-	FB/l0UbnEND2TUTCzJswa+hnOoxsLGdeIgCQI8x7ViAEauYhn1pCUuwp0ketVqhybB0o1Ho4+E5
-	1qaWPgH/UUmZzcJo3str0o/DIi+dNlFvSzYmChYn1kbiypaeQnD6Y8S9/8t0crZbdGjRPnyyo79
-	H3ZYRdQJCeZ1ncLCYEDCv/aufB/kNMbT9ppxddF6Tkf/tAhhQHCqlptFjOabmXtVc1obm8oLZ9r
-	Hc99tgxbmqjCEGeWD+CMknQmo58aRG+w2NJOK5NtIiUE+EDOKkucMkT4ABISkpz48rmlmu/IK2X
-	ffk2kCCEfJyOPppmvD8vtTgwMMaKGyuTNYbzMHH34MFBVwrWHmnOY1ekoIzfJ9IBQ66dIT5CAio
-	8Pgaj7CoULFFbSPK0fmhimIw1gjVdzEFoJPqZQRreMKOgRPv8n24BBvtemi7Yd7bjnBV8tW4Wa
-X-Received: by 2002:a05:6214:2d07:b0:8cc:f882:2562 with SMTP id 6a1803df08f44-8cee61497cdmr30262576d6.39.1780630404187;
-        Thu, 04 Jun 2026 20:33:24 -0700 (PDT)
+        bh=J9VRMQ5Ef8ulqUN7FHiGBWdV1K/iIYqxWaAhgeSwRK0=;
+        b=TYFutVwqY21eo7fKmUSkKwSEVJevzi5rS1yc5MkoyoDmgH/pdmnBsSPZKUaN7sWnaE
+         byLfSx+Fyg38azwRbwtW+2HHKuJ13HtVqJNH9GeBYbbUd/qwwCqGnOOtM/3/CqdXata2
+         nTcwrPVEIkApLr5zzWuCFgqZalUzEcUcncT3YqNt1CGHDfgfbQ7YDEjElhrmm20vShe/
+         5dKSO0c6zWaYn9hhprFMX7SwU9VJQDRDVjahtnhWUY8b9BVjTz2pVSflTy/05oAFk8Kv
+         LwGF+0+WO2xmZgwROeJ9vf8TFBhP76lZbOHIbgg8zWoSa3MIqlu032AwjULHIfw8CxoQ
+         XBUg==
+X-Gm-Message-State: AOJu0YxMoAlTVUcuwsEiiQDMqW+XWm3vN44JYVVH7hR0+GoOg166pKWr
+	7eLFsfnxlEQJNSCB0vGUf00saIUIwihHpY6RYxSNyweKfdCwt7OgWOa69eUomrWKr0stoKZXWdz
+	9LS/C
+X-Gm-Gg: Acq92OG5EH13jq6CkGDctqiXA+cuZPt7sDWq20mB8i5/YpJKCNHucxuEh6cMym+BArT
+	gXwz90ZjsHxEeDiezEb0C2MbndQGlHd1tWITRpPxz1UIEIe3fNcbP4WCkQwPolkohN+PZUe3mwf
+	2oLj/AjVgfOlZ6vSDIS+fyhq4Ydfse9izOaOQNQst117UckIkl8htlCniBMOj0Z7XlE2Q8mufF0
+	RYSta5vBhm2AYN1rScfr8b1XfE1CrnTH3jRHPtbsZsIhyivMiCHWCBQXBGOOamrRefLzhDK7z+E
+	NQn3uVMmmPoPbq76kOAGjCO8UlX4B3D4MvLSQypf19CApMBvxYklxVThwVYCBakZ4t+MSXiYU0K
+	VHuV/N7YLwE5PWt6RabvmZlMkne7WWeHhl9MVFL1uNe9sTyCr1urmm3hPLu3wb/kKROMG/vnLoU
+	I4iwtekMZUCRoQvO+KYPESEALb0CBkW2E/fbX4XgbIqYFsicBh2em8Y29FhpOMVA==
+X-Received: by 2002:a05:620a:3910:b0:915:7f9f:8d97 with SMTP id af79cd13be357-915a9daef8bmr376847085a.53.1780630415906;
+        Thu, 04 Jun 2026 20:33:35 -0700 (PDT)
 Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cecd263003sm71383816d6.42.2026.06.04.20.33.23
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9158a37c645sm743050785a.30.2026.06.04.20.33.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 20:33:23 -0700 (PDT)
+        Thu, 04 Jun 2026 20:33:35 -0700 (PDT)
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 To: linux-kselftest@vger.kernel.org,
 	rppt@kernel.org,
@@ -74,9 +74,9 @@ To: linux-kselftest@vger.kernel.org,
 	kexec@lists.infradead.org,
 	pratyush@kernel.org,
 	graf@amazon.com
-Subject: [RFC v1 4/9] kho: split vmalloc headers out of kexec_handover.h
-Date: Fri,  5 Jun 2026 03:32:30 +0000
-Message-ID: <20260605033235.717351-5-pasha.tatashin@soleen.com>
+Subject: [RFC v1 5/9] kho: move kho_block.h to kho/block.h
+Date: Fri,  5 Jun 2026 03:32:31 +0000
+Message-ID: <20260605033235.717351-6-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260605033235.717351-1-pasha.tatashin@soleen.com>
 References: <20260605033235.717351-1-pasha.tatashin@soleen.com>
@@ -88,340 +88,108 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Split the vmalloc-related ABI definitions and header declarations out
-of the monolithic kexec_handover.h header into a dedicated header
-file (vmalloc.h).
+Move kho_block.h to kho/block.h, organizing it within the existing
+kho directory structure as more KHO data structures are introduced.
 
 This is a pure code movement patch; no logic or functional changes are
 introduced.
 
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- Documentation/core-api/kho/abi.rst     |  3 +-
- include/linux/kexec_handover.h         | 18 -----
- include/linux/kho/abi/kexec_handover.h | 77 +-------------------
- include/linux/kho/abi/memfd.h          |  3 +-
- include/linux/kho/abi/vmalloc.h        | 99 ++++++++++++++++++++++++++
- include/linux/kho/vmalloc.h            | 34 +++++++++
- 6 files changed, 137 insertions(+), 97 deletions(-)
- create mode 100644 include/linux/kho/abi/vmalloc.h
- create mode 100644 include/linux/kho/vmalloc.h
+ Documentation/core-api/kho/index.rst       | 2 +-
+ MAINTAINERS                                | 1 -
+ include/linux/{kho_block.h => kho/block.h} | 2 +-
+ kernel/liveupdate/kho_block.c              | 2 +-
+ kernel/liveupdate/luo_internal.h           | 2 +-
+ kernel/liveupdate/luo_session.c            | 2 +-
+ 6 files changed, 5 insertions(+), 6 deletions(-)
+ rename include/linux/{kho_block.h => kho/block.h} (100%)
 
-diff --git a/Documentation/core-api/kho/abi.rst b/Documentation/core-api/kho/abi.rst
-index da5c6636bb17..b61363679829 100644
---- a/Documentation/core-api/kho/abi.rst
-+++ b/Documentation/core-api/kho/abi.rst
-@@ -13,8 +13,7 @@ Core Kexec Handover ABI
- vmalloc preservation ABI
- ========================
+diff --git a/Documentation/core-api/kho/index.rst b/Documentation/core-api/kho/index.rst
+index a10b10700fb9..4a5477221fe4 100644
+--- a/Documentation/core-api/kho/index.rst
++++ b/Documentation/core-api/kho/index.rst
+@@ -95,7 +95,7 @@ KHO Serialization Blocks API
+ .. kernel-doc:: kernel/liveupdate/kho_block.c
+   :doc: KHO Serialization Blocks
  
--.. kernel-doc:: include/linux/kho/abi/kexec_handover.h
--   :doc: Kexec Handover ABI for vmalloc Preservation
-+.. kernel-doc:: include/linux/kho/abi/vmalloc.h
+-.. kernel-doc:: include/linux/kho_block.h
++.. kernel-doc:: include/linux/kho/block.h
  
- memblock preservation ABI
- =========================
-diff --git a/include/linux/kexec_handover.h b/include/linux/kexec_handover.h
-index 8968c56d2d73..518fdab2a4d1 100644
---- a/include/linux/kexec_handover.h
-+++ b/include/linux/kexec_handover.h
-@@ -11,8 +11,6 @@ struct kho_scratch {
- 	phys_addr_t size;
- };
+ .. kernel-doc:: kernel/liveupdate/kho_block.c
+   :internal:
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 920ba7622afa..9ec290e38b44 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14208,7 +14208,6 @@ F:	Documentation/admin-guide/mm/kho.rst
+ F:	Documentation/core-api/kho/*
+ F:	include/linux/kexec_handover.h
+ F:	include/linux/kho/
+-F:	include/linux/kho_block.h
+ F:	kernel/liveupdate/kexec_handover*
+ F:	lib/test_kho.c
+ F:	tools/testing/selftests/kho/
+diff --git a/include/linux/kho_block.h b/include/linux/kho/block.h
+similarity index 100%
+rename from include/linux/kho_block.h
+rename to include/linux/kho/block.h
+index 93a7cc2be5f5..2b9d5a080a6a 100644
+--- a/include/linux/kho_block.h
++++ b/include/linux/kho/block.h
+@@ -7,9 +7,9 @@
+ #ifndef _LINUX_KHO_BLOCK_H
+ #define _LINUX_KHO_BLOCK_H
  
--struct kho_vmalloc;
--
- struct folio;
- struct page;
- 
-@@ -24,14 +22,11 @@ int kho_preserve_folio(struct folio *folio);
- void kho_unpreserve_folio(struct folio *folio);
- int kho_preserve_pages(struct page *page, unsigned long nr_pages);
- void kho_unpreserve_pages(struct page *page, unsigned long nr_pages);
--int kho_preserve_vmalloc(void *ptr, struct kho_vmalloc *preservation);
--void kho_unpreserve_vmalloc(struct kho_vmalloc *preservation);
- void *kho_alloc_preserve(size_t size);
- void kho_unpreserve_free(void *mem);
- void kho_restore_free(void *mem);
- struct folio *kho_restore_folio(phys_addr_t phys);
- struct page *kho_restore_pages(phys_addr_t phys, unsigned long nr_pages);
--void *kho_restore_vmalloc(const struct kho_vmalloc *preservation);
- int kho_add_subtree(const char *name, void *blob, size_t size);
- void kho_remove_subtree(void *blob);
- int kho_retrieve_subtree(const char *name, phys_addr_t *phys, size_t *size);
-@@ -65,14 +60,6 @@ static inline int kho_preserve_pages(struct page *page, unsigned int nr_pages)
- 
- static inline void kho_unpreserve_pages(struct page *page, unsigned int nr_pages) { }
- 
--static inline int kho_preserve_vmalloc(void *ptr,
--				       struct kho_vmalloc *preservation)
--{
--	return -EOPNOTSUPP;
--}
--
--static inline void kho_unpreserve_vmalloc(struct kho_vmalloc *preservation) { }
--
- static inline void *kho_alloc_preserve(size_t size)
- {
- 	return ERR_PTR(-EOPNOTSUPP);
-@@ -92,11 +79,6 @@ static inline struct page *kho_restore_pages(phys_addr_t phys,
- 	return NULL;
- }
- 
--static inline void *kho_restore_vmalloc(const struct kho_vmalloc *preservation)
--{
--	return NULL;
--}
--
- static inline int kho_add_subtree(const char *name, void *blob, size_t size)
- {
- 	return -EOPNOTSUPP;
-diff --git a/include/linux/kho/abi/kexec_handover.h b/include/linux/kho/abi/kexec_handover.h
-index 99e4a53d4e35..c893b5045078 100644
---- a/include/linux/kho/abi/kexec_handover.h
-+++ b/include/linux/kho/abi/kexec_handover.h
-@@ -96,80 +96,5 @@
- /* The FDT property for the size of preserved data blobs. */
- #define KHO_SUB_TREE_SIZE_PROP_NAME "blob-size"
- 
--/**
-- * DOC: Kexec Handover ABI for vmalloc Preservation
-- *
-- * The Kexec Handover ABI for preserving vmalloc'ed memory is defined by
-- * a set of structures and helper macros. The layout of these structures is a
-- * stable contract between kernels and is versioned by the KHO_FDT_COMPATIBLE
-- * string.
-- *
-- * The preservation is managed through a main descriptor &struct kho_vmalloc,
-- * which points to a linked list of &struct kho_vmalloc_chunk structures. These
-- * chunks contain the physical addresses of the preserved pages, allowing the
-- * next kernel to reconstruct the vmalloc area with the same content and layout.
-- * Helper macros are also defined for storing and loading pointers within
-- * these structures.
-- */
--
--/* Helper macro to define a union for a serializable pointer. */
--#define DECLARE_KHOSER_PTR(name, type)	\
--	union {                        \
--		u64 phys;              \
--		type ptr;              \
--	} name
--
--/* Stores the physical address of a serializable pointer. */
--#define KHOSER_STORE_PTR(dest, val)               \
--	({                                        \
--		typeof(val) v = val;              \
--		typecheck(typeof((dest).ptr), v); \
--		(dest).phys = virt_to_phys(v);    \
--	})
--
--/* Loads the stored physical address back to a pointer. */
--#define KHOSER_LOAD_PTR(src)						\
--	({                                                                   \
--		typeof(src) s = src;                                         \
--		(typeof((s).ptr))((s).phys ? phys_to_virt((s).phys) : NULL); \
--	})
--
--/*
-- * This header is embedded at the beginning of each `kho_vmalloc_chunk`
-- * and contains a pointer to the next chunk in the linked list,
-- * stored as a physical address for handover.
-- */
--struct kho_vmalloc_hdr {
--	DECLARE_KHOSER_PTR(next, struct kho_vmalloc_chunk *);
--};
--
--#define KHO_VMALLOC_SIZE				\
--	((PAGE_SIZE - sizeof(struct kho_vmalloc_hdr)) / \
--	 sizeof(u64))
--
--/*
-- * Each chunk is a single page and is part of a linked list that describes
-- * a preserved vmalloc area. It contains the header with the link to the next
-- * chunk and a zero terminated array of physical addresses of the pages that
-- * make up the preserved vmalloc area.
-- */
--struct kho_vmalloc_chunk {
--	struct kho_vmalloc_hdr hdr;
--	u64 phys[KHO_VMALLOC_SIZE];
--};
--
--static_assert(sizeof(struct kho_vmalloc_chunk) == PAGE_SIZE);
--
--/*
-- * Describes a preserved vmalloc memory area, including the
-- * total number of pages, allocation flags, page order, and a pointer to the
-- * first chunk of physical page addresses.
-- */
--struct kho_vmalloc {
--	DECLARE_KHOSER_PTR(first, struct kho_vmalloc_chunk *);
--	unsigned int total_pages;
--	unsigned short flags;
--	unsigned short order;
--};
--
- #endif	/* _LINUX_KHO_ABI_KEXEC_HANDOVER_H */
-+
-diff --git a/include/linux/kho/abi/memfd.h b/include/linux/kho/abi/memfd.h
-index 08b10fea2afc..af310c0c9fdf 100644
---- a/include/linux/kho/abi/memfd.h
-+++ b/include/linux/kho/abi/memfd.h
-@@ -11,8 +11,9 @@
- #ifndef _LINUX_KHO_ABI_MEMFD_H
- #define _LINUX_KHO_ABI_MEMFD_H
- 
--#include <linux/types.h>
- #include <linux/kho/abi/kexec_handover.h>
-+#include <linux/kho/abi/vmalloc.h>
-+#include <linux/types.h>
++#include <linux/kho/abi/block.h>
+ #include <linux/list.h>
+ #include <linux/types.h>
+-#include <linux/kho/abi/block.h>
  
  /**
-  * DOC: memfd Live Update ABI
-diff --git a/include/linux/kho/abi/vmalloc.h b/include/linux/kho/abi/vmalloc.h
-new file mode 100644
-index 000000000000..87650e1dd774
---- /dev/null
-+++ b/include/linux/kho/abi/vmalloc.h
-@@ -0,0 +1,99 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2025 Microsoft Corporation, Mike Rapoport <rppt@kernel.org>
-+ * Copyright (C) 2025 Pasha Tatashin <pasha.tatashin@soleen.com>
-+ */
-+
-+/**
-+ * DOC: Kexec Handover ABI for vmalloc Preservation
-+ *
-+ * The Kexec Handover ABI for preserving vmalloc'ed memory is defined by
-+ * a set of structures and helper macros. The layout of these structures is a
-+ * stable contract between kernels and is versioned by the KHO_FDT_COMPATIBLE
-+ * string.
-+ *
-+ * This interface is a contract. Any modification to the structure fields,
-+ * compatible strings, or the layout of the serialization structures defined
-+ * here constitutes a breaking change. Such changes require incrementing the
-+ * version number in the `KHO_FDT_COMPATIBLE` string to prevent a new kernel
-+ * from misinterpreting data from an old kernel.
-+ *
-+ * Changes are allowed provided the compatibility version is incremented;
-+ * however, backward/forward compatibility is only guaranteed for kernels
-+ * supporting the same ABI version.
-+ *
-+ * The preservation is managed through a main descriptor &struct kho_vmalloc,
-+ * which points to a linked list of &struct kho_vmalloc_chunk structures. These
-+ * chunks contain the physical addresses of the preserved pages, allowing the
-+ * next kernel to reconstruct the vmalloc area with the same content and layout.
-+ * Helper macros are also defined for storing and loading pointers within
-+ * these structures.
-+ */
-+
-+#ifndef _LINUX_KHO_ABI_VMALLOC_H
-+#define _LINUX_KHO_ABI_VMALLOC_H
-+
-+#include <linux/types.h>
-+#include <asm/page.h>
-+
-+/* Helper macro to define a union for a serializable pointer. */
-+#define DECLARE_KHOSER_PTR(name, type)	\
-+	union {                        \
-+		u64 phys;              \
-+		type ptr;              \
-+	} name
-+
-+/* Stores the physical address of a serializable pointer. */
-+#define KHOSER_STORE_PTR(dest, val)               \
-+	({                                        \
-+		typeof(val) v = val;              \
-+		typecheck(typeof((dest).ptr), v); \
-+		(dest).phys = virt_to_phys(v);    \
-+	})
-+
-+/* Loads the stored physical address back to a pointer. */
-+#define KHOSER_LOAD_PTR(src)						\
-+	({                                                                   \
-+		typeof(src) s = src;                                         \
-+		(typeof((s).ptr))((s).phys ? phys_to_virt((s).phys) : NULL); \
-+	})
-+
-+/*
-+ * This header is embedded at the beginning of each `kho_vmalloc_chunk`
-+ * and contains a pointer to the next chunk in the linked list,
-+ * stored as a physical address for handover.
-+ */
-+struct kho_vmalloc_hdr {
-+	DECLARE_KHOSER_PTR(next, struct kho_vmalloc_chunk *);
-+};
-+
-+#define KHO_VMALLOC_SIZE				\
-+	((PAGE_SIZE - sizeof(struct kho_vmalloc_hdr)) / \
-+	 sizeof(u64))
-+
-+/*
-+ * Each chunk is a single page and is part of a linked list that describes
-+ * a preserved vmalloc area. It contains the header with the link to the next
-+ * chunk and a zero terminated array of physical addresses of the pages that
-+ * make up the preserved vmalloc area.
-+ */
-+struct kho_vmalloc_chunk {
-+	struct kho_vmalloc_hdr hdr;
-+	u64 phys[KHO_VMALLOC_SIZE];
-+};
-+
-+static_assert(sizeof(struct kho_vmalloc_chunk) == PAGE_SIZE);
-+
-+/*
-+ * Describes a preserved vmalloc memory area, including the
-+ * total number of pages, allocation flags, page order, and a pointer to the
-+ * first chunk of physical page addresses.
-+ */
-+struct kho_vmalloc {
-+	DECLARE_KHOSER_PTR(first, struct kho_vmalloc_chunk *);
-+	unsigned int total_pages;
-+	unsigned short flags;
-+	unsigned short order;
-+};
-+
-+#endif /* _LINUX_KHO_ABI_VMALLOC_H */
-diff --git a/include/linux/kho/vmalloc.h b/include/linux/kho/vmalloc.h
-new file mode 100644
-index 000000000000..2d1b5d282a93
---- /dev/null
-+++ b/include/linux/kho/vmalloc.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_KHO_VMALLOC_H
-+#define _LINUX_KHO_VMALLOC_H
-+
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/kho/abi/vmalloc.h>
-+
-+struct page;
-+
-+#ifdef CONFIG_KEXEC_HANDOVER
-+
-+int kho_preserve_vmalloc(void *ptr, struct kho_vmalloc *preservation);
-+void kho_unpreserve_vmalloc(struct kho_vmalloc *preservation);
-+void *kho_restore_vmalloc(const struct kho_vmalloc *preservation);
-+
-+#else /* CONFIG_KEXEC_HANDOVER */
-+
-+static inline int kho_preserve_vmalloc(void *ptr,
-+				       struct kho_vmalloc *preservation)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static inline void kho_unpreserve_vmalloc(struct kho_vmalloc *preservation) { }
-+
-+static inline void *kho_restore_vmalloc(const struct kho_vmalloc *preservation)
-+{
-+	return NULL;
-+}
-+
-+#endif /* CONFIG_KEXEC_HANDOVER */
-+
-+#endif /* _LINUX_KHO_VMALLOC_H */
+  * struct kho_block - Internal representation of a serialization block.
+diff --git a/kernel/liveupdate/kho_block.c b/kernel/liveupdate/kho_block.c
+index 0d2a342ef422..6cedcd36bfd2 100644
+--- a/kernel/liveupdate/kho_block.c
++++ b/kernel/liveupdate/kho_block.c
+@@ -23,7 +23,7 @@
+ #include <linux/io.h>
+ #include <linux/kexec_handover.h>
+ #include <linux/kho/abi/block.h>
+-#include <linux/kho_block.h>
++#include <linux/kho/block.h>
+ #include <linux/slab.h>
+ 
+ /*
+diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
+index 64879ffe7378..349f6d141873 100644
+--- a/kernel/liveupdate/luo_internal.h
++++ b/kernel/liveupdate/luo_internal.h
+@@ -8,9 +8,9 @@
+ #ifndef _LINUX_LUO_INTERNAL_H
+ #define _LINUX_LUO_INTERNAL_H
+ 
++#include <linux/kho/block.h>
+ #include <linux/liveupdate.h>
+ #include <linux/uaccess.h>
+-#include <linux/kho_block.h>
+ 
+ struct luo_ucmd {
+ 	void __user *ubuffer;
+diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+index b79b2a488974..01c0ccf09919 100644
+--- a/kernel/liveupdate/luo_session.c
++++ b/kernel/liveupdate/luo_session.c
+@@ -90,8 +90,8 @@
+ #include <linux/fs.h>
+ #include <linux/io.h>
+ #include <linux/kexec_handover.h>
+-#include <linux/kho_block.h>
+ #include <linux/kho/abi/luo.h>
++#include <linux/kho/block.h>
+ #include <linux/list.h>
+ #include <linux/liveupdate.h>
+ #include <linux/mutex.h>
 -- 
 2.53.0
 
