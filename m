@@ -1,38 +1,40 @@
-Received: from mail-108-mta165.mxroute.com (mail-108-mta165.mxroute.com [136.175.108.165])
+Received: from mail-108-mta227.mxroute.com (mail-108-mta227.mxroute.com [136.175.108.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09A03EE1FA
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 18:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.165
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AED3E92A9
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 18:53:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780685615; cv=none; b=rm2L+OrJnPDBQTkBHyTCIPq0LG5r8t9DCIIrzhZVtUk/VUuWmjrUebM3k2DnCCz6Oe+BQWPwitA7IgVkPL76QjDIyeTQr8/kReIUI+gpowppVo43+1F78oXlUyingp1w87Cwd2Z8kxGiEPPAeMox+44Ez5MN4S5KzWcmE0eH1Aw=
+	t=1780685620; cv=none; b=lwN41Vk2lnusPL1LjfJAdusB5jqL4rJKt8ajIHJJ+8b2J3Obj5aFnTEzCNqr38dITdSKtGnTHXccdz/wZoieBhHZ2gIdOr84t6WskXpY5Tfuo/yeEsHE6PJwgnh5XBVyG2DRDKK1Mf3XdS0FKU71F+zOMkkPWf7rNRaYz9tjdlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780685615; c=relaxed/simple;
-	bh=xDZYPUEvJtvF2g6rvBagwNtcg2951Bd7HeckMQY7nb4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EnesDG7lBtnCmwF7FxFwDZMHP1/L1RVOKTF2JoZNTYUFhrIiy8/CatZ1hs2k+h9ipdne+Ygt8Oldh/9EYxs/dSAAY8aw8KQ3tFp3dnRSrqtmQDuenX3GLgbrG6PfYjx1L037KetACyhjlCdsNt5LfhzcRWXlSWbRIdfoj933mc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=SCrtj17i; arc=none smtp.client-ip=136.175.108.165
+	s=arc-20240116; t=1780685620; c=relaxed/simple;
+	bh=b5WOFM52SN13MEtWftN752/9cLw0JVPazUMHSdNkRmc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=i+sIQzCkEJv1Yg0QXpjAVGEfWwLV6TCrfEGcb9arZGNNarKlzCz07nXBofzMYs14eaShGQh5p09AddM2gKneW1ImHy/IJ8aep3wDWfbjruz1HUOEUzUpYidcra7MqWmQD/ojgpp0mRoXI0B2ObUe2yxwuqQZIpTCwgy62qWRxnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=pFVpl9XD; arc=none smtp.client-ip=136.175.108.227
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="SCrtj17i"
+	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="pFVpl9XD"
 Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
  (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta165.mxroute.com (ZoneMTA) with ESMTPSA id 19e991d5f4300067f7.00f
+ by mail-108-mta227.mxroute.com (ZoneMTA) with ESMTPSA id 19e991d814b00067f7.00f
  for <linux-kselftest@vger.kernel.org>
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 05 Jun 2026 18:48:19 +0000
-X-Zone-Loop: cc83942d69299d10129251a54557538d1a01c587469d
+ Fri, 05 Jun 2026 18:48:28 +0000
+X-Zone-Loop: 2ddcfd31bfde6a84d43d9323765fcc7c3c7a3033510f
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
-	s=x; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:To:
-	From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-	References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-	List-Owner:List-Archive; bh=tkW0+TrK6GB0qXg9yfN0G2cZbNbzRldZbtR9viXCy98=; b=S
-	Crtj17ieZCJRoKE0EMRj+RGosK40bemIaFSd/U3a2qp7L2AueDWJiIjhdyI2LAgEaCiXrjIXRDSBG
-	KAIrSmYo3bOuKzm4vXns2n+HJ+JIkWtemH6SdcZc1Vszgid2AWYhthI3ApXqC9yqncfQhZj2DG+kK
-	k6cze2bqhpWeMHre/NFpo6ZPoeju4mK5jp9ugDwW3c3BgQHv6OSd6fRVvW3KZcKHWGY3KrIEJCYVm
-	6TLjpTP8cUXwwJmVqWRWwnHNw6ffU83c299mlJYJnYLo0OLTlhT3b5dvbOLYPkTN7oYQUeq24PxhY
-	kTtOqr6at835Ju/BXgLsIya493WauEnsw==;
+	s=x; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=ZjosEJpA1eXZ50hc7mf1XeR3qMEd5tWpuh367jDJpcc=; b=pFVpl9XDMdO6BbhkvYP+KOh2c9
+	72YC1t4AkFT6riWxUK1dJ3SfhIiqI/3PQ6ECLQMB6Kb/qV/SyVm06gQV1WEik8dJOdx7c+WLtx7Ws
+	SgJsnBMI8hG5qoO9fex3sbyB6Y9bKv3XXldWsTzIyvsTrG8f9gd8oGfKcnB/WgNnSFSqHWXJcn40t
+	N+UTBo3ntKWrvR6Qu103wBLpbJDjjzRLCa3QOpzkYSbaNRqjOLGU/+SOyY2voHtqzK4jgG4q3QyKi
+	GDs4LjV2JeUYZeH6U74K7tFiQVV/3X1m2uFsvo6/DXqby2GD5sCK5Map2kCZVe0S1/z4B1Dtx0bVy
+	gBcw94kw==;
 From: Richard Patel <ripatel@wii.dev>
 To: x86@kernel.org,
 	"H. Peter Anvin" <hpa@zytor.com>,
@@ -51,9 +53,11 @@ Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>,
 	linux-kernel@vger.kernel.org,
 	Florian Weimer <fweimer@redhat.com>,
 	Richard Patel <ripatel@wii.dev>
-Subject: [PATCH v2 0/5] Usermode Indirect Branch Tracking
-Date: Fri,  5 Jun 2026 18:47:11 +0000
-Message-ID: <20260605184715.3383415-2-ripatel@wii.dev>
+Subject: [PATCH v2 2/5] x86: shstk: don't clobber IBT bits in U_CET MSR
+Date: Fri,  5 Jun 2026 18:47:13 +0000
+Message-ID: <20260605184715.3383415-4-ripatel@wii.dev>
+In-Reply-To: <20260605184715.3383415-2-ripatel@wii.dev>
+References: <20260605184715.3383415-2-ripatel@wii.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,87 +67,59 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Id: ripatel@wii.dev
 
-Adds basic support for x86 userspace IBT.
+Updates usermode shadow stack code to not set IBT-related bits in
+the U_CET MSR.
 
-IBT is part of Intel CET. It requires indirect call and jump targets
-to start with an endbr{32,64} instruction, otherwise throwing #CP.
+Signed-off-by: Richard Patel <ripatel@wii.dev>
+---
+ arch/x86/kernel/shstk.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-In summary, this patch does 3 things:
-- Config wiring ensuring supervisor XSAVE contains IBT state
-- Allow userspace to enable IBT via prctl(PR_CFI_*) for an entire thread
-- Enable IBT support (ENDBR instructions) in VDSO
-
-Unlike the arm64 BTI API:
-- does not support mixed usermode (all or nothing)
-- does not touch page table code
-- not enabled automatically (no ELF GNU note parsing)
-- temporarily disables IBT enforcement when handling signals
-These can all be cleanly added later.
-
-The main question is whether glibc is happy with this prctl syscall API.
-
-Changes from v1:
-- Removed all signal handler changes
-- Removed all uapi changes
-  (v1 saved state via a redundant uc_flags bit, which was a complete
-  mess, and not compatible with sigframe_ia32)
-- Don't allow unknown PR_CFI_* syscall flags
-  see RISC-V patch: https://lore.kernel.org/lkml/20260518183918.322545-1-ripatel@wii.dev/
-- Added 32-bit support
-
-The original usermode IBT patches were written by Yu Cheng years ago,
-but are quite different (no syscall API to enable IBT, no FRED support)
-https://lore.kernel.org/all/20210830182221.3535-1-yu-cheng.yu@intel.com/
-
-There is one notable gap in this patch series, to do with signals:
-
-  000a: mov rax, 0x100a
-  000f: jmp rax
-  *** signal occurs ***
-  *** signal handler runs, does sigreturn ***
-  100a: nop
-
-The above sequence does not crash.
-
-With IBT, it should crash at the nop (because an endr64 is expected there).
-The IBT state (WAIT_FOR_ENDBR in IA32_U_CET MSR) is not backed up to the
-signal frame though.  So, when userland does a sigreturn, the CPU has
-forgotten that it was doing an indirect branch before the signal.
-(This specifically only occurs with signal handlers that sigreturn.)
-
-This is because IA32_U_CET is part of XSAVE 'supervisor' state, so
-regular XSAVE/XRSTOR can't access it.  Doing a manual backup is tricky.
-
-A related problem is that the signal handler routine is not checked for
-endbr preamble.
-
-Basic IBT is better than no IBT, though.
-
-Richard Patel (5):
-  x86: add userspace IBT config option
-  x86: shstk: don't clobber IBT bits in U_CET MSR
-  x86: expose user IBT via PR_CFI_BRANCH_LANDING_PADS
-  x86/entry/vdso: build with IBT support
-  selftests/x86: test usermode IBT
-
- arch/x86/Kconfig                            |  18 ++
- arch/x86/entry/vdso/common/Makefile.include |   3 +-
- arch/x86/include/asm/cpufeatures.h          |   1 +
- arch/x86/include/asm/ibt.h                  |  14 ++
- arch/x86/include/asm/processor.h            |   5 +
- arch/x86/kernel/Makefile                    |   1 +
- arch/x86/kernel/cet.c                       |   3 +-
- arch/x86/kernel/cpu/common.c                |  14 +-
- arch/x86/kernel/ibt.c                       |  98 ++++++++
- arch/x86/kernel/process_64.c                |   2 +
- arch/x86/kernel/shstk.c                     |  12 +-
- tools/arch/x86/include/asm/cpufeatures.h    |   1 +
- tools/testing/selftests/x86/Makefile        |   5 +-
- tools/testing/selftests/x86/user_ibt.c      | 247 ++++++++++++++++++++
- 14 files changed, 416 insertions(+), 8 deletions(-)
- create mode 100644 arch/x86/kernel/ibt.c
- create mode 100644 tools/testing/selftests/x86/user_ibt.c
-
---
+diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+index 0ca64900192f..ff4106dcfec4 100644
+--- a/arch/x86/kernel/shstk.c
++++ b/arch/x86/kernel/shstk.c
+@@ -150,6 +150,7 @@ static int shstk_setup(void)
+ {
+ 	struct thread_shstk *shstk = &current->thread.shstk;
+ 	unsigned long addr, size;
++	u64 msrval;
+ 
+ 	/* Already enabled */
+ 	if (features_enabled(ARCH_SHSTK_SHSTK))
+@@ -166,7 +167,10 @@ static int shstk_setup(void)
+ 
+ 	fpregs_lock_and_load();
+ 	wrmsrq(MSR_IA32_PL3_SSP, addr + size);
+-	wrmsrq(MSR_IA32_U_CET, CET_SHSTK_EN);
++	rdmsrq(MSR_IA32_U_CET, msrval);
++	msrval &= ~CET_WRSS_EN;
++	msrval |= CET_SHSTK_EN;
++	wrmsrq(MSR_IA32_U_CET, msrval);
+ 	fpregs_unlock();
+ 
+ 	shstk->base = addr;
+@@ -520,6 +524,8 @@ static int wrss_control(bool enable)
+ 
+ static int shstk_disable(void)
+ {
++	u64 msrval;
++
+ 	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
+ 		return -EOPNOTSUPP;
+ 
+@@ -528,8 +534,10 @@ static int shstk_disable(void)
+ 		return 0;
+ 
+ 	fpregs_lock_and_load();
++	rdmsrq(MSR_IA32_U_CET, msrval);
+ 	/* Disable WRSS too when disabling shadow stack */
+-	wrmsrq(MSR_IA32_U_CET, 0);
++	msrval &= ~(CET_SHSTK_EN | CET_WRSS_EN);
++	wrmsrq(MSR_IA32_U_CET, msrval);
+ 	wrmsrq(MSR_IA32_PL3_SSP, 0);
+ 	fpregs_unlock();
+ 
+-- 
 2.47.3
 
