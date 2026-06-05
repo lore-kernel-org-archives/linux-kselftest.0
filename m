@@ -1,185 +1,265 @@
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA9D68F7D;
-	Fri,  5 Jun 2026 04:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F6D26A0A7;
+	Fri,  5 Jun 2026 05:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780634433; cv=none; b=BpzZGLiLb2GoGEwQ37Zqqrikq5CzEzOh0CvzdMcAsbdXxGriX835MFHmbw9HbnfErfrR4ocdDTyjAFsOQDAqqm8Dz6yTqA7f1ABBoo/CzX5VoP8rSYrS4kwGrDZt5IPfOSO97Q+a21uFTK6aI/4LAnd8RqYV9M1fhFm0hXkH6Eg=
+	t=1780636197; cv=none; b=tHKLShkQucOgdeE5Aq048g+odWsuzuRkpJl15UVeLIwMAXHi3c3ZzmrNwW25wgJAgRvWc65mQq4XjZfNtZicHvMi5UKe92QnOE2dIO2qI3lx+cWqdKImevl3JPwL/8lmxPLrt6yE1OhBx5n55GCxIVRTcjKKVzDlTE/XkYK5Cns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780634433; c=relaxed/simple;
-	bh=qbg995XpptxNNRNd+WQtyVCFI7iRYwfWZYghGuB1XCY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=s/hsqFIo2S4PqnUIgfbtGuAT1VPE/TdWq1sDX0lzaJCzq8wmezNJ1sq4eIQDy3XO81BE17/VD/wXZIGpMYhVKyye5udTDq5NHOe00H/QiFxBVGqNVXa1QSQSion+9PR8nv5qNG3YG9szAUxSwTPRDC202AK7RMHUFnGRuBW03Ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Dum+VAra reason="signature verification failed"; arc=none smtp.client-ip=162.243.164.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1780636197; c=relaxed/simple;
+	bh=rdJd7sfEa7cyvb8ZIBQzpXJdypnFyAzu3Ks6iqmSBs8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sV/tnGrlQqQBifY5rdVc+9tihVxpMwlngBryZ2SUmzd2yPYm9GAqkqab03DunBrcUvBRgb/QJKksXFRx4FTGQDipwotsujQguf8RiNfC61ZuhmVC1j2vEBGimCnCNKlhFEa//EYkhxYdDtsE+l6L+o1/Yb4w55ZaEhcFbJNJb18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=lA0rkXib; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=F0KvoLUs; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Dum+VAra"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
-	Subject:In-Reply-To:References:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID; bh=eMuIw1NENQA8CNXkANORroU
-	3HDxlCLP/SoZA05I5Z2k=; b=Dum+VAraCeeKYVSrEWi4weL4e/mihq8dpT0Ul6d
-	SML2OxjJSDkDJOlEFDsbBMo6eaRxpZwMi8Vwsl0Ovgrr6ewtWqmhpK+RlLAA0i6v
-	GGPMqRoaNb+gSHg+7mINPEASDzBL1j2PquScerq2ocEsTu3VI8sCuT4o02bbOOsR
-	CjVQ=
-Received: from gnq25$mails.tsinghua.edu.cn ( [59.66.19.181] ) by
- ajax-webmail-web5 (Coremail) ; Fri, 5 Jun 2026 12:39:56 +0800 (GMT+08:00)
-Date: Fri, 5 Jun 2026 12:39:56 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: gnq25@mails.tsinghua.edu.cn
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Song Liu" <song@kernel.org>, "Jiri Olsa" <jolsa@kernel.org>,
-	"Shuah Khan" <shuah@kernel.org>,
-	"Shenghao Yuan" <shenghaoyuan0928@163.com>,
-	"Yazhou Tang" <tangyazhou518@outlook.com>,
-	"Matt Bobrowski" <mattbobrowski@google.com>,
-	"Emil Tsalapatis" <emil@etsalapatis.com>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add tests for
- PTR_TO_FLOW_KEYS constant offset bounds
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
- 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
-In-Reply-To: <3a45b9648a59651ce4206e839050d2f3d76325cd.camel@gmail.com>
-References: <20260604180730.2518088-1-gnq25@mails.tsinghua.edu.cn>
- <20260604180730.2518088-3-gnq25@mails.tsinghua.edu.cn>
- <3a45b9648a59651ce4206e839050d2f3d76325cd.camel@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="lA0rkXib";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="F0KvoLUs"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1780636192;
+	bh=rdJd7sfEa7cyvb8ZIBQzpXJdypnFyAzu3Ks6iqmSBs8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=lA0rkXib/kDl3eMcUq8gGhxvUnLRX20voVmUG4zKgoc4sJwe5xjKkZ/Dqi3zCaNfE
+	 1XVnPE0dGLgLqzkidOMz43feumKBCj/vx6D8JEO/wxziiB0zSUiKGp+7HsyA28NudW
+	 SCQYU5ZlFU0JvZZQUpuPk1/N1/uEAjGNxKAxNDErhMCigFh7wq+YSJt7caj5nNfZ7K
+	 B2KAQ0ywBwcIGKkiHcuR60a4n2YKkT42/Tr81J+3zUaol7CKLMgqNtrVLtBKwkcLfI
+	 Mw8zAWIKZZH2mooOA+xWbtKtogLuVJAHBpAVuNiOI1w+cTOsjp+jEsfWE0zyBBXBm8
+	 uo7HNjr+2lERUbo/2wM+NvUNSZi8CXDHC+wLwUkZeTluL9BGVuyJuqeYj2hmrroXX1
+	 gvjJIxeMaONNnmRulIME7sAUgZEgvmFTn+sB2N+g2dM2ODEXymW/v0rd4PGocfnl4+
+	 uKSeDUIrOWO17rczaAxKizd9A1otaW+sXZifK+y3qa5TFl/cOY+FOtADUyzACaw/Yo
+	 xpUWc0NtD0xvjc6qTkc+0gad+o5QrYVIJgr4Ptgo/HyYQZEdcJelX/O3XNHpG4FTJt
+	 3VMp2Kchuue5UAxQ4THXBd+KI7SSdU2K+dDTjK+VREM5r5kqCSgHqlzOEH9lravo4a
+	 ZG2qRQbivUsCN0Mfz6/fCA2U=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 9CC541E920C; Fri,  5 Jun 2026 13:09:52 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1780636190;
+	bh=rdJd7sfEa7cyvb8ZIBQzpXJdypnFyAzu3Ks6iqmSBs8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=F0KvoLUsuoPBb0L1vpN0tiPTEw+DVFUdMPCFYi5wN+BhK/DmrkGb+zMimxDxJshoY
+	 XLiwccj56goerSUoYBjDdfmtXGdz05naM9Wn+ypqTv0gdawiy1l8ONdt2jAc9kzUFP
+	 q/UeU7bzSxoxHSs6gqB42RKjleOovK0k8ZX3N9/PPBKETjkuXvvDCsfMOoTbHNBkJ+
+	 fkPSECpKYUfGoE2epF88S7mZshILQJZ5DEjn+xizMCm20wy2cmQuEjHiHsylFUbZa0
+	 G7sZkmsqz1DI4zZ2gAcPWAgm5IERY52BwBhZ6CGQvvfbZvYnhzbZGJbxlSFUxZtZjm
+	 WlMsJqnXeVlWp/msuSrYYObtUdjVETGzMUoxhIsswGb0X6aRT3w3hO5cQwcrh6pMv4
+	 9cF8L9tBk5XkGWfzyE03gC2VkG3SMQuN3MvO08N2gPJz4Ijxc+kdGDhneST/jvszI9
+	 lYB8AP2i+C5U1TK6Sx6QfsqYoLko+TjIiw4ACNbMkyqk6NO8JpeicFfVAUHzB2W9RC
+	 Kj77y2yk0jVbaJPNDnGoJcCZ8IaIJS206obxeUejkUYv4QsrWl7StXyXNoRNu+yC5C
+	 3azVemgMNHksIZCv+mOINYSOlRiNJcoL/PQmQ6vgpo/oKEifFBi2aVWKB/N0WCoVJA
+	 lR8kWGVlH7x9Ns2oYdJj4vDY=
+Received: from [IPV6:2001:8003:8810:ea00:ed87:ca88:5326:e11d] (unknown [IPv6:2001:8003:8810:ea00:ed87:ca88:5326:e11d])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id ED4B61E9202;
+	Fri,  5 Jun 2026 13:09:49 +0800 (AWST)
+Message-ID: <758228d7-b555-447a-86f7-3c437ce92460@davidgow.net>
+Date: Fri, 5 Jun 2026 13:09:47 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <35bdd1ba.79348.19e9614a63a.Coremail.gnq25@mails.tsinghua.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID:zAQGZQAnksEcUyJqlDwqAg--.23335W
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgEJA2oh+5vCywA
-	Csp
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] kunit: Add ability to skip entire test suites
+To: Vaibhav Jain <vaibhav@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
+ kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>,
+ Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>
+References: <20260604162805.556135-1-vaibhav@linux.ibm.com>
+ <20260604162805.556135-2-vaibhav@linux.ibm.com>
+From: David Gow <david@davidgow.net>
+Content-Language: fr
+In-Reply-To: <20260604162805.556135-2-vaibhav@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-WWVzLCBJIHdpbGwgYWRkIGEgc2VsZnRlc3Qgd2l0aCBhIHRydWx5IHZhcnlpbmcgb2Zmc2V0LCAK
-YXMgc3VnZ2VzdGVkLiBJIHdpbGwgaW5jbHVkZSB0aGlzIGluIHRoZSBuZXh0IHZlcnNpb24uCgoK
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiRWR1YXJkIFppbmdlcm1hbiIg
-PGVkZHl6ODdAZ21haWwuY29tPgo+IFNlbmQgdGltZTpGcmlkYXksIDA1LzA2LzIwMjYgMTA6MjM6
-NDEKPiBUbzogIk51b3FpIEd1aSIgPGducTI1QG1haWxzLnRzaW5naHVhLmVkdS5jbj4sIGFzdEBr
-ZXJuZWwub3JnLCBkYW5pZWxAaW9nZWFyYm94Lm5ldCwgYW5kcmlpQGtlcm5lbC5vcmcKPiBDYzog
-Ik1hcnRpbiBLYUZhaSBMYXUiIDxtYXJ0aW4ubGF1QGxpbnV4LmRldj4sICJLdW1hciBLYXJ0aWtl
-eWEgRHdpdmVkaSIgPG1lbXhvckBnbWFpbC5jb20+LCAiU29uZyBMaXUiIDxzb25nQGtlcm5lbC5v
-cmc+LCAiWW9uZ2hvbmcgU29uZyIgPHlvbmdob25nLnNvbmdAbGludXguZGV2PiwgIkppcmkgT2xz
-YSIgPGpvbHNhQGtlcm5lbC5vcmc+LCAiU2h1YWggS2hhbiIgPHNodWFoQGtlcm5lbC5vcmc+LCAi
-U2hlbmdoYW8gWXVhbiIgPHNoZW5naGFveXVhbjA5MjhAMTYzLmNvbT4sICJZYXpob3UgVGFuZyIg
-PHRhbmd5YXpob3U1MThAb3V0bG9vay5jb20+LCAiTWF0dCBCb2Jyb3dza2kiIDxtYXR0Ym9icm93
-c2tpQGdvb2dsZS5jb20+LCAiRW1pbCBUc2FsYXBhdGlzIiA8ZW1pbEBldHNhbGFwYXRpcy5jb20+
-LCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnLCBicGZAdmdlci5rZXJuZWwub3JnLCBsaW51
-eC1rc2VsZnRlc3RAdmdlci5rZXJuZWwub3JnCj4gU3ViamVjdDogUmU6IFtQQVRDSCBicGYtbmV4
-dCB2MiAyLzJdIHNlbGZ0ZXN0cy9icGY6IGFkZCB0ZXN0cyBmb3IgUFRSX1RPX0ZMT1dfS0VZUyBj
-b25zdGFudCBvZmZzZXQgYm91bmRzCj4gCj4gT24gRnJpLCAyMDI2LTA2LTA1IGF0IDAyOjA3ICsw
-ODAwLCBOdW9xaSBHdWkgd3JvdGU6Cj4gPiBBZGQgdmVyaWZpZXIgdGVzdHMgY292ZXJpbmcgY29u
-c3RhbnQgcG9pbnRlciBhcml0aG1ldGljIG9uIGEKPiA+IFBUUl9UT19GTE9XX0tFWVMgcmVnaXN0
-ZXIsIHdoaWNoIHJlZ3Jlc3NlZCB3aXRoIGNvbW1pdCAwMjJhYzA3NTA4ODMKPiA+ICgiYnBmOiB1
-c2UgcmVnLT52YXJfb2ZmIGluc3RlYWQgb2YgcmVnLT5vZmYgZm9yIHBvaW50ZXJzIik6IGFuCj4g
-PiBvdXQtb2YtYm91bmRzIG9mZnNldCBpbnRyb2R1Y2VkIGFzIGZsb3dfa2V5cyArPSBLIGFuZCB0
-aGVuIGRlcmVmZXJlbmNlZAo+ID4gYXQgaW5zbi0+b2ZmIDAgd2FzIGFjY2VwdGVkLCB3aGlsZSB0
-aGUgZXF1aXZhbGVudCBmbG93X2tleXMgKyBLIGRpcmVjdAo+ID4gb2Zmc2V0IHdhcyByZWplY3Rl
-ZC4KPiA+IAo+ID4gVGhlIHRlc3RzIGNoZWNrIHRoYXQ6Cj4gPiDCoC0gaW4tYm91bmRzIGNvbnN0
-YW50IGFyaXRobWV0aWMgb24gdGhlIGtleXMgcG9pbnRlciBpcyBzdGlsbCBhY2NlcHRlZCwKPiA+
-IMKgLSBhbiBvdXQtb2YtYm91bmRzIG9mZnNldCBpbnRyb2R1Y2VkIHZpYSBjb25zdGFudCBhcml0
-aG1ldGljIGlzIHJlamVjdGVkCj4gPiDCoMKgIGZvciBib3RoIHJlYWQgYW5kIHdyaXRlLCB3aXRo
-IHRoZSBzYW1lIGRpYWdub3N0aWMgYXMgdGhlIGRpcmVjdAo+ID4gwqDCoCBpbnNuLT5vZmYgZm9y
-bS4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogTnVvcWkgR3VpIDxnbnEyNUBtYWlscy50c2luZ2h1
-YS5lZHUuY24+Cj4gPiAtLS0KPiA+IMKgLi4uL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy92ZXJp
-Zmllci5jwqDCoMKgwqDCoMKgIHzCoCAyICsKPiA+IMKgLi4uL3NlbGZ0ZXN0cy9icGYvcHJvZ3Mv
-dmVyaWZpZXJfZmxvd19rZXlzLmPCoCB8IDc3ICsrKysrKysrKysrKysrKysrKysKPiA+IMKgMiBm
-aWxlcyBjaGFuZ2VkLCA3OSBpbnNlcnRpb25zKCspCj4gPiDCoGNyZWF0ZSBtb2RlIDEwMDY0NCB0
-b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ3MvdmVyaWZpZXJfZmxvd19rZXlzLmMKPiA+
-IAo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3Rz
-L3ZlcmlmaWVyLmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy92ZXJp
-Zmllci5jCj4gPiBpbmRleCAyMTlmZjI5Njk4NjguLmRhZTI2ZGRhMzc4MiAxMDA2NDQKPiA+IC0t
-LSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3ZlcmlmaWVyLmMKPiA+
-ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3ZlcmlmaWVyLmMK
-PiA+IEBAIC0zOCw2ICszOCw3IEBACj4gPiDCoCNpbmNsdWRlICJ2ZXJpZmllcl9kaXYwLnNrZWwu
-aCIKPiA+IMKgI2luY2x1ZGUgInZlcmlmaWVyX2Rpdl9tb2RfYm91bmRzLnNrZWwuaCIKPiA+IMKg
-I2luY2x1ZGUgInZlcmlmaWVyX2Rpdl9vdmVyZmxvdy5za2VsLmgiCj4gPiArI2luY2x1ZGUgInZl
-cmlmaWVyX2Zsb3dfa2V5cy5za2VsLmgiCj4gPiDCoCNpbmNsdWRlICJ2ZXJpZmllcl9nbG9iYWxf
-c3VicHJvZ3Muc2tlbC5oIgo+ID4gwqAjaW5jbHVkZSAidmVyaWZpZXJfZ2xvYmFsX3B0cl9hcmdz
-LnNrZWwuaCIKPiA+IMKgI2luY2x1ZGUgInZlcmlmaWVyX2dvdG9sLnNrZWwuaCIKPiA+IEBAIC0x
-ODksNiArMTkwLDcgQEAgdm9pZCB0ZXN0X3ZlcmlmaWVyX2RpcmVjdF9zdGFja19hY2Nlc3Nfd3Jh
-cGFyb3VuZCh2b2lkKSB7IFJVTih2ZXJpZmllcl9kaXJlY3Rfc3QKPiA+IMKgdm9pZCB0ZXN0X3Zl
-cmlmaWVyX2RpdjAodm9pZCnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB7IFJVTih2
-ZXJpZmllcl9kaXYwKTsgfQo+ID4gwqB2b2lkIHRlc3RfdmVyaWZpZXJfZGl2X21vZF9ib3VuZHMo
-dm9pZCnCoMKgwqDCoMKgwqAgeyBSVU4odmVyaWZpZXJfZGl2X21vZF9ib3VuZHMpOyB9Cj4gPiDC
-oHZvaWQgdGVzdF92ZXJpZmllcl9kaXZfb3ZlcmZsb3codm9pZCnCoMKgwqDCoMKgwqDCoMKgIHsg
-UlVOKHZlcmlmaWVyX2Rpdl9vdmVyZmxvdyk7IH0KPiA+ICt2b2lkIHRlc3RfdmVyaWZpZXJfZmxv
-d19rZXlzKHZvaWQpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB7IFJVTih2ZXJpZmllcl9mbG93X2tl
-eXMpOyB9Cj4gPiDCoHZvaWQgdGVzdF92ZXJpZmllcl9nbG9iYWxfc3VicHJvZ3Modm9pZCnCoMKg
-wqDCoMKgIHsgUlVOKHZlcmlmaWVyX2dsb2JhbF9zdWJwcm9ncyk7IH0KPiA+IMKgdm9pZCB0ZXN0
-X3ZlcmlmaWVyX2dsb2JhbF9wdHJfYXJncyh2b2lkKcKgwqDCoMKgwqAgeyBSVU4odmVyaWZpZXJf
-Z2xvYmFsX3B0cl9hcmdzKTsgfQo+ID4gwqB2b2lkIHRlc3RfdmVyaWZpZXJfZ290b2wodm9pZCnC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgeyBSVU4odmVyaWZpZXJfZ290b2wpOyB9Cj4g
-PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3ZlcmlmaWVy
-X2Zsb3dfa2V5cy5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3ZlcmlmaWVy
-X2Zsb3dfa2V5cy5jCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMDAw
-MDAwLi41MTJlNWQxZDI2NjUKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL3Rvb2xzL3Rlc3Rp
-bmcvc2VsZnRlc3RzL2JwZi9wcm9ncy92ZXJpZmllcl9mbG93X2tleXMuYwo+ID4gQEAgLTAsMCAr
-MSw3NyBAQAo+ID4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wCj4gPiArLyog
-Q29uc3RhbnQtb2Zmc2V0IGJvdW5kcyBjaGVja3MgZm9yIFBUUl9UT19GTE9XX0tFWVMgcG9pbnRl
-ciBhcml0aG1ldGljLiAqLwo+ID4gKwo+ID4gKyNpbmNsdWRlICJ2bWxpbnV4LmgiCj4gPiArI2lu
-Y2x1ZGUgPGJwZi9icGZfaGVscGVycy5oPgo+ID4gKyNpbmNsdWRlICJicGZfbWlzYy5oIgo+ID4g
-Kwo+ID4gKy8qIHNpemVvZihzdHJ1Y3QgYnBmX2Zsb3dfa2V5cykgaXMgd2VsbCB1bmRlciA0MDk2
-LCBzbyArMHgxMDAwIGlzIE9PQi4gKi8KPiA+ICsKPiA+ICtTRUMoImZsb3dfZGlzc2VjdG9yIikK
-PiA+ICtfX2Rlc2NyaXB0aW9uKCJmbG93X2tleXM6IGluLWJvdW5kcyBjb25zdGFudCBwb2ludGVy
-IGFyaXRobWV0aWMgYWNjZXB0ZWQiKQo+ID4gK19fc3VjY2Vzcwo+ID4gK19fbmFrZWQgdm9pZCBm
-bG93X2tleXNfY29uc3RfaW5ib3VuZHModm9pZCkKPiA+ICt7Cj4gPiArCWFzbSB2b2xhdGlsZSAo
-IgkJCQkJXAo+ID4gKwlyMSA9ICoodTY0ICopKHIxICsgJVtmbG93X2tleXNdKTsJCVwKPiA+ICsJ
-cjEgKz0gODsJCQkJCVwKPiA+ICsJcjAgPSAqKHU2NCAqKShyMSArIDApOwkJCQlcCj4gPiArCXIw
-ID0gMDsJCQkJCQlcCj4gPiArCWV4aXQ7CQkJCQkJXAo+ID4gKyIJOgo+ID4gKwk6IF9faW1tX2Nv
-bnN0KGZsb3dfa2V5cywgb2Zmc2V0b2Yoc3RydWN0IF9fc2tfYnVmZiwgZmxvd19rZXlzKSkKPiA+
-ICsJOiBfX2Nsb2JiZXJfYWxsKTsKPiA+ICt9Cj4gPiArCj4gPiArU0VDKCJmbG93X2Rpc3NlY3Rv
-ciIpCj4gPiArX19kZXNjcmlwdGlvbigiZmxvd19rZXlzOiBPT0IgdmlhIGNvbnN0YW50IHBvaW50
-ZXIgYXJpdGhtZXRpYyByZWplY3RlZCIpCj4gPiArX19mYWlsdXJlIF9fbXNnKCJpbnZhbGlkIGFj
-Y2VzcyB0byBmbG93IGtleXMgb2ZmPTQwOTYgc2l6ZT04IikKPiA+ICtfX25ha2VkIHZvaWQgZmxv
-d19rZXlzX2NvbnN0X29vYl9yZWFkKHZvaWQpCj4gPiArewo+ID4gKwlhc20gdm9sYXRpbGUgKCIJ
-CQkJCVwKPiA+ICsJcjEgPSAqKHU2NCAqKShyMSArICVbZmxvd19rZXlzXSk7CQlcCj4gPiArCXIx
-ICs9IDQwOTY7CQkJCQlcCj4gPiArCXIwID0gKih1NjQgKikocjEgKyAwKTsJCQkJXAo+ID4gKwly
-MCA9IDA7CQkJCQkJXAo+ID4gKwlleGl0OwkJCQkJCVwKPiA+ICsiCToKPiA+ICsJOiBfX2ltbV9j
-b25zdChmbG93X2tleXMsIG9mZnNldG9mKHN0cnVjdCBfX3NrX2J1ZmYsIGZsb3dfa2V5cykpCj4g
-PiArCTogX19jbG9iYmVyX2FsbCk7Cj4gPiArfQo+ID4gKwo+ID4gK1NFQygiZmxvd19kaXNzZWN0
-b3IiKQo+ID4gK19fZGVzY3JpcHRpb24oImZsb3dfa2V5czogT09CIHdyaXRlIHZpYSBjb25zdGFu
-dCBwb2ludGVyIGFyaXRobWV0aWMgcmVqZWN0ZWQiKQo+ID4gK19fZmFpbHVyZSBfX21zZygiaW52
-YWxpZCBhY2Nlc3MgdG8gZmxvdyBrZXlzIG9mZj00MDk2IHNpemU9OCIpCj4gPiArX19uYWtlZCB2
-b2lkIGZsb3dfa2V5c19jb25zdF9vb2Jfd3JpdGUodm9pZCkKPiA+ICt7Cj4gPiArCWFzbSB2b2xh
-dGlsZSAoIgkJCQkJXAo+ID4gKwlyMSA9ICoodTY0ICopKHIxICsgJVtmbG93X2tleXNdKTsJCVwK
-PiA+ICsJcjEgKz0gNDA5NjsJCQkJCVwKPiA+ICsJcjIgPSAwOwkJCQkJCVwKPiA+ICsJKih1NjQg
-KikocjEgKyAwKSA9IHIyOwkJCQlcCj4gPiArCXIwID0gMDsJCQkJCQlcCj4gPiArCWV4aXQ7CQkJ
-CQkJXAo+ID4gKyIJOgo+ID4gKwk6IF9faW1tX2NvbnN0KGZsb3dfa2V5cywgb2Zmc2V0b2Yoc3Ry
-dWN0IF9fc2tfYnVmZiwgZmxvd19rZXlzKSkKPiA+ICsJOiBfX2Nsb2JiZXJfYWxsKTsKPiA+ICt9
-Cj4gPiArCj4gPiArLyogRXF1aXZhbGVudCBPT0IgZXhwcmVzc2VkIGRpcmVjdGx5IGluIGluc24t
-Pm9mZjsgdGhpcyBmb3JtIHdhcyBhbHdheXMKPiA+ICsgKiByZWplY3RlZCBhbmQgaXMga2VwdCB0
-byBzaG93IGJvdGggZm9ybXMgbm93IHNoYXJlIG9uZSBkaWFnbm9zdGljLgo+ID4gKyAqLwo+ID4g
-K1NFQygiZmxvd19kaXNzZWN0b3IiKQo+ID4gK19fZGVzY3JpcHRpb24oImZsb3dfa2V5czogT09C
-IHZpYSBpbnNuLT5vZmYgcmVqZWN0ZWQiKQo+ID4gK19fZmFpbHVyZSBfX21zZygiaW52YWxpZCBh
-Y2Nlc3MgdG8gZmxvdyBrZXlzIG9mZj00MDk2IHNpemU9OCIpCj4gPiArX19uYWtlZCB2b2lkIGZs
-b3dfa2V5c19pbnNuX29mZl9vb2Iodm9pZCkKPiA+ICt7Cj4gPiArCWFzbSB2b2xhdGlsZSAoIgkJ
-CQkJXAo+ID4gKwlyMSA9ICoodTY0ICopKHIxICsgJVtmbG93X2tleXNdKTsJCVwKPiA+ICsJcjAg
-PSAqKHU2NCAqKShyMSArIDQwOTYpOwkJCVwKPiA+ICsJcjAgPSAwOwkJCQkJCVwKPiA+ICsJZXhp
-dDsJCQkJCQlcCj4gPiArIgk6Cj4gPiArCTogX19pbW1fY29uc3QoZmxvd19rZXlzLCBvZmZzZXRv
-ZihzdHJ1Y3QgX19za19idWZmLCBmbG93X2tleXMpKQo+ID4gKwk6IF9fY2xvYmJlcl9hbGwpOwo+
-ID4gK30KPiA+ICsKPiA+ICtjaGFyIF9saWNlbnNlW10gU0VDKCJsaWNlbnNlIikgPSAiR1BMIjsK
-PiAKPiBDb3VsZCB5b3UgcGxlYXNlIGFsc28gYWRkIGEgdGVzdCB3aXRoIGEgdHJ1bHkgdmFyeWlu
-ZyBvZmZzZXQ/Cj4gTGlrZSBiZWxvdzoKPiAKPiBfX25ha2VkIHZvaWQgZmxvd19rZXlzX3Zhcl9y
-ZWFkKHZvaWQpCj4gewo+IAlhc20gdm9sYXRpbGUgKCIJCQkJCVwKPiAJcjYgPSByMTsJCQkJCVwK
-PiAJY2FsbCAlW2JwZl9nZXRfcHJhbmRvbV91MzJdOwkJCVwKPiAJcjAgJj0gMHhGRkZGOwkJCQkJ
-XAo+IAlyMSA9ICoodTY0ICopKHI2ICsgJVtmbG93X2tleXNdKTsJCVwKPiAJcjEgKz0gcjA7CQkJ
-CQlcCj4gCXIwID0gKih1NjQgKikocjEgKyAwKTsJCQkJXAo+IAlyMCA9IDA7CQkJCQkJXAo+IAll
-eGl0OwkJCQkJCVwKPiAiCToKPiAJOiBfX2ltbV9jb25zdChmbG93X2tleXMsIG9mZnNldG9mKHN0
-cnVjdCBfX3NrX2J1ZmYsIGZsb3dfa2V5cykpLAo+IAkgIF9faW1tKGJwZl9nZXRfcHJhbmRvbV91
-MzIpCj4gCTogX19jbG9iYmVyX2FsbCk7Cj4gfQo=
+Le 05/06/2026 à 12:28 AM, Vaibhav Jain a écrit :
+> Currently, KUnit provides mechanisms to skip individual test cases, but
+> there is no way to skip an entire test suite based on runtime conditions
+> checked during suite initialization. This limitation forces test suites
+> to either fail or skip tests individually when certain prerequisites are
+> not available.
+> 
+> To address this limitation, the patch adds a 'status' field to struct
+> kunit_suite that allows suite_init callbacks to mark the entire suite as
+> KUNIT_SKIPPED. When a suite is marked as skipped, all test cases within
+> that suite are bypassed without execution.
+> 
+> The patch proposes changes to kunit_suite_has_succeeded() to check suite
+> status before evaluating individual test case results. Also
+> kunit_run_tests() is updated to skip suite execution if 'kunit_suite.status'
+> is set to KUNIT_SKIPPED, thats either set before suite_init or by the
+> suite_init callback itself.
+> 
+> This enables test suites to perform runtime capability checks in their
+> 'suite_init' callback and gracefully skip all tests when prerequisites are
+> not met, rather than reporting failures or requiring each test case to
+> perform redundant checks.
+> 
+> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+> ---
+
+Thanks — this is great! There are a few cases it's not handling
+properly, though, particularly with respect to the debugfs support.
+
+I think we need to:
+- Reset suite->status to KUNIT_SUCCESS in kunit_init_suite(), so that a
+suite which is re-run via debugfs isn't automatically skipped again.
+- Fix the result handling in debugfs to handle skipped suites.
+- (Optional) Maybe we could get rid of kunit_suite::suite_init_err now
+that there's a specific status value. That'd have to be done carefully
+to preserve all of the semantics, though.
+
+Here's a quick (and slightly hacky) patch to fix the first couple of issues:
+---
+diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+index 9c326f1837bd..23d34bfdba95 100644
+--- a/lib/kunit/debugfs.c
++++ b/lib/kunit/debugfs.c
+@@ -58,6 +58,22 @@ static void debugfs_print_result(struct seq_file
+*seq, struct string_stream *log
+ 	spin_unlock(&log->lock);
+ }
+
++/* Print the result line for a suite. */
++static void debugfs_print_ok_not_ok(struct seq_file *seq,
++				    enum kunit_status status,
++				    size_t test_number,
++				    const char *description,
++				    const char *directive)
++{
++	const char *directive_header = (status == KUNIT_SKIPPED) ? " # SKIP "
+: "";
++	const char *directive_body = (status == KUNIT_SKIPPED) ? directive : "";
++
++	seq_printf(seq, "%s %zd %s%s%s\n",
++		   kunit_status_to_ok_not_ok(status),
++		   test_number, description, directive_header,
++		   directive_body);
++}
++
+ /*
+  * /sys/kernel/debug/kunit/<testsuite>/results shows all results for
+testsuite.
+  */
+@@ -77,17 +93,17 @@ static int debugfs_print_results(struct seq_file
+*seq, void *v)
+ 	seq_puts(seq, "1..1\n");
+
+ 	/* Print suite header because it is not stored in the test logs. */
+-	seq_puts(seq, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
+-	seq_printf(seq, KUNIT_SUBTEST_INDENT "# Subtest: %s\n", suite->name);
+-	seq_printf(seq, KUNIT_SUBTEST_INDENT "1..%zd\n",
+kunit_suite_num_test_cases(suite));
+-
+-	kunit_suite_for_each_test_case(suite, test_case)
+-		debugfs_print_result(seq, test_case->log);
++	if (suite->status != KUNIT_SKIPPED) {
++		seq_puts(seq, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
++		seq_printf(seq, KUNIT_SUBTEST_INDENT "# Subtest: %s\n", suite->name);
++		seq_printf(seq, KUNIT_SUBTEST_INDENT "1..%zd\n",
+kunit_suite_num_test_cases(suite));
+
++		kunit_suite_for_each_test_case(suite, test_case)
++			debugfs_print_result(seq, test_case->log);
++	}
+ 	debugfs_print_result(seq, suite->log);
+
+-	seq_printf(seq, "%s %d %s\n",
+-		   kunit_status_to_ok_not_ok(success), 1, suite->name);
++	debugfs_print_ok_not_ok(seq, success, 1, suite->name,
+suite->status_comment);
+ 	return 0;
+ }
+
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index c0ae45a22b2c..2ff145796450 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -798,9 +798,6 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 	/* Taint the kernel so we know we've run tests. */
+ 	add_taint(TAINT_TEST, LOCKDEP_STILL_OK);
+
+-	if (suite->status == KUNIT_SKIPPED)
+-		goto suite_end;
+-
+ 	if (suite->suite_init) {
+ 		suite->suite_init_err = suite->suite_init(suite);
+ 		if (suite->suite_init_err) {
+@@ -836,6 +833,7 @@ static void kunit_init_suite(struct kunit_suite *suite)
+ 	kunit_debugfs_create_suite(suite);
+ 	suite->status_comment[0] = '\0';
+ 	suite->suite_init_err = 0;
++	suite->status = KUNIT_SUCCESS;
+
+ 	if (suite->log)
+ 		string_stream_clear(suite->log);
+---
+
+
+>  include/kunit/test.h |  1 +
+>  lib/kunit/test.c     | 11 +++++++++++
+>  2 files changed, 12 insertions(+)
+> 
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index ce0573e196ce..395221d623f7 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -285,6 +285,7 @@ struct kunit_suite {
+>  	struct string_stream *log;
+>  	int suite_init_err;
+>  	bool is_init;
+> +	enum kunit_status status;
+>  };
+>  
+>  /* Stores an array of suites, end points one past the end */
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 99773e000e1b..989acc770265 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -214,6 +214,9 @@ enum kunit_status kunit_suite_has_succeeded(struct kunit_suite *suite)
+>  	const struct kunit_case *test_case;
+>  	enum kunit_status status = KUNIT_SKIPPED;
+>  
+> +	if (suite->status == KUNIT_SKIPPED)
+> +		return KUNIT_SKIPPED;
+> +
+>  	if (suite->suite_init_err)
+>  		return KUNIT_FAILURE;
+>  
+> @@ -795,12 +798,20 @@ int kunit_run_tests(struct kunit_suite *suite)
+>  	/* Taint the kernel so we know we've run tests. */
+>  	add_taint(TAINT_TEST, LOCKDEP_STILL_OK);
+>  
+> +	if (suite->status == KUNIT_SKIPPED)
+> +		goto suite_end;
+> +
+
+Do we want this? If a test is run more than once, we probably want to
+re-run suite_init so that we can tell if we should still skip it.
+
+While I don't think it's likely that a test which was previously skipped
+will suddenly become available, it's not impossible with, e.g., CPU hotplug.
+
+>  	if (suite->suite_init) {
+>  		suite->suite_init_err = suite->suite_init(suite);
+>  		if (suite->suite_init_err) {
+> +			suite->status = KUNIT_FAILURE;
+>  			kunit_err(suite, KUNIT_SUBTEST_INDENT
+>  				  "# failed to initialize (%d)", suite->suite_init_err);
+>  			goto suite_end;
+> +
+> +		} else if (suite->status == KUNIT_SKIPPED) {
+> +			/* Skip this kunit suite */
+> +			goto suite_end;
+>  		}
+>  	}
+>  
+
+Cheers,
+-- David
