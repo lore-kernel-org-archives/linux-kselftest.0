@@ -1,126 +1,132 @@
-Received: from extorris.mess.org (extorris.mess.org [92.243.27.206])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32B4388E71;
-	Fri,  5 Jun 2026 15:14:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.243.27.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD69F3FFFA2
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 15:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780672477; cv=none; b=Ud/OyoWf+o4v92rxxznQctyqd0USdS2EgM9403IgT2qcPXHwptx2nLAMPGp7Y0sviJ0NjYVqxyrP9vzbhhjXH1w2FhSRyAkQ2JBASZ42WQGtyKNTbt2gDj4goWudff4CyVRCH3AZZRxwNiHqBF4yXumuI/I5WaRmiQOZpg2HDxM=
+	t=1780672487; cv=none; b=K11UtgSiwKy6hlVIDMJRpL+vpM6frnzJgKPIWL8wLLIqSAUayEFpYkinymRD58ysHOaP3eGJOif20WB+Vb4PUfO03BabwQyOZFpFKOoXdmOGCN8L/ESJuMRQ3ZyTnG5fhDGQKZL7iNM3rXt/ATxNn5fJp7nepynAzBMaq2074Ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780672477; c=relaxed/simple;
-	bh=0wSyyP8FRVzf7/nN2rkijpLZ/QyF8u8izV48o+OfdU8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AusVaqzSYmBo3moth0c78bLRCRt/oT1hkkfYTVH3FyC03igSKjsxHQuLagEJdeowt+bC3Q929gHCDvb8E1xgCwyP75caVl3wsv+sVZsWSL0aJWhvNm9DAsqZyxlb4skXpvEnEtf3v/VEL0qJaWadxAXnZSMpJXC7EDnoZ/p41LY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=nsQqgNeT; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=F4yPuMJl; arc=none smtp.client-ip=92.243.27.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
+	s=arc-20240116; t=1780672487; c=relaxed/simple;
+	bh=pVXqDCGJxcTY09vnClQDvcttv3WvWGsjeGCHpdDkg7w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u6xsWAn1jZcjIXL+R9VJbdWmf3cl8Y4SyOpPuNnqfwtnDzoVKmhDn6Kj8KzrWTDQeIaCG1ID0v/zUkwnAF1ZoyTmMdoEyXezVKBj3aXsszU6OOGbhcdSxoaCubIJjrWYCNh/IJ8PdESTMJ5nSsHMzz/ea8RfgXPfUPMwwobBHNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bb49GgEP; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="nsQqgNeT";
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="F4yPuMJl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1780672468; bh=0wSyyP8FRVzf7/nN2rkijpLZ/QyF8u8izV48o+OfdU8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=nsQqgNeT4wTAFr+aVxwsUmHlJytWUwxwIGNAFV2wGyAscuzcALE4+wddUnU5NJA6D
-	 myYFMyoSFTEO2k95Qq5inFspaIabeiwVTIunVpqKkfOOtwGBNeuGLzr7qaeZvUrK6L
-	 3f02DSRk0nSlh1utxsmhmI6GofH/tmph0f+HGr1U51cMst4vdzjRnUKQtpoMAcc+Vc
-	 3YVBCNAxZQQ0YYwOGHEfrmcHfi07Gd8L4mxoZGXyrsChTX4r39CFyWncg8/X4EVaY4
-	 VW5BomhqnsicSwYI0Hu/cXAPxO880lUkoB8c5Vg1/nV/7hpXKrVhvFWl9ngjgjs/nz
-	 GI0ctaA+ScZJQ==
-Received: by extorris.mess.org (Postfix, from userid 1004)
-	id 4C8B441AB7; Fri, 05 Jun 2026 16:14:28 +0100 (BST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1780672467; bh=0wSyyP8FRVzf7/nN2rkijpLZ/QyF8u8izV48o+OfdU8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=F4yPuMJltgSemibAHXlgfScPQuJQ6vWGgtvcuKFa6VexTMnTY3kqWOh5+3Vvy5Ohi
-	 FhsYH/CgFy2C03Uy+N4XtbgJIFCMpdRQ7mBnRWyuI2Q38KlRRXjeQX+JzbB0a9T2Uw
-	 z1mqpnovKqL9/CYrhE/r0J0Qe2oMzplO//6rhMhJG950Szaa/lRiuRqGO84yATq32g
-	 4voCViaFz1Tgj8OQBG2w1Z2fS3uMyAX6L2GxGKvLC725xnKv+F8QX2fxu03tVTlvsn
-	 vOLQYX9PTpLJh2TLlmm4WfZCII2rxw+lC9CGH3NaEbLN9MCljPWS+5nWpOD2chU1Q6
-	 eM+uI598Ty/Yw==
-Received: from maru.local (unknown [62.232.99.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by extorris.mess.org (Postfix) with ESMTPSA id 7A2BA408E6;
-	Fri, 05 Jun 2026 16:14:26 +0100 (BST)
-From: Sean Young <sean@mess.org>
-To: Bastien Curutchet  <bastien.curutchet@bootlin.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Sean Young <sean@mess.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: Fix test_lirc test
-Date: Fri,  5 Jun 2026 16:14:16 +0100
-Message-ID: <20260605151417.777614-1-sean@mess.org>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bb49GgEP"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4908b92904fso23620495e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 08:14:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1780672484; x=1781277284; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w5Us6LXX/m1CkmS8+PwnhcahCPKlGB8k4LedTlqb3Mg=;
+        b=bb49GgEPsSlce8cSGzzCUBfT7ydA151ASBn0zm/lNlFs/1W/JntJ5PRkvJ2Cv0ynMG
+         /QH1sd6ws8dcrekw5fS0MeeEhOHcw1zjjMWy90tcGoKvauDEhumBQmpe3X9A9OKz/5XB
+         jg4EzfAopKbU8+iVzsUWHGjE71Fn2nEyYDzFOZ7EQjsf1F9OmZaCEp/7o7EhBnrSKFEM
+         Ybr2a9oLVCRVwe4P6mMF7d/pHHGO+bR8pUsyXEkF2jcU5dNWJC3TMuc7kakQZDUn/q4T
+         iUet2MHtZO0o0eIKzRc7RoHFd7gTA0T3PpXXPBAGcMT3RLQJ/zcLBT678p3yABzZ4jnm
+         gmXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780672484; x=1781277284;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w5Us6LXX/m1CkmS8+PwnhcahCPKlGB8k4LedTlqb3Mg=;
+        b=lBgYBXdyopKyGGBXqaFp0hlulnO4JGgYMzPlvb3+QkibLt/fc1+P9tGuHovPNHUekS
+         UKGLgY39J+KQnpqiET2cR8oKe/lYT9lSr8I6tkL1FFUsYEQwg5240OJd6VxR1eD7oeJW
+         LHFEgEh81uOPnomPLN4mPsz49GadxxChqG6RhOTaYlnIGPNuhw5vNp2FGiuFnHzmuAcl
+         LHMaOwjGmdzsw5TwtdwKllOtmQtQIOYftEYcY1zmRhFQaEdX0tHN1785dlvQ5Cc5KnaI
+         2Uyl9uZJJAkPKAjU8YQbVbudRRqUGrruujkmYIpgXjTeLRq8x+RMszqixVGo4yowPK9i
+         LFmA==
+X-Forwarded-Encrypted: i=1; AFNElJ8T1tqyxcerIEQ6t3Ohm13IRsYFcHwjxE4m+54dlLRyU7+dw1u9vE6SMpLtcvxA/xwuskWgD3KR4uXSYSRAwKg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJ/YM0qAm8kFtvo2Xvt27oApdBBbvjyVlF16CEX0FGdslIvr0z
+	B0LsQYr8P+ZjYDAG4leGcR5k3sAnWJqoDAgcnV9G+cfsyL8E8CalZqyfPRR2MAp8bojfssCdnYq
+	ectAK
+X-Gm-Gg: Acq92OF3SrmHLk6exEwl0V9MrfC7sD2c1SCLy8dj0l/tkcJmf2dqWrn+tnqJc2QdVMt
+	4AkQXUXo5M36tphEenfKRkbrmGAer05OAJSpxZdWCAipw5/1MEdtX/Z4lmuDaAWRhrwo3ipa/Y/
+	qrG3n2qEgoE+0Lhm8KNajhWkNUJiVnk343ugR/lDAe0Au/X8aDW/4PuF5+fUtNt/A7Hm0lN5cJw
+	u1OaQWj9jWmL/iX4i38oJ5C96v5g2EBSq1oDI/lcsrJzkga1ykE2KYODvysWzxH+sE86eFAcsjV
+	Y9LVU1QxNAgzCQMBFX9TE8WLU7poKQWSN2pRwH+CevVPpQtiofDi+OIl0ulpJGchP5Jv8lUAUS0
+	m/ZwfkraUi9ZKKTRRjs3k2IO32BVRVFJB/blVpEIZB7EVZOFq3phN6VLVNknNImUQAW2HefkkW+
+	cGI5gicI/HEeYdo1FZnE595tSPAmpIfjWniQgz
+X-Received: by 2002:a05:600c:310e:b0:490:b58b:a8cb with SMTP id 5b1f17b1804b1-490c263a615mr63235475e9.26.1780672484398;
+        Fri, 05 Jun 2026 08:14:44 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f0a43e9sm26721601f8f.0.2026.06.05.08.14.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jun 2026 08:14:44 -0700 (PDT)
+Date: Fri, 5 Jun 2026 17:14:42 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	marcos@mpdesouza.com
+Subject: Re: [PATCH 4/4] selftests: livepatch: Add information about minimum
+ kernel support
+Message-ID: <aiLn4slwOcpXhDhn@pathway.suse.cz>
+References: <20260524-livepatch-unload-on-fail-v1-0-7465de7f741d@suse.com>
+ <20260524-livepatch-unload-on-fail-v1-4-7465de7f741d@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260524-livepatch-unload-on-fail-v1-4-7465de7f741d@suse.com>
 
-Since commit 68a99f6a0ebf ("media: lirc: report ir receiver overflow"),
-the rc-loopback driver does not accept edges over 50ms, as these are
-never seen in real life ir protocols. Fix this.
+On Sun 2026-05-24 20:50:33, Marcos Paulo de Souza wrote:
+> The current livepatch selftests are compatible with kernel 4.12, so add
+> a note about it for future developers willing to contribute with new
+> tests.
+> 
+> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> ---
+>  tools/testing/selftests/livepatch/README | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/selftests/livepatch/README
+> index d2035dd64a2b..293f4730b927 100644
+> --- a/tools/testing/selftests/livepatch/README
+> +++ b/tools/testing/selftests/livepatch/README
+> @@ -54,3 +54,6 @@ check_result().  The latter function greps the kernel's ring buffer for
+>  those strings for result comparison.  Other utility functions include
+>  general module loading and livepatch loading helpers (waiting for patch
+>  transitions, sysfs entries, etc.)
+> +
+> +All new tests and test modules MUST be compatible with kernel version 4.12 and
+> +later, including current upstream kernels.
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c | 4 ++--
- tools/testing/selftests/bpf/test_lirc_mode2_user.c       | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+I do not have a good feeling about this. One thing is to accept fixes/workarounds
+for the backward compatibility. But forcing contributors to keep the
+compatibility might be too demanding.
 
-diff --git a/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c b/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c
-index 7a6620671a83..cbe4284c032f 100644
---- a/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c
-@@ -13,9 +13,9 @@ int bpf_decoder(unsigned int *sample)
- 	if (LIRC_IS_PULSE(*sample)) {
- 		unsigned int duration = LIRC_VALUE(*sample);
- 
--		if (duration & 0x10000)
-+		if (duration & 0x1000)
- 			bpf_rc_keydown(sample, 0x40, duration & 0xffff, 0);
--		if (duration & 0x20000)
-+		if (duration & 0x2000)
- 			bpf_rc_pointer_rel(sample, (duration >> 8) & 0xff,
- 					   duration & 0xff);
- 	}
-diff --git a/tools/testing/selftests/bpf/test_lirc_mode2_user.c b/tools/testing/selftests/bpf/test_lirc_mode2_user.c
-index 88e4aeab21b7..cd191da20d14 100644
---- a/tools/testing/selftests/bpf/test_lirc_mode2_user.c
-+++ b/tools/testing/selftests/bpf/test_lirc_mode2_user.c
-@@ -50,8 +50,8 @@ int main(int argc, char **argv)
- {
- 	struct bpf_object *obj;
- 	int ret, lircfd, progfd, inputfd;
--	int testir1 = 0x1dead;
--	int testir2 = 0x20101;
-+	int testir1 = 0x1ead;
-+	int testir2 = 0x2101;
- 	u32 prog_ids[10], prog_flags[10], prog_cnt;
- 
- 	if (argc != 3) {
-@@ -125,7 +125,7 @@ int main(int argc, char **argv)
- 		}
- 
- 		if (event.type == EV_MSC && event.code == MSC_SCAN &&
--		    event.value == 0xdead) {
-+		    event.value == 0x1ead) {
- 			break;
- 		}
- 	}
--- 
-2.54.0
+I might be wrong. But I think that you would need a pretty old
+userspace to run 4.12 kernel. And most people could not get it easily.
 
+Honestly, I though more about this effort and I am not sure how
+complicated it would be in the long term.
+
+I know about two pending patchsets which are breaking the backward
+compatibility:
+
+  + Better integration of callbacks and shadow variables with the states API [1]
+  + Introduce replace set support [2]
+
+Especially the 1st one is a pain. It is 19th patches and most of them
+are fixing/reworking the selftests. I think that it was the reason
+why nobody reviewed it yet. And it might be even worse if we wanted
+to make it backward compatible.
+
+[1] https://lore.kernel.org/all/20250115082431.5550-1-pmladek@suse.com/
+[2] https://lore.kernel.org/all/20260529034542.68766-1-laoar.shao@gmail.com/
+
+Best Regards,
+Petr
