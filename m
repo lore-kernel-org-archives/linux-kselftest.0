@@ -1,164 +1,185 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260E434388A
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 13:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780667915; cv=pass; b=bKdjkPmGYB0TcOK0q6AuCAXuusL5Rga/WqutDaDGxRNb1trb3xhHu5mdeSwMxt7V0NYQ8KYEhQW2iHizWBRpjVaEirhdHnf8y2jmvpYLDszcJUBZaWP++f2IpjdR1d8nLh+4yqJiuhitN/H7z/nJtgwFMhfR+WJWf7CZgK6LLpo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780667915; c=relaxed/simple;
-	bh=VNi24Rd0Up9CVer6FlQvZf4+doC/0e3uwh8unURa9es=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Kln+CcbZo1NXhhm+YM81Zy1HuFYfiukdydqsL1iZ2a7Hmx2Cy8EYs/e3DBeMjpNichToc7IBkfZsFt2oFQcFGWYyVAtb/qjLMcLdIrPdYPEehdqOWG2fa+GL0Q4/UizltOgwFoG2aa7qXrZ6YPKD62RpramfMbCdjiBXBYTr6yY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eFu9vcpF; arc=pass smtp.client-ip=74.125.82.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E4319D071
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 13:59:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780667991; cv=none; b=CnOezkiQVPPB4mIyvcGkqCsUCmwCZJLbYUk5uASuKQkMoVduhbOmJR8ZiCnXc0lyaB00eFcOBpFqYs0BeeTHk043OjqERu+9a5X/7iDR4WpGpxkR+stPzBzguKcXX447PRWwP4H+4JFRoq9BTprTN40zt03Eyf7vB2/sRkZQaNs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780667991; c=relaxed/simple;
+	bh=FvoFCIqZRxItcEHWAa+mPCmgEQlnhbsWRiHHI1hX2Hw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g1WIERJq3C82XrXzt4Fv0c/wsvkVk4FEhSvnAp3R09W8uGMu/bdNoXtVbBQwWUhZ/o6A3viTLxJflq9dAmJAREF8WyNA2iVY31M8lzzwibSvPMHHKJBkFjvhgRUfcszNBNuMOUP8fgPh8VC64xTd1K70oSFQuDrs56vmsC390rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=X3Az9MGS; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eFu9vcpF"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-13807d2f898so635616c88.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 06:58:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780667912; cv=none;
-        d=google.com; s=arc-20240605;
-        b=C9OoJT/U5X+gi0bnRiGpk3Bu8aNJ25lnkji66hK4srpXLiDB2qUZ8s9ot9PuonV73L
-         mPv9nkr6LAcs4vL4ln+mgtUt6vjvw8q19WRoNKQ8hCLhN82OgNt9w4zAJDtNHkvO9zge
-         2n7oailzkOnv4wxd7SFjFw4OXEDaaUsyIG0m33/usFLNTEisSCaOsq/rxZgx9d9CHFOa
-         yc2JHU7zbOCqh1fv1WboIdNX6RdEA6bcwgeZrbmQUJ08p7ifSjNppFJeSTxCdDANNfOI
-         Iw8hyB5Cvp8jV9FGCy+c/Ww2K6K6Cnb0ueumO/kxxVp7TkLczpX7//5TQYQLsU59rBrn
-         tuMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=k12kCbIvaHnTqgCGNpO0hMe+zMyl+k4NL8VZ4tGu3Jo=;
-        fh=2N0QAfuJOceqo/kiaDBByVaxLhZsk2IrRgG/ycVRAA8=;
-        b=AAkt8I76jQwF22AU5IofiziD0te2nCArbLRCEPaTombRowOxSb+xlo/o48d76b52v8
-         2uHAIQU2dLTtZ16JSULLeBlLvUjPzBhDSKuqo/pwkmvCuMZy29e0UzzCJwPpbTXQLzyO
-         rHGZMqLvmqHQfuKRCzENlh1wtAMvza3J4+f0wNoSy6DQGUxsS6EyDZCnZUuR/QL81pQ0
-         2HmaginWcoOoMUOTL7g6AgC1/uFSy6YjNxXjavHaQ6pGz6fK2lot0qEolgL413EHct6I
-         9Dg83CWsH3Aeq4bE8yWj4/4bEDnnQsaoMvZh7AA5QviDw2dnhsntbCdGFTNkXQLKbqYh
-         yRpQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="X3Az9MGS"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-490ace40f4bso22959945e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 06:59:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780667912; x=1781272712; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=k12kCbIvaHnTqgCGNpO0hMe+zMyl+k4NL8VZ4tGu3Jo=;
-        b=eFu9vcpFWK4PcMAPd0uo1Q9KHniDf0z3q2jNWPDx1250Q2T2SDZhuXdz+JWkHxuznO
-         npoVVj5fQDpEgE/tKIoDIErMHAi2V4XMVN6SaO9lLFSmDNfeuGe3FRTNEMMAR41sW8xo
-         akH0eifRTN2XhzmfQdvatUlGT9Uayt+TFrTkd9ADKUT1/4hFyda/sWTRvx46z2x/GiFD
-         0rAGzD4mC1QQTZMUO1wBerkMAl/DHeLZr8xRZKQIcpdydkxmfyui+KKjmJi+/kY27UuF
-         dNT0tdnK9Fq7lgPNLTE7Bkg032+vBB9LI2IwtYU4kAIXpV8qtkLCjJxGQ3zaluhaNrJP
-         lGiQ==
+        d=suse.com; s=google; t=1780667987; x=1781272787; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zKeoGgoFqoqVN9IAaz33U76m0XnnvCdu/CrM2G6zgzQ=;
+        b=X3Az9MGSAAWkjX/nMKd7Styc942oh9KFKMSkpZODmT/LSe/r2SaTOgPgO6obFKW+B/
+         s+e15xsQinPbnjXm0OKGk9Q85X7HGfBH3mrBgg8h2NUxyWME/viksKuzTuNBK02nwp8+
+         dwFwMJbQ2BNq1eeVP1CGkohdIrEpqJfbQI29/UHrSKQ+OSaZg/1vA6NgcWpH/Mq3X2j4
+         1IXGdCXOhBWLp1R07rEy7GWGtn1XLUvKCVtqUodqwDqkE7Wh4uRKatEnSaFFYE27Qn75
+         +5OWVIjunKd4PApyeBfr7hIopRs0WZkVoQaVdbutN8vI3L2E1ZMD3zJqCqgsz6683qK6
+         oTpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780667912; x=1781272712;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k12kCbIvaHnTqgCGNpO0hMe+zMyl+k4NL8VZ4tGu3Jo=;
-        b=Jajt9/yl9TN8tdki/RpIlH54wcYxH6M8Eoq7tI9OyDPv6OcMtdqmIpirgbHR+0DQbM
-         +sJNy2RlYX2b7bHeK4vOO0k71N0i9PhY1PymPEJNz55RKje5tVM9/fthaKbrKiTzMmbB
-         utTwp/uiHnnh8hJt2Eyii2osv5kqEPIEJm8+ADkPzSCWU1MbE92xWaJV3vxDKUTsdT6y
-         oOjnfUyOoggkuIPXWxf7LndwXagk8P1IH0cmSxgQISJTm21JpGVBukyLhP+tfEMRPgNN
-         e5fNggWMITGFFTCRN6b3ZbfwF5vH2pExwMl6BCRAfUjzBa5W5ePUENU44uRQd9EpNyY9
-         mZSA==
-X-Forwarded-Encrypted: i=1; AFNElJ8MsW57uI+4Gg9BZCkSp0TCnwa3d6RM6N6dOCk56vMR2Q32AhlUQRilRA+hjbnU2EeuSdqu91/yrj4jnRIguAg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwENowUC3f0h5/gm1XvvufTajtXeWi26opuehTUv/PKA+B+fEsF
-	WXii05iPwHtWkKl26QkDrwCajwjeOETxxcYKzddqcljGjpvSg8e1d7AYcD0Bgj5qVYuwHzM9CCo
-	WC9TJ4YjbffkoA6+p/K0eTCpMjg6W2g14mK99Btj/
-X-Gm-Gg: Acq92OGu/14Bl+nysD9UERD4ljorXX+YEqv24gnfzYu1bxgV4g0XkFSXACzZS6bPJG0
-	CPjSZxUq4o7/TldNr27B0lIPhmUVrslslzH1KgUAJWTcULvFNElqutzpVGPDCkfyhpFbB/pQV0d
-	79UKewRxCY2uxlr6eCGRYcaYz9r6jw7W7eQoeF6fjLElMy8ZZOvMdIGwjgbYWoC1op3a4fF7JpR
-	QApQBZcdcQBbesN9dUUEDFvUNb3BhtwStZEK89WCkkMBNNxidgm8Gyw/EMg7DkgoPyeJsvC4AeR
-	2v5kcS+jPFigKZtEfPhVXYu78I4cVHgrTXY9JdNyUQp+zGKrEISe54Ge3kg7
-X-Received: by 2002:a05:7022:797:b0:136:c565:e847 with SMTP id
- a92af1059eb24-1380674955dmr1638284c88.32.1780667911277; Fri, 05 Jun 2026
- 06:58:31 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 5 Jun 2026 06:58:30 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 5 Jun 2026 06:58:30 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <20260521-tdx-selftests-v13-v13-19-6983ae4c3a4d@google.com>
-References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com> <20260521-tdx-selftests-v13-v13-19-6983ae4c3a4d@google.com>
+        d=1e100.net; s=20251104; t=1780667987; x=1781272787;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zKeoGgoFqoqVN9IAaz33U76m0XnnvCdu/CrM2G6zgzQ=;
+        b=cQWO7laUfsO+tfAPdxrfcfkhtMuNSs4IoSro0oqgxVJZh3h27r6vg2YUsXkUB3EYmz
+         kCsd0P6RZ0EfPdnvZ2nAv1yuvGr1Uqy5p1dKqAv6ud7lvMw2MD8CkCB7+iiaNsyvL8Ew
+         Pd0gEIZucV+bJ8dlcKKSmI979X0EGNU4LR/lRcMf9fCHUYeVOSrgcJhp69X2FodJ2iuJ
+         IS9plTKPy7ZXR/XrPPBB6h9AMMaGPGJ7VOXvavzxUwOPc4+sXaWWQyiKfq4IirpgdUOa
+         Z8phufjMsIljuxIyivyyP7NlH0AmzrUHTql4AOxolOFwusH9m8SMteHNWuKpjxydd7eg
+         nA1Q==
+X-Forwarded-Encrypted: i=1; AFNElJ8un0aOROt8WpEDW7jU0IgbMkOmmObZwYCV6xjTylL3vKtlE5QYjdrfdLXROYG2mjTGvolRYlSZk/TMjlI/70k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1CkGDvbOuPsPkg6pqeHl4Qe2vs5R7qJdLvC+rEI3rkIaq/ebB
+	paEryWNYlfIBsgh02gw9vuggO+kX3g/AdiJSW+C9MUoflgKR2bUweVAi+QKlqZASH/U=
+X-Gm-Gg: Acq92OHiTrSwDnsShzo5gCtOtObe8unl7Rz3UUbQxqBIlXfzh/czoDefWGgsEn9zRzi
+	WkPydaZcoM/mOp+aHUbelevuZYEOmIu73YRdOMIgvggmtIHKuo5ysrvtmddcoKrh6uu4ytRO3f/
+	s7+0tYvIstvkyH39NiBxE1SdNB5BUSlFWUWWohVvG03OE+jP/P/JKqC58ST3lcA4tYmIwcyggDU
+	sOJsJ/5J7jqgEYjnc56C5B6FKhTUAp6zKElFFz07e+ht41XQbyon/elxpUvIOc+0KF2pVJNGCna
+	JIrSOjL4/w4/HZwkgGTsfIStwYKcgJMhDFKaAaxD1z6WBIcvbb+XeqOQyEbWGJi06VIXiYtc9zW
+	uEkTXkXe81eH0a5ujz0ZTmJpP2FYdAiF9TAMqXLG4Nv2XbBSz7qJKhJHr9I9lMI/U+qRjRgAzPc
+	m50KjMqK1L5c1Tw1flkNxri0k10uKn0bIauwaG
+X-Received: by 2002:a05:600c:3e0c:b0:490:3fdd:d353 with SMTP id 5b1f17b1804b1-490c259e7f2mr62846325e9.8.1780667987383;
+        Fri, 05 Jun 2026 06:59:47 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc39e024sm206514795e9.4.2026.06.05.06.59.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jun 2026 06:59:46 -0700 (PDT)
+Date: Fri, 5 Jun 2026 15:59:44 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	marcos@mpdesouza.com
+Subject: Re: [PATCH 2/4] selftests: livepatch: Remove leftover modules when a
+ testcase fails
+Message-ID: <aiLWUHAGtF8qaE_R@pathway.suse.cz>
+References: <20260524-livepatch-unload-on-fail-v1-0-7465de7f741d@suse.com>
+ <20260524-livepatch-unload-on-fail-v1-2-7465de7f741d@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 5 Jun 2026 06:58:30 -0700
-X-Gm-Features: AVHnY4IxXSl09mthH0pIzdFqFex4dXIrMh3HcKKHB6asWNozDxLWNfOIVIJk5qc
-Message-ID: <CAEvNRgHEq-hHcTivUw8TYBeMu-RpS=Ho4DXaNXKQKLPL_biTgg@mail.gmail.com>
-Subject: Re: [PATCH v13 19/22] KVM: selftests: Finalize TD memory as part of kvm_arch_vm_finalize_vcpus
-To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
-	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>, 
-	linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, 
-	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>, 
-	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260524-livepatch-unload-on-fail-v1-2-7465de7f741d@suse.com>
 
-Lisa Wang <wyihan@google.com> writes:
-
-> From: Sagi Shahar <sagis@google.com>
->
-> Finalize TDX VM after creation to make it runnable.
->
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Lisa Wang <wyihan@google.com>
+On Sun 2026-05-24 20:50:31, Marcos Paulo de Souza wrote:
+> The current livepatch selftest scripts load modules, run tests and
+> unloads them. If the test fails, it can leave loaded modules behind, and
+> in some cases making it impossible to run the next tests.
+> 
+> This approach tracks down the loaded modules, and in case of a test
+> failure, or premature exit of the script, the cleanup function will
+> be called by the trap installed on setup_config function.
+> 
+> The cleanup function iterates over the list of leftover loaded modules,
+> unloading them. The function also checks if the given module is a
+> livepatch, properly disabling it before unloading.
+> 
+> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 > ---
->  tools/testing/selftests/kvm/lib/x86/processor.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
-> index d84c629a1945..842cac168e99 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
-> @@ -1479,6 +1479,12 @@ bool kvm_arch_has_default_irqchip(void)
->  	return true;
+>  tools/testing/selftests/livepatch/functions.sh | 23 ++++++++++++++++++++++-
+>  1 file changed, 22 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+> index 3ec0b7962fc5..25f137003865 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -15,6 +15,8 @@ if [[ -e /sys/kernel/tracing/trace ]]; then
+>  else
+>  	SYSFS_TRACING_DIR="$SYSFS_DEBUG_DIR/tracing"
+>  fi
+> +# List of loaded modules used in tests
+> +TEST_MODS=()
+>  
+>  # Kselftest framework requirement - SKIP code is 4
+>  ksft_skip=4
+> @@ -125,6 +127,14 @@ function set_ftrace_enabled() {
 >  }
->
-> +void kvm_arch_vm_finalize_vcpus(struct kvm_vm *vm)
-> +{
-> +	if (is_tdx_vm(vm))
-> +		tdx_vm_finalize(vm);
-> +}
+>  
+>  function cleanup() {
+> +	# Remove leftover modules in reverse order to handle dependencies
+> +	for mod_item in "${TEST_MODS[@]}"; do
+
+It would make sense to check here that the module is loaded.
+I would add a helper function is_mod_loaded which
+would check whether /sys/module/$mod exists.
+
+
+> +		if is_livepatch_mod "$mod_item"; then
+
+It might make sense to 1st check here whether the livepatch is
+enabled. Again, I would add a helper function for this.
+
+> +			disable_lp "$mod_item"
+> +		fi
+> +		_remove_mod "$mod_item"
+> +	done
+
+I would put this into a helper function, for example,
+called remove_test_mods().
+
 > +
+>  	pop_config
+>  }
+>  
+> @@ -181,6 +191,9 @@ function __load_mod() {
+>  	# Wait for module in sysfs ...
+>  	loop_until '[[ -e "/sys/module/$mod" ]]' ||
+>  		die "failed to load module $mod"
+> +
+> +	# Store the module in the modules list
+> +	TEST_MODS+=("$mod")
 
-This doesn't necessarily block this series, we could (re)move this
-later: I'm not sure if kvm_arch_vm_finalize_vcpus() is the correct place
-to be finalizing the VM.
+I would put this into a helper function, for example,
+called track_test_mod().
 
-Was kvm_arch_vm_finalize_vcpus() supposed to be for finalizing vCPUs
-instead?
+>  }
+>  
+>  
+> @@ -262,12 +275,20 @@ function _remove_mod() {
+>  		die "failed to unload module $mod (/sys/module)"
+>  }
+>  
+> -# unload_mod(modname) - unload a kernel module
+> +# unload_mod(modname) - unload a kernel module and remove it from TEST_MODS
+>  #	modname - module name to unload
+>  function unload_mod() {
+>  	local mod="$1"
+>  
+>  	_remove_mod "$mod"
+> +
+> +	# Remove from TEST_MODS array
+> +	for i in "${!TEST_MODS[@]}"; do
+> +		if [[ "${TEST_MODS[$i]}" == "$mod" ]]; then
+> +			unset 'TEST_MODS[$i]'
+> +			break
+> +		fi
+> +	done
 
-The awkward part is that kvm_arch_vm_finalize_vcpus() is called from
-__vm_create_with_vcpus().
+And this into a helper called, for example, untrack_test_mod().
 
-While building this POC to test conversions [1] I only wanted to create
-the vm and vcpus and didn't want to finalize yet, since I still needed
-to do more mappings in the guest (and I needed the vm pointer to do
-mappings in the guest).
+>  }
+>  
+>  # unload_lp(modname) - unload a kernel module with a livepatch
 
-Would calling tdx_vm_finalize() from within vcpu_run(), just once, be
-too magical?
-
-It's also possible to have some kvm_vm_finalize() call that can be
-explicitly and manually invoked from selftests just for CoCo selftests.
-
-[1] https://lore.kernel.org/all/20260605134153.204152-1-ackerleytng@google.com/
-
->  void setup_smram(struct kvm_vm *vm, struct kvm_vcpu *vcpu, u64 smram_gpa,
->  		 const void *smi_handler, size_t handler_size)
->  {
->
-> --
-> 2.54.0.746.g67dd491aae-goog
+Best Regards,
+Petr
