@@ -1,113 +1,119 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6B43AD510
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 18:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674803655CF
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 18:42:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780684081; cv=none; b=BlV2PMVBG+Qp72ACWM7GxV0NUNq+szB3jQ3VIOu1JLkegdW4ypbsNYvWtO06Oq4AOS06lHj9d9JAMm4guBF2V4VbF7GTV4hv+XVPpL31ijFZZMruI3wu9bQ1W9rSGLeKfFG2lzMQo8UylnQH7ahapJjcGiF4TfJnF8jarQ9/cqE=
+	t=1780684924; cv=none; b=WGmTlI9XpwJerzPSTRL2lH/xA/UVoaFmOqLKMsKr7ptSnv8EdU0hG6Q1EtWf+7LZXc9FbLk39OHCxwkH6geV3iyoQm+PwU4JfUo2YMZQh6C03theTGrTCk5zsdiH80gy7Uyp97z+/av2Zbue4qnyMKjQVO254c7XwdJWc0rh1tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780684081; c=relaxed/simple;
-	bh=5jiFPb4shRixueM3EXqj7rLUUpc6Mvk/umob9LPRscI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EMZaDsFihAL9ZJiyPW8mIjxIk7vP0n9VN4eZYD3a9yqZFWwqV0hPfbOZfp3Iec8gBu4mtrnMzI2/COHkhCAqIXkzKvsBanflAyxptjQjTPkU6YAksAjNNAJjvsvbIwJrtLBjM9buRxwiX7vdkZvZZoPe3aXII2EruIWOdI66+OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=e9yEA4mQ; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1780684924; c=relaxed/simple;
+	bh=syqDKQVb127qXyQlw3Eni5jB/EAn4byQMNt5RzflBVM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nmkTgwDCQx7Pon6e5I+HgsUROhQRpbk3gkRL/7/xxoAkuNKvedGaKQs0/cSEbm655qNOEBXAPH0VFmDFamLGSRTPtChRCpoQonsE6Cc2Zc68BQWYwdpt79kPoUqdEO0Vhq2mQ2O4dl8mO/d6/ttu8WVJH1Uxute0tuPe/OLlveg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com; spf=pass smtp.mailfrom=trailofbits.com; dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b=AkSIsGXY; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e9yEA4mQ"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-36d98b54cf2so1690288a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 11:27:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b="AkSIsGXY"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-5174a1da4b2so17556561cf.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 11:42:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780684079; x=1781288879; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Al0zDa4bN146O1R+FtGZtDttdy90kv7zGQH5evIcYPw=;
-        b=e9yEA4mQM2lut0pEuCRQy3Ps8v9Hyu0Fb1uWNJ62pgvmh5CYZnF9CaZYEwUMxEUlm/
-         8Azxab4UduI99UbxJyBd7805CWQsOCFsv4JaKlvMH59Y7Cs+QkZlEjZQII2EuW/mBvl+
-         E654i/X+2Q8W3amEZWXtyAubBNvVx1uFvWkQCXYiXnieAzgoTRL/MbVcCjEjU8sqx0P5
-         dvgaDa9D8TJAz2YY5WhxLFnWOBWMsxpQKRR5Mfaz95Yk+/6Nl9qtY4/rb4EjxDdkIe8X
-         OJUyzKpW/ERHauokVrwmOBbq1m25UU927PjuKGYU2fRqejCMwr3Y+8WzcAOOPP1bdT2x
-         5WqQ==
+        d=trailofbits.com; s=google; t=1780684922; x=1781289722; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9dziyAFDBMS+ZSt7oFPGlKy1Vv4XAHLNgQ9Ot2eQsEo=;
+        b=AkSIsGXY3CAYHKI9+RWZtx1Seo7xf8kie5qtQOu0MBIVGSqGhIsWlLN1VnMaJfr92G
+         5L6DYmHErCj2ZUk0L8ordMUJqjLfV1P2l4dvYKhUoRTFMllaAUQK4W03Pkt1GIKkjSaX
+         +1MywC5JL21BYOPITxCtlCFSqyIHWJCOnuZjuvig4NIK2OkY4CARaLEt1qNAHeK1AAgq
+         yb2SWXCvDvXGd42J5oCvvxYsUKL51Y8IXUSbrnwlx3QT929WIxr9FvD8cS9+gzy+yvRP
+         qFJQZqO6W0vIlJz/sdLqGo84T2TjCcWvniImOZeLY8RAcqFuP8aj+Ao5kVxpyW7nqjNq
+         mWXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780684079; x=1781288879;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Al0zDa4bN146O1R+FtGZtDttdy90kv7zGQH5evIcYPw=;
-        b=a3SXAGpMjdOiO3xsWnf1Do3eEetvLrVQFM5zSErFH0haFr4SJDSRrVDhd7irmoeVvT
-         KxceTiIKw1ZFJQbtta+Bj2OJSsGrZr9dKhKHwahfXA6eKRby+WTKG35+ihqUtVvnh+ki
-         PecZM2cMyErGMGvxYkQ9wP2vxCYUYOsmOpm09Mh/WQRD0S3m2ox90P0AxPUuEgKU/hGB
-         lYjfLCmImGssU4Y3cOb/ZmeTSrOyGLTAxQlJ1B5AtDCXkzEi2R7TUjrBTkr+Sffact12
-         QkzF7aMoNz4C6En2+dh/6pyt7aBScoZQzSF785Gjj85zG//JGjJCRljghT0t7+Re2+gD
-         MBDQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8siOvYsdJNYcGG7Zkpmiu7AOO9xH+0wZJGzDVBSlL3Nnbc63fPsPtFA2JPlgHeiv3rgrE6SaMeXj8Si5fywSY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmEfDHGTtol8CwICe+I9+Rgag5QrlY5N93i5amIdlcKAKARGo6
-	dUSB10WQmAMFj2EsWEguuDfRdjzJb+66DlO+lHk42bL7bXgPtCfZRvwXAtzi+CR4tJ3GrNhFZ2m
-	tMu59ng==
-X-Received: from pfwp41.prod.google.com ([2002:a05:6a00:26e9:b0:842:5fa6:3103])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5210:b0:36a:1ed8:6fe6
- with SMTP id 98e67ed59e1d1-370f0b58cefmr4684526a91.24.1780684078907; Fri, 05
- Jun 2026 11:27:58 -0700 (PDT)
-Date: Fri, 5 Jun 2026 11:27:58 -0700
-In-Reply-To: <CAEvNRgHz5GDjq0GqRmpQdHc-X45gCNr39VYWZH-T7XhPEtN5CQ@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1780684922; x=1781289722;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9dziyAFDBMS+ZSt7oFPGlKy1Vv4XAHLNgQ9Ot2eQsEo=;
+        b=CRdcgz/bYJYJVIXMkcXqq7u0qr/es2wiwfr8xudZtelZ7ObcCyxwi1quyUUi69aGBr
+         ToiOeJTenTXfMV1FwNOn4JQAyfSQ/fB+khN9UxBXwjAJ12kzQ/w4gbgM9tZy5x4D32kZ
+         Tz5EEIcoj0AFmozWkXpCw/BHL+FEZBMb9p+74hM83OAkNQbmEBcrJdW6Bx5dbW2mSs3d
+         jAXRS3VapfIajdg0EA7IcIhYLzZb70u2kVL0IUwakb3aqI3xnvPz77GM4sJI5tfAPnLz
+         +mFqkBW+bInhM7/TYfjqWWCLJEnH5nZRhz46pX9qOdVWKW5ft4d9IAwZ+g+oV2t+2wZo
+         Rf0w==
+X-Forwarded-Encrypted: i=1; AFNElJ+1ru7mH7j3rjWC2rbs68yMlA65zbTjR4uoeZXSlSrc04KHBzG9y8/et5slrOECTYiAec86WiHTnPz73G9UvBA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFAQpGkhZ389KVZw9iR2e5TkjxxiIsebFrDPfXllEOZxldgxYf
+	FjHjdSjM4UW5/ESiL36OLvxMTu9qInes7UZjs7yZEJ9BD0UHVmjY2ZgsaDOvlQO43/Y=
+X-Gm-Gg: Acq92OE845ZRLtUIsVz3/N/UbqATySfdld2rPibo47NaltlOpztsKQMUPF5fPKIg+7x
+	vcRhB8NqmvE18u2quUHhmkFB6iOZ2BjfU6za+8UY1bjWF8d6s9rUVG8KA+ospE1oo40SqsHZYvE
+	i4e9x5FIqt6+764Rn9Wz7MGkMwGB8MC67nIifTCLKoO3tiifBBoAGI6dUJ0zjMi5JHG5/eukavW
+	JrJ8mNuERkK6cvDtUkR527RNgESuQG6hKGr3ZXkA7Y+xzzxf+d0OuVDGRI/C3x7tLw6VmnrazJn
+	1/XEfj5yQZ4z1Te2gQD+GWs/2a7ypT3i8m4+poTWjPwuZur1En2zGypaIJaQU+iIJ9D1L0/d/8Q
+	dS2KIxh9BNwU38ib+T3Kdr4gjMCwl44zjrz4lI5hiBRtGqNQPCbEI5+DYdNyGwO+6rElWaK96RH
+	LxyPDndNm2QA14ZfVbiZ6agWkoddzpE1QrzTvoaw==
+X-Received: by 2002:a05:622a:4c13:b0:517:8f2e:5d9e with SMTP id d75a77b69052e-51795a71833mr68589031cf.7.1780684921860;
+        Fri, 05 Jun 2026 11:42:01 -0700 (PDT)
+Received: from localhost ([161.35.96.86])
+        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-51775c2e2casm85460011cf.9.2026.06.05.11.42.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Jun 2026 11:42:01 -0700 (PDT)
+From: Samuel Moelius <sam.moelius@trailofbits.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Samuel Moelius <sam.moelius@trailofbits.com>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org (open list:MEMORY MANAGEMENT - MISC),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] mm/page_frag: reject invalid CPUs in page_frag_test
+Date: Fri,  5 Jun 2026 18:41:52 +0000
+Message-ID: <20260605184157.2490353-1-sam.moelius@trailofbits.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260522-gmem-inplace-conversion-v7-0-2f0fae496530@google.com>
- <CAEvNRgGpaggjd3=ooyzv7iEbmA-x1mWJHgjLSjPi8=5CPrk-yQ@mail.gmail.com>
- <aiHeDZEPkAcWcSkn@google.com> <CAEvNRgHz5GDjq0GqRmpQdHc-X45gCNr39VYWZH-T7XhPEtN5CQ@mail.gmail.com>
-Message-ID: <aiMVLtblIKu1DQWJ@google.com>
-Subject: Re: [PATCH v7 00/42] guest_memfd: In-place conversion support
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>, aik@amd.com, 
-	andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org, 
-	chao.p.peng@linux.intel.com, david@kernel.org, ira.weiny@intel.com, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 04, 2026, Ackerley Tng wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> >> + KVM: selftests: Test conversion with elevated page refcount
-> >>     + Askar pointed out that soon vmsplice may not pin pages. Should I
-> >>       pin pages through CONFIG_GUP_TEST like in [2]? I prefer not to
-> >>       take a dependency on CONFIG_GUP_TEST.
-> >
-> > I'm not exactly excited about taking a dependency on CONFIG_GUP_TEST either, but
-> > it probably is the least awful choice.  E.g. KVM also pins pages is certain flows,
-> > but we're _also_ actively working to remove the need to pin.
-> >
-> > Hmm, maybe IORING_REGISTER_PBUF_RING?  AFAICT, it's almost literally a "pin user
-> > memory" syscall.
-> >
-> 
-> Hmm that takes a dependency on io_uring, which isn't always compiled
-> in. Between CONFIG_IO_URING and CONFIG_GUP_TEST, I'd rather
-> CONFIG_GUP_TEST.
+The page_frag selftest module accepts test_push_cpu and test_pop_cpu as
+signed module parameters, then validates them by passing them directly
+to cpu_active().
 
-Or try both?  If it's not a ridiculous amount of work.
+That validation is itself unsafe for negative or out-of-range CPU
+numbers. For example, test_push_cpu=-1 is converted to a very large
+unsigned CPU number before cpu_active() reaches cpumask_test_cpu(),
+which trips the cpumask range check with CONFIG_DEBUG_PER_CPU_MAPS
+enabled.
+
+Reject CPU values outside [0, nr_cpu_ids) before asking whether the CPU
+is active.
+
+Assisted-by: Codex:gpt-5.5-cyber-preview
+Signed-off-by: Samuel Moelius <sam.moelius@trailofbits.com>
+---
+ tools/testing/selftests/mm/page_frag/page_frag_test.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/testing/selftests/mm/page_frag/page_frag_test.c b/tools/testing/selftests/mm/page_frag/page_frag_test.c
+index e806c1866e36..c8584d0fdeab 100644
+--- a/tools/testing/selftests/mm/page_frag/page_frag_test.c
++++ b/tools/testing/selftests/mm/page_frag/page_frag_test.c
+@@ -131,6 +131,8 @@ static int __init page_frag_test_init(void)
+ 	init_completion(&wait);
+ 
+ 	if (test_alloc_len > PAGE_SIZE || test_alloc_len <= 0 ||
++	    test_push_cpu < 0 || test_push_cpu >= nr_cpu_ids ||
++	    test_pop_cpu < 0 || test_pop_cpu >= nr_cpu_ids ||
+ 	    !cpu_active(test_push_cpu) || !cpu_active(test_pop_cpu))
+ 		return -EINVAL;
+ 
+-- 
+2.43.0
+
