@@ -1,96 +1,164 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8EA740E8DB;
-	Fri,  5 Jun 2026 13:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780667633; cv=none; b=L9g1ozr+F6GHSLT0EACBvm600eiq9EZgVgJwgKFbfA9i1VDcTmTYb+zCUDNSgnB73VqWfndWHML69tQ+Z+LEOpTHHUBDmZwd/yQJUlXWeIMMoUjAdSh3Ib+NAbJ6Ol+SZ112H0fsxxtd19LVpRaKcBCDhpF7KaaFAK0Bbwemj7c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780667633; c=relaxed/simple;
-	bh=dv7w7V243Ir0z2lVM+UUtdm7LPvO4BCpPqes1rH4Faw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CbeK39PLi7m4sk7F0mY8ANUTQrhtLEfKsICZRSIvXB59UbJR2tNItKydpnAFYfwuCzHzBltIiyQg7rmS1CtrtKuYhTRVKS5FPhd2iBcIeuY6AkpoVzS1+yJIYfmyhnYXAySWPyQpvcgxd4gGdi9aEK3fr2Q219LmjBE5VaC7zEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A9St+RvV; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260E434388A
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 13:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780667915; cv=pass; b=bKdjkPmGYB0TcOK0q6AuCAXuusL5Rga/WqutDaDGxRNb1trb3xhHu5mdeSwMxt7V0NYQ8KYEhQW2iHizWBRpjVaEirhdHnf8y2jmvpYLDszcJUBZaWP++f2IpjdR1d8nLh+4yqJiuhitN/H7z/nJtgwFMhfR+WJWf7CZgK6LLpo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780667915; c=relaxed/simple;
+	bh=VNi24Rd0Up9CVer6FlQvZf4+doC/0e3uwh8unURa9es=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Kln+CcbZo1NXhhm+YM81Zy1HuFYfiukdydqsL1iZ2a7Hmx2Cy8EYs/e3DBeMjpNichToc7IBkfZsFt2oFQcFGWYyVAtb/qjLMcLdIrPdYPEehdqOWG2fa+GL0Q4/UizltOgwFoG2aa7qXrZ6YPKD62RpramfMbCdjiBXBYTr6yY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eFu9vcpF; arc=pass smtp.client-ip=74.125.82.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A9St+RvV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82EE71F00898;
-	Fri,  5 Jun 2026 13:53:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780667632;
-	bh=J0R4eBG2pFYNvoAv6aArk0OSJ05uyndW9ZEtAs++bJk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=A9St+RvVrzyZl1ZMltNKutIQ4v56AK9zs+Vr6o/Gw9W8YZzAgleY83Gj5tnrWqydv
-	 AdT056a/FPR/9138v3+ImH4wqZtMbBAYNqbYRQPuIe9Tt4Q8tsPXSyqMYCwyrd4RMv
-	 A77jBow2Hfw7i08PjR8ogFZQ9YU3f7fvI7U+y+5KYtTh6fESF/Ezz9WCfT+21oizXA
-	 5vS0IiejhSADD+AjeTi1nsCORC1GBX2JrZy+nrPEcfktzLtTj85ZM7HuO9kxmfAgeO
-	 abA/pREttTxluz8Ydipn9WHLOzoipIwUI1hZwuS7laf3zAoMttwO/y/Z0OatWqDVf9
-	 sc9zAKaZVrkOQ==
-Date: Fri, 5 Jun 2026 08:53:51 -0500
-From: Rob Herring <robh@kernel.org>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay12@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Leo Yan <leo.yan@arm.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Shuah Khan <shuah@kernel.org>, Breno Leitao <leitao@debian.org>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Stephane Eranian <eranian@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Usama Arif <usama.arif@linux.dev>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v4 3/4] perf/arm64: Add BRBE support for
- bpf_get_branch_snapshot()
-Message-ID: <20260605135351.GA3587043-robh@kernel.org>
-References: <20260527121207.2312181-1-puranjay@kernel.org>
- <20260527121207.2312181-4-puranjay@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eFu9vcpF"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-13807d2f898so635616c88.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 06:58:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780667912; cv=none;
+        d=google.com; s=arc-20240605;
+        b=C9OoJT/U5X+gi0bnRiGpk3Bu8aNJ25lnkji66hK4srpXLiDB2qUZ8s9ot9PuonV73L
+         mPv9nkr6LAcs4vL4ln+mgtUt6vjvw8q19WRoNKQ8hCLhN82OgNt9w4zAJDtNHkvO9zge
+         2n7oailzkOnv4wxd7SFjFw4OXEDaaUsyIG0m33/usFLNTEisSCaOsq/rxZgx9d9CHFOa
+         yc2JHU7zbOCqh1fv1WboIdNX6RdEA6bcwgeZrbmQUJ08p7ifSjNppFJeSTxCdDANNfOI
+         Iw8hyB5Cvp8jV9FGCy+c/Ww2K6K6Cnb0ueumO/kxxVp7TkLczpX7//5TQYQLsU59rBrn
+         tuMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=k12kCbIvaHnTqgCGNpO0hMe+zMyl+k4NL8VZ4tGu3Jo=;
+        fh=2N0QAfuJOceqo/kiaDBByVaxLhZsk2IrRgG/ycVRAA8=;
+        b=AAkt8I76jQwF22AU5IofiziD0te2nCArbLRCEPaTombRowOxSb+xlo/o48d76b52v8
+         2uHAIQU2dLTtZ16JSULLeBlLvUjPzBhDSKuqo/pwkmvCuMZy29e0UzzCJwPpbTXQLzyO
+         rHGZMqLvmqHQfuKRCzENlh1wtAMvza3J4+f0wNoSy6DQGUxsS6EyDZCnZUuR/QL81pQ0
+         2HmaginWcoOoMUOTL7g6AgC1/uFSy6YjNxXjavHaQ6pGz6fK2lot0qEolgL413EHct6I
+         9Dg83CWsH3Aeq4bE8yWj4/4bEDnnQsaoMvZh7AA5QviDw2dnhsntbCdGFTNkXQLKbqYh
+         yRpQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780667912; x=1781272712; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=k12kCbIvaHnTqgCGNpO0hMe+zMyl+k4NL8VZ4tGu3Jo=;
+        b=eFu9vcpFWK4PcMAPd0uo1Q9KHniDf0z3q2jNWPDx1250Q2T2SDZhuXdz+JWkHxuznO
+         npoVVj5fQDpEgE/tKIoDIErMHAi2V4XMVN6SaO9lLFSmDNfeuGe3FRTNEMMAR41sW8xo
+         akH0eifRTN2XhzmfQdvatUlGT9Uayt+TFrTkd9ADKUT1/4hFyda/sWTRvx46z2x/GiFD
+         0rAGzD4mC1QQTZMUO1wBerkMAl/DHeLZr8xRZKQIcpdydkxmfyui+KKjmJi+/kY27UuF
+         dNT0tdnK9Fq7lgPNLTE7Bkg032+vBB9LI2IwtYU4kAIXpV8qtkLCjJxGQ3zaluhaNrJP
+         lGiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780667912; x=1781272712;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k12kCbIvaHnTqgCGNpO0hMe+zMyl+k4NL8VZ4tGu3Jo=;
+        b=Jajt9/yl9TN8tdki/RpIlH54wcYxH6M8Eoq7tI9OyDPv6OcMtdqmIpirgbHR+0DQbM
+         +sJNy2RlYX2b7bHeK4vOO0k71N0i9PhY1PymPEJNz55RKje5tVM9/fthaKbrKiTzMmbB
+         utTwp/uiHnnh8hJt2Eyii2osv5kqEPIEJm8+ADkPzSCWU1MbE92xWaJV3vxDKUTsdT6y
+         oOjnfUyOoggkuIPXWxf7LndwXagk8P1IH0cmSxgQISJTm21JpGVBukyLhP+tfEMRPgNN
+         e5fNggWMITGFFTCRN6b3ZbfwF5vH2pExwMl6BCRAfUjzBa5W5ePUENU44uRQd9EpNyY9
+         mZSA==
+X-Forwarded-Encrypted: i=1; AFNElJ8MsW57uI+4Gg9BZCkSp0TCnwa3d6RM6N6dOCk56vMR2Q32AhlUQRilRA+hjbnU2EeuSdqu91/yrj4jnRIguAg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwENowUC3f0h5/gm1XvvufTajtXeWi26opuehTUv/PKA+B+fEsF
+	WXii05iPwHtWkKl26QkDrwCajwjeOETxxcYKzddqcljGjpvSg8e1d7AYcD0Bgj5qVYuwHzM9CCo
+	WC9TJ4YjbffkoA6+p/K0eTCpMjg6W2g14mK99Btj/
+X-Gm-Gg: Acq92OGu/14Bl+nysD9UERD4ljorXX+YEqv24gnfzYu1bxgV4g0XkFSXACzZS6bPJG0
+	CPjSZxUq4o7/TldNr27B0lIPhmUVrslslzH1KgUAJWTcULvFNElqutzpVGPDCkfyhpFbB/pQV0d
+	79UKewRxCY2uxlr6eCGRYcaYz9r6jw7W7eQoeF6fjLElMy8ZZOvMdIGwjgbYWoC1op3a4fF7JpR
+	QApQBZcdcQBbesN9dUUEDFvUNb3BhtwStZEK89WCkkMBNNxidgm8Gyw/EMg7DkgoPyeJsvC4AeR
+	2v5kcS+jPFigKZtEfPhVXYu78I4cVHgrTXY9JdNyUQp+zGKrEISe54Ge3kg7
+X-Received: by 2002:a05:7022:797:b0:136:c565:e847 with SMTP id
+ a92af1059eb24-1380674955dmr1638284c88.32.1780667911277; Fri, 05 Jun 2026
+ 06:58:31 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 5 Jun 2026 06:58:30 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 5 Jun 2026 06:58:30 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <20260521-tdx-selftests-v13-v13-19-6983ae4c3a4d@google.com>
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com> <20260521-tdx-selftests-v13-v13-19-6983ae4c3a4d@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260527121207.2312181-4-puranjay@kernel.org>
+Date: Fri, 5 Jun 2026 06:58:30 -0700
+X-Gm-Features: AVHnY4IxXSl09mthH0pIzdFqFex4dXIrMh3HcKKHB6asWNozDxLWNfOIVIJk5qc
+Message-ID: <CAEvNRgHEq-hHcTivUw8TYBeMu-RpS=Ho4DXaNXKQKLPL_biTgg@mail.gmail.com>
+Subject: Re: [PATCH v13 19/22] KVM: selftests: Finalize TD memory as part of kvm_arch_vm_finalize_vcpus
+To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
+	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>, 
+	linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, 
+	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>, 
+	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, May 27, 2026 at 05:11:59AM -0700, Puranjay Mohan wrote:
-> Enable bpf_get_branch_snapshot() on ARM64 by implementing the
-> perf_snapshot_branch_stack static call for BRBE.
-> 
-> BRBE is paused before masking exceptions to avoid branch buffer
-> pollution from trace_hardirqs_off(). Exceptions are then masked with
-> local_daif_save() to prevent PMU overflow pseudo-NMIs from interfering.
-> If an overflow between pause and DAIF save re-enables BRBE, the snapshot
-> detects this via BRBFCR_EL1.PAUSED and bails out.
-> 
-> Branch records are read using perf_entry_from_brbe_regset() with a NULL
-> event pointer to bypass event-specific filtering. The buffer is
-> invalidated after reading.
-> 
-> Introduce a for_each_brbe_entry() iterator to deduplicate bank
-> iteration between brbe_read_filtered_entries() and the snapshot.
-> 
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+Lisa Wang <wyihan@google.com> writes:
+
+> From: Sagi Shahar <sagis@google.com>
+>
+> Finalize TDX VM after creation to make it runnable.
+>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Lisa Wang <wyihan@google.com>
 > ---
->  drivers/perf/arm_brbe.c  | 127 ++++++++++++++++++++++++++++++++-------
->  drivers/perf/arm_brbe.h  |   9 +++
->  drivers/perf/arm_pmuv3.c |   5 +-
->  3 files changed, 119 insertions(+), 22 deletions(-)
+>  tools/testing/selftests/kvm/lib/x86/processor.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+> index d84c629a1945..842cac168e99 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+> @@ -1479,6 +1479,12 @@ bool kvm_arch_has_default_irqchip(void)
+>  	return true;
+>  }
+>
+> +void kvm_arch_vm_finalize_vcpus(struct kvm_vm *vm)
+> +{
+> +	if (is_tdx_vm(vm))
+> +		tdx_vm_finalize(vm);
+> +}
+> +
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+This doesn't necessarily block this series, we could (re)move this
+later: I'm not sure if kvm_arch_vm_finalize_vcpus() is the correct place
+to be finalizing the VM.
+
+Was kvm_arch_vm_finalize_vcpus() supposed to be for finalizing vCPUs
+instead?
+
+The awkward part is that kvm_arch_vm_finalize_vcpus() is called from
+__vm_create_with_vcpus().
+
+While building this POC to test conversions [1] I only wanted to create
+the vm and vcpus and didn't want to finalize yet, since I still needed
+to do more mappings in the guest (and I needed the vm pointer to do
+mappings in the guest).
+
+Would calling tdx_vm_finalize() from within vcpu_run(), just once, be
+too magical?
+
+It's also possible to have some kvm_vm_finalize() call that can be
+explicitly and manually invoked from selftests just for CoCo selftests.
+
+[1] https://lore.kernel.org/all/20260605134153.204152-1-ackerleytng@google.com/
+
+>  void setup_smram(struct kvm_vm *vm, struct kvm_vcpu *vcpu, u64 smram_gpa,
+>  		 const void *smi_handler, size_t handler_size)
+>  {
+>
+> --
+> 2.54.0.746.g67dd491aae-goog
