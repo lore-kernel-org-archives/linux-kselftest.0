@@ -1,102 +1,211 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4979239A4B9;
-	Fri,  5 Jun 2026 21:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780695030; cv=none; b=M6HXz1sf2mlQLgTV8Oa6jmc9opgFylb57e2gELVa5xsACDL/w0XaF03dbu0ADvRI4XVBaxYxuFOEMoPzgw+oF3K0Vw8BFMzPjxtB8eSCIGy5LKEFNkBa1u4McvNyXmRyH9spjJ3wQgg3oY6Ce8UTEHqVl8jA1qlpBA9kPvGQ16U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780695030; c=relaxed/simple;
-	bh=fdZSoBfDvgRDPhXFcZwO2Lr778PTgRQJfFAMKzrGcDI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=AQRYjTIT1lWn46CmZ3q4qT2NNSB7gGdoIwc7FmxaeriHXNhWC+57jGESHxCn50n88gIiJRjg158KzYfowUN9Fqip9DHzURcF2WdW6NS3T1dTm2ndh7Y13tMKVoSZdmuXCcdaZwoA31fVxy269aQJzjlXnQTEFzAOAo6oe11XbMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HkWCfs9/; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A882DFF3F
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 21:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780695937; cv=pass; b=hROWxQwjgiBnJ6pDq5Jg/Uqh958eAgN8MK5cTRrlPAqwvEJsn/ACO/ezIm/8N1rcZ1QF8zO1hmc7XEeiZbw6b1iSkdmKzFNd3c8sle8aOb/7tRgakpJNuwju4Nk9Yh1hvusO7P6FE9JsNRIpXDVXWkoHeU1V7lGplz/XYA8bRwU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780695937; c=relaxed/simple;
+	bh=RbpDg/kYl6mwQXCz3qR5h0Vix9nrhHwv83Uv0CIXV0g=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nRR+wraF+/n4KKOL6Woy7ieJTR0CdW4IqXRB58euSlcaa3Ddd06/PIJbpFnHH4SRl2uOFtumPIoIh8z6dlZRLYPvg06YAbX0cCsjV2pLHabDLjoXRAc6zQRGNvAj/iMG6CAbvHYOJSERFOnIw8r34txrzdQ2yiQw6Ox5oiq61zE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CLGV0o6h; arc=pass smtp.client-ip=74.125.82.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HkWCfs9/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9EF91F00893;
-	Fri,  5 Jun 2026 21:30:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780695027;
-	bh=Z69GpddxJ/SIhMY4VMCzc9llLu2bxuDx7glOzEnsb/8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=HkWCfs9/610ClG+iKk1ZXbgt/dKz0rrtrJLuQlHS1puLJiFjAZXVFofQIJROuSeVG
-	 0q+4H6REcwXbsewRHe9yqMg8lnGimab4eX6Z88Ay8LdB1bmutIXbMST96t2+bi/3lO
-	 1EGkHejBndMj1QWAeJkbj6bK+6/4urjW1q8VE8T43gmnPtSPs4fe9ge9cQ44ZhaDln
-	 lRLHKMZ7zJb7crHcOXMxj/pYidhkn+dphdImVvpEqLMtVgPEiorz5xmR6S/VdMdu3s
-	 th7vD48RDbnj1y/tLWV0dH0hT0mCqsDEslLdTRCDCrTZDzAvMNrUDpOeuzROjLDaAW
-	 ZhJ6KjhQXGXpw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 569363930BBE;
-	Fri,  5 Jun 2026 21:30:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CLGV0o6h"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-137335bc3caso3019831c88.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 14:45:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780695935; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Y+ra8K/vKvXp4hSr6JDkVWW5AvKluAFGaLy1To7S3vzeOGz+hxhUg82bmGG+v9L1gT
+         wmup1SJ+CpC3ybIFXaLbe05GsjlNXK3I/AevqCvNYLLp5nA7d6XX/a1HMzG3ih6hVPiC
+         Tg1NAiCG41TSbj1dkohFsHGjg7lIfDXtc/ipwz8om3K+qIHt/nfUNKq8mT3mdu/Yt011
+         niQXhlLude+uWhjtPqcn8ztL5kvq6kju3diZkCnhz4gGcdQ/OF0Dgx8Qh1zQTSe09gTV
+         GMUw56/3r5LGmkNDGeOMFOh3SG4UYBpLc/klTtW6A+I4qVRCddBdJBNeTrNmQx6fGqIi
+         1cHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=GS6Ei4jhGsPE0OXhrjRIOP6JH4B+eek+wO3pczZDLKA=;
+        fh=EO9LTgYxYDzMV80Wae6SwZM2+hV/0ySLcSJhzmWQtCo=;
+        b=Hu2cZNYo5pOCHYxHtzuj1/gWMvXRCFs1ltkoYr79RcBYYeK+HEGInunRTRgC2aoxFa
+         VMaRz1p0qeIcsAPs1KF/8gAqVIxSfzkiZaj9IAH4V+Mw6+pSHGtdV6WahSig6EuRstbz
+         Hh+/MYegKk8UrmnwDl18WxqAMUbZ6TumKkKTEGAcYq0cPtcKJFkF+m+JwqO41ZqPvKlS
+         n8gpMsPX/bLxB+3FNnN/waMh2+JPCfSmE6G0hHXhtSVCEOXX+IqGoXZoIkx5WA++5FSv
+         3Cqb+t+U2w31ZVHSSqw7x0bbwUHVKHFLlyi4DNrQUz511UfcQAuS8uVshJ+IP625FaTC
+         Oqcw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780695935; x=1781300735; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GS6Ei4jhGsPE0OXhrjRIOP6JH4B+eek+wO3pczZDLKA=;
+        b=CLGV0o6hUi+JS0+86o0Si5phckCR2/vQFDAWC75m5IblbvSJyv95Qgo3zxcaKhaOHV
+         hIUV4OBLNnxRs3Chb5gmf08A9RQTYO30H9tq+k4W6IKa6gwp9W6HB0V+bJvn5GNCbc9N
+         ujgf6LSq+UfbsYU/jkGzytMYs6VYhdXkCYqfl2A6AhFGOK+s44uh/2YC7+aB4k5V1lxl
+         IP+1pKqKJ76NZ40A4fiGeWK0v0WR6dYlk+NICU1hWLnpsNKdO0FP00Ignef51tk2K962
+         vZYhnlydKCAdVvj/chFXn3Ci46PnM9YsXKxFMpvUYsKRMl9T73Kn+gUSNLuiZ3N4ZrHP
+         wEEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780695935; x=1781300735;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GS6Ei4jhGsPE0OXhrjRIOP6JH4B+eek+wO3pczZDLKA=;
+        b=HQiUM7UtHRbYNgNWIHL+E72NhltPubbLdZsAtYlWL8+2u1EKnMUgGDQQnlEutVJUE5
+         C1I+PHqBsZA0YgB2a+eeEsdBQ9I9fu9INvbbLB6KGEH+FjCh13iK7R6mrCj6+B6BcOto
+         nMIyXH0VfNSCOQMFjjFS+7myDj62Q0ngVq09m04FFJxHzmwrwHXCl6B6gIVFcAS6cbbv
+         tmpixDTNxYGTT4Nb1B1e2v0GAqQ74tKjSa7wyYH8G8qrCQ89Psn29GfbNt5iojq/3rB2
+         c0Z0zaodcK6wqJdnRrzItEX5aCPtorFx7gHgKGMrihYh089TQp2Y9Zw7s0otvcD8fupy
+         wQ+A==
+X-Forwarded-Encrypted: i=1; AFNElJ9SxWBay4qCOBpykZrzVb1IoA6LAZR9KthO2WTrgJe6WreTDCjanqhcO1ulpbAa/9xGYIjm6vriacTqfCcAe+I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPzLbavPmz9gIT775YqB6GRWNKmYMJjYJsUvv/NuyEPE4BFImO
+	DvmK7Q7oQu7BiRDq/UdkkoPPD0UlW69LcEMkQOyhT2UuZD+/DGceAeG1ruJCo5zjSsNg00WCiLE
+	2NwWU2zqWnAUPz/wsL8/vZroHT9G+B6k1T+/bZcsm
+X-Gm-Gg: Acq92OES/6nrYTGVE0RpBVdAJagkFEiaFdv0kiSfb6khXe9AiCjZZLiB2mV3qIV8bR9
+	64DkmSL5VtrczNNrm2bTy/VJajzGRiXT1tuc94RdGFPDAiYQuAaHr+MF/GDYIaVxOsDJlzQJtkj
+	wF6sEi3iZ8gR8ur/XmH5fnC0zBaVFrqcQauQ7SEx7yJP7hlvGzQwBBsRzJ4c38w0XG1XOYMTYK9
+	1F3WKyfOLv9R+wrAqoIhMDo6PCMS+rmZZrBP8BP4e7WbwRbQJGUviZSIs/B1cCzMQBOuFZJfTPF
+	lEA3auyA9U/13i25tAwXDAkqRisMnrdyUMsmBg7B1NNm5sMfAUCoYwOGv1sprlRE3dOHi0bNxP+
+	V6+tl
+X-Received: by 2002:a05:7022:204:b0:137:edc4:a5e6 with SMTP id
+ a92af1059eb24-138066fa2ddmr2670055c88.29.1780695933835; Fri, 05 Jun 2026
+ 14:45:33 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 5 Jun 2026 14:45:33 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 5 Jun 2026 14:45:33 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <aiCzNbtQ4FPu2yCR@google.com>
+References: <20260603-snp-selftest-cleanup-v1-1-73b29fe31ce6@google.com> <aiCzNbtQ4FPu2yCR@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next RESEND v12 00/11] selftests/bpf: Tolerate partial
- builds across kernel configs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178069502789.3925764.15952069390143619686.git-patchwork-notify@kernel.org>
-Date: Fri, 05 Jun 2026 21:30:27 +0000
-References: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
-In-Reply-To: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
-To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgPHJibUBzdXNlLmNvbT4=?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
- nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
- justinstitt@google.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, alan.maguire@oracle.com
+Date: Fri, 5 Jun 2026 14:45:33 -0700
+X-Gm-Features: AVHnY4JzG7VB0zlH5sUGVOnVVh6RIseJI5Gt8L6YDgks9g5Fz-PFBNcjuaYOVuo
+Message-ID: <CAEvNRgHtpFa+HAhPVBvB4=ixUuEW-r_Xh49SHEPktUmHgzYcAw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: selftests: Make guest_code_xsave more friendly
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	michael.roth@amd.com, jackyli@google.com, liruxin@google.com, 
+	darwinguo@google.com, jacobhxu@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+Sean Christopherson <seanjc@google.com> writes:
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+> On Wed, Jun 03, 2026, Ackerley Tng via B4 Relay wrote:
+>> From: Ackerley Tng <ackerleytng@google.com>
+>>
+>> The original implementation of guest_code_xsave makes a jmp to
+>> guest_sev_es_code in inline assembly. When code that uses guest_sev_es_code
+>> is removed, guest_sev_es_code will be optimized out, leading to a linking
+>> error since guest_code_xsave still tries to jmp to guest_sev_es_code.
+>
+> So, don't do that?
+>
 
-On Tue, 02 Jun 2026 10:02:49 -0300 you wrote:
-> Currently the BPF selftests can only be built by using the minimum kernel
-> configuration defined in tools/testing/selftests/bpf/config*. This poses a
-> problem in distribution kernels that may have some of the flags disabled or
-> set as module. For example, we have been running the tests regularly in
-> openSUSE Tumbleweed [1] [2] but to work around this fact we created a
-> special package [3] that build the tests against an auxiliary vmlinux with
-> the BPF Kconfig. We keep a list of known issues that may happen due to,
-> amongst other things, configuration mismatches [4] [5].
-> 
-> [...]
+I was commenting out function calls while working on another part of
+this selftest and ran into linking issues.
 
-Here is the summary with links:
-  - [bpf-next,RESEND,v12,01/11] selftests/bpf: Add BPF_STRICT_BUILD toggle
-    https://git.kernel.org/bpf/bpf-next/c/a6850fa388f6
-  - [bpf-next,RESEND,v12,02/11] selftests/bpf: Fix test_kmods KDIR to honor O= and distro kernels
-    https://git.kernel.org/bpf/bpf-next/c/9779193e871b
-  - [bpf-next,RESEND,v12,03/11] selftests/bpf: Tolerate BPF and skeleton generation failures
-    https://git.kernel.org/bpf/bpf-next/c/c476bdf27657
-  - [bpf-next,RESEND,v12,04/11] selftests/bpf: Avoid rebuilds when running emit_tests
-    https://git.kernel.org/bpf/bpf-next/c/a97bfc9aae07
-  - [bpf-next,RESEND,v12,05/11] selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
-    https://git.kernel.org/bpf/bpf-next/c/5498e47741c8
-  - [bpf-next,RESEND,v12,06/11] selftests/bpf: Tolerate test file compilation failures
-    https://git.kernel.org/bpf/bpf-next/c/9c4de137a9a5
-  - [bpf-next,RESEND,v12,07/11] selftests/bpf: Skip tests whose objects were not built
-    https://git.kernel.org/bpf/bpf-next/c/aeb73a9f301d
-  - [bpf-next,RESEND,v12,08/11] selftests/bpf: Allow test_progs to link with a partial object set
-    https://git.kernel.org/bpf/bpf-next/c/af490669fd33
-  - [bpf-next,RESEND,v12,09/11] selftests/bpf: Tolerate benchmark build failures
-    https://git.kernel.org/bpf/bpf-next/c/f813a4d6877e
-  - [bpf-next,RESEND,v12,10/11] selftests/bpf: Provide weak definitions for cross-test functions
-    https://git.kernel.org/bpf/bpf-next/c/b85e63cb65f9
-  - [bpf-next,RESEND,v12,11/11] selftests/bpf: Tolerate missing files during install
-    https://git.kernel.org/bpf/bpf-next/c/3ca6543464f8
+>> Rewrite guest_code_xsave() to instead make a call, in C, to
+>> guest_sev_es_code(), so that usage of guest_sev_es_code() is made known to
+>> the compiler.
+>>
+>> This rewriting also gives a name to the xsave inline assembly, improving
+>> readability.
+>>
+>> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+>> ---
+>>  tools/testing/selftests/kvm/x86/sev_smoke_test.c | 24 +++++++++++++++++-------
+>>  1 file changed, 17 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/kvm/x86/sev_smoke_test.c b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+>> index 1a49ee3915864..8b859adf4cf6f 100644
+>> --- a/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+>> +++ b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+>> @@ -80,13 +80,23 @@ static void guest_sev_code(void)
+>>  	GUEST_DONE();
+>>  }
+>>
+>> -/* Stash state passed via VMSA before any compiled code runs.  */
+>
+> Uh, so as the comment says, the goal is to stash state before _any_ compiled
+> code runs.  Shoving the code into inline asm breaks that.  The compiler *probably*
+> won't shove anything before the first inline assembly, but there are absolutely
+> no guarantees.  E.g. you're subtly relying on a tail-call optimization to avoid
+> any stack operations.  If I force guest_sev_es_code() to be inlined, then the
+> prologue becomes:
+>
+> 0000000000402a10 <guest_code_xsave>:
+>   402a10:       48 83 ec 08                                     sub    $0x8,%rsp
+>   402a14:       b8 07 00 00 00                                  mov    $0x7,%eax
+>   402a19:       31 d2                                           xor    %edx,%edx
+>   402a1b:       0f ae 27                                        xsave  (%rdi)
+>   402a1e:       b9 31 01 01 c0                                  mov    $0xc0010131,%ecx
+>
+> and we're hosed.
+>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+And omg, I thought I was running the tests!!
 
+>> -extern void guest_code_xsave(void);
+>> -asm("guest_code_xsave:\n"
+>> -    "mov $" __stringify(XFEATURE_MASK_X87_AVX) ", %eax\n"
+>> -    "xor %edx, %edx\n"
+>> -    "xsave (%rdi)\n"
+>> -    "jmp guest_sev_es_code");
+>> +static void xsave_all_registers(void *addr)
+>> +{
+>> +	__asm__ __volatile__(
+>> +		"mov $" __stringify(XFEATURE_MASK_X87_AVX) ", %eax\n"
+>> +		"xor %edx, %edx\n"
+>
+> This doesn't even build.  When using input and/or output params, named registers
+> like eax and edx need an extra '%' to escape them, e.g.
+>
+> 	asm volatile("mov $" __stringify(XFEATURE_MASK_X87_AVX) ", %%eax\n\t"
+> 		     "xor %%edx, %%edx\n\t"
+> 		     "xsave (%0)"
+> 		:
+> 		: "r"(addr)
+> 		: "eax", "edx", "memory"
+> 	 );
+>
 
+My bad, I was compiling this while having the caller of this function
+commented out. Didn't realise that even within the same file, the inline
+assembly won't even be compiled if there's no caller.
+
+>> +		"xsave (%0)"
+>> +		:
+>> +		: "r"(addr)
+>> +		: "eax", "edx", "memory"
+>> +	 );
+>> +}
+>> +
+>>
+>> [...snip...]
+>>
+
+My bad, this patch is such a goof!
+
+I still feel that it'd be nice to allow commenting out functions parts
+of selftests while developing other parts, but let's shelve this for
+now.
+
+I think to clean this up I would do something like
+
+1. Enter the guest, GUEST_SYNC(STAGE_READY)
+2. In the host, write VMSA
+3. vcpu_run(), guest will perform that __asm__ block, then GUEST_DONE()
+4. Host performs compare_vmsa() to verify
+
+But this relies on ucall support for SNP.
