@@ -1,120 +1,108 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD07637646A;
-	Fri,  5 Jun 2026 10:09:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E712141363B;
+	Fri,  5 Jun 2026 10:31:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780654200; cv=none; b=uRuFCMegyg8AK2a4JDaRgiTjtmpLcDxh3D/UGMebZfyhusHwajN7oW0Xy0znHunlHozvwmmV1efzIHe8cg+NajBuyXl9tzHRiXKJuISuEQlqGjLm5sGqHgAzjdAuq/iZoSwDp+GMXDVGcA3OCRXYAXmgNw8z177oQhjFraq9EBI=
+	t=1780655514; cv=none; b=CJjn3DcTcAEEMQP8s9w3NBJmqyyEzmnoaL/HEEBUaZ0rzlpp4gTf0bGM08GAbcmpLCZ26LyywI9VyZZ3Y1h02LscYHd2oRw5k0oJv1qWCAsVHGi797gADY34cKtLg/y+foUZ51e+fhvJgfCbN3Oj2xYklDAHTRULvSnxC0nWwbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780654200; c=relaxed/simple;
-	bh=yGy9BI2lX3e4L6ehvaOo7NKyNAOxB5+brzo5zNYOt8Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KdEB8/8WU+SzY5v/RzLmvxOorrag3DbAghuDvpEoMSUVYZy5Wepmr+//xNbteW0mENyQwyVrcCZ52vUiMKrcVbO7cZIcMp8YgF2hjVV1cEBFwjFU1qTtm6ldFb/Nvw6IoJbR7o4vzoySloTWtoEAdE4/1mQlU2ix2rzs6s4Z3uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=PNS/8oTZ; arc=none smtp.client-ip=82.195.75.108
+	s=arc-20240116; t=1780655514; c=relaxed/simple;
+	bh=00hwPSZA8fZYcFj+RYCIxpnKtgT+aRtEfaPpoZFZJBY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=n3OKoYKMbUTV0foRfxtMN+83UL6Nf4Jyykue/5WMwZz0xuH8YF5O6kgQkeO7kT5t8B2F1lrnrfGo/RxWfF8ZH650iaF6+LQL8EFowwsDVMCFo02v1j6Hx2TmmXqbs7LMye7sAdj0XS/xW8OV3liKpNoC1gjxVTJ8R2PX3FEYZY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=qy2Po5Ez; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="PNS/8oTZ"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="qy2Po5Ez"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=l+jYg9iV99SJr57yhVuMIBoraQjmKqhBTn14aNvbcq8=; b=PNS/8oTZzoJ0T82HX4aeYMeRlS
-	PJhNMHJy7BMN54cYeH/9RSKm34Q8uINR4/tridmtvJfdhlUToFtKZYmIbzmbeLo2HMxOGUpcccIim
-	MJN3QdR9bIZVuOczbQFTOorouVFrEME33p6k7LUoQVJpe58+Xel/03JLwNcMr/s3ejnrfRPAkA+0L
-	qMa4WhRyGyodPX9GFyP0eUqYMfjL9UiF7cRo5NMoc447w6iR6zKdGSTH8EfgVyPnB6KCMLSoPTOpg
-	ZFuM+Pj8yDG4ApxJoeOtptweUvVZAAQxIuio57inZe3eNbC8sEKo9dGaluQhql6wh/8l1ZtFy+ohs
-	ArxrGcig==;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=8DmfM0emdEXvHwwBK/UWoQtQdiUcoSMtiKrMc4myUNY=; b=qy2Po5EzFtqBVmaUj5pARa+sAb
+	5Gcdae7s3vwdeTUvF4A0iXn6EbxMpcydwhIOL1XgdABvEUbvs8BiYDr7hrdJwLe8qZiojWAMAh44l
+	rwMVScrutwrmzFDX4DVm21m4XCAYYGuwvStuxYet4x2iECzK+FK04i2+dl1XKc4DVh3HnvPk+yPkQ
+	Zo+b8ifcaw1AnwUrA94/R4wGYxHWAeQ7KsB63caW4IZO9OlsQ8yoPBSkfjjzgw+h5vlrXBD6CPOKZ
+	xGFfeZXp1LuM9yToRcD/twQOrp6WEXnVOuZqp4nIbv+AYQ4FL+uN1WlTd+kyGpSU+dZ9g9hKc6wth
+	8b3Py7FA==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wVRUu-005DLB-0h;
-	Fri, 05 Jun 2026 10:09:52 +0000
-Date: Fri, 5 Jun 2026 03:09:47 -0700
+	id 1wVRq9-005EEs-2h;
+	Fri, 05 Jun 2026 10:31:50 +0000
 From: Breno Leitao <leitao@debian.org>
-To: Allison Henderson <achender@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	rds-devel@oss.oracle.com, linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next 2/2] selftests: net: rds: add getsockopt()
- conversion test
-Message-ID: <aiKgGJpCWs8zxNKx@gmail.com>
-References: <20260603-getsock_more-v1-0-43b8d40c8849@debian.org>
- <20260603-getsock_more-v1-2-43b8d40c8849@debian.org>
- <134c50a1ca2d2f2bc06336072c89ff011a9842cb.camel@kernel.org>
+Date: Fri, 05 Jun 2026 03:31:38 -0700
+Subject: [PATCH net-next v2 1/3] rds: mark snapshot pages dirty in
+ rds_info_getsockopt()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <134c50a1ca2d2f2bc06336072c89ff011a9842cb.camel@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260605-getsock_more-v2-1-80f38cdb8706@debian.org>
+References: <20260605-getsock_more-v2-0-80f38cdb8706@debian.org>
+In-Reply-To: <20260605-getsock_more-v2-0-80f38cdb8706@debian.org>
+To: Allison Henderson <achender@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com, 
+ linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
+ kernel-team@meta.com
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1093; i=leitao@debian.org;
+ h=from:subject:message-id; bh=00hwPSZA8fZYcFj+RYCIxpnKtgT+aRtEfaPpoZFZJBY=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqIqWNcVYIIJISvcnN7cwAbA0w5GLVZG8jfwZ4Q
+ BxzYfinR9WJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaiKljQAKCRA1o5Of/Hh3
+ bcWKEACuD3qtWXMRs/X/KxwjB9YhpiCScdOL1ayjmDKa76/qXeVdgQpiS8ufbjI9rEY+mL63N84
+ XpRle9/j5uLr6KkRrbcP+xOuBdFEvHA1jd3jC6imnxdOnF3JpJGDO1Ct7ZvOR3d/QOuzmjbCgvc
+ /Uy6BF9GcLbEJLKhoZ+L4CC8RLEDAWrPQsuwPNMMOsjNd/liGEbNP2H8MKgfmBhRX5egLEJlM3b
+ 9LegD3FHsR33fZ2DEUF+ru3drqi/aVxF8LaLKGX15YwmHe1kZHKX9ILG+Avjc8HbIw2g8pX1b2C
+ okXGPcsaqO7I2OedE1jpAqnC/W+AEg3yYZb6qu5tD6w208Z/Qgtdk3vi4hV6XGwFcK5Umqg7QYF
+ CEeKqtxZo2Zml5P/e1ecIKHk84IJDn/WMad3xVA4H2H6zMrArR+x/XV7mQ36xwXv3mxsECTIZxg
+ XjrE7Y3n/tmvnnGidXQDOKY42Sk2tj0rSqrwWXiz+++YsgB8KBCJRF50FGniLGhtx2sIWRi0Gid
+ hR8/6K8NsDDc1Co70/85VIvYqAqpDrZXrmcsvVtjAu5NbPhDIQ6WyeVFmBWOSE84D6pvRidte/v
+ xwea8h4aTyJvZmSFQQFKXu1NXT0zOh0KkpchhnT/0fA0nnth3LJYsVXvzNJ/rmj0bZxE+51afx7
+ co8JzalAEf26YIQ==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-On Fri, Jun 05, 2026 at 02:56:09AM -0700, Allison Henderson wrote:
-> Hi Breno,
-> 
-> Thanks for working on this.  Your test covers a lot of socket behavior that the
-> existing packet test doesn't get into, so I definitely think it's worth adding.
-> I ran it locally under vng and it passes for me.  I did notice one nit below, but
-> otherwise I think it looks really good.
+rds_info_getsockopt() pins the destination user pages with FOLL_WRITE and
+the RDS_INFO_* producers memcpy the snapshot into them through
+kmap_atomic(). Because that copy goes through the kernel direct map, the
+dirty bit on the user PTE is never set, so unpin_user_pages() releases the
+pages without marking them dirty. A file-backed destination page can then
+be reclaimed without writeback, silently discarding the copied data.
 
-Good, thanks for the direction and review!
+Use unpin_user_pages_dirty_lock() with make_dirty=true so the modified
+pages are marked dirty before they are unpinned.
 
-> > +TEST_F(rds, info_counters_snapshot)
-> > +{
-> > +	struct rds_info_counter *ctr;
-> > +	socklen_t need = 0, len;
-> > +	long pagesz = sysconf(_SC_PAGESIZE);
-> > +	unsigned int i, n;
-> > +	char *region, *buf;
-> > +	int ret;
-> > +
-> > +	/* Probe for the required size. */
-> > +	getsockopt(self->fd, SOL_RDS, RDS_INFO_COUNTERS, NULL, &need);
-> > +	ASSERT_GT(need, 0);
-> > +
-> > +	region = mmap(NULL, 2 * pagesz, PROT_READ | PROT_WRITE,
-> > +		      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> 
-> The 2-page mapping (and the ASSERT_LE guarding it) ties the test to the snapshot
-> fitting in two pages.  This works right now, but ideally the region here should
-> account for the number of counters that come back from RDS_INFO_COUNTERS so that
-> if the total number of counters were to grow later, we don't overrun a region
-> that's set to a fixed number of pages.  So in this case, we'd want the need + offset,
-> and then page align that so we can mmap it:
-> 
-> 	offset	= pagesz - 64; 
-> 	map_len	= ((offset + need + pagesz - 1) / pagesz) * pagesz;  /* round (off+need) up to whole pages */
-> 	region  = mmap(NULL, map_len, ...);                 
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ net/rds/info.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Good point - sizing the mapping from the probed length keeps it correct if the
-counter set ever grows. In v2 I'll derive map_len from need + offset and drop
-the fixed 2-page assumption:
+diff --git a/net/rds/info.c b/net/rds/info.c
+index f1b29994934a..17061f6ff74e 100644
+--- a/net/rds/info.c
++++ b/net/rds/info.c
+@@ -235,7 +235,7 @@ int rds_info_getsockopt(struct socket *sock, int optname, char __user *optval,
+ 
+ out:
+ 	if (pages)
+-		unpin_user_pages(pages, nr_pages);
++		unpin_user_pages_dirty_lock(pages, nr_pages, true);
+ 	kfree(pages);
+ 
+ 	return ret;
 
-        long pagesz = sysconf(_SC_PAGESIZE);
-        size_t offset, map_len;
-        ...
-        getsockopt(self->fd, SOL_RDS, RDS_INFO_COUNTERS, NULL, &need);
-        ASSERT_GT(need, 0);
+-- 
+2.53.0-Meta
 
-        /* Unaligned start that runs past the first page boundary. */
-        offset  = pagesz - 64;
-        map_len = ((offset + need + pagesz - 1) / pagesz) * pagesz;
-
-        region = mmap(NULL, map_len, PROT_READ | PROT_WRITE,
-                      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-        ASSERT_NE(MAP_FAILED, region);
-
-        buf = region + offset;
-
-with the ASSERT_LE() dropped and munmap(region, map_len) at the end.
-
-Thanks for the review,
---breno
