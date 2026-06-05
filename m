@@ -1,58 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DA93FFACC;
-	Fri,  5 Jun 2026 05:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153D640149F;
+	Fri,  5 Jun 2026 05:41:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780638112; cv=none; b=CLzxgblntFe+xVrRK5hmSkl6l0w7cyA9gPHZSQu0Evok8yi9dJ+deEmoWEResFer+47bl86ts9+LnBeojgR2sDV+Lw0Vc0xhOzKganIHP2slMFoxF21uI3/RfVaT7EF9H0PyOGe30a9gsn50ZFq3qYvOVhmjgxc9Q1Q+zTFVIH0=
+	t=1780638119; cv=none; b=lbQqJH7Etqtc4oLjB66gfY5S2m7tM2mqrIgH3UmwcOOttGNHyzVLuVW14Y6oi5h1L6xpHovqZ4OWL4Ik7PrhWBM771RxY/SCtokIXm+QOw+QOqh3aud3ma3etv53FvYOnTJmtFyHkW6JPl/InDmtk6NLU7/577es6R0zH/HgqoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780638112; c=relaxed/simple;
-	bh=EEF7M1M56zwwhTGXRepJ6Df3YmQZblYNwV9p/gbKAlY=;
+	s=arc-20240116; t=1780638119; c=relaxed/simple;
+	bh=dLOHKW7WAr1j2ZaVPZw1AOGUtt3G5GCtMKdlXWtC1+g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BWTjDtDAhyOxOW33pm+IWEBkTNXPMzMRrIkqDcQYjIF8JX2ZNseHwgAh4hnmN8F1tIiQh4Fv8YctrcUs7eHXmS+bYhDlEstZ2167m5swYwkS0Wz5c25HXN2oOGctyByuR6WVMW1Vf4cEXiSq5II20TCdkJLp81Fpx0qTjThYSE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RB4HIsSf; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=HMhcHg2Pn+5o4jxfHN+f7aK8dvoTGxRROi9rPtDh8X7N0A1Cx8cRbOMMAK4uQjhiN5mFek36GjzU50qxlfEXLfM87GjideRAGLXdzjmTL0ay0bqEvjFUOJ3AOHWGaoRlJcnqE0mhUqs/txtl4Vl+ngjcqiC/ohNaUdQ4cNhwr6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SRZfQ1Em; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RB4HIsSf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0EB01F0089D;
-	Fri,  5 Jun 2026 05:41:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SRZfQ1Em"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B241F008A1;
+	Fri,  5 Jun 2026 05:41:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780638111;
-	bh=pFJVb0XMzYiDkWRfHTccDmCKdRjygd0kE9XeKrNBbFM=;
+	s=k20260515; t=1780638117;
+	bh=cte+3SORcsAa7eW9vZLxBcB/RUJa01gm+E+K6ToVCog=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=RB4HIsSfYEgjWyfr4hUayUE3CmgQAAWCWKfGfS/3XYYPc1AoVRTylpoHSRitlrxF0
-	 0UA5hcEeDQfzrqvbFwP9zCZDXSixsQuXoxnl6jGuvhL32KZRWW6Z071BCACB4jA8QT
-	 NMP+8lP22A2BTVLlkmbL+x76jIxFeTSqp+74LEzUaMGqXme78IYPLweSoQZrlJmT8k
-	 OlheQM/kQZkJAkzBLSzEmTvwiYNzIJx8fn6ejjE/JOmBkAmx6uYVgWt921MF5XHb3E
-	 r/IjxNat/FD7YT7rVknXbJdYTSQ+AsNzDTJ+7S7ge4VUqUsi6z7oynAiZoxJVghDd2
-	 isHQAKIceV7Rw==
+	b=SRZfQ1EmhHh/fcOTKw4OmaKBk72iM6URnBfbl4OIYW3EsxD79F26PyzDv5DakTIKk
+	 0gazh2CEDaAOaWaWCJ8JVd8Bn+go1fER4lmBlZ+v/utn/XT/SDXBfu151UbTFnzlNg
+	 vA4/kcwzm+IfMRgOGGBdjBjyEIIKL8COuTwzJoxH/0FDY8d3DgMWLwgzId6XQ90ily
+	 0TVqxVBKmxgrojgAAoFF7Hk5PozoFp5EvVKSUjGHmd2hng9z6mUZpt/DaDD03HnvUD
+	 oyrH246/GqVTxxGMypjesyTV/StUgAjJy25GqmhsQbjsUyJBwS8Z8R6devg1dGrdUd
+	 Ed+uDFgESmGQw==
 Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 0C7FEF40068;
-	Fri,  5 Jun 2026 01:41:48 -0400 (EDT)
+	by mailfauth.phl.internal (Postfix) with ESMTP id 7094EF4006D;
+	Fri,  5 Jun 2026 01:41:54 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Fri, 05 Jun 2026 01:41:48 -0400
-X-ME-Sender: <xms:m2EiaolB7zlLUj0MVetnv0Lsvm_OuSZabWrSq9osHKs3Qpozp4ceHw>
-    <xme:m2Eiag8rRDqyS3A6ucXng57bGi9CfObuemW9vzQAVQqXDWuusIFzqEYAmF6iavR9z
-    Nqj2IUgcwQrez3pPte48nhAs9iWsISntCneKtvv8hWeuDtjgs-Dbg>
-X-ME-Received: <xmr:m2EiavhBrlXeuK1ihUb4nFGVIdcsodLWXNu7UT1K7f48RcFQ_GnHyFpHcg0>
-X-ME-Proxy-Cause: dmFkZTFG0WJa+84B5ZLakFCJusLrHx60u/M2e4tgb8vvSWGQWHXMFZeKktHow9VrFaQhwL
-    60vkPLe/GHUXrF9uQjn9EtWhYCiYebO343SXKkauObGNd0gaHEDMGyAUdMEWI3xvV5+MXM
-    Y5XIGIH+RCj/YpjPsc3XHQUzqyjdf8JDGbXE7uRDsVlh2adsQWoVoEG+11Li6tmpxBjo+n
-    GbGHXxcMsG5BC+v/PWXz65OFiJmnJTn18gjrdwmPsAQA0I/XEj3HJhBv36WGSvCgORqSG4
-    pkDfFOinWXk05Px2n3ZYSDFusuNrnah7Cqk2jZsViR99U7a3ccatK3SGLf/zDxH9xSS8Bx
-    NJDPeypZR+UT9k/SqltVTKWiw30nGSTGNtoJTZhFEw535tbPvHx+fxLRs5Z4ou1e4WVvr5
-    fjYq3d0sE8tdFC8joSEqZ+Uo7JwQns/hPHB/VwsR4PvGZtpea1JqcCyFMlPJgyyx8EE4pv
-    jvz4p8DgyUVrtSDfrlYz1plh7KfMMU0jKMO8SRKIOnV1u69YyXD/2yFnyoWy2B1n65QqoC
-    B93ANNq/Xa14drwvS5S7v3OdLu8oSVLylHkLZ+VvgmcmCDl4meFSxlGDWOyi5EBtb/cBbE
-    fuJpgrv2lvgm+etFqRsdjN9nNR9q729Z/AtVZ6SmDmULleejLzV6BAMpyAjQ
-X-ME-Proxy: <xmx:m2EianPaMXuru3-AFtwyCA1Hta101iP2NV1KREiT8MywQg0mx5TlAA>
-    <xmx:nGEiauOvl25w-t4m6rWXegZP32t47S6xYr4FPpP0_7KG1WGfqaucWw>
-    <xmx:nGEiasiTdyvGC_-w9JyTZWBJF0BrS1MDgnYvGkNaRt2RHk-sKuvE6w>
-    <xmx:nGEiapU9w_oFmGCo_I_q8s_KFerlmmVkOTri-Q557e6IBKiKtbhHCQ>
-    <xmx:nGEiauelQ92Dl6HxLv5H5F0zH9kWEZXhm5Wsk3L3t5NUMhQi04Zx-7d1>
+  by phl-compute-04.internal (MEProxy); Fri, 05 Jun 2026 01:41:54 -0400
+X-ME-Sender: <xms:omEiakGP5XVXHljs8KMeu83vG8CW7KvyEkMObkH8eCeRilh9RIiYJQ>
+    <xme:omEiameSlkFLoE_C2fs9ms0g1T8CQbIfyViWI4hZrJPaR7SLUSImLIkEWJbNshSCM
+    qNsZodoj6cnUDNuAFrMF805juMt8XN_nICcp-6HCUZScvhV-ueTOQ>
+X-ME-Received: <xmr:omEianBSvRFrHZXLU7uIF9cLYVuVLaO1mDIA1KCZNnlTnyBWDpQBrtp1j3s>
+X-ME-Proxy-Cause: dmFkZTGNdErcnsY9nz6zZJNqzBGcFpZ3oCsZyVSAsXPEfKD6fiAd7MM8RW3ErpHOKO8vqP
+    y7FRxpXUBU5yb8Y73fmewycTgcYRdiPbEiXJpQaKxk1+aC6Vj3AAV2l/TRkhTd+1u+mIGl
+    dQfEAWycnSLZO+qO217j/GTm+GQxoHWyRwvdph+wtnOrnU/D7PvfaSdl50PQ+1o9QW7RYj
+    snzJFBhgLjSJ/jkZdib8Dc9ob5AHsrvEPqt2vef8Hmx2uDf0JqmoZZ+HexXrtwk5r0bry3
+    HVu0i63lg3nGwPLJ2r8Np94WJ6jG6+OWNN7TpxDaYMxO59AtKcBppdJ6IoJJH6Zm9jQmfy
+    d/M23rmFX/UEDMXUP5h4monMRjH3DBFbRBl3dq3TGCS9QG3xV5SjlbUSvMywVg8PIR6IFK
+    KXMTZHNWG50pa++o/LTrjqU+tS5L11u4ow7nYXPXlPIFaek05dqOtUwW/zxRhcsbtpEZSR
+    ISus0WT/tkwAGiTp3tz0+/6ZUWTvLgozaBgYkLZTwlbtRl/bPzm1sk3zU61ZBdP4XfrXtm
+    nk3D+iIL4bflhzo6zjYipul55NCqZP5sTBozuwFgumkeLXVXTq/GWN7Czth//d3jja9eh1
+    h/wjOwNzkRTyhq3JTkj4jSZ4w0vgmr38G80/zXvpjAFcVTP7qJZ/MeUZNobA
+X-ME-Proxy: <xmx:omEiaoutB1XNfyRFcycQLcyt3196gs6LPaLSsdN5DnIOW3jOGmj-jQ>
+    <xmx:omEiahsharQ5m502EbaXDzC0oOr8jyXpLBSL6tyJf-QAF74Szq47ag>
+    <xmx:omEiaqAYaufe5Xu1CDW8S0L7axxIvgdRm6Y71eGIY6fOOr4tRsMRTA>
+    <xmx:omEiao3df6szJBIycbcYKmDxC_IZWo1ekXvpKE8KizOigLvXK7hGtw>
+    <xmx:omEian-S7B0U97IhQmD3cgGQb7ttfVIb5Blx2faJjvbLe9fS1TAXzQz8>
 Feedback-ID: i8dbe485b:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 Jun 2026 01:41:46 -0400 (EDT)
+ 5 Jun 2026 01:41:53 -0400 (EDT)
 From: Boqun Feng <boqun@kernel.org>
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
@@ -101,9 +101,9 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
 	linux-s390@vger.kernel.org,	linux-arch@vger.kernel.org,
 	bpf@vger.kernel.org,	linux-kselftest@vger.kernel.org,
 	rust-for-linux@vger.kernel.org
-Subject: [PATCH v3 09/13] sched: Avoid signed comparison of preempt_count() in __cant_migrate()
-Date: Thu,  4 Jun 2026 22:41:24 -0700
-Message-ID: <20260605054128.5925-10-boqun@kernel.org>
+Subject: [PATCH v3 12/13] s390/preempt: Enable HAS_SEPARATE_PREEMPT_RESCHED_BITS
+Date: Thu,  4 Jun 2026 22:41:27 -0700
+Message-ID: <20260605054128.5925-13-boqun@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260605054128.5925-1-boqun@kernel.org>
 References: <20260605054128.5925-1-boqun@kernel.org>
@@ -115,33 +115,171 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently preempt_count() is always a non-negative int on all archs
-(PREEMPT_NEED_RESCHED archs will mask out the MSB when return
-preempt_count()), hence the checking in __cant_migrate() is in fact just
-checking whether preempt_count() is 0 or not. In a future change, we are
-going to use all the 32 bits of preempt_count(), which would make
-negative int values possible from preempt_count(). Therefore convert the
-"> 0" comparison into a zero checking to prepare for the future change.
-No functional changes are intended.
+From: Heiko Carstens <hca@linux.ibm.com>
 
+Convert s390's preempt_count to 64 bit, and change the preempt
+primitives accordingly.
+
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 Signed-off-by: Boqun Feng <boqun@kernel.org>
+Link: https://patch.msgid.link/20260509181249.16281C67-hca@linux.ibm.com
 ---
- kernel/sched/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/s390/Kconfig               |  1 +
+ arch/s390/include/asm/lowcore.h | 13 +++++++----
+ arch/s390/include/asm/preempt.h | 41 +++++++++++++++------------------
+ 3 files changed, 29 insertions(+), 26 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 75dba7cc09bd..636e6a15f104 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9207,7 +9207,7 @@ void __cant_migrate(const char *file, int line)
- 	if (!IS_ENABLED(CONFIG_PREEMPT_COUNT))
- 		return;
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index ecbcbb781e40..cbbca82f8443 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -276,6 +276,7 @@ config S390
+ 	select PCI_MSI			if PCI
+ 	select PCI_MSI_ARCH_FALLBACKS	if PCI_MSI
+ 	select PCI_QUIRKS		if PCI
++	select HAS_SEPARATE_PREEMPT_RESCHED_BITS
+ 	select SPARSE_IRQ
+ 	select SWIOTLB
+ 	select SYSCTL_EXCEPTION_TRACE
+diff --git a/arch/s390/include/asm/lowcore.h b/arch/s390/include/asm/lowcore.h
+index 50ffe75adeb4..0974ab278169 100644
+--- a/arch/s390/include/asm/lowcore.h
++++ b/arch/s390/include/asm/lowcore.h
+@@ -160,10 +160,15 @@ struct lowcore {
+ 	/* SMP info area */
+ 	__u32	cpu_nr;				/* 0x03a0 */
+ 	__u32	softirq_pending;		/* 0x03a4 */
+-	__s32	preempt_count;			/* 0x03a8 */
+-	__u32	spinlock_lockval;		/* 0x03ac */
+-	__u32	spinlock_index;			/* 0x03b0 */
+-	__u8	pad_0x03b4[0x03b8-0x03b4];	/* 0x03b4 */
++	union {
++		struct {
++			__u32	need_resched;	/* 0x03a8 */
++			__u32	count;		/* 0x03ac */
++		} preempt;
++		__u64	preempt_count;		/* 0x03a8 */
++	};
++	__u32	spinlock_lockval;		/* 0x03b0 */
++	__u32	spinlock_index;			/* 0x03b4 */
+ 	__u64	percpu_offset;			/* 0x03b8 */
+ 	__u8	pad_0x03c0[0x0400-0x03c0];	/* 0x03c0 */
  
--	if (preempt_count() > 0)
-+	if (preempt_count())
- 		return;
+diff --git a/arch/s390/include/asm/preempt.h b/arch/s390/include/asm/preempt.h
+index 0a25d4648b4c..1d5e4d7e9e1b 100644
+--- a/arch/s390/include/asm/preempt.h
++++ b/arch/s390/include/asm/preempt.h
+@@ -8,11 +8,8 @@
+ #include <asm/cmpxchg.h>
+ #include <asm/march.h>
  
- 	if (time_before(jiffies, prev_jiffy + HZ) && prev_jiffy)
+-/*
+- * Use MSB so it is possible to read preempt_count with LLGT which
+- * reads the least significant 31 bits with a single instruction.
+- */
+-#define PREEMPT_NEED_RESCHED	0x80000000
++/* Use MSB for PREEMPT_NEED_RESCHED mostly because it is available. */
++#define PREEMPT_NEED_RESCHED	0x8000000000000000UL
+ 
+ /*
+  * We use the PREEMPT_NEED_RESCHED bit as an inverted NEED_RESCHED such
+@@ -26,25 +23,25 @@
+  */
+ static __always_inline int preempt_count(void)
+ {
+-	unsigned long lc_preempt, count;
++	unsigned long lc_preempt;
++	int count;
+ 
+-	BUILD_BUG_ON(sizeof_field(struct lowcore, preempt_count) != sizeof(int));
+-	lc_preempt = offsetof(struct lowcore, preempt_count);
++	lc_preempt = offsetof(struct lowcore, preempt.count);
+ 	/* READ_ONCE(get_lowcore()->preempt_count) & ~PREEMPT_NEED_RESCHED */
+ 	asm_inline(
+-		ALTERNATIVE("llgt	%[count],%[offzero](%%r0)\n",
+-			    "llgt	%[count],%[offalt](%%r0)\n",
++		ALTERNATIVE("ly		%[count],%[offzero](%%r0)\n",
++			    "ly		%[count],%[offalt](%%r0)\n",
+ 			    ALT_FEATURE(MFEATURE_LOWCORE))
+ 		: [count] "=d" (count)
+ 		: [offzero] "i" (lc_preempt),
+ 		  [offalt] "i" (lc_preempt + LOWCORE_ALT_ADDRESS),
+-		  "m" (((struct lowcore *)0)->preempt_count));
++		  "m" (((struct lowcore *)0)->preempt.count));
+ 	return count;
+ }
+ 
+-static __always_inline void preempt_count_set(int pc)
++static __always_inline void preempt_count_set(unsigned long pc)
+ {
+-	int old, new;
++	unsigned long old, new;
+ 
+ 	old = READ_ONCE(get_lowcore()->preempt_count);
+ 	do {
+@@ -63,12 +60,12 @@ static __always_inline void preempt_count_set(int pc)
+ 
+ static __always_inline void set_preempt_need_resched(void)
+ {
+-	__atomic_and(~PREEMPT_NEED_RESCHED, &get_lowcore()->preempt_count);
++	__atomic64_and(~PREEMPT_NEED_RESCHED, (long *)&get_lowcore()->preempt_count);
+ }
+ 
+ static __always_inline void clear_preempt_need_resched(void)
+ {
+-	__atomic_or(PREEMPT_NEED_RESCHED, &get_lowcore()->preempt_count);
++	__atomic64_or(PREEMPT_NEED_RESCHED, (long *)&get_lowcore()->preempt_count);
+ }
+ 
+ static __always_inline bool test_preempt_need_resched(void)
+@@ -88,8 +85,8 @@ static __always_inline void __preempt_count_add(int val)
+ 
+ 			lc_preempt = offsetof(struct lowcore, preempt_count);
+ 			asm_inline(
+-				ALTERNATIVE("asi	%[offzero](%%r0),%[val]\n",
+-					    "asi	%[offalt](%%r0),%[val]\n",
++				ALTERNATIVE("agsi	%[offzero](%%r0),%[val]\n",
++					    "agsi	%[offalt](%%r0),%[val]\n",
+ 					    ALT_FEATURE(MFEATURE_LOWCORE))
+ 				: "+m" (((struct lowcore *)0)->preempt_count)
+ 				: [offzero] "i" (lc_preempt), [val] "i" (val),
+@@ -98,7 +95,7 @@ static __always_inline void __preempt_count_add(int val)
+ 			return;
+ 		}
+ 	}
+-	__atomic_add(val, &get_lowcore()->preempt_count);
++	__atomic64_add(val, (long *)&get_lowcore()->preempt_count);
+ }
+ 
+ static __always_inline void __preempt_count_sub(int val)
+@@ -119,15 +116,15 @@ static __always_inline bool __preempt_count_dec_and_test(void)
+ 
+ 	lc_preempt = offsetof(struct lowcore, preempt_count);
+ 	asm_inline(
+-		ALTERNATIVE("alsi	%[offzero](%%r0),%[val]\n",
+-			    "alsi	%[offalt](%%r0),%[val]\n",
++		ALTERNATIVE("algsi	%[offzero](%%r0),%[val]\n",
++			    "algsi	%[offalt](%%r0),%[val]\n",
+ 			    ALT_FEATURE(MFEATURE_LOWCORE))
+ 		: "=@cc" (cc), "+m" (((struct lowcore *)0)->preempt_count)
+ 		: [offzero] "i" (lc_preempt), [val] "i" (-1),
+ 		[offalt] "i" (lc_preempt + LOWCORE_ALT_ADDRESS));
+ 	return (cc == 0) || (cc == 2);
+ #else
+-	return __atomic_add_const_and_test(-1, &get_lowcore()->preempt_count);
++	return __atomic64_add_const_and_test(-1, (long *)&get_lowcore()->preempt_count);
+ #endif
+ }
+ 
+@@ -141,7 +138,7 @@ static __always_inline bool should_resched(int preempt_offset)
+ 
+ static __always_inline int __preempt_count_add_return(int val)
+ {
+-	return val + __atomic_add(val, &get_lowcore()->preempt_count);
++	return val + __atomic64_add(val, (long *)&get_lowcore()->preempt_count);
+ }
+ 
+ static __always_inline int __preempt_count_sub_return(int val)
 -- 
 2.51.0
 
