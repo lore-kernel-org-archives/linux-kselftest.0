@@ -1,178 +1,146 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 237843D45E7;
-	Fri,  5 Jun 2026 09:07:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9322B4183B2;
+	Fri,  5 Jun 2026 09:21:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780650434; cv=none; b=cDVQbmGva75fRzD2S8xKwH+CRRz1mNorCDT1f9jVmFv61O6NZIsmIMZtsoc5uW8SPiXbeZlyxYGwJ10wqITCie63ZSUUx8Astl44J69fAQ3qFZAcyBggBHHp3V++13U7AJemL6BiopLiAPMajEh5KWatVbq7nsi9djqANwWeCVg=
+	t=1780651320; cv=none; b=PBsmtZuPmQDU9PAZKz29f9/AvSGTsk2JLas4zHdvdd+tqtuCCjTU6ej8+05sO1XpWf4auK1zj0LTP0E7JPGtwoV4zrzOQR6e8jzqIS11zi8u77ZPLNmTqZ3evD8z+MZW3RLNVa94N6FyV/oyVwUtw0l0UIU+2DyurPk6D0972A4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780650434; c=relaxed/simple;
-	bh=UXE7DC5dr6M+k24qAaywn7yvVqkTrb7vSLr7g8HR+1E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cjegiXMqQtZyRn1aGi/ACynk7eeB0NmQ78JnxyzmS+F1Hw8GLJZlDFEab6mlAcU2shBgIGtBCK7PI0rSEOfSwUDazr8zkw4XQw90zO89QuCUqYcJh/ZCOn53ASlRu1HOWKbqG068AWVykHLEx0tdFMS+L9b9b3aKJEFFCl4Bybc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=gjxPbq2p; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1780651320; c=relaxed/simple;
+	bh=IQyGWGwxWlD4QOFS/o2hb+N2aTIisuaPW48hlU9kOXY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fjHH5TiTQ0Nn7ruK9oCydDpOAJ9mEy0Xd4MwFBDmKWggnEecwUNMzzjQRxJY9kOG00TSKZ0InCt4OKK+Tx6FJD7dYd2kzKZKvygzKpUas8Q56DhNuPyyCc2sBfoKrKEj9jkymS/udjvLPSHx7JEReI9xhdmPP049bv+YkZU+3Ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K7FJSRgI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="gjxPbq2p"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 975364CDF;
-	Fri,  5 Jun 2026 02:07:06 -0700 (PDT)
-Received: from [10.57.92.75] (unknown [10.57.92.75])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 891843F86F;
-	Fri,  5 Jun 2026 02:07:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1780650431; bh=UXE7DC5dr6M+k24qAaywn7yvVqkTrb7vSLr7g8HR+1E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gjxPbq2pHkOfACoMFtOdYFETh8vR9siYUcniNUVttHwVYajSgtBX2fT7r8/6nEQVU
-	 3U+mruFBjhkJwoh7yfUyp4HzYXblvxOs58WoMrl+NRHN430tFwRzHI5G6iytvzgqmP
-	 jhilsf5wSLNEWJnWJVKRp1qhWyGeYwpuFX4LwbOQ=
-Message-ID: <85b8c177-b566-4e26-884c-9122e2455316@arm.com>
-Date: Fri, 5 Jun 2026 10:06:58 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K7FJSRgI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A1461F00893;
+	Fri,  5 Jun 2026 09:21:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780651319;
+	bh=E37SG+AdDpLtO2UiYqyM2celFi2dDo+IX/sJvSqiS0g=;
+	h=From:Subject:Date:To:Cc;
+	b=K7FJSRgIkbKOSXyuCF/I/SBcnK3b6lTE1GnPO5bzr40ncTSgucRQ7qRDvzaAFXSeL
+	 ap70Tln730AvqJku4kzoEl0zA6AW3FZE28rcc1TtmZOBdfVn/UL8LdSEFuePkdonM2
+	 oTGO+EByVt0o010+2WOb/9r13i74pGf4pHlIwbEB11GEKrv8RTlDHrUxo8SY/eIiXd
+	 Nr2U6xO4uJ4vDWfKgjiUZMyPc6ZFMGVnkKiw0lV+nC92oBwZS5yAz2QMrUS14/SkwP
+	 ib6XEyrSsD9m58ZFdBjtwSrqrGGvAJFexyafvDGMrVD2qzOFDwj88nfEnSX65YMrT2
+	 ++SX5u20HQkHg==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next v2 00/15] mptcp: pm: drop TCP TS with ADD_ADDRv6 +
+ port
+Date: Fri, 05 Jun 2026 19:21:44 +1000
+Message-Id: <20260605-net-next-mptcp-add-addr6-port-ts-v2-0-758e7ca73f4d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 20/42] KVM: SEV: Make 'uaddr' parameter optional for
- KVM_SEV_SNP_LAUNCH_UPDATE
-Content-Language: en-GB
-To: Michael Roth <michael.roth@amd.com>
-Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- david@kernel.org, ira.weiny@intel.com, jmattson@google.com,
- jthoughton@google.com, oupton@kernel.org, pankaj.gupta@amd.com,
- qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
- shivankg@amd.com, steven.price@arm.com, tabba@google.com,
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
- forkloop@google.com, pratyush@kernel.org, aneesh.kumar@kernel.org,
- liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>,
- Barry Song <baohua@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>,
- Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
- Youngjun Park <youngjun.park@lge.com>, Qi Zheng <qi.zheng@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>,
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260522-gmem-inplace-conversion-v7-0-2f0fae496530@google.com>
- <20260522-gmem-inplace-conversion-v7-20-2f0fae496530@google.com>
- <9d15479e-e36b-4865-804c-7d93eb339e4e@arm.com>
- <4muegrza5iyyhqx6wevdlssnb6wvlc4m4wmuz5hmd3xikkftc4@3e2lpuq6tjgr>
-From: Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <4muegrza5iyyhqx6wevdlssnb6wvlc4m4wmuz5hmd3xikkftc4@3e2lpuq6tjgr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/42OzQ6CMBCEX4Xs2TWlwUo8+R6GA7ZbqD+02VaCI
+ by7BePdwxwmszPfzhCJHUU4FTMwjS46P2QjdwXovh06QmeyBymkEkqUOFDKmhI+Q9IBW2NWscL
+ gOWGKWAlTm2NlapIC8kxgsm7aEBf4taH5JvF1vZFOK2G97V1Mnt/bN2O5Nf4HjyUKrKyWB2PJK
+ knnO/FAj73nDpplWT5l+Psm7QAAAA==
+X-Change-ID: 20260601-net-next-mptcp-add-addr6-port-ts-40d8d74d8e20
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+ Shuah Khan <shuah@kernel.org>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3494; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=IQyGWGwxWlD4QOFS/o2hb+N2aTIisuaPW48hlU9kOXY=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBqIpUx2f0IX99W1PY9D+gbsqujaUgkjKZerLa7T
+ TG2DpvWXXeJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCaiKVMQAKCRD2t4JPQmmg
+ c9ipD/9fWgJIhFNDkqqNTpH439b3QTG/1h72fPvW/5LO+X8Ua2yKBrm2VNF556zbcZS5UVVzAeS
+ MrlX6N9WTtUReXPyZxs93F3c+WCUPk5LcBtdK5REzUeGrQ0AU8q0jIs7AErAYKh+SXonkdPEQbT
+ vpsgrVyvwGTpDl/W9Hn3+fD9WWjpHI3fBO4Kxc/dKb1nRBYA2709iJi/OVwj3oBzK183OomqLq3
+ 0yXzKW0xgpcAqJdCyvNfj+zG3Kwiv+6T8qI66nBkj2DyKFPlkzQR2OtsdkteQvb3/6uaFpgctrW
+ Vxg5Bf0qT+xxHCkUUADKsrkYONaphFtHX24lRx5pe4zLDUwqXedfk3M7/6vElFsEQW6FbTbJKj0
+ iszHQk40eyr73S/8VCsP2ZNtn0/XVKJJbr7+hQ18Ftmoy5rB3gjUXQ2IliKXtTJ2wbnyteDhttJ
+ nGiQrAtadrUg96URJ1Rjk+9GTnv+wEZBew28g/Pj3i1Eif8QxsvvqWrw0/DQ8/beq0EhSd0gOpk
+ n5zFR5sADYUX3M7S6fdkWn3I7kNnrWYMOwjjBzBurZuYMvVPepDSbs2hNiuOoK4xOagukcrh0H1
+ zTK8ytHHB47v7lXc1aYa1tp0uPEoiR618ApegH0IzHkr7TuePDGFTcjj7qAFlwtJvbCMq+1VJ1s
+ kKBVPX5CEVfAK7g==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On 04/06/2026 21:11, Michael Roth wrote:
-> On Thu, Jun 04, 2026 at 04:29:19PM +0100, Suzuki K Poulose wrote:
->> On 23/05/2026 01:18, Ackerley Tng via B4 Relay wrote:
->>> From: Michael Roth <michael.roth@amd.com>
->>>
->>> For vm_memory_attributes=1, in-place conversion/population is not
->>> supported, so the initial contents necessarily must need to come
->>> from a separate src address, which is enforced by the current
->>> implementation. However, for vm_memory_attributes=0, it is possible for
->>> guest memory to be initialized directly from userspace by mmap()'ing the
->>> guest_memfd and writing to it while the corresponding GPA ranges are in
->>> a 'shared' state before converting them to the 'private' state expected
->>> by KVM_SEV_SNP_LAUNCH_UPDATE.
->>>
->>> Update the handling/documentation for KVM_SEV_SNP_LAUNCH_UPDATE to allow
->>> for 'uaddr' to be set to NULL when vm_memory_attributes=0, which
->>> SNP_LAUNCH_UPDATE will then use to determine when it should/shouldn't
->>> copy in data from a separate memory location. Continue to enforce
->>> non-NULL for the original vm_memory_attributes=1 case.
->>>
->>> Signed-off-by: Michael Roth <michael.roth@amd.com>
->>> [Added src_page check in error handling path when the firmware command fails]
->>> [Dropped ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES]
->>> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
->>
->>
->>
->>
->>> ---
->>>    Documentation/virt/kvm/x86/amd-memory-encryption.rst | 15 +++++++++++----
->>>    arch/x86/kvm/svm/sev.c                               | 18 +++++++++++++-----
->>>    virt/kvm/kvm_main.c                                  |  1 +
->>>    3 files changed, 25 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/Documentation/virt/kvm/x86/amd-memory-encryption.rst b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
->>> index b2395dd4769de..43085f65b2d85 100644
->>> --- a/Documentation/virt/kvm/x86/amd-memory-encryption.rst
->>> +++ b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
->>> @@ -503,7 +503,8 @@ secrets.
->>>    It is required that the GPA ranges initialized by this command have had the
->>>    KVM_MEMORY_ATTRIBUTE_PRIVATE attribute set in advance. See the documentation
->>> -for KVM_SET_MEMORY_ATTRIBUTES for more details on this aspect.
->>> +for KVM_SET_MEMORY_ATTRIBUTES/KVM_SET_MEMORY_ATTRIBUTES2 for more details on
->>> +this aspect.
->>>    Upon success, this command is not guaranteed to have processed the entire
->>>    range requested. Instead, the ``gfn_start``, ``uaddr``, and ``len`` fields of
->>> @@ -511,9 +512,15 @@ range requested. Instead, the ``gfn_start``, ``uaddr``, and ``len`` fields of
->>>    remaining range that has yet to be processed. The caller should continue
->>>    calling this command until those fields indicate the entire range has been
->>>    processed, e.g. ``len`` is 0, ``gfn_start`` is equal to the last GFN in the
->>> -range plus 1, and ``uaddr`` is the last byte of the userspace-provided source
->>> -buffer address plus 1. In the case where ``type`` is KVM_SEV_SNP_PAGE_TYPE_ZERO,
->>> -``uaddr`` will be ignored completely.
->>> +range plus 1, and ``uaddr`` (if specified) is the last byte of the
->>> +userspace-provided source buffer address plus 1.
->>> +
->>> +In the case where ``type`` is KVM_SEV_SNP_PAGE_TYPE_ZERO, ``uaddr`` will be
->>> +ignored completely. Otherwise, ``uaddr`` is required if
->>> +kvm.vm_memory_attributes=1 and optional if kvm.vm_memory_attributes=0, since
->>> +in the latter case guest memory can be initialized directly from userspace
->>> +prior to converting it to private and passing the GPA range on to this
->>> +interface.
->>
->> Just to confirm, so the sev_gmem_prepare doesn't destroy the contents in the
->> process of making it "private" ? i.e., the contents of a SNP shared
->> page are preserved while transitioning to "SNP Private" (via RMP
->> update).
-> 
-> sev_gmem_prepare() does sort of destroy contents since it finalizes the
-> shared->private conversion which puts the page in an unusable state
-> until the guest 'accepts' it as private memory and re-initializes the
-> contents.
-> 
-> But that's run-time, when the guest is doing conversions. The
-> documentation here is relating to initialization time when we are
-> setting up the initial pre-encrypted/pre-measured guest memory image,
-> via SNP_LAUNCH_UPDATE. That path calls into kvm_gmem_populate(), and it
-> is then sev_gmem_post_populate() callback that actually finalizes the
-> shared->private conversion. The sev_gmem_prepare() hook doesn't get used
-> in this flow (kvm_gmem_populate() calls __kvm_gmem_get_pfn() which skips
-> preparation).
+Up to this series, it was possible to add a "signal" MPTCP endpoint with
+an IPv6 address and a port, or to directly request to send an ADD_ADDR
+with a v6 address and a port, but the expected ADD_ADDR wasn't sent when
+TCP timestamps was used for the connection.
 
-Thanks, thats the bit I was missing. Skipping the prepare path, with 
-__kvm_gmem_get_pfn(). I was under the assumption that 
-kvm_arch_gmem_prepare() was called for all PFNs allocated from gmem
-and how SNP was handling this populate case.
+In fact, such signalling option cannot be sent when TCP timestamps is
+used due to a lack of option space: the limit is at 40 bytes, and, with
+padding, TCP timestamps is taking 12 bytes, while an ADD_ADDR IPv6 +
+port is taking 30 bytes. The selected solution here is to simply drop
+the TCP timestamps option when such ADD_ADDR of 30 bytes needs to be
+sent.
 
+- Patches 1-3: small cleanups to avoid computing ADD/RM_ADDR twice.
 
-Thanks
-Suzuki
+- Patches 4-7: the new feature, controlled by a new sysctl knob.
 
+- Patch 8: extra checks in the MPTCP Join selftests.
 
-> 
-> -Mike
-> 
->>
->> Suzuki
->>
->>
+- Patches 9-15: A bunch of refactoring: renamed confusing helpers and
+  variables, and prevent future misused functions.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Changes in v2:
+- Rebased: some diff caused by commit a02a765bd5c2 ("mptcp: change
+  mptcp_established_options() to return opt_size") and commit
+  bd34fa025726 ("mptcp: add-addr: always drop other suboptions")
+- Patch 4: Use READ_ONCE() to read sysctl data. (Eric)
+- Patches 5-6: Avoid passing local variables' addresses to
+  mptcp_established_options not to force the compiler to use a stack
+  canary in this hot function, even for non-MPTCP flows. (Eric)
+- Replaced previous patches 9-11 modifying selftests by a bunch of
+  pm related refactoring: patches 9-15.
+- Link to v1: https://patch.msgid.link/20260601-net-next-mptcp-add-addr6-port-ts-v1-0-4fc25dfef62e@kernel.org
+
+---
+Matthieu Baerts (NGI0) (15):
+      mptcp: options: suboptions sizes can be negative
+      mptcp: pm: avoid computing rm_addr size twice
+      mptcp: pm: avoid computing add_addr size twice
+      mptcp: introduce add_addr_v6_port_drop_ts sysctl knob
+      tcp: allow mptcp to drop TS for some packets
+      mptcp: pm: drop TCP TS with ADD_ADDRv6 + port
+      selftests: mptcp: validate ADD_ADDRv6 + TS + port
+      selftests: mptcp: always check sent/dropped ADD_ADDRs
+      mptcp: pm: use for_each_subflow helper
+      mptcp: pm: rename add_entry structure to add_addr
+      mptcp: pm: uniform announced addresses helpers
+      mptcp: pm: remove add_ prefix from timer
+      mptcp: pm: make mptcp_pm_add_addr_send_ack static
+      mptcp: pm: avoid using del_timer directly
+      mptcp: options: rst: drop unused skb parameter
+
+ Documentation/networking/mptcp-sysctl.rst       |  13 ++
+ include/net/mptcp.h                             |  13 +-
+ net/ipv4/tcp_output.c                           |  10 +-
+ net/mptcp/ctrl.c                                |  18 ++-
+ net/mptcp/options.c                             |  68 +++------
+ net/mptcp/pm.c                                  | 191 ++++++++++++++----------
+ net/mptcp/pm_kernel.c                           |  22 +--
+ net/mptcp/pm_userspace.c                        |   6 +-
+ net/mptcp/protocol.h                            |  48 ++----
+ net/mptcp/subflow.c                             |   4 +-
+ tools/testing/selftests/net/mptcp/mptcp_join.sh |  83 +++++-----
+ 11 files changed, 248 insertions(+), 228 deletions(-)
+---
+base-commit: bfa3d89cc15c09f7d1581c834a5ed725189ec19f
+change-id: 20260601-net-next-mptcp-add-addr6-port-ts-40d8d74d8e20
+
+Best regards,
+--  
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
