@@ -1,149 +1,186 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52EC02DD5E2;
-	Fri,  5 Jun 2026 05:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C080F3BB10D
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 05:41:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780636227; cv=none; b=PsXDlhNeVqUdd+jkF6yGMOhRQkwNesqLlu1b7xfX+SM9ZHPkMIuPYlXLP061a4LULTiIrkC5VpQI+iVY9llaiYX9GJF747FOIMD7nQjoDJhnRDQzHG+MkZzeAqX2oWVQioCcazcctKR8Fnt7IQgv0RBKnfGfd+I7gPTZDAKHcso=
+	t=1780638096; cv=none; b=k58m1ul0iVW6bkJLp0FgexFKb9kKwhflCCBKeyEcvEgwOfH77fo3qQpunILdLRCzLWNIFuRl3smLcgvMlXDUCCnCO/CglpDO0hmElemM4ApRgEhBsdV0jXSmuCN7CeSGGy3soIDKP086gZOHtN87eOFexSA7mMX8YYmrbRQZi5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780636227; c=relaxed/simple;
-	bh=2ZcqJXsmrbBpKhPyQMBIArzTEmFadM28MZ9/IfA+daU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ImluDGq17+X98yJK9+OsAbHsIPEdbjXyYu8PcI/AEnuCT2ySkZl0BsXMC6JiYCK6dmNvzuCMJsvktAQ2RM4CgYPL9rtaiSUgn5fZ4NiXNps6Yx3QruEohVRGrgWFMrRud3BQKwGDO9ykOHgn+TuwDomW1rsGC7BZ0goxnI9AoNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=V7biNQ3D; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=V/EwKI+P; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+	s=arc-20240116; t=1780638096; c=relaxed/simple;
+	bh=Ls8jAn9uxSIuXUvxGwKTd0oyRzMQf9ICZGzwFlvvGEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MCMFI3yP5f3GDDuPFfAD+72ujxHKFuLQdQH/O9mQvq+9TT/JaDBOqRVROIManItbIlkOtI+Du5rx6xQ8xpOyC74P15VWBT3nMi6SGdNGVVW7GCWZnBr0ckB6BWjvvdg/wyzHRVQeyGlIBYp/+qfuO5TmJ8JbE6gsuAgPmD3i4Vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jVLTKvnF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="V7biNQ3D";
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="V/EwKI+P"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1780636224;
-	bh=2ZcqJXsmrbBpKhPyQMBIArzTEmFadM28MZ9/IfA+daU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=V7biNQ3DctMnlo8cMv5HHSMGtXZXVcOZL2Stz/dpF1N6PF08wHrBSqsPZg/i84dxX
-	 IKd066O9YyRSS8rmpqhhsLpfbbd2r30bmJPNd45GCO6fwRlyD/0KQoEbyJ2Ulg1NnI
-	 GCDOEqx2DiAlwTBAKNBSNcdJidvi9becaR/4ry2ssMxBUR0L4l//VmSCGTnzkuagiT
-	 hd79Pas8pAUXGWVUXYNavDVFYOwmyO4vXRaTidZlnb8yccK8rZndtgfQMC4oK0c//u
-	 E4igylSnkiyW+8i++0mQW94A2ZNLgEPMBBoCwvlnKRH7MIFhaOvCbFE3/05yFOTrRo
-	 wgpqemsan6XN6D1z6bB4OHawW5iD6eYaEUlP/ioWsZOsPvOPmzwCuTADA5SZx601zl
-	 9dFt4erElk6dlJxeZZvcsDopUpD7xNbXD2BvV29rhQkC4twJWWxBZL7sWZ/ci0yVpW
-	 xa8PCgXlKS8f8Ai3rKoi11+s8mKHLL3XrVqdKEtmjcz9LqM1NJ8V8dO/tDX02snYmd
-	 IwEArb9vco0jp+mtcWqzCp45cSL8R0MtfrnCSk7OzK+kf68apV6RZglg/sw6L2Groa
-	 0Z+X2MquW0sMxjpYakJZpSTPhNvy/mB+AjXnBovV5UQSXZXYaqEDeBOHLoDu5vZwPE
-	 E0j/wNVyeYJodv8B/sdvxX08=
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 345361E920C; Fri,  5 Jun 2026 13:10:24 +0800 (AWST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1780636223;
-	bh=2ZcqJXsmrbBpKhPyQMBIArzTEmFadM28MZ9/IfA+daU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=V/EwKI+P6zhGP/r+9Mgv1zGYkS6O2PmVkcNNbGkxK2aaZ3eQl28uPRTETnnKIHUAG
-	 jRb5VIO5EENKtZeAjgx/7pYyjO1N0xweA+j/ZcpHbDKf+CU4/qOuPYsZIxwkkRwwZA
-	 flwnKLo6WNoA+QNR76TetVK7aimJ869zkEy4faHYQu3ADslDPBFmzQVxUlEmCPEMtH
-	 9gnJ5NLFc6YdKH1SUHycaIGw/n8hv6NYWsOtRkDJdPbPhYjg+vENHmgtgug79+Qq2D
-	 R1Te/zMEPRZ/tgoaLPFaRNajqwkmPUhag658oGaOQJ38ExzxeWlcABaxcUvizbShqE
-	 vbTLOkCsPAEMC/cmiv7pozXXdTClxWmx5iD/VCxql+bJDt+sLgslpnMspN5WwQK6xP
-	 CMSR2NqLG6fcdH0MMHqgp631RSU1xMlncHjf/vhyI94YSIdVeaq1ls4Bfztul1GFh9
-	 GPD/UxBBLFqyGyg8NPmu0d23Zik84n4X2Ro7SfiYoP7Ai0e2SGAYQosIk5c/+5gHTG
-	 Tmni9MdVXodKjxsixFVqQ8vdmnbh8dr009fYLjs87RIEOtknIkiYh5izg7tUGfqBMS
-	 DHrGiwRPiJF++h3nxIUPPwyyi/sK6ppHNTU7GTLV11JnCXmtvHze0n+CEd0irOJ5fo
-	 nk6QszY6ojbVT3ZTsNuevO4o=
-Received: from [IPV6:2001:8003:8810:ea00:ed87:ca88:5326:e11d] (unknown [IPv6:2001:8003:8810:ea00:ed87:ca88:5326:e11d])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 29C521E9208;
-	Fri,  5 Jun 2026 13:10:23 +0800 (AWST)
-Message-ID: <d7b56622-6455-4e80-844f-086a0a3b1946@davidgow.net>
-Date: Fri, 5 Jun 2026 13:10:20 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jVLTKvnF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E88571F00899;
+	Fri,  5 Jun 2026 05:41:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780638095;
+	bh=SPlBajyEY6daFB22p/LrTuA35kcRxPh5dhkRnYY+Ggo=;
+	h=From:To:Cc:Subject:Date;
+	b=jVLTKvnFEugQT3TkxhzyzswioUyN1v2R7LUBwa0MO1HPYDLZZmXXlTIlWa/XaAof/
+	 QoSVg2JaZIRISAKY/DYK9rA/wFBEqvQmkiUL6K5wwXPC6u0cX9eO4MQRqt8Y8ZBs/v
+	 Gw7XGubeZhsbbTr0r83tp7/jwsDiR6SccghrbFjQcEEtBdADV0GkH+qWY02l5wHmHR
+	 5ihNP/8mIu0Ty3O3UsYH+M58l80ThRyWOSnDdKSphSQ+ZudVZ9+F/IXZKmFO5kUmEv
+	 o4h1uZGe7BPbSiu0C2Xu5Xc5CTXt9NSptGaLyqOzhdQ5nDsKWvQYzsOJaLz1lFvfz8
+	 oULA5ZNEeUGsw==
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 0DF60F40075;
+	Fri,  5 Jun 2026 01:41:33 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Fri, 05 Jun 2026 01:41:33 -0400
+X-ME-Sender: <xms:jGEian6pbR-I090HCRq40lABCksHe_AMB-tMU-ksxzL_HbSyBS0yKA>
+    <xme:jGEiajvRRAC1Tj8t6DkGoYYfBIkyUIAYBaNwdNIhkk_6rNBN86RfumUO-7N67Bvz6
+    4KtuohlS_Q1UaG-wIO55zGGP5VZdbRsWDNnAG1bXmVMUqV261VZPQ>
+X-ME-Received: <xmr:jGEiavoLx40h6nXgPtksAw3ktngeKFB3savDUCnwY_dYiQs3Wjs0MHTX_Dg>
+X-ME-Proxy-Cause: dmFkZTFc+6I5dnayd2BYaWnu3DfmchaRspDny6hXOeQ0WXB+cUQ8+NyHSxw59pEB4HYxYa
+    hQ/jpd2pfuJ3tb8YfwNEy34LuyXTLFRcJbt/R3UZar0R7U6maQKv8Ka6NzqAWGME+IqBdu
+    RQdq5hY1TEX4Mkzh6yYHh+p5reirdqtNwaqftTDkO7sP45Jaff/WH/0OIgW/vJp50latAm
+    /rZjqCPZR5E6s9fBO3Fb5bdDNNFP7jhf5AaUB5cFypzcKqHlteCps9x6FxSEcbNaEgP8SO
+    zQY036UKu1kACwxOSXMerD2djNH46JMVmwsHENjblrU+CF4vthjwdTe26BiLxe3GIJfiJG
+    RjxR1yUIIVwSsXPKsrNdSCXGu6UprlEJkGbJ3B1VFu+tZg4rlXYG22BD0s8OrcXSQwm7NC
+    l4CbhELYEZuVNoKuLdDMRZr6C/IjJWC97a4XxBGAxUFbF8LpyT/BC/HsxqwBEQ/HRLMbAh
+    Dpp4/sZ1kF0bb4aiYj3m13E2PmMVn7cftH8o+dAQNxJdTp5fTb/EjC26ZGRBOA1Q80npOd
+    2Qex/+DWN7SgpELtlSBBcSbTL2nubPHJymTzywzvBJolNNEtkVlORFC1UwerW2cGz53Isx
+    M8QJPTjEsaTF7VLs8NWwd5o0BuRMm78L/vG+Z9c0aa9bn7IoCunGEhauKf3Q
+X-ME-Proxy: <xmx:jGEial4QER2MrYz0DiDUDJTLXRdmyy4sQPfOBLh--p6E8484ePvGKw>
+    <xmx:jWEiaicqOB0Nq2Wcw2UqV6QRBAqL9B5h-SAx_FgKDB17GXzl0BbAig>
+    <xmx:jWEiagiecPLdtMT_wqMPQ4ardSZLgJsKqWeVe8FvkR0wca5Uc-lpcw>
+    <xmx:jWEiat4IwbpUPMVrOQ3uAqNXnEsZDnDVf39rqZQ8w6mLTWaT0MoCLg>
+    <xmx:jWEiat_QeSJwiP0onTcKhoVUIw9TYHNqOUQ0_iNoX_CSNMiaNUGoFc-i>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 5 Jun 2026 01:41:32 -0400 (EDT)
+From: Boqun Feng <boqun@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
+	Jonas Bonn <jonas@southpole.se>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>,	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,	Arnd Bergmann <arnd@arndb.de>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,	Boqun Feng <boqun@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,	Miguel Ojeda <ojeda@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,	Jinjie Ruan <ruanjinjie@huawei.com>,
+	Lyude Paul <lyude@redhat.com>,	Thomas Huth <thuth@redhat.com>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Nikunj A Dadhania <nikunj@amd.com>,	"Xin Li (Intel)" <xin@zytor.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Randy Dunlap <rdunlap@infradead.org>,	Yury Norov <ynorov@nvidia.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-kernel@vger.kernel.org,	linux-openrisc@vger.kernel.org,
+	linux-s390@vger.kernel.org,	linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org,	linux-kselftest@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: [PATCH v3 00/13] Refcounted interrupt disable and SpinLockIrq for rust (Part 1)
+Date: Thu,  4 Jun 2026 22:41:15 -0700
+Message-ID: <20260605054128.5925-1-boqun@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] kunit: Add example of test suite that can be skipped
- at runtime
-To: Vaibhav Jain <vaibhav@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
- kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>,
- Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>
-References: <20260604162805.556135-1-vaibhav@linux.ibm.com>
- <20260604162805.556135-3-vaibhav@linux.ibm.com>
-From: David Gow <david@davidgow.net>
-Content-Language: fr
-In-Reply-To: <20260604162805.556135-3-vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Le 05/06/2026 à 12:28 AM, Vaibhav Jain a écrit :
-> Add an example test suite name 'example_test_skip_suite' to
-> 'kunit-example-test.c' that shows how to skip an entire test suite based on
-> runtime conditions.
-> 
-> The example suite 'example_skip_suite' provides a 'suite_init' callback
-> named example_skip_suite_init() which marks the entire suite as skipped
-> using kunit_mark_skipped().
-> 
-> This demonstrates a way for conditionally skipping test suites when any
-> prerequisites for kunit_suite execution are not met. The 'suite_init'
-> callback can perform any necessary checks and mark the suite as skipped,
-> preventing all test cases from executing while also indicating why the
-> suite was skipped.
-> 
-> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
-> ---
+Hi Peter,
 
-Thanks!
+Please take a look at the v3 of refcounted interrupt disabling.
 
-Reviewed-by: David Gow <david@davidgow.net>
+Changes since v2:
 
-Cheers,
--- David
+- Fix NMI_OFFSET underflow issue reported by sashiko. See patch #1
+  (__nmi_ext()) and #10 (__preempt_count_nmi_exit()) for details: we
+  have to replace preempt_count_sub() with preempt_count_set().
+- Add WARN_ON_ONCE(in_nmi()) in local_interrupt_disable() per Peter.
+- Remove the use of should_resched() in local_interrupt_enable(), see
+  patch #13.
+- Remove my gmail in SoB.
 
->  lib/kunit/kunit-example-test.c | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-> index 0bae7b7ca0b0..b8ded54fa46d 100644
-> --- a/lib/kunit/kunit-example-test.c
-> +++ b/lib/kunit/kunit-example-test.c
-> @@ -591,5 +591,34 @@ static struct kunit_suite example_init_test_suite = {
->   */
->  kunit_test_init_section_suites(&example_init_test_suite);
->  
-> +/*
-> + * This test should always be skipped.
-> + */
-> +static void example_skip_suite_test(struct kunit *test)
-> +{
-> +	/* This line should never be seen */
-> +	KUNIT_FAIL(test, "You should not see a this.");
-> +}
-> +
-> +static struct kunit_case  example_skip_suite_test_cases[] = {
-> +	KUNIT_CASE(example_skip_suite_test),
-> +	{}
-> +};
-> +
-> +static int example_skip_suite_init(struct kunit_suite *suite)
-> +{
-> +	kunit_mark_skipped(suite, "Test suite expected to be skipped");
-> +	return 0;
-> +}
-> +
-> +static struct kunit_suite example_test_skip_suite = {
-> +	.name = "example_skip_suite",
-> +	.suite_init = example_skip_suite_init,
-> +	.test_cases = example_skip_suite_test_cases,
-> +};
-> +
-> +/* This registers a test suite that will be skipped */
-> +kunit_test_suite(example_test_skip_suite);
-> +
->  MODULE_DESCRIPTION("Example KUnit test suite");
->  MODULE_LICENSE("GPL v2");
+
+v1: https://lore.kernel.org/rust-for-linux/20260508042111.24358-1-boqun@kernel.org/
+v2: 
+
+Boqun Feng (9):
+  preempt: Introduce HARDIRQ_DISABLE_BITS
+  preempt: Introduce __preempt_count_{sub, add}_return()
+  irq & spin_lock: Add counted interrupt disabling/enabling
+  locking: Switch to _irq_{disable,enable}() variants in cleanup guards
+  sched: Remove the unused preempt_offset parameter of __cant_sleep()
+  sched: Avoid signed comparison of preempt_count() in __cant_migrate()
+  preempt: Introduce HAS_SEPARATE_PREEMPT_RESCHED_BITS
+  arm64: sched/preempt: Enable HAS_SEPARATE_PREEMPT_RESCHED_BITS
+  irq: Optimize reschedule check in local_interrupt_enable()
+
+Heiko Carstens (1):
+  s390/preempt: Enable HAS_SEPARATE_PREEMPT_RESCHED_BITS
+
+Joel Fernandes (1):
+  preempt: Track NMI nesting to separate per-CPU counter
+
+Lyude Paul (2):
+  openrisc: Include <linux/cpumask.h> in smp.h
+  irq: Add KUnit test for refcounted interrupt enable/disable
+
+ arch/arm64/Kconfig                            |   1 +
+ arch/arm64/include/asm/preempt.h              |  18 +++
+ arch/openrisc/include/asm/smp.h               |   2 +
+ arch/s390/Kconfig                             |   1 +
+ arch/s390/include/asm/lowcore.h               |  13 ++-
+ arch/s390/include/asm/preempt.h               |  49 ++++----
+ arch/x86/Kconfig                              |   1 +
+ arch/x86/include/asm/preempt.h                |  61 +++++++---
+ arch/x86/kernel/cpu/common.c                  |   2 +-
+ include/asm-generic/preempt.h                 |  14 +++
+ include/linux/hardirq.h                       |  41 ++++++-
+ include/linux/interrupt_rc.h                  |  76 ++++++++++++
+ include/linux/kernel.h                        |   4 +-
+ include/linux/preempt.h                       |  35 ++++--
+ include/linux/spinlock.h                      |  49 +++++---
+ include/linux/spinlock_api_smp.h              |  41 +++++++
+ include/linux/spinlock_api_up.h               |  16 +++
+ include/linux/spinlock_rt.h                   |  18 +++
+ kernel/Kconfig.preempt                        |   4 +
+ kernel/irq/Makefile                           |   1 +
+ kernel/irq/refcount_interrupt_test.c          | 109 ++++++++++++++++++
+ kernel/locking/spinlock.c                     |  29 +++++
+ kernel/sched/core.c                           |  18 ++-
+ kernel/softirq.c                              |  22 +++-
+ lib/locking-selftest.c                        |   2 +-
+ .../testing/selftests/bpf/bpf_experimental.h  |   7 +-
+ 26 files changed, 554 insertions(+), 80 deletions(-)
+ create mode 100644 include/linux/interrupt_rc.h
+ create mode 100644 kernel/irq/refcount_interrupt_test.c
+
+-- 
+2.51.0
 
