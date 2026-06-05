@@ -1,53 +1,53 @@
-Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
+Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2499E3947AE
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 17:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5137439DBFC
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 17:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780679330; cv=none; b=Py+9MrWV49kNmwYlH5KXmSgXcj2tqWuyAA/iWV+NE9E2dyXZ0BvYYZqbZb2CT6SpBAjAL01TyGpHEleDx5Y36MTn1ZkW2G5bRG/cA8DyTgR0/gtVG0djs4OnqstO5zVhdbtj2J4FLMIoZHOIprDjrGmTyxGhMBVjREj7r3h3i7k=
+	t=1780679331; cv=none; b=OXkh8zvIYY6XGu4fe49Y9Kmg6YYaboWSFgDxeGPdWKhHNMy8ZQzxqkg1otl9DAEsydXJT10ujWdZmeZSizIUKOhffNaHL5zq/q3p7+Hwbo+FtQCBTRLizfMfpXZi22dlpnwZdYZZGij47F1/lz1KF2dNQWcT+neAT35XsGIf6YM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780679330; c=relaxed/simple;
-	bh=tTqR6BZWl/UBe5IueumpztzYIFj5r11pAMJcJsDn+B4=;
+	s=arc-20240116; t=1780679331; c=relaxed/simple;
+	bh=n228DZT65TwLTTfjFoMaX3cWUngcNkQKNDGZIIkw6j4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=MSGcwaApHd7IFa6ikgLIjW4ikWA2DAeuTkjcPFsdNZJ2GuLo+iYfwIXDxZ5EZ+EBRTPrsD9d1HxonuuhewV91LRJrivj5s4KYHQfilzDVuZX5DG9YD56iMIE9klRTD6cdYnfMzE/YzonZzQcBc09i3TK9xzDp+IpA231hiO7W88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Tysrfc7t; arc=none smtp.client-ip=209.85.208.73
+	 To:Cc:Content-Type; b=FmKYBRafHOvCdQMkC/Uuq4J/+3WWJrXidYCu6s/tV+65jBMiyjTCWIRlQjd9bYAjs5tLvivfm4e0oWRgSN2j5exQR95qWaeo1tcPIRHfTupddMuxhznKllkYpb5jfGZcDQ17tNQmaXTkhc+2ZguWp1dOrbPIe3FUEhaeSgh3VIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s4fi6xCe; arc=none smtp.client-ip=209.85.218.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Tysrfc7t"
-Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-68d037d5bf8so2741689a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 10:08:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s4fi6xCe"
+Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-bf473656dcdso31287966b.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 10:08:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20251104; t=1780679327; x=1781284127; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=trlmXVdS31p5kQ7BefhczDlKJWOvBF99ud4hEtoc9eM=;
-        b=Tysrfc7tmgDZgqGTyLkVkAIgPkXkvuIXZSfCjUTl7WoP9TxNhGFe2KVhtR0Hwj5MR7
-         DVrGpTT97vxcn0XpfqUuEyit/+NImfV6f6qVCTb1x6j7x4dogRmRR0zdfMo7F+DNzWjU
-         evujY2CwH9ibncx5C5jDCC+yImTi4kb3AyN1zuTrqxQjzwTF438MeR7URilBPw3ISR2z
-         5gpLujjEjdVnqsVOWN5jbA6Vbf0qyPVcGqHPN+gwq5h0TTyqS4LP/+al1CRIZp4AUtA1
-         3LOpj0jTpDsr6ZpmbQDsZmsEKhCknDEMMmPhLFIe17W50dC0fC/xSL46aBE85ekUMUua
-         ckww==
+        bh=1s9Gl9n+JDRxm+uLKvGaoj9Iw7+lf3bKjXDLeITLpkQ=;
+        b=s4fi6xCew4BuC1tPRFGZFroCFd9cqaNQjBOL7da5mI63dJnsbUoEB29JD/MwJzjn4g
+         Ph8NRaxaBj8oqhqbzrzw/vyQQyPnfdlTWijLDcgJax2ptjTBNfcSkrsITGct1+m0eDFL
+         7g3yW0XubSgV0mlfGIB2y4NtyXq9aFeysM01tu86zFHvGi/C0yjU+9qpLL4h1HnrMYyT
+         xtcA+WHEB3GV3cHHiUT87Jh7WK5ZgT3E8k0PYPbYNCpnlhSBVnzyksBn8A2NRZw3Rk09
+         ZUZvsm5T49KVC629N4gaQE7Axncl3yHI4laMnbq8fF8Ah6Yw1MHKnLBQm4BaOrtMKipt
+         lGIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20251104; t=1780679327; x=1781284127;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=trlmXVdS31p5kQ7BefhczDlKJWOvBF99ud4hEtoc9eM=;
-        b=bLD4pD76P83NMv3/iMYq+nTHkMXeoIYwaP/U0Wn3isLfDWpOhe8BNd+kJk2AiC4McM
-         nXjxGGMFJtSqkjeG5iIC5R2iaw598uTjSPNOqhJY0GZAIwdA5qbQqDdEKVwzu81qsBxt
-         2Tvdxm8qlPvRkpldwbUFyPgm44gH1oDCYulzkDESAgt4+oOMejIQtW5Fs40CzYTNDnFF
-         jy/eR29WR1cI6aU7WObucfGRUfOLHpVWx1nawEVrtQRGsTv8nWJ1MCr/t1jXInxBBC1a
-         cDOm3L2afWOphOCSbAaoiIIkn0/kyLUCjaUbQWeWmJnbNHywIKsBzmvC1JDzHTEjPfoW
-         d8FA==
-X-Gm-Message-State: AOJu0YxEp44wX0MGLYfjtcUdxDoXsA9vi5N8m5vyHXXKbcS1pqrkpCwP
-	BMpbuxFJGvdRPexDyK+MB6w1bFcXBbPxn6O9LFJiWKQUXdFvqkVjLIzq8UhsE9kotOkUdqrpngK
-	7QDq3BfO7KHznNr4YOw==
-X-Received: from edrw9.prod.google.com ([2002:a50:fa89:0:b0:68a:be8f:3c00])
+        bh=1s9Gl9n+JDRxm+uLKvGaoj9Iw7+lf3bKjXDLeITLpkQ=;
+        b=kB6T7eFz3KUdXcvjNY5KKqcqYx5xlgfjnUQI6SFfsqlWTbhaqxHhbRTi5SFseKOITV
+         kucE1MKYcGsERxL0WU0bqLDWwK6ZvJ9FmPS+yUwdCLJUVDbnkxBPuhPymbCWwSd7mJ+M
+         L6px5FQpR/5cUuIwf3xDTBHR9v+3Ty1qNw1MZSb/fqKJcFZ4jbsAKhtRRpwVl5cZXEjB
+         kIrYuqfFQ8239x6KK8piRWBlFsdV8vCS86DUgSu2+AMck39ZVjr+MEcbvjfXv3h3p4hZ
+         /L2B9pCNBfC9Y6I27k1fY92GZeM2GA1SdyMPdGe3iZLwumD6FwiyDYG92l8AdfsfE5dG
+         A+kg==
+X-Gm-Message-State: AOJu0YwYECq463A3MFhanz1GQPgzyTQ0s0CyFua2Sa0cnP/dcztHe0QG
+	7voGPxq9exE+pHaxNBE+sS3BtHaytvDJMGvXmwMwWCtUu5TJOwXMWgaYHjAlr1suZYTb946V2D9
+	AolBi9gGfeOsq4t/G8A==
+X-Received: from edty21.prod.google.com ([2002:aa7:ccd5:0:b0:691:5097:3e07])
  (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:d0d:b0:67c:6836:7b0a with SMTP id 4fb4d7f45d1cf-68fa525c09fmr2301648a12.23.1780679326308;
- Fri, 05 Jun 2026 10:08:46 -0700 (PDT)
-Date: Fri,  5 Jun 2026 17:08:29 +0000
+ 2002:a17:906:f59b:b0:bed:6e53:bb1a with SMTP id a640c23a62f3a-bf3749d1646mr252719466b.48.1780679327271;
+ Fri, 05 Jun 2026 10:08:47 -0700 (PDT)
+Date: Fri,  5 Jun 2026 17:08:30 +0000
 In-Reply-To: <cover.1780676742.git.tarunsahu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -57,8 +57,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <cover.1780676742.git.tarunsahu@google.com>
 X-Mailer: git-send-email 2.54.0.1032.g2f8565e1d1-goog
-Message-ID: <8730c0e11acbd0d645a8b7187cd5cd7de373380e.1780676742.git.tarunsahu@google.com>
-Subject: [RFC PATCH v2 04/10] kvm: kvm_luo: Allow kvm preservation with LUO
+Message-ID: <769d0adac847d638fceb3fce093755a74e686582.1780676742.git.tarunsahu@google.com>
+Subject: [RFC PATCH v2 05/10] kvm: guest_memfd: Move internal definitions and
+ helper to new header
 From: Tarun Sahu <tarunsahu@google.com>
 To: Jonathan Corbet <corbet@lwn.net>, vannapurve@google.com, 
 	Tarun Sahu <tarunsahu@google.com>, fvdl@google.com, 
@@ -73,361 +74,182 @@ Cc: linux-kselftest@vger.kernel.org, kexec@lists.infradead.org,
 	linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 
-Introduce KVM VM preservation support for Live Update Orchestrator.
+To support guest_memfd memory preservation with LUO, guest_memfd luo
+code needs to access guest_memfd internals and reconstruct guest_memfd
+file instances from a preserved state.
 
-Register an LUO file handler for KVM files to serialize and
-deserialize necessary VM state across live updates. Currently, this
-preserves the VM type. This implementation provides the necessary
-infrastructure and dependencies for the upcoming guest_memfd
-preservation support. And it can be extended to preserve more vm
-state in future.
+Extract gmem_file, gmem_inode, and the GMEM_I() helper from guest_memfd.c
+into a new internal header virt/kvm/guest_memfd.h.
 
-Retrieve is simply creating the kvm and populate the retrieved data.
-Only catch here is there is no way to know which fd is going to be
-assigned to this kvm file hence I am using atomically incremented id
-for the fdname.
-
-This change also updates the MAINTAINERS list for kvm_luo.c.
+Additionally, split __kvm_gmem_create() to expose a non-static
+__kvm_gmem_create_file() helper. This helper returns a struct file
+instead of a file descriptor, enabling file creation and initialization
+without installing it into a file descriptor table.
 
 Signed-off-by: Tarun Sahu <tarunsahu@google.com>
-
 ---
-My only worry is if userspace strictly depends on the fdname, that it
-needs to be consistent with vm_fd. Discussed more details in the
-cover letter. Would really appreciates the alternatives/other approaches.
----
- MAINTAINERS                 |  11 +++
- include/linux/kho/abi/kvm.h |  39 ++++++++
- virt/kvm/Makefile.kvm       |   1 +
- virt/kvm/kvm_luo.c          | 190 ++++++++++++++++++++++++++++++++++++
- virt/kvm/kvm_main.c         |   8 ++
- virt/kvm/kvm_mm.h           |   8 ++
- 6 files changed, 257 insertions(+)
- create mode 100644 include/linux/kho/abi/kvm.h
- create mode 100644 virt/kvm/kvm_luo.c
+ virt/kvm/guest_memfd.c | 68 +++++++++++++++++-------------------------
+ virt/kvm/guest_memfd.h | 39 ++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+), 40 deletions(-)
+ create mode 100644 virt/kvm/guest_memfd.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9ec290e38b44..9bfc3c1f6676 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14409,6 +14409,17 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
- F:	drivers/video/backlight/ktz8866.c
+diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+index 69c9d6d546b2..6740ae2bf948 100644
+--- a/virt/kvm/guest_memfd.c
++++ b/virt/kvm/guest_memfd.c
+@@ -7,38 +7,12 @@
+ #include <linux/mempolicy.h>
+ #include <linux/pseudo_fs.h>
+ #include <linux/pagemap.h>
++#include "guest_memfd.h"
  
-+KVM LIVE UPDATE
-+M:	Pasha Tatashin <pasha.tatashin@soleen.com>
-+M:	Mike Rapoport <rppt@kernel.org>
-+M:	Pratyush Yadav <pratyush@kernel.org>
-+R:	Tarun Sahu <tarunsahu@google.com>
-+L:	kexec@lists.infradead.org
-+L:	kvm@vger.kernel.org
-+S:	Maintained
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/liveupdate/linux.git
-+F:	virt/kvm/kvm_luo.c
-+
- KVM PARAVIRT (KVM/paravirt)
- M:	Paolo Bonzini <pbonzini@redhat.com>
- R:	Vitaly Kuznetsov <vkuznets@redhat.com>
-diff --git a/include/linux/kho/abi/kvm.h b/include/linux/kho/abi/kvm.h
-new file mode 100644
-index 000000000000..718db68a541a
---- /dev/null
-+++ b/include/linux/kho/abi/kvm.h
-@@ -0,0 +1,39 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2026, Google LLC.
-+ * Tarun Sahu <tarunsahu@google.com>
-+ *
-+ * KVM Preservation ABI for Live Update Orchestrator (LUO)
-+ */
-+#ifndef _LINUX_KHO_ABI_KVM_H
-+#define _LINUX_KHO_ABI_KVM_H
-+
-+#include <linux/types.h>
-+#include <linux/kho/abi/kexec_handover.h>
-+
-+/**
-+ * DOC: KVM Live Update ABI
-+ *
-+ * KVM uses the ABI defined below for preserving its state
-+ * across a kexec reboot using the LUO.
-+ *
-+ * The state is serialized into a packed structure `struct kvm_luo_ser`
-+ * which is handed over to the next kernel via the KHO mechanism.
-+ *
-+ * This interface is a contract. Any modification to the structure layout
-+ * constitutes a breaking change. Such changes require incrementing the
-+ * version number in the KVM_LUO_FH_COMPATIBLE compatibility string.
-+ */
-+
-+/**
-+ * struct kvm_luo_ser - Main serialization structure for a KVM VM.
-+ * @type:         The type of VM.
-+ */
-+struct kvm_luo_ser {
-+	u64 type;
-+} __packed;
-+
-+/* The compatibility string for KVM VM file handler */
-+#define KVM_LUO_FH_COMPATIBLE	"kvm_vm_luo_v1"
-+
-+#endif /* _LINUX_KHO_ABI_KVM_H */
-diff --git a/virt/kvm/Makefile.kvm b/virt/kvm/Makefile.kvm
-index d047d4cf58c9..c1a962159264 100644
---- a/virt/kvm/Makefile.kvm
-+++ b/virt/kvm/Makefile.kvm
-@@ -13,3 +13,4 @@ kvm-$(CONFIG_HAVE_KVM_IRQ_ROUTING) += $(KVM)/irqchip.o
- kvm-$(CONFIG_HAVE_KVM_DIRTY_RING) += $(KVM)/dirty_ring.o
- kvm-$(CONFIG_HAVE_KVM_PFNCACHE) += $(KVM)/pfncache.o
- kvm-$(CONFIG_KVM_GUEST_MEMFD) += $(KVM)/guest_memfd.o
-+kvm-$(CONFIG_LIVEUPDATE_GUEST_MEMFD) += $(KVM)/kvm_luo.o
-diff --git a/virt/kvm/kvm_luo.c b/virt/kvm/kvm_luo.c
-new file mode 100644
-index 000000000000..25619f94ace5
---- /dev/null
-+++ b/virt/kvm/kvm_luo.c
-@@ -0,0 +1,190 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (c) 2026, Google LLC.
-+ * Tarun Sahu <tarunsahu@google.com>
-+ *
-+ * KVM VM Preservation for Live Update Orchestrator (LUO)
-+ */
-+
-+/**
-+ * DOC: KVM VM Preservation via LUO
-+ *
-+ * Overview
-+ * ========
-+ *
-+ * KVM virtual machines (VMs) can be preserved over a kexec reboot using the
-+ * Live Update Orchestrator (LUO) file preservation. This allows userspace
-+ * to preserve KVM VM state across kexec reboots.
-+ *
-+ * The preservation is not intended to be fully transparent. Only specific
-+ * VM configuration and state are preserved, while other aspects of the VM
-+ * must be re-established or re-configured by userspace after retrieval.
-+ *
-+ * Preserved Properties
-+ * ====================
-+ *
-+ * The following properties of the KVM VM are preserved across kexec:
-+ *
-+ * VM Type
-+ *   The VM type (e.g., on x86 architecture, the vm_type parameter) is
-+ *   preserved.
-+ *
-+ * Non-Preserved Properties
-+ * ========================
-+ *
-+ * The preservation does not cover:
-+ *
-+ * - vCPUs and vCPU states
-+ * - Memspots / Memory slot layout (memslots)
-+ * - Interrupt controllers and IRQ routings
-+ * - Coalesced MMIO zones
-+ * - Device bindings (VFIO/Eventfds)
-+ * - Active paging or guest registers state
-+ * - etc
-+ */
-+#include <linux/liveupdate.h>
-+#include <linux/kvm_host.h>
-+#include <linux/pagemap.h>
-+#include <linux/file.h>
-+#include <linux/err.h>
-+#include <linux/anon_inodes.h>
-+#include <linux/magic.h>
-+#include <linux/kexec_handover.h>
-+#include <linux/kho/abi/kexec_handover.h>
-+#include <linux/kho/abi/kvm.h>
-+#include "kvm_mm.h"
-+
-+static bool kvm_luo_can_preserve(struct liveupdate_file_handler *handler,
-+				 struct file *file)
-+{
-+	return file_is_kvm(file);
+ #include "kvm_mm.h"
+ 
+ static struct vfsmount *kvm_gmem_mnt;
+ 
+-/*
+- * A guest_memfd instance can be associated multiple VMs, each with its own
+- * "view" of the underlying physical memory.
+- *
+- * The gmem's inode is effectively the raw underlying physical storage, and is
+- * used to track properties of the physical memory, while each gmem file is
+- * effectively a single VM's view of that storage, and is used to track assets
+- * specific to its associated VM, e.g. memslots=>gmem bindings.
+- */
+-struct gmem_file {
+-	struct kvm *kvm;
+-	struct xarray bindings;
+-	struct list_head entry;
+-};
+-
+-struct gmem_inode {
+-	struct shared_policy policy;
+-	struct inode vfs_inode;
+-	struct list_head gmem_file_list;
+-
+-	u64 flags;
+-};
+-
+-static __always_inline struct gmem_inode *GMEM_I(struct inode *inode)
+-{
+-	return container_of(inode, struct gmem_inode, vfs_inode);
+-}
+ 
+ #define kvm_gmem_for_each_file(f, inode) \
+ 	list_for_each_entry(f, &GMEM_I(inode)->gmem_file_list, entry)
+@@ -556,23 +530,17 @@ bool __weak kvm_arch_supports_gmem_init_shared(struct kvm *kvm)
+ 	return true;
+ }
+ 
+-static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
++struct file *__kvm_gmem_create_file(struct kvm *kvm, loff_t size, u64 flags)
+ {
+ 	static const char *name = "[kvm-gmem]";
+ 	struct gmem_file *f;
+ 	struct inode *inode;
+ 	struct file *file;
+-	int fd, err;
+-
+-	fd = get_unused_fd_flags(0);
+-	if (fd < 0)
+-		return fd;
++	int err;
+ 
+ 	f = kzalloc_obj(*f);
+-	if (!f) {
+-		err = -ENOMEM;
+-		goto err_fd;
+-	}
++	if (!f)
++		return ERR_PTR(-ENOMEM);
+ 
+ 	/* __fput() will take care of fops_put(). */
+ 	if (!fops_get(&kvm_gmem_fops)) {
+@@ -611,8 +579,7 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
+ 	xa_init(&f->bindings);
+ 	list_add(&f->entry, &GMEM_I(inode)->gmem_file_list);
+ 
+-	fd_install(fd, file);
+-	return fd;
++	return file;
+ 
+ err_inode:
+ 	iput(inode);
+@@ -620,7 +587,28 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
+ 	fops_put(&kvm_gmem_fops);
+ err_gmem:
+ 	kfree(f);
+-err_fd:
++	return ERR_PTR(err);
 +}
 +
-+static int kvm_luo_preserve(struct liveupdate_file_op_args *args)
++static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
 +{
-+	struct kvm *kvm = args->file->private_data;
-+	struct kvm_luo_ser *ser;
-+
-+	if (kvm->vm_dead || kvm->vm_bugged)
-+		return -EINVAL;
-+
-+	ser = kho_alloc_preserve(sizeof(*ser));
-+	if (IS_ERR(ser))
-+		return PTR_ERR(ser);
-+
-+#ifdef CONFIG_X86
-+	ser->type = kvm->arch.vm_type;
-+#else
-+	ser->type = 0;
-+#endif
-+
-+	args->serialized_data = virt_to_phys(ser);
-+
-+	return 0;
-+}
-+
-+static atomic_t restored_vm_id = ATOMIC_INIT(0);
-+
-+static int kvm_luo_retrieve(struct liveupdate_file_op_args *args)
-+{
-+	char fdname[ITOA_MAX_LEN + 1];
-+	struct kvm_luo_ser *ser;
 +	struct file *file;
-+	struct kvm *kvm;
-+	int err = 0;
++	int fd, err;
 +
-+	if (!args->serialized_data)
-+		return -EINVAL;
++	fd = get_unused_fd_flags(0);
++	if (fd < 0)
++		return fd;
 +
-+	ser = phys_to_virt(args->serialized_data);
-+
-+	snprintf(fdname, sizeof(fdname), "%d",
-+		 atomic_inc_return(&restored_vm_id));
-+
-+	file = kvm_create_vm_file(ser->type, fdname);
++	file = __kvm_gmem_create_file(kvm, size, flags);
 +	if (IS_ERR(file)) {
 +		err = PTR_ERR(file);
-+		goto err_free_ser;
++		goto err_put_fd;
 +	}
 +
-+	kvm = file->private_data;
++	fd_install(fd, file);
++	return fd;
 +
-+	args->file = file;
-+	kho_restore_free(ser);
-+
-+	kvm_uevent_notify_vm_create(kvm);
-+	return 0;
-+
-+err_free_ser:
-+	kho_restore_free(ser);
-+	return err;
-+}
-+
-+static void kvm_luo_unpreserve(struct liveupdate_file_op_args *args)
-+{
-+	struct kvm_luo_ser *ser;
-+
-+	/*
-+	 * in case preservation failed, args->serialized_data will
-+	 * be NULL and kvm_luo_preserve takes care of cleaning up.
-+	 * If preserve succeeds, this condition fails and unpreserve
-+	 * function takes care of cleaning up.
-+	 */
-+	if (WARN_ON_ONCE(!args->serialized_data))
-+		return;
-+
-+	ser = phys_to_virt(args->serialized_data);
-+
-+	kho_unpreserve_free(ser);
-+}
-+
-+static void kvm_luo_finish(struct liveupdate_file_op_args *args)
-+{
-+	struct kvm_luo_ser *ser;
-+
-+	/*
-+	 * If retrieve_status is true or set to error, nothing to do here.
-+	 * Already cleaned up in kvm_luo_retrieve().
-+	 */
-+	if (args->retrieve_status)
-+		return;
-+
-+	if (!args->serialized_data)
-+		return;
-+
-+	ser = phys_to_virt(args->serialized_data);
-+	kho_restore_free(ser);
-+}
-+
-+static const struct liveupdate_file_ops kvm_luo_file_ops = {
-+	.can_preserve = kvm_luo_can_preserve,
-+	.preserve = kvm_luo_preserve,
-+	.retrieve = kvm_luo_retrieve,
-+	.unpreserve = kvm_luo_unpreserve,
-+	.finish = kvm_luo_finish,
-+	.owner = THIS_MODULE,
-+};
-+
-+static struct liveupdate_file_handler kvm_luo_handler = {
-+	.ops = &kvm_luo_file_ops,
-+	.compatible = KVM_LUO_FH_COMPATIBLE,
-+};
-+
-+int kvm_luo_init(void)
-+{
-+	int err = liveupdate_register_file_handler(&kvm_luo_handler);
-+
-+	if (err && err != -EOPNOTSUPP) {
-+		pr_err("Could not register kvm_vm_luo handler: %pe\n", ERR_PTR(err));
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+void kvm_luo_exit(void)
-+{
-+	liveupdate_unregister_file_handler(&kvm_luo_handler);
-+}
-+
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 65f0c5fb353e..c70346906a89 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -6576,6 +6576,10 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
- 	if (r)
- 		goto err_virt;
- 
-+	r = kvm_luo_init();
-+	if (r)
-+		goto err_luo;
-+
- 	/*
- 	 * Registration _must_ be the very last thing done, as this exposes
- 	 * /dev/kvm to userspace, i.e. all infrastructure must be setup!
-@@ -6589,6 +6593,8 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
- 	return 0;
- 
- err_register:
-+	kvm_luo_exit();
-+err_luo:
- 	kvm_uninit_virtualization();
- err_virt:
- 	kvm_gmem_exit();
-@@ -6618,6 +6624,8 @@ void kvm_exit(void)
- 	 */
- 	misc_deregister(&kvm_dev);
- 
-+	kvm_luo_exit();
-+
- 	kvm_uninit_virtualization();
- 
- 	debugfs_remove_recursive(kvm_debugfs_dir);
-diff --git a/virt/kvm/kvm_mm.h b/virt/kvm/kvm_mm.h
-index 7aa1d65c3d46..118edc47df83 100644
---- a/virt/kvm/kvm_mm.h
-+++ b/virt/kvm/kvm_mm.h
-@@ -97,4 +97,12 @@ static inline void kvm_gmem_unbind(struct kvm_memory_slot *slot)
++err_put_fd:
+ 	put_unused_fd(fd);
+ 	return err;
  }
- #endif /* CONFIG_KVM_GUEST_MEMFD */
- 
-+#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
-+int kvm_luo_init(void);
-+void kvm_luo_exit(void);
-+#else
-+static inline int kvm_luo_init(void) { return 0; }
-+static inline void kvm_luo_exit(void) {}
-+#endif /* CONFIG_LIVEUPDATE_GUEST_MEMFD */
+diff --git a/virt/kvm/guest_memfd.h b/virt/kvm/guest_memfd.h
+new file mode 100644
+index 000000000000..c528b046dd69
+--- /dev/null
++++ b/virt/kvm/guest_memfd.h
+@@ -0,0 +1,39 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __KVM_GUEST_MEMFD_H__
++#define __KVM_GUEST_MEMFD_H__ 1
 +
- #endif /* __KVM_MM_H__ */
++#include <linux/kvm_host.h>
++#include <linux/fs.h>
++#include <linux/mempolicy.h>
++
++/*
++ * A guest_memfd instance can be associated multiple VMs, each with its own
++ * "view" of the underlying physical memory.
++ *
++ * The gmem's inode is effectively the raw underlying physical storage, and is
++ * used to track properties of the physical memory, while each gmem file is
++ * effectively a single VM's view of that storage, and is used to track assets
++ * specific to its associated VM, e.g. memslots=>gmem bindings.
++ */
++struct gmem_file {
++	struct kvm *kvm;
++	struct xarray bindings;
++	struct list_head entry;
++};
++
++struct gmem_inode {
++	struct shared_policy policy;
++	struct inode vfs_inode;
++	struct list_head gmem_file_list;
++
++	u64 flags;
++};
++
++static inline struct gmem_inode *GMEM_I(struct inode *inode)
++{
++	return container_of(inode, struct gmem_inode, vfs_inode);
++}
++
++struct file *__kvm_gmem_create_file(struct kvm *kvm, loff_t size, u64 flags);
++
++#endif /* __KVM_GUEST_MEMFD_H__ */
 -- 
 2.54.0.1032.g2f8565e1d1-goog
 
