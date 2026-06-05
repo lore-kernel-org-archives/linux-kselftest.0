@@ -1,119 +1,215 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674803655CF
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 18:42:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5273E5EF8
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 18:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780684924; cv=none; b=WGmTlI9XpwJerzPSTRL2lH/xA/UVoaFmOqLKMsKr7ptSnv8EdU0hG6Q1EtWf+7LZXc9FbLk39OHCxwkH6geV3iyoQm+PwU4JfUo2YMZQh6C03theTGrTCk5zsdiH80gy7Uyp97z+/av2Zbue4qnyMKjQVO254c7XwdJWc0rh1tc=
+	t=1780685044; cv=none; b=POltRKCHdN7Q9XXatSA9NWxbh7yAGfITe6nC0RReRH5MvNgtZwD8NCevoPOKUe5oMzvKU3/tBXjkOm6tI5bD/u8FgDsZPXQLrnXRChTa04DlICnS7E9NiblMHDqEb9ya8KrI8tojvpk4qtaT78xb0hfbfKCJpSaFMX/XeG402kU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780684924; c=relaxed/simple;
-	bh=syqDKQVb127qXyQlw3Eni5jB/EAn4byQMNt5RzflBVM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nmkTgwDCQx7Pon6e5I+HgsUROhQRpbk3gkRL/7/xxoAkuNKvedGaKQs0/cSEbm655qNOEBXAPH0VFmDFamLGSRTPtChRCpoQonsE6Cc2Zc68BQWYwdpt79kPoUqdEO0Vhq2mQ2O4dl8mO/d6/ttu8WVJH1Uxute0tuPe/OLlveg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com; spf=pass smtp.mailfrom=trailofbits.com; dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b=AkSIsGXY; arc=none smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
+	s=arc-20240116; t=1780685044; c=relaxed/simple;
+	bh=jptZDNz6y+ZlDE7Z2+X6vsmedleZEP/GgTVJ8MIVCV8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mQQzAq/AodIZ4GMJzE3oQXJf7hxaHNK8EMkVBeCU1NHV0Ah7sx7NRQWOa0dlprdrxM/6o5WtQEcPomWWGtPAhSvubt+/wbFxtLMpFRsSz0WP3oi2STYQIOacsEMYRkebMptmDhZ097NRF41S+8jKjB/leybMpHe183XCNrTRFQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qUh+nclv; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b="AkSIsGXY"
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-5174a1da4b2so17556561cf.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 11:42:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qUh+nclv"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2c0c3546924so15614675ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 11:44:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=trailofbits.com; s=google; t=1780684922; x=1781289722; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9dziyAFDBMS+ZSt7oFPGlKy1Vv4XAHLNgQ9Ot2eQsEo=;
-        b=AkSIsGXY3CAYHKI9+RWZtx1Seo7xf8kie5qtQOu0MBIVGSqGhIsWlLN1VnMaJfr92G
-         5L6DYmHErCj2ZUk0L8ordMUJqjLfV1P2l4dvYKhUoRTFMllaAUQK4W03Pkt1GIKkjSaX
-         +1MywC5JL21BYOPITxCtlCFSqyIHWJCOnuZjuvig4NIK2OkY4CARaLEt1qNAHeK1AAgq
-         yb2SWXCvDvXGd42J5oCvvxYsUKL51Y8IXUSbrnwlx3QT929WIxr9FvD8cS9+gzy+yvRP
-         qFJQZqO6W0vIlJz/sdLqGo84T2TjCcWvniImOZeLY8RAcqFuP8aj+Ao5kVxpyW7nqjNq
-         mWXg==
+        d=gmail.com; s=20251104; t=1780685043; x=1781289843; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VmToUT+A6qp8UgJ/VhXar74M6fIQJS1C/pR1f1V3ExQ=;
+        b=qUh+nclvgiHYKzX3b/kDCvzXL/O6elBYjQ0Y2BtzxFxe6Q7xZG239BaIL2RKL8XZzL
+         vpWhSBYMKiVYN/Z77EnauJ1L/pZIRV9cnLxjZav6YlpKNmSLAoqsL5a63WDyRdf2HZ5Z
+         SDorrWNZX/kTLWwY5g0zdRVpmLfo2EH/+B6Qvag5sHDi/7gmLd6ARvd71WRiRVjPhgYJ
+         f6yxBKbfC+XzSkRLourk6ogx2MDz8T70pAWO1IIrzJNsSbbQ7w+oN5p8MK0feSaZP7JQ
+         WcNCA+aT8d9qbLYSx20PhXjlpUFL0y2DJrBbI0O1sy4YfyojDK0hkrTvmVaCaOrqVUgH
+         ZWIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780684922; x=1781289722;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9dziyAFDBMS+ZSt7oFPGlKy1Vv4XAHLNgQ9Ot2eQsEo=;
-        b=CRdcgz/bYJYJVIXMkcXqq7u0qr/es2wiwfr8xudZtelZ7ObcCyxwi1quyUUi69aGBr
-         ToiOeJTenTXfMV1FwNOn4JQAyfSQ/fB+khN9UxBXwjAJ12kzQ/w4gbgM9tZy5x4D32kZ
-         Tz5EEIcoj0AFmozWkXpCw/BHL+FEZBMb9p+74hM83OAkNQbmEBcrJdW6Bx5dbW2mSs3d
-         jAXRS3VapfIajdg0EA7IcIhYLzZb70u2kVL0IUwakb3aqI3xnvPz77GM4sJI5tfAPnLz
-         +mFqkBW+bInhM7/TYfjqWWCLJEnH5nZRhz46pX9qOdVWKW5ft4d9IAwZ+g+oV2t+2wZo
-         Rf0w==
-X-Forwarded-Encrypted: i=1; AFNElJ+1ru7mH7j3rjWC2rbs68yMlA65zbTjR4uoeZXSlSrc04KHBzG9y8/et5slrOECTYiAec86WiHTnPz73G9UvBA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFAQpGkhZ389KVZw9iR2e5TkjxxiIsebFrDPfXllEOZxldgxYf
-	FjHjdSjM4UW5/ESiL36OLvxMTu9qInes7UZjs7yZEJ9BD0UHVmjY2ZgsaDOvlQO43/Y=
-X-Gm-Gg: Acq92OE845ZRLtUIsVz3/N/UbqATySfdld2rPibo47NaltlOpztsKQMUPF5fPKIg+7x
-	vcRhB8NqmvE18u2quUHhmkFB6iOZ2BjfU6za+8UY1bjWF8d6s9rUVG8KA+ospE1oo40SqsHZYvE
-	i4e9x5FIqt6+764Rn9Wz7MGkMwGB8MC67nIifTCLKoO3tiifBBoAGI6dUJ0zjMi5JHG5/eukavW
-	JrJ8mNuERkK6cvDtUkR527RNgESuQG6hKGr3ZXkA7Y+xzzxf+d0OuVDGRI/C3x7tLw6VmnrazJn
-	1/XEfj5yQZ4z1Te2gQD+GWs/2a7ypT3i8m4+poTWjPwuZur1En2zGypaIJaQU+iIJ9D1L0/d/8Q
-	dS2KIxh9BNwU38ib+T3Kdr4gjMCwl44zjrz4lI5hiBRtGqNQPCbEI5+DYdNyGwO+6rElWaK96RH
-	LxyPDndNm2QA14ZfVbiZ6agWkoddzpE1QrzTvoaw==
-X-Received: by 2002:a05:622a:4c13:b0:517:8f2e:5d9e with SMTP id d75a77b69052e-51795a71833mr68589031cf.7.1780684921860;
-        Fri, 05 Jun 2026 11:42:01 -0700 (PDT)
-Received: from localhost ([161.35.96.86])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-51775c2e2casm85460011cf.9.2026.06.05.11.42.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jun 2026 11:42:01 -0700 (PDT)
-From: Samuel Moelius <sam.moelius@trailofbits.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Samuel Moelius <sam.moelius@trailofbits.com>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org (open list:MEMORY MANAGEMENT - MISC),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] mm/page_frag: reject invalid CPUs in page_frag_test
-Date: Fri,  5 Jun 2026 18:41:52 +0000
-Message-ID: <20260605184157.2490353-1-sam.moelius@trailofbits.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20251104; t=1780685043; x=1781289843;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VmToUT+A6qp8UgJ/VhXar74M6fIQJS1C/pR1f1V3ExQ=;
+        b=cKqe+yxg+WZP+nKYWBoDtn81jMnxzpx/cCt4TJKFJfq6Y9PRAsutKvKxgN02SxvQUC
+         GA6nmLiC4KIl4wjvLMB+CQ2k7zZIfGm9kyxz0t5hDOFj11fvH4y4kbWpp5aF6vBce2Bf
+         2Va/Bp5mif7nxoZb0wi9mzm8Q2NkZjl9HnwjURJJlaU3dK1g8k7/yOcDW2uNIQDeY8tq
+         p+7g9DDXXIyrNOuMDxe+QO7lGsRaujWu4Nj2U0z/kKPbTTUs0R9AsBe8x8j3yJgXVulx
+         45n1HpMCRNZJlMosfOXEccP9KHLABXdOWDe0HE71r3UgCOUyimNnN83i1KiolWIWtsLx
+         jK0w==
+X-Forwarded-Encrypted: i=1; AFNElJ/2Ec+pyr5LxuhaQsUuBA2jM610gSW7P+O5ZUiQ8E6hua0EXYhX4hhL4NJWwrFGsSgTASoYKwzeTj9mxOQwugc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXtELggX2K4/XwOxOr1Um7oYqnG56mJI/t2BAUoLXesOSYz8Fa
+	xvf/zqWmf70eSg08DpU87wNgmupiqU3++zMeiYt4D73kSgCOzLht1ZKb
+X-Gm-Gg: Acq92OGGtWZighYw9b6upxPdNHKjO27wkqPblojApTH/JPIJ4KZZ/yihIpbrFJN6vI1
+	9YMergO38WXgEer/xv9SFbDYIPIxQT2OUObE8+x6lKYlJ65lit59VAr3IFk00UI310C1gctLPXi
+	PxFdFZNe7ZwyaCXlOBfhUzvx3fCu32K8CkeoSRIbdMW+2uwe3m0plWeZRG1GPTYJag4wJ6/0ZSg
+	kHJl+hwA2JlFFdNmiAaXT2Rgukma5HYOns8ZZPuv2+jeWsrBNxsn1/9eZU5J8TA4CDUcMLK9Gx4
+	NIsVNA2jB/D9mfhMLp1h/KcPiWFWkPovkTZWBh4HQAHyarv8guDma1VdghfNpJcZ1OYNHrHfo/Q
+	o3H5ejoU807xELKj7oEa/zRSjpepQtd6u/eGD/MeUVtkEXFDZgRAdwY4oTDPZY6qL45+/DkYHwd
+	vmBZQf+DcJQLsMjf10Fdd3kcW7qocLIb+mw9E9idb8Jo/WSNrJIBrYFmo=
+X-Received: by 2002:a17:903:18c:b0:2c0:e5ee:f56c with SMTP id d9443c01a7336-2c1e881fefemr54368775ad.20.1780685042865;
+        Fri, 05 Jun 2026 11:44:02 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:58::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c1663981basm96908105ad.67.2026.06.05.11.44.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jun 2026 11:44:02 -0700 (PDT)
+Date: Fri, 5 Jun 2026 11:44:00 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+	linux-kselftest@vger.kernel.org, sdf@fomichev.me,
+	razor@blackwall.org, daniel@iogearbox.net, almasrymina@google.com,
+	matttbe@kernel.org, skhawaja@google.com, dw@davidwei.uk,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next 2/4] udmabuf: emit one sg entry per pinned folio
+Message-ID: <aiMY8CpckM8Jav0g@devvm29614.prn0.facebook.com>
+References: <20260603-tcpdm-large-niovs-v1-0-f37a4ac6726c@meta.com>
+ <20260603-tcpdm-large-niovs-v1-2-f37a4ac6726c@meta.com>
+ <bdce2488-fe77-4f36-9ed6-dd2c785fa7c1@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <bdce2488-fe77-4f36-9ed6-dd2c785fa7c1@amd.com>
 
-The page_frag selftest module accepts test_push_cpu and test_pop_cpu as
-signed module parameters, then validates them by passing them directly
-to cpu_active().
+On Fri, Jun 05, 2026 at 11:30:07AM +0200, Christian König wrote:
+> On 6/4/26 02:42, Bobby Eshleman wrote:
+> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+> > 
+> > get_sg_table() emitted one PAGE_SIZE sg entry per page even when the
+> > underlying folio was larger.
+> > 
+> > Instead, walk folios[] and emit one sg entry per folio. When folios
+> > represent large pages (as is for MFD_HUGETLB), each sg entry is a large
+> > page. Normal PAGE_SIZE sg tables are unchanged.
+> > 
+> > Required by net/core/devmem to support rx-buf-size > PAGE_SIZE with
+> > udmabuf.
+> 
+> That doesn't explain why this is required.
 
-That validation is itself unsafe for negative or out-of-range CPU
-numbers. For example, test_push_cpu=-1 is converted to a very large
-unsigned CPU number before cpu_active() reaches cpumask_test_cpu(),
-which trips the cpumask range check with CONFIG_DEBUG_PER_CPU_MAPS
-enabled.
+Sure, can definitely add. Devmem currently requires dmabuf sg entries to
+be length and size aligned when it allocates niovs for NIC page pools.
+Though udmabuf is not violating any dmabuf contract by emitting
+PAGE_SIZE entries and the above restriction is probably more a
+shortfalling of devmem, by emitting a single entry per folio this patch
+allows udmabuf to be used by devmem for large pages.
 
-Reject CPU values outside [0, nr_cpu_ids) before asking whether the CPU
-is active.
+> 
+> Please note that accessing the pages/folio of an sg-table returned by DMA-buf is illegal and strictly forbidden!
+> 
+> Regards,
+> Christian.
 
-Assisted-by: Codex:gpt-5.5-cyber-preview
-Signed-off-by: Samuel Moelius <sam.moelius@trailofbits.com>
----
- tools/testing/selftests/mm/page_frag/page_frag_test.c | 2 ++
- 1 file changed, 2 insertions(+)
+It seems both devmem and io_uring zcrx at least introspect through to
+the sg-table to build NIC page pools (not accessing the memory itself,
+however). Is there a better way?
 
-diff --git a/tools/testing/selftests/mm/page_frag/page_frag_test.c b/tools/testing/selftests/mm/page_frag/page_frag_test.c
-index e806c1866e36..c8584d0fdeab 100644
---- a/tools/testing/selftests/mm/page_frag/page_frag_test.c
-+++ b/tools/testing/selftests/mm/page_frag/page_frag_test.c
-@@ -131,6 +131,8 @@ static int __init page_frag_test_init(void)
- 	init_completion(&wait);
- 
- 	if (test_alloc_len > PAGE_SIZE || test_alloc_len <= 0 ||
-+	    test_push_cpu < 0 || test_push_cpu >= nr_cpu_ids ||
-+	    test_pop_cpu < 0 || test_pop_cpu >= nr_cpu_ids ||
- 	    !cpu_active(test_push_cpu) || !cpu_active(test_pop_cpu))
- 		return -EINVAL;
- 
--- 
-2.43.0
+Best,
+Bobby
 
+> 
+> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> > ---
+> >  drivers/dma-buf/udmabuf.c | 47 ++++++++++++++++++++++++++++++++++++++++++-----
+> >  1 file changed, 42 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+> > index 94b8ecb892bb..f28dd3788ada 100644
+> > --- a/drivers/dma-buf/udmabuf.c
+> > +++ b/drivers/dma-buf/udmabuf.c
+> > @@ -141,26 +141,63 @@ static void vunmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
+> >         vm_unmap_ram(map->vaddr, ubuf->pagecount);
+> >  }
+> > 
+> > +/* Return the number of contiguous pages backed by the folio at @i.
+> > + * A udmabuf may map only part of a folio, or reference the same folio
+> > + * in multiple non-contiguous runs, so folio_nr_pages() can't be used.
+> > + */
+> > +static pgoff_t udmabuf_folio_nr_pages(struct udmabuf *ubuf, pgoff_t i)
+> > +{
+> > +       struct folio *f = ubuf->folios[i];
+> > +       pgoff_t j;
+> > +
+> > +       for (j = 1; i + j < ubuf->pagecount; j++) {
+> > +               if (ubuf->folios[i + j] != f)
+> > +                       break;
+> > +               /* Same folio, but not a sequential offset within it. */
+> > +               if (ubuf->offsets[i + j] != ubuf->offsets[i] + j * PAGE_SIZE)
+> > +                       break;
+> > +       }
+> > +       return j;
+> > +}
+> > +
+> > +/* Count the contiguous folio runs in @ubuf, one sg entry per run. */
+> > +static unsigned int udmabuf_sg_nents(struct udmabuf *ubuf)
+> > +{
+> > +       unsigned int nents = 0;
+> > +       pgoff_t i;
+> > +
+> > +       for (i = 0; i < ubuf->pagecount; i += udmabuf_folio_nr_pages(ubuf, i))
+> > +               nents++;
+> > +       return nents;
+> > +}
+> > +
+> >  static struct sg_table *get_sg_table(struct device *dev, struct dma_buf *buf,
+> >                                      enum dma_data_direction direction)
+> >  {
+> >         struct udmabuf *ubuf = buf->priv;
+> > -       struct sg_table *sg;
+> >         struct scatterlist *sgl;
+> > -       unsigned int i = 0;
+> > +       struct sg_table *sg;
+> > +       pgoff_t i, run;
+> > +       unsigned int nents;
+> >         int ret;
+> > 
+> > +       nents = udmabuf_sg_nents(ubuf);
+> > +
+> >         sg = kzalloc_obj(*sg);
+> >         if (!sg)
+> >                 return ERR_PTR(-ENOMEM);
+> > 
+> > -       ret = sg_alloc_table(sg, ubuf->pagecount, GFP_KERNEL);
+> > +       ret = sg_alloc_table(sg, nents, GFP_KERNEL);
+> >         if (ret < 0)
+> >                 goto err_alloc;
+> > 
+> > -       for_each_sg(sg->sgl, sgl, ubuf->pagecount, i)
+> > -               sg_set_folio(sgl, ubuf->folios[i], PAGE_SIZE,
+> > +       sgl = sg->sgl;
+> > +       for (i = 0; i < ubuf->pagecount; i += run) {
+> > +               run = udmabuf_folio_nr_pages(ubuf, i);
+> > +               sg_set_folio(sgl, ubuf->folios[i], run << PAGE_SHIFT,
+> >                              ubuf->offsets[i]);
+> > +               sgl = sg_next(sgl);
+> > +       }
+> > 
+> >         ret = dma_map_sgtable(dev, sg, direction, 0);
+> >         if (ret < 0)
+> > 
+> > --
+> > 2.53.0-Meta
+> > 
+> 
