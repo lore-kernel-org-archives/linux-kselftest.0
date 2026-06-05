@@ -1,67 +1,100 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF7338C2C3
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 17:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780682333; cv=none; b=Pzr4ngUOT5hP00oiX1LvKUoRErXdON4gV2W2KIz3VWtRLHaJPwxeNPlf2q/8M4LQCHx8p5qNnNK0tWsWOYdXamPHXmQh/xvNBK5SDBMvdRfw4OUjwpJG7DbVQIl7GYQOSXCWc90wJ+07PLBJm3qBtaMCH8UJWVscITJrx36s+JM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780682333; c=relaxed/simple;
-	bh=x86P0hCaA9P2MALnrduYKxx4y20a23f8MWvegFcyK1Q=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ZgSHwegJ0P9OHtXmPN4Pv3WLna21QQxu215iqQ8XJYBEdHPmECMX8hXHu2coCdRi809vsstyHx6bgI3kj/a6qTbLkLXCtGlpz+7AULq+6Gi2lNF3FvLaNNyAN784nt4tktlzy8WYnNs9UWmoF5gzkWKCRjB3qm45cmRYZlt10LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SjXt0Ayj; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0815339A05E
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 18:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780684077; cv=pass; b=Di56jBsEOBKVjYKn3GL2Wrwkx6ywMs70F2CltqyXqWFALeV7S073zdioZnwlPwQoGrxSiiZQkCbfYdStWJFWZ3MQ3aLCSPihzkGalsWTGxBDpNUB2X+LlJIIYlghlrvxl2tIrFuBAAqXvduevs0nKfhp+Z9CTBZMSx5RlLq3mqw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780684077; c=relaxed/simple;
+	bh=qghMjk2/zrw+UM50raEmfq4OOKU8kgCvFtfkehZ/rgU=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RgeXO2lUumuNvI0MVA+pYMwAb1EKcWC1DO7LgohnwegOGjuiMFw8J/jGvuyJF66o8hjsuagUYsAfChEHPgg51k7UZPbzhXCS1UCQUntyjLCpjswRmy9NbKDb6AbGvpzbqV/Q8FBXmsjU2ZpUnPXuXj/JPTwAvTWuIzg+nnoc3JM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=awh+0XXT; arc=pass smtp.client-ip=74.125.82.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SjXt0Ayj"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c85a2ed88c8so2444007a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 10:58:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="awh+0XXT"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-137dd5161feso4610972c88.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 11:27:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780684075; cv=none;
+        d=google.com; s=arc-20240605;
+        b=excfJLJIaauJTklc/kXPowAoS3EHjsdvATISxdKsOxlkSvY3k45HD2TmntbFbp3Ep4
+         5S8Rc/qje3QZC+DoFmJNd08VgiCjCPb779fs9K/dCb7MnLS3W76O7J+7NDviEw6w4vKT
+         KUuG8QtRnL8XgB++dGiY0rUDNRudxyBEE1xhfc1xE04XT2RS4PIQ+zhV6s0hnMargx2z
+         Cc+cFNMHvjWqUyZa43Sd5BAVhHN2/SyvnNHP8FolhVMw/EWr0Nb2D2oZrsae720h/u9K
+         P/w6JygDp3gIl/i6drBCbtabs8PpXWz5lmffDX/e912ceFQyIHm72xtKj7QjukOiE4nq
+         l4eA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=dLObr/KEp5oER/6NT5iKluoOpXC19X4vI0a89/66/6Q=;
+        fh=678qKg7oNyQrqny0WA1K2TkV0A/fXUePcLE2TMzN84o=;
+        b=bT26N6/Zu3vB5B0K7jTJRrRsocQeqtwYxbksyOzpCFE9/bXCgR2QWbTXzU2EEswezR
+         ef0YUx2pbBZS1R0bZmfnrb/30zqDso/o8mIyFC1/YZ1pS9ssjnlWbiUeiTVbXCWTepPV
+         b5zXmo6ffDhLaJ9p4fGYK92iw593Cmw7N7Gh5qgd4xbikut9Q6Gni6jwmcFlC957839g
+         NumI3F0puBbDCWEvnpqEBN3W0ZseibfMDKQm04T9bfvADuF0GdI6xhMaB/LIgGolEjHO
+         KM6hH7U9kLQFVeenaFSVmyoF3zFzXlAC+rPHdrT1PX4JNGc6jo0DZbxXUbT0HZ7vSJO1
+         uX1A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780682331; x=1781287131; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nb5QFbdIl+gNz2ph7qrt8I6eQo3B9HFVcNOaGdwtT/U=;
-        b=SjXt0AyjWGKWqtyI4NOfT+Ek+tSVuop3jMYI2Uo/fIhTZmi5SLFuiNEmoYMnNjaUMV
-         S4nm5gHWqeMA0ScZNyT822jJ55cnVebyiIL/Wol0fA1ky9CbZoq3OdCYnTaQdvAVW/1/
-         2muuPkTqLB+rUhJI2J5FuLQ/nSIVeMc563rnSzBC8areCz1/bt8m+o6Ohu8YX4aCtTHv
-         yLdOwxvceJau7kikUCtJNaDfTQHi1Zsik8eu13Raai6sqpbztdvIyiHMYwaW8tOzlePZ
-         03uBQfKs4lj/69fDezr9VxVCjkmMhwtn6bTR8/gca5BaXPU6q/xsAMzrjIjbDTj1j6mR
-         uj2Q==
+        d=google.com; s=20251104; t=1780684075; x=1781288875; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dLObr/KEp5oER/6NT5iKluoOpXC19X4vI0a89/66/6Q=;
+        b=awh+0XXTb2Wjy0ByKcLsfDVySKdwp15kjFMLVWbz21CWOVw5AQyDMKFPCwPMZlucqr
+         /77YW/cVuSZDUoTUuV2/fg8H7hK8lYknGIuSzbTzED+jCofYWYzdGPsUXM/Glmm5I8vK
+         OpZq9vI7986I0/srBd8z1wfHWJo+WqaPjYG1cSEoB7cNyfmsSCnHkDsQt5kkywgQRwr2
+         CA8wH7I6bOT0M2ftVDpTGQah1X7mEttRcQ8h//D428uRgRt2J0KMNPG0WirvltCq9KoM
+         l+EllK595cr5HQnT4sVPUqXG8KKtTUxJpdp5z9QRTzwYQJHayh+5H1eDknPveOD+J29h
+         TrOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780682331; x=1781287131;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nb5QFbdIl+gNz2ph7qrt8I6eQo3B9HFVcNOaGdwtT/U=;
-        b=UeDkAotc6OtFpZUSvhOpxAFdY4bc/lX8apoq33csvwRIEiVQsKKYtr97SnseIgphv8
-         W4iYyywaj8R8F2oNEmpaBJ9i1e8bOtl2G0K5blDVOk6O1oPKOrnbcH7gejZ8CYTUl5Kd
-         6pSrxdwKYGj9wjDTk6I3j2Gy5Df05ry7TonMl8WPuy08UeiAHIsPI0uPfsUk1YMJI0wz
-         an/Ugoq8MKxQ1mXnuG6CmLK8znJU9b8sogUsEr6dDhwSOmZxUdxGhxjWNxofv5tg2sLD
-         JZ9yAEwh/m6zi0GmHlFjSwdj7yONOGMudYtkz3zTzMgbu+HGIJgdnC/DaHHX/pIOjVCG
-         MZgQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/gXUlqquZrR+LxelzcYCoRUkSQHOW+4mG752Xl5FPY/lyBsdqqdpxcQSsUdvWVtAnYrnMlsOfR4wqWKiUtAec=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylmWvgcd6c2lOaoQ2lXpShpoVPj6+Dd8GdZUpNpyUZ76OA1TOm
-	yyQ/NW1iYqtZMXxzSk0M6EeHdyXfrkXBh15QgGx2Vyi34C4hVsIVAWIsPV/smH9QvO8jQJcNFEs
-	zynUmbg==
-X-Received: from pggg6.prod.google.com ([2002:a63:2006:0:b0:c82:798f:628b])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:9089:b0:3b4:8b89:9fac
- with SMTP id adf61e73a8af0-3b4cd0109f6mr6075295637.23.1780682330882; Fri, 05
- Jun 2026 10:58:50 -0700 (PDT)
-Date: Fri, 5 Jun 2026 10:58:50 -0700
-In-Reply-To: <CAEvNRgHEq-hHcTivUw8TYBeMu-RpS=Ho4DXaNXKQKLPL_biTgg@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1780684075; x=1781288875;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dLObr/KEp5oER/6NT5iKluoOpXC19X4vI0a89/66/6Q=;
+        b=Wp6fRdfv9DvLeLPUramp0iMhQC79aKsVvv5x66CA4gGn2IUQtU8mdcgci7HNdWEv+/
+         LF+M4bJmVcYlKMN7zXcHeixM7YyGLQqMxBSCXAv9yC0ngHet5ABqhU+W8BA2oijum9Q5
+         PWbW0pkHspPkmglZvm5UPGnt3zHXjsa/ddEGGJQB9H7VuCW1wekrzcps/xQ1tyeXx/zw
+         Yz+b92hScFljNEOOLyuE0NqXGJdUjM3Ds8u0T1KtF0xNjjTlUjxIX62fxXBTJH86Wo+d
+         EsBBsUMrYCGXoVuVaD2p/1/CYwHQ82LLAjVVmfGiQP0sr5H7wl9yhEaDMsJ4eR2mADOL
+         QD+Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+0SZLkzPl+V+cLQVSwliWtmrs4ZNqthBn5c1Z0YALi9qOZZsHNxJmaNfo6Gaw0gobBthF/Gr717BdxWWWjtTc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzS01wRxy9Chr+ON/mV/0BxsfK0T+pLGeahe9UT3HFevKAIJYSZ
+	nhAROLrENDqQlEsn7Gn0UYb8HOeMLHGwDJgpVfLbZOjD/fGJGT/4kqqGzjXHtdwrz3GkhukwqPl
+	ZubGATYyN1Fnjb5VI/WMPIP3jSxICu6nguXaqO0xd
+X-Gm-Gg: Acq92OFzODmJcHHxxJ52MNdZVfkQtRwryosE8HQpLIPz8XlfT+PCDMTvoVYw21vXO/D
+	B6+RJClybmyaXhoU9tLIe/QpzLct/EHog0LGGjM444BaOJuLudyrozwGHAEFiCRmUsXt6/TwvLa
+	Lo9WZMneCWjlNj0SZA3bKtxBun8xxgAu4EDfiskOIPQYlZjiffGJrMj4HwrkodTXZpWr66Rdm6C
+	t1u9dXYfXlhDpWkxwb9gNwaKuKYsElHzlgdT1D/pp3/zZzewpqJXozcdzZzyAryU7GuAMMbgWx/
+	Lut9KnHPPB4icG3+Wr3bU/PkUbqARtg9NP70ASmMhl3031R1ppBin/VjLoQR6cheZWMiLxsluHe
+	HwLKF
+X-Received: by 2002:a05:7022:fb04:b0:135:52d3:d9de with SMTP id
+ a92af1059eb24-138066c7823mr2585769c88.15.1780684074557; Fri, 05 Jun 2026
+ 11:27:54 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 5 Jun 2026 11:27:53 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 5 Jun 2026 11:27:53 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <aiMOWkiVBqoQDAPd@google.com>
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-19-6983ae4c3a4d@google.com>
+ <CAEvNRgHEq-hHcTivUw8TYBeMu-RpS=Ho4DXaNXKQKLPL_biTgg@mail.gmail.com> <aiMOWkiVBqoQDAPd@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
- <20260521-tdx-selftests-v13-v13-19-6983ae4c3a4d@google.com> <CAEvNRgHEq-hHcTivUw8TYBeMu-RpS=Ho4DXaNXKQKLPL_biTgg@mail.gmail.com>
-Message-ID: <aiMOWkiVBqoQDAPd@google.com>
+MIME-Version: 1.0
+Date: Fri, 5 Jun 2026 11:27:53 -0700
+X-Gm-Features: AVHnY4JaNveLNYRuMGFSmOEbQfPwORj3FOENwfzBRs6UfWg6-x8jGi2n-qT-FGA
+Message-ID: <CAEvNRgF09SfDm=OgbrS8-wpfxbNecQkqAQwf1ELq1jWu7NjbUA@mail.gmail.com>
 Subject: Re: [PATCH v13 19/22] KVM: selftests: Finalize TD memory as part of kvm_arch_vm_finalize_vcpus
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
+To: Sean Christopherson <seanjc@google.com>
 Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
 	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
 	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
@@ -73,68 +106,68 @@ Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
 	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, 
 	Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, 
 	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Jun 05, 2026, Ackerley Tng wrote:
-> Lisa Wang <wyihan@google.com> writes:
-> 
-> > From: Sagi Shahar <sagis@google.com>
-> >
-> > Finalize TDX VM after creation to make it runnable.
-> >
-> > Signed-off-by: Sagi Shahar <sagis@google.com>
-> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Lisa Wang <wyihan@google.com>
-> > ---
-> >  tools/testing/selftests/kvm/lib/x86/processor.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
-> > index d84c629a1945..842cac168e99 100644
-> > --- a/tools/testing/selftests/kvm/lib/x86/processor.c
-> > +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
-> > @@ -1479,6 +1479,12 @@ bool kvm_arch_has_default_irqchip(void)
-> >  	return true;
-> >  }
-> >
-> > +void kvm_arch_vm_finalize_vcpus(struct kvm_vm *vm)
-> > +{
-> > +	if (is_tdx_vm(vm))
-> > +		tdx_vm_finalize(vm);
-> > +}
-> > +
-> 
-> This doesn't necessarily block this series, we could (re)move this
-> later: I'm not sure if kvm_arch_vm_finalize_vcpus() is the correct place
-> to be finalizing the VM.
+Sean Christopherson <seanjc@google.com> writes:
+
 >
-> Was kvm_arch_vm_finalize_vcpus() supposed to be for finalizing vCPUs
-> instead?
-> 
-> The awkward part is that kvm_arch_vm_finalize_vcpus() is called from
-> __vm_create_with_vcpus().
-> 
-> While building this POC to test conversions [1] I only wanted to create
-> the vm and vcpus and didn't want to finalize yet, since I still needed
-> to do more mappings in the guest (and I needed the vm pointer to do
-> mappings in the guest).
+> [...snip...]
+>
+>> Was kvm_arch_vm_finalize_vcpus() supposed to be for finalizing vCPUs
+>> instead?
+>>
+>> The awkward part is that kvm_arch_vm_finalize_vcpus() is called from
+>> __vm_create_with_vcpus().
+>>
+>> While building this POC to test conversions [1] I only wanted to create
+>> the vm and vcpus and didn't want to finalize yet, since I still needed
+>> to do more mappings in the guest (and I needed the vm pointer to do
+>> mappings in the guest).
+>
+> Hmm, I would argue this is a flaw in the selftests infrastructure.  IMO, as a
+> developer, it's quite surprising that the current value of a global variable
+> doesn't show up in the VM automagically.  I totally understand why selftests
+> work that way, but it's certainly odd and annoying.  If _that_ were solved, then
+> the kludginess of what you're doing goes away.
+>
+> The other way this could be solved is by adding support for annotating globals
+> with a __shared flag, a la the kernel's __bss_decrypted, so that loading memory
+> into the VM can automatically mark the associated globals' pages as shared.
+>
 
-Hmm, I would argue this is a flaw in the selftests infrastructure.  IMO, as a
-developer, it's quite surprising that the current value of a global variable
-doesn't show up in the VM automagically.  I totally understand why selftests
-work that way, but it's certainly odd and annoying.  If _that_ were solved, then
-the kludginess of what you're doing goes away.
+More generally, is your opinion that tests should not have to add extra
+memslots?
 
-The other way this could be solved is by adding support for annotating globals
-with a __shared flag, a la the kernel's __bss_decrypted, so that loading memory
-into the VM can automatically mark the associated globals' pages as shared.
+If I wanted a shared page, would I have to do
 
-> Would calling tdx_vm_finalize() from within vcpu_run(), just once, be
-> too magical?
+  static __shared test_page[4096] = {0};
 
-Yes.
+and then rely on ELF loading to put that in the guest for me? Are there
+some compiler flags/how will I require that test_page be page aligned?
 
-> It's also possible to have some kvm_vm_finalize() call that can be
-> explicitly and manually invoked from selftests just for CoCo selftests.
+If I mark 10 globals as __shared, would the compiler automatically
+consolidate the shared memory together?
 
-Why bother?  It's obviously possible to all kvm_arch_vm_finalize_vcpus() directly.
+I think it's a bit constraining to require that all guest memory be set
+up statically. It's nice to have but I'd like another option...
+
+Many tests use vm_userspace_mem_region_add(), CoCo tests that require
+finalizing shouldn't be disallowed that option.
+
+>> Would calling tdx_vm_finalize() from within vcpu_run(), just once, be
+>> too magical?
+>
+> Yes.
+>
+>> It's also possible to have some kvm_vm_finalize() call that can be
+>> explicitly and manually invoked from selftests just for CoCo selftests.
+>
+> Why bother?  It's obviously possible to all kvm_arch_vm_finalize_vcpus() directly.
+
+Works for me to call directly. Do you mean kvm_arch_vm_finalize_vcpus()
+is the right function where the TD is finalized?
+
+For tests that need to do more setup after creating a vm, is the only
+way out to call __vm_create() then vm_vcpu_add() to avoid premature
+finalization in __vm_create_with_vcpus() when
+kvm_arch_vm_finalize_vcpus() is called?
