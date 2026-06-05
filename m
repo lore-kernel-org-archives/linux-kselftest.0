@@ -1,324 +1,481 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12863B14AF
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 13:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387562EEE73
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 13:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780664573; cv=pass; b=JswfuGdfVb54Lf4kFRg4lemd5BxTylt80omEkOAyQwaJFcLP5ucWiHXOGSzCSG22Lu1kBeZm5jLBiw4mJT7Sub30mDt68LmSN87g2YWHTjeKZs5xzs+nBT4RFyTmpFMhRXcA0MgIybMEh8+YGbYgVTu6teyzNJhvG9pTYOpjx6M=
+	t=1780666807; cv=pass; b=oBwLpRHu2nPiCf7plflvxdvmqGzU5PwoXjBSXlaFKWv/vj0fTm+9VxAqYmGppQfp7oU0ktSmCqwNkbDCPEQWcJ8fm0ma22bvBhQQJ71s4J+/ywhMPhuZUEc5FgxwwCRftS5FBPdeRJfaqPS/nfCQyenntB14Qj1fuHvbbDa0FC4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780664573; c=relaxed/simple;
-	bh=7Rcc7KyE8tbm7ygtfwDBDBxyxnCeiVQgltB9GabYmQI=;
+	s=arc-20240116; t=1780666807; c=relaxed/simple;
+	bh=NXVv5G8ZjXXX91vDQZ4zsrw9ziOnzBogrKzoH3bFbYM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uHPmhxVHSoirOUhHBQXrvKUsR3BD5ikbXhPY3+rjvYvp1DkU2vFfXp3ELqugGsqU/nlMQd7hedrcDXhUV4dVIOC1FixbE/Jjmdibqu9tfk3wUZvHRJMeo/ZDqKAst4lxtYgCYLTg2ZoLJfxJMBBZChBdKk/dDl+Cqg4NQCTRHSQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XoIBAj+4; arc=pass smtp.client-ip=209.85.218.53
+	 To:Cc:Content-Type; b=OzqHMcgYCjRDibt7ZCfhgeRF6dsIs1pMvic8yEKqhYb4PCy8GClR7BuFM4CQ99Y2wMb3fEhfWrq/aY/pAHTAcFB6CKGbIDz5rjpQ+ztUriTH1mQi2y0iJJtuG7pB/eY9nwMnZ7aJPNIWbjZl9PUzfEK1Y+dhietksMZf0GDOE5k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZaxVT5vY; arc=pass smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XoIBAj+4"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-befd83e0521so598494666b.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 06:02:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780664570; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZaxVT5vY"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-45ef372c58aso1162951f8f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 06:40:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780666804; cv=none;
         d=google.com; s=arc-20240605;
-        b=bYTKGU1oVnrtyIMhzXbLnTMWj4cRdTZ8s0UxRdnMln3enxR6yOmJEFZ20RYVkc1PJD
-         8gK+r5KVIBrQvEstKMEBg8YOPBhuMMBX0tBUbe35AiPEDHAxj1l65amZMRfTVe9tXUHK
-         YEDfsVrZxRDqvhkWh+FgI5GAvsAKxwNVf0ZhHn4rck186BbMqZttSfgSOgYWMdvSHhoG
-         12Nh5oQKh/m4XbCW2ADb2xnw2G1Q9/xMJB/1Wvi5DDsC+/efe8637zpFDiQkMwT1LQYW
-         l2LV9wy2zUXot4HBWJZGZlq4gYmqdcpyi/M2aLeT1cASS52/CZR46w8HG3aFmbIExYFu
-         V09A==
+        b=IuWlYknelILP4zaO06Etm8sAF72Gvc7OnPlNgNC7KvhFbZ62dcccMhu/XQNMnGY8JC
+         JPO8IWzXJggR3vaju4PJxpQ44SwoiwoG+M7GDUw2ZBYbCfG+lbF7djvXlKNDii0brPWh
+         +KvZePZO+MFussVZC66nDV6YTJEnvG80hlGaFj9EMSLDhEIST33XNlZtWx2H0045CTXy
+         2/Hobaa3qFX0/cWRDkM6w2SvCyb/3X4y/moi9h52nSaKBYV1qXCAdM8F24pByrbCejlX
+         Um9JO8yEqjViZjKuNL5xhh7x+Hu4fte4T0R9QDI+24oVFrI+G44ouKmVVR+6CC+EqPyt
+         dIAA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=JU4GN0vpsrLuN8vab5FiAWTdMHvX9GAwzjPoC+upVCk=;
-        fh=s5jZN+NeNX7e1DiHy6tvX7PQslTuxNBq0xoQyUPkf7A=;
-        b=ZhO+fw0oJpm/2WLZE9rcXsdNreOC/GNLe9SiJpg7vfLRg3vYgD/624H2Wju+ZUwTvw
-         5FjG4ZwILOrUgMx43ksP1gVfGMKw2F2LJ+WZSI6UxcAf7dq0ksuCTJYTru5jTryxupxs
-         8gadFO+iV9D6mjA89ZkYoMnpN9jKUlumXbM24J3tkwKRxqgjO1dWIqac/YKk5WKMWZPc
-         4GC0IUiNtGwVUQADEA/2//h0dh2/IeBuufH4+fubu+CsVWHd9D06o3Yx12TTL+6QDH7L
-         GiETXc99/UhU+qb8u1iFWbVU81U4+c0Yb7lUWuMiiULgqNiXWEfpzcMCPg/6mFwykD9T
-         biAQ==;
+        bh=LiVg/aBuWVrMguSpz5n5CE35KtBF30v3XL/eAKvboRE=;
+        fh=azrHIjc4+QIq8r0i4PXkGUk35BT28qh2Ya5Ij6xqKwg=;
+        b=TnVdPBlNU/3S9OVwDPlYuk7cSGXA0tkNUwUS7bqJI/WVKG3tqOZC/5a/uiNhGPI/l6
+         yYtDAeWH0yBPN3tucJALhVPNmd8qpDxSX0mO9lQoZUAZbHzlAymD33B0a6Prxigu9uiw
+         xrN0yXxs79z4dU9j5Kr996PrlInbYsaYXAo2Kae6WPjlDe/vS45Vnvatjmd2kxXAVeNd
+         fVzolg8AYGvkSRHzsAVDQiB6kzv57TEaHCuMEa8RfeXU8mLbssPVXHPJua9kAS6e9AJe
+         TFqQzpxlNT2w52EBZLXLAF1SxSTfBkagu3AvghB81k1Dxh9aP5+T1GWVDSi/YJsIk3MJ
+         AamA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780664570; x=1781269370; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780666804; x=1781271604; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JU4GN0vpsrLuN8vab5FiAWTdMHvX9GAwzjPoC+upVCk=;
-        b=XoIBAj+4p9JGtPC19hq8k3ePKDaUIvj6c5EZ6j8Qpfu6j91uQKIZkTruZMKTKDk1Ga
-         jLvYfPIiFQ9O151yApr0lcm9hZ4RhnZnkY08EhSJTw0wumUnIlFCm1NrtWStxvcvq2q9
-         owO8fDiyBOGoBYF0o+3X7jLHFJTp8NxEMQNDZcnvE6BWfPMphWhaBCHdk1pw+BdWWCoX
-         SeMgjqFyEX8wq/ztbRNSE5j9PTMv47PSSOPh6FJTvNP41Zl9aG4cjsSDbxAboV5oCxNQ
-         b8ipNvHrS5uNWLjbsq1XIhkquInKLRMYghOINA9Aht3Nhfouvxayb4JpbZWaMA3oe1vJ
-         /c9Q==
+        bh=LiVg/aBuWVrMguSpz5n5CE35KtBF30v3XL/eAKvboRE=;
+        b=ZaxVT5vY1tMfOmUI6qcaIr6NAFWvpyxuBJpVToqnY4yrMKXt1ar5o8kg4xN4XAZ75R
+         8VtiXKteMWAZzWQFYP1/MunLtf2uf9hvEEy9mxMhmcwNYx4ZOM8SeMt+50SQcdQnj0mW
+         +D5H+/3HQP7sXQN/bOMfjei/sgqstbxTrUmrB7b+AfFuiXfeR3UnBQFk3i0wzskkXTQK
+         McHSs38ccf7iLIjKFzk8UkKAH0S9qDDZhH4jZ9vtYdr5p/ZkpZLbiGOWDZu+pk+BQ2qt
+         yGmH8wrkAbNXf19N4A/OhpxzqF9DcuV/m58vqj0YazM3x+xawp6PSBK7K1oE+O0UgLAF
+         98fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780664570; x=1781269370;
+        d=1e100.net; s=20251104; t=1780666804; x=1781271604;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=JU4GN0vpsrLuN8vab5FiAWTdMHvX9GAwzjPoC+upVCk=;
-        b=CqDw2Le2GY6g3ki2kDD8MbWGRXFeznlOX5uuxq5XSvd5+gJ8Esq3Cbiafd6G6Gh9F3
-         SvQZIMpfxdiXYBjQasg4MejvamZAe9f/GtLp70B55nlE9/EC7CMQAqSPV9E+Yrh7iwRf
-         d3BVurWaGkHQo/ic8NZghrixLSXkmHVEDqA7/ZsL8DbRUYOCx15zICumWkcypYwqVazu
-         S0yIcZEq3jrc45OhGHP6AL3Rh7yYPPOpAAjtEbD9SnIG43wIUTn5MGDZeIzBQQU/K/XX
-         K8ZzvTeJlOD0kfFMfBzpPum3ckOmc71nbYdbX+DFG/1nKf6cOa0SQUC40VRDbRJKdSpv
-         WXmA==
-X-Forwarded-Encrypted: i=1; AFNElJ+i35FbKX/ifPffAFy3KMt84rJlZOyOV2xtLfEc1Ww3+RnA4DESjX6lptVkXHCdVphA3e4h4LobeQ1R+ijmKpc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqNRzdEPjE89wG2bROmdU1zwjhVXow/5T2d3dDdIUuWFqrlnlA
-	ultrzhBEp84xTajanOzbBuHNJGeiXWLtB7AZ5De3qf4iz9/7CbvUdSl01bmRISg/oyhqht/PM4c
-	2ND8G+u0MRquF4A0LyUYynZiGJm1eXu4=
-X-Gm-Gg: Acq92OGzLr44IoePceKEhnM2gWuRo1Jp//Y34CYSqe3h+rHCUim5sIhuAUhCB4++BvS
-	VN42cJ/6NjY2TgsUw9UIaO0Hk/twHzHXaMeTqw7ozh94lh1ob0ZMyt1YEZxtvM5qvCtyYBiQCsH
-	0MY/ylKYQ+X71DwPfjO7UDoV9a4WZ28G6Zt/Rpa/K6S2OoP0xVimGa2FQzcWOuBHVlqUqP1EW9j
-	K6GAbXpCBrFqwAg+/MCH1Oj2ciKPvLUJDtFz5f4foWf7h94cNMRVk4hMKi67bQ+1bXRl+/F7hCD
-	dSnMvK1c8APJxrUYZCUQP1vGNmPAH35/sg==
-X-Received: by 2002:a17:907:972a:b0:bdb:5c26:d499 with SMTP id
- a640c23a62f3a-bf3a8a06e97mr124263866b.22.1780664569563; Fri, 05 Jun 2026
- 06:02:49 -0700 (PDT)
+        bh=LiVg/aBuWVrMguSpz5n5CE35KtBF30v3XL/eAKvboRE=;
+        b=NclbK0g3opSQMjcd8lIckYJnRCRXMy5u22btxTkPvUUcWJcqqdhluDuE1DmKq0BMG4
+         BWjmAQNyKKkPcyqXkkkO+lV4UhFKoggYofURqVpxUQxFzi5yoKzG2jrAFAmS9/qr5jfr
+         uzu69vHdc6JgScwjIKK4PzfqTo2Y3gXEX3WdPccz4U5UB65fgY4pl3fTbMqskZiRp0bf
+         de3z2QPtbv+OvxIs7/y/ySZfkX4OpZ5RT7S2Xtr4lbulYZCDjmXT7jEGbZgO0FcWvC1J
+         b7y1AUREAQcCLvp8/2+0B4UlwYaRqU8f4r0e7VQ3KjE0QrnBdzqrLX6D3aOJsOrI7BQ1
+         abvA==
+X-Forwarded-Encrypted: i=1; AFNElJ+gE8hAHhDF6+RyTv4eaTTDtLKI0jxfvhUD2PipF+p+SoI0xLZ5wNbrBaj/dwIpNOh3D/htWXJd8rx1jZOy0RA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxT/KESNoSSzoxeNc/9NVFbH813K06/jMMa0zvFsJ6N5RkhdKUA
+	bg3x1OyDPg5sO/JZk9L8mA1/OerSyUPLOwua5Qr3tHj8n5ORjo/yjDY3KZt14bKhvpM4enEJk8r
+	QX4yvuTC4zT3eBrY6VunsfpXruGAUdAM=
+X-Gm-Gg: Acq92OGx0y3id4m1GMyWOcnskpnVXUQh9Q0gTdTrHQbkpDv5tqvC/ghHNYTpK2SiCL7
+	iKfUuVr8PY+TolRLM8gxw0kLB7i9UuXn4HO7pESXISEJJY5McY0Jv1ejWyMHrt1BZWOuYLSRU36
+	9bt3PswSKM2zcQNK9U5q20Z1D40EgrY04xURw9o83AUolV0VWtUYHBG0Z8V778rrQYxyW5jA7wZ
+	vpDSUBSjiitGMsKbEiHRMheIYsTs9AOxTL9grD8GxkrAohzLXMuZwEOkRGUcoBcGj4i8Y5ihatx
+	IeP7xN+rhP9Bk7U5UWTlr57yOqMVOVT+cgUwx79S5P6WvyhBoxUBsTF/2LIqklY+m0nPLrblTZm
+	w4lcqq60HZHAbxBCm6qMftk/XmmERyXXp+Q==
+X-Received: by 2002:adf:ea12:0:b0:43f:e2b7:7160 with SMTP id
+ ffacd0b85a97d-460304f01bfmr4581992f8f.4.1780666803193; Fri, 05 Jun 2026
+ 06:40:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260527121207.2312181-1-puranjay@kernel.org>
-In-Reply-To: <20260527121207.2312181-1-puranjay@kernel.org>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Fri, 5 Jun 2026 14:02:35 +0100
-X-Gm-Features: AVVi8CdZLIwoo8jb7IFSIVOMgYaUMKtB5fOz9Xl1a8POCFsNfhfSvAxdUH1qdvk
-Message-ID: <CANk7y0jnUebhpw5ORp9TPY7jqfp-5gEF8wkjpUJJd7mLJje7vw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] arm64: Add BRBE support for bpf_get_branch_snapshot()
-To: Rob Herring <robh@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Leo Yan <leo.yan@arm.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>, 
-	Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	Stephane Eranian <eranian@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif <usama.arif@linux.dev>, 
-	linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@meta.com
+References: <20260605-remove-lirc-test-v1-1-ee3f1ea5f3ae@bootlin.com>
+In-Reply-To: <20260605-remove-lirc-test-v1-1-ee3f1ea5f3ae@bootlin.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 5 Jun 2026 06:39:51 -0700
+X-Gm-Features: AVVi8CfWbJgoMqITB3-_uk0rcaG6K6Qc86NA0qVhYhO-cwK9SNn6D_CUqlOMWqI
+Message-ID: <CAADnVQJWBN2wohM8PM4rNGqtgGWQH__sgjrUv7h8SmWE7Px0FA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf/selftests: remove lirc test
+To: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>, Sean Young <sean@mess.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+	Alexis Lothore <alexis.lothore@bootlin.com>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Rob,
+On Fri, Jun 5, 2026 at 12:58=E2=80=AFAM Bastien Curutchet (eBPF Foundation)
+<bastien.curutchet@bootlin.com> wrote:
+>
+> test_lirc_mode.sh fails with the following when run from the vmtest VM:
+> root@(none):/root/bpf# ./test_lirc_mode2.sh
+> Failed to read decoded IR: Resource temporarily unavailable
+> FAIL: lirc_mode2
+>
+> As part of the ongoing effort to get rid of any standalone test, this
+> script should either be fixed and converted to test_progs or removed.
+>
+> Remove it.
 
-Could you please have a look at this patchset when you get a chance?
+cc Sean
 
-Thanks,
-Puranjay
-
-On Wed, May 27, 2026 at 1:12=E2=80=AFPM Puranjay Mohan <puranjay@kernel.org=
-> wrote:
+> Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@boo=
+tlin.com>
+> ---
+> Hi all,
 >
-> v3: https://lore.kernel.org/all/20260413185740.3286146-1-puranjay@kernel.=
-org/
-> Changes in v4:
-> - Fix leaking branch records when scheduled task has an unrelated perf ev=
-ent (Sashiko)
-> - Update tools/include/uapi/linux/perf_event.h as well for patch 2
-> - Introduce cpu_has_brbe() and use it in
->   arm_brbe_snapshot_branch_stack(0 to make sure we don't run on a CPU
->   without BRBE.
-> - Add explicit isb() after after writing to SYS_BRBFCR_EL1.
-> - Rebase on latest arm64 tree.
+> I went back up to v6.13 without finding a working commit. Maybe
+> something's wrong with my setup but comments inside
+> test_lirc_mode2_user.c say that three kernel configurations are needed
+> to have the test working and I ensured they were indeed enabled (with
+> s/BPF_RAWIR_EVENT/BPF_LIRC_MODE2).
 >
-> v2: https://lore.kernel.org/all/20260318171706.2840512-1-puranjay@kernel.=
-org/
-> Changes in v3:
-> - Move NULL pmu_ctx fix from arm_pmuv3.c to perf core (Leo Yan)
-> - Use union to clear branch entry bitfields instead of per-field
->   zeroing (Leo Yan)
-> - Remove per-CPU brbe_active flag; check BRBCR_EL1 =3D=3D 0 instead (Rob
->   Herring)
-> - Remove redundant valid_brbidr() check in snapshot path (Rob Herring)
-> - Introduce for_each_brbe_entry() iterator to deduplicate bank
->   iteration (Rob Herring)
-> - Include perf core maintainers (Leo Yan, Rob Herring)
+> If someone disagrees with this removal please speak up and I'll
+> investigate this further.
 >
-> v1: https://lore.kernel.org/all/20260313180352.3800358-1-puranjay@kernel.=
-org/
-> Changes in v2:
-> - Rebased on arm64/for-next/core
-> - Add per-CPU brbe_active flag to guard against UNDEFINED sysreg access
->   on non-BRBE CPUs in heterogeneous big.LITTLE systems.
-> - Fix pre-existing bug in perf_clear_branch_entry_bitfields() that missed
->   zeroing new_type and priv bitfields, added as a separate patch with
->   Fixes tags (new patch 2).
-> - Use architecture-specific selftest threshold (#if defined(__aarch64__))
->   instead of raising the global threshold, to preserve x86 regression
->   detection.
+> Best regards,
+> Bastien
+> ---
+>  tools/testing/selftests/bpf/.gitignore             |   1 -
+>  tools/testing/selftests/bpf/Makefile               |   3 -
+>  .../selftests/bpf/progs/test_lirc_mode2_kern.c     |  26 ---
+>  tools/testing/selftests/bpf/test_lirc_mode2.sh     |  41 -----
+>  tools/testing/selftests/bpf/test_lirc_mode2_user.c | 177 ---------------=
+------
+>  5 files changed, 248 deletions(-)
 >
-> RFC: https://lore.kernel.org/all/20260102214043.1410242-1-puranjay@kernel=
-.org/
-> Changes from RFC:
->  - Fix pre-existing NULL pointer dereference in armv8pmu_sched_task()
->    found by Leo Yan during testing (patch 1)
->  - Pause BRBE before local_daif_save() to avoid branch pollution from
->    trace_hardirqs_off()
->  - Use local_daif_save() to prevent pNMI race from counter overflow
->    (Mark Rutland)
->  - Reuse perf_entry_from_brbe_regset() instead of duplicating register
->    read logic, by making it accept NULL event (Mark Rutland)
->  - Invalidate BRBE after reading to maintain record contiguity for
->    other consumers (Mark Rutland)
->  - Adjust selftest wasted_entries threshold for ARM64 (patch 3)
->  - Tested on ARM FVP with BRBE enabled
+> diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selft=
+ests/bpf/.gitignore
+> index 986a6389186ba..b815bf0d88774 100644
+> --- a/tools/testing/selftests/bpf/.gitignore
+> +++ b/tools/testing/selftests/bpf/.gitignore
+> @@ -17,7 +17,6 @@ test_verifier_log
+>  feature
+>  urandom_read
+>  test_sockmap
+> -test_lirc_mode2_user
+>  flow_dissector_load
+>  test_tcpnotify_user
+>  test_libbpf
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+> index bc049620c7745..653c949fc854d 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -117,7 +117,6 @@ TEST_FILES =3D xsk_prereqs.sh $(wildcard progs/btf_du=
+mp_test_case_*.c)
 >
-> This series enables the bpf_get_branch_snapshot() BPF helper on ARM64
-> by implementing the perf_snapshot_branch_stack static call for ARM's
-> Branch Record Buffer Extension (BRBE).
+>  # Order correspond to 'make run_tests' order
+>  TEST_PROGS :=3D test_kmod.sh \
+> -       test_lirc_mode2.sh \
+>         test_bpftool_build.sh \
+>         test_doc_build.sh \
+>         test_xsk.sh \
+> @@ -135,7 +134,6 @@ TEST_GEN_PROGS_EXTENDED =3D \
+>         bench \
+>         flow_dissector_load \
+>         test_cpp \
+> -       test_lirc_mode2_user \
+>         veristat \
+>         xdp_features \
+>         xdp_hw_metadata \
+> @@ -325,7 +323,6 @@ $(OUTPUT)/test_sockmap: $(CGROUP_HELPERS) $(TESTING_H=
+ELPERS)
+>  $(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(TR=
+ACE_HELPERS)
+>  $(OUTPUT)/test_sock_fields: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+>  $(OUTPUT)/test_tag: $(TESTING_HELPERS)
+> -$(OUTPUT)/test_lirc_mode2_user: $(TESTING_HELPERS)
+>  $(OUTPUT)/flow_dissector_load: $(TESTING_HELPERS)
+>  $(OUTPUT)/test_maps: $(TESTING_HELPERS)
+>  $(OUTPUT)/test_verifier: $(TESTING_HELPERS) $(CAP_HELPERS) $(UNPRIV_HELP=
+ERS)
+> diff --git a/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c b/t=
+ools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c
+> deleted file mode 100644
+> index 7a6620671a833..0000000000000
+> --- a/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c
+> +++ /dev/null
+> @@ -1,26 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -// test ir decoder
+> -//
+> -// Copyright (C) 2018 Sean Young <sean@mess.org>
+> -
+> -#include <linux/bpf.h>
+> -#include <linux/lirc.h>
+> -#include <bpf/bpf_helpers.h>
+> -
+> -SEC("lirc_mode2")
+> -int bpf_decoder(unsigned int *sample)
+> -{
+> -       if (LIRC_IS_PULSE(*sample)) {
+> -               unsigned int duration =3D LIRC_VALUE(*sample);
+> -
+> -               if (duration & 0x10000)
+> -                       bpf_rc_keydown(sample, 0x40, duration & 0xffff, 0=
+);
+> -               if (duration & 0x20000)
+> -                       bpf_rc_pointer_rel(sample, (duration >> 8) & 0xff=
+,
+> -                                          duration & 0xff);
+> -       }
+> -
+> -       return 0;
+> -}
+> -
+> -char _license[] SEC("license") =3D "GPL";
+> diff --git a/tools/testing/selftests/bpf/test_lirc_mode2.sh b/tools/testi=
+ng/selftests/bpf/test_lirc_mode2.sh
+> deleted file mode 100755
+> index 5252b91f48a18..0000000000000
+> --- a/tools/testing/selftests/bpf/test_lirc_mode2.sh
+> +++ /dev/null
+> @@ -1,41 +0,0 @@
+> -#!/bin/bash
+> -# SPDX-License-Identifier: GPL-2.0
+> -
+> -# Kselftest framework requirement - SKIP code is 4.
+> -ksft_skip=3D4
+> -ret=3D$ksft_skip
+> -
+> -msg=3D"skip all tests:"
+> -if [ $UID !=3D 0 ]; then
+> -       echo $msg please run this as root >&2
+> -       exit $ksft_skip
+> -fi
+> -
+> -GREEN=3D'\033[0;92m'
+> -RED=3D'\033[0;31m'
+> -NC=3D'\033[0m' # No Color
+> -
+> -modprobe rc-loopback
+> -
+> -for i in /sys/class/rc/rc*
+> -do
+> -       if grep -q DRV_NAME=3Drc-loopback $i/uevent
+> -       then
+> -               LIRCDEV=3D$(grep DEVNAME=3D $i/lirc*/uevent | sed sQDEVNA=
+ME=3DQ/dev/Q)
+> -               INPUTDEV=3D$(grep DEVNAME=3D $i/input*/event*/uevent | se=
+d sQDEVNAME=3DQ/dev/Q)
+> -       fi
+> -done
+> -
+> -if [ -n "$LIRCDEV" ];
+> -then
+> -       TYPE=3Dlirc_mode2
+> -       ./test_lirc_mode2_user $LIRCDEV $INPUTDEV
+> -       ret=3D$?
+> -       if [ $ret -ne 0 ]; then
+> -               echo -e ${RED}"FAIL: $TYPE"${NC}
+> -       else
+> -               echo -e ${GREEN}"PASS: $TYPE"${NC}
+> -       fi
+> -fi
+> -
+> -exit $ret
+> diff --git a/tools/testing/selftests/bpf/test_lirc_mode2_user.c b/tools/t=
+esting/selftests/bpf/test_lirc_mode2_user.c
+> deleted file mode 100644
+> index 88e4aeab21b7b..0000000000000
+> --- a/tools/testing/selftests/bpf/test_lirc_mode2_user.c
+> +++ /dev/null
+> @@ -1,177 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -// test ir decoder
+> -//
+> -// Copyright (C) 2018 Sean Young <sean@mess.org>
+> -
+> -// A lirc chardev is a device representing a consumer IR (cir) device wh=
+ich
+> -// can receive infrared signals from remote control and/or transmit IR.
+> -//
+> -// IR is sent as a series of pulses and space somewhat like morse code. =
+The
+> -// BPF program can decode this into scancodes so that rc-core can transl=
+ate
+> -// this into input key codes using the rc keymap.
+> -//
+> -// This test works by sending IR over rc-loopback, so the IR is processe=
+d by
+> -// BPF and then decoded into scancodes. The lirc chardev must be the one
+> -// associated with rc-loopback, see the output of ir-keytable(1).
+> -//
+> -// The following CONFIG options must be enabled for the test to succeed:
+> -// CONFIG_RC_CORE=3Dy
+> -// CONFIG_BPF_RAWIR_EVENT=3Dy
+> -// CONFIG_RC_LOOPBACK=3Dy
+> -
+> -// Steps:
+> -// 1. Open the /dev/lircN device for rc-loopback (given on command line)
+> -// 2. Attach bpf_lirc_mode2 program which decodes some IR.
+> -// 3. Send some IR to the same IR device; since it is loopback, this wil=
+l
+> -//    end up in the bpf program
+> -// 4. bpf program should decode IR and report keycode
+> -// 5. We can read keycode from same /dev/lirc device
+> -
+> -#include <linux/bpf.h>
+> -#include <linux/input.h>
+> -#include <errno.h>
+> -#include <stdio.h>
+> -#include <stdlib.h>
+> -#include <string.h>
+> -#include <unistd.h>
+> -#include <poll.h>
+> -#include <sys/types.h>
+> -#include <sys/ioctl.h>
+> -#include <sys/stat.h>
+> -#include <fcntl.h>
+> -
+> -#include "bpf_util.h"
+> -#include <bpf/bpf.h>
+> -#include <bpf/libbpf.h>
+> -
+> -#include "testing_helpers.h"
+> -
+> -int main(int argc, char **argv)
+> -{
+> -       struct bpf_object *obj;
+> -       int ret, lircfd, progfd, inputfd;
+> -       int testir1 =3D 0x1dead;
+> -       int testir2 =3D 0x20101;
+> -       u32 prog_ids[10], prog_flags[10], prog_cnt;
+> -
+> -       if (argc !=3D 3) {
+> -               printf("Usage: %s /dev/lircN /dev/input/eventM\n", argv[0=
+]);
+> -               return 2;
+> -       }
+> -
+> -       ret =3D bpf_prog_test_load("test_lirc_mode2_kern.bpf.o",
+> -                                BPF_PROG_TYPE_LIRC_MODE2, &obj, &progfd)=
+;
+> -       if (ret) {
+> -               printf("Failed to load bpf program\n");
+> -               return 1;
+> -       }
+> -
+> -       lircfd =3D open(argv[1], O_RDWR | O_NONBLOCK);
+> -       if (lircfd =3D=3D -1) {
+> -               printf("failed to open lirc device %s: %m\n", argv[1]);
+> -               return 1;
+> -       }
+> -
+> -       /* Let's try detach it before it was ever attached */
+> -       ret =3D bpf_prog_detach2(progfd, lircfd, BPF_LIRC_MODE2);
+> -       if (ret !=3D -ENOENT) {
+> -               printf("bpf_prog_detach2 not attached should fail: %m\n")=
+;
+> -               return 1;
+> -       }
+> -
+> -       inputfd =3D open(argv[2], O_RDONLY | O_NONBLOCK);
+> -       if (inputfd =3D=3D -1) {
+> -               printf("failed to open input device %s: %m\n", argv[1]);
+> -               return 1;
+> -       }
+> -
+> -       prog_cnt =3D 10;
+> -       ret =3D bpf_prog_query(lircfd, BPF_LIRC_MODE2, 0, prog_flags, pro=
+g_ids,
+> -                            &prog_cnt);
+> -       if (ret) {
+> -               printf("Failed to query bpf programs on lirc device: %m\n=
+");
+> -               return 1;
+> -       }
+> -
+> -       if (prog_cnt !=3D 0) {
+> -               printf("Expected nothing to be attached\n");
+> -               return 1;
+> -       }
+> -
+> -       ret =3D bpf_prog_attach(progfd, lircfd, BPF_LIRC_MODE2, 0);
+> -       if (ret) {
+> -               printf("Failed to attach bpf to lirc device: %m\n");
+> -               return 1;
+> -       }
+> -
+> -       /* Write raw IR */
+> -       ret =3D write(lircfd, &testir1, sizeof(testir1));
+> -       if (ret !=3D sizeof(testir1)) {
+> -               printf("Failed to send test IR message: %m\n");
+> -               return 1;
+> -       }
+> -
+> -       struct pollfd pfd =3D { .fd =3D inputfd, .events =3D POLLIN };
+> -       struct input_event event;
+> -
+> -       for (;;) {
+> -               poll(&pfd, 1, 100);
+> -
+> -               /* Read decoded IR */
+> -               ret =3D read(inputfd, &event, sizeof(event));
+> -               if (ret !=3D sizeof(event)) {
+> -                       printf("Failed to read decoded IR: %m\n");
+> -                       return 1;
+> -               }
+> -
+> -               if (event.type =3D=3D EV_MSC && event.code =3D=3D MSC_SCA=
+N &&
+> -                   event.value =3D=3D 0xdead) {
+> -                       break;
+> -               }
+> -       }
+> -
+> -       /* Write raw IR */
+> -       ret =3D write(lircfd, &testir2, sizeof(testir2));
+> -       if (ret !=3D sizeof(testir2)) {
+> -               printf("Failed to send test IR message: %m\n");
+> -               return 1;
+> -       }
+> -
+> -       for (;;) {
+> -               poll(&pfd, 1, 100);
+> -
+> -               /* Read decoded IR */
+> -               ret =3D read(inputfd, &event, sizeof(event));
+> -               if (ret !=3D sizeof(event)) {
+> -                       printf("Failed to read decoded IR: %m\n");
+> -                       return 1;
+> -               }
+> -
+> -               if (event.type =3D=3D EV_REL && event.code =3D=3D REL_Y &=
+&
+> -                   event.value =3D=3D 1 ) {
+> -                       break;
+> -               }
+> -       }
+> -
+> -       prog_cnt =3D 10;
+> -       ret =3D bpf_prog_query(lircfd, BPF_LIRC_MODE2, 0, prog_flags, pro=
+g_ids,
+> -                            &prog_cnt);
+> -       if (ret) {
+> -               printf("Failed to query bpf programs on lirc device: %m\n=
+");
+> -               return 1;
+> -       }
+> -
+> -       if (prog_cnt !=3D 1) {
+> -               printf("Expected one program to be attached\n");
+> -               return 1;
+> -       }
+> -
+> -       /* Let's try detaching it now it is actually attached */
+> -       ret =3D bpf_prog_detach2(progfd, lircfd, BPF_LIRC_MODE2);
+> -       if (ret) {
+> -               printf("bpf_prog_detach2: returned %m\n");
+> -               return 1;
+> -       }
+> -
+> -       return 0;
+> -}
 >
-> bpf_get_branch_snapshot() [1] allows BPF programs to capture hardware
-> branch records on-demand from any BPF tracing context. This was
-> previously only available on x86 (Intel LBR) since v5.16. With BRBE
-> available on ARMv9, this series closes the gap for ARM64.
+> ---
+> base-commit: 73f574b0cd0ef87a25afdffe1d907b55f7fcc940
+> change-id: 20260604-remove-lirc-test-fc8afa634f3a
 >
-> Usage model
-> -----------
->
-> The helper works in conjunction with perf events. The userspace
-> component of the BPF application opens a perf event with
-> PERF_SAMPLE_BRANCH_STACK on each CPU, which configures the hardware
-> to continuously record branches into BRBE (on ARM64) or LBR (on x86).
-> A BPF program attached to a tracepoint, kprobe, or fentry hook can
-> then call bpf_get_branch_snapshot() to snapshot the branch buffer at
-> any point. Without an active perf event, BRBE is not recording and
-> the buffer is empty.
->
-> On-demand branch snapshots from BPF are useful for diagnosing which
-> specific code path was taken inside a function. Stack traces only show
-> function boundaries, but branch records reveal the exact sequence of
-> jumps, calls, and returns within a function -- making it possible to
-> identify which specific error check triggered a failure, or which
-> callback implementation was invoked through a function pointer.
->
-> For example, retsnoop [2] is a BPF-based tool for non-intrusive
-> mass-tracing of kernel internals. Its LBR mode (--lbr) creates per-CPU
-> perf events with PERF_SAMPLE_BRANCH_STACK and then uses
-> bpf_get_branch_snapshot() in its fentry/fexit BPF programs to capture
-> branch records whenever a traced function returns an error.
->
-> Consider debugging a bpf() syscall that returns -EINVAL when creating
-> a BPF map with invalid parameters. Running retsnoop on an ARM64 FVP
-> with BRBE to trace the bpf() syscall and array_map_alloc_check():
->
->   $ retsnoop -e '*sys_bpf' -a 'array_map_alloc_check' --lbr=3Dany \
->              -F -k vmlinux --debug full-lbr
->   $ simfail bpf-bad-map-max-entries-array  # in another terminal
->
-> Output of retsnoop:
->
->   --- fentry BPF program (entries #63-#17) ---
->
->   [#63-#59] __htab_map_lookup_elem: hash table walk with memcmp        (h=
-ashtab.c)
->   [#58] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xc850           (h=
-ashtab.c:750)
->   [#57-#55] ... dump_bpf_prog internal branches ...
->   [#54] dump_bpf_prog+0xcab8        -> bpf_get_current_pid_tgid+0x0    (h=
-elpers.c:225)
->   [#53] bpf_get_current_pid_tgid+0x1c -> dump_bpf_prog+0xcabc          (h=
-elpers.c:225)
->   [#52-#51] ... dump_bpf_prog -> __htab_map_lookup_elem ...
->   [#50-#47] __htab_map_lookup_elem: htab_map_hash (jhash2), select_bucket
->   [#46-#42] lookup_nulls_elem_raw: hash chain walk with memcmp         (h=
-ashtab.c:717)
->   [#41] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xcaf8           (h=
-ashtab.c:750)
->   [#40-#37] ... dump_bpf_prog -> bpf_ktime_get_ns ...
->   [#36] bpf_ktime_get_ns+0x10       -> ktime_get_mono_fast_ns+0x0      (h=
-elpers.c:178)
->   [#35-#32] ktime_get_mono_fast_ns: tk_clock_read -> arch_counter_get_cnt=
-pct
->   [#31] ktime_get_mono_fast_ns+0x9c -> bpf_ktime_get_ns+0x14           (t=
-imekeeping.c:493)
->   [#30] bpf_ktime_get_ns+0x18       -> dump_bpf_prog+0xcd50            (h=
-elpers.c:178)
->   [#29-#25] ... dump_bpf_prog internal branches ...
->   [#24] dump_bpf_prog+0x11b28       -> __bpf_prog_exit_recur+0x0       (t=
-rampoline.c:1190)
->   [#23-#17] __bpf_prog_exit_recur: rcu_read_unlock, migrate_enable     (t=
-rampoline.c:1195)
->
->   --- array_map_alloc_check (entries #16-#12) ---
->
->   [#16] dump_bpf_prog+0x11b38       -> array_map_alloc_check+0x8       (a=
-rraymap.c:55)
->   [#15] array_map_alloc_check+0x18  -> array_map_alloc_check+0xb8      (a=
-rraymap.c:56)
->         . bpf_map_attr_numa_node       . bpf_map_attr_numa_node
->   [#14] array_map_alloc_check+0xbc  -> array_map_alloc_check+0x20      (a=
-rraymap.c:59)
->         . bpf_map_attr_numa_node
->   [#13] array_map_alloc_check+0x24  -> array_map_alloc_check+0x94      (a=
-rraymap.c:64)
->   [#12] array_map_alloc_check+0x98  -> dump_bpf_prog+0x11b3c           (a=
-rraymap.c:82)
->
->   --- fexit trampoline overhead (entries #11-#00) ---
->
->   [#11] dump_bpf_prog+0x11b5c       -> __bpf_prog_enter_recur+0x0      (t=
-rampoline.c:1145)
->   [#10-#03] __bpf_prog_enter_recur: rcu_read_lock, migrate_disable     (t=
-rampoline.c:1146)
->   [#02] __bpf_prog_enter_recur+0x114 -> dump_bpf_prog+0x11b60          (t=
-rampoline.c:1157)
->   [#01] dump_bpf_prog+0x11b6c       -> dump_bpf_prog+0xd230
->   [#00] dump_bpf_prog+0xd340        -> arm_brbe_snapshot_branch_stack+0x0=
- (arm_brbe.c:814)
->
->                    el0t_64_sync+0x168
->                    el0t_64_sync_handler+0x98
->                    el0_svc+0x28
->                    do_el0_svc+0x4c
->                    invoke_syscall.constprop.0+0x54
->     373us [-EINVAL] __arm64_sys_bpf+0x8
->                     __sys_bpf+0x87c
->                     map_create+0x120
->      95us [-EINVAL] array_map_alloc_check+0x8
->
-> The FVP's BRBE buffer has 64 entries (BRBE supports 8, 16, 32, or
-> 64). Of these, entries #63-#17 (47) are consumed by the fentry BPF
-> trampoline that ran before the function, and entries #11-#00 (12)
-> are consumed by the fexit trampoline that runs after. Entry #00
-> shows the very last branch recorded before BRBE is paused: the call
-> into arm_brbe_snapshot_branch_stack().
->
-> The 5 useful entries (#16-#12) show the exact path taken inside
-> array_map_alloc_check(). Record #14 shows a jump from line 56
-> (bpf_map_attr_numa_node) to line 59 (the if-condition), and #13
-> shows an immediate jump from line 59 (attr->max_entries =3D=3D 0) to
-> line 64 (return -EINVAL), skipping lines 60-63. This pinpoints
-> max_entries=3D=3D0 as the cause -- a diagnosis impossible with stack
-> traces alone.
->
-> [1] 856c02dbce4f ("bpf: Introduce helper bpf_get_branch_snapshot")
-> [2] https://github.com/anakryiko/retsnoop
->
-> Puranjay Mohan (4):
->   perf/core: Fix sched_task callbacks for CPU-wide branch stack events
->   perf: Use a union to clear branch entry bitfields
->   perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
->   selftests/bpf: Adjust wasted entries threshold for ARM64 BRBE
->
->  drivers/perf/arm_brbe.c                       | 127 +++++++++++++++---
->  drivers/perf/arm_brbe.h                       |   9 ++
->  drivers/perf/arm_pmuv3.c                      |   5 +-
->  include/linux/perf_event.h                    |   9 +-
->  include/uapi/linux/perf_event.h               |  25 ++--
->  kernel/events/core.c                          |  17 ++-
->  tools/include/uapi/linux/perf_event.h         |  25 ++--
->  .../bpf/prog_tests/get_branch_snapshot.c      |  13 +-
->  8 files changed, 172 insertions(+), 58 deletions(-)
->
->
-> base-commit: c754aa6b881ade764510b8539a6a313326501e3d
+> Best regards,
 > --
-> 2.53.0-Meta
+> Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 >
