@@ -1,95 +1,35 @@
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514D83D3CEE
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 21:19:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4979239A4B9;
+	Fri,  5 Jun 2026 21:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780694386; cv=none; b=V1og5fIMnEa5/21H/ZrVCz/7UPpQEyS0u8vuTsKLmxwivNos5kpP5MNugSA4v4z7cnPn78Vy5b3QpsmBXFLgyjRoYEwBdLUWBOvLGbQeQ8Av9JGPdfsiVGaA5ryGfrvCHadpGTnermsj6vlorClQbAM/Fuenm6x1KCuWofE9CI8=
+	t=1780695030; cv=none; b=M6HXz1sf2mlQLgTV8Oa6jmc9opgFylb57e2gELVa5xsACDL/w0XaF03dbu0ADvRI4XVBaxYxuFOEMoPzgw+oF3K0Vw8BFMzPjxtB8eSCIGy5LKEFNkBa1u4McvNyXmRyH9spjJ3wQgg3oY6Ce8UTEHqVl8jA1qlpBA9kPvGQ16U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780694386; c=relaxed/simple;
-	bh=Mh1oQ0uFlkU8AfZR8xtW2zvtlUdY/4dRdyJOeaNOMYw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DuwXwcin4jDTM+wc5W6ZRPHOHoLxujqvn0Ul73aYneP0Hq2/cXe/yswq6q5qL5QF+w8GjJ8EZC+jAtfmvhE7BsADoyVGab+xrhcbwaht1MZKfzgbOjH5IPIHf3gjlU5Byc7aYP+Bj040mfg4rAPz32nSGJzUbS7gJ8I1Z/cg2iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=elwND/tp; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1780695030; c=relaxed/simple;
+	bh=fdZSoBfDvgRDPhXFcZwO2Lr778PTgRQJfFAMKzrGcDI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=AQRYjTIT1lWn46CmZ3q4qT2NNSB7gGdoIwc7FmxaeriHXNhWC+57jGESHxCn50n88gIiJRjg158KzYfowUN9Fqip9DHzURcF2WdW6NS3T1dTm2ndh7Y13tMKVoSZdmuXCcdaZwoA31fVxy269aQJzjlXnQTEFzAOAo6oe11XbMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HkWCfs9/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="elwND/tp"
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8ce65629acaso27120196d6.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 14:19:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1780694373; x=1781299173; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l77sljwLY2ZMyEKXbyo6m0iIvdzx8NQv05f4wwNhT4k=;
-        b=elwND/tpDb3VBKDfYFF8ueWkRH9DetB77KKruGp0eXBXxfTBdou9SFVBf2KLTju3Qc
-         +0euQnGzK6Kgu09fX2BBWo5TqfQBtik9HtG55rQhLwZEESfSbSQTNbgJlxI9O2W2An5B
-         dHvqduQl+2SUkNz6M0ZX/FgEMoZOaHkq1/OMA4+4qDUFihMlaWeNHwSTOjwyYLin9geZ
-         rq1SsMrAhCHa0hPim3LG8ZAOFIU8Z/KkOVRQSi+b6glV9GVVDWR8F1LD+bmlkIcjFSK2
-         yskQKOM00pyfLMrQVTNA9SeJEVXtZEmpI0b7ndF3YqtOvvbxD0VM2nMj2AyVlkxd+fBR
-         i06A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780694373; x=1781299173;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=l77sljwLY2ZMyEKXbyo6m0iIvdzx8NQv05f4wwNhT4k=;
-        b=I0m431zS6ljGoPKTlg1YJdsTojjqeza4zBQ0qcZWa+LedUsCi5MEgo6L1nWG79/dwG
-         19O1FghQR6lc3v5brDdmG8VLtRMjLbrDkz0A5thFEP8yU73eQOJlj5ugHK7H6+mmEti1
-         gGL7FTUVIIjfGPrAPhWmL2HY1frlVD0lvXPMwu1G4mo47+8dlxtgQ5CjEMEgyzbiYIKa
-         TCuANCSMeEZNRbKQbpnF3xvyQOuYLfVgruIg7wa42wWBNW+G3sM5EKkfTRU+ge16IKBQ
-         vqqHjjWroyeFqSirKnx9MZsBWpip728nlXvuBpuB3dLOXVoZNvv1HPoMP9Y86PVYq0Gs
-         +Mfg==
-X-Forwarded-Encrypted: i=1; AFNElJ94qnp51NG18ZIgCZAJLxsEWttYp40Iu1JIeogXbDaj4Xw0uHTA6IvgIAzTv0yHtv/uMqFxMn/mCrPZEBIBOnk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrGYqhqtflFDR9APTcsbP7EozV1H1C+QpTiE6ucn9SAQSbOkFx
-	QxUu2cKuNzx7n0VOv9dpXw7Rj1SVavkDNEq/afBMDYWtn/bKSrzmDd3ng4ri46sZ9to=
-X-Gm-Gg: Acq92OFkYHbM952cVeQY7HFHoFhg7ygz5Bo6zPhh5iFEL05r/tGD3xMsEiKIf4+MiB8
-	sTQWiw/BCz3WN9V/8EAyB/jPIEPRmqD0/TySVwn7PUjas0mglPEX1JG+EGJfLTaCiJK3N6uP6NF
-	5i4Ueq+JGAhKFMUYLtcZjGt5SW2/1v1Pr2mOoEtXOfYQX0jshBVhyiu9FoFAE81ISinrkWA2tDK
-	7sm0IdS5ZcGTzqlpRsn4F0XnJtzoDi3E3++47peV+cmy47bK2sWrq60I0k9OEuoCpp+eOj9O8gM
-	PQlAPGGv4/yzaILWkZHy7gUk6notL+++QlUpfzbhm3Q4vziWMNWrRI/F8Ph+wgM2j3G0FnEuL3l
-	iljYP5EtmCXeu5mhiZlvNZ28MPh6EXyQDQdLUCHUJasaGabBIUE8xUMxVJ88hl317K5WUQpUSPm
-	pMsIv8OLWZAtbEHbpkvPYHN+NfbC9fj1DUStdR91W4M6W+c9X6KQ0RvofBytyF4PakuBy0XTp8q
-	06vqlfDFqyEvNQliohSh4No7xUbZWwNTQ==
-X-Received: by 2002:a05:6214:2aad:b0:8ca:2559:8886 with SMTP id 6a1803df08f44-8cee5fbda5cmr92189846d6.13.1780694373324;
-        Fri, 05 Jun 2026 14:19:33 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cecd277bbcsm90518196d6.49.2026.06.05.14.19.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 14:19:32 -0700 (PDT)
-From: Gregory Price <gourry@gourry.net>
-To: linux-mm@kvack.org,
-	nvdimm@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org,
-	kernel-team@meta.com,
-	linux-cxl@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	djbw@kernel.org,
-	vishal.l.verma@intel.com,
-	dave.jiang@intel.com,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	osalvador@suse.de,
-	shuah@kernel.org,
-	gourry@gourry.net,
-	alison.schofield@intel.com,
-	Smita.KoralahalliChannabasappa@amd.com,
-	ira.weiny@intel.com,
-	apopple@nvidia.com
-Subject: [PATCH v4 9/9] selftests/dax: add dax/kmem hotplug sysfs regression test
-Date: Fri,  5 Jun 2026 22:19:11 +0100
-Message-ID: <20260605211911.2160954-10-gourry@gourry.net>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260605211911.2160954-1-gourry@gourry.net>
-References: <20260605211911.2160954-1-gourry@gourry.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HkWCfs9/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9EF91F00893;
+	Fri,  5 Jun 2026 21:30:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780695027;
+	bh=Z69GpddxJ/SIhMY4VMCzc9llLu2bxuDx7glOzEnsb/8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=HkWCfs9/610ClG+iKk1ZXbgt/dKz0rrtrJLuQlHS1puLJiFjAZXVFofQIJROuSeVG
+	 0q+4H6REcwXbsewRHe9yqMg8lnGimab4eX6Z88Ay8LdB1bmutIXbMST96t2+bi/3lO
+	 1EGkHejBndMj1QWAeJkbj6bK+6/4urjW1q8VE8T43gmnPtSPs4fe9ge9cQ44ZhaDln
+	 lRLHKMZ7zJb7crHcOXMxj/pYidhkn+dphdImVvpEqLMtVgPEiorz5xmR6S/VdMdu3s
+	 th7vD48RDbnj1y/tLWV0dH0hT0mCqsDEslLdTRCDCrTZDzAvMNrUDpOeuzROjLDaAW
+	 ZhJ6KjhQXGXpw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 569363930BBE;
+	Fri,  5 Jun 2026 21:30:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,235 +37,66 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next RESEND v12 00/11] selftests/bpf: Tolerate partial
+ builds across kernel configs
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178069502789.3925764.15952069390143619686.git-patchwork-notify@kernel.org>
+Date: Fri, 05 Jun 2026 21:30:27 +0000
+References: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
+In-Reply-To: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgPHJibUBzdXNlLmNvbT4=?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
+ nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
+ justinstitt@google.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, alan.maguire@oracle.com
 
-Add a kselftest for the dax/kmem whole-device "hotplug" sysfs attribute
-(/sys/bus/dax/devices/daxX.Y/hotplug), which transitions a kmem-backed
-dax device between "unplugged", "online" and "online_movable".
+Hello:
 
-Provisioning a devdax device and binding it to kmem needs daxctl/ndctl
-(or the tools/testing/nvdimm emulation) and is out of scope for an
-in-tree selftest, so the test discovers an already kmem-bound dax device
-and SKIPs (KSFT_SKIP) when none is present or when the memory cannot be
-freed to reach a known baseline.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-When a device is available it validates the interface contract:
-  - online / online_movable actually add memory (MemTotal grows),
-  - online is idempotent,
-  - switching between online types without an intervening unplug is
-    rejected,
-  - unplug removes the memory and the reported state matches reality,
-  - invalid input is rejected.
+On Tue, 02 Jun 2026 10:02:49 -0300 you wrote:
+> Currently the BPF selftests can only be built by using the minimum kernel
+> configuration defined in tools/testing/selftests/bpf/config*. This poses a
+> problem in distribution kernels that may have some of the flags disabled or
+> set as module. For example, we have been running the tests regularly in
+> openSUSE Tumbleweed [1] [2] but to work around this fact we created a
+> special package [3] that build the tests against an auxiliary vmlinux with
+> the BPF Kconfig. We keep a list of known issues that may happen due to,
+> amongst other things, configuration mismatches [4] [5].
+> 
+> [...]
 
-In particular it covers the online -> unplug -> online_movable -> unplug
-cycle: a re-online must re-reserve the per-range resources so that a
-subsequent unplug actually offlines and removes the memory instead of
-silently reporting success while the memory stays online.
+Here is the summary with links:
+  - [bpf-next,RESEND,v12,01/11] selftests/bpf: Add BPF_STRICT_BUILD toggle
+    https://git.kernel.org/bpf/bpf-next/c/a6850fa388f6
+  - [bpf-next,RESEND,v12,02/11] selftests/bpf: Fix test_kmods KDIR to honor O= and distro kernels
+    https://git.kernel.org/bpf/bpf-next/c/9779193e871b
+  - [bpf-next,RESEND,v12,03/11] selftests/bpf: Tolerate BPF and skeleton generation failures
+    https://git.kernel.org/bpf/bpf-next/c/c476bdf27657
+  - [bpf-next,RESEND,v12,04/11] selftests/bpf: Avoid rebuilds when running emit_tests
+    https://git.kernel.org/bpf/bpf-next/c/a97bfc9aae07
+  - [bpf-next,RESEND,v12,05/11] selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
+    https://git.kernel.org/bpf/bpf-next/c/5498e47741c8
+  - [bpf-next,RESEND,v12,06/11] selftests/bpf: Tolerate test file compilation failures
+    https://git.kernel.org/bpf/bpf-next/c/9c4de137a9a5
+  - [bpf-next,RESEND,v12,07/11] selftests/bpf: Skip tests whose objects were not built
+    https://git.kernel.org/bpf/bpf-next/c/aeb73a9f301d
+  - [bpf-next,RESEND,v12,08/11] selftests/bpf: Allow test_progs to link with a partial object set
+    https://git.kernel.org/bpf/bpf-next/c/af490669fd33
+  - [bpf-next,RESEND,v12,09/11] selftests/bpf: Tolerate benchmark build failures
+    https://git.kernel.org/bpf/bpf-next/c/f813a4d6877e
+  - [bpf-next,RESEND,v12,10/11] selftests/bpf: Provide weak definitions for cross-test functions
+    https://git.kernel.org/bpf/bpf-next/c/b85e63cb65f9
+  - [bpf-next,RESEND,v12,11/11] selftests/bpf: Tolerate missing files during install
+    https://git.kernel.org/bpf/bpf-next/c/3ca6543464f8
 
-Signed-off-by: Gregory Price <gourry@gourry.net>
----
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/dax/Makefile          |   6 +
- tools/testing/selftests/dax/config            |   4 +
- .../testing/selftests/dax/dax-kmem-hotplug.sh | 145 ++++++++++++++++++
- tools/testing/selftests/dax/settings          |   1 +
- 5 files changed, 157 insertions(+)
- create mode 100644 tools/testing/selftests/dax/Makefile
- create mode 100644 tools/testing/selftests/dax/config
- create mode 100755 tools/testing/selftests/dax/dax-kmem-hotplug.sh
- create mode 100644 tools/testing/selftests/dax/settings
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 6e59b8f63e41..8c2b4f97619c 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -14,6 +14,7 @@ TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += damon
-+TARGETS += dax
- TARGETS += devices/error_logs
- TARGETS += devices/probe
- TARGETS += dmabuf-heaps
-diff --git a/tools/testing/selftests/dax/Makefile b/tools/testing/selftests/dax/Makefile
-new file mode 100644
-index 000000000000..25a4f3d73a5b
---- /dev/null
-+++ b/tools/testing/selftests/dax/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+all:
-+
-+TEST_PROGS := dax-kmem-hotplug.sh
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/dax/config b/tools/testing/selftests/dax/config
-new file mode 100644
-index 000000000000..4c9aaeb6ceb4
---- /dev/null
-+++ b/tools/testing/selftests/dax/config
-@@ -0,0 +1,4 @@
-+CONFIG_DEV_DAX=m
-+CONFIG_DEV_DAX_KMEM=m
-+CONFIG_MEMORY_HOTPLUG=y
-+CONFIG_MEMORY_HOTREMOVE=y
-diff --git a/tools/testing/selftests/dax/dax-kmem-hotplug.sh b/tools/testing/selftests/dax/dax-kmem-hotplug.sh
-new file mode 100755
-index 000000000000..705a34cc3c6d
---- /dev/null
-+++ b/tools/testing/selftests/dax/dax-kmem-hotplug.sh
-@@ -0,0 +1,145 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Exercise the dax/kmem whole-device "hotplug" sysfs attribute:
-+#   /sys/bus/dax/devices/daxX.Y/hotplug  ->  unplugged | online | online_movable
-+#
-+# The test needs a dax device already bound to the kmem driver (so the
-+# 'hotplug' attribute exists).  Provisioning a devdax device and binding it to
-+# kmem requires daxctl/ndctl (or the tools/testing/nvdimm emulation) and is out
-+# of scope here; if no suitable device is found the test SKIPs.
-+#
-+# To actually run it, provision a kmem-backed dax device first.  For example,
-+# carve a chunk of RAM into an emulated pmem region via the kernel command line
-+# (the region must be at least one memory block, e.g. 128MiB on x86):
-+#
-+#   memmap=2G!4G
-+#
-+# then, in the booted system:
-+#
-+#   ndctl create-namespace -m devdax -e namespace0.0 -f
-+#   daxctl reconfigure-device -N -m system-ram dax0.0   # binds the kmem driver
-+#   ./dax-kmem-hotplug.sh
-+
-+DIR="$(dirname "$(readlink -f "$0")")"
-+. "$DIR"/../kselftest/ktap_helpers.sh
-+
-+DAX_BASE=/sys/bus/dax/devices
-+
-+memtotal_kb() { awk '/^MemTotal:/ {print $2}' /proc/meminfo; }
-+get_state() { cat "$HP" 2>/dev/null; }
-+# set_state STATE -- write a state to the hotplug attribute; returns the
-+# write's exit status (0 = accepted by the kernel)
-+set_state() { echo "$1" > "$HP" 2>/dev/null; }
-+
-+find_kmem_dax() {
-+	local d drv
-+	for d in "$DAX_BASE"/dax*; do
-+		[ -e "$d/hotplug" ] || continue
-+		drv=$(readlink "$d/driver" 2>/dev/null)
-+		[ "$(basename "${drv:-}")" = kmem ] || continue
-+		basename "$d"
-+		return 0
-+	done
-+	return 1
-+}
-+
-+ktap_print_header
-+
-+if [ "$UID" != 0 ]; then
-+	ktap_skip_all "must be run as root"
-+	exit "$KSFT_SKIP"
-+fi
-+
-+DAX=$(find_kmem_dax)
-+if [ -z "$DAX" ]; then
-+	ktap_skip_all "no kmem-bound dax device with a hotplug attribute"
-+	exit "$KSFT_SKIP"
-+fi
-+HP=$DAX_BASE/$DAX/hotplug
-+ORIG=$(get_state)
-+
-+# A failure to reach the baseline is environmental (memory in use), not an
-+# interface failure, so skip rather than fail.
-+set_state unplugged; rc=$?
-+if [ "$rc" != 0 ] || [ "$(get_state)" != unplugged ]; then
-+	ktap_skip_all "$DAX: cannot reach 'unplugged' baseline (memory in use?)"
-+	[ -n "$ORIG" ] && set_state "$ORIG"
-+	exit "$KSFT_SKIP"
-+fi
-+mt_unplugged=$(memtotal_kb)
-+
-+ktap_print_msg "using $DAX (initial state was: $ORIG)"
-+ktap_set_plan 8
-+
-+set_state online; rc=$?
-+mt_online=$(memtotal_kb)
-+if [ "$rc" = 0 ] && [ "$(get_state)" = online ] && [ "$mt_online" -gt "$mt_unplugged" ]; then
-+	ktap_test_pass "online: state=online, MemTotal $mt_unplugged -> $mt_online kB"
-+else
-+	ktap_test_fail "online: rc=$rc state=$(get_state) MemTotal $mt_unplugged -> $mt_online"
-+fi
-+
-+set_state online; rc=$?
-+if [ "$rc" = 0 ] && [ "$(get_state)" = online ]; then
-+	ktap_test_pass "online idempotent"
-+else
-+	ktap_test_fail "online idempotent: rc=$rc state=$(get_state)"
-+fi
-+
-+set_state online_movable; rc=$?
-+if [ "$rc" != 0 ] && [ "$(get_state)" = online ]; then
-+	ktap_test_pass "reject online_movable without intervening unplug"
-+else
-+	ktap_test_fail "online->online_movable not rejected: rc=$rc state=$(get_state)"
-+fi
-+
-+set_state unplugged; rc=$?
-+mt=$(memtotal_kb)
-+if [ "$rc" = 0 ] && [ "$(get_state)" = unplugged ] && [ "$mt" -lt "$mt_online" ]; then
-+	ktap_test_pass "unplug from online: MemTotal $mt_online -> $mt kB"
-+else
-+	ktap_test_fail "unplug from online: rc=$rc state=$(get_state) MemTotal $mt_online -> $mt"
-+fi
-+
-+set_state online_movable; rc=$?
-+mt_mov=$(memtotal_kb)
-+if [ "$rc" = 0 ] && [ "$(get_state)" = online_movable ] && [ "$mt_mov" -gt "$mt_unplugged" ]; then
-+	ktap_test_pass "online_movable after unplug: MemTotal $mt_unplugged -> $mt_mov kB"
-+else
-+	ktap_test_fail "online_movable after unplug: rc=$rc state=$(get_state) MemTotal=$mt_mov"
-+fi
-+
-+# The online -> unplug -> online_movable -> unplug cycle once regressed: a
-+# re-online failed to re-reserve the per-range resources, so this final unplug
-+# reported success while leaving the memory online.  Assert it is really freed.
-+set_state unplugged; rc=$?
-+mt=$(memtotal_kb)
-+if [ "$rc" != 0 ]; then
-+	ktap_test_skip "unplug from movable not accepted (memory in use?) rc=$rc"
-+elif [ "$(get_state)" = unplugged ] && [ "$mt" -lt "$mt_mov" ]; then
-+	ktap_test_pass "unplug from online_movable removed memory: $mt_mov -> $mt kB"
-+else
-+	ktap_test_fail "unplug success but memory remained: $(get_state) $mt_mov -> $mt kB"
-+fi
-+
-+set_state online_kernel; rc=$?
-+mt=$(memtotal_kb)
-+if [ "$rc" = 0 ] && [ "$(get_state)" = online_kernel ] && [ "$mt" -gt "$mt_unplugged" ]; then
-+	ktap_test_pass "online_kernel: MemTotal $mt_unplugged -> $mt kB"
-+else
-+	ktap_test_fail "online_kernel: rc=$rc state=$(get_state) MemTotal=$mt"
-+fi
-+set_state unplugged
-+
-+before=$(get_state)
-+set_state bogus_state; rc=$?
-+if [ "$rc" != 0 ] && [ "$(get_state)" = "$before" ]; then
-+	ktap_test_pass "reject invalid state string"
-+else
-+	ktap_test_fail "invalid state not rejected: rc=$rc state=$(get_state)"
-+fi
-+
-+[ -n "$ORIG" ] && set_state "$ORIG"
-+
-+ktap_finished
-diff --git a/tools/testing/selftests/dax/settings b/tools/testing/selftests/dax/settings
-new file mode 100644
-index 000000000000..ba4d85f74cd6
---- /dev/null
-+++ b/tools/testing/selftests/dax/settings
-@@ -0,0 +1 @@
-+timeout=90
+You are awesome, thank you!
 -- 
-2.54.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
