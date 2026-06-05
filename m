@@ -1,90 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 763673DE43D;
-	Fri,  5 Jun 2026 01:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7666D37B023
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 01:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780623625; cv=none; b=En9DT/rkGZOnQrEsXlgDkrpocGH1CDMy8/ncKyAIVQE1KrVXuTOVKAMhrcRbupFqeIGwTe3B+v1kaFayq9sr8rRGynabX6nz9CIa4yIdCCRj1mKEAUGWZr33hOvirG0GJCI/wOjMWynfvpIIJwqqpVX+se5+omYGWIiArrO1YQ4=
+	t=1780624625; cv=none; b=mbQeEPRHRHkIv8Hg7o6gRq07Kuz0Y6RkDZi2KKYhooQVEEg8aNJbol5VK/UNcB5O/mgPM1z/NBv+AgpQV7sbFb6O/hSG4nZw5kAAixdz84Fc5XHvo/twkbE9AhwZ3TC4bOOav65/kCHhjydIGepY0jgAP7YwOKWH8MHSydXkGXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780623625; c=relaxed/simple;
-	bh=4AEfSWKkdJNyzUgvpPlXBv+nsJC1XKVJru7T5c4QWfY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ZJrmbp0Leuh72tcQCN+UdnVUdPRptvgWjBQ/2gUKKl4OmYFME+zJ2WSIPeo9Ud/nxVLz3vd5Hk9M19zkTf1nica/Bv011EgxItfT3nuCm05KIWNvUK7u+vIkr94Hyb35W3U6lWxzUkTWZPr4Y8v/yBwFYjAK58RV9NilpvqptRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ftUT378C; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780624625; c=relaxed/simple;
+	bh=jadmf9VC1LDUyEhkM6b+U+lNaW2DjPMJVqrBELeHNbs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IvcWg7DlGlO5uKb0mhd1fxNFMO5IrWp3+tYJlbCyUd9M6RuetJhws5ougoFYT5cQMN0NiBWcoOHWY9Sq/hk/mpMb0CC7I1EMWZijPLgQSyf2vT5Ai8oxPhGYgMBFq7ylDBaaGbv8ui9+ckbmUrSWGCWdMf2SS/PRT/6988RV1FE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YVvAkU6/; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ftUT378C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB731F00893;
-	Fri,  5 Jun 2026 01:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780623616;
-	bh=UP+DrtQ07tytdGGieOfM3dKAHlhCO92qNLfifTM2/gY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ftUT378CdSLv/h3vUglOMRAGnwbEMMiv/N+PRyhdL8lA9W4ujV16XBvkyDqOGUXG4
-	 4Tza1WyIZkQusAUwFKadCnOP8fN/R3opVBCmkEKFKW6HflnCbkIbDxYhI+hjbQ1w5l
-	 5izvkPCsTLwWb/QpXwS2fXSGmOa1sQHgGlY0Rz+HVAJZNrXN6OTIkJvGfom/YRsxyg
-	 n4alNdkfQb/l2aplIXrh2n5++yX6yboNqJZpFJZ9WFnUf6efj7ssVA4oioEFStGb21
-	 4bT0o+0wJCINYKmHtw6w0U7Oble/pZcvcuWDQkVf9211RCh284HY/pbDNZN/6K7L1y
-	 GNqWryO1gKXyg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D10523930A8B;
-	Fri,  5 Jun 2026 01:40:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YVvAkU6/"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-36b9033d230so775558a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 18:56:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780624618; x=1781229418; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r9fHnE5/aWcHmZBAbpBqPooAqFKln3As1ZY+Jwjk9ec=;
+        b=YVvAkU6/xKVGEpkNZ/LsWpFaCRYcyKQS7WdojY+UBhjCVOnwjwJm0TMrhu29xV1Z+Q
+         Kr7ZiSAe26bxM/9256JDsXPgzZ57cqbOGo3btDhkXeofw5x+Y9tr7hWC/DiSZRy2dCAA
+         3BHtDHJpMULM0WeZZ7GvPqd+LA8NTtDyez18z/mgZWTXWi3ZuxhHZFLT2c6mjumxsE8L
+         hp/u99c5lqOclMyeBVpunZGHZPVvxabnLMT5MdXjlQmVXUusRFvG6g1cwXImig0CN4a3
+         xgojwQxCN+erWpquLN43kqk6r7Jpbm/jN9VMzpzSj/pilR/cchAzrnvyEVGCkCJmxQt2
+         GHaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780624618; x=1781229418;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r9fHnE5/aWcHmZBAbpBqPooAqFKln3As1ZY+Jwjk9ec=;
+        b=pMFJcjizGmiryymLYG9bqx1gHUyp+cVdCk+Kw7i9fbmYIWpDIHAHga55wniBtOuPDm
+         9mu55PPBFyYdieagyQ6j2oA34lkglB+GO/78lnR80EPsS2kzj7IbINvb55t+jeaHvDL+
+         DowUiJ6R1e+S68FNRlZ8Est0vj6mH2tZoWjwzRAa2DxDw2K6PI13DKKRX6MP26H3ufCF
+         SPw7c/lrqbSDHzCz78ZBT2ijNzY+6L3eXAJlvm3+pAuPFnEu8CZisDAcBSHPNJ8BLwyK
+         kO8yF2ZMNrL5sggvwMpEkCU4A4zGF2GVH3dQ/1HLUYgoDaKhsdEgwcb1oupLexyCt+SL
+         dFmQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+V8zpwKjJ1LfKMaFmxVLG+c0IbYma9Ldna6K9YX4V+bfL9YXSkC2whQkjuXIUA04dcoCIz/83srJXZxLJVFDg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzx0uqvKQr7ICgdVy1z0MRCvYp6mmA+C8EfhJ3rYDapp8mjYuJs
+	qWjZQKkWgVCqkJPFD623ajs4CMV2fOnj3ZzWfxxLZ3Qbae2KArRAu1wCH2SlM888fUE=
+X-Gm-Gg: Acq92OHS4dkwK2b7Wd3QIQaTCjhkw9jA8MOQ4+oHnda4FxNSVmN460/RGQqA2gdaCiQ
+	3Pco3ZfZ9aMpL1gjZNCLaQDLYMfUEPIUJWyReMMU8lRLDot1RsUKaOFwrlZ+NZayJkbC95bjcUi
+	kisei1G2JY1kB5nX6E4pHNz+xAUDqBHAWxgiozdMzRYLLLBkZJAw2Y4StUBsNDYKGRFociBR0rV
+	rZRKDaNQzux9K9hMplAWrhEvzHVvsK0KWTguQ7YLG8pcr0SUIYsONEePeuxBrONV3ARvYEZR59y
+	mieDFPh7EGvUuyyRZwlSnR6aghC4aHnEPlSiUAwm2g1TFTls7xecSOz8CwKXq2ziIgQ8YNb2g64
+	QOXiW9YFTN5FhH3U2LLb1rygfy4zoXGV9tLgbt8snvlbu7mU8/LceTxyfMhcuMpYFwb0mq8kKfS
+	2kkUmsBcRuRU5rkDApoR7N8eRFw8WvBcUEspmigWyLgcVTnIKd3VFKYg==
+X-Received: by 2002:a17:90b:2f0d:b0:368:3830:a8bd with SMTP id 98e67ed59e1d1-37131041514mr487063a91.7.1780624618384;
+        Thu, 04 Jun 2026 18:56:58 -0700 (PDT)
+Received: from [10.22.65.66] ([118.201.124.118])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f6bf827f1sm5711912a91.3.2026.06.04.18.56.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Jun 2026 18:56:57 -0700 (PDT)
+Message-ID: <ca0d8a38-90e2-4f59-b24f-856f6e99ab63@gmail.com>
+Date: Fri, 5 Jun 2026 09:56:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: Check tail zero of bpf_map_info
+Content-Language: en-US
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bot+bpf-ci@kernel.org
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Yuyang Huang <yuyanghuang@google.com>,
+ KP Singh <kpsingh@kernel.org>, Dave Marchevsky <davemarchevsky@fb.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ kernel-patches-bot@fb.com, Mykyta Yatsenko <yatsenko@meta.com>,
+ Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+References: <20260604150505.99129-2-leon.hwang@linux.dev>
+ <3e8f405c266d6f15cc2ffeb3ffbe3674b19633c43048c1942e9a33db86c4c811@mail.kernel.org>
+ <CAADnVQJHCwcFQG5FiejiyTHEFBRGrKqaGAfwVZJXANWuP9rJww@mail.gmail.com>
+From: Leon Hwang <hffilwlqm@gmail.com>
+In-Reply-To: <CAADnVQJHCwcFQG5FiejiyTHEFBRGrKqaGAfwVZJXANWuP9rJww@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/4] selftests: rds: ROCE support follow ups
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178062361652.3097022.10798618190558791022.git-patchwork-notify@kernel.org>
-Date: Fri, 05 Jun 2026 01:40:16 +0000
-References: <20260602050657.26389-1-achender@kernel.org>
-In-Reply-To: <20260602050657.26389-1-achender@kernel.org>
-To: Allison Henderson <achender@kernel.org>
-Cc: netdev@vger.kernel.org, pabeni@redhat.com, edumazet@google.com,
- kuba@kernel.org, horms@kernel.org, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org, shuah@kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon,  1 Jun 2026 22:06:53 -0700 you wrote:
-> Hi all,
+On 5/6/26 00:39, Alexei Starovoitov wrote:
+> On Thu, Jun 4, 2026 at 8:45 AM <bot+bpf-ci@kernel.org> wrote:
+>>
+>>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>>> index 625a4366fe6d..1007fb7c87e9 100644
+>>> --- a/kernel/bpf/syscall.c
+>>> +++ b/kernel/bpf/syscall.c
+>>> @@ -5400,10 +5400,11 @@ static int bpf_map_get_info_by_fd(struct file *file,
+>>>  {
+>>>       struct bpf_map_info __user *uinfo = u64_to_user_ptr(attr->info.info);
+>>>       struct bpf_map_info info;
+>>> -     u32 info_len = attr->info.info_len;
+>>> +     u32 info_len = attr->info.info_len, len;
+>>>       int err;
+>>>
+>>> -     err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), sizeof(info), info_len);
+>>> +     len = offsetofend(struct bpf_map_info, hash_size);
+>>> +     err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), len, info_len);
+>>
+>> Does this change break the ABI for existing deployed binaries? Previously,
+>> expected_size was 104 (sizeof(info)). If an existing binary passes info_len
+>> = 104 with uninitialized stack garbage in the 4-byte padding,
+>> bpf_check_uarg_tail_zero() would see actual_size <= expected_size (104 <=
+>> 104) and immediately return 0.
+>>
+>> By reducing expected_size to 100, actual_size > expected_size (104 > 100),
+>> so bpf_check_uarg_tail_zero() will actively check the 4 padding bytes and
+>> return -E2BIG if they contain garbage. This rejects previously working
+>> applications.
+>>
+>> Additionally, does this actually protect against the stated future issue?
+>> If a future kernel adds a new 4-byte field, the struct size stays 104, and
+>> the new kernel's expected_size will be 104. At that point, those old buggy
+>> binaries passing info_len = 104 will once again hit the fast path
+>> (actual_size <= expected_size), skipping the check and allowing the
+>> uninitialized padding to be consumed as the new field.
 > 
-> This is a follow up series to the "Add ROCE support to rds selftests"
-> series.  The first patch renames run.sh to rds_run.sh, which provides
-> a self-describing name that appears on the netdev CI dashboard.
+> bot's concerns are valid.
+> Let's add __u32 :32 to bpf_map_info at the same time.
 > 
-> The second patch addresses a sashiko complaint that I thought was
-> worth circling back for.  In the patch "pin RDS sockets to their
-> intended transport," sockets are pinned to the specific transport they
-> are meant to test.  By default, socket transports are implicitly
-> selected based on the network topology, but it is possible that they
-> can fail back to other transports if the underlying connection could
-> not be established.  So the patch pins them to the intended transport
-> to avoid false positives.
-> 
-> [...]
+Will add it.
 
-Here is the summary with links:
-  - [net-next,v3,1/4] selftests: rds: Rename run.sh to rds_run.sh
-    https://git.kernel.org/netdev/net-next/c/6d05d3cb44c5
-  - [net-next,v3,2/4] selftests: rds: pin RDS sockets to their intended transport
-    https://git.kernel.org/netdev/net-next/c/d2e76c5b1418
-  - [net-next,v3,3/4] selftests: rds: support RDS built as loadable modules
-    https://git.kernel.org/netdev/net-next/c/c5eb137685f3
-  - [net-next,v3,4/4] selftests: rds: report missing RDMA prereqs as XFAIL
-    https://git.kernel.org/netdev/net-next/c/e3ab0affc10f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Thanks,
+Leon
 
