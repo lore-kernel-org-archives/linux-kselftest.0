@@ -1,140 +1,381 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7666D37B023
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 01:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA4637BE84;
+	Fri,  5 Jun 2026 02:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780624625; cv=none; b=mbQeEPRHRHkIv8Hg7o6gRq07Kuz0Y6RkDZi2KKYhooQVEEg8aNJbol5VK/UNcB5O/mgPM1z/NBv+AgpQV7sbFb6O/hSG4nZw5kAAixdz84Fc5XHvo/twkbE9AhwZ3TC4bOOav65/kCHhjydIGepY0jgAP7YwOKWH8MHSydXkGXY=
+	t=1780626033; cv=none; b=l+cXbN6z8Ha7fgezCojBfDjHQp4bktTJVMgCCZ/88zmelqzopZ1h8QfDbqwYJHdGRpreX4W6fSyUEBjuzcruhF2ewSvVQ/uYhLAYYxglo7CyjmNETwPmBWXOXV2Wpj0nlO1V66lmojAmXu5dLEnO3DAA1DTXm7GnyYYXoToZGag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780624625; c=relaxed/simple;
-	bh=jadmf9VC1LDUyEhkM6b+U+lNaW2DjPMJVqrBELeHNbs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IvcWg7DlGlO5uKb0mhd1fxNFMO5IrWp3+tYJlbCyUd9M6RuetJhws5ougoFYT5cQMN0NiBWcoOHWY9Sq/hk/mpMb0CC7I1EMWZijPLgQSyf2vT5Ai8oxPhGYgMBFq7ylDBaaGbv8ui9+ckbmUrSWGCWdMf2SS/PRT/6988RV1FE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YVvAkU6/; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780626033; c=relaxed/simple;
+	bh=UbxpImoknXuqvKYf/eg9CyXPgm2uzf3+ClJ5y85I54E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RDGL1tM0lY4GO3oqbJbw+EluKgjKc3A8Qf3b4eqse2CuJksdLwJ5GaeYHK8rGnBfmwcTrni2xfZQDtyPu0ubZ3Dq076AkuDXh/vFzhl3ZQ77d3HmFR5mD74P+0+8/Cx0bV1xWehFaE7CSookdFE4n7XccAWUNfNy26IjrRz7ZnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h9yNQwJb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YVvAkU6/"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-36b9033d230so775558a91.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jun 2026 18:56:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780624618; x=1781229418; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r9fHnE5/aWcHmZBAbpBqPooAqFKln3As1ZY+Jwjk9ec=;
-        b=YVvAkU6/xKVGEpkNZ/LsWpFaCRYcyKQS7WdojY+UBhjCVOnwjwJm0TMrhu29xV1Z+Q
-         Kr7ZiSAe26bxM/9256JDsXPgzZ57cqbOGo3btDhkXeofw5x+Y9tr7hWC/DiSZRy2dCAA
-         3BHtDHJpMULM0WeZZ7GvPqd+LA8NTtDyez18z/mgZWTXWi3ZuxhHZFLT2c6mjumxsE8L
-         hp/u99c5lqOclMyeBVpunZGHZPVvxabnLMT5MdXjlQmVXUusRFvG6g1cwXImig0CN4a3
-         xgojwQxCN+erWpquLN43kqk6r7Jpbm/jN9VMzpzSj/pilR/cchAzrnvyEVGCkCJmxQt2
-         GHaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780624618; x=1781229418;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r9fHnE5/aWcHmZBAbpBqPooAqFKln3As1ZY+Jwjk9ec=;
-        b=pMFJcjizGmiryymLYG9bqx1gHUyp+cVdCk+Kw7i9fbmYIWpDIHAHga55wniBtOuPDm
-         9mu55PPBFyYdieagyQ6j2oA34lkglB+GO/78lnR80EPsS2kzj7IbINvb55t+jeaHvDL+
-         DowUiJ6R1e+S68FNRlZ8Est0vj6mH2tZoWjwzRAa2DxDw2K6PI13DKKRX6MP26H3ufCF
-         SPw7c/lrqbSDHzCz78ZBT2ijNzY+6L3eXAJlvm3+pAuPFnEu8CZisDAcBSHPNJ8BLwyK
-         kO8yF2ZMNrL5sggvwMpEkCU4A4zGF2GVH3dQ/1HLUYgoDaKhsdEgwcb1oupLexyCt+SL
-         dFmQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+V8zpwKjJ1LfKMaFmxVLG+c0IbYma9Ldna6K9YX4V+bfL9YXSkC2whQkjuXIUA04dcoCIz/83srJXZxLJVFDg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzx0uqvKQr7ICgdVy1z0MRCvYp6mmA+C8EfhJ3rYDapp8mjYuJs
-	qWjZQKkWgVCqkJPFD623ajs4CMV2fOnj3ZzWfxxLZ3Qbae2KArRAu1wCH2SlM888fUE=
-X-Gm-Gg: Acq92OHS4dkwK2b7Wd3QIQaTCjhkw9jA8MOQ4+oHnda4FxNSVmN460/RGQqA2gdaCiQ
-	3Pco3ZfZ9aMpL1gjZNCLaQDLYMfUEPIUJWyReMMU8lRLDot1RsUKaOFwrlZ+NZayJkbC95bjcUi
-	kisei1G2JY1kB5nX6E4pHNz+xAUDqBHAWxgiozdMzRYLLLBkZJAw2Y4StUBsNDYKGRFociBR0rV
-	rZRKDaNQzux9K9hMplAWrhEvzHVvsK0KWTguQ7YLG8pcr0SUIYsONEePeuxBrONV3ARvYEZR59y
-	mieDFPh7EGvUuyyRZwlSnR6aghC4aHnEPlSiUAwm2g1TFTls7xecSOz8CwKXq2ziIgQ8YNb2g64
-	QOXiW9YFTN5FhH3U2LLb1rygfy4zoXGV9tLgbt8snvlbu7mU8/LceTxyfMhcuMpYFwb0mq8kKfS
-	2kkUmsBcRuRU5rkDApoR7N8eRFw8WvBcUEspmigWyLgcVTnIKd3VFKYg==
-X-Received: by 2002:a17:90b:2f0d:b0:368:3830:a8bd with SMTP id 98e67ed59e1d1-37131041514mr487063a91.7.1780624618384;
-        Thu, 04 Jun 2026 18:56:58 -0700 (PDT)
-Received: from [10.22.65.66] ([118.201.124.118])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f6bf827f1sm5711912a91.3.2026.06.04.18.56.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jun 2026 18:56:57 -0700 (PDT)
-Message-ID: <ca0d8a38-90e2-4f59-b24f-856f6e99ab63@gmail.com>
-Date: Fri, 5 Jun 2026 09:56:50 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h9yNQwJb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE3E1F00893;
+	Fri,  5 Jun 2026 02:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780626026;
+	bh=iMqrRtz2eb5lnLw+J4vSqJrQs0P4R30G8v4BLNSRKzk=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=h9yNQwJbn2GEmFBvPrtApzxAXUBUYpaNKd/nBhT+OZuS0C07JDKr5x7BtuilJt7rN
+	 PBHY18PsnFfP6WWzoYtp+8GWf3zo87uXktuFeUM0DhJhkLAP5RzTQls4Hvrdauusc8
+	 P28Srdr2GZnEq6cJG3RvENUKKid6lhfIM+nl9DL2MQaJIBMH/Y4Jixzvl30ZDndwUZ
+	 pwBc/Q3WlP1RDbzNo1txh0MaZilED5LqpTZNZXSigAL6aWPdn2H84TNHkLUIjcWZro
+	 VClqvzj17YQHBs0cOQxCh7YMzWqansZrFpE5PzZ0LnwqZT2bD4zJe5anG/xjxNyrvF
+	 YRIFQPscBBa0g==
+Message-ID: <4b81c104a8b0f67bb844b894cbd0c58a8191ac5d.camel@kernel.org>
+Subject: Re: [PATCH net-next 1/2] rds: convert to getsockopt_iter
+From: Allison Henderson <achender@kernel.org>
+To: Breno Leitao <leitao@debian.org>, "David S. Miller"
+ <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,  Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com, 
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Date: Thu, 04 Jun 2026 19:20:24 -0700
+In-Reply-To: <20260603-getsock_more-v1-1-43b8d40c8849@debian.org>
+References: <20260603-getsock_more-v1-0-43b8d40c8849@debian.org>
+	 <20260603-getsock_more-v1-1-43b8d40c8849@debian.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: Check tail zero of bpf_map_info
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bot+bpf-ci@kernel.org
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Yuyang Huang <yuyanghuang@google.com>,
- KP Singh <kpsingh@kernel.org>, Dave Marchevsky <davemarchevsky@fb.com>,
- Stanislav Fomichev <sdf@fomichev.me>, LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com, Mykyta Yatsenko <yatsenko@meta.com>,
- Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>
-References: <20260604150505.99129-2-leon.hwang@linux.dev>
- <3e8f405c266d6f15cc2ffeb3ffbe3674b19633c43048c1942e9a33db86c4c811@mail.kernel.org>
- <CAADnVQJHCwcFQG5FiejiyTHEFBRGrKqaGAfwVZJXANWuP9rJww@mail.gmail.com>
-From: Leon Hwang <hffilwlqm@gmail.com>
-In-Reply-To: <CAADnVQJHCwcFQG5FiejiyTHEFBRGrKqaGAfwVZJXANWuP9rJww@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 5/6/26 00:39, Alexei Starovoitov wrote:
-> On Thu, Jun 4, 2026 at 8:45 AM <bot+bpf-ci@kernel.org> wrote:
->>
->>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->>> index 625a4366fe6d..1007fb7c87e9 100644
->>> --- a/kernel/bpf/syscall.c
->>> +++ b/kernel/bpf/syscall.c
->>> @@ -5400,10 +5400,11 @@ static int bpf_map_get_info_by_fd(struct file *file,
->>>  {
->>>       struct bpf_map_info __user *uinfo = u64_to_user_ptr(attr->info.info);
->>>       struct bpf_map_info info;
->>> -     u32 info_len = attr->info.info_len;
->>> +     u32 info_len = attr->info.info_len, len;
->>>       int err;
->>>
->>> -     err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), sizeof(info), info_len);
->>> +     len = offsetofend(struct bpf_map_info, hash_size);
->>> +     err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), len, info_len);
->>
->> Does this change break the ABI for existing deployed binaries? Previously,
->> expected_size was 104 (sizeof(info)). If an existing binary passes info_len
->> = 104 with uninitialized stack garbage in the 4-byte padding,
->> bpf_check_uarg_tail_zero() would see actual_size <= expected_size (104 <=
->> 104) and immediately return 0.
->>
->> By reducing expected_size to 100, actual_size > expected_size (104 > 100),
->> so bpf_check_uarg_tail_zero() will actively check the 4 padding bytes and
->> return -E2BIG if they contain garbage. This rejects previously working
->> applications.
->>
->> Additionally, does this actually protect against the stated future issue?
->> If a future kernel adds a new 4-byte field, the struct size stays 104, and
->> the new kernel's expected_size will be 104. At that point, those old buggy
->> binaries passing info_len = 104 will once again hit the fast path
->> (actual_size <= expected_size), skipping the check and allowing the
->> uninitialized padding to be consumed as the new field.
-> 
-> bot's concerns are valid.
-> Let's add __u32 :32 to bpf_map_info at the same time.
-> 
-Will add it.
+On Wed, 2026-06-03 at 09:11 -0700, Breno Leitao wrote:
+> Convert RDS socket's getsockopt implementation to use the new
+> getsockopt_iter callback with sockopt_t.
+>=20
+> Key changes:
+> - Replace (char __user *optval, int __user *optlen) with sockopt_t *opt
+> - Use opt->optlen for buffer length (input) and returned size (output)
+> - Use copy_to_iter() instead of put_user()/copy_to_user()
+>=20
+> The RDS_INFO_* snapshot path in rds_info_getsockopt() used to pin the
+> userspace buffer with pin_user_pages_fast() on the raw optval address;
+> the info producers then memcpy into those pages under a spinlock via
+> kmap_atomic() and so must not fault. Obtain the same page array and
+> starting offset from opt->iter_out with iov_iter_extract_pages(), which
+> pins for write because iter_out is ITER_DEST.
+>=20
+> The page array is preallocated here (sized with iov_iter_npages()) and
+> passed in, so iov_iter_extract_pages() fills it in place rather than
+> allocating one for us; RDS therefore keeps ownership of the array on
+> every return path and frees it itself. The rds_info_iterator /
+> rds_info_copy machinery and all producer callbacks are unchanged.
+>=20
+> Kernel buffers (ITER_KVEC) are not page-backed in a way the info
+> producers can use, so the RDS_INFO path returns -EOPNOTSUPP for them;
+> this matches the previous behaviour, where a kernel-buffer getsockopt
+> hit the WARN_ONCE() path in do_sock_getsockopt() and returned
+> -EOPNOTSUPP. The simple RDS_RECVERR and SO_RDS_TRANSPORT options keep
+> working for kernel buffers via copy_to_iter().
+>=20
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
-Thanks,
-Leon
+Hi Breno,
 
+Thanks for working on this.  The conversions look mostly correct to me, jus=
+t a few nits I noticed below:
+
+> ---
+>  net/rds/af_rds.c | 36 ++++++++++++++++-------------
+>  net/rds/info.c   | 70 +++++++++++++++++++++++++++++++-------------------=
+------
+>  net/rds/info.h   |  3 +--
+>  3 files changed, 60 insertions(+), 49 deletions(-)
+>=20
+> diff --git a/net/rds/af_rds.c b/net/rds/af_rds.c
+> index 6f4f9cf352bd..d5defe9172e3 100644
+> --- a/net/rds/af_rds.c
+> +++ b/net/rds/af_rds.c
+> @@ -37,6 +37,7 @@
+>  #include <linux/in.h>
+>  #include <linux/ipv6.h>
+>  #include <linux/poll.h>
+> +#include <linux/uio.h>
+>  #include <net/sock.h>
+> =20
+>  #include "rds.h"
+> @@ -485,35 +486,36 @@ static int rds_setsockopt(struct socket *sock, int =
+level, int optname,
+>  }
+> =20
+>  static int rds_getsockopt(struct socket *sock, int level, int optname,
+> -			  char __user *optval, int __user *optlen)
+> +			  sockopt_t *opt)
+>  {
+>  	struct rds_sock *rs =3D rds_sk_to_rs(sock->sk);
+>  	int ret =3D -ENOPROTOOPT, len;
+>  	int trans;
+> +	int val;
+> =20
+>  	if (level !=3D SOL_RDS)
+>  		goto out;
+> =20
+> -	if (get_user(len, optlen)) {
+> -		ret =3D -EFAULT;
+> -		goto out;
+> -	}
+> +	len =3D opt->optlen;
+> =20
+>  	switch (optname) {
+>  	case RDS_INFO_FIRST ... RDS_INFO_LAST:
+> -		ret =3D rds_info_getsockopt(sock, optname, optval,
+> -					  optlen);
+> +		ret =3D rds_info_getsockopt(sock, optname, opt);
+>  		break;
+> =20
+>  	case RDS_RECVERR:
+> -		if (len < sizeof(int))
+> +		if (len < sizeof(int)) {
+>  			ret =3D -EINVAL;
+> -		else
+> -		if (put_user(rs->rs_recverr, (int __user *) optval) ||
+> -		    put_user(sizeof(int), optlen))
+> +			break;
+> +		}
+> +		val =3D rs->rs_recverr;
+> +		if (copy_to_iter(&val, sizeof(int), &opt->iter_out) !=3D
+> +		    sizeof(int)) {
+>  			ret =3D -EFAULT;
+> -		else
+> +		} else {
+> +			opt->optlen =3D sizeof(int);
+>  			ret =3D 0;
+> +		}
+>  		break;
+>  	case SO_RDS_TRANSPORT:
+>  		if (len < sizeof(int)) {
+> @@ -522,11 +524,13 @@ static int rds_getsockopt(struct socket *sock, int =
+level, int optname,
+>  		}
+>  		trans =3D (rs->rs_transport ? rs->rs_transport->t_type :
+>  			 RDS_TRANS_NONE); /* unbound */
+> -		if (put_user(trans, (int __user *)optval) ||
+> -		    put_user(sizeof(int), optlen))
+> +		if (copy_to_iter(&trans, sizeof(int), &opt->iter_out) !=3D
+> +		    sizeof(int)) {
+>  			ret =3D -EFAULT;
+> -		else
+> +		} else {
+> +			opt->optlen =3D sizeof(int);
+>  			ret =3D 0;
+> +		}
+>  		break;
+>  	default:
+>  		break;
+> @@ -653,7 +657,7 @@ static const struct proto_ops rds_proto_ops =3D {
+>  	.listen =3D	sock_no_listen,
+>  	.shutdown =3D	sock_no_shutdown,
+>  	.setsockopt =3D	rds_setsockopt,
+> -	.getsockopt =3D	rds_getsockopt,
+> +	.getsockopt_iter =3D	rds_getsockopt,
+>  	.sendmsg =3D	rds_sendmsg,
+>  	.recvmsg =3D	rds_recvmsg,
+>  	.mmap =3D		sock_no_mmap,
+> diff --git a/net/rds/info.c b/net/rds/info.c
+> index f1b29994934a..171838782595 100644
+> --- a/net/rds/info.c
+> +++ b/net/rds/info.c
+> @@ -35,6 +35,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/proc_fs.h>
+>  #include <linux/export.h>
+> +#include <linux/uio.h>
+> =20
+>  #include "rds.h"
+> =20
+> @@ -144,60 +145,68 @@ void rds_info_copy(struct rds_info_iterator *iter, =
+void *data,
+>  EXPORT_SYMBOL_GPL(rds_info_copy);
+> =20
+>  /*
+> - * @optval points to the userspace buffer that the information snapshot
+> - * will be copied into.
+> - *
+> - * @optlen on input is the size of the buffer in userspace.  @optlen
+> - * on output is the size of the requested snapshot in bytes.
+> + * @opt->iter_out describes the buffer that the information snapshot wil=
+l be
+> + * copied into, and @opt->optlen is the size of that buffer on input.  O=
+n
+> + * output @opt->optlen is set to the size of the requested snapshot in b=
+ytes.
+>   *
+>   * This function returns -errno if there is a failure, particularly -ENO=
+SPC
+> - * if the given userspace buffer was not large enough to fit the snapsho=
+t.
+> - * On success it returns the positive number of bytes of each array elem=
+ent
+> - * in the snapshot.
+> + * if the given buffer was not large enough to fit the snapshot.  On suc=
+cess
+> + * it returns the positive number of bytes of each array element in the
+> + * snapshot.
+>   */
+> -int rds_info_getsockopt(struct socket *sock, int optname, char __user *o=
+ptval,
+> -			int __user *optlen)
+> +int rds_info_getsockopt(struct socket *sock, int optname, sockopt_t *opt=
+)
+>  {
+>  	struct rds_info_iterator iter;
+>  	struct rds_info_lengths lens;
+>  	unsigned long nr_pages =3D 0;
+> -	unsigned long start;
+>  	rds_info_func func;
+>  	struct page **pages =3D NULL;
+> +	size_t offset0 =3D 0;
+> +	int npages =3D 0;
+>  	int ret;
+>  	int len;
+>  	int total;
+> =20
+> -	if (get_user(len, optlen)) {
+> -		ret =3D -EFAULT;
+> -		goto out;
+> -	}
+> +	len =3D opt->optlen;
+> =20
+>  	/* check for all kinds of wrapping and the like */
+> -	start =3D (unsigned long)optval;
+> -	if (len < 0 || len > INT_MAX - PAGE_SIZE + 1 || start + len < start) {
+> +	if (len < 0 || len > INT_MAX - PAGE_SIZE + 1) {
+>  		ret =3D -EINVAL;
+>  		goto out;
+>  	}
+> =20
+> +	/* The info producers write into the pages with kmap_atomic() while
+> +	 * holding a spinlock, so they need a genuine page-backed user buffer.
+> +	 */
+I think !user_backed_iter() is more accurate for what you're meaning to do =
+here?  Technically we only ever get kvecs or
+ubufs since rds_info_getsockopt is only called by do_sock_getsockopt.  Thos=
+e appear to be the only two types it passes,
+so it works out.  But it means we're counting on that assumption from the c=
+aller and ideally we should filter anything
+that's not user backed.  So, I'd replace the iov_iter_is_kvec check with:
+
+	if (!user_backed_iter(&opt->iter_out)) {
+
+> +	if (iov_iter_is_kvec(&opt->iter_out)) {
+> +		ret =3D -EOPNOTSUPP;
+> +		goto out;
+> +	}
+> +
+>  	/* a 0 len call is just trying to probe its length */
+>  	if (len =3D=3D 0)
+>  		goto call_func;
+> =20
+> -	nr_pages =3D (PAGE_ALIGN(start + len) - (start & PAGE_MASK))
+> -			>> PAGE_SHIFT;
+> -
+> -	pages =3D kmalloc_objs(struct page *, nr_pages);
+> +	/*
+> +	 * Preallocate the page array and pass it in so that
+> +	 * iov_iter_extract_pages() fills it in place rather than allocating
+> +	 * one for us.  Handing it a non-NULL array keeps ownership of the
+> +	 * array with us on every return path, instead of depending on the
+> +	 * iterator code to allocate and hand it back.
+> +	 */
+> +	npages =3D iov_iter_npages(&opt->iter_out, INT_MAX);
+> +	pages =3D kvmalloc_array(npages, sizeof(*pages), GFP_KERNEL);
+>  	if (!pages) {
+>  		ret =3D -ENOMEM;
+>  		goto out;
+>  	}
+> -	ret =3D pin_user_pages_fast(start, nr_pages, FOLL_WRITE, pages);
+> -	if (ret !=3D nr_pages) {
+> -		if (ret > 0)
+> -			nr_pages =3D ret;
+> -		else
+> -			nr_pages =3D 0;
+> +
+> +	ret =3D iov_iter_extract_pages(&opt->iter_out, &pages, len, npages,
+> +				     0, &offset0);
+> +	if (ret < 0)
+> +		goto out;
+> +	nr_pages =3D DIV_ROUND_UP(offset0 + ret, PAGE_SIZE);
+> +	if (ret !=3D len) {
+>  		ret =3D -EAGAIN; /* XXX ? */
+>  		goto out;
+>  	}
+> @@ -213,7 +222,7 @@ int rds_info_getsockopt(struct socket *sock, int optn=
+ame, char __user *optval,
+> =20
+>  	iter.pages =3D pages;
+>  	iter.addr =3D NULL;
+> -	iter.offset =3D start & (PAGE_SIZE - 1);
+> +	iter.offset =3D offset0;
+> =20
+>  	func(sock, len, &iter, &lens);
+>  	BUG_ON(lens.each =3D=3D 0);
+> @@ -230,13 +239,12 @@ int rds_info_getsockopt(struct socket *sock, int op=
+tname, char __user *optval,
+>  		ret =3D lens.each;
+>  	}
+> =20
+> -	if (put_user(len, optlen))
+> -		ret =3D -EFAULT;
+> +	opt->optlen =3D len;
+> =20
+>  out:
+The unpin here works, but it took me a little bit to trace out where the co=
+rresponding pin went since it is removed
+earlier in the patch. =C2=A0Pages are pinned on extract, but only for user =
+pages. This works out since the only caller here
+passes kvec or ubuf, and we error out on kvec iters.  Pages are assumed pin=
+ned if they're not null, but without the
+!user_backed_iter check, it leans on this behavior from the caller.  Ideall=
+y I think=C2=A0iov_iter_extract_pages is supposed
+to be paired with iov_iter_extract_will_pin.  A quick comment would help cl=
+arify too.  So the closing gate would look
+something like this:
+
+	/* unpin pages from ubuf iters */
+	if (pages && iov_iter_extract_will_pin(&opt->iter_out))
+
+>  	if (pages)
+>  		unpin_user_pages(pages, nr_pages);
+
+Having both checks is somewhat redundant, but it doesnt hurt anything eithe=
+r.  And I think it helps make it a little
+more uniform and readable.  Other than that I think this patch is looking p=
+retty good to me.
+
+Thank you!
+Allison
+
+> -	kfree(pages);
+> +	kvfree(pages);
+> =20
+>  	return ret;
+>  }
+> diff --git a/net/rds/info.h b/net/rds/info.h
+> index a069b51c4679..1aab62ab6d00 100644
+> --- a/net/rds/info.h
+> +++ b/net/rds/info.h
+> @@ -21,8 +21,7 @@ typedef void (*rds_info_func)(struct socket *sock, unsi=
+gned int len,
+> =20
+>  void rds_info_register_func(int optname, rds_info_func func);
+>  void rds_info_deregister_func(int optname, rds_info_func func);
+> -int rds_info_getsockopt(struct socket *sock, int optname, char __user *o=
+ptval,
+> -			int __user *optlen);
+> +int rds_info_getsockopt(struct socket *sock, int optname, sockopt_t *opt=
+);
+>  void rds_info_copy(struct rds_info_iterator *iter, void *data,
+>  		   unsigned long bytes);
+>  void rds_info_iter_unmap(struct rds_info_iterator *iter);
+>=20
