@@ -1,95 +1,95 @@
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB3F4C8FE4
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 16:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4A13F0779
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 16:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780676065; cv=pass; b=nX5s6MyOh0ant9abo/LqpeJ4GSBTKyxlkvbcgR+vmUh0xM87/qKK30E7cdsJZaJ4g2zd211qY43yBTXMN1odZ4V3Lw+DDuwNspz5IxkOvKqlN0o/YlQZkQenyU5ykDw/gEH5lKgkLnJ8YxMCG83PIpG6qozYyYUb/8N31i48pOQ=
+	t=1780676219; cv=pass; b=rC20GVzc6T7lNNjnJgf9HHDNTJ4iN0VyxXXqyQ89dvmRwXvh3ZmivRf205TttTB5H33Blwxa5Wwuhd0j9u5Bb2n8o92Vs6UCP1UwNVOZyS8QqvXLhIua3uQ9xvcB41PPXBzcQKqE6Y8HouNnMeJIW8K9+mCE0NF4gDOkr1yoYnE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780676065; c=relaxed/simple;
-	bh=dLS4+xsww8K8sz3NhR74iFOWktUATnYG7ItzoaSDSh4=;
+	s=arc-20240116; t=1780676219; c=relaxed/simple;
+	bh=KrEWzX5V+5sJCkuOqVh531ZQ8vZFkc8QDe+WK/l8uok=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MUrjfB+Pr1UAox1gOjOFhST6tkdhHflcSxIKPOtJlFwuwrp/jICYsSVY4bQhBrtIn+umAUerM2Q/0YJ0jmuQ9hqqmAUC/pD1mRKUA1rjly6gLLqslO/FhMGfUwLoZnpR3+bBAx7jGF51ldQ96ot++M45W86PgWTqa8qB4wwW8Tw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20251104.gappssmtp.com header.i=@brainfault-org.20251104.gappssmtp.com header.b=eGpvo7YL; arc=pass smtp.client-ip=209.85.161.41
+	 To:Cc:Content-Type; b=r+DLWUK+hC7GFG+TdPrll0dxFoVqRmgId+5GZl4t9n73r1OmcKnBCQ/PlOErFPRty27n0UrrrJI5ti3T8vFJHFd5ThXoLwjWFDFC3+RwJr80hdtxeJ8TdAhUG1d+eXrLf64jH0GQa4yqnts3Tn/+q0COQow6dKsryFeEDTOP8BY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20251104.gappssmtp.com header.i=@brainfault-org.20251104.gappssmtp.com header.b=UddL5jAj; arc=pass smtp.client-ip=209.85.161.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20251104.gappssmtp.com header.i=@brainfault-org.20251104.gappssmtp.com header.b="eGpvo7YL"
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-69e4adf9ea5so1131342eaf.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 09:14:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780676061; cv=none;
+	dkim=pass (2048-bit key) header.d=brainfault-org.20251104.gappssmtp.com header.i=@brainfault-org.20251104.gappssmtp.com header.b="UddL5jAj"
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-69d8091533bso926690eaf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2026 09:16:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780676217; cv=none;
         d=google.com; s=arc-20240605;
-        b=T26qhmFkTFtb81pWrk6LT8b34KZWKVttDKyfQ4wm/dQmuiO4X988rqcf4ClJoVpAi2
-         ZfRjNWuJKN5oaJvW4jhQwOP2ujSfJFaRGgA+zesI95QozJOZUvLcr84bLRzFLfN6QL09
-         TnmqucJGMKQ5OfGHJkSA/F7mYup+mEYelo9XOdBWB585remWAHkYVNQv/By9T10SxaJP
-         NYVzFIqDfA+78dUgwzxCeI95QR5s67vCor8bd+KcI4cNUHITQyDfmCebzFK2WFv6GJ7y
-         w1DlkN1H92stSUPOvQp2ClUMLutZXUf2Ho/HOfwl99Kzl9SrIyuKwZoMzM+ngfB8pR8C
-         W6dQ==
+        b=YEGDQQS4YsRoj8msom+XlzcW/xsiwxGVKQkyfaPS+BP2rnYVj6qX5+9g+HS6ihlXN2
+         9ndMNZK/iGP7aGjQfc7jTI1dyzsJB568oJ+4RrSPTXTXr9yoSMxtT3PaJDQdgRL0A5tH
+         iqDmmdwNIF9KE4OoaCU4dUEQvdIgy5YeCMraImznJl+rR8uuwGYArvZuD5zHRaQrkjCp
+         Q7B+evCEKNfV6sQ4kIUCena3H8VjIZoC+Qc+ICAw5oYhm1zamic+Aqxritq+PaHg6Jpl
+         QIUb8z7q+076g6qmEZISAFeD4nJHb3BAW8qBp1E1UAKUTc04D8zi05qF34C2WBktGMfh
+         DvFQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=7NtIoBpAV8Yt8sLUxmMCGh/qfsofFoAAgy815UWWYi4=;
-        fh=k4HTehsQunDUGidbyKnLvPMRjyAaTQQXCm7x7FnB1xc=;
-        b=gLWGA+5xUd0ebnirPs9ZhTccK1Sy8DXodqZvT8mSkqSbycRwTnxh3B08fecZsPvjSr
-         14EK9+H7hekDvzpIKIsqhcpvf2bEoXBFSeC7KN+HwHC0ieHp4oZGMJH2TD0h1IKjUe50
-         23SZlcaW0NY6CDUZBCZj1D+YHmdl2PzDLVRPN5RvXHWNMBL9oUlo6BcHRWS47VuHnXYi
-         z9dYPuykdy+tzh6D2uJXFwYWNdK9aF3dNW5gvrI8mpS06fHbeSjLlnjVYB8yxdg10pjc
-         3dSzg/OQ89kEFofIKXItWjL+DTgJdAwghUSPSDaKL7tcmgmF2zdTKX8nHcgxAktFVUrC
-         pMqg==;
+        bh=LFoazSpHOzu3D4nnNfNyUkpuHouoQrz86xgnRKO3Hjk=;
+        fh=lV++NjDIHd4lYNvbRlJB1/bWrQ9pxQtQ5rF1U9bRIbs=;
+        b=U/I6AmIeBHr9A7MRAsbumY/BU0/WpePVWq8nsWPcwoza3Y9Pfm8hGlcKNHTN+k/ddZ
+         d0ac/Ev9wg09OPzfuqbsLXBCH0h1vFBd0EhX98PozUoesGNbFf7/LcwUbWliKJEA01sw
+         YRubc/ucMFo3P7KIbTlzELVGZiqWVZpmUgedGIrJ+0TPMlvwlhTQcRU9lB/8QNJ28I2h
+         kVv8lDVbgf8DPQn9pOKKiZXeHD03zyAuEblBEctgf/0OZt/Z5XOJNtjTD5cQRoBARRGS
+         RIUnu0IClocCbmoMKBIjvZ0DEKhIeTc5+lGsGDVs3bMJFwGrIEK+NmkhPpargCI22OAD
+         zPjQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20251104.gappssmtp.com; s=20251104; t=1780676061; x=1781280861; darn=vger.kernel.org;
+        d=brainfault-org.20251104.gappssmtp.com; s=20251104; t=1780676217; x=1781281017; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7NtIoBpAV8Yt8sLUxmMCGh/qfsofFoAAgy815UWWYi4=;
-        b=eGpvo7YLwjsd9ZnVWrgkHjV4nWwMTioaaOK+i2V/Ui7kc0JXDGK3V3hdWCJAho7lkQ
-         S0SPGeS4ENjwIpxDHwJjDXZF2ztUb7UmMHj/QGl0bGoZhsbCE4U63a2A8ursiNjtmFvf
-         Jgeuo/Qub2wsT0qN1uw8ThvGSvZC+ME4+JQskXzOivXdS1ObUaponQxhY0TnWHnArD5w
-         BH1C2hR0f32JJJT97JeaWlEy4Qyjj/06C5CMqh+P+ueD3oF+WSY+u9S99ur1s/2hMr9U
-         clNGP5iPnZNdaB0FtBIZ8NV003NU0/izjPyioJtnoeJy6DJjWGk7ja+0AGusaXsxsEcq
-         G7bw==
+        bh=LFoazSpHOzu3D4nnNfNyUkpuHouoQrz86xgnRKO3Hjk=;
+        b=UddL5jAjNMAygQ65TPaYSjXk4hD4sj/pTIpdnouDlBhkQSMZ3VURwTKJHzo349B9oA
+         CyDYz/6VlLPlhlPa+sPTfPtsQT7xL3CwoDG+3qWsaBNhkQ/SdOytaQpIRn4Ei27pt0Fu
+         CbLo1lLUw2v3Ln7P66T0XeE5APyFnd4rhllAPdqXaj0jUNmeL1MbLDE/rgnfAirEUzoN
+         WkC5nYiVM3MJJc3YKbNjfamh2ntLnKOuY0beJIqjg77rmRywg0Oq5tizLV8U47SZPG5a
+         7/qWFnXIFMfhJOPoobNy2ngaF2X5X2S/QLxlUmfRckG/rSd/1U+txpvcPOdPSYW7kSS4
+         ZuXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780676061; x=1781280861;
+        d=1e100.net; s=20251104; t=1780676217; x=1781281017;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=7NtIoBpAV8Yt8sLUxmMCGh/qfsofFoAAgy815UWWYi4=;
-        b=FOQFbf7x4/mmak3qd1lMOUQK8LCvpj4RWHu0w7CpQ4/pYqGu+z8ZGEume790QLcwOV
-         bzJpFkzLOz3PAdqysgVtIahQ5irt539WqYHNEiMHiBh8MZtuuhoOfT1ARqivrCwlD4Tt
-         +XeU7uSYjcIUExE7+jHP6vFKOz1g6IaCPW0bJvI5K2X++LmaHu4VXPMHCoDy/Xs+rGRI
-         nVTjJMDMh4eGnWi8oXZp8oGMFoHVhMcuN8PufpdDoS4cB+vuu1O4D7JCtViW0KX/HVZK
-         aEoTlsEQsRFKOQm36hQ+PCLOWi5qUvFkHhTs8pQ74tEMaEWT+kPSLy2pbKW44fv+HkNv
-         Tprw==
-X-Forwarded-Encrypted: i=1; AFNElJ+phUx9qZvjuU6RzTdN+/HZLnp0LgoG+wFnpx8vvCMmMfS333hdNeDdl/mm8Pa4rE19bpLywQRQHGENXRAhGAg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzxwi3XbVSsa4PPWNVWBfhOrJLM/U7RjpCfj6XxlPGW+LE753rV
-	tZO6Q1oh5doxkKrLSMEVoJxEmTMjVXIXVAjXzeKRt1DtvywzVrvRnJ+3BIIlFRMyJHQVuqfEiDo
-	sxBMEy5tCN9fsMMpmdHeLrmH4+7Pi+XVPhGO6/GekDQ==
-X-Gm-Gg: Acq92OG7rbj3mkDkKEwxrcBCrd3xQ3g1NrOBRXjA3i/+ref+WPXJCk+rB3sVCzT1f1P
-	2n3gf+QS8jBAYjMkpmR9GE16kk5/j3+IMtYuiotgpYA7e6j6OrcXF1p47KkoupI3EdJdSbtpoLA
-	VOK5ExUmMOQwvwh8g2eVTnjJAOMQP45p/fJ05FD0VqzrRt6KQpcvf/2MHg/YqF6ed5pbIM/5WS1
-	iorymqQPgS+LU/EGhndhaxjMZPVX5tZ8YQTwTektqtXySe0CywYsEJBXGcLdB9xBcM2OncdnS7b
-	29KCVsibEtJFvQR01JsWNyV730nT2G4p9DzAFBq7RGxjQOWzgOLwsZht6HIXhNYAiMwKTRLUsb9
-	gF0fL08gUB8Bys2DH4u9dmTmxQ3+qNWewFs+y
-X-Received: by 2002:a05:6820:188f:b0:69d:9288:66c8 with SMTP id
- 006d021491bc7-69e68b41cc5mr2597061eaf.13.1780676061024; Fri, 05 Jun 2026
- 09:14:21 -0700 (PDT)
+        bh=LFoazSpHOzu3D4nnNfNyUkpuHouoQrz86xgnRKO3Hjk=;
+        b=Gunhn+FmTDH8mxmmC7whY1e3s9nZYCnZpnYb0lcGVd8li7VPkBI+uVNlZv9RC1lTzJ
+         BJYRwXUYHfKshfYVOM3p+aAxO+d1z/BgxrPn01NodHuj9jkA69a8lHTt8w3FPY0pE2PN
+         O0yTw4/MCpRQSsIW6b0ys7SB8NNpeGYkHfSAuzbWVZhtbV3QHyke6qk2IjA7FtC3zyYC
+         hcCOLZkxHM03CkDdSiSmyxcBXvy1y4uyicFMa8GR9iDSD5KNTYLg30ihKWJ/Qdgs5p1+
+         Vh7NLK/1jxnenzNmId2qfLhT1FA8vnEKvZcePjTWjNAH9EJtpHayxFTKe5JA/URQ9M/q
+         8N2w==
+X-Forwarded-Encrypted: i=1; AFNElJ8FK7uhRlQrDLbNqhT0sCYDy+oi+94644CaaYvhHNlu99A6bm1lCq+TPXWvuO1vG1gNKozva9b1L37yb/iiDNc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQtjlq0YWMC/pUsIIA3Qvjh6OBG0AbNhtvNqlyuUSmRQPEOamP
+	w2SqPBeIk5Bhv1ocKMMW3LrYzxOvJlx0dCxVnl2hztIX2NqldPx9nHfDSpRgs2Gr2Ngz/SIPxh7
+	va4FKllTfkRoEakJSluAGNZcttOZe4KV2F/1B3fz9LehEAgVn/daapVE=
+X-Gm-Gg: Acq92OGOFF8dYrvbWzifMclbp9xynb05rOIwJih7RlVx1aFexIebpi98jlNoVcGCdEk
+	yvEJond31hv5S2XsJesnLDj+vx4U8dD9pSQgf9QobjuhmfwoGb0HvfI+EX8UYZnjEXMYPccg1Gf
+	QhJ7yWNHZC0RPM+aQ0MvWzmiNtmagiP0nklpsIe6IgPcilAAWmJfLDeKuVq9W7TBU2l56k5pvsz
+	PeYCdDYMMGTIwO9Dvc8zLAOq+uXnZqHBmXsGmEk1LrbBmbrl2RYe1G3+Fk3XAxxZOzrQQJY5ICU
+	h/bY2ARb6jQ0iwP6oGUbVV57wSrufDXfOIIPIOvgZBmsiMVx4gPAQpteBIVHC3BRUY5dMgWZLbW
+	Tl4UCfvjbqNQxr4/ZYbnBwu5dSwg/TzJ87MB7
+X-Received: by 2002:a05:6820:621:b0:69d:ee54:babb with SMTP id
+ 006d021491bc7-69e68c7f707mr2648730eaf.46.1780676216681; Fri, 05 Jun 2026
+ 09:16:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260601-kvm-get_reg_list-v2-v5-0-415d08a2813b@sifive.com> <20260601-kvm-get_reg_list-v2-v5-5-415d08a2813b@sifive.com>
-In-Reply-To: <20260601-kvm-get_reg_list-v2-v5-5-415d08a2813b@sifive.com>
+References: <20260601-kvm-get_reg_list-v2-v5-0-415d08a2813b@sifive.com>
+In-Reply-To: <20260601-kvm-get_reg_list-v2-v5-0-415d08a2813b@sifive.com>
 From: Anup Patel <anup@brainfault.org>
-Date: Fri, 5 Jun 2026 21:44:08 +0530
-X-Gm-Features: AVVi8Ce62RKsSjJXp-wBAJPsFgxeGW_0U3nJg8KcNtHwU-Je7pjwoDXpaiVHSug
-Message-ID: <CAAhSdy2oeV=XjQp8YQ9iMwHVQ8B3HDmmUbhmbbYjRLvbp6daow@mail.gmail.com>
-Subject: Re: [PATCH v5 5/5] KVM: riscv: selftests: Split SBI FWFT into
- separate feature-specific sublists
+Date: Fri, 5 Jun 2026 21:46:45 +0530
+X-Gm-Features: AVVi8CfqxZG-V8UYX903THbico9wP-cudNBEPgakg_WBZYUItP5SdwW-rpbB-E4
+Message-ID: <CAAhSdy1bMSadxaoKvSy6fdfb9pLufg=39-sHOHnr7Vj0Y-4Z2w@mail.gmail.com>
+Subject: Re: [PATCH v5 0/5] KVM: riscv: Fix stale FWFT feature exposure and
+ enhance selftests
 To: Yong-Xuan Wang <yongxuan.wang@sifive.com>
 Cc: Atish Patra <atish.patra@linux.dev>, Paul Walmsley <pjw@kernel.org>, 
 	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
@@ -105,186 +105,99 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Jun 1, 2026 at 3:56=E2=80=AFPM Yong-Xuan Wang <yongxuan.wang@sifive=
 .com> wrote:
 >
-> Divide the monolithic SBI FWFT (Firmware Features) register list into
-> separate sublists, each testing a specific FWFT feature independently
-> with proper dependency checking.
+> This series fixes three bugs in the SBI FWFT (Firmware Features) extensio=
+n
+> and improves the related selftest infrastructure.
+> The bugs are:
+> 1. Missing CSR dirty marking: When userspace sets FWFT feature values via
+>    KVM_SET_ONE_REG, modified CSRs (e.g., henvcfg.PMM for pointer masking)
+>    are not marked dirty, leading to stale state after vCPU scheduling or
+>    migration.
+> 2. Hardware probing side effects: The try_to_set_pmm() function modifies
+>    HENVCFG.PMM during hardware capability detection but fails to restore
+>    the original value, leaving the CSR in an altered state that affects
+>    subsequent operations.
+> 3. Stale feature exposure: FWFT feature support is cached at vCPU
+>    initialization time. When userspace subsequently disables ISA extensio=
+ns
+>    via KVM_SET_ONE_REG, the cached support status is not updated, allowin=
+g
+>    guests to access features that depend on disabled extensions.
+> Patches 1-3 fix these bugs separately.
 >
-> Previously, all FWFT features were tested together in a single sublist.
-> This caused issues because:
-> 1. Not all FWFT features are available on all platforms
-> 2. Some features depend on specific ISA extensions (e.g., pointer_masking
-> requires Smnpm)
-> 3. Tests would fail if any single feature was unavailable
+> The selftest improvements (patches 4-5) enhance the get-reg-list test by
+> refactoring the extension sublist infrastructure and splitting FWFT
+> feature testing into separate, properly-gated sublists.
 >
-> Add the feature-specific SBI FWFT sublists with the following
-> improvements:
-> - Add check_fwft_feature() helper to verify FWFT feature availability
->   at runtime
-> - Update filter_reg() to handle per-feature FWFT register filtering
->
-> Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-
-LGTM.
-
-Reviewed-by: Anup Patel <anup@brainfault.org>
-
-Thanks,
-Anup
-
 > ---
->  tools/testing/selftests/kvm/riscv/get-reg-list.c | 60 ++++++++++++++++++=
-++++--
->  1 file changed, 57 insertions(+), 3 deletions(-)
+> Changes in v5:
+> - Add CSR dirty marking fix (new patch 1/5) (sashiko-bot)
+> - Split original FWFT bug fix into two focused patches
+>   - Add init() callback with try_to_set_pmm() restoration fix (new patch
+>     2/5) (sashiko-bot)
+>   - Keep runtime supported() checks as separate patch (patch 3/5)
+> - Link to v4: https://patch.msgid.link/20260601-kvm-get_reg_list-v2-v4-0-=
+c88abc81ebda@sifive.com
 >
-> diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/tes=
-ting/selftests/kvm/riscv/get-reg-list.c
-> index 5033c09201ef..cb86cb6b3635 100644
-> --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> @@ -27,6 +27,7 @@ enum {
->  };
+> Changes in v4:
+> - Rename the title of cover letter
+> - Disable preemption when running try_to_set_pmm() (sashiko-bot)
+> - Remove check_supported_reg() (sashiko-bot)
+> - Link to v3: https://patch.msgid.link/20260528-kvm-get_reg_list-v2-v3-0-=
+170969a8599f@sifive.com
 >
->  static bool isa_ext_cant_disable[KVM_RISCV_ISA_EXT_MAX];
-> +static bool sbi_ext_enabled[KVM_RISCV_SBI_EXT_MAX];
+> Changes in v3:
+> - Restore 'supported' field with init() callback for initialization probi=
+ng
+>   (sashiko-bot)
+> - Add NULL checks before calling feature->supported() in all functions
+> - Fix isa_ext_enabled tracking logic and restore isa_ext_cant_disable arr=
+ay
+> - Add sbi_ext_enabled tracking and enhance dependency checking (sashiko-b=
+ot)
+> - Refine code organization and variable naming consistency (sashiko-bot)
+> - Link to v2: https://patch.msgid.link/20260526-kvm-get_reg_list-v2-v2-0-=
+7940a401454a@sifive.com
 >
->  bool filter_reg(__u64 reg)
->  {
-> @@ -149,6 +150,14 @@ bool filter_reg(__u64 reg)
->         case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CS=
-R_AIA_REG(iprio1h):
->         case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CS=
-R_AIA_REG(iprio2h):
->                 return isa_ext_cant_disable[KVM_RISCV_ISA_EXT_SSAIA];
-> +       /*
-> +        * FWFT misaligned delegation registers are always visible when t=
-he SBI FWFT
-> +        * extension is enable and the host supports the misaligned deleg=
-ation.
-> +        */
-> +       case KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_R=
-ISCV_SBI_FWFT_REG(misaligned_deleg.enable):
-> +       case KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_R=
-ISCV_SBI_FWFT_REG(misaligned_deleg.flags):
-> +       case KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_R=
-ISCV_SBI_FWFT_REG(misaligned_deleg.value):
-> +               return sbi_ext_enabled[KVM_RISCV_SBI_EXT_FWFT];
->         default:
->                 break;
->         }
-> @@ -193,6 +202,27 @@ static int override_vector_reg_size(struct kvm_vcpu =
-*vcpu, struct vcpu_reg_subli
->         return 0;
->  }
+> Changes in v2:
+> - Fix FWFT stale feature exposure by removing static 'supported' field
+> - Refactor get-reg-list test to use unified extension sublist macros
+> - Split FWFT testing into per-feature sublists with runtime checks
+>   (Andrew)
 >
-> +void check_fwft_feature(struct kvm_vcpu *vcpu, struct vcpu_reg_sublist *=
-s, u64 feature)
-> +{
-> +       unsigned long value;
-> +       int rc;
-> +
-> +       /* Enable SBI FWFT extension so that we can check the supported r=
-egister */
-> +       rc =3D __vcpu_set_reg(vcpu, feature, 1);
-> +       if (rc)
-> +               return;
-> +
-> +       for (int i =3D 0; i < s->regs_n; i++) {
-> +               if ((s->regs[i] & KVM_REG_RISCV_TYPE_MASK) =3D=3D KVM_REG=
-_RISCV_SBI_STATE) {
-> +                       rc =3D __vcpu_get_reg(vcpu, s->regs[i], &value);
-> +                       __TEST_REQUIRE(!rc, "%s not available, skipping t=
-ests", s->name);
-> +               }
-> +       }
-> +
-> +       /* We should assert if disabling failed here while enabling succe=
-eded before */
-> +       vcpu_set_reg(vcpu, feature, 0);
-> +}
-> +
->  void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
->  {
->         unsigned long isa_ext_state[KVM_RISCV_ISA_EXT_MAX] =3D { 0 };
-> @@ -235,6 +265,9 @@ void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu=
-_reg_list *c)
->                         break;
->                 case VCPU_FEATURE_SBI_EXT:
->                         feature =3D RISCV_SBI_EXT_REG(s->feature);
-> +                       if (s->feature =3D=3D KVM_RISCV_SBI_EXT_FWFT)
-> +                               check_fwft_feature(vcpu, s, feature);
-> +                       sbi_ext_enabled[s->feature] =3D true;
->                         break;
->                 default:
->                         TEST_FAIL("Unknown feature type");
-> @@ -897,11 +930,15 @@ static __u64 sbi_sta_regs[] =3D {
->         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KV=
-M_REG_RISCV_SBI_STA | KVM_REG_RISCV_SBI_STA_REG(shmem_hi),
->  };
+> To: Anup Patel <anup@brainfault.org>
+> To: Atish Patra <atish.patra@linux.dev>
+> To: Paul Walmsley <pjw@kernel.org>
+> To: Palmer Dabbelt <palmer@dabbelt.com>
+> To: Albert Ou <aou@eecs.berkeley.edu>
+> To: Alexandre Ghiti <alex@ghiti.fr>
+> To: Cl=C3=A9ment L=C3=A9ger <cleger@rivosinc.com>
+> To: Andrew Jones <ajones@ventanamicro.com>
+> To: Paolo Bonzini <pbonzini@redhat.com>
+> To: Shuah Khan <shuah@kernel.org>
+> Cc: greentime.hu@sifive.com
+> Cc: vincent.chen@sifive.com
+> Cc: zong.li@sifive.com
+> Cc: kvm@vger.kernel.org
+> Cc: kvm-riscv@lists.infradead.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
 >
-> -static __u64 sbi_fwft_regs[] =3D {
-> +static __u64 sbi_fwft_misaligned_deleg_regs[] =3D {
->         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KVM_=
-REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_FWFT,
->         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KV=
-M_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.enable),
->         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KV=
-M_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.flags),
->         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KV=
-M_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.value),
-> +};
-> +
-> +static __u64 sbi_fwft_pointer_masking_regs[] =3D {
-> +       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KVM_=
-REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_FWFT,
->         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KV=
-M_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.enable),
->         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KV=
-M_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.flags),
->         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KV=
-M_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.value),
-> @@ -1129,7 +1166,6 @@ KVM_SBI_EXT_SIMPLE_CONFIG(pmu, PMU);
->  KVM_SBI_EXT_SIMPLE_CONFIG(dbcn, DBCN);
->  KVM_SBI_EXT_SIMPLE_CONFIG(susp, SUSP);
->  KVM_SBI_EXT_SIMPLE_CONFIG(mpxy, MPXY);
-> -KVM_SBI_EXT_SUBLIST_CONFIG(fwft, FWFT);
->
->  KVM_ISA_EXT_SUBLIST_CONFIG(aia, SSAIA);
->  KVM_ISA_EXT_SUBLIST_CONFIG(fp_f, F);
-> @@ -1206,6 +1242,23 @@ KVM_ISA_EXT_SIMPLE_CONFIG(zvksed, ZVKSED);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zvksh, ZVKSH);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zvkt, ZVKT);
->
-> +static struct vcpu_reg_list config_sbi_fwft_misaligned_deleg =3D {
-> +       .sublists =3D {
-> +               SUBLIST_BASE,
-> +               SUBLIST_SBI(fwft_misaligned_deleg, FWFT),
-> +               {0},
-> +       },
-> +};
-> +
-> +static struct vcpu_reg_list config_sbi_fwft_pointer_masking =3D {
-> +       .sublists =3D {
-> +               SUBLIST_BASE,
-> +               SUBLIST_ISA(smnpm, SMNPM),
-> +               SUBLIST_SBI(fwft_pointer_masking, FWFT),
-> +               {0},
-> +       },
-> +};
-> +
->  struct vcpu_reg_list *vcpu_configs[] =3D {
->         &config_sbi_base,
->         &config_sbi_sta,
-> @@ -1213,7 +1266,8 @@ struct vcpu_reg_list *vcpu_configs[] =3D {
->         &config_sbi_dbcn,
->         &config_sbi_susp,
->         &config_sbi_mpxy,
-> -       &config_sbi_fwft,
-> +       &config_sbi_fwft_misaligned_deleg,
-> +       &config_sbi_fwft_pointer_masking,
->         &config_aia,
->         &config_fp_f,
->         &config_fp_d,
->
-> --
-> 2.43.7
->
+> ---
+> Yong-Xuan Wang (5):
+>       KVM: RISC-V: SBI FWFT: Mark vCPU CSRs dirty after setting feature v=
+alue
+>       KVM: RISC-V: SBI FWFT: Add optional init() callback for hardware pr=
+obing
+>       KVM: RISC-V: SBI FWFT: Fix stale feature exposure after runtime ext=
+ension changes
+>       KVM: riscv: selftests: Refactor ISA and SBI extension sublist macro=
+s
+>       KVM: riscv: selftests: Split SBI FWFT into separate feature-specifi=
+c sublists
+
+Queued this series for Linux-7.2
+
+Regards,
+Anup
