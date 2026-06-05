@@ -1,145 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75D33368A9;
-	Fri,  5 Jun 2026 06:45:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2934279FC
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2026 06:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780641938; cv=none; b=sQcvGFHEpS3j5Op0iwqSYSd6rom9gtOnhQaX8tlOuzcYxtcwNphOUJ9NsTRozPu8rC1Nxh52jq5XOngwsSC/DOFGGhC9Qbuga+Y+jRgUmKPM3DCCiNTRusz9tQChe9ijEooqZD28nTz6ygFrYEU8vMzyB0sRYslvBmBGClpwll8=
+	t=1780642271; cv=none; b=KLD28mF3kb+JcurZb5KMPrYefx3eS1Mm6/av0K1ECqoZgjLU9lTybsYQaRBFm25tYklKKyyz1EQp60VxR1ydUVAW7dDD0EQEaLVs0oFPGUov1Q++oxd747404lWuV+3wgCRezDZkJlk14CD4wEQ34aD+DerZFqXj8rRcFaT4CeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780641938; c=relaxed/simple;
-	bh=ht0m413PEIPsvFhOM1o886ZRoLV1gC4nu/drcCsImqs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n/3Rz8n1eqVSp0U9qbImkqF5AtnP/qbMA44dDOBNbiXn5kI6mqfnkcKV9wuesJmqs5cKTiib9K/K6Zu0WME3nISiCM7bzlOhOIgUVhiWlgrG+Gh0N0PupF/o1wlARpIk3+gOsAfOURQCsypCmEDij+FYKlmYIXzxkSWYxMPPtaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dK0zPN9m; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780642271; c=relaxed/simple;
+	bh=TfLsETz7Q6l0FsZne6CcwqKFbkV6sQbdJ3G/Uxbs0sc=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=XZvSEf3+5iPfKkyPiEdrWbTHOQP6pGjRoW2mKTDhkBnVrz8s6AY0W/BFMw059UvqPV/msIgCunzfikZ+DTQdsakG/h4s0h4GTdHp5O6/vp6WHeGoBJUQf2f67lfOX8Tl7FpAvNBqsSE+a70CkFT67R8KbuIKSNHe0Ubb6rxJtNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cqbLhYbX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=OCZPDZRv; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cqbLhYbX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=OCZPDZRv; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dK0zPN9m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45CEF1F00899;
-	Fri,  5 Jun 2026 06:45:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780641934;
-	bh=6AYsKMuIdTg8BFUNDzRsVuHiBD4UL7B2xke/AuEe1z0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=dK0zPN9mxzfuHkm4hcM3IAZJDt3m85l7bTjDAVJ/aM9X33cVUMHMAIeUPL4LsDIhp
-	 k54xhzFHe2Q4W+KWJrjVRaG8F9zCXkYdJzie2Mh3vjAqFKr8u3F7D83v9wCnJ4oI9Z
-	 h6/0N6w+4jquG06meZl9RL8Ss7yCedqPfDMJcji3RR9XOF7gpPigVmQdf0Sk7AA9IN
-	 imdEVehSS8rQ+IBsAKH+QIFxrvmOpJukHhGwYYb+FZLJ64JEBQWmHTdTI/7jMPgQIk
-	 JpEUrUXdPdRlMb8IGt0nJqhb0gJu+ic0bU1SCxeZ/v03ODFmZRaPNHatt4/BPS7cB2
-	 p+W7TNNiZ8Z4g==
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 6A0B5F40069;
-	Fri,  5 Jun 2026 02:45:31 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Fri, 05 Jun 2026 02:45:31 -0400
-X-ME-Sender: <xms:i3AiasdNhS_KlyqsumDnLI22Nji4lRgCBXcSawziHZ2KFg80dz_r4Q>
-    <xme:i3AiakojmIrUnzTRKqDHplwGdcPbZxtOaTFP6K98Vj0YJ24e4Yl6aUGtq9D9Nzmvn
-    dcMr-cG4jeurCmamtatymxfRXu8-9msdHJpL6xRRXmXxk5SNBRDTw>
-X-ME-Received: <xmr:i3AiamWVTVH3_IAljezw_p-QLVIZaFjSRdoyaHFhFkYxqxmTVE3j8bXmTY4>
-X-ME-Proxy-Cause: dmFkZTGlcVUQF+Wer3Y5GEVfzATn/deLTQvoklESl61u/rNXp18gne78kg+hRKjPmN+C95
-    +Y+rXOz/wSPynF1ZkSdI0xvnTDk3JzZaYZOwjqPAn5fQPB5z2a4kXq2VN3blLahI0YorC6
-    APEiTrZ02zYFXqZnZgAW76LEBfDjgETDW2APCndMnzlyLbZN8mPXZJRcW+BiZy/tT4XTI9
-    gorxxmEj99FWScGx0DkJim8WCCu/p+rSQEv5zsCk6uLz2qEy3UOrvzI1IH/P0syZmm1PjK
-    z1nsfspXhNfHZz9/FZPcRBYZZsf499hB7WRksmESyQj/3vQnvnMuEcLF8frbXbZ+jh3fYq
-    F9er7eAogPZABVgXL6W7BcIowtwwkYDNbmnE3IOgIUgj9NagEvWW20FlTpx1yL6strEj/Z
-    WJHbcOzvwEWsv8PV/fayj3VJ6keQBQfgmLk7QDi0JfAjld7LRft2EECvZe2ZYFD4zzOej9
-    Nxy8uaR71MAQJHZKEy6xZSdbys0s6JQU1Ij1OY/VhQ/GBrcZf9PmTcsSLHJ/eSfwDSfzbA
-    n0lCqO7VCrMBNcd8az+EodvJTqUDsl7rw3cGMPTDoCvxMwUOIZAoAT8nRABxxbcxFTW052
-    QhmDCDgRZCK7bhjDhoaTeT5bgah4eMxVV4uUgn9Jy+K/G1Mb+K3JD6lRF7gg
-X-ME-Proxy: <xmx:i3Aiak0_yaXo814KKvtjbSJLXyCjEkcH-jAjAUdSEKbjbfUGfoZPMw>
-    <xmx:i3AiaoCA73VJ_JuQ_aX7YVQOERTqb8jzs1LYgHeSIzJEnG1wIJS8wg>
-    <xmx:i3AiaqMkJXwDRZCfL3DNEZs0PCOCBrBagytlIIa-7N2B1_8f-BTGgQ>
-    <xmx:i3Aiahi-nEmDbpxiyOSDZbNGp3rTP8ngb1TRRq9n44dGNgvY0THPRQ>
-    <xmx:i3AiapA8TnDWJqClrosWAiqwxgG4UVI_aUwompfqr0Bbc312m9quGLuN>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 Jun 2026 02:45:30 -0400 (EDT)
-Date: Thu, 4 Jun 2026 23:45:29 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: bot+bpf-ci@kernel.org
-Cc: peterz@infradead.org, catalin.marinas@arm.com, will@kernel.org,
-	jonas@southpole.se, stefan.kristiansson@saunalahti.fi,	shorne@gmail.com,
- hca@linux.ibm.com, gor@linux.ibm.com,	agordeev@linux.ibm.com,
- borntraeger@linux.ibm.com,	svens@linux.ibm.com, tglx@kernel.org,
- mingo@redhat.com,	bp@alien8.de, dave.hansen@linux.intel.com,
- x86@kernel.org,	hpa@zytor.com, arnd@arndb.de, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	vschneid@redhat.com, kprateek.nayak@amd.com, longman@redhat.com,
-	akpm@linux-foundation.org, andrii@kernel.org, eddyz87@gmail.com,
-	ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-	memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
-	jolsa@kernel.org, shuah@kernel.org, ojeda@kernel.org,	gary@garyguo.net,
- bjorn3_gh@protonmail.com, lossin@kernel.org,	a.hindborg@kernel.org,
- aliceryhl@google.com, tmgross@umich.edu,	dakr@kernel.org,
- ruanjinjie@huawei.com, lyude@redhat.com,	thuth@redhat.com,
- sohil.mehta@intel.com,	pawan.kumar.gupta@linux.intel.com,
- seanjc@google.com,	nikunj@amd.com, xin@zytor.com, joelagnelf@nvidia.com,
-	andriy.shevchenko@linux.intel.com, rdunlap@infradead.org,
-	ynorov@nvidia.com, bigeasy@linutronix.de,	linux-kernel@vger.kernel.org,
- linux-openrisc@vger.kernel.org,	linux-s390@vger.kernel.org,
- linux-arch@vger.kernel.org,	bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org,	rust-for-linux@vger.kernel.org,
- boqun.feng@gmail.com,	martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-Subject: Re: [PATCH v3 03/13] preempt: Introduce __preempt_count_{sub,
- add}_return()
-Message-ID: <aiJwieZoxCBEZ2ji@tardis-2.local>
-References: <20260605054128.5925-4-boqun@kernel.org>
- <d3e91d227b0e1b777a85806e54b03d46581e4460f893e5b45baa9168f5319fbf@mail.kernel.org>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cqbLhYbX";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="OCZPDZRv";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cqbLhYbX";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="OCZPDZRv"
+Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
+	by smtp-out2.suse.de (Postfix) with ESMTP id 9F40275828;
+	Fri,  5 Jun 2026 06:51:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1780642266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
+	b=cqbLhYbXqQ5DmSgOueZ40o4uwiC4l/F9yChE0ijzilkPc/NZ/8h52m+nyNo8Z927hNC/nD
+	h6uzKXUMPL2BLimxcA5vZYv8vWHupqNuhJrPtnMUdXjgiwj5AWdsmgTIs6A6COYS3G0Zlb
+	iMXt4baTpTkOZvgu3gj+t71ooYaDVvE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1780642266;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
+	b=OCZPDZRvWlmxIPniJy+nNqaoe+0kcLrgcasJ8Go1l+GIVhUVnBeOC0znbu9O78tPyCl0QS
+	8G9lsmxfaw4MinDA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=cqbLhYbX;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=OCZPDZRv
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1780642266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
+	b=cqbLhYbXqQ5DmSgOueZ40o4uwiC4l/F9yChE0ijzilkPc/NZ/8h52m+nyNo8Z927hNC/nD
+	h6uzKXUMPL2BLimxcA5vZYv8vWHupqNuhJrPtnMUdXjgiwj5AWdsmgTIs6A6COYS3G0Zlb
+	iMXt4baTpTkOZvgu3gj+t71ooYaDVvE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1780642266;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
+	b=OCZPDZRvWlmxIPniJy+nNqaoe+0kcLrgcasJ8Go1l+GIVhUVnBeOC0znbu9O78tPyCl0QS
+	8G9lsmxfaw4MinDA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d3e91d227b0e1b777a85806e54b03d46581e4460f893e5b45baa9168f5319fbf@mail.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2] selftests/livepatch: fix resource leak in
+ test_klp_syscall init error path
+From: Miroslav Benes <mbenes@suse.cz>
+To: Rui Qi <qirui.001@bytedance.com>
+Cc: mbenes@suse.cz, jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com, 
+ joe.lawrence@redhat.com, shuah@kernel.org, live-patching@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20260604083208.1071428-1-qirui.001@bytedance.com>
+References: <20260602124509.365996-1-qirui.001@bytedance.com>
+ <20260604083208.1071428-1-qirui.001@bytedance.com>
+Date: Fri, 05 Jun 2026 08:51:03 +0200
+Message-Id: <178064226303.69035.586790401674446574.b4-reply@b4>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=364; i=mbenes@suse.cz;
+ h=from:subject:message-id; bh=TfLsETz7Q6l0FsZne6CcwqKFbkV6sQbdJ3G/Uxbs0sc=;
+ b=owGbwMvMwMHYWJt9x2W1tA7jabUkhiylwutFJk+tdz8/ZSHzif3Y9Uiuw3eeqVoE/jow/6Cq9
+ OfYr0syOhn9WRgYORgsxRRZXu91ljOckmugWf3uLswgViaQKdIiDQxAwMLAl5uYV2qkY6Rnqm2o
+ Zwhk6BgxcHEKwFRfkuZg2Lwm+ZaJBffnP2v8LO9N+h9Tn/fCrmVrzr0cr89CPzZZ8R6te5nxd6N
+ szckECZe/fIuNdTjfsa9tOv7QRb+nbumjA82eov+cwjYlPbUXmHBo0QLHPk4Hzyl/A1ljJH49Ev
+ 635b/Wwv2GMo3BmmJrPSQTzTxlwuvu7t3boZgpLzv56JXrnee3r2K8Ws0XkZ5nslqcw8666LSD9
+ 6XSdsZGd/fmH/yTVlw9skWPwb7+steOOx08/w8e4n+U3JQcbLBP9pe7W5LKhHrxhKrIWjUZmX2H
+ 5wYuDQ4N/z/9myl/0ePD5aIvFLTevc6/vJTt4ImEU1cUNromvVKV6MywMWrade33FvvUlWeLZoX
+ cjUkFAA==
+X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
+ fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
+X-Spam-Flag: YES
+X-Rspamd-Action: add header
+X-Spam-Level: *****************
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [17.64 / 50.00];
+	SPAM_FLAG(5.00)[];
+	NEURAL_SPAM_LONG(3.50)[1.000];
+	HFILTER_HELO_5(3.00)[localhost.localdomain];
+	NEURAL_SPAM_SHORT(2.99)[0.998];
+	BAYES_HAM(-2.75)[98.90%];
+	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
+	RDNS_NONE(2.00)[];
+	ONCE_RECEIVED(1.20)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DIRECT_TO_MX(0.00)[b4 0.15.2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:1b::12ef:from];
+	RCVD_COUNT_ZERO(0.00)[0];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:dkim]
+X-Spamd-Bar: +++++++++++++++++
+X-Rspamd-Queue-Id: 9F40275828
+X-Spam-Score: 17.64
+X-Spam: Yes
 
-On Fri, Jun 05, 2026 at 06:30:14AM +0000, bot+bpf-ci@kernel.org wrote:
-> >     preempt: Introduce __preempt_count_{sub, add}_return()
-> >
-> >     In order to use preempt_count() to tracking the interrupt disable
-> >     nesting level, __preempt_count_{add,sub}_return() are introduced, as
-> >     their name suggest, these primitives return the new value of the
-> >     preempt_count() after changing it. The following example shows the usage
-> >     of it in local_interrupt_disable():
-> >
-> >             // increase the HARDIRQ_DISABLE bit
-> >             new_count = __preempt_count_add_return(HARDIRQ_DISABLE_OFFSET);
-> >
-> >             // if it's the first-time increment, then disable the interrupt
-> >             // at hardware level.
-> >             if (new_count & HARDIRQ_DISABLE_MASK == HARDIRQ_DISABLE_OFFSET) {
->                                                     ^^
+On 2026-06-04 16:32 +0800, Rui Qi wrote:
+> In livepatch_init(), if klp_enable_patch() fails, the previously
+> created kobject and sysfs file are never cleaned up, causing a
+> resource leak. Capture the return value and add proper cleanup
+> on the error path.
 > 
-> The operator precedence in this example appears incorrect. In C, the equality
-> operator == has higher precedence than the bitwise AND operator &, so this
-> evaluates as:
-> 
->     new_count & (HARDIRQ_DISABLE_MASK == HARDIRQ_DISABLE_OFFSET)
-> 
-> Since the mask does not equal the offset, the equality evaluates to 0, making
-> the entire condition always false.
-> 
-> Should this be written with explicit parentheses to prevent readers from
-> copying flawed logic into downstream implementations?
-> 
+> Signed-off-by: Rui Qi <qirui.001@bytedance.com>
 
-Will fix this but this code is in commit log rather than real code.
-
-Regards,
-Boqun
-
->     if ((new_count & HARDIRQ_DISABLE_MASK) == HARDIRQ_DISABLE_OFFSET) {
-> 
-> This was raised by sashiko-bot@kernel.org in v3 review:
-> https://lore.kernel.org/all/20260605055933.EDF3D1F00898@smtp.kernel.org/
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26998319662
+Acked-by: Miroslav Benes <mbenes@suse.cz>
 
