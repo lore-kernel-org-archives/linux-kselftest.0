@@ -1,148 +1,152 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002372777FC
-	for <linux-kselftest@vger.kernel.org>; Sat,  6 Jun 2026 16:00:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780761643; cv=pass; b=keihkhxdQrg8o/dHn9B3GRcyuP4wOXGOROeMeVo+Eb0k3aPluS4ddm/ntA/aktDeTFf+mQtwnD5GKer2+Mcmz6Su1MedutHS8yPueNkVPMXJ5KmOfcoisw1FpSGqugHC2FpeCp2knRS22n+7Qnx09zlisVIWh/KNnsytrglSBHk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780761643; c=relaxed/simple;
-	bh=i4rew88Flxyki9IDpI/92K3Ph4V2Q1lSJDrrGN9sl4Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F+vIKRnWxxiMVlnkd9YO1q9RevNXa9VkRcqOxZ7ZkE9yo9gQAxBHkvKxhfyxvabfNhRGPsFPCNK5nWEAxWfMuxP8NhLBZm+LhICz14LoNK7W7oLQXuFqLiWz1kyse+n7jDf0QFwHJYF35xMFJJkCgPI0gmfyrZJYyrIKfflWnlY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qtmzFbMc; arc=pass smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4132F0661
+	for <linux-kselftest@vger.kernel.org>; Sat,  6 Jun 2026 20:33:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780778032; cv=none; b=lsJDr4HOE9+PvAfEtvTS5pVv9qe5CnK72WTjJ5NAaMjt83Zf2f8PpZdmjINBlPbB9RE1OQO7vWc6kbl4vSqUiJFuSSIyodFISG6qINLPA9JDlHRQ11tSbUKlgdQkgHyp0gxRKgpY0MCi3uOKFkR2d+JVA0RP13MZLPNHeIf9xNc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780778032; c=relaxed/simple;
+	bh=e714K+mzo2XhjxtDgqNCwQPN3x0crIIMszq1+viOfto=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=fnX93j5aGbph6dFRdr9+OhA/txQ48y2BztzjSV782LP7+F0TkoegQaoeQpmf/0EfiJCq+K+mbk67s7/CGRmWvwiYicC/uK50fHLDwF8/A/iBsoZ+JphcLjumycF34aHg8PipIH/GGtjlyFncvoWJNzQh2nxKLwK4g0VdD4mBlr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V9EZR1CA; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qtmzFbMc"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-68ced08613aso19696a12.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 06 Jun 2026 09:00:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780761639; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RpI7dC5hD7vcP5cn8MoBe+cRA75+b3bntQtemjSWBs3yMVk3DrDD4fcdMEFBcp27Dp
-         mG4EUbh+OmC3GS7J7ITVTRv5Nuabp3WNvCa6Z4LdhTmOMNDVuuOlJTwKiavpImQJ3I/B
-         ue5kCl2aNKbSbcOt590qAEpG68CAo813NwYGuaIRqaKGk5UcTP/R05snpmIoAXKlyp00
-         WFZyUfwsIkCS9vWGcopNENhLjEVwJNWcTVWUs1uDdrC1gywAbabByuRIz38oECXn4fXF
-         ibuQIdi+H0Ubsx/BKq29RQpQIXr0SRQj9RxQYZW9tRR4Cw+9pefw0/A3TIrPL/W+8iLl
-         qU0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=57MeYUfE5UfGozU/Hio7UqMWK4IkSftfIzxvJeTlNdE=;
-        fh=7F2+Xs4v4I+PG/0RHQMS8Ny+ueIgy6wP0QCWDk9rl+g=;
-        b=FjvF6kkvkWarIcNg2Lo9SRdOwdi268UcjP0/qkrUQHWIgBVlzkie0CHGNJMsC+cLc9
-         nCuXMkSjo15oreCZqV00uWDfKjc/yrEKyOR8sbnSi2M8xxZCD29WZNwy0iobM15oxQ6I
-         NOhcsopY7eD5+bQeYhUVUrBliZGjzPZIsPHzAwCnWGsHXnqNQXCeJFYXWBcTaRL/O9K6
-         O6wha3vndTiJWJsH1AgcZeSIf7YArSLUwNVN+AFKBUxTTr/EzLgwY/fcXEGu5z84ZHVa
-         rX9UfuSgWrlqwUoBqNMEhCd+MUrdZncO0tHJybsY/cqzaO75UkkZq6xZ0Wc1OAXw1GG/
-         SsYA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V9EZR1CA"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2bf3781ca51so31382295ad.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 06 Jun 2026 13:33:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780761639; x=1781366439; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=57MeYUfE5UfGozU/Hio7UqMWK4IkSftfIzxvJeTlNdE=;
-        b=qtmzFbMcf5OQlqYiqmSnF1htmq5vzpPoEgjr24mt4U+OLIDxUfcZEhVpd3EAD42bVF
-         r6IG9gxEvBLklC7TGpZR6aU4NBZhQ1soZ9qFh5AGplnNjLDFrblsq54Z/J3pxU/VlyEl
-         Ut82gkV5bcvViQfrSHzVbpmFfoTl5gOlhlg40U4UNek0eeI7IoUza85oFrkKwFn3OHCt
-         ZDvTgaix2zc2V6VhysyegIENaYrFH3jHClszFsE9afOxtudQYxfEM7s4GRshiMhXZG4u
-         sqMgKjBPCKKlHGD8zFujh/jldoR7eciG+uO7FL7if9LTHoaSSsGC6Q0ovkDZVNLDPs+I
-         VH5w==
+        d=gmail.com; s=20251104; t=1780778031; x=1781382831; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=e714K+mzo2XhjxtDgqNCwQPN3x0crIIMszq1+viOfto=;
+        b=V9EZR1CAIcggaqv2B6aMhitDDNdui/7I7gcWjKr/RmfgLEgE8y9WQopgL0mti6G8ie
+         CnCfYRphFcUQaiFdDYUjMGoeSeZYanmZY5TM8M2HfsDdJDY6dyiGrZtKwm+npZZUxVPt
+         ifdEv0ejGYUtFq2fins0JpX073d1811womvTOl5xXaZiDUAsfqE848zHyYCKLnEeNm+d
+         QPzUcEq82JTcXuTY3T3jEv/ozhwDpFccOvmPS/U7sWWjYI4huL5lCh/NsIMYvf2OSVrf
+         51bHiKA0fK0EH1he8C7YFYoEKWTq2DXtrcDNT2/cdUU45PyLPQzPMXiQhtnL6GdXwdom
+         uSUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780761639; x=1781366439;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=57MeYUfE5UfGozU/Hio7UqMWK4IkSftfIzxvJeTlNdE=;
-        b=mVsMr15y2u6fMC6q21o6bRE1gOn96QLGrKSHtctF6e17FxsW4yebLjyHeBjsYw4X4i
-         3RpNsGLouiRLm7oo0QwrQKvhVGlmQ8Wl8NRE5x2GLa8uP+M8Q6tQmFPHqF7meZrGqC00
-         HpZWMoQOoblJrb2oPyup3+++y9CjolfZfGnn6PZCekPefRkMR6K8v9FrSnZV22WCY2uj
-         SHVGhHf04/epUeYA1zq7+gJ1xJjqLGVCk8sxpPyUl8TbLQofH9Z5Zf6bdQRGfuyIX7C1
-         TQjPD3KCBhhDhQMmkZSnPo7m7jcCCztDVHJ4MnBghOMVBjiX76Hu0dBvGpmqF0W8kv9P
-         vvfw==
-X-Forwarded-Encrypted: i=1; AFNElJ/G+qufnwcdQlvm8/v2FHuxmBsMiAOdMWlw7XrwrXy3rysg6dLqDmOd9MGklLBE/hz9h8ovGKQfS3dE4I6D5og=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOH2MsC1R5xw4HhsPJNy2rAD3TeCan+cK00YN7EiRvRvBcqQ0w
-	IIdp012w0kWd8qGAyRDo6qIRaqbUB1ivBVBmFNfDky3pZJzn+oA+PVusQZtacJrBkZuIP5VZYLf
-	FvpYP6gZy0yzSydlUB4KBkvlpca1XbVlfmdfaLviA2prSacDJ5buHIJziCBc=
-X-Gm-Gg: Acq92OEpuKytRnOmNwznEuM0aNbFphSepW8QjaAAOf3/3CVXCDbAVOxbS1EzM3wNjVQ
-	/OrlQlPUtLrLX1KnFBpf4Kxg6QeX4Ufx2aPwWgsYQCFE3mpo7yryzxG23lf8m0GJ/5omUOBAkC/
-	rPlnDmvSlFcx2lc/NLt3RTGiudzoEYNzIw00x36hBZ0GocwziPdH2fe7kxsHQOfCX+jbVoc+8kf
-	mA9S63o0MA7FOzfTkjixpUA/eM48pLo8VbGtScIl+IZAG33O9Zrlwo7oDyQEqwUvryJguhjaBwI
-	dXt489s6c78xTJh+nQ==
-X-Received: by 2002:a05:6402:a382:b0:67b:7d05:60b8 with SMTP id
- 4fb4d7f45d1cf-68fe9275289mr115181a12.10.1780761638922; Sat, 06 Jun 2026
- 09:00:38 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780778031; x=1781382831;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e714K+mzo2XhjxtDgqNCwQPN3x0crIIMszq1+viOfto=;
+        b=UiWIMHZde42J87tSLLDMAvOdDB6QX6VaW2PAuc/CmYqX5Ew80mVEZTiX4RzmJDHTQ8
+         kp5QHhspc2oq7XdqsOGq2T+4AvFgCO3t8zzadStibKwVKugPyfa7rkJPs6KLoKUmCKL+
+         T4Kg6+8baB7zqp28UHeCL5yT9YDpjet3B1uAFrTkFxk4XqMa7TJXfz557EH8p0UbkpUV
+         UV9nMe9kyGx/YTDjfslwwBCCUmQiKkKhdfOt4IUdczTiYegTv/DSuqVhRGbQAr7mJ4Gi
+         A2kC8QePWmS6tXVz2OQIfxHUh4uikiLwfWl4ohQCxZueUMhEgXJk0H/ds8EjvXhyw1dB
+         MRQw==
+X-Forwarded-Encrypted: i=1; AFNElJ9f3YRL9ksTUJ9I6cLr3HGcY7ZOdoyW1gJpxq1S2nEWJ1uuM68fSSy/inFgchXdabaguqU1yU21X/3Zt/+VqJo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy97q5BXuSenqNyIbtJJPmTLexlhe0X5qnHCLyeJWHqsGY/fqvD
+	Vj0NHmrwydjH9M965+AslzShYp8hLswZIK5+7E/RhNwi3bmKysIgI/P/
+X-Gm-Gg: Acq92OHdsKyVjbwCqQjkJ4x+P6EzkzBm9QB2pcACCbbuBCYpDMors6vA+EOVtWdbQ6d
+	k1UuFAoVwZYEZlNs/Tg5Tk3i9pdbCd5hZCAmta4exlFioen8nlQzYEg6rQNxWAkLH+GbrM/Wxea
+	+qyvJywzmuJwNPb7mdxkS/aBEo2RPvLINRTyAaYzbTWRdXwd6uE/3z3Pm7Si6FlK/PKoxSRM9n3
+	0L7clgZwdG9/YQyJrF5rjr/+SWfJvB+9I8MXA7xK+2AjS+uuZt5L2Vyk/tT6UubDdgsD7PjT56u
+	eJNgL0Zo1vOSMNL4ry8X34LJIYETge/+ZvasjbqBC8iXuwu+JAKJoIh5sNusGhsiLE/CyASHk6c
+	jXO+fLnD4Gwu1+1jo9GaeSwsAHScf+nHgyfhcTOLanA0FyFCy/lESdHmtcZPOFry1BuYe9vcmI6
+	/e6gZW6sXbCrRv7pAZGJCLmHbaK7BHD39NKFxOEWD8rYJkDEguPcVHHrvFOyJqag==
+X-Received: by 2002:a17:902:da88:b0:2c0:db23:4c1 with SMTP id d9443c01a7336-2c1e7b359e8mr116953145ad.5.1780778030642;
+        Sat, 06 Jun 2026 13:33:50 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f94a7fsm131987615ad.28.2026.06.06.13.33.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Jun 2026 13:33:50 -0700 (PDT)
+Message-ID: <562b1652176c8f40dd24027d0e0d44ddae800353.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf, verifier: fold reg->var_off into
+ PTR_TO_FLOW_KEYS bounds check
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi
+	 <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
+	 <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+	 <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan
+	 <shuah@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Sat, 06 Jun 2026 13:33:46 -0700
+In-Reply-To: <20260606-c3-01-v3-v3-1-97c51f592f15@mails.tsinghua.edu.cn>
+References: <20260606-c3-01-v3-v3-0-97c51f592f15@mails.tsinghua.edu.cn>
+	 <20260606-c3-01-v3-v3-1-97c51f592f15@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-9 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260527174347.2356165-1-jmattson@google.com> <178009472318.880870.7878635650921105255.b4-ty@google.com>
- <CALMp9eQ-8h2F4HO8S666mJF3QzyH=0b30kC=n_9p7SMbBhxCMA@mail.gmail.com>
-In-Reply-To: <CALMp9eQ-8h2F4HO8S666mJF3QzyH=0b30kC=n_9p7SMbBhxCMA@mail.gmail.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Sat, 6 Jun 2026 09:00:25 -0700
-X-Gm-Features: AVVi8CesUChtR-NwwSdAcU77cBFMJbKq7QwRjpAY4cHdu5oVJkkbFJqIsISYYVc
-Message-ID: <CALMp9eRHC-N7x2ZK3_dk0xg5WaokQFeGuL5qoAQGqpG60bJY4g@mail.gmail.com>
-Subject: Re: [PATCH v4 0/5] KVM: x86: Virtualize AMD's "disable CPUID in usermode"
-To: Sean Christopherson <seanjc@google.com>
-Cc: pbonzini@redhat.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, shuah@kernel.org, 
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, ctpence@google.com, David.Kaplan@amd.com, 
-	binbin.wu@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 6, 2026 at 8:12=E2=80=AFAM Jim Mattson <jmattson@google.com> wr=
-ote:
->
-> On Fri, May 29, 2026 at 3:47=E2=80=AFPM Sean Christopherson <seanjc@googl=
-e.com> wrote:
-> >
-> > On Wed, 27 May 2026 10:43:42 -0700, Jim Mattson wrote:
-> > > AMD's "disable CPUID in usermode" feature is analogous to Intel's "CP=
-UID
-> > > faulting" feature, but it is advertised and activated differently.  T=
-he AMD
-> > > feature is advertised via CPUID.80000021H:EAX.CpuidUserDis[bit 17] an=
-d
-> > > activated by setting HWCR.CpuidUserDis[bit 35].
-> > >
-> > > Add virtualization support for the AMD feature.
-> > >
-> > > [...]
-> >
-> > Applied to kvm-x86 misc, thanks!
->
-> Oops! You haven't sent a pull request for this series yet, have you?
->
-> Our internal Sashiko asks:
->
-> > In kvm_set_msr_common(), the MSR_PLATFORM_INFO handler uses cpuid_fault=
-_enabled() to prevent the host from clearing MSR_PLATFORM_INFO_CPUID_FAULT =
-while CPUID faulting is enabled:
-> >
-> >    case MSR_PLATFORM_INFO:
-> >         if (!msr_info->host_initiated ||
-> >             (!(data & MSR_PLATFORM_INFO_CPUID_FAULT) &&
-> >              cpuid_fault_enabled(vcpu)))
-> >             return 1;
-> >
-> > If a VMM restores MSR_K7_HWCR before MSR_PLATFORM_INFO during live migr=
-ation, and the guest had enabled AMD CPUID faulting, won't the write to MSR=
-_PLATFORM_INFO fail if it doesn't have MSR_PLATFORM_INFO_CPUID_FAULT set?
->
-> Sadly, I think it's right. Even on AMD systems, MSR_PLATFORM_INFO is
-> enumerated by KVM_GET_MSR_INDEX_LIST. It does come before MSR_K7_HWCR
-> in that list, but userspace is free to restore the virtual MSRs in any
-> order. For any sane AMD-hosted vCPU, MSR_PLATFORM_INFO will be zero.
+On Sat, 2026-06-06 at 18:50 +0800, Nuoqi Gui wrote:
+> Constant pointer arithmetic on a PTR_TO_FLOW_KEYS register lands the
+> constant in reg->var_off (e.g. flow_keys(imm=3D4096)), but the
+> PTR_TO_FLOW_KEYS path in check_mem_access() passes only insn->off to
+> check_flow_keys_access() and never folds reg->var_off.value.=C2=A0 The
+> verifier therefore accepts an access that, at runtime, dereferences past
+> struct bpf_flow_keys -- a verifier/runtime divergence that yields an
+> out-of-bounds read and write of kernel stack memory.
+>=20
+> Commit 022ac0750883 ("bpf: use reg->var_off instead of reg->off for
+> pointers") removed the generic "off +=3D reg->off" that check_mem_access(=
+)
+> applied before the per-type dispatch and replaced it with per-path
+> folding of reg->var_off.value (for example the ctx path now folds the
+> register offset via check_ctx_access()).=C2=A0 The PTR_TO_FLOW_KEYS path =
+was
+> not given the equivalent fold, so a constant offset that used to be
+> folded and rejected is now silently accepted:
+>=20
+> =C2=A0 before 022ac0750883: the offset stays in reg->off and is folded
+> =C2=A0=C2=A0=C2=A0 generically, so the access is checked with off=3D4096 =
+and rejected.
+> =C2=A0 after=C2=A0 022ac0750883: the offset lands in reg->var_off, the fl=
+ow_keys
+> =C2=A0=C2=A0=C2=A0 path checks off=3D0 and accepts; at runtime the access=
+ dereferences
+> =C2=A0=C2=A0=C2=A0 base + 0x1000.
+>=20
+> For a BPF_PROG_TYPE_FLOW_DISSECTOR program the following is accepted:
+>=20
+> =C2=A0 r2 =3D *(u64 *)(r1 + 144)=C2=A0=C2=A0 ; R2=3Dflow_keys (PTR_TO_FLO=
+W_KEYS)
+> =C2=A0 r2 +=3D 0x1000=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 ; R2=3Dflow_keys(imm=3D4096), accepted
+> =C2=A0 r0 =3D *(u64 *)(r2 + 0)=C2=A0=C2=A0=C2=A0=C2=A0 ; accepted, var_of=
+f.value=3D0x1000 ignored
+>=20
+> while the equivalent insn->off form
+>=20
+> =C2=A0 r0 =3D *(u64 *)(r2 + 0x1000)
+>=20
+> has the same effective offset but is correctly rejected with
+> "invalid access to flow keys off=3D4096 size=3D8", which isolates the def=
+ect
+> to the missing var_off fold.=C2=A0 Once attached as a flow dissector, the
+> accepted program reads kernel stack past struct bpf_flow_keys (a
+> kernel-stack / KASLR information leak) and can likewise write past it,
+> corrupting kernel memory.
+>=20
+> Fix it by folding reg->var_off.value into the offset before the bounds
+> check and rejecting non-constant offsets, mirroring the other pointer
+> types (e.g. check_ctx_access()).
+>=20
+> No released kernel is affected; the regression is confined to the 7.1
+> development cycle (reproduced on v7.1-rc1..rc5), and v7.0.x rejects the
+> program above.
+>=20
+> Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for point=
+ers")
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> ---
 
-Never mind. This Sashiko observation was on a backport to a branch
-that doesn't have commit 1ded7a57b805 ("KVM: x86: Remove ordering
-check b/w MSR_PLATFORM_INFO and MISC_FEATURES_ENABLES"). Everything is
-fine at tip.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+
+[...]
