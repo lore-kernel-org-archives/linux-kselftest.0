@@ -1,142 +1,162 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03A127732;
-	Sat,  6 Jun 2026 02:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B948818FDBE
+	for <linux-kselftest@vger.kernel.org>; Sat,  6 Jun 2026 03:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780711416; cv=none; b=FmSRbxJnPzFnhitdkoqE/i5JvG/f/UZtFJvQQYhUONvAZ4L+5rEJxbdZMQYcRf3Xv0Vx8E0xfHvtIWyRunR/dE1o9GGze1lXiH0udRKhJT5KWR+kkmqGVPhtiyk4LaDKyIU8w1xvVIa12Yc9YyTo9kL4srNE444myhnqJ2MHZTI=
+	t=1780718305; cv=none; b=nFRXX33CDfs1kiHtxsCDOtHWzQXS5SI7AxMgDhyKL2yy15JEIt4CUHsmzQ5xabb78BPzWQn8cUxQ3OXvPGvEYtod/n4x1HE5ufkFF/uY7aJmKlTxkFIpzKOvIuBUzYLkDy1H+TicmIlH4BDunDxTMOzGCRI5Cw6n98kd7mQMRAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780711416; c=relaxed/simple;
-	bh=dD123OHVdzbCXf35ks7oq1KmBsgfgCLsUgLmeyEdK5Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p26jCBoOWDqZ3YCS14LC3Fs06AuS0m8JMfPpLOvAlJMY2N8r+DO73mOz4EY/abOaf83r9XnYJsRWs5pATJscWMLNTHIkaE7VBwojwcbXlDgbOeG3MLsA63C3CSB02JPvNsqd2AOTHGCFGMJ6u6l+WdvVMpgewJpHhz18PVQ4cMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=np+/fT/y; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=dpUyInKb; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+	s=arc-20240116; t=1780718305; c=relaxed/simple;
+	bh=OEoIxi0GIIXzHNo+sitwf64Y7auwxVmC7N9xy7C0zBQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aK9fcX9kd6VPFhhjjU8YcbTYoj3o/k5O0VQFa9FqY6GRZYHbW4W1vnr856JNmRLFtnaoeCIf69ibszNwcJIWKMZrdaM7tpRpJMZ+YpYATpR38b0XhgEVfHeviJ4WTrieIBFqcEjOGfTAGFSm9CuldFaiM4oLtDFurfBXasr8Xx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Bm3riK5V; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="np+/fT/y";
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="dpUyInKb"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1780711412;
-	bh=dD123OHVdzbCXf35ks7oq1KmBsgfgCLsUgLmeyEdK5Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=np+/fT/y2E5HXCLF8kT8CsyalGzhk+JUWXOWfIBTa25XYF5ivmYhkEl4aLu3cifeS
-	 MSYAGa85NJQdP9cZxq8WiG1/zF+s0B3hHrlqlZLCLfOn30aIoZ3r9ys5UseoFkC0Oc
-	 XnnXBHA4tZBw/527I3Ye1Mnbn2G/Bt7V8THlXlfaV1/O+pfYNOzfP2ZOmFl9y+++kJ
-	 dQEqo7qi6+wMQ21wSjQD7p9kHKKvcmrj6YF7nlMeSTEQ5SFufdhN/QoqDU8yrbTkYF
-	 2fBrVFPm2cWcx0fJpX8naQklhoZlgzCiPfMGgaYBnvnodyECXLsfFSZ5Qf4FoD5Nwi
-	 jJDtHKHf6FyfXb55Uo2pqtaeIrzxa9gQ9ppgOFLvX4u6kspJzWk24xIdsZm/CbXKaI
-	 Kb5LwYaw3CuK6GPPSGksFgN6p1EHoDMnLLzwA9drerwGJdmMBSvupU6Zvs0sg0Wi5A
-	 2BQGPXVtaepKQwEnfv3v6RgD1OSSCczKD0Cb3elU8NoGqUCEDynz3ZDGxo4XjeIsjb
-	 RWhHdAFu+TJ27N37Hw6y/GVEZs3OuCzNJappOaeNoZafEYeezvYK9Rn/dvrPi+wtLs
-	 +O+/jJXIVinYInwsgKyW+DEk0ATsdDV9wXMjYozTkq0BTYNeQHpLgWexmbZVBmdx9l
-	 vn/sDpFZXj2xB1qNzUzCu25c=
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id B402F1EA0D3; Sat,  6 Jun 2026 10:03:32 +0800 (AWST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1780711411;
-	bh=dD123OHVdzbCXf35ks7oq1KmBsgfgCLsUgLmeyEdK5Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=dpUyInKbCANi+XYgxUHz+GO2TF1zXiRU1+wymIGiWm9lMmPnVOjQWPS68i1mCekQu
-	 wDMbn4I2BPKtLOaDOaaqHoTs+H0uF8tgV0ILV1T95hJrPNDoH3oeP/t3wHxcn0ofPb
-	 jAnc513GxZ4xfpIdrAAFayY5RzprRliGyaAYIsOq+GbXk9POEnUXlZRY7v/cczEB3P
-	 LROqrS7wsaE5ZV2yhvB7tbK6A8ZN/xB6rOFzAGtc2YshgpRVZqGZifNuUedVkEgjtr
-	 KP5gvjrm50eo8pni0+KMZMgWkxL5klzNaQu6pgCV4MEWcsUUpjsLO+j7dyuLQnlCFu
-	 XRDHfw6/vxoojvxYGQAkhfos/x7T8dM6qeXGHeXXNreoR4Rage4LIftQW3CnROhNI0
-	 h79nRh3KgZ7ESQiIV4LmRn9NxH+S9quplcD3S/uvAR4HpbK65ArK0cz1bvruXOy0B/
-	 TtUCURwwm6IXxrR9+ptx02JvHPWeF2BkzRKAFAyJihxFeySG/72tHg2qfBeDbp3Vlj
-	 vOce/PRHVqE5wSsI09yywe2CBqtg3kUT+GxwPw39l9wFyVA9xkZjFP5+/+/zExIlB6
-	 RakcV5PgdB2LxO3pPUKy13/DCiB/4TplP5moy+PR+fHq/lwj8fTkpfoPEclv8SH9uA
-	 xpt898uPKLO2AxBxKD0L+NXg=
-Received: from localhost (pa49-196-181-228.pa.vic.optusnet.com.au [49.196.181.228])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 665DB1EA0CF;
-	Sat,  6 Jun 2026 10:03:30 +0800 (AWST)
-From: David Gow <david@davidgow.net>
-To: Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <raemoar63@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: David Gow <david@davidgow.net>,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] kunit:tool: Don't write to stdout when it should be disabled
-Date: Sat,  6 Jun 2026 10:03:15 +0800
-Message-ID: <20260606020317.264178-1-david@davidgow.net>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Bm3riK5V"
+Message-ID: <b7114d6f-989f-49e1-918f-3bdf9d319624@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780718300;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Agl+Zv2W56VjUDH6mhAKCavu7dinG363UWIQgopHFiA=;
+	b=Bm3riK5VR+DtIGjlGcVYK1e8UrGAKkU6dPmhuwn0oS9yoV8k0ZR71CNe+ut6K5maoWd3Q8
+	/Vsbfw1gUSfAwMPcY+6BonavJ+YT+FKxOUwj303fQQIut2z/tcEPZhN2XmjISd0z/Ukvno
+	1sdgHoCx+iVUf5Us/YZ0FSzvQENOBwM=
+Date: Fri, 5 Jun 2026 20:58:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v4 1/2] bpf: Tighten cgroup storage cookie checks for prog
+ arrays
+Content-Language: en-GB
+To: Daniel Borkmann <daniel@iogearbox.net>, Lin Ma <malin89@huawei.com>,
+ Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+ YiFei Zhu <zhuyifei@google.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Amery Hung <ameryhung@gmail.com>, Rongzhen Cui <cuirongzhen@huawei.com>,
+ Jingguo Tan <tanjingguo@huawei.com>, cenxianlong@huawei.com,
+ chenzhe@huawei.com
+References: <20260604070318.2869813-1-malin89@huawei.com>
+ <a8342b94-9732-4878-b794-086106c93585@linux.dev>
+ <86dac3e9-3af2-4bc6-93e5-d62aa70fb362@iogearbox.net>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <86dac3e9-3af2-4bc6-93e5-d62aa70fb362@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-The kunit_parser module accepts a 'printer' object which is used as a
-destination for all output. This is typically set to stdout, so that the
-parsed results are visible, but can be set to a special 'null_printer' to
-implement options where not all results are always printed.
 
-However, there are a few places where use of stdout is hardcoded, notably
-in handling crashed tests and in outputting the colour escape sequences.
 
-Properly use the specified printer for all output. This is okay for the
-colour handling (as this is already gated behind isatty() anyway), and also
-for the crash handling, as cases where printer != stdout are separately
-printed afterwards.
+On 6/5/26 4:16 PM, Daniel Borkmann wrote:
+> On 6/4/26 6:56 PM, Yonghong Song wrote:
+>> On 6/4/26 12:03 AM, Lin Ma wrote:
+>>> The recent KCTF-reported cgroup local storage issue assigned
+>>> CVE-2025-38502 was fixed by commit abad3d0bad72 ("bpf: Fix oob access
+>>> in cgroup local storage").
+>>>
+>>> However, the previous fixes are still incomplete. The current 
+>>> prog-array
+>>> compatibility check treats a program with no cgroup storage as
+>>> compatible with any stored storage cookie. This allows a storage-less
+>>> program to bridge a tail-call chain between an entry program and a
+>>> storage-using callee even though runtime cgroup local storage still
+>>> follows the caller context.
+>>>
+>>> Require exact per-type storage_cookie equality when checking prog-array
+>>> compatibility. This blocks zero-storage bridge programs from joining a
+>>> prog-array owned by a storage-using program and closes the residual
+>>> A -> B(no storage) -> C(storage) path.
+>>>
+>>> This also aligns with Amery Hung's earlier NULL-storage tail-call 
+>>> fix by
+>>> requiring storage use to match consistently across prog-array users.
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Fixes: abad3d0bad72 ("bpf: Fix oob access in cgroup local storage")
+>>> Tested-by: Amery Hung <ameryhung@gmail.com>
+>>> Signed-off-by: Lin Ma <malin89@huawei.com>
+>>> Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
+>>> Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
+>>
+>> Acked-by: Yonghong Song <yonghong.song@linux.dev>
+>
+> Sorry for jumping in late, but I would have an alternative suggestion 
+> below:
+>
+>>> v1: 
+>>> https://lore.kernel.org/bpf/20260601095158.1186318-1-malin89@huawei.com/ 
+>>>
+>>> v1 -> v2:
+>>>   - refine the commit message and mention the relation to Amery Hung's
+>>>     NULL-storage tail-call fix
+>>>   - add patch 2/2 selftests for tail-call cgroup storage prog-array
+>>>     checks
+>>> v2: 
+>>> https://lore.kernel.org/bpf/31927f33-9db0-4a39-b38a-72b33487979e@linux.dev/T/#t
+>>> v2 -> v3:
+>>>   - use abad3d0bad72 as the Fixes tag
+>>> v3: 
+>>> https://lore.kernel.org/bpf/7b3e1adae5c92153e991ac406b2d334609c36d866b5bf81e4465cf63bde0a79c@mail.kernel.org/T/#t
+>>> v3 -> v4:
+>>>   - no changes
+>>> ---
+>>>   kernel/bpf/core.c | 8 ++++++--
+>>>   1 file changed, 6 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>>> index 6aa2a8b24030..f0b61b10f30e 100644
+>>> --- a/kernel/bpf/core.c
+>>> +++ b/kernel/bpf/core.c
+>>> @@ -2470,8 +2470,12 @@ static bool __bpf_prog_map_compatible(struct 
+>>> bpf_map *map,
+>>>                   break;
+>>>               cookie = aux->cgroup_storage[i] ?
+>>>                    aux->cgroup_storage[i]->cookie : 0;
+>>> -            ret = map->owner->storage_cookie[i] == cookie ||
+>>> -                  !cookie;
+>>> +            /*
+>>> +             * Tail calls keep using the caller cgroup storage
+>>> +             * context, so prog-array members must use the same
+>>> +             * storage cookie.
+>>> +             */
+>>> +            ret = map->owner->storage_cookie[i] == cookie;
+>
+>
+> This would basically break if the leaf program does not use cgroup 
+> storage.. can
+> you please try out the below diff ... rationale: this would allow A -> 
+> B(no storage)
+> but reject the A -> B(no storage) -> C(storage) case:
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index a656a8572bdb..649cce41e13f 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2481,7 +2481,7 @@ static bool __bpf_prog_map_compatible(struct 
+> bpf_map *map,
+>                         cookie = aux->cgroup_storage[i] ?
+> aux->cgroup_storage[i]->cookie : 0;
+>                         ret = map->owner->storage_cookie[i] == cookie ||
+> -                             !cookie;
+> +                             (!cookie && !aux->tail_call_reachable);
+>                 }
+>                 if (ret &&
+>                      map->owner->attach_func_proto != aux->attach_func_proto) {
 
-Fixes: 062a9dd9bad7 ("kunit: tool: Only print the summary")
-Signed-off-by: David Gow <david@davidgow.net>
----
- tools/testing/kunit/kunit_parser.py | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 1c61a0ed740d..266c9dd95351 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -17,7 +17,7 @@ import textwrap
- from enum import Enum, auto
- from typing import Iterable, Iterator, List, Optional, Tuple
- 
--from kunit_printer import Printer, stdout
-+from kunit_printer import Printer
- 
- class Test:
- 	"""
-@@ -57,7 +57,7 @@ class Test:
- 	def add_error(self, printer: Printer, error_message: str) -> None:
- 		"""Records an error that occurred while parsing this test."""
- 		self.counts.errors += 1
--		printer.print_with_timestamp(stdout.red('[ERROR]') + f' Test: {self.name}: {error_message}')
-+		printer.print_with_timestamp(printer.red('[ERROR]') + f' Test: {self.name}: {error_message}')
- 
- 	def ok_status(self) -> bool:
- 		"""Returns true if the status was ok, i.e. passed or skipped."""
-@@ -544,7 +544,7 @@ def format_test_result(test: Test, printer: Printer) -> str:
- 		return printer.yellow('[NO TESTS RUN] ') + test.name
- 	if test.status == TestStatus.TEST_CRASHED:
- 		print_log(test.log, printer)
--		return stdout.red('[CRASHED] ') + test.name
-+		return printer.red('[CRASHED] ') + test.name
- 	print_log(test.log, printer)
- 	return printer.red('[FAILED] ') + test.name
- 
-@@ -651,11 +651,11 @@ def print_summary_line(test: Test, printer: Printer) -> None:
- 	printer - Printer object to output results
- 	"""
- 	if test.status == TestStatus.SUCCESS:
--		color = stdout.green
-+		color = printer.green
- 	elif test.status in (TestStatus.SKIPPED, TestStatus.NO_TESTS):
--		color = stdout.yellow
-+		color = printer.yellow
- 	else:
--		color = stdout.red
-+		color = printer.red
- 	printer.print_with_timestamp(color(f'Testing complete. {test.counts}'))
- 
- 	# Summarize failures that might have gone off-screen since we had a lot
--- 
-2.54.0
+I just tried. All tests (including patch v4) passed. Your patch indeed
+preserves the leaf prog (last one in the chain). Thanks!
 
