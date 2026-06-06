@@ -1,80 +1,80 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E96223707
-	for <linux-kselftest@vger.kernel.org>; Sat,  6 Jun 2026 15:12:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002372777FC
+	for <linux-kselftest@vger.kernel.org>; Sat,  6 Jun 2026 16:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780758762; cv=pass; b=aRZjyLMs3T+/YU+C+aSXAhuLCcHO91PRDDcOjF0osXVJZJEPPLN6eyruXKv7ES3X9svcpXLirg0Wb9BZEgUyKM5kdlA18HDr7+FlsLj3CLzTCO5Jb544GwrHADr/4mAlpB97eFAVFJwsYLQsURrFFf2a8ayJt7tbfacSx1orNLo=
+	t=1780761643; cv=pass; b=keihkhxdQrg8o/dHn9B3GRcyuP4wOXGOROeMeVo+Eb0k3aPluS4ddm/ntA/aktDeTFf+mQtwnD5GKer2+Mcmz6Su1MedutHS8yPueNkVPMXJ5KmOfcoisw1FpSGqugHC2FpeCp2knRS22n+7Qnx09zlisVIWh/KNnsytrglSBHk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780758762; c=relaxed/simple;
-	bh=In996MaRK1b1yryCiDiuIu5JXDlTrgSFPed3GJ9VBus=;
+	s=arc-20240116; t=1780761643; c=relaxed/simple;
+	bh=i4rew88Flxyki9IDpI/92K3Ph4V2Q1lSJDrrGN9sl4Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X66bjORadMU+G1JyQGS6VMjdqJuCW+f/4jrw0lYutQ70zUKz/RZy89isXOj0Gms64nNX/Suqga0D3m0CBPIV+PwpgaPRQifOVeFfUbCoh9TS8T/fEOckgIZBUbQAGv5pST+W6OddwuAplGDFGjGZuNgOys+eav6NJBS3tZD9RB8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OhcrVXVO; arc=pass smtp.client-ip=209.85.208.41
+	 To:Cc:Content-Type; b=F+vIKRnWxxiMVlnkd9YO1q9RevNXa9VkRcqOxZ7ZkE9yo9gQAxBHkvKxhfyxvabfNhRGPsFPCNK5nWEAxWfMuxP8NhLBZm+LhICz14LoNK7W7oLQXuFqLiWz1kyse+n7jDf0QFwHJYF35xMFJJkCgPI0gmfyrZJYyrIKfflWnlY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qtmzFbMc; arc=pass smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OhcrVXVO"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-68d22476e88so19454a12.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 06 Jun 2026 08:12:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780758759; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qtmzFbMc"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-68ced08613aso19696a12.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 06 Jun 2026 09:00:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780761639; cv=none;
         d=google.com; s=arc-20240605;
-        b=GJywPklodnwd6j2ACVB2WyredcKRdyY45uDNmYcY/9+q93J8iqbi0S9QiWB6pL0Rdb
-         +zocxAD9dpxytY3lFLBmE27XOvRfkVV5/6BdmcPjfYD/xWyhYnd5/QwuWMS39e66A7Cr
-         yIBDDikgNnfV5dK9B/p5BsH0A37cpS3yS/5rDXZPUzYvtPt13VU+C8i6ymdZ+74ISIGe
-         BJFpdDCqQ7iZ0pSKKNjEnp4LZLBCgp8X2v7muHiJCBx0Qvn+Dk5/ncWkjbDvAwdxtg0f
-         JFAUhcpuJEpqhAdeDmimRYY9Gqg9clCQjhKwIq3AjDWg0F8jsOAsLG+CFI9USBOjpEWe
-         6atw==
+        b=RpI7dC5hD7vcP5cn8MoBe+cRA75+b3bntQtemjSWBs3yMVk3DrDD4fcdMEFBcp27Dp
+         mG4EUbh+OmC3GS7J7ITVTRv5Nuabp3WNvCa6Z4LdhTmOMNDVuuOlJTwKiavpImQJ3I/B
+         ue5kCl2aNKbSbcOt590qAEpG68CAo813NwYGuaIRqaKGk5UcTP/R05snpmIoAXKlyp00
+         WFZyUfwsIkCS9vWGcopNENhLjEVwJNWcTVWUs1uDdrC1gywAbabByuRIz38oECXn4fXF
+         ibuQIdi+H0Ubsx/BKq29RQpQIXr0SRQj9RxQYZW9tRR4Cw+9pefw0/A3TIrPL/W+8iLl
+         qU0Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=yaXDAm37FQ0K2c4b/udh9SWP+t2z0xMe7ch2lO/r3W4=;
-        fh=Q9KUlTsKQ0aX8/QsUhqaEkeQgAlk2BXQg8eBsUdR7ao=;
-        b=K+ws6oLOkYbiSpfjUt1HUPB84aN6r+WCb7Hih7Em0A+8H43PF+wkAvLmMv8B976Bw/
-         BdybLJzza8AkZ3d3n2c+QvWOwFBLPM3foH0E29lcsmqdEef+ZJ2bIpYitrh77R9JKYT4
-         OCXrIu3dKbXXWDHUcBr2D4qjHojEeeb/SA0jv0/VIK0zIYevQa5ahDe1toJUAU/CAhW5
-         x7ZEdHZghc7R3mHHhxyf/JoV7owF/5cwvSoNL4PvZ/cko3Pvz0fop41RTQ5zjNxLbOxL
-         +APlJDk0W5lBMxMUi+Bj0KA5UHcdv7g45Bj/CugzhjNiuo8f1AwHgN2rmvgzBG4fNT6N
-         r7lQ==;
+        bh=57MeYUfE5UfGozU/Hio7UqMWK4IkSftfIzxvJeTlNdE=;
+        fh=7F2+Xs4v4I+PG/0RHQMS8Ny+ueIgy6wP0QCWDk9rl+g=;
+        b=FjvF6kkvkWarIcNg2Lo9SRdOwdi268UcjP0/qkrUQHWIgBVlzkie0CHGNJMsC+cLc9
+         nCuXMkSjo15oreCZqV00uWDfKjc/yrEKyOR8sbnSi2M8xxZCD29WZNwy0iobM15oxQ6I
+         NOhcsopY7eD5+bQeYhUVUrBliZGjzPZIsPHzAwCnWGsHXnqNQXCeJFYXWBcTaRL/O9K6
+         O6wha3vndTiJWJsH1AgcZeSIf7YArSLUwNVN+AFKBUxTTr/EzLgwY/fcXEGu5z84ZHVa
+         rX9UfuSgWrlqwUoBqNMEhCd+MUrdZncO0tHJybsY/cqzaO75UkkZq6xZ0Wc1OAXw1GG/
+         SsYA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780758759; x=1781363559; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1780761639; x=1781366439; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yaXDAm37FQ0K2c4b/udh9SWP+t2z0xMe7ch2lO/r3W4=;
-        b=OhcrVXVOl4qt2NANBJfhglGH8mS4/L4fjXNODD/2p32cAultMvdJceT7adS9ERy46N
-         9xhczzDCLrA+2WMorhvuP4pybQLk74LZFcFvIxYqipfywO89BvgpW26Gnf7xlYqCGR3O
-         bDSIO2gqhZnBeMFsOAZSRNuKHYvkIFKJYrIFWeVLSd84GdfENf2jxLGZqJefdQ4eh0Fm
-         oJ66RruaN9ALTufcpS2H3svjJypVYFXZGkL1a4HuirEFTbAUU4HceTHJprjg7nBgNNV8
-         rRPGtDYRVdYw8DobDzvzYlBOLwEqQLyOK5JqJGPd7GU/YsJ8d0YA+UBa8pRtovEnE7zq
-         hLFg==
+        bh=57MeYUfE5UfGozU/Hio7UqMWK4IkSftfIzxvJeTlNdE=;
+        b=qtmzFbMcf5OQlqYiqmSnF1htmq5vzpPoEgjr24mt4U+OLIDxUfcZEhVpd3EAD42bVF
+         r6IG9gxEvBLklC7TGpZR6aU4NBZhQ1soZ9qFh5AGplnNjLDFrblsq54Z/J3pxU/VlyEl
+         Ut82gkV5bcvViQfrSHzVbpmFfoTl5gOlhlg40U4UNek0eeI7IoUza85oFrkKwFn3OHCt
+         ZDvTgaix2zc2V6VhysyegIENaYrFH3jHClszFsE9afOxtudQYxfEM7s4GRshiMhXZG4u
+         sqMgKjBPCKKlHGD8zFujh/jldoR7eciG+uO7FL7if9LTHoaSSsGC6Q0ovkDZVNLDPs+I
+         VH5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780758759; x=1781363559;
+        d=1e100.net; s=20251104; t=1780761639; x=1781366439;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=yaXDAm37FQ0K2c4b/udh9SWP+t2z0xMe7ch2lO/r3W4=;
-        b=A8XAvnXdn2dduoK7Ni5Y/bmDll/tklTw8H3AJlizYCd1hgVakcfg7IbAAdph4djzlw
-         uHz4KEXj4Dbtq6cO+pynlYBcrYTAqlidNZNzcBy0NGd2qsZlycV9KGgZ0pmUk5odWajd
-         83Hs2T+SzAGHxmva5OAoqfOJNsnEqE2o1AqQX1n5fPVzHwRay0Gpf5JY7rMNOwtUbvG7
-         VycEk1uRwEDOyIIT4VcqmotfRswnOC7JtjWOvVdAncFRH4onatWEarZe4XQqQac/eFy3
-         eLHjSID3ZZWptfgsdRw0rWtWReq/Ma4CkD9ZxVuIeBwta9Bxbn+nLsigOlVpWV9KAGoU
-         akxg==
-X-Forwarded-Encrypted: i=1; AFNElJ/IEaoVEOEarKyogj5cy27Ug/U4hsSGApzGO6JN3QT1RusUgueiRotFKNYPIU+wr7SkIF66XeA/LDU/35Wicw4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEb66X6uonK/xaLVxwspNVQ5IMpnnbV0CutbsmxN8mPINEg5c9
-	vDnYBMVLG42qtF+HTrWLWN51iljIDOD7KkQYcjOk7p6Zv7Nlj9wFTq9wT6HBI67gciizvZGjLU6
-	NHeEmhJg6HJOeGgoMCFJwjnjI8Ep4o9z7zStI7p9N
-X-Gm-Gg: Acq92OEWVMSmrNE9Rv+qbk0leXBNSXXkvG+fgAeQmKVKEm570W3YkNp994WceICOUt9
-	BXjtKezJMTDFC0CtvhWsT0EfC3W4zAv/xXf+JDFGlfnTu7Qi4ONDHSDPn28/Q1TD1txtpEtxLbZ
-	Vf+5Q5eOdeHs7leEMDOUdHgZiPE4Yq6luPzhIxS6WsY8RPC3LujCx9T4ZeFlIvsMLZpbbyuwhKI
-	xGCU3SeBxcJYSEClbYqMXRXCmaoIlMY2JMKagococarrUItDHpQ/rW0oXzhNZMBy67UzthbX7+t
-	xPIprLCBRaphlGfOfErEqYLGTxqT
-X-Received: by 2002:a05:6402:4249:10b0:678:93b4:1fd3 with SMTP id
- 4fb4d7f45d1cf-68fe8c55bc9mr79664a12.6.1780758758706; Sat, 06 Jun 2026
- 08:12:38 -0700 (PDT)
+        bh=57MeYUfE5UfGozU/Hio7UqMWK4IkSftfIzxvJeTlNdE=;
+        b=mVsMr15y2u6fMC6q21o6bRE1gOn96QLGrKSHtctF6e17FxsW4yebLjyHeBjsYw4X4i
+         3RpNsGLouiRLm7oo0QwrQKvhVGlmQ8Wl8NRE5x2GLa8uP+M8Q6tQmFPHqF7meZrGqC00
+         HpZWMoQOoblJrb2oPyup3+++y9CjolfZfGnn6PZCekPefRkMR6K8v9FrSnZV22WCY2uj
+         SHVGhHf04/epUeYA1zq7+gJ1xJjqLGVCk8sxpPyUl8TbLQofH9Z5Zf6bdQRGfuyIX7C1
+         TQjPD3KCBhhDhQMmkZSnPo7m7jcCCztDVHJ4MnBghOMVBjiX76Hu0dBvGpmqF0W8kv9P
+         vvfw==
+X-Forwarded-Encrypted: i=1; AFNElJ/G+qufnwcdQlvm8/v2FHuxmBsMiAOdMWlw7XrwrXy3rysg6dLqDmOd9MGklLBE/hz9h8ovGKQfS3dE4I6D5og=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOH2MsC1R5xw4HhsPJNy2rAD3TeCan+cK00YN7EiRvRvBcqQ0w
+	IIdp012w0kWd8qGAyRDo6qIRaqbUB1ivBVBmFNfDky3pZJzn+oA+PVusQZtacJrBkZuIP5VZYLf
+	FvpYP6gZy0yzSydlUB4KBkvlpca1XbVlfmdfaLviA2prSacDJ5buHIJziCBc=
+X-Gm-Gg: Acq92OEpuKytRnOmNwznEuM0aNbFphSepW8QjaAAOf3/3CVXCDbAVOxbS1EzM3wNjVQ
+	/OrlQlPUtLrLX1KnFBpf4Kxg6QeX4Ufx2aPwWgsYQCFE3mpo7yryzxG23lf8m0GJ/5omUOBAkC/
+	rPlnDmvSlFcx2lc/NLt3RTGiudzoEYNzIw00x36hBZ0GocwziPdH2fe7kxsHQOfCX+jbVoc+8kf
+	mA9S63o0MA7FOzfTkjixpUA/eM48pLo8VbGtScIl+IZAG33O9Zrlwo7oDyQEqwUvryJguhjaBwI
+	dXt489s6c78xTJh+nQ==
+X-Received: by 2002:a05:6402:a382:b0:67b:7d05:60b8 with SMTP id
+ 4fb4d7f45d1cf-68fe9275289mr115181a12.10.1780761638922; Sat, 06 Jun 2026
+ 09:00:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,11 +82,12 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260527174347.2356165-1-jmattson@google.com> <178009472318.880870.7878635650921105255.b4-ty@google.com>
-In-Reply-To: <178009472318.880870.7878635650921105255.b4-ty@google.com>
+ <CALMp9eQ-8h2F4HO8S666mJF3QzyH=0b30kC=n_9p7SMbBhxCMA@mail.gmail.com>
+In-Reply-To: <CALMp9eQ-8h2F4HO8S666mJF3QzyH=0b30kC=n_9p7SMbBhxCMA@mail.gmail.com>
 From: Jim Mattson <jmattson@google.com>
-Date: Sat, 6 Jun 2026 08:12:26 -0700
-X-Gm-Features: AVVi8Ccv1u_7HnXyuP6YGCfDy3Eax8Y6OgqoRW_J3t3Bw-oamTD9jbnsNtAMOy8
-Message-ID: <CALMp9eQ-8h2F4HO8S666mJF3QzyH=0b30kC=n_9p7SMbBhxCMA@mail.gmail.com>
+Date: Sat, 6 Jun 2026 09:00:25 -0700
+X-Gm-Features: AVVi8CesUChtR-NwwSdAcU77cBFMJbKq7QwRjpAY4cHdu5oVJkkbFJqIsISYYVc
+Message-ID: <CALMp9eRHC-N7x2ZK3_dk0xg5WaokQFeGuL5qoAQGqpG60bJY4g@mail.gmail.com>
 Subject: Re: [PATCH v4 0/5] KVM: x86: Virtualize AMD's "disable CPUID in usermode"
 To: Sean Christopherson <seanjc@google.com>
 Cc: pbonzini@redhat.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, 
@@ -97,42 +98,51 @@ Cc: pbonzini@redhat.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 29, 2026 at 3:47=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
+On Sat, Jun 6, 2026 at 8:12=E2=80=AFAM Jim Mattson <jmattson@google.com> wr=
+ote:
 >
-> On Wed, 27 May 2026 10:43:42 -0700, Jim Mattson wrote:
-> > AMD's "disable CPUID in usermode" feature is analogous to Intel's "CPUI=
-D
-> > faulting" feature, but it is advertised and activated differently.  The=
- AMD
-> > feature is advertised via CPUID.80000021H:EAX.CpuidUserDis[bit 17] and
-> > activated by setting HWCR.CpuidUserDis[bit 35].
+> On Fri, May 29, 2026 at 3:47=E2=80=AFPM Sean Christopherson <seanjc@googl=
+e.com> wrote:
 > >
-> > Add virtualization support for the AMD feature.
+> > On Wed, 27 May 2026 10:43:42 -0700, Jim Mattson wrote:
+> > > AMD's "disable CPUID in usermode" feature is analogous to Intel's "CP=
+UID
+> > > faulting" feature, but it is advertised and activated differently.  T=
+he AMD
+> > > feature is advertised via CPUID.80000021H:EAX.CpuidUserDis[bit 17] an=
+d
+> > > activated by setting HWCR.CpuidUserDis[bit 35].
+> > >
+> > > Add virtualization support for the AMD feature.
+> > >
+> > > [...]
 > >
-> > [...]
+> > Applied to kvm-x86 misc, thanks!
 >
-> Applied to kvm-x86 misc, thanks!
-
-Oops! You haven't sent a pull request for this series yet, have you?
-
-Our internal Sashiko asks:
-
-> In kvm_set_msr_common(), the MSR_PLATFORM_INFO handler uses cpuid_fault_e=
-nabled() to prevent the host from clearing MSR_PLATFORM_INFO_CPUID_FAULT wh=
-ile CPUID faulting is enabled:
+> Oops! You haven't sent a pull request for this series yet, have you?
 >
->    case MSR_PLATFORM_INFO:
->         if (!msr_info->host_initiated ||
->             (!(data & MSR_PLATFORM_INFO_CPUID_FAULT) &&
->              cpuid_fault_enabled(vcpu)))
->             return 1;
+> Our internal Sashiko asks:
 >
-> If a VMM restores MSR_K7_HWCR before MSR_PLATFORM_INFO during live migrat=
-ion, and the guest had enabled AMD CPUID faulting, won't the write to MSR_P=
-LATFORM_INFO fail if it doesn't have MSR_PLATFORM_INFO_CPUID_FAULT set?
+> > In kvm_set_msr_common(), the MSR_PLATFORM_INFO handler uses cpuid_fault=
+_enabled() to prevent the host from clearing MSR_PLATFORM_INFO_CPUID_FAULT =
+while CPUID faulting is enabled:
+> >
+> >    case MSR_PLATFORM_INFO:
+> >         if (!msr_info->host_initiated ||
+> >             (!(data & MSR_PLATFORM_INFO_CPUID_FAULT) &&
+> >              cpuid_fault_enabled(vcpu)))
+> >             return 1;
+> >
+> > If a VMM restores MSR_K7_HWCR before MSR_PLATFORM_INFO during live migr=
+ation, and the guest had enabled AMD CPUID faulting, won't the write to MSR=
+_PLATFORM_INFO fail if it doesn't have MSR_PLATFORM_INFO_CPUID_FAULT set?
+>
+> Sadly, I think it's right. Even on AMD systems, MSR_PLATFORM_INFO is
+> enumerated by KVM_GET_MSR_INDEX_LIST. It does come before MSR_K7_HWCR
+> in that list, but userspace is free to restore the virtual MSRs in any
+> order. For any sane AMD-hosted vCPU, MSR_PLATFORM_INFO will be zero.
 
-Sadly, I think it's right. Even on AMD systems, MSR_PLATFORM_INFO is
-enumerated by KVM_GET_MSR_INDEX_LIST. It does come before MSR_K7_HWCR
-in that list, but userspace is free to restore the virtual MSRs in any
-order. For any sane AMD-hosted vCPU, MSR_PLATFORM_INFO will be zero.
+Never mind. This Sashiko observation was on a backport to a branch
+that doesn't have commit 1ded7a57b805 ("KVM: x86: Remove ordering
+check b/w MSR_PLATFORM_INFO and MISC_FEATURES_ENABLES"). Everything is
+fine at tip.
