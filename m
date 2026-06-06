@@ -1,135 +1,104 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6822C316905
-	for <linux-kselftest@vger.kernel.org>; Sat,  6 Jun 2026 08:21:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6383315D5B;
+	Sat,  6 Jun 2026 08:52:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780734099; cv=none; b=kYP8BDLgiumCP16ubeH4UwbY7S8yuajrFq2LkF3MnjbQdC0Kqwy4vlm0r9IST1TCCjGihWttuyTDeeb2Y80Eo4hUsYEHdYsgRcOwPvmS3yPkrpMxiDsqr6z1C6A0GElzwn4w1u6H8EJTDWwzptE6VintBIxFX1uLtqFTSnpnZpI=
+	t=1780735924; cv=none; b=kTk1Z9kjQOgRVcojro7TmWom0RACVTrnmli5XHWySdObviXrLNuHdGrmeqaNWy3gmachhLH5QaHpQrJ76tO+kAGqb1fpBDievsxiLKnKeGbaXJU3GYt7+BKlguo7vn26RSC7tsTHQx4HMauNWN/EMzhdotNFPhMUAOuT/BVhtBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780734099; c=relaxed/simple;
-	bh=xNsig66RaSc9mwJJKda5AfVrR7MopkMm6DomHG+DJVc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BNm3QCuVFyeBazqkXL3KkGxe6lhWUmBaiIQpmne/are0ZXbT8QbCcQvkWtBU7FDnqqgIWD2bE2UNpog/RQA71zyN/1f1auRW3h2LiPf53EIxDKOXh1SiG2T5F3ZI7reBmczNNJF2rDmG1TLfUc55qeKZirn1zquV2mZRVDCgszo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=UH05RJSL; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+	s=arc-20240116; t=1780735924; c=relaxed/simple;
+	bh=bt0Rpwdmhi3tP2g6vq+0m6jbqp4BA+UUcba7I2nnpu8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
+	 References:In-Reply-To; b=KDoi0GnkILTGCt1TQypDKZmPvANIE9++CHJefOg0p9pGmFDb/M60TeWkPQxYlxuD7tAMadyUHxNDgy1rL/djY5RHeQ3LSAJiPvVDjUJ77R9VYBmg6KqoqqMOuxxpzYQobjVb7h9m+IB99X45DuAtKJluBqHqeHHInvjSgctGtIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XW/UZLAN; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="UH05RJSL"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-490b7866869so31513265e9.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 06 Jun 2026 01:21:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1780734096; x=1781338896; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4gMg6KaYvC+cJxi997viIEAJIuy1B+hppRNVQz2bByc=;
-        b=UH05RJSLI0QctYLwr0qzLZKFjNETsRVKTwKFx0L2fmVue84qdzMF8amgvjFCWr9kYZ
-         /YtZKrp2m4lw32rFAyxTxX3UEbZeM9XSO9EKvrTaAfuaRgimy+HY05Xz/wOXm7inNem0
-         6dxSFjusNVmEtwOfQ4wAc4gKl2niSPWagQP18+7wFKEaaTURdQ/MZYbOoWY8euXKQwT5
-         amH+ztZnH4WPThQHboUNfr66vOCjk0nceCr+VgpXhcU7wk3V5S6n/G4WzGxnbVmaKpC8
-         +IIzaQbP+7FDFGNE9qOZLc5B/PtUzJ0kmhqdpMD6z6ECjaBJY9aUwNm+i+IPjHXwNy97
-         j5tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780734096; x=1781338896;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4gMg6KaYvC+cJxi997viIEAJIuy1B+hppRNVQz2bByc=;
-        b=FzvjYnkNZl9OqrvXZrEIkCV+H2Dd39HegCWDocO2vySqTUwal24z34ExJaS2gkIbu7
-         /Sv7PfHSYUGd/b6VaOM1/IjHuAxeQSSjaacia5FToR0OOtbNQI9WRs20hnkiUtf1p3Uf
-         oW2+NcH5BzuSlg78EmJrvdERaQZFcUf1KwJtmC4rKFtW6UP3ubSl4DY4SaTp9rbu+gMx
-         uPwjybqtRZ1+H+7aBSvGB0KyRQbuphmSg7Rdx6A898LuQY2f7jYAjBF1TXRZ1U0qz8DF
-         TyWZE9LLNvnAAWqfSZEXhE2c7XJRhQEzTjvr8soaY5Xiyfd10GxptbTCGvChDqLZc0M1
-         b5ug==
-X-Forwarded-Encrypted: i=1; AFNElJ9xYqCwD0F0/krbNf2rN4PUrQBv/G0YiT4ttEigJjScUhMFm2Skq51nXQ4Q1/vZvBsqMW/P4AWTP+84x6YGR+s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztzvKNCzsIv3CUj5WX22ohII8DBbEprjngbVJAsnnpQ8nvWLzq
-	4nlMauqd5blzH2HbyneeSdsqheIEz9ZGJO6PJXQkObM3GqmMkOGLsVbgjSMaH8o289o=
-X-Gm-Gg: Acq92OFplVAaMQYN8nzt8Xi9zMQSy5D9ZDPImFkDk7rU3fCgR8NFADy1zozt5mj+qfC
-	FljuLEmLYAklQ5f+4vWlmszH508PWPIgKoXZfbEIt7PE6B2uAMMxuQ9dWpV6mJsNucRCL4oU12A
-	5Yo6Kon9t3+huz9AGpFdp4nyyIiXMXQhe/QP6xvPLLH+fbgwzFGWLfcVEggU4mRczjFbWK/bCxn
-	7REaP/cA98K801jQjC1FFEAQsmVDRuPORIh8+/DnyZ/Bgr+sDXL3syskSe4mZ7ljf0gwgpw1knV
-	84lTTxHk4dwsOGIdKz7//OwLC5gGZl5HC8DfM9nxt1D/CQFxdo6zGVcIG7an3ubJcOD2IjhzRCu
-	zUYO7Ua7v1J9MTGPANxU/ovu4bZ9p07quxw4d+jrS7f4pFlRPu1RPumJfvHWtRNdrhb/xziRwBr
-	TA8JrS75dIoU9pjmNqgmQ2QRiraIfZtmjm+XAo26rzVYE6raxnm5C9JKNXPYY6AQKH
-X-Received: by 2002:a05:600c:4e4c:b0:490:bb3e:30b0 with SMTP id 5b1f17b1804b1-490c25b2ab5mr131639785e9.4.1780734095644;
-        Sat, 06 Jun 2026 01:21:35 -0700 (PDT)
-Received: from [192.168.0.161] (78-154-15-182.ip.btc-net.bg. [78.154.15.182])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490c2d4891csm82571075e9.1.2026.06.06.01.21.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Jun 2026 01:21:35 -0700 (PDT)
-Message-ID: <a63eed7d-b674-4830-a690-1b55dfdc9a72@blackwall.org>
-Date: Sat, 6 Jun 2026 11:21:33 +0300
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XW/UZLAN"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id EF77A4E40923;
+	Sat,  6 Jun 2026 08:51:58 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A7B285FF0F;
+	Sat,  6 Jun 2026 08:51:58 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 95DEA106A264A;
+	Sat,  6 Jun 2026 10:51:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1780735917; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=bt0Rpwdmhi3tP2g6vq+0m6jbqp4BA+UUcba7I2nnpu8=;
+	b=XW/UZLANsbxFOVp9pW/jMl3pmKtyerySaLVvM9tsqfgS9C2kdf8LpIjycJRE4qfj4dX/5o
+	IiSMlIBRoLGreB7D9SIgo+GPxVN46Gipxojkpy5xpbWQ5HhXJfhcdMnd1fIG5rzFKZbuv3
+	J32INZbh5I0MYcFCKlmZRtH3PPlolwUhQa5hKlZVF/Zpi/wBri8PakIn1876IzBPFKljC9
+	hro6Nr2se1w1xIIxTxhMEKprKFjLqDK9kWzeBdy6D4ElHCIdPMGqicCR/JUMimKVWtGeDY
+	/nHgoIPLN15A5tnOdC9igeSwywCgNlj0j1ViIKwQumFNc6Uapcdizf8glNjRqA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 3/6] net: bridge: add 802.1Qat stream
- reservation admission control
-Content-Language: en-US, bg
-To: Luke Howard <lukeh@padl.com>, Andrew Lunn <andrew@lunn.ch>
-Cc: Cedric Jehasse <cedric.jehasse@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
- Ivan Vecera <ivecera@redhat.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, bridge@lists.linux.dev,
- linux-kselftest@vger.kernel.org, Max Hunter <max@huntershome.org>,
- Kieran Tyrrell <kieran@sienda.com>
-References: <20260602-mv88e6xxx-8021qat-mqprio-v2-0-72be14522e7c@padl.com>
- <20260602-mv88e6xxx-8021qat-mqprio-v2-3-72be14522e7c@padl.com>
- <537410c3-ff4e-43fd-834e-775cd1bbe89e@blackwall.org>
- <E1253C6D-F6F0-407A-AABF-FCAB57100A1C@padl.com>
- <n2pi7h5nvxg3xvshtcxqeizpukp6hphqa7kodbe7b3ioc3kcq5@n34fgocvaicm>
- <d0e650fb-4011-4d64-9780-a0ddd0ca1cf3@lunn.ch>
- <CCF20D32-6C9F-49DC-9838-592EFB5E88D2@padl.com>
-From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <CCF20D32-6C9F-49DC-9838-592EFB5E88D2@padl.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 06 Jun 2026 10:51:45 +0200
+Message-Id: <DJ1U71MEBQDQ.2PHD22ZTTV64B@bootlin.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>,
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Jiri
+ Olsa" <jolsa@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
+ <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v2 8/8] selftests/bpf: add tests to validate
+ KASAN on JIT programs
+Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>,
+ <linux-arm-kernel@lists.infradead.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260604-kasan-v2-0-c066e627fda8@bootlin.com>
+ <20260604-kasan-v2-8-c066e627fda8@bootlin.com>
+ <13b87293-5237-43d3-9f91-33c13041cb43@linux.dev>
+ <DJ18PD6QWGA2.2HOYGKU7RUB68@bootlin.com>
+ <f73d0971-0544-4a92-bde7-b2fbfcdaf28b@linux.dev>
+ <DJ1EYKOXV11H.25EJOUKFI81T4@bootlin.com>
+ <d717e193-f3b3-4022-8b0f-5e94595dd69b@linux.dev>
+In-Reply-To: <d717e193-f3b3-4022-8b0f-5e94595dd69b@linux.dev>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 06/06/2026 11:02, Luke Howard wrote:
-> 
->> So it sounds like you first need to work on the software
->> implementation and expand the simplified version with the features you
->> need. You can then add support to accelerate this by offloading it to
->> the hardware.
-> 
-> Agreed.
-> 
-> The definition of Dynamic Reservation Entries in 802.1Q (clause 8.8.7) might support the addition of a new MDB (or even FDB) entry state to the kernel:
-> 
-> - add MDB_DYNAMIC_RESERVATION (a state, not a flag);
-> - the software bridge only _classifies_ packets against  MDB_DYNAMIC_RESERVATION entries, and only when MDB is authoritative. Classification sets dynamic_reservation_hit on tc_skb_ext;
-> - dynamic_reservation_hit is visible to the flow dissector so can be used for policy enforcement.
-> 
+On Sat Jun 6, 2026 at 6:09 AM CEST, Yonghong Song wrote:
 
-See, saying the bridge has to classify doesn't sound right. Why not do the
-classification where such operations are usually done, e.g. tc?
-You have to manually designate these entries anyway.
+[...]
 
-> Advantages:
-> 
-> - the new MDB state maps well to 802.1Q;
-> - minimal changes to bridge;
-> - actual policy (reclassify, drop, etc) is left to the user;
-> - doesn’t require a new tc-flower entry for each stream DA;
-> - entry state maps 1:1 to mv88e6xxx AVB_NRL ATU EntryState.
-> 
-> Disadvantages:
-> 
-> - no unicast support, although potentially can be extended (there are some subtleties);
-> - mv88e6xxx support would either require rich enough tc-flower support in TCAM, intercepting TCA_FLOWER_DYNAMIC_RESERVATION_HIT and mapping to native AVB admission control, or a per-port devlink parameter (not so nice).
-> 
-> This is implemented and working with the software bridge, I still haven’t quite figured out the right mapping for mv88e6xxx.
-> 
-> Luke
-> 
-> PS. I previously incorrectly asserted that 802.1Q required dropping frames with AVB/SRP PCPs but without valid dynamic reservation entries. 802.1Q discussions priority mapping in clause 6.9.4 for traffic from SRP boundary ports (those not participating in SRP). In practice I think this should all be policy, e.g. you might want to reprioritise valid DSCP traffic from within a SRP domain, or drop instead of reprioritise, etc.
+>>> But when I am running another same test './test_progs -t kasan', there =
+is no kasan reports.
+>> Ok, I guess you are missing kasan_multi_shot on your kernel command
+>> line: without this option, only the first report is generated, then
+>> KASAN does not emit additional report until you restart your kernel.
+>> Could you please try adding it and running the tests again ?
+>
+> Thanks! Adding 'kasan_multi_shot' to the kernel command line indeed fixed=
+ the problem.
+> It would be great if you can mention 'kasan_multi_shot' is needed in kern=
+el command
+> line in cover letter and in patch 8.
+
+Yes, that's definitely missing, I'll make sure to add it. Thanks again
+for the test !
+
+Alexis
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
