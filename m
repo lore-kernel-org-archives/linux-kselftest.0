@@ -1,151 +1,138 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBF13A544A
-	for <linux-kselftest@vger.kernel.org>; Sat,  6 Jun 2026 13:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780753230; cv=none; b=ebY9vGJhc+cGQGeF94aochKaCAe12LIcq5eFH+P7T9fEakPlOUoG5X9KinsZIiwtQ9gqNZ1ksWr0LPi7mrIfulyEwcaIbu2N5ChnO28nUW9LKfUmH9vu7NXvjW24P3iT/vXiGRjh3KNiPyRuBc3DW2kCvbTczK5wz5qP+s7G3vE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780753230; c=relaxed/simple;
-	bh=daxTICY9+4oyCPFqZwIDiF2rgI59swk+SqQ5orvTnv4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=rgHwP+DKCeWGiyg39MM4r5l62ZnRMcIsS/dtWMQMvanUx74D/zGdzh3tIEYfSj6wMMpUZCgK4rZU+d1szIUTQg9ZaCLhteqPUhTjt1yaG0dI5UNLwGfzrfam2d+NJV09aV4D+aNteNlx4yb1YAOVvOik2fhSF8fejS1KN993mI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A1bJgib1; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E96223707
+	for <linux-kselftest@vger.kernel.org>; Sat,  6 Jun 2026 15:12:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780758762; cv=pass; b=aRZjyLMs3T+/YU+C+aSXAhuLCcHO91PRDDcOjF0osXVJZJEPPLN6eyruXKv7ES3X9svcpXLirg0Wb9BZEgUyKM5kdlA18HDr7+FlsLj3CLzTCO5Jb544GwrHADr/4mAlpB97eFAVFJwsYLQsURrFFf2a8ayJt7tbfacSx1orNLo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780758762; c=relaxed/simple;
+	bh=In996MaRK1b1yryCiDiuIu5JXDlTrgSFPed3GJ9VBus=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X66bjORadMU+G1JyQGS6VMjdqJuCW+f/4jrw0lYutQ70zUKz/RZy89isXOj0Gms64nNX/Suqga0D3m0CBPIV+PwpgaPRQifOVeFfUbCoh9TS8T/fEOckgIZBUbQAGv5pST+W6OddwuAplGDFGjGZuNgOys+eav6NJBS3tZD9RB8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OhcrVXVO; arc=pass smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A1bJgib1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1780753228;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nJefgt/1tnzhpscofCHCp7cRfEweqd5NV5/E12R++QY=;
-	b=A1bJgib1shnqS8zCdCRBOwgSMn59H3zhT5lwOF5YK5rA6QLWqJowzepjSD85B8mGLy6snQ
-	/6TWWiE7eRjGKX+125VwfaES3GncdlvPTINDTRkxsiZ80ddpLXbYKEGmfE9e66LIFtXa7I
-	RgOl++C1rxgbLUw9LebArUgpNylrPRA=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-463-IeK5tGREM2SYpCllOs04hQ-1; Sat,
- 06 Jun 2026 09:40:23 -0400
-X-MC-Unique: IeK5tGREM2SYpCllOs04hQ-1
-X-Mimecast-MFC-AGG-ID: IeK5tGREM2SYpCllOs04hQ_1780753220
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CA9941956089;
-	Sat,  6 Jun 2026 13:40:19 +0000 (UTC)
-Received: from fweimer-oldenburg.csb.redhat.com (unknown [10.44.48.51])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 88A1E1955BC0;
-	Sat,  6 Jun 2026 13:40:13 +0000 (UTC)
-From: Florian Weimer <fweimer@redhat.com>
-To: Richard Patel <ripatel@wii.dev>
-Cc: x86@kernel.org,  "H. Peter Anvin" <hpa@zytor.com>,  Peter Zijlstra
- <peterz@infradead.org>,  Rick Edgecombe <rick.p.edgecombe@intel.com>,
-  Yu-cheng Yu <yu-cheng.yu@intel.com>,  Dave Hansen
- <dave.hansen@linux.intel.com>,  Thomas Gleixner <tglx@kernel.org>,  Ingo
- Molnar <mingo@redhat.com>,  Borislav Petkov <bp@alien8.de>,  David Laight
- <david.laight.linux@gmail.com>,  Andy Lutomirski <luto@kernel.org>,  Kees
- Cook <kees@kernel.org>,  Shuah Khan <shuah@kernel.org>,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  libc-alpha@sourceware.org,  linux-api@vger.kernel.org,  Arjun Shankar
- <ashankar@redhat.com>
-Subject: Re: [PATCH v2 0/5] Usermode Indirect Branch Tracking
-In-Reply-To: <aiMyaJ8zDl76YOVN@wii.dev> (Richard Patel's message of "Fri, 5
-	Jun 2026 20:32:40 +0000")
-References: <20260605184715.3383415-2-ripatel@wii.dev>
-	<lhu1pek4w89.fsf@oldenburg.str.redhat.com> <aiMyaJ8zDl76YOVN@wii.dev>
-Date: Sat, 06 Jun 2026 15:40:10 +0200
-Message-ID: <lhua4t73hz9.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OhcrVXVO"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-68d22476e88so19454a12.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 06 Jun 2026 08:12:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780758759; cv=none;
+        d=google.com; s=arc-20240605;
+        b=GJywPklodnwd6j2ACVB2WyredcKRdyY45uDNmYcY/9+q93J8iqbi0S9QiWB6pL0Rdb
+         +zocxAD9dpxytY3lFLBmE27XOvRfkVV5/6BdmcPjfYD/xWyhYnd5/QwuWMS39e66A7Cr
+         yIBDDikgNnfV5dK9B/p5BsH0A37cpS3yS/5rDXZPUzYvtPt13VU+C8i6ymdZ+74ISIGe
+         BJFpdDCqQ7iZ0pSKKNjEnp4LZLBCgp8X2v7muHiJCBx0Qvn+Dk5/ncWkjbDvAwdxtg0f
+         JFAUhcpuJEpqhAdeDmimRYY9Gqg9clCQjhKwIq3AjDWg0F8jsOAsLG+CFI9USBOjpEWe
+         6atw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=yaXDAm37FQ0K2c4b/udh9SWP+t2z0xMe7ch2lO/r3W4=;
+        fh=Q9KUlTsKQ0aX8/QsUhqaEkeQgAlk2BXQg8eBsUdR7ao=;
+        b=K+ws6oLOkYbiSpfjUt1HUPB84aN6r+WCb7Hih7Em0A+8H43PF+wkAvLmMv8B976Bw/
+         BdybLJzza8AkZ3d3n2c+QvWOwFBLPM3foH0E29lcsmqdEef+ZJ2bIpYitrh77R9JKYT4
+         OCXrIu3dKbXXWDHUcBr2D4qjHojEeeb/SA0jv0/VIK0zIYevQa5ahDe1toJUAU/CAhW5
+         x7ZEdHZghc7R3mHHhxyf/JoV7owF/5cwvSoNL4PvZ/cko3Pvz0fop41RTQ5zjNxLbOxL
+         +APlJDk0W5lBMxMUi+Bj0KA5UHcdv7g45Bj/CugzhjNiuo8f1AwHgN2rmvgzBG4fNT6N
+         r7lQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780758759; x=1781363559; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yaXDAm37FQ0K2c4b/udh9SWP+t2z0xMe7ch2lO/r3W4=;
+        b=OhcrVXVOl4qt2NANBJfhglGH8mS4/L4fjXNODD/2p32cAultMvdJceT7adS9ERy46N
+         9xhczzDCLrA+2WMorhvuP4pybQLk74LZFcFvIxYqipfywO89BvgpW26Gnf7xlYqCGR3O
+         bDSIO2gqhZnBeMFsOAZSRNuKHYvkIFKJYrIFWeVLSd84GdfENf2jxLGZqJefdQ4eh0Fm
+         oJ66RruaN9ALTufcpS2H3svjJypVYFXZGkL1a4HuirEFTbAUU4HceTHJprjg7nBgNNV8
+         rRPGtDYRVdYw8DobDzvzYlBOLwEqQLyOK5JqJGPd7GU/YsJ8d0YA+UBa8pRtovEnE7zq
+         hLFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780758759; x=1781363559;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yaXDAm37FQ0K2c4b/udh9SWP+t2z0xMe7ch2lO/r3W4=;
+        b=A8XAvnXdn2dduoK7Ni5Y/bmDll/tklTw8H3AJlizYCd1hgVakcfg7IbAAdph4djzlw
+         uHz4KEXj4Dbtq6cO+pynlYBcrYTAqlidNZNzcBy0NGd2qsZlycV9KGgZ0pmUk5odWajd
+         83Hs2T+SzAGHxmva5OAoqfOJNsnEqE2o1AqQX1n5fPVzHwRay0Gpf5JY7rMNOwtUbvG7
+         VycEk1uRwEDOyIIT4VcqmotfRswnOC7JtjWOvVdAncFRH4onatWEarZe4XQqQac/eFy3
+         eLHjSID3ZZWptfgsdRw0rWtWReq/Ma4CkD9ZxVuIeBwta9Bxbn+nLsigOlVpWV9KAGoU
+         akxg==
+X-Forwarded-Encrypted: i=1; AFNElJ/IEaoVEOEarKyogj5cy27Ug/U4hsSGApzGO6JN3QT1RusUgueiRotFKNYPIU+wr7SkIF66XeA/LDU/35Wicw4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEb66X6uonK/xaLVxwspNVQ5IMpnnbV0CutbsmxN8mPINEg5c9
+	vDnYBMVLG42qtF+HTrWLWN51iljIDOD7KkQYcjOk7p6Zv7Nlj9wFTq9wT6HBI67gciizvZGjLU6
+	NHeEmhJg6HJOeGgoMCFJwjnjI8Ep4o9z7zStI7p9N
+X-Gm-Gg: Acq92OEWVMSmrNE9Rv+qbk0leXBNSXXkvG+fgAeQmKVKEm570W3YkNp994WceICOUt9
+	BXjtKezJMTDFC0CtvhWsT0EfC3W4zAv/xXf+JDFGlfnTu7Qi4ONDHSDPn28/Q1TD1txtpEtxLbZ
+	Vf+5Q5eOdeHs7leEMDOUdHgZiPE4Yq6luPzhIxS6WsY8RPC3LujCx9T4ZeFlIvsMLZpbbyuwhKI
+	xGCU3SeBxcJYSEClbYqMXRXCmaoIlMY2JMKagococarrUItDHpQ/rW0oXzhNZMBy67UzthbX7+t
+	xPIprLCBRaphlGfOfErEqYLGTxqT
+X-Received: by 2002:a05:6402:4249:10b0:678:93b4:1fd3 with SMTP id
+ 4fb4d7f45d1cf-68fe8c55bc9mr79664a12.6.1780758758706; Sat, 06 Jun 2026
+ 08:12:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+References: <20260527174347.2356165-1-jmattson@google.com> <178009472318.880870.7878635650921105255.b4-ty@google.com>
+In-Reply-To: <178009472318.880870.7878635650921105255.b4-ty@google.com>
+From: Jim Mattson <jmattson@google.com>
+Date: Sat, 6 Jun 2026 08:12:26 -0700
+X-Gm-Features: AVVi8Ccv1u_7HnXyuP6YGCfDy3Eax8Y6OgqoRW_J3t3Bw-oamTD9jbnsNtAMOy8
+Message-ID: <CALMp9eQ-8h2F4HO8S666mJF3QzyH=0b30kC=n_9p7SMbBhxCMA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/5] KVM: x86: Virtualize AMD's "disable CPUID in usermode"
+To: Sean Christopherson <seanjc@google.com>
+Cc: pbonzini@redhat.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, shuah@kernel.org, 
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, ctpence@google.com, David.Kaplan@amd.com, 
+	binbin.wu@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-* Richard Patel:
-
-> On Fri, Jun 05, 2026 at 09:34:46PM +0200, Florian Weimer wrote:
+On Fri, May 29, 2026 at 3:47=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
 >
->> How do you detect that handling a signal is complete and IBT can be
->> re-enabled?  Or is it re-enabled before entering the userspace signal
->> handler?
+> On Wed, 27 May 2026 10:43:42 -0700, Jim Mattson wrote:
+> > AMD's "disable CPUID in usermode" feature is analogous to Intel's "CPUI=
+D
+> > faulting" feature, but it is advertised and activated differently.  The=
+ AMD
+> > feature is advertised via CPUID.80000021H:EAX.CpuidUserDis[bit 17] and
+> > activated by setting HWCR.CpuidUserDis[bit 35].
+> >
+> > Add virtualization support for the AMD feature.
+> >
+> > [...]
 >
-> Hi Florian,
+> Applied to kvm-x86 misc, thanks!
+
+Oops! You haven't sent a pull request for this series yet, have you?
+
+Our internal Sashiko asks:
+
+> In kvm_set_msr_common(), the MSR_PLATFORM_INFO handler uses cpuid_fault_e=
+nabled() to prevent the host from clearing MSR_PLATFORM_INFO_CPUID_FAULT wh=
+ile CPUID faulting is enabled:
 >
-> In v1, we backed up the IBT CPU state into the (user-accessible) signal
-> frame from FRED/XSAVE, then restored it:
-> https://lore.kernel.org/lkml/20260517183024.16292-4-ripatel@wii.dev/
+>    case MSR_PLATFORM_INFO:
+>         if (!msr_info->host_initiated ||
+>             (!(data & MSR_PLATFORM_INFO_CPUID_FAULT) &&
+>              cpuid_fault_enabled(vcpu)))
+>             return 1;
 >
-> In v2, when entering the signal handler, the kernel just context switches
-> to the new user rip, bypassing IBT checks (continues executing if the
-> signal handler does not begin with endbr).
+> If a VMM restores MSR_K7_HWCR before MSR_PLATFORM_INFO during live migrat=
+ion, and the guest had enabled AMD CPUID faulting, won't the write to MSR_P=
+LATFORM_INFO fail if it doesn't have MSR_PLATFORM_INFO_CPUID_FAULT set?
 
-What's the reason for this?
-
-> Some time in the future, ideally:
-> - signal handler is *required* to start with endbr (this is easy)
-> - sigreturn as in my asm example enforces endbr after returning from a
->   signal handler to a in-progres indirect branc
-> - libc (sig)longjmp is made IBT-compatible
-
-I think the compiler already emits ENDBR markers for returns-twice
-functions, which is why longjmp does not use a no-track jump.  Other
-architectures require such a proliferation of markers because they do
-not support no-track jumps at all.  However, longjmp is arguable a
-corner case.  It's not completely safe, like loading a function address
-from a RELRO GOT and jumping to it.
-
-> Btw, I had self-tests for the v1 design, and {signal handle,rt_sigreturn,
-> siglongjmp} with {success case,violation} works flawlessly with Fedora 44
-> glibc amd64. With glibc i686 I ran into PLT issues, probably my fault.
-
-There's no IBT support planned for i686, that's why we dropped all
-marker instructions in Fedora.
-
-> It is quite surprised that siglongjmp was working, btw, since the glibc
-> longjmp code uses 'jmp *reg' (without notrack prefix). I guess you do an
-> endbr64 at the setjmp side?
-
-Yes, compilers generate landing pads for returns-twice functions.  Not
-ideal, but it's the only way to get setjmp working on targets without
-NOTRACK.
-
->> Adding the ELF GNU note parsing can be added later, but perhaps not
->> cleanly.  I'm still a bit worried we might have to rev the markup
->> because too many binaries are in circulation that claim compatibility,
->> have never been tested, and are actually broken.  If the kernel does not
->> look at the ELF bits, things a slightly simpler.
->
-> Phew, I was hoping you'd say that.
->
-> If you want, I can sketch out glibc IBT enabling and test it on Debian
-> and Fedora, which IIRC already emit compile with -fcf-protection=branch
-> for all OS packages.
-
-For Fedora, please coordinate with Arjun (Cc:ed), who is going through
-the motions of enabling SHSTK for real.
-
->> That's not necessarily a problem because its address cannot be directly
->> overwritten in userspace.  Not all indirect branches need to be checked,
->> only those that have tweakable targets.  In fact, fewer ENDBR64 markers
->> are better (although we wouldn't drop the marker from a signal handler
->> specifically, of course).
->
-> Just one concern I have is that people start relying on signal handlers
-> not requiring endbr64, and then a future kernel version breaking them once
-> we enforce it.
-
-Would software enforcement be a possibility?  The kernel could check if
-the landing pad is there.
-
-Thanks,
-Florian
-
+Sadly, I think it's right. Even on AMD systems, MSR_PLATFORM_INFO is
+enumerated by KVM_GET_MSR_INDEX_LIST. It does come before MSR_K7_HWCR
+in that list, but userspace is free to restore the virtual MSRs in any
+order. For any sane AMD-hosted vCPU, MSR_PLATFORM_INFO will be zero.
