@@ -1,95 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC33B390CB0;
-	Sat,  6 Jun 2026 11:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBF13A544A
+	for <linux-kselftest@vger.kernel.org>; Sat,  6 Jun 2026 13:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780745564; cv=none; b=Ihmu4OklloTlLHDymvJ6+OxG4A5xnIzHMqhWSm0o+uMsy8KzafW8F0ZO765BXWJoGEkLNoS8eAfAPfAfhkSDTt9uNcrTxXL6H82Kye6LdkOdcOvniS0340WOd9nuapVXdki7j3qv64mw05i46dFLsur0F/Tb64XcISHEeoVu6hM=
+	t=1780753230; cv=none; b=ebY9vGJhc+cGQGeF94aochKaCAe12LIcq5eFH+P7T9fEakPlOUoG5X9KinsZIiwtQ9gqNZ1ksWr0LPi7mrIfulyEwcaIbu2N5ChnO28nUW9LKfUmH9vu7NXvjW24P3iT/vXiGRjh3KNiPyRuBc3DW2kCvbTczK5wz5qP+s7G3vE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780745564; c=relaxed/simple;
-	bh=/fey9nILQzxR3op27+ma2fTj/lsexsQ1dR4PWF0h/+0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=DVb7D1sYZ29v681qNYR06Wkr7+XC+ViIlbQlmX2/TDu4jNOfzHIHviC2DIKy66KIJckVa7V6QrPO+oLCjIRCnT65h8pCyEkQO98/R2KcAdT+g4NJLr26ZZhKdudWANm2inWh+h29tTiSt9bsAMmr1M7HqH7JyImv6hKw3VZ/xxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UJZ99ci7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780753230; c=relaxed/simple;
+	bh=daxTICY9+4oyCPFqZwIDiF2rgI59swk+SqQ5orvTnv4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=rgHwP+DKCeWGiyg39MM4r5l62ZnRMcIsS/dtWMQMvanUx74D/zGdzh3tIEYfSj6wMMpUZCgK4rZU+d1szIUTQg9ZaCLhteqPUhTjt1yaG0dI5UNLwGfzrfam2d+NJV09aV4D+aNteNlx4yb1YAOVvOik2fhSF8fejS1KN993mI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A1bJgib1; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UJZ99ci7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B381F00893;
-	Sat,  6 Jun 2026 11:32:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780745563;
-	bh=/fey9nILQzxR3op27+ma2fTj/lsexsQ1dR4PWF0h/+0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=UJZ99ci7VIJxN/L7DAesJt/Xht8ffAWcvEE9Xi8QRQf1gHwTiE5CIXR6a20WhZRNB
-	 nGK+pOYYvoQeCVMEJ/eWmQVok7m6Qy5zi4b7JIFuInMEUhNvaLbuPZP7fmxRW0kaZX
-	 n6M1Uj9PGUGSu8KY17q0YXIC5Q7EhOUjBW/QAslKC3cu8syrciMSRWiQ5SKzNlP8um
-	 Br+wbZWYL8VoF9Kwa63i3sZ2evE5kcGh+u/0nuIg3CcrpIoRYyx0mX9VECtuhmq4cr
-	 pxYy+DaB6MxJ/4Dd5fh+iMr7t/WxLD9aiPxtzZEvcENH/uCWMgAEDV31iA894XjRTl
-	 9Oi1G2xkmmsug==
-Content-Type: multipart/mixed; boundary="===============7208419686952190815=="
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A1bJgib1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1780753228;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nJefgt/1tnzhpscofCHCp7cRfEweqd5NV5/E12R++QY=;
+	b=A1bJgib1shnqS8zCdCRBOwgSMn59H3zhT5lwOF5YK5rA6QLWqJowzepjSD85B8mGLy6snQ
+	/6TWWiE7eRjGKX+125VwfaES3GncdlvPTINDTRkxsiZ80ddpLXbYKEGmfE9e66LIFtXa7I
+	RgOl++C1rxgbLUw9LebArUgpNylrPRA=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-463-IeK5tGREM2SYpCllOs04hQ-1; Sat,
+ 06 Jun 2026 09:40:23 -0400
+X-MC-Unique: IeK5tGREM2SYpCllOs04hQ-1
+X-Mimecast-MFC-AGG-ID: IeK5tGREM2SYpCllOs04hQ_1780753220
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CA9941956089;
+	Sat,  6 Jun 2026 13:40:19 +0000 (UTC)
+Received: from fweimer-oldenburg.csb.redhat.com (unknown [10.44.48.51])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 88A1E1955BC0;
+	Sat,  6 Jun 2026 13:40:13 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
+To: Richard Patel <ripatel@wii.dev>
+Cc: x86@kernel.org,  "H. Peter Anvin" <hpa@zytor.com>,  Peter Zijlstra
+ <peterz@infradead.org>,  Rick Edgecombe <rick.p.edgecombe@intel.com>,
+  Yu-cheng Yu <yu-cheng.yu@intel.com>,  Dave Hansen
+ <dave.hansen@linux.intel.com>,  Thomas Gleixner <tglx@kernel.org>,  Ingo
+ Molnar <mingo@redhat.com>,  Borislav Petkov <bp@alien8.de>,  David Laight
+ <david.laight.linux@gmail.com>,  Andy Lutomirski <luto@kernel.org>,  Kees
+ Cook <kees@kernel.org>,  Shuah Khan <shuah@kernel.org>,
+  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  libc-alpha@sourceware.org,  linux-api@vger.kernel.org,  Arjun Shankar
+ <ashankar@redhat.com>
+Subject: Re: [PATCH v2 0/5] Usermode Indirect Branch Tracking
+In-Reply-To: <aiMyaJ8zDl76YOVN@wii.dev> (Richard Patel's message of "Fri, 5
+	Jun 2026 20:32:40 +0000")
+References: <20260605184715.3383415-2-ripatel@wii.dev>
+	<lhu1pek4w89.fsf@oldenburg.str.redhat.com> <aiMyaJ8zDl76YOVN@wii.dev>
+Date: Sat, 06 Jun 2026 15:40:10 +0200
+Message-ID: <lhua4t73hz9.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d32a022041bcaad4e649101b948998b953415f4d8f4eea26422cbc28e0b9dd41@mail.kernel.org>
-In-Reply-To: <20260606-c3-01-v3-v3-2-97c51f592f15@mails.tsinghua.edu.cn>
-References: <20260606-c3-01-v3-v3-2-97c51f592f15@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: add tests for PTR_TO_FLOW_KEYS offset bounds
-From: bot+bpf-ci@kernel.org
-To: gnq25@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com
-Cc: gnq25@mails.tsinghua.edu.cn,john.fastabend@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat,  6 Jun 2026 11:32:42 +0000 (UTC)
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
---===============7208419686952190815==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+* Richard Patel:
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-> index 89779d897aba..8a3d69e2453c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+> On Fri, Jun 05, 2026 at 09:34:46PM +0200, Florian Weimer wrote:
+>
+>> How do you detect that handling a signal is complete and IBT can be
+>> re-enabled?  Or is it re-enabled before entering the userspace signal
+>> handler?
+>
+> Hi Florian,
+>
+> In v1, we backed up the IBT CPU state into the (user-accessible) signal
+> frame from FRED/XSAVE, then restored it:
+> https://lore.kernel.org/lkml/20260517183024.16292-4-ripatel@wii.dev/
+>
+> In v2, when entering the signal handler, the kernel just context switches
+> to the new user rip, bypassing IBT checks (continues executing if the
+> signal handler does not begin with endbr).
 
-[ ... ]
+What's the reason for this?
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_flow_keys.c b/tools/testing/selftests/bpf/progs/verifier_flow_keys.c
-> new file mode 100644
-> index 000000000000..d780a36a6e9a
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_flow_keys.c
-> @@ -0,0 +1,97 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Bounds checks for PTR_TO_FLOW_KEYS pointer arithmetic. */
+> Some time in the future, ideally:
+> - signal handler is *required* to start with endbr (this is easy)
+> - sigreturn as in my asm example enforces endbr after returning from a
+>   signal handler to a in-progres indirect branc
+> - libc (sig)longjmp is made IBT-compatible
 
-[ ... ]
+I think the compiler already emits ENDBR markers for returns-twice
+functions, which is why longjmp does not use a no-track jump.  Other
+architectures require such a proliferation of markers because they do
+not support no-track jumps at all.  However, longjmp is arguable a
+corner case.  It's not completely safe, like loading a function address
+from a RELRO GOT and jumping to it.
 
-> +
-> +/* Equivalent OOB expressed directly in insn->off; this form was always
-> + * rejected and is kept to show both forms now share one diagnostic.
-> + */
+> Btw, I had self-tests for the v1 design, and {signal handle,rt_sigreturn,
+> siglongjmp} with {success case,violation} works flawlessly with Fedora 44
+> glibc amd64. With glibc i686 I ran into PLT issues, probably my fault.
 
-This isn't a bug, but does this multi-line comment follow the preferred
-BPF subsystem style? The guidelines specify that the opening /* should be
-on its own line, with the comment text starting on the next line.
+There's no IBT support planned for i686, that's why we dropped all
+marker instructions in Fedora.
 
-Note: This style issue has been consistently raised in reviews for v1, v2,
-and v3 but has not been addressed.
+> It is quite surprised that siglongjmp was working, btw, since the glibc
+> longjmp code uses 'jmp *reg' (without notrack prefix). I guess you do an
+> endbr64 at the setjmp side?
 
-Reference: https://lore.kernel.org/bpf/20260604154507.B5CB51F00893@smtp.kernel.org/
+Yes, compilers generate landing pads for returns-twice functions.  Not
+ideal, but it's the only way to get setjmp working on targets without
+NOTRACK.
 
-> +SEC("flow_dissector")
-> +__description("flow_keys: OOB via insn->off rejected")
-> +__failure __msg("invalid access to flow keys off=4096 size=8")
-> +__naked void flow_keys_insn_off_oob(void)
+>> Adding the ELF GNU note parsing can be added later, but perhaps not
+>> cleanly.  I'm still a bit worried we might have to rev the markup
+>> because too many binaries are in circulation that claim compatibility,
+>> have never been tested, and are actually broken.  If the kernel does not
+>> look at the ELF bits, things a slightly simpler.
+>
+> Phew, I was hoping you'd say that.
+>
+> If you want, I can sketch out glibc IBT enabling and test it on Debian
+> and Fedora, which IIRC already emit compile with -fcf-protection=branch
+> for all OS packages.
 
-[ ... ]
+For Fedora, please coordinate with Arjun (Cc:ed), who is going through
+the motions of enabling SHSTK for real.
 
+>> That's not necessarily a problem because its address cannot be directly
+>> overwritten in userspace.  Not all indirect branches need to be checked,
+>> only those that have tweakable targets.  In fact, fewer ENDBR64 markers
+>> are better (although we wouldn't drop the marker from a signal handler
+>> specifically, of course).
+>
+> Just one concern I have is that people start relying on signal handlers
+> not requiring endbr64, and then a future kernel version breaking them once
+> we enforce it.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Would software enforcement be a possibility?  The kernel could check if
+the landing pad is there.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27060463888
---===============7208419686952190815==--
+Thanks,
+Florian
+
