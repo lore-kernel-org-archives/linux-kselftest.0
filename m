@@ -1,115 +1,164 @@
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.common-net.org (mail.common-net.org [139.28.148.254])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E2878F2B
-	for <linux-kselftest@vger.kernel.org>; Sun,  7 Jun 2026 13:49:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9AAF2253EE;
+	Sun,  7 Jun 2026 14:01:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.28.148.254
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780840175; cv=none; b=QnGKhAVnrCwBKLAgWZ2qTHl/TglSFPuEF6BOfFORmp79IqwCTTvoo5S9xk9blG4yLXiiB6tzzlPXLPj6ZvvshbYvztnzts4x93eTkdGpCSTIOI4Zi6pg+tHxshP6IH8cgwGgeGwXMrurICVKd8O5ZtLQR7YQ+zc5BkEHYcUzDws=
+	t=1780840885; cv=none; b=ngHJgYSbFk6xBbWE21BgYDf1+FBa/KdwVZP+HjWNE8ZANIOEgO3hBU6h9PauRO4jw1E9wC6rcggzUgjIlInzt6XQk9Zc6OJb1O4Ltpci91DOzaNKRXVRvCSSsZ3CH1xqlYja66tCugqCctmgO9pJYK4ILDR1J9kLwmZytpt1weE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780840175; c=relaxed/simple;
-	bh=XEmC8cTzKQpgszHArxiOjIai4otMc07eukOUPay4pQU=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=j85tTysheSyb72d2O2bxTEdsWLVCFz1wT11ReVOKDO+5APxuuLP0mJDvxyRDkO3JFyrJr2FtM6vYZtNP0B8MwxpPQGQY30eVnUcUsWr0ESPCVhmXpsWmJzZjDSEGtq45l39Q6c4L2eQgtqUubMUtNvSfWhRqP/fgWiCkoYXDBBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZuK4OqAW; arc=none smtp.client-ip=74.125.224.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780840885; c=relaxed/simple;
+	bh=7IIMnHWhVf+twJaSVJxFuCA1jrlaS+iWejGB0SPwmUI=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=sbfHbGKNsLoSUBp7sH+TCcnh0R+DJrKsan8dezDrtLgqr2akSgOTpajAA41b0DFTS25+W93OycPUNQyRbqeoDLegIvqs+bIsBuiz9TaJLrgPWZT6/7/sCrRj4ENiZkeGcwAmh3WcYtUmkGXhzQe8rOyoTbYditZVeXaMe7UqLh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=common-net.org; spf=pass smtp.mailfrom=common-net.org; dkim=pass (1024-bit key) header.d=common-net.org header.i=@common-net.org header.b=t/HU8RzL; arc=none smtp.client-ip=139.28.148.254
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=common-net.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=common-net.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZuK4OqAW"
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-6603246b66dso3421717d50.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 07 Jun 2026 06:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780840172; x=1781444972; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=93wINgt7Upt+lx98SvFQMNbQYg0vszE9BajcG6iLDZI=;
-        b=ZuK4OqAWIGLGiIbJbySOub/GRfPbfZyoMJNaKDCCQNI0RoBCX5gHQ/1j7REZGhUmBN
-         PyxXZxB3RDOTKRA8wWeFgTy+UZ7rm5IbYhLKCuY7k0QGhOREDvbUSNZK/AhVDj3jMNiL
-         K6Xs/T0tIyE+YjE0JP8ju5XadGOSZRthpiNr0aYvlLsqiv3NaSBMcGCFFbDRnMPeXWKL
-         l3GPyiK9RXBJCXWZRwi7/AkqZsJGOANUlp7rrHi9hGnB5FYnKTQheyHnS1QU2cW12b8l
-         LO8YLKYXn5XF6JdCPDmxAd6wPGzXj4ScZSAz2Jbdq+XO3Wal1+nDImpTVjHc6K8cPISB
-         cA8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780840172; x=1781444972;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=93wINgt7Upt+lx98SvFQMNbQYg0vszE9BajcG6iLDZI=;
-        b=GWEAJiuGC7medil76XccLzcX/3uYGyeST694m1TXsOMxQdKKoKRqHZT3/p7ZVa0aD3
-         mAluebJBpuC+NA1gD+diUmicONf8UWIxefSMMjZlcwZo+qqqP93CRh+3WXizEZh2UoT9
-         BibNYJdx0FfS/R28Nov1agJ7ikcfAOhB/pi39vyczzvM4cf6yA8ArVF7BfD14cKBY/H+
-         W/lv73828Rz20FG5khdWcn5jzowt6Tp3+W6K1GKLj7S0E/VhMNiXtvyk9ZXH6IxJA9Gv
-         21rQeznC3pipXl08agY3ibrsJ8dr630TrU2Dqsjch+g8zYV4uNmWP83B5K5BW71q3GIK
-         czPQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/FegwnEiCUyMfh21tdY5xZPcersEv3L0fBcq0sAWndKK16fVWh7O1bEETFA471YA3ZKamDiF78Y3xbPQJ37SM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMsKt2thuUgL2VQgT1HG9y7voM66oYm8KMaf+2eLtPUQCS/5B6
-	2D50GpmltXN1f49f4qCDvIumYqQLgkBSDf2FqaDF3qJo8EPefLo0oiYx
-X-Gm-Gg: Acq92OGDiaDGkMDucXDcdsQOBbsPb6pbWg2esK9atqeuhuJl1+DKdsl2n8aROB+dRsU
-	YJ+CHaq3I36/2mdKElDo82GnG0/CX2SB3MuPEReB+aKS10XAEEg8sHG8tQF9sW97lwQjEmu6eJq
-	9ykqS4KbF6f/f3KK7mGS69ux6r80ecMeBFumsjfVrDJmzUVztF86SzxJd0aIhBPz5jxZYi/oRNp
-	UrhX7b0kgGjXEMtY/W6PIHF59DC7O1fjfhe0BbBlSgnbQU67SzeUFcuB6R7G3CWE2WfJM5HwU8+
-	I6JTdNpqzfavDtM3mRnmxomwANeHslkoB5OiOm0DMximwGBYO5GZN50+kIZDeH+xIzd3xbru3Pj
-	SFuVv2qwrWR0UaBTWgFZlV/DOmlqYrWSjRlqr+/8fitCpLeprhMGCCn9KTaE2eDL810UZ/0SU8U
-	uIvUC7/YDiDCGYEVAr0xN738N14R9/xSd+fs0+ByL2nTEsYG9zfRJ60K+854x7SisrczgwTa1dm
-	YYrmERuA8r/Dbbslw==
-X-Received: by 2002:a05:690e:191c:b0:651:d430:7832 with SMTP id 956f58d0204a3-66106dceef5mr10363870d50.10.1780840172574;
-        Sun, 07 Jun 2026 06:49:32 -0700 (PDT)
-Received: from gmail.com (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-660d5f441f8sm8081424d50.3.2026.06.07.06.49.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2026 06:49:31 -0700 (PDT)
-Date: Sun, 07 Jun 2026 09:49:31 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- Jakub Kicinski <kuba@kernel.org>, 
- shuah@kernel.org, 
- willemb@google.com, 
- linux-kselftest@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.ee6597e4f7af@gmail.com>
-In-Reply-To: <20260607002401.212976-1-kuba@kernel.org>
-References: <20260607002401.212976-1-kuba@kernel.org>
-Subject: Re: [PATCH net-next] selftests: drv-net: gro: signal over-coalescing
- more reliably
+	dkim=pass (1024-bit key) header.d=common-net.org header.i=@common-net.org header.b="t/HU8RzL"
+Received: from lubuntu-18.04 (host-80-116-255-177.pool80116.interbusiness.it [80.116.255.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.common-net.org (Postfix) with ESMTPSA id AE0FA6D20B88;
+	Sun,  7 Jun 2026 16:01:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=common-net.org;
+	s=mail; t=1780840880;
+	bh=7IIMnHWhVf+twJaSVJxFuCA1jrlaS+iWejGB0SPwmUI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=t/HU8RzL4/U+SOIbtwUDTdZ1tq6YpQE+B8fu/n6ihwN5scNcji7geBeqComDRMyI+
+	 kfU0amV1PGzXCJtIFhguAYQNjEo0zr03dOqkwjgKlLrg2454pF3vpWQGohnSuJaFDO
+	 mV/bXt7sgJHOQbsu2XxAZTsFO0PZ/y5iExEvod5M=
+Date: Sun, 7 Jun 2026 16:01:19 +0200
+From: Andrea Mayer <andrea@common-net.org>
+To: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, David Ahern <dsahern@kernel.org>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Justin Iurman <justin.iurman@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org, stefano.salsano@uniroma2.it, ahabdels@cisco.com,
+ Andrea Mayer <andrea.mayer@uniroma2.it>, andrea@common-net.org
+Subject: Re: [PATCH v2 5/7] seg6: add End.M.GTP6.D.Di behavior
+Message-Id: <20260607160119.ed2022e8a358d700e1134318@common-net.org>
+In-Reply-To: <20260505-seg6-mobile-v2-5-9e8022bdfdb6@gmail.com>
+References: <20260505-seg6-mobile-v2-0-9e8022bdfdb6@gmail.com>
+	<20260505-seg6-mobile-v2-5-9e8022bdfdb6@gmail.com>
+Organization: Common Net
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Jakub Kicinski wrote:
-> GRO test is very timing-sensitive, packets may be delayed
-> by the network or just sent slowly. Because of this we retry
-> each test case up to 6 times.
-> 
-> This makes perfect sense for positive cases, in which we want
-> to see coalescing. Negative test cases, which modify headers
-> and expect no coalescing should have opposite treatment.
-> We should really try 6 times and make sure that each time
-> the test failed. This would, however, require that we annotate
-> each test to indicate whether its positive or negative.
-> Let's start with a simpler improvement. Do not allow
-> retries if we detected over-coalescing. Previously the negative
-> case would have to get lucky at least once in 6 tries to pass.
-> Now the first failure breaks the retry loop.
-> 
-> For background - NICs tend to ignore the contents of the TCP
-> timestamp option, so that test case commonly fails. In NIPA
-> having 6 attempts, however, was enough for some NICs to get
-> multiple successful runs in a row, getting the test cases
-> auto-classified as expected to pass, even tho the NIC does
-> not comply with the expectations.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+On Tue, 05 May 2026 01:30:15 +0900
+Yuya Kusakabe <yuya.kusakabe@gmail.com> wrote:
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Hi Yuya,
+
+I do not repeat below the points from the cover letter thread and patch
+1-4 replies (drop reasons, OIF/VRF removal, C helper, coding style, etc.).
+
+The patch 4 review applies here, except for the parts where Section 6.4 is
+implemented instead of Section 6.3 (which is incorrectly implemented in
+patch 4).
+
+> Add the End.M.GTP6.D.Di drop-in mode variant of End.M.GTP6.D
+> (RFC 9433 Section 6.4).  Unlike End.M.GTP6.D, the drop-in variant
+> does NOT fold the GTP-U identifiers into Args.Mob.Session: the
+> original outer IPv6 destination is preserved at SRH[0] of the new
+> SRH, so the destination side can keep the original address
+> untouched while still benefiting from SR Policy steering.
+>
+> The augmented SRH builder/destroyer is shared with End.M.GTP6.D.
+> The TEID and QFI parsed out of the inbound GTP-U header are
+> intentionally discarded for this variant (matching RFC 9433
+> Section 6.4).
+>
+> When net.netfilter.nf_hooks_lwtunnel=1, the inner T-PDU traverses
+> NF_INET_PRE_ROUTING between the GTP-U strip and the SRv6 push,
+> mirroring End.DX4 / End.DX6.
+>
+> Non-T-PDU GTP-U messages are forwarded the same way as in
+> End.M.GTP6.D: passed through via the lwtunnel's saved orig_input
+> to a downstream peer that owns the GTP-U control plane.
+>
+> Configuration:
+>
+>   ip -6 route add 2001:db8:f::/64 \
+>       encap seg6local action End.M.GTP6.D.Di \
+>           srh segs 2001:db8:2::e,2001:db8:3::e \
+>           src 2001:db8:2::1 \
+>       dev <dev>
+>
+> Link: https://www.rfc-editor.org/rfc/rfc9433.html#section-6.4
+> Signed-off-by: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+> ---
+>  include/uapi/linux/seg6_local.h                    |   2 +
+>  net/ipv6/seg6_local.c                              | 222 +++++++++++
+>  tools/testing/selftests/net/Makefile               |   1 +
+>  .../selftests/net/srv6_end_m_gtp6_d_di_test.sh     | 427 +++++++++++++++++++++
+>  4 files changed, 652 insertions(+)
+>
+> diff --git a/include/uapi/linux/seg6_local.h b/include/uapi/linux/seg6_local.h
+> index 7d3d3d245b47..326da65ad5aa 100644
+> --- a/include/uapi/linux/seg6_local.h
+> +++ b/include/uapi/linux/seg6_local.h
+> @@ -80,6 +80,8 @@ enum {
+>  	SEG6_LOCAL_ACTION_END_M_GTP6_E	= 19,
+>  	/* IPv6/GTP-U decap into SRv6 (RFC 9433 Section 6.3) */
+>  	SEG6_LOCAL_ACTION_END_M_GTP6_D	= 20,
+> +	/* IPv6/GTP-U decap into SRv6, drop-in mode (RFC 9433 Section 6.4) */
+> +	SEG6_LOCAL_ACTION_END_M_GTP6_D_DI = 21,
+>
+>  	__SEG6_LOCAL_ACTION_MAX,
+>  };
+> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+> index 09e912e17df8..a6cd57ebcbde 100644
+> --- a/net/ipv6/seg6_local.c
+> +++ b/net/ipv6/seg6_local.c
+
+> + [snip]
+
+input_action_end_m_gtp6_d_di() and its finish callback are largely
+identical to the patch 4 functions (input_action_end_m_gtp6_d() and its
+finish): the SRH check, GTP-U dispatch, outer strip, inner protocol
+detection, and NF_HOOK invocation are identical. The duplication should be
+reduced via shared helpers.
+
+> +static int input_action_end_m_gtp6_d_di(struct sk_buff *skb,
+> +					struct seg6_local_lwt *slwt)
+> +{
+
+> + [snip]
+
+> +		gtp_hdrlen = seg6_mobile_parse_gtpu(skb,
+> +						    upper_off + sizeof(*uh),
+> +						    &teid, &qfi);
+> +		if (gtp_hdrlen == -EOPNOTSUPP)
+> +			return seg6_mobile_passthrough_non_tpdu(skb);
+> +		if (gtp_hdrlen < 0) {
+> +			reason = SKB_DROP_REASON_SEG6_MOBILE_BAD_GTPU;
+> +			goto drop;
+> +		}
+> +		(void)teid;
+> +		(void)qfi;
+
+D.Di does not use teid or qfi, so these variables and the (void) casts are
+dead code and should be avoided. For example, seg6_mobile_parse_gtpu() could
+accept NULL for teid and qfi so callers that do not need them can pass NULL
+directly.
+
+Thanks,
+
+Ciao,
+Andrea
+
+P.S. I am temporarily writing from another address due to a mail
+delivery issue at my @uniroma2.it address. Please always Cc my default
+andrea.mayer@uniroma2.it address on replies.
