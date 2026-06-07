@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E251630C17C;
-	Sun,  7 Jun 2026 11:58:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A913930C17C;
+	Sun,  7 Jun 2026 11:58:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780833497; cv=none; b=pmblBCicsfSMYDSVsVPE9/jZYtDTOUFvABGOILJ7DI3TsVKFG+8YlpMXonXlH0jPNjIJ16u4NmVyuYQoMa/79GVNe55s2FJ+DtVjZsd7zVJ73V4JfFCqT1bNgQnWlf43mR+1ipDHybxyNIYGC6/+XodMViPT+ZVMoK4S7K9vB7w=
+	t=1780833501; cv=none; b=OjOaKJvKQMiXRDL90MVFsWTdpf3y94+LBEntPg3+kzlyAazMCV6js1kp9RDB0H3rFuizmfq4/hb1RFLfV9vc+ZdldmU9EmVCHLfiAkJ+SC9dDqIDCDH8sGq21xdQwbsCXTA+M2OyB7ZSnNVYBVy/QWdx5BjrKLriBUE4/PsdboM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780833497; c=relaxed/simple;
-	bh=sHNqQ6sBVxrgcaxGECrC124JvbJtc9sZDSizM2oMdzc=;
+	s=arc-20240116; t=1780833501; c=relaxed/simple;
+	bh=GkAapea2r6iMuQ9bRretKpT53hPyS2YuHdH+ULS5Nus=;
 	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=kmG+5vT/Tb6cpDFFRqKY7NPtexJBGpbZkSbxB4MM+IDPjhf2brlUiTons9yW9dAL9m5Lhhybm0qoDGHm9QGR/g0lPVWf7/ChCpcmkokcgBaE+xtGSTpKp+yDRGlRYLZKMYIbk/AkVrWkIKqEK9ULi/vyLzev6dW0j0tv1KRF5w8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QMjl1xiS; arc=none smtp.client-ip=100.103.45.18
+	 References:Date:Message-Id; b=KFTwjjivvwBWWp94uX/G2lKI2Tv+bD1czy/ueSRmldwRb28DR5Qc6X8k8ReMm09dSwAFg3iL0YCuas2nunkAKcNAgHIATT8Q/yecI26Ta3D96HSQYL8wbY+0N44CBogMM819czsXaCZgKT6ae+OT04hfmWbn681YTej/QUSYPYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ItsDMWph; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QMjl1xiS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B8E1F00893;
-	Sun,  7 Jun 2026 11:58:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ItsDMWph"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0487A1F00898;
+	Sun,  7 Jun 2026 11:58:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780833496;
-	bh=wNB4h4utZuNVxiAEqzDEuzLMJdgTJVcCVWUJqa+wJiQ=;
+	s=k20260515; t=1780833500;
+	bh=H2pnv615PWqSZrpd2NRH79qwtsELWXhl5rrCYlTNZXo=;
 	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=QMjl1xiSwtKwrEq23rBPX3A0XsSxwc4cSJ5sHlFSziemnPv0qynpJ2Whc1E7Mx1cb
-	 FxsV9O3WNpHYknPYNZSmK6eQt+nsBpaqZWwryUxSaTtObyTKtbqYDcPhfqz7M1nom+
-	 MJsRUUCXBAzGqa4+CCmIE/jrnA+l6bfvRFsuAmQ8iXH7LNhMYFsA2KZzQpdwEmBNHj
-	 FytGpxqTRDm81hZo2xT9cKp8gCMDbTXSDEYRpmaG3ZfsE0pIFQlbtmwHRDz6ackGzk
-	 XJpuA5coF6Xqz5BJyYdhCoKs6qFL2SOjcmnQO4a30hUn+K+rxP+c00cQ/IbQpMlFZM
-	 2p7T6LpAC+ykw==
+	b=ItsDMWphVvFP4D8ih+9sFpqdbEllQp8JuNzqgQys3nbl3JRqSpd7m82izly/lFRXA
+	 23SWdwR6HYtp7hRPXyHAUcOCpSsHOvTegPo0+c0Zoc/8HpZOVaNaXYTu391jg8RAcT
+	 lNuiTww4Je5vPyjUu6tupBsWXuI6+1WkwqXMcZ1uZzFer2zFa65oT4pvSbc/lPzohm
+	 FThaHBR5t10QV7mIFRzbIdC1X3dBWriV7aLfUCAclVbONkt1fiCgXNJgD7wc7Oz4wc
+	 9U8zF9tNMbgUZWnuUB23hxabixRlJ3jbIren5pQKdSCeKQcujQXRc3S61MiWKHXSmM
+	 xJSxwo9xyAzYw==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,7 +34,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [RFC v1 0/9] kho: granular compatibility and header decoupling
+Subject: Re: [RFC v1 1/9] kho: split out radix tree tracker into
+ kho_radix.c
 From: Mike Rapoport <rppt@kernel.org>
 To: Pasha Tatashin <pasha.tatashin@soleen.com>
 Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org, 
@@ -42,86 +43,36 @@ Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org,
  linux-doc@vger.kernel.org, jasonmiu@google.com, 
  linux-kernel@vger.kernel.org, corbet@lwn.net, ran.xiaokai@zte.com.cn, 
  kexec@lists.infradead.org, pratyush@kernel.org, graf@amazon.com
-In-Reply-To: <20260605033235.717351-1-pasha.tatashin@soleen.com>
+In-Reply-To: <20260605033235.717351-2-pasha.tatashin@soleen.com>
 References: <20260605033235.717351-1-pasha.tatashin@soleen.com>
+ <20260605033235.717351-2-pasha.tatashin@soleen.com>
 Date: Sun, 07 Jun 2026 14:58:08 +0300
-Message-Id: <178083348872.1648214.17778188633648887952.b4-review@b4>
+Message-Id: <178083348873.1648214.11020626647820932506.b4-review@b4>
 X-Mailer: b4 0.15.2
 
-On Fri, 05 Jun 2026 03:32:26 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
+On Fri, 05 Jun 2026 03:32:27 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
+> Move the radix tree tracker implementation from the core KHO code
 
-Hi,
+It's radix tree data structure implementation, kho memory tracker is it's
+user. Please rephrase to keep the semantics clear.
 
-> [...]
-> data structure. Keeping all of this within the same `kexec_handover.c`
-> file, and also under the same global version, is no longer sustainable.
-> 
-> To address this, this series:
-> 1. Refactors and reorganizes the code by splitting out radix tree
->    and vmalloc into separate files.
+>
+>
+> diff --git a/kernel/liveupdate/Makefile b/kernel/liveupdate/Makefile
+> index eec9d3ae07eb..a3ee8a5c27a2 100644
+> --- a/kernel/liveupdate/Makefile
+> +++ b/kernel/liveupdate/Makefile
+> @@ -7,7 +7,11 @@ luo-y :=								\
+>  		luo_flb.o						\
+>  		luo_session.o
+>  
+> -obj-$(CONFIG_KEXEC_HANDOVER)		+= kexec_handover.o
+> +kho-y :=								\
+> +		kexec_handover.o					\
 
-I'd keep vmalloc where it is, it's more of a memory preservation primitive
-rather than a data structure of it's own. The data structure it uses is an
-implementation detail.
-
-Let's minimize the churn where possible for the sake of git blame and
-backports.
-
-> 2. Moves and organizes internal and ABI headers into structured
->    directories under include/linux/kho/ and include/linux/kho/abi/.
->    Instead of cluttering include/linux/ with prefix-styled headers like
->    kho_block.h or kho_radix_tree.h, we use the already existing
->    include/linux/kho/ directory (e.g., kho/block.h and
->    kho/radix_tree.h).
-
-This looks to me like unnecessary churn.
-These all are bundled with KHO anyway, there is no header dependencies
-that justify small headers for each two functions and netiher
-linux/kexec_handover.h nor linux/kho/abi/kexec_handover.h are that long
-to start splitting them.
-
-> 3. Introduces a standard set of compatibility helpers in
->    kho/abi/compat.h.
-> 4. Decouples the compatibility strings of individual KHO subsystems
->    (radix tree, vmalloc, and block) from the global KHO version.
->    This enables independent, granular compatibility versioning.
-
-I agree that we should decouple versioning of these components from the
-global KHO versioning.
-Can't say I agree with the way you propose to do it.
-
-I don't like that each user of a KHO component should include that
-component version in its own version string (or whatever it may become
-later).
-
-It requires ABI headers update each time a user decides to add a new
-data structure and worse when there is a change to that data structure.
-It creates coupling of the data structure user with its particular
-version and just looks ugly IMHO.
-
-Suppose we added new fields to vmalloc, but made the implementation of
-restore to be able to cope with both old and new versions. 
-How this would be reflected in memfd versioning?
-We'll add both versions of vmalloc to memfd version? And all other vmalloc
-users?
-
-Or, say, we add support to kmalloc() and use it in kho_block.
-Then we'd have to add kmalloc() versioning to all kho_block users, right?
-
-I think the versioning of each component should be handled by ->restore()
-of that component. If it sees an incompatible version in the preserved
-data, it returns an error. The versions can be stored e.g. in the base KHO
-fdt.
-
-> 5. Adds a KUnit test suite to verify that the composite compatibility
->    strings of different subsystems remain unique and sorted in
->    alphabetical order, guaranteeing a consistent and predictable
->    representation across configurations.
-
-Without "composite compatibility strings" we don't need to care about
-them "remaining unique and sorted in alphabetical order".
-
-The need for this test alone is already a red flag ;-)
+I don't see much value in moving kexec_handover.o to a separate line,
+btw, the same is true for luo_core.o, but it's not important enough to
+change.
 
 -- 
 Sincerely yours,
