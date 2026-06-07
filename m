@@ -1,63 +1,63 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE5C36F413
-	for <linux-kselftest@vger.kernel.org>; Sun,  7 Jun 2026 08:11:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB4036E493
+	for <linux-kselftest@vger.kernel.org>; Sun,  7 Jun 2026 08:11:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780819891; cv=none; b=B+cjwWe19tdPYLVa9YZDDLZ8LGxHGr34fhaUpZZeGxBOVliUbG9bI07jmCMOws8eLZAMs1bY5Ig5xZc8QIN0zL+6vLGVpaAQSypfcApz/EbCxU0qFo+g0ZvPQ8kT9i5cH9WfV4DgQ4DgRcRNFhCicF0x39BCkWbbpsHd32eL444=
+	t=1780819891; cv=none; b=a/dK85t6OerplMfVeYHyP8IiIwAgYUwyrKdt9zdnsve6Cqf+LZfd5p1wCeAuapHOZDXvkvqL3q6I82SEOJDZGT4tnB5t5C3REFuo3hVZvYmKurm2mSoAJ7BhnNBtImkltRc6ahZxZHQ4tem+S7i+2QmD1Qn3JHt2nzGLivJ/nn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780819891; c=relaxed/simple;
-	bh=8Wu5DYY2ASqkhMET+Fm818M8hWVqHPHtTDXL6Ca444Q=;
+	bh=8fGKQM/8ZqCo43qm9SlIU3NFaWdy1/A+/assJKzlb5o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AgMtac75MRfGxt+FSyBp+Mf5NeSKuF8HZgX0iYi3u3AQz1dHTusPNTqcCypewZMvTTYFOdsAiFPRye6TVygycpXJDqVpEioOsVThDhAmHRX7NtN1pWPAuWa3w2x2pJ6rvXJhxjULqK7vJAOpcJV3PbdIpNvP4iVw8EvC1PXdZaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z8nWlKac; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=JGMDPrInlxk0SqzEIKBdHQ+5NabW2hb2IFSpEBnCysCwNl8U9hDtVfhhZojQyzLgRwFIxuzkE8lyOSNHHDJ3MsDHQ4Bcw+uXKyUYL2tnIdd1OW9mRiYuf6Gh/TqbyQjAJQ2fPH4D984pPkEk4k2BmDcp0Ym+TFeZfP+y1x4PlDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kd29fMNx; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z8nWlKac"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2bf114b0cf9so28668895ad.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 07 Jun 2026 01:11:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kd29fMNx"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-36b900f350fso3105497a91.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 07 Jun 2026 01:11:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780819889; x=1781424689; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780819884; x=1781424684; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JzHGULD5HxqQOVF8zdlCFjzG5/aQKaT2bot1mulDc9c=;
-        b=Z8nWlKac2EOgwGUJqz3FaZFQKMPOHaTnwr5W7tsfD+1iNkrxZa8lz1nzpA0uk0BPQ4
-         aogGxElip7MBm6UQSlzOeReH1hA3e86Qm3OoeAm69UDtttIrvVwQ+4URFTzKZ1ZL6idU
-         t6dUxo5+5aEk6jCgzoJsvhKJyeiG/KDBaeLiZxpdS7q8I0qqbDcXDjpLPfG2MjX8zez5
-         YA2LX1CxGgMZPTXTPjR/wBtPYK+beZ6b++j2yARS9lcDy6KTv+XNQighFcAzWYOOvSk/
-         DEcw0uOPY9DfueQE1+d8Uk8f4aV9R6fcXn23wkQ8uwFkX8U/p6MY9sPhgCcEXSGaLfxJ
-         jlvw==
+        bh=JXyTBTDSB4kJ/NqnyBvVuRSbwI4TemATINDoQruBQBs=;
+        b=Kd29fMNxQNgGUdhoqY7aPL5jOAsGnQDTlDlT75BodjRZcK+lDSu9MBuF3gaDu5IJLG
+         WP8Jlpdcexptp1/aMYAIbJjbOZDrm5Khup1fn7i8HD+EUODkX7Ga5yy8wPp5YDlkVmjF
+         2FP2TMsSN7w0gyhBTTMZLVPs/B7xluCs5KU5L/n1r68z0bbbtlCC4L8oG0oc2EqXmxK3
+         ezZ0wHVm7l2xikgpCmvQ35/naYwsAiTRKAkwUeRqWS5K8eb0CqoBko+Mom/uD4MjN9ua
+         ifAIvjG78Uk8x97i74HqJmxrvjOVmgnh4TXXob4CVE6sZL/eOhkFYEhQF6seF3m10z96
+         bJtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780819889; x=1781424689;
+        d=1e100.net; s=20251104; t=1780819884; x=1781424684;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=JzHGULD5HxqQOVF8zdlCFjzG5/aQKaT2bot1mulDc9c=;
-        b=f0qP+ZFWtT5QbkrcFmY8VRcLkGArvdoVAj2OpFDEf6P6PDAmd16qBNgvtosUrCcOrx
-         5D/QKHue2CPFyaws+fDtAvcGiagPn6EY8ZJ3s24RLAARzbBOWLIQu/TmjCIVZn6Rmeg+
-         nQnCq6ek/TROcB0UwNW34VdorLs/P1c3hsEkBJWSfiCMEoLqjI19fykaACNtrhap8VSv
-         +o1ix13FWcUdQ+LvsoNVqvozedgG335Gmu6Pmln3Wt6RJw19Fhl6nzA8jCHQocLNPl90
-         HdOT/Elb00Ds3S4KVFr+i6a7C9luFxyNtamluBLAtJk/240uPw3qgnH/3HHItE2uCC0V
-         Mf8w==
-X-Forwarded-Encrypted: i=1; AFNElJ84tMUOvGRzPwPXiquMUvEi6FY0tOhSfIrOgSfhBJQNuTYczynsra6nteflOibdXJ+te4K34TSofqLAakrxoFs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yww21zxbszkZyQEBt+dMrP+GrZw5gj7PawcAM/DYcq22NrmqQZf
-	5BYZyT0oQJtmcU9O9SQhiF/C/EtP7ai6GRx/ZYhDWBchgPGPpdAMm/qP
-X-Gm-Gg: Acq92OFdIEiocqWjHq3k2WrEOzPjRkS1yrrPou8etT8sCaHjy9ChljcmI9mn8oFuJKJ
-	q6QnB02cDwHMfne5oJXTL4ViKYMRdtgIgo5bEOHbgeApsbkKlOhrffYbfX+X9FinGLTBRfjAZ76
-	gb91ZN7rt2ccgjkkovDZO6/6uQIb7pEfqvDilDZloBKdRmZD8/YV94C3S5+vnJdSf4sIOfEBoU2
-	0pWLvb6zVZviSDfxsqW7Sn7fPm6NPtIbbRJX7WUdJeu62oB6FGux76ZqJ9+CUCPIw6dVVzamwth
-	Tynen5TtunvTeM5dkt10B1FYnvIK/rwoYCWyrhtNTfTsAJRBUGXBlEujTCV8cEDOQGgyyoSdn8Z
-	RDm/VbvAUTGrIPT0E39fR7SHEMoxiNrVeykUTc8BXv9USCRnHbLHARvfoaC9lGV+20B9XroMXcR
-	TvxbyE4+kB4R6p89+wtDs0fs+KPF2yE+3FDw==
-X-Received: by 2002:a17:903:4b46:b0:2c0:c625:400d with SMTP id d9443c01a7336-2c1e8979bedmr117765615ad.37.1780819889340;
-        Sun, 07 Jun 2026 01:11:29 -0700 (PDT)
+        bh=JXyTBTDSB4kJ/NqnyBvVuRSbwI4TemATINDoQruBQBs=;
+        b=TnkFJPnwCnvZ6iXcWLkEMlXnEZrjgTm3boZrIU9h9nwL+4lnr8P5/4St/ddxBwkHQ+
+         VAj7bcDVqXrzpdIU65uBDkSuEBZn5gQkvJgITTbwqc32vo8ZCnaBjjYxwgWOPamb5/jS
+         6JRVTMqusON7SK1Xy5QWWbmbleHsQpQEoMjesEUY0LVg9inlcyKLfLYGYLUQZza1WXJH
+         AmCqTpy0kCBiC63YGvbELhG56Rr4ZrzsSuP+mpOhwIvUC5WlAI1xPctYOccXlS2p64xJ
+         ZzcJyvF3MJDxNGM63jRrnqnnvvYH2Az1mJvtnJIpS35C9HvXmE5AuFAx/1ZmGbwaR4+X
+         X5aA==
+X-Forwarded-Encrypted: i=1; AFNElJ8NeolRuJphE72G+DeiBYffpAhISXJTBuvPdSm2pzg79Vxb8o7HpDqDMa9ymcM5htH5MOtbJEND3P1C/ZiCtwc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxfs4/XrGwEKbiwEXl2QhKP9aI0VnhlgnLBUPYZ40OU4YExEeOl
+	SqB7k8/yIf80JAq2yE1m/Nw08hzwWaYwZXm0y1vh1osBPYB147CkaRR8
+X-Gm-Gg: Acq92OH8nKD7v3SmNV5KvaVaABYX3a1Mr30iVdROKHPwoDIGg7iAcnEnoly5qM3uZqG
+	ycbczNZ0UiVsDRhEPkqYNDkX7XiW+97rLUZyu+xFvj9HwnwJj+5iWegSTylu3+t4zq3JX8Is6UZ
+	AC6nyJShSWY3/97dcDWldcmvXiua0ehn94NJvyjKAfaKg2D6BKafiPH/5XBC3dycNS6wXzglDoO
+	oVKsxJmNgRmERIwywQLWYme4LwzTCONmypX07V4vylQ51sCYkQ62EomKJPhhucEkaE0AXUzyT9v
+	y0+IGTXmsI0Fdq2ekyueWgKq22WebAoDr6PzXh8zG/gR9sixj2EQuqibmXPZ3b4jCT7qtcgNpje
+	3eiJcFVPsXCcZu/dTzGU40KFpz51G39iPdYXiZW+Qm39nvrSpMUxiXXmnUiPIkFYY+4/84GOWlC
+	lPsOy73mJQcTejqyq7BAVLE6/Bf7VknpI9cQ==
+X-Received: by 2002:a17:90b:6c3:b0:36d:b9c5:e8f6 with SMTP id 98e67ed59e1d1-370f0481909mr12811244a91.19.1780819884574;
+        Sun, 07 Jun 2026 01:11:24 -0700 (PDT)
 Received: from localhost ([2001:19f0:8000:3e6e:5400:6ff:fe38:3d01])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164fa3a5fsm152139445ad.36.2026.06.07.01.11.28
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-842828821ddsm14362164b3a.35.2026.06.07.01.11.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2026 01:11:29 -0700 (PDT)
+        Sun, 07 Jun 2026 01:11:24 -0700 (PDT)
 From: Inochi Amaoto <inochiama@gmail.com>
 To: Paul Walmsley <pjw@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -80,9 +80,9 @@ Cc: linux-riscv@lists.infradead.org,
 	Yixun Lan <dlan@gentoo.org>,
 	Longbin Li <looong.bin@gmail.com>,
 	Quan Zhou <zhouquan@iscas.ac.cn>
-Subject: [PATCH v3 5/8] RISC-V: KVM: Handle software-check exits for VCPU
-Date: Sun,  7 Jun 2026 16:11:01 +0800
-Message-ID: <20260607081105.993908-6-inochiama@gmail.com>
+Subject: [PATCH v3 3/8] RISC-V: KVM: Allow Zicfiss/Zicfilp extensions for Guest/VM
+Date: Sun,  7 Jun 2026 16:10:59 +0800
+Message-ID: <20260607081105.993908-4-inochiama@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260607081105.993908-1-inochiama@gmail.com>
 References: <20260607081105.993908-1-inochiama@gmail.com>
@@ -94,47 +94,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The extension Zicfiss/Zicfilp introduces a software-check exception
-to the privilege architecture. Delegate this exception to VS mode
-when vCPU enable Zicfiss/Zicfilp so the CFI violations in VU/VS could
-be reported.
+Extend the KVM ISA extension array to allow KVM userspace to
+detect and enable Zicfiss/Zicfilp extensions for Guest/VM.
 
 Assisted-by: YuanSheng:claude-4.7-opus
 Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
 Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
 Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
 ---
- arch/riscv/include/asm/csr.h | 1 +
- arch/riscv/kvm/vcpu_exit.c   | 4 ++++
- 2 files changed, 5 insertions(+)
+ arch/riscv/include/uapi/asm/kvm.h | 2 ++
+ arch/riscv/kvm/isa.c              | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-index 31b8988f4488..224af9facf1f 100644
---- a/arch/riscv/include/asm/csr.h
-+++ b/arch/riscv/include/asm/csr.h
-@@ -117,6 +117,7 @@
- #define EXC_INST_PAGE_FAULT	12
- #define EXC_LOAD_PAGE_FAULT	13
- #define EXC_STORE_PAGE_FAULT	15
-+#define EXC_SOFTWARE_CHECK		18
- #define EXC_INST_GUEST_PAGE_FAULT	20
- #define EXC_LOAD_GUEST_PAGE_FAULT	21
- #define EXC_VIRTUAL_INST_FAULT		22
-diff --git a/arch/riscv/kvm/vcpu_exit.c b/arch/riscv/kvm/vcpu_exit.c
-index 0bb0c51e3c89..12eebeabdf14 100644
---- a/arch/riscv/kvm/vcpu_exit.c
-+++ b/arch/riscv/kvm/vcpu_exit.c
-@@ -243,6 +243,10 @@ int kvm_riscv_vcpu_exit(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 		run->exit_reason = KVM_EXIT_DEBUG;
- 		ret = 0;
- 		break;
-+	case EXC_SOFTWARE_CHECK:
-+		if (vcpu->arch.cfg.henvcfg & (ENVCFG_LPE | ENVCFG_SSE))
-+			ret = vcpu_redirect(vcpu, trap);
-+		break;
- 	default:
- 		break;
- 	}
+diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
+index 7bbea8812d92..a27de850fa4c 100644
+--- a/arch/riscv/include/uapi/asm/kvm.h
++++ b/arch/riscv/include/uapi/asm/kvm.h
+@@ -199,6 +199,8 @@ enum KVM_RISCV_ISA_EXT_ID {
+ 	KVM_RISCV_ISA_EXT_ZCLSD,
+ 	KVM_RISCV_ISA_EXT_ZILSD,
+ 	KVM_RISCV_ISA_EXT_ZALASR,
++	KVM_RISCV_ISA_EXT_ZICFILP,
++	KVM_RISCV_ISA_EXT_ZICFISS,
+ 	KVM_RISCV_ISA_EXT_MAX,
+ };
+ 
+diff --git a/arch/riscv/kvm/isa.c b/arch/riscv/kvm/isa.c
+index 1132d909cc25..9852a91fdecc 100644
+--- a/arch/riscv/kvm/isa.c
++++ b/arch/riscv/kvm/isa.c
+@@ -65,6 +65,8 @@ static const unsigned long kvm_isa_ext_arr[] = {
+ 	KVM_ISA_EXT_ARR(ZICBOP),
+ 	KVM_ISA_EXT_ARR(ZICBOZ),
+ 	KVM_ISA_EXT_ARR(ZICCRSE),
++	KVM_ISA_EXT_ARR(ZICFILP),
++	KVM_ISA_EXT_ARR(ZICFISS),
+ 	KVM_ISA_EXT_ARR(ZICNTR),
+ 	KVM_ISA_EXT_ARR(ZICOND),
+ 	KVM_ISA_EXT_ARR(ZICSR),
 -- 
 2.54.0
 
