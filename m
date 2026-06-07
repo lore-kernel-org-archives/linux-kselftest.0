@@ -1,59 +1,86 @@
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7AC12F8E88;
-	Sun,  7 Jun 2026 07:30:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6BE25B663
+	for <linux-kselftest@vger.kernel.org>; Sun,  7 Jun 2026 08:11:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780817409; cv=none; b=eR00Uxn09OZaBI6Lef9iQgdA5tT3cDI16R6wz/IbZxxjD7JY4ZpDl+2VboZPYOvxvh4kD3JiTuYXZMfJDo2CYMLYvZTLajE3XRGnH/pBTSB07OI4nnaKkvmlYhe6zh2L1FQzs4qUns2YcplHp5CIhr/azHWRy9H+VAeuf7u7CVk=
+	t=1780819880; cv=none; b=faRxd3eH2tdEjpCvZkTrt0P9RQwEeEOW2PshX8MRrErjO3YOrEJ1a/rdaKXb2jUeVET+M3I6FslapEz4ctZA2uNzQEciUuwOgsu8XH+WI4T6shOSlTF34ABD5xH28b/0PhDK18IJ84T5Pyo2TAXPypHCMSsMRdhzTxPrDS9lSoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780817409; c=relaxed/simple;
-	bh=EJS7A/wEAmBTsJQ6NcrhhgNvyUPkBirlnep1mxNluuU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nYyxjUfBw1xRwBcwavkbp+664OtKQBmcqtZ4k9IY5o71LiYySm8EOHDyj4R71SFlK5Y5+o2ptFIGt7n40i4fmalcBX0breF3AOV/7ULxY8lRQ+MfIDjUmR35OE+ckV1cflvWIxSUIgI3Uua6aaY8Rwv8NzY5fOEfOqy4+son6wA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=O+Pr5+tE; arc=none smtp.client-ip=185.125.188.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1780819880; c=relaxed/simple;
+	bh=mNSSHCC+VNLg5dfwXNVIWWtEdjjLYD1hruSKZs7mCA8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nyMwiBJhafjGLi7ogCZ3YL/S5YUptKCFV40rDVFoOv5CZBpshMeK4H24Kdv+yaNMkBqIcoWmPuk4I9f00ypClXy++E5yJGR+D7ARBVI2bGtFc337LF8tCba2esaZ1ZH2sFlV9mUibIT14i/8KQPqlNzrxiUJ7gf1XGD02RcYyew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PTAIsMni; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="O+Pr5+tE"
-Received: from hwang4-g16.. (unknown [120.244.199.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id BFA0D42049;
-	Sun,  7 Jun 2026 07:24:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1780817081;
-	bh=2FQxyjFfMjGMU2Su/NTyLwgvdlIjIUbAZkH2HU6daJI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version;
-	b=O+Pr5+tEzURexoklTb6DT1ypm/jxJdItKVAGwChozCPjrs2UzqXy4kNY96X3JLD0w
-	 9PGDNlHqQFPjzAd6O5HzpYoPV0wQwmwUo0Gq8cGW7BeQR6AKndMg4MxoFFpTrIw9KR
-	 yR0qkDvm1J0OFpaKl6aavi3IO+hK4foenUUMLkMIkUGLac15+W6hktUu54cZ+Gbj7B
-	 AZonphXryYJPBrjmDfFR2aUadQseY9R/eJV9pDRaXrOEjgYXqrma63To8mBiVesV3p
-	 5xVBfPIlObC6gqZkekdCZu5yzHape1KMuHG0dN1clVbzOdZ4VMp/zw8/YjVoNWhox0
-	 TWFAMKP+w7gr1EktSP9yHKlY7bx+bZLHDVFGQlaY0sSrmLXnxtnT/qGDVJ/U+BVw3S
-	 bUk5T68Vai/LsqWl3wgS7vboadiUbuKnjiv1umaucxlIp7LlpeTWio5Hc2Nua4zwHZ
-	 M8nz3a/KWIOBFkPw4mb2ekufdRn/ucClUCd1pNyXqRDQJmALeG8kuZoGnQpuBqlPPh
-	 eeArDZeL1eSt9xiDPhFMLHhXX3UCVbrowiYKzmSKYAcvj4lR3paSRGeSECfQNc+h5a
-	 leTgE+EptypLF0IYM38CpOIf6xMOhRxDxvig/L04lGciYdCLtAg2zMMSY60AEvQCK3
-	 ouzs0aTIuNTPJ7nulSlhGPkc=
-From: Hui Wang <hui.wang@canonical.com>
-To: rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	pjw@kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	shuah@kernel.org,
-	wangfushuai@baidu.com,
-	linux-kselftest@vger.kernel.org
-Cc: hui.wang@canonical.com
-Subject: [PATCH 1/2] ring-buffer: Fix event length with forced 8-byte alignment
-Date: Sun,  7 Jun 2026 15:24:30 +0800
-Message-ID: <20260607072431.125633-2-hui.wang@canonical.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260607072431.125633-1-hui.wang@canonical.com>
-References: <20260607072431.125633-1-hui.wang@canonical.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PTAIsMni"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2bf237e1433so38254935ad.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 07 Jun 2026 01:11:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780819877; x=1781424677; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EX0GhOhaSuN6IFI88OLaSPa41+0yBYDClmtrszme7Pc=;
+        b=PTAIsMni3Wl+/U1ETXRZIEdCvMd1CSYF6FW+NcTQWrXn2Jyak6PX0oM6jhdIWP0jp/
+         O/NxLWvSskBUj+2cEk2WcvfDVC5Jy7OnTrLNy27ClMkhPqHHHtHWe50ER/eb62kK4con
+         kaf1yW5E6QXl9jS4Hd09yAkorA7OwEiQUr1h4QbK3yfVPHb0vGe5kwnZ7yc3ICRojSV2
+         EJeCRL03t3SnEcIUWc0LPClg8BulLyRMO6TwfNg7z5z8e3+oHPi5KgKyu4rynisS/UIL
+         J4k/kZYrQ75WSbMbu6Mw1LQYUwNYyCvnytmKsEEZYcaIVM9Klfgp6HFVtfZVfTWehusJ
+         BiAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780819877; x=1781424677;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EX0GhOhaSuN6IFI88OLaSPa41+0yBYDClmtrszme7Pc=;
+        b=b+VYYGz8V9YhYmEvJzjs40jc5ccYt81BDr/qSbU+rBR+d85uRRO7Ic58lwTRtOskH0
+         xLu985zSIENg/cJZu84naubCPB9Tnbg4PSQ8bcK0UsvqsBhAn4ejgi9gGIyvlYhM3oP/
+         imHAgeCV/ljNdSs7bA27Z2LZObZUKGDAs0K+yAIPO34qvmGCA0dRH6dd8cok4bQ+o/6e
+         pVJDCxt1ukWH4beGqyL8XgFOt+VsMDMOssNXG6wxolrks/ylLeroahUr+JoY96jpuAG3
+         kQZAaG0PHTGTA9AwMkxVWbsk6CNDAzmMNKKeVqORbzn0bRAU63gyxL64WXHMQ5KQROkQ
+         mlAA==
+X-Forwarded-Encrypted: i=1; AFNElJ/fH0QgwVXY968Vj2Uttv8ixs1J57L1C1E3/842FmiulgwAcgl4dFj74m2Ms6UigQ72laGq92pkphvFW34GwGg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9ocN/He34K++iznO+jrQCP2Jz9YvaDB4NsowHrIsXT3GU2+nY
+	CjP4TvFI5/jAOKIs4zPUwiw3Bd+PPMaJYp5Dppw8pLmferr+vphlBL4pbxTmo5xL
+X-Gm-Gg: Acq92OEIsRcWT1khVMRFu9aqasroGuDR2H4M3MH+PGBwl8yJ01/mes2fQlbzZ+gKSya
+	RHQOLuK46R+rmbkfbfMtzmnoserlujPR0kk9RwrTfnOMKtS8b840UhrJ93VQJ6ndUR265fCQ4Zn
+	Ry9w4gIvWtNZf8DPkw951+d4AHQ5xDO2Zs5TP2f9H1b/MeBOq/w1aYQIVhmGd6nr8o0LXEEbTxl
+	h0SPbRwYESL3Hgj9ZpKoREv826O/RonOaGtVT7eGZqLX6UD0NEJhChSz+j8p1Ackpat+asIQvZs
+	oPP4Cg6SMc1J5mlQGni9F6/rYhD2OZpyks9m4h4urdFBsS8xqdcQ4PfI+VlNwLYC9iSBo2me70F
+	X7irA7YBRhPWT46yGtlJc80suO6Qf2RHrZ4eRZi6lpRgFI7nMvVPwrUTrE+J3UXeYrySfnMMqg3
+	TPKjNSHlzn/88vz9qB03whn3rmOde77qfLCg==
+X-Received: by 2002:a17:903:1252:b0:2bd:eeb6:ff28 with SMTP id d9443c01a7336-2c1e820dae7mr117272165ad.12.1780819877063;
+        Sun, 07 Jun 2026 01:11:17 -0700 (PDT)
+Received: from localhost ([2001:19f0:8000:3e6e:5400:6ff:fe38:3d01])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f6d211sm146385915ad.3.2026.06.07.01.11.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Jun 2026 01:11:16 -0700 (PDT)
+From: Inochi Amaoto <inochiama@gmail.com>
+To: Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Thomas Huth <thuth@redhat.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Sergey Matyukevich <geomatsi@gmail.com>
+Cc: linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	Yixun Lan <dlan@gentoo.org>,
+	Longbin Li <looong.bin@gmail.com>
+Subject: [PATCH v3 0/8] RISC-V: KVM: Add Svadu/Zicfiss/Zicfilp FWFT support
+Date: Sun,  7 Jun 2026 16:10:56 +0800
+Message-ID: <20260607081105.993908-1-inochiama@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,57 +89,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When RB_FORCE_8BYTE_ALIGNMENT is true, rb_calculate_event_length()
-reserves the space of event->array[0] for placing the data length and
-rb_update_event() stores the data length in event->array[0]
-accordingly. As a result the whole event length will add extra 4 bytes
-for sizeof(event.array[0]) unconditionally.
+This patchset based on the patchset "RISC-V: KVM: Add Zicfiss/Zicfilp
+support".
 
-But ring_buffer_event_length() only subtracts the
-sizeof(event->array[0]) for events larger than RB_MAX_SMALL_DATA +
-sizeof(event->array[0]). As a result, small events on architectures
-with RB_FORCE_8BYTE_ALIGNMENT=true report a data length that is 4
-bytes larger than expected.
+The patch includes all the function of original patchset from Quan:
+adding the Svadu/Zicfiss/Zicfilp FWFT for the RISC-V KVM. And this
+patchset already passes the KVM unit test.
 
-To fix it, add the RB_FORCE_8BYTE_ALIGNMENT as a condition to subtract
-the size of that length field whenever RB_FORCE_8BYTE_ALIGNMENT is
-true.
+Follow the patchset (Which is queued for v7.2)
+https://lore.kernel.org/kvm/20260601-kvm-get_reg_list-v2-v5-0-415d08a2813b@sifive.com/
 
-This issue is observed in a riscv64 kernel with
-CONFIG_HAVE_64BIT_ALIGNED_ACCESS set to y, when we run ftrace selftest
-trace_marker_raw.tc, we get the weird log: for cases where the id is
-1..100, the number of data field is 8*N, but once id exceeds 100, the
-number of data field becomes 8*N+4:
- # 1 buf: 58 00 00 00 80 5e d1 63 (number of data field is 8*1)
- ...
- # a buf: 58 ...                  (number of data field is 8*2)
- ...
- # 64 buf: 58 ...                 (number of data field is 8*13)
- # 65 buf: 58 ...                 (number of data field is 8*13+4)
+Test with the patch applied
+https://lore.kernel.org/all/20260522142358.87589-1-cuiyunhui@bytedance.com
 
-After applying this change, the number of data field keeps being 8*N+4
-consistently.
+Changed from v2:
+- https://lore.kernel.org/kvm/20260601084336.2601675-1-inochiama@gmail.com/
+1. rebase with Yong-Xuan's patch set
+2. Add SSP CSR context switch/set/get
+3. Move the software-check exception set/unset into FWFT
+4. Only delegate software-check exception when Zicfiss/Zicfilp is enabled.
+5. Make KVM SBI_FWFT_PTE_AD_HW_UPDATING depends on both Svadu and Svade
+   enabled.
 
-Fixes: 2271048d1b3b ("ring-buffer: Do 8 byte alignment for 64 bit that can not handle 4 byte align")
-Signed-off-by: Hui Wang <hui.wang@canonical.com>
----
- kernel/trace/ring_buffer.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Changed from Quan's v1:
+- https://lore.kernel.org/kvm/cover.1764509485.git.zhouquan@iscas.ac.cn/
+1. rebase to the latest master.
+2. Split Svadu change as separate patch
+3. Fix all build error from the original series
+4. Remove the Svadu check in kvm_riscv_vcpu_config_ran_once() and in
+   favor of the FWFT.
+5. Remove the LPE/SSE setting bit in kvm_riscv_vcpu_config_ran_once()
+   (kvm_riscv_vcpu_setup_config() in original patchset)
 
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 56a328e94395..d9af2bbaf9c0 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -270,7 +270,8 @@ unsigned ring_buffer_event_length(struct ring_buffer_event *event)
- 	if (event->type_len > RINGBUF_TYPE_DATA_TYPE_LEN_MAX)
- 		return length;
- 	length -= RB_EVNT_HDR_SIZE;
--	if (length > RB_MAX_SMALL_DATA + sizeof(event->array[0]))
-+	if (length > RB_MAX_SMALL_DATA + sizeof(event->array[0]) ||
-+	    RB_FORCE_8BYTE_ALIGNMENT)
-                 length -= sizeof(event->array[0]);
- 	return length;
- }
--- 
-2.43.0
+Inochi Amaoto (8):
+  RISC-V: KVM: Add support for Svadu FWFT features
+  KVM: riscv: selftests: add Svadu FWFT extension to get-reg-list test
+  RISC-V: KVM: Allow Zicfiss/Zicfilp extensions for Guest/VM
+  RISC-V: KVM: Add ssp context save/restore
+  RISC-V: KVM: Handle software-check exits for VCPU
+  RISC-V: KVM: Delegate SPELP bit to VS/VU mode if landing pad is
+    enabled.
+  RISC-V: KVM: Add support for control-flow integrity FWFT features
+  KVM: riscv: selftests: add Zicfiss/Zicfilp extension to get-reg-list
+    test
+
+ arch/riscv/include/asm/csr.h                  |   1 +
+ arch/riscv/include/asm/kvm_host.h             |   7 +
+ arch/riscv/include/uapi/asm/kvm.h             |  13 ++
+ arch/riscv/kvm/isa.c                          |   2 +
+ arch/riscv/kvm/vcpu.c                         |   6 +
+ arch/riscv/kvm/vcpu_exit.c                    |  10 +
+ arch/riscv/kvm/vcpu_onereg.c                  |  66 ++++++-
+ arch/riscv/kvm/vcpu_sbi_fwft.c                | 182 ++++++++++++++++++
+ .../selftests/kvm/riscv/get-reg-list.c        |  88 +++++++++
+ 9 files changed, 373 insertions(+), 2 deletions(-)
+
+--
+2.54.0
 
