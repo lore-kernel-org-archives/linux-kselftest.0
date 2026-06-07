@@ -1,154 +1,251 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2873A963A;
-	Sun,  7 Jun 2026 13:24:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0576B30C170
+	for <linux-kselftest@vger.kernel.org>; Sun,  7 Jun 2026 13:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780838691; cv=none; b=qGTCy2RTmd2ECvcublZ2028N02hccgzadGMo9PP84g9f8aatn+UlbpJY1H5Rl+y3xR1gEuuRi9YDzkD1ciTi7c1uWFT1i3GhtT9VmpllrUlUALPKXDaVQ16M0CctPE80k8FHNz/FZLMANmaH7HAynoLqUMSLZc1xETXbUvOy6uA=
+	t=1780839793; cv=none; b=tfqHWTv7rQa1Qn2LZK9DFUhPpvlfYbAIO4jN16aqoHGJN7b4mVGYOtiQbjn1tPEHEkYwBC2OMxPVFQdVsr9yP1yvmH+gF3F/XskcMJHtsBvS0/2XE/tLBxsmXVMeLwMO6r9VQMdl1mxBxjrHC1n+4aoIo1r4ijMTEX4ttKOT5mw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780838691; c=relaxed/simple;
-	bh=yb4BXyAJWMu2fwmiWc5tCIf2WquakStJIyTMMDIBRww=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=U6AZB/fovjVegm4v9T0FxQqZY/4A/6mLS1m+ggOMh/vsOmX6qOYpTcB4RjFz1n76iPXYaTf2EYKmE9d7ba/E7kYCmLQuYZgkxwZaW5wJBk1PR9s4l1VpFq5KVd8Fa5UdHSICfq0oCsYkJRTxIA+3fu7dvYI9uDr3xCvv1R5f7H0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=W40ed+Al; arc=none smtp.client-ip=13.75.44.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1780839793; c=relaxed/simple;
+	bh=Yo2T+crBrnIPw1FsPV22gFWsI07IndQmTQOuDrcH9tk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UjjLhsfD22G7F9bPnYSmGESWNaF7eAAuFG6ivmqOm7byzKLWWj4VFmKTLYkMdl1IzPUE9+3xkdXjFeMqb8/mFjBEe8VeWr1ombuv97XM298veGwikM1v4LokaDFrx46lpry/SkicCcSZFHnfKZj7tNL9TFcvEh2q6Job2NEI35M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=kA/TIw3D; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="W40ed+Al"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="kA/TIw3D"
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-9156ceb55ffso308789785a.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 07 Jun 2026 06:43:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=QHF3niD3FfxGc+79DPsRFE+jwSzDC2N
-	OUwgjGpYau5Y=; b=W40ed+AloZHeF2NxuYw8XO9zyRHEN3zJ+xfjILdZ8vooOGO
-	sVm39e+1wuE0a7lGuNtIzSzGRNSfOUauXxdSgwlJFyqIpXKkJEKGPkjBoisKBM5u
-	Ahysjmmdim8HQvXabgiS3dT2YoW3YYdpTXGRuLeyOTXAOAghTI0Zpw1sy0+o=
-Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web4 (Coremail) with SMTP id ywQGZQD3CJ4KcSVqdwgUAg--.41669S3;
-	Sun, 07 Jun 2026 21:24:28 +0800 (CST)
-From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Sun, 07 Jun 2026 21:24:13 +0800
-Subject: [PATCH bpf v2 1/2] bpf: Keep dynamic inner array lookups nullable
+        d=soleen.com; s=google; t=1780839791; x=1781444591; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1i1ZZY3NH0NksSKwhex65P8mcwZtC9iSbou0/cGuXtQ=;
+        b=kA/TIw3DaMXpzDIQc9rYbQ+Vf+PjPP+aOOMzFq4hkbokjma2MkYufzDNpq6XDAtFeM
+         eU6Z2kVP5gbBRu7cqrXDmdcSQWt50DrGM1MSC36XQz05KtlQJxHC2sMsViHVxlCsYLj/
+         m4kGhQRWoDXxw96N1pVDhuqb106ftMMfk1Da/5G5PVBtgeRaKOEhvR91+ISu/TRPhtnT
+         EQSXBrJLVN1li53BXyr9CpnZ5AowmfuAbaEuuFsKPEanKsvUDGOgjbwcHgF8phRlDen/
+         rhIm8ytCLNkEQkESYGIiNSE0VHf55o3eUROQTxnQJyHs6BUyK6O3fYZ6ky1t73hCnqkC
+         j21Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780839791; x=1781444591;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1i1ZZY3NH0NksSKwhex65P8mcwZtC9iSbou0/cGuXtQ=;
+        b=mRy8PLNVP35CuIDX8pUjrwc2HdAOsfaRw5jkFYVTrHT7lXmqWjiuNlMX1ivBj/4MaH
+         01k/UgXtjsnld8+iV3YaYkWJXS+k9QmX5yzoyluOA1weryPEa/IjU4FsPoHiLMxUqSK+
+         FLQOPZMN595G+HIiEFaI8ZV1uA+kZdNlwPPE5Xpbq+gRXMewW01GXqZA7FryUaAUKhbI
+         kBx1+TOeD/6EypYLUqVylK7iGSrnwnlAZmVcR/mmlRhucTWl4s1qLd64IMZNVP6zANGO
+         XSpHC9X6xn/I3yBRVjnAGqD3+wHjsOmxymR+51tZcYk9qog9Pr8/bk5ASwoZju2iaQ42
+         riPA==
+X-Forwarded-Encrypted: i=1; AFNElJ/LxHi4W97WXex/O2Ax94MxvdoQ1gt0ZFy+sAAvb+WyTtrU5Y2l7JSemU3yHP1475fChhfw178PM8veSjWw3sc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy29ZGTrk6k9fy7UXzJsngsUN3G9ZAIDn+/gkI9p0/vjYvgnk7g
+	3ekRVRnguB6UdYngrUJ0RGOCo4A+kZ7+y6HTH9rJ0cZbe5TGjGRcfjFC9C6efhuNJWg=
+X-Gm-Gg: Acq92OHCqamjNEi2BH7jSZ1j1tENoJIGiv7kOt7xnjFk5dlp6sJUTYQmsqM/HwMX3d8
+	XEsdFf56nIB73KTPLCZDEV2Zo0TwblfsxdBekXgb9ZToPkESaGysCuwPhAIvFYLP9k/7f4HwwZ6
+	a/kAADQthrrClUvyJm8YaudlvAAMxz6GqSVQMB67B8/LnZj85ZVyjVCM+MX4JgInDFO0Xu7V6Df
+	01Qs+r88dcYky+ztHzCc4aSbU7hWBb+7gaJCX6a1kSX4JX/zqfatfVMGVEiIuhBNUY/38idOSkc
+	Ym4aqosScTX7OPtwNiomPR1WmRZpmT/9PuONu6FsxbiSbC3tF7jGsiJVfU4x6ZG9gIiSv6R04d0
+	y/K5ZzHGr3iklIMyCr2uhdBjI9CE3gCgMZ7v3wq5yRpwEJl/IfHfObUEEo53s1MqNjjwtKdNQz3
+	1iWtciXQ/1g3/vfI2D3Axp9P2CvyfQI91QvgscsKq5BngYXkKrHDEyWBR6K4ztSQ==
+X-Received: by 2002:a05:620a:2990:b0:915:6e30:5bdf with SMTP id af79cd13be357-915a9cad06cmr1888383385a.19.1780839790896;
+        Sun, 07 Jun 2026 06:43:10 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9158a40d566sm1415396285a.47.2026.06.07.06.43.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Jun 2026 06:43:10 -0700 (PDT)
+Date: Sun, 7 Jun 2026 13:43:09 +0000
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	linux-kselftest@vger.kernel.org, shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org, 
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, jasonmiu@google.com, 
+	linux-kernel@vger.kernel.org, corbet@lwn.net, ran.xiaokai@zte.com.cn, 
+	kexec@lists.infradead.org, pratyush@kernel.org, graf@amazon.com
+Subject: Re: [RFC v1 0/9] kho: granular compatibility and header decoupling
+Message-ID: <aiVp5RlbWRz5VnPB@plex>
+References: <20260605033235.717351-1-pasha.tatashin@soleen.com>
+ <178083348872.1648214.17778188633648887952.b4-review@b4>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260607-f01-v2-v2-1-da48453146e8@mails.tsinghua.edu.cn>
-References: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
-In-Reply-To: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, Daniel Xu <dxu@dxuuu.xyz>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Ihor Solodrai <isolodrai@meta.com>, 
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780838667; l=3023;
- i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=yb4BXyAJWMu2fwmiWc5tCIf2WquakStJIyTMMDIBRww=;
- b=dukIfljGe8oRuXtRTPDvpC9w1le66lZ1mr4SC+1ZPlaQJQOkz4Qrp30r1x1st2Wpe13QvQPHy
- uxSQ0N/G7vpAztWpITJdwz0o3q2nDRmFypE9FB6EZkUSTkj8ohqjgkv
-X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
- pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:ywQGZQD3CJ4KcSVqdwgUAg--.41669S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxCr47Ary3CF17WF4fWF1UGFg_yoW5Cr1UpF
-	4xGF97Jr1kAa1Yq342ya47AF1Yka47t342kr1rG3yFyrn8WF1DXFWUG3W2va43AFW8Cw4S
-	vr4Ivr9Ykay5JFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBS1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
-	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUXVWUAwAac4AC62xK8xCEY4
-	vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-	7VCjz48v1sIEY20_GrWkJr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
-	1lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxkIecxEwVAFwVW5GwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6c
-	x26r4rKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-	0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMI
-	IF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
-	0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-	Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUY1v3UUUUU
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgELA2oknpuRgQAAsQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <178083348872.1648214.17778188633648887952.b4-review@b4>
 
-An ARRAY_OF_MAPS can use an array created with BPF_F_INNER_MAP as its
-inner map template. A concrete inner array with a different max_entries
-value can then replace the template.
+On 06-07 14:58, Mike Rapoport wrote:
+> On Fri, 05 Jun 2026 03:32:26 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
+> 
+> Hi,
+> 
+> > [...]
+> > data structure. Keeping all of this within the same `kexec_handover.c`
+> > file, and also under the same global version, is no longer sustainable.
+> > 
+> > To address this, this series:
+> > 1. Refactors and reorganizes the code by splitting out radix tree
+> >    and vmalloc into separate files.
+> 
+> I'd keep vmalloc where it is, it's more of a memory preservation primitive
+> rather than a data structure of it's own. The data structure it uses is an
+> implementation detail.
 
-After a successful outer map lookup, the verifier represents the
-resulting map pointer using the inner map template. Const-key lookup
-nullness elision consequently uses the template max_entries even though
-the runtime helper uses the concrete inner map max_entries.
+kho vmalloc is absolutely a data structure. KHO core only provides the
+basic handover mechanism (FDT nodes, physical memory ranges). vmalloc
+is a structured representation on top of KHO, and should provide its own
+versioned ABI.
 
-Do not elide lookup result nullness for maps marked with BPF_F_INNER_MAP,
-because the template max_entries does not prove that the key is in bounds
-for the concrete runtime map.
+If we change any of the vmalloc serialized structures (like kho_vmalloc,
+kho_vmalloc_chunk, or kho_vmalloc_hdr), then vmalloc won't work and
+compatibility will break.
 
-Fixes: d2102f2f5d75 ("bpf: verifier: Support eliding map lookup nullness")
-Cc: stable@vger.kernel.org
-Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
----
- kernel/bpf/verifier.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+Core KHO does not need vmalloc; nothing in kexec_handover.c uses it.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7fb88e1cd7c4d..ff9b1f68ceca4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -8471,7 +8471,7 @@ static int get_constant_map_key(struct bpf_verifier_env *env,
- 	return 0;
- }
- 
--static bool can_elide_value_nullness(enum bpf_map_type type);
-+static bool can_elide_value_nullness(const struct bpf_map *map);
- 
- static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 			  struct bpf_call_arg_meta *meta,
-@@ -8621,7 +8621,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		err = check_helper_mem_access(env, regno, key_size, BPF_READ, false, NULL);
- 		if (err)
- 			return err;
--		if (can_elide_value_nullness(meta->map.ptr->map_type)) {
-+		if (can_elide_value_nullness(meta->map.ptr)) {
- 			err = get_constant_map_key(env, reg, key_size, &meta->const_map_key);
- 			if (err < 0) {
- 				meta->const_map_key = -1;
-@@ -10221,13 +10221,16 @@ static void update_loop_inline_state(struct bpf_verifier_env *env, u32 subprogno
- 				 state->callback_subprogno == subprogno);
- }
- 
--/* Returns whether or not the given map type can potentially elide
-+/* Returns whether or not the given map can potentially elide
-  * lookup return value nullness check. This is possible if the key
-  * is statically known.
-  */
--static bool can_elide_value_nullness(enum bpf_map_type type)
-+static bool can_elide_value_nullness(const struct bpf_map *map)
- {
--	switch (type) {
-+	if (map->map_flags & BPF_F_INNER_MAP)
-+		return false;
-+
-+	switch (map->map_type) {
- 	case BPF_MAP_TYPE_ARRAY:
- 	case BPF_MAP_TYPE_PERCPU_ARRAY:
- 		return true;
-@@ -10589,7 +10592,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		}
- 
- 		if (func_id == BPF_FUNC_map_lookup_elem &&
--		    can_elide_value_nullness(meta.map.ptr->map_type) &&
-+		    can_elide_value_nullness(meta.map.ptr) &&
- 		    meta.const_map_key >= 0 &&
- 		    meta.const_map_key < meta.map.ptr->max_entries)
- 			ret_flag &= ~PTR_MAYBE_NULL;
+Instead, vmalloc has external customers:
+- memfd (uses it to preserve serialized folio metadata)
+- KHO test suite in lib/test_kho.c (uses it to preserve physical address arrays)
 
--- 
-2.34.1
+> Let's minimize the churn where possible for the sake of git blame and
+> backports.
 
+It is much better to do the right cleanups now while KHO is young. Once more
+subsystems are added, this refactoring will be twice as hard. Modularizing the
+code now guarantees a simpler, safer, and scalable design. Placing each data
+structure in its own file gives us code that is easier to maintain, review, and
+less prone to bugs.
+
+> > 2. Moves and organizes internal and ABI headers into structured
+> >    directories under include/linux/kho/ and include/linux/kho/abi/.
+> >    Instead of cluttering include/linux/ with prefix-styled headers like
+> >    kho_block.h or kho_radix_tree.h, we use the already existing
+> >    include/linux/kho/ directory (e.g., kho/block.h and
+> >    kho/radix_tree.h).
+> 
+> This looks to me like unnecessary churn.
+> These all are bundled with KHO anyway, there is no header dependencies
+> that justify small headers for each two functions and netiher
+> linux/kexec_handover.h nor linux/kho/abi/kexec_handover.h are that long
+> to start splitting them.
+
+External users only need to include the headers they actually use. For
+example, LUO shouldn't have to pull vmalloc or radix tree KHO
+declarations, and memfd does not need block.
+
+From a maintenance point of view, it is much easier to catch ABI
+changes when the file with the appropriate version has been changed,
+and most likely the version of that file should be updated. If a single
+header contains compatibility versions for several different data
+structures, it is easier to miss the correct version update.
+
+Since we are splitting the source files (like kho_radix.c and
+kho_vmalloc.c), the headers should logically follow the same
+modularity.
+
+> 
+> > 3. Introduces a standard set of compatibility helpers in
+> >    kho/abi/compat.h.
+> > 4. Decouples the compatibility strings of individual KHO subsystems
+> >    (radix tree, vmalloc, and block) from the global KHO version.
+> >    This enables independent, granular compatibility versioning.
+> 
+> I agree that we should decouple versioning of these components from the
+> global KHO versioning.
+> Can't say I agree with the way you propose to do it.
+> 
+> I don't like that each user of a KHO component should include that
+> component version in its own version string (or whatever it may become
+> later).
+> 
+> It requires ABI headers update each time a user decides to add a new
+> data structure and worse when there is a change to that data structure.
+> It creates coupling of the data structure user with its particular
+> version and just looks ugly IMHO.
+
+It is actually the opposite.
+
+If a user adds a new data structure, that new data structure will have
+its own compatibility version. Instead of the current approach where
+the global version string needs to be updated, only the new version
+string would be added.
+
+Also, if someone updates their code to use the new data structure, their
+compatibility string is going to be updated anyway, as part of using
+the data structure requires including the dependency in their
+compatibility.
+
+
+> Suppose we added new fields to vmalloc, but made the implementation of
+> restore to be able to cope with both old and new versions. 
+> How this would be reflected in memfd versioning?
+> We'll add both versions of vmalloc to memfd version? And all other vmalloc
+> users?
+
+Backward compatibility is not in scope at the moment, but we can make
+the version parsing more granular in the future.
+
+Instead of a simple strncmp(), we can introduce a standard callback
+interface for data structures. Each data structure implementation would
+implement this interface, and we would pass the parsed version string
+to the data-structure-specific version check.
+
+> Or, say, we add support to kmalloc() and use it in kho_block.
+> Then we'd have to add kmalloc() versioning to all kho_block users, right?
+
+I was thinking about this. Since we don't have examples of data
+structures depending on each other right now, I simply made sure
+there are no duplicates in the compatibility strings.
+
+If data structures have interdependencies in the future, we can easily
+remove this uniqueness restriction. The users of block will still
+include the block compatibility string (which automatically includes
+kmalloc), and if user also depends on kmalloc, they will include it
+as well.
+
+> I think the versioning of each component should be handled by ->restore()
+> of that component. If it sees an incompatible version in the preserved
+> data, it returns an error. The versions can be stored e.g. in the base KHO
+> fdt.
+
+Hm, I think, checking compatibility inside ->restore() of each component may be
+too late in the boot sequence.
+
+By checking the composite compatibility strings upfront (before invoking
+the actual restore/retrieve callbacks), we can guarantee that the entire
+state configuration is fully compatible. If any mismatch is found, we
+can cleanly abort the live update.
+
+Additionally, keeping the versioning managed via composite strings on the
+serialized data and registered handlers keeps the KHO core completely
+decoupled from individual component ABIs, avoiding the need to bloat the
+base KHO FDT with subsystem-specific versions.
+
+> > 5. Adds a KUnit test suite to verify that the composite compatibility
+> >    strings of different subsystems remain unique and sorted in
+> >    alphabetical order, guaranteeing a consistent and predictable
+> >    representation across configurations.
+> 
+> Without "composite compatibility strings" we don't need to care about
+> them "remaining unique and sorted in alphabetical order".
+
+These are not strict runtime requirements; they are simply there to enforce
+code cleanliness and prevent human errors like accidental duplicates or
+mismatched orders.
+
+Even with a simple strncmp(), it works perfectly fine as long as the
+strings match exactly. If the uniqueness or sorting constraints are too
+strict, they can easily be removed.
+
+In the future, we can transition to a more sophisticated version checker
+that parses the composite string into individual subsystem version tokens
+and verifies them one-by-one, rather than relying on a strict literal
+strcmp() string comparison.
+
+> The need for this test alone is already a red flag ;-)
+
+I will remove test ;-)
