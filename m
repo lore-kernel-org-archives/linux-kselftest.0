@@ -1,164 +1,142 @@
-Received: from mail.common-net.org (mail.common-net.org [139.28.148.254])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9AAF2253EE;
-	Sun,  7 Jun 2026 14:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.28.148.254
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00D62E736D
+	for <linux-kselftest@vger.kernel.org>; Sun,  7 Jun 2026 16:20:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780840885; cv=none; b=ngHJgYSbFk6xBbWE21BgYDf1+FBa/KdwVZP+HjWNE8ZANIOEgO3hBU6h9PauRO4jw1E9wC6rcggzUgjIlInzt6XQk9Zc6OJb1O4Ltpci91DOzaNKRXVRvCSSsZ3CH1xqlYja66tCugqCctmgO9pJYK4ILDR1J9kLwmZytpt1weE=
+	t=1780849255; cv=none; b=q7B8nbkKGYkezeA4Xk70VhAthnrPhXv8NrD1rPB7MATBpnX94xeLiu0IjcZ78GCTH12a4ZfKZ95gA46ZuS/n0GDEo71JKn5f5P8JVfLd3+8XGxAKpZpYCtoXSsjBQSUyXLpAQDmsyyZHniSSv1T3RGAvVeS53WI5t9pwn4D/m68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780840885; c=relaxed/simple;
-	bh=7IIMnHWhVf+twJaSVJxFuCA1jrlaS+iWejGB0SPwmUI=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=sbfHbGKNsLoSUBp7sH+TCcnh0R+DJrKsan8dezDrtLgqr2akSgOTpajAA41b0DFTS25+W93OycPUNQyRbqeoDLegIvqs+bIsBuiz9TaJLrgPWZT6/7/sCrRj4ENiZkeGcwAmh3WcYtUmkGXhzQe8rOyoTbYditZVeXaMe7UqLh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=common-net.org; spf=pass smtp.mailfrom=common-net.org; dkim=pass (1024-bit key) header.d=common-net.org header.i=@common-net.org header.b=t/HU8RzL; arc=none smtp.client-ip=139.28.148.254
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=common-net.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=common-net.org
+	s=arc-20240116; t=1780849255; c=relaxed/simple;
+	bh=PrHdqXHWOtXY5GwqkXOIGw0IR8A7wbHv/1b/5m3/WWU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qzOyHZW1EQpKW1C8i4JLF2+u5E2hygjj0HgWXtWIdnuAAzwQd6MjhOEIpXqJMqeZ76/tUVYZau+8AOMGD+PUfK+8l03ts8Gn1j4rVGtiw7D9yceQg1/1S3itzcF9WvCNH3nDhe5YV3WEGqYkN/1OzdjHbASP7SWOeCNcdhipGes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=ji5gRsrI; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=common-net.org header.i=@common-net.org header.b="t/HU8RzL"
-Received: from lubuntu-18.04 (host-80-116-255-177.pool80116.interbusiness.it [80.116.255.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.common-net.org (Postfix) with ESMTPSA id AE0FA6D20B88;
-	Sun,  7 Jun 2026 16:01:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=common-net.org;
-	s=mail; t=1780840880;
-	bh=7IIMnHWhVf+twJaSVJxFuCA1jrlaS+iWejGB0SPwmUI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=t/HU8RzL4/U+SOIbtwUDTdZ1tq6YpQE+B8fu/n6ihwN5scNcji7geBeqComDRMyI+
-	 kfU0amV1PGzXCJtIFhguAYQNjEo0zr03dOqkwjgKlLrg2454pF3vpWQGohnSuJaFDO
-	 mV/bXt7sgJHOQbsu2XxAZTsFO0PZ/y5iExEvod5M=
-Date: Sun, 7 Jun 2026 16:01:19 +0200
-From: Andrea Mayer <andrea@common-net.org>
-To: Yuya Kusakabe <yuya.kusakabe@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, David Ahern <dsahern@kernel.org>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Justin Iurman <justin.iurman@gmail.com>, Shuah Khan
- <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-doc@vger.kernel.org, stefano.salsano@uniroma2.it, ahabdels@cisco.com,
- Andrea Mayer <andrea.mayer@uniroma2.it>, andrea@common-net.org
-Subject: Re: [PATCH v2 5/7] seg6: add End.M.GTP6.D.Di behavior
-Message-Id: <20260607160119.ed2022e8a358d700e1134318@common-net.org>
-In-Reply-To: <20260505-seg6-mobile-v2-5-9e8022bdfdb6@gmail.com>
-References: <20260505-seg6-mobile-v2-0-9e8022bdfdb6@gmail.com>
-	<20260505-seg6-mobile-v2-5-9e8022bdfdb6@gmail.com>
-Organization: Common Net
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="ji5gRsrI"
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-9158643e538so327083785a.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 07 Jun 2026 09:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1780849253; x=1781454053; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6HrqFsYWh7IgIodQ4s8E7nh3lZZmydvw5nlZkHywms4=;
+        b=ji5gRsrIz5dSEIZLwMqnq5QzoSBPeGS1RI68PcNvlxkfHVEfVbXZIswgNsL0qHmmTx
+         c5j6OovcVkkdv0y22jNjA9kTZzsU0sDMAGB4QQGQnvv7ovvz9f+9mJQ+WW/N+2mt+Mmi
+         yz+3p2zZhg5dLBLb8DGwGDbqBuQZN+a0GGtAvIbRRNXRP+n0MHysNDQc3cfDZ1ukfLXy
+         s1+t0sZbneTCF4Z+WKgh7HDiffYXmq72z9p1ZwQjMk7FDa+EDz2BmJOrPN9kIw2PZR8w
+         49v5Yd1rZgvGXhG9PJ7cYHzR3uTMOIZ/o2R6HEgvfBmy99Zoh2zuH63QApHUFOaaf0Bq
+         Vu3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780849253; x=1781454053;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6HrqFsYWh7IgIodQ4s8E7nh3lZZmydvw5nlZkHywms4=;
+        b=D6FJOef2qadBGFgoG1pEZwp1hDD4ZhOx257oqkpeU7zU6+xaU8Q4aYa8yvoAEYUpXu
+         Qm73W4EJnmhUPc7qECmJPCcoId3gINIcef5hb9dyeN/gdpLsRdsBLoPy+MLLUfT3YYcF
+         u0+nV+OlaJnY0xs/2Hx4lq1gml6rEySpOr7834xYiuhfrP+LB/7GGa5J3BJVXS3vozWT
+         fAbarXzl46m1e8L1LczioNAawdP0wivkfT34Qmz2gzZ2U64i2SzqMsvtwG/MueZ0haqQ
+         Tm2GJo0b9EpHV5pVkkrP+nbtwnbihBrTABnjJdDqFADeq/HPooJGjSk80BwpGsvdScXr
+         Jrzw==
+X-Forwarded-Encrypted: i=1; AFNElJ+2qQwVIE9LV+Z5q8USv+HGiZWmUKnyjfsAErEUGyIuuA/EG5bVPyXeZz1DzJlUUjbx9ZaqZwgb7tFOrKzT1+k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxomAtOjcA41G8Nqnwj5PzxBuNI/YPoCYydznlz8EY8EVNm+ktb
+	EvlhGXsT0613cvCENZ8/DEs9M7gBy8rtS4NP24Fagi82+lmT13PwaDwGeGJFZL/m67I=
+X-Gm-Gg: Acq92OFk8oBMsXedWL0tP6agBvK40fuoegZGZMqCC7GP8RYUjVkaTuooo4QjtueBg6E
+	pVVk7BokaQs098B5wWNUtANAaFn34gq229sT/ZQMdI9DgYDrPVGhUxt5nBxzJoG++7jQWTikrJm
+	AOzUZqgJMkdgdShBZnhIwTTk2Sj4epElYfuzDsY2YtjjW5bSEDB0v0CPr7UdDJchClv8C3OtUUz
+	7TlfjCLHM8vHCod97/+rIyrnq5WqBkKPd7+0h4rhU7VQAVKmrfu+A61ySZAZOPAlxhh8LYd908Z
+	dEGA3xWNZw3rrUdw1mFQRi1IwF5JMl9tpk+KU1X9sk+sza3x/bSdnTXTrh2Qs0dGJ9T4/BzzY6w
+	ZBS9X63qywMW4MaQn0s5Kw/dIj90vAWXZbblJEJ75QmzHMwo7puLPmE1aclCHVk3kJ6y0GHYrx0
+	SDzRx7iT4gIpsZZGne8KYmKEFmEXo5USolLZS5N+p9wrdXAcQCXPgnHu6YLRErNGqY70M3B1B9
+X-Received: by 2002:a05:620a:29d4:b0:915:cda5:2803 with SMTP id af79cd13be357-915cda52c57mr287390585a.56.1780849252787;
+        Sun, 07 Jun 2026 09:20:52 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9158a37cab6sm1456344985a.22.2026.06.07.09.20.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Jun 2026 09:20:51 -0700 (PDT)
+Date: Sun, 7 Jun 2026 16:20:50 +0000
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	linux-kselftest@vger.kernel.org, shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org, 
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, jasonmiu@google.com, 
+	linux-kernel@vger.kernel.org, corbet@lwn.net, ran.xiaokai@zte.com.cn, 
+	kexec@lists.infradead.org, pratyush@kernel.org, graf@amazon.com
+Subject: Re: [RFC v1 1/9] kho: split out radix tree tracker into kho_radix.c
+Message-ID: <aiWYZhoSOAruIIM3@plex>
+References: <20260605033235.717351-1-pasha.tatashin@soleen.com>
+ <20260605033235.717351-2-pasha.tatashin@soleen.com>
+ <178083348873.1648214.11020626647820932506.b4-review@b4>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <178083348873.1648214.11020626647820932506.b4-review@b4>
 
-On Tue, 05 May 2026 01:30:15 +0900
-Yuya Kusakabe <yuya.kusakabe@gmail.com> wrote:
+On 06-07 14:58, Mike Rapoport wrote:
+> On Fri, 05 Jun 2026 03:32:27 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
+> > Move the radix tree tracker implementation from the core KHO code
+> 
+> It's radix tree data structure implementation, kho memory tracker is it's
+> user. Please rephrase to keep the semantics clear.
 
-Hi Yuya,
+Yeap, I will update it.
 
-I do not repeat below the points from the cover letter thread and patch
-1-4 replies (drop reasons, OIF/VRF removal, C helper, coding style, etc.).
+> 
+> >
+> >
+> > diff --git a/kernel/liveupdate/Makefile b/kernel/liveupdate/Makefile
+> > index eec9d3ae07eb..a3ee8a5c27a2 100644
+> > --- a/kernel/liveupdate/Makefile
+> > +++ b/kernel/liveupdate/Makefile
+> > @@ -7,7 +7,11 @@ luo-y :=								\
+> >  		luo_flb.o						\
+> >  		luo_session.o
+> >  
+> > -obj-$(CONFIG_KEXEC_HANDOVER)		+= kexec_handover.o
+> > +kho-y :=								\
+> > +		kexec_handover.o					\
+> 
+> I don't see much value in moving kexec_handover.o to a separate line,
+> btw, the same is true for luo_core.o, but it's not important enough to
+> change.
 
-The patch 4 review applies here, except for the parts where Section 6.4 is
-implemented instead of Section 6.3 (which is incorrectly implemented in
-patch 4).
+This is purely for consistency. I wanted to use the exact same style in 
+the Makefile instead of having two different ways of declaring the 
+object lists.
 
-> Add the End.M.GTP6.D.Di drop-in mode variant of End.M.GTP6.D
-> (RFC 9433 Section 6.4).  Unlike End.M.GTP6.D, the drop-in variant
-> does NOT fold the GTP-U identifiers into Args.Mob.Session: the
-> original outer IPv6 destination is preserved at SRH[0] of the new
-> SRH, so the destination side can keep the original address
-> untouched while still benefiting from SR Policy steering.
->
-> The augmented SRH builder/destroyer is shared with End.M.GTP6.D.
-> The TEID and QFI parsed out of the inbound GTP-U header are
-> intentionally discarded for this variant (matching RFC 9433
-> Section 6.4).
->
-> When net.netfilter.nf_hooks_lwtunnel=1, the inner T-PDU traverses
-> NF_INET_PRE_ROUTING between the GTP-U strip and the SRv6 push,
-> mirroring End.DX4 / End.DX6.
->
-> Non-T-PDU GTP-U messages are forwarded the same way as in
-> End.M.GTP6.D: passed through via the lwtunnel's saved orig_input
-> to a downstream peer that owns the GTP-U control plane.
->
-> Configuration:
->
->   ip -6 route add 2001:db8:f::/64 \
->       encap seg6local action End.M.GTP6.D.Di \
->           srh segs 2001:db8:2::e,2001:db8:3::e \
->           src 2001:db8:2::1 \
->       dev <dev>
->
-> Link: https://www.rfc-editor.org/rfc/rfc9433.html#section-6.4
-> Signed-off-by: Yuya Kusakabe <yuya.kusakabe@gmail.com>
-> ---
->  include/uapi/linux/seg6_local.h                    |   2 +
->  net/ipv6/seg6_local.c                              | 222 +++++++++++
->  tools/testing/selftests/net/Makefile               |   1 +
->  .../selftests/net/srv6_end_m_gtp6_d_di_test.sh     | 427 +++++++++++++++++++++
->  4 files changed, 652 insertions(+)
->
-> diff --git a/include/uapi/linux/seg6_local.h b/include/uapi/linux/seg6_local.h
-> index 7d3d3d245b47..326da65ad5aa 100644
-> --- a/include/uapi/linux/seg6_local.h
-> +++ b/include/uapi/linux/seg6_local.h
-> @@ -80,6 +80,8 @@ enum {
->  	SEG6_LOCAL_ACTION_END_M_GTP6_E	= 19,
->  	/* IPv6/GTP-U decap into SRv6 (RFC 9433 Section 6.3) */
->  	SEG6_LOCAL_ACTION_END_M_GTP6_D	= 20,
-> +	/* IPv6/GTP-U decap into SRv6, drop-in mode (RFC 9433 Section 6.4) */
-> +	SEG6_LOCAL_ACTION_END_M_GTP6_D_DI = 21,
->
->  	__SEG6_LOCAL_ACTION_MAX,
->  };
-> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-> index 09e912e17df8..a6cd57ebcbde 100644
-> --- a/net/ipv6/seg6_local.c
-> +++ b/net/ipv6/seg6_local.c
+This:
+    luo-y :=                                \
+            luo_core.o                      \
+            luo_file.o                      \
+            luo_flb.o                       \
+            luo_session.o
 
-> + [snip]
+    kho-y :=                                \
+            kexec_handover.o                \
+            kho_radix.o                     \
+            kho_block.o                     \
+            kho_vmalloc.o
 
-input_action_end_m_gtp6_d_di() and its finish callback are largely
-identical to the patch 4 functions (input_action_end_m_gtp6_d() and its
-finish): the SRH check, GTP-U dispatch, outer strip, inner protocol
-detection, and NF_HOOK invocation are identical. The duplication should be
-reduced via shared helpers.
+Or this:
 
-> +static int input_action_end_m_gtp6_d_di(struct sk_buff *skb,
-> +					struct seg6_local_lwt *slwt)
-> +{
+    obj-$(CONFIG_LIVEUPDATE)        += luo_core.o
+    obj-$(CONFIG_LIVEUPDATE)        += luo_file.o
+    obj-$(CONFIG_LIVEUPDATE)        += luo_flb.o
+    obj-$(CONFIG_LIVEUPDATE)        += luo_session.o
 
-> + [snip]
+    obj-$(CONFIG_KEXEC_HANDOVER)        += kexec_handover.o
+    obj-$(CONFIG_KEXEC_HANDOVER)        += kho_radix.o
+    obj-$(CONFIG_KEXEC_HANDOVER)        += kho_vmalloc.o
+    obj-$(CONFIG_KEXEC_HANDOVER)        += kho_block.o
 
-> +		gtp_hdrlen = seg6_mobile_parse_gtpu(skb,
-> +						    upper_off + sizeof(*uh),
-> +						    &teid, &qfi);
-> +		if (gtp_hdrlen == -EOPNOTSUPP)
-> +			return seg6_mobile_passthrough_non_tpdu(skb);
-> +		if (gtp_hdrlen < 0) {
-> +			reason = SKB_DROP_REASON_SEG6_MOBILE_BAD_GTPU;
-> +			goto drop;
-> +		}
-> +		(void)teid;
-> +		(void)qfi;
-
-D.Di does not use teid or qfi, so these variables and the (void) casts are
-dead code and should be avoided. For example, seg6_mobile_parse_gtpu() could
-accept NULL for teid and qfi so callers that do not need them can pass NULL
-directly.
-
-Thanks,
-
-Ciao,
-Andrea
-
-P.S. I am temporarily writing from another address due to a mail
-delivery issue at my @uniroma2.it address. Please always Cc my default
-andrea.mayer@uniroma2.it address on replies.
+I do not care which way is chosen as long as it is consistent. Since 
+this series adds new separate files for KHO, and does not touch LUO, I 
+used  LUO as template, but we can do the other way around.
