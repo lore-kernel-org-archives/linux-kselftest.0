@@ -1,246 +1,89 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E712D131D
-	for <linux-kselftest@vger.kernel.org>; Sun,  7 Jun 2026 05:54:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780811695; cv=pass; b=IrDGfADWg6GLeMdA5G0p/HAMsFOzs2YJuf2ls0WoRbhTGfNmZ+uZ7nD5t9hGsU9NOJww4X5MWpvaBf9GJO0+ueg5dYa/X9MGsa98pjjXiMIMQAgm6LnWnDRQx+r3wK+NTQKvxkBbltwJjq4gR+hc0rgY98iBQ+rLl0bqzqIBWHc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780811695; c=relaxed/simple;
-	bh=uz9uUhexCYmhkBMUW9kqKaAHnjzrD9tTHxL8eI5e5U4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MkTi0E451fT/BZxAuoIYbEa38Ox7IPOv+FujsVIbjZGxm9Lo2lFUPZZFT3c+wfUZiryM6zG6jOFqq9JyMPYXi+Zlh4jzOIC/cMMKH9HJPshHeZ+7iyMz2/gGBIMXoki5iIiKP7d3g5PoruaffgB8C5T2OWWaczA1x+D+Tqo3q9o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=icxzSTcX; arc=pass smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A4A2F5328;
+	Sun,  7 Jun 2026 07:30:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780817409; cv=none; b=YDqd79DNER5M07f2mK2nXZjIFEcQvX82Yla+c7uAU83rcpDUeVfOeb+44ygl39G1jVBWYFJ9kbwXtITrINV5UHca1vVgJjlXfhKJEQCOD6WH2khBMzw4JQuFfaVsKE0oBtFiqccn5kdNFIZB6ftcbBLLlvCUR3droEXJl7fWoNg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780817409; c=relaxed/simple;
+	bh=RkQF8lRbTFbKoWVeRbYJJtgDjACBKW9f4O6+Zj+KJwQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YRx0rAFsf9FvfXE5wibVWnSdGSciD/G+YnwFwbch9dRaTR10mEa1tdSRIZqmrPNJJEGh0ioL91MCwTNxZ5bXv/UtRtjUndpTkzHcZMXq19E2xtVvIBA8aH7Ohv8Y8rWMJYz8sZFkn3Fq/ozGf4x42eLUbFcBO+rQfST5jnfp22s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=it4IPQRc; arc=none smtp.client-ip=185.125.188.121
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="icxzSTcX"
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-39664fe2dd8so27367001fa.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 06 Jun 2026 22:54:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780811692; cv=none;
-        d=google.com; s=arc-20240605;
-        b=k/mlT46BusaFmBeg3mcl+z1A+3alUWfQUaVEdbHJorAqspcXKSLhb3SRttZhIAUNBm
-         Or/G4YbKkfGvHIm2UZmtRwYsd+31frOeEbO2bEmsx1/tnZMeutmiGJyttWwYkrDXu1Iq
-         S9K6ScSrzKSUoXoGY0QtQaIpS6V2jOPlBoEtWG/SA2jomxWcUPnZFhaGT2Eg7mvCAY5u
-         KGCvFnq4B8EAC/rufZxD/3auV3y+wz9VQ+JPTaeNgZwNLAkpHTZKl/Z6YDSf3Qi/xoLd
-         gbomABvbDXLtGUR26f4IJnX8WyuYOn5lJsMV800/hC6j5an5PKX3IIXr5w6V4QcwEb9M
-         DPEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GI/CELcqqMge0dwSQkZwLgMfV8nY/qrqwPle2IRk0dw=;
-        fh=V1qG8uKPPcoUJt9WvBzKaZ+oOzhkz5vQmDZ+ml0bkgs=;
-        b=IgOWQzqegOYaJ0kdtsM6MU4dIJG5e/sveRNr2DhUei7+5otJusTvCKTLVf8thgr6xI
-         BuJfQsC7NxBkW7xWenwAVD0wDd0Br+wZGLuC0xXYnAzkkayySqfOvYn7Mg5BvDeYDYFC
-         HviUYYO0EdbkPnr71FTa7oMY1Xo8SvnvXIFTWNSxKz0tNdqWlFsRR+FcHdH1pdvn3c7l
-         Y10+XOHrNQhaclcWUDtAdoZuTQ6AD+xU6TALTDrl8GtAFGGd3HN7oxGBb8+wdbVGgGDU
-         1KF5UGOrTkQhEre5XiBDLakEKDJjbcfTbETMDlwB8SAtaOhJnwG0+JHeqT5gt9bJibUH
-         V/Lg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1780811692; x=1781416492; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GI/CELcqqMge0dwSQkZwLgMfV8nY/qrqwPle2IRk0dw=;
-        b=icxzSTcXFt6QQsj8oHR9dUC2rAiDfelqOk6J1L2CmXIZRt920fNYIW7wn+Lca477z7
-         o/hxe7vRANmVCJIkQYkRAp+Q6iUoz45VU1AsHpJJR8Vq2jNvK+hG3DOEqp3tc5WLzi94
-         x1Q/6wmSQnTt0+Jojyyfkwf6KdH4hLGmVfBfpcZKdLoNDk90bgak6Uym7Dxs5YBkpCTT
-         h0fGTjRMaRjZF6CgyI13UL+gr4fJkbBdmcT/Ch+GmugS+LIIzy7BSogGpf1qTidgzar9
-         JuKA3TLU7WDhDh8ZgiQ/S8DRrSlCcPq1E0zqdUnck0zEf4/5GoZxUZ0in3Eu6oEy8Sfn
-         Rl5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780811692; x=1781416492;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GI/CELcqqMge0dwSQkZwLgMfV8nY/qrqwPle2IRk0dw=;
-        b=Z9uLlCD0dMfMT5kpMvaZ+MQveEajPQleeINN7+SzMdSBkPN/3v+fjBzuvjt6O5CaX9
-         qf8ko5G6x0jHF81AY//VXIfMC9LRb13v1s1q731vtKwtGXglknA4+Nl8t7NXhAlkGUS0
-         WMxAuxLXMXIJtA4MYhCkyV32AiVqyuajLJM8MfnEFSrjJVkfaUO3otYIodCeQy3JbDlZ
-         0jLEctU1lYJpbQ2x9aXjnX0gqrU2P0gjJ/Z/ykX1LwlKJZmtAR+sYzH66lKm/vBZWukg
-         uLmVRHGItaWWpOs4LN7F48NZBm2YYlXTqR5/RBHJ+Cw7yDh6A0qTmH0zn8gITyqAhAyr
-         H35A==
-X-Forwarded-Encrypted: i=1; AFNElJ8QhLOLI5wn1wC6ItFqCDzpDVFfR/Dqka0jUkLxdSaqLfLp94CzXE/gqRwKWzrrOeS0YBlnfwhsZZqXA5fXGcI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywk2HDNyjsTustdBRvQFYrfophxsg+vZlbQjlcJqa3x8BuLsCyV
-	eFpGC9EyhbTq12mBvHLjs8KeOnB7IpUa9StloM2BPhFuDn122LShUFxqlqSg5B57KkLaYhFUrtn
-	tk+SAtU+9KlNBOqB4TzxvPFbpyqcAMJTB9YR4hOdwyw==
-X-Gm-Gg: Acq92OGpyFDsgiFAnxCRkHrFubl2CEfWRkjPZvQ4CJ6Rdvw6f4KttD5Rz/Z8LzgAm+a
-	0RqZ6cgKwCPPyEg6X9u4V/XWCPH+oAhbHVaFFfG6SyPfrMjbqEre7JaO6C4v5jYNisX2KS8GjEO
-	1LSNe7tpOKE37zf7iaJNlpImCKD1PXHCAxe17XfqoOgIEUzGZPLU8VgfPJy9EC06T0iGAmiYFe1
-	rvaeVtSDht1SCmTgU/c+NwljVAiuRs/7mz9V799+pAoRzMgUqh8EpA/8+53/AreCqQ9PcI7Tb79
-	lC6wHIXDkSQXf2Jcwz5BNLR2XcZ/2CWmdgL2E/kLDdCKVyBluJ4T
-X-Received: by 2002:a05:651c:1423:b0:38a:8602:71aa with SMTP id
- 38308e7fff4ca-396d0895469mr18718371fa.16.1780811692124; Sat, 06 Jun 2026
- 22:54:52 -0700 (PDT)
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="it4IPQRc"
+Received: from hwang4-g16.. (unknown [120.244.199.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id B19673F861;
+	Sun,  7 Jun 2026 07:24:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1780817078;
+	bh=ddikXD3l8TYjtFnVsxE8N0l73vEnH4C/n+VO9I+q5cc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
+	b=it4IPQRcsCT6KdGN18nITlblRVKq6EImDBlDcwQfsVzruEcHYiZZbIUVDfEt+Zvmk
+	 weaS4ACzupm8r7FQ4Vz3kBbykmjsAcpXE2WhXmswJ2ncxisekb+hLYdHWZdQdNR4Qf
+	 vN3T9GZh2cSkKAvyD5qbp5F+ow5bko3JMUtCO+b6y1db/lUAPXlFTU1xKjeEKcU9gG
+	 8Hog3tPexSt/hMZFTcwwhFCv8IQod+nKjaTaGtMPuq2kuEL1i34XtBTXUcGO+mz0//
+	 v8rDGad+zSYE4gd5/aTuefMN0mlZL2CGiwsfQNvOU25o0drAUhdR2f1fnjiRyfogRf
+	 J90Aau6gFU5Tcwe7W5fo8GOPjFTv0qWg7/200YDLh9QAbsCDkX5PBmYixJ9i/94rIr
+	 8u1DFBcTCae2Oy+QRAJGS4nBF1I5jO6R3Z/r5Rwv5YaNfDSl4SzZCwl9AigVoyF4Ji
+	 yBQKKoiHeatjp/X8g+o2aHIPfy6JDr6kAuXnr6T4h0O9Q0IpPsCt1hvd0CAl7GwRhL
+	 Re8xSkb5++ycp7BOR6CuYy4FAUUVfm6JrLNiNv0QFFDBmReaWaCd4n8OGMl0yYsUlp
+	 0SIDTSE7M5FpSnYNM99qI4kvIi2lojlqjcVS/5fh/ZeLSXNir9i0rEM1B10W3kb092
+	 dmqJhvlHXb2Go2k7qhza7VoM=
+From: Hui Wang <hui.wang@canonical.com>
+To: rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	pjw@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	shuah@kernel.org,
+	wangfushuai@baidu.com,
+	linux-kselftest@vger.kernel.org
+Cc: hui.wang@canonical.com
+Subject: [PATCH 0/2] ring-buffer: Fix forced 8-byte alignment event length
+Date: Sun,  7 Jun 2026 15:24:29 +0800
+Message-ID: <20260607072431.125633-1-hui.wang@canonical.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260604142602.3582602-1-tjytimi@163.com> <20260604142602.3582602-3-tjytimi@163.com>
-In-Reply-To: <20260604142602.3582602-3-tjytimi@163.com>
-From: Anup Patel <apatel@ventanamicro.com>
-Date: Sun, 7 Jun 2026 11:24:40 +0530
-X-Gm-Features: AVVi8CenzaChEvM0QLFFb2Zk6nh65TW0r-wtF9-zKuIk2urNBL-QPcDlyquxHck
-Message-ID: <CAK9=C2Xx+wWL=htOvqmPfF4=f68CNF0r3W9nfTNSMjfSyws-tw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] KVM: selftests: Add a hugetlb memslot alignment
- test mode
-To: Jinyu Tang <tjytimi@163.com>
-Cc: Anup Patel <anup@brainfault.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Atish Patra <atish.patra@linux.dev>, Paul Walmsley <pjw@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Shuah Khan <shuah@kernel.org>, 
-	Sean Christopherson <seanjc@google.com>, =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <radim.krcmar@oss.qualcomm.com>, 
-	Andrew Jones <andrew.jones@oss.qualcomm.com>, Conor Dooley <conor.dooley@microchip.com>, 
-	Yong-Xuan Wang <yongxuan.wang@sifive.com>, Nutty Liu <nutty.liu@hotmail.com>, kvm@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 4, 2026 at 7:58=E2=80=AFPM Jinyu Tang <tjytimi@163.com> wrote:
->
-> kvm_page_table_test can already exercise hugetlb-backed guest memory,
-> but it always creates the test memslot with GPA alignment matching the
-> hugetlb backing size. That misses the case where a valid hugetlb
-> memslot is later moved so that the memslot GPA and HVA no longer have
-> the same offset within the backing huge page.
->
-> Add a -u option that moves the test memslot GPA by one guest page after
-> creating the hugetlb memslot. The memslot is created through the normal
-> helper first, so the backing allocation remains valid and hugetlb aligned=
-.
-> Moving the memslot then creates a deliberate HVA/GPA offset mismatch
-> before the guest mapping is installed.
->
-> This mode is useful for checking that architecture MMUs do not install
-> a block mapping when the block would map the wrong host pages or cover
-> memory outside the memslot. The option is restricted to hugetlb-backed
-> test memory because it's specifically about hugetlb block mapping
-> eligibility.
->
-> Signed-off-by: Jinyu Tang <tjytimi@163.com>
+This series fixes the event length reported by ring_buffer_event_length()
+when RB_FORCE_8BYTE_ALIGNMENT is enabled, and updates the ftrace
+trace_marker_raw selftest to account for that layout.
 
-LGTM.
+On architectures where CONFIG_HAVE_64BIT_ALIGNED_ACCESS is enabled, the
+ring buffer forces 8-byte alignment. In that mode, the event length is
+stored in event->array[0] even for small data events, and the payload
+starts from event->array[1]. However, ring_buffer_event_length() only
+subtracted the extra length field for large events. As a result, small
+events reported a payload length 4 bytes larger than expected.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+This was observed on riscv64 with CONFIG_HAVE_64BIT_ALIGNED_ACCESS=y
+when running the ftrace trace_marker_raw.tc selftest. The first patch
+fixes the ring-buffer length calculation. The second patch updates the
+selftest expectation when the running kernel uses forced 8-byte
+alignment.
 
-I did not observe any impact on the default usage without "-u"
-option hence queueing it for Linux-7.2
+Hui Wang (2):
+  ring-buffer: Fix event length with forced 8-byte alignment
+  selftests/ftrace: Account for 8-byte aligned trace_marker_raw events
 
-Thanks
-Anup
+ kernel/trace/ring_buffer.c                    |  3 +-
+ .../ftrace/test.d/00basic/trace_marker_raw.tc | 16 +++++++--
+ .../testing/selftests/ftrace/test.d/functions | 33 +++++++++++++++++++
+ 3 files changed, 48 insertions(+), 4 deletions(-)
 
-> ---
-> v1 -> v2:
->   - Keep the selftest change unchanged from v1
->
->  .../selftests/kvm/kvm_page_table_test.c       | 28 +++++++++++++++----
->  1 file changed, 22 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/kvm_page_table_test.c b/tools/te=
-sting/selftests/kvm/kvm_page_table_test.c
-> index fc5242fb9..a910e3abb 100644
-> --- a/tools/testing/selftests/kvm/kvm_page_table_test.c
-> +++ b/tools/testing/selftests/kvm/kvm_page_table_test.c
-> @@ -230,6 +230,7 @@ struct test_params {
->         u64 phys_offset;
->         u64 test_mem_size;
->         enum vm_mem_backing_src_type src_type;
-> +       bool misalign_slot_gpa;
->  };
->
->  static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void=
- *arg)
-> @@ -244,6 +245,7 @@ static struct kvm_vm *pre_init_before_test(enum vm_gu=
-est_mode mode, void *arg)
->         u64 guest_num_pages;
->         u64 alignment;
->         void *host_test_mem;
-> +       struct userspace_mem_region *region;
->         struct kvm_vm *vm;
->
->         /* Align up the test memory size */
-> @@ -276,13 +278,22 @@ static struct kvm_vm *pre_init_before_test(enum vm_=
-guest_mode mode, void *arg)
->         /* Add an extra memory slot with specified backing src type */
->         vm_userspace_mem_region_add(vm, src_type, guest_test_phys_mem,
->                                     TEST_MEM_SLOT_INDEX, guest_num_pages,=
- 0);
-> +       region =3D memslot2region(vm, TEST_MEM_SLOT_INDEX);
-> +       host_test_mem =3D region->host_mem;
-> +
-> +       if (p->misalign_slot_gpa) {
-> +               TEST_ASSERT(is_backing_src_hugetlb(src_type),
-> +                           "Memslot GPA misalignment requires hugetlb ba=
-cking");
-> +               TEST_ASSERT(guest_num_pages > 1,
-> +                           "Need at least two guest pages to misalign me=
-mslot GPA");
-> +
-> +               guest_test_phys_mem +=3D guest_page_size;
-> +               vm_mem_region_move(vm, TEST_MEM_SLOT_INDEX, guest_test_ph=
-ys_mem);
-> +       }
->
->         /* Do mapping(GVA->GPA) for the testing memory slot */
->         virt_map(vm, guest_test_virt_mem, guest_test_phys_mem, guest_num_=
-pages);
->
-> -       /* Cache the HVA pointer of the region */
-> -       host_test_mem =3D addr_gpa2hva(vm, (gpa_t)guest_test_phys_mem);
-> -
->         /* Export shared structure test_args to guest */
->         sync_global_to_guest(vm, test_args);
->
-> @@ -417,8 +428,8 @@ static void run_test(enum vm_guest_mode mode, void *a=
-rg)
->  static void help(char *name)
->  {
->         puts("");
-> -       printf("usage: %s [-h] [-p offset] [-m mode] "
-> -              "[-b mem-size] [-v vcpus] [-s mem-type]\n", name);
-> +       printf("usage: %s [-h] [-p offset] [-m mode] [-b mem-size]\n", na=
-me);
-> +       printf("          [-v vcpus] [-s mem-type] [-u]\n");
->         puts("");
->         printf(" -p: specify guest physical test memory offset\n"
->                "     Warning: a low offset can conflict with the loaded t=
-est code.\n");
-> @@ -428,6 +439,8 @@ static void help(char *name)
->         printf(" -v: specify the number of vCPUs to run\n"
->                "     (default: 1)\n");
->         backing_src_help("-s");
-> +       printf(" -u: move the test memslot GPA by one guest page after cr=
-eating\n"
-> +              "     the memslot, forcing a hugetlb HVA/GPA offset mismat=
-ch\n");
->         puts("");
->  }
->
-> @@ -442,7 +455,7 @@ int main(int argc, char *argv[])
->
->         guest_modes_append_default();
->
-> -       while ((opt =3D getopt(argc, argv, "hp:m:b:v:s:")) !=3D -1) {
-> +       while ((opt =3D getopt(argc, argv, "hp:m:b:v:s:u")) !=3D -1) {
->                 switch (opt) {
->                 case 'p':
->                         p.phys_offset =3D strtoull(optarg, NULL, 0);
-> @@ -461,6 +474,9 @@ int main(int argc, char *argv[])
->                 case 's':
->                         p.src_type =3D parse_backing_src_type(optarg);
->                         break;
-> +               case 'u':
-> +                       p.misalign_slot_gpa =3D true;
-> +                       break;
->                 case 'h':
->                 default:
->                         help(argv[0]);
-> --
-> 2.43.0
->
+-- 
+2.43.0
+
