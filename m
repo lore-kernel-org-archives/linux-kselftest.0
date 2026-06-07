@@ -1,63 +1,63 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD5F36EA9F
-	for <linux-kselftest@vger.kernel.org>; Sun,  7 Jun 2026 08:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4942980A8
+	for <linux-kselftest@vger.kernel.org>; Sun,  7 Jun 2026 08:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780819884; cv=none; b=HXT0pdIkbudyoJmEEZgx6DVWtHTq8DGN5mjMqn6APvolvLiux3Ahq5+Ig7OPVBQq5z0FIRBwx7BN+EFpmqQ0PWjNnanxJ+2SzvsiP1V3sppttuG9j4MUWeT6o4hHT/+deA3rI8eDwaPhVlEXBCXngypSNR2t2Tyl604c9+6fzc8=
+	t=1780819890; cv=none; b=SNYSErAb8iWZIUDh8WYS/jaICGdLM8uzgxqB5kxtY97jBx5LnEYaewwXt+2OpeWFFsOZXjPd5ffjVhIuf8iRDykhR+cW6+ZeIOXXk4Fy328y6jtyqog9pDxN02mcUuIVpGP1US+1QZRzQ8kU8ndK6aBPyc3tJN4FXy+sX1hOF+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780819884; c=relaxed/simple;
-	bh=P9oXlIsV+MegZELpI7GDef37LAa8lF8oXfLkAh3JFiQ=;
+	s=arc-20240116; t=1780819890; c=relaxed/simple;
+	bh=4iPsNUtzE30oTKcIRucvHW4DlaBGh7JBBtN09w1GgM0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yjnbnb1kLuDqBoD458cgCGJ82J/H1QOCb/OqTnVdWfQo3o7lAqlnnRQCUYGWmwrWwhBHsbVEX+lNhVM+nCtu1es4/8B3FOwnOJwGpunR7Utki1TGzRItAG0R4ON9cRCNGe/7rm45AuYu4SRQ70t1/CFSeELmFdfYeoW2iKdYvVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nK3bZgLz; arc=none smtp.client-ip=209.85.214.174
+	 MIME-Version; b=ezuOn4xxThSoAqnfV7j6WJMGvnWIqRHuj+L1uHWRAVcnMrGRNq8CxlrmA4eb2rlOFOzQjQrirXArC8iobW9Pj0HCbC4UmQYfUJWlqvTcM9q6ddO507eeNKgDAp32XqcalqouZ0xsjfN990ANMVXUk+uNQSomB8Nar/B9SjHCgy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BRB+T106; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nK3bZgLz"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2c0c1e0b0faso22682285ad.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 07 Jun 2026 01:11:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BRB+T106"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84237c55ef9so1528238b3a.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 07 Jun 2026 01:11:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780819882; x=1781424682; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780819887; x=1781424687; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nysJeNyvG9UILI1DFzn2wsHy9N8jdjLD2gqQX3bP48I=;
-        b=nK3bZgLzyge5RA37eHJ1QWVS4JOoDjJLI8mak1XkmONAPMuaDgxaiSx2sK8ckO8So1
-         ggKwguGMpZiRVYiicPcIE77CJIO31dQQQGIQtHL2hpid+22ewF8xv1dqobBW8NJ8ZBF6
-         K2nr8cB42mE/Icm7g/TksWm+rGe7YYddDDNwR2j4M4SW8WrBcl1+bLwgVxukbTwYzpNY
-         TN6OAqEEffJHqtH2ZeYkCfV0ZsRgGZZnDiEiYXy0fm/cy4CCgJusarWGomzXVBg9tdkR
-         0+8EhnhTngJ/YwAKjw9yH4aDT/m7GFJiS4yF8vLLfDzcKxB6UalGoKH+paj8dGUC4048
-         71sg==
+        bh=CVZv/CJK3pxFXw0CmJrNpu82Z7U/XAS/kFgsWo152uk=;
+        b=BRB+T106En5o9FO8XyyYdQkpw4TWg+qMm9H4HW8cQSBR142fQO0xJKudyEdpV4Laog
+         Hc0qPkSS4FSNmOelgFZkunLZ81xWHwD+knA8aqP0rlCYc3UOC2LY+3r2Gcirh1gTwR/7
+         ELtJBp8YoiEO0eMgOcx1FDMB2AZrGq7MFNpLCcPu/gjjxGOemr9iihO5A4P/4Ji1RWLe
+         QnAUW1J73Phv9SP1lDWiT7NBBjhHynLAMebSvW0n6b8tqs/KdKhXXKBPgzCrOkiGwkua
+         x3JP+tgktMNn8aG+JUS3XP4CDFdtbnGUnYUYNEIx8vbcbkqOE8269H+qvn06PQG6WVHV
+         467Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780819882; x=1781424682;
+        d=1e100.net; s=20251104; t=1780819887; x=1781424687;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=nysJeNyvG9UILI1DFzn2wsHy9N8jdjLD2gqQX3bP48I=;
-        b=UubdP7RngchC+iGkxRyDQ87v6wk4LlyhCUIzlSjDjkReSLlliMG/VDx/2jHX5Wgt0E
-         EhmkK4eUx55Bv3b+iHEJwSSaEoG+ZzznPk+dwdPSJfc6iA2vFfO99ziP1tqtchqsvllD
-         UQ4lO+N51gx/f5zcKJgFwR+xK+ijQs52unMsrPSXllPStXn6t2et88smBsoZw9yJx8W+
-         zJ+WTM0hblyZPpYBVq/iq0gi63A+RiFqsRycGLoLufvlJlmFkuK9kFJnJJfMlvwojlTq
-         FQ0bCr1I0wY9SWHGOE2/QLfGON+qx5DOWPUHhTbLAukYx/ojdy9FP03yF1pwnRXPMxwc
-         tpkQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9KYTo3lCyGgYFm9bwcrlzee983MVDXPI8km4Qu+mE6D0gDlwYtGUD/rmT4n8upTtQMUymRsAq3JjG8/E/NsV0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlMIxH23/5UIzgiADJBo2PQYNKeHMo3DIwDFuzbFKa/WpXHTeU
-	s2qZ4BOYbl+cHZfN4vnuaLytobUgyL6GeLGPITHQQx0us9dhbRqveTFO
-X-Gm-Gg: Acq92OEEaMRA/MPFwLgfGPzxlzh1xYzKdNEXbB86yqbXJHRo0L57GcVqn9gb28Exh4m
-	OPHHrFQTIOfeCdtHib8m1Vzpw96mLcaT5Qj7r4Gx90PNtiTOxbPNNqhJfOznjqwRmjcgB4OMGGu
-	foURC74NNbVyZ6aPGovW4iWkPmZ4ZPLut8IGTQbadSALqarY/mNDaijFZmQbMUCER1XiSKVDPc3
-	3lIjOsEGh8JEM68AG+tkYWKV4hoTZbXHzM77ygp4ihvXIMhicRQSo32ClVVGbOfu8VdCeOruWrH
-	WSdDHD1Kmk60z+Yb48bZOiSVGqxujNBT8pO7lQr+WyFkaU9I1dh0jC6iLGOxHW2v2EDCOwxpcif
-	FYgbWhTwy0PMOtqaWwvRwFG1O83k/XSFk1BmjObwKZYE21e7pKe6I1DURFMc9JgNShGxrJ6LSAr
-	4ruYInWKYOLCzbabUSqwbsB/zxu2lraOKpHQ==
-X-Received: by 2002:a17:903:2987:b0:2c1:88a1:9830 with SMTP id d9443c01a7336-2c1e7e74ecamr126056945ad.17.1780819881941;
-        Sun, 07 Jun 2026 01:11:21 -0700 (PDT)
+        bh=CVZv/CJK3pxFXw0CmJrNpu82Z7U/XAS/kFgsWo152uk=;
+        b=gcHKDQB6hZK/HQGz3GS3irp/VQ3fkuFhiXb6SNJJaarF6wkS+mPDi/lX3OP+mlMRrd
+         Pxm1SnDJYmPMCh3WsABkJRD9UsgtC+EE4MELNadANQgNxDBAjOzKuPhOa4kMx2ZVKDo8
+         ZL6G5v5qYA7JjeOQ4XN1aKNmGtIw25w7keT80xOqKAtzpLqUxPy0AEZ9VpwqB34P2cof
+         hL5mIaXlsXjThy8FjncmIN3u49PW+/L0qL0DAINDzxEfb8D7T+DtBPhdC1IbC4c6eRpn
+         vjFnuShPa6dnPdcuUaHGnFnvxAMRWRZ0fqxMerLaiBtrVSHlhedHZnHbUZWJoS4odlYj
+         TMhQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8Rlgq1eKtEQ837B6uHXR2pD9pYGBz+skIl0lFbcGuVDVkRlimbg2mgHPH+zJ5/nsI8XTAv00IvyE65a6eQwlc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzCRjkrpjRApSCYxk5ZdGaGMAdVwN2BHjhU/TTrAnzMz2Jhl9a
+	7CmfcubCg7SlH2bubP+1/wSbBdpRB5EYMPyfjTv/tQLmonbUhjUmtx9J
+X-Gm-Gg: Acq92OHwSrwxjUVqJh7VJq5EsZ4NYf3Mzvx4zEPI55nQU3fucW2E3UEwz/Zul/Uz/4D
+	vpZr9Qh3So92kIaWkhgV1ztNYnZbV5H/Q672p4BnBUokg3A4dFPcRYB8Osw0NnfZ2u4TqK/Yp3O
+	d1UMtICW1S53NM0Dm8jel0IaATxthyWtkkUVvnlYkrIuPW0mBz51u5gx3HqGSJ/xNle9irq50mr
+	h1ZWkxeN5oXUu14U6lKVfKnQgSxid9+WgfeyQBph91VM28EngKU+oHFWVniUU9JzgQaFzAtVKXs
+	FadVm5ZdvM2Uf0BgHb5AvmkjpVvjzqCvf7IcCWYwUVRqXGpclP3EDS1Copa4Bn6bvthGHSQfZDd
+	QdU2cGB9jHBmfSaNbfLwKomf8yr7cDz1fom3jFrvy6pIXWdL9jYyBvgrK9P/0xB1Ewnqm5ldP5D
+	/3wh3I07CQUe6yQvqa041HgDZnsA3P8UPp2Q==
+X-Received: by 2002:a05:6a00:2e1c:b0:842:6c02:2fa1 with SMTP id d2e1a72fcca58-842b10af99dmr11276089b3a.39.1780819887080;
+        Sun, 07 Jun 2026 01:11:27 -0700 (PDT)
 Received: from localhost ([2001:19f0:8000:3e6e:5400:6ff:fe38:3d01])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c24edbb49bsm15223135ad.38.2026.06.07.01.11.21
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8428325d9a3sm14192864b3a.34.2026.06.07.01.11.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2026 01:11:21 -0700 (PDT)
+        Sun, 07 Jun 2026 01:11:26 -0700 (PDT)
 From: Inochi Amaoto <inochiama@gmail.com>
 To: Paul Walmsley <pjw@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -78,11 +78,10 @@ Cc: linux-riscv@lists.infradead.org,
 	kvm-riscv@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
 	Yixun Lan <dlan@gentoo.org>,
-	Longbin Li <looong.bin@gmail.com>,
-	Quan Zhou <zhouquan@iscas.ac.cn>
-Subject: [PATCH v3 2/8] KVM: riscv: selftests: add Svadu FWFT extension to get-reg-list test
-Date: Sun,  7 Jun 2026 16:10:58 +0800
-Message-ID: <20260607081105.993908-3-inochiama@gmail.com>
+	Longbin Li <looong.bin@gmail.com>
+Subject: [PATCH v3 4/8] RISC-V: KVM: Add ssp context save/restore
+Date: Sun,  7 Jun 2026 16:11:00 +0800
+Message-ID: <20260607081105.993908-5-inochiama@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260607081105.993908-1-inochiama@gmail.com>
 References: <20260607081105.993908-1-inochiama@gmail.com>
@@ -94,70 +93,214 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The KVM RISC-V allows Svadu FWFT for Guest/VM so add this extension
-to get-reg-list test.
+Add ssp context save/restore for guest VCPUs and also add it to the
+ONE_REG interface to allow its access from user space.
 
-Assisted-by: YuanSheng:claude-4.7-opus
-Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
 Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
 ---
- .../selftests/kvm/riscv/get-reg-list.c        | 21 +++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ arch/riscv/include/asm/kvm_host.h |  7 ++++
+ arch/riscv/include/uapi/asm/kvm.h |  8 ++++
+ arch/riscv/kvm/vcpu.c             |  6 +++
+ arch/riscv/kvm/vcpu_onereg.c      | 66 ++++++++++++++++++++++++++++++-
+ 4 files changed, 85 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index cb86cb6b3635..94e33b2ee796 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -745,6 +745,9 @@ static const char *sbi_fwft_id_to_str(__u64 reg_off)
- 	case 3: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.enable)";
- 	case 4: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.flags)";
- 	case 5: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.value)";
-+	case 6: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pte_ad_hw_updating.enable)";
-+	case 7: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pte_ad_hw_updating.flags)";
-+	case 8: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pte_ad_hw_updating.value)";
- 	}
- 	return strdup_printf("KVM_REG_RISCV_SBI_FWFT | %lld /* UNKNOWN */", reg_off);
+diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+index 75b0a951c1bc..54ef83ac2d1e 100644
+--- a/arch/riscv/include/asm/kvm_host.h
++++ b/arch/riscv/include/asm/kvm_host.h
+@@ -161,6 +161,10 @@ struct kvm_vcpu_smstateen_csr {
+ 	unsigned long sstateen0;
+ };
+ 
++struct kvm_vcpu_zicfiss_csr {
++	unsigned long ssp;
++};
++
+ struct kvm_vcpu_reset_state {
+ 	spinlock_t lock;
+ 	unsigned long pc;
+@@ -201,6 +205,9 @@ struct kvm_vcpu_arch {
+ 	/* CPU Smstateen CSR context of Guest VCPU */
+ 	struct kvm_vcpu_smstateen_csr smstateen_csr;
+ 
++	/* CPU Zicfiss CSR context of Guest VCPU */
++	struct kvm_vcpu_zicfiss_csr zicfiss_csr;
++
+ 	/* CPU reset state of Guest VCPU */
+ 	struct kvm_vcpu_reset_state reset_state;
+ 
+diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
+index a27de850fa4c..fd4c81697617 100644
+--- a/arch/riscv/include/uapi/asm/kvm.h
++++ b/arch/riscv/include/uapi/asm/kvm.h
+@@ -102,6 +102,11 @@ struct kvm_riscv_smstateen_csr {
+ 	unsigned long sstateen0;
+ };
+ 
++/* Zicfiss CSR for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
++struct kvm_riscv_zicfiss_csr {
++	unsigned long ssp;
++};
++
+ /* TIMER registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
+ struct kvm_riscv_timer {
+ 	__u64 frequency;
+@@ -266,12 +271,15 @@ struct kvm_riscv_sbi_fwft {
+ #define KVM_REG_RISCV_CSR_GENERAL	(0x0 << KVM_REG_RISCV_SUBTYPE_SHIFT)
+ #define KVM_REG_RISCV_CSR_AIA		(0x1 << KVM_REG_RISCV_SUBTYPE_SHIFT)
+ #define KVM_REG_RISCV_CSR_SMSTATEEN	(0x2 << KVM_REG_RISCV_SUBTYPE_SHIFT)
++#define KVM_REG_RISCV_CSR_ZICFISS	(0x3 << KVM_REG_RISCV_SUBTYPE_SHIFT)
+ #define KVM_REG_RISCV_CSR_REG(name)	\
+ 		(offsetof(struct kvm_riscv_csr, name) / sizeof(unsigned long))
+ #define KVM_REG_RISCV_CSR_AIA_REG(name)	\
+ 	(offsetof(struct kvm_riscv_aia_csr, name) / sizeof(unsigned long))
+ #define KVM_REG_RISCV_CSR_SMSTATEEN_REG(name)  \
+ 	(offsetof(struct kvm_riscv_smstateen_csr, name) / sizeof(unsigned long))
++#define KVM_REG_RISCV_CSR_ZICFISS_REG(name)  \
++	(offsetof(struct kvm_riscv_zicfiss_csr, name) / sizeof(unsigned long))
+ 
+ /* Timer registers are mapped as type 4 */
+ #define KVM_REG_RISCV_TIMER		(0x04 << KVM_REG_RISCV_TYPE_SHIFT)
+diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+index a73690eda84b..783455db1d4d 100644
+--- a/arch/riscv/kvm/vcpu.c
++++ b/arch/riscv/kvm/vcpu.c
+@@ -719,6 +719,7 @@ static void kvm_riscv_update_hvip(struct kvm_vcpu *vcpu)
+ 
+ static __always_inline void kvm_riscv_vcpu_swap_in_guest_state(struct kvm_vcpu *vcpu)
+ {
++	struct kvm_vcpu_zicfiss_csr *zicficsr = &vcpu->arch.zicfiss_csr;
+ 	struct kvm_vcpu_smstateen_csr *smcsr = &vcpu->arch.smstateen_csr;
+ 	struct kvm_vcpu_csr *csr = &vcpu->arch.guest_csr;
+ 
+@@ -726,10 +727,13 @@ static __always_inline void kvm_riscv_vcpu_swap_in_guest_state(struct kvm_vcpu *
+ 	vcpu->arch.host_senvcfg = csr_swap(CSR_SENVCFG, csr->senvcfg);
+ 	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SMSTATEEN))
+ 		vcpu->arch.host_sstateen0 = csr_swap(CSR_SSTATEEN0, smcsr->sstateen0);
++	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_ZICFISS))
++		csr_write(CSR_SSP, zicficsr->ssp);
  }
-@@ -944,6 +947,13 @@ static __u64 sbi_fwft_pointer_masking_regs[] = {
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.value),
- };
  
-+static __u64 sbi_fwft_pte_ad_hw_updating_regs[] = {
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_FWFT,
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pte_ad_hw_updating.enable),
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pte_ad_hw_updating.flags),
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pte_ad_hw_updating.value),
-+};
-+
- static __u64 zicbom_regs[] = {
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_CONFIG | KVM_REG_RISCV_CONFIG_REG(zicbom_block_size),
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICBOM,
-@@ -1259,6 +1269,16 @@ static struct vcpu_reg_list config_sbi_fwft_pointer_masking = {
- 	},
- };
+ static __always_inline void kvm_riscv_vcpu_swap_in_host_state(struct kvm_vcpu *vcpu)
+ {
++	struct kvm_vcpu_zicfiss_csr *zicficsr = &vcpu->arch.zicfiss_csr;
+ 	struct kvm_vcpu_smstateen_csr *smcsr = &vcpu->arch.smstateen_csr;
+ 	struct kvm_vcpu_csr *csr = &vcpu->arch.guest_csr;
  
-+static struct vcpu_reg_list config_sbi_fwft_pte_ad_hw_updating = {
-+	.sublists = {
-+		SUBLIST_BASE,
-+		SUBLIST_ISA(svade, SVADE),
-+		SUBLIST_ISA(svadu, SVADU),
-+		SUBLIST_SBI(fwft_pte_ad_hw_updating, FWFT),
-+		{0},
-+	},
-+};
+@@ -737,6 +741,8 @@ static __always_inline void kvm_riscv_vcpu_swap_in_host_state(struct kvm_vcpu *v
+ 	csr->senvcfg = csr_swap(CSR_SENVCFG, vcpu->arch.host_senvcfg);
+ 	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SMSTATEEN))
+ 		smcsr->sstateen0 = csr_swap(CSR_SSTATEEN0, vcpu->arch.host_sstateen0);
++	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_ZICFISS))
++		zicficsr->ssp = csr_swap(CSR_SSP, 0);
+ }
+ 
+ /*
+diff --git a/arch/riscv/kvm/vcpu_onereg.c b/arch/riscv/kvm/vcpu_onereg.c
+index bb920e8923c9..bd59aebc8b2e 100644
+--- a/arch/riscv/kvm/vcpu_onereg.c
++++ b/arch/riscv/kvm/vcpu_onereg.c
+@@ -355,6 +355,44 @@ static int kvm_riscv_vcpu_smstateen_get_csr(struct kvm_vcpu *vcpu,
+ 	return 0;
+ }
+ 
++static inline int kvm_riscv_vcpu_zicfiss_set_csr(struct kvm_vcpu *vcpu,
++						 unsigned long reg_num,
++						 unsigned long reg_val)
++{
++	struct kvm_vcpu_zicfiss_csr *csr = &vcpu->arch.zicfiss_csr;
++	unsigned long regs_max = sizeof(struct kvm_vcpu_zicfiss_csr) /
++		sizeof(unsigned long);
 +
- struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_sbi_base,
- 	&config_sbi_sta,
-@@ -1268,6 +1288,7 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_sbi_mpxy,
- 	&config_sbi_fwft_misaligned_deleg,
- 	&config_sbi_fwft_pointer_masking,
-+	&config_sbi_fwft_pte_ad_hw_updating,
- 	&config_aia,
- 	&config_fp_f,
- 	&config_fp_d,
++	if (!riscv_isa_extension_available(vcpu->arch.isa, ZICFISS))
++		return -ENOENT;
++	if (reg_num >= regs_max)
++		return -ENOENT;
++
++	reg_num = array_index_nospec(reg_num, regs_max);
++
++	((unsigned long *)csr)[reg_num] = reg_val;
++	return 0;
++}
++
++static int kvm_riscv_vcpu_zicfiss_get_csr(struct kvm_vcpu *vcpu,
++					  unsigned long reg_num,
++					  unsigned long *out_val)
++{
++	struct kvm_vcpu_zicfiss_csr *csr = &vcpu->arch.zicfiss_csr;
++	unsigned long regs_max = sizeof(struct kvm_vcpu_zicfiss_csr) /
++		sizeof(unsigned long);
++
++	if (!riscv_isa_extension_available(vcpu->arch.isa, ZICFISS))
++		return -ENOENT;
++	if (reg_num >= regs_max)
++		return -ENOENT;
++
++	reg_num = array_index_nospec(reg_num, regs_max);
++
++	*out_val = ((unsigned long *)csr)[reg_num];
++	return 0;
++}
++
+ static int kvm_riscv_vcpu_get_reg_csr(struct kvm_vcpu *vcpu,
+ 				      const struct kvm_one_reg *reg)
+ {
+@@ -381,6 +419,9 @@ static int kvm_riscv_vcpu_get_reg_csr(struct kvm_vcpu *vcpu,
+ 	case KVM_REG_RISCV_CSR_SMSTATEEN:
+ 		rc = kvm_riscv_vcpu_smstateen_get_csr(vcpu, reg_num, &reg_val);
+ 		break;
++	case KVM_REG_RISCV_CSR_ZICFISS:
++		rc = kvm_riscv_vcpu_zicfiss_get_csr(vcpu, reg_num, &reg_val);
++		break;
+ 	default:
+ 		rc = -ENOENT;
+ 		break;
+@@ -423,6 +464,9 @@ static int kvm_riscv_vcpu_set_reg_csr(struct kvm_vcpu *vcpu,
+ 	case KVM_REG_RISCV_CSR_SMSTATEEN:
+ 		rc = kvm_riscv_vcpu_smstateen_set_csr(vcpu, reg_num, reg_val);
+ 		break;
++	case KVM_REG_RISCV_CSR_ZICFISS:
++		rc = kvm_riscv_vcpu_zicfiss_set_csr(vcpu, reg_num, reg_val);
++		break;
+ 	default:
+ 		rc = -ENOENT;
+ 		break;
+@@ -688,7 +732,7 @@ static int copy_csr_reg_indices(const struct kvm_vcpu *vcpu,
+ 				u64 __user *uindices)
+ {
+ 	int n1 = sizeof(struct kvm_riscv_csr) / sizeof(unsigned long);
+-	int n2 = 0, n3 = 0;
++	int n2 = 0, n3 = 0, n4 = 0;
+ 
+ 	/* copy general csr regs */
+ 	for (int i = 0; i < n1; i++) {
+@@ -740,7 +784,25 @@ static int copy_csr_reg_indices(const struct kvm_vcpu *vcpu,
+ 		}
+ 	}
+ 
+-	return n1 + n2 + n3;
++	/* copy Zicfiss csr regs */
++	if (riscv_isa_extension_available(vcpu->arch.isa, ZICFISS)) {
++		n4 = sizeof(struct kvm_riscv_zicfiss_csr) / sizeof(unsigned long);
++
++		for (int i = 0; i < n4; i++) {
++			u64 size = IS_ENABLED(CONFIG_32BIT) ?
++				   KVM_REG_SIZE_U32 : KVM_REG_SIZE_U64;
++			u64 reg = KVM_REG_RISCV | size | KVM_REG_RISCV_CSR |
++					  KVM_REG_RISCV_CSR_ZICFISS | i;
++
++			if (uindices) {
++				if (put_user(reg, uindices))
++					return -EFAULT;
++				uindices++;
++			}
++		}
++	}
++
++	return n1 + n2 + n3 + n4;
+ }
+ 
+ static inline unsigned long num_timer_regs(void)
 -- 
 2.54.0
 
