@@ -1,45 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284FA2C15A0;
-	Mon,  8 Jun 2026 14:32:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAF73CCFD8;
+	Mon,  8 Jun 2026 14:33:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780929122; cv=none; b=NDsHtl0bJcqenstnqIjgIzdc6CaniLFS7v6EFJzRROgIxSBziKqZTlSm4YYyFY3tYfF+GMutzBO5JKvAO0yYb9z4B3JN/dSmCeXunwjKtwLus4GW3YPjTz+QYcTn86jijBK0k9n5SxzEh1vxhlPiGEUbW37DMO+Y4Jh6ywU+Kkw=
+	t=1780929183; cv=none; b=WEa+U860O2APeM49xm7B47uNjDaPPa9LvRI+5d2Vuv0VEOeBqHcKXgZY/BtwQA/4GsTsUhoXXrX9aEh5hThBQYzGCFbfimC7nT+88PSGrbGW03tXp8M1KH9/T5VMoO6FZmrDeVU0KjbHjvs7pbXzUjE9UVgmFtMoFH5YgXXDTvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780929122; c=relaxed/simple;
-	bh=Vq+kfKcSNF3flf3Wg99MwCMYVyrrBvEwo9miGVees8Y=;
+	s=arc-20240116; t=1780929183; c=relaxed/simple;
+	bh=4R/tNaRPBKSz4d8NRR2R/LV30kd5D+OzUBD6MJHjgTs=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=lBqhD9RtF/vhhXqPZZ8vLJIkSd4z4p4pbeudONgnN/oaMqn2vE8WTdJo+ntORIXxeyAQBhTp3ZOY+zKTrmF6owhiB8EwemT3/wJ96MM+9X6AH9rEkNWbApA7bZDDi9jS0LndXJLRS+/QTeURimL8VLtlWZtWEJARlDHe9ScfZXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dSFVhS4i; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=jyJLXh7ymUWeLo9EcYW8aKAADunje47soH3cjjhf0dN94uQGqX5XIhT78z2h2SDHjQNM5bVWP39N9/71BNAaLlHf+YEHxLfP2wRCh3Ep1DcOvC0akhUARv0+3qXhf1HiCfCm3Uxf7v+fyotf6gPqKYIv33DgBCMwNs6fLZ/m/D8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AGcIFJst; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dSFVhS4i"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A171F00893;
-	Mon,  8 Jun 2026 14:31:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AGcIFJst"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FDF1F0089A;
+	Mon,  8 Jun 2026 14:32:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780929120;
-	bh=GXzhRNmiyLzV5XpoYdPWmv4GRg29mmsANh1qKiJSDnQ=;
+	s=k20260515; t=1780929181;
+	bh=tFRJ8X6n0yeGn7cDVS12LOYvoE0Z65a2bXJ3kF8/cvg=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=dSFVhS4iS5L53nJOdib+8Ww+15mnqO+ql7RkXjQFHQCrei1fnAv6HT3kBq/HsakmR
-	 IAwQr2S4GYxPLM6HCqjO2SWAxzuov2TbvDaZ5qiYQ8+ROqj7B0hzX6ZOMuJ+gYwP1d
-	 SjCiVleP4P/rRXqcPhWY4TH9T/pYndqaCm7EBs9zmWRaccbLyz1bJBu2TCHWL0Cr0V
-	 DzLoQtsjoxS2st1Lf8dDzZD+Z4FOn92S++Acw9jaozOzb5/oOKogBihKbuQlXvrYQs
-	 E5Ry3JyB2KNFc/WeF7gEGDXOlQTaM+BQVyssTX8Id4PBav49gJPYdqJ5ojJPZco+qn
-	 FwwyCqjR8dSzw==
+	b=AGcIFJstgQqLU57rrMwmnS9GqKdlWgI3Hcwl4z71ob8d8n0ZQp18oTHZJG+BWrw1K
+	 /NWl00pIq4UlKtll//RcyAAAqZg56UxQ7erpsn80xInPm3rWAcQatARaEJ8tZOFLSy
+	 n809M/Fex9slb3tld6+jO0A6S5cxZiF1RC0qXoXurotRtk90iN/WB/udu6UpaB40D2
+	 COkoi7WtFBfNpOb+s+4Q65PwJ/RTMMQV6KMlIqdAJMK4g5ZycbWPdYecPqRJcXvoL5
+	 LAOYuKwgu/5gmD5MFc/4iWdv1TgBl2M9wEEgp0lUfWcYW170V7B78AonX5FPIOAMHk
+	 2KQqOE7cFP62A==
 From: Pratyush Yadav <pratyush@kernel.org>
 To: Vipin Sharma <vipinsh@google.com>
-Cc: pasha.tatashin@soleen.com,  rppt@kernel.org,  pratyush@kernel.org,
-  shuah@kernel.org,  dmatlack@google.com,  skhawaja@google.com,
-  tarunsahu@google.com,  linux-kernel@vger.kernel.org,
+Cc: tarunsahu@google.com,  pasha.tatashin@soleen.com,  rppt@kernel.org,
+  pratyush@kernel.org,  shuah@kernel.org,  dmatlack@google.com,
+  skhawaja@google.com,  linux-kernel@vger.kernel.org,
   linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests/liveupdate: Move luo_test_utils.* into a
- reusable library
-In-Reply-To: <20260511201155.1488670-2-vipinsh@google.com> (Vipin Sharma's
-	message of "Mon, 11 May 2026 13:11:54 -0700")
+Subject: Re: [PATCH 2/2] selftests/liveupdate: Add helpers to
+ preserve/retrieve FDs
+In-Reply-To: <20260518170124.GA3352871.vipinsh@google.com> (Vipin Sharma's
+	message of "Mon, 18 May 2026 10:14:21 -0700")
 References: <20260511201155.1488670-1-vipinsh@google.com>
-	<20260511201155.1488670-2-vipinsh@google.com>
-Date: Mon, 08 Jun 2026 16:31:57 +0200
-Message-ID: <2vxzo6hlt86a.fsf@kernel.org>
+	<20260511201155.1488670-3-vipinsh@google.com>
+	<9huzy0hh3qhe.fsf@tarunix.c.googlers.com>
+	<20260518170124.GA3352871.vipinsh@google.com>
+Date: Mon, 08 Jun 2026 16:32:57 +0200
+Message-ID: <2vxzjys9t84m.fsf@kernel.org>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -49,81 +51,73 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-On Mon, May 11 2026, Vipin Sharma wrote:
+On Mon, May 18 2026, Vipin Sharma wrote:
 
-> Move luo_test_utils.[ch] into a lib/ directory and pull the rules to
-> build them out into a separate make script. This will enable these
-> utilities to be also built by and used within other selftests (such as
-> VFIO).
+> On Mon, May 18, 2026 at 11:29:49AM +0000, tarunsahu@google.com wrote:
+>> Vipin Sharma <vipinsh@google.com> writes:
+>> 
+>> > Add helper functions to preserve and retrieve file descriptors from an
+>> > LUO session. This allows library users to work with FD preservation.
+>> >
+>> > No functional change intended.
+>> >
+>> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+>> > Co-developed-by: David Matlack <dmatlack@google.com>
+>> > Signed-off-by: David Matlack <dmatlack@google.com>
+>> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+>> > ---
+>> >  .../liveupdate/lib/include/libliveupdate.h    |  3 ++
+>> >  .../selftests/liveupdate/lib/liveupdate.c     | 41 +++++++++++++++----
+>> >  2 files changed, 35 insertions(+), 9 deletions(-)
+>> >
+>> > diff --git a/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h b/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
+>> > index 4390a2737930..2b04b3256382 100644
+>> > --- a/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
+>> > +++ b/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
+>> > @@ -26,6 +26,9 @@ int luo_create_session(int luo_fd, const char *name);
+>> >  int luo_retrieve_session(int luo_fd, const char *name);
+>> >  int luo_session_finish(int session_fd);
+>> >  
+>> > +int luo_session_preserve_fd(int session_fd, int fd, __u64 token);
+>> > +int luo_session_retrieve_fd(int session_fd, __u64 token);
+>> > +
+>> >  int create_and_preserve_memfd(int session_fd, int token, const char *data);
+>> >  int restore_and_verify_memfd(int session_fd, int token, const char *expected_data);
+>> >  
+>> > diff --git a/tools/testing/selftests/liveupdate/lib/liveupdate.c b/tools/testing/selftests/liveupdate/lib/liveupdate.c
+>> > index 60121873f685..7bc6707d8bb7 100644
+>> > --- a/tools/testing/selftests/liveupdate/lib/liveupdate.c
+>> > +++ b/tools/testing/selftests/liveupdate/lib/liveupdate.c
+>> > @@ -54,9 +54,35 @@ int luo_retrieve_session(int luo_fd, const char *name)
+>> >  	return arg.fd;
+>> >  }
+>> >  
+>> > +int luo_session_preserve_fd(int session_fd, int fd, __u64 token)
+>> > +{
+>> > +	struct liveupdate_session_preserve_fd arg = {
+>> > +		.size = sizeof(arg),
+>> > +		.fd = fd,
+>> > +		.token = token,
+>> > +	};
+>> > +
+>> > +	if (ioctl(session_fd, LIVEUPDATE_SESSION_PRESERVE_FD, &arg) < 0)
+>> > +		return -errno;
+>> > +
+>> > +	return 0;
+>> > +}
+>> > +
+>> > +int luo_session_retrieve_fd(int session_fd, __u64 token)
+>> nit: Can add a comment that, once it is failed, retrieved status is saved,
+>> So it is permanent failure.
 >
-> No functional change intended.
+> I think appropriate place will be the official documentation which is
+> here include/uapi/linux/liveupdate.h
 >
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Co-developed-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> ---
->  tools/testing/selftests/liveupdate/.gitignore |  1 +
->  tools/testing/selftests/liveupdate/Makefile   | 14 ++++---------
->  .../include/libliveupdate.h}                  |  8 ++++----
+> I don't see it is mentioned in the documentation (yes, code does what
+> you have said), I will refrain from adding that comment here.
 
-Nit: perhaps libluo is a bit less wordy?
+Would be a good addition to the LUO docs I think. Patches welcome :-)
 
-No strong opinions on it though, so I am fine with anything.
-
-[...]
-> diff --git a/tools/testing/selftests/liveupdate/lib/libliveupdate.mk b/tools/testing/selftests/liveupdate/lib/libliveupdate.mk
-> new file mode 100644
-> index 000000000000..fffd95b085b6
-> --- /dev/null
-> +++ b/tools/testing/selftests/liveupdate/lib/libliveupdate.mk
-> @@ -0,0 +1,20 @@
-> +include $(top_srcdir)/scripts/subarch.include
-> +ARCH ?= $(SUBARCH)
-> +
-> +LIBLIVEUPDATE_SRCDIR := $(selfdir)/liveupdate/lib
-> +
-> +LIBLIVEUPDATE_C := liveupdate.c
-> +
-> +LIBLIVEUPDATE_OUTPUT := $(OUTPUT)/libliveupdate
-> +
-> +LIBLIVEUPDATE_O := $(patsubst %.c, $(LIBLIVEUPDATE_OUTPUT)/%.o, $(LIBLIVEUPDATE_C))
-> +
-> +LIBLIVEUPDATE_O_DIRS := $(shell dirname $(LIBLIVEUPDATE_O) | uniq)
-> +$(shell mkdir -p $(LIBLIVEUPDATE_O_DIRS))
-
-Sashiko complains about this:
-https://sashiko.dev/#/patchset/20260511201155.1488670-1-vipinsh%40google.com
-
-    Does this execute the directory creation unconditionally during Make parsing?
-    Because it uses the shell function at the top level, this directory creation
-    will run on every Make invocation, including utility targets like make clean
-    or make help.
-    
-    Could the shell dirname command also be fragile if LIBLIVEUPDATE_O ever
-    expands to multiple files? Strictly POSIX-compliant systems only accept a
-    single argument for dirname.
-    
-    Would it be better to use GNU Make's built-in $(dir ...) function and move
-    the directory creation into the compilation recipe below (e.g.,
-    @mkdir -p $(dir $@)), or use an order-only prerequisite?
-
-The first one seems to make sense. The second one not so much. The third
-I have no idea. I don't know Makefiles well enough.
-
-Perhaps worth a look?
-
-With these comments addressed, feel free to add
-
-Acked-by: Pratyush Yadav (Google) <pratyush@kernel.org>
-
-> +
-> +CFLAGS += -I$(LIBLIVEUPDATE_SRCDIR)/include
-> +
-> +$(LIBLIVEUPDATE_O): $(LIBLIVEUPDATE_OUTPUT)/%.o : $(LIBLIVEUPDATE_SRCDIR)/%.c
-> +	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
-> +
-> +EXTRA_CLEAN += $(LIBLIVEUPDATE_OUTPUT)
 [...]
 
 -- 
