@@ -1,37 +1,37 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603E83F0A85;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF7A3F1AB7;
 	Mon,  8 Jun 2026 14:55:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780930518; cv=none; b=qubDPmetCK8+FueCtpAEuEjQDBQeG9Bm0yCOSvp7jroYG09tbqmqN3LYeJJlyDBYWQL9CSZYBY5nXvhHDFfZYPZK+P8yEwbfhmZ9xBwjEVVdUfLec2VubSco4vACrgsY8o1iHsf3dUwEmIboT+V0c10a0fqg3FdMDc71pcxmsoA=
+	t=1780930519; cv=none; b=bqZyYXRz2Y9JZAVpNVkNb9L5szoYswBpPujBDk7xocX+ZB8qtMOKsrrv9dDYzVRl0ZPzvX6DfgzGS7Q2+yjjNmLq9Z5HxPXYzhqB7VxoxvVnAXKwhOtq1hBwqZOLCNgUYkP3QVjAxLKi2F8T8YP4+jteERya4uHmGZM0G7hCJyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780930518; c=relaxed/simple;
-	bh=CfSLh1mbVZA4b1iPKddBsS1/hY+MmDPfgrx5RwqH6BQ=;
+	s=arc-20240116; t=1780930519; c=relaxed/simple;
+	bh=plJjxDtBe0FSVEhxGSNqBqgVNhhrEm73LFDdwQPP650=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=URuZErtB7JpN0zoT4UqwhpG2al883tyLlUAhBdRbvsst1ESvhf2dEmUAf8lKDfHj7bN0T6+E28v3wFPzuEXd4+euYKNYHuDMaOw0kUJFK3saZ1snMNfk5A/wzh6xblplUovhgwl+Z+cYk4XQ+zpYwRR0kP9GatUYhE+ER9+aRDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Hu0bnb2g; arc=none smtp.client-ip=90.155.50.34
+	 MIME-Version; b=VFrJSzbZdG7LGfgxVuo/PbVf1y5VKhsLA7qzsmh1/GaSp1M/x4tfV6JW1TUkZWp4C6WXwsixUamnaL0f/X8lTntUTxTXfdQLxydE/s9m0Pa4fhLKG3OQ73FfNHe8D7cfCoZxxE1lktZSjranCbhCQwb5N2/4BUn5t21pe0ku91o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=rELP0pPs; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Hu0bnb2g"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="rELP0pPs"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:
-	From:Reply-To:Cc:Content-ID:Content-Description;
-	bh=c78r7FHx129wTlE8duPzxp93qTvHafKXfP1ElOAPp+s=; b=Hu0bnb2gTJzqaczociH1Gd9yU6
-	V9F3FDAt6H9lJWrBbnepBHzF5cFtAwyfJufteJNkcYd7UmwJbVGSeJ+PiYe0Vw0mWwyt2PtQNq3Ys
-	G7eVdSyuNjH+ehZf6PZmwQMYuoeaP7zSEecwrM4Ociadp0YNirqwZJ21WOR1Qak1GJNdNr7fs16YS
-	0UexfmoAAfxWHoBgrDH7yMnjXk1n9VGZnCC8pnXSrYtUfv6zhMG5gN9jiUO5B3LQN/lsVl/G1vDSS
-	WrhQctlyxYmEHa/EArSepdj0dRkq3whg/6n5LQFQPzAAI1+yWZmjnueJ59D3BOJBY2M+2nv8FXsSl
-	p4XpDtjQ==;
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:
+	Cc:Content-Type:Content-ID:Content-Description;
+	bh=s86e1eDk7JwzlpKJ6Et1TYCYwI2LU3hCrdoVI9vRngc=; b=rELP0pPshxo9UwZ5syelAnSKO6
+	4cfW8H6uBn/Zf/P0TiJzkdhGO+CwQJuVJ1hnrK2PiO+YODU7eRwQQ9U0yAKSEfyEvh/5xs4UNG2kn
+	+v9PB4fL/k9dKigWNx3dlMJnggVrVGZf0qAsQb8kfP3eJ8BEJA+ahjTIyHp2dRMjxWRNJSY2ptm2B
+	SEp+3poR4nnttJ92rVtigJ2l024kUzYMQSO61fQrwDR86js32ZvlkN2dNVL/BcDq4LQ51TBunnw8Y
+	ZCtUTxz76ATt+jri2NqK539eYVH1wZMP0lXqVNOlqeX2U5+2ij2e9cZSDy+MJzWgPGsBMFESKwxnq
+	+P/Ylngg==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wWbNS-0000000Dtxe-2Jxv;
+	id 1wWbNS-0000000Dtxo-3N7M;
 	Mon, 08 Jun 2026 14:54:59 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1wWbNS-00000000NGJ-2vCG;
+	id 1wWbNS-00000000NGd-3xVq;
 	Mon, 08 Jun 2026 15:54:58 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
@@ -61,9 +61,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	xen-devel@lists.xenproject.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 28/34] KVM: selftests: Add Xen/generic CPUID timing leaf test
-Date: Mon,  8 Jun 2026 15:48:09 +0100
-Message-ID: <20260608145455.89187-29-dwmw2@infradead.org>
+Subject: [PATCH v5 31/34] KVM: x86: Use ktime_get_snapshot_id() for master clock
+Date: Mon,  8 Jun 2026 15:48:12 +0100
+Message-ID: <20260608145455.89187-32-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260608145455.89187-1-dwmw2@infradead.org>
 References: <20260608145455.89187-1-dwmw2@infradead.org>
@@ -73,286 +73,121 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-Verify that userspace can correctly populate Xen and generic CPUID
-timing leaves using the KVM_VCPU_TSC_SCALE and
-KVM_VCPU_TSC_SCALE attributes.
+Replace the KVM-private vgettsc()/do_kvmclock_base()/do_monotonic()/
+do_realtime() timekeeping reimplementation with calls to the generic
+ktime_get_snapshot_id() interface.
 
-This validates that the removal of KVM's runtime Xen CPUID modification
-doesn't break guests: userspace queries the effective TSC and bus
-frequencies, computes the pvclock mul/shift, populates the CPUID leaves,
-and the guest verifies the values match.
+The snapshot provides both the system time and the raw_cycles (TSC)
+atomically paired. When raw_cycles is zero, the clocksource could not
+provide a raw hardware counter value, which is equivalent to the
+previous vgettsc() returning VDSO_CLOCKMODE_NONE.
 
-The test exercises:
- - KVM_VCPU_TSC_SCALE at native and scaled frequencies
- - KVM_VCPU_TSC_SCALE ratio verification against effective frequency
- - Generic timing leaf 0x40000010 (EAX=tsc_khz, EBX=bus_khz)
- - Xen leaf 3 sub-leaf 0 (ECX=guest TSC kHz)
- - Xen leaf 3 sub-leaf 1 (ECX=mul, EDX=shift)
+For kvm_get_time_and_clockread(), the kvmclock base time is
+CLOCK_MONOTONIC_RAW + offs_boot. The snapshot provides the raw time
+atomically paired with the TSC; offs_boot is added separately as it
+only changes at suspend/resume boundaries.
 
-Gracefully skips TSC scaling tests on hardware without support.
+This is a step towards eliminating the pvclock_gtod_data private copy
+of timekeeping state and the associated notifier callback.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Assisted-by: Kiro:claude-opus-4.6-1m
 ---
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../selftests/kvm/x86/xen_cpuid_timing_test.c | 230 ++++++++++++++++++
- 2 files changed, 231 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/xen_cpuid_timing_test.c
+ arch/x86/kvm/x86.c | 46 +++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 35 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 7ecaaf82056e..58aac2980cdf 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -141,6 +141,7 @@ TEST_GEN_PROGS_x86 += x86/xss_msr_test
- TEST_GEN_PROGS_x86 += x86/debug_regs
- TEST_GEN_PROGS_x86 += x86/tsc_msrs_test
- TEST_GEN_PROGS_x86 += x86/vmx_pmu_caps_test
-+TEST_GEN_PROGS_x86 += x86/xen_cpuid_timing_test
- TEST_GEN_PROGS_x86 += x86/xen_shinfo_test
- TEST_GEN_PROGS_x86 += x86/xen_vmcall_test
- TEST_GEN_PROGS_x86 += x86/sev_init2_tests
-diff --git a/tools/testing/selftests/kvm/x86/xen_cpuid_timing_test.c b/tools/testing/selftests/kvm/x86/xen_cpuid_timing_test.c
-new file mode 100644
-index 000000000000..a0c262b8db89
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/xen_cpuid_timing_test.c
-@@ -0,0 +1,230 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Test that userspace can correctly populate Xen and generic CPUID
-+ * timing leaves using KVM_GET_TSC_KHZ and KVM_VCPU_TSC_SCALE.
-+ *
-+ * This validates that the removal of KVM's runtime Xen CPUID modification
-+ * doesn't break guests, because userspace has all the information needed.
-+ */
-+#include <stdint.h>
-+#include <string.h>
-+#include <unistd.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+
-+#include <asm/pvclock-abi.h>
-+
-+#define XEN_CPUID_BASE		0x40000100
-+#define XEN_CPUID_LEAF(n)	(XEN_CPUID_BASE + (n))
-+#define GENERIC_TIMING_LEAF	0x40000010
-+
-+/* Values set by host, verified by guest */
-+static uint32_t expected_tsc_khz;
-+static uint32_t expected_bus_khz;
-+static uint32_t expected_tsc_mul;
-+static int8_t   expected_tsc_shift;
-+static uint64_t host_khz;
-+
-+static void guest_code(void)
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 96250264d403..2713aebb96ae 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -35,6 +35,7 @@
+ #include "smm.h"
+ 
+ #include <linux/clocksource.h>
++#include <linux/timekeeping.h>
+ #include <linux/interrupt.h>
+ #include <linux/kvm.h>
+ #include <linux/fs.h>
+@@ -3162,14 +3163,32 @@ static int do_realtime(struct timespec64 *ts, u64 *tsc_timestamp)
+  * reports the TSC value from which it do so. Returns true if host is
+  * using TSC based clocksource.
+  */
++static bool kvm_snapshot_has_tsc(struct system_time_snapshot *snap,
++				u64 *tsc_timestamp)
 +{
-+	uint32_t eax, ebx, ecx, edx;
++	if (snap->cs_id == CSID_X86_TSC) {
++		*tsc_timestamp = snap->cycles;
++		return true;
++	}
 +
-+	/* Check generic timing leaf 0x40000010 */
-+	__cpuid(GENERIC_TIMING_LEAF, 0, &eax, &ebx, &ecx, &edx);
-+	GUEST_ASSERT_EQ(eax, expected_tsc_khz);
-+	GUEST_ASSERT_EQ(ebx, expected_bus_khz);
++	if (snap->hw_csid == CSID_X86_TSC && snap->hw_cycles) {
++		*tsc_timestamp = snap->hw_cycles;
++		return true;
++	}
 +
-+	/* Check Xen leaf 3, sub-leaf 0: ECX = guest TSC frequency */
-+	__cpuid(XEN_CPUID_LEAF(3), 0, &eax, &ebx, &ecx, &edx);
-+	GUEST_ASSERT_EQ(ecx, expected_tsc_khz);
-+
-+	/* Check Xen leaf 3, sub-leaf 1: ECX = mul, EDX = shift */
-+	__cpuid(XEN_CPUID_LEAF(3), 1, &eax, &ebx, &ecx, &edx);
-+	GUEST_ASSERT_EQ(ecx, expected_tsc_mul);
-+	GUEST_ASSERT_EQ((int8_t)edx, expected_tsc_shift);
-+
-+	GUEST_SYNC(0);
++	return false;
 +}
 +
-+static void add_cpuid_entry(struct kvm_vcpu *vcpu, uint32_t function,
-+			    uint32_t index, uint32_t eax, uint32_t ebx,
-+			    uint32_t ecx, uint32_t edx)
-+{
-+	struct kvm_cpuid2 *cpuid = vcpu->cpuid;
-+	struct kvm_cpuid_entry2 *entry;
-+	int n = cpuid->nent;
+ static bool kvm_get_time_and_clockread(s64 *kernel_ns, u64 *tsc_timestamp)
+ {
+-	/* checked again under seqlock below */
+-	if (!gtod_is_based_on_tsc(pvclock_gtod_data.clock.vclock_mode))
++	struct system_time_snapshot snap;
 +
-+	vcpu->cpuid = realloc(vcpu->cpuid,
-+			      sizeof(*cpuid) + (n + 1) * sizeof(*entry));
-+	cpuid = vcpu->cpuid;
-+	cpuid->nent = n + 1;
++	ktime_get_snapshot_id(CLOCK_MONOTONIC_RAW, &snap);
++	if (!kvm_snapshot_has_tsc(&snap, tsc_timestamp))
+ 		return false;
+ 
+-	return gtod_is_based_on_tsc(do_kvmclock_base(kernel_ns,
+-						     tsc_timestamp));
++	*kernel_ns = ktime_to_ns(ktime_mono_to_any(snap.systime, TK_OFFS_BOOT));
++	return true;
+ }
+ 
+ /*
+@@ -3178,12 +3197,14 @@ static bool kvm_get_time_and_clockread(s64 *kernel_ns, u64 *tsc_timestamp)
+  */
+ bool kvm_get_monotonic_and_clockread(s64 *kernel_ns, u64 *tsc_timestamp)
+ {
+-	/* checked again under seqlock below */
+-	if (!gtod_is_based_on_tsc(pvclock_gtod_data.clock.vclock_mode))
++	struct system_time_snapshot snap;
 +
-+	entry = &cpuid->entries[n];
-+	memset(entry, 0, sizeof(*entry));
-+	entry->function = function;
-+	entry->index = index;
-+	entry->flags = KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
-+	entry->eax = eax;
-+	entry->ebx = ebx;
-+	entry->ecx = ecx;
-+	entry->edx = edx;
-+}
++	ktime_get_snapshot_id(CLOCK_MONOTONIC, &snap);
++	if (!kvm_snapshot_has_tsc(&snap, tsc_timestamp))
+ 		return false;
+ 
+-	return gtod_is_based_on_tsc(do_monotonic(kernel_ns,
+-						 tsc_timestamp));
++	*kernel_ns = ktime_to_ns(snap.systime);
++	return true;
+ }
+ 
+ /*
+@@ -3196,11 +3217,14 @@ bool kvm_get_monotonic_and_clockread(s64 *kernel_ns, u64 *tsc_timestamp)
+ static bool kvm_get_walltime_and_clockread(struct timespec64 *ts,
+ 					   u64 *tsc_timestamp)
+ {
+-	/* checked again under seqlock below */
+-	if (!gtod_is_based_on_tsc(pvclock_gtod_data.clock.vclock_mode))
++	struct system_time_snapshot snap;
 +
-+/*
-+ * Compute pvclock mul/shift from frequency, matching kvm_get_time_scale().
-+ */
-+static void compute_tsc_mul_shift(uint64_t tsc_hz, uint32_t *mul, int8_t *shift)
-+{
-+	uint64_t scaled = 1000000000ULL;
-+	uint64_t base = tsc_hz;
-+	int32_t s = 0;
-+	uint32_t base32;
-+
-+	while (base > scaled * 2 || base >> 32) {
-+		base >>= 1;
-+		s--;
-+	}
-+	base32 = (uint32_t)base;
-+	while (base32 <= scaled || scaled >> 32) {
-+		if (scaled >> 32 || base32 & (1U << 31))
-+			scaled >>= 1;
-+		else
-+			base32 <<= 1;
-+		s++;
-+	}
-+	*mul = (uint32_t)((scaled << 32) / base32);
-+	*shift = (int8_t)s;
-+}
-+
-+static void run_test(uint64_t tsc_khz)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+	uint32_t effective_tsc_khz, effective_bus_khz;
-+	int bus_cycle_ns;
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+
-+	if (tsc_khz) {
-+		pr_info("Testing at TSC frequency %lu kHz\n", tsc_khz);
-+		vcpu_ioctl(vcpu, KVM_SET_TSC_KHZ, (void *)(unsigned long)tsc_khz);
-+	} else {
-+		pr_info("Testing at native TSC frequency\n");
-+	}
-+
-+	effective_tsc_khz = __vcpu_ioctl(vcpu, KVM_GET_TSC_KHZ, NULL);
-+	bus_cycle_ns = vm_check_cap(vm, KVM_CAP_X86_APIC_BUS_CYCLES_NS);
-+	effective_bus_khz = bus_cycle_ns > 0 ? 1000000 / bus_cycle_ns : 1000000;
-+
-+	/* If scaling wasn't applied, skip this frequency */
-+	if (tsc_khz && effective_tsc_khz == host_khz) {
-+		pr_info("  TSC scaling not available, skipping\n");
-+		kvm_vm_release(vm);
-+		return;
-+	}
-+
-+	pr_info("  Effective TSC: %u kHz, Bus: %u kHz\n", effective_tsc_khz, effective_bus_khz);
-+
-+	/* Also exercise KVM_VCPU_TSC_SCALE if available */
-+	{
-+		struct { uint64_t ratio; uint64_t frac_bits; } scale;
-+		struct kvm_device_attr scale_attr = {
-+			.group = KVM_VCPU_TSC_CTRL,
-+			.attr = 1, /* KVM_VCPU_TSC_SCALE */
-+			.addr = (uint64_t)(uintptr_t)&scale,
-+		};
-+
-+		if (!__vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &scale_attr)) {
-+			vcpu_ioctl(vcpu, KVM_GET_DEVICE_ATTR, &scale_attr);
-+			pr_info("  TSC scale: ratio=%lu frac_bits=%lu\n",
-+				scale.ratio, scale.frac_bits);
-+
-+			/*
-+			 * Verify: applying the ratio to the host TSC frequency
-+			 * should give approximately the effective frequency.
-+			 */
-+			if (tsc_khz) {
-+				uint64_t computed = ((__uint128_t)host_khz * scale.ratio) >> scale.frac_bits;
-+				int64_t diff = (int64_t)computed - (int64_t)effective_tsc_khz;
-+
-+				TEST_ASSERT(diff >= -1 && diff <= 1,
-+					    "TSC_SCALE ratio mismatch: computed %lu vs effective %u (diff %ld)",
-+					    computed, effective_tsc_khz, diff);
-+			}
-+		}
-+	}
-+
-+	compute_tsc_mul_shift((uint64_t)effective_tsc_khz * 1000,
-+			      &expected_tsc_mul, &expected_tsc_shift);
-+
-+	expected_tsc_khz = effective_tsc_khz;
-+	expected_bus_khz = effective_bus_khz;
-+
-+	sync_global_to_guest(vm, expected_tsc_khz);
-+	sync_global_to_guest(vm, expected_bus_khz);
-+	sync_global_to_guest(vm, expected_tsc_mul);
-+	sync_global_to_guest(vm, expected_tsc_shift);
-+
-+	/* Populate CPUID leaves as a VMM would */
-+	add_cpuid_entry(vcpu, GENERIC_TIMING_LEAF, 0,
-+			effective_tsc_khz, effective_bus_khz, 0, 0);
-+	add_cpuid_entry(vcpu, XEN_CPUID_LEAF(3), 0,
-+			0, 0, effective_tsc_khz, 0);
-+	add_cpuid_entry(vcpu, XEN_CPUID_LEAF(3), 1,
-+			0, 0, expected_tsc_mul,
-+			(uint32_t)(uint8_t)expected_tsc_shift);
-+
-+	vcpu_set_cpuid(vcpu);
-+
-+	pr_info("  pvclock mul=%u shift=%d\n", expected_tsc_mul, expected_tsc_shift);
-+
-+	vcpu_run(vcpu);
-+	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
-+
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+		break;
-+	case UCALL_SYNC:
-+		break;
-+	default:
-+		TEST_FAIL("Unexpected ucall");
-+	}
-+
-+	kvm_vm_release(vm);
-+}
-+
-+int main(void)
-+{
-+	uint64_t freq;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct kvm_device_attr attr = {
-+		.group = KVM_VCPU_TSC_CTRL,
-+		.attr = KVM_VCPU_TSC_SCALE,
-+	};
-+
-+	TEST_REQUIRE(sys_clocksource_is_based_on_tsc());
-+
-+	/* Check KVM_VCPU_TSC_SCALE is supported (implies TSC scaling) */
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+	TEST_REQUIRE(!__vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &attr));
-+	host_khz = __vcpu_ioctl(vcpu, KVM_GET_TSC_KHZ, NULL);
-+	kvm_vm_release(vm);
-+
-+	/* Native frequency */
-+	run_test(0);
-+
-+	/* Scaled frequencies — skip if TSC scaling not available */
-+	for (freq = 1000000; freq <= 4000000; freq += 1000000) {
-+		if (freq == host_khz)
-+			continue;
-+		run_test(freq);
-+	}
-+
-+	pr_info("PASS: All CPUID timing leaf tests passed\n");
-+	return 0;
-+}
++	ktime_get_snapshot_id(CLOCK_REALTIME, &snap);
++	if (!kvm_snapshot_has_tsc(&snap, tsc_timestamp))
+ 		return false;
+ 
+-	return gtod_is_based_on_tsc(do_realtime(ts, tsc_timestamp));
++	*ts = ktime_to_timespec64(snap.systime);
++	return true;
+ }
+ #endif
+ 
 -- 
 2.54.0
 
