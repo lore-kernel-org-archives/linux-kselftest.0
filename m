@@ -1,55 +1,72 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76263EC2EA;
-	Mon,  8 Jun 2026 14:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15C93F076C;
+	Mon,  8 Jun 2026 14:55:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780930406; cv=none; b=nqvdItRBjwMpkgzrjqovB9r8sHeh3hEzu6ydn67InUJwV37ewI9ncK63Y1RWL4XHENxu9JjMYDP6SBBIkDf0mXc4WVPjGFfVwPZN0MxEjrKFa2MiN6MlL0NrDcwQej7iTf95cmfjDLFS5q+yQwpLP3W4XIUr18XeQE1ZBmX19jg=
+	t=1780930516; cv=none; b=mp+dg/hhDBGkwdGeAm5KeJK6pgS8/K/DNZj4GETUFwONZWmLbSelHt3UmIk5RbLRPwXRfSAWQM6q24wyqF6U3plhP7knuU3OT5pSgUZTdPAZQAPeI+t3+t8Mb9m1YxuGJkbh8MNzHWoZuzhd28/pPoeEqJe5gGqda80JXFmnAZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780930406; c=relaxed/simple;
-	bh=Pl7tYw4HIb7Q4Al7iFy0KP1+3bJ5bnGm7Psh7CNKj78=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pPoIUFy43syH9CYlYcyPcIQ9Qi3tjm2GdYljvBiwii1kcD374mX7A0ZpyXHcKO5lCoIRgIQvkrYu7QndiZVGWQu2WynEOQ5Mm6fSBURIWcLwcgUEzh/r4HeBUmiJvO341zw20NuVWT3oKis9MaZD+Z1bXwIAGuK8sGVeb/E00o0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IyGeyX86; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780930516; c=relaxed/simple;
+	bh=y4ApAUIqRPCFjHNLAgcYHd73PCgvXtcqEokKbJmlZR4=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sjXS611/HEIsJGzx+U9r32Y0dcvz2VZ0DBZKUyJ3RChRGAqSqlCBMh2qdLZWYZOjFdVYV6RrrkBWb42JJcBKaXhApLVR281dZGQYbFmRymO4Cc3JuAnIxslAe1vo5NNromwANzNhe08lPA8P/1PEVkjml037gjERwGNOgD899Co=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=aZGcqpzL; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IyGeyX86"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780930401;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/YipO/dVbEf/rkjPdFkXbR7ai/n9Yp+2D4IvUsZ6fnQ=;
-	b=IyGeyX86qW2NcXufPVn7ZV2UXTi83hg0Ri+Z9+964IZcDSW95CcQ5ZgliHxGEawJaUIMao
-	BBgn0ZPz+DGESJTQwHe/kvtUDV8yqWloKMDh4C1i+jq93IsGyeoyEAqawRTO+KLVMfKGkW
-	oPEgAejkoqNJ1HJ8NLaHwYj+NS91UBQ=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="aZGcqpzL"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:
+	Cc:Content-Type:Content-ID:Content-Description;
+	bh=PQH1s5X/ubTmj6TSpsud5d3OFm7dGCk1M0UtxMvyZFE=; b=aZGcqpzLCQbJf47VRT2oCaHI5o
+	SbAvKu7kWlyBGUrmA+/l18vVNr3QdBHfahIrcZfQJkGAVGs3o38KJEBbjYKPlOT3SLqiUCtvrsFsJ
+	+bQDvjqz5fKj7TDGjjosEQDQqsLwzFAVCtk3kq5eQJU1TTq5ZjeuuUKmfbEl1JbB7LBj0yjstTGmr
+	tD875uYDxfNpnbgVQ2IwPqLHLrPWnwCTEwaW/6RAh1iJBiyO5Lvjt+V1kVbQq4RmF4JOOqDu7vCzO
+	0ECh92S0tDag2AlJwALLBG0Hyx5dV5NF5QRVf4QBmHvn8D7AQZAomwzKdDDH4Cv38nEnOl12amZgA
+	4srQhWTQ==;
+Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wWbNR-0000000Dtx6-2v57;
+	Mon, 08 Jun 2026 14:54:58 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.2 #2 (Red Hat Linux))
+	id 1wWbNR-00000000NEq-2rr6;
+	Mon, 08 Jun 2026 15:54:57 +0100
+From: David Woodhouse <dwmw2@infradead.org>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Juergen Gross <jgross@suse.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Paul Durrant <paul@xen.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Sascha Bischoff <Sascha.Bischoff@arm.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Jack Allister <jalliste@amazon.com>,
+	Dongli Zhang <dongli.zhang@oracle.com>,
+	joe.jin@oracle.com,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v5 9/9] selftests/bpf: Add test to verify bpf_iter for global percpu data
-Date: Mon,  8 Jun 2026 22:51:13 +0800
-Message-ID: <20260608145113.65857-10-leon.hwang@linux.dev>
-In-Reply-To: <20260608145113.65857-1-leon.hwang@linux.dev>
-References: <20260608145113.65857-1-leon.hwang@linux.dev>
+	xen-devel@lists.xenproject.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v5 07/34] KVM: x86: Activate master clock immediately on vCPU creation
+Date: Mon,  8 Jun 2026 15:47:48 +0100
+Message-ID: <20260608145455.89187-8-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260608145455.89187-1-dwmw2@infradead.org>
+References: <20260608145455.89187-1-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,119 +74,41 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-Add a test to verify that it is OK to iter the percpu_array map used for
-global percpu data.
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+Previously, the master clock was only activated when the first vCPU
+processed KVM_REQ_MASTERCLOCK_UPDATE during KVM_RUN. This meant that
+KVM_GET_CLOCK could not return the host_tsc field until after the
+first KVM_RUN, making it impossible for userspace to follow the
+documented TSC migration procedure without a dummy vCPU run.
+
+Fix this by calling kvm_update_masterclock() directly from
+kvm_arch_vcpu_postcreate(), after kvm_synchronize_tsc() has already
+set all_vcpus_matched_freq. This ensures the master clock is active
+immediately, and KVM_GET_CLOCK returns a valid {host_tsc, realtime}
+pair as soon as a vCPU exists.
+
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
- .../bpf/prog_tests/global_data_init.c         | 52 +++++++++++++++++++
- .../bpf/progs/test_global_percpu_data.c       | 25 +++++++++
- 2 files changed, 77 insertions(+)
+ arch/x86/kvm/x86.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index c3b9423246b5..6c1813ffe5f3 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -333,6 +333,56 @@ static void test_global_percpu_data_xlated(void)
- 	free(insns);
- }
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index b7e5f6e3dc6c..c1897d939da9 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -13098,6 +13098,8 @@ void kvm_arch_vcpu_postcreate(struct kvm_vcpu *vcpu)
+ 		return;
+ 	vcpu_load(vcpu);
+ 	kvm_synchronize_tsc(vcpu, NULL);
++	if (!vcpu->kvm->arch.use_master_clock)
++		kvm_update_masterclock(vcpu->kvm);
+ 	vcpu_put(vcpu);
  
-+static void test_global_percpu_data_iter(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct test_global_percpu_data *skel;
-+	union bpf_iter_link_info linfo = {};
-+	struct bpf_link *link = NULL;
-+	int fd, num_cpus, len, err;
-+	char buf[16];
-+
-+	num_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	skel = test_global_percpu_data__open();
-+	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-+		return;
-+
-+	skel->rodata->num_cpus = num_cpus;
-+	skel->rodata->offsetof_num = offsetof(struct test_global_percpu_data__percpu, struct_data);
-+	skel->rodata->offsetof_num += sizeof(skel->percpu->struct_data) - sizeof(int);
-+	skel->rodata->elem_sz = roundup(sizeof(struct test_global_percpu_data__percpu), 8);
-+	skel->percpu->struct_data.nums[6] = 0xc0de;
-+
-+	err = test_global_percpu_data__load(skel);
-+	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-+		goto out;
-+
-+	linfo.map.map_fd = bpf_map__fd(skel->maps.percpu);
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(skel->progs.dump_percpu_data, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto out;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
-+		goto out;
-+
-+	while ((len = read(fd, buf, sizeof(buf))) > 0)
-+		do { } while (0);
-+	ASSERT_EQ(len, 0, "read iter");
-+	ASSERT_TRUE(skel->bss->run_iter, "run_iter");
-+	ASSERT_EQ(skel->bss->percpu_data_sum, 0xc0de * num_cpus, "percpu_data_sum");
-+
-+	close(fd);
-+out:
-+	bpf_link__destroy(link);
-+	test_global_percpu_data__destroy(skel);
-+}
-+
- void test_global_percpu_data(void)
- {
- 	if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
-@@ -348,4 +398,6 @@ void test_global_percpu_data(void)
- 		test_global_percpu_data_verifier_log();
- 	if (test__start_subtest("xlated"))
- 		test_global_percpu_data_xlated();
-+	if (test__start_subtest("iter"))
-+		test_global_percpu_data_iter();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index 9a1b1a314c2f..037c8a05be4b 100644
---- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -62,4 +62,29 @@ int verifier_percpu_read(void *ctx)
- 	return c == ' ';
- }
- 
-+volatile const __u32 num_cpus = 0;
-+volatile const int offsetof_num;
-+volatile const int elem_sz;
-+__u32 percpu_data_sum = 0;
-+bool run_iter = false;
-+
-+SEC("iter/bpf_map_elem")
-+__auxiliary
-+int dump_percpu_data(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	void *pptr = ctx->value;
-+	int i;
-+
-+	if (!pptr)
-+		return 0;
-+
-+	run_iter = true;
-+
-+	for (i = 0; i < num_cpus; i++) {
-+		percpu_data_sum += *(int *) (pptr + offsetof_num);
-+		pptr += elem_sz;
-+	}
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
+ 	/* poll control enabled by default */
 -- 
 2.54.0
 
