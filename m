@@ -1,270 +1,131 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA493BBFBF;
-	Mon,  8 Jun 2026 14:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284FA2C15A0;
+	Mon,  8 Jun 2026 14:32:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780928732; cv=none; b=SYe8muEDYEFDdlgteFWgDIr93uqU/4KJgd/7PXe7BagUb4zY4T5j7BJPmzLhxRfE5ISEhbssjboE0bmPfGDWqtxfDQnesnBl+Mnm1TO2tsAnHuK4saFJoxMytjwjjnFZlbfIVcUH9AIyUaTvDY46/N2LqYpZ5araKNVDR+tlPxk=
+	t=1780929122; cv=none; b=NDsHtl0bJcqenstnqIjgIzdc6CaniLFS7v6EFJzRROgIxSBziKqZTlSm4YYyFY3tYfF+GMutzBO5JKvAO0yYb9z4B3JN/dSmCeXunwjKtwLus4GW3YPjTz+QYcTn86jijBK0k9n5SxzEh1vxhlPiGEUbW37DMO+Y4Jh6ywU+Kkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780928732; c=relaxed/simple;
-	bh=OUIfpm4yjESU1AoCPcmkXCaC7HzyHnY3p+M2tI4H2Uw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=btygi2q5l/A9YdNoFvixVAIlgGXz6vUo1JjPH799gDt+7WSHzXFA0DMfhqbaNoPuopKkoc7iOUQ2HdCCak9SR89DM1sWDlQmABqyVvTzb2PXRTfZbl4cg22tv29jOyGOLNNMmcBg0QrT8u1mzloZpRPecbo9wNipYgdadlby9kQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=POvJmeMY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780929122; c=relaxed/simple;
+	bh=Vq+kfKcSNF3flf3Wg99MwCMYVyrrBvEwo9miGVees8Y=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=lBqhD9RtF/vhhXqPZZ8vLJIkSd4z4p4pbeudONgnN/oaMqn2vE8WTdJo+ntORIXxeyAQBhTp3ZOY+zKTrmF6owhiB8EwemT3/wJ96MM+9X6AH9rEkNWbApA7bZDDi9jS0LndXJLRS+/QTeURimL8VLtlWZtWEJARlDHe9ScfZXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dSFVhS4i; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="POvJmeMY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 484AC1F00893;
-	Mon,  8 Jun 2026 14:25:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dSFVhS4i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A171F00893;
+	Mon,  8 Jun 2026 14:31:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780928730;
-	bh=LXebLbU2PlO++pXKjvrv4XdGUtGGv/sVqpWNGZI12mI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=POvJmeMYSx9UAj3HfJbX4UIIte/iPDJNRUJhZM9IzDYz/oDcVE6URGfU+d1nJrcKe
-	 ZXtDMBhfgr2Y7DbV1TS+NXJRMTYhXvns+p+TigtDhfuTfA6hixbsfiFqkK8xHWTN8J
-	 RrpUApPFVi+AwTTjRJBF/e8fS7NFcn7uXG8EJFaJ5Uj9S5qgznR04rqVYHTfWheqeS
-	 amuKcmhirwSZEAT6UOuy1BzoAsEKsH4ZpjBblT+SsUb8p4rEd8VS4Sqb7ay377YwyH
-	 36J5EBi2TK0KQ6+lcNeIoLyS+UxjLpi6C+Yg42J1nFzuQfIBOf990eWgzE1C2E7LsE
-	 A7Ph4C33Sz46A==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 7/7] tracing/probes: Add a new testcase for BTF typecasts
-Date: Mon,  8 Jun 2026 23:25:26 +0900
-Message-ID: <178092872598.163648.6705606677777891702.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <178092865666.163648.10457567771536160909.stgit@devnote2>
-References: <178092865666.163648.10457567771536160909.stgit@devnote2>
-User-Agent: StGit/0.19
+	s=k20260515; t=1780929120;
+	bh=GXzhRNmiyLzV5XpoYdPWmv4GRg29mmsANh1qKiJSDnQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=dSFVhS4iS5L53nJOdib+8Ww+15mnqO+ql7RkXjQFHQCrei1fnAv6HT3kBq/HsakmR
+	 IAwQr2S4GYxPLM6HCqjO2SWAxzuov2TbvDaZ5qiYQ8+ROqj7B0hzX6ZOMuJ+gYwP1d
+	 SjCiVleP4P/rRXqcPhWY4TH9T/pYndqaCm7EBs9zmWRaccbLyz1bJBu2TCHWL0Cr0V
+	 DzLoQtsjoxS2st1Lf8dDzZD+Z4FOn92S++Acw9jaozOzb5/oOKogBihKbuQlXvrYQs
+	 E5Ry3JyB2KNFc/WeF7gEGDXOlQTaM+BQVyssTX8Id4PBav49gJPYdqJ5ojJPZco+qn
+	 FwwyCqjR8dSzw==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Vipin Sharma <vipinsh@google.com>
+Cc: pasha.tatashin@soleen.com,  rppt@kernel.org,  pratyush@kernel.org,
+  shuah@kernel.org,  dmatlack@google.com,  skhawaja@google.com,
+  tarunsahu@google.com,  linux-kernel@vger.kernel.org,
+  linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests/liveupdate: Move luo_test_utils.* into a
+ reusable library
+In-Reply-To: <20260511201155.1488670-2-vipinsh@google.com> (Vipin Sharma's
+	message of "Mon, 11 May 2026 13:11:54 -0700")
+References: <20260511201155.1488670-1-vipinsh@google.com>
+	<20260511201155.1488670-2-vipinsh@google.com>
+Date: Mon, 08 Jun 2026 16:31:57 +0200
+Message-ID: <2vxzo6hlt86a.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Mon, May 11 2026, Vipin Sharma wrote:
 
-With the introduction of container_of-style BTF typecasting and
-per-CPU variable access support in trace probes, we need a way to
-verify their functionality and prevent regressions.
+> Move luo_test_utils.[ch] into a lib/ directory and pull the rules to
+> build them out into a separate make script. This will enable these
+> utilities to be also built by and used within other selftests (such as
+> VFIO).
+>
+> No functional change intended.
+>
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> Co-developed-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> ---
+>  tools/testing/selftests/liveupdate/.gitignore |  1 +
+>  tools/testing/selftests/liveupdate/Makefile   | 14 ++++---------
+>  .../include/libliveupdate.h}                  |  8 ++++----
 
-Add a new ftrace kselftest and update the trace event sample module to
-test and validate these features.
+Nit: perhaps libluo is a bit less wordy?
 
-Specifically, update the trace-events-sample module to set up a periodic
-timer whose callback accesses a per-CPU counter. Introduce a new sample
-trace event, foo_timer_fn, to trace this callback and log the current
-counter value.
+No strong opinions on it though, so I am fine with anything.
 
-Then, add a new test case, btf_probe_event.tc, which defines a dynamic
-probe on the timer callback. The probe uses BTF typecasting to recover
-the parent structure from the timer argument and +CPU() to fetch the
-per-CPU counter. The test verifies the integrity of the implementation
-by ensuring the values recorded by the dynamic probe match those from
-the static tracepoint.
+[...]
+> diff --git a/tools/testing/selftests/liveupdate/lib/libliveupdate.mk b/tools/testing/selftests/liveupdate/lib/libliveupdate.mk
+> new file mode 100644
+> index 000000000000..fffd95b085b6
+> --- /dev/null
+> +++ b/tools/testing/selftests/liveupdate/lib/libliveupdate.mk
+> @@ -0,0 +1,20 @@
+> +include $(top_srcdir)/scripts/subarch.include
+> +ARCH ?= $(SUBARCH)
+> +
+> +LIBLIVEUPDATE_SRCDIR := $(selfdir)/liveupdate/lib
+> +
+> +LIBLIVEUPDATE_C := liveupdate.c
+> +
+> +LIBLIVEUPDATE_OUTPUT := $(OUTPUT)/libliveupdate
+> +
+> +LIBLIVEUPDATE_O := $(patsubst %.c, $(LIBLIVEUPDATE_OUTPUT)/%.o, $(LIBLIVEUPDATE_C))
+> +
+> +LIBLIVEUPDATE_O_DIRS := $(shell dirname $(LIBLIVEUPDATE_O) | uniq)
+> +$(shell mkdir -p $(LIBLIVEUPDATE_O_DIRS))
 
-Assisted-by: Antigravity:gemini-3.5-flash
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- samples/trace_events/trace-events-sample.c         |   38 ++++++++++++++-
- samples/trace_events/trace-events-sample.h         |   34 ++++++++++++-
- .../ftrace/test.d/dynevent/btf_probe_event.tc      |   52 ++++++++++++++++++++
- 3 files changed, 120 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
+Sashiko complains about this:
+https://sashiko.dev/#/patchset/20260511201155.1488670-1-vipinsh%40google.com
 
-diff --git a/samples/trace_events/trace-events-sample.c b/samples/trace_events/trace-events-sample.c
-index ecc7db237f2e..770315812218 100644
---- a/samples/trace_events/trace-events-sample.c
-+++ b/samples/trace_events/trace-events-sample.c
-@@ -94,6 +94,20 @@ static int simple_thread_fn(void *arg)
- static DEFINE_MUTEX(thread_mutex);
- static int simple_thread_cnt;
- 
-+static struct foo_timer_data *foo_timer_data;
-+
-+static void sample_timer_cb(struct timer_list *t)
-+{
-+	struct foo_timer_data *data = container_of(t, struct foo_timer_data, timer);
-+
-+	get_cpu();
-+	trace_foo_timer_fn(data);
-+	(*this_cpu_ptr(data->counter))++;
-+	put_cpu();
-+
-+	mod_timer(t, jiffies + HZ);
-+}
-+
- int foo_bar_reg(void)
- {
- 	mutex_lock(&thread_mutex);
-@@ -128,9 +142,27 @@ void foo_bar_unreg(void)
- 
- static int __init trace_event_init(void)
- {
-+	foo_timer_data = kzalloc_obj(*foo_timer_data, GFP_KERNEL);
-+	if (!foo_timer_data)
-+		return -ENOMEM;
-+
-+	foo_timer_data->name = "sample_timer_counter";
-+	foo_timer_data->counter = alloc_percpu(int);
-+	if (!foo_timer_data->counter) {
-+		kfree(foo_timer_data);
-+		return -ENOMEM;
-+	}
-+
-+	timer_setup(&foo_timer_data->timer, sample_timer_cb, 0);
-+	mod_timer(&foo_timer_data->timer, jiffies + HZ);
-+
- 	simple_tsk = kthread_run(simple_thread, NULL, "event-sample");
--	if (IS_ERR(simple_tsk))
-+	if (IS_ERR(simple_tsk)) {
-+		timer_delete_sync(&foo_timer_data->timer);
-+		free_percpu(foo_timer_data->counter);
-+		kfree(foo_timer_data);
- 		return -1;
-+	}
- 
- 	return 0;
- }
-@@ -143,6 +175,10 @@ static void __exit trace_event_exit(void)
- 		kthread_stop(simple_tsk_fn);
- 	simple_tsk_fn = NULL;
- 	mutex_unlock(&thread_mutex);
-+
-+	timer_delete_sync(&foo_timer_data->timer);
-+	free_percpu(foo_timer_data->counter);
-+	kfree(foo_timer_data);
- }
- 
- module_init(trace_event_init);
-diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_events/trace-events-sample.h
-index 1a05fc153353..816848a456a2 100644
---- a/samples/trace_events/trace-events-sample.h
-+++ b/samples/trace_events/trace-events-sample.h
-@@ -247,12 +247,14 @@
-  */
- 
- /*
-- * It is OK to have helper functions in the file, but they need to be protected
-- * from being defined more than once. Remember, this file gets included more
-- * than once.
-+ * It is OK to have helper functions and data structures in the file, but they
-+ * need to be protected from being defined more than once. Remember, this file
-+ * gets included more than once.
-  */
- #ifndef __TRACE_EVENT_SAMPLE_HELPER_FUNCTIONS
- #define __TRACE_EVENT_SAMPLE_HELPER_FUNCTIONS
-+#include <linux/timer.h>
-+
- static inline int __length_of(const int *list)
- {
- 	int i;
-@@ -270,6 +272,13 @@ enum {
- 	TRACE_SAMPLE_BAR = 4,
- 	TRACE_SAMPLE_ZOO = 8,
- };
-+
-+struct foo_timer_data {
-+	const char		*name;
-+	struct timer_list	timer;
-+	int __percpu		*counter;
-+};
-+
- #endif
- 
- /*
-@@ -595,6 +604,25 @@ TRACE_EVENT(foo_rel_loc,
- 		  __get_rel_bitmask(bitmask),
- 		  __get_rel_cpumask(cpumask))
- );
-+
-+TRACE_EVENT(foo_timer_fn,
-+
-+	TP_PROTO(struct foo_timer_data *data),
-+
-+	TP_ARGS(data),
-+
-+	TP_STRUCT__entry(
-+		__string(	name,			data->name	)
-+		__field(	int,			count		)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name);
-+		__entry->count	= *this_cpu_ptr(data->counter);
-+	),
-+
-+	TP_printk("name=%s count=%d", __get_str(name), __entry->count)
-+);
- #endif
- 
- /***** NOTICE! The #if protection ends here. *****/
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-new file mode 100644
-index 000000000000..f1980650dbe2
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-@@ -0,0 +1,52 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: BTF event with typecast and percpu access
-+# requires: dynamic_events " +CPU(<fetcharg>)":README "[(structname[,field])]<argname>[->field[->field|.field...]]":README
-+
-+# Check if the sample module is loaded
-+if ! lsmod | grep -q trace_events_sample; then
-+  modprobe trace-events-sample || exit_unsupported
-+fi
-+
-+echo 0 > events/enable
-+echo > dynamic_events
-+
-+# The sample_timer_cb(struct timer_list *t) is called.
-+# We want to check (STRUCT,FIELD)VAR typecast and +PCPU() dereference.
-+# (foo_timer_data,timer)t converts t to struct foo_timer_data * using container_of.
-+# data->counter is a per-cpu pointer to int.
-+# +PCPU(data->counter) should give the per-cpu address of the counter.
-+# *+PCPU(data->counter) should give the value of the counter.
-+
-+echo 'f:mysample/myevent sample_timer_cb name=(foo_timer_data,timer)t->name:string count=+CPU((foo_timer_data,timer)t->counter)' >> dynamic_events
-+
-+echo 1 > events/mysample/myevent/enable
-+echo 1 > events/sample-trace/foo_timer_fn/enable
-+
-+sleep 2
-+
-+echo 0 > events/mysample/myevent/enable
-+echo 0 > events/sample-trace/foo_timer_fn/enable
-+
-+# Compare the values.
-+MATCH=0
-+while read line; do
-+  if echo $line | grep -q "foo_timer_fn:"; then
-+    NAME=`echo $line | sed 's/.*name=\([^ ]*\) .*/\1/'`
-+    COUNT=`echo $line | sed 's/.*count=\([^ ]*\).*/\1/'`
-+    if grep -q "myevent:.*name=\"${NAME}\" count=$COUNT" trace; then
-+       MATCH=$((MATCH+1))
-+    fi
-+  fi
-+done < trace
-+
-+if [ $MATCH -eq 0 ]; then
-+  echo "No matching events found"
-+  exit_fail
-+fi
-+
-+# Clean up
-+echo 0 > events/mysample/myevent/enable
-+echo 0 > events/sample-trace/foo_timer_fn/enable
-+echo > dynamic_events
-+clear_trace
+    Does this execute the directory creation unconditionally during Make parsing?
+    Because it uses the shell function at the top level, this directory creation
+    will run on every Make invocation, including utility targets like make clean
+    or make help.
+    
+    Could the shell dirname command also be fragile if LIBLIVEUPDATE_O ever
+    expands to multiple files? Strictly POSIX-compliant systems only accept a
+    single argument for dirname.
+    
+    Would it be better to use GNU Make's built-in $(dir ...) function and move
+    the directory creation into the compilation recipe below (e.g.,
+    @mkdir -p $(dir $@)), or use an order-only prerequisite?
 
+The first one seems to make sense. The second one not so much. The third
+I have no idea. I don't know Makefiles well enough.
+
+Perhaps worth a look?
+
+With these comments addressed, feel free to add
+
+Acked-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+
+> +
+> +CFLAGS += -I$(LIBLIVEUPDATE_SRCDIR)/include
+> +
+> +$(LIBLIVEUPDATE_O): $(LIBLIVEUPDATE_OUTPUT)/%.o : $(LIBLIVEUPDATE_SRCDIR)/%.c
+> +	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+> +
+> +EXTRA_CLEAN += $(LIBLIVEUPDATE_OUTPUT)
+[...]
+
+-- 
+Regards,
+Pratyush Yadav
