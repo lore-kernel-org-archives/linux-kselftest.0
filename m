@@ -1,189 +1,141 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8356D3ACA5B;
-	Mon,  8 Jun 2026 08:41:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16672E739C;
+	Mon,  8 Jun 2026 08:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780908102; cv=none; b=e5iBdLqGuKwDYxuefA34PkBaQFf+WED0jJ8/wrfZmOqNBXuMt8bxaslvQGxl3vYUZdTbMF5oSVfB4ntbBQoupQmdAYNzF72KZ8ACzh4zEIjzFdUXKvTCIrnsSaw6Bu8QHAeIXc2aW58ghzikUdQ40yAGXyfGgRkIAtMzABhG8Eo=
+	t=1780908356; cv=none; b=krC5457nDZsED6TPg9x+4Uj6BU4WHCnP0JCN116Hr2PPLxzxHQMtUXeS07YZZrQ/FbDBByUdqOGn0kIpy17JUnfnlqOGQP4bN83bYXv7Eh8GEmDYftVqvoexewyhKDcQLEjsqRnj3c56mvZg7Crgz9K48Oe7+5dKuilxoGfx3/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780908102; c=relaxed/simple;
-	bh=yrW0mBMtCm0MMqSPh1NDUETGRGnOLXRNlkNq5uVjlxs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=uP+ba5PZ38T/RmK0dN3T5V5dXAKAVJn1kZMornCb3ujCbOD9cB837NawHvLyBZNl+F2LaSeNn4hKauleYHnzV1x87Exsgay7tKHML2VuMXa4reqvwcvIOmBYIb6ULd35wnLE/xR7xzV0ahjmvryy3lFkjewBXX5jtOTvJAJLA50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tIk5t+1e; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1780908356; c=relaxed/simple;
+	bh=HKFycMw8SADc7AzCbdnusE7SU1MMyYsdtx2WKJd0lHA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pPdCmBtPVkn3Ycl94lA3kWrIQf2M61N+mKwrH1ZtSOVO4QPr1wguFIGGTalfOMhXIGlzjIr/tVhpClhGdjQtYlCQIbJZf4rkAHi1AG318Vo4Y9mk7yZsPO9E2dJsLvAPiiY4rDioBsLWgx4qUffJ6eEzbviYGPWJv2+oIhIdoXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rg+0H1P6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tIk5t+1e"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6584j6QG957566;
-	Mon, 8 Jun 2026 08:41:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=qxP33t
-	HTiH9JRoomvLUhpuOwBkNfYM6QqaMIbGu7vPc=; b=tIk5t+1eoAzDAqSx/40T4P
-	OMk5WT4blpsWTQVyo41eRa9X/2qyZIhTBjk8fhcOgjnyMOQL/PYfSRNXUgnZF7om
-	89cdv5bfDiyz+8Wt6x4/jpuCGOKbjMqHsp2kleVjyWw9jVjgTU4OUgV0r2Wibx35
-	Kr0NQ7p0lGQlGxN5QexqltvkLoNQkibmMdmRXRHACvLtAf2a4eOYZ9/iEZesd4fZ
-	aBsZHxjeB6GDSedhDbpBsP6m1cmTXZwLle03vLASRwn+CR4bg/wvxyDthVvNy/8T
-	ScH7BcRpqj5ukxDaGQDzUmVW95Lr0p/C3+1VUDnbtrIx7kUBtSUEaFfqTjLush+w
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4emb7qed48-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Jun 2026 08:41:24 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6588YaT4029965;
-	Mon, 8 Jun 2026 08:41:23 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4emx8vvmph-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Jun 2026 08:41:23 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6588fMKc5243466
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 8 Jun 2026 08:41:23 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CB7E458055;
-	Mon,  8 Jun 2026 08:41:22 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 44E8058054;
-	Mon,  8 Jun 2026 08:41:17 +0000 (GMT)
-Received: from vaibhav?linux.ibm.com (unknown [9.124.211.219])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with SMTP;
-	Mon,  8 Jun 2026 08:41:16 +0000 (GMT)
-Received: by vaibhav@linux.ibm.com (sSMTP sendmail emulation); Mon, 08 Jun 2026 14:11:15 +0530
-From: Vaibhav Jain <vaibhav@linux.ibm.com>
-To: David Gow <david@davidgow.net>, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman
- <mpe@ellerman.id.au>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae
- Moar <raemoar63@gmail.com>
-Subject: Re: [PATCH 2/2] kunit: Add example of test suite that can be
- skipped at runtime
-In-Reply-To: <d7b56622-6455-4e80-844f-086a0a3b1946@davidgow.net>
-References: <20260604162805.556135-1-vaibhav@linux.ibm.com>
- <20260604162805.556135-3-vaibhav@linux.ibm.com>
- <d7b56622-6455-4e80-844f-086a0a3b1946@davidgow.net>
-Date: Mon, 08 Jun 2026 14:11:15 +0530
-Message-ID: <87cxy1mnkk.fsf@vajain21.in.ibm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rg+0H1P6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E7C1F00893;
+	Mon,  8 Jun 2026 08:45:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780908355;
+	bh=XuarSeLN78HVSV2cIgbzTlP+3ajrwTiQFsYhkjJgQjU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Rg+0H1P6GbsUsqwBUMQLth91KISm3oK8bATyCyasCZ/lmHFNBI0q13Ke0sOQFDI35
+	 uCyrOY5QpDByDZ7XOw/08kVwZyMLV2/n7kD7vOn7Dd+jl8hIUY2bRSXup0b0XQa1x2
+	 0qzfuUd1axp3VTbjdNYpCqbl8rCndYHH8DGFMdQ5eFYLv8x00yBet47bXPorw32JCR
+	 U05aqtV92bpp9yMrU7MI6TW2BYmGPrXRlfwBAJyw4ksSUGbJfG9c+CYLGXowfelT5+
+	 LZ1/eGbk7Iu0NtPpClo0paZxEAH8x8uFX39on25mRqArScVJLus674PVsQnqA1RALC
+	 zxypmzn5TlWwg==
+Message-ID: <79a8abe4-ea1c-456b-b438-44213b042287@kernel.org>
+Date: Mon, 8 Jun 2026 10:45:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=HppG3UTS c=1 sm=1 tr=0 ts=6a268035 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=nzuXsxulAAAA:8
- a=VnNF1IyMAAAA:8 a=eZglOl9lOmnXyWROEjUA:9 a=QEXdDO2ut3YA:10
- a=Jn5cl5okm61iLnyvC_SE:22
-X-Proofpoint-GUID: aXiHbFCGrTpdFmLR4XCt0b5SxYL4d2cz
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjA4MDA3OSBTYWx0ZWRfXzgGIihzmkVp+
- iWWSRd+NzIi486csjavDAU9XzDadgm2jN4OPdlb/G94I/pylAtRBcOOryZP1pwh0aTukHg/5q/D
- zkAdau3KWEjv9itAVlaKJImkVzvQE4G0yeIeqM2Fo6o8iJBd6v/j6JRtmiz8sEydS7QseCymY6v
- /+QwpU0vM/fmgnbLs61hSjvq0YIUFAAuex38t9LC0sP5CFmSu07ZUAQh8rHylD8MnmxHdO2Z/ul
- SPSh3rN7nzxq+ksFwDJUNZy1bwj+NpdfUgDXT7uthC96/SxlyFoT5IlMprSCLhHeYLoDWS+TUkx
- wZkAEspwG6lzzhPHN7awXTuHDq/eodGG8YrgWFfA7LjfI93jVvgw7HImYVTJT4lg6BuwpmPLu+k
- OcEB5mtv8MTMjVlcBSuvIDacTJzQiCwlxP+F5dp3gMopaun15TiyA6U2dSOdNh867sjzZNLPViC
- UL4Kz0r1HSWwfzXSqlg==
-X-Proofpoint-ORIG-GUID: a1oXeeK40NWarEqBZjBv0pXROhUpAoLu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-08_02,2026-06-05_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 adultscore=0 phishscore=0 malwarescore=0 impostorscore=0
- priorityscore=1501 clxscore=1015 bulkscore=0 spamscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2606080079
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 14/42] KVM: guest_memfd: Handle lru_add fbatch
+ refcounts during conversion safety check
+Content-Language: en-US
+To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
+ binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
+ david@kernel.org, ira.weiny@intel.com, jmattson@google.com,
+ jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
+ pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
+ rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
+ tabba@google.com, willy@infradead.org, wyihan@google.com,
+ yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
+ suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>,
+ Barry Song <baohua@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>,
+ Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+ Youngjun Park <youngjun.park@lge.com>, Qi Zheng <qi.zheng@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+ Jason Gunthorpe <jgg@ziepe.ca>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260522-gmem-inplace-conversion-v7-0-2f0fae496530@google.com>
+ <20260522-gmem-inplace-conversion-v7-14-2f0fae496530@google.com>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Autocrypt: addr=vbabka@kernel.org; keydata=
+ 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
+In-Reply-To: <20260522-gmem-inplace-conversion-v7-14-2f0fae496530@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-David Gow <david@davidgow.net> writes:
+On 5/23/26 02:17, Ackerley Tng via B4 Relay wrote:
+> From: Ackerley Tng <ackerleytng@google.com>
+> 
+> When checking if a guest_memfd folio is safe for conversion, its refcount
+> is examined. A folio may be present in a per-CPU lru_add fbatch, which
+> temporarily increases its refcount. This can lead to a false positive,
+> incorrectly indicating that the folio is in use and preventing the
+> conversion, even if it is otherwise safe. The conversion process might not
+> be on the same CPU that holds the folio in its fbatch, making a simple
+> per-CPU check insufficient.
+> 
+> To address this, drain all CPUs' lru_add fbatches if an unexpectedly high
+> refcount is encountered during the safety check. This is performed at most
+> once per conversion request. Draining only if the folio in question may be
+> lru cached.
+> 
+> guest_memfd folios are unevictable, so they can only reside in the lru_add
+> fbatch. If the folio's refcount is still unsafe after draining, then the
+> conversion is truly deemed unsafe.
+> 
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 
-> Le 05/06/2026 =C3=A0 12:28 AM, Vaibhav Jain a =C3=A9crit=C2=A0:
->> Add an example test suite name 'example_test_skip_suite' to
->> 'kunit-example-test.c' that shows how to skip an entire test suite based=
- on
->> runtime conditions.
->>=20
->> The example suite 'example_skip_suite' provides a 'suite_init' callback
->> named example_skip_suite_init() which marks the entire suite as skipped
->> using kunit_mark_skipped().
->>=20
->> This demonstrates a way for conditionally skipping test suites when any
->> prerequisites for kunit_suite execution are not met. The 'suite_init'
->> callback can perform any necessary checks and mark the suite as skipped,
->> preventing all test cases from executing while also indicating why the
->> suite was skipped.
->>=20
->> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
->> ---
->
-> Thanks!
->
-> Reviewed-by: David Gow <david@davidgow.net>
-Awesome, thanks
-Will add your RB to v2 of the patch series
->
-> Cheers,
-> -- David
->
->>  lib/kunit/kunit-example-test.c | 29 +++++++++++++++++++++++++++++
->>  1 file changed, 29 insertions(+)
->>=20
->> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-te=
-st.c
->> index 0bae7b7ca0b0..b8ded54fa46d 100644
->> --- a/lib/kunit/kunit-example-test.c
->> +++ b/lib/kunit/kunit-example-test.c
->> @@ -591,5 +591,34 @@ static struct kunit_suite example_init_test_suite =
-=3D {
->>   */
->>  kunit_test_init_section_suites(&example_init_test_suite);
->>=20=20
->> +/*
->> + * This test should always be skipped.
->> + */
->> +static void example_skip_suite_test(struct kunit *test)
->> +{
->> +	/* This line should never be seen */
->> +	KUNIT_FAIL(test, "You should not see a this.");
->> +}
->> +
->> +static struct kunit_case  example_skip_suite_test_cases[] =3D {
->> +	KUNIT_CASE(example_skip_suite_test),
->> +	{}
->> +};
->> +
->> +static int example_skip_suite_init(struct kunit_suite *suite)
->> +{
->> +	kunit_mark_skipped(suite, "Test suite expected to be skipped");
->> +	return 0;
->> +}
->> +
->> +static struct kunit_suite example_test_skip_suite =3D {
->> +	.name =3D "example_skip_suite",
->> +	.suite_init =3D example_skip_suite_init,
->> +	.test_cases =3D example_skip_suite_test_cases,
->> +};
->> +
->> +/* This registers a test suite that will be skipped */
->> +kunit_test_suite(example_test_skip_suite);
->> +
->>  MODULE_DESCRIPTION("Example KUnit test suite");
->>  MODULE_LICENSE("GPL v2");
->
+Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
 
---=20
-Cheers
-~ Vaibhav
