@@ -1,186 +1,152 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9783D9678
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 14:52:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F4D3E1211
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 14:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780930334; cv=none; b=Figya3MP0kv3WafvmsXWKNAytCpOXN/VsUou9FSR8wuHR60C2Ys7v+8jcBkfpmfxSBCgUflirJXhBgwQHExE9ciyhx1FnoZqVOPJap3LzMmykK/NtPME+jEiNYq7rh2RK7E+CvQQZPKOnZ1KaOinEUM/VY7W4tWZcpyeS5bZ6YQ=
+	t=1780930339; cv=none; b=UdyYY7ie1RyoVGeE+uMHlSZQjmzepjTKL11mpWHyNt/aGbZOfhaV/D7nr0/PVj7W1vgUX4z65MXE5YuznNRrxs5aruNQg6j+Gt7ZzCegMwKwphQ6q7JZddMqGPJjTwVIvKnsRk6k+Hh+Vh2zXZ+0Mpho7YirfzYP7yP4+xR2m5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780930334; c=relaxed/simple;
-	bh=M0jQI31EwXa3KOTZMdije29yltYsv4MYDvK3je7g/rU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jMq+prsGSs/mUsrwDji2XBPNH0lktQzlqiXWsACmtv8zZBe87ZhQBbeYerRYqJt/DDMCyxNslEuvNllsAyBcQAyLRC91w7cNvN9OiMF9efmooPuf+T5/Lhn1HncKL/9S4tkNKGbX39LMe2sgnPMLtxhJhx/a8llJSLxydFNtF5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=T0VdLGbf; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780930339; c=relaxed/simple;
+	bh=rpXnnfiHVzHB7ncZ9FTFRFhCJjEV5nU6ygT9vS6g1Dw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rO3fZ3DduYKDxxXyuUucUFiCvEZz28XZryjqiKhGaGT0XGr1zN4rRJyO4QG74LMfUhZuyOy2EpjYnkGPGFL9/gc7YxDcu6MrKefT5F8g+sKv/XEyPyS0mL+qgvQ1TvXAnZYpVtoa/mVSAnjix9DYvqJXFz6Ng3G6F/2k//ubKZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=lwvYLV27; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="T0VdLGbf"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780930331;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dSIxBzyDkXC88SVvpDlcrBWgN1p50Bd+kAptACE+yR0=;
-	b=T0VdLGbfTnVgLhh3oM/pzHi2ksCRylukjXB9hBNp7ygc3Jfwgkkn3sMP0WiZFw6C7ZUMJX
-	WwYvsvZCXJjqljQCIxmLzJdbawlhWyx2vNtk/wju+eHuAOIEqPTpuKDF8bJieye9UCA+x1
-	TtPaWDgksiIjXezauBL6wK2wMh5sfaU=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v5 1/9] bpf: Drop duplicate blank lines in verifier
-Date: Mon,  8 Jun 2026 22:51:05 +0800
-Message-ID: <20260608145113.65857-2-leon.hwang@linux.dev>
-In-Reply-To: <20260608145113.65857-1-leon.hwang@linux.dev>
-References: <20260608145113.65857-1-leon.hwang@linux.dev>
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="lwvYLV27"
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B67EE3F468
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 14:52:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1780930328;
+	bh=b1pX3FZIzR6JtivhZtR5O2oycxLZ7mVagYmhnEiYG4Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=lwvYLV27F7oDIAYT5ufo85O2nrP6AVjpKxCNaXn23/fbNLZGowueC2j4PdTfOcWnC
+	 ZxJAhKXPvVKvP/Dp+mrsJmNf0f90KiQf20jWYOOVgvdvF1sCbpea6sI7qEZFJ2iCPV
+	 9Cjj9OjyAe2deWqcrlSRCaEh9ytHG/gxQgovE4bC8UNl0lsnv8L4SYZk5+SrYThp1s
+	 zPVzP1PHzmTa7R97645CvFtwO4JM3rk38+/wkwtO/Y010IsJ8Pz3/3qTHai3js61fv
+	 Hwe0KhyNq6M2yX95G9nsiwLZu5aZ8U74lVqnsJaWmPn4fycnYi4NxFxdgyYjkWWhhX
+	 PgFlr4eUh0oy1qy7SCnNp7wn5akkxmowTVPrPNfL4P27+/ixVl0YSYpRae189Bbpzu
+	 e7pC/VISdVJEvFL2Yw+GL6ORqwCFePHM2PIx3fLJai4ej4vWYpG8nv8lbh8IQtto4P
+	 5u5WkTj4pGlzCln1AfR5GDCjL9kvqw92ddq+3oFlbekoaslot17tkTkvlMOr/3PmEi
+	 LMwI0GL7hb/MQ6N1uwBmanCwcAr86FsFlJv227/DtlvNQaV7jHg9jI6sONE8SDVuo3
+	 B9794cT5Z0TR4wi3nvOU4DV+WVU0JOkZTUAz/HRkDEZp2pH4OhrpX0YgIKy8XQOCS3
+	 9XwUu4X+/AO8+YuPhBXOKENM=
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-36b982ec27aso3232838a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2026 07:52:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780930327; x=1781535127;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b1pX3FZIzR6JtivhZtR5O2oycxLZ7mVagYmhnEiYG4Q=;
+        b=TqsittoVm+V4XrSeUWBn+yvC+B0otP2Iby+ZsSG4f8DnzN4s3dzIb2qlLSt17NWzF2
+         QSma+wOc1uEaNBE+lf00oFpNQSd+Ru7pYoKl6GoMwcuugaqT7c7m7aVvAjabjuZpKZzi
+         wyXF1P8dSuF6/yyhNuMGgbBFXp9fk+s5BtLN4GeAcS5j9RtReQrMqPwfyEOIXNJ9eSHL
+         tA1WXQpoQ4rsdAjqFDmqBv4Fvh2ylw5hheb9Ko6XdQlrQaN857Kn2dQPP+HlT+to2JHR
+         heGO+RHcr8AtysU2IRd9YP/UHJkrAfaZtoYJ9iZblo+YocYm5/FDCMLY8fQFjEpdsXtw
+         zdVA==
+X-Forwarded-Encrypted: i=1; AFNElJ+J2WM9/MZnqTPXkQomGwtIuPga4yFbf2Q3HYXxFGpL7IY0q5g6NrT5BvYMHWIwE6CRPBL6wr/ayIs2eC4I7oo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxG0SApSS98xX140grJLCSne/vmDSFp8wkD5iFXGlbIqDcCoCJm
+	IPxfNPI8EbN7WAB0IofkkpqPl41K/8has/f9CIZ28H2DK4pw+O6iYj+t6UPfBZOmjWe6TJomYlv
+	BW7OmbGCVjF17TrS8xOdZoQWr7ZWJF3OzQ5nV9gNzggTWWqXiBJo9Z1yU1WWmWox1P9eJL+b0If
+	lUjsvScve57GyNmrMVxo79
+X-Gm-Gg: Acq92OHg7tfeVEni5F8CdMoJXb00X/r3/SEospL1iz0bM2AbLy/PzHZX8/7x/BNa215
+	YtGR7ICeMAS8YfzjzCL+s+5yhgKCeqMROUVUBo3gUbzSR8FBWk8KBdwLNCqJ+0TdEhjFbzcC4Rz
+	7sSKHMrmyfptOjQ/fzmzUjvr2t7JbH6l2z+/tiE+UwlhlIzVdNvSAsrAO3A9BarxD7nICeSfr1o
+	k5z+9TLGvgtTBJHwnpXA15fs0rlWO42C6o1lB3Xgi/lkuiA4zU6cqbhT4dAsJRsAr83E32ceUES
+	K4dfZviW+z1YDa7k2QBLPe7TATik0DY2OgE5c2uS1VH/K3bPwANXbOluL8MYPO5iiJo7D05zAhX
+	L2/wnfimT2pK5RacpjZDpzPfW2JQHahbt/vEdawmBQY6ojPhpPejHrGz+4cD6CIGA8RVHERRhuZ
+	yvMGY1Pfrt
+X-Received: by 2002:a17:90b:5747:b0:36b:9798:4f67 with SMTP id 98e67ed59e1d1-370eee03facmr15824953a91.8.1780930327073;
+        Mon, 08 Jun 2026 07:52:07 -0700 (PDT)
+X-Received: by 2002:a17:90b:5747:b0:36b:9798:4f67 with SMTP id 98e67ed59e1d1-370eee03facmr15824914a91.8.1780930326374;
+        Mon, 08 Jun 2026 07:52:06 -0700 (PDT)
+Received: from ?IPV6:2409:8a00:48c1:ca00:bd04:9263:b15c:15f? ([2409:8a00:48c1:ca00:bd04:9263:b15c:15f])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f6e828eacsm16073363a91.16.2026.06.08.07.52.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Jun 2026 07:52:06 -0700 (PDT)
+Message-ID: <79c7ede3-e174-487f-bf0b-fc9347fdde9c@canonical.com>
+Date: Mon, 8 Jun 2026 22:51:59 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] selftests/ftrace: Account for 8-byte aligned
+ trace_marker_raw events
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: rostedt@goodmis.org, mathieu.desnoyers@efficios.com, pjw@kernel.org,
+ linux-trace-kernel@vger.kernel.org, shuah@kernel.org, wangfushuai@baidu.com,
+ linux-kselftest@vger.kernel.org
+References: <20260607072431.125633-1-hui.wang@canonical.com>
+ <20260607072431.125633-3-hui.wang@canonical.com>
+ <20260608181716.726cb9c81d41d49095e7f3cf@kernel.org>
+Content-Language: en-US
+From: Hui Wang <hui.wang@canonical.com>
+In-Reply-To: <20260608181716.726cb9c81d41d49095e7f3cf@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-There are many adjacent blank lines in the verifier that have accumulated
-over time.
 
-Drop them for cleanup.
+On 6/8/26 17:17, Masami Hiramatsu (Google) wrote:
+> On Sun,  7 Jun 2026 15:24:31 +0800
+> Hui Wang <hui.wang@canonical.com> wrote:
+>
+[...]
+> +    for config_file in \
+> +        /boot/config-$uname_r \
+> +        /lib/modules/$uname_r/config \
+> +        /lib/modules/$uname_r/build/.config
+>
+> Hmm, also I don't like this, because this highly depends on the environment.
+> Instead, we can add CONFIG_IKCONFIG_PROC=y in tools/testing/selftests/ftrace/config.
+>
+> Thank you,
+>
+Thanks for the review. I'll address all other comments in v2.
 
-No functional changes intended.
+I have a concern about this specific point. On Ubuntu kernels, both 
+CONFIG_IKCONFIG and CONFIG_IKCONFIG_PROC are disabled by default, so 
+/proc/config.gz does not exist. If we drop the /boot/config-$(uname -r) 
+lookup and rely solely on /proc/config.gz, this test would become 
+unresolved on every Ubuntu kernel — a regression, since it works on 
+those kernels today.
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- kernel/bpf/verifier.c | 15 ---------------
- 1 file changed, 15 deletions(-)
+There is also existing precedent for the /boot/config-$(uname -r) 
+fallback: tools/testing/selftests/mm/va_high_addr_switch.sh checks 
+/proc/config.gz first and falls back to /boot/config-$(uname -r).
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ed7ba0e6a9ce..2690d063a240 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -651,7 +651,6 @@ static void __mark_dynptr_reg(struct bpf_reg_state *reg,
- 			      enum bpf_dynptr_type type,
- 			      bool first_slot, int id, int parent_id);
- 
--
- static void mark_dynptr_stack_regs(struct bpf_verifier_env *env,
- 				   struct bpf_reg_state *sreg1,
- 				   struct bpf_reg_state *sreg2,
-@@ -1688,7 +1687,6 @@ static bool same_callsites(struct bpf_verifier_state *a, struct bpf_verifier_sta
- 	return true;
- }
- 
--
- void bpf_free_backedges(struct bpf_scc_visit *visit)
- {
- 	struct bpf_scc_backedge *backedge, *next;
-@@ -2308,7 +2306,6 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
- 	return &elem->st;
- }
- 
--
- static int cmp_subprogs(const void *a, const void *b)
- {
- 	return ((struct bpf_subprog_info *)a)->start -
-@@ -3325,7 +3322,6 @@ static bool is_spillable_regtype(enum bpf_reg_type type)
- 	}
- }
- 
--
- /* check if register is a constant scalar value */
- static bool is_reg_const(struct bpf_reg_state *reg, bool subreg32)
- {
-@@ -3987,7 +3983,6 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 	return err;
- }
- 
--
- /* check_stack_write dispatches to check_stack_write_fixed_off or
-  * check_stack_write_var_off.
-  *
-@@ -4782,7 +4777,6 @@ static int check_sock_access(struct bpf_verifier_env *env, int insn_idx,
- 		valid = false;
- 	}
- 
--
- 	if (valid) {
- 		env->insn_aux_data[insn_idx].ctx_field_size =
- 			info.ctx_field_size;
-@@ -6602,7 +6596,6 @@ static int check_stack_range_initialized(
- 	if (err)
- 		return err;
- 
--
- 	if (tnum_is_const(reg->var_off)) {
- 		min_off = max_off = reg->var_off.value + off;
- 	} else {
-@@ -7316,7 +7309,6 @@ static bool is_iter_new_kfunc(struct bpf_kfunc_call_arg_meta *meta)
- 	return meta->kfunc_flags & KF_ITER_NEW;
- }
- 
--
- static bool is_iter_destroy_kfunc(struct bpf_kfunc_call_arg_meta *meta)
- {
- 	return meta->kfunc_flags & KF_ITER_DESTROY;
-@@ -11459,7 +11451,6 @@ static int process_irq_flag(struct bpf_verifier_env *env, struct bpf_reg_state *
- 	return 0;
- }
- 
--
- static int ref_set_non_owning(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
- {
- 	struct btf_record *rec = reg_btf_record(reg);
-@@ -16335,7 +16326,6 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	return 0;
- }
- 
--
- static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_range *range)
- {
- 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
-@@ -18228,8 +18218,6 @@ static void release_insn_arrays(struct bpf_verifier_env *env)
- 		bpf_insn_array_release(env->insn_array_maps[i]);
- }
- 
--
--
- /* The verifier does more data flow analysis than llvm and will not
-  * explore branches that are dead at run time. Malicious programs can
-  * have dead code too. Therefore replace all dead at-run-time code
-@@ -18257,8 +18245,6 @@ static void sanitize_dead_code(struct bpf_verifier_env *env)
- 	}
- }
- 
--
--
- static void free_states(struct bpf_verifier_env *env)
- {
- 	struct bpf_verifier_state_list *sl;
-@@ -18540,7 +18526,6 @@ static int do_check_main(struct bpf_verifier_env *env)
- 	return ret;
- }
- 
--
- static void print_verification_stats(struct bpf_verifier_env *env)
- {
- 	/* Skip over hidden subprogs which are not verified. */
--- 
-2.54.0
+So how about we keep /boot/config-$(uname -r) as a fallback, but drop 
+the /lib/modules/... paths you objected to. And add ftrace/config as you 
+suggested here.
 
+Thanks,
+Hui.
+>> +    do
+>> +        if [ -f "$config_file" ]; then
+>> +            grep -Eq "^${config}=(y|m)$" "$config_file"
+>> +            return $?
+>> +        fi
+>> +    done
+>> +
+>> +    return 2
+>> +}
+>> +
+>>   LOCALHOST=127.0.0.1
+>>   
+>>   yield() {
+>> -- 
+>> 2.43.0
+>>
+>>
+>
