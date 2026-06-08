@@ -1,141 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16672E739C;
-	Mon,  8 Jun 2026 08:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD973AE71C
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 08:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780908356; cv=none; b=krC5457nDZsED6TPg9x+4Uj6BU4WHCnP0JCN116Hr2PPLxzxHQMtUXeS07YZZrQ/FbDBByUdqOGn0kIpy17JUnfnlqOGQP4bN83bYXv7Eh8GEmDYftVqvoexewyhKDcQLEjsqRnj3c56mvZg7Crgz9K48Oe7+5dKuilxoGfx3/s=
+	t=1780908774; cv=none; b=HcwqYPrZiAM71sAHESreN6qApS7zuIY+/FKzep0VjdmP9amlEUhTmWyM7CO2BxObrAfW8OkaektBi1g2bURXir4acbYR74hr5Piy50SqtAXwFUBNOmPdkgl3bBPFhvTgusJdbPJgDcBAWHHczX+2SuBhCFofIjQzPIA5qqA7nRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780908356; c=relaxed/simple;
-	bh=HKFycMw8SADc7AzCbdnusE7SU1MMyYsdtx2WKJd0lHA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pPdCmBtPVkn3Ycl94lA3kWrIQf2M61N+mKwrH1ZtSOVO4QPr1wguFIGGTalfOMhXIGlzjIr/tVhpClhGdjQtYlCQIbJZf4rkAHi1AG318Vo4Y9mk7yZsPO9E2dJsLvAPiiY4rDioBsLWgx4qUffJ6eEzbviYGPWJv2+oIhIdoXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rg+0H1P6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780908774; c=relaxed/simple;
+	bh=71kngNLglTQFWzZYkjVAWT0fHT+5MJVHKiuaOh/1EgQ=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OpXBqGra/YPitRJsM442VemQBTYFZG6Guea/NhecxeRmUT9MPWsUZlcqhuMTKTJoaUmS9vH3JkWQI6G5xifdDoN/RF0q7gFNPZIUwnauo/W1UpAHptJVJQUfVjaq9CgbyFqG98YraZA4FnTl+iY5dxfWgASXj1O7EHZJPszuuRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IOFTK4Ag; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rg+0H1P6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E7C1F00893;
-	Mon,  8 Jun 2026 08:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780908355;
-	bh=XuarSeLN78HVSV2cIgbzTlP+3ajrwTiQFsYhkjJgQjU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Rg+0H1P6GbsUsqwBUMQLth91KISm3oK8bATyCyasCZ/lmHFNBI0q13Ke0sOQFDI35
-	 uCyrOY5QpDByDZ7XOw/08kVwZyMLV2/n7kD7vOn7Dd+jl8hIUY2bRSXup0b0XQa1x2
-	 0qzfuUd1axp3VTbjdNYpCqbl8rCndYHH8DGFMdQ5eFYLv8x00yBet47bXPorw32JCR
-	 U05aqtV92bpp9yMrU7MI6TW2BYmGPrXRlfwBAJyw4ksSUGbJfG9c+CYLGXowfelT5+
-	 LZ1/eGbk7Iu0NtPpClo0paZxEAH8x8uFX39on25mRqArScVJLus674PVsQnqA1RALC
-	 zxypmzn5TlWwg==
-Message-ID: <79a8abe4-ea1c-456b-b438-44213b042287@kernel.org>
-Date: Mon, 8 Jun 2026 10:45:41 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IOFTK4Ag"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-490b43e2b95so32494375e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2026 01:52:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780908771; x=1781513571; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RAmzFalsZ1626ri7eqynS376s1QmdxkNtdz+K5A5+m4=;
+        b=IOFTK4Ag/Fh423MXLErk25yqTc/H6GVAub/458cV/r+cGCGj/fTnQdeEqQyJvwkA7S
+         qRshw+rSQOex2QIdvzssxJ90ysoVDk9cefNRdZenzfK2/5sLUen7O4nfwScdtz81DmOA
+         DqMhOHQfju0U4/4y5Ct/FDrffrqw69KGj+kQNpU/GhgcKTLi7/B/ZPqUrXZbG2Iz/C7X
+         nQnLHM7xIsc5MdXMzmYkdSJpMxbHR3t8bGt0AksjW7aH2HeXSyadL2ZcE5MGrL0oS0Ma
+         3U2ug8NRcoJMgO3RdrMwVPpzzIrUFgXo/vwqTS1xDZx/1Ulfy1WZtLoSemz84aLsictQ
+         aWIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780908771; x=1781513571;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RAmzFalsZ1626ri7eqynS376s1QmdxkNtdz+K5A5+m4=;
+        b=iJA/eDHHHUwWqd/9+S1s90KrM8B/VEdeW8RIYTpQkHgy913ouS7RNGPuD2mi5VVkLf
+         FY0i0Oar7LEsVGTe/7QWRgsccpa6KYUkJAAbQh8WQsdHZUSMmWE3rWa6ryk9c7wZA1EC
+         R+HKJ5TocWv4hUVsboB8jzxjbx5PenWAFcZ3ZuaiCm3s12pB27akAIImzIku6l7o29BC
+         QLR+gWvjs/7vxTO3c9fPuiNrsJpLChMxOa3EABSdRil6jjOjZ7Egmw5n4nvqcU+Xsggy
+         K5ojWc+VkWRypcTTFeco9idkHg08m+7eI+FpEnWNeGHLSnlOVYMqGcOiMHMiZ0gVogRh
+         ++yA==
+X-Forwarded-Encrypted: i=1; AFNElJ85+DK/jmpC0Sa8uFXEonsnKqb5uXdcf1+oNLQIs4V6Qt9nUMHvfVyu8TS0uUARv+9XwCCZvlTregxixg2rHaE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YytYgWFegIr94e+2B048M3A017gvLIdPiViB4XOUOKyV1LUj4Ny
+	OO86ICo0I7VKl2l63aq0yf1T5Rs6DAUs+JK4Us8ToomJhYVBLN/7K2UW
+X-Gm-Gg: Acq92OHZb0rfLNHAGl0IJqpq2aLlh1oBK6eWIswyhyhpeoHElWInKZPDBDe8qOP9yP7
+	BD/uleIjqT1Ao0Hp1VFJcBpbrfsqSp/ses0RS2IInLjC7+oZMndLTjGMLloSjLswVJfAaNIrzif
+	N+IRheve7AW6StZ2AE6TodQMYelKpZsdINBUI8utfq18YFT+8cWR2lgBmUv4Y7BFAr/Qx5vwC8N
+	EFtqYGvxlj1k0U42v788cFgoODHsDm4Kw1/Rxso6155DvZe9Akaqdo/v69YGuRNPH4g5+TyOGAp
+	M9o9sm1A2nAy4P6nn+iFxCm4CCgBKOI9Fpt7B/Yo+Cq1aEHLm3BMKKD+SgQvPUdSfOi5WTasBi3
+	IIIL4IdNoVV4lAM66yPj9CwGY8uIcNhzv+aWuvZ08dvpyVLeOKH6F3gYRQSEU6QSvppbO2siv3I
+	YGrC+3Er0yYQEKm19oJGQkZw==
+X-Received: by 2002:a05:600c:83c3:b0:48f:d612:3c59 with SMTP id 5b1f17b1804b1-490c25a21a9mr267462155e9.9.1780908771176;
+        Mon, 08 Jun 2026 01:52:51 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc413adbsm378495555e9.15.2026.06.08.01.52.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2026 01:52:50 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 8 Jun 2026 10:52:47 +0200
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Xu <dxu@dxuuu.xyz>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	Shuah Khan <shuah@kernel.org>, Ihor Solodrai <isolodrai@meta.com>,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH bpf v2 0/2] Keep dynamic inner array lookups nullable
+Message-ID: <aiaC37sAQD5kOfQZ@krava>
+References: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 14/42] KVM: guest_memfd: Handle lru_add fbatch
- refcounts during conversion safety check
-Content-Language: en-US
-To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- david@kernel.org, ira.weiny@intel.com, jmattson@google.com,
- jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
- pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
- rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
- tabba@google.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>,
- Barry Song <baohua@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>,
- Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
- Youngjun Park <youngjun.park@lge.com>, Qi Zheng <qi.zheng@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
- Jason Gunthorpe <jgg@ziepe.ca>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260522-gmem-inplace-conversion-v7-0-2f0fae496530@google.com>
- <20260522-gmem-inplace-conversion-v7-14-2f0fae496530@google.com>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Autocrypt: addr=vbabka@kernel.org; keydata=
- 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
-In-Reply-To: <20260522-gmem-inplace-conversion-v7-14-2f0fae496530@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
 
-On 5/23/26 02:17, Ackerley Tng via B4 Relay wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
+On Sun, Jun 07, 2026 at 09:24:12PM +0800, Nuoqi Gui wrote:
+> An ARRAY_OF_MAPS can use an array created with BPF_F_INNER_MAP as its
+> inner map template. The flag allows a concrete inner array with a
+> different max_entries value to replace the template.
 > 
-> When checking if a guest_memfd folio is safe for conversion, its refcount
-> is examined. A folio may be present in a per-CPU lru_add fbatch, which
-> temporarily increases its refcount. This can lead to a false positive,
-> incorrectly indicating that the folio is in use and preventing the
-> conversion, even if it is otherwise safe. The conversion process might not
-> be on the same CPU that holds the folio in its fbatch, making a simple
-> per-CPU check insufficient.
+> The verifier currently uses the template's max_entries to elide
+> nullness for a constant-key lookup through the inner map pointer. At
+> runtime, the lookup uses the concrete inner array's max_entries instead.
+> The verifier can therefore accept an unchecked dereference even though
+> the runtime helper returns NULL.
 > 
-> To address this, drain all CPUs' lru_add fbatches if an unexpectedly high
-> refcount is encountered during the safety check. This is performed at most
-> once per conversion request. Draining only if the folio in question may be
-> lru cached.
+> Patch 1 keeps lookups through BPF_F_INNER_MAP array templates nullable.
+> Patch 2 adds a verifier regression test for the unchecked dereference.
 > 
-> guest_memfd folios are unevictable, so they can only reside in the lru_add
-> fbatch. If the folio's refcount is still unsafe after draining, then the
-> conversion is truly deemed unsafe.
+> Before the fix, the regression program is accepted and the runtime
+> reproducer triggers a NULL dereference. With the fix, both programs are
+> rejected with an invalid map_value_or_null access.
 > 
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Tested by compiling kernel/bpf/verifier.o and
+> verifier_map_in_map.bpf.o, and by running the regression program and
+> runtime reproducer in QEMU before and after the fix.
+> 
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> ---
+> v1->v2:
+> - Update the can_elide_value_nullness() comment to match the changed
+>   parameter (const struct bpf_map *map).
 
-Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
+jirka
+
+> 
+> v1: https://patch.msgid.link/20260604151153.2488051-1-gnq25@mails.tsinghua.edu.cn
+> 
+> To: Alexei Starovoitov <ast@kernel.org>
+> To: Daniel Borkmann <daniel@iogearbox.net>
+> To: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Daniel Xu <dxu@dxuuu.xyz>
+> Cc: Eduard Zingerman <eddyz87@gmail.com>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Cc: Song Liu <song@kernel.org>
+> Cc: Yonghong Song <yonghong.song@linux.dev>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Ihor Solodrai <isolodrai@meta.com>
+> Cc: bpf@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> 
+> ---
+> Nuoqi Gui (2):
+>       bpf: Keep dynamic inner array lookups nullable
+>       selftests/bpf: Cover dynamic inner array lookup nullability
+> 
+>  kernel/bpf/verifier.c                              | 15 ++++----
+>  .../selftests/bpf/progs/verifier_map_in_map.c      | 40 ++++++++++++++++++++++
+>  2 files changed, 49 insertions(+), 6 deletions(-)
+> ---
+> base-commit: e7ae89a0c97ce2b68b0983cd01eda67cf373517d
+> change-id: 20260606-f01-v2-324fb92185a2
+> 
+> Best regards,
+> --  
+> Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> 
