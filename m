@@ -1,85 +1,127 @@
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0870A367B70
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 05:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E4EC37BE9E;
+	Mon,  8 Jun 2026 05:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780897190; cv=none; b=RJrQu5RQtn79oxbmmSNiR1hUuCcM6XB8yJOa9gtzfjU/xcKOpxUtstq2SYGeiDo5FOWkc+ntAiAbrWP91wivxo/sO4YJuAvyo6vBO8t9J3uFZEdGlRomSx1Rdq8eo11huXG7P6oYWi7hHCFFl781q0zCnbFVTYK2gk5BFdhSNJM=
+	t=1780898253; cv=none; b=Dc/aG1p6Huc/FkeExo029Ed7e3vKLOwpKm9rN633kg/XBp3P5mtuyuSN8xzUE31P1IF2ebL3Nanno2AWh+2X1a/XGG69B0ZS6zQpbTkoht1v+1hdBBTOMNQVR/YfJEzkTMbAawpYCqtEAjmIZQqGo5SbLDAX0y3xF0rzJ8JBo9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780897190; c=relaxed/simple;
-	bh=Gnmcw2vbZS/WMbktkUB/bqnpacEFekF4hl3ujR/jTLk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XxIhvgK8LaFXmwBYK4hikOaEtoR1VBy62dYqzijfjjEDEeZHzCk7yme0u7Ui6CZU+fc4DTdcj/bnIMIK0/umUp2EUBLnUb6vArLEerFX1XXPsXv3Gy4bikVL3PGNohYkPNLT3U7r7IQIYUBm6NrDCinOv/4rd8OGb6MHj7QuOcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=SdgDquuW; arc=none smtp.client-ip=115.124.30.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1780898253; c=relaxed/simple;
+	bh=UhM05LYQzK8PNX2EjRBagWrP6FFhDloRZ4eE3WBSkco=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WomuH58h0ef1fGhek8O+QUGFgLdD6Rff+jLyoTMksOEc/mlVVkJfPo1LE0PM2OjXOAUqQ4jCnA7mtEfSlCFyzmP4uQZJkPe6j/0ZlKhesb/qnA5svMN1rGFd1URICsLF51fmwYaB72sFfOcoolU6az+CJeLED+EjWlJAr+uDMLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MvGrofbP; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="SdgDquuW"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1780897179; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=Z/M8I0ggV8g5G3rV9SUyknJRWIxHULtKqRop/8E1M9Y=;
-	b=SdgDquuWmTNqH15IOGUb2vlVXZ/SEbZr69MS49SGf85m+iu8/TGMmqWXNAmKz3TqZbABCbPI3gzORdq9snPoIOLjeTR58HCTHTDxfhBPVGs4JdeuzyLzSBM39Uo7enXvsuIVnhY+F1f9gC5k/JMmIoEJrrC9bbkGtGHN5OvCiek=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=kanie@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0X4Jq033_1780897174;
-Received: from localhost(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0X4Jq033_1780897174 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 08 Jun 2026 13:39:38 +0800
-From: Guixin Liu <kanie@linux.alibaba.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Wei Yang <richard.weiyang@gmail.com>
-Cc: linux-kselftest@vger.kernel.org,
-	xlpang@linux.alibaba.com,
-	oliver.yang@linux.alibaba.com
-Subject: [PATCH] selftests/uevent: increase __UEVENT_BUFFER_SIZE to avoid ENOBUFS on busy systems
-Date: Mon,  8 Jun 2026 13:39:34 +0800
-Message-ID: <20260608053934.4059533-1-kanie@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.7
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MvGrofbP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780898252; x=1812434252;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UhM05LYQzK8PNX2EjRBagWrP6FFhDloRZ4eE3WBSkco=;
+  b=MvGrofbPq7JnTnaREWu+j5cEeNGK60ac72Kkx3s7VlXgUEKdpY40xu+S
+   W/xIIyFdeqNUCZSHLOSiS2CT0cGBlPHCxqDjt6kXYZmWPOr6VkUZdy7uo
+   hFgDckcBqY4iCDm4zfhtOwmAEg1WYQG3z579ZiWoGx6T5zN3yVGP34BoB
+   H4eNEhKzAGBgPhDnD1iI5D6lxJfRDmxrM/dw5MF6Iym8Um7OxPQuFftIF
+   64GjDFjUmhskfAZQOdZ1/jZZknTDAEz0bRMKR+CJj3eISd2pH/2uNKRig
+   Qsk8Wctt8uOzVsWwyRX4bND/F9OKO4YJjtqe1zLqU4DMA46QU6W2dPOfC
+   g==;
+X-CSE-ConnectionGUID: /xyvxPMNTGu23i1eQaCR8A==
+X-CSE-MsgGUID: U3sqoLNiSAe/d87/i+AOAw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11810"; a="92192860"
+X-IronPort-AV: E=Sophos;i="6.24,193,1774335600"; 
+   d="scan'208";a="92192860"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2026 22:57:32 -0700
+X-CSE-ConnectionGUID: JTWGYyAaQpm5TsCLm5FTmg==
+X-CSE-MsgGUID: 0xV4nBAXSyuHM7jGUUtmYA==
+X-ExtLoop1: 1
+Received: from unknown (HELO [10.238.2.24]) ([10.238.2.24])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2026 22:57:27 -0700
+Message-ID: <a58e2941-77f9-43cf-a54d-023506dd7eb0@linux.intel.com>
+Date: Mon, 8 Jun 2026 13:57:24 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 03/22] KVM: selftests: Initialize the TDX VM
+To: Lisa Wang <wyihan@google.com>
+Cc: Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
+ Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+ linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-3-6983ae4c3a4d@google.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20260521-tdx-selftests-v13-v13-3-6983ae4c3a4d@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The kselftests case uevent.uevent_filtering fails reproducibly on busy
-systems (e.g. Intel EMR / AMD servers) with:
+On 5/22/2026 7:16 AM, Lisa Wang wrote:
+[...]
 
-  No buffer space available - Failed to receive uevent
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> index f647e6ca6b34..48d4bd36c35b 100644
+> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> @@ -11,4 +11,34 @@ static inline bool is_tdx_vm(struct kvm_vm *vm)
+>  	return vm->type == KVM_X86_TDX_VM;
+>  }
+>  
+> +/*
+> + * TDX ioctls
+> + * Use underscores to avoid collisions with struct member names.
+> + */
+> +#define __tdx_vm_ioctl(vm, cmd, _flags, arg)				\
+> +({									\
+> +	int r;								\
+> +									\
+> +	union {								\
+> +		struct kvm_tdx_cmd c;					\
+> +		unsigned long raw;					\
+> +	} tdx_cmd = { .c = {						\
+> +		.id = (cmd),						\
+> +		.flags = (u32)(_flags),				\
+> +		.data = (u64)(arg),				\
 
-The listener binds the NETLINK_KOBJECT_UEVENT socket to all 32 multicast
-groups (nl_groups = -1) but only sets SO_RCVBUF to 4 KiB
-(__UEVENT_BUFFER_SIZE = 2048 * 2). On hosts with many devices, the
-kernel and userspace daemons (udev/systemd) constantly emit uevents on
-multiple groups, plus the test itself triggers 10 add events in a row.
-The 4 KiB receive buffer overflows before the listener can drain it,
-recvmsg() returns -ENOBUFS, and the test bails out as failure.
+Nit:
+The two lines' backslashes are misaligned.
 
-Increase __UEVENT_BUFFER_SIZE to 1 MiB so the receive buffer is large
-enough to absorb the burst of uevents on busy systems. After this
-change the test passes consistently across dozens of runs on Intel EMR
-and AMD platforms.
+> +	} };								\
+> +									\
+> +	r = __vm_ioctl(vm, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd.raw);	\
+> +	r ?: tdx_cmd.c.hw_error;					\
+> +})
+> +
+> +#define tdx_vm_ioctl(vm, cmd, flags, arg)				\
+> +({									\
+> +	int ret = __tdx_vm_ioctl(vm, cmd, flags, arg);			\
 
-Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
----
- tools/testing/selftests/uevent/uevent_filtering.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+tdx_cmd.c.hw_error is u64 and it could be assigned to ret, which is a int,
+the upper bits could be truncated if the upper 32-bit is set.
 
-diff --git a/tools/testing/selftests/uevent/uevent_filtering.c b/tools/testing/selftests/uevent/uevent_filtering.c
-index 974b076f9235..33a09f66d7e2 100644
---- a/tools/testing/selftests/uevent/uevent_filtering.c
-+++ b/tools/testing/selftests/uevent/uevent_filtering.c
-@@ -22,7 +22,7 @@
- #include "kselftest_harness.h"
- 
- #define __DEV_FULL "/sys/devices/virtual/mem/full/uevent"
--#define __UEVENT_BUFFER_SIZE (2048 * 2)
-+#define __UEVENT_BUFFER_SIZE (1024 * 1024)
- #define __UEVENT_HEADER "add@/devices/virtual/mem/full"
- #define __UEVENT_HEADER_LEN sizeof("add@/devices/virtual/mem/full")
- #define __UEVENT_LISTEN_ALL -1
--- 
-2.43.7
-
+> +									\
+> +	__TEST_ASSERT_VM_VCPU_IOCTL(!ret, #cmd,	ret, vm);		\
+> +})
+> +
+> +void tdx_init_vm(struct kvm_vm *vm, u64 attributes);
+> +
+>  #endif /* SELFTESTS_TDX_TDX_UTIL_H */[...]
