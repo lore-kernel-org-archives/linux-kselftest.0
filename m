@@ -1,169 +1,187 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459EA3B3C1A;
-	Mon,  8 Jun 2026 09:05:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0540F3B4E84;
+	Mon,  8 Jun 2026 09:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780909531; cv=none; b=LR4eygSE2QpEvlgT22YxhtkVEWEpAAlPvi4bGdg+g0TYKjquilV35UALNrzYRemlRUHfCPpBKNVq7ipnxqz8EIf44PBgeh8tCifwUAtwDe84ffjpc5GHUToD3P2tD2Y0LebSheU1azHik+0L9ZgpSwsr7m3NxckBy4Zj3EAr+ow=
+	t=1780910242; cv=none; b=Mn+2VyXz1PnxzYDSYb8xj3NWmkfuwzMK5Cg7mupkYCHyuu1GjB/er98hD5qFls1w8Dns7pJwJzbjtkUMO1BLIbIeOEsXKhhxZ0S89/eUJQxaIMh5UDMXDHTAbD7Jw/Qb6KK+6PrS763yMoDDoMXcO+BdWhy948c3ld7KE0cig6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780909531; c=relaxed/simple;
-	bh=TpWrD5gjmN1WPInRMN9PduOOKnV9C/59BHFBj1wnECE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NtQKojtdu/zk07n5Q1D2Xdh2qSOq2sojHs8eSzHZ+rfYigB13KxL+BpnpqkaxD6KO2zxUwe8gt6R2sgoCfgm3xTxyJdhA/GldThKjSqIlR1HlO+QyK2sua12ApqmUiNwL16l2qEFUMnyHe7XmZ9AcdmOYwHjJMtRA8lap+bwmT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=f76VVQsi; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1780910242; c=relaxed/simple;
+	bh=VCEs5thF0HcxdTp52UUMgGH17U9lIvOSaM1EHqrG7pA=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=r1oyaDlc6kWkfvxdV3mnx/cymV4fmLcUPmuikLrVRe1sOTllGetgDjORZxuZJnBB3ieYaCDZDbBOblf3L6oetT8cnJhnmLXH0mnhoYlC4uCjj/h17jCJBSShFpT3wzu8Vybw0UMFIzdTkdY/0224XAk2K8Gy/XpZS7oz2s2oOpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C0vUtKNo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="f76VVQsi"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6582nIbe1271233;
-	Mon, 8 Jun 2026 09:04:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=rwiFJLng3tyPnkhK9swVWgnZjidfD+EFCRnjHRrM3
-	YE=; b=f76VVQsidm2W8nS8TOrGI14C9LSgob2LlWjOWkonC5QA82Mn40iMXA2p9
-	zxNkPdaULkv0X13YvcAD5gb4nrLSsnkVB1d9fD01z7H6G85Q8Us2hCAT1mehiOPJ
-	/L0raDUe5dXPQX3ohp8rzdkJMdCv16GxxvyeZ7FOIOjSl0u28a+h5+hpvdfWMZi3
-	/LcvOYeXnYj+NK3sk7E5se3acrVdPdxH1ZV6CRHNchzVzMhYevOFpv96ByDzUD4J
-	Esg5AJZvMPJHpi0OrNc4MymIxTc3xpVHQJ2sPsR6CTiwYh8ryhnf3/JSoc+kQWZV
-	NK+IMs+81312TWr1Vydfeq1w2RlcA==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4em9ydxgtg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Jun 2026 09:04:56 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65894toV012186;
-	Mon, 8 Jun 2026 09:04:55 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4en03fvdnk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Jun 2026 09:04:55 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65894r2D30409300
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 8 Jun 2026 09:04:54 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D3E8E58060;
-	Mon,  8 Jun 2026 09:04:53 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 758245803F;
-	Mon,  8 Jun 2026 09:04:49 +0000 (GMT)
-Received: from vaibhav?linux.ibm.com (unknown [9.124.211.219])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with SMTP;
-	Mon,  8 Jun 2026 09:04:49 +0000 (GMT)
-Received: by vaibhav@linux.ibm.com (sSMTP sendmail emulation); Mon, 08 Jun 2026 14:34:47 +0530
-From: Vaibhav Jain <vaibhav@linux.ibm.com>
-To: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Cc: Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>
-Subject: [PATCH v2 0/2] kunit: Add support for skipping entire test suites
-Date: Mon,  8 Jun 2026 14:34:25 +0530
-Message-ID: <20260608090438.219497-1-vaibhav@linux.ibm.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C0vUtKNo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8B31F00893;
+	Mon,  8 Jun 2026 09:17:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780910240;
+	bh=gkLIaTscoCnVDRa3Re0bl/NCLLxGRZqG/r6RpTgMv5s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=C0vUtKNoajNAJpjdxt+7WmSFH8h5OmpWhkZPVRK7IJ7kFHzUhHnb8x+SQnk8Ootyl
+	 wMF6frhWwJy+Irtyco8xC3GF6JgPUbl18qBlYSpdheOZepiQfL1yxzHZcCWtLx1hBf
+	 5tjoRgVR8Hc+Tyqyd0e95OJWwW5uXpnhrMWcjhwUSZA3JWrM6lxWRXoYZsCXac+b2f
+	 1W/bBuEp1ZvX73B8hXXI265ijKhWKXzxwqJLSPZMpGAu0iZs74ikL8r3NPQ8iH052X
+	 gBRe/XUAUspKeg6lDsJk7lX/dc+MfReQEI3dpFuakLQXvwvslM4O9uAdsfgt2G/70j
+	 rSQl+h3lOmRGw==
+Date: Mon, 8 Jun 2026 18:17:16 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Hui Wang <hui.wang@canonical.com>
+Cc: rostedt@goodmis.org, mathieu.desnoyers@efficios.com, pjw@kernel.org,
+ linux-trace-kernel@vger.kernel.org, shuah@kernel.org,
+ wangfushuai@baidu.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/ftrace: Account for 8-byte aligned
+ trace_marker_raw events
+Message-Id: <20260608181716.726cb9c81d41d49095e7f3cf@kernel.org>
+In-Reply-To: <20260607072431.125633-3-hui.wang@canonical.com>
+References: <20260607072431.125633-1-hui.wang@canonical.com>
+	<20260607072431.125633-3-hui.wang@canonical.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjA4MDA3OSBTYWx0ZWRfX8761vXqvrv5i
- O257b+sGiTAmcdWmyDOymfzZyd2ZE7j4f1hDY4pckfggVFxnQs++PbKL6Uqokkv7qjxNpfuKsd1
- n826PJSZl4jsxPB94LfpDp5WseKRxazj5/Ke1dX8egCBcQEMGCwZV1aTr4CIvtwy4yzsv2GteJe
- 4p05ZgQAL1G0l41tnMIv2U/GD2HfIS8EFObdvWJ34owhnu8htNDR29CawuHZAw/OBGF86dGs+Ya
- s41pulJzsSDrINynW8Li8ldpv7jX3jff7o03WlRUs+pG/sM/qOCuYP1TqsQen1Yq9UnFbcIbl/E
- QXIGR2vrfRUTp8k3YG+Iyj+IMqUPzN2iRJy9PjPQyadd8gWWxcSpK6rUNRCE5CdJTjrR0I3o/qJ
- ncZ7janwRE82BXQC8jjaEY6k7FJggRvGfjsoMrs5SZ5EICu4M3YO/zLUajwJjRpJD2FNzNh/RlJ
- kju0Ji4GTjmhtzQQ9UQ==
-X-Authority-Analysis: v=2.4 cv=QKhYgALL c=1 sm=1 tr=0 ts=6a2685b8 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=FF_GvKQqgJ40MD8C4q4A:9
-X-Proofpoint-GUID: SXAeJE6n0o3roo0GAo-bW16fbPFbNpnS
-X-Proofpoint-ORIG-GUID: f6UDockO6RwHIU5I8m9S0RRA0ENlbFWE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-08_02,2026-06-05_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0 phishscore=0
- malwarescore=0 impostorscore=0 suspectscore=0 spamscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2606080079
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Changelog:
-==========
-Previous version:
-https://lore.kernel.org/all/20260604162805.556135-1-vaibhav@linux.ibm.com/
+On Sun,  7 Jun 2026 15:24:31 +0800
+Hui Wang <hui.wang@canonical.com> wrote:
 
-* Fix malformed and missing test-log when skipping kunit-suite. [David Gow]
-* Update kunit_init_suite() to reset the kunit-suite so that it can be
-re-run [David Gow]
-* Update kunit_suite_has_succeeded() to check for any failed test-case and
-update the 'status' for kunit-suite.
-* Added David Gow's RB to Patch-2
+> trace_marker_raw.tc assumes that the raw marker payload length
+> reported in trace_pipe is the result of int((id + 3) / 4) * 4, but
+> that is not true on kernels with CONFIG_HAVE_64BIT_ALIGNED_ACCESS
+> enabled.
+> 
+> With forced 8-byte alignment, the ring buffer event forces 8-byte
+> alignment. The event length is stored in array[0], the payload data
+> and id are placed in a struct raw_data_entry which is stored starting
+> at array[1]. In this case, the printed payload data length is 8*N+4
+> bytes.
+> 
+> To make the testcase pass in this case, add a kconfig_enabled() helper
+> and use it to detect CONFIG_HAVE_64BIT_ALIGNED_ACCESS so
+> trace_marker_raw.tc can calculate the expected length correctly.
+> 
 
-Summary of changes
-==================
+Hmm this fix lacks consideration for the environment.
 
-This patch series introduces the ability to skip entire 'kunit_suite'
-based on runtime conditions, addressing a limitation where test suites
-could only skip individual test cases or fail when prerequisites were not
-met.
+> Assisted-by: Copilot:gpt-5.5
+> Signed-off-by: Hui Wang <hui.wang@canonical.com>
+> ---
+>  .../ftrace/test.d/00basic/trace_marker_raw.tc | 16 +++++++--
+>  .../testing/selftests/ftrace/test.d/functions | 33 +++++++++++++++++++
+>  2 files changed, 46 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+> index 8e905d4fe6dd..beda0f8627b3 100644
+> --- a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+> @@ -15,6 +15,11 @@ is_little_endian() {
+>  }
+>  
+>  little=`is_little_endian`
+> +raw_data_align=4
+> +
+> +if kconfig_enabled CONFIG_HAVE_64BIT_ALIGNED_ACCESS; then
 
-The motivation for this feature comes from test suites that depend on
-specific hardware features, kernel capabilities, or runtime conditions.
-Currently, such suites must either:
-* Fail when prerequisites are missing
-* Skip each test case individually with redundant checks
-* Implement workarounds to avoid running tests
+Checking Kconfig is OK, but in this case, if the existence of the
+dependent Kconfig file itself cannot be confirmed, this test should
+return an unresolved error.
 
-An example of such a requirement came from [1] where the patch author
-wanted to skip the entire 'kunit_suite' but then had to resort marking all
-struct 'kunit_case' as skipped by accessing 'kunit_case.status' private
-struct member. This usecase being addressed in the patch[1] can be better
-implemented with the changes proposed in this patch series.
+> +       raw_data_align=8
+> +fi
+>  
+>  make_str() {
+>  	id=$1
+> @@ -60,7 +65,8 @@ test_multiple_writes() {
+>  	echo stop > trace_marker
+>  
+>  	# Check to make sure the number of entries is the id (rounded up by 4)
+> -	awk '/.*: # [0-9a-f]* / {
+> +	# or is (((id + 3) rounded by 8) + 4) if raw_data_align is 8
+> +	awk -v data_align=$raw_data_align '/.*: # [0-9a-f]* / {
+>  			print;
+>  			cnt = -1;
+>  			for (i = 0; i < NF; i++) {
+> @@ -69,8 +75,12 @@ test_multiple_writes() {
+>  					i++;
+>  					cnt = strtonum("0x" $i);
+>  					num = NF - (i + 1);
+> -					# The number of items is always rounded up by 4
+> -					cnt2 = int((cnt + 3) / 4) * 4;
+> +					# The number of items is rounded up by 4
+> +					# or is (8 * N + 4) if data_align is 8
+> +					if (data_align == 4)
+> +						cnt2 = int((cnt + 3) / 4) * 4;
+> +					else
+> +						cnt2 = int((cnt + 3) / 8) * 8 + 4;
+>  					if (cnt2 != num) {
+>  						exit 1;
+>  					}
+> diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+> index 826141e299e5..0f778087d81b 100644
+> --- a/tools/testing/selftests/ftrace/test.d/functions
+> +++ b/tools/testing/selftests/ftrace/test.d/functions
+> @@ -177,6 +177,39 @@ check_awk_strtonum() { # strtonum is GNU awk extension
+>      awk 'BEGIN{strtonum("0x1")}'
+>  }
+>  
+> +# a helper to check if a kconfig is enabled or not
+> +# return value: 0 (if kconfig is enabled)
+> +#               1 (if kconfig is not enabled)
+> +#               2 (if the config files don't exist or are unreadable)
+> +kconfig_enabled() { # config-name
+> +    local config="$1"
+> +    local uname_r=`uname -r`
+> +    local config_file
+> +
+> +    case "$config" in
+> +    CONFIG_*) ;;
+> +    *) config="CONFIG_$config" ;;
+> +    esac
+> +
+> +    if [ -f /proc/config.gz ] && zgrep --version >/dev/null 2>&1; then
+> +        zgrep -Eq "^${config}=(y|m)$" /proc/config.gz 2>/dev/null
 
-Structure of the patch series
-=============================
-PATCH 1:
-* Add a 'status' field to struct kunit_suite that allows 'suite_init'
-  callbacks to mark the entire suite as KUNIT_SKIPPED.
-* Modify the KUnit core to check this newly introduced 'status' field
-  and bypass all test cases when a suite is marked as skipped.
-* Update debugfs_print_results() to emmit correct logs for skipped
-  'kunit-suite'
-* Init 'kunit_suite.status' to KUNIT_SUCCESS so that kunit_suite can be
-  re-run from debugfs
+Do not use zgrep (this requires to install zgrep pacakge) in this test,
+instead, use more widely available `gzip -dc | grep ...`.
+I would like to keep this runnable on a minimum environment.
 
-Patch 2:
-* Providing an example in kunit-example-test.c demonstrating the usage
-  pattern.
+> +        return $?
+> +    fi
+> +
+> +    for config_file in \
+> +        /boot/config-$uname_r \
+> +        /lib/modules/$uname_r/config \
+> +        /lib/modules/$uname_r/build/.config
 
-The implementation is minimal and non-intrusive, adding only a status field
-to kunit_suite and checks in two key functions. Test suites that don't use
-this proposed feature should be unaffected.
+Hmm, also I don't like this, because this highly depends on the environment.
+Instead, we can add CONFIG_IKCONFIG_PROC=y in tools/testing/selftests/ftrace/config.
 
-References
-==========
-[1] https://lore.kernel.org/all/20260604092931.344101-1-vaibhav@linux.ibm.com
+Thank you,
 
-Vaibhav Jain (2):
-  kunit: Add ability to skip entire test suites
-  kunit: Add example of test suite that can be skipped at runtime
+> +    do
+> +        if [ -f "$config_file" ]; then
+> +            grep -Eq "^${config}=(y|m)$" "$config_file"
+> +            return $?
+> +        fi
+> +    done
+> +
+> +    return 2
+> +}
+> +
+>  LOCALHOST=127.0.0.1
+>  
+>  yield() {
+> -- 
+> 2.43.0
+> 
+> 
 
- include/kunit/test.h           |  1 +
- lib/kunit/debugfs.c            | 30 +++++++++++++++++++++---------
- lib/kunit/kunit-example-test.c | 29 +++++++++++++++++++++++++++++
- lib/kunit/test.c               | 17 ++++++++++++++++-
- 4 files changed, 67 insertions(+), 10 deletions(-)
 
 -- 
-2.54.0
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
