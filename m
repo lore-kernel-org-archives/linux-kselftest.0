@@ -1,270 +1,80 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0333F336891;
-	Mon,  8 Jun 2026 10:26:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29BD431B101;
+	Mon,  8 Jun 2026 10:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780914380; cv=none; b=FL40He6v4O30I82OkdLYUPvMSUvmpMIBhq5SPgVXtufV2E1vXkFqnAtQGCWLv84EHD2aN0u5SBD+F3lTi0kLPzWAL5n13nJZDXKRvcM2qSUhs2Wtou21pns+Dsf3wZ9AD4x4UYMQu+SeLJkacleoVPaphitE+3ze7RNoATOXM3U=
+	t=1780914756; cv=none; b=TET/XY4qTDkuJtxXHEUg5M7EihVKy+/KuFrypdIsk0T2PeUgdEfehX7EoYIoKvFUQYopa0RQdS0lG0+pq6vw7DZG6HDQ3Q9LIr/7EbpR97yyGkEl48z1hT0BAaUILTntd2zvOWk4clgrp962/4pRL/BDXbkq+HtJqe1ndDE3wU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780914380; c=relaxed/simple;
-	bh=CkWGaUYG20dc9W69h9S8TH3b+CnKcai89evnLGg19Kg=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=uQtHINUXnV0CW4dTlnrWgn+Nkz3vKJUHn+nyYMwzRU/tX4XpgpAze9RQt7g+/UkjJc7nk8FA1ef+FP+7iwHEUfthCFYu4gOX1hWKp2ly4GRCYJGdbZBd/Yz8q0/bj1It8DksK9HBnnk4FAMuWUwq2Fe18Yv/1aJC612ZauEOwtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kgVwy8zh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780914756; c=relaxed/simple;
+	bh=BHohjbZbGokKxuhzeEPMqgB3NmgFH0MxP3ZLy7lt3zk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pgt0WvsE5Jzpl3Z9MLFVngNLXkCfEPPxR/HxrJ+PHaUlSZlMw76SwMSLhYUmIFSxJPeiBK/87OJwunLMrKSK+EUHythx526Q8lUI8e8w+ZuRhHDhtrEGJqsU37jNNDyDSU2pep8OxWneMFjGT/2GYXLSbOcfPrPzCsOw/eZ2yMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=qEFmRZ4S; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kgVwy8zh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 817231F00893;
-	Mon,  8 Jun 2026 10:26:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780914378;
-	bh=i1lroZnoIaLu1CMzf9kEVvvwG+CcQpGu2by6hNtmkow=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=kgVwy8zhdyQca1BKeV6lxRurKUs5PF/8H4Yr4L5huRfNMVNH0YwhhuUCzuYXd8mv5
-	 CbdlFVXFX6I/7m+gL8+0kNcyQcQjvwKtuHMu0mLoOg/WCDyzS4FP4eofmRSfoYr26E
-	 5G70YuumsWXfdUFXHkyLauQKAYGEHDz7k8EFeRkSVnjLRYqBBk4c0116AjVCJbRlhw
-	 yJwqLAndgemOL8eT8gkYVqdzaqyWgZkUFJylihyfv9UNkEh9SyU3HKx8xGdLGn7Sfs
-	 4cowKgJmxIYsghmlUWcKOhA5iubapbStqLCBKdl/M0Iblw6O6f1fOi+PNSk9wK6Wd9
-	 T17EaljA2Rt0w==
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="qEFmRZ4S"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A493C1F91;
+	Mon,  8 Jun 2026 03:32:29 -0700 (PDT)
+Received: from a081061.blr.arm.com (a081061.arm.com [10.164.19.82])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 865823F62B;
+	Mon,  8 Jun 2026 03:32:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1780914754; bh=BHohjbZbGokKxuhzeEPMqgB3NmgFH0MxP3ZLy7lt3zk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=qEFmRZ4SNoZLJslFZ60m9VmaAf7ydO83aqFlsu4ciNX1guMKLtLq3b8iGahi/iSXX
+	 RwOG0PBCpTG+P+pEhn8FP3i8tcUAfvTvWiAy+c0HVnUpX4X0KMmOY8Tlg9Bk3BqQvO
+	 4uRErH4c0Gx9fCkhZ1X0SZL9vJI40WBFK+9zKN7o=
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Mark Brown <broonie@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sarthak Sharma <sarthak.sharma@arm.com>
+Subject: [PATCH] selftests/mm: fix ksft_process_madv.sh test category
+Date: Mon,  8 Jun 2026 16:02:24 +0530
+Message-ID: <20260608103224.344101-1-sarthak.sharma@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [RFC v1 0/9] kho: granular compatibility and header decoupling
-From: Mike Rapoport <rppt@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: Mike Rapoport <rppt@kernel.org>, linux-kselftest@vger.kernel.org, 
- shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org, 
- skhan@linuxfoundation.org, linux-doc@vger.kernel.org, jasonmiu@google.com, 
- linux-kernel@vger.kernel.org, corbet@lwn.net, ran.xiaokai@zte.com.cn, 
- kexec@lists.infradead.org, pratyush@kernel.org, graf@amazon.com
-In-Reply-To: <aiVp5RlbWRz5VnPB@plex>
-References: <20260605033235.717351-1-pasha.tatashin@soleen.com>
- <178083348872.1648214.17778188633648887952.b4-review@b4>
- <aiVp5RlbWRz5VnPB@plex>
-Date: Mon, 08 Jun 2026 13:26:12 +0300
-Message-Id: <178091437240.1648214.10761111570005003901.b4-reply@b4>
-X-Mailer: b4 0.15.2
+Content-Transfer-Encoding: 8bit
 
-On 2026-06-07 13:43:09+00:00, Pasha Tatashin wrote:
-> On 06-07 14:58, Mike Rapoport wrote:
-> 
-> > On Fri, 05 Jun 2026 03:32:26 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
-> > 
-> > Hi,
-> > 
-> > 
-> > I'd keep vmalloc where it is, it's more of a memory preservation primitive
-> > rather than a data structure of it's own. The data structure it uses is an
-> > implementation detail.
-> 
-> kho vmalloc is absolutely a data structure. KHO core only provides the
-> basic handover mechanism (FDT nodes, physical memory ranges). vmalloc
-> is a structured representation on top of KHO, and should provide its own
-> versioned ABI.
+ksft_process_madv.sh currently runs run_vmtests.sh with the
+mmap category. Update it to run the process_madv category,
+since ksft_mmap.sh already runs the mmap category tests.
 
-kho_preserve_vmalloc() has the same semantics as kho_preserve_folio().
-It's not intended to be used as a data structure. The data structure is
-an implementation detail unlike with kho_block and kho_radix_tree that
-are intended to be used as data structures and expose clear data
-structure APIs.
+This avoids running mmap tests twice and ensures that process_madv
+tests are run through the kselftest harness.
 
-Yes, vmalloc should have versioning, but that does not mean it must move
-to different files.
+Fixes: 6ce964c02f1c ("selftests/mm: have the harness run each test category separately")
+Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+---
+ tools/testing/selftests/mm/ksft_process_madv.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-And, btw, moving KHOSER_PTR() infra along with vmalloc is wrong. It was
-my oversight that I didn't insist on using it for most of the
-serializeable pointers instead of open coded
-virt_to_phys()/phys_to_virt(). We need to fix it.
-
-> If we change any of the vmalloc serialized structures (like kho_vmalloc,
-> kho_vmalloc_chunk, or kho_vmalloc_hdr), then vmalloc won't work and
-> compatibility will break.
-> 
-> Core KHO does not need vmalloc; nothing in kexec_handover.c uses it.
-> 
-> Instead, vmalloc has external customers:
-> - memfd (uses it to preserve serialized folio metadata)
-> - KHO test suite in lib/test_kho.c (uses it to preserve physical address arrays)
-
-Following this logic, kho_presrve_folio() should be moved out because
-it's not used by KHO but has external customers. And radix tree should
-forever remain in kexec_handover.c because KHO uses it ;-)
-
-> > Let's minimize the churn where possible for the sake of git blame and
-> > backports.
-> 
-> It is much better to do the right cleanups now while KHO is young. Once more
-> subsystems are added, this refactoring will be twice as hard. Modularizing the
-> code now guarantees a simpler, safer, and scalable design. Placing each data
-> structure in its own file gives us code that is easier to maintain, review, and
-> less prone to bugs.
-
-dependencies
-> > that justify small headers for each two functions and netiher
-> > linux/kexec_handover.h nor linux/kho/abi/kexec_handover.h are that long
-> > to start splitting them.
-> 
-> External users only need to include the headers they actually use. For
-> example, LUO shouldn't have to pull vmalloc or radix tree KHO
-> declarations, and memfd does not need block.
-> 
-> From a maintenance point of view, it is much easier to catch ABI
-> changes when the file with the appropriate version has been changed,
-> and most likely the version of that file should be updated. If a single
-> header contains compatibility versions for several different data
-> structures, it is easier to miss the correct version update.
-
-No matter in what files the definition lives, someone can forget to
-update version and we may miss it during review.
-
-Would be better to spend this time and energy to add kho-specific prompt
-to LLM review to catch such issues ;-)
+diff --git a/tools/testing/selftests/mm/ksft_process_madv.sh b/tools/testing/selftests/mm/ksft_process_madv.sh
+index 2c3137ae8bc8..edad2d2d888f 100755
+--- a/tools/testing/selftests/mm/ksft_process_madv.sh
++++ b/tools/testing/selftests/mm/ksft_process_madv.sh
+@@ -1,4 +1,4 @@
+ #!/bin/sh -e
+ # SPDX-License-Identifier: GPL-2.0
  
-> Since we are splitting the source files (like kho_radix.c and
-> kho_vmalloc.c), the headers should logically follow the same
-> modularity.
- 
-They could. Doesn't mean they have to.
-
-> > I agree that we should decouple versioning of these components from the
-> > global KHO versioning.
-> > Can't say I agree with the way you propose to do it.
-> > 
-> > I don't like that each user of a KHO component should include that
-> > component version in its own version string (or whatever it may become
-> > later).
-> > 
-> > It requires ABI headers update each time a user decides to add a new
-> > data structure and worse when there is a change to that data structure.
-> > It creates coupling of the data structure user with its particular
-> > version and just looks ugly IMHO.
-> 
-> It is actually the opposite.
-> 
-> If a user adds a new data structure, that new data structure will have
-> its own compatibility version. Instead of the current approach where
-> the global version string needs to be updated, only the new version
-> string would be added.
-> 
-> Also, if someone updates their code to use the new data structure, their
-> compatibility string is going to be updated anyway, as part of using
-> the data structure requires including the dependency in their
-> compatibility.
-
-Sorry I wasn't clear. I agree that kho_vmalloc, block and radix tree
-should have their own versioning rather than rely on global KHO version.
-
-What I don't like in your proposal is mixing versioning of a component
-with its dependencies.
-
-I think that versioning should be completely local to each component.
-LUO should not care about kho_block "on wire" layout. This should be
-encapsulated in kho_block.
-
-> Backward compatibility is not in scope at the moment, but we can make
-> the version parsing more granular in the future.
-> 
-> Instead of a simple strncmp(), we can introduce a standard callback
-> interface for data structures. Each data structure implementation would
-> implement this interface, and we would pass the parsed version string
-> to the data-structure-specific version check.
-
-Backward compatibility will be in scope sooner or later and string
-parsing is surely not the way to deal with multiple versions.
-
-How do you suggest to represent support for multiple versions?
-"luo-v2;luo-v3;block-v2;block-v3;block-v4"?
-
-> > Or, say, we add support to kmalloc() and use it in kho_block.
-> > Then we'd have to add kmalloc() versioning to all kho_block users, right?
-> 
-> I was thinking about this. Since we don't have examples of data
-> structures depending on each other right now, I simply made sure
-> there are no duplicates in the compatibility strings.
-> 
-> If data structures have interdependencies in the future, we can easily
-> remove this uniqueness restriction. The users of block will still
-> include the block compatibility string (which automatically includes
-> kmalloc), and if user also depends on kmalloc, they will include it
-> as well.
-> 
-> > I think the versioning of each component should be handled by ->restore()
-> > of that component. If it sees an incompatible version in the preserved
-> > data, it returns an error. The versions can be stored e.g. in the base KHO
-> > fdt.
-> 
-> Hm, I think, checking compatibility inside ->restore() of each component may be
-> too late in the boot sequence.
->
-> By checking the composite compatibility strings upfront (before invoking
-> the actual restore/retrieve callbacks), we can guarantee that the entire
-> state configuration is fully compatible. If any mismatch is found, we
-> can cleanly abort the live update.
-
-If a ->restore() returned an error (for any reason) we anyway need to
-reboot, don't we? 
-
-What do we do if memfd discovered incompatibility, but, say hugetlb
-global state was already restored?
-
-If you really want to run the compatibility check upfront, we need a
-mechanism for that. And that should probably happen even before
-kho_mem_init().
-
-> Additionally, keeping the versioning managed via composite strings on the
-> serialized data and registered handlers keeps the KHO core completely
-> decoupled from individual component ABIs, avoiding the need to bloat the
-> base KHO FDT with subsystem-specific versions.
-
-Actually FDT "compatible" handles versioning nicer than composite strings
-You can have
-
-	compatible="kho-v4", "vmalloc-v1", "radix-v1", "block-v2";
-
-and check fdt_node_check_compatible("vmalloc-v1") for vmalloc and
-fdt_node_check_compatible("block-v2") for block.
-
-And we wouldn't need to reimplement string parsing ;-)
-
-But yeah, I do see value of making components versioning and KHO global
-versioning independent. I just don't like composite strings and I don't
-like mixing versioning with dependencies.
-
-Since we are moving from FDT for the most things, version should become
-a number rather than a string and version compatibility should be
-independently verified by each component.
-Then dependencies between components will remain at API level rather
-than brought into the ABI.
-
-If you think ->restore() is too late for compatibility check, we should
-work on a mechanism for upfront compatibility verification.
-
-> > > 5. Adds a KUnit test suite to verify that the composite compatibility
-> > 
-> > Without "composite compatibility strings" we don't need to care about
-> > them "remaining unique and sorted in alphabetical order".
-> 
-> These are not strict runtime requirements; they are simply there to enforce
-> code cleanliness and prevent human errors like accidental duplicates or
-> mismatched orders.
-> 
-> Even with a simple strncmp(), it works perfectly fine as long as the
-> strings match exactly. If the uniqueness or sorting constraints are too
-> strict, they can easily be removed.
-> 
-> In the future, we can transition to a more sophisticated version checker
-> that parses the composite string into individual subsystem version tokens
-> and verifies them one-by-one, rather than relying on a strict literal
-> strcmp() string comparison.
-> 
-> > The need for this test alone is already a red flag ;-)
-> 
-> I will remove test ;-)
-
-It will not remove the red flags ;-)
+-./run_vmtests.sh -t mmap
++./run_vmtests.sh -t process_madv
+-- 
+2.39.5
 
