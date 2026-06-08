@@ -1,187 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0540F3B4E84;
-	Mon,  8 Jun 2026 09:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B28E337B81;
+	Mon,  8 Jun 2026 09:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780910242; cv=none; b=Mn+2VyXz1PnxzYDSYb8xj3NWmkfuwzMK5Cg7mupkYCHyuu1GjB/er98hD5qFls1w8Dns7pJwJzbjtkUMO1BLIbIeOEsXKhhxZ0S89/eUJQxaIMh5UDMXDHTAbD7Jw/Qb6KK+6PrS763yMoDDoMXcO+BdWhy948c3ld7KE0cig6w=
+	t=1780911969; cv=none; b=XZ4JhorEcH2cvGyYa+/Ti2e0UKafEI8Zd5R4RYzDScCBXHLd8p8KZK2+JHVSmJoK6XlPMtmsfjw/H/RXP4HfnnbxJliaLXP5Q7NBsuX+ylVFNhFVSISU8Ww6L2QaVCIJ+cVEgUgQs5cfxf2mzq/3BPOJfpcKM+m58cjcLOsrRtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780910242; c=relaxed/simple;
-	bh=VCEs5thF0HcxdTp52UUMgGH17U9lIvOSaM1EHqrG7pA=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=r1oyaDlc6kWkfvxdV3mnx/cymV4fmLcUPmuikLrVRe1sOTllGetgDjORZxuZJnBB3ieYaCDZDbBOblf3L6oetT8cnJhnmLXH0mnhoYlC4uCjj/h17jCJBSShFpT3wzu8Vybw0UMFIzdTkdY/0224XAk2K8Gy/XpZS7oz2s2oOpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C0vUtKNo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780911969; c=relaxed/simple;
+	bh=ZNqXIOMQx/9Cei0fmz4inEdM2L/JL2wYYV5+cGQyfdE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cpJ3QsaIoA4bVuAlNNZi2ESWCGR9yMNsnhY53/ZZwm94+sYxh+R5/RZCg9PxdY3cPnJ6Scmf5tNj+L34b3iDlvhpBmk2keW26VwKYkVJRkwvWqjamg+wW83oKYtaP31h6BUtbF37kXd8hFFNSVJG/gmnO775d8QWcKZvOf+YIOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=QH+yS7L3; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C0vUtKNo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8B31F00893;
-	Mon,  8 Jun 2026 09:17:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780910240;
-	bh=gkLIaTscoCnVDRa3Re0bl/NCLLxGRZqG/r6RpTgMv5s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=C0vUtKNoajNAJpjdxt+7WmSFH8h5OmpWhkZPVRK7IJ7kFHzUhHnb8x+SQnk8Ootyl
-	 wMF6frhWwJy+Irtyco8xC3GF6JgPUbl18qBlYSpdheOZepiQfL1yxzHZcCWtLx1hBf
-	 5tjoRgVR8Hc+Tyqyd0e95OJWwW5uXpnhrMWcjhwUSZA3JWrM6lxWRXoYZsCXac+b2f
-	 1W/bBuEp1ZvX73B8hXXI265ijKhWKXzxwqJLSPZMpGAu0iZs74ikL8r3NPQ8iH052X
-	 gBRe/XUAUspKeg6lDsJk7lX/dc+MfReQEI3dpFuakLQXvwvslM4O9uAdsfgt2G/70j
-	 rSQl+h3lOmRGw==
-Date: Mon, 8 Jun 2026 18:17:16 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Hui Wang <hui.wang@canonical.com>
-Cc: rostedt@goodmis.org, mathieu.desnoyers@efficios.com, pjw@kernel.org,
- linux-trace-kernel@vger.kernel.org, shuah@kernel.org,
- wangfushuai@baidu.com, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/ftrace: Account for 8-byte aligned
- trace_marker_raw events
-Message-Id: <20260608181716.726cb9c81d41d49095e7f3cf@kernel.org>
-In-Reply-To: <20260607072431.125633-3-hui.wang@canonical.com>
-References: <20260607072431.125633-1-hui.wang@canonical.com>
-	<20260607072431.125633-3-hui.wang@canonical.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="QH+yS7L3"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=GBAWpq3VWx9yVC9Jpc9XHimo01iW/tVjM3UeU3rQ7bM=; b=QH+yS7L3gJ03MjrME5DH0eTMvg
+	APKNQzww04jRBj9S7AoW61CO599tEik6vctHB1kVkairmOuoTrZkxQeZqZiP++ARDnmUoBMMP7wx4
+	Ubz6SFLDax/ZC+RHdyFtKS1WmF7VRMZDDb1oGfEGKiWMNKookzhb+PKttPA7wBd1dHeZzs/7RHsd2
+	B3lmeTh5m5slc0vzdRmYFviPBgCPWxfeiQDj2HWFtfuhQTnqZXGY59eyTCKEZDBz8lTG7YDMpzNnp
+	5OF/Xk2FdM/EXpnIkNj2DvgSpGtQL3upKjPbQd0sDN13YBrwpQ0bHp0aclE0CiSuK1EAov1mi/5xS
+	MkMCHIIw==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wWWYS-007XFC-0f;
+	Mon, 08 Jun 2026 09:46:00 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v3 0/2] net: rds: convert rds to getsockopt_iter
+Date: Mon, 08 Jun 2026 02:44:56 -0700
+Message-Id: <20260608-getsock_more-v3-0-706ecf2ea332@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIABiPJmoC/23N0QrCIBiG4VuR/3iGU2e2o+4jIqb+2yTSUBmLs
+ XsPPKro+ON5vw0yJo8ZerJBwsVnHwP0RDQE7DyECal30BPgjCummKATlhzt/faICalUBrVrbad
+ GBw2BZ8LRrzV3gYCFBlwLXBsCs88lplf9Wdq6/08uLWVUCqOdZFZreTo7NH4Ih5imWlr4p+5+N
+ KeMajYKbZ3RR6a+9L7vb9Gf9N3xAAAA
+X-Change-ID: 20260603-getsock_more-46be8d1c56fd
+To: Allison Henderson <achender@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Andy Grover <andy.grover@oracle.com>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com, 
+ linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
+ kernel-team@meta.com
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2524; i=leitao@debian.org;
+ h=from:subject:message-id; bh=ZNqXIOMQx/9Cei0fmz4inEdM2L/JL2wYYV5+cGQyfdE=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqJo9Utu600ILqdENVlMGn3XjTeq22GF+fzocyn
+ xERVNUMnweJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaiaPVAAKCRA1o5Of/Hh3
+ bZhqD/9e5mw9Fr8hTfzJexYQxGpVuPNPn8f9rETxJ2dyxAlufWTbY6DhsTPmBP4aXodVkA/kWm/
+ gp0+V8tR2DsiJZf5VebMRI91S+DLBzZQzdNEp5L0zHSWjOAXzv7a1D+wAQAWNyNDSPnnH/oAvbV
+ piSv9I9UeP8P+GuKq+xPgMBBxsGo3AAehyWzO49onqZtg4L/KiCMQnDGIoCdkgX4aYOcShKZY8w
+ muSYkdpo7N7wcWQP9q7cvgmlujMZYWnhulJ1cWDcOKyLaaCCQlK7WKgg7XOxcxRkndpYj2XtSXJ
+ lfkylTjnOmb8aa7H3MdXZYTJgQl1N+KJVYW1baBwMK/Qo3SvURmomRp7Qh/x85cWTlAOqqQjLb6
+ 1G3k0b/xV36gsvGhDbnIwwTmBEViNXJ1LlUCrB6oDZA4hKm7tCACjCgzZbs2rGthOqCJJP5SCkk
+ dzgtzq4/SfxwVGd5hyb+DZqJnIQmpQqh2M+8bO5ePKaLJ9CnlbgTeQjSH1iQn4izsR/eRrGjLdZ
+ hto72g/CUG90fPyuoGSdL7zq66vbue+S71Vn9wmbCMUztqgvtcMD5aEH2rLHYJNOrt7MFc6hhcQ
+ 18MqxAkBhx8AZPX3nC3B+OA8r/7lEf5gdTUrGLxvY3Zcom0E+NJi4kKTaUWUrTaRp4tXo+5jmSn
+ lGEEFVHdpeehrNQ==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-On Sun,  7 Jun 2026 15:24:31 +0800
-Hui Wang <hui.wang@canonical.com> wrote:
+This series continues the conversion of the remaining proto_ops getsockopt
+callbacks to the new getsockopt_iter callback introduced in commit
+67fab22a7adc ("net: add getsockopt_iter callback to proto_ops"), this time
+for RDS.
 
-> trace_marker_raw.tc assumes that the raw marker payload length
-> reported in trace_pipe is the result of int((id + 3) / 4) * 4, but
-> that is not true on kernels with CONFIG_HAVE_64BIT_ALIGNED_ACCESS
-> enabled.
-> 
-> With forced 8-byte alignment, the ring buffer event forces 8-byte
-> alignment. The event length is stored in array[0], the payload data
-> and id are placed in a struct raw_data_entry which is stored starting
-> at array[1]. In this case, the printed payload data length is 8*N+4
-> bytes.
-> 
-> To make the testcase pass in this case, add a kconfig_enabled() helper
-> and use it to detect CONFIG_HAVE_64BIT_ALIGNED_ACCESS so
-> trace_marker_raw.tc can calculate the expected length correctly.
-> 
+RDS is a little more involved than the protocols converted so far, because
+the RDS_INFO_* options snapshot kernel state directly into the destination
+buffer: the info producers memcpy into the pages under a spinlock via
+kmap_atomic() and so must not fault.
 
-Hmm this fix lacks consideration for the environment.
+The conversion preserves that model — it obtains the same page array and
+starting offset from opt->iter_out with iov_iter_extract_pages(),
+preallocating the array so the iterator fills it in place, and leaves
+the rds_info_iterator / rds_info_copy machinery and all producer
+callbacks unchanged; kernel (ITER_KVEC) buffers remain unsupported on
+the RDS_INFO path, as before.
 
-> Assisted-by: Copilot:gpt-5.5
-> Signed-off-by: Hui Wang <hui.wang@canonical.com>
-> ---
->  .../ftrace/test.d/00basic/trace_marker_raw.tc | 16 +++++++--
->  .../testing/selftests/ftrace/test.d/functions | 33 +++++++++++++++++++
->  2 files changed, 46 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-> index 8e905d4fe6dd..beda0f8627b3 100644
-> --- a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-> @@ -15,6 +15,11 @@ is_little_endian() {
->  }
->  
->  little=`is_little_endian`
-> +raw_data_align=4
-> +
-> +if kconfig_enabled CONFIG_HAVE_64BIT_ALIGNED_ACCESS; then
+I've vibe-coded a kselftest exercising both the simple options and the
+RDS_INFO_* snapshot path, feel free to drop it in case this is not
+useful.
 
-Checking Kconfig is OK, but in this case, if the existence of the
-dependent Kconfig file itself cannot be confirmed, this test should
-return an unresolved error.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v3:
+- Resolved the conflict with net-next
+- Added additional tags (assisted-by and reviewes)
+- Link to v2: https://lore.kernel.org/r/20260605-getsock_more-v2-0-80f38cdb8706@debian.org
 
-> +       raw_data_align=8
-> +fi
->  
->  make_str() {
->  	id=$1
-> @@ -60,7 +65,8 @@ test_multiple_writes() {
->  	echo stop > trace_marker
->  
->  	# Check to make sure the number of entries is the id (rounded up by 4)
-> -	awk '/.*: # [0-9a-f]* / {
-> +	# or is (((id + 3) rounded by 8) + 4) if raw_data_align is 8
-> +	awk -v data_align=$raw_data_align '/.*: # [0-9a-f]* / {
->  			print;
->  			cnt = -1;
->  			for (i = 0; i < NF; i++) {
-> @@ -69,8 +75,12 @@ test_multiple_writes() {
->  					i++;
->  					cnt = strtonum("0x" $i);
->  					num = NF - (i + 1);
-> -					# The number of items is always rounded up by 4
-> -					cnt2 = int((cnt + 3) / 4) * 4;
-> +					# The number of items is rounded up by 4
-> +					# or is (8 * N + 4) if data_align is 8
-> +					if (data_align == 4)
-> +						cnt2 = int((cnt + 3) / 4) * 4;
-> +					else
-> +						cnt2 = int((cnt + 3) / 8) * 8 + 4;
->  					if (cnt2 != num) {
->  						exit 1;
->  					}
-> diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
-> index 826141e299e5..0f778087d81b 100644
-> --- a/tools/testing/selftests/ftrace/test.d/functions
-> +++ b/tools/testing/selftests/ftrace/test.d/functions
-> @@ -177,6 +177,39 @@ check_awk_strtonum() { # strtonum is GNU awk extension
->      awk 'BEGIN{strtonum("0x1")}'
->  }
->  
-> +# a helper to check if a kconfig is enabled or not
-> +# return value: 0 (if kconfig is enabled)
-> +#               1 (if kconfig is not enabled)
-> +#               2 (if the config files don't exist or are unreadable)
-> +kconfig_enabled() { # config-name
-> +    local config="$1"
-> +    local uname_r=`uname -r`
-> +    local config_file
-> +
-> +    case "$config" in
-> +    CONFIG_*) ;;
-> +    *) config="CONFIG_$config" ;;
-> +    esac
-> +
-> +    if [ -f /proc/config.gz ] && zgrep --version >/dev/null 2>&1; then
-> +        zgrep -Eq "^${config}=(y|m)$" /proc/config.gz 2>/dev/null
+Changes in v2:
+- rds: reject non-user-backed buffers with !user_backed_iter() instead of
+  iov_iter_is_kvec() on the RDS_INFO path (Allison Henderson)
+- rds: gate the page unpin on iov_iter_extract_will_pin() and comment the
+  implicit pin (Allison Henderson)
+- selftest: size the snapshot mmap from the probed length instead of a fixed
+  two pages (Allison Henderson)
+- Add a new patch to fix a concern raised by Sashiko.
+- Link to v1:
+https://lore.kernel.org/r/20260603-getsock_more-v1-0-43b8d40c8849@debian.org
 
-Do not use zgrep (this requires to install zgrep pacakge) in this test,
-instead, use more widely available `gzip -dc | grep ...`.
-I would like to keep this runnable on a minimum environment.
+---
+Breno Leitao (2):
+      selftests: net: rds: add getsockopt() conversion test
+      rds: convert to getsockopt_iter
 
-> +        return $?
-> +    fi
-> +
-> +    for config_file in \
-> +        /boot/config-$uname_r \
-> +        /lib/modules/$uname_r/config \
-> +        /lib/modules/$uname_r/build/.config
+ net/rds/af_rds.c                             |  36 ++---
+ net/rds/info.c                               |  76 +++++-----
+ net/rds/info.h                               |   3 +-
+ tools/testing/selftests/net/rds/.gitignore   |   1 +
+ tools/testing/selftests/net/rds/Makefile     |   4 +
+ tools/testing/selftests/net/rds/getsockopt.c | 208 +++++++++++++++++++++++++++
+ 6 files changed, 278 insertions(+), 50 deletions(-)
+---
+base-commit: 903db046d5579bef0ea699eae4b279dd6455fc9f
+change-id: 20260603-getsock_more-46be8d1c56fd
 
-Hmm, also I don't like this, because this highly depends on the environment.
-Instead, we can add CONFIG_IKCONFIG_PROC=y in tools/testing/selftests/ftrace/config.
-
-Thank you,
-
-> +    do
-> +        if [ -f "$config_file" ]; then
-> +            grep -Eq "^${config}=(y|m)$" "$config_file"
-> +            return $?
-> +        fi
-> +    done
-> +
-> +    return 2
-> +}
-> +
->  LOCALHOST=127.0.0.1
->  
->  yield() {
-> -- 
-> 2.43.0
-> 
-> 
-
-
+Best regards,
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Breno Leitao <leitao@debian.org>
+
