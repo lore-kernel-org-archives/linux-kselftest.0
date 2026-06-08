@@ -1,97 +1,137 @@
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCD13E3C73
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 18:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A543E51DB
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 20:02:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780944268; cv=none; b=uJ01GMwl01JqVjL1slh3vOspjMVgGX70gA2rkWjB35E3BI+Jns90EuQK21S3sYq1hZBHz/6cpTH8vaiCTuANbGysb6Xc88Vc1K7SJ+ZipWCimEEDM5kZEWPA/AeWfT4fPxradwQXCDHApdd9LzMPKo1CnK9oqVBDrbEdIVsJHgI=
+	t=1780948942; cv=none; b=EoFNjVC5AHadRDdr8+oaDD7PiYSN1kMPclJl/gs+oBpLwj7Zu7xaebRYc6ha1/UEpI1jntw9wKe7ueWz3swcdT+ai7RdRQTS1FJo0WjTMMA8w6ToO/eUmiqhs4/DAhfF8fPK57C+5yw4P9OzaZ8/uoIaJ1O5h6b0YiE8BqApWCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780944268; c=relaxed/simple;
-	bh=XR7M+k8AyohEgX2Awc+rok3FKQJEWRdH3Mqrk0t1ESg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Q/1FX1WKvqZ5KFxs9+f4qFgKgBukWaBWxLHHJvcjh6l+bIVO9ioTTc7QqMJqsi9RtsjdtvxyBQVkkHOVrXRpshy07s7FhG1EffJb4qWja7m7J8f/C4+byG1g7IVLHDIxajitZ9AN0aBI3qydjz5ExsQwqM5yiywqCf4JWyqGLZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KlnADuuo; arc=none smtp.client-ip=209.85.208.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
+	s=arc-20240116; t=1780948942; c=relaxed/simple;
+	bh=wrqE2O76YCV8wdY1YPpUUnMYdTSt/lGtjLT9N9f7KaA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=XWFaDkFokTO5UeZscS050r2xlgLLQ/GNvCtGh9pHeRAkb7qJ6w79UQS6Jn2rpz8fYbFF5bCGHbmEVR7ejxaD/jT+6IInZ8kpmXKdISQfCUWvDOq7yf5KomBf3CmcuS9tifjRgl3D/+TBn/xAHt/BRkrIRmvHDEcKt3jfuYRpDI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JaGM42CN; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KlnADuuo"
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-68f9f08cfcaso4391881a12.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2026 11:44:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JaGM42CN"
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7e6e41cf7aeso2799623a34.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2026 13:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780944266; x=1781549066; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1kzWlN/HIpnAONZ7obvDJpbmfDuKvpPMm7rzEezOti8=;
-        b=KlnADuuoAe/3uQQMpSOrdlftHc7sbFN99LQVx6iy0HNZqfASAb7F90yTY4vQ9HjQI/
-         j+82gZMt7UQw/Nq1JrCFLUyhLOiFTicc7CovmXnCFyFs4YgJtrAMq7VygTWyd3yJNARR
-         5iX58fwk1EW3mgoZKdHy7YYQ00kyD2yjib0efpTf/Mt0ic4Km2CsZJecblkE+TZd7v3+
-         g626vOwENH/NRNIQLmp5AQrL1P/jSqRxYSTS82fHvHgJTAaktT1FTS6ijboFIMaj6Fh8
-         1cL1CzMn+XHXr3VTndqjKUu5lS6I09esh7f28FGe5HTuCE56m0orCwbp4t/quRW81W7U
-         2OhA==
+        d=gmail.com; s=20251104; t=1780948940; x=1781553740; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pwrxcif3XUtEKF7lrhb7eyL0FpVd3GzB9U/X8qwd09o=;
+        b=JaGM42CND++GVCO/APZTAt8fet5/AfRQBUcUWxHYxHHqZInMxKQbF6OT3FmXDjtx6i
+         ozM356muRW6wHE7nxLSzn0SpJLwzCmam74OffTWA0QxKNXp2uBjvUKkWZHa5Qn2qSMvL
+         LUMkkAtJm/hr/K3MutMWwkwk9vP0EL8d053cguGLhQO+eWhd9DcMNR1Mp9om4+fpp3Ne
+         R6SlRzNODEgUPxSoeYrLPmWT5FDBkX33xxLwNapI3/HMCNc2SEWNQmWHBOZPmRQYpqpp
+         +PAbwSpx/A6u4EDuoiFZcwRcVVsnSb9x8xXTMxRMeUutezTmyBN38WGw74RGHhb8To9j
+         5amQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780944266; x=1781549066;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1kzWlN/HIpnAONZ7obvDJpbmfDuKvpPMm7rzEezOti8=;
-        b=kw6L/uilaPZxNzwpBKZZl5Hb2XCd9DugNNW+tM1A1u0QsKsqk1VLaJ6QKIwF2HxElz
-         vvy2hnxlVWsXamC77brJ4K7A3wWsVEL/9sfwOz5tw8h8RJWAa4lOvi4YflzqBdiEdPjX
-         HPilYuliz0KPvODOQRTpk9H8YsPjG/WzD63LMEWOMf/K6bHP9K4LR4F+HeFD3mXpRfUF
-         oeoQPedLm+evcBRfyWHGo3pljGC37PBKh8Jxt6/Eyv8LFTHYQO0xwtI2J8RX+0uJdNdW
-         h3qwzqDGxqmAvYif8DQTw5tSX3VooauOaMPGKnUMDGSHDGLHEjSS89KEiQfQvUXGiRpp
-         AvsQ==
-X-Forwarded-Encrypted: i=1; AFNElJ89yXymKUkYC/rwqsV4LGtVb7Equ/Tb97lcxSSHESkZFn0+hruyanbwvoURY3a9CqQhSJzQ8sb5MVWpuyfoUqY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzzb9RtjglV6vLrF3eCh7xNZ0YRfF9/L0o8JFOhRrKTRzeZkP0Y
-	7nFDgRWoZw8Rr8y/BxzTzx/p/Gl20gs19m1TadCJQ3hQOlJPwM9OvT3WILKhy3r9hkyEZGPoDfn
-	lA4VppbVhOiUXDnhJcg==
-X-Received: from edyf26.prod.google.com ([2002:a05:6402:69a:b0:691:b0e3:5c51])
- (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:4595:b0:691:acfc:54bf with SMTP id 4fb4d7f45d1cf-691acfc5784mr3195303a12.21.1780944265680;
- Mon, 08 Jun 2026 11:44:25 -0700 (PDT)
-Date: Mon, 08 Jun 2026 18:44:24 +0000
-In-Reply-To: <2vxzjys9t84m.fsf@kernel.org>
+        d=1e100.net; s=20251104; t=1780948940; x=1781553740;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pwrxcif3XUtEKF7lrhb7eyL0FpVd3GzB9U/X8qwd09o=;
+        b=a+6l65VBC/yhrS3DEcvXyLtHEQnCIKMDHNEosr9JJh7orBOMJE83hckWKl8UTyhbR7
+         hHHoMS5Ry17/tu7ff7ZQQyjgNAM5CgJ9ibXKCsvMX/efuEFQbfBwXX/7Ms6krQ8BqP4N
+         HsvSIjo+3wuT7Fnpnsq0yT/1hBQOaBjTiaFv7PYHrnuY3QJgKxwg79D9TJe/IwQ/tLHk
+         BPwFitfeLQOJIEkPlJECFDYbWZdQlNRwtoMH5p3OXVFSxh0rHq6MspUWJIpLGCvb5paI
+         NkWPJ0MCXuJUWxg3RFv4UcC7OXKJ2Qmy7nztTNZ2txqQ+f7qj72MN+sgCotjJmb/vXRa
+         amsA==
+X-Forwarded-Encrypted: i=1; AFNElJ+JRgtu99w9jo7s2xY51oW2VKBYhEazsbtL1/9+Edg9plV4JY+Mp3TitQPLdx7hU/G0OZtXjAQT1n+X+20CZCI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3MIG1iiN4ImpDGjC4FmtW1HxgXsUd0TXgaU39Iw06q5y6OiEO
+	S+M1d1HjSr9Ai/5vvuHPv7QM8arFkurHNFgVUyt3lCnW7VpYpwGuHxhn
+X-Gm-Gg: Acq92OGmIsTcXP/htAmqrxeFjgAKT6tTHbN0i/GiSNn84KhryAZN51duMnZu3ts7lcj
+	0MeuLk6DHK2eUp1oIq8wUB20vP5DoEvGifWy7YI/M8SUoejm7sTQlQ9inOWYc3iWydHCJh4bVNA
+	knhXy/APdhxOUGIJefLMrxh9nXW/DJbwCaFHltQ/MMhOopaGdnUNw3JY1fRSNPnCw16k6N3Uros
+	wRU3LxatS2JH/5qJ3TJ/8FihPOZH3hnp+X9GwHtjOn0O/sc/six9CeWiNA29KAdf6H151aQyDRT
+	DF2NOvJ6yqETO4KWCtj/OpuKOaPnInSpIY7/1mBO1uTKfNFhk6vJxqwbAFy2OTCAR8FkgMUamIF
+	THsnRDXXFR2OePH9qWYX3qojKftjMJGptCbH03JUthvIbuc/g+TMdGz43l7YAStYAeZkYkstRfH
+	BdJz4hKoVPKwkdIyMIxMWrz2c77J1V1uiC0w7kR49PiMFvKpIVlnqwWBOJP7q/XKU6RJzo55d2r
+	pqNotrIbSJzKbwN6k4Co7tla15d8K5jtD+qEoI=
+X-Received: by 2002:a05:6830:902:b0:7dc:dd19:7f53 with SMTP id 46e09a7af769-7e70c7906d4mr9896252a34.14.1780948940066;
+        Mon, 08 Jun 2026 13:02:20 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5c::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e6e7923af1sm13046364a34.20.2026.06.08.13.02.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Jun 2026 13:02:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260511201155.1488670-1-vipinsh@google.com> <20260511201155.1488670-3-vipinsh@google.com>
- <9huzy0hh3qhe.fsf@tarunix.c.googlers.com> <20260518170124.GA3352871.vipinsh@google.com>
- <2vxzjys9t84m.fsf@kernel.org>
-Message-ID: <9huzse6wzxbr.fsf@tarunix.c.googlers.com>
-Subject: Re: [PATCH 2/2] selftests/liveupdate: Add helpers to
- preserve/retrieve FDs
-From: tarunsahu@google.com
-To: Pratyush Yadav <pratyush@kernel.org>, Vipin Sharma <vipinsh@google.com>
-Cc: pasha.tatashin@soleen.com, rppt@kernel.org, pratyush@kernel.org, 
-	shuah@kernel.org, dmatlack@google.com, skhawaja@google.com, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 08 Jun 2026 13:02:17 -0700
+Message-Id: <DJ3XPJA746S5.NYKZWY1HBH8O@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kuniyuki Iwashima" <kuniyu@google.com>, "Jiayuan Chen"
+ <jiayuan.chen@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>
+Cc: <bpf@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Willem de
+ Bruijn" <willemdebruijn.kernel@gmail.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Shuah Khan" <shuah@kernel.org>, "Joe Stringer" <joe@wand.net.nz>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf v8 1/2] net: Validate protocol in skb_steal_sock()
+ for BPF-assigned sockets
+X-Mailer: aerc
+References: <20260608125846.157004-1-jiayuan.chen@linux.dev>
+ <20260608125846.157004-2-jiayuan.chen@linux.dev>
+ <CAAVpQUDZoEVEX1kXok-29dzVHk=ZK_2MkZyZY8kRHCJCfAWVFg@mail.gmail.com>
+In-Reply-To: <CAAVpQUDZoEVEX1kXok-29dzVHk=ZK_2MkZyZY8kRHCJCfAWVFg@mail.gmail.com>
 
-Pratyush Yadav <pratyush@kernel.org> writes:
-
->>> > +	return 0;
->>> > +}
->>> > +
->>> > +int luo_session_retrieve_fd(int session_fd, __u64 token)
->>> nit: Can add a comment that, once it is failed, retrieved status is saved,
->>> So it is permanent failure.
+On Mon Jun 8, 2026 at 10:21 AM PDT, Kuniyuki Iwashima wrote:
+> On Mon, Jun 8, 2026 at 5:59=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.d=
+ev> wrote:
 >>
->> I think appropriate place will be the official documentation which is
->> here include/uapi/linux/liveupdate.h
+>> bpf_sk_assign_tcp_reqsk() can assign a TCP reqsk to a non-TCP skb,
+>> causing a panic when the skb enters the wrong L4 receive path [1].
+>> An initial attempt tried to fix this in the BPF helper by checking
+>> iph->protocol, but Sashiko [2] revealed that BPF programs can bypass
+>> this check via a TOCTOU attack by modifying iph->protocol around the
+>> call:
 >>
->> I don't see it is mentioned in the documentation (yes, code does what
->> you have said), I will refrain from adding that comment here.
+>>     iph->protocol =3D IPPROTO_TCP;
+>>     bpf_sk_assign_tcp_reqsk(udp_skb, tcp_sk);
+>>     iph->protocol =3D IPPROTO_UDP;
+>>
+>> Furthermore, bpf_sk_assign() has had the same class of vulnerability
+>> since its introduction =E2=80=94 it can assign any socket type to any sk=
+b
+>> without protocol validation.  Since the BPF helper check alone cannot
+>> prevent a malicious BPF program from crashing the kernel, add protocol
 >
-> Would be a good addition to the LUO docs I think. Patches welcome :-)
+> I'm curious about the BPF maintainers' stance on this kind of "bug"
+> where admin tries to shoot oneself in the foot.
+>
+> I saw Alexei said this recently, and I guess it applies here as well ?
+> https://lore.kernel.org/bpf/CAADnVQLh7VEKAtckzz=3DXOVPT8ovpDQshvPPCWHDQu2=
+OWQx27_w@mail.gmail.com/
+>
+> ---8<---
+> Not every "bug" needs a fix.
+> If a malicious bpf user wants to crash the kernel they will
+> find a way to do so. Especially with agents.
+> We cannot realistically close all of the holes.
+> Right now the priority is to fix the issues that normal
+> users can hit and not bots.
+> ---8<---
 
-Added here:
-https://lore.kernel.org/all/074445fc4964961f12171ea129f2a7690322a78a.1780944056.git.tarunsahu@google.com/
+In addition to that I have to add that skb_steal_sock() is performance
+critical path of networking stack. Adding runtime overheard there
+because bots can find a way to abuse the interfaces is not a good trade off=
+.
+If there is no simple way to fix it completely on the bpf side
+then we have to flag this issue as "won't fix" and move on.
 
->
-> [...]
->
-> -- 
-> Regards,
-> Pratyush Yadav
