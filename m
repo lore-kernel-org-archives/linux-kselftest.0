@@ -1,40 +1,31 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5AF3B8127;
-	Mon,  8 Jun 2026 09:46:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0333F336891;
+	Mon,  8 Jun 2026 10:26:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780911974; cv=none; b=JfAb+M0L3kmzZzbNvbpqP0CFKj+8rcu4JlGn94xDZOhF0QiAZV4Tz5GjYVEQsQMuaHOnw9rWURzMEotrsvKaefqk5ud2bowq9xuqi+o22Gfzo99nbuLVtHsTvHgA5hkW5h0KEFLxkyAgB+Twzuq/zAayRKJhDrrr1ZPUpUwmAZ8=
+	t=1780914380; cv=none; b=FL40He6v4O30I82OkdLYUPvMSUvmpMIBhq5SPgVXtufV2E1vXkFqnAtQGCWLv84EHD2aN0u5SBD+F3lTi0kLPzWAL5n13nJZDXKRvcM2qSUhs2Wtou21pns+Dsf3wZ9AD4x4UYMQu+SeLJkacleoVPaphitE+3ze7RNoATOXM3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780911974; c=relaxed/simple;
-	bh=zIfiWBmE2HnYS/F0hW39kjh4eHnOUmlctnvwmiHCkRw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gmIXvi7lIXcfRudQcQlsoByraPEjpMB0ymcmRPva1Z8FTg9h6dDQx1kpLsSNZqfdefgu3jHsm6rhUe0/thJBCJDzKAeJd4sJw73GPxNeG8vJrzT+32LN1hoNnDTpLEbecswHnD576vFXYEG4Tg29j2UNuuaIFkcPwRtXTKZtmEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=fs0A+8qr; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1780914380; c=relaxed/simple;
+	bh=CkWGaUYG20dc9W69h9S8TH3b+CnKcai89evnLGg19Kg=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=uQtHINUXnV0CW4dTlnrWgn+Nkz3vKJUHn+nyYMwzRU/tX4XpgpAze9RQt7g+/UkjJc7nk8FA1ef+FP+7iwHEUfthCFYu4gOX1hWKp2ly4GRCYJGdbZBd/Yz8q0/bj1It8DksK9HBnnk4FAMuWUwq2Fe18Yv/1aJC612ZauEOwtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kgVwy8zh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="fs0A+8qr"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=w0e/0FhKofh2YOqY4slcg2eOBkyn0jr9EXZHJ/nOus0=; b=fs0A+8qrGfHCygVnx0cvBusPgD
-	/TXoWDZ2aP4ZbP6qc/HqNDAATZ6yloCA5oqaIyFOJ/N7hoQNDLwmGplr0dhovgwSLOJ/9jECxE0n7
-	33Q9gS7H1QczOF2CVsRSSfNqaSAk8f/qXPDT3RWtLBzgS7yrO7sDKTBQnSq48XKr5y/WcCkiMUbi/
-	2lEqrB7V/GCGA8T03SJ9xP0dXrvz1ole7hz5g4/2mRWWal6iFrEOXIEww5EdDZJc9e4OWqHy13Fg0
-	AdUVIQVg/9nlKzlgqN1nfByk09B3A45XE96bZCidmgdyat2CaoYolhAcYsRCO461/IAzvs/VLFXQ8
-	irto6G7Q==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wWWYb-007XIa-0v;
-	Mon, 08 Jun 2026 09:46:09 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Mon, 08 Jun 2026 02:44:58 -0700
-Subject: [PATCH net-next v3 2/2] rds: convert to getsockopt_iter
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kgVwy8zh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 817231F00893;
+	Mon,  8 Jun 2026 10:26:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780914378;
+	bh=i1lroZnoIaLu1CMzf9kEVvvwG+CcQpGu2by6hNtmkow=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=kgVwy8zhdyQca1BKeV6lxRurKUs5PF/8H4Yr4L5huRfNMVNH0YwhhuUCzuYXd8mv5
+	 CbdlFVXFX6I/7m+gL8+0kNcyQcQjvwKtuHMu0mLoOg/WCDyzS4FP4eofmRSfoYr26E
+	 5G70YuumsWXfdUFXHkyLauQKAYGEHDz7k8EFeRkSVnjLRYqBBk4c0116AjVCJbRlhw
+	 yJwqLAndgemOL8eT8gkYVqdzaqyWgZkUFJylihyfv9UNkEh9SyU3HKx8xGdLGn7Sfs
+	 4cowKgJmxIYsghmlUWcKOhA5iubapbStqLCBKdl/M0Iblw6O6f1fOi+PNSk9wK6Wd9
+	 T17EaljA2Rt0w==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,313 +34,237 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260608-getsock_more-v3-2-706ecf2ea332@debian.org>
-References: <20260608-getsock_more-v3-0-706ecf2ea332@debian.org>
-In-Reply-To: <20260608-getsock_more-v3-0-706ecf2ea332@debian.org>
-To: Allison Henderson <achender@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Andy Grover <andy.grover@oracle.com>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com, 
- linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
- kernel-team@meta.com
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9118; i=leitao@debian.org;
- h=from:subject:message-id; bh=zIfiWBmE2HnYS/F0hW39kjh4eHnOUmlctnvwmiHCkRw=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqJo9U2FzK2OIZNxe6HZ9J6R9Otrxz6CSmukCbg
- MrjxTBfDGiJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaiaPVAAKCRA1o5Of/Hh3
- bbTwD/466kvNcGZg2CIq4ipz800YlNdDMPb+QtfFTkOnmYM0KLguqto+vT7l/N1zZNgnFPJZWZ7
- oL9/nI38yrPci5AmOhu/iCM0R73vxRtpu91rwoMxFf3sBL6tWtCVF7jJ89iSzT3ynK1Ms5tO6Fy
- qAAcMxR1NVXuEuHZ2TisNlM+1b3O+tMZi4rqBf3jZj2EpDHBMp/3ugp1XZGn0/rgBf33AZKEg9a
- e/AtF+gm3mqQznsHnjcjTQaVoSCYUGtlPlKRrPTnt85AxdYV6Do9ISfiUPjBhsrZEs2u4RnzOQS
- 7jz86fZ8g4wDU/rJBnv+eFek7tQR2W/C+jszcIFXrU/MwwfaAi2/rlSPjN+L2LnEpqSk68Yr2Jr
- r+rArY+iBbnWgT05/revyyhuZcxG6F7mzD4pzWSbt3jYJkY44XBfA8lXiE3FdTCyQx0Dyg3bmyt
- lHkePnnBeGGKT00x9axjJ9J4lgtK9jZMs6VAYCd27ChgNda5YU9zcBo94B8N0gudeM0rsc/9nr+
- tpo2q0eXpuYQQs5t2s/SA2prdVt7R8zEb92bX/uF4udUyfS2NakPn+lOXF/tp/9hYl3qvTvp4/H
- U6/Izq2RsaGDKdXTUPWpFzNsbu0VkGlKiEJWXQLL27sm9GQ1/g1CRQ3t8yFf0QeB+/5SL2qYsg3
- vHMABtxqSBKi+GQ==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Subject: Re: [RFC v1 0/9] kho: granular compatibility and header decoupling
+From: Mike Rapoport <rppt@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Mike Rapoport <rppt@kernel.org>, linux-kselftest@vger.kernel.org, 
+ shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org, 
+ skhan@linuxfoundation.org, linux-doc@vger.kernel.org, jasonmiu@google.com, 
+ linux-kernel@vger.kernel.org, corbet@lwn.net, ran.xiaokai@zte.com.cn, 
+ kexec@lists.infradead.org, pratyush@kernel.org, graf@amazon.com
+In-Reply-To: <aiVp5RlbWRz5VnPB@plex>
+References: <20260605033235.717351-1-pasha.tatashin@soleen.com>
+ <178083348872.1648214.17778188633648887952.b4-review@b4>
+ <aiVp5RlbWRz5VnPB@plex>
+Date: Mon, 08 Jun 2026 13:26:12 +0300
+Message-Id: <178091437240.1648214.10761111570005003901.b4-reply@b4>
+X-Mailer: b4 0.15.2
 
-Convert RDS socket's getsockopt implementation to use the new
-getsockopt_iter callback with sockopt_t.
+On 2026-06-07 13:43:09+00:00, Pasha Tatashin wrote:
+> On 06-07 14:58, Mike Rapoport wrote:
+> 
+> > On Fri, 05 Jun 2026 03:32:26 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
+> > 
+> > Hi,
+> > 
+> > 
+> > I'd keep vmalloc where it is, it's more of a memory preservation primitive
+> > rather than a data structure of it's own. The data structure it uses is an
+> > implementation detail.
+> 
+> kho vmalloc is absolutely a data structure. KHO core only provides the
+> basic handover mechanism (FDT nodes, physical memory ranges). vmalloc
+> is a structured representation on top of KHO, and should provide its own
+> versioned ABI.
 
-Key changes:
-- Replace (char __user *optval, int __user *optlen) with sockopt_t *opt
-- Use opt->optlen for buffer length (input) and returned size (output)
-- Use copy_to_iter() instead of put_user()/copy_to_user()
+kho_preserve_vmalloc() has the same semantics as kho_preserve_folio().
+It's not intended to be used as a data structure. The data structure is
+an implementation detail unlike with kho_block and kho_radix_tree that
+are intended to be used as data structures and expose clear data
+structure APIs.
 
-The RDS_INFO_* snapshot path in rds_info_getsockopt() used to pin the
-userspace buffer with pin_user_pages_fast() on the raw optval address;
-the info producers then memcpy into those pages under a spinlock via
-kmap_atomic() and so must not fault. Obtain the same page array and
-starting offset from opt->iter_out with iov_iter_extract_pages(), which
-pins for write because iter_out is ITER_DEST.
+Yes, vmalloc should have versioning, but that does not mean it must move
+to different files.
 
-The page array is preallocated here (sized with iov_iter_npages()) and
-passed in, so iov_iter_extract_pages() fills it in place rather than
-allocating one for us; RDS therefore keeps ownership of the array on
-every return path and frees it itself. The rds_info_iterator /
-rds_info_copy machinery and all producer callbacks are unchanged.
+And, btw, moving KHOSER_PTR() infra along with vmalloc is wrong. It was
+my oversight that I didn't insist on using it for most of the
+serializeable pointers instead of open coded
+virt_to_phys()/phys_to_virt(). We need to fix it.
 
-Kernel buffers (ITER_KVEC) are not page-backed in a way the info
-producers can use, so the RDS_INFO path returns -EOPNOTSUPP for them;
-this matches the previous behaviour, where a kernel-buffer getsockopt
-hit the WARN_ONCE() path in do_sock_getsockopt() and returned
--EOPNOTSUPP. The simple RDS_RECVERR and SO_RDS_TRANSPORT options keep
-working for kernel buffers via copy_to_iter().
+> If we change any of the vmalloc serialized structures (like kho_vmalloc,
+> kho_vmalloc_chunk, or kho_vmalloc_hdr), then vmalloc won't work and
+> compatibility will break.
+> 
+> Core KHO does not need vmalloc; nothing in kexec_handover.c uses it.
+> 
+> Instead, vmalloc has external customers:
+> - memfd (uses it to preserve serialized folio metadata)
+> - KHO test suite in lib/test_kho.c (uses it to preserve physical address arrays)
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
-Reviewed-by: Allison Henderson <achender@kernel.org>
----
- net/rds/af_rds.c | 36 +++++++++++++++------------
- net/rds/info.c   | 76 ++++++++++++++++++++++++++++++++------------------------
- net/rds/info.h   |  3 +--
- 3 files changed, 65 insertions(+), 50 deletions(-)
+Following this logic, kho_presrve_folio() should be moved out because
+it's not used by KHO but has external customers. And radix tree should
+forever remain in kexec_handover.c because KHO uses it ;-)
 
-diff --git a/net/rds/af_rds.c b/net/rds/af_rds.c
-index 6f4f9cf352bd..d5defe9172e3 100644
---- a/net/rds/af_rds.c
-+++ b/net/rds/af_rds.c
-@@ -37,6 +37,7 @@
- #include <linux/in.h>
- #include <linux/ipv6.h>
- #include <linux/poll.h>
-+#include <linux/uio.h>
- #include <net/sock.h>
- 
- #include "rds.h"
-@@ -485,35 +486,36 @@ static int rds_setsockopt(struct socket *sock, int level, int optname,
- }
- 
- static int rds_getsockopt(struct socket *sock, int level, int optname,
--			  char __user *optval, int __user *optlen)
-+			  sockopt_t *opt)
- {
- 	struct rds_sock *rs = rds_sk_to_rs(sock->sk);
- 	int ret = -ENOPROTOOPT, len;
- 	int trans;
-+	int val;
- 
- 	if (level != SOL_RDS)
- 		goto out;
- 
--	if (get_user(len, optlen)) {
--		ret = -EFAULT;
--		goto out;
--	}
-+	len = opt->optlen;
- 
- 	switch (optname) {
- 	case RDS_INFO_FIRST ... RDS_INFO_LAST:
--		ret = rds_info_getsockopt(sock, optname, optval,
--					  optlen);
-+		ret = rds_info_getsockopt(sock, optname, opt);
- 		break;
- 
- 	case RDS_RECVERR:
--		if (len < sizeof(int))
-+		if (len < sizeof(int)) {
- 			ret = -EINVAL;
--		else
--		if (put_user(rs->rs_recverr, (int __user *) optval) ||
--		    put_user(sizeof(int), optlen))
-+			break;
-+		}
-+		val = rs->rs_recverr;
-+		if (copy_to_iter(&val, sizeof(int), &opt->iter_out) !=
-+		    sizeof(int)) {
- 			ret = -EFAULT;
--		else
-+		} else {
-+			opt->optlen = sizeof(int);
- 			ret = 0;
-+		}
- 		break;
- 	case SO_RDS_TRANSPORT:
- 		if (len < sizeof(int)) {
-@@ -522,11 +524,13 @@ static int rds_getsockopt(struct socket *sock, int level, int optname,
- 		}
- 		trans = (rs->rs_transport ? rs->rs_transport->t_type :
- 			 RDS_TRANS_NONE); /* unbound */
--		if (put_user(trans, (int __user *)optval) ||
--		    put_user(sizeof(int), optlen))
-+		if (copy_to_iter(&trans, sizeof(int), &opt->iter_out) !=
-+		    sizeof(int)) {
- 			ret = -EFAULT;
--		else
-+		} else {
-+			opt->optlen = sizeof(int);
- 			ret = 0;
-+		}
- 		break;
- 	default:
- 		break;
-@@ -653,7 +657,7 @@ static const struct proto_ops rds_proto_ops = {
- 	.listen =	sock_no_listen,
- 	.shutdown =	sock_no_shutdown,
- 	.setsockopt =	rds_setsockopt,
--	.getsockopt =	rds_getsockopt,
-+	.getsockopt_iter =	rds_getsockopt,
- 	.sendmsg =	rds_sendmsg,
- 	.recvmsg =	rds_recvmsg,
- 	.mmap =		sock_no_mmap,
-diff --git a/net/rds/info.c b/net/rds/info.c
-index f1b29994934a..499b3774860e 100644
---- a/net/rds/info.c
-+++ b/net/rds/info.c
-@@ -35,6 +35,7 @@
- #include <linux/slab.h>
- #include <linux/proc_fs.h>
- #include <linux/export.h>
-+#include <linux/uio.h>
- 
- #include "rds.h"
- 
-@@ -144,60 +145,68 @@ void rds_info_copy(struct rds_info_iterator *iter, void *data,
- EXPORT_SYMBOL_GPL(rds_info_copy);
- 
- /*
-- * @optval points to the userspace buffer that the information snapshot
-- * will be copied into.
-- *
-- * @optlen on input is the size of the buffer in userspace.  @optlen
-- * on output is the size of the requested snapshot in bytes.
-+ * @opt->iter_out describes the buffer that the information snapshot will be
-+ * copied into, and @opt->optlen is the size of that buffer on input.  On
-+ * output @opt->optlen is set to the size of the requested snapshot in bytes.
-  *
-  * This function returns -errno if there is a failure, particularly -ENOSPC
-- * if the given userspace buffer was not large enough to fit the snapshot.
-- * On success it returns the positive number of bytes of each array element
-- * in the snapshot.
-+ * if the given buffer was not large enough to fit the snapshot.  On success
-+ * it returns the positive number of bytes of each array element in the
-+ * snapshot.
-  */
--int rds_info_getsockopt(struct socket *sock, int optname, char __user *optval,
--			int __user *optlen)
-+int rds_info_getsockopt(struct socket *sock, int optname, sockopt_t *opt)
- {
- 	struct rds_info_iterator iter;
- 	struct rds_info_lengths lens;
- 	unsigned long nr_pages = 0;
--	unsigned long start;
- 	rds_info_func func;
- 	struct page **pages = NULL;
-+	size_t offset0 = 0;
-+	int npages = 0;
- 	int ret;
- 	int len;
- 	int total;
- 
--	if (get_user(len, optlen)) {
--		ret = -EFAULT;
--		goto out;
--	}
-+	len = opt->optlen;
- 
- 	/* check for all kinds of wrapping and the like */
--	start = (unsigned long)optval;
--	if (len < 0 || len > INT_MAX - PAGE_SIZE + 1 || start + len < start) {
-+	if (len < 0 || len > INT_MAX - PAGE_SIZE + 1) {
- 		ret = -EINVAL;
- 		goto out;
- 	}
- 
-+	/* The info producers write into the pages with kmap_atomic() while
-+	 * holding a spinlock, so they need a genuine page-backed user buffer.
-+	 */
-+	if (!user_backed_iter(&opt->iter_out)) {
-+		ret = -EOPNOTSUPP;
-+		goto out;
-+	}
-+
- 	/* a 0 len call is just trying to probe its length */
- 	if (len == 0)
- 		goto call_func;
- 
--	nr_pages = (PAGE_ALIGN(start + len) - (start & PAGE_MASK))
--			>> PAGE_SHIFT;
--
--	pages = kmalloc_objs(struct page *, nr_pages);
-+	/*
-+	 * Preallocate the page array and pass it in so that
-+	 * iov_iter_extract_pages() fills it in place rather than allocating
-+	 * one for us.  Handing it a non-NULL array keeps ownership of the
-+	 * array with us on every return path, instead of depending on the
-+	 * iterator code to allocate and hand it back.
-+	 */
-+	npages = iov_iter_npages(&opt->iter_out, INT_MAX);
-+	pages = kvmalloc_array(npages, sizeof(*pages), GFP_KERNEL);
- 	if (!pages) {
- 		ret = -ENOMEM;
- 		goto out;
- 	}
--	ret = pin_user_pages_fast(start, nr_pages, FOLL_WRITE, pages);
--	if (ret != nr_pages) {
--		if (ret > 0)
--			nr_pages = ret;
--		else
--			nr_pages = 0;
-+
-+	ret = iov_iter_extract_pages(&opt->iter_out, &pages, len, npages,
-+				     0, &offset0);
-+	if (ret < 0)
-+		goto out;
-+	nr_pages = DIV_ROUND_UP(offset0 + ret, PAGE_SIZE);
-+	if (ret != len) {
- 		ret = -EAGAIN; /* XXX ? */
- 		goto out;
- 	}
-@@ -213,7 +222,7 @@ int rds_info_getsockopt(struct socket *sock, int optname, char __user *optval,
- 
- 	iter.pages = pages;
- 	iter.addr = NULL;
--	iter.offset = start & (PAGE_SIZE - 1);
-+	iter.offset = offset0;
- 
- 	func(sock, len, &iter, &lens);
- 	BUG_ON(lens.each == 0);
-@@ -230,13 +239,16 @@ int rds_info_getsockopt(struct socket *sock, int optname, char __user *optval,
- 		ret = lens.each;
- 	}
- 
--	if (put_user(len, optlen))
--		ret = -EFAULT;
-+	opt->optlen = len;
- 
- out:
--	if (pages)
-+	/*
-+	 * iov_iter_extract_pages() pins only user-backed (ubuf) iters;
-+	 * iov_iter_extract_will_pin() reports whether an unpin is owed here.
-+	 */
-+	if (pages && iov_iter_extract_will_pin(&opt->iter_out))
- 		unpin_user_pages(pages, nr_pages);
--	kfree(pages);
-+	kvfree(pages);
- 
- 	return ret;
- }
-diff --git a/net/rds/info.h b/net/rds/info.h
-index a069b51c4679..1aab62ab6d00 100644
---- a/net/rds/info.h
-+++ b/net/rds/info.h
-@@ -21,8 +21,7 @@ typedef void (*rds_info_func)(struct socket *sock, unsigned int len,
- 
- void rds_info_register_func(int optname, rds_info_func func);
- void rds_info_deregister_func(int optname, rds_info_func func);
--int rds_info_getsockopt(struct socket *sock, int optname, char __user *optval,
--			int __user *optlen);
-+int rds_info_getsockopt(struct socket *sock, int optname, sockopt_t *opt);
- void rds_info_copy(struct rds_info_iterator *iter, void *data,
- 		   unsigned long bytes);
- void rds_info_iter_unmap(struct rds_info_iterator *iter);
+> > Let's minimize the churn where possible for the sake of git blame and
+> > backports.
+> 
+> It is much better to do the right cleanups now while KHO is young. Once more
+> subsystems are added, this refactoring will be twice as hard. Modularizing the
+> code now guarantees a simpler, safer, and scalable design. Placing each data
+> structure in its own file gives us code that is easier to maintain, review, and
+> less prone to bugs.
 
--- 
-2.53.0-Meta
+dependencies
+> > that justify small headers for each two functions and netiher
+> > linux/kexec_handover.h nor linux/kho/abi/kexec_handover.h are that long
+> > to start splitting them.
+> 
+> External users only need to include the headers they actually use. For
+> example, LUO shouldn't have to pull vmalloc or radix tree KHO
+> declarations, and memfd does not need block.
+> 
+> From a maintenance point of view, it is much easier to catch ABI
+> changes when the file with the appropriate version has been changed,
+> and most likely the version of that file should be updated. If a single
+> header contains compatibility versions for several different data
+> structures, it is easier to miss the correct version update.
+
+No matter in what files the definition lives, someone can forget to
+update version and we may miss it during review.
+
+Would be better to spend this time and energy to add kho-specific prompt
+to LLM review to catch such issues ;-)
+ 
+> Since we are splitting the source files (like kho_radix.c and
+> kho_vmalloc.c), the headers should logically follow the same
+> modularity.
+ 
+They could. Doesn't mean they have to.
+
+> > I agree that we should decouple versioning of these components from the
+> > global KHO versioning.
+> > Can't say I agree with the way you propose to do it.
+> > 
+> > I don't like that each user of a KHO component should include that
+> > component version in its own version string (or whatever it may become
+> > later).
+> > 
+> > It requires ABI headers update each time a user decides to add a new
+> > data structure and worse when there is a change to that data structure.
+> > It creates coupling of the data structure user with its particular
+> > version and just looks ugly IMHO.
+> 
+> It is actually the opposite.
+> 
+> If a user adds a new data structure, that new data structure will have
+> its own compatibility version. Instead of the current approach where
+> the global version string needs to be updated, only the new version
+> string would be added.
+> 
+> Also, if someone updates their code to use the new data structure, their
+> compatibility string is going to be updated anyway, as part of using
+> the data structure requires including the dependency in their
+> compatibility.
+
+Sorry I wasn't clear. I agree that kho_vmalloc, block and radix tree
+should have their own versioning rather than rely on global KHO version.
+
+What I don't like in your proposal is mixing versioning of a component
+with its dependencies.
+
+I think that versioning should be completely local to each component.
+LUO should not care about kho_block "on wire" layout. This should be
+encapsulated in kho_block.
+
+> Backward compatibility is not in scope at the moment, but we can make
+> the version parsing more granular in the future.
+> 
+> Instead of a simple strncmp(), we can introduce a standard callback
+> interface for data structures. Each data structure implementation would
+> implement this interface, and we would pass the parsed version string
+> to the data-structure-specific version check.
+
+Backward compatibility will be in scope sooner or later and string
+parsing is surely not the way to deal with multiple versions.
+
+How do you suggest to represent support for multiple versions?
+"luo-v2;luo-v3;block-v2;block-v3;block-v4"?
+
+> > Or, say, we add support to kmalloc() and use it in kho_block.
+> > Then we'd have to add kmalloc() versioning to all kho_block users, right?
+> 
+> I was thinking about this. Since we don't have examples of data
+> structures depending on each other right now, I simply made sure
+> there are no duplicates in the compatibility strings.
+> 
+> If data structures have interdependencies in the future, we can easily
+> remove this uniqueness restriction. The users of block will still
+> include the block compatibility string (which automatically includes
+> kmalloc), and if user also depends on kmalloc, they will include it
+> as well.
+> 
+> > I think the versioning of each component should be handled by ->restore()
+> > of that component. If it sees an incompatible version in the preserved
+> > data, it returns an error. The versions can be stored e.g. in the base KHO
+> > fdt.
+> 
+> Hm, I think, checking compatibility inside ->restore() of each component may be
+> too late in the boot sequence.
+>
+> By checking the composite compatibility strings upfront (before invoking
+> the actual restore/retrieve callbacks), we can guarantee that the entire
+> state configuration is fully compatible. If any mismatch is found, we
+> can cleanly abort the live update.
+
+If a ->restore() returned an error (for any reason) we anyway need to
+reboot, don't we? 
+
+What do we do if memfd discovered incompatibility, but, say hugetlb
+global state was already restored?
+
+If you really want to run the compatibility check upfront, we need a
+mechanism for that. And that should probably happen even before
+kho_mem_init().
+
+> Additionally, keeping the versioning managed via composite strings on the
+> serialized data and registered handlers keeps the KHO core completely
+> decoupled from individual component ABIs, avoiding the need to bloat the
+> base KHO FDT with subsystem-specific versions.
+
+Actually FDT "compatible" handles versioning nicer than composite strings
+You can have
+
+	compatible="kho-v4", "vmalloc-v1", "radix-v1", "block-v2";
+
+and check fdt_node_check_compatible("vmalloc-v1") for vmalloc and
+fdt_node_check_compatible("block-v2") for block.
+
+And we wouldn't need to reimplement string parsing ;-)
+
+But yeah, I do see value of making components versioning and KHO global
+versioning independent. I just don't like composite strings and I don't
+like mixing versioning with dependencies.
+
+Since we are moving from FDT for the most things, version should become
+a number rather than a string and version compatibility should be
+independently verified by each component.
+Then dependencies between components will remain at API level rather
+than brought into the ABI.
+
+If you think ->restore() is too late for compatibility check, we should
+work on a mechanism for upfront compatibility verification.
+
+> > > 5. Adds a KUnit test suite to verify that the composite compatibility
+> > 
+> > Without "composite compatibility strings" we don't need to care about
+> > them "remaining unique and sorted in alphabetical order".
+> 
+> These are not strict runtime requirements; they are simply there to enforce
+> code cleanliness and prevent human errors like accidental duplicates or
+> mismatched orders.
+> 
+> Even with a simple strncmp(), it works perfectly fine as long as the
+> strings match exactly. If the uniqueness or sorting constraints are too
+> strict, they can easily be removed.
+> 
+> In the future, we can transition to a more sophisticated version checker
+> that parses the composite string into individual subsystem version tokens
+> and verifies them one-by-one, rather than relying on a strict literal
+> strcmp() string comparison.
+> 
+> > The need for this test alone is already a red flag ;-)
+> 
+> I will remove test ;-)
+
+It will not remove the red flags ;-)
 
