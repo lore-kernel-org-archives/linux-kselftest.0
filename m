@@ -1,88 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D4C38BF9A;
-	Mon,  8 Jun 2026 10:37:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F2A257452;
+	Mon,  8 Jun 2026 10:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780915053; cv=none; b=lV+if68sNsuEn9ufT8Dts8BzeE8z/lMHB09wcFt8iLgz6d9C1r3wkn6YD4wRfsyABbuDWOE4aI8t0ivGn4TB6Jin8qCqDPbq5A/uw1oSygiKn30AhnmfHqvafYg8EakPa0M0S6cEfauhSOmHQQnfpbDpUVCQtEyttzu4f9WKIno=
+	t=1780915761; cv=none; b=NzLodJlsYaxC2Rsm4LS9VL+Fh2hk/tflFZ3bEcifvPrrmOlP82F4sCLQCuvDHXc84Hz3a3CRyaddPK5TQ7OEkpBn5mBjZN2VMhy96cXLP8dUJGI7tibSkatHBjlq+FslynH4g97pXgoqPbhMv+XuKBcnZ7FH5ptzvpE43jF21S4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780915053; c=relaxed/simple;
-	bh=bi6ela1PzKjx+8mELW2MCPCgwE8HURVXok4aZqsq08w=;
+	s=arc-20240116; t=1780915761; c=relaxed/simple;
+	bh=6z5TwCvxmR0oWhUIZDHw7icnAILN1BrQclLdwGydBNU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Imv2OaUqOow7iqFwZvDy9bi0vkOBKesfL4bRis9Q75RlK1aH9frdZ4o9KogRMPYoTqrxHODSqqWv+i0DaTqPjBRAfMLhNfzmjsIZgW+YPEQdHc0b2fdeZ/k+Bz0jE9TILYJvRDxb6EOMppiJgjQr77ZDRItQCRkateyO5Eth2Vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ejm8OtTw; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=QCrbOivNQz3XhnYybTaHD0Ny9BqRmZwuWN+tsgzttac2uNYesDRbAGOTiOrGEZvW8SQUFgxzkYfMAb6fAftMPF6C33q1e4FL9inN2+wD0/Gq5XZy/f8mEpJZp+gnlIdFXXjXg55ze+Oo0GeHZQ+jjX355m4q+heA46in286OnOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Ok33r+3S; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ejm8OtTw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5F8A1F00893;
-	Mon,  8 Jun 2026 10:37:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780915052;
-	bh=bi6ela1PzKjx+8mELW2MCPCgwE8HURVXok4aZqsq08w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Ejm8OtTwRK1IxMRRB2gaW8FKerJb/HjUQOjE+YqwbnZ7GZWKS4mR+EcctpvKDEepV
-	 ZRuMVzDnpZHrnnzIzGMHYICj8tNavzox34ngAIGylYMDBRBYT9LO1lMxVNues4WUm6
-	 KyFwrSf0Es2fA+Mq20Rs/0u7SJZsskczIbQYnoB7EG4SbTV4QiCwYX/vNlaS1O2O9Q
-	 BuT/dJay7Ts4xuszmsFv1jTFzOfWr1eCsyb+MiVsHBUag64oqS8XGs9aAgrZ2Qi7O1
-	 Th/RubEtnIRs/tS1BoKtip0bFK/VB16gyJ/rHbsW9nPzlqVBQHwVPgV/9ONOfFfYlR
-	 HO4K8GEgRKW7w==
-Date: Mon, 8 Jun 2026 11:37:27 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Sarthak Sharma <sarthak.sharma@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: fix ksft_process_madv.sh test category
-Message-ID: <23069ced-21e3-43ea-a338-182f6f861583@sirena.org.uk>
-References: <20260608103224.344101-1-sarthak.sharma@arm.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Ok33r+3S"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=+EQqr05hh9fgha9YNXLz45sYz2lpixlHYNaQiqO6rYk=; b=Ok33r+3SNj5issGl/MqqWKjyrb
+	pqT7KiM4ZQwh1ai+OFt3w0nA9/TsxkF1CZBkx7Pl/M2iEeCSmIz87a/YlUcgmcg/1cz2b+Wvy3dHL
+	sY2Tmpje0aQ0cy4GHko8mVtc8Lfzl3HDQONY3R8bGJN9smS5hw5PNNi4cUzUR4Utqk4ep89TQdjY+
+	ulgvF8bydEciMhkWE3cLv5gQSQA57G1JXk7FUVGuLfCQzn0DkHr/tsJnDDBm/2GH5AGgzRF4IB3ft
+	F8BBzTPc883o8adKD1TTmurpy79pZzC0YTu8EVA/scww2nrgf5vJliSNVKo0eH3jawJFLQHjPpAcO
+	2y6Q9uIw==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wWXXU-007ZTp-2L;
+	Mon, 08 Jun 2026 10:49:04 +0000
+Date: Mon, 8 Jun 2026 03:48:57 -0700
+From: Breno Leitao <leitao@debian.org>
+To: "D. Wythe" <alibuda@linux.alibaba.com>, 
+	Dust Li <dust.li@linux.alibaba.com>, Sidraya Jayagond <sidraya@linux.ibm.com>, 
+	Wenjia Zhang <wenjia@linux.ibm.com>, Mahanta Jambigi <mjambigi@linux.ibm.com>, 
+	Tony Lu <tonylu@linux.alibaba.com>, Wen Gu <guwen@linux.alibaba.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH net-next 1/2] smc: convert to getsockopt_iter
+Message-ID: <aiaeBuPC6e-rsaxY@gmail.com>
+References: <20260605-getsockopt_smc-v1-0-65da62fa44c4@debian.org>
+ <20260605-getsockopt_smc-v1-1-65da62fa44c4@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="cq+yAeCdDhOAl0L7"
-Content-Disposition: inline
-In-Reply-To: <20260608103224.344101-1-sarthak.sharma@arm.com>
-X-Cookie: We've upped our standards, so up yours!
-
-
---cq+yAeCdDhOAl0L7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20260605-getsockopt_smc-v1-1-65da62fa44c4@debian.org>
+X-Debian-User: leitao
 
-On Mon, Jun 08, 2026 at 04:02:24PM +0530, Sarthak Sharma wrote:
-> ksft_process_madv.sh currently runs run_vmtests.sh with the
-> mmap category. Update it to run the process_madv category,
-> since ksft_mmap.sh already runs the mmap category tests.
+On Fri, Jun 05, 2026 at 05:13:25AM -0700, Breno Leitao wrote:
+> Convert SMC socket's getsockopt implementation to use the new
+> getsockopt_iter callback with sockopt_t.
+> 
+> Key changes:
+> - Replace (char __user *optval, int __user *optlen) with sockopt_t *opt
+> - Use opt->optlen for buffer length (input) and returned size (output)
+> - Use copy_to_iter() instead of put_user()/copy_to_user()
+> - Add linux/uio.h for copy_to_iter()
+> 
+> SMC is a proxy socket: only the SOL_SMC level is handled locally, while
+> all other levels are forwarded to the underlying CLC (TCP) socket. That
+> socket's getsockopt() still operates on __user buffers, so the
+> pass-through is limited to user-backed iters: optval is reconstructed
+> from iter_out, the original optlen pointer (preserved in sockopt_t) is
+> forwarded, and the length reported by the clcsock is mirrored back into
+> opt->optlen so the core writes the correct value to userspace.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
-> -./run_vmtests.sh -t mmap
-> +./run_vmtests.sh -t process_madv
+Damn, this is not building. let me send a fixed version (v2).
 
-Sorry about that, obviously a cut'n'paste error.
-
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
---cq+yAeCdDhOAl0L7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmomm2YACgkQJNaLcl1U
-h9DLXgf9EsUNsYMgg1YbwFjooXAaQP3U0UTcEACKdnwX/Li0OSW+969rU2vjx3NX
-hbgrpkCnSf4bl4K5uMgXmiJvA1yBnWRKMZWttgZVhN9GT1u1vZoo3VyohJbqaFEJ
-st4GkGvGw1+u/+s736Pa2UvmlU9b0jO6XNq52csGFQAoxL53+2knpND8iGzxQz/E
-e7heBbbFkXY73tjeKPgagFlLDDt6bi5ZyIQCwwumLribvsCucmIxnduva2rJt8TA
-uBjiuVVGxIAVqRLlpN0biP5wMbu8nY6Uei5cbC3qWOXX7Jx6b2xelBZ2h/fTQqjc
-71l1kn0Ud9DICYy2nfzzDnhuvEJ0Hg==
-=1EMQ
------END PGP SIGNATURE-----
-
---cq+yAeCdDhOAl0L7--
+--
+pw-bot: cr
