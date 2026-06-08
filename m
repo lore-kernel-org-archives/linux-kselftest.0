@@ -1,152 +1,261 @@
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F4D3E1211
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 14:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE2B3E3142
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 14:52:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780930339; cv=none; b=UdyYY7ie1RyoVGeE+uMHlSZQjmzepjTKL11mpWHyNt/aGbZOfhaV/D7nr0/PVj7W1vgUX4z65MXE5YuznNRrxs5aruNQg6j+Gt7ZzCegMwKwphQ6q7JZddMqGPJjTwVIvKnsRk6k+Hh+Vh2zXZ+0Mpho7YirfzYP7yP4+xR2m5M=
+	t=1780930342; cv=none; b=rvHRdpzJdgQS9gnB5bdf3IJ1ilsn/d7w6/+fH+Ie4CkK18O6iPQxp96172KDz/j58ZaEpIH4OZARkvq4auwFSQbJ+rciLIf96XW08vFJhWkeiWnKfBryrElFcWVqPBf73M4pba/P8k0CfyLsv8RRCoIi2EEcZ8cJu4IxQOMn1Ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780930339; c=relaxed/simple;
-	bh=rpXnnfiHVzHB7ncZ9FTFRFhCJjEV5nU6ygT9vS6g1Dw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rO3fZ3DduYKDxxXyuUucUFiCvEZz28XZryjqiKhGaGT0XGr1zN4rRJyO4QG74LMfUhZuyOy2EpjYnkGPGFL9/gc7YxDcu6MrKefT5F8g+sKv/XEyPyS0mL+qgvQ1TvXAnZYpVtoa/mVSAnjix9DYvqJXFz6Ng3G6F/2k//ubKZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=lwvYLV27; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1780930342; c=relaxed/simple;
+	bh=wOdE8zdye6eYehDyzgVykZybe5+faY4jRhHsAjAthGY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ssxbQRfGFxSK+S0F1ow4xee5aCSi4zJqNLB1haSZN4UDBVj/gNSg5IGB2aCvu6pQ46a9beNt4PW0N2gZGbqRfsAEwRTKUku61/d3b83XS5ErC1xTszXwQyUMqfvaojVdq7MR30OFafFZ2AVvcyDT1kLDuf1YqfBXTUJvPU7RyKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gV/o4CVr; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="lwvYLV27"
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B67EE3F468
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 14:52:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1780930328;
-	bh=b1pX3FZIzR6JtivhZtR5O2oycxLZ7mVagYmhnEiYG4Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=lwvYLV27F7oDIAYT5ufo85O2nrP6AVjpKxCNaXn23/fbNLZGowueC2j4PdTfOcWnC
-	 ZxJAhKXPvVKvP/Dp+mrsJmNf0f90KiQf20jWYOOVgvdvF1sCbpea6sI7qEZFJ2iCPV
-	 9Cjj9OjyAe2deWqcrlSRCaEh9ytHG/gxQgovE4bC8UNl0lsnv8L4SYZk5+SrYThp1s
-	 zPVzP1PHzmTa7R97645CvFtwO4JM3rk38+/wkwtO/Y010IsJ8Pz3/3qTHai3js61fv
-	 Hwe0KhyNq6M2yX95G9nsiwLZu5aZ8U74lVqnsJaWmPn4fycnYi4NxFxdgyYjkWWhhX
-	 PgFlr4eUh0oy1qy7SCnNp7wn5akkxmowTVPrPNfL4P27+/ixVl0YSYpRae189Bbpzu
-	 e7pC/VISdVJEvFL2Yw+GL6ORqwCFePHM2PIx3fLJai4ej4vWYpG8nv8lbh8IQtto4P
-	 5u5WkTj4pGlzCln1AfR5GDCjL9kvqw92ddq+3oFlbekoaslot17tkTkvlMOr/3PmEi
-	 LMwI0GL7hb/MQ6N1uwBmanCwcAr86FsFlJv227/DtlvNQaV7jHg9jI6sONE8SDVuo3
-	 B9794cT5Z0TR4wi3nvOU4DV+WVU0JOkZTUAz/HRkDEZp2pH4OhrpX0YgIKy8XQOCS3
-	 9XwUu4X+/AO8+YuPhBXOKENM=
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-36b982ec27aso3232838a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2026 07:52:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780930327; x=1781535127;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b1pX3FZIzR6JtivhZtR5O2oycxLZ7mVagYmhnEiYG4Q=;
-        b=TqsittoVm+V4XrSeUWBn+yvC+B0otP2Iby+ZsSG4f8DnzN4s3dzIb2qlLSt17NWzF2
-         QSma+wOc1uEaNBE+lf00oFpNQSd+Ru7pYoKl6GoMwcuugaqT7c7m7aVvAjabjuZpKZzi
-         wyXF1P8dSuF6/yyhNuMGgbBFXp9fk+s5BtLN4GeAcS5j9RtReQrMqPwfyEOIXNJ9eSHL
-         tA1WXQpoQ4rsdAjqFDmqBv4Fvh2ylw5hheb9Ko6XdQlrQaN857Kn2dQPP+HlT+to2JHR
-         heGO+RHcr8AtysU2IRd9YP/UHJkrAfaZtoYJ9iZblo+YocYm5/FDCMLY8fQFjEpdsXtw
-         zdVA==
-X-Forwarded-Encrypted: i=1; AFNElJ+J2WM9/MZnqTPXkQomGwtIuPga4yFbf2Q3HYXxFGpL7IY0q5g6NrT5BvYMHWIwE6CRPBL6wr/ayIs2eC4I7oo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxG0SApSS98xX140grJLCSne/vmDSFp8wkD5iFXGlbIqDcCoCJm
-	IPxfNPI8EbN7WAB0IofkkpqPl41K/8has/f9CIZ28H2DK4pw+O6iYj+t6UPfBZOmjWe6TJomYlv
-	BW7OmbGCVjF17TrS8xOdZoQWr7ZWJF3OzQ5nV9gNzggTWWqXiBJo9Z1yU1WWmWox1P9eJL+b0If
-	lUjsvScve57GyNmrMVxo79
-X-Gm-Gg: Acq92OHg7tfeVEni5F8CdMoJXb00X/r3/SEospL1iz0bM2AbLy/PzHZX8/7x/BNa215
-	YtGR7ICeMAS8YfzjzCL+s+5yhgKCeqMROUVUBo3gUbzSR8FBWk8KBdwLNCqJ+0TdEhjFbzcC4Rz
-	7sSKHMrmyfptOjQ/fzmzUjvr2t7JbH6l2z+/tiE+UwlhlIzVdNvSAsrAO3A9BarxD7nICeSfr1o
-	k5z+9TLGvgtTBJHwnpXA15fs0rlWO42C6o1lB3Xgi/lkuiA4zU6cqbhT4dAsJRsAr83E32ceUES
-	K4dfZviW+z1YDa7k2QBLPe7TATik0DY2OgE5c2uS1VH/K3bPwANXbOluL8MYPO5iiJo7D05zAhX
-	L2/wnfimT2pK5RacpjZDpzPfW2JQHahbt/vEdawmBQY6ojPhpPejHrGz+4cD6CIGA8RVHERRhuZ
-	yvMGY1Pfrt
-X-Received: by 2002:a17:90b:5747:b0:36b:9798:4f67 with SMTP id 98e67ed59e1d1-370eee03facmr15824953a91.8.1780930327073;
-        Mon, 08 Jun 2026 07:52:07 -0700 (PDT)
-X-Received: by 2002:a17:90b:5747:b0:36b:9798:4f67 with SMTP id 98e67ed59e1d1-370eee03facmr15824914a91.8.1780930326374;
-        Mon, 08 Jun 2026 07:52:06 -0700 (PDT)
-Received: from ?IPV6:2409:8a00:48c1:ca00:bd04:9263:b15c:15f? ([2409:8a00:48c1:ca00:bd04:9263:b15c:15f])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f6e828eacsm16073363a91.16.2026.06.08.07.52.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jun 2026 07:52:06 -0700 (PDT)
-Message-ID: <79c7ede3-e174-487f-bf0b-fc9347fdde9c@canonical.com>
-Date: Mon, 8 Jun 2026 22:51:59 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gV/o4CVr"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780930337;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8YP9wxQExZ/A+pdpZbBfKzHyR4j6PtbdgvLWu59Ku60=;
+	b=gV/o4CVr04QNpEt9JtFmzwz9214cJt3obtZrmI3Hx/YbYfygYijqlhfJ71Q8yoNsm+67OE
+	Clp36qm217UA1qeco+YHFyyLDWf2DXvI22DuNXxgoQCwktwWaBd+cYmoAmA3PMv7paVyYR
+	Jvh/Mia2MDkEUxAu12MJIhtXiNPUBJk=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v5 2/9] bpf: Introduce global percpu data
+Date: Mon,  8 Jun 2026 22:51:06 +0800
+Message-ID: <20260608145113.65857-3-leon.hwang@linux.dev>
+In-Reply-To: <20260608145113.65857-1-leon.hwang@linux.dev>
+References: <20260608145113.65857-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] selftests/ftrace: Account for 8-byte aligned
- trace_marker_raw events
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: rostedt@goodmis.org, mathieu.desnoyers@efficios.com, pjw@kernel.org,
- linux-trace-kernel@vger.kernel.org, shuah@kernel.org, wangfushuai@baidu.com,
- linux-kselftest@vger.kernel.org
-References: <20260607072431.125633-1-hui.wang@canonical.com>
- <20260607072431.125633-3-hui.wang@canonical.com>
- <20260608181716.726cb9c81d41d49095e7f3cf@kernel.org>
-Content-Language: en-US
-From: Hui Wang <hui.wang@canonical.com>
-In-Reply-To: <20260608181716.726cb9c81d41d49095e7f3cf@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
+Introduce global percpu data, inspired by the commit
+6316f78306c1 ("Merge branch 'support-global-data'"). It enables the
+definition of global percpu variables in BPF, similar to the
+include/linux/percpu-defs.h::DEFINE_PER_CPU() macro.
 
-On 6/8/26 17:17, Masami Hiramatsu (Google) wrote:
-> On Sun,  7 Jun 2026 15:24:31 +0800
-> Hui Wang <hui.wang@canonical.com> wrote:
->
-[...]
-> +    for config_file in \
-> +        /boot/config-$uname_r \
-> +        /lib/modules/$uname_r/config \
-> +        /lib/modules/$uname_r/build/.config
->
-> Hmm, also I don't like this, because this highly depends on the environment.
-> Instead, we can add CONFIG_IKCONFIG_PROC=y in tools/testing/selftests/ftrace/config.
->
-> Thank you,
->
-Thanks for the review. I'll address all other comments in v2.
+For example, in BPF, it is able to define a global percpu variable like:
 
-I have a concern about this specific point. On Ubuntu kernels, both 
-CONFIG_IKCONFIG and CONFIG_IKCONFIG_PROC are disabled by default, so 
-/proc/config.gz does not exist. If we drop the /boot/config-$(uname -r) 
-lookup and rely solely on /proc/config.gz, this test would become 
-unresolved on every Ubuntu kernel — a regression, since it works on 
-those kernels today.
+int data SEC(".percpu");
 
-There is also existing precedent for the /boot/config-$(uname -r) 
-fallback: tools/testing/selftests/mm/va_high_addr_switch.sh checks 
-/proc/config.gz first and falls back to /boot/config-$(uname -r).
+With this patch, tools like retsnoop [1] and bpfsnoop [2] can simplify
+their BPF code for handling LBRs. The code can be updated from
 
-So how about we keep /boot/config-$(uname -r) as a fallback, but drop 
-the /lib/modules/... paths you objected to. And add ftrace/config as you 
-suggested here.
+static struct perf_branch_entry lbrs[1][MAX_LBR_ENTRIES] SEC(".data.lbrs");
 
-Thanks,
-Hui.
->> +    do
->> +        if [ -f "$config_file" ]; then
->> +            grep -Eq "^${config}=(y|m)$" "$config_file"
->> +            return $?
->> +        fi
->> +    done
->> +
->> +    return 2
->> +}
->> +
->>   LOCALHOST=127.0.0.1
->>   
->>   yield() {
->> -- 
->> 2.43.0
->>
->>
->
+to
+
+static struct perf_branch_entry lbrs[MAX_LBR_ENTRIES] SEC(".percpu.lbrs");
+
+This eliminates the need to retrieve the CPU ID using the
+bpf_get_smp_processor_id() helper.
+
+Additionally, by reusing global percpu data map, sharing information
+between tail callers and callees or freplace callers and callees becomes
+simpler compared to reusing percpu_array maps.
+
+Links:
+[1] https://github.com/anakryiko/retsnoop
+[2] https://github.com/bpfsnoop/bpfsnoop
+
+Assisted-by: Codex:gpt-5.5-xhigh
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/arraymap.c   | 39 +++++++++++++++++++++++++++++++++++++--
+ kernel/bpf/const_fold.c |  1 -
+ kernel/bpf/fixups.c     | 32 ++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c   | 14 ++++++++++++++
+ 4 files changed, 83 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index e6271a2bf6d6..e6b5d8e89723 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -259,6 +259,38 @@ static void *percpu_array_map_lookup_elem(struct bpf_map *map, void *key)
+ 	return this_cpu_ptr(array->pptrs[index & array->index_mask]);
+ }
+ 
++static int percpu_array_map_direct_value_addr(const struct bpf_map *map, u64 *imm, u32 off)
++{
++	struct bpf_array *array = container_of(map, struct bpf_array, map);
++
++	if (map->max_entries != 1)
++		return -EOPNOTSUPP;
++	if (off >= map->value_size)
++		return -EINVAL;
++	if (!bpf_jit_supports_percpu_insn())
++		return -EOPNOTSUPP;
++
++	*imm = (u64) array->pptrs[0];
++	return 0;
++}
++
++static int percpu_array_map_direct_value_meta(const struct bpf_map *map, u64 imm, u32 *off)
++{
++	struct bpf_array *array = container_of(map, struct bpf_array, map);
++	u64 base = (u64) array->pptrs[0];
++	u64 range = array->elem_size;
++
++	if (map->max_entries != 1)
++		return -EOPNOTSUPP;
++	if (imm < base || imm >= base + range)
++		return -ENOENT;
++	if (!bpf_jit_supports_percpu_insn())
++		return -EOPNOTSUPP;
++
++	*off = imm - base;
++	return 0;
++}
++
+ /* emit BPF instructions equivalent to C code of percpu_array_map_lookup_elem() */
+ static int percpu_array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
+ {
+@@ -551,9 +583,10 @@ static int array_map_check_btf(struct bpf_map *map,
+ 			       const struct btf_type *key_type,
+ 			       const struct btf_type *value_type)
+ {
+-	/* One exception for keyless BTF: .bss/.data/.rodata map */
++	/* One exception for keyless BTF: .bss/.data/.rodata/.percpu map */
+ 	if (btf_type_is_void(key_type)) {
+-		if (map->map_type != BPF_MAP_TYPE_ARRAY ||
++		if ((map->map_type != BPF_MAP_TYPE_ARRAY &&
++		     map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY) ||
+ 		    map->max_entries != 1)
+ 			return -EINVAL;
+ 
+@@ -832,6 +865,8 @@ const struct bpf_map_ops percpu_array_map_ops = {
+ 	.map_get_next_key = bpf_array_get_next_key,
+ 	.map_lookup_elem = percpu_array_map_lookup_elem,
+ 	.map_gen_lookup = percpu_array_map_gen_lookup,
++	.map_direct_value_addr = percpu_array_map_direct_value_addr,
++	.map_direct_value_meta = percpu_array_map_direct_value_meta,
+ 	.map_update_elem = array_map_update_elem,
+ 	.map_delete_elem = array_map_delete_elem,
+ 	.map_lookup_percpu_elem = percpu_array_map_lookup_percpu_elem,
+diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
+index b2a19acadb91..5787246bef30 100644
+--- a/kernel/bpf/const_fold.c
++++ b/kernel/bpf/const_fold.c
+@@ -182,7 +182,6 @@ static void const_reg_xfer(struct bpf_verifier_env *env, struct const_arg_info *
+ 		u64 val = 0;
+ 
+ 		if (!bpf_map_is_rdonly(map) || !map->ops->map_direct_value_addr ||
+-		    map->map_type == BPF_MAP_TYPE_INSN_ARRAY ||
+ 		    off < 0 || off + size > map->value_size ||
+ 		    bpf_map_direct_read(map, off, size, &val, is_ldsx)) {
+ 			*dst = unknown;
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 3cf2cc6e3ab6..4f84d087ca69 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1819,6 +1819,38 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			goto next_insn;
+ 		}
+ 
++		if (env->prog->jit_requested &&
++		    bpf_jit_supports_percpu_insn() &&
++		    insn->code == (BPF_LD | BPF_IMM | BPF_DW) &&
++		    (insn->src_reg == BPF_PSEUDO_MAP_VALUE ||
++		     insn->src_reg == BPF_PSEUDO_MAP_IDX_VALUE)) {
++			struct bpf_map *map;
++
++			aux = &env->insn_aux_data[i + delta];
++			map = env->used_maps[aux->map_index];
++			if (map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY)
++				goto next_insn;
++
++			/*
++			 * Reuse the original ld_imm64 insn, and add one
++			 * mov64_percpu_reg insn.
++			 */
++
++			insn_buf[0] = insn[1];
++			insn_buf[1] = BPF_MOV64_PERCPU_REG(insn->dst_reg, insn->dst_reg);
++			cnt = 2;
++
++			i++;
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			if (!new_prog)
++				return -ENOMEM;
++
++			delta    += cnt - 1;
++			env->prog = prog = new_prog;
++			insn      = new_prog->insnsi + i + delta;
++			goto next_insn;
++		}
++
+ 		if (insn->code != (BPF_JMP | BPF_CALL))
+ 			goto next_insn;
+ 		if (insn->src_reg == BPF_PSEUDO_CALL)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2690d063a240..eecd9ab82e91 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5556,6 +5556,8 @@ int bpf_map_direct_read(struct bpf_map *map, int off, int size, u64 *val,
+ 	u64 addr;
+ 	int err;
+ 
++	if (map->map_type == BPF_MAP_TYPE_INSN_ARRAY || map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY)
++		return -EINVAL;
+ 	err = map->ops->map_direct_value_addr(map, &addr, off);
+ 	if (err)
+ 		return err;
+@@ -8074,6 +8076,12 @@ static int check_arg_const_str(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
++	if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
++		verbose(env, "%s points to percpu_array map which cannot be used as const string\n",
++			reg_arg_name(env, argno));
++		return -EACCES;
++	}
++
+ 	if (!bpf_map_is_rdonly(map)) {
+ 		verbose(env, "%s does not point to a readonly map'\n", reg_arg_name(env, argno));
+ 		return -EACCES;
+@@ -18143,6 +18151,12 @@ static int check_and_resolve_insns(struct bpf_verifier_env *env)
+ 					return -EINVAL;
+ 				}
+ 
++				if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY &&
++				    !env->prog->jit_requested) {
++					verbose(env, "JIT is required to use global percpu data\n");
++					return -EOPNOTSUPP;
++				}
++
+ 				err = map->ops->map_direct_value_addr(map, &addr, off);
+ 				if (err) {
+ 					verbose(env, "invalid access to map value pointer, value_size=%u off=%u\n",
+-- 
+2.54.0
+
