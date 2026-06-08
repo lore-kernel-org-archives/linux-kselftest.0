@@ -1,201 +1,85 @@
-Received: from mail.common-net.org (mail.common-net.org [139.28.148.254])
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49DE0F9D9;
-	Mon,  8 Jun 2026 00:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.28.148.254
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0870A367B70
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 05:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780879204; cv=none; b=thNZTqbx7F2Q7kn1TnO2nPNrT5LsXGat04eu0uYryGuwm49mtFXPfdQ6XXaJG6oAcalkRYgJDUsKan03D44GRAYpBO874eppExeave6B8WGR2nAwZ4/EgcXvDHTqKapYm7ktgkacorjqWW4JM58OD4fQrEdOpd5FaLblpiSvD2A=
+	t=1780897190; cv=none; b=RJrQu5RQtn79oxbmmSNiR1hUuCcM6XB8yJOa9gtzfjU/xcKOpxUtstq2SYGeiDo5FOWkc+ntAiAbrWP91wivxo/sO4YJuAvyo6vBO8t9J3uFZEdGlRomSx1Rdq8eo11huXG7P6oYWi7hHCFFl781q0zCnbFVTYK2gk5BFdhSNJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780879204; c=relaxed/simple;
-	bh=fE/ADlnkBPH9pTGhVSqA6lM2fhCG+KALo3TglJMi/KE=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=NhCenHf/yyqwwFIxbr8Qn5e66/lSo05VMO+mXxjFDC+orbDbyTvZAUB3FDNbqNr9oYxvIHtkxSUX+mHgW82CYE5AYSyRQiQQhUOvxFzcYlr97HFRe147J0+OgBTs+9VfJbyMuf8ZcuUApDRUzmdx2b37dXWdaoXpmvrN0jyQju8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=common-net.org; spf=pass smtp.mailfrom=common-net.org; dkim=pass (1024-bit key) header.d=common-net.org header.i=@common-net.org header.b=Bcpq/5xV; arc=none smtp.client-ip=139.28.148.254
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=common-net.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=common-net.org
+	s=arc-20240116; t=1780897190; c=relaxed/simple;
+	bh=Gnmcw2vbZS/WMbktkUB/bqnpacEFekF4hl3ujR/jTLk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XxIhvgK8LaFXmwBYK4hikOaEtoR1VBy62dYqzijfjjEDEeZHzCk7yme0u7Ui6CZU+fc4DTdcj/bnIMIK0/umUp2EUBLnUb6vArLEerFX1XXPsXv3Gy4bikVL3PGNohYkPNLT3U7r7IQIYUBm6NrDCinOv/4rd8OGb6MHj7QuOcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=SdgDquuW; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=common-net.org header.i=@common-net.org header.b="Bcpq/5xV"
-Received: from lubuntu-18.04 (host-80-116-255-177.retail.telecomitalia.it [80.116.255.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.common-net.org (Postfix) with ESMTPSA id 966276D20B88;
-	Mon,  8 Jun 2026 02:39:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=common-net.org;
-	s=mail; t=1780879193;
-	bh=fE/ADlnkBPH9pTGhVSqA6lM2fhCG+KALo3TglJMi/KE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Bcpq/5xVd5Jc8Qd0t3so+RQsmrD8gSiyi51MwZEGXJ2KjbCZc2NDXka6s2g4064oO
-	 WBGniBVD1Yy9RviQC0TXX1PwwJYusFIZ1dMyLQ1qEM+wcfXwG3B+UUkalekrTtme8v
-	 LpAqxrH+3H8aGF8yOCp944Th+pBKMV6ux4THqHZs=
-Date: Mon, 8 Jun 2026 02:39:51 +0200
-From: Andrea Mayer <andrea@common-net.org>
-To: Yuya Kusakabe <yuya.kusakabe@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, David Ahern <dsahern@kernel.org>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Justin Iurman <justin.iurman@gmail.com>, Shuah Khan
- <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-doc@vger.kernel.org, stefano.salsano@uniroma2.it, ahabdels@cisco.com,
- Andrea Mayer <andrea.mayer@uniroma2.it>, andrea@common-net.org
-Subject: Re: [PATCH v2 0/7] seg6: add SRv6 Mobile User Plane (RFC 9433)
- behaviors
-Message-Id: <20260608023951.ccd278890d7c489dbfe21113@common-net.org>
-In-Reply-To: <CAGCJULPdm8jbveZsUm467_LBHRf5g=Jqd=XvCVKdNE1F2U99jg@mail.gmail.com>
-References: <20260505-seg6-mobile-v2-0-9e8022bdfdb6@gmail.com>
-	<20260516182556.66af27a9c63208435911990b@uniroma2.it>
-	<CAGCJULPdm8jbveZsUm467_LBHRf5g=Jqd=XvCVKdNE1F2U99jg@mail.gmail.com>
-Organization: Common Net
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="SdgDquuW"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1780897179; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=Z/M8I0ggV8g5G3rV9SUyknJRWIxHULtKqRop/8E1M9Y=;
+	b=SdgDquuWmTNqH15IOGUb2vlVXZ/SEbZr69MS49SGf85m+iu8/TGMmqWXNAmKz3TqZbABCbPI3gzORdq9snPoIOLjeTR58HCTHTDxfhBPVGs4JdeuzyLzSBM39Uo7enXvsuIVnhY+F1f9gC5k/JMmIoEJrrC9bbkGtGHN5OvCiek=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=kanie@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0X4Jq033_1780897174;
+Received: from localhost(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0X4Jq033_1780897174 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 08 Jun 2026 13:39:38 +0800
+From: Guixin Liu <kanie@linux.alibaba.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Wei Yang <richard.weiyang@gmail.com>
+Cc: linux-kselftest@vger.kernel.org,
+	xlpang@linux.alibaba.com,
+	oliver.yang@linux.alibaba.com
+Subject: [PATCH] selftests/uevent: increase __UEVENT_BUFFER_SIZE to avoid ENOBUFS on busy systems
+Date: Mon,  8 Jun 2026 13:39:34 +0800
+Message-ID: <20260608053934.4059533-1-kanie@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 20 May 2026 12:12:08 +0900
-Yuya Kusakabe <yuya.kusakabe@gmail.com> wrote:
+The kselftests case uevent.uevent_filtering fails reproducibly on busy
+systems (e.g. Intel EMR / AMD servers) with:
 
-Hi Yuya,
+  No buffer space available - Failed to receive uevent
 
-Thanks for the reply. Inline answers below.
+The listener binds the NETLINK_KOBJECT_UEVENT socket to all 32 multicast
+groups (nl_groups = -1) but only sets SO_RCVBUF to 4 KiB
+(__UEVENT_BUFFER_SIZE = 2048 * 2). On hosts with many devices, the
+kernel and userspace daemons (udev/systemd) constantly emit uevents on
+multiple groups, plus the test itself triggers 10 add events in a row.
+The 4 KiB receive buffer overflows before the listener can drain it,
+recvmsg() returns -ENOBUFS, and the test bails out as failure.
 
-> On Sun, May 17, 2026 at 1:26 AM Andrea Mayer <andrea.mayer@uniroma2.it>
-> wrote:
->
-> > RFC 9433 Section 6 is titled "SRv6 Segment Endpoint Mobility
-> > Behaviors", but Section 6.7 defines H.M.GTP4.D as "SR Policy Headend
-> > with tunnel decapsulation and map to an SRv6 policy". This behavior
-> > receives IPv4 packets and is not bound to any SID, so it does not fit
-> > the endpoint model that seg6_local implements. Placing it there
-> > required relaxing the ETH_P_IPV6 guard to accept ETH_P_IP and adding
-> > input_family to seg6_action_desc, for a single behavior that does not
-> > share the endpoint model.
-> >
-> > seg6_local is not the natural place for this behavior. The UAPI cannot
-> > be undone once merged, so where it should live needs discussion on the
-> > list before we proceed.
-> >
-> > Given the volume, moving the MUP code into a separate seg6_mobile.c
-> > (say CONFIG_IPV6_SEG6_MUP) would keep seg6_local focused on the RFC
-> > 8986 endpoint framework.
->
-> I will move the MUP code out of seg6_local into a new
-> net/ipv6/seg6_mobile.c under a new Kconfig symbol, and register the
-> behaviors under a new lwtunnel encap type rather than
-> LWTUNNEL_ENCAP_SEG6_LOCAL.
->
+Increase __UEVENT_BUFFER_SIZE to 1 MiB so the receive buffer is large
+enough to absorb the burst of uevents on busy systems. After this
+change the test passes consistently across dozens of runs on Intel EMR
+and AMD platforms.
 
-On the placement, the new lwtunnel encap type you propose could be a way to
-implement the seg6_mobile.c separation. Since this touches UAPI in
-include/uapi/linux/lwtunnel.h beyond the SRv6 subsystem and cannot be
-undone once merged, it needs careful design.
+Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
+---
+ tools/testing/selftests/uevent/uevent_filtering.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> For naming I was thinking CONFIG_IPV6_SEG6_MOBILE and
-> LWTUNNEL_ENCAP_SEG6_MOBILE to match the file name, but I have no strong
-> preference over CONFIG_IPV6_SEG6_MUP if the list prefers that.
+diff --git a/tools/testing/selftests/uevent/uevent_filtering.c b/tools/testing/selftests/uevent/uevent_filtering.c
+index 974b076f9235..33a09f66d7e2 100644
+--- a/tools/testing/selftests/uevent/uevent_filtering.c
++++ b/tools/testing/selftests/uevent/uevent_filtering.c
+@@ -22,7 +22,7 @@
+ #include "kselftest_harness.h"
+ 
+ #define __DEV_FULL "/sys/devices/virtual/mem/full/uevent"
+-#define __UEVENT_BUFFER_SIZE (2048 * 2)
++#define __UEVENT_BUFFER_SIZE (1024 * 1024)
+ #define __UEVENT_HEADER "add@/devices/virtual/mem/full"
+ #define __UEVENT_HEADER_LEN sizeof("add@/devices/virtual/mem/full")
+ #define __UEVENT_LISTEN_ALL -1
+-- 
+2.43.7
 
-On the Kconfig symbol I agree, CONFIG_IPV6_SEG6_MOBILE matches the RFC 9433
-Section 6 terminology better than CONFIG_IPV6_SEG6_MUP. Section 6 is titled
-"SRv6 Segment Endpoint Mobility Behaviors".
-
-> Once LWTUNNEL_ENCAP_SEG6_MOBILE is its own encap type, it feels
-> natural to me to put H.M.GTP4.D there too rather than adding a
-> separate LWTUNNEL_ENCAP_SEG6_MOBILE_HEADEND. What do you think?
-
-H.M.GTP4.D in v2 shares the SEG6_LOCAL_MOBILE_* attributes and processing
-helpers with the End.M.* behaviors. A separate
-LWTUNNEL_ENCAP_SEG6_MOBILE_HEADEND would require its own attribute set,
-lwtunnel_encap_ops, and iproute2 parser, similar to the current
-implementation of RFC 8986 in the kernel (seg6 and seg6local).
-
-As far as I can see, RFC 9433 has only one Headend behavior, and no L2 or
-reduced variants. So a single LWTUNNEL_ENCAP_SEG6_MOBILE handling both
-End.M.* and H.M.GTP4.D could be viable if accepting both input families
-(ETH_P_IPV6 for End.M.*, ETH_P_IP for H.M.GTP4.D) is treated as a design
-choice of the new encap type, not a stretching of the seg6_local endpoint
-processing model.
-
-These trade-offs are worth weighing in the final design. The patchset
-rework (shared helper functions, the layout of the new UAPI attributes,
-etc.) feeds into this decision. Like the encap type above, this is a UAPI
-choice and cannot be undone once merged. I think the lwtunnel direction
-will need feedback and comments from its community and maintainers.
-
-> Will do, following the End.DT4/End.DT6/End.DT46 model: one patchset
-> per behavior, with the behavior, helpers, and selftest as separate
-> patches. The new code will be aligned with seg6_local.c style as
-> part of this rework.
-
-Sounds good.
-
-> The mobile behaviors will define their own SEG6_MOBILE_* attribute
-> namespace under LWTUNNEL_ENCAP_SEG6_MOBILE, with no reuse of any
-> SEG6_LOCAL_* attribute. That keeps the established SEG6_LOCAL_*
-> semantics untouched.
-
-If LWTUNNEL_ENCAP_SEG6_MOBILE is added, using SEG6_MOBILE_* attributes
-instead of SEG6_LOCAL_* removes the NH6/SRH/OIF overload raised in v2.
-After solving the above, additional issues remain in the patchset,
-for example src is overloaded across MUP behaviors, and v4_mask_len
-needs revision. These are independent of the lwtunnel decision.
-
-> I will drop VRF support from the initial behaviors and revisit it
-> later as a separate optional attribute.
-
-OK.
-
-> Good idea. The prep patchset would introduce the SRv6-level reasons
-> (SEG6_INVALID_SRH, SEG6_HMAC, ...) and convert the existing
-> seg6_local and seg6_iptunnel call sites to use them. The
-> mobile-specific reasons (BAD_SID, BAD_GTPU) would then be added
-> together with the first behavior that uses them and reused by
-> subsequent behaviors. NOMEM and MTU_EXCEEDED would be dropped in
-> favor of the existing generic reasons, and the current
-> INVALID_SRH_SL / BAD_INNER misuses would be replaced by the new
-> SRv6-level reasons from the prep patchset.
->
-> Would you prefer to lead on the prep patchset yourself, or would you
-> like me to prepare it?
-
-I can lead it. I have been evaluating the SRv6 drop reasons with my
-research group, alongside other pending SRv6 patches.
-
-We can sync offline on which SRv6 reasons fit your MUP behaviors, which
-v2 MUP-specific reasons would fit better as SRv6 or generic, and what
-stays MUP-specific.
-
-> I will replace the python3/scapy heredocs with a statically compiled
-> C helper for packet construction and validation, and extend the
-> selftests to cover the cases you mention (SRH / no-SRH input paths,
-> missing SRH where required, malformed SRH, and invalid attribute
-> values).
-
-Thanks. Maybe also worth covering bad packets, like fragmented input or
-malformed GTP-U extensions.
-
-> Thanks for taking that on. Given the cb/dst issues you described, I
-> am inclined to drop NF_HOOK support from the initial mobile
-> behaviors and add it in a follow-up patchset once your fix lands.
-> The initial behaviors would then do a direct input -> output flow
-> without the cb-context/finish-callback pattern, which avoids the
-> issues entirely on day one and decouples this series from the
-> pre-existing fix. Does that work for you, or would you prefer
-> NF_HOOK to be present from the start and rebased on top of your fix?
-
-Works for me. What matters is that the upcoming patches are well structured
-so NF_HOOK can be wired in cleanly in the follow-up.
-
-I am already working on the fix.
-
-Thanks,
-Andrea
-
-P.S. I am temporarily writing from another address due to a mail
-delivery issue at my @uniroma2.it address. Please always Cc my default
-andrea.mayer@uniroma2.it address on replies.
