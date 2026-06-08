@@ -1,204 +1,132 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A49147AF5C;
-	Mon,  8 Jun 2026 14:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4FF495506
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 14:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780930551; cv=none; b=XZy2QJq2FRAMZPLSlWQizG4GdVbsPXmRBLbqaY0R5QeRlUp4jcHwH5yp43GyShkJuuXG9cJ121AWARtAnJYQ4N0M9rTg6QkafD3yEpLdsgqwPe+vWsedrrqohSmOomaLmuXBCsQk1jhriSUxHJaTpSMC0pEPGbPO3FZyJ62+ItY=
+	t=1780930599; cv=none; b=eK2ms+uqEs4yo/Ab7iR6mP2VxOGPyCNs8Q7xokF6ei3DBIgIFJDGu5kGjHI+DAlainpEscn/vOllTpC4AEDkfuPsGmKmkyzNpXER06CpfR86f9+jbioGRghIFw4Uc2z79smYxU9ifTx12cf6rZpOYTw2gWkLnmpKru8rQBwjReE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780930551; c=relaxed/simple;
-	bh=U0Off8Gt4aUWFvtQ+Z2BLcCThTzMu2R19NdWYIh4/bg=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FQAHJwIqrh4IvqxVdJLZ7f5YIVggfts7E2VSAesa6oHni/33/tCK3fvie68FXM0dIJ9pt2W2Zm67sMVAIiGg6qsC1lip3AV3hZmJxV4QvK8bAv2NryF/+MqA1K1MMWL6t2RmQR0lAj9rsp1RlfYOvVX0fOaylFIccnUdq4/WtRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=P9MXUoXj; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	s=arc-20240116; t=1780930599; c=relaxed/simple;
+	bh=OLvBvUjkzfMn1Cidy+KbhXvOT4PjxRs8Fx8SkFfpgFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dzmPzL6xTLq4QfkZNXTXGYP78GQe4ZNA4mzaBAlYSxTOb2sRQWNqE+QCMojMnTC7meg/0rpx7ITv9ZsP7fd9TbNqutQ2mh/e2cEFOdaQOzpxs0oUWzE/Po/yXwr0x01b9jH3WUues8A9FUbar5GJ9y2lOcGhBP0pRyaohC0WEW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Vz+OvLtn; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="P9MXUoXj"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Cc:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=TgKl1KOO3MJY6Y2LA+lrNOwCy2WWSJSUW1q+Go58VwI=; b=P9MXUoXj7e3DhrM2y3IHOHq84j
-	Dep6NROhhD5T6eCTvYbJKAS+eTglb9s+jKSn6uVmst9s5JTyCVQV9f14aN3sUIGo79+gzb2WHc7YU
-	E/8Zq1W/ZqewrUv9ui/cszWJWLCs6e2QqNUl7nvYGE9dtX/H7iRVy930wxbzjbHuzIfv0YVWsdSey
-	iZDAnFMYmwzQ3frOMg9RCyIqvH8dapfKqWvZL6LU/mPacHRped/qRnvVQbUDpKDMTuzG2/7idCnTT
-	wdfpfALh8+kMdn0kKQZPa5Ce4FWQMNt14NCd8ogagcqSIYCifP5t8FEZENqDYEFTlW4j9MeiChGsp
-	mPromYJw==;
-Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1wWbNU-00000001Afw-2M3l;
-	Mon, 08 Jun 2026 14:55:00 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1wWbNR-00000000NEV-1CLO;
-	Mon, 08 Jun 2026 15:54:57 +0100
-From: David Woodhouse <dwmw2@infradead.org>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Paul Durrant <paul@xen.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Sascha Bischoff <Sascha.Bischoff@arm.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Jack Allister <jalliste@amazon.com>,
-	Dongli Zhang <dongli.zhang@oracle.com>,
-	joe.jin@oracle.com,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	xen-devel@lists.xenproject.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 00/34] Cleaning up the KVM clock mess
-Date: Mon,  8 Jun 2026 15:47:41 +0100
-Message-ID: <20260608145455.89187-1-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Vz+OvLtn"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-51761d27612so52510501cf.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2026 07:56:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1780930591; x=1781535391; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5XaEoBFZ0wQN7RayZ7ZGkzrqQNmFAZboLFpyYk5DAFk=;
+        b=Vz+OvLtnDLdBCYdORDQbcTs2rusiLhkpjeqFPNwcEwNYhHyk8d3HB1v6zbUMCJ5XRX
+         OdLmxiemRs9Nq3Ze9ymf0puQVhplsbuC79pY9rYuwI+Z9phnw+j3hy/zJFBtxB13xRbv
+         1rTtisvq6/5U5/IICAE/yCjNhCrY8TyiBsEm05EZw1xHhkrCYMzYiI+za5pcgONY9njS
+         KToSzx3NHOQPJT0JfAgkXtwsWAqttV4Uz+plFbKfMtxysrFHaBAld+Z+Bgk9ZeY6YUfA
+         8tZgX4ceZ8Mhhqm2h63FvUkzJDK7ePx9yr4qg73vB2smkNtwtJFiVO+UkFQUcTBqzJHI
+         Y5bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780930591; x=1781535391;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5XaEoBFZ0wQN7RayZ7ZGkzrqQNmFAZboLFpyYk5DAFk=;
+        b=aQxO+s0YEMtlj2xF9PHz0iiYHQz8RaGqmkVHJn4UkuyhW44aS+mTihmRn4//627t9C
+         18gMLZfPorEJ8M+gJSHLKED4dY5ECd0bN0fVDzrHK1doUNw/A0mvvIiUM1mF1r1NTrpY
+         bfnnIDUsWOpDTE8kkMajT45JLOb1HUiKuqjuzz/F6kPBPRMC05X9DBAvoHipjsAfl69y
+         0Tas4EU7HMzI5k/p7F4qURVIwrpheIcui6ThMeSKSB0SwLdIL7GBIfL4aMeSAWBU5ky/
+         l3dbrYwgXQJGdAoUsD1Gln7r0cunpZH+4YEkOjJfEeKXmUoHjBjeEps7UawygDGbmeD8
+         yizQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9igcVSKWLE0vEQTQrz9Gw94wJVBqtzSxv8NhU5FTyhMKiCmBUbO5M8uu2v/mPeySl0J2CEe8KXnSsX1gIv9+4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGbVlBCclHv7K7KMgQVvgtEkgOz/R4kONF7D+r6drz7DOBWSMl
+	s25bWEdb91tLMeigGVPne4Lf93b07SltXkI6/kn67sbUSXambFfZ60ZE9c1S2gHsW60=
+X-Gm-Gg: Acq92OHJBgBxZc6jwhsHuCxavQ6E3vDNWdEqYKwc8J6jaTk4ygJflwGdE+fTiEszJW7
+	xyz5zSH/dC33yz82hGf50F9fVKE7ipNTylKvC1BRZ/pi35H+AF0yXCZhtrPRibayjKUvz12D/G0
+	1FsPW7vh3terM/5HQFFvY8eKgHLUT2qusRDvUpFWpenPqhSzvZeQ2djbknJY7ybbDBxM5AbR5aG
+	TUfciT5YBid5dv7mY1KK6T8mtAVHJVejfEqCCvQyXVFfkK5YHKiVvhoHyWFUM7rQ9IoiJywG+zj
+	uh/iOqq9M7s0l9drlrX9Kf7Kx+OpFXIrT0rMygNATAoWJnwt9aWrcGLXeyIknH+0HZivyY/9C5U
+	hgqAD6jJlWLadZSEjQkljPSc60WQcHzOLxkZuxGWeKQ6QA8TijFaX2NdPvclodq1IKB6bfSyXEO
+	GpDWe6a0HQoi9/AsQJHcWHxf0s+aV7G2iDGWCrZpjRaomL/maXunGbiie7xUNfVg==
+X-Received: by 2002:a05:622a:1648:b0:517:6d75:a2cf with SMTP id d75a77b69052e-51795c5a18fmr245549391cf.43.1780930590664;
+        Mon, 08 Jun 2026 07:56:30 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51775dbd2c9sm158664971cf.23.2026.06.08.07.56.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2026 07:56:30 -0700 (PDT)
+Date: Mon, 8 Jun 2026 14:56:28 +0000
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	linux-kselftest@vger.kernel.org, shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org, 
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, jasonmiu@google.com, 
+	linux-kernel@vger.kernel.org, corbet@lwn.net, ran.xiaokai@zte.com.cn, 
+	kexec@lists.infradead.org, pratyush@kernel.org, graf@amazon.com
+Subject: Re: [RFC v1 1/9] kho: split out radix tree tracker into kho_radix.c
+Message-ID: <aibX8oS4toOVaCqm@plex>
+References: <20260605033235.717351-1-pasha.tatashin@soleen.com>
+ <20260605033235.717351-2-pasha.tatashin@soleen.com>
+ <178083348873.1648214.11020626647820932506.b4-review@b4>
+ <aiWYZhoSOAruIIM3@plex>
+ <178085518028.1648214.13339471022594901667.b4-reply@b4>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <178085518028.1648214.13339471022594901667.b4-reply@b4>
 
-This is v5 of the series to clean up the KVM clock, rebased onto
-tip/timers/ptp (which now includes Thomas's ktime snapshot series and
-the read_snapshot patches for hyperv, kvmclock, and vmclock).
+On 06-07 20:59, Mike Rapoport wrote:
+> On 2026-06-07 16:20:50+00:00, Pasha Tatashin wrote:
+> > On 06-07 14:58, Mike Rapoport wrote:
+> > 
+> > > On Fri, 05 Jun 2026 03:32:27 +0000, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
+> > > 
+> > > It's radix tree data structure implementation, kho memory tracker is it's
+> > > user. Please rephrase to keep the semantics clear.
+> > 
+> > Yeap, I will update it.
+> > 
+> > > I don't see much value in moving kexec_handover.o to a separate line,
+> > > btw, the same is true for luo_core.o, but it's not important enough to
+> > > change.
+> > 
+> > This is purely for consistency. I wanted to use the exact same style in 
+> > the Makefile instead of having two different ways of declaring the 
+> > object lists.
+> > 
+> > This:
+> >     luo-y :=                                \
+> >             luo_core.o                      \
+> >             luo_file.o                      \
+> >             luo_flb.o                       \
+> >             luo_session.o
+> > 
+> >     kho-y :=                                \
+> >             kexec_handover.o                \
+> >             kho_radix.o                     \
+> >             kho_block.o                     \
+> >             kho_vmalloc.o
+>  
+> I mean this:
+> 
+> luo-y := luo_core.o		\
+> 	luo_file.o		\
+> 	luo_flb.o		\
+> 	luo_session.o
+>  
+> kho-y := kexec_handover.o	\
+> 	kho_radix.o		\
+> 	kho_block.o		\
+> 	kho_vmalloc.o
 
-The KVM clock has historically suffered from three problems:
+Got it, I thought you were against making the consistent :-)
 
- 1. Imprecision: get_kvmclock_ns() computed the clock from the *host*
-    TSC without applying guest TSC scaling, causing systemic drift from
-    the values the guest computes from its own TSC.
-
- 2. Unnecessary discontinuities: gratuitous KVM_REQ_MASTERCLOCK_UPDATE
-    requests caused the master clock reference point to be re-snapshotted,
-    yanking the guest's clock due to arithmetic precision differences.
-
- 3. No precise migration API: the existing KVM_[GS]ET_CLOCK only allows
-    setting the clock at a given UTC reference time, which is necessarily
-    imprecise. There was no way to preserve the exact arithmetic
-    relationship between guest TSC and KVM clock across live migration.
-
-This series addresses all three, and adds new APIs for precise clock 
-migration and TSC frequency reporting. As an added bonus, it now rips 
-out the whole pvclock_gtod_data hack which was shadowing the kernel's 
-timekeeping, and uses ktime snapshots as $DEITY (well, Thomas) intended.
-
-Changes since v4:
- - Rebased onto tip/timers/ptp (includes ktime snapshot infrastructure)
- - Dropped "WARN if kvm_get_walltime_and_clockread() fails" — the WARN
-   was spurious during clocksource transitions
- - Dropped guest-side "Obtain TSC frequency from CPUID" patches (adopted
-   by Sean for a separate series)
- - Dropped KVM_VCPU_TSC_EFFECTIVE_FREQ
- - Fixed false re-enabling of master clock when a single vCPU syncs
-   multiple times at a mismatched frequency: introduced per-vCPU
-   cur_tsc_freq_generation counter so each vCPU is counted exactly once
- - Unified nr_vcpus_matched_tsc and nr_vcpus_matched_freq to use the
-   same counting convention (1-based, >= online_vcpus threshold)
- - "Avoid gratuitous global clock updates": kept global update in
-   non-master-clock mode on vCPU load (CLOCK_MONOTONIC_RAW means no NTP
-   drift but preserving the existing safety); only optimize master clock
- - "Xen runstate negative time": refined to update state but not account
-   time on backwards clock, always update last_steal and guest shared page
- - Added "Activate master clock immediately on vCPU creation" to avoid
-   unnecessary non-master-clock window during VM setup
- - New final patches: use ktime_get_snapshot_id() for master clock
-   reference, then remove pvclock_gtod_data entirely (replaced by direct
-   ktime_get_raw() + offs_boot computation)
- - Added masterclock_offset_test selftest (verifies kvmclock consistency
-   across vCPUs with different TSC offsets)
- - Added xen_cpuid_timing_test selftest
- - Added pvclock_migration_test selftest
- - Addressed AI reviewer (Sashiko) feedback throughout:
-   - get_kvmclock(): goto fallback on clock read failure instead of
-     using uninitialized data; single #ifdef CONFIG_X86_64 block
-   - kvm_synchronize_tsc(): changed ns to s64 to match function
-     signature; moved time reads inside tsc_write_lock
-   - Kill last_tsc fields: use kvm_scale_tsc() subtraction for
-     backwards TSC instead of zeroing cur_tsc_write
-   - KVM_[GS]ET_CLOCK_GUEST: validate padding fields, bounds-check
-     tsc_shift
-   - pvclock selftest: seqcount loop for torn-read safety, per-vCPU
-     pvclock addresses, graceful skip when caps unavailable
-   - KVM_VCPU_TSC_SCALE: return -ENXIO when !has_tsc_control
-   - UAPI pvclock-abi: added -D__KERNEL__ to xen-hypercalls.sh
-   - VMX: also clear SECONDARY_EXEC_TSC_SCALING from vmcs_config
-
-David Woodhouse (31):
-  KVM: x86/xen: Do not corrupt KVM clock in kvm_xen_shared_info_init()
-  KVM: x86: Improve accuracy of KVM clock when TSC scaling is in force
-  KVM: x86: Explicitly disable TSC scaling without CONSTANT_TSC
-  KVM: x86: Activate master clock immediately on vCPU creation
-  KVM: x86: Add KVM_VCPU_TSC_SCALE and fix the documentation on TSC migration
-  KVM: x86: Avoid NTP frequency skew for KVM clock on 32-bit host
-  KVM: x86: Fold __get_kvmclock() into get_kvmclock()
-  KVM: x86: Restructure get_kvmclock()
-  KVM: x86: Fix KVM clock precision in get_kvmclock() with TSC scaling
-  KVM: x86: Use get_kvmclock() in kvm_get_wall_clock_epoch()
-  KVM: x86: Fix compute_guest_tsc() to handle negative time deltas
-  KVM: x86: Restructure kvm_guest_time_update() for TSC upscaling
-  KVM: x86: Simplify and comment kvm_get_time_scale()
-  KVM: x86: Remove implicit rdtsc() from kvm_compute_l1_tsc_offset()
-  KVM: x86: Improve synchronization in kvm_synchronize_tsc()
-  KVM: x86: Kill last_tsc_{nsec,write,offset} fields
-  KVM: x86: Replace nr_vcpus_matched_tsc count with all_vcpus_matched_tsc bool
-  KVM: x86: Allow KVM master clock mode when TSCs are offset from each other
-  KVM: x86: Factor out kvm_use_master_clock()
-  KVM: x86: Avoid gratuitous global clock updates
-  KVM: x86/xen: Prevent runstate times from becoming negative
-  KVM: x86: Avoid redundant masterclock updates from multiple vCPUs
-  KVM: x86: Remove runtime Xen TSC frequency CPUID update
-  KVM: x86: Re-synchronize TSC after KVM_SET_TSC_KHZ
-  KVM: x86: Use ktime_get_snapshot_id() for master clock
-  KVM: x86: Compute kvmclock base without pvclock_gtod_data
-  KVM: x86: Replace pvclock_gtod_data vclock_mode with boolean
-  KVM: x86: Remove pvclock_gtod_data and private timekeeping code
-  KVM: selftests: Add master clock offset test
-  KVM: selftests: Add Xen/generic CPUID timing leaf test
-  KVM: selftests: Add Xen runstate migration test
-
-Jack Allister (3):
-  UAPI: x86: Move pvclock-abi to UAPI for x86 platforms
-  KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for accurate KVM clock migration
-  KVM: selftests: Add KVM/PV clock selftest to prove timer correction
-
- Documentation/virt/kvm/api.rst                     |   37 +
- Documentation/virt/kvm/devices/vcpu.rst            |  119 ++-
- MAINTAINERS                                        |    4 +-
- arch/x86/include/asm/kvm_host.h                    |   16 +-
- arch/x86/include/uapi/asm/kvm.h                    |    6 +
- arch/x86/include/{ => uapi}/asm/pvclock-abi.h      |   27 +-
- arch/x86/kvm/cpuid.c                               |   16 -
- arch/x86/kvm/svm/svm.c                             |    3 +-
- arch/x86/kvm/vmx/vmx.c                             |    4 +-
- arch/x86/kvm/x86.c                                 | 1039 ++++++++++++--------
- arch/x86/kvm/xen.c                                 |   30 +-
- arch/x86/kvm/xen.h                                 |   13 -
- include/uapi/linux/kvm.h                           |    3 +
- scripts/xen-hypercalls.sh                          |    2 +-
- tools/testing/selftests/kvm/Makefile.kvm           |    4 +
- .../selftests/kvm/x86/masterclock_offset_test.c    |  180 ++++
- .../selftests/kvm/x86/pvclock_migration_test.c     |  382 +++++++
- tools/testing/selftests/kvm/x86/pvclock_test.c     |  441 +++++++++
- .../selftests/kvm/x86/xen_cpuid_timing_test.c      |  230 +++++
- .../testing/selftests/kvm/x86/xen_migration_test.c |  194 ++++
- 20 files changed, 2263 insertions(+), 487 deletions(-)
-
-base-commit: bc484a5096732cd858771cccd3164ec985bdc03d
-
+> 
+> 
