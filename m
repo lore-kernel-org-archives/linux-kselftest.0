@@ -1,155 +1,150 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [45.157.188.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F71A39A048
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 22:35:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780958105; cv=pass; b=IIikIaCXHCvKmyjH4DEIXX62ZYI+1lfevm6VZc5mlqg9eJThD/fWqsl+6/JPkSEbPtOulPB8ESZB6lQi/bEnA9tKjG1Kf0qKBFTHVfhRE7xPyxJrNkHIlV93JeH3mmP6TqFAgiDqUXNkcCXKqrRJb6RjcwdTjzDHGDHnFlR8QhA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780958105; c=relaxed/simple;
-	bh=/rpv0hsisGb3nHHvAOO3ELylrxjpXbdj4HzmBdxPovY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gE5+Q5Fdi9a9RR2tytHTawrXttAQJjmjCqhtdSr22IFPqWx7gwJJJO2WuQ6Y6LbwBMjcFZpUwfoB3SO7Y9xY8kwAqDsupginpPttqjvVJMctuVc5nmhONFtNln+SaVRwT/D50VQT7Vid4fUJTfXV4lM89/XC1ZONTZcjubvvtVk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UZNxa8s+; arc=pass smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95300F9E8
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 22:51:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780959073; cv=none; b=cu0mWRTXzNWYJJA1XvTnBsyOLszhJhddVXVIulv/+xaN5Mao4CtToRrJmVXeYck9x6x07P4qEXcGSvtLzhX9vxmgkS8m89PQDV+viGm20GV0rMu4038AF0kX/95dMwj/P5/iRLcCIThPv3mbg+2S0vbb3gaFkT9RfF6MFJADwC0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780959073; c=relaxed/simple;
+	bh=tcojNWyZlA4hOL9PXkaYaUZBxwMZ3D8jqxSv4YkHmM8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CUzHizBfGDq68xrusyYQBnZ6KwlLZRvRELlYoWedo8EB0qjoRkvSTrjl0kN44ECNJcGT0iisIdUnnKv1Mvat0C8buqXmhvCRAPfxGXnMH8xbghn2uzsvjxJDuOh1QkBrZEQrOvHImXp2i0qOf8gw/XTJ8jRoV+6iK3vazg/7sVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=rBBtcnRo; arc=none smtp.client-ip=45.157.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UZNxa8s+"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-137335bc3caso5994264c88.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2026 15:35:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780958104; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZSWoxfc53fJmpKx6bV0hkMQ2b7PLj3K6tVzlnzdyXfvBay+h2EU6eGb0WcMyNXvrah
-         IkwYcJ65h5LfwyRyRDB+blS8zS0bWtnNFU+7SsOzoF9MoExVKLlhCVdeR+U1bepkATF4
-         WzRLFTCmPhtfsZy0XJf/Wvl7jvjdoqQ6wEp2RbtVrVfanBWzMh6au5oB2A3MwijylCNV
-         kX30sOnMvyzbFsUpEKTRgV2NYJJUSuRIcsD89piRykYqQ/lVwZ9rI2Qbv0Qgv1sZbwvF
-         arqVS6PHA/qAkW6MLpKgaeZkQ/TP3gRWL2uELZl4IbRXrb+KtLE2PINWY/83KItDmZd+
-         IRLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=/rpv0hsisGb3nHHvAOO3ELylrxjpXbdj4HzmBdxPovY=;
-        fh=jExKh7myAprYkHnt4xThQ7eMJ+EUcwE/kBAlq1Fj5jo=;
-        b=L0lqPNhT54a3vz7vo/odD9SJjzFUwB2W/+JhOVasqw7s7P+11TrajZk/sghbEcNnvA
-         0JhEz3Uny5bDYvebwHHntHZzagZyv8DT65fKGZHYlteK1ABdwkWFSQZzzXcLjDOXTSEt
-         pmScrjInA51Fp/NUTfwISW+jTgrClXIg7dTW989TTTGk1MAHp/E+wV8FoL2j4/HJCuV6
-         Grh3AwEPbl9uqCMTMsouIVRB3h2ml9nxgxOnxpg1j4YX9X64CuHb3RjeEXCEN2Wrvr8F
-         w0gKZIU7zNTdL7IKkD+mnLvuHSwTOLp1BBYiBq0jQBrYDmL0WrTzCTA8JRZn/bFnX0Re
-         Gy8w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780958104; x=1781562904; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/rpv0hsisGb3nHHvAOO3ELylrxjpXbdj4HzmBdxPovY=;
-        b=UZNxa8s+iZMlCKqqQ1SbxK57Q3Mgj26fl1kt8gO1WwVaxYIsXgTmnrv1WnNIVI21Ef
-         53r3p7KPeaiGY7+oDsX+jn1SYPyV2AxytFPoKSKpBFXhlmbWMgBejk7hWBeYAX8Bxxky
-         sv1VD8HA3ebiW20l8NaEhreYlqd8yveMID1vmkZZicG0Uco3a6+BVHIi2S3B0WUhxbcL
-         KQ6Tfhdo+fNHMKiK+EHvWTJD/c3K4A0C9cA1keoGi8QfjbhMivN+m6ymqIvHLl/NYfx4
-         KDF8qzEC6dBWSXSu7ns3YVGCCbVIXJXO0PhK02RIleXx20QbMSJwB+1FPda+HlamrJm7
-         AVkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780958104; x=1781562904;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/rpv0hsisGb3nHHvAOO3ELylrxjpXbdj4HzmBdxPovY=;
-        b=pdDcsUFKh19H0n8ZkW6rHjipAGHb8o4rmMb8rn+f32ZZZ3BTplIL82Cj3PRto1lA4w
-         JlnbXa2zeeSvuja6Tc/QJ2n7JXh0FyZ7ZOVp87fOogW0hTJsqz3kLLaLiESnbUwPtIjg
-         jIQrn1+LescA8pPt67Ksb0SeFNNiys/Ho1JYKBwBV6nDgHgxNnlGQAeV/6BXqu+V0i1Y
-         H2j3pL+vldEYI0u8ryO7nKIShTZYxP7iN9R2ReaykGOw5MtOa578lFUDN1lqUVYe5s4L
-         pX/+1sa0bABYPv7ERMjLnRVY3ClBjW4xvQGvwBtlUuQxf6fYnm8G5dYwG3NnbjWpeT8Q
-         /m3A==
-X-Forwarded-Encrypted: i=1; AFNElJ/i73731pNk5lOvqZR6yG+0IDYUBLjqj2YWx6EYH1VSZOEp5e0O3bT/QfqBcHyhJQeF8d+sSEdHkvafUniE3ac=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywe18JJkBWtgSn92H1o1Q0ZHrNrxTyzu+BAuwUt27BFLeIg3XjM
-	x5MS17Bwe5nLcKJXd7y2/+0YqoxYuDUOvfZNz2JPrph7sPcc/I4UUTxcx/cvQ5zdiIXbtHzsttC
-	3WqO77WkeM1kY8p93VLWSZPa/sg5yZFxHA+fvSqDX
-X-Gm-Gg: Acq92OFf0FbeA1MMelv3YXomJ4hIeTsuNZXCqdqAk1lcvwE1Gc4baRpESqRKui2+AG0
-	R+hBRxMbuKZzeNp7OcipeWeGPo43Z6sEJHOSz1NsWAbm606F2cxexJYS/5hvwb79wirfNBzYczp
-	Un5Orevs3ANBorzSDh0VY37lNAR4RV1dWE/evXO/ovUWguZRKU9Uby60r10lIZKAG9ayTGlrzAL
-	uCXwTEcmWN+Z8QIcFMEpfN43JnvccSdzVGABp+P1g1R0E4OzVz5L6fozdC2iK2nukvUmAtw1yTy
-	SsS6JBvfUZOOgedzaL5dCXnpJXwMQCMuQE0CSqxL2rdaRNkr1jcTxnYQzcs7OEX5qo3zPT0cEyU
-	4iyyv/O8rRcUglaM9tIdNcmGPb0UwTF8kE6gZnGzH0RjWU1SRb+SazAJvM1xZ
-X-Received: by 2002:a05:7022:510:b0:136:83f5:c80 with SMTP id
- a92af1059eb24-138066608abmr7982404c88.4.1780958102929; Mon, 08 Jun 2026
- 15:35:02 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="rBBtcnRo"
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4gZ6hl6yK1zPxL;
+	Tue,  9 Jun 2026 00:51:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1780959063;
+	bh=Ihp2DWwa5XBMw5A0wiUqR5CUCI5kU3bO6aS6PO85JbY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rBBtcnRoo0EGvKWh39HYPlkpgOTsZiU5rD5UO4iRGLDKJkIwUCeLsj8Japl7ptpZx
+	 zZLX5iN5ShYj2kyFdGnzjuwFqELOw2OQ+hl1GJg6chCBvyo5X3iEH7YwnNrKUKNdSu
+	 Omp7bAEvuNNY6O/ngF4OrCrL1lpn3E+Vfe+pyIiU=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4gZ6hl1WW0zBTN;
+	Tue,  9 Jun 2026 00:51:03 +0200 (CEST)
+Date: Tue, 9 Jun 2026 00:51:02 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Maximilian Heyne <mheyne@amazon.de>
+Cc: stable@vger.kernel.org, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/landlock: explicitly disable audit
+Message-ID: <20260604.Gee4caexei8o@digikod.net>
+References: <20260529-welsh-nagoya-b4d9ca60@mheyne-amazon>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260608125846.157004-1-jiayuan.chen@linux.dev>
- <20260608125846.157004-2-jiayuan.chen@linux.dev> <CAAVpQUDZoEVEX1kXok-29dzVHk=ZK_2MkZyZY8kRHCJCfAWVFg@mail.gmail.com>
- <DJ3XPJA746S5.NYKZWY1HBH8O@gmail.com> <CAAVpQUATP7S7OEZw4P_7fp5zmQO-T5jByxAfp0+YsjRENeWscg@mail.gmail.com>
- <CAADnVQKa2Z2HKKZMhyD1HrurQ4LTcCS0Mm0YPxtisGKwVfcxmg@mail.gmail.com>
- <CAAVpQUCJH3iknHSfNwMqvHVc_V09zNDK-YbXbqa-=K159PTqiw@mail.gmail.com> <DJ40JYME18U1.3RA3TUXB3MH3M@gmail.com>
-In-Reply-To: <DJ40JYME18U1.3RA3TUXB3MH3M@gmail.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Mon, 8 Jun 2026 15:34:51 -0700
-X-Gm-Features: AVVi8CdeAbkRwHhPre5-1lF1rzTOH3OTwg-sIWZIP8BtHCUTHJ-Y9jp0mJntayw
-Message-ID: <CAAVpQUC1Ot9vr09gNoe+vxgLoqU8Wwn2DV+CQZYYpAJUATJiWg@mail.gmail.com>
-Subject: Re: [PATCH bpf v8 1/2] net: Validate protocol in skb_steal_sock() for
- BPF-assigned sockets
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Joe Stringer <joe@wand.net.nz>, 
-	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260529-welsh-nagoya-b4d9ca60@mheyne-amazon>
+X-Infomaniak-Routing: alpha
 
-On Mon, Jun 8, 2026 at 3:16=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon Jun 8, 2026 at 2:35 PM PDT, Kuniyuki Iwashima wrote:
-> >>
-> >> btw is earlier sashiko TOCTOU concern real?
-> >
-> > Yes, the selftest in patch 2 should reproduce null-ptr-deref.
-> > (I tested one in a prior version)
-> >
-> >
-> >> iph->protocol =3D IPPROTO_TCP;
-> >> bpf_sk_assign_tcp_reqsk(udp_skb, tcp_sk);
-> >> iph->protocol =3D IPPROTO_UDP;
-> >>
-> >> as far as I can tell past bpf_sk_assign_tcp_reqsk()
-> >> the networking stack only looks at skb->protocol,
-> >> so modifying iph->protocol will only mess up
-> >> things on the wire (if this packet goes out).
-> >
-> > ip_rcv_finish_core() uses iph->protocol for early demux
-> > and ip_local_deliver_finish() also uses it for demux.
->
-> ok. Another idea... we can keep the checks on bpf side and
-> teach the verifier to invalidate packet pointers at bpf_sk_assign_tcp_req=
-sk()
-> and introduce new concept of "readonly skb".
-> So after invalidation the reloaded sbk->data will be read only.
-
-Yes, this is exactly what I had in mind in the other thread :)
-
----8<---
-On top of L4 validation in bpf_sk_assign() and bpf_sk_assign_tcp_reqsk(),
-can't we mark such an skb immutable after the helpers and catch
-subsequent writes to skb->data on the verifier ?
----8<---
+Thanks for this patch.  I merged a few fixes and I'd be interested to
+know if this one fix the issue you spotted:
+https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git/commit/?h=next&id=d8dfb4c7faa87c3e41a8678f38f136c2c7c036fa
 
 
-> There is no such thing today. The verifier only understands PTR_TO_PACKET
-> as read/write. So it's not easy, but probably good thing to have
-> for this and other cases where bpf prog shouldn't touch the packet
-> once it called some kfunc/helper.
+On Fri, May 29, 2026 at 08:03:41PM +0000, Maximilian Heyne wrote:
+> I'm seeing sporadic selftest failures, such as
+> 
+>   #  RUN           scoped_audit.connect_to_child ...
+>   # scoped_abstract_unix_test.c:314:connect_to_child:Expected 0 (0) == records.access (8)
+>   # connect_to_child: Test failed
+>   #          FAIL  scoped_audit.connect_to_child
+>   not ok 19 scoped_audit.connect_to_child
+> 
+> This seems similar to what commit 3647a4977fb73d ("selftests/landlock:
+> Drain stale audit records on init") tried to fix. However, the added
+> drain loop is not effective. When setting the AUDIT_STATUS_PID, the
+> kauditd_thread is woken up starting to send messages from the hold queue
+> to the netlink. Depending on scheduling of this kthread not all messages
+> might be send via the netlink in the 1 us interval.
+> 
+> Therefore, instead of trying to drain the queue, let's just disable
+> audit when running non-audit tests or more precisely disable it after
+> audit-tests. This way we won't generate any new audit message that could
+> interfere with the other tests.
+> 
+> The comment saying that on process exit audit will be disabled is wrong.
+> The closed file descriptor just causes an auditd_reset(), not a
+> disablement. So future messages will be queued in the hold queue.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 6a500b22971c ("selftests/landlock: Add tests for audit flags and domain IDs")
+> Signed-off-by: Maximilian Heyne <mheyne@amazon.de>
+> ---
+> 
+> I've seen the failures on the 6.18 kernels but haven't tested on latest
+> upstream. However, I still think this is an issue.
+> 
+> ---
+>  tools/testing/selftests/landlock/audit.h | 13 +++++--------
+>  1 file changed, 5 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/landlock/audit.h b/tools/testing/selftests/landlock/audit.h
+> index 834005b2b0f09..7842330875f53 100644
+> --- a/tools/testing/selftests/landlock/audit.h
+> +++ b/tools/testing/selftests/landlock/audit.h
+> @@ -494,10 +494,9 @@ static int audit_init_filter_exe(struct audit_filter *filter, const char *path)
+>  static int audit_cleanup(int audit_fd, struct audit_filter *filter)
 
-This would be useful and we could (re)move some validations from
-the fast path.
+audit_cleanup() should be called for audit_exec tests too.
+
+>  {
+>  	struct audit_filter new_filter;
+> +	int err;
+>  
+>  	if (audit_fd < 0 || !filter) {
+> -		int err;
+> -
+>  		/*
+>  		 * Simulates audit_init_with_exe_filter() when called from
+>  		 * FIXTURE_TEARDOWN_PARENT().
+> @@ -518,12 +517,10 @@ static int audit_cleanup(int audit_fd, struct audit_filter *filter)
+>  	audit_filter_exe(audit_fd, filter, AUDIT_DEL_RULE);
+>  	audit_filter_drop(audit_fd, AUDIT_DEL_RULE);
+>  
+> -	/*
+> -	 * Because audit_cleanup() might not be called by the test auditd
+> -	 * process, it might not be possible to explicitly set it.  Anyway,
+> -	 * AUDIT_STATUS_ENABLED will implicitly be set to 0 when the auditd
+> -	 * process will exit.
+> -	 */
+
+Please add a comment that explains that the audit state is not restored
+but just disabled.
+
+> +	err = audit_set_status(audit_fd, AUDIT_STATUS_ENABLED, 0);
+> +	if (err)
+> +		return err;
+> +
+>  	return close(audit_fd);
+
+FDs should always be closed.
+
+>  }
+>  
+> -- 
+> 2.50.1
+> 
+> 
+> 
+> 
+> Amazon Web Services Development Center Germany GmbH
+> Tamara-Danz-Str. 13
+> 10243 Berlin
+> Geschaeftsfuehrung: Christof Hellmis, Andreas Stieger
+> Eingetragen am Amtsgericht Charlottenburg unter HRB 257764 B
+> Sitz: Berlin
+> Ust-ID: DE 365 538 597
+> 
+> 
