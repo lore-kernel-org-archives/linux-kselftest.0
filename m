@@ -1,81 +1,81 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307BE35E1A0
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 18:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8CD63D3480
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2026 18:17:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780942460; cv=pass; b=Ha7IpGyeUgWgjKS2tmf7R2jpqfdGnIf6TH/4dkUDEcs7lKJ6WJlqueXXNIqa5PXMCeqMO13kOHlezdznsk/xa1P8KV+sH1skd8HJRLKhc+c6WP1LohvgWEte9vHHkcA7/u4YMHVRMgaCfckZQdnFGufAIUNCpXV3D2MoHXvpu5s=
+	t=1780942670; cv=pass; b=O8VpGJpm+qURzHVJmTorKytsJszjhcwrhFq/sgHiCj6ga4dZaodq2qgbfbVZgq+kFcpfr97chz1uepl0e4qIkDnCqM0rPmnTzMCkJgUW5C/cyXYnyhh2jFjQAecHpswc0bVBFWibkeWodiktYjiStWQR09odPMb6l9wvSbb2b5s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780942460; c=relaxed/simple;
-	bh=cdobpiwLWv7oVVX/pldaFU009Uk0NSg+Z2E2eK4qo7Y=;
+	s=arc-20240116; t=1780942670; c=relaxed/simple;
+	bh=qEXPWKJAUq9h7gKR3mFd+TXuFcMvNL0MlYhGUvYhw74=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WMGgoE7NB9uToa7CJoBfLygAyK5RyXTnlv/ehju2HINXZkGS1fTztlJGJxojWcXloZxNS2P0Cyu8XdU9g+MelZpHdJZYW/eMUUBb6zNBl/BFaqlg1WNa36aPP2TojtAQ+YoKcADyJyIMLLh4oYfp+9DkuHO6OvZVD9dN7xKmYIY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUPy1lFt; arc=pass smtp.client-ip=209.85.214.182
+	 To:Cc:Content-Type; b=cEEuUALgpextB0byVjkcJAutCTx9hKHuIQN06BxeJ7h3RidoTIDLZAYNa/7SH4tUAaCdaPof6l6Hx1RYbj97A560D079DeQ0GHUH/y8xarGD5vjFPueoIP3GxItDKbzIKQHvb3nHEFd4Z23eJ6aStqvtdWIxxbIKdiDrnJovkK4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pcSDhrqL; arc=pass smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUPy1lFt"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2c0c379e8ffso31628405ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2026 11:14:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780942458; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pcSDhrqL"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2c0c379e8ffso31649455ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2026 11:17:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780942667; cv=none;
         d=google.com; s=arc-20240605;
-        b=EyBteNfeSm+95Zb0zsZzTwdBK2id+6AnqEVSslV/58zsVnExZaXYNhObryxbwrJOdz
-         SWzUom/J7cizFRv5xMwC2O/rcAwLQcQ0fiESzWta/cBVH8Jud6+ufGjBWejQu2Ukej2g
-         zvQ5nhaiCt4tlaGlIeCuxoeem7b3h+8D5w4Orh268uYljWZ04msXK4SkCD0BsDAqI7KO
-         LhVsVK9WYqYhWxkaujK9glgGeizI/5rEQK606oGMWwizK44Qntnq0QuWUjGClHx7PczM
-         Qo5ui7NNnDgSmqz8YTRcG+ZOdRI4kiIm+bKSC3Tl37ER9xN13qSxNBqCsocYz3smJqUL
-         4l5A==
+        b=hmbakt/ZJE6GplKaHLJV926dhgLHqqSEM6mhKGnjEVpJ4N236crITwuoWV9F2Rlpsa
+         ++XQ5PB0Zdb/Ywn9upqpjmF65A+310ia+fv71f0BU8FMg8dWI8hb+8uLL5CB/73DyFWZ
+         3ELMRwLxAYtDQDzlEQNl1cLlAzbidz2VvUX3ZH/ibg7+XRr3XGQfUuJIwoo2mAdHiiIP
+         Y02uwiZ2vvVGoK8twvkRBiegPtvqNIcUpOgrmPYah//Vaz+pOyA62UewEpALSo5UaAsc
+         Ytr3A/+jdFLrwlrRMX9X5DxlAs6YVqfUkfTTHHZG2hoePe9Obzk8wMIQZKOBlpi21hV3
+         Iiww==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=bLVgW0YpQ2LvPnx562WBAcfO+Acupv1Ug4Sxu3bRE0k=;
-        fh=EZHSYcmj+B2zgcjb9VCqOhMWl9jERhuWu1krFKu3z0U=;
-        b=IdV6KaWrseO4M/TC2QwQU1HleUCqR9LJDV+dUIe3AXUEia7I0igfY14X3BdfFh+4CO
-         Hfpg+fJSvYOtRv4oB4vLtt5iiLhhzOLiLQPBFUPITTTa6I/5U2ZmwSjZUqqqy7vugLHX
-         Yy2viC0IrWpNEq/oHKbEUA+tiyaDabQdTQkIJzACKewg3aq8j1Y+yXxI7BtNYF/XAgb6
-         gsV+WBlYYDZ0JQ2HYufNDltIf19ydH3cnA6GAUPxPgZSIoI5d1vYMbC2/xVrE9Thb9QX
-         gHA5lbOTviIahlm2zv+R+L+7EcQ3aejHm1CKh/SclPCN1QY2EGcIN4AGF2nDvmnfKJWc
-         u6AQ==;
+        bh=t5DnDar6JBnPe48ajQB1Hb9265gKUCW9aay647po/SI=;
+        fh=Zrs6nMyXrutz0GRzCKsoMzawIdGuxgsyKUb5oMzbQ9c=;
+        b=jv5jgiNTpBgUtcP/PGY9nheuMy0yU5HhPZDlFAlLB1UbE9NVkJAuROZE/yaCBgjVea
+         H7sYNWcfBQLO2/l74lk8tt6jwImQfqxpRxY5ZZmUEnP95rDFaxVnFbrZewlgLDPdbw9p
+         H33qjh4drpdRy3SW9+kJ9hAe7nepPNfCdTh4q3Cb8iAe6wXBEvUFdLnRn9xbZ6EhR6Hh
+         Al9yUTHOj5BFdU4akpvFB6a9L2CHyNe8C8zHonItj0htS/oerav2evmq3eU+fW81ky9t
+         ct2BLGULnd3gut3zv82QP8KPRwKRxFpiqUekAun4l2bsJo2+gREha1LL5tiUxMkfoC/G
+         UJaA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780942458; x=1781547258; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780942667; x=1781547467; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bLVgW0YpQ2LvPnx562WBAcfO+Acupv1Ug4Sxu3bRE0k=;
-        b=CUPy1lFt2e62Q3gx3DrcJT8CL7ht1lt5Cqb/ppN/yOepqEoKTejdWxMU4SH/r2TWkF
-         7Ju6SAvv0unNQTWDoio4oeQ9tdyUhmJaqf+iAcJ7oCNKy6URZB0Ib9V1x8rJcTwv8uf7
-         MmReM+YFzR28VzN43fJSSCMSJn2TpPbL4vK74ZioYRuKO16N06H8aU2oRrobm7Pco1eh
-         4e90ZiGmna7jobG8/e3f0zO7E1y3S9QSRKVnXw9ZkF0CExzmbXQ8Q6Fhp3w2MrKBi3Dj
-         /+Z1KoUjTas+eqq13ylQwJ1DPZM5hmeZpUQ45EHfc2SR9fMNh1CDwVNJo8K2Onfb/8cN
-         6Oyw==
+        bh=t5DnDar6JBnPe48ajQB1Hb9265gKUCW9aay647po/SI=;
+        b=pcSDhrqLqZgA9oHaxYDBaH5WqiBwXPi5NJ7hSn9ETt3Eo3lmZ39nh4EyGS3XeWgueu
+         BxlUSn7HvrLwOdQcML8aQfaJVcODOfB7X5GCDVCeQYG+K7bIrTSJAud1ht9BIrurtHLX
+         XBCF0dz0vlzEF6MX6I/gf6X7YqxVZIu5v4Crkzjt9pKpJm6MV9xq3K5sDcnQVYcRQaWA
+         7YNUqEK+S90fHiNtO40xi+pSs5bcIrcd0CQNSd1TxCPjG2DDv0UJ7btUqUeb2hRakZRA
+         maKSifJtb1ElbQZ8+ZhUJP2acxqs9DtdvX2lwwkjn8A1O6j1HzDOYrFB1uuKUwrSvwBX
+         aIPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780942458; x=1781547258;
+        d=1e100.net; s=20251104; t=1780942667; x=1781547467;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=bLVgW0YpQ2LvPnx562WBAcfO+Acupv1Ug4Sxu3bRE0k=;
-        b=d4F1cXo14sGQLpsOR5oiMAIhtUOy9BYyLOWHZbKSqXVtt6NlMEEglbmYLmNEk0qdNB
-         4wsppD/o9uK8lVBfZlfo4qYo37yDwZOjdqWO6z02SgHKsA1YrI8z63M2/IuOYLHhq/2e
-         sBUBs+4kMcDD8K8e8v7cc9XKuXRJmnb6GyJXYR3O3oyn0VptCfwvDv3thGkLos7b4q0Y
-         SdWfCtQze30r9vmzWr8R/sPxiOKb2CuHc9cPCF4fPEI4td5xWs5FKnEkxduMssp02wK7
-         JrEOCOaLEykRp5jdxNj2NqIyMbxlV8EiD5DIRzbW1T9zCidSlRm6QYEsQGl7rrnzbBXk
-         T92g==
-X-Forwarded-Encrypted: i=1; AFNElJ/CNZy/Ud3GpOgDtiBafpNUxb0lwPe2n0ORv1olrV2OYE2UorXaI6HHlCFZwYlZ3825E8cATT/wz3Fdyrnrir4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdNg7/b41E2/2IOwMJW1cBNcn+Te5EW5mdESX6ZmKF9UtpHwyW
-	yQHOdFDiLBGRAVzeQl4CGKhzC1r0sgNtScnrHcrbQ05FwuKAjKCKmxpPi6eFHRGdIf38hM+synV
-	UnquxrbQaZ5n+6kbFqMM5Yu4ruPap8DA=
-X-Gm-Gg: Acq92OG7UfPHfHkhYdcdKKQDNbvUJL3S8+OkeGIzOY+Q+jKTuMSO49dYKUQQbQveKiF
-	BTG9abxvxmQt2nXt6noItA0pmn50IgqDvQgmJ5AuJC3UoH+f+f0pAV5/ZK9NJNTt8HhvdLSk0NY
-	voyBG8eD8Fqhugwnf6mkCp1XCmQVrNqibznZV2JNopE6C6wV30hNO5/F1SsCmaGQVrEtQ04oMFW
-	W3qEdDlEwHvK5b5mqAN/cnh8X186O/ifgSOawEdROBjwT5VrNAZ7kFV6m5h8fBzUpMSNpN3Lc/c
-	Ai+pgszCje9C+iPZF+pr2NZC190mfYE6hn2ydygl1fHnl/84gWBIlsHwV7rBXIkjgKhJ+oohrxj
-	P5s5iRMBwZk6++3Z0cPZr6x3mUg==
-X-Received: by 2002:a17:903:1813:b0:2c0:c262:b919 with SMTP id
- d9443c01a7336-2c1e78e4e97mr111388825ad.5.1780942458521; Mon, 08 Jun 2026
- 11:14:18 -0700 (PDT)
+        bh=t5DnDar6JBnPe48ajQB1Hb9265gKUCW9aay647po/SI=;
+        b=JWPBdlkm/UvAXaiXQ3/TIiSkaBzizsW8DoltMSGR/kq0hJM0+neza9fUz0tvgZitrX
+         fPZnmqfW9ReBd8iijtvr7fU4d9VIsh5oSkQ7GJ+oceWFGMnpHEMcaSPoGwUYj9QfvRNw
+         UutwV75sX8eJS7eNwu5G+rgxh1M8SZmfcO10aPFfkeJG3q3gffkOToaud3+jS63SVM/3
+         dIvFOk3tCAv7r8S6/t7TLd84OXguJGjs5sV4WsmngPfRnGiPyov2oCslT8DfbcbWCvW+
+         b7Cy9FkNrD5YvnPYs2/I+1YlLhrzsOP5L/JsuUJeCzRW6p+nNGYOZ0vrMt73u4DUXJU0
+         +ZtQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/a29zCS2PS7xfxUCQ32fzwwmF8hR9Cx5eorCMH2TpksH6j3RIy08ttlwGs+QdFTmiBRSaeMN9ojf/FhjwEEgg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfsTevugfZbQauswYeYm+rG8V9fURYrI0eXftbjhkq7FZAmuSs
+	OTeKf4GWaKcJyLOo/P7FaOFYjBUOLMqWV79uhM+eW1m6HJ1uzo3wSE8LNiP14bnrlBctilGVghd
+	XoIhfTAOE33ukcPQGRCaFJjUl8+BDrPA=
+X-Gm-Gg: Acq92OETsFXKsH5hm9DOM5WkTR/FoBhOSkLAVbmwxnh5hXnH6WeQeF17eal99rKOuRV
+	XgZc3tRuvZsD1fkGG/FMx6nkHpnxJMds3lEExOMQtPaESekleGoiykuB4onFAtnfHfxweTl4vEH
+	wok4jZxfM5qRBkaLvajJRoxRqFtxBKcnFeiKXFLQW7pB2KgRInxvM1T3lo4xqcvHO7+nOnnTYBM
+	jzzbzOOh4PutLgNavcXu8NNGU3XbPxVqk/UPO41LnW2p8rRnomn57dO+yvBssllKMDR95lfCnFz
+	UcE3An9mz6HUXUmSegxjxC7AyxO7ZCf+vsRplPRA5/nPHxlG9qbzNtlQEnFXeFfCC1uVfoxXzrG
+	SRLZiG7j1iCFjEk4=
+X-Received: by 2002:a17:903:1b44:b0:2c0:c262:b925 with SMTP id
+ d9443c01a7336-2c1e7f9252fmr195715815ad.25.1780942667015; Mon, 08 Jun 2026
+ 11:17:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,86 +83,90 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260529031604.888137-1-chenyuan_fl@163.com> <20260604031033.806727-1-chenyuan_fl@163.com>
- <20260604031033.806727-3-chenyuan_fl@163.com>
-In-Reply-To: <20260604031033.806727-3-chenyuan_fl@163.com>
+ <20260604031033.806727-2-chenyuan_fl@163.com> <e23baad8-1709-4210-81c8-22741b9dfb3e@gmail.com>
+In-Reply-To: <e23baad8-1709-4210-81c8-22741b9dfb3e@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 8 Jun 2026 11:14:04 -0700
-X-Gm-Features: AVVi8CfeHqtpS-HGlLc4glXkts_Xp6ARPR9VGj-S1X4pyp51n5kXFrLsUu96gpI
-Message-ID: <CAEf4BzavhAkKLdmsZLd0r0bUd-B1XKS6a+Ec9xfqaZVZNiu1UA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/3] selftests/bpf: Add ARRAY map type to
- token tests that use struct_ops global data
-To: chenyuan_fl@163.com
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	chenyuan@kylinos.cn, daniel@iogearbox.net, eddyz87@gmail.com, 
-	linux-kselftest@vger.kernel.org, shuah@kernel.org
+Date: Mon, 8 Jun 2026 11:17:31 -0700
+X-Gm-Features: AVVi8CcTUadNsMgxD4J0IajYU5XL2tzBD2ThgUFwBi0fy2o_akjL-kP-J_G8V_M
+Message-ID: <CAEf4BzaY3LLmMbSm1ritXwTvqGYi+KSWSkqMYJd62D7opu4ZnQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/3] libbpf: Skip bpf_object__probe_loading()
+ when BPF token is in use
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: chenyuan_fl@163.com, andrii@kernel.org, ast@kernel.org, 
+	bpf@vger.kernel.org, chenyuan@kylinos.cn, daniel@iogearbox.net, 
+	eddyz87@gmail.com, linux-kselftest@vger.kernel.org, shuah@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 3, 2026 at 8:11=E2=80=AFPM <chenyuan_fl@163.com> wrote:
+On Thu, Jun 4, 2026 at 4:16=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
 >
-> From: Yuan Chen <chenyuan@kylinos.cn>
+> On 6/4/26 4:10 AM, chenyuan_fl@163.com wrote:
+> > From: Yuan Chen <chenyuan@kylinos.cn>
+> >
+> > bpf_object__probe_loading() tries to load trivial SOCKET_FILTER and
+> > TRACEPOINT programs to verify the BPF environment works.  When a
+> > BPF token is in use with restricted program type permissions, these
+> > probe loads may fail because the token does not allow the specific
+> > program types, even though BPF loading is perfectly functional.
+> >
+> > Fix by skipping the probe when a token FD is present: BPF token
+> > creation itself proves the kernel has a working BPF subsystem.
+> > Real BPF issues will be caught during actual program and map loading.
+> >
+> > Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+> > ---
+> >  tools/lib/bpf/libbpf.c | 10 +++-------
+> >  1 file changed, 3 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index ab2071fdd3e8..7e21c5eb9533 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -5167,12 +5167,8 @@ bpf_object__probe_loading(struct bpf_object *obj=
+)
+> >               BPF_EXIT_INSN(),
+> >       };
+> >       int ret, insn_cnt =3D ARRAY_SIZE(insns);
+> > -     LIBBPF_OPTS(bpf_prog_load_opts, opts,
+> > -             .token_fd =3D obj->token_fd,
+> > -             .prog_flags =3D obj->token_fd ? BPF_F_TOKEN_FD : 0,
+> > -     );
+> >
+> > -     if (obj->gen_loader)
+> > +     if (obj->gen_loader || obj->token_fd)
 >
-> obj_priv_btf_success, obj_priv_implicit_token and
-> obj_priv_implicit_token_envvar use the dummy_st_ops_success skeleton,
-> whose struct_ops programs reference global variables backed by ARRAY
-> maps.  Without BPF_MAP_TYPE_ARRAY in the token allowed map types,
-> bpf_object__load() fails because the kernel rejects ARRAY map creation
-> for global data.
+> This change makes sense, bpf_object__probe_loading() does very basic
+> check that BPF works on a given kernel. In this case, when token is
+> passed, this is ok to skip. An alternative, trying to make
+> bpf_object__probe_loading() correctly token aware is worse.
 >
-> Add BPF_MAP_TYPE_ARRAY to the token permission mask for these three
-> subtests so their skeletons can load successfully.
->
-> This is distinct from the libbpf probe issue: the skeletons genuinely
-> require ARRAY maps for their global data, not merely for probing.
->
-> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
-> ---
->  tools/testing/selftests/bpf/prog_tests/token.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
-ng/selftests/bpf/prog_tests/token.c
-> index f2f5d36ae00a..1812de87bedb 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/token.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/token.c
-> @@ -1214,7 +1214,7 @@ void serial_test_token(void)
->                 struct bpffs_opts opts =3D {
->                         /* allow BTF loading */
->                         .cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE)=
- | bit(BPF_PROG_LOAD),
-> -                       .maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS),
-> +                       .maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_=
-MAP_TYPE_ARRAY),
->                         .progs =3D bit(BPF_PROG_TYPE_STRUCT_OPS),
->                         .attachs =3D ~0ULL,
->                 };
-> @@ -1225,7 +1225,7 @@ void serial_test_token(void)
->                 struct bpffs_opts opts =3D {
->                         /* allow BTF loading */
->                         .cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE)=
- | bit(BPF_PROG_LOAD),
-> -                       .maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS),
-> +                       .maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_=
-MAP_TYPE_ARRAY),
->                         .progs =3D bit(BPF_PROG_TYPE_STRUCT_OPS),
->                         .attachs =3D ~0ULL,
->                 };
-> @@ -1236,7 +1236,7 @@ void serial_test_token(void)
->                 struct bpffs_opts opts =3D {
->                         /* allow BTF loading */
->                         .cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE)=
- | bit(BPF_PROG_LOAD),
-> -                       .maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS),
-> +                       .maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_=
-MAP_TYPE_ARRAY),
+> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 
-Hm.. ARRAY map is unprivileged, you shouldn't need this. Are you sure
-this test failing for you is not a consequence of the issue you fixed
-in the first patch?
+This is the only patch in the series that makes sense to apply, but I
+don't see this series in patchworks. Can you please resend just this
+one to BPF mailing list? Thanks
 
->                         .progs =3D bit(BPF_PROG_TYPE_STRUCT_OPS),
->                         .attachs =3D ~0ULL,
->                 };
-> --
-> 2.54.0
+>
+> >               return 0;
+> >
+> >       ret =3D bump_rlimit_memlock();
+> > @@ -5181,9 +5177,9 @@ bpf_object__probe_loading(struct bpf_object *obj)
+> >                       errstr(ret));
+> >
+> >       /* make sure basic loading works */
+> > -     ret =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", i=
+nsns, insn_cnt, &opts);
+> > +     ret =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", i=
+nsns, insn_cnt, NULL);
+> >       if (ret < 0)
+> > -             ret =3D bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GP=
+L", insns, insn_cnt, &opts);
+> > +             ret =3D bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GP=
+L", insns, insn_cnt, NULL);
+> >       if (ret < 0) {
+> >               ret =3D errno;
+> >               pr_warn("Error in %s(): %s. Couldn't load trivial BPF pro=
+gram. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=3Dy) and/or th=
+at RLIMIT_MEMLOCK is set to big enough value.\n",
 >
