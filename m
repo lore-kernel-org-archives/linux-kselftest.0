@@ -1,130 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204C2365A11;
-	Mon,  8 Jun 2026 11:27:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1574D372EDB;
+	Mon,  8 Jun 2026 12:00:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780918069; cv=none; b=WNja8lUKd+jnX1K3kYlYmJz4xL17csBGDzsA6XIfIW066QGjbWp3yrLhc6jj8EyhXgRWC0dgP2gUEHUX5I5xEF96U3Y/sPhQ+3qUIWgRR78skL7cLYR7X6Kqj+yoxE1+4VAmRUtcwv1k6eysvv7yG1N7JB/BaRiTEfbjeMVcNtY=
+	t=1780920015; cv=none; b=amHH1pZEsxZmi2vhELFGcvrpTr2SKYGinlJy2g7RQnv0jvJ3DSDGW33UVdRzIPCKrYAGj9P2wl5ruXwJ6JdLRxyciYwWL10oTFptsxC05jEWaggZbzepSe4PJGeIHgwVZMCGgMot7hsq+R2ZWj2zxcE7LlzLWybEmPoMS/xm4o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780918069; c=relaxed/simple;
-	bh=1Oepd5ayuqMxAESQdRVsJbhstjko7EEYWtBgr9hkwkc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DKZks8r+SmVnUZUoKZfQTz2b7GIInatwMT1hmiFQHvdIQH/UIE/GsV8ulsRJCP36Xl4NoSkTzR5l7iGWqS9/KaHt//MbJVnVX5cPxxClYlN1Gqd6YOOrsXDrz5SrWd06K5OvzVS3gn4vndV+Rukv0veb6CrTJckcHybfpEIz2eI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DqlpETE2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780920015; c=relaxed/simple;
+	bh=iSUmoylf8/1ygBkTEmCjhBqfVrg1PFhIznDLN/bx3kw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=gyQIw9bmBH8NcjTMRM1YbHqS4/eRcBsQ+CfdwmaH3d18rKDGV9eKRT5uFg3NQvLpvLq/UG6DLamay258n0DR/xhCO/99FpvViX1NKtGCkgUXOXqqARJdKprrP9JlrB8Bt0lgkNJ7neOXYpe81VQarem3Ou+tWqecb6a+CKIsB50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NdsopHfq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DqlpETE2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438841F00899;
-	Mon,  8 Jun 2026 11:27:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NdsopHfq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA6AE1F00893;
+	Mon,  8 Jun 2026 12:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780918067;
-	bh=aWwG3u0Aflc/Lda1tLzKYbhfKzk+y64NfNIO0xuz6x8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=DqlpETE2sC+9/CTV46REFHah6qfKdE+9VXVClVpyTA7UyFkQaLR3rqjYbxKfg3BRH
-	 S457z5AIQ2wen3PR38oQIytG0cvxYEdo2YBwyBliRZycsCic9YetdcOBFnU9cIGCCO
-	 HMrYYlDdtOkjVLt56CBdMDFWdfTvbAMX19QtwWsiBEbVCDLQipbP2o48r3LDF1wlk4
-	 2gAsNO4YwXt/eBJmex5keeJZr8/Ohh+HhwOHdTP4kxx4IApo3G6qFZ59BZlwkJOmvC
-	 DTFaWRacxIL5Ioq516CFVwa5irMFJwWxb7u5dDN5u8EOo4lEVyKCMYeDxp7QqhFFRX
-	 T8nfKxWt8ZCvQ==
-Message-ID: <74d6034b-ca63-419b-9241-81f8eb1f31d7@kernel.org>
-Date: Mon, 8 Jun 2026 13:27:42 +0200
+	s=k20260515; t=1780920014;
+	bh=i4t1rDwmbFC0mDMHdQRS20cjdrug12x5V1MErA96jds=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=NdsopHfq00KU3uY9+9/LkeiqsLWts9dWYorUAsx/9hYIjfnKC+Ar2RgAvslhzQA7O
+	 YPdMxDUwm2yLpX2nVkEj5TXiqi8M7s3bdjwzyud61fK0L+Az/zpiBAfdsuzEkvTNwP
+	 gejSPEfz7lXrzesvO7YHhshDudn0rRboruaT0czBTV98/L3p1rZCpNS/dZrlgmiLr6
+	 0aCD4Y+8FGAL5OaO3w4bPvP3ILKUFqa5wEfhwkPWCLp7B5rJ3eY2RNqgGHSnCeebju
+	 K8BbhW3dyaXO92MpFwYK/kzV52Z2z41ShAU+Mk/8/iS8LEk2dbrazMakIVWXgi+GA8
+	 dBzuXYv9Cky7A==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198563930D69;
+	Mon,  8 Jun 2026 12:00:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: fix ksft_process_madv.sh test category
-To: Sarthak Sharma <sarthak.sharma@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Mark Brown <broonie@kernel.org>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260608103224.344101-1-sarthak.sharma@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260608103224.344101-1-sarthak.sharma@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v2 0/2] Keep dynamic inner array lookups nullable
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178092001263.1007295.5762213253620384461.git-patchwork-notify@kernel.org>
+Date: Mon, 08 Jun 2026 12:00:12 +0000
+References: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
+In-Reply-To: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, dxu@dxuuu.xyz,
+ eddyz87@gmail.com, john.fastabend@gmail.com, martin.lau@linux.dev,
+ memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ shuah@kernel.org, isolodrai@meta.com, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ stable@vger.kernel.org
 
-On 6/8/26 12:32, Sarthak Sharma wrote:
-> ksft_process_madv.sh currently runs run_vmtests.sh with the
-> mmap category. Update it to run the process_madv category,
-> since ksft_mmap.sh already runs the mmap category tests.
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+
+On Sun, 07 Jun 2026 21:24:12 +0800 you wrote:
+> An ARRAY_OF_MAPS can use an array created with BPF_F_INNER_MAP as its
+> inner map template. The flag allows a concrete inner array with a
+> different max_entries value to replace the template.
 > 
-> This avoids running mmap tests twice and ensures that process_madv
-> tests are run through the kselftest harness.
+> The verifier currently uses the template's max_entries to elide
+> nullness for a constant-key lookup through the inner map pointer. At
+> runtime, the lookup uses the concrete inner array's max_entries instead.
+> The verifier can therefore accept an unchecked dereference even though
+> the runtime helper returns NULL.
 > 
-> Fixes: 6ce964c02f1c ("selftests/mm: have the harness run each test category separately")
-> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
-> ---
->  tools/testing/selftests/mm/ksft_process_madv.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/ksft_process_madv.sh b/tools/testing/selftests/mm/ksft_process_madv.sh
-> index 2c3137ae8bc8..edad2d2d888f 100755
-> --- a/tools/testing/selftests/mm/ksft_process_madv.sh
-> +++ b/tools/testing/selftests/mm/ksft_process_madv.sh
-> @@ -1,4 +1,4 @@
->  #!/bin/sh -e
->  # SPDX-License-Identifier: GPL-2.0
->  
-> -./run_vmtests.sh -t mmap
-> +./run_vmtests.sh -t process_madv
+> [...]
 
-Thanks!
+Here is the summary with links:
+  - [bpf,v2,1/2] bpf: Keep dynamic inner array lookups nullable
+    (no matching commit)
+  - [bpf,v2,2/2] selftests/bpf: Cover dynamic inner array lookup nullability
+    https://git.kernel.org/bpf/bpf-next/c/a3847994b4d2
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-
+You are awesome, thank you!
 -- 
-Cheers,
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-David
+
