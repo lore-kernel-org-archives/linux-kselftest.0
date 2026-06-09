@@ -1,305 +1,118 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF41E800;
-	Tue,  9 Jun 2026 09:27:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3607E3DF012;
+	Tue,  9 Jun 2026 09:50:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780997247; cv=none; b=g2mKU/7PgsB5F5y5nEqmCV2hNQmoDodSbDH90oi84m8GvtYwt/Z0nuv7hbt8S4SOSzjgz0St6uTIFuV+wmIjmTpebUbBmkl1JFJgd6I7UP3734d184CewhKVyFiq0fT2E6zBchCPfahNFFzVaY0aK/PfdvPkoCAvkLdjl9pjx1g=
+	t=1780998638; cv=none; b=rXvyQKupc8GU0U8gDoJPpR4x0BqNSIOXRTBehDr28RjbsznyrH6D5nThPF795w+TtjmSF+JKXv5SJrlFihJSQUO9fLjJLaXYPDsRORSngp0yXwOtgF9vQRWONCmf37QGf7IXmzaFf8DmknBmS+OA9JIBXLNgKV26UJw1IdMWmDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780997247; c=relaxed/simple;
-	bh=fIeE9ivwtPH8PJXqfFRmYEVH+fP3+jTygzmFkgUVIEM=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=DppG5B//uXnWf7CsEr8Qo+FYGGOiQmYsBd8x3UfLy8zxGatUpZDoDjUmsP4gGUKAEXqnyVI/Gn5IrFCVQDsVExyE+KdUQUocfg1N/tyFIZDl2J7FGfFJfCyWTW8ZMEtyXoe91/3MEgMNkXrd73D1YI6C2Wr0NIRD8EEnL7xn3lQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.62])
-	by gateway (Coremail) with SMTP id _____8Dxlnh43CdqaDMSAA--.23790S3;
-	Tue, 09 Jun 2026 17:27:20 +0800 (CST)
-Received: from [10.20.42.62] (unknown [10.20.42.62])
-	by front1 (Coremail) with SMTP id qMiowJCx+8F43CdqjqegAA--.43586S3;
-	Tue, 09 Jun 2026 17:27:20 +0800 (CST)
-Subject: Re: [PATCH v2 2/2] KVM: LoongArch: selftests: Add FPU test case
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: kvm@vger.kernel.org, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260609072715.1005923-1-maobibo@loongson.cn>
- <20260609072715.1005923-3-maobibo@loongson.cn>
- <CAAhV-H64=C8iBRHrE=0rohnGxK1WeWUoG9zWrH9MB1kaw6usww@mail.gmail.com>
- <efe9f60e-6229-06bc-0dc5-cee9c53a2076@loongson.cn>
- <CAAhV-H6VmmFiVy=2d_1bACErUv62L+4+Q6b2xVcxmNjnjv4=sw@mail.gmail.com>
-From: Bibo Mao <maobibo@loongson.cn>
-Message-ID: <856fbbf5-95a7-5118-66ba-57b279d6cbaf@loongson.cn>
-Date: Tue, 9 Jun 2026 17:24:13 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1780998638; c=relaxed/simple;
+	bh=NSbo4P60mH7kPCiwN+iFwZhDiEsPjZ90p0+O0wAGCFI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wr3zqWLrOfPbjgBa1midpUvnd/qvZJ2bAjge5ukhmBkx3k2Yf/PbTGwuwnoC52PRxKF0qLIoRB+7uPlKj/CfGwl0WfMHzH9ck3XyXCPlCq6VcY8siSUVBh5y5c9dIXs430mkoxKpAREquX22Cy7w3LPHeHuypBoGkbiaC/hVFcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=isVl+sB/; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="isVl+sB/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF67B1F00893;
+	Tue,  9 Jun 2026 09:50:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780998636;
+	bh=npatsvxFpEUExBZprH7y6acM3CECn55+b2n/zGR7Ocs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=isVl+sB/Uumf+OqYKOTAI8zicn/UuohcBTKeuFb/0b6hIUMtYcXspbVUAScdcv50U
+	 bFGCilGdEQU0iFaR55wjMHbkQtETqtNBMFuME9TocVTyEXLFqbpNDSPo+7qGHWlPN4
+	 Vo3i9TI1n/e514PM4BEDz6ExnBn4n/Ncc/U6By1RENU5MGOeMXCGduVeH81laDc2xk
+	 BUITZgnj+y5QhtuH+7uQefvkUcxQo43DRBnqosgyxDlRPNCoHeUQ8VM2v8KvMbh2lE
+	 S7x1eXW/wbAASegQ8q0+MBhA8q+z92rG+ZRUkpdntkNuidXUamRJBV1UJzQxQb+nxZ
+	 Te3xK2jlUetMg==
+Message-ID: <835c3fd8-635d-4380-b14e-e468eb0bb136@kernel.org>
+Date: Tue, 9 Jun 2026 11:50:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H6VmmFiVy=2d_1bACErUv62L+4+Q6b2xVcxmNjnjv4=sw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/9] mm/memory: add memory_block_aligned_range() helper
+To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org,
+ nvdimm@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, kernel-team@meta.com,
+ linux-cxl@vger.kernel.org, linux-kselftest@vger.kernel.org, djbw@kernel.org,
+ vishal.l.verma@intel.com, dave.jiang@intel.com, akpm@linux-foundation.org,
+ ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
+ surenb@google.com, mhocko@suse.com, osalvador@suse.de, shuah@kernel.org,
+ alison.schofield@intel.com, Smita.KoralahalliChannabasappa@amd.com,
+ ira.weiny@intel.com, apopple@nvidia.com
+References: <20260605211911.2160954-1-gourry@gourry.net>
+ <20260605211911.2160954-2-gourry@gourry.net>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCx+8F43CdqjqegAA--.43586S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxtF47KrW5Ar1rXry7XryDtwc_yoWfGr45p3
-	yvkF1jgr48tF13Jw10vwn0yrs3Kr18Kr1xXr1IgryUAr1DKFZ7JF1kJrWqgrn5uws5X3WU
-	Zr1fGw43uFy5JacCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Sb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
-	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
-	67AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-	8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWU
-	CwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-	1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-	daVFxhVjvjDU0xZFpf9x07jnUUUUUUUU=
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260605211911.2160954-2-gourry@gourry.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-
-On 2026/6/9 下午5:23, Huacai Chen wrote:
-> On Tue, Jun 9, 2026 at 5:02 PM Bibo Mao <maobibo@loongson.cn> wrote:
->>
->>
->>
->> On 2026/6/9 下午4:40, Huacai Chen wrote:
->>> Hi, Bibo,
->>>
->>> On Tue, Jun 9, 2026 at 3:27 PM Bibo Mao <maobibo@loongson.cn> wrote:
->>>>
->>>> Add FPU test case and verify FPU register get and set APIs, the
->>>> FPU width supports 64/128/256 bits.
->>>>
->>>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
->>>> ---
->>>>    tools/testing/selftests/kvm/Makefile.kvm      |   1 +
->>>>    .../kvm/include/loongarch/processor.h         |   8 +
->>>>    .../selftests/kvm/loongarch/fpu_test.c        | 145 ++++++++++++++++++
->>>>    3 files changed, 154 insertions(+)
->>>>    create mode 100644 tools/testing/selftests/kvm/loongarch/fpu_test.c
->>>>
->>>> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
->>>> index 9118a5a51b89..7d11592b3759 100644
->>>> --- a/tools/testing/selftests/kvm/Makefile.kvm
->>>> +++ b/tools/testing/selftests/kvm/Makefile.kvm
->>>> @@ -224,6 +224,7 @@ TEST_GEN_PROGS_riscv += rseq_test
->>>>    TEST_GEN_PROGS_riscv += steal_time
->>>>
->>>>    TEST_GEN_PROGS_loongarch = loongarch/pmu_test
->>>> +TEST_GEN_PROGS_loongarch += loongarch/fpu_test
->>>>    TEST_GEN_PROGS_loongarch += arch_timer
->>>>    TEST_GEN_PROGS_loongarch += coalesced_io_test
->>>>    TEST_GEN_PROGS_loongarch += demand_paging_test
->>>> diff --git a/tools/testing/selftests/kvm/include/loongarch/processor.h b/tools/testing/selftests/kvm/include/loongarch/processor.h
->>>> index 2324e311180f..981ae7078354 100644
->>>> --- a/tools/testing/selftests/kvm/include/loongarch/processor.h
->>>> +++ b/tools/testing/selftests/kvm/include/loongarch/processor.h
->>>> @@ -82,6 +82,14 @@
->>>>    #define  PLV_MASK                      0x3
->>>>    #define LOONGARCH_CSR_PRMD             0x1
->>>>    #define LOONGARCH_CSR_EUEN             0x2
->>>> +#define  CSR_EUEN_LBTEN_SHIFT          3
->>>> +#define  CSR_EUEN_LBTEN                        BIT_ULL(CSR_EUEN_LBTEN_SHIFT)
->>>> +#define  CSR_EUEN_LASXEN_SHIFT         2
->>>> +#define  CSR_EUEN_LASXEN               BIT_ULL(CSR_EUEN_LASXEN_SHIFT)
->>>> +#define  CSR_EUEN_LSXEN_SHIFT          1
->>>> +#define  CSR_EUEN_LSXEN                        BIT_ULL(CSR_EUEN_LSXEN_SHIFT)
->>>> +#define  CSR_EUEN_FPEN_SHIFT           0
->>>> +#define  CSR_EUEN_FPEN                 BIT_ULL(CSR_EUEN_FPEN_SHIFT)
->>>>    #define LOONGARCH_CSR_ECFG             0x4
->>>>    #define  ECFGB_PMU                     10
->>>>    #define  ECFGF_PMU                     (BIT_ULL(ECFGB_PMU))
->>>> diff --git a/tools/testing/selftests/kvm/loongarch/fpu_test.c b/tools/testing/selftests/kvm/loongarch/fpu_test.c
->>>> new file mode 100644
->>>> index 000000000000..5bccce9db5d0
->>>> --- /dev/null
->>>> +++ b/tools/testing/selftests/kvm/loongarch/fpu_test.c
->>>> @@ -0,0 +1,145 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +
->>>> +#include <stdio.h>
->>>> +#include <string.h>
->>>> +#include "kvm_util.h"
->>>> +#include "processor.h"
->>>> +#include "loongarch/processor.h"
->>>> +
->>>> +struct kvm_fpureg __aligned(64) vector = {{1, 2, 3, 4 }};
->>>> +
->>>> +static void guest_code(void)
->>>> +{
->>>> +       unsigned long val;
->>>> +       struct kvm_fpureg *fp = &vector;
->>>> +
->>>> +       val = csr_read(LOONGARCH_CSR_EUEN);
->>>> +       val |= CSR_EUEN_FPEN | CSR_EUEN_LSXEN | CSR_EUEN_LASXEN;
->>>> +       csr_write(val, LOONGARCH_CSR_EUEN);
->>>> +
->>>> +       __asm__ __volatile__("fld.d $f0, %0, 0\n" : : "r"(fp) : "$f0");
->>>> +       GUEST_SYNC(0);
->>>> +
->>>> +       __asm__ __volatile__("vld $vr0, %0, 0\n" : : "r"(fp) : "$vr0");
->>>> +       GUEST_SYNC(1);
->>>> +
->>>> +       __asm__ __volatile__("xvld $xr0, %0, 0\n" : : "r"(fp) : "$xr0");
->>>> +       GUEST_SYNC(2);
->>>> +
->>>> +       __asm__ __volatile__("fst.d $f0, %0, 0\n" : : "r"(fp) : "memory");
->>>> +       GUEST_SYNC(3);
->>>> +
->>>> +       __asm__ __volatile__("vst $vr0, %0, 0\n" : : "r"(fp) : "memory");
->>>> +       GUEST_SYNC(4);
->>>> +
->>>> +       __asm__ __volatile__("xvst $xr0, %0, 0\n" : : "r"(fp) : "memory");
->>>> +       GUEST_SYNC(5);
->>>> +
->>>> +       GUEST_DONE();
->>>> +}
->>>> +
->>>> +static void run_vcpu(struct kvm_vcpu *vcpu)
->>>> +{
->>>> +       struct ucall uc;
->>>> +       int cont;
->>>> +
->>>> +       cont = 1;
->>>> +       while (cont) {
->>>> +               vcpu_run(vcpu);
->>>> +
->>>> +               switch (get_ucall(vcpu, &uc)) {
->>>> +               case UCALL_PRINTF:
->>>> +                       printf("%s", (const char *)uc.buffer);
->>>> +                       break;
->>>> +               case UCALL_DONE:
->>>> +                       printf("FPU test PASSED\n");
->>>> +                       fallthrough;
->>>> +               case UCALL_SYNC:
->>>> +                       cont = 0;
->>>> +                       break;
->>>> +               case UCALL_ABORT:
->>>> +                       REPORT_GUEST_ASSERT(uc);
->>>> +               default:
->>>> +                       TEST_ASSERT(false, "Unexpected exit: %s",
->>>> +                               exit_reason_str(vcpu->run->exit_reason));
->>>> +               }
->>>> +       }
->>>> +}
->>>> +
->>>> +static bool __vm_has_feature(struct kvm_vm *vm, int feature)
->>>> +{
->>>> +       int ret;
->>>> +
->>>> +       ret = __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL, feature);
->>>> +       return !ret;
->>>> +}
->>>> +
->>>> +
->>>> +int main(void)
->>>> +{
->>>> +       struct kvm_vcpu *vcpu;
->>>> +       struct kvm_vm *vm;
->>>> +       struct kvm_fpu fpu;
->>>> +       struct kvm_fpureg *fp = &vector;
->>>> +
->>>> +       vm = vm_create_with_one_vcpu(&vcpu, guest_code);
->>>> +       __TEST_REQUIRE(__vm_has_feature(vm, KVM_LOONGARCH_VM_FEAT_LSX),
->>>> +                       "LSX not available, skipping test\n");
->>>> +       __TEST_REQUIRE(__vm_has_feature(vm, KVM_LOONGARCH_VM_FEAT_LASX),
->>>> +                       "LASX not available, skipping test\n");
->>> Directly use __kvm_has_device_attr() as the first patch, or use
->>> __vm_has_feature() in the first patch?
->> do you mean something like this?
->>          ret = __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL,
->> KVM_LOONGARCH_VM_FEAT_LSX);
->>          __TEST_REQUIRE(!ret, "LSX not available, skipping test\n");
->>          ret = __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL,
->> KVM_LOONGARCH_VM_FEAT_LASX);
->>          __TEST_REQUIRE(!ret, "LASX not available, skipping test\n");
-> Yes, I think this is a little better, it removes the inconsistency
-> between two patch.
-ok, will do in this way in the next version.
-
-Regards
-Bibo Mao
+On 6/5/26 23:19, Gregory Price wrote:
+> Memory hotplug operations require ranges aligned to memory block
+> boundaries.  This is a generic operation for hotplug.
 > 
-> Huacai
+> Add memory_block_aligned_range() as a common helper in <linux/memory.h>
+> that aligns the start address up and end address down to memory block
+> boundaries.
 > 
->>
->> I am ok with both.
->>>
->>> BTW, I don't think the __ prefix is necessary.
->> There seem no unified rules with kvm selftest cases, I have no idea
->> about this actually. There are __kvm_has_device_attr/__TEST_REQUIRE
->> public APIs and real usages.
->>
->> Regards
->> Bibo Mao
->>>
->>> Huacai
->>>
->>>> +
->>>> +       run_vcpu(vcpu);
->>>> +       vcpu_fpu_get(vcpu, &fpu);
->>>> +       TEST_ASSERT(!memcmp(fpu.fpr, fp, 8), "Wanted 0x%llx from f0, got 0x%llx",
->>>> +                       fp->val64[0], fpu.fpr[0].val64[0]);
->>>> +
->>>> +       run_vcpu(vcpu);
->>>> +       vcpu_fpu_get(vcpu, &fpu);
->>>> +       TEST_ASSERT(!memcmp(fpu.fpr, fp, 16), "Wanted 0x%llx %llx from vr0, got 0x%llx %llx",
->>>> +                       fp->val64[0], fp->val64[1],
->>>> +                       fpu.fpr[0].val64[0], fpu.fpr[0].val64[1]);
->>>> +
->>>> +       run_vcpu(vcpu);
->>>> +       vcpu_fpu_get(vcpu, &fpu);
->>>> +       TEST_ASSERT(!memcmp(fpu.fpr, fp, 32),
->>>> +                       "Wanted 0x%llx %llx %llx %llx from xr0, got 0x%llx %llx %llx %llx",
->>>> +                       fp->val64[0], fp->val64[1], fp->val64[2], fp->val64[3],
->>>> +                       fpu.fpr[0].val64[0], fpu.fpr[0].val64[1],
->>>> +                       fpu.fpr[0].val64[2], fpu.fpr[0].val64[3]);
->>>> +
->>>> +       fpu.fpr[0].val64[0] += random();
->>>> +       vcpu_fpu_set(vcpu, &fpu);
->>>> +       run_vcpu(vcpu);
->>>> +       vcpu_fpu_get(vcpu, &fpu);
->>>> +       sync_global_from_guest(vm, *fp);
->>>> +       TEST_ASSERT(!memcmp(fpu.fpr, fp, 8), "Wanted 0x%llx from f0, got 0x%llx",
->>>> +                       fp->val64[0], fpu.fpr[0].val64[0]);
->>>> +
->>>> +       fpu.fpr[0].val64[0] += random();
->>>> +       fpu.fpr[0].val64[1] += random();
->>>> +       vcpu_fpu_set(vcpu, &fpu);
->>>> +       run_vcpu(vcpu);
->>>> +       vcpu_fpu_get(vcpu, &fpu);
->>>> +       sync_global_from_guest(vm, *fp);
->>>> +       TEST_ASSERT(!memcmp(fpu.fpr, fp, 16), "Wanted 0x%llx %llx from vr0, got 0x%llx %llx",
->>>> +                       fp->val64[0], fp->val64[1],
->>>> +                       fpu.fpr[0].val64[0], fpu.fpr[0].val64[1]);
->>>> +
->>>> +       fpu.fpr[0].val64[0] += random();
->>>> +       fpu.fpr[0].val64[1] += random();
->>>> +       fpu.fpr[0].val64[2] += random();
->>>> +       fpu.fpr[0].val64[3] += random();
->>>> +       vcpu_fpu_set(vcpu, &fpu);
->>>> +       run_vcpu(vcpu);
->>>> +       vcpu_fpu_get(vcpu, &fpu);
->>>> +       sync_global_from_guest(vm, *fp);
->>>> +       TEST_ASSERT(!memcmp(fpu.fpr, fp, 32),
->>>> +                       "Wanted 0x%llx %llx %llx %llx from xr0, got 0x%llx %llx %llx %llx",
->>>> +                       fp->val64[0], fp->val64[1], fp->val64[2], fp->val64[3],
->>>> +                       fpu.fpr[0].val64[0], fpu.fpr[0].val64[1],
->>>> +                       fpu.fpr[0].val64[2], fpu.fpr[0].val64[3]);
->>>> +
->>>> +       run_vcpu(vcpu);
->>>> +       kvm_vm_free(vm);
->>>> +       return 0;
->>>> +}
->>>> --
->>>> 2.39.3
->>>>
->>
+> Update dax/kmem to use this helper.
+> 
+> Signed-off-by: Gregory Price <gourry@gourry.net>
+> ---
 
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+
+-- 
+Cheers,
+
+David
