@@ -1,133 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2135368287;
-	Tue,  9 Jun 2026 10:06:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3FD3AE6F3;
+	Tue,  9 Jun 2026 10:21:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780999606; cv=none; b=TNKzl/fJ8htS+oAR8GG+AspEkzaPqO8OLkJVVUL2WmeXGIMvQ20IOgk5vastaEhpzXZ+WRWz6Hr0rH1Id1arl4l07qii0mMrk5S0shqGQ1Wo1uPBl6kLydWGkdnT2xnXQamVxMJccfdINnzvxRfuc9pZVUYe5F+99AikjkU5n6c=
+	t=1781000504; cv=none; b=MPKI78P4xzmifxCMk8arlS4f98GfaGrS3NyKd9qCVPQ1owfjzS11s7ovwywUoX6j2OfHacku2nBv7QqISwRmjpk3JG1TK/ZkIDzmMqqb0ColP29ZU4F04OXK5XIBjmCNFJqrjXXjI3DMKPcDo0/yONfUlB+AXlL/kXtHmVBY28I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780999606; c=relaxed/simple;
-	bh=6vaEOQWfHt0+Xy+mj8HE6cKKkv5QTIXPQRFdqMKFba4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HRmMFWKUhlWrcN/Kcur53Tx57vX41l9W5bgrkaJBoKBlBOC2KAaJ4dBoYHq9cWE2FLCRCkadwyiilt8z7LqWJn9g+j+9dB+jkKauxtTuciEC3aaVnbJ6/LNTz40etpfic7Xf0H0g5J54GR5jSLi5PUj/Qj1fbs/6Y2tqH+v1BNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f/DNTIH/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781000504; c=relaxed/simple;
+	bh=yTbPOFep//xnXucTDWTRchd9BaLydjBq64dWeX2DbsU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gss35Ke7WD4aN9E39sCgFwh6Mpu6//hgcPVjZlExg2dyCXyN3iX2H8z021FK7PZJIGsYhMxs+OegaPdT3nsh3BKsQzGmxrOH+ny27VISw5HT0wJoO8ScdsHiPY6uz0XbmBWh9JYUri0PU4zHW2iWY0k0arBJ98s8aNqhVWzDlZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=VhOHgGRx; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f/DNTIH/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AF681F00899;
-	Tue,  9 Jun 2026 10:06:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780999604;
-	bh=1ihPSDA/h0Hov+M03ajn9GoQMpAb1QB0ZzEH18p98fI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=f/DNTIH/yx46ZasoAMnEH1+Guyhpk0JvhSaZTirQQds6faAGBzhYHerjrdgUJJXsL
-	 NxG7D2lZanD7LmDxrolbWQwz1dgenNB8N/Sk3ZjzoJtO4qCGocSDl3ka2ajzQwzINO
-	 ufSlpY6Mw0IEcUn5oDqsTUaF8tN4YxQX/omJoDv9avZg2Lj5GgPJLD6hYn4LMbVlWS
-	 qJpz8NsESC8hOvNFqp6R4rjHENMkwgI54a/ADNU+G/qhYgGo93a+0egI/oPX4EKYS2
-	 wQTSOcY/Hqs6YvPvTydGkejXD076sN7iZsS1Aj3OK7xeY3ZHeOFWVwc1J1o3NMWSbe
-	 ZhJct0Cn7Aa9g==
-Message-ID: <b62e071b-9dec-423f-9b4b-e3c34ea0a409@kernel.org>
-Date: Tue, 9 Jun 2026 12:06:38 +0200
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="VhOHgGRx"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=bn99WnrCUkbfsqFDL/rbJh3F4JaVhuaOf+afGyjHySo=; b=VhOHgGRxICUsrfaJgFcDQvvyze
+	d9kU96FibEcIKwwIChvLusQP1uyaxogC376OFW/AuBQ4/sC0tjMisozUvLOInxpkQWTJLqQDxZZJt
+	9DsEt2XtWd4Aguk3T5BvR8TsEhbi1Xln5HAwjm8PsQTTeiP/t4aBmQQCX4h5y3nVJpqslXa9MHvrz
+	JnAK65jAXDj5l0AfPhc+AWdP7ElR7Eds261BEZMueM4J3CH460yFVbQNeSRuPsaDlPGN72UkyZuBG
+	q8od3dNXMFHF/CM/cCdTCYcoDvC2X2ESqPKHy2+WIP6zSy9I6UZ80nZcxpw/yldz+Pku6i63nBnY1
+	roxpDzkQ==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wWtaD-008Kc4-2z;
+	Tue, 09 Jun 2026 10:21:22 +0000
+Date: Tue, 9 Jun 2026 03:21:15 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Lance Yang <lance.yang@linux.dev>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
+	Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, kernel-team@meta.com, Andrew Morton <akpm@linux-foundation.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>
+Subject: Re: [PATCH v8 2/6] mm/memory-failure: surface unhandlable kernel
+ pages as -ENOTRECOVERABLE
+Message-ID: <aifo8HlTY7YBWsrr@gmail.com>
+References: <e3d023f1-ab6e-4424-b304-55f1294480c3@kernel.org>
+ <33ef8821-c809-b7d1-ea77-6e8a07a6e784@huawei.com>
+ <21732071-14a1-486a-951c-34de97b7c757@kernel.org>
+ <4b27467e-935f-5587-2f48-5a794c30a592@huawei.com>
+ <aiKXrovzrNN-gExm@gmail.com>
+ <f1a742be-80cb-4256-b1f9-e50a0f83cb15@kernel.org>
+ <aibN4osY_QF1Rejh@gmail.com>
+ <4953bcee-5a0f-2bc5-7295-63e5e7513e8b@huawei.com>
+ <f2a4d5c8-3d7d-4fc3-8769-66e0c24866fb@kernel.org>
+ <f21d7c12-e6c7-49b0-8d83-c26946d0d4ee@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/9] mm/memory_hotplug: add multi-range hotunplug
-To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org,
- nvdimm@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org, kernel-team@meta.com,
- linux-cxl@vger.kernel.org, linux-kselftest@vger.kernel.org, djbw@kernel.org,
- vishal.l.verma@intel.com, dave.jiang@intel.com, akpm@linux-foundation.org,
- ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, osalvador@suse.de, shuah@kernel.org,
- alison.schofield@intel.com, Smita.KoralahalliChannabasappa@amd.com,
- ira.weiny@intel.com, apopple@nvidia.com
-References: <20260605211911.2160954-1-gourry@gourry.net>
- <20260605211911.2160954-6-gourry@gourry.net>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260605211911.2160954-6-gourry@gourry.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f21d7c12-e6c7-49b0-8d83-c26946d0d4ee@linux.dev>
+X-Debian-User: leitao
 
+On Tue, Jun 09, 2026 at 05:08:14PM +0800, Lance Yang wrote:
+> 
+> 
+> On 2026/6/9 15:09, David Hildenbrand (Arm) wrote:
+> > On 6/9/26 04:39, Miaohe Lin wrote:
+> > > On 2026/6/8 22:15, Breno Leitao wrote:
+> > > > On Fri, Jun 05, 2026 at 11:42:53AM +0200, David Hildenbrand (Arm) wrote:
+> > > > > 
+> > > > > I mean, any such races can currently already happen one way or the other?
+> > > > > 
+> > > > > Really, the only way to not get races is to tryget the (compound)page,
+> > > > > revalidate that the page is still part of the compound page.
+> > > > > 
+> > > > > I'm not sure if that's really a good idea.
+> > > > > 
+> > > > > But my memory is a bit vague in which scenarios we already hold a page reference
+> > > > > here to prevent any concurrent freeing?
+> > > > 
+> > > > No, we don't hold one here in the case that matters.
+> > > > 
+> > > > HWPoisonKernelOwned() runs at the very top of get_any_page(), before
+> > > > try_again: and before __get_hwpoison_page(). The first refcount taken in
+> > > > the whole path is the folio_try_get() inside __get_hwpoison_page(), which
+> > > > runs *after* the short-circuit.
+> > > > 
+> > > > So get_any_page() itself never holds a reference at the check -- the only way
+> > > > one exists is if the caller passed MF_COUNT_INCREASED (count_increased ==
+> > > > true).
+> > > > 
+> > > > So on the MCE/GHES path -- the one this panic option exists for -- no
+> > > > reference is held when HWPoisonKernelOwned() does its compound_head() +
+> > > > PageSlab()/PageTable()/PageLargeKmalloc() checks.
+> > > > 
+> > > > Given that, I'd rather keep it racy and take no refcount than add a
+> > > > tryget + revalidate purely for this check. As I've said earleir, an operator
+> > > 
+> > > Would it be acceptable to add a simple recheck? Something like below:
+> > > 
+> > > retry:
+> > > head = compound_head(page);
+> > > PageSlab()/PageTable()/PageLargeKmalloc() checks
+> > > if (head != compound_head(page))
+> > > 	goto retry
+> > 
+> > Sure. I guess it could still be racy in some weird scenarios where we
+> > free+allocate+free in-between.
+> 
+> +1, sounds reasonable to me. Still racy, but acceptable here I guess :D
 
->  EXPORT_SYMBOL_GPL(offline_and_remove_memory);
-> +
-> +/**
-> + * offline_and_remove_memory_ranges - offline and remove multiple memory ranges
-> + * @ranges: array of physical address ranges to offline and remove
-> + * @nr_ranges: number of entries in @ranges
-> + *
-> + * Offline and remove several memory ranges as one operation, serialized
-> + * against other hotplug operations by a single lock_device_hotplug().
-> + *
-> + * Unlike calling offline_and_remove_memory() in a loop, this offlines *all*
-> + * ranges before removing any of them.  If offlining any range fails, the
-> + * offlining of the ranges processed so far is reverted and nothing is
-> + * removed, leaving every range online as it was before the call.  This gives
-> + * callers all-or-nothing semantics for the offline step, so a failed unplug
-> + * does not leave a device split between online and removed ranges.
-> + *
-> + * Each range must be memory-block aligned in start and size.
-> + *
-> + * Return: 0 on success, negative errno otherwise.  On failure no range has
-> + * been removed.
-> + */
-> +int offline_and_remove_memory_ranges(const struct range *ranges, int nr_ranges)
-> +{
-
-Is there a way to just generalize the logic in offline_and_remove_memory() to
-multiple ranges, making offline_and_remove_memory() then a simple wrapper around
-the new offline_and_remove_memory_ranges(), providing only a single range?
-
--- 
-Cheers,
-
-David
+Ack. I will post v9 shortly with this plus a couple of selftest fixes
+Sashiko flagged.
