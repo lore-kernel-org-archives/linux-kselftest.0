@@ -1,152 +1,117 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C21E6341062;
-	Tue,  9 Jun 2026 15:03:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A78B3914F5
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 15:11:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781017394; cv=none; b=d/ww5GGEfZRuMk067L3M+fIfnP01wWcbIeSQoRlWFk78JyjU18aoxjw4HKfTreQHgZ423qHFmXySKF6Xy9dsJmLXT1Wkg/ZTuX9u5cGpZQoOe1BL0c6vu7VxJJH606/Ba0/rV9sf+p/ihBDv9WFego8qG4Tg4GlYbNHzj7fImEU=
+	t=1781017918; cv=none; b=jEpswz5YunilXyjKYSON4fdhGIjgVxinIsNoTxbTzf+b1am3shAZmxbDVO3JGUc3tOxuqKzbo4SQc83C3dYznSSfbpObNtgwF5sTBd5NRy/ouZPPHJxfHxv/C4P3YsZuAUm6pFFQTVdjeKc+OBsXj4hJQoY/ybeREvFqKSy+7o8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781017394; c=relaxed/simple;
-	bh=MiRFfNkd0l8xm9rBTeYxdgz62An0xG8BJUuDI04X68k=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eLD5zTIanucT7U631f3AgzSl7ssHbj4bP1QlcMuqL/OZdFwwooTVnsl9y9MTlim6U+i2NNitJ2rPcDxa4hGzYUpCuqNCIen9Jlltzq1ilWx7xvwObmqBcgVjSfnhEs0u/UX+crlFBuu+xe8dZclPPefXQgRPn/9yYoq2sSktqC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Sj6g6iKO; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781017918; c=relaxed/simple;
+	bh=2N6jjPNXS8KHkA9ELWAn9DU9QeobkpuL9vsk9iqxtB4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fl8tyeWEd8yR7uLznNgpTBw7z2yXZppwF2ZsmvQeUAWOvXEsC8MzKulRHm4JYARHkmTAGfVNBP9vpz5iAIW+llFV5olZyqkbmZUKYxTso4t+etm84KTXSkJ73nmuqpk/tdIVfQKgWzhZrykTQyrO2lE1wU/cBVtGs/vsUWMr7sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=oMeq8jxa; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Sj6g6iKO"
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="oMeq8jxa"
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-91562bf6c12so692714185a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 08:11:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=+tRO8w3UkDyoMG5FyX5HmJSCvC/l54Z
-	H2fuj5GLZG10=; b=Sj6g6iKOKGIWl2L03zL5fdSxFJveEXPVTfxB3oMVE9a9mkO
-	tRufzLxPqpo/05MxvE/NE1rxZnqn+TzdvZsaybfHtq5ZVVNTY+Vn9UrtpQLCuwnM
-	R1PCgkQtDOTvTWO5H3hm2LW1y2p2SlVdGiM9o9Gh7h0BQ9QOuJAJ152YbfQk=
-Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web2 (Coremail) with SMTP id yQQGZQCXcporKyhqMNgjAg--.44237S3;
-	Tue, 09 Jun 2026 23:03:07 +0800 (CST)
-From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Tue, 09 Jun 2026 23:03:06 +0800
-Subject: [PATCH bpf-next 1/2] bpf: Fix gotox target validation against CFG
+        d=gourry.net; s=google; t=1781017914; x=1781622714; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4JHWQ15ZRzqnNTI4yBH6/uoHMgLXFxEcxAiVyb8DKfs=;
+        b=oMeq8jxaYTIDpX3677iVIffpL40PQNwhQC7oEKFTbUgV/TAGmjp+dKmA2i9Y1OEU+W
+         +L5JoR7wHQANPUBf4lwWVMnVQ2ZQfmcoIkvi3LjOGsJmoXjzhjZDPgsqpou153P9dwr7
+         s8sXGynBp+/1JTpDDk2vp+seRzQW3Jlu2NQcOKaUQTnKAwBHlNoRzUmIUDYjMKf3/SD2
+         fGqigpEZNr2XHtbL3ta40r4OMWst3qoDJdJX0HEcGeHXEjgVWJQuaKS/UjKSBNR0xKn7
+         DRyQLE36k1OG9Vo9eJ41OuCvtYV0yI4ESwHOGUL/aTY8AQo2CQIevQZQHitKSKxBA7+e
+         Vwgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781017914; x=1781622714;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4JHWQ15ZRzqnNTI4yBH6/uoHMgLXFxEcxAiVyb8DKfs=;
+        b=WWbgRqF3WVsg4ymq9qc4ynzRwUC2ZrSiLQbMiWoKw0VqReQ8n4FVYSTI920bEvo85x
+         N4HihP//dDgJloORRikRcIYl2S8qSo6MjUbvOHo77Kisx2mzLwvCn05OyoC6gC8d+Qh3
+         X/7mtHoC2BfNjckvjt2K26RyutNAHfjxwQwGPQMOwjzydmzmd67sL9Eh9zapgNbpgibA
+         tLxd1fyX3nZWwzlj0p4hP20aVkBhVhluZMr3/vd2AfnvRBUjNYCDSv3FrgFSFlZFpw1S
+         jR+OJvmnc0k2VRT+93hbYNK4wzQMzG85na9Y1vNy8rHovN2NIb9Zj0Bo0ddUD30Lr6J5
+         ZiQQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8zf6WvYu5tSXBueq8SY3vcqqSmZ+bLH1PY9IB0gZHiE5vnHjb/bTIPbPyFarXCujmwnyzDFDVs4LJyMbYqq44=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUngTFNX/NCGvlrJsc0RTGfrT1wKKcTJNo8Wp7DQ3rkb+oqLAJ
+	zZ0sTVJulW1oqjXVjUXmdj8ySwFYhbx32O/yWhIYUb9XKdPLi3Oeq0vJVURx1JxklUA=
+X-Gm-Gg: Acq92OG5rJ7zbPrFJQiN4XPzbX7Z0LLzvoR/jkX/JRXnqc7cK7nJI0XiWQIWoPQGdJG
+	P4icvoMU0qqM3suYBmmOi9W9Q44ci7s2oroDoQO4GGjwLxB4v+bIz4JKtxs+2JLgjjfQxnLtNEK
+	yLA6fkgLB/oEE6AmzFaCNubzqctvN8FYsks+x0YNWEzgWDkyZ0X5u0N/ifCxASsZMMRaBZHMRDe
+	qBivooTCPCBQrZ+2SvSecEaWEmLwSIr3RW4UkPUblYIj4vvba4SjhdvLfrKGOFhigBMQP66EDRz
+	A34B1YB5zitLg0EJ0/N16knQ4+x1DujUanFE7VwDGLtD2kMW4+1+MbQlzAMvxlljOcG+LewbkPz
+	uJz1SZhDgdDm61CsY7+oOxhp6NYOs6rsaqfmZMbTSK8nyAK+cMoYgP6BMK9gG7YQiAY5mLKDsgB
+	OYjyAy6DogOG4BadGedpujVGfkgu9OXX/u7Zil3kjN6kxwbEfAaFC13CNt1FLMYc+PKdDSJJizC
+	ngnZeIhAgBIhjZ2Qg==
+X-Received: by 2002:a05:620a:4546:b0:915:cf88:1e3b with SMTP id af79cd13be357-915cf882096mr1578753385a.47.1781017914136;
+        Tue, 09 Jun 2026 08:11:54 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9158a237330sm2207058485a.16.2026.06.09.08.11.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2026 08:11:53 -0700 (PDT)
+Date: Tue, 9 Jun 2026 11:11:51 -0400
+From: Gregory Price <gourry@gourry.net>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com,
+	linux-cxl@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	djbw@kernel.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
+	akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
+	vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
+	mhocko@suse.com, osalvador@suse.de, shuah@kernel.org,
+	alison.schofield@intel.com, Smita.KoralahalliChannabasappa@amd.com,
+	ira.weiny@intel.com, apopple@nvidia.com
+Subject: Re: [PATCH v4 3/9] mm/memory_hotplug: export
+ mhp_get_default_online_type
+Message-ID: <aigtN28XUvHyCSkG@gourry-fedora-PF4VCD3F>
+References: <20260605211911.2160954-1-gourry@gourry.net>
+ <20260605211911.2160954-4-gourry@gourry.net>
+ <eaea4aac-fcba-4f83-99dd-f8289e5556c0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260609-f01-02-gotox-bpf-next-v1-1-b441d63a1559@mails.tsinghua.edu.cn>
-References: <20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn>
-In-Reply-To: <20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Anton Protopopov <a.s.protopopov@gmail.com>, Shuah Khan <shuah@kernel.org>, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781017389; l=2707;
- i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=MiRFfNkd0l8xm9rBTeYxdgz62An0xG8BJUuDI04X68k=;
- b=H5uDYOZplt+pr3wJDSReTLtLvItFa1gkIhTugTAnN6Knzf3wQgSr7cb3p9tGTfczIJSYOoxVX
- zoji/DVwbVxCPv2vWDnlbK4wGu0G3hcctNZPU6qzOb/c92BdEOwEDtr
-X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
- pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:yQQGZQCXcporKyhqMNgjAg--.44237S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF4xWFyDuFW3KryxZr43ZFb_yoW5Xr17pa
-	10q3sxtFWkCFZ7WrnxAF4UAr13KrW8K3y5CrWxCw10yw45tr98JF4rWF9IvF9IyF1S9r1I
-	vF4jvw45K3yUAFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPl1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
-	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUXVWUAwAac4AC62xK8xCEY4
-	vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-	7VCjz48v1sIEY20_GrWkJr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
-	1lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r1q6r43MxkIecxEwVAFwVW5WwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6c
-	x26r4rKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2Iq
-	xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
-	1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY
-	6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-	AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
-	pf9x0Jjoq2NUUUUU=
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQENA2ony4GgqwACsA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eaea4aac-fcba-4f83-99dd-f8289e5556c0@kernel.org>
 
-CFG construction records the modeled gotox target set in
-insn_aux_data->jt. It includes INSN_ARRAY maps based on whether the map
-target is in the current subprog. check_indirect_jump() later validates and
-follows the current PTR_TO_INSN register's actual INSN_ARRAY map. The
-verifier does not check that targets copied from that map match the targets
-that CFG construction modeled for this gotox instruction.
+On Tue, Jun 09, 2026 at 11:52:21AM +0200, David Hildenbrand (Arm) wrote:
+> On 6/5/26 23:19, Gregory Price wrote:
+> > Drivers which may pass hotplug policy down to DAX need MMOP_ symbols
+> > and the mhp_get_default_online_type function for hotplug use cases.
+> > 
+> > Some drivers (cxl) co-mingle their hotplug and devdax use-cases into
+> > the same driver code, and chose the dax_kmem path as the default driver
+> > path - making it difficult to require hotplug as a predicate to building
+> > the overall driver (it may break other non-hotplug use-cases).
+> > 
+> > Export mhp_get_default_online_type function to allow these drivers to
+> > build when hotplug is disabled and still use the DAX use case.
+> > 
+> > In the built-out case we simply return MMOP_OFFLINE as it's
+> 
+> Ah, you mean without CONFIG_MEMORY_HOTPLUG
+> 
 
-This lets one gotox instruction observe two different INSN_ARRAY maps. CFG
-can select a map whose target is in the current subprog. Another path to
-the same gotox can carry a PTR_TO_INSN value from a map whose target points
-at a different subprog. The verifier then accepts an edge absent from the
-CFG.
+Yeah i'll update the commit message, thanks!
 
-On x86, gotox becomes a raw indirect jump in the JIT image. Accepting a
-target not modeled by CFG can enter another subprog without a matching BPF
-call frame and crash when executed. Validation observed a GPF in
-bpf_test_run().
-
-Fix this by requiring every target copied from the actual PTR_TO_INSN map
-to be present in the CFG jump table built for the current gotox
-instruction.
-Reject the program before pushing verifier states for any unmodeled target.
-
-Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
-Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
----
- kernel/bpf/verifier.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ed7ba0e6a9ce..25fa90e731e3 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17124,6 +17124,23 @@ static int indirect_jump_min_max_index(struct bpf_verifier_env *env,
- 	return 0;
- }
- 
-+static bool is_cfg_indirect_jump_target(struct bpf_verifier_env *env,
-+					u32 target)
-+{
-+	struct bpf_iarray *jt = env->insn_aux_data[env->insn_idx].jt;
-+	int i;
-+
-+	if (!jt)
-+		return false;
-+
-+	for (i = 0; i < jt->cnt; i++) {
-+		if (jt->items[i] == target)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- /* gotox *dst_reg */
- static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *insn)
- {
-@@ -17171,6 +17188,15 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
- 		return -EINVAL;
- 	}
- 
-+	for (i = 0; i < n; i++) {
-+		if (!is_cfg_indirect_jump_target(env, env->gotox_tmp_buf->items[i])) {
-+			verbose(env,
-+				"gotox target %u from map id=%d is not in the CFG jump table\n",
-+				env->gotox_tmp_buf->items[i], map->id);
-+			return -EINVAL;
-+		}
-+	}
-+
- 	for (i = 0; i < n - 1; i++) {
- 		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
- 		other_branch = push_stack(env, env->gotox_tmp_buf->items[i],
-
--- 
-2.34.1
-
+> > non-destructive.  The internal function can never return -1 either,
+> > so we choose this to allow for defining the function with 'enum mmop'.
+> 
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> 
+> -- 
+> Cheers,
+> 
+> David
