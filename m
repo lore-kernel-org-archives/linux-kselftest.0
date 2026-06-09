@@ -1,33 +1,33 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF410401A14;
-	Tue,  9 Jun 2026 14:44:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C499533F5A0;
+	Tue,  9 Jun 2026 14:55:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.175.55.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781016255; cv=none; b=N46bvgR/ZGAkWe8YTePV03SgoTGPQm3741BzNWD6HctIyjZMZxMYuJD6ZO/7SCzVurzz7QByXYlxLbI826hRC6shvPW9HsO9vstO/qYJpfqfIgHsUyDCFoIB7tI55Mao+PcK18Qk2I6IevMANETG9FaXO/f7m1COC8r1Eary+fU=
+	t=1781016959; cv=none; b=jlYbwW3lDvd57Tr2+H9U8rbrDpNuug17Z6mHm3/CeAlS3ofI6VPNHZugYUoYVVn2rUq3Gey4c/D2PM3QhIlcWA+mZtLzZLaxqLCfJ+rQAPvrLVydg5TlFXlHqv+E3FRmQGUBWVhiK6AqsBjIRS0eARpWObrAW6QxJsnSWokeIgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781016255; c=relaxed/simple;
-	bh=mg1wm2aBlxY1HNYDtkr9Bs+r/1HT2sfOznftFJVgEPw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KMuvGcMORWi+ftXAmW5Q1ybyMssqxSwFcMGkzbwsazaSlkSsnWi+go9ac6YtsK2wONiiHVuu2AUtdeYfY0RZBvOab0BAiO1Ce6w16A4ef7gxCnrGadXmK1yprjbKf5ePuEb0d1vcE4IgIxXOumVDZ+PXeoNZ0J3JDuNsOE8d5s0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=q3ptnSgH; arc=none smtp.client-ip=13.75.44.102
+	s=arc-20240116; t=1781016959; c=relaxed/simple;
+	bh=OkWYuxTB9G6Mjp2u4ScYGrLXonSUh1c0jfaAzDcMuIQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=BHNDzMU5Yte5Ce/C/Sy2/1d03MLJFaDsRQpJSVfJxTf5Nlz5AuA7B5O78+uMztkeEhuIE6rBJxpogZpNp0eYz5Py54pNtQuVMQXdsQz6MuhhtirInSuSIrElDiF8g4Tu8Qj5uGvIjgTmwr3pBfZ3F6fmkx7tuV/HqcD1WzcoJJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=VCaYB++S; arc=none smtp.client-ip=52.175.55.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="q3ptnSgH"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="VCaYB++S"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
-	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	To:Cc; bh=wwHIALP3qo8/ByBe+wR6z0FuRRAUNDQbqHVYy/rE90Q=; b=q3ptnS
-	gHJRXmXZ7eYxZJZx3XkBxE4HOvlaw72Fr6eeelTZ/0oLNo2E0e4hejZ7QhwukdAw
-	Pi7UtfqCAMTai3aenLWoJdHyXzywqmVKDKzTtfh5nj+IcxavYIL5WZKfGUPsMK7X
-	iCi5F9QcxRTk8RZVaEe0cLeQrmrgzcc+EzSV0=
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=jL/9+s3Pr094UNG1PalCQW0wDlNELr8
+	stMh7twBcJT0=; b=VCaYB++SpACJv2SmAtJj0R+ZxEmLEa8H12uOzOcyPHpGaQU
+	2ekjwO6fuvP8jkb+iGFTJ4OC825NQXSCNCrVZzf4V5SE6DNEutTWqfP9u8XQhNqc
+	Yx4zPWHAfFpkp2QXgXm+hsO0Ndtc/r2Wrc7aOr1PW7JyFkchBS6CAvWIYuMo=
 Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web4 (Coremail) with SMTP id ywQGZQDn+6CpJihq+OUeAg--.58007S2;
-	Tue, 09 Jun 2026 22:43:53 +0800 (CST)
+	by web5 (Coremail) with SMTP id zAQGZQBXEMBqKShqQodBAg--.40025S3;
+	Tue, 09 Jun 2026 22:55:39 +0800 (CST)
 From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Subject: [PATCH bpf-next 0/2] bpf: Enforce BTF pointer write checks for
- global args
-Date: Tue, 09 Jun 2026 22:43:49 +0800
-Message-Id: <20260609-f01-04-btf-writable-arg-v1-0-f449cd970669@mails.tsinghua.edu.cn>
+Date: Tue, 09 Jun 2026 22:55:18 +0800
+Subject: [PATCH bpf-next 1/2] bpf: Reject scalar addition from untrusted
+ memory
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -36,81 +36,79 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKYmKGoC/yWM0QrCMAwAf2Xk2UA2pEx/RXxo2nRGpI6008HYv
- 1v18TjuNihiKgXO3QYmLy36zA36Qwfh5vMkqLExDDQ4cnTCRD3SEbkmfJtWzw9BbxM6z5GjG6O
- EEVo9myRdf+cL8Jwwy1rh+jdl4buE+h3Dvn8ApHBJT4UAAAA=
-X-Change-ID: 20260609-f01-04-btf-writable-arg-6abdbd68dec8
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
+Message-Id: <20260609-f01-03-scalar-add-bpf-next-v1-1-e6212e274155@mails.tsinghua.edu.cn>
+References: <20260609-f01-03-scalar-add-bpf-next-v1-0-e6212e274155@mails.tsinghua.edu.cn>
+In-Reply-To: <20260609-f01-03-scalar-add-bpf-next-v1-0-e6212e274155@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, 
  Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Yonghong Song <yonghong.song@linux.dev>, Shuah Khan <shuah@kernel.org>, 
- linux-kselftest@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+ John Fastabend <john.fastabend@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781016235; l=1624;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781016941; l=1303;
  i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=mg1wm2aBlxY1HNYDtkr9Bs+r/1HT2sfOznftFJVgEPw=;
- b=p6CuBrB5hGtCSNpUozCb3lKnKnNCYqxb2J+lclLJZqR94ZkURbqh6XxcxFkmfJLSQdxzxXkmW
- fJxRcb65rDaC8pC1h5s8koz2OU++YHi+5AI3DpLzW4HgCo494afNpSu
+ bh=OkWYuxTB9G6Mjp2u4ScYGrLXonSUh1c0jfaAzDcMuIQ=;
+ b=IKboBUhVYFvvszz9aYxo8sG+f5c7yqxBFIE8SsPan0HyMh9ajvSmk+kfztjbDMcHkzWV29kbG
+ zaswRMCqsZYCIv9f6Qb1xwvtZz9epBtezwkbNK0R0aGBVVRF2PVcpSR
 X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
  pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:ywQGZQDn+6CpJihq+OUeAg--.58007S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ary8Gw4DCrWDXw1kXrWkJFb_yoW8Wr43pF
-	1Fgry3KrWUAan2kasFya4jgayYqr4kGFy3GFsFyr1ayFs3GF1DGrWIga4DZFyYqrn5W3yk
-	WrWqqr9xWa1UGFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+X-CM-TRANSID:zAQGZQBXEMBqKShqQodBAg--.40025S3
+X-Coremail-Antispam: 1UD129KBjvJXoWrZryxGw4rtFyrGr4UKw4kJFb_yoW8JrWkpr
+	4kWr9Fqr4DAFW7uasrZF4jvFyYga1rtw4rCa15A34xt3WDJFy0qF47Ka47XrZ0yF40va18
+	tFyYvayj9ay7AaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
-	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
-	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
-	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
-	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Av
-	z4vE14v_Xryl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
-	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-	JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-	v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU0hSdPUUUUU==
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgMNA2onzACbaQAAs8
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
+	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
+	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
+	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xS
+	Y4AK67AK6ry5MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
+	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+	AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8I
+	cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
+	4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUIKZXDUUUU
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgINA2onzACdTQADsc
 
-check_mem_reg() verifies both read and write access when a caller passes
-memory into a global subprogram. For PTR_TO_BTF_ID callers,
-check_helper_mem_access() currently always checks the access as BPF_READ.
+scalar += rdonly_untrusted_mem reaches adjust_ptr_min_max_vals() with the
+pointer as the source register. The untrusted PTR_TO_MEM case returns there
+without updating the scalar destination, leaving stale verifier state.
 
-That lets a tracing program pass a task_struct field pointer to a global
-subprogram argument typed as writable memory. The direct field store is rejected
-with "only read is supported", but the callee is validated with a generic
-writable PTR_TO_MEM argument and can store through it.
+Reject that addition before the early return. Pointer += scalar remains
+handled by the existing untrusted-memory rule.
 
-Forward the requested access type into the PTR_TO_BTF_ID helper-access path and
-add verifier coverage for the global-subprogram argument case.
-
-Validation (tested on bpf-next 8496d9020ff3):
-
-  Without this series:
-    direct BTF field store rejected with "only read is supported";
-    global-subprogram candidate loaded, attached, and runtime-confirmed.
-
-  With this series applied:
-    direct BTF field store rejected with "only read is supported";
-    global-subprogram candidate rejected with "only read is supported".
-
+Fixes: f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
 Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
-Nuoqi Gui (2):
-      bpf: Enforce write checks for BTF pointer helper access
-      selftests/bpf: Cover writable BTF field global subprog args
+ kernel/bpf/verifier.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- kernel/bpf/verifier.c                                 |  2 +-
- .../selftests/bpf/progs/verifier_global_ptr_args.c    | 19 +++++++++++++++++++
- 2 files changed, 20 insertions(+), 1 deletion(-)
----
-base-commit: b9452b594fd3aecbfd4aa0a6a1f741330a37dab7
-change-id: 20260609-f01-04-btf-writable-arg-6abdbd68dec8
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c8d980fdd709..c6b350f9585a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -14823,6 +14823,14 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+ 				 * This is legal, but we have to reverse our
+ 				 * src/dest handling in computing the range
+ 				 */
++				if (opcode == BPF_ADD &&
++				    base_type(src_reg->type) == PTR_TO_MEM &&
++				    (src_reg->type & PTR_UNTRUSTED)) {
++					verbose(env, "R%d tried to add from %s to scalar\n",
++						insn->dst_reg,
++						reg_type_str(env, src_reg->type));
++					return -EACCES;
++				}
+ 				err = mark_chain_precision(env, insn->dst_reg);
+ 				if (err)
+ 					return err;
 
-Best regards,
---  
-Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+-- 
+2.34.1
 
