@@ -1,290 +1,148 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C354ADD86
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 16:57:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE964ADD81
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 17:01:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781024263; cv=none; b=r9bNfxp0DN2BSTlz+609e2heEtAp1ve4om/CoSWHzsbHjtuhT2vgMrR+UqTPf5vq+dQ9a+z0SnLhXwFKWiozo2G81STTEiHyQC3yrCurfXMBAFmRPxpt1aW6jjT+lGWT1F6Yt4tzujApneMf9HhWpYPGS9LJGsc7jHeXc8dqr+c=
+	t=1781024472; cv=none; b=H4WhcX3G0QCWub1xVvq/e2R5rbM21rc2Sitomq9WeQ3WovJNfqCULDJzp/DS5wEYX27Ql6TAftlUqSZGOrFU4/TZf6zf7L5yE//w5oq+px0djRvesIaIB+c4+6xg8stA5S7Q2IXzAgzc/aMwF2yvmGBEqEer7UmvimK9i38cM3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781024263; c=relaxed/simple;
-	bh=JZcX41kc/PnmNGyLbsWtRkljYop+3TqNeiSZZrwHmck=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MS7eFOPCwVeFmBFcBYf6BRz/J3nK2fFCQN81bwb5jbdZ2AnTU68K58d4+s+3l90MuXT0QfdALEvA7m3kDrfEUS0fSwCqTl7UCmRsYyid5POAL4oaRejJkBX7X7D5PZZkEU5Nv3Y8mTWBXdUZPo9btiYmGqe5pIFmqzDoDTT3XIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UIK1piuF; arc=none smtp.client-ip=74.125.224.50
+	s=arc-20240116; t=1781024472; c=relaxed/simple;
+	bh=WDmcAROiZzPtamIVySVJ0+BibdW1AO8nRjbT9ZEyGoI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=D7I+m7x2NGVA9Ae6iB7/b+J99fqLoPG9JPOM8QiHSfA5ECk5GiQ3ovJY/Zo8d6hkD1Eiycu2TKNYS3O+o5borCTEct6VM/djIjWkhyYJ5+zo5/g0HcdbkDboqEtmNJc2pjLFuO45I8jwj7B6aftdhtT1nBuAdDRXLXngGE4CKdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JE1KJOEi; arc=none smtp.client-ip=74.125.82.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UIK1piuF"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-66061993294so6092914d50.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 09:57:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JE1KJOEi"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-3074adb8fcaso10125321eec.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 10:01:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781024261; x=1781629061; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=av7EYFBoj6gq1ZvLp6d893SbwiyvMCDkkTCv0M4AutE=;
-        b=UIK1piuF1PzV/1g9rsMp2cDSLJyyX8YMAM6K5fC4Un4kAvMjLeVHS8Srd9M+B8GUlj
-         O1tF/YuXyY/dKf+tsI0OaLMNFWO5Yfolvl2mA8jLgOPaExHB22gpNG3KUsiQAXYUQfh3
-         AVkaVkXMCKJDgC6/ryp3MNvaR++cCVBq4tP4++qpdYqKU4fP+BTT0V8E+/gWQp1zj+0i
-         zhSL3SgiZ3zGXwGdl/KVKRTRwMKX9oXkPNDd5xvl1GcriZ2oZNUdWq2wpk7WWlb3NjdI
-         iq+SdjbfrUFnl/JLyV3QzN52GDEkZRLzpoa0s4vxkKoWSdAO/tiw0yqo22c9+0uS59Rf
-         W4yQ==
+        d=gmail.com; s=20251104; t=1781024470; x=1781629270; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nN5MW2PnNv4yAQd89c4hNRm4nd60DU2qj0yVzLTHfgQ=;
+        b=JE1KJOEieOOlKJGRgX8eiMzTvNK+/DFOwma9VrfuMe1zXZ6xoa94jINYcgeBaghl+Z
+         xwq38GjAvk3k42bxWycQVSF9XDh6u/Mi0YbE2sDoXWnPgYxcfEeQEAgpGhuxzY9O6oMG
+         evJn4b3p6EueErSsuo+fRG4L0HGpY5zSPrl5UnJ+X6hjWkbeX4QoGD/GoYPge+6sD7BU
+         jC5I6VGeA0o+PfRWCON9itDnpNUQgXqEH6td4lgMckEkK5v20B4Jq1CUmhJnHE7uX2mh
+         v2kzXmE4SNyhDeRH6FN7eutwdAQg9VG13fi//W7rtLFqUh75CXaF0HjdQ9wCycShyZto
+         qWqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781024261; x=1781629061;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=av7EYFBoj6gq1ZvLp6d893SbwiyvMCDkkTCv0M4AutE=;
-        b=BXjMjXfReKkpIaxiKwu4eEkgoMNZ9bxVD4bq5cLL+qRn4kv7sv6RW03JTqZb+h7i2W
-         yXK1vy5kZqpz8HKtVlUeL0lXgygff0DzJqc69SfbDLHGazpUqG43GmYpdsP7FTsNfdu7
-         /yn4EFxZp8+iDmc2qKpKTo0tQr+bB6zmUDKDqIdTqaDLgu3469pvRO/nfHhC/immKYu7
-         i/8paA+ahE97wKMWC2Reajtq3xzSHThwCiEc7L3jadBJEo5Rt7ra6hyroIlCNijZRpdd
-         kHKISx4lFAfGi8a0JQ+3kPg4L+971CEU00+aZBH/me3nvW6pJ5ON0P11H1VbLR8hKFP0
-         u0+A==
-X-Forwarded-Encrypted: i=1; AFNElJ8sBH274TQ92LwWghh9TiudlksDi/hwq/C1cTukQsbC6b+TbWOrSrRqI7u1Qs5zX4oWKcaBR4SbJlFrDD7oyxU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxzf27sTCbSJBex09QXN4de4oiTbqi9TR26/WNd6ZZ/C96A2z4t
-	PDDilj6DH1yu3dGMlnydWXmSQpYPRuHKaOk2DlHYqlP4hIDCT+CGa/Yc
-X-Gm-Gg: Acq92OGdQNtDhQIaQhhOvQxjpQ5lMAaOr75gLKhCGqd9X2YX81uWKNZQ54MTVtd5BPh
-	Bb/z7OqK2aX3IwWjrqGlO3vAggA5TBqT3xGzumLVPJDN/yLbVQ1CLuftMMoznZ1+yW6zxQiImCW
-	s9i2noBO+QRi87maGXVb2kMEL5Ouv0FliZ9mVwyu0IlzsWdD/UDUdiEPSbGfYhyEHAujTqJ3IWu
-	1/T3m94v1hVmWdVJw/kn7sBoXzp8S7qJ85YbMWUUPmPdqdjOQnzag+njKgZU2cP3tnqKxes+lIF
-	S59bRCnwahovI4/t8oqqnG4YDX1+PRMZMpZ5qOsVdlVMPNpofiLil9rcdt7d00kVxg+M7+9tqeQ
-	cTax4FehVhjDL/ujtPFvPqHXJY9TmyDB+E8PWGV0lZ+J1wVK7AVQpvl7AQt/PqxyWdqqAhRWbKa
-	7yT3aGgM4k2yuqxuilfMEzPIaAN7DYWx4cXGGZ
-X-Received: by 2002:a05:690c:710a:b0:7bd:5579:185a with SMTP id 00721157ae682-7ed0c80a062mr196768697b3.25.1781024260523;
-        Tue, 09 Jun 2026 09:57:40 -0700 (PDT)
-Received: from houminxi ([23.133.88.228])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7ea215825d2sm99814537b3.16.2026.06.09.09.57.31
+        d=1e100.net; s=20251104; t=1781024470; x=1781629270;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nN5MW2PnNv4yAQd89c4hNRm4nd60DU2qj0yVzLTHfgQ=;
+        b=MHxcBiC70mkkUHXpztbIRG7aV5w2MkDP8RI79sv67b7H5R2lnjWeJDdOe7tjGerYeg
+         jfQ+mzX7KebscqHLBje/ZmPwW4kkZWoDQpRnTHUHxPV3uy9wzdkeBZFKD1TtFNoQUgq9
+         i2zA4KgENv/fchRDUS60ye8z1Lg1p3rZ6hldZmd7nJ6vx8hOA8AsGlJsl5z788krIOxb
+         znisJWdfqn5qC2ztJGWfmEQJtXS5r2fArrTG5yeMIbqzqV5MYoiCVziQFXAz17Ps4SU3
+         v8eIBn8saF5SclN0/O5s4Qb+Tdmj+toFtKLgCyTjo6AyeVSfkNNiCVfQcsYawGHd+aV6
+         mrgg==
+X-Forwarded-Encrypted: i=1; AFNElJ8emx0h7rVMWnU56UbDll/LwZomraODxZeDIltN4sexFTJ3S23sBNocSxL0+rGbQCSTAgl+QxFEgYk6E7wMzSo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1fuQY0n8cDRZsaaH/4OfKxFYIIocjIdqz9Kl4oxhnJHXdnoNq
+	j3ZqaSzN0z0gGi+a+SuJDU8pcN6akHxitXpaFDEprbRh14v4ntyOrQg3
+X-Gm-Gg: Acq92OED11s+vrzKwVsmaF/OKcABbDlrteSolkPd5MMgzrMsAI6hXR4EhshQBfLxeHP
+	vH0mwNKQ/SkIYvuSUVw1iMx+RN1ggwj2cZPXwjbP7/xOKv2gXyiBYka+utHNPOd1V0oDe8LhMKq
+	LDD1rsdhNmwvsWkve6XAnn8O/FayC7GORa64OC5VHyHj10FElXZJo2hwFVLOqZ/BxAsEDCJI0uG
+	tnINtJUv3dAcKYx5q548/2Nps+tb75MSwmf6op4b+K8ailoeulpJX+/rbvV2qPrCLTxYyPuAIm6
+	k8N5Z5vRLDUaP7Z8Uj7tgnlx58G+dW/jZMjq4rPz8Pu16efkdxJ7+gXs/tlJH4Ay8jRyDutyeFj
+	SX7oA7UxR15dU0g97n7YEC8D7fK1ur6l7Y6+jIT2+vq05CWTi+TnieIARuUBkjHOmSSKfxB39KF
+	ZtYtMGvpAcYW/CGFQuklEShvRyx9PmzaxiBk/G6aM7HYNQeBd21TJxkDkykhkgyFssL4i5Z3iG8
+	y6m4aCWC4ry0o91vVY=
+X-Received: by 2002:a05:7301:1009:b0:2f2:32bc:787d with SMTP id 5a478bee46e88-3077b1f31f7mr11653007eec.23.1781024469439;
+        Tue, 09 Jun 2026 10:01:09 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:bc91:a683:c279:a106? ([2620:10d:c090:500::3:1322])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074df191d0sm31809976eec.21.2026.06.09.10.01.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 09:57:40 -0700 (PDT)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: aconole@redhat.com,
-	echaudro@redhat.com,
-	i.maximets@ovn.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	dev@openvswitch.org,
-	linux-kselftest@vger.kernel.org,
-	amorenoz@redhat.com,
-	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH net-next v2] selftests/net/openvswitch: add flow modify test
-Date: Wed, 10 Jun 2026 00:57:25 +0800
-Message-ID: <20260609165725.107484-1-houminxi@gmail.com>
-X-Mailer: git-send-email 2.54.0
+        Tue, 09 Jun 2026 10:01:09 -0700 (PDT)
+Message-ID: <c6cf40ef2957b6b2acf8820bce10becda20d9dfd.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Reject scalar addition from untrusted
+ memory
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, John Fastabend	
+ <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
+ Liu	 <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa	
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Tue, 09 Jun 2026 10:01:07 -0700
+In-Reply-To: <20260609-f01-03-scalar-add-bpf-next-v1-1-e6212e274155@mails.tsinghua.edu.cn>
+References: 
+	<20260609-f01-03-scalar-add-bpf-next-v1-0-e6212e274155@mails.tsinghua.edu.cn>
+	 <20260609-f01-03-scalar-add-bpf-next-v1-1-e6212e274155@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add mod_flow() and the mod-flow CLI command to ovs-dpctl.py, exercising
-OVS_FLOW_CMD_SET. Add test_flow_set which first modifies an existing
-flow with new actions and verifies the change via traffic, then modifies
-the same flow without actions and verifies the kernel handles the
-no-actions case gracefully.
+On Tue, 2026-06-09 at 22:55 +0800, Nuoqi Gui wrote:
+> scalar +=3D rdonly_untrusted_mem reaches adjust_ptr_min_max_vals() with t=
+he
+> pointer as the source register. The untrusted PTR_TO_MEM case returns the=
+re
+> without updating the scalar destination, leaving stale verifier state.
+>=20
+> Reject that addition before the early return. Pointer +=3D scalar remains
+> handled by the existing untrusted-memory rule.
+>=20
+> Fixes: f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> ---
+>  kernel/bpf/verifier.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index c8d980fdd709..c6b350f9585a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -14823,6 +14823,14 @@ static int adjust_reg_min_max_vals(struct bpf_ve=
+rifier_env *env,
+>  				 * This is legal, but we have to reverse our
+>  				 * src/dest handling in computing the range
+>  				 */
+> +				if (opcode =3D=3D BPF_ADD &&
+> +				    base_type(src_reg->type) =3D=3D PTR_TO_MEM &&
+> +				    (src_reg->type & PTR_UNTRUSTED)) {
+> +					verbose(env, "R%d tried to add from %s to scalar\n",
+> +						insn->dst_reg,
+> +						reg_type_str(env, src_reg->type));
+> +					return -EACCES;
+> +				}
+>  				err =3D mark_chain_precision(env, insn->dst_reg);
+>  				if (err)
+>  					return err;
 
-The no-actions path is unreachable from userspace OVS tools (dpctl
-mod-flow requires actions) but reachable via raw netlink. This is the
-code path where Adrian Moreno found a possible kfree_skb of ERR_PTR
-when reply allocation fails after locking.
+Should the fix be like this:
 
-Make parse() skip OVS_FLOW_ATTR_ACTIONS when actstr is None so the
-kernel enters the post-lock allocation branch in ovs_flow_cmd_set().
-After the no-actions set, verify via dump-flows that the flow retained
-its drop action.
+  diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+  index 7d27ba396d32..9c85dd680a46 100644
+  --- a/kernel/bpf/verifier.c
+  +++ b/kernel/bpf/verifier.c
+  @@ -13593,8 +13593,10 @@ static int adjust_ptr_min_max_vals(struct bpf_ve=
+rifier_env *env,
+           * Accesses to untrusted PTR_TO_MEM are done through probe
+           * instructions, hence no need to track offsets.
+           */
+  -       if (base_type(ptr_reg->type) =3D=3D PTR_TO_MEM && (ptr_reg->type =
+& PTR_UNTRUSTED))
+  +       if (base_type(ptr_reg->type) =3D=3D PTR_TO_MEM && (ptr_reg->type =
+& PTR_UNTRUSTED)) {
+  +               *dst_reg =3D *ptr_reg;
+                  return 0;
+  +       }
+  =20
+          switch (base_type(ptr_reg->type)) {
+          case PTR_TO_CTX:
 
-Suggested-by: Aaron Conole <aconole@redhat.com>
-Signed-off-by: Minxi Hou <houminxi@gmail.com>
----
-v1 -> v2:
-  - Add dump-flows verification after no-actions mod-flow (Aaron)
-  - Add docstring to mod_flow() (pylint C0116)
-  - Use f-string in DP-not-found message (pylint C0209)
----
- .../selftests/net/openvswitch/openvswitch.sh  | 77 +++++++++++++++++++
- .../selftests/net/openvswitch/ovs-dpctl.py    | 40 +++++++++-
- 2 files changed, 114 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index 82f066a0ceed..d533decca5c1 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -30,6 +30,7 @@ tests="
- 	drop_reason				drop: test drop reasons are emitted
- 	pop_vlan				vlan: POP_VLAN action strips tag
- 	dec_ttl					ttl: dec_ttl decrements IP TTL
-+	flow_set				flow-set: Flow modify
- 	psample					psample: Sampling packets with psample"
- 
- info() {
-@@ -193,6 +194,23 @@ ovs_add_flow () {
- 	return 0
- }
- 
-+ovs_mod_flow () {
-+	if [ -n "$4" ]; then
-+		info "Modifying flow: sbx:$1 br:$2 flow:$3 act:$4"
-+		ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py \
-+			mod-flow "$2" "$3" "$4"
-+	else
-+		info "Modifying flow (no actions): sbx:$1 br:$2 flow:$3"
-+		ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py \
-+			mod-flow "$2" "$3"
-+	fi
-+	if [ $? -ne 0 ]; then
-+		info "Flow modify [ $3 ] failed"
-+		return 1
-+	fi
-+	return 0
-+}
-+
- ovs_del_flows () {
- 	info "Deleting all flows from DP: sbx:$1 br:$2"
- 	ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py del-flows "$2"
-@@ -300,6 +318,65 @@ test_dec_ttl() {
- 	return 0
- }
- 
-+test_flow_set() {
-+	sbx_add "test_flow_set" || return $?
-+	ovs_add_dp "test_flow_set" flowset || return 1
-+
-+	info "create namespaces"
-+	for ns in client server; do
-+		ovs_add_netns_and_veths "test_flow_set" "flowset" "$ns" \
-+			"${ns:0:1}0" "${ns:0:1}1" || return 1
-+	done
-+
-+	ip netns exec client ip addr add 10.0.0.1/24 dev c1
-+	ip netns exec client ip link set c1 up
-+	ip netns exec server ip addr add 10.0.0.2/24 dev s1
-+	ip netns exec server ip link set s1 up
-+
-+	ovs_add_flow "test_flow_set" flowset \
-+		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
-+	ovs_add_flow "test_flow_set" flowset \
-+		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
-+
-+	local fwd_flow="ufid:00000001-0002-0003-0004-000500060007"
-+	fwd_flow="$fwd_flow,in_port(1),eth(),eth_type(0x0800),ipv4()"
-+
-+	ovs_add_flow "test_flow_set" flowset "$fwd_flow" '2' \
-+		|| return 1
-+	ovs_add_flow "test_flow_set" flowset \
-+		'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return 1
-+
-+	info "verify initial forwarding"
-+	ovs_sbx "test_flow_set" ip netns exec client ping -c 1 -W 2 \
-+		10.0.0.2 || return 1
-+
-+	info "mod-flow with new actions (change to drop)"
-+	ovs_mod_flow "test_flow_set" flowset "$fwd_flow" 'drop' \
-+		|| return 1
-+
-+	info "verify traffic is now dropped"
-+	ovs_sbx "test_flow_set" ip netns exec client ping -c 1 -W 2 \
-+		10.0.0.2 >/dev/null 2>&1 \
-+		&& { info "FAIL: ping should fail after mod-flow to drop"
-+		     return 1; }
-+
-+	info "mod-flow without actions"
-+	ovs_mod_flow "test_flow_set" flowset "$fwd_flow" || return 1
-+
-+	info "verify flow retained drop action via dump"
-+	python3 "$ovs_base/ovs-dpctl.py" dump-flows flowset \
-+		| grep -q "actions:drop" || \
-+		{ info "FAIL: flow not showing drop action"; return 1; }
-+
-+	info "verify drop actions unchanged"
-+	ovs_sbx "test_flow_set" ip netns exec client ping -c 1 -W 2 \
-+		10.0.0.2 >/dev/null 2>&1 \
-+		&& { info "FAIL: ping should still fail after no-actions set"
-+		     return 1; }
-+
-+	return 0
-+}
-+
- # psample test
- # - use psample to observe packets
- test_psample() {
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 3342e295293d..e1ecfad2c03e 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -2702,9 +2702,10 @@ class OvsFlow(GenericNetlinkSocket):
-             self["attrs"].append(["OVS_FLOW_ATTR_KEY", k])
-             self["attrs"].append(["OVS_FLOW_ATTR_MASK", m])
- 
--            a = ovsactions()
--            a.parse(actstr)
--            self["attrs"].append(["OVS_FLOW_ATTR_ACTIONS", a])
-+            if actstr is not None:
-+                a = ovsactions()
-+                a.parse(actstr)
-+                self["attrs"].append(["OVS_FLOW_ATTR_ACTIONS", a])
- 
-     def __init__(self):
-         GenericNetlinkSocket.__init__(self)
-@@ -2738,6 +2739,25 @@ class OvsFlow(GenericNetlinkSocket):
-             raise ne
-         return reply
- 
-+    def mod_flow(self, dpifindex, flowmsg):
-+        """Modify an existing flow in the kernel."""
-+        flowmsg["cmd"] = OVS_FLOW_CMD_SET
-+        flowmsg["version"] = OVS_DATAPATH_VERSION
-+        flowmsg["reserved"] = 0
-+        flowmsg["dpifindex"] = dpifindex
-+
-+        try:
-+            reply = self.nlm_request(
-+                flowmsg,
-+                msg_type=self.prid,
-+                msg_flags=NLM_F_REQUEST | NLM_F_ACK,
-+            )
-+            reply = reply[0]
-+        except NetlinkError as ne:
-+            print(flowmsg)
-+            raise ne
-+        return reply
-+
-     def del_flows(self, dpifindex):
-         """
-         Send a del message to the kernel that will drop all flows.
-@@ -3013,6 +3033,12 @@ def main(argv):
-     addflcmd.add_argument("flow", help="Flow specification")
-     addflcmd.add_argument("acts", help="Flow actions")
- 
-+    modflcmd = subparsers.add_parser("mod-flow")
-+    modflcmd.add_argument("modbr", help="Datapath name")
-+    modflcmd.add_argument("modflow", help="Flow specification")
-+    modflcmd.add_argument("modacts", help="Flow actions",
-+                          nargs="?", default=None)
-+
-     delfscmd = subparsers.add_parser("del-flows")
-     delfscmd.add_argument("flsbr", help="Datapath name")
- 
-@@ -3110,6 +3136,14 @@ def main(argv):
-         flow = OvsFlow.ovs_flow_msg()
-         flow.parse(args.flow, args.acts, rep["dpifindex"])
-         ovsflow.add_flow(rep["dpifindex"], flow)
-+    elif hasattr(args, "modbr"):
-+        rep = ovsdp.info(args.modbr, 0)
-+        if rep is None:
-+            print(f"DP '{args.modbr}' not found.")
-+            return 1
-+        flow = OvsFlow.ovs_flow_msg()
-+        flow.parse(args.modflow, args.modacts, rep["dpifindex"])
-+        ovsflow.mod_flow(rep["dpifindex"], flow)
-     elif hasattr(args, "flsbr"):
-         rep = ovsdp.info(args.flsbr, 0)
-         if rep is None:
--- 
-2.54.0
-
+Instead?
