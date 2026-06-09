@@ -1,103 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B922495537;
-	Tue,  9 Jun 2026 15:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B4443DA54
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 15:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781018919; cv=none; b=gGymeWumkpixc1OyH+tOYPmkWH95jJP4fMPy5icbZnuKb8ahxkz994guYBRPZg9MrVDiFdLjF+i4hiTa18fF/lxGSxyuQIDF/1CjGyQiiTMhuetDZBP+rjWOeG4dCNbYLOaBAkS0X1XfCzcBKf/aeYiTbpzqDSHczqsY/w76fy8=
+	t=1781019351; cv=none; b=Q5p028BBTITHqy8637eFdVCZP3M7DfPXSa/mue+8JmXUoOXaWDTuSUSKlmjt6N60VpBISqJKpSK11gQbEAQbXYMiV3EzQOmrgKemptUKcDeTRydgBEiYLe9DS/T8194R8ZHqJi3FX4t42Sv1LqMUZwmpz5QsArUXOoEzr8YlnsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781018919; c=relaxed/simple;
-	bh=r4dOWXNNvuf8DRRHkfZL18gR3qJn+6PnEAP2O5Cul5c=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=DFkyHd6603FVgXMWvUEM1bU55GwobPayEppR0AaYmDWNguKuS4k4HjgQZScXNODN+vXfMtxBwAquiugu9B9Dqs4/gLs7gvaAXqYzZBEF4tOIGo1UPcM7mz4ASIgrgotqc2OqOO6t9QZbnWgHswzZCy6UtY1RjOkgNJagGV+KnLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V6Oifqkw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781019351; c=relaxed/simple;
+	bh=/TgtOuaONvsUnR+aXOPnuRF8ZAqdZP8tr7TwdKuIOt4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rrVEKByVy+j78rmMmjv3JynhfHJkTXzTpuGoXBY7j1MDcq/ZSo2UtfTs9LqQKqG3jDz+KDTSAFYOU7Iulcu6+yMEHMVwlYoeaC6gZc6naMDNJg+0oUXnesbL3+v+pzfEECWXH5JYRbpM2y8jdOktYfKCAvVVLbhvh+20U+mxpbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=j576Jndo; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V6Oifqkw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C2A1F00893;
-	Tue,  9 Jun 2026 15:28:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781018918;
-	bh=ddZOQzePBcTzXM9ICrRTTs2ZyCVDUIbNbEGt5eqAoS4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=V6OifqkwVk9RRfnI7MU2ApO1r7mIZR82RtRZIAJKtlAnalcqOehXYmKpYH7p199ls
-	 +EwcDmEp8hh0T2xCdzRE2Aaw3pGyEvGP0BpRzxi73M6XbSXrilziITpfN8ZpZaOugB
-	 jr+/SAuLUVcjQGPe22qiE3Y4JGylcYLwdQD0u+SUD+xeF3knb/DuJlcFpbQfo2oITL
-	 kkyhNs3t3+14S7coKP8A4VGBVpWo2KuijITJ2HJcSM4DUYFCMo8EKNU6Aif5hyKXBU
-	 C6bnrOaVoIlQ1blgWZ8JMg3NtrGoP2PmP8lYmDwAXJRsBYBokN4RtVISsgkRKIPMhG
-	 olDDVNUxkeAnA==
-Content-Type: multipart/mixed; boundary="===============3917869089422927326=="
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="j576Jndo"
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-9159da9bba5so410834185a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 08:35:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1781019349; x=1781624149; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fMNVrJ+zylUZaoWsNGMkq8FYpb2q8Its7Sc70f0OoMM=;
+        b=j576JndoQRbFIwumnPu2agxfJTry9gN3fd65VC3AxO6na6iEv2DVDWijxUmR2wpLme
+         EcozNL+7l1PsxsSJcKgwrJeIrVVlsd8htTKxY5UiJrai+IYyjjBiH0WOmYoa98bpLlhD
+         Lk7xBVgMuTbNv84+leerCaS2ruXmo9RiR5wGfemDasCJ8tfGuyDHpP27D1m9STYO2l1g
+         mjyQbInRQcq+I0hFXL2nzCp0TVBXMInEuLKbaktsz5JWGPXn5unH4q7zBhQAFRN/qe3+
+         2tOLCvVtqY5+8S+lj9UF744BrkKLfWWkXBy+M147GFsNR2rzE0a41gCEJdlzQF+9rTcY
+         pETA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781019349; x=1781624149;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fMNVrJ+zylUZaoWsNGMkq8FYpb2q8Its7Sc70f0OoMM=;
+        b=PY7uUMw7DNvrvPbqV1hrTPghak7yNJU3J3JPfv78I5I8267FOPnOnAkZawGBFPsWyO
+         Yjxcc2CCwyV7p42idC9dwp51WLIe0Af6YVdvpqEF7xj9mhBCvz9Rb/aLUeuFsjfxlBYH
+         KBRWor63xKMWLUBZ5u+XLRnEEbqL1ANFL2Gl25emMo7GVU/BzEi4Rg2Ko3LjO5FvEMh0
+         41CFPznxlEX/2jDxQk6jbjR/36ChIwVEPoFcFEBkO9GhSF2riYk8ji7qbnHNZDhtXN7w
+         Gq+YuBpgt4Kjx9n8aTbDxestY47ctLtHGZOnzYm/Jc328TpEkQZbuykTpLig54RoDRl4
+         w1AQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9ZDmQ2ImoJGMR6t1X7jGYLbOlzy2cpEbzMDdU9xaWkRUhUK3JIk02C2PAgE6noymJuTDkBvBvBtmboRiYOu1Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3jKnLErVlHzwNp0GVSg6zemuax7THh55mVss+8lOvVxNmShyy
+	Hk7snomGUxOT5/X0c7UysBN4nj52Ptl2Oz/5txlG7nUsxEqZqdtyb7Z2JUKpR74Dzls=
+X-Gm-Gg: Acq92OGt2HGWuTu1uYnYpGy1omjCUNNS0I2ur6r5QQgE2ZL+v+IUEvKmiyNre6CqpSI
+	ATkDRf1Rpg1W/qJcBlqDVjuRIPNBT//ucWJivRYr0bgQ82FJRIDUEV/It/omf7GoDlJhh5hdViH
+	4E2HdD8CsshYjF5TSDjMghh3GA86t6koaSUdb+ynNAfbPH11s+/ca6Mk1XVHqcKY3zwgKgD0/v+
+	12ZfEUFkhrkzROscfjTks8HJBEbAzrnmaPnZL0fDGNMG0ha2KpPe9ECJ/H8koZml+3vKuak0cB5
+	nSSvlOoJtT87Sq27oYTENLRbBkwNtw6JbcabDA8DdNjImk8t9HIhG3UjLqPEk8YRNW7zE9nFkl6
+	cIeifseZwuzHLUA6jTZN261BpnFsXvQ1I69y+Shk7yU4Qc9YZy+j+g7avab009il/ItA93CqmUA
+	UUvi5EU8KlsAzE6LUl9382ljV88aXlYPDpuLRnghp0Wo1KpYGm45vSa9x8MnGC4Vaf/LdFVgGEP
+	d0RKzBYT/PeHPardw==
+X-Received: by 2002:a05:620a:454b:b0:915:7732:ea7c with SMTP id af79cd13be357-915a9da3801mr3475555585a.43.1781019349028;
+        Tue, 09 Jun 2026 08:35:49 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9158a3bf5f9sm2173658385a.35.2026.06.09.08.35.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2026 08:35:48 -0700 (PDT)
+Date: Tue, 9 Jun 2026 11:35:46 -0400
+From: Gregory Price <gourry@gourry.net>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com,
+	linux-cxl@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	djbw@kernel.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
+	akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
+	vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
+	mhocko@suse.com, osalvador@suse.de, shuah@kernel.org,
+	alison.schofield@intel.com, Smita.KoralahalliChannabasappa@amd.com,
+	ira.weiny@intel.com, apopple@nvidia.com,
+	Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH v4 8/9] dax/kmem: add sysfs interface for atomic hotplug
+Message-ID: <aigy0ut410TItkgB@gourry-fedora-PF4VCD3F>
+References: <20260605211911.2160954-1-gourry@gourry.net>
+ <20260605211911.2160954-9-gourry@gourry.net>
+ <1cb0514b-c753-411e-8ff8-80fa29837441@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <02594c1325f00e261f97f6f75a742a93cfdfc2272afa2a7ac98eba07e4ca4684@mail.kernel.org>
-In-Reply-To: <20260609-f01-03-scalar-add-bpf-next-v1-1-e6212e274155@mails.tsinghua.edu.cn>
-References: <20260609-f01-03-scalar-add-bpf-next-v1-1-e6212e274155@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Reject scalar addition from untrusted memory
-From: bot+bpf-ci@kernel.org
-To: gnq25@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: eddyz87@gmail.com,memxor@gmail.com,john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,gnq25@mails.tsinghua.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  9 Jun 2026 15:28:37 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1cb0514b-c753-411e-8ff8-80fa29837441@kernel.org>
 
---===============3917869089422927326==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, Jun 09, 2026 at 12:26:07PM +0200, David Hildenbrand (Arm) wrote:
+> On 6/5/26 23:19, Gregory Price wrote:
+> 
+> >  
+> > +static int dax_kmem_parse_state(const char *buf)
+> > +{
+> > +	if (sysfs_streq(buf, "unplugged"))
+> > +		return DAX_KMEM_UNPLUGGED;
+> > +	if (sysfs_streq(buf, "online"))
+> > +		return MMOP_ONLINE;
+> > +	if (sysfs_streq(buf, "online_kernel"))
+> > +		return MMOP_ONLINE_KERNEL;
+> > +	if (sysfs_streq(buf, "online_movable"))
+> > +		return MMOP_ONLINE_MOVABLE;
+> > +	return -EINVAL;
+> 
+> Should we try making use of mhp_online_type_from_str()/online_type_to_str()
+> [possibly a nicer exported function for the latter] to avoid duplicating this ...
+> 
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index ed7ba0e6a9ce..514322aca6ed 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -14758,6 +14758,14 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
->  				 * This is legal, but we have to reverse our
->  				 * src/dest handling in computing the range
->  				 */
-> +				if (opcode == BPF_ADD &&
-> +				    base_type(src_reg->type) == PTR_TO_MEM &&
-> +				    (src_reg->type & PTR_UNTRUSTED)) {
-> +					verbose(env, "R%d tried to add from %s to scalar\n",
-> +						insn->dst_reg,
-> +						reg_type_str(env, src_reg->type));
-> +					return -EACCES;
-> +				}
+In patch 6 response i point out adding MMOP_UNPLUGGED
 
-The patch only prevents scalar += untrusted_ptr (BPF_ADD) but fails to
-reject other ALU operations like BPF_SUB, BPF_XOR, and BPF_MUL. This
-allows attackers to trivially bypass the new check by using operations
-like scalar -= untrusted_ptr or scalar ^= untrusted_ptr.
+If we add MMOP_UNPLUGGED as a state that is only use by callers of
+memory hotplug to represent the current state - but not as a valid input
+to memory_hotplug.c - then we can simply this as you request.
 
-When an attacker uses these alternative operations, the code will:
+Although we'll need to add a couple lines to memoryN/state parsing code
+to disallow MMOP_UNPLUGGED as a valid input (otherwise you could
+permanently unplug memory without the ability to get it back... unless
+you want that?  Seems useless to me.)
 
-1. Bypass the new BPF_ADD check added by this patch
-2. Call adjust_ptr_min_max_vals() with the untrusted pointer
-3. Hit the early return for untrusted PTR_TO_MEM in
-   adjust_ptr_min_max_vals()
-4. Return success without updating the scalar's verifier state
-
-This creates the same verifier state desynchronization vulnerability that
-the patch was meant to fix. The scalar register's tracked bounds remain
-stale while its actual runtime value has been manipulated by the pointer
-value.
-
-Can this verifier state desynchronization be leveraged to achieve
-out-of-bounds access?
-
-This concern was raised by sashiko-bot@kernel.org in the v1 review:
-https://lore.kernel.org/bpf/20260609151019.678141F00893@smtp.kernel.org/
-
-The author has not responded to this concern.
-
->  				err = mark_chain_precision(env, insn->dst_reg);
->  				if (err)
->  					return err;
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27215521040
---===============3917869089422927326==--
+~Gregory
