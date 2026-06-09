@@ -1,118 +1,317 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F4031715A
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 09:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C613F58DC
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 09:22:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780996128; cv=none; b=guj6CFTEe0wRsdHaZ/eV2Q+fuQXCQCsbLf82G4wuhkGUDCM9Vp8k3OT86t64jAl+BNGzfyyNQTtc3iLdn+UtsnTqjlxnp3C/ximYviRkllnlwyb3CPvD6T38UMki/24TtLg0Ff3aLQK2Bu7DRAHw1dKWoHHVAhZ6RJjcEroQuFE=
+	t=1780996966; cv=none; b=jNrodTk5yMlSHoRjzNrKHBpQFctkVZCoeus97Noj+B/k6Flk66junKJA3S8l555imXThUvwo3UzlNR18v0LCqsqAh/aKAmUtf7KzVPWW4Vs9Z3fboRDNpUdxMdy5jGlstIN/yXNdneWFdDosr9he6AmaKe/unmmiLR9J1uVfRvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780996128; c=relaxed/simple;
-	bh=ELTIZfPUhLxbEZbkSlSVE+gpbL1zi2Cs3U5SkO7yw9I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D6RNpZmtLCGgz/BY0XPWjntnEwNnaqe3xmazWItmxyXuBuXLLDE0/Ah4lqBNEe6bOxBvaViN3HVi4CM95BEB+VHOYIcFaDLR+jDoInys+JiNrlQ0alNFvIp5tSklZDUF+zRSNvQrRUMY5ID4Zn4KrVfObp0ND+7B7gPEKsygukg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hfr7GTaI; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780996966; c=relaxed/simple;
+	bh=TZCQ8LMfFX1hjuF+mqs7Yth0dBry9uXKk05WVo64elk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FpAmm9LNCJHn/c84qPVTTFaJiackmY/Ht+DkObgGadZesPrvx5F7StLrpWYxuuHzolW4dR1S90yM33D7cm25UsAxJUFsvOWs7kU10RiyP3pUpMMOOC/yUdWL6ZNZL+FCiDgtwtnO+tcHP/M3FTCD/twDxY8m76SIb0E+1i1KSHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fzDr+q6G; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hfr7GTaI"
-Message-ID: <f21d7c12-e6c7-49b0-8d83-c26946d0d4ee@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780996114;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Bk+cuqVkiscfXQOg4Fx57mt0jx9ijz84xEuHbEOrHnY=;
-	b=hfr7GTaIOxEAe5xwodnf8gchpVC+CiIkwRdFShplJcUJFtzPmOK1trlHgkVaZMgy9vt+zM
-	+j/MS1T1gPELGLosMYUNtpIGnqJcb/YWUD5btv+XufH/GnFFMvuwx5Sdpu1v0Rfj92qnKZ
-	GJ7UF+QuxRptHJRUZ9++OfMXio3i5ic=
-Date: Tue, 9 Jun 2026 17:08:14 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fzDr+q6G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E9F41F0089A
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 09:22:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780996965;
+	bh=c4LMKjsoSnrUoLPwR+YaFRzY1COUsWTlvcQuGft7wpI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=fzDr+q6G1zBt7ZlDyUa3IORutO9/xgO3Hhq93s7wE7LGWEDj/23Uk81NoVa4ezxsy
+	 oA849pqNR1GPDNF3kREWsS1vNog0NGkmKVkwdlsn07iFIw67u9Ca+es2UxaotSid4E
+	 CaE7k66Uu+Hle01iaYxrhrRmVNcy29Ob0/CL+yAVK8VG8kFTYehHHFSO7qGqulZpPK
+	 ZimG3DDWdZOeMcMOIHE1d22XTN03BSemwvzg8FfTK4iXVECC/2z+nSUuI0Fz2tkfi+
+	 0mkqARbcqQ74Z67xdk+cu+lVf/oHwUYc/HdKOZSz/s5IEUhCsRW52xyPbojOxCXvwN
+	 PsS33C2sWwbqQ==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-68b90fc6a1dso2932489a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 02:22:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8fRGT8GdSddB7IOHrbvBVn6g+Jl/4iRBx6NyLhTB1QD9yIOKwD7i/5Cy8dLaYt+wfWuDSWoUb6jjdoWGQpJoc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNBsPsaWLMUuBU8JfGXCtmqw+B3h0/VWEslMVnOk/IHYHEVOB4
+	vptZs1U4xzy5QnJ9KnpGKxRsGgXwzvlTAi7cvUKeCFzfA+B1bytkW08LFDrtG4khJKjaxe6332m
+	iAiQO9OavwvnD4L4Q2q2VrrNxjK0vX+M=
+X-Received: by 2002:a05:6402:2348:b0:66f:76c8:f747 with SMTP id
+ 4fb4d7f45d1cf-68ff1935bf4mr8066304a12.6.1780996963654; Tue, 09 Jun 2026
+ 02:22:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v8 2/6] mm/memory-failure: surface unhandlable kernel
- pages as -ENOTRECOVERABLE
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
- Miaohe Lin <linmiaohe@huawei.com>, Breno Leitao <leitao@debian.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, kernel-team@meta.com,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Naoya Horiguchi <nao.horiguchi@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- "Liam R. Howlett" <liam@infradead.org>
-References: <20260527-ecc_panic-v8-0-9ea0cfa16bb0@debian.org>
- <20260527-ecc_panic-v8-2-9ea0cfa16bb0@debian.org>
- <19f968f5-1289-f573-4406-e5c91dcd8923@huawei.com>
- <e3d023f1-ab6e-4424-b304-55f1294480c3@kernel.org>
- <33ef8821-c809-b7d1-ea77-6e8a07a6e784@huawei.com>
- <21732071-14a1-486a-951c-34de97b7c757@kernel.org>
- <4b27467e-935f-5587-2f48-5a794c30a592@huawei.com>
- <aiKXrovzrNN-gExm@gmail.com>
- <f1a742be-80cb-4256-b1f9-e50a0f83cb15@kernel.org>
- <aibN4osY_QF1Rejh@gmail.com>
- <4953bcee-5a0f-2bc5-7295-63e5e7513e8b@huawei.com>
- <f2a4d5c8-3d7d-4fc3-8769-66e0c24866fb@kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <f2a4d5c8-3d7d-4fc3-8769-66e0c24866fb@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260609072715.1005923-1-maobibo@loongson.cn> <20260609072715.1005923-3-maobibo@loongson.cn>
+ <CAAhV-H64=C8iBRHrE=0rohnGxK1WeWUoG9zWrH9MB1kaw6usww@mail.gmail.com> <efe9f60e-6229-06bc-0dc5-cee9c53a2076@loongson.cn>
+In-Reply-To: <efe9f60e-6229-06bc-0dc5-cee9c53a2076@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Tue, 9 Jun 2026 17:23:03 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6VmmFiVy=2d_1bACErUv62L+4+Q6b2xVcxmNjnjv4=sw@mail.gmail.com>
+X-Gm-Features: AVVi8Cfbtd6W9i2TCWm8UoMeiYGOK67cC2Jgx8Nd41KbrV3ATEkurrhpNCNjMpY
+Message-ID: <CAAhV-H6VmmFiVy=2d_1bACErUv62L+4+Q6b2xVcxmNjnjv4=sw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] KVM: LoongArch: selftests: Add FPU test case
+To: Bibo Mao <maobibo@loongson.cn>
+Cc: kvm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jun 9, 2026 at 5:02=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> wrote=
+:
+>
+>
+>
+> On 2026/6/9 =E4=B8=8B=E5=8D=884:40, Huacai Chen wrote:
+> > Hi, Bibo,
+> >
+> > On Tue, Jun 9, 2026 at 3:27=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> w=
+rote:
+> >>
+> >> Add FPU test case and verify FPU register get and set APIs, the
+> >> FPU width supports 64/128/256 bits.
+> >>
+> >> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> >> ---
+> >>   tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+> >>   .../kvm/include/loongarch/processor.h         |   8 +
+> >>   .../selftests/kvm/loongarch/fpu_test.c        | 145 ++++++++++++++++=
+++
+> >>   3 files changed, 154 insertions(+)
+> >>   create mode 100644 tools/testing/selftests/kvm/loongarch/fpu_test.c
+> >>
+> >> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/=
+selftests/kvm/Makefile.kvm
+> >> index 9118a5a51b89..7d11592b3759 100644
+> >> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> >> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> >> @@ -224,6 +224,7 @@ TEST_GEN_PROGS_riscv +=3D rseq_test
+> >>   TEST_GEN_PROGS_riscv +=3D steal_time
+> >>
+> >>   TEST_GEN_PROGS_loongarch =3D loongarch/pmu_test
+> >> +TEST_GEN_PROGS_loongarch +=3D loongarch/fpu_test
+> >>   TEST_GEN_PROGS_loongarch +=3D arch_timer
+> >>   TEST_GEN_PROGS_loongarch +=3D coalesced_io_test
+> >>   TEST_GEN_PROGS_loongarch +=3D demand_paging_test
+> >> diff --git a/tools/testing/selftests/kvm/include/loongarch/processor.h=
+ b/tools/testing/selftests/kvm/include/loongarch/processor.h
+> >> index 2324e311180f..981ae7078354 100644
+> >> --- a/tools/testing/selftests/kvm/include/loongarch/processor.h
+> >> +++ b/tools/testing/selftests/kvm/include/loongarch/processor.h
+> >> @@ -82,6 +82,14 @@
+> >>   #define  PLV_MASK                      0x3
+> >>   #define LOONGARCH_CSR_PRMD             0x1
+> >>   #define LOONGARCH_CSR_EUEN             0x2
+> >> +#define  CSR_EUEN_LBTEN_SHIFT          3
+> >> +#define  CSR_EUEN_LBTEN                        BIT_ULL(CSR_EUEN_LBTEN=
+_SHIFT)
+> >> +#define  CSR_EUEN_LASXEN_SHIFT         2
+> >> +#define  CSR_EUEN_LASXEN               BIT_ULL(CSR_EUEN_LASXEN_SHIFT)
+> >> +#define  CSR_EUEN_LSXEN_SHIFT          1
+> >> +#define  CSR_EUEN_LSXEN                        BIT_ULL(CSR_EUEN_LSXEN=
+_SHIFT)
+> >> +#define  CSR_EUEN_FPEN_SHIFT           0
+> >> +#define  CSR_EUEN_FPEN                 BIT_ULL(CSR_EUEN_FPEN_SHIFT)
+> >>   #define LOONGARCH_CSR_ECFG             0x4
+> >>   #define  ECFGB_PMU                     10
+> >>   #define  ECFGF_PMU                     (BIT_ULL(ECFGB_PMU))
+> >> diff --git a/tools/testing/selftests/kvm/loongarch/fpu_test.c b/tools/=
+testing/selftests/kvm/loongarch/fpu_test.c
+> >> new file mode 100644
+> >> index 000000000000..5bccce9db5d0
+> >> --- /dev/null
+> >> +++ b/tools/testing/selftests/kvm/loongarch/fpu_test.c
+> >> @@ -0,0 +1,145 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >> +
+> >> +#include <stdio.h>
+> >> +#include <string.h>
+> >> +#include "kvm_util.h"
+> >> +#include "processor.h"
+> >> +#include "loongarch/processor.h"
+> >> +
+> >> +struct kvm_fpureg __aligned(64) vector =3D {{1, 2, 3, 4 }};
+> >> +
+> >> +static void guest_code(void)
+> >> +{
+> >> +       unsigned long val;
+> >> +       struct kvm_fpureg *fp =3D &vector;
+> >> +
+> >> +       val =3D csr_read(LOONGARCH_CSR_EUEN);
+> >> +       val |=3D CSR_EUEN_FPEN | CSR_EUEN_LSXEN | CSR_EUEN_LASXEN;
+> >> +       csr_write(val, LOONGARCH_CSR_EUEN);
+> >> +
+> >> +       __asm__ __volatile__("fld.d $f0, %0, 0\n" : : "r"(fp) : "$f0")=
+;
+> >> +       GUEST_SYNC(0);
+> >> +
+> >> +       __asm__ __volatile__("vld $vr0, %0, 0\n" : : "r"(fp) : "$vr0")=
+;
+> >> +       GUEST_SYNC(1);
+> >> +
+> >> +       __asm__ __volatile__("xvld $xr0, %0, 0\n" : : "r"(fp) : "$xr0"=
+);
+> >> +       GUEST_SYNC(2);
+> >> +
+> >> +       __asm__ __volatile__("fst.d $f0, %0, 0\n" : : "r"(fp) : "memor=
+y");
+> >> +       GUEST_SYNC(3);
+> >> +
+> >> +       __asm__ __volatile__("vst $vr0, %0, 0\n" : : "r"(fp) : "memory=
+");
+> >> +       GUEST_SYNC(4);
+> >> +
+> >> +       __asm__ __volatile__("xvst $xr0, %0, 0\n" : : "r"(fp) : "memor=
+y");
+> >> +       GUEST_SYNC(5);
+> >> +
+> >> +       GUEST_DONE();
+> >> +}
+> >> +
+> >> +static void run_vcpu(struct kvm_vcpu *vcpu)
+> >> +{
+> >> +       struct ucall uc;
+> >> +       int cont;
+> >> +
+> >> +       cont =3D 1;
+> >> +       while (cont) {
+> >> +               vcpu_run(vcpu);
+> >> +
+> >> +               switch (get_ucall(vcpu, &uc)) {
+> >> +               case UCALL_PRINTF:
+> >> +                       printf("%s", (const char *)uc.buffer);
+> >> +                       break;
+> >> +               case UCALL_DONE:
+> >> +                       printf("FPU test PASSED\n");
+> >> +                       fallthrough;
+> >> +               case UCALL_SYNC:
+> >> +                       cont =3D 0;
+> >> +                       break;
+> >> +               case UCALL_ABORT:
+> >> +                       REPORT_GUEST_ASSERT(uc);
+> >> +               default:
+> >> +                       TEST_ASSERT(false, "Unexpected exit: %s",
+> >> +                               exit_reason_str(vcpu->run->exit_reason=
+));
+> >> +               }
+> >> +       }
+> >> +}
+> >> +
+> >> +static bool __vm_has_feature(struct kvm_vm *vm, int feature)
+> >> +{
+> >> +       int ret;
+> >> +
+> >> +       ret =3D __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CT=
+RL, feature);
+> >> +       return !ret;
+> >> +}
+> >> +
+> >> +
+> >> +int main(void)
+> >> +{
+> >> +       struct kvm_vcpu *vcpu;
+> >> +       struct kvm_vm *vm;
+> >> +       struct kvm_fpu fpu;
+> >> +       struct kvm_fpureg *fp =3D &vector;
+> >> +
+> >> +       vm =3D vm_create_with_one_vcpu(&vcpu, guest_code);
+> >> +       __TEST_REQUIRE(__vm_has_feature(vm, KVM_LOONGARCH_VM_FEAT_LSX)=
+,
+> >> +                       "LSX not available, skipping test\n");
+> >> +       __TEST_REQUIRE(__vm_has_feature(vm, KVM_LOONGARCH_VM_FEAT_LASX=
+),
+> >> +                       "LASX not available, skipping test\n");
+> > Directly use __kvm_has_device_attr() as the first patch, or use
+> > __vm_has_feature() in the first patch?
+> do you mean something like this?
+>         ret =3D __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL,
+> KVM_LOONGARCH_VM_FEAT_LSX);
+>         __TEST_REQUIRE(!ret, "LSX not available, skipping test\n");
+>         ret =3D __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL,
+> KVM_LOONGARCH_VM_FEAT_LASX);
+>         __TEST_REQUIRE(!ret, "LASX not available, skipping test\n");
+Yes, I think this is a little better, it removes the inconsistency
+between two patch.
 
+Huacai
 
-On 2026/6/9 15:09, David Hildenbrand (Arm) wrote:
-> On 6/9/26 04:39, Miaohe Lin wrote:
->> On 2026/6/8 22:15, Breno Leitao wrote:
->>> On Fri, Jun 05, 2026 at 11:42:53AM +0200, David Hildenbrand (Arm) wrote:
->>>>
->>>> I mean, any such races can currently already happen one way or the other?
->>>>
->>>> Really, the only way to not get races is to tryget the (compound)page,
->>>> revalidate that the page is still part of the compound page.
->>>>
->>>> I'm not sure if that's really a good idea.
->>>>
->>>> But my memory is a bit vague in which scenarios we already hold a page reference
->>>> here to prevent any concurrent freeing?
->>>
->>> No, we don't hold one here in the case that matters.
->>>
->>> HWPoisonKernelOwned() runs at the very top of get_any_page(), before
->>> try_again: and before __get_hwpoison_page(). The first refcount taken in
->>> the whole path is the folio_try_get() inside __get_hwpoison_page(), which
->>> runs *after* the short-circuit.
->>>
->>> So get_any_page() itself never holds a reference at the check -- the only way
->>> one exists is if the caller passed MF_COUNT_INCREASED (count_increased ==
->>> true).
->>>
->>> So on the MCE/GHES path -- the one this panic option exists for -- no
->>> reference is held when HWPoisonKernelOwned() does its compound_head() +
->>> PageSlab()/PageTable()/PageLargeKmalloc() checks.
->>>
->>> Given that, I'd rather keep it racy and take no refcount than add a
->>> tryget + revalidate purely for this check. As I've said earleir, an operator
->>
->> Would it be acceptable to add a simple recheck? Something like below:
->>
->> retry:
->> head = compound_head(page);
->> PageSlab()/PageTable()/PageLargeKmalloc() checks
->> if (head != compound_head(page))
->> 	goto retry
-> 
-> Sure. I guess it could still be racy in some weird scenarios where we
-> free+allocate+free in-between.
-
-+1, sounds reasonable to me. Still racy, but acceptable here I guess :D
+>
+> I am ok with both.
+> >
+> > BTW, I don't think the __ prefix is necessary.
+> There seem no unified rules with kvm selftest cases, I have no idea
+> about this actually. There are __kvm_has_device_attr/__TEST_REQUIRE
+> public APIs and real usages.
+>
+> Regards
+> Bibo Mao
+> >
+> > Huacai
+> >
+> >> +
+> >> +       run_vcpu(vcpu);
+> >> +       vcpu_fpu_get(vcpu, &fpu);
+> >> +       TEST_ASSERT(!memcmp(fpu.fpr, fp, 8), "Wanted 0x%llx from f0, g=
+ot 0x%llx",
+> >> +                       fp->val64[0], fpu.fpr[0].val64[0]);
+> >> +
+> >> +       run_vcpu(vcpu);
+> >> +       vcpu_fpu_get(vcpu, &fpu);
+> >> +       TEST_ASSERT(!memcmp(fpu.fpr, fp, 16), "Wanted 0x%llx %llx from=
+ vr0, got 0x%llx %llx",
+> >> +                       fp->val64[0], fp->val64[1],
+> >> +                       fpu.fpr[0].val64[0], fpu.fpr[0].val64[1]);
+> >> +
+> >> +       run_vcpu(vcpu);
+> >> +       vcpu_fpu_get(vcpu, &fpu);
+> >> +       TEST_ASSERT(!memcmp(fpu.fpr, fp, 32),
+> >> +                       "Wanted 0x%llx %llx %llx %llx from xr0, got 0x=
+%llx %llx %llx %llx",
+> >> +                       fp->val64[0], fp->val64[1], fp->val64[2], fp->=
+val64[3],
+> >> +                       fpu.fpr[0].val64[0], fpu.fpr[0].val64[1],
+> >> +                       fpu.fpr[0].val64[2], fpu.fpr[0].val64[3]);
+> >> +
+> >> +       fpu.fpr[0].val64[0] +=3D random();
+> >> +       vcpu_fpu_set(vcpu, &fpu);
+> >> +       run_vcpu(vcpu);
+> >> +       vcpu_fpu_get(vcpu, &fpu);
+> >> +       sync_global_from_guest(vm, *fp);
+> >> +       TEST_ASSERT(!memcmp(fpu.fpr, fp, 8), "Wanted 0x%llx from f0, g=
+ot 0x%llx",
+> >> +                       fp->val64[0], fpu.fpr[0].val64[0]);
+> >> +
+> >> +       fpu.fpr[0].val64[0] +=3D random();
+> >> +       fpu.fpr[0].val64[1] +=3D random();
+> >> +       vcpu_fpu_set(vcpu, &fpu);
+> >> +       run_vcpu(vcpu);
+> >> +       vcpu_fpu_get(vcpu, &fpu);
+> >> +       sync_global_from_guest(vm, *fp);
+> >> +       TEST_ASSERT(!memcmp(fpu.fpr, fp, 16), "Wanted 0x%llx %llx from=
+ vr0, got 0x%llx %llx",
+> >> +                       fp->val64[0], fp->val64[1],
+> >> +                       fpu.fpr[0].val64[0], fpu.fpr[0].val64[1]);
+> >> +
+> >> +       fpu.fpr[0].val64[0] +=3D random();
+> >> +       fpu.fpr[0].val64[1] +=3D random();
+> >> +       fpu.fpr[0].val64[2] +=3D random();
+> >> +       fpu.fpr[0].val64[3] +=3D random();
+> >> +       vcpu_fpu_set(vcpu, &fpu);
+> >> +       run_vcpu(vcpu);
+> >> +       vcpu_fpu_get(vcpu, &fpu);
+> >> +       sync_global_from_guest(vm, *fp);
+> >> +       TEST_ASSERT(!memcmp(fpu.fpr, fp, 32),
+> >> +                       "Wanted 0x%llx %llx %llx %llx from xr0, got 0x=
+%llx %llx %llx %llx",
+> >> +                       fp->val64[0], fp->val64[1], fp->val64[2], fp->=
+val64[3],
+> >> +                       fpu.fpr[0].val64[0], fpu.fpr[0].val64[1],
+> >> +                       fpu.fpr[0].val64[2], fpu.fpr[0].val64[3]);
+> >> +
+> >> +       run_vcpu(vcpu);
+> >> +       kvm_vm_free(vm);
+> >> +       return 0;
+> >> +}
+> >> --
+> >> 2.39.3
+> >>
+>
