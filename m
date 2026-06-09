@@ -1,184 +1,187 @@
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1FD495538
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 17:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781025295; cv=pass; b=MLvpYRLGuL4qNqfSONwJXlThiQyopmMd+DRTWbxQYwAr3/C2d7aXi5SeMGzuoRdyBZFFbChtYNFkijtP6sHlyrWAJOSOQLL0jsdSJUQdRWGZ9RGyTVsDj0LHd/BzN9IjVxAZRgr/lc1E/+MAv3sVpyY6j2P13CDJgvMq8kYWr4s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781025295; c=relaxed/simple;
-	bh=uEmI5xWjbsRJZ1CrxCtcNunqVcmNADT/o8HWSzvO/Zo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wk03LXqFLrnlxjZkkv9r8M8GuzLirupKaKoBS+KA7fAgqypksKCsNSQSO2mF6PkmOHpkRGulQZY9g4GvPKmyh96nRTuwP/hppCGTnpfqJvI6su1QqXpMeeUJPu8P6v5N8XUhkqgLl30KvtfhZSsw2JCawGDj1/pnotef6axniQE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b0rMbT1E; arc=pass smtp.client-ip=74.125.82.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FDBD4C9549
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 17:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781026033; cv=none; b=Kfh5H5GFHTIJrMJ0l4FrvJPZnwIRpcnXdboN2+FGoJeAC45KpZzGyIezFK/HMANWx53JqGABhMBMhIFrg2VBgtUkSj1Rdf/jfN7k3lxDL8Cz5ENokcC1J0+7aqPpDjEFqEZflUbjYGP5WKdThz4ZVPgo05tDe4lz5eFHkuammBc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781026033; c=relaxed/simple;
+	bh=XP12//l6icFutubq5HcIhpjs1JD3dOe7rFIpKieBZYw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=SrR9LXyzTqveMlg+xcLTA9yowDIBieleMZnbY/GnMq8VXOiAMn/CLXttno07trSI+P74D1OirLJW9E6Q9IefNHHURsR+MFDpQVicWuT3zotDUM+wHwK0EI2lu6HM3jkktVlgRlPxH71ijhNg6OeTDuYmvKQmi2JPtqPJPG8PpSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pZvMEgxK; arc=none smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b0rMbT1E"
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-137335bc3caso7160216c88.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 10:14:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781025293; cv=none;
-        d=google.com; s=arc-20240605;
-        b=DI1OczwKGGrtF0U9+95If/X2dswAe5T/uKypxsQ7Gj/8sUkjPW+AuLVbwLehEIIoOR
-         PBtffAtQ73LOoW4mEQ9KBbLzcsA8fbCBY4UgfDiq5YCgjt4S8Bia5fUS04qItK6/DZyH
-         F+jbZSPqsKjE0rHUx7lfCKQJ7uWf+z+4vjfcM4SwZC2uZF3avwXBYam+bT49aOYOBuTV
-         hEprKHTpeXH7bE8iJCHs258aK946xGl7rCFOK1NvQXNjjpMmZgXHlVO2rd9kcIM/ukYs
-         rosj8VnGXlT9xwd69MDq+WfKtB2HgysPOcWHWZzujhgLm2H4uxP9mkU30HQnBShfzIQs
-         qfDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=uEmI5xWjbsRJZ1CrxCtcNunqVcmNADT/o8HWSzvO/Zo=;
-        fh=UlBZi/SpE28bXOmn44hyQeJjRJp66/vrRA5Ajs1esj8=;
-        b=aY4C2Y4qFvHcPZADmQ9yQBy8Tp1zf0xujIGfaxWqPS64VbNIHRVwp2cSuaPCJzKPPZ
-         LHwdrocMCG7ye4BFr5an4MuK//76Ih4rYqvcuBYKJw/zf0dHHj2gWoKL5usx+2qAUE3s
-         VtvtVfT+iJVx/aDpW0nsNG66KzcWyKbPgY7OYOvVpbPa/QsJ/7KcRW5hc8ngTubjdgeW
-         v3TxJCH8mrrSjyEnijowIVemdG8pqUZFpYY1Yt68QpOkJae2f5m+/Hpdq7+gAsiBOKl7
-         yQHO4/YM8jH3n+4+ne3iXCc2pdgfML/enD3f265LEU6VJ+jKynJRHNfRKp4Gfn6FXHlm
-         uKeQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pZvMEgxK"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-13832028e9fso1023443c88.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 10:27:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781025293; x=1781630093; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uEmI5xWjbsRJZ1CrxCtcNunqVcmNADT/o8HWSzvO/Zo=;
-        b=b0rMbT1EYBkozeO7X4b6HKQQyaiZA6zDG9qsJym95lRSvE55qHWJrNvAccj/CtItRe
-         NW5ThQElREuHxHtVPEvWDu7o+Mut2fCIduepMhZ64CReUnRxEXoudU+pbzgflpiVvE73
-         X0NcHq8fA5mvA7EK9CkKajfhCQsWcEeLDXQRoKRa4rNcwd1/lrclITJFjUS30JiksLPQ
-         lbx5VFX01U58iDqpppIKGtKfx8t9w31CaOBsJPP/CnKYhSeHwa9r3Cw7Sh3POhYrT1wh
-         s9AAMLyM8tqT4RSuHqMulYfqqKKR+Hi10pVsAowrRJpFTZzC1TZbnyT3Xq+RfQU5cBo7
-         mFTA==
+        d=gmail.com; s=20251104; t=1781026028; x=1781630828; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vXMiGqxbaUP+oImtGF3Od5sBeqsgvxmpYzRfPRB1FZM=;
+        b=pZvMEgxKr9855ZmlbJoiA/5IKV1qyqQYvEsPckraclBbWt+9s8fU4r09aEpQ8YeFYR
+         uT0trqUMPq1LO3IE+n3zNVjNZEdlfcpQoOyTlcRC5olidb7HRvEIKqnyrMAwrw8obzUs
+         vFRpJBxwJZPRgtVSamSawsn/OZMZeHC/RBd1v6XNA9yeS2IFh31gqe0a9wNrN3D9TsGT
+         1b14ToPrZgL4KZW7HAVIoXotTxfrMzq0rvL7eQZjWL4d+zqUydEfuDOJx+fgBDXyieE1
+         2HqenjksjLG60RPwJ2hUWtvTlbe/FkoBu4466/3dgPgslzH8q5/qWt6WomwuJ2/SFKXF
+         kpJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781025293; x=1781630093;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uEmI5xWjbsRJZ1CrxCtcNunqVcmNADT/o8HWSzvO/Zo=;
-        b=pcFv7Tkj8EwwAs8biAEsOCNnUaMuts2zR0aaytvpxnQ/sXCQg6QfamCVPW81i5sQOD
-         9oG41PVt+yhANqXlr33YFuaQIq8bkhHtwFM3vTBTYjnLtP44kvQlh4Yo9XkmPw/EWBxz
-         kUwSedKNC7IhxyHkpk87n6JSLAN2pReEemw0MmkWZGwSiiQnMgPQUnrUJiaFsjxAr67n
-         E7/txuPQQUQveJMblW5OMsjAnzZvKrQB4NEUu77U0v6GLLTlqt8VIDus0FZ3CVBT+cHA
-         8VmcifKOpyR/vOXOTHYA+MWGxKqiPa3L1ju69tSp6/KNNlrQ5osSj6iFMbgUQ43cghow
-         ZIrw==
-X-Forwarded-Encrypted: i=1; AFNElJ+kJD6R2hRK9DtYc/42EL9dLXOW9ArwhZTVrJ7knWV34tScXMTH0bxti/IrJyCwzQja6JECTw3jfs+i59Y0RpU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUPDAhttiru1yW7shT7Mh7AnsVysZMmEbMiD8bmy7hVUIR0urR
-	GSGCIBbfvjhGC9H8y6Mts0TcCz8HCpN+5yIk5IW78CJHASR7f6NvkH546OLnrgQykIP/ExrwMn6
-	9azai40+a6yc6YuAOTW6fa5k20mK/YRptrGyS42t1
-X-Gm-Gg: Acq92OHkXinuDb2gtYjMzxie3VDzs6prjnkRWdm3hd+RJIAbxMGFEGE9OUFDW4IsvB+
-	dffIogyRmD7ZQZKS7VOgrZYPQ+RRzMML15pVebFqpLYE2lrEP5jiR0Db/rKFHfGnML5PuxIAivL
-	5wCQ96KK0e8Zii5Jn+I3T8QA1S9f7S9g9rZTQLv+7qhEY0UZ0Wjb2Uu6VXGydH3wSCTfL2CZMyr
-	aYKiVTGUZqV4pwcRF5UOOdF0He0FHOvOeCOX2PJfHID8ERji6+BBqeDgDNA3m2IeifkH6LSQ9Iz
-	nCK6egJgEdns7Dn+X/NbcDr6hY4yvYWgaEJb+euYPjxLeFjJfkhKnEGfRJLWxS+7T4Sad/ZBIAb
-	jAqHWX4Ziz4emr0zL+INm9I/ymfkSI8fWYUDwF4R9HIBBZfjpShlcAYZkA7Sm
-X-Received: by 2002:a05:7022:510:b0:136:83f5:c80 with SMTP id
- a92af1059eb24-138066608abmr10538613c88.4.1781025292274; Tue, 09 Jun 2026
- 10:14:52 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781026028; x=1781630828;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vXMiGqxbaUP+oImtGF3Od5sBeqsgvxmpYzRfPRB1FZM=;
+        b=cFtpp2q/QvLJwUkrSYrI3LTPfd8m2F/MxkTcYAmzF5niP9a+tAYteAWaqDu7mXMiGK
+         aiQzsQPCc8mTboMP2utEt+mQCKkHhu0kdHgbYlh3cnq52N2xA9Vv2h4gQvvjrjnZZYUl
+         wrIsVLHP8PHqdkGOs8Jxtb6cVbLK2GLBLoA+1DngFLogtidBasZ658N2RU0NgoVwbKK7
+         DKmGk5GBWl7ySNLcoel+5aCUFqap+USUmc7hRXtbentMC82S+hDlQsXBhIXGTJld7TPn
+         FR2wtKzWy1qo7xk7Ge1dYD6cmUAlu1pvVIl6ejxiO1CBvwDch+erKRFwRZFPN32rmjUY
+         vg3Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+Ab+km1kU2psWPUBmjU2QAx9rLTCC8zxyo2LsUFPgj9I/sv4QxA9nh1SpWl7jy791/cx6oo4IiqJFLnp19j5g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZjySTuPbyBSO3P2R2tLPTlfh1cLL+LJJ3k5i4PnCDQA4Jc/Ux
+	Ut4k6kNax/pa5zoYKKfYDYAxrGT3GJnJPa6LrnTimvIuaOcb7x/6f4D0
+X-Gm-Gg: Acq92OG3pte7AOkfPZXgJytuYu2EAuS8TYLE2eDSHRrZ9EEXnya2sFKbpTcbLxmr5fw
+	08Qjwnm7qEHQY0iz24WNaGz6FKUuGHY3ShAdb5zzi14B677u0KVgXLGT6ZdszJzNgcwlCZkURDs
+	lWwPZvbEbBQEjiZnhHaA0ozLV0edfmbAFP+PyruAFcJOPs5gtroiVQNFdMXBTgdH6mter/ByFyq
+	w8DZ1uFIMhhOL1C4EZ2t2vN+8TV3xkc/pzPCg6dtjrXygHaa9FElbOoVfJL9HhACvXA7YiKX7hi
+	4gwhf+fRNpqwklR9FQ6OhK9HRrAw3ppGqNf2jCn6vzN4lWcJkGdtpY/1Z/UgykbXSurI+ppMO7w
+	lnNhdSVXG79xfnDYE5uSZcM7ij4L78rDP/NaXe3jICbMWDeLkLAbRE43zDomzRtkx6WU9LfCA1S
+	mk1BGTvlKbbXnJjbTKbPuMmRbUUB9uvEczylZ8GYluxQrizFa1j9AGIRX1k5PXIJtLNbAZnr1Qu
+	+90fXtcKzeeVAUYt9A=
+X-Received: by 2002:a05:7022:f9a:b0:11a:342e:8a98 with SMTP id a92af1059eb24-138065b2f54mr12010692c88.0.1781026028061;
+        Tue, 09 Jun 2026 10:27:08 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:f998:4362:fa1b:11a8? ([2620:10d:c090:500::3:f603])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1381495bb00sm9369001c88.3.2026.06.09.10.27.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2026 10:27:07 -0700 (PDT)
+Message-ID: <b58e49c8f4d2d4d5d1a9a8f27e77b56b04b5a70d.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Fix gotox target validation against
+ CFG
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Anton Protopopov <a.s.protopopov@gmail.com>, Nuoqi Gui
+	 <gnq25@mails.tsinghua.edu.cn>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann	 <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Shuah Khan	 <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Tue, 09 Jun 2026 10:27:06 -0700
+In-Reply-To: <aig3p8QFlWv1sFqV@mail.gmail.com>
+References: 
+	<20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn>
+	 <20260609-f01-02-gotox-bpf-next-v1-1-b441d63a1559@mails.tsinghua.edu.cn>
+	 <aig3p8QFlWv1sFqV@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260608125846.157004-1-jiayuan.chen@linux.dev>
- <20260608125846.157004-2-jiayuan.chen@linux.dev> <CAAVpQUDZoEVEX1kXok-29dzVHk=ZK_2MkZyZY8kRHCJCfAWVFg@mail.gmail.com>
- <DJ3XPJA746S5.NYKZWY1HBH8O@gmail.com> <CAAVpQUATP7S7OEZw4P_7fp5zmQO-T5jByxAfp0+YsjRENeWscg@mail.gmail.com>
- <CAADnVQKa2Z2HKKZMhyD1HrurQ4LTcCS0Mm0YPxtisGKwVfcxmg@mail.gmail.com>
- <CAAVpQUCJH3iknHSfNwMqvHVc_V09zNDK-YbXbqa-=K159PTqiw@mail.gmail.com>
- <DJ40JYME18U1.3RA3TUXB3MH3M@gmail.com> <CAAVpQUC1Ot9vr09gNoe+vxgLoqU8Wwn2DV+CQZYYpAJUATJiWg@mail.gmail.com>
- <f0468cb2-1b52-4216-9592-ceb204f6ea41@linux.dev>
-In-Reply-To: <f0468cb2-1b52-4216-9592-ceb204f6ea41@linux.dev>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Tue, 9 Jun 2026 10:14:39 -0700
-X-Gm-Features: AVVi8CfkVjeAeUk17kjk2s6wRYeo3MTRMX2aePnQQmjsoDb5ybrS3XbXLwOcaFw
-Message-ID: <CAAVpQUC=AJvJS1yppw+aAVpmRhB6GganrUKMsKSo7WUKNkZHfA@mail.gmail.com>
-Subject: Re: [PATCH bpf v8 1/2] net: Validate protocol in skb_steal_sock() for
- BPF-assigned sockets
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Joe Stringer <joe@wand.net.nz>, 
-	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 9, 2026 at 6:55=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.dev=
-> wrote:
->
->
-> On 6/9/26 6:34 AM, Kuniyuki Iwashima wrote:
-> > On Mon, Jun 8, 2026 at 3:16=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> >> On Mon Jun 8, 2026 at 2:35 PM PDT, Kuniyuki Iwashima wrote:
-> >>>> btw is earlier sashiko TOCTOU concern real?
-> >>> Yes, the selftest in patch 2 should reproduce null-ptr-deref.
-> >>> (I tested one in a prior version)
-> >>>
-> >>>
-> >>>> iph->protocol =3D IPPROTO_TCP;
-> >>>> bpf_sk_assign_tcp_reqsk(udp_skb, tcp_sk);
-> >>>> iph->protocol =3D IPPROTO_UDP;
-> >>>>
-> >>>> as far as I can tell past bpf_sk_assign_tcp_reqsk()
-> >>>> the networking stack only looks at skb->protocol,
-> >>>> so modifying iph->protocol will only mess up
-> >>>> things on the wire (if this packet goes out).
-> >>> ip_rcv_finish_core() uses iph->protocol for early demux
-> >>> and ip_local_deliver_finish() also uses it for demux.
-> >> ok. Another idea... we can keep the checks on bpf side and
-> >> teach the verifier to invalidate packet pointers at bpf_sk_assign_tcp_=
-reqsk()
-> >> and introduce new concept of "readonly skb".
-> >> So after invalidation the reloaded sbk->data will be read only.
-> > Yes, this is exactly what I had in mind in the other thread :)
-> >
-> > ---8<---
-> > On top of L4 validation in bpf_sk_assign() and bpf_sk_assign_tcp_reqsk(=
-),
-> > can't we mark such an skb immutable after the helpers and catch
-> > subsequent writes to skb->data on the verifier ?
-> > ---8<---
-> >
-> >
-> >> There is no such thing today. The verifier only understands PTR_TO_PAC=
-KET
-> >> as read/write. So it's not easy, but probably good thing to have
-> >> for this and other cases where bpf prog shouldn't touch the packet
-> >> once it called some kfunc/helper.
-> > This would be useful and we could (re)move some validations from
-> > the fast path.
->
->
-> Hi Kuniyuki and Alexei,
->
->
-> Thanks both for the discussion, it makes sense to me.
->
-> I'll go back to fixing this in the helper itself, like the previous
-> version did.
+On Tue, 2026-06-09 at 15:56 +0000, Anton Protopopov wrote:
+> On 26/06/09 11:03PM, Nuoqi Gui wrote:
+> > CFG construction records the modeled gotox target set in
+> > insn_aux_data->jt. It includes INSN_ARRAY maps based on whether the map
+> > target is in the current subprog. check_indirect_jump() later validates=
+ and
+> > follows the current PTR_TO_INSN register's actual INSN_ARRAY map. The
+> > verifier does not check that targets copied from that map match the tar=
+gets
+> > that CFG construction modeled for this gotox instruction.
+> >=20
+> > This lets one gotox instruction observe two different INSN_ARRAY maps. =
+CFG
+> > can select a map whose target is in the current subprog. Another path t=
+o
+> > the same gotox can carry a PTR_TO_INSN value from a map whose target po=
+ints
+> > at a different subprog. The verifier then accepts an edge absent from t=
+he
+> > CFG.
+> >=20
+> > On x86, gotox becomes a raw indirect jump in the JIT image. Accepting a
+> > target not modeled by CFG can enter another subprog without a matching =
+BPF
+> > call frame and crash when executed. Validation observed a GPF in
+> > bpf_test_run().
+> >=20
+> > Fix this by requiring every target copied from the actual PTR_TO_INSN m=
+ap
+> > to be present in the CFG jump table built for the current gotox
+> > instruction.
+> > Reject the program before pushing verifier states for any unmodeled tar=
+get.
+> >=20
+> > Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+> > Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> > ---
+> >  kernel/bpf/verifier.c | 26 ++++++++++++++++++++++++++
+> >  1 file changed, 26 insertions(+)
+> >=20
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index ed7ba0e6a9ce..25fa90e731e3 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -17124,6 +17124,23 @@ static int indirect_jump_min_max_index(struct =
+bpf_verifier_env *env,
+> >  	return 0;
+> >  }
+> > =20
+> > +static bool is_cfg_indirect_jump_target(struct bpf_verifier_env *env,
+> > +					u32 target)
+> > +{
+> > +	struct bpf_iarray *jt =3D env->insn_aux_data[env->insn_idx].jt;
+> > +	int i;
+> > +
+> > +	if (!jt)
+> > +		return false;
+> > +
+> > +	for (i =3D 0; i < jt->cnt; i++) {
+> > +		if (jt->items[i] =3D=3D target)
+> > +			return true;
+> > +	}
+> > +
+> > +	return false;
+> > +}
+> > +
+> >  /* gotox *dst_reg */
+> >  static int check_indirect_jump(struct bpf_verifier_env *env, struct bp=
+f_insn *insn)
+> >  {
+> > @@ -17171,6 +17188,15 @@ static int check_indirect_jump(struct bpf_veri=
+fier_env *env, struct bpf_insn *in
+> >  		return -EINVAL;
+> >  	}
+> > =20
+> > +	for (i =3D 0; i < n; i++) {
+> > +		if (!is_cfg_indirect_jump_target(env, env->gotox_tmp_buf->items[i]))=
+ {
+> > +			verbose(env,
+> > +				"gotox target %u from map id=3D%d is not in the CFG jump table\n",
+> > +				env->gotox_tmp_buf->items[i], map->id);
+> > +			return -EINVAL;
+> > +		}
+> > +	}
+>=20
+> Thanks for reporting the bug.
+>=20
+> As for the fix, would it make more sense to either record maps in
+> check_cfg or to re-check subfunc boundaries here?
 
-I think even the previous version is the same type of change
-for intentional misuse.
++1 for checking if the jump is within subprog boundaries assumed for the go=
+tox.
 
-Both bpf_sk_assign() and bpf_sk_assign_tcp_reqsk() assumes
-sk_lookup() in advance, meaning the bpf must have dissected
-skb, and bpf_sk_assign() relies on it and has no protocol check.
-
-
->
->
-> Then, as a longer-term and more general solution, I'll try look into
-> marking the
-> skb as immutable after these helpers so the verifier can reject any
-> later writes
-> to the packet.
->
+> >  	for (i =3D 0; i < n - 1; i++) {
+> >  		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
+> >  		other_branch =3D push_stack(env, env->gotox_tmp_buf->items[i],
+> >=20
+> > --=20
+> > 2.34.1
+> >=20
