@@ -1,185 +1,115 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA42C352C5B;
-	Tue,  9 Jun 2026 14:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781016232; cv=pass; b=XrlGZIXcQV2EGYqEHCYvPlc6oNkWcZ8YiHwnsY6j19pXQzIdg97xa2z6F0dLn10fBAmG6PD9tyS5hl6dnBnIDsZC8DHqv/FSnSIYLipTi8PICNJsQxXBYqeRIkBuRUaPprQEUkAP57ObV2DjY2RaRWAw79Hiv5zdvTGP123ki08=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781016232; c=relaxed/simple;
-	bh=hba8JdKa5DwwyWp0VLcyVqa2151ObpLXyNCan9gFlNs=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=R5u8/04IL0X0f5c5QC3XQ2G6ElsBRhgPJxFcAEnJ+gYcPF8LyvL4M/1afjhtcfKPnJp1JRKfQA4wwbqJhfjo4zspoR0XESdIGOS6dLPa+BtU9iEd1LflgunVGVcnkO+RrH3ueU8SkZBaQV0/YWmS1ds/7liRNId57e22mZxxjmI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=COdwqkDQ; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.beauty
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133263EFD26;
+	Tue,  9 Jun 2026 14:44:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781016253; cv=none; b=L9LfG3s0jVPmRu31f0fLKFkDVHzc6SOpLIMkhFI7u3XTCuAUoV26qoH3TXu2lR+1pUnYBOamX6m+0QDrD8VAxBqn55uVNKcR1h+ZBhKaq4icGXck5yPPq+r4Im2gFo+qD+ssBSB6KZqjnFVhyUt49vGopgbDhxW7/hGF9dMhDtA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781016253; c=relaxed/simple;
+	bh=xqk9KgZBaEPu2shwKK1bu3XFXlcpEBgLridTtQ6Hy6M=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=dU3+FPXdPFDSu80EV0zZIXwKzCsejKxQvsK1G08h4wb5sjkZxSocjzhhk7M4nsaL354WSYIi9cMgDeo9WpEs2h3HX5jBt4dmKa7SIOpMkOp/mgdH1fVfIY0duIrq+Y0UiTZLrD8qrPJX23jJt6p6e0F+ccYVIioFVyilk0kzVuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=MGCcJKJ8; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b="COdwqkDQ"
-ARC-Seal: i=1; a=rsa-sha256; t=1781016191; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=h7rLtiBgT6JIZSxmJMtvUqc4vDZXEE84xSFHH7+I7DRRoiIxpI6USJd4jeM5QKxTHLBOjRdGlGPZK491r6Ic0mZHo4E6Os5MnWiN1hQAtcqCaRDitY6VvI2f6oz5eb3b9mj4UTqInmHmmH9FyLo9Z/0p24DR0VZIseC0o1dhDWA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1781016191; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=/y9sk2WKJk6IVRAkewpieDuGt24dURWTghxoT+OO5zI=; 
-	b=f9q23nRD9SwH6P0dfQ+zaosNvHpR6OplQgfllXtgS+3kEfwrreImsF/Jw5oxfWk7c+v3pkV1oH1syqog/nU1i9ccZ4I1GbIytyRi6YvbmuDAhDo245bgvuYxw4L4FU3++fOLhMhm6/JQ6zyOrPZnYLAzpv71AKwoFhzJKFwluyk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=linux.beauty;
-	spf=pass  smtp.mailfrom=me@linux.beauty;
-	dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1781016191;
-	s=zmail; d=linux.beauty; i=me@linux.beauty;
-	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=/y9sk2WKJk6IVRAkewpieDuGt24dURWTghxoT+OO5zI=;
-	b=COdwqkDQJ9R0ZBvzBwIwlx+nRdcQO9W3BEy4BNPz+VcJ0wKYsAMd0YbHmrS6azhT
-	338RbHqaewKGsSI9be4yoWBCQGRKqjBZG5nbubYRN/04VYI2Y18hEQ5IZt8uHveiPhe
-	CGUwP+qJQjwM8IFoZr8xMCL7e4gyrv2AhDkkmgj0=
-Received: from mail.zoho.com by mx.zohomail.com
-	with SMTP id 1781016184094100.75145563479225; Tue, 9 Jun 2026 07:43:04 -0700 (PDT)
-Date: Tue, 09 Jun 2026 22:43:04 +0800
-From: Li Chen <me@linux.beauty>
-To: "Andy Lutomirski" <luto@kernel.org>
-Cc: "Christian Brauner" <brauner@kernel.org>, "Kees Cook" <kees@kernel.org>,
-	"Alexander Viro" <viro@zeniv.linux.org.uk>,
-	"linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
-	"linux-api" <linux-api@vger.kernel.org>,
-	"linux-kernel" <linux-kernel@vger.kernel.org>,
-	"linux-mm" <linux-mm@kvack.org>,
-	"linux-arch" <linux-arch@vger.kernel.org>,
-	"linux-doc" <linux-doc@vger.kernel.org>,
-	"linux-kselftest" <linux-kselftest@vger.kernel.org>,
-	"x86" <x86@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
-	"Thomas Gleixner" <tglx@kernel.org>,
-	"Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-	"Dave Hansen" <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, "Jan Kara" <jack@suse.cz>,
-	"Jonathan Corbet" <corbet@lwn.net>,
-	"Shuah Khan" <skhan@linuxfoundation.org>
-Message-ID: <19eacd64508.26b92c022125848.262962729296162879@linux.beauty>
-In-Reply-To: <CALCETrWJQpLR4n1cpichBk8=uExSKLWTMGU3BufGdk_WE_p5UA@mail.gmail.com>
-References: <20260528095235.2491226-1-me@linux.beauty> <20260528-madig-fachrichtung-fehlinformation-61117ba640da@brauner> <CALCETrWJQpLR4n1cpichBk8=uExSKLWTMGU3BufGdk_WE_p5UA@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 00/13] exec: add spawn templates for repeated
- executable startup
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="MGCcJKJ8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=ThEMKlBMDXM7Mc4KGjL+vCXZAWAbge7
+	f0xOZjWjdBec=; b=MGCcJKJ8xt0VpeO73qgCcjv8mOWrUSk/Z/qthhBTVBcfqcv
+	SOMxJ28q+CrnC6or47SIxMOH2urU0DhFNYiALidgbodvAr5Xvng0GrazsJfIwNY2
+	TqSshAB+DubGg+FbYanyYtPqWF5WuNysZAF20+057pj7XWqXGylxAuhE6rbI=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web4 (Coremail) with SMTP id ywQGZQDn+6CpJihq+OUeAg--.58007S3;
+	Tue, 09 Jun 2026 22:43:53 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Date: Tue, 09 Jun 2026 22:43:50 +0800
+Subject: [PATCH bpf-next 1/2] bpf: Enforce write checks for BTF pointer
+ helper access
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260609-f01-04-btf-writable-arg-v1-1-f449cd970669@mails.tsinghua.edu.cn>
+References: <20260609-f01-04-btf-writable-arg-v1-0-f449cd970669@mails.tsinghua.edu.cn>
+In-Reply-To: <20260609-f01-04-btf-writable-arg-v1-0-f449cd970669@mails.tsinghua.edu.cn>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Yonghong Song <yonghong.song@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781016235; l=1621;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=xqk9KgZBaEPu2shwKK1bu3XFXlcpEBgLridTtQ6Hy6M=;
+ b=ft3Vl5Y9t5CXFqugr2J41d0o5Mi45nv4TAYDMeidC9V5kekU0KDSA0wtxL4dMgm2tUuxTlcuC
+ y2mFTn2FTE4ASobatmIclk6mulNWolRM5ragGN0MYYyPlNy5svYk7zQ
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:ywQGZQDn+6CpJihq+OUeAg--.58007S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cr43tw17KFWxur4xZrWxXrb_yoW8WF1Dpr
+	WkGry29r48t3W7u3ZFvayIya45Wr1rJrW3Ga1ayryfZrn8Wr1qqrZ8XrWjvFyayrnYy340
+	gr1jyryavw4UZrJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBS1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUXVWUAwAac4AC62xK8xCEY4
+	vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+	7VCjz48v1sIEY20_GrWkJr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
+	1lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxkIecxEwVAFwVW5XwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6c
+	x26r4rKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
+	0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMI
+	IF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
+	0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87
+	Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUxNtxDUUUU
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgINA2onzACbagAAs+
 
-Hi Andy,
+check_mem_reg() verifies both read and write access for global subprogram
+memory arguments. When the caller register is PTR_TO_BTF_ID,
+check_helper_mem_access() currently forwards the access to
+check_ptr_to_btf_access() as BPF_READ regardless of the requested access
+type.
 
- ---- On Tue, 09 Jun 2026 08:01:57 +0800  Andy Lutomirski <luto@kernel.org>=
- wrote ---=20
- > On Thu, May 28, 2026 at 4:05=E2=80=AFAM Christian Brauner <brauner@kerne=
-l.org> wrote:
- > >
- > > On Thu, May 28, 2026 at 05:52:21PM +0800, Li Chen wrote:
- > > > Hi,
- > > >
- > > > This is an early RFC for an idea that is probably still rough in bot=
-h the
- > > > UAPI and implementation details. Sorry for the rough edges; I am sen=
-ding
- > > > it now to check whether this direction is worth pursuing and to get
- > > > feedback on the kernel/userspace boundary.
- > >
- > > The idea of having a builder api for exec isn't all that crazy. But it
- > > should simply be built on top of pidfds and thus pidfs itself instead.
- > > It has all the basic infrastructure in place already. Any implementati=
-on
- > > should also allow userspace to implement posix_spawn() on top of it.
- > >
- > > fd =3D pidfd_open(0, PIDFD_EMPTY /* or better name */)
- > >
- > > pidfd_config(fd, ...) // modeled similar to fsconfig()
- > >
- >=20
- > After contemplating this for a bit... why pidfd?  Doesn't a pidfd
- > refer to an actual process that is, or at least was, running?  This
- > new thing is a process that we are contemplating spawning.  I can
- > imagine that basically all pidfd APIs would be a bit confused by the
- > nonexistence of the process in question.
- >=20
+This lets a BTF-backed kernel object field pointer pass the caller-side
+writable memory check for a global subprogram argument. The callee is then
+validated with a generic writable PTR_TO_MEM argument and can store through
+it, even though an equivalent direct BTF field store is rejected with "only
+read is supported".
 
-Yes, I think that is a real concern.                                       =
-                                                                           =
-                                            =20
-                                                                           =
-     =20
-In my current local WIP I tried to keep that distinction explicit.         =
-                           =20
-pidfd_spawn_open() returns a pidfs-backed builder fd, not a normal pidfd
-referring to a process. The builder fd is allocated as an anonymous pidfs  =
-                                                                           =
-                                                          =20
-file with builder-specific file operations:      =20
-                                                                           =
-                           =20
-    file =3D pidfs_alloc_anon_file("[pidfd_spawn]",                        =
-                             =20
-                                 &pidfd_spawn_builder_fops, builder,     =
-=20
-                                 O_RDWR);                                  =
-                           =20
-                                                 =20
-and the normal pidfd helpers still reject it because it does not use the
-ordinary pidfd file operations:                                            =
-                           =20
-                                                                           =
-                           =20
-    struct pid *pidfd_pid(const struct file *file)
-    {
-        if (file->f_op !=3D &pidfs_file_operations)                        =
-                             =20
-            return ERR_PTR(-EBADF);              =20
-        return file_inode(file)->i_private;                                =
-                                                                           =
-                                                          =20
-    }                                                                      =
-                                                                           =
-                                                          =20
-                                                                           =
-                                                                           =
-                                                          =20
-So the current split is:                                                   =
-                           =20
-                                                                           =
-                           =20
-    builder_fd =3D pidfd_spawn_open(...);       /* builder object */
-    pidfd_config(builder_fd, ...);    =20
-    child_pidfd =3D pidfd_spawn_run(builder_fd, ...); /* real pidfd */
-                                                                           =
-                           =20
-Only the last fd is a normal pidfd for an actual child process. The
-builder fd is only accepted by the builder operations.                     =
-                                                                           =
-                                                          =20
-                                                                           =
-                           =20
-This avoids having to define what waitid(P_PIDFD), pidfd_send_signal(),
-pidfd_getfd(), poll(), etc. mean before the process exists. The downside   =
-                                                                           =
-                                                          =20
-is that it adds a separate open-style entry point and is less uniform than =
-                                                                           =
-                                                          =20
-the pidfd_open(0, PIDFD_EMPTY) spelling Christian sketched.                =
-                                                                           =
-                                                          =20
-                                                                           =
-                                                                           =
-                                                          =20
-If people think there is a better way to represent the pre-spawn builder
-state, or if the preference is to integrate it directly into pidfd_open()
-with an explicit empty/future-pidfd state, I would be happy to discuss
-that.
+Forward the requested access type to check_ptr_to_btf_access().
+This enforces existing BTF write restrictions for global subprogram memory
+arguments as well.
 
-Regards,
-Li=E2=80=8B
+Fixes: 3e30be4288b3 ("bpf: Allow helpers access trusted PTR_TO_BTF_ID.")
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+---
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ed7ba0e6a9ce..cdff3e6eb96e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6777,7 +6777,7 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, struct bpf_reg_
+ 				zero_size_allowed, access_type, meta);
+ 	case PTR_TO_BTF_ID:
+ 		return check_ptr_to_btf_access(env, regs, reg, argno, 0,
+-					       access_size, BPF_READ, -1);
++					       access_size, access_type, -1);
+ 	case PTR_TO_CTX:
+ 		/* Only permit reading or writing syscall context using helper calls. */
+ 		if (is_var_ctx_off_allowed(env->prog)) {
+
+-- 
+2.34.1
 
