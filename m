@@ -1,110 +1,239 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7A623D2A4
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 18:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91812481651;
+	Tue,  9 Jun 2026 18:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781030040; cv=none; b=rIDs6nXwW1KcA76Bw7xxtqQHm8Tuaup6ffkldggKGs9Q7hxe9IjDxVn1y2zq3CBy0pMKP3IwOHWKebxXwW80lSSp/ZG12eHchszEQzRAEeQO8BfH0Dto4xCbd8P4f3LmOZFJnDvajCsVg0wkGlY8WFXtwwQJsO6PgSK/3+0jll0=
+	t=1781030495; cv=none; b=a2ctQjDlo4cZHa2QMM4ZrWNMsjocmK8TtqqpKUczgy0pRMpi69uiv//qUkhF6p1WbLoOkgfOshzEBvzkOkmQfSDocmPSbGeNa3X1qlfY81Ohy84jvawZCVXzynlEOiADFd1S+pGzsGk8bXPKX//LG9gO62Fg5EnhRv/mn1zvbGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781030040; c=relaxed/simple;
-	bh=YPBILIJB/sXgdKpxBDocoTsa5FDZwh7jmpWEGCgXIzg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SWC44Ty/3llEwFIKOVozdwNKKOj8cMh8iNJd5bdi9eFYtlNTWFW8gQVJuybOJC7YpOJpPVQ5MjRzuKCGHkpFb99jKj6GNLl2s82SaGDNhLbWgZq4Po/ZNtgt5Tj46WGqekoji/rh/gTNomeOsPuyy1cHPr4n6y8fonMktm3elA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=cmEBbWi9; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1781030495; c=relaxed/simple;
+	bh=4l1FdF8MyFgSw6mDCjIvWtZQ/gN7IgJ4ss4of4U/f7g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kNLq0uX3eLa5ai02LWlE5Ve1iLzHWQ4uAUgtT8seB/gTGEKOTgSa+5864SP5iMwj0kBPql0TeSJkEVjgn1B0THtCqpn1mfGC0mgAqecBwOSbMK8BPav22RyWAI/+xZ5Sj8GjOB1M1KAvK0dHg4kjxrjgMx39Lpu+7gSl4r1fK/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n/s/LF6J; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="cmEBbWi9"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-9157b94a07aso686806485a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 11:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1781030038; x=1781634838; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OySD+ExhHPCEiw9aOnLHfgmqMe+Ca/7oT+zDoVBuOjM=;
-        b=cmEBbWi92Wbz522rBYJQGkJPku6c/7g5/AvRQqFIQopotI2vvtpnI5NTKyrfqxNuIR
-         Kdi7/zeqjL4VSHNr9BNcxZzN4FBX2/pXaJSn5WSlPI+ntggWDxeAUDSHOWNhZhfntfTB
-         x5HTZlcoVSPhA8BIdK6b0+QiGGsK3sZdyopSb0CMvtdlvjDKiuZgc57I3nKrPdurzxKs
-         zSoKv5WA42KbXP3dCdfef09GbK28iVTi05SyC6vTACKHVFw6WuY72QXHwUDJE6uaUh/X
-         RLxl44lBi9+lk5biFRE6TftERtjCAqVkXeQU/Pf7W0UoTZRLIvnkwv9day/rRUmyr3SZ
-         DwUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781030038; x=1781634838;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OySD+ExhHPCEiw9aOnLHfgmqMe+Ca/7oT+zDoVBuOjM=;
-        b=H7b6zYGhRrchh1dvaLtqgoqcNssaNPYMC7v71zxZXuOrHag1RyjW8JI1kqz6NAH4d/
-         srhZaq7QYVJL+dpDNNJXEGM2DN7i8RVE9BjucDRs51d6JbhKjtAw9ulwK5GWQnMmCaD4
-         6T3DaTWkioTWI1sv7wA2EQ+UJ97VQeiryV+BdGJY9VG7N7ue1Dt8isP4E2OjxbJpL8f2
-         yM+GAk3PDpfR/aVKq9y/eMixurt6UVtkMiaUQs4gJsZ6zIkpBnNf4loyygNEXDbHfpfa
-         XMn4cJHFrZQF4FrCex7i7ryZiGAZK1PpbM/lTl2yTNzP11ybS6ESzicYpDY5XXHPTWjJ
-         iMTQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/Bg1/8bdPa5T1+dspnkIvZzhpZ/mIA2uGw/DYN4ogb/AzPOUM9gUjiC5DIvD+mhas6tX3es5wRTlLFWHhP4lg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcQ5orp112by8k/z7ZhHcbNx90uxKv0VMqSsreLzkPR7f+I5qA
-	K8ozETQJOhY4/Fu+CMjjrYDQVpnX2FywstXdd5JXEG1WU0atfnVmB7TM6FRV04KwmNA=
-X-Gm-Gg: Acq92OEuSNPkRteDCBXI2Ms9Q2nxy01F28fePDkRFCRsvwAH7np0PGnSyvx05+tRdYN
-	6zmkV1T17zzbN1L6h03TLKUtkHHaT/4/+KnqnFEBJ6X/Xdo3Blgw6Gq1Pd6fYzl/1rpWaMYnByN
-	iKTMfybgT96FmDAHdTue6wGAciFed1CgQBMcMglcrUZwU+fbSVueLYEN/rX9jFHBd3wA7bP3YWT
-	DA7zocuvJ+oAMXntDrYIWuAyc7xxM/BA/l/MZcs2WcwhOIcwcDffujYhE2Ut1sHEnU6Nm9ZlUB0
-	5+snIlxOQGpfHGQqSI9iFk3e8bNlL99uxFOfZGq4Mz5/6/XMIubR72vgTOKV+uZ1a57zuXoTRWA
-	X0b6U4rvZ936rVLgJfhcAI4TVGa96I4gszUh+7ILJAplaIDNiOZsdNHNb7/OIH278wo9wqUKgDl
-	CdjBF9lFXEukD8YdtoHz0gINy0A/L/uWXYTtxRC1JMbqtYjlP+3qSSuS6Sr/GWACItoBCtYmlnh
-	WIDN9rS0UjquKf9nw==
-X-Received: by 2002:a05:620a:1d01:b0:915:9e84:85ee with SMTP id af79cd13be357-915a9ca7655mr3263727985a.15.1781030037611;
-        Tue, 09 Jun 2026 11:33:57 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9158a3eea49sm2158492985a.44.2026.06.09.11.33.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 11:33:57 -0700 (PDT)
-Date: Tue, 9 Jun 2026 14:33:55 -0400
-From: Gregory Price <gourry@gourry.net>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kernel-team@meta.com,
-	linux-cxl@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	djbw@kernel.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
-	akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
-	vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
-	mhocko@suse.com, osalvador@suse.de, shuah@kernel.org,
-	alison.schofield@intel.com, Smita.KoralahalliChannabasappa@amd.com,
-	ira.weiny@intel.com, apopple@nvidia.com,
-	Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH v4 8/9] dax/kmem: add sysfs interface for atomic hotplug
-Message-ID: <aihck-U9nyne98H0@gourry-fedora-PF4VCD3F>
-References: <20260605211911.2160954-1-gourry@gourry.net>
- <20260605211911.2160954-9-gourry@gourry.net>
- <1cb0514b-c753-411e-8ff8-80fa29837441@kernel.org>
- <aigy0ut410TItkgB@gourry-fedora-PF4VCD3F>
- <e6e7453a-d2af-4f1a-8930-5e5e5c5879cd@kernel.org>
- <aihZG8WKVSvA86mA@gourry-fedora-PF4VCD3F>
- <06bcee07-5e56-4a82-95ff-2a8e75b7154d@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n/s/LF6J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A02BC1F00893;
+	Tue,  9 Jun 2026 18:41:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781030494;
+	bh=rRqUAdkAgr6Ypp8Su6+2n5PtsOSqMs20GrK0aAXdiU0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=n/s/LF6JEqwIWKt9Q7XElB33dDXdgS/LPOJVRmRcwWm5MAB6i2lkrwfbAhA0gfTx+
+	 59NfwWG2KwBDmUOV6bsAfxSArZcFcKV/SvaBUmia5LCaZ2W7892C52u+Z++06W3dCi
+	 C6/ZSHM+j2i3qfGcqTHnuo0H3xgWvHlFCel0FC0751zl6BUXxf8XZ3j5MpyPEp6p9I
+	 zwFfXxt2Z03iYrdd+7P/RBEy/Qe1jPd2NSesyYWhKUw9wu1wMX3EAziFf4gQ/LvBPk
+	 35cWOxTQwJ7vG4cyGBIvJewYSa968HRt1WkEKYwHe420u5TmWsPPFerMxQRedNug1m
+	 CrKWll7YTrRgw==
+Message-ID: <cf2bb24e-9341-4ded-b238-064dca442a92@kernel.org>
+Date: Tue, 9 Jun 2026 20:41:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <06bcee07-5e56-4a82-95ff-2a8e75b7154d@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 2/6] mm/memory-failure: surface unhandlable kernel
+ pages as -ENOTRECOVERABLE
+To: Breno Leitao <leitao@debian.org>
+Cc: Miaohe Lin <linmiaohe@huawei.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Naoya Horiguchi <nao.horiguchi@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ "Liam R. Howlett" <liam@infradead.org>, lance.yang@linux.dev,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ kernel-team@meta.com
+References: <20260609-ecc_panic-v9-0-432a74002e74@debian.org>
+ <20260609-ecc_panic-v9-2-432a74002e74@debian.org>
+ <174b8d76-5514-4942-af5d-c975ff95ee03@kernel.org>
+ <aig7jzwDHfVCxikl@gmail.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <aig7jzwDHfVCxikl@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 09, 2026 at 08:22:20PM +0200, David Hildenbrand (Arm) wrote:
-> On 6/9/26 20:19, Gregory Price wrote:
-> > On Tue, Jun 09, 2026 at 08:11:42PM +0200, David Hildenbrand (Arm) wrote:
-> >> On 6/9/26 17:35, Gregory Price wrote:
-> > 
-> > Was going to propose this, but then I thought... well if CXL detactes
-> > itself from dax and does this same pattern, maybe MMOP_UNPLUGGED makes
-> > sense.
-> > 
-> > But i'll leave that for another day and do as you suggest.
+On 6/9/26 18:15, Breno Leitao wrote:
+> On Tue, Jun 09, 2026 at 04:41:01PM +0200, David Hildenbrand (Arm) wrote:
+>> On 6/9/26 12:56, Breno Leitao wrote:
+>>> get_any_page() collapses every HWPoisonHandlable() rejection into a
+>>> single -EIO via the __get_hwpoison_page() -> -EBUSY -> shake_page()
+>>> -> retry path.  That is correct for the transient case (a userspace
+>>> folio briefly off LRU during migration or compaction, which a later
+>>> shake can drag back), but wrong for stable kernel-owned pages: slab,
+>>> page-table, large-kmalloc and PG_reserved pages will never become
+>>> HWPoisonHandlable(), so the retry loop is wasted work and the final
+>>> -EIO loses the "this is structurally unrecoverable" information.
+>>> memory_failure() then maps -EIO into MF_MSG_GET_HWPOISON, which the
+>>> panic-on-unrecoverable sysctl deliberately does not act on.
+>>>
+>>> Introduce HWPoisonKernelOwned(), a small predicate that positively
+>>> identifies pages the hwpoison handler cannot recover from:
+>>>
+>>>   HWPoisonKernelOwned(p, flags) :=
+>>>       !(MF_SOFT_OFFLINE && page_has_movable_ops(p)) &&
+>>>       (PageReserved(p) ||
+>>>        PageSlab(head) || PageTable(head) || PageLargeKmalloc(head))
+>>>
+>>>   where head = compound_head(p).
+>>>
+>>> PG_reserved is a per-page flag (PF_NO_COMPOUND) and is tested on the
+>>> page directly.  The slab, page-table and large-kmalloc page-type bits
+>>> are only stored on the head page, so those tests resolve the compound
+>>> head first, then re-read compound_head(page) afterwards: a concurrent
+>>> split or compound free that moves head invalidates the just-read flags
+>>> and the loop retries.  The lookup still takes no refcount, mirroring
+>>> the rest of get_any_page(); the recheck closes the common split race,
+>>> and a residual free->alloc->free in the same window can only mis-tag
+>>> a genuinely poisoned page, never reclassify a handlable one.
+>>>
+>>> The MF_SOFT_OFFLINE / page_has_movable_ops() opt-out mirrors the
+>>> same exception in HWPoisonHandlable(): soft-offline is allowed to
+>>> migrate movable_ops pages even though they are not on the LRU, and
+>>> we must not pre-empt that with an unrecoverable verdict.
+>>>
+>>> The list is intentionally not exhaustive.  vmalloc and kernel-stack
+>>> pages, for example, do not carry a page_type bit and would need a
+>>> different oracle; they keep going through the existing retry path
+>>> unchanged.  This is the smallest set we can identify with certainty
+>>> by page type.
+>>>
+>>> Wire the helper into the top of get_any_page() to short-circuit
+>>> those pages before the retry loop runs.  On a hit, drop the caller's
+>>> MF_COUNT_INCREASED reference (if any) and return -ENOTRECOVERABLE
+>>> straight away.  Pages outside the helper's positive list still take
+>>> the existing retry path and return -EIO, leaving operator-visible
+>>> behaviour for those cases unchanged.
+>>>
+>>> Extend the unhandlable-page pr_err() to fire for either errno and
+>>> update the get_hwpoison_page() kerneldoc to document the new return.
+>>>
+>>> memory_failure() still folds every negative return into
+>>> MF_MSG_GET_HWPOISON via its existing "else if (res < 0)" branch, so
+>>> this patch on its own only changes the errno that soft_offline_page()
+>>> can propagate to its callers.  A follow-up wires -ENOTRECOVERABLE
+>>> through memory_failure() and reports MF_MSG_KERNEL for the
+>>> unrecoverable cases, which is what the
+>>> panic_on_unrecoverable_memory_failure sysctl observes.
+>>>
+>>> Suggested-by: David Hildenbrand <david@kernel.org>
+>>> Suggested-by: Lance Yang <lance.yang@linux.dev>
+>>> Signed-off-by: Breno Leitao <leitao@debian.org>
+>>> ---
+>>>  mm/memory-failure.c | 60 +++++++++++++++++++++++++++++++++++++++++++++++++++--
+>>>  1 file changed, 58 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>>> index f4d3e6e20e13..eed9de387694 100644
+>>> --- a/mm/memory-failure.c
+>>> +++ b/mm/memory-failure.c
+>>> @@ -1325,6 +1325,46 @@ static inline bool HWPoisonHandlable(struct page *page, unsigned long flags)
+>>>  	return PageLRU(page) || is_free_buddy_page(page);
+>>>  }
+>>>  
+>>> +/*
+>>> + * Positive identification of pages the hwpoison handler cannot recover.
+>>> + * These page types are owned by kernel internals (no userspace mapping
+>>> + * to unmap, no file mapping to invalidate, no migration target), so the
+>>> + * shake_page() / retry loop in get_any_page() can never turn them into
+>>> + * something HWPoisonHandlable() will accept.  Short-circuit them to
+>>> + * -ENOTRECOVERABLE so callers can panic on operator request instead of
+>>> + * spinning through retries that exit as a transient-looking -EIO.
+>>> + *
+>>> + * The MF_SOFT_OFFLINE / page_has_movable_ops() opt-out mirrors
+>>> + * HWPoisonHandlable(): soft-offline is allowed to migrate movable_ops
+>>> + * pages even though they are not on the LRU.
+>>> + */
+>>> +static inline bool HWPoisonKernelOwned(struct page *page, unsigned long flags)
+>>> +{
+>>> +	struct page *head;
+>>> +
+>>> +	if ((flags & MF_SOFT_OFFLINE) && page_has_movable_ops(page))
+>>> +		return false;
+>>> +
+>>
+>> On a second look: Do we really need that? The page types below never support
+>> migration. So I guess that check is not required?
+>>
+>> Apart from that, looks good with two comments:
+>>
+>> a) HWPoisonKernelOwned: this is not the common style for us to name functions.
+>>
+>> is_kernel_owned_page() or sth like that would do.
 > 
-> Let me sleep over it :)
+> Ack, I will rename it is_kernel_owned_page()
 > 
+> In my defence, most of the functions similar to HWPoisonKernelOwned()
+> has this name format, and I got this discussion earlier (with Lance?
+> I think). Here are the similar function names in that file:
+> 
+>  * HWPoisonHandlable
+>  * PageHWPoisonTakenOff()
+>  * SetPageHWPoisonTakenOff
 
-Have some other sets i'm trying to break out of private-nodes anyway,
-i'll let this bake for the week.
+Some of these probably date back to our old way of handling page flags and
+things, like PageLRU.
 
-~Gregory
+But we really should stop :)
+
+> 
+> I will update in the new version.
+
+Thanks! Probably best to wait a bit, the merge window is coming up either way,
+so this will have to wait a bit either way.
+
+-- 
+Cheers,
+
+David
