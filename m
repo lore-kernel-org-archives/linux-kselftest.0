@@ -1,135 +1,157 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9D02D8DD6
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 01:14:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5112D3242BE;
+	Tue,  9 Jun 2026 01:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780967697; cv=none; b=kt30lsQUBJOv0qazUuhKNX0SPaAuUggTIMhc8WyO9n+3UN1NCmS6bPxT6kvOq+uru3ckgKk3cfLe9M58sfpjyPRpMcSdad9UXwthStaukWnekDiJKxOT3xVAz7DLOSeSvACUqC/qVFsyewmrjOvFQ2f9v8j3onIae+MrqGOfD/A=
+	t=1780969365; cv=none; b=e8SI6U8OQK9w2kTpjrUkm4AT/n8x4fOp8Zd2iB4noWoKvGfFQoOER4k1gOCsmuOYMUZ0PzT3hASDlrZXuOt3nK7ee7hi4WH/LKpG7VocXL4S/ysz3PCxAbsG1HRWXwh0DE6SfuQF20kmdaOTg3RbGB/IS+C/s4uro+LD+P8UOMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780967697; c=relaxed/simple;
-	bh=hj1Fq6LHV1ic5dn6Rszt6KztxqEuzXCQBnDMl++8g+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XU+DaKHY3ENjZ7E+z3kU5WH/FYNCj5BX1Zcnhywlgq3b/NM6D1LwJrcXorWGGEWepPfPCKngJQVdBMXbW23pQ9izuei8VQ+SepmJOcYB9yhlfrnWZ5A0aWbySp+IHR9SREVnSXqeJYWhDetw9qClJ0auMTLY53VPAVRHdCqZvFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=ESmYwpTY; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	s=arc-20240116; t=1780969365; c=relaxed/simple;
+	bh=+HFQhrlCP9FpZ3LCWsl97dDZOruMBx1TlcvW2V6/B28=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=cJLBmY1FGHjdfhhAqwCNqhPWQFN8n7ASL4lfA0turF9IvMDrRfHp6kAlB7PPIoCuAOL/n7CvWNX8eyiUexKI+611cjtxFdLWJYDrYK9zfaNPVRJiqnOv0rEJMU7CGGEOb5xypDv6qTfC1qyyEUwYu+hYPuZfRIvuoOuV/P05M1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zdo6FWur; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="ESmYwpTY"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-9159477c893so627672885a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2026 18:14:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1780967695; x=1781572495; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sgWc+GbcdT1TE4KoGHerpUiSmy6CQo1tAeSFDOuPHPo=;
-        b=ESmYwpTYtqKI9A0/icDX590wO9mqHvjUfxx9LZ8obhtZ/CpgHgTbN2HnIS/rnvISiz
-         cAGLpdVzMNYS4/rOTBQLZg0pDE4oixYrmZ40yLwo7vNDH7/WbYQwlow1wzAjrBdvhc7C
-         eFukaAcjLkpqQGegnPOFQ45j5jnD4EzWi70LrsHEnwMH1CjXTha5ef86neurgPSl2l7K
-         2vGetYC8q/mv87Gf4QxWtJ/kzLnoMdYvH28tTFvVdEL8D3xcSGWrORKVUrekuRQbNiGK
-         WEFgtru2a8+oKzh9kO6svJT6SZOfItjCoIHaHuXry8V9Qc425BlR2SoPjiQSxqSj8Fmt
-         zLSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780967695; x=1781572495;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sgWc+GbcdT1TE4KoGHerpUiSmy6CQo1tAeSFDOuPHPo=;
-        b=RO8uIs/WKaGx5rfijItU28DrOQ5QbE9AuHquN6P6Kgq/QukLXD3VGBanRgFfmYT8Hn
-         en27ex9aZMxB07h9DJFgWlLVAwiaP5KkaorSd5aNi8DsTJJ3MlCQceTWgX82/101vjKM
-         Pt1c9a7xFc2gALM4pnQc3ZcClPpXelUQYqaR7mmhSOSmzo956cJaiAYA4PFzzzc8I4eZ
-         h+322E1WNTxgGz5XoaHN9TxfTU5hw6E4ACMyH467Emsln+W81dzFF0f7I2QJqmzimK1p
-         HmhbcK4/3JN4fuCG3b62rIBNHpBTv5JFJ3WPI9YAzjt0MumNzROmpTf/jQVVjdkVwTEj
-         R20g==
-X-Forwarded-Encrypted: i=1; AFNElJ8y2GvWp6UmVEsKJnxmmM9fB0/2oDbyUoK0w5kRsAIuDClr3/qyQuqYRdJxZw/gjT2A9V+gztDv4tP947jlKbY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKbKrwFQ9q3VE2ZCm1+5pXsgGCYIOJbUZJf0zOT037G9ezYkKA
-	r1L/M362YzimQkOm1WhR3vz3mHATKvL2QDkBauZM/bhM5V3QI39DAWBg9qmlg0aEHtg=
-X-Gm-Gg: Acq92OGQof5LnKyaJ0pCRi4l4bP5p7mrQc3WLvHUbXha9JD+ojRu9RSjdsvo1wwi49c
-	1yHUx/11r+gB8gz70BBjhq0Ss7MZeDQ6I04Jx6bHno04/pmHOYI4+xuqcL05YUsCeMBTkkd7S0Z
-	07oSND33EmsdRsbmcj+b0Z91sB4IpWIHh98sAIFcZcMx7lL4PihB19TjsrbanTXug1ES6FobKRh
-	3cwha2NDJ3M6J2ChOSmQyL9qOL2sc0sDRPrzJdt6VUMtHfwp5xQ3nUtS3XtHa/UuYjoHMUtEV5q
-	vrouGtYB2sT/Z1/lwTLHHNBApf3n5p8FBmLAF+rpFpBlyMG7UKfKOUgUu7hwnqle6/66qsXb7FU
-	3GqHlhCASUuLp3qK7LMeX7T0bf4pJVxvRQb+LmjayvQBzqj0rkxq1put22LX9EjGDMKiBMKD6rv
-	hUPip53VtaqHPn04anRJbPI1JTN2WeG4qCm+9V1f6TT2r2/XOUudFqDNhC4vA0vQ==
-X-Received: by 2002:a05:620a:1b8d:b0:914:c0ab:f1ee with SMTP id af79cd13be357-915a9d93f2fmr2862027885a.44.1780967695361;
-        Mon, 08 Jun 2026 18:14:55 -0700 (PDT)
-Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9158a009fe7sm1902384885a.8.2026.06.08.18.14.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2026 18:14:54 -0700 (PDT)
-Date: Tue, 9 Jun 2026 01:14:53 +0000
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	linux-kselftest@vger.kernel.org, shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org, 
-	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, jasonmiu@google.com, 
-	linux-kernel@vger.kernel.org, corbet@lwn.net, ran.xiaokai@zte.com.cn, 
-	kexec@lists.infradead.org, pratyush@kernel.org, graf@amazon.com
-Subject: Re: [RFC v1 0/9] kho: granular compatibility and header decoupling
-Message-ID: <aidnjw5pH_z45gJT@plex>
-References: <20260605033235.717351-1-pasha.tatashin@soleen.com>
- <178083348872.1648214.17778188633648887952.b4-review@b4>
- <aiVp5RlbWRz5VnPB@plex>
- <178091437240.1648214.10761111570005003901.b4-reply@b4>
- <aibYJvzQQnpoN6YW@plex>
- <aicF5Sa11B4ujfSa@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zdo6FWur"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89D211F00893;
+	Tue,  9 Jun 2026 01:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780969363;
+	bh=U5/oRI5LWE976MxGo2nzIX5Q2u1ajqCiTNhhJJv6E44=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Zdo6FWur2iYfoWkbx5ySONDe0FQy9jf3fEGC0VpzuW1ogNuMnkAJfmdICO/sARWd5
+	 deCpni5oUfJsQZYMKK36lCyh2uZCrmZBQjMJwnxfNhoJXA2TnpIGLHp0QtasO6K3PI
+	 vCrFe3tNa24i6lUmE9HiVuMe2o/oUMm/qx0TIGX1kk/A+1Nvb6x3X7tVQG6zB9g6Ee
+	 P//68QKzQrAfXoe78adqVnmvTia9I14O5CRIYh/F5XTuHJSUOsXRutPezpPFUlc+9T
+	 LU/BF1GPrgNHLAhCu9ARuiRmgqQwkuMGAf5pbangZoBrFPkSZcEYWUvHDuh1boL+GQ
+	 hd8NPbfljvQ+A==
+Date: Tue, 9 Jun 2026 10:42:39 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, Shuah
+ Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 0/7] tracing/probes: Add more typecast features
+Message-Id: <20260609104239.a9fc9446602d5b4a5ab667e3@kernel.org>
+In-Reply-To: <178092865666.163648.10457567771536160909.stgit@devnote2>
+References: <178092865666.163648.10457567771536160909.stgit@devnote2>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aicF5Sa11B4ujfSa@kernel.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 06-08 21:11, Mike Rapoport wrote:
-> On Mon, Jun 08, 2026 at 04:12:56PM +0000, Pasha Tatashin wrote:
-> > On 06-08 13:26, Mike Rapoport wrote:
-> > > On 2026-06-07 13:43:09+00:00, Pasha Tatashin wrote:
-> >
-> > Keeping all of that in a single KHO file is the wrong approach and goes 
-> > against how other logically separated subsystems in Linux are organized 
-> > (e.g., mm/vmap.c, mm/vmalloc.c, etc.). Yes, there are some messier 
-> > places in the kernel as well, but keeping this in its own dedicated 
-> > kho_vmalloc.c file makes complete sense to me.
+Hi,
+
+On Mon,  8 Jun 2026 23:24:16 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> Hi,
 > 
-> Either I hallucinated or b4 ate a paragraph from my reply ;)
+> Here is a series of patches to introduce more typecast features
+> to probe events, which includes 1. expanding BTF typecast to
+> fprobe and kprobe events, 2. introducing container_of like typecst
+> option, 3. supporting nested typecast, 4. adding $current special
+> variable support, 5. adding per-cpu dereference support, 6. adding
+> a testcase to check typecasts.
+
+Sashiko found many issues on this series. I'll fix those.
+
+BTW, for $current, I think it should typecasted to task_struct without
+typecast. (except if it is the container_of() type typecasting)
+In this case, ctx->strcut_btf will be updated automatically if $current
+is specified.
+
+Also, I'm thinking redesign +CPU/+PCPU/this_cpu_ptr().
+Instead of those, what about introducing followings?
+
+ - this_cpu_read(VAR)
+ - this_cpu_ptr(VAR)
+
+Comments are welcome!
+
+Thanks,
+
 > 
-> Regarding the code movement
-> - splitting radix tree makes perfect sense to me, just the documentation
->   part needs more care than mechanical move
-
-Agreed. I'll also pay closer attention to the documentation.
-
-> - I'm fine with abi/vmalloc.h, presuming KHOSER_PTR() is not part of it
-
-Yes, I will move KHOSER_PTR() to the shared compat.h in v2 so it's not 
-tied to vmalloc.
-
-> - I can live with kho_vmalloc.c although I still consider it unnecessary
->   churn
-
-Appreciate it.
-
-> - I'm against moving vmalloc APIs from kexec_handover.h because they are
->   very close in nature to folio and pages. I don't see core KHO as
->   responsible for preserving physically contiguous ranges but rather as
->   preserving allocations. Not sure we'll ever support kmalloc(), but still.
-
-That is a very reasonable compromise. I am fine with keeping the 
-consumer-facing function declarations in kexec_handover.h so they remain 
-grouped  with folios and pages.
-
-> > However, overall enforcing the use of KHOSER is unrelated to this work. 
-> > I have my own thoughts on this, and perhaps with proper versioning, 
-> > using KHOSER_PTR everywhere would be appropriate, but let's keep that as 
-> > a separate work.
+> Steve introduced BTF typecast feature for eprobe[1].
+> This series extends it and add more options:
 > 
-> This is a separate work, indeed. But regardless of the versioning it's
-> already better than plain u64 because it provides type safety.
+> 1. Expanding BTF typecast to kprobe and fprobe.
+>    (currently only function entry/exit)
+> 
+> 2. Introduce container_of like typecast. This adds a "assigned
+>    member" option to the typecast.
+> 
+>    (STRUCT,MEMBER)VAR->ANOTHER_MEMBER
+> 
+>    This casts VAR to STRUCT type but the VAR is as the address
+>    of STRUCT.MEMBER. In C, it is:
+> 
+>    container_of(VAR, STRUCT, MEMBER)->ANOTHER_MEMBER
+> 
+> 3. Support nested typecast, e.g.
+> 
+>    (STRUCT)((STRUCT2)VAR->MEMBER2)->MEMBER
+> 
+>    the nest level must be smaller than 3.
+> 
+> 4. Add $current variable to point "current" task_struct.
+>    This is useful with typecast, e.g.
+> 
+>    (task_struct)$current->pid
+> 
+> 5. per-cpu dereference support.
+> 
+>    +CPU(VAR) is the same as this_cpu_read(VAR), and
+>    +PCPU(VAR) is the same as this_cpu_ptr(VAR).
+>    Also, "this_cpu_ptr(VAR)" is available. This is good
+>    with nesting expression.
+> 
+>    (STRUCT)(this_cpu_ptr(VAR))->MEMBER
+> 
+>    (However, it might be better to allow a special way to omit
+>     parentheses for thi_cpu_ptr())
+> 
+> And added a test script to test part of them.
+> 
+> [1] https://lore.kernel.org/all/20260601130746.2139d926@gandalf.local.home/
+> 
+> 
+> ---
+> 
+> Masami Hiramatsu (Google) (7):
+>       tracing/probes: Support typecast for various probe events
+>       tracing/probes: Support nested typecast
+>       tracing/probes: Support field specifier option for typecast
+>       tracing/probes: Add $current variable support
+>       tracing/probes: Add +CPU() and +PCPU() dereference method to fetcharg
+>       tracing/probes: Support reserved this_cpu_ptr() method
+>       tracing/probes: Add a new testcase for BTF typecasts
+> 
+> 
+>  Documentation/trace/eprobetrace.rst                |   11 +
+>  Documentation/trace/fprobetrace.rst                |   11 +
+>  Documentation/trace/kprobetrace.rst                |   12 +
+>  kernel/trace/trace.c                               |    6 
+>  kernel/trace/trace_probe.c                         |  312 +++++++++++++++-----
+>  kernel/trace/trace_probe.h                         |   12 +
+>  kernel/trace/trace_probe_tmpl.h                    |   33 ++
+>  samples/trace_events/trace-events-sample.c         |   38 ++
+>  samples/trace_events/trace-events-sample.h         |   34 ++
+>  .../ftrace/test.d/dynevent/btf_probe_event.tc      |   52 +++
+>  10 files changed, 422 insertions(+), 99 deletions(-)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
+> 
+> --
+> Signature
 
-Agreed.
 
-Thanks!
-Pasha
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
