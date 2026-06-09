@@ -1,133 +1,196 @@
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4681D3D4130;
-	Tue,  9 Jun 2026 06:30:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263873C98AE;
+	Tue,  9 Jun 2026 06:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780986628; cv=none; b=Qx86m+xqEoFBnhmUsq3HAuPi3513vO703mstlFt+XUo/hN2Qyn6qSX0fK8rjrYbM05vVA5bC+FH8bvaXLJ1Dnt8vKyoPHv37VtNCxVwLX8Ek26eWqkIdUkm0nHar+V2ikb5jIIHiWutET959fV0OQFc0t0qxxTMLu8qJ2IWUxoo=
+	t=1780987536; cv=none; b=eOa7R1oMxPjKgkYXYt6CxHgUCo4WBBK159h0KcMmo5R4ciCaCVVtccrd7KBhG13hezkMVpy1CQP70s3ypCJdw4xpGElqmuWAwyIJhXGtJry3/MRCx0wZpnwExVOqdPuydV256mL/82tuFimZlqycagtp3x0gRUu8drA5mzqQTJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780986628; c=relaxed/simple;
-	bh=0KCT5lX/yA5lYF4rKIYrYcunKBGHZ4tEo6Vt4nyxfCw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RY5ffb5wCtGGEPGynh0PlD85bVtKd3grVCkvI6JKILdD6ukmGYY++a0+fTJD2VmjHNnQm0XV74AFuIJmsSS8LQ3ZCy4NS+Wg2Eyn1QRuBmY8My1vrTBfYl66tFRfPgMjEKWXoXWGUyXBntArYNm7lNmiFkQLtJuxmSR8atJPCoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ge0iK81i; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1780987536; c=relaxed/simple;
+	bh=mReAix0LSYK6FclEHavg7EVgJC59/qq0PQ1n3G0Dor0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l2Nf8EeQr12KH0o9pUNTQuYcv/LHTxIqwywu5+dk6QK9Io2HDRK1Pif46F5E/BAae0k6YHs9c/yZnbCcao+7d7E0ctcEeU4Dcr/fzTYJAUBR9mZ2nR8XDlo/XztEPUuWN734+Z/HFoIgzkESvIRdXkBWm0wWsVkTkgkFZTca+OA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NLi5PomX; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ge0iK81i"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1780986616; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=ipNiCgq1zQDmCfj6MBMo/UwiU6bdUS/uJE7SlSsGs3U=;
-	b=ge0iK81iqsPuiVmpr0xd0LylLaGITQOrAPNusAfhsl2wQ4gYnPJkTPuXQoO1M3PiSG6Nd+fncF9Xw5NS3LuQsYou4XMgmWs3N6hwWhBV/2D5ROEAzdFsDiwIEt08TNdY4zOl8UBY+LvjMoGW03juIoMiynYKmXgCJELcU/BFUEo=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X4VD53s_1780986613;
-Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X4VD53s_1780986613 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 09 Jun 2026 14:30:14 +0800
-From: Wang Han <wanghan@linux.alibaba.com>
-To: Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Chen Pei <cp0613@linux.alibaba.com>,
-	Andy Chiu <andybnac@gmail.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	oliver.yang@linux.alibaba.com,
-	xueshuai@linux.alibaba.com,
-	zhuo.song@linux.alibaba.com,
-	jkchen@linux.alibaba.com,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: [PATCH v3 7/8] riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
-Date: Tue,  9 Jun 2026 14:29:58 +0800
-Message-ID: <20260609063002.3943001-7-wanghan@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.194d76e3a15b.v3.riscv-livepatch.wanghan@linux.alibaba.com>
-References: <20260528082310.1994388-1-wanghan@linux.alibaba.com> <cover.194d76e3a15b.v3.riscv-livepatch.wanghan@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NLi5PomX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780987535; x=1812523535;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mReAix0LSYK6FclEHavg7EVgJC59/qq0PQ1n3G0Dor0=;
+  b=NLi5PomX6ZX3q3i7xLN28t4S8x298PJpgGsOevudHd3gekInAyFYCWHt
+   wI/3WbGrUqrJ+njeVRzbwsUPIwe5fQETV7SApY8kfMhrDcC7GlrGu6LFd
+   E4B/edLtYSrkDRLKmcBPNC+LrZaqfIVSq1L4mlMEAcEU+HNDptJDvrVWk
+   wojfr58ZWjNA+oetMUb2HqveaNC9CpT5hPxhJPLqNtKKhYa+pJzKsnjXq
+   9/nBx8mi20vlb4hbcwXK0YjXFxQRkWoaBMo461Rut4u82DaKJYQJjswKa
+   xHLWOEUvP0T41sJhJND4abawzUNurTdxn42S4XCZpqJdH1Ecf9/4RgfKF
+   w==;
+X-CSE-ConnectionGUID: K8dc8MmrTHSqJtzXVlb1Bg==
+X-CSE-MsgGUID: UAf0fOa6RKOuN63DrmpSMg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11811"; a="107175923"
+X-IronPort-AV: E=Sophos;i="6.24,195,1774335600"; 
+   d="scan'208";a="107175923"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2026 23:45:34 -0700
+X-CSE-ConnectionGUID: qJtNBrs8QnqhS9ujN+hdAA==
+X-CSE-MsgGUID: w5/whA3kSkGPcZA6dTvr9w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,195,1774335600"; 
+   d="scan'208";a="245623860"
+Received: from unknown (HELO [10.238.2.24]) ([10.238.2.24])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2026 23:45:28 -0700
+Message-ID: <051df51b-cbf0-48d2-8d34-9392783afe2d@linux.intel.com>
+Date: Tue, 9 Jun 2026 14:45:25 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 20/22] KVM: selftests: Implement MMIO WRITE for the
+ TDX VM
+To: Lisa Wang <wyihan@google.com>
+Cc: Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
+ Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+ linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-20-6983ae4c3a4d@google.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20260521-tdx-selftests-v13-v13-20-6983ae4c3a4d@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Now that the metadata frame records, the kunwind state machine and
-arch_stack_walk_reliable() are all in place, advertise the capability
-to the rest of the kernel:
 
-  * select HAVE_RELIABLE_STACKTRACE under FRAME_POINTER && 64BIT, so
-    only the configurations with the tested metadata records and
-    FP-based reliable walker enable it.
-  * select HAVE_LIVEPATCH under the same condition and source
-    kernel/livepatch/Kconfig so the livepatch menu is reachable from
-    the RISC-V configuration.
 
-The 64BIT dependency is conservative scoping rather than a hard
-technical requirement: the metadata frame record, kunwind state machine
-and arch_stack_walk_reliable() also build on RV32, and the IRQ-stack
-frame-record adjustment fixes a latent RV32 issue. However, the syscall
-livepatch selftest and module relocation path have only been exercised
-on RV64 QEMU virt so far. The 64BIT gate can be relaxed in a follow-up
-once RV32 has equivalent coverage.
+On 5/22/2026 7:17 AM, Lisa Wang wrote:
+> From: Erdem Aktas <erdemaktas@google.com>
+> 
+> Implement the tdx_mmio_write() to allow TDX VMs to request MMIO
+> emulation.
+> 
+> Follow the Intel Guest-Hypervisor Communication Interface (GHCI) spec
+> to the minimum extent that a spec-abiding TDX module will pass the
+> request to KVM. Skip implementing the #VE handler as described in the
+> GHCI spec so selftests will not take a dependency on having a working
+                                                                       ^
+Something was cut off?
 
-This is split out from the unwinder change so the policy decision and
-the implementation can be reviewed and reverted independently.
+> 
+> To perform emulated I/O, VMs use the TDG.VP.VMCALL instruction to
+> request MMIO.
+> 
+> Signed-off-by: Erdem Aktas <erdemaktas@google.com>
+> Co-developed-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Co-developed-by: Lisa Wang <wyihan@google.com>
+> Signed-off-by: Lisa Wang <wyihan@google.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile.kvm          |  1 +
+>  tools/testing/selftests/kvm/include/x86/tdx/tdx.h | 16 ++++++++++++
+>  tools/testing/selftests/kvm/lib/x86/tdx/tdx.c     | 30 +++++++++++++++++++++++
+>  3 files changed, 47 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> index a651a876c522..489324cecf83 100644
+> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> @@ -33,6 +33,7 @@ LIBKVM_x86 += lib/x86/ucall.c
+>  LIBKVM_x86 += lib/x86/vmx.c
+>  LIBKVM_x86 += lib/x86/tdx/tdx_util.c
+>  LIBKVM_x86 += lib/x86/tdx/td_boot.S
+> +LIBKVM_x86 += lib/x86/tdx/tdx.c
+>  
+>  LIBKVM_arm64 += lib/arm64/gic.c
+>  LIBKVM_arm64 += lib/arm64/gic_v3.c
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> new file mode 100644
+> index 000000000000..810ca7423c84
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef SELFTESTS_TDX_TDX_H
+> +#define SELFTESTS_TDX_TDX_H
 
-Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
----
- arch/riscv/Kconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+Nit:
+The headers in tools/testing/selftests/kvm use SELFTEST_KVM_XXX.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 674044754378..2921680d2132 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -185,6 +185,7 @@ config RISCV
- 	select HAVE_KRETPROBES
- 	# https://github.com/ClangBuiltLinux/linux/issues/1881
- 	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
-+	select HAVE_LIVEPATCH if FRAME_POINTER && 64BIT
- 	select HAVE_MOVE_PMD
- 	select HAVE_MOVE_PUD
- 	select HAVE_PAGE_SIZE_4KB
-@@ -195,6 +196,7 @@ config RISCV
- 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
- 	select HAVE_PREEMPT_DYNAMIC_KEY
- 	select HAVE_REGS_AND_STACK_ACCESS_API
-+	select HAVE_RELIABLE_STACKTRACE if FRAME_POINTER && 64BIT
- 	select HAVE_RETHOOK
- 	select HAVE_RSEQ
- 	select HAVE_RUST if RUSTC_SUPPORTS_RISCV && CC_IS_CLANG
-@@ -1394,3 +1396,5 @@ endmenu # "CPU Power Management"
- source "arch/riscv/kvm/Kconfig"
- 
- source "drivers/acpi/Kconfig"
-+
-+source "kernel/livepatch/Kconfig"
--- 
-2.43.0
+> +
+> +#include <linux/types.h>
+> +
+> +enum mmio_size {
+> +	MMIO_SIZE_1B = 1,
+> +	MMIO_SIZE_2B = 2,
+> +	MMIO_SIZE_4B = 4,
+> +	MMIO_SIZE_8B = 8
+> +};
+> +
+> +u64 tdx_mmio_write(u64 address, enum mmio_size size, u64 data_in);
+> +
+> +#endif // SELFTESTS_TDX_TDX_H
+> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
+> new file mode 100644
+> index 000000000000..f19be79fe11f
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
+> @@ -0,0 +1,30 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include "tdx/tdx.h"
+> +
+> +#define TDG_VP_VMCALL 0
+> +#define TDG_VP_VMCALL_VE_REQUEST_MMIO    48
+> +#define TDVMCALL_MMIO_WRITE		  1
+> +#define TDVMCALL_EXPOSE_REGS_MASK    0xFC00
+> +
+> +u64 tdx_mmio_write(u64 address, enum mmio_size size, u64 data_in)
+> +{
+> +	register u64 r10_reg asm("r10") = TDG_VP_VMCALL;
+
+I think this should just be 0 instead of TDG_VP_VMCALL, although
+TDG_VP_VMCALL is also 0.
+Per GHCI spec about R10:
+ : Set to 0 indicates that TDG.VP.VMCALL leaf used in R11 is defined
+ : in this specification.
+ : All other values 0x1 to 0xFFFFFFFFFFFFFFFF indicate TDG.VP.VMCALL
+ : is vendor-specific (both R10 and R11).
+
+
+> +	register u64 r11_reg asm("r11") = TDG_VP_VMCALL_VE_REQUEST_MMIO;
+> +	register u64 r12_reg asm("r12") = size;
+> +	register u64 r13_reg asm("r13") = TDVMCALL_MMIO_WRITE;
+> +	register u64 r14_reg asm("r14") = address;
+> +	register u64 r15_reg asm("r15") = data_in;
+> +	register u64 rax_reg asm("rax") = TDG_VP_VMCALL;
+> +	register u64 rcx_reg asm("rcx") = TDVMCALL_EXPOSE_REGS_MASK;
+> +
+> +	asm volatile(
+> +	 ".byte 0x66,0x0f,0x01,0xcc" /* tdcall */
+> +	 : "+r" (r10_reg), "+r" (r11_reg)
+> +	 : "r" (r12_reg), "r" (r13_reg), "r" (r14_reg), "r" (r15_reg),
+> +	   "r" (rax_reg), "r" (rcx_reg)
+> +	 : "cc", "memory"
+> +	);
+> +
+> +	return r10_reg;
+> +}
+> 
 
