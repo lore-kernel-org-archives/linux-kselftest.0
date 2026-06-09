@@ -1,166 +1,202 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B314CA277
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 18:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1A454654;
+	Tue,  9 Jun 2026 23:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781031415; cv=none; b=AwjERPkH132CIfc/iYKCVq8Lm6qPVPtDDxTzqrJasS0RnzNfyyWRTkYa32zkBEBHkubVPYJKU4fl+UKsp5hJ+tIoehv50fGsBQ7lxvseEfiLCR0lhJXOhEeTwzAO2faatQO5hnCRQz4ojMvZrszdzzku7XNeR7uv1fP3VlAsJfo=
+	t=1781047599; cv=none; b=lfPcT2YELU69HXQvEhApfB0nAhGltS51lsx/BEhUt3L9N34Kp/wcDhmaYd36eOWByz7STpTa/n+KkpW5BPQ4DRjpGFsn6lgdUNMe0fBe3IV7+b6jpPVDLG5l7dAgfSaUx9ao5r+G+nu/tq2seiLRGWt6EkXYJ3dmyJrvcfcfUuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781031415; c=relaxed/simple;
-	bh=eJrryJR7FC2wXcvBjW9Isaw+U5WrFzf+qgsOKVPU91Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m1RCBsacSCiYVXjh24Nc4txycRSlb8YAzV8kveszZrLpxcbp6Hsm/iuIrINnk3kRqv+CKR/zxG7kmXymPr5B3Z2L0U/lhW0lita27cPqwSNNaCsInIW9QVDg3/sODPSq3VRIe2CApLqEdWiT/+xTrgKkxhpeDUBOx93t3G2P7NE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com; spf=pass smtp.mailfrom=trailofbits.com; dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b=P78xY7aM; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
+	s=arc-20240116; t=1781047599; c=relaxed/simple;
+	bh=jXoX8kHsxTkpkszOVa2HH4vyPwIOsZj8uMNa5sttN1w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=rz5OPlxuWOX/q3wG2Uvje0yM1/maje6EKt0zPtpF/V3NU5CyLsTRj92lhaRf7MmMP+bXA/QHcZ8Owc7OIrOxs80nHAc3/AN3n+F5d2v+DeNzAgh7kpG2R4SeMqwlwKWfHCS8mXcrYBfVLWEgHYl86pxTdS1/ucPH0RwPjQNrIEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Fa2g7uA4; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b="P78xY7aM"
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-9159477c893so733634085a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 11:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=trailofbits.com; s=google; t=1781031413; x=1781636213; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UPa3Agakguu+yTP7S/VS7Anopqh6DOy/a2ofAVBPmuM=;
-        b=P78xY7aMkl6+MYCnczOaIpAE/cmZfFqoGhah1y438V0079ncGNixFJgybKVAKJsbzB
-         PBhvZZxgFxTTqz1knJ+2Y77dpA0lDvUuiNWFXQE4ZGBIwmx3HPgIcy4mc0mdExzfFU9X
-         f4w5zQcNXlO2zXogSgyEBzzfoVQI8Eo2Kog4hMXWPUcGq4FqtURTaD1ew65JqOJkq+e1
-         CK2wPLwB/Cw2ILrQhBudsNHEMpeQgYvZK2C7v5TuJxuep6uV+eu1GmiVwAiwrg77W9gY
-         uajf0F8V1puv1nmWz3e6C4B8B/yOJOCFNkfw961pKCo/t0tPNWy3QsaLmE1TLXxO/24C
-         nvPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781031413; x=1781636213;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UPa3Agakguu+yTP7S/VS7Anopqh6DOy/a2ofAVBPmuM=;
-        b=D9Mqw60JUZo+mGIpjsPfiymiNr8SULk5rp0B2DWUyt2tpnFsEySy8DyYjbRiBEG1Bo
-         kOKK6K6Enzt95qv1iK/KOlX7lBSOCbI79fCaj5FZvfDzd4CYH7/Eq+i3kyxzCDMPW6b0
-         cM1u3rmzz0Cqh3jZhiG5Wj16aQl6jZuUkQVgeG5l0roPuOAC9GsADiIcax1C8znBNkwE
-         WCLU1uEBGrfZbe/G7SjmOY4jWBv3wEqAactE7xk2jabDM4tMkvP3LX9d3iwlsWTJHKaz
-         CYSb0holE6H0iDCFcfaFTPPwP70DcqkbakL56NrCQ/jDSUJee/++ijitFI1B7T8yzSV2
-         ch9g==
-X-Forwarded-Encrypted: i=1; AFNElJ+YzoT8LILYJW1P3+nRDkK5LJcACxrdmwaOytC1RCN+Ps39U8uouZrAcIkGmuKCJq/SvZfs9rcO6sceH3V2/bE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJWvLY8je2uAsNyW8ku25IDW76wS+sijOqyEolugkLJVGMGsj9
-	oSRKL61SwRVdmbwLep43zNIdoFm9hE8+wIMyVEVjVgs46uFCYz8qrkIb77pC0PnK5uw=
-X-Gm-Gg: Acq92OF5EhWR+xcQkY3meScgyeg/8B61uxxZ8oJfLuoo2ZS8b7qo1E3rJDjP/UNRSS2
-	K/iJhg8P0YvX3vAk/BrTbDx+xZqGghfnh89bNItpqtHOrnLeUHWxTn7T0XbItK4nzVqdmHzEMHh
-	+IvUjK7clXl86Tz48qJYaecEB7elFQc/7iTSrfSoqFzfsId3S13MZrmPj4rDzV0u0r3cn2MY/tq
-	wYviO+ciptsLtk7NppcsAu3l0csDijghK3iLAu4pPKkvjMqDXzY+skjZ8MBn9aFwXrH2NmTVeGN
-	BcMP+FKxjmfYr9GmcVvJaCSqziDKCxpAsICChBLMSGN7gQDVXr0y471QxDC7J79l2Evkyb0Kipa
-	4LoPzdwe4Mxz96GusOaspjPzzmkysjmTnDNJ6iTYm580LlCi72+hKr79xptVtPx9eyJULP8zS12
-	blfTbx0cGAdGZQ4WWuOnVnizF+qXs9p+c9sxr9ow==
-X-Received: by 2002:a05:620a:a29b:20b0:90d:501c:50 with SMTP id af79cd13be357-915a9c75e55mr2470804085a.26.1781031413022;
-        Tue, 09 Jun 2026 11:56:53 -0700 (PDT)
-Received: from localhost ([161.35.96.86])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-9158a00a4f4sm2355139185a.3.2026.06.09.11.56.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2026 11:56:52 -0700 (PDT)
-From: Samuel Moelius <sam.moelius@trailofbits.com>
-To: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: Victor Nogueira <victor@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net v3 2/2] net/sched: act_pedit: require matching IPv4 L4 protocol
-Date: Tue,  9 Jun 2026 18:56:35 +0000
-Message-ID: <20260609185636.1599359-3-sam.moelius@trailofbits.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260609185636.1599359-1-sam.moelius@trailofbits.com>
-References: <20260609185636.1599359-1-sam.moelius@trailofbits.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Fa2g7uA4"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+	bh=b7kXFBbKNObo56DfTljiu9Pfh/bAzB9MuzypdnWNDDA=; b=Fa2g7uA4IubffrruqBpJWMWO/Q
+	mm/mJk0tcZMrqtK6rTOMfEGmzbBoWN0daRp/hU60H+WHxWaSHa2CRDPf3s8fLgHoH4XWE/HVRBBac
+	u6iXnmSyvENs9JPGoaNmR4nJmynQQs0Osqk49ze85V/Nu+TslfCYnBVcxxshPC/q6cYeJ2bGMgFhD
+	FYbA1nvsi/idpPSld72QM73tuFgMGuwrbvNDlJlHXYuE4WRWLn9bgOWL8kPvoL86fdFslRBCuzjB3
+	88JLQn3g1XItGqHvcBNQdJmTRGcRXvWEAPd5LJIrAV39G1nAIyCNRS4VwM8CY1ny2Efuq0qvBx1ia
+	eteSIV6A==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wX5ps-00000006VZd-2m5z;
+	Tue, 09 Jun 2026 23:26:20 +0000
+Message-ID: <339b6b8f-ac3d-4b49-acf1-9d846fc1db4a@infradead.org>
+Date: Tue, 9 Jun 2026 16:26:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 08/34] KVM: x86: Add KVM_VCPU_TSC_SCALE and fix the
+ documentation on TSC migration
+To: David Woodhouse <dwmw2@infradead.org>, Paolo Bonzini
+ <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+ Juergen Gross <jgross@suse.com>, Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>,
+ Jonathan Cameron <jic23@kernel.org>,
+ Sascha Bischoff <Sascha.Bischoff@arm.com>, Marc Zyngier <maz@kernel.org>,
+ Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>,
+ Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com,
+ kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+ linux-kselftest@vger.kernel.org
+References: <20260608145455.89187-1-dwmw2@infradead.org>
+ <20260608145455.89187-9-dwmw2@infradead.org>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20260608145455.89187-9-dwmw2@infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Victor Nogueira <victor@mojatatu.com>
 
-Add a tdc test that checks the act_pedit extended L4 header mode does not
-edit a packet whose IPv4 protocol does not match the selected transport
-header.
 
-The test installs an ingress pedit rule that sets the UDP destination
-port, then injects a TCP packet with dport 2222. The UDP and TCP
-destination ports sit at the same L4 offset, so a buggy kernel rewrites
-the TCP dport. A second flower filter matches TCP dport 2222 and drops
-the packet through an indexed gact action; the test then verifies via
-JSON that this action saw exactly one packet, i.e. the dport was left
-untouched and still matched 2222.
+On 6/8/26 7:47 AM, David Woodhouse wrote:
+> diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
+> index 5e3805820010..167aa4140d30 100644
+> --- a/Documentation/virt/kvm/devices/vcpu.rst
+> +++ b/Documentation/virt/kvm/devices/vcpu.rst
+> @@ -243,7 +243,10 @@ Returns:
+>  Specifies the guest's TSC offset relative to the host's TSC. The guest's
+>  TSC is then derived by the following equation:
+>  
+> -  guest_tsc = host_tsc + KVM_VCPU_TSC_OFFSET
+> +  guest_tsc = ((host_tsc * tsc_scale_ratio) >> tsc_scale_bits) + KVM_VCPU_TSC_OFFSET
+> +
+> +The values of tsc_scale_ratio and tsc_scale_bits can be obtained using
+> +the KVM_VCPU_TSC_SCALE attribute.
+>  
+>  This attribute is useful to adjust the guest's TSC on live migration,
+>  so that the TSC counts the time during which the VM was paused. The
+> @@ -251,44 +254,100 @@ following describes a possible algorithm to use for this purpose.
+>  
+>  From the source VMM process:
+>  
+> -1. Invoke the KVM_GET_CLOCK ioctl to record the host TSC (tsc_src),
+> +1. Invoke the KVM_GET_CLOCK ioctl to record the host TSC (host_tsc_src),
+>     kvmclock nanoseconds (guest_src), and host CLOCK_REALTIME nanoseconds
+> -   (host_src).
+> +   (time_src) at a given moment (Tsrc).
+> +
+> +2. For each vCPU[i]:
+> +
+> +   a. Read the KVM_VCPU_TSC_OFFSET attribute to record the guest TSC offset
+> +      (ofs_src[i]).
+>  
+> -2. Read the KVM_VCPU_TSC_OFFSET attribute for every vCPU to record the
+> -   guest TSC offset (ofs_src[i]).
+> +   b. Read the KVM_VCPU_TSC_SCALE attribute to record the guest TSC scaling
+> +      ratio (ratio_src[i], frac_bits_src[i]).
+>  
+> -3. Invoke the KVM_GET_TSC_KHZ ioctl to record the frequency of the
+> -   guest's TSC (freq).
+> +   c. Use host_tsc_src and the scaling/offset factors to calculate this
+> +      vCPU's TSC at time Tsrc:
+> +
+> +      tsc_src[i] = ((host_tsc_src * ratio_src[i]) >> frac_bits_src[i]) + ofs_src[i]
+> +
+> +3. Invoke the KVM_GET_CLOCK_GUEST ioctl on the boot vCPU to return the KVM
+> +   clock as a function of the guest TSC (pvti_src). (This ioctl may not
+> +   succeed if the host and guest TSCs are not consistent and well-behaved.)
+>  
+>  From the destination VMM process:
+>  
+> -4. Invoke the KVM_SET_CLOCK ioctl, providing the source nanoseconds from
+> -   kvmclock (guest_src) and CLOCK_REALTIME (host_src) in their respective
+> -   fields.  Ensure that the KVM_CLOCK_REALTIME flag is set in the provided
+> -   structure.
+> +4. Before creating the vCPUs, invoke the KVM_SET_TSC_KHZ ioctl on the VM, to
+> +   set the scaled frequency of the guest's TSC (freq).
+> +
+> +5. Invoke the KVM_GET_CLOCK ioctl to record the host TSC (host_tsc_dst) and
+> +   host CLOCK_REALTIME nanoseconds (time_dst) at a given moment (Tdst).
+> +
+> +6. Calculate the number of nanoseconds elapsed between Tsrc and Tdst:
+> +
+> +   ΔT = time_dst - time_src
+> +
+> +7. As each vCPU[i] is created:
+> +
+> +   a. Read the KVM_VCPU_TSC_SCALE attribute to record the guest TSC scaling
+> +      ratio (ratio_dst[i], frac_bits_dst[i]).
+> +
+> +   b. Calculate the intended guest TSC value at time Tdst:
+> +
+> +      tsc_dst[i] = tsc_src[i] + (ΔT * freq[i])
+>  
+> -   KVM will advance the VM's kvmclock to account for elapsed time since
+> -   recording the clock values.  Note that this will cause problems in
+> -   the guest (e.g., timeouts) unless CLOCK_REALTIME is synchronized
+> -   between the source and destination, and a reasonably short time passes
+> -   between the source pausing the VMs and the destination executing
+> -   steps 4-7.
+> +   c. Use host_tsc_dst and the scaling factors to calculate this vCPU's
+> +      raw scaled TSC at time Tdst without offsetting:
+> +
+> +      raw_dst[i] = ((host_tsc_dst * ratio_dst[i]) >> frac_bits_dst[i])
+> +
+> +   d. Calculate ofs_dst[i] = tsc_dst[i] - raw_dst[i] and set the resulting
+> +      offset using the KVM_VCPU_TSC_OFFSET attribute.
+> +
+> +8. If pvti_src was provided, invoke the KVM_SET_CLOCK_GUEST ioctl on the boot
+> +   vCPU to restore the KVM clock as a precise function of the guest TSC.
+> +
+> +9. If KVM_SET_CLOCK_GUEST was not available or failed (e.g. because the
+> +   master clock is not active), fall back to the KVM_SET_CLOCK ioctl,
+> +   providing the source nanoseconds from kvmclock (guest_src) and
+> +   CLOCK_REALTIME (time_src) in their respective fields. Ensure that the
+> +   KVM_CLOCK_REALTIME flag is set in the provided structure.
+> +
+> +   KVM will restore the VM's kvmclock, accounting for elapsed time since
+> +   the clock values were recorded. Note that this will cause problems in
+> +   the guest (e.g., timeouts) unless CLOCK_REALTIME is synchronized between
+> +   the source and destination, and a reasonably short time passes between
+> +   the source pausing the VMs and the destination resuming them.
+> +   Due to the KVM_[SG]ET_CLOCK API using CLOCK_REALTIME instead of
+> +   CLOCK_TAI, leap seconds during the migration may also introduce errors.
+> +
+> +4.2 ATTRIBUTE: KVM_VCPU_TSC_SCALE
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Signed-off-by: Victor Nogueira <victor@mojatatu.com>
----
-Changes in v3:
-  - Add test
+Documentation/virt/kvm/devices/vcpu.rst:327: ERROR: Inconsistent title style: skip from level 2 to 4.
 
- .../tc-testing/tc-tests/actions/pedit.json    | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
+4.2 ATTRIBUTE: KVM_VCPU_TSC_SCALE
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/pedit.json b/tools/testing/selftests/tc-testing/tc-tests/actions/pedit.json
-index 37c4103321749..d8b685cfc62de 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/actions/pedit.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/pedit.json
-@@ -1920,5 +1920,54 @@
-         "teardown": [
-             "$TC actions flush action pedit"
-         ]
-+    },
-+    {
-+        "id": "1a4f",
-+        "name": "Pedit udp dport should not mangle TCP packet dport",
-+        "category": [
-+            "actions",
-+            "pedit"
-+        ],
-+        "plugins": {
-+            "requires": [
-+                "nsPlugin",
-+                "scapyPlugin"
-+            ]
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 clsact",
-+            "$TC filter add dev $DEV1 ingress protocol ip pref 1 matchall action pedit ex munge udp dport set 18053 continue"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 ingress protocol ip pref 2 flower ip_proto tcp dst_port 2222 action drop index 1",
-+        "scapy": {
-+            "iface": "$DEV0",
-+            "count": 1,
-+            "packet": "Ether()/IP(dst='10.10.10.1')/TCP(dport=2222)"
-+        },
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC -j -s actions get action gact index 1",
-+        "matchJSON": [
-+            {
-+                "total acts": 0
-+            },
-+            {
-+                "actions": [
-+                    {
-+                        "order": 1,
-+                        "kind": "gact",
-+                        "control_action": {
-+                            "type": "drop"
-+                        },
-+                        "index": 1,
-+                        "stats": {
-+                            "packets": 1
-+                        }
-+                    }
-+                ]
-+            }
-+        ],
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 clsact"
-+        ]
-     }
- ]
+Established title styles: =/= = - [docutils]
+
+Change this "underline" to use "--------------------------" (for whatever
+width is needed) and also add the same to the 4.1 heading.
+
+> +
+> +:Parameters: struct kvm_vcpu_tsc_scale
+> +
+> +Returns:
+> +
+> +	 ======= ======================================
+> +	 -EFAULT Error reading the provided parameter
+> +		 address.
+> +	 -ENXIO  Attribute not supported (no TSC scaling)
+> +	 -EINVAL Invalid request to write the attribute
+> +	 ======= ======================================
+
+
 -- 
-2.54.0
+~Randy
 
