@@ -1,117 +1,203 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012012.outbound.protection.outlook.com [52.101.43.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F5C2F2910;
-	Tue,  9 Jun 2026 05:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780983488; cv=none; b=DUExAOab6X4oMAsFPFw396AeO0/SiP1jyH5bI3UM3uzH1GeKhMq+GYyaeGmSM92RYbR+74ehzYjhcMo9mbzi7Ynwjanwktg+OHu/6d731P44l5c6RNUd1fH2VE1isfiPcU3jbbRvBNP5PxMvUuAyNR0gHw1Ch7DsevTxsTS8UIM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780983488; c=relaxed/simple;
-	bh=13H4rBXOwb8xQGBX0guI7OEhjmT0Lz/E1TcGCfJ+rwM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TU2FPe98ktlT/2yR+aJQgu/fOplAEwWBlzUKCQGF7Uh7ux7+vZ/DjOZ1su/XkgY7UrfYZk6l54Qe//4oLbOhBKidYvuq/mAr1BNlTjTiAPfvq/qT0gHYNYpk6uLhaJDLU6wJWZuFdm7plCiEpZDBHFhw/XnA/IKflOKXQlR+zYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h4sVGkdP; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FF33C4540;
+	Tue,  9 Jun 2026 05:40:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780983653; cv=fail; b=MaxwGO/d81oBewyK1Uv8ldlORteailO6LgH2Zbx+98diZNv3QGci2J9wDIa1TINDO8quj+gacmiMQi11Yp9H4vxSwoB1K8CQuZK6U023I1o4Lm3n+A4pUh1RKjyE3ADtWcWFdqXTzpXoTlywg1wuCEnYtT97E36IYi3W7f3al9o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780983653; c=relaxed/simple;
+	bh=O314YEvG5JW+bc6Ip8Tlr0U8MW1y8VJ7Dpq6Z3U5/84=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=f2Zf6jdLCvVxYFnZW+Vnb0W0sXdsZy7+94WUwK4c2tdXTjVgTU708225DFe0zmPy4/XeCLkoWtEIT7rGvRuDkjAa1I4JP5yryy7dwsccgR5s5W6aHtefQpz7NxKvUbpfMkI1GSXsFAshhlIIs1YnWV1uOHulPxdxtMYP6nyGrmw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YHzEr/wi; arc=fail smtp.client-ip=52.101.43.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h4sVGkdP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780983485; x=1812519485;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=13H4rBXOwb8xQGBX0guI7OEhjmT0Lz/E1TcGCfJ+rwM=;
-  b=h4sVGkdPQ/pxf8LD4NzFNdYxrD2NLaA/XuCDMu4Qav2ob1AKo3eyLGvh
-   b3qKoU7lS6cU7jWCIDRDvcEQmE9wGvsI6hCQZ2DA1fZ/mBMCPdQ/l5aQZ
-   KKGOggrniQ9kkBFHLQptdhunovWsAA7HnMrBUwrp+97m8umlDimhhKisD
-   FhqVWZ8zRIMRwZOdKH2TWRTzZpsjkMVelDql2uaCZMobost0uJA1lIuDN
-   6lf7xWM/G/QCC87/n+XZB8GKgQ3igismFV1Rg9fK2QurhPMQEBRb9TGd5
-   CFKrFKZqH6lRRoAvoJ7GurAlw08jLFqpen5dfpL9ccgpImecCasLPkBQ2
-   Q==;
-X-CSE-ConnectionGUID: LphlZHksSKmKEC5Ai+Y03w==
-X-CSE-MsgGUID: YjBzBLbWQgKRuF86yFh6qQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11811"; a="104398000"
-X-IronPort-AV: E=Sophos;i="6.24,195,1774335600"; 
-   d="scan'208";a="104398000"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2026 22:38:05 -0700
-X-CSE-ConnectionGUID: 3LkUyPELRx6Cy7oCkd0/LQ==
-X-CSE-MsgGUID: fJrLrpFLTNifHob7ADMrZg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,195,1774335600"; 
-   d="scan'208";a="244914220"
-Received: from unknown (HELO [10.238.2.24]) ([10.238.2.24])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2026 22:37:57 -0700
-Message-ID: <a16f6ee5-263c-4627-b94d-5d248ee00f21@linux.intel.com>
-Date: Tue, 9 Jun 2026 13:37:54 +0800
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YHzEr/wi"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=PLOz4xnnSdLEd/udtEFPtFksTcap5NgU4c1zQwTIToiJqNMbiKaWfvTUiLUl6M4E7CioMs57fjHt5ovGtDgBJ7DggTrfvLG9HKTMjgzb9lwc+igo0x3bv/92jofDrLyJv7Dt8v3+Aw6HHeo99n73jN3RNyZxFjzUSL5OH4/7d/5KKvGw0NfiuYhSEyitR+1SEafjSKQkT93DpEjy/AbrJ2O184RrHU++wV4iaG/LpQWnELB56K874tTgVvFzZpAj8sZv2HOG6d7aFiDOZUK2bEcbJ8uh9+NqCSGd8xVgDbPukYoTX5E/Nb1wpnXu4kWWB7YGkYvj27S0AM3n/PaaoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5gQfz0qjAQFoOdhCeIPSqsb7Wx1GPva0gwy1T5k3UJo=;
+ b=OawdYAOqRp3tnRDLOZTPokXyhN/lPvFeaSZRqQ/+41RpgWZ2SjjVlBVY2Wt1gBGxh7zXoOmS1OfSnM7RB81h9/CFJTLAh6RXPl6tOWT5fGBxqF6cA1o0xXt79skVZleWALtLzhLAPXIhz9HLvUDoedV4iP7Maw+vno2oTuNW0UYDq8CmCGXvM3iUaV0x9tGUifZ2jT7JFxb4iutYfOZymMona8TteoROU06nXT4DS1V3dYYWNr+Qc1fkwmEmUoWArHKZfBfG7KB0b8YEC30qynEORbV8azhrxZG42BUgg8+ssAOMmvuzvZX74nldhUNcYho+MOHLLY5+zOgXLJUh2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=networkplumber.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5gQfz0qjAQFoOdhCeIPSqsb7Wx1GPva0gwy1T5k3UJo=;
+ b=YHzEr/wiTLiRV4lQE5DUmj8yozlbGC5xAiKHs+G2x7WGVX/oNJnKDiWrUfsD3Hxk5oZuVgKEmm0aR0/cfQjJR1ggVwWNxuAFwz4mpQjhNJmAbVRtY0k8bB+h1AaPA6BX1WWvOZXKjrrDXgwu3xWbbUxMlU0eWhjdCa25/10vET/2TGhnfd/q3i4sr6+GevswzZHT7U7Q/I59X3G4a45mFMXVWGrGJCRVdUpJWFFZZpE7TXHXFfvDXKHq9B8tLeZxlfBURtuH9EhsZdSk8+D7ITpFM/xSBQYQyJkxgnMNvv1c3JamT6YRC0+Tq+wYX55i65qxrlU5/o1CHnldiJuqng==
+Received: from PH8P221CA0026.NAMP221.PROD.OUTLOOK.COM (2603:10b6:510:2d8::29)
+ by MN0PR12MB5859.namprd12.prod.outlook.com (2603:10b6:208:37a::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.13; Tue, 9 Jun 2026
+ 05:40:47 +0000
+Received: from SA2PEPF00001507.namprd04.prod.outlook.com
+ (2603:10b6:510:2d8:cafe::9d) by PH8P221CA0026.outlook.office365.com
+ (2603:10b6:510:2d8::29) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.113.10 via Frontend Transport; Tue, 9
+ Jun 2026 05:40:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ SA2PEPF00001507.mail.protection.outlook.com (10.167.242.39) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.113.7 via Frontend Transport; Tue, 9 Jun 2026 05:40:46 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 8 Jun
+ 2026 22:40:33 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Mon, 8 Jun 2026 22:40:32 -0700
+Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Mon, 8 Jun 2026 22:40:23 -0700
+From: Tariq Toukan <tariqt@nvidia.com>
+To: Stephen Hemminger <stephen@networkplumber.org>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>
+CC: David Ahern <dsahern@kernel.org>, Donald Hunter <donald.hunter@gmail.com>,
+	Simon Horman <horms@kernel.org>, Jiri Pirko <jiri@resnulli.us>, "Jonathan
+ Corbet" <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, "Saeed
+ Mahameed" <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Tariq
+ Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, Shuah Khan
+	<shuah@kernel.org>, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, "Chuck
+ Lever" <chuck.lever@oracle.com>, Or Har-Toov <ohartoov@nvidia.com>, "Carolina
+ Jubran" <cjubran@nvidia.com>, Moshe Shemesh <moshe@nvidia.com>, Shay Drori
+	<shayd@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>, Daniel Zahka
+	<daniel.zahka@gmail.com>, Shahar Shitrit <shshitrit@nvidia.com>, Jacob Keller
+	<jacob.e.keller@intel.com>, Cosmin Ratiu <cratiu@nvidia.com>, Parav Pandit
+	<parav@nvidia.com>, Kees Cook <kees@kernel.org>, Adithya Jayachandran
+	<ajayachandra@nvidia.com>, Daniel Jurgens <danielj@nvidia.com>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, Gal Pressman <gal@nvidia.com>, "Ido
+ Schimmel" <idosch@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, Petr Machata
+	<petrm@nvidia.com>
+Subject: [PATCH iproute2-next 0/7] devlink: add per-port resource support
+Date: Tue, 9 Jun 2026 08:39:46 +0300
+Message-ID: <20260609053953.487152-1-tariqt@nvidia.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 16/22] KVM: selftests: Load per-vCPU guest stack in
- TDX boot parameters
-To: Lisa Wang <wyihan@google.com>
-Cc: Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
- Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
- <20260521-tdx-selftests-v13-v13-16-6983ae4c3a4d@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20260521-tdx-selftests-v13-v13-16-6983ae4c3a4d@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00001507:EE_|MN0PR12MB5859:EE_
+X-MS-Office365-Filtering-Correlation-Id: f13f0f69-1bd4-4487-c3a2-08dec5e9a79e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|36860700016|82310400026|1800799024|11063799006|56012099006|6133799003|18002099003|3023799007|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	nk5J50wIfsofyv7/0JFzH46omqHICMwWUTGJ0FZKuepO57rhFtMsQKU0jbTWEVckCDEPZEMKm3vvREYUMdy06LZzpKa+mZj/9yNM1SAr8n8h4GmK+oQpJUChbXa00RVWCULw4b2iJXhj+yZJteeeJGnCDP/2eC7tY8v7nFi8CM914JgJLAs1tAnubue0YA8SExUz2tYIZ4hHm8k2tIPkEtgaaQAX+EVAdzbMkFBD/+ppsgIuwUTM6SAFFeEoZCwhyWGi7kz+96UKGtTSVb6D9AiqDgPBd4gbSz7OBjnew9kqkuzI6HhSxDi/169UxSSah2NMQ5j+V/Z12uA+ao2KHSS8UOyzyAehrURY6ZwZlkjEEuwGe1gGBApyNTBPKuOC3cxLq7ZazPmYyjzxkUzji5xRsXmdNbPZ7RXgziE0EEX8SBnrudkcQbuhn8xkfvxBB4vEJo/RulKPhrt4EGEg6D7BnNED2WLn3QaQmEEMb1F6eyc2kCMuma8IqwLa6e5pKf7J5EMBszjcz2/lzM6yTZykGqo3Hwdi33/vp4P1zwaaYDMBoIEI8pH9nFC2DekkDfDomV8WTDNvukVRJerTRQTtNjJNKNz5iwMpR49TBOVwnAjEfnu39Qen83SbZKwKxB7PjGIrydlhM2uGmEFn7VVZ8OOqj2ziDrqUJ4wHZAuxMkxPuK9P8RdFPe7doml+3P5mqruTtAnXg59HEmcLPIq8DyDCHoWymsvqH0fe+5x3uvWK4iplyify/T1vRQ/n
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700016)(82310400026)(1800799024)(11063799006)(56012099006)(6133799003)(18002099003)(3023799007)(13003099007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	1spcJajCy8cyvOPRp2onwVdy8YCArYSsiI0pU1ABCoclJgpnZhRl7yeurYKTaFUlclZk9SgTdZo8nOXCoSUAhiX828GpbUWbBf1nQ+SgMMzoijznBv02aIRiWZuK4Tx5y1CTUyMNPva4flpvG0XIGJc3lYNBV/kdeX82n8e3SAWqlkXMlB+l9N12digUDjZAk4IW2m8JF8buLUKGNOEa/TnE5Yoo2yvGk1bteignpXus9jvflgLS3lg8NU9K0ctSgAzHaZCGG8u9Fqe1jmeiwIQi30J42z9MeLdx7VccapLR40YYJ3BxgskCUn8uuszKcuWj97UCVpnNjS00QkMS30xDsrpDY6CNOVwWsSlcpb/QtesZOeLx+8cu0dNCu81c+AlNt8kPsgywXPanhJpV3UOi79jxX6Mwh6e/tGvTJCq4sl5aPmFaxBNZ+gGP8Vmc
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2026 05:40:46.1936
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f13f0f69-1bd4-4487-c3a2-08dec5e9a79e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00001507.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5859
+
+Hi,
+
+Currently, devlink resource show only supports querying a specific
+device and displays device-level resources. However, some resources
+are per-port, such as the maximum number of SFs that can be created
+on a specific PF port.
+
+This series extends devlink resource show with full support for
+port-level resources, including a dump mode, per-port querying syntax,
+and scope filtering. In preparation for these features, the first two
+patches refactor how dpipe tables are handled to unblock dump support
+and ensure errors in secondary queries are non-fatal.
+
+The series is organized as follows:
+
+Patch 1 splits the dpipe tables display into a separate function.
+
+Patch 2 moves the dpipe tables query into the per-device resource show
+callback, ensuring it behaves correctly during a multi-device dump.
+
+Patch 3 fixes a pre-existing memory leak in resource_ctx_fini.
+
+Patch 4 adds dump support to resource show (no device required).
+
+Patch 5 shows port-level resources returned in a dump reply.
+
+Patch 6 adds DEV/PORT_INDEX syntax to resource show.
+
+Patch 7 adds scope filter to resource show.
+
+With this series, users can query resources at all levels:
+
+$ devlink resource show
+pci/0000:03:00.0:
+  name local_max_SFs size 508 unit entry
+  name external_max_SFs size 508 unit entry
+pci/0000:03:00.0/196608:
+  name max_SFs size 20 unit entry
+
+$ devlink resource show scope dev
+pci/0000:03:00.0:
+  name local_max_SFs size 508 unit entry
+  name external_max_SFs size 508 unit entry
+
+$ devlink resource show scope port
+pci/0000:03:00.0/196608:
+  name max_SFs size 20 unit entry
+
+$ devlink resource show pci/0000:03:00.0/196608
+pci/0000:03:00.0/196608:
+  name max_SFs size 20 unit entry
+
+This series is the userspace counterpart to the kernel series:
+https://lore.kernel.org/all/20260407194107.148063-1-tariqt@nvidia.com/
+
+Ido Schimmel (2):
+  devlink: Split dpipe tables output to a separate function
+  devlink: Move dpipe tables query to resources show callback
+
+Or Har-Toov (5):
+  devlink: fix memory leak in resource_ctx_fini
+  devlink: add dump support for resource show
+  devlink: show port resources in resource dump
+  devlink: add per-port resource show support
+  devlink: add scope filter to resource show
+
+ bash-completion/devlink     |   8 ++
+ devlink/devlink.c           | 202 +++++++++++++++++++++++++++---------
+ man/man8/devlink-resource.8 |  34 +++++-
+ 3 files changed, 192 insertions(+), 52 deletions(-)
 
 
-
-On 5/22/2026 7:16 AM, Lisa Wang wrote:
-> From: Sagi Shahar <sagis@google.com>
-> 
-> Allocate a guest stack for each vCPU and record the GVA in the TDX boot
-> parameters region to allow proper vCPU initialization.
-> 
-> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Lisa Wang <wyihan@google.com>
-
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
-
-One nit below.
-
-[...]>  
-> +void tdx_vcpu_load_boot_parameters(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
-> +{
-> +	struct td_boot_parameters *params =
-> +		addr_gpa2hva(vm, TD_BOOT_PARAMETERS_GPA);
-> +	struct td_per_vcpu_parameters *vcpu_params =
-> +		&params->per_vcpu[vcpu->id];
-> +
-> +	vcpu_params->esp_gva = kvm_allocate_vcpu_stack(vm);
-> +}
-> +
-> +
-
-An extra empty line.
-
->  static struct kvm_tdx_capabilities *tdx_read_capabilities(struct kvm_vm *vm)
->  {
->  	struct kvm_tdx_capabilities *tdx_cap = NULL;
-> 
+base-commit: 7340b539841dc739bc0b813e8e86825bc1eb5a4c
+-- 
+2.44.0
 
