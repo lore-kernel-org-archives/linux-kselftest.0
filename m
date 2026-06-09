@@ -1,162 +1,85 @@
-Received: from akranes.kaiser.cx (akranes.kaiser.cx [152.53.16.207])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104453D3CEF;
-	Tue,  9 Jun 2026 07:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=152.53.16.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B053E7BA8;
+	Tue,  9 Jun 2026 07:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780990090; cv=none; b=LB7XbhpB/KL/dlL0YPvpfOO+wKZeecF9+rF3QKaTvkvyVrW2YfweET/6Wzhs+E0anDVvxXIjm+lNWl7fbO0C8Hxuo8jEqDfx46tXVR0APGaAOHLM+SSArgxk/HzQdeMr0AJVQoWCB1z4pAjmcHryx/VQgnGkJKLGpkPfpdVmu48=
+	t=1780991142; cv=none; b=N82hE5lIKjiCyKZG3tj7pDWsBgWDXVVxNDqiuWFDz1BIUUsj3wvZpsG6c2LsbtvM3y+kdxmp+on3nZVTSVY9omPsbvkd7UhrOkIq8QCUA4kni3rqEI8wKdFCx1EILbUx/IQX76mIsuJCrD3+Mt84fcvOG1WyLWp3uS9qahBiEP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780990090; c=relaxed/simple;
-	bh=1tjO6VMGzyVIS+TNlEBflb9MJnuAW7Hr0LU4DhXj+tI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cjAyRMDvFn/ydG3DIwJwvZk0GGtEv6KZCEBzUaMolb8xDTX66QX8rOjblYXVCNka4S9mBXGyAXEFrg8GPH8ag0k6K5fww35vMtjzfsoQHZMihLNdL6GvQaJr7PfUKqhRTitTHMLC1q/stOjyxury47WYrgHLSgJjHAWFTNBHyeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kaiser.cx; spf=pass smtp.mailfrom=kaiser.cx; arc=none smtp.client-ip=152.53.16.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kaiser.cx
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaiser.cx
-Received: from ipservice-092-209-184-216.092.209.pools.vodafone-ip.de ([92.209.184.216] helo=nb282.user.codasip.com)
-	by akranes.kaiser.cx with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <martin@kaiser.cx>)
-	id 1wWqsJ-000000020yB-196a;
-	Tue, 09 Jun 2026 09:27:51 +0200
-Date: Tue, 9 Jun 2026 09:27:50 +0200
-From: Martin Kaiser <martin@kaiser.cx>
-To: Wang Han <wanghan@linux.alibaba.com>
-Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Chen Pei <cp0613@linux.alibaba.com>, Andy Chiu <andybnac@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, oliver.yang@linux.alibaba.com,
-	xueshuai@linux.alibaba.com, zhuo.song@linux.alibaba.com,
-	jkchen@linux.alibaba.com, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v3 1/8] scripts/sorttable: Handle RISC-V patchable ftrace
- entries
-Message-ID: <aifAdmxJtnVjshl2@nb282.user.codasip.com>
-References: <20260528082310.1994388-1-wanghan@linux.alibaba.com>
- <cover.194d76e3a15b.v3.riscv-livepatch.wanghan@linux.alibaba.com>
- <20260609063002.3943001-1-wanghan@linux.alibaba.com>
+	s=arc-20240116; t=1780991142; c=relaxed/simple;
+	bh=Epl21bg/B+GSKA5aa8yLW2Biqm3DveVoIHiJK+uZxVg=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=H1aLwkl9hvzTO5P4cgj+vH/HN3nH5T65SnnX+CmhTH74OY3CMtACGZlAMuytyjnQxbzHznogocMr8O+JYXMvMHdWz5m/kPOvodtqB7emU7dJ0QLgIGvbFkHM2UzAqMuhBxSRTS6WqpxK/TvNe2OAdS4nVd/+kd9OQywl2hNsYVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ir0xcoM2; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="ir0xcoM2"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=ktNotGT5JK3I/QKLXmHwe1WwS3X3UN7pBsbxz+Du+Ho=;
+	b=ir0xcoM2vUj6JNmJbu+CcwVzu3LZqtzPzJp/pM+t2wzqE0wKOoCeyP3lyYi3Boy3N4bDXvc6x
+	dPbx4PndL6ZdmZsxeg4IGgGNKjDFs8FrQKZxExEg87ArBAy9l3W/obldyebACkFqnGmLxtINLwf
+	3iQAE9vH2qgPmIqc6x0uilI=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4gZLNK6bxfz12LD1;
+	Tue,  9 Jun 2026 15:37:37 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3E05440561;
+	Tue,  9 Jun 2026 15:45:30 +0800 (CST)
+Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 9 Jun 2026 15:45:30 +0800
+Received: from [10.173.124.160] (10.173.124.160) by
+ kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 9 Jun 2026 15:45:28 +0800
+Subject: Re: [PATCH v4 1/7] mm: memory_failure: Clarify the MF_DELAYED
+ definition
+To: Lisa Wang <wyihan@google.com>
+CC: <rientjes@google.com>, <seanjc@google.com>, <ackerleytng@google.com>,
+	<vannapurve@google.com>, <michael.roth@amd.com>, <jiaqiyan@google.com>,
+	<tabba@google.com>, <dave.hansen@linux.intel.com>, Naoya Horiguchi
+	<nao.horiguchi@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, "Paolo
+ Bonzini" <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Hugh Dickins
+	<hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, "David
+ Hildenbrand" <david@kernel.org>, Lorenzo Stoakes
+	<lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren
+ Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20260602-memory-failure-mf-delayed-fix-v4-0-a5bc7db5a9b2@google.com>
+ <20260602-memory-failure-mf-delayed-fix-v4-1-a5bc7db5a9b2@google.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <6ed7e4e9-6256-4348-235a-e5b4bf132f57@huawei.com>
+Date: Tue, 9 Jun 2026 15:45:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260609063002.3943001-1-wanghan@linux.alibaba.com>
+In-Reply-To: <20260602-memory-failure-mf-delayed-fix-v4-1-a5bc7db5a9b2@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemq500010.china.huawei.com (7.202.194.235)
 
-Thus wrote Wang Han (wanghan@linux.alibaba.com):
+On 2026/6/3 5:55, Lisa Wang wrote:
+> This patch clarifies the definition of MF_DELAYED to represent cases
+> where a folio's removal is initiated but not immediately completed
+> (e.g., due to remaining metadata references).
+> 
+> Signed-off-by: Lisa Wang <wyihan@google.com>
 
-> RISC-V uses -fpatchable-function-entry=8,4 when the compressed ISA is
-> enabled and -fpatchable-function-entry=4,2 otherwise. In both cases, the
-> patchable NOP area starts 8 bytes before the function symbol address.
-> The __mcount_loc entries therefore point at the patchable NOP area
-> associated with a function, while nm reports the function symbol at the
-> entry address used for the function range check.
+Acked-by: Miaohe Lin <linmiaohe@huawei.com>
 
-> After RISC-V selected HAVE_BUILDTIME_MCOUNT_SORT, sorttable started
-> applying that range check at build time. Without allowing entries just
-> before the reported function address, the mcount sorter treats valid
-> RISC-V ftrace callsites as invalid weak-function entries and writes
-> them back as zero. The resulting kernel boots with no ftrace entries,
-> breaking dynamic ftrace and users such as livepatch.
-
-> The failure is silent during the final link because zeroing weak-function
-> entries is an expected sorttable operation. At boot, those zero entries
-> are skipped by ftrace_process_locs(), so the only obvious symptom is that
-> the vmlinux ftrace table has lost valid callsites and ftrace users cannot
-> attach to them.
-
-> CONFIG_FTRACE_SORT_STARTUP_TEST also reports the table as sorted in this
-> state: it only checks that the __mcount_loc entries are in ascending
-> order, which a fully zeroed table trivially satisfies. The original
-> commit relied on this check and did not see the regression.
-
-> On an affected RISC-V QEMU boot with both CONFIG_FTRACE_SORT_STARTUP_TEST
-> and CONFIG_FTRACE_STARTUP_TEST enabled, the sort check still passes
-> while ftrace reports zero usable entries and the early selftests fail:
-
->   [    0.000000] ftrace section at ffffffff8101da98 sorted properly
->   [    0.000000] ftrace: allocating 0 entries in 128 pages
->   [    0.054999] Testing tracer function: .. no entries found ..FAILED!
->   [    0.172407] tracer: function failed selftest, disabling
->   [    0.178186] Failed to init function_graph tracer, init returned -19
-
-> Handle RISC-V like arm64 for the function-range check and allow
-> patchable entries up to 8 bytes before the function address.
-
-> With this fix, a RISC-V QEMU smoke boot with ftrace startup tests shows
-> the vmlinux ftrace table is populated and dynamic ftrace still works:
-
->   [    0.000000] ftrace: allocating 46749 entries in 184 pages
->   [    0.051115] Testing tracer function: PASSED
->   [    1.283782] Testing dynamic ftrace: PASSED
->   [    6.275456] Testing tracer function_graph: PASSED
-
-> Fixes: 0ca1724b56af ("riscv: ftrace: select HAVE_BUILDTIME_MCOUNT_SORT")
-> Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
-> Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Reviewed-by: Chen Pei <cp0613@linux.alibaba.com>
-> Link: https://lore.kernel.org/all/20260527113028.4b21a5de@fedora/
-> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
-> ---
->  scripts/sorttable.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-
-> diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-> index e8ed11c680c6..d8dc2a1b7c31 100644
-> --- a/scripts/sorttable.c
-> +++ b/scripts/sorttable.c
-> @@ -891,17 +891,22 @@ static int do_file(char const *const fname, void *addr)
->  	table_sort_t custom_sort = NULL;
-
->  	switch (elf_map_machine(ehdr)) {
-> -	case EM_AARCH64:
->  #ifdef MCOUNT_SORT_ENABLED
-> +	case EM_AARCH64:
-> +		/* arm64 also needs RELA-based weak-function fixups. */
->  		sort_reloc = true;
->  		rela_type = 0x403;
-> -		/* arm64 uses patchable function entry placing before function */
-> +		/* fallthrough */
-> +	case EM_RISCV:
-> +		/* arm64 and RISC-V place patchable entries before the function. */
->  		before_func = 8;
-> +#else
-> +	case EM_AARCH64:
-> +	case EM_RISCV:
->  #endif
->  		/* fallthrough */
->  	case EM_386:
->  	case EM_LOONGARCH:
-> -	case EM_RISCV:
->  	case EM_S390:
->  	case EM_X86_64:
->  		custom_sort = sort_relative_table_with_data;
-> -- 
-> 2.43.0
-
-I ran into this problem and came up with pretty much the same fix.
-
-Reviewed-by: Martin Kaiser <martin@kaiser.cx>
+Thanks.
+.
