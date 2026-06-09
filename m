@@ -1,187 +1,190 @@
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FDBD4C9549
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 17:27:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5639363C46;
+	Tue,  9 Jun 2026 17:28:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781026033; cv=none; b=Kfh5H5GFHTIJrMJ0l4FrvJPZnwIRpcnXdboN2+FGoJeAC45KpZzGyIezFK/HMANWx53JqGABhMBMhIFrg2VBgtUkSj1Rdf/jfN7k3lxDL8Cz5ENokcC1J0+7aqPpDjEFqEZflUbjYGP5WKdThz4ZVPgo05tDe4lz5eFHkuammBc=
+	t=1781026096; cv=none; b=VxtN1aoPIVRzv3r6eqbd2mMR98q56L9CJb9za48JATJNsJf862CcCBtRSYVlM5hBk4AXCnPdlWeYnkr3PD1J/qU/qbaASNvxLODrojmThIdwdX+UEU+rIP0YlJBhmQU9dDkiOUndkch27DCYsrFDOVgxSOBwIK6GGXfl19yAOfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781026033; c=relaxed/simple;
-	bh=XP12//l6icFutubq5HcIhpjs1JD3dOe7rFIpKieBZYw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SrR9LXyzTqveMlg+xcLTA9yowDIBieleMZnbY/GnMq8VXOiAMn/CLXttno07trSI+P74D1OirLJW9E6Q9IefNHHURsR+MFDpQVicWuT3zotDUM+wHwK0EI2lu6HM3jkktVlgRlPxH71ijhNg6OeTDuYmvKQmi2JPtqPJPG8PpSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pZvMEgxK; arc=none smtp.client-ip=74.125.82.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781026096; c=relaxed/simple;
+	bh=RndYqpsRK1cbF9S8uUn0Zc9Z/6z/z+JG0kopFVxnUJQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=HL+QVkcfp+Q4OnDzdva5vboRMHxgYCzuHMqCOttDbqNOeSjxdC8v5iWKfzcPWtLYHzNqikNuGsm62dwpt5UrcF64jhdU4Rz8WvNtiZwUxnOuemf9dMji7QJolodx8DB3o0pLMKgk1gno3fVxjY95rU+lF5wkIAUHzc/Qmhow1Ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=johnericson.me; spf=pass smtp.mailfrom=johnericson.me; dkim=pass (2048-bit key) header.d=johnericson.me header.i=@johnericson.me header.b=HE3ZkDji; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UH5I0Kp/; arc=none smtp.client-ip=103.168.172.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=johnericson.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=johnericson.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pZvMEgxK"
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-13832028e9fso1023443c88.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 10:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781026028; x=1781630828; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vXMiGqxbaUP+oImtGF3Od5sBeqsgvxmpYzRfPRB1FZM=;
-        b=pZvMEgxKr9855ZmlbJoiA/5IKV1qyqQYvEsPckraclBbWt+9s8fU4r09aEpQ8YeFYR
-         uT0trqUMPq1LO3IE+n3zNVjNZEdlfcpQoOyTlcRC5olidb7HRvEIKqnyrMAwrw8obzUs
-         vFRpJBxwJZPRgtVSamSawsn/OZMZeHC/RBd1v6XNA9yeS2IFh31gqe0a9wNrN3D9TsGT
-         1b14ToPrZgL4KZW7HAVIoXotTxfrMzq0rvL7eQZjWL4d+zqUydEfuDOJx+fgBDXyieE1
-         2HqenjksjLG60RPwJ2hUWtvTlbe/FkoBu4466/3dgPgslzH8q5/qWt6WomwuJ2/SFKXF
-         kpJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781026028; x=1781630828;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vXMiGqxbaUP+oImtGF3Od5sBeqsgvxmpYzRfPRB1FZM=;
-        b=cFtpp2q/QvLJwUkrSYrI3LTPfd8m2F/MxkTcYAmzF5niP9a+tAYteAWaqDu7mXMiGK
-         aiQzsQPCc8mTboMP2utEt+mQCKkHhu0kdHgbYlh3cnq52N2xA9Vv2h4gQvvjrjnZZYUl
-         wrIsVLHP8PHqdkGOs8Jxtb6cVbLK2GLBLoA+1DngFLogtidBasZ658N2RU0NgoVwbKK7
-         DKmGk5GBWl7ySNLcoel+5aCUFqap+USUmc7hRXtbentMC82S+hDlQsXBhIXGTJld7TPn
-         FR2wtKzWy1qo7xk7Ge1dYD6cmUAlu1pvVIl6ejxiO1CBvwDch+erKRFwRZFPN32rmjUY
-         vg3Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+Ab+km1kU2psWPUBmjU2QAx9rLTCC8zxyo2LsUFPgj9I/sv4QxA9nh1SpWl7jy791/cx6oo4IiqJFLnp19j5g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZjySTuPbyBSO3P2R2tLPTlfh1cLL+LJJ3k5i4PnCDQA4Jc/Ux
-	Ut4k6kNax/pa5zoYKKfYDYAxrGT3GJnJPa6LrnTimvIuaOcb7x/6f4D0
-X-Gm-Gg: Acq92OG3pte7AOkfPZXgJytuYu2EAuS8TYLE2eDSHRrZ9EEXnya2sFKbpTcbLxmr5fw
-	08Qjwnm7qEHQY0iz24WNaGz6FKUuGHY3ShAdb5zzi14B677u0KVgXLGT6ZdszJzNgcwlCZkURDs
-	lWwPZvbEbBQEjiZnhHaA0ozLV0edfmbAFP+PyruAFcJOPs5gtroiVQNFdMXBTgdH6mter/ByFyq
-	w8DZ1uFIMhhOL1C4EZ2t2vN+8TV3xkc/pzPCg6dtjrXygHaa9FElbOoVfJL9HhACvXA7YiKX7hi
-	4gwhf+fRNpqwklR9FQ6OhK9HRrAw3ppGqNf2jCn6vzN4lWcJkGdtpY/1Z/UgykbXSurI+ppMO7w
-	lnNhdSVXG79xfnDYE5uSZcM7ij4L78rDP/NaXe3jICbMWDeLkLAbRE43zDomzRtkx6WU9LfCA1S
-	mk1BGTvlKbbXnJjbTKbPuMmRbUUB9uvEczylZ8GYluxQrizFa1j9AGIRX1k5PXIJtLNbAZnr1Qu
-	+90fXtcKzeeVAUYt9A=
-X-Received: by 2002:a05:7022:f9a:b0:11a:342e:8a98 with SMTP id a92af1059eb24-138065b2f54mr12010692c88.0.1781026028061;
-        Tue, 09 Jun 2026 10:27:08 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:f998:4362:fa1b:11a8? ([2620:10d:c090:500::3:f603])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1381495bb00sm9369001c88.3.2026.06.09.10.27.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 10:27:07 -0700 (PDT)
-Message-ID: <b58e49c8f4d2d4d5d1a9a8f27e77b56b04b5a70d.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Fix gotox target validation against
- CFG
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Anton Protopopov <a.s.protopopov@gmail.com>, Nuoqi Gui
-	 <gnq25@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann	 <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Shuah Khan	 <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Tue, 09 Jun 2026 10:27:06 -0700
-In-Reply-To: <aig3p8QFlWv1sFqV@mail.gmail.com>
-References: 
-	<20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn>
-	 <20260609-f01-02-gotox-bpf-next-v1-1-b441d63a1559@mails.tsinghua.edu.cn>
-	 <aig3p8QFlWv1sFqV@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=johnericson.me header.i=@johnericson.me header.b="HE3ZkDji";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UH5I0Kp/"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.phl.internal (Postfix) with ESMTP id C2CE513804A9;
+	Tue,  9 Jun 2026 13:28:13 -0400 (EDT)
+Received: from phl-imap-16 ([10.202.2.88])
+  by phl-compute-05.internal (MEProxy); Tue, 09 Jun 2026 13:28:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=johnericson.me;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
+	 t=1781026093; x=1781033293; bh=snmIR5TlwK9lFoo/BHJwgJJSAFxLeac4
+	ICD6l4oUvpg=; b=HE3ZkDji5I5YD9LxdPIcf92Zc+LYhfx40Jg/wbA8GXORicY2
+	QaiWMJvbkKCx7kyflIVHAf0X2IZC2s7Uxc7VoTJOtONJLgNixkFVFvKfVzutf3mX
+	G6lmVW/BGgpmF5Ai19QSPr9U0SGccEI73IDWbUJASZdWYLS2EKdESKF5mQJlYdQt
+	WgAGt3dmqFC2fqC6qGhTb5jJd5gj/GNQnN19p55+qo/mhwNsFkYoas6LUw5GTLJX
+	jCKRA5rdGSwMTbeRIAynA6dk105bfMXz+Jn6ZpEQaZGz4pf/vjvLEQx0LPoFbntc
+	DUuPxnL0x4ZU62vchhzJp438Naua5Lfqn+wg2A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1781026093; x=
+	1781033293; bh=snmIR5TlwK9lFoo/BHJwgJJSAFxLeac4ICD6l4oUvpg=; b=U
+	H5I0Kp/D7aH/EguuehCHLLkrYN9Bp+EY5ICsflRQcHHT+hKGuQwmQDakepYBbcD6
+	CXwZ9GTCxQfoaBle1Y3q7rx6jEIXzIAYUr6iPL2KDitv+FibE6k6RVw6nWtlaHss
+	sOVsxbYZ40CLIC0Lag/ykPexVQ6Nudu+RICDqHotOhtHWUKHTCg2ZEDJkSsS4gtF
+	vaOiZlovRO/pBEUwEhZB/kFYW6Oj/1UnrVCK3xrC50c+w4dCtyfOLyWsA5LNKCoT
+	rySdgpTZ+0ceakchtQ2ZiJJDzVMD3KXmCImjonpbbqv7e1O+1fWifjS8AKNNMZJe
+	4g/9+/0rFIw/rN3mkjc8A==
+X-ME-Sender: <xms:K00oajkRORc133r7PC1IBlKXMDjSqvW9vIjnqG_QZbkAQOYotfILsQ>
+    <xme:K00oahpf4FLWEUbd6wOCxg3-u_RCJdbNqACdOD7aR8p36lWn3JPMHHQ58CWH_FVHo
+    3LLoLJvohH3MaOvvmfK4gvIdMgmqZ-vDA4y1Xzq4zN0vAr9xnYTw98d>
+X-ME-Proxy-Cause: dmFkZTFbWbIVgk3oNIIQ+G+AHYlJwWdcELEDDoIiIUBvnYRJd3CsISE3I/JOVyG2d0IybM
+    lj5uQrrQaowMUeTn4kKKsnFzToChT0pwu6ZWOuYIZaTZFJK7mNfbD1w3DbZcQCw8ITSvLG
+    oY/9k9GxCUV7/ZlAa32DEFwc1lP/VEBX786Dt0GHxWvqfvPEnbcxdzQC2RraHKCXyD0c+G
+    QBNYH0rV6FloMMOiwEzsyT/H/C1ZzgFYQZp2hAg7/d8uHURiK6WYeFwyLQ9VyDwHkmVLQM
+    IUqgsriFiBf0fPDUN+cEn2U59ltSXiLLd9IK9k8Y2rbCO86LV+C/AQJFGtHozyB6MGfJRL
+    Y4HFNmgYr28jA2vrdstJgPu3J/ljJskwYqY8g5qRoXRlodCXtOlo+zfmpAwUfMqUT+0Ksb
+    UQzCGN8T164/oXuv+XWsOh3ppLWk3oKF6KnbkCWj1S+hz1UIGg7wt4nauAWLkDncPtNq+r
+    5wvHbtEWlfiN2WuDh9tM+gLZUn21C0mdPOqzgjIpMfftaEDOVhs+L4tpETZ9dA0DHSttkd
+    DCazvhjFTaGTVDY4dE6gGV4VMGv0h+vktmXOPmvTtan8nVuvQ0e8dF2TVjIgG3nYoj0TRc
+    M8dVN9ly4LG6QhDwxgXQJiXin4CiOh/KmiqdBDpGeU7fArNOWRmEEn5rCPJA
+X-ME-Proxy: <xmx:LE0oar9BUiQp_qrgSrScH1M3f-UE7OtajjYJ26_u59UFWO3P90M4Ng>
+    <xmx:LE0oarrfVWp2ygG18KNq77pu68TRdhCVd9V3fNc8BttVQO9k9YD-3A>
+    <xmx:LE0oahiexkHx_MqYM2F7qOj3QDFZgah_DQDHi_-PN5DcK-BK_aswcw>
+    <xmx:LE0oahDxlnOWbriQaaU9aOrsncRT_PUU2vxksIAdCgYbPXnFVrOLqw>
+    <xmx:LU0oak0sJQRlsXUCBkAWIgEKRUMvsHFR_SYwXJpDwlB9AROrqdxW8eLT>
+Feedback-ID: ieb4144f1:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id DC8082CC0083; Tue,  9 Jun 2026 13:28:11 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-ThreadId: AtGJywdvvpER
+Date: Tue, 09 Jun 2026 13:27:47 -0400
+From: "John Ericson" <mail@johnericson.me>
+To: "Li Chen" <me@linux.beauty>, "Andy Lutomirski" <luto@kernel.org>
+Cc: "Christian Brauner" <brauner@kernel.org>, "Kees Cook" <kees@kernel.org>,
+ "Al Viro" <viro@zeniv.linux.org.uk>,
+ linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+ linux-api <linux-api@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ linux-mm <linux-mm@kvack.org>, linux-arch <linux-arch@vger.kernel.org>,
+ linux-doc <linux-doc@vger.kernel.org>,
+ linux-kselftest <linux-kselftest@vger.kernel.org>, x86 <x86@kernel.org>,
+ "Arnd Bergmann" <arnd@arndb.de>, "Thomas Gleixner" <tglx@kernel.org>,
+ "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, "Jan Kara" <jack@suse.cz>,
+ "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>
+Message-Id: <4e049396-377d-48a7-a34c-91318413a876@app.fastmail.com>
+In-Reply-To: <19eacd64508.26b92c022125848.262962729296162879@linux.beauty>
+References: <20260528095235.2491226-1-me@linux.beauty>
+ <20260528-madig-fachrichtung-fehlinformation-61117ba640da@brauner>
+ <CALCETrWJQpLR4n1cpichBk8=uExSKLWTMGU3BufGdk_WE_p5UA@mail.gmail.com>
+ <19eacd64508.26b92c022125848.262962729296162879@linux.beauty>
+Subject: Re: [RFC PATCH v1 00/13] exec: add spawn templates for repeated executable
+ startup
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Tue, 2026-06-09 at 15:56 +0000, Anton Protopopov wrote:
-> On 26/06/09 11:03PM, Nuoqi Gui wrote:
-> > CFG construction records the modeled gotox target set in
-> > insn_aux_data->jt. It includes INSN_ARRAY maps based on whether the map
-> > target is in the current subprog. check_indirect_jump() later validates=
- and
-> > follows the current PTR_TO_INSN register's actual INSN_ARRAY map. The
-> > verifier does not check that targets copied from that map match the tar=
-gets
-> > that CFG construction modeled for this gotox instruction.
-> >=20
-> > This lets one gotox instruction observe two different INSN_ARRAY maps. =
-CFG
-> > can select a map whose target is in the current subprog. Another path t=
-o
-> > the same gotox can carry a PTR_TO_INSN value from a map whose target po=
-ints
-> > at a different subprog. The verifier then accepts an edge absent from t=
-he
-> > CFG.
-> >=20
-> > On x86, gotox becomes a raw indirect jump in the JIT image. Accepting a
-> > target not modeled by CFG can enter another subprog without a matching =
-BPF
-> > call frame and crash when executed. Validation observed a GPF in
-> > bpf_test_run().
-> >=20
-> > Fix this by requiring every target copied from the actual PTR_TO_INSN m=
-ap
-> > to be present in the CFG jump table built for the current gotox
-> > instruction.
-> > Reject the program before pushing verifier states for any unmodeled tar=
-get.
-> >=20
-> > Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
-> > Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> > ---
-> >  kernel/bpf/verifier.c | 26 ++++++++++++++++++++++++++
-> >  1 file changed, 26 insertions(+)
-> >=20
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index ed7ba0e6a9ce..25fa90e731e3 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -17124,6 +17124,23 @@ static int indirect_jump_min_max_index(struct =
-bpf_verifier_env *env,
-> >  	return 0;
-> >  }
-> > =20
-> > +static bool is_cfg_indirect_jump_target(struct bpf_verifier_env *env,
-> > +					u32 target)
-> > +{
-> > +	struct bpf_iarray *jt =3D env->insn_aux_data[env->insn_idx].jt;
-> > +	int i;
-> > +
-> > +	if (!jt)
-> > +		return false;
-> > +
-> > +	for (i =3D 0; i < jt->cnt; i++) {
-> > +		if (jt->items[i] =3D=3D target)
-> > +			return true;
-> > +	}
-> > +
-> > +	return false;
-> > +}
-> > +
-> >  /* gotox *dst_reg */
-> >  static int check_indirect_jump(struct bpf_verifier_env *env, struct bp=
-f_insn *insn)
-> >  {
-> > @@ -17171,6 +17188,15 @@ static int check_indirect_jump(struct bpf_veri=
-fier_env *env, struct bpf_insn *in
-> >  		return -EINVAL;
-> >  	}
-> > =20
-> > +	for (i =3D 0; i < n; i++) {
-> > +		if (!is_cfg_indirect_jump_target(env, env->gotox_tmp_buf->items[i]))=
- {
-> > +			verbose(env,
-> > +				"gotox target %u from map id=3D%d is not in the CFG jump table\n",
-> > +				env->gotox_tmp_buf->items[i], map->id);
-> > +			return -EINVAL;
-> > +		}
-> > +	}
->=20
-> Thanks for reporting the bug.
->=20
-> As for the fix, would it make more sense to either record maps in
-> check_cfg or to re-check subfunc boundaries here?
 
-+1 for checking if the jump is within subprog boundaries assumed for the go=
-tox.
 
-> >  	for (i =3D 0; i < n - 1; i++) {
-> >  		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
-> >  		other_branch =3D push_stack(env, env->gotox_tmp_buf->items[i],
-> >=20
-> > --=20
-> > 2.34.1
-> >=20
+On Tue, Jun 9, 2026, at 10:43 AM, Li Chen wrote:
+> Hi Andy,
+>
+> ---- On Tue, 09 Jun 2026 08:01:57 +0800  Andy Lutomirski <luto@kernel.org> wrote ---
+> > [...]
+> >
+> > After contemplating this for a bit... why pidfd?  Doesn't a pidfd
+> > refer to an actual process that is, or at least was, running?  This
+> > new thing is a process that we are contemplating spawning.  I can
+> > imagine that basically all pidfd APIs would be a bit confused by the
+> > nonexistence of the process in question.
+> >
+>
+> Yes, I think that is a real concern.
+>
+> In my current local WIP I tried to keep that distinction explicit.
+> pidfd_spawn_open() returns a pidfs-backed builder fd, not a normal pidfd
+> referring to a process. The builder fd is allocated as an anonymous pidfs
+> file with builder-specific file operations:
+>
+>     file = pidfs_alloc_anon_file("[pidfd_spawn]",
+>                                  &pidfd_spawn_builder_fops, builder,
+>                                  O_RDWR);
+>
+
+What does your builder fd point to, explicitly? For example in my other reply I
+talked about how it was "real" process state. In my FreeBSD patch, for example,
+I found there was already a status for a process "in exec", and I figured that
+was clean to reuse for one of these "embryonic" processes that also hadn't
+started running. I would reckon that Linux probably has some similar notions.
+
+> and the normal pidfd helpers still reject it because it does not use the
+> ordinary pidfd file operations:
+>
+>     struct pid *pidfd_pid(const struct file *file)
+>     {
+>         if (file->f_op != &pidfs_file_operations)
+>             return ERR_PTR(-EBADF);
+>         return file_inode(file)->i_private;
+>     }
+>
+> So the current split is:
+>
+>     builder_fd = pidfd_spawn_open(...);       /* builder object */
+>     pidfd_config(builder_fd, ...);
+>     child_pidfd = pidfd_spawn_run(builder_fd, ...); /* real pidfd */
+>
+> Only the last fd is a normal pidfd for an actual child process. The builder
+> fd is only accepted by the builder operations.
+>
+> This avoids having to define what waitid(P_PIDFD), pidfd_send_signal(),
+> pidfd_getfd(), poll(), etc. mean before the process exists.
+
+I wouldn't be so sure this is necessary/good. For example, I think it could
+make sense to wait on a process that has yet to be started; one just waits for
+both the process to start and the process to exit. Obviously a blocking syscall
+in the thread that is spawning the process is not useful, but the asynchronous
+poll variation seems fine.
+
+As long as there is real process state here, it shouldn't be too hard to
+implement.
+
+> The downside is that it adds a separate open-style entry point and is less
+> uniform than the pidfd_open(0, PIDFD_EMPTY) spelling Christian sketched.
+
+I do think there is no point having two file descriptors. The file descriptor
+that previously referred to the builder/embryonic process then can refer to the
+real process, right?
+
+> If people think there is a better way to represent the pre-spawn builder
+> state, or if the preference is to integrate it directly into pidfd_open()
+> with an explicit empty/future-pidfd state, I would be happy to discuss that.
+
+Hope the above answers your question? I suppose my ideas lean more on the
+"future" than "empty" side --- there is indeed a thread in the thread group,
+with real VM/namespace/file descriptor etc. state. Moreover, state gets
+initialized before the process is started, so the actual start is a pretty
+lightweight step of just letting the scheduler know the now-ready process can
+be scheduled. The only thing that distinguishes the embryonic process from a
+real one is simply that it isn't running --- i.e. isn't (yet) available to be
+scheduled --- so the pidfds holders are free to poke at its state.
+
+Cheers,
+
+John
