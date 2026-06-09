@@ -1,122 +1,172 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3E93DD505
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 10:56:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE813F58EB;
+	Tue,  9 Jun 2026 10:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781002585; cv=none; b=CQ99nz8StwBhxjbXMKdvOZWiAI6AYDzT0w6gqXOLsaX7k/dfs1drZtyK9IOzCJajYHAvFP4cKs7l8e7gFc/o0W04LQSH6IVBemOyL1doMj7uMoiouSQ1p/83FjIbgnqcjdkLkU6+ich109Mz0dY7vpO5Dqk45ACrcq+eAtpQmGc=
+	t=1781002641; cv=none; b=BuJFSlyeWkZ61vgrkd5MgdDtkdsRKUThYgKp3R5Nkaq4ijB4qNKbGxm+G+XDZc6KlEDyoKul3m1gURGfTygjPIGYZKKvUzMljzCJ6ZDlZQZxT321msQZ289IXWL0NYl4MAKcayhrjOXd0BsY4PRYgaXGqhrMm8EyQAr+0H/bO68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781002585; c=relaxed/simple;
-	bh=+I/emWIMpz5OK9O0WDpDRa3M0xoLc3qCWoaFHxS7tU8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kAl66yoCQaeSfyVfqwG0JX9SxqhcWbAQKrr4bznI9apXMRUme5upokYDR0ldkN39K86cZfZAFFjnypHxNjlBxmWV01hFuiwb2Cn8CnzSnL1jlfsKEDRcu9jAEaDGmr4axzKjYOB30CK28OSWRx13PKxJt3ZEOYhICqqTIk9pwoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YU4iWvNQ; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=OXlRV9au; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1781002641; c=relaxed/simple;
+	bh=S/LBPsjK30OHelXFeIEq2OoL51toNBeqnKCcHXf3YZ8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=DCxn8MepUMx0v7znuTsjZYlCnFgyXjnS0RH6+nPaW94PjEV6c9MNvQA349VvZh8t+0zdz7y4NTn2iMZiC4K8Nytn+jtnqyP4LlfxLoRkEtXP4X5LADBU2O58uySeXUbZJi+VhjG6Ds0UtWV0uH0D4gVIe42fVPTA/I/7EqTsVEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=R2Ebasz7; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YU4iWvNQ";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="OXlRV9au"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781002582;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=K/WfzyLR/nks8SQbfnC26t/FYPJsMiOkM/D4jryDNZ8=;
-	b=YU4iWvNQhmyJWv3xm7QlmjzymsUpL5yUx5oZgsEzlr8pI+mwP388X5m3qsS0cmHUwfLy7a
-	323llYSCUoDHv2JVV3Sh4w8QshEx/ZCpwzOIjKVb/2j00nLZWCS49jSEjQQG8g3SkCOZJ3
-	UiaJ0CXz3Aos5DURlwAJK5kqaMnA6e0=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-490-Tix6Nxc0P1Sz6M0ocJemZQ-1; Tue, 09 Jun 2026 06:56:20 -0400
-X-MC-Unique: Tix6Nxc0P1Sz6M0ocJemZQ-1
-X-Mimecast-MFC-AGG-ID: Tix6Nxc0P1Sz6M0ocJemZQ_1781002580
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-45eec2badc4so2653788f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 03:56:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1781002580; x=1781607380; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K/WfzyLR/nks8SQbfnC26t/FYPJsMiOkM/D4jryDNZ8=;
-        b=OXlRV9auelMMmPy1PzKMCqfsdnGmgYn3V+JJxzCERUE4APgORp3MTCZIHxW15WQGxZ
-         tlnl1kCq3isTSq1fO75JITJFS/BRWYUqL1613LJ/255Q4LqowjzLXKthTjFnEn0/fRM/
-         NpxGVxtftj+J1TjybRaehesV9w+ypBnCesjv/4dodYwDyxUKhMYU4kLWjIIaQb1Yo/6/
-         77fZRR1trHJiTX1PNoBb0F8YlhRf+vk8DQ3Cn1wSCukt9AYslFGrhM+lHWoJhUaHoWG3
-         lZ6Hd9WCP7dpNuyswSJ0kWBRjT+vA6ThA710gT1LmOUyJlpUhTM81mQtuVz8OCoxSzG5
-         BSLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781002580; x=1781607380;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K/WfzyLR/nks8SQbfnC26t/FYPJsMiOkM/D4jryDNZ8=;
-        b=XbfY8I9GXLkGmQ5SeK1vmpC9hzEeEeAGYEq26GkxvcEU4/i0aA+hGiXEgs9Z7dOUW+
-         NpshaFSNJx1zmUDoDZ/PKRn3DRSUgcl9k2URCL2+tfyDUWd3S+CpJKHnBWqV9WJg4puH
-         movSKPBe6D0Xe+kcnLKq+HQ9/K1cCq68Z0a/g+XppIaionT9tNy1l44ng86ch2RZRWH0
-         zv4ZeCocRQlE7R3szPAnxV821cTdw3tx/1dvgt5UT6n+T2ukLhnQJkjx+27lw+WQmMw4
-         VFu87btVtbbhpWSnIRU8Ttv0puq6qJkR+x79mIxLR4q6M9e9FCuhx4fD9UJHR6J28Wbz
-         ScEw==
-X-Forwarded-Encrypted: i=1; AFNElJ/iyv1dkZv3gXbt7yqxjYAz2AoXcpoLp5iLS4L0pr8E32udqUJh1+39dWs6xIuwy8NUkCJFA2Fj2r31mFxtFfg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywGvoCwQheHGryOnE5AlYIotoOxzlWJnXSJ9HmDvOSopFeYuEg
-	Wr1sNvyr0c0HreoyNQ39hzak0CjtIsULoWqfVYLWefxqoHiCf80N7UhpnUmo+oi+mc4H03DRjPD
-	oPJQRmdRn+Q8P4XLnDrwmxQ1p4KG8lzEbvztxJj6XQ53y9b594WwqSqRjOmHp5Y5vPUpHtg==
-X-Gm-Gg: Acq92OFZ9vguHv05P0wSdh4L+W5+INIodrpt+MOb5+cKI5ap13E2ghdpeBtaHahf6vd
-	T/CrSeU/9nUV/6Q46dXRpQI3iyzqrIufZH+umld6p0y+RSU/CAgEVzEy0wzzpwQmatRr3ROZVy4
-	ZGougDzKRFJnwe/ByaRcNx7gt7p7wvqOvrNgzH8mfYK6Hr70/kiN9Y4vbA1fKqqZY+paJUVi0Pl
-	beVUbDsYBPFebcxuGM8X9TFDeD2tWv30NVzkhHxhXpJgVB9w46xoeo8O2MRkPahymY9RLGa3xvZ
-	nCp8a+BiOkH1Ma4N1/2nb3VsH5ZSQhsoPraWkmavERYW0Pg7isxomHUM6RdOc0xDYx8lsb7To8T
-	6El9JGngpDABT+vIYSqfB2NGtUCDT/CUJjTmWNINazX/Li2V9eE5cDja33L3tKBr0tw==
-X-Received: by 2002:a5d:4c45:0:b0:43c:f52b:8003 with SMTP id ffacd0b85a97d-4603063a18amr22853094f8f.36.1781002579615;
-        Tue, 09 Jun 2026 03:56:19 -0700 (PDT)
-X-Received: by 2002:a5d:4c45:0:b0:43c:f52b:8003 with SMTP id ffacd0b85a97d-4603063a18amr22853054f8f.36.1781002579214;
-        Tue, 09 Jun 2026 03:56:19 -0700 (PDT)
-Received: from [192.168.88.32] ([150.228.93.44])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f351ac0sm109104155f8f.27.2026.06.09.03.56.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2026 03:56:18 -0700 (PDT)
-Message-ID: <c530d07f-5841-4bfb-b296-b47fc0ce0614@redhat.com>
-Date: Tue, 9 Jun 2026 12:56:17 +0200
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="R2Ebasz7"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=fa8zz6R4p8oQR9YfNRRWZX08Hmu4ZhsxlCE5B6JMwdY=; b=R2Ebasz7sqx+PQI4Hl+rYq/Yah
+	KTpeniLLengUedpR0JZxa5kHQkS/sXBigQJVRtOblpTfnfdBT7PlkvhZL2VTR5zqvINsMgKVKrZ46
+	qzxqWewlD80vhGHWzUC+QnReOX533BW5H8jSGhy+0WZfadKWzi0vZNbJNPhCY2GVozO5KpZNAQa+4
+	DTSWN/XhKQe06Y5LHdmR14pTdR5qTILMr5lEHJ0HJk/FdI+Z2sj866hO11kM7Dp7GbfK1Y9mD0CnH
+	f1piZ1PerfnSuwVedlK4tkEItLxaeSBwIi/QUS+x5E3XjsOtDokiuWKgkeQx9RG//0zC3fU5qqxSL
+	wTS/Cw1w==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wWu8w-008LtA-2j;
+	Tue, 09 Jun 2026 10:57:15 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Tue, 09 Jun 2026 03:56:55 -0700
+Subject: [PATCH v9 1/6] mm/memory-failure: drop dead error_states[] entry
+ for reserved pages
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/openvswitch: guard command substitutions
- against empty output
-To: Minxi Hou <houminxi@gmail.com>, netdev@vger.kernel.org
-Cc: aconole@redhat.com, davem@davemloft.net, echaudro@redhat.com,
- edumazet@google.com, horms@kernel.org, i.maximets@ovn.org, kuba@kernel.org,
- shuah@kernel.org, dev@openvswitch.org, linux-kselftest@vger.kernel.org
-References: <20260601115307.1411211-1-houminxi@gmail.com>
-From: Paolo Abeni <pabeni@redhat.com>
-Content-Language: en-US
-In-Reply-To: <20260601115307.1411211-1-houminxi@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260609-ecc_panic-v9-1-432a74002e74@debian.org>
+References: <20260609-ecc_panic-v9-0-432a74002e74@debian.org>
+In-Reply-To: <20260609-ecc_panic-v9-0-432a74002e74@debian.org>
+To: Miaohe Lin <linmiaohe@huawei.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+ Shuah Khan <shuah@kernel.org>, Naoya Horiguchi <nao.horiguchi@gmail.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, lance.yang@linux.dev, 
+ Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ "Liam R. Howlett" <liam@infradead.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Breno Leitao <leitao@debian.org>, linux-trace-kernel@vger.kernel.org, 
+ kernel-team@meta.com
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3199; i=leitao@debian.org;
+ h=from:subject:message-id; bh=S/LBPsjK30OHelXFeIEq2OoL51toNBeqnKCcHXf3YZ8=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqJ/F+RwM7FNvMEmtMWZ1Zg7fCTG+bxJiZsvZCe
+ jH49HaDs1+JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaifxfgAKCRA1o5Of/Hh3
+ bfWQD/99pUoutynRjvnbUr1KG39G7HbZBPVQotVsVqujJ9kMtd9WYO/9Mq3ApucmJ6rxrDOdobr
+ yPsAWi5L8Wm73ds8YU2RpvtWBfvLX/YKGlouKI4VCMFSfMXgSpIVfvqToBnSnXnle1Pm6uN4aHG
+ Su/eUPNTnkRnSCNIQZ3NoOJqX9xlrjiw87zP9aNgGsevb8IL5aye9meJZT6lwaJEa4WGQTryZVK
+ 1EWkgs3iLPgAy8Nf5jktGpIypnon4nRmgrDPra9MiuftTp02o5z9W7InLcCTU8iHtkWuwiUGyw6
+ 8+z+8GWgLrWP7kOSwnAsTpCKXoBjWaK0KMEEjgJm5q9GAMX3oI71isW9u6MfmWF5aOGBBpWAmw6
+ Fwj3o7IdL5b8hVzrjX9Yr+p+YmZ6bqBm7RPZu/JCnD5v2xHTCaL5LlSq9sfXGbcb5hl0y8zOyCN
+ VfgEju0mpzTSYmG1UVCfqTfEoyYpaA3Yayl/HpNQYWnRS31qopEgKxfK8bUxEoA2V7QUBJLs9kb
+ 9jeKdSDWaKGK11XjAbCoFgOXq4D3kBZY19n9Yw9Y8+XCFaazzzLLgWLIHKZUvhhKduqc1nzU9yX
+ yfXU1OZKQWCSVA1cl/ULE1LKeZX7FwWiNh+J68MQDCHCvREc08UbvgpdecFdOpdsOyllqWBpmZL
+ xRzlYtE7rZewwOw==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-On 6/1/26 1:53 PM, Minxi Hou wrote:
-> When ip-link output is unavailable, when the upcall daemon log has not
-> been written yet, or when pahole does not know the OVS drop subsystem
-> ID, the affected command substitutions silently produce empty strings.
-> The caller then passes empty sha= or pid= arguments to ovs_add_flow,
-> or matches against wrong drop reason codes, all without a diagnostic.
-> 
-> Add [ -z ] guards immediately after each assignment. For test_arp_ping,
-> also align the MAC extraction to use awk '/link\/ether/' as in
-> test_pop_vlan. The drop_reason guard returns ksft_skip because an
-> absent subsystem ID is an environment issue, not a test failure.
-> 
-> Signed-off-by: Minxi Hou <houminxi@gmail.com>
+The first entry of error_states[],
 
-IMHO this is net-next material.
+	{ reserved,	reserved,	MF_MSG_KERNEL,	me_kernel },
 
-@Aaron, @Eelco, @Ilya: WDYT?
+is unreachable.  identify_page_state() has two callers, and neither
+one can dispatch a PG_reserved page to me_kernel():
 
-/P
+  * memory_failure() reaches identify_page_state() only after
+    get_hwpoison_page() returned 1.  get_any_page() reaches that
+    return only via __get_hwpoison_page(), which only takes a
+    refcount when the page is HWPoisonHandlable().
+    HWPoisonHandlable() is an allowlist for LRU, free-buddy, and
+    (for soft-offline) movable_ops pages -- PG_reserved pages do
+    not satisfy any of these, so they fail with -EBUSY/-EIO long
+    before identify_page_state() runs.
+
+  * try_memory_failure_hugetlb() reaches identify_page_state() only
+    via the MF_HUGETLB_IN_USED branch, where the page is necessarily
+    a hugetlb folio.  hugetlb folios don't carry PG_reserved at that
+    point: hugetlb_folio_init_vmemmap() calls __folio_clear_reserved()
+    during init, so the reserved entry would not match even if it
+    were still present.
+
+me_kernel() never executes and the entry exists only to be matched
+against by code that cannot see it.
+
+Drop the entry, the me_kernel() helper, and the now-unused
+"reserved" macro.  Leave the MF_MSG_KERNEL enum value in place: it
+remains part of the tracepoint and pr_err() string tables, and
+follow-on work to classify unrecoverable kernel pages can reuse it
+without churning the user-visible enum.
+
+No functional change.
+
+Suggested-by: David Hildenbrand <david@kernel.org>
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Reviewed-by: Lance Yang <lance.yang@linux.dev>
+Acked-by: Miaohe Lin <linmiaohe@huawei.com>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ mm/memory-failure.c | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 51508a55c405..f4d3e6e20e13 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -980,17 +980,6 @@ static bool has_extra_refcount(struct page_state *ps, struct page *p,
+ 	return false;
+ }
+ 
+-/*
+- * Error hit kernel page.
+- * Do nothing, try to be lucky and not touch this instead. For a few cases we
+- * could be more sophisticated.
+- */
+-static int me_kernel(struct page_state *ps, struct page *p)
+-{
+-	unlock_page(p);
+-	return MF_IGNORED;
+-}
+-
+ /*
+  * Page in unknown state. Do nothing.
+  * This is a catch-all in case we fail to make sense of the page state.
+@@ -1199,10 +1188,8 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+ #define mlock		(1UL << PG_mlocked)
+ #define lru		(1UL << PG_lru)
+ #define head		(1UL << PG_head)
+-#define reserved	(1UL << PG_reserved)
+ 
+ static struct page_state error_states[] = {
+-	{ reserved,	reserved,	MF_MSG_KERNEL,	me_kernel },
+ 	/*
+ 	 * free pages are specially detected outside this table:
+ 	 * PG_buddy pages only make a small fraction of all free pages.
+@@ -1234,7 +1221,6 @@ static struct page_state error_states[] = {
+ #undef mlock
+ #undef lru
+ #undef head
+-#undef reserved
+ 
+ static void update_per_node_mf_stats(unsigned long pfn,
+ 				     enum mf_result result)
+
+-- 
+2.53.0-Meta
 
