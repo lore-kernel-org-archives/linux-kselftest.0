@@ -1,95 +1,205 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F54831F992;
-	Tue,  9 Jun 2026 14:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9895133ADA7;
+	Tue,  9 Jun 2026 14:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781014900; cv=none; b=iC+YWsPtV8P3kxiJp6nSG7n3hVOhRdKtznTwxjymrDl9BQwarnFHU/kYQYGIoGI8Bl5LopG8l+2EFzZ4KBveEDyrFEwb+ubYO9NY1ze9NV12hORUUM7q9fgYivlevt94/KmYycJcRg7MWffBDjhR70YVRYB/x7IY6qw7PliqUgk=
+	t=1781015297; cv=none; b=omv7UCszysFd39GqAl+CBUNiX852nEhy4d+tzlkBXPVdoCtXZbwk3nh14EFLywZsr9puNBIReeneVpzy6Qd5S13vqgQEflc38QN37IEREf+9/MeYzIJqoamTvneaGWmnr0eRWdb5pRHAsq00gIf1omBCMV9BYmLrWXQdCp2AJgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781014900; c=relaxed/simple;
-	bh=RZQdR2RKKQFK1T///gJQrEsaJ+JbvCh3icAhhy8YLwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Fs2JXqXtVynUnWwRtCUj7XkAJFE4uzDXiQUBO1CyL9jD+C5JqpEw/qlPN4n3JoRxFPezVaI0tlmGE2YaI28F0NaxWW+DrGr55aJdtLtuDTxXb8mesWF6I+eyewqBUCiUxoBcgkecH3QJ3Yn0bK7qHQ3NmXGgwXkylETV2lEsaEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf20.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id C49AD8F3F9;
-	Tue,  9 Jun 2026 14:21:28 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id 19B1E20025;
-	Tue,  9 Jun 2026 14:21:20 +0000 (UTC)
-Date: Tue, 9 Jun 2026 10:21:20 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: Wang Han <wanghan@linux.alibaba.com>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Chen Pei <cp0613@linux.alibaba.com>, Andy Chiu
- <andybnac@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@rivosinc.com>, Deepak Gupta <debug@rivosinc.com>, Puranjay Mohan
- <puranjay@kernel.org>, Conor Dooley <conor.dooley@microchip.com>, Josh
- Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, Miroslav
- Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Joe Lawrence
- <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de
- Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- oliver.yang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
- jkchen@linux.alibaba.com, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v2 1/8] scripts/sorttable: Handle RISC-V patchable
- ftrace entries
-Message-ID: <20260609102120.359f3c4c@fedora>
-In-Reply-To: <6753385b-c2ab-4ed0-9400-78ce967450ba@linux.alibaba.com>
-References: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
-	<20260528082310.1994388-2-wanghan@linux.alibaba.com>
-	<0a913398-3d0c-472e-89c4-062052eae04d@linux.alibaba.com>
-	<20260601095746.70c01d24@fedora>
-	<6753385b-c2ab-4ed0-9400-78ce967450ba@linux.alibaba.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1781015297; c=relaxed/simple;
+	bh=FR6ANIiu15qdDMIzwyhHEXdX7Sy1cSNu4UgUMN6MUSw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=mgRSQl9RkSOvyQgYRMjwahH7klcUtxQzMRlTC4oVK2kTXjzyMcHLTmCbUOb6UHD8XkTHnJy9LYZBLPO7B4MINSYyABhHQfdBcYaotFEhc4vt7S1f5jdDes0412bJX8fISoZH0314h/QfupzTRgV+FkmcoS+tCAMqRP+S2FFTEN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xjnfkonv; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xjnfkonv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB4641F00898;
+	Tue,  9 Jun 2026 14:28:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781015296;
+	bh=PjHIRpjtlXIyylASoF8WIzC6zkAZuxm/NxysGVUExR4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=XjnfkonvBA7BPNQ+bKKY6oIc51fRqT6F7xQ5JkGtkh/+n3vxfPebE28AtnI121Tz2
+	 VY5M28uj9LWKoQr/N+8GKcqeMxutY2VcXRe+22FgmwDZiv4EAI2xGaDAukkgr6aIkl
+	 GZw2xTY619ykBheB5bPqXoEU+eRmKSJ3j/Pb0eMgaacWWtVljP7Djn42kDX3tlOANd
+	 oeWIJzCmqgwa4HLNDgS8Gzfmd5E66hbCgIYGHiqh2YC72J810QRKJJrBp4WyFR5CsV
+	 +JJQzoYVTrUwNt/1MaLPyCIaWdQEC0rK/onYbEg6TXottOQSyUkdmarinDxoUVsTEz
+	 h/Iy4rexr7Ydw==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Mike Rapoport <rppt@kernel.org>,  linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,  akpm@linux-foundation.org,  linux-mm@kvack.org,
+	skhan@linuxfoundation.org,  linux-doc@vger.kernel.org,
+	jasonmiu@google.com,  linux-kernel@vger.kernel.org,  corbet@lwn.net,
+	ran.xiaokai@zte.com.cn,  kexec@lists.infradead.org,
+	pratyush@kernel.org,  graf@amazon.com,
+	Logan Odell <loganodell@google.com>
+Subject: Re: [RFC v1 0/9] kho: granular compatibility and header decoupling
+In-Reply-To: <aibYJvzQQnpoN6YW@plex> (Pasha Tatashin's message of "Mon, 8 Jun
+	2026 16:12:56 +0000")
+References: <20260605033235.717351-1-pasha.tatashin@soleen.com>
+	<178083348872.1648214.17778188633648887952.b4-review@b4>
+	<aiVp5RlbWRz5VnPB@plex>
+	<178091437240.1648214.10761111570005003901.b4-reply@b4>
+	<aibYJvzQQnpoN6YW@plex>
+Date: Tue, 09 Jun 2026 16:28:12 +0200
+Message-ID: <2vxzo6hjss8z.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 45xon1xuzxd7bgbg6edxpht5trjjyge4
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 19B1E20025
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/HKKn7GymGBUtkbeNr+MEsQdyMhp17MdU=
-X-HE-Tag: 1781014880-666201
-X-HE-Meta: U2FsdGVkX1+rK/eN1BdojHWIcLwqDes8ikyUSWOVgDM2z/pUIyOFyAee0s6My7Xxv1XzzZB08fnXey3byMofDxmK30CuRFQCjWETw/qIBkjcJV57g+7dTfTdypOfD2pf0hdNCmgUxgCz/J3/gcLcZYfC0zSHjnyQIlGUv9j+Isx5nTYNWn+1B1CJbxTLmg+8dEzmXK9YwAdspV+E77PvKlOsfl9CkgQt5e9eMdCkHTeHy4Zg+CZjBhu/tSKVgIrKau/2+NoIvgk/ss8SC2tb8MP0B6hSQKNl7Zy5c1VIBSaVQ8O0do7KHzUUkMExhc5OsUmLw+L6MoGJv5Tz/LKKkj6b4PH6Qkyj5rBcgmOV845Q9MeB4BlbRCOS2hCWeUjRAg8fESSRucIKnZULyjZjNw==
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 3 Jun 2026 10:10:44 +0800
-Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+On Mon, Jun 08 2026, Pasha Tatashin wrote:
 
-> It's a pure comment cosmetic, not worth a respin on its own. But for the
+> On 06-08 13:26, Mike Rapoport wrote:
+>> On 2026-06-07 13:43:09+00:00, Pasha Tatashin wrote:
+>> > On 06-07 14:58, Mike Rapoport wrote:
+>> >=20
+>> > > On Fri, 05 Jun 2026 03:32:26 +0000, Pasha Tatashin <pasha.tatashin@s=
+oleen.com> wrote:
+[...]
+>> > External users only need to include the headers they actually use. For
+>> > example, LUO shouldn't have to pull vmalloc or radix tree KHO
+>> > declarations, and memfd does not need block.
+>> >=20
+>> > From a maintenance point of view, it is much easier to catch ABI
+>> > changes when the file with the appropriate version has been changed,
+>> > and most likely the version of that file should be updated. If a single
+>> > header contains compatibility versions for several different data
+>> > structures, it is easier to miss the correct version update.
+>>=20
+>> No matter in what files the definition lives, someone can forget to
+>> update version and we may miss it during review.
 
-I don't know. I've respinned for better comments before.
+Perhaps we should have some tests (maybe with kunit?) that can catch
+this? If you change the format, the test fails. So you'd have to go and
+update the test, and at that point it should be more obvious that ABI
+version needs bumping.
 
-> rest of the feedback on this series (the frame-record metadata contract
-> in patch 2 and the dead state->regs field / Call Trace output change in
-> patch 6) are the ones actually worth a new version.
-> 
-> Just to get the routing straight: are you planning to pick this one up
-> through the tracing tree on its own?
-> 
-> It feels like a good candidate for that -- it's an independent
-> regression fix (Fixes: 0ca1724b56af) that breaks *all* RISC-V dynamic
-> ftrace, not just livepatch, so it shouldn't have to wait on the rest of
-> the livepatch series.
+[...]
+>>=20
+>> Sorry I wasn't clear. I agree that kho_vmalloc, block and radix tree
+>> should have their own versioning rather than rely on global KHO version.
+>>=20
+>> What I don't like in your proposal is mixing versioning of a component
+>> with its dependencies.
+>>=20
+>> I think that versioning should be completely local to each component.
+>> LUO should not care about kho_block "on wire" layout. This should be
+>> encapsulated in kho_block.
+>
+> That is a fair point.
+>
+> As I mentioned in my previous reply, we can definitely look into making=20
+> the version checking more modular. For example, each component could=20
+> implement a standard compatibility-checking interface.
+>
+> These checks could run early in boot to determine whether each component=
+=20
+> is capable of accepting the incoming preserved data format.
+>
+> Whenever the component is later used by LUO, memfd, etc., we can query=20
+> that cached status. This achieves four key benefits:
+>
+> 1. It avoids delaying the compatibility check to the actual time of data=
+=20
+> retrieval, which is too late to safely abort.
+>
+> 2. It prevents a local incompatibility from triggering a global kernel=20
+> panic, allowing us to handle failures gracefully for just that specific=20
+> component or session.
 
-As it affects RISCV and I don't have a RISCV to test, I would feel more
-comfortable with it going through a RISCV tree that can test the patch.
+I think the right time to do the compatibility check is _before_ kexec.
+That is the only point where you can safely abort. Once you boot into
+the new kernel and discover you can't understand the passed data, you
+are in a bad spot already and should reboot. I don't think think you
+really can gracefully handle these failures.
 
-Feel free to add:
+For example, say you fail to understand the incoming PCI data. So you
+have no idea which devices are participating in live update and cannot
+correctly probe any of them. Which effectively means you cannot resume
+any of your guests since you have no idea how to restore their device
+state. The only path you are left with is to reboot. I haven't read the
+IOMMU series, but I imagine the same story applies there.
 
-Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
+For a more benign example, let's assume one of your memfds that back VM
+memory fail to restore.
 
--- Steve
+In this case, you can safely leak that memory and run the other guests,
+but at that point the host is in impaired state. You don't want to keep
+running it in this state. You likely either do a reboot, or if you feel
+more adventurous, you do another live update.
+
+In either case, there is no "safely abort" after the kexec happens.
+
+So I think our energy is better spent solving the versioning story
+_before_ kexec. After kexec I think it is perfectly fine to error out
+and panic or expect a reboot. You can't salvage much at that point
+anyway.
+
+And I think how the versioning format looks also should be based on the
+design of this pre-kexec check, not the other way round.
+
+>
+> 3. It keeps the local version local, as you suggested, so it is checked=20
+> only by the consumers of that specific component.
+>
+> 4. It provides a clean path for backward compatibility, as components=20
+> can individually decide whether they understand the incoming data=20
+> format.
+>
+[...]
+>>=20
+>> Actually FDT "compatible" handles versioning nicer than composite strings
+>> You can have
+>>=20
+>> 	compatible=3D"kho-v4", "vmalloc-v1", "radix-v1", "block-v2";
+>>=20
+>> and check fdt_node_check_compatible("vmalloc-v1") for vmalloc and
+>> fdt_node_check_compatible("block-v2") for block.
+
+I agree. Even if we don't use FDT, something more structured than
+composite strings would be nice to have.
+
+>
+> That is actually very similar to what I am proposing=E2=80=94individual v=
+ersion=20
+> tokens (which in my current series are concatenated into a composite=20
+> compatibility string separated by ';').
+>
+> But let's not get too fixated on the composite string formatting. I=20
+> actually really like what you are proposing: using integers for versions=
+=20
+> and having each registered component carry its own "NAME" and version=20
+> number in the KHO FDT.
+
+There is another nice thing about numbers that Logan (+cc) recently
+pointed out. You can tell which one is bigger.
+
+At some point I think we will support multiple versions of a data
+structure to allow for upgrades. At that point, it will help to know
+which one is "newer". So if both kernel versions support version 3 and
+4, you can use 4 to serialize.
+
+This of course is harder to do with strings.
+
+>
+>> And we wouldn't need to reimplement string parsing ;-)
+>>=20
+>> But yeah, I do see value of making components versioning and KHO global
+>> versioning independent. I just don't like composite strings and I don't
+>> like mixing versioning with dependencies.
+>>=20
+>> Since we are moving from FDT for the most things, version should become
+>> a number rather than a string and version compatibility should be
+[...]
+
+--=20
+Regards,
+Pratyush Yadav
