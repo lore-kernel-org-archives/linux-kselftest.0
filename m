@@ -1,114 +1,113 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-dl1-f68.google.com (mail-dl1-f68.google.com [74.125.82.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61AFC35F185
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 03:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA59243951
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 03:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780974524; cv=none; b=c+zIpqsW0f1Rby9lo4Xd65mG6s7czRn2ZBmyve+rMdGPMaQiBO1o6h2VA1OquoQ1H29Td0NrWXDyltm6jHkIuV0ZCUvL08y7h9SXoxYe3am8QCP2ioebQXX4QM0mRXDnzzKDr4jVmn70rWHFcPjOWHg1G9tZhgzGjVBi2WRNBbw=
+	t=1780976880; cv=none; b=k7mkQivua1j1gchG+7lcai7z2UcJDEK+jB8wUeJcbm4YZwB92gXIVLOil/FBm4WzzrO0SUvDws0+uVdL4CK9zIJhFL8GLn4QYvOo3KDb+pbAoFN7esm4HuCw923vFWBXNS2R6C/V7zz/52TVhJdUZEupG9P4YgZv2jE6Q+vNyGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780974524; c=relaxed/simple;
-	bh=ZWOR/QrGmJu+uFyB1Ae1JiHHn0938DbKRArZn+SVsjg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=CikyqCouMqIIsr+AxXcfWn2BZp74puqFv9g2iYcF47iLZ9r3elpDLzSAZ8LmcXoxk0Um86rpKPrdW8nBoCd0dcOhPyFNIOD84x55O1M70KAd8J0jTXkA6xDWYtYvvihbKF+zMgLEmE+OG33o2RqPOguVG4u30+aXF0L7ffbgvaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=q9jzrwcu; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1780976880; c=relaxed/simple;
+	bh=qfsK3KtNdTDf/24y49QdjdKuG3mI9WE1CZdOT6rck40=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j4UzyYqvdoegdyhB4p45qrAcrvOCxNjro/16HEluf1db0iMRAUVR7YmocxGu4jKz9moc/r+VMgyNwnb3g8DuVgbozMWvPIXNEnpeLgVmeeKFibpRQ8Bj+T/NPNtra3DEi/ZAVeamU49eKjWwp8zlMNYqEv2FoiAG0zALhpW4wz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YA7pdWnj; arc=none smtp.client-ip=74.125.82.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="q9jzrwcu"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2c0c3315d31so54909985ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2026 20:08:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YA7pdWnj"
+Received: by mail-dl1-f68.google.com with SMTP id a92af1059eb24-137dd4cc208so3185880c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2026 20:47:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780974523; x=1781579323; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WZhzMIPpW0uftooDfGhS6jJvYEf+eSZUIwidGAEeFqU=;
-        b=q9jzrwcuQNqmpceaam+6jcf2tBk8GwjGUprRtthw1FYhw92n/M9caY3tTJI9xSWnxo
-         WPyWP9ZV7bilSNRMN/PTNtaVqZOtvYbcBtvmKiI0fhatogrE6eLnW/AjibGXe5C8NHDN
-         cbgarGcLlbLLobHodOFcoOPVpjielAwsuRNun/UZivGIjF+39Xh8KOSv5nm2sLWauvQa
-         8s+EwPBSA11xDRfP9lVGzp8EMlRV/ZoUOkwdO9y+ruK/6G3iEGr6ZxWrhkFMRHLFWGTZ
-         f2JOr9Wk0I25M/n+t3/R+vIndtvtd7x/JXpGNFY3ndtX6Dco7Jb00tgIDzEvhDzUTrHY
-         J+hg==
+        d=gmail.com; s=20251104; t=1780976878; x=1781581678; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e9ypEpJRomt61fdJTwLpnXYjE3sebWbqzR+cTfomFgU=;
+        b=YA7pdWnj3pVQAs37tKwv9cRN7AZDDzkbyVla+GvowoiVFbrmccl1VT3Ob5NzhgxP+Y
+         C0d7aRisHSgZBKvO2zTN6QCpqaQHLrkXEqgeGd4Dx7eCfhLGpc72HziCb+5bB7uSzO1A
+         ZMZoZb5CGMtqsLeHWt5wibzNnm0OS1ejZmnvKzFdXQ6O+Q/KlMpeZNZQtOnBHzDOrgPT
+         fCD8jFatC2J0QcnzcCNYkJR+dnEBOePSp6FHxLsKK1VqciNR3Y9jL4Zv67XLMg7sUZKH
+         g7gfltKH1UsGyzrUq2HEkRVX8aQig6axNtuywFDt3Ipdg2SBRTtOcf2/1rgsI5HBpaGh
+         WDzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780974523; x=1781579323;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WZhzMIPpW0uftooDfGhS6jJvYEf+eSZUIwidGAEeFqU=;
-        b=IKfm3IJ3TnqGRAsmRK0h2gTHXrDfcsuG28NTbpHy5nWWBejF2B+QZ+iIMJDlGGDvWV
-         gTcd2tFnFJMdFhgJtoQ23PUJz8Xeoa5yz6zAdpsdR+zOJCL2MrXlJDVBjdhZDqHQ3zpq
-         c+HyxeqahDFHtUggw7X07zsKa3NCchJTQBPCCTgDOAUH/XEcODqCyAw7jJ46gXa5TT0U
-         cgno7jCm4nVFH5rLiXskjm4JwD9PpzwG+DqzSk5ytjGHNfL2TZv04FV7B4TTVKm9ASAl
-         wZKtPRHd1h4KMF5n3JsbtNW2HPu1Kz1D/5xB7YT26zyAbCwpT9hya4kqLAbdRezhwjJS
-         Cqlg==
-X-Forwarded-Encrypted: i=1; AFNElJ+5Jh6Rd1X9ycSwLqmMDRHAjY+/n/t1tmgOER3Oando1iRKho6snQyvR25y0izR/won3s91EhTT8C7GiyWHXaM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWLKs9z4GYXsTTaUsn7WlkUJYm60tHp0igVBiPb8Mg4+Ev0ldB
-	3C/zWJGw0KcmHqtdDNDs+Tjhy6FrzY9TCLDG0nYuovdzgSOSIirmFb+rPLxpzb5Ei9jsRbNnTaj
-	IiuM8nA==
-X-Received: from plbz12.prod.google.com ([2002:a17:902:ee0c:b0:2bf:ce7:ae06])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f543:b0:2c2:27be:39a3
- with SMTP id d9443c01a7336-2c227be3b4fmr142116515ad.29.1780974522512; Mon, 08
- Jun 2026 20:08:42 -0700 (PDT)
-Date: Mon, 8 Jun 2026 20:08:41 -0700
-In-Reply-To: <CAEvNRgHtpFa+HAhPVBvB4=ixUuEW-r_Xh49SHEPktUmHgzYcAw@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1780976878; x=1781581678;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e9ypEpJRomt61fdJTwLpnXYjE3sebWbqzR+cTfomFgU=;
+        b=QmyEEx1qRYJoWeEV4COqT3VHIrnBE9LpKcho8iewk4X8oHms6MAq/T7ueAGsHNr/Lz
+         KEFUomcOFaKQRqOfG0jFJ6wqAz0jFTOdffOaP9RAj2SHsCWbaw+cValEapFndCOzlwFP
+         NpJ+kyfJZ8uVwVQklTjmW7HtxGjGvA1lnKHQf+0XPiqvoKGXt2yiY9q/lrLUm0RxRHfp
+         kKe7OxkUIHmQwvUkS6QKj7TYPwu8mEQgrMHkh01DDR1XpZ3FIk9p1wo58CE4DAlWNCNB
+         sbC4r8m5XMyBwzcJwrHFYza/vc5nb2DPMUQXwDTNuJb9lxBvkwTfKqB6W/vhr2GhdTM1
+         9QsA==
+X-Forwarded-Encrypted: i=1; AFNElJ/+DqC8yi8QHoBgJuye0GWZZynL7NXP4mmo81GaocookAVv+IogBpoUYmcw3ss/Cm714qjUN4DzwkYWzSGiJRM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiQioaAJgafrksto5f7wfP2KNp6R7XyaPTNOkRwkzm4jW6jd/u
+	tq/kUW9T05QsZ5uYanFyJKynNryK4pc5qsdjJ2fmAWrVrnr8BBA4MBxG
+X-Gm-Gg: Acq92OHUrqbeLmeuCYsJ0BrwIhgetX/74Q1CyGirDMi2YMRtzJOjAObkNMOpS/PKUjz
+	xProu5zmlv/thJYWgLb8eTDWheC7sGZI50k7BSiFFre7NNNprSt3BA9+z7mW7HikVfnCIA745T+
+	F2/KcJNhO3DB8d4aXLBzYwUEBGVRP84uxWIaAZcTI2fbgnAd1HpHEIdtWYL78Lg4aLDnQomHIur
+	etIlE+jX2MXfBpRgWJHeid21wiIvg2qt0mbS70GkY93/+jc/2Yqq6v4SlBfaaLz+YPxpfhP6dqJ
+	u5anB+oh0WLyKyRWRzHD57t3MZWkoJyQf25ktOnLH5eDMS9rERj12SxLvfsg573UgrPWA9+38Gq
+	e29GsBXfr+hs8E3pUR2liGXU/Z3QF7T1CtKvjDgc8WLuPjJtWgfwa/jEE7VhRJaUizUr1kztHTm
+	9tF2zWnZXI0BGrHhcnZZAdvdalE6bDb2NTns90TjFLMxdYj0HRok0QodDSR3TgFiYZ7yOrhOV2h
+	tuvNRqdvMqwV7AHi2MF9Fzl3hqWuyCVcT9/3uPDr+P1v8umH9LmmytJQSbf+H6vSruCZkaXiORM
+	mkZ4A6Fzku1l+HHXtyAsrmr/rW8QvveMgqL2RhY=
+X-Received: by 2002:a05:7022:160c:b0:12c:1288:ce63 with SMTP id a92af1059eb24-13807d7b5camr7734016c88.13.1780976877846;
+        Mon, 08 Jun 2026 20:47:57 -0700 (PDT)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074dcad34esm28011373eec.11.2026.06.08.20.47.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2026 20:47:57 -0700 (PDT)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH] selftests/bpf: correct CONFIG_PPC64 macro name in comment
+Date: Mon,  8 Jun 2026 20:47:51 -0700
+Message-ID: <20260609034754.26081-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260603-snp-selftest-cleanup-v1-1-73b29fe31ce6@google.com>
- <aiCzNbtQ4FPu2yCR@google.com> <CAEvNRgHtpFa+HAhPVBvB4=ixUuEW-r_Xh49SHEPktUmHgzYcAw@mail.gmail.com>
-Message-ID: <aieDuZi3oMQvdwaK@google.com>
-Subject: Re: [PATCH] KVM: selftests: Make guest_code_xsave more friendly
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	michael.roth@amd.com, jackyli@google.com, liruxin@google.com, 
-	darwinguo@google.com, jacobhxu@google.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jun 05, 2026, Ackerley Tng wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> > Uh, so as the comment says, the goal is to stash state before _any_ compiled
-> > code runs.  Shoving the code into inline asm breaks that.  The compiler *probably*
-> > won't shove anything before the first inline assembly, but there are absolutely
-> > no guarantees.  E.g. you're subtly relying on a tail-call optimization to avoid
-> > any stack operations.  If I force guest_sev_es_code() to be inlined, then the
-> > prologue becomes:
-> >
-> > 0000000000402a10 <guest_code_xsave>:
-> >   402a10:       48 83 ec 08                                     sub    $0x8,%rsp
-> >   402a14:       b8 07 00 00 00                                  mov    $0x7,%eax
-> >   402a19:       31 d2                                           xor    %edx,%edx
-> >   402a1b:       0f ae 27                                        xsave  (%rdi)
-> >   402a1e:       b9 31 01 01 c0                                  mov    $0xc0010131,%ecx
-> >
-> > and we're hosed.
-> >
-> 
-> And omg, I thought I was running the tests!!
+A comment in tools/testing/selftests/bpf/progs/test_fill_link_info.cc
+incorrectly refers to CONFIG_PPC6 instead of CONFIG_PPC64. Correct it.
 
-FWIW, you probably were, I had to force it to be inline via __always_inline.
+Discovered while searching for CONFIG_* symbols referenced in code but
+not defined in any Kconfig file.
 
-> >> +		"xsave (%0)"
-> >> +		:
-> >> +		: "r"(addr)
-> >> +		: "eax", "edx", "memory"
-> >> +	 );
-> >> +}
-> >> +
-> >>
-> >> [...snip...]
-> >>
-> 
-> My bad, this patch is such a goof!
-> 
-> I still feel that it'd be nice to allow commenting out functions parts
-> of selftests while developing other parts, but let's shelve this for
-> now.
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+ tools/testing/selftests/bpf/progs/test_fill_link_info.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I mean, it's always "allowed", but that's firmly "Here be dragons!" territory.
-There are any number of things that can go sideways when adding and/or removing
-code for development and debug purposes, many of which are far more nefarious
-and subtle than obscure compiler errors.
+diff --git a/tools/testing/selftests/bpf/progs/test_fill_link_info.c b/tools/testing/selftests/bpf/progs/test_fill_link_info.c
+index fac33a14f200..137bd6292163 100644
+--- a/tools/testing/selftests/bpf/progs/test_fill_link_info.c
++++ b/tools/testing/selftests/bpf/progs/test_fill_link_info.c
+@@ -12,7 +12,7 @@ extern bool CONFIG_PPC64 __kconfig __weak;
+ 
+ /* This function is here to have CONFIG_X86_KERNEL_IBT,
+  * CONFIG_PPC_FTRACE_OUT_OF_LINE, CONFIG_KPROBES_ON_FTRACE,
+- * CONFIG_PPC6 used and added to object BTF.
++ * CONFIG_PPC64 used and added to object BTF.
+  */
+ int unused(void)
+ {
+-- 
+2.43.0
+
