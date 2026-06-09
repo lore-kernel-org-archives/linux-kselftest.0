@@ -1,149 +1,109 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE72440B395
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2026 12:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C73C408608;
+	Tue,  9 Jun 2026 13:11:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781009837; cv=none; b=MHbx9Kl/7Rp1593NU3W4Giu03wxn/Qry06NfeARP+XIOK6kYS8/hCr9rHgt5hL7a7jL4kM0JpgoADUBEpphwel/bFsJCN3n+srXa5V8m/WMx48dBs+b+qVVhSVmIUMiwUZPqqza40WibBqne2qt6Dq3f8Was+9It+0osK3Bdh8M=
+	t=1781010709; cv=none; b=gAlXzcEt2RGBKG5WNIeiGDtEwD+FQUWLxqFHF/6SxQYhxTUsKBwfS5A4oIaVqKI+lSxW1lhsCAKkehspkYSa/GOvQeaKSkA/P8drySgyijywb3hciVXHX158J8jcbVwpPvjNgl83yBgtIhxJi2PzHtMDTohKwCjaZcP0MDU11Zk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781009837; c=relaxed/simple;
-	bh=GaOLgQslyWp7a5kLYFLKYx+o5cHDquI3aEiSDItK5t0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Y8kBfAoiz6baD1wAGc02ciHATZyQ1Vp9EDzQfHI+v8EbNamYvrQd5BtSIuowj6v8dG2D7X8GeMG4RQW+CuxF7iuh2l3LL19+byH+oxiiBDgd1TO4GvH1HZQcS0Io1RV/Z59v8TQaRpj9cbxVmNoFTn9RKPWISt9AhvsHRbI5jTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DL/KI8B5; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1781010709; c=relaxed/simple;
+	bh=cNMCsVmjpyoIcJwmYtdqjz5auyf3WVePYRZffBtEjIQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=b5C6MdSdLKpKJpWkP/leKXSP9qoV5vXAmeTB5XgBvqqO56gRAUxnd70CPRlh87YHgflWaeQe23GJPdJ1GUNmREzTJn/YhAe8cy5vZshhVHRxBy5gQPR94E6mi6E3UfVoap8ZrMCK+TZzhv7ft915EBiVinMj42Ip/Aw5KrYFz+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=nZcTUzTZ; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DL/KI8B5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781009834;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i8I64MBW6eLAXF/vYc9bg28DHRcO9L2MdGHC99IA9vw=;
-	b=DL/KI8B5ZgIV2z7AxpukH0F8bs5XLukqRBjIRw1VEowc64jIKI0FxUCIjcgnoVGX876o95
-	E7QyVDI4JBf35dSRFeT2nlGm+jaHv9+OWicphcMh1MLuhPa+fG5nLrPL4BxcIt4nsksg4O
-	e6rufOUGFV5vAjgvM6magJlbK3RFMKM=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-278-zxyvu-sLNiuk92GUwyN1Ng-1; Tue,
- 09 Jun 2026 08:57:11 -0400
-X-MC-Unique: zxyvu-sLNiuk92GUwyN1Ng-1
-X-Mimecast-MFC-AGG-ID: zxyvu-sLNiuk92GUwyN1Ng_1781009829
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6B280195DE63;
-	Tue,  9 Jun 2026 12:57:09 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.65.94])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 93D86D6E;
-	Tue,  9 Jun 2026 12:57:07 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Minxi Hou <houminxi@gmail.com>
-Cc: netdev@vger.kernel.org,  davem@davemloft.net,  echaudro@redhat.com,
-  edumazet@google.com,  horms@kernel.org,  i.maximets@ovn.org,
-  kuba@kernel.org,  pabeni@redhat.com,  shuah@kernel.org,
-  dev@openvswitch.org,  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v4] selftests/net/openvswitch: guard command
- substitutions against empty output
-In-Reply-To: <20260604163016.3929371-1-houminxi@gmail.com> (Minxi Hou's
-	message of "Fri, 5 Jun 2026 00:30:16 +0800")
-References: <20260604163016.3929371-1-houminxi@gmail.com>
-Date: Tue, 09 Jun 2026 08:57:06 -0400
-Message-ID: <f7t7bo7g9ct.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="nZcTUzTZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=c5
+	0F5kPryHPBKKAhs6EjQOHtwcJTbFVsHxkqhql+Ro4=; b=nZcTUzTZq3v6n+FjSm
+	ODysGnD5lbu4cC+N2UY+BBc2X6wm1QpVR7EhAFr5FjHqwCzPLzEv9Dr0thFBrQvp
+	haa7ST8DLHc+uLbX05cKZDUsS17bKraLL5vjXhbr6tKFYVZ7ZV5xY2NSsdRTC/P+
+	tj3/oKVkfkWoz29Bu1lr2pMqo=
+Received: from nec8-i7 (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wDHzpjuEChqlpqhCQ--.20624S2;
+	Tue, 09 Jun 2026 21:11:13 +0800 (CST)
+From: chenyuan_fl@163.com
+To: andrii.nakryiko@gmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	chenyuan@kylinos.cn,
+	chenyuan_fl@163.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	linux-kselftest@vger.kernel.org,
+	mykyta.yatsenko5@gmail.com,
+	shuah@kernel.org
+Subject: [PATCH bpf] libbpf: Skip bpf_object__probe_loading() when BPF token is in use
+Date: Tue,  9 Jun 2026 21:11:00 +0800
+Message-ID: <20260609131100.3097225-1-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <CAEf4BzaY3LLmMbSm1ritXwTvqGYi+KSWSkqMYJd62D7opu4ZnQ@mail.gmail.com>
+References: <CAEf4BzaY3LLmMbSm1ritXwTvqGYi+KSWSkqMYJd62D7opu4ZnQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDHzpjuEChqlpqhCQ--.20624S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7trWUJw1xWw4rtF13trWUJwb_yoW8ZFWxpF
+	n0yF92kFWUJw4rurWkJa10ka1rKa1Ig3ZxGFsxXrWavw4qqF4ktr1ayFsIyF1Yq395K3W3
+	Z3y3u3yDZr1UZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piznQUUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAhHkomooEPE8AwAA3J
 
-Minxi Hou <houminxi@gmail.com> writes:
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-> When ip-link output is unavailable, when the upcall daemon log has not
-> been written yet, or when pahole does not know the OVS drop subsystem
-> ID, the affected command substitutions silently produce empty strings.
-> The caller then passes empty sha= or pid= arguments to ovs_add_flow,
-> or matches against wrong drop reason codes, all without a diagnostic.
->
-> Add [ -z ] guards immediately after each assignment. For test_arp_ping,
-> also align the MAC extraction to use awk '/link\/ether/' as in
-> test_pop_vlan. The drop_reason guard returns ksft_skip because an
-> absent subsystem ID is an environment issue, not a test failure.
->
-> Signed-off-by: Minxi Hou <houminxi@gmail.com>
-> ---
+bpf_object__probe_loading() tries to load trivial SOCKET_FILTER and
+TRACEPOINT programs to verify the BPF environment works.  When a
+BPF token is in use with restricted program type permissions, these
+probe loads may fail because the token does not allow the specific
+program types, even though BPF loading is perfectly functional.
 
-Thanks Minxi - these look good although this is probably better to go to
-net-next since it's more like enhancement rather than really a 'fix'.
+Fix by skipping the probe when a token FD is present: BPF token
+creation itself proves the kernel has a working BPF subsystem.
+Real BPF issues will be caught during actual program and map loading.
 
-Reviewed-by: Aaron Conole <aconole@redhat.com>
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ tools/lib/bpf/libbpf.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-When you post next version make sure to target it as such.
-
-> Changes since v3:
->   - Corrected subject prefix to [PATCH net] (hardening fix, not new feature).
->
-> Changes since v2:
->   - Fixed missing 'net/' in subject path (selftests/net/openvswitch).
->   - Removed --base flag (prerequisite-patch-id flood in v2).
->
-> Changes since v1:
->   - Rebased onto current net-next/main. No code changes.
->
->  .../selftests/net/openvswitch/openvswitch.sh     | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> index a415e9dec8cd..82f066a0ceed 100755
-> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> @@ -360,6 +360,8 @@ test_psample() {
->  	# sFlow / IPFIX.
->  	nlpid=$(grep -E "listening on upcall packet handler" \
->              $ovs_dir/s0.out | cut -d ":" -f 2 | tr -d ' ')
-> +	[ -z "$nlpid" ] && \
-> +		{ info "failed to get upcall PID"; return 1; }
->  
->  	ovs_add_flow "test_psample" psample \
->              "in_port(2),eth(),eth_type(0x0800),ipv4()" \
-> @@ -393,6 +395,10 @@ test_drop_reason() {
->  	ovs_drop_subsys=$(pahole -C skb_drop_reason_subsys |
->  			      awk '/OPENVSWITCH/ { print $3; }' |
->  			      tr -d ,)
-> +	if [ -z "$ovs_drop_subsys" ]; then
-> +		info "failed to get OVS drop subsys ID"
-> +		return $ksft_skip
-> +	fi
->  
->  	sbx_add "test_drop_reason" || return $?
->  
-> @@ -491,13 +497,19 @@ test_arp_ping () {
->  	# Setup client namespace
->  	ip netns exec client ip addr add 172.31.110.10/24 dev c1
->  	ip netns exec client ip link set c1 up
-> -	HW_CLIENT=`ip netns exec client ip link show dev c1 | grep -E 'link/ether [0-9a-f:]+' | awk '{print $2;}'`
-> +	HW_CLIENT=$(ip netns exec client ip link show dev c1 \
-> +		| awk '/link\/ether/ {print $2}')
-> +	[ -z "$HW_CLIENT" ] && \
-> +		{ info "failed to get client hwaddr"; return 1; }
->  	info "Client hwaddr: $HW_CLIENT"
->  
->  	# Setup server namespace
->  	ip netns exec server ip addr add 172.31.110.20/24 dev s1
->  	ip netns exec server ip link set s1 up
-> -	HW_SERVER=`ip netns exec server ip link show dev s1 | grep -E 'link/ether [0-9a-f:]+' | awk '{print $2;}'`
-> +	HW_SERVER=$(ip netns exec server ip link show dev s1 \
-> +		| awk '/link\/ether/ {print $2}')
-> +	[ -z "$HW_SERVER" ] && \
-> +		{ info "failed to get server hwaddr"; return 1; }
->  	info "Server hwaddr: $HW_SERVER"
->  
->  	ovs_add_flow "test_arp_ping" arpping \
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index ab2071fdd3e8..7e21c5eb9533 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5167,12 +5167,8 @@ bpf_object__probe_loading(struct bpf_object *obj)
+ 		BPF_EXIT_INSN(),
+ 	};
+ 	int ret, insn_cnt = ARRAY_SIZE(insns);
+-	LIBBPF_OPTS(bpf_prog_load_opts, opts,
+-		.token_fd = obj->token_fd,
+-		.prog_flags = obj->token_fd ? BPF_F_TOKEN_FD : 0,
+-	);
+ 
+-	if (obj->gen_loader)
++	if (obj->gen_loader || obj->token_fd)
+ 		return 0;
+ 
+ 	ret = bump_rlimit_memlock();
+@@ -5181,9 +5177,9 @@ bpf_object__probe_loading(struct bpf_object *obj)
+ 			errstr(ret));
+ 
+ 	/* make sure basic loading works */
+-	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &opts);
++	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, NULL);
+ 	if (ret < 0)
+-		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, &opts);
++		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, NULL);
+ 	if (ret < 0) {
+ 		ret = errno;
+ 		pr_warn("Error in %s(): %s. Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.\n",
+-- 
+2.54.0
 
