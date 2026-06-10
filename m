@@ -1,84 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F4C25392A
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 01:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132BB274652
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 01:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781055252; cv=none; b=PGZYkXPTs4MKyp8qC/uetnLYS2fSFzOq5W/Nz0b2OR4kvKvwrXTSIqJiBFxv7dfnSaXi7X8o3zL3b2irHOAq0t2bz1Y7/hspc3UWSdmWTvQ6gEdv5QjLo+64Llv+RBB4JvFDi8a6DqMz1tf6lNhDn8DFWZyzhREWujF1aydM6/0=
+	t=1781055473; cv=none; b=QVoPxIwZ7Mk5VaSKXfCHyoeI/xo5KKJHrk1M2lcXeJHDIUkLN3uV+3bVV5AojVa2Aj/q7mPQ3INTZbrKEa1VFtoNa0nFgHmb1Ej6w7vvmUm27ehDeRBq0UEQ5zFd5r+0+wfy5FH5H8uRGOFwiSM6kZeJf0tYETsdR1Td2e+J0Ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781055252; c=relaxed/simple;
-	bh=A5XhxhQpDjd5Y3dQ6ggNhwKi4mDZqP1k/1/3dKefuSs=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=HjO0Mwukw8c3ZM17CLdmntM76rV2rADDektaCzzNsRCaiXCRDBrwygL3UkGZOE9q4+q8xQkwgNVOz1H7yBO2I1x4yKcJkO8rIWQjMZBeqeCrFHB/lqWu8vgQMceZvw4x64aGMTgBFiWVZpqb9qdxorVcFh0pUqpASYRi+ZW+WJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=VqgCaVNr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781055473; c=relaxed/simple;
+	bh=ipRH2nMK3lHpLv5WJfej2MXixMzET4R0uqTE01p2WX8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PrW1J2DhKd+dRVj9L0D2xfvUl6XWyRa7wln5bkyiE0BJNOtDSwwk0w8+kkgGaSPZ2BUw4f/Sl2q1e8f2dguFJ9OaaYpMfCFVD3WY/00jiaS35elEnqTHa7BLaTclTqO+gtSODgW6kmqcAY1yVcfiv0dRc8lpKoDMtPCMVKxY468=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rA4wFQDx; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="VqgCaVNr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D409E1F00893;
-	Wed, 10 Jun 2026 01:34:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1781055251;
-	bh=LXyBFmUl+0nsx+jMMZqWFw5M81eQZPzHgTN30WwAB7s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=VqgCaVNrlwh2oCMQD5/3dJDQarLRj11lHwjNJ8ixzhgw1EW+4DGVvpGwfSeWuFqyZ
-	 Vwojx1TdTDHjOf1z8N1csF7oUE/msADxMLsZ2DrFvRZxYxnorPwcLxbs0koehRnNPk
-	 ZFOB+bZROp6qtj+Js1LuKAOFkiaoGuFI7I3zomLs=
-Date: Tue, 9 Jun 2026 18:34:10 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Guixin Liu <kanie@linux.alibaba.com>
-Cc: Shuah Khan <shuah@kernel.org>, Bala-Vignesh-Reddy
- <reddybalavignesh9979@gmail.com>, Wei Yang <richard.weiyang@gmail.com>,
- linux-kselftest@vger.kernel.org, xlpang@linux.alibaba.com,
- oliver.yang@linux.alibaba.com, Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH] selftests/uevent: increase __UEVENT_BUFFER_SIZE to
- avoid ENOBUFS on busy systems
-Message-Id: <20260609183410.8d6ade7384e6a39c076f9834@linux-foundation.org>
-In-Reply-To: <20260608053934.4059533-1-kanie@linux.alibaba.com>
-References: <20260608053934.4059533-1-kanie@linux.alibaba.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rA4wFQDx"
+Message-ID: <82860b36-4a8a-43df-a737-1bed1d42d2c4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781055455;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ipRH2nMK3lHpLv5WJfej2MXixMzET4R0uqTE01p2WX8=;
+	b=rA4wFQDxOiT7IAWnm3j/pFSxnJ/94leDcDG8OOWKmPebyFMqx9FuEpg/ImFTH7o1ugFusY
+	qIOZZcYkW9xgkS3VGI/vJ1m3AJ0NAV1eteqQWic7uLi3UcXL26qjZ3lJNJ9gS2nNmOvtLK
+	IcjmBhlJ8vgqCs+u0gfiGkINKQXOjP0=
+Date: Wed, 10 Jun 2026 09:37:16 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf v8 1/2] net: Validate protocol in skb_steal_sock() for
+ BPF-assigned sockets
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Joe Stringer <joe@wand.net.nz>, Network Development
+ <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <20260608125846.157004-1-jiayuan.chen@linux.dev>
+ <20260608125846.157004-2-jiayuan.chen@linux.dev>
+ <CAAVpQUDZoEVEX1kXok-29dzVHk=ZK_2MkZyZY8kRHCJCfAWVFg@mail.gmail.com>
+ <DJ3XPJA746S5.NYKZWY1HBH8O@gmail.com>
+ <CAAVpQUATP7S7OEZw4P_7fp5zmQO-T5jByxAfp0+YsjRENeWscg@mail.gmail.com>
+ <CAADnVQKa2Z2HKKZMhyD1HrurQ4LTcCS0Mm0YPxtisGKwVfcxmg@mail.gmail.com>
+ <CAAVpQUCJH3iknHSfNwMqvHVc_V09zNDK-YbXbqa-=K159PTqiw@mail.gmail.com>
+ <DJ40JYME18U1.3RA3TUXB3MH3M@gmail.com>
+ <CAAVpQUC1Ot9vr09gNoe+vxgLoqU8Wwn2DV+CQZYYpAJUATJiWg@mail.gmail.com>
+ <f0468cb2-1b52-4216-9592-ceb204f6ea41@linux.dev>
+ <CAAVpQUC=AJvJS1yppw+aAVpmRhB6GganrUKMsKSo7WUKNkZHfA@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <CAAVpQUC=AJvJS1yppw+aAVpmRhB6GganrUKMsKSo7WUKNkZHfA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon,  8 Jun 2026 13:39:34 +0800 Guixin Liu <kanie@linux.alibaba.com> wrote:
 
-> The kselftests case uevent.uevent_filtering fails reproducibly on busy
-> systems (e.g. Intel EMR / AMD servers) with:
-> 
->   No buffer space available - Failed to receive uevent
-> 
-> The listener binds the NETLINK_KOBJECT_UEVENT socket to all 32 multicast
-> groups (nl_groups = -1) but only sets SO_RCVBUF to 4 KiB
-> (__UEVENT_BUFFER_SIZE = 2048 * 2). On hosts with many devices, the
-> kernel and userspace daemons (udev/systemd) constantly emit uevents on
-> multiple groups, plus the test itself triggers 10 add events in a row.
-> The 4 KiB receive buffer overflows before the listener can drain it,
-> recvmsg() returns -ENOBUFS, and the test bails out as failure.
-> 
-> Increase __UEVENT_BUFFER_SIZE to 1 MiB so the receive buffer is large
-> enough to absorb the burst of uevents on busy systems. After this
-> change the test passes consistently across dozens of runs on Intel EMR
-> and AMD platforms.
-> 
+On 6/10/26 1:14 AM, Kuniyuki Iwashima wrote:
+>> Hi Kuniyuki and Alexei,
+>>
+>>
+>> Thanks both for the discussion, it makes sense to me.
+>>
+>> I'll go back to fixing this in the helper itself, like the previous
+>> version did.
+> I think even the previous version is the same type of change
+> for intentional misuse.
+>
+> Both bpf_sk_assign() and bpf_sk_assign_tcp_reqsk() assumes
+> sk_lookup() in advance, meaning the bpf must have dissected
+> skb, and bpf_sk_assign() relies on it and has no protocol check.
 
-Fair enough.
 
-> --- a/tools/testing/selftests/uevent/uevent_filtering.c
-> +++ b/tools/testing/selftests/uevent/uevent_filtering.c
-> @@ -22,7 +22,7 @@
->  #include "kselftest_harness.h"
->  
->  #define __DEV_FULL "/sys/devices/virtual/mem/full/uevent"
-> -#define __UEVENT_BUFFER_SIZE (2048 * 2)
-> +#define __UEVENT_BUFFER_SIZE (1024 * 1024)
->  #define __UEVENT_HEADER "add@/devices/virtual/mem/full"
->  #define __UEVENT_HEADER_LEN sizeof("add@/devices/virtual/mem/full")
->  #define __UEVENT_LISTEN_ALL -1
+Hi Kuniyuki,
 
-scripts/get_maintainer.sh isn't very useful with selftests code.  But
-git-blame can be used to find out who to Cc (hi, Christian!).
+Fair point. The "immutable skb" idea is more more worthy.
+
