@@ -1,224 +1,128 @@
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E672459FE
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 01:58:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA4133F385
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 02:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781056706; cv=pass; b=d26Dbos5Z9TG/aOaRIZzpJ07lgdDBcpskpZsCVlNIs+Md4nefG6VZ9e3CC8KBKnT46fnoVuGzYfmeB8sh25/9CKGDwciUwaW/1ZMWPkf63XelztM0z9e+zgVYIB2pHkaKrxBdt3VDpb93HhlWTFCHtQbT/pNVlkX9Tdv1FyT/GU=
+	t=1781056835; cv=pass; b=s6Efwz20cRWsnx5OxR1GVEYeR5bX/qmplgLWsxakv2OmJqs4jLVxgW1ExKwi6rjzSQXAAqZ0lpOxwb/Dif1xsnsq8gSyv9ncAG4itGv5OFc6bAa1wMxDRS7c9dLvtiolTpS13COJzDBPX0gThPclnd19YNb2/fmjiaFQqWweTAk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781056706; c=relaxed/simple;
-	bh=r7wZRIULkzfdJ6PbIVDPQrynqxU84BnGc6ZnGMKQxbU=;
+	s=arc-20240116; t=1781056835; c=relaxed/simple;
+	bh=mRVgDARQ+qAbaZF3g1EjOu0YqsDTXhBlD9Y4+9FuLAA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jdQGQVF0kOhj4Zr3hWq9XF4gmhPGCDFvtT3TE+ncT5P8hAD5BrYxvT/wFwJRNHYt5gkmSz7xo28sUpaAV46ilV/YpK8rUiRIoE13XofaIO2WLcvJDR6cQ4afHPZnvD5W48M9F9wxZjDJuFelk+G6K47eVTXmkJUCW3UhjKNJS/Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IHt6vqUW; arc=pass smtp.client-ip=74.125.224.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=W6mH1secoPnHff/txH3Ix+LKJMSHwfkL0+Df1F9JRA8nROdvLnA/ak+YghVDNsf6zBQVG5PFGGi0BZKbPdyWNRZ1pautAtJ63MEoRps24scVMSNqt7MQ+FmDGMWy3GJoD0elQi2sFZqVi+SCeGOPVCK4jpEnM00DgRsIDMrLbZU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oaYvuVmB; arc=pass smtp.client-ip=74.125.82.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IHt6vqUW"
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-6611689dc10so3670226d50.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 18:58:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781056704; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oaYvuVmB"
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-13807d2f898so5396303c88.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2026 19:00:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781056833; cv=none;
         d=google.com; s=arc-20240605;
-        b=MJOWBwWPcFDDHiVgRkTVtAqWBixfpS5Nn8aqGLkcQ7bNUroZbqBY0QmQU1uowcsYWp
-         1KJKPK6g5wopCHlouwh4pIKywqZX07T6Gw9A5abtJqzYm3SIUCi265VXxFL77TMMdnrd
-         lrxXVgtabFjbjHfKnVa1WRo9i/lJTsxLcIGjJp0Blt+FMbK0Yg48OLjW1IsC2gGlOxj6
-         JxS3myOV3Snwo6cxVKMFYGm9d704N7jE5d9Aw9uGtQqtdAnB2baMz75+q/BTlFT7TM1m
-         Wp1HFsqEZ/aKL42g0XYZaGGi4IGuGIrMw8p88bb6Ef38z3OVAviqxoIaN6gnKg68J/TZ
-         ZOlA==
+        b=BAmGySdtjgEkTRrtvgkbeI1wOngRmjYknepwjzAttTKXIYmuWV3yVJosfwgVlgimJc
+         tWDeSNUSxFX2sXIl8SuxSSobXLFuwkhFJMq5Pqt7OK/g9Ac1oKh7LwKvz5Znisnb4Z7X
+         uDY5hM/WXK8LMbcWOwfmnjY7FVbK7vRvTAuG1hqd/9IVlEBvaT16GuR0sRFlB9MyxUUA
+         aOdg4IhEre+dobXnQcIuG4Q6cvjBiVa5U4EN9D3UC0RJ3yXRAmxlkiUTwUydsFK29wAX
+         fASqmuuV22Xa9hIM9sdP9Mlhr/WD9sFzv0qmWBhsiwUEx4d/8P+EP4RwJPjkN64TLdzY
+         yPwQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=V26tMOgLqjN+F+t/D87zLfcdZGcgB0R+hwG90xbmU9k=;
-        fh=KaZLwkMva07RHv8PiprdiHW0kK2aDBed2xEWpUSAIcs=;
-        b=V4ARHRzSxVP8+o6tZGE2Vecz8isJtXmD6FjFaPmNpZKn+NnFJcH0WvuX7DAuiHS5mm
-         i7BypAp39affdRvCh1onPt2F+EkT3ZuU+o4t8WneZ2IMCuTYPzt4LvSUJTcY0JRebeKL
-         PS08eZ+Ow2eCNVGAguiU0pWofHjbFOrqhScuqfYQuL074G8+fcx4jJ7COUk4DUjbjlB2
-         XmXD76YMKdMSaCVsWr0pMvlrhRPinFkhqCK1Jy+/8Q9pVRP2gWgQ/OAv8q2NzvZE9HqI
-         NKJy2AyUlb5CB9Sb5zcsUHniCfXV7l6wkWNEcIkCnoHG1AmeFHhpZlLGyFCB2Ak6ic8d
-         9RWw==;
+        bh=mRVgDARQ+qAbaZF3g1EjOu0YqsDTXhBlD9Y4+9FuLAA=;
+        fh=MdyVwTnPvhbZHFaj8sLmpUKvYgBEiwx6INzRFNi/JQY=;
+        b=aNToWKXS3iiPi1ZOvSs/sQSEwKlrqBKjaOrh81DMGLkPTSzr92cnBcZsYB7DS4dZzZ
+         JkZZworZH4gOYyBV0e+8d+RSj/wtRTFPifZ5iMQGuv3+/Rnx3TliATu8ooK+nMQXaSmZ
+         xf4CRXecZ0baa6KaU0Nb/H0cNPQlJBqlmerEdqV+z3UFxINrFNuuiJMAm9abD1JajFce
+         m7v+Mda/rVRQT69D7t9EvZ08Dez2XT91J9OZUsLFu4epgW0L1kXKXoGcQSLGdqO0x8Vl
+         j68HLuFv2QQzCSdeSgHAeP+R6oWgLZdikPnEROVardiQc643z1KIpaigQ+MvNqkNF38a
+         E7bQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781056704; x=1781661504; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1781056833; x=1781661633; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=V26tMOgLqjN+F+t/D87zLfcdZGcgB0R+hwG90xbmU9k=;
-        b=IHt6vqUWTuoZQ6HfufaMFIuLw052EaXdX8WR6Bn8l0Zcj9CUfBNVtlj+y+OblMvU3+
-         R5cMN5n+jW6V7I2+Aq58v39Y14o4e2l6YXq0p2HQ0qLH6fWJpxqfLckfIqsJBADapRTn
-         iJzHgEt7YXq+OuSufbQFiP9UYS0h8HGrNwj5VF/FPKx3Tba6il9QnQzDeCJO2gYmrWml
-         C2SWNZpiErUUpSBs1SWocJdfNrgO9RyKA0mQ7MS65XahO6PcZiUQD2QubNxnQoyw1lWK
-         YzUD2bG2KVd+ACm5Zai4385tTx5/yPGWsWIrhTHfFxS0HJHKZA6b1rY0Tl0dHWZSy/7c
-         vC2g==
+        bh=mRVgDARQ+qAbaZF3g1EjOu0YqsDTXhBlD9Y4+9FuLAA=;
+        b=oaYvuVmBRxkUVFf9qmkJfyrPW8cyKbC6ZkAdBqdjWC/jw0PyncyipEnmG2GC71b2Sw
+         GbXCg+XOrPHBS2MzvgBA8d+sfMHSETVKQ6AQTLxgoXpx+lH3oKghnf2VExjsuO4iDmYj
+         /e+Q9+E29wP2gGS+Zi5Ga7ZhQbZTUHAz6ujn6sA6hFHjooIYonERdxCuowOOlgmM28gG
+         3kucQjgqPqq8Zvckor3blVsXPHxdbTliG/JvxM0Ydntt3s6CEDmjoYx10BU2Xz4mNUoH
+         FTLeQA1YBFfr1ZfIPKVo97tLxoZKikbpiI0FZsxnwcz8XH67C/+INVwWiDZoKxh56R40
+         XlVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781056704; x=1781661504;
+        d=1e100.net; s=20251104; t=1781056833; x=1781661633;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=V26tMOgLqjN+F+t/D87zLfcdZGcgB0R+hwG90xbmU9k=;
-        b=pio3YGy2gauGJwNEcnLC5TasgwzzsdtHXpxCrizmt4RBhtAHg1blU+tEb4ISz3auOC
-         BtTuoGyTb20D9HGfatxkl+mDgXop/+P2XZY1h5Iyu/F8eqyQP8y2wRadA0qTqw1CckFX
-         OtJqSlmnvrej80qiyRPk9ATiVWLaExdI4qS3wAXM5UFgcijYAX1tngPeKLJwlFltA34G
-         bL6l7PslW581Jh1nHvaRgcl9bgao1ZhhJ5SBfAz91XCDABs8ojxaFq1x/UGXZ5QiHpdQ
-         sAS+NMi3EiwItb5nAb+zGjGEqTy4aOkXmTxo7wQEkG/Hlhk1O4hh0JHniISFo/ZKP5H4
-         5seQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/AaVQhFsqhM7K5MOZLLlZ9Av0gmNdbCkPjRobMsP4DTF/gp237gSm3ILCO9OMj7otd6RyOLXr2FLTaEUl0I28=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIIGDGQtYue7BcYe0oCKftdHgB2UmaxXUCuzrooHEbRNzEqsHw
-	tQx24hu3zAm86JPgAOJcopWhSsbKzRWfEOjEjMFAXG0J6VEeiLEXNXzNVZSRbjMqe19nXfYYPSH
-	z4Al0r5CLhPAYbPA/w87rVzzwNVcYIVo=
-X-Gm-Gg: Acq92OFPk9MBWqytPHJakTO0rGjZLwgcUq2eNtp/VUUXYsMWdmi7JvKAOwbAiTYLJE0
-	bFIMAwDT7rfhRNTiklVyB7F4FMoWTKGQaFJC4cdcG6OQApywjqMzxi9m1IZQ+BPxH4Sb4LSbey8
-	I5cloPEk5HB/0dBWU4p/xk/hlARHnzVXaUOsLihSw19eBf2XOrtLdZHZXqidkqSDVvhjPPM3UWx
-	c8Yko+zm4Hc6U8AnCpXa0e32ZBzEfUB0W4dcWaUN8eJQJ3ieNHXUxEpV4MQKvLBHScYoVnc4rGG
-	ZcdK8bs6nVDbCBq009/Yn6aRP6FTuETzDco5mIh/xSTmzv8RIURHw8439T/A/qFnO+7Ph6QU
-X-Received: by 2002:a05:690e:4390:b0:660:4369:8cb1 with SMTP id
- 956f58d0204a3-66106e90b5cmr15646241d50.24.1781056704624; Tue, 09 Jun 2026
- 18:58:24 -0700 (PDT)
+        bh=mRVgDARQ+qAbaZF3g1EjOu0YqsDTXhBlD9Y4+9FuLAA=;
+        b=MHXAaMZ0IFZj9XZeBmCzKdqASb5ZIHgVCms1AP82l6rTGtWxhfNJhVzuJjToiANlmb
+         AqNDTfV1NdIVAJ4VfNQIAG/YepthbT0d3170te1EyXpnoGU8cc2A8zOMZmOXmS/dWE41
+         PYiqu5qrEYPJ36plFQr4+P5YcvDXehwrPZfzoEpZ0cDyyfOEF1pvFZ6IVC38Nb2ciq34
+         uE9jFKgWoYg07x7DLBTP0U2YLJ6PDj1uFAT5mwa5qiAwqJi85emK8DIeqcTmEOkxWN8g
+         QIbtBFTaps2K34Gu8oTjgAAFqJw7WWUNMavPBQourFUkf3WpO7xQPqvirbC2oiXbxfhY
+         kLiA==
+X-Forwarded-Encrypted: i=1; AFNElJ+N6gcMXPjm5L9ohn8MDqLeVq7GM953PPjeCHBLeXyNxthFDVrmfzBzsMbeP1x3ixSuR95Kp3zw28XRDD5slMc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlaeE6gh2iATvUEN2aH21HUhsJgnajPKeN+oYiZ1184WB+WSv5
+	urNrvWkXuZvjWHFqP9r/qo+VdOZAzxWuhMXsxgNafC5oZ2emDpt0NU9147RtaHDS2xM9oGUXQZb
+	d6x1GjDQOZF7WnrncPpqRPG1u6/e1/OLkOLzX67A=
+X-Gm-Gg: Acq92OFuWdTZS4kG839zAgC5EGhmC52SA62Ue8fN2TuVwoLaAoX7wrgcEGb73I2Yohp
+	6iP5tlHojMhMv1n2EDLEaYC9FCOUYHzxyNbG5fG70XLDdQGddTJ6+BDPYXuvJ+M0Mli5ksmHYVW
+	Fs+P3CPZJ+szuGnINpk06GCvxeCD/RiW6cF7wAFO8mG9VMg5ZYygI0WdXgOwY80uUO2AIcbQHFf
+	uAMkQc/GtvbUGgMRUqLtZCe3sniAabLDNktVq7av9Dl0YlJm5Oi42jIC4yGm/8sUhgNS5Ju+iuM
+	XjrKyXqE8dngTg5d8+2O1QQFHDQkkUGDCile2arF2msmpgGkT9EBfSbQIHD6Q/J9S4HVl6ejc7p
+	0+Y47p4hSeJw/TUb8z6Q52MKTptaBG68fTep0OfHN79hNWQ==
+X-Received: by 2002:a05:7022:221e:b0:137:fe07:8a2c with SMTP id
+ a92af1059eb24-1380671fdfamr11991332c88.22.1781056832305; Tue, 09 Jun 2026
+ 19:00:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260609100214.337538-1-sun.jian.kdev@gmail.com>
- <L0cwr1-KRSKR7-dJdjDmJA@linux.dev> <DJ4XIOT2RVMT.28I5LA2UOZVUI@etsalapatis.com>
- <AgOg1pJHQN-gpKhYUz3SMw@linux.dev>
-In-Reply-To: <AgOg1pJHQN-gpKhYUz3SMw@linux.dev>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Wed, 10 Jun 2026 09:58:13 +0800
-X-Gm-Features: AVVi8Cd2Bbe0wde5qToQ7hXErFi3TvnK9_5Ol1Mi8_YsK_saSVysuCpjLW1uQ1Y
-Message-ID: <CABFUUZH9F+tiitstSBy2-M=WC84jg28CVMXU+Lu-va6jm71fDw@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Unshare cloned skb before devmap egress XDP program
-To: Menglong Dong <menglong.dong@linux.dev>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	davem@davemloft.net, kuba@kernel.org, hawk@kernel.org, 
-	john.fastabend@gmail.com, sdf@fomichev.me, shuah@kernel.org, 
-	liuhangbin@gmail.com
+References: <CANDhNCrDSy8Zf9yo4uKGOtJnLVSNqF6pOqZiRr9giyEG89qpMg@mail.gmail.com>
+ <20260610014721.718362-1-wakel@google.com>
+In-Reply-To: <20260610014721.718362-1-wakel@google.com>
+From: John Stultz <jstultz@google.com>
+Date: Tue, 9 Jun 2026 19:00:19 -0700
+X-Gm-Features: AVVi8CdaB8uh_ClYhwsTNecOtJogIRHhf7pwROPp8mHdXjM4UzGmgHy1yGTTPWY
+Message-ID: <CANDhNCq9GibNuAfJezCj1xSd4cKcN=5BqEVy6H4QJu_kdD4eXw@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests: timers: Partially revert "Remove local
+ NSEC_PER_SEC and USEC_PER_SEC defines"
+To: Wake Liu <wakel@google.com>
+Cc: anna-maria@linutronix.de, frederic@kernel.org, tglx@kernel.org, 
+	shuah@kernel.org, sboyd@kernel.org, cmllamas@google.com, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 10, 2026 at 9:21=E2=80=AFAM Menglong Dong <menglong.dong@linux.=
-dev> wrote:
+On Tue, Jun 9, 2026 at 6:47=E2=80=AFPM Wake Liu <wakel@google.com> wrote:
 >
-> On 2026/6/10 08:06 Emil Tsalapatis <emil@etsalapatis.com> write:
-> > On Tue Jun 9, 2026 at 7:06 AM EDT, Menglong Dong wrote:
-> > > On 2026/6/9 18:02 Sun Jian <sun.jian.kdev@gmail.com> write:
-> > >> dev_map_redirect_clone() uses skb_clone() when redirecting a generic=
- XDP
-> > >> skb to multiple devmap destinations. The cloned skb can share packet=
- data
-> > >> with other clones.
-> > >>
-> > >> If the destination devmap entry has an egress XDP program, that prog=
-ram
-> > >> can modify packet data. Such modifications can then be observed by o=
-ther
-> > >> clones sharing the same packet data.
-> > >>
-> > >> This can be reproduced by strengthening xdp_veth_egress to configure=
- a
-> > >> different source MAC for each egress device and checking that store_=
-mac_1/2
-> > >> observe the MAC configured for their own egress devices. Without the=
- fix,
-> > >> the SKB_MODE subtest observes store_mac_1 receiving the MAC configur=
-ed for
-> > >> the next egress device.
-> > >>
-> > >> Fix this by unsharing the cloned skb before running the devmap egres=
-s XDP
-> > >> program. Limit the extra copy to destinations with an attached egres=
-s
-> > >> program.
-> > >
-> > > Hi, Jian.
-> > >
-> > > This sounds like a good idea in this case. When I have a look at bpf_=
-clone_redirect(),
-> > > I found that it use skb_clone() too, which means it has the same prob=
-lem. The
-> > > data can be modified by other xdp prog in the destination NIC if we u=
-se
-> > > bpf_clone_redirect().
-> > >
-> > > So maybe this is the default logic, and I'm not sure if this patch ca=
-n break the
-> > > existing users :/
-> >
-> > I think for use cases where we are using bpf_clone_redirect() to use
-> > one clone for inspection this would add an unnecessary copy. Maybe
-> > adding *_copy() variants instead of changing the *_clone() would be
-> > better? That way we wouldn't be changing the behavior for existing
-> > consumers and the naming would be consistent with the skb_* methods.
+> This partially reverts commit 80fa614e2fbc ("selftests: timers: Remove
+> local NSEC_PER_SEC and USEC_PER_SEC defines").
 >
-> Agree. It's not a good idea to change the logic of the existing API. Or
-> maybe we can add a BPF_F_CLONE flag for the existing API.
+> The original commit removed local definitions of NSEC_PER_SEC and
+> USEC_PER_SEC in favor of including <include/vdso/time64.h>. However,
+> NSEC_PER_SEC in vdso/time64.h is defined as 1000000000L, which is
+> 32-bit on 32-bit architectures. This causes integer overflow warnings
+> in several timer tests when doing arithmetic like NSEC_PER_SEC * 10 on
+> 32-bit systems.
 >
-> >
-> > But more importantly, is there an actual use case for the kind of API
-> > that the modified selftest requires? Nobody until now has considered
-> > the existing behavior to be a problem.
+> To fix this, restore the local definitions of NSEC_PER_SEC and
+> USEC_PER_SEC in the test files, but use "LL" suffix consistently
+> (1000000000LL and 1000000LL) to ensure 64-bit arithmetic and avoid
+> overflows.
 >
-> Agree too. Obviously, this is not a bug. For the use case in the commit
-> log, it's something that can be fixed by the user themself. If we need
-> modify the MAC, we'd better attach a BPF program for all the egress
-> device in the devmap.
+> We keep the cleanup from the original commit that renamed plural
+> definitions (NSECS_PER_SEC/USECS_PER_SEC) to singular ones in
+> posix_timers.c, but we now define them locally there as well.
+> This also removes the dependency of the selftests on the internal
+> kernel header <include/vdso/time64.h>.
 >
-> >
-> > >
-> > > Thanks!
-> > > Menglong Dong
-> > >
-> > >>
-> > >> Tested with:
-> > >>   ./test_progs -t xdp_veth_egress
-> > >>   ./test_progs -t xdp_veth
-> > >>   ./test_progs -t xdp
-> > > [...]
-> > >>
-> > >>  destroy_xdp_redirect_map:
-> > >> --
-> > >> 2.43.0
-> > >>
-> > >>
-> > >>
-> >
->
->
->
->
+> Signed-off-by: Wake Liu <wakel@google.com>
 
-Thanks for all the comments.
+This looks ok to me. Thanks for putting this together!
 
-I agree this should not be treated as a generic skb_clone() issue, and I
-understand the concern about changing existing clone/shared-data semantics.
-
-The case I was trying to address is narrower: generic XDP devmap
-broadcast/multi redirect with per-devmap-entry egress programs. The use cas=
-e is
-not newly introduced by this patch. The existing xdp_veth_egress test alrea=
-dy
-attaches xdp_devmap_prog to all egress devmap entries, and that program rew=
-rites
-eth->h_source based on ctx->egress_ifindex. My change only strengthens the =
-test
-from checking that the observed MAC is not equal to a single magic MAC to
-checking that each destination observes the MAC selected for its own egress
-ifindex.
-
-So attaching an egress program to all devmap entries is already what this t=
-est
-does. The SKB_MODE failure happens because the cloned skbs can still share =
-the
-packet data, and a later per-egress rewrite can be observed by another
-destination.
-
-That said, I see the concern that this may need a clearer semantic boundary
-between clone and copy behavior. I will also check the last_dst path pointe=
-d out
-by Sashiko before deciding whether this should be handled as a bug fix, or
-whether it needs a separate explicit copy/isolated redirect semantic instea=
-d.
+Acked-by: John Stultz <jstultz@google.com>
