@@ -1,255 +1,88 @@
-Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04E7385D88
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 07:13:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7AD9233921;
+	Wed, 10 Jun 2026 07:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781075632; cv=none; b=KJCSAwxIBfq7QqzM8mOyFYyBWsYk9CyJV2VK/RBi0WS9xA7dJPOyRzBJLFT/xrjEDvKvzfJBPyDEZcJumZJtek6d78hsZBP5N1aD8TXWJCCOLpcMxYR1qxyBqJmK8h/XZKadOHQBdG4mqKKFRHWC8wORO3JGLFB2HkdDWpHxeTc=
+	t=1781076522; cv=none; b=M3TGiIwef/3Ifr4Bt7VrMucSnDkBnG8ckcnNSj5OSvgP0+Apxu5ah329zKfhBMBM52v1eWyhVPLYrKzqS+iGHMvOxyoY4hjvRVz28Xi26qw1zbeufHBZlzqLoi4C+dZh05BLZfDjzSwzLz7qRzukWsSPS3nFmaqYBAoHybHj9YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781075632; c=relaxed/simple;
-	bh=53JyhO7i5frR2tFIJKi76YP5Onuf89dbn1JJ8Mp4sJ0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pfn/3k0duH8ilHHcV5TavSynU7/o+iCc7sVCmH6lo0IY06oXsOGEtqqZhfUs6AL2TbOrbG5vCVmDRmGQkzSMIn4xNkQE7mOxZEeDLyWJMXGehgvv2sazc9wav/AhIEsxXmdUTQLVqKaiPIE5w0hiir4OGdclnHYp9ZruGLwlUys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V6UFO26m; arc=none smtp.client-ip=209.85.216.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781076522; c=relaxed/simple;
+	bh=XVzT4dC9J9FFpWrYJ1jidUjuN9wz2V7gqq0wjB+r38s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LUOSeJBZUSZxnvYfJVR0HYtlj7W4K9l17CB18hf3XuzPRkCegJjsLWSb8QiKvmawcaUNXrlO65syW+kzLYOMyQ1Js6229GRgaQJaMRNdp1e3tCTuY7+WWavbHY5cM7Wz9C72PysN3deF80x9KQHCQtEfSreJY6zceU23sFr46ZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fgvSiRD0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V6UFO26m"
-Received: by mail-pj1-f65.google.com with SMTP id 98e67ed59e1d1-36d5fd50d20so4195901a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 00:13:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781075630; x=1781680430; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yzdEMh5lHMBwcaHbKYzieVMCGt4oUIEY8iF46MdpcK0=;
-        b=V6UFO26mrR8jlINLiVfxjBhxh+OvmhJPe3xZLarevWETHG6JgRGzcKr9DiLPstL0GE
-         TypiCqLbJVS7PDUjBMI2wSsvM9EzPJtCidVz2TvGfiVkykckj6EwgPZgYh1AbysxIqOD
-         YQjywpFFzmxK4h2eZJeq/ts5cawwXu6XAxL0Du9kP6kVwSE0cvEeC/rXrx7vFUBJbHlP
-         sZkTcB++MXC5HdQ05zC3sWbftURxrxacgufM/WgSQyKgArnVHumn6BN4rsbF6piSqLsk
-         UclhWVQwH4QLWUpYlSwdRY43X5Bwsrf0OtOuXj0GiOgvnPCSOrLdYANjtTvnlD6j0YvH
-         X7iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781075630; x=1781680430;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yzdEMh5lHMBwcaHbKYzieVMCGt4oUIEY8iF46MdpcK0=;
-        b=NoJCp1JIkc8IP5JaNbVHbAlZNrWjEGOnX9THlX87YZxHgvn3n8C5ZX7yb3sF/ea8Sr
-         eKgafrJa8reKlTqLD4inigjTQMUa6uVKAqlcyMwIw6EpT9RknGFQOVlQOtYji29/A8xs
-         M4iY+YbvK4X2o7RYCfbUKp1twhkA/a/hSi1MdNI2MiS7m5+TOTBgnQACFZFoJkq6iguu
-         b7bvwCgS7zZ96k5WJrKTy/8ccBz1pj5yrksOiZkFi2p94/U+iMZZeqQdrayNPckEfmfu
-         fZbyOck7WWJmhTV5Vy8Bw3OdcLzLJo4g0Ynuv2JFoHbhHKav92bBq3GaA5/pE29QDBEy
-         1pdQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/qXeeszT/rjlpiQI2f8P9YG0gxV61FmT8Ld7V0fXc7+C/qWfSeEMJsiPKLZ5S+N4lCTKrSO5FOWqJtMghPI3w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKyOii6/Y6knGhSepDPD4ySnccgW75wRxZIxRLJq+BuTUJUGtq
-	rsk8B0wvGxPGnen2GeIWFsGbSi1Lea5CJNr/IkUJkKfhcsdwerdmKLqY
-X-Gm-Gg: Acq92OHN4kjqeFueefhDIhRlk1CQiR4r21u0Gl94RbFUl0T6W145ybLbgz4rEWXEaEk
-	lC/oAaFHQf+Wpr/a0kh9srW2vjseIruFojaCXHgfS3ING+RZkRO2YgXBaF2jrJiTi7HN9JgB72O
-	NSxZHCkxYbffWBoVyUzqNssOnVmQMc4fvjQV/1fDOh0+OHVi5VkQvwXFaKDPpOh4uhO06ZjaPIc
-	L//Og+JxgVrjPx9yLgkB7t9SG05/xFZ8dCqWor0NvBFhtyTy8DnkIvizRVDQw0vr7sco9K5zmUV
-	tjTQUHwGwR2GHhVjbnq3EwFRLdWTmyMLVTjfk3Ufhdd4Io636HGUj+AChNRtJbSJEI8xfd9jlMo
-	0J2HizEl6Blp6QPxEt5S96KOjNfjmqB3kPuLLsAC6abEqJi/ws5a6G/A7MtHRcIE+ziOXC7+Btf
-	1LKxp8kYlJqqYo3Gn7KSvs7bciBbVg4iea
-X-Received: by 2002:a17:902:ef08:b0:2b9:6458:1a2c with SMTP id d9443c01a7336-2c1e820e30bmr298583035ad.13.1781075629930;
-        Wed, 10 Jun 2026 00:13:49 -0700 (PDT)
-Received: from [172.30.1.91] ([59.6.68.4])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f875casm237059765ad.22.2026.06.10.00.13.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 00:13:49 -0700 (PDT)
-From: Woojin Ji <random6.xyz@gmail.com>
-Date: Wed, 10 Jun 2026 16:13:45 +0900
-Subject: [PATCH bpf-next v3] selftests/bpf: Add arena direct-value
- one-past-end reject test
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fgvSiRD0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D40D1F00893;
+	Wed, 10 Jun 2026 07:28:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781076521;
+	bh=Ujw8//AhBz2ofNEZXVOO0whE9ziRkQU7WuP9Q2n1nw4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=fgvSiRD0nlrWeKZ00ARxxj8+SIeSOssxKo/IteKl5SNNXShxIV9RzZYZjW2fJDF4Y
+	 BRLJiLnad8I+/cgypVTOTIn/c5oxyEme4EK0poeNVEmG9QKE7i/U92Q7yjVt2JPZoo
+	 KKab8o9SdIM2XvpGoVICIQ4XwdgAVtaPGhU54ayQfCnfLlEaW3lPQVBllb9BkmzECO
+	 nE7j1CjEqBtnt3cNbOS7Erz0xZkaANJGk+ly24VtiJa0PCDT3qoW/N+IRr4nTvwqZd
+	 Z5PKSNrIQl7+mm2qzkxCg4AIGhgZkp5e7n9mKFUe2JXKDXK2WgGk0nXZXZ5u3/BshM
+	 PjG2C1OvGIzpg==
+Date: Wed, 10 Jun 2026 09:28:32 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Andy Lutomirski <luto@kernel.org>
+Cc: Li Chen <me@linux.beauty>, Kees Cook <kees@kernel.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-arch@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, x86@kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, Jan Kara <jack@suse.cz>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [RFC PATCH v1 00/13] exec: add spawn templates for repeated
+ executable startup
+Message-ID: <20260610-saufen-zerfallen-uncool-5608105e0d8e@brauner>
+References: <20260528095235.2491226-1-me@linux.beauty>
+ <20260528-madig-fachrichtung-fehlinformation-61117ba640da@brauner>
+ <CALCETrWJQpLR4n1cpichBk8=uExSKLWTMGU3BufGdk_WE_p5UA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260610-arena-direct-value-v1-v3-1-d5f0d935ee45@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WOyw6DIBBFf6VhXRoe9dVV/6PpAnBQGkUDSmyM/
- 16kGzdNk9nczJxzZ0UenAGPbqcVOQjGm8HGwM8npFphG8CmjhkxwnKSE46FAytwbRyoCQfRzYA
- DxaCvtS6zQlalRJEdHWizJO8DyVFjC8uEnt+Nn+Ur0rt2v22Nnwb3Ti8Emog/bXEoLiSnShFRK
- qHuTS9Md1FDnzoCO1qyXxYWLaJiSrKSAi/yo2Xbtg/ppg5jHAEAAA==
-X-Change-ID: 20260603-arena-direct-value-v1-ef4df857b98b
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Emil Tsalapatis <emil@etsalapatis.com>, 
- Junyoung Jang <graypanda.inzag@gmail.com>, 
- Woojin Ji <random6.xyz@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5647; i=random6.xyz@gmail.com;
- h=from:subject:message-id; bh=53JyhO7i5frR2tFIJKi76YP5Onuf89dbn1JJ8Mp4sJ0=;
- b=owEBbQKS/ZANAwAKAUOXRMMVrfhrAcsmYgBqKQ6q/0Mnw8OjeZLWplgHEnkOYShXxKmetW4OQ
- f6Q92Vn4+mJAjMEAAEKAB0WIQSrknTJbxUcAdPNt5BDl0TDFa34awUCaikOqgAKCRBDl0TDFa34
- axveEACfexJ/1G1cZljjcqjlGuRWEziCRKgYU15g/chjQTl7g7ce7+MNBPJURxttv7VmgW8uZyM
- secmTrgsg4TwTKq6Wfskg2RjJe3P4PRdILTfmNrUtP16bH3UqHC9Btq0vJsgv7jTOz29wlt2I4a
- MVjM3D9QsjZCG5Di0aMYscwcDJXJ4qhfHDeS53PoIeEekdyeB77nH08zgqScL/x0rT3WpCmniwt
- SxIJe/bsgZeDHafcB8uj69SD06r+wp7TcbRZ0h5VyOJmDmer/AUAxa+6t2A41t5akW4DRoI4eE1
- AmygEVyo3tIp7mVxCaTnlhlzw2aIIu77F6iqFaCyPQaBDCKVzksuW0ntC705i6r0NzgQaecTCfE
- BvxShBIn1RXvR79xlWWVICvn+mpQ6YI/lod57n6L5EaTVPI6k2ugHAfl5wbolZhlvUJNEE3i7Qd
- syNJdaATVgpv1EJE0dd6cUx/66H5EFzraxcUhnoDDqk0VLGQ+RHhyErtRYgO07OGYPsouZe41j3
- sB0nMJlUuqn6jijDuLbwpiXwz6+hnjx4b3O3qCYqKEZ/AbtZJK0PP5H2JI7RjcVJS34iLOhbSTM
- jsFBgEn98SICUzKnrdTRITXJ2oWZmSzPm+mMs/Vx6Mwu4HM4JfvBFXhJvuBCe1T8X0cTgLLF0qQ
- WFf8czg0/HWX1Cg==
-X-Developer-Key: i=random6.xyz@gmail.com; a=openpgp;
- fpr=AB9274C96F151C01D3CDB790439744C315ADF86B
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALCETrWJQpLR4n1cpichBk8=uExSKLWTMGU3BufGdk_WE_p5UA@mail.gmail.com>
 
-BPF_MAP_TYPE_ARENA supports direct-value pseudo loads, but unlike array
-maps its map value_size is zero and the valid direct-value range is the
-arena mmap size, max_entries * PAGE_SIZE.
+On Mon, Jun 08, 2026 at 05:01:57PM -0700, Andy Lutomirski wrote:
+> On Thu, May 28, 2026 at 4:05 AM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > On Thu, May 28, 2026 at 05:52:21PM +0800, Li Chen wrote:
+> > > Hi,
+> > >
+> > > This is an early RFC for an idea that is probably still rough in both the
+> > > UAPI and implementation details. Sorry for the rough edges; I am sending
+> > > it now to check whether this direction is worth pursuing and to get
+> > > feedback on the kernel/userspace boundary.
+> >
+> > The idea of having a builder api for exec isn't all that crazy. But it
+> > should simply be built on top of pidfds and thus pidfs itself instead.
+> > It has all the basic infrastructure in place already. Any implementation
+> > should also allow userspace to implement posix_spawn() on top of it.
+> >
+> > fd = pidfd_open(0, PIDFD_EMPTY /* or better name */)
+> >
+> > pidfd_config(fd, ...) // modeled similar to fsconfig()
+> >
+> 
+> After contemplating this for a bit... why pidfd?  Doesn't a pidfd
+> refer to an actual process that is, or at least was, running?  This
+> new thing is a process that we are contemplating spawning.  I can
+> imagine that basically all pidfd APIs would be a bit confused by the
+> nonexistence of the process in question.
 
-Commit 3ac1a467e376 ("bpf: Fix off-by-one boundary validation in arena
-direct-value access") fixed arena_map_direct_value_addr() to reject an
-offset exactly at the end of the arena mapping. Add a regression test
-that loads a BPF_PSEUDO_MAP_VALUE with off == arena_size and verifies
-that the verifier rejects it with the expected offset in the log.
-
-This is intentionally kept as a userspace raw-instruction test. I tried
-expressing the same BPF_PSEUDO_MAP_VALUE + off == arena_size case in
-verifier_arena.c with inline assembly. The only form that produces the
-desired instruction bytes uses __imm_addr(arena), but that emits
-R_BPF_64_NODYLD32, which the libbpf/bpftool link step rejects. Other
-register, immediate, and memory constraints either fail in the BPF
-backend or lower to a normal R_BPF_64_64 load followed by an ALU add,
-which does not exercise arena_map_direct_value_addr() with the boundary
-offset in the second ldimm64 slot.
-
-A legacy test_verifier fixture can express the raw instruction directly,
-but it needs arena map creation, mmap, and fixup plumbing in the legacy
-runner. That is more intrusive than the small prog_tests raw-instruction
-test.
-
-Use the userspace raw-instruction test, following the existing selftests
-pattern used for direct map-value pseudo loads, so insns[1].imm can be
-set to arena_size precisely.
-
-Assisted-by: ChatGPT:gpt-5.5
-Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Junyoung Jang <graypanda.inzag@gmail.com>
----
-Changes in v3:
-- Document why verifier_arena.c inline assembly cannot express this case:
-  __imm_addr emits R_BPF_64_NODYLD32, while other constraints either fail
-  in the BPF backend or miss the pseudo-load boundary path.
-- Mention that natural C forms lower to a normal load plus ALU add, so they
-  do not exercise arena_map_direct_value_addr() with off == arena_size.
-- Keep the userspace raw-instruction test as the least intrusive option;
-  test_verifier was checked but would require legacy runner arena plumbing.
-- Link to v2: https://patch.msgid.link/20260605-arena-direct-value-v1-v2-1-a92cb281e376@gmail.com
-
-Changes in v2:
-- Explain why this uses a userspace raw-instruction test rather than a
-  verifier_arena.c failure program: the test must set the second
-  BPF_PSEUDO_MAP_VALUE ldimm64 immediate to arena_size exactly. For
-  arena globals, libbpf derives that immediate from the arena-relative
-  symbol offset, so the boundary value cannot be represented directly as
-  a verifier_arena.c C-level failure program.
-- Link to v1: https://patch.msgid.link/20260603-arena-direct-value-v1-v1-1-7b31cc0a8cac@gmail.com
-
-Tested on x86_64 with tools/testing/selftests/bpf/vmtest.sh:
-  $ ./test_progs -t arena_direct_value
-  #2/1     arena_direct_value/one_past_end:OK
-  #2       arena_direct_value:OK
-  Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
----
- .../selftests/bpf/prog_tests/arena_direct_value.c  | 73 ++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
-new file mode 100644
-index 000000000000..b7760b021670
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
-@@ -0,0 +1,73 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <bpf/bpf.h>
-+#include <errno.h>
-+#include <sys/mman.h>
-+#include <unistd.h>
-+
-+#define ARENA_PAGES 32
-+
-+static void test_arena_direct_value_one_past_end(void)
-+{
-+	char log_buf[16384] = {}, expected[128];
-+	__u32 arena_sz = ARENA_PAGES * getpagesize();
-+	struct bpf_insn insns[] = {
-+		BPF_LD_IMM64_RAW(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, 0),
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	LIBBPF_OPTS(bpf_map_create_opts, map_opts);
-+	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts);
-+	void *arena = MAP_FAILED;
-+	int map_fd, prog_fd;
-+
-+	map_opts.map_flags = BPF_F_MMAPABLE;
-+	prog_opts.log_buf = log_buf;
-+	prog_opts.log_size = sizeof(log_buf);
-+	prog_opts.log_level = 1;
-+
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_direct_value",
-+				0, 0, ARENA_PAGES, &map_opts);
-+	if (map_fd < 0) {
-+		if (errno == EOPNOTSUPP || errno == EINVAL) {
-+			test__skip();
-+			return;
-+		}
-+		ASSERT_GE(map_fd, 0, "bpf_map_create");
-+		return;
-+	}
-+
-+	arena = mmap(NULL, arena_sz, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
-+	if (!ASSERT_NEQ(arena, MAP_FAILED, "arena_mmap"))
-+		goto cleanup;
-+
-+	insns[0].imm = map_fd;
-+	insns[1].imm = arena_sz;
-+
-+	prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT,
-+				"arena_direct_value", "GPL", insns,
-+				ARRAY_SIZE(insns), &prog_opts);
-+	if (!ASSERT_LT(prog_fd, 0, "prog_load")) {
-+		if (prog_fd >= 0)
-+			close(prog_fd);
-+		prog_fd = -1;
-+		goto cleanup;
-+	}
-+
-+	snprintf(expected, sizeof(expected),
-+		 "invalid access to map value pointer, value_size=0 off=%u",
-+		 arena_sz);
-+	ASSERT_HAS_SUBSTR(log_buf, expected, "verifier_log");
-+
-+cleanup:
-+	if (arena != MAP_FAILED)
-+		munmap(arena, arena_sz);
-+	close(map_fd);
-+}
-+
-+void test_arena_direct_value(void)
-+{
-+	if (test__start_subtest("one_past_end"))
-+		test_arena_direct_value_one_past_end();
-+}
-
----
-base-commit: ba3e43a9e601636f5edb54e259a74f96ca3b8fd8
-change-id: 20260603-arena-direct-value-v1-ef4df857b98b
-
-Best regards,
---  
-Woojin Ji <random6.xyz@gmail.com>
-
+I don't think that would be a problem because every api just needs to
+handle ESRCH. Ignoring that for a second: the mount api has a builder fd
+that is later transformed into a pidfd. Which is easily doable here as
+well. My point is that all the infrastructure building blocks already
+exist in pidfs.
