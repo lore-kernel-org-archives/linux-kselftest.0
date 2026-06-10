@@ -1,219 +1,255 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED1F3A59A3
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 08:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781079184; cv=none; b=foTC/ZLyGlXebX97HC8pNtRXz8hL8w12lT7iiuGRmeYGnLe7Ozeef9luO6Ummj2VkVXFvBSQd5iLvqopD3TnjFjB9B01zMy+G/sVI1hU9ov0zMcK+tXVAJbbO9dju+p3DKeLsDIvmI1EdW5nd5wiilfhWbwcWF0LgqHzoBTrZF4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781079184; c=relaxed/simple;
-	bh=1LwNYa0nsMkWi/VTO8ktSvbDoho+LWniLHNV/RoBPe8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Zt51tGI4H45sR/captep1/MNTu9ghb7UjsyHLl/YW7OoP+6eHam1PrSi/k0oLOVYHqS0G0E0b5FyBuyTDmWjZo1RkZKtic9o2WHCXM56X6SslEQueWvjf5d7lM72a4j7MSt8gO8Lt/JoSVrrq/XfiBtR1dHLqdvPT5mFsbUGkPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EhrL1R3h; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CFAC2D3A7C
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 09:35:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781084110; cv=pass; b=kEwX0yLJ8ERZ0OH97zdr4hghLAs4xdi95hVYTe2q1IaV98yuK0GQUJqBz3wJQJ7w5p+74MQ0noVuWG5vp4h6sM/Sm++jEpHqkhl5RNUXOgJIPmWvmpy0UzaRrzrzypuIORHMPql8GSRP9qGbOA/haJrBsYzuO4BILftPhg0QYA4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781084110; c=relaxed/simple;
+	bh=f13hlIkd3qAqESAAe+1Ll7lwWedKyP+tjl+1tINB0Z4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qjBjUNz19jp6yZcrOu5LH1bShdME2dcNEUEFkLsxxwiTLZhPbKgkkVTpJEQZoJ28nmxrehPDmOwRvBDLknd6j9jvzyrzOSU9gBVMisWkr8aCpATeSq+Ql7MLAXx3Gv3xWaR1cqfT/PAQvTvBFT/fAblWkfjwYNnGA0A45pBscAk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pFBAbAG5; arc=pass smtp.client-ip=74.125.224.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EhrL1R3h"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-36dd65b95f2so4641672a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 01:13:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pFBAbAG5"
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-6607048fa62so6386470d50.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 02:35:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781084108; cv=none;
+        d=google.com; s=arc-20240605;
+        b=In9oCPNQ/PpL1TjuCMaGKbb9xfsns75EG2uM5dNKpV4uoDqiYidob98bGcXzyCDewC
+         rs9wxh28nMb7yResvIhOobM7q06VgMSdp8lhYNfbVLyPnR/698iNPCD2P/hq4xgGjr6R
+         pfQKkDXwdD9D9wI3UOe2CImeIBEp7aKXoyNR8R5P6RSpTQCLzAsKFivhVJyR83CVs+nt
+         bEi2Z7KeXSp9RHHj2r5E8PxgBNZMyzd4ewt/V1JJcUHM16A/gM+vVFbwc1BnsBQGRLvM
+         TzAeP3hcY8JteiGBZFMGxH6+e8VhwHg5cbXCQVXsAweLadC7FmFxFi7p2GLFycpj8zuY
+         04dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=QrsRVHaTOrUv/oFhwSzJi/8W4myIMifEs3+89C8c3Zg=;
+        fh=kC7Oia6WMhX5JA7xcq1+ZpZU80sovT+e/acZH5PS2cI=;
+        b=ZWC5v8VkpxWKhoRl81mP7TeYcjSajWuc987CdX5x3go7GASTv8OO6GBkiexHIfEq9+
+         FA5VaeiNW97u8iJGUBHlE54iopdjfklyGG/CK0vUXl9ti2Pt8o93gJ027acdllkJaTVP
+         RqBi2N2FfGCaLrCsqce+K7DkftwOiUlFgkV75Hb2+LdGqDmZ7nvP2T4RibfdL8C9hfi8
+         fr0vAhhmv2aSbYDEL+K23nUlI5KUnNvrL9ofMHIZ7e5B4DqqFSW+D3VCBLH6Hed/o9pI
+         9BfSOLJ7trPS06IEqeU6Ks64A9RgwDIUO4MDDdxTXktmMUTgWQOTqcZpUi9HYvPdofhZ
+         CoQA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781079183; x=1781683983; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781084108; x=1781688908; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v3kEhRN8jP8NPUF2dXs8XkRxqkJ3rS6M1G7akkNNwjA=;
-        b=EhrL1R3hdkqryyd3ucapXsWMPROpZzMH4iUhRLjXv8TgLGWeLR/WvY/GPTgo2xu4pW
-         79nJRKn3ZOXY41JqoVRUriMH8ZGBP+JfN/HTgDisraMEHRb0XfJTrnn/pjSisn7c24te
-         cxuDudj7V/iWuSzI3f9tpTncqFvGyz/PoduaSkBD9gVkAKIW/nHOenGNMRvjNe2dmtbj
-         PJkdzQsXbpsECCqhrDlfXX5FvbkvROHNiqjF6whzD3EUYMBAEVcwKm4w16R9yuErdAgC
-         TeoEs8jN9xBCxIrWIKObIm5J28ZcuyJKc/BzLyB4cYj4kMfIsHYKQGoiRYnGa+Z3/Im9
-         ToVg==
+        bh=QrsRVHaTOrUv/oFhwSzJi/8W4myIMifEs3+89C8c3Zg=;
+        b=pFBAbAG5e+gryTMupfIlwf2bbh46zpH3f1KvDGQTecrjmGwcJIt8wKotjOyk9G9J/u
+         Al3HZgOpQdMi/99K5rrGhmXBsKntezwoK+T2nDL/qjHolICnolTzNaRC/luQaHo1LNLY
+         cQoPJXks1D+8oFtH7J4sOfuPES2PxYulzsEFokdsCbgisBJo9VUOX3miy4l7idpJEzOz
+         bis1i1szXpfIJgsSxYtbpESq01PXhwycNTL+ZofBCVe6xDHW8WHKWPAFXvUgL1QPML16
+         +ML1qrBJE47/zQUMMK0l+dLibE6/2T2Aj62wFoGgEUTY33ZaJ61tGC8jDyEFxIHSBjW8
+         BeQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781079183; x=1781683983;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1781084108; x=1781688908;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=v3kEhRN8jP8NPUF2dXs8XkRxqkJ3rS6M1G7akkNNwjA=;
-        b=ZQI/CBZNXu/6vTxa89/doJ8Y2q3hkQTAKS2wDaTpmNtzlnNL+tVpCKUE8/wVnWHbYI
-         uwDeDvuuzMJwqxWe75fTPeZA2Z6rUgvH0BOZ7gVprj+x5oeOR2Zreb91ugk4yPWGYwVw
-         urC9NpKswd7LJjsvVhiJyGJEAPJoQL+65z5V37E4hhLkAg6AwxcAjTNz92vf5qYf3wKt
-         xR3H0MzmD6DpQe7sGacY/gmtR/rvR5kMnnSRmd1aLhkDEztgKrN1ILuJjoHnFPt9XjOE
-         uxd4KEg5U+vJG/kqAKRBkqiALS0Xww7CjtswoePg/HuN0HlfP6jSpY5C7yOjQbvc19gN
-         azQg==
-X-Forwarded-Encrypted: i=1; AFNElJ8mFCBHtelg+PXOIcvenpKnOrr4fuybnhX4ydz3idK8k7cROKM3ArYwaljghMfryqT31/F82ozHmUSfX0GecPE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5DgoyUAHWOXjVOkSupMstGTw1bTDzeNZFb4XSwkvOBrHcJclb
-	4f8Wbj+5nB5vT/kZ27l/j7q2ImtJ84xM8vMQVgFVnSZS/hJjT97hI9bJ
-X-Gm-Gg: Acq92OE3pk9x/jrhnR068TtM+jzfLHG/KN9bvaGD2RCwQpczIcnM9y4lfybDjHqZ+Rn
-	H+i4IAikwABUZpr0cPllwuZvVdl+/urmiAx0LdE9j4uacoep3uhd/kkLW1gSCrYXhvddbk5U0ds
-	T4fqlwWbh6tzVZcNnhJTUTiLLO/yTHQQRbqBc4k0R4qVK1FH2ZXtxaEJMru6EtpZaeStecKqMAb
-	OQYdqKXkKZKSPOJTfjhY/0U9vk0s09KCxOYnSOk0aRZecXyH9PykTU6GVaulNBa6N7koWKv46I4
-	y+LSQI4h+94FOtIlwGCDbqLRAE4QPXLeMNwU1uGmMbIayEEV5jvko0qplkNeXosMr6u+I1ADBL1
-	K1AP6ubqPZCflTzSQiire3LLpSwwwW6qhqibPCQ72hlDzp7ILRHi61xTGbtx+BjVdMhJc1dI9XL
-	IhAcMhhbMYHGG36LYB4WZTrJAM/d0wM9cWxIL0iZO7nrKm9Qn5ka23YHmjUwHDgeriw2RaGoIz
-X-Received: by 2002:a17:90b:2f0d:b0:368:3830:a8bd with SMTP id 98e67ed59e1d1-37131041514mr18542159a91.7.1781079182633;
-        Wed, 10 Jun 2026 01:13:02 -0700 (PDT)
-Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37645c1aeb5sm1241003a91.2.2026.06.10.01.12.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 01:13:02 -0700 (PDT)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Cong Wang <cwang@multikernel.io>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: add test for bpf_msg_pop_data() overflow
-Date: Wed, 10 Jun 2026 08:11:54 +0000
-Message-ID: <20260610081218.506709-3-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260610081218.506709-1-rhkrqnwk98@gmail.com>
-References: <20260610081218.506709-1-rhkrqnwk98@gmail.com>
+        bh=QrsRVHaTOrUv/oFhwSzJi/8W4myIMifEs3+89C8c3Zg=;
+        b=EoA4riDUt6bmNPGkI0uKmMTj1vU20Tt+qRqbpUF+yFn+sVuPnZUljazBASX/NcU3xa
+         C42bprklUqxcLPXNjOsTWi3zcZ2VuSpv6/XmWCAmH+4j+cGpiZBKV+jRx5Z51Hcqt9kn
+         99+/eIhyB2X5sFQskGR44ZUSRQfi7Fwao17+jGDNea6qQMtGu++tmjCTKPD3Qu9tapSr
+         UiceSTpF+61yf4zr/MT5WV7pWq3L2KVGguJOkiTBvN9YJufshmYvYO30q3MeDUPU3UqD
+         9zLlMGrxXYqa2QSsbi2BDm5dg6nIICmYZxSbUjKez5eUNAl8ZEo6kA4jtms5lk6ox53L
+         QQjA==
+X-Forwarded-Encrypted: i=1; AFNElJ8lzZWImUs63jY5rkVMFkNb+z2poxMiiXU07aQfQjSVco7zytnhsIJGorcxYgHEyabHAC7oqwDRYg6aH6p//wo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPzHdw6clfXuWCrmGV75cSexkN5DxzsC7reRkcV8hAOoSDbCZ9
+	xH6Ca7bXwbzDKhhms1tHK3NHYDY814dkBjpPx4z2LEeyD9f/q8mjSJF85F3CFxzR84JcBgBKHwe
+	Gh3FrYFm/LYAht1zepntK5JXGlRfrmLk=
+X-Gm-Gg: Acq92OFTZHBok+Eu8LR/90Zy/Sd+Oth+8u4GGh+35xPxxrTVUgMN/gyWHLxQThE6YXE
+	abL7mDcQai6B0/JXyGieEaZdn7DBJKSs4X5HLYRhki5t9riSFt+ZzhSKKqS0mPB8Je3HlaTedVm
+	qy6EdLq9yS/GantWOo5Ah5Oage5mQEdqQY5v7COLy2I0n/FX1XCw/ct9aAhL0H7xkcsRyv3TRNV
+	CkhoeggeWcPCQ3s8GNpRtfglTrvAzw9nXtmZ73GkEZEK2gH3bTSIuhyexyWmOpbMdI8ur4n1p26
+	Vi71eszDzwbRGR7el6DZo0HHf0mML8aepi9F/D0V5sd/opaC4IgXadiJZqkygQ==
+X-Received: by 2002:a05:690e:1902:b0:64a:ef61:188c with SMTP id
+ 956f58d0204a3-6614f7fa83emr6602296d50.47.1781084108264; Wed, 10 Jun 2026
+ 02:35:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260609100214.337538-1-sun.jian.kdev@gmail.com>
+ <L0cwr1-KRSKR7-dJdjDmJA@linux.dev> <DJ4XIOT2RVMT.28I5LA2UOZVUI@etsalapatis.com>
+ <AgOg1pJHQN-gpKhYUz3SMw@linux.dev> <CABFUUZH9F+tiitstSBy2-M=WC84jg28CVMXU+Lu-va6jm71fDw@mail.gmail.com>
+ <b35a2395-0e15-4390-ba7a-b48748e7e3f3@linux.dev>
+In-Reply-To: <b35a2395-0e15-4390-ba7a-b48748e7e3f3@linux.dev>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Wed, 10 Jun 2026 17:34:56 +0800
+X-Gm-Features: AVVi8Cd2Q687Tcu63pcXaDbwOQYOqrUxS-NscSvnl80wWepD5q_IKVSOQ-JfzjM
+Message-ID: <CABFUUZFimdrZdq=NWi+N-0sJZWvMwY=f4iF6-3TVMS8=m07Zmw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Unshare cloned skb before devmap egress XDP program
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: Menglong Dong <menglong.dong@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, davem@davemloft.net, kuba@kernel.org, 
+	hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, shuah@kernel.org, 
+	liuhangbin@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a test in sockmap_basic.c that calls bpf_msg_pop_data() with a length
-close to U32_MAX, which overflows the start + len bounds check. The sk_msg
-program records the return value over a sendmsg and the test checks that
-the call is rejected with -EINVAL.
+On Wed, Jun 10, 2026 at 1:13=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.de=
+v> wrote:
+>
+>
+> On 6/10/26 9:58 AM, sun jian wrote:
+> > On Wed, Jun 10, 2026 at 9:21=E2=80=AFAM Menglong Dong <menglong.dong@li=
+nux.dev> wrote:
+> >> On 2026/6/10 08:06 Emil Tsalapatis <emil@etsalapatis.com> write:
+> >>> On Tue Jun 9, 2026 at 7:06 AM EDT, Menglong Dong wrote:
+> >>>> On 2026/6/9 18:02 Sun Jian <sun.jian.kdev@gmail.com> write:
+> [...]
+> >>>> Hi, Jian.
+> >>>>
+> >>>> This sounds like a good idea in this case. When I have a look at bpf=
+_clone_redirect(),
+> >>>> I found that it use skb_clone() too, which means it has the same pro=
+blem. The
+> >>>> data can be modified by other xdp prog in the destination NIC if we =
+use
+> >>>> bpf_clone_redirect().
+> >>>>
+> >>>> So maybe this is the default logic, and I'm not sure if this patch c=
+an break the
+> >>>> existing users :/
+> >>> I think for use cases where we are using bpf_clone_redirect() to use
+> >>> one clone for inspection this would add an unnecessary copy. Maybe
+> >>> adding *_copy() variants instead of changing the *_clone() would be
+> >>> better? That way we wouldn't be changing the behavior for existing
+> >>> consumers and the naming would be consistent with the skb_* methods.
+> >> Agree. It's not a good idea to change the logic of the existing API. O=
+r
+> >> maybe we can add a BPF_F_CLONE flag for the existing API.
+> >>
+> >>> But more importantly, is there an actual use case for the kind of API
+> >>> that the modified selftest requires? Nobody until now has considered
+> >>> the existing behavior to be a problem.
+> >> Agree too. Obviously, this is not a bug. For the use case in the commi=
+t
+> >> log, it's something that can be fixed by the user themself. If we need
+> >> modify the MAC, we'd better attach a BPF program for all the egress
+> >> device in the devmap.
+> >>
+> [...]
+> >>>>
+> > Thanks for all the comments.
+> >
+> > I agree this should not be treated as a generic skb_clone() issue, and =
+I
+> > understand the concern about changing existing clone/shared-data semant=
+ics.
+> >
+> > The case I was trying to address is narrower: generic XDP devmap
+> > broadcast/multi redirect with per-devmap-entry egress programs. The use=
+ case is
+> > not newly introduced by this patch. The existing xdp_veth_egress test a=
+lready
+> > attaches xdp_devmap_prog to all egress devmap entries, and that program=
+ rewrites
+> > eth->h_source based on ctx->egress_ifindex. My change only strengthens =
+the test
+> > from checking that the observed MAC is not equal to a single magic MAC =
+to
+> > checking that each destination observes the MAC selected for its own eg=
+ress
+> > ifindex.
+> >
+> > So attaching an egress program to all devmap entries is already what th=
+is test
+> > does. The SKB_MODE failure happens because the cloned skbs can still sh=
+are the
+> > packet data, and a later per-egress rewrite can be observed by another
+> > destination.
+> >
+> > That said, I see the concern that this may need a clearer semantic boun=
+dary
+> > between clone and copy behavior. I will also check the last_dst path po=
+inted out
+> > by Sashiko before deciding whether this should be handled as a bug fix,=
+ or
+> > whether it needs a separate explicit copy/isolated redirect semantic in=
+stead.
+>
+>
+> I agree there's a real concern here. For context, native XDP already
+> makes a full copy
+> of the frame for every broadcast destination:
+>
+>    dev_map_enqueue_multi -> dev_map_enqueue_clone -> xdpf_clone
+>
+> so on the native path each destination gets its own independent buffer.
+>
+> The generic path is the odd one out, because skb_clone() shares the
+> underlying data.
+> I think this rationale should be spelled out in the commit message.
+>
+> Regarding performance: generic XDP is already a slow path =E2=80=94 the i=
+ngress
+> side already
+> linearizes / expands the skb (pskb_expand_head() in
+> netif_receive_generic_xdp())
+> so the extra copy here is not a concern.
+>
+>
+> However, there is one problem with the patch as it stands.
+>
+> The last destination is transmitted using the original skb directly,
+> without unsharing it.
+> So with two destinations where the first one has no egress XDP program
+> and the second (i.e. the last one) does,
+> the egress modification on the second destination will corrupt the
+> packet sent to the first.
+>
+> This could be addressed by doing the skb_unshare() inside
+> dev_map_generic_redirect() instead ?
+>
+> For the non-broadcast (existing) path the skb is not cloned, so
+> skb_unshare() simply returns it unchanged.
+>
+>
+>
+Hi Jiayuan,
 
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 48 +++++++++++++++++++
- .../bpf/progs/test_sockmap_msg_pop_data.c     | 27 +++++++++++
- 2 files changed, 75 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+Thanks for the detailed explanation.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index d2846579285f..cb3229711f93 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -14,6 +14,7 @@
- #include "test_sockmap_pass_prog.skel.h"
- #include "test_sockmap_drop_prog.skel.h"
- #include "test_sockmap_change_tail.skel.h"
-+#include "test_sockmap_msg_pop_data.skel.h"
- #include "bpf_iter_sockmap.skel.h"
- 
- #include "sockmap_helpers.h"
-@@ -666,6 +667,51 @@ static void test_sockmap_skb_verdict_change_tail(void)
- 	test_sockmap_change_tail__destroy(skel);
- }
- 
-+static void test_sockmap_msg_verdict_pop_data(void)
-+{
-+	struct test_sockmap_msg_pop_data *skel;
-+	int err, map, verdict;
-+	int c1 = -1, p1 = -1, sent;
-+	int zero = 0;
-+	char *buf;
-+	const size_t len = 32 * 1024;
-+
-+	skel = test_sockmap_msg_pop_data__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	verdict = bpf_program__fd(skel->progs.prog_msg_pop_data);
-+	map = bpf_map__fd(skel->maps.sock_map);
-+
-+	err = bpf_prog_attach(verdict, map, BPF_SK_MSG_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto out;
-+
-+	err = create_pair(AF_INET, SOCK_STREAM, &c1, &p1);
-+	if (!ASSERT_OK(err, "create_pair"))
-+		goto out;
-+
-+	err = bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto out_close;
-+
-+	buf = calloc(len, 1);
-+	if (!ASSERT_OK_PTR(buf, "calloc"))
-+		goto out_close;
-+
-+	sent = xsend(c1, buf, len, 0);
-+	ASSERT_EQ(sent, (ssize_t)len, "xsend");
-+	ASSERT_EQ(skel->data->pop_data_ret, -EINVAL, "pop_data_rejects overflow");
-+
-+	free(buf);
-+
-+out_close:
-+	close(c1);
-+	close(p1);
-+out:
-+	test_sockmap_msg_pop_data__destroy(skel);
-+}
-+
- static void test_sockmap_skb_verdict_peek_helper(int map)
- {
- 	int err, c1, p1, zero = 0, sent, recvd, avail;
-@@ -1373,6 +1419,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_fionread(false);
- 	if (test__start_subtest("sockmap skb_verdict change tail"))
- 		test_sockmap_skb_verdict_change_tail();
-+	if (test__start_subtest("sockmap msg_verdict pop_data overflow"))
-+		test_sockmap_msg_verdict_pop_data();
- 	if (test__start_subtest("sockmap skb_verdict msg_f_peek"))
- 		test_sockmap_skb_verdict_peek();
- 	if (test__start_subtest("sockmap skb_verdict msg_f_peek with link"))
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
-new file mode 100644
-index 000000000000..301e65b95256
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+} sock_map SEC(".maps");
-+
-+#define POP_START 0x48a3
-+#define POP_LEN   0xfffffffd
-+
-+long pop_data_ret = 1;
-+
-+SEC("sk_msg")
-+int prog_msg_pop_data(struct sk_msg_md *msg)
-+{
-+	if (msg->size <= POP_START)
-+		return SK_PASS;
-+
-+	pop_data_ret = bpf_msg_pop_data(msg, POP_START, POP_LEN, 0);
-+	return SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+I checked the last_dst case and was able to reproduce it locally. In that c=
+ase,
+earlier destinations without devmap egress programs can still observe the p=
+acket
+data rewritten by the final destination's egress program.
 
+I also tried your suggestion of handling this in dev_map_generic_redirect()=
+,
+right before running the devmap egress program. That fixes both the origina=
+l
+case and the last_dst case.
+
+One detail I changed in the implementation is to use skb_copy() + consume_s=
+kb()
+instead of skb_unshare(), so that allocation failure does not consume the s=
+kb
+and the existing caller error paths keep their ownership semantics.
+
+With that version, the following tests pass:
+
+./test_progs -t xdp_veth_egress
+./test_progs -t xdp_veth
+./test_progs -t xdp
+
+I'll send v2 shortly.
+
+Thanks,
+sun jian
