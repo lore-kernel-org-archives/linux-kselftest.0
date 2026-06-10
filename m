@@ -1,166 +1,106 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 468B5416D0F;
-	Wed, 10 Jun 2026 13:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300F73DB31B
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 14:47:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781099845; cv=none; b=rHLTfqyGDy0YuBS3k8pRGJPyxV2Y83rOU24k3IXtxa86b6bU+1xJ9etu/2xggEpqleo5jNlvycCIX7GFprKaGnaiwP+e/gGVAp3ib6bNf/XmibnH18lSdW2FsMAYTEeZWc09CXp8HE55OR7dwVei2+rSJsGIEWRAtZudLA1gMCQ=
+	t=1781102837; cv=none; b=g7ZEswNQZrLPo9MRG712pCxGpX/ZH1qDekX7HhkX3qH25d0lATwfCHEKPYY92sajsxG9RHt47kkFgoBk5vtsBLYDGvEeUB37NV6OZLffL7mzKuLyeze3h7Nkd2u0/zFpObC48Xj+U6YUuy2LGInMiGVVoIwnkNoaVoyELUmVAFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781099845; c=relaxed/simple;
-	bh=CGrh7KvfdrsdL6DF0jcOf3eHYS7cMBvKypJY6m6cmmU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tQKUBgJmGHYInlFoQ9usPtkughIMMheuieq0UaR7CjmSGGxlZaueC1UmtU1MONnONiWjqsG8cawxsKwYYdgWz+fR0zE7tmGmo5705z/vZ2N+xz2ZtHF5wGSKZJ0fUWvZ7nQnR0a7YvITZmuMLNeHphX9x7noBWkCAWsXAiJDJAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=l7lmvP4D; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1781102837; c=relaxed/simple;
+	bh=COX1VHjRoe/ogspb3mFubjljRixbXBFDulSIQg2GM4U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o8bBLx+fOBJx4Jhct21H+Y1smN/Gk7wjsTX6nBWM9f5bJ2Ysp2Knr4LtYtcB8pd08h8qmsaZjQpunEEO+Nm/hCv9Xmi04NiI+X2eSo+eLzBz4iSw2IpwMXxSIIhXahmEsEodticWrNqXBY/ukb0Ic7hJxMTLEIdhApPVh6y8QWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQqLqCt3; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="l7lmvP4D"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA53125DF;
-	Wed, 10 Jun 2026 06:57:18 -0700 (PDT)
-Received: from thinkpad-e142931.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 82D093F99C;
-	Wed, 10 Jun 2026 06:57:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1781099843; bh=CGrh7KvfdrsdL6DF0jcOf3eHYS7cMBvKypJY6m6cmmU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l7lmvP4Dg91mMi4EywP9dT+/mWH6HER8VuIebB4WhBrgQG2wKmH9QQ6DBeieh38m7
-	 pLqgqHI/UneyB/aCDcyrjyJ7TrIZAQHvDVxruzvK8e40uFBWburRLkZ+mSG/igMZbu
-	 ddtUCueMRXeNNAcbn3rxc8LiDNFvUgb8qt2I02ec=
-Date: Wed, 10 Jun 2026 14:57:09 +0100
-From: Wei-Lin Chang <weilin.chang@arm.com>
-To: Oliver Upton <oupton@kernel.org>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Itaru Kitayama <itaru.kitayama@fujitsu.com>
-Subject: Re: [PATCH v3 0/9] KVM: arm64: selftests: Basic nested guest support
-Message-ID: <pwkaekvyhbjaztohmuxfrzn5qnfmzsms7k27ocbvtrpelha2m4@awls6yy6lfre>
-References: <20260516183003.799058-1-weilin.chang@arm.com>
- <agzWnS2gzzhEHEG6@kernel.org>
- <ioz7qsirq2v665bqbjin5ekwss46pfg2sfmndkvail2athbo75@cgt7zikhtx6r>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQqLqCt3"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-490aaeabdb4so44869905e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 07:47:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781102834; x=1781707634; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pW0vQ1fZte9oW2h1t9hL6NwsrjoJkK4YR5wSpSnn56o=;
+        b=MQqLqCt3ATJllUbg1LRp8A7Mv/bntmshft8sq8LA/wVR3hqf9HAuzYAen08+XLaErK
+         NAGDoUswlI/f+fe9HiVA/Ed6cfiUATUJZmWhhKi2iQdhuy6BTVyRyDNGzLUEOKzMT5pJ
+         wwoAbNEgO7B7L1E3Z6ZBmDfP1Aq5qrEyuzrkbRr+kQNhxReryy6s5L1HsLv1M4gBdqKi
+         GY85v3TE3NZNJMTgBkmko2FlS6iSBv5ABJZNa2QDthjy2Yt0yLJ+7I/cnfzOFZJlVKdI
+         gphsrEXtLAtDYQo3PsFMIkE9S7D4z3ekPSa3ojOi7hlpiCrS4Rm6LuQ/cJUDK3Br/aVT
+         LvsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781102834; x=1781707634;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pW0vQ1fZte9oW2h1t9hL6NwsrjoJkK4YR5wSpSnn56o=;
+        b=VwwlMICXJm4jCFxulhH2+DKMbe/rsBFrH7B3juBA/rBQtlSg7fSmTEUvYY1yy3Hy/8
+         L5iMAO6C7TyyRNXbRV+M/ZYtRSWgV+aOQrpXi0jbQAphVnnpG8gnlbcRAB5PzqPHjhOP
+         CcZGAByqFH/Lhca8i3OHxyiqi6k+YChCTgQTutqht9NOc2ZhtyKjLYXSbAI8K4E0EtKI
+         aWqSL8xNGq3OZbOwWIovTfWMXka6bZqyyMND0sAnYpzL+MVBEvBB8DMdUUaaJheYJViu
+         CmCzRjXadUnnZWud326ao8xn6gr43C5zHYHAGUl8//LeWvLPjJ6gUdg8kuvZlvWnHAqf
+         1U2w==
+X-Forwarded-Encrypted: i=1; AFNElJ/sfrB6UPQMUkBixcHotiqrSiynSjZlnO0FDgei20JIqFljz0jc0n1mTMt6AxiGNuhl3pxWjlkVN0kkMK1pfv4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxl1QY3cL20oA1M13X94N6SkEJQ79HS80eXlNrkhwzi3fAa4wq3
+	+vbnxz9H9I2uLO+8PdWpo3gKE6ylwBkLFG4OZcsk4gktWkVS6XjtFO/C
+X-Gm-Gg: Acq92OHM1IyVP4TCsgmS5VtCEAr8JddtdqmSOnJFuc5zbmihTpcChZzsAdUcyc5chuf
+	7RCVyOf/VE9vMN8Q4QRFuj6F9AKlgxkCTnbmT+D7fDPQeGHgmfFm8s03GXDInlFFcxPZetUNeLz
+	RDM9crdehGJlja9et40UmgacFj/6Au11s/dTuPstNYSPVA+/0zYlSpzT3ASlaL7/+8G89y3zDTA
+	2Uc6Ae9H3S7d/iDTX3oW9VCUK7Gcf4xpMMYQi/BzQk7SaRgekvgGRxdgcZb+m3HZbqqP7UzTLyO
+	pzjD0FtAf5opQRqA6H+sK+SoHLggXkXzZltcU7wHFz+Jq2bP4PHKtGMCd3xXOn4jMJ5FOJqfEli
+	H2qdRd0V93PL7kSJ/XL5PMLhCdsVNaBn0pJbhuvAiYbK1Pu/hHIORsISbemqgujCXugj0jByTdx
+	GnvfJLjs+Jzyg8I6kYtd+Etb1p84C9+RbZkSnw1c73j8Hyd/IbgIXzR7r5r78pzWkB0gWpLD2TU
+	mzpDimd4xlopZOVyXEuywAfdzvhAl/d
+X-Received: by 2002:a05:600c:3f0e:b0:490:d38c:7836 with SMTP id 5b1f17b1804b1-490d38c7867mr165452235e9.3.1781102834318;
+        Wed, 10 Jun 2026 07:47:14 -0700 (PDT)
+Received: from gmail.com ([2a01:e11:1403:8620:65d0:ca2a:aeaa:7c0c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490dcab9092sm41419235e9.1.2026.06.10.07.47.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 07:47:13 -0700 (PDT)
+From: Paolo Pisati <p.pisati@gmail.com>
+To: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Cc: Paolo Pisati <p.pisati@gmail.com>
+Subject: [PATCH] selftests: net: fcnal-test.sh: rmmod br_netfilter at function exit
+Date: Wed, 10 Jun 2026 16:46:18 +0200
+Message-ID: <20260610144618.35252-1-p.pisati@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ioz7qsirq2v665bqbjin5ekwss46pfg2sfmndkvail2athbo75@cgt7zikhtx6r>
+Content-Transfer-Encoding: 8bit
 
-Hi Oliver,
+fcnal-test.sh loads br_netfilter to test bridge-into-VRF scenarios but
+does not remove it at function exit (the second modprobe around line 4158
+has no matching rmmod). Since tests run sequentially, any test running
+after fcnal-test.sh inherits it.
 
-On Fri, May 29, 2026 at 02:38:53PM +0100, Wei-Lin Chang wrote:
-> Hi Oliver,
-> 
-> On Tue, May 19, 2026 at 02:31:09PM -0700, Oliver Upton wrote:
-> > Hi Wei-Lin,
-> > 
-> > Thank you very much for the series.
-> > 
-> > I haven't had time to read through much of this yet, but I noticed
-> > Itaru's comment about leaving stage-1 translation disabled for the L2.
-> > 
-> > Since selftests expects things like atomics to work we will definitely
-> > need the stage-1 MMU to be enabled w/ Normal mappings (this was broken
-> > in the past [*]). I wonder if we can (ab)use the pre-existing stage-1
-> > tables that the selftests library creates on behalf of the L1. After all,
-> > L1 and L2 are both effectively in the same virtual address space.
-> > 
-> > [*] https://lore.kernel.org/kvmarm/20250405001042.1470552-1-rananta@google.com/
-> 
-> Thanks for the pointer, I see, only inner/outer shareable, write-back
-> normal memory guarantees atomics to work. Interestingly, treating the
-> atomic instruction as a NOP is one of the permitted outcomes if other
-> memory attributes are used...
-> 
-> However, the L2s in this series aren't using atomic instructions, and
-> right now for the current organization of this series, the L1 guest
-> hypervisor infrastructure is in lib/ for future NV selftests to share L2
-> creation code, but L2 code are entirely per selftest. This means other
-> selftest L2s can reuse the L1 stage-1 tables themselves if the implicit
-> memory attributes that comes from MMU being off is not desired.
-> 
-> Sorry if that sounded defensive, I am not opposed to always reusing the
-> L1 stage-1 tables in L2, just wanted to make sure the point gets across.
-> 
-> Always reusing L1 stage-1 tables in L2 allows L2 access to lib/ (which
-> should be helpful for testing recursive NV), and L1-L2 code sharing
-> intra-selftest. OTOH things are a bit simpler with MMU off in this case
-> with testing the shadow stage2.
-> 
-> What do you think?
+Signed-off-by: Paolo Pisati <p.pisati@gmail.com>
+---
+ tools/testing/selftests/net/fcnal-test.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Gentle ping on this :)
-Would love to hear what you think.
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 890c3f8e51bb..de7b6768882a 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -4176,6 +4176,8 @@ use_case_br()
+ 
+ 	setup_cmd ip li del br0 2>/dev/null
+ 	setup_cmd_nsb ip li del vlan100 2>/dev/null
++
++	rmmod br_netfilter 2>/dev/null
+ }
+ 
+ # VRF only.
+-- 
+2.43.0
 
-Thanks,
-Wei-Lin Chang
-
-> 
-> Thanks,
-> Wei-Lin Chang
-> 
-> > 
-> > Thanks,
-> > Oliver
-> > 
-> > On Sat, May 16, 2026 at 07:29:54PM +0100, Wei-Lin Chang wrote:
-> > > Hi,
-> > > 
-> > > This is v3 of adding basic support for running nested guests (L2) in
-> > > kselftest. This time a framework for enabling stage-2 in the guest is
-> > > added, including the s2_mmu struct, s2 translation control setup, and
-> > > a stage-2 page table generator. Similar to L2 vCPU management, all
-> > > stage-2 work is done in the guest instead of userspace.
-> > > 
-> > > An additional shadow_stage2 test is added which leverages the framework
-> > > to run L2 with stage-2 enabled.
-> > > 
-> > > * Changes from v2 [1]:
-> > > 
-> > >   - Update vm_paddr_t to gpa_t, vm_vaddr_t to gva_t.
-> > > 
-> > >   - Added framework for enabling stage-2 in the guest.
-> > > 
-> > >   - Added shadow_stage2 test.
-> > > 
-> > > Thanks!
-> > > 
-> > > [1]: https://lore.kernel.org/kvmarm/20260412142216.3806482-1-weilin.chang@arm.com/
-> > > 
-> > > Wei-Lin Chang (9):
-> > >   KVM: arm64: selftests: Add GPR save/restore functions for NV
-> > >   KVM: arm64: selftests: Add helpers for guest hypervisors
-> > >   KVM: arm64: selftests: Add hello_nested basic NV selftest
-> > >   KVM: arm64: selftests: Enhance hello_nested test
-> > >   KVM: arm64: selftests: Add shadow_stage2 test
-> > >   KVM: arm64: selftests: shadow_stage2: Allocate L2 stack from dedicated
-> > >     pool
-> > >   KVM: arm64: selftests: shadow_stage2: Check supported stage-2 granule
-> > >     size
-> > >   KVM: arm64: selftests: Add infrastructure for using stage-2 in guest
-> > >   KVM: arm64: selftests: shadow_stage2: Turn on stage-2 translation for
-> > >     the nested guest
-> > > 
-> > >  tools/testing/selftests/kvm/Makefile.kvm      |   5 +
-> > >  .../selftests/kvm/arm64/hello_nested.c        | 134 +++++++++
-> > >  .../selftests/kvm/arm64/shadow_stage2.c       | 165 +++++++++++
-> > >  .../selftests/kvm/include/arm64/nested.h      |  85 ++++++
-> > >  tools/testing/selftests/kvm/lib/arm64/entry.S | 137 +++++++++
-> > >  .../selftests/kvm/lib/arm64/hyp-entry.S       |  77 +++++
-> > >  .../testing/selftests/kvm/lib/arm64/nested.c  | 264 ++++++++++++++++++
-> > >  7 files changed, 867 insertions(+)
-> > >  create mode 100644 tools/testing/selftests/kvm/arm64/hello_nested.c
-> > >  create mode 100644 tools/testing/selftests/kvm/arm64/shadow_stage2.c
-> > >  create mode 100644 tools/testing/selftests/kvm/include/arm64/nested.h
-> > >  create mode 100644 tools/testing/selftests/kvm/lib/arm64/entry.S
-> > >  create mode 100644 tools/testing/selftests/kvm/lib/arm64/hyp-entry.S
-> > >  create mode 100644 tools/testing/selftests/kvm/lib/arm64/nested.c
-> > > 
-> > > -- 
-> > > 2.43.0
-> > > 
-> > > 
