@@ -1,234 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A561429D266;
-	Wed, 10 Jun 2026 16:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9C6346E64
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 17:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781109034; cv=none; b=mH8GSZwH/EQzCvj4cO4w6DS0Lp/ij1Jy72Y3z35drsORpeE4m+ITHG/vdFD24DzXkhSvpKGanwkX5gmt1XFukFKaiPlSAX3zdkVHnorNNQm+FWHW5ZE2qLAxSQjbUIPg1T7im/JYpvI5Wu0te167HoNUFA39O09JuWhUovVkwS0=
+	t=1781112917; cv=none; b=CLFweX8WNvQbCS5MYyxvFC8jvqnSjMZKMmbianuKXm723/4k+DR0fhLBvgUjqCQN21QIUbQzB90bdC5hZOo7G8BU4GUOke2I307J+io2DOb5bt003ps/tyAkultZ1vIOmP2x7sWrOwxPgeRNnw0NB+760clKl439PxWIQvBjiPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781109034; c=relaxed/simple;
-	bh=bzzN9LgGSFxt+HUM8qwxm6TDxioiNp05CKnhySDKqtQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=bU0PTGkaeiPUCI8AzjXcORO6h+Kv47s+8rmo6snHRGapFiEbOswoQJVo6Gb7uNnJ/5sLe3B8Drwi/X1SwoVMvbMbwD1za3wuh8hQ7Fm7o1C8VKj4uIo3YzQTPnew1iOqAt54njqsiZB7GvFxjVw/0aF7hxHABe7KUCA8u+w5KTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gs+u4Smd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781112917; c=relaxed/simple;
+	bh=GC4dbUj72/CzNM//E7ZABcGs/pl4qLAV5yt/OMal3/E=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=GSDNs3dJug/sYnSqxh/GCNkWCiodzkGwgB1oMwVxCK23n2R8NjQLKA4bT8dyWYaISoKYPQ+kJdgZIf83ZWrUi8BlJZyrmKGPnhnCBzZHD2dw5qmenLIpyIyKqaKR9yjuOOS9xolbMCOv9RzAJMatdDmD0atXunI45ZnhjslHWuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mKvri2hf; arc=none smtp.client-ip=209.85.160.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gs+u4Smd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E101F00898;
-	Wed, 10 Jun 2026 16:30:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781109033;
-	bh=OxMe21Cv5RjJwXpM95clCOD1WxBtVt9yPtHG1wNYPbc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=gs+u4SmdfxjgLnOPOKwut0tP2v8M0BF8JBUYU8tX4j0Bz78x9IHj7Z4kEfA7j9bur
-	 9wobO08K1W+g04WMm+6AWAa2ISI1u6ASNvM+til/kKjRfkZvLub4dWOMbRIla9yfA7
-	 ZgOtEFMpreCH1vaYiVzw191JKjg26AzS7Fqyj8rZFarj9rnt9tKV8caq15R8XfToNH
-	 j26YC6PlOH038quHuuXDLNFxpwCCsnZ5daRm12aL3il7hd3ArHIhf0hlHybnrOVM7d
-	 NNFytuzgcnHBPhC6kz4bFJuTVIsGt0KYZTlbevfdzYXWHfnTmMR0Fe1loK566LSdND
-	 GoofvDOrABCsw==
-Content-Type: multipart/mixed; boundary="===============0413197802770624427=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mKvri2hf"
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-43b7e186a0cso2870972fac.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 10:35:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781112914; x=1781717714; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MKXcTAXyiY5MMHqAfWwxOYdso2q+yhhH5j2phXAXPxw=;
+        b=mKvri2hfaIpYBPgrMl5ojn1pAFQQ4qGrSeuxtj39iQ7QolwSgmurRK3KTHszE3dvt0
+         stkf7MCF7zu2AFFOS2U0s6a2QiNQB3avcmI3uZEmItSwsyhplQ3RLWREwIWIyi8PYpf8
+         OudqskRW2+FJ8yIQBiVs5QVZunlYwQm7iT0fcZeR+F+YwhPZKPZO2bKZ3M/pPsKChH1U
+         XCXZbDiRArSO913o2Es+6kaJNM9cKKkA56Y4xcyEmuze2m4zbunOefHj4ZxeX/CEwkE8
+         B2Q7Z/Jmut6f+RQ3uYKo58BKeaEk4xxznPgZNL/CIMtJOxKzOm3+tMVHfaGXPAae4Jq7
+         0C5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781112914; x=1781717714;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MKXcTAXyiY5MMHqAfWwxOYdso2q+yhhH5j2phXAXPxw=;
+        b=LQFM5h8IZlsIqmnR7OwFtQQn05BO+p3nYY8jVk3xsaJA8Epn8gD6PXPr7h2Rwh4HbU
+         dkAQ1ilHXMsonhVuqsYGGny9R0rP/yVLkt9I2Gaz1MWcSVCH0Q9WdiCmdeAQDctT+0Nx
+         aH35X7t/xZY2NjvPjfnajnWHxAia4ton6Lh/9blnBWqCFAkT0dXQUalMPkRCPRKS2qjK
+         WU5lQhFVS0BEofRFABQg6NR0WO1S/qIGIPqAy0ioIu4h/aXNJylzx4bFCbzwTyPMi9n3
+         weVDxww94A2jqkr7PVoahUVkiD5qmvmCLVbvuTr0ceuLT6n7kmmHO7ubVVvKd0Z7HgRV
+         dtVg==
+X-Forwarded-Encrypted: i=1; AFNElJ8u81isu12SBec7ULCWthwvC1vv0wM3kTSKp8SDQ40VlKr1D1R/IieoFbTvCG14UeocgqakKKhyjT96IYLAYY8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxv4yUL9hMA6eCXEpk+3uqR0WAd8aU7j6dHtsw1UrWhn6qZicvi
+	KyQVsy4MXSncWTE5sGqieNcDmmdxzRVYYmtLUA//pYpwtoTIhF4W68EW
+X-Gm-Gg: Acq92OGagON7Pso3DCY19ZObpvhC4mn1Re/OpNMb/vBXtK1zaduolofVtqyRfi1hg8u
+	DObLIMFU4RUdlOA2LuBtsSPtp+ovVffivElR3yBsldT+RDGHLoTLh724vaHssMRZi+vFCfYj0VP
+	SL5h+hAgsNR5RESiyWIxnVRtvs+M7/rgs1KzXjBKi7rSq75OnRJ7olZQRKcCKvzMaqSzZ0xAJf5
+	FS35fA0gyd5dWUYwGSWMO+Lc2zUjYK7iSC9U3B10um0WbK2V+/XJJO1GXr/nbzuUUVebSWG1THx
+	kw4hxHXI3YvULgm8wdlsPyKdSYQ/SrnXoeo58UoqmbSHn5dlEOZTGZzG8AkiUikkbh8B8jBnXt7
+	YBrS6lbaiA4AZAG32lEAn03yPTnWhNLQgptF0tRgEC7swTvLQjtXW/0ass44GpEorrUe0pTde/U
+	gx+nV2vr0Sc6OD08IOAXK4L2IK1YZCwXTY8/8A2aMi7NeNNTiVGy4g2R9N/40gIRBnH1Ic8YtUg
+	lSLud/cJe2jriz0VMdIAveIRYj/
+X-Received: by 2002:a05:6871:606:b0:442:3434:7dd6 with SMTP id 586e51a60fabf-4423434e34emr404867fac.14.1781112913657;
+        Wed, 10 Jun 2026 10:35:13 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:55::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-440d7263efcsm22580309fac.0.2026.06.10.10.35.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Jun 2026 10:35:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <b2a09e444a9b53441fb2d3b36f14528f9584723f0a03b5601119183e7a3f0910@mail.kernel.org>
-In-Reply-To: <20260610145059.113412-3-chenyuan_fl@163.com>
-References: <20260610145059.113412-3-chenyuan_fl@163.com>
-Subject: Re: [PATCH bpf-next v3 2/2] libbpf: fetch probeable prog type from token for feature probes
-From: bot+bpf-ci@kernel.org
-To: chenyuan_fl@163.com,chenyuan_fl@163.com
-Cc: andrii@kernel.org,ast@kernel.org,bpf@vger.kernel.org,chenyuan@kylinos.cn,daniel@iogearbox.net,eddyz87@gmail.com,linux-kselftest@vger.kernel.org,shuah@kernel.org,mykyta.yatsenko5@gmail.com,andrii.nakryiko@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 10 Jun 2026 16:30:32 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 10 Jun 2026 10:35:10 -0700
+Message-Id: <DJ5JTZ788GDY.FXAAY47YDG3N@gmail.com>
+Cc: "Eduard Zingerman" <eddyz87@gmail.com>, "Stanislav Fomichev"
+ <sdf@fomichev.me>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "David S . Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Cong Wang" <cwang@multikernel.io>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>,
+ <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf v2 1/2] bpf, sockmap: fix integer overflow in
+ bpf_msg_pop_data() bounds check
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "John
+ Fastabend" <john.fastabend@gmail.com>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>
+X-Mailer: aerc
+References: <20260610081218.506709-1-rhkrqnwk98@gmail.com>
+ <20260610081218.506709-2-rhkrqnwk98@gmail.com>
+In-Reply-To: <20260610081218.506709-2-rhkrqnwk98@gmail.com>
 
---===============0413197802770624427==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-> index b7e388f99d0b..f008ee50e246 100644
-> --- a/tools/lib/bpf/features.c
-> +++ b/tools/lib/bpf/features.c
-> @@ -19,6 +19,57 @@ int probe_fd(int fd)
->  	return fd >= 0;
->  }
+On Wed Jun 10, 2026 at 1:11 AM PDT, Sechang Lim wrote:
+> start and len are u32, so
 >
-> +/* Fetch the first program type from the token that can be used for
-> + * feature probes.  Only a few common types are checked that are known
-> + * to accept a trivial "return 0" program.  Returns the type on success,
-> + * -EINVAL if the token has no probeable type.
-> + */
-> +static int token_probeable_prog_type(int token_fd)
-> +{
-> +	/* Types that accept a simple "return 0" probe program */
-> +	/* Types that accept a trivial "return 0" program without
-> +	 * specific expected_attach_type.  Types requiring expected_attach_type
-> +	 * (CGROUP_SOCK, CGROUP_SOCK_ADDR, LWT_*, NETFILTER) are excluded.
-> +	 */
-
-There seem to be two comment blocks describing the probeable[] array
-back-to-back here.  The first single-line comment looks like a leftover
-from an earlier revision; should it be removed?
-
-> +	static const int probeable[] = {
-> +		BPF_PROG_TYPE_SOCKET_FILTER,
-> +		BPF_PROG_TYPE_KPROBE,
-> +		BPF_PROG_TYPE_SCHED_CLS,
-> +		BPF_PROG_TYPE_SCHED_ACT,
-> +		BPF_PROG_TYPE_TRACEPOINT,
-> +		BPF_PROG_TYPE_XDP,
-> +		BPF_PROG_TYPE_PERF_EVENT,
-> +		BPF_PROG_TYPE_CGROUP_SKB,
-> +		BPF_PROG_TYPE_SOCK_OPS,
-> +		BPF_PROG_TYPE_SK_SKB,
-> +		BPF_PROG_TYPE_CGROUP_DEVICE,
-> +		BPF_PROG_TYPE_SK_MSG,
-> +		BPF_PROG_TYPE_RAW_TRACEPOINT,
-> +		BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
-> +		BPF_PROG_TYPE_CGROUP_SOCKOPT,
-> +		BPF_PROG_TYPE_CGROUP_SYSCTL,
-> +		BPF_PROG_TYPE_FLOW_DISSECTOR,
-> +		BPF_PROG_TYPE_SK_LOOKUP,
-> +	};
-
-The list places BPF_PROG_TYPE_SOCKET_FILTER first, and the no-token case
-also returns SOCKET_FILTER.  This matters for the two probes below that
-previously used TRACEPOINT.
-
-> +	struct bpf_token_info info = {};
-> +	__u32 info_len = sizeof(info);
-> +	int i, err;
-> +
-> +	if (!token_fd)
-> +		return BPF_PROG_TYPE_SOCKET_FILTER;
-> +
-> +	err = bpf_obj_get_info_by_fd(token_fd, &info, &info_len);
-> +	if (err)
-> +		return -errno;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(probeable); i++) {
-> +		if (info.allowed_progs & (1ULL << probeable[i]))
-> +			return probeable[i];
-> +	}
-> +
-> +	return -EINVAL;
-> +}
-> +
-
-[ ... ]
-
-> @@ -257,8 +318,13 @@ static int probe_kern_probe_read_kernel(int token_fd)
->  		BPF_EXIT_INSN(),
->  	};
->  	int fd, insn_cnt = ARRAY_SIZE(insns);
-> +	int prog_type;
+> 	u64 last =3D start + len;
 >
-> -	fd = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, &opts);
-> +	prog_type = token_probeable_prog_type(token_fd);
-> +	if (prog_type < 0)
-> +		return 1;
-> +
-> +	fd = bpf_prog_load(prog_type, NULL, "GPL", insns, insn_cnt, &opts);
-
-This probe tests for BPF_FUNC_probe_read_kernel and previously hardcoded
-BPF_PROG_TYPE_TRACEPOINT.  In the no-token case token_probeable_prog_type()
-now returns BPF_PROG_TYPE_SOCKET_FILTER instead.
-
-For a TRACEPOINT program, probe_read_kernel is reachable through:
-
-    tp_prog_func_proto() -> bpf_tracing_func_proto()
-
-For a SOCKET_FILTER program the helper is only reachable through
-bpf_base_func_proto(), where it is gated behind
-bpf_token_capable(CAP_PERFMON) and
-security_locked_down(LOCKDOWN_BPF_READ_KERNEL), and is not exposed via
-sk_filter_func_proto().
-
-Does this narrow the conditions under which the probe succeeds, so that
-FEAT_PROBE_READ_KERNEL can be misreported in the no-token case that
-previously used TRACEPOINT?
-
-> +	return probe_fd(fd);
->  }
+> evaluates start + len in 32-bit and wraps before storing it in last.
+> The bounds check
 >
-
-[ ... ]
-
-> @@ -277,6 +343,7 @@ static int probe_prog_bind_map(int token_fd)
->  		.prog_flags = token_fd ? BPF_F_TOKEN_FD : 0,
->  	);
->  	int ret, map, prog, insn_cnt = ARRAY_SIZE(insns);
-> +	int prog_type;
+> 	if (start >=3D offset + l || last > msg->sg.size)
+> 		return -EINVAL;
 >
->  	map = bpf_map_create(BPF_MAP_TYPE_ARRAY, "libbpf_det_bind", sizeof(int), 32, 1, &map_opts);
->  	if (map < 0) {
-> @@ -286,7 +353,12 @@ static int probe_prog_bind_map(int token_fd)
->  		return ret;
->  	}
+> can then be passed with an out-of-range start/len, after which the pop
+> loop runs off the end of the scatterlist and sk_msg_shift_left() calls
+> put_page() on the empty msg->sg.end slot:
 >
-> -	prog = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &prog_opts);
-> +	prog = prog_type = token_probeable_prog_type(token_fd);
-
-This assigns the result to both prog and prog_type, but prog is
-unconditionally overwritten by the bpf_prog_load() call just below before
-it is ever read.  The assignment to prog looks like dead code; should this
-just be:
-
-	prog_type = token_probeable_prog_type(token_fd);
-
-> +	if (prog_type < 0) {
-> +		close(map);
-> +		return 1;
-> +	}
-> +	prog = bpf_prog_load(prog_type, NULL, "GPL", insns, insn_cnt, &prog_opts);
->  	if (prog < 0) {
->  		close(map);
->  		return 0;
-
-[ ... ]
-
-> @@ -435,8 +507,13 @@ static int probe_kern_bpf_cookie(int token_fd)
->  		.prog_flags = token_fd ? BPF_F_TOKEN_FD : 0,
->  	);
->  	int ret, insn_cnt = ARRAY_SIZE(insns);
-> +	int prog_type;
+>   Oops: general protection fault, probably for non-canonical address
+>   0xdffffc0000000001: 0000 [#1] SMP KASAN PTI
+>   KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+>   RIP: 0010:sk_msg_shift_left net/core/filter.c:2957 [inline]
+>   RIP: 0010:____bpf_msg_pop_data net/core/filter.c:3103 [inline]
+>   RIP: 0010:bpf_msg_pop_data+0x753/0x1a10 net/core/filter.c:2984
+>   Call Trace:
+>    <TASK>
+>    bpf_prog_4cc92c278f4d5d56+0x1b1/0x1e8
+>    bpf_prog_run_pin_on_cpu+0x107/0x320 include/linux/filter.h:746
+>    sk_psock_msg_verdict+0x357/0x7f0 net/core/skmsg.c:934
+>    tcp_bpf_send_verdict net/ipv4/tcp_bpf.c:420 [inline]
+>    tcp_bpf_sendmsg+0x766/0x1ae0 net/ipv4/tcp_bpf.c:583
+>    __sock_sendmsg+0x153/0x1c0 net/socket.c:802
+>    __sys_sendto+0x326/0x430 net/socket.c:2265
+>    __x64_sys_sendto+0xe3/0x100 net/socket.c:2268
+>    do_syscall_64+0x14c/0x480
+>    entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>    </TASK>
 >
-> -	ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, &opts);
-> +	prog_type = token_probeable_prog_type(token_fd);
-> +	if (prog_type < 0)
-> +		return 1;
-> +
-> +	ret = bpf_prog_load(prog_type, NULL, "GPL", insns, insn_cnt, &opts);
-
-This probe tests for BPF_FUNC_get_attach_cookie and previously hardcoded
-BPF_PROG_TYPE_TRACEPOINT.  In the no-token case token_probeable_prog_type()
-now returns BPF_PROG_TYPE_SOCKET_FILTER.
-
-The get_attach_cookie func_proto is only returned for tracing program
-types (kprobe via kprobe_prog_func_proto, tracepoint via tp_prog_func_proto,
-perf_event via pe_prog_func_proto, raw_tp/tracing).
-
-For a SOCKET_FILTER program, helper resolution goes:
-
-    sk_filter_func_proto() -> bpf_sk_base_func_proto() -> bpf_base_func_proto()
-
-none of which expose BPF_FUNC_get_attach_cookie.
-
-Does this mean the verifier rejects the trivial program, bpf_prog_load()
-fails, probe_fd() returns 0, and feat_supported() caches FEAT_MISSING, so
-FEAT_BPF_COOKIE is reported as unsupported on kernels that do support it,
-even with no token in use?
-
-> +	return probe_fd(ret);
->  }
+> Widen the addition with a (u64) cast so the bound is evaluated in
+> 64-bit and a len near U32_MAX no longer wraps below msg->sg.size.
 >
+> While here, change pop from int to u32. It counts bytes against the
+> unsigned scatterlist lengths and can never be negative, so the signed
+> type only invites sign-confusion in the pop loop.
+>
+> Fixes: 7246d8ed4dcc ("bpf: helper to pop data from messages")
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+> ---
+>  net/core/filter.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 80439767e0ee..9cdfec2ca11e 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -2974,8 +2974,8 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, =
+u32, start,
+>  	   u32, len, u64, flags)
+>  {
+>  	u32 i =3D 0, l =3D 0, space, offset =3D 0;
+> -	u64 last =3D start + len;
+> -	int pop;
+> +	u64 last =3D (u64)start + len;
 
+sashiko is correct that there are 4 other issue in very similar code path
+all in skmsg. Please fix them all in one go.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27285576775
---===============0413197802770624427==--
+pw-bot: cr
