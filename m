@@ -1,148 +1,177 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52F5434D4EA;
-	Wed, 10 Jun 2026 18:38:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE71A369224
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 19:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781116723; cv=none; b=FuLOcG87eMhopYe1MfyWqHgyqge0kKhrPM9hrbcYkgdgwM2misseN4ZZ3gQxGOtVzbkir4CDVsrwIYye8bqttgasEnz/BsxUV2l9B4oF+YuTpFMAFYnfcpzBePbLfi56APzJ6eob54ZbK/1g1mDBoW2+uFYAdkPYV0fu4N7oQU4=
+	t=1781119052; cv=none; b=tXuXCWIbvnjYZwDzFeTt9ofemOVmkVU79DjuhIPzpnF++w1k9uyVDwQF/4Avm4NisgXkqr4298y4w2Ve/on374lxFO66tTBjOqQeHyRpoVnJT1fM4On2+szkmeZT+ruq1Q3rQnkiIEFSBptTAqpFX7PrD6q9mgnG88u1wOsat38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781116723; c=relaxed/simple;
-	bh=VJuqabAy318tziQymx83eendKuZlFwi/OP2IQu9oNfY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Imdqu9NbHCh0Y0DGgVGMn7/3OZv0M3p8GRxMliS+LsdOgxoF+AdGpXLIBJ6/bfpcBPlslrkQN1xIsoOXts3FxFyiFrVw1NkQOjIYrUTIYe1dq8MZWVHvJBTREVdQl7IUhXZAPZtPqGsjuXx80aRpGukLPvmsye2ZBMT9TxYkDOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn; spf=pass smtp.mailfrom=lzu.edu.cn; arc=none smtp.client-ip=13.76.78.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lzu.edu.cn
-Received: from enjou-Legion-Y7000P-2019 (unknown [172.23.56.36])
-	by app1 (Coremail) with SMTP id ygmowABXdb8WrylqK054AA--.36514S4;
-	Thu, 11 Jun 2026 02:38:35 +0800 (CST)
-From: Ren Wei <n05ec@lzu.edu.cn>
-To: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: yotam.gi@gmail.com,
-	jhs@mojatatu.com,
-	davem@davemloft.net,
-	xiyou.wangcong@gmail.com,
-	victor@mojatatu.com,
-	kuba@kernel.org,
-	yuantan098@gmail.com,
-	bird@lzu.edu.cn,
-	edragain@163.com,
-	n05ec@lzu.edu.cn
-Subject: [PATCH 2/2] selftests/tc-testing: Verify IFE can handle truncated inner Ethernet header
-Date: Thu, 11 Jun 2026 02:37:44 +0800
-Message-ID: <20260610183814.1648888-3-n05ec@lzu.edu.cn>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260610183814.1648888-1-n05ec@lzu.edu.cn>
-References: <20260610183814.1648888-1-n05ec@lzu.edu.cn>
+	s=arc-20240116; t=1781119052; c=relaxed/simple;
+	bh=AZvi6ZNzBZy6L1WVZ0LtkofFo1vWzMWYeJFKz3V4hFE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=udCNVXnEDiNYweBm2FATy1HsoMX61iOkTByVROcqH0ntUEuojTcF+vIm2Tv3DYMV5oHsPhLgFNpzqgPnp9U7JjWalVvwRPBRAz/sL8qiINV0KxYpWidhyoBEVMg2H95U/+YcWM5Juc0xy1jHYRUhBWTUEpSvdU3jUsRCAe1oV28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZzyA5RpJ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZzyA5RpJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781119049;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/myOSqG7uv5qCnsE2QetCIJ83uVxLLLFgvexWhF+Xlo=;
+	b=ZzyA5RpJgEb1/7Mn9yfjYgrWhiyMl7LL4LPypzvsgG8Wk3YS+XPTrIXQU83znR8kebwnVI
+	MVfyo6XLz2o77xqsvjfCqQHf5n4VWZzfkQgyyaDdmAlgNAFopX930uXG9qc6yOwvkj8sLd
+	PfwkUbpk27wkuvfyt2woxVUP7qfCV38=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-481-wXi_R3TWMLeok5rQbRDlbA-1; Wed,
+ 10 Jun 2026 15:17:23 -0400
+X-MC-Unique: wXi_R3TWMLeok5rQbRDlbA-1
+X-Mimecast-MFC-AGG-ID: wXi_R3TWMLeok5rQbRDlbA_1781119041
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0E7FC180048E;
+	Wed, 10 Jun 2026 19:17:20 +0000 (UTC)
+Received: from thinkpad (headnet02.pony-001.prod.iad2.dc.redhat.com [10.2.32.102])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CABD23008DCB;
+	Wed, 10 Jun 2026 19:17:13 +0000 (UTC)
+Date: Wed, 10 Jun 2026 21:17:10 +0200
+From: Felix Maurer <fmaurer@redhat.com>
+To: Daniel Hodges <daniel@danielhodges.dev>
+Cc: Daniel Hodges <git@danielhodges.dev>, bpf@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+	daniel@iogearbox.net, vadim.fedorenko@linux.dev, song@kernel.org,
+	yatsenko@meta.com, martin.lau@linux.dev, eddyz87@gmail.com,
+	haoluo@google.com, jolsa@kernel.org, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, yonghong.song@linux.dev,
+	herbert@gondor.apana.org.au, davem@davemloft.net
+Subject: Re: [PATCH bpf-next v8 0/4] Add cryptographic hash and signature
+ verification kfuncs to BPF
+Message-ID: <aim4Ntj22wM30Ga8@thinkpad>
+References: <20260225202935.31986-1-git@danielhodges.dev>
+ <ag8zGP5azt743BWc@thinkpad>
+ <fm43bx7min3olvz4ok46emxvyvbczw4weq5dkwitzwmq6h4jzg@a56b3irxynks>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ygmowABXdb8WrylqK054AA--.36514S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFyfCw1xZryrXw4xWrWkCrg_yoW8ur13pa
-	4Ikr1Utrn7try7Aw1xG343WF45Wan7ur48XF1ftry7G34kCFyvqFZakF109FnFkrZ5Z39Y
-	v3WDKF4xuF48AFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUB21xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-	w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-	IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2
-	jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzx
-	vE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	JVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-	AKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x02
-	62kKe7AKxVWUtVW8ZwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaV
-	Av8VW8GwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
-	C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
-	CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfUonmRUUUUU
-X-CM-SenderInfo: zqqvvuo6o23hxhgxhubq/1tbiAQEOCWopHlEJpAAAsm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fm43bx7min3olvz4ok46emxvyvbczw4weq5dkwitzwmq6h4jzg@a56b3irxynks>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-From: Victor Nogueira <victor@mojatatu.com>
+Hi Daniel,
 
-Add a tdc test that exercises the act_ife decode path with a malformed
-IFE packet whose encapsulated inner Ethernet header is truncated.
+Sorry for taking long to get back to you, I've been on vacation for a
+while.
 
-The injected frame has a valid outer Ethernet header (ethertype 0xED3E)
-and a minimal IFE header (metalen 2, i.e. no metadata TLVs), but the
-payload that should hold the original frame is a single byte instead of
-a full Ethernet header. Once ife_decode() strips the outer header and
-the IFE metadata, fewer than ETH_HLEN bytes are left, which previously
-let eth_type_trans() read past the end of the linear data.
+> It would also be helpful to hear about what your use case is.
 
-Signed-off-by: Victor Nogueira <victor@mojatatu.com>
----
- .../tc-testing/tc-tests/actions/ife.json      | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
+I'll put this one first, as it probably informs my thinking quite a bit.
+My use case is accessing hash functions from the networking bpf hooks,
+mostly XDP and tc. I'm less interested in the cryptographic hash
+functions (although I think we should support them as well), but
+checksums like CRC32c which have efficient implementations in the kernel
+and are not straightforward to implement in bpf.
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/ife.json b/tools/testing/selftests/tc-testing/tc-tests/actions/ife.json
-index 808aef4afe22..ece7ec41bf99 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/actions/ife.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/ife.json
-@@ -1378,5 +1378,60 @@
-         "teardown": [
-             "$TC actions flush action ife"
-         ]
-+    },
-+    {
-+        "id": "4e6b",
-+        "name": "Decode IFE packet with truncated inner Ethernet header",
-+        "category": [
-+            "actions",
-+            "ife"
-+        ],
-+        "plugins": {
-+            "requires": [
-+                "nsPlugin",
-+                "scapyPlugin"
-+            ]
-+        },
-+        "setup": [
-+            [
-+                "$TC actions flush action ife",
-+                0,
-+                1,
-+                255
-+            ],
-+            "$TC qdisc add dev $DEV1 clsact"
-+        ],
-+        "scapy": [
-+            {
-+                "iface": "$DEV0",
-+                "count": 1,
-+                "packet": "Ether(type=0xED3E) / Raw(b'\\x00\\x02\\xaa')"
-+            }
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 ingress protocol all matchall action ife decode pipe index 10",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC -s -j actions get action ife index 10",
-+        "matchJSON": [
-+            {
-+              "total acts": 0
-+            },
-+            {
-+              "actions": [
-+                  {
-+                      "kind": "ife",
-+                      "mode": "decode",
-+                      "index": 10,
-+                      "stats": {
-+                          "bytes": 3,
-+                          "packets": 1,
-+                          "drops": 1
-+                      }
-+                  }
-+              ]
-+            }
-+        ],
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 clsact"
-+        ]
-     }
- ]
--- 
-2.34.1
+> > Taking an initial look at your hashing patches, I'm wondering: the usual
+> > interface to hash/digest algorithms is to have three functions: an
+> > init() function to set up state
+>
+> Doesn't bpf_crypto_ctx_create already provide the initialization? I was
+> trying to make that pattern work by adding the bpf_crypto_type_id to
+> make the code a little more maintainable.
+
+No, bpf_crypto_ctx_create() doesn't do the initialization I was
+referring to, it only creates the tfm that is later used to do the
+hashing. The actual init() of the hash function happens inside
+crypto_shash_digest(). More details at the end of my reply.
+
+> > an update() function that can be called  multiple times to hash new
+> > bytes, and a finalize() function that creates the actual hash.
+> > Depending on the algorithm, some of them (esp.  finalize) may be
+> > no-ops. Often, a fourth function, like hash(), is provided
+>
+> I think the bpf_crypto_encrypt should cover that along with the
+> bpf_crypto_hash in the first patch.
+
+Not sure if I understand you correctly, bpf_crypto_encrypt() shouldn't
+be callable for a hashing crypto context at all?
+
+> > I think we should provide the same init/update/finalize interface in bpf
+> > as well to make the API more flexible. That would require splitting out
+> > the shash_desc from the (mostly static) context. But doing so would also
+> > address the review comment from bpf-ci bot to patch 1. WDYT?
+>
+> I was trying to make things work with the existing bpf_crypto_ctx
+> lifecycle. IIRC in the V1/V2 of the series there was a separate struct
+> but it was suggested to integrate the changes into bpf_crypto_ctx.
+
+Yes, I see that the idea is to integrate into the existing life cycle
+and I appreciate that! But IIUC, they are subtly different at the
+moment.  Just to be sure, the idea of your first two patches is to
+provide an interface to shash that supports the do-all-at-once function
+hash()/digest() (i.e., internally do init+update+finalize), pretty much
+the equivalent of the existing encrypt() + decrypt() interface to
+skcipher, right? I.e. not supporting each and every use case for now but
+just the case where all data is available and we want to hash/encrypt/
+decrypt in one go?
+
+With that assumption, the current implementation for skcipher looks like
+this: we have bpf_crypto_ctx_create(). It sets up a bpf_crypto_ctx with
+the chosen algorithm, the right key, etc. It must be called from a
+sleepable bpf program because it may require to load the kernel module
+with the requested algorithm. The prepared bpf_crypto_ctx can be stored
+in a map so it can be used from other (non-sleepable) bpf programs,
+e.g., XDP programs.
+
+When the bpf_crypto_ctx is used with encrypt()/decrypt(), both functions
+have the siv argument. It's a dynptr to some memory, containing the IV
+for algorithms that need it, but also has room for the *state* if the
+algorithm needs it. This means, the state is provided (fresh) for each
+invocation of encrypt/decrypt.
+
+Your proposed implementation for shash, bpf_crypto_ctx_create() calls
+bpf_crypto_shash_alloc_tfm() which creates the tfm (just as above, needs
+to be in a sleepable bpf program to potentially load modules), but it
+also allocates the shash_desc which has room for some algorithm state if
+needed. This mixes the static, long-living, reusable tfm with the
+per-invocation shash_desc. shash is safe to use with the same tfm
+concurrently exactly because the state is stored in the shash_desc,
+which must not be used concurrently. Think of the shash_desc to be the
+equivalent of the siv for skcipher.
+
+Therefore, I think the memory for shash_desc.__ctx should come from a
+dynptr as well. Do you agree or did I miss something?
+
+Btw, your bpf_crypto_shash_alloc_tfm() never sets shash_desc.__ctx, so
+that's a bug anyways.
+
+> Regarding the bpf-ci bot I think it's somewhat valid, but you could
+> solve that by putting the bpf_crypto_ctx in a per CPU map or protecting
+> it with a bpf spinlock.
+
+Two things for that: for networking use cases, needing a lock because of
+implementation details doesn't sound very intriguing. Plus, if per-cpu
+or a lock are required, that's currently not enforced. This means an
+invalid/unsafe bpf program could pass the verifier, right?
+
+> If you want to give it a go feel free.
+
+If you're still interested in pursuing this, please go ahead with your
+work, I don't want to take it from you. Only if you're explicitly not
+interested anymore, I'll go ahead and try to build something on top of
+you work. Just let me know :)
+
+Thanks,
+   Felix
 
