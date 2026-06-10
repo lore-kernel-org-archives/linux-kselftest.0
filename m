@@ -1,88 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7AD9233921;
-	Wed, 10 Jun 2026 07:28:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE2239EF2B
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 08:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781076522; cv=none; b=M3TGiIwef/3Ifr4Bt7VrMucSnDkBnG8ckcnNSj5OSvgP0+Apxu5ah329zKfhBMBM52v1eWyhVPLYrKzqS+iGHMvOxyoY4hjvRVz28Xi26qw1zbeufHBZlzqLoi4C+dZh05BLZfDjzSwzLz7qRzukWsSPS3nFmaqYBAoHybHj9YE=
+	t=1781079166; cv=none; b=hG1nQrugr4t16P/NhCUu2j0zpbsDUWx0VlEmLOLoGEag8ssdlztsWSV1P2C0BNfRkw1nWgpuUk0dLc3l/p51zmzlF1h+itqDBJ0v5mp7gtGwRbBRzAMebwI5bwXJdgyBcRBhEClDEZIS4cA55zs9Bbduf8rGxxCBAtdLbrsZkf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781076522; c=relaxed/simple;
-	bh=XVzT4dC9J9FFpWrYJ1jidUjuN9wz2V7gqq0wjB+r38s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LUOSeJBZUSZxnvYfJVR0HYtlj7W4K9l17CB18hf3XuzPRkCegJjsLWSb8QiKvmawcaUNXrlO65syW+kzLYOMyQ1Js6229GRgaQJaMRNdp1e3tCTuY7+WWavbHY5cM7Wz9C72PysN3deF80x9KQHCQtEfSreJY6zceU23sFr46ZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fgvSiRD0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781079166; c=relaxed/simple;
+	bh=3mIefPDB43KmMDQcWcDMAg6qpJoLh01xoGq7lr55mDg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YukYBbOF5J9OGTeAuMl/6QArZ6U9NT8ymK2VEOvOxPl+7i2HEqWfj0z5F6QgFftNri8PKg8xeiqaiNfU52ge0bzpQwK29Lp3n1dFaNw5myQzuNR0VMyUZmxbIYJSW4YpQsT2uR8LB64us4Gv4rlm3f72BKWiHlKllgLnJmhPeHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pr+8qgk9; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fgvSiRD0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D40D1F00893;
-	Wed, 10 Jun 2026 07:28:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781076521;
-	bh=Ujw8//AhBz2ofNEZXVOO0whE9ziRkQU7WuP9Q2n1nw4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fgvSiRD0nlrWeKZ00ARxxj8+SIeSOssxKo/IteKl5SNNXShxIV9RzZYZjW2fJDF4Y
-	 BRLJiLnad8I+/cgypVTOTIn/c5oxyEme4EK0poeNVEmG9QKE7i/U92Q7yjVt2JPZoo
-	 KKab8o9SdIM2XvpGoVICIQ4XwdgAVtaPGhU54ayQfCnfLlEaW3lPQVBllb9BkmzECO
-	 nE7j1CjEqBtnt3cNbOS7Erz0xZkaANJGk+ly24VtiJa0PCDT3qoW/N+IRr4nTvwqZd
-	 Z5PKSNrIQl7+mm2qzkxCg4AIGhgZkp5e7n9mKFUe2JXKDXK2WgGk0nXZXZ5u3/BshM
-	 PjG2C1OvGIzpg==
-Date: Wed, 10 Jun 2026 09:28:32 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Andy Lutomirski <luto@kernel.org>
-Cc: Li Chen <me@linux.beauty>, Kees Cook <kees@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-arch@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, x86@kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, Jan Kara <jack@suse.cz>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [RFC PATCH v1 00/13] exec: add spawn templates for repeated
- executable startup
-Message-ID: <20260610-saufen-zerfallen-uncool-5608105e0d8e@brauner>
-References: <20260528095235.2491226-1-me@linux.beauty>
- <20260528-madig-fachrichtung-fehlinformation-61117ba640da@brauner>
- <CALCETrWJQpLR4n1cpichBk8=uExSKLWTMGU3BufGdk_WE_p5UA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pr+8qgk9"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-36da8439078so5735042a91.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 01:12:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781079164; x=1781683964; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iAJrDclWsxoQPkhKhcELIufNlH0kXnHvmBTgSWCpEJs=;
+        b=Pr+8qgk9P2LjQVCxEYVY3GSKVntPOK/KO8w124W+5BFy63WUMqWnXYMmtEuLwotfYh
+         mr8ugKBJ9i/q6t4QjdeO83V/FdVSpkccgZnSWkMVQw5YqToz04TT0n9hrT+CBpZRbnQR
+         iTq6OVBucQuEN05DgHBTBlNAqDfYjK5H5rtybVP5FZqfL4A8FGGq5ikthI6v40NCsfix
+         2R0DWgWpuArEtXPnWOhn8vPWkOuRdXvvY+Eqvib7Q4gfYgENR1quZXiDDfPYNTqhUNQ2
+         6Ev++qkdSu9bb99MTn1FGTclvVQHoG+zC99wnBqG53EYKHp+4lMJUOCdH97OQu+fUszK
+         hrhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781079164; x=1781683964;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iAJrDclWsxoQPkhKhcELIufNlH0kXnHvmBTgSWCpEJs=;
+        b=f9A8GswTqBwP2Pm1q42K/WH+tnvKscE9aekqAI0CwubAc06H5WPXK7IpVIhi+qnfSS
+         ouAD0GZi37oAkDYt6Am5LYxGuv3Mezt8lHOsOoshnkQgyj2Ln7ENrdGJnAA3ZhplnLhg
+         E1v+MMATjljufakbEIQgpDiqVL9mH6b4OVaViUDy0kPrO8uldScYS+lGtU5Z9mx1t7sY
+         4CmQahEIQy6zwwnGAgKRk3ChiOHEzohnvDoZb/Q9Kl2y8kKNR+K4lnMnma+AKthTeTEV
+         kwhQUjFmMZuUEaKkZjqmi42Cr7ItxcnMTc073HiLS+7f5O1zatNwzCOQJ+xUMf9KKjBp
+         fwiA==
+X-Forwarded-Encrypted: i=1; AFNElJ8041xQqBoBDCFVrwnNtWnJ8fHcok+2pv5L7KLoEZ3NRQgGi/oCwekPxwiru+DYhlNjX73y+InY8l7g7lIErkQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxips+2TP5VkNE0NRj7Ri48q0grGdaUE58KuQQSJiM+iC7RM7E2
+	3HguMihIKUbCtudsRYH9Hm1g0IHMaiXlrJs7eCh15ONvZjpCR7E5aAXM
+X-Gm-Gg: Acq92OEnpzjRoSnHn6NtV5rt5Lt+45GdGWtRkSZy1hJ83u9zXOkY6VACmv2fudF0Yy3
+	1C5JSjHHlKlFscUiRfv8xlRbTL4jgdIRVLaKzvYEmYTH6zyIypHPOwtNrfHgagwt3VTwdh7lZjx
+	GZbtBj6xo4zE+BXPg2weZEf1+/SNqtE3CUCMIUbMp1isxPmfb2NZJx31yv7Udvi3aZYeSygxDXL
+	5inryMyZ8Yif8SOcT/WKoZ2h28y9ybqfE0/uMahitGPV0km7c2KLQoP2/Zr1e+pMEpf8xeyqP1j
+	VbQS7wmppoByoDY3kW5nHtkWna/pjQCO/P8mWll572YE0EiYBEGtxdxEEq2OkM0iZ3pCNyNp+LY
+	ux0VoS3TQU/s2OIOo4zTfxO5rNSlWPebpzptt1u806H1E+X7wd8b3fqgqzZStUmPG6Sn3qd85G8
+	u5t4tMLeSYACFlscms7AjA4WpGkH62PVSiqeynBjA2C+Wd/Mz+C7k2hsZyD4XFCvBe/rRVpRaK
+X-Received: by 2002:a17:90a:d40f:b0:36a:a16b:5f65 with SMTP id 98e67ed59e1d1-370ef1f3d01mr25989391a91.11.1781079164425;
+        Wed, 10 Jun 2026 01:12:44 -0700 (PDT)
+Received: from cps-manycore-1.. ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37645c1aeb5sm1241003a91.2.2026.06.10.01.12.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 01:12:43 -0700 (PDT)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Cong Wang <cwang@multikernel.io>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v2 0/2] bpf, sockmap: fix bpf_msg_pop_data() integer overflow
+Date: Wed, 10 Jun 2026 08:11:52 +0000
+Message-ID: <20260610081218.506709-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALCETrWJQpLR4n1cpichBk8=uExSKLWTMGU3BufGdk_WE_p5UA@mail.gmail.com>
 
-On Mon, Jun 08, 2026 at 05:01:57PM -0700, Andy Lutomirski wrote:
-> On Thu, May 28, 2026 at 4:05 AM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > On Thu, May 28, 2026 at 05:52:21PM +0800, Li Chen wrote:
-> > > Hi,
-> > >
-> > > This is an early RFC for an idea that is probably still rough in both the
-> > > UAPI and implementation details. Sorry for the rough edges; I am sending
-> > > it now to check whether this direction is worth pursuing and to get
-> > > feedback on the kernel/userspace boundary.
-> >
-> > The idea of having a builder api for exec isn't all that crazy. But it
-> > should simply be built on top of pidfds and thus pidfs itself instead.
-> > It has all the basic infrastructure in place already. Any implementation
-> > should also allow userspace to implement posix_spawn() on top of it.
-> >
-> > fd = pidfd_open(0, PIDFD_EMPTY /* or better name */)
-> >
-> > pidfd_config(fd, ...) // modeled similar to fsconfig()
-> >
-> 
-> After contemplating this for a bit... why pidfd?  Doesn't a pidfd
-> refer to an actual process that is, or at least was, running?  This
-> new thing is a process that we are contemplating spawning.  I can
-> imagine that basically all pidfd APIs would be a bit confused by the
-> nonexistence of the process in question.
+bpf_msg_pop_data() computes "u64 last = start + len" with u32 operands,
+so a len close to U32_MAX wraps the sum and passes the bounds check. The
+pop loop then walks off the end of the sk_msg scatterlist and
+sk_msg_shift_left() calls put_page() on the empty msg->sg.end slot.
 
-I don't think that would be a problem because every api just needs to
-handle ESRCH. Ignoring that for a second: the mount api has a builder fd
-that is later transformed into a pidfd. Which is easily doable here as
-well. My point is that all the infrastructure building blocks already
-exist in pidfs.
+v2:
+ - add selftest (Cong Wang)
+ - change pop to u32 (Emil Tsalapatis)
+
+v1:
+ - https://lore.kernel.org/all/20260609183927.4021802-1-rhkrqnwk98@gmail.com/
+
+Sechang Lim (2):
+  bpf, sockmap: fix integer overflow in bpf_msg_pop_data() bounds check
+  selftests/bpf: add test for bpf_msg_pop_data() overflow
+
+ net/core/filter.c                             |  4 +-
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 48 +++++++++++++++++++
+ .../bpf/progs/test_sockmap_msg_pop_data.c     | 27 +++++++++++
+ 3 files changed, 77 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+
+-- 
+2.43.0
+
