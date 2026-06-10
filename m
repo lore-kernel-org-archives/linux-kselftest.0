@@ -1,32 +1,50 @@
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E48A6213E89
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 03:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B1E5474E;
+	Wed, 10 Jun 2026 03:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781061338; cv=none; b=BoXqgRAylAEqOi9DSWAWusItmwItZwSCbWiqZSUhGnElBMWA0I/Emt3Cyszy9BHk5qnLMvoIKRvKpVesJSkUybs7ZbMNt+bEk6slxxYKFwvkQ/6KSf9UEKdcW3c1cA8jknvQSV9WFe0t7HcZ8R8YyL4ySzn+Uc7itnnyk0jTarc=
+	t=1781061442; cv=none; b=iCL6DizEAzPJlXYa6rf2BpiA7QtdIW0RzskA1jv0EsBq9STvCo/TjQnXD6FUjq0pIt/La4OXh39v12SloXvjQWibcCclmhID99rw1FNCt0DrN3i8NV46E8gP1uCmyKkQ1yrrLONOfAmkyCSMWHfXycRuhpooUQB8g2VTXrUeg1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781061338; c=relaxed/simple;
-	bh=jUBmC5gvw+RCqWsXBhY8pIww68FtDNu2Ek4bRm9cCr8=;
+	s=arc-20240116; t=1781061442; c=relaxed/simple;
+	bh=0EEZiPOgIhJKF7ggkB4ySQ088W91sUeLQCXaineGcS8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DRfEJqFmSgdAWDeLK8BczEdy7nAhFCbStza6jX+5dFrCxSCezO22D1AIfBzIzfAfy6eg0opcajMyzeMi/+4/yc20fIXyue+yR+0daWro9v0d36hT7AenjKflDCIHD90FC5u7C8fZUziTkUfxL926s+LiTaH5vb7w0ZzJuKyM6Io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ftYHOrql; arc=none smtp.client-ip=115.124.30.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	 In-Reply-To:Content-Type; b=Dg6LB7QAapAMuEqfjhsohJefN63PlxVRRmjCNoHjcq1sqhYSjbjht+jlO+ClH92+N/i7PZ47g8BStO7TPho6OGprxdJFnuYFpwJ076Mh9cVkJZXZWlb7jEwkLFxa8JKHd5YfKOaUGN1kh9qXZ19DHpEvAbbXGzc6s2VZWd9SDMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fz5j9b/L; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ftYHOrql"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1781061332; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=cNmOhfMNQ5fdxIZhkZYWk18D6krzi1ZCktahJwXG/tE=;
-	b=ftYHOrql0QUuLMcHYbvfjnlNnhy9lmuZBV7PvkbEQx/iPuKLqc5UJwTQI6B09geEjlLQ8oxCln3S8nx0wZrMh1Xz90jsOR5Wb+liQCt+e7eKAH1VuRmG67ZBBNUyrx1ym5/Nmjra7b+06jg1xtdr9FATeCysqTMfOp3Y/6iKx5c=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=kanie@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0X4Ycxd._1781061330;
-Received: from 30.178.82.120(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0X4Ycxd._1781061330 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 10 Jun 2026 11:15:31 +0800
-Message-ID: <778aeb80-ee8d-44a5-a103-7e0559be0302@linux.alibaba.com>
-Date: Wed, 10 Jun 2026 11:15:30 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fz5j9b/L"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781061441; x=1812597441;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0EEZiPOgIhJKF7ggkB4ySQ088W91sUeLQCXaineGcS8=;
+  b=fz5j9b/L5AYccsGZQUPXe58TSvDyYvjSYKAPPTsv3YrOZmY+f1F31JTx
+   NWtQC6LJB35zSb8UUvU3+slBcGhRqJlzknMRZ78VOj8YW3f/wvfbmrKzf
+   vhEWU64SbVat0fTdk0Cz5gtgQx8cnh2RR84zfsH8aDhijHw7DeImclxk7
+   plvodVYn+QvJbzrSQAb7XynO8yXnycnhp8hXDuC8E/aHAm33fymsiIf2s
+   LSO1Mi2QGFVhZ+klDDX22j8apfFpZuFQakXLZZyd2tzfELuJVRlSM9Fqm
+   1Z5jpk5FNGOxfKwRyDfOnvE/Vy/cErej5JqBgZXFShzDH7svLUhzaJOY9
+   g==;
+X-CSE-ConnectionGUID: l3ygCS5bRLulk3Tfc0Dbsw==
+X-CSE-MsgGUID: ito4TcLxQ9KH4VvGcC+r0g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11812"; a="69379164"
+X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
+   d="scan'208";a="69379164"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2026 20:17:20 -0700
+X-CSE-ConnectionGUID: nrt6CnzBQhSMVAAkpuxs4A==
+X-CSE-MsgGUID: qfKH81A3QUSFwkYW5xaSsw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
+   d="scan'208";a="246067137"
+Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2026 20:17:17 -0700
+Message-ID: <b2119f23-190b-4dcc-bc63-9554f0f8383a@linux.intel.com>
+Date: Wed, 10 Jun 2026 11:16:10 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,63 +52,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/uevent: increase __UEVENT_BUFFER_SIZE to avoid
- ENOBUFS on busy systems
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>,
- Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
- Wei Yang <richard.weiyang@gmail.com>, linux-kselftest@vger.kernel.org,
- xlpang@linux.alibaba.com, oliver.yang@linux.alibaba.com,
- Christian Brauner <brauner@kernel.org>
-References: <20260608053934.4059533-1-kanie@linux.alibaba.com>
- <20260609183410.8d6ade7384e6a39c076f9834@linux-foundation.org>
-From: Guixin Liu <kanie@linux.alibaba.com>
-In-Reply-To: <20260609183410.8d6ade7384e6a39c076f9834@linux-foundation.org>
+Subject: Re: [PATCH v1 1/4] iommufd: Set upper bounds on cache invalidation
+ entry_num and entry_len
+To: Nicolin Chen <nicolinc@nvidia.com>, Will Deacon <will@kernel.org>,
+ Jason Gunthorpe <jgg@nvidia.com>, Kevin Tian <kevin.tian@intel.com>
+Cc: Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+ Shuah Khan <shuah@kernel.org>, Pranjal Shrivastava <praan@google.com>,
+ Kees Cook <kees@kernel.org>, Yi Liu <yi.l.liu@intel.com>,
+ Eric Auger <eric.auger@redhat.com>, linux-arm-kernel@lists.infradead.org,
+ iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <cover.1780521606.git.nicolinc@nvidia.com>
+ <447fa93663f7526eb361719e83fa8b649464483d.1780521606.git.nicolinc@nvidia.com>
+Content-Language: en-US
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <447fa93663f7526eb361719e83fa8b649464483d.1780521606.git.nicolinc@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
+On 6/4/26 05:26, Nicolin Chen wrote:
+> iommufd_hwpt_invalidate() takes a user-controlled entry_num and entry_len,
+> each bounded only by U32_MAX. An entry_len beyond the kernel's struct size
+> makes the copy helper verify the extra bytes are zero, scanning that excess
+> in one uninterruptible pass; a multi-gigabyte value over zeroed user memory
+> trips the soft-lockup watchdog.
+> 
+> A large entry_num is the other half, driving the backend invalidation loop
+> with no reschedule. The VT-d nested handler, for one, copies each entry and
+> flushes caches per iteration, pinning the CPU on a non-preemptible kernel.
+> 
+> Cap both in the ioctl. entry_len is held under PAGE_SIZE, above any request
+> struct, and entry_num under 1 << 19, the order of a hardware invalidation
+> queue and well beyond any real batch, bounding the per-call loop length.
+> 
+> Fixes: 8c6eabae3807 ("iommufd: Add IOMMU_HWPT_INVALIDATE")
+> Cc:stable@vger.kernel.org
+> Assisted-by:Claude:claude-opus-4-8
+> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
+> ---
+>   drivers/iommu/iommufd/hw_pagetable.c | 11 ++++++++++-
+>   1 file changed, 10 insertions(+), 1 deletion(-)
 
-
-在 2026/6/10 09:34, Andrew Morton 写道:
-> On Mon,  8 Jun 2026 13:39:34 +0800 Guixin Liu <kanie@linux.alibaba.com> wrote:
->
->> The kselftests case uevent.uevent_filtering fails reproducibly on busy
->> systems (e.g. Intel EMR / AMD servers) with:
->>
->>    No buffer space available - Failed to receive uevent
->>
->> The listener binds the NETLINK_KOBJECT_UEVENT socket to all 32 multicast
->> groups (nl_groups = -1) but only sets SO_RCVBUF to 4 KiB
->> (__UEVENT_BUFFER_SIZE = 2048 * 2). On hosts with many devices, the
->> kernel and userspace daemons (udev/systemd) constantly emit uevents on
->> multiple groups, plus the test itself triggers 10 add events in a row.
->> The 4 KiB receive buffer overflows before the listener can drain it,
->> recvmsg() returns -ENOBUFS, and the test bails out as failure.
->>
->> Increase __UEVENT_BUFFER_SIZE to 1 MiB so the receive buffer is large
->> enough to absorb the burst of uevents on busy systems. After this
->> change the test passes consistently across dozens of runs on Intel EMR
->> and AMD platforms.
->>
-> Fair enough.
->
->> --- a/tools/testing/selftests/uevent/uevent_filtering.c
->> +++ b/tools/testing/selftests/uevent/uevent_filtering.c
->> @@ -22,7 +22,7 @@
->>   #include "kselftest_harness.h"
->>   
->>   #define __DEV_FULL "/sys/devices/virtual/mem/full/uevent"
->> -#define __UEVENT_BUFFER_SIZE (2048 * 2)
->> +#define __UEVENT_BUFFER_SIZE (1024 * 1024)
->>   #define __UEVENT_HEADER "add@/devices/virtual/mem/full"
->>   #define __UEVENT_HEADER_LEN sizeof("add@/devices/virtual/mem/full")
->>   #define __UEVENT_LISTEN_ALL -1
-> scripts/get_maintainer.sh isn't very useful with selftests code.  But
-> git-blame can be used to find out who to Cc (hi, Christian!).
-Got it, thanks.
-
-In addtion, It's nice to get a rb tag.
-
-Best Regards,
-Guixin Liu
-
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
