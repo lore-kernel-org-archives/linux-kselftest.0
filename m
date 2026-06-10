@@ -1,234 +1,255 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011018.outbound.protection.outlook.com [52.101.62.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F583839AF;
-	Wed, 10 Jun 2026 07:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781075127; cv=fail; b=jKa/KhVcOfJ9DRlOrfamYM5Gogo7IDBP+r5IiAK53KIgOEgnPn/jAplDwSaL8ZvdALeKEA2cO0l+P56tM+1otg4R4poy31G0Q9mN98FNPhBlH6PJWD/rY6Bc/jWdXYLqMcuHYbkSEN0IKJuz+j+0sgPuyOsadzAWMeRDDYB4lDo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781075127; c=relaxed/simple;
-	bh=G+EbitmvzWg5enhw6EjkHan96FhORwusgA6ldVWwCgU=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=S8SPPmUcq/rO6hHvskk3CSf3gNirHAAY6o91YTfeWMMA4D3bNEpGpJFcSC2CyXLlsI9KY4k5Azntcl7D5h/Z1R/3c01APwnABVj69Fe9b41CiFN5WgJKJAIWT964lgO+NI7CJg3NwxUEBXxktMzjzfB45rt0F+CrDg8rVzYfPrA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=xpRXs8Zt; arc=fail smtp.client-ip=52.101.62.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04E7385D88
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 07:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.65
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781075632; cv=none; b=KJCSAwxIBfq7QqzM8mOyFYyBWsYk9CyJV2VK/RBi0WS9xA7dJPOyRzBJLFT/xrjEDvKvzfJBPyDEZcJumZJtek6d78hsZBP5N1aD8TXWJCCOLpcMxYR1qxyBqJmK8h/XZKadOHQBdG4mqKKFRHWC8wORO3JGLFB2HkdDWpHxeTc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781075632; c=relaxed/simple;
+	bh=53JyhO7i5frR2tFIJKi76YP5Onuf89dbn1JJ8Mp4sJ0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pfn/3k0duH8ilHHcV5TavSynU7/o+iCc7sVCmH6lo0IY06oXsOGEtqqZhfUs6AL2TbOrbG5vCVmDRmGQkzSMIn4xNkQE7mOxZEeDLyWJMXGehgvv2sazc9wav/AhIEsxXmdUTQLVqKaiPIE5w0hiir4OGdclnHYp9ZruGLwlUys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V6UFO26m; arc=none smtp.client-ip=209.85.216.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="xpRXs8Zt"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wC5gaRwugFgobAoTCWdjnvaFw5ZahNuTM/nnOT6KX/MSD1G0vYricNY7y1vS99ava03T01XuqX6A454WYigeSyjhL38goLJhSBlQwlHK+KSN8GpU6BKrt2XTSy4WWOrCIPvN3u+9JHLfg1pwqMmpM0uA15RyJbeCVDhln5D1B45iYhlFiqxss8Iuzm0bGEO3jTCeUruww2TwIv1e7kk2Ukul5h2KypYga5Ioix5QwGGuMOZCajOM/xgafD51FpVDGWeKDAf6V4+g/4Q2yA/iJJr558wvmVLyJzrUo1w52HGC9q++7zMzcNT13w895i0VOlySJfu+RPVY4jwAAbVMpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3UI3tncPTi8BPTuOtb0LYX0hQd3bu6+ZfrwFLx8wrcU=;
- b=Dcf5wKXS9ot4tdy1yWhVeG8o4RS1ehsNjfusLSobe2+hCiCKlfng4P/sfdAp5lEW7HZV7kNpJmzWn21EvkOjm8T7aj7moePGCetehqiIDDwOIAsPkGb6Qnye6O6TaYQwhq3yNL/0vtvBls6e+MfUjlZTZTy3KRuJF92cgCP+3cFl++lAsULIkOlUV+Swt+01iLnVh5RpBpwrb7oA6DDu9HUW2M5HOo0t75UsCZXm+m2z+lLC5v68nkAMCFHBmfSRHpkAPjzzHImP9KcKCE7jnpdj03FcYxPf9B4Cy5dNg6IfQL0Sm8ylOXEhi+VOjsOh+DhDLxoeCZ3E/h9NW/Lldg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3UI3tncPTi8BPTuOtb0LYX0hQd3bu6+ZfrwFLx8wrcU=;
- b=xpRXs8ZtYT0DzY/FDERfvzMxQqgVOIXkAqu265cTbwjGbI6QPgb9RXnbue2uOTYiuaEZlA92tuVRMi3WQGAVVQelWxAVrhCCIP0pJHdMj/L2ueTapH/dL1APNXK/gITWYe8gTQJq4hDzomPaAXghwFNu30+J0ew2aiOCrePUL80=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by SA1PR12MB8598.namprd12.prod.outlook.com (2603:10b6:806:253::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.13; Wed, 10 Jun
- 2026 07:05:22 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c%5]) with mapi id 15.21.0092.006; Wed, 10 Jun 2026
- 07:05:22 +0000
-Message-ID: <c78eec30-159f-41f6-b725-8402752f90dd@amd.com>
-Date: Wed, 10 Jun 2026 09:04:06 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 2/4] udmabuf: emit one sg entry per pinned folio
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
- <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Gerd Hoffmann <kraxel@redhat.com>,
- Vivek Kasireddy <vivek.kasireddy@intel.com>,
- Sumit Semwal <sumit.semwal@linaro.org>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org,
- sdf@fomichev.me, razor@blackwall.org, daniel@iogearbox.net,
- almasrymina@google.com, matttbe@kernel.org, skhawaja@google.com,
- dw@davidwei.uk, Bobby Eshleman <bobbyeshleman@meta.com>
-References: <20260603-tcpdm-large-niovs-v1-0-f37a4ac6726c@meta.com>
- <20260603-tcpdm-large-niovs-v1-2-f37a4ac6726c@meta.com>
- <bdce2488-fe77-4f36-9ed6-dd2c785fa7c1@amd.com>
- <aiMY8CpckM8Jav0g@devvm29614.prn0.facebook.com>
- <0c86f5d3-b5e9-4cac-aa9d-30c5c8ecca66@amd.com>
- <CAKB00G3opAoAYswsq2uz0Q6jgku8u4NthKOzCbSumZ0qK7QxcQ@mail.gmail.com>
- <a51e97bd-39dc-492f-bd7d-f137423277df@amd.com>
- <aigqFQWzPkiSh3ie@devvm29614.prn0.facebook.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <aigqFQWzPkiSh3ie@devvm29614.prn0.facebook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR4P281CA0357.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f4::18) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V6UFO26m"
+Received: by mail-pj1-f65.google.com with SMTP id 98e67ed59e1d1-36d5fd50d20so4195901a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 00:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781075630; x=1781680430; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yzdEMh5lHMBwcaHbKYzieVMCGt4oUIEY8iF46MdpcK0=;
+        b=V6UFO26mrR8jlINLiVfxjBhxh+OvmhJPe3xZLarevWETHG6JgRGzcKr9DiLPstL0GE
+         TypiCqLbJVS7PDUjBMI2wSsvM9EzPJtCidVz2TvGfiVkykckj6EwgPZgYh1AbysxIqOD
+         YQjywpFFzmxK4h2eZJeq/ts5cawwXu6XAxL0Du9kP6kVwSE0cvEeC/rXrx7vFUBJbHlP
+         sZkTcB++MXC5HdQ05zC3sWbftURxrxacgufM/WgSQyKgArnVHumn6BN4rsbF6piSqLsk
+         UclhWVQwH4QLWUpYlSwdRY43X5Bwsrf0OtOuXj0GiOgvnPCSOrLdYANjtTvnlD6j0YvH
+         X7iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781075630; x=1781680430;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yzdEMh5lHMBwcaHbKYzieVMCGt4oUIEY8iF46MdpcK0=;
+        b=NoJCp1JIkc8IP5JaNbVHbAlZNrWjEGOnX9THlX87YZxHgvn3n8C5ZX7yb3sF/ea8Sr
+         eKgafrJa8reKlTqLD4inigjTQMUa6uVKAqlcyMwIw6EpT9RknGFQOVlQOtYji29/A8xs
+         M4iY+YbvK4X2o7RYCfbUKp1twhkA/a/hSi1MdNI2MiS7m5+TOTBgnQACFZFoJkq6iguu
+         b7bvwCgS7zZ96k5WJrKTy/8ccBz1pj5yrksOiZkFi2p94/U+iMZZeqQdrayNPckEfmfu
+         fZbyOck7WWJmhTV5Vy8Bw3OdcLzLJo4g0Ynuv2JFoHbhHKav92bBq3GaA5/pE29QDBEy
+         1pdQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/qXeeszT/rjlpiQI2f8P9YG0gxV61FmT8Ld7V0fXc7+C/qWfSeEMJsiPKLZ5S+N4lCTKrSO5FOWqJtMghPI3w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKyOii6/Y6knGhSepDPD4ySnccgW75wRxZIxRLJq+BuTUJUGtq
+	rsk8B0wvGxPGnen2GeIWFsGbSi1Lea5CJNr/IkUJkKfhcsdwerdmKLqY
+X-Gm-Gg: Acq92OHN4kjqeFueefhDIhRlk1CQiR4r21u0Gl94RbFUl0T6W145ybLbgz4rEWXEaEk
+	lC/oAaFHQf+Wpr/a0kh9srW2vjseIruFojaCXHgfS3ING+RZkRO2YgXBaF2jrJiTi7HN9JgB72O
+	NSxZHCkxYbffWBoVyUzqNssOnVmQMc4fvjQV/1fDOh0+OHVi5VkQvwXFaKDPpOh4uhO06ZjaPIc
+	L//Og+JxgVrjPx9yLgkB7t9SG05/xFZ8dCqWor0NvBFhtyTy8DnkIvizRVDQw0vr7sco9K5zmUV
+	tjTQUHwGwR2GHhVjbnq3EwFRLdWTmyMLVTjfk3Ufhdd4Io636HGUj+AChNRtJbSJEI8xfd9jlMo
+	0J2HizEl6Blp6QPxEt5S96KOjNfjmqB3kPuLLsAC6abEqJi/ws5a6G/A7MtHRcIE+ziOXC7+Btf
+	1LKxp8kYlJqqYo3Gn7KSvs7bciBbVg4iea
+X-Received: by 2002:a17:902:ef08:b0:2b9:6458:1a2c with SMTP id d9443c01a7336-2c1e820e30bmr298583035ad.13.1781075629930;
+        Wed, 10 Jun 2026 00:13:49 -0700 (PDT)
+Received: from [172.30.1.91] ([59.6.68.4])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f875casm237059765ad.22.2026.06.10.00.13.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 00:13:49 -0700 (PDT)
+From: Woojin Ji <random6.xyz@gmail.com>
+Date: Wed, 10 Jun 2026 16:13:45 +0900
+Subject: [PATCH bpf-next v3] selftests/bpf: Add arena direct-value
+ one-past-end reject test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SA1PR12MB8598:EE_
-X-MS-Office365-Filtering-Correlation-Id: c9f7bbaa-e450-4695-b251-08dec6bea395
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|366016|1800799024|7416014|376014|10063799003|11063799006|56012099006|4143699003|6133799003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	U9FM1uTIw9GGijuROFDG0oSAWEZO4ts2TW7shhHgPp0oo2WTeuuMJd4Pt6QU2y/O9zoJ5F4iGh+f+OMPTQT3HvOY5blUChNkKKQeWbUAflUfR0CBNWQ/nbsDZLVfGXEGoYkHP8aw+O9ysZPu9pz/d7dJhT04UBpwcta3cnwdtZrQLkFsTVIzjOxZMjhpzw5V4eyU2FC9qO07dsaLZWygI5EwEuNApX7XRF8/e0yrfJz2cTuyCikLEl1iH6ekoaXEBH+RhxEccmFVFPRTBagEdmHk20Y//2KBhnr8ZvzGsQwM+IqcMSwpqAmwceeNJaAjR1lBhiX2y8RLVk0mBrpvtSZzJJU0X6Eax3nUadZsSiR9aM3zZ2rsvYDLBBR/uO3bh4Yc0vqDklJy7eReNB81yttkmJEEDJ4okS9akL8prPKKTcLboAjtJruBA5/K+ayOp89VgEl3luPyLn66K+s8lXpoBPZG3LcEWxZuImKa024p9qZ3MgwiDw4hAQ+JICEmAT6A93r93zSCavUGpo89BHpYopGXV4iiv20P1Y79ERdbpz//jqdo4xE4sN+0xKzeyYpuBdYGGyDzVvj8dXHCH070z9KbqY2xnOv7f0Xke4Zf5FV5b1ImEITWbeuX5iyXzUSA8Ld5U+K0UYTsISc/gmY5IJ1OCZUTq0EmtAvB/aEJxt4twN9IKrvVNE3tJJw7
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(7416014)(376014)(10063799003)(11063799006)(56012099006)(4143699003)(6133799003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WEJDNStCY3ZCZ2Q1b2k0cWxhVVdSMHBPcVBCODYxRlNBa2lDUCtadm1iRFNT?=
- =?utf-8?B?Z2hMSUk2RTRTZ3hZUDdPc2xIcGQxTnZWbTRqblNVenZISER0dkpKSU83V2Uy?=
- =?utf-8?B?cktIcGZDWVkrcHVpUi9abk5jajJEbGtWZWlHWG5NVnZFMjYxUTRoMjFOOW9T?=
- =?utf-8?B?M25xdXFqMm0wY3QydUgxakw1UEdrUWN1WFR3emtMQXM0NnZGeEkwdXhlaVYv?=
- =?utf-8?B?bnA1OHpHenRUWXpVYXpkcDJCOTdVMm0zQTdESGFDK3JHTUt6ZjlVaFVNRS96?=
- =?utf-8?B?eUZNTXZoRHgwNk1Fc0ZwVTgyVmF1R0tKa29aaWd3RnZ3OUZMekJkTXY5NEJh?=
- =?utf-8?B?enAydXZGZW5hUWtUbElSSnRGd2cybzBYUVBiZ3B3MEw1ZDRGdzNQV2tPbmdT?=
- =?utf-8?B?U1U4cVc5dEZvaEVPYUtRL05haU5RL1dPRlVZK0pyMEtReUtnZTQvVFQ2MVBI?=
- =?utf-8?B?NmZLYnlNZ01RQkFSY1JaWEN5RjJkc0pkWkxKZmJ1b2lXaitNMTNSOEtIaDUr?=
- =?utf-8?B?blVpbzk5VnVOQWxHREhib2tvQ1pZZWJrOVh4RndqQjBoK0I0eVpGOXVBWGo1?=
- =?utf-8?B?VCt6UDBZdGZRVWlWY3IrUHFHOUJqU3kwRVV1dzJTSTN5ZHB2b3VFbVlTRDZh?=
- =?utf-8?B?cnNQWk1hMnhySmpWUURzOUU1ODNDdTlkVjZDZUJ4THZvN0tHUDhNVzRiZDhW?=
- =?utf-8?B?UlM3S2gySGl4WE43STBWL3UrRXNFckZuLzlEVEFCbkg2YWw0QWdYdVF3RmVR?=
- =?utf-8?B?TGNVV1M3MTVhREQrNDc0RVY4eXlIdTBYTnFLZE9Ybk5ndWptUEZiNldKaXor?=
- =?utf-8?B?Q05hVS9tWVlhZEVaVGJhdzMwVHh1aHJtQWpWT0dHOEdzS0RySnNpVmxzMXB6?=
- =?utf-8?B?UCtzeUJUbkozN2diNTVTemhFUEk4NExrWGY2Q3hJdXhjeTZ0UEQxUXB3M1oz?=
- =?utf-8?B?M3Y4WEEraC9KMDYvOTUxdHRHMXltOCt1SmZ3Q0FRNTUyemlKY3loOUVkcnpR?=
- =?utf-8?B?ZFNQQUgwMkptazIveU8xdTFqUWlxZXNVRU4yQmFSMDkvTXE5d2o1M0o1MTNM?=
- =?utf-8?B?cWFYdEdPL2htbGlaUXQ3VUFtRkZjMFBueVJVakZ1azhSWENwTUVnK1h1OWw1?=
- =?utf-8?B?OERTTmoydFgrbjZkUmNSdi9RRWZob2VCUU1ubEdoUU0reTJia3FHVm9RWGUv?=
- =?utf-8?B?U2lZV3BVQU1lWXRwdjVIMzhBWnNyMloxTjZVMmJkUHFmcDVHOEZlL1Rnd2ls?=
- =?utf-8?B?SzNUNUZZbHdyRjRxcEJydnA4MHF6Sk01VFhmcTdUR2pWeVA1eEV6ZmkveXVB?=
- =?utf-8?B?ZUpKVjYxeUFBTzN1ZHFMcVpYQ3loeGNndDRleERrSWNJVTJHUnFIWkpSaEVj?=
- =?utf-8?B?SW9ZYmk5dXdWcDQrMUVFZS9rRncyY1JLWjVYUjdtOUU3ZC9HYUNLK21PVHZr?=
- =?utf-8?B?LzRWejVXV3E1NkNYYkpoWnBjZ2lMb0xudzZGTWI2SUZTQjVXWFYrY1dqUWZH?=
- =?utf-8?B?NWZiTTc4QTV1UWFaR0MyTGM1NCs5b2dnejZsMlFkVDFycTMwdmNRdmNJcnp6?=
- =?utf-8?B?VHdJSWdsU0I0SDlkZ3BqZFh1b2Q1djVSdTNobDMydXBkVWo1aGdneTZFcmxC?=
- =?utf-8?B?SXVjT21BZjBWTFRkUlZaaDBiMHZiQ1lraHdaZEwyRnFZVnZnQ0xJUGl2ZVN6?=
- =?utf-8?B?NDlxSDlrRmd1UWFjOW03RXl2NEJ5UEV5TmRkNk1BWTdMV0tCOUxodVdSQ0lT?=
- =?utf-8?B?MUN0UHRMdE1WSDNyTHZsdDNYRytlUTFqWC9VOVUwci9xRHgxQ1BnanVXdkJ4?=
- =?utf-8?B?RlYwSmlNclBGdzdTOHk1b2trOEZtcUxEakJweGhQVUVxdnhiWU02a3BPcDJy?=
- =?utf-8?B?Y1RpQ2JJTFI0eERkaUQzVEp5c20wUFNDa09KcSt6R2dPVXB5a2xhWEE2WjI5?=
- =?utf-8?B?Z09aTExnbUgrWVVoalp2YXBRbVJmODNuZEhWbzRnUkdBSkRaRlU4NVNUWTF3?=
- =?utf-8?B?eUpydTkxY2xEdVNvK25SaUhyc3djNm9HV2p5TEV5ZXdjeUJnODFtOWhqbi9W?=
- =?utf-8?B?NlV6N1RSSklzYzFsRkJkSk9mcEhadW5TWFRCR0dFb2JkaFdVZ3p3NFV3c2Ri?=
- =?utf-8?B?MDZDZDBLTXBGT1BUYVRHM2NnY1BRQVRoMy9ldWlSZGVJdkNDNEdQWWRoTzlV?=
- =?utf-8?B?K2ZwVEI3bjgzd1l0QmhLRzVRZ29QdHdNZTRyM0ZBUEFBeUZHV3g2dVZUYnB1?=
- =?utf-8?B?NzRTV0JkT2ZZaE95QkxkN1Ewb1poa1dHaEJvclBHSUdnRXBONDA4SlpVQ29v?=
- =?utf-8?Q?QC24X2X0/kQBnG5rJN?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9f7bbaa-e450-4695-b251-08dec6bea395
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2026 07:05:22.5788
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +jcpW5n71EkJnjSrLpPbEVLknf/3YNE0O8pZQe0UKv4Ww45oXdr9BpIzkalxRg/j
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8598
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260610-arena-direct-value-v1-v3-1-d5f0d935ee45@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WOyw6DIBBFf6VhXRoe9dVV/6PpAnBQGkUDSmyM/
+ 16kGzdNk9nczJxzZ0UenAGPbqcVOQjGm8HGwM8npFphG8CmjhkxwnKSE46FAytwbRyoCQfRzYA
+ DxaCvtS6zQlalRJEdHWizJO8DyVFjC8uEnt+Nn+Ur0rt2v22Nnwb3Ti8Emog/bXEoLiSnShFRK
+ qHuTS9Md1FDnzoCO1qyXxYWLaJiSrKSAi/yo2Xbtg/ppg5jHAEAAA==
+X-Change-ID: 20260603-arena-direct-value-v1-ef4df857b98b
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Emil Tsalapatis <emil@etsalapatis.com>, 
+ Junyoung Jang <graypanda.inzag@gmail.com>, 
+ Woojin Ji <random6.xyz@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5647; i=random6.xyz@gmail.com;
+ h=from:subject:message-id; bh=53JyhO7i5frR2tFIJKi76YP5Onuf89dbn1JJ8Mp4sJ0=;
+ b=owEBbQKS/ZANAwAKAUOXRMMVrfhrAcsmYgBqKQ6q/0Mnw8OjeZLWplgHEnkOYShXxKmetW4OQ
+ f6Q92Vn4+mJAjMEAAEKAB0WIQSrknTJbxUcAdPNt5BDl0TDFa34awUCaikOqgAKCRBDl0TDFa34
+ axveEACfexJ/1G1cZljjcqjlGuRWEziCRKgYU15g/chjQTl7g7ce7+MNBPJURxttv7VmgW8uZyM
+ secmTrgsg4TwTKq6Wfskg2RjJe3P4PRdILTfmNrUtP16bH3UqHC9Btq0vJsgv7jTOz29wlt2I4a
+ MVjM3D9QsjZCG5Di0aMYscwcDJXJ4qhfHDeS53PoIeEekdyeB77nH08zgqScL/x0rT3WpCmniwt
+ SxIJe/bsgZeDHafcB8uj69SD06r+wp7TcbRZ0h5VyOJmDmer/AUAxa+6t2A41t5akW4DRoI4eE1
+ AmygEVyo3tIp7mVxCaTnlhlzw2aIIu77F6iqFaCyPQaBDCKVzksuW0ntC705i6r0NzgQaecTCfE
+ BvxShBIn1RXvR79xlWWVICvn+mpQ6YI/lod57n6L5EaTVPI6k2ugHAfl5wbolZhlvUJNEE3i7Qd
+ syNJdaATVgpv1EJE0dd6cUx/66H5EFzraxcUhnoDDqk0VLGQ+RHhyErtRYgO07OGYPsouZe41j3
+ sB0nMJlUuqn6jijDuLbwpiXwz6+hnjx4b3O3qCYqKEZ/AbtZJK0PP5H2JI7RjcVJS34iLOhbSTM
+ jsFBgEn98SICUzKnrdTRITXJ2oWZmSzPm+mMs/Vx6Mwu4HM4JfvBFXhJvuBCe1T8X0cTgLLF0qQ
+ WFf8czg0/HWX1Cg==
+X-Developer-Key: i=random6.xyz@gmail.com; a=openpgp;
+ fpr=AB9274C96F151C01D3CDB790439744C315ADF86B
 
-On 6/9/26 16:58, Bobby Eshleman wrote:
-> On Mon, Jun 08, 2026 at 03:59:04PM +0200, Christian König wrote:
->> On 6/8/26 15:55, Bobby Eshleman wrote:
->>>
->>> On Sun, Jun 7, 2026 at 11:42 PM Christian König <christian.koenig@amd.com <mailto:christian.koenig@amd.com>> wrote:
->>>
->>>     On 6/5/26 20:44, Bobby Eshleman wrote:
->>>     > On Fri, Jun 05, 2026 at 11:30:07AM +0200, Christian König wrote:
->>>     >> On 6/4/26 02:42, Bobby Eshleman wrote:
->>>     >>> From: Bobby Eshleman <bobbyeshleman@meta.com <mailto:bobbyeshleman@meta.com>>
->>>     >>>
->>>     >>> get_sg_table() emitted one PAGE_SIZE sg entry per page even when the
->>>     >>> underlying folio was larger.
->>>     >>>
->>>     >>> Instead, walk folios[] and emit one sg entry per folio. When folios
->>>     >>> represent large pages (as is for MFD_HUGETLB), each sg entry is a large
->>>     >>> page. Normal PAGE_SIZE sg tables are unchanged.
->>>     >>>
->>>     >>> Required by net/core/devmem to support rx-buf-size > PAGE_SIZE with
->>>     >>> udmabuf.
->>>     >>
->>>     >> That doesn't explain why this is required.
->>>     >
->>>     > Sure, can definitely add. Devmem currently requires dmabuf sg entries to
->>>     > be length and size aligned when it allocates niovs for NIC page pools.
->>>     > Though udmabuf is not violating any dmabuf contract by emitting
->>>     > PAGE_SIZE entries and the above restriction is probably more a
->>>     > shortfalling of devmem, by emitting a single entry per folio this patch
->>>     > allows udmabuf to be used by devmem for large pages.
->>>     >
->>>     >>
->>>     >> Please note that accessing the pages/folio of an sg-table returned by DMA-buf is illegal and strictly forbidden!
->>>     >>
->>>     >> Regards,
->>>     >> Christian.
->>>     >
->>>     > It seems both devmem and io_uring zcrx at least introspect through to
->>>     > the sg-table to build NIC page pools (not accessing the memory itself,
->>>     > however). Is there a better way?
->>>
->>>     That's an absolute NO-GO! We need to stop that immediately.
->>>
->>>     Touching the underlying struct page of an DMA-buf exported sg-table is strictly forbidden.
->>>
->>>     We even have code to wrap the sg_table and hide the struct pages on debug builds to catch those issues, see function dma_buf_wrap_sg_table().
->>>
->>>     My last status is that the NIC page pools are build directly from the DMA addresses exposed by the sg_table.
->>>
->>>     Was there any change I'm not aware of?
->>>
->>>     Regards,
->>>     Christian.
->>>
->>>
->>> Oh no change, your mental model is still current.
->>> They just go through each sg and use sg_dma_address() on each.
->>
->> Ah, thanks! That was a near heart attack :D
->>
->> Yeah that is perfectly correct, question is do you then still really need this udmabuf change? I mean the DMA API usually merges together contiguous DMA addresses.
->>
->> Regards,
->> Christian.
->>
-> 
-> Hey Christian, sorry for the delay I justed want to double check what
-> I'm seeing...
-> 
-> I reverted the udmabuf patch and confirmed devmem still runs into 4K
-> pages even for hugepage udmabuf. I see that the dma_map_direct() path is
-> being taken, which if I am reading the code correctly results in the
-> sg_dma_len(sg) inheriting sg->length directly (set by udmabuf's
-> sg_set_folio(..., PAGE_SIZE) call), compared to the iommu_dma_map_phys()
-> path which looks like it does merge when possible.
+BPF_MAP_TYPE_ARENA supports direct-value pseudo loads, but unlike array
+maps its map value_size is zero and the valid direct-value range is the
+arena mmap size, max_entries * PAGE_SIZE.
 
+Commit 3ac1a467e376 ("bpf: Fix off-by-one boundary validation in arena
+direct-value access") fixed arena_map_direct_value_addr() to reject an
+offset exactly at the end of the arena mapping. Add a regression test
+that loads a BPF_PSEUDO_MAP_VALUE with off == arena_size and verifies
+that the verifier rejects it with the expected offset in the log.
 
-Ok that makes more sense. Yeah something which could potentially be improved elsewhere.
+This is intentionally kept as a userspace raw-instruction test. I tried
+expressing the same BPF_PSEUDO_MAP_VALUE + off == arena_size case in
+verifier_arena.c with inline assembly. The only form that produces the
+desired instruction bytes uses __imm_addr(arena), but that emits
+R_BPF_64_NODYLD32, which the libbpf/bpftool link step rejects. Other
+register, immediate, and memory constraints either fail in the BPF
+backend or lower to a normal R_BPF_64_64 load followed by an ALU add,
+which does not exercise arena_map_direct_value_addr() with the boundary
+offset in the second ldimm64 slot.
 
-Feel free to go ahead with this patch as a workaround, just adjust the commit message and maybe add a code comment why it is necessary and helpful.
+A legacy test_verifier fixture can express the raw instruction directly,
+but it needs arena map creation, mmap, and fixup plumbing in the legacy
+runner. That is more intrusive than the small prog_tests raw-instruction
+test.
 
-Thanks,
-Christian.
+Use the userspace raw-instruction test, following the existing selftests
+pattern used for direct map-value pseudo loads, so insns[1].imm can be
+set to arena_size precisely.
 
-> 
-> Best,
-> Bobby
+Assisted-by: ChatGPT:gpt-5.5
+Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Junyoung Jang <graypanda.inzag@gmail.com>
+---
+Changes in v3:
+- Document why verifier_arena.c inline assembly cannot express this case:
+  __imm_addr emits R_BPF_64_NODYLD32, while other constraints either fail
+  in the BPF backend or miss the pseudo-load boundary path.
+- Mention that natural C forms lower to a normal load plus ALU add, so they
+  do not exercise arena_map_direct_value_addr() with off == arena_size.
+- Keep the userspace raw-instruction test as the least intrusive option;
+  test_verifier was checked but would require legacy runner arena plumbing.
+- Link to v2: https://patch.msgid.link/20260605-arena-direct-value-v1-v2-1-a92cb281e376@gmail.com
+
+Changes in v2:
+- Explain why this uses a userspace raw-instruction test rather than a
+  verifier_arena.c failure program: the test must set the second
+  BPF_PSEUDO_MAP_VALUE ldimm64 immediate to arena_size exactly. For
+  arena globals, libbpf derives that immediate from the arena-relative
+  symbol offset, so the boundary value cannot be represented directly as
+  a verifier_arena.c C-level failure program.
+- Link to v1: https://patch.msgid.link/20260603-arena-direct-value-v1-v1-1-7b31cc0a8cac@gmail.com
+
+Tested on x86_64 with tools/testing/selftests/bpf/vmtest.sh:
+  $ ./test_progs -t arena_direct_value
+  #2/1     arena_direct_value/one_past_end:OK
+  #2       arena_direct_value:OK
+  Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+---
+ .../selftests/bpf/prog_tests/arena_direct_value.c  | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
+new file mode 100644
+index 000000000000..b7760b021670
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include <bpf/bpf.h>
++#include <errno.h>
++#include <sys/mman.h>
++#include <unistd.h>
++
++#define ARENA_PAGES 32
++
++static void test_arena_direct_value_one_past_end(void)
++{
++	char log_buf[16384] = {}, expected[128];
++	__u32 arena_sz = ARENA_PAGES * getpagesize();
++	struct bpf_insn insns[] = {
++		BPF_LD_IMM64_RAW(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, 0),
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	LIBBPF_OPTS(bpf_map_create_opts, map_opts);
++	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts);
++	void *arena = MAP_FAILED;
++	int map_fd, prog_fd;
++
++	map_opts.map_flags = BPF_F_MMAPABLE;
++	prog_opts.log_buf = log_buf;
++	prog_opts.log_size = sizeof(log_buf);
++	prog_opts.log_level = 1;
++
++	map_fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_direct_value",
++				0, 0, ARENA_PAGES, &map_opts);
++	if (map_fd < 0) {
++		if (errno == EOPNOTSUPP || errno == EINVAL) {
++			test__skip();
++			return;
++		}
++		ASSERT_GE(map_fd, 0, "bpf_map_create");
++		return;
++	}
++
++	arena = mmap(NULL, arena_sz, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
++	if (!ASSERT_NEQ(arena, MAP_FAILED, "arena_mmap"))
++		goto cleanup;
++
++	insns[0].imm = map_fd;
++	insns[1].imm = arena_sz;
++
++	prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT,
++				"arena_direct_value", "GPL", insns,
++				ARRAY_SIZE(insns), &prog_opts);
++	if (!ASSERT_LT(prog_fd, 0, "prog_load")) {
++		if (prog_fd >= 0)
++			close(prog_fd);
++		prog_fd = -1;
++		goto cleanup;
++	}
++
++	snprintf(expected, sizeof(expected),
++		 "invalid access to map value pointer, value_size=0 off=%u",
++		 arena_sz);
++	ASSERT_HAS_SUBSTR(log_buf, expected, "verifier_log");
++
++cleanup:
++	if (arena != MAP_FAILED)
++		munmap(arena, arena_sz);
++	close(map_fd);
++}
++
++void test_arena_direct_value(void)
++{
++	if (test__start_subtest("one_past_end"))
++		test_arena_direct_value_one_past_end();
++}
+
+---
+base-commit: ba3e43a9e601636f5edb54e259a74f96ca3b8fd8
+change-id: 20260603-arena-direct-value-v1-ef4df857b98b
+
+Best regards,
+--  
+Woojin Ji <random6.xyz@gmail.com>
 
