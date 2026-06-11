@@ -1,533 +1,145 @@
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013065.outbound.protection.outlook.com [40.107.159.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25567492517;
-	Thu, 11 Jun 2026 16:22:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781194934; cv=fail; b=roalsysTtMbvD0GyJeH+C4vh3tgsoJzaJc0xT5L71KAnI1MEguzy8P54V8R76QK5uZ5ibWWuE0wqHk2ErftzZNtPyQ4dwILB4uGg9wSk8mVAWzd5j+/ZP8/dfjvA5opHOb83gh7FTBcaKX6dLZ02JCr6t9zJOtqRxWm7MDXdLlY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781194934; c=relaxed/simple;
-	bh=/QO7d0pbLHh6PDXLjjWzFubgN6kPyE0jU7Dr92rYdGY=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=r+cNqaCoum+kOprf04mCX6bO52qt0KDc/+oi85t4e0azFKhLPLZT+8wDLtA/3GFoINF0+rVnEzFQ1z1Nj7ffxLH88lzheGYshDiktWtyKx5Wcdku+R6kvZqpRbzM8u+zWnzuoPIgImSIj4sjGUQkhkMQIe8OdhmCYz7Io6FuSEQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=pnOWWgPT; arc=fail smtp.client-ip=40.107.159.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9FA425CEB;
+	Thu, 11 Jun 2026 16:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781195039; cv=none; b=jEVHj91dlCn0knyc7E3yrAOAw79dLSPyjcQTPgM9M7ZnBFewVs+WPYFOgjKCHf3OVELVpMww4E1CrF6+xf5EYIB2M0kUs58AaikHydr/1lHH4PZH56wbL7pY0GoWpCRzwHpdHyrjfEllynpfA7lnMaVWTDdiMMDUlFkdCRIzTic=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781195039; c=relaxed/simple;
+	bh=hb9uZ9IcB7+Pvn0JGZXQ2LFCCumBvvwoKOnALyQ2r2U=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=E/3qZGaB3Y2dNWND4NcN6FW4tIEOokn5kibFFxrEwQarMMauqf1KeGdjC7AluZ+1PKAxn2MV9jsA3Vfo8gMFi4Faykr2QK4tdiapUE9YkXADJ7Xvb8R3t5Vdc4y9Tl7cior5tHgJiE96FgTgHZZiUsyEVlY6RoRENibPNGdP1ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SbxrVoYn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="pnOWWgPT"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fNCCw8gDHe8R68nVJ17p8+ZeDW3zPrjKG2QrqCpVKIyzZBhQXwoYDKKJC20BMdXf91t6efOl+xdsW4rk4XJ/6h92XzZ21z3THpXHMq6Khp5ZS6xEUdUOwQNxAjbqJenshr4dbGGuySXJvELv7lkfKDSWfCdd/p8XfVZD/aB1BBdRIFtn8EEB8NZ5VHQcpzyJduH9DVGDcLvYsdn8dGxKiocDbsObYovZg9PE54kXylHQDvQd16vIkNFraSZQH5J57ZjtIkl7mgW6pwKHhgEbned3H9BEPNHMWJjsmPbpD5ryDGUoCgo3jNkPaqKQYygubIPRJGUc9W5Lfw7dbbksew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aWpBGa9Bxt7VzvS8PLudFJQTc3v2XROBC4kSRu7VSAg=;
- b=Q6XoAD8NFfj6o0SELYOU9XzlI8YPUZ+YXV3ncSWW7cc96vsMXHgi3JFDY8XJk2spn32GjmNQuf0wbamL2bkT5DUDbUnH1rQFFj+tg+SOgtiM1IQoxbxJ9IBwHX5g+h3CZGZDTGUdofyC7pZjafMSt7/NicFtMtfWm5Qf5kd2r/WbrjPjydzCryUFiVrIfdOYBKIRON4T0beIEn5uCcI16uaJNici0Mr1Yyyy+WVlvnfNOKp6n6tgj/nFHSJYVwhSouxaH6a5s8/B0WsVARDKW9qVflVjhOOx8MP9YeGUZMQw0f6/FCbx5zLih0L9jHQyh448MFBSGiUqWN2pI0de6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aWpBGa9Bxt7VzvS8PLudFJQTc3v2XROBC4kSRu7VSAg=;
- b=pnOWWgPTf+QA6HQPdViPLCWKPIcOToU7hlSV7f+lVkImoSAkdHNTrWspZDjlS8ZjcNq1dyWCWyE7HqSwzQ8Ha7t6HqAGmXZVHnGHuG9bgs6eRApTpfrcXRsCjsLOaGR40TG//bZopvT7ESOe+zymv/2HuaNapUGFbgFS9DTozt/6i2CJqp/YzXAInX+OMG9eBIhyMYb94gQscP+fNAWMNTM7TTTJHqSEzW/C3w2R2V1MazxtJI5RrBwoLhmT5Z4TBAD/hcNyZ14G/sNwBXI61BUK7ZGXNVVNRt0rfGE3BvEqrluMNh6JZx2nh9SqbJjbN34jmm0tlUo3V+BRLvR6+g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-Received: from DB9P189MB1754.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:2a5::24)
- by PAWP189MB2829.EURP189.PROD.OUTLOOK.COM (2603:10a6:102:468::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.13; Thu, 11 Jun
- 2026 16:22:01 +0000
-Received: from DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
- ([fe80::2af4:a981:db81:d471]) by DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
- ([fe80::2af4:a981:db81:d471%6]) with mapi id 15.21.0113.013; Thu, 11 Jun 2026
- 16:22:01 +0000
-From: Yunseong Kim <yunseong.kim@est.tech>
-Date: Thu, 11 Jun 2026 18:21:16 +0200
-Subject: [RFC PATCH v2 14/14] Documentation: add kcov-dataflow.rst
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260611-b4-kcov-dataflow-v2-v2-14-0a261da3987c@est.tech>
-References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
-In-Reply-To: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
-To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
- K Prateek Nayak <kprateek.nayak@amd.com>, 
- Andrey Konovalov <andreyknvl@gmail.com>, 
- Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Kees Cook <kees@kernel.org>, David Hildenbrand <david@kernel.org>, 
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Yunseong Kim <yunseong.kim@est.tech>
-Cc: linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
- rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- llvm@lists.linux.dev, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
- Yeoreum Yun <yeoreum.yun@arm.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781194895; l=12496;
- i=yunseong.kim@est.tech; s=20260426; h=from:subject:message-id;
- bh=/QO7d0pbLHh6PDXLjjWzFubgN6kPyE0jU7Dr92rYdGY=;
- b=djzukwNo+OmamenYPu+h1hlnGM1Q1eKpTy7Lkob/n535yCIsP008ubTTkjqdJErql5jBJKLXt
- bu5itSDzg1QD35LNTmLWyNBOiQ5/KekYTC3Zl71uCLU8/+s3oEr4j/S
-X-Developer-Key: i=yunseong.kim@est.tech; a=ed25519;
- pk=1nBUX92cvTaavYG1+MR073D+XMKhdOciBZcnf6h6qEo=
-X-ClientProxiedBy: GVX0EPF0005F693.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:158:400::13c) To DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:10:2a5::24)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SbxrVoYn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB211F00893;
+	Thu, 11 Jun 2026 16:23:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781195038;
+	bh=HZajxgs8H41vz+bZ2heTynPzuZ7XRleIa9mbFJ8vkSM=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To;
+	b=SbxrVoYnzUEhF0dvOc0CbUo8e7jG1jhr3NvuAGR7nMfOSKGxdavR76v2b100bmsSQ
+	 nXOx8DQIg16YMD5vee+Cm0ol5PY/W7eOFbfq4/TNoxeqXENspAfs7THNMAgsJFVLFD
+	 wd3RdHLKIYPJkXC1Qk/2ByEs5dnt1MW3Pn/4Uz6jn9fg17NOv7JnxQ0hBBma6UoDeX
+	 1myU2Y4yGY5UWVDzFC5uwCLNGJhdhAbR1iyXrC3FA5jFWFRtjYLwIB+U9//E1HTIXy
+	 yn9fiN9+5eVunEnyvAVq8BHiOAGibvJ6XuuZv6CqRQClULlPzLiLPns4sh3SSNjqcf
+	 QB7uwqNqf7lUw==
+Message-ID: <58760bd8-4979-4fb1-96a3-eb94f0e8ca0c@kernel.org>
+Date: Thu, 11 Jun 2026 18:23:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9P189MB1754:EE_|PAWP189MB2829:EE_
-X-MS-Office365-Filtering-Correlation-Id: 16ee207c-d882-45a0-49df-08dec7d59150
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|23010399003|1800799024|376014|7416014|921020|56012099006|11063799006|3023799007|6133799003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	7kXpKgAZ2npSI+Vazsj9EPVIK4hAdklIQvqjUVvI9iBAVabc2hw66gqmrzuXzDgx9a7aYOPpdVisxuVYpHkYqcposTqfluv1/DLn47lafC8Bums+9IS7UO7Hk1GZIBOLJ4oeUO67QNU/u1ZdSiFwMJFC6ULbG0oTDFmGx+wy71jkm9hS/8Qr1S3iPFha9FkZBKfSB+1e5UI57KZ1cKcPV/YQ5mEN062NZfA3HhsUSn/sULr5K5R7zKaPGYRHQhEx+tIcp6RC/W7dnX+mn9ZJWbkNctGnb85IAv3o9TwIhjJ/i714/wjUXQbayIfLT9yGgQaQEYiKysJtsjwuS47lgWwze5WlO/7gdsJtVpqBbtBBke+SzHaVho5lI7NhCDuUcOvs1Jey+1/BK8e2KVpViE75HkGg5lSm+/uCsRLQipEOY4sbTYsNivkJpo71NRt8YJkDzSxjT9MB+fcNVFzBT5HoDMMpJBcZgshorKB1PSpBs5r9Uds4k2143Ibfm5/491YsDGiTmDuifC9V7iO48jUrvTRYpTC5yYgdSv95BfvIuddxB3ata4P2ymwmq69M1IPQF3qIXeveuf76M1wvjU2h/ShUjZkKzSlUFr76c7k0BDn7p6Ql9v24sM59a3eiAlFhDDmOdQZykCWjFotM7eQdD+OKQKhzdj5CRZ6t1dKP85s4ThhPEKSml8mvTnuq0Fr+PBZ3mlHNn5cMfaL0GesrxacY76atYKwgRd98Xyo=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9P189MB1754.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(376014)(7416014)(921020)(56012099006)(11063799006)(3023799007)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZGtyUmNJYmxSbDBabzl4WFlvYTFITFRhOXVkRHdFcDNoS2grbDM5bjk3a1pu?=
- =?utf-8?B?ZkxBQVFCUFNtcmF3NzZ4NmNHZ2dtSGRMOEhCRHJmb1VQZzVqMnB3OVVJMUxG?=
- =?utf-8?B?Qm9YSG4xaDU0T2daOFpwN1lWT0g0WFdvQnRCUnpCN21IY01SODlEL1dIT29m?=
- =?utf-8?B?U1Nla2VQOS9FRkh3K3lDNUVQSFdzMTJHMzJ4dUMvbFczRTFmM1FOY0U0enlJ?=
- =?utf-8?B?Y1Y1dU9ReXNpSXJRUVRLUGwydWZ5UmVFU05kQXpXSHN2Q29lUG5jRk4vV0cy?=
- =?utf-8?B?dGtvdm9GOU5ydVRFRDNud2thVkRFbVQyWWZocitOVnlxcFZvUnFjcDVwZ2hE?=
- =?utf-8?B?RUJibzhnZDJRbCtBM2JCV0V3Zzk0VEkwUU5LRGp0WDF3RFRLbUhZRGFicXBj?=
- =?utf-8?B?aEhDbElza2VvNFJzVWRtRjdQK3lUV2dzRDV4NStTVHFSVHpIU2V6eEVhd1Rl?=
- =?utf-8?B?MUV6TFJwbzFQZjJrdnRCZGlSVWR6RmppSzN5cytjbEVNZVBVSmZHZlduSjRY?=
- =?utf-8?B?eEhOeDdIdGUwNWRlV0FIWUpGZlg5a1pPbjZJWUdQVmVZMlYweE5kN2xyRGV3?=
- =?utf-8?B?eEtyWDNuTkZBWnI0eFQwN2tGY1ZZTXNKQVhaeDBGMk9JN2xYYmZ4ZlRJdWxK?=
- =?utf-8?B?a2pCbTJZYmIzZVFTYW92YUhNQS9TcnY1UEdITEtQYWVpaFpBemZuMVphdU5O?=
- =?utf-8?B?YWVzcWR3dHVSdjZKVGlKWVlTYTBKMGtBRkl6Yi9neWl4VlY4NW9QMjRRL3Ir?=
- =?utf-8?B?SlVkM0x5aWt5NURVQXYzbjlvUmZvUzBReWUzc3R2cUVxU0toVzFmVi94K094?=
- =?utf-8?B?ZUhWNFlMTlRxcm5idDA3b2dRMDhIbndqL2N6aFBxWXd1d3pKTFZiQTZDNWds?=
- =?utf-8?B?dnZmUHRBUnBKV01UdjZUeUlDUVRpQjFibUpCRDJoa0lUbGVmemRFTGF6NHQ1?=
- =?utf-8?B?ODYyak0vUjZib05OMkZlS3dUMmZzZGhMdllWNElabDM3bkpoY3RLalhMSVRE?=
- =?utf-8?B?SVBycVo3S3JyajE0b3pqS1Rucnk1aGFtWWZvRXMzUHNwUFYwZlVaeXpKMXlt?=
- =?utf-8?B?MDdOaWVLbkJFaXN1QTFVaWJjSnVLZFhOdC9xdnNVdTNQdERxUWtsZGdmRjBy?=
- =?utf-8?B?anY0eGxaL1lQVXZTMUlQM0RjNnM0dElZV0hoMmtlU2Z5L1cveVFvbjc0UGZN?=
- =?utf-8?B?N3ZXTTMxdFRpbGRmUi9DVXVuSmxRRm9ucWxndXJuTUpQVXh6Ui93L2lWeVZY?=
- =?utf-8?B?NUVSMkl4aTZjWnE4RjFjeUcrZVBqUGl0YW9tL0NISGxJZmJORzNobjRXam9j?=
- =?utf-8?B?ckpJelMrbUI1YXczNVZRV2NlYyt5YjNDbExCbG9RUTVVeS9NSm1ObTZiTmtB?=
- =?utf-8?B?YkRnUUN5RWFyL3M0SkdDMmxFeVczTmZWRTZ6MG95empUN3llZS9nM2Ivc3pq?=
- =?utf-8?B?d2VLdjQ0M252WTlsTUE2eStIV3NmUHhyd0VNWFV0QldwSGtGQTYvYXQzaC82?=
- =?utf-8?B?RkkyVW9YMDhOTnlxaVhaekhNU0hoZlJmcjhqOGcwcDBXd0lPemtqTjhTanQ3?=
- =?utf-8?B?QmJmZi9YZytxa3BJNmRVYlBhYllGZEZROXZNYUdVYkZSL0FHTE1nQ2VXN2o0?=
- =?utf-8?B?UGZwUWZvSThMUjFWaU50NzhlaFBvY1dRMy8zeG5GVUx4eU5pUnI3QWtqUThZ?=
- =?utf-8?B?bWRaVHk3L0owa0xqK3g2NVJYblF6NE44TmZWc2NlTUtQbE1FcE1ZdDYrejNH?=
- =?utf-8?B?UUJxNW5SaWV0OUlKWklEMVFuMFE3RmJ3aU96a01naXlSVjIxTFhMZnV3cDFF?=
- =?utf-8?B?YUlSR3VDcGRmUllJdHdBeG5XZUVkc2NYQnVzeGFQaUFRcVhCbDlhWmdWY2cx?=
- =?utf-8?B?ZEsxc0h3YlFIdGNVMW1wY3lNN0hpZmRBcmFIcnp1L1NEOXNZdG1WaG51amZt?=
- =?utf-8?B?WG9TcFE0U1hDRFRKdWVickFKZEVDR2cvZTRsYnBCek4yS2tGMGd0SmFDVzgy?=
- =?utf-8?B?Tk83bUlsSUMvWmNjUktLQnNUMW1YSGdSMElvZ1g1SFNpN2RoRGJQWldsa2Rs?=
- =?utf-8?B?ckhOMDh1amgrM09hd2lYRUF4eUR0dWl0NmZ1TlM0UEd0ZkxwWHIvT0JVdnd1?=
- =?utf-8?B?K2g3ZHFJSjc4TFVtY3QrNXErcE16THF0a1dDd2lDeFRnWk5ReklSU2dBc3Q4?=
- =?utf-8?B?VXExZ1E1WlFYeWwrQjJ2aTNvSWpHcTVDM0ZjdFdlbFZoUExUWjJ6THdHVTZO?=
- =?utf-8?B?V05JTW9PbzFQUi9sVGpGU0x1QzhCNzdYblZNSndCVmlrbVFldWZkNTNTRG9S?=
- =?utf-8?B?TDJMN1UrbmNMaCtvbWxBNmlBM1RQWTJrMkxyL0JMamNWK1ZRaVJIQT09?=
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: 16ee207c-d882-45a0-49df-08dec7d59150
-X-MS-Exchange-CrossTenant-AuthSource: DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2026 16:22:01.4854
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lz2tdGPdgSR3llAbP75jWb9xs33EXLwlqly9t6QAo6TjkOwDtLWWpChFjGL+Hpgf+CZ0qBI0gCqqJdK4eLOVAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWP189MB2829
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Bug Report] Elevated PMD nr_anon after running selftests
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+To: Nico Pache <npache@redhat.com>, Linux MM <linux-mm@kvack.org>,
+ linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ linux-cxl@vger.kernel.org
+Cc: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
+ Oscar Salvador <osalvador@suse.de>, Andrew Morton
+ <akpm@linux-foundation.org>, Zi Yan <ziy@nvidia.com>,
+ Matthew Brost <matthew.brost@intel.com>,
+ Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
+ Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
+ Ying Huang <ying.huang@linux.alibaba.com>,
+ Alistair Popple <apopple@nvidia.com>
+References: <c5401e8d-0b46-4cc0-88b3-f438d610e73b@redhat.com>
+ <7e7cbc60-e9c7-4a63-9d4b-4e8fcad7bfc0@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
+ ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
+ AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
+ 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
+ g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
+ ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
+ 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
+ /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
+ jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
+ DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
+ HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
+ 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
+ LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
+ 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
+ VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
+ /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
+ iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
+ 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
+ zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
+ azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
+ FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
+ sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
+ 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
+ EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
+ IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
+ 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
+ Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
+ sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
+ yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
+ 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
+ r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
+ 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
+ CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
+ qIws/H2t
+In-Reply-To: <7e7cbc60-e9c7-4a63-9d4b-4e8fcad7bfc0@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add documentation for the KCOV-Dataflow subsystem covering:
-- Prerequisites and Kconfig options
-- Per-module and per-directory instrumentation
-- Data collection example with buffer parsing
-- Ring buffer TLV record format
-- Safety properties
-- Ioctl interface reference
-- Compatibility with legacy KCOV
-- Rust module support via post-compilation pipeline
-- Fork/child process tracing pattern
+On 6/11/26 18:09, David Hildenbrand (Arm) wrote:
+> On 6/11/26 17:58, Nico Pache wrote:
+>> Hi,
+>>
+>> While testing my mTHP code I noticed that mm selftests caused an accounting error in
+>> /sys/kernel/mm/transparent_hugepage/hugepages-2048kB/stats/nr_anon
+>>
+>> At first I thought I might have caused a regression, but when retesting with 7.1-rc5 (without my code), the issue was still present.
+>>
+>> This issue occurs in two mm selftests:
+>> 1) hmm test
+>> 2) migration - private_anon_htlb test
+>>
+>> I spoke to David about this and he suggested the following diff which seems to have solved both issues.
+>>
+>> David would you like to send a formal patch or patches?
+>>
+>> Cheers,
+>> -- Nico
+>>
+>> Diff for (1)
+>>
+>> diff --git a/mm/memremap.c b/mm/memremap.c
+>> index 053842d45cb1..683a77dd679d 100644
+>> --- a/mm/memremap.c
+>> +++ b/mm/memremap.c
+>> @@ -425,6 +425,7 @@ void free_zone_device_folio(struct folio *folio)
+>>         mem_cgroup_uncharge(folio);
+>>
+>>         if (folio_test_anon(folio)) {
+>> +               mod_mthp_stat(folio_order(folio), MTHP_STAT_NR_ANON, -1);
+>>                 for (i = 0; i < nr; i++)
+>>                         __ClearPageAnonExclusive(folio_page(folio, i));
+>>         }
+> 
+> Wasn't there another issue with hugetlb?
 
-Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
----
- Documentation/dev-tools/index.rst              |   1 +
- Documentation/dev-tools/kcov-dataflow.rst      | 321 +++++++++++++++++++++++++
- tools/testing/selftests/kcov_dataflow/Makefile |   2 +-
- 3 files changed, 323 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
-index 59cbb77b33ff..541c58cc65ea 100644
---- a/Documentation/dev-tools/index.rst
-+++ b/Documentation/dev-tools/index.rst
-@@ -24,6 +24,7 @@ Documentation/process/debugging/index.rst
-    context-analysis
-    sparse
-    kcov
-+   kcov-dataflow
-    gcov
-    kasan
-    kmsan
-diff --git a/Documentation/dev-tools/kcov-dataflow.rst b/Documentation/dev-tools/kcov-dataflow.rst
-new file mode 100644
-index 000000000000..603c83946d12
---- /dev/null
-+++ b/Documentation/dev-tools/kcov-dataflow.rst
-@@ -0,0 +1,321 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+KCOV-Dataflow: function argument and return value extraction
-+=============================================================
-+
-+KCOV-Dataflow captures function arguments and return values, including
-+automatic struct field decomposition, at instrumented kernel function
-+boundaries. It provides per-task, lock-free ring buffers accessible via
-+``mmap()``, enabling data-flow-aware fuzzing and post-mortem contract
-+verification.
-+
-+Unlike KCOV's ``trace-pc`` which reports *which* code executed,
-+KCOV-Dataflow reports *what values* were passed and returned. This is
-+a completely separate device from ``/sys/kernel/debug/kcov``.
-+
-+Prerequisites
-+-------------
-+
-+KCOV-Dataflow requires Clang/LLVM with the ``trace-args`` and
-+``trace-ret`` SanitizerCoverage extensions. Standard (unpatched)
-+compilers will not expose these Kconfig options.
-+
-+To enable KCOV-Dataflow, configure the kernel with::
-+
-+        CONFIG_KCOV=y
-+        CONFIG_KCOV_DATAFLOW_ARGS=y
-+        CONFIG_KCOV_DATAFLOW_RET=y
-+
-+Optional: instrument the entire kernel (significant overhead)::
-+
-+        CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL=y
-+
-+Coverage data becomes accessible once debugfs is mounted::
-+
-+        mount -t debugfs none /sys/kernel/debug
-+
-+Per-module instrumentation
-+--------------------------
-+
-+To instrument a specific module, add to its Makefile::
-+
-+        KCOV_DATAFLOW_my_module.o := y
-+
-+For example, to instrument the Android binder driver::
-+
-+        # drivers/android/Makefile
-+        KCOV_DATAFLOW_binder.o := y
-+        KCOV_DATAFLOW_binder_alloc.o := y
-+
-+To instrument an entire directory, set the variable without a filename::
-+
-+        # fs/Makefile
-+        KCOV_DATAFLOW := y
-+
-+The build system automatically adds the required compiler flags
-+(``-fsanitize-coverage=trace-args,trace-ret``). Debug info is provided
-+by ``CONFIG_DEBUG_INFO`` which is a Kconfig dependency.
-+
-+Data collection
-+---------------
-+
-+The following program demonstrates how to collect function argument and
-+return value data for a single syscall:
-+
-+.. code-block:: c
-+
-+    #include <stdio.h>
-+    #include <stdint.h>
-+    #include <stdlib.h>
-+    #include <sys/types.h>
-+    #include <sys/ioctl.h>
-+    #include <sys/mman.h>
-+    #include <unistd.h>
-+    #include <fcntl.h>
-+
-+    #define KCOV_DF_INIT_TRACE  _IOR('d', 1, unsigned long)
-+    #define KCOV_DF_ENABLE      _IO('d', 100)
-+    #define KCOV_DF_DISABLE     _IO('d', 101)
-+    #define BUF_SIZE            (1 << 20)  /* 1M words = 8MB */
-+
-+    int main(void)
-+    {
-+        int fd;
-+        uint64_t *buf, n, i;
-+
-+        fd = open("/sys/kernel/debug/kcov_dataflow", O_RDWR);
-+        if (fd == -1)
-+            perror("open"), exit(1);
-+
-+        /* Allocate buffer (size in u64 words). */
-+        if (ioctl(fd, KCOV_DF_INIT_TRACE, BUF_SIZE))
-+            perror("ioctl(INIT)"), exit(1);
-+
-+        /* Map the buffer into user space. */
-+        buf = (uint64_t *)mmap(NULL, BUF_SIZE * sizeof(uint64_t),
-+                               PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+        if (buf == MAP_FAILED)
-+            perror("mmap"), exit(1);
-+
-+        /* Enable data-flow collection for this task. */
-+        if (ioctl(fd, KCOV_DF_ENABLE, 0))
-+            perror("ioctl(ENABLE)"), exit(1);
-+
-+        /* Reset counter. */
-+        __atomic_store_n(&buf[0], 0, __ATOMIC_RELAXED);
-+
-+        /* === Trigger syscall(s) here === */
-+        read(-1, NULL, 0);
-+
-+        /* Read how many words were written. */
-+        n = __atomic_load_n(&buf[0], __ATOMIC_RELAXED);
-+
-+        /* Parse TLV records. */
-+        i = 1;
-+        while (i + 3 < n) {
-+            uint64_t type_seq = buf[i];
-+            uint64_t pc       = buf[i + 1];
-+            uint64_t meta     = buf[i + 2];
-+            uint32_t type     = (type_seq >> 28) & 0xF;
-+            uint32_t num_vals = (type_seq >> 24) & 0xF;
-+            uint32_t seq      = type_seq & 0x00FFFFFF;
-+            uint32_t arg_idx  = (meta >> 56) & 0xFF;
-+            uint32_t size     = (meta >> 48) & 0xFF;
-+
-+            if (type_seq >> 32 || (type != 0xE && type != 0xF)) {
-+                i++;
-+                continue;
-+            }
-+            if (!num_vals)
-+                num_vals = 1;
-+
-+            printf("[%s] seq=%u pc=0x%lx arg_idx=%u size=%u val=0x%lx\n",
-+                   type == 0xE ? "ENTRY" : "RET",
-+                   seq, pc, arg_idx, size, buf[i + 3]);
-+            i += 3 + num_vals;
-+        }
-+
-+        if (ioctl(fd, KCOV_DF_DISABLE, 0))
-+            perror("ioctl(DISABLE)"), exit(1);
-+
-+        munmap(buf, BUF_SIZE * sizeof(uint64_t));
-+        close(fd);
-+        return 0;
-+    }
-+
-+Ring buffer format
-+------------------
-+
-+The buffer is an array of ``u64`` words::
-+
-+        buf[0]: atomic counter -- total words written
-+
-+Each record occupies 3 + N words:
-+
-+.. list-table::
-+   :header-rows: 1
-+
-+   * - Offset
-+     - Field
-+     - Description
-+   * - 0
-+     - type_and_seq
-+     - bits[31:28] = 0xE (entry) or 0xF (return), bits[27:24] = num_vals,
-+       bits[23:0] = sequence number
-+   * - 1
-+     - pc
-+     - Instrumented function address
-+   * - 2
-+     - meta
-+     - bits[63:56] = arg_idx (0 for return), bits[55:48] = size in bytes,
-+       bits[47:0] = raw pointer value
-+   * - 3..N
-+     - field_val[0..N]
-+     - Struct field values or single scalar
-+
-+Magic values:
-+
-+- ``0xBADADD85``: field read failed (pointer was invalid/freed/poisoned)
-+
-+Safety
-+------
-+
-+- Callbacks are ``notrace``, ``__no_sanitize_coverage``, ``noinline``
-+  to prevent recursion.
-+- All pointer reads use ``copy_from_kernel_nofault()`` -- survives
-+  freed, poisoned, or unmapped memory.
-+- An ``in_task()`` guard rejects calls from hardirq/softirq/NMI context,
-+  preventing reentrant buffer corruption.
-+- No ``printk`` or allocation in the data path.
-+- When not enabled for a task, overhead is a single boolean check.
-+
-+Ioctl interface
-+---------------
-+
-+.. list-table::
-+   :header-rows: 1
-+
-+   * - Command
-+     - Value
-+     - Description
-+   * - KCOV_DF_INIT_TRACK
-+     - ``_IOR('d', 1, unsigned long)``
-+     - Allocate buffer (size in u64 words)
-+   * - KCOV_DF_ENABLE
-+     - ``_IO('d', 100)``
-+     - Start collection for current task
-+   * - KCOV_DF_DISABLE
-+     - ``_IO('d', 101)``
-+     - Stop collection
-+
-+Compatibility
-+-------------
-+
-+KCOV-Dataflow is completely independent from legacy KCOV:
-+
-+- Separate device: ``/sys/kernel/debug/kcov_dataflow``
-+- Separate ioctl namespace (``'d'`` vs ``'c'``)
-+- Separate per-task buffer
-+- Both can be used simultaneously without interference
-+- syzkaller and other KCOV users are unaffected
-+
-+Rust module support
-+-------------------
-+
-+Rust kernel modules are supported via a post-compilation pipeline::
-+
-+        rustc --emit=llvm-ir -g module.rs
-+        opt -passes=sancov-module \
-+            -sanitizer-coverage-trace-args \
-+            -sanitizer-coverage-trace-ret module.ll -S -o module_inst.ll
-+        llc -filetype=obj module_inst.ll -o module.o
-+
-+Selftests
-+---------
-+
-+Automated tests and visualization tools are in
-+``tools/testing/selftests/kcov_dataflow/``::
-+
-+        # Automated ioctl interface test (TAP output):
-+        make -C tools/testing/selftests/kcov_dataflow
-+        vng --user root --exec \
-+          tools/testing/selftests/kcov_dataflow/user_ioctl/user_ioctl
-+
-+        # Load a test module and view captured records:
-+        make LLVM=1 CC=clang M=tools/testing/selftests/kcov_dataflow/eight_args_c modules
-+        vng --user root --exec \
-+          "python3 tools/testing/selftests/kcov_dataflow/trigger-view.py \
-+            eight_args_c -C 8 --ko \
-+            tools/testing/selftests/kcov_dataflow/eight_args_c/eight_args_c.ko"
-+
-+        # Binderfs ioctl capture test (requires CONFIG_ANDROID_BINDER_IPC):
-+        make -C tools/testing/selftests/kcov_dataflow/binderfs
-+        vng --user root --exec \
-+          tools/testing/selftests/kcov_dataflow/binderfs/binderfs_test
-+
-+See ``tools/testing/selftests/kcov_dataflow/README.rst`` for details.
-+
-+Tracing child processes
-+-----------------------
-+
-+KCOV-Dataflow is per-task: after ``fork()``, the child does not inherit
-+the enabled state. To trace child processes, re-enable on the inherited
-+file descriptor in the child before ``exec()``. The ``mmap``'d buffer is
-+shared (``MAP_SHARED``), so both parent and child write to the same ring
-+buffer atomically.
-+
-+.. code-block:: c
-+
-+    #include <stdio.h>
-+    #include <stdint.h>
-+    #include <stdlib.h>
-+    #include <sys/ioctl.h>
-+    #include <sys/mman.h>
-+    #include <sys/wait.h>
-+    #include <unistd.h>
-+    #include <fcntl.h>
-+
-+    #define KCOV_DF_INIT_TRACE  _IOR('d', 1, unsigned long)
-+    #define KCOV_DF_ENABLE      _IO('d', 100)
-+    #define KCOV_DF_DISABLE     _IO('d', 101)
-+    #define BUF_SIZE            (1 << 20)
-+
-+    int main(int argc, char **argv)
-+    {
-+        int fd = open("/sys/kernel/debug/kcov_dataflow", O_RDWR);
-+        ioctl(fd, KCOV_DF_INIT_TRACE, BUF_SIZE);
-+        uint64_t *buf = mmap(NULL, BUF_SIZE * 8,
-+                             PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+
-+        /* Enable for parent task. */
-+        ioctl(fd, KCOV_DF_ENABLE, 0);
-+        __atomic_store_n(&buf[0], 0, __ATOMIC_RELAXED);
-+
-+        pid_t pid = fork();
-+        if (pid == 0) {
-+            /*
-+             * Child: re-enable on inherited fd.
-+             * The shared mmap buffer receives records from both tasks.
-+             */
-+            ioctl(fd, KCOV_DF_ENABLE, 0);
-+            execvp(argv[1], &argv[1]);
-+            _exit(1);
-+        }
-+
-+        waitpid(pid, NULL, 0);
-+        ioctl(fd, KCOV_DF_DISABLE, 0);
-+
-+        uint64_t n = __atomic_load_n(&buf[0], __ATOMIC_RELAXED);
-+        printf("Captured %lu words from parent + child\n", n);
-+
-+        munmap(buf, BUF_SIZE * 8);
-+        close(fd);
-+        return 0;
-+    }
-+
-+Note: the child's ``ioctl(fd, KCOV_DF_ENABLE)`` will fail if the parent
-+has not yet called ``KCOV_DF_DISABLE``, because only one task can be
-+associated with a descriptor at a time. For true multi-process tracing,
-+open a separate ``kcov_dataflow`` fd per child, or disable in the parent
-+before the child enables (as shown above -- the parent is blocked in
-+``waitpid`` so it generates no records during that time anyway).
-diff --git a/tools/testing/selftests/kcov_dataflow/Makefile b/tools/testing/selftests/kcov_dataflow/Makefile
-index 6412c90edfa1..9691b41ffd3e 100644
---- a/tools/testing/selftests/kcov_dataflow/Makefile
-+++ b/tools/testing/selftests/kcov_dataflow/Makefile
-@@ -1,4 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
- TEST_GEN_PROGS := user_ioctl/user_ioctl
--TEST_PROGS := run_eight_args_c.sh run_rust_ffi_contract.sh
-+TEST_PROGS := run_eight_args_c.sh run_eight_args_rust.sh run_rust_ffi_contract.sh
- include ../lib.mk
+Just realized that you sent this, but somehow my mail client got confused and
+hid it.
 
 -- 
-2.43.0
+Cheers,
 
+David
