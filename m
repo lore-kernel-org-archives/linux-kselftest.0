@@ -1,148 +1,275 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3055417A2EA
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 02:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E36E3126CA
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 02:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781146046; cv=none; b=TvNZMmIiMTijcYyiocrWcHufIyevXM7MRebXQMiO7rLoRG7SROJJIux3oWBPCGk1zEKdR9KVsOfdVDXPSmXm51u9xBK6OzgYRysNAeoy2xRVy6qUWIoAb8xMrzaTIBCbAiZZYU6UEjIM5efJ1l+0H9UMRtSDQG1uw8SseImSjjY=
+	t=1781146800; cv=none; b=JAGEXxPKC8mvleSjzpFRyJCLwkyZhF2Vw7EMEPCKxTOSg43ufoz3/cDbyIaJ24OwfQy6UWJN6Rv0qMS03sWLiocryv2SytAYUoeu5hs352AZRi8/vQpvPJXysSK8zf7IFqkyeDu7Zl1ej2jYjy+xl5j9yQJuscz6MWr0rz7O3Sg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781146046; c=relaxed/simple;
-	bh=mQEWrckvm4HphmuBIl1YfXsnn6HlZaXDSfu1TJ+63tM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gO2kdJxauw1DG4ztoHy4UmH2AgtrIyefdtm720Wp9kpmgkLlQ5ybbw13dAaf/ITGqQuHS5BPQ5PyHs8BijUAeH0TOWh26zAtWO9C3TdtTL5vR3mINKBFBm+jTkejmgYjgo/690OfvZp6CYMtduo6/lngBo1U8mtrypr0trr/kIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=StQ1nVUw; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781146800; c=relaxed/simple;
+	bh=VXQtPS98erG3uINeejISc2Pvz0T6AF9YAdqN+flVs5c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=vBfJ+OYrIm+iknorXGUWcaHHxKPiwoVOPuIqb2dHL1Bjq9luqJHvDTgkl52EGneayzVLdzzy1NCqmQu3fQSBj0ZAwQ0Ri/gV82n4XVxh8DQTS08Z8S28XCodXe4BNhnas21Tn+IlxHVOk64l9fxh3dFOGHegLFKn6EQbh2JVdeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m0rFJIjS; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="StQ1nVUw"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781146042;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S9EUXg/9jzkqyqp4PuuzqslZeYUCH3d8eRt1rqr7ueg=;
-	b=StQ1nVUwjNoPoPBt2M2i15wP5Ek9v27AAi6hKq5nJtqx+P/Y5YzF+BhppVP0KqnhjsOOEF
-	6GzyjMsJ4Og+dUrBSEqbWdVjdQR3rTMeFZqiq1+a4SI/LbqIkunWWxVjm7lT375JDbgKvV
-	SY2/Fo8mnot9CLLB/zJNFMjWl1paovQ=
-From: Lance Yang <lance.yang@linux.dev>
-To: baolin.wang@linux.alibaba.com
-Cc: lance.yang@linux.dev,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	hughd@google.com,
-	willy@infradead.org,
-	ziy@nvidia.com,
-	liam@infradead.org,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	linux-mm@kvack.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m0rFJIjS"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8423efad617so4273461b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 19:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781146798; x=1781751598; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VXQtPS98erG3uINeejISc2Pvz0T6AF9YAdqN+flVs5c=;
+        b=m0rFJIjSMq5RE6Yz9DcsY+d6M1PU0s/39VNmzoSadCt59dLViccucbLslFDhvR1gLW
+         sSh8hne7QACc+/r+2xoe4e/nwpKEDmupcIwNf+L1C77taf6uX+lKsqgNS1u0yTmntv1g
+         Gcf+nH+Qaub0ObVSNBFt4dfbwXSh4HPU34ZxpTCrCe0Va2f2PRr2omjc6ghpof4VIoTb
+         iYM38z1KRnJfK4mgmSGYt9pjb/NuAGSn63ogBcviLRnZAArnqfUyoxeHIzX4/HUF/QlY
+         Iy9oP04AW/uaQawgzcFGvpDQ5Asmam891apIOAVaRzSyETGFyB9fpEX7sbw+je7H1/yc
+         ugOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781146798; x=1781751598;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=VXQtPS98erG3uINeejISc2Pvz0T6AF9YAdqN+flVs5c=;
+        b=ZWzQj61QZmP9DuyLQnc4u6eXK5WIRy2Lih3oJyXSDGgjHmJK5DInQvnSLZ1el+sETv
+         Vwqusc5Ubb3Kd2vjMCbuX+k1AyHGhrkyc7LqWKnKLvs5ePV1W9impBMZKl0qm/DJI1nb
+         Wm4jZ4i9ESBa3vAkRgiz2RrWcGYWzbnexkd70aKJzbFuGxcR6ZVNDJK8n8P1gWBv/6kX
+         hKhiATpvZsG4Ciyx0TqyWNBJwoUViIxfRdbSkgrqKKFhKTU4NAfr9u3Q0HbemX077AOy
+         qps8KWKuBllSB7/zluf/ihJ1KWbwsH8wSkk9MSPAzwiD0REp5CLBlH3fXwu3wWWlXX4u
+         8OAw==
+X-Forwarded-Encrypted: i=1; AFNElJ8q36T/oMWeiD53PZz29ZZrzb2z5l+lZmNmtQaaUD3nNbqgHI8ZRnNPGeftO4eH3r2pDFMMad/+rDIBZYXiicU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTZS4YHO9m5l/93Ps3ldTsI9bV15xSPWTAiXd/fkHEOWcfQ5DA
+	YsJx1zTa6d4sYLW6g7xdEA85zqHHPBYxuTPr4Ih87NsKo3Iswo05H4JH
+X-Gm-Gg: Acq92OFhbrIL29xVhSmxplNF2tU1g3O7WKmp3EgDLCBe4ExNgAiwJGwF5/ZyZvC8kFv
+	BV8AwSW+Fx0I4iu9tsN/ADEEmCc3X1v3G8YZr42JRPDbxDxn5JDFUDLkd5yz/hAk4QhNctD51/7
+	tDDkBGT+2k5k0ny+5R364gyMURS/WG4vjYrR4tlKwjq6hUUvKVNq9miPR3Ey99XeBKba35Fal0F
+	PQeW+y+RFpsTqWZYee+438NDuTcDnEwD/3aR8oS4ztcg8H95TGZYmPc/2Nctkj2SAetdl2/DXIE
+	cuJScAFnNdVQu2qHQ49dzGh4baWaMQF+QA54eQLQ0HWKUT7q1hWSCjyg8dRTQ5FD2GujH05KGK6
+	dVN9hcrU/pYn8/2c/uLNypyRVotr9QPx7QlOqk2vQ4ShbdihMakNsJbcf091TOcoNMuMs4tC/pL
+	qGAym42PgJw7+8Xo1HoD9AOaIFZQxlwHg+DzLo4Q==
+X-Received: by 2002:a05:6a00:3988:b0:82c:ebae:3cb with SMTP id d2e1a72fcca58-84336df67c2mr793546b3a.43.1781146798371;
+        Wed, 10 Jun 2026 19:59:58 -0700 (PDT)
+Received: from dev ([163.43.103.131])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84337beaab7sm264039b3a.25.2026.06.10.19.59.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 19:59:57 -0700 (PDT)
+From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+To: andrea.mayer@uniroma2.it
+Cc: Yuya Kusakabe <yuya.kusakabe@gmail.com>,
+	davem@davemloft.net,
+	edumazet@google.com,
+	dsahern@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	justin.iurman@gmail.com,
+	shuah@kernel.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 04/11] mm: khugepaged: add shmem mTHP collapse support
-Date: Thu, 11 Jun 2026 10:47:06 +0800
-Message-Id: <20260611024706.95748-1-lance.yang@linux.dev>
-In-Reply-To: <0e431c06-b80e-4b4b-aeca-b9a0eacb6252@linux.alibaba.com>
-References: <0e431c06-b80e-4b4b-aeca-b9a0eacb6252@linux.alibaba.com>
+	linux-doc@vger.kernel.org,
+	stefano.salsano@uniroma2.it,
+	ahabdels@cisco.com
+Subject: Re: [PATCH v2 2/7] seg6: add End.M.GTP4.E behavior
+Date: Thu, 11 Jun 2026 11:59:46 +0900
+Message-ID: <20260611025946.1065565-1-yuya.kusakabe@gmail.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260527030907.52bc613c27be26d6c1d59e36@uniroma2.it>
+References: <20260527030907.52bc613c27be26d6c1d59e36@uniroma2.it>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+Hi Andrea,
 
-On Thu, Jun 11, 2026 at 08:42:28AM +0800, Baolin Wang wrote:
+Thank you for the detailed review. I intend to address every point
+below in the rework agreed in the cover letter thread (one RFC series
+per behavior, on a new lwtunnel encap type with its own SEG6_MOBILE_*
+attribute namespace); answers to your questions inline.
+
+> There are three issues with the End.M.GTP4.E UAPI behavior:
 >
->
->On 6/10/26 8:44 PM, Lance Yang wrote:
->> 
->> On Wed, Jun 10, 2026 at 06:29:12PM +0800, Baolin Wang wrote:
->> [...]
->>> @@ -1512,8 +1517,12 @@ static enum scan_result mthp_collapse(struct mm_struct *mm,
->>> 			enum scan_result ret;
->>>
->>> 			collapse_address = address + offset * PAGE_SIZE;
->>> -			ret = collapse_huge_page(mm, collapse_address, referenced,
->>> -						 unmapped, cc, order);
->>> +			if (file)
->>> +				ret = collapse_file(mm, collapse_address, file,
->>> +						start + offset, cc, order);
->>> +			else
->>> +				ret = collapse_huge_page(mm, collapse_address,
->>> +						referenced, unmapped, cc, order);
->>>
->>> 			switch (ret) {
->>> 			/* Cases where we continue to next collapse candidate */
->>> @@ -1521,6 +1530,7 @@ static enum scan_result mthp_collapse(struct mm_struct *mm,
->>> 				collapsed += nr_ptes;
->>> 				fallthrough;
->>> 			case SCAN_PTE_MAPPED_HUGEPAGE:
->> 
->> Looks like SCAN_PTE_MAPPED_HUGEPAGE from collapse_file() get lost for
->> the PMD-order case.
->> 
->> Previously, collapse_file() returned it straight back to
->> collapse_single_pmd(), so we would run try_collapse_pte_mapped_thp().
->> 
->> Now it hits mthp_collapse() fitst, and that case just goes to
->> next_offset ...
->
->This is the expected behavior. SCAN_PTE_MAPPED_HUGEPAGE is only returned 
->when the MADV_COLLAPSE collapse succeeds. In this case, if 
->collapse_file() still returns SCAN_PTE_MAPPED_HUGEPAGE, then 
->mthp_collapse() will ultimately return SCAN_FAIL (because collapsed == 
->0), even though the MADV_COLLAPSE collapse has already succeeded.
->
->Additionally, the SCAN_PTE_MAPPED_HUGEPAGE logic is already handled in 
->collapse_scan_file(), see:
->
->result = mthp_collapse(mm, file, start, addr, 0, 0, cc, enabled_orders);
->if (result == SCAN_SUCCEED && !cc->is_khugepaged) {
->         /* If MADV_COLLAPSE, adjust result to call 
->collapse_pte_mapped_thp(). */
->         result = SCAN_PTE_MAPPED_HUGEPAGE;
->}
+> (1) In the example, v4_mask_len = 32 and the src value is required but not
+> used.
+[...]
+> (2) With v4_mask_len < 32, the low bits of the IPv4 SA that the inbound
+> packet does not carry come from src.
+[...]
+> (3) With v4_mask_len < 32, the low bits of the IPv4 DA that the SID does
+> not carry are set to zero.
+[...]
+> Together with the IPv4 SA behavior in (2), does it make sense to support
+> v4_mask_len values other than 32?
 
-Right, I agree for that case. The one I meant is a bit different.
+Agreed on all three, and no, I see no practical use for v4_mask_len
+values other than 32. I will drop both v4_mask_len and the src
+template from End.M.GTP4.E: the next version will recover the full
+32-bit IPv4 DA from the SID right after the locator, and the full
+32-bit IPv4 SA from the inbound IPv6 SA at bit offset
+v6_src_prefix_len (default 64), per RFC 9433 Figures 9 and 10. That
+leaves no required attribute whose value can be unused or partially
+discarded.
 
-I was looking at this earlier return from collapse_file():
+> This check cannot trigger at runtime.
+> seg6_mobile_v4_validate() already rejects v6_src_prefix_len > 96 at install
+> time, and the default (64) leaves p_bits at most 96.
+> If kept for defense in depth, or if you plan to reuse this helper
+> elsewhere, the silent return of 0 produces an outgoing IPv4 packet with SA
+> = 0.0.0.0 without any error.
+> Nit: the (unsigned int) cast on p_bits can be removed.
 
-		if (is_pmd_order(folio_order(folio))) {
-			result = SCAN_PTE_MAPPED_HUGEPAGE;
-			goto out_unlock;
-		}
+Will fix: the range will be enforced only at build_state time with an
+extack message, so the data path helper cannot fail silently, and the
+cast will go away.
 
-Old code let it bubble back up:
+> seg6_mobile_skb_prefix_bits() reads the matched route prefix length from
+> the FIB on every packet. [...]
+> Caching it in slwt->mobile_info at validate would let the data path read
+> minfo->locator_bits directly.
+[...]
+> The operator cannot configure the IPv4 DA to start at a position different
+> from where the route prefix ends. Is this intentional?
 
-collapse_single_pmd()
-  -> collapse_scan_file()
-    -> collapse_file()
-      -> SCAN_PTE_MAPPED_HUGEPAGE
-    -> SCAN_PTE_MAPPED_HUGEPAGE
-  -> try_collapse_pte_mapped_thp()
+It was, but it does not survive your first point: deriving the
+locator length from the matched route prefix couples the SID layout
+to the routing table and costs a per-packet FIB read. I will replace
+it with an explicit locator-length attribute (sr_prefix_len, validated
+at build_state time), which removes the per-packet rcu/container_of
+walk and the 128 fallback, and also decouples the IPv4 DA position
+from the route prefix, so one route can cover SIDs whose locator is
+longer than the route prefix.
 
-Not limited to !is_khugepaged. collapse_single_pmd() only checked the
-result, then passed !cc->is_khugepaged as install_pmd.
+> Nit: skb_push() returns void * so the explicit casts on two of the three
+> calls are unnecessary.
 
-Now the same return goes through mthp_collapse() first:
+Will fix.
 
-collapse_single_pmd()
-  -> collapse_scan_file()
-    -> mthp_collapse()
-      -> collapse_file()
-        -> SCAN_PTE_MAPPED_HUGEPAGE
-      -> goto next_offset
+> orig_dst may be NULL or stale. This is an NF_HOOK finish callback, and
+> Netfilter processing during NF_INET_PRE_ROUTING can drop or replace the
+> skb dst. skb->cb is not guaranteed to be untouched (IPCB/IP6CB aliases it).
 
-So collapse_single_pmd() never sees SCAN_PTE_MAPPED_HUGEPAGE for this
-case anymore. Hopefully Im not missing something here :)
+As agreed in the cover letter thread, the initial per-behavior series
+will drop the NF_HOOK split entirely: each behavior becomes a single
+input function with no skb->cb context and no finish callback. To be
+revisited on top of your seg6 netfilter fix.
 
-Cheers, Lance
+> Same four-sizeof sum as ovhd above. Move ovhd to function scope to avoid
+> the repetition.
+
+Will fix; with iptunnel_handle_offloads() below, the GSO-vs-MTU check
+itself goes away, leaving a single worst-case skb_cow_head().
+
+> input_action_end_m_gtp4_e_finish() never calls iptunnel_handle_offloads(),
+> so GSO of the outer UDP tunnel cannot operate correctly. The call should
+> go between skb_cow_head() and seg6_mobile_push_gtpu().
+[...]
+> The fix needs end-to-end testing to confirm it works correctly.
+
+Will do exactly as you describe. I will also add a GSO case to the
+per-behavior selftest so the fix gets end-to-end coverage.
+
+> The caller already reserves worst-case headroom, so the skb_cow_head()
+> calls inside seg6_mobile_push_gtpu() are always no-ops. Could they be
+> removed?
+
+Yes, will remove them and make the helper non-failing; the caller
+reserves the worst case once.
+
+> Does this mirror the drivers/net/gtp.c data-path convention
+> (src == dst == 2152)?
+
+Yes -- drivers/net/gtp.c transmits from its bound socket port, so its
+packets also leave with src == dst == 2152.
+
+> The comment says the packet "traverses NF_INET_LOCAL_OUT", but dst_output()
+> goes through NF_INET_POST_ROUTING only. [...]
+> IMHO, gateways that do protocol transformation can set rp_filter=0. Using
+> ip_route_input() + dst_input() and documenting the rp_filter requirement is
+> preferable to silently bypassing the FORWARD chain.
+
+Agreed; will switch to ip_route_input() + dst_input() so the rebuilt
+IPv4 packet traverses NF_INET_PRE_ROUTING and NF_INET_FORWARD like
+the other behaviors, and will document the rp_filter=0 requirement on
+the ingress device (code comment and the iproute2 man page).
+
+> The anonymous { } scope block should be avoided. rt and fl4 should be
+> declared at the function top. The same pattern appears in other patches
+> of this series.
+[...]
+> Variable declarations are not in reverse Christmas tree order. Same issue
+> in the other functions introduced by this patch.
+
+Will fix both across the series, splitting the egress half into its
+own helper with all declarations at function top.
+
+> This pskb_may_pull pulls the OUTER IPv6 header, not the inner T-PDU.
+> BAD_INNER is the wrong drop reason here. [...]
+> Same BAD_INNER misuse: ipv6_skip_exthdr() is parsing the OUTER IPv6
+> extension headers [...]
+
+Right. Per the cover letter thread the MUP-specific drop reasons will
+be left out of the initial per-behavior series; the behaviors will
+adopt the SRv6-level reasons from your prep series once it lands, and
+BAD_SID / BAD_GTPU will return with correct scoping at that point.
+
+> frag_off is not checked after ipv6_skip_exthdr(). [...] Adding
+> "if (frag_off) goto drop;" after the ipv6_skip_exthdr() call would handle
+> this.
+
+Will add the check, plus a fragmented-input case to the selftests as
+discussed in the cover letter thread.
+
+> Same seg6_mobile_get_validated_srh() bug described in my reply to patch 1.
+
+Will fix as discussed there: the helper will return a three-state
+result (absent / present / malformed) so an absent SRH is
+distinguishable from a malformed one, with HMAC validated whenever an
+SRH is present.
+
+> RFC 6040 Section 1.1 scopes the document to ECN field processing in
+> IP-in-IP tunnels. The patch cites it for DSCP and Hop Limit/TTL on a
+> protocol conversion (the IPv6 outer is popped, not encapsulated). Could
+> you clarify the RFC 6040 reference?
+
+You are right, the citation was over-scoped. I will drop the
+reference and describe the DSCP/ECN and Hop Limit to TTL propagation
+in plain words.
+
+> The inner_nfproto-based size selection appears several times:
+> pskb_may_pull, skb->protocol, and skb_set_transport_header. Computing a
+> local inner_hdr_len once inside the switch would replace all three. Same
+> pattern in every other behavior.
+
+Will fix in every behavior.
+
+> parse_nla_mobile_pdu_type() accepts the full 4-bit range 0..15, but the
+> function comment in seg6_mobile_push_gtpu() notes that only 0 (downlink)
+> and 1 (uplink) have a defined meaning.
+> RFC 9433 describes the E behaviors in the downlink packet flows (Section
+> 5.3.1.2 and 5.3.2.2). How are PDU Type 1 (uplink) and the reserved values
+> supposed to be used with the GTP*.E behaviors?
+> UAPI cannot be tightened after merge. IMHO, if a type is not supported
+> yet, the parser should reject it and notify userspace.
+
+Agreed. RFC 9433 describes End.M.GTP4.E only in the downlink toward
+the gNB (Sections 6.6 and 5.3.2.2), so the End.M.GTP4.E series will
+accept only PDU Type 0 (DL) and reject everything else with an
+extack message. PDU Type 1 (UL) belongs to End.M.GTP6.E, which
+regenerates uplink GTP-U in the drop-in mode (Section 5.4: "There is
+one instance of the End.M.GTP6.E SID per PDU type"), so it will be
+enabled by that series; the reserved values 2..15 stay rejected
+there too.
+
+Thanks,
+Yuya
