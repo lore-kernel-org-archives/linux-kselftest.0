@@ -1,109 +1,240 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from flow-a6-smtp.messagingengine.com (flow-a6-smtp.messagingengine.com [103.168.172.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753B442B732;
-	Thu, 11 Jun 2026 18:53:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF53638333B;
+	Thu, 11 Jun 2026 18:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781204042; cv=none; b=Wu8VbGq9LUhTheeofMlY1dikGHf8wqphSsamBLMS9acd+CYk43mSerI8TU7IpNwX/pvbgyY1i1RbiTYEoHtj4T/fSpo3HnZccUrQ0X5DXCn6irtEvyHNZbSDAAeOyilSnLUntY9uCmtWTQSaM2ZpKfsyM8SOuJq9NVp3QTdtUso=
+	t=1781204131; cv=none; b=NYPArHM7xJjC3wZ5DeoZdKc7KCnOZu2WYdQ9fEqdTIN1NRYYqIwcShxO6EQlKRg5WSVs5dTjzdXfGYmK9f/08ZjWrB+BVY0ASDYe2dqeGDbCeEbcWyMy7Rlw5FradKUWsQ9lJWBmg+rB/Xigojx8GCwFx86G9Wj2oBrnaQzm9Qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781204042; c=relaxed/simple;
-	bh=lyoYDo723ITo2kQarUaC98MkKgPUszT7d+2KOjiMLk4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qF9scqKBGEVKdCaj1DU+otjZoe/dRm25p4ozLadu8w7lyHkYY50p6CvE31Om6aJMH+8RPT29LwmbhWNWSaxFRTIqmyrF5yMGKnoXKFVp4+bP09HEb2+fANE54/0TGePkiWjpIKd9Qm8gCguwR+JGG0Ct5mTa+nMlM9oFJBzvt/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LZhqOn5I; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781204131; c=relaxed/simple;
+	bh=hPOHqYG+iRF3Ic0VkRMBbLpS+z9IKrHddDy3pi2hdIc=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=oyLWxKrD8K3xv2yOeJcMIQzsqZZtGfak581TXN5XCmX8y05DmfX0DDOb09WBbrOZxRJ2WFufJ6cj7XUom3BLhTz9zSjHGUf20hledZqs2nhN056p4a9DyNszzMsEaBWaCVKIae01iXo05DYRAcPwAVOn6yoHkFSIGn7ltehsdcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=johnericson.me; spf=pass smtp.mailfrom=johnericson.me; dkim=pass (2048-bit key) header.d=johnericson.me header.i=@johnericson.me header.b=lqoDUw/k; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SxhnnWMs; arc=none smtp.client-ip=103.168.172.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=johnericson.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=johnericson.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LZhqOn5I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 646691F000E9;
-	Thu, 11 Jun 2026 18:53:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781204038;
-	bh=hjj5mBR6SBQTds2P7Qn6eN4rJ9W11rwc7SbsUviVMX4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=LZhqOn5Ilvsw6JsbgErLBhERiOd6NBo2fFvjxs/lQnIfx4ncu625nN6xMP+xMZc+K
-	 RKHlgAKXV/ErOS7HxpVDLqKIIIyrqe8Mjx6Ogv3oPcRgjNwTiuN1mIYaEB3H3I5sa9
-	 IUr5fHpJsBfF9CHjZ0RlJriNRhcVQII1mPn6c/BiYgPnp0Rzo4L7gnkmcfxARQoj/2
-	 eUqzxPR1hVbSL6nvvkplFE8cGcdCdBBF7chO6wGly87yCnRHboQFtqAlXLyPty/MoC
-	 RquT3NYRc4i2MYXfmJJlAiTEE6m5g1eboiVeeYYfycSdjELZO2dIlktQqWAKUCpkPi
-	 KtrCxM1gU9+tA==
-Message-ID: <943b4932-17f4-4a52-af92-b9485a0e8c7a@kernel.org>
-Date: Thu, 11 Jun 2026 12:53:56 -0600
+	dkim=pass (2048-bit key) header.d=johnericson.me header.i=@johnericson.me header.b="lqoDUw/k";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SxhnnWMs"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.phl.internal (Postfix) with ESMTP id 1652F1380100;
+	Thu, 11 Jun 2026 14:55:29 -0400 (EDT)
+Received: from phl-imap-16 ([10.202.2.88])
+  by phl-compute-05.internal (MEProxy); Thu, 11 Jun 2026 14:55:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=johnericson.me;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
+	 t=1781204129; x=1781211329; bh=hPOHqYG+iRF3Ic0VkRMBbLpS+z9IKrHd
+	dDy3pi2hdIc=; b=lqoDUw/kVA743bATY9h3WK1dphY3DTGWmWqfS7rSB5GSVn1J
+	as9WBsb+A9PKES5gRpl1K43ImpkJByEQ+OAGA8jgvTajebY1O93d+Ltmq8xdbZmr
+	UpjrbAZH15xpPstw++7hFOY+AQmRLZsb2gRNFyC6VpRAlni/E62ZfUjR+2Y7ilDV
+	5dalJkSjuO6iJHSs2PFitbvp8GbWY+Y4zFxsBDVzhzH13FnV4hN4gX3XoXsGEpU5
+	VX6YHz30fcubjL8dS4nRv3IXpnfilOnuPUp8p3r0TTr6X+SeYW3CB5Ye/Y8JCFpK
+	jE+5fg0CFoxi4Y/BBElq4gToBlMwJqp/uqu9MA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1781204129; x=
+	1781211329; bh=hPOHqYG+iRF3Ic0VkRMBbLpS+z9IKrHddDy3pi2hdIc=; b=S
+	xhnnWMsEUraepm0he9orZCyxPfx/X2RF4T9x70S85+8jra4FIRU9EW5non7HfVsM
+	Ci2TSpRE8DCnorJZZDCFAJnPbE74cU40UqUFdxQG06Ca0gf4YOU1CcSzAl7STslr
+	hkiKH7TApmoVk+z9PZs+yoayKHgiTZtULPsVqW6Rrfak38XDnPycDho5FKzQBef1
+	CY6QNcMEThwJpZ3k8dCfdqYEOgLqhPFyaSw/8plKCDA4ADs1atRjXiHektoDVGfc
+	fFn8T2+BwlXB/s0NPeOq0qQ16jw7OASdZDZeHmvZZ39x54Pz2OrB2tDyBB1+NgYc
+	5/H2msE/XBzMbGzzvKNHA==
+X-ME-Sender: <xms:oAQralqwuh0eouA59R3_QIwyLFBttjzOXYhOIDERLdIbdk93hF5puA>
+    <xme:oAQraifGdN2-ZAHIe6oNEDRfSEnR6WUhOwyGtPPn4ubpqD8tEdnDMeWgLTUy6Ii6x
+    5vzuFyYmFZ2RIu87ORhcAz6vnLAsYx-tpUTNEZVfRt127tc0NsvnK0>
+X-ME-Proxy-Cause: dmFkZTFYpPOn7LI4ucgrxMRuvUt0Pp7TpsmWzC1UMf5Uv3HNtfQ/V0DF7oE2QhImNcQ7/n
+    hX3+SBSdsUULValjF705kUffDlbULeLEuQLe9sEh2MjAhjTTmycdP5MBvhnGe8dzZvyNon
+    El9MmMNYiTmjnLQ2tcVKntlKTVipyiBsZrqxOGT4HbGXTm+q5nJv2ou/btyVBYEM9hCWwC
+    5GGP97dtjAoQTfqjBznaZdB0rggqqROmubcwr/kzdeAmz621tqJGsS7RdmLEwmGJYTNNOO
+    USKMjLfMmFc65L14V1RzajGF3g6WHSe5i+BYmpu3hA0CfgzgP+VZ8oTuBT+38JRx/yxzgs
+    umnpTqvcNAd1NFNCHjofpW8OHDuMUHWjxpEVBjSNmRctxv64ki/DUB9+G7ogl7t9K3QVjK
+    Ow2Y0fYcjWb7JTEpo/PoDYWzEvTk9XEek3xh+BpzUH00rvEY2PWP7ywJRQTdPoMcVAn7Gn
+    r7cDKLJ65+s64x2Q942+XWGD/zOI1+7LvCGFjOH2uWfyZd0Fv7Ymr+gzCBsMoAv2xkL3T0
+    CqD6YGWIlZSwWzrToYEFEdrCnD2xjZeUFFAtwMMKqgh8H1xdIFhWYk77oCQivDvMMOaL+9
+    Tq0tCHKmG0ElxEfp2Q75UzEXsV7cS5F72NZyHP1i3LMypy67FGfWMnYliP7A
+X-ME-Proxy: <xmx:oAQraroOprWSkLgJ-7djeMHTInI52a640Gjt5LslcKa87iD22lOadQ>
+    <xmx:oAQraoatsZC0BtBctCPgAsy7fxQT3f9fqffQoMXyvPniBkKKuuh1bA>
+    <xmx:oAQralHhcfx828vfIPwoTAB7RPq0-Rlkt4Jh2VvoK2hJ4cYJKq3hrQ>
+    <xmx:oAQramZmlr4zGPtWbXjA0WPzKylSB7mfQzF7M44bZW6o1b9B_bhaGA>
+    <xmx:oQQrarNSduaBJQ-qynqxxgQ-ZwyRh49OZambtOBojf-3vpyXdpA0tC_O>
+Feedback-ID: ieb4144f1:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 0C7D62CC0086; Thu, 11 Jun 2026 14:55:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH iproute2-next 7/7] devlink: add scope filter to resource
- show
-Content-Language: en-US
-To: Tariq Toukan <tariqt@nvidia.com>,
- Stephen Hemminger <stephen@networkplumber.org>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>
-Cc: Donald Hunter <donald.hunter@gmail.com>, Simon Horman <horms@kernel.org>,
- Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Saeed Mahameed <saeedm@nvidia.com>,
- Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>,
- Shuah Khan <shuah@kernel.org>, "Matthieu Baerts (NGI0)"
- <matttbe@kernel.org>, Chuck Lever <chuck.lever@oracle.com>,
- Or Har-Toov <ohartoov@nvidia.com>, Carolina Jubran <cjubran@nvidia.com>,
- Moshe Shemesh <moshe@nvidia.com>, Shay Drori <shayd@nvidia.com>,
- Dragos Tatulea <dtatulea@nvidia.com>, Daniel Zahka <daniel.zahka@gmail.com>,
- Shahar Shitrit <shshitrit@nvidia.com>,
- Jacob Keller <jacob.e.keller@intel.com>, Cosmin Ratiu <cratiu@nvidia.com>,
- Parav Pandit <parav@nvidia.com>, Kees Cook <kees@kernel.org>,
- Adithya Jayachandran <ajayachandra@nvidia.com>,
- Daniel Jurgens <danielj@nvidia.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Gal Pressman <gal@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
- Jiri Pirko <jiri@nvidia.com>, Petr Machata <petrm@nvidia.com>
-References: <20260609053953.487152-1-tariqt@nvidia.com>
- <20260609053953.487152-8-tariqt@nvidia.com>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <20260609053953.487152-8-tariqt@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
+X-ThreadId: AtGJywdvvpER
+Date: Thu, 11 Jun 2026 14:53:10 -0400
+From: "John Ericson" <mail@johnericson.me>
+To: "Mateusz Guzik" <mjguzik@gmail.com>, "Li Chen" <me@linux.beauty>
+Cc: "Andy Lutomirski" <luto@kernel.org>,
+ "Christian Brauner" <brauner@kernel.org>, "Kees Cook" <kees@kernel.org>,
+ "Al Viro" <viro@zeniv.linux.org.uk>,
+ linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+ linux-api <linux-api@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ linux-mm <linux-mm@kvack.org>, linux-arch <linux-arch@vger.kernel.org>,
+ linux-doc <linux-doc@vger.kernel.org>,
+ linux-kselftest <linux-kselftest@vger.kernel.org>, x86 <x86@kernel.org>,
+ "Arnd Bergmann" <arnd@arndb.de>, "Thomas Gleixner" <tglx@kernel.org>,
+ "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, "Jan Kara" <jack@suse.cz>,
+ "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>
+Message-Id: <9033ff42-9ee7-4b93-9570-a5adcd16e826@app.fastmail.com>
+In-Reply-To: 
+ <hd3i6pxxohsjesyid7nhuic6ppp6nyoxxpwa4mny6riqvpyqec@mylfprni2yaw>
+References: <20260528095235.2491226-1-me@linux.beauty>
+ <20260528-madig-fachrichtung-fehlinformation-61117ba640da@brauner>
+ <CALCETrWJQpLR4n1cpichBk8=uExSKLWTMGU3BufGdk_WE_p5UA@mail.gmail.com>
+ <19eacd64508.26b92c022125848.262962729296162879@linux.beauty>
+ <4e049396-377d-48a7-a34c-91318413a876@app.fastmail.com>
+ <19eb181fdd4.6d028f442844776.3737831021032223216@linux.beauty>
+ <hd3i6pxxohsjesyid7nhuic6ppp6nyoxxpwa4mny6riqvpyqec@mylfprni2yaw>
+Subject: Re: [RFC PATCH v1 00/13] exec: add spawn templates for repeated executable
+ startup
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 6/8/26 11:39 PM, Tariq Toukan wrote:
-> @@ -9010,13 +9029,29 @@ static int cmd_resource_show(struct dl *dl)
->  	uint16_t flags = NLM_F_REQUEST | NLM_F_ACK;
->  	struct nlmsghdr *nlh;
->  	struct resource_ctx resource_ctx = {};
-> +	struct dl_opts *opts = &dl->opts;
->  	int err;
->  
-> -	err = dl_argv_parse_with_selector(dl, &flags, DEVLINK_CMD_RESOURCE_DUMP,
-> -					  DL_OPT_HANDLE | DL_OPT_HANDLEP,
-> -					  0, 0, 0);
-> -	if (err)
-> -		return err;
-> +	if (dl_argv_match(dl, "scope")) {
-> +		const char *scopestr;
-> +
-> +		dl_arg_inc(dl);
-> +		err = dl_argv_str(dl, &scopestr);
-> +		if (err)
-> +			return err;
-> +		err = resource_scope_get(scopestr, &opts->resource_scope_mask);
-> +		if (err)
-> +			return err;
-> +		opts->present |= DL_OPT_RESOURCE_SCOPE;
+On Wed, Jun 10, 2026, at 7:40 PM, Mateusz Guzik wrote:
+> [...]
+>
+> As I tried to explain in my previous e-mail this approach does not cut
+> it because of NUMA.
+>
+> Suppose you have a machine with 2 nodes. The parent-to-be is running
+> on node 0 and the child is intended to exec something on node 1.
+>
+> When the parent-to-be allocates and populates stuff, it takes place with
+> memory backed by node 0. If you allocate task_struct, the file table and
+> other frequently used (and modified!) objs in this way, you are
+> guaranteeing performance loss due to interconnect traffic to access it.
+>
+> Trying to add plumbing so that all allocations respect numa placement is
+> probably too cumbersome.
 
-Comment from Claude that seems legit:
+Are we sure that last part is true?
 
-Issue found: In cmd_resource_show, the scope path sets opts->present |=
-DL_OPT_RESOURCE_SCOPE without first clearing opts->present. In batch
-mode, dl->opts is shared across commands, and the non-scope path
-correctly resets opts->present via dl_argv_parse(). But the scope path
-bypasses dl_argv_parse(), so stale bits (e.g. DL_OPT_HANDLE from a
-previous dev show) remain. When dl_opts_put() runs, it writes the stale
-DEVLINK_ATTR_BUS_NAME/DEV_NAME attributes into the dump request,
-silently filtering to a single device instead of all devices. Fix: use =
-instead of |=
+Let's also assume when this stuff was initially implemented, we didn't
+have it. If the basic thrust of this work is to replace functions that
+previously only worked on the current thread with those that worked on
+either arbitrary (not yet started) threads or the current thread, would
+that not prepare us for slowly migrating the allocation choice to
+reflect the node of the target task (new parameter) rather than the node
+of the current task over time?
 
-Are you ok with the suggested resolution?
+(This assumes the task is pre-placed on a node before it is actually run
+there, and that pre-placement happens as early in the allocation process
+as possible, so subsequent allocations can read off the
+partially-initialized task's node.)
 
+"Slowly migrating" is good here! It doesn't need to be the fastest thing
+out of the gate, but if this new proper spawning API gets popular as I
+think it would, and there is a clear path to optimizing it per the
+above, then I am confident that over the years it will happen.
+
+> The primary example for that is looking up the binary to exec in the
+> first place.
+>
+> userspace likes to pass paths which don't exist, meaning checking for
+> the binary before any hard work is a useful optimization. Suppose the
+> binary to be executed is in a container bound with a taskset using
+> node 1 and the content of the fs part of the container is currently
+> fully uncached.
+>
+> When you perform the lookup on node 0, you are populating a bunch of
+> metadata (inode, dentry) using memory from that domain. But the intended
+> user will only execute on node 1, again resulting in a performance loss.
+>
+> In order to not do it you would need to convince VFS to allocate memory
+> elsewhere.
+
+One thing I don't get about this is that isn't the cost doing a bunch of
+work searching the PATH for the directories where the executable
+*doesn't* exist? In the case of something like a shell that is going to
+spawn a lot of processes, I would think it is *good* to keep all that
+PATH crawling VFS filling to be on the shell's node, rather than the
+child processes' nodes.
+
+It is only the executable itself, the final step of the VFS crawl, that
+should be loaded into the other NUMA nodes. Insofar as (unless I am
+missing something) creating the process means finding the inode for the
+executable but not loading those pages, aren't we OK here? Only when the
+new process is actually scheduled and run must the ELF be paged into
+memory, and then that will happen on the correct node.
+
+> So I stand by my previous claim that ultimately a pristine child has to
+> be created (like in this patch), but which also has to do the work on
+> its own.
+
+I have not been a kernel dev, so my apologies if I am missing things.
+But in conclusion for me, the FS and other resource access patterns of
+*creating a process* vs *that process itself running* do not seem
+necessarily coincident to me. What you are describing as for sure a
+problem might possibly be a *good thing*, if they are in fact quite
+different.
+
+> Suppose there is no explicit placement requested anywhere. Even in that
+> case there are legitimate workloads which will eventually be forced to
+> exec stuff on another node. Even these have a better chance retaining
+> full locality if the child process does all the work.
+>
+> Per my previous message I don't see a clean interface to do it.
+> something quasi-posix_spawn is probably the least bad way out, it will
+> also allow userspace to easily wrap the new thing with posix_spawn
+> itself.
+>
+> Also note there is another issue with the fd-based approach: the fd will
+> get inherited on fork and will hang out in the child afterwards unless
+> explicitly closed. Suppose you have a multithreaded program which likes
+> to both fork(+no exec) and fork+exec. With the fd-based approach you
+> have no means of stopping another thread from grabbing your state thanks
+> to unix defaulting to copying everything. There was an attempt to fix
+> this aspect with O_CLOFORK, but this got rejected.
+
+I would think we don't need to worry about clone/fork very much, right?
+I think the premise of your emails, and just about everyone else's in
+this thread too, is that we agree fork+exec is bad, and the problem of
+unnecessarily sharing resources is inherent to fork. Furthermore, I
+think we all agree that while `O_CLOEXEC` and `O_CLOFORK` may help, both
+are unsatisfying solutions because they are opt-out not opt-in, and
+global to the parent process / preexec state (respectively) rather than
+local to the specific fork / exec in question.
+
+pidfds encounter these problems no more than any other
+file-descriptor-based UAPI, right? And I don't think it is good to blame
+any such file-descriptor-based UAPI when fork/exec are at fault.
+
+Maybe during the transition, when some things use fork and some things
+use this new API, stuff will be awkward, but I would rather that just be
+an incentive to complete the transition away from fork, not a reason to
+second-guess the plan.
+
+Once the transition is complete, and everyone is diligently assembling
+their child processes from scratch as is proposed, `O_CLOEXEC` and
+`O_CLOFORK` are both unneeded, and oversharing privileges will be much
+less common simply because "lazy coding"/"minimal typing" will only
+share what is needed --- anything else is more code/keystrokes!
+
+> Whatever exactly happens, NUMA is a sad fact of computing and needs to
+> be accounted for. The approach as proposed not only does not do it, but
+> it actively hinders such deployments.
+
+Despite everything I said, I want to be clear that I do agree that NUMA
+performance should be accounted for. Even if the first version isn't as
+great as it could be on that metric, there should be a clear plan for
+how future work can conclusively address it.
+
+Cheers,
+
+John
