@@ -1,85 +1,133 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EABD2DC350;
-	Thu, 11 Jun 2026 06:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD543594A;
+	Thu, 11 Jun 2026 06:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781158471; cv=none; b=ktyEAjZtKrt2rqe1Lwleaxs8RD/88RMLzLSgyx7bPf+8Ysykve3q0eVsyQCe1+eTboF9gaOxUDwgPv3a8jvZTPI1p3O2Q8oKEwUjbYhHC04BSva479f1+vK4xUwOx5hG4eF2WNZJMVFWhobh65seiiyd4z0cD39WKIu/4wo8yYw=
+	t=1781158751; cv=none; b=Vow5EN7D4vljfKxL/XxsBa3iEuu+3nYWROQPKP9FHsNQ9733hI8v4FvJVxsleASu1OjzJhlm4i6xiDgk3RDn2aZuIUfkmjwndWK2Yn0YMtN2v9duGE5qOVxEqGEIeQaBWfKIelCeJeZ020+Ep5uwiZZ2Q49h7/R9AeY4WoMyrmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781158471; c=relaxed/simple;
-	bh=a7zXUsjIHFBj6UtuHIGqkb0M6o1HjRSl6bFr87ht9jQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=t9dzJjCX5hIVpCZtpxRlmjhC0awP6Ls9fCICplDuJE+SR8KZXEVQMGzTYf0dmRRNLpzvKPNggoop5tnfnzlSOspApCBMaqglBkHxSpDuETvMxIca+G96hZhOW+FfGJwUbCSsGbzMkRFI+41SWVaAAp9xT3XqgOM0iVzCrafe/e8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nC9ssiMZ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=92MTl0jo; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1781158751; c=relaxed/simple;
+	bh=5ielNzdy7pQG+QERCHUszabsGuDEDDJL2FysnECKnls=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ivREoVFRqjchrJJezidbUnIDhhGPDTXCWm6ekFFEh6+vW+MRSpxeNN/1fGMtybKOudPPkDcb5xkuO2YR0sv46QiAfYhcH949OSrijKlYAVWf5YXxoUh5M7Z0csLTnX05vHGCJTxDqAQYZI0ckdkd9C6gUHcLXjTheSearm0+++o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PhLzDqo5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nC9ssiMZ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="92MTl0jo"
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1781158467;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ss4V+l8mnf5i6k0R0ef1MTFl+m/Q+uH7niX45ju74q8=;
-	b=nC9ssiMZmnQB6q7mxt5yHOD7QsdEgPh4KOBC5Xna6Mjmncguu3o9gTtbX397mar8EeQbpq
-	A4mrcHazAwdML7cK23gnWfcMikiz5i9mY28doaaai1hRVTJrNOjIHEfFKqicVuXERTvLxb
-	EWqci5bzGHyn/NZmMInhQPCeWaVTfZSurfpvdMJVGyp2Y7N+qIeyHsfLmtuHk+lrjZgA/4
-	XLwcQHiEHteW6AgqEKOUxvo9ALYvmnjebokamnNPtWg7XGTEhWWNPNZwxtLyJ74rn+pa6u
-	rOLAERS9eBoD2xfYVv/f9ifT1Mk2EUrBOhbN3cN1GQm3FW7Q8abOPDVBl4vV4w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1781158467;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ss4V+l8mnf5i6k0R0ef1MTFl+m/Q+uH7niX45ju74q8=;
-	b=92MTl0joGPKBzVCUhKureETnSLTs8TgOxwiZ2SswSn11pFUs68rtFOWFnCH8FoE4CC1xVC
-	BCV9Js8kTIHAygDw==
-To: Charlie Jenkins via B4 Relay
- <devnull+thecharlesjenkins.gmail.com@kernel.org>, Paul Walmsley
- <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti
- <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, Atish Patra
- <atish.patra@linux.dev>, Conor Dooley <conor@kernel.org>, Paolo Bonzini
- <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Shuah
- Khan <shuah@kernel.org>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-kselftest@vger.kernel.org, Charlie Jenkins
- <thecharlesjenkins@gmail.com>
-Subject: Re: [PATCH 04/16] riscv: kprobes: Use generated instruction headers
-In-Reply-To: <20260407-riscv_insn_table-v1-4-54b4736a1e77@gmail.com>
-References: <20260407-riscv_insn_table-v1-0-54b4736a1e77@gmail.com>
- <20260407-riscv_insn_table-v1-4-54b4736a1e77@gmail.com>
-Date: Thu, 11 Jun 2026 08:14:27 +0200
-Message-ID: <87mrx1eh8c.fsf@yellow.woof>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PhLzDqo5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB3B1F00893;
+	Thu, 11 Jun 2026 06:19:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781158750;
+	bh=6aSwxGmpETKMO5gOuGeJq7TjqE4KH6CoAq7LEyPtOgA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=PhLzDqo5Cvrc1JYXyvEiz6ZvyzPSZs0EJwhq36Uf6vxl5qrM08p7VaOaG0m1oep+w
+	 n9B1+3LdImwuDTcMKpJzcT30v77sbUKgMEXEWBSatXHD1IKWvCIDFbu4+cm5DWqU+A
+	 jpokZDBR1qS4saVx83JIZ8PCml2r8hsFEgCusas/Wwjby17a08Z2WGqJ8euYVUkwnU
+	 UXSqgZYrHb8ijTXvOuIfKlLcqxnEZre/RTMh0cauC5r4tQCUK0niR6sZu5ntaBFXqs
+	 4oaA9r182MOJMtSMYnwKz97Sc3M3621e/hask6ityxPBJQsoe9UM5BU8SsU9KLp+iw
+	 jOgzrQ3ToKvrw==
+Date: Thu, 11 Jun 2026 07:18:55 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, hughd@google.com, 
+	willy@infradead.org, ziy@nvidia.com, liam@infradead.org, npache@redhat.com, 
+	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 00/11] add shmem mTHP collapse support
+Message-ID: <aipSe9Snx5x0esQx@lucifer>
+References: <cover.1781083630.git.baolin.wang@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1781083630.git.baolin.wang@linux.alibaba.com>
 
-Charlie Jenkins via B4 Relay
-<devnull+thecharlesjenkins.gmail.com@kernel.org> writes:
->  bool __kprobes simulate_c_jr(u32 opcode, unsigned long addr, struct pt_regs *regs)
->  {
-> -	return simulate_c_jr_jalr(opcode, addr, regs, false);
-> +	unsigned long next_addr;
-> +	unsigned long *regs_ptr = (unsigned long *)regs;
-> +
-> +	next_addr = regs_ptr[riscv_insn_c_jr_extract_xs1(opcode)];
-> +	instruction_pointer_set(regs, next_addr);
-> +
-> +	regs->ra = addr + 2;
+On Wed, Jun 10, 2026 at 06:29:08PM +0800, Baolin Wang wrote:
+> (Note: this patchset is not targeting v7.2, but posted for early feedback.)
 
-c.jr does not change ra.
+Hi Baolin,
 
-> +	return true;
->  }
+Speaking broadly, and to repeat what I said to Nico - I'd like to
+re-emphasise my _strong_ desire for us to pay down technical debt in THP
+code before adding any further major features.
 
-We have CONFIG_RISCV_KPROBES_KUNIT now, please try that.
+Really I'd have liked to see us do this _before_ khugepaged mTHP, but I
+didn't want to put Nico through more than he already endured with that
+series :)
 
-Nam
+So I'd really like to see some action on that before we embark on any
+further significant changes.
+
+This is no comment on your changes, just something that we really need to
+address in THP generally.
+
+Will try to give some detailed commentary on the actual changes when I have
+time also :)
+
+Cheers, Lorenzo
+
+>
+> This is a follow-up patchset for mTHP collapse to support shmem mTHP collapse,
+> which is based on Nico's patchset[1].
+>
+> The shmem mTHP collapse strategy follows the anonymous mTHP collapse approach:
+> track present pages via a bitmap while scanning PMD ranges for collapse candidates,
+> then use the bitmap after the scan completes to determine the most efficient
+> mTHP order to collapse to. Built on the basic framework added for anonymous
+> mTHP collapse, the shmem mTHP collapse implementation is straightforward
+> (Thanks for Nico's work).
+>
+> In addition, I have added some anon/shmem mTHP collapse selftests, and now all
+> khugepaged test cases can pass.
+>
+> Note: I have not yet enabled large order collapse for file folios (file folios
+> currently only support PMD-sized large folio collapse). Although file large order
+> collapse would be more straightforward to implement after shmem mTHP collapse
+> support is added (requiring some changes to file_thp_enabled()), I think this
+> still need some discussion on whether it is necessary to support other large
+> orders collapse for file folios.
+>
+> Comments are welcome. Thanks.
+>
+> Changes from RFC v1:
+> https://lore.kernel.org/all/cover.1755677674.git.baolin.wang@linux.alibaba.com/
+>  - Rebase on the new code, and update to use the new functions.
+>  - Add more test cases.
+>
+> [1] https://lore.kernel.org/all/20260605161422.213817-1-npache@redhat.com/
+>
+> Baolin Wang (11):
+>   mm: khugepaged: add max_ptes_none check in collapse_file()
+>   mm: khugepaged: generalize collapse_file() for shmem mTHP support
+>   mm: khugepaged: add an order check for PMD-sized THP statistics
+>   mm: khugepaged: add shmem mTHP collapse support
+>   mm: shmem: run khugepaged for all shmem mTHP orders
+>   mm: khugepaged: allow khugepaged to check all shmem mTHP-sized orders
+>   mm: khugepaged: skip large folios that don't need to be collapsed
+>   selftests: mm: extend the check_huge() to support mTHP check
+>   selftests: mm: move gather_after_split_folio_orders() into vm_util.c
+>     file
+>   selftests: mm: implement the mTHP-sized hugepage check helpers
+>   selftests: mm: add mTHP collapse test cases
+>
+>  include/linux/shmem_fs.h                      |   4 +-
+>  mm/khugepaged.c                               | 174 ++++++++++++----
+>  mm/shmem.c                                    |  10 +-
+>  .../selftests/mm/folio_split_race_test.c      |   2 +-
+>  tools/testing/selftests/mm/khugepaged.c       | 195 +++++++++++++-----
+>  .../testing/selftests/mm/prctl_thp_disable.c  |   2 +-
+>  tools/testing/selftests/mm/run_vmtests.sh     |   4 +
+>  tools/testing/selftests/mm/soft-dirty.c       |   2 +-
+>  .../selftests/mm/split_huge_page_test.c       | 139 +------------
+>  tools/testing/selftests/mm/uffd-common.c      |   4 +-
+>  tools/testing/selftests/mm/vm_util.c          | 184 ++++++++++++++++-
+>  tools/testing/selftests/mm/vm_util.h          |   8 +-
+>  12 files changed, 492 insertions(+), 236 deletions(-)
+>
+> --
+> 2.47.3
+>
