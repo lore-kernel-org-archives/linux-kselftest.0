@@ -1,360 +1,128 @@
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0409345CBC
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 10:11:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781172694; cv=none; b=VhfUrE8klorlAyzjcsEDQWFjeeXMQEgsTFQifhG5yezwI+/5sjb8X+Ve2thCh4t/ceS7PtoK8dQcuKb9XGmKegG4OKu0+jVmDA7Bljk2jTan52C/czeKlRbVAfbmdfWzcpiLJ5n7nKlC1Ac4APd6vcaR3PPwhjmtpYq0IQd8SaE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781172694; c=relaxed/simple;
-	bh=0JqGj+0SYcjs265lh5fKkT/DLXFDwGgLJyf8WKteLwo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=grj2XJ0PAsKI3ZcEzpW/nzZoddEDKKYhE5UtL17VULN4Pp9aDEISWIFRa86x6V7jR3IihUnohN07lOez5qepGLtzo/W0wBf4iCB4WVphnlY5zjQuJtO8Bko/WUHH0OfoFhokVduR+oaVSmTWTgcR9dTW0G79dBdGg+vM8w7Yb0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NCDlHYBG; arc=none smtp.client-ip=209.85.214.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBDD1376BE8
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 10:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781173363; cv=pass; b=d0TR2QDaH7hmygCCoIwq4QVlS3jr1ZcL2bbs97GaHZoeqNIEzxdpwVO3rM7iL2xvG+KUXICdhvY/7HSmpoBjTzwcM0oeDERYO78uv9s74MmnvoDtihLCmOjzEjkH4ttBwXVPHujZpo6Nw+2eBCDDEvVFcWnyYU9CB6hAssVi2u4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781173363; c=relaxed/simple;
+	bh=9rd5ao9UX+dRdCRfac+Al0jz3HeZixBGrRexHervq2A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oK7jSPGyvO3Deg00v7rzaDUJNqAMcWgN6vlTw9GNUNEHVf+8LkUsAKe/iQvCy1X/+4/iW5Zo8KvMkVpvkt0eyBAoSKcyP99VY/k470ioNXRN/h+37tCDzSSNcliaRkc68uK/zTAnyLEOdduH7FtduFwKcSuBbD2V0zZoiuVZqeM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=szeredi.hu; spf=pass smtp.mailfrom=szeredi.hu; dkim=pass (1024-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b=OTF8zohF; arc=pass smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=szeredi.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=szeredi.hu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NCDlHYBG"
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2bf2e8ccca1so55190465ad.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 03:11:30 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b="OTF8zohF"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-51776b4de37so61300261cf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 03:22:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781173361; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Az2FIplBS7573L9tVuX7KeTjRmfDI7qGVPKYlcF9RRYn+OTguWw7ufbcMi6S0ci0fa
+         5CXMgTrmwgtGaUpXkG/wDQizNUlEz4yHniEVyu+Mb2ISwdANyFELgmDRcDztNp8L7oeZ
+         VYCbEc2blS8Kk4EXwrii4eQyScBZDCQp7Aonv1GPueKvqg1RfgM5tf02W9BNUjecSKC7
+         T7SRaJvLYhAjIcRI1z7lPNS9M5VCxrxFQbGTQgq4/K+3ZZfZleb48dIwExlDUuZkHHzd
+         82s4HhGcCrcyILHVKDhvcu0W8nroxoCUrYNX4XAELMytMERBmHau5ybwUODhEtjUmq+c
+         hYRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=ZdX0Q5Dj/m/HuXrzpkAdoJ/jZuUveaL90+L63Y1EBAI=;
+        fh=G0QaIPXUFWMfcM0cTesBljzZzvsY4UyfElXlmhwSNUk=;
+        b=hnc4IoF5uyici6cu/oJ2tkZS0kzAVdSRiIUtXNotO15okNgSOKrGBFQeAys2cdIggw
+         NYZ+bz0kVOIiORIPiwmrFm/lXhD36fGkmug6zRsQ5/2BuOCJ9zOW/T6z0SZEj5Ysp8NL
+         2l8cDuDo7vliwkjsrMYPz4wl3FLd/2lby3Hb7ye6O5xqr3CSb4NJERtBcqmCFi5gGlYU
+         vaRMSmfoZ1W18x56ozl02V0l4ajjopY+Tii54g769QiwLq0/lUg9gNW07/gfmFG0BON1
+         n8SXQoaHWFZVEXknWLaq+Kqx/x3yW604kdxUVPB3V9QUxTk605296l+qQyl6Wz7zmEjL
+         ztoA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781172690; x=1781777490; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UEHLsjJ++YbF5BMtiZ2F3yyTv5ibuthDDlfDb6LLLmA=;
-        b=NCDlHYBGcI7EyHpUGmrP4AQab55rj9nOlm9gVgG18thT0FYoNp/4tTO1owrSixzp4P
-         cuOTlDm9wF6V5XP5fgFhEosft87ikol0SH3/ann4GViW4/ePBnZdUTB7OGVgp5yIA4EP
-         5s8RrXJGacKElSeeGIi6cuZC51NOL1jEc/5r2tco8nHMtVHVj9O4scc8jE1d4552DmeX
-         77rrj60oVimAMYMMkgZq/M+cVrJDA1DmNjlqRDBpBNOL/BzBLVz5+DiEjSLYZaXrvaum
-         q9k0ut7Q+p+Mi+fSMx2tmW7J9Ydb1IhTIMDDYY4W6YS60DuXAUKTh1+z01+n8EL8uXm+
-         GZpA==
+        d=szeredi.hu; s=google; t=1781173361; x=1781778161; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZdX0Q5Dj/m/HuXrzpkAdoJ/jZuUveaL90+L63Y1EBAI=;
+        b=OTF8zohFsJVlZr6ws2Abv0gTeJmK0zD7MmfaID1jzVc/USrBTCewyyhj9GT4vtpY4O
+         ms7AwaPUfikslTgpPiVC2X4ryQ50/H2jLhsJT3Qli/YtcvctDl9pGrXN6zQf2mjXUVbo
+         Am7v6zhUFq5ZbahxSMvpaBA/ObD1f4kwGdXkM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781172690; x=1781777490;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1781173361; x=1781778161;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UEHLsjJ++YbF5BMtiZ2F3yyTv5ibuthDDlfDb6LLLmA=;
-        b=WcmLMHQIiqopu7oGH0nNx1KNWI+w9hNbFu82UNya4U1+r6gDy2R+jcP0sQdDb4MgDq
-         HYrwc0J7uqtabBT9tC2xNqSX0kAvqarig+PJT1+JFE2gbeC1QpFRNnJblXrjicDvkfkD
-         AahcqY/Gj4MnnkJjmOcWTxqPxIX5vyPBFkvD11Gqt+2OcNCUB0VIqTAarp80C4qZju/P
-         RhcK/yum0ZPAtNONaxB0G1c8SwVVydOcwaGYOrrUxemx4AEwBKNjpx1gz74bpIx7Q/tz
-         hnm5uR7wmtEgaqhmMQLlsRCy6sk+tUHl17uLp7wn6P+t37xsw3/LL9K+7HBmkDOQ2ug9
-         U+yg==
-X-Forwarded-Encrypted: i=1; AFNElJ/3c720cXgQd/cHwa9Txfb4BQGTyOuOPHq70Z+kg/gHrvnFOAlEvCeOTq+KU2eEVmNp17I/3Wj/Zw7PM5Wc04U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+BWCgEBz2MHj1REF6xKiY7ZdLQ+gAZpoG1wY6za3lOSj+Kl+X
-	PdE2tHsX/m8mMzfqjmm61EWOpG82323eXv04pSCnoJ3w+8Pk+2XWQtUD
-X-Gm-Gg: Acq92OFqp3GY+K2AU7+dZdTxD6ibHLnVR0d/Sg/2GHUpn9dgzrt6MMR41dptk02WE8w
-	SiKWnPE8XrTFxIwlf8hTfwyYbP1dYYqe4pbHW9hbAVXsENVFF1I1ALl6LKQy19ioq9eQ3oTaNHM
-	yCJxxjt0jDGGTGRR7JJD1EmXXpYJ8+I1qWYcSFgZAff22aZOQRt6jQDV1Y7AyvRVDwRF3yx+1zW
-	9Uv96DD40HXO1/O9QVapkfKUlTWE5+Z48Q0dsXKqkVjNPuL9UMejEdXf+J6QYx8/QZ/1CnZkqxr
-	+j07hGf05+NuXyW89UBmG7mX3QFTzbct+2BZKDzXBmbzWOa1qnvQTnPmpUrHkMX3mBkrwz5DP47
-	2xQSVDnJUgIvJaX9s5jPAdkol82bcsq6Kc1XXclc1314ZLNZuciPEK+Z/5C18Qx8k4hR1UdZcDR
-	u8/jPZn0ChHvZVqpehBrt2CkSdhOaJ6NBfrInBDYArOsnbw6TRnfI=
-X-Received: by 2002:a17:903:3886:b0:2c1:6715:a4ea with SMTP id d9443c01a7336-2c2f3254f81mr25383955ad.30.1781172690259;
-        Thu, 11 Jun 2026 03:11:30 -0700 (PDT)
-Received: from [192.168.0.6] ([223.131.147.119])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164fa072asm272299185ad.34.2026.06.11.03.11.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 03:11:29 -0700 (PDT)
-From: Woojin Ji <random6.xyz@gmail.com>
-Date: Thu, 11 Jun 2026 19:11:24 +0900
-Subject: [PATCH bpf] bpf: Track spilled zero scalars for var-off stack
- reads
+        bh=ZdX0Q5Dj/m/HuXrzpkAdoJ/jZuUveaL90+L63Y1EBAI=;
+        b=JYxcFfaF/qyqKHs41827vOITSlL1K55eZ/dVt3kfmkrrCTxj5zXHkouOqsbG78kkIt
+         2f7vUFHda7TiGTT7PrIhJw6tZyDbOe7AS6ogGv0ORecu+Vm/JD9mzfbZTob0UzrHUWbf
+         aVdmXi1r+XvGOmBPEx5REhav/LGZhqTbRzJhl9PdnVzW2VdQcv5+lBxaelLSPE4uc0Eu
+         +ksw3qGIuzO+YyEz+/Y8XwFU11QcyscLBe9ceq/VS3ctavoqTZhwVGqpRcvN7JLIuU8B
+         olPMXsUCs0fhiT/OGlO1RcJ7mRlA04J0jFPn+Ginoxd3ERHqL+PrUsLMQlkO2j7sTq0A
+         xa6w==
+X-Forwarded-Encrypted: i=1; AFNElJ/TCLkI3Ya46HGyYZLRf1T6gg8eJJCpBQ+1MDtGFJ/lanWYRMvcPEF7GW9Qh9fWukGLLxlh8ffghJI+JQv+7G4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXp19FzNYdFL+/Hoh0RzNvWyM4SA+SjzuOLZ0Cfjp1gYR09wK5
+	MRI+DaVLPfH/ea6DtgZ98K9/c4G2ilY6hVk0vEn6bqmlphIIYsWgvsxEUORUerXf25S+nvkjlA6
+	nMgr7idu5jtEbT63NS/sE1irkO7Hm5cTdRgpOfn3Vni4DpICjwNyUfmE=
+X-Gm-Gg: Acq92OHqQwY8grA4wEU7O3lzmtV7Xknj+3Y6KATddcQ99D+nTaq0PMAmZ0KBQQ/nJuQ
+	S6DnKhTmXwVTeB2UpAh/SPvW41d/qMEZB1TZc94XlLPGwLgjYzElRoFmrA49G1PCUyMSkuHRL9w
+	Nzww9JU9eDFKxPcz3QsDhZT6iVsmUDmbioz2P2aCPqMYX+hr7eyHVf2CYk4U2MDeAdTy6mJCSjy
+	hcVWbCG7CA2qZlUQU4aA4f0u9Rajzt5ImSNgdXaI58WMJRzv0peQnL3NRTCc0xzsb4x0rP2Q6p1
+	yNmDWbxZuVxVVE+i6weye12UsGOE50bQt+bW9+l9kULVc3q3WWE=
+X-Received: by 2002:ac8:7d55:0:b0:517:8aed:1498 with SMTP id
+ d75a77b69052e-517edd196demr32813551cf.16.1781173360617; Thu, 11 Jun 2026
+ 03:22:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260611-bpf-stack-var-off-zero-v1-v1-1-0ec407376147@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMQQ6CMBAAv0L27CYtFQ5+xXhoyxYWE0p2oTES/
- m7V40wyc4CSMCncmgOECivnpYK9NBAnv4yEPFSG1rS96a3BsCbUzccnFi+YU8I3ScZi0V39YEN
- 0oXMOar8KJX793neoGTz+UvcwU9y+VzjPD0oPN56CAAAA
-X-Change-ID: 20260610-bpf-stack-var-off-zero-v1-34ad1bc3b533
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Woojin Ji <random6.xyz@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8817; i=random6.xyz@gmail.com;
- h=from:subject:message-id; bh=0JqGj+0SYcjs265lh5fKkT/DLXFDwGgLJyf8WKteLwo=;
- b=owEBbQKS/ZANAwAKAUOXRMMVrfhrAcsmYgBqKonOv0DOBgJ1NXrh8NtUDLJOIS8Ll1jFGmqN/
- 9TDMjzY+oyJAjMEAAEKAB0WIQSrknTJbxUcAdPNt5BDl0TDFa34awUCaiqJzgAKCRBDl0TDFa34
- a5wfD/9XFMkALnzbeJnhATtSPA3rRuXLDYn8MKnsvfwRqy8V8IXF+ooV4BLCmqB0FFZTxXfJe1n
- IMP9yNwLnV1pIXBpqjwHcGYy756ukAR3KPKEMaksTetKHchwsDlORhJnCvwHtoF7dHMIwDBFgN2
- bxodEdCBnJxLbMu/+mc6SbYkR+7z0u6tWnKSnMpou2qEek7yQEUrmDTy/CGNlPLIKc0xdtqd2EN
- jU3ldea4laOsCymAsw2b2+OmLX6fhQlxj7rZ++XdVL0bYxYJkLyG/IwlWyHyypYgS8oYQyOV0/R
- BZvdn2GGu5qZQ593rvCJz+BR5uoGHWxrYpDmgThOcrd+mtXgs0HBSSjT3maDZgU1ztiwsZ3WnNn
- 5CdJFfHTj+beczZwb8qfePaWHpse5/svsizvxpakdiX1qcB5YQfkJ/xRxihWzKk5MnWsIoyqu//
- eUrGysEPVge7Cjdgtvbwmf+y0aWy5fN1PGFQADwAIA1rjEePCM1WnpJLpOJdesEDCegsicQWost
- pMjct8m3JVl7Skq8BAHQOOui9TSEqW2M7QNtjYvjqRib4agTafKxqAmL/AzZiFKun45ebJ+db6V
- 0o5tGYAWDEzjnqD9uixpyAu0AewRoA80hccKSm/i+8M6x23d8xINXFBIppgLSukwE04R0+wzPHI
- 3SibtTqtWJqXuog==
-X-Developer-Key: i=random6.xyz@gmail.com; a=openpgp;
- fpr=AB9274C96F151C01D3CDB790439744C315ADF86B
+References: <20260408-wip-cuse-leak-fix-v1-0-1c028d575e97@redhat.com> <20260408-wip-cuse-leak-fix-v1-1-1c028d575e97@redhat.com>
+In-Reply-To: <20260408-wip-cuse-leak-fix-v1-1-1c028d575e97@redhat.com>
+From: Miklos Szeredi <miklos@szeredi.hu>
+Date: Thu, 11 Jun 2026 12:22:29 +0200
+X-Gm-Features: AVVi8CdMAm9XTPu_tz3eNH4Gr6oH6gYH_KlQ1VbfnPRDcGzO9UeXR4dc-afKowg
+Message-ID: <CAJfpegtWTNEDcDds5X_jsXc_wKWtuW5oZqXQnrTrzW0rw8fa7Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] fuse: fix device node leak in cuse_process_init_reply()
+To: aruiz@redhat.com
+Cc: Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-mark_reg_stack_read() currently treats a variable-offset stack read as
-known-zero only when every byte in the read range has STACK_ZERO type.
-This loses precision for stack bytes that are represented as STACK_SPILL
-but come from a spilled scalar const zero.
+On Wed, 8 Apr 2026 at 17:23, Alberto Ruiz via B4 Relay
+<devnull+aruiz.redhat.com@kernel.org> wrote:
+>
+> From: Alberto Ruiz <aruiz@redhat.com>
+>
+> If device_add() succeeds during CUSE initialization but a subsequent
+> step (cdev_alloc() or cdev_add()) fails, the error path calls
+> put_device() without first calling device_del().  This leaks the
+> devtmpfs entry created by device_add(), leaving a stale /dev/<name>
+> node that persists until reboot.
+>
+> Since the cuse_conn is never linked into cuse_conntbl on the failure
+> path, cuse_channel_release() sees cc->dev == NULL and skips
+> device_unregister(), so no other code path cleans up the node.
+>
+> This has several consequences:
+>
+>  - The device name is permanently poisoned: any subsequent attempt to
+>    create a CUSE device with the same name hits the stale sysfs entry,
+>    device_add() fails, and the new device is aborted.
+>
+>  - The collision manifests as ENODEV returned to userspace with no
+>    dmesg diagnostic, making it very difficult to debug.
+>
+>  - The failure is self-perpetuating: once a name is leaked, all future
+>    attempts with that name fail identically.
+>
+> Fix this by introducing an err_dev label that calls device_del() to
+> undo device_add() before falling through to err_unlock.  The existing
+> err_unlock path from a device_add() failure correctly skips device_del()
+> since the device was never added.
+>
+> Signed-off-by: Alberto Ruiz <aruiz@redhat.com>
 
-Fixed-offset stack reads already preserve such partial reads from a
-spilled scalar zero as const zero. Variable-offset stack writes also keep
-a spilled scalar zero intact when a zero write overlaps it. The read side
-is therefore inconsistent and can reject otherwise valid programs: a byte
-read from a spilled zero becomes an unknown u8 and may then make a
-stack access through that value appear out of bounds.
+Applied, thanks.
 
-Treat STACK_SPILL bytes backed by a spilled scalar const zero as zero
-bytes in mark_reg_stack_read(). When such a spilled scalar is used to
-prove the destination register is const zero, mark every contributing
-source stack slot precise before state pruning can use an explored
-zero-spill path for a later non-zero spill path.
-
-This has to be done eagerly for variable-offset loads. Fixed-offset stack
-fills can record one source stack slot in the jump history and propagate
-destination precision back to that slot later, but a variable-offset load
-may source bytes from multiple stack slots. Seed precision backtracking
-with every zero-spill slot that contributes to the const-zero
-classification instead.
-
-Add verifier selftests for both sides: accepted programs that read a byte
-through a variable stack offset from spilled zero scalars, including a
-multi-slot range, and a rejected program that would be accepted unsafely
-by a naive implementation that promotes spilled zero bytes to const zero
-without tracking the source spilled slot precisely. Use
-BPF_F_TEST_STATE_FREQ for the rejected test so it does not depend on the
-current verifier checkpoint heuristic thresholds.
-
-Tested:
-  ./test_progs -t verifier_var_off
-
-Assisted-by: opencode:gpt-5.5
-Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
----
- kernel/bpf/verifier.c                              | 52 ++++++++++---
- .../testing/selftests/bpf/progs/verifier_var_off.c | 88 ++++++++++++++++++++++
- 2 files changed, 130 insertions(+), 10 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7fb88e1cd..c4b89fbd9 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4058,14 +4058,21 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
-  * SCALAR. This function does not deal with register filling; the caller must
-  * ensure that all spilled registers in the stack range have been marked as
-  * read.
-+ *
-+ * If the const-zero classification depends on spilled scalar zeroes, mark the
-+ * contributing stack slots precise so pruning cannot reuse a zero-spill state
-+ * for a later path containing a different spilled scalar.
-+ *
-+ * Returns an error if precision backtracking fails.
-  */
--static void mark_reg_stack_read(struct bpf_verifier_env *env,
--				/* func where src register points to */
--				struct bpf_func_state *ptr_state,
--				int min_off, int max_off, int dst_regno)
-+static int mark_reg_stack_read(struct bpf_verifier_env *env,
-+			       /* func where src register points to */
-+			       struct bpf_func_state *ptr_state,
-+			       int min_off, int max_off, int dst_regno)
- {
- 	struct bpf_verifier_state *vstate = env->cur_state;
- 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
-+	u64 zero_spill_mask = 0;
- 	int i, slot, spi;
- 	u8 *stype;
- 	int zeros = 0;
-@@ -4075,19 +4082,38 @@ static void mark_reg_stack_read(struct bpf_verifier_env *env,
- 		spi = slot / BPF_REG_SIZE;
- 		mark_stack_slot_scratched(env, spi);
- 		stype = ptr_state->stack[spi].slot_type;
--		if (stype[slot % BPF_REG_SIZE] != STACK_ZERO)
--			break;
--		zeros++;
-+		if (stype[slot % BPF_REG_SIZE] == STACK_ZERO) {
-+			zeros++;
-+			continue;
-+		}
-+		if (stype[slot % BPF_REG_SIZE] == STACK_SPILL &&
-+		    bpf_is_spilled_scalar_reg(&ptr_state->stack[spi]) &&
-+		    tnum_is_const(ptr_state->stack[spi].spilled_ptr.var_off) &&
-+		    ptr_state->stack[spi].spilled_ptr.var_off.value == 0) {
-+			zero_spill_mask |= 1ull << spi;
-+			zeros++;
-+			continue;
-+		}
-+		break;
- 	}
- 	if (zeros == max_off - min_off) {
- 		/* Any access_size read into register is zero extended,
- 		 * so the whole register == const_zero.
- 		 */
- 		__mark_reg_const_zero(env, &state->regs[dst_regno]);
-+		if (zero_spill_mask) {
-+			for (spi = 0; spi < MAX_BPF_STACK / BPF_REG_SIZE; spi++) {
-+				if (zero_spill_mask & (1ull << spi))
-+					bpf_bt_set_frame_slot(&env->bt, ptr_state->frameno, spi);
-+			}
-+			return mark_chain_precision_batch(env, env->cur_state);
-+		}
- 	} else {
- 		/* have read misc data from the stack */
- 		mark_reg_unknown(env, state->regs, dst_regno);
- 	}
-+
-+	return 0;
- }
- 
- /* Read the stack at 'off' and put the results into the register indicated by
-@@ -4109,6 +4135,7 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 	int i, slot = -off - 1, spi = slot / BPF_REG_SIZE;
- 	struct bpf_reg_state *reg;
- 	u8 *stype, type;
-+	int err;
- 	int insn_flags = insn_stack_access_flags(reg_state->frameno, spi);
- 
- 	stype = reg_state->stack[spi].slot_type;
-@@ -4235,8 +4262,11 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 			}
- 			return -EACCES;
- 		}
--		if (dst_regno >= 0)
--			mark_reg_stack_read(env, reg_state, off, off + size, dst_regno);
-+		if (dst_regno >= 0) {
-+			err = mark_reg_stack_read(env, reg_state, off, off + size, dst_regno);
-+			if (err)
-+				return err;
-+		}
- 		insn_flags = 0; /* we are not restoring spilled register */
- 	}
- 	if (insn_flags)
-@@ -4291,7 +4321,9 @@ static int check_stack_read_var_off(struct bpf_verifier_env *env,
- 
- 	min_off = reg->smin_value + off;
- 	max_off = reg->smax_value + off;
--	mark_reg_stack_read(env, ptr_state, min_off, max_off + size, dst_regno);
-+	err = mark_reg_stack_read(env, ptr_state, min_off, max_off + size, dst_regno);
-+	if (err)
-+		return err;
- 	check_fastcall_stack_contract(env, ptr_state, env->insn_idx, min_off);
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_var_off.c b/tools/testing/selftests/bpf/progs/verifier_var_off.c
-index f345466bc..2d4878270 100644
---- a/tools/testing/selftests/bpf/progs/verifier_var_off.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_var_off.c
-@@ -59,6 +59,94 @@ __naked void stack_read_priv_vs_unpriv(void)
- "	::: __clobber_all);
- }
- 
-+SEC("cgroup/skb")
-+__description("variable-offset stack read preserves spilled zero")
-+__success
-+__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !root")
-+__retval(0)
-+__naked void stack_read_var_off_preserves_spilled_zero(void)
-+{
-+	asm volatile (
-+	"r0 = 0; "
-+	" *(u64 *)(r10 - 8) = r0; "
-+	"r2 = *(u32 *)(r1 + 0); "
-+	"r2 &= 7; "
-+	"r2 -= 8; "
-+	"r2 += r10; "
-+	"r3 = *(u8 *)(r2 + 0); "
-+	"r1 = r10; "
-+	"r1 += -1; "
-+	"r1 += r3; "
-+	" *(u8 *)(r1 + 0) = r3; "
-+	"r0 = 0; "
-+	"exit; "
-+	::
-+	: __clobber_all);
-+}
-+
-+SEC("cgroup/skb")
-+__description("variable-offset stack read preserves spilled zero across slots")
-+__success
-+__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !root")
-+__retval(0)
-+__naked void stack_read_var_off_preserves_spilled_zero_across_slots(void)
-+{
-+	asm volatile (
-+	"r0 = 0; "
-+	" *(u64 *)(r10 - 8) = r0; "
-+	" *(u64 *)(r10 - 16) = r0; "
-+	"r2 = *(u32 *)(r1 + 0); "
-+	"r2 &= 15; "
-+	"r2 -= 16; "
-+	"r2 += r10; "
-+	"r3 = *(u8 *)(r2 + 0); "
-+	"r1 = r10; "
-+	"r1 += -1; "
-+	"r1 += r3; "
-+	" *(u8 *)(r1 + 0) = r3; "
-+	"r0 = 0; "
-+	"exit; "
-+	::
-+	: __clobber_all);
-+}
-+
-+SEC("cgroup/skb")
-+__description("variable-offset stack read tracks spilled zero precisely")
-+__failure
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("invalid variable-offset write to stack R1")
-+__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !root")
-+__naked void stack_read_var_off_tracks_spilled_zero_precisely(void)
-+{
-+	asm volatile (
-+	"r6 = *(u32 *)(r1 + 0); "
-+	"r6 &= 1; "
-+	"r0 = 0; "
-+	"if r6 != 0 goto "
-+	"+"
-+	"2; "
-+	" *(u64 *)(r10 - 8) = r0; "
-+	"goto "
-+	"+"
-+	"2; "
-+	"r0 = 1; "
-+	" *(u64 *)(r10 - 8) = r0; "
-+	"r0 = 0; "
-+	"r2 = *(u32 *)(r1 + 4); "
-+	"r2 &= 7; "
-+	"r2 -= 8; "
-+	"r2 += r10; "
-+	"r3 = *(u8 *)(r2 + 0); "
-+	"r1 = r10; "
-+	"r1 += -1; "
-+	"r1 += r3; "
-+	" *(u8 *)(r1 + 0) = 0; "
-+	"r0 = 0; "
-+	"exit; "
-+	::
-+	: __clobber_all);
-+}
-+
- SEC("cgroup/skb")
- __description("variable-offset stack read, uninitialized")
- __success
-
----
-base-commit: ddd664bbff63e09e7a7f9acae9c43605d4cf185f
-change-id: 20260610-bpf-stack-var-off-zero-v1-34ad1bc3b533
-
-Best regards,
---  
-Woojin Ji <random6.xyz@gmail.com>
-
+Miklos
