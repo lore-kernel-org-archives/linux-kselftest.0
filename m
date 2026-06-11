@@ -1,167 +1,183 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852FB4BC01D
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 16:28:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781195338; cv=none; b=T5+HCxx2bTTpF6o5kKsfpp2OI3EqXg36gS9ew3pIehoxjgHUFzTheeBdnfqZj4Gf/aCDKut3ZqDdPDn1db7cv5IFyUCWaauETrpKPiJkKo4ULph8L/NS5YQaIa6Kjt6U5mPB/3cXrPpqAwOzaBNUse7A8tWgCBoL6Kb799bKJlI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781195338; c=relaxed/simple;
-	bh=Dq8U4JeMLdDJZCai9rkKpCchuv1uUA+lqZN3PGfqBIk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=ml3lzOkX6LA0EwrcQjvyEIfjFyRE8zGgFm0Wh4P+QfZmFQVxyOLS23fLduiPdrQqO0SNasTekPqUJdNKAI6+J2GMo/mdFmNwOQTVQc9rNwqFSSc/+pr97HIp8ugAclcVOhcluIFijOAf7axg9p4H2BytK8ceww9zDZAIh53P/v8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=gO86XJ5l; arc=none smtp.client-ip=74.125.82.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E51330651
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 16:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781195849; cv=pass; b=Rb3kp6h18/tBcqYXYbWHzmc6FJf39hNlO7AP+sUoXnHW87CiwvKamspwHrWnaA+/Pl4kcQRilTGJi8kVqe4IPZm/0nDUv25ysZyaH/AbArmulORfj4ssjP1YPi4532AQny6PGTaoryEHwbCcF9eKNc6YItEDSR2KcnzDHishO7g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781195849; c=relaxed/simple;
+	bh=YqpjZ2mJYo+OscrePw1sjkzQ+nl0rlFsGa5QD/lhW78=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Vo2KAV1f5m2LyXteyMnkH3+lGoQsAVfpQlox8ngiVJE9ctIijKNfMNxOTI0XMD2aHdcMiiyTjp59CT+JxhGlonBupVme5VdJ55OlBoEbn/8P/qiXiSs+rPJpGkDvPxPwUGhTV7WyzOgc2IBxp5r8+bdkazse+AEQvwiGe6uCwhc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gy7H0iuv; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sls/ulgy; arc=pass smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="gO86XJ5l"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-30759632453so110672eec.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 09:28:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gy7H0iuv";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sls/ulgy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781195847;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lo2BJAapvZJXWOBDzrRCDmN5WtMov6d+Ohtu+DitNMw=;
+	b=Gy7H0iuvwtQLYLxnJ9X3AxhXcQ5dXhoz8rwlEuxg2FJjkLZ4MPuXX4jh9g6qNSuQ3up9h8
+	2wjDhIqslmwEUf2GkmQvQlje6Bd8tJ/nVLSU23d67DShuk/vNNB3atFOGK+ACPhODKwf+Y
+	Y3pDoHFhki5sLhtkOK0rt2OHNnNn9bU=
+Received: from mail-yx1-f69.google.com (mail-yx1-f69.google.com
+ [74.125.224.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-258-h3g96382O8mUltZQgJNNNQ-1; Thu, 11 Jun 2026 12:37:25 -0400
+X-MC-Unique: h3g96382O8mUltZQgJNNNQ-1
+X-Mimecast-MFC-AGG-ID: h3g96382O8mUltZQgJNNNQ_1781195845
+Received: by mail-yx1-f69.google.com with SMTP id 956f58d0204a3-660d7828a5bso167405d50.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 09:37:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781195845; cv=none;
+        d=google.com; s=arc-20240605;
+        b=lVWN5GAJN5L3SLpZuRar1EC+diK8jRrbFE0IZct9UXU0CYZXX9rlttHlgSirjq7Jvm
+         0rF+2J2loET8voPNdEaBcQsqAgn8lgGijGEkMqACDxk2osHx3zFxDrMHaBPpc/h7oxkd
+         CxsezK+EsTmEaOxuMXCX1wBNIa1zr9UysjlUu1AgaSn+vTLab4N6bpgzVnSbyy5hdnzK
+         g3xmiJQHCwRojO/vke6oItU1AxdDXC6fIeceZws/tqTlqJfX1jaSvP3Rnz7d6uxPLT+b
+         wJU2GVdyawCiLn6FBRowp52g5THpt0pGlx6m75jkIQ3UGwlYKMWOxggDf7USG4hziUkW
+         CsNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lo2BJAapvZJXWOBDzrRCDmN5WtMov6d+Ohtu+DitNMw=;
+        fh=GzI79nLngE63NS6cmDynk/qZ5ZULcDnX4ZXzFXG88yY=;
+        b=cCQmwXGAKZdN+cm4jGBIvbgXog7QQziHr6tcI43WC2mXjYmnrS2guQ+j2BWuuCb1CV
+         UsClokRziWOXTv+jG3enTC4mgiDj8GWo0No6w6WIXjWxbHo/v7SEPX6tMbj9lZJZVVIo
+         FjBHXjXQDhYSy2glkskfAOi79PcO3T2ZYr5JiqSq0sze97F9E9WCF+/OOjafpk+q8oct
+         Q+JuEVKcXHsx0WnBcbLPSaQjhIHCE/1B0MYLIKSB/mERk9cBqPyDoz4axaRT+dxEFoUd
+         mt8QAhN1/O2YBbNj5lDfRwRxP7ocLhwDMtoPAzS8g4XKsNs75xTn6z3cZCfkdiKZ9HMt
+         6Qow==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781195336; x=1781800136; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=redhat.com; s=google; t=1781195845; x=1781800645; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hmILQTIhg4C2xaf23uaTPKYf63Qsqb45amOoW42QXJM=;
-        b=gO86XJ5lX2WhRMfkazLeKXLf7wv1CkXPx9mPNdIgUvnRG0+aMS1WTVPTkSFyz2/uju
-         f+dl+CDOeVOGYozPh+AO0+g+AgA2I7Wj8aG25z9PsB5fyPphzH2PzL8g7p25qK12h4XW
-         RE1fBgpAck3lEoD+tHqqnHXIFLFe91oecgiTgsV3/5L8YMOhIhmK+3xqnQ5wyeTr6DNp
-         NveThIDMWV2oQieMoMTS/P4+oOR4X/CFU0JecME9HoQLWnVGGNzexXvEn+NmYX+57mMD
-         8/SRfSGfQ2vSlSUKCnOoHLyi5Jb8wCP3EWlntz/vDnyKTNzvb+FWamw5uieCRTuHLSlo
-         G9Kw==
+        bh=lo2BJAapvZJXWOBDzrRCDmN5WtMov6d+Ohtu+DitNMw=;
+        b=Sls/ulgyCvKOSDCRAMQ3/lO8IGrW5PWeLhBrTfgT/9PfJE1tKDxRx/XWf90Q2yG5Uz
+         vrVW4ijQbxeA2+FryLzros5G3Q3JjWJxz2ZZuFoiWdlXNOT8D5Wag34+zYK82g8Lvxh3
+         DUEUwH9BEi2NIlp/iiY2qEdmNTYhGcebagdqA50KaHM0AbHpX/CgOjaouEh6Zvj6YF3w
+         arl+HbuJdcd3TltckQEzW0eNCIn/W7Hrhi3a1Spp9f3tPBe2NEhHkN0fF58GOgYgY/Sm
+         ePvSwsIV0BylPeHTLyYkF36OC3rAtH1DgCusCQmKAKxmk2MkMqc7iJxKxxnUVOi4hCRT
+         FTpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781195336; x=1781800136;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hmILQTIhg4C2xaf23uaTPKYf63Qsqb45amOoW42QXJM=;
-        b=WDcEenThARjjtAzReuMjDeXW+7v+jJ1PARTvM08cVPJktMNBKDSi9OempT0+RJn+3O
-         Wq75lUg1NFHtHIy8b+ax8SFxTfP6fxMAb5ZofC+7vcKI9hskHraDvMxjcsRpUvBNXy8h
-         4YM3FFioXE5n2PXwjzstlkRD/4f/TSLynE+aJZu6riYPh5qWWhUqMNMGUu7BHe1vVAuQ
-         2p0r4kSMItcHCrlFVEHy8lethEN2aoi90fovPyE/BjVay6YmJteLMJFGwroFj8nb4UD8
-         hGBFhme1culQ4qa3zuQCof3JijbQSrgbukfGWbqWqOOttEY6l3s9vozTwr5DDPuUUu7L
-         mtGg==
-X-Forwarded-Encrypted: i=1; AFNElJ+70HZ/20SkJO2SiFIU4rUqGFIHwkXXFa+f/dBm4px8+0jTp6NK0M0Y1hlRZsZj+5f7NJyvxzVt7fcgw8eHGDM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxtq6vO2twwGYwstzDzL0zjLMnNbOOs2LNQxllAplYxmGcN2GK9
-	ux5UG3+WnaEIbrtHQEHCTHuIJZBSkvc2sPAeNs6f9YvUvA8NQ9ge27j1cOnPT0UyG+0=
-X-Gm-Gg: Acq92OF5TB/hso8dYwLuUZEdBOKbpi9PAk9kDsqxuAaPJTpGr16YPXKt8OlBs4a+xnD
-	bEY7/06N5BNvcJR+16UcKUfvGYFtHgJCsGeH6WbGOjtJPuiWhbGqTFPmmnO0gdf3VPBBQiEWGU5
-	MBFWROmGCrrwm8utyes8VXF5zHUTn5NGQolkjedzSEAk3Ykn/GXy+BrgbJbQDLlnf/TCsHZFjbG
-	xGyCmnWvMIRgSIztPGjgAqzvHH32wJo1lk7Lh2xF5FCpQgmuNzCWhaQwzcNpHy/ZkPpIIopZGGF
-	mmJU5qZtcPuCwUsfAoyscTDqTdcmCBCoCrIrSylWCekLByI5Eb2JzJrPck7XRW6JWfiZyw0cjC2
-	gLISKALBt08WlYb8q48crGKqGSN16cVgDdu6afCx+XBTEomMskBTbuaqrhqbvMG3tlXRK7G9ED/
-	oMlyhboTruVHQa68s=
-X-Received: by 2002:a05:7301:1292:b0:2fc:9ae6:e5a8 with SMTP id 5a478bee46e88-308049eb931mr2752590eec.20.1781195335328;
-        Thu, 11 Jun 2026 09:28:55 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::9f35])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30806c47afbsm3701418eec.10.2026.06.11.09.28.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jun 2026 09:28:54 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781195845; x=1781800645;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lo2BJAapvZJXWOBDzrRCDmN5WtMov6d+Ohtu+DitNMw=;
+        b=DHoBsMjDseOmfVy7gZ2JFoXHmaJ74rGvlUpPmH7wxNM12gbIhO6tudJQbw2wNzHapL
+         2+VJpo/oXPsZCao7dFv/IUZumgwEOXMGkaAZLyz2yyLFaGcMZ0ydw1vZvMIRqEyemdnC
+         82Gl49PNUG68Nw8rW1R6ruFdI8DeNh9E3/EnyVBnkS2e5Wk+UeUiaQCA2S3B+FUVPuyr
+         LEhholeQoDH882dlR5FK/4UajGA5Z6IbUZ+80m3qKeBgPBxfe4eAiq778tqR/Zfd4dwN
+         MWYg/n+I8IRe3mSxK+oVWqxt9g8oywEtozo8BdNs2ixKKtJ+XnEvX24QL53Ix6t/wiNL
+         dPKA==
+X-Forwarded-Encrypted: i=1; AFNElJ/Ads9l8cIA6rdfC7zbG7PlOmFI+VC6RWS34unxsff0n6LmYq85FTHY4Lb5Wff+erwJ8J7hg4IQdLCxBmYDOu0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzC9q21Dba3mcfgF3zwLZev6oA7E7UR8v2ULlG3jaNEUP2QCYLE
+	xMBHSad5WgS+VNZG8d6fEmvO7bLu1IfeKgrrZiwV8ySGWTtwdoqpS3+VK/EaW3WFQL+OPiL9Ve1
+	4jyqMDPBO6rFuBun/oMu5tso5er8khJyE48pBxcTaCfHF/Zr8XxQc+kUBQl1d0L11HPnEgjMsZt
+	hMsPftHgMgrtxAQeLB6JC2zb9QjLxVlf3DvxJ9OSFHV0pU
+X-Gm-Gg: Acq92OHizzPSUyqo9tJu2cQMNSlNKJBaxXMTHhq+5Of7JKB4tJn59Dszw7jqVgsdoJY
+	z7tK7lQOdZZT8q9uyC4dPVWhQputirKlz9P0//FeKBUW7ao+ZOT2qwKIdyYrLbHQGWWqjF+kePJ
+	7ObeVcLhy2B5O3novMY/eVR34UUOYTnLXNu0jfB902xjfFwlIPzZCO2Q6O9JVGaIsxTJktOacwM
+	E4F
+X-Received: by 2002:a05:690e:1c07:b0:65e:9e71:7942 with SMTP id 956f58d0204a3-66269821a84mr2395917d50.37.1781195845248;
+        Thu, 11 Jun 2026 09:37:25 -0700 (PDT)
+X-Received: by 2002:a05:690e:1c07:b0:65e:9e71:7942 with SMTP id
+ 956f58d0204a3-66269821a84mr2395891d50.37.1781195844844; Thu, 11 Jun 2026
+ 09:37:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <c5401e8d-0b46-4cc0-88b3-f438d610e73b@redhat.com>
+ <7e7cbc60-e9c7-4a63-9d4b-4e8fcad7bfc0@kernel.org> <58760bd8-4979-4fb1-96a3-eb94f0e8ca0c@kernel.org>
+In-Reply-To: <58760bd8-4979-4fb1-96a3-eb94f0e8ca0c@kernel.org>
+From: Nico Pache <npache@redhat.com>
+Date: Thu, 11 Jun 2026 10:38:12 -0600
+X-Gm-Features: AVVi8CeRiWREUqKN2Q_Og2MjBU5y5YTHpA1HPOjpENVr0n3Tq-KSA69EjhcH1X4
+Message-ID: <CAA1CXcCuk+3T98i01fAbQ-MSDX-f6ZdpE7kTbC_TwKObJ9siwA@mail.gmail.com>
+Subject: Re: [Bug Report] Elevated PMD nr_anon after running selftests
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Linux MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>, linux-cxl@vger.kernel.org, 
+	"Lorenzo Stoakes (Oracle)" <ljs@kernel.org>, Oscar Salvador <osalvador@suse.de>, 
+	Andrew Morton <akpm@linux-foundation.org>, Zi Yan <ziy@nvidia.com>, 
+	Matthew Brost <matthew.brost@intel.com>, Joshua Hahn <joshua.hahnjy@gmail.com>, 
+	Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
+	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 11 Jun 2026 12:28:51 -0400
-Message-Id: <DJ6D1R10KDES.B0BC2FOSLNCH@etsalapatis.com>
-Cc: "Weiming Shi" <bestswngs@gmail.com>, "Xiang Mei" <xmei5@asu.edu>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
- Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "David
- S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>, "Jakub Sitnicki" <jakub@cloudflare.com>,
- "Shuah Khan" <shuah@kernel.org>, "Jesper Dangaard Brouer"
- <hawk@kernel.org>, "Sechang Lim" <rhkrqnwk98@gmail.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Cong Wang" <cong.wang@bytedance.com>,
- <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf v2 2/7] bpf, sockmap: Fix wrong rsge offset in
- bpf_msg_push_data()
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260611123538.156005-1-jiayuan.chen@linux.dev>
- <20260611123538.156005-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260611123538.156005-3-jiayuan.chen@linux.dev>
 
-On Thu Jun 11, 2026 at 8:34 AM EDT, Jiayuan Chen wrote:
-> From: Weiming Shi <bestswngs@gmail.com>
+On Thu, Jun 11, 2026 at 10:24=E2=80=AFAM David Hildenbrand (Arm)
+<david@kernel.org> wrote:
 >
-> When bpf_msg_push_data() splits a scatterlist element into head and
-> tail, the tail's page offset is advanced by `start` (absolute message
-> byte offset) instead of `start - offset` (byte position within the
-> element). This makes rsge.offset overshoot by `offset` bytes, pointing
-> to the wrong location within the page or beyond its boundary. Consumers
-> of the corrupted entry either silently read wrong data or trigger an
-> out-of-bounds access.
+> On 6/11/26 18:09, David Hildenbrand (Arm) wrote:
+> > On 6/11/26 17:58, Nico Pache wrote:
+> >> Hi,
+> >>
+> >> While testing my mTHP code I noticed that mm selftests caused an accou=
+nting error in
+> >> /sys/kernel/mm/transparent_hugepage/hugepages-2048kB/stats/nr_anon
+> >>
+> >> At first I thought I might have caused a regression, but when retestin=
+g with 7.1-rc5 (without my code), the issue was still present.
+> >>
+> >> This issue occurs in two mm selftests:
+> >> 1) hmm test
+> >> 2) migration - private_anon_htlb test
+> >>
+> >> I spoke to David about this and he suggested the following diff which =
+seems to have solved both issues.
+> >>
+> >> David would you like to send a formal patch or patches?
+> >>
+> >> Cheers,
+> >> -- Nico
+> >>
+> >> Diff for (1)
+> >>
+> >> diff --git a/mm/memremap.c b/mm/memremap.c
+> >> index 053842d45cb1..683a77dd679d 100644
+> >> --- a/mm/memremap.c
+> >> +++ b/mm/memremap.c
+> >> @@ -425,6 +425,7 @@ void free_zone_device_folio(struct folio *folio)
+> >>         mem_cgroup_uncharge(folio);
+> >>
+> >>         if (folio_test_anon(folio)) {
+> >> +               mod_mthp_stat(folio_order(folio), MTHP_STAT_NR_ANON, -=
+1);
+> >>                 for (i =3D 0; i < nr; i++)
+> >>                         __ClearPageAnonExclusive(folio_page(folio, i))=
+;
+> >>         }
+> >
+> > Wasn't there another issue with hugetlb?
 >
->  BUG: KASAN: slab-use-after-free in bpf_msg_pull_data (net/core/filter.c:=
-2728)
->  Read of size 32752 at addr ffff8881042f0010 by task poc/130
->  Call Trace:
->   __asan_memcpy (mm/kasan/shadow.c:105)
->   bpf_msg_pull_data (net/core/filter.c:2728)
->   bpf_prog_run_pin_on_cpu (include/linux/bpf.h:1402)
->   sk_psock_msg_verdict (net/core/skmsg.c:934)
->   tcp_bpf_send_verdict (net/ipv4/tcp_bpf.c:421)
->   sock_sendmsg_nosec (net/socket.c:727)
+> Just realized that you sent this, but somehow my mail client got confused=
+ and
+> hid it.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Yeah, sorry. Thanks for the message about the email client setting I'm
+probably missing. Thunderbird may actually work for me now :)
+
+Cheers,
+-- Nico
 
 >
-> Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
-> Reported-by: Xiang Mei <xmei5@asu.edu>
-> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
-> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-> ---
-> To sashiko:
+> --
+> Cheers,
 >
-> Regarding bpf_msg_push_data() reading "copy =3D msg->sg.data[i].length" w=
-ith
-> i =3D=3D msg->sg.end (appending at the very end of a full/near-full ring)=
-:
+> David
 >
-> This is pre-existing code, not touched by this series, and reproducing it=
- needs
-> a narrow combination -- a pure append at the end so the loop exits with
-> i =3D=3D msg->sg.end, a full/near-full ring, plus a prior push/pop histor=
-y that
-> leaves a stale length in the otherwise-unused end slot. A freshly built r=
-ing
-> zeroes that slot, so copy stays 0. We don't consider it practically repro=
-ducible.
->
-> Even then it's already covered: the overflow check in patch 1 ("copy + le=
-n <
-> copy") rejects the dangerous case, and __GFP_ZERO in patch 3 prevents any=
- data
-> exposure. Not worth fixing here.
-> ---
->  net/core/filter.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 3c8f1cedb217f..3e555f276ba80 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2872,7 +2872,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg,=
- u32, start,
-> =20
->  		psge->length =3D start - offset;
->  		rsge.length -=3D psge->length;
-> -		rsge.offset +=3D start;
-> +		rsge.offset +=3D start - offset;
-> =20
->  		sk_msg_iter_var_next(i);
->  		sg_unmark_end(psge);
 
