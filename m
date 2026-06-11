@@ -1,33 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16B23ACA7C;
-	Thu, 11 Jun 2026 10:02:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0409345CBC
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 10:11:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781172122; cv=none; b=I63JLRasGssZH718WaxRyxBy8k+oJ01czV8FxeyUSshruI+C1C0wr6QvFFvbZh5lbpcplWgy3DqhZg7E+rM+ApmqBA1IKm2KFvJRCHuqUPVATxMPO+tgOYLFWO+s2RbWh+GBwh74YqXVUSFzYBhi8l1domtBmRZgFmSBzpooLLI=
+	t=1781172694; cv=none; b=VhfUrE8klorlAyzjcsEDQWFjeeXMQEgsTFQifhG5yezwI+/5sjb8X+Ve2thCh4t/ceS7PtoK8dQcuKb9XGmKegG4OKu0+jVmDA7Bljk2jTan52C/czeKlRbVAfbmdfWzcpiLJ5n7nKlC1Ac4APd6vcaR3PPwhjmtpYq0IQd8SaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781172122; c=relaxed/simple;
-	bh=epjhNjiTuw7OKicaBYm6IsSTnRn6aTsVutKxIjrfWck=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=IJIg0GkAfdct/fko91piTBiTtA/4PO3vwrIDYiMIHqf7vRlgU/K/yUVAoxa/aTtH8YUnuP8IEbzqK9YnksAV2S2xSnCXEK2DTsgctV4XG8QUKpLLSzUGPlSNjSnY5HAgq5TW1DjP0Z1Ak6JBFKUuT8aeRjzHEWhU3m5ZaKNRJSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cxkPnPGR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781172694; c=relaxed/simple;
+	bh=0JqGj+0SYcjs265lh5fKkT/DLXFDwGgLJyf8WKteLwo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=grj2XJ0PAsKI3ZcEzpW/nzZoddEDKKYhE5UtL17VULN4Pp9aDEISWIFRa86x6V7jR3IihUnohN07lOez5qepGLtzo/W0wBf4iCB4WVphnlY5zjQuJtO8Bko/WUHH0OfoFhokVduR+oaVSmTWTgcR9dTW0G79dBdGg+vM8w7Yb0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NCDlHYBG; arc=none smtp.client-ip=209.85.214.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cxkPnPGR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8706D1F00893;
-	Thu, 11 Jun 2026 10:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781172121;
-	bh=7UQfP1YxizekUK5kBwNkIE8MO8+eXgLAl0KPnDKl73Q=;
-	h=From:Date:Subject:To:Cc;
-	b=cxkPnPGREf1vKQgkfjyrjPLaAePUQaLKLGYnyakzhJ13F0NoKNU/qv1sIbTW2albR
-	 ecgmCAjsGMX2bVwzhXmgx1IMUh0hZuLT7tMHeoq5RaOYh9qBgc+7Oh7tZ5OonLQ3+T
-	 UJ+JuiPxtLJkYlM3AyKvF6qaSAfg/ChHS4qlhX0zMDghQk3w3Kp3EE5kTcpdwjwJ30
-	 pGVi3VnTmRV86EMuP904eSV+rjwLrJn+wSK4B6pPK/VbzC7y/nRAeNY8LnXnx1LEvF
-	 xP2kbPnUOUIeXCdMy275ZOlSWpqZg/8acHrQO7xt1Ey561BF75PWNXpmNqPrtj8haH
-	 2EhWbl7F0K9gg==
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Date: Thu, 11 Jun 2026 12:01:55 +0200
-Subject: [PATCH] selftests: mm: fix and speedup "droppable" test
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NCDlHYBG"
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2bf2e8ccca1so55190465ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 03:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781172690; x=1781777490; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UEHLsjJ++YbF5BMtiZ2F3yyTv5ibuthDDlfDb6LLLmA=;
+        b=NCDlHYBGcI7EyHpUGmrP4AQab55rj9nOlm9gVgG18thT0FYoNp/4tTO1owrSixzp4P
+         cuOTlDm9wF6V5XP5fgFhEosft87ikol0SH3/ann4GViW4/ePBnZdUTB7OGVgp5yIA4EP
+         5s8RrXJGacKElSeeGIi6cuZC51NOL1jEc/5r2tco8nHMtVHVj9O4scc8jE1d4552DmeX
+         77rrj60oVimAMYMMkgZq/M+cVrJDA1DmNjlqRDBpBNOL/BzBLVz5+DiEjSLYZaXrvaum
+         q9k0ut7Q+p+Mi+fSMx2tmW7J9Ydb1IhTIMDDYY4W6YS60DuXAUKTh1+z01+n8EL8uXm+
+         GZpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781172690; x=1781777490;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UEHLsjJ++YbF5BMtiZ2F3yyTv5ibuthDDlfDb6LLLmA=;
+        b=WcmLMHQIiqopu7oGH0nNx1KNWI+w9hNbFu82UNya4U1+r6gDy2R+jcP0sQdDb4MgDq
+         HYrwc0J7uqtabBT9tC2xNqSX0kAvqarig+PJT1+JFE2gbeC1QpFRNnJblXrjicDvkfkD
+         AahcqY/Gj4MnnkJjmOcWTxqPxIX5vyPBFkvD11Gqt+2OcNCUB0VIqTAarp80C4qZju/P
+         RhcK/yum0ZPAtNONaxB0G1c8SwVVydOcwaGYOrrUxemx4AEwBKNjpx1gz74bpIx7Q/tz
+         hnm5uR7wmtEgaqhmMQLlsRCy6sk+tUHl17uLp7wn6P+t37xsw3/LL9K+7HBmkDOQ2ug9
+         U+yg==
+X-Forwarded-Encrypted: i=1; AFNElJ/3c720cXgQd/cHwa9Txfb4BQGTyOuOPHq70Z+kg/gHrvnFOAlEvCeOTq+KU2eEVmNp17I/3Wj/Zw7PM5Wc04U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+BWCgEBz2MHj1REF6xKiY7ZdLQ+gAZpoG1wY6za3lOSj+Kl+X
+	PdE2tHsX/m8mMzfqjmm61EWOpG82323eXv04pSCnoJ3w+8Pk+2XWQtUD
+X-Gm-Gg: Acq92OFqp3GY+K2AU7+dZdTxD6ibHLnVR0d/Sg/2GHUpn9dgzrt6MMR41dptk02WE8w
+	SiKWnPE8XrTFxIwlf8hTfwyYbP1dYYqe4pbHW9hbAVXsENVFF1I1ALl6LKQy19ioq9eQ3oTaNHM
+	yCJxxjt0jDGGTGRR7JJD1EmXXpYJ8+I1qWYcSFgZAff22aZOQRt6jQDV1Y7AyvRVDwRF3yx+1zW
+	9Uv96DD40HXO1/O9QVapkfKUlTWE5+Z48Q0dsXKqkVjNPuL9UMejEdXf+J6QYx8/QZ/1CnZkqxr
+	+j07hGf05+NuXyW89UBmG7mX3QFTzbct+2BZKDzXBmbzWOa1qnvQTnPmpUrHkMX3mBkrwz5DP47
+	2xQSVDnJUgIvJaX9s5jPAdkol82bcsq6Kc1XXclc1314ZLNZuciPEK+Z/5C18Qx8k4hR1UdZcDR
+	u8/jPZn0ChHvZVqpehBrt2CkSdhOaJ6NBfrInBDYArOsnbw6TRnfI=
+X-Received: by 2002:a17:903:3886:b0:2c1:6715:a4ea with SMTP id d9443c01a7336-2c2f3254f81mr25383955ad.30.1781172690259;
+        Thu, 11 Jun 2026 03:11:30 -0700 (PDT)
+Received: from [192.168.0.6] ([223.131.147.119])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164fa072asm272299185ad.34.2026.06.11.03.11.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jun 2026 03:11:29 -0700 (PDT)
+From: Woojin Ji <random6.xyz@gmail.com>
+Date: Thu, 11 Jun 2026 19:11:24 +0900
+Subject: [PATCH bpf] bpf: Track spilled zero scalars for var-off stack
+ reads
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -36,132 +68,293 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260611-droppable_test-v1-1-b6a73d99f658@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAJKHKmoC/x3MQQqAIBBA0avIrBNSIamrRITmVAOhohJBePek5
- Vv8/0LGRJhhYi8kvClT8A2iY7Cdxh/IyTWD7OXQD0Jwl0KMxl64FsyFK620dXoUbrfQophwp+c
- fzkutHx5EE79gAAAA
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>, "Jason A. Donenfeld" <Jason@zx2c4.com>, 
- Anthony Yznaga <anthony.yznaga@oracle.com>, Mark Brown <broonie@kernel.org>, 
- Sarthak Sharma <sarthak.sharma@arm.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Aishwarya TCV <Aishwarya.TCV@arm.com>, 
- "David Hildenbrand (Arm)" <david@kernel.org>
-X-Mailer: b4 0.13.0
+Message-Id: <20260611-bpf-stack-var-off-zero-v1-v1-1-0ec407376147@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMQQ6CMBAAv0L27CYtFQ5+xXhoyxYWE0p2oTES/
+ m7V40wyc4CSMCncmgOECivnpYK9NBAnv4yEPFSG1rS96a3BsCbUzccnFi+YU8I3ScZi0V39YEN
+ 0oXMOar8KJX793neoGTz+UvcwU9y+VzjPD0oPN56CAAAA
+X-Change-ID: 20260610-bpf-stack-var-off-zero-v1-34ad1bc3b533
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Woojin Ji <random6.xyz@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8817; i=random6.xyz@gmail.com;
+ h=from:subject:message-id; bh=0JqGj+0SYcjs265lh5fKkT/DLXFDwGgLJyf8WKteLwo=;
+ b=owEBbQKS/ZANAwAKAUOXRMMVrfhrAcsmYgBqKonOv0DOBgJ1NXrh8NtUDLJOIS8Ll1jFGmqN/
+ 9TDMjzY+oyJAjMEAAEKAB0WIQSrknTJbxUcAdPNt5BDl0TDFa34awUCaiqJzgAKCRBDl0TDFa34
+ a5wfD/9XFMkALnzbeJnhATtSPA3rRuXLDYn8MKnsvfwRqy8V8IXF+ooV4BLCmqB0FFZTxXfJe1n
+ IMP9yNwLnV1pIXBpqjwHcGYy756ukAR3KPKEMaksTetKHchwsDlORhJnCvwHtoF7dHMIwDBFgN2
+ bxodEdCBnJxLbMu/+mc6SbYkR+7z0u6tWnKSnMpou2qEek7yQEUrmDTy/CGNlPLIKc0xdtqd2EN
+ jU3ldea4laOsCymAsw2b2+OmLX6fhQlxj7rZ++XdVL0bYxYJkLyG/IwlWyHyypYgS8oYQyOV0/R
+ BZvdn2GGu5qZQ593rvCJz+BR5uoGHWxrYpDmgThOcrd+mtXgs0HBSSjT3maDZgU1ztiwsZ3WnNn
+ 5CdJFfHTj+beczZwb8qfePaWHpse5/svsizvxpakdiX1qcB5YQfkJ/xRxihWzKk5MnWsIoyqu//
+ eUrGysEPVge7Cjdgtvbwmf+y0aWy5fN1PGFQADwAIA1rjEePCM1WnpJLpOJdesEDCegsicQWost
+ pMjct8m3JVl7Skq8BAHQOOui9TSEqW2M7QNtjYvjqRib4agTafKxqAmL/AzZiFKun45ebJ+db6V
+ 0o5tGYAWDEzjnqD9uixpyAu0AewRoA80hccKSm/i+8M6x23d8xINXFBIppgLSukwE04R0+wzPHI
+ 3SibtTqtWJqXuog==
+X-Developer-Key: i=random6.xyz@gmail.com; a=openpgp;
+ fpr=AB9274C96F151C01D3CDB790439744C315ADF86B
 
-The droppable test currently relies on creating memory pressure in a
-child process to trigger dropping the droppable pages.
+mark_reg_stack_read() currently treats a variable-offset stack read as
+known-zero only when every byte in the read range has STACK_ZERO type.
+This loses precision for stack bytes that are represented as STACK_SPILL
+but come from a spilled scalar const zero.
 
-That not only takes a long time on some machines (allocating and filling
-all that memory), on large machines this will not work as we hardcode the
-area size to 134217728 bytes.
+Fixed-offset stack reads already preserve such partial reads from a
+spilled scalar zero as const zero. Variable-offset stack writes also keep
+a spilled scalar zero intact when a zero write overlaps it. The read side
+is therefore inconsistent and can reject otherwise valid programs: a byte
+read from a spilled zero becomes an unknown u8 and may then make a
+stack access through that value appear out of bounds.
 
-... further, we rely on timeouts to detect that memory was not dropped,
-which is really suboptimal.
+Treat STACK_SPILL bytes backed by a spilled scalar const zero as zero
+bytes in mark_reg_stack_read(). When such a spilled scalar is used to
+prove the destination register is const zero, mark every contributing
+source stack slot precise before state pruning can use an explored
+zero-spill path for a later non-zero spill path.
 
-Instead, let's just use MADV_PAGEOUT on a 2 MiB region. MADV_PAGEOUT works
-with droppable memory even without swap.
+This has to be done eagerly for variable-offset loads. Fixed-offset stack
+fills can record one source stack slot in the jump history and propagate
+destination precision back to that slot later, but a variable-offset load
+may source bytes from multiple stack slots. Seed precision backtracking
+with every zero-spill slot that contributes to the const-zero
+classification instead.
 
-There is the low chance of MADV_PAGEOUT failing to drop a page because
-of speculative references. We'll wait 1s and retry 10 times to
-rule that unlikely case out as best as we can.
+Add verifier selftests for both sides: accepted programs that read a byte
+through a variable stack offset from spilled zero scalars, including a
+multi-slot range, and a rejected program that would be accepted unsafely
+by a naive implementation that promotes spilled zero bytes to const zero
+without tracking the source spilled slot precisely. Use
+BPF_F_TEST_STATE_FREQ for the rejected test so it does not depend on the
+current verifier checkpoint heuristic thresholds.
 
-On a machine without swap:
+Tested:
+  ./test_progs -t verifier_var_off
 
-	$ ./droppable
-	TAP version 13
-	1..1
-	ok 1 madvise(MADV_PAGEOUT) behavior
-	# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Reported-by: Aishwarya TCV <Aishwarya.TCV@arm.com>
-Fixes: 9651fcedf7b9 ("mm: add MAP_DROPPABLE for designating always lazily freeable mappings")
-Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+Assisted-by: opencode:gpt-5.5
+Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
 ---
- tools/testing/selftests/mm/droppable.c | 46 +++++++++++++++++++---------------
- 1 file changed, 26 insertions(+), 20 deletions(-)
+ kernel/bpf/verifier.c                              | 52 ++++++++++---
+ .../testing/selftests/bpf/progs/verifier_var_off.c | 88 ++++++++++++++++++++++
+ 2 files changed, 130 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/droppable.c b/tools/testing/selftests/mm/droppable.c
-index 30c8be37fcb9..57e1b6fc5569 100644
---- a/tools/testing/selftests/mm/droppable.c
-+++ b/tools/testing/selftests/mm/droppable.c
-@@ -17,10 +17,10 @@
- 
- int main(int argc, char *argv[])
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7fb88e1cd..c4b89fbd9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4058,14 +4058,21 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
+  * SCALAR. This function does not deal with register filling; the caller must
+  * ensure that all spilled registers in the stack range have been marked as
+  * read.
++ *
++ * If the const-zero classification depends on spilled scalar zeroes, mark the
++ * contributing stack slots precise so pruning cannot reuse a zero-spill state
++ * for a later path containing a different spilled scalar.
++ *
++ * Returns an error if precision backtracking fails.
+  */
+-static void mark_reg_stack_read(struct bpf_verifier_env *env,
+-				/* func where src register points to */
+-				struct bpf_func_state *ptr_state,
+-				int min_off, int max_off, int dst_regno)
++static int mark_reg_stack_read(struct bpf_verifier_env *env,
++			       /* func where src register points to */
++			       struct bpf_func_state *ptr_state,
++			       int min_off, int max_off, int dst_regno)
  {
--	size_t alloc_size = 134217728;
--	size_t page_size = getpagesize();
-+	const size_t alloc_size = 2 * 1024 * 1024;
-+	int retry_count = 10;
-+	bool dropped;
- 	void *alloc;
--	pid_t child;
- 
- 	ksft_print_header();
- 	ksft_set_plan(1);
-@@ -35,26 +35,32 @@ int main(int argc, char *argv[])
- 		exit(KSFT_FAIL);
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+ 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
++	u64 zero_spill_mask = 0;
+ 	int i, slot, spi;
+ 	u8 *stype;
+ 	int zeros = 0;
+@@ -4075,19 +4082,38 @@ static void mark_reg_stack_read(struct bpf_verifier_env *env,
+ 		spi = slot / BPF_REG_SIZE;
+ 		mark_stack_slot_scratched(env, spi);
+ 		stype = ptr_state->stack[spi].slot_type;
+-		if (stype[slot % BPF_REG_SIZE] != STACK_ZERO)
+-			break;
+-		zeros++;
++		if (stype[slot % BPF_REG_SIZE] == STACK_ZERO) {
++			zeros++;
++			continue;
++		}
++		if (stype[slot % BPF_REG_SIZE] == STACK_SPILL &&
++		    bpf_is_spilled_scalar_reg(&ptr_state->stack[spi]) &&
++		    tnum_is_const(ptr_state->stack[spi].spilled_ptr.var_off) &&
++		    ptr_state->stack[spi].spilled_ptr.var_off.value == 0) {
++			zero_spill_mask |= 1ull << spi;
++			zeros++;
++			continue;
++		}
++		break;
  	}
- 	memset(alloc, 'A', alloc_size);
--	for (size_t i = 0; i < alloc_size; i += page_size)
--		assert(*(uint8_t *)(alloc + i));
--
--	child = fork();
--	assert(child >= 0);
--	if (!child) {
--		for (;;)
--			*(char *)malloc(page_size) = 'B';
--	}
- 
--	for (bool done = false; !done;) {
--		for (size_t i = 0; i < alloc_size; i += page_size) {
--			if (!*(uint8_t *)(alloc + i)) {
--				done = true;
--				break;
-+	while (retry_count--) {
-+		if (madvise(alloc, alloc_size, MADV_PAGEOUT)) {
-+			if (errno == EINVAL) {
-+				ksft_test_result_skip("madvise(MADV_PAGEOUT) not supported\n");
-+				exit(KSFT_SKIP);
- 			}
-+			ksft_test_result_fail("madvise(MADV_PAGEOUT) error: %s\n", strerror(errno));
-+			exit(KSFT_FAIL);
- 		}
-+
-+		dropped = memchr(alloc, 'A', alloc_size) == NULL;
-+
-+		/*
-+		 * Speculative reference can temporarily prevent some
-+		 * pages from getting dropped. So sleep and retry.
-+		 *
-+		 * If a page is not droppable for 10s, something
-+		 * is seriously messed up and we want to fail.
-+		 */
-+		if (dropped)
-+			break;
-+		sleep(1);
+ 	if (zeros == max_off - min_off) {
+ 		/* Any access_size read into register is zero extended,
+ 		 * so the whole register == const_zero.
+ 		 */
+ 		__mark_reg_const_zero(env, &state->regs[dst_regno]);
++		if (zero_spill_mask) {
++			for (spi = 0; spi < MAX_BPF_STACK / BPF_REG_SIZE; spi++) {
++				if (zero_spill_mask & (1ull << spi))
++					bpf_bt_set_frame_slot(&env->bt, ptr_state->frameno, spi);
++			}
++			return mark_chain_precision_batch(env, env->cur_state);
++		}
+ 	} else {
+ 		/* have read misc data from the stack */
+ 		mark_reg_unknown(env, state->regs, dst_regno);
  	}
--	kill(child, SIGTERM);
- 
--	ksft_test_result_pass("MAP_DROPPABLE: PASS\n");
--	exit(KSFT_PASS);
-+	ksft_test_result(dropped, "madvise(MADV_PAGEOUT) behavior\n");
 +
-+	ksft_finished();
++	return 0;
  }
+ 
+ /* Read the stack at 'off' and put the results into the register indicated by
+@@ -4109,6 +4135,7 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
+ 	int i, slot = -off - 1, spi = slot / BPF_REG_SIZE;
+ 	struct bpf_reg_state *reg;
+ 	u8 *stype, type;
++	int err;
+ 	int insn_flags = insn_stack_access_flags(reg_state->frameno, spi);
+ 
+ 	stype = reg_state->stack[spi].slot_type;
+@@ -4235,8 +4262,11 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
+ 			}
+ 			return -EACCES;
+ 		}
+-		if (dst_regno >= 0)
+-			mark_reg_stack_read(env, reg_state, off, off + size, dst_regno);
++		if (dst_regno >= 0) {
++			err = mark_reg_stack_read(env, reg_state, off, off + size, dst_regno);
++			if (err)
++				return err;
++		}
+ 		insn_flags = 0; /* we are not restoring spilled register */
+ 	}
+ 	if (insn_flags)
+@@ -4291,7 +4321,9 @@ static int check_stack_read_var_off(struct bpf_verifier_env *env,
+ 
+ 	min_off = reg->smin_value + off;
+ 	max_off = reg->smax_value + off;
+-	mark_reg_stack_read(env, ptr_state, min_off, max_off + size, dst_regno);
++	err = mark_reg_stack_read(env, ptr_state, min_off, max_off + size, dst_regno);
++	if (err)
++		return err;
+ 	check_fastcall_stack_contract(env, ptr_state, env->insn_idx, min_off);
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_var_off.c b/tools/testing/selftests/bpf/progs/verifier_var_off.c
+index f345466bc..2d4878270 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_var_off.c
++++ b/tools/testing/selftests/bpf/progs/verifier_var_off.c
+@@ -59,6 +59,94 @@ __naked void stack_read_priv_vs_unpriv(void)
+ "	::: __clobber_all);
+ }
+ 
++SEC("cgroup/skb")
++__description("variable-offset stack read preserves spilled zero")
++__success
++__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !root")
++__retval(0)
++__naked void stack_read_var_off_preserves_spilled_zero(void)
++{
++	asm volatile (
++	"r0 = 0; "
++	" *(u64 *)(r10 - 8) = r0; "
++	"r2 = *(u32 *)(r1 + 0); "
++	"r2 &= 7; "
++	"r2 -= 8; "
++	"r2 += r10; "
++	"r3 = *(u8 *)(r2 + 0); "
++	"r1 = r10; "
++	"r1 += -1; "
++	"r1 += r3; "
++	" *(u8 *)(r1 + 0) = r3; "
++	"r0 = 0; "
++	"exit; "
++	::
++	: __clobber_all);
++}
++
++SEC("cgroup/skb")
++__description("variable-offset stack read preserves spilled zero across slots")
++__success
++__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !root")
++__retval(0)
++__naked void stack_read_var_off_preserves_spilled_zero_across_slots(void)
++{
++	asm volatile (
++	"r0 = 0; "
++	" *(u64 *)(r10 - 8) = r0; "
++	" *(u64 *)(r10 - 16) = r0; "
++	"r2 = *(u32 *)(r1 + 0); "
++	"r2 &= 15; "
++	"r2 -= 16; "
++	"r2 += r10; "
++	"r3 = *(u8 *)(r2 + 0); "
++	"r1 = r10; "
++	"r1 += -1; "
++	"r1 += r3; "
++	" *(u8 *)(r1 + 0) = r3; "
++	"r0 = 0; "
++	"exit; "
++	::
++	: __clobber_all);
++}
++
++SEC("cgroup/skb")
++__description("variable-offset stack read tracks spilled zero precisely")
++__failure
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("invalid variable-offset write to stack R1")
++__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !root")
++__naked void stack_read_var_off_tracks_spilled_zero_precisely(void)
++{
++	asm volatile (
++	"r6 = *(u32 *)(r1 + 0); "
++	"r6 &= 1; "
++	"r0 = 0; "
++	"if r6 != 0 goto "
++	"+"
++	"2; "
++	" *(u64 *)(r10 - 8) = r0; "
++	"goto "
++	"+"
++	"2; "
++	"r0 = 1; "
++	" *(u64 *)(r10 - 8) = r0; "
++	"r0 = 0; "
++	"r2 = *(u32 *)(r1 + 4); "
++	"r2 &= 7; "
++	"r2 -= 8; "
++	"r2 += r10; "
++	"r3 = *(u8 *)(r2 + 0); "
++	"r1 = r10; "
++	"r1 += -1; "
++	"r1 += r3; "
++	" *(u8 *)(r1 + 0) = 0; "
++	"r0 = 0; "
++	"exit; "
++	::
++	: __clobber_all);
++}
++
+ SEC("cgroup/skb")
+ __description("variable-offset stack read, uninitialized")
+ __success
 
 ---
+base-commit: ddd664bbff63e09e7a7f9acae9c43605d4cf185f
+change-id: 20260610-bpf-stack-var-off-zero-v1-34ad1bc3b533
 
-base-commit: d401506a8ee8ac6bc4a7767c17da036e9434a4a3
-
-change-id: 20260611-droppable_test-3737bd791dfb
-
---
-
-Cheers,
-
-David
+Best regards,
+--  
+Woojin Ji <random6.xyz@gmail.com>
 
