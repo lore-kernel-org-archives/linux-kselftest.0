@@ -1,308 +1,183 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC553644BC
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 08:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C24B34750D
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 08:30:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781165364; cv=none; b=qcBdQYTsayvubn7/vkx4/IEzAAvbZr5GIjnbbNk3e7YwYjKrg5cIJbdedKlVdp9Pd4bh7tt42+hiwdO4OUlbmJcV5S3Pd6emXPm6tfr+ZVJV4f0tys98xwww/3XP9cgtAfcDc2uYh7blspc0dk6mT6SeLoQ1UxaqVQpb5nKD0zk=
+	t=1781166647; cv=none; b=aCA7IttQnpAiAmgBYDypETNUtN8qLN1gjYpH+wtPrEpjNAslNXZLgLXDmaw6rJuG974uECszYVPMUzID8hpRr9X48fakLE7qdxwgUA28Z5ORjU6fSJ/QORzd98jdyDbJjKfdosSQJNK5JwsomYyyWbT6JtGhxTgamWVh80/rzqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781165364; c=relaxed/simple;
-	bh=fLiLl3V0CgYI1k2r0nXl+Hv1z/JdJstVhTKAWntg5NE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Uy3pW01Gm+/VHYhdXKvEybZYmad7L2ROFnVdjcoHYgzycONRTKzkFPOk88nyFALQNaT13DeCaxmlxlavClQd2Sll4bve9xgJXVfRyqluXhCg9UxM5iwjOolwS7OyPuUbekgD2Mi/E8TiPJ8yRCOOvS4BWKxaakRzAfwCEUL7ImQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WqHPd6bz; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781166647; c=relaxed/simple;
+	bh=XR0V+4h+8MJh9uy6euPn7a63rvq06PZMS77yDeSWSwQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=O5Rrb6wEzpnUkVIvHUNgNeBMiDuTeO5eYlvbnY4pLTndWf5Dy2KSsfTIk1wpw1bfyMJB5TZEnJxR86NO/UtUYij96/H+GVNUhsvgeWttB8b0ArySnwcOwBpq15xHXrl2xoBpZ74gwEJNsJMtC2gnDY6rcSgtc0OezUrLI/+IL6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jEIN7waR; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=W0VVR2hZ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WqHPd6bz"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2bf0ddaf50fso53026435ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 01:09:22 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jEIN7waR";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="W0VVR2hZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781166644;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K0b7sev+YXar1BdsAXXs6+O/y7RGvS4oVWMa4UAvNR4=;
+	b=jEIN7waR2UDP55G4M1PsvhJ5AghntcpJFBJAMtucsMcT8Fqa7ECpdqrWT26lK6IisETmkQ
+	OmMMgsvt4ezS8tlPm8VuP/P3LhC3w3/oDVolb6ArDhHyxaotAUWcHqBK+A4+SwlOmcqAL4
+	yrCv04auzcNdTN2badaDe/vsJUvtBsc=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-377-G9JupaRjOQOCbxlk9x93cw-1; Thu, 11 Jun 2026 04:30:42 -0400
+X-MC-Unique: G9JupaRjOQOCbxlk9x93cw-1
+X-Mimecast-MFC-AGG-ID: G9JupaRjOQOCbxlk9x93cw_1781166642
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-4600c8cb13aso4729999f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 01:30:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781165362; x=1781770162; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fSWHG/fZwGNdDcsSNE8Dmg90eYdiDIo5tjPEs/CIw8s=;
-        b=WqHPd6bza4PNBcUQKM4KGJvPh1Q/Lvce0KCR+I0jBnuF7RAX9NQZH4zCTsqvxg0jY/
-         fEIy1fcdaeOH9w2iuC4phUO+ddSBO7f+i3LI9qDbL1gWqRkiDjuHJ5n5tG7gb/Yzn2eN
-         FnuEmHNeXBWr+AEkRd6wNj2PdI1Ki7Kk7lfRrdAJtgXQYa+aZ8uOeIwBPesG/OJseYf8
-         069OA9kOjMVWXOCgY1ZpVwsA5pSxVnxF1U4vmA5JXRc+HiGcBYLR96T9KWJZWJwOd4Vm
-         rhiXNJ30eY+IrcNq5nXhXppGcqLEEnpdmmOleGVDPLhT85aS0UeV3VOA2UCmZ2higr/0
-         xNKA==
+        d=redhat.com; s=google; t=1781166642; x=1781771442; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K0b7sev+YXar1BdsAXXs6+O/y7RGvS4oVWMa4UAvNR4=;
+        b=W0VVR2hZwFKl/M3Sp+D/1o9rThGTAvzejaH1A92ykZOnsNQ732pOqNdo62QflzOUJ0
+         SdC4FMerrZSY97TQ+Ce7ZlkOFYA4zToBmohim4aJyMqBHJxylI74CLqiYDfipp8y+ula
+         Smbz8jRc5GXghQ4/SCBqgqJC/nd5lW45e2/PTQc2WYwJI/jEXbFzuKA/+Zjh/evxbbdS
+         AVeIB7u1MwwVtz+VTeHFbjAfVf/laYPFRAPYqL8VaUN4AK4+enNS6Vne+yAHopfKnEtM
+         4T4ICE+8SvhTrnIMegVc+1AWycDVAd2C9qhh/v63mZ9TgYtwAltClP9AAaw18R0j5f1P
+         Jtwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781165362; x=1781770162;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fSWHG/fZwGNdDcsSNE8Dmg90eYdiDIo5tjPEs/CIw8s=;
-        b=ktZkN/+RWNa1OZ+1W7rtEYc5Y8fm1tTtJAtk2evbNpRwiwacRHo+muFbkYgGICG6wk
-         iAQTFfA7greWEmUGCFRiqKljvZWk2amYn2xdxLdleohGwZzPk5dbAaCtKZXXoPYiDW+U
-         u/BDZIOTH4Vsu7SD6BgnxUn73Pu54vehRMbJxVGiWsxoS2u6Zu4Dj3Z36vfb+rwyIojo
-         otGMe23Fp/Ug9zfqjBiJJiOoJH8YcYk0Xdj8FCLIh8FdflSytOfreCvD1S8QopsChgpA
-         0CO0UGUtMBclxNb7m7Gd7UH+hvvJAPsmG0bXgxJQyNcNYK1h0HkaxsQsFDjmW3OjgQyW
-         ONbA==
-X-Forwarded-Encrypted: i=1; AFNElJ+9r02s4bXfJk7QU9RoYk+Z1I4HulJtb75XuQMB/CZNrKG2926JTOg7/Gmm9g/zOqPzFvI2Ib5cm6Jylq/K+28=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwO2hYgqJNIh9cf+DCOzZNoT/gWtlBSTz6LR6KXxXx7SA14AyhP
-	UpREUvk33GXQD2iPeHDjAPrUpgJJk8Ck3oDQxHK4OCFIBli5DYPJtBYH
-X-Gm-Gg: Acq92OHmxZLgJjaxJWy5AvAxB4VQOPmS5gFEXSzh13FSnt2Ccm3zlMHh4t3FYAmQlnZ
-	ZtQmsRQMImVUK14DcM5Rvquuxcads6Kfy+SHbk78TaJyohphQTrtTGIqHOZO9lCn2/9XMyFz8Ef
-	5FmnJegDfvrZHLu9G00OuPmaktnzSlxvSuJf4Xblj/BVl9SIdYpWvMuL/prCpQCpIkPw7+cQXoc
-	r74u/p2bTIUN4Aw4j57CbxYODJ0LQFNRh/uAkSOIZPRKQXBJCWrR8vaoaPyrrI8FtwYwTcV9SEH
-	AEG+0EizjQheMkUXHZxcXpX1MT2RkwN2Hs4Buduml6xrC8GQAPHa9L/2VkTJ8TEGP9dJKg9gMWw
-	2EtMGLNT3FEcdVWlWwPhED2IbKc9i6AXgmeYuJILbgyaFx/YWgKSos5jwFj0wVnyvZovVz/EPAv
-	/ldjy+terG+ElxV1sOQ+jyuMziaVjMJ14hEuIRKnLNZpDnBgrtYrzvWun9/3wb+TtrT64fUo1d1
-	vhnCF+ZxMiz7MqaABf8r0T6d0is
-X-Received: by 2002:a17:903:2408:b0:2ba:7881:948d with SMTP id d9443c01a7336-2c2f18e2accmr20789065ad.1.1781165362432;
-        Thu, 11 Jun 2026 01:09:22 -0700 (PDT)
-Received: from u2404-VMware-Virtual-Platform.localdomain ([2a12:a304:100::109f])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c1664ad138sm277591035ad.82.2026.06.11.01.09.14
+        d=1e100.net; s=20251104; t=1781166642; x=1781771442;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=K0b7sev+YXar1BdsAXXs6+O/y7RGvS4oVWMa4UAvNR4=;
+        b=GO7LgeKfQo1XOMQH0IsQsTRtBgWcIsetQXseZ/jnX4yhalumKVW6QcEzRJPVkSqy8G
+         9NaXw/JKyqm8o/M+b9nrQ5DhlykcfdjkBfhRPCCA+nSURWqqLUMbWW8r8Ew54E6YWw6J
+         CqvgNQOySwJKNWquEOUseDJlkzhDgiyLLIgF6o9ohm2b2tDtJ48a234wnZ4IzboNZpQ6
+         qqaRwIzQ/qWDOV8whnZJ74oawIyvULCsKK7+ij+K2jNBHk2+1g2WT4ItqFJq8JAsBSuo
+         EjV+K/58NnmTWbhoyoj4q8M5FiVj+KhmKMjR2BcC/aAZrRKZkstMhjspAQxdUu7zr/S5
+         zQ8A==
+X-Forwarded-Encrypted: i=1; AFNElJ8zlufD5wZfyGkizKqBcmmdotz+aYupLjJJHGtZCFeIVR92M/1owwujpWmynxi0oat7f3bWGxq9+TCuavVdESI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPgdC+DCHKIurgU7kxHmqJhVGzO9ABt3UCeBSLzTjjc2cIT1A+
+	+9+4l9vVMLJ92kDpxQWEQllYCC4UsQB6coLxK6jZlT7I8Hd3HvkYxJjgnPVF/IJPtSnJZcjLq2H
+	L14vGp3dTpq/ns2lGrPLUuW/rYw+FeOhOU09YbNDtabPQhRgzcE5/1bU5bECJnSWgVXTOXA==
+X-Gm-Gg: Acq92OHqt5hZB9dcCv1okqstljhSL5x/i5HZdtI6gNxdlnhBvFmtt17eAElAdBZswII
+	+9a+/vdLYTTpIQeGaXdOFtUfkYemmTrxIM+gQOeF4HKZsot2whAAp0e/yRs5cwI51TSbXLrBSX+
+	UkMWOFTDch9goqWJw/GeNHOIsYvaRzmBEEPvQL53HP9KZ54DvWtoDgdqn3nKyni0S6lZTouoyuN
+	2NZkIn1376ZVJeGpY8uYtyLsQH/7tlbng0TYsk85hhcky9PtzjPAyIlfkZjBHABXS4wH9kh0HDr
+	xDzRvqs0YeBNBsyIVS1ysAZUao+DkfnaPGWp9ZCl1dkom7cAqbz7y5fQYagZzc8UCaUoYmsIeGJ
+	gn46A8BfS5mEv7vtjg/rSZZGNZ8SgYCAlkLzbv4MMrdYUAMy2Vpe1nbEw
+X-Received: by 2002:a05:600c:4444:b0:490:bcf6:469f with SMTP id 5b1f17b1804b1-490e534d301mr20585905e9.0.1781166637006;
+        Thu, 11 Jun 2026 01:30:37 -0700 (PDT)
+X-Received: by 2002:a05:600c:4444:b0:490:bcf6:469f with SMTP id 5b1f17b1804b1-490e534d301mr20585325e9.0.1781166636452;
+        Thu, 11 Jun 2026 01:30:36 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490e2c9057bsm55175325e9.5.2026.06.11.01.30.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 01:09:22 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	shuah@kernel.org,
-	jiayuan.chen@linux.dev,
-	toke@redhat.com,
-	menglong.dong@linux.dev,
-	emil@etsalapatis.com,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf v4 2/2] selftests/bpf: Cover generic devmap egress last-dst rewrite
-Date: Thu, 11 Jun 2026 16:08:49 +0800
-Message-ID: <20260611080850.536996-3-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260611080850.536996-1-sun.jian.kdev@gmail.com>
+        Thu, 11 Jun 2026 01:30:35 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 0F0E17BCC96; Thu, 11 Jun 2026 10:30:35 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Sun Jian <sun.jian.kdev@gmail.com>, bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, shuah@kernel.org, jiayuan.chen@linux.dev,
+ menglong.dong@linux.dev, emil@etsalapatis.com, Sun Jian
+ <sun.jian.kdev@gmail.com>
+Subject: Re: [PATCH bpf v4 1/2] bpf: Run generic devmap egress prog on
+ private skb
+In-Reply-To: <20260611080850.536996-2-sun.jian.kdev@gmail.com>
 References: <20260611080850.536996-1-sun.jian.kdev@gmail.com>
+ <20260611080850.536996-2-sun.jian.kdev@gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Thu, 11 Jun 2026 10:30:35 +0200
+Message-ID: <87se6t8ono.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Strengthen xdp_veth_egress to check that each destination observes the
-MAC selected for its own egress ifindex, instead of only checking that
-the observed MAC differs from a single magic value.
+Sun Jian <sun.jian.kdev@gmail.com> writes:
 
-Add a generic XDP last-destination test where earlier destinations do
-not have a devmap egress program while the final destination does. This
-covers the case where the final destination runs on the original skb and
-could otherwise rewrite packet data still shared with earlier cloned
-skbs.
+> Generic XDP devmap multi redirect uses skb_clone() for intermediate
+> destinations and sends the last destination with the original skb. This
+> can leave multiple destinations sharing the same packet data.
+>
+> This becomes visible after generic devmap egress-program support was
+> added: a devmap egress program may mutate packet data, and another
+> destination sharing the same data can observe that mutation.
+>
+> Native XDP broadcast redirect does not have this issue because
+> xdpf_clone() copies the frame data for each destination. Generic XDP
+> should provide the same per-destination isolation before running a
+> devmap egress program.
+>
+> Fix this by making cloned skbs private before running the generic devmap
+> egress program. Use skb_copy() instead of skb_unshare() so allocation
+> failure does not consume the skb and the existing caller error paths keep
+> their ownership semantics.
+>
+> Fixes: 2ea5eabaf04a ("bpf: devmap: Implement devmap prog execution for ge=
+neric XDP")
+> Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> ---
+>  kernel/bpf/devmap.c | 41 +++++++++++++++++++++++++++++++----------
+>  1 file changed, 31 insertions(+), 10 deletions(-)
+>
+> diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+> index cc0a43ebab6b..a3d6c60dbddb 100644
+> --- a/kernel/bpf/devmap.c
+> +++ b/kernel/bpf/devmap.c
+> @@ -512,35 +512,52 @@ static inline int __xdp_enqueue(struct net_device *=
+dev, struct xdp_frame *xdpf,
+>  	return 0;
+>  }
+>=20=20
+> -static u32 dev_map_bpf_prog_run_skb(struct sk_buff *skb, struct bpf_dtab=
+_netdev *dst)
+> +static int dev_map_bpf_prog_run_skb(struct sk_buff **pskb,
+> +				    struct bpf_dtab_netdev *dst,
+> +				    u32 *act)
+>  {
+> +	struct sk_buff *skb =3D *pskb;
+>  	struct xdp_txq_info txq =3D { .dev =3D dst->dev };
+>  	struct xdp_buff xdp;
+> -	u32 act;
+>=20=20
+> -	if (!dst->xdp_prog)
+> -		return XDP_PASS;
+> +	if (!dst->xdp_prog) {
+> +		*act =3D XDP_PASS;
+> +		return 0;
+> +	}
+> +
+> +	if (skb_cloned(skb)) {
+> +		struct sk_buff *nskb;
+> +
+> +		nskb =3D skb_copy(skb, GFP_ATOMIC);
+> +		if (!nskb)
+> +			return -ENOMEM;
+> +
+> +		nskb->mac_len =3D skb->mac_len;
+> +		consume_skb(skb);
+> +		skb =3D nskb;
+> +		*pskb =3D nskb;
+> +	}
 
-Use deterministic DEVMAP_HASH keys for the egress map so the intended
-last destination is stable.
+So with all this pointer soup and back and forth, the version you had in
+v2 (with the check and skb_copy() in dev_map_generic_redirect()) was
+much cleaner :/
 
-Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- .../selftests/bpf/prog_tests/test_xdp_veth.c  | 152 +++++++++++++++++-
- 1 file changed, 149 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-index 3e98a1665936..0fa2cf835c62 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-@@ -456,7 +456,11 @@ static void xdp_veth_egress(u32 flags)
- 			.remote_flags = flags,
- 		}
- 	};
--	const char magic_mac[6] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF};
-+	const unsigned char egress_macs[VETH_PAIRS_COUNT][ETH_ALEN] = {
-+		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x01 },
-+		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x02 },
-+		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x03 },
-+	};
- 	struct xdp_redirect_multi_kern *xdp_redirect_multi_kern;
- 	struct bpf_object *bpf_objs[VETH_EGRESS_SKEL_NB];
- 	struct xdp_redirect_map *xdp_redirect_map;
-@@ -512,7 +516,7 @@ static void xdp_veth_egress(u32 flags)
- 						 &net_config, prog_cfg, i))
- 			goto destroy_xdp_redirect_map;
- 
--		err = bpf_map_update_elem(mac_map, &ifindex, magic_mac, 0);
-+		err = bpf_map_update_elem(mac_map, &ifindex, egress_macs[i], 0);
- 		if (!ASSERT_OK(err, "bpf_map_update_elem"))
- 			goto destroy_xdp_redirect_map;
- 
-@@ -530,16 +534,155 @@ static void xdp_veth_egress(u32 flags)
- 		goto destroy_xdp_redirect_map;
- 
- 	for (i = 0; i < 2; i++) {
-+		u32 key = i;
-+		__be64 expected = 0;
-+		u64 res;
-+
-+		err = bpf_map_lookup_elem(res_map, &key, &res);
-+		if (!ASSERT_OK(err, "get MAC res"))
-+			goto destroy_xdp_redirect_map;
-+
-+		/* store_mac_1/2 run on the second/third remote veths. */
-+		memcpy(&expected, egress_macs[i + 1], ETH_ALEN);
-+		ASSERT_EQ(res, expected, "compare mac");
-+	}
-+
-+destroy_xdp_redirect_map:
-+	close_netns(nstoken);
-+	xdp_redirect_map__destroy(xdp_redirect_map);
-+destroy_xdp_redirect_multi_kern:
-+	xdp_redirect_multi_kern__destroy(xdp_redirect_multi_kern);
-+destroy_xdp_dummy:
-+	xdp_dummy__destroy(xdp_dummy);
-+
-+	cleanup_network(&net_config);
-+}
-+
-+static void xdp_veth_egress_last_dst(u32 flags)
-+{
-+	struct prog_configuration prog_cfg[VETH_PAIRS_COUNT] = {
-+		{
-+			.local_name = "xdp_redirect_map_all_prog",
-+			.remote_name = "store_mac_1",
-+			.local_flags = flags,
-+			.remote_flags = flags,
-+		},
-+		{
-+			.local_name = "xdp_redirect_map_all_prog",
-+			.remote_name = "store_mac_2",
-+			.local_flags = flags,
-+			.remote_flags = flags,
-+		},
-+		{
-+			.local_name = "xdp_redirect_map_all_prog",
-+			.remote_name = "xdp_dummy_prog",
-+			.local_flags = flags,
-+			.remote_flags = flags,
-+		}
-+	};
-+	const unsigned char egress_macs[VETH_PAIRS_COUNT][ETH_ALEN] = {
-+		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x01 },
-+		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x02 },
-+		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x03 },
-+	};
-+	struct xdp_redirect_multi_kern *xdp_redirect_multi_kern;
-+	struct bpf_object *bpf_objs[VETH_EGRESS_SKEL_NB];
-+	struct xdp_redirect_map *xdp_redirect_map;
-+	struct net_configuration net_config = {};
-+	int mac_map, egress_map, res_map;
-+	struct nstoken *nstoken = NULL;
-+	struct xdp_dummy *xdp_dummy;
-+	__be64 last_mac = 0;
-+	bool found = false;
-+	int err;
-+	int i;
-+
-+	xdp_dummy = xdp_dummy__open_and_load();
-+	if (!ASSERT_OK_PTR(xdp_dummy, "xdp_dummy__open_and_load"))
-+		return;
-+
-+	xdp_redirect_multi_kern = xdp_redirect_multi_kern__open_and_load();
-+	if (!ASSERT_OK_PTR(xdp_redirect_multi_kern, "xdp_redirect_multi_kern__open_and_load"))
-+		goto destroy_xdp_dummy;
-+
-+	xdp_redirect_map = xdp_redirect_map__open_and_load();
-+	if (!ASSERT_OK_PTR(xdp_redirect_map, "xdp_redirect_map__open_and_load"))
-+		goto destroy_xdp_redirect_multi_kern;
-+
-+	if (!ASSERT_OK(create_network(&net_config), "create network"))
-+		goto destroy_xdp_redirect_map;
-+
-+	mac_map = bpf_map__fd(xdp_redirect_multi_kern->maps.mac_map);
-+	if (!ASSERT_OK_FD(mac_map, "open mac_map"))
-+		goto destroy_xdp_redirect_map;
-+
-+	egress_map = bpf_map__fd(xdp_redirect_multi_kern->maps.map_egress);
-+	if (!ASSERT_OK_FD(egress_map, "open map_egress"))
-+		goto destroy_xdp_redirect_map;
-+
-+	bpf_objs[0] = xdp_dummy->obj;
-+	bpf_objs[1] = xdp_redirect_multi_kern->obj;
-+	bpf_objs[2] = xdp_redirect_map->obj;
-+
-+	nstoken = open_netns(net_config.ns0_name);
-+	if (!ASSERT_OK_PTR(nstoken, "open NS0"))
-+		goto destroy_xdp_redirect_map;
-+
-+	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
-+		struct bpf_devmap_val devmap_val = {};
-+		int ifindex = if_nametoindex(net_config.veth_cfg[i].local_veth);
-+		u32 key = i;
-+
-+		SYS(destroy_xdp_redirect_map,
-+		    "ip -n %s neigh add %s lladdr 00:00:00:00:00:01 dev %s",
-+		    net_config.veth_cfg[i].namespace, IP_NEIGH,
-+		    net_config.veth_cfg[i].remote_veth);
-+
-+		if (attach_programs_to_veth_pair(bpf_objs, VETH_EGRESS_SKEL_NB,
-+						 &net_config, prog_cfg, i))
-+			goto destroy_xdp_redirect_map;
-+
-+		err = bpf_map_update_elem(mac_map, &ifindex, egress_macs[i], 0);
-+		if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+			goto destroy_xdp_redirect_map;
-+
-+		devmap_val.ifindex = ifindex;
-+		devmap_val.bpf_prog.fd = -1;
-+
-+		if (i == VETH_PAIRS_COUNT - 1)
-+			devmap_val.bpf_prog.fd =
-+				bpf_program__fd(xdp_redirect_multi_kern->progs.xdp_devmap_prog);
-+
-+		err = bpf_map_update_elem(egress_map, &key, &devmap_val, 0);
-+		if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+			goto destroy_xdp_redirect_map;
-+	}
-+
-+	SYS_NOFAIL("ip netns exec %s ping %s -i 0.1 -c 4 -W1 > /dev/null ",
-+		   net_config.veth_cfg[0].namespace, IP_NEIGH);
-+
-+	res_map = bpf_map__fd(xdp_redirect_map->maps.rx_mac);
-+	if (!ASSERT_OK_FD(res_map, "open rx_map"))
-+		goto destroy_xdp_redirect_map;
-+
-+	memcpy(&last_mac, egress_macs[VETH_PAIRS_COUNT - 1], ETH_ALEN);
-+
-+	for (i = 0; i < VETH_PAIRS_COUNT - 1; i++) {
- 		u32 key = i;
- 		u64 res;
- 
- 		err = bpf_map_lookup_elem(res_map, &key, &res);
-+		if (err == -ENOENT)
-+			continue;
- 		if (!ASSERT_OK(err, "get MAC res"))
- 			goto destroy_xdp_redirect_map;
- 
--		ASSERT_STRNEQ((const char *)&res, magic_mac, ETH_ALEN, "compare mac");
-+		found = true;
-+		ASSERT_NEQ(res, last_mac, "compare last dst mac");
- 	}
- 
-+	ASSERT_TRUE(found, "found earlier dst mac");
-+
- destroy_xdp_redirect_map:
- 	close_netns(nstoken);
- 	xdp_redirect_map__destroy(xdp_redirect_map);
-@@ -596,4 +739,7 @@ void test_xdp_veth_egress(void)
- 
- 	if (test__start_subtest("SKB_MODE/egress"))
- 		xdp_veth_egress(XDP_FLAGS_SKB_MODE);
-+
-+	if (test__start_subtest("SKB_MODE/egress_last_dst"))
-+		xdp_veth_egress_last_dst(XDP_FLAGS_SKB_MODE);
- }
--- 
-2.43.0
+-Toke
 
