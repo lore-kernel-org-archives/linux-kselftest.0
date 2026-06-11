@@ -1,52 +1,53 @@
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013065.outbound.protection.outlook.com [40.107.159.65])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010042.outbound.protection.outlook.com [52.101.69.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5F6472764;
-	Thu, 11 Jun 2026 16:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D025C481FB8;
+	Thu, 11 Jun 2026 16:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781194926; cv=fail; b=p/ZoXFg9dSOd4kObF2KQnE2PpozPBYSEW1gGHf9KzCUsSEZlGozCVpT6RyI/AZJfh4gZe6sTCmDOpAf4j2fS1LNuztrPBO5JLWbLhiKB8WuDjNmPh46YhycQc9K6hcGrk6TygqkNQ0VFHYDyNNr1n0AZ+D7mOiQ1KZbJHKNVSL8=
+	t=1781194929; cv=fail; b=Bnkn7jorGobGL3Em+z7m0ASqwMxgo3UPhWKKrt2wyd0i/reW+HMcJhTPjD9+i4YaaRojNjpegArFlGHEXVRxsO1zpHJtkassbe3Eq2DuHOYkGAkmGiFjG1PgI/Y/ScVG9H88wgCdk4joH9tTzb60iJE0vYXsrl5giphTspKxUOE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781194926; c=relaxed/simple;
-	bh=uKDYnpB8BwFaTgVadpzgWc+JDjhfCuwUY8/JIB0IobY=;
+	s=arc-20240116; t=1781194929; c=relaxed/simple;
+	bh=++Ocp69V2+ssWb+8fcntzlFH2d9U7HbUzkJAMdwtirc=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=Y+/vBum9ib1ij2SIJEIea9KA+F4GUC3KMKNRVTG4OVTuuASvG7iN66JSE5KLcDwIlWbgC3ZbiFLldor205dYn+8m/26dbYdOWFNRh62hvkeYkaiUtE/sjfJz+ZcFZNFlrRMAbqLB6FXWdhnh+sWxATN1mwvgRpgq/YTmTGyMqbY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=O1xUle1T; arc=fail smtp.client-ip=40.107.159.65
+	 To:Cc:MIME-Version; b=LS6vLDG23gCJlAWso0CgP/hWY1yqm1N5xKSrhWdYpm2nBguvUnK3KoVZ0+il049Rmu9s6KowfZKj5X0TFF0O/LcSt3/HFnfuUYNuTG5Q+Wo8UDtl45UhdEVe4voPOACJ+vEU4EGY+yk/v/n19XfN08yDjoMHJHG5FZyNk6JsL1o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=z6nIDQJJ; arc=fail smtp.client-ip=52.101.69.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="O1xUle1T"
+	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="z6nIDQJJ"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oE3lQLUhvmDg57HK+upRRAySE+qBeVJaN4UNbbU3BsqAYBjuS3NHA1ehDn/h+SFWchsy4FFTB902+RH5S5/gy/7o4rkcegd/7O4bA1p0ln5OeljaO1rDRKB+MYp8rpL/A69BGg1zrDeO3tJGTxrGEakpOiScJvXtWSEACV0L/9851G7t/Nl2LZ9u2KBn85ZcQ+X8Qre6Dd1GlxYWyPodjOlTdRzO4JbiSyAnm41x/Px+DtVb7S/SUsOap9n5QXVnRj4Eo4FlKxZ1PaEkx69zDMhw+tnHEfbkRkXp6L7UznbxW2o7Onf7mFLf3OFLv9LQzqpiw+TJup54pdCSKG1fLw==
+ b=ImbpPvCvG3XRJv2KTuLQyU6cXnz/bfaOXhM8BkG3i67HHUUQ0+SI9GPO7q2Nv+2yLi6OLY9oZg318QTicPJwtpONtSJkmRC5acG2GnnxeGJvkhRrWMIHY+oGdL2H2apthjA29XSpMggjNj3ZabEOF/pdCGcskzxqRkvYl/hOlKsVK1MJQBIeC9hDZ0XC3C60GYrb6rVv3S0RbFs92mvjdRSJvs9cNlq7a49+L3Cxy1kjcKraFAT0Che94TAQ5qc0NWwwE7+Ari2brN2NegcfSNTvsC0AUwcVmkC8k/3NHVM6n/w4VRXDrAKdvwGRfsslVGNDA5Gc1jnRSub0Cbt//Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HoENOFMq92qTwczbiLwgprmQTz8BLW620KOHwffPRLk=;
- b=FZhXI5leHAZb9s3c+URZt3wQppfM6ezvRK3hq2N0TD6jBBu11aAn5wVSrIzO2b9LVYWIOYAO9t5ekbeAv+YtskGEqWhuQ0JmZUxJP1BLv/GUnASgvg+sVT7ChoLns1kedkZzCb35rDTU/ZWL+08m4AymqguptoHB6Bw6wJX11Bhiuu7lyO/I4dO7HG1sXV0OCpGJrMtg9DNDjqXHP8/WniB4h8SDtUXPIuwDZ6dqZM46q2uzXDB37NhcwTRPITIf/T8ccUnhW2SiuQJVliJ7U8gFmV9peG1Qm+F0Q3a/Mi2OVjx/t43tgI/HrcwXwfqd4y/AeH6Qm2T//WlwqzgmRA==
+ bh=mXxDoiqFPBn7Gh8AwleiDDC8ndob1oNAc/f88nP72Uw=;
+ b=SNodKEq1mu/oGpLcX7vgVeAlYCR1bt3Jtxz21iKxWMExgavo2iRYlBJvSDSjbA4KYZD5OK3Pr8Vz1kp+mOn3l6YH981ffnaUrVt8Z9Yi6sOze71l0IN3UUsNvgCFwt2bT1oQr5rYzXEAnXbgZ/eABCMzikflZBaGd7jEgY2Zi/6e7ur8AhdN37kL/zWH5ZFBUr73wZV9C9skjyzYZvr75tWT72xpM0yAkcdQxO1elw78AuoYj5+HwlnWJKapCe8/3kZeeJboPObqlKl8I6O9uu+YteBMxto9Witm/v/j34GxyqtjzvW2DHZ/XNCV9HM/qq8U/xfUpanyILPhsm0MOQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
  dkim=pass header.d=est.tech; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HoENOFMq92qTwczbiLwgprmQTz8BLW620KOHwffPRLk=;
- b=O1xUle1TTk7+l73YcZcTsatYptpYP5PJQzYZYscx74GH4mX0XvVKHAWf1SR4CoVHRjvtThp5EOte0F8c8OJoA2AAiXgRAtFaDQVDdF+hc7ol1QVdPlb4vCYg7LUK5aHCQxVvmDApj/FBLv3s2Fmq61hCBDOSOV9N9fgWCV+HRQ0gqcf+HP8japctY/nQjOF1zAcxenRtlazIvnIAmaz+MZ993VUr0GQ8s/McUyEZASXdcj/9VCfYo9PyIWpaV1pP+BZ7e9QrfycsNIINyQse515SM4qfsMVZuzJR8LqfEyqRBO9q9PM3bhB1Wx3h6znDSCqjxFObxgnxT3eg65soOA==
+ bh=mXxDoiqFPBn7Gh8AwleiDDC8ndob1oNAc/f88nP72Uw=;
+ b=z6nIDQJJ6ZfusYVwyBvGjumkJ5UQvyJCmNeHdIvXB2ZK3P0WkJMxF+J3v6ci/WT+NkH+3NXA6PHNDfjUR1siYRl0/EVV8R5SBnl0tO9zq5rxoJtiJdQMMgH0UOuth7Z6bZBiiEPf72pYbdnNu7kbjV33OzxJ6dzH7ZmnNw326JlWeJZLZ5tk6Gwu1muRg8y9SYcUOO/nwVkai89ZXOJWAqmUo3drtgj1Q/CB4R7Tb4bszxC2CfWUDHLfiAATXbtBNxbd+5fLBVagQ2ZaI76tup53dEdCCMUfKkIhed7v4NtT440hB4PZgMM29cCCKQaF2eKc4oaNL5MKNAp7j5pvQw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=est.tech;
 Received: from DB9P189MB1754.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:2a5::24)
  by PAWP189MB2829.EURP189.PROD.OUTLOOK.COM (2603:10a6:102:468::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.13; Thu, 11 Jun
- 2026 16:21:52 +0000
+ 2026 16:21:57 +0000
 Received: from DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
  ([fe80::2af4:a981:db81:d471]) by DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
  ([fe80::2af4:a981:db81:d471%6]) with mapi id 15.21.0113.013; Thu, 11 Jun 2026
- 16:21:52 +0000
+ 16:21:57 +0000
 From: Yunseong Kim <yunseong.kim@est.tech>
-Date: Thu, 11 Jun 2026 18:21:10 +0200
-Subject: [RFC PATCH v2 08/14] selftests/kcov_dataflow: add trigger-view.py
+Date: Thu, 11 Jun 2026 18:21:13 +0200
+Subject: [RFC PATCH v2 11/14] selftests/kcov_dataflow: add eight_args_rust
+ test module
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260611-b4-kcov-dataflow-v2-v2-8-0a261da3987c@est.tech>
+Message-Id: <20260611-b4-kcov-dataflow-v2-v2-11-0a261da3987c@est.tech>
 References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
 In-Reply-To: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
 To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
@@ -80,15 +81,15 @@ Cc: linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
  workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
  Yeoreum Yun <yeoreum.yun@arm.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781194895; l=13901;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781194895; l=9294;
  i=yunseong.kim@est.tech; s=20260426; h=from:subject:message-id;
- bh=uKDYnpB8BwFaTgVadpzgWc+JDjhfCuwUY8/JIB0IobY=;
- b=MJ+pxNM0hyDV00H+eS5JXNTGMaBudcXB/KrtkQygYEPcv/YjIQS6azSDdSx7mR0HYcs4USdjb
- xZYjOhZ4WclAUpk2oh8earMYXFXS+QrgswaFBo8HTqyIMNg7P61r11b
+ bh=++Ocp69V2+ssWb+8fcntzlFH2d9U7HbUzkJAMdwtirc=;
+ b=XFUAXMnfJ4atgczymD9v9L2GOcegffbVHv196KyruS1AeYxDKaWBg+VY2XLLsstyTjLNOrzDP
+ xhYNsOsroEdDKOA5rN6R4wpZNeLmfX/LnKXlkP8T4mTHcOJ/S+dPY9k
 X-Developer-Key: i=yunseong.kim@est.tech; a=ed25519;
  pk=1nBUX92cvTaavYG1+MR073D+XMKhdOciBZcnf6h6qEo=
-X-ClientProxiedBy: GV2PEPF00023985.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:158:400::36b) To DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
+X-ClientProxiedBy: GV3PEPF0001DBEF.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:158:400::31c) To DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
  (2603:10a6:10:2a5::24)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -98,483 +99,340 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB9P189MB1754:EE_|PAWP189MB2829:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6448ddd8-50e0-419a-f028-08dec7d58bc7
+X-MS-Office365-Filtering-Correlation-Id: cb125fa1-66cd-4f61-59fc-08dec7d58ea4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|23010399003|1800799024|376014|7416014|921020|56012099006|11063799006|5023799004|3023799007|6133799003|9063799003|18002099003|22082099003;
+	BCL:0;ARA:13230040|366016|23010399003|1800799024|376014|7416014|921020|56012099006|11063799006|5023799004|3023799007|6133799003|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	lsGmbgDnFuyfk7xcUxN2TU+I7jAfM1g2ZEYhOcpBmptpQNLmlmswaMWJnacupOvWi50GpKrdl7DrtMX6QkvtJLmyNyvWD5rIwyzo3dqjrJCDaTqsCPi6OpDYdud4MKcQYXPegCQaC7XI+5/+pVCmeYQrH7PIp4ryFYr7E3MOrDwVzfl9rzKUK5UYDXp58k+u2jVajnqchumf3lqglRqAiS8107IzPSVBWplVOA8ZEc4GMfvMPpL3Sc/24E5u5RFhNMTzWFzSLJsC0H1BuCBkYt9iutxlYhQQIacOX1HP69N/AOgoLlt7wcYx/C7Xrp/1I2XZB+GDyke/qb3eFRNJiL0Z8kh1dBifEdIDZuk+9IBcrszQp1X2nQ6MZYqknrLK/SrzA82naM0qFMmJvVGl5K5GUAz6RPlH7a8ui58GJVVp5pLy97NhGeQc/+ZDJmR6vwupCtuJNwqXSiM5dP76cslwQhYjfB9YRSAtpYKWq+XoJKkkVA1+sz5OK7mBp/lguiY5Lt/1b7SUOk55mbiKjpFWvv2yB9Y5eFK64+h3B0gXF6VVzPDyShI/kzx0r1s2X44ZDfBLRkl1nwvd2ui2/feSfhxrfVybzhFBQI+LCnzG37h2Yz0UhArv1EW/95zIOVGx9I/TIay6aUJfwTxvqIUX/ZKd+pU7eqKD9yaVEk3FMya/eIhmpfMmpknuJD/FtHngKCW/iyYEP5GQ3Hr1BifWNXoVjJAHmnHt4sfh6ImffgR1BfNd9gRR6XHzXpZj
+	8eR2uqVI0e1ZUCI+OSN9Qqgv7FklNAl4e7fZoioOI07xny7OLmw21AK3veRJq+Ow9apZYCGMiY0cbUfAFWH8AJWEkGCZC2JB224fW9Kvdbm6CU4uSEkpbk3Pf1N9X8T6Yw19h9XbJeR+qYulv1NSza3wT6pZnCJgGca330qJqH4XjsHT3h3/oIpwjeErPGcBRMqo3k7WptQG3v4dcMH2LakuUSB4rEdOI703RCHVKiNr/gouCF8oSlbp/fZ5KC8E6mHLvN08bPA1dkNJDCh1B4n7TJxAO6dTh0GB4cAmFZ8vaLWNf/85nkeik0AVKZ7mIjeg4xgXsQjqNfdpBJjQi/hYRgg50VreZa68lPDdddrZiGLvwYp+sZpUOgWVfSipDls5uC3Ou5j68TikW4uolsP+Ti5YQk6zj0uaeejJKV0j+oFpBl/s+IznX4JocOP0Edp/iSJ6oSIgYLPShL1Wd2283kAb7Pd9TqPsrbVgBRjx/6f7xo5cd87h+jwsbaJxfyru9j3T81TpEWQ0VZuIJNu5yl7Nlf50fu9yzHVfp/UgqENzrij1vABs9uBM1vBZ+/Yb3YNEdL3pGNI4bStOpB0rp58Pae391Cv7WtmKMHDBDG0X/HRZCSrAyFs9V3pDeMU5p3CuxRAJJYMDNFh0dwqqYAdRhbWkYUwCYjMtXDL2IrOALiRihd6dxP9NQf5F6talMfmQRABtIGMzDpoezrfuM/Q+EOzwuRFmnriDx5vibjIxPqWtafPJ23HI/WAo
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9P189MB1754.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(376014)(7416014)(921020)(56012099006)(11063799006)(5023799004)(3023799007)(6133799003)(9063799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9P189MB1754.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(376014)(7416014)(921020)(56012099006)(11063799006)(5023799004)(3023799007)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TlNTeWhKNUFBMXV6eU9NSGdQRnVvNUtWTDNlQ1dUY1hXVXhYTXd5cHkxWWQ0?=
- =?utf-8?B?TVB4NEdzSUl6THpSUGFIU2I1ZVdIYllCUlRwY1RZbFRYV25jcHNWQjkwYnFm?=
- =?utf-8?B?VEdoNGprSUt6TjJXeGRKRTVjK1NaN0VETGEwejE4c2Y2S1Y0RCtSdHZxclpH?=
- =?utf-8?B?YzhYTmJvZ0xzeDVMMFJhMTNmbDl3UkZxK3BoRmlWNTVTUTJKZWNwK09pV2Nq?=
- =?utf-8?B?WFc2T3paN2pyb2tKeS9yZ0tFZ2pyZGVpc29GQy9XQXlxOEgyQnhOV3Z4NUVQ?=
- =?utf-8?B?dWZlZmk1NTYrOERjVWU1VGdyM3I0TXdzNEZRRjVLbmZ2b1Z2Q1VQd21QWng0?=
- =?utf-8?B?MkZVRzVxOG1FL0F3ODJyNkFCYU9OUWRNRzhxS0JyZmdMR0tYaDhKclpLM3R1?=
- =?utf-8?B?OFBZSjB1aU40R0U0eE9wRUZFNXRrd0Rlcjc4RFZPZERYenZOdG5FTnhXTUcv?=
- =?utf-8?B?eTIvTGRnWERVV1VpUDFBSDVlc1NEczZpaS9KS2daZEFybDRsSFJsRnEzcGpi?=
- =?utf-8?B?NHlFYUMxalgxaWlDWkRhNXJTbFBJa1Q4WWk2UzgvK3YvSWNTcGlTR0J4N1lv?=
- =?utf-8?B?a1NTWlZ2VXpXTTZYSlhwNHkrZ2lNdkh6VEV2ZEczcEJhNXkwUDBmQWlkUzE3?=
- =?utf-8?B?bFRyU3phRmFuNWVrMmc4Vm8wTmJBSnAvU1o2SjBmcW5NNTdsL3NSSTU5Sk9K?=
- =?utf-8?B?NHZhSEZBWGdrSEQrQVNHc2RqZVpSRjdFUThVZXdHVmNXNkVYREhCOFc4U0dt?=
- =?utf-8?B?SFZlNUxoSkdReDlIZmh6RmZyNmxZZk9SNmZUWWJueTZtMFd6bWtJcUQwSmZt?=
- =?utf-8?B?TlFMd2tGR0xLNFZIaC93RnkwOVcrWGpuTko0dWJtZHY4QnR0dE1lWmlWaURr?=
- =?utf-8?B?bzYzYTl4dTNHNWxkRE5nUW43b1NTbW55VC9XbTJuYi9pelNUK1pNdzBxd2N6?=
- =?utf-8?B?VWhKSlZIYTJQam9lOTFiYWZuOGNIV3lqeEM0Q2FBNWpCNy9pODhlTmF5VGdY?=
- =?utf-8?B?OFJSU3g1dm5rQnY4YkZhWENuZmpqZGN2aHovSGdpWlc3c2pUTXAxbi9LRUJw?=
- =?utf-8?B?UjR0T3BWenRpWkxaZ2g3eWE2OVVqUk1FejQ3YlY0QWp0cElkQndyc0VyU2t3?=
- =?utf-8?B?NG16RXNtREkzNjlkUEpSUklLWUxBQWRuQ2VhTks3ZkZSKy82ekw3dGQxeHB6?=
- =?utf-8?B?S1VrWXpBZnZkcDFXc3BOUFVNeGlQMSs0S0NhOGl3dllmQWNET05objV0RTN5?=
- =?utf-8?B?NEo0MU0wYUdsM041WE5lc1FFQ2pBbFpFRFMxK0kzcW0zeG9XTUpwYTdGRXc5?=
- =?utf-8?B?WUZabWV1Sk1yS1YxeWJBQkxwOGlTVHdJSm94anNuQjlCMDR4aElKMWJPbThi?=
- =?utf-8?B?c1ZGckFjYWtBOElVdGJPWXAzbmNGbVhYQW5INmNhWEp3cE1QWTdmaWMrRWZQ?=
- =?utf-8?B?NlRwaW0xM1VpdHdPY2I3R3NGa2Z4RVJacjk0Q2dUcVlnM2c0Mnh2TnlsYWRR?=
- =?utf-8?B?emlHVDVMWDZtdUZWbWF6SVR3SEJGZHZNQ0xNNUJGSzk3NzdHd0hyOE1QbUwy?=
- =?utf-8?B?eVV1SHRQUGtrTk5hQnU0eHJCNHJlZzdwbksrd2ZSdXBhRmR5SE9jMUdxbXBy?=
- =?utf-8?B?OWI1dHpnVkw5Q09zQXI1dHMxYzVOUk5HNUJSQVg3MENkL0VBQnJRbnUzWFhw?=
- =?utf-8?B?Q003T1d4SXF2UnVVamx1cXp2WnFoczROTjJYdmtlZU93VW1wNlRHUmw2NFc2?=
- =?utf-8?B?cldNUW9nemg1WGJ4bVJDOVRBRFJadENocEh2OGJsNVgrV2tweXZudXozMnli?=
- =?utf-8?B?ZWNpYWw2QndWYWRabEdEYUJFYnk1cTVlNnlhWk1lcUhzVGRaR05xeW56R1BN?=
- =?utf-8?B?aC9GZUhmN2QzcTJMbC84ZkQvNm42S20rZXRXNHBBMUxYWVZTeVdDcXA2clZD?=
- =?utf-8?B?MjMxTHBzaVdNZUVZT3JXOGlIc1hKNW9lM3FBNGs5QVZpMmJGbHVNVFlwd09z?=
- =?utf-8?B?REJmUzc2SGkzdCtoMjgzTlgzbmZ6c05zWXl1bGtUU1YvOFZYcUxHR1hzcE4x?=
- =?utf-8?B?TzYyN21KSG85aHFhaVZFaEpLVDRqcXRvTWp0OGZ2U29XMCsrMGVQZllJZFIw?=
- =?utf-8?B?cDdVTm42MFczRk9oYVU1b2xRZTd4am9ha2dzRG9CSlF1RlMrTkY1RFp3VUVB?=
- =?utf-8?B?Y2NjYitYczd6SmZpOHRFYTFsL1JiNi8zWHJqRUlHTVFPTVJxNU9DaFRWN0sw?=
- =?utf-8?B?RHAvYmMrbWI0L1lEbUJRSlM4V203RDhlU3Q5bVJPVnBqMk5Hb3RoclovYm1w?=
- =?utf-8?B?TnpDZmlJZlVKQ05wc3VTNWZJSUVSK2VOSmlVb21aSU1mY3ZJUEN1QT09?=
+	=?utf-8?B?SXdhWUIrMHExRkZtWE45RFpYdFJCT1lnOEh3WlAwZUZ3Znhwbm1DRDJNWDUw?=
+ =?utf-8?B?Sk1Fai9kOG1DUG1lMXhCSE5aM0lqL01mSjQ4U1VTbG4zRjlCblhEdGlyeG5L?=
+ =?utf-8?B?amdkWUM0L092RGVqK0pKOWQrdE54MmVUVnpTWXpCS3lPS1ZQVDZ4Wlcza2Z1?=
+ =?utf-8?B?UkZ5eENWelY0d0Y0bkJTUG1oSGVJa1U3ZHRrSzdtS2NjdXVRSjNsMFFKb2Rn?=
+ =?utf-8?B?R1dtdks2QWJUMldJeFQzOC9TQzZBWXlEVTl2ZWdINHV6U3hPbWZQRGdRTHhQ?=
+ =?utf-8?B?YTRjemFRL0N2MUxOOWFSdS9lNWtVYi8xd0lYZFlBV0luMUlFRkIvYTlVTm5Y?=
+ =?utf-8?B?aU9DVyt3alI4bWE5NDBqdmhMWUpDUUN6WHk4bFlKbG1EajFiYjcrS3hvY1A1?=
+ =?utf-8?B?ZmdLa1Bnb1Eycy9YZHZvMG1wZi9NR3ovUW5Md0NudW1zc1Z6YUw5alNCWVFh?=
+ =?utf-8?B?YWlRT3pHNWlYRVZoWFVNTUxFL0ZxVmM1enVvZklERmNTYm5RZGIrTmtwV1NO?=
+ =?utf-8?B?eHEyQ1FubVVPZDF3QXpkcDNjaEVsbWloZ3hmWElzUHJXcFkwY3VzekpIMFYw?=
+ =?utf-8?B?RHVQR0tTZTF0bDFFcWJtOERESzlLd0JpU0hrOXIvSXV3Z1RYREdiNnFkZkM1?=
+ =?utf-8?B?d2xKeXdlS1IyZzVKUk15NE51cDE4T0o0MHBJZWhjT2tJWU1oRmhBODFrMU1z?=
+ =?utf-8?B?eTFhUTBRWldlQUl5L3hpSlRKbzBQZ0M1TzRSSHQ0eUlrMk9PNUprQ1FaL2Vz?=
+ =?utf-8?B?K3dCejlVWXMra0FRalVnRE5GSVBSWWRBZEtud01pYnNhZEJ4UDVnTHl6b0VF?=
+ =?utf-8?B?WTlCNVd4aGtkakNJc0xvMHd1QmFGdzc3dENyZnF6QXBGdU80SGE0UkUzQ2Rr?=
+ =?utf-8?B?ZEVyajJpaGpRUVBhUk1YeHBRU3ZuY2tlQStJZGo1TWJuK3RLRlUxWUFIMzJs?=
+ =?utf-8?B?MHFxWm9CWnZ2Z0JiR29IQ3JrNURLZ2w0cnFFQ0Mya3p2MW04WVowL2pJQitC?=
+ =?utf-8?B?dnNJMWJqR0pFUHdlZ0dYTU9rbXdKSVY3WDFDUk53ZjdWK3JKaklMMFJEM0VC?=
+ =?utf-8?B?dWRzQWRTdlpoM0NINklzK1dmK2o2SVNQTlBqVTBQTnNIV2JrbkhtM1JydGJG?=
+ =?utf-8?B?RGNrcllweCticzBnRVNLck4zVkZRbUZzT0dTWVFFNjNWWmRaVExra1JXNHJE?=
+ =?utf-8?B?Q0RrbGduOXNaNlZydmNzcVFlUG51M2pZaXdmSDRSQjYzMDN4WExDRlc5Y2RG?=
+ =?utf-8?B?Ykd3d1hvOHp2S3hMYnE5cnluMHJxamltdlZ5QzVDN01OcU50YmdwSmR4Z1hz?=
+ =?utf-8?B?bVdoa0RrYmY1a1RsWVloWXN1azJBTFQxMFNiN1ZhcjN0TS82UXIxcUpheXky?=
+ =?utf-8?B?cmZ6bDNraEZad2ttZkYyeWZkMzcycFlQQW4wcE9XQ0QzNnpFSG5mUFhDSERu?=
+ =?utf-8?B?MmNoK2tQTGdSSFhqREthbE9lbG12MzlDMVVNSWl3YmxjeVE0TkdtSWM2NkpT?=
+ =?utf-8?B?ckhXZFBkZC9ZZWNUNXlqQzQvS2FsMEo0cFNyTkZMSjBxaThqQjErdG4zWnVY?=
+ =?utf-8?B?eEVCZXJEUitIMTNKb2tnR1A5ZlRZbDkwZnhiV0JPQ1dLalZ2NUR3YkN5Nmpa?=
+ =?utf-8?B?R0NVWE5vSnJTcFFPNmp5emhJOG9oM2VtbnM2dytxaHFBa0VFR2dRR1RUTWk0?=
+ =?utf-8?B?M05YWkpTUlVoSkpEUkF1NHpyR3I1MEhXbVliYUpienhlb1hhaTdCckcrMk41?=
+ =?utf-8?B?emU2M1VxK3ZPdHkvMjcrZHp6Q1A2M0tDZmIwVXVnWGF1cGdMaVI1UTlRdmZN?=
+ =?utf-8?B?b0grbXhUQVNwSitUL3ZUMTlDemVnbFIvR05kbmJpd1pJaVZ2N1JadE50WFE5?=
+ =?utf-8?B?QzZiK053b2FNRGZUd3pyY0xlRTY3bGh4bTZGNERpc01pVjhvUGZpL1Y0MDV5?=
+ =?utf-8?B?NUpYTDZCK2oxOWR2cDZUR1htcSt1cXo3R1FIb09BZlVrejRQYkVlakYyTUly?=
+ =?utf-8?B?dWtTd1kvbVpNa0RiOHFMSEQ5ekhVZzcrblk5S284SEN0Q1ordFhqbUZQQWox?=
+ =?utf-8?B?THFLclRTNUo0eFBIMkNQNEcvVjZYZGZRbjZiekVuZWRkQlhhUjRVdjlPYXl1?=
+ =?utf-8?B?Y09aS0dtTndVSE1yWUMrN3RVWW0zOHpySllwNlNKYWxqKzhtenp4aFlpNU5I?=
+ =?utf-8?B?TXJtWGtQeXpkTGtZYlRqN3JSd1BIU1FzR1VRMS9qcmZJZEtNdXF3SEdyUmxq?=
+ =?utf-8?B?aExFcnFZWEthZGdvQ1BiNzVrOWlDTkU5NHJOZnpLdFFqZnJSMUFDTHR2bk15?=
+ =?utf-8?B?VUpiL09pSWhnUnpsc3N2YzkvTTNsaGJjWDVTSE8rd0pYSEMvTWZhdz09?=
 X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6448ddd8-50e0-419a-f028-08dec7d58bc7
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb125fa1-66cd-4f61-59fc-08dec7d58ea4
 X-MS-Exchange-CrossTenant-AuthSource: DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2026 16:21:52.1334
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2026 16:21:57.0034
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j/OWa3q+SFFqrYLZMKBhQ0hQMEqffvHXHhChT9Zgf8uQcUbK/S9jpFt1oFewZ0qIKnhdnt6J6tRmqBSeN+g8VQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8ORcy8baJS9d+Btne4efmhzSCMbEV98QyTNuOKFYcIJlq4hGRpaicwreC6LCgPhZu8I7Pc6mzvdMw+JgtuEwbw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWP189MB2829
 
-Add a Python script that loads a test module, triggers its debugfs
-entry with kcov_dataflow recording active, then pretty-prints captured
-records as a nested call tree with kallsyms symbol resolution.
+Rust module exercising 1-8 argument functions plus struct pointer.
+Verifies register-passed (1-6) and stack-passed (7-8) arguments.
 
-Features:
-- 8MB ring buffer (1M u64 words) for INSTRUMENT_ALL kernels
-- Enable recording after module load, before trigger (avoids VFS noise)
-- Variable-length record parsing using header-encoded field count
-- Module-only filtering via kallsyms symbol lookup
-- --context/-C N: show N records before/after each module function call
-- --raw: print raw records instead of call tree
-- Architecture-aware syscall numbers (x86_64 and arm64)
+Test:
 
-Usage:
+  make LLVM=1 CC=clang RUSTC=$RUSTC RUST_LIB_SRC=$RUST_LIB_SRC \
+    M=tools/testing/selftests/kcov_dataflow/eight_args_rust modules
+  vng --user root --exec \
+    "python3 tools/testing/selftests/kcov_dataflow/trigger-view.py \
+      eight_args_rust -C 8 --ko \
+      tools/testing/selftests/kcov_dataflow/eight_args_rust/eight_args_rust.ko"
 
-  python3 trigger-view.py eight_args_c \
-    --ko eight_args_c/eight_args_c.ko
+Result:
 
-  python3 trigger-view.py eight_args_rust \
-    --ko eight_args_rust/eight_args_rust.ko
-
-  python3 trigger-view.py rust_ffi_contract \
-    --ko rust_ffi_contract/rust_ffi_contract.ko
+  ksys_write(0x0, 0x1)
+    fdget_pos(0x4)
+    0xffff891481d2bc00 = fdget_pos()
+  0x0 = vfs_write()
+  vfs_write(0x0, 0x1, 0x0)
+  0x0 = _RNvCs3p16QzTwthP_15eight_args_rust13write_handler [eight_args_rust]()
+  _RNvCs3p16QzTwthP_15eight_args_rust13write_handler [eight_args_rust](0x0, 0x1, 0x0)
+    rdf_func2 [eight_args_rust](0x11, 0x22)
+    0x33 = rdf_func2 [eight_args_rust]()
+    rdf_func3 [eight_args_rust](0x11, 0x22, 0x33)
+    0x66 = rdf_func3 [eight_args_rust]()
+    rdf_func4 [eight_args_rust](0x11, 0x22, 0x33, 0x44)
+    0xaa = rdf_func4 [eight_args_rust]()
+    rdf_func5 [eight_args_rust](0x11, 0x22, 0x33, 0x44, 0x55)
+    0xff = rdf_func5 [eight_args_rust]()
+    rdf_func6 [eight_args_rust](0x11, 0x22, 0x33, 0x44, 0x55, 0x66)
+    0x165 = rdf_func6 [eight_args_rust]()
+    rdf_func7 [eight_args_rust](0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77)
+    0x1dc = rdf_func7 [eight_args_rust]()
+    rdf_func8 [eight_args_rust](0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88)
+    0x264 = rdf_func8 [eight_args_rust]()
+    rdf_func_struct [eight_args_rust](0xaaaa)
+    0x16665 = rdf_func_struct [eight_args_rust]()
+  0x1 = _RNvCs3p16QzTwthP_15eight_args_rust13write_handler [eight_args_rust]()
+  0x1 = vfs_write()
+  0x1 = ksys_write()
+  0x1 = __x64_sys_write()
+  0x0 = fpregs_assert_state_consistent()
+  0xba5748 = __x64_sys_close()
+  file_close_fd(0x4)
+  0x0 = file_close_fd()
+  0x0 = filp_flush()
 
 Cc: Alexander Potapenko <glider@google.com>
 Assisted-by: Claude:claude-opus-4-6 [kiro-chat]
 Link: https://github.com/yskzalloc/kcov-dataflow/actions
 Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
 ---
- .../selftests/kcov_dataflow/trigger-view.py        | 377 +++++++++++++++++++++
- 1 file changed, 377 insertions(+)
+ tools/testing/selftests/kcov_dataflow/README.rst   |   7 +
+ .../kcov_dataflow/eight_args_rust/Makefile         |   3 +
+ .../eight_args_rust/eight_args_rust.rs             | 143 +++++++++++++++++++++
+ .../selftests/kcov_dataflow/run_eight_args_rust.sh |  35 +++++
+ 4 files changed, 188 insertions(+)
 
-diff --git a/tools/testing/selftests/kcov_dataflow/trigger-view.py b/tools/testing/selftests/kcov_dataflow/trigger-view.py
-new file mode 100755
-index 000000000000..a3274e472dc1
+diff --git a/tools/testing/selftests/kcov_dataflow/README.rst b/tools/testing/selftests/kcov_dataflow/README.rst
+index e93b4e573504..61a41f3bd596 100644
+--- a/tools/testing/selftests/kcov_dataflow/README.rst
++++ b/tools/testing/selftests/kcov_dataflow/README.rst
+@@ -41,3 +41,10 @@ eight_args_c/
+ 
+         make LLVM=1 CC=clang M=tools/testing/selftests/kcov_dataflow/eight_args_c modules
+         python3 trigger-view.py eight_args_c
++
++eight_args_rust/
++    Rust equivalent of eight_args_c. Captures arguments at -O2 where
++    drgn/vmcore cannot. Requires CONFIG_RUST::
++
++        make LLVM=1 CC=clang M=tools/testing/selftests/kcov_dataflow/eight_args_rust modules
++        python3 trigger-view.py eight_args_rust
+diff --git a/tools/testing/selftests/kcov_dataflow/eight_args_rust/Makefile b/tools/testing/selftests/kcov_dataflow/eight_args_rust/Makefile
+new file mode 100644
+index 000000000000..c1e9ea2c5622
 --- /dev/null
-+++ b/tools/testing/selftests/kcov_dataflow/trigger-view.py
-@@ -0,0 +1,377 @@
-+#!/usr/bin/env python3
++++ b/tools/testing/selftests/kcov_dataflow/eight_args_rust/Makefile
+@@ -0,0 +1,3 @@
 +# SPDX-License-Identifier: GPL-2.0
-+"""
-+trigger-view.py - Load a module with kcov_dataflow
-+recording active, then pretty-print captured records.
++obj-m := eight_args_rust.o
++KCOV_DATAFLOW_eight_args_rust.o := y
+diff --git a/tools/testing/selftests/kcov_dataflow/eight_args_rust/eight_args_rust.rs b/tools/testing/selftests/kcov_dataflow/eight_args_rust/eight_args_rust.rs
+new file mode 100644
+index 000000000000..3026265cda97
+--- /dev/null
++++ b/tools/testing/selftests/kcov_dataflow/eight_args_rust/eight_args_rust.rs
+@@ -0,0 +1,143 @@
++// SPDX-License-Identifier: GPL-2.0
++//! Verify kcov_dataflow captures 1-8 argument Rust functions at -O2.
++//!
++//! This is the Rust equivalent of eight_args_c. Since rustc elides DWARF
++//! variable locations at -O2, drgn/vmcore cannot observe these arguments.
++//! kcov_dataflow captures them via the post-compilation pipeline.
++//!
++//! Write to /sys/kernel/debug/kcov_dataflow_test/trigger_rust to invoke.
 +
-+Usage:
-+    python3 trigger-view.py eight_args_c
-+    python3 trigger-view.py rust_ffi_contract
-+    python3 trigger-view.py eight_args_c --raw
++#![allow(missing_docs)]
 +
-+The script:
-+  1. Opens /sys/kernel/debug/kcov_dataflow
-+  2. Inits and mmaps the buffer
-+  3. Enables recording for this process
-+  4. Loads the module via finit_module() -- init runs in our context
-+  5. Disables recording
-+  6. Unloads the module
-+  7. Parses and prints captured records with kallsyms resolution
-+"""
-+import os
-+import sys
-+import struct
-+import ctypes
-+import ctypes.util
-+import argparse
-+import fcntl
++use kernel::prelude::*;
++use kernel::c_str;
 +
-+# Constants
-+DF_TYPE_ENTRY = 0xE
-+DF_TYPE_RET = 0xF
-+MAGIC_BAD = 0xBADADD85
-+BUF_SIZE = 1048576  # 1M words = 8MB
++module! {
++    type: EightArgsRust,
++    name: "eight_args_rust",
++    authors: ["kcov-dataflow"],
++    description: "1-8 arg Rust verification for kcov_dataflow",
++    license: "GPL",
++}
 +
-+# Ioctl numbers
-+def _IOR(t, nr, size):
-+    return (2 << 30) | (ord(t) << 8) | nr | (size << 16)
++#[repr(C)]
++pub struct Pair {
++    pub x: u32,
++    pub y: u32,
++}
 +
-+def _IO(t, nr):
-+    return (ord(t) << 8) | nr
++#[no_mangle]
++#[inline(never)]
++pub extern "C" fn rdf_func1(a1: u64) -> u64 { a1 }
 +
-+KCOV_DF_INIT_TRACK = _IOR('d', 1, 8)
-+KCOV_DF_ENABLE = _IO('d', 100)
-+KCOV_DF_DISABLE = _IO('d', 101)
++#[no_mangle]
++#[inline(never)]
++pub extern "C" fn rdf_func2(a1: u64, a2: u64) -> u64 { a1 + a2 }
 +
-+# syscall numbers (x86_64)
-+import platform
-+_machine = platform.machine()
-+if _machine == "aarch64":
-+    SYS_FINIT_MODULE = 273
-+    SYS_DELETE_MODULE = 106
-+else:  # x86_64
-+    SYS_FINIT_MODULE = 313
-+    SYS_DELETE_MODULE = 176
++#[no_mangle]
++#[inline(never)]
++pub extern "C" fn rdf_func3(a1: u64, a2: u64, a3: u64) -> u64 {
++    a1 + a2 + a3
++}
 +
-+SELFTEST_DIR = os.path.dirname(os.path.abspath(__file__))
++#[no_mangle]
++#[inline(never)]
++pub extern "C" fn rdf_func4(a1: u64, a2: u64, a3: u64, a4: u64) -> u64 {
++    a1 + a2 + a3 + a4
++}
 +
++#[no_mangle]
++#[inline(never)]
++pub extern "C" fn rdf_func5(a1: u64, a2: u64, a3: u64, a4: u64, a5: u64) -> u64 {
++    a1 + a2 + a3 + a4 + a5
++}
 +
-+def load_kallsyms():
-+    """Load kernel symbols for PC resolution."""
-+    syms = []
-+    try:
-+        with open("/proc/kallsyms") as f:
-+            for line in f:
-+                parts = line.split()
-+                if len(parts) >= 3:
-+                    addr = int(parts[0], 16)
-+                    name = parts[2]
-+                    mod = parts[3].strip("[]") if len(parts) > 3 else ""
-+                    syms.append((addr, name, mod))
-+    except (PermissionError, FileNotFoundError):
-+        pass
-+    syms.sort()
-+    return syms
++#[no_mangle]
++#[inline(never)]
++pub extern "C" fn rdf_func6(
++    a1: u64, a2: u64, a3: u64, a4: u64, a5: u64, a6: u64,
++) -> u64 {
++    a1 + a2 + a3 + a4 + a5 + a6
++}
 +
++#[no_mangle]
++#[inline(never)]
++pub extern "C" fn rdf_func7(
++    a1: u64, a2: u64, a3: u64, a4: u64, a5: u64, a6: u64, a7: u64,
++) -> u64 {
++    a1 + a2 + a3 + a4 + a5 + a6 + a7
++}
 +
-+def symbolize(pc, syms):
-+    """Find nearest symbol <= pc."""
-+    if not syms:
-+        return f"0x{pc:x}"
-+    lo, hi = 0, len(syms) - 1
-+    while lo < hi:
-+        mid = (lo + hi + 1) // 2
-+        if syms[mid][0] <= pc:
-+            lo = mid
-+        else:
-+            hi = mid - 1
-+    addr, name, mod = syms[lo]
-+    if addr > pc:
-+        return f"0x{pc:x}"
-+    offset = pc - addr
-+    if mod:
-+        return f"{name}+0x{offset:x} [{mod}]" if offset else f"{name} [{mod}]"
-+    return f"{name}+0x{offset:x}" if offset else name
++#[no_mangle]
++#[inline(never)]
++pub extern "C" fn rdf_func8(
++    a1: u64, a2: u64, a3: u64, a4: u64, a5: u64, a6: u64, a7: u64, a8: u64,
++) -> u64 {
++    a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8
++}
 +
++#[no_mangle]
++#[inline(never)]
++pub extern "C" fn rdf_func_struct(p: *const Pair) -> u64 {
++    unsafe { (*p).x as u64 + (*p).y as u64 }
++}
 +
-+def format_val(v):
-+    """Format a captured value."""
-+    if v == MAGIC_BAD:
-+        return "FAULT"
-+    if v == 0:
-+        return "0x0"
-+    return f"0x{v:x}"
++unsafe extern "C" fn write_handler(
++    _file: *mut kernel::bindings::file,
++    _buf: *const core::ffi::c_char,
++    count: usize,
++    _ppos: *mut kernel::bindings::loff_t,
++) -> kernel::ffi::c_long {
++    let p = Pair { x: 0xAAAA, y: 0xBBBB };
 +
++    let mut sum: u64 = 0;
++    sum = sum.wrapping_add(rdf_func1(0x11));
++    sum = sum.wrapping_add(rdf_func2(0x11, 0x22));
++    sum = sum.wrapping_add(rdf_func3(0x11, 0x22, 0x33));
++    sum = sum.wrapping_add(rdf_func4(0x11, 0x22, 0x33, 0x44));
++    sum = sum.wrapping_add(rdf_func5(0x11, 0x22, 0x33, 0x44, 0x55));
++    sum = sum.wrapping_add(rdf_func6(0x11, 0x22, 0x33, 0x44, 0x55, 0x66));
++    sum = sum.wrapping_add(rdf_func7(0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77));
++    sum = sum.wrapping_add(rdf_func8(0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88));
++    sum = sum.wrapping_add(rdf_func_struct(&p as *const Pair));
++    core::hint::black_box(sum);
 +
-+def find_module(name):
-+    """Find the .ko file for the given test name."""
-+    ko_path = os.path.join(SELFTEST_DIR, name, f"{name}_mod.ko")
-+    if os.path.exists(ko_path):
-+        return ko_path
-+    # Try without _mod suffix
-+    ko_path = os.path.join(SELFTEST_DIR, name, f"{name}.ko")
-+    if os.path.exists(ko_path):
-+        return ko_path
-+    # Search for any .ko in the directory
-+    mod_dir = os.path.join(SELFTEST_DIR, name)
-+    if os.path.isdir(mod_dir):
-+        for f in os.listdir(mod_dir):
-+            if f.endswith(".ko"):
-+                return os.path.join(mod_dir, f)
-+    return None
++    count as kernel::ffi::c_long
++}
 +
++#[repr(transparent)]
++struct SyncFops(kernel::bindings::file_operations);
++unsafe impl Sync for SyncFops {}
 +
-+def finit_module(ko_path):
-+    """Load a kernel module via finit_module syscall."""
-+    libc = ctypes.CDLL(ctypes.util.find_library("c"), use_errno=True)
-+    fd = os.open(ko_path, os.O_RDONLY)
-+    ret = libc.syscall(SYS_FINIT_MODULE, fd, b"", 0)
-+    os.close(fd)
-+    if ret != 0:
-+        errno = ctypes.get_errno()
-+        raise OSError(errno, f"finit_module({ko_path}): {os.strerror(errno)}")
++static FOPS: SyncFops = SyncFops(kernel::bindings::file_operations {
++    write: Some(unsafe { core::mem::transmute(write_handler as *const ()) }),
++    ..unsafe { core::mem::zeroed() }
++});
 +
++struct EightArgsRust {
++    d: *mut kernel::bindings::dentry,
++}
 +
-+def delete_module(name):
-+    """Unload a kernel module."""
-+    libc = ctypes.CDLL(ctypes.util.find_library("c"), use_errno=True)
-+    ret = libc.syscall(SYS_DELETE_MODULE, name.encode(), 0)
-+    if ret != 0:
-+        errno = ctypes.get_errno()
-+        raise OSError(errno, f"delete_module({name}): {os.strerror(errno)}")
++impl kernel::Module for EightArgsRust {
++    fn init(_module: &'static ThisModule) -> Result<Self> {
++        let d = unsafe {
++            kernel::bindings::debugfs_create_file_unsafe(
++                c_str!("trigger_rust").as_char_ptr(),
++                0o222,
++                core::ptr::null_mut(),
++                core::ptr::null_mut(),
++                &FOPS.0,
++            )
++        };
++        Ok(Self { d })
++    }
++}
 +
++impl Drop for EightArgsRust {
++    fn drop(&mut self) {
++        unsafe { kernel::bindings::debugfs_remove(self.d) };
++    }
++}
 +
-+def parse_records(buf, total_words):
-+    """Parse the ring buffer into a list of records."""
-+    records = []
-+    pos = 1
-+    while pos + 3 <= total_words and pos < BUF_SIZE:
-+        hdr = buf[pos]
++unsafe impl Send for EightArgsRust {}
++unsafe impl Sync for EightArgsRust {}
+diff --git a/tools/testing/selftests/kcov_dataflow/run_eight_args_rust.sh b/tools/testing/selftests/kcov_dataflow/run_eight_args_rust.sh
+new file mode 100755
+index 000000000000..c5f11866e19d
+--- /dev/null
++++ b/tools/testing/selftests/kcov_dataflow/run_eight_args_rust.sh
+@@ -0,0 +1,35 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Test eight_args_rust module capture via kcov_dataflow
++DIR="$(dirname "$0")"
++KO="$DIR/eight_args_rust/eight_args_rust.ko"
 +
-+        # Valid headers fit in 32 bits (upper 32 must be zero)
-+        if hdr >> 32:
-+            pos += 1
-+            continue
++if [ ! -f "$KO" ]; then
++	echo "SKIP: $KO not found"
++	echo "Build: make LLVM=1 CC=clang RUSTC=\$RUSTC M=...eight_args_rust modules""
++	exit 4  # kselftest SKIP
++fi
 +
-+        rtype = (hdr >> 28) & 0xF
++if [ ! -e /sys/kernel/debug/kcov_dataflow ]; then
++	echo "SKIP: kcov_dataflow not available"
++	exit 4
++fi
 +
-+        if rtype not in (DF_TYPE_ENTRY, DF_TYPE_RET):
-+            pos += 1
-+            continue
++OUTPUT=$(python3 "$DIR/trigger-view.py" eight_args_rust --ko "$KO" --raw 2>&1)
++RC=$?
 +
-+        pc = buf[pos + 1]
-+        meta = buf[pos + 2]
-+        seq = hdr & 0x00FFFFFF
-+        num_vals = (hdr >> 24) & 0xF
-+        if num_vals == 0:
-+            num_vals = 1
++if [ $RC -ne 0 ]; then
++	echo "FAIL: trigger-and-view exited with $RC"
++	echo "$OUTPUT"
++	exit 1
++fi
 +
-+        # Valid records always have a non-zero PC (kernel text address)
-+        if pc == 0:
-+            pos += 1
-+            continue
-+
-+        val = buf[pos + 3] if pos + 3 < BUF_SIZE else 0
-+        records.append({
-+            "type": rtype,
-+            "seq": seq,
-+            "pc": pc,
-+            "meta": meta,
-+            "val": val,
-+        })
-+        pos += 3 + num_vals
-+    return records
-+
-+
-+def print_raw(records, syms):
-+    """Print records in raw format."""
-+    for r in records:
-+        sym = symbolize(r["pc"], syms)
-+        t = "ENTRY" if r["type"] == DF_TYPE_ENTRY else "RET  "
-+        arg_idx = (r["meta"] >> 56) & 0xFF
-+        size = (r["meta"] >> 48) & 0xFF
-+        print(f"[{t}] seq={r['seq']:3d} {sym} "
-+              f"arg[{arg_idx}]({size}) = {format_val(r['val'])}")
-+
-+
-+def print_tree(records, syms):
-+    """Print records as indented call tree matching converted.txt format."""
-+    depth = 0
-+    # Group consecutive ENTRY records by PC to collect all args
-+    i = 0
-+    while i < len(records):
-+        r = records[i]
-+        sym = symbolize(r["pc"], syms)
-+
-+        if r["type"] == DF_TYPE_ENTRY:
-+            # Collect all args for this call (same PC, consecutive entries)
-+            args = []
-+            pc = r["pc"]
-+            while i < len(records) and records[i]["type"] == DF_TYPE_ENTRY \
-+                    and records[i]["pc"] == pc:
-+                args.append(format_val(records[i]["val"]))
-+                i += 1
-+            indent = "  " * depth
-+            print(f"{indent}{sym}({', '.join(args)})")
-+            depth += 1
-+        else:
-+            depth = max(0, depth - 1)
-+            indent = "  " * depth
-+            print(f"{indent}{format_val(r['val'])} = {sym}()")
-+            i += 1
-+
-+
-+def main():
-+    parser = argparse.ArgumentParser(
-+        description="Load a test module with kcov_dataflow and view records")
-+    parser.add_argument("module", help="Test module name (e.g. eight_args_c)")
-+    parser.add_argument("--raw", action="store_true",
-+                        help="Print raw records instead of tree")
-+    parser.add_argument("--ko", help="Explicit path to .ko file")
-+    parser.add_argument("--context", "-C", type=int, default=0,
-+                        help="Show N lines before/after each module record")
-+    args = parser.parse_args()
-+
-+    # Find module
-+    if args.ko:
-+        ko_path = args.ko
-+    else:
-+        ko_path = find_module(args.module)
-+    if not ko_path or not os.path.exists(ko_path):
-+        print(f"Cannot find module for '{args.module}'", file=sys.stderr)
-+        print(f"Build it first: make LLVM=1 CC=clang "
-+              f"M=tools/testing/selftests/kcov_dataflow/{args.module} modules",
-+              file=sys.stderr)
-+        sys.exit(1)
-+
-+    # Open kcov_dataflow
-+    # Ensure kallsyms shows real addresses
-+    try:
-+        with open("/proc/sys/kernel/kptr_restrict", "w") as f:
-+            f.write("0")
-+    except (PermissionError, FileNotFoundError):
-+        pass
-+
-+    try:
-+        df_fd = os.open("/sys/kernel/debug/kcov_dataflow", os.O_RDWR)
-+    except OSError as e:
-+        print(f"Cannot open kcov_dataflow: {e}", file=sys.stderr)
-+        sys.exit(1)
-+
-+    # Init + mmap
-+    fcntl.ioctl(df_fd, KCOV_DF_INIT_TRACK, BUF_SIZE)
-+    libc = ctypes.CDLL(ctypes.util.find_library("c"), use_errno=True)
-+    libc.mmap.restype = ctypes.c_void_p
-+    libc.mmap.argtypes = [
-+        ctypes.c_void_p, ctypes.c_size_t, ctypes.c_int,
-+        ctypes.c_int, ctypes.c_int, ctypes.c_long
-+    ]
-+    buf_ptr = libc.mmap(None, BUF_SIZE * 8, 0x3, 0x01, df_fd, 0)
-+    if buf_ptr == ctypes.c_void_p(-1).value:
-+        print("mmap failed", file=sys.stderr)
-+        sys.exit(1)
-+    buf = (ctypes.c_uint64 * BUF_SIZE).from_address(buf_ptr)
-+
-+    # Load module first (generates noise with INSTRUMENT_ALL)
-+    mod_name = os.path.basename(ko_path).replace(".ko", "")
-+    try:
-+        finit_module(ko_path)
-+        print(f"# Loaded {mod_name}")
-+    except OSError as e:
-+        print(f"Failed to load module: {e}", file=sys.stderr)
-+        sys.exit(1)
-+
-+    # Get module .text address for PC filtering
-+    mod_text_start = 0
-+    try:
-+        with open(f"/sys/module/{mod_name}/sections/.text") as f:
-+            mod_text_start = int(f.read().strip(), 16)
-+    except (FileNotFoundError, ValueError, PermissionError):
-+        pass
-+
-+    # Enable recording AFTER load, BEFORE trigger (avoids VFS/loader noise)
-+    fcntl.ioctl(df_fd, KCOV_DF_ENABLE, 0)
-+    buf[0] = 0
-+
-+    # Trigger the module's debugfs file to invoke test functions
-+    trigger_paths = [
-+        f"/sys/kernel/debug/kcov_dataflow_test/trigger",
-+        f"/sys/kernel/debug/kcov_dataflow_test/rust_ffi_trigger",
-+        f"/sys/kernel/debug/trigger_rust",
-+        f"/sys/kernel/debug/{mod_name}/trigger",
-+    ]
-+    for tp in trigger_paths:
-+        try:
-+            with open(tp, "w") as f:
-+                f.write("1")
-+            break
-+        except (FileNotFoundError, PermissionError):
-+            continue
-+
-+    fcntl.ioctl(df_fd, KCOV_DF_DISABLE, 0)
-+
-+    # Read kallsyms while module is still loaded (symbols available)
-+    syms = load_kallsyms()
-+
-+    # Unload
-+    try:
-+        delete_module(mod_name)
-+    except OSError:
-+        pass
-+
-+    # Parse and display
-+    total = int(buf[0])
-+    print(f"# Captured {total} words")
-+    records = parse_records(buf, total)
-+    print(f"# {len(records)} records")
-+
-+    # Filter to module records using kallsyms
-+    # Build set of module symbol addresses for fast lookup
-+    mod_syms = set()
-+    for addr, name, mod in syms:
-+        if mod == mod_name and addr != 0:
-+            mod_syms.add(addr)
-+
-+    def is_module_pc(pc):
-+        """Check if PC belongs to mod_name via kallsyms."""
-+        if mod_syms:
-+            # Binary search: find nearest symbol <= pc, check module
-+            lo, hi = 0, len(syms) - 1
-+            while lo < hi:
-+                mid = (lo + hi + 1) // 2
-+                if syms[mid][0] <= pc:
-+                    lo = mid
-+                else:
-+                    hi = mid - 1
-+            return syms[lo][2] == mod_name
-+        # Fallback: if no module symbols (kptr_restrict), use .text start
-+        return mod_text_start and pc >= mod_text_start
-+
-+    if syms or mod_text_start:
-+        if args.context > 0:
-+            module_indices = set()
-+            for i, r in enumerate(records):
-+                if is_module_pc(r["pc"]):
-+                    for j in range(max(0, i - args.context),
-+                                   min(len(records), i + args.context + 1)):
-+                        module_indices.add(j)
-+            records = [records[i] for i in sorted(module_indices)]
-+            print(f"# showing {len(records)} records with context={args.context} "
-+                  f"around {mod_name}\n")
-+        else:
-+            module_records = [r for r in records if is_module_pc(r["pc"])]
-+            print(f"# {len(module_records)} from {mod_name}\n")
-+            records = module_records
-+    else:
-+        print("")
-+
-+    if args.raw:
-+        print_raw(records, syms)
-+    else:
-+        print_tree(records, syms)
-+
-+    os.close(df_fd)
-+
-+
-+if __name__ == "__main__":
-+    main()
++RECORDS=$(echo "$OUTPUT" | grep -c "^\[ENTRY\]\|^\[RET")
++if [ "$RECORDS" -gt 0 ]; then
++	echo "PASS: captured $RECORDS records from eight_args_rust"
++	exit 0
++else
++	echo "FAIL: no records captured"
++	echo "$OUTPUT"
++	exit 1
++fi
 
 -- 
 2.43.0
