@@ -1,72 +1,86 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D8442EBB8C;
-	Thu, 11 Jun 2026 05:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E420A34CFAB;
+	Thu, 11 Jun 2026 05:21:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781154606; cv=none; b=dwU/Wt3cW/KXXV5cjg+m7eQQnRdhuse1UwZqe8uZLWkkWZdCwj3u4zUONc11QtlrclJAO59SvoIdp7rRXrdwOy6ASBEyx4J1ZlEY++1o8b6A34+ET5lYSEHbl2LmrasW1MANe5ms1NEokvOwpvZPm/DqNktHSOh7HPdJxOLGXKo=
+	t=1781155306; cv=none; b=gAq9g7qaqfheFHAIIIJs5W8vMzsFBck3ZUSHppJQFTP2czJIa9X/4n6HsOuz0Rbcp5rP2JjDOVQYcFW+6NWX+yPT03rX+ka+pBksIsjCpMYvIN9EjkMghddU6qVl5++KtJ8NknehVXLNrGaOWTZ8lhsYt9RcBwwb6D73MhVGyeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781154606; c=relaxed/simple;
-	bh=z/DHXPmt9zCySDr/M0U+2D0wie5JQGoTyWwU4ttjJ4w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RA2A11lNMpTaegPzNuMOGvMJahPlZTmNpgf7ZOMeeBj/I+1REl39q3MRX6hhkMSvUkyW3zLYqNrANYfokia7cbSc8UdxrC4cNeIMKa0LcUMoYvct0CvJmVS3yxQkC9ddhgz1I+pCGVOW1ock6nfybJMNHTFQb2diPjwCvQZ1nQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xDPnlm+J; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781155306; c=relaxed/simple;
+	bh=i/JsgUYCntCG1YQqZsG70gRHrs+EAW6ILhqG6XZySuQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WGQp3RBLpotG5lITER82ALXAbv6a+oqQ95C8MuiSj7FH/nFko4l/gDW4MxC7BedE9ElYLkBFsSASQ/nhqbmtXb9jixyfQM4+um4kE2Oh+mrf7YegQp+niutQIafadH1njRAdoPz5wM+Ftld3f6uMdei9KJdoKaLWh1s6f8TEOt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=aQzCTui0; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=fHWDIlZd; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xDPnlm+J"
-Message-ID: <6b2be62c-bcba-4bfd-9006-613f9134aa3b@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781154597;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="aQzCTui0";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="fHWDIlZd"
+From: Nam Cao <namcao@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1781155298;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=c6UD8muV8Jcg0AZHQWSeCaLakAseTNRvoqY9r4Xc6FM=;
-	b=xDPnlm+JCDWUoUkpH3oIGlJmB9sInKTdczo14RrOGloCLOQbmctrU5pvJpUmqBk4qQeMLO
-	BRmITRdG6iNKuiKv+t7Obc5oPv5VBz4xZbCe7kQsY5US0Hs3cRtPvLNnQdwD/zpZCGpYWy
-	lGi/ds3f+uf2zvSx3JcP/2qA17EvANQ=
-Date: Thu, 11 Jun 2026 13:09:48 +0800
+	bh=pxZrj3HZL3fhz45xiVff8+rxIRxk0wNsp5NDbhPArlI=;
+	b=aQzCTui0vIILvBLiJ6c+wEedWOf1pg+UetUx3mJQd/3OCbhPCyC/7p99cIGbjKgoJbxeMJ
+	RvZqYgQwQFmC5CqTD+p42o+nd8/IV56U9kBsGlgsljW4/EmiHlyE08zJwlpzKtucjsQTH2
+	rEJEjOzYg4y7RDE+33fQm7bKo99nmPtAfJtfGnHRx8CfIAXiBKPibOszPxJ5R9VMvrAzqv
+	cRKzAmPGIbpXjmJYkNqeuRTchJRuKCXXrSf/oOJdgegFvGyzXK6jp82DFjbqWEtEXJ4e+C
+	Ed5pEg0YR/GG/tIVoc+km7DO9PUvOfGDB+PARYYG7MGDLtyslxaUlED8pLbDSw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1781155298;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pxZrj3HZL3fhz45xiVff8+rxIRxk0wNsp5NDbhPArlI=;
+	b=fHWDIlZdzOiLKfXOL42qehPTjVZemfYb8XJAOT676l7OxGd2A/3JPDZzKUvv/Wqp1V95b2
+	AtIF3KGM8zBcLRBw==
+To: Charlie Jenkins <thecharlesjenkins@gmail.com>
+Cc: Charlie Jenkins via B4 Relay
+ <devnull+thecharlesjenkins.gmail.com@kernel.org>, Paul Walmsley
+ <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti
+ <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, Atish Patra
+ <atish.patra@linux.dev>, Conor Dooley <conor@kernel.org>, Paolo Bonzini
+ <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Shuah
+ Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 01/16] riscv: Introduce instruction table generation
+In-Reply-To: <aioJ_5SIXdGQg55R@blinky>
+References: <20260407-riscv_insn_table-v1-0-54b4736a1e77@gmail.com>
+ <20260407-riscv_insn_table-v1-1-54b4736a1e77@gmail.com>
+ <878q8m1j9y.fsf@yellow.woof> <aioJ_5SIXdGQg55R@blinky>
+Date: Thu, 11 Jun 2026 07:21:37 +0200
+Message-ID: <87se6tejoe.fsf@yellow.woof>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 5/9] bpftool: Generate skeleton for global
- percpu data
-Content-Language: en-US
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, john.fastabend@gmail.com,
- qmo@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com,
- martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260608145113.65857-6-leon.hwang@linux.dev>
- <f7c7f1ea3da3115928819d4b4071cde9bda3786ffaf1fd60b06180719d64f625@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <f7c7f1ea3da3115928819d4b4071cde9bda3786ffaf1fd60b06180719d64f625@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
 
-On 8/6/26 23:29, bot+bpf-ci@kernel.org wrote:
-[...]
-> 
-> Does the generated light skeleton need an explicit mprotect(..., PROT_READ)
-> on the .percpu initial value buffer to enforce the read-only constraint
-> described in the commit message?
-> 
-> This was raised on v4 (https://lore.kernel.org/bpf/20260414212650.4F89BC19425@smtp.kernel.org/)
-> where the response was that the mprotect(..., PROT_READ) added in patch #4
-> should be moved into this patch so it isn't missed. The v5 code here looks
-> unchanged from v4, and the mprotect does not appear to have been moved in.
-> 
-Will add mprotect(..., PROT_READ) for light skeleton.
+Charlie Jenkins <thecharlesjenkins@gmail.com> writes:
+> This is a weird one. The Ziclsd extension introduces it for RV32[1]. All
+> of the data is generated from the riscv-unified-db and because it is in
+> the Ziclsd extension, c.ld is included for 32-bit in the c.ld
+> description [2]. 
 
-Thanks,
-Leon
+Oh :( We probably should amend the base spec to mention that.
 
+>> > +        compressed_name=${name##c.*}
+>> 	   ^^^^^^^^^^^^^^^
+>> 	   this name is misleading
+>
+> That's fair, I can rename it to be something like "compressed_inst"?
+
+My issue is that "compressed_name" indicates that it holds the
+compressed variant of the name. But it actually is empty if the
+instruction is compressed, otherwise it is the original instruction name.
+
+I am not sure what is a better name. Perhaps just inline this to the
+usage below.
+
+Nam
