@@ -1,646 +1,141 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B266435E1B6
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 06:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781159124; cv=pass; b=t9SG5/EgtemSTblsoO4Bwj83HzDstMWmlZdLCLdOSxA5r5xz4EDWOum+jI2UR0I912ADljEGauxwjGqsIl0yW1EwyayYvTxIgydNNv31z9vAYVNziZem71R2lujpWR+aVzC1ms+l4+CVeREOjoOTbAppbXoqhYxWVl/Bx6XnBT0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781159124; c=relaxed/simple;
-	bh=Yrlr0yot/oaJDdCF7EKIDtviaaLhkA/1Pi8KSApFPvQ=;
-	h=Mime-Version:In-Reply-To:From:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aeY0ScdB7VbDwvsA6Tw5L13mo/cVOB5ZZYE0lTTUioclMkjPKvODbGrFQjYo5L741yx6o7M1Fx989DalIGwKTiZSb3MOl4XSa+YWy0pFASNAk0IMjct6MWwhIhHosSI51zvllfK9cYg8fzE9q5gtN0Wjzjid0rUQggjYKs1XI2Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=JjYwU7Qz; arc=pass smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7987533986F
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 08:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781165347; cv=none; b=GmfF+vbsZlRNx/SuVhq8RP+bgSBFqnZvYRZ6s4JN57VNo74Qkj39gBrGQ0q/iu1UQQZL8DKXkjo2qDQmkee6/Qn9f3uWPw0ClAa3X76SMmD+peGkT1YFl4ptvIlZ9chVG/nRvDeBJl7fyVSBLdIKNnC2/JK7MgZQY5GZvAa/Yrg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781165347; c=relaxed/simple;
+	bh=43aTg0uqeeQ1d2jMcSX4cwzeXgZpgGmCmaoUiCwIYpI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bk6Y5ivodk0kNautdjrmZH3iMyvTPewrTlQmt8ZWnIyoXgJFgRcOl40PK2Fo0wx5hcKPdEFaHruPtk0CrJ/ttK0gApuDrmxazxNMqL1dPNo/BqeXuEow3HwwCKyiTNnvX+QKukTg7ZmWoDZipu3jYR96xvuldS5mg3yZiZipKmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ByieKP5v; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="JjYwU7Qz"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5aa624ff3cbso7872146e87.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 23:25:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781159120; cv=none;
-        d=google.com; s=arc-20240605;
-        b=d0Wbhs/8RPyD8QldNwcq4BKRpNupan5eq6jH9h+6tNEif10b2QDE8m0VX9Jeho8zph
-         Qawo8TiP+ZaTkaSJxUy3l5HnXy4xjhmrYnN6RRRLus+jbmTU56eGZ2aJfKyH75Kdw1Pv
-         NHU8LPcrEdIggACWIL+xJW6DVU9QfexPpMwPehQmyicduhQFgtxFbzzWlWPIb5Si2m39
-         at+v4r03EL/Ac5ugODOKyV81WWo7rC3d7fPkk0SjbxJ8p6YwTcUNl18sunfjGtkmoZMz
-         f0U/IM66/3gxiCXtlzccx9Epz3bLCi5HyA0sYeCLluuxrTH3x8z/VRm8Ave8ZDhTZZUd
-         WTOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:references
-         :from:in-reply-to:mime-version:dkim-signature;
-        bh=Yrlr0yot/oaJDdCF7EKIDtviaaLhkA/1Pi8KSApFPvQ=;
-        fh=IbBAwY3AswXo7ZxDLmsJa/oNkGf3FnQ6X6yalT+27GY=;
-        b=aR7WCwqEal7Xz9UDk0tt2q8VEALbShSe5qbty20DRfltUMqCrWaGH/bGf/UF4ZG6dZ
-         qRkw4IXVVWIw00q81PO8WKcaptpOQM4nFiruhHlFlthQoaigjzLDT7bB6oMqt5dDqc8n
-         u81BuJlqHq4L1vAAvIA98v1PMb8odjhGOkp1uwgtyuOL37KFKnDDZt7Py+5wck2axUR5
-         WTauTCbIX5BYw2QUikWBvgoe31OK/BXAiWUVEnyL89Iq9P6ySDq6FzDwZwcjCbWitazy
-         Gn5u/wRjjE2+O5ev1UN0RUIGTooUtu4e4hzfc36I8ZbHIGK6zSDQYtcz4BrqVDyEUELL
-         FxEw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ByieKP5v"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2c0c2d792c8so51445915ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 01:09:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1781159120; x=1781763920; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:references
-         :from:in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yrlr0yot/oaJDdCF7EKIDtviaaLhkA/1Pi8KSApFPvQ=;
-        b=JjYwU7QzHFmNNguIW1x/s9Nam8zfFbGT+yUuXIQMqn0XxEDifCPgxgC0hF79eF2bST
-         iUJUk5t+McU5UmbFBToUVtv5idJZM4TOHeDPuX72eX1tsD2hkky89wG1x1qw5ADCGYut
-         ND+tC3gRW7IhrUVhyf+zBhGT8NJ4JVFDligwhx93y0tifoXRqhOSUZQ91oUQvB3bkETY
-         IbP7Ae7T+L9BUsanHJLwijC2nRXUV0SMpPmG6VCbDee+XvS1vwoWz3hjWEWrEVmtF9dK
-         qww4sohed/aEOYdJlgFLozZ+0dDrKcFb3j253ea45MoLZNXWEjd8CxNfn60S8MesQ7Mb
-         bSCw==
+        d=gmail.com; s=20251104; t=1781165346; x=1781770146; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ez/7YuAJr4Y+RG8kQa8JolzS7h4/ienZb2p4vynCkX0=;
+        b=ByieKP5vYX53ZzYn26b8aIuF4w2nt9RdK9oz9i3Pjkcaq6FstjjKqymiWu6abi8/6u
+         yN7DVZyQfN04v+PutYDUoEDYakHbmHuVkCabjR0m/gvxbWIDRkROG+xzpqoRMEn4g/EI
+         p82Mgd14OMGuthhDvxrz1nPM2XHdkgXE0XYHiXzbvbBS/Lk8WE2P0p1fqiGM6V/sLzft
+         Oi1I8NgKVN2ZRPf2JGbRLyANRUy8AssFq6CHQep3eLk/dVAzc/q6hXmfhyslMU+/oLKv
+         9lvZJOdYtdtz1nFH/MTmokqrSuAYxUjSSjx0HrW9WwrIhJCMuR/n5u9cCMivJjsPrHBH
+         l9jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781159120; x=1781763920;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:references
-         :from:in-reply-to:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Yrlr0yot/oaJDdCF7EKIDtviaaLhkA/1Pi8KSApFPvQ=;
-        b=UA/DhQ+4leUGdfRKU+uIjbWw4o8eMkMMLjF3jw40twVeR3G1es3Ft26qOlJmQgpEFi
-         wAKkYQmZZPmAhggPhN/l9Zlu0oe0LPeDzhfgoEmpj9oQfCthmNPTH1uAKnboUmB8Tbyw
-         bSNw7L2jHPiR89incIgYe1uDdRdXwWDOZhesNXA4ASGKv40rDD9XXXVkypb94pAI1xWv
-         wJ0hGPIX1da5Yg4NdCSFCGIktkp0QOsxr3eWH7doGTJWokqQeHehEYL/WD+syVqsg3B4
-         LwTBfIqg5hCUz3OC9HvlTbdmh1wdtOaPvHbRP3lbCQM26iNuNZn3HYQOKk+HCY+pbw7+
-         032Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+JB8j7Klo5D7FPb80qEHy6jE8AY2BxlkFIox0oVGlgaEf43MrVHtPMTET68F3SoXYhFmE6wgphg9thVRTyEI4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy70Z5fh8Np1Q0Uhop2NZHr/PjMDRpErAkA5VmnvNMgTNcoMPgD
-	2cyhcOAcM249AZX3gyYFbQKrBLtQWpUVbF73ZrwYXF+mszIFIB4+uKr75Y9JStI2F2w5O8BPb/W
-	MLG3SDikWXtGW4RoGj/+jHn4VW2Bb9b430lOZlq1HyQ==
-X-Gm-Gg: Acq92OErtyX+2HJ8SjClF1pk6kLyRNKlWXrhoQfPoYHZeSkplnQelxVmzL2Od0NlGex
-	LCcJxc0zvPKtFtmE98wWbmUC/V2haDUX9BbW2B9bcSu8o3oJ3eEFmPHdnFoM+FoMOz3EC0a0hSY
-	C8oMAmN5ZfrYO1bgoh64+qRGv/NfEXzQJE8350oDAdZbf8eNa8Ylkt1KoQAowWaRB19uLTEUwO1
-	03GrerLS9SxR/QIDLEKAs39klCpHEJ1whI0KRsdkR5HI6GRg4sn6dZciI46MbVlyuwpl1drFMB7
-	yaK3WtmZmHDVFnwJdnM=
-X-Received: by 2002:a05:6512:3d04:b0:5aa:6cfc:771e with SMTP id
- 2adb3069b0e04-5ad27aaf3f0mr446123e87.2.1781159119646; Wed, 10 Jun 2026
- 23:25:19 -0700 (PDT)
-Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
- Wed, 10 Jun 2026 23:25:19 -0700
-Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
- Wed, 10 Jun 2026 23:25:18 -0700
+        d=1e100.net; s=20251104; t=1781165346; x=1781770146;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ez/7YuAJr4Y+RG8kQa8JolzS7h4/ienZb2p4vynCkX0=;
+        b=M+fJshDS4tUKkaPcp3B458LVIEgC6PlsWHowlwoTiJNDu8H8jXNyLVrhIgXK9hCVBH
+         x5zDNQ4Viz7CZzMJfcQWvXEgqowEGRToU7PcmbDW6Sodtc5Iy6H7Yx2vnknTI3QQ6S02
+         izqcB6mlo9RDQKlwCR1PpivNLJZHCdRVyAQ1qTMLHJIg07Kys5DhAD9DCkmD0hD3+jhT
+         zxpZ+7crGorIEURYJSjTmSr8bUaI5nIcPb5CAXTBcZ2ymoxJ3SY/nBe3wFQKh+m5hiT7
+         vyly48X887XQO77LE2uLmF29Id34FScLylyFhxUctuF3Ohs5n5iVFsjtXjrGirtjEcqd
+         A0+A==
+X-Forwarded-Encrypted: i=1; AFNElJ+0+uF6Hf9m4/VKDtWCiYjai4Xrs/jJjUJ5FS18Z3hhd8JhbKSKCQUeb+Npx+ay2CT1r9fKPo+2guzIZ8n12Kk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxT+blga0xXg097ewD32/eXedKleuRZ5SHY+QwC28ttUc1KpNvF
+	WkeyvmP1sC5v1mpbj7XJS/C0qvcOl7J1WQAtUX09xeIAw/TI8bFwi4Ru
+X-Gm-Gg: Acq92OEtH4eXh63Jg+aKNW65/zgIQDKyeqsjXPMDndjoLc4HbRdI4jwFaK+b5Psw2qo
+	ftrwMDAB3T8I2YM26Yxn0aSOojC7x4+nAWT7uFDmqUpK9xlMIh5/XS50SqvXoTMdSTVQUeQEzwS
+	aFFC+tfLJoYwPOzC6UC5+IwmW0g+h24QsiHlGJSkQ9bs8LYKerOp5PI5/nUmdlmDroHgowuWNeR
+	7H+hjY6nSuBa7t/AbzDirdloaIiEV0JhL8jzvaCWFNXp5y3Q7QbgAGjQBcOWza8Mhujp+ynlsg1
+	Uk0IU4kjYY78z6OGGp4l01YtPNZk+lcZPEc8LvxjIDvhnNVUaqskUSqwCTuaLP7R5WbcpkgBJJy
+	wjEG0qRQcVUa2Rr6jP2iU4LDGYjQ7rbHH2iP0RLi3CW9pfst9NFitBp+K64014azY5rEXGq3ilW
+	ZgG6odxDy8mnYLy8/unKzxYSkNDOXYX2v/CN60059AOaG0aDD9WYJ0Aywht8Xb+71MRxM4ypofb
+	Xp4VduMomhR+2HZFZIi5Q1o4tYAl6LYQpN5KQ4=
+X-Received: by 2002:a17:903:f8c:b0:2c1:a19:8396 with SMTP id d9443c01a7336-2c2f2a780bamr19562055ad.31.1781165345756;
+        Thu, 11 Jun 2026 01:09:05 -0700 (PDT)
+Received: from u2404-VMware-Virtual-Platform.localdomain ([2a12:a304:100::109f])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c1664ad138sm277591035ad.82.2026.06.11.01.08.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jun 2026 01:09:05 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	shuah@kernel.org,
+	jiayuan.chen@linux.dev,
+	toke@redhat.com,
+	menglong.dong@linux.dev,
+	emil@etsalapatis.com,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH bpf v4 0/2] bpf: Fix generic devmap egress skb sharing
+Date: Thu, 11 Jun 2026 16:08:47 +0800
+Message-ID: <20260611080850.536996-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-In-Reply-To: <202606101206.65AC69UA050105@mse-fl1.zte.com.cn>
-From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-References: <202606101206.65AC69UA050105@mse-fl1.zte.com.cn>
-Date: Wed, 10 Jun 2026 23:25:18 -0700
-X-Gm-Features: AVVi8Cccw1045papxZ-dB2dGVyzu0pCYO5mq1CV43NzkHw82hIME6-yb2UQ_lKU
-Message-ID: <CACnXVnfRsOt7NY58+Hc1Ez2NahdRwu7J0idi4YGFoZJNRMhspA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v9 4/5] perf: RISC-V: add support for SSE event
-To: yang.susheng@zte.com.cn
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, pjw@kernel.org, palmer@dabbelt.com, 
-	aou@eecs.berkeley.edu, alex@ghiti.fr, conor@kernel.org, cleger@rivosinc.com, 
-	himanshu@thechauhan.dev, will@kernel.org, mark.rutland@arm.com, 
-	atish.patra@linux.dev, anup@brainfault.org, shuah@kernel.org, 
-	cuiyunhui@bytedance.com, yuanzhu@bytedance.com, liu.xuemei1@zte.com.cn, 
-	zhang.anmeng@zte.com.cn, gao.rui@zte.com.cn, tan.hu@zte.com.cn, 
-	jin.qi@zte.com.cn, li.zhichao@zte.com.cn, jia.yunxiang@zte.com.cn, 
-	dai.hualiang@zte.com.cn, liu.qingtao2@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Susheng,
+Generic XDP devmap multi redirect can leave cloned skbs sharing packet
+data. When a devmap egress program mutates packet data, another
+destination sharing the same data may observe that mutation.
 
-Thanks a lot for the bug report and the detailed logs.
+Fix this by making cloned skbs private before running the generic devmap
+egress program. Add selftest coverage for the last-destination case,
+where the final destination runs on the original skb while earlier
+destinations use cloned skbs.
 
-> From: yang.susheng@zte.com.cn
-> Date:=C2=A0 Wed, Jun 10, 2026, 20:06
-> Subject:=C2=A0 [External] Re: [PATCH v9 4/5] perf: RISC-V: add support fo=
-r SSE event
-> To: <zhangzhanpeng.jasper@bytedance.com>
-> Cc: <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>, <=
-linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>, <kvm-riscv@lists.i=
-nfradead.org>, <pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.e=
-du>, <alex@ghiti.fr>, <conor@kernel.org>, <cleger@rivosinc.com>, <himanshu@=
-thechauhan.dev>, <will@kernel.org>, <mark.rutland@arm.com>, <atish.patra@li=
-nux.dev>, <anup@brainfault.org>, <shuah@kernel.org>, <cuiyunhui@bytedance.c=
-om>, <yuanzhu@bytedance.com>, <zhangzhanpeng.jasper@bytedance.com>, <liu.xu=
-emei1@zte.com.cn>, <zhang.anmeng@zte.com.cn>, <gao.rui@zte.com.cn>, <tan.hu=
-@zte.com.cn>, <jin.qi@zte.com.cn>, <li.zhichao@zte.com.cn>, <jia.yunxiang@z=
-te.com.cn>, <dai.hualiang@zte.com.cn>, <liu.qingtao2@zte.com.cn>
-> Hi Zhanpeng,
->
-> >
-> > In order to use SSE within PMU drivers, register an SSE handler for the
-> > local PMU event. Reuse the existing overflow IRQ handler and pass
-> > appropriate pt_regs. Add a config option RISCV_PMU_SBI_SSE to select ev=
-ent
-> > delivery via SSE events.
-> >
-> > When the SSE path is used, also honor the return value from
-> > perf_event_overflow(). If perf core throttles or disables an event, do =
-not
-> > immediately restart the overflowed counters from the SSE handler.
-> >
-> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <cleger@rivosinc.com>
-> > Co-developed-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-> > Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-> > ---
-> > =C2=A0drivers/perf/Kconfig =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 10 ++++=
-+
-> > =C2=A0drivers/perf/riscv_pmu.c =C2=A0 =C2=A0 =C2=A0 | 23 +++++++++++
-> > =C2=A0drivers/perf/riscv_pmu_sbi.c =C2=A0 | 78 ++++++++++++++++++++++++=
-++++++++-----
-> > =C2=A0include/linux/perf/riscv_pmu.h | =C2=A05 +++
-> > =C2=A04 files changed, 104 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
-> > index ab90932fc2d0..b6c58475091c 100644
-> > --- a/drivers/perf/Kconfig
-> > +++ b/drivers/perf/Kconfig
-> > @@ -105,6 +105,16 @@ config RISCV_PMU_SBI
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0full perf feature support i.e.=
- counter overflow, privilege mode
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0filtering, counter configurati=
-on.
-> >
-> > +config RISCV_PMU_SBI_SSE
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0depends on RISCV_PMU && RISCV_SBI_SSE
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0bool "RISC-V PMU SSE events"
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0default n
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0help
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Say y if you want to use SSE events=
- to deliver PMU interrupts. This
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0provides a way to profile the kerne=
-l at any level by using NMI-like
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0SSE events. Since SSE events can be=
- intrusive, this option allows
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0selecting them only when needed.
-> > +
-> > =C2=A0config STARFIVE_STARLINK_PMU
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0depends on ARCH_STARFIVE || COMPILE_T=
-EST
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0depends on 64BIT
-> > diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
-> > index 8e3cd0f35336..a48e286d9394 100644
-> > --- a/drivers/perf/riscv_pmu.c
-> > +++ b/drivers/perf/riscv_pmu.c
-> > @@ -13,6 +13,7 @@
-> > =C2=A0#include <linux/irqdesc.h>
-> > =C2=A0#include <linux/perf/riscv_pmu.h>
-> > =C2=A0#include <linux/printk.h>
-> > +#include <linux/riscv_sbi_sse.h>
-> > =C2=A0#include <linux/smp.h>
-> > =C2=A0#include <linux/sched_clock.h>
-> >
-> > @@ -254,6 +255,24 @@ void riscv_pmu_start(struct perf_event *event, int=
- flags)
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0perf_event_update_userpage(event);
-> > =C2=A0}
-> >
-> > +#ifdef CONFIG_RISCV_PMU_SBI_SSE
-> > +static void riscv_pmu_disable(struct pmu *pmu)
-> > +{
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0struct riscv_pmu *rvpmu =3D to_riscv_pmu(p=
-mu);
-> > +
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0if (rvpmu->sse_evt)
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0sse_event_disa=
-ble_local(rvpmu->sse_evt);
-> > +}
-> > +
-> > +static void riscv_pmu_enable(struct pmu *pmu)
-> > +{
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0struct riscv_pmu *rvpmu =3D to_riscv_pmu(p=
-mu);
-> > +
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0if (rvpmu->sse_evt)
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0sse_event_enab=
-le_local(rvpmu->sse_evt);
-> > +}
-> > +#endif
-> > +
-> > =C2=A0static int riscv_pmu_add(struct perf_event *event, int flags)
-> > =C2=A0{
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct riscv_pmu *rvpmu =3D to_riscv_=
-pmu(event->pmu);
-> > @@ -411,6 +430,10 @@ struct riscv_pmu *riscv_pmu_alloc(void)
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0.event_ma=
-pped =C2=A0 =C2=A0 =C2=A0 =C2=A0=3D riscv_pmu_event_mapped,
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0.event_un=
-mapped =C2=A0 =C2=A0 =C2=A0 =C2=A0=3D riscv_pmu_event_unmapped,
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0.event_id=
-x =C2=A0 =C2=A0 =C2=A0 =C2=A0=3D riscv_pmu_event_idx,
-> > +#ifdef CONFIG_RISCV_PMU_SBI_SSE
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0.pmu_enable =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0=3D riscv_pmu_enable,
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0.pmu_disable =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0=3D riscv_pmu_disable,
-> > +#endif
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0.add =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=3D riscv_pmu_add,
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0.del =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=3D riscv_pmu_del,
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0.start =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=3D riscv_pmu_start,
-> > diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.=
-c
-> > index 385af5e6e6d0..ac10ebd73c7c 100644
-> > --- a/drivers/perf/riscv_pmu_sbi.c
-> > +++ b/drivers/perf/riscv_pmu_sbi.c
-> > @@ -17,6 +17,7 @@
-> > =C2=A0#include <linux/irqdomain.h>
-> > =C2=A0#include <linux/of_irq.h>
-> > =C2=A0#include <linux/of.h>
-> > +#include <linux/riscv_sbi_sse.h>
-> > =C2=A0#include <linux/cpu_pm.h>
-> > =C2=A0#include <linux/sched/clock.h>
-> > =C2=A0#include <linux/soc/andes/irq.h>
-> > @@ -1038,10 +1039,10 @@ static void pmu_sbi_start_overflow_mask(struct =
-riscv_pmu *pmu,
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0pmu_sbi_s=
-tart_ovf_ctrs_sbi(cpu_hw_evt, ctr_ovf_mask);
-> > =C2=A0}
-> >
-> > -static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
-> > +static irqreturn_t pmu_sbi_ovf_handler(struct cpu_hw_events *cpu_hw_ev=
-t,
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 struct pt_r=
-egs *regs, bool from_sse)
-> > =C2=A0{
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct perf_sample_data data;
-> > - =C2=A0 =C2=A0 =C2=A0 =C2=A0struct pt_regs *regs;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct hw_perf_event *hw_evt;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0union sbi_pmu_ctr_info *info;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0int lidx, hidx, fidx;
-> > @@ -1049,7 +1050,7 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, v=
-oid *dev)
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct perf_event *event;
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0int ev_overflow =3D 0;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0u64 overflow;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0u64 overflowed_ctrs =3D 0;
-> > - =C2=A0 =C2=A0 =C2=A0 =C2=A0struct cpu_hw_events *cpu_hw_evt =3D dev;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0u64 start_clock =3D sched_clock();
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct riscv_pmu_snapshot_data *sdata=
- =3D cpu_hw_evt->snapshot_addr;
-> >
-> > @@ -1059,13 +1059,15 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq,=
- void *dev)
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/* Firmware counter don't support ove=
-rflow yet */
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fidx =3D find_first_bit(cpu_hw_evt->u=
-sed_hw_ctrs, RISCV_MAX_COUNTERS);
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (fidx =3D=3D RISCV_MAX_COUNTERS) {
-> > - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0csr_clear(CSR_=
-SIP, BIT(riscv_pmu_irq_num));
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (!from_sse)
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0csr_clear(CSR_SIP, BIT(riscv_pmu_irq_num));
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return IR=
-Q_NONE;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}
-> >
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0event =3D cpu_hw_evt->events[fidx];
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (!event) {
-> > - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ALT_SBI_PMU_OV=
-F_CLEAR_PENDING(riscv_pmu_irq_mask);
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (!from_sse)
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0ALT_SBI_PMU_OVF_CLEAR_PENDING(riscv_pmu_irq_mask);
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return IR=
-Q_NONE;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}
-> >
-> > @@ -1080,16 +1082,16 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq,=
- void *dev)
-> >
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/*
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 * Overflow interrupt pending bit sho=
-uld only be cleared after stopping
-> > - =C2=A0 =C2=A0 =C2=A0 =C2=A0 * all the counters to avoid any race cond=
-ition.
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 * all the counters to avoid any race cond=
-ition. When using SSE,
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 * interrupt is cleared when stopping coun=
-ters.
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 */
-> > - =C2=A0 =C2=A0 =C2=A0 =C2=A0ALT_SBI_PMU_OVF_CLEAR_PENDING(riscv_pmu_ir=
-q_mask);
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0if (!from_sse)
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ALT_SBI_PMU_OV=
-F_CLEAR_PENDING(riscv_pmu_irq_mask);
-> >
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/* No overflow bit is set */
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (!overflow)
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return IR=
-Q_NONE;
-> >
-> > - =C2=A0 =C2=A0 =C2=A0 =C2=A0regs =3D get_irq_regs();
-> > -
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0for_each_set_bit(lidx, cpu_hw_evt->us=
-ed_hw_ctrs, RISCV_MAX_COUNTERS) {
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct pe=
-rf_event *event =3D cpu_hw_evt->events[lidx];
-> >
-> > @@ -1133,18 +1136,65 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq,=
- void *dev)
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 * TODO: We will need to stop the guest counters once
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 * virtualization support is added.
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 */
-> > - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0perf_event_overflow(event, &data, regs);
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0ev_overflow |=3D perf_event_overflow(event, &data, regs);
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/* Reset =
-the state as we are going to start the counter after the loop */
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0hw_evt->s=
-tate =3D 0;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}
-> >
-> > - =C2=A0 =C2=A0 =C2=A0 =C2=A0pmu_sbi_start_overflow_mask(pmu, overflowe=
-d_ctrs);
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0if (!ev_overflow || !from_sse)
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0pmu_sbi_start_=
-overflow_mask(pmu, overflowed_ctrs);
-> > +
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0perf_sample_event_took(sched_clock() =
-- start_clock);
-> >
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return IRQ_HANDLED;
-> > =C2=A0}
-> >
-> > +static irqreturn_t pmu_sbi_ovf_irq_handler(int irq, void *dev)
-> > +{
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0return pmu_sbi_ovf_handler(dev, get_irq_re=
-gs(), false);
-> > +}
-> > +
-> > +#ifdef CONFIG_RISCV_PMU_SBI_SSE
-> > +static int pmu_sbi_ovf_sse_handler(u32 evt, void *arg, struct pt_regs =
-*regs)
-> > +{
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0struct cpu_hw_events __percpu *hw_events =
-=3D arg;
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0struct cpu_hw_events *hw_event =3D raw_cpu=
-_ptr(hw_events);
-> > +
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0pmu_sbi_ovf_handler(hw_event, regs, true);
-> > +
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0return 0;
-> > +}
-> > +
-> > +static int pmu_sbi_setup_sse(struct riscv_pmu *pmu)
-> > +{
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0int ret;
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0struct sse_event *evt;
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0struct cpu_hw_events __percpu *hw_events =
-=3D pmu->hw_events;
-> > +
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0evt =3D sse_event_register(SBI_SSE_EVENT_L=
-OCAL_PMU_OVERFLOW, 0,
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 pmu_sbi_ovf_sse_handler, hw_even=
-ts);
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0if (IS_ERR(evt))
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return PTR_ERR=
-(evt);
-> > +
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D sse_event_enable(evt);
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0if (ret) {
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0sse_event_unre=
-gister(evt);
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return ret;
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0}
-> > +
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0pr_info("using SSE for PMU event delivery\=
-n");
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0pmu->sse_evt =3D evt;
-> > +
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0return ret;
-> > +}
-> > +#else
-> > +static int pmu_sbi_setup_sse(struct riscv_pmu *pmu)
-> > +{
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0return -EOPNOTSUPP;
-> > +}
-> > +#endif
-> > +
-> > =C2=A0static int pmu_sbi_starting_cpu(unsigned int cpu, struct hlist_no=
-de *node)
-> > =C2=A0{
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct riscv_pmu *pmu =3D hlist_entry=
-_safe(node, struct riscv_pmu, node);
-> > @@ -1195,6 +1242,10 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *=
-pmu, struct platform_device *pde
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct cpu_hw_events __percpu *hw_eve=
-nts =3D pmu->hw_events;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct irq_domain *domain =3D NULL;
-> >
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D pmu_sbi_setup_sse(pmu);
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0if (!ret)
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return 0;
-> > +
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (riscv_isa_extension_available(NUL=
-L, SSCOFPMF)) {
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0riscv_pmu=
-_irq_num =3D RV_IRQ_PMU;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0riscv_pmu=
-_use_irq =3D true;
-> > @@ -1229,7 +1280,7 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *p=
-mu, struct platform_device *pde
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return -E=
-NODEV;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}
-> >
-> > - =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D request_percpu_irq(riscv_pmu_irq, =
-pmu_sbi_ovf_handler, "riscv-pmu", hw_events);
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D request_percpu_irq(riscv_pmu_irq, =
-pmu_sbi_ovf_irq_handler, "riscv-pmu", hw_events);
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (ret) {
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0pr_err("r=
-egistering percpu irq failed [%d]\n", ret);
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return re=
-t;
-> > diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_=
-pmu.h
-> > index f82a28040594..08fdcf6baf4e 100644
-> > --- a/include/linux/perf/riscv_pmu.h
-> > +++ b/include/linux/perf/riscv_pmu.h
-> > @@ -28,6 +28,8 @@
-> >
-> > =C2=A0#define RISCV_PMU_CONFIG1_GUEST_EVENTS 0x1
-> >
-> > +struct sse_event;
-> > +
-> > =C2=A0struct cpu_hw_events {
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/* currently enabled events */
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0int =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0n_events;
-> > @@ -54,6 +56,9 @@ struct riscv_pmu {
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0char =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0*name;
-> >
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0irqreturn_t =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0(*handle_irq)(int irq_num, void *dev);
-> > +#ifdef CONFIG_RISCV_PMU_SBI_SSE
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0struct sse_event *sse_evt;
-> > +#endif
-> >
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0unsigned long =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0cmask;
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0u64 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0(*ctr_read)(struct perf_event *event);
-> > --
-> > 2.50.1 (Apple Git-155)
->
-> We found that if RISCV_PMU_SBI_SSE is enabled, executing 'perf record -g
-> -F 999 ls' may occasionally fail. If the program is more complex, the
-> error occurs 100% of the time. After disabling RISCV_PMU_SBI_SSE, the
-> program runs normally. Therefore, we suspect there may be an issue with
-> the PMU_SBI_SSE functionality. Have you encountered this phenomenon? Do
-> you have any troubleshooting suggestions?
+---
 
-I can reproduce the issue locally with PMU-SSE enabled, using
-`perf record -g -F 999`. This does look like a PMU-SSE issue. I am
-investigating the root cause now, and will follow up once I have a clear
-answer and a proper fix.
+v4:
 
-> Below are some fault information=EF=BC=9A
-> [root@localhost ~]# perf record -g -F 999 ls
-> [ 9478.867438] BUG: spinlock bad magic on CPU#2, ls/1046
-> [ 9478.871534] Unable to handle kernel paging request at virtual address =
-ffffffc6004940d0
-> [ 9478.872804] Oops [#1]
-> [ 9478.873359] Modules linked in: xt_MASQUERADE xfrm_user xfrm_algo iptab=
-le_nat xt_addrtype
-> iptable_filter ip_tables xt_conntrack x_tables nf_nat nf_conntrack nf_def=
-rag_ipv6 nf_defrag_ipv4
-> libcrc32c br_netfilter bridge stp llc overlay virtio_gpu virtio_dma_buf d=
-rm_shmem_helper
-> drm_client_lib drm_kms_helper nls_iso8859_1 drm drm_panel_orientation_qui=
-rks backlight configfs efivarfs
-> [ 9478.877513] CPU: 2 UID: 0 PID: 1046 Comm: ls Not tainted 6.13.0-00006-=
-ge94d0b11d044-dirty #7
-> [ 9478.878544] Hardware name: QEMU QEMU Virtual Machine, BIOS 2.7 2/2/202=
-2
-> [ 9478.879324] epc : string+0x48/0xe6
-> [ 9478.880100] =C2=A0ra : vsnprintf+0xea/0x3b4
-> [ 9478.880697] epc : ffffffff809e39ae ra : ffffffff809e656e sp : ffffffc6=
-00493360
-> [ 9478.881331] =C2=A0gp : ffffffff81516480 tp : ffffffd68d280000 t0 : fff=
-fffc600493312
-> [ 9478.881952] =C2=A0t1 : ffffffffffffffff t2 : 6e697073203a4755 s0 : fff=
-fffc6004933a0
-> [ 9478.882557] =C2=A0s1 : ffffffffffffffff a0 : ffffffc6004934d7 a1 : 000=
-0000000000000
-> [ 9478.883355] =C2=A0a2 : ffffffc6004934a8 a3 : ffffffc6004930d0 a4 : fff=
-fffc6004940d0
-> [ 9478.883988] =C2=A0a5 : ffffffc7004934d6 a6 : ffffffffffffe000 a7 : 000=
-0000000000004
-> [ 9478.884600] =C2=A0s2 : ffffffc6004934d7 s3 : ffffffc6004934a8 s4 : fff=
-fffff80f24ea4
-> [ 9478.885420] =C2=A0s5 : ffffffff000000ff s6 : ffffffff8100153e s7 : 000=
-0000000ffffff
-> [ 9478.886056] =C2=A0s8 : ffffffff8100153c s9 : 0000000000000007 s10: 000=
-0000000000002
-> [ 9478.886859] =C2=A0s11: ffffffc6004935f0 t3 : 0000000000000004 t4 : fff=
-fffff80e592d8
-> [ 9478.887493] =C2=A0t5 : ffffffff8152cb20 t6 : ffffffc60049307a
-> [ 9478.887946] status: 0000000200000100 badaddr: ffffffc6004940d0 cause: =
-000000000000000d
-> [ 9478.888886] [<ffffffff809e39ae>] string+0x48/0xe6
-> [ 9478.889342] [<ffffffff809e656e>] vsnprintf+0xea/0x3b4
-> [ 9478.889795] [<ffffffff8007c2ce>] vprintk_store+0x108/0x3d2
-> [ 9478.890459] [<ffffffff8007d0ce>] vprintk_emit+0x82/0x218
-> [ 9478.890932] [<ffffffff8007d27a>] vprintk_default+0x16/0x1e
-> [ 9478.891416] [<ffffffff8007e270>] vprintk+0x1e/0x3c
-> [ 9478.892011] [<ffffffff8000332a>] _printk+0x32/0x50
-> [ 9478.892441] [<ffffffff80002f84>] spin_dump+0x5e/0x6e
-> [ 9478.892865] [<ffffffff80077bf4>] do_raw_spin_unlock+0x130/0x132
-> [ 9478.893542] [<ffffffff809f50e0>] _raw_spin_unlock+0x10/0x22
-> [ 9478.894031] [<ffffffff80166118>] filemap_map_pages+0x314/0x434
-> [ 9478.894541] [<ffffffff8019f6ea>] __handle_mm_fault+0x9ac/0xd50
-> [ 9478.895556] Code: 97aa a809 7463 00c5 0023 00d5 0505 2585 0663 00f5 (4=
-683) 0007
-> [ 9478.896729] ---[ end trace 0000000000000000 ]---
-> [ 9478.897637] note: ls[1046] exited with irqs disabled
-> [ 9478.898653] note: ls[1046] exited with preempt_count 4
->
-> [root@localhost x264]# perf record -g -F 999 ./x264 -o output_static.mkv =
-./Kimono_1920x1080_24.yuv
-> --input-res 1920x1080 --fps 24 --preset faster --vbv-maxrate 2400 --vbv-b=
-ufsize 4800 --ref 1
-> --aq-mode 2 --aq-strength 1.2 --qcomp 0.8 --lookahead-threads 12 --iprati=
-o 1.0 --bframes 3
-> --rc-lookahead 6 --crf 28 --keyint 60 --scenecut 0 --frames 200
-> [ =C2=A0 63.382672] Unable to handle kernel paging request at virtual add=
-ress 0000003feb0ff5d8
-> [ =C2=A0 63.383325] Oops [#1]
-> [ =C2=A0 63.383395] Modules linked in: xt_MASQUERADE xfrm_user xfrm_algo =
-iptable_nat xt_addrtype
-> iptable_filter ip_tables xt_conntrack x_tables nf_nat nf_conntrack nf_def=
-rag_ipv6 nf_defrag_ipv4
-> libcrc32c br_netfilter bridge stp llc overlay virtio_gpu virtio_dma_buf d=
-rm_shmem_helper
-> drm_client_lib drm_kms_helper nls_iso8859_1 drm configfs drm_panel_orient=
-ation_quirks
-> backlight efivarfs
-> [ =C2=A0 63.385401] CPU: 3 UID: 0 PID: 580 Comm: x264 Not tainted 6.13.0-=
-00006-ge94d0b11d044-dirty #7
-> [ =C2=A0 63.385521] Hardware name: QEMU QEMU Virtual Machine, BIOS 2.7 2/=
-2/2022
-> [ =C2=A0 63.385732] epc : walk_stackframe+0x5c/0x11a
-> [ =C2=A0 63.386470] =C2=A0ra : walk_stackframe+0xda/0x11a
-> [ =C2=A0 63.386537] epc : ffffffff80013b5c ra : ffffffff80013bda sp : fff=
-fffc600493a40
-> [ =C2=A0 63.386579] =C2=A0gp : ffffffff81516480 tp : ffffffd684b33300 t0 =
-: ffffffd7febf9c20
-> [ =C2=A0 63.386617] =C2=A0t1 : 000000003b9aca00 t2 : ffffffd7febe8080 s0 =
-: ffffffc600493a90
-> [ =C2=A0 63.386654] =C2=A0s1 : ffffffc600493ee0 a0 : 0000000000000001 a1 =
-: ffffffff809f5a48
-> [ =C2=A0 63.386692] =C2=A0a2 : 0000000000000002 a3 : 0000003feb0ff5d0 a4 =
-: ffffffffffffc000
-> [ =C2=A0 63.386729] =C2=A0a5 : 0000000000003fff a6 : ffffffff81552558 a7 =
-: ffffffd698fb8000
-> [ =C2=A0 63.386769] =C2=A0s2 : 0000003feb100000 s3 : 0000003feb0ff5e0 s4 =
-: ffffffff8001886a
-> [ =C2=A0 63.386806] =C2=A0s5 : ffffffc600493ac0 s6 : ffffffff809f5a48 s7 =
-: 0000000000000000
-> [ =C2=A0 63.386844] =C2=A0s8 : ffffffc600493ac0 s9 : 0000000000000000 s10=
-: 000000000007fff8
-> [ =C2=A0 63.386886] =C2=A0s11: ffffffd698fb8000 t3 : 0000000000000015 t4 =
-: 00000000000003e7
-> [ =C2=A0 63.386932] =C2=A0t5 : 0000000000452bf5 t6 : ffffffc600493f70
-> [ =C2=A0 63.386965] status: 0000000200000100 badaddr: 0000003feb0ff5d8 ca=
-use: 000000000000000d
-> [ =C2=A0 63.387069] [<ffffffff80013b5c>] walk_stackframe+0x5c/0x11a
-> [ =C2=A0 63.387122] [<ffffffff80018902>] perf_callchain_kernel+0x28/0x34
-> [ =C2=A0 63.387154] [<ffffffff80160294>] get_perf_callchain+0x88/0x18e
-> [ =C2=A0 63.387189] [<ffffffff8015bcf2>] perf_callchain+0x52/0x6e
-> [ =C2=A0 63.387219] [<ffffffff8015c0f4>] perf_prepare_sample+0x3e6/0x730
-> [ =C2=A0 63.387249] [<ffffffff8015c8d6>] perf_event_output_forward+0x56/0=
-xb8
-> [ =C2=A0 63.387280] [<ffffffff8015c51a>] __perf_event_overflow+0xdc/0x2e2
-> [ =C2=A0 63.387310] [<ffffffff8015d954>] perf_event_overflow+0x12/0x1a
-> [ =C2=A0 63.387341] [<ffffffff807e15e0>] pmu_sbi_ovf_handler+0x684/0x736
-> [ =C2=A0 63.387383] [<ffffffff807e16ee>] pmu_sbi_ovf_sse_handler+0x26/0x3=
-0
-> [ =C2=A0 63.387417] [<ffffffff807b73a0>] sse_handle_event+0x16/0x48
-> [ =C2=A0 63.387449] [<ffffffff8001933a>] do_sse+0x76/0xa8
-> [ =C2=A0 63.387478] [<ffffffff800195ac>] handle_sse+0xc0/0x162
-> [ =C2=A0 63.387748] Code: 7933 00e9 6463 0539 f693 0079 e2a1 e062 8693 ff=
-09 (bc03) 0086
-> [ =C2=A0 63.388072] ---[ end trace 0000000000000000 ]---
-> [ =C2=A0 63.388547] Kernel panic - not syncing: Fatal exception in interr=
-upt
-> [ =C2=A0 63.388870] SMP: stopping secondary CPUs
->
-> Regards
-> Yangsusheng
->
+* Preserve mac_len after skb_copy().
+* Separate errno return from XDP action output in
+  dev_map_bpf_prog_run_skb().
+* Zero-initialize net_config in the new selftest.
 
-Thanks,
-Zhanpeng
+v3: https://lore.kernel.org/bpf/20260611043317.512843-1-sun.jian.kdev@gmail.com/T/#m77fde65437b0398cb470649d4f1feeb85bc134bc
+
+* Split the kernel fix and selftest into separate patches.
+* Move the private-copy logic into dev_map_bpf_prog_run_skb().
+* Use deterministic DEVMAP_HASH keys in the last-destination selftest.
+* Fix the Fixes tag.
+
+v2: https://lore.kernel.org/bpf/08c35c70-a59e-4e0e-91db-22b5ec30b611@linux.dev/T/#m613671b243e8651c47f84bb329f0ea668974c549
+
+* Move the private-copy step into dev_map_generic_redirect() so the
+  last-destination path is covered as well.
+* Use skb_copy() instead of skb_unshare() to keep caller ownership
+  unchanged on allocation failure.
+* Add a generic XDP last-destination selftest case.
+
+v1: https://lore.kernel.org/bpf/CABFUUZFimdrZdq=NWi+N-0sJZWvMwY=f4iF6-3TVMS8=m07Zmw@mail.gmail.com/
+
+
+Sun Jian (2):
+  bpf: Run generic devmap egress prog on private skb
+  selftests/bpf: Cover generic devmap egress last-dst rewrite
+
+ kernel/bpf/devmap.c                           |  41 +++--
+ .../selftests/bpf/prog_tests/test_xdp_veth.c  | 152 +++++++++++++++++-
+ 2 files changed, 180 insertions(+), 13 deletions(-)
+
+
+base-commit: e7ae89a0c97ce2b68b0983cd01eda67cf373517d
+-- 
+2.43.0
+
