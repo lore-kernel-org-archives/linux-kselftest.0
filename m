@@ -1,66 +1,67 @@
 Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71314369D64
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 20:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84FDB399D0B
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 20:13:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781208802; cv=none; b=FquPBAk6crUvDFhsyvBFA8xldvATPPU6jDWn43ytbU64hPNVs/1WV4smvFlJKz7SZHWj7ZeL7HyCB2FtUgSLrQWk8wUQZLTAuXD43WlyrGwNL80wdky5iK43caVSpAIQLylisXYjY4y9zhZAotRZ4FzErduY1k4jn+uwPKOBX2g=
+	t=1781208809; cv=none; b=A1Ihoo4dcvL6sFl50DS7IeoX94HU+oqCSA/NkyWeIYqUI6HO4HUwoXpA8/vYoDv9Be1xCXPDPzDlGILL80bF5SAervZYJVi7/9Jid9WLwv3UO8SkTD4OfY3AISEa9f7XFg3bnlHtU8/mlwCm+15eur/6P65poelqDfkxBqs1i5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781208802; c=relaxed/simple;
-	bh=WGcOGvqaetbEHQzdF/lWpQ6ABvIWM9LYTrsz4zJlOL0=;
+	s=arc-20240116; t=1781208809; c=relaxed/simple;
+	bh=q/QLrWSGJJhQtCezKRc6txtE+UkVnOpKgnOg6fjEGdI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bNMVuggZWAZpJtUK4x7J1Iv9Je79IkKCQG9SXaNZe676n3kfg9gkoNy9cFxSNdydu6i4mMl04Ono210fsgCtzQRowTvxBlakiuYhqiu4HuvNQkUKr4snqQHJOPb/zMrDhAMiOK8n3x3DXzO+/5sVjJ4Z/oIHrC8SZwIAPTqQDgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=na6/bPsj; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:To:Cc; b=aiLRJzDt3Wvgwhj/w5QpRoYoJtv6p0MUu0BDMaoRGtxLWdkMK9I06BDGe5JwTku1bdti0tgjOucyxiE5mK5LyGDAkZbcqG3WeILWYrZKfyQVeL4i7th/00ETw45yKM5m/7Fo3RQx9nZloKFtjDYcvxOt4kH6UygzWSiz1HRVtHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kI6qqUok; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="na6/bPsj"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2bf125989f2so2247235ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 13:13:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kI6qqUok"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2bf22d29dabso1886365ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 13:13:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781208800; x=1781813600; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781208808; x=1781813608; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8I5erXJc2rPSk4mu9K4o3pYu8vzsNMBKJ/Xde8NImfk=;
-        b=na6/bPsjkXop4EIdSUZnTaUz12Ix4J6puZJdg9MEZnGyblfOFg8fE4FmPq4BIqTcrV
-         RnIoOf9IES0W+XATKk1Gf/vSHXXxzXHB2K8Rlhyx5jN/9SXtKEAGC1efq8P1mS4zkyRW
-         fQIqkpX6/IT9JYt6w3VY9UOKjRFPcx7uUDN+i6nNABQjE+A/cAnmsp8iZOQvRZfebwFm
-         ED69ldRsbr3GL1k3i20LSYjJOJYPTstGMVZ/WKWtsog4E3oEDH60yCru8nOSw8+3Uj2O
-         Sh9jiU2gIs0IfTJI0Ep06uZ+lWOUPQ1u/ld2WaoqdBe7Eu2nou1LCgAdZMqzj1qAVYo7
-         PBdg==
+        bh=gm44aTTKOxWn0lKZi70AX96tEsXQQm8LgJ40+/hEF0Q=;
+        b=kI6qqUokt0GU6PTeVVWprdc80dAzZjvb7KJASalkAl+9n9iMrwDQ1daHyu4qM/OaW8
+         mWMW74iNSKw1FAU0/mX7xWz7Scc6uJ2mLC5pQ784EZMzg7I1kETHt4S/28qCi3EhDGF2
+         7P/Fe2EckOpxbJmpKaPZGgZ2kkhVeWjXeliR5LAy6q+K/szkEtVw2eZH+Gsn21OErkbI
+         D7FwImBbAzSgUWWbuDzTNZYleVOKfmFD0u+F4OvikISN+ENlCgjuvjoPB/WPFv+hA6hs
+         a9kjPy4jq5gT+AIeZYjzrbIvg5FyqkdOM9bdSERE2dguuJVjOHqdNWXcA9RbIvBAUyF2
+         cVRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781208800; x=1781813600;
+        d=1e100.net; s=20251104; t=1781208808; x=1781813608;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=8I5erXJc2rPSk4mu9K4o3pYu8vzsNMBKJ/Xde8NImfk=;
-        b=GMMkYiqxe7PITtiK8pJlR4WyoLYGX7gyipkBtTb2GA1sznVXiHOhU0+bpSZqCM+yRI
-         CxRIRdCqZDY5cyfQBpg57k+uvbelalHUqkXkiBNOjVEpAjMl7GprMFQ7wD1mftjdgZHe
-         8+lIGnm2i80/3gDLsXtvgFzbEsY8dBKlJc21V0YvxmVCGlnaQsHbt+xP4xM22AZl/yvd
-         X+xo9PY/4u3tocPWrxZHUItIznRwyRMgKIfIMbltgQc+5OjWrxPXdX03PNTbrHM/hK8N
-         TSI6wHSNPk6HTwWX+vTdea+LvgLPyb6by1bD+nX70ljnovHc2FfRwFO3GqthJ0G7it+E
-         vmQw==
-X-Forwarded-Encrypted: i=1; AFNElJ9+u6pW8/YWhsgzLdC0V9nCp6dw/mEHISA1gyjJ2rAVG8/mVpC0dpJWArnoAw3eGj1vue3VGWgOfhmteC2pems=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMZ0f+X8ShNYC36wleDZiD9GIFABTR5IGLxdQRcUvPyPjTVzvq
-	hifw5Mvg/U0YrhYxMM+ZiV2S7HgAHh655+2FG6mLcvwcNI7/z10cAiku
-X-Gm-Gg: Acq92OH/W51XgGCQtpNhwQlYTE6LDjXnUF+DVM6wluoeMjbOVo1TGCnsSCqaS8S7EaJ
-	fwaZf693P6jUxfbCb40ikL4UwJDH9gXTaTcFyrbfsx6AhPn0tYEWC3z0GJpHbPePLbVwuTEB4+F
-	/RdPhT0mNJDh1cSEGICvyKEBAKddD0b6X+E469pY5N1LvmNalk2f4hy5g2f042YD7fltzwd7xAh
-	UaBjPsr/rJ3y5hcnmu4QbJBI+r2JxuflNPyerkbJ0vbTl8dzDoRdFqhlkYUVw8W5okorgn/l6/L
-	FfPeM1c1dfbu7lbLDiAiPNA50JF03zzGBMXfz7Tq1o73jhAHHkzjDgWe5KmEIhMiMIDEyn6h8g1
-	I1O0iikBtdFhpyOUpIpkEZH8O7doEOuOhLfVwrF0ojgrFDnlzK/ULxscikUhlDi+Az8aca5cZOL
-	+93VPNIZPQ
-X-Received: by 2002:a17:903:2449:b0:2c2:50c7:58a4 with SMTP id d9443c01a7336-2c2f21a17e8mr51191105ad.22.1781208799654;
-        Thu, 11 Jun 2026 13:13:19 -0700 (PDT)
+        bh=gm44aTTKOxWn0lKZi70AX96tEsXQQm8LgJ40+/hEF0Q=;
+        b=hYWFwyZT1dOzwJ7g/jwT+KhLnlzhh6gPbdKW3Cjn4d72bppS4HO4gKi4qTMqT9WF3U
+         jEdBkGToZmhQ+nb64fgAZUiYIYAHsxlQK6GPJWv395jkOe6cI4Lo8zMVBR6NAlqHt1Fp
+         Ns4wqTImO5JX4FfwAVXT/g9lPV3stE937JdgM8AGeLerut/KSD9anmoF5P8tzDJHA5+B
+         j/jVWGOjo1kKrROSfT3J49sdi1GxbyfKKzy3nAtJ9o5kE83QiqnqhQUEQDVqQKUm45C7
+         4NTDGwz351y8zrXaGO0OcEpiZ18i7XVHVCDsHrT8nBe0rfdcs8ph6Fyzw0cZB0ihlGfE
+         A2Kg==
+X-Forwarded-Encrypted: i=1; AFNElJ+LPzEXCr+gSIY078bAuRa9NFvGsUQRRkvS6w60+/IYp22MwFrWQbeeooR5Gl8R26VSRNHnN10oSwwvVYYW7tA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7yjEHePFHhPqU/WIYHR5xBqRsBmOz6sEGRoKOoljH3oeIGJ3y
+	QW6ow08P00UZKNQz2mkdbpnJEIahqcwR9eu/3RshKECWvV1saHwzBxOW
+X-Gm-Gg: Acq92OHOKMja763Ouwjjxkh7OX3r3T7DL4qhNl7EOv2t/zahhsB/izLRAABFcbEa6/c
+	754hWrWvgzCjrqt+2cZcl/GqTWH8nnDzPsiULydkg3WebqqRMiiDFM3quGY+Xiy9fzvztISJx/F
+	hRKLzx3WCUJjN9KBQ34vZVHOZ1soqMQA5iLikctzSLLN3nzGdz3OPLP4SVGpJfeeseSEJeM6kM+
+	tTFkS6YDG2ClT+L5R1l+wPEMjcj6x4EaMY2etrWyNy9w4ofeIpBTtbW2IySFRw4RSoFSoW54xvT
+	TzUmkaBNuMwcWs+QEUTos56/DAJijiU1PEodqdBN0dP9CcSjvQq6FT6dQ69ItEt0NqpY0raXo1Z
+	vwV4o4N31cq9dzDX2lc/r4fhJx+ZPYDwR7UoMTwmOb4Va1lVGQE4u8BekD37G7iwWHgTLtw9iUg
+	==
+X-Received: by 2002:a17:903:4b46:b0:2c1:6259:cda8 with SMTP id d9443c01a7336-2c2f22a9f06mr51888325ad.25.1781208807828;
+        Thu, 11 Jun 2026 13:13:27 -0700 (PDT)
 Received: from [127.0.1.1] ([2a12:a305:4::302d])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f875casm288730475ad.22.2026.06.11.13.13.11
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f875casm288730475ad.22.2026.06.11.13.13.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 13:13:19 -0700 (PDT)
+        Thu, 11 Jun 2026 13:13:27 -0700 (PDT)
 From: Guodong Xu <docular.xu@gmail.com>
-Date: Thu, 11 Jun 2026 16:12:39 -0400
-Subject: [PATCH v4 02/16] riscv: hwprobe.rst: Make indentation consistent
+Date: Thu, 11 Jun 2026 16:12:40 -0400
+Subject: [PATCH v4 03/16] riscv: hwprobe.rst: Document EXT_ZICFISS and
+ EXT_ZICFILP
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260611-rva23u64-hwprobe-v2-v4-2-3f01a2449488@gmail.com>
+Message-Id: <20260611-rva23u64-hwprobe-v2-v4-3-3f01a2449488@gmail.com>
 References: <20260611-rva23u64-hwprobe-v2-v4-0-3f01a2449488@gmail.com>
 In-Reply-To: <20260611-rva23u64-hwprobe-v2-v4-0-3f01a2449488@gmail.com>
 To: Jonathan Corbet <corbet@lwn.net>, 
@@ -90,397 +91,61 @@ Cc: linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
  Guodong Xu <docular.xu@gmail.com>, 
  Andrew Jones <andrew.jones@oss.qualcomm.com>
 X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=20524; i=docular.xu@gmail.com;
- h=from:subject:message-id; bh=s32nahUhQLj4L2esrJKbW037pNJIi93j499jOhIxbus=;
- b=owGbwMvMwCXWtEl1Z3CGpCDjabUkhixtsQO3+PYv4T0TVdi6KGjhvNtist7ply2OeP3qMqt/8
- LT5pHtpRykLgxgXg6yYIsvhoy3ZW1/5RPs+5/wBM4eVCWQIAxenAExkdQDDX4k/6Sc9nublu/7e
- dvupZ7zAmd9fu4LXLt7pvujzWsNHJxcxMjytOpG44VW7QppRs/wdX/3PkRdbLVxPdHVLlD9azFj
- /ghUA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2231; i=docular.xu@gmail.com;
+ h=from:subject:message-id; bh=q/QLrWSGJJhQtCezKRc6txtE+UkVnOpKgnOg6fjEGdI=;
+ b=owGbwMvMwCXWtEl1Z3CGpCDjabUkhixtsQMhX89b/jK+JCRn0MornigW9b3hyMPzwofO+E6Zo
+ OCz7+rMjlIWBjEuBlkxRZbDR1uyt77yifZ9zvkDZg4rE8gQBi5OAZhIxBeGf9qm976639f69W0V
+ w+nNF3xEdGem/L+z0GGNnnNgRX2FMgvDf7dtpZJc33bcTb0lVM65UDi3+C+rk0eI372LQmZHZb7
+ e5wMA
 X-Developer-Key: i=docular.xu@gmail.com; a=openpgp;
  fpr=90B1DC3DF0BD10FD1227BD6344F254AF42F143EE
 
-From: Andrew Jones <andrew.jones@oss.qualcomm.com>
+RISCV_HWPROBE_EXT_ZICFISS and RISCV_HWPROBE_EXT_ZICFILP are defined in
+the hwprobe uAPI but are not documented in
+Documentation/arch/riscv/hwprobe.rst.  Add documentation for them.
 
-A handful of vendor-extension entries indent continuation lines with a
-tab character, while the rest of hwprobe.rst uses spaces.  In addition,
-many list items align their continuation lines under the 'm' of
-':c:macro:' (column 7) rather than under the item text (column 4), so
-the file mixes several indentation styles.
-
-Replace the tabs with spaces and align every list item's continuation
-lines under the item text, giving the whole file one consistent style.
-
-Whitespace-only change, no functional change.
-
-Signed-off-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
-[Guodong: extend from tabs->spaces to normalizing all continuation-line
- indentation across the file]
+Link: https://github.com/riscv/riscv-cfi/commit/302a2d45c2435940d9a63571c66bc038adc74133
 Signed-off-by: Guodong Xu <docular.xu@gmail.com>
+Reviewed-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
 ---
-v4: No change.
+v4:
+- Update the commit message.
+- Cite riscv-cfi commit 302a2d45c243 (tag v1.0) instead of ff03d8485a04,
+  per Andrew.
+- Add a Link: tag for this citation.
 v3:
-- Move to the front of the series.
-- Extend from replacing tabs to normalizing all continuation-line
-  indentation, so later patches add documentation on top of a
-  consistent base (Andrew).
+- Also document RISCV_HWPROBE_EXT_ZICFILP (bit 63 of IMA_EXT_0), the
+  sibling enumeration to ZICFISS (Andrew).
+v2: New patch.
 ---
- Documentation/arch/riscv/hwprobe.rst | 194 +++++++++++++++++------------------
- 1 file changed, 97 insertions(+), 97 deletions(-)
+ Documentation/arch/riscv/hwprobe.rst | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/Documentation/arch/riscv/hwprobe.rst b/Documentation/arch/riscv/hwprobe.rst
-index c420a8349bc68..a09a8f16bd16f 100644
+index a09a8f16bd16f..d9928641deb99 100644
 --- a/Documentation/arch/riscv/hwprobe.rst
 +++ b/Documentation/arch/riscv/hwprobe.rst
-@@ -82,121 +82,121 @@ The following keys are defined:
-     version 1.0 of the RISC-V Vector extension manual.
+@@ -289,6 +289,11 @@ The following keys are defined:
+     defined in the RISC-V ISA manual starting from commit f88abf1 ("Integrating
+     load/store pair for RV32 with the main manual") of the riscv-isa-manual.
  
-   * :c:macro:`RISCV_HWPROBE_EXT_ZBA`: The Zba address generation extension is
--       supported, as defined in version 1.0 of the Bit-Manipulation ISA
--       extensions.
-+    supported, as defined in version 1.0 of the Bit-Manipulation ISA
-+    extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZBB`: The Zbb extension is supported, as defined
--       in version 1.0 of the Bit-Manipulation ISA extensions.
-+    in version 1.0 of the Bit-Manipulation ISA extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZBS`: The Zbs extension is supported, as defined
--       in version 1.0 of the Bit-Manipulation ISA extensions.
-+    in version 1.0 of the Bit-Manipulation ISA extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZICBOZ`: The Zicboz extension is supported, as
--       ratified in commit 3dd606f ("Create cmobase-v1.0.pdf") of riscv-CMOs.
-+    ratified in commit 3dd606f ("Create cmobase-v1.0.pdf") of riscv-CMOs.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZBC` The Zbc extension is supported, as defined
--       in version 1.0 of the Bit-Manipulation ISA extensions.
-+    in version 1.0 of the Bit-Manipulation ISA extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZBKB` The Zbkb extension is supported, as
--       defined in version 1.0 of the Scalar Crypto ISA extensions.
-+    defined in version 1.0 of the Scalar Crypto ISA extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZBKC` The Zbkc extension is supported, as
--       defined in version 1.0 of the Scalar Crypto ISA extensions.
-+    defined in version 1.0 of the Scalar Crypto ISA extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZBKX` The Zbkx extension is supported, as
--       defined in version 1.0 of the Scalar Crypto ISA extensions.
-+    defined in version 1.0 of the Scalar Crypto ISA extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZKND` The Zknd extension is supported, as
--       defined in version 1.0 of the Scalar Crypto ISA extensions.
-+    defined in version 1.0 of the Scalar Crypto ISA extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZKNE` The Zkne extension is supported, as
--       defined in version 1.0 of the Scalar Crypto ISA extensions.
-+    defined in version 1.0 of the Scalar Crypto ISA extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZKNH` The Zknh extension is supported, as
--       defined in version 1.0 of the Scalar Crypto ISA extensions.
-+    defined in version 1.0 of the Scalar Crypto ISA extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZKSED` The Zksed extension is supported, as
--       defined in version 1.0 of the Scalar Crypto ISA extensions.
-+    defined in version 1.0 of the Scalar Crypto ISA extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZKSH` The Zksh extension is supported, as
--       defined in version 1.0 of the Scalar Crypto ISA extensions.
-+    defined in version 1.0 of the Scalar Crypto ISA extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZKT` The Zkt extension is supported, as defined
--       in version 1.0 of the Scalar Crypto ISA extensions.
-+    in version 1.0 of the Scalar Crypto ISA extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVBB`: The Zvbb extension is supported as
--       defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
-+    defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVBC`: The Zvbc extension is supported as
--       defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
-+    defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVKB`: The Zvkb extension is supported as
--       defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
-+    defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVKG`: The Zvkg extension is supported as
--       defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
-+    defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVKNED`: The Zvkned extension is supported as
--       defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
-+    defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVKNHA`: The Zvknha extension is supported as
--       defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
-+    defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVKNHB`: The Zvknhb extension is supported as
--       defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
-+    defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVKSED`: The Zvksed extension is supported as
--       defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
-+    defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVKSH`: The Zvksh extension is supported as
--       defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
-+    defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVKT`: The Zvkt extension is supported as
--       defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
-+    defined in version 1.0 of the RISC-V Cryptography Extensions Volume II.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZFH`: The Zfh extension version 1.0 is supported
--       as defined in the RISC-V ISA manual.
-+    as defined in the RISC-V ISA manual.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZFHMIN`: The Zfhmin extension version 1.0 is
--       supported as defined in the RISC-V ISA manual.
-+    supported as defined in the RISC-V ISA manual.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZIHINTNTL`: The Zihintntl extension version 1.0
--       is supported as defined in the RISC-V ISA manual.
-+    is supported as defined in the RISC-V ISA manual.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVFH`: The Zvfh extension is supported as
--       defined in the RISC-V Vector manual starting from commit e2ccd0548d6c
--       ("Remove draft warnings from Zvfh[min]").
-+    defined in the RISC-V Vector manual starting from commit e2ccd0548d6c
-+    ("Remove draft warnings from Zvfh[min]").
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVFHMIN`: The Zvfhmin extension is supported as
--       defined in the RISC-V Vector manual starting from commit e2ccd0548d6c
--       ("Remove draft warnings from Zvfh[min]").
-+    defined in the RISC-V Vector manual starting from commit e2ccd0548d6c
-+    ("Remove draft warnings from Zvfh[min]").
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZFA`: The Zfa extension is supported as
--       defined in the RISC-V ISA manual starting from commit 056b6ff467c7
--       ("Zfa is ratified").
-+    defined in the RISC-V ISA manual starting from commit 056b6ff467c7
-+    ("Zfa is ratified").
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZTSO`: The Ztso extension is supported as
--       defined in the RISC-V ISA manual starting from commit 5618fb5a216b
--       ("Ztso is now ratified.")
-+    defined in the RISC-V ISA manual starting from commit 5618fb5a216b
-+    ("Ztso is now ratified.")
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZACAS`: The Zacas extension is supported as
--       defined in the Atomic Compare-and-Swap (CAS) instructions manual starting
--       from commit 5059e0ca641c ("update to ratified").
-+    defined in the Atomic Compare-and-Swap (CAS) instructions manual starting
-+    from commit 5059e0ca641c ("update to ratified").
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZICNTR`: The Zicntr extension version 2.0
--       is supported as defined in the RISC-V ISA manual.
-+    is supported as defined in the RISC-V ISA manual.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZICOND`: The Zicond extension is supported as
--       defined in the RISC-V Integer Conditional (Zicond) operations extension
--       manual starting from commit 95cf1f9 ("Add changes requested by Ved
--       during signoff")
-+    defined in the RISC-V Integer Conditional (Zicond) operations extension
-+    manual starting from commit 95cf1f9 ("Add changes requested by Ved
-+    during signoff")
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZIHINTPAUSE`: The Zihintpause extension is
--       supported as defined in the RISC-V ISA manual starting from commit
--       d8ab5c78c207 ("Zihintpause is ratified").
-+    supported as defined in the RISC-V ISA manual starting from commit
-+    d8ab5c78c207 ("Zihintpause is ratified").
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZIHPM`: The Zihpm extension version 2.0
--       is supported as defined in the RISC-V ISA manual.
-+    is supported as defined in the RISC-V ISA manual.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVE32X`: The Vector sub-extension Zve32x is
-     supported, as defined by version 1.0 of the RISC-V Vector extension manual.
-@@ -214,84 +214,84 @@ The following keys are defined:
-     supported, as defined by version 1.0 of the RISC-V Vector extension manual.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZIMOP`: The Zimop May-Be-Operations extension is
--       supported as defined in the RISC-V ISA manual starting from commit
--       58220614a5f ("Zimop is ratified/1.0").
-+    supported as defined in the RISC-V ISA manual starting from commit
-+    58220614a5f ("Zimop is ratified/1.0").
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZCA`: The Zca extension part of Zc* standard
--       extensions for code size reduction, as ratified in commit 8be3419c1c0
--       ("Zcf doesn't exist on RV64 as it contains no instructions") of
--       riscv-code-size-reduction.
-+    extensions for code size reduction, as ratified in commit 8be3419c1c0
-+    ("Zcf doesn't exist on RV64 as it contains no instructions") of
-+    riscv-code-size-reduction.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZCB`: The Zcb extension part of Zc* standard
--       extensions for code size reduction, as ratified in commit 8be3419c1c0
--       ("Zcf doesn't exist on RV64 as it contains no instructions") of
--       riscv-code-size-reduction.
-+    extensions for code size reduction, as ratified in commit 8be3419c1c0
-+    ("Zcf doesn't exist on RV64 as it contains no instructions") of
-+    riscv-code-size-reduction.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZCD`: The Zcd extension part of Zc* standard
--       extensions for code size reduction, as ratified in commit 8be3419c1c0
--       ("Zcf doesn't exist on RV64 as it contains no instructions") of
--       riscv-code-size-reduction.
-+    extensions for code size reduction, as ratified in commit 8be3419c1c0
-+    ("Zcf doesn't exist on RV64 as it contains no instructions") of
-+    riscv-code-size-reduction.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZCF`: The Zcf extension part of Zc* standard
--       extensions for code size reduction, as ratified in commit 8be3419c1c0
--       ("Zcf doesn't exist on RV64 as it contains no instructions") of
--       riscv-code-size-reduction.
-+    extensions for code size reduction, as ratified in commit 8be3419c1c0
-+    ("Zcf doesn't exist on RV64 as it contains no instructions") of
-+    riscv-code-size-reduction.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZCMOP`: The Zcmop May-Be-Operations extension is
--       supported as defined in the RISC-V ISA manual starting from commit
--       c732a4f39a4 ("Zcmop is ratified/1.0").
-+    supported as defined in the RISC-V ISA manual starting from commit
-+    c732a4f39a4 ("Zcmop is ratified/1.0").
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZAWRS`: The Zawrs extension is supported as
--       ratified in commit 98918c844281 ("Merge pull request #1217 from
--       riscv/zawrs") of riscv-isa-manual.
-+    ratified in commit 98918c844281 ("Merge pull request #1217 from
-+    riscv/zawrs") of riscv-isa-manual.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZAAMO`: The Zaamo extension is supported as
--       defined in the in the RISC-V ISA manual starting from commit e87412e621f1
--       ("integrate Zaamo and Zalrsc text (#1304)").
-+    defined in the in the RISC-V ISA manual starting from commit e87412e621f1
-+    ("integrate Zaamo and Zalrsc text (#1304)").
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZALASR`: The Zalasr extension is supported as
--       frozen at commit 194f0094 ("Version 0.9 for freeze") of riscv-zalasr.
-+    frozen at commit 194f0094 ("Version 0.9 for freeze") of riscv-zalasr.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZALRSC`: The Zalrsc extension is supported as
--       defined in the in the RISC-V ISA manual starting from commit e87412e621f1
--       ("integrate Zaamo and Zalrsc text (#1304)").
-+    defined in the in the RISC-V ISA manual starting from commit e87412e621f1
-+    ("integrate Zaamo and Zalrsc text (#1304)").
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_SUPM`: The Supm extension is supported as
--       defined in version 1.0 of the RISC-V Pointer Masking extensions.
-+    defined in version 1.0 of the RISC-V Pointer Masking extensions.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZFBFMIN`: The Zfbfmin extension is supported as
--       defined in the RISC-V ISA manual starting from commit 4dc23d6229de
--       ("Added Chapter title to BF16").
-+    defined in the RISC-V ISA manual starting from commit 4dc23d6229de
-+    ("Added Chapter title to BF16").
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVFBFMIN`: The Zvfbfmin extension is supported as
--       defined in the RISC-V ISA manual starting from commit 4dc23d6229de
--       ("Added Chapter title to BF16").
-+    defined in the RISC-V ISA manual starting from commit 4dc23d6229de
-+    ("Added Chapter title to BF16").
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZVFBFWMA`: The Zvfbfwma extension is supported as
--       defined in the RISC-V ISA manual starting from commit 4dc23d6229de
--       ("Added Chapter title to BF16").
-+    defined in the RISC-V ISA manual starting from commit 4dc23d6229de
-+    ("Added Chapter title to BF16").
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZICBOM`: The Zicbom extension is supported, as
--       ratified in commit 3dd606f ("Create cmobase-v1.0.pdf") of riscv-CMOs.
-+    ratified in commit 3dd606f ("Create cmobase-v1.0.pdf") of riscv-CMOs.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZABHA`: The Zabha extension is supported as
--       ratified in commit 49f49c842ff9 ("Update to Rafified state") of
--       riscv-zabha.
-+    ratified in commit 49f49c842ff9 ("Update to Rafified state") of
-+    riscv-zabha.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZICBOP`: The Zicbop extension is supported, as
--       ratified in commit 3dd606f ("Create cmobase-v1.0.pdf") of riscv-CMOs.
-+    ratified in commit 3dd606f ("Create cmobase-v1.0.pdf") of riscv-CMOs.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZILSD`: The Zilsd extension is supported as
--       defined in the RISC-V ISA manual starting from commit f88abf1 ("Integrating
--       load/store pair for RV32 with the main manual") of the riscv-isa-manual.
-+    defined in the RISC-V ISA manual starting from commit f88abf1 ("Integrating
-+    load/store pair for RV32 with the main manual") of the riscv-isa-manual.
- 
-   * :c:macro:`RISCV_HWPROBE_EXT_ZCLSD`: The Zclsd extension is supported as
--       defined in the RISC-V ISA manual starting from commit f88abf1 ("Integrating
--       load/store pair for RV32 with the main manual") of the riscv-isa-manual.
-+    defined in the RISC-V ISA manual starting from commit f88abf1 ("Integrating
-+    load/store pair for RV32 with the main manual") of the riscv-isa-manual.
- 
++  * :c:macro:`RISCV_HWPROBE_EXT_ZICFILP`: The Zicfilp extension is supported,
++    as defined in version 1.0 of the RISC-V Control-flow Integrity (CFI)
++    extensions specification, ratified in commit 302a2d45c243
++    ("Update build-pdf.yml") of riscv-cfi.
++
  * :c:macro:`RISCV_HWPROBE_KEY_CPUPERF_0`: Deprecated.  Returns similar values to
--     :c:macro:`RISCV_HWPROBE_KEY_MISALIGNED_SCALAR_PERF`, but the key was
--     mistakenly classified as a bitmask rather than a value.
-+  :c:macro:`RISCV_HWPROBE_KEY_MISALIGNED_SCALAR_PERF`, but the key was
-+  mistakenly classified as a bitmask rather than a value.
- 
- * :c:macro:`RISCV_HWPROBE_KEY_MISALIGNED_SCALAR_PERF`: An enum value describing
-   the performance of misaligned scalar native word accesses on the selected set
-@@ -326,7 +326,7 @@ The following keys are defined:
- * :c:macro:`RISCV_HWPROBE_KEY_TIME_CSR_FREQ`: Frequency (in Hz) of `time CSR`.
- 
- * :c:macro:`RISCV_HWPROBE_KEY_MISALIGNED_VECTOR_PERF`: An enum value describing the
--     performance of misaligned vector accesses on the selected set of processors.
-+  performance of misaligned vector accesses on the selected set of processors.
- 
-   * :c:macro:`RISCV_HWPROBE_MISALIGNED_VECTOR_UNKNOWN`: The performance of misaligned
-     vector accesses is unknown.
-@@ -348,7 +348,7 @@ The following keys are defined:
-   * MIPS
- 
-     * :c:macro:`RISCV_HWPROBE_VENDOR_EXT_XMIPSEXECTL`: The xmipsexectl vendor
--        extension is supported in the MIPS ISA extensions spec.
-+      extension is supported in the MIPS ISA extensions spec.
- 
- * :c:macro:`RISCV_HWPROBE_KEY_VENDOR_EXT_THEAD_0`: A bitmask containing the
-   thead vendor extensions that are compatible with the
-@@ -357,8 +357,8 @@ The following keys are defined:
-   * T-HEAD
- 
-     * :c:macro:`RISCV_HWPROBE_VENDOR_EXT_XTHEADVECTOR`: The xtheadvector vendor
--        extension is supported in the T-Head ISA extensions spec starting from
--	commit a18c801634 ("Add T-Head VECTOR vendor extension. ").
-+      extension is supported in the T-Head ISA extensions spec starting from
-+      commit a18c801634 ("Add T-Head VECTOR vendor extension. ").
- 
- * :c:macro:`RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE`: An unsigned int which
-   represents the size of the Zicbom block in bytes.
-@@ -370,20 +370,20 @@ The following keys are defined:
-   * SIFIVE
- 
-     * :c:macro:`RISCV_HWPROBE_VENDOR_EXT_XSFVQMACCDOD`: The Xsfqmaccdod vendor
--        extension is supported in version 1.1 of SiFive Int8 Matrix Multiplication
--	Extensions Specification.
-+      extension is supported in version 1.1 of SiFive Int8 Matrix Multiplication
-+      Extensions Specification.
- 
-     * :c:macro:`RISCV_HWPROBE_VENDOR_EXT_XSFVQMACCQOQ`: The Xsfqmaccqoq vendor
--        extension is supported in version 1.1 of SiFive Int8 Matrix Multiplication
--	Instruction Extensions Specification.
-+      extension is supported in version 1.1 of SiFive Int8 Matrix Multiplication
-+      Instruction Extensions Specification.
- 
-     * :c:macro:`RISCV_HWPROBE_VENDOR_EXT_XSFVFNRCLIPXFQF`: The Xsfvfnrclipxfqf
--        vendor extension is supported in version 1.0 of SiFive FP32-to-int8 Ranged
--	Clip Instructions Extensions Specification.
-+      vendor extension is supported in version 1.0 of SiFive FP32-to-int8 Ranged
-+      Clip Instructions Extensions Specification.
- 
-     * :c:macro:`RISCV_HWPROBE_VENDOR_EXT_XSFVFWMACCQQQ`: The Xsfvfwmaccqqq
--        vendor extension is supported in version 1.0 of Matrix Multiply Accumulate
--	Instruction Extensions Specification.
-+      vendor extension is supported in version 1.0 of Matrix Multiply Accumulate
-+      Instruction Extensions Specification.
- 
- * :c:macro:`RISCV_HWPROBE_KEY_ZICBOP_BLOCK_SIZE`: An unsigned int which
-   represents the size of the Zicbop block in bytes.
+   :c:macro:`RISCV_HWPROBE_KEY_MISALIGNED_SCALAR_PERF`, but the key was
+   mistakenly classified as a bitmask rather than a value.
+@@ -391,3 +396,8 @@ The following keys are defined:
+ * :c:macro:`RISCV_HWPROBE_KEY_IMA_EXT_1`: A bitmask containing additional
+   extensions that are compatible with the
+   :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_IMA`: base system behavior.
++
++  * :c:macro:`RISCV_HWPROBE_EXT_ZICFISS`: The Zicfiss extension is supported,
++    as defined in version 1.0 of the RISC-V Control-flow Integrity (CFI)
++    extensions specification, ratified in commit 302a2d45c243
++    ("Update build-pdf.yml") of riscv-cfi.
 
 -- 
 2.43.0
