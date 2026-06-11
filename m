@@ -1,53 +1,52 @@
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013065.outbound.protection.outlook.com [40.107.159.65])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010042.outbound.protection.outlook.com [52.101.69.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A61D44D014;
-	Thu, 11 Jun 2026 16:21:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E089C44BCBE;
+	Thu, 11 Jun 2026 16:21:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781194920; cv=fail; b=ArRJkWd3rA7FSCD3nhqk3FbyOVrOfXqfAk8MFOLk+ifscCX2fZ5ZKOABsGEJoWeZk+uXcblWVwgsENOcxHN3DzLAnk6lOuGdXYzERi+lN5w0/Ctli98dZmxJzpQnA8oBxxvN7x5RSmtQoLCxVwDOe9vx0zc530yclNPpeTRdYSU=
+	t=1781194921; cv=fail; b=FAEGjPxIxVvauvfB0Pt11lzSVBw0tAkq7fgmTVC25TQcePcN+ePwtxSrkZpYg+pOrsywa8MfdTWwNXvMj0jpJkaWjnCtrE8gcTUjWtOCPVwme/+gpB0hTYXMl0gryuh4YwE1c1BXyoMKqndxdba6oj9lwdK7wOjFy1lNJT0HZBc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781194920; c=relaxed/simple;
-	bh=PmtegGlP3oC3YRD6P1kuj8eoKvWyzYU8JTA0aTpc6bM=;
+	s=arc-20240116; t=1781194921; c=relaxed/simple;
+	bh=Sl6u6AvdCIQIiG26Yfl2mpNG0w7ezgkO/1XDtS722aE=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=Hv9nPjCR4yoWn5pM4b+ymMckZpJy9EtiQcKJ3oL5wyEHaQkV9Pa3Gx90C/CZicVt66ph/HwIPeeiz9O19nXPe7tB8QhJq6EmLPSbO8KwmjfJR16ZsmnEJxgaMF67lToRsFD4Coz1InAOSr/kN7RFks6wRqC4WKbJztcRTQJC2FE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=Mjlhshnw; arc=fail smtp.client-ip=40.107.159.65
+	 To:Cc:MIME-Version; b=noOcc+rhes5VQRVciydh+UT9nYsdIsiMj+PQ2aSQFwllBeKJEW5i4UVKBeMnR+xCXaEvZZsfrGtO2yFn1gOtC7JYDjwPFLpCOcq9kooJ84K0CXudevLVbYeN/AYUYsLAZ44PUHFXP6tXaU/uzzS4WZmyDTGSo0Rj6Lk1r/F5Nps=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=HNETnNJu; arc=fail smtp.client-ip=52.101.69.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="Mjlhshnw"
+	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="HNETnNJu"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RPyrch2NgrEWB+HjpdLbdBkqeee8dBaKdWmd+K236HUTARMmHVSaLbYGpjBhK95+TNz8pVlcRu/2R2aisVQUwfUkN4d6qBME4VuH4BjefjYweVy+zLTuqGVuUsv73Q2f5dPEXYIC4+UY9RD3WuiuRj12Kw17WMqKRWXQU4L29lxi9ArN0tzZNFKuX78VKDp5NU5DDcSTehDbZbC4mRQ17WWYLWLkxvutgPhAGR6/MIN5yExa9HJhBSu757jBVzsmjY9MBeSWlu5A+XkcClzb7u6mpfgWpVbUY24nws49qjX/xVTD6KaZ2l0RqDLVanKKuMYl9OLUWabpP8tgkwo1fA==
+ b=foNZ5i5EmWGDUnKlDs6u+RoyJFADnL8G8lW5OA5pFrP3LCRCmJAZzs2Csu7rqqc27bjnjG63sr7WSEvpjMGgJn77Kx8JwDmQPfLL3SlmkQDLrrnOlx55u8WUoEh+4+A6P12CeEmq8VQtA02hTaM6YvUpz9hlOx0ON5jUgDpda+KwGJCg7e7fM1ZlQYxpqm1Hfvw07BDqkJWVlhzp3HPgTeXEBPjEvRDlFDXs8ohezyZX5F0M7UbBPnF1Vq65btvoAN7JtowkFJi5wzGkOBm5YN4t+C8/8IjTgpgGMtWAP04CgGIEdkOkIfCed6N7St8aoPAvTXBzrpJFcIzRiL6OZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZaeM3xQHpXxRiq9fltNVkln/dOccxRMDrYQW+wNikZk=;
- b=yIgmB6bDKk64cvrYwtXoiu38Z1viqWY+TQaN2HhR8zYjkIpIr6REwTbNbMJnV3Won2CKsTi/NRsUNypxR97IcrsufUTSMc+/BHNyKz9FOtihu4bRz+3QTYGDUNabw56XGVQLZg1sqMIwOIcNqieunBDDasE5AAir3pvsiIImYakS4brS6Qnm6qKOPZyaZ5KAYP7TtNw7uw1TySiXpp/1Rf67dZf0z4dI0PC4dILS2jzXQ8+vPTcZsGGMYUI99pJQj17Gx/fdUcXE7eqyI0yYVD/hqi8PJTaFXbwlpMHCsxk+DR9zcNKPl6G3PhfKF7dfhETPphNNopQf3SfDiVlszg==
+ bh=Q/Z9buftd28jxr/zK/940oKb0JuRI9nUYB8vwv5I+Lo=;
+ b=liDRIAzpvvzIYuKEDI7Q7cGEH4bj2gwwvwTsJFJt6fZGObrpJNgjtSs9ON3zJEQ8/IHoqEoR6cxBz5sqx3YwVwUlMpUycfoyYsY36aWVH9Q5qz+2M/BLD01pL+O4jii/qLQs/HiaJq8styG6VZLLAZ2/FR03G8urfqde7hosTv06sQ5DdROkVzJtWSylBN5iXs+faXJvOxwZ4FGf0Q/bFwYYq7MRzKVy3/btNRFl0O+PgdKDOIPL6cM+M3wWxeMTzn3wpm4GXXaHpjmRm+FAxYUujkzZf1I5BsnKkwVtimKj9yAIf+X6Jn8PGtWKUDOECDbi3mluYK6OKezjw5McLA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
  dkim=pass header.d=est.tech; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZaeM3xQHpXxRiq9fltNVkln/dOccxRMDrYQW+wNikZk=;
- b=MjlhshnwEKSnL4vjTDV+fxFckR75MImYh/gOad/l3L6YHkElt/L9r4bqjWds6fqiaPOISwb4SjJ7BcAglYlE5kopfJbRShi3IXjitdKP8uMko1GvkzB9bzpdPay6ITskjz1J79LVgTxAjFZ9g38zcxQf2sfqAOS8UkTEdDT+cWfKqzzmmrtUTM6x0NcF1kPsj9BVBylKo2feJsvocdnhcud1YMhGd/msyy2wOOvKZNRvreG38GWd6Ifse8xLFFCm3wWnDQFnJ5HsYDKb4Ft95NLNoiKaYTjC2Kwfed9XBpCZfQZggBYB1K5t/KJewPfJD/CDH74TM+L17F4PbWUANA==
+ bh=Q/Z9buftd28jxr/zK/940oKb0JuRI9nUYB8vwv5I+Lo=;
+ b=HNETnNJuKrtTMU61bry43x57VDPSytbXH02qlBqDUnLeFN8gjz9BTTP7db7QOYhU9WIM6w72+xZa1vxcOIh+YToN7PaMi+VGkCp7namOXShypxy8RJB7PSXH8HeIqFhgF+p6vu3DucLHFEFh2XWW2+dqs5OIaHpmR6sTvrfNPR1R9GJBhOdzjvhA+5nQfM5D18ZHQfKqMYVkeFCcHhLAFxhtnHxhQuDxV+1ls1vmBYUDDfUKEYuSLU5sNAzg43mAUW3gF4dVgMc7lvQZgRVKBQpW+5MQJXIvktBxcZ/ABU7UZ+S2l0YV2kadJvskVBH+fIihGjgY1MRf7Sy+3ufUMw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=est.tech;
 Received: from DB9P189MB1754.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:2a5::24)
  by PAWP189MB2829.EURP189.PROD.OUTLOOK.COM (2603:10a6:102:468::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.13; Thu, 11 Jun
- 2026 16:21:50 +0000
+ 2026 16:21:48 +0000
 Received: from DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
  ([fe80::2af4:a981:db81:d471]) by DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
  ([fe80::2af4:a981:db81:d471%6]) with mapi id 15.21.0113.013; Thu, 11 Jun 2026
- 16:21:50 +0000
+ 16:21:48 +0000
 From: Yunseong Kim <yunseong.kim@est.tech>
-Date: Thu, 11 Jun 2026 18:21:09 +0200
-Subject: [RFC PATCH v2 07/14] kcov: exclude kcov_dataflow.o from sanitizer
- instrumentation
+Date: Thu, 11 Jun 2026 18:21:08 +0200
+Subject: [RFC PATCH v2 06/14] kcov: clean up dataflow state on task exit
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260611-b4-kcov-dataflow-v2-v2-7-0a261da3987c@est.tech>
+Message-Id: <20260611-b4-kcov-dataflow-v2-v2-6-0a261da3987c@est.tech>
 References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
 In-Reply-To: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
 To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
@@ -79,17 +78,17 @@ Cc: linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
  rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
  llvm@lists.linux.dev, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
  workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
- Yeoreum Yun <yeoreum.yun@arm.com>
+ Yeoreum Yun <yeoreum.yun@arm.com>, sashiko-bot <sashiko-bot@kernel.org>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781194895; l=922;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781194895; l=2400;
  i=yunseong.kim@est.tech; s=20260426; h=from:subject:message-id;
- bh=PmtegGlP3oC3YRD6P1kuj8eoKvWyzYU8JTA0aTpc6bM=;
- b=e5xstSMsJXnbXyB+C7adTAPN//7fQTeFH4ATtubzHpMsx0JK0Otu4HT3jDZy6qquKsRKR6sT+
- a4NAYtSFhCGCSzK79P1/f/gwkNtmL/6Rxjw78k/f4CQeCAzAqFPkjdn
+ bh=Sl6u6AvdCIQIiG26Yfl2mpNG0w7ezgkO/1XDtS722aE=;
+ b=+Kzb3ovU+beuHUv8M53MW3+pE00ij6W4GaFOkOymP0rlQbqr/UhgAjnK29kP/TquBrQIY/ay9
+ eCCBeM9sEtcCBomWEne+Hj8+6lxSdwnH+tjJ6BozULhBfL4JDDddJ1P
 X-Developer-Key: i=yunseong.kim@est.tech; a=ed25519;
  pk=1nBUX92cvTaavYG1+MR073D+XMKhdOciBZcnf6h6qEo=
-X-ClientProxiedBy: GVX0EPF0005F6D1.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:158:401::64e) To DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
+X-ClientProxiedBy: GV3PEPF0001DBFC.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:158:400::317) To DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
  (2603:10a6:10:2a5::24)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -99,95 +98,134 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB9P189MB1754:EE_|PAWP189MB2829:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2454eb6c-da2d-4096-2b13-08dec7d58ae8
+X-MS-Office365-Filtering-Correlation-Id: efe2062d-e52f-4ed3-e82b-08dec7d589bf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|23010399003|1800799024|376014|7416014|921020|56012099006|11063799006|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	kd8j3nrOOqM2I54A4h2lzfTpkw/heKam5BLD2/SVdnsuNJTypk7CaTl3MR76ZECvPkXT1SLr8zv5tw1O4OG3cyWZZhvRGSfxLneSw28Bw2T/CVu+5Zlz41mJmZ+89hU0+K4MQeY+PtZrOxflJZaCT0dNH6qlMAvE9VMBk8pQeDaxwvlfuUh5hu0bUso5ZpH4+ORwYpbHK6kyE27BcIdQoVrTow/rrY7oew5liD2eXNflJMm7beRtOrCVbGc/cT03rDP30xyfEON109hTVIfqbp3IOF64Ybrjs87H7Rd54V7ew8y7N39wxr5IOj7lSQqk93pUKeyyUIQCxYno1Avw+Mo25mwT0dBk1Zl7Vd64iE/0RiGEtG2ZzDCcVC8ot7g2yzSrkuoephxOP0X8hK7fsZoOIp8yr/PiPlF8d/EcsAQnY5Yh9w2QWjPRiW/h0VJT6VqdnXEp3NU/xmV/mSMqq/SJ0/Fs6kLRthuRjpb6ByTjfHBIsCraR0EQB6p84Wpgl8Q7NAkyA4pGFxzxfFUxWAhz1s3JHE5k3MUGUP8yLdPBopqjm2Zj4S4g9CSZwE3a7b/yVXN9cDZ0DKcAAtlNbbpCXDRsjb/VhkKgtlmtjhTzojpwEHBWkG3FFHKcIoLC80jNhsOvB5HwcVjvOCWpRBhcHGZW4Fxg64gvqj6yDKmcQXrYyFn5CgmgL16SNzyeapnAEelis8wY3OneAXi4RYsqf0G8q7++pOZiW+ZLwbA=
+	quvWXfSxMSEUvFFbyZiJ+PaJ5VeCRCRT3cMqFCIB7Hlss0el7GQ62VJGs4ODW5BhhPvLqdPpDRW7gTGwFAZjZs2OVMaDGsbHMXOceMYA/po33bh30c6ICGS2VclxopDUoTnzlVYHptivdICxMw0LrM6Zad+C3R6VS89JhQ+4TTC3A9NZSeMQsXaa0EWmdQR/n45OYZVhgufg1sU0ES6yAZfZnCzHr7KPVdaviwS9/psdZY2gdyuF1q0t2frUXO8KApk2uL31fOCz2M8WHAeTzRKAl5WTM0EwTwdxb6OcNaSkuFVKXXw2Tz1Z4gObLCmlKFLxGf+Za28ivmd8j90Rud2E6jUJEpYb1+2kzatEr6wwihbok8JdivtleFnNSRJcl7fmHLYsYAu7r7HJ5pklDbiBt8GuFFrIEyvMDm8NVL7QGczy4osXCNzUKCOkdrVfyqGEreUBaSx7n5WJsgrxSl2k3EU89Cvm8ui8hbRRFn7itpikqUC/rL+Z9h8VA/xuJYcnDq7d6eS19J+X6XGukIQs5lJ2iYCmNRrWQfvL7tB4ug0smgE1ogPSJgrtAAi5ZrEd2nYKI0j2rtXvm5xrGkPn15UypKhYK7jQnce3Ce3HRGO7PpB3VLVbpb511+q/zd5MgJ6JcZ9/MOCbM6xhVHeUiQu9ItNWuBuRG18WqcFp07sBlzv75IelQiS6yq1v
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9P189MB1754.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(376014)(7416014)(921020)(56012099006)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TkJSS0FUVHZBRkw3bWxJeUdDc29nR2FOektaa2tUWitOd2k3MFZvaWNnY29s?=
- =?utf-8?B?SEFsSVZSSnZWZVYwS3h1OHdLL3hISWo4dkJVVlNZM1VuQmg5bWVjdUdwOWlk?=
- =?utf-8?B?RXZoSURZc3V6cTNzb1p2ZCtiNkh1YVhZckNRakl6Rkk1T09waEthcElWb1lS?=
- =?utf-8?B?SWpOamxlMGR4Y2hzRXdoazNKbm1haVZIY0FaUG5Ic1QzTHRKQktCT1Njc3Jv?=
- =?utf-8?B?Y3NUeThIMmpVa2NpVThpVUI0M2ducjMraThXUzhpaWVYVWRQcFFPKzF5OS83?=
- =?utf-8?B?aXhvazFrd0MwTlRTSXhKbGtXcmFnVGZGQkNpTjdoTU9BTjIwbHIvWTBJNVA3?=
- =?utf-8?B?UUVpUmd2NEIrcldMLy91ckJQQ21CR3kzUzduRElrUkE1dmdpb29QTGxCTG1v?=
- =?utf-8?B?cUlaOCsveUlJWDNPZStPUVBVbU1BSUk4WXZ6SGdOWTNRZVBXMWRoanFPN2Fl?=
- =?utf-8?B?VTV6UWVGN0dHOFNKMEl4eXZxa2xWcWNqVm1pT3VHazJYWmdlQTk1azAvaHNH?=
- =?utf-8?B?SGZyc1FJYnZZaUV4Qi8waWNLejV6aktmSzlNM0VYNXNUN1NVY3Bva05YczE3?=
- =?utf-8?B?bjE0UUJkcTdtUHNHYmgxZnFKQ0piRUdKVisvd3MxUHllSzgxR21pTXFzN3dZ?=
- =?utf-8?B?Q2pQU2NkKzFEZmxyV0ttZnJFQnVjSStWWEpzcVdJOGlUeHIwYjFWeFg3T1Zu?=
- =?utf-8?B?NXVyMm9lZHQvbjlIWDFpYVNKalJzZ1ZkQU5RSmFGV29Da0MzQW9jY0tEbXVN?=
- =?utf-8?B?U2NGMmYyWTc2c2k0ZW9TRUhhNTZhS2Jpb29CS0V4QzNRZFJZbXNqNjQzU05z?=
- =?utf-8?B?SytzT2pGU1pGWUoxRGwvOXphRUtLV1J6N2FmNEdENWF4Y0FXSWlBL2hkSXRv?=
- =?utf-8?B?VFBaUTd0SkluSEI3VWM2VTZvaHhOdjQrRXdBYmtvMkM0T0xvakV0clNzb3FN?=
- =?utf-8?B?UTQrcGNHNlN4N1FaQjFxbGdGN3h6UmVSS0RtZFR4RTRlM0VYSmxzbWplSHQ2?=
- =?utf-8?B?VWdtSmRqeXdXUzlDcGFMVVllWlZhNFovVVcxajB5RmlyS2U0ZVZLTjhYQjJn?=
- =?utf-8?B?YUVjMWV4dGxpYVhFTFFDcWlBQzZRK1pZTFFwM2xlbDRzWXRqRGVaUFBXSGlK?=
- =?utf-8?B?TjFoNEYreHZoeXoxOXNJaUlGYjV2QWplQTVBaHlWc3loRThVeWNNQTFLZzJh?=
- =?utf-8?B?M1c2T0NjSzRqTUV2UTZXMGk4NVE0VDczTjZtNFBXZWRtdFRqNVRpUG5pY0RE?=
- =?utf-8?B?Z25OWW1xYXhXM3UxWTRuYUlmcWF2Z29YUXUxN1Nva1RIdHR4SzZTRlJUUkgv?=
- =?utf-8?B?ZjdnM3dFVENmVzBLRnNLekRUdkJ5bktmRDFHZEYvZ2t0V3Z6M0ZuQ2dsc0Yw?=
- =?utf-8?B?Z2NrQnBodHBwb0lrWHczdTJXTWxWUWxCQ1Bwb200Zk5zVlpyaEhEYzVYU0Ft?=
- =?utf-8?B?Q2E5TDZJbDF2ZHV2WHdQRzBhTlYzdDBrbGZXUHlRSlp3bFZpZWNvYVFWelFp?=
- =?utf-8?B?SGFhUVJ6aWdQbllzdm9zUktENWs3NzJOcGhDM2N3WHVDUE5ESnZlUlVhcUdH?=
- =?utf-8?B?VlpsR1MyNnhUVHlWajEyOFBwbGcxNmFTeFNVL1p3a0ZTcjdzWVBXb09lRUdO?=
- =?utf-8?B?L3pranlVZ2ZGVDR2YXFmSTg0ZXZ4RjlkZDdGbzFTNGR6TWt3c3lCcC95QnFK?=
- =?utf-8?B?OURRazhoOGtzUXkrZWxtbk1wSlozNzFlUitIZFZZVGZaRDFKVFRGRFZPeWRC?=
- =?utf-8?B?aWszVHZBRTR0TG1ZTm14MGVNaTFjelo4Nk5EN1dsSVdLRTh4d1k4UlJTblpB?=
- =?utf-8?B?STQxM21xQ013emRGOHM2K0RIMWZuUWwvdlF4ZkhQUk5MUk1Ld3ZuRDZaWEtK?=
- =?utf-8?B?Q1hlZEVEc2lGWlJPeGNNVlo1eUZUR1NUckRBT3daUVpqdUQyQ2JKTDgweS9i?=
- =?utf-8?B?UmNEMWRIL3RHQzhpNEt0TUtiaG5KaFJCbnVnZ0xOM1phU3pmZHVrWHF5NC82?=
- =?utf-8?B?bi9CMlpxb01iMmxaNkx0QjRCK3U3UysrdUxOcHkvcTNBcjk3Wkc5RUs1TFVr?=
- =?utf-8?B?blJvZjBza2RnRmFTNVRsQ1hCUmhocFVma28zcFlEaENZZ2J5dWdISjdsZzNk?=
- =?utf-8?B?S2FkM2wxWXRNZXA0VVNnMXRRVUFtZVR1M25VT2xXaUdWRUd2SEg3c3RsTFNr?=
- =?utf-8?B?eFlTOVYydlhyaWtHOTBWNHJkc1ZFWFViZUVTTk1EQk9iTzdKWjd1RGVJL2xv?=
- =?utf-8?B?ajg4dGtoQnR4ZlJ3dDhuY3NVVkQreHBDeVcvU2NTTkh0UEYzZmRUQTlwdzM1?=
- =?utf-8?B?Nkh4cEFxNStlNEh1bVArb3JndmpQdlp0TnJZLzhrc0dCUHlOWjhkUT09?=
+	=?utf-8?B?NkJ5UGpBY0wwK3VTRVMxOExTZzlaWHlUS3dXcmEvQ1lsTFVKbmdnUmV1d2lP?=
+ =?utf-8?B?UVF6Ly9ydnU1SnpVUlZ2VkRaM0F4ZU1oRE9nNGMzcEl4d01ObTM1MURpSjV2?=
+ =?utf-8?B?alV1a25QUFh0YzNTdnAyMnFITzFJOUhoSVFiWGREV3ZxMi9sMmtNVzFMRWRM?=
+ =?utf-8?B?ZUM0VWplNENycVg2ODd4UzhuTWl2Z0h5dlVPT21QL0haV01MSzVDRk50dWJw?=
+ =?utf-8?B?eUhLNTVBS2FBem5HeFdCbURNVFduYkhzVDZ3cDBodjhzTU91VjRzWXlYOUw4?=
+ =?utf-8?B?T0Q3bHRueGYvVy95SnAwNHFZVi9JazJVUXUxZGFTMTdkSGZyM2pGUmVQY1Mz?=
+ =?utf-8?B?WTFrN3MyN0FtMUFWWkpac3FsdnJCdFpJREFDK2ovQXFGd3lnTkd2eGJaOGxE?=
+ =?utf-8?B?ZFQyaHUrUzlvR05hQU54b1JKQnB5Nm5XUDJLMTEvRGZaZFY3ZXNiWVhDVEFq?=
+ =?utf-8?B?cUpvMXgzSWV3OU5Ia0ZkWVBXL0RucEZ0eGplbVRMQ1V2djIyNkFaTUlNWHJq?=
+ =?utf-8?B?aWFTWGpHNTdXYkphMDhnS0ROVitQZis1QnQrNmk0UWhGY0owUDI2aTU3d0JG?=
+ =?utf-8?B?UjBwVkNCMXBEbVBjd2VzWFFMcVRpZFZnazJMdkN2MWVHMXdyTzY2VVBaWCtj?=
+ =?utf-8?B?TER6K1hKTm9pc0tCRTZEbU5qWkh1TVpLaU52NlUrYk0rRWk4ZmZVTnpUb2I5?=
+ =?utf-8?B?YWpzbS9pYWd1QldIVWxPY0VwZW56UlZQWEhBR2xsNmUrZHU4MGtmR3dqeXZr?=
+ =?utf-8?B?RW5oRm1zMXE4bFcxdDJVMDlNaWZxRnpuR2RqdzZxSEc0alFvVjJXUjlYSlJG?=
+ =?utf-8?B?VGovUzRQQkMvQ1hwQTVnS2pYa01sM1JoRkZnOTVndk51VDFQYTBVd0hWcFBX?=
+ =?utf-8?B?d0FZR0ZsL29ueGIzL1pGNkRGai9raTlEeGJpS01hai9EWUN1bWg0VXQzSUMz?=
+ =?utf-8?B?MUJmMG9sOXhMQlY0NitzZzJ2dUJyV3JSd3hZRDZzTytMWlp3dEdRd0ZKKzFV?=
+ =?utf-8?B?ZmFGTjZzWXBlWU5kK3UxMXJIaVlhUjE0ckJrY1RpTDdMMUtHOGgrS2h3dnJM?=
+ =?utf-8?B?Z1ZXLzhGTDJwd20xMGVvUFFTbGJwbGp4Z1RNM1NuS2RPZldwUUtIRFJibWR2?=
+ =?utf-8?B?UlVwQlViNnlaVUVkOVdING1UazFDVVRMSlkyWFZGbWNzM2ZySGt0amNKb1px?=
+ =?utf-8?B?L2laN0NNajFKdS9xT3hDVnhoclYwZTBvMUtDanBTc05XY1g5VktSTkJOV0oz?=
+ =?utf-8?B?RWd4K3FCc1QyZFZkdHJOMlAyUTQxeEorRS9neGlwM3UzVHgwaExiYjJ1M013?=
+ =?utf-8?B?dnVzc3VJRmZJaFBidWFRVzVDWVJNVjIyb1JlTU9DTlVLd3lBV1pzMW5vWW1l?=
+ =?utf-8?B?WlZ5aVRwRWNoZys3TmNCMzJUdkJKOFhvTFo5aGdoeHMzd0ovR0E3WVEwQWJo?=
+ =?utf-8?B?aCtBYmloMXRVSlk2TGVkb0RFMjNDOHI3SDU4ZEVhS0tXTkxTTHFXT045TVZt?=
+ =?utf-8?B?NmpDZktaVnUvemsyc2h3SlVBTjZpeTgxMXQ4MHhkNEpheHk4eDcreFdIL2Jy?=
+ =?utf-8?B?N2J4a2c5NjQvZCtUd29xSm1kNW5Pd3VkQ1gxT29sS0hqM2w4K0V1VTcwaGEv?=
+ =?utf-8?B?enkyNFgrbE02T3JON1UzNDFGTzMvSmJqbHRrZWoyK1ExZUloQWNzdVdDaklW?=
+ =?utf-8?B?RDZ1TWpwR3JTc1RPQlJlWWljdFpObzBRdTRrdlg3Q0ZmN091TXVpakNDTkpY?=
+ =?utf-8?B?Rk9SSzloMzBDQW43NiszK1kzMk5vdE1zUDhta0NnN05XNVBpam4vb3pGb2Vv?=
+ =?utf-8?B?RnpGVENnZjV1c3lBM3c5bThudUtHSkF3ZVhkV3Rsb2p6TkIxVVBNVXZFZ0o4?=
+ =?utf-8?B?WVByWXdWY1YwUGhXQklROVJqaUlLSnU2MEY5TmdIdUJYRlJIY2pOMFpUTGVl?=
+ =?utf-8?B?aDBZNkpWYzEzVloyeFl0L005WmoySmZSbXU1THdlNDVLTzdmWGhDbi9sWW4r?=
+ =?utf-8?B?MnBKVGZod1poM053Q0puaWVlV2wxNlJveFlSSkw1ODdFZmNnMWxzc3RPUXlx?=
+ =?utf-8?B?WjdSZzNOcmhXb05seFFlR1hLU3RDS3ZEbTdLbEZ6YXd1aUZMVUNadlN2RGRz?=
+ =?utf-8?B?Vjk4TGZOc3NTdHdxRHo5dElmckZKSE92cHllNjRhbGozNmI1NXV0U2xPMTdW?=
+ =?utf-8?B?SU9Yd1VSRHVyMm5XajR3VTNQcVkrZXpGVnhpYUFGSWZ6SGN6aWpCa1QwVS8x?=
+ =?utf-8?B?RE9UME94RUw0T1I4RE4wc3c3VUlFZlZzVHlISEZsaDBsY2REZG5MZ3pLbzRv?=
+ =?utf-8?B?MmJJelBKZXRjUXFhVW9sdnE4Wk10M3FGNkNxOE9oR0N6R1h4elpjdz09?=
 X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2454eb6c-da2d-4096-2b13-08dec7d58ae8
+X-MS-Exchange-CrossTenant-Network-Message-Id: efe2062d-e52f-4ed3-e82b-08dec7d589bf
 X-MS-Exchange-CrossTenant-AuthSource: DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2026 16:21:50.6767
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2026 16:21:48.7614
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AUpn7b3SfIdLROAGs2f3S36enjvrUcgw0N14v/k8GTZDqr4OCLE24jiZgG5YBtmET3ATTy9aLbp9L5rbTs2sug==
+X-MS-Exchange-CrossTenant-UserPrincipalName: v8IT8/Ect7M88fT2bAQx96ioqggdeYYhW17VSDRUM7HE4RyDzs/l4bj/KOTYLPz9KmGFA8wYX9dokCPhoyNk8Q==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWP189MB2829
 
-Exclude kcov_dataflow.o from KCOV, KASAN, KCSAN, UBSAN, and KMSAN
-instrumentation, matching the exclusions already applied to kcov.o.
-Without this, sanitizers instrumenting the dataflow callbacks would
-cause infinite recursion.
+If a task exits without calling KCOV_DF_DISABLE, the kcov_df_enabled
+flag and area pointer remain set on the freed task_struct. If that
+memory is reallocated, subsequent writes could corrupt arbitrary memory.
 
+Add kcov_dataflow_task_exit() which clears the dataflow fields, called
+from kernel/exit.c alongside kcov_task_exit(). This matches how
+kcov_task_exit() cleans up the legacy kcov state.
+
+Reported-by: sashiko-bot <sashiko-bot@kernel.org>
+Closes: https://sashiko.dev/#/patchset/20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4%40est.tech
 Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
 ---
- kernel/Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/linux/kcov.h   |  2 ++
+ kernel/exit.c          |  1 +
+ kernel/kcov_dataflow.c | 11 +++++++++++
+ 3 files changed, 14 insertions(+)
 
-diff --git a/kernel/Makefile b/kernel/Makefile
-index b70e524c4074..307b7fd1e1f9 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -44,6 +44,12 @@ KCSAN_SANITIZE_kcov.o := n
- UBSAN_SANITIZE_kcov.o := n
- KMSAN_SANITIZE_kcov.o := n
+diff --git a/include/linux/kcov.h b/include/linux/kcov.h
+index e9822b02982b..07d7823e5d6f 100644
+--- a/include/linux/kcov.h
++++ b/include/linux/kcov.h
+@@ -30,8 +30,10 @@ void kcov_task_exit(struct task_struct *t);
  
-+KCOV_INSTRUMENT_kcov_dataflow.o := n
-+KASAN_SANITIZE_kcov_dataflow.o := n
-+KCSAN_SANITIZE_kcov_dataflow.o := n
-+UBSAN_SANITIZE_kcov_dataflow.o := n
-+KMSAN_SANITIZE_kcov_dataflow.o := n
+ #if defined(CONFIG_KCOV_DATAFLOW_ARGS) || defined(CONFIG_KCOV_DATAFLOW_RET)
+ void kcov_dataflow_task_init(struct task_struct *t);
++void kcov_dataflow_task_exit(struct task_struct *t);
+ #else
+ static inline void kcov_dataflow_task_init(struct task_struct *t) {}
++static inline void kcov_dataflow_task_exit(struct task_struct *t) {}
+ #endif
+ 
+ #define kcov_prepare_switch(t)			\
+diff --git a/kernel/exit.c b/kernel/exit.c
+index 1056422bc101..af2314500791 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -935,6 +935,7 @@ void __noreturn do_exit(long code)
+ 		kthread_do_exit(kthread, code);
+ 
+ 	kcov_task_exit(tsk);
++	kcov_dataflow_task_exit(tsk);
+ 	kmsan_task_exit(tsk);
+ 
+ 	synchronize_group_exit(tsk, code);
+diff --git a/kernel/kcov_dataflow.c b/kernel/kcov_dataflow.c
+index 7cfe2495275a..df037b7e90eb 100644
+--- a/kernel/kcov_dataflow.c
++++ b/kernel/kcov_dataflow.c
+@@ -196,6 +196,17 @@ void kcov_dataflow_task_init(struct task_struct *t)
+ 	t->kcov_df_enabled = false;
+ }
+ 
++/* Called from kernel/exit.c to clear state on task exit. */
++void kcov_dataflow_task_exit(struct task_struct *t)
++{
++	if (t->kcov_df_enabled) {
++		t->kcov_df_enabled = false;
++		barrier();
++		t->kcov_df_area = NULL;
++		t->kcov_df_size = 0;
++	}
++}
 +
- CONTEXT_ANALYSIS_kcov.o := y
- CFLAGS_kcov.o := $(call cc-option, -fno-conserve-stack) -fno-stack-protector
+ /* File operations for /sys/kernel/debug/kcov_dataflow */
  
+ static int kcov_df_open(struct inode *inode, struct file *filep)
 
 -- 
 2.43.0
