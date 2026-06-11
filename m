@@ -1,200 +1,138 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2139A1DC198
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 01:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781139973; cv=none; b=ujmsqe7Y9HIA+sHXaRDzXagqNQaoaH3mpsisl/haAmVNf9e+2mCeo7QjfEkXLB5G9nhILHm6wjvNR54KoIwz6nx8PovBzql66o/XdEN46Tn0Q5cZ2VnLRQWCeqYqtqb4JPv0V4xe+HXUuMt+TlzT2kqo2XugVzJdGU39eDyWVnc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781139973; c=relaxed/simple;
-	bh=tlYJdwjt2jvaFbKtXeL1njWq773Cas3GWF5HwbmzqD4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I+NkuImjfOhkCyxijvPXOfpelTXni07aIZW0neGmiPvP9PXTRM4LQ7D4cx0FPUouA5Ysfw0wsa5eNMUCDdkB7bdTrbgnUYmL7O3Ozn3mbm62rr2wXbkh+t/F/6CGEOGEzRYe16YTJi4tD3yA1Eosmlv5Trda5f3Y0VALbDyy60o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FvWWnYEm; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480F9E555
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 01:17:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781140678; cv=pass; b=sr8ayId4OmEptZBfJgeCWkhSYymgkUbQA6xoejqo/A770tAW/wE0GrK4Jb1vAlgthBVQ3eZMtpGl80FNhBl1VOXx8U44WMxp3/G57d0K+DnSsXGxtNv2rYVKKy9fiWeOZHDda83LlYAGitzFsUEN+GcMC4X4u7sDRUEH1zZ0hSk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781140678; c=relaxed/simple;
+	bh=y6kzzG3ct0h6IoHvAD4R7WtfG1tsXtsc+74I95kF+5I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HQn7HllgEOvMqa/OIY41lOttuhvSAuLufz5nmEPz9zcTlBdXeY0sm3RtCFt5NHisdtiWeoFYiq2tqReiIdWt2uhfhxVu6hpugNXA6A9F5q1LZhA57dKZSgmfKIUSXg4YoujSM4xL2Nhgo+nA5bfvnQNkFVO11C95dyRQ5R3s6NU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k1DPFvIV; arc=pass smtp.client-ip=209.85.128.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FvWWnYEm"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-304e83724bfso9453178eec.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 18:06:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k1DPFvIV"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7e16f05fd79so79936477b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 18:17:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781140675; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Wn1J08yYGgU72hHMoMiSdod934XvDGZJDagR0GE+rtlvqB2eWJLDhXLnNxrMOi9CSL
+         CNPERp4rvrFO8wERTLD70YcVGxHEofKUKVZpMzxr09lclLOPVkTqfjTtoXiv1+oNrXjP
+         +J+4TDkrKPF/GqAsboBDqjNUmDVAA6gAkTUH/enoash245gPMUCkr5fbAzFIUPIWvtpE
+         Wkmnbr4QPzPnmSO5pODElP3ZNXEIjKNoWBEOujexagAbDTlY8nmgS1F+oT1GWvPWk+6V
+         bW1VlL8T+R5OAxI8QmQ9rZVrV5HweCObFZPjQICde1PreETOc/lP97hSvG6NIi9T+4kt
+         QsZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=cwpdyNCQVE9Z0vBjg+vKg/1VB56zfLGyeI5CigKesGI=;
+        fh=F+fyiIXrFMxFynneJ22J1pkfpdLoMMc1Q03/YdW/G7A=;
+        b=XS0eYuQvDMq6c2h/L4z86cJu7KSOufQQVWaVfVpkw1mquNRC//gHFOSL2XP6k/jJOm
+         W8VvRUSZ29af90oKesREenOiYC2yuzIxtN2G8oim9gw15O7fnj0IMtn7vEg+njGNCOt/
+         vclNm4YJ834b/CEN5NYnh9VBhOe8+9Jl/7HmHYe2R9TybmdD7ViwjDpap+djHQYd8qjH
+         m9FUzNXmWFJo5AOYsbTBuJFxuTrietekbytXuuOry5hOmIfKY/Spbg8ObvZyK/WM/J7z
+         KhSXaUiQACK8qkdOG9vF93pGo8t31GU0IssX3m0VP9TWVYfRb99QUoEsLMnXG4F7Vxa7
+         oT2A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781139971; x=1781744771; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VboLQNAR8iiox5vG6qq6qNpSq+23FwPh2uptUxiLAaw=;
-        b=FvWWnYEmq470Eysdd1SKG1uDMRxao45PEzCSOo8EULrYfZQUCHdM7kQmoyaoEbSduM
-         6qSsdIJEmKebx4cb8rBjAF4kuxWnqWFyjGiRWgC9tGQjo+aTGbgnroCE3P9ZJWE6GEDA
-         u1fwRpm+VhCY1Clfb5vh1sfdIsZ91iVd6mYjIHuJEl+unbxhFRrwktegfqFnweFeho/1
-         G7MFG3yPRbbbWTBkXKHuroc6cffuGismDTOyp7lLiDIF3Fq1FogNtIRt77vgt6FKH+pk
-         mZLn3RHACK2p63Iv//anLvD5cNCnoioDCXxUvorKyZ4De4E2ADzGki7w3mGhRBM9BC2w
-         1cuQ==
+        d=gmail.com; s=20251104; t=1781140675; x=1781745475; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cwpdyNCQVE9Z0vBjg+vKg/1VB56zfLGyeI5CigKesGI=;
+        b=k1DPFvIVaJUG0nOCozFMPM7VTT1VRTdz6b/erSM0D6FJdFyzsu8I9bkzXbRDvldUVR
+         o7EmWMu/u1ZqsrsPzmr4oj1slHt0VURPq5WDlsGMJbk6rXhKkp7ATlxhpoNenKZGEsGl
+         Cx7hgBJQ5sYtzvmRZAPUMwwSCnu8mU6dqFr4hmaqswcRdT1fj9EqNohlAyGcOUYg16EB
+         T4qUyin8OQ6elJ9d9MZnNWkslxZXl3d5eanQ5StrgGbMvOsjHr/R+ZdtkMt7dVDk/0NN
+         3MD/jFHPy0Q0UbLbLBGX2b9K6qZ5Ad2N025qBEhBuS72QN4QG9hbyzNLvTHdXb5jiE+t
+         LNEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781139971; x=1781744771;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VboLQNAR8iiox5vG6qq6qNpSq+23FwPh2uptUxiLAaw=;
-        b=KVrKLa9CopPmDKHSqGmyHsnHEN+5ljanGt75uuxwqNE3lDLXKQmPjBzI8dG5TPr11l
-         8KeuM7H3YgVMt26Wop03xCBG5kdcUYr/xqzmUSTAXtkWtDpbfJ68KZ/eEhvX9CqY6ZWI
-         60X32+RnSIFSAqNZzAkgeMRmKL4gH59fpBoDdkSyNMj7OxuI82WCpPfyvQ3DyFe6MeVo
-         E/qvTvcctKW4uU+LACSLSU2ScuLziipi9nuvxBHs/8ZBqug0Yh8fWhwyVdqS+sLTHQPZ
-         xpaa/POskurMF0Y9VL+ZgS2+azrwSzqTjHpXHmqmNuNDmlUQ/2u5eKF68kAgDOaz45wt
-         lc0Q==
-X-Forwarded-Encrypted: i=1; AFNElJ/1JtKUQtpQxqx+OmfzDa1duMrz2kNXG3WPaPErNe6pvhYZjttbMxBNdtaebeAFOdwlSsoHWd1xq8KzFm00u38=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHSMZd7VYoT+fxIXKFPMvZluGAIMpXmS21vzodSLObn9lJwS+K
-	2+kxGQCfUC2k5izMs9v9HRxFsVfKa7SFyocrbs39dE0u+G4FCxtfVPsh
-X-Gm-Gg: Acq92OGNnLTY4ejLCcUxHHi8UFg2TJSS6u/hhDRHXMQeIdTDU1YrQ7seWFFjfWN0T8P
-	YP0YQg/gG9AY5onnUoay+OwGBNDnSUBSYE80viwYfPBEfK5fvXhYtcp+zDpKSli9UcpaUwCiPCN
-	XOD6Lvp5gCTtFH1YaHY3M9Cp+5HO3o7CNCDO6mfxeILj1bm88wEoPM529TSoPk66f1DXO4MD3Ja
-	crYXtdf75n4D5o0oRoYM4VT3oXSnri4AaovZPCHnIZRod+bCpPBXVb1pNK3RutdeE87QSsVyCdx
-	PPY/OS/v32NHNrABRg9TVzhLTgdBAxT/E22NohoktaA+/KSZpNiY7R5XWyGHE4o77cvKXXLOOBc
-	W9513QpIhZRy45IBKDPy1xYcootTK+ZraoCXAVsxBLGt4uQvOc7QFKP2KRxND6JNs2HkpAghl6r
-	fqMD9gkZzzFjaqKbgrHT/hDA==
-X-Received: by 2002:a05:7300:510:b0:2f3:986d:2d01 with SMTP id 5a478bee46e88-30804bbdd85mr548716eec.19.1781139971040;
-        Wed, 10 Jun 2026 18:06:11 -0700 (PDT)
-Received: from blinky ([2601:647:6700:64d0::92d1])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30806ebb79bsm71245eec.25.2026.06.10.18.06.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 18:06:10 -0700 (PDT)
-Date: Wed, 10 Jun 2026 18:06:07 -0700
-From: Charlie Jenkins <thecharlesjenkins@gmail.com>
-To: Nam Cao <namcao@linutronix.de>
-Cc: Charlie Jenkins via B4 Relay <devnull+thecharlesjenkins.gmail.com@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
-	Atish Patra <atish.patra@linux.dev>,
-	Conor Dooley <conor@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 01/16] riscv: Introduce instruction table generation
-Message-ID: <aioJ_5SIXdGQg55R@blinky>
-References: <20260407-riscv_insn_table-v1-0-54b4736a1e77@gmail.com>
- <20260407-riscv_insn_table-v1-1-54b4736a1e77@gmail.com>
- <878q8m1j9y.fsf@yellow.woof>
+        d=1e100.net; s=20251104; t=1781140675; x=1781745475;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=cwpdyNCQVE9Z0vBjg+vKg/1VB56zfLGyeI5CigKesGI=;
+        b=BrNCvdYkuUJFMJzi+kz1zs5MuwLgjZyC76qDZddMcffjx67hEn77Wwo3TJXgKeThCk
+         15+i0PScCGQtv8mQAewsJYnKSbc3KslS/OujWfGlCzBVKUQxPuLTxrI19/PXcfFeVlXL
+         wFbUc+2IPHD0GtzTu0fvFVvYzj3d2XffS6+4ckg6XaLlJwsp/TjZbbiUd0D8je7eCrY4
+         Gdy+gvnaK3kLao+1Vu/T+AJPXB0P0TtlWaRb05WWM36P0hNL4eZhtPv/v1AeP75HNqXU
+         1/IXZ77RzvOxsegR6f0pg11pOhkrMiuJTrAcVLWSivPkhM4bhxoA/iu9u+LQArgbf0dH
+         whdA==
+X-Forwarded-Encrypted: i=1; AFNElJ9+c84WgdD+7apsnTStpCm8PwVG0XByzxik852JeI7ponrn4VV7YDz4sG+KxuWH703cvjUT4R+z0YKt3+6lf/k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqizSH2/GFzlXDCsUaHvo+33ZuukPKsSK1kNA7FNk3d/2HbCYu
+	7uf2YqH097QwBF4K0YD/1KDO3eMEJnLlxaDnPNW96QpLKbuj51wnqt07PhhGkSQYXzbf/ZU3WlQ
+	sILRxQajunGm2balISgZ/zN7Trr7hUy8=
+X-Gm-Gg: Acq92OGCs4nDrWKnBhdDO7vDNrnwJFf+SW5hC96+qlgVU0/DZj4wQ1sEZrPh3yNdeFJ
+	jEjM1kOpsM4+sEiBwAD/44+XtJ1RucknHsH70N+PcIMzNRgv+Nr5zhto6Q+yPMfnHoJCUqAyCRe
+	nqPS1aDpIYtWPqTHcaNLiRwaUnPgsi+4S0jG+qGxnaquGu+IyDVsrKgL1fl9lRmeBN2MPvrpRYI
+	QW0ldVI18FjhSN81elbprort0K7ume2SBVRmxgOfe+sseUWkClFzjXLNJoibXLY4Ikes9MvQsXo
+	kf6c2pai4uAIH8744dMnQu8bQCEXGYXMJR01tf6xZR9t8dyhlwaKcv47Mls7AeAc9gf+PQ==
+X-Received: by 2002:a05:690c:3392:b0:7f4:fad5:2084 with SMTP id
+ 00721157ae682-7f6559e6bf8mr8454907b3.13.1781140675216; Wed, 10 Jun 2026
+ 18:17:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <878q8m1j9y.fsf@yellow.woof>
+References: <20260610102850.483291-1-sun.jian.kdev@gmail.com>
+ <871peeacre.fsf@toke.dk> <20260610075018.6162cec7@kernel.org>
+In-Reply-To: <20260610075018.6162cec7@kernel.org>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Thu, 11 Jun 2026 09:17:45 +0800
+X-Gm-Features: AVVi8CfDR3TXqyYOHmrrylWsHkJhrNSrybKrnHMejG_1zq7GSb6GOaAcLezoD7U
+Message-ID: <CABFUUZEKS9P8=hsboyBj_f_9W8ycZHVG3GwqmtcnUoiRgh8iVw@mail.gmail.com>
+Subject: Re: [PATCH bpf v2] bpf: Run generic devmap egress prog on private skb
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	bpf@vger.kernel.org, Menglong Dong <menglong.dong@linux.dev>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	"David S. Miller" <davem@davemloft.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 10, 2026 at 05:56:25PM +0200, Nam Cao wrote:
-> Charlie Jenkins via B4 Relay
-> <devnull+thecharlesjenkins.gmail.com@kernel.org> writes:
-> > From: Charlie Jenkins <thecharlesjenkins@gmail.com>
+On Wed, Jun 10, 2026 at 10:50=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
+rote:
+>
+> On Wed, 10 Jun 2026 12:52:21 +0200 Toke H=C3=B8iland-J=C3=B8rgensen wrote=
+:
+> > > @@ -700,12 +700,22 @@ int dev_map_enqueue_multi(struct xdp_frame *xdp=
+f, struct net_device *dev_rx,
+> > >  int dev_map_generic_redirect(struct bpf_dtab_netdev *dst, struct sk_=
+buff *skb,
+> > >                          const struct bpf_prog *xdp_prog)
+> > >  {
+> > > +   struct sk_buff *nskb;
 > >
-> > Eliminate the need to hand-write riscv instructions by using a shell
-> > script to autogenerate a header from an instruction table. This is modeled
-> > after the syscall table infrastructure.
-> >
-> > The table is generated externally by riscv-unified-db [1], but is
-> > in a simple format to make it possible to use other tools or modify
-> > manually.
-> >
-> > [1] https://github.com/riscv-software-src/riscv-unified-db
-> >
-> > Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
-> 
-> Thanks for the work, I really like the idea. This will make it much
-> easier to maintain the instruction stuffs.
-> 
-> > +c.ld common,32 011<13|00<0 imm<3=6-5|12-10 xd!1!3!5!7=4-2 xs1=9-7
-> > +c.ld common,64 011<13|00<0 imm<3=6-5|12-10 xd=4-2 xs1=9-7
-> 
-> Not sure if I confuse something, but the spec says "C.LD is an
-> RV64C-only instruction". Why do we have 32 here?
+> > nit: this definition could go inside the if statement block below, to
+> > make it obvious that nskb is not used outside that branch.
+>
+> Or maybe move the copy inside dev_map_bpf_prog_run_skb() since it only
+> has one caller and already checks if prog is NULL?
 
-This is a weird one. The Ziclsd extension introduces it for RV32[1]. All
-of the data is generated from the riscv-unified-db and because it is in
-the Ziclsd extension, c.ld is included for 32-bit in the c.ld
-description [2]. 
+Hi Toke, Jakub, Jiayuan,
 
-[1] https://docs.riscv.org/reference/isa/extensions/zilsd/_attachments/riscv-zilsd.pdf
-[2] https://github.com/riscv/riscv-unified-db/blob/main/spec/std/isa/inst/C/c.ld.yaml
+Thanks for the reviews and suggestions.
 
-> 
-> > +echo "#define COMMA ," >> $outfile
-> > +echo "#define SEMICOLON ;" >> $outfile
-> > +echo "#define SINGLE_ARG(...) __VA_ARGS__" >> $outfile
-> 
-> Aren't these macro unused?
+I'll prepare a v3 that splits the selftest into a separate patch, makes the
+DEVMAP_HASH keys deterministic in the last-destination test, and fixes the
+Fixes tag to point at the generic devmap egress-program support commit.
 
-Yes thanks, I had them for an earlier version and never removed them.
+I'll also look at moving the private-copy step closer to
+dev_map_bpf_prog_run_skb(), as Jakub suggested.
 
-> 
-> > +echo >> $outfile
-> > +
-> > +grep -E "^[a-z\.0-9]+[[:space:]]+" "$infile" | {
-> > +    while read name base fixed variables; do
-> > +        echo "/* $name */"
-> > +
-> > +        compressed_name=${name##c.*}
-> 	   ^^^^^^^^^^^^^^^
-> 	   this name is misleading
-
-That's fair, I can rename it to be something like "compressed_inst"?
-
-> 
-> > +        invalid_inst_functions=""
-> > +        variable_params=""
-> > +        constraints=""
-> > +        match=""
-> > +        mask=""
-> > +        make=""
-> > +
-> > +        # All compressed instructions start with "c."
-> > +        size=${compressed_name:+32};
-> > +        size=${size:-16};
-> > +
-> > +        # Replace all . with _
-> > +        formatted_inst_name=$name
-> > +        while [ ! ${formatted_inst_name##*.*} ]; do
-> > +            prefix=${formatted_inst_name%.*}
-> > +            suffix=${formatted_inst_name##*.}
-> > +            contains_dot=${formatted_inst_name##*.*}
-> > +            formatted_inst_name=${contains_dot:-${prefix}_${suffix}}
-> > +        done
-> 
-> Does the simplier
->      formatted_inst_name=$(echo $name | tr '.' '_')
-> work?
-
-That does work, but it dramatically slows down the time. I was trying to
-avoid using external programs because this is called on every
-compilation and there are a lot of instructions to parse. On my system,
-it's about 10x slower to use echo/tr. Taking the time from about 150us
-to 1.5ms for each iteration and the total time from around 0.8s to
-around 3.5s.
-
-> 
-> > +            echo "static __always_inline ${type}${size} riscv_insn_${formatted_inst_name}_extract_${variable_name}(u${size} ${insn})"
-> > +            echo "{"
-> > +            echo "\treturn ${extract};"
-> > +            echo "}"
-> > +            echo "static __always_inline void riscv_insn_${formatted_inst_name}_insert_${variable_name}(u${size} *${insn}, ${type}32 ${var})"
-> > +            echo "{"
-> > +            echo "\t*_insn &= ${insert_mask# & };"
-> 
-> Why is this required? Isn't this part always zero at this point?
-> 
-> > +            echo "\t*_insn |= ${insert# | };"
-> > +            echo "}"
-> > +
-> > +            if [ "${only_base}" ]; then
-> > +                invalid_inst_functions="${invalid_inst_functions}static __always_inline ${type}${size} riscv_insn_${formatted_inst_name}_extract_${variable_name}(u${size} ${insn}) {\n\tpanic(\"${name} is not supported on non ${only_base}-bit systems.\");\n}\n"
-> 
-> Instead of panic(), can we do BUILD_BUG() instead?
-
-That's a better solution :)
-
-- Charlie
-
-> 
-> Nam
+Thanks,
+Sun Jian
