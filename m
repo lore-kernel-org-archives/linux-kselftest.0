@@ -1,64 +1,63 @@
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD0D42189F
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 16:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852FB4BC01D
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 16:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781195264; cv=none; b=PdS0/EaYH7DnDSj30DR6q0909Iu60iC+b2jvwRym04KjSIMU8cHG9HIxZ8OiNBF9g5gypLywsCQ28BtvvHArjATINNmfBWJTmd1BhVC7BPsmeI99Je7fmfs5v6FlSQpKfyjh+C5RdMHKqACnyESz7PqL0egspKKHkf7cbTpjnFk=
+	t=1781195338; cv=none; b=T5+HCxx2bTTpF6o5kKsfpp2OI3EqXg36gS9ew3pIehoxjgHUFzTheeBdnfqZj4Gf/aCDKut3ZqDdPDn1db7cv5IFyUCWaauETrpKPiJkKo4ULph8L/NS5YQaIa6Kjt6U5mPB/3cXrPpqAwOzaBNUse7A8tWgCBoL6Kb799bKJlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781195264; c=relaxed/simple;
-	bh=o6+f15UBh3/yTDV9eUcXAhmyyH3yJMXjUp0vK+0tjRo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=nL8d/0hb2qqRkRcz3aEAC7ufrTDGFdDEWpZiniQA0PID7eIIul8/mwegcVyIcXiZoUvHbrM99QM/3nbzo2dbs35KEtpSiQ7VbwZiG9SO2H8UJ3I+mPnY6o2XPyyQrYFhE9KXXq09m1bNBFVRSyxFq8i1cOO1h9qGja2I2lhN+Z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ZRdybbqo; arc=none smtp.client-ip=74.125.82.49
+	s=arc-20240116; t=1781195338; c=relaxed/simple;
+	bh=Dq8U4JeMLdDJZCai9rkKpCchuv1uUA+lqZN3PGfqBIk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=ml3lzOkX6LA0EwrcQjvyEIfjFyRE8zGgFm0Wh4P+QfZmFQVxyOLS23fLduiPdrQqO0SNasTekPqUJdNKAI6+J2GMo/mdFmNwOQTVQc9rNwqFSSc/+pr97HIp8ugAclcVOhcluIFijOAf7axg9p4H2BytK8ceww9zDZAIh53P/v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=gO86XJ5l; arc=none smtp.client-ip=74.125.82.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ZRdybbqo"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-13809ed8fbeso8971c88.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 09:27:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="gO86XJ5l"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-30759632453so110672eec.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 09:28:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781195261; x=1781800061; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781195336; x=1781800136; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yHOgJn/4y6N8Z6nRlIY4TDWtqDPGGDCIQEUNbW0Y9Ng=;
-        b=ZRdybbqol5AdhTR0qOBDpYqif3qwT0nKMSbxUWBx89q5/fO5PpOCMsZkcLfD9dZxkv
-         1HTW57Divqu5vCbcrSlmQWq4/N7k1g8FoTi/cKdn2PUlJK7zjp1LxV/TI0mVTz6Dug48
-         Yym0XhMxlX/wLyOqAnGD56obI/tp6bys5v2D2P2kpWzv+sxV1GH6qcNduDZgTAra8/ay
-         YOjVm/5AVJuXTYM1i+6ChGkG8NVaWFrMlvIqQFF3ctYVUFAwPT+AGxZxPceMQW72iVyy
-         rFy8U1/xQGmtpEpn/DDY+A9LoKfTEsQKpk2wRA9w8R2HFY12/x6p112HEimbLz8F3wi2
-         BNXA==
+        bh=hmILQTIhg4C2xaf23uaTPKYf63Qsqb45amOoW42QXJM=;
+        b=gO86XJ5lX2WhRMfkazLeKXLf7wv1CkXPx9mPNdIgUvnRG0+aMS1WTVPTkSFyz2/uju
+         f+dl+CDOeVOGYozPh+AO0+g+AgA2I7Wj8aG25z9PsB5fyPphzH2PzL8g7p25qK12h4XW
+         RE1fBgpAck3lEoD+tHqqnHXIFLFe91oecgiTgsV3/5L8YMOhIhmK+3xqnQ5wyeTr6DNp
+         NveThIDMWV2oQieMoMTS/P4+oOR4X/CFU0JecME9HoQLWnVGGNzexXvEn+NmYX+57mMD
+         8/SRfSGfQ2vSlSUKCnOoHLyi5Jb8wCP3EWlntz/vDnyKTNzvb+FWamw5uieCRTuHLSlo
+         G9Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781195261; x=1781800061;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
+        d=1e100.net; s=20251104; t=1781195336; x=1781800136;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yHOgJn/4y6N8Z6nRlIY4TDWtqDPGGDCIQEUNbW0Y9Ng=;
-        b=NEsQ8pVa2+KsN7NPiceP8Ntl6efBdj58Xz3vVCeUNrwdYmXkGEpqVm7eRBpLA5arer
-         FLLZK2X7X7rVdeDF7ZKcAzn4H5VrnY3y1ig3kBqqCJEyMXDm3jfa20xNgtMAbvaD7lLb
-         xU/sjqLd1Xo0ttggN7jqruXbqtkzPcEaesfdDj2gQY4Pv09XR64sGuscErWRb6MzYHtR
-         mEfQ0NcD+2/f5I4NGIlQXhQEavm6bHvCpNJnpyarPY/cqAwzJ3n1EZBulakpkZb6CUcr
-         OR8bEZ9bUkRbHcqTzt9L7xF8iuYkPZlhtn/KWt4D1PA+lML3MyQCZT+Gg3+neJXTidzq
-         4Bbw==
-X-Forwarded-Encrypted: i=1; AFNElJ8mBiJkwJBeFtwmE8kFu6pHUCHgiTCNDlcf5zeEqCecePiZe9EwKxgRKFkCFN8zNwvtuUzkWsO0DZ2GTkyRjhU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw311yyLGVRpMhFSZX9MMmQ4YBilRo9cUo3RGAied4R06Oqo0rs
-	14UtbeQiZuy/Gpda9tHnTwZmD/YrkpiDFZ1RgeAZdTe9+jANs6JBmEHGXJ5dreQeRJqawAdZmNV
-	0bPVuLYk=
-X-Gm-Gg: Acq92OEUYQa/VPbTT7+OXH/PG00TE3SYaj9Sb/E7cek6xzGoiozuzqmuqoKLGdifGtu
-	Vd7reAq2HEdqXDroR0IwqIppa0Ve9YyV0GuUVgnFwcO8gzaeD3ICfYVItrbxyFTXEtYxY0yTpzo
-	/nHCk2GGFLSnvIO4VZQ9O1pSDDounOtuvGb6qfRZEJ7SLZ/hzdt+jw0I4UsOuOIpPeby4t8kTZI
-	UtXkogdvFYUTXPhy1PSbceDvs6Ru0AJ2PPhosUjzl7BPIMqJ57rDc2ejw6hF+EQ64810/gtzkje
-	7jbQ+ADkKdokd/VYbCUxl3p/jjDGWR7///2LPI932HYWzczYRQgUPYEDHPMgWpqwHBozD7aUUdY
-	Dtu8T6k1oduxOf038vcxgRHQzc2gKEwJjUzlsGBsyhspdVtYm2qFEsCf5IAFzg0yrALQi8iQ4Da
-	LGgDng
-X-Received: by 2002:a05:7023:a56:20b0:138:576:fd with SMTP id a92af1059eb24-138421833f5mr1484959c88.2.1781195260827;
-        Thu, 11 Jun 2026 09:27:40 -0700 (PDT)
+        bh=hmILQTIhg4C2xaf23uaTPKYf63Qsqb45amOoW42QXJM=;
+        b=WDcEenThARjjtAzReuMjDeXW+7v+jJ1PARTvM08cVPJktMNBKDSi9OempT0+RJn+3O
+         Wq75lUg1NFHtHIy8b+ax8SFxTfP6fxMAb5ZofC+7vcKI9hskHraDvMxjcsRpUvBNXy8h
+         4YM3FFioXE5n2PXwjzstlkRD/4f/TSLynE+aJZu6riYPh5qWWhUqMNMGUu7BHe1vVAuQ
+         2p0r4kSMItcHCrlFVEHy8lethEN2aoi90fovPyE/BjVay6YmJteLMJFGwroFj8nb4UD8
+         hGBFhme1culQ4qa3zuQCof3JijbQSrgbukfGWbqWqOOttEY6l3s9vozTwr5DDPuUUu7L
+         mtGg==
+X-Forwarded-Encrypted: i=1; AFNElJ+70HZ/20SkJO2SiFIU4rUqGFIHwkXXFa+f/dBm4px8+0jTp6NK0M0Y1hlRZsZj+5f7NJyvxzVt7fcgw8eHGDM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxtq6vO2twwGYwstzDzL0zjLMnNbOOs2LNQxllAplYxmGcN2GK9
+	ux5UG3+WnaEIbrtHQEHCTHuIJZBSkvc2sPAeNs6f9YvUvA8NQ9ge27j1cOnPT0UyG+0=
+X-Gm-Gg: Acq92OF5TB/hso8dYwLuUZEdBOKbpi9PAk9kDsqxuAaPJTpGr16YPXKt8OlBs4a+xnD
+	bEY7/06N5BNvcJR+16UcKUfvGYFtHgJCsGeH6WbGOjtJPuiWhbGqTFPmmnO0gdf3VPBBQiEWGU5
+	MBFWROmGCrrwm8utyes8VXF5zHUTn5NGQolkjedzSEAk3Ykn/GXy+BrgbJbQDLlnf/TCsHZFjbG
+	xGyCmnWvMIRgSIztPGjgAqzvHH32wJo1lk7Lh2xF5FCpQgmuNzCWhaQwzcNpHy/ZkPpIIopZGGF
+	mmJU5qZtcPuCwUsfAoyscTDqTdcmCBCoCrIrSylWCekLByI5Eb2JzJrPck7XRW6JWfiZyw0cjC2
+	gLISKALBt08WlYb8q48crGKqGSN16cVgDdu6afCx+XBTEomMskBTbuaqrhqbvMG3tlXRK7G9ED/
+	oMlyhboTruVHQa68s=
+X-Received: by 2002:a05:7301:1292:b0:2fc:9ae6:e5a8 with SMTP id 5a478bee46e88-308049eb931mr2752590eec.20.1781195335328;
+        Thu, 11 Jun 2026 09:28:55 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:600::9f35])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384303a312sm2857258c88.12.2026.06.11.09.27.37
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30806c47afbsm3701418eec.10.2026.06.11.09.28.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jun 2026 09:27:40 -0700 (PDT)
+        Thu, 11 Jun 2026 09:28:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,64 +66,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 11 Jun 2026 12:27:37 -0400
-Message-Id: <DJ6D0SSBHB0K.3B83F5Z3EBQWN@etsalapatis.com>
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
-Cc: "Weiming Shi" <bestswngs@gmail.com>, "Xiang Mei" <xmei5@asu.edu>, "Xinyu
- Ma" <mmmxny@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "John
- Fastabend" <john.fastabend@gmail.com>, "Stanislav Fomichev"
- <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
- <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
- <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Jakub Sitnicki"
- <jakub@cloudflare.com>, "Shuah Khan" <shuah@kernel.org>, "Jesper Dangaard
- Brouer" <hawk@kernel.org>, "Sechang Lim" <rhkrqnwk98@gmail.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "Cong Wang" <cong.wang@bytedance.com>,
+Date: Thu, 11 Jun 2026 12:28:51 -0400
+Message-Id: <DJ6D1R10KDES.B0BC2FOSLNCH@etsalapatis.com>
+Cc: "Weiming Shi" <bestswngs@gmail.com>, "Xiang Mei" <xmei5@asu.edu>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
+ Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "David
+ S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Simon Horman" <horms@kernel.org>, "Jakub Sitnicki" <jakub@cloudflare.com>,
+ "Shuah Khan" <shuah@kernel.org>, "Jesper Dangaard Brouer"
+ <hawk@kernel.org>, "Sechang Lim" <rhkrqnwk98@gmail.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Cong Wang" <cong.wang@bytedance.com>,
  <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
  <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf v2 1/7] bpf, sockmap: reject overflowing copy + len
- in bpf_msg_push_data()
+Subject: Re: [PATCH bpf v2 2/7] bpf, sockmap: Fix wrong rsge offset in
+ bpf_msg_push_data()
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260611123538.156005-1-jiayuan.chen@linux.dev>
- <20260611123538.156005-2-jiayuan.chen@linux.dev>
-In-Reply-To: <20260611123538.156005-2-jiayuan.chen@linux.dev>
+ <20260611123538.156005-3-jiayuan.chen@linux.dev>
+In-Reply-To: <20260611123538.156005-3-jiayuan.chen@linux.dev>
 
 On Thu Jun 11, 2026 at 8:34 AM EDT, Jiayuan Chen wrote:
 > From: Weiming Shi <bestswngs@gmail.com>
 >
-> When the scatterlist ring is full or nearly full, bpf_msg_push_data()
-> enters a copy fallback path and computes copy + len for the page
-> allocation size. Since len comes from BPF with arg3_type =3D ARG_ANYTHING
-> and both are u32, a crafted len can wrap the sum to a small value,
-> causing an undersized allocation followed by an out-of-bounds memcpy.
+> When bpf_msg_push_data() splits a scatterlist element into head and
+> tail, the tail's page offset is advanced by `start` (absolute message
+> byte offset) instead of `start - offset` (byte position within the
+> element). This makes rsge.offset overshoot by `offset` bytes, pointing
+> to the wrong location within the page or beyond its boundary. Consumers
+> of the corrupted entry either silently read wrong data or trigger an
+> out-of-bounds access.
 >
->  BUG: unable to handle page fault for address: ffffed104089a402
->  Oops: Oops: 0000 [#1] SMP KASAN NOPTI
+>  BUG: KASAN: slab-use-after-free in bpf_msg_pull_data (net/core/filter.c:=
+2728)
+>  Read of size 32752 at addr ffff8881042f0010 by task poc/130
 >  Call Trace:
 >   __asan_memcpy (mm/kasan/shadow.c:105)
->   bpf_msg_push_data (net/core/filter.c:2852 net/core/filter.c:2788)
->   bpf_prog_9ed8b5711920a7d7+0x2e/0x36
+>   bpf_msg_pull_data (net/core/filter.c:2728)
+>   bpf_prog_run_pin_on_cpu (include/linux/bpf.h:1402)
 >   sk_psock_msg_verdict (net/core/skmsg.c:934)
->   tcp_bpf_sendmsg (net/ipv4/tcp_bpf.c:421 net/ipv4/tcp_bpf.c:584)
->   __sys_sendto (net/socket.c:2206)
->   do_syscall_64 (arch/x86/entry/syscall_64.c:94)
->   entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
->
-> Add an overflow check before the allocation.
+>   tcp_bpf_send_verdict (net/ipv4/tcp_bpf.c:421)
+>   sock_sendmsg_nosec (net/socket.c:727)
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
 >
-> Link: https://lore.kernel.org/all/20260424155913.A19FDC19425@smtp.kernel.=
-org
 > Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
-> Tested-by: Xiang Mei <xmei5@asu.edu>
-> Tested-by: Xinyu Ma <mmmxny@gmail.com>
+> Reported-by: Xiang Mei <xmei5@asu.edu>
 > Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 > Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
 > Signed-off-by: Weiming Shi <bestswngs@gmail.com>
@@ -152,22 +147,21 @@ n <
  data
 > exposure. Not worth fixing here.
 > ---
->  net/core/filter.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  net/core/filter.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
 > diff --git a/net/core/filter.c b/net/core/filter.c
-> index 9590877b0714f..3c8f1cedb217f 100644
+> index 3c8f1cedb217f..3e555f276ba80 100644
 > --- a/net/core/filter.c
 > +++ b/net/core/filter.c
-> @@ -2829,6 +2829,9 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg,=
+> @@ -2872,7 +2872,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg,=
  u32, start,
->  	if (!space || (space =3D=3D 1 && start !=3D offset))
->  		copy =3D msg->sg.data[i].length;
 > =20
-> +	if (unlikely(copy + len < copy))
-> +		return -EINVAL;
-> +
->  	page =3D alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
->  			   get_order(copy + len));
->  	if (unlikely(!page))
+>  		psge->length =3D start - offset;
+>  		rsge.length -=3D psge->length;
+> -		rsge.offset +=3D start;
+> +		rsge.offset +=3D start - offset;
+> =20
+>  		sk_msg_iter_var_next(i);
+>  		sg_unmark_end(psge);
 
