@@ -1,88 +1,76 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E36E3126CA
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 02:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 194903161A4;
+	Thu, 11 Jun 2026 03:41:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781146800; cv=none; b=JAGEXxPKC8mvleSjzpFRyJCLwkyZhF2Vw7EMEPCKxTOSg43ufoz3/cDbyIaJ24OwfQy6UWJN6Rv0qMS03sWLiocryv2SytAYUoeu5hs352AZRi8/vQpvPJXysSK8zf7IFqkyeDu7Zl1ej2jYjy+xl5j9yQJuscz6MWr0rz7O3Sg=
+	t=1781149301; cv=none; b=Xam6OWYuXl7IWAEdbABwidR8X/Rz03MaOSc1uOQ/ckWeQYeQPu3lN8QUtSYUQHPzdglvZ79DqD6Gaw57W37TrLPRjwI+pl1IHjyQlEWgsA9U37dBicxEI/3i8HPa33infubONcmPvyJEG81igibme1QEE8ariCvG1uSoLzPJCwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781146800; c=relaxed/simple;
-	bh=VXQtPS98erG3uINeejISc2Pvz0T6AF9YAdqN+flVs5c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=vBfJ+OYrIm+iknorXGUWcaHHxKPiwoVOPuIqb2dHL1Bjq9luqJHvDTgkl52EGneayzVLdzzy1NCqmQu3fQSBj0ZAwQ0Ri/gV82n4XVxh8DQTS08Z8S28XCodXe4BNhnas21Tn+IlxHVOk64l9fxh3dFOGHegLFKn6EQbh2JVdeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m0rFJIjS; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781149301; c=relaxed/simple;
+	bh=7yWpXLaw6CYFRQ1cAa6Koqi5tWvFVhIW4pgfODm3Zso=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wo61991dMR4kA3/117DbAV7hzQIggBRQem4Y5GkwNbwPKD430YLQurSK4UHT9+RroBzjywnHLXkW1N115SvY5fITtPU5xFI1COshiV0etY77KJVVEwvxIm/PQmz6Z8wZWWwHQShaaUFh7GhuPZuo/b5twq2akfyBLy0DdtFOet4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=YrzZrABd; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m0rFJIjS"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8423efad617so4273461b3a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jun 2026 19:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781146798; x=1781751598; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VXQtPS98erG3uINeejISc2Pvz0T6AF9YAdqN+flVs5c=;
-        b=m0rFJIjSMq5RE6Yz9DcsY+d6M1PU0s/39VNmzoSadCt59dLViccucbLslFDhvR1gLW
-         sSh8hne7QACc+/r+2xoe4e/nwpKEDmupcIwNf+L1C77taf6uX+lKsqgNS1u0yTmntv1g
-         Gcf+nH+Qaub0ObVSNBFt4dfbwXSh4HPU34ZxpTCrCe0Va2f2PRr2omjc6ghpof4VIoTb
-         iYM38z1KRnJfK4mgmSGYt9pjb/NuAGSn63ogBcviLRnZAArnqfUyoxeHIzX4/HUF/QlY
-         Iy9oP04AW/uaQawgzcFGvpDQ5Asmam891apIOAVaRzSyETGFyB9fpEX7sbw+je7H1/yc
-         ugOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781146798; x=1781751598;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VXQtPS98erG3uINeejISc2Pvz0T6AF9YAdqN+flVs5c=;
-        b=ZWzQj61QZmP9DuyLQnc4u6eXK5WIRy2Lih3oJyXSDGgjHmJK5DInQvnSLZ1el+sETv
-         Vwqusc5Ubb3Kd2vjMCbuX+k1AyHGhrkyc7LqWKnKLvs5ePV1W9impBMZKl0qm/DJI1nb
-         Wm4jZ4i9ESBa3vAkRgiz2RrWcGYWzbnexkd70aKJzbFuGxcR6ZVNDJK8n8P1gWBv/6kX
-         hKhiATpvZsG4Ciyx0TqyWNBJwoUViIxfRdbSkgrqKKFhKTU4NAfr9u3Q0HbemX077AOy
-         qps8KWKuBllSB7/zluf/ihJ1KWbwsH8wSkk9MSPAzwiD0REp5CLBlH3fXwu3wWWlXX4u
-         8OAw==
-X-Forwarded-Encrypted: i=1; AFNElJ8q36T/oMWeiD53PZz29ZZrzb2z5l+lZmNmtQaaUD3nNbqgHI8ZRnNPGeftO4eH3r2pDFMMad/+rDIBZYXiicU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTZS4YHO9m5l/93Ps3ldTsI9bV15xSPWTAiXd/fkHEOWcfQ5DA
-	YsJx1zTa6d4sYLW6g7xdEA85zqHHPBYxuTPr4Ih87NsKo3Iswo05H4JH
-X-Gm-Gg: Acq92OFhbrIL29xVhSmxplNF2tU1g3O7WKmp3EgDLCBe4ExNgAiwJGwF5/ZyZvC8kFv
-	BV8AwSW+Fx0I4iu9tsN/ADEEmCc3X1v3G8YZr42JRPDbxDxn5JDFUDLkd5yz/hAk4QhNctD51/7
-	tDDkBGT+2k5k0ny+5R364gyMURS/WG4vjYrR4tlKwjq6hUUvKVNq9miPR3Ey99XeBKba35Fal0F
-	PQeW+y+RFpsTqWZYee+438NDuTcDnEwD/3aR8oS4ztcg8H95TGZYmPc/2Nctkj2SAetdl2/DXIE
-	cuJScAFnNdVQu2qHQ49dzGh4baWaMQF+QA54eQLQ0HWKUT7q1hWSCjyg8dRTQ5FD2GujH05KGK6
-	dVN9hcrU/pYn8/2c/uLNypyRVotr9QPx7QlOqk2vQ4ShbdihMakNsJbcf091TOcoNMuMs4tC/pL
-	qGAym42PgJw7+8Xo1HoD9AOaIFZQxlwHg+DzLo4Q==
-X-Received: by 2002:a05:6a00:3988:b0:82c:ebae:3cb with SMTP id d2e1a72fcca58-84336df67c2mr793546b3a.43.1781146798371;
-        Wed, 10 Jun 2026 19:59:58 -0700 (PDT)
-Received: from dev ([163.43.103.131])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84337beaab7sm264039b3a.25.2026.06.10.19.59.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 19:59:57 -0700 (PDT)
-From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
-To: andrea.mayer@uniroma2.it
-Cc: Yuya Kusakabe <yuya.kusakabe@gmail.com>,
-	davem@davemloft.net,
-	edumazet@google.com,
-	dsahern@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	justin.iurman@gmail.com,
-	shuah@kernel.org,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	stefano.salsano@uniroma2.it,
-	ahabdels@cisco.com
-Subject: Re: [PATCH v2 2/7] seg6: add End.M.GTP4.E behavior
-Date: Thu, 11 Jun 2026 11:59:46 +0900
-Message-ID: <20260611025946.1065565-1-yuya.kusakabe@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260527030907.52bc613c27be26d6c1d59e36@uniroma2.it>
-References: <20260527030907.52bc613c27be26d6c1d59e36@uniroma2.it>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="YrzZrABd"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65AJu40a4146513;
+	Thu, 11 Jun 2026 03:41:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=Y0/G7y6HjmKYou0RghAqp0snLCOrcWkAONdunbULC
+	wE=; b=YrzZrABd5k92FeXsmeuix8MMgDfOGWOZo+vCT61fexToTnJG0NKtutaK+
+	drkrwWGBkNdTeamoSHkwspxzQ3Wj0SL0K3FS9ncDCThO5e5NGCqHH1wMNeOwQHLr
+	/O5Rx221zYtfGQ3gbov7Qy5L3hLUv7/CNYevnjt/9IxGQeOOd1j49wEzvKyR0hap
+	vAF6limJNQmlYiW6sY2YsfhQwkdXXHR8BF/SvZc0JEQGoCImuMNAEXGIfm6Ywkp4
+	HkV0nuyWnMaUWKfsie4svONWhGaGuL9TWn1JTltzz/Fv3PnVFpPX4QsPsvzslWBO
+	QIqHFmq7eTbEmxgEve1PTUvW2gtag==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4eqe8c18wv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 11 Jun 2026 03:41:16 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65B3Ybuf009495;
+	Thu, 11 Jun 2026 03:41:15 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4eqe08sfax-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 11 Jun 2026 03:41:15 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65B3fBGW45875570
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 11 Jun 2026 03:41:11 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 907E320040;
+	Thu, 11 Jun 2026 03:41:11 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9C1832004E;
+	Thu, 11 Jun 2026 03:41:04 +0000 (GMT)
+Received: from aboo.ibm.com.com (unknown [9.39.27.36])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 11 Jun 2026 03:41:04 +0000 (GMT)
+From: Aboorva Devarajan <aboorvad@linux.ibm.com>
+To: Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+        David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+        "Liam R . Howlett" <liam@infradead.org>,
+        Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        Shuah Khan <shuah@kernel.org>, Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Balbir Singh <balbirs@nvidia.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sayali Patil <sayalip@linux.ibm.com>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Aboorva Devarajan <aboorvad@linux.ibm.com>
+Subject: [PATCH v3 0/3] selftests/mm: assorted fixes for hmm-tests
+Date: Thu, 11 Jun 2026 09:10:59 +0530
+Message-ID: <20260611034102.1030738-1-aboorvad@linux.ibm.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,186 +78,77 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjExMDAzMiBTYWx0ZWRfX33cLrJmY9dIL
+ kF0N0bHQ9VM4NKCR3g/A6IOfci13Z0c5mkLEFwf0uLCkwAb4pVoK5nRsRDb41XTUqY6SM4e/2HL
+ jYz43BSCzUxJWjZJP9bBqQ8TEUb9694=
+X-Authority-Analysis: v=2.4 cv=AYCB2XXG c=1 sm=1 tr=0 ts=6a2a2e5d cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=fsPjIq3vPFagtXREB8kA:9
+X-Proofpoint-GUID: naBpAaJcwPSnvDYDmdBpIrHgrXyzYpME
+X-Proofpoint-ORIG-GUID: Tp18Vn8KOllkXEz0SE-xkHUgxLzRu0OH
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjExMDAzMiBTYWx0ZWRfX9vBvpXKNlHce
+ cDEIQotyBFi2K5p2SnRlZEcA1yyIOgkOUh8jmGAMU2fk69BJFizQcAYM7ZqIVvQZotjkJ5MUY1f
+ dKpX6X4aGeQHWF003684hPU6Y5k1noIsDlHQjIO+5PvFQpmQpPkAJzbmhEQDqjjtsfCU56h+ujN
+ bt8Qe7eRCHNU6BLGzJPvH9/RD55tHtK3ShlBuwY63SEQiMzdW1IGYADe2DoyrCVkB6ZJDvDEaN0
+ NT2vhomgAPoRQx8E1WzlotWvhETK96WJ25a58CBbn3i8NbRZ71nTq5cbzUD0uHM2B3bMHvnRscQ
+ 2AMpMz4D4uqk9c4KQQ5gKhmiDQARP7hCRWCDqfxpMD1+H9FpUUNIlLZMsWtSxQ7avkWUAJS2umM
+ nrw10I+TqZ8iEK9QxtugasHs4XNTZbrxlQtdQppOl+uO+Vv1iIRCtB7wr+9MNF9uEKAO87Gpmoy
+ D2He+3hpT7UeyLlONdg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-11_01,2026-06-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 malwarescore=0 spamscore=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 priorityscore=1501 clxscore=1011
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606040000 definitions=main-2606110032
 
-Hi Andrea,
+Hi all,
 
-Thank you for the detailed review. I intend to address every point
-below in the rework agreed in the cover letter thread (one RFC series
-per behavior, on a new lwtunnel encap type with its own SEG6_MOBILE_*
-attribute namespace); answers to your questions inline.
+This series fixes a few issues in hmm-tests that show up when
+page-size and huge-page configuration differ from the hardcoded
+assumptions the tests were written for (PMD/THP sizing, default
+hugepage size, and related cases).
 
-> There are three issues with the End.M.GTP4.E UAPI behavior:
->
-> (1) In the example, v4_mask_len = 32 and the src value is required but not
-> used.
-[...]
-> (2) With v4_mask_len < 32, the low bits of the IPv4 SA that the inbound
-> packet does not carry come from src.
-[...]
-> (3) With v4_mask_len < 32, the low bits of the IPv4 DA that the SID does
-> not carry are set to zero.
-[...]
-> Together with the IPv4 SA behavior in (2), does it make sense to support
-> v4_mask_len values other than 32?
+It also includes a fix to exclusive_cow: the test ignored the return
+value of fork(), so both parent and child ran the same teardown path.
 
-Agreed on all three, and no, I see no practical use for v4_mask_len
-values other than 32. I will drop both v4_mask_len and the src
-template from End.M.GTP4.E: the next version will recover the full
-32-bit IPv4 DA from the SID right after the locator, and the full
-32-bit IPv4 SA from the inbound IPv6 SA at bit offset
-v6_src_prefix_len (default 64), per RFC 9433 Figures 9 and 10. That
-leaves no required attribute whose value can be unused or partially
-discarded.
+Changes in v3:
+- Rebased onto current mm-new.
+- Patch 1: reworked the compound testcase check in response to the
+  Shashiko review. Instead of an ASSERT_TRUE() that ORs the PMD and
+  PUD cases on every page (which loses the expected/observed values on
+  failure and would let a fragmented PMD+PUD mapping pass), determine
+  the mapping level once from the first page and then enforce that every
+  page matches it exactly with ASSERT_EQ().
+- Patch 2: Unchanged from v2.
+- Patch 3: No functional change from v2.
 
-> This check cannot trigger at runtime.
-> seg6_mobile_v4_validate() already rejects v6_src_prefix_len > 96 at install
-> time, and the default (64) leaves p_bits at most 96.
-> If kept for defense in depth, or if you plan to reuse this helper
-> elsewhere, the silent return of 0 produces an outgoing IPv4 packet with SA
-> = 0.0.0.0 without any error.
-> Nit: the (unsigned int) cast on p_bits can be removed.
 
-Will fix: the range will be enforced only at build_state time with an
-extack message, so the data path helper cannot fail silently, and the
-cast will go away.
+v1: https://lore.kernel.org/all/cover.1777870179.git.aboorvad@linux.ibm.com/
+v2: https://lore.kernel.org/all/cover.1779090293.git.aboorvad@linux.ibm.com/
 
-> seg6_mobile_skb_prefix_bits() reads the matched route prefix length from
-> the FIB on every packet. [...]
-> Caching it in slwt->mobile_info at validate would let the data path read
-> minfo->locator_bits directly.
-[...]
-> The operator cannot configure the IPv4 DA to start at a position different
-> from where the route prefix ends. Is this intentional?
-
-It was, but it does not survive your first point: deriving the
-locator length from the matched route prefix couples the SID layout
-to the routing table and costs a per-packet FIB read. I will replace
-it with an explicit locator-length attribute (sr_prefix_len, validated
-at build_state time), which removes the per-packet rcu/container_of
-walk and the 128 fallback, and also decouples the IPv4 DA position
-from the route prefix, so one route can cover SIDs whose locator is
-longer than the route prefix.
-
-> Nit: skb_push() returns void * so the explicit casts on two of the three
-> calls are unnecessary.
-
-Will fix.
-
-> orig_dst may be NULL or stale. This is an NF_HOOK finish callback, and
-> Netfilter processing during NF_INET_PRE_ROUTING can drop or replace the
-> skb dst. skb->cb is not guaranteed to be untouched (IPCB/IP6CB aliases it).
-
-As agreed in the cover letter thread, the initial per-behavior series
-will drop the NF_HOOK split entirely: each behavior becomes a single
-input function with no skb->cb context and no finish callback. To be
-revisited on top of your seg6 netfilter fix.
-
-> Same four-sizeof sum as ovhd above. Move ovhd to function scope to avoid
-> the repetition.
-
-Will fix; with iptunnel_handle_offloads() below, the GSO-vs-MTU check
-itself goes away, leaving a single worst-case skb_cow_head().
-
-> input_action_end_m_gtp4_e_finish() never calls iptunnel_handle_offloads(),
-> so GSO of the outer UDP tunnel cannot operate correctly. The call should
-> go between skb_cow_head() and seg6_mobile_push_gtpu().
-[...]
-> The fix needs end-to-end testing to confirm it works correctly.
-
-Will do exactly as you describe. I will also add a GSO case to the
-per-behavior selftest so the fix gets end-to-end coverage.
-
-> The caller already reserves worst-case headroom, so the skb_cow_head()
-> calls inside seg6_mobile_push_gtpu() are always no-ops. Could they be
-> removed?
-
-Yes, will remove them and make the helper non-failing; the caller
-reserves the worst case once.
-
-> Does this mirror the drivers/net/gtp.c data-path convention
-> (src == dst == 2152)?
-
-Yes -- drivers/net/gtp.c transmits from its bound socket port, so its
-packets also leave with src == dst == 2152.
-
-> The comment says the packet "traverses NF_INET_LOCAL_OUT", but dst_output()
-> goes through NF_INET_POST_ROUTING only. [...]
-> IMHO, gateways that do protocol transformation can set rp_filter=0. Using
-> ip_route_input() + dst_input() and documenting the rp_filter requirement is
-> preferable to silently bypassing the FORWARD chain.
-
-Agreed; will switch to ip_route_input() + dst_input() so the rebuilt
-IPv4 packet traverses NF_INET_PRE_ROUTING and NF_INET_FORWARD like
-the other behaviors, and will document the rp_filter=0 requirement on
-the ingress device (code comment and the iproute2 man page).
-
-> The anonymous { } scope block should be avoided. rt and fl4 should be
-> declared at the function top. The same pattern appears in other patches
-> of this series.
-[...]
-> Variable declarations are not in reverse Christmas tree order. Same issue
-> in the other functions introduced by this patch.
-
-Will fix both across the series, splitting the egress half into its
-own helper with all declarations at function top.
-
-> This pskb_may_pull pulls the OUTER IPv6 header, not the inner T-PDU.
-> BAD_INNER is the wrong drop reason here. [...]
-> Same BAD_INNER misuse: ipv6_skip_exthdr() is parsing the OUTER IPv6
-> extension headers [...]
-
-Right. Per the cover letter thread the MUP-specific drop reasons will
-be left out of the initial per-behavior series; the behaviors will
-adopt the SRv6-level reasons from your prep series once it lands, and
-BAD_SID / BAD_GTPU will return with correct scoping at that point.
-
-> frag_off is not checked after ipv6_skip_exthdr(). [...] Adding
-> "if (frag_off) goto drop;" after the ipv6_skip_exthdr() call would handle
-> this.
-
-Will add the check, plus a fragmented-input case to the selftests as
-discussed in the cover letter thread.
-
-> Same seg6_mobile_get_validated_srh() bug described in my reply to patch 1.
-
-Will fix as discussed there: the helper will return a three-state
-result (absent / present / malformed) so an absent SRH is
-distinguishable from a malformed one, with HMAC validated whenever an
-SRH is present.
-
-> RFC 6040 Section 1.1 scopes the document to ECN field processing in
-> IP-in-IP tunnels. The patch cites it for DSCP and Hop Limit/TTL on a
-> protocol conversion (the IPv6 outer is popped, not encapsulated). Could
-> you clarify the RFC 6040 reference?
-
-You are right, the citation was over-scoped. I will drop the
-reference and describe the DSCP/ECN and Hop Limit to TTL propagation
-in plain words.
-
-> The inner_nfproto-based size selection appears several times:
-> pskb_may_pull, skb->protocol, and skb_set_transport_header. Computing a
-> local inner_hdr_len once inside the switch would replace all three. Same
-> pattern in every other behavior.
-
-Will fix in every behavior.
-
-> parse_nla_mobile_pdu_type() accepts the full 4-bit range 0..15, but the
-> function comment in seg6_mobile_push_gtpu() notes that only 0 (downlink)
-> and 1 (uplink) have a defined meaning.
-> RFC 9433 describes the E behaviors in the downlink packet flows (Section
-> 5.3.1.2 and 5.3.2.2). How are PDU Type 1 (uplink) and the reserved values
-> supposed to be used with the GTP*.E behaviors?
-> UAPI cannot be tightened after merge. IMHO, if a type is not supported
-> yet, the parser should reject it and notify userspace.
-
-Agreed. RFC 9433 describes End.M.GTP4.E only in the downlink toward
-the gNB (Sections 6.6 and 5.3.2.2), so the End.M.GTP4.E series will
-accept only PDU Type 0 (DL) and reject everything else with an
-extack message. PDU Type 1 (UL) belongs to End.M.GTP6.E, which
-regenerates uplink GTP-U in the drop-in mode (Section 5.4: "There is
-one instance of the End.M.GTP6.E SID per PDU type"), so it will be
-enabled by that series; the reserved values 2..15 stay rejected
-there too.
+Please let us know if you have any comments.
 
 Thanks,
-Yuya
+Aboorva
+
+Aboorva Devarajan (1):
+  selftests/mm: fix exclusive_cow test fork() handling
+
+Sayali Patil (2):
+  selftests/mm: allow PUD-level entries in compound testcase of hmm
+    tests
+  selftests/mm: remove hardcoded THP sizing assumptions in hmm tests
+
+ tools/testing/selftests/mm/hmm-tests.c | 125 +++++++++++++++++++------
+ 1 file changed, 95 insertions(+), 30 deletions(-)
+
+
+base-commit: 801c5efa788952095586d076fed1ea4902facff8
+--
+2.54.0
