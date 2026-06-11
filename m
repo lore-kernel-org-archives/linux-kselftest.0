@@ -1,232 +1,226 @@
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0BC48C8DB
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 20:37:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781210224; cv=pass; b=NvLpY7GlTLxGe1LPxrcoMmSELJgsNL/sSXST4pTc/2GeS6iLYLHNecOPah1tSs+wzyqpQLyAfH9lfhpnbfpMhYliX1OspJ+FVP8jHwy38d0uAyyE6HuRsiR83rDYU9TwaPpPcCZNaBTdGpZP7A85THk9+T7ZvzE3yCu1yt45lg8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781210224; c=relaxed/simple;
-	bh=K58UcHo+B3aFwDsgem6xE8uiuWZd8lb+WbYUU9ocaqA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wt5iUbmYv6XIa8cP8l/6riEjM81thM62yRwOIlu9NbcTXSUQYyj7tzObMn88fJQy/mHUWBbmJxStjILtAncMwq7FYTyOL7gxhEkAObPBK6pA1T7mTaAeNXDGprJsBBLkdxjTbQGUoPHy9ygeNznef8c8mGcrM004NuEdCYp0ZAk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BZWUKAUr; arc=pass smtp.client-ip=209.85.217.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 366DF4963C6
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 20:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781210238; cv=none; b=mHr8sEoF0A02hcjyNXYLQLzv6Z2TZ1niUufRGl0C9SepC6tA3P3xC/gPMFEO4+yhKHMb6KL0VYmjmiIDvTfx6H8gWWYsMsMLCwww7LFZvtq93G6Fffu8Hmz8lT9XoC0HXqRrsWZeA8FeamsxEuOx/z6cAc4b1Mu1hRx8hRkggFA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781210238; c=relaxed/simple;
+	bh=CJup5kn+//3c6lvhS7G15fADLqy2j/lGG5vzKHuwCek=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=AnRyPByq5nmQpWTjxEabW6a1F9gP+ewqy9y83yvRNVtQD/R49EU30dXWGuorLpxiziSCVoa8JSTn9jbnOttOz/0BbuXRdtawoJTmr1oAOPeZgrLWS9KpmhuLiDcDzCfqeg0rWVhufeFNGmA7vtxGauiQ1SjgGLBLcaOTu3YN1Rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=VhO1C+xo; arc=none smtp.client-ip=74.125.82.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BZWUKAUr"
-Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-6c54b82e936so5096137.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 13:37:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781210222; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Ey2qvISkQXy+mxdgXBUCqnOh58t7xhFqABjsSEJfInrHFhLTrGKlqleQm5h53MOBXw
-         Lw302mwAW7h/OQa46XZXcLVevRJhv9lSx/1yjBCT7RKFy4j0JNTh/cgrT5icXjOrKO6U
-         t52LONRQLQYF78sm+YQJXcY8C24b7EBWK/aT2EiQVCbEfLgj7gAU1YCdXp2j4LQr+brd
-         CGrL9GJV+397uAx8+Z/qKqm+IONhWnGZL+cp0g/aSQWuNNuSZsh4wAIlKJ65XTVY1RV6
-         PpV8D3PbgdGNd560/6KbrBckiSKKoOwQCCMt2R+kQdFRWA+uZrIszX+i93yUy4vF26p+
-         J3+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+sd3cdzhpA5EXsMbu0XJlZwk0ZLWyDF9YQvcNfzR1z4=;
-        fh=WWG/ZFcVbflmyG+5j2mOXP4/7/2yApvvKt4UzCcKYCg=;
-        b=jHKA2GvZr4ITHqzk0192POLsz7zZxYHiR84W0Rv03PYRON4lupGLLRzx0UlGcGDt7h
-         jQv3XZj+IU0Y/H+elhhp23Ga099XZim0zW30R7vSRgShlrC29wtGfOnlGJnrQpzPH5cM
-         YVxw/3ZMybPvIHz1S4G8qeqqMJORemhbBcXUtcpxgZGoDC+2YYUNpSCsmiA+c1b5cEzy
-         L++M56tElJzsPtK2/fCarmpPAcQQf3kZ/AIxbJfgn6k/CHiI6cORNsqRlIGqDjoFVDGK
-         DL02W/U7oRix392M4riv8yOsFKdYf0IFBm/bSk1RroeamFP0hVTD1m1ZugL/7q3CzxNQ
-         //EQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="VhO1C+xo"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-137ec563a95so279667c88.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 13:37:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781210222; x=1781815022; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781210234; x=1781815034; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+sd3cdzhpA5EXsMbu0XJlZwk0ZLWyDF9YQvcNfzR1z4=;
-        b=BZWUKAUraziQu0sfd6OqVx7WeO3HUGsmQYbuFHe5pAVUJYAycBN4oIuAHq8rX12wSE
-         UE4sF3bvEcOQ+p2+ebgkFMhBiP5NQpVPoygob6iftXrWDEdzRLD5dx9TUphJI70Gw7Iz
-         mWUWmDxu/EUEOO1mVRHAYiQfCUY4BWTxqI/FuzqMi8shWbdiIXoxM/QC/1P1vALSiUev
-         lKKJFFGusbgOtIVzmbVYVaH7xP8HPXMVk9UHZUVa0P6Wizi5vRaVqzihVQlnYHyl+Rup
-         CO2cpYjhkPU9e665PFRpxg3T5oGzDEil/krlTR7haT1sWlL1vi0/kDniyxCVP2+f0Et/
-         qMMA==
+        bh=W7mqNjhHyqtg/51iXjZww+ewEqqH7eyuOnewfNHYD/Q=;
+        b=VhO1C+xoj+nNEVls7VJNrHzkh/zGw/aGdHr8WRV5eYtZ0W08R2nAcI87v4WxIHe14H
+         RCouEXjRy1zb/CTX5Ly0C1qo5HYxKiu4DtYE7IDawaPjXwFG3i8kpVP1CdafALAjfSfi
+         afkJkJayB+5WLQA5fNaZeeHGAu4NpmgdND/IBR+Ogn5TRH1iYKN5T1GS/jw99pqtY9vh
+         Wig8wyVd4SkDGcQ7dumL8lTP5Fa9Osw/qADKEkditSvbABOLOUHpxpfop9MfRn/esoIh
+         NZ4yxAH9Ddm0X7oggrC6HV1kJoWx4ZX+lZajE/asmT6eZHYcsXCg5Tgk2T2QJ+VQIHDH
+         wS1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781210222; x=1781815022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+sd3cdzhpA5EXsMbu0XJlZwk0ZLWyDF9YQvcNfzR1z4=;
-        b=NiiiVDhtZkVUotr601tJPEAHt9P7cu1OL3dG0Ml+caxTl+L9Lxei3e8S7xbJ9fRXTO
-         p9p528SdFO0OH+H9u7gcN0b8hxNfG+tzTtTnnQxMGOTjjFhIJKqCpr85t3Jqov5Y9du8
-         BU2CXFO+ppk5PTFypBYGTBdXrDzHo2Owp4DR0R/Jgsng6ijT747iEgz/lCzzaVstpha8
-         /FYxof/rFQrZxf2lfJgBX8DVJ9j6RuUtNkmSSb5ND/2xAYC4GSdwOmiUJuLWghkPd1Kd
-         odijU/ndd8YDlh5FGKsz05MpAaT9LEGkOfwu1cgdPWVny1YhWJEiRZcnHLraBS0sELwA
-         eHQA==
-X-Forwarded-Encrypted: i=1; AFNElJ+kbzsEO9hA9L9Q6rker7oScu1DpnEO6eqWU54OnfgINKArSJGL6Xp7/NnwPm/W+irtD4Sa642w9L5dflzk1Hw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqCc4Czwj4Os9RJulBVzEnrmVJ8WHdBhGjEBYCRThyw7eNehiV
-	zv5eI14on1poEvM46oOQulAgBLtZrkHpF1iOVo4Z98xMXO6qw370KOJ4QUwvU13mRE3Fkw9eUlO
-	JUWGrG7SWEUmAyy2GzfRcfKZdzDpQuKE=
-X-Gm-Gg: Acq92OErwLAF6N5T+ZpBN0u7BNHJcVxt09voYOnoiZFjL1lac7Ifc5V0Qv3AgbQIpNn
-	zS7sdAU7M5O+rrWgSR+d5B1iv3fIp4tyvkROrmnpC0m6E1YaQ5IykqpGTErhyIjd7ki0U0jLXxy
-	MdkObf1wSxwPSb+Yos+Xis2P7ku3viMpTlrmDpoK1Vh/nJ4wZIiIEVMonIZgJ0qwQWxF7/0+u+O
-	s40PGeBrGRcz22ugJfjwvaBrpTfk/pCwbMprd8K8zHjGdGX117TkWKBbq2AGM6uhgesVPPgq8kz
-	i9KmD0gM4A==
-X-Received: by 2002:a05:6102:26cb:b0:631:4d32:a86 with SMTP id
- ada2fe7eead31-71d5c67f824mr916400137.7.1781210221808; Thu, 11 Jun 2026
- 13:37:01 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781210234; x=1781815034;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W7mqNjhHyqtg/51iXjZww+ewEqqH7eyuOnewfNHYD/Q=;
+        b=A80EY+Gi1CPL8X9rPJPG4MSYxRi5MDSK69H47f0RpGopePE4E37jnJZyb4d0oKf2rk
+         tIGt5nGu8TXhwftclZuA0GhJCCSKBN2kfaJl8UBGuDdhHOGpF0f4v6sgWnvqUagMV67o
+         LhkI7NI3DRKu90m09aS34+BPjkmFwOWvUeGPQfISr6YAVZKxh7hitpZ4PPYOk1kFqhMY
+         LV50KaEX++/1fr4df3ULeN5lfNRpMRNXw0lot9wE79xZJp0hvkLA06WfyVRwqrjKM2Ez
+         +d4Rm2Fq4cWt7VMU9gzMig6zTuV+2yYptGF7pH3N7Q9lZI5jTH2lJRSiz+I3WZqtr7iV
+         DQSg==
+X-Forwarded-Encrypted: i=1; AFNElJ9hxG0dYSd08DXFdEw3tnmOH6fCV8BUXMYtPKwfuNWLpkrnp5joDSuEKn9Mcnmlk+VXF2wL08tJSrjzudnIFR4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGB13fCvdGdQZhnpw7Tc3dhjOGiVbu9ht6/ZLzAPLYSJi6Pqn5
+	xEEURwe7Cq8h8KYBeTQLTLR7m1jG7hDkIBowixDv3EwWOrOZ5NdEPepvff9sar09LaM=
+X-Gm-Gg: Acq92OHRgP2caEDxTivhRlF6XHQkR24Paoi2q/E0CCoJ0Zt7Waoi2pDiHLxWCEeFuF0
+	8iMgS1tR7SXhf9hNS2CIz4cwFFALo2aMuIpwqZViHSj6oYNgyj3tTQiPR4q1SVEHULvFM2OZK2m
+	QWBVO/HycL7zYbypdUOI3pEJdNI5W6VFhbuklW/+g1iW7D9vLzhT8VvSV2pgAPw0wRN3MqmDR/r
+	vhqVqLeWg2PmiTuh5NrDRC/3xZbIOlcRKR6Ryg1x3kwZqcnsBHFNfjI56qSZk58j+qRTo1gcTbS
+	sS3ejVAxmlVytj8KDKO8Q89f/1Iu14oK8sqpee75rGGwKh7Q4wnfTh9BJQ7jo3PScwOi3TNsEwC
+	epz3o3g44zjpc9SejhND8bbY2B+ZsIC/wbjYRZpmR+CkXMR1a0dhVvP4TXCy9miY1KqxUyCm9Ol
+	5+jpaC8m3EIyk1S48=
+X-Received: by 2002:a05:7022:f40e:b0:137:ea00:3f3a with SMTP id a92af1059eb24-13842151e39mr2739263c88.9.1781210234161;
+        Thu, 11 Jun 2026 13:37:14 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::3c95])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384303a312sm3809521c88.12.2026.06.11.13.37.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Jun 2026 13:37:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <CAF+TLO0TOKr3nef9RnbBuZ8A-jNpV1po26t1BO6JbSqMhfABvw@mail.gmail.com>
- <20260606003627.88973-1-sj@kernel.org> <CAF+TLO3a2MBVp3-7jm3BPjuT8jhx4yzdWxuA_QPQ9YPVEj0XZw@mail.gmail.com>
-In-Reply-To: <CAF+TLO3a2MBVp3-7jm3BPjuT8jhx4yzdWxuA_QPQ9YPVEj0XZw@mail.gmail.com>
-From: Sailesh Nandanavanam <saileshnandanavanam@gmail.com>
-Date: Fri, 12 Jun 2026 02:06:51 +0530
-X-Gm-Features: AVVi8Ce2REi4mUqmiQKXLcfNq0RParFt0ik2l5LBrnYnygRVam7OLZkXJS6yVMY
-Message-ID: <CAF+TLO2PX71_-9nKBEAJ50+NpjNkgipig6=9OLsvbgZtqF2yew@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/damon: add regression test for damos_walk()
- vs kdamond exit race
-To: SeongJae Park <sj@kernel.org>
-Cc: shuah@kernel.org, damon@lists.linux.dev, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 11 Jun 2026 16:37:11 -0400
+Message-Id: <DJ6IBVPSUNFM.3VJW6W39N5AKK@etsalapatis.com>
+Cc: "Sechang Lim" <rhkrqnwk98@gmail.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "David S. Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Jakub Sitnicki" <jakub@cloudflare.com>, "Shuah
+ Khan" <shuah@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Cong Wang" <cong.wang@bytedance.com>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf v2 7/7] selftests/bpf: add test for
+ bpf_msg_pop_data() overflow
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260611123538.156005-1-jiayuan.chen@linux.dev>
+ <20260611123538.156005-8-jiayuan.chen@linux.dev>
+In-Reply-To: <20260611123538.156005-8-jiayuan.chen@linux.dev>
 
-Hello SeongJae,
-
-Noted on inline replies - I'll follow that format from the next response.
-
-Following up on this thread with progress.
-
-As discussed, I dropped the userspace selftest approach since it
-cannot reliably trigger the microsecond-wide race window.
-
-I wrote a KUnit test instead, added to mm/damon/tests/core-kunit.h:
-
-- Creates a damon_ctx
-- Sets ctx->walk_control_obsolete =3D true under walk_control_lock,
-simulating the state just before kdamond_fn() exits
-- Calls damos_walk() and verifies it returns -ECANCELED immediately
-
-I built and ran this on a kernel with commit 33c3f6c2b48c
-("mm/damon/core: fix damos_walk() vs kdamond_fn() exit race") present,
-and the test passes along with all other 28 existing damon KUnit
-tests:
-
-  ok 29 damon_test_walk_control_obsolete
-  # damon: pass:29 fail:0 skip:0 total:29
-
-Since walk_control_obsolete is a field introduced by this fix, a
-kernel with the fix reverted would not compile this test (the field
-would not exist). So the usual "fails before fix, passes after fix"
-verification does not apply the same way here - the test directly
-validates the new field/behavior introduced by the fix.
-
-If this approach looks reasonable, I plan to send v3 with this KUnit
-test (replacing the userspace selftest from v1/v2), along with the
-commit message format and other minor fixes from your earlier review.
-
-Please let me know if you'd like any changes before I send v3.
-
-Thanks,
-Sailesh Nandanavanam
-
-
-On Fri, 12 Jun, 2026, 01:50 Sailesh Nandanavanam,
-<saileshnandanavanam@gmail.com> wrote:
+On Thu Jun 11, 2026 at 8:34 AM EDT, Jiayuan Chen wrote:
+> From: Sechang Lim <rhkrqnwk98@gmail.com>
 >
-> Hello SeongJae,
+> Add a test in sockmap_basic.c that calls bpf_msg_pop_data() with a length
+> close to U32_MAX, which overflows the start + len bounds check. The sk_ms=
+g
+> program records the return value over a sendmsg and the test checks that
+> the call is rejected with -EINVAL.
 >
-> Noted on inline replies - I'll follow that format from the next response.
+
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+> ---
+>  .../selftests/bpf/prog_tests/sockmap_basic.c  | 48 +++++++++++++++++++
+>  .../bpf/progs/test_sockmap_msg_pop_data.c     | 27 +++++++++++
+>  2 files changed, 75 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_po=
+p_data.c
 >
-> Following up on this thread with progress.
->
-> As discussed, I dropped the userspace selftest approach since it cannot r=
-eliably trigger the microsecond-wide race window.
->
-> I wrote a KUnit test instead, added to mm/damon/tests/core-kunit.h:
->
-> - Creates a damon_ctx
-> - Sets ctx->walk_control_obsolete =3D true under walk_control_lock, simul=
-ating the state just before kdamond_fn() exits
-> - Calls damos_walk() and verifies it returns -ECANCELED immediately
->
-> I built and ran this on a kernel with commit 33c3f6c2b48c ("mm/damon/core=
-: fix damos_walk() vs kdamond_fn() exit race") present, and the test passes=
- along with all other 28 existing damon KUnit tests:
->
->   ok 29 damon_test_walk_control_obsolete
->   # damon: pass:29 fail:0 skip:0 total:29
->
-> Since walk_control_obsolete is a field introduced by this fix, a kernel w=
-ith the fix reverted would not compile this test (the field would not exist=
-). So the usual "fails before fix, passes after fix" verification does not =
-apply the same way here - the test directly validates the new field/behavio=
-r introduced by the fix.
->
-> If this approach looks reasonable, I plan to send v3 with this KUnit test=
- (replacing the userspace selftest from v1/v2), along with the commit messa=
-ge format and other minor fixes from your earlier review.
->
-> Please let me know if you'd like any changes before I send v3.
->
-> Thanks,
-> Sailesh
->
-> On Sat, Jun 6, 2026 at 6:06=E2=80=AFAM SeongJae Park <sj@kernel.org> wrot=
-e:
->>
->> On Fri, 5 Jun 2026 12:44:50 +0530 Sailesh Nandanavanam <saileshnandanava=
-nam@gmail.com> wrote:
->>
->> > Hi SeongJae,
->> >
->> > Apologies for the delayed response.
->>
->> No worry!
->>
->> [...]
->> > I agree that a KUnit test is the right approach since it runs inside t=
-he
->> > kernel and can directly set walk_control_obsolete to simulate the race
->> > condition reliably without timing dependencies.
->> >
->> > I will drop the userspace selftest approach and write a KUnit test for
->> > damos_walk() functionality including walk_control_obsolete. I will ver=
-ify
->> > it fails on a kernel with commit 33c3f6c2b48c ("mm/damon/core: fix
->> > damos_walk() vs kdamond_fn() exit race") reverted and passes with the =
-fix
->> > present before sending v3.
->> >
->> > Regarding other feedback:
->> > - Will use correct commit description format with subject in brackets
->> > - Will remove the Fixes: tag
->> > - Will add blank line before _damon_sysfs import
->> > - Will add changelog and link previous versions
->> > - Will share revision plan and wait at least one day
->> >   before sending new version
->>
->> Sounds good.  Please consider using in-line reply [1] from the next time=
-,
->> though!
->>
->> >
->> > Please give me some time to study mm/damon/tests/core-kunit.h and impl=
-ement
->> > this properly.
->>
->> No rush, take your time.
->>
->> [1] https://subspace.kernel.org/etiquette.html#do-not-top-post-when-repl=
-ying
->>
->>
->> Thanks,
->> SJ
->>
->> [...]
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/too=
+ls/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> index d2846579285f2..cb3229711f93a 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> @@ -14,6 +14,7 @@
+>  #include "test_sockmap_pass_prog.skel.h"
+>  #include "test_sockmap_drop_prog.skel.h"
+>  #include "test_sockmap_change_tail.skel.h"
+> +#include "test_sockmap_msg_pop_data.skel.h"
+>  #include "bpf_iter_sockmap.skel.h"
+> =20
+>  #include "sockmap_helpers.h"
+> @@ -666,6 +667,51 @@ static void test_sockmap_skb_verdict_change_tail(voi=
+d)
+>  	test_sockmap_change_tail__destroy(skel);
+>  }
+> =20
+> +static void test_sockmap_msg_verdict_pop_data(void)
+> +{
+> +	struct test_sockmap_msg_pop_data *skel;
+> +	int err, map, verdict;
+> +	int c1 =3D -1, p1 =3D -1, sent;
+> +	int zero =3D 0;
+> +	char *buf;
+> +	const size_t len =3D 32 * 1024;
+> +
+> +	skel =3D test_sockmap_msg_pop_data__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+> +
+> +	verdict =3D bpf_program__fd(skel->progs.prog_msg_pop_data);
+> +	map =3D bpf_map__fd(skel->maps.sock_map);
+> +
+> +	err =3D bpf_prog_attach(verdict, map, BPF_SK_MSG_VERDICT, 0);
+> +	if (!ASSERT_OK(err, "bpf_prog_attach"))
+> +		goto out;
+> +
+> +	err =3D create_pair(AF_INET, SOCK_STREAM, &c1, &p1);
+> +	if (!ASSERT_OK(err, "create_pair"))
+> +		goto out;
+> +
+> +	err =3D bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
+> +	if (!ASSERT_OK(err, "bpf_map_update_elem"))
+> +		goto out_close;
+> +
+> +	buf =3D calloc(len, 1);
+> +	if (!ASSERT_OK_PTR(buf, "calloc"))
+> +		goto out_close;
+> +
+> +	sent =3D xsend(c1, buf, len, 0);
+> +	ASSERT_EQ(sent, (ssize_t)len, "xsend");
+> +	ASSERT_EQ(skel->data->pop_data_ret, -EINVAL, "pop_data_rejects overflow=
+");
+> +
+> +	free(buf);
+> +
+> +out_close:
+> +	close(c1);
+> +	close(p1);
+> +out:
+> +	test_sockmap_msg_pop_data__destroy(skel);
+> +}
+> +
+>  static void test_sockmap_skb_verdict_peek_helper(int map)
+>  {
+>  	int err, c1, p1, zero =3D 0, sent, recvd, avail;
+> @@ -1373,6 +1419,8 @@ void test_sockmap_basic(void)
+>  		test_sockmap_skb_verdict_fionread(false);
+>  	if (test__start_subtest("sockmap skb_verdict change tail"))
+>  		test_sockmap_skb_verdict_change_tail();
+> +	if (test__start_subtest("sockmap msg_verdict pop_data overflow"))
+> +		test_sockmap_msg_verdict_pop_data();
+>  	if (test__start_subtest("sockmap skb_verdict msg_f_peek"))
+>  		test_sockmap_skb_verdict_peek();
+>  	if (test__start_subtest("sockmap skb_verdict msg_f_peek with link"))
+> diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.=
+c b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+> new file mode 100644
+> index 0000000000000..301e65b95256c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+> @@ -0,0 +1,27 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_SOCKMAP);
+> +	__uint(max_entries, 1);
+> +	__type(key, int);
+> +	__type(value, int);
+> +} sock_map SEC(".maps");
+> +
+> +#define POP_START 0x48a3
+> +#define POP_LEN   0xfffffffd
+> +
+> +long pop_data_ret =3D 1;
+> +
+> +SEC("sk_msg")
+> +int prog_msg_pop_data(struct sk_msg_md *msg)
+> +{
+> +	if (msg->size <=3D POP_START)
+> +		return SK_PASS;
+> +
+> +	pop_data_ret =3D bpf_msg_pop_data(msg, POP_START, POP_LEN, 0);
+> +	return SK_PASS;
+> +}
+> +
+> +char _license[] SEC("license") =3D "GPL";
+
