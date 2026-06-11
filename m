@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9416C3CAA31;
-	Thu, 11 Jun 2026 11:26:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D879F3DFC93;
+	Thu, 11 Jun 2026 11:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781177170; cv=none; b=M5AF0FUFtYTAhTrClerqC6slPMLfUjQqApCnhUw1YVt2XiWZqlDpAu7CeTmJL0bv3zgda7E1e9e4cU22siU07KuJEA2jJ7g/qPxSiK1BylIAjX973FLldEcoi8DjxiNGviM6QeJJxm9drODJmedq8Dm5pX0+hnXfpYcQCKtBOmM=
+	t=1781177225; cv=none; b=dG+NzGAwWFBAElV7a9Buya8xgOLxxN0VKq3qB8td+XkrVqQS3zUhN+MWLBn5wW+Hz/58umflm7l7MMF4506+/Vz27lA48y4WeZG7o1KI3SP1Zue7XP2C96CXC1X7Z8oe44trMbs3YyukP0p+By4WaIL35qmwnrobyNUY14RBayY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781177170; c=relaxed/simple;
-	bh=Mj+8CjxRtYoK7TTOorhjV9i+oFQowCHblGc7zuWS1L4=;
+	s=arc-20240116; t=1781177225; c=relaxed/simple;
+	bh=Rzxu/C730LVQThpUUtYaPazcB6xwueqIi+r3vrN9QzE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ice/Hw9bnXzsLLK9hMk5eaFHygIk+NnFaiAs22UpGY8sOMQ4b9vIPydLUjDkgPIKo78EYBZk08iv1gGO0exhS7hWCGZCFJ3cHo/obQvDdfMmw1U/s6yGzZKOSUwxQ3z+SC9GFQZPj2bgrgPJc9Dr3gfq9gWOXIzQAlVRgt3jgVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gPcbs4uT; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=j7HVetZXa+mL7N5MSJgX006DAemBeDf5zkeVO3+KXhhA7PpGyB+X/Ixjj602Gww7MDsG32VWEbnjaQZmnAX2R5PJ+eU9aWPM7P48f+0NGMAPkRGQDZqB6eZvkPwyjHF2r6ff3ZmF3AnAfta39V0y01XqkEILcufsUx1toM4vgf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mHELn24G; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gPcbs4uT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABF801F00893;
-	Thu, 11 Jun 2026 11:26:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mHELn24G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F417B1F00893;
+	Thu, 11 Jun 2026 11:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781177169;
-	bh=RqjjulDH3Tmftd6bFVSbdFoziLNVvT1hh+/KsytHjBY=;
+	s=k20260515; t=1781177224;
+	bh=WYYnd4Zz9q84LFFeACONzdQ+ixiXpHspWS7cUg4EYiE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=gPcbs4uT270KLUxvFhf5PCccdxHi/jLrUP1GCYzWkfed2AQJ0aIXEJerDVk1SewrM
-	 iwkK/knNdRs72Hnzn39mz4J7gzeRD0m/9CirgWfe58HkzsuBsFPxqCND58xg29q7Dn
-	 heSQJFFKwSpPD/qLff3aRio8TKObX7qPJcLifGpCxbaUsFjY8ozikSPq5guEPa9uLA
-	 Z3B+s4NJKMZvnqhnZgWRyH0mngisLaQ2NzMjKXGGQ/AMj0BwXrBc78WboBjQnYU8SQ
-	 zvn2gjy0GBqJ9nrrVd1MygWWkvKkng/A86V2P9hVqB0Kp0djUE6UKWbMzHJARvfE4u
-	 eKf6c2GHq4Czg==
-Message-ID: <bc29b740-8f1c-4e2b-9b01-c8c4a4183b3a@kernel.org>
-Date: Thu, 11 Jun 2026 13:26:02 +0200
+	b=mHELn24Ghek242AaTXZbG30vsyn9jDmkH/4NMRTti3KqfkLj3DGa2pKzVH4PgAG3l
+	 4WZPsUXWERDGoLepQ6KpKiD2UA11nMo6VPcBQynsVw7Omhg73HEx8maS5mrrUzhoNu
+	 gr3wqR/T62gnkpLcFx7JF/L/a2Fw7lZ0kYN+1oDYYL/h3NWrkkyAm+pRwLijpm+uHy
+	 VBkojXh/ct5QEo81vqn+lbMpstNla8N+qYetTNnq0TSAL3BtuZ0ykvR1EdM6ZU7d5E
+	 iEN04lHZxU8at85xyWHyvfzam69VH0TDekgmcjx42svs5P4G/wBrQwNRW1Glhsq/46
+	 27W0P01CwkkVw==
+Message-ID: <b2e63557-a0fa-409f-8a75-12d43257efb5@kernel.org>
+Date: Thu, 11 Jun 2026 13:26:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -36,17 +36,17 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] selftests: mm: fix and speedup "droppable" test
-To: Dev Jain <dev.jain@arm.com>, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
- Anthony Yznaga <anthony.yznaga@oracle.com>, Mark Brown <broonie@kernel.org>,
- Sarthak Sharma <sarthak.sharma@arm.com>
+To: Sarthak Sharma <sarthak.sharma@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ "Jason A. Donenfeld" <Jason@zx2c4.com>,
+ Anthony Yznaga <anthony.yznaga@oracle.com>, Mark Brown <broonie@kernel.org>
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, Aishwarya TCV <Aishwarya.TCV@arm.com>
 References: <20260611-droppable_test-v1-1-b6a73d99f658@kernel.org>
- <bd9d1353-3053-4665-8f35-ae3f6e379237@arm.com>
+ <9afa4ff1-9749-4efa-8112-73fca1f25e8b@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -93,35 +93,56 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <bd9d1353-3053-4665-8f35-ae3f6e379237@arm.com>
+In-Reply-To: <9afa4ff1-9749-4efa-8112-73fca1f25e8b@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
->> +		/*
->> +		 * Speculative reference can temporarily prevent some
->> +		 * pages from getting dropped. So sleep and retry.
->> +		 *
->> +		 * If a page is not droppable for 10s, something
->> +		 * is seriously messed up and we want to fail.
->> +		 */
->> +		if (dropped)
->> +			break;
->> +		sleep(1);
->>  	}
->> -	kill(child, SIGTERM);
->>  
->> -	ksft_test_result_pass("MAP_DROPPABLE: PASS\n");
->> -	exit(KSFT_PASS);
->> +	ksft_test_result(dropped, "madvise(MADV_PAGEOUT) behavior\n");
+On 6/11/26 13:07, Sarthak Sharma wrote:
 > 
-> You meant "MAP_DROPPABLE" behaviour? Perhaps that can be folded in.
-
-No, I did mean "madvise(MADV_PAGEOUT)" behaves as expected with droppable pages.
-
-Reasoning being that we might want to add some other tests in the future that
-trigger reclaim differently.
+> 
+> On 6/11/26 3:31 PM, David Hildenbrand (Arm) wrote:
+>> The droppable test currently relies on creating memory pressure in a
+>> child process to trigger dropping the droppable pages.
+>>
+>> That not only takes a long time on some machines (allocating and filling
+>> all that memory), on large machines this will not work as we hardcode the
+>> area size to 134217728 bytes.
+>>
+>> ... further, we rely on timeouts to detect that memory was not dropped,
+>> which is really suboptimal.
+>>
+>> Instead, let's just use MADV_PAGEOUT on a 2 MiB region. MADV_PAGEOUT works
+>> with droppable memory even without swap.
+>>
+>> There is the low chance of MADV_PAGEOUT failing to drop a page because
+>> of speculative references. We'll wait 1s and retry 10 times to
+>> rule that unlikely case out as best as we can.
+>>
+>> On a machine without swap:
+>>
+>> 	$ ./droppable
+>> 	TAP version 13
+>> 	1..1
+>> 	ok 1 madvise(MADV_PAGEOUT) behavior
+>> 	# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+>>
+>> Reported-by: Aishwarya TCV <Aishwarya.TCV@arm.com>
+>> Fixes: 9651fcedf7b9 ("mm: add MAP_DROPPABLE for designating always lazily freeable mappings")
+>> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+>> ---
+> 
+> I ran this test before and after applying the patch and recorded the
+> execution time over 5 runs on an Orion O6 board.
+> 
 
 Thanks!
+
+> Before the patch, average execution time = 3.87 s
+
+Out of interest, how much memory did your machine have?
+
+I ran into this myself on a 200gig machine, and there was essentially no
+progress ...
 
 -- 
 Cheers,
