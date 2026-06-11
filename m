@@ -1,240 +1,251 @@
-Received: from flow-a6-smtp.messagingengine.com (flow-a6-smtp.messagingengine.com [103.168.172.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF53638333B;
-	Thu, 11 Jun 2026 18:55:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F2C35E1C1
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 20:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781204131; cv=none; b=NYPArHM7xJjC3wZ5DeoZdKc7KCnOZu2WYdQ9fEqdTIN1NRYYqIwcShxO6EQlKRg5WSVs5dTjzdXfGYmK9f/08ZjWrB+BVY0ASDYe2dqeGDbCeEbcWyMy7Rlw5FradKUWsQ9lJWBmg+rB/Xigojx8GCwFx86G9Wj2oBrnaQzm9Qs=
+	t=1781208785; cv=none; b=V2iRB7Bh6n/aPeN8yvwnZOmUlKUlbiRxbTCPESipDDa1E9wPQ2+kjSrcmlsckjI21pNqTaDJ480i8uKWVj9GRKsK8egG3RzLGGf1QZ5Quaq0BwLM0hUJ1IdWuKdqpd7ZsbVwwLO9QuWUO1kyQ7duYGVlDBA/oDbvedZzJTMzeZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781204131; c=relaxed/simple;
-	bh=hPOHqYG+iRF3Ic0VkRMBbLpS+z9IKrHddDy3pi2hdIc=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=oyLWxKrD8K3xv2yOeJcMIQzsqZZtGfak581TXN5XCmX8y05DmfX0DDOb09WBbrOZxRJ2WFufJ6cj7XUom3BLhTz9zSjHGUf20hledZqs2nhN056p4a9DyNszzMsEaBWaCVKIae01iXo05DYRAcPwAVOn6yoHkFSIGn7ltehsdcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=johnericson.me; spf=pass smtp.mailfrom=johnericson.me; dkim=pass (2048-bit key) header.d=johnericson.me header.i=@johnericson.me header.b=lqoDUw/k; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SxhnnWMs; arc=none smtp.client-ip=103.168.172.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=johnericson.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=johnericson.me
+	s=arc-20240116; t=1781208785; c=relaxed/simple;
+	bh=GS7X8iSTN4N+xNNFv8PFB8oM/gEHO+PcXo/VZaIMAiM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EYvPWMcLuB4M+zmTBODcFx1cfzpVWDDXghiQyHDu7oc8SSpQ9NwpHBTLygUxgcn1oMuclGdhgtDKEkhPf0HkCy/8oPYlXxCXBTXl8mhIDX6DJM6cf3aDfW3DMMXxn8PinJdy0JbKzIMLCVYsIlw+DQW3Oj8Nw3dyjnDffWjumx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H7RXnyuX; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=johnericson.me header.i=@johnericson.me header.b="lqoDUw/k";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SxhnnWMs"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.phl.internal (Postfix) with ESMTP id 1652F1380100;
-	Thu, 11 Jun 2026 14:55:29 -0400 (EDT)
-Received: from phl-imap-16 ([10.202.2.88])
-  by phl-compute-05.internal (MEProxy); Thu, 11 Jun 2026 14:55:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=johnericson.me;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
-	 t=1781204129; x=1781211329; bh=hPOHqYG+iRF3Ic0VkRMBbLpS+z9IKrHd
-	dDy3pi2hdIc=; b=lqoDUw/kVA743bATY9h3WK1dphY3DTGWmWqfS7rSB5GSVn1J
-	as9WBsb+A9PKES5gRpl1K43ImpkJByEQ+OAGA8jgvTajebY1O93d+Ltmq8xdbZmr
-	UpjrbAZH15xpPstw++7hFOY+AQmRLZsb2gRNFyC6VpRAlni/E62ZfUjR+2Y7ilDV
-	5dalJkSjuO6iJHSs2PFitbvp8GbWY+Y4zFxsBDVzhzH13FnV4hN4gX3XoXsGEpU5
-	VX6YHz30fcubjL8dS4nRv3IXpnfilOnuPUp8p3r0TTr6X+SeYW3CB5Ye/Y8JCFpK
-	jE+5fg0CFoxi4Y/BBElq4gToBlMwJqp/uqu9MA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1781204129; x=
-	1781211329; bh=hPOHqYG+iRF3Ic0VkRMBbLpS+z9IKrHddDy3pi2hdIc=; b=S
-	xhnnWMsEUraepm0he9orZCyxPfx/X2RF4T9x70S85+8jra4FIRU9EW5non7HfVsM
-	Ci2TSpRE8DCnorJZZDCFAJnPbE74cU40UqUFdxQG06Ca0gf4YOU1CcSzAl7STslr
-	hkiKH7TApmoVk+z9PZs+yoayKHgiTZtULPsVqW6Rrfak38XDnPycDho5FKzQBef1
-	CY6QNcMEThwJpZ3k8dCfdqYEOgLqhPFyaSw/8plKCDA4ADs1atRjXiHektoDVGfc
-	fFn8T2+BwlXB/s0NPeOq0qQ16jw7OASdZDZeHmvZZ39x54Pz2OrB2tDyBB1+NgYc
-	5/H2msE/XBzMbGzzvKNHA==
-X-ME-Sender: <xms:oAQralqwuh0eouA59R3_QIwyLFBttjzOXYhOIDERLdIbdk93hF5puA>
-    <xme:oAQraifGdN2-ZAHIe6oNEDRfSEnR6WUhOwyGtPPn4ubpqD8tEdnDMeWgLTUy6Ii6x
-    5vzuFyYmFZ2RIu87ORhcAz6vnLAsYx-tpUTNEZVfRt127tc0NsvnK0>
-X-ME-Proxy-Cause: dmFkZTFYpPOn7LI4ucgrxMRuvUt0Pp7TpsmWzC1UMf5Uv3HNtfQ/V0DF7oE2QhImNcQ7/n
-    hX3+SBSdsUULValjF705kUffDlbULeLEuQLe9sEh2MjAhjTTmycdP5MBvhnGe8dzZvyNon
-    El9MmMNYiTmjnLQ2tcVKntlKTVipyiBsZrqxOGT4HbGXTm+q5nJv2ou/btyVBYEM9hCWwC
-    5GGP97dtjAoQTfqjBznaZdB0rggqqROmubcwr/kzdeAmz621tqJGsS7RdmLEwmGJYTNNOO
-    USKMjLfMmFc65L14V1RzajGF3g6WHSe5i+BYmpu3hA0CfgzgP+VZ8oTuBT+38JRx/yxzgs
-    umnpTqvcNAd1NFNCHjofpW8OHDuMUHWjxpEVBjSNmRctxv64ki/DUB9+G7ogl7t9K3QVjK
-    Ow2Y0fYcjWb7JTEpo/PoDYWzEvTk9XEek3xh+BpzUH00rvEY2PWP7ywJRQTdPoMcVAn7Gn
-    r7cDKLJ65+s64x2Q942+XWGD/zOI1+7LvCGFjOH2uWfyZd0Fv7Ymr+gzCBsMoAv2xkL3T0
-    CqD6YGWIlZSwWzrToYEFEdrCnD2xjZeUFFAtwMMKqgh8H1xdIFhWYk77oCQivDvMMOaL+9
-    Tq0tCHKmG0ElxEfp2Q75UzEXsV7cS5F72NZyHP1i3LMypy67FGfWMnYliP7A
-X-ME-Proxy: <xmx:oAQraroOprWSkLgJ-7djeMHTInI52a640Gjt5LslcKa87iD22lOadQ>
-    <xmx:oAQraoatsZC0BtBctCPgAsy7fxQT3f9fqffQoMXyvPniBkKKuuh1bA>
-    <xmx:oAQralHhcfx828vfIPwoTAB7RPq0-Rlkt4Jh2VvoK2hJ4cYJKq3hrQ>
-    <xmx:oAQramZmlr4zGPtWbXjA0WPzKylSB7mfQzF7M44bZW6o1b9B_bhaGA>
-    <xmx:oQQrarNSduaBJQ-qynqxxgQ-ZwyRh49OZambtOBojf-3vpyXdpA0tC_O>
-Feedback-ID: ieb4144f1:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 0C7D62CC0086; Thu, 11 Jun 2026 14:55:28 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H7RXnyuX"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-36d98c9b596so247883a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 13:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781208783; x=1781813583; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4z0hl6gf2+Flj5FX9Tlv/6+ud0tivr1GWz8vDmFJRDs=;
+        b=H7RXnyuXE6HWmmX59z4uWJW6Sei/mMN8nkLdTTx9/tou5QzKxwe5wuWSIbmRLs4E2B
+         zmg+4WrkhkGJR+PA67dEfiAopBrRmqr78XXU37nYksMGV3LI5ZSye8G4qhgJIhTA6bSu
+         07HBnaOvR+Z/JNr4Sl6X2Lk3va1vu01YC0WzlO+oN6aO6m4TasvBPCap+fYyRpsiVg7i
+         DqTFxT2QxFDDbgm6mwDj5eAw/zoBY5NaoGLllq3IAXE3kTqT8tTeR31C+2NkUNJAVLQt
+         1hcKXuEAbCzLMUik5svCpgMFxRndDIT/+KNOjMQtRKcjQBdK9vnzHfB+X7LrSzgMtSLz
+         rzZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781208783; x=1781813583;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4z0hl6gf2+Flj5FX9Tlv/6+ud0tivr1GWz8vDmFJRDs=;
+        b=Pkhb4cT9X419HSPnXpz/mnQ3Tq2Dv/blZSERN6l9gah3s65aE/rhti1/7PPUsal7ze
+         WiaJJox25MV6JBRv0g+h3x51wbrYaOwk6HQTIGfuaAGEjAgKtvZPqRebIifPMhmLvxTt
+         m6xjrQ+fjf9mowMQSG5EMmlRfaXHgBLIhM3zIREQfXkl/YK5hQfr2L7ZBkd48TwrRr8A
+         +woLos36j3tCbYS6CE+6J47MuCHouvcn6eIYBXyUVRvrYjyHyAlBKdnVITlV+yYFfTpx
+         uLMtaVdpIWSoI48g9ZNSYRzs1cOAA1UM/ZGMyNURPd+vp4UR0biWwvKRNKCv02NZlvq7
+         vRPA==
+X-Forwarded-Encrypted: i=1; AFNElJ8P/utuhFQO1dAp7lHujY0LBX8wUpa9zHKGTHcd/TdP8AXQXobSX8dAemJ5wB4Y87ROmPgbA0PO7zstW1e+tTY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdTumEYyD0XogCSBeiGu+2xpQjsfqAElfJwIbkW6HadwKxv3/x
+	/KDeA2Xe3zy6UaBV/wPpmDrmhkPBtu4m/o8pQN6PuR7A5XNrx8McKHal
+X-Gm-Gg: Acq92OFn/jroFJZoIxK9LYjWNbUnRY3fn9TvF9m28TrgXVTuG9k7ePikxo+U9mlxDBy
+	aQ7oCUG5WYOLFlT8mDSqGKmSmmqfy7mA4FUbYDGhAKIYrfEBO+LwXJlPxCbKvpR53rYBVQqeE7k
+	4Bi/s8Y//BgNDvsX9AUaBbpT+vlM6KwjarfTCsIiBAo7FBglJaHxzKxkl78H3f9aiSpAmQlnKwQ
+	POmFB/wSiDx2Euy4DlZ2U87mNYCjeYPC0r689jz8Sw7DZDu4CAtC/QdVMFHILAWvdiwA0Io4IIP
+	wvf7iOKH/H9/YkZxB7tktUdP+vIQv36I0uMrM3oKWjhJPcBaW7YBrG8xqvo5n1KGu/wHQy3FCSb
+	Ohc4WbcfhHud5LFrEgAHL2XX/Hv4Xedk+g7sLtivjvt0a/yswd0WQuaRJBC7+45tSyFFV/zr6WQ
+	==
+X-Received: by 2002:a17:903:2ac4:b0:2c0:ab82:6b99 with SMTP id d9443c01a7336-2c2f36399f1mr48272375ad.33.1781208782464;
+        Thu, 11 Jun 2026 13:13:02 -0700 (PDT)
+Received: from [127.0.1.1] ([2a12:a305:4::302d])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f875casm288730475ad.22.2026.06.11.13.12.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jun 2026 13:13:02 -0700 (PDT)
+From: Guodong Xu <docular.xu@gmail.com>
+Subject: [PATCH v4 00/16] riscv: hwprobe: Expose RVA23U64 base behavior
+Date: Thu, 11 Jun 2026 16:12:37 -0400
+Message-Id: <20260611-rva23u64-hwprobe-v2-v4-0-3f01a2449488@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AtGJywdvvpER
-Date: Thu, 11 Jun 2026 14:53:10 -0400
-From: "John Ericson" <mail@johnericson.me>
-To: "Mateusz Guzik" <mjguzik@gmail.com>, "Li Chen" <me@linux.beauty>
-Cc: "Andy Lutomirski" <luto@kernel.org>,
- "Christian Brauner" <brauner@kernel.org>, "Kees Cook" <kees@kernel.org>,
- "Al Viro" <viro@zeniv.linux.org.uk>,
- linux-fsdevel <linux-fsdevel@vger.kernel.org>,
- linux-api <linux-api@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- linux-mm <linux-mm@kvack.org>, linux-arch <linux-arch@vger.kernel.org>,
- linux-doc <linux-doc@vger.kernel.org>,
- linux-kselftest <linux-kselftest@vger.kernel.org>, x86 <x86@kernel.org>,
- "Arnd Bergmann" <arnd@arndb.de>, "Thomas Gleixner" <tglx@kernel.org>,
- "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, "Jan Kara" <jack@suse.cz>,
- "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>
-Message-Id: <9033ff42-9ee7-4b93-9570-a5adcd16e826@app.fastmail.com>
-In-Reply-To: 
- <hd3i6pxxohsjesyid7nhuic6ppp6nyoxxpwa4mny6riqvpyqec@mylfprni2yaw>
-References: <20260528095235.2491226-1-me@linux.beauty>
- <20260528-madig-fachrichtung-fehlinformation-61117ba640da@brauner>
- <CALCETrWJQpLR4n1cpichBk8=uExSKLWTMGU3BufGdk_WE_p5UA@mail.gmail.com>
- <19eacd64508.26b92c022125848.262962729296162879@linux.beauty>
- <4e049396-377d-48a7-a34c-91318413a876@app.fastmail.com>
- <19eb181fdd4.6d028f442844776.3737831021032223216@linux.beauty>
- <hd3i6pxxohsjesyid7nhuic6ppp6nyoxxpwa4mny6riqvpyqec@mylfprni2yaw>
-Subject: Re: [RFC PATCH v1 00/13] exec: add spawn templates for repeated executable
- startup
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALUWK2oC/22Nyw6DIBBFf8WwLg0M4KMr/6PpAhCVpj4CStsY/
+ 72oTbppMpuT3DlnQd44azy6JAtyJlhvhz4CPyVIt7JvDLZVZAQEUiJIjl2QwOaU4/Y5ukEZHAD
+ TCkjGCq1UblD8HJ2p7Wu3Xm8H+1ndjZ421bZorZ8G996zAbbdt0Dp30I8goFqIQXnNa106azXf
+ pLurIcObZHAfpqUsP8aFjVCQCEzBTnLedl00j4Ox7quH99o0TcPAQAA
+X-Change-ID: 20260508-rva23u64-hwprobe-v2-1d20739cbb8e
+To: Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Paul Walmsley <pjw@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Zong Li <zong.li@sifive.com>, 
+ Deepak Gupta <debug@rivosinc.com>, Anup Patel <anup@brainfault.org>, 
+ Atish Patra <atish.patra@linux.dev>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@kernel.org>, 
+ Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>
+Cc: linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+ kvm-riscv@lists.infradead.org, Paul Walmsley <paul.walmsley@sifive.com>, 
+ Conor Dooley <conor@kernel.org>, devicetree@vger.kernel.org, 
+ spacemit@lists.linux.dev, sophgo@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, Palmer Dabbelt <palmer@sifive.com>, 
+ Guodong Xu <docular.xu@gmail.com>, 
+ Andrew Jones <andrew.jones@oss.qualcomm.com>, 
+ Charlie Jenkins <charlie@rivosinc.com>, 
+ Charlie Jenkins <thecharlesjenkins@gmail.com>, 
+ Jesse Taube <jesse@rivosinc.com>, Conor Dooley <conor.dooley@microchip.com>, 
+ Qingwei Hu <qingwei.hu@bytedance.com>, Andy Chiu <andybnac@gmail.com>
+X-Mailer: b4 0.15.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6838; i=docular.xu@gmail.com;
+ h=from:subject:message-id; bh=GS7X8iSTN4N+xNNFv8PFB8oM/gEHO+PcXo/VZaIMAiM=;
+ b=owGbwMvMwCXWtEl1Z3CGpCDjabUkhixtsV1M0pIfS9dk2yi2XM1WDGhwi7udZ9gdveG2q2WYZ
+ j+vCGdHKQuDGBeDrJgiy+GjLdlbX/lE+z7n/AEzh5UJZAgDF6cATMRiLSPDg+TlLVX8a+yfbl9t
+ 2r/hz+rlrwSWn6pJWV70QN5nc6zEIkaGbqX1iR89tTSW8ExSSvUNTtynVWnroCbXe2hv8LV8q3n
+ 8AA==
+X-Developer-Key: i=docular.xu@gmail.com; a=openpgp;
+ fpr=90B1DC3DF0BD10FD1227BD6344F254AF42F143EE
 
-On Wed, Jun 10, 2026, at 7:40 PM, Mateusz Guzik wrote:
-> [...]
->
-> As I tried to explain in my previous e-mail this approach does not cut
-> it because of NUMA.
->
-> Suppose you have a machine with 2 nodes. The parent-to-be is running
-> on node 0 and the child is intended to exec something on node 1.
->
-> When the parent-to-be allocates and populates stuff, it takes place with
-> memory backed by node 0. If you allocate task_struct, the file table and
-> other frequently used (and modified!) objs in this way, you are
-> guaranteeing performance loss due to interconnect traffic to access it.
->
-> Trying to add plumbing so that all allocations respect numa placement is
-> probably too cumbersome.
+This series builds on Andrew Jones's earlier RFC [1]. It lets userspace
+check for RVA23U64 conformance in one call, instead of walking hwprobe +
+prctl across every mandatory extension.
 
-Are we sure that last part is true?
+The series adds a small framework that resolves profile-class bases (IMA
+and RVA23U64) from the kernel's ISA extension bitmap at init time, and
+surfaces the result through both /proc/cpuinfo and hwprobe. Later patches
+can add RVA23S64, and backward RVA22 / RVA20 detection, to
+riscv_set_isa_bases() without changes to the surrounding code.
 
-Let's also assume when this stuff was initially implemented, we didn't
-have it. If the basic thrust of this work is to replace functions that
-previously only worked on the current thread with those that worked on
-either arbitrary (not yet started) threads or the current thread, would
-that not prepare us for slowly migrating the allocation choice to
-reflect the node of the target task (new parameter) rather than the node
-of the current task over time?
+Series outline (v4):
 
-(This assumes the task is pre-placed on a node before it is actually run
-there, and that pre-placement happens as early in the allocation process
-as possible, so subsequent allocations can read off the
-partially-initialized task's node.)
+  Housekeeping, clean-ups:
+   1.  dt-bindings: sort the multi-letter Z extensions alphanumerically.
+   2.  hwprobe.rst: normalize indentation.
+   3.  hwprobe.rst: document EXT_ZICFISS / EXT_ZICFILP.
+   4.  Standardize the single-letter extension macros to uppercase
+       (RISCV_ISA_EXT_a -> RISCV_ISA_EXT_A, etc.).
 
-"Slowly migrating" is good here! It doesn't need to be the fastest thing
-out of the gate, but if this new proper spawning API gets popular as I
-think it would, and there is a clear path to optimizing it per the
-above, then I am confident that over the years it will happen.
+  Per-extension cpufeature parsing + hwprobe export:
+   5.  Zicclsm.
+   6.  Ziccamoa, Ziccif, Ziccrse, Za64rs.
+   7.  B (the Zba/Zbb/Zbs set).
 
-> The primary example for that is looking up the binary to exec in the
-> first place.
->
-> userspace likes to pass paths which don't exist, meaning checking for
-> the binary before any hard work is a useful optimization. Suppose the
-> binary to be executed is in a container bound with a taskset using
-> node 1 and the content of the fs part of the container is currently
-> fully uncached.
->
-> When you perform the lookup on node 0, you are populating a bunch of
-> metadata (inode, dentry) using memory from that domain. But the intended
-> user will only execute on node 1, again resulting in a performance loss.
->
-> In order to not do it you would need to convince VFS to allocate memory
-> elsewhere.
+  Zic64b (new first-class extension):
+   8.  dt-binding, with a schema check.
+   9.  cpufeature parsing + hwprobe export.
+  10-12. dts: declare zic64b in the SpacemiT K3, SpacemiT K1, and Sophgo
+         SG2044 device trees.
 
-One thing I don't get about this is that isn't the cost doing a bunch of
-work searching the PATH for the directories where the executable
-*doesn't* exist? In the case of something like a shell that is going to
-spawn a lot of processes, I would think it is *good* to keep all that
-PATH crawling VFS filling to be on the shell's node, rather than the
-child processes' nodes.
+  RVA23U64 base detection and exposure:
+  13.  riscv_have_user_pmlen(): accessor for user pointer-masking PMLEN
+       support.
+  14.  cpufeature: per-hart and host-wide isa_bases bitmaps; IMA and
+       RVA23U64 detection lives here.
+  15.  /proc/cpuinfo: print "isa bases:" and "hart isa bases:", e.g.
+       rva23u64.
+  16.  hwprobe: expose RVA23U64.
 
-It is only the executable itself, the final step of the VFS crawl, that
-should be loaded into the other NUMA nodes. Insofar as (unless I am
-missing something) creating the process means finding the inode for the
-executable but not loading those pages, aren't we OK here? Only when the
-new process is actually scheduled and run must the ELF be paged into
-memory, and then that will happen on the correct node.
+Tested on both K3 Pico ITX and QEMU with -cpu rva23s64,sv39=on:
+  - /proc/cpuinfo reports "isa bases : rv64ima rva23u64" on both the
+    aggregated and per-hart lines.
+  - hwprobe RISCV_HWPROBE_KEY_BASE_BEHAVIOR returns
+    BASE_BEHAVIOR_IMA | BASE_BEHAVIOR_RVA23U64.
 
-> So I stand by my previous claim that ultimately a pristine child has to
-> be created (like in this patch), but which also has to do the work on
-> its own.
+Based on v7.1-rc6 plus [2]; happy to rebase onto another tree if needed.
+A branch is available for all patches in the series: [3].
 
-I have not been a kernel dev, so my apologies if I am missing things.
-But in conclusion for me, the FS and other resource access patterns of
-*creating a process* vs *that process itself running* do not seem
-necessarily coincident to me. What you are describing as for sure a
-problem might possibly be a *good thing*, if they are in fact quite
-different.
+Note: [2] is only required to save the merge effort for adding 'Zic64b'
+      and 'Ziccrse' into the same k3.dtsi file.
 
-> Suppose there is no explicit placement requested anywhere. Even in that
-> case there are legitimate workloads which will eventually be forced to
-> exec stuff on another node. Even these have a better chance retaining
-> full locality if the child process does all the work.
->
-> Per my previous message I don't see a clean interface to do it.
-> something quasi-posix_spawn is probably the least bad way out, it will
-> also allow userspace to easily wrap the new thing with posix_spawn
-> itself.
->
-> Also note there is another issue with the fd-based approach: the fd will
-> get inherited on fork and will hang out in the child afterwards unless
-> explicitly closed. Suppose you have a multithreaded program which likes
-> to both fork(+no exec) and fork+exec. With the fd-based approach you
-> have no means of stopping another thread from grabbing your state thanks
-> to unix defaulting to copying everything. There was an attempt to fix
-> this aspect with O_CLOFORK, but this got rejected.
+Link: Andrew's RFC v1:
+      https://lore.kernel.org/linux-riscv/20260206002349.96740-1-andrew.jones@oss.qualcomm.com/ [1]
+Link: Prerequisite for applying on K3 w/Ziccrse:
+      https://lore.kernel.org/all/20260602070257-KYC5031219@kernel.org/ [2]
+Link: Branch: https://github.com/docularxu/linux/commits/b4/rva23u64-hwprobe-v4/ [3]
 
-I would think we don't need to worry about clone/fork very much, right?
-I think the premise of your emails, and just about everyone else's in
-this thread too, is that we agree fork+exec is bad, and the problem of
-unnecessarily sharing resources is inherent to fork. Furthermore, I
-think we all agree that while `O_CLOEXEC` and `O_CLOFORK` may help, both
-are unsatisfying solutions because they are opt-out not opt-in, and
-global to the parent process / preexec state (respectively) rather than
-local to the specific fork / exec in question.
+Changes in v4:
+- New patch: sort the multi-letter Z extensions alphanumerically in the
+  dt-binding (Conor), and place zic64b at its sorted position.
+- Zic64b cpufeature: validate only the CBO block sizes that are present;
+  overlaps Qingwei Hu's earlier patch, so it is now authored by Qingwei.
+- Document EXT_ZICFISS / EXT_ZICFILP: cite the riscv-cfi v1.0 tag commit.
+- Picked up Inochi Amaoto's Acked-by (SG2044 dts) and Andrew Jones's
+  Reviewed-by (documentation patch).
+- Link to v3: https://patch.msgid.link/20260603-rva23u64-hwprobe-v2-v3-0-5529a7b28384@gmail.com
 
-pidfds encounter these problems no more than any other
-file-descriptor-based UAPI, right? And I don't think it is good to blame
-any such file-descriptor-based UAPI when fork/exec are at fault.
+Changes in v3:
+- Add Zic64b as a first-class ISA extension: dt-binding, cpufeature
+  parsing with a validate check, hwprobe export, and device-tree
+  declarations for K3/K1/SG2044.
+- Patch 1 is now a clean up of hwprobe.rst indentation.
+- Document RISCV_HWPROBE_EXT_ZICFILP alongside ZICFISS.
+- Move the Zicclsm hwprobe.rst entry to the IMA_EXT_1 section to match
+  its bit allocation.
+- Collect Anup Patel's Acked-by/Reviewed-by on Patch 3, the capitalization.
+- In cpufeature.c, set the local ext_mask with __set_bit().
+- Update Guodong Xu's email to docular.xu@gmail.com.
+- Link to v2: https://patch.msgid.link/20260511-rva23u64-hwprobe-v2-v2-0-21c5a544f1dc@riscstar.com
 
-Maybe during the transition, when some things use fork and some things
-use this new API, stuff will be awkward, but I would rather that just be
-an incentive to complete the transition away from fork, not a reason to
-second-guess the plan.
+Changes in v2 (since Andrew's RFC v1):
+- Rebased onto v7.1-rc2.
+- Reworked rva23u64 detection into per-hart and host isa_bases bitmaps,
+  shared by /proc/cpuinfo and hwprobe.
+- Scoped to IMA and RVA23U64 (RVA23S64, RVA20/RVA22 cpuinfo output deferred).
+- Link to v1:  https://lore.kernel.org/linux-riscv/20260206002349.96740-1-andrew.jones@oss.qualcomm.com
 
-Once the transition is complete, and everyone is diligently assembling
-their child processes from scratch as is proposed, `O_CLOEXEC` and
-`O_CLOFORK` are both unneeded, and oversharing privileges will be much
-less common simply because "lazy coding"/"minimal typing" will only
-share what is needed --- anything else is more code/keystrokes!
+Signed-off-by: Guodong Xu <docular.xu@gmail.com>
+---
+Andrew Jones (4):
+      riscv: hwprobe.rst: Make indentation consistent
+      riscv: Add Ziccamoa, Ziccif, Ziccrse, and Za64rs to cpufeature and hwprobe
+      riscv: Add B to hwcap and hwprobe
+      riscv: Add a getter for user PMLEN support
 
-> Whatever exactly happens, NUMA is a sad fact of computing and needs to
-> be accounted for. The approach as proposed not only does not do it, but
-> it actively hinders such deployments.
+Charlie Jenkins (1):
+      riscv: Standardize extension capitalization
 
-Despite everything I said, I want to be clear that I do agree that NUMA
-performance should be accounted for. Even if the first version isn't as
-great as it could be on that metric, there should be a clear plan for
-how future work can conclusively address it.
+Guodong Xu (9):
+      dt-bindings: riscv: sort multi-letter Z extensions alphanumerically
+      riscv: hwprobe.rst: Document EXT_ZICFISS and EXT_ZICFILP
+      dt-bindings: riscv: Add Zic64b extension description
+      riscv: dts: spacemit: k3: Add Zic64b ISA extension
+      riscv: dts: spacemit: k1: Add Zic64b ISA extension
+      riscv: dts: sophgo: sg2044: Add Zic64b ISA extension
+      riscv: cpufeature: Introduce ISA bases bitmap and rva23u64 detection
+      riscv: cpu: Output isa bases lines in cpuinfo
+      riscv: hwprobe: Introduce rva23u64 base behavior
 
-Cheers,
+Jesse Taube (1):
+      riscv: Add Zicclsm to cpufeature and hwprobe
 
-John
+Qingwei Hu (1):
+      riscv: Add Zic64b to cpufeature and hwprobe
+
+ Documentation/arch/riscv/hwprobe.rst               | 240 ++++++++++++---------
+ .../devicetree/bindings/riscv/extensions.yaml      | 204 ++++++++++--------
+ arch/riscv/boot/dts/sophgo/sg2044-cpus.dtsi        | 128 +++++------
+ arch/riscv/boot/dts/spacemit/k1.dtsi               |  80 +++----
+ arch/riscv/boot/dts/spacemit/k3.dtsi               |  48 ++---
+ arch/riscv/include/asm/cpufeature.h                |  14 ++
+ arch/riscv/include/asm/hwcap.h                     |  24 ++-
+ arch/riscv/include/asm/processor.h                 |   4 +
+ arch/riscv/include/asm/switch_to.h                 |   4 +-
+ arch/riscv/include/uapi/asm/hwcap.h                |   1 +
+ arch/riscv/include/uapi/asm/hwprobe.h              |  10 +-
+ arch/riscv/kernel/cpu.c                            |  26 +++
+ arch/riscv/kernel/cpufeature.c                     | 183 ++++++++++++++--
+ arch/riscv/kernel/process.c                        |  12 ++
+ arch/riscv/kernel/sys_hwprobe.c                    |  34 ++-
+ arch/riscv/kvm/isa.c                               |  16 +-
+ arch/riscv/kvm/main.c                              |   2 +-
+ arch/riscv/kvm/vcpu_fp.c                           |  20 +-
+ arch/riscv/kvm/vcpu_onereg.c                       |   6 +-
+ arch/riscv/kvm/vcpu_vector.c                       |  10 +-
+ tools/testing/selftests/riscv/hwprobe/which-cpus.c |   2 +-
+ 21 files changed, 680 insertions(+), 388 deletions(-)
+---
+base-commit: 99c201dabc35bbd21252c4c682488209dcb4295e
+change-id: 20260508-rva23u64-hwprobe-v2-1d20739cbb8e
+
+Best regards,
+--  
+Guodong Xu <docular.xu@gmail.com>
+
