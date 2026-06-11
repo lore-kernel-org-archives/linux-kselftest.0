@@ -1,183 +1,153 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E51330651
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 16:37:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781195849; cv=pass; b=Rb3kp6h18/tBcqYXYbWHzmc6FJf39hNlO7AP+sUoXnHW87CiwvKamspwHrWnaA+/Pl4kcQRilTGJi8kVqe4IPZm/0nDUv25ysZyaH/AbArmulORfj4ssjP1YPi4532AQny6PGTaoryEHwbCcF9eKNc6YItEDSR2KcnzDHishO7g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781195849; c=relaxed/simple;
-	bh=YqpjZ2mJYo+OscrePw1sjkzQ+nl0rlFsGa5QD/lhW78=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vo2KAV1f5m2LyXteyMnkH3+lGoQsAVfpQlox8ngiVJE9ctIijKNfMNxOTI0XMD2aHdcMiiyTjp59CT+JxhGlonBupVme5VdJ55OlBoEbn/8P/qiXiSs+rPJpGkDvPxPwUGhTV7WyzOgc2IBxp5r8+bdkazse+AEQvwiGe6uCwhc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gy7H0iuv; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sls/ulgy; arc=pass smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4EE331EBD;
+	Thu, 11 Jun 2026 16:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781195962; cv=none; b=ngXGi+/fXEcowKN0j6F5wVY4vs6qqE65fxcixy/leOGnJYCdQjr/C8oYs6WV8xdx5sugI9TVmno7q4FMOfm0WqahFtJleGFigRA4YOsxdd2JnqlzDSZUbC8ONh+EpxufNiWenwYZULC9tF9W0KaJ80OCE5Km0mKkqFXOxXG69fw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781195962; c=relaxed/simple;
+	bh=hasXvVLG/gODkcBEMTA+RRTXcriCUdW2mKBOU/kxIMU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LmoA0f7u74s7uzugk7iBQ4Ghx1TmsuyvSS3Jy5aXt1AMcPHvca5MwFSG7s0hp+YKmA3uJVn+ma39wsMxti0NIOJtQLvuFRIgCV0wUqU+RwMDKFRsL2b9TTm3xiTlPF3dnh4E15Xq0xTWLLvPoWmfV0fkRnAWbbxMstr+f+Ls6x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XJECdmOl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gy7H0iuv";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sls/ulgy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781195847;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lo2BJAapvZJXWOBDzrRCDmN5WtMov6d+Ohtu+DitNMw=;
-	b=Gy7H0iuvwtQLYLxnJ9X3AxhXcQ5dXhoz8rwlEuxg2FJjkLZ4MPuXX4jh9g6qNSuQ3up9h8
-	2wjDhIqslmwEUf2GkmQvQlje6Bd8tJ/nVLSU23d67DShuk/vNNB3atFOGK+ACPhODKwf+Y
-	Y3pDoHFhki5sLhtkOK0rt2OHNnNn9bU=
-Received: from mail-yx1-f69.google.com (mail-yx1-f69.google.com
- [74.125.224.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-258-h3g96382O8mUltZQgJNNNQ-1; Thu, 11 Jun 2026 12:37:25 -0400
-X-MC-Unique: h3g96382O8mUltZQgJNNNQ-1
-X-Mimecast-MFC-AGG-ID: h3g96382O8mUltZQgJNNNQ_1781195845
-Received: by mail-yx1-f69.google.com with SMTP id 956f58d0204a3-660d7828a5bso167405d50.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 09:37:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781195845; cv=none;
-        d=google.com; s=arc-20240605;
-        b=lVWN5GAJN5L3SLpZuRar1EC+diK8jRrbFE0IZct9UXU0CYZXX9rlttHlgSirjq7Jvm
-         0rF+2J2loET8voPNdEaBcQsqAgn8lgGijGEkMqACDxk2osHx3zFxDrMHaBPpc/h7oxkd
-         CxsezK+EsTmEaOxuMXCX1wBNIa1zr9UysjlUu1AgaSn+vTLab4N6bpgzVnSbyy5hdnzK
-         g3xmiJQHCwRojO/vke6oItU1AxdDXC6fIeceZws/tqTlqJfX1jaSvP3Rnz7d6uxPLT+b
-         wJU2GVdyawCiLn6FBRowp52g5THpt0pGlx6m75jkIQ3UGwlYKMWOxggDf7USG4hziUkW
-         CsNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lo2BJAapvZJXWOBDzrRCDmN5WtMov6d+Ohtu+DitNMw=;
-        fh=GzI79nLngE63NS6cmDynk/qZ5ZULcDnX4ZXzFXG88yY=;
-        b=cCQmwXGAKZdN+cm4jGBIvbgXog7QQziHr6tcI43WC2mXjYmnrS2guQ+j2BWuuCb1CV
-         UsClokRziWOXTv+jG3enTC4mgiDj8GWo0No6w6WIXjWxbHo/v7SEPX6tMbj9lZJZVVIo
-         FjBHXjXQDhYSy2glkskfAOi79PcO3T2ZYr5JiqSq0sze97F9E9WCF+/OOjafpk+q8oct
-         Q+JuEVKcXHsx0WnBcbLPSaQjhIHCE/1B0MYLIKSB/mERk9cBqPyDoz4axaRT+dxEFoUd
-         mt8QAhN1/O2YBbNj5lDfRwRxP7ocLhwDMtoPAzS8g4XKsNs75xTn6z3cZCfkdiKZ9HMt
-         6Qow==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1781195845; x=1781800645; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lo2BJAapvZJXWOBDzrRCDmN5WtMov6d+Ohtu+DitNMw=;
-        b=Sls/ulgyCvKOSDCRAMQ3/lO8IGrW5PWeLhBrTfgT/9PfJE1tKDxRx/XWf90Q2yG5Uz
-         vrVW4ijQbxeA2+FryLzros5G3Q3JjWJxz2ZZuFoiWdlXNOT8D5Wag34+zYK82g8Lvxh3
-         DUEUwH9BEi2NIlp/iiY2qEdmNTYhGcebagdqA50KaHM0AbHpX/CgOjaouEh6Zvj6YF3w
-         arl+HbuJdcd3TltckQEzW0eNCIn/W7Hrhi3a1Spp9f3tPBe2NEhHkN0fF58GOgYgY/Sm
-         ePvSwsIV0BylPeHTLyYkF36OC3rAtH1DgCusCQmKAKxmk2MkMqc7iJxKxxnUVOi4hCRT
-         FTpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781195845; x=1781800645;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lo2BJAapvZJXWOBDzrRCDmN5WtMov6d+Ohtu+DitNMw=;
-        b=DHoBsMjDseOmfVy7gZ2JFoXHmaJ74rGvlUpPmH7wxNM12gbIhO6tudJQbw2wNzHapL
-         2+VJpo/oXPsZCao7dFv/IUZumgwEOXMGkaAZLyz2yyLFaGcMZ0ydw1vZvMIRqEyemdnC
-         82Gl49PNUG68Nw8rW1R6ruFdI8DeNh9E3/EnyVBnkS2e5Wk+UeUiaQCA2S3B+FUVPuyr
-         LEhholeQoDH882dlR5FK/4UajGA5Z6IbUZ+80m3qKeBgPBxfe4eAiq778tqR/Zfd4dwN
-         MWYg/n+I8IRe3mSxK+oVWqxt9g8oywEtozo8BdNs2ixKKtJ+XnEvX24QL53Ix6t/wiNL
-         dPKA==
-X-Forwarded-Encrypted: i=1; AFNElJ/Ads9l8cIA6rdfC7zbG7PlOmFI+VC6RWS34unxsff0n6LmYq85FTHY4Lb5Wff+erwJ8J7hg4IQdLCxBmYDOu0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzC9q21Dba3mcfgF3zwLZev6oA7E7UR8v2ULlG3jaNEUP2QCYLE
-	xMBHSad5WgS+VNZG8d6fEmvO7bLu1IfeKgrrZiwV8ySGWTtwdoqpS3+VK/EaW3WFQL+OPiL9Ve1
-	4jyqMDPBO6rFuBun/oMu5tso5er8khJyE48pBxcTaCfHF/Zr8XxQc+kUBQl1d0L11HPnEgjMsZt
-	hMsPftHgMgrtxAQeLB6JC2zb9QjLxVlf3DvxJ9OSFHV0pU
-X-Gm-Gg: Acq92OHizzPSUyqo9tJu2cQMNSlNKJBaxXMTHhq+5Of7JKB4tJn59Dszw7jqVgsdoJY
-	z7tK7lQOdZZT8q9uyC4dPVWhQputirKlz9P0//FeKBUW7ao+ZOT2qwKIdyYrLbHQGWWqjF+kePJ
-	7ObeVcLhy2B5O3novMY/eVR34UUOYTnLXNu0jfB902xjfFwlIPzZCO2Q6O9JVGaIsxTJktOacwM
-	E4F
-X-Received: by 2002:a05:690e:1c07:b0:65e:9e71:7942 with SMTP id 956f58d0204a3-66269821a84mr2395917d50.37.1781195845248;
-        Thu, 11 Jun 2026 09:37:25 -0700 (PDT)
-X-Received: by 2002:a05:690e:1c07:b0:65e:9e71:7942 with SMTP id
- 956f58d0204a3-66269821a84mr2395891d50.37.1781195844844; Thu, 11 Jun 2026
- 09:37:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XJECdmOl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56DC21F00893;
+	Thu, 11 Jun 2026 16:39:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781195961;
+	bh=i8j+1zlC7hMJNqYIVOq0PFbMVTaou4UfvLB7ez4lCWk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=XJECdmOlaPRVHdUcTH+MqiDeBXH/ihHo1yWSAp7cQRCxWOovqzrvRf41RfpspPUgO
+	 4wDZoi3b/ZhMzO8cwj6w/FW3gABWTyRKiM+C5wfdckRCLVkCI9Tgl8cKHCS6gGjq5d
+	 hFQfnj7KCq9gFrqEcZB7dCBhNoLa9eyZxkzmT0tPwTZIWc0Jo5EmJiB7YoFhdl1jRK
+	 Q84Qrs82Eg2nuSaN+8fdQ6fW4qgf5qOS4tHRnEtmWBalpzjcBmTQn1yefVKNB3JcQq
+	 BzQlqEBOe5z+JtdJljfcdsMJdcJT2br/ExmR7cTqgp1cmgB32EROIOGG7V7tm4lFWu
+	 PPraFMdpLYt3A==
+Date: Thu, 11 Jun 2026 17:39:13 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Nico Pache <npache@redhat.com>
+Cc: Linux MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>, linux-cxl@vger.kernel.org, 
+	"David Hildenbrand (Red Hat)" <david@kernel.org>, Oscar Salvador <osalvador@suse.de>, 
+	Andrew Morton <akpm@linux-foundation.org>, Zi Yan <ziy@nvidia.com>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
+	Alistair Popple <apopple@nvidia.com>
+Subject: Re: [Bug Report] Elevated PMD nr_anon after running selftests
+Message-ID: <aireq_jrgKH0zsNy@lucifer>
+References: <c5401e8d-0b46-4cc0-88b3-f438d610e73b@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <c5401e8d-0b46-4cc0-88b3-f438d610e73b@redhat.com>
- <7e7cbc60-e9c7-4a63-9d4b-4e8fcad7bfc0@kernel.org> <58760bd8-4979-4fb1-96a3-eb94f0e8ca0c@kernel.org>
-In-Reply-To: <58760bd8-4979-4fb1-96a3-eb94f0e8ca0c@kernel.org>
-From: Nico Pache <npache@redhat.com>
-Date: Thu, 11 Jun 2026 10:38:12 -0600
-X-Gm-Features: AVVi8CeRiWREUqKN2Q_Og2MjBU5y5YTHpA1HPOjpENVr0n3Tq-KSA69EjhcH1X4
-Message-ID: <CAA1CXcCuk+3T98i01fAbQ-MSDX-f6ZdpE7kTbC_TwKObJ9siwA@mail.gmail.com>
-Subject: Re: [Bug Report] Elevated PMD nr_anon after running selftests
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Linux MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>, linux-cxl@vger.kernel.org, 
-	"Lorenzo Stoakes (Oracle)" <ljs@kernel.org>, Oscar Salvador <osalvador@suse.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Zi Yan <ziy@nvidia.com>, 
-	Matthew Brost <matthew.brost@intel.com>, Joshua Hahn <joshua.hahnjy@gmail.com>, 
-	Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c5401e8d-0b46-4cc0-88b3-f438d610e73b@redhat.com>
 
-On Thu, Jun 11, 2026 at 10:24=E2=80=AFAM David Hildenbrand (Arm)
-<david@kernel.org> wrote:
+On Thu, Jun 11, 2026 at 09:58:55AM -0600, Nico Pache wrote:
+> Hi,
 >
-> On 6/11/26 18:09, David Hildenbrand (Arm) wrote:
-> > On 6/11/26 17:58, Nico Pache wrote:
-> >> Hi,
-> >>
-> >> While testing my mTHP code I noticed that mm selftests caused an accou=
-nting error in
-> >> /sys/kernel/mm/transparent_hugepage/hugepages-2048kB/stats/nr_anon
-> >>
-> >> At first I thought I might have caused a regression, but when retestin=
-g with 7.1-rc5 (without my code), the issue was still present.
-> >>
-> >> This issue occurs in two mm selftests:
-> >> 1) hmm test
-> >> 2) migration - private_anon_htlb test
-> >>
-> >> I spoke to David about this and he suggested the following diff which =
-seems to have solved both issues.
-> >>
-> >> David would you like to send a formal patch or patches?
-> >>
-> >> Cheers,
-> >> -- Nico
-> >>
-> >> Diff for (1)
-> >>
-> >> diff --git a/mm/memremap.c b/mm/memremap.c
-> >> index 053842d45cb1..683a77dd679d 100644
-> >> --- a/mm/memremap.c
-> >> +++ b/mm/memremap.c
-> >> @@ -425,6 +425,7 @@ void free_zone_device_folio(struct folio *folio)
-> >>         mem_cgroup_uncharge(folio);
-> >>
-> >>         if (folio_test_anon(folio)) {
-> >> +               mod_mthp_stat(folio_order(folio), MTHP_STAT_NR_ANON, -=
-1);
-> >>                 for (i =3D 0; i < nr; i++)
-> >>                         __ClearPageAnonExclusive(folio_page(folio, i))=
-;
-> >>         }
-> >
-> > Wasn't there another issue with hugetlb?
->
-> Just realized that you sent this, but somehow my mail client got confused=
- and
-> hid it.
+> While testing my mTHP code I noticed that mm selftests caused an accounting error in
+> /sys/kernel/mm/transparent_hugepage/hugepages-2048kB/stats/nr_anon
 
-Yeah, sorry. Thanks for the message about the email client setting I'm
-probably missing. Thunderbird may actually work for me now :)
-
-Cheers,
--- Nico
+You're not giving any details? how does this manifest? How did you detect?
+Output? Etc.
 
 >
-> --
+> At first I thought I might have caused a regression, but when retesting with 7.1-rc5 (without my code), the issue was still present.
+
+Seems to be a regression in your editor's line wrapping... ;)
+
+>
+> This issue occurs in two mm selftests:
+> 1) hmm test
+> 2) migration - private_anon_htlb test
+
+OK that's useful, but what exactly happened? Any test output?
+
+>
+> I spoke to David about this and he suggested the following diff which seems to have solved both issues.
+
+Whilst speaking to people off-list/elsewhere etc. is totally fine, I'd suggest
+engaging with the community as the first course of action is often a good way of
+resolving things.
+
+Even if things arise from private discussions, which is also totally fine,
+please do give sufficient context so that the community can engage with it.
+
+And I would suggest that ideally you phrase things such that you are asking the
+community as a whole :)
+
+>
+> David would you like to send a formal patch or patches?
+
+So on that point, I understand you're asking David specifically because he
+suggested the patch, but I feel that you'd get better results making it clear
+that you want community input :)
+
+As one might misread this, and perhaps other such occasions, as you feeling THP
+== 1 person, which I am absolutely sure is not how you feel, but phrasing things
+a little differently would help underline that :)
+
+Kernel review and maintainership can be rather a thankless task, so details like
+this matter I feel! [and I realise I probably screw up on this regularly too so
+we're all constantly learning :)]
+
+>
 > Cheers,
->
-> David
->
+> -- Nico
 
+Thanks, Lorenzo
+
+>
+> Diff for (1)
+>
+> diff --git a/mm/memremap.c b/mm/memremap.c
+> index 053842d45cb1..683a77dd679d 100644
+> --- a/mm/memremap.c
+> +++ b/mm/memremap.c
+> @@ -425,6 +425,7 @@ void free_zone_device_folio(struct folio *folio)
+>         mem_cgroup_uncharge(folio);
+>
+>         if (folio_test_anon(folio)) {
+> +               mod_mthp_stat(folio_order(folio), MTHP_STAT_NR_ANON, -1);
+>                 for (i = 0; i < nr; i++)
+>                         __ClearPageAnonExclusive(folio_page(folio, i));
+>         }
+> --
+> 2.54.0
+>
+> For (2) he suggested
+>
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index d9b23909d716..9fd50ea25d2d 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -590,7 +590,8 @@ static int __folio_migrate_mapping(struct address_space *mapping,
+>                 /* No turning back from here */
+>                 newfolio->index = folio->index;
+>                 newfolio->mapping = folio->mapping;
+> -               if (folio_test_anon(folio) && folio_test_large(folio))
+> +               if (folio_test_anon(folio) && folio_test_large(folio) &&
+> +                   !folio_test_hugetlb(folio))
+>                         mod_mthp_stat(folio_order(folio), MTHP_STAT_NR_ANON, 1);
+>                 if (folio_test_swapbacked(folio))
+>                         __folio_set_swapbacked(newfolio);
+> @@ -623,7 +624,8 @@ static int __folio_migrate_mapping(struct address_space *mapping,
+>          */
+>         newfolio->index = folio->index;
+>         newfolio->mapping = folio->mapping;
+> -       if (folio_test_anon(folio) && folio_test_large(folio))
+> +       if (folio_test_anon(folio) && folio_test_large(folio) &&
+> +           !folio_test_hugetlb(folio))
+>                 mod_mthp_stat(folio_order(folio), MTHP_STAT_NR_ANON, 1);
+>         folio_ref_add(newfolio, nr); /* add cache reference */
+>         if (folio_test_swapbacked(folio))
+> --
+> 2.54.0
+>
