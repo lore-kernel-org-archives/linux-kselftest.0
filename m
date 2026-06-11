@@ -1,215 +1,232 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BE93A6EE5
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 20:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781208922; cv=none; b=ftSKIWn5osM5k9oAhok6oM77Rw7l6hxqG8i4EwCcZ0R61C+gpmCKtY/XoOiHbqcuhk/R89zcBkLaBiv70+kbHxstcPo/Cno07iDiyzWqgosWlcmt0QY4viGrao9fbP2cMrrYDLRAkJgHUxUipeGpEgq6diblnPStzTmmoMw8+9M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781208922; c=relaxed/simple;
-	bh=ztCzluR5K1LOfYvJO2M/7Jb0AjscEHQ8dyRN17VY1U0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PIKfKVmXLoLAcNAVD3Cip+vNmQTKBNwNe9zWcxyOwACZtwZohKzfeGZGUF3gVdZMb6kWrCRUwjrqMn58PLhIiH5BrgU9rvEOguEhvHKwPTkY9G2uIPXxkP9c/EV6xG6/s2pD+Lg139bYXJY1MOP3TbrihGl0IOGUCJVwBopYBFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TJoVYKLs; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0BC48C8DB
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 20:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781210224; cv=pass; b=NvLpY7GlTLxGe1LPxrcoMmSELJgsNL/sSXST4pTc/2GeS6iLYLHNecOPah1tSs+wzyqpQLyAfH9lfhpnbfpMhYliX1OspJ+FVP8jHwy38d0uAyyE6HuRsiR83rDYU9TwaPpPcCZNaBTdGpZP7A85THk9+T7ZvzE3yCu1yt45lg8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781210224; c=relaxed/simple;
+	bh=K58UcHo+B3aFwDsgem6xE8uiuWZd8lb+WbYUU9ocaqA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Wt5iUbmYv6XIa8cP8l/6riEjM81thM62yRwOIlu9NbcTXSUQYyj7tzObMn88fJQy/mHUWBbmJxStjILtAncMwq7FYTyOL7gxhEkAObPBK6pA1T7mTaAeNXDGprJsBBLkdxjTbQGUoPHy9ygeNznef8c8mGcrM004NuEdCYp0ZAk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BZWUKAUr; arc=pass smtp.client-ip=209.85.217.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TJoVYKLs"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-36bb3551f6eso308645a91.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 13:15:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BZWUKAUr"
+Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-6c54b82e936so5096137.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 13:37:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781210222; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Ey2qvISkQXy+mxdgXBUCqnOh58t7xhFqABjsSEJfInrHFhLTrGKlqleQm5h53MOBXw
+         Lw302mwAW7h/OQa46XZXcLVevRJhv9lSx/1yjBCT7RKFy4j0JNTh/cgrT5icXjOrKO6U
+         t52LONRQLQYF78sm+YQJXcY8C24b7EBWK/aT2EiQVCbEfLgj7gAU1YCdXp2j4LQr+brd
+         CGrL9GJV+397uAx8+Z/qKqm+IONhWnGZL+cp0g/aSQWuNNuSZsh4wAIlKJ65XTVY1RV6
+         PpV8D3PbgdGNd560/6KbrBckiSKKoOwQCCMt2R+kQdFRWA+uZrIszX+i93yUy4vF26p+
+         J3+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=+sd3cdzhpA5EXsMbu0XJlZwk0ZLWyDF9YQvcNfzR1z4=;
+        fh=WWG/ZFcVbflmyG+5j2mOXP4/7/2yApvvKt4UzCcKYCg=;
+        b=jHKA2GvZr4ITHqzk0192POLsz7zZxYHiR84W0Rv03PYRON4lupGLLRzx0UlGcGDt7h
+         jQv3XZj+IU0Y/H+elhhp23Ga099XZim0zW30R7vSRgShlrC29wtGfOnlGJnrQpzPH5cM
+         YVxw/3ZMybPvIHz1S4G8qeqqMJORemhbBcXUtcpxgZGoDC+2YYUNpSCsmiA+c1b5cEzy
+         L++M56tElJzsPtK2/fCarmpPAcQQf3kZ/AIxbJfgn6k/CHiI6cORNsqRlIGqDjoFVDGK
+         DL02W/U7oRix392M4riv8yOsFKdYf0IFBm/bSk1RroeamFP0hVTD1m1ZugL/7q3CzxNQ
+         //EQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781208921; x=1781813721; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SXkT6PmbtXC0d/wtet81Vb0IYNXQoXYAymVUyoGXQ78=;
-        b=TJoVYKLsmEB3/xdVj+baW2aOXHE8Z+uhjOPsflQKIlnhfb7bCoOuTV91/QLUg/xmz3
-         wuAqPGHy4OnfoMn6xBcWv/F08oMElW/NZstUNe5ds8wghbg9u4Vahn5u9XMXsbzzq/hh
-         2xVWSxaGpNrJYCe6VYmsb0vPiz2nAk2Zl9A+P6AXOLHTI3dMxaIQJpfQr0DS49lqnzSj
-         Yg+vwSojvJO1bi/GwCyta044XIn6Y+R8nlDI7gYn4VygV6+1HGTgw4Ne7HuexJXCLROy
-         QVtm8hA4F+dEXV2iWArrCQlf1ZOsjkQCyv5fd/eup62WDEnG0nwZf6oYizYXUR+JQTND
-         94ig==
+        d=gmail.com; s=20251104; t=1781210222; x=1781815022; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+sd3cdzhpA5EXsMbu0XJlZwk0ZLWyDF9YQvcNfzR1z4=;
+        b=BZWUKAUraziQu0sfd6OqVx7WeO3HUGsmQYbuFHe5pAVUJYAycBN4oIuAHq8rX12wSE
+         UE4sF3bvEcOQ+p2+ebgkFMhBiP5NQpVPoygob6iftXrWDEdzRLD5dx9TUphJI70Gw7Iz
+         mWUWmDxu/EUEOO1mVRHAYiQfCUY4BWTxqI/FuzqMi8shWbdiIXoxM/QC/1P1vALSiUev
+         lKKJFFGusbgOtIVzmbVYVaH7xP8HPXMVk9UHZUVa0P6Wizi5vRaVqzihVQlnYHyl+Rup
+         CO2cpYjhkPU9e665PFRpxg3T5oGzDEil/krlTR7haT1sWlL1vi0/kDniyxCVP2+f0Et/
+         qMMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781208921; x=1781813721;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SXkT6PmbtXC0d/wtet81Vb0IYNXQoXYAymVUyoGXQ78=;
-        b=nND6Y5q7pePrcck5Yz4ipdq+/Q96PSsKhDOicUuL+6z8QXTsgIF2/7LLq+WTR0DN5n
-         OL8zB9xr24l3SacG3k/rBrMLjS53rXV2qPm/Sz9P+Od56bg/BweefxHL5g5HzpVxjKXW
-         00vKENxpyFFT+Rm9Mb3GEFxnPcKXd+am+wwo4klxfT9J+aN+/MgKDY0zJBdQkcCLDkfm
-         zqFzn0Ys1DLgHfw+jNZNtGxh1EG8j5G/X5i6lOS3Tnv6njFM8S2qSt5Cdk6YpvBBLRZ3
-         lsYtJ7l8H7/lqlhaOnnliKpxorHaZNVUFxfjYWpSzTqcS2tjqOu0+mRP45Q+3PNQ+Shf
-         uROQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8JqNtVoKCI3u0He/xBLM6Po+n1f8q45mZTWiAH7s5Ga0Xo66J7KTdrI5v/Ie6fQJP5uWqIv+gB+ajCec7FFSs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfQnFo8mEoswHHPjrN330hYI0cCGLAkaL9SJNiv45zdG8StyCo
-	3hwKrNM/KIDbVelOJ66St9+6V2UHMesa8aZ0FD5+FRtVN2XKHLON71Ey
-X-Gm-Gg: Acq92OGyVqAZ+d7536D3bKRko25dF77COoKdCP8yeuiVy5+J0n30gVLB7Zl6cY6OuCW
-	Z/T/xqslEKBXRkr1ek55F02sKkD8C0gfGHw1VmFlKchzeZIYVZKko3S6k8OC049uGtGQ75ICPzg
-	21XsdYimWHhZQ66uvWCi1ip6UywDyJK9Lj8yfROOGPhEqRSKEAO9CxTlpwOOeRCPMZu6o2PVecZ
-	Rto0FV/P0/6KnTAlW/0SgHU4keUGn6TBkjqmr9wbXa7e9Y63ANDUI6ksh1x25oXQ5mqSTD55OVm
-	AweQTY5avupiTwasO1dmiwAVNGW0vbXjPpZnOWNOk62dYfO5y57KFvCZwFyRMN6lEsYPsJHvxHf
-	SLj4MK6y+kGTNQv7NN6vLj5edZb1iTlC2pbH3ez8LRlGUaxFss9OifyrGQWzscNjjdpzpCX+P0Q
-	==
-X-Received: by 2002:a17:903:41cf:b0:2b4:656b:aeb0 with SMTP id d9443c01a7336-2c2f4fd8bbemr50216465ad.35.1781208919538;
-        Thu, 11 Jun 2026 13:15:19 -0700 (PDT)
-Received: from [127.0.1.1] ([2a12:a305:4::302d])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f875casm288730475ad.22.2026.06.11.13.15.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 13:15:19 -0700 (PDT)
-From: Guodong Xu <docular.xu@gmail.com>
-Date: Thu, 11 Jun 2026 16:12:53 -0400
-Subject: [PATCH v4 16/16] riscv: hwprobe: Introduce rva23u64 base behavior
+        d=1e100.net; s=20251104; t=1781210222; x=1781815022;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+sd3cdzhpA5EXsMbu0XJlZwk0ZLWyDF9YQvcNfzR1z4=;
+        b=NiiiVDhtZkVUotr601tJPEAHt9P7cu1OL3dG0Ml+caxTl+L9Lxei3e8S7xbJ9fRXTO
+         p9p528SdFO0OH+H9u7gcN0b8hxNfG+tzTtTnnQxMGOTjjFhIJKqCpr85t3Jqov5Y9du8
+         BU2CXFO+ppk5PTFypBYGTBdXrDzHo2Owp4DR0R/Jgsng6ijT747iEgz/lCzzaVstpha8
+         /FYxof/rFQrZxf2lfJgBX8DVJ9j6RuUtNkmSSb5ND/2xAYC4GSdwOmiUJuLWghkPd1Kd
+         odijU/ndd8YDlh5FGKsz05MpAaT9LEGkOfwu1cgdPWVny1YhWJEiRZcnHLraBS0sELwA
+         eHQA==
+X-Forwarded-Encrypted: i=1; AFNElJ+kbzsEO9hA9L9Q6rker7oScu1DpnEO6eqWU54OnfgINKArSJGL6Xp7/NnwPm/W+irtD4Sa642w9L5dflzk1Hw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqCc4Czwj4Os9RJulBVzEnrmVJ8WHdBhGjEBYCRThyw7eNehiV
+	zv5eI14on1poEvM46oOQulAgBLtZrkHpF1iOVo4Z98xMXO6qw370KOJ4QUwvU13mRE3Fkw9eUlO
+	JUWGrG7SWEUmAyy2GzfRcfKZdzDpQuKE=
+X-Gm-Gg: Acq92OErwLAF6N5T+ZpBN0u7BNHJcVxt09voYOnoiZFjL1lac7Ifc5V0Qv3AgbQIpNn
+	zS7sdAU7M5O+rrWgSR+d5B1iv3fIp4tyvkROrmnpC0m6E1YaQ5IykqpGTErhyIjd7ki0U0jLXxy
+	MdkObf1wSxwPSb+Yos+Xis2P7ku3viMpTlrmDpoK1Vh/nJ4wZIiIEVMonIZgJ0qwQWxF7/0+u+O
+	s40PGeBrGRcz22ugJfjwvaBrpTfk/pCwbMprd8K8zHjGdGX117TkWKBbq2AGM6uhgesVPPgq8kz
+	i9KmD0gM4A==
+X-Received: by 2002:a05:6102:26cb:b0:631:4d32:a86 with SMTP id
+ ada2fe7eead31-71d5c67f824mr916400137.7.1781210221808; Thu, 11 Jun 2026
+ 13:37:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260611-rva23u64-hwprobe-v2-v4-16-3f01a2449488@gmail.com>
-References: <20260611-rva23u64-hwprobe-v2-v4-0-3f01a2449488@gmail.com>
-In-Reply-To: <20260611-rva23u64-hwprobe-v2-v4-0-3f01a2449488@gmail.com>
-To: Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Paul Walmsley <pjw@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>, Zong Li <zong.li@sifive.com>, 
- Deepak Gupta <debug@rivosinc.com>, Anup Patel <anup@brainfault.org>, 
- Atish Patra <atish.patra@linux.dev>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@kernel.org>, 
- Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>
-Cc: linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
- kvm-riscv@lists.infradead.org, Paul Walmsley <paul.walmsley@sifive.com>, 
- Conor Dooley <conor@kernel.org>, devicetree@vger.kernel.org, 
- spacemit@lists.linux.dev, sophgo@lists.linux.dev, 
- linux-kselftest@vger.kernel.org, Palmer Dabbelt <palmer@sifive.com>, 
- Guodong Xu <docular.xu@gmail.com>, 
- Andrew Jones <andrew.jones@oss.qualcomm.com>
-X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4843; i=docular.xu@gmail.com;
- h=from:subject:message-id; bh=ztCzluR5K1LOfYvJO2M/7Jb0AjscEHQ8dyRN17VY1U0=;
- b=owGbwMvMwCXWtEl1Z3CGpCDjabUkhixtsSM//PujPG/o5C1988NFUFrlz3OZHb+sFHZukhbJ4
- gmQWDGzo5SFQYyLQVZMkeXw0Zbsra98on2fc/6AmcPKBDKEgYtTACZyvoWR4Yvq2kdr86/OeP4u
- qMp8S+LZV3N353cxPzBS0t6YmX07+h0jw50MkaNquufeZAvdUuY5IyOsvCP6GE9UwXfZPrNulv3
- drAA=
-X-Developer-Key: i=docular.xu@gmail.com; a=openpgp;
- fpr=90B1DC3DF0BD10FD1227BD6344F254AF42F143EE
+References: <CAF+TLO0TOKr3nef9RnbBuZ8A-jNpV1po26t1BO6JbSqMhfABvw@mail.gmail.com>
+ <20260606003627.88973-1-sj@kernel.org> <CAF+TLO3a2MBVp3-7jm3BPjuT8jhx4yzdWxuA_QPQ9YPVEj0XZw@mail.gmail.com>
+In-Reply-To: <CAF+TLO3a2MBVp3-7jm3BPjuT8jhx4yzdWxuA_QPQ9YPVEj0XZw@mail.gmail.com>
+From: Sailesh Nandanavanam <saileshnandanavanam@gmail.com>
+Date: Fri, 12 Jun 2026 02:06:51 +0530
+X-Gm-Features: AVVi8Ce2REi4mUqmiQKXLcfNq0RParFt0ik2l5LBrnYnygRVam7OLZkXJS6yVMY
+Message-ID: <CAF+TLO2PX71_-9nKBEAJ50+NpjNkgipig6=9OLsvbgZtqF2yew@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/damon: add regression test for damos_walk()
+ vs kdamond exit race
+To: SeongJae Park <sj@kernel.org>
+Cc: shuah@kernel.org, damon@lists.linux.dev, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Provide a hwprobe base-behavior bit so userspace can check RVA23U64
-support in one call.  Without it, a consumer needs five hwprobe
-calls and four prctl calls, which is error-prone to require of every
-caller.  Most software treats RVA23U64 as a new base anyway, so
-expose it directly.
+Hello SeongJae,
 
-Signed-off-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
-Signed-off-by: Guodong Xu <docular.xu@gmail.com>
----
-v4: No change.
-v3: No change.
-v2:
-- Detect RVA23U64 by reading from the cached hart_isa[].isa_bases
-  bitmap populated by riscv_init_isa_bases() at init time, sharing
-  one source of truth with /proc/cpuinfo.
----
- Documentation/arch/riscv/hwprobe.rst               |  8 ++++++++
- arch/riscv/include/uapi/asm/hwprobe.h              |  3 ++-
- arch/riscv/kernel/sys_hwprobe.c                    | 23 +++++++++++++++-------
- tools/testing/selftests/riscv/hwprobe/which-cpus.c |  2 +-
- 4 files changed, 27 insertions(+), 9 deletions(-)
+Noted on inline replies - I'll follow that format from the next response.
 
-diff --git a/Documentation/arch/riscv/hwprobe.rst b/Documentation/arch/riscv/hwprobe.rst
-index 32a14331eb9de..dc70470093b1b 100644
---- a/Documentation/arch/riscv/hwprobe.rst
-+++ b/Documentation/arch/riscv/hwprobe.rst
-@@ -67,6 +67,14 @@ The following keys are defined:
-       programs (it may still be executed in userspace via a
-       kernel-controlled mechanism such as the vDSO).
- 
-+  * :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_RVA23U64`: Support for all mandatory
-+    extensions of RVA23U64, as defined in the RISC-V Profiles specification
-+    starting from commit 0273f3c921b6 ("rva23/rvb23 ratified").
-+
-+    The RVA23U64 base is based upon the IMA base and therefore IMA extension
-+    keys (e.g. :c:macro:`RISCV_HWPROBE_KEY_IMA_EXT_0`:) may be used to probe
-+    optional extensions.
-+
- * :c:macro:`RISCV_HWPROBE_KEY_IMA_EXT_0`: A bitmask containing extensions
-   that are compatible with the :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_IMA`:
-   base system behavior.
-diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
-index 36ec8ab470423..50733d3db7633 100644
---- a/arch/riscv/include/uapi/asm/hwprobe.h
-+++ b/arch/riscv/include/uapi/asm/hwprobe.h
-@@ -21,7 +21,8 @@ struct riscv_hwprobe {
- #define RISCV_HWPROBE_KEY_MARCHID	1
- #define RISCV_HWPROBE_KEY_MIMPID	2
- #define RISCV_HWPROBE_KEY_BASE_BEHAVIOR	3
--#define		RISCV_HWPROBE_BASE_BEHAVIOR_IMA	(1 << 0)
-+#define		RISCV_HWPROBE_BASE_BEHAVIOR_IMA		(1 << 0)
-+#define		RISCV_HWPROBE_BASE_BEHAVIOR_RVA23U64	(1 << 1)
- #define RISCV_HWPROBE_KEY_IMA_EXT_0	4
- #define		RISCV_HWPROBE_IMA_FD		(1 << 0)
- #define		RISCV_HWPROBE_IMA_C		(1 << 1)
-diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
-index 3e80e5551ae0d..3f66f2e99d41a 100644
---- a/arch/riscv/kernel/sys_hwprobe.c
-+++ b/arch/riscv/kernel/sys_hwprobe.c
-@@ -226,6 +226,17 @@ static bool hwprobe_ext0_has(const struct cpumask *cpus, u64 ext)
- 	return (pair.value & ext);
- }
- 
-+static bool hwprobe_has_isa_base(const struct cpumask *cpus, unsigned int base)
-+{
-+	int cpu;
-+
-+	for_each_cpu(cpu, cpus) {
-+		if (!test_bit(base, hart_isa[cpu].isa_bases))
-+			return false;
-+	}
-+	return true;
-+}
-+
- #if defined(CONFIG_RISCV_PROBE_UNALIGNED_ACCESS)
- static u64 hwprobe_misaligned(const struct cpumask *cpus)
- {
-@@ -308,14 +319,12 @@ static void hwprobe_one_pair(struct riscv_hwprobe *pair,
- 	case RISCV_HWPROBE_KEY_MIMPID:
- 		hwprobe_arch_id(pair, cpus);
- 		break;
--	/*
--	 * The kernel already assumes that the base single-letter ISA
--	 * extensions are supported on all harts, and only supports the
--	 * IMA base, so just cheat a bit here and tell that to
--	 * userspace.
--	 */
- 	case RISCV_HWPROBE_KEY_BASE_BEHAVIOR:
--		pair->value = RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
-+		pair->value = 0;
-+		if (hwprobe_has_isa_base(cpus, RISCV_ISA_BASE_IMA))
-+			pair->value |= RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
-+		if (hwprobe_has_isa_base(cpus, RISCV_ISA_BASE_RVA23U64))
-+			pair->value |= RISCV_HWPROBE_BASE_BEHAVIOR_RVA23U64;
- 		break;
- 
- 	case RISCV_HWPROBE_KEY_IMA_EXT_0:
-diff --git a/tools/testing/selftests/riscv/hwprobe/which-cpus.c b/tools/testing/selftests/riscv/hwprobe/which-cpus.c
-index 587feb198c049..f8c797b1d0fd9 100644
---- a/tools/testing/selftests/riscv/hwprobe/which-cpus.c
-+++ b/tools/testing/selftests/riscv/hwprobe/which-cpus.c
-@@ -105,7 +105,7 @@ int main(int argc, char **argv)
- 	pairs[0] = (struct riscv_hwprobe){ .key = RISCV_HWPROBE_KEY_BASE_BEHAVIOR, };
- 	rc = riscv_hwprobe(pairs, 1, 0, NULL, 0);
- 	assert(rc == 0 && pairs[0].key == RISCV_HWPROBE_KEY_BASE_BEHAVIOR &&
--	       pairs[0].value == RISCV_HWPROBE_BASE_BEHAVIOR_IMA);
-+	       (pairs[0].value & RISCV_HWPROBE_BASE_BEHAVIOR_IMA));
- 
- 	pairs[0] = (struct riscv_hwprobe){ .key = RISCV_HWPROBE_KEY_IMA_EXT_0, };
- 	rc = riscv_hwprobe(pairs, 1, 0, NULL, 0);
+Following up on this thread with progress.
 
--- 
-2.43.0
+As discussed, I dropped the userspace selftest approach since it
+cannot reliably trigger the microsecond-wide race window.
 
+I wrote a KUnit test instead, added to mm/damon/tests/core-kunit.h:
+
+- Creates a damon_ctx
+- Sets ctx->walk_control_obsolete =3D true under walk_control_lock,
+simulating the state just before kdamond_fn() exits
+- Calls damos_walk() and verifies it returns -ECANCELED immediately
+
+I built and ran this on a kernel with commit 33c3f6c2b48c
+("mm/damon/core: fix damos_walk() vs kdamond_fn() exit race") present,
+and the test passes along with all other 28 existing damon KUnit
+tests:
+
+  ok 29 damon_test_walk_control_obsolete
+  # damon: pass:29 fail:0 skip:0 total:29
+
+Since walk_control_obsolete is a field introduced by this fix, a
+kernel with the fix reverted would not compile this test (the field
+would not exist). So the usual "fails before fix, passes after fix"
+verification does not apply the same way here - the test directly
+validates the new field/behavior introduced by the fix.
+
+If this approach looks reasonable, I plan to send v3 with this KUnit
+test (replacing the userspace selftest from v1/v2), along with the
+commit message format and other minor fixes from your earlier review.
+
+Please let me know if you'd like any changes before I send v3.
+
+Thanks,
+Sailesh Nandanavanam
+
+
+On Fri, 12 Jun, 2026, 01:50 Sailesh Nandanavanam,
+<saileshnandanavanam@gmail.com> wrote:
+>
+> Hello SeongJae,
+>
+> Noted on inline replies - I'll follow that format from the next response.
+>
+> Following up on this thread with progress.
+>
+> As discussed, I dropped the userspace selftest approach since it cannot r=
+eliably trigger the microsecond-wide race window.
+>
+> I wrote a KUnit test instead, added to mm/damon/tests/core-kunit.h:
+>
+> - Creates a damon_ctx
+> - Sets ctx->walk_control_obsolete =3D true under walk_control_lock, simul=
+ating the state just before kdamond_fn() exits
+> - Calls damos_walk() and verifies it returns -ECANCELED immediately
+>
+> I built and ran this on a kernel with commit 33c3f6c2b48c ("mm/damon/core=
+: fix damos_walk() vs kdamond_fn() exit race") present, and the test passes=
+ along with all other 28 existing damon KUnit tests:
+>
+>   ok 29 damon_test_walk_control_obsolete
+>   # damon: pass:29 fail:0 skip:0 total:29
+>
+> Since walk_control_obsolete is a field introduced by this fix, a kernel w=
+ith the fix reverted would not compile this test (the field would not exist=
+). So the usual "fails before fix, passes after fix" verification does not =
+apply the same way here - the test directly validates the new field/behavio=
+r introduced by the fix.
+>
+> If this approach looks reasonable, I plan to send v3 with this KUnit test=
+ (replacing the userspace selftest from v1/v2), along with the commit messa=
+ge format and other minor fixes from your earlier review.
+>
+> Please let me know if you'd like any changes before I send v3.
+>
+> Thanks,
+> Sailesh
+>
+> On Sat, Jun 6, 2026 at 6:06=E2=80=AFAM SeongJae Park <sj@kernel.org> wrot=
+e:
+>>
+>> On Fri, 5 Jun 2026 12:44:50 +0530 Sailesh Nandanavanam <saileshnandanava=
+nam@gmail.com> wrote:
+>>
+>> > Hi SeongJae,
+>> >
+>> > Apologies for the delayed response.
+>>
+>> No worry!
+>>
+>> [...]
+>> > I agree that a KUnit test is the right approach since it runs inside t=
+he
+>> > kernel and can directly set walk_control_obsolete to simulate the race
+>> > condition reliably without timing dependencies.
+>> >
+>> > I will drop the userspace selftest approach and write a KUnit test for
+>> > damos_walk() functionality including walk_control_obsolete. I will ver=
+ify
+>> > it fails on a kernel with commit 33c3f6c2b48c ("mm/damon/core: fix
+>> > damos_walk() vs kdamond_fn() exit race") reverted and passes with the =
+fix
+>> > present before sending v3.
+>> >
+>> > Regarding other feedback:
+>> > - Will use correct commit description format with subject in brackets
+>> > - Will remove the Fixes: tag
+>> > - Will add blank line before _damon_sysfs import
+>> > - Will add changelog and link previous versions
+>> > - Will share revision plan and wait at least one day
+>> >   before sending new version
+>>
+>> Sounds good.  Please consider using in-line reply [1] from the next time=
+,
+>> though!
+>>
+>> >
+>> > Please give me some time to study mm/damon/tests/core-kunit.h and impl=
+ement
+>> > this properly.
+>>
+>> No rush, take your time.
+>>
+>> [1] https://subspace.kernel.org/etiquette.html#do-not-top-post-when-repl=
+ying
+>>
+>>
+>> Thanks,
+>> SJ
+>>
+>> [...]
