@@ -1,139 +1,160 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1366F3EB81A
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 15:07:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09FC8395ACE
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 15:46:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781190471; cv=none; b=TyVMCLGhd89YCxpsBAoc322fLFEKMjp8EosQH36kKuLH7l2NzKiZydo88x+5Y44nxytJuJKuy52ox6MSwclOr6+nSuKo7iaSZBIyxtNgbVQDP/AslAvKQ3RB1/ZTbUQFf8H0SfhnKoK8b2JgG+lU9mS8UOInclJnmxD2vUcsBBo=
+	t=1781192796; cv=none; b=FDKA7CkGWPKjRmBk6q91fDYbYCfPCqj/LzGRUtA5y9MYz7gtuGrhf/Q1BKfeEd70ZrAUm6GWgc5sOg9Pu/SJklOtN1WHgPXu9Igfrq+O09nWPq+hcdo9nnjkxk0gjuZOdoVm6jvt9iiQzEiej28YgVRWgnrU7dQXNj/LUp65nds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781190471; c=relaxed/simple;
-	bh=9FEuV5fSd29uNBGYMcM4imW91zywpwZ5wJYK4FqNSvs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ePkoelkez7V3jPVKzECPtcp488ADwHaL/G5zbr0F6RvSXDeoJ2jjtlCXOHWUB9d3nZieSiMQovy7bLkEyCBFFarvu2tdX7Y0dbPVhOymBryXzoSba3+u+E7+iT41AqhSwivE3iWvGaH9f7qWvub7uQaglejnfRVjy8S6wZn0ABU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N06gQObH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1781192796; c=relaxed/simple;
+	bh=rzzbz++k+Syo0+alvwR6Pj1Z4/WDKW3XNFj7YkGBOUo=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=q+wjpLSfvmoj3erFINrbD3NFfS+onPfNe+8HSutbHZFJnSiG82sg7Ep6TTQg1fWW4/Zmitfd4NvE+CwqckfhMhs+ZxbeyrVKn3POm2mUzmor1izWRAtVyKr27NlQeg7TnO76GZYzv5l9c/A9iQn3Tj+d8Gt9f0selDKUOlTUbEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RxrXnopI; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N06gQObH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781190469;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=HLMNQWK2qUjD76HjTu4AN6U4NjDfgr0okMXaX6F1/oM=;
-	b=N06gQObHu3p33xcF6MrUEB1nOai2i7kVKBubytShLl5MUbgWs4dVxcd4chWJy5Y2gqQPXr
-	/4HZGNetEDhttbs2hUtCnhS2wJ5XoKvcdr8GPDtY7IvFd5h9d8X0SB3lq9cQHF/x4q0X7x
-	BGfUVVFWAz3UmNDmM85mrEVMyzzWT6A=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-330-tZiFQOrbPjWXr5V1ILfKng-1; Thu,
- 11 Jun 2026 11:07:46 -0400
-X-MC-Unique: tZiFQOrbPjWXr5V1ILfKng-1
-X-Mimecast-MFC-AGG-ID: tZiFQOrbPjWXr5V1ILfKng_1781190464
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4AD9B1953963;
-	Thu, 11 Jun 2026 15:07:44 +0000 (UTC)
-Received: from fedora-pc.redhat.corp (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 13128195410A;
-	Thu, 11 Jun 2026 15:07:40 +0000 (UTC)
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Gabriele Monaco <gmonaco@redhat.com>
-Subject: [PATCH bpf-next] selftsets/bpf: Retry map update on helper_fill_hashmap()
-Date: Thu, 11 Jun 2026 17:07:03 +0200
-Message-ID: <20260611150704.95133-1-gmonaco@redhat.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RxrXnopI"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2bf3636d6c0so85382205ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 08:46:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1781192792; x=1781797592; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tkYI56ab44R+CGvXUlfI3ycHykGEF+9O0JMidioFwIA=;
+        b=RxrXnopItWRUKFsvJuGu/1PEMqGZf8sHSY+ZZyZwYmXgTV2hEaRPyMGf1QLNH98tTn
+         ZYN2GfMfyd+FplSUa48NpR+M0r95nKiCwss0a1QWG0TnLc5Hkahdz/jpnq6gUGPlIst/
+         mRrH17zalUoIhQMLjzjmNUFzu7+K/Z5vdCLia5VjfqRvdZIvrotw+uixqgU0LR5mhZDR
+         lRFGybBNnW/rVx1yreVWQpGtI51qBbKAucX4xruEyIQf35FHnJKScMLOySKw15xtZLk9
+         gcwkrYUcQ/kGz6DlrSircsVUJE7fC7nLABOBPOa9dA4//CWR+bXiscN4mEF0V7UyrSNY
+         TxyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781192792; x=1781797592;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tkYI56ab44R+CGvXUlfI3ycHykGEF+9O0JMidioFwIA=;
+        b=P6j9zOjpz99xMUZqrSmKTNU9CNg+ccTxl/twzsEpvEgE7IrUj00UgclIXfk6GS1ZsX
+         qcSLvnCyq8dtDqHPaLx/jB0NkhrFJjujyfncATdCK+156iwgFiJDpIdVDCjFeDjk+KV/
+         n+WIa2cZvQTLcaTRpoy2892y1jKStXW1ZgozdZ0EhqESbfbX5DRqv2KL6GyX2sDgaYcZ
+         r2lNri/w6V9hak/ffqiMCwqr043Da7IVnTuK1+ni3YnkfBPnesLANkZFXMA0R8FQe/E+
+         P+Df94iFSCTIxew/L7j5H7new4gTW4pRhzsugGg5nViq9KINQL/SWs+1G6rb8fk0/nuW
+         eepg==
+X-Forwarded-Encrypted: i=1; AFNElJ9hV9LngLHIksZOimbJz8VOAe863kYKtS7TAerGG881ILPbJtPHMlrSLu8TR0Yn8ph1C/E6WboG/UGMbDBzbGM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzl3Sfu6n42isyTYJAfCNEbx/TLprMUftQ01bRnMcSV1lO02yR6
+	6fW2Hzs+mDCpQ9QwkbFsbT27kRGuDEzZgwHcBOl1nUr9ev6MgDrDV99IEP2UIQ9kYYNj/E9EmgX
+	iTTKGyg==
+X-Received: from plbbb1.prod.google.com ([2002:a17:902:bc81:b0:2bf:17b5:30c9])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:947:b0:2c2:245a:3366
+ with SMTP id d9443c01a7336-2c2f305aff9mr45838065ad.27.1781192791738; Thu, 11
+ Jun 2026 08:46:31 -0700 (PDT)
+Date: Thu, 11 Jun 2026 08:46:31 -0700
+In-Reply-To: <CAEvNRgF31BzyFyVUa7tDJ=qJ-8ws2kxfNjLxmV=OxKSqhaOiPw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Mime-Version: 1.0
+References: <20260522-gmem-inplace-conversion-v7-0-2f0fae496530@google.com>
+ <CAEvNRgGpaggjd3=ooyzv7iEbmA-x1mWJHgjLSjPi8=5CPrk-yQ@mail.gmail.com>
+ <aiHeDZEPkAcWcSkn@google.com> <CAEvNRgHz5GDjq0GqRmpQdHc-X45gCNr39VYWZH-T7XhPEtN5CQ@mail.gmail.com>
+ <aiMVLtblIKu1DQWJ@google.com> <CAEvNRgF31BzyFyVUa7tDJ=qJ-8ws2kxfNjLxmV=OxKSqhaOiPw@mail.gmail.com>
+Message-ID: <airYV9lcIM4xdA60@google.com>
+Subject: Re: [PATCH v7 00/42] guest_memfd: In-place conversion support
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>, aik@amd.com, 
+	andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org, 
+	chao.p.peng@linux.intel.com, david@kernel.org, ira.weiny@intel.com, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-helper_fill_hashmap() is used also on parallel and stress map tests.
-Those are consistently failing with ENOMEM on kernels built with
-PREEMPT_RT if preallocation is disabled. The failure is transient and
-only called by the memory cache refill running in a preemptible
-irq_work, which can easily stall in case of contention.
+On Wed, Jun 10, 2026, Ackerley Tng wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > On Thu, Jun 04, 2026, Ackerley Tng wrote:
+> >> Sean Christopherson <seanjc@google.com> writes:
+> >> >> + KVM: selftests: Test conversion with elevated page refcount
+> >> >>     + Askar pointed out that soon vmsplice may not pin pages. Should I
+> >> >>       pin pages through CONFIG_GUP_TEST like in [2]? I prefer not to
+> >> >>       take a dependency on CONFIG_GUP_TEST.
+> >> >
+> >> > I'm not exactly excited about taking a dependency on CONFIG_GUP_TEST either, but
+> >> > it probably is the least awful choice.  E.g. KVM also pins pages is certain flows,
+> >> > but we're _also_ actively working to remove the need to pin.
+> >> >
+> >> > Hmm, maybe IORING_REGISTER_PBUF_RING?  AFAICT, it's almost literally a "pin user
+> >> > memory" syscall.
+> >> >
+> >>
+> >> Hmm that takes a dependency on io_uring, which isn't always compiled
+> >> in. Between CONFIG_IO_URING and CONFIG_GUP_TEST, I'd rather
+> >> CONFIG_GUP_TEST.
+> >
+> > Or try both?  If it's not a ridiculous amount of work.
+> 
+> CONFIG_GUP_TEST was tried in [1]
+> 
+> [1] https://lore.kernel.org/all/baa8838f623102931e755cf34c86314b305af49c.1747264138.git.ackerleytng@google.com/
+> 
+> It looks like this
+> 
+>   static void pin_pages(void *vaddr, uint64_t size)
+>   {
+>   	const struct pin_longterm_test args = {
+>   		.addr = (uint64_t)vaddr,
+>   		.size = size,
+>   		.flags = PIN_LONGTERM_TEST_FLAG_USE_WRITE,
+>   	};
+> 
+>   	gup_test_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
+>   	TEST_REQUIRE(gup_test_fd > 0);
 
-Use a retriable update in those cases to handle transient ENOMEM and
-make the test more stable also on PREEMPT_RT.
-Also fix the sign of the value printed in case of error (strerror()
-expects a positive errno while updates return it negative).
+Use __open_path_or_exit().  I also think it makes sent to make these available
+to all KVM selftests, there are probably other testcases that could utilize page
+pinning.
 
-Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
----
- tools/testing/selftests/bpf/test_maps.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+>   	TEST_ASSERT_EQ(ioctl(gup_test_fd, PIN_LONGTERM_TEST_START, &args), 0);
+>   }
+> 
+>   static void unpin_pages(void)
+>   {
+>   	TEST_ASSERT_EQ(ioctl(gup_test_fd, PIN_LONGTERM_TEST_STOP), 0);
+>   }
+> 
+> So in the test I'll call pin_pages(), then try to convert, see that it
+> fails with EAGAIN and reports the expected error_offset, then I call
+> unpin_pages(), then I convert again and expect success.
+> 
+> Are you uncomfortable with the CONFIG_GUP_TEST interface?
 
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index ccc5acd55f..c32da7bd8b 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -260,6 +260,16 @@ static void test_hashmap_percpu(unsigned int task, void *data)
- 	close(fd);
- }
- 
-+#define MAP_RETRIES 20
-+
-+static bool can_retry(int err)
-+{
-+	return (err == EAGAIN || err == EBUSY ||
-+		((err == ENOMEM || err == E2BIG) &&
-+		 map_opts.map_flags == BPF_F_NO_PREALLOC));
-+}
-+
-+
- #define VALUE_SIZE 3
- static int helper_fill_hashmap(int max_entries)
- {
-@@ -274,10 +284,11 @@ static int helper_fill_hashmap(int max_entries)
- 
- 	for (i = 0; i < max_entries; i++) {
- 		key = i; value[0] = key;
--		ret = bpf_map_update_elem(fd, &key, value, BPF_NOEXIST);
-+		ret = map_update_retriable(fd, &key, value, BPF_NOEXIST,
-+					   MAP_RETRIES, can_retry);
- 		CHECK(ret != 0,
- 		      "can't update hashmap",
--		      "err: %s\n", strerror(ret));
-+		      "err: %s\n", strerror(-ret));
- 	}
- 
- 	return fd;
-@@ -1392,17 +1403,9 @@ static void test_map_stress(void)
- #define DO_UPDATE 1
- #define DO_DELETE 0
- 
--#define MAP_RETRIES 20
- #define MAX_DELAY_US 50000
- #define MIN_DELAY_RANGE_US 5000
- 
--static bool can_retry(int err)
--{
--	return (err == EAGAIN || err == EBUSY ||
--		((err == ENOMEM || err == E2BIG) &&
--		 map_opts.map_flags == BPF_F_NO_PREALLOC));
--}
--
- int map_update_retriable(int map_fd, const void *key, const void *value, int flags, int attempts,
- 			 retry_for_error_fn need_retry)
- {
+No, my concern is/was the potential for leaking pages if the test fails/crashes,
+but it looks gup_test_release() ensures all pins are dropped when the file is
+released, so that should be a non-issue.
 
-base-commit: 2d3090a8aeb596a26935db0955d46c9a5db5c6ce
--- 
-2.54.0
-
+> What would you like me to try with CONFIG_IO_URING? I'm thinking that the
+> main difference between the two is just down to which non-default CONFIG
+> option we want to take for guest_memfd tests.
