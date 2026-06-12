@@ -1,93 +1,93 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5489A314A73
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 07:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419F83D75A0
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 07:33:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781249465; cv=pass; b=KkTQO/flCnLCV5X+L3/+btOU3EVg9l6FgeCWmgxi5RlrYM6ycZ0GDcJKDxffKC7e01lwYK1/6Y+D5rTpObOeQsBzbpvRHjTUw91Vsb44Q6b5a1rkccviCW/EuI7xJ1rFvADuUPlJijnxyoAzMzTfFnh99BmFmbLjExyYhw08oGc=
+	t=1781249605; cv=pass; b=qm1tOr+qnNSybX78JF2vb0KjsUq8ox3J+A0M/XTBjblfjpUPlbQ/7iwnQiPdfmgX6dAVIJ+UHXnZ+e0dvmMn2DxPrIAfQ1FonQXvD3+nAZ+ZSswuQ+MkxiuOdQzxIPoJIHRsLQ89qA6QOaperqJf0yYjgSYKmcbSMIL7yLYlHw8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781249465; c=relaxed/simple;
-	bh=TJhwC0TjtETgO7UDDcPQsbkdSGcQTc0ybmTI+jD//dA=;
+	s=arc-20240116; t=1781249605; c=relaxed/simple;
+	bh=+CK+tt771npQ32DrjHpsZa5xuUy11BpcBUH4eDrxn4c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rtQt7ShCP8c2bv9Fir7bbHzo5I+sUcUk5pKMVxbZt6a0aMbawjQLlshV8TVJAKsWabU5fAk8sGUhSrIOwm1ZlORw7SrpD6e9Mj29VAlWirSvMwS73h0AlRiYhB7V2a30JUVl/rV+pDdw3gKveCg4DNoP/3MVeWu/sKF9rMWphEY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=L58aOBc1; arc=pass smtp.client-ip=209.85.208.44
+	 To:Cc:Content-Type; b=NZyG2dRHA4Wepyd5nhO+TASEoJiAeQQqCqI454PVsXl24FCvYerHmpMSzhUeY1w4l4tFZ0WaIulZ1AMxgZJrHEtClCq94fXKQDzRsycdy++fH1mioAffDALEIsumi+JoqU/k2I/uzmRwfzF1KCBFIELuJEy6DE1G5OkKIYCi3UI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tutk9yub; arc=pass smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L58aOBc1"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-68d23396ed3so1190961a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 00:31:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781249462; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tutk9yub"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-7e8833c99fcso7018297b3.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 00:33:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781249603; cv=none;
         d=google.com; s=arc-20240605;
-        b=gpD8yBHatCYFWUX9V9Bvk9eXAm56E4y/UBmU+UERUXAVWlSlqOzKauL2gzKq128D9e
-         x66uTFHns/ewswa8u+7+NTAFWb9i6YcLYab1bwALkikqmxE6cVvXXKfsVRblvqpUFpO9
-         xjfOOLKcGxyFovqM6t7mm3pJkOtW5BfXbM4K990tk0oUgdWMu0Ab9t8v5deJ9wv0PJaj
-         JNw5GaTS58RZ9nvo0ciQAalwX8068kPkyxMt1bBvlZxbM89Ug4XU9j5/0v3zYT+GVeOc
-         PBZmru85aVhRylvfPBWR+V7i/SlrxXnWBy16USvQbITXol7IzWI8nhh1HQy7JXPXiOem
-         5HTQ==
+        b=CFKEc1x8CvHlhYs/7T0cu9hlba1H7JGiKh60MZ+eN+hEUB/yp2HWMxAGPEDNwOewOI
+         ZZRecrzPUjvmVLMGKT7n0wEuLECQKmfdZTGnNNeGRD7Y6PZZZVgfGBHZd7qyQ4gMTq9B
+         hu0vPWiJCShBH64rImWPJ6s1FUWJCALzI5e8Te3eZb9ADyaBHsDn3TolW3t/7A/se3F+
+         ZPcpPVPctIYXPXd2IPym2XiXUpGzWEemq8jmfkrEDIZ8EqEMlgP+isYwTQ6RjHKyOJSb
+         KxyAc8r9QpiUCxfiNNCyYuK3WHwp4cVngKwq7GDMtL+goCgicSXkX6OztdNXtxPfBIwB
+         +mQw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=SbYOYDefhLvBGJQzilDjssSWO2zIKceTdBiGnToKxU0=;
-        fh=W7sKix2HZRj3W6MN6rrNV2KFysxH9ScqUnV/Uz5QlOw=;
-        b=cMfQkqKyXXBbf0shwkkGFhhb8iR7B/5RvjMT00LeHBX+V9h/gve8iqRasu453QGCl+
-         TXlYVI64wnQmbE9/N5zhGHMX2vkWeIvtVOa6EmE/59OWE0fzHozjj9Se6FRgjbcUCSJe
-         kJamrvicU4Hx1VEeBSBtrWzgnazIvMxPKoG9WHzuT0vVuFue7m/+MzEA4y30c9DUhnsD
-         ell1KkwUCSa+Ap2LTmlR1aDCHZtG+rl4RT3avXNC0UQLEAZNCL1OBQlhInGmKHwPv8Sl
-         pBhJ8BnhBVNyLK3bFO5XHhmpA3CVz9TIQT9WYjjpBDXalt7auC5r4sRhxOg3unORQl5k
-         Px4g==;
+        bh=37yHv6yFdGH61lIGAgzgwqwgl+igTLCwlH4B//p5pEE=;
+        fh=bskroX55nDgQjdaKuJbW5LlCrIiVqRZoUd/tcw2cIdc=;
+        b=dWsTAeuDez9ujrvQGTZdAL9wBK4oGYaTpQYaukhTKwKYsP5zdroXMcgpI9B+og0Wxv
+         K+XVZv8Sl2TMX0Tik66L6fJwYcKwiY9FjMQDYGqDptsk806dJYXIXogIapJwFYlsYjXA
+         U6jxhdazomMScvym3se6g7Uy2CIHIe1YKzy2AVX8GMj0xLUUoWgkjfYhCzS6h0uNI3Wx
+         StBi35KXe3QnAfJYLrJaX5JbJrhIJRwT4+qr7uC9qTtJm2AToeJGBi4+RNJXcMZCza+w
+         Y5nXTflrIz3pDPEWkgWIRjksTU4r18vrcV/KdOzr9zXAC01eWCd5kai3j5P4iCmQWJbd
+         ZkjA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781249462; x=1781854262; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1781249603; x=1781854403; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SbYOYDefhLvBGJQzilDjssSWO2zIKceTdBiGnToKxU0=;
-        b=L58aOBc1t+GGEQcW9ZUCClwQvWRVSfh0l0dwUX8RnHUPdAiHfoAgoY/hLcJF5PqmDz
-         wD8Dm+3RibTWmuGetriZAkwjyoP2m+Q4jWl7sqx5+R0KFi0niCRZuAdEfb7uJHjaLBIs
-         buBnyvjXmSXIzid5o7u60MGJ5+6TJrjvLQfTIaiUjxT7msImLvAEluy5rwmU3flVIOmT
-         6gWjbSPp4E9eYP8MuxGF+1HB8FU2Rwrdd5LhA+49UXBs0si3uKubqA6+S+ONUEfSN359
-         OEJcXHBCDuoFF8wcGR8XNKobiWWA3Bo0w18RacL+2ijuRLf/mOQ6KqaZNYaAj0u6AMh5
-         5/vQ==
+        bh=37yHv6yFdGH61lIGAgzgwqwgl+igTLCwlH4B//p5pEE=;
+        b=tutk9yubKt7rHGQInrqHwM30HuPbjoAYyeaA/DlyS9ulVx7Xam6hQFFnFX0Mntw92w
+         FP29nQouQzxm7wsKMLZY9u7LhPVrwxPgreKyPQz+S+b1V9tFNgpbFHN2YWIMM0RIMHcr
+         zjt2S4JuWLGXVZYA3yuWEPE/YdiePv9l1bm1gYpu0qFrN2+JVUvGRAWCLC/ID3UaDJzJ
+         fJwS58v324aOEln5ZKPwjAIJ1a4KXwF0TgrBZ8fzjZo6bgxDwdDdbqNfcCRbmwpHVJO/
+         g2b2lpak3J2s9Dxyk6EQrBvA9Hail/tGrtjlGeqQbgRdwbiFAyEv1Ls+u9aS+jjcRX5E
+         O/Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781249462; x=1781854262;
+        d=1e100.net; s=20251104; t=1781249603; x=1781854403;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=SbYOYDefhLvBGJQzilDjssSWO2zIKceTdBiGnToKxU0=;
-        b=G0mmkkgbnfgJq4pl+UPcxhsUdJRYLqSGJkQvCyDK5SnDQfty7EzOvRYEu3JUCm0C6A
-         9OY7Dp+ZbpDmO/1X9fwY5RWlxim0U8WPFgtGH9g1itYSC9SwW5cV/NRhbAnyAOgmM99N
-         nxfs9kihKcWLhZQs02jjgGNf2ImZq4qM+Bd44K7GYCmPVz5os69JOo4f+IsIa9PmUSFH
-         IfCoKGmLHkJa0bCJ59jUfIhyzO37WD2YMQMGLlT3iokviL4tpeMaFO2aLWA/hGu4jCAu
-         1KetlvmvWX+jSzqBBUV9+Oclv0SiFikByLbEu1/j+PJmEFjMUle+Efdzw+WIFbTSNSUk
-         EZcw==
-X-Forwarded-Encrypted: i=1; AFNElJ9AtFzjUM9099xBnR0oR3ji+LJ08wV8Wj9EetuR+3fggFsw2Gsr6rLrjV+9mWOXcxoqtJ45kIjYIzOLRuW5Fro=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaS3sLF7H2oBr3cWvCYONryYXqsMAdFjp4gVR6YZ6hrrDrbfJY
-	JNrNOeXRwIlFRL3C6QVvKANSRRbgHf4cG3S6frxTPiqAMCv5wuWCiaHMZqjeiJcUOjZgNzY3/+5
-	0tfGVXfIAexrbD74Z2D4ZJn7hDsksJ7U1l4gkRm8/
-X-Gm-Gg: Acq92OG79+FzDxlg9jDbd0xvwPUIyBnOo8oBJjMwhEj1za3ea1AExutaYh3n8W0qxY2
-	0VpKgrElGwiUx5Lu7IRx4KxuM6k495caBWu7OEQnys5Kmz8Lb3URyx1Zith6/gcRwn4ZixX8UH0
-	CvnNE6bVbBGdB8J4YF2RZVG7eTgbXRBZpf5X7XXt79sxzIdu4ZlHbENtAegZ6/yN02ASutJi28p
-	8usX07xWLL8b9qdsr6lmxaF/pok5zH8kfXbbxuz8aMvaCCrTHVOJopljJRbPy164fxjP1Wz7kx3
-	b9MLDLhupB1TTGTvahfeaO6tbL7lsCTdmkTCbg==
-X-Received: by 2002:a05:6402:360e:b0:691:ad29:ea33 with SMTP id
- 4fb4d7f45d1cf-693779d1edfmr692502a12.12.1781249461160; Fri, 12 Jun 2026
- 00:31:01 -0700 (PDT)
+        bh=37yHv6yFdGH61lIGAgzgwqwgl+igTLCwlH4B//p5pEE=;
+        b=JXXU5S8mNeh9ZeT53AFlUEDHdJkfia2BCtLRIFcH/WvIyLXTCvxYR8DYJ6tdLt2a9T
+         2HqfX3mQewJFUcmlhoVWvEQnamxywkg5r8ROQGytO6r9hlwR0ObCczXzlxSb/aM8mkbr
+         kvV5eb7vlplqslNoVCwgBHH3aieDMCi3uNOSvBPEuJwglh8ZjGxDkE4Rho63Ywf4UoJA
+         Owa77vL/NxZVPSr1DKO5Dhv8qYfEIj+2CKBxo7W662p9J9jSYLRHirc0Ij7rcothxrvF
+         JDQ/0bf61DUyDF5b0DMI/Yxe2/2CpzqIgWblD4EE4d/rndGuCg1ft0Q1XH3e7dpAKETv
+         HYUw==
+X-Forwarded-Encrypted: i=1; AFNElJ9NCgRhhW2rZUyslkPjKe62SPxRsFKlI1OGDW/kUI3IydBCFxWLJF8U10pwAMFN03Tmevzq4jBa8S/CeVSaono=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhR4NQcqBSjtNK8W/TyG5RpJGexO9WzeWVJA7LrY/SnirR020s
+	RRHKfOLQjgq8LxA3dWqR3AjvNWUBKV45o1+GEd8eRMGYwcLyxKWSO8DX66rGcf2fsMomvPiYpQG
+	p3mCwa+5CjWXwHpB7aY7gaZ/vtMnm+9pmH5NPd/jR
+X-Gm-Gg: Acq92OEeeg75DQyEdamX8P8OTJmi59QDuM/lhTqc8I+VjgiN+AujyfrvqG9o3MkKiC5
+	6rMFQvnSX/jZDDeGHxC7tVaLrMx6FoZZ+Ipg4lPZvuPuE9kyFNIv1NTsQQJUfSGuNckkfnofOR1
+	LCOBq1c9LI9iUEOIIg6kem3+znRIugz2CajQdGH7en13Xj/bvaJ9wPWqzWLYSrbMcQ321jZsgQ2
+	jnE1by0EmGj+C6fhVCELIFZdoixtKIRqxFfUGwOFjZuSU4rDGHwKmMG8yNMyZg3HbTrGxZzs5iJ
+	iW/qdfS+YGpNPjalLqqf8Hm9M1Dd+BB/12mCRg==
+X-Received: by 2002:a05:690c:c502:b0:7bd:8752:cdbd with SMTP id
+ 00721157ae682-7f7bdb01a78mr15009497b3.41.1781249602660; Fri, 12 Jun 2026
+ 00:33:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech> <20260611-b4-kcov-dataflow-v2-v2-3-0a261da3987c@est.tech>
-In-Reply-To: <20260611-b4-kcov-dataflow-v2-v2-3-0a261da3987c@est.tech>
+References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech> <20260611-b4-kcov-dataflow-v2-v2-4-0a261da3987c@est.tech>
+In-Reply-To: <20260611-b4-kcov-dataflow-v2-v2-4-0a261da3987c@est.tech>
 From: Alexander Potapenko <glider@google.com>
-Date: Fri, 12 Jun 2026 09:30:22 +0200
-X-Gm-Features: AVVi8CevQ1ha7IS1m5wrojNeqF7AokFDz6V9vLKSYwmszS5cFjeqHBoSGHAAq9c
-Message-ID: <CAG_fn=XRzSuFrxtFbz2t9jjY8HPUUhhnU3iWJiSV-X4+hg66cw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 03/14] kcov: add barriers to recursion guard in kcov_df_write
+Date: Fri, 12 Jun 2026 09:32:43 +0200
+X-Gm-Features: AVVi8CfstzQNbiRE_Nzp0e98G9-7hbopDZWc7hVRExeHcpnRY99AeT5FguWPzQ8
+Message-ID: <CAG_fn=UJTVm+XVjq-wq1GsfFLvQuET7N1A6ZF_BWtYwmDab_TQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 04/14] kcov: reject enable on multiple dataflow fds simultaneously
 To: Yunseong Kim <yunseong.kim@est.tech>
 Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
 	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
@@ -110,43 +110,32 @@ Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
 	kasan-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
 	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, linux-mm@kvack.org, 
 	linux-kselftest@vger.kernel.org, workflows@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Yeoreum Yun <yeoreum.yun@arm.com>
+	linux-doc@vger.kernel.org, Yeoreum Yun <yeoreum.yun@arm.com>, 
+	sashiko-bot <sashiko-bot@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Thu, Jun 11, 2026 at 6:21=E2=80=AFPM Yunseong Kim <yunseong.kim@est.tech=
 > wrote:
 >
-> The recursion guard (bit-31 of kcov_df_seq) prevents reentry when
-> copy_from_kernel_nofault() or other called functions are instrumented
-> with INSTRUMENT_ALL. Without compiler barriers, the guard set/clear
-> can be reordered relative to the function body, making the protection
-> ineffective under optimization.
+> A task could enable tracing on multiple kcov_dataflow file descriptors,
+> corrupting the internal tracking state when one is subsequently closed.
 >
-> Add barrier() after setting the guard and before clearing it, ensuring
-> the compiler does not move instrumented operations outside the guarded
-> region.
+> Check current->kcov_df_enabled before allowing KCOV_DF_ENABLE and
+> return -EBUSY if already active. This matches kcov's check of
+> t->kcov !=3D NULL in the KCOV_ENABLE path.
 >
-> Cc: Peter Zijlstra <peterz@infradead.org>
+> Reported-by: sashiko-bot <sashiko-bot@kernel.org>
+> Closes: https://sashiko.dev/#/patchset/20260603-kcov-dataflow-next-202606=
+03-v2-0-fee0939de2c4%40est.tech
 > Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
 > ---
->  kernel/kcov_dataflow.c | 2 ++
-
-Please merge this patch into the one introducing kcov_dataflow.c
-
-
->  1 file changed, 2 insertions(+)
+>  kernel/kcov_dataflow.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
 > diff --git a/kernel/kcov_dataflow.c b/kernel/kcov_dataflow.c
-> index df7e8bf70bfa..5248293280d5 100644
+> index 5248293280d5..27587b8ceeab 100644
 > --- a/kernel/kcov_dataflow.c
 > +++ b/kernel/kcov_dataflow.c
-> @@ -86,6 +86,7 @@ kcov_df_write(u64 type_marker, u64 pc, u64 meta, void *=
-ptr,
->         if (t->kcov_df_seq & (1U << 31))
->                 return;
->         t->kcov_df_seq |=3D (1U << 31);
-> +       barrier();
 
-Please make sure barriers have comments explaining which barriers they
-pair with (see kernel/kcov.c)
+Please merge this patch into the one introducing kcov_dataflow.c
