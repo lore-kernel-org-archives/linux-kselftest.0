@@ -1,63 +1,63 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7052B3815CC
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 16:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1063E4C88
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 16:24:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781281460; cv=none; b=uKquVFpMPiAv4cNZ/eham/ptnDoTnQESonu5re6/127en0dfUS+PW/kY4gG+icZPe4F0PjgstAEKSOJRX28HPzC0/2Pkc9A0P5yKkUW3u1Cy/bVT9JXm0650VxSGuhb/QKdKHlPFiM96ZX6du7w9NaWB1FqlME2sdTAhBC3mDxI=
+	t=1781281463; cv=none; b=Bwt69TMHgunu72d5fVsr4hEW/YTuz/MDBs50NU9LnvF5pILECuc0nRqdytk/pDHYkH7IkbsY4rvh/hvyNsoPys3sa33YEgJayjGuWaBm6KOSWYr61Ss7SHCmR1U1Okp1HOH3CYNVv8nbgQ5DS+JXNhwFvg5nxG4CpEPdWhRiIAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781281460; c=relaxed/simple;
-	bh=QRDRXTCX50amxKD5gLh7D6OBaXCfaBfzgoB4N+6bbzg=;
+	s=arc-20240116; t=1781281463; c=relaxed/simple;
+	bh=KmMepa6SILU+p5gEjwRcDM4ZL8kxCOFddSZl35hjD5I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QdLntKI/SOXfxcHiLCmmr8+fRy+pBJ8sb08rnTjNC7o0JlAHmnKJEQpV3EmodEQreaSbC9Zwy+gH/itRVxjqrW2PNce9oZDKsKddLSihK5srHTs1gomw1WJCHfhwCpG8BDA6oN07VwpzabE4WUzfE+ccj9mm1/SdmCk+685xfS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NoBrRehd; arc=none smtp.client-ip=209.85.128.50
+	 MIME-Version; b=B5GuupvR1cMZx9wsH8idRgS1d2JHclJFUGHv3ycZS9Lt2Rhfq7eROYp0/5VyV1rxG739Xd0riFXLwlh0dHMf7w0YW8fRBJnGTxUsn+W+v7fY+3kv9o8Jz86vz0VrtNdO7UoDOc+Zb1miPxA2RwlWwBUkfgZNWx2GxPciRzKRPkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H2euK0jM; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NoBrRehd"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-490ae94a89eso10355655e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 09:24:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H2euK0jM"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-490b64c8311so12827315e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 09:24:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781281456; x=1781886256; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781281458; x=1781886258; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mJahK7oX1jpIBSr/85+UyDd//PxGmbpfN024eZe1Ebc=;
-        b=NoBrRehdDwJVQdKa0C37zfYA0hO1eLZxOeIoJgnQZPq8ucrodATeQo4X4YpaNNQ0Md
-         osOLlTZeLA1VzYGwGsJ1wpA7PP5QDgn+Nrsv8nw9J1odCsDJegjQPp3SMJ08I2uXX1F6
-         QYz4/D/vh4dg9d3gkQGcPd/glSiOyVYmDIE8MKfJskbXNXTJei7HetJpnJCe+uAYMUkF
-         pHlPu51NPntaMF7PAHlWoxozVaeoxn9wFg5js6aWzEvv/Yb0bmsgxnd0iab5CZjazxI6
-         UzVV+9zw/Zs35zUxaIgihk+CTgZEjHE08QS1KiRmzBNfSsgPUFrpL9Gx8qCf3XFxTkPi
-         dlWA==
+        bh=Tuh44YqrjzSlLd6mm7aQwU0y2sKDDLs9iqICVctwKS8=;
+        b=H2euK0jMcKLvCfRWGX6UYiKL+KhzjvVA8yan1E4HoPE+w71Gcj60T3H2zeWSEjq7Ih
+         /+pz/E9rBXSdeLUGyVonD8d1Iz3AlpEkVEO3WZS5rnD7y3CG4fdRBlrIB7uhx024Ev7Q
+         9ei1n9SAkSUzzTcNvIgr7PmPfsXFkGDYVTT0IEGTUCUCPl2W10r79P+t9++NH/LCzkuV
+         qqNX2eEmkQ+3YWPQz4bBMb+wOSkeX8iOgUvy0CiFATlk5yHbRZbNGvJQcLeDrlsfrrxG
+         jecJ7Vq42HhV4HJjPvg2qQNk8otVAjkEG0OELV7L5wx5RKWfrA8UsJNZvArDtI1f38gq
+         Ux/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781281456; x=1781886256;
+        d=1e100.net; s=20251104; t=1781281458; x=1781886258;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=mJahK7oX1jpIBSr/85+UyDd//PxGmbpfN024eZe1Ebc=;
-        b=k3dAJcsugEXxvXjmahir0KRqOqTkIm6U2+KQgaNdefnlKZ2WfjXNqNo04u5WbJV2QH
-         MCyw6PTL/WbWuncZgVDON3gSNw7MErAlDRfoGHZ9yHRMhhacMuJlL6Vw11r2OMxBf5xT
-         4jfeBLInCYXtTHFtu/mBAOC0yZY7gvXO8sZCpRmUAVoqEaSxVChLFU2p/3M6769ng8pk
-         wBj19lan2IE9lF62X5HRAkIqo4D/ViEPcV7ZuKwBsP7VBXBBz1sJLmHDAPDf8Osk31Vv
-         uQuMyWwl8yGvcj72bWqPgim+NUQ/YPT+DKHeHpPb5RGXQiHOL6YKMPDit40diKU9xXKL
-         Cd6A==
-X-Forwarded-Encrypted: i=1; AFNElJ8T295J3klSz3A9kQ7LpbaVGyMPbqX1LQsS8BNGDUsCrXl9ePzH6DIQPqpwIuTy5bhIIGwey/1t3lN8XtandWo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyH0m+1F6sbYBYcomLgXTkYDTU1nqPOqcgTNjtUHZNIisQVlzQR
-	O9pfJhTmMd0J4w1iLDXrOYGI2jFHWTx4PUEIClO8gVqf0r6QnLa6Yaxg
-X-Gm-Gg: Acq92OHhptJx0s4j19TISuXroVQHH1SkvzdvTKPlfL2fUs42v45jdf1M5ELMYqjZe7c
-	UnK2hL98WtInIVJhJYuLJnt1WReMwuKtrCEmHMeRieC8ur85MhsF6U8pXDIYyC8Y1pDzKRNade3
-	BZyS5lkwzAJGlmqszvA/BpejcNTx1vb0ydIjU6l0C6k+g0ujNnEhgIDW789QjE7F00tIo+r12NQ
-	WDfnYuviyeOMn6FqZBnWNlmKHlkzFm71pNyMIWnvCyevctqeMFYVgBzoyxTBmYa23W7eEKhtFGb
-	pcBXg2nTUKhg+eK1twHgONZp5VV2zx7KfnucAdP0QqZeF1RkP4hHZunSkjrDiUUmyZ+vkZAOyyy
-	2dO7UapLS0fKuIWndFOM9UTPfGYOm7/5DIVt+SqL66wZFNbgL9+OjTKrwFPabOc9RFtk2jwMMLp
-	iuhbmv7fVUhX4NbFrBFg1SKdrb2B7X75J7nJv1km5zaafmjSwieJN5lYp84Ri7fw==
-X-Received: by 2002:a05:600c:4745:b0:490:bd66:e523 with SMTP id 5b1f17b1804b1-492200c04a9mr1802785e9.20.1781281455606;
-        Fri, 12 Jun 2026 09:24:15 -0700 (PDT)
+        bh=Tuh44YqrjzSlLd6mm7aQwU0y2sKDDLs9iqICVctwKS8=;
+        b=dwAadGX7M+vuyYTZpm+avJ0VMWqHQPMTlzU/Pl3tCxDNq8Z42+8Gnn+KalCe431my3
+         uZ9XQczwQ8QJykTP6E9bgITFUIKGAEwAVd+ffTj/fSMd61yJuT/hS+Ky/wZnv6frFgCO
+         Xn9zxUUU0ZkM6DU+rLgWhfSxEOwXmnR1H0kHKVryKq7TTZ9obom/nkOET9xA6cIC88J7
+         lc6tZB+So5RoEAMk4kBdky5j3+aig4gZKPsaekgCH+8dq5q8RF3Y3gt20olqwFega4rM
+         c5IAdKkMcBK7KyX8MrJGGAWbfzdIxrII8KejmKRqDoLhzTj4r/8xRUNBJg2vjmMp0EOJ
+         4Qtw==
+X-Forwarded-Encrypted: i=1; AFNElJ8VLTon2+nvtHv6xM7rh6ZR6UyTwTTYdbKdi6rL/CgHxf1JiQEntBfiSWDX9CaJ+zhaykM4HxsFUFSMXdZ7SsQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5dxdpnbsbYtXJKtJLSy3JErgtvuwzbCeY1xq+qRudRKT/VR1Z
+	xBOuaNUbV+DjpA1Kao1gz0zC3llZ+iMkizBOiBL66oSLkuAn3eog2jfB
+X-Gm-Gg: Acq92OH+fOVJJOiWSrINI4ALPkEltdgJNifAR5sIpfc0kO2XI+mjGk3ihm0L5o0EAl/
+	d8uC7446czEATAar+qoRSXMcGjp9v+RIIjTxRMYTssbla+aTSpzE+w2LcAK1icl21sBdF7Y2E7v
+	yX2uSoFEsDjafRYsBzZVvBF2zBkLpWeJ6EV0VUUkrrX4zpUBx3RiOtn9KcTL6SwdMSYRiNKWzTL
+	jaUN7pH7mVb5F1FQQtSZ0t+b6HrkVhT/OAp1RHA/9DyV8732bvJ0GTX5D8Du4i+sxpJip/yJHO+
+	M50ZNpww6yFUKtG+8oWaRBFsuEfiYkOBuLH13vDDq6OOiZnzATrnOmbeJX1CYv9m7nfIgMDS2rV
+	eMFWdPQo/L9Dpcg7vvzxSY986B1YoYITDwbrLjX6QaEw0Ul6PiL4ub/ABInLnS2Ii+JKoJWijGq
+	mV2sBWps8foIQy9kE2adgZEJCXO/ndlPFIEu5yFOWdfx9APJiM81wo0jZrIZxRqA==
+X-Received: by 2002:a05:600c:468d:b0:490:9588:bdae with SMTP id 5b1f17b1804b1-490ec4ee664mr53299705e9.18.1781281458289;
+        Fri, 12 Jun 2026 09:24:18 -0700 (PDT)
 Received: from f4d4888f22f2.ant.amazon.com.com ([15.248.2.31])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490ea95c51dsm57620935e9.1.2026.06.12.09.24.14
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490ea95c51dsm57620935e9.1.2026.06.12.09.24.17
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 12 Jun 2026 09:24:15 -0700 (PDT)
+        Fri, 12 Jun 2026 09:24:18 -0700 (PDT)
 From: Jack Thomson <jackabt.amazon@gmail.com>
 To: maz@kernel.org,
 	oupton@kernel.org,
@@ -79,9 +79,9 @@ Cc: joey.gouly@arm.com,
 	linux-doc@vger.kernel.org,
 	isaku.yamahata@intel.com,
 	Jack Thomson <jackabt@amazon.com>
-Subject: [PATCH v5 2/5] KVM: arm64: Add pre_fault_memory implementation
-Date: Fri, 12 Jun 2026 17:23:50 +0100
-Message-ID: <20260612162354.73378-3-jackabt.amazon@gmail.com>
+Subject: [PATCH v5 4/5] KVM: selftests: Add option for different backing in pre-fault tests
+Date: Fri, 12 Jun 2026 17:23:52 +0100
+Message-ID: <20260612162354.73378-5-jackabt.amazon@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260612162354.73378-1-jackabt.amazon@gmail.com>
 References: <20260612162354.73378-1-jackabt.amazon@gmail.com>
@@ -95,307 +95,183 @@ Content-Transfer-Encoding: 8bit
 
 From: Jack Thomson <jackabt@amazon.com>
 
-Add arm64 support for KVM_PRE_FAULT_MEMORY by synthesizing a read data
-abort and routing it through the existing stage-2 fault handlers. Treat
-the requested GPA as an IPA in the userspace-owned VM's memslot space
-and always target the canonical stage-2, even if the vCPU last ran with
-a nested/shadow MMU selected.
-
-If the vCPU last ran in a nested context, switch to the canonical
-stage-2 with the vCPU put/load helpers so VMID, VNCR and shadow-MMU
-refcount state stay consistent. Leave the switch in place for the ioctl;
-vcpu_put() at ioctl exit drops the hw_mmu and the next vcpu_load()
-reselects the correct MMU from vCPU state.
-
-Check existing mappings with a shared page-table walk under the MMU read
-lock, and use the resulting walk level when constructing the synthetic
-fault. Report poisoned pages through the ioctl return path with
--EHWPOISON instead of also queueing SIGBUS, and use the installed
-mapping size to advance the prefault range.
-
-Advertise KVM_CAP_PRE_FAULT_MEMORY on arm64. Protected VMs remain
-unsupported: pKVM filters the capability, and the ioctl returns
--EOPNOTSUPP if invoked anyway.
+Add a -s option to specify different memory backing types for the
+pre-fault tests (e.g. anonymous, hugetlb), allowing testing of the
+pre-fault functionality across different memory configurations.
 
 Signed-off-by: Jack Thomson <jackabt@amazon.com>
 ---
- Documentation/virt/kvm/api.rst |  18 +++-
- arch/arm64/kvm/Kconfig         |   1 +
- arch/arm64/kvm/arm.c           |   1 +
- arch/arm64/kvm/mmu.c           | 162 +++++++++++++++++++++++++++++++++
- 4 files changed, 178 insertions(+), 4 deletions(-)
+ .../selftests/kvm/pre_fault_memory_test.c     | 51 +++++++++++++------
+ 1 file changed, 36 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 52bbbb553ce1..657e05656fa6 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -6462,7 +6462,7 @@ See KVM_SET_USER_MEMORY_REGION2 for additional details.
- ---------------------------
+diff --git a/tools/testing/selftests/kvm/pre_fault_memory_test.c b/tools/testing/selftests/kvm/pre_fault_memory_test.c
+index 9f5f0d1a5db1..c850cf28e86a 100644
+--- a/tools/testing/selftests/kvm/pre_fault_memory_test.c
++++ b/tools/testing/selftests/kvm/pre_fault_memory_test.c
+@@ -45,6 +45,7 @@ struct slot_worker_data {
+ 	struct kvm_vm *vm;
+ 	gpa_t gpa;
+ 	u32 flags;
++	enum vm_mem_backing_src_type mem_backing_src;
+ 	bool worker_ready;
+ 	bool prefault_ready;
+ 	bool recreate_slot;
+@@ -65,14 +66,16 @@ static void *delete_slot_worker(void *__data)
+ 	while (!READ_ONCE(data->recreate_slot))
+ 		cpu_relax();
  
- :Capability: KVM_CAP_PRE_FAULT_MEMORY
--:Architectures: none
-+:Architectures: x86, arm64
- :Type: vcpu ioctl
- :Parameters: struct kvm_pre_fault_memory (in/out)
- :Returns: 0 if at least one page is processed, < 0 on error
-@@ -6470,11 +6470,14 @@ See KVM_SET_USER_MEMORY_REGION2 for additional details.
- Errors:
+-	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, data->gpa,
++	vm_userspace_mem_region_add(vm, data->mem_backing_src, data->gpa,
+ 				    TEST_SLOT, test_config.test_num_pages, data->flags);
  
-   ========== ===============================================================
-+  EAGAIN     A memslot update raced with the ioctl before any page was
-+             processed.
-   EINVAL     The specified `gpa` and `size` were invalid (e.g. not
-              page aligned, causes an overflow, or size is zero).
-   ENOENT     The specified `gpa` is outside defined memslots.
-   EINTR      An unmasked signal is pending and no page was processed.
-   EFAULT     The parameter address was invalid.
-+  EHWPOISON  A poisoned host page was encountered.
-   EOPNOTSUPP Mapping memory for a GPA is unsupported by the
-              hypervisor, and/or for the current vCPU state/mode.
-   EIO        unexpected error conditions (also causes a WARN)
-@@ -6494,7 +6497,14 @@ Errors:
- KVM_PRE_FAULT_MEMORY populates KVM's stage-2 page tables used to map memory
- for the current vCPU state.  KVM maps memory as if the vCPU generated a
- stage-2 read page fault, e.g. faults in memory as needed, but doesn't break
--CoW.  However, KVM does not mark any newly created stage-2 PTE as Accessed.
-+CoW.  However, on x86, KVM does not mark any newly created stage-2 PTE as
-+Accessed.  On arm64, newly created stage-2 PTEs are marked Accessed.
-+
-+On arm64, `gpa` is interpreted as an IPA in the userspace-owned VM's
-+memslot address space.  If the vCPU most recently ran a nested guest, KVM
-+still targets the VM's canonical stage-2, and does not interpret `gpa` as
-+a nested guest IPA or target the nested/shadow stage-2 selected by the
-+vCPU's last run state.
+ 	return NULL;
+ }
  
- In the case of confidential VM types where there is an initial set up of
- private guest memory before the guest is 'finalized'/measured, this ioctl
-@@ -6507,9 +6517,9 @@ case, the ioctl can be called in parallel.
- 
- When the ioctl returns, the input values are updated to point to the
- remaining range.  If `size` > 0 on return, the caller can just issue
--the ioctl again with the same `struct kvm_map_memory` argument.
-+the ioctl again with the same `struct kvm_pre_fault_memory` argument.
- 
--Shadow page tables cannot support this ioctl because they
-+On x86, shadow page tables cannot support this ioctl because they
- are indexed by virtual address or nested guest physical address.
- Calling this ioctl when the guest is using shadow page tables (for
- example because it is running a nested guest with nested page tables)
-diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
-index 449154f9a485..6b89262e8ba7 100644
---- a/arch/arm64/kvm/Kconfig
-+++ b/arch/arm64/kvm/Kconfig
-@@ -24,6 +24,7 @@ menuconfig KVM
- 	select HAVE_KVM_CPU_RELAX_INTERCEPT
- 	select KVM_MMIO
- 	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
-+	select KVM_GENERIC_PRE_FAULT_MEMORY
- 	select VIRT_XFER_TO_GUEST_WORK
- 	select KVM_VFIO
- 	select HAVE_KVM_DIRTY_RING_ACQ_REL
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 9453321ef8c6..dcb92bee13af 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -392,6 +392,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	case KVM_CAP_COUNTER_OFFSET:
- 	case KVM_CAP_ARM_WRITABLE_IMP_ID_REGS:
- 	case KVM_CAP_ARM_SEA_TO_USER:
-+	case KVM_CAP_PRE_FAULT_MEMORY:
- 		r = 1;
- 		break;
- 	case KVM_CAP_SET_GUEST_DEBUG2:
-diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index c720f07cb82e..4bf048bbcf8b 100644
---- a/arch/arm64/kvm/mmu.c
-+++ b/arch/arm64/kvm/mmu.c
-@@ -1571,6 +1571,8 @@ struct kvm_s2_fault_desc {
- 	struct kvm_s2_trans	*nested;
- 	struct kvm_memory_slot	*memslot;
- 	unsigned long		hva;
-+	unsigned long		*page_size;
-+	bool			prefault;
+ static void pre_fault_memory(struct kvm_vcpu *vcpu, u64 base_gpa, u64 offset,
+-			     u64 size, u64 expected_left, bool private)
++			     u64 size, u64 expected_left,
++			     enum vm_mem_backing_src_type mem_backing_src,
++			     bool private)
+ {
+ 	struct kvm_pre_fault_memory range = {
+ 		.gpa = base_gpa + offset,
+@@ -83,6 +86,7 @@ static void pre_fault_memory(struct kvm_vcpu *vcpu, u64 base_gpa, u64 offset,
+ 		.vm = vcpu->vm,
+ 		.gpa = base_gpa,
+ 		.flags = private ? KVM_MEM_GUEST_MEMFD : 0,
++		.mem_backing_src = mem_backing_src,
+ 	};
+ 	bool slot_recreated = false;
+ 	pthread_t slot_worker;
+@@ -172,11 +176,13 @@ static void pre_fault_memory(struct kvm_vcpu *vcpu, u64 base_gpa, u64 offset,
+ struct test_params {
+ 	unsigned long vm_type;
+ 	bool private;
++	enum vm_mem_backing_src_type mem_backing_src;
  };
  
- static int gmem_abort(const struct kvm_s2_fault_desc *s2fd)
-@@ -1882,6 +1884,13 @@ static int kvm_s2_fault_pin_pfn(const struct kvm_s2_fault_desc *s2fd,
- 				      &s2vi->map_writable, &s2vi->page);
- 	if (unlikely(is_error_noslot_pfn(s2vi->pfn))) {
- 		if (s2vi->pfn == KVM_PFN_ERR_HWPOISON) {
-+			/*
-+			 * When prefaulting, report the poison via -EHWPOISON
-+			 * only; don't also queue a SIGBUS as the run path
-+			 * does for the faulting vCPU thread.
-+			 */
-+			if (s2fd->prefault)
-+				return -EHWPOISON;
- 			kvm_send_hwpoison_signal(s2fd->hva, __ffs(s2vi->vma_pagesize));
- 			return 0;
- 		}
-@@ -2053,6 +2062,9 @@ static int kvm_s2_fault_map(const struct kvm_s2_fault_desc *s2fd,
- 	kvm_release_faultin_page(kvm, s2vi->page, !!ret, writable);
- 	kvm_fault_unlock(kvm);
+ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
+ {
+ 	gpa_t gpa, gva, alignment, guest_page_size, host_page_size;
++	gpa_t backing_src_pagesz, mem_page_size;
+ 	struct test_params *p = arg;
+ 	const struct vm_shape shape = {
+ 		.mode = guest_mode,
+@@ -188,24 +194,28 @@ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
+ 	struct ucall uc;
  
-+	if (s2fd->page_size && !ret)
-+		*s2fd->page_size = mapping_size;
-+
- 	/*
- 	 * Mark the page dirty only if the fault is handled successfully,
- 	 * making sure we adjust the canonical IPA if the mapping size has
-@@ -2757,3 +2769,153 @@ void kvm_toggle_cache(struct kvm_vcpu *vcpu, bool was_enabled)
+ 	pr_info("Testing guest mode: %s\n", vm_guest_mode_string(guest_mode));
++	pr_info("Testing memory backing src type: %s\n",
++		vm_mem_backing_src_alias(p->mem_backing_src)->name);
  
- 	trace_kvm_toggle_cache(*vcpu_pc(vcpu), was_enabled, now_enabled);
+ 	vm = vm_create_shape_with_one_vcpu(shape, &vcpu, guest_code);
+ 
+ 	guest_page_size = vm_guest_mode_params[guest_mode].page_size;
+ 	host_page_size = getpagesize();
++	backing_src_pagesz = get_backing_src_pagesz(p->mem_backing_src);
++	mem_page_size = max(host_page_size, backing_src_pagesz);
+ 
+ 	test_config.page_size = guest_page_size;
+ 	test_config.test_size = align_up(TEST_BASE_SIZE + test_config.page_size,
+-					 host_page_size);
++					 mem_page_size);
+ 	test_config.test_num_pages = vm_calc_num_guest_pages(vm->mode, test_config.test_size);
+ 
+ 	gpa = (vm->max_gfn - test_config.test_num_pages) * test_config.page_size;
+ 	alignment = SZ_2M;
+-	alignment = max(alignment, host_page_size);
++	alignment = max(alignment, mem_page_size);
+ 	gpa = align_down(gpa, alignment);
+ 	gva = gpa & ((1ULL << (vm->va_bits - 1)) - 1);
+ 
+-	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
++	vm_userspace_mem_region_add(vm, p->mem_backing_src,
+ 				    gpa, TEST_SLOT, test_config.test_num_pages,
+ 				    p->private ? KVM_MEM_GUEST_MEMFD : 0);
+ 	virt_map(vm, gva, gpa, test_config.test_num_pages);
+@@ -213,14 +223,18 @@ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
+ 	if (p->private)
+ 		vm_mem_set_private(vm, gpa, test_config.test_size);
+ 
+-	pre_fault_memory(vcpu, gpa, 0, test_config.test_size, 0, p->private);
++	pre_fault_memory(vcpu, gpa, 0, test_config.test_size, 0,
++			 p->mem_backing_src, p->private);
+ 	/* Retry the same range after the first prefault attempt. */
+-	pre_fault_memory(vcpu, gpa, 0, test_config.test_size, 0, p->private);
++	pre_fault_memory(vcpu, gpa, 0, test_config.test_size, 0,
++			 p->mem_backing_src, p->private);
+ 	pre_fault_memory(vcpu, gpa,
+ 			 test_config.test_size - host_page_size,
+-			 host_page_size * 2, host_page_size, p->private);
++			 host_page_size * 2, host_page_size,
++			 p->mem_backing_src, p->private);
+ 	pre_fault_memory(vcpu, gpa, test_config.test_size,
+-			 host_page_size, host_page_size, p->private);
++			 host_page_size, host_page_size,
++			 p->mem_backing_src, p->private);
+ 
+ 	vcpu_args_set(vcpu, 1, gva);
+ 
+@@ -249,11 +263,13 @@ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
+ 	kvm_vm_free(vm);
  }
-+
-+/*
-+ * Prefaulting always targets the canonical stage-2.  If the vCPU last ran
-+ * in a nested context, swap in the canonical MMU via the vCPU put/load
-+ * helpers so that preemption, VMID, VNCR fixmap and shadow-MMU refcount
-+ * state stay consistent.
-+ *
-+ * The swap is deliberately not undone: nothing runs in between the
-+ * per-page invocations of kvm_arch_vcpu_pre_fault_memory() except the
-+ * generic prefault loop, and the vcpu_put() at ioctl exit discards
-+ * vcpu->arch.hw_mmu anyway (see kvm_vcpu_put_hw_mmu()), so the next
-+ * vcpu_load() re-derives the correct MMU from the vCPU's context.  If the
-+ * prefault task is preempted in the meantime, kvm_vcpu_put_hw_mmu()
-+ * keeps the canonical MMU in place for the reload.  Leaving the swap in
-+ * place also bounds the cost to at most one put/load pair per ioctl,
-+ * rather than two pairs per prefaulted page.
-+ */
-+static void kvm_pre_fault_load_canonical_mmu(struct kvm_vcpu *vcpu)
-+{
-+	if (!vcpu_has_nv(vcpu) || vcpu->arch.hw_mmu == &vcpu->kvm->arch.mmu)
-+		return;
-+
-+	preempt_disable();
-+	kvm_arch_vcpu_put(vcpu);
-+	vcpu->arch.hw_mmu = &vcpu->kvm->arch.mmu;
-+	kvm_arch_vcpu_load(vcpu, smp_processor_id());
-+	preempt_enable();
-+}
-+
-+long kvm_arch_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
-+				    struct kvm_pre_fault_memory *range)
-+{
-+	struct kvm_vcpu_fault_info *fault_info = &vcpu->arch.fault;
-+	struct kvm_vcpu_fault_info fault_backup = *fault_info;
-+	s8 walk_level = KVM_PGTABLE_LAST_LEVEL;
-+	unsigned long page_size = PAGE_SIZE;
-+	struct kvm_memory_slot *memslot;
-+	phys_addr_t gpa = range->gpa;
-+	struct kvm_pgtable *pgt;
-+	phys_addr_t end;
-+	kvm_pte_t pte;
-+	hva_t hva;
-+	gfn_t gfn;
-+	long ret;
-+
-+	if (vcpu_is_protected(vcpu))
-+		return -EOPNOTSUPP;
-+
-+	/*
-+	 * Interpret range->gpa in the userspace-owned VM's IPA space, not in
-+	 * any nested guest IPA space that may have been active on the vCPU's
-+	 * last run.  Always target the canonical stage-2.
-+	 */
-+	kvm_pre_fault_load_canonical_mmu(vcpu);
-+
-+	if (gpa >= kvm_phys_size(vcpu->arch.hw_mmu)) {
-+		ret = -ENOENT;
-+		goto out;
-+	}
-+
-+	gfn = gpa_to_gfn(gpa);
-+	memslot = gfn_to_memslot(vcpu->kvm, gfn);
-+	if (!memslot) {
-+		ret = -ENOENT;
-+		goto out;
-+	}
-+
-+	/*
-+	 * A racing memslot deletion or move installs an invalid slot before
-+	 * zapping stage-2.  Ask userspace to retry once the update settles.
-+	 */
-+	if (memslot->flags & KVM_MEMSLOT_INVALID) {
-+		ret = -EAGAIN;
-+		goto out;
-+	}
-+
-+	/*
-+	 * pKVM stage-2 mappings aren't directly walkable from the host; let
-+	 * the fault path handle both new and existing mappings.
-+	 */
-+	if (!is_protected_kvm_enabled()) {
-+		pgt = vcpu->arch.hw_mmu->pgt;
-+		scoped_guard(read_lock, &vcpu->kvm->mmu_lock) {
-+			ret = kvm_pgtable_get_leaf(pgt, gpa, &pte, &walk_level,
-+						   KVM_PGTABLE_WALK_SHARED);
-+		}
-+		if (ret)
-+			goto out;
-+
-+		if (kvm_pte_valid(pte)) {
-+			page_size = kvm_granule_size(walk_level);
-+			if (!(pte & KVM_PTE_LEAF_ATTR_LO_S2_AF))
-+				handle_access_fault(vcpu, gpa);
-+			goto out_success;
-+		}
-+	}
-+
-+	/*
-+	 * Synthesize a read translation fault for the canonical IPA, at the
-+	 * level where the stage-2 walk currently ends (the last level under
-+	 * pKVM, where stage-2 isn't walkable from the host).
-+	 */
-+	fault_info->esr_el2 = (ESR_ELx_EC_DABT_LOW << ESR_ELx_EC_SHIFT) |
-+		ESR_ELx_IL | ESR_ELx_FSC_FAULT_L(walk_level);
-+	fault_info->hpfar_el2 = HPFAR_EL2_NS |
-+		FIELD_PREP(HPFAR_EL2_FIPA, gpa >> 12);
-+
-+	struct kvm_s2_fault_desc s2fd = {
-+		.vcpu		= vcpu,
-+		.fault_ipa	= gpa,
-+		.nested		= NULL,
-+		.memslot	= memslot,
-+		.page_size	= &page_size,
-+		.prefault	= true,
-+	};
-+
-+	/*
-+	 * As in the run path, -EAGAIN from the abort handlers is treated as
-+	 * progress: either a parallel fault installed the mapping, or a racing
-+	 * invalidation is in flight and the next access will refault.
-+	 */
-+	if (kvm_slot_has_gmem(memslot)) {
-+		ret = gmem_abort(&s2fd);
-+	} else {
-+		hva = gfn_to_hva_memslot_prot(memslot, gfn, NULL);
-+		if (kvm_is_error_hva(hva)) {
-+			ret = -EFAULT;
-+			goto out;
-+		}
-+
-+		s2fd.hva = hva;
-+		ret = user_mem_abort(&s2fd);
-+	}
-+
-+	if (ret < 0)
-+		goto out;
-+
-+out_success:
-+	end = ALIGN_DOWN(gpa, page_size) + page_size;
-+	ret = min_t(u64, range->size, end - gpa);
-+out:
-+	/*
-+	 * Restore the synthetic fault state so a subsequent KVM_RUN does not
-+	 * observe it. kvm_handle_mmio_return() runs before guest entry can
-+	 * refresh fault.esr_el2 from hardware, so leaving the synthetic ESR
-+	 * in place would corrupt the completion of a pending MMIO exit.
-+	 */
-+	*fault_info = fault_backup;
-+	return ret;
-+}
+ 
+-static void test_pre_fault_memory(unsigned long vm_type, bool private)
++static void test_pre_fault_memory(unsigned long vm_type, enum vm_mem_backing_src_type backing_src,
++				  bool private)
+ {
+ 	struct test_params p = {
+ 		.vm_type = vm_type,
+ 		.private = private,
++		.mem_backing_src = backing_src,
+ 	};
+ 
+ 	if (vm_type && !(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(vm_type))) {
+@@ -267,23 +283,28 @@ static void test_pre_fault_memory(unsigned long vm_type, bool private)
+ static void help(char *name)
+ {
+ 	puts("");
+-	printf("usage: %s [-h] [-m mode]\n", name);
++	printf("usage: %s [-h] [-m mode] [-s mem-type]\n", name);
+ 	puts("");
+ 	guest_modes_help();
++	backing_src_help("-s");
+ 	puts("");
+ }
+ 
+ int main(int argc, char *argv[])
+ {
++	enum vm_mem_backing_src_type backing = DEFAULT_VM_MEM_SRC;
+ 	int opt;
+ 
+ 	guest_modes_append_default();
+ 
+-	while ((opt = getopt(argc, argv, "hm:")) != -1) {
++	while ((opt = getopt(argc, argv, "hm:s:")) != -1) {
+ 		switch (opt) {
+ 		case 'm':
+ 			guest_modes_cmdline(optarg);
+ 			break;
++		case 's':
++			backing = parse_backing_src_type(optarg);
++			break;
+ 		case 'h':
+ 		default:
+ 			help(argv[0]);
+@@ -293,10 +314,10 @@ int main(int argc, char *argv[])
+ 
+ 	TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
+ 
+-	test_pre_fault_memory(0, false);
++	test_pre_fault_memory(0, backing, false);
+ #ifdef __x86_64__
+-	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, false);
+-	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, true);
++	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, backing, false);
++	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, backing, true);
+ #endif
+ 	return 0;
+ }
 -- 
 2.43.0
 
