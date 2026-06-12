@@ -1,55 +1,45 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1EF38A71B
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 15:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB37331A7B;
+	Fri, 12 Jun 2026 15:05:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781276450; cv=none; b=tx+WHfw8FyMBPIY0W4+pehDhlPJjMOWHKIDD1Nt+uXQ/B8QXSgav+IGjYqk5e+9FrBJkAv7qzfzmVo5W2zOXC4YFQMOyBIR99VMQR0G2xguhAZV+PCM90Js+P0Vw1JsdXlV9mtzJC3E5uTaBU0A1ciTU0UbDRdZe8g+cs+v1WyQ=
+	t=1781276733; cv=none; b=LKyI638Ktt4nU7IX0MNkO/V+SPce/DoNbF2uERIvGf4aCuSGEcUT0hXH+XbxGVj1MrNTc5x+qgGnj53jd9MtGGgrFOBUSagmmaZOlfGNunmlEoas8LhVQ0DTMwynN6y9Hpm+FG1rtsZq/Ba/0g6DmI8EgyyoOuTbztFpoppDsKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781276450; c=relaxed/simple;
-	bh=hYSRYjMPMxI1GzWpT7bxOFdiqcUGpvzifQdkodIai14=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dxtlSrTpkbmScKGjLJvdN9I4iqPP7PZDvuMmYV+7tji/gW1pu3bEliYLSK5rWEMytS/HcxNi0HW6DU9bRKHnB52C0r582gBrSfcXVIAzF7wwIbKyYo9wliqFwMMjg2nLNSkoOvD4aW/F8mrj8+hzDa2HxUZdaUKChtTwuUIl65M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AVMUEptW; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1781276733; c=relaxed/simple;
+	bh=lFWyF3MUzH5yXMZ2h7JK+QO9d4tUAhsFCCbNi/USkw0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PRO1i6rzm2haxQaiQhx7Bq7QRG35WpmnHkhCtiEroc07A0hHB7c7r2FVwVzPUx6hiDAT2v5nkbSiEFOBc4p/yjUm41E49r+cHPE52TbDAslU7wCKb94Veg7zy54fHfFBRGTnm8wko3h3ckBkPncnAoteLyXgY3QB+ebPg8gjr5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O3Bjk6Xc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AVMUEptW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781276448;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=vnbWX1Uf9fJ5n9pZHlTP11jwn1zRPMTrBKBQXMgAwWk=;
-	b=AVMUEptWnLIB1jEipWrYaS9uPtEzeevqgfIThHiMITZMS4eLk7FAuhcKdglsAEQ7/M4G8u
-	oKQxYADc6wKhyZB1oMzC3hP2ujcJmqdtbI0/hpk71KTssL2jMuoEZ1DflY2gBmLmRxYj0R
-	giFMoVQ6AOgY7shd34nfUiC+rixWOBY=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-486-U72KixcsNn-blwR5AsKDsg-1; Fri,
- 12 Jun 2026 11:00:43 -0400
-X-MC-Unique: U72KixcsNn-blwR5AsKDsg-1
-X-Mimecast-MFC-AGG-ID: U72KixcsNn-blwR5AsKDsg_1781276442
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1885A195609E;
-	Fri, 12 Jun 2026 15:00:42 +0000 (UTC)
-Received: from intellaptop.lan (unknown [10.22.65.135])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 15C3A1955BD4;
-	Fri, 12 Jun 2026 15:00:40 +0000 (UTC)
-From: Maxim Levitsky <mlevitsk@redhat.com>
-To: kvm@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	linux-kernel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O3Bjk6Xc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5280F1F000E9;
+	Fri, 12 Jun 2026 15:05:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781276732;
+	bh=rdqySyIK765/5XAxZ3yDsSGj9IMPdHvPQEL66jI/4x8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=O3Bjk6XcazGCZB0etMaC1lMSb67pMC2hUv0CHNXDxg4+idcDpgHjuAF8mdmL/lTrq
+	 420ll8cJEWP4T0UPWRG1XU7ZdLkWXksNNtFVokjx3POw5pHoVO2T8ckSq5zzhTT6EY
+	 jdsIXhNLCXNP35lnsoeJq+GbObjtmWC4/qj7YNXuixuubGCM1T+/5AsOPO/JOI26Rx
+	 CYR8LrWQbWwiklmjT2pga4kr440UTUocQISzMyAiEY7BO1m6iLVQg4nTQfZjL3kpeW
+	 ZqQ0hO/QL3SjtG22nS2LLwpWObTA/VVup0FZ7ir4DF+OZ7oKb4T1IGprjViB2A2SCZ
+	 e3QTw3/qyIuFA==
+From: SeongJae Park <sj@kernel.org>
+To: Sailesh Nandanavanam <saileshnandanavanam@gmail.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	shuah@kernel.org,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH] KVM: selftests: access_tracking_perf_test: bump number of NUMA nodes to 32
-Date: Fri, 12 Jun 2026 11:00:38 -0400
-Message-ID: <20260612150038.1277394-1-mlevitsk@redhat.com>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mm/damon: add KUnit test for walk_control_obsolete behavior
+Date: Fri, 12 Jun 2026 08:05:23 -0700
+Message-ID: <20260612150524.95770-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260612062337.2459-1-saileshnandanavanam@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,35 +47,57 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-It's rare to find a system that has more than 4 sockets,
-but a system can have more than 4 NUMA nodes if each socket
-exposes its chiplets as separate NUMA nodes.
+Hello Sailesh,
 
-In particular, our CI caught a failure in this test on a system with
-two sockets, each containing an 'AMD EPYC 7601 32-Core Processor'.
 
-Bump the limit to 32, just in case.
+Thank you for this patch!
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- tools/testing/selftests/kvm/include/lru_gen_util.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+From next time, please send a new version of a patch as a new thread, not as a
+reply to the previous version.
 
-diff --git a/tools/testing/selftests/kvm/include/lru_gen_util.h b/tools/testing/selftests/kvm/include/lru_gen_util.h
-index d32ff5d8ffd0..49c8139d398c 100644
---- a/tools/testing/selftests/kvm/include/lru_gen_util.h
-+++ b/tools/testing/selftests/kvm/include/lru_gen_util.h
-@@ -14,7 +14,7 @@
- #include "test_util.h"
- 
- #define MAX_NR_GENS 16 /* MAX_NR_GENS in include/linux/mmzone.h */
--#define MAX_NR_NODES 4 /* Maximum number of nodes supported by the test */
-+#define MAX_NR_NODES 32 /* Maximum number of nodes supported by the test */
- 
- #define LRU_GEN_DEBUGFS "/sys/kernel/debug/lru_gen"
- #define LRU_GEN_ENABLED_PATH "/sys/kernel/mm/lru_gen/enabled"
--- 
-2.49.0
+For the subject, please use mm/damon/tests/core-kunit: as the prefix.
 
+On Fri, 12 Jun 2026 11:53:37 +0530 Sailesh Nandanavanam <saileshnandanavanam@gmail.com> wrote:
+
+> Add a KUnit test to verify that damos_walk() rejects
+> new requests when walk_control_obsolete is set.
+> 
+> Commit 33c3f6c2b48c ("mm/damon/core: fix damos_walk() vs
+> kdamond_fn() exit race") introduced walk_control_obsolete
+> to prevent a race condition where new requests could be
+> registered during kdamond shutdown and never handled.
+> 
+> This test simulates the shutdown condition by setting
+> walk_control_obsolete and verifies that damos_walk()
+> returns -ECANCELED immediately.
+> 
+> This validates the invariant introduced by the fix and
+> helps prevent regressions.
+> 
+> Suggested-by: SeongJae Park <sj@kernel.org>
+> Signed-off-by: Sailesh Nandanavanam <saileshnandanavanam@gmail.com>
+
+Other than the subject prefix, all looks good.
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+I applied  this patch to damon/next [1] tree after modifying the subject prefix
+as I suggested, assuming you don't mind.  If you do mind that change, please
+let me know.
+
+We are now quite close to next merge window.  We (mm community) want
+to focus on making mm.git more stabilized and therefore ready for the next
+merge window, rather than adding more changes that are not really urgent.  I
+understand this patch is not really urgent.  Hence, Andrew might not add this
+patch until next -rc1 release.  In the case, I will request adding this to
+mm.git after next -rc1 release.  So, no action from your side is needed for
+now.
+
+[1] https://origin.kernel.org/doc/html/latest/mm/damon/maintainer-profile.html#scm-trees
+
+
+Thanks,
+SJ
+
+[...]
