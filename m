@@ -1,149 +1,153 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674353DCDB5
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 11:40:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5433EB118;
+	Fri, 12 Jun 2026 11:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781264460; cv=none; b=fu+mO8cvjc+TT9gKrsaSAcdfVE8dXmtUziXxMAUowmDkZXVjnIZVxUNpHi0O+uHDuw8FmSCLASbpSGtgJUbP0abA+ffLNJ3ckyIznC3FFNBe04/RXK2ltn26PYvn20mDRgDcGt0THLrQ2XBC7J0HDdciqyQ75XrVYXYmPQqnc2Q=
+	t=1781264469; cv=none; b=p01VVgyMCzH1u4TNI0F9ECW5ZrxWOV7FikKYZHBKuHDDEDl6PpFdFRlDOY9dvdNk2Izb5DglmJhVWf6+Lu63xwRjRZeJxp5VhbhHoXEBPb1WIfO0IDsRlC9HaOlX61qUBumpyRxkuQEOJoBVdss/gufroj4/k+E847pQB7HpDDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781264460; c=relaxed/simple;
-	bh=pJ/QyvoAyb5v+r2U61ucd8SlUzxeU1gohB/ziTC8eW8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GYk0hV0W1u6D1HivDEy3Y4e7SWe8ZVOkgVEVIyAsqE1ws51Z4un+odvdCwalU75gSgcepF5uE/CWnzmdiCBUyPnOd3Bogbhg3xdhuVqfA4K+qjP/3oKL32xgzGeMAiyczolAHFc4uW1d2JXNM9/dZR52BiRRfUSfZBUq9ImUde0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZkQQ/xls; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781264469; c=relaxed/simple;
+	bh=IXHJOU0oLy6l03pAmfv5nGYKFNT71fN5FVctAoo/kOo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MfywUnNE6TanL467BIDW7Cq0HMfQYH/BWII/iMuV0kUsNAHmBjOd6yFK+v3GT/vNv7PHEp0daQFWdJ9dtKm8k5+JbvgvsJekYFwdGgQrCaftrUr0jLTov/SsEcWMYs5DIfEFCVCGP5xBiLmuijkYKeFw/7oZUUyen2f3nHUJjAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DueXUBEF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZkQQ/xls"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-36b9d265355so427495a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 04:40:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781264459; x=1781869259; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vO5l5ehIJQy/8ncJAgfC2hVtehf0lOaUgVls6srL24o=;
-        b=ZkQQ/xlsyAwV63tXS5gGgEoLPqFO2FFqpYWTrlvJbfQ3QDDldjuSOoIraAWjf3zc3g
-         kiEqaOoXH2AlJcJUe7joYbPgE74K+zhAdZ5KDAuyjob0jHOtVJfjs+VGFOMBLbbLy00a
-         PJrftoY7AxGuH8u49YdcaGiEyntBZt0oHYm9sjapdCudqkESCTueI53y4rch1VUSQ1jp
-         jNmPln79sxzuSiNKUOhQiXxH5kl8BbyhW6xWLNiu1Wr9t6E/jF+s66lEE0MtQAQ6PAZH
-         kvPDDRM3V/CZRuR/M+fAjlvDgfksh1/pCaA6pq39glLaalUTvHLqLh9grTd+fZ/sCal2
-         GzDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781264459; x=1781869259;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=vO5l5ehIJQy/8ncJAgfC2hVtehf0lOaUgVls6srL24o=;
-        b=ce7UyGQXm7GwVoLq4POMUeLz4HEZNLwycGfzxLX1JDis6gkD7Rqc9pXsNjioSvJi63
-         xbZ7tJYe3XqG5Djd0/2NgIdSSSjL4LHNVuQGzp0phnrx0h0MdWe9E5KJNP0FLmBp0fOv
-         aX6AK+15dc0GFyOgjjfrTcgoR/pi6Qu52YwuN4LDSI4+LsNWLuPcWdz00fJJy2xzEpDz
-         +XWvUDCbnyUgThMZv8ilHrWBSwHVA6IL3aozWH5uMkvLTkGcx5eWaw1Nl2KATPf5pLLW
-         1yubbUobYX8wEC21RFOOKkKweNtxSstM+jCGDzMkGwPiDlBJMwyzlSTpBVNESSHPs2qT
-         ZnBA==
-X-Forwarded-Encrypted: i=1; AFNElJ8keCyAdWUrwXC8/p0oUua5OfbeK9OH0jb91bsAWm1eTciHiHfqcuG/0+OsZh7qCo/U3SaoDUqvl2zDeZx6Yrg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztLzvPIAfTh2YGj42iy7fy1ybaf3rTGLii/7kX342pZdO9+XeF
-	fY9E1B5CNX2eJBnuwjZYK5EQosufDAGiaVftzSeF6hbQOBK4CwZC+nET
-X-Gm-Gg: Acq92OHMTaefUHVTFyVbDzw23xDB0k4L+XzCyE0PI5dwjggdyV0jyr6KnAatd4ng0fh
-	jVP2t2JacgJvpczGwJnZAWfqJsP8dOyVVT5G0hmshudgt5INN0YtcnzS2rLf1suE4OxSB1ehA3W
-	qA093ybBvkqDcaHY3EjVWcO/LOxW1R8h6vvD/IOsV8FBD8dHKrZex1Yyu5fmltnqUD4LC0szsOO
-	1Kw69I9fcmrbm6g7lx+tXWMFeOAn8833AHAhBgvcc8682ezA7AN15V2If6BKi8MigEgrRSo82QT
-	ZOvKgcQiwh9Rl0zVszTbnhDxV99QdCyDwvaxEOHE/hK4gFQvf3NtEU9k9mD1mVQ1TwXk2UiN3nY
-	PNNab6aBekKYEhza2mxrccoVtzC8+Iw67lPTYtvbbKznGef9vAN7yU11EoahvGin6V8y0NqyQNu
-	94aCDJsPFX3o7ZXV4Zw7JA58FfZFknejCJoFaBssvH8iUxVC9IjpH4NZLESYOodhP7cE8KY/c5u
-	h9k+GW1h5taiLv90drnt/8=
-X-Received: by 2002:a17:902:ced2:b0:2bd:7684:34b0 with SMTP id d9443c01a7336-2c4105092a4mr33621575ad.15.1781264458780;
-        Fri, 12 Jun 2026 04:40:58 -0700 (PDT)
-Received: from localhost.localdomain ([45.142.165.58])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c4327ac72asm20697455ad.38.2026.06.12.04.40.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2026 04:40:58 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	shuah@kernel.org,
-	jiayuan.chen@linux.dev,
-	toke@redhat.com,
-	menglong.dong@linux.dev,
-	emil@etsalapatis.com,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf v5 1/2] bpf: Run generic devmap egress prog on private skb
-Date: Fri, 12 Jun 2026 19:40:31 +0800
-Message-ID: <20260612114032.244616-2-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260612114032.244616-1-sun.jian.kdev@gmail.com>
-References: <20260612114032.244616-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DueXUBEF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 036751F000E9;
+	Fri, 12 Jun 2026 11:41:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781264468;
+	bh=GsP/OcYc2aQ8nhYpNO2oEoNFkMgUJ4z8n0SYStJlwzc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=DueXUBEFLOOMTmTcr7WzT0cS5vI6MeEZOQNLd3vYFbo6ttwHHajZxUHzL1oQ9JCJR
+	 ZvUTeY0K5Hi/YCgjK1IJCYjgCdixmIePj/oD2xPAqnb+DsH/dqebqMdQ2Q8QV8FM4L
+	 Z+s/US1gYUG4rSKyr/wEgK4nRpkQN6w8QhVu1pVkEAY/bDFUrLK4XrEoqTgOxyGtpR
+	 neEp9cOQeZrynheX+/DyZUe52Fbe/czpAYpfHY8NLvab14thzjB3ESjId2FszpFPlK
+	 Ydpln4w8GZ/eSB0L8eRtClF6vRYvW7auNzMlQpacZY6Gb9V14HBKWoxppU3e7TadGX
+	 FuNIrsJ/33H7A==
+Message-ID: <b91ff67e-ce74-4edf-a8b0-08be04586485@kernel.org>
+Date: Fri, 12 Jun 2026 13:41:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net-next v3 2/2] rds: convert to getsockopt_iter: manual
+ merge
+Content-Language: fr
+To: Breno Leitao <leitao@debian.org>
+Cc: Allison Henderson <achender@kernel.org>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+ rds-devel@oss.oracle.com, linux-kselftest@vger.kernel.org,
+ kernel-team@meta.com, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Andy Grover <andy.grover@oracle.com>,
+ Mark Brown <broonie@kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20260608-getsock_more-v3-0-706ecf2ea332@debian.org>
+ <20260608-getsock_more-v3-2-706ecf2ea332@debian.org>
+ <2e1b0534-a1a0-4eb1-a5e2-d42fcf991188@kernel.org>
+ <aivAbAIjnTeqlsdS@gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <aivAbAIjnTeqlsdS@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Generic XDP devmap multi redirect uses skb_clone() for intermediate
-destinations and sends the last destination with the original skb. This
-can leave multiple destinations sharing the same packet data.
+Hi Breno,
 
-This becomes visible after generic devmap egress-program support was
-added: a devmap egress program may mutate packet data, and another
-destination sharing the same data can observe that mutation.
+On 12/06/2026 10:19, Breno Leitao wrote:
+> Hello Matthieu,
+> 
+> On Thu, Jun 11, 2026 at 02:52:36PM +0200, Matthieu Baerts wrote:
+>>> +	/*
+>>> +	 * iov_iter_extract_pages() pins only user-backed (ubuf) iters;
+>>> +	 * iov_iter_extract_will_pin() reports whether an unpin is owed here.
+>>> +	 */
+>>> +	if (pages && iov_iter_extract_will_pin(&opt->iter_out))
+>>>  		unpin_user_pages(pages, nr_pages);
+>>
+>> FYI, we got a small conflict when merging 'net' in 'net-next' in the
+>> MPTCP tree due to this patch applied in 'net':
+>>
+>>   f512db8267b73 ("rds: mark snapshot pages dirty in rds_info_getsockopt()")
+>>
+>> and this one from 'net-next':
+>>
+>>   6e94eeb2a2a6 ("rds: convert to getsockopt_iter")
+> 
+> I was aware of the conflict but didn't realize a note would be helpful
+> for the merge. I should have included one.
+> 
+> Could you point me to an example commit/patch that contains such a note so I
+> can understand the expected format and procedure?
 
-Native XDP broadcast redirect does not have this issue because
-xdpf_clone() copies the frame data for each destination. Generic XDP
-should provide the same per-destination isolation before running a
-devmap egress program.
+In this particular example, I think it would have been easier to have
+waited for the fix to land in net-next -- after the weekly sync with net
+-- and then send the net-next patches.
 
-Fix this by making cloned skbs private before running the generic devmap
-egress program. Use skb_copy() instead of skb_unshare() so allocation
-failure does not consume the skb and the existing caller error paths keep
-their ownership semantics.
+When this cannot be avoided, then you can mention the conflict, and
+ideally share a diff of the resolution, plus a description, especially
+when it is not obvious, when simply saying "take the version from X" is
+helpful, when extra modifications are needed, etc. e.g. [1]. Something
+similar to what Mark is usually doing on the linux-next ML, or what I
+did here.
 
-Fixes: 2ea5eabaf04a ("bpf: devmap: Implement devmap prog execution for generic XDP")
-Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- kernel/bpf/devmap.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+[1]
+https://lore.kernel.org/98386125-c0bb-495e-b2ba-2765aaed19d8@oss.qualcomm.com
 
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index cc0a43ebab6b..28bd44591ce4 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -706,6 +706,18 @@ int dev_map_generic_redirect(struct bpf_dtab_netdev *dst, struct sk_buff *skb,
- 	if (unlikely(err))
- 		return err;
- 
-+	if (dst->xdp_prog && skb_cloned(skb)) {
-+		struct sk_buff *nskb;
-+
-+		nskb = skb_copy(skb, GFP_ATOMIC);
-+		if (!nskb)
-+			return -ENOMEM;
-+
-+		nskb->mac_len = skb->mac_len;
-+		consume_skb(skb);
-+		skb = nskb;
-+	}
-+
- 	/* Redirect has already succeeded semantically at this point, so we just
- 	 * return 0 even if packet is dropped. Helper below takes care of
- 	 * freeing skb.
+> Apologies for the omission.
+No problem, it happens fairly regularly ;)
+
+Cheers,
+Matt
 -- 
-2.43.0
+Sponsored by the NGI0 Core fund.
 
