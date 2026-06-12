@@ -1,173 +1,121 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7656376A14;
-	Fri, 12 Jun 2026 21:58:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781301520; cv=none; b=HJq8O9AvYMZjTdP8qSqXF9IXrtHXIhpMONblXzIR9U4P/2opgA7flwNxYWxX9e1HCP+CG+VR3FIfItwQtM4ndryL5MKGTumzHQYlrtF2TXon/n8bsXKXs7TDYljxK8yx2h/1yaIpDOMTORup0H6ghdeUrIpNNxU3VEgg4UpLYVA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781301520; c=relaxed/simple;
-	bh=6CB+EACVj9i7vfpAtYZtfBKjpnd9/NJ72oOTAx0fK9o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=QDtSk/07/6AgAQhMOLHCD7EUbqZ2kmfR1hrRFsOILRfhtETuRH/BEX5Dyali4WKzFG+IsS5H7Yrs15DjDpmenVU3/afl1Dt1wyGAY7Z+8BU6ICmbCqgF6wZDC7y9cUY7EYwi+cIlBUGllVg9T+aOSOeE1fdnlbo00Z4XBEErTmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=L/ITEdP3; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDDA735675D
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 22:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781301727; cv=pass; b=ClZgQNQ/2QeDhB/FiAZ4+n+fQimbbECR/VrrSt3Y+tm458WjO/KnQFnsaIJnG+bUa9QFN2pkDBXTJSriL1x9+ad/RdL28ZRsyt78rq4koLt5xX4nK0wMWyNSaFFpJHbTqwehnc8ldq3b+K2DG8FA6NS+fnT/ZMOazvqBrpAaGqM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781301727; c=relaxed/simple;
+	bh=cDAkfdaLRfmCvVXnA0yRMRfwD8UYysD3SIVaRGrDclI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kuGrByaooBov741udKvzMYgdB7vbz7/5LN/wU4fiKDpABaH0iruQsQt/8FflTvr8oLXp3mURvvQWxYqYmHmvUFhb0QO9IuG47S6rtzQyhaxEKrVyYXNu3g9cdm+XK38y3HQVSmF6HVrv7jPIT5ixGBWI5EEw76Su6P6oVSyueSo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JWAr/ZxI; arc=pass smtp.client-ip=209.85.167.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="L/ITEdP3"
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65CLeBWf081430;
-	Fri, 12 Jun 2026 14:58:32 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=s2048-2025-q2; bh=6O1wfCKi/6SypHiOen
-	6EorUS0jEKsCdWVuFiK5jSYzQ=; b=L/ITEdP3RqgpzMAFaMIqcNJ8J9VIttkxSg
-	hUE5n+M4jDRpYmybYQwBiLKo4bjTzdWkqtdjRCDMEkO8sedUp9jvhOJcWP8uVLz8
-	gxcjLtcBu2DKM8x+2uUtDDEBmSSwy1dqRW+sSBcYU7L8KTiDsXCy9XvUJWhXYeMZ
-	T7L1H2b/iGIkGBcnBh0rXV6stTTJCYbMsNUo2aYwvbxIkNRQooptrNOA5x5YD7F1
-	jbgkO/wjpWUqh6+l6drGEiv0Z0XFajrjdsyBl7F50AAD0XKcVz5QchNcUFZTgBCQ
-	pnoI70jIqklISxD6Ns3cvL4Xw3+h75xJ+G3Dhz1KSfbCfWmTexEw==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4erfxrm51a-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Fri, 12 Jun 2026 14:58:31 -0700 (PDT)
-Received: from devgpu015.cco6.facebook.com (2620:10d:c085:108::150d) by
- mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.41; Fri, 12 Jun 2026 21:58:29 +0000
-From: Alex Mastro <amastro@fb.com>
-Date: Fri, 12 Jun 2026 14:58:18 -0700
-Subject: [PATCH] selftests/vfio: avoid VLAs
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JWAr/ZxI"
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-486560db92cso1120726b6e.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 15:02:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781301725; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MmAxuTKrOU5dOYBV/wqsRZySsvfa10VqJ7wSV+1Fr6Jl5sq/duUiWxyZBNQVSA/ZiG
+         Rq0J2zTm9IcI5HJ801XD8XoICa2Zfj5bfSDDHk/h4F33JGUdnQt6w/vPH3lb1VFNMKow
+         HjWb0R0doj0O1b276ZvH0bfwnjUP67tsgbL3qJhYee4JUIvEcDo+86taFdNE9YuMMu7L
+         0i7t4cU2X2vLciyuOR6ThvfKt4nTXSJT+rn7VSv/4J7NzTAAG4mO9HBfBzbyn2A7rx0Q
+         +FFPh0ZiNPDiejDx1W8h5Mt6ca9kdn7PqWdc+3qi4qinARWliXs0E5BB+LPe73VtQrIP
+         40Rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lr7PuuvzhjV3VzJLoKFC38vG+nAVtfp8SSMy3aUwQ6A=;
+        fh=leqAXpPxffc21imz+ez9QJlDEd+fV3iuf4ERcn+lpEk=;
+        b=jH7Ij8hSGaEKFZiUhu4oIZsesQEK3AVwiZ8UhO40qMOJCezzGRN53l5YADR+qvtD6s
+         8pW8pxWc9EJbq+7jJ80hSAiTlBOpQUw5O95xjwGqzQRavaOQOppZmwxW2HWfTBQMTgfQ
+         vxxWDVFdm29BPTSUWbnoEuFCvq0m7K/Sfdaqk+f5uRViH7oittoAjf/6DS+PCM4ISEXL
+         HW/Q/J56ogbmexo2bNVeq8aMUsYhq74hocmVYE031meaxyE9rHJ1XSn2JpCRDBREzIwc
+         certsr/bu0OLurgjlnT9coxws/XadxXtZEttN40ZcJMYhylia1tNjvS2EHiVoSylDXec
+         VzXg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781301725; x=1781906525; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lr7PuuvzhjV3VzJLoKFC38vG+nAVtfp8SSMy3aUwQ6A=;
+        b=JWAr/ZxIXuQbeJJwdoQicLIgIqXoXNXmRsaCQ3bAFRolJEyu7ecm6NrfBbs5BkkY9H
+         bNFYsjZ1G/0Gbk3BW85ePrsLbGRQ1GxYkek0BUbGVhDKr50ody/kUXZqeUWgk0bLE5/i
+         QRvoJhvtw93Dn0RfSBcQzj0m6xAnF7/N4cx/cO0Zj2Kn942WJYkDoKNGXf8GHRPJg5DP
+         28UvJsseQwCRbTj9Pfht/RoUVlTteBRgcfJHi+PybAK/eBcePRvvF+L0OuVbknUjOLAO
+         hwvV3sE8BixKGGep8FPlQJyVmvktGodpP25cFMhZNLI0efWY5fYmaQsm0rVmsMp/IAbQ
+         /uAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781301725; x=1781906525;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lr7PuuvzhjV3VzJLoKFC38vG+nAVtfp8SSMy3aUwQ6A=;
+        b=ebSymCB+kHzFr0idY5cNQ4x3iXwFoV/O16gXxykXrMfQWqzPF9Inbeg3hOctUOMm5K
+         x1rue5csO4ofNHnAPNUJeetukP/Zva0xnRxvbpBErqqo75IWBVHyWpi0YqUs/xZgZ/I7
+         nHH8a6uqTxoI3CEZbFjtV8vDQo0H8CoJFhIjq13k9xn9f3qEKVfCou44oNDdHBX2hZoS
+         ZUnlorbPT2zIlki8pkmDAVBOjLvBYBIUpVcM2VUvQBCJ34HDmVG+MOOi/wa9DZJl2Xkc
+         mFcnr/LUP3nbuyI8Vot/iPJNf2zE0CwmWHspWbDsISGiKD664vmzNHxoUxq7BKs0HX9b
+         gsEA==
+X-Forwarded-Encrypted: i=1; AFNElJ8dTVWuiyaBvJYUX+FD7pzrKx3hTLl921Mv/U4buxrqeGwzCBEV40yQjy3Q2QhTsZI0XUPQO/U3yGvNRqSDxXs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2iHMdMU3LUsxDNrRj3u6WCcla4eOmsMOdenATfBKfVS32h5KA
+	nEbuW+741YJa9SqRhcikRrIQUF5XKLGd/R1tDqpBZUYKyg0VwaLlxTg01NEw4Q4pUs/3oRUwmHr
+	LNyjKdS8d7gl7KZRTFHWkUHnVjQ6/qq4=
+X-Gm-Gg: Acq92OEwrcuppr+Omu4x3NazsHaCejQg4E6GR+xBmECc85F8kRB4GkuxVdIRKkolwKb
+	1IUyzzDAjSsIAyFzuHPIclDB1b6pMwWa/SH34ickKWDfzhavV0F5TQQU13wqHYuzf6bGSpbyClf
+	6NZvxTy8uZDutMXnm0tUHJrSxI+WDtvzBAMxJ6yiXBLfERL/QJ341iyuYt7AKVGrcfgMULUFKJa
+	pS6K7aJsZF+DiZEnc1e9EkQ1jGO0ItL1ehsX91vbWSyEnefA/UI9Wvj6XC4/JWqCfKZk/4NuZ05
+	dGvecUolYWs/X83m35caGBbXgdR2r5Xtybhpvdyw1mZmD88UtIL4pUqQLaxx7QWNIaboiz595A=
+	=
+X-Received: by 2002:a05:6808:3a0f:b0:463:efb4:f9a2 with SMTP id
+ 5614622812f47-4872f493555mr3330241b6e.28.1781301724761; Fri, 12 Jun 2026
+ 15:02:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20260612-scratch-amastro-vfio-selftests-avoid-vlas-v1-1-ba3acb635f0a@fb.com>
-X-B4-Tracking: v=1; b=H4sIAPmALGoC/yXNwQrCMAwA0F8pOS+wtTiwvyIe0jZ1kblKU4sw9
- u+iHt/p7aBchRW82aFyF5WygTfTYCAutN0YJYE3YEc7j/NkUWOlFhekB2mrBXuWgsprbqxNkXq
- RhH0lRXc+cXApBkcBBgPPylnev+ty/Vtf4c6xfQM4jg/I04QtjQAAAA==
-X-Change-ID: 20260612-scratch-amastro-vfio-selftests-avoid-vlas-395eb3dcb3ab
-To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Raghavendra Rao Ananta <rananta@google.com>,
-        Vipin Sharma <vipinsh@google.com>
-CC: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        "Alex
- Mastro" <amastro@fb.com>
-X-Mailer: b4 0.15.2
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEyMDIwOCBTYWx0ZWRfX9Yju4hek7PKn
- aDaj8P6BA/cDrAZXu8FQZtpukNQLL4Uu0uZ2bHnqu9RvhFa6iq4MTlmLZ1pZC32d1mELTQRfBWs
- NtvAKM4IKXahMD9LlalRvTdwQyCi0GE=
-X-Authority-Analysis: v=2.4 cv=euTvCIpX c=1 sm=1 tr=0 ts=6a2c8107 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7x6HtfJdh03M6CCDgxCd:22 a=JnKecZnUtZousrUlYMGU:22 a=FOH2dFAWAAAA:8
- a=tIFWguhhewu6Um0Ueq0A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: 9oxPIB0vE2wkaog8CyG_osSkYsHeJeDp
-X-Proofpoint-GUID: 9oxPIB0vE2wkaog8CyG_osSkYsHeJeDp
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEyMDIwOCBTYWx0ZWRfX+M+w+aD2SYhm
- IK4KA5LoAJbyRM9T68DrmxEZ+4bPOuTgfqI3NUKq0e9hD+G6r4yEnWV6+ek7VfUf4cAYBxs5EO+
- nNjOgyuDOFLBxP9yi7UWZ04xx66nQL1HOc904ISvOVoV8hqyU5L/QwNrROIcCkkWK7VN3EI4cuI
- iA7tKpBMGAj9r1jVjNRazpjc3oYhlN6wv8Rj4eIrY0Fl02aNtjDnznBfUbq7huk576QgDVRPaq1
- BzUuPq1iKatDGzlt1sWmPe+2zbS2TrSjDVyi3OGk0kmUtt1RAU7Q2XDCrxobW063SOdydw1gkKe
- 7AsJEbZTUhnWlJaRO3aEuHz7YrILW5PWJYHpzA4L+55a5YIjR0hecG6uhml1EdFiBG93KKfuX7I
- 7BRaiBQMB5iaKkD8MJ6jq/wWDoGljEGVwPQVmiFO/pKIgdpyX4xJAuhMkcBx8S7d9ihBZTpnfTm
- kUnX4vHu9JB1ycROx9Q==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-12_03,2026-06-12_03,2025-10-01_01
+References: <20260526-seccomp-combined-v1-0-304b1cc3ad24@hill-daniel.co.uk>
+ <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk>
+ <CAAFS_9HpxOgHn+qfzSpLjV4Mj_CURiwxFOaK9GO0DdBg8xgNYw@mail.gmail.com> <CALCETrUArQBzUS2mAhYxDS-unze_gnQ7efv1qeBke-ux=2KdkQ@mail.gmail.com>
+In-Reply-To: <CALCETrUArQBzUS2mAhYxDS-unze_gnQ7efv1qeBke-ux=2KdkQ@mail.gmail.com>
+From: clubby789 <clubby789@gmail.com>
+Date: Fri, 12 Jun 2026 23:01:53 +0100
+X-Gm-Features: AVVi8CcPCqPkDoueJ__frRsNImZP3mTgK4w2ichmgt6_4IvZ-L4SX1qks8EWNvI
+Message-ID: <CAO1UbGcJEhwtHcxy5zcc8cH=YjfSDiDa2o-o8o+LMbkmL7WFcQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND 1/2] seccomp: Allow using `SECCOMP_MODE_STRICT`
+ with `SECCOMP_MODE_FILTER`
+To: Andy Lutomirski <luto@amacapital.net>
+Cc: Will Drewry <wad@chromium.org>, Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Allocate VFIO ioctl requests dynamically instead of using VLAs. GCC 11.5.0
-rejects initialized VLAs with:
+On Fri, Jun 12, 2026 at 10:24=E2=80=AFPM Andy Lutomirski <luto@amacapital.n=
+et> wrote:
+>
+> I wonder if It would be reasonable to have the kernel do this on
+> behalf of the user program that's asking for STRICT.  The
+> implementation would probably be trivial.
 
-  error: variable-sized object may not be initialized
+I experimented with this approach after the initial AI review, but it
+turned out surprisingly complex,
+requiring a decent amount of refactoring to allow installing
+kernel-resident programs. The filter
+itself is also rather complex (mostly due to needing to account for
+BPF jump sizes, which differ
+as different configs (uprobe, uretprobe, SECCOMP_ARCH_COMPAT) have
+different logic., and I'd worry about
+keeping logic synced.
+If that approach is worth pursuing though, I can submit that version
+of this patch.
 
-The replaced stack u8 arrays also do not guarantee native struct alignment
-for the aliased pointers.
-
-Fixes: 19faf6fd969c ("vfio: selftests: Add a helper library for VFIO selftests")
-Fixes: 20face8c75ff ("vfio: selftests: Add helper to set/override a vf_token")
-Signed-off-by: Alex Mastro <amastro@fb.com>
-Assisted-by: Codex:gpt-5.5-high
----
- tools/testing/selftests/vfio/lib/vfio_pci_device.c | 28 +++++++++++++---------
- 1 file changed, 17 insertions(+), 11 deletions(-)
-
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-index 94dc5fcecbeb..0b437435cce1 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-@@ -30,13 +30,12 @@
- static void vfio_pci_irq_set(struct vfio_pci_device *device,
- 			     u32 index, u32 vector, u32 count, int *fds)
- {
--	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count];
--	struct vfio_irq_set *irq = (void *)&buf;
--	int *irq_fds = (void *)&irq->data;
-+	struct vfio_irq_set *irq;
-+	size_t irq_size = sizeof(*irq) + sizeof(int) * count;
- 
--	memset(buf, 0, sizeof(buf));
--
--	irq->argsz = sizeof(buf);
-+	irq = calloc(1, irq_size);
-+	VFIO_ASSERT_NOT_NULL(irq);
-+	irq->argsz = irq_size;
- 	irq->flags = VFIO_IRQ_SET_ACTION_TRIGGER;
- 	irq->index = index;
- 	irq->start = vector;
-@@ -44,12 +43,13 @@ static void vfio_pci_irq_set(struct vfio_pci_device *device,
- 
- 	if (count) {
- 		irq->flags |= VFIO_IRQ_SET_DATA_EVENTFD;
--		memcpy(irq_fds, fds, sizeof(int) * count);
-+		memcpy(irq->data, fds, sizeof(int) * count);
- 	} else {
- 		irq->flags |= VFIO_IRQ_SET_DATA_NONE;
- 	}
- 
- 	ioctl_assert(device->fd, VFIO_DEVICE_SET_IRQS, irq);
-+	free(irq);
- }
- 
- void vfio_pci_irq_trigger(struct vfio_pci_device *device, u32 index, u32 vector)
-@@ -118,15 +118,21 @@ static void vfio_pci_irq_get(struct vfio_pci_device *device, u32 index,
- static int vfio_device_feature_ioctl(int fd, u32 flags, void *data,
- 				     size_t data_size)
- {
--	u8 buffer[sizeof(struct vfio_device_feature) + data_size] = {};
--	struct vfio_device_feature *feature = (void *)buffer;
-+	struct vfio_device_feature *feature;
-+	size_t feature_size = sizeof(*feature) + data_size;
-+	int ret;
- 
-+	feature = calloc(1, feature_size);
-+	VFIO_ASSERT_NOT_NULL(feature);
- 	memcpy(feature->data, data, data_size);
- 
--	feature->argsz = sizeof(buffer);
-+	feature->argsz = feature_size;
- 	feature->flags = flags;
- 
--	return ioctl(fd, VFIO_DEVICE_FEATURE, feature);
-+	ret = ioctl(fd, VFIO_DEVICE_FEATURE, feature);
-+	free(feature);
-+
-+	return ret;
- }
- 
- static void vfio_device_feature_set(int fd, u16 feature, void *data, size_t data_size)
-
----
-base-commit: a26b499b757cfc8bbff1088bb1b844639e250893
-change-id: 20260612-scratch-amastro-vfio-selftests-avoid-vlas-395eb3dcb3ab
-
-Best regards,
---  
-Alex Mastro <amastro@fb.com>
-
+- Jamie
