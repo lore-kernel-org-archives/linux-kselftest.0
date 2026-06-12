@@ -1,135 +1,154 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014FE383319
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 11:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671983E44FB
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 11:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781264239; cv=none; b=Oymci2877bAqf5nr71VMb6guHZ9dyO6jvugccCb7p36DhHrZnIeEwwoewZfLdN0srv95oE3yNR+iTF1dJvXhS3s4x7gdAFfzgp8JFApxcttF+AEpQb8E/U2agGNVkw4XH50D43kpPh/YZCN+yEt4zOj/Dw6G32QK96A9PmOo/A8=
+	t=1781264452; cv=none; b=T3ZAIjE0vW3dgqliLrYqYq/cCF3ofJmD4AkJ27KeANxynYcjKPWqhWjtzwU6o3NaXq+MStEDq8IG4pFKJzKhYgzZxFGAvb7TMIdYHZqc7H4D3yFBDQXxArGXFyIF3Pm/VcCyWekfhkh2Bz9+PBduW5FZKV3d58mYeJNYrbpezv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781264239; c=relaxed/simple;
-	bh=4bNEnXOnxP9R4p/TqJRZcA+o31g58k6pVxjAj3spyT4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WeS+9ut8HVJ4XsvACrvCgZNEL0PWiR+p9xolFXvutA7i2L7GiWEwdwgHaEsjlLrlUv9yRMijwC2WufE+7Jr/7jy28gYmDmafj0NDIasjCjn8YFAiuJezD8zyh7gtydS/AzzZqfd6G+eFe2tXhIpOzQmz8X063mvYI6JPoBPmHAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gXjJtrEj; arc=none smtp.client-ip=209.85.128.42
+	s=arc-20240116; t=1781264452; c=relaxed/simple;
+	bh=+8lv4XArd/KwhtE8lU4HJ+brttyOEuvASR41k7r5TA8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JCGyE8WgbUakxlkp5AHggjadhqXSlGVL5D3qBKHUTTLnfF7bfOFyG2AbnjTyTv2AwNGuqSRJsGCcTvHQp4AFyCMHilOh4jPrVX/VK84shquctLfujsNYjKSOCSs2KsvCJ34CbR6kuXMENKvcoZ5U/MFLcFrKVKpmwek93EDJbHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DTLi//zo; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gXjJtrEj"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-491609cdd8fso2471395e9.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 04:37:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DTLi//zo"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2bf1f074a12so8894555ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 04:40:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781264235; x=1781869035; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=j9dyxygjV/3RofubGPQY9xrYK9q7NJvG8u++ttMJ7jM=;
-        b=gXjJtrEjaGEOql6CyedpqqOR5hAdC3d5xqCL+LsdpfNytEp0nHOzKcvEOQZ4gHsiPb
-         olJDwgrdrPOhmxS8eKIf0dj+P3YVAOZ4HGXQiSO2fAP/7tZGAbrSQ/OSX54fASP841HU
-         KIjBvbUyxguy1y9J4DO0HTFAPbrk01/cLE9CoBBuUabNDUJt1YJdc5nG6pbE6XH2BjYK
-         UhLoGUUw+gq/o9IidALv4PE5jVuyckHYWridIuakHe8Dg7DVzAJVqCBnKK59u9YgHbgn
-         M0DYLEIEIGcbs9bHY/ArMUTF1hK/VIQYDwVzchijqhqMCeIVT3BO2huV3LKvXNoITZR0
-         czLw==
+        d=gmail.com; s=20251104; t=1781264451; x=1781869251; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3A4DI9oNtTuCvLmw1xW2OUzcOaOyUCmbNpOHdpzsdg4=;
+        b=DTLi//zoU2/xdLbXTb4+wkj+x5uATOGdWvETmUQyuCOGcgh/WeZ93d/uP4P+0j3Xi5
+         bxjEq2tsNy/L3HSRW9TBHC0nmglGGilRUXUHZEizIZ2djuuaqdHPEB1kUb5tmn1qMGjO
+         Yw1kRjao1IAAE5Y+zUU2/wzSkNF2CtV+kQPkfSQe9BiTeVPnChYpYc/FvnoGmT/Me7wl
+         3cfauM/jxh5SRC/jnh2BRR6FyXJkXF+iNpukDHY+UIkQv31FpeY3cHoenuSSU5iM+HBU
+         nVtv4kB+ue2lovGsWX9DjNnNLrpdWrBYGspUDgnNsnD/GsLP2ef9ZMSzJ0g1SiyNyceU
+         1itQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781264235; x=1781869035;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1781264451; x=1781869251;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j9dyxygjV/3RofubGPQY9xrYK9q7NJvG8u++ttMJ7jM=;
-        b=bYcmRTxj7EzbeGKBwxtm4kEuJyRD7hOpzKuDq4gYY8TG9r8Hk/J9rwsOoS9rcEMWx4
-         MOf5YzWSuuXms7uMEiMFM9sN8z1By8oYzBumqT1ytA2UyKuok2RA+72B1fbkK+bGvVqO
-         KOtjjOwhJAjPTbWJm8u/PmSEDrE6gZRT8G5pIj1kGrItn2dzIxfCceLgQuInPnHbMpx3
-         8cCeR0CxrgqncULI94ESoUJN8NsAVQSJEFxdlcOc9TvMTxxESXFRFK9VpUzN9Cn3GTJp
-         RBLgPYD/Equ38MGVkIdk1fRvyOWV1KVs01/jp5n2Y+IHARnxEFUr3jv09f5ni4SIEGzo
-         W91w==
-X-Forwarded-Encrypted: i=1; AFNElJ+JDBGLz7/uAckICdBWpb8J75oMTHSLCy0pshTo96P2+GgoIwvx1F74e/saUYQxwSfiOsvhqhkKwgz7QKa6q+k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1iCpO66K2NvO83/Zg5QC89GG0tl8HtZHLNpvCOUy956CGnmRP
-	Es99fnfIXLXb/xHIm4daGTyF6ZcepELqCRzakK+SPmlmOy8uS010Q4S7
-X-Gm-Gg: Acq92OGWeN5s73fhm1LZp5poKsx9AkHXSmFcarSB750iFcKgEwdPp6x+no9vnfAX9Bh
-	JVHvXbrJGbWmWAQQ0bnZ3B/tsk91lCKkV6pxgGeav/uerLMnb7Sn29P5KfwQe5BGBMo8jMxeoZv
-	LSIReLjCWsdT7qFZK9U93DHlTOuk6zAQe/ZRHKP3CrdE7gdJz4suJ7tpHY/iivBNwtUwvUbGHMG
-	D6zb2FfbsMP+3wc8DkRZ/rExx46ywFj1wWIZhf58VlnJA7C7nLMNu4Ad3lsuN7r4Bho0mC8IljI
-	y6YlfFUljhpJQ6RalH+lZTFmovNKTn9hhDzTuX5wGs4yr/3v3C8MW0/51Ny79kq7KzALLhRFiOE
-	yb7vX1zWvm+yQTtKtHx0BlzQmBWK5gs4GBQXktQtJcdSoofWPZC6bAQoOijDhzvzAMWkdMJujV3
-	jEoDTLSIWeLi8mr8Q12ccMfOJnNyJcOGMhW4B3sygCl1A66Ycf4QGrTxfMsuSEeJKPA/MyRANyn
-	axRan/bsqy6ktu/auA=
-X-Received: by 2002:a05:600c:8486:b0:490:a298:acf7 with SMTP id 5b1f17b1804b1-490ec4ee700mr36638215e9.17.1781264235050;
-        Fri, 12 Jun 2026 04:37:15 -0700 (PDT)
-Received: from [10.128.10.215] (195-23-151-163.net.novis.pt. [195.23.151.163])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2637ccsm4885808f8f.6.2026.06.12.04.37.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jun 2026 04:37:14 -0700 (PDT)
-Sender: Julian Braha <julian.braha@gmail.com>
-Message-ID: <2e528372-aba4-4621-a9a3-7ce23571ef37@gmail.com>
-Date: Fri, 12 Jun 2026 12:37:11 +0100
+        bh=3A4DI9oNtTuCvLmw1xW2OUzcOaOyUCmbNpOHdpzsdg4=;
+        b=bX0xhw+V6TIhyZTosjzKZl9TQj0i6e30/NvB9nCdF4bf+3ip2oMq7t7nz3K2lFN/Ua
+         NSPwFKG369dheA7Zhf/ns1VEkWtZsUqCP9+OiMkAMagq7gtkyrbsrtV1c/txvlO1xqmG
+         1OwqEbwzoWARbK5EQW+2IBEkc+1s+X6rmxHohmXbYYP5FsSdObGjBvwMYusUUjRARBVq
+         L+2AvZtKb30XcwKgpmZqdc85zNiI191DR3pISzAn3jsi8Scw3ssZJQwBO48QNoYUteSc
+         CvwtvONZNTmTqXSzRxMM+UncfS2UBY/t9MjR1vpazsQUZVNGyQTpVkCyasuUakceiEAL
+         naqw==
+X-Forwarded-Encrypted: i=1; AFNElJ/DlqcbnJBAuOSGqyKKD0ISR/RekAtqFHGaBG9NkMkFwM9nH7AeGgXUKbgEaHR/qeqUHzzA4acLrfUtkvEzQi8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw32THptEnb8pLMOZca6/uY1hYjhwRXy4vAizM7gAO9Zd3wZF+A
+	mkm4WNnRFIRO+TPQSCjTXDxaYqLKAxfliTbJJwLvp72NQVebT6fNdbsF
+X-Gm-Gg: Acq92OE0BXpYAF1e9UVCY7HSu0/IEgViAtODq6GqMomOUwAlbch7vQdDy5tUlOfdHNn
+	4zUArc5s96TqNhkqRIMRyVHhffDlnNoEx6I9WNchfQqZiamYvNjQnJToIHboRs7KYahlQ3AF3kL
+	DBZOlp8M2yGUJZpAxD91UywpPTjA/YfBULbbguAApdYrgyqy1Y3gw3yFSmKf+HebPG/VWmeV6cr
+	GKuvRJiZBJLDYgIDrbmwWIGyLOWeFwESLhx/5IGJBSxUE2KedifxKAbJkbfdElWdXUv1Jt4vVU/
+	3ntZHUbQ9IhTY/R8HP3jVLTUg8AHa+c0z+cHw1qJCn8CQMFg5eTa6cjDMTi3YRpabsE5G8NCpHM
+	so2lER+JFbje+ZjdwUHzzY9E9GbpcRRI4MrichQ94G/j9lQYtUG4ey6DUTj62Vf5U6cAIkimGQm
+	mMnDbS4qwfmaGWeMnfEk4zV/E7f26uaYvMznCDeDO9ErtuZc5nvYdgQWrx3o0V6HH6hGqDe+/rH
+	w/pgyposrPO
+X-Received: by 2002:a17:902:e54b:b0:2c0:bb2d:a314 with SMTP id d9443c01a7336-2c4129391a8mr31141165ad.28.1781264450591;
+        Fri, 12 Jun 2026 04:40:50 -0700 (PDT)
+Received: from localhost.localdomain ([45.142.165.58])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c4327ac72asm20697455ad.38.2026.06.12.04.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jun 2026 04:40:50 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	shuah@kernel.org,
+	jiayuan.chen@linux.dev,
+	toke@redhat.com,
+	menglong.dong@linux.dev,
+	emil@etsalapatis.com,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH bpf v5 0/2] bpf: Fix generic devmap egress skb sharing
+Date: Fri, 12 Jun 2026 19:40:30 +0800
+Message-ID: <20260612114032.244616-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 01/14] kcov: add per-task dataflow tracking for
- function arguments/return values
-To: Yunseong Kim <yunseong.kim@est.tech>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- Andrey Konovalov <andreyknvl@gmail.com>,
- Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kees Cook <kees@kernel.org>, David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
- rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- workflows@vger.kernel.org, linux-doc@vger.kernel.org,
- Yeoreum Yun <yeoreum.yun@arm.com>
-References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
- <20260611-b4-kcov-dataflow-v2-v2-1-0a261da3987c@est.tech>
-Content-Language: en-US
-From: Julian Braha <julianbraha@gmail.com>
-In-Reply-To: <20260611-b4-kcov-dataflow-v2-v2-1-0a261da3987c@est.tech>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/11/26 17:21, Yunseong Kim wrote:
-> +config KCOV_DATAFLOW_RET
-> +	bool "Enable KCOV dataflow: return value capture"
-> +	depends on KCOV
-> +	depends on DEBUG_INFO
-> +	depends on $(cc-option,-fsanitize-coverage=trace-ret)
-> +	help
-> +	  Captures function return values via /sys/kernel/debug/kcov_dataflow.
-> +	  Struct pointer returns are auto-expanded using compiler DebugInfo
-> +	  metadata, recording individual field values at runtime.
-> +	  Enable per-module with: KCOV_DATAFLOW_file.o := y in the Makefile.
-> +	  Requires clang with -fsanitize-coverage=trace-ret support.
-> +
-> +config KCOV_DATAFLOW_NO_INLINE
-> +	bool "Disable inlining for dataflow-instrumented files"
-> +	default n
-In Kconfig, when you don't specify any default explicitly, it's
-implicitly 'default n'.
+Generic XDP devmap multi redirect can leave cloned skbs sharing packet
+data. When a devmap egress program mutates packet data, another
+destination sharing the same data may observe that mutation.
 
-I think either style (implicit or explicit) is fine and both are used
-throughout the kernel, but is there any reason to make it explicit only
-for KCOV_DATAFLOW_NO_INLINE, and implicit for the others?
+Fix this by making cloned skbs private before running the generic devmap
+egress program. The private copy is made in dev_map_generic_redirect()
+so dev_map_bpf_prog_run_skb() can keep returning the XDP action directly.
 
-- Julian Braha
+Add selftest coverage for the last-destination case, where the final
+destination runs on the original skb while earlier destinations use 
+cloned skbs. The test records the source MAC observed by an earlier
+destination and checks that it is neither the sentinel value left in the 
+result map nor the MAC written by the final destination.
+
+---
+
+v5:
+- Move the skb_copy() check back to dev_map_generic_redirect() to keep
+  dev_map_bpf_prog_run_skb() returning only the XDP action.
+- Preserve mac_len after skb_copy().
+- Use __be64 temporary values when updating mac_map from userspace.
+- Initialize rx_mac with a sentinel in the last-destination test instead
+  of relying on -ENOENT for ARRAY map lookups.
+- Adjust the last-destination test topology so the checked earlier
+  destination is not the ingress/source veth.
+- Split the last-destination check into two assertions: one for store_mac_1
+  updating rx_mac and one for detecting last-destination rewrite leakage.
+
+v4: https://lore.kernel.org/bpf/20260611080850.536996-1-sun.jian.kdev@gmail.com/T/#mf830f03d362f33e0941d1b0e425169698fce76e5
+- Preserve mac_len after skb_copy().
+- Separate errno return from XDP action output in
+  dev_map_bpf_prog_run_skb().
+- Zero-initialize net_config in the new selftest.
+
+v3: https://lore.kernel.org/bpf/20260611043317.512843-1-sun.jian.kdev@gmail.com/
+- Split the kernel fix and selftest into separate patches.
+- Move the private-copy logic into dev_map_bpf_prog_run_skb().
+- Use deterministic DEVMAP_HASH keys in the last-destination selftest.
+- Fix the Fixes tag.
+
+v2: https://lore.kernel.org/bpf/08c35c70-a59e-4e0e-91db-22b5ec30b611@linux.dev/
+- Move the private-copy step into dev_map_generic_redirect() so the
+  last-destination path is covered as well.
+- Use skb_copy() instead of skb_unshare() to keep caller ownership
+  unchanged on allocation failure.
+- Add a generic XDP last-destination selftest case.
+
+v1: https://lore.kernel.org/bpf/CABFUUZFimdrZdq=NWi+N-0sJZWvMwY=f4iF6-3TVMS8=m07Zmw@mail.gmail.com/
+
+Sun Jian (2):
+  bpf: Run generic devmap egress prog on private skb
+  selftests/bpf: Cover generic devmap egress last-dst rewrite
+
+ kernel/bpf/devmap.c                           |  12 ++
+ .../selftests/bpf/prog_tests/test_xdp_veth.c  | 166 +++++++++++++++++-
+ 2 files changed, 175 insertions(+), 3 deletions(-)
+
+
+base-commit: e7ae89a0c97ce2b68b0983cd01eda67cf373517d
+-- 
+2.43.0
+
