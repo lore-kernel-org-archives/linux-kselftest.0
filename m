@@ -1,52 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E3A3EA976;
-	Fri, 12 Jun 2026 16:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B8378F59
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 16:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781280355; cv=none; b=mzUkitmnRRlQfXy2TQXMFI9JOoKsN4EcHtJETfTkUMturvVpp5cCCK3uIEbLlJC5j4q/dLE3iTzfiPTZM1GvpE+Jdc0wye4Zr9KEv3iVX2sBX9wFQbBiTMHIvsTARHiL1s8l+5yS7N0CTqdpmqwTuxFHKL9skQVQO6S8VrTqQlo=
+	t=1781281456; cv=none; b=mX2v6C7Po5JxQdyMwnOVr+WDZDHhASVfLwZtVk1ZLADEQdWn5qywU5kjgrcoC500NLs3ieXgxdegeBdbRtDBXeEGRUQJiqaZlmBBzgBdMrszIfTUDEkLU9veK5+4BuRtvRsRZPgwCyph5qQFYKV7IJ/ok/0pA0Wu2+7XTejqlZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781280355; c=relaxed/simple;
-	bh=cRg+a9qucOtZBNJgsQ2iduOKFMHke87hohv4YWD3xd4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jRpt0gutDE8R5x9lJM5zgBVIDvWF5Virf5obincuaeDOr379j4/VBQ8r2TKhN8ZCgnlmwdeaEefzq69AAbDlcsaLv11aPVUmR3B+LAQBV88pL4hONGvIh24xZRZyuYEwdHTj5c+XI550qDWzyR8YRy23jfbRLa0Ip1juDcvH0Hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kb3ruvTV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781281456; c=relaxed/simple;
+	bh=EM9fYVOVO5wx0AlxxQX5Z5uY6L8sVXrfM9pNCZ2t61Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hscF2qNXBNNT53d0UvI9OeHJ5sRk/rckMXAMsh8U8ZHUBh8VNQR2Ox0Lmu0MQLpfH2VfvCim6OrGkuk8pRAw8ICpFYl8rp9PNnGfJbb8to6tStsqDUXNDgxEYmcFVPxJRNua/+k7CC0yuLbO/d1VsX1wDQyCFoI0ALBue03cGFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJyyiCa0; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kb3ruvTV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFFF71F000E9;
-	Fri, 12 Jun 2026 16:05:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781280354;
-	bh=vXPx915FPyROeaH1BXJ21X8rOWbYRAV9JqNbLkxK7o4=;
-	h=From:To:Cc:Subject:Date:Reply-To;
-	b=Kb3ruvTVifiBaPhJAgcZpc+xE4EGTDX4hirH/ABnHuaW9Evnox4tU2Kw76KkLv/oR
-	 JxZkPuIP+tyBGzfShQxpe+IA1ggII+3X7iEjFdZ42ZtwmI4PolEUWZr1RKS+JBGC/b
-	 SLNwk5AQUhjF1uh9klV3/UfivH/kg1IipvRv53ulPo2Mb9uprm1d3EKCK4jFgXNcus
-	 PNM0Fa2AUkWDiDHHK+tAW1naetnjs6lT3RD6MTwvDA7GWDDWFxh8xsgkG9MF0EEVr6
-	 40Frk74DiVo9eI57ocO+trLDsMfrd/Tv3zGGoeIdfOtsutk6qTfGvijrENCp2Rd3MG
-	 F7qm7kuhllmwQ==
-From: Gary Guo <gary@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>,
-	Rae Moar <raemoar63@gmail.com>
-Cc: linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJyyiCa0"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-490ae94a89eso10355155e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 09:24:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781281453; x=1781886253; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M15/H5SXZ3Wzm+97G4xOFVhr5vUJMWE6LcDVgXk/KoI=;
+        b=hJyyiCa0DXhx8I5pTyhvBYesy2h98alxnGEACn7sxNiNQCStACz0nA6uu2IRTTsUvm
+         Dh/FhQV191O8HpCpHYW1nBaV31j5rpCrFDwiBO5M66mY9UkKalffsP9kkLFNPdM4kDtF
+         xrwRhxNt9TNF1OqZMzzsuxwZ9NDpnAuuFPCdyr0a5uPYNN+YPdSaBjIVZpaP9Z+9nxGW
+         b6IE/8JH4A3/OtgG/4+ekZMn0owYfamFZDh8qVfqMGjxoSARVzUSxzgRZ9cf0pjU0Bn8
+         HbXUkNtzM57qKyUdJ2vypinRVRHoZnIANQcynOduWA2RBzmXVbLBhMZjs7M2FQMrkagK
+         Ta4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781281453; x=1781886253;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M15/H5SXZ3Wzm+97G4xOFVhr5vUJMWE6LcDVgXk/KoI=;
+        b=fTpm7YPVatsqqvI8/GGUezyQu2xOmqJ8ps4ukZps8t/HbKQPMFkBZRPWA7V8IRkqch
+         86WXUZIk6GRWtWq2t71tRqJHjA2dfGs1/Dox1/b8pbOWghsPD97EpB0xffYY+m09NGOG
+         VyzCNoCz3BEYZzh2nPFQqJPVjKP5u660Oe/lgVHO3pIkuu82EWOrHO+5D/9mjWoZ7LVw
+         D0Itcwb6rBX4kZvGWaXE7zOS/ER4QGMSiOmdO5qbRaIcPHpgog2SDPhKlhjRbAe9qemV
+         fvB/zSKz8IuzHUVXYjxrgLG+wRAXj3I8+cDeraRYiJQGj7uo6Y9/RFvDsbUlWvINQRtR
+         1pyQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8VxoYlJ4uspzfeDqV2rSeVi9VM7VqXXd42hySnAVZcmlOq9TUm57FPDI6ITQR31RVl4KXORoaHKRTgIzwJON0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzieMrxq3wxR2YD9YM99eqT6FKvRSAxHBaFblc0sbGNgnjrrEnB
+	cHuE/K55vVK4E5K0I+u/InQQC8fSqjGlG9cgPx6S9ALCimLQwOgtbUW5
+X-Gm-Gg: Acq92OEG4uAXCeS7mpsrZwdFVxhGhlehsYI9uBhq27tdUdXGT0AdfwETBPS+8I0QoO+
+	JM3DludsKuyIBAmxxTTicjWLHxvUGLT9E16sIGWTZCGwFCnhV3pwrkW+WUX/GGgj5Ta/PXPWKnB
+	AfZgdf+Y9KDobenz0V8FDLHAAlqqck62hS4f4+BYUB7jQIoiTIeOE1IVtN3kj09PlIyP5iDwTXG
+	+OQyjbfI/jLjiaTxTIu62lZhYfUjEs1VucTxxQTK8sRhEhV/zCgmuo/kajK4bcOAX5CPqvthj3T
+	fhUiiygOifkBAEKx1R8pdDvSIOXb7zkmFFlw9WXUEziiBO6N/KsdI3mFo64IDa9LVl5T3kZ5SN6
+	MNGXDnovTSFzdmBhohf/24PzE66ifIZik67rdL1GB+MebxVKp9xNR9pqrS+0BY0hmI4OS8or0D0
+	dzHPCx1AsHxo5mkN+cxV4hf2Ywjn09Fs9TrqER/dNMY+Gn2kTb/paoOpITOBqCJw==
+X-Received: by 2002:a05:600c:348b:b0:490:e5c1:b89e with SMTP id 5b1f17b1804b1-49220061e38mr2167415e9.10.1781281452911;
+        Fri, 12 Jun 2026 09:24:12 -0700 (PDT)
+Received: from f4d4888f22f2.ant.amazon.com.com ([15.248.2.31])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490ea95c51dsm57620935e9.1.2026.06.12.09.24.11
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 12 Jun 2026 09:24:12 -0700 (PDT)
+From: Jack Thomson <jackabt.amazon@gmail.com>
+To: maz@kernel.org,
+	oupton@kernel.org,
+	pbonzini@redhat.com
+Cc: joey.gouly@arm.com,
+	seiden@linux.ibm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	shuah@kernel.org,
+	corbet@lwn.net,
+	vladimir.murzin@arm.com,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Subject: [RFC PATCH] rust: doctest: add source map script
-Date: Fri, 12 Jun 2026 17:05:22 +0100
-Message-ID: <20260612160523.3083792-1-gary@kernel.org>
-X-Mailer: git-send-email 2.54.0
-Reply-To: Gary Guo <gary@garyguo.net>
+	linux-doc@vger.kernel.org,
+	isaku.yamahata@intel.com,
+	Jack Thomson <jackabt@amazon.com>
+Subject: [PATCH v5 0/5] KVM: arm64: Add KVM_PRE_FAULT_MEMORY support
+Date: Fri, 12 Jun 2026 17:23:48 +0100
+Message-ID: <20260612162354.73378-1-jackabt.amazon@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,122 +89,121 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Gary Guo <gary@garyguo.net>
+From: Jack Thomson <jackabt@amazon.com>
 
-Quite often when updating abstractions there will be some documentation
-that needs updating, but the build process is not very developer friendly
-as it just gives out something like
-"rust/doctests_kernel_generated.rs:12345:42" and it is a hassle to find
-where the documentation actually is.
+Hi,
 
-Add a script as rustc wrapper, which translates the error message by
-appending a "(generated from original_file:original_line:col)" message to
-the original source info emitted by rustc.
+This series adds arm64 support for KVM_PRE_FAULT_MEMORY, which was added
+for x86 in [1]. The ioctl allows userspace to populate stage-2 mappings
+before running a vCPU, reducing the number of stage-2 faults taken in
+the run path. This is useful for post-copy migration, where stage-2
+fault latency shows up directly in memory-intensive workloads.
 
-Signed-off-by: Gary Guo <gary@garyguo.net>
----
-I made this a rustc wrapper instead of trying to pipe rustc output to
-it, as Kbuild is too complex for me to understand how to do it :)
----
- rust/Makefile                           |  4 ++
- scripts/rustdoc_test_build_sourcemap.py | 71 +++++++++++++++++++++++++
- 2 files changed, 75 insertions(+)
- create mode 100644 scripts/rustdoc_test_build_sourcemap.py
+On arm64, the GPA supplied to the ioctl is treated as an IPA in the
+userspace-owned VM's memslot address space. If the vCPU most recently
+ran a nested guest, KVM still targets the VM's canonical stage-2. It
+does not interpret the GPA as an L2 IPA, and does not try to populate
+the nested/shadow stage-2 selected by the vCPU's last run state.
 
-diff --git a/rust/Makefile b/rust/Makefile
-index 63b1e355321d..d133d4fe1f2d 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -393,6 +393,10 @@ quiet_cmd_rustdoc_test_kernel = RUSTDOC TK $<
-     $(objtree)/scripts/rustdoc_test_gen FORCE
- 	+$(call if_changed,rustdoc_test_kernel)
- 
-+ACTUAL_RUSTC := $(RUSTC_OR_CLIPPY)
-+%/doctests_kernel_generated.o: private RUSTC_OR_CLIPPY = \
-+	PYTHONDONTWRITEBYTECODE=1 ACTUAL_RUSTC=$(ACTUAL_RUSTC) $(PYTHON3) $(srctree)/scripts/rustdoc_test_build_sourcemap.py
-+
- # We cannot use `-Zpanic-abort-tests` because some tests are dynamic,
- # so for the moment we skip `-Cpanic=abort`.
- quiet_cmd_rustc_test = $(RUSTC_OR_CLIPPY_QUIET) T  $<
-diff --git a/scripts/rustdoc_test_build_sourcemap.py b/scripts/rustdoc_test_build_sourcemap.py
-new file mode 100644
-index 000000000000..afabcd061567
---- /dev/null
-+++ b/scripts/rustdoc_test_build_sourcemap.py
-@@ -0,0 +1,71 @@
-+import sys
-+import re
-+import os
-+import subprocess
-+
-+LOCATION_REGEX = re.compile(r"\.location: (.*):(\d+)")
-+ANCHOR_REGEX = re.compile(r"static __DOCTEST_ANCHOR: i32 = .* \+ (\d+) \+ (\d+);")
-+SOURCE_INFO_REGEX = re.compile(r"(rust/[\w/.-]+\.rs):(\d+):(\d+)")
-+
-+
-+def transform(file, line):
-+    with open(file, "r") as f:
-+        lines = f.readlines()
-+
-+    line_idx = line - 1
-+
-+    # Find the last location and anchor before the erroring line
-+    real_path = None
-+    orig_line = None
-+    anchor_line = None
-+
-+    for i in range(line_idx, -1, -1):
-+        if real_path is None:
-+            match = LOCATION_REGEX.search(lines[i])
-+            if match:
-+                real_path = match.group(1)
-+                orig_line = int(match.group(2))
-+
-+        if anchor_line is None:
-+            match = ANCHOR_REGEX.search(lines[i])
-+            if match:
-+                anchor_line = i + int(match.group(1)) + int(match.group(2))
-+
-+        if real_path is not None and anchor_line is not None:
-+            break
-+
-+    new_line = orig_line + (line_idx - anchor_line)
-+    return real_path, new_line
-+
-+
-+def main():
-+    actual_rustc = os.environ.get("ACTUAL_RUSTC")
-+    args = sys.argv[1:]
-+
-+    # We redirected Rust output so it is not TTY anymore.
-+    # Add `--color=always` back to preserve the color behaviour.
-+    if sys.stdout.isatty() and not any(arg.startswith("--color") for arg in args):
-+        args.append("--color=always")
-+
-+    result = subprocess.run([actual_rustc] + args, stderr=subprocess.PIPE, text=True)
-+
-+    def replacer(match):
-+        orig = match.group(0)
-+        file = match.group(1)
-+        line = int(match.group(2))
-+        col = int(match.group(3))
-+
-+        if file != "rust/doctests_kernel_generated.rs":
-+            return orig
-+
-+        new_file, new_line = transform(file, line)
-+        return f"{orig} (generated from {new_file}:{new_line}:{col})"
-+
-+    if result.stderr:
-+        sys.stderr.write(SOURCE_INFO_REGEX.sub(replacer, result.stderr))
-+
-+    sys.exit(result.returncode)
-+
-+
-+if __name__ == "__main__":
-+    main()
+The patches are:
 
-base-commit: 3782319656f65f0bf020d4c058058c23c3e16679
+ - Allow callers of kvm_pgtable_get_leaf() to pass walk flags, so the
+   prefault path can walk stage-2 under the MMU read lock.
+
+ - Add arm64 support for KVM_PRE_FAULT_MEMORY.
+
+ - Enable pre_fault_memory_test on arm64.
+
+ - Add a backing-source option to pre_fault_memory_test.
+
+ - Add a nested (NV) selftest that prefaults on a vCPU whose last-run
+   context is backed by a shadow stage-2 MMU with an empty nested
+   stage-2 root.
+
+The prefault flag and page_size output in the stage-2 fault descriptor
+remain in this series so the arm64 implementation can advance by the
+mapping granule installed by the fault path and report poison without
+queueing a SIGBUS.
+
+Tested with pre_fault_memory_test under an arm64 QEMU setup with
+anonymous, shmem, anonymous_thp, anonymous_hugetlb and shared_hugetlb
+backings, including 64K, 2M and 32M hugetlb pools, and with the new
+nv_pre_fault_memory_test on an NV-capable setup.
+
+=== Changes since v4 [2] ===
+
+ - Reworked nested virt semantics: arm64 now treats the ioctl GPA as the
+   VM/memslot IPA and always targets the canonical stage-2. It no longer
+   translates an L2 IPA through L1's stage-2.
+
+ - Documented the arm64 nested behavior in the KVM API text.
+
+ - Switch to the canonical stage-2 with the vCPU put/load helpers when
+   the vCPU last ran with a nested/shadow MMU, keeping VMID, VNCR and
+   shadow-MMU refcount state consistent.
+
+ - Split the kvm_pgtable_get_leaf() walk-flag plumbing into a prep patch
+   and walk existing mappings with KVM_PGTABLE_WALK_SHARED under the MMU
+   read lock.
+
+ - Tightened prefault fault handling: preserve fault info, set IL in the
+   synthetic ESR, handle existing mappings, return -EAGAIN for invalid
+   memslot races, and report -EHWPOISON without queueing SIGBUS.
+
+ - Avoid directly walking stage-2 page tables when pKVM is enabled.
+   Protected VMs remain unsupported via -EOPNOTSUPP.
+
+ - Preserve the selected selftest memory backing when recreating the
+   racing memslot.
+
+ - Add the nested (NV) prefault selftest, including an empty nested
+   stage-2 root to catch accidental L2-IPA interpretation.
+
+=== Changes since v3 [3] ===
+
+ - Return -EOPNOTSUPP for protected VMs.
+
+ - Reworked nested-vCPU handling to translate an L2 IPA through L1's
+   stage-2. This has been superseded by the canonical VM-IPA semantics
+   described above.
+
+ - Make page_size unsigned and keep local declarations ordered at the
+   top of kvm_arch_vcpu_pre_fault_memory().
+
+=== Changes since v2 [4] ===
+
+ - Update the synthetic fault info. Thanks Suzuki.
+
+ - Remove the selftest change for unaligned mmap allocations. Thanks
+   Sean.
+
+[1]: https://lore.kernel.org/kvm/20240710174031.312055-1-pbonzini@redhat.com/
+[2]: https://lore.kernel.org/linux-arm-kernel/20260113152643.18858-1-jackabt.amazon@gmail.com/
+[3]: https://lore.kernel.org/linux-arm-kernel/20251119154910.97716-1-jackabt.amazon@gmail.com/
+[4]: https://lore.kernel.org/linux-arm-kernel/20251013151502.6679-1-jackabt.amazon@gmail.com/
+
+Jack Thomson (5):
+  KVM: arm64: Pass walk flags to kvm_pgtable_get_leaf()
+  KVM: arm64: Add pre_fault_memory implementation
+  KVM: selftests: Enable pre_fault_memory_test for arm64
+  KVM: selftests: Add option for different backing in pre-fault tests
+  KVM: selftests: Add nested pre-fault test for arm64
+
+ Documentation/virt/kvm/api.rst                |  18 +-
+ arch/arm64/include/asm/kvm_pgtable.h          |   5 +-
+ arch/arm64/kvm/Kconfig                        |   1 +
+ arch/arm64/kvm/arm.c                          |   1 +
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c         |  10 +-
+ arch/arm64/kvm/hyp/pgtable.c                  |   5 +-
+ arch/arm64/kvm/mmu.c                          | 164 +++++++++++++-
+ arch/arm64/kvm/nested.c                       |   2 +-
+ tools/testing/selftests/kvm/Makefile.kvm      |   2 +
+ .../kvm/arm64/nv_pre_fault_memory_test.c      | 200 ++++++++++++++++++
+ .../selftests/kvm/pre_fault_memory_test.c     | 150 ++++++++++---
+ 11 files changed, 513 insertions(+), 45 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
+
+
+base-commit: 98f826f3c500fda08d51fca434b7aefa6a2f7076
 -- 
-2.54.0
-
+2.43.0
