@@ -1,318 +1,174 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B488B3DD86A
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 16:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B386735E949
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 16:28:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781281464; cv=none; b=bt+kI5A/x1Slv+894KuxA4A9wKlHSiuDI3CIo7WRjxlm8St9bt3iBDZ3m6Nrhqw+gXlSj9ysxeiT4Kf/Mx59RQgDFFZfXzdllagVv24pQ9HMP2pIbei7fEJvvN1DQNVrHuABz+GuzzzegbwAURBtgGcjqvlTHzgPmHX59B1mZjQ=
+	t=1781281693; cv=none; b=LTahgDIGIHiK0XjgS0NszeNzNvjuw2OnDis/wHLZn8WVRxlaAsWopCcnOyZcA0qCig12hCDc6DmhIEp39fVWpQu++JtgvF+6XdXiY3/MY/eNGcJlWGxqVN77yrItIap5U3l8e+vetOOtIU9CpEw99RFiYCeFRKOPVHR+QuMJAL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781281464; c=relaxed/simple;
-	bh=H2Kd07qElqnot6gVepkdwLKpMe9/R/K8xbz744caVbU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Pu9LRnukRrAkBULxgWnAyRuBlX8DiuI3HzMR65Ebe/I0fextCaICA3qUatBBi6Y9FQvoANL58RK+A1Y3UyJgcME4MLxkPiUfsiwmpipj50+b8tC0jcYxWH+d4SC6Nv9qA5pdut8NjWTTb5vgz725i8CbuiM8OOjmWN3OXPt4E1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V+ornFK4; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1781281693; c=relaxed/simple;
+	bh=6ZE69KeYwSFR9ddLxR0MdZCFmLqvmyPcMNYBiJZYTEY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IkUpvrwwH/RKJW+FaX8Zf6Qj5HGYJZyZGChJh08weXut7JMxpOQyfhzt7gBPgY8SAhPp7dQT/1TofBmdAyoAir9QPqGTLmTZmtZD2jgFlVEevy9ScYuEFvg2n1WOrqpabPa7juTyj1UXdIAarBw3sPoMxOive9/m2iMmFmq9TiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q9m43Nyc; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V+ornFK4"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-490b613a17bso10267125e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 09:24:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q9m43Nyc"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-84275887a3fso1627668b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 09:28:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781281457; x=1781886257; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tydmeyYrLPvT4qet9l6Pm8OKfFhD4dz0649Lu1ejs0k=;
-        b=V+ornFK40pMnEL6osF/kpsRP7kftKkRR63KmY1fDtEtdEOoetHZAGyxb1o4GnysgeI
-         Ee8owvBrO8/x/LpcFl9PkhkGbtC0JbeljkyubOaSDwYzppWW7G9IqPJJgRND+r6CcsrW
-         QzX1oCVEMCkvk7dSKC1kjdkL1HtxCAMGjzU1u57aUynFdumMcefgoU+30Ve3PFR0v9Zw
-         RBeYpNlibmbd4iuO9f5AcPau8waqIVJdNv7HTls7xKaStoO6+S+pOagnlWedR4HfBw9f
-         Svdcj6rQn2pyk4YGLKx1zJiVpRESMrMdugi6aaZfzwBmZSMNlaWP/PzVekM6jRd/cD9M
-         +Wxw==
+        d=gmail.com; s=20251104; t=1781281691; x=1781886491; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1gfCjqesfW4kvsUaSrLF2IXLSdKMNWo5TtK5P4zLV3s=;
+        b=q9m43NycljZ/y+CWZ61pjHLdFLTXuVlI/oW+KYmP2poGJAgnHxs0rvM60ACrkHXvvL
+         MKyFwI+geeecXZcFZyIEu5IKO2jOxbYB453eGeHyk0zWP6/S7d0aTxFu7F6Ixwdkszwz
+         x9xoIIpkgKb+CrAKZclsjF3x6qp0bBpf7YQUzlk+JOPZTqN1An129SBRlI9NdgGgZzOa
+         H7Mjsd+lRaiNamZ4nsTsDFEiUuiceip9VVKaMoNRgnjmHjdyCaPWTrkSEFErP/IIsCBq
+         Jx8MJ9EK6pnGBuSkeqNAZ/npJxldBR3AkkjfFamla+LOYhXHm1tYkb6V4hgkyt294P6o
+         usTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781281457; x=1781886257;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tydmeyYrLPvT4qet9l6Pm8OKfFhD4dz0649Lu1ejs0k=;
-        b=ruw9zGwH3l1fsH5OSJbAaVsT5690j01MQf7paqWFrpt84cxDbBtgRlIit1vCkiTV7U
-         YvIodrQakBoQR3GWTqrIPlEbGslNjGi+c0iBZgaJxAScTJG4liaeoLv75ezJjFBFFEjN
-         4tTL8I6lYQ3Lc6ZnTU399C3KALxG3qtfJ1WlGuovEr2xHzhdMcsKVfItxtNHezxoWsNd
-         NhQYtYqNDBVSykWQr6dmDIaxVr5ZLOmCodOpatsxYCZn2Lykh4yaOVuBeseIzPrjammz
-         CSb6NWznlBBr7sMh9kmFjhUsO3ElpqjduvfxJYj19Uva4w8libcTwUMt2GYu6WBHszib
-         /Big==
-X-Forwarded-Encrypted: i=1; AFNElJ+P6sDj+//sM4z84I6XwICqWnC6D0HDsmOL9Sw8wRbjvHRxGHBmsGfrI67AWgcILURwgSYyD+MsOH2EIZy8cuI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVD4mfMaIEQGlaetLm4nCwvBboz676jVqlR4xL6dWJbqeklxnh
-	qzTIGAA3MJQdW+69ArtuQkhdY34+dhHtCHD140xzztyDe+a1xzHXhOxu
-X-Gm-Gg: Acq92OGZVyJeaWiEJ78YYeL1tBqR4SdvaZ8uAZjqUtU2z7I7XfMFUKxQgzJnjuFoVLl
-	NgYp5VyNEXjZiGkq2x2tcPPujMzsREi4YwREXniJbb5RyoAvtw4R7BAXHY+sQCaBzaH9d99gyN1
-	FCXiEn1OO1YrsnMPCaJkSXymgiFM31f5YBJYzv76isHp0lns2PfSVORN0qXfq3mzyWYAjpfXQTg
-	hAdeRH9w4/J5aJ0qVRJmSYXFqldMmHofGgyC8HeVvDr2Ifz/qJpduA6+JZPdPbrWcMRIoFMlXa9
-	RvL5+M/liXrIyPaTj8zIN7oQ1L7FsWRMy9NCpLBuTphmMFe5dsx07BsBeMgq22o1BR2zjLZGILL
-	bJvZHIC+UPsp4PaHabbmCcorrz2EInUTz511UrMGdG3hfsQOZckUAj6Eitxi2FtZ91tRvkVQVfR
-	IT176L9EGluZPZvb7ExDJE34rw4DwVRh2vRGj5yWk+dgPs8UWOYVdNL86QtkebsA==
-X-Received: by 2002:a05:600c:c0d1:10b0:490:b9c3:6c69 with SMTP id 5b1f17b1804b1-490ec50f80cmr36665975e9.30.1781281456986;
-        Fri, 12 Jun 2026 09:24:16 -0700 (PDT)
-Received: from f4d4888f22f2.ant.amazon.com.com ([15.248.2.31])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490ea95c51dsm57620935e9.1.2026.06.12.09.24.15
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 12 Jun 2026 09:24:16 -0700 (PDT)
-From: Jack Thomson <jackabt.amazon@gmail.com>
-To: maz@kernel.org,
-	oupton@kernel.org,
-	pbonzini@redhat.com
-Cc: joey.gouly@arm.com,
-	seiden@linux.ibm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	shuah@kernel.org,
-	corbet@lwn.net,
-	vladimir.murzin@arm.com,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	isaku.yamahata@intel.com,
-	Jack Thomson <jackabt@amazon.com>
-Subject: [PATCH v5 3/5] KVM: selftests: Enable pre_fault_memory_test for arm64
-Date: Fri, 12 Jun 2026 17:23:51 +0100
-Message-ID: <20260612162354.73378-4-jackabt.amazon@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260612162354.73378-1-jackabt.amazon@gmail.com>
-References: <20260612162354.73378-1-jackabt.amazon@gmail.com>
+        d=1e100.net; s=20251104; t=1781281691; x=1781886491;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1gfCjqesfW4kvsUaSrLF2IXLSdKMNWo5TtK5P4zLV3s=;
+        b=r4D0sNTjuGZKXhHye25yV9i2a+XPoN8LNDg58PtAVNjFMA83g5RNcr30BJ+3c2g1Hq
+         NjETG8KizFF0YQkzQPn6Nqqw3zt8zcpQbTSClP3vZl5cDPDbKGv4pWcOImKelGutJhnn
+         HqY/JSYlHxVtvRegKkiWjlo5hS+1DT8NDWW91zzOJxWClzEn1bzH9yImHOJYf7eFmScX
+         QV+Rj0xO88zKHRnKultGNa2gmIRMI2U13ka2UM7c4JotNndC9LN4+SfNOJMnPZrnmHES
+         ZHSTpe7Jd+NwnMgFwb6e6gf+xr9vYm4k9wsigl0iKt5JPJesmChE09h3UFZwGFuoIDEm
+         AUAA==
+X-Forwarded-Encrypted: i=1; AFNElJ8xzLWAC1vhSrzeWgRmAOSSJ0WWe5BzS0S1IJLkFZoRzmBhT4/WV7JGs+IJtoL+5mXJJ6hGgNa4RuBkEi5Vxjw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYdsTOKmIf+M2x1yT7SU3h8jJqF31Qu2vGjk4T39Ee9X1citrm
+	U2/CawkDzx//LKpge+asFaHiReMSt4W7ctbSoLqm3tnBfCPNXEXJwlm1
+X-Gm-Gg: Acq92OFXW/E2fITy1IAH9QP5kmNxdge3sbX46K3mx30Ea4DSvGLcOHvdm+eGj2uEbfl
+	5nYq/h43qasx2tCFbHW5EhZdVkenzv4YdFmILSQlg+yzQMV32Hx8IClvRF9VKnUajL7CgIsi3mj
+	OP3JQGkPrOjq/WQIO/9njoydUSgbn5dnvQcet+fd42NKgpRLNVSgWc0PsHAgg5NpSvMZ4zLd5sd
+	W7CeIN1QOu6eQiqwfPE5vfIxaa4cZi1l4VcXZ9/f+WpgqZb6Q3ZI4LPCg8wsTnTzAfECsKcYS+n
+	7ned25/kErMxbD3HyQVnO2lhpgDv6VxQzu+pihjtE1HpSuQPueme/vcRAOIkZtf7UvMraCPMMyR
+	OTsIx+w9OjRNomclyTEnA1E4jrd161N3euheBTR+Jc/1vI9D9Onlu9djqez33XRQn6rk8W1YH1A
+	H5WLLsHXo8AcCFI+UPzPo=
+X-Received: by 2002:a05:6a00:2998:b0:82c:7420:82bf with SMTP id d2e1a72fcca58-8434d0b0bc3mr2959505b3a.19.1781281690860;
+        Fri, 12 Jun 2026 09:28:10 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:4f::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434b05d7d7sm2906069b3a.60.2026.06.12.09.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jun 2026 09:28:10 -0700 (PDT)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: [PATCH net-next v3 0/4] net: devmem: allow rx-buf-size > PAGE_SIZE
+ per binding
+Date: Fri, 12 Jun 2026 09:25:56 -0700
+Message-Id: <20260612-tcpdm-large-niovs-v3-0-a3b693e76fcb@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABkzLGoC/23NQQrDIBBA0avIrDNFx0Yhq96jdGHNpBUaU1QkJ
+ eTuBekii64/vL9B5hQ4wyA2SFxDDkuEQehOgH+6+GAMIwwCSJKRRhIW/x5nfLn0YIxhqRl705N
+ 22ilpLXQC3omnsDbzCpELRl4L3DoBz5DLkj5tVlXrP1f/catCiZO27uy8sWT8ZebiTn6ZG1bpA
+ Cj1DyCUyEz3SfVse9IHYN/3L8Foqfj8AAAA
+X-Change-ID: 20260602-tcpdm-large-niovs-56523a3a1077
+To: Donald Hunter <donald.hunter@gmail.com>, 
+ Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Gerd Hoffmann <kraxel@redhat.com>, 
+ Vivek Kasireddy <vivek.kasireddy@intel.com>, 
+ Sumit Semwal <sumit.semwal@linaro.org>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+ linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org, 
+ sdf@fomichev.me, razor@blackwall.org, daniel@iogearbox.net, 
+ almasrymina@google.com, matttbe@kernel.org, skhawaja@google.com, 
+ dw@davidwei.uk, Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
 
-From: Jack Thomson <jackabt@amazon.com>
+Every devmem dmabuf binding hands the page_pool PAGE_SIZE niovs today.
+On NICs that consume one descriptor per netmem, this caps a single RX
+descriptor at PAGE_SIZE and burns CPU on buffer churn.
 
-Enable the pre_fault_memory_test to run on arm64 by making it work with
-different guest page sizes and testing multiple guest configurations.
+In this series, we add a bind-time netlink attribute,
+NETDEV_A_DMABUF_RX_BUF_SIZE, that lets userspace request a larger niov size
+(power of two >= PAGE_SIZE). Drivers must opt in via
+queue_mgmt_ops.QCFG_RX_PAGE_SIZE.
 
-Update the test_assert to compare against the UCALL_EXIT_REASON, for
-portability, as arm64 exits with KVM_EXIT_MMIO while x86 uses
-KVM_EXIT_IO.
+Selftests use udmabuf, but udmabuf sgtables were previously hardcoded to
+PAGE_SIZE. This series modifies udmabuf to respect folio sizes in its exported
+sgtable. The result is that when backing udmabuf with MFD_HUGETLB 2MB pages,
+the sgtable is populated with 2MB entries, allowing devmem's gen_pool to carve
+out large (eg. 64K) niovs.
 
-Signed-off-by: Jack Thomson <jackabt@amazon.com>
+Measurements
+------------
+
+Setup: kperf devmem RX/TX cuda, 4 flows, 64 MB messages, 60s, dctcp,
+num-rx-queues=4, dmabuf-rx/tx-size-mb=2048, 10 runs per niov size,
+mlx5.
+
+   niov       RX dev Gbps   RX flow avg Gbps         app sys %
+  -----  ----------------  -----------------  ----------------
+     4K  300.63 +/- 53.21    75.16 +/- 13.30   54.15 +/- 10.23
+    16K  321.35 +/- 28.20    80.34 +/-  7.05   41.05 +/-  8.87
+    32K  347.63 +/-  2.20    86.91 +/-  0.55   44.54 +/-  3.51
+    64K  332.11 +/- 14.26    83.03 +/-  3.56   35.47 +/-  3.11
+
+RX app sys % drops ~19% from 4K to 64K.
+
+kperf support (not yet merged):
+https://github.com/facebookexperimental/kperf/commit/8837577f920876bce6986ec18869ac04439ebcd2
+
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../selftests/kvm/pre_fault_memory_test.c     | 115 ++++++++++++++----
- 2 files changed, 92 insertions(+), 24 deletions(-)
+Changes in v3:
+- fix a bunch of non-reverse christmas tree declarations (Stan)
+- remove extra uint32 cast for getpagesize() (Stan)
+- remove overzealous strtoul checking (Stan)
+- remove value checks that the kernel already performs on rx_buf_size
+  (Stan)
+- Link to v2: https://lore.kernel.org/r/20260611-tcpdm-large-niovs-v2-0-ee2bf15e7523@meta.com
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 9118a5a51b89..4609d8f23e38 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -194,6 +194,7 @@ TEST_GEN_PROGS_arm64 += guest_memfd_test
- TEST_GEN_PROGS_arm64 += mmu_stress_test
- TEST_GEN_PROGS_arm64 += rseq_test
- TEST_GEN_PROGS_arm64 += steal_time
-+TEST_GEN_PROGS_arm64 += pre_fault_memory_test
- 
- TEST_GEN_PROGS_s390 = $(TEST_GEN_PROGS_COMMON)
- TEST_GEN_PROGS_s390 += s390/memop
-diff --git a/tools/testing/selftests/kvm/pre_fault_memory_test.c b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-index fcb57fd034e6..9f5f0d1a5db1 100644
---- a/tools/testing/selftests/kvm/pre_fault_memory_test.c
-+++ b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-@@ -11,19 +11,29 @@
- #include <kvm_util.h>
- #include <processor.h>
- #include <pthread.h>
-+#include <guest_modes.h>
- 
- /* Arbitrarily chosen values */
--#define TEST_SIZE		(SZ_2M + PAGE_SIZE)
--#define TEST_NPAGES		(TEST_SIZE / PAGE_SIZE)
-+#define TEST_BASE_SIZE		SZ_2M
- #define TEST_SLOT		10
- 
-+/* Storage of test info to share with guest code */
-+struct test_config {
-+	u64 page_size;
-+	u64 test_size;
-+	u64 test_num_pages;
-+};
-+
-+static struct test_config test_config;
-+
- static void guest_code(u64 base_gva)
- {
- 	volatile u64 val __used;
-+	struct test_config *config = &test_config;
- 	int i;
- 
--	for (i = 0; i < TEST_NPAGES; i++) {
--		u64 *src = (u64 *)(base_gva + i * PAGE_SIZE);
-+	for (i = 0; i < config->test_num_pages; i++) {
-+		u64 *src = (u64 *)(base_gva + i * config->page_size);
- 
- 		val = *src;
- 	}
-@@ -56,7 +66,7 @@ static void *delete_slot_worker(void *__data)
- 		cpu_relax();
- 
- 	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, data->gpa,
--				    TEST_SLOT, TEST_NPAGES, data->flags);
-+				    TEST_SLOT, test_config.test_num_pages, data->flags);
- 
- 	return NULL;
- }
-@@ -149,8 +159,8 @@ static void pre_fault_memory(struct kvm_vcpu *vcpu, u64 base_gpa, u64 offset,
- 	/*
- 	 * Assert success if prefaulting the entire range should succeed, i.e.
- 	 * complete with no bytes remaining.  Otherwise prefaulting should have
--	 * failed due to ENOENT (due to RET_PF_EMULATE for emulated MMIO when
--	 * no memslot exists).
-+	 * failed due to ENOENT (no memslot exists for the GPA; on x86 this
-+	 * surfaces via RET_PF_EMULATE).
- 	 */
- 	if (!expected_left)
- 		TEST_ASSERT_VM_VCPU_IOCTL(!ret, KVM_PRE_FAULT_MEMORY, ret, vcpu->vm);
-@@ -159,43 +169,70 @@ static void pre_fault_memory(struct kvm_vcpu *vcpu, u64 base_gpa, u64 offset,
- 					  KVM_PRE_FAULT_MEMORY, ret, vcpu->vm);
- }
- 
--static void __test_pre_fault_memory(unsigned long vm_type, bool private)
-+struct test_params {
-+	unsigned long vm_type;
-+	bool private;
-+};
-+
-+static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
- {
--	gpa_t gpa, gva, alignment, guest_page_size;
-+	gpa_t gpa, gva, alignment, guest_page_size, host_page_size;
-+	struct test_params *p = arg;
- 	const struct vm_shape shape = {
--		.mode = VM_MODE_DEFAULT,
--		.type = vm_type,
-+		.mode = guest_mode,
-+		.type = p->vm_type,
- 	};
- 	struct kvm_vcpu *vcpu;
- 	struct kvm_run *run;
- 	struct kvm_vm *vm;
- 	struct ucall uc;
- 
-+	pr_info("Testing guest mode: %s\n", vm_guest_mode_string(guest_mode));
-+
- 	vm = vm_create_shape_with_one_vcpu(shape, &vcpu, guest_code);
- 
--	alignment = guest_page_size = vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
--	gpa = (vm->max_gfn - TEST_NPAGES) * guest_page_size;
-+	guest_page_size = vm_guest_mode_params[guest_mode].page_size;
-+	host_page_size = getpagesize();
-+
-+	test_config.page_size = guest_page_size;
-+	test_config.test_size = align_up(TEST_BASE_SIZE + test_config.page_size,
-+					 host_page_size);
-+	test_config.test_num_pages = vm_calc_num_guest_pages(vm->mode, test_config.test_size);
-+
-+	gpa = (vm->max_gfn - test_config.test_num_pages) * test_config.page_size;
- 	alignment = SZ_2M;
-+	alignment = max(alignment, host_page_size);
- 	gpa = align_down(gpa, alignment);
- 	gva = gpa & ((1ULL << (vm->va_bits - 1)) - 1);
- 
--	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, gpa, TEST_SLOT,
--				    TEST_NPAGES, private ? KVM_MEM_GUEST_MEMFD : 0);
--	virt_map(vm, gva, gpa, TEST_NPAGES);
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+				    gpa, TEST_SLOT, test_config.test_num_pages,
-+				    p->private ? KVM_MEM_GUEST_MEMFD : 0);
-+	virt_map(vm, gva, gpa, test_config.test_num_pages);
- 
--	if (private)
--		vm_mem_set_private(vm, gpa, TEST_SIZE);
-+	if (p->private)
-+		vm_mem_set_private(vm, gpa, test_config.test_size);
- 
--	pre_fault_memory(vcpu, gpa, 0, SZ_2M, 0, private);
--	pre_fault_memory(vcpu, gpa, SZ_2M, PAGE_SIZE * 2, PAGE_SIZE, private);
--	pre_fault_memory(vcpu, gpa, TEST_SIZE, PAGE_SIZE, PAGE_SIZE, private);
-+	pre_fault_memory(vcpu, gpa, 0, test_config.test_size, 0, p->private);
-+	/* Retry the same range after the first prefault attempt. */
-+	pre_fault_memory(vcpu, gpa, 0, test_config.test_size, 0, p->private);
-+	pre_fault_memory(vcpu, gpa,
-+			 test_config.test_size - host_page_size,
-+			 host_page_size * 2, host_page_size, p->private);
-+	pre_fault_memory(vcpu, gpa, test_config.test_size,
-+			 host_page_size, host_page_size, p->private);
- 
- 	vcpu_args_set(vcpu, 1, gva);
-+
-+	/* Export the shared variables to the guest. */
-+	sync_global_to_guest(vm, test_config);
-+
- 	vcpu_run(vcpu);
- 
- 	run = vcpu->run;
--	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
--		    "Wanted KVM_EXIT_IO, got exit reason: %u (%s)",
-+	TEST_ASSERT(run->exit_reason == UCALL_EXIT_REASON,
-+		    "Wanted %s, got exit reason: %u (%s)",
-+		    exit_reason_str(UCALL_EXIT_REASON),
- 		    run->exit_reason, exit_reason_str(run->exit_reason));
- 
- 	switch (get_ucall(vcpu, &uc)) {
-@@ -214,16 +251,46 @@ static void __test_pre_fault_memory(unsigned long vm_type, bool private)
- 
- static void test_pre_fault_memory(unsigned long vm_type, bool private)
- {
-+	struct test_params p = {
-+		.vm_type = vm_type,
-+		.private = private,
-+	};
-+
- 	if (vm_type && !(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(vm_type))) {
- 		pr_info("Skipping tests for vm_type 0x%lx\n", vm_type);
- 		return;
- 	}
- 
--	__test_pre_fault_memory(vm_type, private);
-+	for_each_guest_mode(__test_pre_fault_memory, &p);
-+}
-+
-+static void help(char *name)
-+{
-+	puts("");
-+	printf("usage: %s [-h] [-m mode]\n", name);
-+	puts("");
-+	guest_modes_help();
-+	puts("");
- }
- 
- int main(int argc, char *argv[])
- {
-+	int opt;
-+
-+	guest_modes_append_default();
-+
-+	while ((opt = getopt(argc, argv, "hm:")) != -1) {
-+		switch (opt) {
-+		case 'm':
-+			guest_modes_cmdline(optarg);
-+			break;
-+		case 'h':
-+		default:
-+			help(argv[0]);
-+			exit(0);
-+		}
-+	}
-+
- 	TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
- 
- 	test_pre_fault_memory(0, false);
+Changes in v2:
+- Use NL_SET_ERR_MSG_FMT for sg alignment failure details (Stan)
+- Keep -E2BIG (not a direct ask, but seemed preferred, Stan)
+- Update udmabuf commit message and comments explaining why
+  "one sg ent per folio" is useful (Christian)
+- Set/restore nr_hugepages in py harness (Stan)
+- Link to v1: https://lore.kernel.org/r/20260603-tcpdm-large-niovs-v1-0-f37a4ac6726c@meta.com
+
+---
+Bobby Eshleman (4):
+      net: devmem: allow rx-buf-size > PAGE_SIZE per dmabuf binding
+      udmabuf: emit one sg entry per pinned folio
+      selftests/net: ncdevmem: add -b option to set rx-buf-size on bind
+      selftests/net: devmem.py: add check_rx_large_niov
+
+ Documentation/netlink/specs/netdev.yaml            |  8 +++
+ drivers/dma-buf/udmabuf.c                          | 52 +++++++++++++++++--
+ include/uapi/linux/netdev.h                        |  1 +
+ net/core/devmem.c                                  | 51 +++++++++++--------
+ net/core/devmem.h                                  | 13 +++--
+ net/core/netdev-genl-gen.c                         |  5 +-
+ net/core/netdev-genl.c                             | 19 ++++++-
+ tools/include/uapi/linux/netdev.h                  |  1 +
+ tools/testing/selftests/drivers/net/hw/config      |  1 +
+ tools/testing/selftests/drivers/net/hw/devmem.py   | 12 ++++-
+ .../testing/selftests/drivers/net/hw/devmem_lib.py | 58 +++++++++++++++++++++-
+ tools/testing/selftests/drivers/net/hw/ncdevmem.c  | 36 ++++++++++++--
+ .../testing/selftests/drivers/net/hw/nk_devmem.py  | 11 +++-
+ 13 files changed, 225 insertions(+), 43 deletions(-)
+---
+base-commit: 518d8d0199538a4d6d5e51064044ece71e0c42e7
+change-id: 20260602-tcpdm-large-niovs-56523a3a1077
+
+Best regards,
 -- 
-2.43.0
+Bobby Eshleman <bobbyeshleman@meta.com>
 
