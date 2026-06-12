@@ -1,78 +1,87 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFBE3CFF4D;
-	Fri, 12 Jun 2026 16:29:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCCC403AE1;
+	Fri, 12 Jun 2026 17:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781281743; cv=none; b=liY6TRsf3AIgfZ6J26Bf75iKm866rs4MPlQjxEN0g9muuizwFmAN6G1Le8QjUq1RcPUYzIBTpsgL3fuHnxiV513HRNDxU0vQ02mR8p0nIaUFVWRPLqYQw/zikCkyQvG2JNxWQwwIzi/5AlzK8M1vAoePkUMU94voWoeQ+Y9rBjk=
+	t=1781283877; cv=none; b=rZ0gQovH7c3qQhDtX3lvZicJ32z0W4hfFr/8OXU5HLe/6FoDMGy+QehWNHR3OCpghPpEz2rIq5tvEZbZFCGCM0Y7FOrEtmJr94cf/z0bfMdQs5qYqJjO3LVm9W6f8fX8gu5/28H0h2Bknd4F3Pxmj6RNPilNAJ0pa8hPifUYJ5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781281743; c=relaxed/simple;
-	bh=9eG0SjFppRiHnEy0aXqt2CnVnNSCQ3XR7nSnUtTKfQ4=;
+	s=arc-20240116; t=1781283877; c=relaxed/simple;
+	bh=w9rB03p6uNf6v+e3HDd0+4lcc0LC1WNGF2W3+/a4vJg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fgQLEotiKqNAdr/G9x8vd6F+OT9VODWkyY0mEc555iYlqVJHFqQLZodIcGJc3Xq37175sc+DPhaHcKW13ogmRQyX+pAh62u08mCj2HGF6oi8pUwELjoiYS8jgcZDH/qJnabB1pnsN6fA7cGIT33NxPpYzVSZMa7jJN9/T9RzEII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=IYF2qStP; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=chY2ORbD1TJV44MxMbXIWsuLDDp+E1Ka0MYngAQHl4qApcYFmznSLAhU4FiLlyAZOaUCfO1ACOymon0lx88miL2heXPEutrgyqCR2s67VHz/kql9JF69SHKLopy04OWuM5l1Y/9EVzCjEj/LcUFa0FeNV4uyQiJcsZy5sgd5je4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=SkCA5wn7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="IYF2qStP"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=9eG0SjFppRiHnEy0aXqt2CnVnNSCQ3XR7nSnUtTKfQ4=; b=IYF2qStPBeqFayHUIlfLp0tknT
-	I+pb2ZuqkqThXJFrSvkqpHk9W51LUE/OykPJo7brnIINbJZf53Syf4DXTuKXMLuiWniSYqSfoyVhQ
-	L7WVmlxpQ4wmE6GXcENf5CKBJxSOa74z8RH4Ta3+nXB5T3nyOLas16BHNNc3dNmTmoXOI+njd7vBC
-	SYfhLq26sLh2hzoKPFgSYm0MaOcw4YR9P0O7CIZ1VP9gJgCmeLrwa6Wdova9V+wrfRnAWXi3oHvTN
-	JsFkQa+SPcCDMCpfQaH0jdjB1WesoZbcYBHASv13WEG4PBSeSa7VYmQVf9UpLafgv5SDI5N2hV9MN
-	u9qUMyfw==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wY4kS-00Are3-0P;
-	Fri, 12 Jun 2026 16:28:48 +0000
-Date: Fri, 12 Jun 2026 09:28:42 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	sdf.kernel@gmail.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next 2/2] udp: convert udp_lib_getsockopt to sockopt_t
-Message-ID: <aiwyvEbSHLHKNXBk@gmail.com>
-References: <20260612-getsockopt_phase2-v1-0-7b01f1f5d106@debian.org>
- <20260612-getsockopt_phase2-v1-2-7b01f1f5d106@debian.org>
- <willemdebruijn.kernel.26a37316bb5e2@gmail.com>
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="SkCA5wn7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5804A1F000E9;
+	Fri, 12 Jun 2026 17:04:34 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=zx2c4.com header.i=@zx2c4.com header.a=rsa-sha256 header.s=20210105 header.b=SkCA5wn7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1781283873;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XtNLc2MCDhGhm4G2cttMK4Gp2TnrnlYCYBd7sz+n4j0=;
+	b=SkCA5wn7FcRWHDB77LQw/14w6pahdvrLSr51m2na5mZ8EuON9aLbb518bl6CR8GAANx6mK
+	SGq+vTqROsfdrCd3B9T5y65W+G44LUgYXBqEJdYQOYbQ9hu8BLYYCMClpn6Z+GAQPdwOEa
+	sSVSCCza0bG+SmaPxIoVMrprCygE3V0=
+Received: 
+	by mail.zx2c4.com (OpenSMTPD) with ESMTPSA id 3a28b952 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Fri, 12 Jun 2026 17:04:32 +0000 (UTC)
+Date: Fri, 12 Jun 2026 19:04:15 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Anthony Yznaga <anthony.yznaga@oracle.com>,
+	Mark Brown <broonie@kernel.org>,
+	Sarthak Sharma <sarthak.sharma@arm.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Aishwarya TCV <Aishwarya.TCV@arm.com>
+Subject: Re: [PATCH] selftests: mm: fix and speedup "droppable" test
+Message-ID: <aiw8D_tdKYYNGyN_@zx2c4.com>
+References: <20260611-droppable_test-v1-1-b6a73d99f658@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <willemdebruijn.kernel.26a37316bb5e2@gmail.com>
-X-Debian-User: leitao
+In-Reply-To: <20260611-droppable_test-v1-1-b6a73d99f658@kernel.org>
 
-Hello Willem,
+On Thu, Jun 11, 2026 at 12:01:55PM +0200, David Hildenbrand (Arm) wrote:
+> The droppable test currently relies on creating memory pressure in a
+> child process to trigger dropping the droppable pages.
+> 
+> That not only takes a long time on some machines (allocating and filling
+> all that memory), on large machines this will not work as we hardcode the
+> area size to 134217728 bytes.
+> 
+> ... further, we rely on timeouts to detect that memory was not dropped,
+> which is really suboptimal.
+> 
+> Instead, let's just use MADV_PAGEOUT on a 2 MiB region. MADV_PAGEOUT works
+> with droppable memory even without swap.
+> 
+> There is the low chance of MADV_PAGEOUT failing to drop a page because
+> of speculative references. We'll wait 1s and retry 10 times to
+> rule that unlikely case out as best as we can.
+ 
+Wow, thanks! I wish I had realized the MADV_PAGEOUT behavior while developing
+VM_DROPPABLE in the first place. That would have made development a lot easier.
+I wound up just running this in a memory limited VM to test out the different
+behaviors, which worked decent enough for verifying things. It would be
+interesting to me to now experiment with vgetrandom behavior over intentionally
+MADV_PAGEOUT'd droppable mappings, to fuzz that the careful bookchecking of
+that works as intended against droppable mappings. Anyway, thanks and:
 
-On Fri, Jun 12, 2026 at 10:58:19AM -0400, Willem de Bruijn wrote:
-> Breno Leitao wrote:
-> > In preparation for converting the proto-layer getsockopt callbacks to the
-> > sockopt_t interface, switch udp_lib_getsockopt() to take a sockopt_t.
->
-> What is the benefit of this conversion?
-
-This enables kernel callers (io_uring, bpf, etc.) to invoke getsockopt
-directly. The setsockopt() conversion previously used sockptr, but
-Linus objected to that approach and suggested iov_iter instead.
-
-For full context, see:
-https://lore.kernel.org/all/20260408-getsockopt-v3-0-061bb9cb355d@debian.org/
-
-> It does add a lot more complexity and makes the code less obvious.
-
-I agree this adds complexity. Unfortunately, I don't see a simpler way
-to enable getsockopt to work with non-__user addresses.
+Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
