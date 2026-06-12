@@ -1,183 +1,294 @@
-Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012010.outbound.protection.outlook.com [40.107.200.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0F339023D;
-	Fri, 12 Jun 2026 19:11:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA38338D3F6
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 19:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781291510; cv=fail; b=eC1C+ya3/Gnck2v2oqNyWk22rYYGxDm7nbf+omtfx45VnoitvauUMiM7pQ7Ixx6gV2s9AoFcTXcIY8BKK4T8ssBxFyhfyuR6bA8gz1+D3MnU0JmAcV6E6c2cDwp89dowBRAMPYrAzZf3bj0V2JpF28wo3rtghOd5aI0am7tOMNk=
+	t=1781292323; cv=pass; b=ok1DTjWBwwCd66sw/IUSwXiPvFOS9NqlRqGkAjilawy8ll1ZngYT5SGrJoLIHL2EKLn/NSFWdtD7SMGtoBWkWj1EbQLxqR4Z9kcCeA0CK7p6Q1CmRHVxIJ0j9jfE+qr6Hvi2VceiS6d87hq6GS6G7DmfFcodHAf8ZPEhP+ZFsi4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781291510; c=relaxed/simple;
-	bh=CGFL7rcRNPgduubjpfFDdmcgw7sIdhpNPa9VfO2YJrI=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SO2tMSFtAqAYfNK2zfwKL4dDtUyeYHF4m4BvWAfaxvM1kSAM3c8WF20mIvqp2PeYlX+p4uLqjFp59oE25CfDI8PXDoDg4vlixWkM2A0o+y8RFSpg+FTH0IP3hugRFQ5OnwpiPmG3ysHQ4zb8Fuo4pnnXizg/pfEvXTOKy9/yjQw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=BjFXa9ML; arc=fail smtp.client-ip=40.107.200.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1781292323; c=relaxed/simple;
+	bh=wtdSAI/WhKGBjuABTv5R/kXIRbC/rjQy6jOp30gmmV0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=s3h3GrJ9fxxzroOb2YpcKCbtDusDsOZCKAKEg6V7zK0oiGyer72pBPSt55lWulDXO/IxpmI8c4n3eRqDXycSkPzVtIro3K5yaMyzWswag7YICdzXX95HNnJIoUcFX/HX3CESezn7iq4a/ssB7iFaG/BfSz0NOm6B55UNtXqIlhk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=google.com; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DgF8gDjd; arc=pass smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="BjFXa9ML"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lWkgdHDVRwL72Uya+woVioZpY8nF/yU11VQVa/iGd9q7x379TDneCFnVPrL65ywdNDzfe1IudE5uYfYhknsAAh7/iYqC/xl+3pyxU/KxIfc7c5zot6im1gJVQSOmmmlpgfgxrhu9irjw8OboOIfkMrnTZHCxNGcn3EX0f+GG/wNtSLtc2KfGXPWKupzpsC4vmX8OzvDuXK//0rpuc5yl9pNcIRJvOeUN2EMS3MiA9lCuLwWH9tnZVaxM+A9ieIK6llyQERJGJDL0HnZGVt2gkmQEz3ayHFNnrIXQgX01/pNDrtllgQM9aXtrCPekuk10jhkjtpOpaT8X1C/fIsi/ag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j8JizqIbPHlIecuV91nZmZXGP9oW0pqG3tLusttFP/g=;
- b=dqI+Cb+chRlvu2NMZtveQcfpYmZbUvcdzwAM5ISASyzEGLBkzmNScm+DdsR5h4EIryLmbfRbi9JQ747uP/BzrshjAOUjiG7W15XFi4eD2g+o5dEg2KdSYmvvTZs1SPQxqnEJIgmLangaHeie4qfTO5gnggyBTVlhU++UvQmz0QSDJrXm4zzp9mw0223KaLKRLrsYQH6rB6fsDWfnWqX0q2lA0kCt5IedLf3x/HeVaqw+jG6lnZvXWYOZpZMUDCuh8WMWhsoakEvo6bLD5yQLjB+Q3EJHxc9aDoOCeAd8ISliuKIrBQQndVJXVVI8G1+TqABCdGVkHlPBo2Ru5j7HCA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j8JizqIbPHlIecuV91nZmZXGP9oW0pqG3tLusttFP/g=;
- b=BjFXa9MLKyumQWxIz/dLUaImtr9kycynoarnny0Bua4sBrqEaVq+zjQPYGyalwAs4P+fijYiVZQ8HVOiKjgx7wOkpTOy+fO36mxeD5WUpTtY6qyZcXpD2wczOrGMjPeNyqbZH5S7N2ejXgiD0szepdIl4LAW1yoE7Q3w4PcRMfvWK6p4SZpWCDtjpVsr7OXpkBmE07MiEpRWXIr722xViWQM6qD7ePkEkBJvA0GPYyDXsvyUJLeed1lRM6wf43c1+UiUlYEJZR8UcbrfutERwemTvqc+vM2VRuGNkwUZx/Z/D4X0DoJvRUJyG2+2m4jrTX6UvbRvijonL4tD57XcBA==
-Received: from MN2PR16CA0066.namprd16.prod.outlook.com (2603:10b6:208:234::35)
- by PH8PR12MB7445.namprd12.prod.outlook.com (2603:10b6:510:217::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.14; Fri, 12 Jun
- 2026 19:11:38 +0000
-Received: from BL02EPF00021F6F.namprd02.prod.outlook.com
- (2603:10b6:208:234:cafe::25) by MN2PR16CA0066.outlook.office365.com
- (2603:10b6:208:234::35) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.113.14 via Frontend Transport; Fri,
- 12 Jun 2026 19:11:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BL02EPF00021F6F.mail.protection.outlook.com (10.167.249.11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.113.7 via Frontend Transport; Fri, 12 Jun 2026 19:11:38 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 12 Jun
- 2026 12:11:19 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Fri, 12 Jun 2026 12:11:13 -0700
-Received: from nvidia.com (10.127.8.13) by mail.nvidia.com (10.126.190.181)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Fri, 12 Jun 2026 12:11:12 -0700
-Date: Fri, 12 Jun 2026 12:11:10 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: Will Deacon <will@kernel.org>, Kevin Tian <kevin.tian@intel.com>, "Robin
- Murphy" <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>, Shuah Khan
-	<shuah@kernel.org>, Pranjal Shrivastava <praan@google.com>, Kees Cook
-	<kees@kernel.org>, Yi Liu <yi.l.liu@intel.com>, Eric Auger
-	<eric.auger@redhat.com>, <linux-arm-kernel@lists.infradead.org>,
-	<iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v1 4/4] iommu/arm-smmu-v3: Process vIOMMU invalidations
- in batches
-Message-ID: <aixZzvVWmAFEDQZI@nvidia.com>
-References: <cover.1780521606.git.nicolinc@nvidia.com>
- <00748c5cbea95a938d032269001a598203b06bbc.1780521606.git.nicolinc@nvidia.com>
- <20260612135409.GI1962447@nvidia.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DgF8gDjd"
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5ad0abf1f7bso988726e87.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 12:25:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781292320; cv=none;
+        d=google.com; s=arc-20240605;
+        b=CU4Jo9dd7b0W/7RiWdNr9c8BarHuHXjysPNGUXoi8dqV+ChGmkUYmcBd1kEMiAJ5Tv
+         VNO2ulYsvSIeWb727B1hy2VoChPkspVZzcTRpLIFK1vYHq+OPz2sQDMhQEKUjkJT/thf
+         UeeGeAeeUp5zh22lzAe9I15SKo6ZrBNR5a3vogOvY/iZ0Ntm2+mvrwM3t4u7Jp5sKjDg
+         36o+6MTk7TyBDRvMNDOTVJ63frkn1N4RniPTQdMTHg6zA1T/oQs5HfEUiE+kMUH8EM9x
+         mTi2IZuNCehN4c+zVUfhtjO1Y9EM2+igqGBzFjpF/ZaRO2NDkAcpYfABeZsdhBG1F+vH
+         Fc8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=JzbhYOVx15zdNgTlmqivEDbnFdm8e7TKoj1i3uih1i8=;
+        fh=1fMRYLo3c8UXlkgIaa0OkEWzjb1RcoU6ZCy9ubgOMbU=;
+        b=K4HRindXvmRk3a0phpfMLVLbbM9Wb6lUb+45/aWm42q2j3gayEt3l2HY/Cjw8k22Tm
+         HnUNEvvoJb43ALynQQolnBJ4jmKaeiyTsY9Czmyr53Wk0lh1yIomL5H0MBnmgwU7YbEP
+         EI5rYiY8yS6OuZB16PozOMCF9KPKjMCo5mEgyfAAKYBtCgsRvbtuM2uuJpqLcdoxKdmZ
+         KNbwBE9DKwNWvORDKmxnDIzu5VLrwEzn1KUudkH35aOV4O/tnx2s0PiA9zfHLBnQm8uS
+         2B97t5LlvJyAIr8hraLAe+WWNFlE2g7whrmxBOsC/xR1myocuqSKjT6SLJRC57YeBK00
+         4tYw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1781292320; x=1781897120; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JzbhYOVx15zdNgTlmqivEDbnFdm8e7TKoj1i3uih1i8=;
+        b=DgF8gDjdoPbi+WpN19e2HKMcEIJNpsRgG6t0J3ouGRuudtJMGdY/fnnNPidXbkFatF
+         M/yI372egOH3EOroPtM2WdecxJojBzPApVemjhnc5QWBgXo4VCSkWmFNZXup6jl+DPRa
+         dimn87G92CKfrIQBovIao5xy9HjLv8f9ykmeQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781292320; x=1781897120;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JzbhYOVx15zdNgTlmqivEDbnFdm8e7TKoj1i3uih1i8=;
+        b=D48VWf3S39ky28nSSOGVKPnBM6dP8tDlXttNokqbzHwFG/prjlLfOZZyEp4MbUAV+T
+         gkBIYOyiRLAD/Fvt1CIHMv3PRnE12Ibop65LVfub2TXlXvDjwREzJgHlIaRgDmpTdZbq
+         dvozDSPrM6Ph607zoT4Q0xAkatNCa1RvUE9xUM33/JGDbv18mR4wz6hlKIdcNvRv33Im
+         pu38tkh8u6exXz1LkeuTY+v7aAeZht2+/gEWev3Emn6sp2fLZ+Jcg/WC7vu6ViQ+rT3V
+         pck0P49VlqQqfvCnAaSnTsffICapdFgqJjBeXJmTxHG4SAt6zziEfmaPRjQE6Ali41he
+         QWzw==
+X-Forwarded-Encrypted: i=1; AFNElJ87+IYTY94vHXwmob4dpX1srDUhkf5MywIcnlXtx6sUKkFtxWGZ4bvU4knbLDyM9/64kJ+aSVwWr4SOpMtcfww=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyChIQjvjdTrCfye9SP/L5hartuoK5Ia8fnfeHatjdGMVH7/Dxy
+	jpYVF/D8BfMnTLO3CzDeOgTDKIxN4GOfbGq6DKnUejEY/Ktk/DBAeDI3zR+WnYf+8SXdH1M9Ysg
+	LkzM548qCgpdZqlR3oV53pr8u0a1QRvnkAyibIsFMCMmO30mSe1g0BN7m
+X-Gm-Gg: Acq92OGotKEJRpMXuGej2LEBVPdhFjaU2JrDEaeqru7THeXfsnLy6QswxbUoypYq6of
+	95VaNBUKNptd/lRKSyBhfIWcz7z9I3szSbiCcZLShV9EIOyL58VY0atiWakJ5eGoXGvVIxJ+sfj
+	lAzL6M7IU8Ve7fNbbfJJitrYONgUS8qfqGoxp55qL/UrEKnPh6yq06TFtkTNWpVeakrHNYe6hX2
+	DFN05ZqPKutBe4BXZamu+ZCCq9kFGszoeuLpHuAuH1swZWl50yDS78Ks3+3OYPrf04LvVr9ft/p
+	QGS6Z3rw7muDodXyVSWfVltQbRbgh1D5yjXbvFC5FG1Zboxo
+X-Received: by 2002:a05:6512:3b0a:b0:5aa:854c:61e0 with SMTP id
+ 2adb3069b0e04-5ad2db452d1mr1311594e87.20.1781292319447; Fri, 12 Jun 2026
+ 12:25:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260612135409.GI1962447@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00021F6F:EE_|PH8PR12MB7445:EE_
-X-MS-Office365-Filtering-Correlation-Id: 19e48bcc-a773-4144-6578-08dec8b66df9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|36860700016|82310400026|23010399003|18002099003|22082099003|6133799003|5023799004|56012099006|11063799006|4143699003|3023799007;
-X-Microsoft-Antispam-Message-Info:
-	JrxbLH5Dn1Uo8f34umaVZ5yFm4L9bzT9qjhMqGM9ez6MfatFcNrzsTzZWXiZLwet28fqSMjVkr70ArkVrdkupqtkRRkuhTCRIyd+dEIBjM85Y6F8C1E+nt+8HDWP3fiHX+NaqDOfDoqPblPHUD1Q4y8FgY2I0R+DLOu/h6Zw77IqH14M1CCRaEY3RPXthLLgHEWPIf88zgigK7rhsGVoj9OZhTLeoDU/hd+ZYWkJuHkms07mLLxYNI04LJxzSngLhxyxnOND6EZcbxxi7BFd1yoWlwS65NZyj4HMv58/Slmq1QF4NYnlvPqH8qS/XOOvdarUAGcBvA9cygvKtV1xJmuBrJ6jjQnnscCnFQRaQaUxGbwJZtzEBPKV28SOjKpVzusXsgfLbyVI9GeTPmQhyvXm1tRRxmpeCSNTUl+bB0AmtNIluZZZCtCrfum+qyS9s8k3eXUGj+b0SohZQiufHW0YoDZkUZ3ssevHkDHY+NkZixBtHZ+lA6rN3PQa5mQ0VSoOOPNzH2Ft2bdAvNC2RoBWAyPSpreYR8IRVPX9U1Aj4Jp7IJbEYPQ3UnQhXumYo9N6Q7os354ekwHO6hAh1zLoptmY3ObVVLAa7HxvJXyFTs2Z6n+pRLrKFpGHZRCXSXc9gYWlqMFIFbIqhpK8yClDzvO/5TbocXNWROfOQaM4hgubvy4EG3RZJXIpLolG0IdaytcFpO+7Msi5NijkNWHTT9gpf7RQw+gkTa5uk+o=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(36860700016)(82310400026)(23010399003)(18002099003)(22082099003)(6133799003)(5023799004)(56012099006)(11063799006)(4143699003)(3023799007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	tIV9YIc6h4Da6WRZ0WUGbB4Nj/tysvLVpBawvzVhvLF/DlESpCDNclrpLd2b2JaP4St/fTvRMDKtQcsWybMJjq+RrZM4koXkICupsTdRlkfvlb23vCqbPhTi8p7wsKvMo8RMJlmm/R1IBqIni/NN1r8ahOGxLII8zJuTuyy+5pQ8ywLBLhPNP5gRE8Ekr44FVt513An9lGZoxredjjItC81E2b/F2+V1W4U1Daspp6oZpo1NPAJwc4abdyEY/4+ueUJqbb8eOFq1OGh25Y8mx2L5AZOT/6/S67po6F4hvv2yX+AOEo2xcDwANPfMXjah3U+tpuuFdnCTBvwWKl+N1+/Dct9TZohGobn4MrKwA+9LNmX8bYZaWbRfVhFKos3nIMvSqDW5Dm2o4jsUjNCb8ZtXx1ABhcpBd9MQox9jHKu+0CENy0x8gEPoMwXmUwgk
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2026 19:11:38.5909
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19e48bcc-a773-4144-6578-08dec8b66df9
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF00021F6F.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7445
+References: <20260526-seccomp-combined-v1-0-304b1cc3ad24@hill-daniel.co.uk> <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk>
+In-Reply-To: <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk>
+From: Will Drewry <wad@chromium.org>
+Date: Fri, 12 Jun 2026 14:25:03 -0500
+X-Gm-Features: AVVi8CdO18l0E0vkUdggPdi_e7VaCUHGrQ-SUpY-fJfFGaS3PLmAAujQ6BHqK08
+Message-ID: <CAAFS_9HpxOgHn+qfzSpLjV4Mj_CURiwxFOaK9GO0DdBg8xgNYw@mail.gmail.com>
+Subject: Re: [PATCH RESEND 1/2] seccomp: Allow using `SECCOMP_MODE_STRICT`
+ with `SECCOMP_MODE_FILTER`
+To: Jamie Hill-Daniel <clubby789@gmail.com>
+Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 12, 2026 at 10:54:09AM -0300, Jason Gunthorpe wrote:
-> On Wed, Jun 03, 2026 at 02:26:56PM -0700, Nicolin Chen wrote:
-> > +int arm_vsmmu_cache_invalidate(struct iommufd_viommu *viommu,
-> > +			       struct iommu_user_data_array *array)
-> > +{
-> > +	struct arm_vsmmu *vsmmu = container_of(viommu, struct arm_vsmmu, core);
-> > +	u32 issued = 0;
-> > +	int ret = 0;
-> > +
-> > +	if (array->type != IOMMU_VIOMMU_INVALIDATE_DATA_ARM_SMMUV3) {
-> > +		array->entry_num = 0;
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	while (issued != array->entry_num) {
-> > +		/* Process and issue the command(s) in batch */
-> > +		ret = arm_vsmmu_cache_invalidate_batch(vsmmu, array, &issued);
-> > +		if (ret)
-> > +			break;
-> > +	}
-> > +
-> > +	array->entry_num = issued;
-> >  	return ret;
-> 
-> I think every driver will have this same problem, how about lifting
-> this loop to the core code?
+On Tue, May 26, 2026 at 10:42=E2=80=AFAM Jamie Hill-Daniel <clubby789@gmail=
+.com> wrote:
+>
+> It is currently impossible to enable `SECCOMP_MODE_STRICT` if
+> `SECCOMP_MODE_FILTER` is enabled, and vice-versa. This makes using
+> seccomp difficult in environments such as Docker, which installs a
+> seccomp filter by default.
 
-Sure. I think that makes things a bit cleaner. I'll try that. Then,
-this would become another iommufd series.
+Some quick thoughts on your resend -- the original reasons for
+this approach:
+(a) filter policy !=3D strict policy
+(b) filter can implement strict, if layering is desired
+(c) minimize checks in the syscall entry/return path
 
-> Also not sure I like the validation flow, I think it will be easier to
-> understand for everything if either num is 0 and nothing was done with
-> an error code
-> 
-> Or num is non zero and no error code.
-> 
-> Like it doesn't make sense to fail immediately if zero pad is nonzero
-> in iommu_copy_struct_from_full_user_array() but then to try to
-> partially continue if arm_vsmmu_convert_user_cmd() finds illegal data
-> in the very same buffer. Be consistent, validate the user buffer, if
-> it is not valid fail immeidately. Then execute a fully valid user buffer.
+I'd expected folks to simply create the ~80 byte strict filter and install
+it if they needed STRICT policy. More discussion below.
 
-I don't think fully validating the user buffer is correct..
+> Introduce a new internal `SECCOMP_MODE_COMBINED`
+> that runs `strict` checks, followed by any installed filters.
+>
+> Link: https://github.com/moby/moby/issues/42082
+> Signed-off-by: Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
+> ---
+>  kernel/seccomp.c | 46 ++++++++++++++++++++++++++--------------------
+>  1 file changed, 26 insertions(+), 20 deletions(-)
+>
+> diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+> index 25f62867a16d..8201a050d358 100644
+> --- a/kernel/seccomp.c
+> +++ b/kernel/seccomp.c
+> @@ -33,6 +33,8 @@
+>
+>  /* Not exposed in headers: strictly internal use only. */
+>  #define SECCOMP_MODE_DEAD      (SECCOMP_MODE_FILTER + 1)
+> +/* Run SECCOMP_MODE_STRICT checks, followed by SECCOMP_MODE_FILTER  */
+> +#define SECCOMP_MODE_COMBINED (SECCOMP_MODE_DEAD + 1)
 
-VMM would have to know which command failed, to flag it in the CONS
-register, indicating: a) commands prior to the CONS are issued, and
-b) command pointed by the CONS is illegal.
+I'm not sure if DEAD is meant to be fixed at the end of all modes or
+not -- given that it's internal.
 
-Then, guest kernel reads the CONS register to pinpoint this illegal
-command and swap it with a CMD_SYNC (__arm_smmu_cmdq_skip_err).
+>
+>  #ifdef CONFIG_SECCOMP_FILTER
+>  #include <linux/file.h>
+> @@ -432,14 +434,21 @@ static u32 seccomp_run_filters(const struct seccomp=
+_data *sd,
+>  }
+>  #endif /* CONFIG_SECCOMP_FILTER */
+>
+> -static inline bool seccomp_may_assign_mode(unsigned long seccomp_mode)
+> +/**
+> + * seccomp_needs_combined: internal function for checking if requested m=
+ode
+> + * needs to be upgraded to `SECCOMP_MODE_COMBINED`.
+> + *
+> + */
+> +static inline bool seccomp_needs_combined(unsigned long seccomp_mode)
 
-E.g., if the 16th command in a 64-command array is illegal, kernel
-should issue the first 15 commands, returns -EIO; then, VMM should
-flag illegal at CONS pointing to the 16th command.
+It is easier to reason about if you keep the access checks separate from th=
+e
+behavior-change decision. Setting seccomp modes isn't on a particularly
+performance-critical path, so we can be more verbose and explicit.
 
-The design in this patch is implemented in this way. And arguably,
-I think the nonzero-padding case is VMM violating the ABI, in which
-case the return code would be different than -EIO. And VMM should
-fix itself instead of flagging illegal in the CONS register.
+>  {
+>         assert_spin_locked(&current->sighand->siglock);
+>
+> -       if (current->seccomp.mode && current->seccomp.mode !=3D seccomp_m=
+ode)
+> -               return false;
+> +       if ((current->seccomp.mode =3D=3D SECCOMP_MODE_STRICT ||
+> +            current->seccomp.mode =3D=3D SECCOMP_MODE_FILTER) &&
+> +           current->seccomp.mode !=3D seccomp_mode)
+> +               return true;
 
-Do you agree?
+AFAICT, the only valid "combined" case is current->seccomp.mode=3D=3DFILTER
+and seccomp_mode=3D=3DSTRICT.   There are other allowed transitions, but
+not allowed for transitioning from FILTER->STRICT via COMBINED.
 
-Thanks
-Nicolin
+If this wasn't subsuming the update access check, then the single allowed
+transition could be checked in set_mode_strict() (or a helper).
+
+>
+> -       return true;
+> +       return false;
+>  }
+>
+>  void __weak arch_seccomp_spec_mitigate(struct task_struct *task) { }
+> @@ -1407,6 +1416,9 @@ int __secure_computing(void)
+>                 WARN_ON_ONCE(1);
+>                 do_exit(SIGKILL);
+>                 return -1;
+> +       case SECCOMP_MODE_COMBINED:
+> +               __secure_computing_strict(this_syscall);
+> +               return __seccomp_filter(this_syscall, false);
+>         default:
+>                 BUG();
+>         }
+> @@ -1421,30 +1433,23 @@ long prctl_get_seccomp(void)
+>  /**
+>   * seccomp_set_mode_strict: internal function for setting strict seccomp
+>   *
+> - * Once current->seccomp.mode is non-zero, it may not be changed.
+> + * Once current->seccomp.mode is non-zero, it may only be changed to `CO=
+MBINED` or `DEAD`.
+>   *
+> - * Returns 0 on success or -EINVAL on failure.
+>   */
+> -static long seccomp_set_mode_strict(void)
+> +static void seccomp_set_mode_strict(void)
+>  {
+> -       const unsigned long seccomp_mode =3D SECCOMP_MODE_STRICT;
+> -       long ret =3D -EINVAL;
+> +       unsigned long seccomp_mode =3D SECCOMP_MODE_STRICT;
+>
+>         spin_lock_irq(&current->sighand->siglock);
+>
+> -       if (!seccomp_may_assign_mode(seccomp_mode))
+> -               goto out;
+> +       if (seccomp_needs_combined(seccomp_mode))
+> +               seccomp_mode =3D SECCOMP_MODE_COMBINED;
+>
+>  #ifdef TIF_NOTSC
+>         disable_TSC();
+>  #endif
+>         seccomp_assign_mode(current, seccomp_mode, 0);
+> -       ret =3D 0;
+> -
+> -out:
+>         spin_unlock_irq(&current->sighand->siglock);
+> -
+> -       return ret;
+
+Is this reachable when mode is DEAD? In its current form, it would fail
+out on may_assign_mode(), but now you have to consider if a race
+could silently clobber the DEAD value (let's say).
+
+>  }
+>
+>  #ifdef CONFIG_SECCOMP_FILTER
+> @@ -1956,7 +1961,7 @@ static bool has_duplicate_listener(struct seccomp_f=
+ilter *new_child)
+>  static long seccomp_set_mode_filter(unsigned int flags,
+>                                     const char __user *filter)
+>  {
+> -       const unsigned long seccomp_mode =3D SECCOMP_MODE_FILTER;
+> +       long seccomp_mode =3D SECCOMP_MODE_FILTER;
+>         struct seccomp_filter *prepared =3D NULL;
+>         long ret =3D -EINVAL;
+>         int listener =3D -1;
+> @@ -2016,8 +2021,8 @@ static long seccomp_set_mode_filter(unsigned int fl=
+ags,
+>
+>         spin_lock_irq(&current->sighand->siglock);
+>
+> -       if (!seccomp_may_assign_mode(seccomp_mode))
+> -               goto out;
+> +       if (seccomp_needs_combined(seccomp_mode))
+> +               seccomp_mode =3D SECCOMP_MODE_COMBINED;
+
+So I have two concerns here --
+
+1. By layering, STRICT becomes subject to FILTER RET behaviors.
+2. If we did want to layer them, it would be ideal to separate the 'upgrade=
+'
+    decision from the access checks and make the layering path explicit.
+
+If you are running a legacy binary that uses STRICT in Docker, then I
+understand the goal, but there are userspace options.
+
+I think it's hard to want to open the door on changing STRICT without
+a good reason to work through all the implications that come with it:
+cross-checking every SECCOMP_MODE_FILTER reference, sorting
+out thread sync interactions, ...
+
+That said, this change could be streamlined and look for ways
+to minimize any potential implications.
+
+Am I missing something or overstating it?
+
+Thanks!
+will
+
+>
+>         if (has_duplicate_listener(prepared)) {
+>                 ret =3D -EBUSY;
+> @@ -2105,7 +2110,8 @@ static long do_seccomp(unsigned int op, unsigned in=
+t flags,
+>         case SECCOMP_SET_MODE_STRICT:
+>                 if (flags !=3D 0 || uargs !=3D NULL)
+>                         return -EINVAL;
+> -               return seccomp_set_mode_strict();
+> +               seccomp_set_mode_strict();
+> +               return 0;
+>         case SECCOMP_SET_MODE_FILTER:
+>                 return seccomp_set_mode_filter(flags, uargs);
+>         case SECCOMP_GET_ACTION_AVAIL:
+>
+> --
+> 2.54.0
+>
