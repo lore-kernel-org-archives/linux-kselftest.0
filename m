@@ -1,168 +1,139 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842FE37DEBE
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 06:24:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781245453; cv=none; b=PWZU6clivsrk3zzqZ4aBgQ84e4JOOP9B8oN7Q9Pig3TE+DCgYA8Ro5MZnhpkXTECIMfimtGgrMouFhRmovesB+FlLgLwanNDGYucLhRnJhqlaAnMfCUZhM2m/xNbY+hO/Smt+Yus0D5fsuHGdL/GtkK1sCVakpbG6vtaAbdVBHg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781245453; c=relaxed/simple;
-	bh=V4degicP98YaeLR08jiuNOlhbT3ArmkZyO1D0XGygGA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VngrjmEv6ljLkppt5a2va4rBuyn8vbmKmMKUhATOKG+8G1YRMeW0Ffu8+rSFdcuNTlAUTSNGtOOmY4UdYLed+Tp4cOq6cguNwzzbrr+RB6NSPgWMO+TQxFrVdp2dKUGUKEwDOLpZU2kW6MYpTQVC0IuDLfPJv7COi2ZdOHWmxco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UqWHhdoF; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B47A3A5453
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 06:56:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781247395; cv=pass; b=MhMACI8ujjoig5RBSOqaocueeMTHwMaJ/r8xSfjkhGfovkiOzrvi08sT3s9LN4v32zu1R6Z7nLjmavUj8zDYZTWTBhkMeFBcAV4AMTmLhuaJxdj+Ir9j2eso3LJxEb8T4NunwBLwpXgNhgs22YGD4HKYb/JeLCHntWxncwsKWcg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781247395; c=relaxed/simple;
+	bh=3lBHS9HDKEcHXBILsrP2x1PQFt4q9srNsFjMrwfX9Vs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X+rjp/pYUHRr3VwJEESOhSMg7A1qq3mm/wLrNCaomJhTv6JqQd6LmQUt+cqdhyKUK8M5xO5hnoM6Q3GhJhv6hKINT8hAkvMa3WOY3iQKU0s0eAjdwp4Qp2HcbUg1EttmuzkibiLh4ZvkxnO9rh1HnKMm60WZM3oPmOZDnZUsShs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EqDjjaIn; arc=pass smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UqWHhdoF"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2c0c35980c6so1286915ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 23:24:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EqDjjaIn"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-68ced97b6eeso1032947a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 23:56:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781247393; cv=none;
+        d=google.com; s=arc-20240605;
+        b=LKZWRoZAZNkeYF9BEkwxThSwGRx93HI4eclhnMdA6o3dyYwBNAfUky0NoTGevQU0Ji
+         j9ijdLGX86u3qF/fk43XplRmRthCb/Z+Vpbr9NjxYkQxXCIh9Usn5yZSHKqDyU/0/Mbs
+         9skcj4LvnfAhbScT0lFNl9KW0LioD9qiZeXKvpmr/F3P1tMJOsrsP6Agv2Chcoc7Yu4B
+         xjO8rpJWbUzRX5F3HIVtzNVQ29P8/pKCmGirr7/2Rzi69ToqCNGmccRprE2xLulpMjUM
+         yjo6gxTCb5/OSFBsJ/2dBF3EKI4Z8cBbc9EO/8D+om69MpBLrMN5kHBu7C0oisyRXuAa
+         ftoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3lBHS9HDKEcHXBILsrP2x1PQFt4q9srNsFjMrwfX9Vs=;
+        fh=MkkGF7/4BpxYUXqM9tdmymxIft0zQsAbFkwRL2bLwpk=;
+        b=d3/475TRhqCmLjPPVd4/4Wv+XifDgY0vEwSnOedHH8GhUU4G8S0ocbhDMMZXHem262
+         Fx4IGqfRZSySyvy6jREoFIUoFBsBMEthEqDgW+23MSBKTIFdFbUuL59WSeoq7YN3XB3Q
+         BfBsmHCg8+f4ketWiXZV7uLIYcHQJbPRSa1ldX3vYsYccJkt6zJn+pk0ITsyrme2Aa6X
+         ZBXCKmclGoGMH38rh+XhR+MIwLNY4x0bwDeQl6o46Z797Wi3hzMbyvTNcvjFbIEh/Ecs
+         SlVO0iF54fh8GlWYdojFmpRtuiejfv8OZC0YIzHp5oZZDzW0tZVnq6wZdSvFsJnDGMLU
+         Ik0Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781245452; x=1781850252; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20251104; t=1781247393; x=1781852193; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=45sVfS/nx2nzBsCxkzCB9QiCoVHDr0etpbiBAxE4XQM=;
-        b=UqWHhdoFlhEJI0xLkbtfAsUB5F2i09YWQKQGcpIFNJveF+BJiYp8fSXk7Q+JAgWjum
-         lXOSwnV5iJUiSnWmyOQ8aK2nkjyelP+w9+LKVko+S23G8FOYGXI9G7+UdaAYWeAdynyZ
-         tBs/IvCJ3ReqFgqCgHufoKxmd93GiOdnJGKyiTZttoBCTOCHBRixiES3xP1FSFU5DwC1
-         Q7hGs184oBXTXDgAJRhM3LDa8Ji1mvE/kR1VMKnpP0MjvvXgZAxKoEuClEeOTFXJ2rXM
-         dA7PWwwc22icBO4FgV2UXcvBm0Iv9UJuHcgMCo33ftV89Q4kr2hKQUKIiHY0DAVD3Q11
-         N9aA==
+        bh=3lBHS9HDKEcHXBILsrP2x1PQFt4q9srNsFjMrwfX9Vs=;
+        b=EqDjjaInov0ka4alN+yEFWBFuaxhdbrfTeM99dBjBHVH1TGqPNOwMXvp3aBAtkNwGy
+         wuUszsiCnccC+mXgVgklYrmJpM4ITNLR+1Pdq81iYB9iH8fIQ4Bj7siJSio/GUKufXNx
+         uXLplkNvuYKJ356p1ai5tl+9d3qggFzGRiMQ0Y85CiE+L3Q12ToW+x1COpZlQo+fpOZE
+         Apr3vb1VXwL/9IHBFx3WjOH6ceWGtdi2t3QdLCyf1j21yuQZfrSPzo1HjsEevZyy96Wl
+         FDOKchXplfC1MTsnyxN7ZPsFme7ZJTfu3QPEZC/sMXV7SCV1Jl+fh+kNG5QUGdXfpb45
+         NfYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781245452; x=1781850252;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1781247393; x=1781852193;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=45sVfS/nx2nzBsCxkzCB9QiCoVHDr0etpbiBAxE4XQM=;
-        b=NiemFPAd11afGP7ZTrZAEJaAWmBkuWv9v63adPiYlKKNb8UTcegX0QKMLwbroCpsGU
-         ed77KUo2mDRPOjRLMQDgpZV4HXHNySOl0AXGnN2WANz0pJ1lJeyA0SgKGTRB4WSrK4CT
-         GllPfE4jZ7qJnL9XT57TLCi8uEOIHJKbtM4//dddaNgb4cbxOqNHkThMZvx01c3L3G1j
-         0FRvd31TzvRYh1hZ7ndYC58UYWx/CtZCAJt6GPX6vV6YCVcOvv0qZPr06Ol/ucT89iZT
-         gdVwuS37fXzG6/P/w5np816PMJsqrDmTJKH4sAcxFQ7SElQ/QcJSw3WD+xyGMUSneJ4t
-         Ix4Q==
-X-Forwarded-Encrypted: i=1; AFNElJ/GwYVgmzyWjIw6zKL2elqtcZocpT/Of2PQp7iqN3pQhU6YQ1aGdW3yBkdw5DIrTOBGSX+KwN9HNoVNyC++uvg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzh+r5Hqy3fSZdJL6OahSoB8GYIocUx7dQCxK0g3WVCS9EIxRyj
-	LNmn1+M5VoaWhaNHx1xgpMjeNXFh87EFkfPBsryXe8HoQ07KC7YysWS2a8CmFNMF
-X-Gm-Gg: Acq92OGuZa8DMyUu1HaKE4OnK8eEUzwKN1LSeg79WO2WdGMGJidEI67ZMIRJ5DyDeDN
-	BXpRW5e16Js5+uKqhePQdy6LoWz1sahJ126gq/ybTom68od6IRVruXY/1+aOKjYq6vu+0oPHh9l
-	Dqk6k6V+hCtcm+rS+AmCOk9VlBIM7+kBlJvDFg9sky4B2HISHiyYO2C77zxnV0zP32ihmJPIpLn
-	8P9gNDpUXG6ywnIVGu5QIrnez+oGvit2wyKhMD7AWUrBC46Gc6FBTEpjcPHGKBEJjmNeCQkEp1u
-	XIyrkKLZsoIMoyWNZN2d8Y9cHehCdlpQ5kOxZMai1tzcNmpNFYcx6F9HbnpW7dQIGHFnsRK0n7y
-	Bfjqv9xm0t4a6Srr1hbx1h/q0NER6GnyByA5B5kr3LBAfaNUFmj1mRXpn5BrFzKWQk01gcp9dCz
-	3ZRNd1uxtzU3c08wVigj/FnP+A3gKR0EyuotJP8ynfb5HSdWQ=
-X-Received: by 2002:a17:90b:2c84:b0:36b:9798:4f6c with SMTP id 98e67ed59e1d1-37a0468a571mr789060a91.7.1781245451640;
-        Thu, 11 Jun 2026 23:24:11 -0700 (PDT)
-Received: from localhost.localdomain ([106.195.67.13])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434ac9cd8dsm1064680b3a.1.2026.06.11.23.24.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 23:24:11 -0700 (PDT)
-From: Sailesh Nandanavanam <saileshnandanavanam@gmail.com>
-To: sj@kernel.org
-Cc: shuah@kernel.org,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sailesh Nandanavanam <saileshnandanavanam@gmail.com>
-Subject: [PATCH v3] mm/damon: add KUnit test for walk_control_obsolete behavior
-Date: Fri, 12 Jun 2026 11:53:37 +0530
-Message-Id: <20260612062337.2459-1-saileshnandanavanam@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260524100258.36819-1-saileshnandanavanam@gmail.com>
-References: <20260524100258.36819-1-saileshnandanavanam@gmail.com>
+        bh=3lBHS9HDKEcHXBILsrP2x1PQFt4q9srNsFjMrwfX9Vs=;
+        b=N9hfY+rXB5KPYAnIunWub2YN8LImktfsWnCBaIfAsBQsy5ijDScgHTnF/ZF4qJU2CV
+         mmc29CNkr4iAvq5p+ZC9JzKzkCcghMwNX7WXAXGVLYILJatYwOv72o/z7PAild23mEtJ
+         j0f4k8AyYWJv1gOvtWWWu6EjnIFNePkjXUX03WFOsFImgvr4vu66iwbClexHWoCpyTyn
+         ArZMH+TaSjB5/a411ZxYd9cFSF517yKRKyfn+fX3vgmzYKG+s2BVWkmfSYsNerVcYatf
+         c8ZGxh2KUWutvZgemvQ3bYUSY7GO+BUzziM1G/ez7zOesGZwJ7rlt1ccoIvm32bHo0G2
+         dboA==
+X-Forwarded-Encrypted: i=1; AFNElJ9NAjT9e+ljzJAsPd1cQhX1oIhTPM32yr8bKXA83iiV53HVaX7qGwAMwwnBBFzcMnAb6hCeU5DRqNWKK870Cpg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsRURr8DWBQI7v+E0RDFk8/HUpVHXnpGV2LD2KNFIsrq/9K6lP
+	cZS3xKQvq1RXtH5NkVMOJGNQ/AnjF+j2DbmQR3yVvv9GMtDtrpi6ox7d9DaP84yjJPiRQZXAN0E
+	MWU5Q7zBqPzMe6UC0jqKm2whCwD3nlMqQqxeqSTSc
+X-Gm-Gg: Acq92OFqGFkAGTm4g0FcJg5ZBRKcnykI7WDHcSmKw7Zr5gVkxEHPA1VMShrAFwQ02Oo
+	FNj6NzYd+36ETTawI9yhXCYEmCEg57+HT+7bQbdsTWVGGZb81vUrF64iQ2qP8DravZO18HTLZYI
+	Ycxp7jxvfkTVyd6DEM8cL09ODO1kYiQrOLGvwfLtB1FODEyOjeMm1Npb/WWTSXSQJYkSsI7gbhh
+	5d4LO0ubYF9lIqmXmdo6wqq00b/MYFF4WPM3/kVLITZM4+ak5MwxLXm8aPWdc1VTQLA7jUUqhdy
+	LllZ/5eIrhZcMKdxZYp7hTIZROueBElseMLcuA==
+X-Received: by 2002:a05:6402:434b:b0:68b:d10a:a48a with SMTP id
+ 4fb4d7f45d1cf-693784fb02dmr602313a12.11.1781247392123; Thu, 11 Jun 2026
+ 23:56:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech> <20260611-b4-kcov-dataflow-v2-v2-2-0a261da3987c@est.tech>
+In-Reply-To: <20260611-b4-kcov-dataflow-v2-v2-2-0a261da3987c@est.tech>
+From: Alexander Potapenko <glider@google.com>
+Date: Fri, 12 Jun 2026 08:55:54 +0200
+X-Gm-Features: AVVi8CdLRn3HUIKr4oSFNxeMmeQ95IhSWpzIU1V25ylhb68DqGsVy-9EpMVuQUY
+Message-ID: <CAG_fn=V1+_xLgCZgdLnT7Y-muRO0CXkrNKkC8AzrqzWoL4eR8w@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 02/14] kcov: fix INIT_TRACK race in kcov_dataflow
+To: Yunseong Kim <yunseong.kim@est.tech>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
+	kasan-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, workflows@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Yeoreum Yun <yeoreum.yun@arm.com>, 
+	sashiko-bot <sashiko-bot@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a KUnit test to verify that damos_walk() rejects
-new requests when walk_control_obsolete is set.
+On Thu, Jun 11, 2026 at 6:21=E2=80=AFPM Yunseong Kim <yunseong.kim@est.tech=
+> wrote:
+>
+> Two threads calling KCOV_DF_INIT_TRACK concurrently could both observe
+> df->area =3D=3D NULL, drop the lock to allocate, and then both assign the=
+ir
+> allocation to df->area, leaking one buffer.
+>
+> Fix by rechecking df->area after re-acquiring the lock. If another
+> thread won the race, free the allocation and return -EBUSY. This
+> matches the pattern used by KCOV_INIT_TRACE in kernel/kcov.c.
+>
+> Reported-by: sashiko-bot <sashiko-bot@kernel.org>
+> Closes: https://sashiko.dev/#/patchset/20260603-kcov-dataflow-next-202606=
+03-v2-0-fee0939de2c4%40est.tech
+> Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
 
-Commit 33c3f6c2b48c ("mm/damon/core: fix damos_walk() vs
-kdamond_fn() exit race") introduced walk_control_obsolete
-to prevent a race condition where new requests could be
-registered during kdamond shutdown and never handled.
-
-This test simulates the shutdown condition by setting
-walk_control_obsolete and verifies that damos_walk()
-returns -ECANCELED immediately.
-
-This validates the invariant introduced by the fix and
-helps prevent regressions.
-
-Suggested-by: SeongJae Park <sj@kernel.org>
-Signed-off-by: Sailesh Nandanavanam <saileshnandanavanam@gmail.com>
----
-
-Changes since v2 (https://lore.kernel.org/20260524100258.36819-1-saileshnandanavanam@gmail.com):
-- Dropped the userspace selftest approach entirely. SeongJae tested
-  v2 100 times on a kernel with the fix reverted and it always
-  passed, confirming the microsecond-wide race window cannot be
-  reliably hit from userspace due to syscall overhead.
-- Added a KUnit test for damos_walk() + walk_control_obsolete
-  instead, as suggested by SeongJae. This directly sets the
-  obsolete flag and verifies damos_walk() returns -ECANCELED
-  immediately, without timing dependency.
-
-Changes since v1 (https://lore.kernel.org/20260524091812.35283-1-saileshnandanavanam@gmail.com):
-- Addressed sashiko bot review comments (execute bit, threading,
-  dynamic sysfs path, OSError handling) - superseded by the v3
-  approach above.
-
- mm/damon/tests/core-kunit.h | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index 9e5904c2beeb..599aac056b73 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -1336,6 +1336,33 @@ static void damon_test_is_last_region(struct kunit *test)
- 	damon_free_target(t);
- }
- 
-+/*
-+ * Verify that damos_walk() rejects new requests when
-+ * walk_control_obsolete is set.
-+ *
-+ * This tests the invariant introduced by:
-+ * commit 33c3f6c2b48c ("mm/damon/core: fix damos_walk() vs kdamond_fn() exit race")
-+ */
-+static void damon_test_walk_control_obsolete(struct kunit *test)
-+{
-+	struct damon_ctx *ctx;
-+	struct damos_walk_control control = {};
-+	int ret;
-+
-+	ctx = damon_new_ctx();
-+	if (!ctx)
-+		kunit_skip(test, "ctx alloc fail");
-+
-+	/* Simulate shutdown phase */
-+	ctx->walk_control_obsolete = true;
-+
-+	ret = damos_walk(ctx, &control);
-+
-+	KUNIT_EXPECT_EQ(test, ret, -ECANCELED);
-+
-+	damon_destroy_ctx(ctx);
-+}
-+
- static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_target),
- 	KUNIT_CASE(damon_test_regions),
-@@ -1365,6 +1392,7 @@ static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_set_filters_default_reject),
- 	KUNIT_CASE(damon_test_apply_min_nr_regions),
- 	KUNIT_CASE(damon_test_is_last_region),
-+	KUNIT_CASE(damon_test_walk_control_obsolete),
- 	{},
- };
- 
--- 
-2.34.1
-
+Can we please avoid this?
+kcov_dataflow.c is being introduced in the same series, there is no
+need to send a buggy commit and a follow-up fix - just squash the two
+together and note the changes after Signed-off-by: separated by a
+triple dash.
