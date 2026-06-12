@@ -1,73 +1,78 @@
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21AF22424C
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 00:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AF825CC74
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 01:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781223481; cv=none; b=XuE2xnEOFXZC1EU8ncXOChRMJCpKLCVKbaykyuB7fvNyC2NiFAm8hS9vlxndNybZbN/DBJK1g/hm8VX43CW5dyBNrX4mTugdFNR6TbrESjJLtLKFv+i0MiWCKftrGPHYhtxxivFdIHMVXJlzHmsvqZEUfUNANyEwbJ9xiKl9/ok=
+	t=1781226055; cv=none; b=fX5q9quI9euMsMhKDvumn/51Tghz6HlAIm1VKlCHqC6E7jLVUBvqf+d9BJznNk95WzDpeVwsonqDT9/bZxDie/UOmt6VrqNfbOOD56g9YlL3zwYDhAvDF3yswEPrL2VgNjY73FwyLBGgfTQ2CPFmh7qpi56bArBUm979mHqyHxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781223481; c=relaxed/simple;
-	bh=j7uOBGOWOUHxEgVJqerTtY0Pst0XirntyuZpZ3i9KH8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hIOvJC+029EuXOgNOb24v21D1znYorcbjHiNqgheT9Ka4QeQu02c7BwCtMDS13ppgek+NaXPdpc3u+sIwzKL2dfuZpXscJxR8mzf8zgWWZb3eUDMVYDIspLIwRozCeBxU6+VR/Dh2gEtbDOZ+rYPsffrTkxaJud1aBR0JRuoxvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rvkaFB4+; arc=none smtp.client-ip=209.85.160.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781226055; c=relaxed/simple;
+	bh=mm7lhGurzpH5S1D4K03Qa3k5Ics0Cd5OlZOIs6VTP1U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mTnWLdAfF1gaJv8+ufN0hndy/0eNJElKHODaTABdOG3H3if43yjGFVIqdI6KYrL3RjbFt3PIcHFGTpw1AeMb3/iu9iZsTAZKQwG4BCa6DJXZPRoTnH3Dv4U7I7zu69wzx2MhL/6ZX/YDngk6+bZBvuFDWKDnTg+2mFMABqbHyAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=HG1HyNyj; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rvkaFB4+"
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-43f5e285111so367120fac.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 17:17:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781223479; x=1781828279; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fbOR7faLhl6QNiMFhxyuN3Xj5ppMarngi323ERxJp8E=;
-        b=rvkaFB4+1Ka9dVwLI3YyVHpjmyrpiuGYsMybO2gic+aTkG3h/17gpKAcYqqGWn5BqD
-         7tLnWAWIDKCBNW5cy3iGdD6Wr6CRV7oESaHYZuoQwEXuRcInOJZrV1GaBMMvcG7u18SH
-         6F8zrOUWxqI3aMJQybALKUq0hA8xVfma3oNrhVS5EjyEn8YuWRypXlt74Cb6FA46dz9d
-         xmRTgFAI6qFCkrEJCYMjUhNYg8DmO7qjm6hkNiYduhRSphRNYjVXV92QSNE5Pp2zvSr9
-         ZE1a1ep1cBhq7GjcAPcnEeb2QmGkD/LAqO4WtRvPaaHR2bOrGRu3KqFIpTLk5j0lBpQK
-         brBg==
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="HG1HyNyj"
+Received: from pps.filterd (m0528004.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65BEOYxv3011404
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 18:00:51 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=s2048-2025-q2; bh=zFDj2IOT/JWpaH+VD8OkJUPInevQlFQ
+	dH2RzPJRh3Qk=; b=HG1HyNyj+U73SKLwM4GsJrV9X3AOr0Aze0Ckd32xiLQR85R
+	TPIC1lgy8EM7sfXNAYysf/6QNrWy92NuFQPAQfaB61+XaM8rCU5cCcSjEcsTy+f3
+	1Ng3RmrIyEsZi6kZd0ERzEMVkQUYqPA5mnaUOSi3id/WHbKQ14tkh7+jcihLS+1p
+	YtCkl46kLygTNxlOliCHqJt2uKStRL6D4EzDzRzrlVQNYpRc/KzsF0K7cVaa9jdX
+	xNhikC5b1RYQ2U3XVMzIEwsnHuM7rl4BreajsHLImbTpi9KJh4hhNK6YbRRz3Z3u
+	If+IXOJYHTW1WWuxoNbrZ6cWDCZrESwJwJhmWFg==
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4eqe78tbhp-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 18:00:51 -0700 (PDT)
+Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-7e71adbb398so877074a34.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 18:00:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781223479; x=1781828279;
+        d=1e100.net; s=20251104; t=1781226050; x=1781830850;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fbOR7faLhl6QNiMFhxyuN3Xj5ppMarngi323ERxJp8E=;
-        b=Z12LKSclZ05zdrmYxP2nZQOdpniqdOcPx1IBwM/WoFG2nQUiNsq4FuXVdgkjnX5f/2
-         f63NLo76nS3LDP0eh2eDQA0MtjNDXsHSZtFO4jib5zqIfdmUfkWOOlyy6XxYYtpYegOw
-         LbBYSWFuVrnzEapskx05EU8uPYlOLrsYcL6S4eR59QZZrqkKwXYUFP9jAYTA3oi3pl8j
-         1cKe1KlUtOnkZ6xaGhZdMprSxB4lxFqn5tK/q0FqcoFYBsIybGihTD/aOJRzYHOUo8QE
-         eM33jBmNBcEIZDTGkq/WBG9qbZD3ZUbi/3v1WoAmxVrO8rkEsYy0qLIqqFT8wbCd8ar/
-         mcBQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9JKz8eTXnzXfAyikUhMbJo2RZR9h/aA5jjy32eHo495T+kP63yLnBelVF73lp1KFpK7pr3gb8Zu5O1f5Apm6M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQcNKfZPRaXmddmOy3rTvMW+OWnL+yh9ggrIjQB5hNwVJZBKfG
-	+4N82mdelWAOQBhzZm72H0KlSrLdLMnKaYps5S+sB9oRDha18iRdMmfC
-X-Gm-Gg: Acq92OGzsGs1QhqesEkFWcb66geNjiJCQnCg8R8+ebrFR4LAnAKex6fn9U3eG83Nvo0
-	ucUV47nakKGIf1PD2GJQxtJ2n5RJdPP8qs5YmsX4PRQkIVu+rQVGOULsFIGu2/zLylq19mli5Zu
-	V3K247Lg95+8Ds+eEl7u48qKq+PF1oibIx5s0XhbAhYZ9Ozjz7nTlcfZAD6r3SGqg3wtv37jv+k
-	RnnQ3b4zHXdfn61FA9tM+ogfvgICmlBL6okuu/SYGheSPEygWkwpcZibrjeYnH3ra8/RCjT6108
-	YHhdHH6SAFqYTEYa3mQzQ8vE0Zcu1CQhO/twiX8OYJBX/URaYKJ8ghwv8cvnln2RdI2XfM42TfK
-	fNytowoGbxAaFJocwY+9P450JeZ27cxkyUe6HPu5N9e8TF5JPnD+8XPQBwMei6Fc+0ksULzz+MZ
-	3Hij4Bg5JG2MrIMGq99vw=
-X-Received: by 2002:a05:6870:179d:b0:43d:a174:b8d0 with SMTP id 586e51a60fabf-4426dd8a63bmr298590fac.14.1781223478791;
-        Thu, 11 Jun 2026 17:17:58 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:4::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4426ab10c46sm442562fac.1.2026.06.11.17.17.57
+        bh=zFDj2IOT/JWpaH+VD8OkJUPInevQlFQdH2RzPJRh3Qk=;
+        b=oxch6welMHykRUdeEb9p8ZH/0mjJ4pssryZZAsfthjUkiuGejjjAq2mt9BDNEQ8UA7
+         2cjf9YfI3AMRMKzFR3H0HQTNoDke4Gek2ahcEhIyBpw9zqgzDTrtOBL/EiQ5BpuB6fz/
+         x7BHqqQeWQBQPP2w7K0rFvQYVAw3S+2Ox+d2UgWODw8/JzaghZxidp8GFzyoN4jj7Fkh
+         boCavfI+zI2HrB1dGs5Z+pb4cITszGoLLQVrvREJ8PntNvXDg1rpk0pvRuNPnoSs5g6r
+         fYkUmOD3QTZIsPZozRfbbQYB04EpM3XKE0ANjucl9Hyj/lXVf5jiQkCHK3xI2xDeHZ90
+         HCTg==
+X-Forwarded-Encrypted: i=1; AFNElJ8eO49Quz2Giw1W1uyYpQGeAX8BH/cUPV74NsqrYcScKYUuUA9rGVqiG9vudFEc8GXFUp7BhTu+ToaZ/xj0TAQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8FTYMpTtPgMjSsFCsNW+2B9ta69gc24iia4keA/suE7yftV9R
+	+eUnk1Rw8jt/Ld1JNPMrbFZT+4Gx4KcbAZvSOs02gBO5jV1DVbuPHnW+0OQuFyqG4+k3GTb4A9x
+	oZau82sii+huL30sXUHCZaVFrwscS6HhXyTG0ebuTckHhL1Zd+ReTbAM0AnCHjDt0zpo=
+X-Gm-Gg: Acq92OHh/jB99UsA+xYJj8i9WjYTnPFJDX/9yQAj+jRgta6/Uy2QONPChFFeADK/PIu
+	rNfvfHnfsq2b9X/h4pWsHw4P/dZgXBPN1VJdkfzlnpqwFz0gdT/z21WDhr7eUAq6jvjA68katxC
+	aor4ywRoOI3y8tkGHucjPy4i6KoajPeh2JrH4iwRDUmX+YsDgaMKQPP9mzmMOH8McsWQrMC1Amf
+	FTtx1A5hPmTUt+HLoVpW+l2ODSdLKtVkPJugVa2EJGB9lnWigLZR7AZfd4RkxvQtWCGynywEsyW
+	o8f6YFfaktdiR22z4zAgwpWXJPZMXHo45zMlakqVLsG+8DLKTmrDbIvCMkZVIhb9iFfDy8eh2Aj
+	3lO4ZnCn0XQ==
+X-Received: by 2002:a05:6830:7007:b0:7e6:fdea:7aee with SMTP id 46e09a7af769-7e7847b6cf6mr381228a34.24.1781226050259;
+        Thu, 11 Jun 2026 18:00:50 -0700 (PDT)
+X-Received: by 2002:a05:6830:7007:b0:7e6:fdea:7aee with SMTP id 46e09a7af769-7e7847b6cf6mr381196a34.24.1781226049731;
+        Thu, 11 Jun 2026 18:00:49 -0700 (PDT)
+Received: from localhost ([2a03:2880:12ff:4::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e78144823asm751251a34.5.2026.06.11.18.00.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 17:17:57 -0700 (PDT)
-From: Mohsin Bashir <mohsin.bashr@gmail.com>
+        Thu, 11 Jun 2026 18:00:49 -0700 (PDT)
+From: Neil Spring <ntspring@meta.com>
 To: netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests: drv-net: Test queue stall upon reconfig
-Date: Thu, 11 Jun 2026 17:17:53 -0700
-Message-ID: <20260612001754.2489868-1-mohsin.bashr@gmail.com>
+Cc: edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
+        davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org,
+        pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, ntspring@meta.com,
+        bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net
+Subject: [PATCH net-next v13 0/2] tcp: rehash onto different local ECMP path on retransmit timeout
+Date: Thu, 11 Jun 2026 18:00:45 -0700
+Message-ID: <20260612010047.1377331-1-ntspring@meta.com>
 X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -75,268 +80,249 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEyMDAwNiBTYWx0ZWRfX/vRy8hVGIBlV
+ Cke4OPQMHZo90zKQhnFWNN52o5QcJsyPnBTSAEOyxrrHSPvxyTeTS4+rx6DT96FMpruvEEACR+I
+ En28fU2KIl3NeqlPavYucCpAZYutwAV+wWuF8WNeeKjUJV5KpaHIAdARQ8XRzXVwSeXPknXN0Gw
+ nik4ywPNko5xVn879X6Is79XQzossBNQnqD0Pj3kpvcChdv52mBkt8wdOKH5icJxYHmv+VrpUJJ
+ T0jpAudYUoSiFHzzH2KB/jEMKKEM/ZCpIW2MxY7XRtSFHzLwD3fP8VFMzVNpwwhUXGtkTaGEoB7
+ Fu8MaVCURtglXMy6dxOVJzzsdVbCvAY1mOZGLDHrz536t9GqXnTJywLqhBGaZJcMzfrD/DKXqGj
+ ep1FlizE9GOn2D6KK+efiESVmDGVCmd6Kj7bJ7QUEmwGd6GHv29M2yMptA7ouNry7VuKsi+6DWT
+ RyIALl0EOdsss99jP7w==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEyMDAwNiBTYWx0ZWRfXxnVxY30dgZBK
+ wQP84cyjB14MqEttEqONVsoPlcN+mMQl5/7rbhwvmTUjN9ttXrw2hEK0E5xzhravbmKNWanp5JI
+ AIcJXvMGsnU+nPgtNH9+caOOEgikH98=
+X-Proofpoint-ORIG-GUID: 7muS_Ty1PG3Gux1s0RCyzzx6x41F88UJ
+X-Proofpoint-GUID: 7muS_Ty1PG3Gux1s0RCyzzx6x41F88UJ
+X-Authority-Analysis: v=2.4 cv=ZaAt8MVA c=1 sm=1 tr=0 ts=6a2b5a43 cx=c_pps
+ a=+3WqYijBVYhDct2f5Fivkw==:117 a=xqWC_Br6kY4A:10 a=FelO9ux0wxsA:10
+ a=f7IdgyKtn90A:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
+ a=GbPsI2Ihf5RTnMjR_gZv:22 a=VwQbUJbxAAAA:8 a=VabnemYjAAAA:8
+ a=FMVIpMHTegAHNGUTmSsA:9 a=eYe2g0i6gJ5uXG_o6N4q:22 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-11_05,2026-06-11_01,2025-10-01_01
 
-From: Mohsin Bashir <hmohsin@meta.com>
+Currently sk_rethink_txhash() re-rolls the socket's txhash on RTO,
+PLB, and spurious-retransmission events, but the new hash is not
+propagated into the IPv6 ECMP path selection.  The cached
+route is reused and fib6_select_path() is never re-invoked, so
+the connection uses the same local ECMP decision.
 
-Add a reconfig_tx_stall test that detects the possibility of a TX stall
-after ring reconfiguration. The key observation is that drivers using
-netif_tx_start_all_queues() are prone to experiencing a stall when
-reconfiguration completes compared to drivers using
-netif_tx_wake_all_queues(). start_all_queues only clears DRV_XOFF, while
-wake_all_queues also calls __netif_schedule() to kick the qdisc. Without
-the kick, qdisc backlog present at reconfig time can stay stuck until a
-new trigger is issued.
+This series adds the two missing pieces:
 
-The test caps the TX ring at 64 entries so it fills quickly, then
-installs FQ on a target TX queue and sends UDP packets with SO_TXTIME
-scheduled in the future. With napi_defer_hard_irqs slowing completions,
-the small ring can fill when FQ releases the burst, leaving requeued
-qdisc backlog with no FQ timer to rescue it. A subsequent ring reconfig
-must wake the queues to drain the backlog. Simply starting the queues can
-leave it stuck.
+1. __sk_dst_reset() alongside sk_rethink_txhash() so the cached dst
+   is invalidated and the next transmit triggers a fresh route lookup.
 
-On host with problematic driver:
- Sent 128 SO_TXTIME packets (+100ms)
- Sent 128 SO_TXTIME packets (+200ms)
- Backlog before reconfig: 52632 bytes
- Check| At /root/ksft-net-drv/./drivers/net/ring_reconfig.py, ...
- Check|     ksft_eq(0, backlog,
- Check failed 0 != 52632 qdisc backlog stuck on queue 1 after ring reconfig
-not ok 3 ring_reconfig.reconfig_tx_stall
+2. fl6->mp_hash set from sk_txhash before each route lookup so
+   fib6_select_path() picks a path from the (potentially re-rolled) hash.
 
-On host with fixed driver:
- Sent 128 SO_TXTIME packets (+100ms)
- Sent 128 SO_TXTIME packets (+200ms)
- Backlog before reconfig: 76024 bytes
-ok 3 ring_reconfig.reconfig_tx_stall
+The override applies only to fib_multipath_hash_policy 0 (the default L3
+policy).  Its hash includes the flow label, but that is 0 by default
+(np->flow_label is unset; auto_flowlabels computes the on-wire label
+later, per packet), so flows to the same peer share one local path.
+Keying it on sk_txhash makes that local path per-connection and lets a
+rehash re-select it; even when a flow label is present (reflected REPFLOW
+or explicitly set) only local path selection changes -- the on-wire flow
+label is unaffected.  Policies 1-3 are left unchanged.
 
-Signed-off-by: Mohsin Bashir <hmohsin@meta.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/testing/selftests/drivers/net/config    |   4 +
- .../selftests/drivers/net/ring_reconfig.py    | 175 +++++++++++++++++-
- 2 files changed, 177 insertions(+), 2 deletions(-)
+Patch 1 is the kernel change; patch 2 adds selftests covering SYN
+rehash, SYN/ACK rehash, midstream RTO rehash, midstream ACK rehash
+(spurious retransmission), PLB rehash, a policy 1 negative test,
+a flowlabel leak regression test, two dst rebuild consistency
+tests (normal and syncookie) verifying that natural route
+invalidation does not cause unintended path changes, and a
+syncookie server path consistency test verifying that the SYN-ACK
+and post-cookie ACKs use the same ECMP nexthop.
 
-diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
-index 617de8aaf551..d5787ccdd16f 100644
---- a/tools/testing/selftests/drivers/net/config
-+++ b/tools/testing/selftests/drivers/net/config
-@@ -7,6 +7,10 @@ CONFIG_MACSEC=m
- CONFIG_NETCONSOLE=m
- CONFIG_NETCONSOLE_DYNAMIC=y
- CONFIG_NETCONSOLE_EXTENDED_LOG=y
-+CONFIG_NET_ACT_SKBEDIT=m
-+CONFIG_NET_CLS_ACT=y
-+CONFIG_NET_CLS_FLOWER=m
-+CONFIG_NET_CLS_MATCHALL=m
- CONFIG_NETDEVSIM=m
- CONFIG_NET_SCH_ETF=m
- CONFIG_NET_SCH_FQ=m
-diff --git a/tools/testing/selftests/drivers/net/ring_reconfig.py b/tools/testing/selftests/drivers/net/ring_reconfig.py
-index f9530a8b0856..17831e2f0f65 100755
---- a/tools/testing/selftests/drivers/net/ring_reconfig.py
-+++ b/tools/testing/selftests/drivers/net/ring_reconfig.py
-@@ -5,10 +5,17 @@
- Test channel and ring size configuration via ethtool (-L / -G).
- """
- 
-+import socket
-+import struct
-+import time
-+
- from lib.py import ksft_run, ksft_exit, ksft_pr
- from lib.py import ksft_eq
-+from lib.py import KsftSkipEx
- from lib.py import NetDrvEpEnv, EthtoolFamily, GenerateTraffic
--from lib.py import defer, NlError
-+from lib.py import cmd, defer, rand_port, tc, NlError
-+
-+SO_TXTIME = 61
- 
- 
- def channels(cfg) -> None:
-@@ -151,6 +158,169 @@ def ringparam(cfg) -> None:
-         GenerateTraffic(cfg).wait_pkts_and_stop(10000)
- 
- 
-+def _write_sysfs(cfg, path, val):
-+    with open(path, "r", encoding="utf-8") as fp:
-+        orig_val = fp.read().strip()
-+    if str(val) == orig_val:
-+        return
-+    with open(path, "w", encoding="utf-8") as fp:
-+        fp.write(str(val))
-+    defer(lambda p=path, v=orig_val: open(p, "w").write(v))
-+
-+
-+def _get_mq_handle(cfg):
-+    qdiscs = tc(f"qdisc show dev {cfg.ifname}", json=True)
-+    for q in qdiscs:
-+        if q.get("kind") == "mq":
-+            return q["handle"]
-+    raise KsftSkipEx(f"no mq qdisc found on {cfg.ifname}")
-+
-+
-+def _get_qdisc_backlog(cfg, queue, mq_handle):
-+    qdiscs = tc(f"-s qdisc show dev {cfg.ifname}", json=True)
-+    target_parent = f"{mq_handle}{queue + 1:x}"
-+    for q in qdiscs:
-+        if q.get("parent", "") == target_parent:
-+            return q.get("backlog")
-+    return None
-+
-+
-+def _setup_fq_qdisc(cfg, mq_handle, port, target_queue, other_queue):
-+    mq_child_parent = f"{mq_handle}{target_queue + 1:x}"
-+
-+    # Save the original child qdisc to restore after test
-+    qdiscs = tc(f"qdisc show dev {cfg.ifname}", json=True)
-+    default_qdisc = cmd("sysctl -n net.core.default_qdisc").stdout.strip()
-+    orig_kind = default_qdisc
-+    for q in qdiscs:
-+        if q.get("parent", "") == mq_child_parent:
-+            orig_kind = q.get("kind", default_qdisc)
-+            break
-+    try:
-+        tc(f"qdisc replace dev {cfg.ifname} parent {mq_child_parent} fq")
-+    except Exception as exc:
-+        raise KsftSkipEx("fq not available (CONFIG_NET_SCH_FQ)") from exc
-+    defer(tc,
-+          f"qdisc replace dev {cfg.ifname} parent {mq_child_parent} {orig_kind}")
-+
-+    qdisc_j = tc(f"qdisc show dev {cfg.ifname}", json=True)
-+    has_clsact = any(q['kind'] == 'clsact' for q in qdisc_j)
-+    if not has_clsact:
-+        tc(f"qdisc add dev {cfg.ifname} clsact")
-+        defer(tc, f"qdisc del dev {cfg.ifname} clsact")
-+
-+    proto = "ipv6" if int(cfg.addr_ipver) == 6 else "ip"
-+    try:
-+        tc(f"filter add dev {cfg.ifname} egress protocol {proto} "
-+           f"pref 1 flower ip_proto udp dst_port {port} "
-+           f"action skbedit queue_mapping {target_queue}")
-+    except Exception as exc:
-+        raise KsftSkipEx("tc flower/act_skbedit not available") from exc
-+    defer(tc, f"filter del dev {cfg.ifname} egress pref 1")
-+
-+    tc(f"filter add dev {cfg.ifname} egress pref 100 "
-+       f"matchall action skbedit queue_mapping {other_queue}")
-+    defer(tc, f"filter del dev {cfg.ifname} egress pref 100")
-+
-+
-+def _create_sotxtime_socket(cfg):
-+    sock = socket.socket(socket.AF_INET6 if cfg.addr_ipver == "6"
-+                         else socket.AF_INET, socket.SOCK_DGRAM)
-+    try:
-+        sock.setsockopt(socket.SOL_SOCKET, SO_TXTIME, struct.pack("Ii", 1, 0))
-+    except OSError:
-+        sock.close()
-+        raise KsftSkipEx("SO_TXTIME not supported")
-+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE,
-+                    cfg.ifname.encode())
-+    return sock
-+
-+
-+def _send_sotxtime_burst(sock, addr, port, count, delay_ns, ipver):
-+    payload = b'\x00' * 1400
-+    txtime_ns = time.clock_gettime_ns(time.CLOCK_MONOTONIC) + delay_ns
-+
-+    ancdata = [(socket.SOL_SOCKET, SO_TXTIME, struct.pack("Q", txtime_ns))]
-+    if int(ipver) == 6:
-+        dest = (addr, port, 0, 0)
-+    else:
-+        dest = (addr, port)
-+    for _ in range(count):
-+        sock.sendmsg([payload], ancdata, 0, dest)
-+
-+
-+def reconfig_tx_stall(cfg) -> None:
-+    target_queue = 1
-+    other_queue = 0
-+
-+    ehdr = {'header': {'dev-index': cfg.ifindex}}
-+    chans = cfg.eth.channels_get(ehdr)
-+
-+    if 'combined-max' not in chans:
-+        raise KsftSkipEx("device does not support combined channels")
-+    if chans['combined-count'] < 2:
-+        raise KsftSkipEx("need at least 2 combined channels")
-+
-+    rings = cfg.eth.rings_get(ehdr)
-+    if 'rx' not in rings or 'tx' not in rings:
-+        raise KsftSkipEx("device does not expose rx/tx ring params")
-+    tx_cur = rings['tx']
-+    if tx_cur <= 64:
-+        raise KsftSkipEx("tx ring size already at minimum")
-+    defer(cfg.eth.rings_set, ehdr | {'tx': tx_cur})
-+
-+    tx_min = 64
-+    cfg.eth.rings_set(ehdr | {'tx': tx_min})
-+
-+    # Slow completions so the ring stays full after FQ releases packets
-+    napi_defer = f"/sys/class/net/{cfg.ifname}/napi_defer_hard_irqs"
-+    gro_timeout = f"/sys/class/net/{cfg.ifname}/gro_flush_timeout"
-+    _write_sysfs(cfg, napi_defer, 100)
-+    _write_sysfs(cfg, gro_timeout, 1000000000)
-+
-+    mq_handle = _get_mq_handle(cfg)
-+    port = rand_port()
-+    _setup_fq_qdisc(cfg, mq_handle, port, target_queue, other_queue)
-+
-+    sock = _create_sotxtime_socket(cfg)
-+    defer(sock.close)
-+
-+    pkt_count = tx_min * 2
-+
-+    for delay_ms in [100, 200, 500]:
-+        delay_ns = delay_ms * 1_000_000
-+        _send_sotxtime_burst(sock, cfg.remote_addr, port, pkt_count,
-+                             delay_ns, cfg.addr_ipver)
-+        ksft_pr(f"Sent {pkt_count} SO_TXTIME packets (+{delay_ms}ms)")
-+        time.sleep(delay_ms / 1000 + 0.3)
-+
-+        backlog = _get_qdisc_backlog(cfg, target_queue, mq_handle)
-+        if backlog:
-+            break
-+    else:
-+        raise KsftSkipEx("failed to build qdisc backlog")
-+
-+    ksft_pr(f"Backlog before reconfig: {backlog} bytes")
-+
-+    # Trigger ring reconfig — driver should call wake, not just start
-+    cfg.eth.rings_set(ehdr | {'tx': tx_cur})
-+
-+    # Let completions proceed normally
-+    _write_sysfs(cfg, napi_defer, 0)
-+    _write_sysfs(cfg, gro_timeout, 0)
-+
-+    # Poll for backlog to drain
-+    for _ in range(100):
-+        backlog = _get_qdisc_backlog(cfg, target_queue, mq_handle)
-+        if not backlog:
-+            break
-+        time.sleep(0.1)
-+
-+    ksft_eq(0, backlog,
-+            comment=f"qdisc backlog stuck on queue {target_queue} "
-+                    f"after ring reconfig")
-+
-+
- def main() -> None:
-     """ Ksft boiler plate main """
- 
-@@ -158,7 +328,8 @@ def main() -> None:
-         cfg.eth = EthtoolFamily()
- 
-         ksft_run([channels,
--                  ringparam],
-+                  ringparam,
-+                  reconfig_tx_stall],
-                  args=(cfg, ))
-     ksft_exit()
- 
+Changes since v12: https://lore.kernel.org/netdev/20260604212246.265079-1-ntspring@meta.com/
+Patch 1:
+- Factor the repeated policy-0 IPv6 mp_hash assignment into a shared
+  ip6_ecmp_set_mp_hash() helper (Paolo Abeni)
+- Replace the open-coded txhash reroll + dst reset at the three rehash
+  sites with a __sk_rethink_txhash_reset_dst() helper, kept separate
+  from sk_rethink_txhash() so dst_negative_advice()'s dst op still runs
+  (Paolo Abeni)
+Patch 2:
+- Check the first rehash attempt's exit status directly instead of via
+  $? (shellcheck SC2181), and drop the redundant fail_reason capture on
+  the tolerated first attempt (Paolo Abeni)
+- Redirect the remaining slowwait stdout to /dev/null so loopy_wait's
+  counter output cannot leak into the captured failure message
+  (Sashiko AI review)
+
+Changes since v11: https://lore.kernel.org/netdev/20260602181428.2318919-1-ntspring@meta.com/
+Patch 1:
+- Fix the IPv6-only rule to exclude IPv4-mapped connections: key the
+  cookie txhash on skb->protocol, not sk->sk_family (Sashiko AI review)
+- Set fl6->mp_hash in tcp_v6_send_response() so RSTs and time-wait
+  ACKs use the connection's ECMP path (Sashiko AI review)
+- Remove the bpf_sk_assign_tcp_reqsk() txhash init added in v7; it is
+  redundant, as cookie_tcp_reqsk_init() always sets txhash before the
+  request socket is routed (verified by poisoning txhash and running
+  the tcp_custom_syncookie BPF selftest: the route lookup never saw
+  the poison)
+- Document that policy 0 IPv6 TCP ECMP selection follows txhash over a
+  reflected/explicit flow label (on-wire flow label unchanged)
+Patch 2:
+- Drain TCP teardown between rounds so late FIN/RST packets do not
+  pollute the next round's tc filter counters (bot+bpf-ci)
+- Skip the syncookie tests when CONFIG_SYN_COOKIES is unavailable;
+  select it in selftests/net/config
+
+Changes since v10: https://lore.kernel.org/netdev/20260529160136.1010064-1-ntspring@meta.com/
+Patch 1:
+- Fix build without CONFIG_SYN_COOKIES
+- Leave IPv4 syncookie txhash unmodified (`net_tx_rndhash()`)
+- Document the IPv6 TCP policy 0 behavior change in ip-sysctl.rst
+Patch 2:
+- Correct runtime estimate from ~15s to ~60s
+- Build DCTCP as `=y` instead of `=m` to avoid module load races
+- Fix false failure of the midstream ACK test by limiting the send
+  buffer to avoid a closed receive window; window probes do not
+  cause rehash
+
+Changes since v9: https://lore.kernel.org/netdev/20260526203403.3517607-1-ntspring@meta.com/
+Patch 1:
+- Split cookie_init_sequence() into pure computation and a new
+  cookie_record_sent() helper for the side effects; call
+  cookie_record_sent() after route_req() succeeds so the overflow
+  timestamp and SYNCOOKIESSENT counter are not bumped when no
+  SYN-ACK is sent
+Patch 2:
+- Make midstream ACK rehash test more reliable by blocking the unused
+  path first
+- Fix port overlap when ECMP_REBUILD_ROUNDS exceeds the default
+
+Changes since v8: https://lore.kernel.org/netdev/20260522215733.929238-1-ntspring@meta.com/
+Patch 1:
+- Fix REPFLOW flowlabel reflection for syncookie SYN-ACKs: pass 0 as
+  tw_isn to route_req() so tcp_v6_init_req() saves ireq->pktopts
+Patch 2:
+- Give midstream and ACK rehash attempt helpers distinct failure
+  messages (no TX activity vs no data on alternate path vs counter
+  not incrementing) instead of a single generic error
+- Drop unused ns_server parameter from ecmp_dst_rebuild_check()
+- Clean up server socat before break on setup failure in the dst
+  rebuild loop
+
+Changes since v7: https://lore.kernel.org/netdev/20260520064310.4154268-1-ntspring@meta.com/
+Patch 1:
+- Remove #if IS_ENABLED(CONFIG_IPV6) guards around __sk_dst_reset()
+  in tcp_plb.c and tcp_timer.c (Eric Dumazet)
+- Guard mp_hash in inet6_csk_route_socket() on sk_protocol == IPPROTO_TCP
+  instead of txhash != 0, since non-TCP callers like L2TP set sk_txhash
+  in __ip6_datagram_connect() and should retain flow-key-based ECMP
+- Use the syncookie (ISN) as txhash for both the SYN-ACK route lookup
+  and cookie_v6_check() socket creation, so the server's ECMP selection is
+  consistent across the stateless SYN-ACK and the subsequent full socket.
+  Move cookie_init_sequence() before route_req() in tcp_conn_request()
+  so the SYN-ACK dst is computed with the cookie-derived txhash; derive
+  txhash from snt_isn in cookie_tcp_reqsk_init() to match
+Patch 2:
+- Invalidate dst via dummy route add/del instead of route replace to
+  avoid a transient single-nexthop state during multipath replacement
+- Add syncookie server path consistency test verifying the SYN-ACK and
+  post-cookie ACKs use the same ECMP path
+- Strengthen policy 1 negative test to wait for multiple rehash attempts
+  and verify SYNs landed on exactly one interface
+
+Changes since v6: https://lore.kernel.org/netdev/20260517174522.2232057-1-ntspring@meta.com/
+- Guard mp_hash assignment so that non-TCP callers of
+  inet6_csk_route_socket() fall through to rt6_multipath_hash()
+  (superseded in v8 by sk_protocol == IPPROTO_TCP guard)
+- Initialize txhash in bpf_sk_assign_tcp_reqsk() to avoid reading
+  uninitialized slab memory in inet6_csk_route_req() (reverted in v12
+  as redundant)
+- Check post-rebuild busywait return status to avoid silent false pass
+
+Changes since v5: https://lore.kernel.org/netdev/20260513204048.2721843-1-ntspring@meta.com/
+- Improve selftest reliability: suppress __dst_negative_advice() via
+  tcp_retries1=255 in dst rebuild tests so a real RTO cannot trigger
+  an unintended rehash; add internal retry to midstream and ACK
+  rehash tests to tolerate probabilistic ECMP path selection; fix
+  midstream baseline capture to account for packets that bypass tc
+  filters during the prio qdisc's TCQ_F_CAN_BYPASS window
+- Increase ECMP_REBUILD_ROUNDS default to 10 for reliable regression
+  detection with 2-way ECMP; replace sleep with busywait
+- Use tcp_allowed_congestion_control instead of changing the host's
+  default congestion control for PLB test
+- Use (txhash >> 1) ?: 1 to guarantee non-zero mp_hash, since zero
+  falls back to rt6_multipath_hash()
+
+Changes since v4: https://lore.kernel.org/netdev/20260507171319.1259115-1-ntspring@meta.com/
+- Condition fl6->mp_hash on fib_multipath_hash_policy == 0 to preserve
+  deterministic hash policies 1-3 (e.g., symmetric 5-tuple for policy 1)
+- Set fl6->mp_hash in tcp_v6_connect() and cookie_v6_check() for
+  initial route lookup consistency; move sk_set_txhash() earlier
+  (Jakub Kicinski)
+- Add policy 1 negative test; improve sysctl save/restore
+- Add flowlabel leak test confirming mp_hash does not alter the
+  on-wire IPv6 flow label
+- Add dst rebuild consistency tests (normal and syncookie) verifying
+  that route table changes do not cause unintended ECMP path changes
+
+Changes since v3: https://lore.kernel.org/netdev/20260505193824.2791642-1-ntspring@meta.com/
+- Use __sk_dst_reset() instead of sk_dst_reset() since the socket lock
+  is held in all three call sites (Eric Dumazet)
+- Guard __sk_dst_reset() with sk->sk_family == AF_INET6 since IPv4 ECMP
+  does not use sk_txhash for path selection
+- Guard __sk_dst_reset() in tcp_plb_check_rehash() with the return value
+  of sk_rethink_txhash()
+- Move tcp_rsk(req)->txhash initialization before route_req() in
+  tcp_conn_request() to avoid reading uninitialized memory
+- Add CONFIG_TCP_CONG_DCTCP=m to selftests/net/config for PLB test
+- Skip PLB test gracefully if DCTCP is not available
+- Save and restore original congestion control algorithm in PLB test
+- Default get_netstat_counter() to 0 when counter is not found
+- Skip all tests if tcp_syn_linear_timeouts is not available
+- Replace bash/pipe data sources with socat OPEN:/dev/zero for
+  cleaner process cleanup
+- Fix shellcheck warnings
+
+Changes since v2: https://lore.kernel.org/netdev/20260408070514.1840227-1-ntspring@meta.com/
+- Retitle "ECMP" to "local ECMP" to distinguish from remote ECMP
+  (Neal Cardwell)
+- Add fl6->mp_hash propagation in inet6_sk_rebuild_header() (af_inet6.c),
+  covering the dst rebuild path used on established sockets
+- Remove incorrect ir_iif update from tcp_check_req() in tcp_minisocks.c;
+  the SYN/ACK rehash is already handled by tcp_rtx_synack() re-rolling
+  txhash which feeds into inet6_csk_route_req()'s mp_hash
+  (Eric Dumazet)
+- Add ACK rehash and PLB rehash selftests
+- Improve selftest reliability
+
+Changes since v1: https://lore.kernel.org/netdev/20260408002802.2448424-1-ntspring@meta.com/
+- Use tcp_rsk(req)->txhash instead of jhash_1word(req->num_retrans, ...)
+  for ECMP path selection in inet6_csk_route_req(), making the request
+  socket path consistent with the established socket path (Eric Dumazet)
+- Add comments explaining the >> 1 shift for 31-bit mp_hash range
+- Use socat -u (unidirectional) in selftest to avoid SIGPIPE race
+- Increase tcp_syn_retries and tcp_syn_linear_timeouts to 25 for
+  better rehash coverage
+
+Neil Spring (2):
+  tcp: rehash onto different local ECMP path on retransmit timeout
+  selftests: net: add local ECMP rehash test
+
+ Documentation/networking/ip-sysctl.rst     |    6 +-
+ include/net/ipv6.h                         |   11 +
+ include/net/sock.h                         |   14 +
+ include/net/tcp.h                          |   20 +-
+ net/ipv4/syncookies.c                      |   11 +-
+ net/ipv4/tcp_input.c                       |   18 +-
+ net/ipv4/tcp_plb.c                         |    2 +-
+ net/ipv4/tcp_timer.c                       |    2 +-
+ net/ipv6/af_inet6.c                        |    2 +
+ net/ipv6/inet6_connection_sock.c           |    5 +
+ net/ipv6/syncookies.c                      |    2 +
+ net/ipv6/tcp_ipv6.c                        |   19 +-
+ tools/testing/selftests/net/Makefile       |    1 +
+ tools/testing/selftests/net/config         |    2 +
+ tools/testing/selftests/net/ecmp_rehash.sh | 1112 ++++++++++++++++++++
+ 15 files changed, 1211 insertions(+), 16 deletions(-)
+ create mode 100755 tools/testing/selftests/net/ecmp_rehash.sh
+
 -- 
 2.53.0-Meta
 
