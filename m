@@ -1,61 +1,63 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B8378F59
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 16:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6B63839BB
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 16:24:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781281456; cv=none; b=mX2v6C7Po5JxQdyMwnOVr+WDZDHhASVfLwZtVk1ZLADEQdWn5qywU5kjgrcoC500NLs3ieXgxdegeBdbRtDBXeEGRUQJiqaZlmBBzgBdMrszIfTUDEkLU9veK5+4BuRtvRsRZPgwCyph5qQFYKV7IJ/ok/0pA0Wu2+7XTejqlZg=
+	t=1781281457; cv=none; b=Uu6pAXte+W0aFFk+DBtTMuRVpqLQQFTKfpXoycMuzWyjdyoFFOEAvyaHnAcvJFvQq/BK8MElNHhGKIHME11im7JWVKqmF7Clbzqpu7L0yyoh1ekmjOzVSNY3kv26ABm9K5xJDF1AetPWm/OBiq9lq/uBXXv24d96N3Q7t9noZKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781281456; c=relaxed/simple;
-	bh=EM9fYVOVO5wx0AlxxQX5Z5uY6L8sVXrfM9pNCZ2t61Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hscF2qNXBNNT53d0UvI9OeHJ5sRk/rckMXAMsh8U8ZHUBh8VNQR2Ox0Lmu0MQLpfH2VfvCim6OrGkuk8pRAw8ICpFYl8rp9PNnGfJbb8to6tStsqDUXNDgxEYmcFVPxJRNua/+k7CC0yuLbO/d1VsX1wDQyCFoI0ALBue03cGFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJyyiCa0; arc=none smtp.client-ip=209.85.128.47
+	s=arc-20240116; t=1781281457; c=relaxed/simple;
+	bh=Ek5sg8ia7dHrpdcCzHmFxOvsiqSRhQeTCIZ4Fbont5Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Ac0mz0tTMNgDyS0B/zbEk1PXPwTNhRCaCQFU9IztJuc9/h5D86nWo8oZ0MEciH8pfNKUFB7P+EZ9k1qi5FSc7O+PumN3Eq0Gll2WimOo0W67teZD7hXwUB28ObbTZr9M/NXsgOM7EPNCj61DwiXHiItMo0Vs2FzOUQ9K69QYc14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=io+CayzF; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJyyiCa0"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-490ae94a89eso10355155e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 09:24:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="io+CayzF"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-490afc47455so5502765e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 09:24:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781281453; x=1781886253; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=M15/H5SXZ3Wzm+97G4xOFVhr5vUJMWE6LcDVgXk/KoI=;
-        b=hJyyiCa0DXhx8I5pTyhvBYesy2h98alxnGEACn7sxNiNQCStACz0nA6uu2IRTTsUvm
-         Dh/FhQV191O8HpCpHYW1nBaV31j5rpCrFDwiBO5M66mY9UkKalffsP9kkLFNPdM4kDtF
-         xrwRhxNt9TNF1OqZMzzsuxwZ9NDpnAuuFPCdyr0a5uPYNN+YPdSaBjIVZpaP9Z+9nxGW
-         b6IE/8JH4A3/OtgG/4+ekZMn0owYfamFZDh8qVfqMGjxoSARVzUSxzgRZ9cf0pjU0Bn8
-         HbXUkNtzM57qKyUdJ2vypinRVRHoZnIANQcynOduWA2RBzmXVbLBhMZjs7M2FQMrkagK
-         Ta4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781281453; x=1781886253;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781281454; x=1781886254; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M15/H5SXZ3Wzm+97G4xOFVhr5vUJMWE6LcDVgXk/KoI=;
-        b=fTpm7YPVatsqqvI8/GGUezyQu2xOmqJ8ps4ukZps8t/HbKQPMFkBZRPWA7V8IRkqch
-         86WXUZIk6GRWtWq2t71tRqJHjA2dfGs1/Dox1/b8pbOWghsPD97EpB0xffYY+m09NGOG
-         VyzCNoCz3BEYZzh2nPFQqJPVjKP5u660Oe/lgVHO3pIkuu82EWOrHO+5D/9mjWoZ7LVw
-         D0Itcwb6rBX4kZvGWaXE7zOS/ER4QGMSiOmdO5qbRaIcPHpgog2SDPhKlhjRbAe9qemV
-         fvB/zSKz8IuzHUVXYjxrgLG+wRAXj3I8+cDeraRYiJQGj7uo6Y9/RFvDsbUlWvINQRtR
-         1pyQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8VxoYlJ4uspzfeDqV2rSeVi9VM7VqXXd42hySnAVZcmlOq9TUm57FPDI6ITQR31RVl4KXORoaHKRTgIzwJON0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzieMrxq3wxR2YD9YM99eqT6FKvRSAxHBaFblc0sbGNgnjrrEnB
-	cHuE/K55vVK4E5K0I+u/InQQC8fSqjGlG9cgPx6S9ALCimLQwOgtbUW5
-X-Gm-Gg: Acq92OEG4uAXCeS7mpsrZwdFVxhGhlehsYI9uBhq27tdUdXGT0AdfwETBPS+8I0QoO+
-	JM3DludsKuyIBAmxxTTicjWLHxvUGLT9E16sIGWTZCGwFCnhV3pwrkW+WUX/GGgj5Ta/PXPWKnB
-	AfZgdf+Y9KDobenz0V8FDLHAAlqqck62hS4f4+BYUB7jQIoiTIeOE1IVtN3kj09PlIyP5iDwTXG
-	+OQyjbfI/jLjiaTxTIu62lZhYfUjEs1VucTxxQTK8sRhEhV/zCgmuo/kajK4bcOAX5CPqvthj3T
-	fhUiiygOifkBAEKx1R8pdDvSIOXb7zkmFFlw9WXUEziiBO6N/KsdI3mFo64IDa9LVl5T3kZ5SN6
-	MNGXDnovTSFzdmBhohf/24PzE66ifIZik67rdL1GB+MebxVKp9xNR9pqrS+0BY0hmI4OS8or0D0
-	dzHPCx1AsHxo5mkN+cxV4hf2Ywjn09Fs9TrqER/dNMY+Gn2kTb/paoOpITOBqCJw==
-X-Received: by 2002:a05:600c:348b:b0:490:e5c1:b89e with SMTP id 5b1f17b1804b1-49220061e38mr2167415e9.10.1781281452911;
-        Fri, 12 Jun 2026 09:24:12 -0700 (PDT)
+        bh=tdYyfsvx1DQaEQW7SfjjNGQD4l8zjElTcwX+OTVhZvA=;
+        b=io+CayzFz4Uk2FNGC95HpAvXh/oJq7US3dD/KCDftdTO/QmdQj9yAudNKO1NfMCRAv
+         qcics5FowaDmK3SpF7CS3UI0vuLK9wuQa//jYtfMhFz380Q5MX4aOrAR/vbShXHc8QYc
+         uSxy+gKK3DVpit+m/+sV5UPkoRqbgNQXXzV/w87643eLyyR9dQtxRZprlFCKlzb7p9JN
+         0NiLKPN0+xiCyqBCcEuaEaq3kmBXJGnHhfHDGJBAErwxj8RoBD5q/XmUjzPIOFUAeEKF
+         6xqJ46NxzV23u1A2m5R1OvLI2MlVzSl/vauAvo99XPEhpTJI9InkjjMl6aAQwl/eKO/m
+         wM7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781281454; x=1781886254;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=tdYyfsvx1DQaEQW7SfjjNGQD4l8zjElTcwX+OTVhZvA=;
+        b=OmjljcauK3bRty7AKAC9NHWdAKcp5ll+2eaTxyl9nuSDeN0pyNY0FX06QuLz8t+rWZ
+         dbv1C6v68PJaXcWxgNRDyF9cYJaWFgfOhgWS9XEMJyKsobRMTUaEpF6+VtwT3fH92VY/
+         BFxR53nA4v/fWmgXLv/VVvMBt+pPtXa2gd3gKlyS+Q0K1inDhY2Xi/ytmwBnicOhXzGa
+         MkvKuxRKINgEHa5w5vUiepcYo8Z4n0enloiEFphLpklF+fp2/uFDhXt73toK38MZKAmO
+         99QkfV7wIOSqqe7FIFNDRftXYFOzXeKM7/WVmnTI5nwqs/3p+8LCgCprZNx4EyAqc6cT
+         I4Kw==
+X-Forwarded-Encrypted: i=1; AFNElJ9floE3M9XqcvlF+h3qvPTD9nN7Xb5MlMxnrDanyoQ4HwCwKc3udZG3ztCV4Ighu83NGEViy3fsLzfT7pyRdIc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBAO/Qg28zKz54CsO9i3PeDsgPz4AgLoVDEHtYcJI702/jllWA
+	cmnwNCnLyIwg0pt1ErBG4NMUGZwsV/Baa8gkHSwmYHhajByprQA+Yy28
+X-Gm-Gg: Acq92OEDHfAz/utoy6V0bcN02wOIBygbeI9dqGKXJ14Lb0tX9NFKiiHR4HcSDp6k/Py
+	y1pZgI+cxZz8POnDALIt08CdnkkW6Mr6/pMXKUeNjO31bP26nooiMZZY5/ntjDNaSOb9oyeAMHS
+	kugSpAeBC7rzSjapzjjM8l80sQIyD82EWl75EIPKSGphDzAC2Kl6knwUpHZ5TsGoxQzgIRPBBad
+	3+o09fFGOZQClnbOZbKl6uQtYe5BZW25JkM2cvT12U1ZIkz3+VmUHktHPHdYcYe78ywNTP/1cSw
+	UlAB9m/Lg4jEup1Tnk2MefG4iLV8UW+o/PLk+Zf6xUZ1e+BtIZkEI6gDH/QhOIQpoCmzTekmS9M
+	PauG8mEQ2WD4na+d7BPMNElPacnbQuncgaR4hqu7dAOiSTTvTulyIEAXwMyP644vthbQgZj+8Su
+	ShklCwTh8meJKHtlAj8IDt6uPXyDGD8ZFkmR15fLtq+5l5vFnUUOAQjaxLOaobJw==
+X-Received: by 2002:a05:600c:3548:b0:490:ea8a:32d0 with SMTP id 5b1f17b1804b1-490ec501917mr49869245e9.20.1781281454334;
+        Fri, 12 Jun 2026 09:24:14 -0700 (PDT)
 Received: from f4d4888f22f2.ant.amazon.com.com ([15.248.2.31])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490ea95c51dsm57620935e9.1.2026.06.12.09.24.11
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490ea95c51dsm57620935e9.1.2026.06.12.09.24.13
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 12 Jun 2026 09:24:12 -0700 (PDT)
+        Fri, 12 Jun 2026 09:24:13 -0700 (PDT)
 From: Jack Thomson <jackabt.amazon@gmail.com>
 To: maz@kernel.org,
 	oupton@kernel.org,
@@ -77,10 +79,12 @@ Cc: joey.gouly@arm.com,
 	linux-doc@vger.kernel.org,
 	isaku.yamahata@intel.com,
 	Jack Thomson <jackabt@amazon.com>
-Subject: [PATCH v5 0/5] KVM: arm64: Add KVM_PRE_FAULT_MEMORY support
-Date: Fri, 12 Jun 2026 17:23:48 +0100
-Message-ID: <20260612162354.73378-1-jackabt.amazon@gmail.com>
+Subject: [PATCH v5 1/5] KVM: arm64: Pass walk flags to kvm_pgtable_get_leaf()
+Date: Fri, 12 Jun 2026 17:23:49 +0100
+Message-ID: <20260612162354.73378-2-jackabt.amazon@gmail.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260612162354.73378-1-jackabt.amazon@gmail.com>
+References: <20260612162354.73378-1-jackabt.amazon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,119 +95,148 @@ Content-Transfer-Encoding: 8bit
 
 From: Jack Thomson <jackabt@amazon.com>
 
-Hi,
+Allow callers of kvm_pgtable_get_leaf() to specify the page-table walk
+flags, in preparation for performing walks under the MMU read lock.
 
-This series adds arm64 support for KVM_PRE_FAULT_MEMORY, which was added
-for x86 in [1]. The ioctl allows userspace to populate stage-2 mappings
-before running a vCPU, reducing the number of stage-2 faults taken in
-the run path. This is useful for post-copy migration, where stage-2
-fault latency shows up directly in memory-intensive workloads.
+Reading a stage-2 leaf while only holding the read lock requires
+KVM_PGTABLE_WALK_SHARED: parallel faults (which also only hold the read
+lock) can unlink table pages and free them via RCU, so the walker must
+be inside an RCU read-side critical section, which the shared walk flag
+provides via kvm_pgtable_walk_begin().
 
-On arm64, the GPA supplied to the ioctl is treated as an IPA in the
-userspace-owned VM's memslot address space. If the vCPU most recently
-ran a nested guest, KVM still targets the VM's canonical stage-2. It
-does not interpret the GPA as an L2 IPA, and does not try to populate
-the nested/shadow stage-2 selected by the vCPU's last run state.
+All existing callers either hold the write lock, walk with interrupts
+disabled, or run at hyp where shared walks are rejected; they keep the
+current behaviour by passing no flags.
 
-The patches are:
+No functional change intended.
 
- - Allow callers of kvm_pgtable_get_leaf() to pass walk flags, so the
-   prefault path can walk stage-2 under the MMU read lock.
+Signed-off-by: Jack Thomson <jackabt@amazon.com>
+---
+ arch/arm64/include/asm/kvm_pgtable.h  |  5 ++++-
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c | 10 +++++-----
+ arch/arm64/kvm/hyp/pgtable.c          |  5 +++--
+ arch/arm64/kvm/mmu.c                  |  2 +-
+ arch/arm64/kvm/nested.c               |  2 +-
+ 5 files changed, 14 insertions(+), 10 deletions(-)
 
- - Add arm64 support for KVM_PRE_FAULT_MEMORY.
-
- - Enable pre_fault_memory_test on arm64.
-
- - Add a backing-source option to pre_fault_memory_test.
-
- - Add a nested (NV) selftest that prefaults on a vCPU whose last-run
-   context is backed by a shadow stage-2 MMU with an empty nested
-   stage-2 root.
-
-The prefault flag and page_size output in the stage-2 fault descriptor
-remain in this series so the arm64 implementation can advance by the
-mapping granule installed by the fault path and report poison without
-queueing a SIGBUS.
-
-Tested with pre_fault_memory_test under an arm64 QEMU setup with
-anonymous, shmem, anonymous_thp, anonymous_hugetlb and shared_hugetlb
-backings, including 64K, 2M and 32M hugetlb pools, and with the new
-nv_pre_fault_memory_test on an NV-capable setup.
-
-=== Changes since v4 [2] ===
-
- - Reworked nested virt semantics: arm64 now treats the ioctl GPA as the
-   VM/memslot IPA and always targets the canonical stage-2. It no longer
-   translates an L2 IPA through L1's stage-2.
-
- - Documented the arm64 nested behavior in the KVM API text.
-
- - Switch to the canonical stage-2 with the vCPU put/load helpers when
-   the vCPU last ran with a nested/shadow MMU, keeping VMID, VNCR and
-   shadow-MMU refcount state consistent.
-
- - Split the kvm_pgtable_get_leaf() walk-flag plumbing into a prep patch
-   and walk existing mappings with KVM_PGTABLE_WALK_SHARED under the MMU
-   read lock.
-
- - Tightened prefault fault handling: preserve fault info, set IL in the
-   synthetic ESR, handle existing mappings, return -EAGAIN for invalid
-   memslot races, and report -EHWPOISON without queueing SIGBUS.
-
- - Avoid directly walking stage-2 page tables when pKVM is enabled.
-   Protected VMs remain unsupported via -EOPNOTSUPP.
-
- - Preserve the selected selftest memory backing when recreating the
-   racing memslot.
-
- - Add the nested (NV) prefault selftest, including an empty nested
-   stage-2 root to catch accidental L2-IPA interpretation.
-
-=== Changes since v3 [3] ===
-
- - Return -EOPNOTSUPP for protected VMs.
-
- - Reworked nested-vCPU handling to translate an L2 IPA through L1's
-   stage-2. This has been superseded by the canonical VM-IPA semantics
-   described above.
-
- - Make page_size unsigned and keep local declarations ordered at the
-   top of kvm_arch_vcpu_pre_fault_memory().
-
-=== Changes since v2 [4] ===
-
- - Update the synthetic fault info. Thanks Suzuki.
-
- - Remove the selftest change for unaligned mmap allocations. Thanks
-   Sean.
-
-[1]: https://lore.kernel.org/kvm/20240710174031.312055-1-pbonzini@redhat.com/
-[2]: https://lore.kernel.org/linux-arm-kernel/20260113152643.18858-1-jackabt.amazon@gmail.com/
-[3]: https://lore.kernel.org/linux-arm-kernel/20251119154910.97716-1-jackabt.amazon@gmail.com/
-[4]: https://lore.kernel.org/linux-arm-kernel/20251013151502.6679-1-jackabt.amazon@gmail.com/
-
-Jack Thomson (5):
-  KVM: arm64: Pass walk flags to kvm_pgtable_get_leaf()
-  KVM: arm64: Add pre_fault_memory implementation
-  KVM: selftests: Enable pre_fault_memory_test for arm64
-  KVM: selftests: Add option for different backing in pre-fault tests
-  KVM: selftests: Add nested pre-fault test for arm64
-
- Documentation/virt/kvm/api.rst                |  18 +-
- arch/arm64/include/asm/kvm_pgtable.h          |   5 +-
- arch/arm64/kvm/Kconfig                        |   1 +
- arch/arm64/kvm/arm.c                          |   1 +
- arch/arm64/kvm/hyp/nvhe/mem_protect.c         |  10 +-
- arch/arm64/kvm/hyp/pgtable.c                  |   5 +-
- arch/arm64/kvm/mmu.c                          | 164 +++++++++++++-
- arch/arm64/kvm/nested.c                       |   2 +-
- tools/testing/selftests/kvm/Makefile.kvm      |   2 +
- .../kvm/arm64/nv_pre_fault_memory_test.c      | 200 ++++++++++++++++++
- .../selftests/kvm/pre_fault_memory_test.c     | 150 ++++++++++---
- 11 files changed, 513 insertions(+), 45 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
-
-
-base-commit: 98f826f3c500fda08d51fca434b7aefa6a2f7076
+diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+index 41a8687938eb..d0167f7dfbee 100644
+--- a/arch/arm64/include/asm/kvm_pgtable.h
++++ b/arch/arm64/include/asm/kvm_pgtable.h
+@@ -859,6 +859,8 @@ int kvm_pgtable_walk(struct kvm_pgtable *pgt, u64 addr, u64 size,
+  * @addr:	Input address for the start of the walk.
+  * @ptep:	Pointer to storage for the retrieved PTE.
+  * @level:	Pointer to storage for the level of the retrieved PTE.
++ * @flags:	Flags to control the page-table walk
++ *		(see struct kvm_pgtable_visit_ctx).
+  *
+  * The offset of @addr within a page is ignored.
+  *
+@@ -869,7 +871,8 @@ int kvm_pgtable_walk(struct kvm_pgtable *pgt, u64 addr, u64 size,
+  * Return: 0 on success, negative error code on failure.
+  */
+ int kvm_pgtable_get_leaf(struct kvm_pgtable *pgt, u64 addr,
+-			 kvm_pte_t *ptep, s8 *level);
++			 kvm_pte_t *ptep, s8 *level,
++			 enum kvm_pgtable_walk_flags flags);
+ 
+ /**
+  * kvm_pgtable_stage2_pte_prot() - Retrieve the protection attributes of a
+diff --git a/arch/arm64/kvm/hyp/nvhe/mem_protect.c b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+index 25f04629014e..3b765c9ff7e8 100644
+--- a/arch/arm64/kvm/hyp/nvhe/mem_protect.c
++++ b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+@@ -522,7 +522,7 @@ static int host_stage2_adjust_range(u64 addr, struct kvm_mem_range *range)
+ 	int ret;
+ 
+ 	hyp_assert_lock_held(&host_mmu.lock);
+-	ret = kvm_pgtable_get_leaf(&host_mmu.pgt, addr, &pte, &level);
++	ret = kvm_pgtable_get_leaf(&host_mmu.pgt, addr, &pte, &level, 0);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -890,7 +890,7 @@ static int get_valid_guest_pte(struct pkvm_hyp_vm *vm, u64 ipa, kvm_pte_t *ptep,
+ 	s8 level;
+ 	int ret;
+ 
+-	ret = kvm_pgtable_get_leaf(&vm->pgt, ipa, &pte, &level);
++	ret = kvm_pgtable_get_leaf(&vm->pgt, ipa, &pte, &level, 0);
+ 	if (ret)
+ 		return ret;
+ 	if (guest_pte_is_poisoned(pte))
+@@ -939,7 +939,7 @@ int __pkvm_vcpu_in_poison_fault(struct pkvm_hyp_vcpu *hyp_vcpu)
+ 	ipa |= FAR_TO_FIPA_OFFSET(kvm_vcpu_get_hfar(&hyp_vcpu->vcpu));
+ 
+ 	guest_lock_component(vm);
+-	ret = kvm_pgtable_get_leaf(&vm->pgt, ipa, &pte, &level);
++	ret = kvm_pgtable_get_leaf(&vm->pgt, ipa, &pte, &level, 0);
+ 	if (ret)
+ 		goto unlock;
+ 
+@@ -1293,7 +1293,7 @@ static int host_stage2_get_guest_info(phys_addr_t phys, struct pkvm_hyp_vm **vm,
+ 		return -EPERM;
+ 	}
+ 
+-	ret = kvm_pgtable_get_leaf(&host_mmu.pgt, phys, &pte, &level);
++	ret = kvm_pgtable_get_leaf(&host_mmu.pgt, phys, &pte, &level, 0);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1522,7 +1522,7 @@ static int __check_host_shared_guest(struct pkvm_hyp_vm *vm, u64 *__phys, u64 ip
+ 	s8 level;
+ 	int ret;
+ 
+-	ret = kvm_pgtable_get_leaf(&vm->pgt, ipa, &pte, &level);
++	ret = kvm_pgtable_get_leaf(&vm->pgt, ipa, &pte, &level, 0);
+ 	if (ret)
+ 		return ret;
+ 	if (!kvm_pte_valid(pte))
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index 0c1defa5fb0f..6a839a32e246 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -298,12 +298,13 @@ static int leaf_walker(const struct kvm_pgtable_visit_ctx *ctx,
+ }
+ 
+ int kvm_pgtable_get_leaf(struct kvm_pgtable *pgt, u64 addr,
+-			 kvm_pte_t *ptep, s8 *level)
++			 kvm_pte_t *ptep, s8 *level,
++			 enum kvm_pgtable_walk_flags flags)
+ {
+ 	struct leaf_walk_data data;
+ 	struct kvm_pgtable_walker walker = {
+ 		.cb	= leaf_walker,
+-		.flags	= KVM_PGTABLE_WALK_LEAF,
++		.flags	= flags | KVM_PGTABLE_WALK_LEAF,
+ 		.arg	= &data,
+ 	};
+ 	int ret;
+diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+index 4da9281312eb..c720f07cb82e 100644
+--- a/arch/arm64/kvm/mmu.c
++++ b/arch/arm64/kvm/mmu.c
+@@ -839,7 +839,7 @@ static int get_user_mapping_size(struct kvm *kvm, u64 addr)
+ 	 * IPI-ing threads).
+ 	 */
+ 	local_irq_save(flags);
+-	ret = kvm_pgtable_get_leaf(&pgt, addr, &pte, &level);
++	ret = kvm_pgtable_get_leaf(&pgt, addr, &pte, &level, 0);
+ 	local_irq_restore(flags);
+ 
+ 	if (ret)
+diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
+index 38f672e94087..e45aed6d9e65 100644
+--- a/arch/arm64/kvm/nested.c
++++ b/arch/arm64/kvm/nested.c
+@@ -559,7 +559,7 @@ static u8 get_guest_mapping_ttl(struct kvm_s2_mmu *mmu, u64 addr)
+ 		return 0;
+ 
+ 	tmp &= ~(sz - 1);
+-	if (kvm_pgtable_get_leaf(mmu->pgt, tmp, &pte, NULL))
++	if (kvm_pgtable_get_leaf(mmu->pgt, tmp, &pte, NULL, 0))
+ 		goto again;
+ 	if (!(pte & PTE_VALID))
+ 		goto again;
 -- 
 2.43.0
+
