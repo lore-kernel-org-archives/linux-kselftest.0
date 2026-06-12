@@ -1,271 +1,98 @@
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9A532E12E
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 23:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8871B3B19;
+	Fri, 12 Jun 2026 00:11:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781222269; cv=none; b=jUBV9ppF8SOb8gBpDg0PFAQ3Rx8zyHSBr1NGDTnf8fKX6XVzFB9p2Z/+2ENwsYyDGrTSUufhxKLtQY6andw/iGKsm0TmHncfstFstngrLNNeUBHYpz7a4nfidj1oc1E7FYzL/frbkb/x01RqFm7bUtbctHVzh7rTHqwccQhLog4=
+	t=1781223085; cv=none; b=aaRIfyHAm8YB/fT9/6bhEevjCkQsA2yoHGMNS2Fe3Ea9a92MufWHBgJw6MIizewpITH0zwAfMosLAOwXfk00aE8IRGN4LvZVlX/KxJUmA0LBCINeBO9Wab4X/qgg70aSmSbjYnGrP9jBkq+qK4qaYD0utPOaPekYdvnMoNne3a0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781222269; c=relaxed/simple;
-	bh=joYtZp1DLMtG5NCrCqbZ2vAMHVbq7PSTkwtqz0mC7Yw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=d7VS3ejnkJf6caMu7gCpOwEMH6fWcYmT79Nqyk/PYaqtbcvQduINTmZg9TIYmC8AJsJjN+rhgn+Yr7RpyILJwdZ2m0E1NwebTsyvO7QF1VcAudaQW05UXAi6UKVH3kfFr8u/B1WkGDceqqsAfHXDuDtrqZXNb61jD7ABM5K5DdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ky6MpRnD; arc=none smtp.client-ip=74.125.82.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1781223085; c=relaxed/simple;
+	bh=7jE9PKH31IpRmYc+zScP8Dv4gr1YZnKYVnlI4wc3UUU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=f3tNvA2qbM+0P1mGDBTiorPJZrzBCGTjBcPSmkt2DWqGesUr/DuAYuzuFFSUzNtXQPxK0AGk3ZruROErPu/zESrFeZyi30qALofG/XGZZyBxsWaK5Jv2/NpozoGbP7iSxHSmAubOj4Ze6c1efxcqt0OuS16dZUZdKGG5CbGf4EA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iBQATIv3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ky6MpRnD"
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-137dd523634so640490c88.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2026 16:57:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781222267; x=1781827067; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OiZfNmRVIlmdVfJ43rwYwpCae7PE+p2DOUyDfQoeSn8=;
-        b=ky6MpRnD5hpXkv4C3CBu5cVtKT0pn3BNKjVzVnyXqvb1aumI1dRrgb+zWYaSKTloZz
-         WCuSZjrB/zSYRK1fAeYdivKepp1y6gKlcGmxlutxG6E7WxE3o/YeLFJm5lfz4LEhmQQg
-         gNSPnLk0xsGRH7mj36jBkVV0FYpjmkmUnBqoBkboL5Tqrij+RAFRDt0Te9FL+qG2aHWB
-         eMIr7gcc/8D8wqTxbPv379aK3BZo7DJA9I/u9UJffkJGpRp57t/fUrBFlmV6u2VzZW9N
-         7LXWaOtw6VV7Xfi5AU8VU7WhJpi2VGzbkqZ/2MYc5HS69mkidSbQYoWtXzP4ZPwKgmln
-         LLDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781222267; x=1781827067;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OiZfNmRVIlmdVfJ43rwYwpCae7PE+p2DOUyDfQoeSn8=;
-        b=WmHDdxDRIYHbHjPtEHr4M4L/Ttn/OGZDyk+wAAn+8DM2yzwcF+IWPG62iOqQBWRLCC
-         2NxLEzT0i8ffeoctEMCR+a5bR/9z+xHsKIeA5knjhTEruHvIEZ+wyS0Zox0WegIxSOKX
-         8T5KY+QJRfZuDjqs3XPLZCXnu8w8lobX4Zr1AaEPjQaGcmit0q82ew5iwIftFgK5wq8U
-         fUUlhmhF4Qthd0VMaEAq77Av2YGa80KMTReCebHanRgETIXv/KDZXJm/JPUiabBW2gth
-         XXZ5U1EA0u8tEl2kAN/HPq9KqZ/89+0yBxpGpgCY660fzIXB+ox7vreU57jBdgWw2yKs
-         Iqqw==
-X-Forwarded-Encrypted: i=1; AFNElJ9bHgRzIQCuDkGt8jI5sTdj16AdScAUIJBNxTqZw11KcuDIE79a2IshufWI6gM9ZsERm7z0Peeb0w2S1k9XUAk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmZFphJzI1dctOfJcSAMFG/ANqEzjI71PC+e67Lvrxz9KD3EEH
-	iRyoDOV2bvcRtLRLOo6DrTo1k2m84YnQqtsFh+U3ivyfobhyaKnwaQeK5Eb8mwtTNm8=
-X-Gm-Gg: Acq92OE4pestISgKf5om5YBiC3PEr2lKapJYp7Pa/kj8DOlOH74hb+xZaIzFsaUlA8J
-	TqiXqK/yBRwGl+s7xnejYOm2zLA01rDaevaBQ5pbVeGvnreLHzQISKHDfoR+36uqtxq1Ws/Qo4Q
-	QBh1v6GAFlqcfn+DJSGYhcPSvKnsR3ufGltotJYjW4bWZdgMDpYZ8B6NKXgTsj2RJtR82JlQ9Nh
-	sqda/69o897HKoV8R1FBLZeB7YBXx7MBZyryut8uqCDOPXlvvBDssuCzw1nI60nFZoTbMybWqc3
-	IzennY6pXvnAwP99xZTGJ0TEaiftgz8JK05C76w/oyUSqSJsgb9U4FHQ+oYGhxH4GT0xQ3O4l2I
-	XUHC5dp+I65ubKX4avjyJozJSoXx4FwoDKlK64x6SCB3Ema63v99ay/nt+tz53Yr1tcw/JQPd1F
-	X+2sIz
-X-Received: by 2002:a05:7022:ec2:b0:130:6c8f:5aae with SMTP id a92af1059eb24-1384bafedf4mr228935c88.14.1781222267098;
-        Thu, 11 Jun 2026 16:57:47 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::3c95])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384b975e55sm411958c88.13.2026.06.11.16.57.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jun 2026 16:57:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iBQATIv3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF5E1F000E9;
+	Fri, 12 Jun 2026 00:11:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781223084;
+	bh=9FQuoOP0H6GOvfWs9acfWr7SdBLQ4JX5Rqqd4VQi5Lw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=iBQATIv3vlXRihKYdfldGfgFMv3KTGZQDg+cVNsHCAPkt8/QhNCK3Kvz8PSt1DZS/
+	 pvgyAe0YYxih/Z0qD1iT5pEvMwTYrVSwSS/7+2G1jbktuxBixbp72f0LNCiaIaEVVT
+	 hf+NlFKBtKU4p7ETcRjV5APBRdQ3IT8oVGnEwYROsf+bVc1D9AUjLSkSCHE/WqSkYW
+	 /UrvwvCN3+/sPFgt9JHri3oNwSMGfrKvyQdhsrK0qRFEy+xW9VOe7ObgKhEgdZ2jPP
+	 mthIZENeGtmTWkVjQzG8yf3t/xLQZk7iyHin4XOp5J/TX399Yg29NHKvxefRK8orl0
+	 2ouiAUXN5i70g==
+From: SeongJae Park <sj@kernel.org>
+To: Sailesh Nandanavanam <saileshnandanavanam@gmail.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	shuah@kernel.org,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/damon: add regression test for damos_walk() vs kdamond exit race
+Date: Thu, 11 Jun 2026 17:11:21 -0700
+Message-ID: <20260612001122.27512-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <CAF+TLO2PX71_-9nKBEAJ50+NpjNkgipig6=9OLsvbgZtqF2yew@mail.gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 11 Jun 2026 19:57:44 -0400
-Message-Id: <DJ6MLFYZRWEC.3N07REXZNM8HA@etsalapatis.com>
-Cc: <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, "Junyoung Jang" <graypanda.inzag@gmail.com>
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Add arena direct-value
- one-past-end reject test
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Woojin Ji" <random6.xyz@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260610-arena-direct-value-v1-v3-1-d5f0d935ee45@gmail.com>
-In-Reply-To: <20260610-arena-direct-value-v1-v3-1-d5f0d935ee45@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed Jun 10, 2026 at 3:13 AM EDT, Woojin Ji wrote:
-> BPF_MAP_TYPE_ARENA supports direct-value pseudo loads, but unlike array
-> maps its map value_size is zero and the valid direct-value range is the
-> arena mmap size, max_entries * PAGE_SIZE.
->
-> Commit 3ac1a467e376 ("bpf: Fix off-by-one boundary validation in arena
-> direct-value access") fixed arena_map_direct_value_addr() to reject an
-> offset exactly at the end of the arena mapping. Add a regression test
-> that loads a BPF_PSEUDO_MAP_VALUE with off =3D=3D arena_size and verifies
-> that the verifier rejects it with the expected offset in the log.
->
-> This is intentionally kept as a userspace raw-instruction test. I tried
-> expressing the same BPF_PSEUDO_MAP_VALUE + off =3D=3D arena_size case in
-> verifier_arena.c with inline assembly. The only form that produces the
-> desired instruction bytes uses __imm_addr(arena), but that emits
-> R_BPF_64_NODYLD32, which the libbpf/bpftool link step rejects. Other
-> register, immediate, and memory constraints either fail in the BPF
-> backend or lower to a normal R_BPF_64_64 load followed by an ALU add,
-> which does not exercise arena_map_direct_value_addr() with the boundary
-> offset in the second ldimm64 slot.
->
-> A legacy test_verifier fixture can express the raw instruction directly,
-> but it needs arena map creation, mmap, and fixup plumbing in the legacy
-> runner. That is more intrusive than the small prog_tests raw-instruction
-> test.
->
-> Use the userspace raw-instruction test, following the existing selftests
-> pattern used for direct map-value pseudo loads, so insns[1].imm can be
-> set to arena_size precisely.
->
-> Assisted-by: ChatGPT:gpt-5.5
-> Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
-> Cc: Emil Tsalapatis <emil@etsalapatis.com>
-> Cc: Junyoung Jang <graypanda.inzag@gmail.com>
+On Fri, 12 Jun 2026 02:06:51 +0530 Sailesh Nandanavanam <saileshnandanavanam@gmail.com> wrote:
 
-Nits below, after addressing them feel free to add:
+> Hello SeongJae,
+> 
+> Noted on inline replies - I'll follow that format from the next response.
+> 
+> Following up on this thread with progress.
+> 
+> As discussed, I dropped the userspace selftest approach since it
+> cannot reliably trigger the microsecond-wide race window.
+> 
+> I wrote a KUnit test instead, added to mm/damon/tests/core-kunit.h:
+> 
+> - Creates a damon_ctx
+> - Sets ctx->walk_control_obsolete = true under walk_control_lock,
+> simulating the state just before kdamond_fn() exits
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+I don't think you don't need to hold the lock, since this is just a unit test
+and there should be no race for the test.
 
-> ---
-> Changes in v3:
-> - Document why verifier_arena.c inline assembly cannot express this case:
->   __imm_addr emits R_BPF_64_NODYLD32, while other constraints either fail
->   in the BPF backend or miss the pseudo-load boundary path.
-> - Mention that natural C forms lower to a normal load plus ALU add, so th=
-ey
->   do not exercise arena_map_direct_value_addr() with off =3D=3D arena_siz=
-e.
-> - Keep the userspace raw-instruction test as the least intrusive option;
->   test_verifier was checked but would require legacy runner arena plumbin=
-g.
-> - Link to v2: https://patch.msgid.link/20260605-arena-direct-value-v1-v2-=
-1-a92cb281e376@gmail.com
->
-> Changes in v2:
-> - Explain why this uses a userspace raw-instruction test rather than a
->   verifier_arena.c failure program: the test must set the second
->   BPF_PSEUDO_MAP_VALUE ldimm64 immediate to arena_size exactly. For
->   arena globals, libbpf derives that immediate from the arena-relative
->   symbol offset, so the boundary value cannot be represented directly as
->   a verifier_arena.c C-level failure program.
-> - Link to v1: https://patch.msgid.link/20260603-arena-direct-value-v1-v1-=
-1-7b31cc0a8cac@gmail.com
->
-> Tested on x86_64 with tools/testing/selftests/bpf/vmtest.sh:
->   $ ./test_progs -t arena_direct_value
->   #2/1     arena_direct_value/one_past_end:OK
->   #2       arena_direct_value:OK
->   Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
-> ---
->  .../selftests/bpf/prog_tests/arena_direct_value.c  | 73 ++++++++++++++++=
-++++++
->  1 file changed, 73 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c =
-b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
-> new file mode 100644
-> index 000000000000..b7760b021670
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
-> @@ -0,0 +1,73 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <test_progs.h>
-> +#include <bpf/bpf.h>
-> +#include <errno.h>
-> +#include <sys/mman.h>
-> +#include <unistd.h>
-> +
-> +#define ARENA_PAGES 32
-> +
-> +static void test_arena_direct_value_one_past_end(void)
-> +{
-> +	char log_buf[16384] =3D {}, expected[128];
+> - Calls damos_walk() and verifies it returns -ECANCELED immediately
+> 
+> I built and ran this on a kernel with commit 33c3f6c2b48c
+> ("mm/damon/core: fix damos_walk() vs kdamond_fn() exit race") present,
+> and the test passes along with all other 28 existing damon KUnit
+> tests:
+> 
+>   ok 29 damon_test_walk_control_obsolete
+>   # damon: pass:29 fail:0 skip:0 total:29
+> 
+> Since walk_control_obsolete is a field introduced by this fix, a
+> kernel with the fix reverted would not compile this test (the field
+> would not exist). So the usual "fails before fix, passes after fix"
+> verification does not apply the same way here - the test directly
+> validates the new field/behavior introduced by the fix.
+> 
+> If this approach looks reasonable, I plan to send v3 with this KUnit
+> test (replacing the userspace selftest from v1/v2), along with the
+> commit message format and other minor fixes from your earlier review.
 
-Since the log_buf is huge, and the file has a simple test,
-just move it to the BSS.
+Other than the trivial comment about locking, your plan soudns reasonable to
+me.  Looking forward to your next patch!
 
-> +	__u32 arena_sz =3D ARENA_PAGES * getpagesize();
-> +	struct bpf_insn insns[] =3D {
-> +		BPF_LD_IMM64_RAW(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, 0),
-> +		BPF_MOV64_IMM(BPF_REG_0, 0),
-> +		BPF_EXIT_INSN(),
-> +	};
-> +	LIBBPF_OPTS(bpf_map_create_opts, map_opts);
-> +	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts);
-> +	void *arena =3D MAP_FAILED;
 
-No need to initialize this, we have not code paths where we read the
-variable before it gets assigned by mmap().
+Thanks,
+SJ
 
-> +	int map_fd, prog_fd;
-> +
-> +	map_opts.map_flags =3D BPF_F_MMAPABLE;
-> +	prog_opts.log_buf =3D log_buf;
-> +	prog_opts.log_size =3D sizeof(log_buf);
-> +	prog_opts.log_level =3D 1;
-> +
-> +	map_fd =3D bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_direct_value",
-> +				0, 0, ARENA_PAGES, &map_opts);
-> +	if (map_fd < 0) {
-> +		if (errno =3D=3D EOPNOTSUPP || errno =3D=3D EINVAL) {
-
-Question: Why is an EINVAL on map creation a skippable event? What failure =
-mode
-does it correspond to?
-
-> +			test__skip();
-> +			return;
-> +		}
-> +		ASSERT_GE(map_fd, 0, "bpf_map_create");
-> +		return;
-> +	}
-> +
-> +	arena =3D mmap(NULL, arena_sz, PROT_READ | PROT_WRITE, MAP_SHARED, map_=
-fd, 0);
-> +	if (!ASSERT_NEQ(arena, MAP_FAILED, "arena_mmap"))
-> +		goto cleanup;
-> +
-> +	insns[0].imm =3D map_fd;
-> +	insns[1].imm =3D arena_sz;
-> +
-> +	prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT,
-> +				"arena_direct_value", "GPL", insns,
-> +				ARRAY_SIZE(insns), &prog_opts);
-> +	if (!ASSERT_LT(prog_fd, 0, "prog_load")) {
-> +		if (prog_fd >=3D 0)
-
-If we only take this path if prog_fd >=3D 0, why the extra check
-internally?
-
-> +			close(prog_fd);
-> +		prog_fd =3D -1;
-
-No need to set this, we never use it after this.
-
-> +		goto cleanup;
-> +	}
-> +
-> +	snprintf(expected, sizeof(expected),
-> +		 "invalid access to map value pointer, value_size=3D0 off=3D%u",
-> +		 arena_sz);
-> +	ASSERT_HAS_SUBSTR(log_buf, expected, "verifier_log");
-> +
-> +cleanup:
-> +	if (arena !=3D MAP_FAILED)
-> +		munmap(arena, arena_sz);
-> +	close(map_fd);
-> +}
-> +
-> +void test_arena_direct_value(void)
-> +{
-> +	if (test__start_subtest("one_past_end"))
-> +		test_arena_direct_value_one_past_end();
-> +}
->
-> ---
-> base-commit: ba3e43a9e601636f5edb54e259a74f96ca3b8fd8
-> change-id: 20260603-arena-direct-value-v1-ef4df857b98b
->
-> Best regards,
-> -- =20
-> Woojin Ji <random6.xyz@gmail.com>
-
+[...]
