@@ -1,62 +1,66 @@
-Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED26407CC2
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 17:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043BF406829
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 17:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781285811; cv=none; b=FNgGrUKejv/E87Cv3Zry9tnG50VEpetZ9b2Kushj8YhtGzvZSX62fTsyEpSVohG7e+ve5TEidVcLoaHqdObM+aNpwiGncvXwybx+siD3HSNPmKxm09Ynqusw7IeCOe6MEinaZzMpvPMUH2+Uu3DNLJgr9MObkc/3McTGYq39CFI=
+	t=1781285815; cv=none; b=dFCyMXWXWQf3zOM0nMg8JVnG9nEl8Fxd2DLN1tu/2/oCfSSVRIhUPcmZarhQjOdtUp92qx/PAiQp59lZhIJ13DP+BXZYq1SzL/i4dBESglzJhby7bp2f347RH2u5/zoqOxikFW63xkzMqkd07R4dZlUT1778Kj/7aUg9OU54/vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781285811; c=relaxed/simple;
-	bh=EDZfpL0WwzkQ8hq0Wdv9p5cHlrRrzU/QFy+XGloNPb0=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Byzl9KnO3nyOP+vYTYpnqILc+HS/meoKBGNQwup75amJ83eoleSlfv0hDRlff3fLeM1Mhp7mihTUbmVFX6XdueWsd8d3dp0ku+THLcACg91Z8jDSD1aJALFsILQHPfqjPUflDjJf1zcnB2dsgqBMwL2FlJ5coDd1Mbiy5YGWlmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tanshuhao.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WyYuE+97; arc=none smtp.client-ip=74.125.82.74
+	s=arc-20240116; t=1781285815; c=relaxed/simple;
+	bh=rXFphTeY1MLItaanBUlJajUJ/NbTofJP7DBOOoHQ0Dg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=U3gtmeIjk0sTqTLSs0aWpChlpFkivwAZSwXt4wE7jOPWQzXWAbF6h4+DQdDrVh5x2Ff1F439DBNOWUuV5JYgQ8DX3MKAgmJ6uPlsN2kvYduch2BnIPVnEctEMqTA6OB9umYWjTMlKFaiCBPL5RjEDo7q+7WII1QDUuTv8X3lNYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tanshuhao.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QEoFY+KF; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tanshuhao.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WyYuE+97"
-Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-138acbc0e69so90521c88.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 10:36:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QEoFY+KF"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-30762d67a64so1924520eec.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 10:36:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781285809; x=1781890609; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=m0AdHFT5n0KXuYQG6JAlkPd+J0hfnrhnYB6jEfLYTzA=;
-        b=WyYuE+97EJ9bsa7IhWc9y/6IJIl0afFpUBghlu8gynTlgDbeAQqzm4TgVQjEbjwTYn
-         sBGUn73BwAwBqfCeUq2SPoan8RwrSlWb86c8FJ5palTE3hiqLudeCMfps+ztW3vOHreL
-         UQi48/iNfNW9+H6Y/zdF27+ToZFJw+dZneqvZ8R3AIAB6GE2hMS8iV0s2fyuCVFbclY+
-         zJLlD0Eywmg2//4U8qH7lzrPMLrnR0zS68mGE9yIOjGLhD+N2fJEEkE4yX3fGcFSZgQO
-         avdaeG1ozxJZDxcB7ASEWN0fvi8crrP3qrYIDUPKKLJy974BRO0bS34mtXDE1Mt8QdVc
-         hpVQ==
+        d=google.com; s=20251104; t=1781285812; x=1781890612; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aqAF30KpKdcq5sTUeKbILHPk2Mfwqo1yQa24lqVRy9g=;
+        b=QEoFY+KFzB2uF669GiiTSRAbq5MOVjJfHjqkM5Y/I8FA1+dskQoS8zK0JpXRISWOqN
+         uqTRpTd4vWida1VokxrrLO3bM4F1n4Mj09jKt8y1oyxJB3zTD6DBhqtv2pu58AuFv2ZI
+         8tJYo0TcEyq4fjgtKpcxxxSUseUVw932w7vhst4h/NrALzjo3Dz9xJlSW/INctBDCXXw
+         W6EJHt2/9lEY6BxET9YPuWZ0dCPEKQ1aR2mEs4qN0HcxyI9KfdRolVFchHA1dyYDx7YT
+         oojXqZwJ/u8erT7gzY2BRrWM10VCPAyQpJFRW4keACuvh0zEYCVZjgnQbKe1z2ETcZyN
+         WAvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781285809; x=1781890609;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m0AdHFT5n0KXuYQG6JAlkPd+J0hfnrhnYB6jEfLYTzA=;
-        b=T+epGMzuPqvw58jbBdRRUjTTtEA0+Bp6+JL35w3r6GQZZkXZK/rFjgELAiOTjI5KyD
-         h1rJ8Wa0yk02452CgyF9Gu8WBAQeGqUwPrHqNCGCgZfixRdnfEjm0c7jnI+M53/72QBh
-         U0n1wW275239MHG5qBnsqtyvS3fi4vfaG7JAc9RUmE+OY0URA5ZcVRPLToAZzaIYvcnP
-         lMJvSB1AocxIbVB375NvWP99ZwxiCR88DKMQvh2WDgAp51sGTS/GYC6Ku+29A3I0i5gP
-         ZvfJe2LqYA52lqpdgwFxPvokojJkOAhH13O7vmMSSKM1SpP1AHCgxfqxix47yMNk5YqA
-         gckQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/jqB4207iPDmRTNTQtbVivT0qKNnVw+QLu+3X4exVNZ/eQ5OckT28xEDykg030SCq435EH0loMpqRaf7b3yRw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxamTZ2YguvBxJ5vbHlN5gmNQHiF9H0mr4H3fVQkl4yZeyUkzuN
-	SgklBBQvhww2oYBdu7SuGVy/FSxBXC/V1dYAZidO66OocoMHX43+qP1fQP4YRQiKtalUDE9X2Lj
-	HFgEdJaJp3M0m6LkeLA==
-X-Received: from dlec6-n2.prod.google.com ([2002:a05:701b:4286:20b0:138:4e1:4728])
+        d=1e100.net; s=20251104; t=1781285812; x=1781890612;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aqAF30KpKdcq5sTUeKbILHPk2Mfwqo1yQa24lqVRy9g=;
+        b=LOFKsr5vHm5p4BMxt1YPpkx2Q+8GJre2s58lEVyQX1lsFjCrz4DTC+u4wz4qbxjHF1
+         ISJon/s2P7orErmXb6auvRUMyA+dNV0l+cmxE+VxK4br8izCsPS3izoUQxG2gAZzxKSq
+         EE/hvXzKGQ74Ivj1oiBkzdjs8G6Lu8oMgDvKNyd81dHHwKB+CelqDQaj9dAkBW3Em0+d
+         7kvbZN9nd1rqToyNmkg0RWdmJbwsNuafOYA6FCVqrov16dT7XP2+iI+N9iKL/Se1g70Y
+         xTUAFYcgR6aCXDZZGzdbabliA7P8wyHfXpA4n1+vy9HRlCW23A3D1LhSF6f6VC18w6tr
+         SmHg==
+X-Forwarded-Encrypted: i=1; AFNElJ/weK2aUPhF8ggI1BDy5diQo2uJ2NF0G3p4qn+YHVpRsUxlBnL5R543Aoe7tNd1jr3NTA/Fp094daFwu/Co4aY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzY4F/aqoXOze9kpZiEeTPhrJ/8yF6eDlz3Z/33Hs6XVgRAKN1h
+	VO0BRgD/W1A7GmAWs7Jonqic4/kCrPLXuvv38rUuWazqMq9uo2JouCn0GC974tNpiPAX7oQALhP
+	nuZbCYpm7tJ8XhQgruQ==
+X-Received: from dybpi5.prod.google.com ([2002:a05:7301:4205:b0:304:ebf6:da3b])
  (user=tanshuhao job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7022:ea24:b0:128:d4be:7438 with SMTP id a92af1059eb24-1384bbc646fmr2287331c88.30.1781285808673;
- Fri, 12 Jun 2026 10:36:48 -0700 (PDT)
-Date: Fri, 12 Jun 2026 10:36:40 -0700
+ 2002:a05:7300:6407:b0:2d9:f0b3:1d98 with SMTP id 5a478bee46e88-3081ff3ddc7mr2658629eec.7.1781285811647;
+ Fri, 12 Jun 2026 10:36:51 -0700 (PDT)
+Date: Fri, 12 Jun 2026 10:36:41 -0700
+In-Reply-To: <20260612173644.380972-1-tanshuhao@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260612173644.380972-1-tanshuhao@google.com>
 X-Mailer: git-send-email 2.54.0.1136.gdb2ca164c4-goog
-Message-ID: <20260612173644.380972-1-tanshuhao@google.com>
-Subject: [RFC net-next v1 0/2] Reuse threaded NAPI kthread across napi_del()/napi_add().
+Message-ID: <20260612173644.380972-2-tanshuhao@google.com>
+Subject: [RFC net-next v1 1/2] net: Save kthread of threaded NAPI in
+ napi_config in napi_del and restore in napi_add
 From: Shuhao Tan <tanshuhao@google.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, 
 	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -66,74 +70,437 @@ Cc: Shuhao Tan <tanshuhao@google.com>, Mina Almasry <almasrymina@google.com>,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Currently the lifetime of the kthread of a threaded NAPI is tied to
-the napi_struct. netif_napi_del() stops the kthread when it destroys
-the NAPI struct.
+Replace napi->thread with a new thread_node struct that has a back
+pointer to napi_struct.
 
-This patch series reuses the same kthread (thus preserving all of its
-attributes) across napi_del/napi_add. This series now tie the lifetime
-of the kthread to net_device instead of napi_struct.
+Make the NAPI thread to use the thread_node as data pointer so that
+it can poll on different NAPIs thoughout its lifetime.
 
-A normal use case for threaded NAPI will be "enable threaded" ->
-"configure the thread". Driver reset (that can be caused by a NIC
-configuration change) often destroys the configuration and causes a
-usability issue. This series aims to solve the issue.
+Park the thread and save the thread_node in napi_config on napi_del.
+Restore the node and unpark the thread on napi_add_config.
 
-There is a downside of this approach: If a device reduces number of
-queues while its NAPIs are threaded. The kthread associated with
-removed queues will not be stopped. Since the mapping between the
-index passed to napi_add_config() and NAPI is an implementation
-detail of individual drivers, it is not straightfoward to perform
-a garbage collection and stop kthreads that are no longer associated
-with a queue. This patch series tries to minimize the effect by
-parking the kthread in napi_del. The kthread still shows up in
-/proc, but should not consume CPU cycles.
+Signed-off-by: Shuhao Tan <tanshuhao@google.com>
+---
+ include/linux/netdevice.h |  13 +++-
+ net/core/dev.c            | 151 +++++++++++++++++++++++++++++---------
+ net/core/netdev-genl.c    |  12 ++-
+ 3 files changed, 139 insertions(+), 37 deletions(-)
 
-There was a discussion
-https://lore.kernel.org/CAAywjhR0TPKZ-xzqjSP709OVmZWUisDNv2CVc_VxgOrXRtop+g@mail.gmail.com/
-around what to do with the kthread between napi_disable/napi_enable.
-It seems that there was an intention to keep user configuration for
-the kthread across NIC configuration change. This patch series extends
-the effort to cover more NIC configuration changes. Roughly tracing
-through the call hierarchy of napi_del reveals that at least the
-following drivers will not preserve the user configurations:
-- idpf: idpf_set_channels(), idpf_set_ringparam()
-- mlx4: mlx4_en_set_ringparam(), mlx4_en_set_rxfh(),
-  mlx4_en_setchannels()
-- bnx2: bnx2_set_ringparam(), bnx2_set_channels(), bnx2_change_mtu()
-- gve: gve_set_channels(), gve_set_ringparam()
-- ena2: ena_set_ringparam(), ena_set_channels()
-- (non exhaustive)
-
-These drivers destroy and recreate queues during configuration
-changes. If a NAPI was threaded before destruction, during the
-creation, a new kthread will be spawned for the NAPI.
-
-Some drivers do not have this problem, e.g. fbnic, netdevsim. But
-these drivers and the drivers mentioned above will still lose kthread
-during link flap (ndo_stop/ndo_open).
-
-Because the kthreads before and after these configuration changes are
-different, all the attributes associated with the kthread are lost.
-These include CPU mask, priority, scheduler policy, etc.. If the
-threaded state is preserved for a NAPI, it makes sense to want to
-preserve the attributes of the thread as well.
-
-Link: https://lore.kernel.org/CAAywjhR0TPKZ-xzqjSP709OVmZWUisDNv2CVc_VxgOrXRtop+g@mail.gmail.com/
-
-Shuhao Tan (2):
-  net: Save kthread of threaded NAPI in napi_config in napi_del and
-    restore in napi_add
-  selftests: net: Add kthread preserving test in napi_threaded and
-    busy_poll_test
-
- include/linux/netdevice.h                     |  13 +-
- net/core/dev.c                                | 151 ++++++++++++++----
- net/core/netdev-genl.c                        |  12 +-
- .../selftests/drivers/net/napi_threaded.py    |  41 ++++-
- tools/testing/selftests/net/busy_poll_test.sh |  24 +++
- 5 files changed, 203 insertions(+), 38 deletions(-)
-
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 7f4f0837c09f..1cda88607e99 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -63,6 +63,7 @@ struct dsa_port;
+ struct ip_tunnel_parm_kern;
+ struct macsec_context;
+ struct macsec_ops;
++struct napi_struct;
+ struct netdev_config;
+ struct netdev_name_node;
+ struct sd_flow_limit;
+@@ -363,10 +364,20 @@ struct gro_node {
+ 	u32			cached_napi_id;
+ };
+ 
++/*
++ * Structure for persisting threaded NAPI kthread
++ */
++struct napi_thread_node {
++	struct task_struct *thread;
++	struct napi_struct *napi;
++	struct rcu_head rcu;
++};
++
+ /*
+  * Structure for per-NAPI config
+  */
+ struct napi_config {
++	struct napi_thread_node *thread_node;
+ 	u64 gro_flush_timeout;
+ 	u64 irq_suspend_timeout;
+ 	u32 defer_hard_irqs;
+@@ -403,7 +414,7 @@ struct napi_struct {
+ 	struct gro_node		gro;
+ 	struct hrtimer		timer;
+ 	/* all fields past this point are write-protected by netdev_lock */
+-	struct task_struct	*thread;
++	struct napi_thread_node __rcu *thread_node;
+ 	unsigned long		gro_flush_timeout;
+ 	unsigned long		irq_suspend_timeout;
+ 	u32			defer_hard_irqs;
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 202e35acb15b..f5e3b9e526af 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -1645,25 +1645,62 @@ EXPORT_SYMBOL(netdev_notify_peers);
+ 
+ static int napi_threaded_poll(void *data);
+ 
+-static int napi_kthread_create(struct napi_struct *n)
++static int napi_thread_node_create(struct napi_struct *n)
+ {
++	struct napi_thread_node *thread_node = NULL;
++	struct task_struct *thread = NULL;
+ 	int err = 0;
+ 
++	thread_node = kvzalloc_obj(*thread_node);
++	if (!thread_node)
++		return -ENOMEM;
++
+ 	/* Create and wake up the kthread once to put it in
+ 	 * TASK_INTERRUPTIBLE mode to avoid the blocked task
+ 	 * warning and work with loadavg.
+ 	 */
+-	n->thread = kthread_run(napi_threaded_poll, n, "napi/%s-%d",
+-				n->dev->name, n->napi_id);
+-	if (IS_ERR(n->thread)) {
+-		err = PTR_ERR(n->thread);
++	thread_node->napi = n;
++	thread = kthread_run(napi_threaded_poll, thread_node, "napi/%s-%d",
++			     n->dev->name, n->napi_id);
++	if (IS_ERR(thread)) {
++		err = PTR_ERR(thread);
+ 		pr_err("kthread_run failed with err %d\n", err);
+-		n->thread = NULL;
++		goto free_thread_node;
+ 	}
+ 
++	thread_node->thread = thread;
++	rcu_assign_pointer(n->thread_node, thread_node);
++
++	return 0;
++
++free_thread_node:
++	kvfree(thread_node);
++
+ 	return err;
+ }
+ 
++static void napi_thread_node_stop(struct napi_thread_node *thread_node)
++{
++	kthread_stop(thread_node->thread);
++	kvfree_rcu(thread_node, rcu);
++}
++
++static int napi_kthread_create(struct napi_struct *n)
++{
++	struct napi_thread_node *thread_node;
++
++	if (n->config && n->config->thread_node) {
++		thread_node = n->config->thread_node;
++		rcu_assign_pointer(n->thread_node, thread_node);
++		n->config->thread_node = NULL;
++		WRITE_ONCE(thread_node->napi, n);
++		kthread_unpark(thread_node->thread);
++		return 0;
++	}
++
++	return napi_thread_node_create(n);
++}
++
+ static int __dev_open(struct net_device *dev, struct netlink_ext_ack *extack)
+ {
+ 	const struct net_device_ops *ops = dev->netdev_ops;
+@@ -4949,7 +4986,7 @@ EXPORT_SYMBOL(__dev_direct_xmit);
+ /*************************************************************************
+  *			Receiver routines
+  *************************************************************************/
+-static DEFINE_PER_CPU(struct task_struct *, backlog_napi);
++static DEFINE_PER_CPU(struct napi_thread_node, backlog_napi);
+ 
+ int weight_p __read_mostly = 64;           /* old backlog weight */
+ int dev_weight_rx_bias __read_mostly = 1;  /* bias for backlog weight */
+@@ -4959,10 +4996,11 @@ int dev_weight_tx_bias __read_mostly = 1;  /* bias for output_queue quota */
+ static inline void ____napi_schedule(struct softnet_data *sd,
+ 				     struct napi_struct *napi)
+ {
+-	struct task_struct *thread;
++	struct napi_thread_node *thread_node;
+ 
+ 	lockdep_assert_irqs_disabled();
+ 
++	rcu_read_lock();
+ 	if (test_bit(NAPI_STATE_THREADED, &napi->state)) {
+ 		/* Paired with smp_mb__before_atomic() in
+ 		 * napi_enable()/netif_set_threaded().
+@@ -4970,18 +5008,21 @@ static inline void ____napi_schedule(struct softnet_data *sd,
+ 		 * read on napi->thread. Only call
+ 		 * wake_up_process() when it's not NULL.
+ 		 */
+-		thread = READ_ONCE(napi->thread);
+-		if (thread) {
+-			if (use_backlog_threads() && thread == raw_cpu_read(backlog_napi))
++		thread_node = rcu_dereference(napi->thread_node);
++		if (thread_node) {
++			if (use_backlog_threads() &&
++			    thread_node == this_cpu_ptr(&backlog_napi))
+ 				goto use_local_napi;
+ 
+ 			set_bit(NAPI_STATE_SCHED_THREADED, &napi->state);
+-			wake_up_process(thread);
++			wake_up_process(thread_node->thread);
++			rcu_read_unlock();
+ 			return;
+ 		}
+ 	}
+ 
+ use_local_napi:
++	rcu_read_unlock();
+ 	DEBUG_NET_WARN_ON_ONCE(!list_empty(&napi->poll_list));
+ 	list_add_tail(&napi->poll_list, &sd->poll_list);
+ 	WRITE_ONCE(napi->list_owner, smp_processor_id());
+@@ -7148,6 +7189,7 @@ static enum hrtimer_restart napi_watchdog(struct hrtimer *timer)
+ 
+ static void napi_stop_kthread(struct napi_struct *napi)
+ {
++	struct napi_thread_node *thread_node;
+ 	unsigned long val, new;
+ 
+ 	/* Wait until the napi STATE_THREADED is unset. */
+@@ -7180,8 +7222,9 @@ static void napi_stop_kthread(struct napi_struct *napi)
+ 		msleep(20);
+ 	}
+ 
+-	kthread_stop(napi->thread);
+-	napi->thread = NULL;
++	thread_node = netdev_lock_dereference(napi->thread_node, napi->dev);
++	rcu_assign_pointer(napi->thread_node, NULL);
++	napi_thread_node_stop(thread_node);
+ }
+ 
+ static void napi_set_threaded_state(struct napi_struct *napi,
+@@ -7197,9 +7240,13 @@ static void napi_set_threaded_state(struct napi_struct *napi,
+ int napi_set_threaded(struct napi_struct *napi,
+ 		      enum netdev_napi_threaded threaded)
+ {
++	struct napi_thread_node *thread_node;
++
++	thread_node = netdev_lock_dereference(napi->thread_node, napi->dev);
++
+ 	if (threaded) {
+-		if (!napi->thread) {
+-			int err = napi_kthread_create(napi);
++		if (!thread_node) {
++			int err = napi_thread_node_create(napi);
+ 
+ 			if (err)
+ 				return err;
+@@ -7215,7 +7262,7 @@ int napi_set_threaded(struct napi_struct *napi,
+ 	 * softirq mode will happen in the next round of napi_schedule().
+ 	 * This should not cause hiccups/stalls to the live traffic.
+ 	 */
+-	if (!threaded && napi->thread) {
++	if (!threaded && thread_node) {
+ 		napi_stop_kthread(napi);
+ 	} else {
+ 		/* Make sure kthread is created before THREADED bit is set. */
+@@ -7236,8 +7283,9 @@ int netif_set_threaded(struct net_device *dev,
+ 
+ 	if (threaded) {
+ 		list_for_each_entry(napi, &dev->napi_list, dev_list) {
+-			if (!napi->thread) {
+-				err = napi_kthread_create(napi);
++			/* protected by assertion above */
++			if (!rcu_dereference_protected(napi->thread_node, 1)) {
++				err = napi_thread_node_create(napi);
+ 				if (err) {
+ 					threaded = NETDEV_NAPI_THREADED_DISABLED;
+ 					break;
+@@ -7253,8 +7301,14 @@ int netif_set_threaded(struct net_device *dev,
+ 		WARN_ON_ONCE(napi_set_threaded(napi, threaded));
+ 
+ 	/* Override the config for all NAPIs even if currently not listed */
+-	for (i = 0; i < dev->num_napi_configs; i++)
++	for (i = 0; i < dev->num_napi_configs; i++) {
+ 		dev->napi_config[i].threaded = threaded;
++		/* Stop parked threads in inactive napi_configs */
++		if (!threaded && dev->napi_config[i].thread_node) {
++			napi_thread_node_stop(dev->napi_config[i].thread_node);
++			dev->napi_config[i].thread_node = NULL;
++		}
++	}
+ 
+ 	return err;
+ }
+@@ -7657,7 +7711,7 @@ void napi_enable_locked(struct napi_struct *n)
+ 		BUG_ON(!test_bit(NAPI_STATE_SCHED, &val));
+ 
+ 		new = val & ~(NAPIF_STATE_SCHED | NAPIF_STATE_NPSVC);
+-		if (n->dev->threaded && n->thread)
++		if (n->dev->threaded && n->thread_node)
+ 			new |= NAPIF_STATE_THREADED;
+ 	} while (!try_cmpxchg(&n->state, &val, new));
+ }
+@@ -7682,6 +7736,8 @@ EXPORT_SYMBOL(napi_enable);
+ /* Must be called in process context */
+ void __netif_napi_del_locked(struct napi_struct *napi)
+ {
++	struct napi_thread_node *thread_node;
++
+ 	netdev_assert_locked(napi->dev);
+ 
+ 	if (!test_and_clear_bit(NAPI_STATE_LISTED, &napi->state))
+@@ -7693,6 +7749,18 @@ void __netif_napi_del_locked(struct napi_struct *napi)
+ 	if (test_and_clear_bit(NAPI_STATE_HAS_NOTIFIER, &napi->state))
+ 		irq_set_affinity_notifier(napi->irq, NULL);
+ 
++	thread_node = netdev_lock_dereference(napi->thread_node, napi->dev);
++	if (thread_node) {
++		rcu_assign_pointer(napi->thread_node, NULL);
++		if (napi->config) {
++			kthread_park(thread_node->thread);
++			napi->config->thread_node = thread_node;
++			napi->config->thread_node->napi = NULL;
++		} else {
++			napi_thread_node_stop(thread_node);
++		}
++	}
++
+ 	if (napi->config) {
+ 		napi->index = -1;
+ 		napi->config = NULL;
+@@ -7702,11 +7770,6 @@ void __netif_napi_del_locked(struct napi_struct *napi)
+ 	napi_free_frags(napi);
+ 
+ 	gro_cleanup(&napi->gro);
+-
+-	if (napi->thread) {
+-		kthread_stop(napi->thread);
+-		napi->thread = NULL;
+-	}
+ }
+ EXPORT_SYMBOL(__netif_napi_del_locked);
+ 
+@@ -7802,11 +7865,21 @@ static int napi_poll(struct napi_struct *n, struct list_head *repoll)
+ 	return work;
+ }
+ 
+-static int napi_thread_wait(struct napi_struct *napi)
++static struct napi_struct *
++napi_thread_wait(struct napi_thread_node *thread_node)
+ {
++	struct napi_struct *napi = READ_ONCE(thread_node->napi);
++
+ 	set_current_state(TASK_INTERRUPTIBLE);
+ 
+ 	while (!kthread_should_stop()) {
++		if (kthread_should_park()) {
++			kthread_parkme();
++			napi = READ_ONCE(thread_node->napi);
++			/* Might be awakened for stopping */
++			continue;
++		}
++
+ 		/* Testing SCHED_THREADED bit here to make sure the current
+ 		 * kthread owns this napi and could poll on this napi.
+ 		 * Testing SCHED bit is not enough because SCHED bit might be
+@@ -7815,7 +7888,7 @@ static int napi_thread_wait(struct napi_struct *napi)
+ 		if (test_bit(NAPI_STATE_SCHED_THREADED, &napi->state)) {
+ 			WARN_ON(!list_empty(&napi->poll_list));
+ 			__set_current_state(TASK_RUNNING);
+-			return 0;
++			return napi;
+ 		}
+ 
+ 		schedule();
+@@ -7823,7 +7896,7 @@ static int napi_thread_wait(struct napi_struct *napi)
+ 	}
+ 	__set_current_state(TASK_RUNNING);
+ 
+-	return -1;
++	return NULL;
+ }
+ 
+ static void napi_threaded_poll_loop(struct napi_struct *napi,
+@@ -7880,13 +7953,19 @@ static void napi_threaded_poll_loop(struct napi_struct *napi,
+ 
+ static int napi_threaded_poll(void *data)
+ {
+-	struct napi_struct *napi = data;
++	struct napi_thread_node *thread_node = data;
+ 	unsigned long last_qs = jiffies;
++	struct napi_struct *napi;
+ 	bool want_busy_poll;
+ 	bool in_busy_poll;
+ 	unsigned long val;
+ 
+-	while (!napi_thread_wait(napi)) {
++	while (1) {
++		napi = napi_thread_wait(thread_node);
++
++		if (!napi)
++			break;
++
+ 		val = READ_ONCE(napi->state);
+ 
+ 		want_busy_poll = val & NAPIF_STATE_THREADED_BUSY_POLL;
+@@ -12155,6 +12234,8 @@ EXPORT_SYMBOL(alloc_netdev_mqs);
+ 
+ static void netdev_napi_exit(struct net_device *dev)
+ {
++	unsigned int i;
++
+ 	if (!list_empty(&dev->napi_list)) {
+ 		struct napi_struct *p, *n;
+ 
+@@ -12166,6 +12247,10 @@ static void netdev_napi_exit(struct net_device *dev)
+ 		synchronize_net();
+ 	}
+ 
++	for (i = 0; i < dev->num_napi_configs; i++) {
++		if (dev->napi_config[i].thread_node)
++			napi_thread_node_stop(dev->napi_config[i].thread_node);
++	}
+ 	kvfree(dev->napi_config);
+ }
+ 
+@@ -13204,12 +13289,12 @@ static void backlog_napi_setup(unsigned int cpu)
+ 	struct softnet_data *sd = per_cpu_ptr(&softnet_data, cpu);
+ 	struct napi_struct *napi = &sd->backlog;
+ 
+-	napi->thread = this_cpu_read(backlog_napi);
++	rcu_assign_pointer(napi->thread_node, this_cpu_ptr(&backlog_napi));
+ 	set_bit(NAPI_STATE_THREADED, &napi->state);
+ }
+ 
+ static struct smp_hotplug_thread backlog_threads = {
+-	.store			= &backlog_napi,
++	.store			= &backlog_napi.thread,
+ 	.thread_should_run	= backlog_napi_should_run,
+ 	.thread_fn		= run_backlog_napi,
+ 	.thread_comm		= "backlog_napi/%u",
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index 11b0b91683d7..f2ecdb26d6f1 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -162,6 +162,7 @@ static int
+ netdev_nl_napi_fill_one(struct sk_buff *rsp, struct napi_struct *napi,
+ 			const struct genl_info *info)
+ {
++	struct napi_thread_node *thread_node;
+ 	unsigned long irq_suspend_timeout;
+ 	unsigned long gro_flush_timeout;
+ 	u32 napi_defer_hard_irqs;
+@@ -188,11 +189,16 @@ netdev_nl_napi_fill_one(struct sk_buff *rsp, struct napi_struct *napi,
+ 			 napi_get_threaded(napi)))
+ 		goto nla_put_failure;
+ 
+-	if (napi->thread) {
+-		pid = task_pid_nr(napi->thread);
+-		if (nla_put_u32(rsp, NETDEV_A_NAPI_PID, pid))
++	rcu_read_lock();
++	thread_node = rcu_dereference(napi->thread_node);
++	if (thread_node) {
++		pid = task_pid_nr(thread_node->thread);
++		if (nla_put_u32(rsp, NETDEV_A_NAPI_PID, pid)) {
++			rcu_read_unlock();
+ 			goto nla_put_failure;
++		}
+ 	}
++	rcu_read_unlock();
+ 
+ 	napi_defer_hard_irqs = napi_get_defer_hard_irqs(napi);
+ 	if (nla_put_s32(rsp, NETDEV_A_NAPI_DEFER_HARD_IRQS,
 -- 
 2.54.0.1136.gdb2ca164c4-goog
 
