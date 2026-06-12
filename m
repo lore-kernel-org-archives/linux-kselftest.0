@@ -1,81 +1,80 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0A038E8C3
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 22:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2394E175A7D
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 22:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781303855; cv=pass; b=OzjRCYr08cp9sRXFaA88VtHOAVj+I1NCMimOsz3Hu0gMUXopiH1O2434UuExMNFxwMNqMGhAaPUDolVqXRMEfOzbmjxZ1FhL/AEo31JnreakGT03hYa9yMfI+UvaXw3o+aT/cGPLbiBp9sFNycr8c5qEu7WO33yMbhVCck54IxI=
+	t=1781304669; cv=pass; b=k9KCwQdLWDB98szK5N6BkZL9P7hVcY+EntnuVD54nzk4jNUsMUqoF1zYbQbO16rJgd8PBNuA5Ou6iwQsc+wDaTxkZI+fKAbTSw034WaNcoOmcA3ReGK6jyC+1G0ntR2o9xbAMT3seSgFcsvt86sRTc4v1FESWB7Ro4TBjAGSTzo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781303855; c=relaxed/simple;
-	bh=upxYdsljs1Q3FobyTQ4N3L2JqmWumXD9D4kqsVO1Mn8=;
+	s=arc-20240116; t=1781304669; c=relaxed/simple;
+	bh=sFT+XzlKpv4SUnajwscPnJF8p5NOz9tEidbYoBHNmNs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aeyvkcLSlHxW54csG0bnkh99soJZ7PwoWKwvpDW/Z8HzUQurzLhghFe6GJNBZkeKfVoGKpv2XTzxuupmkydckDNsNKQV9JfuCbLhbOV99ICHCJPar16mduJ43q4Ov8kPwVie27SpGzjA7lTzmV0VuSth1nP+GNjA+qW3A46sDHM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iCYTY5sb; arc=pass smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=cSgXtvKeVi8FgIiZK0pTgjoPhvb0lo2/W4fxThTCM8LbgsKfXavCUaN3CkFMyNnWX+iBe99COsoOla95zFunjIGIHClsalPjOQbgx4u3mwkTwL0t+kegkjrdid4HW051mbA4YI5wXXKL90ar0bbzsTm8aTvmqGf38To1LfhRyEI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net; spf=pass smtp.mailfrom=amacapital.net; dkim=pass (2048-bit key) header.d=amacapital-net.20251104.gappssmtp.com header.i=@amacapital-net.20251104.gappssmtp.com header.b=xH2cGArT; arc=pass smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iCYTY5sb"
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-517a5cafc3dso15201501cf.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 15:37:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781303853; cv=none;
+	dkim=pass (2048-bit key) header.d=amacapital-net.20251104.gappssmtp.com header.i=@amacapital-net.20251104.gappssmtp.com header.b="xH2cGArT"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5aa68e66128so1483883e87.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 15:51:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781304666; cv=none;
         d=google.com; s=arc-20240605;
-        b=CJTa0agoKc6juZnCZYY/bukXGX4C4yydoQxBpbhiQyFHrUYS5JEblgZHxM77AXoGVR
-         4JyMS3CohZxEhgzTw2+xidEdczD59ttq0W5jfXA0LG7M4yrov/69yTQug1VRvXyzHUaA
-         uX9YxOcJXDO1KuYYjkw8ji2YEzHANjWzGWofZx4mAMlQM95NZTAADs3G9tquVSVGExqY
-         ejEmPfOUqF4u0nis+cQmRVCpgd1zeNGrEQFqsPYwKu0pJpT7OumFrdl2ACcA5vXRJ+W2
-         fqBPmRn2yEWk4BThedodf5BGFFDkWILB9bEVvbq8Nn+JFrxGDOAef9ooG9pBNUG2SbD/
-         2TFQ==
+        b=Sxib52BwqUYTUB1kiEMNQBfBd2cUYbyVJjOZD/y2F1inUgQTa5myIl5aBzFOVUFTcn
+         jkTta6pQ7GQ/hb+rzNqhRbr64JCdRJfwWIaFI5X/JvpaTEHv7NjWHSUrQ3xoj1CDh3Rk
+         nK3IU5mc0xKRGjOubhzeDuVBS8lvJeQV79CTM5b/VXk1ZPZw5InHfR4alnjYioD2sbsk
+         6B+zEz4X+vtbM9efWO+jNaNtdPul24ZU3EM9yKGuGF7J7jGk7ScZFwmfG+WyeFU3iIX5
+         uuMNoEt/ZAH8CmOdw9GQfRmp2k5MasNknwjgl/3YGJOIyLhq4VBoYtkCqq4DXiX5r0lC
+         mBdw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=rBRAHcebZQ7InUHNMGol8uXlGZUk31ysomU2l/3gZBk=;
-        fh=mAki1xC5Wv4iAqaMP/iftxAtjxRN4hiW7WzDQ1d+uWE=;
-        b=RKS5IsBzLMD8U/nUygxySrv2R/i/VB4M0rgKcmJhNy7tGgCl6+lbSKQgUpo5nenHSJ
-         JL6KYsZw6yL+7rMHAWwTS3a1d7AD4BWFjYwaCGmeHK9Nq7rxBXPN7/RfC27UKZFzKgds
-         +DNyQWR1Ec79qIEl/Qh7tncUOBtt3w5tf7CATV2UrZGm/Qn5y7XI3Fh33F+VjJxIbWhr
-         vytCFQM/5KMTFdsvsDV2Z7QFyVpkGtk3P+Eg0pdQSmRUx6SNrE//lIh/g7XtsKNAVw/6
-         j0aHjA7D3CUdg29ciuUR9ldx8XAFhc2Pu3PK6m9V68sbSL1F56VQ6xAjNDaZBDNZK+BN
-         cxow==;
+        bh=dujGfjjYzIobRUfmhoS0JnZwiM+XACk6xmwNRmTPVO8=;
+        fh=wmdyKsKIfcdKRPcwnLG4NUqXAR7FPr/94Fn/ipSIEwg=;
+        b=Q2M7e+1uaEBuTqRO5gWGYVmmqPyxel29360Yl7xjlHW6PHQY/VZ4e36sm+/wdlUJqO
+         Df5HP9k7f1ao37d9X7z7LhWpee63MnjdMpd923MdbuQrmTadNPsoZ6348ZLwQgKFUu5x
+         G6dA5/kNEJAKFdNS4iCim8g4Tn7YlkDbJgmHXUPXj4WegFOz6CETbo4AWQgABFqKwl+K
+         l/BNynT9Qa/Yshv5rU1XsBamhQ7aeMg6oLqmN6XaZ0oZEeB1r1L7QvqAobxSEXZsHJ0v
+         zMZEcJAXTPcei+24ADvfq296+M05xI2crBLA4yzYltXuFxjFrZgfbjcAhmvICIUNRhcg
+         MGkQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781303853; x=1781908653; darn=vger.kernel.org;
+        d=amacapital-net.20251104.gappssmtp.com; s=20251104; t=1781304666; x=1781909466; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rBRAHcebZQ7InUHNMGol8uXlGZUk31ysomU2l/3gZBk=;
-        b=iCYTY5sbSdPsbXX+Ikcrb9lffX5RC17UTN2t8Qd58+V+9775DZeBZm+lXP7o0z7Hsg
-         KWVt1wz0AZQGE1FJBzyJg24wDt14s/XlozKQxDoFiIJA8g+reTnWQic0brbTyC6+L1sP
-         AB7WjHqBEXIuMzLNmlg6f5YLdjdEnt1ywIOKpHcWhScdcdsLTafMz8hS+3fmNii5whyR
-         rr6Wm+cMJOXnKEK5naMDICLrAgM4XlWHR0t2WfCddk/Rr00O/6bHIdBbGTcZw/DC363s
-         TjZ6Su/15uokHWnJjqqSnVCWQZqOln0+NaMpR2NpNRMeKC79XbhCRVCZuo3bDkyStq83
-         Bl0Q==
+        bh=dujGfjjYzIobRUfmhoS0JnZwiM+XACk6xmwNRmTPVO8=;
+        b=xH2cGArTp80e5H0iFWbigUXMNkbEA6Z+v36xmYhBDkqoyPbxBg0u5HP7aIkE/kKvT6
+         rYnLhEW6lR3yFoOU4vw0hkr5WO8xNQtVdhSakYJwX90cpN+n+8zHSVbY5Q37TGSJaK5s
+         gAf1qETjqcppz5KkeoZp2mfs21WBbSC0m8RQqoICymMUZAXugn7IOLUqTvaLUH1Ly/fz
+         Zw4rZaGCBN5IpwGV3HmQzQ4N/fIu/6ze/ehvbr3AhNUdLKs0v0HtvursTbP2vtD8vYN7
+         ABaraYgKUK3CIHNBQ9s64W0nYPfB2tIUYctsl3O2OsaYDluci5XuTvlH7F7aBLbPk9M6
+         CEGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781303853; x=1781908653;
+        d=1e100.net; s=20251104; t=1781304666; x=1781909466;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rBRAHcebZQ7InUHNMGol8uXlGZUk31ysomU2l/3gZBk=;
-        b=pu9Bu1bgKB9YUz0Yf6w8KtwsySvphVumAM5dmxO/izg0DMMfp6IAX+VXQ/mfYHJ1k2
-         XearsLE6sAQKiVlHTDbSpj0WlWcLX6S7/kFCAWy5YnFrZK4weLeOEvaK/uHm/Jk/uuCR
-         etxy94izhupBmqh0jXqoCKLtThswLgor4ifdl7i/hnPlomhuRmNwAx1tba38yVx4/3Ya
-         Pkr55oD0Qdu5aDlenCNXU33KD6HbwTkhzjCJKBeHHNX2qrrQuRky7NdXJMH8uFT4oew2
-         oF0YTrn/KraO1IbpcgChwfR90ir92nQ1CCTrb3bBgdaetCOI/XmMN8zvx8UHygr73JUd
-         tuDg==
-X-Forwarded-Encrypted: i=1; AFNElJ/5ll5qN+tySxbmR+7X7QJ4T/ggVK+teXnQLCy1GOx1XPmDXxTnBqS8uwyF7Y0YPYKjSrlgC6xbkPqq9f+t0VM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkazWZIFmS8cMLcTPe8aMoerGFAzUwYTVRx89OE85UWILbjduH
-	7F1dQSFtgFs6mOGOtX2v5u4lGD95lGkW28ug2u9VrUpL5hOaDTmagg7S4qbc++DmtTyKNuSlMmw
-	eaQPzu+bCe8vDze+dRsIPMfZ30UdnIEI=
-X-Gm-Gg: Acq92OFys/XU9m2p5eP8ZFCD3oiRrSTKuAp2G61K7q/6xGfev/TO7NJKgAfh5sUhVY4
-	fpm/iYvu/SPMKLW+TYL9RBEzn+CchHdcbnGsQkqinpcFTd9D+cDX7rtXbRPwpGqNtL4XebfWjlu
-	YE1y3JTgvaHc2Z5k6id8/EZDr/dT2apTAjwZ+CHpP3shVcp1lnJrMxnAOgINC07Br3Q4ud0XQpM
-	tDen//0I+8jTijSMHmtJXdobHYe2Cl2cdbVs3PRlbkPv1Ss6vGXtFGcfPZTjoFyF+zElMkhVz2I
-	DcBJF3POLvehaoK9eOE/5gyPz8WBMmzYGNfCrW55KkXXdZdPTqJv7PayJUZJ8PkdMNb3JbCd+WN
-	AnxmyszEU
-X-Received: by 2002:a05:622a:5147:b0:50f:bb77:a084 with SMTP id
- d75a77b69052e-517fe48d46bmr70305501cf.25.1781303853375; Fri, 12 Jun 2026
- 15:37:33 -0700 (PDT)
+        bh=dujGfjjYzIobRUfmhoS0JnZwiM+XACk6xmwNRmTPVO8=;
+        b=JVKqo5fX8QMxSxUgKo5IxfTVBg34QZ4tSlwLlp5wcraD01N2DiIpJGzKYVChwRsx/b
+         uhY5lscbbAOgFekN+21DiE5XkYzqjtAahqceu/bLLEXGX6Wtg7yU3dEyQbU6Bi4ISvp1
+         BsZJEyl4F006dj8ybLBl0B+KbEf+jiAk5qsezUlCHYQuGBgUpykE84UpLaCgHZR3vUG8
+         QxUTb1+609M2cS1ZdE2Nkcq/GZr18FRR2pMMIOOVimTlsEXah9FM4DeJQa7XDXGw8b+E
+         sDN8qdsNajDvhS2Rj4rl5KNKH7IXSIFFsUnOhhJZySCbw0FAxKeg6beiiMSUKlVRsery
+         kpzw==
+X-Forwarded-Encrypted: i=1; AFNElJ+72tzmnpqmCl9kpMeeBMCUmshHrwmzGVWEf6suEDfJ5zeOJTo2xswjJB9/K+sMOJPyBiuseMNPLeqofV1WhQU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+8q0fERJL8Nmk0a68VA0VgKbdcaohWT/BkxduH8U3RZLVcc/J
+	rTLXuNPsSYZ6lHKcGkoGHZvXqfaIXkWPQ2e9ZQG6w1hkfI71S7Rz1q9apwxUMiZ5NFF/VX/jVkC
+	a9PCKM3LKGl/IrDjJr4fqZls00WqpYMst1tztCo8j
+X-Gm-Gg: Acq92OHjn8CD/jNJFJBSA73Kx91g95be5ksuEwPuisfU3aZOC9K3XFv+PjoM7XpApkK
+	skrTKvXWQKseLAHY/JRFADq34v32c/HkvJ6ZWvXhYXYTiHQ35zYaIaW3yaKTptT8FJSxKJwvtrV
+	mQV5KKG8UIFWkFJc5f5E2qROHcX9ZrgRFmoVp9nm3i3Czq8X7rKQawZQa4vFyQuq72FNZbEYDmv
+	MbQpVzDnCAiqvko8OPPvMDqCY3DSJGZl9ufmdWVDuRUhQ8Ss+K4/UZiFkW6nvBYUs/03QtAMeqi
+	tHiE
+X-Received: by 2002:a05:6512:8053:b0:5ad:3035:9e5b with SMTP id
+ 2adb3069b0e04-5ad30dda3c2mr206991e87.52.1781304665912; Fri, 12 Jun 2026
+ 15:51:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,55 +82,110 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260526-seccomp-combined-v1-0-304b1cc3ad24@hill-daniel.co.uk>
- <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk> <CAAFS_9HpxOgHn+qfzSpLjV4Mj_CURiwxFOaK9GO0DdBg8xgNYw@mail.gmail.com>
-In-Reply-To: <CAAFS_9HpxOgHn+qfzSpLjV4Mj_CURiwxFOaK9GO0DdBg8xgNYw@mail.gmail.com>
-From: clubby789 <clubby789@gmail.com>
-Date: Fri, 12 Jun 2026 23:37:21 +0100
-X-Gm-Features: AVVi8CfgjBSgYWbftHOxOIpBd0igqwxLIi0I8C044rd7QU4om_B4hew3bdGZkvw
-Message-ID: <CAO1UbGemPgHNj1VYONQGx3HJbMMmORctF=jQbGPGUFQYGch7qw@mail.gmail.com>
+ <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk>
+ <CAAFS_9HpxOgHn+qfzSpLjV4Mj_CURiwxFOaK9GO0DdBg8xgNYw@mail.gmail.com> <CAO1UbGemPgHNj1VYONQGx3HJbMMmORctF=jQbGPGUFQYGch7qw@mail.gmail.com>
+In-Reply-To: <CAO1UbGemPgHNj1VYONQGx3HJbMMmORctF=jQbGPGUFQYGch7qw@mail.gmail.com>
+From: Andy Lutomirski <luto@amacapital.net>
+Date: Fri, 12 Jun 2026 15:50:54 -0700
+X-Gm-Features: AVVi8CeSEtVZONHGCnuCD2xhJbfvrvV9WVJmuJmgnaVxQRCFw5qubUWEiH7MAAg
+Message-ID: <CALCETrVSjTk975oejzBMHXZUAqRvVJpWUcHwBHrN8VCGb55HrA@mail.gmail.com>
 Subject: Re: [PATCH RESEND 1/2] seccomp: Allow using `SECCOMP_MODE_STRICT`
  with `SECCOMP_MODE_FILTER`
-To: Will Drewry <wad@chromium.org>
-Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Shuah Khan <shuah@kernel.org>, 
+To: clubby789 <clubby789@gmail.com>
+Cc: Will Drewry <wad@chromium.org>, Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	bpf@vger.kernel.org, Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 12, 2026 at 8:25=E2=80=AFPM Will Drewry <wad@chromium.org> wrot=
-e:
+On Fri, Jun 12, 2026 at 3:37=E2=80=AFPM clubby789 <clubby789@gmail.com> wro=
+te:
 >
-> So I have two concerns here --
+> On Fri, Jun 12, 2026 at 8:25=E2=80=AFPM Will Drewry <wad@chromium.org> wr=
+ote:
+> >
+> > So I have two concerns here --
+> >
+> > 1. By layering, STRICT becomes subject to FILTER RET behaviors.
+> > 2. If we did want to layer them, it would be ideal to separate the 'upg=
+rade'
+> >     decision from the access checks and make the layering path explicit=
+.
+> >
+> > If you are running a legacy binary that uses STRICT in Docker, then I
+> > understand the goal, but there are userspace options.
+> >
+> > I think it's hard to want to open the door on changing STRICT without
+> > a good reason to work through all the implications that come with it:
+> > cross-checking every SECCOMP_MODE_FILTER reference, sorting
+> > out thread sync interactions, ...
+> >
+> > That said, this change could be streamlined and look for ways
+> > to minimize any potential implications.
+> >
+> > Am I missing something or overstating it?
+> >
+> > Thanks!
 >
-> 1. By layering, STRICT becomes subject to FILTER RET behaviors.
-> 2. If we did want to layer them, it would be ideal to separate the 'upgra=
-de'
->     decision from the access checks and make the layering path explicit.
->
-> If you are running a legacy binary that uses STRICT in Docker, then I
-> understand the goal, but there are userspace options.
->
-> I think it's hard to want to open the door on changing STRICT without
-> a good reason to work through all the implications that come with it:
-> cross-checking every SECCOMP_MODE_FILTER reference, sorting
-> out thread sync interactions, ...
->
-> That said, this change could be streamlined and look for ways
-> to minimize any potential implications.
->
-> Am I missing something or overstating it?
->
-> Thanks!
+> Thanks for the review - I'm currently working on a new version which
+> addresses some of the implementation
+> issues. On the semantics side:
+> The current version runs strict checks before filters. I think it
+> makes more sense to run filters, run strict checks, then return the
+> filter result (assuming strict checks were survived)
+> Since the strict checks logically work as another filter layer,
+> documentation says
+> > Synchronization will fail if another thread in the same process is in S=
+ECCOMP_MODE_STRICT
+> So refusing to sync threads which are using both modes seems the most
+> reasonable.
 
-Thanks for the review - I'm currently working on a new version which
-addresses some of the implementation
-issues. On the semantics side:
-The current version runs strict checks before filters. I think it
-makes more sense to run filters, run strict checks, then return the
-filter result (assuming strict checks were survived)
-Since the strict checks logically work as another filter layer,
-documentation says
-> Synchronization will fail if another thread in the same process is in SEC=
-COMP_MODE_STRICT
-So refusing to sync threads which are using both modes seems the most
-reasonable.
+
+Can we take a moment to contemplate how filters compose?  The current rule =
+is:
+
+/*
+ * All BPF programs must return a 32-bit value.
+ * The bottom 16-bits are for optional return data.
+ * The upper 16-bits are ordered from least permissive values to most,
+ * as a signed value (so 0x8000000 is negative).
+ *
+ * The ordering ensures that a min_t() over composed return values always
+ * selects the least permissive choice.
+ */
+#define SECCOMP_RET_KILL_PROCESS 0x80000000U /* kill the process */
+#define SECCOMP_RET_KILL_THREAD  0x00000000U /* kill the thread */
+#define SECCOMP_RET_KILL         SECCOMP_RET_KILL_THREAD
+#define SECCOMP_RET_TRAP         0x00030000U /* disallow and force a SIGSYS=
+ */
+#define SECCOMP_RET_ERRNO        0x00050000U /* returns an errno */
+#define SECCOMP_RET_USER_NOTIF   0x7fc00000U /* notifies userspace */
+#define SECCOMP_RET_TRACE        0x7ff00000U /* pass to a tracer or disallo=
+w */
+#define SECCOMP_RET_LOG          0x7ffc0000U /* allow after logging */
+#define SECCOMP_RET_ALLOW        0x7fff0000U /* allow */
+
+This has always bothered me.  In the absence of USER_NOTIF and TRACE,
+fine, I guess -- we're choosing the least permissive, and this doesn't
+seem too crazy.
+
+But TRACE and USER_NOTIF make this very strange, especially as people
+keep wanting, quite reasonably, to make USER_NOTIF fancier.  Shouldn't
+the actual behavior be that each filter, starting from the innermost,
+gets to reject or transform a system call, and the outer filters
+should act on the result *after transformation* of the syscall?
+
+For example, if I run a container and set some syscall foobar() to
+SECCOMP_RET_ERROR in the container's policy, and the container them
+runs a tool that sets foobar() to TRACE, then I think it would make a
+lot more sense for the tracer get notified if the task calls foobar().
+Or if the container sets foobar() to USER_NOTIF and tries to emulate
+it, then it should emulate (and not get ERRORed because no actual
+foobar() syscall has been attempted now that the inner filter was
+evaluated) and then run the result of USER_NOTIF emulation (assuming
+it tries to do a syscall) through the outer syscall?
+
+And, however, this gets done, presumably STRICT would be a different
+variant of KILL_PROCESS that does SIGKILL.
+
+--Andy
