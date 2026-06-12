@@ -1,188 +1,163 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB34F407594
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 17:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781285815; cv=none; b=dZLnLgWi6TFyacyLEX+RVXT78w3YBdTOdmGFJEXhWEVPomDHD8Fw3GpvOK18oVIKxcYy1pJqAE7chVb+caTfCo+wraALI0j1+ALMrRSUW5SjdxdX5+ORhEq+gu1XlnI3CkDmDA01UNHFmUHCMBBVnVmhbR5FDaBFHgMjVlr+obY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781285815; c=relaxed/simple;
-	bh=llZ8H1lfztnu03TuEAoA5P95ceB3NnCFNCOfl247eDg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PM7xBVMZEnmu4F+KgjZcATYt7lQEDpuHcDEXRdJ+4QNSnfVvu4UNnndG947L4QHu163W0DfVBhJLrKtV+MHiejgQSqVtROf257qDTqS7eiLST/pDiU62BHKKRiJxVjR3vA50Znw6TSyxA6VdDQwbhpq3AIYN8EOOnCREDZso2ME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tanshuhao.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T7gcPcc8; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105F838CFFE
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 18:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781289814; cv=pass; b=Zre9QknTbbXpz4vVpMFKWDMbzkh+Yvvd00KmeM7gQThNbp6kA2+HjKRzaoxo9nP1EaA1vPhp0srHuog+3qbuTt3Z5jy6l62BGSyrXpqUhznhIiukxc5TNABEjB4W1YSN0pi7jgT/UD6dlefq7b9YRao9tZgu6d428jUzCMK3iyM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781289814; c=relaxed/simple;
+	bh=IQZpujVP87VTdmXVxfTNfi9J/0IXL9EHLyAaVdEbWQw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LFuhstzYZB4USi+Gf3pnbeVyZuVppcu5NPWvX03j2Bn72WcQe59nS6Akd2ocXHSOPV8AkwAsHvAg4ivO+hYAE5aHiCz613+rwKoH9hJ3gdcv3J0c5FSBFU5ryXQHXS8g02cQoGquvRvTG3TEgjbYuCkAi4DZ68/uuzq+rJww1ko=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FNqgjgKD; arc=pass smtp.client-ip=74.125.82.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tanshuhao.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T7gcPcc8"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-30761ab3483so137959eec.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 10:36:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FNqgjgKD"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-138501f8c04so379163c88.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 11:43:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781289812; cv=none;
+        d=google.com; s=arc-20240605;
+        b=gZzBfiyRXubMTbQmJEtk1z5rmfSXdF8cRlZOWL1yJ8hWFOswJM8l2eFPeqr1aLsVwW
+         h7vBqhleANxhVsmPcmUyS26t3Pg3Cgp80rpn6S/35+a5V1LbCIPtPmRN/KqoY8bjWXPp
+         CnE1Gyp2jeYVgpiGvWaRNSIJs+VCs6MG1aV6WPHrh8HlX6+9wvsuELOmSlckjQTKSNuX
+         ULuagPh5sBiqVmOINW1wWGovKV47MfmVBINHFwFrkEJwnHjNHuBAA8HJ/4y3haNSZLMh
+         nI+kV2cB16C3zQ4g+fIgL900UNfQZXCoSt0pG0CiEgIlIiX62/nSmQ3mHh7cju7/qZuv
+         lnSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZuYKYCkwO9VPPo9z/rSbFexmMoWoCjN3fygPjKuaDfI=;
+        fh=QzHHkxJ+5nxd4ofI0mf2xFVXJfzMki2hkG9pcTAAK+c=;
+        b=aL6ChL4uFcNxRshflP8eikC5HBjUsOcifOUcgdNwETNa89OGCN8HMCU2GFq6Gi+FA0
+         aSr8eiKOFTusK2jdsxTA4Hin4iWA/EEclLXRc/WaMxWpsOGkLKJR3CRZg8BUAF9zW2oM
+         pATTP5ofQulG/tj8ngSDt6vO0bGD42T/tk32RlBdTXpSV58Fe9ZxsByXFZkTOv/YfeWI
+         6eYySm51KYWdWqddN4S5kLGbD9o9KekAxpq6dB9wXvXwYrBRVKC3TxAukzLzqwFo/K8f
+         n4fDjievCzMPlz08cAqKWknCTYzgybFvvpV+IuhOpgv2NhF+WMr2GQVp3A1hAk67WAfu
+         dUIw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781285814; x=1781890614; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EgcIZJWJZmsAs9uR37o6ITXG3G+FR+XpfTMm8NsA12M=;
-        b=T7gcPcc8eKH3YVtLef7pkiedFVmYMrwXaWjJsGkcjgPOwScqmZSW0htw+sY18UjKhu
-         mA/b41LTMBqveTsveNjpSUF6TzGOZPX1NYe3/f5U1IikGQOfwkCKi6ik5T44P07N3ryF
-         1ItaW531BKedFu/Np/pCrOM7y8rJ0yWZeOl26FYkzhs+6MlDwPCiTVHXiHBMno0vneKV
-         mub7P1TNMxk90YZvFnByYgUwfPMy+Yl8CLx9ItTu+NWr0ogZoZ1B2TJDr1144PEhXWzn
-         crglSztZEixVjCmaP+1xOSDteynJWLV99y+hHpRaJ+tlRGyJlzFaMpN2skZ5VKL7Dsrp
-         rqIQ==
+        d=google.com; s=20251104; t=1781289812; x=1781894612; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZuYKYCkwO9VPPo9z/rSbFexmMoWoCjN3fygPjKuaDfI=;
+        b=FNqgjgKDckM/ef/CMXnPTNMN1jfEk8s4gs8f9SetKVyxbd+n4K1AEEwZ3OYV0H9yw4
+         TndiQagpsw9Dv0OpqPJmlWl/X2s99mp5geH0oRQ5iP5EWzQbOgGz1/OmDiNiRxXKEqLg
+         PthTVFY+8Zzjbo3qsNgag8YlB9qYdkUToYF5pC4fTCsnpQZNIT/38ySyjf4F+HbiFg+j
+         eFNaOxY7BZnmnuXq2mqSLvVgyERmOmN5pmLO8lgUad0/tjRIBIN2N6LgM7+el73WXaS0
+         dlu5/OuXV50SmD3cWcZzGLqXCgD4lKqGiYuSS/HbmTtMIjARhWiMh4+a9NrxSxm+LeFy
+         LH7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781285814; x=1781890614;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EgcIZJWJZmsAs9uR37o6ITXG3G+FR+XpfTMm8NsA12M=;
-        b=CJbiWz3ZCRHUwVZPhE7fkaweVOJgTlIYzkt9kUhni7jNQEPVa+icPr+T33jrZz5/Z3
-         l3cCBsUVwWB940f2wXCzdyqVDKUM3luBLaYCNdFSdU5KfP6otdEGxnuPhR6P4rUmSmYz
-         Ol0NInPofP9B44L6TjsMooguW7Egvq/FJt0nTT+hNxUr7eD4gnYE7nSU+Ub0Bpg0DX2S
-         iUHNTt9ACF8lqg8guMXpYA8TNj5SKepy362sfQ0a/8hLmDyXw6D9ZdTKywrMvoNi8MIt
-         A2fKMmuekTxao0N2i76sUFAAqb9ke5kYALQLSIeiZw4h4lQZuMv7VlXF6+l8CSE052C/
-         pIPA==
-X-Forwarded-Encrypted: i=1; AFNElJ+HrczRarDhl8V4tl/c+HX7RVdYOojNjmBkvu2MgEFAA7h48f1Lpw+zaH6DIch7CGMjxi3jPQ5aLeulv8THbqs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydYk044cYidGsxCe2UiRjh2hOaqdHK7yBAXubHAt0x2QTmL/cI
-	KcgjzDSEnBEZJon7OgCCMpj7Eb+S2T4ZUBqJSM7kjduTIVB+6aqdBqGgFYflWqmEYHQYUDFaM9O
-	jRjMyt3QTomIzKCSQ7Q==
-X-Received: from dycpb7.prod.google.com ([2002:a05:7301:9c07:b0:304:e89d:c06b])
- (user=tanshuhao job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7300:8185:b0:307:26a3:75d8 with SMTP id 5a478bee46e88-3081ff40831mr2404473eec.1.1781285813469;
- Fri, 12 Jun 2026 10:36:53 -0700 (PDT)
-Date: Fri, 12 Jun 2026 10:36:42 -0700
-In-Reply-To: <20260612173644.380972-1-tanshuhao@google.com>
+        d=1e100.net; s=20251104; t=1781289812; x=1781894612;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZuYKYCkwO9VPPo9z/rSbFexmMoWoCjN3fygPjKuaDfI=;
+        b=dd17SjhyqYFGMf3g6ELQymF5OpMz6tH1EYzc6T5nqCqzyLodDcQobs7Z+Pfhg644w3
+         mwOxOpYm3t+IQ+eK511AI4VcnMqeLB5ykoB+0oWrz2kilmc1+5BvwGgHNsIPM2AJ/iXi
+         D/HAI1QP+6icN7ihxbmJ1udVGcdCnedepccxd4gjoHMrJYyF4NTO20++pOzRSwJKA8pl
+         TyFk13956MCxj3tCuepBTSonlisqcbnt4lWPq5kGPBZbPcM420Ar8JqPzmwPoK38rwJE
+         UYnpTwWPBZ+dvm89w5NahnSaxEKRa8ELAg9u02FhuNw3TSXqydQC3de7PdkgopFN2TtQ
+         CUvw==
+X-Forwarded-Encrypted: i=1; AFNElJ8fY91rPhqPbPybVlPvTj0SFUNzocbr5xtW01yDpRnT6kTcNkyXSaehfMyfhuLGagVdnR2FO8e1kIuC1Rdoc7s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8T4aL7IthtSAEcygDkAxyKwCyFv4OFT7gBjrVBNmqExC10Hnl
+	J2EjvbwKKUJuxnHGOvGmuaXZWN9Tti1mr/4E+yyoD7A3d0D42V7UawNELK2iXpUG64/2e6u1MT2
+	hgpnKuHLY4EXRVJcSNFkovdKzVONuaa7kDji61xaF
+X-Gm-Gg: Acq92OFdfAOVmgueeQKHjJBnWZBtagwbQ3We+ePFg9s6d+2HU0pa5a6QMHEqn4ydTMB
+	6PVmBPtK1roChP/XMv/EIzW0N6+Ky/navQdGdK7iAmy5CfH+Axu5NgnHULkbuLEXt0hJ0AfC/aC
+	08F/861sdLIyBqOb2bET4SvXmW7nqy2gfleGdm7Zo4lWp5f+wpKtdCjMt1zvcWkgTPmdPzEOAbs
+	PPNcS+QGXBPtChzf9ryiumjculRUNu/uyLrxo4ejUeGWUpMTPd4PNbhkdBBOAzjbA/FMQVqhy1u
+	a8S+G8eYIPGv4vyt7IVTF5tZ6soWxudrde9VHooWGt7i/bpqC0S5riYuBwHYSK80X9gnchfCN9E
+	zfviaIC+5hL7aoi8i+jMVkrhMTh2pU33PpISzHuaVQu8y+ZH75qtc
+X-Received: by 2002:a05:7022:418:b0:137:fe07:8a2d with SMTP id
+ a92af1059eb24-1386f24121cmr436470c88.6.1781289811262; Fri, 12 Jun 2026
+ 11:43:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260612173644.380972-1-tanshuhao@google.com>
-X-Mailer: git-send-email 2.54.0.1136.gdb2ca164c4-goog
-Message-ID: <20260612173644.380972-3-tanshuhao@google.com>
-Subject: [RFC net-next v1 2/2] selftests: net: Add kthread preserving test in
- napi_threaded and busy_poll_test
-From: Shuhao Tan <tanshuhao@google.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, 
+MIME-Version: 1.0
+References: <20260612130919.299124-1-jiayuan.chen@linux.dev> <CAADnVQKL26zPepqOf_FtuA6ALQEtFJmiKU12iahdvfeAyJ7XhA@mail.gmail.com>
+In-Reply-To: <CAADnVQKL26zPepqOf_FtuA6ALQEtFJmiKU12iahdvfeAyJ7XhA@mail.gmail.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Fri, 12 Jun 2026 11:43:17 -0700
+X-Gm-Features: AVVi8CfZ2Yztrdd9Cz0a8Cioo193fVEec7AtKDsitODSamBkyRtcTNl8C85ikBY
+Message-ID: <CAAVpQUBmiyfW-3FjssDUmbOXyA+QbsFyATEs2D38ZbWfpNQE+w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/7] bpf, skmsg: some fixes for skmsg
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, Kuniyuki Iwashima <kuni1840@gmail.com>, 
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, 
 	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Shuhao Tan <tanshuhao@google.com>, Mina Almasry <almasrymina@google.com>, 
-	Samiullah Khawaja <skhawaja@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+	Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, Shuah Khan <shuah@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Sechang Lim <rhkrqnwk98@gmail.com>, Cong Wang <cong.wang@bytedance.com>, 
+	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add testcase to ensure the kthread stays the same across NIC link
-flap.
+On Fri, Jun 12, 2026 at 10:10=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Jun 12, 2026 at 6:09=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.=
+dev> wrote:
+> >
+> >
+> > All fixes are from previous patches sent by Weiming Shi, Zhang Cen,
+> > Kuniyuki and Sechang Lim, which have already been reviewed by me and Jo=
+hn and Jakub.
+> >
+> > https://lore.kernel.org/bpf/20260610081218.506709-2-rhkrqnwk98@gmail.co=
+m/
+> > https://lore.kernel.org/bpf/20260520102715.3033936-1-rollkingzzc@gmail.=
+com/
+> > https://lore.kernel.org/bpf/20260424190310.1520555-2-bestswngs@gmail.co=
+m/
+> > https://lore.kernel.org/bpf/20260424191602.1522411-3-bestswngs@gmail.co=
+m/
+> > https://lore.kernel.org/bpf/20260423155807.1245644-2-bestswngs@gmail.co=
+m/
+> > https://lore.kernel.org/bpf/20260221233234.3814768-4-kuniyu@google.com/
+> >
+> > The automated reviewer (sashiko) may still flag a few other potential
+> > issues on top of this series. After looking into them, they are either
+> > already covered by the patches here, or only reachable under very narro=
+w
+> > conditions that require a specially crafted BPF program and an unusual
+> > sk_msg ring state, so they are not practical to trigger and are left ou=
+t
+> > of this series. I'm collecting these fixes together because the same
+> > problems have been re-sent many times in slightly different forms, and =
+I
+> > hope this series can be prioritized for merging so the duplicates can
+> > finally settle. With so many AI-generated patches floating around for
+> > these spots, leaving them unmerged just keeps wasting maintainer review
+> > cycles on the same issues.
+> >
+> >
+> > v2->v3: Target to bpf-next and carry Emil's reviewed-by tag.
+> >         Reverse xmas tree style is used suggested by Cong.
+> >         (not all code match reverse xmas tree due to variable dependenc=
+y)
+> > v1->v2: fix problem when fix the conflict.
+> >
+>
+> Kuniyuki,
+>
+> one patch is yours. thanks.
+> Please help review the rest.
 
-Add testcase to ensure the same kthread can poll different napis
-across NIC link flap.
+Sure, will look into it.
 
-Signed-off-by: Shuhao Tan <tanshuhao@google.com>
----
- .../selftests/drivers/net/napi_threaded.py    | 41 ++++++++++++++++++-
- tools/testing/selftests/net/busy_poll_test.sh | 24 +++++++++++
- 2 files changed, 64 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/drivers/net/napi_threaded.py b/tools/testing/selftests/drivers/net/napi_threaded.py
-index f4be72b2145a..20110fb6942e 100755
---- a/tools/testing/selftests/drivers/net/napi_threaded.py
-+++ b/tools/testing/selftests/drivers/net/napi_threaded.py
-@@ -127,6 +127,44 @@ def change_num_queues(cfg, nl) -> None:
-     _assert_napi_threaded_enabled(nl, napi0_id)
-     _assert_napi_threaded_enabled(nl, napi1_id)
- 
-+def nic_link_flap(cfg, nl) -> None:
-+    """
-+    Test that if threaded is enabled, and NIC goes through
-+    a reset, the kthread stays unchanged across the link flap.
-+    """
-+    napis = nl.napi_get({'ifindex': cfg.ifindex}, dump=True)
-+    ksft_ge(len(napis), 2)
-+
-+    napi0_id = napis[0]['id']
-+    napi1_id = napis[1]['id']
-+
-+    _setup_deferred_cleanup(cfg)
-+
-+    # set threaded
-+    _set_threaded_state(cfg, 1)
-+    napis = nl.napi_get({'ifindex': cfg.ifindex}, dump=True)
-+
-+    # check napi threaded is set for both napis
-+    _assert_napi_threaded_enabled(nl, napi0_id)
-+    _assert_napi_threaded_enabled(nl, napi1_id)
-+
-+    pid0 = napis[0].get('pid')
-+    pid1 = napis[1].get('pid')
-+
-+    cmd(f"ip link set {cfg.ifname} down")
-+    cmd(f"ip link set {cfg.ifname} up")
-+
-+    # re-acquire napi info
-+    napis = nl.napi_get({'ifindex': cfg.ifindex}, dump=True)
-+    ksft_ge(len(napis), 2)
-+
-+    # check napi threaded is set for both napis
-+    _assert_napi_threaded_enabled(nl, napi0_id)
-+    _assert_napi_threaded_enabled(nl, napi1_id)
-+
-+    # check the kthread remains the same
-+    ksft_eq(napis[0].get('pid'), pid0)
-+    ksft_eq(napis[1].get('pid'), pid1)
- 
- def main() -> None:
-     """ Ksft boiler plate main """
-@@ -134,7 +172,8 @@ def main() -> None:
-     with NetDrvEnv(__file__, queue_count=2) as cfg:
-         ksft_run([napi_init,
-                   change_num_queues,
--                  enable_dev_threaded_disable_napi_threaded],
-+                  enable_dev_threaded_disable_napi_threaded,
-+                  nic_link_flap],
-                  args=(cfg, NetdevFamily()))
-     ksft_exit()
- 
-diff --git a/tools/testing/selftests/net/busy_poll_test.sh b/tools/testing/selftests/net/busy_poll_test.sh
-index 5ec1c85c1623..897ce6700601 100755
---- a/tools/testing/selftests/net/busy_poll_test.sh
-+++ b/tools/testing/selftests/net/busy_poll_test.sh
-@@ -124,6 +124,23 @@ test_busypoll_with_napi_threaded()
- 	return $?
- }
- 
-+test_busypoll_with_napi_threaded_link_flap()
-+{
-+	# Only enable napi threaded poll. Set suspend timeout and prefer busy
-+	# poll to 0. Run again after a link flap.
-+	test_busypoll 0 ${NAPI_THREADED_MODE_BUSY_POLL} 0 || return $?
-+
-+	ip netns exec nssv ip link set dev $NSIM_SV_NAME down
-+	ip netns exec nscl ip link set dev $NSIM_CL_NAME down
-+
-+	ip netns exec nssv ip link set dev $NSIM_SV_NAME up
-+	ip netns exec nscl ip link set dev $NSIM_CL_NAME up
-+
-+	test_busypoll 0 ${NAPI_THREADED_MODE_BUSY_POLL} 0
-+
-+	return $?
-+}
-+
- ###
- ### Code start
- ###
-@@ -176,6 +193,13 @@ if [ $? -ne 0 ]; then
- 	exit 1
- fi
- 
-+test_busypoll_with_napi_threaded_link_flap
-+if [ $? -ne 0 ]; then
-+	echo "test_busypoll_with_napi_threaded_link_flap failed"
-+	cleanup_ns
-+	exit 1
-+fi
-+
- echo "$NSIM_SV_FD:$NSIM_SV_IFIDX" > $NSIM_DEV_SYS_UNLINK
- 
- echo $NSIM_CL_ID > $NSIM_DEV_SYS_DEL
--- 
-2.54.0.1136.gdb2ca164c4-goog
-
+Thanks
