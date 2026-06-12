@@ -1,155 +1,225 @@
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010034.outbound.protection.outlook.com [52.101.46.34])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FCD3381B07;
-	Fri, 12 Jun 2026 08:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.34
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781252567; cv=fail; b=pXuHAcYzjYMzQ+9stn0yD2/4yf008YOXUIfsxynl9sTTPo4mvJiTYWzOLMtPCP7rCHlTnf+tU//x+ItaXSImkGywRsxiatOcfKF8pl1ueLJYykwQjOVL2DoidOMhgqV31k1lFRzcHQisZ1zpVnsbAVAFXX+Q9BUzVsnyRYZJQgc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781252567; c=relaxed/simple;
-	bh=hMhOpicBQnOx/BcychnCpDAGt9jjwwbMXDsLSA87VC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=GC6sBiFpjx7ODJfcJFwc6r0J1AE8PsM7on99zCRIDoqBsLSWkg+yGouJHf8eKpMcg2JM3NL26KvPBZL4fT+X/EAvVRaZa2Cbwv2KhvUMd2W4hl1k7TxkRMwiJChywxEjshu2NsJaQScwW7BlPrMjrQNWfqj5aGmBi55nfw9bJ7g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nbWpzpVp; arc=fail smtp.client-ip=52.101.46.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBFC337DAD6;
+	Fri, 12 Jun 2026 08:24:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781252648; cv=none; b=FEJyUj+1MBhvMjHsTjtAFuzOi/y3AjPKynsVa+a8bTC0VPdWkLeAYQT9rRyvRz5gwJHGFxIYU4GJ2c1fwsRXxr6ZlQql7IkMjcQb8NodrZi7q0GrmCkoASdo2CCRsdhzl1WxAnaIyWroVR4bEOhf7rLl6Q1dmAKM3n9h3bSxT5I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781252648; c=relaxed/simple;
+	bh=aik1yZWSrKo57yjYoAjGg1WiRNqIySZleRfYd2RGgiY=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WgYkNEW6QEzoOkfYQN5FmJnIVcCr/7GZGdIb+4zNO4g8gk1nZ3B9Pcm0pHT52zGBaEMSCr6Zn/c733DAt0wa3BpAMLqlyDCxH1IQqytKvPFYtAgKNqQMSXUBiNYdx1OFY0PgkkjD1G0mB5Ac7qXVMAvD44ZXBP3gaH2NaSwO/1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=M/qYnh2+; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nbWpzpVp"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nCueoHLqn3LwPXYIeX5qI1pQEkfcNBvCaMguXZVhHb6qUpUVNDyAOC5UAsqNEWnAeoDYf6AKkZ4xvFdEDDt8YvH1dIGSXTTm9kgP57qGZqNsJSeIAtCPj8nGfL+oOIuTJEvgHUihJhR1itqOB6REsZWzXOKcHsEsckfyRPnc9wqHqQeqpLLEEYK/efmqYwgOsqoAl1A96FYICHFfPD2FVnFv9C61PQFkYkbUmB3Fr71J+dJFG/QoDTSWn4NTXFjZ1npcIodwOmbYXuvnJWOJwIxyhAK4f7VR11iDgpjg1VlkOlu0RPdeHd4/FYVKc8RhERdIFEgzy+YFXE6L8tZYnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cCkWijr9+FmHTTNd5tVOF+na/i5xAL7Oi5Gr5nK1Y/w=;
- b=BEOKv5jBeqQvS7MV/CweG4PNS0+Imm2c3MQrij72h5K3WCGWwG9GH1Dv7GkpmRz9PaSbktf+R9s/qTWY1Lr2MFmkP3Igy7zB3q3usseRqYm8RQzNn50cbTIfca/Ul+Bj7Ri96+U4H10ZRZVRqFL6poDQq8gZaLTucw64ys9PMENu7jh1JFM8SkfVZH17Mbv7FIKLlaTqWMH7Znnh9qcgkKoN+KeF/PgA9XufImMGrqWaCHi6fTJ28rXr/ttiuFFcc9Nzc3tZMDCy+bHRA/FPAgVYJWGEliFu5/qL/qF3Z46szBBbgCsbUDdarpYfy6SE59XYT9e9rTp/r5MjXW9Ndw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cCkWijr9+FmHTTNd5tVOF+na/i5xAL7Oi5Gr5nK1Y/w=;
- b=nbWpzpVp2fIC37D9eEaYX4sf9NisA4/OYGBzpS4EGNCQLnj4CRGxz0FAQ2Xjv2aSdV10mGCaTQ/Zh9IcNtd3oeW4XMr+LV5/5PQgKPAf0FC6gw8xkGY4E/5WCWm0atVnPBxle26frnLOQ5S/hr1YE+uD3rU7YCOJzeWXDVgvV1FEpdenTDM5h3kkyZIuddUgu6iAhxomHjHWfvpk32FcQ0WsaMPUK0BTLTVZy7uEFD++SqFEjYelEffdlZB0VPCiRvVJLkmXxXEsiuLVtDx5Oq/glu4agyuRrxNz7HlLd/4jeaZ9GGsx6YNKrcV7xNG2whE2RokHHJm5HIGxT36INQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH2PR12MB5001.namprd12.prod.outlook.com (2603:10b6:610:61::18)
- by SN7PR12MB8129.namprd12.prod.outlook.com (2603:10b6:806:323::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.14; Fri, 12 Jun
- 2026 08:22:39 +0000
-Received: from CH2PR12MB5001.namprd12.prod.outlook.com
- ([fe80::89e3:6df0:de90:8dfe]) by CH2PR12MB5001.namprd12.prod.outlook.com
- ([fe80::89e3:6df0:de90:8dfe%5]) with mapi id 15.21.0092.016; Fri, 12 Jun 2026
- 08:22:39 +0000
-Date: Fri, 12 Jun 2026 18:22:34 +1000
-From: Balbir Singh <balbirs@nvidia.com>
-To: Aboorva Devarajan <aboorvad@linux.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Ralph Campbell <rcampbell@nvidia.com>, Matthew Brost <matthew.brost@intel.com>, 
-	Alistair Popple <apopple@nvidia.com>, Alex Sierra <alex.sierra@amd.com>, 
-	Matthew Wilcox <willy@infradead.org>, Sayali Patil <sayalip@linux.ibm.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] selftests/mm: remove hardcoded THP sizing
- assumptions in hmm tests
-Message-ID: <aivBqhx7gDMOEzua@parvat>
-References: <20260611034102.1030738-1-aboorvad@linux.ibm.com>
- <20260611034102.1030738-3-aboorvad@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260611034102.1030738-3-aboorvad@linux.ibm.com>
-X-ClientProxiedBy: MEVPR01CA0002.ausprd01.prod.outlook.com
- (2603:10c6:220:204::19) To CH2PR12MB5001.namprd12.prod.outlook.com
- (2603:10b6:610:61::18)
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="M/qYnh2+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1781252646; x=1812788646;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aik1yZWSrKo57yjYoAjGg1WiRNqIySZleRfYd2RGgiY=;
+  b=M/qYnh2+vzN1VsNIX0tPDvOnW85ecMAt3gC38tmwrBiJoD+dgPWvOaBa
+   PMZNaTjI1RR6qFedYC0gVKFcQYc2+01pomTsCjt6VpoN9UNa5AqJTZ+fc
+   CkytOOD5UZSqCCEYTgFR90iyJftYn+k0aOYtWJ7kYAyneB8IsOnqY220z
+   gzrsu3b+7ry76uClLhzUYaya0ZZH8EXBIUq2czovOec2ov42UubNLijTb
+   tiwhh13GCY0Z42cw11+tDd3z9RpThKbpCzWvIKw0R7E/0B2cidbpu9xU9
+   eB5CIw2nai+X9JLd3P2kYOGF4doxx8PPRgEfDSBoYSacW9x6Ac1RErXxf
+   A==;
+X-CSE-ConnectionGUID: 5MrWdWtvTtS4GM0us5yIIA==
+X-CSE-MsgGUID: szhd3KRbRoylTsr8ICyu6g==
+X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
+   d="asc'?scan'208";a="59016839"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Jun 2026 01:24:04 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Fri, 12 Jun 2026 01:24:02 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.58 via Frontend
+ Transport; Fri, 12 Jun 2026 01:23:58 -0700
+Date: Fri, 12 Jun 2026 09:23:12 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Guodong Xu <docular.xu@gmail.com>
+CC: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert
+ Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Zong Li
+	<zong.li@sifive.com>, Deepak Gupta <debug@rivosinc.com>, Anup Patel
+	<anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Yixun Lan <dlan@kernel.org>, Chen Wang
+	<unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>,
+	<linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<kvm-riscv@lists.infradead.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Conor Dooley <conor@kernel.org>, <devicetree@vger.kernel.org>,
+	<spacemit@lists.linux.dev>, <sophgo@lists.linux.dev>,
+	<linux-kselftest@vger.kernel.org>, Palmer Dabbelt <palmer@sifive.com>
+Subject: Re: [PATCH v4 08/16] dt-bindings: riscv: Add Zic64b extension
+ description
+Message-ID: <20260612-scarcity-willow-c073342b5ac2@wendy>
+References: <20260611-rva23u64-hwprobe-v2-v4-0-3f01a2449488@gmail.com>
+ <20260611-rva23u64-hwprobe-v2-v4-8-3f01a2449488@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PR12MB5001:EE_|SN7PR12MB8129:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2bbe4644-9e41-4d26-6045-08dec85bc41f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|23010399003|376014|7416014|366016|18002099003|22082099003|4143699003|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	UTakmnDw0nOVbGiRixWBoo2yuvdnZ0n5Yzymmm6QvwPPtQAT52k2VNnMDv6N9IXXyrs+qPJlFgMYo073eERMbPlttN67sFRRS1guUTpyjfWQKbvvclEm5XDlk6spJEbSvRibNBI4VAh+RRoN6OWw+hhC3Y0/ot9wablmWdeTJXSY0Gbwk4UpZEvwRwgmhZt2MEEgzLtgBkGgqRmMH9QaNl85PnJuMPAg6odJi7PzRhbQtiRICSF0qwkgFTx00fqhJBUc8aUwLeprYmfWaVHQfZc95/52LY1ilsQtcXGRwy3p6onS1Z5Ec0FDxSk35Lzv2fs9GUYhzNwPlcr+5EXovMK7eyzsFmnxbVx1SHa9xPEUGo+ePgHV/+qm6R+RMOGpFe918KO56sKBLUZ9kYgW5EUzg1SAVznJyv6K16/ExpLXWwJklu53fsV+k9nVMQmoPkfnYNXnCctn7/0mahLujxbtwB2/Yh5PT+Tk+93Jm4KWfAQuxXErVkoZ065Bf+b8Y70E4kZCa+Lw4o2ANRHRrN712IR7gDeTbtf/CuXaWf4PkdgGEEwqEdWu7Niqwck2Ig0S5PmrJLFDcMPCktgfPDaKLVl0Vu29NJ6YLfDBZ9iODIe6+z9GsWiV3Hg1yQXahKKNfmnOnkZo4Z8OxO7teHmibx1suCT1HGVG+LRmYscH5RbcGkc1ohJu+YEQTX/2
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB5001.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(376014)(7416014)(366016)(18002099003)(22082099003)(4143699003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ilYBLLK2hNu5dB64RO0vyn8WyktQ7Le0G3ZsP2+1+vuUxEZYghensUudP8lJ?=
- =?us-ascii?Q?V3Upu5Nl4PnrrqlUBuoOKZ4U/qa9whTELE2E3onMqjswWqcaTE90I76EioWk?=
- =?us-ascii?Q?m4o1q5CBiaK20ANJ65o8oCVVu6KnVC8hQYH+0rAWGwd4oTn6rcZ8FqcIXI6o?=
- =?us-ascii?Q?1e2TjzsqU8sWzcI09oiuqMG0Gb35qKF05xoQAeHobTlc+XbLl9uuye3Y6leG?=
- =?us-ascii?Q?pPJEJgwdz04ozBd9QIVoGNqz8KPQZtxR2l5tC81VEh7x9DI17jT9CF6WB0Bh?=
- =?us-ascii?Q?mxpseXfkZUtFjUWSBuypeW+OUVguokU2kq5YKnM/UL08OnaMDe6/j65h0zFI?=
- =?us-ascii?Q?/ezWlpF/uA4FlMg9Yc/wrXE44onJJtDu82DdlJMmoa1+Bo3GLXpFnP5cg6+D?=
- =?us-ascii?Q?PaGzd120IFuLS6UhrI8zhyzGMjOpUe1dSa+q3aym7RgITcf+E6btiDjAKRzM?=
- =?us-ascii?Q?jLlzFDzfV2mPttZYQMG3kDLeVenKmNyHyC7yQOjx2HBIf3U268QDKYCX0WLj?=
- =?us-ascii?Q?SThISj7AeDRpJvzO25d/uvs9Lq3e0GYmkUqcNjHBR/ZRlMDr9HyBWHrEXPMT?=
- =?us-ascii?Q?E+HxnIic+s08TuFDBuyzqsFrtcob9HBhpWNKBwv2TSrC2PBnure/djNiY1rY?=
- =?us-ascii?Q?O1QMX+b/VrE6UXl8l2Yfv0KxDqoV2U48cumK+Q3wI43jF4HJqmX5A/UTMQUq?=
- =?us-ascii?Q?FCIZpzANatvzLnM77kn6pckuBiaEF2+JG7ZYLap73qc7kvIctoSvJROx2djV?=
- =?us-ascii?Q?S5FjfJsvbyJVoz+g5HtUoBmUCr21v3F3BSRVNS3Cgg7zDlQX5jnI/KpAAYeq?=
- =?us-ascii?Q?GeQLxn6wZJHb+g8gnO4h0Wsz+3TwxJt2RVTlXJU//S2mvUJGRbIfVWpIb5kl?=
- =?us-ascii?Q?dSw1IvN+02DsgG4mx0yaKFMOLM0y5s+TbtHV4nvobGuaEIITS/MRFTY9Np6Q?=
- =?us-ascii?Q?FL211fTcYSzHoRYYPNxdH+IZ94yLeSPe9Ivf+1dwXGEFDEoq+f7kybbxN8o0?=
- =?us-ascii?Q?T4E3hN5NKUNrxqbhHb9mBl1g0rgAx+x9TTO+AECsGiACnqQ889KW6/ya2zjq?=
- =?us-ascii?Q?ENocJjChZYhA+fIFC/H67nAoTuBQ1fSFmfnDKRVhcldlLFODXEj7Czw8jnhg?=
- =?us-ascii?Q?pRoNef+ujYPmbPRzaIr81psO7An3AP6CgBuh+dl1X75cDd4FhMZ9eKgAA1wx?=
- =?us-ascii?Q?bJoLC/V172fdY4N9BEXx+imKIeisY6vZ6DDWd2U/byK4H8CpZWv46xSj3pGp?=
- =?us-ascii?Q?dS7Yz2ys4lC7UxJKd7NO2DgK7S5OjU1Vsl6jERrt1U71kRAM9C5gW7oWS7Q9?=
- =?us-ascii?Q?7Sshv0SenEXmdl4RS0fgNerqGYByUKj57kg4jLoEmKovf/PrbOuAiEdy9S0/?=
- =?us-ascii?Q?AuvtRtEaoj3KO54ItAErViJFKdE84r57tDL7ZVll09ZoKtlvRuWimRh3h/YN?=
- =?us-ascii?Q?9DLSd4GLjwqUluy5r4eBGvucUkrMDBYR0CdBczRfjtpoxm0fzG7wpEazKuIO?=
- =?us-ascii?Q?xTzseY2AoDaMS/QfxZODAECh/1QtkzkcPmBn2X1r4w8ZAgzZUVRHotzL/ovA?=
- =?us-ascii?Q?HW2hOvgQe3Di1Y2vp0t0Pv8pZtGL260FQDLNNau2kGkgEqyCvcepMwQ0aECB?=
- =?us-ascii?Q?advsnywWCoUM6A5QUhLEFxPT+hQTQcr6lEyxWXoOP1+WSHtKSAscfFMSr7nm?=
- =?us-ascii?Q?cMBCqwvXkIwwN5F8LEjG3bXjmhFLsUuvlhwL/sWlt4k/bLTliRHpXuwn2Wxl?=
- =?us-ascii?Q?AaWDKUcmhA=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2bbe4644-9e41-4d26-6045-08dec85bc41f
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5001.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2026 08:22:39.2960
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UHOQusaG2pXFQos7KAvAFKeLJ4FnkjTbJWXkMz1OWxBPAdOgTN7JmVfT/HjmAwC8iQI2wmh4vHJfyIuU2fk4hg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8129
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="Dm2P8/tZRoFsL+eF"
+Content-Disposition: inline
+In-Reply-To: <20260611-rva23u64-hwprobe-v2-v4-8-3f01a2449488@gmail.com>
 
-On Thu, Jun 11, 2026 at 09:11:01AM +0530, Aboorva Devarajan wrote:
-> From: Sayali Patil <sayalip@linux.ibm.com>
-> 
-> migrate_partial_unmap_fault() and migrate_remap_fault() use
-> hardcoded offsets based on a 2MB PMD size. Similarly,
-> benchmark_thp_migration() assumes a fixed 2MB THP size when generating
-> test buffer sizes.
-> 
-> Derive offsets and test sizes from the runtime PMD page size returned
-> by read_pmd_pagesize(). If unavailable, fall back to TWOMEG.
-> This allows the tests to adapt correctly on systems where
-> PMD-sized THP differs from 2MB. Also replace the fixed 1MB unmap
-> size with a PMD-relative value derived from the runtime PMD size.
-> 
-> On systems with larger PMD sizes, computed test buffer sizes can exceed
-> INT_MAX. Skip such test cases to avoid overflow.
-> 
-> Fixes: 24c2c5b8ffbd ("selftests/mm/hmm-tests: partial unmap, mremap and anon_write tests")
-> Fixes: 271a7b2e3c13 ("selftests/mm/hmm-tests: new throughput tests including THP")
-> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
-> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+--Dm2P8/tZRoFsL+eF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jun 11, 2026 at 04:12:45PM -0400, Guodong Xu wrote:
+> Zic64b mandates that cache blocks are 64 bytes in size and naturally
+> aligned in the address space.  It is a mandatory extension of both the
+> RVA22 (U64/S64) and RVA23 (U64/S64) profiles, ratified with RISC-V
+> Profiles Version 1.0.
+>=20
+> Document it so it can be described in the riscv,isa-extensions property,
+> alongside the related Zicbom/Zicbop/Zicboz cache-block extensions. Since
+> Zic64b fixes the cache block size at 64 bytes, also add a  schema check
+                                                           ^^
+Not that it matters, but there's an extra space here.
+
+> requiring any present cbom/cbop/cboz block size to be 64.
+>=20
+> Signed-off-by: Guodong Xu <docular.xu@gmail.com>
 > ---
+> v4: Insert zic64b at its sorted position (before zicbom).
+>     Update the commit message.
+> v3: New patch.
+> ---
+>  .../devicetree/bindings/riscv/extensions.yaml        | 20 ++++++++++++++=
+++++++
+>  1 file changed, 20 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Do=
+cumentation/devicetree/bindings/riscv/extensions.yaml
+> index 5ffc40d599c02..1c24999beb59e 100644
+> --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> @@ -494,6 +494,12 @@ properties:
+>              in commit 64074bc ("Update version numbers for Zfh/Zfinx") of
+>              riscv-isa-manual.
+> =20
+> +        - const: zic64b
+> +          description:
+> +            The standard Zic64b extension for 64-byte naturally aligned =
+cache
+> +            blocks, as ratified in RISC-V Profiles Version 1.0, with com=
+mit
+> +            b1d806605f87 ("Updated to ratified state.")
+> +
+>          - const: zicbom
+>            description:
+>              The standard Zicbom extension for base cache management oper=
+ations as
+> @@ -1142,6 +1148,20 @@ allOf:
+>            not:
+>              contains:
+>                const: zilsd
+> +  # Zic64b mandates 64-byte naturally aligned cache blocks
+> +  - if:
+> +      properties:
+> +        riscv,isa-extensions:
+> +          contains:
+> +            const: zic64b
+> +    then:
+> +      properties:
+> +        riscv,cbom-block-size:
+> +          const: 64
+> +        riscv,cbop-block-size:
+> +          const: 64
+> +        riscv,cboz-block-size:
+> +          const: 64
 
-Thanks,
+I think we also need to have
+diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Docu=
+mentation/devicetree/bindings/riscv/extensions.yaml
+index 1c24999beb59e..bbd442cfbd904 100644
+--- a/Documentation/devicetree/bindings/riscv/extensions.yaml
++++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+@@ -1162,6 +1162,32 @@ allOf:
+           const: 64
+         riscv,cboz-block-size:
+           const: 64
++  # All three Zicbo* extensions require their block size property as there=
+'s no
++  # default.
++  - if:
++      properties:
++        riscv,isa-extensions:
++          contains:
++            const: zicbom
++    then:
++      required:
++        - riscv,cbom-block-size
++  - if:
++      properties:
++        riscv,isa-extensions:
++          contains:
++            const: zicbop
++    then:
++      required:
++        - riscv,cbop-block-size
++  - if:
++      properties:
++        riscv,isa-extensions:
++          contains:
++            const: zicboz
++    then:
++      required:
++        - riscv,cboz-block-size
+=20
+ additionalProperties: true
+ ...
 
-Acked-by: Balbir Singh <balbirs@nvidia.com>
+because I don't think there's a warning generated at present* if someone
+does "zicbom" + "zic64b" and doesn't have a riscv,cbom-block-size property,
+only if they have one and it isn't 64. I think the former is a bigger
+problem than the latter.
+
+Probably needs to be an additional patch, because it has value whether
+or not we permit zic64b.
+
+pwbot: cr
+
+Cheers,
+Conor.
+
+*: the kernel will warn at runtime, but nothing in dtbs_check etc.
+
+> =20
+>  additionalProperties: true
+>  ...
+>=20
+> --=20
+> 2.43.0
+>=20
+
+--Dm2P8/tZRoFsL+eF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaivB7wAKCRB4tDGHoIJi
+0r+LAP95Lkh6JmlVNGkOMGiFZ+ds+OC4z1NCcvaGyDDMznHyEQEAk5bm8w0ICEyr
+TwHrpZxora0ISSspUjdDg1Xmy+dJDQM=
+=9gRX
+-----END PGP SIGNATURE-----
+
+--Dm2P8/tZRoFsL+eF--
