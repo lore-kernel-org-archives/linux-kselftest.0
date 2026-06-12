@@ -1,113 +1,139 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709AE3290BD
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 17:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED26407CC2
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 17:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781285679; cv=none; b=UzsXCAfrxEu4uDA45ei+ZkLuWxeFIHmrWVOs3gWtHNh2ngqdA0faXEQACqDnoMaQGNNXgLELfa1/ymS04QSwCXnwh4pcw7l0ShISbtoX81BIM1zHh8lBEveskRCCo+LMjHzkN87P9/PdPGUT2zLe6+ciwgSaglpxnjH3hjkx21k=
+	t=1781285811; cv=none; b=FNgGrUKejv/E87Cv3Zry9tnG50VEpetZ9b2Kushj8YhtGzvZSX62fTsyEpSVohG7e+ve5TEidVcLoaHqdObM+aNpwiGncvXwybx+siD3HSNPmKxm09Ynqusw7IeCOe6MEinaZzMpvPMUH2+Uu3DNLJgr9MObkc/3McTGYq39CFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781285679; c=relaxed/simple;
-	bh=2vXTYwKAqE8zGS6G1ooSD5BTmzZfSEZFKULV8+Xply8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fryNhHh7NTk6ntKPh9x7dGf0k54Ynw5+HY4BgY8MFj+quW3LluQwYZFhtb/C5V1muUmIm0c7Nl2wHUbILyc4nsJcuFa+942HWe3IVxKGCdR3UFcOnH3T0YBul62sFMJ8hcHJfLlL44FAwXzcA4OT5j/NJ9ie/aEHOrIu92oT9wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qkr48IH0; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1781285811; c=relaxed/simple;
+	bh=EDZfpL0WwzkQ8hq0Wdv9p5cHlrRrzU/QFy+XGloNPb0=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Byzl9KnO3nyOP+vYTYpnqILc+HS/meoKBGNQwup75amJ83eoleSlfv0hDRlff3fLeM1Mhp7mihTUbmVFX6XdueWsd8d3dp0ku+THLcACg91Z8jDSD1aJALFsILQHPfqjPUflDjJf1zcnB2dsgqBMwL2FlJ5coDd1Mbiy5YGWlmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tanshuhao.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WyYuE+97; arc=none smtp.client-ip=74.125.82.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tanshuhao.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qkr48IH0"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2bf2d865383so3915ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 10:34:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WyYuE+97"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-138acbc0e69so90521c88.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 10:36:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781285678; x=1781890478; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ifKMUC6sFpR43pSlkSu8t/hrhXmnCH8Plz+P3dkdA8=;
-        b=Qkr48IH045JrHBYA2janwFJVYNUw0o+Jp0lglXWwwPODV3mQrfVgnvpa9xOFrJmpP0
-         6PpoY5HkwwNNYag2jBzmDiJJqQ18jTPiEIeJJBdjPEesAp90EhWdLJspEq8lir/PcpVy
-         3LJO5XtvqbHFsCt10VXQbEFVQ3DiufvpiGIezW77koOgC5VYACyi3vJExzVggVayjhjv
-         iEkRnIqsIOjoOhhZyEpDpmSOTQDZyiUOPbP6+xK0f4CAkMAH0LP/3dQOm7NuOg1bM1+o
-         BE57CslrMSVjFvDHgccLT2dYPYSVFu7vtFEXgl16tV4CxPNajv1rTmfhgFYU/vjnPzyP
-         KBVg==
+        d=google.com; s=20251104; t=1781285809; x=1781890609; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=m0AdHFT5n0KXuYQG6JAlkPd+J0hfnrhnYB6jEfLYTzA=;
+        b=WyYuE+97EJ9bsa7IhWc9y/6IJIl0afFpUBghlu8gynTlgDbeAQqzm4TgVQjEbjwTYn
+         sBGUn73BwAwBqfCeUq2SPoan8RwrSlWb86c8FJ5palTE3hiqLudeCMfps+ztW3vOHreL
+         UQi48/iNfNW9+H6Y/zdF27+ToZFJw+dZneqvZ8R3AIAB6GE2hMS8iV0s2fyuCVFbclY+
+         zJLlD0Eywmg2//4U8qH7lzrPMLrnR0zS68mGE9yIOjGLhD+N2fJEEkE4yX3fGcFSZgQO
+         avdaeG1ozxJZDxcB7ASEWN0fvi8crrP3qrYIDUPKKLJy974BRO0bS34mtXDE1Mt8QdVc
+         hpVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781285678; x=1781890478;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0ifKMUC6sFpR43pSlkSu8t/hrhXmnCH8Plz+P3dkdA8=;
-        b=BIe+pxKzlI8Z8XnXn+D/s6CUxzX3LQ8sMKtejHJ+hdo/05pBShyzeSgTrIOx2p9w2q
-         r8G6P+FJnVKonMgDPYncBars5jUhDqqN1iKl1hNFOcKdh2o41ePco0LWQWgjLVFq+CDt
-         Q/e9NRbnXdD92BOs5sUxZNqmyzlaKOzzLw2Fpxc8vgFhRZ1hdbnX2Zvy0ISLiFEXtR9K
-         5Z+c55FwfMkcpc7wS+NEpDA+UmpNciMXx5i0DwqvQK3egBrTKJc7rxMVLg9gnS0bO4zC
-         sQMPxPUvGnntTdZb7xtjjNnoaRVX/hUYdT6Moy5y3NgRetMbCMA65HCR5azUwL6tBN6x
-         TayQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+NuMTr5q0LQ5EjJVPzW3NG+4GalBnDxy8+jD4PIIwGSs/GUvlsva6nL9O+t/6aSFCYlGVqG/lX/yYytMQaC8E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2btAcEnCnaO7Oabj/P8g3dL5yPX8aLvPP93bTrsK+wFhUKwmr
-	s5qL+YYHU07TbCswFJw3exX5/Mn3o687p3s2HDBV7KsEijSDycvTEwsJ8g0nrNGMwpnLAXBuJUi
-	TYU/Irw==
-X-Gm-Gg: Acq92OH/TNlE6RX0GRtI/VkBe4qgimNKS4i/c0/8AsVyhJngWP+4xEjMmztwZHgG136
-	qYEiAZXCb1B2/MMEHkAUgiqS1O5n22fVnQwK7yecB51JpX/vZ6ltP9QJmirrYuCX3PmVKCu2s1Y
-	aojMMLTAw4XP/1VHYBL+++AXusTUA7RbTdZEbXEhpuUEyXq2DmHCIcmywaHMqi6Y/WS/b/erTAU
-	/n7D1Un4RDTEfQHW6bifxtVP+Jo1N5SPkEjp/wAEwtrsq4a0B0mVw9boN536U61Il5s884F3U3p
-	U3cbta9WaAGHthjMMWXBE/plzif7x5sGTZRytl+zKpf2qchPEbn5Z5ZOM5XUloBvbSk+jTb/aMl
-	FGtDNcXI3Xd+h8syHbpfOCxYy0pgxzmIS5OU746q14x8Ya/Ky0S0dSt9rbUv6QPnxogFuzXeRTi
-	xdkzsbLVxY58rsSIYfIG3xz3zzWho9FBsvxKypiksphT7dHnX0g8XCP+4LQOvZ
-X-Received: by 2002:a17:902:ea0d:b0:2bd:63cb:c5be with SMTP id d9443c01a7336-2c665175772mr102415ad.5.1781285677239;
-        Fri, 12 Jun 2026 10:34:37 -0700 (PDT)
-Received: from google.com (176.13.105.34.bc.googleusercontent.com. [34.105.13.176])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c42fbb5411sm27322505ad.32.2026.06.12.10.34.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2026 10:34:36 -0700 (PDT)
-Date: Fri, 12 Jun 2026 10:34:32 -0700
-From: Vipin Sharma <vipinsh@google.com>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: rppt@kernel.org, pratyush@kernel.org, tarunsahu@google.com, 
-	skhawaja@google.com, shuah@kernel.org, dmatlack@google.com, 
-	linux-kernel@vger.kernel.org, kexec@lists.infradead.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] selftests/liveupdate: Add helpers to
- preserve/retrieve FDs
-Message-ID: <20260612173145.GB40404.vipinsh@google.com>
-References: <20260610230909.876546-1-vipinsh@google.com>
- <20260610230909.876546-3-vipinsh@google.com>
- <178123377287.908199.15268768789704684712.b4-review@b4>
+        d=1e100.net; s=20251104; t=1781285809; x=1781890609;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m0AdHFT5n0KXuYQG6JAlkPd+J0hfnrhnYB6jEfLYTzA=;
+        b=T+epGMzuPqvw58jbBdRRUjTTtEA0+Bp6+JL35w3r6GQZZkXZK/rFjgELAiOTjI5KyD
+         h1rJ8Wa0yk02452CgyF9Gu8WBAQeGqUwPrHqNCGCgZfixRdnfEjm0c7jnI+M53/72QBh
+         U0n1wW275239MHG5qBnsqtyvS3fi4vfaG7JAc9RUmE+OY0URA5ZcVRPLToAZzaIYvcnP
+         lMJvSB1AocxIbVB375NvWP99ZwxiCR88DKMQvh2WDgAp51sGTS/GYC6Ku+29A3I0i5gP
+         ZvfJe2LqYA52lqpdgwFxPvokojJkOAhH13O7vmMSSKM1SpP1AHCgxfqxix47yMNk5YqA
+         gckQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/jqB4207iPDmRTNTQtbVivT0qKNnVw+QLu+3X4exVNZ/eQ5OckT28xEDykg030SCq435EH0loMpqRaf7b3yRw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxamTZ2YguvBxJ5vbHlN5gmNQHiF9H0mr4H3fVQkl4yZeyUkzuN
+	SgklBBQvhww2oYBdu7SuGVy/FSxBXC/V1dYAZidO66OocoMHX43+qP1fQP4YRQiKtalUDE9X2Lj
+	HFgEdJaJp3M0m6LkeLA==
+X-Received: from dlec6-n2.prod.google.com ([2002:a05:701b:4286:20b0:138:4e1:4728])
+ (user=tanshuhao job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7022:ea24:b0:128:d4be:7438 with SMTP id a92af1059eb24-1384bbc646fmr2287331c88.30.1781285808673;
+ Fri, 12 Jun 2026 10:36:48 -0700 (PDT)
+Date: Fri, 12 Jun 2026 10:36:40 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <178123377287.908199.15268768789704684712.b4-review@b4>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.1136.gdb2ca164c4-goog
+Message-ID: <20260612173644.380972-1-tanshuhao@google.com>
+Subject: [RFC net-next v1 0/2] Reuse threaded NAPI kthread across napi_del()/napi_add().
+From: Shuhao Tan <tanshuhao@google.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Shuhao Tan <tanshuhao@google.com>, Mina Almasry <almasrymina@google.com>, 
+	Samiullah Khawaja <skhawaja@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Jun 12, 2026 at 03:09:32AM +0000, Pasha Tatashin wrote:
-> On Wed, 10 Jun 2026 16:09:08 -0700, Vipin Sharma <vipinsh@google.com> wrote:
-> > diff --git a/tools/testing/selftests/liveupdate/lib/liveupdate.c b/tools/testing/selftests/liveupdate/lib/liveupdate.c
-> > index 897c200f3845..961a732b541d 100644
-> > --- a/tools/testing/selftests/liveupdate/lib/liveupdate.c
-> > +++ b/tools/testing/selftests/liveupdate/lib/liveupdate.c
-> > @@ -78,9 +78,35 @@ int luo_retrieve_session(int luo_fd, const char *name)
-> >  	return arg.fd;
-> >  }
-> >  
-> > +int luo_session_preserve_fd(int session_fd, int fd, __u64 token)
-> > +{
-> > +	struct liveupdate_session_preserve_fd arg = {
-> > +		.size = sizeof(arg),
-> > +		.fd = fd,
-> > +		.token = token,
-> > +	};
-> > +
-> > +	if (ioctl(session_fd, LIVEUPDATE_SESSION_PRESERVE_FD, &arg) < 0)
-> > +		return -errno;
-> 
-> We do not return positive values on success either, so !ioctl() would 
-> be a tighter check, but < 0 is also acceptable.
-> 
-> Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Currently the lifetime of the kthread of a threaded NAPI is tied to
+the napi_struct. netif_napi_del() stops the kthread when it destroys
+the NAPI struct.
 
-I have to send v3 for other feedbacks, I will address this also in that
-version.
+This patch series reuses the same kthread (thus preserving all of its
+attributes) across napi_del/napi_add. This series now tie the lifetime
+of the kthread to net_device instead of napi_struct.
 
-Thanks!
+A normal use case for threaded NAPI will be "enable threaded" ->
+"configure the thread". Driver reset (that can be caused by a NIC
+configuration change) often destroys the configuration and causes a
+usability issue. This series aims to solve the issue.
+
+There is a downside of this approach: If a device reduces number of
+queues while its NAPIs are threaded. The kthread associated with
+removed queues will not be stopped. Since the mapping between the
+index passed to napi_add_config() and NAPI is an implementation
+detail of individual drivers, it is not straightfoward to perform
+a garbage collection and stop kthreads that are no longer associated
+with a queue. This patch series tries to minimize the effect by
+parking the kthread in napi_del. The kthread still shows up in
+/proc, but should not consume CPU cycles.
+
+There was a discussion
+https://lore.kernel.org/CAAywjhR0TPKZ-xzqjSP709OVmZWUisDNv2CVc_VxgOrXRtop+g@mail.gmail.com/
+around what to do with the kthread between napi_disable/napi_enable.
+It seems that there was an intention to keep user configuration for
+the kthread across NIC configuration change. This patch series extends
+the effort to cover more NIC configuration changes. Roughly tracing
+through the call hierarchy of napi_del reveals that at least the
+following drivers will not preserve the user configurations:
+- idpf: idpf_set_channels(), idpf_set_ringparam()
+- mlx4: mlx4_en_set_ringparam(), mlx4_en_set_rxfh(),
+  mlx4_en_setchannels()
+- bnx2: bnx2_set_ringparam(), bnx2_set_channels(), bnx2_change_mtu()
+- gve: gve_set_channels(), gve_set_ringparam()
+- ena2: ena_set_ringparam(), ena_set_channels()
+- (non exhaustive)
+
+These drivers destroy and recreate queues during configuration
+changes. If a NAPI was threaded before destruction, during the
+creation, a new kthread will be spawned for the NAPI.
+
+Some drivers do not have this problem, e.g. fbnic, netdevsim. But
+these drivers and the drivers mentioned above will still lose kthread
+during link flap (ndo_stop/ndo_open).
+
+Because the kthreads before and after these configuration changes are
+different, all the attributes associated with the kthread are lost.
+These include CPU mask, priority, scheduler policy, etc.. If the
+threaded state is preserved for a NAPI, it makes sense to want to
+preserve the attributes of the thread as well.
+
+Link: https://lore.kernel.org/CAAywjhR0TPKZ-xzqjSP709OVmZWUisDNv2CVc_VxgOrXRtop+g@mail.gmail.com/
+
+Shuhao Tan (2):
+  net: Save kthread of threaded NAPI in napi_config in napi_del and
+    restore in napi_add
+  selftests: net: Add kthread preserving test in napi_threaded and
+    busy_poll_test
+
+ include/linux/netdevice.h                     |  13 +-
+ net/core/dev.c                                | 151 ++++++++++++++----
+ net/core/netdev-genl.c                        |  12 +-
+ .../selftests/drivers/net/napi_threaded.py    |  41 ++++-
+ tools/testing/selftests/net/busy_poll_test.sh |  24 +++
+ 5 files changed, 203 insertions(+), 38 deletions(-)
+
+-- 
+2.54.0.1136.gdb2ca164c4-goog
 
