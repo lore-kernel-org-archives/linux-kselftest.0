@@ -1,54 +1,54 @@
 Received: from mail-oi1-f201.google.com (mail-oi1-f201.google.com [209.85.167.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ADDB3ACF17
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 19:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B363AE184
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 19:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781292558; cv=none; b=VsadTZXU3chOCSAawxt2edqaFZhWMuAU+fykXUaot2Kz8t8HNVZoXTBQrhOTsv6NdtThnPXO0jeS+hb+J1rNAyMR9s0coNCEKXGvcQhOTgkfRhk/bUjTF1invsqqHV+Q+s7VX870oPkG5z1hu826rRV8z88w3zJ1MwdFCCXOIxY=
+	t=1781292558; cv=none; b=XL1RyS7EDn/2Yl4GdEAhlLaA5xrx/AjwbOWvW6RYkr5JxAy6Rd4VXBkMsemw1hFFT4pWeljuuetQscjBYeK/3peRPqpQWJxf/RzV89jreDGLxkiZn4z+EU1oz+lrLa5MGj4ohLZ2to0E/9KHIf8rSpDeapN8INp8X7SJM25WpMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1781292558; c=relaxed/simple;
-	bh=y194xz2pw7UR4oVxuISv6WLw/M9JjuDpUxu6e6ZXbf0=;
+	bh=06yjw3p+ipuRaTZAWCI5G1pBBjTnmA793yGUK4DpqJU=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ldmZ6YEPpCGvg6bxEnuw5ysZN1hrlYX8SWofmuADwAlBdZACbEu4F5pSBcnZXjoWwpp2QxVqv+HvHFn3azigqlvWX5vDJTcfrnrGkAyajlaCHqRGbVT7Guilv71UiRWj78CImQfPoK1YL5rkC6ZLMfa+obQF1rp55irUcD0IW60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=at0OOUpz; arc=none smtp.client-ip=209.85.167.201
+	 To:Cc:Content-Type; b=lEfvsBCM90qH/yqeAxnJjibHtLoJtkZl71wNg3W6p6fPROYPZuVe+1RhOLps1B2RsWnu0cyypz5+SA4XePnom6tyOL1HVVzHYP23nBEHILbVd4rOoJP3GoSHAXX/4VYt8GTQQdNWWlvX5c4gvjqMCALsQ52IhSlA/bwSUOmEXBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qt4zRkD3; arc=none smtp.client-ip=209.85.167.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="at0OOUpz"
-Received: by mail-oi1-f201.google.com with SMTP id 5614622812f47-486417cc069so1694765b6e.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 12:29:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qt4zRkD3"
+Received: by mail-oi1-f201.google.com with SMTP id 5614622812f47-48687df43c4so2054142b6e.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 12:29:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781292554; x=1781897354; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1781292555; x=1781897355; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aEOgMIo61tN5cbwnLn9iRecU9xGHnAGtn6LC63IksYY=;
-        b=at0OOUpzxqo+WNrMVoZsCPDa707Xl6mqhh8Net9xYX4O4JXyM7EftJQotFkivGRz7P
-         meJbayUduodbJC/Q0rkRwUN3zN8OMYCz/3aoqRVA46RN2lPzsszBi7+VQjJ/xinPOFEV
-         vrDQK5MRfLUc++pV61kigGakyCe8IkcdY2MMbP1x+pTetJ9xrmjd5jfhbN5S4Bpqkw5V
-         s55NFtlobZ6bq7IhSHSbQXAzIu4SmfDYJqatwFd0ua6fM0IRVIZx7MBr/BzyS5PxgJHg
-         YrNOHrtOAf/ZnVLKd8tFutI9ljZwgQryEwarTD+NARtF1gGgZaBReuRS0BFcPoUZ6mOq
-         hGqg==
+        bh=2M2UIoQTEUhWBAO6CcMuiUQsYo7FQeN0Fuvmz5eDMgU=;
+        b=qt4zRkD3P79O7CMpCSgk2omvpeByXpgYK9BDRDYhwAC8+FHRR8aGBq7LgT2OwxcuoU
+         PwPKAiPPDUmcZyakBXMBHt5xbzkAyuwYYVR388mFOdByzJkudKL3psOSscsWulusiIOC
+         Br8SXVene6LB43AzjyN7JDdft61KRpCxslVBWRa3ZsAduCrt3p4ztm3NNtAZZiu3ipQX
+         3j+2fq85DkWaFF/y34kN5cpPYuATR3h8HakRWBcVgHlzN9iZDoCOspsFGGOjpslvcipm
+         FgrQUGSgAcntqR6Txf4LGNcWg0mkC9dNcAHrz0JEh04lpgLotX6ynmO59E2pEn09Riwl
+         B4LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781292554; x=1781897354;
+        d=1e100.net; s=20251104; t=1781292555; x=1781897355;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aEOgMIo61tN5cbwnLn9iRecU9xGHnAGtn6LC63IksYY=;
-        b=IgMfbyFcEJ5xBvvchJtzzVm42PB/UL58ry1OxGhVJ9+NLnoQPes/VlwOLxIHuhjt93
-         CbXfg9O15eOC7VMoJcvSvNIMjLvKWxRkgjUJ4Fq/E+CVQlqobg11T0TKTy09Ndb0RUo0
-         Tp6kfqDN3LLXSmRDJ+r2I6wvn02LBpHBBeS3iXA4AA41btMOvL1EwS4LEpLzVr5SNvU6
-         Hb6zrMBWfWQAQ8G+mouO4GtpRa6RGYRIRModCTWU0Tp6K1znQmmXo4hr9EQ/msh2pO4t
-         k+rcL3dDGulBNOYhtc1XuKNdS/GWuyiIOl+sKzjJdINk+F8AgqAWUrZ8VPjjmU5ZkSSO
-         mwrw==
-X-Forwarded-Encrypted: i=1; AFNElJ/j+uF8MOiCNcwoAjwY9H7+mnY2NMRuxXMELFegebveByYMmsP1DTy/1OjjSx/Lc6ITyHdCrL6AXw7xXMUnUXE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfYlLfGqtWtj5r2F/ZvlkaorPpGqzsR39ruqQOr2PyObDEddQN
-	p6p7EzpG6QbT2KpDacWgziNRI8bsyGJQyMqSsQRVPIZ2lZu6lQSbvxpd3/Gk/Xuk3bXFuINDzwi
-	OaPoqdAw84sZxzlhY9m13rDEaqQ==
-X-Received: from ilbeo3-n2.prod.google.com ([2002:a05:6e02:2903:20b0:502:1132:3da5])
+        bh=2M2UIoQTEUhWBAO6CcMuiUQsYo7FQeN0Fuvmz5eDMgU=;
+        b=RRd65uHXw3ALF9665Gc4uuYIWLWlziLmBtnM/7nftf5o8jxWEbvZUbT2ZiWwHMRkEg
+         2y+HgKvqx3BUQWzCv8wVmwpgpYY/iFpOc4Y+cC8DvK2AdiRnoku3gUnXQJmrFp04bBaA
+         Mvjgb8Fb5rQiodhrhNU29bkoNjXm2/YT7h1+4VdrBp+3sISmy09wY6FsimenrlUgWk3n
+         GOZVd8euMoH9/UvkT8pknyNcO+FGF+QbRlYO+ARtzOVnS7RjMp/cs9iI7NuCcUNoTz2Y
+         DGFH0q0t7cPtNMb4DLjQjZR9saxz4vcMDDzdvlD8OgwA5zOxO8HMWXj2N8oV8uhyi0uj
+         aPIQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/9ZcJibnVUQ+a7dkj4hXI64VeGLa3GbqSfVgxII3tVFB67O28MvOrdQY3MCqmTZaVR2BNokqYF4QOXQ1tTpPg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBuQ5C7GCTP3ik8PETDXE6tJK91oxbzGC3Zk8SeJQ2S07C4E0X
+	xUTKAF4UBcq7XwW+Wmv2KEhTg3Tu8sgunmbnDdk1GGfPpwNsZbkqVBBkM20VS/SBOR2wY0ZYzgF
+	x41ysS6BG24rSz/EjPCfQibNTrQ==
+X-Received: from ilbdw10-n1.prod.google.com ([2002:a05:6e02:410a:10b0:502:1132:3db9])
  (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6809:d2:20b0:487:4624:71c3 with SMTP id 5614622812f47-48746249e89mr25208b6e.5.1781292553983;
- Fri, 12 Jun 2026 12:29:13 -0700 (PDT)
-Date: Fri, 12 Jun 2026 19:28:52 +0000
+ 2002:a05:6808:1920:b0:479:e7c7:dc76 with SMTP id 5614622812f47-4872f4bc1a3mr2488426b6e.26.1781292554890;
+ Fri, 12 Jun 2026 12:29:14 -0700 (PDT)
+Date: Fri, 12 Jun 2026 19:28:53 +0000
 In-Reply-To: <20260612192909.1153907-1-coltonlewis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260612192909.1153907-1-coltonlewis@google.com>
 X-Mailer: git-send-email 2.54.0.1136.gdb2ca164c4-goog
-Message-ID: <20260612192909.1153907-5-coltonlewis@google.com>
-Subject: [PATCH 04/21] perf: arm_pmuv3: Generalize counter bitmasks
+Message-ID: <20260612192909.1153907-6-coltonlewis@google.com>
+Subject: [PATCH 05/21] perf: arm_pmuv3: Check cntr_mask before using pmccntr
 From: Colton Lewis <coltonlewis@google.com>
 To: kvm@vger.kernel.org
 Cc: Alexandru Elisei <alexandru.elisei@arm.com>, Paolo Bonzini <pbonzini@redhat.com>, 
@@ -75,89 +75,29 @@ Cc: Alexandru Elisei <alexandru.elisei@arm.com>, Paolo Bonzini <pbonzini@redhat.
 	linux-kselftest@vger.kernel.org, Colton Lewis <coltonlewis@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-The OVSR bitmasks are valid for enable and interrupt registers as well as
-overflow registers. Generalize the names.
+Check cntr_mask before using pmccntr to ensure it's available. With a
+partitioned PMU, there may be instances where pmccntr is being used by
+the guest and will be absent from cntr_mask.
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Colton Lewis <coltonlewis@google.com>
 ---
- drivers/perf/arm_pmuv3.c       |  4 ++--
- include/linux/perf/arm_pmuv3.h | 14 +++++++-------
- tools/include/perf/arm_pmuv3.h | 12 +++++++-----
- 3 files changed, 16 insertions(+), 14 deletions(-)
+ drivers/perf/arm_pmuv3.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
-index 8d3b832cd633a..1cceb1f614515 100644
+index 1cceb1f614515..17bb1cfdc271c 100644
 --- a/drivers/perf/arm_pmuv3.c
 +++ b/drivers/perf/arm_pmuv3.c
-@@ -534,7 +534,7 @@ static void armv8pmu_pmcr_write(u64 val)
+@@ -1028,7 +1028,8 @@ static int armv8pmu_get_event_idx(struct pmu_hw_events *cpuc,
  
- static int armv8pmu_has_overflowed(u64 pmovsr)
- {
--	return !!(pmovsr & ARMV8_PMU_OVERFLOWED_MASK);
-+	return !!(pmovsr & ARMV8_PMU_CNT_MASK_ALL);
- }
- 
- static int armv8pmu_counter_has_overflowed(u64 pmnc, int idx)
-@@ -770,7 +770,7 @@ static u64 armv8pmu_getreset_flags(void)
- 	value = read_pmovsclr();
- 
- 	/* Write to clear flags */
--	value &= ARMV8_PMU_OVERFLOWED_MASK;
-+	value &= ARMV8_PMU_CNT_MASK_ALL;
- 	write_pmovsclr(value);
- 
- 	return value;
-diff --git a/include/linux/perf/arm_pmuv3.h b/include/linux/perf/arm_pmuv3.h
-index d698efba28a27..fd2a34b4a64d1 100644
---- a/include/linux/perf/arm_pmuv3.h
-+++ b/include/linux/perf/arm_pmuv3.h
-@@ -224,14 +224,14 @@
- 				 ARMV8_PMU_PMCR_LC | ARMV8_PMU_PMCR_LP)
- 
- /*
-- * PMOVSR: counters overflow flag status reg
-+ * Counter bitmask layouts for overflow, enable, and interrupts
-  */
--#define ARMV8_PMU_OVSR_P		GENMASK(30, 0)
--#define ARMV8_PMU_OVSR_C		BIT(31)
--#define ARMV8_PMU_OVSR_F		BIT_ULL(32) /* arm64 only */
--/* Mask for writable bits is both P and C fields */
--#define ARMV8_PMU_OVERFLOWED_MASK	(ARMV8_PMU_OVSR_P | ARMV8_PMU_OVSR_C | \
--					ARMV8_PMU_OVSR_F)
-+#define ARMV8_PMU_CNT_MASK_P		GENMASK(30, 0)
-+#define ARMV8_PMU_CNT_MASK_C		BIT(31)
-+#define ARMV8_PMU_CNT_MASK_F		BIT_ULL(32) /* arm64 only */
-+#define ARMV8_PMU_CNT_MASK_ALL		(ARMV8_PMU_CNT_MASK_P | \
-+					 ARMV8_PMU_CNT_MASK_C | \
-+					 ARMV8_PMU_CNT_MASK_F)
- 
- /*
-  * PMXEVTYPER: Event selection reg
-diff --git a/tools/include/perf/arm_pmuv3.h b/tools/include/perf/arm_pmuv3.h
-index 1e397d55384ed..d045b0f3b93fe 100644
---- a/tools/include/perf/arm_pmuv3.h
-+++ b/tools/include/perf/arm_pmuv3.h
-@@ -226,12 +226,14 @@
- 				 ARMV8_PMU_PMCR_LC | ARMV8_PMU_PMCR_LP)
- 
- /*
-- * PMOVSR: counters overflow flag status reg
-+ * Counter bitmask layouts for overflow, enable, and interrupts
-  */
--#define ARMV8_PMU_OVSR_P		GENMASK(30, 0)
--#define ARMV8_PMU_OVSR_C		BIT(31)
--/* Mask for writable bits is both P and C fields */
--#define ARMV8_PMU_OVERFLOWED_MASK	(ARMV8_PMU_OVSR_P | ARMV8_PMU_OVSR_C)
-+#define ARMV8_PMU_CNT_MASK_P		GENMASK(30, 0)
-+#define ARMV8_PMU_CNT_MASK_C		BIT(31)
-+#define ARMV8_PMU_CNT_MASK_F		BIT_ULL(32) /* arm64 only */
-+#define ARMV8_PMU_CNT_MASK_ALL		(ARMV8_PMU_CNT_MASK_P | \
-+					 ARMV8_PMU_CNT_MASK_C | \
-+					 ARMV8_PMU_CNT_MASK_F)
- 
- /*
-  * PMXEVTYPER: Event selection reg
+ 	/* Always prefer to place a cycle counter into the cycle counter. */
+ 	if (armv8pmu_can_use_pmccntr(cpuc, event)) {
+-		if (!test_and_set_bit(ARMV8_PMU_CYCLE_IDX, cpuc->used_mask))
++		if (test_bit(ARMV8_PMU_CYCLE_IDX, cpu_pmu->cntr_mask) &&
++		    !test_and_set_bit(ARMV8_PMU_CYCLE_IDX, cpuc->used_mask))
+ 			return ARMV8_PMU_CYCLE_IDX;
+ 		else if (armv8pmu_event_is_64bit(event) &&
+ 			   armv8pmu_event_want_user_access(event) &&
 -- 
 2.54.0.1136.gdb2ca164c4-goog
 
