@@ -1,212 +1,212 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBC83D8901
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 07:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781249719; cv=pass; b=Q8JosVYKlP0DEEsNextKN/g9AbldsZdUGU4rsKuybVO+Uc2VWarkLvz1r0AaP1DW64ojfEf32J/qS18axSac4k9iXo4+nIMlC0PczkwzHdaW+db08Io7z8+B//3BGpGSftDz0IEb8XKVI6ncyWqrqPHbZJ8su1lpUE6KAfTQ0kQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781249719; c=relaxed/simple;
-	bh=p6q8LWPMVa2osOVn3baZs5YxnHGVEKp86xJ2gk1+YxQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SsdF4Z+k77ZckHdy9AZ2lS7tbNN/zq8kvnTlsQUov1ajs40KIu6+UGiPR5LmDb4GXnJixUjR5sWPZ/zB7M/7oqjBwiINVOVTmXHDLtHBfOQQiDhWIECpCqGITj0e+/3Yt2mTuzMkCLRKLIdjgHhCzd2hO5cgC2UbQiztf6OLqcU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=J4dXThBe; arc=pass smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A83353D648A;
+	Fri, 12 Jun 2026 07:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781249729; cv=none; b=F2LnbXQZ4Vc2+rez0n0vqgouVY+YsgH/ftlCefZQKkk/nRVJ6Nf0358mBd8Qjt8HfaTRQ8o37uiXakl7zaJ5i6Xvk7xTvOOT41+62DZQeb+Q0mMIkYrW+XWAX7VnrjaP6yobsc7xmqDFJWFuELj+57RANrb/W8hvvIGuHOgcV6I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781249729; c=relaxed/simple;
+	bh=6PFKtc4OHuGEBph1RwUbyC76NRjLZPimWFCe311V/1Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pEWiPneoHPWQnam/VHgCR+fzFtAxb1QgSnfNuNv0UrrBO+Swqsy4I7stqS/9qj6xt9f37ZN+3mvX5peQVt/kFNjWya4ZZ5jYtIuKH6xFsVHZvshfPK7wR7p6fQugO8dwPTgw2+xWQGskJ5quNUhGtajfsXA/i6aygHd26X0Ql10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dw41I0KG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="J4dXThBe"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7e2fc11088dso6421807b3.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 00:35:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781249717; cv=none;
-        d=google.com; s=arc-20240605;
-        b=e0Wrxjn92jmN20agPAKPQgI4fxwRfUW7JrDy8WTLIcUnIvAo4aRAKh7Iy2EgYkOnxt
-         4WgvX5GuI/dFUJMk0M6kmiNhOLMiyC/yCFDzSnx2Pj8Ih8YzBgiQu5DyOKXEFcNXjz4y
-         WyTqH43xh0+JKBGNdnXmwUDup/aWnsMNKoXGUpKfesSoYVFVcEFNqazlynWAHrPq8L3y
-         XRQ1wvZYRK9OOYkhVKjOt/w8350jjdpgtrVizNARUCbBLclIrRzm5AaSDBXQLcjmX4tC
-         qpDJyX/3s2xvgBChMlrky8A4kxJbL2kBrOymAHkFAMH9NFqXkY3tbxcLcDRQFrnfXg8r
-         jbIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=g1vLF6yuNSQgtVfJ+k2uIVqLmlvQ2f0shING6YSG4gg=;
-        fh=9bT3t6iSUQRy7bvZmGkjihMxvu0hDourlQEYEFihtAA=;
-        b=SrG/f2+auo+Fz/Wi5auxPcoNtrllyjPd1FmbQiU3NIghJTJDQ0s5gx7qQpkMUfaind
-         4ZcggwexIuUzbasOICoek/DMkj526SLzx6R2slrFydzjkSN54PSWYPgcvrjLx5rj4fej
-         OHMAiNVbPWwfoHfdSnrVL5nSsND8UbrmWX+ujOEwbwkMCMOyPjhHm44wYfB8V0PoOWzt
-         GrRQcaZ7++dNZS+GqcJXyO12ykBQkJeBxg0wMmYo/glaH/SA54iuu5ApB42MrLnk7Dq3
-         m4XK5JLx1m3erLRuAMv7vn/Dtit5m/D2g2+RCUhJRSnt4ubMe1myBj65Lj0etIxuT9we
-         rSNw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781249717; x=1781854517; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g1vLF6yuNSQgtVfJ+k2uIVqLmlvQ2f0shING6YSG4gg=;
-        b=J4dXThBefC/uv2x81IA7NSuEoWoexazimn8V8DKAXljYkmsI7laNV1zY/Dy0fUxMwi
-         EpMDSRwzhCk7HuyVirTGkvjYmqkTO6VhWfVz8ybPjAPhIwsY0PW9VlcBxZzBg17hiUzT
-         LJrOnRk++eHkpd+cqkT90bqerl9yX8cc5AYhu69Rcb0sKW7ALA2zafe8fyarShtqsnHE
-         jeiQQ/AKg5tPx8+Km/itxnPkgyx6eiKY+AM40UYt/At1csgeOJ78QPt+sXWsWuhFP8sv
-         dIUGuFqLLWUFGQ/HavxSmB7IPH0Up19eje2bFm4nUgecG2bO/dhrdAMobt6x5HYpecuZ
-         uF3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781249717; x=1781854517;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=g1vLF6yuNSQgtVfJ+k2uIVqLmlvQ2f0shING6YSG4gg=;
-        b=sb90zP1k8Sgy6JSWmD21bV2F0T8TO+EKwRHRg1hn5WAWwLkp8aAd+wAs4Gmru/DaV+
-         TnZKRNTopSq/TN0bekbXhiTcLwqdtVkBsP/Kq+0Fd144UYjs1jw0mSU95ACrZ+6uWXoE
-         rhniC1bOPOdHITAotVFgT0PZPb6y1cAj45qtTZqfDHXFve523mX4pZL95DNp8xR0Wg9l
-         AH39R7jfty7MBQeHSe8MmAAc2hkPb5jHgzR7QVeR5wscgZizpmsh0IFU7Xs5PLrsEs7b
-         BLCv6lJkU7NPF9Jwmu6aWwOfvTeYoa/wesQvtSVTB6jv/Rb/7u2+NZyBWwKpRUyq8LKv
-         t40w==
-X-Forwarded-Encrypted: i=1; AFNElJ9jpBnBUZO3Kf38W5w4eVegoHOxUdLASHr5QrWHwovs8fdgeBgz9UqItrJFI+Fo1tkhfvwn/iJo6JGHDDGd6uM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpcFQMTBdqG2wKW7emOJQWeAn9k7zhHMIfKKH1Exbn9mV4KFcW
-	xojxIkC0Iv4/cch8Hmc+0D76atLfudizTA1usACayjeFyWWDji02ojrp7BNZEyb6pYHZbcdzOb7
-	AhE6ez0DfPANPJBuemlGd3yvWL1bMbYILnOFiTrPj
-X-Gm-Gg: Acq92OE9FQCmkBj+9yMXDlMdQZ1pKHr6TQUKQNWV3P1MoVqWmhMhj6U1OPzO8X/QWub
-	yCvE/DGaV5y41c76HLKuixGb/U4QKbk+LEpnRKEPY50VDtm9C5Leioj5j0djWu609WYOsxCSFRk
-	tjueA99m78zIpFU3jz9PIoAWd+7A1RidkP+NbiZIB6weigsQEeDWEwlZyYoGtkmaSmaQbtWJF1Q
-	hnvoW/ea95zKjDuULmcdKPE+VUu039YCFPg8xYcFyg3Zym5O+loAcp7ocPz+HuHKfRJHCb6nMdz
-	TePQGgMLebf/kWnXraRv/lZD0jMSx3jhpWVJzQ==
-X-Received: by 2002:a05:690c:4b0f:b0:7d1:c256:b5a8 with SMTP id
- 00721157ae682-7f7b9020616mr15009847b3.40.1781249716383; Fri, 12 Jun 2026
- 00:35:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dw41I0KG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1EAE1F000E9;
+	Fri, 12 Jun 2026 07:35:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781249728;
+	bh=S8tXmCVe6Dq2p9EIVnNxhFn9TuFpBDLwCbLsDYh9a/4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=dw41I0KGmcYOKqDkRFzNeMeBtkob/gBxFAWH1wEeldyPh3p+C4YgF7hRiawytWCjm
+	 l+tQKR0a9KqVSlZZ044nX9x4gAnA1lr01x+H44DQcoHyRbXVrf6o2p6kB06jmrZJw/
+	 5sF+D2BW4WvwHvx5174uapQzgoqZK/z2YwdRl/f5IfI5hBJFwVf4/HaiL6QQXX7VTc
+	 EZxlVxxaZIRNSjX4EXLzgR2RA/grfrCDN86buvzST9ZRwyZ+FOvehDiv6WTMxEaiqa
+	 j4wCgrl70ReuumqCWCywmwW+6jI9TGP3+kL7FcWzXZYMJ5eBB5YHi7tAMIwlSLjMh/
+	 uUr9Aousv83GA==
+Message-ID: <63ed20dd-e572-4ac5-8cb4-7eed2f42f2fc@kernel.org>
+Date: Fri, 12 Jun 2026 09:35:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech> <20260611-b4-kcov-dataflow-v2-v2-1-0a261da3987c@est.tech>
-In-Reply-To: <20260611-b4-kcov-dataflow-v2-v2-1-0a261da3987c@est.tech>
-From: Alexander Potapenko <glider@google.com>
-Date: Fri, 12 Jun 2026 09:34:31 +0200
-X-Gm-Features: AVVi8Cfm4phss8ao3422B1w1tp_vYDP5PJUsvm_ZDGjV7MhrtYD94WvUDwrEe3M
-Message-ID: <CAG_fn=WYdnX_09RNs3sTQWn+KZZaw+X9a=s1Uk1bqd3gW04h6Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 01/14] kcov: add per-task dataflow tracking for
- function arguments/return values
-To: Yunseong Kim <yunseong.kim@est.tech>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
-	kasan-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, workflows@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Yeoreum Yun <yeoreum.yun@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: mm: fix and speedup "droppable" test
+To: SeongJae Park <sj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+ Anthony Yznaga <anthony.yznaga@oracle.com>, Mark Brown <broonie@kernel.org>,
+ Sarthak Sharma <sarthak.sharma@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Aishwarya TCV <Aishwarya.TCV@arm.com>
+References: <20260612012910.84424-1-sj@kernel.org>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260612012910.84424-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jun 11, 2026 at 6:21=E2=80=AFPM Yunseong Kim <yunseong.kim@est.tech=
-> wrote:
->
-> Add a new tracking mechanism that captures function arguments/return
-> values at instrumented function boundaries via submitted as an LLVM
-> RFC SanitizerCoverage callbacks:
->
->   __sanitizer_cov_trace_args
->   __sanitizer_cov_trace_ret
->
-> This requires a custom LLVM/Clang build with the trace-args/ret passes:
->
-> LLVM RFC:
->
->   https://discourse.llvm.org/t/rfc-sanitizercoverage-add-fsanitize-covera=
-ge-trace-args-trace-ret/91026
->
-> LLVM PR:
->
->   https://github.com/llvm/llvm-project/pull/201410
->
-> Clone and build toolchain:
->
->   git clone --recursive --depth 1 --shallow-submodules \
->     --jobs `nproc` https://github.com/yskzalloc/kcov-dataflow.git
->   cd kcov-dataflow
->
->   cd llvm-project
->   cmake -S llvm -B build -G Ninja \
->     -DCMAKE_BUILD_TYPE=3DRelease \
->     -DCMAKE_C_COMPILER=3Dclang \
->     -DCMAKE_CXX_COMPILER=3Dclang++ \
->     -DLLVM_ENABLE_LLD=3DON \
->     -DLLVM_ENABLE_PROJECTS=3D"clang;lld" \
->     -DLLVM_TARGETS_TO_BUILD=3D"X86;AArch64"
->   ninja -C build
->   cd ..
->
-> Build and boot kernel (using virtme-ng):
->
->   export PATH=3D$PWD/llvm-project/build/bin:$PATH
->   cd linux
->   vng --build \
->     --configitem CONFIG_KCOV=3Dy \
->     --configitem CONFIG_KCOV_DATAFLOW_ARGS=3Dy \
->     --configitem CONFIG_KCOV_DATAFLOW_RET=3Dy \
->     --configitem CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL=3Dy \
->     --configitem CONFIG_DEBUG_INFO=3Dy \
->     --configitem CONFIG_RUST=3Dy # for rust module kselftest
->     LLVM=3D1 CC=3Dclang
->
-> Core implementation in kernel/kcov_dataflow.c (separating from kcov.c
-> as Alexander's request):
->   - Per-task lock-free ring buffer via debugfs kcov_dataflow device
->   - READ_ONCE/WRITE_ONCE atomic pattern (tested on arm64)
->   - copy_from_kernel_nofault() for safe struct field reads
->   - in_task() guard rejects interrupt context
->   - Bit-31 recursion guard prevents INSTRUMENT_ALL re-entry
->
-> Build system (scripts/Makefile.kcov, scripts/Makefile.lib):
->   - CFLAGS_KCOV_DATAFLOW: -fsanitize-coverage=3Dtrace-args,trace-ret
->   - RUSTFLAGS_KCOV_DATAFLOW: -Cllvm-args=3D-sanitizer-coverage-trace-args=
-/ret
->   - Per-file opt-in: KCOV_DATAFLOW_file.o :=3D y
->   - Respects KCOV_INSTRUMENT :=3D n for noinstr exclusion
->   - CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL for whole-kernel
->
-> Kconfig (lib/Kconfig.debug):
->   - CONFIG_KCOV_DATAFLOW_ARGS / CONFIG_KCOV_DATAFLOW_RET
->   - Depends on CONFIG_KCOV and CONFIG_DEBUG_INFO
->   - CONFIG_KCOV_DATAFLOW_NO_INLINE (default n)
->   - CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL
->
-> Also fix rust/kernel/str.rs unused import (flags::* -> flags::GFP_KERNEL)
-> which newer rustc (1.98-nightly) rejects as a hard error.
->
-> Rust support requires rustc built against the custom LLVM with
-> trace-args/ret passes compiled in:
->
->   https://github.com/yskzalloc/rust
->
-> Link: https://github.com/yskzalloc/kcov-dataflow/
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Nicolas Schier <nsc@kernel.org>
-> Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
-> ---
->  include/linux/sched.h  |  10 ++
->  kernel/Makefile        |   3 +
->  kernel/kcov.c          |   2 +
->  kernel/kcov_dataflow.c | 324 +++++++++++++++++++++++++++++++++++++++++++=
-++++++
+On 6/12/26 03:29, SeongJae Park wrote:
+> On Thu, 11 Jun 2026 12:01:55 +0200 "David Hildenbrand (Arm)" <david@kernel.org> wrote:
+> 
+>> The droppable test currently relies on creating memory pressure in a
+>> child process to trigger dropping the droppable pages.
+>>
+>> That not only takes a long time on some machines (allocating and filling
+>> all that memory), on large machines this will not work as we hardcode the
+>> area size to 134217728 bytes.
+>>
+>> ... further, we rely on timeouts to detect that memory was not dropped,
+>> which is really suboptimal.
+>>
+>> Instead, let's just use MADV_PAGEOUT on a 2 MiB region. MADV_PAGEOUT works
+>> with droppable memory even without swap.
+>>
+>> There is the low chance of MADV_PAGEOUT failing to drop a page because
+>> of speculative references. We'll wait 1s and retry 10 times to
+>> rule that unlikely case out as best as we can.
+>>
+>> On a machine without swap:
+>>
+>> 	$ ./droppable
+>> 	TAP version 13
+>> 	1..1
+>> 	ok 1 madvise(MADV_PAGEOUT) behavior
+>> 	# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+>>
+>> Reported-by: Aishwarya TCV <Aishwarya.TCV@arm.com>
+>> Fixes: 9651fcedf7b9 ("mm: add MAP_DROPPABLE for designating always lazily freeable mappings")
+> 
+> Because this is a fix for a test, I think not Cc-ing stable@ is ok.  Further,
+> arguably this is not a fix but an improvement?  No strong opinion, just
+> thinking loud.
 
-I think the total size of kcov_dataflow.c doesn't justify splitting it
-in multiple patches.
+The test will hang forever on very large machines and timeout on large machines,
+so it's a fix not just an improvement.
+
+I think Andrew just automatically CCs stable on any test fixes, so yeah, CC;
+stable makes sense for this one as well.
+
+> 
+>> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+> 
+> Reviewed-by: SeongJae Park <sj@kernel.org>
+> 
+>> ---
+>>  tools/testing/selftests/mm/droppable.c | 46 +++++++++++++++++++---------------
+>>  1 file changed, 26 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/droppable.c b/tools/testing/selftests/mm/droppable.c
+>> index 30c8be37fcb9..57e1b6fc5569 100644
+>> --- a/tools/testing/selftests/mm/droppable.c
+>> +++ b/tools/testing/selftests/mm/droppable.c
+>> @@ -17,10 +17,10 @@
+>>  
+>>  int main(int argc, char *argv[])
+>>  {
+>> -	size_t alloc_size = 134217728;
+>> -	size_t page_size = getpagesize();
+>> +	const size_t alloc_size = 2 * 1024 * 1024;
+>> +	int retry_count = 10;
+>> +	bool dropped;
+>>  	void *alloc;
+>> -	pid_t child;
+>>  
+>>  	ksft_print_header();
+>>  	ksft_set_plan(1);
+>> @@ -35,26 +35,32 @@ int main(int argc, char *argv[])
+>>  		exit(KSFT_FAIL);
+>>  	}
+>>  	memset(alloc, 'A', alloc_size);
+>> -	for (size_t i = 0; i < alloc_size; i += page_size)
+>> -		assert(*(uint8_t *)(alloc + i));
+>> -
+>> -	child = fork();
+>> -	assert(child >= 0);
+>> -	if (!child) {
+>> -		for (;;)
+>> -			*(char *)malloc(page_size) = 'B';
+>> -	}
+>>  
+>> -	for (bool done = false; !done;) {
+>> -		for (size_t i = 0; i < alloc_size; i += page_size) {
+>> -			if (!*(uint8_t *)(alloc + i)) {
+>> -				done = true;
+>> -				break;
+>> +	while (retry_count--) {
+>> +		if (madvise(alloc, alloc_size, MADV_PAGEOUT)) {
+>> +			if (errno == EINVAL) {
+>> +				ksft_test_result_skip("madvise(MADV_PAGEOUT) not supported\n");
+>> +				exit(KSFT_SKIP);
+> 
+> This check is for a case that this test is running against an old kernel that
+> doesn't have MADV_PAGEOUT?
+
+Yes!
+
+> 
+> Assuming so, I was first thinking this check might not really needed, assuming
+> the test runner would pick the kselftest code from the running kernel's source
+> code.  But I recalled some people do get kselftest code from random place.  So
+> this check seems nice to me.
+
+Yeah, we try to handle older kernels on a best-effort basis. This one is rather
+simple :)
+
+Thanks!
+
+-- 
+Cheers,
+
+David
