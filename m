@@ -1,202 +1,183 @@
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012046.outbound.protection.outlook.com [52.101.66.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B69F2D3ED1;
-	Fri, 12 Jun 2026 12:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781268961; cv=fail; b=ZAnKCqvxnjlxRNuG3wpvmpewQc9hXeLeU+REvPGcgn2e9mon6yLMzGa4KDoXb78Q9QlaxeRO3StmCmUJgMIZKOo+4OCvqGVpIvG7hO4ycX3rbAraOlC3yUeWJDeLyAsuy7Zz6FdmTrPYmkKrFUJ0zMWXV7iaYjAbPdogDfz3n+Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781268961; c=relaxed/simple;
-	bh=1SfwCcdqtBvChJoCjKFoXtMR9lcEiNlKUzVNVlrPPBs=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=TJmuX1y1L6NXdo0NAu55p5X9xF4BH3+f8zUdjnfK+VDoe+y5gqekIQe9UjJin8eCmDOzbD5YCZj3mD10xix8A4qq9wxgjmKjXX8HeIfgRymKx5qmBDh31mTtVtq6zId+8pZPEF7FsEZQ/aNTxJuDIvwjqsA6FUwO/PtXQz8z46E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=NNGEDVxb; arc=fail smtp.client-ip=52.101.66.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834F03D2FF4
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 13:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781269526; cv=none; b=u+Hkv7n4tGO7eb2j+imFak4OOsXKyZ7Fc3ZG1749yzGruMc3wH7YmsFDeoq8Bm416H0U/zYFk0s1yjmrf4/FeGOd09C7uDCKdDhX+Z+aipmsar5wT+0RHWQvuT1EHfK1Rn6WH+qoI5Do7ZGAHkhfH+RuA/FClXRlcxGs5vju1S4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781269526; c=relaxed/simple;
+	bh=/u5n0ZLTjcOeOWVFdcyyVpxGewb/+5l0WRaVCdRb5Gg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y/dZcAPIhHycxzF6OZQyftDwoTlYolniXP2OQSq1Nr7cG2htoQvzpDBSLai190QZhyFw/+lt7aUPzvc6/ZVg1rGUW7kX5gKgN8dlXr7HREUaVlTnkYwhzcPPHAgrhGckPVvvjMP7r0iTlVm8JmZ6+xZDKZ+KskfljvqBrSxn3Kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f6cRqZhu; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="NNGEDVxb"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tDf5xsKvC5bzSBWImMZFlWpFsQZhddHtOgbRZ1shV7O75XAKrYEWNRacxff3tSJ3kchlkaYnS17wA5vxfXwM7UM8ir6PiYW4w4WMs8Yz7vR2kOV0hvOLb5MrerConRbT3I9oDlAfAcHT/IKdBJ1rqJKN2DWhu0WcqGlj+qJNQ5bJZwn1y2/CQAOiRq9xbyO7CuPGx4hKT9N1s5+ZzOLz47v2AJWmyTTbpV+XY2sYPoZ46OKgO8XY/N+T2BUTa9udIoL5FYFdvGGyqPb3mgZv6bqdAsfWFaZpOkQEHP3lVoTrwPE1JxB+igCjaTD1wr7BzfFqawycqKikYQIJYah3ww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eO/6LqX1ou4Z3VRKAIDsM3acu8fUnJgiHoFfOZKSXGY=;
- b=I4IfMNb3iO1UzmRpC6YJbF/6tDI0bcSWfDu0QYTiWnrKypsuA2+B0fIbLBCOq3J1r/lv9qhoYCq61sE7OPGYBb45w1yL9hW1aHlfrYRFEptTOUMCQZatqL9YpgvuArSac87ntz4hFMxUsrL6MnGMiyDnBnX+gkSS28DVlYWAbtZsvkm1wquaWcLPBM4e6n1ZYBwXSVHOH7xHDwmzrkHTEHm8K4pIHobpE4mOYLf4uxk3FxyDOlD5QmuP7hCJKMxS9gF8ElT782taujccEVbSGJGiMnfcIhF7AHXxGSbE8TLxAcWYhK+oz//DoEAlxQtBCBBQu4zC5gMo3VyoxWk/pg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eO/6LqX1ou4Z3VRKAIDsM3acu8fUnJgiHoFfOZKSXGY=;
- b=NNGEDVxb83KibfO2+9+QsrD+wUQ0Xto3ua0ky92PSloglX9CkQ+Cgl03FLKj71OGVO9t4fAK4K5u09bUMZ7a215Gxz66RrrrZneHdCq75Y0UCPalfdKYsQ4XsxsnmMPeToaDMznNQqu7RMS2ib8coSoXTok2VgsH6x6O3kqAXn9IHn2awm1GSvCsa3rJ9F3UCbMmuuj0TWNH3D8/Am66niXb+Yb5WEVHbiyr92u1mZe2F6TgK6ADNRi/uCRc1KYhAlpHL+GX7XGU6LzMBGjTBU/PmxesbbqwC8m3zaCK8MeRfflJpIaYNV0wPDbTPzOnkeuk+3XjpK8wgOUW4pyPMA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:39b::19)
- by VI0P189MB3236.EURP189.PROD.OUTLOOK.COM (2603:10a6:800:2b6::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.13; Fri, 12 Jun
- 2026 12:55:54 +0000
-Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
- ([fe80::69fc:c4d4:200b:e4b4]) by AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
- ([fe80::69fc:c4d4:200b:e4b4%7]) with mapi id 15.21.0113.013; Fri, 12 Jun 2026
- 12:55:53 +0000
-Message-ID: <56f7bd56-db01-475e-83e6-65963974f613@est.tech>
-Date: Fri, 12 Jun 2026 14:55:50 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 03/14] kcov: add barriers to recursion guard in
- kcov_df_write
-To: Alexander Potapenko <glider@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kees Cook <kees@kernel.org>, David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
- kasan-dev@googlegroups.com, rust-for-linux@vger.kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, workflows@vger.kernel.org,
- linux-doc@vger.kernel.org, Yeoreum Yun <yeoreum.yun@arm.com>,
- Yunseong Kim <ysk@kzalloc.com>, Yunseong Kim <yunseong.kim@ericsson.com>
-References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
- <20260611-b4-kcov-dataflow-v2-v2-3-0a261da3987c@est.tech>
- <CAG_fn=XRzSuFrxtFbz2t9jjY8HPUUhhnU3iWJiSV-X4+hg66cw@mail.gmail.com>
-From: Yunseong Kim <yunseong.kim@est.tech>
-Content-Language: en-US
-In-Reply-To: <CAG_fn=XRzSuFrxtFbz2t9jjY8HPUUhhnU3iWJiSV-X4+hg66cw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO2P123CA0082.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:138::15) To AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:39b::19)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f6cRqZhu"
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-5176a2fd597so7616941cf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 06:05:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781269521; x=1781874321; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fvXXwXWTSGYXKy5X/ooRPGvrZHiscmZ8mdP5qLv/Du4=;
+        b=f6cRqZhuVt8KayVC3XtlRngSYe5LtJZSBKIvqqj6w46+GBCF+xZHvukTCWzjxvxjcC
+         tmsuAMrzf6rW19MNdZWnWHfAV9FIyc+IizXZ3dUhegnPv4/gHTFaT/JQ/0nJM12RqwJF
+         153KF/xdtu/A/GN+lSGz45Qhx0KFYMBzp3lHdzRdI/Bmpt0D4l131lu6aM2n6MCID6+6
+         gINuiYfSoY9uw+YU29eeV7l9d3PAix9hykrsfm0itg4SmaTZCpTlHfV01VEcPpQcvyN1
+         z3mTLkCwtfNuMne/+Eua/63TuAgcRhsUAP8eiLBIQCTvFDLO8n8nXIyZ5m5Q6iKO71HM
+         Xaow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781269521; x=1781874321;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fvXXwXWTSGYXKy5X/ooRPGvrZHiscmZ8mdP5qLv/Du4=;
+        b=fy36Qt8pKVhwrcdUyKrAqee/4xjzzCsgrt0Q/7+f+Hinr5wCxPw9MzP4lQaHySW1lI
+         UuzaRuqxfkvPD75w9BWdanEAZYMVPXZtqCeWjrGXRT0nq5g2Kw+KyOffBqgs6jtDRkta
+         yRZ7eP6r/+V7XhdDMQdm02bDXPNnZ1sl/2aIS+fzq3NhmwUTt32msw6vaH3FbOzhJ4pv
+         ymahGIce5zE8+0QV7aiFy0dDCs02lVCMC2guUBacdjB/Hsp8iG9UPJnh5ikJ88Du1SaD
+         Ud+cHbx7WdjZF5HXdd57rnB7ys2SIJ2TyhlBrXp1I1b4OxDGIKur24/hvjrRS+HGHMEL
+         BGHA==
+X-Forwarded-Encrypted: i=1; AFNElJ+RgQb/QRBm7ekgFLaAmoJ1YRdRppk9hOAae4H9q/gDClHcYzil2IvjsHmjc1EY6Ca/8Cn92rErww7EYBs+e1w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/URl0yICUkl+AzDTD/k6CH7v9g2m5RhTT5l89XSq5O6LWOnaA
+	c4VgW2u0RnDFgtJPy3TqfWtc4oSgKOXacQcTZ/s6PlgwuUQ9p5RSMivA
+X-Gm-Gg: Acq92OHlKV6UUlcsNp0GLcDtO+aqU6uLXQJ0vTGazt6ZFIA9m6nZaDFiZBymvy3rBfn
+	WZVcrLTnclyAbPnqInQ/Dlrzp4Npdlwq27nyns40MKwIgjzsYxuNt6QWetmad5UoLnCQ9n99IBQ
+	KbZ0vyoQxlz6dXluBK0MJBmZ6CALeM1oNTtFeyR1AmBMnzvF9b3FnmTDhTBj9NqnKFH9Nc1UMw+
+	OweEZawmtTN4j7ibpW+/GEuna+f4y7bcnnGt2bSYljB9je4vp+R3QKbYZvBzaXEYXNMEkpoYYka
+	kK/I2cxeJM0uB8k1pivMaD6O24rNQbIGDnGrrAKnvjkK+m0WLXbOsyiciWEajIzyU63iFjHDJCd
+	o0lnzYT5zfnk/0E0Phlct4DHZe6fJT0XxQrm3DWB0Z2kCv/z169TKLq7Ic75oRErdqjHdvtxe94
+	3t0V/mvy5I5sS935PEyg==
+X-Received: by 2002:a05:620a:448f:b0:915:cda5:2805 with SMTP id af79cd13be357-9161bf57505mr368410585a.52.1781269521084;
+        Fri, 12 Jun 2026 06:05:21 -0700 (PDT)
+Received: from houminxi ([163.123.141.225])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-91619ed7857sm201511485a.4.2026.06.12.06.05.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jun 2026 06:05:20 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
+To: netdev@vger.kernel.org
+Cc: aconole@redhat.com,
+	echaudro@redhat.com,
+	i.maximets@ovn.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
+	Minxi Hou <houminxi@gmail.com>
+Subject: [PATCH net-next] selftests/net/openvswitch: add SET action test
+Date: Fri, 12 Jun 2026 21:05:03 +0800
+Message-ID: <20260612130503.311240-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8P189MB1752:EE_|VI0P189MB3236:EE_
-X-MS-Office365-Filtering-Correlation-Id: 21059141-36fb-4598-f95f-08dec881f026
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|23010399003|376014|7416014|18002099003|22082099003|6133799003|11063799006|56012099006|4143699003;
-X-Microsoft-Antispam-Message-Info:
-	mBaOhkZLAGjNnmH3Tu8rXvMAuxONazSJ0VCfMd6Q5qTheCXEt/ZTGFv8G2SStr+FYlDtC+U68Dt4CpRZ1NTjRN5atCx2ZZchnZ6MLlcgGut6e+GmbY6c0PizUc1fENSV5kymfxMiW2l071h2BMcV8ttbhwNZ17WbvrJocyOdIKD6Iq++v63jCggGSVxBDSSKQ9e3l/bJOyz2Lxx7MuSmGcrGf7jXXznppJZjCkKx1RKwTc+ggSRFezzobBBqhRlVfvzg4msMZR0Dsd1uCI644uQbCFnAGg2AdfX0zUxk5SMy8f7F7EwAuql+7S2cITir6+Q1/O7KTKQTuAQ07HK73Z/D0wkpSH7fgeoqrPfpwPQZSS1JD7aMw4P3F8OXpJn7zimB/G6FgZFCVvi6f7kZGPpjLNwMvSXYYeNYZ5U3wIFPXGIhhvegvppBsupQCZG+hTmtgD4rXgE+kl26sgsPkSjDeVRvWrUVn5Ar432+wDuadt0Sjekgq/elWGkqXkuE2lAIGaaB+KBm/1hVHPhqgapQn653io05WQOOpB3r6bcgOkMeRP05sQx+ZBX/Y4BmnwN2DLoVNeyotCWNSXQvOws8HB63gPL8ciDZhY0fDKHZtw45rlc6PGr2VyiQwFy4IY3/Wnj2EVyy9R/zGjcT60semWJ76LC3PR6stTzXdLJy5GU5UjpFGGYC0kiYsm/C
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P189MB1752.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(376014)(7416014)(18002099003)(22082099003)(6133799003)(11063799006)(56012099006)(4143699003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ekpxcWVWU3J4dW96aHFETks4M3k0VGpuQzI5ZDFGeWxrL2l0M0NoUXQ5Wllr?=
- =?utf-8?B?SWhYOTBXblMvV2RsalpmZkdZcjJkaEJPSTRYWjNGeFk0NExzOTFYeUtnQW9B?=
- =?utf-8?B?Y3NvUS9UdU1Da1pJc0FtQkx1ZEhXUmthQTFXV01UaEtJZVJ6YVBGbk1NdVhP?=
- =?utf-8?B?ZmFMOGdXTmd1N3dXeWJLcHFIU1l5V1NIeWpMVDJKUEk2ZlBhZVJBZForWVpV?=
- =?utf-8?B?ZlBjQU5BdWgvbnAyZmRseGRGQTk1WWsvYXEyZzlpZmMxMzhkRGtaZUQwOWs5?=
- =?utf-8?B?eDBCR1l0eGU5K1JzL3o0Zm5sTDErN2hZeXVscHNGdko5WmdMd010MVY5cXVp?=
- =?utf-8?B?Z0cvMG1uQ041cmxMRExCU1NHZ203d1dRTllsaDBlYjA0Z1BrZ2FObXFvNTZu?=
- =?utf-8?B?Slk1ak1mS1l2YzR2SDNmYzZEa2lmMDc4emRnR2lvY3dEL2lUeUhJZ3ZPVHdO?=
- =?utf-8?B?YWc3STRwa3BRQ3Vpam1GU2xvN285SjZLMWdnZGFEQVg5MEZCK1hxeUdnVVRZ?=
- =?utf-8?B?dTdSZTZzU3RYOEpIWEZsUVl1VSt2UktjQnV6VW5sdFRHY08rNlF5NnlBcThs?=
- =?utf-8?B?SGY1eHJqbFI5bEhCd0tDUjdqUTRTTUM4NHRqU3dqVnJiOU1oZHVYZTZubDZl?=
- =?utf-8?B?TFNGWCtZUG9iZDkzbXdyYy9JQWdyVDMyZkc5QkloaHdlZ29xZ2VhVkVMQThU?=
- =?utf-8?B?QkNldzEyRmdZdjRSd1YreE8weVp3djVQTXVFV3FUZFlJU0dnMktJaGRKcnJX?=
- =?utf-8?B?Q0VCZnE1NFM1ZVlGcUpUNXA0QXpkekRPRENCeVo5QWxTTmNSWU4rZkdIWXRN?=
- =?utf-8?B?WVgyMWxGanhUQ1hIdWZMUE5Lb0dhWlcxaS9wQ2tnMUxkQW5sYWFKMlNETnhn?=
- =?utf-8?B?bGRCcDRBdW1qNFMrckJRdkQzdVV3NWdLSnkyU2p6NU4ycjlXWlN5MzRsVG5l?=
- =?utf-8?B?UEJBUkpPdlI2NDdYZCtOcFBvVk5va0svanI5bjkyb1NJR1RISVBMV3lBT3pM?=
- =?utf-8?B?bGpjL0VKV2p4WWk2RVBsSG4xdG05K245NVRuRTlWN0F0ZjN1YWgydzRXOHpR?=
- =?utf-8?B?NlhKb0NPcWtmUGh0Mnl3TXFKQXpxN0FzOHJ2TXNCR3VROVk3OVV0MnVudzQr?=
- =?utf-8?B?MHFsbjF6aCtxcllsTjVGc20xQlhhWFo1N3locWpvK1BJRHhncUNndzg3UHh4?=
- =?utf-8?B?WU12QURvNE9JbGZMSlkxOFFGOXJzZE9xd1FUd25Qdm5nZXpuUlBkRG9waXl2?=
- =?utf-8?B?MGRGVDFjeUc0ZUFhODNNcGxFNWJ3WEMvZ1cxSVd4NGtLOUsxNVhUcFFkM3BM?=
- =?utf-8?B?S2lEc3pYTWw3YXgzaUxYRlU1djlHVUR0eVpXRzRHVmdrRW55bTFodlNtWXVt?=
- =?utf-8?B?VWs1aXFlamNLY2lJQm9WSFJMV3lqYmZxTFlid3hqT010TG1IYnZ5VjZta2xQ?=
- =?utf-8?B?RzNiZEJTcnNBaTBPNGlHbUdQeVp5Rmpia3d4K2hTbnV1R1lxUFBoR2VvUUhk?=
- =?utf-8?B?UXlOMnk5czdsejJCL2VBdjBpdkxaTXdsM24rWWtQZjU2Tzdib3pGY0VUWnRZ?=
- =?utf-8?B?eCtSeDZUZ1M2ZjliZ21PbzNuRUVmeXpxTDlJdWpNRngrdWJvNEhsSyt5Uk9B?=
- =?utf-8?B?QnE4ZjFybGlVRXRscWJ0eEIwekl0N3RxR2llQUpkaTV1WXQvUVVTUVhBOXM3?=
- =?utf-8?B?eTdsc2ppVmsyTkZRUXNWRlUxTGxXWHZYelllVVFlcHhrT0pSekxhb251M1Fz?=
- =?utf-8?B?VURHUitNQTVKOXNyNndWNUFJL2dSTUFWRFpqaStUclRieXBleVNQWDBlOWR1?=
- =?utf-8?B?eXRKVCtRQUY3dUU0NHU1VkJvNi9TRGQyckNYY3lHYzM5cWtVdU1Vdm5XdElZ?=
- =?utf-8?B?OHgwWU5wc0RQZnp2OWVaZndXcWQ5aG5ZMU93Y2pBMFU5d1lmTmoxdEpzaytT?=
- =?utf-8?B?T2hBc0QwSlF6NkFEVDN5Rm1kZW5TVE56RjYxczc0Z3I3OTdyYTIrMUdnamJH?=
- =?utf-8?B?OTl2b3pidzlnSkV4M1I3eDEwemVyNHl6NnNqSjB5VlQxUGpiZlBUNFFzc2Vr?=
- =?utf-8?B?M0ZpeUF3dVFxMHdJSFdWa3czOTIyU1N2QXhZYU4vbFZjblp1QVZzQXc2KzFE?=
- =?utf-8?B?RzZPZDVncVNOcWwzMW82dzB3WFdHOGdkTHBUVDFxUU1yR1BiMUFzcERnMnNC?=
- =?utf-8?B?Z0ZoNks4UXFrc2JLenRVcnI1RFlIRnR3MjdvYU9SQXk3cDNmL3J5VXdBQzho?=
- =?utf-8?B?Q2xPRS8wZWpYaGlFenBvbmJZaHVFU0dBZllwUFhsWkhmL3FhWDEwYStUNWtT?=
- =?utf-8?B?K3k5dkF4byszRmhRZmZJVjlpVjhsV0c0NEEycjcxbFNsM0FQU2lqZz09?=
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21059141-36fb-4598-f95f-08dec881f026
-X-MS-Exchange-CrossTenant-AuthSource: AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2026 12:55:53.9566
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZL1jHNSJseZfzeNrUNcvuzkLiXvCzovV7SbsVJKhprtiKwUZ79sUjryNmA09XdqIpTjqFAvAOp3512qLqgKjdg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0P189MB3236
+Content-Transfer-Encoding: 8bit
 
-Hi Alexander,
+Add test_action_set exercising OVS_ACTION_ATTR_SET with an ipv4 dst
+rewrite. The test verifies the SET action in three steps: first
+confirm normal forwarding, then apply set(ipv4(dst=10.0.0.99)) to
+rewrite the destination to an address nobody owns and verify ping
+fails, then restore normal forwarding and verify connectivity
+recovers.
 
-> On Thu, Jun 11, 2026 at 6:21 PM Yunseong Kim <yunseong.kim@est.tech> wrote:
->>
->> The recursion guard (bit-31 of kcov_df_seq) prevents reentry when
->> copy_from_kernel_nofault() or other called functions are instrumented
->> with INSTRUMENT_ALL. Without compiler barriers, the guard set/clear
->> can be reordered relative to the function body, making the protection
->> ineffective under optimization.
->>
->> Add barrier() after setting the guard and before clearing it, ensuring
->> the compiler does not move instrumented operations outside the guarded
->> region.
->>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
->> ---
->>  kernel/kcov_dataflow.c | 2 ++
-> 
-> Please merge this patch into the one introducing kcov_dataflow.c
-> 
+Signed-off-by: Minxi Hou <houminxi@gmail.com>
+---
+ .../selftests/net/openvswitch/openvswitch.sh  | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-Understood. I'll merge them in v3.
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index d533decca5c1..2954245129a2 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -31,6 +31,7 @@ tests="
+ 	pop_vlan				vlan: POP_VLAN action strips tag
+ 	dec_ttl					ttl: dec_ttl decrements IP TTL
+ 	flow_set				flow-set: Flow modify
++	action_set				set: SET action rewrites fields
+ 	psample					psample: Sampling packets with psample"
+ 
+ info() {
+@@ -377,6 +378,71 @@ test_flow_set() {
+ 	return 0
+ }
+ 
++test_action_set() {
++	sbx_add "test_action_set" || return $?
++	ovs_add_dp "test_action_set" settest || return 1
++
++	info "create namespaces"
++	for ns in client server; do
++		ovs_add_netns_and_veths "test_action_set" "settest" "$ns" \
++			"${ns:0:1}0" "${ns:0:1}1" || return 1
++	done
++
++	ip netns exec client ip addr add 10.0.0.1/24 dev c1
++	ip netns exec client ip link set c1 up
++	ip netns exec server ip addr add 10.0.0.2/24 dev s1
++	ip netns exec server ip link set s1 up
++
++	ovs_add_flow "test_action_set" settest \
++		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
++	ovs_add_flow "test_action_set" settest \
++		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
++
++	ovs_add_flow "test_action_set" settest \
++		'in_port(1),eth(),eth_type(0x0800),ipv4()' '2' || return 1
++	ovs_add_flow "test_action_set" settest \
++		'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return 1
++
++	info "verify connectivity without SET"
++	ovs_sbx "test_action_set" ip netns exec client ping -c 1 -W 2 \
++		10.0.0.2 || return 1
++
++	ovs_del_flows "test_action_set" settest
++	ovs_add_flow "test_action_set" settest \
++		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
++	ovs_add_flow "test_action_set" settest \
++		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
++
++	info "set ipv4 dst to unreachable address"
++	ovs_add_flow "test_action_set" settest \
++		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
++		'set(ipv4(dst=10.0.0.99)),2' || return 1
++	ovs_add_flow "test_action_set" settest \
++		'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return 1
++
++	info "verify ping fails with rewritten dst"
++	ovs_sbx "test_action_set" ip netns exec client ping -c 1 -W 2 \
++		10.0.0.2 >/dev/null 2>&1 \
++		&& { info "FAIL: ping should fail with dst rewritten"
++		     return 1; }
++
++	ovs_del_flows "test_action_set" settest
++	ovs_add_flow "test_action_set" settest \
++		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
++	ovs_add_flow "test_action_set" settest \
++		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
++	ovs_add_flow "test_action_set" settest \
++		'in_port(1),eth(),eth_type(0x0800),ipv4()' '2' || return 1
++	ovs_add_flow "test_action_set" settest \
++		'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return 1
++
++	info "verify connectivity restored without SET"
++	ovs_sbx "test_action_set" ip netns exec client ping -c 1 -W 2 \
++		10.0.0.2 || return 1
++
++	return 0
++}
++
+ # psample test
+ # - use psample to observe packets
+ test_psample() {
+-- 
+2.54.0
 
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/kernel/kcov_dataflow.c b/kernel/kcov_dataflow.c
->> index df7e8bf70bfa..5248293280d5 100644
->> --- a/kernel/kcov_dataflow.c
->> +++ b/kernel/kcov_dataflow.c
->> @@ -86,6 +86,7 @@ kcov_df_write(u64 type_marker, u64 pc, u64 meta, void *ptr,
->>         if (t->kcov_df_seq & (1U << 31))
->>                 return;
->>         t->kcov_df_seq |= (1U << 31);
->> +       barrier();
-> 
-> Please make sure barriers have comments explaining which barriers they
-> pair with (see kernel/kcov.c)
-
-Thanks for the pointer. I see the existing implementation now and will align
-my changes with it.
-
-Best regards,
-Yunseong
