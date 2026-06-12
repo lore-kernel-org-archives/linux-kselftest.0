@@ -1,79 +1,62 @@
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834F03D2FF4
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 13:05:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5753630AE
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 13:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781269526; cv=none; b=u+Hkv7n4tGO7eb2j+imFak4OOsXKyZ7Fc3ZG1749yzGruMc3wH7YmsFDeoq8Bm416H0U/zYFk0s1yjmrf4/FeGOd09C7uDCKdDhX+Z+aipmsar5wT+0RHWQvuT1EHfK1Rn6WH+qoI5Do7ZGAHkhfH+RuA/FClXRlcxGs5vju1S4=
+	t=1781269796; cv=none; b=ZgSfytABFI1fyzIii0E8tPOfCsMJAlnWsC4pjP1GJzinSma/3i271j7GRZAqvsvQ+RW/dBIEPf5Xssahk9/Y6Urtt52+FHCZw9Du5vbc7gWXsTIPlapyNKaOf/ssOifXSbk12BiCWNLLq19lE9jGHa5Zpy8R9kM3yKgYxTt1oZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781269526; c=relaxed/simple;
-	bh=/u5n0ZLTjcOeOWVFdcyyVpxGewb/+5l0WRaVCdRb5Gg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y/dZcAPIhHycxzF6OZQyftDwoTlYolniXP2OQSq1Nr7cG2htoQvzpDBSLai190QZhyFw/+lt7aUPzvc6/ZVg1rGUW7kX5gKgN8dlXr7HREUaVlTnkYwhzcPPHAgrhGckPVvvjMP7r0iTlVm8JmZ6+xZDKZ+KskfljvqBrSxn3Kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f6cRqZhu; arc=none smtp.client-ip=209.85.160.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781269796; c=relaxed/simple;
+	bh=VaFsV3zYFY3mK1OrfmJTm2cFqGadeu79qZUzTRXR7Bc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pe/SkD/98K+065EzsFcTwrqcZRrb9qTnTLAJaTIJweIlzVx9UxM2hHi3Oo4s8fuLfCsK6jLaBBO2QqUd1HDehhq4khTojV39t6dmPWjKjFfbYHajnshoOtnN+OBlZ1BjzTb28kO1d0fCHTRZmYdPv3nBkcXX9gMar7covwHrlLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XgkQiM3j; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f6cRqZhu"
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-5176a2fd597so7616941cf.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 06:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781269521; x=1781874321; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fvXXwXWTSGYXKy5X/ooRPGvrZHiscmZ8mdP5qLv/Du4=;
-        b=f6cRqZhuVt8KayVC3XtlRngSYe5LtJZSBKIvqqj6w46+GBCF+xZHvukTCWzjxvxjcC
-         tmsuAMrzf6rW19MNdZWnWHfAV9FIyc+IizXZ3dUhegnPv4/gHTFaT/JQ/0nJM12RqwJF
-         153KF/xdtu/A/GN+lSGz45Qhx0KFYMBzp3lHdzRdI/Bmpt0D4l131lu6aM2n6MCID6+6
-         gINuiYfSoY9uw+YU29eeV7l9d3PAix9hykrsfm0itg4SmaTZCpTlHfV01VEcPpQcvyN1
-         z3mTLkCwtfNuMne/+Eua/63TuAgcRhsUAP8eiLBIQCTvFDLO8n8nXIyZ5m5Q6iKO71HM
-         Xaow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781269521; x=1781874321;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fvXXwXWTSGYXKy5X/ooRPGvrZHiscmZ8mdP5qLv/Du4=;
-        b=fy36Qt8pKVhwrcdUyKrAqee/4xjzzCsgrt0Q/7+f+Hinr5wCxPw9MzP4lQaHySW1lI
-         UuzaRuqxfkvPD75w9BWdanEAZYMVPXZtqCeWjrGXRT0nq5g2Kw+KyOffBqgs6jtDRkta
-         yRZ7eP6r/+V7XhdDMQdm02bDXPNnZ1sl/2aIS+fzq3NhmwUTt32msw6vaH3FbOzhJ4pv
-         ymahGIce5zE8+0QV7aiFy0dDCs02lVCMC2guUBacdjB/Hsp8iG9UPJnh5ikJ88Du1SaD
-         Ud+cHbx7WdjZF5HXdd57rnB7ys2SIJ2TyhlBrXp1I1b4OxDGIKur24/hvjrRS+HGHMEL
-         BGHA==
-X-Forwarded-Encrypted: i=1; AFNElJ+RgQb/QRBm7ekgFLaAmoJ1YRdRppk9hOAae4H9q/gDClHcYzil2IvjsHmjc1EY6Ca/8Cn92rErww7EYBs+e1w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/URl0yICUkl+AzDTD/k6CH7v9g2m5RhTT5l89XSq5O6LWOnaA
-	c4VgW2u0RnDFgtJPy3TqfWtc4oSgKOXacQcTZ/s6PlgwuUQ9p5RSMivA
-X-Gm-Gg: Acq92OHlKV6UUlcsNp0GLcDtO+aqU6uLXQJ0vTGazt6ZFIA9m6nZaDFiZBymvy3rBfn
-	WZVcrLTnclyAbPnqInQ/Dlrzp4Npdlwq27nyns40MKwIgjzsYxuNt6QWetmad5UoLnCQ9n99IBQ
-	KbZ0vyoQxlz6dXluBK0MJBmZ6CALeM1oNTtFeyR1AmBMnzvF9b3FnmTDhTBj9NqnKFH9Nc1UMw+
-	OweEZawmtTN4j7ibpW+/GEuna+f4y7bcnnGt2bSYljB9je4vp+R3QKbYZvBzaXEYXNMEkpoYYka
-	kK/I2cxeJM0uB8k1pivMaD6O24rNQbIGDnGrrAKnvjkK+m0WLXbOsyiciWEajIzyU63iFjHDJCd
-	o0lnzYT5zfnk/0E0Phlct4DHZe6fJT0XxQrm3DWB0Z2kCv/z169TKLq7Ic75oRErdqjHdvtxe94
-	3t0V/mvy5I5sS935PEyg==
-X-Received: by 2002:a05:620a:448f:b0:915:cda5:2805 with SMTP id af79cd13be357-9161bf57505mr368410585a.52.1781269521084;
-        Fri, 12 Jun 2026 06:05:21 -0700 (PDT)
-Received: from houminxi ([163.123.141.225])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-91619ed7857sm201511485a.4.2026.06.12.06.05.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2026 06:05:20 -0700 (PDT)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: aconole@redhat.com,
-	echaudro@redhat.com,
-	i.maximets@ovn.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	dev@openvswitch.org,
-	linux-kselftest@vger.kernel.org,
-	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH net-next] selftests/net/openvswitch: add SET action test
-Date: Fri, 12 Jun 2026 21:05:03 +0800
-Message-ID: <20260612130503.311240-1-houminxi@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XgkQiM3j"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781269773;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=u1jR21UWFQybwcEcFpefATHF6rUgxMUInVDBlrsJDFI=;
+	b=XgkQiM3jsqYJIclHiKxdsmL9VLVyA6bWpC9/6ltpWdTyGPDxJNDNlGovI6hdZSMhmnywYT
+	Zv9ubwz1H8dgTZw7FCvQi1pV8g91rgRE8lfxudsKXtNj3gU6gc5agFY+f3QhnZFBE8cKsv
+	6bXkrUINRiUf4kYUxsJ8/yZ8lIsVnEY=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	Cong Wang <cong.wang@bytedance.com>,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/7] bpf, skmsg: some fixes for skmsg
+Date: Fri, 12 Jun 2026 21:07:44 +0800
+Message-ID: <20260612130919.299124-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,103 +64,59 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Add test_action_set exercising OVS_ACTION_ATTR_SET with an ipv4 dst
-rewrite. The test verifies the SET action in three steps: first
-confirm normal forwarding, then apply set(ipv4(dst=10.0.0.99)) to
-rewrite the destination to an address nobody owns and verify ping
-fails, then restore normal forwarding and verify connectivity
-recovers.
 
-Signed-off-by: Minxi Hou <houminxi@gmail.com>
----
- .../selftests/net/openvswitch/openvswitch.sh  | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
+All fixes are from previous patches sent by Weiming Shi, Zhang Cen,
+Kuniyuki and Sechang Lim, which have already been reviewed by me and John and Jakub.
 
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index d533decca5c1..2954245129a2 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -31,6 +31,7 @@ tests="
- 	pop_vlan				vlan: POP_VLAN action strips tag
- 	dec_ttl					ttl: dec_ttl decrements IP TTL
- 	flow_set				flow-set: Flow modify
-+	action_set				set: SET action rewrites fields
- 	psample					psample: Sampling packets with psample"
- 
- info() {
-@@ -377,6 +378,71 @@ test_flow_set() {
- 	return 0
- }
- 
-+test_action_set() {
-+	sbx_add "test_action_set" || return $?
-+	ovs_add_dp "test_action_set" settest || return 1
-+
-+	info "create namespaces"
-+	for ns in client server; do
-+		ovs_add_netns_and_veths "test_action_set" "settest" "$ns" \
-+			"${ns:0:1}0" "${ns:0:1}1" || return 1
-+	done
-+
-+	ip netns exec client ip addr add 10.0.0.1/24 dev c1
-+	ip netns exec client ip link set c1 up
-+	ip netns exec server ip addr add 10.0.0.2/24 dev s1
-+	ip netns exec server ip link set s1 up
-+
-+	ovs_add_flow "test_action_set" settest \
-+		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
-+	ovs_add_flow "test_action_set" settest \
-+		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
-+
-+	ovs_add_flow "test_action_set" settest \
-+		'in_port(1),eth(),eth_type(0x0800),ipv4()' '2' || return 1
-+	ovs_add_flow "test_action_set" settest \
-+		'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return 1
-+
-+	info "verify connectivity without SET"
-+	ovs_sbx "test_action_set" ip netns exec client ping -c 1 -W 2 \
-+		10.0.0.2 || return 1
-+
-+	ovs_del_flows "test_action_set" settest
-+	ovs_add_flow "test_action_set" settest \
-+		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
-+	ovs_add_flow "test_action_set" settest \
-+		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
-+
-+	info "set ipv4 dst to unreachable address"
-+	ovs_add_flow "test_action_set" settest \
-+		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
-+		'set(ipv4(dst=10.0.0.99)),2' || return 1
-+	ovs_add_flow "test_action_set" settest \
-+		'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return 1
-+
-+	info "verify ping fails with rewritten dst"
-+	ovs_sbx "test_action_set" ip netns exec client ping -c 1 -W 2 \
-+		10.0.0.2 >/dev/null 2>&1 \
-+		&& { info "FAIL: ping should fail with dst rewritten"
-+		     return 1; }
-+
-+	ovs_del_flows "test_action_set" settest
-+	ovs_add_flow "test_action_set" settest \
-+		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
-+	ovs_add_flow "test_action_set" settest \
-+		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
-+	ovs_add_flow "test_action_set" settest \
-+		'in_port(1),eth(),eth_type(0x0800),ipv4()' '2' || return 1
-+	ovs_add_flow "test_action_set" settest \
-+		'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return 1
-+
-+	info "verify connectivity restored without SET"
-+	ovs_sbx "test_action_set" ip netns exec client ping -c 1 -W 2 \
-+		10.0.0.2 || return 1
-+
-+	return 0
-+}
-+
- # psample test
- # - use psample to observe packets
- test_psample() {
+https://lore.kernel.org/bpf/20260610081218.506709-2-rhkrqnwk98@gmail.com/
+https://lore.kernel.org/bpf/20260520102715.3033936-1-rollkingzzc@gmail.com/
+https://lore.kernel.org/bpf/20260424190310.1520555-2-bestswngs@gmail.com/
+https://lore.kernel.org/bpf/20260424191602.1522411-3-bestswngs@gmail.com/
+https://lore.kernel.org/bpf/20260423155807.1245644-2-bestswngs@gmail.com/
+https://lore.kernel.org/bpf/20260221233234.3814768-4-kuniyu@google.com/
+
+The automated reviewer (sashiko) may still flag a few other potential
+issues on top of this series. After looking into them, they are either
+already covered by the patches here, or only reachable under very narrow
+conditions that require a specially crafted BPF program and an unusual
+sk_msg ring state, so they are not practical to trigger and are left out
+of this series. I'm collecting these fixes together because the same
+problems have been re-sent many times in slightly different forms, and I
+hope this series can be prioritized for merging so the duplicates can
+finally settle. With so many AI-generated patches floating around for
+these spots, leaving them unmerged just keeps wasting maintainer review
+cycles on the same issues.
+
+
+v2->v3: Target to bpf-next and carry Emil's reviewed-by tag.
+        Reverse xmas tree style is used suggested by Cong.
+        (not all code match reverse xmas tree due to variable dependency)
+v1->v2: fix problem when fix the conflict.
+
+Kuniyuki Iwashima (1):
+  sockmap: Fix use-after-free in udp_bpf_recvmsg()
+
+Sechang Lim (2):
+  bpf, sockmap: fix integer overflow in bpf_msg_pop_data() bounds check
+  selftests/bpf: add test for bpf_msg_pop_data() overflow
+
+Weiming Shi (3):
+  bpf, sockmap: reject overflowing copy + len in bpf_msg_push_data()
+  bpf, sockmap: Fix wrong rsge offset in bpf_msg_push_data()
+  bpf, sockmap: zero-initialize pages allocated in bpf_msg_push_data
+
+Zhang Cen (1):
+  bpf, sockmap: keep sk_msg copy state in sync
+
+ net/core/filter.c                             | 99 +++++++++++++++++--
+ net/ipv4/udp_bpf.c                            |  9 ++
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 48 +++++++++
+ .../bpf/progs/test_sockmap_msg_pop_data.c     | 27 +++++
+ 4 files changed, 174 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+
 -- 
-2.54.0
+2.43.0
 
