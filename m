@@ -1,121 +1,131 @@
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDDA735675D
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 22:02:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781301727; cv=pass; b=ClZgQNQ/2QeDhB/FiAZ4+n+fQimbbECR/VrrSt3Y+tm458WjO/KnQFnsaIJnG+bUa9QFN2pkDBXTJSriL1x9+ad/RdL28ZRsyt78rq4koLt5xX4nK0wMWyNSaFFpJHbTqwehnc8ldq3b+K2DG8FA6NS+fnT/ZMOazvqBrpAaGqM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781301727; c=relaxed/simple;
-	bh=cDAkfdaLRfmCvVXnA0yRMRfwD8UYysD3SIVaRGrDclI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kuGrByaooBov741udKvzMYgdB7vbz7/5LN/wU4fiKDpABaH0iruQsQt/8FflTvr8oLXp3mURvvQWxYqYmHmvUFhb0QO9IuG47S6rtzQyhaxEKrVyYXNu3g9cdm+XK38y3HQVSmF6HVrv7jPIT5ixGBWI5EEw76Su6P6oVSyueSo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JWAr/ZxI; arc=pass smtp.client-ip=209.85.167.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD493D3D09
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 22:27:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781303267; cv=none; b=aX6ubrRn2djS+ff5PuRvgGnkeswCUzB2mqBH7K9cM/9RqOWisHDdZLDReInUW3zGgDZhdmLf/22I/mJhvXaECef85SgY/+s9eTSi4oEP7nj33LJD6GprUQI11wHnuls/E38t78qpKRA0S9SM9Mgn9tpwNHXmHe4Z1P0/NnMFaGM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781303267; c=relaxed/simple;
+	bh=lGEMy8UIN+fTJmtIdtuFJyBWyHQUMLGF+H4nss57VLo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rpFqkhV1KFfUaMweRq1k+E1WsIkTZD22vCVueTSrFasUflTtJjJVekpxhx5Xa+uN1HLyMIzlt3tCoRWbw3EHkqkZcXM17dpvYksIb5miX5oe/Lupd1+KNVbsWD8AKx+MrgyHGSsHSng0Y8/uvR+GTazIFePOSDt49y9EJT28U50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cY7xsJA9; arc=none smtp.client-ip=74.125.82.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JWAr/ZxI"
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-486560db92cso1120726b6e.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 15:02:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781301725; cv=none;
-        d=google.com; s=arc-20240605;
-        b=MmAxuTKrOU5dOYBV/wqsRZySsvfa10VqJ7wSV+1Fr6Jl5sq/duUiWxyZBNQVSA/ZiG
-         Rq0J2zTm9IcI5HJ801XD8XoICa2Zfj5bfSDDHk/h4F33JGUdnQt6w/vPH3lb1VFNMKow
-         HjWb0R0doj0O1b276ZvH0bfwnjUP67tsgbL3qJhYee4JUIvEcDo+86taFdNE9YuMMu7L
-         0i7t4cU2X2vLciyuOR6ThvfKt4nTXSJT+rn7VSv/4J7NzTAAG4mO9HBfBzbyn2A7rx0Q
-         +FFPh0ZiNPDiejDx1W8h5Mt6ca9kdn7PqWdc+3qi4qinARWliXs0E5BB+LPe73VtQrIP
-         40Rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lr7PuuvzhjV3VzJLoKFC38vG+nAVtfp8SSMy3aUwQ6A=;
-        fh=leqAXpPxffc21imz+ez9QJlDEd+fV3iuf4ERcn+lpEk=;
-        b=jH7Ij8hSGaEKFZiUhu4oIZsesQEK3AVwiZ8UhO40qMOJCezzGRN53l5YADR+qvtD6s
-         8pW8pxWc9EJbq+7jJ80hSAiTlBOpQUw5O95xjwGqzQRavaOQOppZmwxW2HWfTBQMTgfQ
-         vxxWDVFdm29BPTSUWbnoEuFCvq0m7K/Sfdaqk+f5uRViH7oittoAjf/6DS+PCM4ISEXL
-         HW/Q/J56ogbmexo2bNVeq8aMUsYhq74hocmVYE031meaxyE9rHJ1XSn2JpCRDBREzIwc
-         certsr/bu0OLurgjlnT9coxws/XadxXtZEttN40ZcJMYhylia1tNjvS2EHiVoSylDXec
-         VzXg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cY7xsJA9"
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-1383e116edfso1839277c88.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 15:27:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781301725; x=1781906525; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lr7PuuvzhjV3VzJLoKFC38vG+nAVtfp8SSMy3aUwQ6A=;
-        b=JWAr/ZxIXuQbeJJwdoQicLIgIqXoXNXmRsaCQ3bAFRolJEyu7ecm6NrfBbs5BkkY9H
-         bNFYsjZ1G/0Gbk3BW85ePrsLbGRQ1GxYkek0BUbGVhDKr50ody/kUXZqeUWgk0bLE5/i
-         QRvoJhvtw93Dn0RfSBcQzj0m6xAnF7/N4cx/cO0Zj2Kn942WJYkDoKNGXf8GHRPJg5DP
-         28UvJsseQwCRbTj9Pfht/RoUVlTteBRgcfJHi+PybAK/eBcePRvvF+L0OuVbknUjOLAO
-         hwvV3sE8BixKGGep8FPlQJyVmvktGodpP25cFMhZNLI0efWY5fYmaQsm0rVmsMp/IAbQ
-         /uAg==
+        d=gmail.com; s=20251104; t=1781303265; x=1781908065; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tdOIpPwQMpYh5nCpsBhSLYhKVNtHCNddyJ/gLUgFL/s=;
+        b=cY7xsJA9VwVlFPywfn6d9BBupAE8A3LtzQ8nXtOTOea6oseE3WRgvDGyq532z/Qhtc
+         fSuWX0S0q9ZLCN+/mINrLcOmoYGt4dcJM4d2AGWPhjuKYHyLGTZB1RjdAhE+pBc4mqC+
+         zSVNwwm9rT0OQrHkOtlq/PsFxIk4ZfXBzIgcC8pOgvuQaMdQR+8zQ/lWmjUzoW7Ov+4k
+         +yy5cd1FEAA/TVg6YVcua5JwSR3AxXC/+YeKUHuy65RO3W3FsvnmPOq3YWuFu7qbXb1e
+         DZLYWbrWW3q7EWVnMZIZR/QVrwICCQa8lq1IaPVLfmjJsBJAaktkv6pmiTWcpxuV+4C3
+         WERA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781301725; x=1781906525;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lr7PuuvzhjV3VzJLoKFC38vG+nAVtfp8SSMy3aUwQ6A=;
-        b=ebSymCB+kHzFr0idY5cNQ4x3iXwFoV/O16gXxykXrMfQWqzPF9Inbeg3hOctUOMm5K
-         x1rue5csO4ofNHnAPNUJeetukP/Zva0xnRxvbpBErqqo75IWBVHyWpi0YqUs/xZgZ/I7
-         nHH8a6uqTxoI3CEZbFjtV8vDQo0H8CoJFhIjq13k9xn9f3qEKVfCou44oNDdHBX2hZoS
-         ZUnlorbPT2zIlki8pkmDAVBOjLvBYBIUpVcM2VUvQBCJ34HDmVG+MOOi/wa9DZJl2Xkc
-         mFcnr/LUP3nbuyI8Vot/iPJNf2zE0CwmWHspWbDsISGiKD664vmzNHxoUxq7BKs0HX9b
-         gsEA==
-X-Forwarded-Encrypted: i=1; AFNElJ8dTVWuiyaBvJYUX+FD7pzrKx3hTLl921Mv/U4buxrqeGwzCBEV40yQjy3Q2QhTsZI0XUPQO/U3yGvNRqSDxXs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2iHMdMU3LUsxDNrRj3u6WCcla4eOmsMOdenATfBKfVS32h5KA
-	nEbuW+741YJa9SqRhcikRrIQUF5XKLGd/R1tDqpBZUYKyg0VwaLlxTg01NEw4Q4pUs/3oRUwmHr
-	LNyjKdS8d7gl7KZRTFHWkUHnVjQ6/qq4=
-X-Gm-Gg: Acq92OEwrcuppr+Omu4x3NazsHaCejQg4E6GR+xBmECc85F8kRB4GkuxVdIRKkolwKb
-	1IUyzzDAjSsIAyFzuHPIclDB1b6pMwWa/SH34ickKWDfzhavV0F5TQQU13wqHYuzf6bGSpbyClf
-	6NZvxTy8uZDutMXnm0tUHJrSxI+WDtvzBAMxJ6yiXBLfERL/QJ341iyuYt7AKVGrcfgMULUFKJa
-	pS6K7aJsZF+DiZEnc1e9EkQ1jGO0ItL1ehsX91vbWSyEnefA/UI9Wvj6XC4/JWqCfKZk/4NuZ05
-	dGvecUolYWs/X83m35caGBbXgdR2r5Xtybhpvdyw1mZmD88UtIL4pUqQLaxx7QWNIaboiz595A=
-	=
-X-Received: by 2002:a05:6808:3a0f:b0:463:efb4:f9a2 with SMTP id
- 5614622812f47-4872f493555mr3330241b6e.28.1781301724761; Fri, 12 Jun 2026
- 15:02:04 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781303265; x=1781908065;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tdOIpPwQMpYh5nCpsBhSLYhKVNtHCNddyJ/gLUgFL/s=;
+        b=RUK1gt0U/PiktHrZxIWQnAzu7/qvg8eCXDMaNPla0tEZ8Ch7zz0W2CbovCj71YP5TR
+         lPF8qTPIgoFv14j6MMAXc5YKhgH8z8MULqGrSeO3pv1VMGqnvHDEtDd5DZc0Me9Nhhjl
+         c4kV0wHGMZM8iuH/GMSvM9LLzHHiR/jGjrQ8P8UC6bDm4Wpq1EWydLkyWuHHPdeiZuhh
+         votrox1H3fHNcwTj7ETdUvy8Yf5Qs2QnLP07IgvY3DXeng/2LdNZV4r8dpvxWL6XsGCM
+         bFM3Y7I0qPfFCAQ/vMS5vdcVfN9n/sYCCTWZd+KL6SOJwUeuGw8mIdbhwnPdMsZJEqGk
+         A3Wg==
+X-Forwarded-Encrypted: i=1; AFNElJ/n8NRpykpnGz/mAkUoSiLOzKEBtzCc+MznJYCsKoEfx4uGUMpalcVUkTpu49aD3+2MzN4U29RChZBn4VeGR3Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywpe32w1GiThMFyKj+rZX2lxJLs72iCDaO4FatjRphJTL2WkNlU
+	NP9LCj2lqLftQJiHdpMvpCdUjU858FX2TNyoNsJ5bGo65FUd8s5TjbiB
+X-Gm-Gg: Acq92OGjyFiIBEWSplDDFm0CIjR5F5nC9y1RZ3hrGHFS+x+vuSs50SOgU4ESFWErDzB
+	qXj3+1VqSWfXUUb5GQ5fdbGSOMJ23im92bxIoTIFnHC4D+ECgC7CowhJSVFfr3yoNjbOd80V9nz
+	+PUr9vpVc0plis1rlurc4vh4nA8n1zcC9RxEqSqPKMUpzJvcxppPrt/Y1bHmQ1drNAmunIAj7Kg
+	0hvmjgY7iQrdDOe/JN7j2ZkbgLMQVTqP83jfFB28BsFVceawhkKaVTf+6k7xicTet8RnJKxPqli
+	OdMnFcm1m8sJCbUZasdOhwLe83bOBLEsblBHNZU/T4SFTcOdaiMBHLTZKit9y9gnRlKADUhex6l
+	KFuhJDVe8gKvwPPx5r/S0ICS9QumzTNi1ESDjwhiYUzmvWNmLTzIfIPsxMkA/VdQy2PXNcRY1Gp
+	h3dKfpSickf6qYc9XGBaz2mINiobIqsIv5D36N9RyDLJhMdpEK9cXmPrnFrBQP/vqJ4CkCoi26h
+	1MfbM8dTkdI21k3
+X-Received: by 2002:a05:7022:309:b0:138:236a:c521 with SMTP id a92af1059eb24-1384baf12b0mr2300612c88.2.1781303265082;
+        Fri, 12 Jun 2026 15:27:45 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:c503:9b3a:29da:a70c? ([2620:10d:c090:500::9f26])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1386f20ad25sm1289668c88.0.2026.06.12.15.27.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jun 2026 15:27:44 -0700 (PDT)
+Message-ID: <76cf1da72418d905cfd52dc9e0efa7c37cf8ba76.camel@gmail.com>
+Subject: Re: [PATCH bpf] bpf: Track spilled zero scalars for var-off stack
+ reads
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Woojin Ji <random6.xyz@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko	 <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi	
+ <memxor@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan	
+ <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Fri, 12 Jun 2026 15:27:42 -0700
+In-Reply-To: <20260611-bpf-stack-var-off-zero-v1-v1-1-0ec407376147@gmail.com>
+References: <20260611-bpf-stack-var-off-zero-v1-v1-1-0ec407376147@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260526-seccomp-combined-v1-0-304b1cc3ad24@hill-daniel.co.uk>
- <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk>
- <CAAFS_9HpxOgHn+qfzSpLjV4Mj_CURiwxFOaK9GO0DdBg8xgNYw@mail.gmail.com> <CALCETrUArQBzUS2mAhYxDS-unze_gnQ7efv1qeBke-ux=2KdkQ@mail.gmail.com>
-In-Reply-To: <CALCETrUArQBzUS2mAhYxDS-unze_gnQ7efv1qeBke-ux=2KdkQ@mail.gmail.com>
-From: clubby789 <clubby789@gmail.com>
-Date: Fri, 12 Jun 2026 23:01:53 +0100
-X-Gm-Features: AVVi8CcPCqPkDoueJ__frRsNImZP3mTgK4w2ichmgt6_4IvZ-L4SX1qks8EWNvI
-Message-ID: <CAO1UbGcJEhwtHcxy5zcc8cH=YjfSDiDa2o-o8o+LMbkmL7WFcQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND 1/2] seccomp: Allow using `SECCOMP_MODE_STRICT`
- with `SECCOMP_MODE_FILTER`
-To: Andy Lutomirski <luto@amacapital.net>
-Cc: Will Drewry <wad@chromium.org>, Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 12, 2026 at 10:24=E2=80=AFPM Andy Lutomirski <luto@amacapital.n=
-et> wrote:
->
-> I wonder if It would be reasonable to have the kernel do this on
-> behalf of the user program that's asking for STRICT.  The
-> implementation would probably be trivial.
+On Thu, 2026-06-11 at 19:11 +0900, Woojin Ji wrote:
+> mark_reg_stack_read() currently treats a variable-offset stack read as
+> known-zero only when every byte in the read range has STACK_ZERO type.
+> This loses precision for stack bytes that are represented as STACK_SPILL
+> but come from a spilled scalar const zero.
+>=20
+> Fixed-offset stack reads already preserve such partial reads from a
+> spilled scalar zero as const zero. Variable-offset stack writes also keep
+> a spilled scalar zero intact when a zero write overlaps it. The read side
+> is therefore inconsistent and can reject otherwise valid programs: a byte
+> read from a spilled zero becomes an unknown u8 and may then make a
+> stack access through that value appear out of bounds.
+>=20
+> Treat STACK_SPILL bytes backed by a spilled scalar const zero as zero
+> bytes in mark_reg_stack_read(). When such a spilled scalar is used to
+> prove the destination register is const zero, mark every contributing
+> source stack slot precise before state pruning can use an explored
+> zero-spill path for a later non-zero spill path.
+>=20
+> This has to be done eagerly for variable-offset loads. Fixed-offset stack
+> fills can record one source stack slot in the jump history and propagate
+> destination precision back to that slot later, but a variable-offset load
+> may source bytes from multiple stack slots. Seed precision backtracking
+> with every zero-spill slot that contributes to the const-zero
+> classification instead.
+>=20
+> Add verifier selftests for both sides: accepted programs that read a byte
+> through a variable stack offset from spilled zero scalars, including a
+> multi-slot range, and a rejected program that would be accepted unsafely
+> by a naive implementation that promotes spilled zero bytes to const zero
+> without tracking the source spilled slot precisely. Use
+> BPF_F_TEST_STATE_FREQ for the rejected test so it does not depend on the
+> current verifier checkpoint heuristic thresholds.
+>=20
+> Tested:
+>   ./test_progs -t verifier_var_off
+>=20
+> Assisted-by: opencode:gpt-5.5
+> Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+> ---
 
-I experimented with this approach after the initial AI review, but it
-turned out surprisingly complex,
-requiring a decent amount of refactoring to allow installing
-kernel-resident programs. The filter
-itself is also rather complex (mostly due to needing to account for
-BPF jump sizes, which differ
-as different configs (uprobe, uretprobe, SECCOMP_ARCH_COMPAT) have
-different logic., and I'd worry about
-keeping logic synced.
-If that approach is worth pursuing though, I can submit that version
-of this patch.
-
-- Jamie
+This patch does not apply cleanly to current bpf-next, and that's the
+branch it should target. Also note that tests should be split as a
+separate patch in the patch-set.
