@@ -1,62 +1,65 @@
 Received: from mail-oi1-f202.google.com (mail-oi1-f202.google.com [209.85.167.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B790B38F25A
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 19:29:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8132C3A8FEA
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 19:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781292553; cv=none; b=gRl88hrqnWbW5CocQy8lx3urIryJu47N68Vnvkw6g2BleHgg8riCdB78num0aumFG7pCDmCwfh1SQmgXZeGOa7FOnEDV1liJwFEEAxDdGLjC/BjWLJ2cGwekN2gOrvtcWPL075gmT3masck/7FaUwASWLB8ddUoVqDDrfaQ9YBM=
+	t=1781292555; cv=none; b=uQmIAl9rNJRCafDJFRoDbXoWk4xpvzZb9I1Z+lnzJPAHFfvNHLvGMIGSnJnqKZHIAakcmU/2xcFrxO1vExSTl3tDzK5t1B19d9pZxD+L97FpL+xXHxgVXoT4e5gnq5iD9jIHahnXIuIRQCJfYsIFh0oWvlSjRWnSXlgKlJ7zTgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781292553; c=relaxed/simple;
-	bh=DlsneMygrkTUWs+1mVdQCE+qz199JpVjNUFhJE+VTWc=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=JmD/NC49f7sBKXNALu9HEZXVF5QDNAHrBgwp+vS97CLfY0MN72GRIf7n1pyianCjfqmDA72NpEz2nOeQHqkCcGyBlDqZSqxIhw6iQNQy2bHX5/E6bin3ePdkE4EGrG5A7cDCxwWrR2lKkuJrt9lVPYIPfujCMFtdKqR1fsDv4GE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MAY4BFnB; arc=none smtp.client-ip=209.85.167.202
+	s=arc-20240116; t=1781292555; c=relaxed/simple;
+	bh=5kGKr+m+2SakCtheR8UcEY2IRqG2QSoWSyyeWDBZdSA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=CJaXb25jY5KSmjsN1LQlqBXGXbRkRqqhk7S75oNeNGlax77ftfGoFOd0/yo8apra2DF4jidHSevQSR5qvn6zB4s0ydn1E5/vdTAKlAx2CjgykFNAIXU91izCSDFi50ZnmRDfnXHQGdBG3+QsrJTAm9jqTJnSlQWnjqgELY2I1VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F+YunNd6; arc=none smtp.client-ip=209.85.167.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MAY4BFnB"
-Received: by mail-oi1-f202.google.com with SMTP id 5614622812f47-4863a55600aso1245601b6e.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 12:29:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F+YunNd6"
+Received: by mail-oi1-f202.google.com with SMTP id 5614622812f47-48637dce961so1273881b6e.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 12:29:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781292550; x=1781897350; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=u60qdRNOCqKqcuRdaXAx140Po6M1Yopy4F2KxEGMp20=;
-        b=MAY4BFnBWAT1umRWsa+NH+eoHJIxzKJdZu0U+sits2lUrA9o8aEgdlFenRhPiVz0aI
-         DXEuAEZXJSsJklYywlFk39Lcd4F1oHJb7IAhs4sQ92ipH0XkvtosZ2PwnrGjG1tiqPqM
-         BrrRJ/dpkFfKKF37aKRiYOIotj5JlIycQ/S6LK97cDojPXyjYHPDI+BAYMbDY50m8r4r
-         2t6pV7huvOFhfSAx1YRaXEvxLRNntd9UTyB8RSy7w69+7Zuvv3Uy1MCl3O2I7sgukKFW
-         b42/DiqO083rm5vFRwOpqj20h8xO6zifiGe6gaKfLzfrw3XdbD2MwLygvZZB/wCTeBW8
-         nzlA==
+        d=google.com; s=20251104; t=1781292551; x=1781897351; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HlOJEoz94FuxFi6Nw0eWYLZk82W0XKPPEF+zFyUMrwY=;
+        b=F+YunNd65Y0vL0jJ1hHpfDNU3o1OCV/oNTBrkMwS1/02Z24lURdwp7UOhjAsdHmJgD
+         Gj99Ez09gk2v9blSWWyd3fY84tVDk7VwY53+pZI851gnU1sgtetZ6BuNhrN6J/nvWdxW
+         cCzjKHmCB72eybW0dpz/oaDQMGkf5fn433wUBNSAUjJCyJLeSyhfsuBDwHjmnPT0vG8Y
+         s/s7vokH44TokdlQMOzNTK2iJqIR3VzEHzuGAyMwTdrICAd+lyZp03uItB8esC5t0p1o
+         /hxE549n+YmqikxEGo+JYVVqjwMxm3BbetPcEx4/5P2T55FnWL0M9F8bhh7sRtUM2xC9
+         I+QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781292550; x=1781897350;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u60qdRNOCqKqcuRdaXAx140Po6M1Yopy4F2KxEGMp20=;
-        b=NUNrrM4KI5TC1bS+36pXW/VseQLl9pMmi4KvpFCcNrrzIboUEG+1vaENrnjBhC+Mdc
-         JkW9R2LHcHnBok0gyAYOd4kzoEg88Tou8oaUCZ2aNDOb+V6Ui9JXFd+pY6PIwtFUzbg9
-         VVmHLU0mzz143pySE3iv+5Hn9tomoaP0LA//1Z0jH6vEPrE0lgF08igTXfWHOmq37nVp
-         oJm+chL7MBuHJ341FPuUVJe+x/bG+YCcQ7TNVHG49R9smlxceAFB8PiO8Tf/2revsib/
-         /92nXbF7JKvFdwazZdCuwrV/iFSXsRfFwNuU57bCRjMSyxynOFVDqFv9WfE+Dhj0NDf+
-         PDrA==
-X-Forwarded-Encrypted: i=1; AFNElJ8U5l+NtkTgLJ3p94qpFTIl/lsFRIf7qWZA6pye0U2mVrE991GxFt4QjhMyF5fg25ywFh3RDNvgk+31LE7gxSY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQZa9GsfVF47imrcSdnIypBdKl+RZnxcf3UHce+BDU/Kqixs/j
-	qjJ1HpKt3w2inhwgaheAXEzNiSYs418fDOmt19lltiPZ1/wXyjWLJfCEtlcv1S45KxuXApH5sPL
-	G/OHcjQOHpSCgvwsPXleki9gEyw==
-X-Received: from ilqh1.prod.google.com ([2002:a92:d841:0:b0:501:ee09:eb2e])
+        d=1e100.net; s=20251104; t=1781292551; x=1781897351;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HlOJEoz94FuxFi6Nw0eWYLZk82W0XKPPEF+zFyUMrwY=;
+        b=NtqRL96BtQwPG19FpeE/72NUmW3bHxUILQOWf2GWYLWG6lmA2h+peRMh35j6t1nuuI
+         dVDwuPMExMmGYKpUTJxfhZSISupIVytUOlW5MSB36vHXMgYyngP2rLjOXJtF9kQFvJI9
+         lnYlaawo+TLnh5CMgP/SB99kcLpUz9lb34Z6OWRkTRsMysF+/D5zf4ZXSAvyichHKQ0z
+         xLydKHCY16J4/WWuAwDaMhVMJnJxf1Azkv78Oc5OE3RY5wXFMoQD9Z7B31COD3oHzECa
+         W1yn4TNN5CDksCm5S1ruy07ZGpIQzA07/Z8vT4dZTdtcQPQxmXiyPOKlEPwjLMIThgv/
+         auuA==
+X-Forwarded-Encrypted: i=1; AFNElJ+xXdXuK8/7p7TCStgouoLQQMOveaBwnDFZLHBQBAoGCJGIi6qpLMyhwg9qZk7sbfjqP+++ZlI/hvnj0HID3p8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YymHDZPs2w8/866YKBaxcGMqd0h+PU4Z354sOtMx1uULZmsScyB
+	DvpX5s3d5Xf6xJacVBg/1zt7OvdyPXJ3IkY/VHN3AkmqbLFIICJiS8nUHqDX96ggkO39dono1/s
+	ZqSj0RI/fuDcVylzeJ9S4l+kh0g==
+X-Received: from ilb5-n2.prod.google.com ([2002:a05:6e02:5305:20b0:500:2417:f074])
  (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:1913:b0:479:d25e:9065 with SMTP id 5614622812f47-4874193626fmr670168b6e.2.1781292550242;
- Fri, 12 Jun 2026 12:29:10 -0700 (PDT)
-Date: Fri, 12 Jun 2026 19:28:48 +0000
+ 2002:a05:6808:1913:b0:486:45c7:34c5 with SMTP id 5614622812f47-487419e6d1emr682785b6e.17.1781292551319;
+ Fri, 12 Jun 2026 12:29:11 -0700 (PDT)
+Date: Fri, 12 Jun 2026 19:28:49 +0000
+In-Reply-To: <20260612192909.1153907-1-coltonlewis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260612192909.1153907-1-coltonlewis@google.com>
 X-Mailer: git-send-email 2.54.0.1136.gdb2ca164c4-goog
-Message-ID: <20260612192909.1153907-1-coltonlewis@google.com>
-Subject: [PATCH v8 00/21] ARM64 PMU Partitioning
+Message-ID: <20260612192909.1153907-2-coltonlewis@google.com>
+Subject: [PATCH 01/21] arm64: cpufeature: Add cpucap for HPMN0
 From: Colton Lewis <coltonlewis@google.com>
 To: kvm@vger.kernel.org
 Cc: Alexandru Elisei <alexandru.elisei@arm.com>, Paolo Bonzini <pbonzini@redhat.com>, 
@@ -72,152 +75,101 @@ Cc: Alexandru Elisei <alexandru.elisei@arm.com>, Paolo Bonzini <pbonzini@redhat.
 	linux-kselftest@vger.kernel.org, Colton Lewis <coltonlewis@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-This series creates a new PMU scheme on ARM, a partitioned PMU that
-allows reserving a subset of counters for more direct guest access,
-significantly reducing overhead. More details, including performance
-benchmarks, can be read in the v1 cover letter linked below.
+Add a capability for FEAT_HPMN0, whether MDCR_EL2.HPMN can specify 0
+counters reserved for the guest.
 
-An overview of what this series accomplishes was presented at KVM
-Forum 2025. Slides [1] and video [2] are linked below.
+This required changing HPMN0 to an UnsignedEnum in tools/sysreg
+because otherwise not all the appropriate macros are generated to add
+it to arm64_cpu_capabilities_arm64_features.
 
-The kernel command line parameter for the driver still exists, but now
-only defines an upper limit of counters the guest might use rather
-than taking those counters from the host permanently.
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Signed-off-by: Colton Lewis <coltonlewis@google.com>
+---
+ arch/arm64/kernel/cpufeature.c | 10 +++++++++-
+ arch/arm64/kvm/sys_regs.c      |  3 ++-
+ arch/arm64/tools/cpucaps       |  1 +
+ arch/arm64/tools/sysreg        |  6 +++---
+ 4 files changed, 15 insertions(+), 5 deletions(-)
 
-I would appreciate any discussion on whether that parameter should
-still exist as it's an inconvenient enabling gate on the feature that
-is no longer required. The question comes down to what, if any, guards
-we want against a guest monopolizing all counters on a system.
-
-v8:
-
-* Rebase on top of v7.1-rc7.
-
-* Implement Oliver Upton's accessor proposal to centralize PMU
-  register access and simplify trap handlers. Instead of one singular
-  accessor, implement as two because the read and write paths are
-  always different anyway.
-
-* Introduce the partitioning flag along with the
-  kvm_pmu_is_partitioned predicate
-
-* Don't use ifdef for partitioning predicates as that can be handled
-  by has_vhe
-
-* Clean up MDCR_EL2 handling by open-coding use_fgt and hpmn and
-  unconditionally setting RES0 bits.
-
-* Use {read,write}_pmcrcntrn in context swaps
-
-* Put operators on preceeding lines
-
-* Rename hw_cntr_mask to hw_cntr_impl to clarify it tracks the number
-  of counters implemented by hardware
-
-* Use GENMASK_ULL in mask functions returning u64
-
-* warn_once when host events are squeezed out by guest counter
-  allocations.
-
-* Address Sashiko AI Review findings:
-
-  - Critical fixes for lazy PMU context swaps (ensuring guest state is
-    loaded on transition to GUEST_OWNED), PMSELR_EL0 trapping to
-    prevent stale selector index, and masking guest PMCR_EL0 writes to
-    prevent host reset.
-
-  - High priority fixes for lock safety (disabling IRQs when acquiring
-    perf context lock), disabling guest counters on vCPU put,
-    preserving VHE host profiling in MDCR_EL2, waking halted vCPUs on
-    guest PMU interrupts, masking host configuration leaks, preemption
-    safety in per-CPU accesses, emulating PMCR.N reads, and preventing
-    data races in PMOVSSET_EL0 accesses.
-
-  - Medium/Low fixes for user-access fallback safety, VM-wide state
-    modification restrictions, selftests type safety, and cleanup of
-    unused fields and typos.
-
-v7:
-https://lore.kernel.org/kvmarm/20260504211813.1804997-1-coltonlewis@google.com/
-
-v6:
-https://lore.kernel.org/kvmarm/20260209221414.2169465-1-coltonlewis@google.com/
-
-v5:
-https://lore.kernel.org/kvmarm/20251209205121.1871534-1-coltonlewis@google.com/
-
-v4:
-https://lore.kernel.org/kvmarm/20250714225917.1396543-1-coltonlewis@google.com/
-
-v3:
-https://lore.kernel.org/kvm/20250626200459.1153955-1-coltonlewis@google.com/
-
-v2:
-https://lore.kernel.org/kvm/20250620221326.1261128-1-coltonlewis@google.com/
-
-v1:
-https://lore.kernel.org/kvm/20250602192702.2125115-1-coltonlewis@google.com/
-
-[1] https://gitlab.com/qemu-project/kvm-forum/-/raw/main/_attachments/2025/Optimizing__itvHkhc.pdf
-[2] https://www.youtube.com/watch?v=YRzZ8jMIA6M&list=PLW3ep1uCIRfxwmllXTOA2txfDWN6vUOHp&index=9
-
-Colton Lewis (20):
-  arm64: cpufeature: Add cpucap for HPMN0
-  KVM: arm64: Reorganize PMU functions
-  perf: arm_pmuv3: Generalize counter bitmasks
-  perf: arm_pmuv3: Check cntr_mask before using pmccntr
-  perf: arm_pmuv3: Allocate counter indices from high to low
-  perf: arm_pmuv3: Add method to partition the PMU
-  KVM: arm64: Set up FGT for Partitioned PMU
-  KVM: arm64: Add Partitioned PMU register trap handlers
-  KVM: arm64: Set up MDCR_EL2 to handle a Partitioned PMU
-  KVM: arm64: Context swap Partitioned PMU guest registers
-  KVM: arm64: Enforce PMU event filter at vcpu_load()
-  perf: Add perf_pmu_resched_update()
-  KVM: arm64: Apply dynamic guest counter reservations
-  KVM: arm64: Implement lazy PMU context swaps
-  perf: arm_pmuv3: Handle IRQs for Partitioned PMU guest counters
-  KVM: arm64: Detect overflows for the Partitioned PMU
-  KVM: arm64: Add vCPU device attr to partition the PMU
-  KVM: selftests: Add find_bit to KVM library
-  KVM: arm64: selftests: Add test case for Partitioned PMU
-  KVM: arm64: selftests: Relax testing for exceptions when partitioned
-
-Marc Zyngier (1):
-  KVM: arm64: Reorganize PMU includes
-
- arch/arm/include/asm/arm_pmuv3.h              |  18 +
- arch/arm64/include/asm/arm_pmuv3.h            |  12 +-
- arch/arm64/include/asm/kvm_host.h             |  17 +-
- arch/arm64/include/asm/kvm_types.h            |   6 +-
- arch/arm64/include/uapi/asm/kvm.h             |   2 +
- arch/arm64/kernel/cpufeature.c                |  10 +-
- arch/arm64/kvm/Makefile                       |   2 +-
- arch/arm64/kvm/arm.c                          |   2 +
- arch/arm64/kvm/config.c                       |  41 +-
- arch/arm64/kvm/debug.c                        |  30 +-
- arch/arm64/kvm/pmu-direct.c                   | 507 ++++++++++++
- arch/arm64/kvm/pmu-emul.c                     | 684 +----------------
- arch/arm64/kvm/pmu.c                          | 720 ++++++++++++++++++
- arch/arm64/kvm/sys_regs.c                     | 271 +++++--
- arch/arm64/tools/cpucaps                      |   1 +
- arch/arm64/tools/sysreg                       |   6 +-
- drivers/perf/arm_pmuv3.c                      | 136 +++-
- include/kvm/arm_pmu.h                         |  93 ++-
- include/linux/perf/arm_pmu.h                  |   8 +
- include/linux/perf/arm_pmuv3.h                |  14 +-
- include/linux/perf_event.h                    |   3 +
- kernel/events/core.c                          |  31 +-
- tools/include/perf/arm_pmuv3.h                |  12 +-
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../selftests/kvm/arm64/vpmu_counter_access.c | 112 ++-
- tools/testing/selftests/kvm/lib/find_bit.c    |   2 +
- 26 files changed, 1918 insertions(+), 823 deletions(-)
- create mode 100644 arch/arm64/kvm/pmu-direct.c
- create mode 100644 tools/testing/selftests/kvm/lib/find_bit.c
-
-
-base-commit: 4549871118cf616eecdd2d939f78e3b9e1dddc48
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 6d53bb15cf7bb..096545a6e4043 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -77,7 +77,7 @@
+ #include <linux/percpu.h>
+ #include <linux/sched/isolation.h>
+ 
+-#include <asm/arm_pmuv3.h>
++#include <linux/perf/arm_pmuv3.h>
+ #include <asm/cpu.h>
+ #include <asm/cpufeature.h>
+ #include <asm/cpu_ops.h>
+@@ -560,6 +560,7 @@ static const struct arm64_ftr_bits ftr_id_mmfr0[] = {
+ };
+ 
+ static const struct arm64_ftr_bits ftr_id_aa64dfr0[] = {
++	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64DFR0_EL1_HPMN0_SHIFT, 4, 0),
+ 	S_ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64DFR0_EL1_DoubleLock_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64DFR0_EL1_PMSVer_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64DFR0_EL1_CTX_CMPs_SHIFT, 4, 0),
+@@ -2965,6 +2966,13 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		ARM64_CPUID_FIELDS(ID_AA64MMFR0_EL1, FGT, FGT2)
+ 	},
++	{
++		.desc = "HPMN0",
++		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
++		.capability = ARM64_HAS_HPMN0,
++		.matches = has_cpuid_feature,
++		ARM64_CPUID_FIELDS(ID_AA64DFR0_EL1, HPMN0, IMP)
++	},
+ #ifdef CONFIG_ARM64_SME
+ 	{
+ 		.desc = "Scalable Matrix Extension",
+diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+index fa5c93c7a1352..c52873a6f91ed 100644
+--- a/arch/arm64/kvm/sys_regs.c
++++ b/arch/arm64/kvm/sys_regs.c
+@@ -3326,7 +3326,8 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+ 		    ID_AA64DFR0_EL1_DoubleLock_MASK |
+ 		    ID_AA64DFR0_EL1_WRPs_MASK |
+ 		    ID_AA64DFR0_EL1_PMUVer_MASK |
+-		    ID_AA64DFR0_EL1_DebugVer_MASK),
++		    ID_AA64DFR0_EL1_DebugVer_MASK |
++		    ID_AA64DFR0_EL1_HPMN0_MASK),
+ 	ID_SANITISED(ID_AA64DFR1_EL1),
+ 	ID_UNALLOCATED(5,2),
+ 	ID_UNALLOCATED(5,3),
+diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
+index 811c2479e82d6..f8fb4a6395428 100644
+--- a/arch/arm64/tools/cpucaps
++++ b/arch/arm64/tools/cpucaps
+@@ -42,6 +42,7 @@ HAS_GIC_PRIO_MASKING
+ HAS_GIC_PRIO_RELAXED_SYNC
+ HAS_ICH_HCR_EL2_TDIR
+ HAS_HCR_NV1
++HAS_HPMN0
+ HAS_HCX
+ HAS_LDAPR
+ HAS_LPA2
+diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+index 6c3ff14e561e6..2d5cbc8ced114 100644
+--- a/arch/arm64/tools/sysreg
++++ b/arch/arm64/tools/sysreg
+@@ -1679,9 +1679,9 @@ EndEnum
+ EndSysreg
+ 
+ Sysreg	ID_AA64DFR0_EL1	3	0	0	5	0
+-Enum	63:60	HPMN0
+-	0b0000	UNPREDICTABLE
+-	0b0001	DEF
++UnsignedEnum	63:60	HPMN0
++	0b0000	NI
++	0b0001	IMP
+ EndEnum
+ UnsignedEnum	59:56	ExtTrcBuff
+ 	0b0000	NI
 -- 
 2.54.0.1136.gdb2ca164c4-goog
 
