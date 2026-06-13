@@ -1,80 +1,74 @@
 Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C8275801
-	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 02:04:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4623803D3
+	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 02:10:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781316242; cv=none; b=bQ/UU1x7YN8Fyam2Z30JNZTH5ZT5vXl6zBcHTjTTqaJEu1ZZFsftdiXVGbxwoPCzZI68qAjSajWlmTIfxUe3sjSdas3bgsZ4dTQlDeY8Z3StcgWB0lgopi9xd3/uVfmR64hoerYeo+UOV1RJ9OG2APHpEhdJNrSBe9RioVZ0cWc=
+	t=1781316623; cv=none; b=CLxCZPxB4hvRFsOM1G9jQuG/xEyOBbcmpOFOEqFlXaPrnTrEUZIWZE/2Xn9N3zR+/JtjSULmEysMsxCs62clheUeaCE97T2ojhTc+zy2gLlCvX7j/RGkj+oEf3v9xstlFmrKZSUzR2hEoMvtRe3NKz+k1k86xc8Y0E6foSgRB9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781316242; c=relaxed/simple;
-	bh=BF63f8tkkJfZ/bY07JtFT74M8MLMPf3ZpoYhZ+oniIY=;
+	s=arc-20240116; t=1781316623; c=relaxed/simple;
+	bh=uTqsrI3kXHlZ9s5FCWhR0+ezVXqQfpVv9lD9udQjaag=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MV6Dg3rD90hcm9qEUsIdKmULkqWqzS9JYyvBKgbdauUFMv/DCvJIbNlUIgQD9H2+FgEo9xLD6qyHU4qFP4tLtH8iqTBdN+Tc849TQYokNhnFw2o7czFsHAjcWEsNsAnXfAPEaJNj1RFzLOxm3oEUhmG6IJaopDWgefgbsPIYDDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nhqidihH; arc=none smtp.client-ip=209.85.216.68
+	 Content-Type:Content-Disposition:In-Reply-To; b=t2T77RGt+Jotz1Bq98UhejLYdE88n6OuahmnK5myYk0fgUfal9XVn6+10VmlWxMYxqJW0UzIi2aD42om9DC54Jrq5OD5jLZXJJrHw7QkRzcYS8bdGUm3M9WnNF95w+uAJNXIOU3zebuwb9SWdFKcOqnrH2m3WxmSLgQ+AvD9Hfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WYBNAx6R; arc=none smtp.client-ip=209.85.216.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nhqidihH"
-Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-36ba706ab46so1007677a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 19:04:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WYBNAx6R"
+Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-36d5fd50d20so1146496a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 19:10:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781316241; x=1781921041; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781316622; x=1781921422; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qvlrbvjYmzCXoLrV2hsJdEbJOUWSCE5NGHj2A3xomvU=;
-        b=nhqidihHBRXjKuyI3jLI72GFUIyYnPkVmKDpuWeQ2HmmDsoLX6YgMwVx7gSWGDpv3E
-         NppSpLpXY7S2oPkobyW/KW+6RftxJKJriOz6h75wqkk+d3lCwbnfFlQDMbi1/cLcAm0z
-         a08kVwWd3Asjc6ZHCzx8Cl3kI2rjahh9QxY/ka+Aljx59VWbluWC0/XIe3FPyGWJr40Z
-         v7t917/zN9x+5X1RRE1ECsWmQkP+hlsySBGx1m+PONN4wgo+BMjiaHf7lOXZhh9E4RA4
-         w1bMWCTyD6LPmM+nyfG5ybAfcs/DMh2cXx4CwWZhMDCpekNzNpa9GL9VzkQNtPV55dJA
-         ngAA==
+        bh=wlXZARvbuLg9eimNdY6LbUYqojjxqaDI2VXv+ws27Jk=;
+        b=WYBNAx6RA3iHPgNBsHKg4uE+y16iBvAyMLIjSJjtVZOb3mrw5ALHYKZAjujzpuizAn
+         XEYzSZUyhdLbQVSbmvk37prtPys0Khb7V+gyjUkS4L8PHfAVHYpwRCgeUJTTD3Tmn+Fs
+         HZz8V5BzT8DmnRgJFK/o/ms07Q4nCvFGkXDZN95clbcrAkTry6NWv+UgcJ9S661w5vqs
+         gADNzKaJ9VKbF7MlUjQNW7oINoGnsOxItnXPmNmUDPEi2B+1Wv9HxCtjLFTKxZ7YRdXR
+         xhblQkcNhsdXFBYM/ahhBritH+mfGzNmbsSQqkaI9xMsjQi75yiW10zD75Fq7LjqXqji
+         ujaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781316241; x=1781921041;
+        d=1e100.net; s=20251104; t=1781316622; x=1781921422;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qvlrbvjYmzCXoLrV2hsJdEbJOUWSCE5NGHj2A3xomvU=;
-        b=VDFfzcwQ/J0npJi0sM9SC8z1YgTr5ewYv9AYwGyk/L2fVn9zS1VcUICup+KqZHm894
-         pPDiYULL0DotJPJQxItf5zLgVQsnQZt0TBrW9iZoH8t9K3MBP4wTlkyIL3uy7Da/FREi
-         Go81GunsOoE7BQ70iRWszY/2NsceDWftHy9IfUeiyk5PQh8PPlLIgZt7ZpuUOW22Cps3
-         o6zW9Bz/feGCsD06BknU+7ySYssP5+tt1aVeAubvV8JhzWGHZTXwO1/hVpbhV0iRT5gq
-         ituAqDwgRvBmQ7XS8BBPUYelyduMauG5DkXS9JIhAvdUYOnGQNqyyT4qPiRVyE4hem/P
-         B6bw==
-X-Forwarded-Encrypted: i=1; AFNElJ/pC7e8Lz292oCtNpkGteTqRyUUrYMUvfoqvUsdKoqn0phJ+VU3e9Th4mfWlboSRW10IYdVxDh9iBLQt5NPL/g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2vFKZWLtXD6pPuI068oHXXpUNxCIe1qZL0r5U4r0KvwwKgFe4
-	xeKNEyOnY2rEJnvS/0y9IhFtbwEdCZ93/WpDArQaxWCvQFBlBFzDxdA6
-X-Gm-Gg: Acq92OGtuW4kmTANik6egPCHqp9If4MnOHr0ryT+s5U6UB6eesj6qp81hpCkS457NrI
-	wCPc5kiHLl8kH3AqZcUM8kKeNtlBX1MeDWLHgSkelGkfuVmDlUn9yYG7j4X7fQX9BgLjQ0SZJdX
-	9fDg4kpBpL0ze+7uocWPmpho5jrwIdMHbCsIejuCqSpD9TPUYIUFlDNf0x15JU2aMEnP8jTV5ay
-	+tBZuYC71Pssk0OVqJuzBX7ZxpKGzQN4EnDPNz/dopE6z2okN0RoZEmPMle2+x9vs5Fe+ytYA3k
-	fcZg2+B6L0RJ9RhNjTzD346CFqzoFA4zUb4FWnJqQR7RgRq0Lp/Wprhh9zs6TfPoa7BkGjOMMf0
-	AwzjXa+lGDQ+Zh+BrutsbWLA8RaCTFlE5UbY0dnMDeEF8O4p5Ghyfe8jkpbSGPQD+fEiQc3TgwJ
-	rF9/POJsewYVoO+mHz
-X-Received: by 2002:a05:6a20:2d14:b0:3b4:6265:3786 with SMTP id adf61e73a8af0-3b784026fc9mr6690558637.43.1781316241406;
-        Fri, 12 Jun 2026 19:04:01 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4e::])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8665186d98sm3006091a12.16.2026.06.12.19.04.00
+        bh=wlXZARvbuLg9eimNdY6LbUYqojjxqaDI2VXv+ws27Jk=;
+        b=MO4ob56BdOk25QuHWze0uGqy6iqPdKkwvOMPSkCYOw7cjE/kbtewvv+6qb8+Y/jHtz
+         m5t1twIre99ltNRWMAxt0JnyxZYT0uNpnzVL7kBL5HWWXHcJpijDNrI9Uh0T8o7xwFny
+         Gcjeaxdcy/gufoTAGqWFsMPNHHV+i50Zr6ePKrUwBUYj+te+CGahpDBsT2X4twqHdVJW
+         m8If3e7R24/kGCJ46vakzo79sA039OnfrQncn7V5YAzgUEgZn47ySdIBmx7cs+zWH+/j
+         cj+BK1K1u629uZ+BLwWWNb6HYYdiM1kOkgdytPiR6pg2EwICQB/COZfPqHngIOyFAFX/
+         ou6Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+fWuZj7pNjKw2qKRNbqfYE7617m8CAdx80VL4oIXm6DAiPSxm04TYyeVvBeqroCYcGvWS7/qEvJa8MdcYjiBY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyC9+yA35F+6FLZHSBtYrAZp4oQag3s7xI444ifoXHhiusYdpF8
+	AT2u1lGJEUPTOpqiEKjizAvL5qGUxXAg+mqmd8+f3OqwmpGMHMIOBn2h
+X-Gm-Gg: Acq92OGZKXHKo6J1Jjbnq6nZzSXplSyzAQGR8nXyckYpuhIHqDAbZ33XuU4pqhftlgp
+	oCsUnW8VBSqfVQTpMHdyJJ5vX7TifNm9EVPYG2y1vlEyo6dqGW2FVq4ruxjjO5H3GO5MOGgO8KZ
+	b7Wbjs5k4q9oh7p7ulj54HT8OOhenNQ/p8jK+eELbIGoI2Mh4A/ulUKol1UGKWaHWMJUjk7rydi
+	LQPUU8mUfBtyg33+nbUZyGboHLwG/O16qDfF3a4umngcEY6Eo9X8I3R5yQMFHWxmlEWputtGf0o
+	rR+FDqrGXv/q8kH1lp9wUMJtxy8pcf6f7eEpydEy6MDaxSe4ctxxhSlN6TY/AhCJhHglA8lUnNZ
+	cJ+Ab+1pDg2XpGtv4NX9843yd6DWta6CG+yjN/hKSPqUObGq21yqgBTA+/RlYal8wcQ3iB/vttr
+	Tg6h2R3K2CN+XQxc3Grk2sfcZf9ro=
+X-Received: by 2002:a17:90a:d44e:b0:36b:2179:6d23 with SMTP id 98e67ed59e1d1-37a01c36da1mr5844647a91.7.1781316621781;
+        Fri, 12 Jun 2026 19:10:21 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:41::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-379c3240b5esm2395134a91.0.2026.06.12.19.10.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2026 19:04:00 -0700 (PDT)
-Date: Fri, 12 Jun 2026 19:03:50 -0700
+        Fri, 12 Jun 2026 19:10:21 -0700 (PDT)
+Date: Fri, 12 Jun 2026 19:10:15 -0700
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Gerd Hoffmann <kraxel@redhat.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
-	linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org, sdf@fomichev.me, 
-	razor@blackwall.org, daniel@iogearbox.net, almasrymina@google.com, matttbe@kernel.org, 
-	skhawaja@google.com, dw@davidwei.uk, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v3 4/4] selftests/net: devmem.py: add
- check_rx_large_niov
-Message-ID: <aiy6fWaIILSj6dpr@devvm7509.cco0.facebook.com>
-References: <20260612-tcpdm-large-niovs-v3-0-a3b693e76fcb@meta.com>
- <20260612-tcpdm-large-niovs-v3-4-a3b693e76fcb@meta.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next 2/2] udp: convert udp_lib_getsockopt to sockopt_t
+Message-ID: <aiy7ZR7Yz2Z4Ioyd@devvm7509.cco0.facebook.com>
+References: <20260612-getsockopt_phase2-v1-0-7b01f1f5d106@debian.org>
+ <20260612-getsockopt_phase2-v1-2-7b01f1f5d106@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,15 +77,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260612-tcpdm-large-niovs-v3-4-a3b693e76fcb@meta.com>
+In-Reply-To: <20260612-getsockopt_phase2-v1-2-7b01f1f5d106@debian.org>
 
-On 06/12, Bobby Eshleman wrote:
-> From: Bobby Eshleman <bobbyeshleman@meta.com>
+On 06/12, Breno Leitao wrote:
+> In preparation for converting the proto-layer getsockopt callbacks to the
+> sockopt_t interface, switch udp_lib_getsockopt() to take a sockopt_t.
 > 
-> Add a new devmem test case for binding the dmabuf with rx-buf-size=16K.
-> The test sweeps RX payload sizes straddling the niov boundary to cover
-> the sub-niov, exact-niov, and multi-niov RX paths.
+> The thin udp_getsockopt()/udpv6_getsockopt() wrappers keep their __user
+> signature for now: they build a user-backed sockopt_t with
+> sockopt_init_user(), call the helper, and write the returned length back
+> to optlen. The helper uses copy_to_iter() instead of copy_to_user().
+> No functional change.
 > 
-> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  include/net/udp.h |  2 +-
+>  net/ipv4/udp.c    | 40 ++++++++++++++++++++++++++--------------
+>  net/ipv6/udp.c    | 17 ++++++++++++++---
+>  3 files changed, 41 insertions(+), 18 deletions(-)
+> 
+> diff --git a/include/net/udp.h b/include/net/udp.h
+> index 8262e2b215b4e..1fee17274745f 100644
+> --- a/include/net/udp.h
+> +++ b/include/net/udp.h
+> @@ -430,7 +430,7 @@ struct sk_buff *skb_udp_tunnel_segment(struct sk_buff *skb,
+>  				       netdev_features_t features,
+>  				       bool is_ipv6);
+>  int udp_lib_getsockopt(struct sock *sk, int level, int optname,
+> -		       char __user *optval, int __user *optlen);
+> +		       sockopt_t *opt);
+>  int udp_lib_setsockopt(struct sock *sk, int level, int optname,
+>  		       sockptr_t optval, unsigned int optlen,
+>  		       int (*push_pending_frames)(struct sock *));
+> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> index 70f6cbd4ef73b..0691f74db2c11 100644
+> --- a/net/ipv4/udp.c
+> +++ b/net/ipv4/udp.c
+> @@ -76,6 +76,7 @@
+>  
+>  #include <linux/bpf-cgroup.h>
+>  #include <linux/uaccess.h>
+> +#include <linux/uio.h>
+>  #include <asm/ioctls.h>
+>  #include <linux/memblock.h>
+>  #include <linux/highmem.h>
+> @@ -2995,18 +2996,12 @@ static int udp_setsockopt(struct sock *sk, int level, int optname, sockptr_t opt
+>  }
+>  
+>  int udp_lib_getsockopt(struct sock *sk, int level, int optname,
+> -		       char __user *optval, int __user *optlen)
+> +		       sockopt_t *opt)
+>  {
+>  	struct udp_sock *up = udp_sk(sk);
+>  	int val, len;
+>  
+> -	if (get_user(len, optlen))
+> -		return -EFAULT;
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+[..]
+
+> -	if (len < 0)
+> -		return -EINVAL;
+
+I see this part now in sockopt_init_user, but you mention that it's a
+transitional helper. When we drop it, will we loose this <0 check?
+Maybe keep `if ((int)opt->optlen < 0))` here for backwards
+compatibility?
