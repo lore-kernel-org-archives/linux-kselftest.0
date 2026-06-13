@@ -1,110 +1,76 @@
-Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744E7282F12;
-	Sat, 13 Jun 2026 18:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCD121CC71;
+	Sat, 13 Jun 2026 20:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781377018; cv=none; b=iyj3h+ebyNd1Pu/eSFGI5c/iWcpsDOetDeV58zPQc7rEX650yB2Dpr3t4G34+8HhP5ugQibHyaisd0sBhNE6FLEhsnwaNuChrHiSzMLUaJ8YWrFR5V/oo52JEO2ijAe93Zr96zgomIGaVnq/houThy0TdbmdtLgMO7Vq3bKNoLg=
+	t=1781381026; cv=none; b=tGWi657y4wnb/V/KIBgJRYe8THpKbVlJUKLBTplMmsXmL2fFFWJfvKxc1oPxcj/tDZbnNSSqwcis8KK2P9Q3UVzh9R8zF2abB/0mf+ZkaV76rvcbckbHAz11KOX//OYumIV42kKZkEL8MHw5QkxVYAvDtd5G/uvxJdJiqBA5+Zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781377018; c=relaxed/simple;
-	bh=6g/hcspqmnzDpTPyOXVCXQgi33ZrKlPFvAoor5/tz90=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Pf7P7z67ff9qEE2b5IdJiHWcKjhPbM2KslN/cNzFqhg0sh6qhzaKvLnF0d6uagjpjNEcTS/3/MUVN8x999MbbQikcQOdvo5iTw0T7B6nQWXCzFx5Q6S/pZoghw28OnHRNuB1C9V1+VcYCukvrInhreD6O7BeRTERMpIkHvd/2OU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=cciQe5mQ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CPGd77qI; arc=none smtp.client-ip=103.168.172.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	s=arc-20240116; t=1781381026; c=relaxed/simple;
+	bh=MajHWP36pywmpHXIutnrtvjgrOaNo1sOUa38DWPkGqw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=H0eWF3ElcMlBLlZgv3q9C3rOyU/nO6iIwN1gzEu11HF4ZK5elK0J8hV67EiY/WIfLJeaOnniTH4jKIwm8KqwBn9RZwZqg2LeF+uoc+dn4UC50vjE1lMlQsTTIBRu7TsdSdgZwsMZptCvtfqhuDt48fZDysuR1m/T9oHqAfXrykc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A+0YbmSl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="cciQe5mQ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CPGd77qI"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfout.phl.internal (Postfix) with ESMTP id 421FAEC0110;
-	Sat, 13 Jun 2026 14:56:52 -0400 (EDT)
-Received: from phl-imap-18 ([10.202.2.89])
-  by phl-compute-02.internal (MEProxy); Sat, 13 Jun 2026 14:56:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1781377012;
-	 x=1781463412; bh=DedA66i8NGg0cgs5rpe5hEwK9Jl8E+D2eWj+aYyb91k=; b=
-	cciQe5mQO2LKhZGSuGKmn8ZJrD0b9X80caZcjawDjGZS4s/TBE4NBgCB6Anpcqt8
-	w0hh9XZRI9KHJoe2M0s5Kcke4y4UanUCOcdxSOUmmaRLcgAxjMyUZTQAFxPNOfXq
-	wD5tR9+KUHeya/yF9n6p+VsBRvvbd0fJOD/lQ6p1SXE/Fj4wrRdH+/gf/y57iME6
-	3H2ADc2bVS5kQllbuVLnLdZk2S1JpNo+uNGD6og7ECSd6ZgoQQYmNduRmKdQl6mc
-	b2plnxQ+7TNjyj1i+lULK6bWMTz5Rz3m4/LOIJbzzBBZUxnSfzBhojGPgUX19Pl9
-	eBQWrSjxsbFu5b/zF1s0dQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1781377012; x=
-	1781463412; bh=DedA66i8NGg0cgs5rpe5hEwK9Jl8E+D2eWj+aYyb91k=; b=C
-	PGd77qIABBYAreVnqRwjGYigZP/aHbb6CqO1e6em5wGI0bReVsslTCMjO0sLPIih
-	W7QL9UL/bN0x9ATo+j2kWse6GaunYzCkj7J9UDHuxFRg6KQ1iIxtGsUXKA0ATREM
-	1aRFpuL4q/wYztptt4ar/9j6uuk1930yPGdLqLfPlKa26GRzNSNfVQx6qZfKWRLn
-	70ccWe08JloRaqD59NdemUpqn0OSn3YVggztWJ7vUVJnco2oHYrOecFfkbVeroOs
-	PEa/QdGnGNtinq/PVeebFbxqUSnFTQxIOGidv5TdjB1a4etbjxhGI7itRG3Nn5sl
-	P3bK6rZ1771HiWq3qyi1A==
-X-ME-Sender: <xms:9KctanAPKTiPOZ1I3qovOj3sBLv5Ubj7J4LCbN9nJITGBA2lRu3q6Q>
-    <xme:9KctaoUGKQQPTytPiDBPyg8GHRa27R6_L5cUFayWB4d5DXUXPZfRbTlN7pvooTYxe
-    jmBuyLIcQyakUcLSWGHv0S1I1JSFOu18pkaswSLJqNsXb-C-PeeuA>
-X-ME-Proxy-Cause: dmFkZTENY/k1unTZtgfGRIcYYqnjKx4tZRQ36/irkP+VyjvaKGjbe+ykCPnqkTu5C24Wy2
-    XzZvF3UzKLg4+GPpMh0i+q13uJsSlmGCjMqcZcSXp+USlTRu99yQxUuFai8vdIZW70CV7R
-    EkWyV3EfMhf1DrurgEeS/dU3PHz5qed88G7UKKVjlPZSsCoDmKPD2kb5oTi02+/B05iACH
-    kMFDKkWeOAEzfI+UE4ByBqpu854AnecEmtljaHnTYkIVif//R5rThJDDMe/6GqlN7rh8ni
-    ZEyByJYQVSpU4fouRm4gKBhpLj/+FPOlUm0SfC1QnGHHXh6thsHLhqRmte0NGS6t2svLhm
-    5TlRp8g/ybuMdTnWplxgegc3ymH7up8vy6DB0Ct9OEOXLY9II3VwyXD2WxFX37/vP1LCRT
-    KTRCvUdxfjlfFDU6W2Ecnz5rUQLtqos+fVqEhs+S8xABq3DB/2NA/cua1CV1MiAi79eT+p
-    9Ld9qywvcRI1hOKcJqy+Fdkmh9H1MjdnPkzNDBF25bDNCFViytgi9yhLGHL8EEhdKnWQTE
-    amZ0wkKBRgvaXBObG3jRHaDScMONFSsqxlbe8OcvlhZap0O5a4WkH+8Ivy0NrkGc/4ffHv
-    I2WTNeOU/O41NrFEN0KmarRjcyKq6Wq25ROw9iIMdCBI6M0PnoUD/MSAZpSg
-X-ME-Proxy: <xmx:9Kctaq-s1IMBfq8MjAeWMaxyy5aQtpc9JzPLgOYyB9FNHPxppU_fUA>
-    <xmx:9KctahE_cXouBnp3dU5nWCnb4lN7U6iCcc0jN4-cBvWrYphk8gqOpg>
-    <xmx:9KctasRBfT93PBjQf8X9WgnjYDXC8_K_DIPJAjJ3gDGMzhpq36wbIg>
-    <xmx:9KctagS4iI8IbouAknygapDcaetJcWqDtilRuKCKT0fg6p_XFg4Ocw>
-    <xmx:9KctavT4CeUohXy6K3x3Jg5zrpifjXigco7PD5cVQPWmPgVKxGMR-plA>
-Feedback-ID: i03f14258:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 0081E15C008C; Sat, 13 Jun 2026 14:56:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A+0YbmSl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFA711F000E9;
+	Sat, 13 Jun 2026 20:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781381024;
+	bh=MajHWP36pywmpHXIutnrtvjgrOaNo1sOUa38DWPkGqw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=A+0YbmSljX2VbpxkK5dc/ihCO36cuH/Mt2Soy5Pnz2Em5SHZfkJ1Pxx2i9QDGjhJk
+	 FtFEMirkQKmnuP41y3L9hXmk0SSpe54xsy66sxpDbmZVU/OGL1V4elLg+fY97KaXf9
+	 Atny5XMcXhWlhPU3fHgOlcxbaV+glBvbZkHrUgL4SAWzIz47/B7mGnT3sN4HNxrP4y
+	 GK3kl75FyUtF5uKabdd4J1nYqV82FZKMbZzCct3rY+yAMA02NtAM+qsZ1ykOAAnh3M
+	 ia/pBQgBeY/sW88AtPPOxAKKTgAmAMxjDgnWRLA5Qj5WMy55RGTQ9UVD2h4AJMme+X
+	 pLMfZ74dxEb3A==
+Date: Sat, 13 Jun 2026 13:03:43 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Sun Jian <sun.jian.kdev@gmail.com>, bpf <bpf@vger.kernel.org>, Network
+ Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, "David S. Miller" <davem@davemloft.net>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Shuah
+ Khan <shuah@kernel.org>, Jiayuan Chen <jiayuan.chen@linux.dev>, Toke
+ =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>, Menglong Dong
+ <menglong.dong@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>
+Subject: Re: [PATCH bpf v5 1/2] bpf: Run generic devmap egress prog on
+ private skb
+Message-ID: <20260613130343.3984878b@kernel.org>
+In-Reply-To: <CAADnVQJyOR0hppTmhbTRS8Sp5ci-L0fmQ6V+R9eiJDop_95rVA@mail.gmail.com>
+References: <20260612114032.244616-1-sun.jian.kdev@gmail.com>
+	<20260612114032.244616-2-sun.jian.kdev@gmail.com>
+	<20260613102549.0061a875@kernel.org>
+	<CAADnVQJyOR0hppTmhbTRS8Sp5ci-L0fmQ6V+R9eiJDop_95rVA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A4YpCjS-paqo
-Date: Sat, 13 Jun 2026 12:56:31 -0600
-From: "Alex Williamson" <alex@shazbot.org>
-To: "Pranjal Arya" <pranjal.arya@oss.qualcomm.com>,
- "Bjorn Helgaas" <bhelgaas@google.com>, "David Matlack" <dmatlack@google.com>,
- "Shuah Khan" <shuah@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, kvm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-kselftest@vger.kernel.org, "Pranjal Shrivastava" <praan@google.com>,
- "Manivannan Sadhasivam" <mani@kernel.org>
-Message-Id: <13c56a19-aabe-40c7-b9a6-96c8d1a8a102@app.fastmail.com>
-In-Reply-To: <20260613-pcie_vfio-v1-0-09168188f3f2@oss.qualcomm.com>
-References: <20260613-pcie_vfio-v1-0-09168188f3f2@oss.qualcomm.com>
-Subject: Re: [PATCH RFC 0/3] vfio/pci: Hide and optionally override the PCIe Device
- Serial Number
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
+On Sat, 13 Jun 2026 10:53:35 -0700 Alexei Starovoitov wrote:
+> On Sat, Jun 13, 2026 at 10:25=E2=80=AFAM Jakub Kicinski <kuba@kernel.org>=
+ wrote:
+> >
+> > On Fri, 12 Jun 2026 19:40:31 +0800 Sun Jian wrote: =20
+> > > Suggested-by: Jakub Kicinski <kuba@kernel.org> =20
+> >
+> > I did not suggest this =20
+>=20
+> ohh. I didn't follow discussion closely.
+> Do you want me to revert the whole set or just remove that line?
 
+It's alright, I was just being grumpy.
 
-On Sat, Jun 13, 2026, at 11:43 AM, Pranjal Arya wrote:
-> vfio-pci has no perm_bits entry for the PCIe Device Serial Number (DSN)
-> Extended Capability, so guest reads of the serial
-> number currently fall through to the physical device.  The DSN is a
-> unique, persistent hardware serial number that identifies the physical
-> component (the functions of a Multi-Function Device report the same
-> value; Root Complex integrated Endpoints may implement it independently),
-> so exposing it lets a guest fingerprint the host hardware and correlate
-> it across VMs.  For multi-tenant passthrough this is an unnecessary
-> host-identifier leak.
-
-This sounds like a userspace problem, QEMU can virtualize the capability and manipulate it as it sees fit.  Thanks,
-
-Alex
+Maybe we can amend Chris's prompts to catch these?
+Noobs tend to add Suggested-by for people who simply commented=20
+on patches.
