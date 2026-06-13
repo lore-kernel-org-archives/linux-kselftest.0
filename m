@@ -1,85 +1,87 @@
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627F2380FFA
-	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 17:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964DB38333F
+	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 17:43:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781372630; cv=none; b=AxoS+1t4QRgem+90/BuxA3N+NWqE2VDbkARYMPi5boonIwRjrb+AnnG0KRdzU9Z/1ZHMm7aTyIe4SkMuo0qyRUhoY8OUCaRJQmMivs/NXk+fwuQLdVoc4yNo2bsWfpJUFvrIwQIxzZxLlNIlNBlLY0ILnszfQOCDigKn4r09j0I=
+	t=1781372635; cv=none; b=s+0r8OfN+Al+ctTsIOoQSOPeYrR7AmFm+QgjJbEapf1x1IAMoarsztKgINcLGOLas9F5RYZ9KFXgx9Kw7RYTGaV24SvWQ4aMroj2wroa88h0SB23PqIVWIT4qJPD7bdRDcWd7D0yqWvYNlQBR0gsgqfs5X5Ml+vtsl1SK/duyc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781372630; c=relaxed/simple;
-	bh=qfSZdPmwBhywiRrKL1QrGMIdCfETYR+AOs72sM7RPN0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UK0HzeB0jahhd61QE7duMLi7mAAtGY5CaqFNKpNN8qdfIjHAvGxjEvbewBqF4f3cMT9H1omANcDQxyLrb1j3uSzsjkpO5wxIbKJCcIfBL2RCCytIk4XQGvSS39F/jGwqgc4X4bDC24Bv/sdFBm1WDc/TSg+DXAeBNVQ0ZVAlT4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=OKXZsLuZ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=i4tu7jAj; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1781372635; c=relaxed/simple;
+	bh=i1C+7GVwz8hqSxonETSP8Z7foT49r9/TUeD3+VkK9Uo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=BHXpJWfG1pGhiE+TtLSlkJMoFcIbFJF8JimKZAKNItsObioO99DUsIyPXkGrpF1vVgoTGbQC/IYi4ARha6tDyJPB+mvnM5TBLTNcEIJIcdAU8gJqXbdlo8lQkxHK9RM7tvqP5NDORt2DynFN/XHT8dpLHw1dtaTnuhuS6HQzK/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=kImBcS6E; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=IicaYopM; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="OKXZsLuZ";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="i4tu7jAj"
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65DF9P9S2784798
-	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 17:43:48 GMT
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="kImBcS6E";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="IicaYopM"
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65DF8qQW1234589
+	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 17:43:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=plRqMq3yK9Gvk+pbVnt+KD
-	Y+x/K8ovZzlsQsgimrdOE=; b=OKXZsLuZw1uLwCy9wlEQKLoLrCSLPORTIs4pYg
-	ackQWrlEebJQn4hX8E4P4xoEIfr2zv3GKNmunXBMoj4QUurG0AUkJoT75/iRBdPw
-	r8uizcWTxANrBucYJ/lyE2iFrf6AI0MeiPZZDNv80ytCI5DBkmXoqbHqRQ5Jc1kY
-	eUU9fNhCpabRgloPKhvJcGxdfb8Aqu74ncD1dZtWyDA/mDGqXbSQ4pxBzb+6hpos
-	vllClEcjzwZ64ibosP5+O4k44cMldNlN3oaldjEt3el6P6RIY1ZtkmRA+WmZDn/R
-	NCMdIpa95WZK+zXC+g5oYYqvcKYdH0GEYUWwSI8jgLKDxikA==
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4es0cghj9e-1
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	eliVjm18cWWxfayAi3KcJNFoMA1vSR2kzp1VWaYb3AQ=; b=kImBcS6EHxWaZhVb
+	eWG8NPJ65KU3oR5iGbYrvJcA6jHUdsfeZgkAJDcABqT+SOK3ezsJxlL+/cChSysy
+	TCE0700ld5UrGtJy6KUHekJbF5H1P+FzsQwzgPnYkwgOv1azfubaaUEgseT3wd/v
+	rVB9wsjjcz80KJ0sqy9YjxRu/u9V3d3l/TlRtHgrH4zBFY9ujLcmGRJ/ER5nqd87
+	J54Gfo8vVvqut8gWligtjGCn9QU5+X7HOZ2cT4ARviBXyNTfX03SEM7DDsszrI98
+	wgBdG69yliJ0yuDcMr9r+NMhS5NS09DQrGtJRXLD8gHpHxE6tkKrfnVrCLyVJPAJ
+	Qy2e/g==
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4eryffhn4j-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 17:43:48 +0000 (GMT)
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8423f544944so1428910b3a.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 10:43:48 -0700 (PDT)
+	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 17:43:52 +0000 (GMT)
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-c8592a62f32so974669a12.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 10:43:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1781372628; x=1781977428; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=plRqMq3yK9Gvk+pbVnt+KDY+x/K8ovZzlsQsgimrdOE=;
-        b=i4tu7jAjg75I3psvQVP3j9KipjErxzq4RMEOe7AZjbtC4NwvSUS6H10m24hPuaYDL8
-         nDpAN5eg4CFZKVaIPPrurS5tILbW5O7aK+fGed75vr8xR7BebEmPXFWokIsFeWoc/EMQ
-         rH9L0b3/Fka3QiU4WndYe6ojPeAPGF3P/7yTryUWRZkvl8IW9RcirnTuCNSKGrFN82oz
-         MGPP6pJVaR29K/mg2JM8DV0FKfGGxLqxgcucLxbwGVKOpACTjkUk3YPos3X8UJdPPthM
-         U4yhHxfmEg312vLLJQR5i5Glv3S61qLP68NEbU7CelZNL0sJMGrJCGP8bPyNN5Zo3arI
-         qxpw==
+        d=oss.qualcomm.com; s=google; t=1781372632; x=1781977432; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eliVjm18cWWxfayAi3KcJNFoMA1vSR2kzp1VWaYb3AQ=;
+        b=IicaYopM9yt+UCtWQBp2nw/ra5uGB4NVyrNl7s1hAetUP+NxZK1RIg42NxxW8csB0L
+         1dgXwIfk7tyEuQyV5PbZYYgFVjfjemrBtJenhFwrXYRyUuKtZJRUa4ZVugspJaLNEnGX
+         k/AtfU3XDII/QGlxhoHK49hJjWO+wjJQMdy3IADilgVTK4oLU+IlkwFxt0oTa1BoGr84
+         hHiTvWEY+6tf1Dc1eeXZq0qH3GBtWuHfifYUDLhtF4F/1cejLOwIlHqOqtZi5mUyJsHV
+         E2GvloeFFHGyYVZF9Ay+ID8ETum/ybiQ0ILnUFXeRHzkdKn1ATkAbPncaDHWHAr1nD2w
+         cuoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781372628; x=1781977428;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=plRqMq3yK9Gvk+pbVnt+KDY+x/K8ovZzlsQsgimrdOE=;
-        b=N65/uxLtKJMBrk3xogHl27iKJzz6QgyldGzsMqePkBlJRNsukdXCEJe33mMjWJT/57
-         7BTKYoq2ucIRDN+r7Sqgjqiqz73sODgSygyLhTF9y3yPnz/jCnlLDbbs2APH2hEmt2g9
-         dgWJSPTjHftc1yZ8UEnNlq+SNPClXWYMllXfQMeF5xKpvHFM/8PJkeWV3tQlENxwN8Ju
-         EzE7gmLa3UneGJoBY5Be+wkooHPL5L8Sb5gGD5f0+7KsCwIIp/cXXRqsanvaAmdQ+jVR
-         e7k685yM4W7jgBqQ6PFPscquCRdytzERS+fwSJvNOoONg6DqabVuhvOxbhnqGTS5A+Ic
-         sGkQ==
-X-Forwarded-Encrypted: i=1; AFNElJ95lH15P8V1d3WiI44zNaxE1YieLgqg4qNV9FmGxgNol6VLb4tFDynrsUHVNoU4391tRAlxf339P++9uEaXv6M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytwoGmksQ5h93kocAz2sRp0ZB/jQG0X44K8E3GaMri8S5TIvaA
-	geEZw1e9ZTuqsQvog3WUYNBaF7E9BfkuAV7Lt7E8Q9vGOZKB4rNZkAX02wTL97yDA71o+phsA7k
-	j+91YT1tp+5VST4rymvir2jHFJt6lglLlVrCfkCturmGg1FIBKOik1rNZXsXxgdScD741Tb4=
-X-Gm-Gg: Acq92OE1hODn9Z0tAXpzUJHLkgL5Hq+jTSqPZZEjPLA+vQo8oIkxDrdprLjy/wF3m5C
-	2yt2umnW7EnUvfH0eoDrDeOqe9sSvCUbcVxEc2MnrX8ay0CXSegjtGnqtNYBIp48zQjm52eoSJV
-	ooMSSHvQtsV9/d5MVA+KuJzKaGCqNtj0DaULU4v9ZmrEWodKlqYRh5dJstgv3Ft4CthR/i+NBtZ
-	G5XHZ/MgEgMRRQx8iErj342ohhD16CTx6+SILsNDdqdYs909RQ1CHrWx0aKGMBwjSWBujMOrhWF
-	5rpLT1x0tDl6uq8AkQDqMd7QaZOmnT6OJx6BgbPlp9hjbX6uQHXImST1OUssCI2DEJgMaNpDxMH
-	mk2c5Objp6dWehTJZtbrxxXkeeiSayo6aPvX0uB1yyq8A7+x310FrkQ==
-X-Received: by 2002:a05:6a00:238c:b0:835:41f3:f440 with SMTP id d2e1a72fcca58-8434cdfe0ffmr8593306b3a.14.1781372627780;
-        Sat, 13 Jun 2026 10:43:47 -0700 (PDT)
-X-Received: by 2002:a05:6a00:238c:b0:835:41f3:f440 with SMTP id d2e1a72fcca58-8434cdfe0ffmr8593287b3a.14.1781372627138;
-        Sat, 13 Jun 2026 10:43:47 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781372632; x=1781977432;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eliVjm18cWWxfayAi3KcJNFoMA1vSR2kzp1VWaYb3AQ=;
+        b=cHzq8/UjPlm9jsWTjkd1NXmLm7QUWWpQDwut+tuHx+z1Wvul5BHqEQxmiuA6C9YoQr
+         vYa+K3H2Y1jabJ4Pb0Eju5LZ3obeDOhB4XtzN8P1QFbT1Q0VX0rMCNaTj43Nzd3XrsiL
+         FKjQTSspznJ4kihH8GnRYhQCYxZyz5vPTOOLQ1IIW13drizbn7ib1CUNzqgBGzaV9lVr
+         EBSDH+m1IaUdPI+YfpJg2F9PIeU2obyeMUrgDy1iCF2c2BdB0OcOhu7j/4ODVpolKlQP
+         u5GYuadFdeOqukMHcYgia/aeA+aCmkynsGzuTXai7UBTYeBIX0OE0YRV5Bdhlw5quBmO
+         85jw==
+X-Forwarded-Encrypted: i=1; AFNElJ/RK9R2/uKL3SODGdyWnJA4lxfVSdKhdR5+K+beu2wTNoK8bkeus7NpPuresWfto0hS9rsivZHJXRBE+2RR3cM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYo0TjexrqAjADCOH7/5MDGFzBw5RuXKK7lgdkLFBhlJniD1rt
+	v854TH0M7kjxlHHn+W191nHRkbehq9RWUyygyrAHqgs7fXcmZpMC/MejjtGAYHIfmR3TFvZpNVX
+	7u/v13JE7XfAiF9KreOzrn+VoI1RijhP1+VrCkamUgWCNyD7Rt0zWKOMIV6aWHa4f/SN2QfQ=
+X-Gm-Gg: Acq92OHJx/RdG4RldlDv8WIheuewE7CBTibfBJbHD9IA4InU/MMg7cwoN8PSx4eVPeO
+	BCQX6bhXg7SKKoTAgfxN+2yk2flZLaeS0+sxGklLrVrAwZQEIG8RPn2sppnGU/BrH1Dlh0kBiaK
+	yPvDaFG7UNXNLFe8Rfsx44JoeqqWeYYTeE8VqMEqTx/noVj/DToLLIozqZzCp4OxKqxDe2F+FBx
+	TZfdVUut988yfee0H4B/8lIkjJOAD7nGrqtkL3SNI91EZubuEzy9WENCv0zV1PQgrEiwW+/1p6i
+	2y8B3kCZO7Auw5eX6Apn+TpmDVJiqyLzIGQ6o1h7EUwYCbTH2ULUexXja3H4minIKD/DUutvIaC
+	1TF9Pr9Bkjh8ZFPMj+9rEhhh7a5nsSJzN9RGSzOmQRxB2wxxvwFUXqg==
+X-Received: by 2002:a05:6a00:1f0f:b0:822:6830:5900 with SMTP id d2e1a72fcca58-8434cdcaeedmr7853509b3a.6.1781372631973;
+        Sat, 13 Jun 2026 10:43:51 -0700 (PDT)
+X-Received: by 2002:a05:6a00:1f0f:b0:822:6830:5900 with SMTP id d2e1a72fcca58-8434cdcaeedmr7853490b3a.6.1781372631441;
+        Sat, 13 Jun 2026 10:43:51 -0700 (PDT)
 Received: from hu-pranarya-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434b055095sm6594096b3a.57.2026.06.13.10.43.43
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434b055095sm6594096b3a.57.2026.06.13.10.43.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jun 2026 10:43:46 -0700 (PDT)
+        Sat, 13 Jun 2026 10:43:51 -0700 (PDT)
 From: Pranjal Arya <pranjal.arya@oss.qualcomm.com>
-Subject: [PATCH RFC 0/3] vfio/pci: Hide and optionally override the PCIe
- Device Serial Number
-Date: Sat, 13 Jun 2026 23:13:35 +0530
-Message-Id: <20260613-pcie_vfio-v1-0-09168188f3f2@oss.qualcomm.com>
+Date: Sat, 13 Jun 2026 23:13:36 +0530
+Subject: [PATCH RFC 1/3] vfio/pci: Virtualize and scrub Device Serial
+ Number from guests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,10 +90,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAMiWLWoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDM0Nj3YLkzNT4srTMfF0TC1MDMzMDo9Rks0QloPqCotS0zAqwWdFKQW7
- OSrEQweLSpKzU5BKQKUq1tQAPURXkcgAAAA==
-X-Change-ID: 20260613-pcie_vfio-48506602ec6a
+Message-Id: <20260613-pcie_vfio-v1-1-09168188f3f2@oss.qualcomm.com>
+References: <20260613-pcie_vfio-v1-0-09168188f3f2@oss.qualcomm.com>
+In-Reply-To: <20260613-pcie_vfio-v1-0-09168188f3f2@oss.qualcomm.com>
 To: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>,
         David Matlack <dmatlack@google.com>, Shuah Khan <shuah@kernel.org>
 Cc: linux-arm-msm@vger.kernel.org, kvm@vger.kernel.org,
@@ -101,132 +102,184 @@ Cc: linux-arm-msm@vger.kernel.org, kvm@vger.kernel.org,
         Manivannan Sadhasivam <mani@kernel.org>,
         Pranjal Arya <pranjal.arya@oss.qualcomm.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781372623; l=4732;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781372623; l=6577;
  i=pranjal.arya@oss.qualcomm.com; s=20260516; h=from:subject:message-id;
- bh=qfSZdPmwBhywiRrKL1QrGMIdCfETYR+AOs72sM7RPN0=;
- b=rLXoafxrZr8d972ebckbTQWraOKdDA+HhooMDSSLb5qy8ZwtwT764phTddP7x0mDhD6/QsFBC
- y1y4QqjZbnWCxmX/Kg16h6VqIo2TdZWayWFEBY5tWsCYFlR7mtWfb3z
+ bh=i1C+7GVwz8hqSxonETSP8Z7foT49r9/TUeD3+VkK9Uo=;
+ b=0WN5zT+Mq0FFfXU8VJ/YH6TO/KCuwKs/cW5LjPcv4yOeQbyQZTmTdoNW8qaJbx1tTpv/Q3RgX
+ ZLlGyyE6HAuA62vYVsgUD0/O6tvmiALyVOt6/LY2rnDJb1+elDq4NvX
 X-Developer-Key: i=pranjal.arya@oss.qualcomm.com; a=ed25519;
  pk=ymtcTlccEIDsi3ErhpjIoZZHKdPBYWGWW0Lchs5MsbE=
-X-Proofpoint-ORIG-GUID: _qANs4_h_4oILfgTO73AKNAkU0mu2tsG
-X-Authority-Analysis: v=2.4 cv=NPLlPU6g c=1 sm=1 tr=0 ts=6a2d96d4 cx=c_pps
- a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+X-Authority-Analysis: v=2.4 cv=HuxG3UTS c=1 sm=1 tr=0 ts=6a2d96d8 cx=c_pps
+ a=oF/VQ+ItUULfLr/lQ2/icg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
  a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=DJpcGTmdVt4CTyJn9g5Z:22
- a=EUspDBNiAAAA:8 a=vxAM7KqD62Chtjj2FOQA:9 a=QEXdDO2ut3YA:10
- a=2VI0MkxyNR6bbpdq8BZq:22
-X-Proofpoint-GUID: _qANs4_h_4oILfgTO73AKNAkU0mu2tsG
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEzMDE4NSBTYWx0ZWRfX3gtLr/nEzHhz
- 01+onM1uP67L6kv56rpbig38GyUZ9KtuymMKtrSKcc9hHVZnWvFgP4oculIs6sZX6+mPkD7cbRe
- FwgdjHNAmgOmLugfUmm/0iXiT9P7iSw=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEzMDE4NSBTYWx0ZWRfX30RUDk+8Qrm+
- v5Y8SHOYgA1z0c8gFuvsSTp089nG7ioZkoqtG+uVA0NZ5OkTgeIw7Lx17CnrKQ286yrey5okby8
- 7x1SV7FobfgIhSCssDX0j6GLUnH6UweBXgC3GsVaWOgsCJfWiiB9aQ6jXGY1ZtMOgiI1VpNPfYI
- btW7cG0LktK37L/9Cq4zZtMiey++Q/iXuCE0FR4/DVupxWkWHBZx5yhPAwlZBGHCltfjP9hesDg
- +aezW0tbIp3eQhmiE3kHMURkU1XBE5qk11vJecYAoQ2e70nV0WtwSIT1y/ahCd4Myr131yTjW3a
- cK5eUt1BqxaYTkjVaYgoPbVIT4jZv3w+qQfwZS8fkq80mo7F00U+lSyfkYu8tfuEfPIuwlWUm8n
- jq2P35pVBu433G//Eu4WFzrKY6tEiBTx30NrSKJ2q3z813pRJhFSn7xut9djSCdwee/daTi/QbH
- +zK983OuFvqTAlI7Ygw==
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=Um2Pa8k9VHT-vaBCBUpS:22
+ a=EUspDBNiAAAA:8 a=Sm3NOD-Glf8aR10cVYQA:9 a=QEXdDO2ut3YA:10
+ a=3WC7DwWrALyhR5TkjVHa:22
+X-Proofpoint-ORIG-GUID: CTHPPxZ67hpCtqpir7vfhwlIOgYWS8Rf
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEzMDE4NSBTYWx0ZWRfX+fTwSC49FR91
+ m+kJUk+5gh2GyyKht7rtOdaATreF69RqB+5ptE+dzuJjL/79V1lBwiEcORRD6VdYHp9dxzxKRAF
+ cL8eeijkulenZQhyPRK1s00JkS28FAc=
+X-Proofpoint-GUID: CTHPPxZ67hpCtqpir7vfhwlIOgYWS8Rf
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEzMDE4NSBTYWx0ZWRfX1mjpo1bVUr1b
+ 22ue6afeinmAki5hIU3eIItyNcK1+pxItOwagGPwNrpdDME8doQrbMr3YKWa9/0SYf7jyjUDiOz
+ eUkv5Ovhcwm5bS7JijMhMR68vMPPxYn5m9w923sFkhquz7uBCPBQHFGiS0LLcEZFx4A0oxpUKMx
+ s+IfibNgOTBBHE20BDFrAjl8l/GFORRlIE6wZb+uxWo/H4a8ymFmQjn+62mVO4wU7AP/ET+WRja
+ WPXjlxbF6SFLth4IlYu1eBfcn/xrSXNidkUgaHPLiC/HTOcu8hkeRh7amL2+OJsLoCzGrIczguF
+ s/sqjMGZHoCrU+W/DKkv3o3RPGb6jZ1civD5NwijAuViYctFiXUjR5iD6svLMBq229zQ/ZlpmXa
+ UOk2Dagx4Q8zo+pEsX/p2XKlLT7ZAjovC1wvI4lp6oEDdKG/QWTnABYhJrEFHMC9zYxSSfLB5Ly
+ A4diq0RwASAh4ukIO5g==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-06-13_03,2026-06-12_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 bulkscore=0
- adultscore=0 impostorscore=0 phishscore=0 clxscore=1011 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606040000 definitions=main-2606130185
+ lowpriorityscore=0 bulkscore=0 adultscore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 clxscore=1015 spamscore=0 suspectscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606040000
+ definitions=main-2606130185
 
-vfio-pci has no perm_bits entry for the PCIe Device Serial Number (DSN)
-Extended Capability, so guest reads of the serial
-number currently fall through to the physical device.  The DSN is a
-unique, persistent hardware serial number that identifies the physical
-component (the functions of a Multi-Function Device report the same
-value; Root Complex integrated Endpoints may implement it independently),
-so exposing it lets a guest fingerprint the host hardware and correlate
-it across VMs.  For multi-tenant passthrough this is an unnecessary
-host-identifier leak.
+The PCIe Device Serial Number (DSN) Extended Capability reports a unique,
+persistent hardware serial number (PCIe r6.2 sec 7.9.3).  The value
+identifies the physical component: per the spec the functions of a
+Multi-Function Device that implement the capability report the same DSN,
+so a single value can fingerprint a whole physical device.  Root Complex
+integrated Endpoints (RCiEPs) may implement the capability independently
+and are not required to share their value with other RCiEPs of the same
+Root Complex, but each such value is still a stable, host-specific
+identifier.
 
-Series:
+vfio-pci has no perm_bits entry for the DSN capability, so guest reads of
+the serial number fall through to the physical device.  This leaks a
+stable hardware identifier into the guest that can be used to fingerprint
+the host device and correlate it across VMs, which is undesirable for
+multi-tenant passthrough.
 
-  Patch 1 fully virtualizes the DSN capability (header + both serial
-  dwords) and scrubs the serial in the virtualized config space, so guests
-  read a zeroed serial while the capability stays visible.
+Add a perm_bits initializer that fully virtualizes the DSN capability:
+the header dword and both serial-number dwords (PCI_DSN_CAP,
+PCI_DSN_LOW_DW, PCI_DSN_HIGH_DW) are marked ALL_VIRT/NO_WRITE so all
+reads are served from the virtualized config space rather than hardware
+and writes are denied (the DSN is read-only state).  Scrub the serial in
+vconfig during vfio_ecap_init() so guests read a zeroed serial while the
+capability remains visible.  Add the DSN register-offset defines to
+pci_regs.h.
 
-  Patch 2 adds a VFIO_DEVICE_FEATURE_PCI_DSN device feature so a trusted
-  userspace VMM can GET/SET the serial presented to the guest, for use
-  cases that need a stable but non-host-identifying serial (e.g. across
-  live migration between different physical devices).
+The capability length used by alloc_perm_bits() comes from the existing
+pci_ext_cap_length[PCI_EXT_CAP_ID_DSN] = PCI_EXT_CAP_DSN_SIZEOF (12),
+which covers the 4-byte header plus the 8-byte serial.
 
-  Patch 3 adds a selftest: scrub-by-default, guest-write rejection,
-  PROBE/SET/GET, set-twice, persistence-across-reset, and bad-argsz.
+SR-IOV: per the SR-IOV spec a PF's DSN applies to all of its VFs, and a
+VF that implements the DSN capability must report the same value as its
+PF.  vfio-pci exposes only the assigned device's own config space to the
+guest, and neither the vconfig fill nor the vfio_ecap_init() walk applies
+any VF-specific transform to the DSN bytes, so the DSN capability is
+virtualized and scrubbed for a VF exactly as for a PF.  Therefore a VF
+that implements DSN (whose value is the PF's host serial) is scrubbed,
+and a VF that omits the capability (the spec-recommended case) exposes no
+serial to scrub.
 
-Position on default-on (the main RFC question):
-  I propose scrubbing by default rather than opt-in.  Rationale:
-  - A passed-through DSN is not meaningful to a guest today: the value
-    identifies the specific physical device, so any guest that keyed off
-    it would already break on migration or reassignment.
-  - vfio-pci already virtualizes/zeroes other identifying or host-specific
-    config state. The DSN is an outlier passed through unfiltered.
-  - Patch 2 provides an explicit escape hatch (VMM-set serial) for the
-    rare consumer that wants a stable identity.
-  If maintainers prefer opt-in, the scrub can be gated behind a module
-  param or a per-device feature flag.
+Variant drivers (mlx5-vfio-pci, hisi-acc-vfio-pci, nvgrace-gpu-vfio-pci,
+virtio-vfio-pci, etc.) build on vfio-pci-core and share this config-space
+path and perm_bits table, so the scrub applies to them as well.
 
-Concurrency:
-  The guest config-space read path is unlocked and reads the DSN as two
-  independent 32-bit accesses, so the kernel cannot make a 64-bit guest
-  read atomic.  Patch 2 uses WRITE_ONCE/READ_ONCE for per-dword
-  consistency and documents that a guest reading across a SET may see an
-  old/new mix, exactly as HW may tear a 64-bit read of a register pair.
-  Serializing concurrent SET callers is the VMM's responsibility.
-
-Lifetime:
-  The presented serial lives only in vconfig: it persists across runtime
-  FLR/SBR and is cleared on device fd close (per-open).
-
-SR-IOV:
-  Per the SR-IOV spec a PF's DSN applies to all its VFs, and a VF that
-  implements DSN must report the same value as its PF.  vfio-pci exposes
-  only the assigned device's own config space and applies no VF-specific
-  transform to the DSN bytes, so a VF that implements DSN (whose value is
-  the PF's host serial) is scrubbed like a PF, and a VF that omits the
-  capability (the spec-recommended case) exposes no serial.  The selftest
-  covers VFs when run against a VF BDF that exposes DSN.
-
-Testing (under QEMU with full VFIO device assignment via IOMMUFD); in
-every configuration all of the selftest's cases passed with none skipped
-or failing:
-  - x86_64 (intel-iommu), e1000e PF with DSN: all cases passed.
-  - arm64 (smmuv3), e1000e PF with DSN: all cases passed.
-  - x86_64 SR-IOV: an igb PF was given 1 VF that implements a DSN cap in a
-    realistic extended-capability chain (AER -> ARI -> DSN); the VF was
-    bound to vfio-pci and the selftest run against it: all cases passed.
-    This exercises the spec case where a VF's DSN mirrors the PF host
-    serial.
-  - The SR-IOV run used a kernel built with KASAN + PROVE_LOCKING; no KASAN
-    reports, lockdep splats, or warnings were produced.
+The scrub is the default because a guest cannot rely on a meaningful DSN
+through vfio-pci in general (it identifies the physical device, which
+varies across assignment and migration). The following patch lets the VMM
+present a chosen serial where a stable identity is required.
 
 Signed-off-by: Pranjal Arya <pranjal.arya@oss.qualcomm.com>
 ---
-Pranjal Arya (3):
-      vfio/pci: Virtualize and scrub Device Serial Number from guests
-      vfio/pci: Allow userspace to set a virtual Device Serial Number
-      selftests/vfio: Add PCIe Device Serial Number test
+ drivers/vfio/pci/vfio_pci_config.c | 39 ++++++++++++++++++++++++++++++++++++++
+ include/uapi/linux/pci_regs.h      |  5 +++++
+ 2 files changed, 44 insertions(+)
 
- MAINTAINERS                                      |   6 +
- drivers/vfio/pci/vfio_pci_config.c               |  98 +++++++++++
- drivers/vfio/pci/vfio_pci_core.c                 |   2 +
- drivers/vfio/pci/vfio_pci_priv.h                 |   2 +
- include/uapi/linux/pci_regs.h                    |   5 +
- include/uapi/linux/vfio.h                        |  18 ++
- tools/testing/selftests/vfio/Makefile            |   1 +
- tools/testing/selftests/vfio/vfio_pci_dsn_test.c | 206 +++++++++++++++++++++++
- 8 files changed, 338 insertions(+)
----
-base-commit: c425609d6ac4012c8bbf01ec2e10e801b1923a7b
-change-id: 20260613-pcie_vfio-48506602ec6a
+diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
+index a10ed733f0e3..24dfeb43cb71 100644
+--- a/drivers/vfio/pci/vfio_pci_config.c
++++ b/drivers/vfio/pci/vfio_pci_config.c
+@@ -1085,6 +1085,31 @@ static int __init init_pci_ext_cap_pwr_perm(struct perm_bits *perm)
+ 	return 0;
+ }
+ 
++/*
++ * The Device Serial Number is a unique, persistent, per-device identifier.
++ * Passing the physical serial number through to a guest leaks an identifier
++ * that can be used to fingerprint and correlate the host device across VMs
++ * and tenants.  Virtualize the whole capability so reads come from vconfig
++ * (which is scrubbed during init, see vfio_ecap_init()) instead of hardware,
++ * and disallow writes (the DSN is read-only hardware state anyway).
++ */
++static int __init init_pci_ext_cap_dsn_perm(struct perm_bits *perm)
++{
++	if (alloc_perm_bits(perm, pci_ext_cap_length[PCI_EXT_CAP_ID_DSN]))
++		return -ENOMEM;
++
++	/*
++	 * Virtualize the whole capability: the header (offset 0) plus the
++	 * two serial-number dwords (offsets 4 and 8).  All reads are then
++	 * served from vconfig (scrubbed in vfio_ecap_init()) rather than
++	 * hardware, and writes are denied since the DSN is read-only state.
++	 */
++	p_setd(perm, 0, ALL_VIRT, NO_WRITE);
++	p_setd(perm, 4, ALL_VIRT, NO_WRITE);
++	p_setd(perm, 8, ALL_VIRT, NO_WRITE);
++	return 0;
++}
++
+ /*
+  * Initialize the shared permission tables
+  */
+@@ -1100,6 +1125,7 @@ void vfio_pci_uninit_perm_bits(void)
+ 
+ 	free_perm_bits(&ecap_perms[PCI_EXT_CAP_ID_ERR]);
+ 	free_perm_bits(&ecap_perms[PCI_EXT_CAP_ID_PWR]);
++	free_perm_bits(&ecap_perms[PCI_EXT_CAP_ID_DSN]);
+ }
+ 
+ int __init vfio_pci_init_perm_bits(void)
+@@ -1120,6 +1146,7 @@ int __init vfio_pci_init_perm_bits(void)
+ 	/* Extended capabilities */
+ 	ret |= init_pci_ext_cap_err_perm(&ecap_perms[PCI_EXT_CAP_ID_ERR]);
+ 	ret |= init_pci_ext_cap_pwr_perm(&ecap_perms[PCI_EXT_CAP_ID_PWR]);
++	ret |= init_pci_ext_cap_dsn_perm(&ecap_perms[PCI_EXT_CAP_ID_DSN]);
+ 	ecap_perms[PCI_EXT_CAP_ID_VNDR].writefn = vfio_raw_config_write;
+ 	ecap_perms[PCI_EXT_CAP_ID_DVSEC].writefn = vfio_raw_config_write;
+ 
+@@ -1702,6 +1729,18 @@ static int vfio_ecap_init(struct vfio_pci_core_device *vdev)
+ 		if (ret)
+ 			return ret;
+ 
++		/*
++		 * Scrub the physical Device Serial Number from the
++		 * virtualized config space so the guest cannot read the
++		 * host device's unique identifier.  The capability is fully
++		 * virtualized (see init_pci_ext_cap_dsn_perm()), so reads
++		 * return this scrubbed value rather than hardware.  The user
++		 * can present a chosen serial via VFIO_DEVICE_FEATURE_PCI_DSN.
++		 */
++		if (ecap == PCI_EXT_CAP_ID_DSN)
++			memset(&vdev->vconfig[epos + PCI_DSN_LOW_DW], 0,
++			       sizeof(__le64));
++
+ 		/*
+ 		 * If we're just using this capability to anchor the list,
+ 		 * hide the real ID.  Only count real ecaps.  XXX PCI spec
+diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
+index facaa324bd86..bd0ae9decc00 100644
+--- a/include/uapi/linux/pci_regs.h
++++ b/include/uapi/linux/pci_regs.h
+@@ -768,6 +768,11 @@
+ #define PCI_EXT_CAP_DSN_SIZEOF	12
+ #define PCI_EXT_CAP_MCAST_ENDPOINT_SIZEOF 40
+ 
++/* Device Serial Number */
++#define PCI_DSN_CAP		0x00	/* Capability header */
++#define PCI_DSN_LOW_DW		0x04	/* Serial number, lower dword */
++#define PCI_DSN_HIGH_DW		0x08	/* Serial number, upper dword */
++
+ /* Advanced Error Reporting */
+ #define PCI_ERR_UNCOR_STATUS	0x04	/* Uncorrectable Error Status */
+ #define  PCI_ERR_UNC_UND	0x00000001	/* Undefined */
 
-Best regards,
---  
-Pranjal Arya <pranjal.arya@oss.qualcomm.com>
+-- 
+2.34.1
 
