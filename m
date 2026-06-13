@@ -1,92 +1,82 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED70274B39
-	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 01:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA78391E57;
+	Sat, 13 Jun 2026 01:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781313100; cv=none; b=mpni6FN8tzve+2yFqvmysv2jN/UFpeoDA4gQWpGBTpDkVyOdR7HRW7Sn9XrsMbaVl6TrOSd5EhY8TzKjKDuZit0VcFs4VfZyIrenFdaEPN+rKnkH6+IqUii7OHfI+eefbqaJ3KI8D26YwlSq8ZO3VUWefLgQ9NLKGJlZMeHeFA0=
+	t=1781314213; cv=none; b=Z4ne7CP+Ua8tm5zVhlqV+PeuhJPdw92Yv8LiYG5Rq3bUiOWfqabz80TwAV6NeiLl9jHYTtHzjOzD3qWwPea1oXQzY430+4gmTFrS6imb/grXD6f68DGaLp92PtD3jETowdgumuyBdj3Hs9atJITaaTxyW9ftQJPxbN6z3qZvCbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781313100; c=relaxed/simple;
-	bh=3kPALoqciAvx3DHaPPfs5j5t9c/xeTNCPkJPgVQBJKo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q+6TIKE6idZg/H5FpjNZielRWN8j5TozAtqjjPwjtyflF+gKpr6mp4BTFS47ds/Psz+iVa0FARhcguR6055K/EeUu3sLtSuxdaVwTggtOfa5cnd+ZLJ7zRYG2ig81zVSPnGjnTXXlTUxhiZ/OAZqPA5NWD6NGWSNJmaA6u+LSOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FCZkdplL; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781314213; c=relaxed/simple;
+	bh=3upDyn5RhcofBT2froWXmIYYJa39rXG8LBPHUpHv3oc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=DMcXjiGDVOueAY85U9Fxa8cUnocz8Z51E95ROS433qscukXHF57t1hBR4Erlz53CmwAbwxtjKuHiG401GDXdQfw5WWGg1H+5VnnAFufHMkLvPo4htWJNiPM7CW7IZmRWR1liV7NEpH7Vkr5hQMK1MH3vKPfOZtkYWwHSw+0nudk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TYp6/NL1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FCZkdplL"
-Message-ID: <d1ea947e-f54c-468f-8e26-7bac59b1d6e9@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781313095;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=84+X1Q0jO7Re73KFOwXuIPKLl/X31z7M7p9DFtbZB5s=;
-	b=FCZkdplLoWoDhnnXO9ooFuhPvAjAKXbBRnV1zIMKh2nC7GUNzb4MD7xJEz0LLHFeGlscv4
-	vqoCiSetjs7TBOLsOSLraj973gOQx+w0vkFb5dW+JhwDhta55c1CwbBXRPxXim4CHN1VQe
-	6UiyLJjLKSV10xqRPkXLJLaKn38BVgw=
-Date: Fri, 12 Jun 2026 18:11:26 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TYp6/NL1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C42811F000E9;
+	Sat, 13 Jun 2026 01:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781314211;
+	bh=5pcfRNmimPChlCbZjWnbiudfie8PBLs0TM/PI/AZ7NA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=TYp6/NL1QCXWddtrd7pYD4KAGRSTgs4BPqNcBpAN6U0ygphNkvxJNX3r7Qdsnzyd2
+	 sRMYW+0/KoRRVRaLENCm+mpjKMFoK7mdHF+tBmqmkDCWnutpLwhkWDlpUlGngsMlbu
+	 IWx5Ts3NQrA3ibE3npyJZc50UTgK1UHACiGii0AEZBK6ZgTXcqtX5LVNCuKj/UDsOo
+	 QyIIZyDB69Uf1KroYrcW+SrkeqBWWjQvIlIfQj/zB62N+aDyMCabVL1di1NXKZJS9j
+	 wUIC+hGtdTIKTOHIlFI+mOcBcbuLkbFvQ3LUveu8oGzIJX3WPGlOyvilVAGKkaNanH
+	 0GL4MYpGabroA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A3439E9607;
+	Sat, 13 Jun 2026 01:30:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 6/8] selftests/bpf: Initialize operation name
- before use
-To: Leo Yan <leo.yan@arm.com>, Quentin Monnet <qmo@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Lorenz Bauer <lmb@isovalent.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-References: <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
- <20260602-tools_build_fix_zero_init_bpf_only-v2-6-c76e5250ea1c@arm.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260602-tools_build_fix_zero_init_bpf_only-v2-6-c76e5250ea1c@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v5 0/2] bpf: Fix generic devmap egress skb sharing
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178131420839.1324271.17087407155107747116.git-patchwork-notify@kernel.org>
+Date: Sat, 13 Jun 2026 01:30:08 +0000
+References: <20260612114032.244616-1-sun.jian.kdev@gmail.com>
+In-Reply-To: <20260612114032.244616-1-sun.jian.kdev@gmail.com>
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ shuah@kernel.org, jiayuan.chen@linux.dev, toke@redhat.com,
+ menglong.dong@linux.dev, emil@etsalapatis.com
 
-On 6/2/26 7:47 AM, Leo Yan wrote:
-> ASAN reports stack-buffer-overflow due to the uninitialized op_name.
-> 
-> Initialize it to fix the issue.
-> 
-> Fixes: 054b6c7866c7 ("selftests/bpf: Add verifier log tests for BPF_BTF_LOAD command")
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/verifier_log.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> index c01c0114af1b7476d27885ce380d90400a4bdc89..4542bb586d723b8fda2faf8261066f16102c60c0 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> @@ -317,6 +317,7 @@ static void verif_btf_log_subtest(bool bad_btf)
->  	res = load_btf(&opts, true);
->  	ASSERT_EQ(res, -ENOSPC, "half_log_fd");
->  	ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25");
-> +	strscpy(op_name, "log_fixed", sizeof(op_name));
+Hello:
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
->  	ASSERT_STRNEQ(logs.buf, logs.reference, 24, op_name);
->  
->  	/* validate rolling verifier log logic: try all variations of log buf
+On Fri, 12 Jun 2026 19:40:30 +0800 you wrote:
+> Generic XDP devmap multi redirect can leave cloned skbs sharing packet
+> data. When a devmap egress program mutates packet data, another
+> destination sharing the same data may observe that mutation.
 > 
+> Fix this by making cloned skbs private before running the generic devmap
+> egress program. The private copy is made in dev_map_generic_redirect()
+> so dev_map_bpf_prog_run_skb() can keep returning the XDP action directly.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf,v5,1/2] bpf: Run generic devmap egress prog on private skb
+    https://git.kernel.org/bpf/bpf-next/c/6001896f0098
+  - [bpf,v5,2/2] selftests/bpf: Cover generic devmap egress last-dst rewrite
+    https://git.kernel.org/bpf/bpf-next/c/f0eff94d07cd
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
