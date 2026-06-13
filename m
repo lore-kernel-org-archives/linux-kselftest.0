@@ -1,40 +1,41 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA9225B08F
-	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 01:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED70274B39
+	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 01:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781313013; cv=none; b=gu9IqPVM9kWpbfqatNv0XEnH+OfLgtV+zaYtr5bE2vgyzRaoNjFjmPPOQ6umOju3u7hWYvFgRwEyMN2VHXvFrm0x2uW+QzmJ8fvIqnjosEt5NLMjNlPAR156S5KeSTO4Dku2N/RAkvEq+WYlHND/HoB/xanqRzRTEyRjy3qvZbQ=
+	t=1781313100; cv=none; b=mpni6FN8tzve+2yFqvmysv2jN/UFpeoDA4gQWpGBTpDkVyOdR7HRW7Sn9XrsMbaVl6TrOSd5EhY8TzKjKDuZit0VcFs4VfZyIrenFdaEPN+rKnkH6+IqUii7OHfI+eefbqaJ3KI8D26YwlSq8ZO3VUWefLgQ9NLKGJlZMeHeFA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781313013; c=relaxed/simple;
-	bh=3IYf4nFqEuhKYAs0qSBdcbMMZB8b/ZMFbnevmr2S0aY=;
+	s=arc-20240116; t=1781313100; c=relaxed/simple;
+	bh=3kPALoqciAvx3DHaPPfs5j5t9c/xeTNCPkJPgVQBJKo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gi7v5ZpVTWhQoXZwNXs/EhED85vM+7q5Ue2BD4CmHZ1HElrNu47Ju3R8XZMA1VRn+WltHiNnYVE1FF7yu/hUv0/hWFDXLKps3Oe2u4HU+fNCkGTLqy8XV9E8+XKsXtaq2vgkD516SKEeGgivDN6FxCQ0dkcCJBZR7WMh2M4K6Us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hbljm5Q0; arc=none smtp.client-ip=91.218.175.189
+	 In-Reply-To:Content-Type; b=Q+6TIKE6idZg/H5FpjNZielRWN8j5TozAtqjjPwjtyflF+gKpr6mp4BTFS47ds/Psz+iVa0FARhcguR6055K/EeUu3sLtSuxdaVwTggtOfa5cnd+ZLJ7zRYG2ig81zVSPnGjnTXXlTUxhiZ/OAZqPA5NWD6NGWSNJmaA6u+LSOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FCZkdplL; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hbljm5Q0"
-Message-ID: <ec393874-c497-4943-86dd-3f9b5f93b49a@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FCZkdplL"
+Message-ID: <d1ea947e-f54c-468f-8e26-7bac59b1d6e9@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781312999;
+	t=1781313095;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Yqm6Ma13HVSNAEaBNT//aY4x0WUrJAMWPwAZIyMYak8=;
-	b=hbljm5Q0pV5/uev/vLsZ5rG0G0KwwT5B4bv68MjvPm480DhbaJhXuh3+lYyAdLKdxH1CXU
-	EaUGWu7oUOTEcfeFpIPnXVvNMKNOdImSgqcrPnOaJyWHvwtUlUUjVdcRyfj4TQ3TbiRtEV
-	Z5dCVJP/jUpCDPICVZzNGmlPKecvof8=
-Date: Fri, 12 Jun 2026 18:09:49 -0700
+	bh=84+X1Q0jO7Re73KFOwXuIPKLl/X31z7M7p9DFtbZB5s=;
+	b=FCZkdplLoWoDhnnXO9ooFuhPvAjAKXbBRnV1zIMKh2nC7GUNzb4MD7xJEz0LLHFeGlscv4
+	vqoCiSetjs7TBOLsOSLraj973gOQx+w0vkFb5dW+JhwDhta55c1CwbBXRPxXim4CHN1VQe
+	6UiyLJjLKSV10xqRPkXLJLaKn38BVgw=
+Date: Fri, 12 Jun 2026 18:11:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 5/8] tools/bpf: build: Append extra cflags
+Subject: Re: [PATCH bpf-next v2 6/8] selftests/bpf: Initialize operation name
+ before use
 To: Leo Yan <leo.yan@arm.com>, Quentin Monnet <qmo@kernel.org>,
  Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
@@ -52,38 +53,40 @@ Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 References: <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
- <20260602-tools_build_fix_zero_init_bpf_only-v2-5-c76e5250ea1c@arm.com>
+ <20260602-tools_build_fix_zero_init_bpf_only-v2-6-c76e5250ea1c@arm.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260602-tools_build_fix_zero_init_bpf_only-v2-5-c76e5250ea1c@arm.com>
+In-Reply-To: <20260602-tools_build_fix_zero_init_bpf_only-v2-6-c76e5250ea1c@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 On 6/2/26 7:47 AM, Leo Yan wrote:
-> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-> the compiler.
+> ASAN reports stack-buffer-overflow due to the uninitialized op_name.
 > 
+> Initialize it to fix the issue.
+> 
+> Fixes: 054b6c7866c7 ("selftests/bpf: Add verifier log tests for BPF_BTF_LOAD command")
 > Signed-off-by: Leo Yan <leo.yan@arm.com>
 > ---
->  tools/bpf/Makefile | 1 +
+>  tools/testing/selftests/bpf/prog_tests/verifier_log.c | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
-> index fd2585af1252669c59228af3a77320e449e1a1ab..9c19e81f3c274767c3b9b94c907cbbe3ce9fe78c 100644
-> --- a/tools/bpf/Makefile
-> +++ b/tools/bpf/Makefile
-> @@ -11,6 +11,7 @@ INSTALL ?= install
->  CFLAGS += -Wall -O2
->  CFLAGS += -D__EXPORTED_HEADERS__ -I$(srctree)/tools/include/uapi \
->  	  -I$(srctree)/tools/include
-> +CFLAGS += $(EXTRA_CFLAGS)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+> index c01c0114af1b7476d27885ce380d90400a4bdc89..4542bb586d723b8fda2faf8261066f16102c60c0 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+> @@ -317,6 +317,7 @@ static void verif_btf_log_subtest(bool bad_btf)
+>  	res = load_btf(&opts, true);
+>  	ASSERT_EQ(res, -ENOSPC, "half_log_fd");
+>  	ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25");
+> +	strscpy(op_name, "log_fixed", sizeof(op_name));
 
 Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
+>  	ASSERT_STRNEQ(logs.buf, logs.reference, 24, op_name);
 >  
->  # This will work when bpf is built in tools env. where srctree
->  # isn't set and when invoked from selftests build, where srctree
+>  	/* validate rolling verifier log logic: try all variations of log buf
 > 
 
