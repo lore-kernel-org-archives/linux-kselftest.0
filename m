@@ -1,19 +1,20 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D86B26F29C;
-	Sat, 13 Jun 2026 17:43:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFA8937F8A5;
+	Sat, 13 Jun 2026 17:43:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781372609; cv=none; b=FdnyVMJFVWIR4LcmPFtFa780ZdA5iP2HDInqHBuFhSuIN+dlLoMFzDIiPv/eq5WT/J76r0/u9aAUP/a67njHt+XS392nzqWwM2Oh2zvgB4xwUUmyQStGiq78Bb11neotYUhZRJlABjna6JeHIt4RaQSpesQyi/EOJKGY/Wh+YKA=
+	t=1781372619; cv=none; b=CZhkETT61Jm96omNzLyMIy/W+zzSWBUgTIZGyuq+fedAD/HiqYk5qbSf/iUIvVHja90RCb2/5gekk+L6Y09GkwMdcIFT5yNU6f69Egb3GVyyVK5WNsLNfQJuCkI+BlAtncRQH9vO/DNaoSI8UjLVxnbVnQDwFfzzGLu6tqg9L3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781372609; c=relaxed/simple;
-	bh=JPw+VsGU1KSWz84l1kioCdI3opQPfaN8V534we2oXUs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bJA6Qohp7CNOQE+6RWYVc03r6dPtz68Gom1p9+TjWZcRwW9Yh1DLu9pb38xKfTtvSC2tNbnK4ShDvNYUPVHDlxi0x4Ir4lY4fAkV/LR3Zg84GjZ9fqjWkBm1bRgNbR7MIvzwyktGYk20dhFXEjhLLWIJbVNYQTEg9ODQTW3SC20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn; spf=pass smtp.mailfrom=lzu.edu.cn; arc=none smtp.client-ip=207.46.229.174
+	s=arc-20240116; t=1781372619; c=relaxed/simple;
+	bh=sSQKr7Q9ONNhA76/XdrxKkC9L3yoDSOG2MUWRHM8UZU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=I0mdYgOKymgxKWPWuCpjKpFPXt55deV6DLtzO1T9UV71mJYWJjTW8qqU5N5KxpzpvfuDgW0pYtItGcIL+DdHwd4bvkf2w7ZDJSIA45MnVTw5ElBXd4w2ASWKpPe4VJWE3l2XlpAHbMZjsiedIrQfoaWbthR1nAkhFAG1LhLLRmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn; spf=pass smtp.mailfrom=lzu.edu.cn; arc=none smtp.client-ip=13.75.44.102
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lzu.edu.cn
 Received: from enjou-Legion-Y7000P-2019 (unknown [172.23.56.36])
-	by app3 (Coremail) with SMTP id ywmowAAnZv6xli1ql2MiAA--.37844S2;
-	Sun, 14 Jun 2026 01:43:14 +0800 (CST)
+	by app3 (Coremail) with SMTP id ywmowAAnZv6xli1ql2MiAA--.37844S4;
+	Sun, 14 Jun 2026 01:43:31 +0800 (CST)
 From: Ren Wei <n05ec@lzu.edu.cn>
 To: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
@@ -29,10 +30,12 @@ Cc: jhs@mojatatu.com,
 	bird@lzu.edu.cn,
 	xizh2024@lzu.edu.cn,
 	n05ec@lzu.edu.cn
-Subject: [PATCH net v2 0/2] net/sched: act_ct: preserve tc_skb_cb across defragmentation
-Date: Sun, 14 Jun 2026 01:42:38 +0800
-Message-ID: <cover.1781358691.git.xizh2024@lzu.edu.cn>
+Subject: [PATCH net v2 2/2] selftests/tc-testing: act_ct: add TDC test for skb cb preservation across defrag
+Date: Sun, 14 Jun 2026 01:42:40 +0800
+Message-ID: <53493549fdbcb2de25788b7894c56baadbc5fede.1781358692.git.xizh2024@lzu.edu.cn>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <cover.1781358691.git.xizh2024@lzu.edu.cn>
+References: <cover.1781358691.git.xizh2024@lzu.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,10 +43,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ywmowAAnZv6xli1ql2MiAA--.37844S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAw1DZF1DWFW5tF1UWr1kuFg_yoWrJw43pa
-	y5KF4jyF18AF43A3W8CF1jga1rCFs8ZrWj9rZ7trWfC3WY9a4SqryIqw1xuFy0kryfZ343
-	X34UWay3uan5JFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:ywmowAAnZv6xli1ql2MiAA--.37844S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF48ZrWDKFWDWFWfXFyfXrb_yoW8tw45pa
+	48CF42yF48Ar17Cw4Uuw1Yga1rW3Z5ur4Yqr13X347uw1rC3ZYqa1xKw48uF4DGrWrXr4S
+	yw1qg342kFs3AFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUB01xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
 	w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
 	IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2
@@ -57,127 +60,75 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxAw1DZF1DWFW5tF1UWr1kuFg_yoWrJw43pa
 	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
 	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
 	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUonmRUUUUU
-X-CM-SenderInfo: zqqvvuo6o23hxhgxhubq/1tbiAQERCWotEtIA3AACsB
+X-CM-SenderInfo: zqqvvuo6o23hxhgxhubq/1tbiAQERCWotEtIDpwAAs7
 
 From: Zihan Xi <xizh2024@lzu.edu.cn>
 
-Hi Linux kernel maintainers,
+Add a tc-testing case that sends IPv4 fragments through act_ct on clsact
+egress while a root prio qdisc is present on the transmit path.
 
-We found and validated an issue in net/sched/act_ct.c. The bug is
-reachable when configuring TC with act_ct on a netdev (requires
-CAP_NET_ADMIN). We have tested it, and the fix should not affect
-other functionality.
+The test verifies that packet processing and qdisc accounting continue
+to work after conntrack defragmentation, covering tc_skb_cb preservation
+across defragmentation.
 
-We provide bug details, a PoC, and a crash log below.
+Signed-off-by: Zihan Xi <xizh2024@lzu.edu.cn>
+Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
 
-v2 adds a tc-testing (TDC) selftest case in patch 2, per maintainer
-feedback.
-
----- details below ----
-
-Bug details:
-
-tcf_ct_handle_fragments() calls nf_ct_handle_fragments() without
-saving and restoring skb->cb. The defrag helper clears IPCB/IP6CB,
-which aliases the tc_skb_cb/qdisc_skb_cb control buffer in
-include/net/sch_generic.h. Fragmented traffic through act_ct
-therefore loses qdisc metadata such as pkt_segs.
-
-Later qdisc dequeue paths call qdisc_bstats_update() ->
-qdisc_pkt_segs(). For a non-GSO skb, clobbered pkt_segs == 0 trips
-DEBUG_NET_WARN_ON_ONCE() in qdisc_pkt_segs(). With panic_on_warn=1
-the kernel panics.
-
-Unlike ovs_ct_handle_fragments() in net/openvswitch/conntrack.c, the
-act_ct caller only restored mru after defrag, not the full control
-buffer. The attached patch saves and restores struct tc_skb_cb around
-nf_ct_handle_fragments(), matching the OVS pattern.
-
-Reproducer:
-
-Run as root in the guest (QEMU bullseye image, eth0):
-
-    chmod +x ./poc.sh
-    ./poc.sh eth0 10.0.2.2 100
-
-The script installs a root prio qdisc, clsact egress with "action ct",
-then sends oversized UDP datagrams with PMTUD disabled to force IPv4
-fragmentation through the act_ct defrag path.
-
-We run the PoC in a 2 vCPU, 2 GB RAM x86 QEMU environment.
-
-------BEGIN poc.sh------
-
-#!/bin/sh
-set -eu
-
-IFACE="${1:-eth0}"
-DST="${2:-10.0.2.2}"
-COUNT="${3:-100}"
-
-sysctl -w kernel.panic_on_warn=1 >/dev/null
-
-tc qdisc del dev "$IFACE" clsact 2>/dev/null || true
-tc qdisc del dev "$IFACE" root 2>/dev/null || true
-
-tc qdisc add dev "$IFACE" root handle 1: prio
-tc qdisc add dev "$IFACE" clsact
-tc filter add dev "$IFACE" egress protocol ip pref 1 u32 \
-	match u32 0 0 action ct zone 1 pipe
-
-python3 - "$DST" "$COUNT" <<'PY'
-import socket
-import sys
-import time
-
-dst = sys.argv[1]
-count = int(sys.argv[2])
-
-IP_MTU_DISCOVER = 10
-IP_PMTUDISC_DONT = 0
-
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.setsockopt(socket.IPPROTO_IP, IP_MTU_DISCOVER, IP_PMTUDISC_DONT)
-payload = b"A" * 4000
-
-for _ in range(count):
-    s.sendto(payload, (dst, 9))
-    time.sleep(0.01)
-PY
-
-------END poc.sh------
-
-----BEGIN crash log----
-
-[  549.900801][T10210] Kernel panic - not syncing: kernel: panic_on_warn set ...
-[  549.901406][T10210] CPU: 2 UID: 0 PID: 10210 Comm: python3 Not tainted 7.1.0-rc1 #2 PREEMPT(full)
-[  549.902720][T10210] Call Trace:
-[  549.903756][T10210]  ? qdisc_dequeue_head+0x287/0x370
-[  549.904713][T10210]  check_panic_on_warn+0x61/0x80
-[  549.905053][T10210]  __warn+0xe8/0x330
-[  549.905345][T10210]  ? qdisc_dequeue_head+0x287/0x370
-[  549.909442][T10210] RIP: 0010:qdisc_dequeue_head+0x287/0x370
-[  549.914217][T10210]  prio_dequeue+0x40c/0x6a0
-[  549.914539][T10210]  __qdisc_run+0x170/0x1b30
-[  549.915561][T10210]  __dev_queue_xmit+0x25e6/0x3ac0
-[  549.920352][T10210]  ip_do_fragment+0x1188/0x19a0
-[  549.924214][T10210]  udp_send_skb+0x885/0x1270
-[  549.924556][T10210]  udp_sendmsg+0x13f3/0x20a0
-
------END crash log-----
-
-Best regards,
-Zihan Xi
-
-Zihan Xi (2):
-  net/sched: act_ct: preserve tc_skb_cb across defragmentation
-  selftests/tc-testing: act_ct: add TDC test for skb cb preservation
-    across defrag
-
- net/sched/act_ct.c                            |  7 ++--
+---
+changes in v2:
+  - Add tc-testing case 9c2a for skb cb preservation across defrag
+  - v1 Link: https://lore.kernel.org/all/20260611154939.2615919-1-n05ec@lzu.edu.cn/
  .../tc-testing/tc-tests/actions/ct.json       | 38 +++++++++++++++++++
- 2 files changed, 42 insertions(+), 3 deletions(-)
+ 1 file changed, 38 insertions(+)
 
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/ct.json b/tools/testing/selftests/tc-testing/tc-tests/actions/ct.json
+index 33bb8f3ff8ed..da65f838bd52 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/actions/ct.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/actions/ct.json
+@@ -664,5 +664,43 @@
+         "teardown": [
+             "$TC qdisc del dev $DEV1 ingress_block 21 clsact"
+         ]
++    },
++    {
++        "id": "9c2a",
++        "name": "Act_ct preserves skb cb across defrag before prio dequeue",
++        "category": [
++            "actions",
++            "ct",
++            "scapy"
++        ],
++        "plugins": {
++            "requires": [
++                "nsPlugin",
++                "scapyPlugin"
++            ]
++        },
++        "setup": [
++            "$TC qdisc add dev $DUMMY root handle 1: prio",
++            "$TC qdisc add dev $DUMMY clsact",
++            "$TC qdisc add dev $DEV1 clsact",
++            "$TC filter add dev $DEV1 ingress protocol ip prio 1 matchall action mirred egress redirect dev $DUMMY"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DUMMY egress protocol ip prio 1 matchall action ct zone 1 pipe",
++        "scapy": [
++            {
++                "iface": "$DEV0",
++                "count": 1,
++                "packet": "[Ether()/frag for frag in fragment(IP(src='10.0.0.10', dst='10.0.0.1', id=1)/UDP(sport=12345, dport=9)/Raw(b'A' * 4000), fragsize=1400)]"
++            }
++        ],
++        "expExitCode": "0",
++        "verifyCmd": "$TC -s qdisc show dev $DUMMY | grep -A 1 '^qdisc prio 1:'",
++        "matchPattern": "Sent [1-9][0-9]* bytes [1-9][0-9]* pkt",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 clsact",
++            "$TC qdisc del dev $DUMMY clsact",
++            "$TC qdisc del dev $DUMMY root handle 1:"
++        ]
+     }
+ ]
 -- 
 2.43.0
 
