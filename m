@@ -1,63 +1,63 @@
-Received: from mail-pg1-f194.google.com (mail-pg1-f194.google.com [209.85.215.194])
+Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7947775801
-	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 02:04:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C8275801
+	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 02:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781316241; cv=none; b=fTY0UTTyRoWgUi7uffEndytKVkzvAJBO2X3Y4iZA/6KIY8GUAn1lNpNMZr2Eh0FXvSKH66DMPIh68TVxbs94pmkza0RfS3xlGCUMeODB/wWWDCtSp63yQFSGf9b1z7b6XSNihD0R0SQRdnuOSsY/bQZAZl+J29cYxE74brVCVv0=
+	t=1781316242; cv=none; b=bQ/UU1x7YN8Fyam2Z30JNZTH5ZT5vXl6zBcHTjTTqaJEu1ZZFsftdiXVGbxwoPCzZI68qAjSajWlmTIfxUe3sjSdas3bgsZ4dTQlDeY8Z3StcgWB0lgopi9xd3/uVfmR64hoerYeo+UOV1RJ9OG2APHpEhdJNrSBe9RioVZ0cWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781316241; c=relaxed/simple;
-	bh=sVAcEu8jo7YtMp4kXrsHHazO4c8qMlzVPhgFWdu1rLA=;
+	s=arc-20240116; t=1781316242; c=relaxed/simple;
+	bh=BF63f8tkkJfZ/bY07JtFT74M8MLMPf3ZpoYhZ+oniIY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pisClA34yBTEehu4M5LcPlFyLU7p8g4IDAx01GAWbJpuNWAsskOOLyUiNN+ffXVOZLjw8R1zwv2XqjXEbizNpirxLsgIefCcBDMPj0EW1f6LBa0Cy9qkrLjBCvh1i6RUUv0mwKh9UMqQss5xJcqMPIkfwLTOXr6RTt54osjPGMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M4VTosJ/; arc=none smtp.client-ip=209.85.215.194
+	 Content-Type:Content-Disposition:In-Reply-To; b=MV6Dg3rD90hcm9qEUsIdKmULkqWqzS9JYyvBKgbdauUFMv/DCvJIbNlUIgQD9H2+FgEo9xLD6qyHU4qFP4tLtH8iqTBdN+Tc849TQYokNhnFw2o7czFsHAjcWEsNsAnXfAPEaJNj1RFzLOxm3oEUhmG6IJaopDWgefgbsPIYDDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nhqidihH; arc=none smtp.client-ip=209.85.216.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M4VTosJ/"
-Received: by mail-pg1-f194.google.com with SMTP id 41be03b00d2f7-c8588ec1b44so1117343a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 19:04:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nhqidihH"
+Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-36ba706ab46so1007677a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2026 19:04:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781316240; x=1781921040; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781316241; x=1781921041; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mPoSyMAZC6nuaPbHwX1o/fpMkBKd3DvivicT6BAaRnA=;
-        b=M4VTosJ/s1qL7Q149VAuavLpusACpQ3GbeVdB01rIfk4cbXsfd6+JUhfy7j5q1B4Ru
-         6rI5m+oqoBKvJRvSm+pAIBfPBI5j1glIUa5f5s/97Y7n/dD1oG8u7LaN/WIH/QcXH2SI
-         AP2kuLaVdzngyLQ0lDn7wHKqdwB2d2USWa+G7rU+1aJNiSiuctLLUQsgvoflWGV3AqYE
-         QvZSyhVTlt3J/LZZuYxVS+1v0Kgn7ybXqb4F9+XrjSrg50w2xICpmdEcl7iUjKnn7dc+
-         y3pvFdSvk25Lg9oUMTPew6v/ONmRaNLr/87XV44BegTBtthJkS5lvu02yqwIIeRFWgLg
-         39xg==
+        bh=qvlrbvjYmzCXoLrV2hsJdEbJOUWSCE5NGHj2A3xomvU=;
+        b=nhqidihHBRXjKuyI3jLI72GFUIyYnPkVmKDpuWeQ2HmmDsoLX6YgMwVx7gSWGDpv3E
+         NppSpLpXY7S2oPkobyW/KW+6RftxJKJriOz6h75wqkk+d3lCwbnfFlQDMbi1/cLcAm0z
+         a08kVwWd3Asjc6ZHCzx8Cl3kI2rjahh9QxY/ka+Aljx59VWbluWC0/XIe3FPyGWJr40Z
+         v7t917/zN9x+5X1RRE1ECsWmQkP+hlsySBGx1m+PONN4wgo+BMjiaHf7lOXZhh9E4RA4
+         w1bMWCTyD6LPmM+nyfG5ybAfcs/DMh2cXx4CwWZhMDCpekNzNpa9GL9VzkQNtPV55dJA
+         ngAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781316240; x=1781921040;
+        d=1e100.net; s=20251104; t=1781316241; x=1781921041;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mPoSyMAZC6nuaPbHwX1o/fpMkBKd3DvivicT6BAaRnA=;
-        b=O/8ji2F6Lj4GrNkMK42e3mvYfTVx9/hPEhxeRiYJDXqPtMeRXw/73YxIrYrgV9vW6u
-         XlROcU0Lgj2Y4Y6voaYl4Jn69GqCQpEW8Eb/1noubjgF55WkBn8EDMhDe3E5qyiuNZ8q
-         m/ktmpVC8tGu+zmeXMEXC3CrccUOUheJw5IQgtqQSfZ4MVLPx4aAGsQoAwHlqRdWUqZ2
-         i5Dr4h2cyRB20W5mjXNfWVb/TqzodxnR/DVXcNUhWZ/sRI2llnwGhzwI/TsI0QpGvAKr
-         jrRm14U8wae+A42hBHTXwrvrfyjkJOiTS0PBqk5LIVi50aiL5igfObgduph+xqw7VTSD
-         EEng==
-X-Forwarded-Encrypted: i=1; AFNElJ8Aa3CU+J423qFFhpSGSw6MPEy/ZUxo9jk+YrQY8DqYymUW6zmjUPso/MZMYXHXZBoVjkuWRwUaJ38WdthUlek=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzM4vhaJ2DL44h+AxMrZSjK3fG/RZ2bFt9W9Ry/ub3dqiWPWvxt
-	dR53ezdKOCSJ0cJ+MrJQE+OQ4pDcd0yfPbkDDSp4dBH9waQtgk3ZMcHR
-X-Gm-Gg: Acq92OE6YEFi/HYxJYBrawwnQHF4joSyypKcdgA4YS7EpwwcCQxatdu2WmLhK6kCfo2
-	ieNOX47N055pwNs6/6LuiSMLK4Vfu1jCrplFqVohyc3Ap0KZ5yrMlSeBb06ESys9oObKJGs1eXV
-	bZHwGiXkhgUMzniygMYrYK2E+BdUO1VLalWb2R2+mE0uGnmF0e072rQMaZq0Qi1uxPN5fyZJbUO
-	uiJPJA9LsR59l8qPAoRrSzs/FOLRBps42haWWnSuldj/N1NrAMG/S6e/s1UoHQPpVaZ+zTMksX8
-	4mUIDXRK95QmgNdw8NPIIeWYEEeG5P+9lFaQMa9nwrjF+AgFicl/rKq0B5C27+YL7fQ0R4322T2
-	s6Tw9A9jzi2gQIcRFpZ3YSnpU99NBi0qKpo6NpRVxl9e1uqNe0UiQ6oQZbeDtxX5gcFW91ICjdf
-	PleweOro2l4bdKqxWR
-X-Received: by 2002:a05:6a00:1d9b:b0:842:6c02:2fa4 with SMTP id d2e1a72fcca58-8434cd42d57mr5864692b3a.14.1781316239902;
-        Fri, 12 Jun 2026 19:03:59 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:45::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434afc8a5bsm3623847b3a.33.2026.06.12.19.03.58
+        bh=qvlrbvjYmzCXoLrV2hsJdEbJOUWSCE5NGHj2A3xomvU=;
+        b=VDFfzcwQ/J0npJi0sM9SC8z1YgTr5ewYv9AYwGyk/L2fVn9zS1VcUICup+KqZHm894
+         pPDiYULL0DotJPJQxItf5zLgVQsnQZt0TBrW9iZoH8t9K3MBP4wTlkyIL3uy7Da/FREi
+         Go81GunsOoE7BQ70iRWszY/2NsceDWftHy9IfUeiyk5PQh8PPlLIgZt7ZpuUOW22Cps3
+         o6zW9Bz/feGCsD06BknU+7ySYssP5+tt1aVeAubvV8JhzWGHZTXwO1/hVpbhV0iRT5gq
+         ituAqDwgRvBmQ7XS8BBPUYelyduMauG5DkXS9JIhAvdUYOnGQNqyyT4qPiRVyE4hem/P
+         B6bw==
+X-Forwarded-Encrypted: i=1; AFNElJ/pC7e8Lz292oCtNpkGteTqRyUUrYMUvfoqvUsdKoqn0phJ+VU3e9Th4mfWlboSRW10IYdVxDh9iBLQt5NPL/g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2vFKZWLtXD6pPuI068oHXXpUNxCIe1qZL0r5U4r0KvwwKgFe4
+	xeKNEyOnY2rEJnvS/0y9IhFtbwEdCZ93/WpDArQaxWCvQFBlBFzDxdA6
+X-Gm-Gg: Acq92OGtuW4kmTANik6egPCHqp9If4MnOHr0ryT+s5U6UB6eesj6qp81hpCkS457NrI
+	wCPc5kiHLl8kH3AqZcUM8kKeNtlBX1MeDWLHgSkelGkfuVmDlUn9yYG7j4X7fQX9BgLjQ0SZJdX
+	9fDg4kpBpL0ze+7uocWPmpho5jrwIdMHbCsIejuCqSpD9TPUYIUFlDNf0x15JU2aMEnP8jTV5ay
+	+tBZuYC71Pssk0OVqJuzBX7ZxpKGzQN4EnDPNz/dopE6z2okN0RoZEmPMle2+x9vs5Fe+ytYA3k
+	fcZg2+B6L0RJ9RhNjTzD346CFqzoFA4zUb4FWnJqQR7RgRq0Lp/Wprhh9zs6TfPoa7BkGjOMMf0
+	AwzjXa+lGDQ+Zh+BrutsbWLA8RaCTFlE5UbY0dnMDeEF8O4p5Ghyfe8jkpbSGPQD+fEiQc3TgwJ
+	rF9/POJsewYVoO+mHz
+X-Received: by 2002:a05:6a20:2d14:b0:3b4:6265:3786 with SMTP id adf61e73a8af0-3b784026fc9mr6690558637.43.1781316241406;
+        Fri, 12 Jun 2026 19:04:01 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:4e::])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8665186d98sm3006091a12.16.2026.06.12.19.04.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2026 19:03:59 -0700 (PDT)
-Date: Fri, 12 Jun 2026 19:03:34 -0700
+        Fri, 12 Jun 2026 19:04:00 -0700 (PDT)
+Date: Fri, 12 Jun 2026 19:03:50 -0700
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
 To: Bobby Eshleman <bobbyeshleman@gmail.com>
 Cc: Donald Hunter <donald.hunter@gmail.com>, 
@@ -70,11 +70,11 @@ Cc: Donald Hunter <donald.hunter@gmail.com>,
 	linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org, sdf@fomichev.me, 
 	razor@blackwall.org, daniel@iogearbox.net, almasrymina@google.com, matttbe@kernel.org, 
 	skhawaja@google.com, dw@davidwei.uk, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v3 3/4] selftests/net: ncdevmem: add -b option
- to set rx-buf-size on bind
-Message-ID: <aiy6bh2IAHDtBX2L@devvm7509.cco0.facebook.com>
+Subject: Re: [PATCH net-next v3 4/4] selftests/net: devmem.py: add
+ check_rx_large_niov
+Message-ID: <aiy6fWaIILSj6dpr@devvm7509.cco0.facebook.com>
 References: <20260612-tcpdm-large-niovs-v3-0-a3b693e76fcb@meta.com>
- <20260612-tcpdm-large-niovs-v3-3-a3b693e76fcb@meta.com>
+ <20260612-tcpdm-large-niovs-v3-4-a3b693e76fcb@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,22 +83,14 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260612-tcpdm-large-niovs-v3-3-a3b693e76fcb@meta.com>
+In-Reply-To: <20260612-tcpdm-large-niovs-v3-4-a3b693e76fcb@meta.com>
 
 On 06/12, Bobby Eshleman wrote:
 > From: Bobby Eshleman <bobbyeshleman@meta.com>
 > 
-> Add -b <bytes> to request a non-default niov size via
-> NETDEV_A_DMABUF_RX_BUF_SIZE. When the value exceeds PAGE_SIZE,
-> udmabuf_alloc() switches to an MFD_HUGETLB-backed memfd so each 2 MB
-> hugepage produces one naturally-aligned sg entry.
-> 
-> Reject values > 2 MB up front: MFD_HUGETLB + udmabuf can only guarantee
-> 2 MB per sg entry (one hugepage), so a larger rx_buf_size would fail the
-> per-sg length/alignment check.
-> 
-> Add CONFIG_HUGETLBFS=y to drivers/net/hw/config so the new path is
-> reachable in the CI kernels built for these tests.
+> Add a new devmem test case for binding the dmabuf with rx-buf-size=16K.
+> The test sweeps RX payload sizes straddling the niov boundary to cover
+> the sub-niov, exact-niov, and multi-niov RX paths.
 > 
 > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 
