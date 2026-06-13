@@ -1,83 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549091F09A5;
-	Sat, 13 Jun 2026 00:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA9225B08F
+	for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 01:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781311485; cv=none; b=K7jD+9IgWpO3vgxfjLjy+l+JTrfAfOjL/zvROED1Hmyn2QGgVKYAlxEUl2ORisRRkRS5KKhZrP36qHhcFNQ47IvDmGfwE5lVzB9prP5jhEpScP06GZjmZOcmHo7jkw4dOqCAImd9CE/s01ielI8Hovm1ondirmodXL+0RPXeoe8=
+	t=1781313013; cv=none; b=gu9IqPVM9kWpbfqatNv0XEnH+OfLgtV+zaYtr5bE2vgyzRaoNjFjmPPOQ6umOju3u7hWYvFgRwEyMN2VHXvFrm0x2uW+QzmJ8fvIqnjosEt5NLMjNlPAR156S5KeSTO4Dku2N/RAkvEq+WYlHND/HoB/xanqRzRTEyRjy3qvZbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781311485; c=relaxed/simple;
-	bh=c1HPFZsU0eRnti37RMqtFvZSiXq6k8XdGi4re0c8Tvg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gvfxTbzQmHcQBx/oApc209EWmd74jF+0gzKzZuiGCunJRMar2IapTrI6XbvRCf4s0bxM8hqj+WwigpptSBkhLQYPy3aAV3vsnWEwWtmr5C7GCS+CC1zmdr3WkyVX6K5roxsX3CgAM814CWn8VvDbdyoA3duJ6k24k9qdOyrbVIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpv9Es7L; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781313013; c=relaxed/simple;
+	bh=3IYf4nFqEuhKYAs0qSBdcbMMZB8b/ZMFbnevmr2S0aY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gi7v5ZpVTWhQoXZwNXs/EhED85vM+7q5Ue2BD4CmHZ1HElrNu47Ju3R8XZMA1VRn+WltHiNnYVE1FF7yu/hUv0/hWFDXLKps3Oe2u4HU+fNCkGTLqy8XV9E8+XKsXtaq2vgkD516SKEeGgivDN6FxCQ0dkcCJBZR7WMh2M4K6Us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hbljm5Q0; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpv9Es7L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 380611F000E9;
-	Sat, 13 Jun 2026 00:44:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781311484;
-	bh=OEt29oeVnp0fgMWbhtQ94bxVYk/Oo9ifrXVMeaXuFzE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=gpv9Es7L/BeqibIroIT8p3V1n1+Gt1mbGSw1xvwrzNHD6OPA7YN0OfyDJkCpAaFSb
-	 iKHkLydxyWt506995rgIfgy9VFtTp3xIuQQMnXKfUI/zxpKUzj4NWE3B0rBRca5SlZ
-	 fGShz+S0CZoYZJlXde3e/30gkMc7dRDL1iF8jw9VLuy+M+gVbhmhD89wpU8PNH5iz9
-	 /Joc5xaLRYgqXPiTDTZ3bPJ19O+eASLINo1H/tErCzMsD7skHuF8JlqzZ7ngXMe+66
-	 1ZoQ8ZMhDHycHQiz5KNpO/ashtahKg22+px+FuGlPZpieM02vWjaE3xkoWUUGQlzfe
-	 UoB0dvnIxAZRw==
-Date: Fri, 12 Jun 2026 17:44:42 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: Breno Leitao <leitao@debian.org>, Allison Henderson
- <achender@kernel.org>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
- rds-devel@oss.oracle.com, linux-kselftest@vger.kernel.org,
- kernel-team@meta.com, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Andy Grover
- <andy.grover@oracle.com>, Mark Brown <broonie@kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH net-next v3 2/2] rds: convert to getsockopt_iter: manual
- merge
-Message-ID: <20260612174442.5fe54656@kernel.org>
-In-Reply-To: <b91ff67e-ce74-4edf-a8b0-08be04586485@kernel.org>
-References: <20260608-getsock_more-v3-0-706ecf2ea332@debian.org>
-	<20260608-getsock_more-v3-2-706ecf2ea332@debian.org>
-	<2e1b0534-a1a0-4eb1-a5e2-d42fcf991188@kernel.org>
-	<aivAbAIjnTeqlsdS@gmail.com>
-	<b91ff67e-ce74-4edf-a8b0-08be04586485@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hbljm5Q0"
+Message-ID: <ec393874-c497-4943-86dd-3f9b5f93b49a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781312999;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Yqm6Ma13HVSNAEaBNT//aY4x0WUrJAMWPwAZIyMYak8=;
+	b=hbljm5Q0pV5/uev/vLsZ5rG0G0KwwT5B4bv68MjvPm480DhbaJhXuh3+lYyAdLKdxH1CXU
+	EaUGWu7oUOTEcfeFpIPnXVvNMKNOdImSgqcrPnOaJyWHvwtUlUUjVdcRyfj4TQ3TbiRtEV
+	Z5dCVJP/jUpCDPICVZzNGmlPKecvof8=
+Date: Fri, 12 Jun 2026 18:09:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Subject: Re: [PATCH bpf-next v2 5/8] tools/bpf: build: Append extra cflags
+To: Leo Yan <leo.yan@arm.com>, Quentin Monnet <qmo@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Lorenz Bauer <lmb@isovalent.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+ James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
+ <20260602-tools_build_fix_zero_init_bpf_only-v2-5-c76e5250ea1c@arm.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260602-tools_build_fix_zero_init_bpf_only-v2-5-c76e5250ea1c@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 12 Jun 2026 13:41:00 +0200 Matthieu Baerts wrote:
-> > I was aware of the conflict but didn't realize a note would be helpful
-> > for the merge. I should have included one.
-> > 
-> > Could you point me to an example commit/patch that contains such a note so I
-> > can understand the expected format and procedure?  
+On 6/2/26 7:47 AM, Leo Yan wrote:
+> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+> the compiler.
 > 
-> In this particular example, I think it would have been easier to have
-> waited for the fix to land in net-next -- after the weekly sync with net
-> -- and then send the net-next patches.
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/bpf/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> When this cannot be avoided, then you can mention the conflict, and
-> ideally share a diff of the resolution, plus a description, especially
-> when it is not obvious, when simply saying "take the version from X" is
-> helpful, when extra modifications are needed, etc. e.g. [1]. Something
-> similar to what Mark is usually doing on the linux-next ML, or what I
-> did here.
+> diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
+> index fd2585af1252669c59228af3a77320e449e1a1ab..9c19e81f3c274767c3b9b94c907cbbe3ce9fe78c 100644
+> --- a/tools/bpf/Makefile
+> +++ b/tools/bpf/Makefile
+> @@ -11,6 +11,7 @@ INSTALL ?= install
+>  CFLAGS += -Wall -O2
+>  CFLAGS += -D__EXPORTED_HEADERS__ -I$(srctree)/tools/include/uapi \
+>  	  -I$(srctree)/tools/include
+> +CFLAGS += $(EXTRA_CFLAGS)
 
-Thanks for explaining! This conflict was avoidable but I didn't find
-the appropriately polite explanation within me :)
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-When conflicting code is _already committed_ to net-next we can deal
-with the conflict. If there's a patch only posted but not commited and
-we notice a bug - the net-next patch should be explicitly withdrawn and
-reposted once the fix has propagated.
+>  
+>  # This will work when bpf is built in tools env. where srctree
+>  # isn't set and when invoked from selftests build, where srctree
+> 
+
