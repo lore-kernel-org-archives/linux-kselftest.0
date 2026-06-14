@@ -1,333 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D068E1E832A;
-	Sun, 14 Jun 2026 14:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95D82EDD6B
+	for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2026 16:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781448877; cv=none; b=alEGRS4W94He/1unQMU5y97xaGkdbuahnJPOM7X2hn8ZB/XgFEQHcw/U8KTl9s96G8Ck3h97RLTMDdzUrUuDkl46EjxfQGnwll38oCjbPhCDIFOOQIm0KWy+dsiMUVbkc/5UWSUtNKUazA5LOgBS+SfbAiOttt4iO7XtYL/Iw90=
+	t=1781454892; cv=none; b=Ie+vjaewih4pdpGDse6rCJsTlhFysffdlCeuxTkCtiWczKVDCy0WZzv2ObowmdSA/GgLQSP7PY1azmgbvJnJVKBj6LjqhMRjGsRDRk5GAy4Z0nfErpyoXyuYUGdPBpiorUPQT/k6ngq2fvVOKr85pzr326WXU/hTb/P3HjJ/2Dc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781448877; c=relaxed/simple;
-	bh=i72LStz5JPKT4OjgIZTKVJYarb6vIrVQ6OzvLwXT11o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sFCFHWIR+INHQEHS7Ia9l8xvAJSoX26fc0HTKQcNAuLjl1x+F9PFLEeXs1eg4uOsg3FqzjbB3Rk3aJjo9iwN44wfr55/fN3fYWEZsD1y8qJJL1XAmnaUQVPaHx5pfY9DaUnzmuo2KvlPtGjQfT4ueYS0M5ir+z23hJ/V1ANpD8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aGbCHVOh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781454892; c=relaxed/simple;
+	bh=JOEI8vu/7HAwBxTRs1BHdDZNqxm4ZVt72nXf1bK2VVE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=W2cXt1dltzEfoLIUtjTbJl38H2QLTtm7DNJkK2gsj3SuWFNsxMH6LGT8fqjtiG5UVfl0idcJINwnUZTpGI0MRElcqWQerST/iJfEgVgUhacU9gQqQZUsBW9rM4wldoHOR5k6xY5fmOMD3v3ds0QxnbmZNHF1B2yXFc1JIXIKhLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wws5WHjS; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aGbCHVOh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A07411F000E9;
-	Sun, 14 Jun 2026 14:54:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781448875;
-	bh=vbYrakTfnKtA+OmusDKcwDdwvf0yeRD6NkdJsOQQveA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=aGbCHVOhamLU+ioc8IfR1NpQsBnK2re3r805Q/hDg2YJpqToCNAseQ1gNUaaHMX2L
-	 0LrcsVz4mjblJPTvQzaqKyfEzNZfShMKqIGhXb8WpHvsIMBQpxCtkoeQheIY9FGWB8
-	 ytAnkk57IwiuHnONSGcce/plY5fLfO6WhrB1Obz+uKx2/KVZsCNYwr6iisRfXZzf5h
-	 fY7FDE4ZU4C58RA+eSS8o1Fq0ypNhJ5x0/DMPUjZ8ht35zcVMnX6v3yKDzkaBJ6O8t
-	 vhAtgLZZgfLmrnKHQhCtc/NRD3zsHyuE4nx7QLYmlf5Vw9CPW246i0PR+V5M6jpsPw
-	 DGZpgvSiXyflg==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wws5WHjS"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-490afc47455so10518665e9.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2026 09:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781454889; x=1782059689; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ie7W0/36/mBiMATry4KLDy87C2gkFpZRNsB/aUK3ZIM=;
+        b=Wws5WHjSbtocO+zba8s1Wy8edJiBVsKmvPmNq953tp/BdGGRc6umjVtK08lXWw5XJi
+         ft1YDNLBgxk4GIjuP1OwHI4oir0IIu7BbvyQzw8O/ko6biQ/hUs6n3g1wVqXlGR4HrVK
+         uAQa0HLxah4A5tqsSG04lFwyd+tIB+puSsEZiVMWQohVSIOiZr6uLtZuTrQ3a4NW37Oy
+         U8HcajOxMwAA3qjVQrxc+gJu5BQ0aBBa7ZDBM1fMb/Ms+y7siAWoc0hg2kNKWL4pxtHm
+         POPTk6xZP0awDmvUK8SlH+8VfWbAl6hkfPky7qeVGQDhNOE9Opn7u5o+BTRGHZQqE2Os
+         3sjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781454889; x=1782059689;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ie7W0/36/mBiMATry4KLDy87C2gkFpZRNsB/aUK3ZIM=;
+        b=HbAAbOI1Y9UErUcO1EnWGjsd4x9sC+RQcLfyvbQph8liErnmZZaGHLPASbOICbrIzT
+         j1joH0OVIyf8lFD+7D6r4iqv1S5R3CrTV8Lio+YAw992P/sxJRg/0dOYikitGTPmilQb
+         gDwAhsv/wbqy5L2reU0Lu2S5ljypRqtELmkszd1OE7L9LEznUEIgGBxrTkUSRZvVIUxs
+         GUmPp48gem1j1GrS3om5DfpdvU8mdMOvmSJxc0mVcfWsZ6cM9Pkak1csN/GW1Vc6XFQ/
+         tKCfdPx81xKt0K7JKmlvKdUv7VhpXkERQYm17TXqj1IbLzIMGzExaBJlImP9vrGqcKDp
+         1ltg==
+X-Gm-Message-State: AOJu0YzAQq+DvZjjcwNPSTK/vZUk9Fgv6yto/5pE1yDTHLWpuMI2aJLJ
+	MMp/sjftNXhzAnQ36E+aDRK5hpBPCNhQJoAShKR7kbzhLDvvtal0zJg2
+X-Gm-Gg: Acq92OFzbK/LUKenKBoRwi5oqSpo8INwu8ZIJzHxEuus/ppl3b7ovKtFdmhxsHOQ3OB
+	2cVrCY6Li9GwlArn9N1IF/HBcIz7SGWepqJpFUNnleVBLJXPZax4lS4pcZBbsoNHSu3Qh/hVHMD
+	FM0dq2lctSoIfQoHjUAM8B/+3pQH+UI94247gX8KGNEATG6e77w7AARZoqRnxX59+THRxFyzev9
+	mr2Na55KET8/dRihJSqbUL8z4AyJ2JcFK9LKQZkUyrBPRgTujW5CtraE+Ygj08UWsQFfO8JXqFu
+	OUVkt8GgF9HuxvT5mPZ/q1LbAhpbyKhEcnwh2XwnNQkGA8mK2XnzJxsXc0yVITNkq7QQdadedAM
+	1TfKPe78wo4HSIQ/0J9D2AzMHvEgMIqhRxw71ugNZUcvGqfruFWqY5mvLhZjuPKRQEO7wxDcp3z
+	vA5B/ZnnOMDOkv7diXA0PPKrJeGClC4kWWPJ8HTsvi4AfaSkCWivpI5VKOZTuzMZbXVB6y/UJ0o
+	rGz2kSKkym1cnE=
+X-Received: by 2002:a7b:cbc3:0:b0:48a:5565:ec3d with SMTP id 5b1f17b1804b1-490ec502d01mr96781235e9.22.1781454889048;
+        Sun, 14 Jun 2026 09:34:49 -0700 (PDT)
+Received: from ds-pc.. (host86-147-161-204.range86-147.btcentralplus.com. [86.147.161.204])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2637ccsm25885849f8f.6.2026.06.14.09.34.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Jun 2026 09:34:48 -0700 (PDT)
+From: Dhiraj Shah <find.dhiraj@gmail.com>
+To: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 7/7] tracing/probes: Add a new testcase for BTF typecasts
-Date: Sun, 14 Jun 2026 23:54:31 +0900
-Message-ID: <178144887132.159464.5344508628040730804.stgit@devnote2>
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	shuah@kernel.org
+Subject: [PATCH] selftests/bpf: Add arena direct-value boundary test
+Date: Sun, 14 Jun 2026 17:33:52 +0100
+Message-ID: <20260614163352.1060813-1-find.dhiraj@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <178144880282.159464.16882854283219530040.stgit@devnote2>
-References: <178144880282.159464.16882854283219530040.stgit@devnote2>
-User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Add coverage for direct map value access against BPF_MAP_TYPE_ARENA.
+For a one-page arena, an offset of PAGE_SIZE - 1 is valid, while
+PAGE_SIZE is one byte past the end of the mapping and must be rejected.
 
-With the introduction of container_of-style BTF typecasting and
-per-CPU variable access support in trace probes, we need a way to
-verify their functionality and prevent regressions.
+This covers the off-by-one case in arena direct-value range checking.
 
-Add a new ftrace kselftest and update the trace event sample module
-to test and validate these features.
-
-Specifically, update the trace-events-sample module to set up a
-periodic timer whose callback accesses a per-CPU counter. Introduce
-a new sample trace event, foo_timer_fn, to trace this callback
-and log the current counter value.
-
-Then, add a new test case, btf_probe_event.tc, which defines a
-dynamic probe on the timer callback. The probe uses BTF typecasting
-to recover the parent structure from the timer argument and
-this_cpu_read() to fetch the per-CPU counter. The test verifies
-the integrity of the implementation by ensuring the values
-recorded by the dynamic probe match those from the static tracepoint.
-
-Assisted-by: Antigravity:gemini-3.5-flash
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Dhiraj Shah <find.dhiraj@gmail.com>
 ---
- Changes in v3:
-  - Add syntax test case.
-  - Update testcase to use this_cpu_read()
- Changes in v2:
-  - Use timer_shutdown_sync() instead of timer_delete_sync() for teardown.
----
- samples/trace_events/trace-events-sample.c         |   40 +++++++++++++++-
- samples/trace_events/trace-events-sample.h         |   34 ++++++++++++-
- .../ftrace/test.d/dynevent/btf_probe_event.tc      |   51 ++++++++++++++++++++
- .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    9 ++++
- .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    9 ++++
- .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    5 ++
- 6 files changed, 143 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
+ .../bpf/prog_tests/arena_direct_value.c       | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
 
-diff --git a/samples/trace_events/trace-events-sample.c b/samples/trace_events/trace-events-sample.c
-index 82344a78e471..651f3e2138ab 100644
---- a/samples/trace_events/trace-events-sample.c
-+++ b/samples/trace_events/trace-events-sample.c
-@@ -94,6 +94,20 @@ static int simple_thread_fn(void *arg)
- static DEFINE_MUTEX(thread_mutex);
- static int simple_thread_cnt;
- 
-+static struct foo_timer_data *foo_timer_data;
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
+new file mode 100644
+index 000000000000..00e65af5df6c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
+@@ -0,0 +1,65 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+static void sample_timer_cb(struct timer_list *t)
++#include <test_progs.h>
++#include <bpf/bpf.h>
++#include <linux/filter.h>
++#include <sys/mman.h>
++#include <sys/user.h>
++#ifndef PAGE_SIZE
++#include <unistd.h>
++#define PAGE_SIZE getpagesize()
++#endif
++
++static int create_arena(void)
 +{
-+	struct foo_timer_data *data = container_of(t, struct foo_timer_data, timer);
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .map_flags = BPF_F_MMAPABLE,
++	);
 +
-+	get_cpu();
-+	trace_foo_timer_fn(data);
-+	(*this_cpu_ptr(data->counter))++;
-+	put_cpu();
-+
-+	mod_timer(t, jiffies + HZ);
++	return bpf_map_create(BPF_MAP_TYPE_ARENA, "arena", 0, 0, 1, &opts);
 +}
 +
- int foo_bar_reg(void)
- {
- 	mutex_lock(&thread_mutex);
-@@ -133,9 +147,27 @@ void foo_bar_unreg(void)
- 
- static int __init trace_event_init(void)
- {
-+	foo_timer_data = kzalloc_obj(*foo_timer_data, GFP_KERNEL);
-+	if (!foo_timer_data)
-+		return -ENOMEM;
++static int load_direct_value_prog(int map_fd, int off)
++{
++	struct bpf_insn insns[] = {
++		BPF_LD_MAP_VALUE(BPF_REG_1, map_fd, off),
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
 +
-+	foo_timer_data->name = "sample_timer_counter";
-+	foo_timer_data->counter = alloc_percpu(int);
-+	if (!foo_timer_data->counter) {
-+		kfree(foo_timer_data);
-+		return -ENOMEM;
-+	}
++	return bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL",
++			     insns, ARRAY_SIZE(insns), NULL);
++}
 +
-+	timer_setup(&foo_timer_data->timer, sample_timer_cb, 0);
-+	mod_timer(&foo_timer_data->timer, jiffies + HZ);
++static void test_direct_value_boundary(void)
++{
++	void *area = MAP_FAILED;
++	int map_fd, prog_fd;
 +
- 	simple_tsk = kthread_run(simple_thread, NULL, "event-sample");
--	if (IS_ERR(simple_tsk))
--		return -1;
-+	if (IS_ERR(simple_tsk)) {
-+		timer_shutdown_sync(&foo_timer_data->timer);
-+		free_percpu(foo_timer_data->counter);
-+		kfree(foo_timer_data);
-+		return PTR_ERR(simple_tsk);
-+	}
- 
- 	return 0;
- }
-@@ -148,6 +180,10 @@ static void __exit trace_event_exit(void)
- 		kthread_stop(simple_tsk_fn);
- 	simple_tsk_fn = NULL;
- 	mutex_unlock(&thread_mutex);
++	map_fd = create_arena();
++	if (!ASSERT_OK_FD(map_fd, "create_arena"))
++		return;
 +
-+	timer_shutdown_sync(&foo_timer_data->timer);
-+	free_percpu(foo_timer_data->counter);
-+	kfree(foo_timer_data);
- }
- 
- module_init(trace_event_init);
-diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_events/trace-events-sample.h
-index 1a05fc153353..816848a456a2 100644
---- a/samples/trace_events/trace-events-sample.h
-+++ b/samples/trace_events/trace-events-sample.h
-@@ -247,12 +247,14 @@
-  */
- 
- /*
-- * It is OK to have helper functions in the file, but they need to be protected
-- * from being defined more than once. Remember, this file gets included more
-- * than once.
-+ * It is OK to have helper functions and data structures in the file, but they
-+ * need to be protected from being defined more than once. Remember, this file
-+ * gets included more than once.
-  */
- #ifndef __TRACE_EVENT_SAMPLE_HELPER_FUNCTIONS
- #define __TRACE_EVENT_SAMPLE_HELPER_FUNCTIONS
-+#include <linux/timer.h>
++	area = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
++	if (!ASSERT_NEQ(area, MAP_FAILED, "arena_mmap"))
++		goto out;
 +
- static inline int __length_of(const int *list)
- {
- 	int i;
-@@ -270,6 +272,13 @@ enum {
- 	TRACE_SAMPLE_BAR = 4,
- 	TRACE_SAMPLE_ZOO = 8,
- };
++	prog_fd = load_direct_value_prog(map_fd, PAGE_SIZE - 1);
++	if (ASSERT_OK_FD(prog_fd, "last_valid_byte"))
++		close(prog_fd);
 +
-+struct foo_timer_data {
-+	const char		*name;
-+	struct timer_list	timer;
-+	int __percpu		*counter;
-+};
++	prog_fd = load_direct_value_prog(map_fd, PAGE_SIZE);
++	if (!ASSERT_LT(prog_fd, 0, "one_past_end"))
++		close(prog_fd);
 +
- #endif
- 
- /*
-@@ -595,6 +604,25 @@ TRACE_EVENT(foo_rel_loc,
- 		  __get_rel_bitmask(bitmask),
- 		  __get_rel_cpumask(cpumask))
- );
++out:
++	if (area != MAP_FAILED)
++		munmap(area, PAGE_SIZE);
++	close(map_fd);
++}
 +
-+TRACE_EVENT(foo_timer_fn,
-+
-+	TP_PROTO(struct foo_timer_data *data),
-+
-+	TP_ARGS(data),
-+
-+	TP_STRUCT__entry(
-+		__string(	name,			data->name	)
-+		__field(	int,			count		)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name);
-+		__entry->count	= *this_cpu_ptr(data->counter);
-+	),
-+
-+	TP_printk("name=%s count=%d", __get_str(name), __entry->count)
-+);
- #endif
- 
- /***** NOTICE! The #if protection ends here. *****/
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-new file mode 100644
-index 000000000000..96791e120b7d
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-@@ -0,0 +1,51 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: BTF event with typecast and percpu access
-+# requires: dynamic_events "this_cpu_read(<fetcharg>)":README "[(structname[,field])]<argname>[->field[->field|.field...]]":README
-+
-+# Check if the sample module is loaded
-+if ! lsmod | grep -q trace_events_sample; then
-+  modprobe trace-events-sample || exit_unsupported
-+fi
-+
-+echo 0 > events/enable
-+echo > dynamic_events
-+
-+# The sample_timer_cb(struct timer_list *t) is called.
-+# We want to check (STRUCT,FIELD)VAR typecast and this_cpu_read() access.
-+# (foo_timer_data,timer)t converts t to struct foo_timer_data * using container_of.
-+# data->counter is a per-cpu pointer to int.
-+# this_cpu_read(data->counter) should give the value of the counter.
-+
-+echo 'f:mysample/myevent sample_timer_cb name=(foo_timer_data,timer)t->name:string count=this_cpu_read((foo_timer_data,timer)t->counter)' >> dynamic_events
-+
-+echo 1 > events/mysample/myevent/enable
-+echo 1 > events/sample-trace/foo_timer_fn/enable
-+
-+sleep 2
-+
-+echo 0 > events/mysample/myevent/enable
-+echo 0 > events/sample-trace/foo_timer_fn/enable
-+
-+# Compare the values.
-+MATCH=0
-+while read line; do
-+  if echo $line | grep -q "foo_timer_fn:"; then
-+    NAME=`echo $line | sed 's/.*name=\([^ ]*\) .*/\1/'`
-+    COUNT=`echo $line | sed 's/.*count=\([^ ]*\).*/\1/'`
-+    if grep -q "myevent:.*name=\"${NAME}\" count=$COUNT" trace; then
-+       MATCH=$((MATCH+1))
-+    fi
-+  fi
-+done < trace
-+
-+if [ $MATCH -eq 0 ]; then
-+  echo "No matching events found"
-+  exit_fail
-+fi
-+
-+# Clean up
-+echo 0 > events/mysample/myevent/enable
-+echo 0 > events/sample-trace/foo_timer_fn/enable
-+echo > dynamic_events
-+clear_trace
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-index fee479295e2f..b781ec07c0d0 100644
---- a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-@@ -112,6 +112,15 @@ check_error 'f vfs_read%return $retval->^foo'	# NO_PTR_STRCT
- check_error 'f vfs_read file->^foo'		# NO_BTF_FIELD
- check_error 'f vfs_read file^-.foo'		# BAD_HYPHEN
- check_error 'f vfs_read ^file:string'		# BAD_TYPE4STR
-+if grep -qF "[(structname" README ; then
-+check_error 'f vfs_read arg1=(task_struct)file^'		# TYPECAST_REQ_FIELD
-+check_error 'f vfs_read arg1=(f)((f)((f)((f)^((f)file->f)->f)->f)->f)->f'	# TOO_MANY_NESTED
-+check_error 'f vfs_read arg1=(task_struct,^in_execve)file->comm'	# TYPECAST_NOT_ALIGNED
-+check_error 'f vfs_read arg1=(task_struct,se^->group_node)file->comm'	# TYPECAST_BAD_ARROW
-+check_error 'f vfs_read arg1=(task_struct,^->pid)file->comm'	# TYPECAST_BAD_ARROW
-+check_error 'f vfs_read arg1=(task_struct,^.pid)file->comm'	# BTF_BAD_TID
-+check_error 'f vfs_read arg1=(task_struct,^.)file->comm'	# BTF_BAD_TID
-+fi
- fi
- 
- else
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-index 8f1c58f0c239..78f015c8c010 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-@@ -115,6 +115,15 @@ check_error 'p vfs_read+20 ^$arg*'		# NOFENTRY_ARGS
- check_error 'p vfs_read ^hoge'			# NO_BTFARG
- check_error 'p kfree ^$arg10'			# NO_BTFARG (exceed the number of parameters)
- check_error 'r kfree ^$retval'			# NO_RETVAL
-+if grep -qF "[(structname" README ; then
-+check_error 'p vfs_read arg1=(task_struct)file^'		# TYPECAST_REQ_FIELD
-+check_error 'p vfs_read arg1=(f)((f)((f)((f)^((f)file->f)->f)->f)->f)->f'	# TOO_MANY_NESTED
-+check_error 'p vfs_read arg1=(task_struct,^in_execve)file->comm'	# TYPECAST_NOT_ALIGNED
-+check_error 'p vfs_read arg1=(task_struct,se^->group_node)file->comm'	# TYPECAST_BAD_ARROW
-+check_error 'p vfs_read arg1=(task_struct,^->pid)file->comm'	# TYPECAST_BAD_ARROW
-+check_error 'p vfs_read arg1=(task_struct,^.pid)file->comm'	# BTF_BAD_TID
-+check_error 'p vfs_read arg1=(task_struct,^.)file->comm'	# BTF_BAD_TID
-+fi
- else
- check_error 'p vfs_read ^$arg*'			# NOSUP_BTFARG
- fi
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-index c817158b99db..d5d5245bee6c 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-@@ -28,4 +28,9 @@ if grep -q ".*symstr.*" README; then
- check_error 'p /bin/sh:10 $stack0:^symstr'	# BAD_TYPE
- fi
- 
-+# $current is not supported by uprobe
-+if grep -q "\$current.*" README; then
-+check_error 'p /bin/sh:10 $current:^u8'	# BAD_VAR
-+fi
-+
- exit 0
++void test_arena_direct_value(void)
++{
++	if (test__start_subtest("direct_value_boundary"))
++		test_direct_value_boundary();
++}
+-- 
+2.43.0
 
