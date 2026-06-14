@@ -1,64 +1,64 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD7D2459DC
-	for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2026 05:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554D6242D65
+	for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2026 05:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781415595; cv=none; b=jCdN2gb5oUrduQfi3sj2TCkf8Bxjg/zpLFlBaD1GaHj9Ic7PfrdpkYJt1/Bl6rdjJQCkwN0kvYdAKgt9bT2w65pXO7YGpvTcgU7tL7SCyx7qk/8KP1RKKZq4WodjuLFxFGLtjMBJg7r3bBusAwWuoi4WRh7nq2W2pPlRg/RHe6U=
+	t=1781415606; cv=none; b=S6cd1w27kegeb4g9DHvITWBp60Z/IvSxrgRZzSX09DN0aM3BZcTx7Phgl1Xpmo/rfRfIG3BKz7RtuOlfBKV+Wdwht3q9hyyZbmnaF17UJKtxndh+2xVpi8G3kKtK59BwWk6cMGpPObvyiYJtpEXeJD8taJbRVMONEpBwQjho6Bw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781415595; c=relaxed/simple;
-	bh=lhowr9EjwPapIm5LZ9CUvqkGMBmfsnVS9rihubPA5e4=;
+	s=arc-20240116; t=1781415606; c=relaxed/simple;
+	bh=xYkuCVHdPfVL4LS6phd9e7uDx30DaXSEX00b1pg95YA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o1HEZZbf9WKM6FQB1DfkIhWcqzulI4q7JMUWp+tTP/YLSbnOP02+tkVMO1n0vq1SOLEt43GQxGwaw/v1gLDgn41dm0TZnLaEIFllEI5BGlMbHDvXXY6GafSX2k2s4Z+MOcjtt8nxKiz+XSavU2sTqQaUWB2pJesK0uqxiaSsm6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k7Y+ZSnn; arc=none smtp.client-ip=209.85.210.174
+	 MIME-Version; b=muYfsgj6R6awbXXtZJkePZXMzZMoRofE8Mj5zjEuwdKualLrn/3PQkAhcOrw0CgdoqAke8gKvVj75C9PgwTp0BQuF8O+pjw1GdOeRnQZg19lu63gsG6tIuCV1XrKruE7D4yqKSoiMqyFJ3YOUHJpb1ANBa1+08gQBueckinkbcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GYEDKfGk; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k7Y+ZSnn"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8423efad617so1435519b3a.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 22:39:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GYEDKfGk"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-842288702fbso1061543b3a.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 22:40:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781415594; x=1782020394; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781415605; x=1782020405; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NT1UtqM2AmX11NcJjNv9n62UrLKyvxdMBYbCsYRy7Tg=;
-        b=k7Y+ZSnnWZdZwA16LI1jjwiD9wmD/pD5qjRx+SZt0TGO6PL2TosKf3zQEYuBOOo3jl
-         IXJ4DI3O4DDszR3h7L9hsel/+bPebrxhlHnILMSml/PubyVW7QOXg1OZ1IQjVxyYLYvL
-         G+GTWiX5utKgMFP/sZdfS5XtLxR6fJRhBnqIpJ+HfwsYfQCgvlHQ73MoPZHw+4V973cM
-         bQv32r09k21FrpEdUOr8k2FRrQL48VY7QkXDDHHv3/r8R+9EEDheSZEmL9oDq4sQXVAR
-         0qnaR5hyIdLRgKWW9t4bFk/tV0M7f1t88wCinuopPv37POBxtYYjol63QqGanP1jEGSO
-         g72A==
+        bh=bkS4IMnvlVTyKrBWl0mp/SrLhH39RLp4sUhYtNuaaOU=;
+        b=GYEDKfGkuIvDL1YfKrzWajDus78mFJMl1Zp0sryRAw3U1WApB49cvZmqyDmOlgp5vr
+         pInFh9rTk0z9cEWFzc1Yr3d8zveQc42LmQvqfeUL9pBhVjOhND4xzj26rWzj+Qx1WIZa
+         0vsWTFqtQjNIRRlh22WnGtNWQQOrXxEHhXK4HukNU5pxClci7ZVH+tEObvT92oCSGscq
+         qVCe6n8jtTXzPGLluJJ1tgCZRvMHdTNBk2cKLpyGkZvvZxw7UIACgNKCCrl9CREOlIS+
+         SD6p2cZpR0DMamIhvOvnfRUDei33dQihOJsCHBR/RCOuuJIfTw8uEcIFBvGPgNXr+jZW
+         eQeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781415594; x=1782020394;
+        d=1e100.net; s=20251104; t=1781415605; x=1782020405;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=NT1UtqM2AmX11NcJjNv9n62UrLKyvxdMBYbCsYRy7Tg=;
-        b=coETHFdjQygwV8l68xOggzl4MtR0speChY8h2Hnq+ApINkRqH9xCIsZYT27kg7sNxJ
-         ZuNvV0ExxM24sfcIOVfNYjGvqjJPnMyCu6+OMqYO3miiRUN/W10ZQXR++VpF+FFNP095
-         w5o6bfDqvh1Exesy9w6nrVrR7rKpZ5eTP1tvGUquY5ikjfSJj7b7Gljq2jgXxTz6PJF0
-         npa8UjT2Hom5Q+ynJ7ngBP39moMjGXEoTrRvmBD/da4t1HVtWu7X2Jh2rY0ng2Ewrpxa
-         QsU1oB8kcU643isCw3Qno683JG5XXhgWp7hz1/2VCynQwk2ZktHLVZb+Kz/DBRZGN0ZU
-         /Z9Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+0WoEYqUiURskVzSkTc+G9FpvARNyiGx3VUIfZajFNCm9Sa3K4Eccz9vrl6ahNvXRiAPlXKoRJvhcKTRRsbvo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzib8g+P0BVJFfR2bt0tdku1DkvN9J1Cyy1VKu6TazFyKLDnZzY
-	RHlZP2LzY9X699yDvxluB0ry47a2AnMrkkpqSt2aPe0FuLsW+Lqo9OK2
-X-Gm-Gg: Acq92OGmoHEzCG27UZUNTgflfpsY0xJzZ1hqWLyx2M5oFWGL+4u322S/4wqmz1wK76N
-	96wbXFZ+4WAullBNyqIYPYxaBhhfgMfSBRxtBS9jGqnwd3nReOTlte/VJdY2iaQynLPCq1p01Ic
-	9nDU/262tDu/BTUIGzNi81yR9tuZA/eeb23iVjb3pey5L/siG+oonyqzSR60NGxZVB4KUMTKe3E
-	bInwz01SxGKAFPGQe4+SvjHi5iCqfs+YqwZQvS2ASVUKzxWHbV+ViNmrfrXD1/2HSvdYyz57Gdk
-	ruOeAdwO/nZhd4YsPeYuX9LfGpJdr5ezBebSV98pp2qRQSnfdpXaEjaUDGVR7Cp8Dl1HHOmQyB8
-	BwsrVsyk89N6MTLBaDBK5W/a5n7IJOeLBrbM61MaW1Cs9SSx18fuiuModtSXzul4gaPbT/TVQFL
-	7qfszHp0o6GV/YwcgBCG/0kikLpc/ht654t86k6qnKj2ci5BZMmYCYGtdPtG/rMi4LGlfLDHLKi
-	2TkQedsnCwFcKmv
-X-Received: by 2002:a05:6a00:4fcf:b0:842:5711:9a2f with SMTP id d2e1a72fcca58-8434cf4f362mr10259911b3a.36.1781415594241;
-        Sat, 13 Jun 2026 22:39:54 -0700 (PDT)
+        bh=bkS4IMnvlVTyKrBWl0mp/SrLhH39RLp4sUhYtNuaaOU=;
+        b=IKek0NXYU5WJwDyifWJL3jnzg0mQ/WjebRwfEYSmokSKTqgC/o7IvubG5sFbYJPSRV
+         ayRp82WecgmZbbO3iYv2dokaP5wTYP1SDeiwoebxNXXCdOBRUo9O8taQ0SPWElZ+jDM3
+         pvM/OhrhkBbBfzO3ECp+vsJCcWd1jTmaSt6pJGnC4ZWxIMPExMUr8iIGDLg1wKT3EIQf
+         bjHiw2TLiF6aUV+vxL2cjidZ4wUbRIhoZpi3ETceQkeRIwomFSDpuKZ7OYCzSKaXDQU4
+         oJRLIOND+exU3TvSPP8lQT1RomhjpmiyxBMZQTBQj1RTYyKF6ez3dmEktQk2V3QRtINL
+         Skdw==
+X-Forwarded-Encrypted: i=1; AFNElJ80SkxTTpwbu1fQ86j8pzoVa7H9u+WwKLJNrTscSqm9uPwMy5IiiBZnyKSOmsZqNaPtS74uhBYZvqvjZySvgt4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzywCx0qyT/h1Y27yk+Fx2GsVsVTtkrGjnKcLFOAhnCbBHf4H5
+	KY5GCuJPXRxOfCnJ6CvRpYssiuBC5WkDPN+qwLcccHDFhVYUl6KM/PK7
+X-Gm-Gg: Acq92OGPGieBJO8kU4pgAxEYcELX4BQNWlo8q+ri/sg9O4p0umNHY9ZxlJqfJjTGXFw
+	e/ceiQJMjQQUom4iz4OESUaMS3003SlF/hbFdlv7tqfRyBFVLMgpBsmXNpuNkM4H1hD8lWxg57E
+	V6heuNSHvOOsS4WewzTNVx713BMS2U+m8nwDnxfmX5EzTEa5kuhF3mIF8uV/HX1WM3ksR7mwavK
+	cWlWQwNAVf0u/2XeZRMQaHhlE+aRk6ZOlldbphLdZ+dLvEpvtAZo/xmtozVYSCCFxwpbmRE+VJR
+	OMU5Qo1Y2MlNBooqM0dCyVvmWeIY2q61JJFSBfu2T560WuYCc5WoA9izBlEE1sX4ejKQy1e8Hfx
+	zAEIOb45sZNBZKRlrVVL0bT1xLDsEXxJnQipUDev0xbqg9wkKpmNtLmgn1lViATEBinPEmSFPWO
+	J7wPnAmWIi7jOKWmaqOTBbgMmaN58jwkdhg91lZmDpbeC8kspb5IJSupd0q2VWQtfJ5ef/TgpWy
+	tpvwJx3TRwNtUSW
+X-Received: by 2002:a05:6a00:9287:b0:842:7436:657a with SMTP id d2e1a72fcca58-8434ce832d7mr10346527b3a.32.1781415604612;
+        Sat, 13 Jun 2026 22:40:04 -0700 (PDT)
 Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434acffd04sm6387078b3a.26.2026.06.13.22.39.51
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434acffd04sm6387078b3a.26.2026.06.13.22.40.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jun 2026 22:39:53 -0700 (PDT)
+        Sat, 13 Jun 2026 22:40:04 -0700 (PDT)
 From: HyeongJun An <sammiee5311@gmail.com>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -73,11 +73,10 @@ Cc: Eduard Zingerman <eddyz87@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	HyeongJun An <sammiee5311@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH bpf 1/2] libbpf: Reject out-of-range linker relocation offsets
-Date: Sun, 14 Jun 2026 14:39:26 +0900
-Message-ID: <20260614053927.160566-2-sammiee5311@gmail.com>
+	HyeongJun An <sammiee5311@gmail.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: Test linker rejects out-of-range relocation offset
+Date: Sun, 14 Jun 2026 14:39:27 +0900
+Message-ID: <20260614053927.160566-3-sammiee5311@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260614053927.160566-1-sammiee5311@gmail.com>
 References: <20260614053927.160566-1-sammiee5311@gmail.com>
@@ -89,61 +88,238 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The static linker sanity-checks relocation sections before appending them,
-but for executable target sections it only verifies that r_offset is
-BPF-instruction aligned.  It does not verify that the offset is inside the
-relocated section.
+Add regression coverage for libbpf static linker relocation offset checks.
 
-A malformed object can therefore pass an out-of-range offset through
-linker_sanity_check_elf_relos().  When the relocation is against an
-STT_SECTION symbol, linker_append_elf_relos() uses the unchecked offset to
-find the instruction to adjust:
+Build a minimal ET_REL/EM_BPF object in memory with a 16-byte executable
+section and one relocation against that section. Check that a valid
+relocation offset is accepted and an offset outside the relocated section
+is rejected with -EINVAL.
 
-  insn = dst_linked_sec->raw_data + dst_rel->r_offset;
-
-and then reads insn->code and updates insn->imm.
-
-This is reproducible with bpftool's static linker by crafting a BPF object
-with a 16-byte executable section and a relocation in its .rel section
-whose r_offset is 0x1000:
-
-  BUG: AddressSanitizer: heap-buffer-overflow in linker_append_elf_relos
-  READ of size 1
-   linker_append_elf_relos
-   bpf_linker_add_file
-   bpf_linker__add_file
-   do_object
-
-Reject relocation offsets that are outside the relocated section before any
-later use.  This mirrors the normal object loading path, which already
-rejects executable relocations whose r_offset is not inside the program
-section.
-
-Fixes: faf6ed321cf6 ("libbpf: Add BPF static linker APIs")
-Cc: stable@vger.kernel.org
 Assisted-by: Codex:gpt-5
 Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
 ---
- tools/lib/bpf/linker.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../selftests/bpf/prog_tests/libbpf_linker.c  | 212 ++++++++++++++++++
+ 1 file changed, 212 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_linker.c
 
-diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-index 78f92c39290a..3eb23da167d2 100644
---- a/tools/lib/bpf/linker.c
-+++ b/tools/lib/bpf/linker.c
-@@ -1048,6 +1048,12 @@ static int linker_sanity_check_elf_relos(struct src_obj *obj, struct src_sec *se
- 			return -EINVAL;
- 		}
- 
-+		if (relo->r_offset >= link_sec->shdr->sh_size) {
-+			pr_warn("ELF relo #%d in section #%zu has invalid offset %zu in %s\n",
-+				i, sec->sec_idx, (size_t)relo->r_offset, obj->filename);
-+			return -EINVAL;
-+		}
+diff --git a/tools/testing/selftests/bpf/prog_tests/libbpf_linker.c b/tools/testing/selftests/bpf/prog_tests/libbpf_linker.c
+new file mode 100644
+index 000000000000..e7bec2434349
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/libbpf_linker.c
+@@ -0,0 +1,212 @@
++// SPDX-License-Identifier: GPL-2.0
 +
- 		if (link_sec->shdr->sh_flags & SHF_EXECINSTR) {
- 			if (relo->r_offset % sizeof(struct bpf_insn) != 0) {
- 				pr_warn("ELF relo #%d in section #%zu points to missing symbol #%zu in %s\n",
++#include <elf.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <unistd.h>
++
++#include <bpf/libbpf.h>
++#include <linux/bpf.h>
++#include <test_progs.h>
++
++enum {
++	SEC_NULL,
++	SEC_TEXT,
++	SEC_REL_TEXT,
++	SEC_SYMTAB,
++	SEC_STRTAB,
++	SEC_SHSTRTAB,
++	SEC_CNT,
++};
++
++enum {
++	SHSTR_TEXT = 1,
++	SHSTR_REL_TEXT = SHSTR_TEXT + sizeof(".text"),
++	SHSTR_SYMTAB = SHSTR_REL_TEXT + sizeof(".rel.text"),
++	SHSTR_STRTAB = SHSTR_SYMTAB + sizeof(".symtab"),
++	SHSTR_SHSTRTAB = SHSTR_STRTAB + sizeof(".strtab"),
++};
++
++struct test_elf {
++	void *buf;
++	size_t sz;
++};
++
++static size_t elf_round_up(size_t value, size_t align)
++{
++	return (value + align - 1) / align * align;
++}
++
++/*
++ * Build a minimal ET_REL object in memory. A normal .bpf.c source cannot
++ * produce a relocation whose offset points past the relocated section, so the
++ * test constructs the ELF directly and feeds it to bpf_linker__add_buf().
++ */
++static struct test_elf make_relo_obj(size_t relo_off)
++{
++	static const char shstrtab[] = "\0.text\0.rel.text\0.symtab\0.strtab\0.shstrtab";
++	static const char strtab[] = "\0";
++	struct bpf_insn insns[] = {
++		{
++			.code = BPF_ALU64 | BPF_MOV | BPF_K,
++			.dst_reg = BPF_REG_0,
++			.imm = 0,
++		},
++		{
++			.code = BPF_JMP | BPF_EXIT,
++		},
++	};
++	size_t off, text_off, rel_off, symtab_off, strtab_off, shstrtab_off, shdr_off;
++	struct test_elf obj = {};
++	Elf64_Shdr *shdr;
++	Elf64_Ehdr *ehdr;
++	Elf64_Sym *sym;
++	Elf64_Rel *rel;
++
++	off = sizeof(*ehdr);
++	text_off = elf_round_up(off, 8);
++	off = text_off + sizeof(insns);
++	rel_off = elf_round_up(off, 8);
++	off = rel_off + sizeof(*rel);
++	symtab_off = elf_round_up(off, 8);
++	off = symtab_off + 2 * sizeof(*sym);
++	strtab_off = off;
++	off = strtab_off + sizeof(strtab);
++	shstrtab_off = off;
++	off = shstrtab_off + sizeof(shstrtab);
++	shdr_off = elf_round_up(off, 8);
++	off = shdr_off + SEC_CNT * sizeof(*shdr);
++
++	obj.buf = calloc(1, off);
++	if (!obj.buf)
++		return obj;
++	obj.sz = off;
++
++	ehdr = obj.buf;
++	memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
++	ehdr->e_ident[EI_CLASS] = ELFCLASS64;
++	ehdr->e_ident[EI_DATA] = ELFDATA2LSB;
++	ehdr->e_ident[EI_VERSION] = EV_CURRENT;
++	ehdr->e_type = ET_REL;
++	ehdr->e_machine = EM_BPF;
++	ehdr->e_version = EV_CURRENT;
++	ehdr->e_ehsize = sizeof(*ehdr);
++	ehdr->e_shoff = shdr_off;
++	ehdr->e_shentsize = sizeof(*shdr);
++	ehdr->e_shnum = SEC_CNT;
++	ehdr->e_shstrndx = SEC_SHSTRTAB;
++
++	memcpy(obj.buf + text_off, insns, sizeof(insns));
++
++	rel = obj.buf + rel_off;
++	rel->r_offset = relo_off;
++	rel->r_info = ELF64_R_INFO(1, R_BPF_64_64);
++
++	sym = obj.buf + symtab_off;
++	sym[1].st_info = ELF64_ST_INFO(STB_LOCAL, STT_SECTION);
++	sym[1].st_shndx = SEC_TEXT;
++
++	memcpy(obj.buf + strtab_off, strtab, sizeof(strtab));
++	memcpy(obj.buf + shstrtab_off, shstrtab, sizeof(shstrtab));
++
++	shdr = obj.buf + shdr_off;
++	shdr[SEC_TEXT] = (Elf64_Shdr) {
++		.sh_name = SHSTR_TEXT,
++		.sh_type = SHT_PROGBITS,
++		.sh_flags = SHF_ALLOC | SHF_EXECINSTR,
++		.sh_offset = text_off,
++		.sh_size = sizeof(insns),
++		.sh_addralign = 8,
++		.sh_entsize = sizeof(struct bpf_insn),
++	};
++	shdr[SEC_REL_TEXT] = (Elf64_Shdr) {
++		.sh_name = SHSTR_REL_TEXT,
++		.sh_type = SHT_REL,
++		.sh_offset = rel_off,
++		.sh_size = sizeof(*rel),
++		.sh_link = SEC_SYMTAB,
++		.sh_info = SEC_TEXT,
++		.sh_addralign = 8,
++		.sh_entsize = sizeof(*rel),
++	};
++	shdr[SEC_SYMTAB] = (Elf64_Shdr) {
++		.sh_name = SHSTR_SYMTAB,
++		.sh_type = SHT_SYMTAB,
++		.sh_offset = symtab_off,
++		.sh_size = 2 * sizeof(*sym),
++		.sh_link = SEC_STRTAB,
++		.sh_info = 2,
++		.sh_addralign = 8,
++		.sh_entsize = sizeof(*sym),
++	};
++	shdr[SEC_STRTAB] = (Elf64_Shdr) {
++		.sh_name = SHSTR_STRTAB,
++		.sh_type = SHT_STRTAB,
++		.sh_offset = strtab_off,
++		.sh_size = sizeof(strtab),
++		.sh_addralign = 1,
++	};
++	shdr[SEC_SHSTRTAB] = (Elf64_Shdr) {
++		.sh_name = SHSTR_SHSTRTAB,
++		.sh_type = SHT_STRTAB,
++		.sh_offset = shstrtab_off,
++		.sh_size = sizeof(shstrtab),
++		.sh_addralign = 1,
++	};
++
++	return obj;
++}
++
++static int link_relo_obj(size_t relo_off)
++{
++	char path[] = "/tmp/libbpf_linker_relo_XXXXXX";
++	struct test_elf obj = {};
++	struct bpf_linker *linker;
++	int err, fd;
++
++	fd = mkstemp(path);
++	if (!ASSERT_OK_FD(fd, "mkstemp"))
++		return -errno;
++	close(fd);
++
++	linker = bpf_linker__new(path, NULL);
++	if (!ASSERT_OK_PTR(linker, "linker_new")) {
++		err = libbpf_get_error(linker);
++		goto out_unlink;
++	}
++
++	obj = make_relo_obj(relo_off);
++	if (!ASSERT_OK_PTR(obj.buf, "make_relo_obj")) {
++		err = -ENOMEM;
++		goto out_free_linker;
++	}
++
++	err = bpf_linker__add_buf(linker, obj.buf, obj.sz, NULL);
++	if (!err)
++		err = bpf_linker__finalize(linker);
++
++	free(obj.buf);
++out_free_linker:
++	bpf_linker__free(linker);
++out_unlink:
++	unlink(path);
++	return err;
++}
++
++static void test_valid_relo_offset(void)
++{
++	ASSERT_OK(link_relo_obj(0), "valid_relo_offset");
++}
++
++static void test_invalid_relo_offset(void)
++{
++	ASSERT_EQ(link_relo_obj(0x1000), -EINVAL, "invalid_relo_offset");
++}
++
++void test_libbpf_linker(void)
++{
++	if (test__start_subtest("valid_relo_offset"))
++		test_valid_relo_offset();
++	if (test__start_subtest("invalid_relo_offset"))
++		test_invalid_relo_offset();
++}
 -- 
 2.43.0
 
