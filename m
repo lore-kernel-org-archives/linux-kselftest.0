@@ -1,127 +1,315 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013027.outbound.protection.outlook.com [52.101.72.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B372AD35;
-	Sun, 14 Jun 2026 07:13:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781421192; cv=none; b=hzVGbDWW7H9pNCReKq5vcWEQRWCGC9W8//6nPbnm2DrP4PX46sQ0UZveMG+CVHz1ME7N9CnX9CSdTlOOTo2BGLNZuqeQ/2nWAczOo70NWZ0F0aTR0JPmegN7cHIVDNltMNjKLbnnje48iFvltqusDcxEM+nN+sYfzDMxARTlzcU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781421192; c=relaxed/simple;
-	bh=QDMLcymWmFNA2LVj2LNc+u/jMVoxGS5wyG5igyEU2js=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RfwGUIjkP4VVuzLOYqDaT0GT2Ed3akck/GVKdMYvWIHPHPFeOA0+8rgt3b0qXr/HMz+KAvOtRNAlHVEkqUCTKBjUj58qOad3igHfpEz0D2tcNRa0EXTeEOOBu9YsP5Y+HYoDLtIn/+8K9gh8A1wx6KminHnkiThPAyIq7gb58V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id C9EC81E9FA4; Sun, 14 Jun 2026 15:07:31 +0800 (AWST)
-X-Spam-Level: 
-Received: from [IPV6:2001:8003:8810:ea00::9c4] (unknown [IPv6:2001:8003:8810:ea00::9c4])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 5E4391E9F99;
-	Sun, 14 Jun 2026 15:07:27 +0800 (AWST)
-Message-ID: <5f5c5555-466d-41ac-8187-8b9ddc14965f@davidgow.net>
-Date: Sun, 14 Jun 2026 15:07:24 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67729346AE3;
+	Sun, 14 Jun 2026 07:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.27
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781421537; cv=fail; b=QtKSLwXXRwJi3rHTRyoeruwchwTyB3+++YJ5sks2RWtfpeliXTiN5vlB6ui5ekXhVz5i4uD6HKaCc5oPkkd9D4Yhk+0onXewuy5akqwf8BtC9mSDe0/VRl6dukooh6Ft8ZbvA+isiXVprO09uO3nmK/4c4rFzY9j97lcCgpfoTM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781421537; c=relaxed/simple;
+	bh=ReafgJqtXESWWRKSNcXYSwz0VWWb6vRIwHsi06XhaRc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=nlhSsOQQJzaaxTH8ErrzcNo8FtSHIGhTEmgBltQfs9bJWgr+/ERXAI8Nhfq+Qljl3g8QvMtYtZfNw6cWddSbl65gnDxZ4COiwCLbEzjkLgq6uIHsLzOMmJx9KN1L/w2YgllKPmwO04cmXZb1cFeOvQldsMXUtxlgw0iU3X+kuNA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=qpKNyWP7; arc=fail smtp.client-ip=52.101.72.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="qpKNyWP7"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mGHa1DmiCfS/NdYH0/4ZfCYnFWJ60Qaf6KcJgyr0tJhNzsE7ZA7zsTo/76evKUtQu/EZlzKOQRTraoy9ETbl7CBjRdRT7zA7QcOrSwPVzBunuWAAyGzz+yRkso6mxDJmgUAhynkBRAO0Q3E/zwdQYCyWSv0g5Amhz+0aNkAJ3FxXdeCDxn2oxPXGDKjeUnz1Kd7Dz0BuZJtkig+TqPnKDogmdQ+Ub8zuMxmcQB28PE/1ImxKGbH+akJl75Vpzce8z511zI87hwcjowhGU/yMREDw1OflN9BODnfvT4/lYUwE/ovUeTnsyf4UuBa4rtwXflWjTetQYYftpr9tI0H8VA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=60S6ewrTPpyUw6VWmEqyuhAQ3Ub1Mtnrh9Vq/CNDkcA=;
+ b=r/AK3QcFeq34UYK12jAo22YtXY5MmnX7/G6BnlhHdqPj+TmyCjZpsD8SyB51n75T68okoaur/sp9UXS7BEKomz2WOfcFPpqBPvsOFWUVvkmy6yDuee9SMU093zOQroJvhxt2cl0cYNvyU+NgwQfuKJTeVFEakRQV7dFrexM8FCVfBd5gzAjPO7fZ5WFnvOtndpoaY/DVBtHrn/QL/qOINVxPTmFkEMShEpryrjzqADQElNXK+buvX4oD1dtQnEiMcesBLOFAbfNFDtnEYXhYVUi2QGT76xceO5onmyGmNnW2TkxQ1u+9cNiJAeNC2YbsnWzSS1Xwm+vfHbe+LmWTpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.6.100) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=60S6ewrTPpyUw6VWmEqyuhAQ3Ub1Mtnrh9Vq/CNDkcA=;
+ b=qpKNyWP7WrYaYRO0qi73jlGmLAPrp7znstpZMc6vdBlnSRQGmj1XFiSIs4NpOBcLv4bIwXmfOlXB/63K3tw6We9EiOfK5VtpX68cNIQJjhOlb8DYwNFfku1O9iDmZgPXFYuSWZDu5sZKf6ojDzxCW1fztO/ASAEOVxGeeIWKGcu9dRneScToIoQG153fY5fZqZC1vHJ+/mv/XQe+A2IFAV91Ufu533AeFezjCcTtBHrTifrteTGL+Jbxb79hbSlZe/EiM0xl2c5PEpvqkZZnWaZV62wED8VcI/3SF3LnmzAHK/WGoIhvJllogylqaW2t1+epfZfNvNOIa77IHwXrtw==
+Received: from DU7PR01CA0028.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:50e::13) by AS8PR07MB9210.eurprd07.prod.outlook.com
+ (2603:10a6:20b:5ee::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.18; Sun, 14 Jun
+ 2026 07:18:51 +0000
+Received: from DB3PEPF0000885A.eurprd02.prod.outlook.com
+ (2603:10a6:10:50e:cafe::30) by DU7PR01CA0028.outlook.office365.com
+ (2603:10a6:10:50e::13) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.113.17 via Frontend Transport; Sun,
+ 14 Jun 2026 07:18:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.100)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.6.100 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.6.100;
+ helo=fr711usmtp2.zeu.alcatel-lucent.com; pr=C
+Received: from fr711usmtp2.zeu.alcatel-lucent.com (131.228.6.100) by
+ DB3PEPF0000885A.mail.protection.outlook.com (10.167.242.5) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.139.8
+ via Frontend Transport; Sun, 14 Jun 2026 07:18:51 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fr711usmtp2.zeu.alcatel-lucent.com (Postfix) with ESMTP id 91E2568004E;
+	Sun, 14 Jun 2026 10:18:49 +0300 (EEST)
+From: chia-yu.chang@nokia-bell-labs.com
+To: jolsa@kernel.org,
+	yonghong.song@linux.dev,
+	song@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	memxor@gmail.com,
+	shuah@kernel.org,
+	martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	kuniyu@google.com,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with tso_segs() CC callback for TCP Prague
+Date: Sun, 14 Jun 2026 09:17:56 +0200
+Message-Id: <20260614071756.239686-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] rust: doctest: trim function name for reproducbility
-To: Gary Guo <gary@garyguo.net>, Brendan Higgins <brendan.higgins@linux.dev>,
- Rae Moar <raemoar63@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Igor Korotin <igor.korotin@linux.dev>
-Cc: rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-References: <20260613140431.232471-1-gary@kernel.org>
- <20260613140431.232471-2-gary@kernel.org>
-From: David Gow <david@davidgow.net>
-Content-Language: fr
-In-Reply-To: <20260613140431.232471-2-gary@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB3PEPF0000885A:EE_|AS8PR07MB9210:EE_
+X-MS-Office365-Filtering-Correlation-Id: 332dc418-3284-4265-5cde-08dec9e52f68
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|36860700016|23010399003|82310400026|56012099006|11063799006|18002099003|3023799007|6133799003|921020;
+X-Microsoft-Antispam-Message-Info:
+	oPZIMO/qa9mi6fzt6vDaj8dsYgkBIrbBrVsTO/ll0MwwJZZ7NPsa7XaNEmihi8OzLtduyjoJmToj3D/Hywq5e1gFKZ6PsKghlCHVbrDHy+sB819M2uHC9P0CHMW0m2O7UjqkcZR4uigfSZRcD+Q9gAxXIcjPP+evw8xRfuvie7AIqAn6CUs5Vk5iw0PMSZ+2uqiaJj5z1icc3j4q51krTtn0lAHo/hnTqrIGNnPwAEINrIrfwIzSbZGZ6vpU7NoH0cNhNPPVhHSCSxBvnBcPoxvArcGCoMh1F90MmENiUjTDQh97xmn6OAM5FBJy1q1Cbg2X2nOL39vSAMRBWFes17A84tS8NFxYzUukGgn+FuRQoDm8rXrsqjkt0XP6+mHxRhHKNcR9CQkp21DrGZZX8JkivLer3PIguz851JlfQLpm13RcTSiziH2GmPpCdiZ3RkwUetPCnm6WzqDWe4A+HHaavFOSvbNK8vJe75LZBVNIgQPs5x5GH1wUKzfIbnxwSZE5rTy50d2gLwwqKLgDgpk5Txj4mwNClOjaHQNbv7SETqGiTyNhGWhBHCtnsbRXV2+AhvDihERlsV7gfBPkK8K0EI46/zuvSZIhZIenvtTfz5XDyEgZM6miyloLBbH5rzDKHmpr5ed/4oSmS4rASUzr17DM63WTt3U/n1A+WtYSUuP5ighvjIKztXg91RX2MwkND+2AdHyppsPrI2u4FOmdRCTl3KUx9z1fPvUQjuN9l3GneHGIf2fJzanUyVpi/rJYW7eipUiO4wmdLsxCEA==
+X-Forefront-Antispam-Report:
+	CIP:131.228.6.100;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr711usmtp2.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(36860700016)(23010399003)(82310400026)(56012099006)(11063799006)(18002099003)(3023799007)(6133799003)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	5cQhBjwYHlcAbJZF6CI9MxgIy8dPqhxLYtvVnUwHjzR9ETCbwExA+oWfugIifQvAUo3JRxztueQmpmgYn4VmfLbQgHiPcWeNrl3dirIadTaWea61qQgjeAaMROZZR5tU1Lpu/97ETu2vWVeE65n7Nn1pGdP270hDzNLUqryUl4d5/fDQaPyIfputC+58FBuoSXKR+rwflRpQDH7U/yRd7aw3gkXkOlEF9i3980I/YDympVIAVZjwFi9L4iHPiDyFW0OGm3AFnZasm70QMpOl8W9ysRt6Hj1UZ/7QmrPOWStG1kINCSaCRpcEZyxJ8m3ALXivJzSrwX9LFk3qcI3b9jHediWjRx6FrapOSAhQ5GbfJxATcdLq9+pzooKmAITQq9Rf+e5WYm+WTh14JfzB2Wp1F1mzPkiO1fggdbB2bjw4n7fFZ2wR8LsH8Np1n6+S
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2026 07:18:51.2463
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 332dc418-3284-4265-5cde-08dec9e52f68
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.100];Helo=[fr711usmtp2.zeu.alcatel-lucent.com]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DB3PEPF0000885A.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB9210
 
-Le 13/06/2026 à 10:04 PM, Gary Guo a écrit :
-> From: Gary Guo <gary@garyguo.net>
-> 
-> Currently rustdoc will generate function names like
-> "_doctest_main__home_gary_Projects_linux_rust_kernel_io_rs_824_0" for a
-> doctest located at rust/kernel/io.rs:824, when building with separate
-> outdir using `O=`. This creates overlong symbol names and is also not
-> reproducible.
-> 
-> Fix it by doing a custom remapping to trim it to something like
-> `_doctest_main_rust_kernel_io_rs_824_0`.
-> 
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> ---
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-Hi Gary,
+This patch replaces existing min_tso_segs() with tso_segs() CC callbak
+for CC algorithm to provides explicit tso segment number of each data
+burst and overrides tcp_tso_autosize().
 
-This seems to break older versions of rustc. For example, with
-rust 1.93.1, the build now fails with errors like:
+No functional change.
 
-ERROR:root:error[E0425]: cannot find function `_doctest_main_rust_kernel_alloc_allocator_rs_176_0` in this scope
-  --> rust/doctests_kernel_generated.rs:74:27
-   |
-74 | } let test_return_value = _doctest_main_rust_kernel_alloc_allocator_rs_176_0(); assert!(test_return_value.is_ok()); }
-   |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+Signed-off-by: Ilpo Järvinen <ij@kernel.org>
+Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+---
+ include/net/tcp.h                                |  7 +++++--
+ net/ipv4/bpf_tcp_ca.c                            |  4 ++--
+ net/ipv4/tcp_bbr.c                               | 14 +++++++++++---
+ net/ipv4/tcp_output.c                            | 13 +++++++------
+ tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c |  8 ++++----
+ 5 files changed, 29 insertions(+), 17 deletions(-)
 
-
-Am I missing something? I'm using kunit.py to build:
-./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_RUST=y rust_doctests_kernel
-
-Seems to be working okay with 1.96, though.
-
-Cheers,
--- David
-
->  scripts/rustdoc_test_builder.rs | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/scripts/rustdoc_test_builder.rs b/scripts/rustdoc_test_builder.rs
-> index 2b1f9ba01839..fda7284355f8 100644
-> --- a/scripts/rustdoc_test_builder.rs
-> +++ b/scripts/rustdoc_test_builder.rs
-> @@ -47,11 +47,18 @@ fn main() {
->          })
->          .expect("No test function found in `rustdoc`'s output.");
->  
-> +    // Figure out a smaller test name based on the generated function name.
-> +    let name = rustdoc_function_name.split_once("_rust_kernel_").unwrap().1;
-> +
-> +    // The rustdoc function name can include the absolute path when building with `O=` which is
-> +    // undesireable and create overlong symbol names. Remap it to relative path.
-> +    let trimmed_function_name = format!("_doctest_main_rust_kernel_{name}");
-> +
->      // Qualify `Result` to avoid the collision with our own `Result` coming from the prelude.
->      let body = body.replace(
->          &format!("{rustdoc_function_name}() -> Result<(), impl core::fmt::Debug> {{"),
->          &format!(
-> -            "{rustdoc_function_name}() -> ::core::result::Result<(), impl ::core::fmt::Debug> {{"
-> +            "{trimmed_function_name}() -> ::core::result::Result<(), impl ::core::fmt::Debug> {{"
->          ),
->      );
->  
-> @@ -62,12 +69,9 @@ fn main() {
->      // We save the result in a variable so that the failed assertion message looks nicer.
->      let body = body.replace(
->          &format!("}} {rustdoc_function_name}().unwrap() }}"),
-> -        &format!("}} let test_return_value = {rustdoc_function_name}(); assert!(test_return_value.is_ok()); }}"),
-> +        &format!("}} let test_return_value = {trimmed_function_name}(); assert!(test_return_value.is_ok()); }}"),
->      );
->  
-> -    // Figure out a smaller test name based on the generated function name.
-> -    let name = rustdoc_function_name.split_once("_rust_kernel_").unwrap().1;
-> -
->      let path = format!("rust/test/doctests/kernel/{name}");
->  
->      std::fs::write(path, body.as_bytes()).unwrap();
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index f063eccbbba3..34d370ea9ceb 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -824,6 +824,9 @@ unsigned int tcp_sync_mss(struct sock *sk, u32 pmtu);
+ unsigned int tcp_current_mss(struct sock *sk);
+ u32 tcp_clamp_probe0_to_user_timeout(const struct sock *sk, u32 when);
+ 
++u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
++		     int min_tso_segs);
++
+ /* Bound MSS / TSO packet size with the half of the window */
+ static inline int tcp_bound_to_half_wnd(struct tcp_sock *tp, int pktsize)
+ {
+@@ -1361,8 +1364,8 @@ struct tcp_congestion_ops {
+ 	/* hook for packet ack accounting (optional) */
+ 	void (*pkts_acked)(struct sock *sk, const struct ack_sample *sample);
+ 
+-	/* override sysctl_tcp_min_tso_segs (optional) */
+-	u32 (*min_tso_segs)(struct sock *sk);
++	/* override tcp_tso_autosize (optional)*/
++	u32 (*tso_segs)(struct sock *sk, u32 mss_now);
+ 
+ 	/* new value of cwnd after loss (required) */
+ 	u32  (*undo_cwnd)(struct sock *sk);
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index 791e15063237..ed4fea98dfde 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -284,7 +284,7 @@ static void bpf_tcp_ca_pkts_acked(struct sock *sk, const struct ack_sample *samp
+ {
+ }
+ 
+-static u32 bpf_tcp_ca_min_tso_segs(struct sock *sk)
++static u32 bpf_tcp_ca_tso_segs(struct sock *sk, u32 mss_now)
+ {
+ 	return 0;
+ }
+@@ -320,7 +320,7 @@ static struct tcp_congestion_ops __bpf_ops_tcp_congestion_ops = {
+ 	.cwnd_event_tx_start = bpf_tcp_ca_cwnd_event_tx_start,
+ 	.in_ack_event = bpf_tcp_ca_in_ack_event,
+ 	.pkts_acked = bpf_tcp_ca_pkts_acked,
+-	.min_tso_segs = bpf_tcp_ca_min_tso_segs,
++	.tso_segs = bpf_tcp_ca_tso_segs,
+ 	.cong_control = bpf_tcp_ca_cong_control,
+ 	.undo_cwnd = bpf_tcp_ca_undo_cwnd,
+ 	.sndbuf_expand = bpf_tcp_ca_sndbuf_expand,
+diff --git a/net/ipv4/tcp_bbr.c b/net/ipv4/tcp_bbr.c
+index 82378a2bfd1e..15536564246c 100644
+--- a/net/ipv4/tcp_bbr.c
++++ b/net/ipv4/tcp_bbr.c
+@@ -297,11 +297,19 @@ static void bbr_set_pacing_rate(struct sock *sk, u32 bw, int gain)
+ }
+ 
+ /* override sysctl_tcp_min_tso_segs */
+-__bpf_kfunc static u32 bbr_min_tso_segs(struct sock *sk)
++static u32 bbr_min_tso_segs(struct sock *sk)
+ {
+ 	return READ_ONCE(sk->sk_pacing_rate) < (bbr_min_tso_rate >> 3) ? 1 : 2;
+ }
+ 
++__bpf_kfunc static u32 bbr_tso_segs(struct sock *sk, u32 mss_now)
++{
++	u32 min_tso;
++
++	min_tso = bbr_min_tso_segs(sk);
++	return tcp_tso_autosize(sk, mss_now, min_tso);
++}
++
+ static u32 bbr_tso_segs_goal(struct sock *sk)
+ {
+ 	struct tcp_sock *tp = tcp_sk(sk);
+@@ -1151,7 +1159,7 @@ static struct tcp_congestion_ops tcp_bbr_cong_ops __read_mostly = {
+ 	.undo_cwnd	= bbr_undo_cwnd,
+ 	.cwnd_event_tx_start	= bbr_cwnd_event_tx_start,
+ 	.ssthresh	= bbr_ssthresh,
+-	.min_tso_segs	= bbr_min_tso_segs,
++	.tso_segs	= bbr_tso_segs,
+ 	.get_info	= bbr_get_info,
+ 	.set_state	= bbr_set_state,
+ };
+@@ -1163,7 +1171,7 @@ BTF_ID_FLAGS(func, bbr_sndbuf_expand)
+ BTF_ID_FLAGS(func, bbr_undo_cwnd)
+ BTF_ID_FLAGS(func, bbr_cwnd_event_tx_start)
+ BTF_ID_FLAGS(func, bbr_ssthresh)
+-BTF_ID_FLAGS(func, bbr_min_tso_segs)
++BTF_ID_FLAGS(func, bbr_tso_segs)
+ BTF_ID_FLAGS(func, bbr_set_state)
+ BTF_KFUNCS_END(tcp_bbr_check_kfunc_ids)
+ 
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 26dd751ec72a..a09b00c5483e 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -2253,8 +2253,8 @@ static bool tcp_nagle_check(bool partial, const struct tcp_sock *tp,
+  * for every 2^9 usec (aka 512 us) of RTT, so that the RTT-based allowance
+  * is below 1500 bytes after 6 * ~500 usec = 3ms.
+  */
+-static u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
+-			    int min_tso_segs)
++u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
++		     int min_tso_segs)
+ {
+ 	unsigned long bytes;
+ 	u32 r;
+@@ -2269,6 +2269,7 @@ static u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
+ 
+ 	return max_t(u32, bytes / mss_now, min_tso_segs);
+ }
++EXPORT_SYMBOL(tcp_tso_autosize);
+ 
+ /* Return the number of segments we want in the skb we are transmitting.
+  * See if congestion control module wants to decide; otherwise, autosize.
+@@ -2278,11 +2279,11 @@ static u32 tcp_tso_segs(struct sock *sk, unsigned int mss_now)
+ 	const struct tcp_congestion_ops *ca_ops = inet_csk(sk)->icsk_ca_ops;
+ 	u32 min_tso, tso_segs;
+ 
+-	min_tso = ca_ops->min_tso_segs ?
+-			ca_ops->min_tso_segs(sk) :
+-			READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
++	min_tso = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
+ 
+-	tso_segs = tcp_tso_autosize(sk, mss_now, min_tso);
++	tso_segs = ca_ops->tso_segs ?
++			ca_ops->tso_segs(sk, mss_now) :
++			tcp_tso_autosize(sk, mss_now, min_tso);
+ 	return min_t(u32, tso_segs, sk->sk_gso_max_segs);
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c b/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
+index 0a3e9d35bf6f..58262e490336 100644
+--- a/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
++++ b/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
+@@ -10,7 +10,7 @@ extern u32 bbr_sndbuf_expand(struct sock *sk) __ksym;
+ extern u32 bbr_undo_cwnd(struct sock *sk) __ksym;
+ extern void bbr_cwnd_event_tx_start(struct sock *sk) __ksym;
+ extern u32 bbr_ssthresh(struct sock *sk) __ksym;
+-extern u32 bbr_min_tso_segs(struct sock *sk) __ksym;
++extern u32 bbr_tso_segs(struct sock *sk, u32 mss_now) __ksym;
+ extern void bbr_set_state(struct sock *sk, u8 new_state) __ksym;
+ 
+ extern void dctcp_init(struct sock *sk) __ksym;
+@@ -90,9 +90,9 @@ u32 BPF_PROG(ssthresh, struct sock *sk)
+ }
+ 
+ SEC("struct_ops")
+-u32 BPF_PROG(min_tso_segs, struct sock *sk)
++u32 BPF_PROG(tso_segs, struct sock *sk, u32 mss_now)
+ {
+-	return bbr_min_tso_segs(sk);
++	return bbr_tso_segs(sk, mss_now);
+ }
+ 
+ SEC("struct_ops")
+@@ -120,7 +120,7 @@ struct tcp_congestion_ops tcp_ca_kfunc = {
+ 	.cwnd_event	= (void *)cwnd_event,
+ 	.cwnd_event_tx_start = (void *)cwnd_event_tx_start,
+ 	.ssthresh	= (void *)ssthresh,
+-	.min_tso_segs	= (void *)min_tso_segs,
++	.tso_segs	= (void *)tso_segs,
+ 	.set_state	= (void *)set_state,
+ 	.pkts_acked     = (void *)pkts_acked,
+ 	.name		= "tcp_ca_kfunc",
+-- 
+2.34.1
 
