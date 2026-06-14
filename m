@@ -1,187 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 252791DA62E;
-	Sun, 14 Jun 2026 01:49:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781401751; cv=none; b=Wk6d3jW+33iFs/kv1QBbjsjUYf6p6rV7qLBk2RqFsWnyiB9DeOZIXxW1t3L3PNMRun0q2PS0FQuZVaDBOd0K8XbMXt7lvEHMI7S5OjicQtB+d0jcB3QxvX4YRRQLuqx1hbx7JlRPTzUtq9GNNJCSyLTQ358si1YBX2QB3V5sNqs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781401751; c=relaxed/simple;
-	bh=6i5k0UBlMUt12SCBmIur8jGAs+CBWD1Z12+vLx8ocyI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=G34zFcTLIEBw7EqFMx8h2y+GoLHmzBlPOwdZpcMKLm0t9v5FvYtINJUZrXropckS/KAHsmHG2FI94+1DcU43k8+4jL4L3QLE5wHhlnLqUV1nkO9ikr6zocsoFFAdhSzuXJNSh1J8y/dOHIJx++FqpatrtN9FqiesgMMIzPrawBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mp/OzQps; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16511E8826
+	for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2026 03:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781408819; cv=pass; b=X+hQ0HwJq3BhszUU5M1ZCqmFuYpK6JeqH/wxLC8YBbQtTQUX+N+rJ38vNcR6QKkYqxGviTbNpzU4RAl7v9ySLg8+j9gsqCigRWCpfxxNm9lYmsE5n480fv+X7sOQ1drqOhGErrwDrkOEfFiBKdAySDZO6oKjsRf51eRlvrulvjk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781408819; c=relaxed/simple;
+	bh=eRVFYlLNmeSGg3OY7gKvJQsWIErX/iR++Ro+lG+7u2Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ivxudQ5e/9fCsvaPn5vopgZDANQFem7bWLIkVrUrMHS5zKQiCGCaz1j+PUs9rK/dpJt/1qY17gwQXGT0nybUo3kZv+tYIfOiMw9Mp+/uIp2H8hS7LtYCPpHV/K8YE6MNHDsXjHAm1XkCZ/OO+5suNE8OQlcOknoTAe3xlFcmCxQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NLzKiCBv; arc=pass smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mp/OzQps"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EF1F1F00A3E;
-	Sun, 14 Jun 2026 01:49:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781401750;
-	bh=DFSqeE5tj30m25zsXyPJzG7hsA72SXLztYslV+9vHZY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=Mp/OzQps8B20Q+x9vuY52Y+a1iwanS7jk9TsSNHgsYMyAQa+qMKjS0EZn3ZF1FHRE
-	 l1ZRT16iD3FkQXBJj1AU4DjyMV8Qll3jT+9n//iMG74XW7vQVL4wEoyh1y9zHymNIn
-	 HFUJvHN9v1TXss0RTr++Ozt0kGLJNtslmUzLa7l5P4nRqAxHSjqtDuIg8ID9BZfuRO
-	 wZMEkWgv8ubkmrsLa3/VI9dATopAmGtNDmqSbtLbkvzUFPzNx77egjSe/RqFW3gS/2
-	 km2i/g/AGPG3sdj4+WsLLeNC4nblHeUrHwbJvO+i1Ydc2uwMIAgVDN5bMaflZlG96i
-	 Sl8hivaApEViQ==
-From: Tamir Duberstein <tamird@kernel.org>
-Date: Sat, 13 Jun 2026 21:48:49 -0400
-Subject: [PATCH bpf 6/6] libbpf: ringbuf: Reject overwrite callback use
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NLzKiCBv"
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-7e266714bd3so24782657b3.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 20:46:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781408817; cv=none;
+        d=google.com; s=arc-20240605;
+        b=PCqSzQmoxdzqO0fhe12PtYJQfR4B5H5VExjyAV8mecpuLOfjvXuEqhj/dYZ8cOhKR/
+         JDM6U+T/g/rvocq77OADBJ2TZkno4seidCrdPxWyMk1ycpsH0bp7iwqXLRGZ2ohWt3Mo
+         RZ8+uesvQHNg002zW4UtIPc1I/QPsmYPqLCbbJPS62YfEzBTYPq3Co4xFj478KWldZcB
+         QAUycA3Zfc+nuBb/X3Uony7bBPvOP8byDn7Q6FGz2cUyS20EtkCdAHfV4t+klSAUcXlb
+         BBNojvQPkwtldK29hwAwZLyGMRJ4XFoguyLMcfGsj1gxxBr21FeDp9hQYztLfhmsPVpk
+         KnVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=eRVFYlLNmeSGg3OY7gKvJQsWIErX/iR++Ro+lG+7u2Y=;
+        fh=CAP+0DOOZ1qnCUJAsDEKDeNSXbZP9992jy2YLSGv3HY=;
+        b=S+kMdZwV7eTmyj3HE1P7VHitPpTv3zOvxPOwZ+aloMAs0lugf3ulg6XU5dvEBL0V+M
+         QF8i78aD8RyaxLrYZArJgtWlwWbyYDaEPq/hefdWj52y3eKnQeZ/NQFkDtkN/MF5AoLd
+         O72ebmXgsorYHXW/9EAJgTC2kDWOTRUu3bEOTkuO0+8Sakpt9ry9fC8ytUBe1PGkmoED
+         tyGY6WGyE3SWqZF8fJlXFELRrglWROwO2H6Dwzh1/Ugu7Om6rDmkQARK0FlDm6qVnu1Z
+         rv4fBZE5zFl/p6oGNNjrOHyQb5Mp6FP8YExQdPjh+SzNh3roomtp4mvYHZp0jYaSQe6E
+         kgyQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781408817; x=1782013617; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eRVFYlLNmeSGg3OY7gKvJQsWIErX/iR++Ro+lG+7u2Y=;
+        b=NLzKiCBvHBcuw4Q5i3phBnygyZxRE1PTbUnT0uRi1oaTxA+DYtMdX5YyX3/UIR5N6N
+         qpnhdW6Jy/DGgBqFRqW64IHK2B8BHPgXORkNmthYK82/9+nB2TP01UfVmqx0w82C2tZ6
+         LGSstKyCdeo9dbbBzY9InGtBYO+XQqjdyJ6A0gTBvueripynuCUUY018H1O3ReDu3tXi
+         QxpHbhbBneOZH6JFcY9kuKYbKUJKulI5EPoqQnTFpSjHRn+bEjAnkdgTKnuuAdJsqsX6
+         ieoyv8jMBmIngk+ar3kWqKZ4Q0i0cEmyjo8Jco7anIiObAzl8itFZSXrSfZ9JSV2CWir
+         1oVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781408817; x=1782013617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=eRVFYlLNmeSGg3OY7gKvJQsWIErX/iR++Ro+lG+7u2Y=;
+        b=h1aspQ3A9DfGUKDpph0dRnfY622UvU9X+X7VqkpHCRTBbBj21lVFrLR0WFMmJMOOj2
+         UfTaguPG3qpMS3EbagRscv+iSzE6NmHi2CvZiIpfi7c0PWbjO4ucRmv2WMCtgNS16TK3
+         GlEB9RDem7Jp939KlhyuUty6ROVOa9nnzI3Bg2NPRmDv8u0Am/zyPGy3u4SEB3Yz5N1O
+         pT8nSpAFcINotGWhHWxikYqMcBEBz5PXSZarRSG6q8+fJr94vAGECYdK+5ym7s5T21Uo
+         jvIS/t1b8fFkpD/DGWCMWLbL2/iJxvQAQ6nNzbtBEckKc3/2q0hCw3jLD5ijUshhXppx
+         l0uA==
+X-Forwarded-Encrypted: i=1; AFNElJ8WWnao3sEi/J/Ojx4OzImi0U9IkbdyOtFIQZ7FM1pnNEyA0UIpmmteTXKEu2JTvZNNe4XWpl1n6UA7kvEWFKo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyoWFkYN5301oQQPaL+EJhNRYL9/NFyZDtAvSyrT4y9wk37/oOb
+	DpaLmgm8rc4K0FhsMredZcLCmRbVCad0YMrGJcRZsA2lsrNfp09N+jbw2qBbUax07Wn+WWnBMJr
+	y3opq4Ts9ib1CpaS6xm6iDsu33qi7PZQ=
+X-Gm-Gg: Acq92OHRJS90KitWNPt4nfaQ7jEa6UgcIDeFdCqWz0xzKFnvO2pgLVV5kJSDmv9sdcE
+	Zhw6S4uft/kH2hST4LrGNi3BKjPLaul8C/F+hiph8gUtWeackaqZK9v3ST74B5AQ6UMoB+edzf5
+	v/77rFkYLY3wBUqHMQZU62cs/XjPL7Zrm88DpLZI7Mdo9/7H6isBAoKJWc2gbwZY0IRyfIFRVWy
+	2aVAhNukWRysp5+x8VkBISdk6LR8MCNkiKVQU1xczKMacO0RYIT5aMVnpBirp7JieVGlbE4XaAT
+	N6B8drbH5b7fUI1MHfE9ZxtxvgjFsNUHtY+ou+l5301Dob0IDxAi+Yr/m3DxTw==
+X-Received: by 2002:a05:690c:6c93:b0:7bd:9ce7:164c with SMTP id
+ 00721157ae682-7f8c3fdd5bemr51633187b3.43.1781408816861; Sat, 13 Jun 2026
+ 20:46:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260613-bpf-ringbuf-fixes-v1-6-e623481cb724@kernel.org>
-References: <20260613-bpf-ringbuf-fixes-v1-0-e623481cb724@kernel.org>
-In-Reply-To: <20260613-bpf-ringbuf-fixes-v1-0-e623481cb724@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Andrea Righi <arighi@nvidia.com>, 
- Xu Kuohai <xukuohai@huawei.com>, Andrea Righi <andrea.righi@canonical.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>, 
- Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>, 
- Tamir Duberstein <tamird@kernel.org>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4465; i=tamird@kernel.org;
- h=from:subject:message-id; bh=6i5k0UBlMUt12SCBmIur8jGAs+CBWD1Z12+vLx8ocyI=;
- b=owGbwMvMwCV2wYdPVfy60HTG02pJDFl6HO1hgjen3oj0eSGewqdwZamwaa9/5/dI8Ucx8SsLv
- Ca7qk3umMjCIMbFYCmmyJIoemhveurtPbKZ747DzGFlAhkiLdLAAAQsDHy5iXmlRjpGeqbahnqG
- RjoGOsYMXJwCMNVTHRn+F9RkCebP+6hgvFjz3eYvLctZeqvv79LnvG5+0DF0+oqJoQz/lCeL7bH
- ViZW+7b7z20Wrn7HabIrP37lzbbQ7XZER5WfFCQA=
-X-Developer-Key: i=tamird@kernel.org; a=openpgp;
- fpr=5A6714204D41EC844C50273C19D6FF6092365380
+References: <20260612114032.244616-1-sun.jian.kdev@gmail.com>
+ <20260612114032.244616-2-sun.jian.kdev@gmail.com> <20260613102549.0061a875@kernel.org>
+ <CAADnVQJyOR0hppTmhbTRS8Sp5ci-L0fmQ6V+R9eiJDop_95rVA@mail.gmail.com> <20260613130343.3984878b@kernel.org>
+In-Reply-To: <20260613130343.3984878b@kernel.org>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Sun, 14 Jun 2026 11:46:44 +0800
+X-Gm-Features: AVVi8CeuSoLbqKZ8hO8Mj4s69jiQxW-2c__whedvojWfFSqVia9mVfTsO1WPvBM
+Message-ID: <CABFUUZFG5fybb=2A_2x-aa0Y2zvHn86sTV-ZBoLSzxLw0VLvGA@mail.gmail.com>
+Subject: Re: [PATCH bpf v5 1/2] bpf: Run generic devmap egress prog on private skb
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, "David S. Miller" <davem@davemloft.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>, 
+	Jiayuan Chen <jiayuan.chen@linux.dev>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	Menglong Dong <menglong.dong@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-BPF_F_RB_OVERWRITE can advance overwrite_pos past consumer_pos.
-Callback traversal does not read overwrite_pos, so after the producer
-laps the consumer it can treat overwritten data as a record header.
+On Sun, Jun 14, 2026 at 4:03=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> On Sat, 13 Jun 2026 10:53:35 -0700 Alexei Starovoitov wrote:
+> > On Sat, Jun 13, 2026 at 10:25=E2=80=AFAM Jakub Kicinski <kuba@kernel.or=
+g> wrote:
+> > >
+> > > On Fri, 12 Jun 2026 19:40:31 +0800 Sun Jian wrote:
+> > > > Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> > >
+> > > I did not suggest this
+> >
+> > ohh. I didn't follow discussion closely.
+> > Do you want me to revert the whole set or just remove that line?
+>
+> It's alright, I was just being grumpy.
+>
+> Maybe we can amend Chris's prompts to catch these?
+> Noobs tend to add Suggested-by for people who simply commented
+> on patches.
 
-An earlier proposal[0] copied the readable window before invoking
-callbacks. Review concluded that callbacks are a poor fit because
-copying penalizes zero-copy users and the API cannot report skipped
-records.
+Hi Jakub, Alexei,
 
-Record the map flag and reject callback consumption with -EOPNOTSUPP.
+Sorry about that. I had meant to drop that Suggested-by tag before
+sending v5, but missed it.
 
-Link: https://lore.kernel.org/bpf/CAEf4Bzaq5drHWChXoRBnrmkb6reAsSVj8r=uByFSup31FMA7hw@mail.gmail.com/ [0]
-Fixes: feeaf1346f80 ("bpf: Add overwrite mode for BPF ring buffer")
-Assisted-by: Codex:gpt-5.5
-Signed-off-by: Tamir Duberstein <tamird@kernel.org>
----
- tools/lib/bpf/libbpf.h                           |  1 +
- tools/lib/bpf/ringbuf.c                          |  4 +++
- tools/testing/selftests/bpf/prog_tests/ringbuf.c | 39 ++++++++++++++++++++++++
- 3 files changed, 44 insertions(+)
+No action needed from my side.
 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index a3b8f606a91d..899457d5d536 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1439,6 +1439,7 @@ struct ring_buffer;
- struct ring;
- struct user_ring_buffer;
- 
-+/* Callback-based consumption is unsupported for BPF_F_RB_OVERWRITE maps. */
- /* A negative return stops consumption; non-negative values continue. Stopping
-  * can leave records queued without a new readiness notification. Before
-  * waiting for readiness again, consume until no records remain.
-diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-index ea8909fec4e9..f7972eae05ba 100644
---- a/tools/lib/bpf/ringbuf.c
-+++ b/tools/lib/bpf/ringbuf.c
-@@ -30,6 +30,7 @@ struct ring {
- 	unsigned long *producer_pos;
- 	unsigned long mask;
- 	int map_fd;
-+	bool overwrite;
- };
- 
- struct ring_buffer {
-@@ -118,6 +119,7 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- 	r->sample_cb = sample_cb;
- 	r->ctx = ctx;
- 	r->mask = info.max_entries - 1;
-+	r->overwrite = info.map_flags & BPF_F_RB_OVERWRITE;
- 
- 	/* Map writable consumer page */
- 	tmp = mmap(NULL, rb->page_size, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
-@@ -233,6 +235,8 @@ static inline int roundup_len(__u32 len)
- 
- static int ringbuf_validate(const struct ring *r)
- {
-+	if (r->overwrite)
-+		return -EOPNOTSUPP;
- 	return r->sample_cb ? 0 : -EINVAL;
- }
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-index 5f0c679bf9a6..a6c707af1134 100644
---- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-@@ -684,6 +684,43 @@ static void ringbuf_map_key_subtest(void)
- 	test_ringbuf_map_key_lskel__destroy(skel_map_key);
- }
- 
-+static void ringbuf_overwrite_callback_subtest(void)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_RB_OVERWRITE);
-+	struct ring_buffer *ringbuf;
-+	struct ring *ring;
-+	int map_fd, err;
-+
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_RINGBUF, NULL, 0, 0, getpagesize(),
-+				&opts);
-+	if (!ASSERT_OK_FD(map_fd, "bpf_map_create"))
-+		return;
-+
-+	ringbuf = ring_buffer__new(map_fd, process_noop_sample, NULL, NULL);
-+	if (!ASSERT_OK_PTR(ringbuf, "ring_buffer__new"))
-+		goto cleanup_fd;
-+
-+	ring = ring_buffer__ring(ringbuf, 0);
-+	if (!ASSERT_OK_PTR(ring, "ring_buffer__ring"))
-+		goto cleanup_ringbuf;
-+
-+	err = ring_buffer__consume_n(ringbuf, 0);
-+	ASSERT_EQ(err, -EOPNOTSUPP, "ringbuf_consume_zero");
-+	err = ring_buffer__consume(ringbuf);
-+	ASSERT_EQ(err, -EOPNOTSUPP, "ringbuf_consume");
-+	err = ring_buffer__poll(ringbuf, 0);
-+	ASSERT_EQ(err, -EOPNOTSUPP, "ringbuf_poll");
-+	err = ring__consume_n(ring, 0);
-+	ASSERT_EQ(err, -EOPNOTSUPP, "ring_consume_zero");
-+	err = ring__consume(ring);
-+	ASSERT_EQ(err, -EOPNOTSUPP, "ring_consume");
-+
-+cleanup_ringbuf:
-+	ring_buffer__free(ringbuf);
-+cleanup_fd:
-+	close(map_fd);
-+}
-+
- static void ringbuf_overwrite_mode_subtest(void)
- {
- 	unsigned long size, len1, len2, len3, len4, len5;
-@@ -760,6 +797,8 @@ void test_ringbuf(void)
- 		ringbuf_map_key_subtest();
- 	if (test__start_subtest("ringbuf_write"))
- 		ringbuf_write_subtest();
-+	if (test__start_subtest("ringbuf_overwrite_callback"))
-+		ringbuf_overwrite_callback_subtest();
- 	if (test__start_subtest("ringbuf_overwrite_mode"))
- 		ringbuf_overwrite_mode_subtest();
- }
-
--- 
-2.55.0.rc0.96.gc050c23164
-
+Thanks,
+Sun Jian
