@@ -1,84 +1,198 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011069.outbound.protection.outlook.com [40.107.208.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8941CD2C;
-	Sun, 14 Jun 2026 10:23:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781432593; cv=none; b=ZkZ/WPjgGQoThBcLX+aI0FlKOQ0VRWkpIlvA4+aju7gqUGrGTUd5ESagK3qb1G1ekWN1+npGap+fHYlh1HRZFxkbwdr6JL65rjT/8oYCooDeNaW90l3ydfma2A3mheQGJ4ytIWjO0GgEDbHtzn9kbWY478iH8hnmxwfuTyJHkZs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781432593; c=relaxed/simple;
-	bh=RuwEj2ihxdijHpW/9xxHXNSYgqpQTqjL9QJE6KcwM0k=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=J+umJEnEs1AEa8xfgnMZNXRwFZaT/cu7bksOqmZb3SPGqHSqVOLZ8JdMl2+DADtNHVGe1ggZk38m8X4gwFzUyIoc+/djeRxznCB6m5qanV89N4l5ABfcCE66qCJPT6EmBEkn84E2iqbJ2A9zEx08FNe5QRsyF/b/URkehqRgBXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ealqgkai; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D8729827E;
+	Sun, 14 Jun 2026 12:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781438592; cv=fail; b=pKh5ujuljW0CpVdR1bmUNeLqwdrZ7tpigTgaZQF01C1H7NNdEZGxA4LJJoZVJbEeeyNuaqXVpHkE9o5DwTnVCb005feywUniTLTFp0mDbV0sFnIHXPn2NdsRMkdqoHuXCvXYNEmJJQlkDLuAWXrFU09bLOllDfmJL1h/M8SvHK8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781438592; c=relaxed/simple;
+	bh=4jwruzzDh7QBhP4b4mfcpa5e+NzNAfQn9Ospl+mTAa0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=pczeX2NXdNBssMdweGtXJsBB7IuiMF+AgTLFQj2aFZ3LVrvmZJBbBr8cJyfWd7CmfYUjJlSUmLEVuMqhWNA6aXt0mmmfMrwLV8+NOmF6wmmL3nW+OaXfYCCCU+jz9GMplYypz2+y38XGHHKKdF6FBAU3lB66wS46V/YxS2t/D/8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nJXe5hIK; arc=fail smtp.client-ip=40.107.208.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ealqgkai"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 315241F000E9;
-	Sun, 14 Jun 2026 10:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781432591;
-	bh=3kqt2PsjkTRNbqmgv01YobweDN9fkjlj+b394Tb6Uu0=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=Ealqgkai4qqTif1CDYIGqpuXKEUkZpWX1rrlTJZYqn4Gk8Nh8DDN3ub6KB02kVvZN
-	 x4CAJMfzUv7VEeOzFAB3PtoQc3yYUD3HTwf4SHDYxCOPZiw39hIFVIG2P3LduzPW1O
-	 pYj58K3ewGrckUmR6B+zCng2vz4C8k9AXgGN1kirbidHcnCW6EYXEC2qG151+cN8Q9
-	 Eo4X70VM1fItupStDRQjHyA44R5N/eHuCNoMhHyDUFO5cGpMx5FaT15HKm76d04nK2
-	 ab5dFLosIzV4tt0xcUzjbzAcIhNkjI2iCb2nblLkldnpZhYU+ABp9SfjlyB5tjMQwm
-	 NbmQbN8BkBe5Q==
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nJXe5hIK"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hCJj7Zi2xySDS6K+IP8E91uKHNCXizUrZwzXN0B+PgSvGsc2Km/x+GFIwd8IOkPb42oIfwss35eHqGMY17ORtdYEMsDipFuCs8fYix8g8A+DM72LuMpYWP4l1ki+8TyHAsFHGD3swQF0ctvI/HKpe18xaq6PfNGqypVcARs6TQEkLZgIq670VhQ8HpJWIfJ1yZghHonUHrZSK2mLC9hdWlGUcD5osUXkd1fn9T0CEu2ltY+/LfSNYUKQxRDQQNcyWXuIwGJgdNHe/6zvb9x0ExQb69cJpu0YeJNKCQzi7xvONTDl4vdVCb163FfRX2vklsSOqo7Tju/zB+uPtnfNFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D0s1j+HoPahgSYzHmxzvm0qVH8oI+m+/rpRV7xxb9DE=;
+ b=weKkU9S0XEQzWDl1MRamx3fbIMeGTXkhkhu8TN3pyX/jEdZtKNLZnopyBZiWBzgkJr2Tgf/gFtbaJqvffwNZ6bJ1Ma4/Nvq197Q0RKqdlp0OrD4tOMtyFZn587qvZLAXyN9pa1+atxgrpVI5yogETcEdKX/ocrQpESA02NGpV3/5a4rnPODnbAJmJEKeG+i1bdotcTabnMX8k6fNgWVGz+21gP/CZt/uRDbzI9zZDbRhL4l9bjXjk8rM3g/wSdtuMKpfxj31T3t8M/el1Gec9mt/ULUf+9VVYLBhG76rVlSiDujy/ZBySnnLVNBWnZGycbUrdbprbWQs/BM4x1N94A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=D0s1j+HoPahgSYzHmxzvm0qVH8oI+m+/rpRV7xxb9DE=;
+ b=nJXe5hIKdrThnp1FM63sQnwVLCtZufh316j7bbtIGKMq54rCJ7fay85y1lkRZDV3BmrriPFyhcwykBJhjKkom4dkeTJkxA1/vtfTl6OGAZ8zDrg34j+PwvQNcfmqnomnYL/KuG3YUVOXJPwCAi+eMLkmCPHC6iYTMEHtwsVqlY0lQspqhllPzlu16PieXa2L0SwRA9h8QjDuhxOllpZgv4ZS+3uMG/l3h3T9sw21/iK865X+KraJclNtCkzrszQnpMVVyEvh5cA1Xmv5eZ7KyEBfgUT0NEBd9K4OKRq11sSlsm5tlC0QvBI1U7v9KNilxmKhlSXFkH669nhnAtOJdw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY1PR12MB9558.namprd12.prod.outlook.com (2603:10b6:930:fe::13)
+ by IA0PPF95ABFC125.namprd12.prod.outlook.com (2603:10b6:20f:fc04::bdb) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.13; Sun, 14 Jun
+ 2026 12:03:05 +0000
+Received: from CY1PR12MB9558.namprd12.prod.outlook.com
+ ([fe80::920f:8246:c48b:7ce9]) by CY1PR12MB9558.namprd12.prod.outlook.com
+ ([fe80::920f:8246:c48b:7ce9%4]) with mapi id 15.21.0113.015; Sun, 14 Jun 2026
+ 12:03:05 +0000
+Message-ID: <bdbcd7ab-68cb-461f-b21b-814685764461@nvidia.com>
+Date: Sun, 14 Jun 2026 15:02:53 +0300
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH iproute2-next 7/7] devlink: add scope filter to resource
+ show
+To: David Ahern <dsahern@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+ Stephen Hemminger <stephen@networkplumber.org>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>
+Cc: Donald Hunter <donald.hunter@gmail.com>, Simon Horman <horms@kernel.org>,
+ Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Saeed Mahameed <saeedm@nvidia.com>,
+ Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>,
+ Shuah Khan <shuah@kernel.org>, "Matthieu Baerts (NGI0)"
+ <matttbe@kernel.org>, Chuck Lever <chuck.lever@oracle.com>,
+ Carolina Jubran <cjubran@nvidia.com>, Moshe Shemesh <moshe@nvidia.com>,
+ Shay Drori <shayd@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>,
+ Daniel Zahka <daniel.zahka@gmail.com>, Shahar Shitrit
+ <shshitrit@nvidia.com>, Jacob Keller <jacob.e.keller@intel.com>,
+ Cosmin Ratiu <cratiu@nvidia.com>, Parav Pandit <parav@nvidia.com>,
+ Kees Cook <kees@kernel.org>, Adithya Jayachandran <ajayachandra@nvidia.com>,
+ Daniel Jurgens <danielj@nvidia.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Gal Pressman <gal@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
+ Jiri Pirko <jiri@nvidia.com>, Petr Machata <petrm@nvidia.com>
+References: <20260609053953.487152-1-tariqt@nvidia.com>
+ <20260609053953.487152-8-tariqt@nvidia.com>
+ <943b4932-17f4-4a52-af92-b9485a0e8c7a@kernel.org>
+Content-Language: en-US
+From: Or Har-Toov <ohartoov@nvidia.com>
+In-Reply-To: <943b4932-17f4-4a52-af92-b9485a0e8c7a@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0343.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:ea::12) To CY1PR12MB9558.namprd12.prod.outlook.com
+ (2603:10b6:930:fe::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v3 3/3] selftests/kho: add LoongArch vmtest support
-From: Mike Rapoport <rppt@kernel.org>
-To: George Guo <dongtai.guo@linux.dev>
-Cc: Huacai Chen <chenhuacai@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Pasha Tatashin <pasha.tatashin@soleen.com>, 
- Pratyush Yadav <pratyush@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- George Guo <guodongtai@kylinos.cn>, WANG Xuerui <kernel@xen0n.name>, 
- Alexander Graf <graf@amazon.com>, loongarch@lists.linux.dev, 
- linux-kernel@vger.kernel.org, kexec@lists.infradead.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, Kexin Liu <liukexin@kylinos.cn>
-In-Reply-To: <20260601093930.112758-3-dongtai.guo@linux.dev>
-References: <20260601092823.110362-1-dongtai.guo@linux.dev>
- <20260601093930.112758-1-dongtai.guo@linux.dev>
- <20260601093930.112758-3-dongtai.guo@linux.dev>
-Date: Sun, 14 Jun 2026 13:23:03 +0300
-Message-Id: <178143258399.2123877.4049283498071192411.b4-review@b4>
-X-Mailer: b4 0.15.2
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY1PR12MB9558:EE_|IA0PPF95ABFC125:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a075ddc-b9d2-4bfc-0389-08deca0ce438
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|23010399003|366016|7416014|376014|22082099003|18002099003|6133799003|56012099006|11063799006|4143699003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	aJ+3AjzVq3C0c5Ux9zHWS4RXRZm4VkocxpbS5ierviSHC3F1C0y/s+PUCd5weiOREjpdTMSuA53Mh9Ep5Hlx8qdupMxky5UJpDvJ3po1r4C/6zwHWeAfyaapklS2HweWAL/xJTtL4Ma6j7baOOHTEjl9esEJ8396KOqC43mYOpirGhy+aOxWSYZF1roVwWdTUXIQgtJKZ7i27gYQYgekzWcCG9eg07JU0+Bt0wWOiumtA8qP/Qg1+ZsvNA8zts7GJwlsec2M/6xtrQKUNkq2x90lLlsBifGbX4iU+WlbnUo97zFHzymLXuEnJAP9++K42YYdzMq2P11Y48iSN2soXR+wG92SLV1UtW3Yyz9AxfGxxa5EfGC7PFyKmPLORtcuAM98rD4tlQEqE3JsKBPFnrHBzK98UJdJwKG1fwijaXMUhaBoOtfRIMVqD5gv0gthLdac0tifJMcycl1fPzbCZN7nV+gaZQWU6T7okXgbmOR2tuTPZ6fWeZDeN2nhkyt1iv80mvrGUahMa/s/pKzzhymmEyLyOeHSwWVltn81ExjETmQlb7l7J/5isXOl+VDGENOUAbYqrNTSjvQOCT7tTLIZaazRGSVlgNuZRQSRSU66mTPA+TVt2tuBoacMhxyafaV/JdK7GOfDeCrSQQxUmPg7NQWOYtao/Y95xHNOo2qp82pqvRbX474gXIWMrhuP
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY1PR12MB9558.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(366016)(7416014)(376014)(22082099003)(18002099003)(6133799003)(56012099006)(11063799006)(4143699003)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UWJ4Yk53K1dKaW4wdlg4dlhFaStPNEU0YmcyRSs3UmZpVkt5ckkwRytORmlj?=
+ =?utf-8?B?WkpyMjhhRTQ4ZHA2NlJuV0lrY3FPdFozM1J6T0UzSCtHOVVRbXNFVmFqYkZu?=
+ =?utf-8?B?Zlp6QkhKN3I0OTNQN3hCQUpFSlR1V0c0UFAvUVVQN1pjaFdzQ2JHdFdkdnVO?=
+ =?utf-8?B?czlTbzVKQmF3b0hyTFhqUm9oZ2YvYzBZWWsrSHM3OWxEcmhPN2VzSURhNFpj?=
+ =?utf-8?B?L0pYSzdmdUVlZmhBRVpZWWNaOXZTcHhMV21ld3FzZGNCMUxQMlJoVDRybkFa?=
+ =?utf-8?B?aXlMNGtwaDA0ZXBER20ySFV3QkM2NUR5Z2hUSmdZVnFGMG9qOVhUTVgwK1M4?=
+ =?utf-8?B?dDRmMTIweDhyaFF0aVJUcmwyMEF0OVVUVkRpeVJaa0hpU2RNU21uK3NYNWMx?=
+ =?utf-8?B?QW9KejhQL0EvVUdaZDlJVUVMY0wwNFhYK0VvbHRwczcydXFpUkJUc250V0t3?=
+ =?utf-8?B?RjFrYitmZDcvdTdhd3hmM25Pc0VBcUdYSWtiU1JzRVczdzVzM1JYUWxybUhJ?=
+ =?utf-8?B?YkN0LzhISGJ2Yi9tUWtSRnBiaFNESEp1U1BBRmJJdE9KTjI0a1dKZnI1NEJz?=
+ =?utf-8?B?bUVvYytEa2thZHprRlp5aEFaTkFIbHFrZWxWZGJJR3ViTzU0aGVGMlJPM0Vm?=
+ =?utf-8?B?OEM5Ulc4dk9DMy85WHZaMVk0b1hLM0d0OHNnL3FPa0dqWkRwQjJwcTRTZnlM?=
+ =?utf-8?B?dCtBM0sxaXJNZldmMEY0a0kyTU9kZ3UydWszVUtQZkI4alJtYko0ZUlaRHV2?=
+ =?utf-8?B?L2dsanR3dzVZSnVoY2dEOHNGaXlWZWhFRkFjNFdselZzTVFWczNmbUZBbUl0?=
+ =?utf-8?B?Z1kvV3g4TkFvSW9hUHpQdElBMFpKTnlWTWFsYld2VjVocVhlMjNrem5rVys5?=
+ =?utf-8?B?NGd4MHltZHJaV2NxRWZSbGd6WnhiVDFaa0xJWFR5YTIrOEFkOW9ENzVMMjVI?=
+ =?utf-8?B?ZWNEN1l2THJPcFloRGEyTXZxbWRYc2p6TWZkNlZCZlVXRmtvcmU2SytDTU9l?=
+ =?utf-8?B?SzFIRUlZdXFSZkdQQnYza1ZiWDhLWjl5QlRYTE43MEwvUHBaV2RQanN2NG4v?=
+ =?utf-8?B?L1RpTmZPenYySFp3RVNaWWQvbGRwLzIxclphQ1NndExuUzFGTmVyOXlTQ0xn?=
+ =?utf-8?B?MCtObFBUejRrOTBjaEtMcjZ4K01sNzZyS1hzZ2ZKZXloQkhnYXZoTWluN3VQ?=
+ =?utf-8?B?SFZ5SW5rR3lWUUdNWXhHR3pTaVlkM0xsNGxSN012OTJBQVVaQTArUitJaUd0?=
+ =?utf-8?B?YW5tVmw4aXlucHRENU9PdGQ1dE56QVZWem5pVGRGZXRXZkpkNEVieUN1dUNr?=
+ =?utf-8?B?WG1tR3BnQW1qdUlSRjNqSFV3OXQvREpDUkhhME50R0pITjhnNnVCRzVHVjJh?=
+ =?utf-8?B?UlRFeDlqemxDUEdMY0c4SnY0bTAvQkJqZEJuRUhGRWQyTi8rdHp2THVYZ1Uw?=
+ =?utf-8?B?ZWhlckNwbUdLd0tVRGlxYmMrNERaRXl1Rkp5QTZsSHhYVnU1ZC92UUl0QUpU?=
+ =?utf-8?B?R0JMaVNld1cwbHExd3luUVRoY2gxV1hIL1BtdG1jTktxUjJ1ZjRHZi9DMHdr?=
+ =?utf-8?B?NlZ2TXEvRzY4cS9HZGo3MVJOTzZpdmlSNlMvTzhmRXdtbFdYN0JPVnZmM0ZR?=
+ =?utf-8?B?ZlVxSWhFeVpWalYzeHRpalAvOWR5VlorWUN1dE5UUE9XaTgzQ1I5VkQwQ1Yv?=
+ =?utf-8?B?U2tDQ1prSXI1alFDZnpoQ0ZkTklZTEhJN1l6YzF1MGJBV0s5L0RwL3VtQXA4?=
+ =?utf-8?B?RVEyVVZpbkVGN0dOK2VWdXU4SXlUek1Lb3RxTjJLdkJnVmFJclRzTWg4empE?=
+ =?utf-8?B?SU1BemUzODdDNkxzZGYrdkoxNFVQa2J0MTdVcEM2MW9zaWNUWWZnVE04NFFr?=
+ =?utf-8?B?TDYzQ2pKWVZ2djVQRXJJM1YxNmlQaWkyTnpZeTBDVWREd0lYQ1V0U0M3Nm1t?=
+ =?utf-8?B?NktwOE53SlBRY1IwTFptSGJmQ25QeWlWK1JwcDljbC95WFpLT0E5ajBMQWdk?=
+ =?utf-8?B?NEwxMVdrNlljU2JLY0xuNkVmL0pOTU5RQmNlVWxFd2FDSU8xVzRKbDNDQlhm?=
+ =?utf-8?B?RnlZaHhZZjNSZUpqUWU1aXFCZk5rdjdwcDIzdkpoRXZxbUUzN0VXUE44VmMr?=
+ =?utf-8?B?TDBLaGNOdUdxVmRwbEQwWE9NZ0J4M0tiTnFJMjZEVk5RMnpFZzNrZWVyM29K?=
+ =?utf-8?B?ZGZaNGMwY0N6bWtZWmFTWGR4SlQ0elZxNnVvNkpQcTZlZGZnL1Q1WDkyM1hD?=
+ =?utf-8?B?SDk5ZU9OTGhIKzJ0SkVsTzBaaEJwc0xsVUJ2YU9QMm9CMDRzTEVYLzNjV1J5?=
+ =?utf-8?B?Nlh5UnBBbTJ5cCsxc201MUl6SStMTFBNbENDYU9XTHpXT29BQTVwQT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a075ddc-b9d2-4bfc-0389-08deca0ce438
+X-MS-Exchange-CrossTenant-AuthSource: CY1PR12MB9558.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2026 12:03:05.1975
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: O0/XtkC9r5CM50KlXWBe9LIqNPd5ZLVFxNGbTWIfXEiCvMcEh2wzOveI4yICgnyq1Fdowkql9TanfVWwG3nu/A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PPF95ABFC125
 
-On Mon, 01 Jun 2026 17:39:30 +0800, George Guo <dongtai.guo@linux.dev> wrote:
 
-Hi,
 
-> Add loongarch.conf to configure QEMU's LoongArch virt machine with a
+On 11/06/2026 21:53, David Ahern wrote:
+> 
+> On 6/8/26 11:39 PM, Tariq Toukan wrote:
+>> @@ -9010,13 +9029,29 @@ static int cmd_resource_show(struct dl *dl)
+>>        uint16_t flags = NLM_F_REQUEST | NLM_F_ACK;
+>>        struct nlmsghdr *nlh;
+>>        struct resource_ctx resource_ctx = {};
+>> +     struct dl_opts *opts = &dl->opts;
+>>        int err;
+>>
+>> -     err = dl_argv_parse_with_selector(dl, &flags, DEVLINK_CMD_RESOURCE_DUMP,
+>> -                                       DL_OPT_HANDLE | DL_OPT_HANDLEP,
+>> -                                       0, 0, 0);
+>> -     if (err)
+>> -             return err;
+>> +     if (dl_argv_match(dl, "scope")) {
+>> +             const char *scopestr;
+>> +
+>> +             dl_arg_inc(dl);
+>> +             err = dl_argv_str(dl, &scopestr);
+>> +             if (err)
+>> +                     return err;
+>> +             err = resource_scope_get(scopestr, &opts->resource_scope_mask);
+>> +             if (err)
+>> +                     return err;
+>> +             opts->present |= DL_OPT_RESOURCE_SCOPE;
+> 
+> Comment from Claude that seems legit:
+> 
+> Issue found: In cmd_resource_show, the scope path sets opts->present |=
+> DL_OPT_RESOURCE_SCOPE without first clearing opts->present. In batch
+> mode, dl->opts is shared across commands, and the non-scope path
+> correctly resets opts->present via dl_argv_parse(). But the scope path
+> bypasses dl_argv_parse(), so stale bits (e.g. DL_OPT_HANDLE from a
+> previous dev show) remain. When dl_opts_put() runs, it writes the stale
+> DEVLINK_ATTR_BUS_NAME/DEV_NAME attributes into the dump request,
+> silently filtering to a single device instead of all devices. Fix: use =
+> instead of |=
+> 
+> Are you ok with the suggested resolution?
+> 
 
-Please spell out "virtual machine" here and below or use VM abbrevation.
-
->
->
-> diff --git a/tools/testing/selftests/kho/vmtest.sh b/tools/testing/selftests/kho/vmtest.sh
-> index 49fdac8e8b15..918698b6dd2a 100755
-> --- a/tools/testing/selftests/kho/vmtest.sh
-> +++ b/tools/testing/selftests/kho/vmtest.sh
-> @@ -107,12 +107,20 @@ function run_qemu() {
-> [ ... skip 14 lines ... ]
-> +		-kernel "$kernel"
-> +		-initrd "$initrd"
-> +	)
-> +
-> +	if [[ -n "${QEMU_TIMEOUT:-}" ]]; then
-> +		timeout "$QEMU_TIMEOUT" $qemu_cmd "${qemu_args[@]}" || true
-
-Runnig with timeout can be actually useful for other architecures. Let's
-make a local variable for timeout of 120 seconds and always run qemu with timeout.
-
--- 
-Sincerely yours,
-Mike.
+yes, thank you. let me know if I should resend.
 
