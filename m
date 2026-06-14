@@ -1,252 +1,237 @@
-Received: from CWXP265CU010.outbound.protection.outlook.com (mail-ukwestazon11022089.outbound.protection.outlook.com [52.101.101.89])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1638F23A562;
-	Sun, 14 Jun 2026 13:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.101.89
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781442124; cv=fail; b=qPN51W0d3+2QZZpBhvbpQ48YIg4f0nODAR+TGLA8T27kyQPHDeUx/3tUGue1mKw4qcYMOS2X758SRLsXXi0bClaOQ0iePoPhTKNCU55klx2Eh8Cp+lb8FIxEiD4TLbdaGttBoD6wcCBthyIZjftjN7WpIi0RYQ1r5zMpd5fsiF4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781442124; c=relaxed/simple;
-	bh=iuuc5XVvOUQF9xfcH1MCUJtHLeSXeg4TS8+OQajrqBA=;
-	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:References:
-	 In-Reply-To:MIME-Version; b=tSWXfPvMIvRY+Ka/dsM1KNcxWuurpmV9ODW+Hiy3fBVg0gLvDwbynzQJV7CXBQoNasT36V1g1jzU9THfjwhmF6Ep8NPQ4O1+h5x1PsPrsYQ1QqEVSOILHVGXbR65kgSZGImHCwdXFSXfPfYokAnKNLSh4XmCXXEePvHOPos/2Sw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=oimdvjlN; arc=fail smtp.client-ip=52.101.101.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89283A6EE5
+	for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2026 13:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781445292; cv=none; b=K4sjoao6uSUjEZsJMd2vAhXDFtlnNR2L78ty2T/QPoy2HxIKZyIKUNNb0oMftMSjASAsjFw7uuI0oCips2jzKjqVYsYokWNlQKEKd+/6OGGzovp01YcZdFlEgz+9yaVmBMTC8Qo84vr2cp1VOs1q+/TrJZCzgOhiVrJ/Y/06RCU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781445292; c=relaxed/simple;
+	bh=8IsoR48HYHt8z+6h+CkbVkeNVCfnjoxPmIGyuZitupw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hDTSwHebCQhrOoggWvF6LLnRP0t55ZTsiMCTP6hRX7uCseuC8lng9Uy/KYg6McMabzpEOVFr/FgOReEE8l1bpvJL1WpSfSe9bqc3L7u0nW1ZIIVbujNxcyNJBeKT1eN+Kg7R8Hl2U523dGlbKFHuOEjzRA5/Elhsaf7I2Iik/RM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Pzn4EWeE; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=rX5jE8SH; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="oimdvjlN"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lfDZ87HOZH9FHEMP0BsMlwQ/AW3xYmQgZd4VkRa05FpMskLyE6daagZsp032H5uOCIBmFfIQG7KHoKnsWdv1ZHQtQLrADZO4Swhi58zAoOykOVMZxjdez2vQ4EKmJ9+W858fxxuog/l+J42W0pYMmuCYFSC82vxQk9XoEmMGuBsYB3O4FYaQGI8/Xany/X0+ZMMUI+GXouOyoW9KSz9bjgcaKNyjK1M5jYY2eFEvt46nzcP8yS4WgovoOqnA2E1Ji467h2ntAOGBGMky/EdajgtxYuknKJX50fznyOx84cHstMU/z/JMXQJoTMS/IcmTNjYzKKmkQBf5vNTLtkz17w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bL+lWhcyHO620OulB+XnhsIaO1prnYC8A5ulTfo9UBI=;
- b=WHK2gpdXASqDJrWl5ZdgIU6y4f6bozMCKI8UFO/EK3X68q1vnZAL5EAc2Vok8nSoCKoteh5NhCx9APYqMyOX7IuhSCwVXTEZ/yKAnbFUQO5orm1VrY8cU3m9USO6c1zUPUIJn0lwJdN1Sdg+MkWLiKpxj6RmJPsBDAX8EptPxoNL0tek2nm8X6fqq9scW1DYw2pRXYv+CTJiiE+ABPNgYbcTot2QJZm6xUovtAOTD5AAgKXGOPzmhjRUkgKvnNO6z0prP3EgApW0SZmuNBZESs3wpGP5fzZw2g5Ir9+Mup6Q83DAitHGx7+bR69uCGYk8GbOKZUWOMghYbbq/QGPRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bL+lWhcyHO620OulB+XnhsIaO1prnYC8A5ulTfo9UBI=;
- b=oimdvjlNL8Y8DUvQIOtM0zOZXpNs7FFj78aRCaJTdZoieGrHvaixtHDmmwNCkulI9zyoIlo1f5gEF1WjzcsDpFxk6oALU2JVA0beC9qHjjQSj0GfdCmGfNLecOagRa733aGB0ZTQS23y9btBWkIaY0vPgVIM/8H79Os4LTe0aLA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
- by CWYP265MB9335.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:295::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.17; Sun, 14 Jun
- 2026 13:01:57 +0000
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.21.0113.015; Sun, 14 Jun 2026
- 13:01:56 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 14 Jun 2026 14:01:56 +0100
-Message-Id: <DJ8SIY9SCW97.ZOTSZPBIKMWV@garyguo.net>
-From: "Gary Guo" <gary@garyguo.net>
-To: "David Gow" <david@davidgow.net>, "Gary Guo" <gary@garyguo.net>,
- "Brendan Higgins" <brendan.higgins@linux.dev>, "Rae Moar"
- <raemoar63@gmail.com>, "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng"
- <boqun@kernel.org>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
- "Trevor Gross" <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Igor Korotin"
- <igor.korotin@linux.dev>
-Cc: <rust-for-linux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <kunit-dev@googlegroups.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] rust: doctest: trim function name for
- reproducbility
-X-Mailer: aerc 0.21.0
-References: <20260613140431.232471-1-gary@kernel.org>
- <20260613140431.232471-2-gary@kernel.org>
- <5f5c5555-466d-41ac-8187-8b9ddc14965f@davidgow.net>
-In-Reply-To: <5f5c5555-466d-41ac-8187-8b9ddc14965f@davidgow.net>
-X-ClientProxiedBy: LO6P265CA0001.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:339::9) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:488::16)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Pzn4EWeE";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="rX5jE8SH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781445290;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+581tBiHg3KRDIQb4ilM0CwMAPM/nzYQ3rJCv1cD2EY=;
+	b=Pzn4EWeEtnrncyM63cD9IVj7aFF/qGuM3eE5sofX+PT6sgsJ+YaYBdFY9tM82KjW8IirG0
+	A0gylr/vFQXRh5k4nf68Y/ZD1C+R6u8ZAdqU3GG1QehUfVnlPwPkwl6YE8Lc56IP2Prr1Y
+	AARmjSSfy4kGawTK4nK9ePt8wJuip/E=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-70-WuomSYblNyCWrTdp-Vu0Vg-1; Sun, 14 Jun 2026 09:54:48 -0400
+X-MC-Unique: WuomSYblNyCWrTdp-Vu0Vg-1
+X-Mimecast-MFC-AGG-ID: WuomSYblNyCWrTdp-Vu0Vg_1781445287
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-45eee3f9f03so2317465f8f.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2026 06:54:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1781445287; x=1782050087; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+581tBiHg3KRDIQb4ilM0CwMAPM/nzYQ3rJCv1cD2EY=;
+        b=rX5jE8SHxumxpskZ/a2PJckMo6Qgv9YvWSvqcb5mfPB/a4CppXbkJgxPH/ObktOQpQ
+         cOy1Y4Jh2UWdyOOOaF/sHvpNc1M6WJVpFcFAaEKMB1tncSEPnART8kw7ideNg6HDqgwF
+         QGEMOGNCJe761MAnPAFrb0sKuGlqou35v+DHkTwqHl7MC9Ey9NR6fvD7JidB/ZGPJOrv
+         cR1I+/SMzChgsCL4XFx/OpocVMli5vwuf6uOfAkkKXWGtwIYSei7JS2heLun+jYSrGLz
+         1QZvXvhpjY5Hjy1O3+q+EmOAwJxMDW4FzHH0f7be/LIERXkEARnrmkPVakHDeKi2eYKR
+         k94w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781445287; x=1782050087;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+581tBiHg3KRDIQb4ilM0CwMAPM/nzYQ3rJCv1cD2EY=;
+        b=VR1N/rdW/c1FJbybDqoxdsjUk9xnZ3sh8qCTh2Nx1qi8FtAWxKZ3xCzCM+xgQB13Fm
+         OpDUTEtEwGNbpNDVbBUWLZJhvepraABVBWn2LGeDQXgKrKKlym+SeROmcnLP6s4wxNpL
+         w909isA2JW9cl12mJhfkkQ/b95XG+aHjc5qY3FumImiZ9sppdxo4yrTh8FDVKwvoyLTY
+         T2tlwZula1eL1Lw8qLfnyC/lLuj1/anR3EzWNbxFgRTICeaJUO8fPgIMoEw6Yc1DtQrO
+         7qz/lBXEdoueXiu1BLBFD2co74JT2NAmrzfS8HiTOmkiWMobH7lFSbzDnbrR6hGs9nxC
+         CNSA==
+X-Forwarded-Encrypted: i=1; AFNElJ/d3vFw3MkjtH3Rn+M5/9wj/VqwWgYn5kfMEno1qzIwMVug11KFr3KC7yZT/yzHj0zDcsFDZZNYLpewHWsFP04=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yys8ioBZ+UlSs/n187Z3fUwlRgscz7VGjlHWINILiSFUAeqFRwt
+	ScERyJaB9opsYkeKce+YFKY4jt7xrEyKCOFVsnpWVus2YEX3UpT6VMWkq2Zlp52Xhv4C8NZtJMC
+	0YjHaNQBxo2Kl/skE1q9mpgMydrVEigionb5KZV5GPLVpwi3O0YXvm8Gj0hNuWfN2B+t2bw==
+X-Gm-Gg: Acq92OGJM5cyaImTtl0H6dDhn2JTpzLSkcxatSU2Kg8ymQ9gP/JI8rsgGr/sMXpIBN9
+	Q6G+2TZgG/+P260KfSVRdUUSFT9KYD4FWPE5hTm6ERbnfaT/W1ZwRsAkiDs59gdJbtxQ+Xjd3SS
+	zy8vVe1ySkRV0eU1QG4fpsR3vmFeGoW0eMC624Ik0l5h3GlC0Dbd1IrbI5m9w7oXgRvm/arFkKj
+	EPYCdJYsDDsoQ9BRgfxNVUXKi14L0CRN/CImBE5z5NJGmi+60mKbK+xOGkicmzOhehnA7+T4W+1
+	RidEq23ZfC/E5ac/r+O1b6NtLiQGgu74Dbq8QW9kSRbxU1Km1qbIQyrpfLJKDN2b9bdM7as5gYL
+	h0bL6saxwhH+bF28tvd8gcs4Ndy11MYB4oNlDjO0oIYq4sv36I0nwS4s=
+X-Received: by 2002:a05:6000:40c9:b0:45e:f684:7347 with SMTP id ffacd0b85a97d-46074b822a5mr9486011f8f.12.1781445287247;
+        Sun, 14 Jun 2026 06:54:47 -0700 (PDT)
+X-Received: by 2002:a05:6000:40c9:b0:45e:f684:7347 with SMTP id ffacd0b85a97d-46074b822a5mr9485972f8f.12.1781445286781;
+        Sun, 14 Jun 2026 06:54:46 -0700 (PDT)
+Received: from [192.168.88.32] ([150.228.25.72])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2b1056sm25168865f8f.18.2026.06.14.06.54.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Jun 2026 06:54:46 -0700 (PDT)
+Message-ID: <6ab86192-f0d4-4a00-83c9-3fd6449dc9dd@redhat.com>
+Date: Sun, 14 Jun 2026 15:54:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|CWYP265MB9335:EE_
-X-MS-Office365-Filtering-Correlation-Id: d521a7fa-5347-4a8a-312b-08deca151d3f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|10070799003|23010399003|376014|7416014|6133799003|18002099003|22082099003|921020|56012099006|4143699003|3023799007;
-X-Microsoft-Antispam-Message-Info:
-	5GaMkJMrx0Tv2SGycgbZDqpBnjugt7UTnhVJehsg2GpzzN5wT20gyKjVedEp1vRhgStw1dYBywkvxY7kyfetjDHu8kMeer1OXKjHjoixlV0Fy241aLImv09PEKswKnrraVCZIgE+KbgH3xfB2WJ8xWYG1N0ss+R6PBM9OS9imYJ4KP6rrVDjdF6ze+4/aU5uVE+rByk/7woKbCgYkXiSkQY5ETZu9TX1PufB76/acLsg627fGfGkWFktyJbZTfVO3c0/PUlVct/mTtyBb2KqoJs6LOpM4/2lRW4GrFHg/b9KJi0dpxd0sllcZTZGobG/B+ktbzGow2idTaZURCzFpqvErmSVVkr9dAaUlNlya3pxQsSF59GyxE88Xt/JOvQhTqg82L6TeyXuhZyWmrAnbnONcyePgfQ2qdwDn9SS+BgQ0N/roYbWOzFrkkq0jQHyzBRtojJdSM9LyoUxvIOOUD+gNm09s/xVwKnfX2Nmx7MA0L03jPdhkA8LkKezhimMm3g9VWCb6KVxcv9Sfw2RQcfyR0PRBYib4Bv/3TJ0yXfrrHs6+zQyY7ThPvD+DHT2sEKA4obOyIvJ1hFQRMwH+VB3OssW38NVii9OvdLwPS0rtJV5kU406fzQr4B4+E6pXarbC8byHQMCmC0Da27lqxukTT5egVEvmxGm882r3Oxtt1mghqyS2n9oUHNsofN8R83PrnERHK4dQzHJw0qLMfIdWOjHU7n2Y/68AXNtLwQ=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(10070799003)(23010399003)(376014)(7416014)(6133799003)(18002099003)(22082099003)(921020)(56012099006)(4143699003)(3023799007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?azYwT29pUkVIWi92NlBSK3FDUFhPb3BvRUkyQlJBWm5LdXAxOERFTW5zdVB6?=
- =?utf-8?B?SGFXUW9wenZjOW9BdEZEN0dpWmdqdkMyM25qY3U0YlJCeEdWSENHTUVTS3lx?=
- =?utf-8?B?MjZqR3hJT3c1Q1Rob2FYbDdmWDVrSEEyUExhVnpTUDFBdmh1NW15Ky9sazk5?=
- =?utf-8?B?NzJlZjM5QzlGVUxwNFY2NkFhTUpGd1M2S2xnMFdYZDgrNE1NTmw3WTZZSGFC?=
- =?utf-8?B?RUw3TndrbGFLbE5ZWWVQcUsxazRUcjdEOFRxZVlUcDZ4RTJ3RTZCRHpVQWpB?=
- =?utf-8?B?ZElwamNXRXBSWnMrK2I1bWVMbE1UMHBIK2VLVHlxMGVRa096UUJnV3JHWUQv?=
- =?utf-8?B?S0ZzVGFQZ20vYW5hbWtmMlZnSXA3R053dERMOUlYTW5TY3BIeE5WZVdsM0l1?=
- =?utf-8?B?U0puaDh3TGpXZ0RjT2lzOXAxZ0N2SDFkcHdGZEtTckFpZ0dzVVV5cE5BWFpt?=
- =?utf-8?B?WHk4L1Z2N2hUYy9CQjAwa05oaGJQRGl3RW83dmpwUCtIRnM5dnV2VWNEcm5X?=
- =?utf-8?B?WXJ2K0hINVgranR6WUxGMXpBZlFGaGxoRnl1aGxSNFBxSTRqcGQ3T0kwTUg0?=
- =?utf-8?B?dkcwU3YxQzNWeXJLaXJTWnl4b0hOQ0FQOEQ4QlhiQWhYd1A2Y1FseVU0TE00?=
- =?utf-8?B?eUdDdVlzbnUwK1E3QWxDZ0hEZkxuRVVxM0Y4NnpiWHhpbmlXMDYxWFpoVGUy?=
- =?utf-8?B?SFlFaGV3enpMUncvek0zbE92UGJvZzdKZS8raVBFQ0VNSXB5eU9iSkVwWDYv?=
- =?utf-8?B?Y25MalhUMDVIM1VOVjFaSXNGWmU4RGNUSlk1SmVLbVIwemJWdU5sSkZtOG5B?=
- =?utf-8?B?a3JTZGRzTFV0Ky8zOEJNNW5lekRnQ2JZY243RDRFdTdzbWc5MGQ5STREODJZ?=
- =?utf-8?B?UGJ6VXhDUTMrNSszc2R5bnBHaXQ4djgrZEpJc0RLeUp4QThnZnVkRTVmS2k5?=
- =?utf-8?B?UkJvcWFlMGN6d3hNVVBNVGhHU01yZUgzUjQwaG5vRjFnaHdsTkhDSmtvUm1F?=
- =?utf-8?B?K0Yxb2R0OFBXTUlIQkYrS2p4UDZTaGJFd2l0NklxN2NzK0JJaW5NSkd2L2Zw?=
- =?utf-8?B?MjVyQmY4ZE9tMDBqNDFnWGdWci9yM1Vrei85eFUzSWEzVDdDcUpwUmNPTHpn?=
- =?utf-8?B?TVlPYWhoWlRsc3lVdlBiclJFcTFkend2TmQ4OXZzdVp4cUR6N2tjMDdLM0xk?=
- =?utf-8?B?N3o5bWNEWllMMEJRYzhZZkx5ZW1OeEk2aHpvMDZLcDBLU25vVWdlb1VKR1pw?=
- =?utf-8?B?clA4NGU2QVB2all6WCtyNGllbWVSTmcwV0JCNkNaTk5zdTRHaThGc1dxZU00?=
- =?utf-8?B?aW9BTWk3bkVDQ2g1d3doTDVSWmVlMGgyeXowTnVBcTJSaXlPaGQvRVNSZnJi?=
- =?utf-8?B?MEpadWxxaHhMTVpjaTFuaHY4U0VtblN6MGZKdllZUVh5VUhRdUNyVlU3MzR6?=
- =?utf-8?B?dDJ0SFh3Q0JBT3Y1ektVZ0J1QzJCWFRTcWtQd2luWk5YcDYyQ05UanBCcGVC?=
- =?utf-8?B?RVBRdmtIblNhaU5SUmFkaFBZeDd5eWRraEk4ZC9iZHArTjQ0K1ZSV2Yybm9k?=
- =?utf-8?B?NW0xOEJyblBiZG9XSWRzNEQ2MkNKZkRJSm5yUXAwRFFrcWV5NXFlZW11YTVv?=
- =?utf-8?B?UVZnYTFkbE9POUJGcWtEYk8yQ09Bc3prSzZFVmYzRWdSWVVJQWNLYzZmb3Ar?=
- =?utf-8?B?QWlpU1RNRkFvKzJ2czB6empNdjNHZkFaU3luNzJjN1RnSWhYZnZCdzVKL3Fp?=
- =?utf-8?B?Z2ZjUENkNXVXZ1Rib1Jxdy96OFNnSllJL1FyalFoY2xscVBOME1PU0VKTVBn?=
- =?utf-8?B?elpsTlYycGZVT2htOVhmSFFnWjlUQVE4UXYrQXVja0tqSmg2a0VSTi96UkI3?=
- =?utf-8?B?ZGJybGNQSFEyMUVXaWx5TldUQjR1UUI2Q1JzNmhNcWtlaEM4TUI5WTY5dUtB?=
- =?utf-8?B?RUx4RzJsZ0IwQ0hiZmE0bmlxUm1JcFdGWUgrT2tyVmlBWWFzd0RtenovZ2kx?=
- =?utf-8?B?WlhsREZMM1VNZlYwZlVzcVB3bU02Z01ZaUhLU1pMUS95d0lqVkVMVFhTUUF3?=
- =?utf-8?B?bk5CTklLQ05MTThOdkJ6Q1cvdmRDaEZwTkMxSmZHVk44RnhiWjVRRStzRnBB?=
- =?utf-8?B?UTlndm8rYWlTQVdZak9QWDFqVFBweStidVFuWDY1ankzL0t2UHVRWlFicXRz?=
- =?utf-8?B?SzQ1NndRd1hOYmluOE5neWozZkdkUFJzMTU0UnZoWGU1RFlZTUFMWHhvZGRk?=
- =?utf-8?B?YnRIQW5UajZxUUJtdlhBK0JsSVFHalR6VHdGSG1sTU1YeGYwdFRHajZab1FF?=
- =?utf-8?B?SDFMSnlaZmVkS0hkcUJVRlpFaC9RVHYyZWhoeVNWMk0rOFFKbEtVdz09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: d521a7fa-5347-4a8a-312b-08deca151d3f
-X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2026 13:01:56.8090
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vxVV5OZzVOwfWxeY+nuS7v4FreQd90jUHC16RyZGzY9PtjTnkGlHRYNZor5abBduw6GW1v/gGSVPE7ul4qcpYA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWYP265MB9335
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v13 1/2] tcp: rehash onto different local ECMP
+ path on retransmit timeout
+To: Neil Spring <ntspring@meta.com>, netdev@vger.kernel.org
+Cc: edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
+ davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org, horms@kernel.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ martin.lau@linux.dev, daniel@iogearbox.net
+References: <20260612010047.1377331-1-ntspring@meta.com>
+ <20260612010047.1377331-2-ntspring@meta.com>
+From: Paolo Abeni <pabeni@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20260612010047.1377331-2-ntspring@meta.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun Jun 14, 2026 at 8:07 AM BST, David Gow wrote:
-> Le 13/06/2026 =C3=A0 10:04 PM, Gary Guo a =C3=A9crit=C2=A0:
->> From: Gary Guo <gary@garyguo.net>
->>=20
->> Currently rustdoc will generate function names like
->> "_doctest_main__home_gary_Projects_linux_rust_kernel_io_rs_824_0" for a
->> doctest located at rust/kernel/io.rs:824, when building with separate
->> outdir using `O=3D`. This creates overlong symbol names and is also not
->> reproducible.
->>=20
->> Fix it by doing a custom remapping to trim it to something like
->> `_doctest_main_rust_kernel_io_rs_824_0`.
->>=20
->> Signed-off-by: Gary Guo <gary@garyguo.net>
->> ---
->
-> Hi Gary,
->
-> This seems to break older versions of rustc. For example, with
-> rust 1.93.1, the build now fails with errors like:
->
-> ERROR:root:error[E0425]: cannot find function `_doctest_main_rust_kernel_=
-alloc_allocator_rs_176_0` in this scope
->   --> rust/doctests_kernel_generated.rs:74:27
->    |
-> 74 | } let test_return_value =3D _doctest_main_rust_kernel_alloc_allocato=
-r_rs_176_0(); assert!(test_return_value.is_ok()); }
->    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^=
-^^^^^^^^ not found in this scope
->
->
-> Am I missing something? I'm using kunit.py to build:
-> ./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_RUST=3Dy rust_doc=
-tests_kernel
->
-> Seems to be working okay with 1.96, though.
+On 6/12/26 3:00 AM, Neil Spring wrote:
+> Currently sk_rethink_txhash() re-rolls the socket's txhash on RTO, PLB,
+> and spurious-retransmission events, but the cached route is reused and
+> the new hash is not propagated into the ECMP path selection logic.  Two
+> changes are needed to make rehash select a different local ECMP path:
+> 
+> 1. Add __sk_dst_reset() alongside sk_rethink_txhash() in
+>    tcp_write_timeout(), tcp_rcv_spurious_retrans(), and
+>    tcp_plb_check_rehash() so the cached dst is invalidated and the
+>    next transmit triggers a fresh route lookup.
+> 
+> 2. Set fl6->mp_hash from sk_txhash (or tcp_rsk(req)->txhash for
+>    SYN/ACK retransmits and syncookies) in tcp_v6_connect(),
+>    inet6_sk_rebuild_header(), inet6_csk_route_req(),
+>    inet6_csk_route_socket(), tcp_v6_send_response(), and
+>    cookie_v6_check() so fib6_select_path() picks a path based on the
+>    new hash.
+> 
+> The mp_hash override only applies to fib_multipath_hash_policy 0 (the
+> default L3 policy).  Its hash includes the flow label, but that is 0 by
+> default -- np->flow_label is unset, and auto_flowlabels only computes
+> the on-wire label later, per packet -- so flows to the same peer share
+> one local path.  Keying the hash on sk_txhash makes the local path
+> per-connection and lets a rehash re-select it.  Policies 1-3 are left
+> unchanged.
+> 
+> The mp_hash assignment is factored into a small helper,
+> ip6_ecmp_set_mp_hash(), shared by inet6_csk_route_req(),
+> inet6_csk_route_socket(), tcp_v6_connect(), inet6_sk_rebuild_header(),
+> tcp_v6_send_response(), and cookie_v6_check().  It applies
+> (txhash >> 1) ?: 1 for policy 0 (the >> 1 keeps mp_hash in the 31-bit
+> range; ?: 1 keeps it non-zero, since 0 would fall back to
+> rt6_multipath_hash()).  inet6_csk_route_socket() calls it only for
+> sk_protocol == IPPROTO_TCP so that non-TCP callers (e.g., L2TP via
+> inet6_csk_xmit) fall through to rt6_multipath_hash() and retain their
+> existing flow-key-based ECMP behavior.
+> 
+> tcp_v6_send_response() also sets mp_hash from the response txhash so
+> that a control packet (a RST from the full socket, or an ACK from a
+> time-wait socket) selects the same local ECMP nexthop as the
+> connection's txhash rather than falling back to the flow hash.  The
+> time-wait socket's tw_txhash is copied from sk_txhash when the
+> connection enters TIME_WAIT, so it reflects any rehash that occurred.
+> 
+> Setting mp_hash explicitly is necessary because the default ECMP hash
+> derives from fl6->flowlabel via np->flow_label, which is not updated
+> from sk_txhash (REPFLOW is off by default).  ip6_make_flowlabel()
+> cannot help either, as it runs after the route lookup.
+> 
+> As a consequence, for policy 0 the local ECMP path of an IPv6 TCP
+> flow follows sk_txhash even when fl6->flowlabel is non-zero, e.g. a
+> reflected (REPFLOW) or explicitly set (IPV6_FLOWLABEL_MGR) flow
+> label.  This is intentional: only local path selection changes, so
+> rehash can recover from a failed path; the on-wire flow label is
+> unchanged.
+> 
+> sk_set_txhash() is moved before ip6_dst_lookup_flow() in
+> tcp_v6_connect() so the initial ECMP path is selected by the same
+> txhash that subsequent route rebuilds will use.  This avoids
+> unintended path changes when the cached dst is naturally invalidated
+> (e.g., by PMTU discovery or route changes).
+> 
+> The rehash sites (tcp_write_timeout(), tcp_plb_check_rehash(), and
+> tcp_rcv_spurious_retrans()) call __sk_rethink_txhash_reset_dst(),
+> which re-rolls the txhash and, when it changed, drops the cached dst
+> so the next transmit re-runs route selection.  The dst reset is
+> guarded by sk->sk_family == AF_INET6 since IPv4 ECMP does not
+> currently use sk_txhash for path selection.  For IPv4-mapped IPv6
+> sockets this produces a redundant dst reset on a cold path
+> (RTO/PLB); the subsequent IPv4 route lookup returns the same result.
+> The helper is deliberately separate from sk_rethink_txhash() itself:
+> dst_negative_advice() calls sk_rethink_txhash() before its own dst op,
+> so resetting the dst inside sk_rethink_txhash() would skip that op
+> (e.g. rt6_remove_exception_rt()).
+> 
+> For syncookies, cookie_init_sequence() computes the cookie value
+> before route_req() and sets txhash so the SYN-ACK selects the same
+> ECMP path that cookie_v6_check() will use when the full socket is
+> created.  cookie_tcp_reqsk_init() derives txhash from the cookie so
+> the full socket's ECMP path matches the SYN-ACK.  Both the SYN-ACK
+> assignment in tcp_conn_request() and the full-socket assignment in
+> cookie_tcp_reqsk_init() are keyed on the packet family
+> (skb->protocol == ETH_P_IPV6), not sk->sk_family: a dual-stack
+> AF_INET6 listener also serves IPv4 connections, and the v4 cookie has
+> mssind bits that would bias TX queue distribution if used as txhash.
+> IPv4 connections retain net_tx_rndhash().
+> 
+> cookie_init_sequence() is split from the former version that also
+> called tcp_synq_overflow() and incremented SYNCOOKIESSENT; those
+> side effects are now in cookie_record_sent(), called after
+> route_req() succeeds so they are not bumped when route_req() fails.
+> cookie_record_sent() is guarded by CONFIG_SYN_COOKIES to
+> match the guard on tcp_synq_overflow().  route_req() receives 0 as
+> tw_isn for the syncookie path so that tcp_v6_init_req() still saves
+> ireq->pktopts for REPFLOW flowlabel reflection and IPv6 cmsg
+> options.  The ecn_ok clear for syncookies without timestamps stays
+> after tcp_ecn_create_request() so it takes precedence.
+> 
+> Signed-off-by: Neil Spring <ntspring@meta.com>
 
-It looks like upstream rustdoc is using fully qualified path from 1.87+, so=
- the
-replacement doesn't find it anymore. Not sure why it works in 1.96, though.
+This looks good to me, with a minor commit below.
 
-Sashiko suggested doing a full text replacement which I think makes more se=
-nse
-anyway and would work for all versions (and also for unit-returning functio=
-ns).
-Will do it for the next version.
+> diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
+> index df479277fb80..cc71d84df42b 100644
+> --- a/net/ipv4/syncookies.c
+> +++ b/net/ipv4/syncookies.c
+> @@ -280,9 +280,18 @@ static int cookie_tcp_reqsk_init(struct sock *sk, struct sk_buff *skb,
+>  	treq->snt_synack = 0;
+>  	treq->snt_tsval_first = 0;
+>  	treq->tfo_listener = false;
+> -	treq->txhash = net_tx_rndhash();
+>  	treq->rcv_isn = ntohl(th->seq) - 1;
+>  	treq->snt_isn = ntohl(th->ack_seq) - 1;
+> +	if (skb->protocol == htons(ETH_P_IPV6)) {
+> +		/* Use the cookie as txhash so the ECMP path matches
+> +		 * the SYN-ACK, where txhash was also set to the
+> +		 * cookie.  The original request socket (and its
+> +		 * txhash) was freed after sending the SYN-ACK.
+> +		 */
+> +		treq->txhash = treq->snt_isn;
+> +	} else {
+> +		treq->txhash = net_tx_rndhash();
 
-Best,
-Gary
+I'm wondering if it would make sense always using snt_isn for txhash in
+the syn cookie case, regardless of the IP protocol. Beyond reducing the
+differences between ipv4 and ipv6 it will make the code a little simpler.
 
->
-> Cheers,
-> -- David
->
->>  scripts/rustdoc_test_builder.rs | 14 +++++++++-----
->>  1 file changed, 9 insertions(+), 5 deletions(-)
->>=20
->> diff --git a/scripts/rustdoc_test_builder.rs b/scripts/rustdoc_test_buil=
-der.rs
->> index 2b1f9ba01839..fda7284355f8 100644
->> --- a/scripts/rustdoc_test_builder.rs
->> +++ b/scripts/rustdoc_test_builder.rs
->> @@ -47,11 +47,18 @@ fn main() {
->>          })
->>          .expect("No test function found in `rustdoc`'s output.");
->> =20
->> +    // Figure out a smaller test name based on the generated function n=
-ame.
->> +    let name =3D rustdoc_function_name.split_once("_rust_kernel_").unwr=
-ap().1;
->> +
->> +    // The rustdoc function name can include the absolute path when bui=
-lding with `O=3D` which is
->> +    // undesireable and create overlong symbol names. Remap it to relat=
-ive path.
->> +    let trimmed_function_name =3D format!("_doctest_main_rust_kernel_{n=
-ame}");
->> +
->>      // Qualify `Result` to avoid the collision with our own `Result` co=
-ming from the prelude.
->>      let body =3D body.replace(
->>          &format!("{rustdoc_function_name}() -> Result<(), impl core::fm=
-t::Debug> {{"),
->>          &format!(
->> -            "{rustdoc_function_name}() -> ::core::result::Result<(), im=
-pl ::core::fmt::Debug> {{"
->> +            "{trimmed_function_name}() -> ::core::result::Result<(), im=
-pl ::core::fmt::Debug> {{"
->>          ),
->>      );
->> =20
->> @@ -62,12 +69,9 @@ fn main() {
->>      // We save the result in a variable so that the failed assertion me=
-ssage looks nicer.
->>      let body =3D body.replace(
->>          &format!("}} {rustdoc_function_name}().unwrap() }}"),
->> -        &format!("}} let test_return_value =3D {rustdoc_function_name}(=
-); assert!(test_return_value.is_ok()); }}"),
->> +        &format!("}} let test_return_value =3D {trimmed_function_name}(=
-); assert!(test_return_value.is_ok()); }}"),
->>      );
->> =20
->> -    // Figure out a smaller test name based on the generated function n=
-ame.
->> -    let name =3D rustdoc_function_name.split_once("_rust_kernel_").unwr=
-ap().1;
->> -
->>      let path =3D format!("rust/test/doctests/kernel/{name}");
->> =20
->>      std::fs::write(path, body.as_bytes()).unwrap();
+Not a blocker in any case.
 
+Still I think this could deserve an explicit ack from Eric.
+
+/P
 
