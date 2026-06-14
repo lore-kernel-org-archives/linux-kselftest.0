@@ -1,62 +1,64 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B572236EE
-	for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2026 05:39:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD7D2459DC
+	for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2026 05:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781415587; cv=none; b=BMmRWmPsJW0Pl39OVWcZHuoqd6aCt02DcoFTWT4b2zzBWIw17lR1dthXrF3gmip4TLbM4InbNOMIKkkUpPbKW+s35ziJLYtuD2Po5EGVTt36gFjrnO9zJzlyiUGdDpXMMhipF7ucXGbNlou+8nqtY7iFnigP9LEf1U394LBfj+U=
+	t=1781415595; cv=none; b=jCdN2gb5oUrduQfi3sj2TCkf8Bxjg/zpLFlBaD1GaHj9Ic7PfrdpkYJt1/Bl6rdjJQCkwN0kvYdAKgt9bT2w65pXO7YGpvTcgU7tL7SCyx7qk/8KP1RKKZq4WodjuLFxFGLtjMBJg7r3bBusAwWuoi4WRh7nq2W2pPlRg/RHe6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781415587; c=relaxed/simple;
-	bh=9kbwiMAQqD/ZLgHbcz+rU3ewKuxGRikpRtLFDnpflQs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BZVG5V3NlzAP9xmALC8FiKoVAumxwthrujdf59jbhPLuFZRRhuRtbrG379yP6VUEOVi56H1il0P/1z67C60xaD2UxhE8uBKS8gM7k2CQH/xKSCAJGyuYm1atOdeDmfOsaboy3mAB4/GVloGrbNJC96hdwZrnx3AVLOKlEYvC/Tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FHiFBYcy; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1781415595; c=relaxed/simple;
+	bh=lhowr9EjwPapIm5LZ9CUvqkGMBmfsnVS9rihubPA5e4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=o1HEZZbf9WKM6FQB1DfkIhWcqzulI4q7JMUWp+tTP/YLSbnOP02+tkVMO1n0vq1SOLEt43GQxGwaw/v1gLDgn41dm0TZnLaEIFllEI5BGlMbHDvXXY6GafSX2k2s4Z+MOcjtt8nxKiz+XSavU2sTqQaUWB2pJesK0uqxiaSsm6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k7Y+ZSnn; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FHiFBYcy"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-842cd900ee0so1001454b3a.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 22:39:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k7Y+ZSnn"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8423efad617so1435519b3a.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2026 22:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781415585; x=1782020385; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4tgM+z2iyzMGP1zVK/SY9fes3/obYg8+/vIlbcStyS0=;
-        b=FHiFBYcyUlhFQ2oW5HFKmGDEwofi5tGB6Sb6brDrz4qffhxDSN48n8B6R6mSqffUBP
-         xpYHb/pI72q4QvzXJ+63W+2VWcED01N4aGFY3DRtnCwSHts/VkjKnWWHWOrgOg31VQZj
-         pWZKLjWShEhpY1OKTYFffpxNB2q+R6OWcYDJedsksJNJtNfOo97zazLGtnfpqheKGbP1
-         muYKJBfa6EAptTgfraIUR7XCPOcqcWrYsesjjHsMta1hiayMDGW9r3ZfkCsqlVV3PrR0
-         yU8R26F8vqCvP5V2Ch/EBIk60cYHV562Z/3mRqqvWgKUzN8M8uvUYt+Uhg8bNYTCr591
-         B8qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781415585; x=1782020385;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781415594; x=1782020394; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4tgM+z2iyzMGP1zVK/SY9fes3/obYg8+/vIlbcStyS0=;
-        b=SSvHhzcalDZhmpEgc8vr7Z2b94zGEia98Ot1SXILApIF0YN3OYw6Ce4ut1lcGg8Pax
-         3uvKbI/2zEsaqP0ne6pOTWVIvpg/FL7etzfX0JFSn6E9Bn03cGuObPiIWbx7Csw1AMrt
-         vw8f1ooOK+GJiC0WXG2bc4WficJE3hwe82XUfEU+DZuqhKO+tXmRccrXtVP8jYWqcNAd
-         bCWFKt9z5bzPFO0pnY/09gzknWaQ7jzF2TsasF6Qu601umXaVfMSOus9WK/WdOvotve8
-         mz8qLyGu0mZzB2scJcx5R74Jx+CAZmfDk4gqgRebOLuj0BcWw10DGdMqOkXIcY5X1tIx
-         GI0w==
-X-Forwarded-Encrypted: i=1; AFNElJ8t/QKWNEXTrxbRyfaIO9RYDXqe9c5vTrK/wNAssft/El/kA6B8SbVAMPP84ddQl21QpXDorMxCjim5fA828is=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpR27CFB0VQfnRRs4v2ktpvfGl0AqfwqaLx96kdy7Gzmu/ma1E
-	/xm34lcPxCIPmME9MRnnQs50U0lYrhN/rVXgA8bBxL48LDsNrH6yAg/0
-X-Gm-Gg: Acq92OH02toXs67qrogjxpwGzZX/BohUdDK2z6dgAOmfXCB8hcEcHrrmZCfUkjJCfJj
-	xWfKvxqZIhQAYcIme+lWPKcZ/tcfoRmqeJg8tOazgiDFbYOM8YH1YtxZhT7GCN1MUchlHJK+w23
-	EtK+uJGayzNIxahRzQBIm2Zw7IkFe+MnXe/cZ4NdqT6E3npXThL0M3GA3LUJzsqkDKoOVmiw/Fz
-	SJhH3ERI0o6dgUvG4fEQFKUCwyhZHpwckReSG+LMJJf+o/Emt7ZijNioDVr84t5pPJHb+L6LwB/
-	WDisi1YaFz/Gd9FUR3BGmpfJ0aJ4vegg/TeiCzwv/ofIfcFUa8GZMOolEKUjMSLr/fHKw34xROb
-	p0f0rtscB3PCfO/7wS6S7yW1+nUOPVA/KkZ1Jlo9F9PY9s1Nx2LqBNNeX5H2BfFb1YyrM4OXMbo
-	AIqOmq2mq7DxvN6PF+i3+oJIkRqUHgHS4psmB90+4QNQ1A66OZhXOmWD2F0tROQ9Hq7lqMJ+i08
-	LWM7AN8c00f9xbq
-X-Received: by 2002:a05:6a00:1813:b0:842:7838:61c3 with SMTP id d2e1a72fcca58-8434d07bb66mr9712669b3a.22.1781415585382;
-        Sat, 13 Jun 2026 22:39:45 -0700 (PDT)
+        bh=NT1UtqM2AmX11NcJjNv9n62UrLKyvxdMBYbCsYRy7Tg=;
+        b=k7Y+ZSnnWZdZwA16LI1jjwiD9wmD/pD5qjRx+SZt0TGO6PL2TosKf3zQEYuBOOo3jl
+         IXJ4DI3O4DDszR3h7L9hsel/+bPebrxhlHnILMSml/PubyVW7QOXg1OZ1IQjVxyYLYvL
+         G+GTWiX5utKgMFP/sZdfS5XtLxR6fJRhBnqIpJ+HfwsYfQCgvlHQ73MoPZHw+4V973cM
+         bQv32r09k21FrpEdUOr8k2FRrQL48VY7QkXDDHHv3/r8R+9EEDheSZEmL9oDq4sQXVAR
+         0qnaR5hyIdLRgKWW9t4bFk/tV0M7f1t88wCinuopPv37POBxtYYjol63QqGanP1jEGSO
+         g72A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781415594; x=1782020394;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=NT1UtqM2AmX11NcJjNv9n62UrLKyvxdMBYbCsYRy7Tg=;
+        b=coETHFdjQygwV8l68xOggzl4MtR0speChY8h2Hnq+ApINkRqH9xCIsZYT27kg7sNxJ
+         ZuNvV0ExxM24sfcIOVfNYjGvqjJPnMyCu6+OMqYO3miiRUN/W10ZQXR++VpF+FFNP095
+         w5o6bfDqvh1Exesy9w6nrVrR7rKpZ5eTP1tvGUquY5ikjfSJj7b7Gljq2jgXxTz6PJF0
+         npa8UjT2Hom5Q+ynJ7ngBP39moMjGXEoTrRvmBD/da4t1HVtWu7X2Jh2rY0ng2Ewrpxa
+         QsU1oB8kcU643isCw3Qno683JG5XXhgWp7hz1/2VCynQwk2ZktHLVZb+Kz/DBRZGN0ZU
+         /Z9Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+0WoEYqUiURskVzSkTc+G9FpvARNyiGx3VUIfZajFNCm9Sa3K4Eccz9vrl6ahNvXRiAPlXKoRJvhcKTRRsbvo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzib8g+P0BVJFfR2bt0tdku1DkvN9J1Cyy1VKu6TazFyKLDnZzY
+	RHlZP2LzY9X699yDvxluB0ry47a2AnMrkkpqSt2aPe0FuLsW+Lqo9OK2
+X-Gm-Gg: Acq92OGmoHEzCG27UZUNTgflfpsY0xJzZ1hqWLyx2M5oFWGL+4u322S/4wqmz1wK76N
+	96wbXFZ+4WAullBNyqIYPYxaBhhfgMfSBRxtBS9jGqnwd3nReOTlte/VJdY2iaQynLPCq1p01Ic
+	9nDU/262tDu/BTUIGzNi81yR9tuZA/eeb23iVjb3pey5L/siG+oonyqzSR60NGxZVB4KUMTKe3E
+	bInwz01SxGKAFPGQe4+SvjHi5iCqfs+YqwZQvS2ASVUKzxWHbV+ViNmrfrXD1/2HSvdYyz57Gdk
+	ruOeAdwO/nZhd4YsPeYuX9LfGpJdr5ezBebSV98pp2qRQSnfdpXaEjaUDGVR7Cp8Dl1HHOmQyB8
+	BwsrVsyk89N6MTLBaDBK5W/a5n7IJOeLBrbM61MaW1Cs9SSx18fuiuModtSXzul4gaPbT/TVQFL
+	7qfszHp0o6GV/YwcgBCG/0kikLpc/ht654t86k6qnKj2ci5BZMmYCYGtdPtG/rMi4LGlfLDHLKi
+	2TkQedsnCwFcKmv
+X-Received: by 2002:a05:6a00:4fcf:b0:842:5711:9a2f with SMTP id d2e1a72fcca58-8434cf4f362mr10259911b3a.36.1781415594241;
+        Sat, 13 Jun 2026 22:39:54 -0700 (PDT)
 Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434acffd04sm6387078b3a.26.2026.06.13.22.39.42
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434acffd04sm6387078b3a.26.2026.06.13.22.39.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jun 2026 22:39:44 -0700 (PDT)
+        Sat, 13 Jun 2026 22:39:53 -0700 (PDT)
 From: HyeongJun An <sammiee5311@gmail.com>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -71,11 +73,14 @@ Cc: Eduard Zingerman <eddyz87@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	HyeongJun An <sammiee5311@gmail.com>
-Subject: [PATCH bpf 0/2] libbpf: Reject out-of-range linker relocation offsets
-Date: Sun, 14 Jun 2026 14:39:25 +0900
-Message-ID: <20260614053927.160566-1-sammiee5311@gmail.com>
+	HyeongJun An <sammiee5311@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH bpf 1/2] libbpf: Reject out-of-range linker relocation offsets
+Date: Sun, 14 Jun 2026 14:39:26 +0900
+Message-ID: <20260614053927.160566-2-sammiee5311@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260614053927.160566-1-sammiee5311@gmail.com>
+References: <20260614053927.160566-1-sammiee5311@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,34 +89,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The libbpf static linker validates relocation type, symbol index and
-instruction alignment in linker_sanity_check_elf_relos(), but does not
-check that the relocation offset is inside the relocated section.  A
-malformed BPF object processed by the static linker (e.g. via
-"bpftool gen object") can therefore carry an out-of-range r_offset that
-linker_append_elf_relos() then uses to index the section data, reading
-and writing past the buffer.
+The static linker sanity-checks relocation sections before appending them,
+but for executable target sections it only verifies that r_offset is
+BPF-instruction aligned.  It does not verify that the offset is inside the
+relocated section.
 
-The normal object-loading path already rejects such offsets (libbpf.c,
-rel->r_offset >= scn_data->d_size); the static linker path is the
-missing sibling.  Patch 1 adds the same bound.  Patch 2 adds a selftest
-that builds a tiny object with an out-of-range relocation offset and
-checks that the linker now rejects it, with a valid relocation as a
-positive control.
+A malformed object can therefore pass an out-of-range offset through
+linker_sanity_check_elf_relos().  When the relocation is against an
+STT_SECTION symbol, linker_append_elf_relos() uses the unchecked offset to
+find the instruction to adjust:
 
-Reproduced with ASAN: before patch 1 the out-of-range relocation is
-accepted (and triggers a heap-buffer-overflow); after, it is rejected
-with -EINVAL.
+  insn = dst_linked_sec->raw_data + dst_rel->r_offset;
 
-HyeongJun An (2):
-  libbpf: Reject out-of-range linker relocation offsets
-  selftests/bpf: Test linker rejects out-of-range relocation offset
+and then reads insn->code and updates insn->imm.
 
- tools/lib/bpf/linker.c                        |   6 +
- .../selftests/bpf/prog_tests/libbpf_linker.c  | 212 ++++++++++++++++++
- 2 files changed, 218 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_linker.c
+This is reproducible with bpftool's static linker by crafting a BPF object
+with a 16-byte executable section and a relocation in its .rel section
+whose r_offset is 0x1000:
 
+  BUG: AddressSanitizer: heap-buffer-overflow in linker_append_elf_relos
+  READ of size 1
+   linker_append_elf_relos
+   bpf_linker_add_file
+   bpf_linker__add_file
+   do_object
+
+Reject relocation offsets that are outside the relocated section before any
+later use.  This mirrors the normal object loading path, which already
+rejects executable relocations whose r_offset is not inside the program
+section.
+
+Fixes: faf6ed321cf6 ("libbpf: Add BPF static linker APIs")
+Cc: stable@vger.kernel.org
+Assisted-by: Codex:gpt-5
+Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
+---
+ tools/lib/bpf/linker.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+index 78f92c39290a..3eb23da167d2 100644
+--- a/tools/lib/bpf/linker.c
++++ b/tools/lib/bpf/linker.c
+@@ -1048,6 +1048,12 @@ static int linker_sanity_check_elf_relos(struct src_obj *obj, struct src_sec *se
+ 			return -EINVAL;
+ 		}
+ 
++		if (relo->r_offset >= link_sec->shdr->sh_size) {
++			pr_warn("ELF relo #%d in section #%zu has invalid offset %zu in %s\n",
++				i, sec->sec_idx, (size_t)relo->r_offset, obj->filename);
++			return -EINVAL;
++		}
++
+ 		if (link_sec->shdr->sh_flags & SHF_EXECINSTR) {
+ 			if (relo->r_offset % sizeof(struct bpf_insn) != 0) {
+ 				pr_warn("ELF relo #%d in section #%zu points to missing symbol #%zu in %s\n",
 -- 
 2.43.0
 
