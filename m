@@ -1,315 +1,125 @@
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013027.outbound.protection.outlook.com [52.101.72.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67729346AE3;
-	Sun, 14 Jun 2026 07:18:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781421537; cv=fail; b=QtKSLwXXRwJi3rHTRyoeruwchwTyB3+++YJ5sks2RWtfpeliXTiN5vlB6ui5ekXhVz5i4uD6HKaCc5oPkkd9D4Yhk+0onXewuy5akqwf8BtC9mSDe0/VRl6dukooh6Ft8ZbvA+isiXVprO09uO3nmK/4c4rFzY9j97lcCgpfoTM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781421537; c=relaxed/simple;
-	bh=ReafgJqtXESWWRKSNcXYSwz0VWWb6vRIwHsi06XhaRc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=nlhSsOQQJzaaxTH8ErrzcNo8FtSHIGhTEmgBltQfs9bJWgr+/ERXAI8Nhfq+Qljl3g8QvMtYtZfNw6cWddSbl65gnDxZ4COiwCLbEzjkLgq6uIHsLzOMmJx9KN1L/w2YgllKPmwO04cmXZb1cFeOvQldsMXUtxlgw0iU3X+kuNA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=qpKNyWP7; arc=fail smtp.client-ip=52.101.72.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5373339A057
+	for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2026 09:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781429189; cv=none; b=bqvZGMw/2MlXkg6mxrllZ1hhK1yzSGFXjHMg9jzKdm/BGvp1BeEtOm5PJBwP82avQGwqNEGCGfkeW/om4kd2k3XaGNp5dyAb0K+yvCXBW39wxFn/LwbVPm1PyurLNSAYRtwBGHa+bfFxwzGt+m4j183KqXDeoTwj6UJQBU65ycY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781429189; c=relaxed/simple;
+	bh=tl1gbtf86a0S1llqs4X38XTvX69cB6KA93mt/uCE6DU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GKtayy1gF7DDQJZjB16WkW0fA5G2LLBsE74gSXdyQogI9Sn9qeP+/Gh0wDHbWrrSa5aiARRtqv9bqLVWy4DjId0n5oXHzyePs0QX5SYez5jaqup6QJhTrNeXeqfsyadqTLc1Iwe7L/NpmMr/0NuYJdi5W0dQnv4/w6U2fzkkRpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nJxYLBHY; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="qpKNyWP7"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mGHa1DmiCfS/NdYH0/4ZfCYnFWJ60Qaf6KcJgyr0tJhNzsE7ZA7zsTo/76evKUtQu/EZlzKOQRTraoy9ETbl7CBjRdRT7zA7QcOrSwPVzBunuWAAyGzz+yRkso6mxDJmgUAhynkBRAO0Q3E/zwdQYCyWSv0g5Amhz+0aNkAJ3FxXdeCDxn2oxPXGDKjeUnz1Kd7Dz0BuZJtkig+TqPnKDogmdQ+Ub8zuMxmcQB28PE/1ImxKGbH+akJl75Vpzce8z511zI87hwcjowhGU/yMREDw1OflN9BODnfvT4/lYUwE/ovUeTnsyf4UuBa4rtwXflWjTetQYYftpr9tI0H8VA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=60S6ewrTPpyUw6VWmEqyuhAQ3Ub1Mtnrh9Vq/CNDkcA=;
- b=r/AK3QcFeq34UYK12jAo22YtXY5MmnX7/G6BnlhHdqPj+TmyCjZpsD8SyB51n75T68okoaur/sp9UXS7BEKomz2WOfcFPpqBPvsOFWUVvkmy6yDuee9SMU093zOQroJvhxt2cl0cYNvyU+NgwQfuKJTeVFEakRQV7dFrexM8FCVfBd5gzAjPO7fZ5WFnvOtndpoaY/DVBtHrn/QL/qOINVxPTmFkEMShEpryrjzqADQElNXK+buvX4oD1dtQnEiMcesBLOFAbfNFDtnEYXhYVUi2QGT76xceO5onmyGmNnW2TkxQ1u+9cNiJAeNC2YbsnWzSS1Xwm+vfHbe+LmWTpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 131.228.6.100) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=60S6ewrTPpyUw6VWmEqyuhAQ3Ub1Mtnrh9Vq/CNDkcA=;
- b=qpKNyWP7WrYaYRO0qi73jlGmLAPrp7znstpZMc6vdBlnSRQGmj1XFiSIs4NpOBcLv4bIwXmfOlXB/63K3tw6We9EiOfK5VtpX68cNIQJjhOlb8DYwNFfku1O9iDmZgPXFYuSWZDu5sZKf6ojDzxCW1fztO/ASAEOVxGeeIWKGcu9dRneScToIoQG153fY5fZqZC1vHJ+/mv/XQe+A2IFAV91Ufu533AeFezjCcTtBHrTifrteTGL+Jbxb79hbSlZe/EiM0xl2c5PEpvqkZZnWaZV62wED8VcI/3SF3LnmzAHK/WGoIhvJllogylqaW2t1+epfZfNvNOIa77IHwXrtw==
-Received: from DU7PR01CA0028.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:50e::13) by AS8PR07MB9210.eurprd07.prod.outlook.com
- (2603:10a6:20b:5ee::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.18; Sun, 14 Jun
- 2026 07:18:51 +0000
-Received: from DB3PEPF0000885A.eurprd02.prod.outlook.com
- (2603:10a6:10:50e:cafe::30) by DU7PR01CA0028.outlook.office365.com
- (2603:10a6:10:50e::13) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.113.17 via Frontend Transport; Sun,
- 14 Jun 2026 07:18:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.100)
- smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
-Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
- designates 131.228.6.100 as permitted sender)
- receiver=protection.outlook.com; client-ip=131.228.6.100;
- helo=fr711usmtp2.zeu.alcatel-lucent.com; pr=C
-Received: from fr711usmtp2.zeu.alcatel-lucent.com (131.228.6.100) by
- DB3PEPF0000885A.mail.protection.outlook.com (10.167.242.5) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.139.8
- via Frontend Transport; Sun, 14 Jun 2026 07:18:51 +0000
-Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fr711usmtp2.zeu.alcatel-lucent.com (Postfix) with ESMTP id 91E2568004E;
-	Sun, 14 Jun 2026 10:18:49 +0300 (EEST)
-From: chia-yu.chang@nokia-bell-labs.com
-To: jolsa@kernel.org,
-	yonghong.song@linux.dev,
-	song@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	memxor@gmail.com,
-	shuah@kernel.org,
-	martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	horms@kernel.org,
-	dsahern@kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nJxYLBHY"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c86214eead7so969426a12.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2026 02:26:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781429186; x=1782033986; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d16k0vZR1zettaTdZ3HXP0MjQdOsOHiGY8GKp79+E2s=;
+        b=nJxYLBHYRr6bFb4koagSWnjAp6lTGLoCkFZJzRsoGSN1dT/1xDST6P72Y1rS4BBU1c
+         /ksxdMoKaCFg7E2lOuTSwgDuOs6h1YkOhakArzUIdQhtTBByERozUohhr7mfOfEoK7V3
+         0BNzn6CPonQ3WFkv9POg3+TS9a74S1jnU8jXget7Q/XfKXKB5fJF7gfxbzyKzHmUhM1N
+         R6ZE6pHoq8UBJg7x3oKdcUGTC/PT+CgeJMPR+uJOwU3hed2+5CtwSPacXHBCSgsHlQpX
+         r7Xcbi3hM8aZAYTYNTSbZJINtEu8SzEz1SFviVZmgUcrsQKTI/q59ows+4fRtb87EyMc
+         RjWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781429186; x=1782033986;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d16k0vZR1zettaTdZ3HXP0MjQdOsOHiGY8GKp79+E2s=;
+        b=oCrq91MaAlU21OsA3XomnpFbBQTYiq8/FpUeaiFvdSLOtNF7ABELwwNioabsDHbwF2
+         6ETDakwabp9tjagiZJSVolFCqLLz1r2N1Qn/TcvvwKO+EnfPrZqHKxc/yTIjuP2kxwoh
+         PicuHg83qOfgaIVtwNVWqBVo5rr2wjOJuOGUOj3ZgjKnrwJxqCcnkfEf7tOtMw0dSRBH
+         R0O8RClBJkH/73aY3vjhESI9s2mH6J7jQF7x3OtZcUBf5Y4DLzU0LcF1a0SM3oTIUHPU
+         W7hSNh8MF503n4imBnPzFjXYoSeyxBuC8XnScJTbfN5SmDo8NUZA2uFXFkFP1AVkHjlU
+         gN2A==
+X-Forwarded-Encrypted: i=1; AFNElJ96c72Umbd4aE1jiYMG3HxLR5SihYIdKXJeS3W57szjxU62oXLyQ8Snl0qBfy2YCaNw96Etq2HHtGo83RUtqdk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyWgn154yvqJ0wilVwlQsa6TQnCmSIL8lFblSXrAuxCumV1CY6
+	OZ66K6AzR6r/E4Ta1kFyv/SPMhMgmWgFCORCLhBmykq5/pzeIAw1I2rC
+X-Gm-Gg: Acq92OG6AswvzFcMUHhlanTlE+jfHspJsEKTd/XhblS55wr+NEOTNbGJEvbh/hgnD7O
+	+TIAy/eQA9WL8W8wp99FInefV3Alj26gxELm59v0kkKsp/rv4MSt6TWyc7e/0vnXbUglVd6CQdg
+	AajCYXx9j61Q/3rJ/Uz+1Z5NeGoJzg3yM1/t0WEqWg3+ld8P0NSwEFjKTJ1dUG8XECQHuXh583R
+	nZ0kPpehSAsnwkmjSgMyBxtyf4jzklRecw951GhFDrQV2ixY6esgdSD6o/OsgEXt5jw4qoZAFYa
+	CW+4IdaOtrPq3wI95Z+2f1VNJupBQM7ul6fhxdsn9BB9vfygZ9X/ThhCkFk7vmCYwpfjZ6gpVXG
+	Ck2qTzih6qYjoBAqoYMyMnFjY10toizwY/5EnY+wX7S7SffYvWX6kvpsxfmflI96KDwd8XsY6JQ
+	I1FNgolcTJ6B4x8Xj9Wrh3T900tC7Lv5vBXFEQB2GNkaB0AYLKICeAuCF+sGruwjkqS4+vwJhTL
+	53vHq3gTAFq3+nm
+X-Received: by 2002:a05:6a21:9207:b0:3b5:530d:d96d with SMTP id adf61e73a8af0-3b7857de1b2mr8737610637.12.1781429186348;
+        Sun, 14 Jun 2026 02:26:26 -0700 (PDT)
+Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434b057461sm8198423b3a.58.2026.06.14.02.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Jun 2026 02:26:25 -0700 (PDT)
+From: HyeongJun An <sammiee5311@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
 	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	jhs@mojatatu.com,
-	kuba@kernel.org,
-	stephen@networkplumber.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	donald.hunter@gmail.com,
-	kuniyu@google.com,
-	ij@kernel.org,
-	ncardwell@google.com,
-	koen.de_schepper@nokia-bell-labs.com,
-	g.white@cablelabs.com,
-	ingemar.s.johansson@ericsson.com,
-	mirja.kuehlewind@ericsson.com,
-	cheshire@apple.com,
-	rs.ietf@gmx.at,
-	Jason_Livingood@comcast.com,
-	vidhi_goel@apple.com
-Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with tso_segs() CC callback for TCP Prague
-Date: Sun, 14 Jun 2026 09:17:56 +0200
-Message-Id: <20260614071756.239686-1-chia-yu.chang@nokia-bell-labs.com>
-X-Mailer: git-send-email 2.34.1
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	HyeongJun An <sammiee5311@gmail.com>
+Subject: [PATCH bpf v2 0/2] libbpf: Reject out-of-range linker relocation offsets
+Date: Sun, 14 Jun 2026 18:26:14 +0900
+Message-ID: <20260614092616.165337-1-sammiee5311@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB3PEPF0000885A:EE_|AS8PR07MB9210:EE_
-X-MS-Office365-Filtering-Correlation-Id: 332dc418-3284-4265-5cde-08dec9e52f68
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|36860700016|23010399003|82310400026|56012099006|11063799006|18002099003|3023799007|6133799003|921020;
-X-Microsoft-Antispam-Message-Info:
-	oPZIMO/qa9mi6fzt6vDaj8dsYgkBIrbBrVsTO/ll0MwwJZZ7NPsa7XaNEmihi8OzLtduyjoJmToj3D/Hywq5e1gFKZ6PsKghlCHVbrDHy+sB819M2uHC9P0CHMW0m2O7UjqkcZR4uigfSZRcD+Q9gAxXIcjPP+evw8xRfuvie7AIqAn6CUs5Vk5iw0PMSZ+2uqiaJj5z1icc3j4q51krTtn0lAHo/hnTqrIGNnPwAEINrIrfwIzSbZGZ6vpU7NoH0cNhNPPVhHSCSxBvnBcPoxvArcGCoMh1F90MmENiUjTDQh97xmn6OAM5FBJy1q1Cbg2X2nOL39vSAMRBWFes17A84tS8NFxYzUukGgn+FuRQoDm8rXrsqjkt0XP6+mHxRhHKNcR9CQkp21DrGZZX8JkivLer3PIguz851JlfQLpm13RcTSiziH2GmPpCdiZ3RkwUetPCnm6WzqDWe4A+HHaavFOSvbNK8vJe75LZBVNIgQPs5x5GH1wUKzfIbnxwSZE5rTy50d2gLwwqKLgDgpk5Txj4mwNClOjaHQNbv7SETqGiTyNhGWhBHCtnsbRXV2+AhvDihERlsV7gfBPkK8K0EI46/zuvSZIhZIenvtTfz5XDyEgZM6miyloLBbH5rzDKHmpr5ed/4oSmS4rASUzr17DM63WTt3U/n1A+WtYSUuP5ighvjIKztXg91RX2MwkND+2AdHyppsPrI2u4FOmdRCTl3KUx9z1fPvUQjuN9l3GneHGIf2fJzanUyVpi/rJYW7eipUiO4wmdLsxCEA==
-X-Forefront-Antispam-Report:
-	CIP:131.228.6.100;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr711usmtp2.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(36860700016)(23010399003)(82310400026)(56012099006)(11063799006)(18002099003)(3023799007)(6133799003)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	5cQhBjwYHlcAbJZF6CI9MxgIy8dPqhxLYtvVnUwHjzR9ETCbwExA+oWfugIifQvAUo3JRxztueQmpmgYn4VmfLbQgHiPcWeNrl3dirIadTaWea61qQgjeAaMROZZR5tU1Lpu/97ETu2vWVeE65n7Nn1pGdP270hDzNLUqryUl4d5/fDQaPyIfputC+58FBuoSXKR+rwflRpQDH7U/yRd7aw3gkXkOlEF9i3980I/YDympVIAVZjwFi9L4iHPiDyFW0OGm3AFnZasm70QMpOl8W9ysRt6Hj1UZ/7QmrPOWStG1kINCSaCRpcEZyxJ8m3ALXivJzSrwX9LFk3qcI3b9jHediWjRx6FrapOSAhQ5GbfJxATcdLq9+pzooKmAITQq9Rf+e5WYm+WTh14JfzB2Wp1F1mzPkiO1fggdbB2bjw4n7fFZ2wR8LsH8Np1n6+S
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2026 07:18:51.2463
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 332dc418-3284-4265-5cde-08dec9e52f68
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.100];Helo=[fr711usmtp2.zeu.alcatel-lucent.com]
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DB3PEPF0000885A.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB9210
 
-From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+The libbpf static linker validates relocation type, symbol index and
+instruction alignment in linker_sanity_check_elf_relos(), but does not
+check that the relocation offset is inside the relocated section.  A
+malformed BPF object processed by the static linker (e.g. via
+"bpftool gen object") can therefore carry an out-of-range r_offset that
+linker_append_elf_relos() then uses to index the section data, reading
+and writing past the buffer.
 
-This patch replaces existing min_tso_segs() with tso_segs() CC callbak
-for CC algorithm to provides explicit tso segment number of each data
-burst and overrides tcp_tso_autosize().
+The normal object-loading path already rejects such offsets (libbpf.c,
+rel->r_offset >= scn_data->d_size); the static linker path is the
+missing sibling.  Patch 1 adds the same bound.  Patch 2 adds a selftest
+that builds a tiny object with an out-of-range relocation offset and
+checks that the linker now rejects it, with a valid relocation as a
+positive control.
 
-No functional change.
+Reproduced with ASAN: before patch 1 the out-of-range relocation is
+accepted (and triggers a heap-buffer-overflow); after, it is rejected
+with -EINVAL.
 
-Signed-off-by: Ilpo Järvinen <ij@kernel.org>
-Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
----
- include/net/tcp.h                                |  7 +++++--
- net/ipv4/bpf_tcp_ca.c                            |  4 ++--
- net/ipv4/tcp_bbr.c                               | 14 +++++++++++---
- net/ipv4/tcp_output.c                            | 13 +++++++------
- tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c |  8 ++++----
- 5 files changed, 29 insertions(+), 17 deletions(-)
+Changes in v2:
+- selftest: set the generated ELF object's EI_DATA from the host byte
+  order instead of hardcoding little-endian, so it works on big-endian
+  hosts (e.g. s390x).
+- selftest: add fallback definitions for EM_BPF and R_BPF_64_64 for
+  older system headers.
+Patch 1 (the fix) is unchanged.
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index f063eccbbba3..34d370ea9ceb 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -824,6 +824,9 @@ unsigned int tcp_sync_mss(struct sock *sk, u32 pmtu);
- unsigned int tcp_current_mss(struct sock *sk);
- u32 tcp_clamp_probe0_to_user_timeout(const struct sock *sk, u32 when);
- 
-+u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
-+		     int min_tso_segs);
-+
- /* Bound MSS / TSO packet size with the half of the window */
- static inline int tcp_bound_to_half_wnd(struct tcp_sock *tp, int pktsize)
- {
-@@ -1361,8 +1364,8 @@ struct tcp_congestion_ops {
- 	/* hook for packet ack accounting (optional) */
- 	void (*pkts_acked)(struct sock *sk, const struct ack_sample *sample);
- 
--	/* override sysctl_tcp_min_tso_segs (optional) */
--	u32 (*min_tso_segs)(struct sock *sk);
-+	/* override tcp_tso_autosize (optional)*/
-+	u32 (*tso_segs)(struct sock *sk, u32 mss_now);
- 
- 	/* new value of cwnd after loss (required) */
- 	u32  (*undo_cwnd)(struct sock *sk);
-diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-index 791e15063237..ed4fea98dfde 100644
---- a/net/ipv4/bpf_tcp_ca.c
-+++ b/net/ipv4/bpf_tcp_ca.c
-@@ -284,7 +284,7 @@ static void bpf_tcp_ca_pkts_acked(struct sock *sk, const struct ack_sample *samp
- {
- }
- 
--static u32 bpf_tcp_ca_min_tso_segs(struct sock *sk)
-+static u32 bpf_tcp_ca_tso_segs(struct sock *sk, u32 mss_now)
- {
- 	return 0;
- }
-@@ -320,7 +320,7 @@ static struct tcp_congestion_ops __bpf_ops_tcp_congestion_ops = {
- 	.cwnd_event_tx_start = bpf_tcp_ca_cwnd_event_tx_start,
- 	.in_ack_event = bpf_tcp_ca_in_ack_event,
- 	.pkts_acked = bpf_tcp_ca_pkts_acked,
--	.min_tso_segs = bpf_tcp_ca_min_tso_segs,
-+	.tso_segs = bpf_tcp_ca_tso_segs,
- 	.cong_control = bpf_tcp_ca_cong_control,
- 	.undo_cwnd = bpf_tcp_ca_undo_cwnd,
- 	.sndbuf_expand = bpf_tcp_ca_sndbuf_expand,
-diff --git a/net/ipv4/tcp_bbr.c b/net/ipv4/tcp_bbr.c
-index 82378a2bfd1e..15536564246c 100644
---- a/net/ipv4/tcp_bbr.c
-+++ b/net/ipv4/tcp_bbr.c
-@@ -297,11 +297,19 @@ static void bbr_set_pacing_rate(struct sock *sk, u32 bw, int gain)
- }
- 
- /* override sysctl_tcp_min_tso_segs */
--__bpf_kfunc static u32 bbr_min_tso_segs(struct sock *sk)
-+static u32 bbr_min_tso_segs(struct sock *sk)
- {
- 	return READ_ONCE(sk->sk_pacing_rate) < (bbr_min_tso_rate >> 3) ? 1 : 2;
- }
- 
-+__bpf_kfunc static u32 bbr_tso_segs(struct sock *sk, u32 mss_now)
-+{
-+	u32 min_tso;
-+
-+	min_tso = bbr_min_tso_segs(sk);
-+	return tcp_tso_autosize(sk, mss_now, min_tso);
-+}
-+
- static u32 bbr_tso_segs_goal(struct sock *sk)
- {
- 	struct tcp_sock *tp = tcp_sk(sk);
-@@ -1151,7 +1159,7 @@ static struct tcp_congestion_ops tcp_bbr_cong_ops __read_mostly = {
- 	.undo_cwnd	= bbr_undo_cwnd,
- 	.cwnd_event_tx_start	= bbr_cwnd_event_tx_start,
- 	.ssthresh	= bbr_ssthresh,
--	.min_tso_segs	= bbr_min_tso_segs,
-+	.tso_segs	= bbr_tso_segs,
- 	.get_info	= bbr_get_info,
- 	.set_state	= bbr_set_state,
- };
-@@ -1163,7 +1171,7 @@ BTF_ID_FLAGS(func, bbr_sndbuf_expand)
- BTF_ID_FLAGS(func, bbr_undo_cwnd)
- BTF_ID_FLAGS(func, bbr_cwnd_event_tx_start)
- BTF_ID_FLAGS(func, bbr_ssthresh)
--BTF_ID_FLAGS(func, bbr_min_tso_segs)
-+BTF_ID_FLAGS(func, bbr_tso_segs)
- BTF_ID_FLAGS(func, bbr_set_state)
- BTF_KFUNCS_END(tcp_bbr_check_kfunc_ids)
- 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 26dd751ec72a..a09b00c5483e 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -2253,8 +2253,8 @@ static bool tcp_nagle_check(bool partial, const struct tcp_sock *tp,
-  * for every 2^9 usec (aka 512 us) of RTT, so that the RTT-based allowance
-  * is below 1500 bytes after 6 * ~500 usec = 3ms.
-  */
--static u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
--			    int min_tso_segs)
-+u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
-+		     int min_tso_segs)
- {
- 	unsigned long bytes;
- 	u32 r;
-@@ -2269,6 +2269,7 @@ static u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
- 
- 	return max_t(u32, bytes / mss_now, min_tso_segs);
- }
-+EXPORT_SYMBOL(tcp_tso_autosize);
- 
- /* Return the number of segments we want in the skb we are transmitting.
-  * See if congestion control module wants to decide; otherwise, autosize.
-@@ -2278,11 +2279,11 @@ static u32 tcp_tso_segs(struct sock *sk, unsigned int mss_now)
- 	const struct tcp_congestion_ops *ca_ops = inet_csk(sk)->icsk_ca_ops;
- 	u32 min_tso, tso_segs;
- 
--	min_tso = ca_ops->min_tso_segs ?
--			ca_ops->min_tso_segs(sk) :
--			READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
-+	min_tso = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
- 
--	tso_segs = tcp_tso_autosize(sk, mss_now, min_tso);
-+	tso_segs = ca_ops->tso_segs ?
-+			ca_ops->tso_segs(sk, mss_now) :
-+			tcp_tso_autosize(sk, mss_now, min_tso);
- 	return min_t(u32, tso_segs, sk->sk_gso_max_segs);
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c b/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
-index 0a3e9d35bf6f..58262e490336 100644
---- a/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
-+++ b/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
-@@ -10,7 +10,7 @@ extern u32 bbr_sndbuf_expand(struct sock *sk) __ksym;
- extern u32 bbr_undo_cwnd(struct sock *sk) __ksym;
- extern void bbr_cwnd_event_tx_start(struct sock *sk) __ksym;
- extern u32 bbr_ssthresh(struct sock *sk) __ksym;
--extern u32 bbr_min_tso_segs(struct sock *sk) __ksym;
-+extern u32 bbr_tso_segs(struct sock *sk, u32 mss_now) __ksym;
- extern void bbr_set_state(struct sock *sk, u8 new_state) __ksym;
- 
- extern void dctcp_init(struct sock *sk) __ksym;
-@@ -90,9 +90,9 @@ u32 BPF_PROG(ssthresh, struct sock *sk)
- }
- 
- SEC("struct_ops")
--u32 BPF_PROG(min_tso_segs, struct sock *sk)
-+u32 BPF_PROG(tso_segs, struct sock *sk, u32 mss_now)
- {
--	return bbr_min_tso_segs(sk);
-+	return bbr_tso_segs(sk, mss_now);
- }
- 
- SEC("struct_ops")
-@@ -120,7 +120,7 @@ struct tcp_congestion_ops tcp_ca_kfunc = {
- 	.cwnd_event	= (void *)cwnd_event,
- 	.cwnd_event_tx_start = (void *)cwnd_event_tx_start,
- 	.ssthresh	= (void *)ssthresh,
--	.min_tso_segs	= (void *)min_tso_segs,
-+	.tso_segs	= (void *)tso_segs,
- 	.set_state	= (void *)set_state,
- 	.pkts_acked     = (void *)pkts_acked,
- 	.name		= "tcp_ca_kfunc",
+HyeongJun An (2):
+  libbpf: Reject out-of-range linker relocation offsets
+  selftests/bpf: Test linker rejects out-of-range relocation offset
+
+ tools/lib/bpf/linker.c                        |   6 +
+ .../selftests/bpf/prog_tests/libbpf_linker.c  | 231 ++++++++++++++++++
+ 2 files changed, 237 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_linker.c
+
 -- 
-2.34.1
+2.43.0
 
