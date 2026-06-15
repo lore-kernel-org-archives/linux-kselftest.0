@@ -1,160 +1,133 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92097145B3F
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 07:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 826683C0A16;
+	Mon, 15 Jun 2026 08:10:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781509181; cv=none; b=g9OkSF/Aa3mglvXTPHLntNQ22G9Tzk7A1iWkFEC5e5XC3AZZZvX7TmVWY9s0knHzzgN0yiVSY6uVj2opCUhSI5ahPz1pTqt6F0uQax4l1luSPPQtw7BjR4HajSOrzjZHXcnUrW1SoHSECrs7QSWSVb75bBt3XMaPsDzABt6f+CY=
+	t=1781511012; cv=none; b=UB20jaTgqbTcNhWuyr9UtWe9daQNu57ryuDgnRpp644TLH/E0n0/tnoYW2zFUzxLOC7DRgMLzyPL7xqd4Zka4tIT4PNjl/d0kmDt/YiR8S+LBh6IZT0IqUc4OhnuzrogrhJWStPpYe21GIXUmpP+3AjwvkX5i/mhR+Yi2RaI2H0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781509181; c=relaxed/simple;
-	bh=gLE8CCQ5SH12vR+rRgkoSJvrMBzBUKCuuw23IvWdWz4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CmI14fgeBZ2tb5Fd15BO+PchaN+yFu48ZFwDsBv0GU3kFoT3Ulh+wANfqsL3hZPya3DYtqUl2M/T2LhqSIa7w9hDXyh5xi8VQxgbyvBAfnnxWmI30YATQpTu9M8DHsV81w6AjRA6AV4kSnqFU3o0Ahy7Z8WVfMYULlEpBb+eaU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HylVFj8o; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781511012; c=relaxed/simple;
+	bh=uORuALk+uTPXVC4G/DmCc3zHesRqlCytr+WfQU8HQrs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=OgMqu7uJ9Lw7AirlNODUP7er1R35FaHx28GGezvjq5OPtloY5T/bD7IDElWkVp3hKKt6+9kaCHDFaJxgdVLrCtPL7RwUpcucjLp8ENllN38+hRQZuW4rC9Gq3ltu7lSLVkQWibFcsbZDdwGhw9UqZRsXejFZc72RAd7FQBUD5oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=dSUsOvp4; arc=none smtp.client-ip=162.243.164.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HylVFj8o"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2c0c20f0c0aso20371995ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 00:39:37 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="dSUsOvp4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781509177; x=1782113977; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vbxyv2uuWx2uMg89JQUtXul+SksXRCRyTkytnWrdbbs=;
-        b=HylVFj8olbHUfUyxSEIEg9YPMet/+ntPQWFLo9hdVoorB+YhdS9hNFUJIUSHR8Ib2V
-         kG9bsprvYkkKY6qwgnqt5u4IuHTRKn70Z/g0Np2yOhdvUef/CQSk5lhBVmqiDMwJdMBM
-         JG3WSM54Viep3VFRJSCHEt69AvkI1YBF4TdtPMeHis8arqH6DqAREGPgwYUquiDv4zIk
-         Khe3m0LETBwReGBkHaautnRGSndbR1l60gcMMlcf0Xol1oMEVGUqCvCi+0dp4t7q7d9k
-         +KCxIeQ7JJWpIguW2j9kw+DcQEM9H1EvncKke5yJc2NaPqO2X8RJ416LHijdISkFg/gz
-         wn7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781509177; x=1782113977;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=vbxyv2uuWx2uMg89JQUtXul+SksXRCRyTkytnWrdbbs=;
-        b=WX1gH8SaeSdtU1+wwCj5BG+dd55UqwmyMx1i5n3vn9T5kT9+3GRd1O2KjqpEri+hYm
-         QqjJR+bagGW+eWoil9VQ8ExkiJNVvp7gPbRkBgBf2owzkr32RTk/+hkud1TL+i++k2Yi
-         12GQpP6L7FlXbiBJCvYTR3egNCMJRqTIZj8mvZrgRISkVfSxWW42KEeramDo68GnAOZY
-         u8FktNlzdgOqZQRGTeIRZ3AcVDTP74tmuZJBlRrBho3ooeBGVYjmahb5IMjwTCY0Vt2z
-         us6v+rEIbPA3UOjAgilZhSJeTjH5sjbpdfpLRFPc+6A23eIsOFJ75JayC1Bd1TUlqSWu
-         8mYQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+lvwE61c18nXHYO5vFw9dSj0XNlqod3iHJmlRCdoP3tXU0aVjmhEavi36hB6PAgD3hg+xXWleVsyworCIoEFs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWjajTlag2CicOh1nOdpTc0Txw3TR/8qKXaYEdm+92Hh/uvMyT
-	YsJyvv6RJ4XS0N6+S+3QNpfsOXkSt7YYLbGGFu60cWHos27eqAqj0p2n
-X-Gm-Gg: Acq92OEAULVODHrjdmBaRk1otFkqDnnkojOEiHg4PuXNLNVdoNqVKuMKmXlM6M9Dpi3
-	xGJE/2N3pn/f9W8vtEGWd9lpclkeSGRtRypKAI79OR2AQaQ6Ea7uretgsOq7Mfm8gW6+6E+Q9aJ
-	H3HK7qkHEajq13/LWCFoPAsRnEE5N3ElmmkkmAE66iNfwzFNgDq+JOaO+uqpguNCL89bGyjWhtR
-	rXzCp/6zXxc+WzQFeKSv4IZ3/tTGziohLmOLgABgsoBmJ3K2U8LYxxjvF09X/CwmWkMaoTRLeeu
-	utPVzwj43cJKq7/YefjXB9HLqu4I6o/IWdeHUmq5UwPbGCRGJg3MPOiYmwhCOldBG53iDdD7Zz1
-	kBc7eDDxx0+4T4HKFyAz/gkNZnfrF60rRQ2pBzt1tJ0w80y+2jf9yusFtAVmlL9d4fkiNT5IOnm
-	o2iU8vwr5zT8MZaVa/eDNCykOdGjmopvOzJE4rQmEcCKrrSG4PZMc43qd9DNVYVOQ=
-X-Received: by 2002:a17:903:1a30:b0:2c6:7479:644d with SMTP id d9443c01a7336-2c674796a84mr71837965ad.5.1781509176848;
-        Mon, 15 Jun 2026 00:39:36 -0700 (PDT)
-Received: from localhost.localdomain ([2a12:a304:100::209f])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c43307a259sm91271345ad.68.2026.06.15.00.39.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 00:39:36 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	paul.chaignon@gmail.com,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf 2/2] selftests/bpf: Cover partial copy of non-linear skb test_run output
-Date: Mon, 15 Jun 2026 15:38:56 +0800
-Message-ID: <20260615073856.152479-3-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260615073856.152479-1-sun.jian.kdev@gmail.com>
-References: <20260615073856.152479-1-sun.jian.kdev@gmail.com>
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=TOjQORQFh9NCz0+U4YFbAtKq5Cs7dfL
+	OwKv18hFTr9s=; b=dSUsOvp45uiSFb8iIdKv4Tpqm+oURHpARByTa6gZs+66cDx
+	FOew56ltOZA3GUO/bJTPtg/e9C6DZ3nfopbrwZGMPV9BWxNdb+CAL+eakJZAC1+4
+	HumGoJ+Kq/YxevgtSRC+QhscJidNvTrC8URbhbirdBD7vuJhX8dIWlr+K6i8=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web4 (Coremail) with SMTP id ywQGZQC3y6BWsy9qKJVJAg--.52153S3;
+	Mon, 15 Jun 2026 16:09:59 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Date: Mon, 15 Jun 2026 16:09:53 +0800
+Subject: [PATCH bpf-next 1/2] bpf: Preserve pointer spill metadata during
+ half-slot cleanup
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260615-f01-06-half-slot-pointer-spill-v1-1-47f1c18a8965@mails.tsinghua.edu.cn>
+References: <20260615-f01-06-half-slot-pointer-spill-v1-0-47f1c18a8965@mails.tsinghua.edu.cn>
+In-Reply-To: <20260615-f01-06-half-slot-pointer-spill-v1-0-47f1c18a8965@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781511000; l=2173;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=uORuALk+uTPXVC4G/DmCc3zHesRqlCytr+WfQU8HQrs=;
+ b=6RR7bMd57EzU7sLiVhygpbPl6Fr+IUm+pV51NKW5TbgwPfhVpap7MDjRa7SLAgu0c2/p52yc7
+ Dbq4LJLH9iHADUEi5Lo2TyfuOYn+7mxZB/Wf30vhRU/Ntk+Pf1T8DUz
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:ywQGZQC3y6BWsy9qKJVJAg--.52153S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFyxuFWfGw1UGr1Dur1ftFb_yoW8ur45pF
+	yDG3W7Gr4kJw1I93ZFvF1kKryDGF4kXw42kF1UGryIgFyrGry2vFs09ayrAa1aqFykA3yr
+	ArWFqrZ0k3WDuFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
+	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
+	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
+	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
+	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Av
+	z4vE14v_GFyl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
+	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+	JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+	v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU0Ysj5UUUUU==
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgATA2ovr8QHzQAAs2
 
-Add a test case for BPF_PROG_TEST_RUN with a non-linear skb and a short
-data_out buffer.
+__clean_func_state() cleans dead stack slots in 4-byte halves. When the
+high half of a STACK_SPILL slot is dead and the low half remains live,
+cleanup converts the live low half to STACK_MISC or STACK_ZERO and clears
+the saved spilled_ptr metadata.
 
-The test verifies that test_run returns -ENOSPC, reports the full packet
-length through data_size_out, and copies the packet prefix into data_out.
-The test uses a 100-byte data_out buffer with a 64-byte linear head, so the
-expected output spans both the skb head and the first fragment.
+That conversion is safe only for scalar spills. For a pointer spill, this
+metadata clear lets a later 32-bit fill from the still-live half avoid the
+normal non-scalar register-fill check and be treated as an ordinary scalar
+stack read.
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+Leave non-scalar spill slots intact in this half-live shape. This is
+conservative for pruning and preserves the existing
+check_stack_read_fixed_off() rejection path for partial fills from pointer
+spills.
+
+Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
- .../selftests/bpf/prog_tests/skb_load_bytes.c | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ kernel/bpf/states.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/skb_load_bytes.c b/tools/testing/selftests/bpf/prog_tests/skb_load_bytes.c
-index d7f83c0a40a5..134be0ea8ed7 100644
---- a/tools/testing/selftests/bpf/prog_tests/skb_load_bytes.c
-+++ b/tools/testing/selftests/bpf/prog_tests/skb_load_bytes.c
-@@ -3,6 +3,39 @@
- #include <network_helpers.h>
- #include "skb_load_bytes.skel.h"
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 32f346ce3ffc..ea2153cf28d0 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -436,12 +436,10 @@ static void __clean_func_state(struct bpf_verifier_env *env,
+ 				continue;
  
-+#define NONLINEAR_PKT_LEN 9000
-+#define NONLINEAR_HEAD_LEN 64
-+#define SHORT_OUT_LEN 100
-+
-+static void test_nonlinear_data_out_partial(int prog_fd)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, tattr);
-+	__u8 pkt[NONLINEAR_PKT_LEN];
-+	__u8 out[SHORT_OUT_LEN];
-+	struct __sk_buff skb = {};
-+	int err, i;
-+
-+	for (i = 0; i < sizeof(pkt); i++)
-+		pkt[i] = i & 0xff;
-+
-+	memset(out, 0xa5, sizeof(out));
-+
-+	skb.data_end = NONLINEAR_HEAD_LEN;
-+
-+	tattr.data_in = pkt;
-+	tattr.data_size_in = sizeof(pkt);
-+	tattr.data_out = out;
-+	tattr.data_size_out = sizeof(out);
-+	tattr.ctx_in = &skb;
-+	tattr.ctx_size_in = sizeof(skb);
-+
-+	err = bpf_prog_test_run_opts(prog_fd, &tattr);
-+
-+	ASSERT_EQ(err, -ENOSPC, "nonlinear_partial_err");
-+	ASSERT_EQ(tattr.data_size_out, sizeof(pkt), "nonlinear_partial_data_size_out");
-+	ASSERT_OK(memcmp(out, pkt, sizeof(out)), "nonlinear_partial_data_out");
-+}
-+
- void test_skb_load_bytes(void)
- {
- 	struct skb_load_bytes *skel;
-@@ -40,6 +73,8 @@ void test_skb_load_bytes(void)
- 	if (!ASSERT_EQ(test_result, 0, "offset 10"))
- 		goto out;
+ 			/*
+-			 * Only destroy spilled_ptr when hi half is dead.
+-			 * If hi half is still live with STACK_SPILL, the
+-			 * spilled_ptr metadata is needed for correct state
+-			 * comparison in stacksafe().
+-			 * is_spilled_reg() is using slot_type[7], but
+-			 * is_spilled_scalar_after() check either slot_type[0] or [4]
++			 * Only scalar spills can be degraded to raw stack bytes
++			 * when their high half is dead. Pointer spills need the
++			 * saved spilled_ptr metadata so partial fills keep
++			 * rejecting as non-scalar register fills.
+ 			 */
+ 			if (!hi_live) {
+ 				struct bpf_reg_state *spill = &st->stack[i].spilled_ptr;
+@@ -449,6 +447,9 @@ static void __clean_func_state(struct bpf_verifier_env *env,
+ 				if (lo_live && stype == STACK_SPILL) {
+ 					u8 val = STACK_MISC;
  
-+	test_nonlinear_data_out_partial(prog_fd);
++					if (spill->type != SCALAR_VALUE)
++						continue;
 +
- out:
- 	skb_load_bytes__destroy(skel);
- }
+ 					/*
+ 					 * 8 byte spill of scalar 0 where half slot is dead
+ 					 * should become STACK_ZERO in lo 4 bytes.
+
 -- 
-2.43.0
+2.34.1
 
