@@ -1,148 +1,79 @@
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011058.outbound.protection.outlook.com [40.107.208.58])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CA72E401;
-	Mon, 15 Jun 2026 00:16:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781482615; cv=fail; b=D68aUmFvVvIy7hQXzGqaqd43xzf0/EiWU8ESM+PG2TY66ZkatHfh7upo+GTGu3qMJPmKcrUIxeXE3J3WUMLrxRgxy9XOzgO1510CqyX6D8T6wXRFAu04Xbp5BCpFBvVmJkiyAUJpEkLt102mawhab2PRHUtVznB9N0gN8JgHVlo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781482615; c=relaxed/simple;
-	bh=CjYnjOWAfUgyTIl4agaUZra1/3Ht2/+NPo4/OL68VFo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=LHoUJgTJ55uQ6Lapt9mzLAoAl4u/RwgsHgDIBw/Ys1HwiFPKdqRUcOPAa3em2VaAp0jP4dDLn6OGSneLBvM+tVtcLiCHjaUKJQhDaBT5JOjrNbUG9es1L2r4iTh9JrSlO9Tn0BVSi+Xy7WZm9JbQLiOH0LpgCya2VPrQURYRRZQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tV9YBYdj; arc=fail smtp.client-ip=40.107.208.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C1E22652D;
+	Mon, 15 Jun 2026 00:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781484033; cv=none; b=pyD+d8dFQvQS3Z3tX8m3FKPDrYRQHi7YIb/GlG5d4mEF4QqcES48QDqYp3u42FZ2S7A6ClXBr55hz9ZH49s+isUFn1GMLbKo0NwKrHp4UvauYvuVYqVNn0E3jh2rJ30mY0IjsI/cYhb00DLHtfci6pRYUnQJ3cbZetBHLXS1+zc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781484033; c=relaxed/simple;
+	bh=UJy0AA6csPRiCnstvTz1ueAhR/3DCFkAlvjNGPjxHHo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=jHZqNtitPYaUCn/p9k/cT7rp4htQrbLaUoBCT2T45vB98yeYk+onSnwo34sAC9si1GZUHdUOcsf/YstIFDHXtYNiPhn3qoKdni1jRmuRqEvIliCiVeRFw4d4XV8iabrbkGpMW/SxKSPkqYMpwMN75F8337MRaZx0yNd0PKDEsTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KYWzrzkc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tV9YBYdj"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EUBmEn7mmw0Ec5Or79Q3CQoprmEGqPdOnRsUyIv41JGpF/bbnXNQw69pBqosbRg9XPVnoLlVvkh8fSK8eyS9dsR+fZc85TR6WUdqN7KGdXB6tOux3R3vqpr+x7Q38wPTdytPnK0z7Bl3SkZeJgQFgZLei/+zi6+sR+euAWhsff1p16C4hgT9sNk6+k+qgqPkMmTaaQoLAYom+mndaQsFElbPm9MwK+o+76xntau/hQDMYmTWxPJwvC4VUm7a09iw/5ZsGzwSSBitYxVNpx13K1ugmjhfmS7HgIy5kA5mm4zDc5X438HSOJZ4wMFcNVm6VL2BPKPiBg2LIDRR8pDkeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IsvmiMuXmpOcEyJjEd3gqK54xf+nXDz6FZ9/ZIK5T2A=;
- b=aLPt/Mg6B8K8p7rt5HJHulGyEtPGGHYbyRG1g6KdPKuJFfdRBjGJD6gwa+dH7FXoyY5kLf0v4ylZiiaGYoaqRpT8j+uD9BWSJ9xqwAtmNEcUy0+Hjwaoj0ez9sY8DK3DOO5eWeCkqwTWZ8qEiHqRvRm9E/bispMmNMxYNYZzvk/c+Nmgv76d+pLXD7Bj0SpwNKCgydX1rYZ/drOycDJGkbBOfE0KMm+U7l/y5L7tWUDdo23IZMIxw0Fj4QzV8cLqLE3DybzJYBYvB7yGv1TiLFu+t69m/InJiNL7sKfpGPJQbzQfLEM4G3oP54lGkyWbrjGlLYzznzTizFfg7iVQ7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IsvmiMuXmpOcEyJjEd3gqK54xf+nXDz6FZ9/ZIK5T2A=;
- b=tV9YBYdjQO/4ZkQ1xc4RVXao8yOLUCxj2UOTRDx75dCfAyY8qzEW69SbKXLFhUChFuptMAEmdhEWX154ub/tIAJ6AasQannV7ON70uPSeqD2N8Y0w0RTFV0psDuNJAC6MX1uj69pHzzmTotUQA3CTdkioTtaC4aA+2GGYWuVkdkJQ49ipdqNnDJd1AKBRht+B3uWRgmvfIP9lOG1yQk8DP/fUvra0ARbVVrxCmGc5iakmM9LnHhbjT6MHUrrKqnjtATq1Tw+648duqTHVZilqw0TDcCP57NGsOotKsjyz5FtKThJ6oJTwuCMayv9EE4a3ab086gJnCeUNt6c9paW2g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH2PR12MB5001.namprd12.prod.outlook.com (2603:10b6:610:61::18)
- by IA1PR12MB6652.namprd12.prod.outlook.com (2603:10b6:208:38a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.16; Mon, 15 Jun
- 2026 00:16:47 +0000
-Received: from CH2PR12MB5001.namprd12.prod.outlook.com
- ([fe80::89e3:6df0:de90:8dfe]) by CH2PR12MB5001.namprd12.prod.outlook.com
- ([fe80::89e3:6df0:de90:8dfe%5]) with mapi id 15.21.0113.015; Mon, 15 Jun 2026
- 00:16:47 +0000
-Date: Mon, 15 Jun 2026 10:16:41 +1000
-From: Balbir Singh <balbirs@nvidia.com>
-To: Aboorva Devarajan <aboorvad@linux.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Ralph Campbell <rcampbell@nvidia.com>, Matthew Brost <matthew.brost@intel.com>, 
-	Alistair Popple <apopple@nvidia.com>, Alex Sierra <alex.sierra@amd.com>, 
-	Matthew Wilcox <willy@infradead.org>, Sayali Patil <sayalip@linux.ibm.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] selftests/mm: allow PUD-level entries in compound
- testcase of hmm tests
-Message-ID: <aivB1jLODH1W_0yt@parvat>
-References: <20260611034102.1030738-1-aboorvad@linux.ibm.com>
- <20260611034102.1030738-2-aboorvad@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260611034102.1030738-2-aboorvad@linux.ibm.com>
-X-ClientProxiedBy: MEWP282CA0100.AUSP282.PROD.OUTLOOK.COM
- (2603:10c6:220:1cf::20) To CH2PR12MB5001.namprd12.prod.outlook.com
- (2603:10b6:610:61::18)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KYWzrzkc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FBD1F000E9;
+	Mon, 15 Jun 2026 00:40:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781484031;
+	bh=S5YfzIDxUgC4Xg71v9qmQZJR6JCeH4FhZ6dTlzLXreA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=KYWzrzkcuAJyQdPcBJPSQESdbGCene9Ss6Wkl5d1dbBzJbsJQHrG9+4wGxMBDU824
+	 P3lyE+dNnWf0jI7DJjlo/5Sxka3JYMH9v2saSNqJwrMrBhqJjuqkOc/WiYVk/CwXkZ
+	 pYbWBNVAEfxGen1Xit+vL55NzWOyZZTmLRxIP9T99q0oA+xdOf8xvbsHbwpAWQ2ZYE
+	 ORXVskR3zaLIbztM5obl1Cv6F0wZFIrCtTi5Ha+5KwaJ7ldoO/mPZKnFojxzbBdC8q
+	 k+Dk3eVpomBNOiqgMSkc/m+uzfYf35q2IeKPX1jx+MZs9FFqOas+GiNdktf4v2ZppK
+	 FwDT45s/D6VTQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93BE13A566D2;
+	Mon, 15 Jun 2026 00:40:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PR12MB5001:EE_|IA1PR12MB6652:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8cb3cfab-7916-4042-4759-08deca736358
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|23010399003|56012099006|4143699003|11063799006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	IsZzQv76lRQzUAkQbQkQpO6e+LqmN5om85hDONUN40nBqI+aGaGpqw7ryinxsV9JJNyZMsprF5aef06prMAokg4+Yi749e/2srJpV5d9kuUsJZUdwPrxMB4CP4iOm7HyFmg0JK3eHV2Vb1pJbiX/MZNP875xvc3Ty3miXyJNjCYJXuM4F75saJ1gOGGvbhyFmQ6bPDguKCGFfevee/KoFHSKjYAyDDR3m8ovURjGewW40PvUruOEUExyvsOExQPN50AZfQhLRueIpIyuREhApAGxQpPEMUMDCD+qHvr6hRDR4IwmPHyfReSKZsKJQv4G5yejP7xf5xyAeW6Ar5UwXI1pYAd5ZrgYoHFAyx5pa+YNdjmPJvjrZ+rJe9yxISCpUaWHf949DbHgvYynd4NqBiymILHkVnQ194YvOkRPMWbJzloc0uMcB1u6xDcdsCcX8rQeILP0PJqAs8jFSXn7Ny12DuDFgng7uGyrUJ5zKZNK87I2alZ2V4TfqkWgfSWreCfUs2lZusLvjnBKnRTRXfuK5VwaF3LeGIl561D0+CgkGOwuZJJAjA+7iEJ2H8uoVdDFICs5DdpKaC/WudIb4gCK4Qb5ZTcmM7OPKVm9R/L+fYGEEAqT8fiL/vyMNTmVfYLNioIFcNzI2rj6aSPpNA5QOPHv2wO+7gCwsqLjJsAR2SApfXAbZJi2LwYOT5bd
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB5001.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(23010399003)(56012099006)(4143699003)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?80RMFtVfY6fBbzGSokrJjxRGCTwJ0n7cPEmnsUjJDgBZnw/gL4H4Ssgx9CwZ?=
- =?us-ascii?Q?5cd1XidMM5Gkr+F/Tsot6MdoZ1vcQdiXx/MAoHGT7qgBifv5B0RUX9u/LTx4?=
- =?us-ascii?Q?soiMJFHaH++FeyzISqHowcjJ+IEdyZEL4pteV3rG5kFxmQ068xNN6YduYYWB?=
- =?us-ascii?Q?d1TR7dvo+/a02kjwsyTAavarkduop+/nqeMjf3SDm3MfpKMtZ+VWzFTHKBth?=
- =?us-ascii?Q?Wn3s3Kfd64NO9obLMyPdskJ6vCTHdmqDUtamPhTnddfQ1SHQmiUNCKS8SKES?=
- =?us-ascii?Q?19Ta3+g706mn9Pdo5vMJCUN8hGDhMKChD2UbrH55vmIfvgskjwHBbmQcNEeS?=
- =?us-ascii?Q?DrWlCcTEbzToQNm6j6d4jDnAnr6Fy0Phv7WplVIYwBmIvjDvjGBmMg/dbBOu?=
- =?us-ascii?Q?UYKasdtOrUy6oyvtUz3KxrcY5VFqhZQWEZ2e7XZLg+9peBPwLV32IvP6ATdN?=
- =?us-ascii?Q?xOn9GLokWaxeb4UlUPu+701dxu9Sq8mkgTj9RXJ1dsrqZSGp/c2VtvVjz2OP?=
- =?us-ascii?Q?O++PQglbST4ZQXKzPnzjqy1H73YunhwhZfsVvOHoFBoi5cSf8LG8+CC3AAGn?=
- =?us-ascii?Q?44kdLs8hC1UpUPGwZypr8+AGB7gH9d/+ZQePgX1WRpZJRdYDFdFbWgh/GXyo?=
- =?us-ascii?Q?aOHfpnyowas0IUZG6AZwxGRDP3nqo51uduZFKUZMmLZfGUUiMr7R/zbRJSyV?=
- =?us-ascii?Q?elJ59XFua8ZHieE3ro59abTxnQAjQ5mj1V54wplbaFgin2YPQNbAcOTd3G0k?=
- =?us-ascii?Q?LcxYIosIe0gtuRFwN1IVDn++nUymjLQ0oDR+wEn3u/wl9vQeovWotUF+d0be?=
- =?us-ascii?Q?W/utZMG9PYf0aUEe+Occ2VdQniXEHf0jB3X/mT6ATD/8un3HfqWBcq3r5Kd1?=
- =?us-ascii?Q?ejxogGboP6/B2W+1fLnydzg+B0QU1SZt+kpqBa0V+KkkohNp2E8HREGzdWTr?=
- =?us-ascii?Q?ObVEYcHiVfSiY/tV+4Nn/4lWQcsZUchf6RqjA32Q4kmlTyTOI9PLHtMUM2yM?=
- =?us-ascii?Q?it3/EO1TENyrIGuC02rGBVWRxlxjrEM2IQaWIe8sRT9UT+9ILB1+OCx72H7+?=
- =?us-ascii?Q?v1Dzij9NedbfBUaTf/SKcCATMUI+atvBPes44z7FX7a0q+3qBNqYqNImD5TC?=
- =?us-ascii?Q?nY4DGr5Ycwr14MHNtQn1UkWK2DNDVPEqCS8Y9cPFOAiY7lA2fihiUWPAp/xZ?=
- =?us-ascii?Q?dY2KBblHxID6MzsIRRBwCwuv9QPvKmppbxzHLUNcSv1nXYdICPaABjoBp/CR?=
- =?us-ascii?Q?vcTcE98ho4RIO7T5vpHC/iIy8K7qos3s9SCbiS57+7trktlLGVz4dBEIPgdx?=
- =?us-ascii?Q?cJmkFTFHm4um37tHr9ILmWXUVjLESXRwJ9NEydd6JjICDwCY1f8AxXiVbcU+?=
- =?us-ascii?Q?P2ktTBckrE8HYHmWhrtlSiwJGUic6IfGH/+U6UMCbeAIEvH4Jsil5t4HSVrc?=
- =?us-ascii?Q?t3TQAYgxmCH7dMj1zODJ2t00MAI2iwcWZNwz7pyXCFbfxNOaTvXd5GWuJPHV?=
- =?us-ascii?Q?KUwmkgzpCw/zhzCxHg/FM2S20wmnRq2tX49ki2S6UK/h+6vPJwxJ4F3qRzq3?=
- =?us-ascii?Q?AHF54zlQUwaPP0PXDPCRR/fzs/JQFiFWGv+Qfu+NYQkDjw9IAi/3J2DOmsBP?=
- =?us-ascii?Q?lmuS3ARSlTRPi8sSx4XhSdAD9pECIavzz/tSyrrfFPKZoViOJ81/4E9KrDsD?=
- =?us-ascii?Q?NQJgkfuPHCGPRmUB/7I0ea3OkyL5O9NucKZpIiJlrjYXWF1Unq+Hv3CF+i9S?=
- =?us-ascii?Q?bx0BBAlzAw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8cb3cfab-7916-4042-4759-08deca736358
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5001.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2026 00:16:47.2174
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 55dNAUjIEbkppSnTxnG35cP8kKitGK/6j/DasgOlH3c2l4GSe663uUWcrGR9rMu0ERAIv0uJ5OUDmZwR/YusZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6652
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] selftests/bpf: correct CONFIG_PPC64 macro name in
+ comment
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178148402716.2363016.7900379113752570071.git-patchwork-notify@kernel.org>
+Date: Mon, 15 Jun 2026 00:40:27 +0000
+References: <20260610044023.225820-1-enelsonmoore@gmail.com>
+In-Reply-To: <20260610044023.225820-1-enelsonmoore@gmail.com>
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org
 
-On Thu, Jun 11, 2026 at 09:11:00AM +0530, Aboorva Devarajan wrote:
-> From: Sayali Patil <sayalip@linux.ibm.com>
-> 
-> The HMM compound testcase currently assumes only PMD-level mappings and
-> fails on systems where default_hugepagesz=1G is set, because the region
-> is then reported by the device at PUD level.
-> 
-> Determine the mapping level (PMD or PUD) the device reports for the first
-> page of the range and require every page to match that level exactly via
-> ASSERT_EQ(). This accepts PUD-level mappings while preserving the
-> expected/observed protection values printed on failure, and rejects a
-> fragmented mapping that mixes PMD- and PUD-level entries within the same
-> range (which a per-page OR check would have let pass).
-> 
+Hello:
 
-PUD is not supported with zone device private folios, the fix should
-be really around default_huge_page_size(), using the default pmd size.
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Balbir
+On Tue,  9 Jun 2026 21:40:20 -0700 you wrote:
+> A comment in tools/testing/selftests/bpf/progs/test_fill_link_info.c
+> incorrectly refers to CONFIG_PPC6 instead of CONFIG_PPC64. Correct it.
+> 
+> Discovered while searching for CONFIG_* symbols referenced in code but
+> not defined in any Kconfig file.
+> 
+> Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] selftests/bpf: correct CONFIG_PPC64 macro name in comment
+    https://git.kernel.org/bpf/bpf-next/c/1f24de6b2c81
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
