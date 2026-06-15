@@ -1,122 +1,125 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD0D3AB272
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 19:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B973A783D;
+	Mon, 15 Jun 2026 19:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781550538; cv=none; b=hYcMB6JyolB77AiK9VQpQEw+HIa0G8OHd5VFFTL+i4Pvfp8XvB+DdcvCOMFpjUF1uxtdItmCNCksiWf3RKhg1VSWrJLAkOuhPr0IKbrZZLNqcthbQJK3+Zi7/2WhYn3Hw4w/dxbZcd0W78uaFU1qgVovSBoC6YkFzEZs1QR7ML8=
+	t=1781552735; cv=none; b=n6lUQRXN7MVPgVUwKR3Le62lUWAm9gwdVSiRhvSczzN2g5h/o177k48ZyizFPrqtZZQcsrZ8a4inSxR5hDgW8p0DFOuLZqTx1r9Oi6zIbzFTI+5T9kIisJZVbtz33IcN59uVTGNI0b2fxze6UMcyPIF/RQ+SdgQEm1TvJ7RNTXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781550538; c=relaxed/simple;
-	bh=EvoJ3aDtZ4F/C8Kr9wphawKCAyi3l8ODysFcMsfBdGc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OmlVeIXzJaRLwdaSlp9ODCPmgsESFWfUmzk6zIi+3do1MyRD97e758QWBciF/OeqQV4xhMtwUnXGBLMzwQZRsoRWBjsSFU60i0IMyv0MKTsbxW5Z2nm3Ycw6SVEp1WWI7MYtiHIQ//HZ155Fk5u7dViMXx7dPcrLGY1r13JtI7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ETarz34O; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1781552735; c=relaxed/simple;
+	bh=FDHf7U4X55reFqVUhfhhoBmGKF3N0D8S+rd2ezxiNKg=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=jj86pveIFH8IpWHz3d7+ZDyyoR2hZtMkiE7uxdOF59ijfmKLM/Zdpnmihu15WbSMIMLdpPzks1+N7U83VfJJJtdQJEuoBNkkMVeM/etjUbiOFJ6XozjzVpQ5Omr3468ZErqeFOCyktzHk9YhfmmtTWUhHsXGE0Y3+MoZyY8fPmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=S0HuVtXD; arc=none smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ETarz34O"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2c0b1a48855so11615ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 12:08:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781550537; x=1782155337; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ISqMLHuxmmME4HG1iYeuq/aT+EEs3k5ypriNOeJFwpk=;
-        b=ETarz34Obq789inNl2pics+fHINA3Gx16qKzeiY9T0eqGMZQWo4H/n9KfwSxzM2PC8
-         Nz/2Ac8IgJa3RMZAOr6TyNnmPd7lvmNDxFw8c314bfo1cl+DKZU9rBV1T/s7VheYrJ0l
-         g400EEgReNo7S/Ox7a5MtRjfBoeFei+GKjSrGmebvtU0rKO4oHoW0Y8O9LTpLGXXtwKH
-         2gMsGKDGFagEyeQ/2TmC1XjCRa/XkK4MkRgsSN2lxP9s1ZlnAZnE5HAhiWFss8E7L8pG
-         9il3rn9l41D0SvO2AqquwEXml3fxtzzj/Ym6TcR4l/fFm5GkWb+6GkFRCuiu9dJcJKce
-         87lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781550537; x=1782155337;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ISqMLHuxmmME4HG1iYeuq/aT+EEs3k5ypriNOeJFwpk=;
-        b=HYub6hPabn0JpDdFfl3fWDk6WyMmH2uXsoLLust98d+VQbjlGtChwFyHN+k1j612+M
-         IPAOnNM96idHGFYdDXk/INM7kyAqTVDrP0wI9NH5Yflqf1EVhcFpjmr482CtJ9vMWj0T
-         M89NzgAgnnIYPS25u7+D14Ms2XVn8un9lrr+E5UerRUtCH5rxWFrBLP0YkU+wfJYo+0S
-         WUFEy3nY+9wjJ6M/D9ntlR54k/gRPAihY/TC8Wc6rEY7rLdHJt44vOw0A/UulGPbB9uo
-         PQo+RZZ43suYt6QCjeh2J1MqmcR9upcr5xHfysL4zpiiuMbIgLo2Kv9RYE4JuJ4EG0oj
-         6t/w==
-X-Forwarded-Encrypted: i=1; AFNElJ/1/uh/oR9VbTwUYFA5x4KT35V1PXxj9QiF0L/YcfDfoX0GTcpGoXlLlqLWeHJ5N9KpeVKMwauF4xMaLcvBjjE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRLst8yuizfEUGjtejpnJHWLku8OGcxvkyeBythjKJihYZbpMF
-	qChi8+jQ6iSe3IRDAIzaReXYcnKiQz3wXpAcECsj/oAZwS33fxXEEWYMt+VAZyStfQ==
-X-Gm-Gg: Acq92OG31hLunB6odlSLXj4MBUkSlSQ6p0OMSp6LkQdi41jJEBCCT5ZUMdfD5hYfiyh
-	vo6JZJpoMCfmNg3WAztfUCkUKRvwJnGqwpxM65Ak/Yn8sPys9QkSc4/x4R/mi+0kGAXqmjXyFXw
-	69YBf/hshGPMB5ks/n6cS5Vqb7rhMS2G0uNLIvpcIijkXsrvDIgrv5PVjDTo6VbnYCq6kcYnglc
-	vpmISdXLZf6da/9mcdsQKnj4xs2daJq6C9YQuEziWWDUAuTHdUzt354rrDHk1c8wcIWP5eAMji3
-	PPG56+M/T0q8yyjeSriBKNw2424HFPwYL2iE0W/I0m6yFSRivfDecC1EFfuZKbHjqD8z1tD7G1A
-	4u8SS4PdC3d4CXHjmCrakpOShb/DVMUaxJ2us27yfG1RUEgHU+48IplJzoipRw5UdpNHjCJEo/c
-	TLhx1n4dcn1T/3jcj5abflxHJIYTvgJkHwQA/jbY69m0j8nlcju3V5dBzEx8I=
-X-Received: by 2002:a17:902:d584:b0:2c2:2485:7086 with SMTP id d9443c01a7336-2c69a3f43e7mr514035ad.17.1781550536841;
-        Mon, 15 Jun 2026 12:08:56 -0700 (PDT)
-Received: from google.com (62.101.197.35.bc.googleusercontent.com. [35.197.101.62])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37c5228ebadsm344889a91.10.2026.06.15.12.08.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 12:08:56 -0700 (PDT)
-Date: Mon, 15 Jun 2026 19:08:52 +0000
-From: Lisa Wang <wyihan@google.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Miaohe Lin <linmiaohe@huawei.com>,
-	Naoya Horiguchi <nao.horiguchi@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, rientjes@google.com,
-	seanjc@google.com, ackerleytng@google.com, vannapurve@google.com,
-	michael.roth@amd.com, jiaqiyan@google.com, tabba@google.com,
-	dave.hansen@linux.intel.com
-Subject: Re: [PATCH v4 5/7] mm: selftests: Add shmem into memory failure test
-Message-ID: <ajBNxPKzhARLFk9X@google.com>
-References: <20260602-memory-failure-mf-delayed-fix-v4-0-a5bc7db5a9b2@google.com>
- <20260602-memory-failure-mf-delayed-fix-v4-5-a5bc7db5a9b2@google.com>
- <6963083d-6725-4081-b2a2-894a0510c6fb@kernel.org>
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="S0HuVtXD"
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65FIwEJ32969350;
+	Mon, 15 Jun 2026 12:45:26 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=s2048-2025-q2; bh=5OK8nAMoINAkcKNytQ
+	hxl9ERv7t4F+5ekKo/R203pZc=; b=S0HuVtXDox86Bj4nvVXFxPYjdvekHaoIyR
+	lOyiTB1edn0wksYvEMuyScyXsbx9vNPEaVM8ILqrrSCpH2qsbRT52nTjmS/kdN+z
+	Hs1zE0+z3T40Y8cSoeVVDlhTi6b8ofykfzAsvPZlmlo3ANhMZgEmCYZfkCaNZfVO
+	Epo7Rm3pTRYC9GUiwgIYsLBqHK9eOJ5n0NiUJN4BB9llbYi85PNJrzTTDaGp5ntW
+	B28dJuyYk5eW9SLjN7Kxi8v4wc31qO3XQcqIMFuDew9ky8a/Kf2UyWgLvCcHJIFg
+	QdPuWor3w7Ynph5Jk/EdJXtGO92ghi3oTPp+7QtbKHllumMsGK5A==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4es4a6ketk-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 15 Jun 2026 12:45:25 -0700 (PDT)
+Received: from devgpu015.cco6.facebook.com (2620:10d:c0a8:fe::f072) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.41; Mon, 15 Jun 2026 19:45:22 +0000
+From: Alex Mastro <amastro@fb.com>
+Subject: [PATCH v3 0/2] vfio: selftests: Add calloc_assert() and avoid VLAs
+Date: Mon, 15 Jun 2026 12:44:50 -0700
+Message-ID: <20260615-scratch-amastro-vfio-selftests-avoid-vlas-v3-0-b3798415c72a@fb.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6963083d-6725-4081-b2a2-894a0510c6fb@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADJWMGoC/52OQW7CMBBFr2LNmqliO4marLgHYjF2xo2rgJHHW
+ CCUu1ehi7Klyy89vfcfIJwjC4zqAZlrlJjOMCq7U+BnOn8xxglGBaYxfdNrg+IzFT8jnUhKTlh
+ DTCi8hMJSBKmmOGFdSNAOHTs7eWfJwU7BJXOIt2frcPzdcnXf7MsW2Ig5Skn5/jxT9cb9p1s1a
+ nRkybvedqGhfXAfPp1gi1bzqu3e0RrU2HI7hbY3Q/P5p13X9Qc0niYCSAEAAA==
+X-Change-ID: 20260612-scratch-amastro-vfio-selftests-avoid-vlas-395eb3dcb3ab
+To: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Raghavendra Rao Ananta <rananta@google.com>,
+        Vipin Sharma <vipinsh@google.com>
+CC: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+        "Alex
+ Mastro" <amastro@fb.com>
+X-Mailer: b4 0.15.2
+X-Authority-Analysis: v=2.4 cv=V5dNF+ni c=1 sm=1 tr=0 ts=6a305655 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=03ozwUkBphtHgyqjj1sw:22 a=bC-a23v3AAAA:8
+ a=FOH2dFAWAAAA:8 a=-R2Yz_5xwDJVClEb3P0A:9 a=QEXdDO2ut3YA:10
+ a=FO4_E8m0qiDe52t0p3_H:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE1MDIwNyBTYWx0ZWRfX82tHIkm6SdNU
+ KITes8P7pcliO5X+zOnKbSHP31T1EvTM5zRb72gTbDndkiHVB2coHlcqehYU3ft0bMg5gj1pXxK
+ SdkQKpfcK2vtxydjQymrsAuSOzkg5VMiu6ucC6RntQ4XaagT5ISzqQfWLMzLnUMVEKBBOM3/UPW
+ R52kgbFQYrbqRSdMuZ5zCu9FMLBp+pYPpdrKNR2DYXvrWtIhFVEvE7dZe6P+kLc+O69C6r/1a8n
+ 0utnzPOiU87a04lMdoqVTwA081Ypq6FKNMYtqqJCyMYLqPYMumgvZ5Jt8wvn2OALT4IQPQ2eioD
+ gOuQvnw7PTWgfgEXofKqalpyhUsisllikSFh53XruB1JUbSApI2A8+OBjju+koLgt5TRb0939Qo
+ x1hntEQfpLzcMjpXBgRLK7xTJmx/Z9k9UQ9cLRWQDT9JJlvRlSnHkoEZs0xgs3Jp+o6Ww0f6w8I
+ XqxD/ZlBfbkKqUPXJEw==
+X-Proofpoint-ORIG-GUID: FHcJVT5AfOZN2xUXyXjUsrJ6Fcuck-1d
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE1MDIwNyBTYWx0ZWRfX7DiqU0pBhypx
+ 11p+Y1HdGD99Dv5B5ph8zOlK7sE/4vao+NkUCRu8CHA7MEBR6i7/TkBTSXNWfPnL8YkFME+F7Y+
+ q8JwHPAZ4jplMKmUqAFMfbVVl9KoV2Y=
+X-Proofpoint-GUID: FHcJVT5AfOZN2xUXyXjUsrJ6Fcuck-1d
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-15_05,2026-06-15_04,2025-10-01_01
 
-On Fri, Jun 05, 2026 at 01:38:28PM +0200, David Hildenbrand (Arm) wrote:
+Add a VFIO selftest calloc_assert() helper, then use it in places that
+open-code calloc() or malloc() followed by VFIO_ASSERT_NOT_NULL().
 
-[...snip...]
+Use that helper to replace initialized variable-length stack buffers in
+vfio_pci_device.c with heap allocations. This avoids GCC rejecting
+initialized VLAs and avoids treating a u8 buffer as a possibly
+under-aligned VFIO request struct.
 
-> >  static jmp_buf signal_jmp_buf;
-> > @@ -165,17 +170,21 @@ static void check(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure
-> >  	case MADV_HARD_CLEAN_PAGECACHE:
-> >  	case MADV_SOFT_CLEAN_PAGECACHE:
-> >  	case MADV_SOFT_DIRTY_PAGECACHE:
-> > -		/* It is not expected to receive a SIGBUS signal. */
-> > -		ASSERT_EQ(setjmp, 0);
-> > -
-> > +	case MADV_SOFT_DIRTY_SHMEM:
-> >  		/* The page content should remain unchanged. */
-> >  		ASSERT_TRUE(check_memory(vaddr, self->page_size));
-> 
-> You should likely use "fallthrough;" ... unless you are missing a break; here.
+Changes in v3:
+- Add the calloc_assert() helper as a precursor patch.
+- Convert existing VFIO selftest calloc() assertion sites.
+- Update the VLA fix to use calloc_assert().
+- Link to v2: https://patch.msgid.link/20260615-scratch-amastro-vfio-selftests-avoid-vlas-v2-1-4e4df462908a@fb.com
 
-Thanks, will fix this in the next version.
+Changes in v2:
+- Reverse xmas tree variable ordering
+- Link to v1: https://patch.msgid.link/20260612-scratch-amastro-vfio-selftests-avoid-vlas-v1-1-ba3acb635f0a@fb.com
 
-Lisa
+Signed-off-by: Alex Mastro <amastro@fb.com>
+---
+Alex Mastro (2):
+      vfio: selftests: Add calloc_assert() helper
+      vfio: selftests: Avoid VLAs
 
-> 
-> 
-> -- 
-> Cheers,
-> 
-> David
+ .../selftests/vfio/lib/include/libvfio/assert.h    | 10 +++++++
+ tools/testing/selftests/vfio/lib/iommu.c           | 12 +++-----
+ tools/testing/selftests/vfio/lib/iova_allocator.c  |  4 +--
+ tools/testing/selftests/vfio/lib/sysfs.c           |  3 +-
+ tools/testing/selftests/vfio/lib/vfio_pci_device.c | 32 ++++++++++++----------
+ .../vfio/vfio_pci_device_init_perf_test.c          |  4 +--
+ 6 files changed, 35 insertions(+), 30 deletions(-)
+---
+base-commit: a26b499b757cfc8bbff1088bb1b844639e250893
+change-id: 20260612-scratch-amastro-vfio-selftests-avoid-vlas-395eb3dcb3ab
+
+Best regards,
+--  
+Alex Mastro <amastro@fb.com>
+
