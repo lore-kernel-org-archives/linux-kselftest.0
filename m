@@ -1,85 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA553B5841;
-	Mon, 15 Jun 2026 20:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E26B2DA759
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 20:45:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781555414; cv=none; b=Uuc1j4Oz3FvY8w0DaRpphX6OUsLPwm9MeKHPsWUkwEtigYjv9MLCiOLCSr+2K//6IKbQK+l8eKC2I0SBzBT8U3InCLUy147/y5v8xjkcDZmmSx4+dSrRscH79iNDSL/KnkUnf12DiiNc5tli0kQlTz8zH6LRf6TEe33mP70HgD4=
+	t=1781556318; cv=none; b=gy2zbSPT/2QSC+Y4yAle8J+REIG4NYva3GEXkfqvcI3YGSdGVTRADs4R6tfUBfgvlv8f5vRIpZQ8IPF/V0zvhC34IOegquGGqWsjf4rWcIacObHrHv8VxnXNJi4roT8G1h6Mf0Oox02rKbY1kFxIqX6TE1zYLKjf1Rw04oLtAp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781555414; c=relaxed/simple;
-	bh=bRQr9t8wtT837TG2tr0GdAxazaLA4sfobrPIOzlVmIY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=QMVaYgl/COGczKPUqGmAKOjvYLfBo4vbG1ihTKmLp4VKxzNYHaGZ7lieGz8g6AjuG59fkVHjf05Chv9UsmpdzKwwryZAYvQYmNtFoNZ4jV/FPNOt11mWf5KlASRvyVtXHE6QlnOpFc1kwiZyeCx56Me6HEbfnkEoFodL6a8ltzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O+1QuY9d; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781556318; c=relaxed/simple;
+	bh=KanPUGtLInNYCa8h02lUaJ0jH4YGdy4claGcmGBLxpE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=PTSsuA6AWjmrGMDlqNMQyVrzYgsau9pU4hIQcKMLSuupb3DtMR+IIgezfmbolmefI/yB7wz4dd1mpXU7xB8JH5gEaZJDJqqINYf5X8flbCNjYDLasvdkvqdlLd/v3po+5a5oeJNXSDjOjJk9hzGjBedYIiD2EqP6f+a+EFz+bmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D2viaD4Y; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O+1QuY9d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86AFC1F000E9;
-	Mon, 15 Jun 2026 20:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781555413;
-	bh=5aMDLIE5PrNUelkHErz/IH1DPJ9zEL4jKjoADG/7r1c=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=O+1QuY9dSV6txVh9SRYv2Trkgbf5SsM9wyjpKZOGTIzfUNa7EMlwhPY0zf1fYFkGZ
-	 H5QhLiO25gmCrNaa+MQT7fiMlMszGd8OAcox0m5hYv9cDiFdw1/QBnIbpcykKPCNpG
-	 nLjuemRS0BC1X9DLo2b2AcBftZBha5x2QM8aI9fi/TVfB2O1VmDk4HqDpWTQB3iNbA
-	 lZd59XyM7UBk+CYmO8Pxb2Vs3pedcO2xEV0D4TbReqwKyrpN/8FpWai+I+weRj8r/h
-	 mDxhF+xfTW6NAxIsxg5XV/c2wm8/k13OieJFxt76KtdQO5c8+9a2kvdZXrsqxLmc0q
-	 SIS9sg5SaQO4g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0D0E3839A06;
-	Mon, 15 Jun 2026 20:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D2viaD4Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781556316;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KanPUGtLInNYCa8h02lUaJ0jH4YGdy4claGcmGBLxpE=;
+	b=D2viaD4YtcK5kZHERGPywMwZ5k4sQFHOmnzrG9gW3qzr56tS2TS3tjB/HaWU2+6FpH/DKt
+	qTS3ADn8SO9IjNKRzLGxVfILi167V9Lcph7LVDi6UVBN3wMgO3fI8adbbuO0M1LvdDDGSV
+	jGJl/2pv+PyFcCQHrsVWcYu/CtyK8pg=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-413-Ic84ZJvpOASsSanHKJULdg-1; Mon,
+ 15 Jun 2026 16:45:10 -0400
+X-MC-Unique: Ic84ZJvpOASsSanHKJULdg-1
+X-Mimecast-MFC-AGG-ID: Ic84ZJvpOASsSanHKJULdg_1781556308
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5BA581956067;
+	Mon, 15 Jun 2026 20:45:08 +0000 (UTC)
+Received: from RHTRH0061144 (unknown [10.22.89.66])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2E0DB175F;
+	Mon, 15 Jun 2026 20:45:06 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: Minxi Hou <houminxi@gmail.com>
+Cc: netdev@vger.kernel.org,  echaudro@redhat.com,  i.maximets@ovn.org,
+  davem@davemloft.net,  edumazet@google.com,  kuba@kernel.org,
+  pabeni@redhat.com,  horms@kernel.org,  shuah@kernel.org,
+  dev@openvswitch.org,  linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests/net/openvswitch: add SET action test
+In-Reply-To: <20260612130503.311240-1-houminxi@gmail.com> (Minxi Hou's message
+	of "Fri, 12 Jun 2026 21:05:03 +0800")
+References: <20260612130503.311240-1-houminxi@gmail.com>
+Date: Mon, 15 Jun 2026 16:45:04 -0400
+Message-ID: <f7t1pe7ednz.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/2] netdev: expose page pool order via
- netlink
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178155540839.284807.2185512260142204749.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Jun 2026 20:30:08 +0000
-References: <20260612211709.1456966-2-dtatulea@nvidia.com>
-In-Reply-To: <20260612211709.1456966-2-dtatulea@nvidia.com>
-To: Dragos Tatulea <dtatulea@nvidia.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, donald.hunter@gmail.com,
- andrew+netdev@lunn.ch, asml.silence@gmail.com, axboe@kernel.dk,
- shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- io-uring@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-Hello:
+Minxi Hou <houminxi@gmail.com> writes:
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sat, 13 Jun 2026 00:17:02 +0300 you wrote:
-> This small series exposes io_uring's high order page configuration
-> via the page_pool netlink interface and updates the appropriate
-> selftest to check this value.
-> 
+> Add test_action_set exercising OVS_ACTION_ATTR_SET with an ipv4 dst
+> rewrite. The test verifies the SET action in three steps: first
+> confirm normal forwarding, then apply set(ipv4(dst=10.0.0.99)) to
+> rewrite the destination to an address nobody owns and verify ping
+> fails, then restore normal forwarding and verify connectivity
+> recovers.
+>
+> Signed-off-by: Minxi Hou <houminxi@gmail.com>
 > ---
-> v2:
-> - Switched from exposing page_pool order to rx_buf_len via nl_fill of
->   the io_uring memory provider.
-> - Updated selftest to check rx_buf_len.
-> - v1: https://lore.kernel.org/all/20260611161235.3807332-1-dtatulea@nvidia.com/
-> 
-> [...]
 
-Here is the summary with links:
-  - [net-next,v2,1/2] netdev: expose io_uring rx_page_order order via netlink
-    https://git.kernel.org/netdev/net-next/c/5c4adb7fb46f
-  - [net-next,v2,2/2] io_uring/zcrx: selftests: verify rx_buf_len for large chunks
-    https://git.kernel.org/netdev/net-next/c/18f65355e112
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Reviewed-by: Aaron Conole <aconole@redhat.com>
 
