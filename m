@@ -1,32 +1,32 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDBC405852
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 15:28:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0604028FE
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 15:28:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781537288; cv=none; b=e8eeba7g9XCdxlFIGnCyJJatQJ8W6DOwKm6+GtRIrXH7n/B6Sxfci5nZOPmxK9ogj37Ady815mUwAYaerGo+SCioWcYFy4YIuTvzXmfS/9Kz4MqkqTeDtmhbBGPxcWallBdHVnPEUsifiY5F2Rq+ZE+l4vZy4s61ff7UdIhiXQY=
+	t=1781537298; cv=none; b=Rf2zj382AE4yXk3TSXmUjbjrJBysFvyurtqfmJDEnbdpvNTp//Fjq55TuNFJ0fr7tQhIuRG5Swf+KDQ1tzRxQxKgIMOfJ36UNqBsxu7RoRoGuJBI9BYO+Nwfv8rN0J7FmhFpUSV0zlgnPFb3oQzEfU+9XaNzHhFJ4z/OYqV7QaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781537288; c=relaxed/simple;
-	bh=X4RejCl5E4bii5smI+jnMQZQCUyMD5D1BoR42aQVhrE=;
+	s=arc-20240116; t=1781537298; c=relaxed/simple;
+	bh=721RJucMZVja3f2/78SJ3YsiNxGl6KFT8QrGf/fap40=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FoJKgVhmxyuhVTndZS6DTiuuW78RzRNrK4fDs8Q3RLIB6pT2+StfEqCD6P5IKu7vRlV79G1AUWOOXZF5y78/6ChwkmqThnShDKiVwgsKUUq6rw0GfDyy9OkYV+90yuNOqeLul+omhSFMWo7FSqAz19N9Ycv8tbA/Pr9NH6z15cA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=itlDbEaV; arc=none smtp.client-ip=95.215.58.174
+	 MIME-Version; b=Q1/lJwjO1nr5grVAOVvFUBGxSkGOjCQxfIuk4JnTw8xAtCWyzsccOyeIZlRjXBj70ZEM+r3zCzG9MxpGEph1WWSBbwDA3b/TYU9wHFS/DGEFe6gyNFv3onMjjJu2avB6HrC5scTeTo6J28skRH66Y2i0Z4RjD+SiRYG6+Aag1tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CIfxQhi4; arc=none smtp.client-ip=95.215.58.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="itlDbEaV"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CIfxQhi4"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781537285;
+	t=1781537293;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=puiMD21T5oV7HcJ+x5YV5znjdR+X66CQDB/i3QPdu58=;
-	b=itlDbEaVTfkoFk/KTrFBk3rD45aOSoFBtKtHZBLlOKSlEO6M592u5igyoGjJJLnH5+Hai3
-	XZ9cEAcQwrAO3XmjjGthrIlMsDzr+zEuL6+4unZEbIMkKic1+wnHPcVltAyqTh51lOBW8F
-	x+9W4J9rXYpF28gnafc27exBlVUlCTY=
+	bh=6QP46oDj+m3aNlLwfNzDDE050nCPuj8E/Khl3XbBbK0=;
+	b=CIfxQhi4LLhwjaXFckoG6H5vSvNA5r6ntwfQundkPRfA8AreJxQsh1S3i661Kyyu903Xu5
+	NuaV6ULA2Q9XDfBBwnmZJMpSnDQr3yDpA5Hggjnx6jTpoDsPX0cX2a9VoKIeC8abkVgVcD
+	RryR4mEZYmEzTToU+ocYMMHuMdE29ec=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -45,9 +45,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v6 06/12] libbpf: Add support for global percpu data
-Date: Mon, 15 Jun 2026 23:26:40 +0800
-Message-ID: <20260615152646.27639-7-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v6 07/12] bpftool: Generate skeleton for global percpu data
+Date: Mon, 15 Jun 2026 23:26:41 +0800
+Message-ID: <20260615152646.27639-8-leon.hwang@linux.dev>
 In-Reply-To: <20260615152646.27639-1-leon.hwang@linux.dev>
 References: <20260615152646.27639-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -59,261 +59,215 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add support for global percpu data in libbpf by adding a new ".percpu"
-section, similar to ".data". It enables efficient handling of percpu
-global variables in bpf programs.
+Enhance bpftool to generate skeletons that properly handle global percpu
+variables. The generated skeleton now includes a dedicated structure for
+percpu data, allowing users to initialize and access percpu variables more
+efficiently.
 
-When generating loader for lightweight skeleton, update the percpu_array
-map used for global percpu data using BPF_F_ALL_CPUS, in order to update
-values across all CPUs using one value slot.
+For global percpu variables, the skeleton now includes a nested
+structure, e.g.:
 
-Unlike global data, the mmaped data for global percpu data will be marked
-as read-only after populating the percpu_array map. Thereafter, users can
-read those initialized percpu data after loading prog. If they want to
-update the percpu data after loading prog, they have to update the
-percpu_array map using key=0 instead.
+struct test_global_percpu_data {
+	struct bpf_object_skeleton *skeleton;
+	struct bpf_object *obj;
+	struct {
+		struct bpf_map *percpu;
+	} maps;
+	// ...
+	struct test_global_percpu_data__percpu {
+		int data;
+		char run;
+		struct {
+			char set;
+			int i;
+			int nums[7];
+		} struct_data;
+		int nums[7];
+	} *percpu;
 
+	// ...
+};
+
+  * The "struct test_global_percpu_data__percpu *percpu" points to
+    initialized data, which is actually "maps.percpu->mmaped".
+  * Before loading the skeleton, updating the
+    "struct test_global_percpu_data__percpu *percpu" modifies the initial
+    value of the corresponding global percpu variables.
+  * After loading the skeleton, "maps.percpu->mmaped" has been marked as
+    read-only in libbpf. If users want to update the global percpu
+    variables, they have to update the "maps.percpu" map instead.
+  * For lightweight skeleton, "lskel->percpu" will be protected by
+    "mprotect(p, sz, PROT_READ)".
+  * For subskeleton, those variables of global percpu data will be
+    skipped.
+
+Assisted-by: Codex:gpt-5.5-xhigh
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/lib/bpf/bpf_gen_internal.h |  3 +-
- tools/lib/bpf/gen_loader.c       |  3 +-
- tools/lib/bpf/libbpf.c           | 68 ++++++++++++++++++++++++++------
- 3 files changed, 60 insertions(+), 14 deletions(-)
+ tools/bpf/bpftool/gen.c       | 43 +++++++++++++++++++++++++++--------
+ tools/lib/bpf/skel_internal.h | 24 +++++++++++++++++--
+ 2 files changed, 56 insertions(+), 11 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
-index 49af4260b8e6..5ea8383805d3 100644
---- a/tools/lib/bpf/bpf_gen_internal.h
-+++ b/tools/lib/bpf/bpf_gen_internal.h
-@@ -66,7 +66,8 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
- 			enum bpf_prog_type prog_type, const char *prog_name,
- 			const char *license, struct bpf_insn *insns, size_t insn_cnt,
- 			struct bpf_prog_load_opts *load_attr, int prog_idx);
--void bpf_gen__map_update_elem(struct bpf_gen *gen, int map_idx, void *value, __u32 value_size);
-+void bpf_gen__map_update_elem(struct bpf_gen *gen, int map_idx, void *value, __u32 value_size,
-+			      __u64 flags);
- void bpf_gen__map_freeze(struct bpf_gen *gen, int map_idx);
- void bpf_gen__record_attach_target(struct bpf_gen *gen, const char *name, enum bpf_attach_type type);
- void bpf_gen__record_extern(struct bpf_gen *gen, const char *name, bool is_weak,
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index d79695f01c87..7ceb096f18ec 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -1190,7 +1190,7 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
- }
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index 6ae7262ebe0c..2200ab004d2b 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -92,7 +92,7 @@ static void get_header_guard(char *guard, const char *obj_name, const char *suff
  
- void bpf_gen__map_update_elem(struct bpf_gen *gen, int map_idx, void *pvalue,
--			      __u32 value_size)
-+			      __u32 value_size, __u64 flags)
+ static bool get_map_ident(const struct bpf_map *map, char *buf, size_t buf_sz)
  {
- 	int attr_size = offsetofend(union bpf_attr, flags);
- 	int map_update_attr, value, key;
-@@ -1198,6 +1198,7 @@ void bpf_gen__map_update_elem(struct bpf_gen *gen, int map_idx, void *pvalue,
- 	int zero = 0;
- 
- 	memset(&attr, 0, attr_size);
-+	attr.flags = flags;
- 
- 	value = add_data(gen, pvalue, value_size);
- 	key = add_data(gen, &zero, sizeof(zero));
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 1368752aa13c..199d08d3cdcd 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -541,6 +541,7 @@ struct bpf_struct_ops {
- };
- 
- #define DATA_SEC ".data"
-+#define PERCPU_SEC ".percpu"
- #define BSS_SEC ".bss"
- #define RODATA_SEC ".rodata"
- #define KCONFIG_SEC ".kconfig"
-@@ -555,6 +556,7 @@ enum libbpf_map_type {
- 	LIBBPF_MAP_BSS,
- 	LIBBPF_MAP_RODATA,
- 	LIBBPF_MAP_KCONFIG,
-+	LIBBPF_MAP_PERCPU,
- };
- 
- struct bpf_map_def {
-@@ -666,6 +668,7 @@ enum sec_type {
- 	SEC_DATA,
- 	SEC_RODATA,
- 	SEC_ST_OPS,
-+	SEC_PERCPU,
- };
- 
- struct elf_sec_desc {
-@@ -1839,6 +1842,8 @@ static size_t bpf_map_mmap_sz(const struct bpf_map *map)
- 	switch (map->def.type) {
- 	case BPF_MAP_TYPE_ARRAY:
- 		return array_map_mmap_sz(map->def.value_size, map->def.max_entries);
-+	case BPF_MAP_TYPE_PERCPU_ARRAY:
-+		return map->def.value_size;
- 	case BPF_MAP_TYPE_ARENA:
- 		return page_sz * map->def.max_entries;
- 	default:
-@@ -1938,7 +1943,7 @@ static bool map_is_mmapable(struct bpf_object *obj, struct bpf_map *map)
- 	struct btf_var_secinfo *vsi;
+-	static const char *sfxs[] = { ".data", ".rodata", ".bss", ".kconfig" };
++	static const char *sfxs[] = { ".data", ".rodata", ".bss", ".percpu", ".kconfig" };
+ 	const char *name = bpf_map__name(map);
  	int i, n;
  
--	if (!map->btf_value_type_id)
-+	if (!map->btf_value_type_id || map->libbpf_type == LIBBPF_MAP_PERCPU)
- 		return false;
+@@ -117,7 +117,7 @@ static bool get_map_ident(const struct bpf_map *map, char *buf, size_t buf_sz)
  
- 	t = btf__type_by_id(obj->btf, map->btf_value_type_id);
-@@ -1962,6 +1967,7 @@ static int
- bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
- 			      const char *real_name, int sec_idx, void *data, size_t data_sz)
+ static bool get_datasec_ident(const char *sec_name, char *buf, size_t buf_sz)
  {
-+	bool is_percpu = type == LIBBPF_MAP_PERCPU;
- 	struct bpf_map_def *def;
- 	struct bpf_map *map;
- 	size_t mmap_sz;
-@@ -1983,7 +1989,7 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
- 	}
+-	static const char *pfxs[] = { ".data", ".rodata", ".bss", ".kconfig" };
++	static const char *pfxs[] = { ".data", ".rodata", ".bss", ".percpu", ".kconfig" };
+ 	int i, n;
  
- 	def = &map->def;
--	def->type = BPF_MAP_TYPE_ARRAY;
-+	def->type = is_percpu ? BPF_MAP_TYPE_PERCPU_ARRAY : BPF_MAP_TYPE_ARRAY;
- 	def->key_size = sizeof(int);
- 	def->value_size = data_sz;
- 	def->max_entries = 1;
-@@ -1996,8 +2002,9 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
- 	if (map_is_mmapable(obj, map))
- 		def->map_flags |= BPF_F_MMAPABLE;
- 
--	pr_debug("map '%s' (global data): at sec_idx %d, offset %zu, flags %x.\n",
--		 map->name, map->sec_idx, map->sec_offset, def->map_flags);
-+	pr_debug("map '%s' (global %sdata): at sec_idx %d, offset %zu, flags %x.\n",
-+		 map->name, is_percpu ? "percpu " : "", map->sec_idx,
-+		 map->sec_offset, def->map_flags);
- 
- 	mmap_sz = bpf_map_mmap_sz(map);
- 	map->mmaped = mmap(NULL, mmap_sz, PROT_READ | PROT_WRITE,
-@@ -2057,6 +2064,13 @@ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
- 							    NULL,
- 							    sec_desc->data->d_size);
- 			break;
-+		case SEC_PERCPU:
-+			sec_name = elf_sec_name(obj, elf_sec_by_idx(obj, sec_idx));
-+			err = bpf_object__init_internal_map(obj, LIBBPF_MAP_PERCPU,
-+							    sec_name, sec_idx,
-+							    sec_desc->data->d_buf,
-+							    sec_desc->data->d_size);
-+			break;
- 		default:
- 			/* skip */
- 			break;
-@@ -4016,6 +4030,11 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
- 				sec_desc->sec_type = SEC_RODATA;
- 				sec_desc->shdr = sh;
- 				sec_desc->data = data;
-+			} else if (strcmp(name, PERCPU_SEC) == 0 ||
-+				   str_has_pfx(name, PERCPU_SEC ".")) {
-+				sec_desc->sec_type = SEC_PERCPU;
-+				sec_desc->shdr = sh;
-+				sec_desc->data = data;
- 			} else if (strcmp(name, STRUCT_OPS_SEC) == 0 ||
- 				   strcmp(name, STRUCT_OPS_LINK_SEC) == 0 ||
- 				   strcmp(name, "?" STRUCT_OPS_SEC) == 0 ||
-@@ -4544,6 +4563,7 @@ static bool bpf_object__shndx_is_data(const struct bpf_object *obj,
- 	case SEC_BSS:
- 	case SEC_DATA:
- 	case SEC_RODATA:
-+	case SEC_PERCPU:
- 		return true;
- 	default:
- 		return false;
-@@ -4569,6 +4589,8 @@ bpf_object__section_to_libbpf_map_type(const struct bpf_object *obj, int shndx)
- 		return LIBBPF_MAP_DATA;
- 	case SEC_RODATA:
- 		return LIBBPF_MAP_RODATA;
-+	case SEC_PERCPU:
-+		return LIBBPF_MAP_PERCPU;
- 	default:
- 		return LIBBPF_MAP_UNSPEC;
- 	}
-@@ -4944,7 +4966,7 @@ static int map_fill_btf_type_info(struct bpf_object *obj, struct bpf_map *map)
- 
- 	/*
- 	 * LLVM annotates global data differently in BTF, that is,
--	 * only as '.data', '.bss' or '.rodata'.
-+	 * only as '.data', '.bss', '.percpu' or '.rodata'.
- 	 */
- 	if (!bpf_map__is_internal(map))
- 		return -ENOENT;
-@@ -5297,18 +5319,30 @@ static int
- bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
- {
- 	enum libbpf_map_type map_type = map->libbpf_type;
-+	bool is_percpu = map_type == LIBBPF_MAP_PERCPU;
-+	__u64 update_flags = 0;
- 	int err, zero = 0;
- 	size_t mmap_sz;
- 
-+	if (is_percpu) {
-+		if (!obj->gen_loader && !kernel_supports(obj, FEAT_PERCPU_DATA)) {
-+			pr_warn("map '%s': kernel does not support percpu data.\n",
-+				bpf_map__name(map));
-+			return -EOPNOTSUPP;
-+		}
-+
-+		update_flags = BPF_F_ALL_CPUS;
-+	}
-+
- 	if (obj->gen_loader) {
- 		bpf_gen__map_update_elem(obj->gen_loader, map - obj->maps,
--					 map->mmaped, map->def.value_size);
-+					 map->mmaped, map->def.value_size, update_flags);
- 		if (map_type == LIBBPF_MAP_RODATA || map_type == LIBBPF_MAP_KCONFIG)
- 			bpf_gen__map_freeze(obj->gen_loader, map - obj->maps);
- 		return 0;
- 	}
- 
--	err = bpf_map_update_elem(map->fd, &zero, map->mmaped, 0);
-+	err = bpf_map_update_elem(map->fd, &zero, map->mmaped, update_flags);
- 	if (err) {
- 		err = -errno;
- 		pr_warn("map '%s': failed to set initial contents: %s\n",
-@@ -5353,6 +5387,13 @@ bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
- 			return err;
- 		}
- 		map->mmaped = mmaped;
-+	} else if (is_percpu) {
-+		if (mprotect(map->mmaped, mmap_sz, PROT_READ)) {
-+			err = -errno;
-+			pr_warn("map '%s': failed to mprotect() contents: %s\n",
-+				bpf_map__name(map), errstr(err));
-+			return err;
-+		}
- 	} else if (map->mmaped) {
- 		munmap(map->mmaped, mmap_sz);
- 		map->mmaped = NULL;
-@@ -10806,16 +10847,19 @@ int bpf_map__fd(const struct bpf_map *map)
- 
- static bool map_uses_real_name(const struct bpf_map *map)
- {
--	/* Since libbpf started to support custom .data.* and .rodata.* maps,
--	 * their user-visible name differs from kernel-visible name. Users see
--	 * such map's corresponding ELF section name as a map name.
--	 * This check distinguishes .data/.rodata from .data.* and .rodata.*
--	 * maps to know which name has to be returned to the user.
-+	/*
-+	 * Since libbpf started to support custom .data.*, .rodata.* and
-+	 * .percpu.* maps, their user-visible name differs from
-+	 * kernel-visible name. Users see such map's corresponding ELF section
-+	 * name as a map name. This check distinguishes plain .data/.rodata/.percpu
-+	 * from .data.*, .rodata.* and .percpu.* to choose which name to return.
- 	 */
- 	if (map->libbpf_type == LIBBPF_MAP_DATA && strcmp(map->real_name, DATA_SEC) != 0)
- 		return true;
- 	if (map->libbpf_type == LIBBPF_MAP_RODATA && strcmp(map->real_name, RODATA_SEC) != 0)
- 		return true;
-+	if (map->libbpf_type == LIBBPF_MAP_PERCPU && strcmp(map->real_name, PERCPU_SEC) != 0)
-+		return true;
- 	return false;
+ 	/* recognize hard coded LLVM section name */
+@@ -254,6 +254,11 @@ static const struct btf_type *find_type_for_map(struct btf *btf, const char *map
+ 	return NULL;
  }
  
++static bool bpf_map_is_percpu_data(const struct bpf_map *map)
++{
++	return bpf_map__is_internal(map) && bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY;
++}
++
+ static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
+ {
+ 	size_t tmp_sz;
+@@ -263,13 +268,12 @@ static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
+ 		return true;
+ 	}
+ 
+-	if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF_F_MMAPABLE))
+-		return false;
+-
+-	if (!get_map_ident(map, buf, sz))
+-		return false;
++	if (bpf_map__is_internal(map) &&
++	    ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) || bpf_map_is_percpu_data(map)) &&
++	    get_map_ident(map, buf, sz))
++		return true;
+ 
+-	return true;
++	return false;
+ }
+ 
+ static int codegen_datasecs(struct bpf_object *obj, const char *obj_name)
+@@ -343,6 +347,9 @@ static int codegen_subskel_datasecs(struct bpf_object *obj, const char *obj_name
+ 		if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
+ 			continue;
+ 
++		if (bpf_map_is_percpu_data(map))
++			continue;
++
+ 		sec = find_type_for_map(btf, map_ident);
+ 		if (!sec)
+ 			continue;
+@@ -669,7 +676,7 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
+ 		if (!get_map_ident(map, ident, sizeof(ident)))
+ 			continue;
+ 		if (bpf_map__is_internal(map) &&
+-		    (bpf_map__map_flags(map) & BPF_F_MMAPABLE))
++		    ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) || bpf_map_is_percpu_data(map)))
+ 			printf("\tskel_free_map_data(skel->%1$s, skel->maps.%1$s.initial_value, %2$zu);\n",
+ 			       ident, bpf_map_mmap_sz(map));
+ 		codegen("\
+@@ -850,6 +857,20 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
+ 		if (!is_mmapable_map(map, ident, sizeof(ident)))
+ 			continue;
+ 
++		if (bpf_map_is_percpu_data(map)) {
++			codegen("\
++		\n\
++			err = skel_protect_map_data(skel->%1$s, &skel->maps.%1$s.initial_value, %2$zd);\n\
++			if (err)					    \n\
++				return err;				    \n\
++		#ifdef __KERNEL__					    \n\
++			skel->%1$s = NULL;				    \n\
++		#endif							    \n\
++			",
++			ident, bpf_map_mmap_sz(map));
++			continue;
++		}
++
+ 		if (bpf_map__map_flags(map) & BPF_F_RDONLY_PROG)
+ 			mmap_flags = "PROT_READ";
+ 		else
+@@ -1740,6 +1761,8 @@ static int do_subskeleton(int argc, char **argv)
+ 
+ 		if (!is_mmapable_map(map, ident, sizeof(ident)))
+ 			continue;
++		if (bpf_map_is_percpu_data(map))
++			continue;
+ 
+ 		map_type_id = bpf_map__btf_value_type_id(map);
+ 		if (map_type_id <= 0) {
+@@ -1863,6 +1886,8 @@ static int do_subskeleton(int argc, char **argv)
+ 	bpf_object__for_each_map(map, obj) {
+ 		if (!is_mmapable_map(map, ident, sizeof(ident)))
+ 			continue;
++		if (bpf_map_is_percpu_data(map))
++			continue;
+ 
+ 		map_type_id = bpf_map__btf_value_type_id(map);
+ 		if (map_type_id <= 0)
+diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
+index 74503d358bc8..485b0cd17017 100644
+--- a/tools/lib/bpf/skel_internal.h
++++ b/tools/lib/bpf/skel_internal.h
+@@ -135,8 +135,10 @@ static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
+ {
+ 	if (addr != ~0ULL)
+ 		kvfree(p);
+-	/* When addr == ~0ULL the 'p' points to
+-	 * ((struct bpf_array *)map)->value. See skel_finalize_map_data.
++	/*
++	 * When addr == ~0ULL the init buffer has already been released.
++	 * For skel_finalize_map_data(), 'p' points to
++	 * ((struct bpf_array *)map)->value.
+ 	 */
+ }
+ 
+@@ -174,6 +176,15 @@ static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int
+ 	return addr;
+ }
+ 
++static inline int skel_protect_map_data(void *p, __u64 *init_val, size_t sz)
++{
++	(void)sz;
++
++	kvfree(p);
++	*init_val = ~0ULL;
++	return 0;
++}
++
+ #else
+ 
+ static inline void *skel_alloc(size_t size)
+@@ -212,6 +223,15 @@ static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int
+ 		return NULL;
+ 	return addr;
+ }
++
++static inline int skel_protect_map_data(void *p, __u64 *init_val, size_t sz)
++{
++	(void)init_val;
++
++	if (mprotect(p, sz, PROT_READ))
++		return -errno;
++	return 0;
++}
+ #endif
+ 
+ static inline int skel_closenz(int fd)
 -- 
 2.54.0
 
