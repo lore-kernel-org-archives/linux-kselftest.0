@@ -1,205 +1,212 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE77407597
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 16:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781542561; cv=pass; b=MTIEkaLKZ3ubxYqT+9LWd0ZK98kK6m1XHlKtdL6LbW/q7ovaJIYipbc689yt6ZPAWzlnj9gwHbbgL8Um90xlvvicy7e5VukN2Fe0EqFArA0kKUD8Nhw2mMrICsJxlLlBmt7RmhcXDNWB2+o6DLWe1KQ/usbEgQHGsPmqW/zVXEI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781542561; c=relaxed/simple;
-	bh=4YPWMK+0WYWJceGQjSJj/WOQ+Iz5+dRnHqH63ccwQUo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S8mledXdZTZGJU2fDQ9iNGgdQzdjHw2LGhWvl42Vq8S0OiKk2UBoQqAa3P9iFaiVti41PhZis/kp/zIL8Fv7JLuIlOI/aMOS+FDledVP3rcX5/pxQ6BhkfRIxvWYsMzE4vVqOzehP17XRaMsjQ3vsC/1nNBjma5vQAk6gTsVUQk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mcSXSTgB; arc=pass smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D29411694;
+	Mon, 15 Jun 2026 17:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781543605; cv=none; b=rmmkpa7GkuLWIP67PSuFWQJDpN2uajEX8G5XKF6uA0Z+LUF4/JkCIm6mdSlVamiAdx/8ZTELDmbxm8fxoLVN8gZ5lHt36kEjyRp2QgwwwllzD5jOiEogvjqKv5ogJDRJXIGqLxlrsqN/mSBcoHo7Dfp4H0IRvfq16J0skNS1AVo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781543605; c=relaxed/simple;
+	bh=vIvfN+UVP0a1jpNh9MZOKcnAduoJQL6vWVlu40op1n8=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ouPQXVcBUMCmrRnn/UuKdsvyv7ocb+lXr6YcRKavBmN4KkQjdh1gxDQrAE//0BXYzMA1isxy/ESAa5cYLzfNRtg2XgrFtSJJJdlMWXpzyCu+zLXRgO98OVcsJeQO/y/flU4N50lWsjYZYwIZAEuauPrJDk8U3DClI5v7DnrV2ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=l0s8gVLn; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mcSXSTgB"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-5177b1a7441so49835031cf.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 09:55:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781542558; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FX3wWrB/cGMjViVgaJRHb14N7hHEMdNL/p6K9Rxkj09BnkPTMHwVhU8pWO16srVt35
-         yQZQP/bwhxGlS40jqDnnRJAPyV/1bwskYCiU1GfbQ8EmYs+r2dmlMKIIZvkG/yTs9ZxQ
-         HXSNw8GWfGAWDIYgXVDkc7Irgv+5VuMVcWx+yKa13sfUWWyx5JUtq3RCnFXA8bJ2zS//
-         JbyjggyB6DZPxVP4CVpMMwbDN3+MYYwaRzL86E7j9ySQGqEvQvuJ3A5PTKn0USPxPcS9
-         /UbF+OYVAhY6fo0kJo7A4OxMr3CXqpr+JiRn+veB3/NbZ1TGmX8JzE9xijMCDTHspbhi
-         3G8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=op3KaiCmJCT9futuSMniceaWe5Q/wKrwv8uwA7WTvb8=;
-        fh=n+VmT1ete7D09vmKIKsceZsTg/g96uFnTm9rblWCT2E=;
-        b=MnjXILa+RzNC/KUxidP8QBgg3XyfssrXPWRzy+s2javDirOQA+0/4elkDTn7kWfG6i
-         AhdGdfrFMPk7v1zILYziuJ+fNMgE5dzw78tWcmW9n/s7ICptgUyRUpTVUqRa0HUKhEMJ
-         w3/rMUim4xpqVcLl3LkNsmyKXT3X1Eujld5UnIBP/nMePSQVOAvTSVxxcm+YYYeQomCY
-         CUjFZC5NxplNzh31OF0zQGgRmg+lvz+uA3uJ8QN9Xp26Rl27liJbFS97D5HujZOu2LoI
-         QCdn0n44v7LN/WeeCS8QwCFKhnErlScmHUlK8aX6KUfxuLmDpUXOvvf7/2LT3h9Ds4Hq
-         fyhQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781542558; x=1782147358; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=op3KaiCmJCT9futuSMniceaWe5Q/wKrwv8uwA7WTvb8=;
-        b=mcSXSTgBoO4O/qL7Qd87hqo3I3Z0I3BGtkW9A2FPKwCQFvqqU09+es8L6ET2ATj6TS
-         7Y0ystcfUhQ/69kFzrPWyYo4/gCZKYKTX9HxxAuBBHdMxPhm+t2G5A6hZdnB2nyYOxen
-         cj+Dw6ZJfmjy6XyY1hcyb+h/1CJuYTQ0VV0GiRrIFZ8Hj647FS/PEPXYNyij5GXyqWhB
-         9iZtnFD/rWWi1xRU0fKOZRhwyEtUxr6w2fgymUImnNv1IGHiMFQdxkid2CVucz4H/za4
-         uxWKCbj5fDTA13HQiDMrAaIyoxWuWw99510D2QSPmEa5OkPiBhGLoBdmiacTXBZRJZn0
-         //LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781542558; x=1782147358;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=op3KaiCmJCT9futuSMniceaWe5Q/wKrwv8uwA7WTvb8=;
-        b=ZrpbCXtQu1HU8gmqPhUWCDOMwws1x6HWO1D3G4LkwaF8TskKhScWVAVesU3y3Qdnw8
-         soYTYTaz6JnV+ZV74NaqtIK0NJAyiQM4erKClcMJnRed70GXR+PKIpqiEIQJ3596YFBf
-         +ZKEkB2ezE6ZTlWCyCT9frAuumObQ+VIOUZ6+5nVMj+Vh4yizVICuR0iY1bopumCJwx8
-         +ygP4vBSxYSqJeFcuAjqPEudY8WbLJLg4/xsS3pTxCBw6j+XrNKTtPHOua8gilUb/A2Z
-         t1+A81n44LpqRC9eA0Krvvo3ekRfpHFw/gMoMlKeqMl0R9xX4LhMZZTcRX40clgSlzP7
-         22Zg==
-X-Forwarded-Encrypted: i=1; AFNElJ/Slc5F8h4OKnbFGzQeEIKRWdDGDm7k9EowSyVqCplKA4hP/CS88DsDGXwG2tbAMiZrf3/Il1037VAzcPEvzeE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJRWYUoWUgqFSexrOO7T+E77hl7HWhX0RvrunEDkn2ww3U9lEI
-	zFtGhFbLB+xPsad8BV3W8Jlfu6k4K91rYDzDNadYrBVdKo1F6V5F61mVo5M9k0enxBCzGeJelVA
-	4U28RWM+2xZTnLr3FlPvGlLP3UyrjsS4nx2YqUJPi
-X-Gm-Gg: Acq92OEezV1/SY/CizhBmdwatp02ZloSU9boUgLfOy4PdAPxnkdd5IySpe5HOCrRT8L
-	1TUfC0BQT1NYSfRbYhs7fiinqLVkCw/+QXVVhuZySo0J3dD1cGHCNULU5Abt5CnQSV3VA0uDUXT
-	h//ug1YzRg9xWt/2+LUvMqO2SKjofXPMiBkELHyHj3geoovxkJAjbXao6OGaSnd7Mj/6xnr29Dd
-	t//36vJMLcjVyBrFgQHJpHEmfzti+ASKcKwUbL2GRNJ6UzpkOCmc/t2ooXCgdIkBisPQb5FQKr6
-	JQTBlyycaTFlFA9jiJAnPuLhi0+viYt0tk+iEcMnFdpCqsg5TH8Fq9TWU9EVtdm/VugKOAmM+FB
-	v3vW5iVVrjTExh380myHG
-X-Received: by 2002:a05:622a:1115:b0:50f:b4c0:630f with SMTP id
- d75a77b69052e-5195357c228mr175976161cf.54.1781542556797; Mon, 15 Jun 2026
- 09:55:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="l0s8gVLn"
+Received: from pps.filterd (m0528005.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65FFsDMl2417603;
+	Mon, 15 Jun 2026 10:13:16 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=s2048-2025-q2; bh=l0uOK1Mg5WaFHaoF5tPX
+	saTZvJO3YB5M5MPuUWRtdy4=; b=l0s8gVLnkwdTAPe+f3iIHKLWTKM9aVj+y488
+	McbwwFU0wTbnKPZb7r7xqgMnikWDXqYPG89kXmqvgaPUKM39xUlHfZ+qaVrKOxpa
+	aJPm9m+XJsS+WzOiELkZaL9aI6QE4uOXwYe0HIRTL8DU7zcmAWeTisexwHEus4pp
+	0heAitPg2EW1jqok3T0ZnZq+tsADS9X93W9SfujSgL+e5yuLliGhrBGkmFe259qY
+	0+QOrWyyJDf8JrxGvEXSBBamhfJ0JnUSLY9TVbfF5EBY2GjoXIlZt9XPEoSuvx4e
+	9QIy/c4moKOZjQMi5dtT5aWNxe7GElko5qakVRzrodt8FwKn8w==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4esrsh6qys-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 15 Jun 2026 10:13:16 -0700 (PDT)
+Received: from devgpu015.cco6.facebook.com (2620:10d:c085:108::150d) by
+ mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.41; Mon, 15 Jun 2026 17:13:15 +0000
+Date: Mon, 15 Jun 2026 10:13:10 -0700
+From: Alex Mastro <amastro@fb.com>
+To: David Matlack <dmatlack@google.com>
+CC: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+        Raghavendra Rao Ananta <rananta@google.com>,
+        Vipin Sharma
+	<vipinsh@google.com>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Shuah Khan
+	<skhan@linuxfoundation.org>
+Subject: Re: [PATCH v2] selftests/vfio: avoid VLAs
+Message-ID: <ajAyppvcK7ViJJRk@devgpu015.cco6.facebook.com>
+References: <20260615-scratch-amastro-vfio-selftests-avoid-vlas-v2-1-4e4df462908a@fb.com>
+ <ajAsJXWxRQtkIaCf@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260615042158.1600746-1-ntspring@meta.com> <20260615042158.1600746-2-ntspring@meta.com>
-In-Reply-To: <20260615042158.1600746-2-ntspring@meta.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Mon, 15 Jun 2026 09:55:45 -0700
-X-Gm-Features: AVVi8CcLt4JINR95JUJ5Pig2rgeZiW8v5j_nnToRd6BeBcgfvgXVPVQccUrwbf4
-Message-ID: <CANn89iLjf-d08s1ofLo3fDUQENYji9qwG6fQbiAN3fyvxP=+BA@mail.gmail.com>
-Subject: Re: [PATCH v14 1/2] tcp: rehash onto different local ECMP path on
- retransmit timeout
-To: Neil Spring <ntspring@meta.com>
-Cc: netdev@vger.kernel.org, ncardwell@google.com, kuniyu@google.com, 
-	davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ajAsJXWxRQtkIaCf@google.com>
+X-Proofpoint-ORIG-GUID: EecBBOisbfPpexi8taZFo2apUp0SC_UL
+X-Authority-Analysis: v=2.4 cv=DOO/JSNb c=1 sm=1 tr=0 ts=6a3032ac cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=kj9zAlcOel0A:10 a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=jCddH8ec0KUNCymVuxII:22 a=bC-a23v3AAAA:8
+ a=FOH2dFAWAAAA:8 a=1XWaLZrsAAAA:8 a=r1p2_3pzAAAA:8 a=VwQbUJbxAAAA:8
+ a=ag1SF4gXAAAA:8 a=vn35S1QI-jAAMeZZ1ucA:9 a=CjuIK1q_8ugA:10
+ a=FO4_E8m0qiDe52t0p3_H:22 a=r_pkcD-q9-ctt7trBg_g:22 a=Yupwre4RP9_Eg_Bd0iYG:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE1MDE4MiBTYWx0ZWRfX5Z81KXGI4QGN
+ 3CaPq1MxzG40cOiC7i48hNkfn9Yy0WFj0fJ+3Bh14BwOV3MfzAksRTCcagnZ2qSJP8V/QxbREnS
+ KggLF63QODF/achZu/Y0DLoiMJsrk7s=
+X-Proofpoint-GUID: EecBBOisbfPpexi8taZFo2apUp0SC_UL
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE1MDE4MiBTYWx0ZWRfXwZCD6kR1c6YV
+ HNdUG7QOfwtVRUZijXDQJ6TLLItCTsBK6/072TZu9sz3FpOHHHvnoPcOAAcAn24Oz1x0n+ffH4e
+ pDRtEiBtKiLRr8xWwZfKvO6JlXlzmEEB4fAc/hRoeQTJvT9/T8lS6tNHGKrvDLEaXexqO8N6+SG
+ 7jzhIuOteUbdLfHurYSr0R6wG1nc8i9hud2PAGI1Zxv0/+5PNW2BnOl05PGWJhuvOSHnWxNiDrR
+ UbEklv/L3BV1kX6IznQH3QULkS/Cp2JImdlfIps9mKhxUpFx+VMeaSUgjRjkjXj2iW6wECgSR3l
+ 6V0tE8ETQfue52O67wSynUf286uMxfuwTCjhKvkHpBOSbqA3jrNrJs6/lw0TBuHcywiOC0VBA2i
+ fllktrfYoAvYg3g+JhMmbXLhQkMZrutRLdJHP4yykKjoQ6OlyExWraX99hAz0hh/aNusKIB0cET
+ bZ19RLUOxnCgPnNbdSQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-15_04,2026-06-15_04,2025-10-01_01
 
-On Sun, Jun 14, 2026 at 9:22=E2=80=AFPM Neil Spring <ntspring@meta.com> wro=
-te:
->
-> Currently sk_rethink_txhash() re-rolls the socket's txhash on RTO, PLB,
-> and spurious-retransmission events, but the cached route is reused and
-> the new hash is not propagated into the ECMP path selection logic.  Two
-> changes are needed to make rehash select a different local ECMP path:
->
-> 1. Add __sk_dst_reset() alongside sk_rethink_txhash() in
->    tcp_write_timeout(), tcp_rcv_spurious_retrans(), and
->    tcp_plb_check_rehash() so the cached dst is invalidated and the
->    next transmit triggers a fresh route lookup.
->
-> 2. Set fl6->mp_hash from sk_txhash (or tcp_rsk(req)->txhash for
->    SYN/ACK retransmits and syncookies) in tcp_v6_connect(),
->    inet6_sk_rebuild_header(), inet6_csk_route_req(),
->    inet6_csk_route_socket(), tcp_v6_send_response(), and
->    cookie_v6_check() so fib6_select_path() picks a path based on the
->    new hash.
->
-> The mp_hash override only applies to fib_multipath_hash_policy 0 (the
-> default L3 policy).  Its hash includes the flow label, but that is 0 by
-> default -- np->flow_label is unset, and auto_flowlabels only computes
-> the on-wire label later, per packet -- so flows to the same peer share
-> one local path.  Keying the hash on sk_txhash makes the local path
-> per-connection and lets a rehash re-select it.  Policies 1-3 are left
-> unchanged.
->
-> The mp_hash assignment is factored into a small helper,
-> ip6_ecmp_set_mp_hash(), shared by inet6_csk_route_req(),
-> inet6_csk_route_socket(), tcp_v6_connect(), inet6_sk_rebuild_header(),
-> tcp_v6_send_response(), and cookie_v6_check().  It applies
-> (txhash >> 1) ?: 1 for policy 0 (the >> 1 keeps mp_hash in the 31-bit
-> range; ?: 1 keeps it non-zero, since 0 would fall back to
-> rt6_multipath_hash()).  inet6_csk_route_socket() calls it only for
-> sk_protocol =3D=3D IPPROTO_TCP so that non-TCP callers (e.g., L2TP via
-> inet6_csk_xmit) fall through to rt6_multipath_hash() and retain their
-> existing flow-key-based ECMP behavior.
->
-> tcp_v6_send_response() also sets mp_hash from the response txhash so
-> that a control packet (a RST from the full socket, or an ACK from a
-> time-wait socket) selects the same local ECMP nexthop as the
-> connection's txhash rather than falling back to the flow hash.  The
-> time-wait socket's tw_txhash is copied from sk_txhash when the
-> connection enters TIME_WAIT, so it reflects any rehash that occurred.
->
-> Setting mp_hash explicitly is necessary because the default ECMP hash
-> derives from fl6->flowlabel via np->flow_label, which is not updated
-> from sk_txhash (REPFLOW is off by default).  ip6_make_flowlabel()
-> cannot help either, as it runs after the route lookup.
->
-> As a consequence, for policy 0 the local ECMP path of an IPv6 TCP
-> flow follows sk_txhash even when fl6->flowlabel is non-zero, e.g. a
-> reflected (REPFLOW) or explicitly set (IPV6_FLOWLABEL_MGR) flow
-> label.  This is intentional: only local path selection changes, so
-> rehash can recover from a failed path; the on-wire flow label is
-> unchanged.
->
-> sk_set_txhash() is moved before ip6_dst_lookup_flow() in
-> tcp_v6_connect() so the initial ECMP path is selected by the same
-> txhash that subsequent route rebuilds will use.  This avoids
-> unintended path changes when the cached dst is naturally invalidated
-> (e.g., by PMTU discovery or route changes).
->
-> The rehash sites (tcp_write_timeout(), tcp_plb_check_rehash(), and
-> tcp_rcv_spurious_retrans()) call __sk_rethink_txhash_reset_dst(),
-> which re-rolls the txhash and, when it changed, drops the cached dst
-> so the next transmit re-runs route selection.  The dst reset is
-> guarded by sk->sk_family =3D=3D AF_INET6 since IPv4 ECMP does not
-> currently use sk_txhash for path selection.  For IPv4-mapped IPv6
-> sockets this produces a redundant dst reset on a cold path
-> (RTO/PLB); the subsequent IPv4 route lookup returns the same result.
-> The helper is deliberately separate from sk_rethink_txhash() itself:
-> dst_negative_advice() calls sk_rethink_txhash() before its own dst op,
-> so resetting the dst inside sk_rethink_txhash() would skip that op
-> (e.g. rt6_remove_exception_rt()).
->
-> For syncookies, cookie_init_sequence() computes the cookie value
-> before route_req() and sets txhash so the SYN-ACK selects the same
-> ECMP path that cookie_v6_check() will use when the full socket is
-> created.  cookie_tcp_reqsk_init() derives txhash from the cookie so
-> the full socket's ECMP path matches the SYN-ACK.  Both the SYN-ACK
-> assignment in tcp_conn_request() and the full-socket assignment in
-> cookie_tcp_reqsk_init() set txhash from the cookie for IPv4 and IPv6
-> alike.  On IPv6 this drives ECMP path selection; on IPv4, which does
-> not use sk_txhash for ECMP, it only affects TX-queue selection.  That
-> selection scales the hash by its high bits (reciprocal_scale()), which
-> are uniform in the keyed secure_tcp_syn_cookie() output -- the MSS index
-> only perturbs the low bits -- so the queue distribution matches
-> net_tx_rndhash().
->
-> cookie_init_sequence() is split from the former version that also
-> called tcp_synq_overflow() and incremented SYNCOOKIESSENT; those
-> side effects are now in cookie_record_sent(), called after
-> route_req() succeeds so they are not bumped when route_req() fails.
-> cookie_record_sent() is guarded by CONFIG_SYN_COOKIES to
-> match the guard on tcp_synq_overflow().  route_req() receives 0 as
-> tw_isn for the syncookie path so that tcp_v6_init_req() still saves
-> ireq->pktopts for REPFLOW flowlabel reflection and IPv6 cmsg
-> options.  The ecn_ok clear for syncookies without timestamps stays
-> after tcp_ecn_create_request() so it takes precedence.
->
-> Signed-off-by: Neil Spring <ntspring@meta.com>
+On Mon, Jun 15, 2026 at 04:45:25PM +0000, David Matlack wrote:
+> On 2026-06-15 08:47 AM, Alex Mastro wrote:
+> 
+> Please follow the local convention for shortlogs:
+> 
+>   vfio: selftests: Description of the commit
+> 
+> > Allocate VFIO ioctl requests dynamically instead of using VLAs. GCC 11.5.0
+> > rejects initialized VLAs with:
+> > 
+> >   error: variable-sized object may not be initialized
+> > 
+> > The replaced stack u8 arrays also do not guarantee native struct alignment
+> > for the aliased pointers.
+> > 
+> > Fixes: 19faf6fd969c ("vfio: selftests: Add a helper library for VFIO selftests")
+> > Fixes: 20face8c75ff ("vfio: selftests: Add helper to set/override a vf_token")
+> > Assisted-by: Codex:gpt-5.5-high
+> > Tested-by: Vipin Sharma <vipinsh@google.com>
+> > Reviewed-by: Vipin Sharma <vipinsh@google.com>
+> > Signed-off-by: Alex Mastro <amastro@fb.com>
+> > ---
+> > Changes in v2:
+> > - Reverse xmas tree variable ordering
+> > - Link to v1: https://patch.msgid.link/20260612-scratch-amastro-vfio-selftests-avoid-vlas-v1-1-ba3acb635f0a@fb.com
+> > 
+> > To: David Matlack <dmatlack@google.com>
+> > To: Alex Williamson <alex@shazbot.org>
+> > To: Shuah Khan <shuah@kernel.org>
+> > To: Raghavendra Rao Ananta <rananta@google.com>
+> > To: Vipin Sharma <vipinsh@google.com>
+> > Cc: Shuah Khan <skhan@linuxfoundation.org>
+> > Cc: kvm@vger.kernel.org
+> > Cc: linux-kselftest@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > ---
+> >  tools/testing/selftests/vfio/lib/vfio_pci_device.c | 28 +++++++++++++---------
+> >  1 file changed, 17 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> > index 94dc5fcecbeb..c65d5ed33e51 100644
+> > --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> > +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> > @@ -30,13 +30,12 @@
+> >  static void vfio_pci_irq_set(struct vfio_pci_device *device,
+> >  			     u32 index, u32 vector, u32 count, int *fds)
+> >  {
+> > -	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count];
+> > -	struct vfio_irq_set *irq = (void *)&buf;
+> > -	int *irq_fds = (void *)&irq->data;
+> > +	size_t irq_size = sizeof(struct vfio_irq_set) + sizeof(int) * count;
+> 
+> optional nit: s/irq_size/argsz/ (same for vfio_device_feature_ioctl())
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+SGTM
+
+> 
+> > +	struct vfio_irq_set *irq;
+> >  
+> > -	memset(buf, 0, sizeof(buf));
+> > -
+> > -	irq->argsz = sizeof(buf);
+> > +	irq = calloc(1, irq_size);
+> > +	VFIO_ASSERT_NOT_NULL(irq);
+> 
+> Could you add a precursor patch to add a calloc_assert() helper to
+> assert.h next to ioctl_assert() and snprintf_assert()? It looks like
+> there's quite a bit of code that repeats the
+> calloc()/VFIO_ASSERT_NOT_NULL() pattern.
+
+Good call, yes will do. Thanks for reviewing!
+
+> 
+> > +	irq->argsz = irq_size;
+> >  	irq->flags = VFIO_IRQ_SET_ACTION_TRIGGER;
+> >  	irq->index = index;
+> >  	irq->start = vector;
+> > @@ -44,12 +43,13 @@ static void vfio_pci_irq_set(struct vfio_pci_device *device,
+> >  
+> >  	if (count) {
+> >  		irq->flags |= VFIO_IRQ_SET_DATA_EVENTFD;
+> > -		memcpy(irq_fds, fds, sizeof(int) * count);
+> > +		memcpy(irq->data, fds, sizeof(int) * count);
+> >  	} else {
+> >  		irq->flags |= VFIO_IRQ_SET_DATA_NONE;
+> >  	}
+> >  
+> >  	ioctl_assert(device->fd, VFIO_DEVICE_SET_IRQS, irq);
+> > +	free(irq);
+> >  }
+> >  
+> >  void vfio_pci_irq_trigger(struct vfio_pci_device *device, u32 index, u32 vector)
+> > @@ -118,15 +118,21 @@ static void vfio_pci_irq_get(struct vfio_pci_device *device, u32 index,
+> >  static int vfio_device_feature_ioctl(int fd, u32 flags, void *data,
+> >  				     size_t data_size)
+> >  {
+> > -	u8 buffer[sizeof(struct vfio_device_feature) + data_size] = {};
+> > -	struct vfio_device_feature *feature = (void *)buffer;
+> > +	size_t feature_size = sizeof(struct vfio_device_feature) + data_size;
+> > +	struct vfio_device_feature *feature;
+> > +	int ret;
+> >  
+> > +	feature = calloc(1, feature_size);
+> > +	VFIO_ASSERT_NOT_NULL(feature);
+> >  	memcpy(feature->data, data, data_size);
+> >  
+> > -	feature->argsz = sizeof(buffer);
+> > +	feature->argsz = feature_size;
+> >  	feature->flags = flags;
+> >  
+> > -	return ioctl(fd, VFIO_DEVICE_FEATURE, feature);
+> > +	ret = ioctl(fd, VFIO_DEVICE_FEATURE, feature);
+> > +	free(feature);
+> > +
+> > +	return ret;
+> >  }
+> >  
+> >  static void vfio_device_feature_set(int fd, u16 feature, void *data, size_t data_size)
+> > 
+> > ---
+> > base-commit: a26b499b757cfc8bbff1088bb1b844639e250893
+> > change-id: 20260612-scratch-amastro-vfio-selftests-avoid-vlas-395eb3dcb3ab
+> > 
+> > Best regards,
+> > --  
+> > Alex Mastro <amastro@fb.com>
+> > 
