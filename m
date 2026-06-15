@@ -1,194 +1,255 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD8ED336EF8;
-	Mon, 15 Jun 2026 08:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3E138F653
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 09:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781513859; cv=none; b=FBKGdWO5OmDqLV6WYJX5CHO02EdBNV9/xV//IL1wowyRnL5OiBmb7k34owW+o0T9E5ig7O+eiAAkdMbHaGOcxAP9pNMvXzPWSC1KQU4iOky0wARrKzYxqTGteCeNkmo/9DkoeUGwUQeVFXRHtbGDtGPT2qODvv6Hrl6pTYnTlA8=
+	t=1781514320; cv=none; b=XjtRMwjlYUmVk+YSPJTMLHeE6Qgq6tB4IoJ7JYH8vlGMDZgsaX2IwsEfIuBRmUTqziRtswmY6wpvGA3YhmNxkffPaeAIXYkRPaMgvPUSwOxnT72H3B0cuKJ2wSyAxmw62NGOCDfKVGnxvk6DvJd4ZduC5SbmZPcGVeINSwIphCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781513859; c=relaxed/simple;
-	bh=0ZmxJwX0TNvfZyUvqRReauaUChMUhfTmeoPCo3hDwfg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZBU/ermDTBe17D9euWZWBVxBvz68EGgIt4pomMXhpNBe6fhfmqAATqiWl3exH6lJOe324XP8F9423GsEzSv4bksTy0Zxvw0U2gYNV8Oi/SgniC2Gnv7V0mo/cahrCJEj2N9XupmQu0nwDYny9hz6fN2v8Yb/bVfHVwXQC5cj8Jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=biLB3FOJ; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781514320; c=relaxed/simple;
+	bh=is0aUcqvIZ1xcT2jK43lwzQy9+ksca8vwiUx2SlLA9s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ouXUF7lfYkSteADq3fsa5A/dg8MOUFysxOTpbCCO4YbEuNsLqAf/ttr8mt/rWQX3lMwyI9x6DywkgbEnPOrrKnEx4KZbO/BMKCBZ90n1Bj1QOlxwTMY1jZ87X0PgFwdP0EaPSud4KTO0+83fh7jSD0GJoufTOjGHKB4arbXTZr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F2VSxmuZ; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="biLB3FOJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F2VSxmuZ"
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-8cc0ef7c306so28602646d6.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 02:05:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=LPg1Nn6vrL88IG0ir4EweS9hqoHbdKi
-	vd8bG6IaSvng=; b=biLB3FOJxAR1/zANUzRsTL9fSc1c4hcL+0aQG+npxDV3oi3
-	vpMvXey/59BGPpKkX4iOKJCGyUpXqbAiJZ3fHBPV7e9wbQNwpBtPIbzW47rZj706
-	Qr/sPe9hhnAahFZJ9vFHmPMUvo4gqNzIFvMF1/wbTf0syPh148JRL1NcWGD4=
-Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web5 (Coremail) with SMTP id zAQGZQA37r1vvi9qPuFwAg--.22668S3;
-	Mon, 15 Jun 2026 16:57:21 +0800 (CST)
-From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Mon, 15 Jun 2026 16:57:17 +0800
-Subject: [PATCH bpf 1/2] bpf: Preserve dynptr slice lifetime across
- rdonly_cast
+        d=gmail.com; s=20251104; t=1781514318; x=1782119118; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OvV17BgpJQmVQrI1yyaY3qROAJv7ED+Gi/LtXIZqMPI=;
+        b=F2VSxmuZK3+lLiaTVErbvzZRXcA0gpZd111o4WAO/7BG2E47jI/iYOeprIWpPMJ7DT
+         edFsRWqxMHU4K7Sd8Q3D0UDbeRhqUfgBr1aEX4Yfks42AjeWLGOsGujU6DEsXa7C64tj
+         7I+UqBD6kA/a91zOzFprsyECq0COBq/I/Uk9a9q2C/EYfStgf5ux4UFp4xGGyc8PckAf
+         3pjOma9ymSGyzmmjB9ZoH7JaGVlzl78NnK5ktAQH73+Y76bV0cz7sBFqs3TFX3rg4GKG
+         zQu6m150M6jVXc+n4wb4CLKIln0+U9qpVOidX1Sm52UTfppfG56mFKlgWYEuM9o4tKgB
+         XNIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781514318; x=1782119118;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OvV17BgpJQmVQrI1yyaY3qROAJv7ED+Gi/LtXIZqMPI=;
+        b=CwBRUh61j6ZOY1Rn4G8ZPZs8nOyD+GtMHAI0z6fsx1w4o/AHWMeOx2elMd5CnfS2Y2
+         lAHEo/gh2nlQeCjcYaY7Bs0LIKE2w60U5NkRCcqHfxp5Qd6YC3gUEAkBHZ2E5fifyHcM
+         JY5nLRU+RfYd9JPJ42E9FGUNELmQPpPDJtjM15XTGLuQ6Wm9lIrakxAuMSl9REzHl+N2
+         WatPfUN5c90jggOrp1sKsYubBDSK8Hgv9ueP4IUNvEkJC58KsEs9MyM4Cdre6/xPh23g
+         6uvex4mJwlXkHM7RHKCiEQghb4Hkc4ImGljZFLDBhdm+d7QIVn/OQzSIss64FYh5p7z8
+         F3DA==
+X-Forwarded-Encrypted: i=1; AFNElJ/Pg9oUvWCECtqMIfeP4FTC6Sn3NwSz6hX3IqomUkc76UAnYN9bjo+gjLIpfjnujPFR6MrGZJRMfMi46WZmAt8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYNBP1CARTHVESDU2XMHEwcpdWxFVRSHZBj2EZSUWfboGTRbhW
+	jrrj7NQ3JGKurYl7qS4nC2TpbZLs37N1ircAXb0owXLlvBbwyvPN51gk
+X-Gm-Gg: Acq92OFusa+rxDs/SwVYucG1s7RhHVXtBggvDpnN544opkddG774QD+thRZOJJ1WVo0
+	9wZ9RPRnofx+KNv8t9N1pyfU2NDobeHvOPuu/cggNoc8fhYPLeAJYlDcy96YGo1QckCQwf7v/Cx
+	5E9bLaz5AOGbfauh9t42llJQ/Mof/u0W9J+nzzGfTu4HFz7dT7ksW4zL4grDg6C9JsTp+XB6sSx
+	pDAxRmiTP0oFAk/D7rJ4pcrLLJP6prVIcwERAo1VrtJZ/e8LtjSb+h4Rkkr2q3lRBdx2pF4F/Le
+	KW3afAE+JkvvkXB9+ALuFOkrJvazt1mYt+4V0hlGsNVmPNAVL5lg7T7lVI2uGsBRenYunp9qvqS
+	DIfmULn0islolsOSZFNbpbTYwCUQ9muz7fLrJm8YgXA4CIj9K2xU5Q11yPmf1oiEFb/YBE46B+P
+	OZRNua1aSgJEfMIe3d9hcJQaU=
+X-Received: by 2002:ad4:5761:0:b0:8ae:62aa:665a with SMTP id 6a1803df08f44-8d32d858216mr244104566d6.28.1781514318228;
+        Mon, 15 Jun 2026 02:05:18 -0700 (PDT)
+Received: from houminxi.lan ([163.123.141.225])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8d302114676sm109704966d6.20.2026.06.15.02.05.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2026 02:05:17 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
+To: netdev@vger.kernel.org
+Cc: aconole@redhat.com,
+	echaudro@redhat.com,
+	i.maximets@ovn.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
+	Minxi Hou <houminxi@gmail.com>
+Subject: [PATCH net-next v2] selftests/net/openvswitch: add ICMPv6 echo type match test
+Date: Mon, 15 Jun 2026 17:05:07 +0800
+Message-ID: <20260615090507.3647256-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260613141429.3084962-1-houminxi@gmail.com>
+References: <20260613141429.3084962-1-houminxi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260615-f01-09-rdonly-cast-dynptr-lifetime-v1-1-2dd0a369e153@mails.tsinghua.edu.cn>
-References: <20260615-f01-09-rdonly-cast-dynptr-lifetime-v1-0-2dd0a369e153@mails.tsinghua.edu.cn>
-In-Reply-To: <20260615-f01-09-rdonly-cast-dynptr-lifetime-v1-0-2dd0a369e153@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781513842; l=4776;
- i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=0ZmxJwX0TNvfZyUvqRReauaUChMUhfTmeoPCo3hDwfg=;
- b=BhLVITKpvP6onNKe8J1gTuLDESWhMspmXjgE9Eagfa+ooHfmh8WeI56RHZFOj0oYx1mKsGYTo
- qFDHE9wP1giBLH414Z2PV26td737kkB+sh+2Gu48UJ6i/2dYfSLisfY
-X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
- pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:zAQGZQA37r1vvi9qPuFwAg--.22668S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXr1UCFWDCF45Jry5Zr4fZrb_yoWrKF1UpF
-	4Sgr9Fqr4kAw47GFnxAan7ZF1F9r4vqa17CrySk34xtF1UXrWYvF18KryYq3sxtFyYyw4U
-	tr4jvrZ8W3W7XFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
-	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
-	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
-	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
-	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xS
-	Y4AK67AK6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
-	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-	AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-	1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfUxv38DUUUU
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQETA2ovr0If+gABsc
+Content-Transfer-Encoding: 8bit
 
-bpf_rdonly_cast() is an identity operation at runtime and is also fixed
-up to a register move by the verifier. Its verifier return-state setup
-must preserve lifetime metadata that belongs to the source pointer.
+Register OVS_KEY_ATTR_ICMPV6 in the flow key parser so that
+icmpv6(type=...) can be used in flow specifications. Without this
+registration the parser silently drops the token and the kernel
+rejects the flow with EINVAL because the expected ICMPv6 key
+attribute is missing.
 
-On this verifier model, dynptr-slice kfunc returns carry dynptr_id, while
-refcounted dynptr release invalidates aliases by ref_obj_id. Attach the
-ref_obj_id to bpf_dynptr_slice() and bpf_dynptr_slice_rdwr() returns.
-Propagate source id and release metadata through bpf_rdonly_cast().
-For typed rdonly_cast() aliases, keep the source dynptr_id in reg id so
-stack-overwrite invalidation can distinguish the originating dynptr when a
-clone keeps the ref alive.
+While here, add convert_int() to the ovs_key_ipv6 and ovs_key_icmp
+fields_map entries so that specifying a field value produces the
+correct wildcard mask. The IPv6 flow label uses convert_int(20) to
+produce a 20-bit mask (0x000FFFFF), matching the kernel constraint in
+flow_netlink.c that rejects masks with bits 20-31 set; byte-wide
+fields use convert_int(8). The ipv4 counterpart already does this via
+convert_int(); the ipv6 and icmp classes were simply missing the fifth
+tuple element. Existing callers that pass empty parentheses are
+unaffected because convert_int("") returns (0, 0).
 
-Otherwise, a cast alias can survive bpf_ringbuf_discard_dynptr() and
-remain readable after the dynptr release.
+Add test_icmpv6 exercising the ICMPv6 echo flow key. The test uses
+static neighbour entries to bypass NDP, then verifies in three steps:
+install icmpv6(type=128) and icmpv6(type=129) flows and confirm ping
+works, remove the flows and confirm ping fails, reinstall and confirm
+recovery.
 
-Fixes: 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and bpf_dynptr_slice_rdwr")
-Fixes: a35b9af4ec2c ("bpf: Add a kfunc for generic type cast")
-Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Signed-off-by: Minxi Hou <houminxi@gmail.com>
 ---
- include/linux/bpf_verifier.h |  5 +++++
- kernel/bpf/verifier.c        | 36 ++++++++++++++++++++++++++++--------
- 2 files changed, 33 insertions(+), 8 deletions(-)
+v2: fix ovs_key_ipv6 label mask to use convert_int(20) instead of
+    convert_int(32); the IPv6 flow label is 20 bits and the kernel
+    rejects masks with bits 20-31 set in validate_set().
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 185b2aa43a420..0bc4b40e76bd0 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1366,6 +1366,11 @@ struct bpf_kfunc_call_arg_meta {
- 		u32 id;
- 		u32 ref_obj_id;
- 	} initialized_dynptr;
-+	struct {
-+		u32 id;
-+		u32 dynptr_id;
-+		u32 ref_obj_id;
-+	} rdonly_cast_src;
- 	struct {
- 		u8 spi;
- 		u8 frameno;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ff9b1f68ceca4..7cdf20944f31a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -832,10 +832,16 @@ static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
- 	dynptr_id = state->stack[spi].spilled_ptr.id;
- 	/* Invalidate any slices associated with this dynptr */
- 	bpf_for_each_reg_in_vstate(env->cur_state, fstate, dreg, ({
--		/* Dynptr slices are only PTR_TO_MEM_OR_NULL and PTR_TO_MEM */
--		if (dreg->type != (PTR_TO_MEM | PTR_MAYBE_NULL) && dreg->type != PTR_TO_MEM)
-+		if (base_type(dreg->type) == PTR_TO_MEM &&
-+		    dreg->dynptr_id == dynptr_id) {
-+			mark_reg_invalid(env, dreg);
- 			continue;
--		if (dreg->dynptr_id == dynptr_id)
-+		}
-+
-+		/* Typed bpf_rdonly_cast() aliases keep dynptr_id in reg id. */
-+		if (base_type(dreg->type) == PTR_TO_BTF_ID &&
-+		    (dreg->type & PTR_UNTRUSTED) &&
-+		    dreg->id == dynptr_id)
- 			mark_reg_invalid(env, dreg);
- 	}));
- 
-@@ -12085,8 +12091,17 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			continue;
- 		}
- 
--		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
-+		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i)) {
-+			if (meta->func_id == special_kfunc_list[KF_bpf_rdonly_cast] &&
-+			    i == 0 && is_spillable_regtype(reg->type)) {
-+				meta->rdonly_cast_src.id = reg->id;
-+				if (base_type(reg->type) == PTR_TO_MEM)
-+					meta->rdonly_cast_src.dynptr_id = reg->dynptr_id;
-+				meta->rdonly_cast_src.ref_obj_id = reg->ref_obj_id;
-+			}
-+
- 			continue;
-+		}
- 
- 		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
- 
-@@ -12935,10 +12950,17 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_ca
- 			regs[BPF_REG_0].type = PTR_TO_BTF_ID | PTR_UNTRUSTED;
- 			regs[BPF_REG_0].btf = desc_btf;
- 			regs[BPF_REG_0].btf_id = meta->arg_constant.value;
-+			regs[BPF_REG_0].id = meta->rdonly_cast_src.id;
-+			if (!regs[BPF_REG_0].id)
-+				regs[BPF_REG_0].id = meta->rdonly_cast_src.dynptr_id;
-+			regs[BPF_REG_0].ref_obj_id = meta->rdonly_cast_src.ref_obj_id;
- 		} else if (btf_type_is_void(ret_t)) {
- 			mark_reg_known_zero(env, regs, BPF_REG_0);
- 			regs[BPF_REG_0].type = PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED;
- 			regs[BPF_REG_0].mem_size = 0;
-+			regs[BPF_REG_0].id = meta->rdonly_cast_src.id;
-+			regs[BPF_REG_0].dynptr_id = meta->rdonly_cast_src.dynptr_id;
-+			regs[BPF_REG_0].ref_obj_id = meta->rdonly_cast_src.ref_obj_id;
- 		} else {
- 			verbose(env,
- 				"kfunc bpf_rdonly_cast type ID argument must be of a struct or void\n");
-@@ -12975,11 +12997,9 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_ca
- 			return -EFAULT;
- 		}
- 		regs[BPF_REG_0].dynptr_id = meta->initialized_dynptr.id;
-+		regs[BPF_REG_0].ref_obj_id = meta->initialized_dynptr.ref_obj_id;
- 
--		/* we don't need to set BPF_REG_0's ref obj id
--		 * because packet slices are not refcounted (see
--		 * dynptr_type_refcounted)
--		 */
-+		/* ref_obj_id is zero for non-refcounted packet slices. */
- 	} else {
- 		return 0;
- 	}
+ .../selftests/net/openvswitch/openvswitch.sh  | 63 +++++++++++++++++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 26 +++++---
+ 2 files changed, 82 insertions(+), 7 deletions(-)
 
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index d533decca5c1..8923224fa88e 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -31,6 +31,7 @@ tests="
+ 	pop_vlan				vlan: POP_VLAN action strips tag
+ 	dec_ttl					ttl: dec_ttl decrements IP TTL
+ 	flow_set				flow-set: Flow modify
++	icmpv6					icmpv6: ICMPv6 echo type match
+ 	psample					psample: Sampling packets with psample"
+ 
+ info() {
+@@ -377,6 +378,68 @@ test_flow_set() {
+ 	return 0
+ }
+ 
++test_icmpv6() {
++	sbx_add "test_icmpv6" || return $?
++	ovs_add_dp "test_icmpv6" icmpv6 || return 1
++
++	info "create namespaces"
++	for ns in client server; do
++		ovs_add_netns_and_veths "test_icmpv6" "icmpv6" \
++			"$ns" "${ns:0:1}0" "${ns:0:1}1" || return 1
++	done
++
++	ip netns exec client ip addr add fd00::1/64 dev c1 nodad
++	ip netns exec client ip link set c1 up
++	ip netns exec server ip addr add fd00::2/64 dev s1 nodad
++	ip netns exec server ip link set s1 up
++
++	local cl_mac sl_mac
++	cl_mac=$(ip netns exec client \
++		ip link show c1 | awk '/link\/ether/ {print $2}')
++	[ -z "$cl_mac" ] && \
++		{ info "failed to get c1 hwaddr"; return 1; }
++	sl_mac=$(ip netns exec server \
++		ip link show s1 | awk '/link\/ether/ {print $2}')
++	[ -z "$sl_mac" ] && \
++		{ info "failed to get s1 hwaddr"; return 1; }
++	ip netns exec client \
++		ip -6 neigh add fd00::2 lladdr "$sl_mac" dev c1
++	ip netns exec server \
++		ip -6 neigh add fd00::1 lladdr "$cl_mac" dev s1
++
++	ovs_add_flow "test_icmpv6" icmpv6 \
++	  'in_port(1),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6(type=128)' \
++	  '2' || return 1
++	ovs_add_flow "test_icmpv6" icmpv6 \
++	  'in_port(2),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6(type=129)' \
++	  '1' || return 1
++
++	info "verify ICMPv6 echo with type-specific flows"
++	ovs_sbx "test_icmpv6" ip netns exec client \
++		ping -6 -c 1 -W 2 fd00::2 || return 1
++
++	ovs_del_flows "test_icmpv6" icmpv6
++
++	info "verify ping fails without echo flows"
++	ovs_sbx "test_icmpv6" ip netns exec client \
++		ping -6 -c 1 -W 2 fd00::2 >/dev/null 2>&1 \
++		&& { info "FAIL: ping should fail without flows"
++		     return 1; }
++
++	ovs_add_flow "test_icmpv6" icmpv6 \
++	  'in_port(1),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6(type=128)' \
++	  '2' || return 1
++	ovs_add_flow "test_icmpv6" icmpv6 \
++	  'in_port(2),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6(type=129)' \
++	  '1' || return 1
++
++	info "verify connectivity restored"
++	ovs_sbx "test_icmpv6" ip netns exec client \
++		ping -6 -c 1 -W 2 fd00::2 || return 1
++
++	return 0
++}
++
+ # psample test
+ # - use psample to observe packets
+ test_psample() {
+diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+index e1ecfad2c03e..f3edd198223f 100644
+--- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
++++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+@@ -1255,11 +1255,16 @@ class ovskey(nla):
+                 lambda x: ipaddress.IPv6Address(x).packed if x else 0,
+                 convert_ipv6,
+             ),
+-            ("label", "label", "%d", lambda x: int(x) if x else 0),
+-            ("proto", "proto", "%d", lambda x: int(x) if x else 0),
+-            ("tclass", "tclass", "%d", lambda x: int(x) if x else 0),
+-            ("hlimit", "hlimit", "%d", lambda x: int(x) if x else 0),
+-            ("frag", "frag", "%d", lambda x: int(x) if x else 0),
++            ("label", "label", "%d", lambda x: int(x) if x else 0,
++                convert_int(20)),
++            ("proto", "proto", "%d", lambda x: int(x) if x else 0,
++                convert_int(8)),
++            ("tclass", "tclass", "%d", lambda x: int(x) if x else 0,
++                convert_int(8)),
++            ("hlimit", "hlimit", "%d", lambda x: int(x) if x else 0,
++                convert_int(8)),
++            ("frag", "frag", "%d", lambda x: int(x) if x else 0,
++                convert_int(8)),
+         )
+ 
+         def __init__(
+@@ -1344,8 +1349,10 @@ class ovskey(nla):
+         )
+ 
+         fields_map = (
+-            ("type", "type", "%d", lambda x: int(x) if x else 0),
+-            ("code", "code", "%d", lambda x: int(x) if x else 0),
++            ("type", "type", "%d", lambda x: int(x) if x else 0,
++                convert_int(8)),
++            ("code", "code", "%d", lambda x: int(x) if x else 0,
++                convert_int(8)),
+         )
+ 
+         def __init__(
+@@ -1982,6 +1989,11 @@ class ovskey(nla):
+                 "icmp",
+                 ovskey.ovs_key_icmp,
+             ),
++            (
++                "OVS_KEY_ATTR_ICMPV6",
++                "icmpv6",
++                ovskey.ovs_key_icmpv6,
++            ),
+             (
+                 "OVS_KEY_ATTR_TCP_FLAGS",
+                 "tcp_flags",
 -- 
-2.34.1
+2.54.0
 
