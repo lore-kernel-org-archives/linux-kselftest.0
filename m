@@ -1,33 +1,62 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99ED30D406;
-	Mon, 15 Jun 2026 18:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6568C3093B5
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 18:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781548248; cv=none; b=LMSJxgsn5vYjcQZLlqJMp2dCt3MHexo0zE5WkwbTwFPeXBRk61IEypclYfeMENH+aIBGXcnWjcwZ9+t8rIDp1FCnRZG4/q5MLM3QKST0kfEEptURaGMm1CKxb4B0qhPUxYIdPjxf3FmnW23AkfoNA+pmvzYMxBl1CCvb4paAzRk=
+	t=1781548520; cv=none; b=kikLTlTusUVkQvy9SIbh0a+oICWT5qiQ9SHSGBjIcshpZsgqCqmLuOKh9578u20Ltvz4l7EtulD72Ooy7lfcNCWPfNhF86khEZaUJsfVjtKKYkDkVw3/pYNabfoz057zqfxvKKntnrzi8xTV4vCMHeewrlBX9eGdw4QFj7HDKwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781548248; c=relaxed/simple;
-	bh=pxQwzcJlcWnEDPGhp6rYbip82v234/yHkMHOg47dTWU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kUfOor/pxI0FzoZZY5KyuuVPpizDYqJkVgQnrNlg/nVjuqrYKOTKCnrTgcTV13R+Weozkm5FaOPkNVg5q2048HIqfibSEvQygsYaVWkuo6Aeo8AaOwPZ9NBtYDrOEJPGEmHm8GpIZKHQG/uK9fbahgy/DOLWUz5CuYuBBE4muaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k4SHta/B; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781548520; c=relaxed/simple;
+	bh=nYe3T6nk5X+LpqmT3+/FrppmZmvGaV3vmiAi609UQoU=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=QJUITWL/kFLFhuTYNNJB/nL+xaVd/4qKY7IHbc5Lf0TzSTaQxNwjPWJCVF5cwl8dJRKbztObx6tDAvGt5bPyWD/NrTJXqzhUJI7vAgiNWxH/zL50QAAO6R1JYYS3vGbvzg0XEP4UYEqhKN/cBU5w8APzZ5SWknWcGBtCXjZhPUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UYD9QOl4; arc=none smtp.client-ip=209.85.160.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k4SHta/B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB051F000E9;
-	Mon, 15 Jun 2026 18:30:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781548247;
-	bh=5MEuihEHUG8jPWIs1KOkwtZJwTHjAJf8Y63agBr60OI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=k4SHta/BN4P+7V74eW0MmMMzlqtqnrXT0Gsbh6Nhp0VOwYxab9pF04tz4ZQL/MBsn
-	 SMhgGhwip2LeFofAMIBs66wlPK478uWLih57GiC+qFoLG48NNWmtsiea4Mb47lEdjL
-	 krT/GtMiQIQMoPHjzxuyVFbAYHv8sf2nX1BUIx576cvKnEPYx7w8u1KqhhFiveuLAK
-	 CY9THeOSQLTtFSTB1sadZJWy7xhcXn2Ag3RA+LC2HBEhpPM5XassxK2kNZP7aELp3F
-	 PV1byUCpL7cUDATNi4jvlqY8igfyj55/eydhfP4Mk5Qz2jIN9euH0B+Piu6e0Dngzq
-	 Loz7d/qD2J04A==
-Message-ID: <dba6a4a4-09e4-42b3-a7fc-1886a05d1299@kernel.org>
-Date: Mon, 15 Jun 2026 20:30:36 +0200
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UYD9QOl4"
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-441080fd7b9so2458490fac.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 11:35:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1781548517; x=1782153317; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ai58U+K7vgoV9YJk/w0Fvdj8swc2gtgv3T0MBj91zc8=;
+        b=UYD9QOl4KO4fnbKImla51yaMeL08nhASpWI7i9X5T/7SxMTAJzeo7fB+5eclEjKvs4
+         LU6fkOP129fD0/KK52Nnr/PvDqpkiRYCz99X9uTg8yuraq21g19dQ+jnATx4TgyIgxps
+         vxGE/bHSUqYU11mWItTZyhvn/yKtWGYbX5jkw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781548517; x=1782153317;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ai58U+K7vgoV9YJk/w0Fvdj8swc2gtgv3T0MBj91zc8=;
+        b=n2y+XEUIf3fhsQ3rjGVIH7flJR4Mlix3TtxQ4ahq6WVbKY+x4aCb8RPvXavZraFdnX
+         jfj8SvvcmJhcwcKTF2rUROmwPOR/I4kPfBgUE2H5pDIQKvL128EATRHUg6YlfDDu2sCB
+         mLDOg1/rBRc1k/1gFapy0o2142YtdAiSzoUYvOP+KwM1OVyPM9vtNOBxb+SEou+MvFoS
+         +EktNjg1TesiefG3pOrtr1h7rqXYQpZGhSIQoBAaxWdGHathP+yN4E0CiJGc20M3Sdcn
+         ocfjSWolEYzbNssmi44LAYhVSPVcN+S4HVPwf3E1Vxu+Swg1V3wZi9rsXaVnz1pwsZm8
+         AgtQ==
+X-Forwarded-Encrypted: i=1; AFNElJ91QHK/D1DJVNOM+H7TyEVPLVO/99Fs4IfyvQZsgc77AZ7rzez2QHQYF3p2RTWogQN2Bfil7CYT9pdeT6lsmoA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZr7qM5DyccRp1lq/vU8rnMVSICDRG7VFc5AHGQ7hIeo3uLxh1
+	yB6XR7UcNVhDaINVp6OJ0faArEwa0PogudSF/tFBZ8yeG3qwhpal3Qx4jfxBK+2pUFNVVodL+Mk
+	OIg+7
+X-Gm-Gg: Acq92OFK+wNPJC8lunWZqio9PmJLOs0OPQassHy3yv3qNMdyKZrCdo/vKP64i+4XDhc
+	ji+YShqIdtDSr9MVNWr4+iI6PKMxMRky3amDlpjlRRjB+Fe7tEoV6OCf0rMWw7WTSh2OnEn7eZg
+	IWSnoRlFvaZnyt7l2GvqZomHfJAvL0GKHzO4euYqetSbQLBAyCl6f/pDwSnGj3601AS+MayFEQg
+	zNvufUNkkj/J1mRi2HN43TxS/G0G0Zet3OsOmEJYYISWTYQU6d6CWa4DvDZtCTao6v6gUmlKacg
+	2u/SiW07COeQRiiAhOnNh+f3tCDi/AGNYJQ6xscDK+0vNn+HOx638AdpcnqPnciTrx9JxDgTQ8t
+	Vz70CZjbrxf5z3sU0qK50pfnDVTfNSlKv80rb6gmRZJ1YRhngOqz0bpurWWDpqWB/llnQNPXYbB
+	/YnL80aHA3DakegpgYV3sSjzFQ9/nE3EM=
+X-Received: by 2002:a05:6870:7988:b0:43b:b245:30ac with SMTP id 586e51a60fabf-4430b5cb217mr335448fac.16.1781548517372;
+        Mon, 15 Jun 2026 11:35:17 -0700 (PDT)
+Received: from [192.168.1.14] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4430866fa15sm488149fac.0.2026.06.15.11.35.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Jun 2026 11:35:16 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------NSNXtQ0NqHNpDlMrMs8PkVhK"
+Message-ID: <6cc7e08d-ae50-486e-97e1-6190f0790c6b@linuxfoundation.org>
+Date: Mon, 15 Jun 2026 12:35:15 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,119 +64,470 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 0/3] KVM: guest_memfd: folio migration for
- non-confidential VMs
-To: Alexandru Elisei <alexandru.elisei@arm.com>,
- Shivank Garg <shivankg@amd.com>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>,
- Vlastimil Babka <vbabka@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
- Matthew Brost <matthew.brost@intel.com>,
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
- Ying Huang <ying.huang@linux.alibaba.com>,
- Alistair Popple <apopple@nvidia.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Chao Peng <chao.p.peng@linux.intel.com>,
- Nikunj A Dadhania <nikunj@amd.com>, Ira Weiny <ira.weiny@intel.com>,
- Michael Roth <michael.roth@amd.com>, Pankaj Gupta <pankaj.gupta@amd.com>,
- Ackerley Tng <ackerleytng@google.com>, Fuad Tabba <tabba@google.com>,
- Sean Christopherson <seanjc@google.com>,
- Vishal Annapurve <vannapurve@google.com>,
- Nikita Kalyazin <nikita.kalyazin@linux.dev>,
- Patrick Roy <patrick.roy@linux.dev>, Pratik Sampat <prsampat@amd.com>,
- Ashish Kalra <Ashish.Kalra@amd.com>, linux-fsdevel@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260611-shivank-gmem-migrate-v1-0-2d266bfc6f95@amd.com>
- <ai_XK__RTXMCEcCG@raptor>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <ai_XK__RTXMCEcCG@raptor>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+From: Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] kselftest update for Linux 7.2-rc1
 
-On 6/15/26 12:43, Alexandru Elisei wrote:
-> Hi,
-> 
-> On Thu, Jun 11, 2026 at 01:05:07PM +0000, Shivank Garg wrote:
->> guest_memfd folios are currently marked unmovable, so the kernel cannot
->> perform NUMA-balancing, memory compaction, etc. This is unavoidable for
->> confidential VMs (SEV-SNP, TDX), since memory is encrypted and copying it
->> needs firmware assistance. However, for non-confidential VMs (like
->> Firecracker), we can migrate the folios.
->>
->> This series enables folio migration for non-confidential guest_memfd and
->> also lays the groundwork for migrating confidential guest_memfd later.
->> Once firmware-assisted copying support is available, those VMs can be
->> made movable, the confidential folio content can be copied separately,
->> and the destination folio marked with FOLIO_CONTENT_COPIED so
->> __migrate_folio() skips the host-side folio_mc_copy().
-> 
-> I always thought that one of the nice things about using guest_memfd as a
-> memory backend, as opposed to host userspace mappings, is that the host
-> cannot unmap VM memory because of KSM, automatic NUMA balancing, hugepage
-> collapse, compaction, etc, acting on the host userspace mapping of the
-> VM memory, and outside of the VMM's or KVM's control.
+This is a multi-part message in MIME format.
+--------------NSNXtQ0NqHNpDlMrMs8PkVhK
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Yeah, but it doesn't play nice with THPs / large folios. So if you want to run
-something else on a hypervisor than just confidential VMs, you definitely want
-guest_memfd to be as nice to the system.
+Hi Linus,
 
-That is, support page migration if nothing speaks against it.
+Please pull this kselftest next update for Linux 7.2-rc1.
 
-Now, if something speaks against it, for sure we can just leave the pages be
-unmovable.
+Several fixes and improvements to resctrl test and a change to
+kselftest document to clarify the use of FORCE_TARGETS build
+variable.
 
-Fortunately, the patch is rather trivial.
+diff is attached.
 
--- 
-Cheers,
+thanks,
+-- Shuah
 
-David
+----------------------------------------------------------------
+The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+
+   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-next-7.2-rc1
+
+for you to fetch changes up to 5f4974231fb3656c15a82faece9f2303b8c18a14:
+
+   kselftest: fix doc for ksft_test_result_report() (2026-05-05 12:39:43 -0600)
+
+----------------------------------------------------------------
+linux_kselftest-next-7.2-rc1
+
+Several fixes and improvements to resctrl test and a change to
+kselftest document to clarify the use of FORCE_TARGETS build
+variable.
+
+----------------------------------------------------------------
+Reinette Chatre (10):
+       selftests/resctrl: Improve accuracy of cache occupancy test
+       selftests/resctrl: Reduce interference from L2 occupancy during cache occupancy test
+       selftests/resctrl: Do not store iMC counter value in counter config structure
+       selftests/resctrl: Prepare for parsing multiple events per iMC
+       selftests/resctrl: Support multiple events associated with iMC
+       selftests/resctrl: Increase size of buffer used in MBM and MBA tests
+       selftests/resctrl: Raise threshold at which MBM and PMU values are compared
+       selftests/resctrl: Remove requirement on cache miss rate
+       selftests/resctrl: Simplify perf usage in CAT test
+       selftests/resctrl: Reduce L2 impact on CAT test
+
+Ricardo B. Marlière (1):
+       docs: kselftest: Document the FORCE_TARGETS build variable
+
+Woradorn Laodhanadhaworn (1):
+       kselftest: fix doc for ksft_test_result_report()
+
+  Documentation/dev-tools/kselftest.rst         |  12 +++
+  tools/testing/selftests/kselftest.h           |   4 +-
+  tools/testing/selftests/resctrl/cache.c       |  30 +++---
+  tools/testing/selftests/resctrl/cat_test.c    |  41 ++------
+  tools/testing/selftests/resctrl/cmt_test.c    |  36 ++++++-
+  tools/testing/selftests/resctrl/fill_buf.c    |   4 +-
+  tools/testing/selftests/resctrl/mba_test.c    |   6 +-
+  tools/testing/selftests/resctrl/mbm_test.c    |   6 +-
+  tools/testing/selftests/resctrl/resctrl.h     |  20 ++--
+  tools/testing/selftests/resctrl/resctrl_val.c | 135 +++++++++++++++++++-------
+  10 files changed, 193 insertions(+), 101 deletions(-)
+----------------------------------------------------------------
+--------------NSNXtQ0NqHNpDlMrMs8PkVhK
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux_kselftest-next-7.2-rc1.diff"
+Content-Disposition: attachment; filename="linux_kselftest-next-7.2-rc1.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2LXRvb2xzL2tzZWxmdGVzdC5yc3QgYi9E
+b2N1bWVudGF0aW9uL2Rldi10b29scy9rc2VsZnRlc3QucnN0CmluZGV4IDE4YzJkYTY3ZmFl
+NC4uZDdiZmUzMjAzMzhjIDEwMDY0NAotLS0gYS9Eb2N1bWVudGF0aW9uL2Rldi10b29scy9r
+c2VsZnRlc3QucnN0CisrKyBiL0RvY3VtZW50YXRpb24vZGV2LXRvb2xzL2tzZWxmdGVzdC5y
+c3QKQEAgLTEyNiw2ICsxMjYsMTggQEAgZGVkaWNhdGVkIHNraXBsaXN0OjoKIFNlZSB0aGUg
+dG9wLWxldmVsIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL01ha2VmaWxlIGZvciB0aGUgbGlz
+dCBvZiBhbGwKIHBvc3NpYmxlIHRhcmdldHMuCiAKK1JlcXVpcmluZyBhbGwgdGFyZ2V0cyB0
+byBidWlsZCBzdWNjZXNzZnVsbHkKKz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT0KKworQnkgZGVmYXVsdCwgdGhlIGJ1aWxkIHN1Y2NlZWRzIGFzIGxvbmcg
+YXMgYXQgbGVhc3Qgb25lIHRhcmdldCBidWlsZHMKK3dpdGhvdXQgZXJyb3IuIFNldCBgYEZP
+UkNFX1RBUkdFVFM9MWBgIHRvIGluc3RlYWQgcmVxdWlyZSBldmVyeSB0YXJnZXQgdG8KK2J1
+aWxkIHN1Y2Nlc3NmdWxseTsgbWFrZSB3aWxsIGFib3J0IGFzIHNvb24gYXMgYW55IHRhcmdl
+dCBmYWlsczo6CisKKyAgJCBtYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzIEZPUkNF
+X1RBUkdFVFM9MQorCitUaGlzIGFwcGxpZXMgdG8gYm90aCB0aGUgYGBhbGxgYCBhbmQgYGBp
+bnN0YWxsYGAgdGFyZ2V0cyBhbmQgaXMgdXNlZnVsIGluCitDSSBlbnZpcm9ubWVudHMgd2hl
+cmUgYSBzaWxlbnQgcGFydGlhbCBidWlsZCB3b3VsZCBiZSBtaXNsZWFkaW5nLgorCiBSdW5u
+aW5nIHRoZSBmdWxsIHJhbmdlIGhvdHBsdWcgc2VsZnRlc3RzCiA9PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09CiAKZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcv
+c2VsZnRlc3RzL2tzZWxmdGVzdC5oIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0
+ZXN0LmgKaW5kZXggNmQ4MDlmMDhhYjdiLi5iNTBhODQ3OGQ0ZDMgMTAwNjQ0Ci0tLSBhL3Rv
+b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZWxmdGVzdC5oCisrKyBiL3Rvb2xzL3Rlc3Rpbmcv
+c2VsZnRlc3RzL2tzZWxmdGVzdC5oCkBAIC0zNDYsOSArMzQ2LDkgQEAgdm9pZCBrc2Z0X3Rl
+c3RfcmVzdWx0X2NvZGUoaW50IGV4aXRfY29kZSwgY29uc3QgY2hhciAqdGVzdF9uYW1lLAog
+fQogCiAvKioKLSAqIGtzZnRfdGVzdF9yZXN1bHQoKSAtIFJlcG9ydCB0ZXN0IHN1Y2Nlc3Mg
+YmFzZWQgb24gdHJ1dGggb2YgY29uZGl0aW9uCisgKiBrc2Z0X3Rlc3RfcmVzdWx0X3JlcG9y
+dCgpIC0gUmVwb3J0IHRlc3QgcmVzdWx0IGJhc2VkIG9uIGEga3NlbGZ0ZXN0IGV4aXQgY29k
+ZQogICoKLSAqIEBjb25kaXRpb246IGlmIHRydWUsIHJlcG9ydCB0ZXN0IHN1Y2Nlc3MsIG90
+aGVyd2lzZSBmYWlsdXJlLgorICogQHJlc3VsdDogYSBrc2VsZnRlc3QgZXhpdCBjb2RlCiAg
+Ki8KICNkZWZpbmUga3NmdF90ZXN0X3Jlc3VsdF9yZXBvcnQocmVzdWx0LCBmbXQsIC4uLikg
+ZG8gewkJXAogCXN3aXRjaCAocmVzdWx0KSB7CQkJCQlcCmRpZmYgLS1naXQgYS90b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL2NhY2hlLmMgYi90b29scy90ZXN0aW5nL3NlbGZ0
+ZXN0cy9yZXNjdHJsL2NhY2hlLmMKaW5kZXggMWZmMTEwNGU2NTc1Li5kZjliZWE1ODRhMmQg
+MTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvY2FjaGUuYwor
+KysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL2NhY2hlLmMKQEAgLTEwLDcg
+KzEwLDYgQEAgdm9pZCBwZXJmX2V2ZW50X2F0dHJfaW5pdGlhbGl6ZShzdHJ1Y3QgcGVyZl9l
+dmVudF9hdHRyICpwZWEsIF9fdTY0IGNvbmZpZykKIAltZW1zZXQocGVhLCAwLCBzaXplb2Yo
+KnBlYSkpOwogCXBlYS0+dHlwZSA9IFBFUkZfVFlQRV9IQVJEV0FSRTsKIAlwZWEtPnNpemUg
+PSBzaXplb2YoKnBlYSk7Ci0JcGVhLT5yZWFkX2Zvcm1hdCA9IFBFUkZfRk9STUFUX0dST1VQ
+OwogCXBlYS0+ZXhjbHVkZV9rZXJuZWwgPSAxOwogCXBlYS0+ZXhjbHVkZV9odiA9IDE7CiAJ
+cGVhLT5leGNsdWRlX2lkbGUgPSAxOwpAQCAtMzcsMTkgKzM2LDEzIEBAIGludCBwZXJmX2V2
+ZW50X3Jlc2V0X2VuYWJsZShpbnQgcGVfZmQpCiAJcmV0dXJuIDA7CiB9CiAKLXZvaWQgcGVy
+Zl9ldmVudF9pbml0aWFsaXplX3JlYWRfZm9ybWF0KHN0cnVjdCBwZXJmX2V2ZW50X3JlYWQg
+KnBlX3JlYWQpCi17Ci0JbWVtc2V0KHBlX3JlYWQsIDAsIHNpemVvZigqcGVfcmVhZCkpOwot
+CXBlX3JlYWQtPm5yID0gMTsKLX0KLQogaW50IHBlcmZfb3BlbihzdHJ1Y3QgcGVyZl9ldmVu
+dF9hdHRyICpwZWEsIHBpZF90IHBpZCwgaW50IGNwdV9ubykKIHsKIAlpbnQgcGVfZmQ7CiAK
+IAlwZV9mZCA9IHBlcmZfZXZlbnRfb3BlbihwZWEsIHBpZCwgY3B1X25vLCAtMSwgUEVSRl9G
+TEFHX0ZEX0NMT0VYRUMpOwogCWlmIChwZV9mZCA9PSAtMSkgewotCQlrc2Z0X3BlcnJvcigi
+RXJyb3Igb3BlbmluZyBsZWFkZXIiKTsKKwkJa3NmdF9wZXJyb3IoIlVuYWJsZSB0byBzZXQg
+dXAgcGVyZm9ybWFuY2UgbW9uaXRvcmluZyIpOwogCQlyZXR1cm4gLTE7CiAJfQogCkBAIC0x
+MzIsOSArMTI1LDkgQEAgc3RhdGljIGludCBwcmludF9yZXN1bHRzX2NhY2hlKGNvbnN0IGNo
+YXIgKmZpbGVuYW1lLCBwaWRfdCBibV9waWQsIF9fdTY0IGxsY192YWwKICAqCiAgKiBSZXR1
+cm46ID0wIG9uIHN1Y2Nlc3MuIDwwIG9uIGZhaWx1cmUuCiAgKi8KLWludCBwZXJmX2V2ZW50
+X21lYXN1cmUoaW50IHBlX2ZkLCBzdHJ1Y3QgcGVyZl9ldmVudF9yZWFkICpwZV9yZWFkLAot
+CQkgICAgICAgY29uc3QgY2hhciAqZmlsZW5hbWUsIHBpZF90IGJtX3BpZCkKK2ludCBwZXJm
+X2V2ZW50X21lYXN1cmUoaW50IHBlX2ZkLCBjb25zdCBjaGFyICpmaWxlbmFtZSwgcGlkX3Qg
+Ym1fcGlkKQogeworCV9fdTY0IHZhbHVlOwogCWludCByZXQ7CiAKIAkvKiBTdG9wIGNvdW50
+ZXJzIGFmdGVyIG9uZSBzcGFuIHRvIGdldCBtaXNzIHJhdGUgKi8KQEAgLTE0MiwxMyArMTM1
+LDEzIEBAIGludCBwZXJmX2V2ZW50X21lYXN1cmUoaW50IHBlX2ZkLCBzdHJ1Y3QgcGVyZl9l
+dmVudF9yZWFkICpwZV9yZWFkLAogCWlmIChyZXQgPCAwKQogCQlyZXR1cm4gcmV0OwogCi0J
+cmV0ID0gcmVhZChwZV9mZCwgcGVfcmVhZCwgc2l6ZW9mKCpwZV9yZWFkKSk7CisJcmV0ID0g
+cmVhZChwZV9mZCwgJnZhbHVlLCBzaXplb2YodmFsdWUpKTsKIAlpZiAocmV0ID09IC0xKSB7
+CiAJCWtzZnRfcGVycm9yKCJDb3VsZCBub3QgZ2V0IHBlcmYgdmFsdWUiKTsKIAkJcmV0dXJu
+IC0xOwogCX0KIAotCXJldHVybiBwcmludF9yZXN1bHRzX2NhY2hlKGZpbGVuYW1lLCBibV9w
+aWQsIHBlX3JlYWQtPnZhbHVlc1swXS52YWx1ZSk7CisJcmV0dXJuIHByaW50X3Jlc3VsdHNf
+Y2FjaGUoZmlsZW5hbWUsIGJtX3BpZCwgdmFsdWUpOwogfQogCiAvKgpAQCAtMTczLDYgKzE2
+NiwxOSBAQCBpbnQgbWVhc3VyZV9sbGNfcmVzY3RybChjb25zdCBjaGFyICpmaWxlbmFtZSwg
+cGlkX3QgYm1fcGlkKQogCXJldHVybiBwcmludF9yZXN1bHRzX2NhY2hlKGZpbGVuYW1lLCBi
+bV9waWQsIGxsY19vY2N1X3Jlc2MpOwogfQogCisvKgorICogUmVkdWNlIEwyIGFsbG9jYXRp
+b24gdG8gbWluaW11bSB3aGVuIHRlc3RpbmcgTDMgY2FjaGUgYWxsb2NhdGlvbi4KKyAqLwor
+aW50IG1pbmltaXplX2wyX29jY3VwYW5jeShjb25zdCBzdHJ1Y3QgcmVzY3RybF90ZXN0ICp0
+ZXN0LAorCQkJICBjb25zdCBzdHJ1Y3QgdXNlcl9wYXJhbXMgKnVwYXJhbXMsCisJCQkgIGNv
+bnN0IHN0cnVjdCByZXNjdHJsX3ZhbF9wYXJhbSAqcGFyYW0pCit7CisJaWYgKCFzdHJjbXAo
+dGVzdC0+cmVzb3VyY2UsICJMMyIpICYmIHJlc2N0cmxfcmVzb3VyY2VfZXhpc3RzKCJMMiIp
+KQorCQlyZXR1cm4gd3JpdGVfc2NoZW1hdGEocGFyYW0tPmN0cmxncnAsICIweDEiLCB1cGFy
+YW1zLT5jcHUsICJMMiIpOworCisJcmV0dXJuIDA7Cit9CisKIC8qCiAgKiBzaG93X2NhY2hl
+X2luZm8gLSBTaG93IGdlbmVyaWMgY2FjaGUgdGVzdCBpbmZvcm1hdGlvbgogICogQG5vX29m
+X2JpdHM6CQlOdW1iZXIgb2YgYml0cwpkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMvcmVzY3RybC9jYXRfdGVzdC5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcmVz
+Y3RybC9jYXRfdGVzdC5jCmluZGV4IGYwMGI2MjJjMTQ2MC4uMzcxYTJmMjZkYzQ3IDEwMDY0
+NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL2NhdF90ZXN0LmMKKysr
+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcmVzY3RybC9jYXRfdGVzdC5jCkBAIC0xNCw0
+MiArMTQsMjAgQEAKICNkZWZpbmUgUkVTVUxUX0ZJTEVfTkFNRQkicmVzdWx0X2NhdCIKICNk
+ZWZpbmUgTlVNX09GX1JVTlMJCTUKIAotLyoKLSAqIE1pbmltdW0gZGlmZmVyZW5jZSBpbiBM
+TEMgbWlzc2VzIGJldHdlZW4gYSB0ZXN0IHdpdGggbisxIGJpdHMgQ0JNIHRvIHRoZQotICog
+dGVzdCB3aXRoIG4gYml0cyBpcyBNSU5fRElGRl9QRVJDRU5UX1BFUl9CSVQgKiAobiAtIDEp
+LiBXaXRoIGUuZy4gNSB2cyA0Ci0gKiBiaXRzIGluIHRoZSBDQk0gbWFzaywgdGhlIG1pbmlt
+dW0gZGlmZmVyZW5jZSBtdXN0IGJlIGF0IGxlYXN0Ci0gKiBNSU5fRElGRl9QRVJDRU5UX1BF
+Ul9CSVQgKiAoNCAtIDEpID0gMyBwZXJjZW50LgotICoKLSAqIFRoZSByZWxhdGlvbnNoaXAg
+YmV0d2VlbiBudW1iZXIgb2YgdXNlZCBDQk0gYml0cyBhbmQgZGlmZmVyZW5jZSBpbiBMTEMK
+LSAqIG1pc3NlcyBpcyBub3QgZXhwZWN0ZWQgdG8gYmUgbGluZWFyLiBXaXRoIGEgc21hbGwg
+bnVtYmVyIG9mIGJpdHMsIHRoZQotICogbWFyZ2luIGlzIHNtYWxsZXIgdGhhbiB3aXRoIGxh
+cmdlciBudW1iZXIgb2YgYml0cy4gRm9yIHNlbGZ0ZXN0IHB1cnBvc2VzLAotICogaG93ZXZl
+ciwgbGluZWFyIGFwcHJvYWNoIGlzIGVub3VnaCBiZWNhdXNlIHVsdGltYXRlbHkgb25seSBw
+YXNzL2ZhaWwKLSAqIGRlY2lzaW9uIGhhcyB0byBiZSBtYWRlIGFuZCBkaXN0aW5jdGlvbiBi
+ZXR3ZWVuIHN0cm9uZyBhbmQgc3Ryb25nZXIKLSAqIHNpZ25hbCBpcyBpcnJlbGV2YW50Lgot
+ICovCi0jZGVmaW5lIE1JTl9ESUZGX1BFUkNFTlRfUEVSX0JJVAkxVUwKLQogc3RhdGljIGlu
+dCBzaG93X3Jlc3VsdHNfaW5mbyhfX3U2NCBzdW1fbGxjX3ZhbCwgaW50IG5vX29mX2JpdHMs
+CiAJCQkgICAgIHVuc2lnbmVkIGxvbmcgY2FjaGVfc3BhbiwKLQkJCSAgICAgdW5zaWduZWQg
+bG9uZyBtaW5fZGlmZl9wZXJjZW50LAogCQkJICAgICB1bnNpZ25lZCBsb25nIG51bV9vZl9y
+dW5zLCBib29sIHBsYXRmb3JtLAogCQkJICAgICBfX3M2NCAqcHJldl9hdmdfbGxjX3ZhbCkK
+IHsKIAlfX3U2NCBhdmdfbGxjX3ZhbCA9IDA7Ci0JZmxvYXQgYXZnX2RpZmY7CiAJaW50IHJl
+dCA9IDA7CiAKIAlhdmdfbGxjX3ZhbCA9IHN1bV9sbGNfdmFsIC8gbnVtX29mX3J1bnM7CiAJ
+aWYgKCpwcmV2X2F2Z19sbGNfdmFsKSB7Ci0JCWZsb2F0IGRlbHRhID0gKF9fczY0KShhdmdf
+bGxjX3ZhbCAtICpwcmV2X2F2Z19sbGNfdmFsKTsKLQotCQlhdmdfZGlmZiA9IGRlbHRhIC8g
+KnByZXZfYXZnX2xsY192YWw7Ci0JCXJldCA9IHBsYXRmb3JtICYmIChhdmdfZGlmZiAqIDEw
+MCkgPCAoZmxvYXQpbWluX2RpZmZfcGVyY2VudDsKKwkJcmV0ID0gcGxhdGZvcm0gJiYgKGF2
+Z19sbGNfdmFsIDwgKnByZXZfYXZnX2xsY192YWwpOwogCi0JCWtzZnRfcHJpbnRfbXNnKCIl
+cyBDaGVjayBjYWNoZSBtaXNzIHJhdGUgY2hhbmdlZCBtb3JlIHRoYW4gJS4xZiUlXG4iLAot
+CQkJICAgICAgIHJldCA/ICJGYWlsOiIgOiAiUGFzczoiLCAoZmxvYXQpbWluX2RpZmZfcGVy
+Y2VudCk7Ci0KLQkJa3NmdF9wcmludF9tc2coIlBlcmNlbnQgZGlmZj0lLjFmXG4iLCBhdmdf
+ZGlmZiAqIDEwMCk7CisJCWtzZnRfcHJpbnRfbXNnKCIlcyBDaGVjayBjYWNoZSBtaXNzIHJh
+dGUgaW5jcmVhc2VkXG4iLAorCQkJICAgICAgIHJldCA/ICJGYWlsOiIgOiAiUGFzczoiKTsK
+IAl9CiAJKnByZXZfYXZnX2xsY192YWwgPSBhdmdfbGxjX3ZhbDsKIApAQCAtNTgsMTAgKzM2
+LDEwIEBAIHN0YXRpYyBpbnQgc2hvd19yZXN1bHRzX2luZm8oX191NjQgc3VtX2xsY192YWws
+IGludCBub19vZl9iaXRzLAogCXJldHVybiByZXQ7CiB9CiAKLS8qIFJlbW92ZSB0aGUgaGln
+aGVzdCBiaXQgZnJvbSBDQk0gKi8KKy8qIFJlbW92ZSB0aGUgaGlnaGVzdCBiaXRzIGZyb20g
+Q0JNICovCiBzdGF0aWMgdW5zaWduZWQgbG9uZyBuZXh0X21hc2sodW5zaWduZWQgbG9uZyBj
+dXJyZW50X21hc2spCiB7Ci0JcmV0dXJuIGN1cnJlbnRfbWFzayAmIChjdXJyZW50X21hc2sg
+Pj4gMSk7CisJcmV0dXJuIGN1cnJlbnRfbWFzayAmIChjdXJyZW50X21hc2sgPj4gMik7CiB9
+CiAKIHN0YXRpYyBpbnQgY2hlY2tfcmVzdWx0cyhzdHJ1Y3QgcmVzY3RybF92YWxfcGFyYW0g
+KnBhcmFtLCBjb25zdCBjaGFyICpjYWNoZV90eXBlLApAQCAtMTEyLDcgKzkwLDYgQEAgc3Rh
+dGljIGludCBjaGVja19yZXN1bHRzKHN0cnVjdCByZXNjdHJsX3ZhbF9wYXJhbSAqcGFyYW0s
+IGNvbnN0IGNoYXIgKmNhY2hlX3R5cGUKIAogCQlyZXQgPSBzaG93X3Jlc3VsdHNfaW5mbyhz
+dW1fbGxjX3BlcmZfbWlzcywgYml0cywKIAkJCQkJYWxsb2Nfc2l6ZSAvIDY0LAotCQkJCQlN
+SU5fRElGRl9QRVJDRU5UX1BFUl9CSVQgKiAoYml0cyAtIDEpLAogCQkJCQlydW5zLCBnZXRf
+dmVuZG9yKCkgPT0gQVJDSF9JTlRFTCwKIAkJCQkJJnByZXZfYXZnX2xsY192YWwpOwogCQlp
+ZiAocmV0KQpAQCAtMTU4LDcgKzEzNSw2IEBAIHN0YXRpYyBpbnQgY2F0X3Rlc3QoY29uc3Qg
+c3RydWN0IHJlc2N0cmxfdGVzdCAqdGVzdCwKIAkJICAgIHN0cnVjdCByZXNjdHJsX3ZhbF9w
+YXJhbSAqcGFyYW0sCiAJCSAgICBzaXplX3Qgc3BhbiwgdW5zaWduZWQgbG9uZyBjdXJyZW50
+X21hc2spCiB7Ci0Jc3RydWN0IHBlcmZfZXZlbnRfcmVhZCBwZV9yZWFkOwogCXN0cnVjdCBw
+ZXJmX2V2ZW50X2F0dHIgcGVhOwogCWNwdV9zZXRfdCBvbGRfYWZmaW5pdHk7CiAJdW5zaWdu
+ZWQgY2hhciAqYnVmOwpAQCAtMTgxLDggKzE1NywxMSBAQCBzdGF0aWMgaW50IGNhdF90ZXN0
+KGNvbnN0IHN0cnVjdCByZXNjdHJsX3Rlc3QgKnRlc3QsCiAJaWYgKHJldCkKIAkJZ290byBy
+ZXNldF9hZmZpbml0eTsKIAorCXJldCA9IG1pbmltaXplX2wyX29jY3VwYW5jeSh0ZXN0LCB1
+cGFyYW1zLCBwYXJhbSk7CisJaWYgKHJldCkKKwkJZ290byByZXNldF9hZmZpbml0eTsKKwog
+CXBlcmZfZXZlbnRfYXR0cl9pbml0aWFsaXplKCZwZWEsIFBFUkZfQ09VTlRfSFdfQ0FDSEVf
+TUlTU0VTKTsKLQlwZXJmX2V2ZW50X2luaXRpYWxpemVfcmVhZF9mb3JtYXQoJnBlX3JlYWQp
+OwogCXBlX2ZkID0gcGVyZl9vcGVuKCZwZWEsIGJtX3BpZCwgdXBhcmFtcy0+Y3B1KTsKIAlp
+ZiAocGVfZmQgPCAwKSB7CiAJCXJldCA9IC0xOwpAQCAtMjE1LDcgKzE5NCw3IEBAIHN0YXRp
+YyBpbnQgY2F0X3Rlc3QoY29uc3Qgc3RydWN0IHJlc2N0cmxfdGVzdCAqdGVzdCwKIAogCQkJ
+ZmlsbF9jYWNoZV9yZWFkKGJ1Ziwgc3BhbiwgdHJ1ZSk7CiAKLQkJCXJldCA9IHBlcmZfZXZl
+bnRfbWVhc3VyZShwZV9mZCwgJnBlX3JlYWQsIHBhcmFtLT5maWxlbmFtZSwgYm1fcGlkKTsK
+KwkJCXJldCA9IHBlcmZfZXZlbnRfbWVhc3VyZShwZV9mZCwgcGFyYW0tPmZpbGVuYW1lLCBi
+bV9waWQpOwogCQkJaWYgKHJldCkKIAkJCQlnb3RvIGZyZWVfYnVmOwogCQl9CmRpZmYgLS1n
+aXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL2NtdF90ZXN0LmMgYi90b29s
+cy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL2NtdF90ZXN0LmMKaW5kZXggZDA5ZTY5M2Rj
+NzM5Li5jY2I2ZmU4ODFhOTQgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
+L3Jlc2N0cmwvY210X3Rlc3QuYworKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNj
+dHJsL2NtdF90ZXN0LmMKQEAgLTE5LDEyICsxOSw0MCBAQAogI2RlZmluZSBDT05fTU9OX0xD
+Q19PQ0NVUF9QQVRICQlcCiAJIiVzLyVzL21vbl9kYXRhL21vbl9MM18lMDJkL2xsY19vY2N1
+cGFuY3kiCiAKLXN0YXRpYyBpbnQgY210X2luaXQoY29uc3Qgc3RydWN0IHJlc2N0cmxfdmFs
+X3BhcmFtICpwYXJhbSwgaW50IGRvbWFpbl9pZCkKKy8qCisgKiBJbml0aWFsaXplIGNhcGFj
+aXR5IGJpdG1hc2tzIChDQk1zKSBvZjoKKyAqIC0gY29udHJvbCBncm91cCBiZWluZyB0ZXN0
+ZWQgcGVyIHRlc3QgcGFyYW1ldGVycywKKyAqIC0gZGVmYXVsdCByZXNvdXJjZSBncm91cCBh
+cyBpbnZlcnNlIG9mIGNvbnRyb2wgZ3JvdXAgYmVpbmcgdGVzdGVkIHRvIHByZXZlbnQKKyAq
+ICAgb3RoZXIgdGFza3MgZnJvbSBpbnRlcmZlcmluZyB3aXRoIHRlc3QsCisgKiAtIEwyIHJl
+c291cmNlIG9mIGNvbnRyb2wgZ3JvdXAgYmVpbmcgdGVzdGVkIHRvIG1pbmltaXplIGFsbG9j
+YXRpb25zIGludG8KKyAqICAgTDIgaWYgcG9zc2libGUgdG8gYmV0dGVyIHByZWRpY3QgTDMg
+b2NjdXBhbmN5LgorICovCitzdGF0aWMgaW50IGNtdF9pbml0KGNvbnN0IHN0cnVjdCByZXNj
+dHJsX3Rlc3QgKnRlc3QsCisJCSAgICBjb25zdCBzdHJ1Y3QgdXNlcl9wYXJhbXMgKnVwYXJh
+bXMsCisJCSAgICBjb25zdCBzdHJ1Y3QgcmVzY3RybF92YWxfcGFyYW0gKnBhcmFtLCBpbnQg
+ZG9tYWluX2lkKQogeworCXVuc2lnbmVkIGxvbmcgZnVsbF9tYXNrOworCWNoYXIgc2NoZW1h
+dGFbNjRdOworCWludCByZXQ7CisKIAlzcHJpbnRmKGxsY19vY2N1cF9wYXRoLCBDT05fTU9O
+X0xDQ19PQ0NVUF9QQVRILCBSRVNDVFJMX1BBVEgsCiAJCXBhcmFtLT5jdHJsZ3JwLCBkb21h
+aW5faWQpOwogCi0JcmV0dXJuIDA7CisJcmV0ID0gZ2V0X2Z1bGxfY2JtKHRlc3QtPnJlc291
+cmNlLCAmZnVsbF9tYXNrKTsKKwlpZiAocmV0KQorCQlyZXR1cm4gcmV0OworCisJc25wcmlu
+dGYoc2NoZW1hdGEsIHNpemVvZihzY2hlbWF0YSksICIlbHgiLCB+cGFyYW0tPm1hc2sgJiBm
+dWxsX21hc2spOworCXJldCA9IHdyaXRlX3NjaGVtYXRhKCIiLCBzY2hlbWF0YSwgdXBhcmFt
+cy0+Y3B1LCB0ZXN0LT5yZXNvdXJjZSk7CisJaWYgKHJldCkKKwkJcmV0dXJuIHJldDsKKwor
+CXNucHJpbnRmKHNjaGVtYXRhLCBzaXplb2Yoc2NoZW1hdGEpLCAiJWx4IiwgcGFyYW0tPm1h
+c2spOworCXJldCA9IHdyaXRlX3NjaGVtYXRhKHBhcmFtLT5jdHJsZ3JwLCBzY2hlbWF0YSwg
+dXBhcmFtcy0+Y3B1LCB0ZXN0LT5yZXNvdXJjZSk7CisJaWYgKHJldCkKKwkJcmV0dXJuIHJl
+dDsKKworCXJldHVybiBtaW5pbWl6ZV9sMl9vY2N1cGFuY3kodGVzdCwgdXBhcmFtcywgcGFy
+YW0pOwogfQogCiBzdGF0aWMgaW50IGNtdF9zZXR1cChjb25zdCBzdHJ1Y3QgcmVzY3RybF90
+ZXN0ICp0ZXN0LApAQCAtMTUzLDExICsxODEsMTEgQEAgc3RhdGljIGludCBjbXRfcnVuX3Rl
+c3QoY29uc3Qgc3RydWN0IHJlc2N0cmxfdGVzdCAqdGVzdCwgY29uc3Qgc3RydWN0IHVzZXJf
+cGFyYW0KIAlzcGFuID0gY2FjaGVfcG9ydGlvbl9zaXplKGNhY2hlX3RvdGFsX3NpemUsIHBh
+cmFtLm1hc2ssIGxvbmdfbWFzayk7CiAKIAlpZiAodXBhcmFtcy0+ZmlsbF9idWYpIHsKLQkJ
+ZmlsbF9idWYuYnVmX3NpemUgPSBzcGFuOworCQlmaWxsX2J1Zi5idWZfc2l6ZSA9IHNwYW4g
+KiAyOwogCQlmaWxsX2J1Zi5tZW1mbHVzaCA9IHVwYXJhbXMtPmZpbGxfYnVmLT5tZW1mbHVz
+aDsKIAkJcGFyYW0uZmlsbF9idWYgPSAmZmlsbF9idWY7CiAJfSBlbHNlIGlmICghdXBhcmFt
+cy0+YmVuY2htYXJrX2NtZFswXSkgewotCQlmaWxsX2J1Zi5idWZfc2l6ZSA9IHNwYW47CisJ
+CWZpbGxfYnVmLmJ1Zl9zaXplID0gc3BhbiAqIDI7CiAJCWZpbGxfYnVmLm1lbWZsdXNoID0g
+dHJ1ZTsKIAkJcGFyYW0uZmlsbF9idWYgPSAmZmlsbF9idWY7CiAJfQpkaWZmIC0tZ2l0IGEv
+dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcmVzY3RybC9maWxsX2J1Zi5jIGIvdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMvcmVzY3RybC9maWxsX2J1Zi5jCmluZGV4IDE5YTAxYTUyZGMxYS4u
+YjlmYTc5NjhjZDZlIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNj
+dHJsL2ZpbGxfYnVmLmMKKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcmVzY3RybC9m
+aWxsX2J1Zi5jCkBAIC0xMzksNiArMTM5LDYgQEAgc3NpemVfdCBnZXRfZmlsbF9idWZfc2l6
+ZShpbnQgY3B1X25vLCBjb25zdCBjaGFyICpjYWNoZV90eXBlKQogCWlmIChyZXQpCiAJCXJl
+dHVybiByZXQ7CiAKLQlyZXR1cm4gY2FjaGVfdG90YWxfc2l6ZSAqIDIgPiBNSU5JTVVNX1NQ
+QU4gPwotCQkJY2FjaGVfdG90YWxfc2l6ZSAqIDIgOiBNSU5JTVVNX1NQQU47CisJcmV0dXJu
+IGNhY2hlX3RvdGFsX3NpemUgKiA0ID4gTUlOSU1VTV9TUEFOID8KKwkJCWNhY2hlX3RvdGFs
+X3NpemUgKiA0IDogTUlOSU1VTV9TUEFOOwogfQpkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGlu
+Zy9zZWxmdGVzdHMvcmVzY3RybC9tYmFfdGVzdC5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVz
+dHMvcmVzY3RybC9tYmFfdGVzdC5jCmluZGV4IGM3ZTlhZGMwMzY4Zi4uMzljZWU5ODk4MzU5
+IDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL21iYV90ZXN0
+LmMKKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcmVzY3RybC9tYmFfdGVzdC5jCkBA
+IC0xMiwxMiArMTIsMTQgQEAKIAogI2RlZmluZSBSRVNVTFRfRklMRV9OQU1FCSJyZXN1bHRf
+bWJhIgogI2RlZmluZSBOVU1fT0ZfUlVOUwkJNQotI2RlZmluZSBNQVhfRElGRl9QRVJDRU5U
+CTgKKyNkZWZpbmUgTUFYX0RJRkZfUEVSQ0VOVAkxNQogI2RlZmluZSBBTExPQ0FUSU9OX01B
+WAkJMTAwCiAjZGVmaW5lIEFMTE9DQVRJT05fTUlOCQkxMAogI2RlZmluZSBBTExPQ0FUSU9O
+X1NURVAJCTEwCiAKLXN0YXRpYyBpbnQgbWJhX2luaXQoY29uc3Qgc3RydWN0IHJlc2N0cmxf
+dmFsX3BhcmFtICpwYXJhbSwgaW50IGRvbWFpbl9pZCkKK3N0YXRpYyBpbnQgbWJhX2luaXQo
+Y29uc3Qgc3RydWN0IHJlc2N0cmxfdGVzdCAqdGVzdCwKKwkJICAgIGNvbnN0IHN0cnVjdCB1
+c2VyX3BhcmFtcyAqdXBhcmFtcywKKwkJICAgIGNvbnN0IHN0cnVjdCByZXNjdHJsX3ZhbF9w
+YXJhbSAqcGFyYW0sIGludCBkb21haW5faWQpCiB7CiAJaW50IHJldDsKIApkaWZmIC0tZ2l0
+IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcmVzY3RybC9tYm1fdGVzdC5jIGIvdG9vbHMv
+dGVzdGluZy9zZWxmdGVzdHMvcmVzY3RybC9tYm1fdGVzdC5jCmluZGV4IDg0ZDhiYzI1MDUz
+OS4uNmRiYmMzYjc2MDAzIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9y
+ZXNjdHJsL21ibV90ZXN0LmMKKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcmVzY3Ry
+bC9tYm1fdGVzdC5jCkBAIC0xMSw3ICsxMSw3IEBACiAjaW5jbHVkZSAicmVzY3RybC5oIgog
+CiAjZGVmaW5lIFJFU1VMVF9GSUxFX05BTUUJInJlc3VsdF9tYm0iCi0jZGVmaW5lIE1BWF9E
+SUZGX1BFUkNFTlQJOAorI2RlZmluZSBNQVhfRElGRl9QRVJDRU5UCTE1CiAjZGVmaW5lIE5V
+TV9PRl9SVU5TCQk1CiAKIHN0YXRpYyBpbnQKQEAgLTgzLDcgKzgzLDkgQEAgc3RhdGljIGlu
+dCBjaGVja19yZXN1bHRzKHNpemVfdCBzcGFuKQogCXJldHVybiByZXQ7CiB9CiAKLXN0YXRp
+YyBpbnQgbWJtX2luaXQoY29uc3Qgc3RydWN0IHJlc2N0cmxfdmFsX3BhcmFtICpwYXJhbSwg
+aW50IGRvbWFpbl9pZCkKK3N0YXRpYyBpbnQgbWJtX2luaXQoY29uc3Qgc3RydWN0IHJlc2N0
+cmxfdGVzdCAqdGVzdCwKKwkJICAgIGNvbnN0IHN0cnVjdCB1c2VyX3BhcmFtcyAqdXBhcmFt
+cywKKwkJICAgIGNvbnN0IHN0cnVjdCByZXNjdHJsX3ZhbF9wYXJhbSAqcGFyYW0sIGludCBk
+b21haW5faWQpCiB7CiAJaW50IHJldDsKIApkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9z
+ZWxmdGVzdHMvcmVzY3RybC9yZXNjdHJsLmggYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9y
+ZXNjdHJsL3Jlc2N0cmwuaAppbmRleCBhZmU2MzViNmU0OGQuLjE3NTEwMTAyMmJmMyAxMDA2
+NDQKLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcmVzY3RybC9yZXNjdHJsLmgKKysr
+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcmVzY3RybC9yZXNjdHJsLmgKQEAgLTU1LDcg
+KzU1LDcgQEAKICAqIGFuZCBNQk0gcmVzcGVjdGl2ZWx5LCBmb3IgaW5zdGFuY2UgZ2VuZXJh
+dGluZyAib3ZlcmhlYWQiIHRyYWZmaWMgd2hpY2gKICAqIGlzIG5vdCBjb3VudGVkIGFnYWlu
+c3QgYW55IHNwZWNpZmljIFJNSUQuCiAgKi8KLSNkZWZpbmUgVEhST1RUTEVfVEhSRVNIT0xE
+CTc1MAorI2RlZmluZSBUSFJPVFRMRV9USFJFU0hPTEQJMjUwMAogCiAvKgogICogZmlsbF9i
+dWZfcGFyYW06CSJmaWxsX2J1ZiIgYmVuY2htYXJrIHBhcmFtZXRlcnMKQEAgLTEzNSw3ICsx
+MzUsOSBAQCBzdHJ1Y3QgcmVzY3RybF92YWxfcGFyYW0gewogCWNoYXIJCQlmaWxlbmFtZVs2
+NF07CiAJdW5zaWduZWQgbG9uZwkJbWFzazsKIAlpbnQJCQludW1fb2ZfcnVuczsKLQlpbnQJ
+CQkoKmluaXQpKGNvbnN0IHN0cnVjdCByZXNjdHJsX3ZhbF9wYXJhbSAqcGFyYW0sCisJaW50
+CQkJKCppbml0KShjb25zdCBzdHJ1Y3QgcmVzY3RybF90ZXN0ICp0ZXN0LAorCQkJCQljb25z
+dCBzdHJ1Y3QgdXNlcl9wYXJhbXMgKnVwYXJhbXMsCisJCQkJCWNvbnN0IHN0cnVjdCByZXNj
+dHJsX3ZhbF9wYXJhbSAqcGFyYW0sCiAJCQkJCWludCBkb21haW5faWQpOwogCWludAkJCSgq
+c2V0dXApKGNvbnN0IHN0cnVjdCByZXNjdHJsX3Rlc3QgKnRlc3QsCiAJCQkJCSBjb25zdCBz
+dHJ1Y3QgdXNlcl9wYXJhbXMgKnVwYXJhbXMsCkBAIC0xNDYsMTMgKzE0OCw2IEBAIHN0cnVj
+dCByZXNjdHJsX3ZhbF9wYXJhbSB7CiAJc3RydWN0IGZpbGxfYnVmX3BhcmFtCSpmaWxsX2J1
+ZjsKIH07CiAKLXN0cnVjdCBwZXJmX2V2ZW50X3JlYWQgewotCV9fdTY0IG5yOwkJCS8qIFRo
+ZSBudW1iZXIgb2YgZXZlbnRzICovCi0Jc3RydWN0IHsKLQkJX191NjQgdmFsdWU7CQkvKiBU
+aGUgdmFsdWUgb2YgdGhlIGV2ZW50ICovCi0JfSB2YWx1ZXNbMl07Ci19OwotCiAvKgogICog
+TWVtb3J5IGxvY2F0aW9uIHRoYXQgY29uc3VtZXMgdmFsdWVzIGNvbXBpbGVyIG11c3Qgbm90
+IG9wdGltaXplIGF3YXkuCiAgKiBWb2xhdGlsZSBlbnN1cmVzIHdyaXRlcyB0byB0aGlzIGxv
+Y2F0aW9uIGNhbm5vdCBiZSBvcHRpbWl6ZWQgYXdheSBieQpAQCAtMjA4LDEyICsyMDMsMTMg
+QEAgdW5zaWduZWQgaW50IGNvdW50X2JpdHModW5zaWduZWQgbG9uZyBuKTsKIGludCBzbmNf
+a2VybmVsX3N1cHBvcnQodm9pZCk7CiAKIHZvaWQgcGVyZl9ldmVudF9hdHRyX2luaXRpYWxp
+emUoc3RydWN0IHBlcmZfZXZlbnRfYXR0ciAqcGVhLCBfX3U2NCBjb25maWcpOwotdm9pZCBw
+ZXJmX2V2ZW50X2luaXRpYWxpemVfcmVhZF9mb3JtYXQoc3RydWN0IHBlcmZfZXZlbnRfcmVh
+ZCAqcGVfcmVhZCk7CiBpbnQgcGVyZl9vcGVuKHN0cnVjdCBwZXJmX2V2ZW50X2F0dHIgKnBl
+YSwgcGlkX3QgcGlkLCBpbnQgY3B1X25vKTsKIGludCBwZXJmX2V2ZW50X3Jlc2V0X2VuYWJs
+ZShpbnQgcGVfZmQpOwotaW50IHBlcmZfZXZlbnRfbWVhc3VyZShpbnQgcGVfZmQsIHN0cnVj
+dCBwZXJmX2V2ZW50X3JlYWQgKnBlX3JlYWQsCi0JCSAgICAgICBjb25zdCBjaGFyICpmaWxl
+bmFtZSwgcGlkX3QgYm1fcGlkKTsKK2ludCBwZXJmX2V2ZW50X21lYXN1cmUoaW50IHBlX2Zk
+LCBjb25zdCBjaGFyICpmaWxlbmFtZSwgcGlkX3QgYm1fcGlkKTsKIGludCBtZWFzdXJlX2xs
+Y19yZXNjdHJsKGNvbnN0IGNoYXIgKmZpbGVuYW1lLCBwaWRfdCBibV9waWQpOworaW50IG1p
+bmltaXplX2wyX29jY3VwYW5jeShjb25zdCBzdHJ1Y3QgcmVzY3RybF90ZXN0ICp0ZXN0LAor
+CQkJICBjb25zdCBzdHJ1Y3QgdXNlcl9wYXJhbXMgKnVwYXJhbXMsCisJCQkgIGNvbnN0IHN0
+cnVjdCByZXNjdHJsX3ZhbF9wYXJhbSAqcGFyYW0pOwogdm9pZCBzaG93X2NhY2hlX2luZm8o
+aW50IG5vX29mX2JpdHMsIF9fdTY0IGF2Z19sbGNfdmFsLCBzaXplX3QgY2FjaGVfc3Bhbiwg
+Ym9vbCBsaW5lcyk7CiAKIC8qCmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
+cy9yZXNjdHJsL3Jlc2N0cmxfdmFsLmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNj
+dHJsL3Jlc2N0cmxfdmFsLmMKaW5kZXggN2MwOGU5MzY1NzJkLi5mMjBkMjE5NGMzNWYgMTAw
+NjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvcmVzY3RybF92YWwu
+YworKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL3Jlc2N0cmxfdmFsLmMK
+QEAgLTExLDEwICsxMSwxMCBAQAogI2luY2x1ZGUgInJlc2N0cmwuaCIKIAogI2RlZmluZSBV
+TkNPUkVfSU1DCQkidW5jb3JlX2ltYyIKLSNkZWZpbmUgUkVBRF9GSUxFX05BTUUJCSJldmVu
+dHMvY2FzX2NvdW50X3JlYWQiCisjZGVmaW5lIFJFQURfRklMRV9OQU1FCQkiY2FzX2NvdW50
+X3JlYWQiCiAjZGVmaW5lIERZTl9QTVVfUEFUSAkJIi9zeXMvYnVzL2V2ZW50X3NvdXJjZS9k
+ZXZpY2VzIgogI2RlZmluZSBTQ0FMRQkJCTAuMDAwMDYxMDM1MTU2MjUKLSNkZWZpbmUgTUFY
+X0lNQ1MJCTIwCisjZGVmaW5lIE1BWF9JTUNTCQk0MAogI2RlZmluZSBNQVhfVE9LRU5TCQk1
+CiAKICNkZWZpbmUgQ09OX01CTV9MT0NBTF9CWVRFU19QQVRICQlcCkBAIC0zMiw3ICszMiw2
+IEBAIHN0cnVjdCBpbWNfY291bnRlcl9jb25maWcgewogCV9fdTY0IGV2ZW50OwogCV9fdTY0
+IHVtYXNrOwogCXN0cnVjdCBwZXJmX2V2ZW50X2F0dHIgcGU7Ci0Jc3RydWN0IG1lbWJ3X3Jl
+YWRfZm9ybWF0IHJldHVybl92YWx1ZTsKIAlpbnQgZmQ7CiB9OwogCkBAIC03NCw3ICs3Myw3
+IEBAIHN0YXRpYyB2b2lkIHJlYWRfbWVtX2J3X2lvY3RsX3BlcmZfZXZlbnRfaW9jX2Rpc2Fi
+bGUoaW50IGkpCiAgKiBAY2FzX2NvdW50X2NmZzoJQ29uZmlnCiAgKiBAY291bnQ6CQlpTUMg
+bnVtYmVyCiAgKi8KLXN0YXRpYyB2b2lkIGdldF9yZWFkX2V2ZW50X2FuZF91bWFzayhjaGFy
+ICpjYXNfY291bnRfY2ZnLCBpbnQgY291bnQpCitzdGF0aWMgdm9pZCBnZXRfcmVhZF9ldmVu
+dF9hbmRfdW1hc2soY2hhciAqY2FzX2NvdW50X2NmZywgdW5zaWduZWQgaW50IGNvdW50KQog
+ewogCWNoYXIgKnRva2VuW01BWF9UT0tFTlNdOwogCWludCBpID0gMDsKQEAgLTExMCw0NSAr
+MTA5LDExNCBAQCBzdGF0aWMgaW50IG9wZW5fcGVyZl9yZWFkX2V2ZW50KGludCBpLCBpbnQg
+Y3B1X25vKQogCXJldHVybiAwOwogfQogCi0vKiBHZXQgdHlwZSBhbmQgY29uZmlnIG9mIGFu
+IGlNQyBjb3VudGVyJ3MgcmVhZCBldmVudC4gKi8KLXN0YXRpYyBpbnQgcmVhZF9mcm9tX2lt
+Y19kaXIoY2hhciAqaW1jX2RpciwgaW50IGNvdW50KQorc3RhdGljIGludCBwYXJzZV9pbWNf
+cmVhZF9id19ldmVudHMoY2hhciAqaW1jX2RpciwgdW5zaWduZWQgaW50IHR5cGUsCisJCQkJ
+ICAgIHVuc2lnbmVkIGludCAqY291bnQpCiB7Ci0JY2hhciBjYXNfY291bnRfY2ZnWzEwMjRd
+LCBpbWNfY291bnRlcl9jZmdbMTAyNF0sIGltY19jb3VudGVyX3R5cGVbMTAyNF07CisJY2hh
+ciBpbWNfZXZlbnRzX2RpcltQQVRIX01BWF0sIGltY19jb3VudGVyX2NmZ1tQQVRIX01BWF07
+CisJdW5zaWduZWQgaW50IG9yaWdfY291bnQgPSAqY291bnQ7CisJY2hhciBjYXNfY291bnRf
+Y2ZnWzEwMjRdOworCXN0cnVjdCBkaXJlbnQgKmVwOworCWludCBwYXRoX2xlbjsKKwlpbnQg
+cmV0ID0gLTE7CisJaW50IG51bV9jZmc7CiAJRklMRSAqZnA7CisJRElSICpkcDsKIAotCS8q
+IEdldCB0eXBlIG9mIGlNQyBjb3VudGVyICovCi0Jc3ByaW50ZihpbWNfY291bnRlcl90eXBl
+LCAiJXMlcyIsIGltY19kaXIsICJ0eXBlIik7Ci0JZnAgPSBmb3BlbihpbWNfY291bnRlcl90
+eXBlLCAiciIpOwotCWlmICghZnApIHsKLQkJa3NmdF9wZXJyb3IoIkZhaWxlZCB0byBvcGVu
+IGlNQyBjb3VudGVyIHR5cGUgZmlsZSIpOworCXBhdGhfbGVuID0gc25wcmludGYoaW1jX2V2
+ZW50c19kaXIsIHNpemVvZihpbWNfZXZlbnRzX2RpciksICIlc2V2ZW50cyIsCisJCQkgICAg
+aW1jX2Rpcik7CisJaWYgKHBhdGhfbGVuID49IHNpemVvZihpbWNfZXZlbnRzX2RpcikpIHsK
+KwkJa3NmdF9wcmludF9tc2coIlVuYWJsZSB0byBjcmVhdGUgcGF0aCB0byAlc2V2ZW50c1xu
+IiwgaW1jX2Rpcik7CisJCXJldHVybiAtMTsKKwl9CiAKKwlkcCA9IG9wZW5kaXIoaW1jX2V2
+ZW50c19kaXIpOworCWlmICghZHApIHsKKwkJa3NmdF9wZXJyb3IoIlVuYWJsZSB0byBvcGVu
+IFBNVSBldmVudHMgZGlyZWN0b3J5Iik7CiAJCXJldHVybiAtMTsKIAl9Ci0JaWYgKGZzY2Fu
+ZihmcCwgIiV1IiwgJmltY19jb3VudGVyc19jb25maWdbY291bnRdLnR5cGUpIDw9IDApIHsK
+LQkJa3NmdF9wZXJyb3IoIkNvdWxkIG5vdCBnZXQgaU1DIHR5cGUiKTsKKworCXdoaWxlICgo
+ZXAgPSByZWFkZGlyKGRwKSkpIHsKKwkJLyoKKwkJICogUGFyc2UgYWxsIGV2ZW50IGZpbGVz
+IHdpdGggUkVBRF9GSUxFX05BTUUgcHJlZml4IHRoYXQKKwkJICogY29udGFpbiB0aGUgZXZl
+bnQgbnVtYmVyIGFuZCB1bWFzay4gU2tpcCBmaWxlcyBjb250YWluaW5nCisJCSAqICIuIiB0
+aGF0IGNvbnRhaW4gdW51c2VkIHByb3BlcnRpZXMgb2YgZXZlbnQuCisJCSAqLworCQlpZiAo
+IXN0cnN0cihlcC0+ZF9uYW1lLCBSRUFEX0ZJTEVfTkFNRSkgfHwKKwkJICAgIHN0cmNocihl
+cC0+ZF9uYW1lLCAnLicpKQorCQkJY29udGludWU7CisKKwkJcGF0aF9sZW4gPSBzbnByaW50
+ZihpbWNfY291bnRlcl9jZmcsIHNpemVvZihpbWNfY291bnRlcl9jZmcpLAorCQkJCSAgICAi
+JXMvJXMiLCBpbWNfZXZlbnRzX2RpciwgZXAtPmRfbmFtZSk7CisJCWlmIChwYXRoX2xlbiA+
+PSBzaXplb2YoaW1jX2NvdW50ZXJfY2ZnKSkgeworCQkJa3NmdF9wcmludF9tc2coIlVuYWJs
+ZSB0byBjcmVhdGUgcGF0aCB0byAlcy8lc1xuIiwKKwkJCQkgICAgICAgaW1jX2V2ZW50c19k
+aXIsIGVwLT5kX25hbWUpOworCQkJZ290byBvdXRfY2xvc2U7CisJCX0KKwkJZnAgPSBmb3Bl
+bihpbWNfY291bnRlcl9jZmcsICJyIik7CisJCWlmICghZnApIHsKKwkJCWtzZnRfcGVycm9y
+KCJGYWlsZWQgdG8gb3BlbiBpTUMgY29uZmlnIGZpbGUiKTsKKwkJCWdvdG8gb3V0X2Nsb3Nl
+OworCQl9CisJCW51bV9jZmcgPSBmc2NhbmYoZnAsICIlMTAyM3MiLCBjYXNfY291bnRfY2Zn
+KTsKIAkJZmNsb3NlKGZwKTsKKwkJaWYgKG51bV9jZmcgPD0gMCkgeworCQkJa3NmdF9wZXJy
+b3IoIkNvdWxkIG5vdCBnZXQgaU1DIGNhcyBjb3VudCByZWFkIik7CisJCQlnb3RvIG91dF9j
+bG9zZTsKKwkJfQorCQlpZiAoKmNvdW50ID49IE1BWF9JTUNTKSB7CisJCQlrc2Z0X3ByaW50
+X21zZygiTWF4aW11bSBpTUMgY291bnQgZXhjZWVkZWRcbiIpOworCQkJZ290byBvdXRfY2xv
+c2U7CisJCX0KIAotCQlyZXR1cm4gLTE7CisJCWltY19jb3VudGVyc19jb25maWdbKmNvdW50
+XS50eXBlID0gdHlwZTsKKwkJZ2V0X3JlYWRfZXZlbnRfYW5kX3VtYXNrKGNhc19jb3VudF9j
+ZmcsICpjb3VudCk7CisJCS8qIERvIG5vdCBmYWlsIGFmdGVyIGluY3JlbWVudGluZyAqY291
+bnQuICovCisJCSpjb3VudCArPSAxOwogCX0KLQlmY2xvc2UoZnApOworCWlmICgqY291bnQg
+PT0gb3JpZ19jb3VudCkgeworCQlrc2Z0X3ByaW50X21zZygiVW5hYmxlIHRvIGZpbmQgZXZl
+bnRzIGluICVzXG4iLCBpbWNfZXZlbnRzX2Rpcik7CisJCWdvdG8gb3V0X2Nsb3NlOworCX0K
+KwlyZXQgPSAwOworb3V0X2Nsb3NlOgorCWNsb3NlZGlyKGRwKTsKKwlyZXR1cm4gcmV0Owor
+fQogCi0JLyogR2V0IHJlYWQgY29uZmlnICovCi0Jc3ByaW50ZihpbWNfY291bnRlcl9jZmcs
+ICIlcyVzIiwgaW1jX2RpciwgUkVBRF9GSUxFX05BTUUpOwotCWZwID0gZm9wZW4oaW1jX2Nv
+dW50ZXJfY2ZnLCAiciIpOwotCWlmICghZnApIHsKLQkJa3NmdF9wZXJyb3IoIkZhaWxlZCB0
+byBvcGVuIGlNQyBjb25maWcgZmlsZSIpOworLyogR2V0IHR5cGUgYW5kIGNvbmZpZyBvZiBh
+biBpTUMgY291bnRlcidzIHJlYWQgZXZlbnQuICovCitzdGF0aWMgaW50IHJlYWRfZnJvbV9p
+bWNfZGlyKGNoYXIgKmltY19kaXIsIHVuc2lnbmVkIGludCAqY291bnQpCit7CisJY2hhciBp
+bWNfY291bnRlcl90eXBlW1BBVEhfTUFYXTsKKwl1bnNpZ25lZCBpbnQgdHlwZTsKKwlpbnQg
+cGF0aF9sZW47CisJRklMRSAqZnA7CisJaW50IHJldDsKIAorCS8qIEdldCB0eXBlIG9mIGlN
+QyBjb3VudGVyICovCisJcGF0aF9sZW4gPSBzbnByaW50ZihpbWNfY291bnRlcl90eXBlLCBz
+aXplb2YoaW1jX2NvdW50ZXJfdHlwZSksCisJCQkgICAgIiVzJXMiLCBpbWNfZGlyLCAidHlw
+ZSIpOworCWlmIChwYXRoX2xlbiA+PSBzaXplb2YoaW1jX2NvdW50ZXJfdHlwZSkpIHsKKwkJ
+a3NmdF9wcmludF9tc2coIlVuYWJsZSB0byBjcmVhdGUgcGF0aCB0byAlcyVzXG4iLAorCQkJ
+ICAgICAgIGltY19kaXIsICJ0eXBlIik7CiAJCXJldHVybiAtMTsKIAl9Ci0JaWYgKGZzY2Fu
+ZihmcCwgIiUxMDIzcyIsIGNhc19jb3VudF9jZmcpIDw9IDApIHsKLQkJa3NmdF9wZXJyb3Io
+IkNvdWxkIG5vdCBnZXQgaU1DIGNhcyBjb3VudCByZWFkIik7Ci0JCWZjbG9zZShmcCk7CisJ
+ZnAgPSBmb3BlbihpbWNfY291bnRlcl90eXBlLCAiciIpOworCWlmICghZnApIHsKKwkJa3Nm
+dF9wZXJyb3IoIkZhaWxlZCB0byBvcGVuIGlNQyBjb3VudGVyIHR5cGUgZmlsZSIpOwogCiAJ
+CXJldHVybiAtMTsKIAl9CisJcmV0ID0gZnNjYW5mKGZwLCAiJXUiLCAmdHlwZSk7CiAJZmNs
+b3NlKGZwKTsKLQotCWdldF9yZWFkX2V2ZW50X2FuZF91bWFzayhjYXNfY291bnRfY2ZnLCBj
+b3VudCk7CisJaWYgKHJldCA8PSAwKSB7CisJCWtzZnRfcGVycm9yKCJDb3VsZCBub3QgZ2V0
+IGlNQyB0eXBlIik7CisJCXJldHVybiAtMTsKKwl9CisJcmV0ID0gcGFyc2VfaW1jX3JlYWRf
+YndfZXZlbnRzKGltY19kaXIsIHR5cGUsIGNvdW50KTsKKwlpZiAocmV0KSB7CisJCWtzZnRf
+cHJpbnRfbXNnKCJVbmFibGUgdG8gcGFyc2UgYmFuZHdpZHRoIGV2ZW50IGFuZCB1bWFza1xu
+Iik7CisJCXJldHVybiByZXQ7CisJfQogCiAJcmV0dXJuIDA7CiB9CkBAIC0xOTcsMTMgKzI2
+NSwxMiBAQCBzdGF0aWMgaW50IG51bV9vZl9pbWNzKHZvaWQpCiAJCQlpZiAodGVtcFswXSA+
+PSAnMCcgJiYgdGVtcFswXSA8PSAnOScpIHsKIAkJCQlzcHJpbnRmKGltY19kaXIsICIlcy8l
+cy8iLCBEWU5fUE1VX1BBVEgsCiAJCQkJCWVwLT5kX25hbWUpOwotCQkJCXJldCA9IHJlYWRf
+ZnJvbV9pbWNfZGlyKGltY19kaXIsIGNvdW50KTsKKwkJCQlyZXQgPSByZWFkX2Zyb21faW1j
+X2RpcihpbWNfZGlyLCAmY291bnQpOwogCQkJCWlmIChyZXQpIHsKIAkJCQkJY2xvc2VkaXIo
+ZHApOwogCiAJCQkJCXJldHVybiByZXQ7CiAJCQkJfQotCQkJCWNvdW50Kys7CiAJCQl9CiAJ
+CX0KIAkJY2xvc2VkaXIoZHApOwpAQCAtMzEyLDIzICszNzksMjMgQEAgc3RhdGljIGludCBn
+ZXRfcmVhZF9tZW1fYndfaW1jKGZsb2F0ICpid19pbWMpCiAJICogVGFrZSBvdmVyZmxvdyBp
+bnRvIGNvbnNpZGVyYXRpb24gYmVmb3JlIGNhbGN1bGF0aW5nIHRvdGFsIGJhbmR3aWR0aC4K
+IAkgKi8KIAlmb3IgKGltYyA9IDA7IGltYyA8IGltY3M7IGltYysrKSB7CisJCXN0cnVjdCBt
+ZW1id19yZWFkX2Zvcm1hdCBtZWFzdXJlbWVudDsKIAkJc3RydWN0IGltY19jb3VudGVyX2Nv
+bmZpZyAqciA9CiAJCQkmaW1jX2NvdW50ZXJzX2NvbmZpZ1tpbWNdOwogCi0JCWlmIChyZWFk
+KHItPmZkLCAmci0+cmV0dXJuX3ZhbHVlLAotCQkJIHNpemVvZihzdHJ1Y3QgbWVtYndfcmVh
+ZF9mb3JtYXQpKSA9PSAtMSkgeworCQlpZiAocmVhZChyLT5mZCwgJm1lYXN1cmVtZW50LCBz
+aXplb2YobWVhc3VyZW1lbnQpKSA9PSAtMSkgewogCQkJa3NmdF9wZXJyb3IoIkNvdWxkbid0
+IGdldCByZWFkIGJhbmR3aWR0aCB0aHJvdWdoIGlNQyIpOwogCQkJcmV0dXJuIC0xOwogCQl9
+CiAKLQkJX191NjQgcl90aW1lX2VuYWJsZWQgPSByLT5yZXR1cm5fdmFsdWUudGltZV9lbmFi
+bGVkOwotCQlfX3U2NCByX3RpbWVfcnVubmluZyA9IHItPnJldHVybl92YWx1ZS50aW1lX3J1
+bm5pbmc7CisJCV9fdTY0IHJfdGltZV9lbmFibGVkID0gbWVhc3VyZW1lbnQudGltZV9lbmFi
+bGVkOworCQlfX3U2NCByX3RpbWVfcnVubmluZyA9IG1lYXN1cmVtZW50LnRpbWVfcnVubmlu
+ZzsKIAogCQlpZiAocl90aW1lX2VuYWJsZWQgIT0gcl90aW1lX3J1bm5pbmcpCiAJCQlvZl9t
+dWxfcmVhZCA9IChmbG9hdClyX3RpbWVfZW5hYmxlZCAvCiAJCQkJCShmbG9hdClyX3RpbWVf
+cnVubmluZzsKIAotCQlyZWFkcyArPSByLT5yZXR1cm5fdmFsdWUudmFsdWUgKiBvZl9tdWxf
+cmVhZCAqIFNDQUxFOworCQlyZWFkcyArPSBtZWFzdXJlbWVudC52YWx1ZSAqIG9mX211bF9y
+ZWFkICogU0NBTEU7CiAJfQogCiAJKmJ3X2ltYyA9IHJlYWRzOwpAQCAtNTY5LDcgKzYzNiw3
+IEBAIGludCByZXNjdHJsX3ZhbChjb25zdCBzdHJ1Y3QgcmVzY3RybF90ZXN0ICp0ZXN0LAog
+CQlnb3RvIHJlc2V0X2FmZmluaXR5OwogCiAJaWYgKHBhcmFtLT5pbml0KSB7Ci0JCXJldCA9
+IHBhcmFtLT5pbml0KHBhcmFtLCBkb21haW5faWQpOworCQlyZXQgPSBwYXJhbS0+aW5pdCh0
+ZXN0LCB1cGFyYW1zLCBwYXJhbSwgZG9tYWluX2lkKTsKIAkJaWYgKHJldCkKIAkJCWdvdG8g
+cmVzZXRfYWZmaW5pdHk7CiAJfQo=
+
+--------------NSNXtQ0NqHNpDlMrMs8PkVhK--
