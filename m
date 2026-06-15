@@ -1,130 +1,127 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF184183C1
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 17:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1A5B8635D;
+	Mon, 15 Jun 2026 17:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781545183; cv=none; b=tR4w0mhRxuRrifUL/JnR9KrgEwTJstgernH9gvzI/AFp2xCjyFxOe6fO2oaa27spQF3Q1NSjPpUwTg8gO2rL0y38y523DUb7NuwLMh6uTnV0XrjvYAS7Y68T/fhlBBglcPi95DZ0L6Di6qv0G7cAtTsLilxeaRXIsg+FX0eOpxA=
+	t=1781545774; cv=none; b=cOqnko1h6MWT7HyRRTrFf8CAqGQUJdTND+KaZoA7+annoAymWQkSAKfzogGrfLhTB109oRguCFy9FFUgtigHBYpnf6TknJHySezwpVGgY4uPe1G8nYsYKEj9aEOlkV2Udnjdyc8nXW930oeGUDM2lsECygS/54vc5ZSIgL+e37k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781545183; c=relaxed/simple;
-	bh=R3Ew4UG09Tlztc6dINQgLDygyhYIKiJlxV2UJACXXFw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=FVWiVtz99QuaAcREpiBPW+CIUuVM2w2Bo0n1oGDb/PpQvHgVWexKGwUM8wdHKdZHkv/usBH+7BqEKcE1TEXb2FqufP0BmDtVFQeNLw1TH/cj9EnXVh883oEseUvfFvoquXygYegNd2rPkwUlzwbi4cPtDU3lR/S9AHAuWdgphiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qyj6Ikc/; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1781545774; c=relaxed/simple;
+	bh=mD76oGNe2iNjnoBNoMR424OP5bMiKH4V8RzOGS3TaH4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=DTpBWlewTtLdhoPOTphBDTPcTEBC5UrNhoiHIYClU54iN9tzDNAWd7mU0MaI/xwf2pYB17ntGC9jbbvngY0I3bxOTbntakhQuJSLfc4Pd5PvmIy/HkO6lhPzHUvDdH1IDH5jTsoeajUVgsF7nRXIbCnMiPlnCVme3xnRw1vXHiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=E4u5gGG7; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qyj6Ikc/"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-842208d5b0eso2977132b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 10:39:41 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="E4u5gGG7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781545181; x=1782149981; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zt0anKDYS0gqDu93ubQsMfBghI6qH1md1eoQ9mMVUKo=;
-        b=Qyj6Ikc/P175iZr7A3e9uPRusC3iyGEcnwbNOabEdBMby653PGwTTMzaCJA1eCnHVo
-         8bEr0ql6WwV726XfhH3q39ugNyhu5MeoD5lNZ7CWUeojXfnHIJSylW7I/nY4gcyiMkYy
-         snXcckzTWP3NPGd7O5eCW6Vldw/J9jyJGa+ETKkQ3NUrKMlbq5tWFIYgUo2gQeudOyzl
-         6BzZJaa9jvNHAaYN1/581a/Zazf5msOfdE88ACFdjxAi2S2tQpskGWpHCYyjiOSh6EVk
-         gmTKwKYZOq/zrWy0NCBVNZtN5ovRdqI/X4aJpUHTIo0XBZhefTN+La0+hLTV4QlsiT2I
-         3G9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781545181; x=1782149981;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zt0anKDYS0gqDu93ubQsMfBghI6qH1md1eoQ9mMVUKo=;
-        b=Dhf+aJd0R8Uiz7ShP72dQf2O1tYwAgPlbHgOGCMh6O7Ti6Cd78JJUGJLn4ROejJBRN
-         09Gs7rc1md/lN8oNObn4GOvmV889kEm+VTrbvuII2uAcz6H004jl51og7p3s/fw2bUlE
-         hjtJBv9Elp8FD+kuWKaXpYBe2UM2/FqNGJbZF5BVco1FwWabbP4HUDDdZ3dyYdGfT+MI
-         CBKWPHUM9SzAUriB5L8BdNtQhFk1xjeha9QWQFP2gfMbk+4DH47OY8uktcpPVWnjqDOh
-         HZpWg7HKXmZtLUTN8vSCXHXgqkbhCsraF4rirLxWnFiAp7gbYdqnzbhg7KMD80xXRx0x
-         +M/A==
-X-Forwarded-Encrypted: i=1; AFNElJ/IjAHYL34rFc2jPDg8J2wR7qv+aE8MeECGb/u6thV2uku9rkfmuChTBHkI1n5AwCarwy4sEA8laz7Qex35pjc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyn09Kwzt8VpAPFVj2gugvWSTMzNKyVIy9961chfNAEkJRaV9j6
-	wqqNyDC1PqEMlBSgLF/r+zQOh0z4gWXCF5XEf+2o3rqcEr8j7AwWY4X6vCUrj3e6rblau230ZVS
-	vuYxnEA==
-X-Received: from pfbmy22-n1.prod.google.com ([2002:a05:6a00:6d56:10b0:842:6be9:dfa5])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:ac01:b0:842:6c02:2fa1
- with SMTP id d2e1a72fcca58-8434cec1cd2mr16474936b3a.39.1781545180989; Mon, 15
- Jun 2026 10:39:40 -0700 (PDT)
-Date: Mon, 15 Jun 2026 10:39:27 -0700
-In-Reply-To: <ai_aczmeH2IA6JaB@raptor>
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=L+ls6H1/tlPpf6sxp+q0eeQIlWXoPBYARt
+	oPsjLLuO0=; b=E4u5gGG7vaYgyFn6/jphz1CDOkqpNIi445yMRcQFttn8afBOeV
+	v7x80f0kQRE6kcq71rjYWjSHzZg4MT/Ww0NpfmCndLM3t2Zm6N4mS8xI94elNXx7
+	4a1B6i/hbHfwZjfeccdPFZCB0XBAOiBtuFUIiOYJuZnn3xtbymv2zZcQQ=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web4 (Coremail) with SMTP id ywQGZQA3SJ0XOzBqCjxLAg--.43171S2;
+	Tue, 16 Jun 2026 01:49:18 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: bpf@vger.kernel.org
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v5 0/2] bpf: Fix packet pointer invalidation for skb dynptr writes
+Date: Mon, 15 Jun 2026 17:49:06 +0000
+Message-Id: <cover.1781539813.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1781535194.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1781535194.git.chenyy23@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260611-shivank-gmem-migrate-v1-0-2d266bfc6f95@amd.com>
- <ai_XK__RTXMCEcCG@raptor> <ai_aczmeH2IA6JaB@raptor>
-Message-ID: <ajA4z_Wkb93cTW4m@google.com>
-Subject: Re: [PATCH RFC 0/3] KVM: guest_memfd: folio migration for
- non-confidential VMs
-From: Sean Christopherson <seanjc@google.com>
-To: Alexandru Elisei <alexandru.elisei@arm.com>
-Cc: Shivank Garg <shivankg@amd.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
-	Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, 
-	David Hildenbrand <david@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
-	Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Chao Peng <chao.p.peng@linux.intel.com>, Nikunj A Dadhania <nikunj@amd.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Michael Roth <michael.roth@amd.com>, 
-	Pankaj Gupta <pankaj.gupta@amd.com>, Ackerley Tng <ackerleytng@google.com>, 
-	Fuad Tabba <tabba@google.com>, Vishal Annapurve <vannapurve@google.com>, 
-	Nikita Kalyazin <nikita.kalyazin@linux.dev>, Patrick Roy <patrick.roy@linux.dev>, 
-	Pratik Sampat <prsampat@amd.com>, Ashish Kalra <Ashish.Kalra@amd.com>, linux-fsdevel@vger.kernel.org, 
-	linux-coco@lists.linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ywQGZQA3SJ0XOzBqCjxLAg--.43171S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFyxtr17Zw1UZw1fXr13Arb_yoW8Kr4kpa
+	yFkryYgr4ktF43Z3ZxAa18AFy5uF4kXrW3C343A343tF15tryYvrW8Kw13XF9xtr98Ww4x
+	AFy2vF90ga47ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+	1j6F4UJwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
+	x2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4
+	vE14v_GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU7pnPU
+	UUUU=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-On Mon, Jun 15, 2026, Alexandru Elisei wrote:
-> Hi,
-> 
-> On Mon, Jun 15, 2026 at 11:43:14AM +0100, Alexandru Elisei wrote:
-> > Hi,
-> > 
-> > On Thu, Jun 11, 2026 at 01:05:07PM +0000, Shivank Garg wrote:
-> > > guest_memfd folios are currently marked unmovable, so the kernel cannot
-> > > perform NUMA-balancing, memory compaction, etc. This is unavoidable for
-> > > confidential VMs (SEV-SNP, TDX), since memory is encrypted and copying it
-> > > needs firmware assistance. However, for non-confidential VMs (like
-> > > Firecracker), we can migrate the folios.
-> > > 
-> > > This series enables folio migration for non-confidential guest_memfd and
-> > > also lays the groundwork for migrating confidential guest_memfd later.
-> > > Once firmware-assisted copying support is available, those VMs can be
-> > > made movable, the confidential folio content can be copied separately,
-> > > and the destination folio marked with FOLIO_CONTENT_COPIED so
-> > > __migrate_folio() skips the host-side folio_mc_copy().
-> > 
-> > I always thought that one of the nice things about using guest_memfd as a
-> > memory backend, as opposed to host userspace mappings, is that the host
-> > cannot unmap VM memory because of KSM, automatic NUMA balancing, hugepage
-> > collapse, compaction, etc, acting on the host userspace mapping of the
-> > VM memory, and outside of the VMM's or KVM's control.
+skb-backed dynptr writers may mutate packet data and therefore must
+invalidate checked direct packet pointers. The normal verifier path had
+coverage for bpf_dynptr_write() with concrete skb dynptrs, but missed
+unspecialized global subprogram dynptr arguments. skb dynptr writer
+kfuncs also did not participate in packet pointer invalidation.
 
-+1000.  It's not just "nice to have", it's a core design principle of guest_memfd.
+Fix both paths by adding conservative static CFG predicates for
+bpf_dynptr_write() and skb dynptr writer kfuncs, while keeping the normal
+verifier invalidation tied to the checked dynptr argument. Track when a
+LOCAL dynptr may actually be packet-backed, and propagate that state
+through dynptr clones and returned dynptr slices.
 
-> > I think it would be useful to preserve this behaviour, even in the absence
-> > of confidential VMs (i.e, guest_memfd file descriptor created with
-> > GUEST_MEMFD_FLAG_MMAP).
-> 
-> Just to be clear, I was thinking that it might be useful for both
-> behaviours to exist (migratable and non-migratable) for non-confidential
-> VMs, and allow KVM or userspace to decide which they prefer for a
-> guest_memfd.
+Validation, rebased and tested on bpf.git master 0e0611827f33
+("Merge tag 'pull-fixes' of gitolite.kernel.org:pub/scm/linux/kernel/git/viro/vfs"):
 
-For the purposes of this discussion, we should separate the physical act of
-migrating pages from the features that trigger migration.  As I said in last week's
-guest-memfd call, I am a-ok with supporting page migration as a mechanism, but I
-am dead set against supporting NUMA balancing, KSM, LRU-based swap/reclaim, and
-anything else that goes against the goal of guest-first memory.
+  git diff --check HEAD~2..HEAD: OK
+  scripts/checkpatch.pl --strict --no-tree: OK
+  make O=/tmp/patch008-v4-bpf-build -j16 \
+    kernel/bpf/verifier.o kernel/bpf/cfg.o kernel/bpf/states.o: OK
+  clang --target=bpfel ... dynptr_fail.c: OK
+  make O=/tmp/patch008-v4-bpf-build -j16 bzImage: OK
+  QEMU replay on 7.1.0-g7feeed42d8b9:
+    PATCH008_SUMMARY failures=0 total=10
 
-If userspace wants mm/ functionality, then use anon, memfd, hugetlb, shmem, etc.
+Changes in v5:
+- Carry maybe-packet-backed dynptr state for unspecialized global
+  subprogram dynptr arguments.
+- Propagate that state through bpf_dynptr_clone() and dynptr slice returns.
+- Invalidate LOCAL-typed dynptr slices when they may refer to packet data.
+- Include the new dynptr state bit in stack state pruning comparisons.
+- Add selftests for the global-dynptr clone and LOCAL-slice bypasses.
+- Rebase onto bpf.git master 0e0611827f33.
+- Link to v4: https://patch.msgid.link/cover.1781535194.git.chenyy23@mails.tsinghua.edu.cn
 
-Shivank, what's the immediate motivation for this series?
+Yiyang Chen (2):
+  bpf: Fix packet pointer invalidation for skb dynptr writes
+  selftests/bpf: Add skb dynptr writer packet invalidation tests
+
+ include/linux/bpf_verifier.h                  |   6 +
+ include/linux/filter.h                        |   5 +
+ kernel/bpf/cfg.c                              |   4 +-
+ kernel/bpf/states.c                           |   2 +
+ kernel/bpf/verifier.c                         | 145 +++++++++--
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 238 ++++++++++++++++++
+ 6 files changed, 382 insertions(+), 18 deletions(-)
+
+
+base-commit: 0e0611827f3349d0a2ac121c023a6d3260dcecdb
+-- 
+2.34.1
+
