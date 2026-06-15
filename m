@@ -1,112 +1,123 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4B0B184524;
-	Mon, 15 Jun 2026 11:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCFB8313546;
+	Mon, 15 Jun 2026 12:07:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781521469; cv=none; b=SpzBLKOFFL8HVS7cPus7dojM14quOaZbziBIp/o/bWuYtqey1ry7O9WLAQBxyDBYeVDpAm+XlNbuOvMN/DRqHZRljQfgKtOJaUf3cd/OnFE8p2UC7mPouIKe18JkRDXm6NtyAwu2ApivTX2k9tVA9TMcAYCMsS23VvmlAp0mi84=
+	t=1781525241; cv=none; b=r1fMagszq1yyOG9I6rcsfsoMtK/6JIWMZ/qg14Sl2ko4hsZQ/XXg7esZHrzo36DfuCAQhl2oqtHp7yeIqizyqWlYzAx+1EFKvfwQQd9ghlT28AUDyH8edpf9FJKyHx99ApiwvnONsVHg9Jq/H2DpFDdOwsc4nNb48C+wKfyrNBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781521469; c=relaxed/simple;
-	bh=G5bCUMpAj7XkCblIAeX+67lQJO0pVJ0HsMawKtJgxQU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZSx/smY0+Y1tyYeWXFoGI5XRlHEgoh6+nZIx8Qa4N2XUENBBuzhsibUidKLSlLw1xioMe8dMibI6I9dM3XFU+MJZPDeFyqxcUJNjF2/Pti8s1Oh3cvbFFwfxhvXP9zitqM2/xt0Dul/rf8Fm4OWn/KgnXGFNCJp3mqwFRzwH4Fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ITcrxen1; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1781525241; c=relaxed/simple;
+	bh=A49IaxbGzZVBNxFu8s+zBlZ4emBPLDy+yxux8zWbf+E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XpycLdf1LqM7AcVemWtL0JSM2EWP1wLwVv71i1wzKUf4pnge4C9pmamrBwakVkLDMJtMaRpzwe73ZKmnRICywDSvotooyolVBV8wdaPnyrKExPOC3GqC6EPyKHWw8zPiUO7+WKy80Kgweb4STVoacmZLP7mBM7bOxlzx5905jz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=U21mDHDK; arc=none smtp.client-ip=162.243.164.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ITcrxen1"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4303E328D;
-	Mon, 15 Jun 2026 04:04:22 -0700 (PDT)
-Received: from raptor (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E54C13F915;
-	Mon, 15 Jun 2026 04:04:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1781521467; bh=G5bCUMpAj7XkCblIAeX+67lQJO0pVJ0HsMawKtJgxQU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ITcrxen1FUILXt0yTvFGlM97RCokdSUG6KreIW5VnfKj1yUsv5nAXAUCQjVOZEyus
-	 1bxtVRPtXhyGGGbSLmKSdOfzkBrck+oXlbdN9jdKXe1uibx4w6l3zzqX0H/xXyhSXE
-	 z3BP5/FQv9K7Ctbm7B/qLe39ZaH6N64JsRAQb/a8=
-Date: Mon, 15 Jun 2026 12:04:15 +0100
-From: Alexandru Elisei <alexandru.elisei@arm.com>
-To: Shivank Garg <shivankg@amd.com>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Jan Kara <jack@suse.cz>, Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Brendan Jackman <jackmanb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
-	David Hildenbrand <david@kernel.org>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
-	Byungchul Park <byungchul@sk.com>,
-	Gregory Price <gourry@gourry.net>,
-	Ying Huang <ying.huang@linux.alibaba.com>,
-	Alistair Popple <apopple@nvidia.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Chao Peng <chao.p.peng@linux.intel.com>,
-	Nikunj A Dadhania <nikunj@amd.com>, Ira Weiny <ira.weiny@intel.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Pankaj Gupta <pankaj.gupta@amd.com>,
-	Ackerley Tng <ackerleytng@google.com>,
-	Fuad Tabba <tabba@google.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Vishal Annapurve <vannapurve@google.com>,
-	Nikita Kalyazin <nikita.kalyazin@linux.dev>,
-	Patrick Roy <patrick.roy@linux.dev>,
-	Pratik Sampat <prsampat@amd.com>,
-	Ashish Kalra <Ashish.Kalra@amd.com>, linux-fsdevel@vger.kernel.org,
-	linux-coco@lists.linux.dev, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 0/3] KVM: guest_memfd: folio migration for
- non-confidential VMs
-Message-ID: <ai_aczmeH2IA6JaB@raptor>
-References: <20260611-shivank-gmem-migrate-v1-0-2d266bfc6f95@amd.com>
- <ai_XK__RTXMCEcCG@raptor>
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="U21mDHDK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=0OK1d
+	F+u9ommmMt0UEseuzZpFlk7Yclc2bHdgM7n/hQ=; b=U21mDHDKjuxQ7SNuMPqLe
+	R80SJUU1ld62ceD7w0+Gkx+VLOna6biQ30tWxkS2TthpUL0I3bcjX2TUrRnL+MSC
+	jktQFO9oZ7+E1egqCbNoSvBobQH5It599McxUbOvL+rMfsNqy7UeXQpIYmllQodk
+	5tfohn0aIMSh1/9xfHUTcY=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web3 (Coremail) with SMTP id ygQGZQAHVpPi6i9qGQ10Ag--.50794S2;
+	Mon, 15 Jun 2026 20:07:06 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: bpf@vger.kernel.org
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf 0/2] bpf: Fix packet pointer invalidation for skb dynptr writes
+Date: Mon, 15 Jun 2026 12:06:37 +0000
+Message-Id: <20260615120637.151095-1-chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ai_XK__RTXMCEcCG@raptor>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ygQGZQAHVpPi6i9qGQ10Ag--.50794S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFW5Cr45ZF4rJFy5Kw4rKrg_yoW8Ww1Dpa
+	yrGryYqrykZF13ZrnxJF40vr98Wa18WF43Gasrtry5Zwn8XryYqFyagr15Aas8KF4fXw4a
+	vFy2v3s5Ca45CrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr
+	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
+	rcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Avz4vE14
+	v_Xr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AK
+	xVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrx
+	kI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v2
+	6r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8Jw
+	CI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRCGQ6UUUU
+	U
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Hi,
+skb-backed dynptr writer kfuncs can mutate skb packet data.
+The verifier does not currently treat those kfuncs as packet-changing.
+A direct packet pointer checked before the call can stay usable after the
+write.
 
-On Mon, Jun 15, 2026 at 11:43:14AM +0100, Alexandru Elisei wrote:
-> Hi,
-> 
-> On Thu, Jun 11, 2026 at 01:05:07PM +0000, Shivank Garg wrote:
-> > guest_memfd folios are currently marked unmovable, so the kernel cannot
-> > perform NUMA-balancing, memory compaction, etc. This is unavoidable for
-> > confidential VMs (SEV-SNP, TDX), since memory is encrypted and copying it
-> > needs firmware assistance. However, for non-confidential VMs (like
-> > Firecracker), we can migrate the folios.
-> > 
-> > This series enables folio migration for non-confidential guest_memfd and
-> > also lays the groundwork for migrating confidential guest_memfd later.
-> > Once firmware-assisted copying support is available, those VMs can be
-> > made movable, the confidential folio content can be copied separately,
-> > and the destination folio marked with FOLIO_CONTENT_COPIED so
-> > __migrate_folio() skips the host-side folio_mc_copy().
-> 
-> I always thought that one of the nice things about using guest_memfd as a
-> memory backend, as opposed to host userspace mappings, is that the host
-> cannot unmap VM memory because of KSM, automatic NUMA balancing, hugepage
-> collapse, compaction, etc, acting on the host userspace mapping of the
-> VM memory, and outside of the VMM's or KVM's control.
-> 
-> I think it would be useful to preserve this behaviour, even in the absence
-> of confidential VMs (i.e, guest_memfd file descriptor created with
-> GUEST_MEMFD_FLAG_MMAP).
+bpf_dynptr_write() already clears packet pointers through the helper path.
+Teach kfunc argument checking to do the same for skb and skb-meta dynptr
+destinations.
+Keep source-only dynptr arguments unchanged.
 
-Just to be clear, I was thinking that it might be useful for both
-behaviours to exist (migratable and non-migratable) for non-confidential
-VMs, and allow KVM or userspace to decide which they prefer for a
-guest_memfd.
+Validation:
 
-Thanks,
-Alex
+  Without this series:
+    linux-stable-v7.0.12 accepts the three stale packet pointer cases;
+    linux-mainline-v7.1-rc7 accepts the three stale packet pointer cases;
+    the source-only bpf_dynptr_copy() control loads on both kernels.
+
+  With this series applied:
+    patched bpf-next rejects the three stale packet pointer cases with
+    "invalid mem access 'scalar'";
+    the source-only bpf_dynptr_copy() control still loads.
+
+  Build and style checks:
+    git diff --check: OK
+    checkpatch.pl --strict --no-tree: OK
+    make O=$BUILD kernel/bpf/verifier.o: OK
+    make O=$BUILD -j$(nproc) bzImage: OK
+    dynptr_fail.bpf.o build against patched vmlinux BTF: OK
+
+Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+---
+
+Yiyang Chen (2):
+  bpf: Fix packet pointer invalidation for skb dynptr writes
+  selftests/bpf: Add skb dynptr writer packet invalidation tests
+
+ include/linux/bpf_verifier.h                  |  1 +
+ kernel/bpf/verifier.c                         | 62 ++++++++++++-
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 89 +++++++++++++++++++
+ 3 files changed, 151 insertions(+), 1 deletion(-)
+
+
+base-commit: e4287bf34f97a88c7d9322f5bde828724c073a6b
+change-id: 20260615-bpf-skb-dynptr-pkt-inval
+
+Best regards,
+Yiyang Chen
+-- 
+2.34.1
+
