@@ -1,103 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F0030E0E4;
-	Mon, 15 Jun 2026 18:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD0D3AB272
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 19:08:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781548786; cv=none; b=uInBvcOBuSyFMwL8DKGkIvliUKRKHmHyEyAvoDqqpxo8EZ67ZYFyAr6bMj1mmHEshrWBtIILyIxkJNRX2dSIjCYHuqHS7bMuVsrg0WmBhK+HoEDgFALg2tmqeJuecwr0EZirRGxqQSCcIkOFMQg8FqZ/Sa+/wnnMlHUIrbRE+M4=
+	t=1781550538; cv=none; b=hYcMB6JyolB77AiK9VQpQEw+HIa0G8OHd5VFFTL+i4Pvfp8XvB+DdcvCOMFpjUF1uxtdItmCNCksiWf3RKhg1VSWrJLAkOuhPr0IKbrZZLNqcthbQJK3+Zi7/2WhYn3Hw4w/dxbZcd0W78uaFU1qgVovSBoC6YkFzEZs1QR7ML8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781548786; c=relaxed/simple;
-	bh=8IzHOxxoDVy4Ie+xULeDCZS7NlKodbk1gByjESBaMY0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=TU/vuZQD5ucPJWfvKjdW5RpjK+zbpcGBF2nBPThI/zJbIcGBWO6ptfVxidgdexvA6tqm1PxR/Gof9mou1EVO5h0uk+IGqOafvCOQV92sPkvJ4obMzpV2mpZ+19RVTCHHtLiZBoA5sShuZghSeAJh0yB94PauudrHPF7dfaZAFTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MtjoLS6y; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781550538; c=relaxed/simple;
+	bh=EvoJ3aDtZ4F/C8Kr9wphawKCAyi3l8ODysFcMsfBdGc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OmlVeIXzJaRLwdaSlp9ODCPmgsESFWfUmzk6zIi+3do1MyRD97e758QWBciF/OeqQV4xhMtwUnXGBLMzwQZRsoRWBjsSFU60i0IMyv0MKTsbxW5Z2nm3Ycw6SVEp1WWI7MYtiHIQ//HZ155Fk5u7dViMXx7dPcrLGY1r13JtI7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ETarz34O; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MtjoLS6y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26CB01F000E9;
-	Mon, 15 Jun 2026 18:39:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781548783;
-	bh=8cjaxnVTkKtFxEZxU+TnoyaBRvRzZYYcWmbAlrHkSvo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=MtjoLS6ygVe0ce64V4vA/hBOpyJqMOUNl2lvLgfqWVHkhLN5/RMJ8i6v+/TX4SCk6
-	 EaT7CTjXNb4dLcpC9yD+kcU0o5n/P0F5qxsFERXpdnw4uR6vReIofMSvAPxRSAkRug
-	 4wLygnwx5kkMJMzYAJ7UUmwiGnX2mfaiFXZ7On2zsOiSJOj0SfXv5Sl9OGeGjcJSbu
-	 +5jH9g0jKrMTSglsdms3a7F3Sk4fQAp5Y361qsphN+2cFyq/kgOVryCUvo97DhULU0
-	 H89a0j+Pk75J+RQ/3I6I49DzANdup6ADqyam+TXXdYhKonsy3e2K6hmBfZ5DL5pijv
-	 QbPRyXLXBRDlw==
-Content-Type: multipart/mixed; boundary="===============3705424124499032894=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ETarz34O"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2c0b1a48855so11615ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 12:08:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1781550537; x=1782155337; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ISqMLHuxmmME4HG1iYeuq/aT+EEs3k5ypriNOeJFwpk=;
+        b=ETarz34Obq789inNl2pics+fHINA3Gx16qKzeiY9T0eqGMZQWo4H/n9KfwSxzM2PC8
+         Nz/2Ac8IgJa3RMZAOr6TyNnmPd7lvmNDxFw8c314bfo1cl+DKZU9rBV1T/s7VheYrJ0l
+         g400EEgReNo7S/Ox7a5MtRjfBoeFei+GKjSrGmebvtU0rKO4oHoW0Y8O9LTpLGXXtwKH
+         2gMsGKDGFagEyeQ/2TmC1XjCRa/XkK4MkRgsSN2lxP9s1ZlnAZnE5HAhiWFss8E7L8pG
+         9il3rn9l41D0SvO2AqquwEXml3fxtzzj/Ym6TcR4l/fFm5GkWb+6GkFRCuiu9dJcJKce
+         87lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781550537; x=1782155337;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ISqMLHuxmmME4HG1iYeuq/aT+EEs3k5ypriNOeJFwpk=;
+        b=HYub6hPabn0JpDdFfl3fWDk6WyMmH2uXsoLLust98d+VQbjlGtChwFyHN+k1j612+M
+         IPAOnNM96idHGFYdDXk/INM7kyAqTVDrP0wI9NH5Yflqf1EVhcFpjmr482CtJ9vMWj0T
+         M89NzgAgnnIYPS25u7+D14Ms2XVn8un9lrr+E5UerRUtCH5rxWFrBLP0YkU+wfJYo+0S
+         WUFEy3nY+9wjJ6M/D9ntlR54k/gRPAihY/TC8Wc6rEY7rLdHJt44vOw0A/UulGPbB9uo
+         PQo+RZZ43suYt6QCjeh2J1MqmcR9upcr5xHfysL4zpiiuMbIgLo2Kv9RYE4JuJ4EG0oj
+         6t/w==
+X-Forwarded-Encrypted: i=1; AFNElJ/1/uh/oR9VbTwUYFA5x4KT35V1PXxj9QiF0L/YcfDfoX0GTcpGoXlLlqLWeHJ5N9KpeVKMwauF4xMaLcvBjjE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRLst8yuizfEUGjtejpnJHWLku8OGcxvkyeBythjKJihYZbpMF
+	qChi8+jQ6iSe3IRDAIzaReXYcnKiQz3wXpAcECsj/oAZwS33fxXEEWYMt+VAZyStfQ==
+X-Gm-Gg: Acq92OG31hLunB6odlSLXj4MBUkSlSQ6p0OMSp6LkQdi41jJEBCCT5ZUMdfD5hYfiyh
+	vo6JZJpoMCfmNg3WAztfUCkUKRvwJnGqwpxM65Ak/Yn8sPys9QkSc4/x4R/mi+0kGAXqmjXyFXw
+	69YBf/hshGPMB5ks/n6cS5Vqb7rhMS2G0uNLIvpcIijkXsrvDIgrv5PVjDTo6VbnYCq6kcYnglc
+	vpmISdXLZf6da/9mcdsQKnj4xs2daJq6C9YQuEziWWDUAuTHdUzt354rrDHk1c8wcIWP5eAMji3
+	PPG56+M/T0q8yyjeSriBKNw2424HFPwYL2iE0W/I0m6yFSRivfDecC1EFfuZKbHjqD8z1tD7G1A
+	4u8SS4PdC3d4CXHjmCrakpOShb/DVMUaxJ2us27yfG1RUEgHU+48IplJzoipRw5UdpNHjCJEo/c
+	TLhx1n4dcn1T/3jcj5abflxHJIYTvgJkHwQA/jbY69m0j8nlcju3V5dBzEx8I=
+X-Received: by 2002:a17:902:d584:b0:2c2:2485:7086 with SMTP id d9443c01a7336-2c69a3f43e7mr514035ad.17.1781550536841;
+        Mon, 15 Jun 2026 12:08:56 -0700 (PDT)
+Received: from google.com (62.101.197.35.bc.googleusercontent.com. [35.197.101.62])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37c5228ebadsm344889a91.10.2026.06.15.12.08.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2026 12:08:56 -0700 (PDT)
+Date: Mon, 15 Jun 2026 19:08:52 +0000
+From: Lisa Wang <wyihan@google.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Miaohe Lin <linmiaohe@huawei.com>,
+	Naoya Horiguchi <nao.horiguchi@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Hugh Dickins <hughd@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, rientjes@google.com,
+	seanjc@google.com, ackerleytng@google.com, vannapurve@google.com,
+	michael.roth@amd.com, jiaqiyan@google.com, tabba@google.com,
+	dave.hansen@linux.intel.com
+Subject: Re: [PATCH v4 5/7] mm: selftests: Add shmem into memory failure test
+Message-ID: <ajBNxPKzhARLFk9X@google.com>
+References: <20260602-memory-failure-mf-delayed-fix-v4-0-a5bc7db5a9b2@google.com>
+ <20260602-memory-failure-mf-delayed-fix-v4-5-a5bc7db5a9b2@google.com>
+ <6963083d-6725-4081-b2a2-894a0510c6fb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <22a4e602da5c745be6947e9ebf41759432280a7697b74614d84c55ba9c10aed5@mail.kernel.org>
-In-Reply-To: <7feeed42d8b97d0db0eab2c1c30aa86f110fe49c.1781539814.git.chenyy23@mails.tsinghua.edu.cn>
-References: <7feeed42d8b97d0db0eab2c1c30aa86f110fe49c.1781539814.git.chenyy23@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf v5 2/2] selftests/bpf: Add skb dynptr writer packet invalidation tests
-From: bot+bpf-ci@kernel.org
-To: chenyy23@mails.tsinghua.edu.cn,bpf@vger.kernel.org
-Cc: chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,john.fastabend@gmail.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 15 Jun 2026 18:39:43 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6963083d-6725-4081-b2a2-894a0510c6fb@kernel.org>
 
---===============3705424124499032894==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Fri, Jun 05, 2026 at 01:38:28PM +0200, David Hildenbrand (Arm) wrote:
 
-> diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> index b62773ce5219..aa9374dbdb11 100644
-> --- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> @@ -1232,6 +1232,244 @@ int skb_invalid_data_slice4(struct __sk_buff *skb)
->  	return SK_PASS;
->  }
->
+[...snip...]
 
-[ ... ]
+> >  static jmp_buf signal_jmp_buf;
+> > @@ -165,17 +170,21 @@ static void check(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure
+> >  	case MADV_HARD_CLEAN_PAGECACHE:
+> >  	case MADV_SOFT_CLEAN_PAGECACHE:
+> >  	case MADV_SOFT_DIRTY_PAGECACHE:
+> > -		/* It is not expected to receive a SIGBUS signal. */
+> > -		ASSERT_EQ(setjmp, 0);
+> > -
+> > +	case MADV_SOFT_DIRTY_SHMEM:
+> >  		/* The page content should remain unchanged. */
+> >  		ASSERT_TRUE(check_memory(vaddr, self->page_size));
+> 
+> You should likely use "fallthrough;" ... unless you are missing a break; here.
 
-> +SEC("?tc")
-> +__failure __msg("invalid mem access 'scalar'")
-> +int skb_pkt_ptr_invalid_after_global_dynptr_write(struct __sk_buff *skb)
-> +{
-> +	__u8 *data = (void *)(long)skb->data;
-> +	__u8 *data_end = (void *)(long)skb->data_end;
-> +	struct bpf_dynptr ptr;
-> +
-> +	if (data + 1 > data_end)
-> +		return SK_DROP;
-> +
-> +	bpf_dynptr_from_skb(skb, 0, &ptr);
-> +	global_dynptr_helper_write(&ptr);
-> +
-> +	/* this should fail */
-> +	return *data;
-> +}
+Thanks, will fix this in the next version.
 
-These new cases all assert __failure with __msg("invalid mem access
-'scalar'"), meaning they expect the verifier to invalidate the direct
-packet pointer after a skb dynptr write.
+Lisa
 
-This expectation matches the verifier behavior change in the companion
-patch 1/2 of the series. That verifier change was rejected during review:
-Alexei Starovoitov replied "Nack. You misunderstand what
-bpf_is_kfunc_pkt_changing() is doing." and later "There is nothing to
-fix.", stating the existing verifier behavior is correct.
-
-If the existing verifier behavior is correct and packet pointers are not
-invalidated by these dynptr writes, would these __failure expectations
-hold? It looks like they encode the disputed behavior from the rejected
-patch 1/2, so should this selftest patch land on its own?
-
-The author appears to have agreed in the discussion and withdrawn the
-series. Was this patch intended to be dropped along with patch 1/2?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27565623381
---===============3705424124499032894==--
+> 
+> 
+> -- 
+> Cheers,
+> 
+> David
