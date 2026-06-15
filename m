@@ -1,175 +1,192 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC773ECBF9
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 15:29:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554D23C278B;
+	Mon, 15 Jun 2026 15:48:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781537349; cv=none; b=bZlGXvGl+foXZHVRN2WHqLoDFcbLP+DwQrO04drY2uX3jHq1McqJEkDH7LwKoHfnLGXJkUdouM5r9UUvfcq4D0GcOj5Zcs7LAJWdp+a5UXv8+VcSqPhFiL0/vWzjF9260JWeCbFRjRmDrbKkBEQV9cxxqagwunSvDZMVYbpYviI=
+	t=1781538482; cv=none; b=jC4u00Arni5+F4zN3ayB3xnhYvQWtFPGBFYBivn5N6ZNhuhxhR4HOzqGFAvDx9dcdMb53swo0J+baMqpwX0al2jXX9qBdDEQoZcouHKVe5g5uB9P8lcCYi/SVsBF3dD2OsruH6bmEWZFDv0g6+jQXViLv0ut0Etj4axnhjD8THU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781537349; c=relaxed/simple;
-	bh=MjmKna4cRwr68ZopsL4cQSU35eG9YmoIqOsYL0OmCiQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M4kWoQZOJriLgMe7xkAOUyjYLdMq/7v8UUYBwVHa+R/S+7dlXf0ciXuja5fL8dfqzhZS1Tnb7xthoP5upojPR0FyeHUefLc4kmPdCth8HFazJYoMQLPK1MPGHzH627UHjWla5CyvAvqKLZhQbUE9HHo+PJJBoxveJIRw9IKQq6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RgwFyeQz; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781538482; c=relaxed/simple;
+	bh=TGRwAUeV+ie82segunXYNQsrZrNbtlYj2E4Rje30IgY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=qI9mwC82UarkRv6Ypnt2/X7+8UJYdoiDpIMk05p64gIAiVlxsu8gqca7qN2hjGGz4b5Ajow0Tm5v7l5alNEnUIw4lZBlGh+6iFiX2/DZwd/9N/VCMQhKOY4SyywRrrE5Q/2jcmQHzDk4mJgIkq4OsoChqbbQ3eUR/78zJdchdx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=BqHSW3MU; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RgwFyeQz"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781537344;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hj64heSBBnXd1MwM6JSlU7H3nc37cycujFFa4hzuBWE=;
-	b=RgwFyeQz0591lJyheLU5vMwkN8U5fozc9ftY2dSW55f60EHZRAA5m2IVCg+MH+IG56EXp6
-	HoQFfU+emB2zfChk4rz9hJ1oMWfwS9wdTaeRvaQ/WbI06E3wljJH8yvjl94AbgKj7sWe4o
-	UHM3gtClh6raE0ZxF0DK1tgzyd0IMEA=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v6 12/12] selftests/bpf: Add test to verify bpf_iter for global percpu data
-Date: Mon, 15 Jun 2026 23:26:46 +0800
-Message-ID: <20260615152646.27639-13-leon.hwang@linux.dev>
-In-Reply-To: <20260615152646.27639-1-leon.hwang@linux.dev>
-References: <20260615152646.27639-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="BqHSW3MU"
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.18.1.11/8.18.1.11) with ESMTP id 65FFcV9b2411539;
+	Mon, 15 Jun 2026 08:47:55 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=s2048-2025-q2; bh=US7+Eg3exbzN8pCE4a
+	aLaMOJAsVDryeEeQZ1a5CGt78=; b=BqHSW3MUVxeZnp5b5BkWbnF3ICIWPzMVS0
+	7tvvoNxHPQ0NWvsIorsuhb01Tg+ypclllCmQNvzSLuZgHtwKoBmDBSRkoct7IKsG
+	2bd5oNOIfOecMEsW8CAaQujG1Sa6/UwRR+lHsRhKuA5riHbAvqp+Sakx2y3aY+5d
+	Q/yuGJed7/IG7azVq4aOn5igXh62/8Nvdvo2DTv15ESxgN/JsyjQlL+nmJO+oOy4
+	zmRhnzVcpXLL9skIdV1/HaSAMdHd17EB0+cLoh3naKkeNN1DTH1gohhUZ6S/sQZj
+	mXqSjvyYZqgr3keQ80jfKOyDSIwmO+6s/dpdeWxGmPZfuRkBY0rA==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by m0001303.ppops.net (PPS) with ESMTPS id 4es2v91yyv-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 15 Jun 2026 08:47:55 -0700 (PDT)
+Received: from devgpu015.cco6.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.41; Mon, 15 Jun 2026 15:47:53 +0000
+From: Alex Mastro <amastro@fb.com>
+Date: Mon, 15 Jun 2026 08:47:44 -0700
+Subject: [PATCH v2] selftests/vfio: avoid VLAs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20260615-scratch-amastro-vfio-selftests-avoid-vlas-v2-1-4e4df462908a@fb.com>
+X-B4-Tracking: v=1; b=H4sIAJ8eMGoC/53OQQqDMBCF4auEWXeKJijUVe9RXEzipKaoKZk0t
+ Ih3L9obdPngh++tIJwCC3RqhcQlSIgLdEqfFLiRljtjGKBToCvdVm2tUVyi7EakmSSniMWHiMK
+ TzyxZkEoMA5aJBM2lYWsGZw1ZOCl4JvbhfVi3/rflZR/s8g7sxRgkx/Q5zpR67/5xS401WjLkb
+ GsaX9HV27OLM/Tbtn0BjnFpT/EAAAA=
+X-Change-ID: 20260612-scratch-amastro-vfio-selftests-avoid-vlas-395eb3dcb3ab
+To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Raghavendra Rao Ananta <rananta@google.com>,
+        Vipin Sharma <vipinsh@google.com>
+CC: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+        "Alex
+ Mastro" <amastro@fb.com>
+X-Mailer: b4 0.15.2
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE1MDE2NiBTYWx0ZWRfX7L03TNrNXB81
+ 3YUYDF2CqZpqOlMjYIQ9URIMwMzN/jBLGWASR/8TWeeI1vdJRnJ09kHkcnUqy+at0AfhxSHoN5a
+ uDdb6PQJrljuIOET7zPCazPsUWn2Lx8=
+X-Authority-Analysis: v=2.4 cv=GNc41ONK c=1 sm=1 tr=0 ts=6a301eab cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=_78whYxrdx1mplLwxq1U:22 a=bC-a23v3AAAA:8
+ a=FOH2dFAWAAAA:8 a=1XWaLZrsAAAA:8 a=r1p2_3pzAAAA:8 a=VwQbUJbxAAAA:8
+ a=ag1SF4gXAAAA:8 a=YPhXfWToY5FXjb2lha0A:9 a=QEXdDO2ut3YA:10
+ a=FO4_E8m0qiDe52t0p3_H:22 a=r_pkcD-q9-ctt7trBg_g:22 a=Yupwre4RP9_Eg_Bd0iYG:22
+X-Proofpoint-ORIG-GUID: UuXTThyKsewOmx9jdNf3IWyaRSuZ0lEz
+X-Proofpoint-GUID: UuXTThyKsewOmx9jdNf3IWyaRSuZ0lEz
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE1MDE2NiBTYWx0ZWRfX7lFQdM0wAmmq
+ 1pGV8ZQqqEauq6sqI+uga/SUItUh4NlnNbIf2SYHi2jVQsdhGhgy88ufr3OkDT0ED772JDHtnCn
+ OsNtdn9uvLPPNMzuCBLjENnWk8XRG57dgac8lmz7qK2K+zDa9cHrx0bi6FKC/4Ad9nTlrZ+Ntfz
+ B8N3HgQZZTSE0eeyVviJOmkdWOtlm1b5xUopR20aSeM+aaUpLxkCjl4ZfTi856agCsEPCb8Uzo5
+ ldrEWq4xYOgtSY/D+gj4XLC4Q5mPzBhWbSji7cb4RDCftmPd+rZHPfCYsPDzuBsYl20lomZzoM5
+ wKXTsrV+b/fFLkP5jv/iH4beldaEr2af4cNdHxrMN7hgLRIUdNz9VvdXO63sXG4wtswkzqZ7ZTZ
+ DpgUkZh7McrnakhfnkHsfNJ92cPbnE8qxH/L8vtXQNn8xb7Jo43aJAH9oVJ3/w0DZnxJaq4t5XT
+ dk4oS1kyY7JCOW7xrSQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-15_04,2026-06-15_04,2025-10-01_01
 
-Add a test to verify that it is OK to iter the percpu_array map used for
-global percpu data.
+Allocate VFIO ioctl requests dynamically instead of using VLAs. GCC 11.5.0
+rejects initialized VLAs with:
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+  error: variable-sized object may not be initialized
+
+The replaced stack u8 arrays also do not guarantee native struct alignment
+for the aliased pointers.
+
+Fixes: 19faf6fd969c ("vfio: selftests: Add a helper library for VFIO selftests")
+Fixes: 20face8c75ff ("vfio: selftests: Add helper to set/override a vf_token")
+Assisted-by: Codex:gpt-5.5-high
+Tested-by: Vipin Sharma <vipinsh@google.com>
+Reviewed-by: Vipin Sharma <vipinsh@google.com>
+Signed-off-by: Alex Mastro <amastro@fb.com>
 ---
- .../bpf/prog_tests/global_data_init.c         | 52 +++++++++++++++++++
- .../bpf/progs/test_global_percpu_data.c       | 25 +++++++++
- 2 files changed, 77 insertions(+)
+Changes in v2:
+- Reverse xmas tree variable ordering
+- Link to v1: https://patch.msgid.link/20260612-scratch-amastro-vfio-selftests-avoid-vlas-v1-1-ba3acb635f0a@fb.com
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index fcc2c4ec8644..635084d057c2 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -364,6 +364,56 @@ static void test_global_percpu_data_xlated(void)
- 	free(insns);
- }
- 
-+static void test_global_percpu_data_iter(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct test_global_percpu_data *skel;
-+	union bpf_iter_link_info linfo = {};
-+	struct bpf_link *link = NULL;
-+	int fd, num_cpus, len, err;
-+	char buf[16];
-+
-+	num_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	skel = test_global_percpu_data__open();
-+	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-+		return;
-+
-+	skel->rodata->num_cpus = num_cpus;
-+	skel->rodata->offsetof_num = offsetof(struct test_global_percpu_data__percpu, struct_data);
-+	skel->rodata->offsetof_num += sizeof(skel->percpu->struct_data) - sizeof(int);
-+	skel->rodata->elem_sz = roundup(sizeof(struct test_global_percpu_data__percpu), 8);
-+	skel->percpu->struct_data.nums[6] = 0xc0de;
-+
-+	err = test_global_percpu_data__load(skel);
-+	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-+		goto out;
-+
-+	linfo.map.map_fd = bpf_map__fd(skel->maps.percpu);
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(skel->progs.dump_percpu_data, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto out;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
-+		goto out;
-+
-+	while ((len = read(fd, buf, sizeof(buf))) > 0)
-+		do { } while (0);
-+	ASSERT_EQ(len, 0, "read iter");
-+	ASSERT_TRUE(skel->bss->run_iter, "run_iter");
-+	ASSERT_EQ(skel->bss->percpu_data_sum, 0xc0de * num_cpus, "percpu_data_sum");
-+
-+	close(fd);
-+out:
-+	bpf_link__destroy(link);
-+	test_global_percpu_data__destroy(skel);
-+}
-+
- void test_global_percpu_data(void)
+To: David Matlack <dmatlack@google.com>
+To: Alex Williamson <alex@shazbot.org>
+To: Shuah Khan <shuah@kernel.org>
+To: Raghavendra Rao Ananta <rananta@google.com>
+To: Vipin Sharma <vipinsh@google.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: kvm@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ tools/testing/selftests/vfio/lib/vfio_pci_device.c | 28 +++++++++++++---------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
+
+diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+index 94dc5fcecbeb..c65d5ed33e51 100644
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+@@ -30,13 +30,12 @@
+ static void vfio_pci_irq_set(struct vfio_pci_device *device,
+ 			     u32 index, u32 vector, u32 count, int *fds)
  {
- 	if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
-@@ -380,4 +430,6 @@ void test_global_percpu_data(void)
- 	test_global_percpu_data_verifier_log();
- 	if (test__start_subtest("xlated"))
- 		test_global_percpu_data_xlated();
-+	if (test__start_subtest("iter"))
-+		test_global_percpu_data_iter();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index 9a1b1a314c2f..037c8a05be4b 100644
---- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -62,4 +62,29 @@ int verifier_percpu_read(void *ctx)
- 	return c == ' ';
+-	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count];
+-	struct vfio_irq_set *irq = (void *)&buf;
+-	int *irq_fds = (void *)&irq->data;
++	size_t irq_size = sizeof(struct vfio_irq_set) + sizeof(int) * count;
++	struct vfio_irq_set *irq;
+ 
+-	memset(buf, 0, sizeof(buf));
+-
+-	irq->argsz = sizeof(buf);
++	irq = calloc(1, irq_size);
++	VFIO_ASSERT_NOT_NULL(irq);
++	irq->argsz = irq_size;
+ 	irq->flags = VFIO_IRQ_SET_ACTION_TRIGGER;
+ 	irq->index = index;
+ 	irq->start = vector;
+@@ -44,12 +43,13 @@ static void vfio_pci_irq_set(struct vfio_pci_device *device,
+ 
+ 	if (count) {
+ 		irq->flags |= VFIO_IRQ_SET_DATA_EVENTFD;
+-		memcpy(irq_fds, fds, sizeof(int) * count);
++		memcpy(irq->data, fds, sizeof(int) * count);
+ 	} else {
+ 		irq->flags |= VFIO_IRQ_SET_DATA_NONE;
+ 	}
+ 
+ 	ioctl_assert(device->fd, VFIO_DEVICE_SET_IRQS, irq);
++	free(irq);
  }
  
-+volatile const __u32 num_cpus = 0;
-+volatile const int offsetof_num;
-+volatile const int elem_sz;
-+__u32 percpu_data_sum = 0;
-+bool run_iter = false;
+ void vfio_pci_irq_trigger(struct vfio_pci_device *device, u32 index, u32 vector)
+@@ -118,15 +118,21 @@ static void vfio_pci_irq_get(struct vfio_pci_device *device, u32 index,
+ static int vfio_device_feature_ioctl(int fd, u32 flags, void *data,
+ 				     size_t data_size)
+ {
+-	u8 buffer[sizeof(struct vfio_device_feature) + data_size] = {};
+-	struct vfio_device_feature *feature = (void *)buffer;
++	size_t feature_size = sizeof(struct vfio_device_feature) + data_size;
++	struct vfio_device_feature *feature;
++	int ret;
+ 
++	feature = calloc(1, feature_size);
++	VFIO_ASSERT_NOT_NULL(feature);
+ 	memcpy(feature->data, data, data_size);
+ 
+-	feature->argsz = sizeof(buffer);
++	feature->argsz = feature_size;
+ 	feature->flags = flags;
+ 
+-	return ioctl(fd, VFIO_DEVICE_FEATURE, feature);
++	ret = ioctl(fd, VFIO_DEVICE_FEATURE, feature);
++	free(feature);
 +
-+SEC("iter/bpf_map_elem")
-+__auxiliary
-+int dump_percpu_data(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	void *pptr = ctx->value;
-+	int i;
-+
-+	if (!pptr)
-+		return 0;
-+
-+	run_iter = true;
-+
-+	for (i = 0; i < num_cpus; i++) {
-+		percpu_data_sum += *(int *) (pptr + offsetof_num);
-+		pptr += elem_sz;
-+	}
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.54.0
++	return ret;
+ }
+ 
+ static void vfio_device_feature_set(int fd, u16 feature, void *data, size_t data_size)
+
+---
+base-commit: a26b499b757cfc8bbff1088bb1b844639e250893
+change-id: 20260612-scratch-amastro-vfio-selftests-avoid-vlas-395eb3dcb3ab
+
+Best regards,
+--  
+Alex Mastro <amastro@fb.com>
 
