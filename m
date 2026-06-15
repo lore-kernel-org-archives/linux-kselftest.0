@@ -1,87 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D527DDCD;
-	Mon, 15 Jun 2026 00:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9401D416C;
+	Mon, 15 Jun 2026 01:14:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781484615; cv=none; b=okcZoOTU2unttdb1labQZpRXliw4vMrv48TiB5hJWzqBTCoLqTI8GBZjnIRDKR+g7C5RPS56nIGAn2usyyaHBuRvRI2Ouvjodsk/abvhylT5fxWZnwSFWv2WBUN3iJBxAkfU349EfpRWiwwXg74jYoouIvYT4KUG8AHvzo9AYCU=
+	t=1781486042; cv=none; b=m8A/ldO4olczOQOS2m6+TW1D7eHX3QN2M+oI4HLmRyrjRj/x7Qua5lgVOrc+LZb7XOwvP6GB99hd2m8DcvdNNbSEXGQIDtiBFzPguUeJ4r/jRhr99mLmsrfXHLwy3xHPpSl9qRjsDqabxYkUYBRy338z8aLFddeK+MtqXbukS5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781484615; c=relaxed/simple;
-	bh=rSxKc/N/tH+uwzNkiWE4KIoX0y7JGcbdRUe2EnBy/a0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=WiWVF+A/GXGIKbQSk+r32aKqT34UZX9yb9MifMNNIlG6Vys9OXAyIekTNzsDCceJX4CqMK+F8NQWsQxKyTa05/DkMKZc5gZaPjTMdA5cKRcKbajVi1ouxnPRfZpWqfLGRKYJGiFv7dn0TVMrnwFvx8yERCXdaV9eHW9z9IAMfHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vz7rW4iy; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781486042; c=relaxed/simple;
+	bh=srTHieG9QuuExlHEw5TlKCwlwwWNy6V4euxanIlNlkE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=maCQ1CCPagyqbtoYRjuPbtxelOrCf+m5E8tPwR7ZGS0coTCxq5SQDS4k82XzDGudxUscIuCwcevJ5CVl1/YjdtgFztxZZeTh/ZoyRr02i0iKXONTOmo3sZZ7y/HzlQBM5jSZ/t+9e5R6YACZGbLOrCrnPrjNPx3McQlyT8qlpgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ILZEs0zt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vz7rW4iy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 981361F00A3A;
-	Mon, 15 Jun 2026 00:50:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ILZEs0zt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76FEF1F000E9;
+	Mon, 15 Jun 2026 01:13:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781484613;
-	bh=YWWI/90L+aoxO/PYplJC9Vjepxw4Tfe3yAFXN/NOWHQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Vz7rW4iyAmd8NnKTk18OuCKtmHSw9nNa5HzS5blMaZysarw1hwtIZINA4L7yCMD2I
-	 ui8X7z61b9DItkWuLvbgCq6M269HoIQ91UNOuOeAeEzp7P9SgEipG6ng5qw8cMt37F
-	 UjfUykk+ex3RT5hXttcr+Pa4Ew6WvwKVwIu9rGO8M6S7KlOqeuV7DmE97WsxcuiHAw
-	 RUj7QI6DxJwe5/lX8EhyEz05STGDOH18+mXQXR6t+OysjQevsYx/Pi0SYxBNiK5FIm
-	 T+zxEBnKRh3XFpml+feigYemg1rBvbv4MKDCcgjTgqgkyeDYPhnKqxWDruoF+QaGit
-	 xBW6VDXBr+Scg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 569653A566D2;
-	Mon, 15 Jun 2026 00:50:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1781486040;
+	bh=IMLryOOflPIA2MeylTVQIkAq8ZoOodmRc9G5qh/vtSo=;
+	h=From:To:Cc:Subject:Date;
+	b=ILZEs0ztlHZvIev2SkNLzROJupEOQeOpmRE5zgaZhj81x8M6nm8VN6gmNnEf7j5W0
+	 dSGRJ/fMvustrl81F3W+mNPPMrV19A7u+3oaQIpRZr14L/0ewWbi4fgKvcjaqfjQ73
+	 4pRMnYVoUtyRwRgLDGiaWuqM+Iyg9CQ277pss3bTKRAIr5YnEd+y7EGerb5rw2wWUO
+	 5gysc0JgfKesW4e+cL8wReBkJ2+IGojgnKx7TD653lJ51cD+HEwq2qSAJfzfpDyUez
+	 rh9I3lC6W4JRntDcoe55KgeKKpw+KzTGb8bMFyVRvQxstv/cuJX8z7tWujbTraQMRz
+	 Y1c9zxfjK+h2A==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 0/7] tracing/probes: Add more typecast features
+Date: Mon, 15 Jun 2026 10:13:55 +0900
+Message-ID: <178148603548.185520.3389196102475741865.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/2] bpf: Fix bpf_get/setsockopt to tos for
- ipv4-mapped ipv6 socket
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178148460889.2365545.16232674085836025115.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Jun 2026 00:50:08 +0000
-References: <20260613162443.60515-1-leon.hwang@linux.dev>
-In-Reply-To: <20260613162443.60515-1-leon.hwang@linux.dev>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, ihor.solodrai@linux.dev,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
 
-Hello:
+Hi,
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Here is the 4th version of series to introduce more typecast features
+to probe events. The previous version is here:
 
-On Sun, 14 Jun 2026 00:24:41 +0800 you wrote:
-> When TCP over IPv4 via INET6 API, sk->sk_family is AF_INET6, but it is a
-> v4 pkt. inet_csk(sk)->icsk_af_ops is ipv6_mapped and use ip_queue_xmit.
-> The tos sockopt does not work for bpf [get,set]sockopt() helpers.
-> 
-> Changelog:
-> v3 -> v4:
-> * Add 'sk->sk_type != SOCK_RAW && !ipv6_only_sock(sk)' check.
-> * Re-implement test with LLM assistance.
-> * v3: https://lore.kernel.org/all/20240914103226.71109-1-zhoufeng.zf@bytedance.com/
-> 
-> [...]
+ https://lore.kernel.org/all/178144880282.159464.16882854283219530040.stgit@devnote2/
 
-Here is the summary with links:
-  - [bpf-next,v4,1/2] bpf: Fix bpf_get/setsockopt to tos for ipv4-mapped ipv6 socket
-    https://git.kernel.org/bpf/bpf-next/c/ca0f587c029a
-  - [bpf-next,v4,2/2] selftests/bpf: Add test to verify the fix for bpf_setsockopt() helper
-    https://git.kernel.org/bpf/bpf-next/c/5cf2c21ab090
+In this version, I fixed some issues found by Sashiko reviews.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Steve introduced BTF typecast feature for eprobe[1].
+This series extends it and add more options:
+
+1. Expanding BTF typecast to kprobe and fprobe.
+   (currently only function entry/exit)
+
+2. Introduce container_of like typecast. This adds a "assigned
+   member" option to the typecast.
+
+   (STRUCT,MEMBER)VAR->ANOTHER_MEMBER
+
+   This casts VAR to STRUCT type but the VAR is as the address
+   of STRUCT.MEMBER. In C, it is:
+
+   container_of(VAR, STRUCT, MEMBER)->ANOTHER_MEMBER
+
+3. Support nested typecast, e.g.
+
+   (STRUCT)((STRUCT2)VAR->MEMBER2)->MEMBER
+
+   the nest level must be smaller than 3.
+
+4. Add $current variable to point "current" task_struct.
+   This is useful with typecast, e.g.
+
+   (task_struct)$current->pid
+
+5. per-cpu dereference support.
+
+   Intrdouce this_cpu_read(VAR) and this_cpu_ptr(VAR) to
+   access per-cpu data on the current CPU (accessing other CPU
+   data is not stable, because it can be changed.)
+
+   You can access the member of per-cpu data structure using
+   typecast like:
+
+   (STRUCT)this_cpu_ptr(VAR)->MEMBER
 
 
+And added a test script to test part of them.
+
+[1] https://lore.kernel.org/all/20260601130746.2139d926@gandalf.local.home/
+
+
+---
+
+Masami Hiramatsu (Google) (7):
+      tracing/events: Fix to check the simple_tsk_fn creation
+      tracing/probes: Support typecast for various probe events
+      tracing/probes: Support nested typecast
+      tracing/probes: Support field specifier option for typecast
+      tracing/probes: Add $current variable support
+      tracing/probes: Add this_cpu_read() and this_cpu_ptr() dereference method to fetcharg
+      tracing/probes: Add a new testcase for BTF typecasts
+
+
+ Documentation/trace/eprobetrace.rst                |    9 
+ Documentation/trace/fprobetrace.rst                |   10 
+ Documentation/trace/kprobetrace.rst                |   11 +
+ kernel/trace/trace.c                               |    8 
+ kernel/trace/trace_probe.c                         |  413 +++++++++++++++-----
+ kernel/trace/trace_probe.h                         |   19 +
+ kernel/trace/trace_probe_tmpl.h                    |   33 +-
+ samples/trace_events/trace-events-sample.c         |   44 ++
+ samples/trace_events/trace-events-sample.h         |   34 ++
+ .../ftrace/test.d/dynevent/btf_probe_event.tc      |   51 ++
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    9 
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    9 
+ .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    5 
+ 13 files changed, 540 insertions(+), 115 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
