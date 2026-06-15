@@ -1,146 +1,94 @@
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5FB92F7F15;
-	Mon, 15 Jun 2026 08:31:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72AFC3BFAD3;
+	Mon, 15 Jun 2026 08:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781512282; cv=none; b=iYNPA2Ylj+wTLxwEKWksBao+htfoxuj/LH0HJluuakIpDpC5Ky3bySGsM4mOb20+WLEUqjsrxQU2laHcrwueJjvbEgbOKfHYCwN2c9ZBZrVUK77/l7+wWYpM+wBcM+UwpHcPjcxuC1A/FhFYE90Lo8z6reU3+bPuXi7wup1fe+s=
+	t=1781513335; cv=none; b=JVWwvzxQA0Qsnbc5jXGdUg16al2PMw3kxh5B01jVgos/d1IkReneS3/pv8sE16MdyYzPoBgRiA6bKuFZQUXWOEXYU+3i+R7FxqWPpuMPRLUdvsWkY4ghzOKqvW3VTzh7Rsd6Kbi4tAQrd/oEUrpzqfURJV+zZf0g8ZwoRICwDP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781512282; c=relaxed/simple;
-	bh=w9TgtjeoWg1QRC8HtVLI/HGroA6AaS7WzzbbfIu42s0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IgSl1d2xy/PKkWZdL8/bn8FWWAcGlF+CZtfMxk65m/31vCB+SaI+J2v7G3ckeB1dXLSLtGnZp36hE+cL1KwmsDStiXOOqHe3ePcQ3RVJeN5BlFlCv8+7Aa3xxFAWdW209WrwhjMQLL4fwHbZEH5kp7NegqCRjWCLAIYZVNFhVmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=nxDOZOm7; arc=none smtp.client-ip=162.243.161.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781513335; c=relaxed/simple;
+	bh=/j3NBrlTLaudkDSka2M6EE293V8ehR6UrpETXseRjuE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=W3PJbqkxViwqwXtbnJv0XotZzhuivyC2D3aZH0SGCHcGBzAQi1HE17u4+hyW6Q2bCh9zDnlpQGbAqCUf2lskzzj3DEeXLvrgJ7StLe3a0BAZpasatc4kdgl6k+gMF+WbtXb3N2KiO38AFPGqSHiUFZJf9XtFsFpt9SwoAt/N/LM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJhripag; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="nxDOZOm7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=Pn9vM5BBoMlYJ1DxDQ2zsk7QezY4+f5
-	JZSm7cp8EMik=; b=nxDOZOm7WGcA29mH8vkNbzxkAQ+MEOwgCsHEhIjF+CRpYYg
-	yIV5d4oJUk/oIB4n5CRRFqXZqSKgugxKK95W0IlMN+fWi14st6VGySZhjkoZPPnR
-	K57xm5yj/rMnu4hH4zOxehG/1ExrlV5XrWodujqigHRyHZfF5lUi2/Wfb/Ug=
-Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web5 (Coremail) with SMTP id zAQGZQBXEMBFuC9qh8JwAg--.40355S3;
-	Mon, 15 Jun 2026 16:31:02 +0800 (CST)
-From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Mon, 15 Jun 2026 16:31:01 +0800
-Subject: [PATCH bpf 1/2] bpf: Gate dynptr probe-read kfuncs like helpers
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJhripag"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A3521F00A3A;
+	Mon, 15 Jun 2026 08:48:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781513329;
+	bh=aKn5TMpsqQkbVXFHdW1ResVJ/Nc5/kBI3zl/0q/Cats=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=DJhripag3BhQHwhamRVbVYmW1D2agvg3BNkocUj80oXa3b9OsOAjhNNm9WsmWKF7W
+	 biTYVf3joD+3GR2QV5Uq+SeSDMA58B72ktdPgHnW1OVPPswRBln+rXHqq1rXHqN+BX
+	 7p9dooKtGilKboynbHVWVd2aZKQhJ5t01c/2CicjR3r4PpkrlmOegpQtroexeHtMWp
+	 99GJI7q0RPks17VzSH63w8ncAwKvaNfTJ6t9QPPZx605mjCcYB2j2ANNvsHaJ30ODO
+	 ZUJkIC0OjV2jfaB4kkdHGX9yCPa6OfQTEhi/iYHoD/bNqCr1dvKGFfFs8gIJnrO3O2
+	 1NGPwdQhIZEjQ==
+Content-Type: multipart/mixed; boundary="===============5023186984400448720=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Message-Id: <ba187060a5a8232b69cbd080223bd36f806556fc877c07f470b938870b9e4a05@mail.kernel.org>
+In-Reply-To: <20260615-f01-06-half-slot-pointer-spill-v1-1-47f1c18a8965@mails.tsinghua.edu.cn>
+References: <20260615-f01-06-half-slot-pointer-spill-v1-1-47f1c18a8965@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Preserve pointer spill metadata during half-slot cleanup
+From: bot+bpf-ci@kernel.org
+To: gnq25@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,gnq25@mails.tsinghua.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 15 Jun 2026 08:48:49 +0000 (UTC)
+
+--===============5023186984400448720==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260615-f01-07-dynptr-probe-read-cap-v1-1-e626cd61a381@mails.tsinghua.edu.cn>
-References: <20260615-f01-07-dynptr-probe-read-cap-v1-0-e626cd61a381@mails.tsinghua.edu.cn>
-In-Reply-To: <20260615-f01-07-dynptr-probe-read-cap-v1-0-e626cd61a381@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, 
- Mykyta Yatsenko <yatsenko@meta.com>, Shuah Khan <shuah@kernel.org>, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781512263; l=2543;
- i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=w9TgtjeoWg1QRC8HtVLI/HGroA6AaS7WzzbbfIu42s0=;
- b=9oC4nFMAc2/qDOnnO8YhTh0NWtB657zd8o3qwF9cPtod9fj52R46R0iiCHZamncVHzLk0+N/N
- 7H5BYEUYPEpDnnhiI5nfAYM4D8OwnTP2ZXeH1n2x9/yWxm0Jop9Qi81
-X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
- pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:zAQGZQBXEMBFuC9qh8JwAg--.40355S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF4kXFykuw47urWrtw4rGrg_yoW5Xr1fpF
-	s5C34Ykr18t3Z3Zasrtws5WryFyw1kJF4xCFn7GFyxZw4vqrZ8Z34I9F15Jr93Kr1jgrW3
-	Xw10v3sI93WUGFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9m1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
-	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
-	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
-	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
-	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xS
-	Y4AK67AK6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
-	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-	AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-	0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JjcIDcUUUUU=
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQQTA2ovr0IOQAAEs3
 
-The bpf_probe_read_{user,kernel}{,_str}_dynptr() kfuncs provide
-probe-read style nofault copies into dynptr-backed BPF memory. Their
-legacy helper counterparts are exposed only to programs with CAP_PERFMON,
-and the kernel-read helpers are additionally blocked by
-LOCKDOWN_BPF_READ_KERNEL.
+>     bpf: Preserve pointer spill metadata during half-slot cleanup
+>
+>     __clean_func_state() cleans dead stack slots in 4-byte halves. When the
+>     high half of a STACK_SPILL slot is dead and the low half remains live,
+>     cleanup converts the live low half to STACK_MISC or STACK_ZERO and clears
+>     the saved spilled_ptr metadata.
+>
+>     That conversion is safe only for scalar spills. For a pointer spill, this
+>     metadata clear lets a later 32-bit fill from the still-live half avoid the
+>     normal non-scalar register-fill check and be treated as an ordinary scalar
+>     stack read.
+>
+>     Leave non-scalar spill slots intact in this half-live shape. This is
+>     conservative for pruning and preserves the existing
+>     check_stack_read_fixed_off() rejection path for partial fills from pointer
+>     spills.
+>
+>     Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
+>     Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 
-The dynptr kfuncs are registered in the common kfunc set, so the verifier
-currently allows them with the generic kfunc privilege gate. Add a common
-kfunc filter that mirrors the helper policy for these probe-read dynptr
-kfuncs: require CAP_PERFMON for all four nofault probe-read variants and
-apply the existing lockdown check to the kernel-read variants.
+Is the Fixes: tag pointing at the right commit?
 
-This preserves the existing dynptr copy implementation while aligning the
-capability policy with the legacy probe-read helpers.
+The commit referenced, 2cb27158adb3 ("bpf: poison dead stack slots"), adds
+STACK_POISON handling in kernel/bpf/verifier.c and does not contain the
+half-slot cleanup logic being corrected here.
 
-Fixes: a498ee7576de ("bpf: Implement dynptr copy kfuncs")
-Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+The 4-byte half-slot cleanup in __clean_func_state() that downgrades a
+still-live STACK_SPILL low half to STACK_MISC/STACK_ZERO and clears the
+saved spilled_ptr metadata without checking for SCALAR_VALUE was introduced
+by be23266b4a08 ("bpf: 4-byte precise clean_verifier_state"). That commit
+added the lo_live/hi_live model and the exact block this patch corrects:
+
+	if (lo_live && stype == STACK_SPILL) {
+
+be23266b4a08 predates both 2cb27158adb3 and this fix. Should the tag be:
+
+  Fixes: be23266b4a08 ("bpf: 4-byte precise clean_verifier_state")
+
+
 ---
- kernel/bpf/helpers.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 9ca195104667..fbef89196f85 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -4961,9 +4961,41 @@ BTF_ID_FLAGS(func, bpf_dynptr_file_discard)
- BTF_ID_FLAGS(func, bpf_timer_cancel_async)
- BTF_KFUNCS_END(common_btf_ids)
- 
-+#ifdef CONFIG_BPF_EVENTS
-+BTF_KFUNCS_START(probe_read_dynptr_kfunc_ids)
-+BTF_ID_FLAGS(func, bpf_probe_read_user_dynptr)
-+BTF_ID_FLAGS(func, bpf_probe_read_kernel_dynptr)
-+BTF_ID_FLAGS(func, bpf_probe_read_user_str_dynptr)
-+BTF_ID_FLAGS(func, bpf_probe_read_kernel_str_dynptr)
-+BTF_KFUNCS_END(probe_read_dynptr_kfunc_ids)
-+
-+BTF_KFUNCS_START(probe_read_kernel_dynptr_kfunc_ids)
-+BTF_ID_FLAGS(func, bpf_probe_read_kernel_dynptr)
-+BTF_ID_FLAGS(func, bpf_probe_read_kernel_str_dynptr)
-+BTF_KFUNCS_END(probe_read_kernel_dynptr_kfunc_ids)
-+#endif
-+
-+static int common_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
-+{
-+#ifdef CONFIG_BPF_EVENTS
-+	if (!btf_id_set8_contains(&probe_read_dynptr_kfunc_ids, kfunc_id))
-+		return 0;
-+
-+	if (!bpf_token_capable(prog->aux->token, CAP_PERFMON))
-+		return -EACCES;
-+
-+	if (btf_id_set8_contains(&probe_read_kernel_dynptr_kfunc_ids, kfunc_id) &&
-+	    security_locked_down(LOCKDOWN_BPF_READ_KERNEL) < 0)
-+		return -EACCES;
-+#endif
-+
-+	return 0;
-+}
-+
- static const struct btf_kfunc_id_set common_kfunc_set = {
- 	.owner = THIS_MODULE,
- 	.set   = &common_btf_ids,
-+	.filter = common_kfunc_filter,
- };
- 
- static int __init kfunc_init(void)
-
--- 
-2.34.1
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27533304560
+--===============5023186984400448720==--
