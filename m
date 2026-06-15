@@ -1,32 +1,32 @@
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DC03B14A3;
-	Mon, 15 Jun 2026 06:46:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399E0330662;
+	Mon, 15 Jun 2026 06:51:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.112
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781506015; cv=none; b=WXEZlS/h2WEY86ed0lwPoqR9/yT5yKTuaFz05vDT6Bjm3SzFMuIBJhLb6NEYhAcA+qIfYiGCIvdIS01DhhxOzUV5cRcx+FdETiT811Fs53i6Bvkp5h+Y5w+anx0JUq29qN5B0UN5REy9SOt0ufUZjkPPi8IDDTuc2C6cKdpE8sg=
+	t=1781506287; cv=none; b=u8ky6mH+iExJw54W0LrmUPhYYOsYDnr4eDFshNVQ5fv8VmMnktaJYqms0wAK1Bc0/i/nPiWUhWff6z4fyBnh/AT0Lo4UXrltpn/bCRUsKONpcsDnT6b/JihT4dptx9Zus9O15YMXxo3zVw7m0slzwrdNw+T/QQFrq3xDTKP2rf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781506015; c=relaxed/simple;
-	bh=tYVbsJMtl4sLHc9F3ymy7DSjMez2Q+25+5pzmss6iPk=;
+	s=arc-20240116; t=1781506287; c=relaxed/simple;
+	bh=Vr+YiSg54QGBVZngXSIuL0UJ+D6sPZxNpJBvXwnTI2w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l++6yYPzvBSqZR9tGzzbo3D4IgY2xOM0ReXV4DMpRGVX1AfBj1JCMaaDyszFMXiX657VPtWZpqcxDA9cVenW1Yz+76OneRn1kVdwB13XGJNwdUjmpaftnaHUUseqUugXtCpUo3yP8zpoCNgAddgKhK+1HNKG1iIAwIB89y65WnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=hT6VmRkb; arc=none smtp.client-ip=115.124.30.98
+	 In-Reply-To:Content-Type; b=ZbPb8cakGh9laogA6GvzUDBkaGCcN5qeA4Sc2feasupMD5f7MFH5hl/d9Th4i1+4FsJzusikAKIR2BDFmgxUtKUPLXSUIrURvxVwOHFDNShAhVpkFRW47WYn3o4qejhuUBnXu229d2vkqNFM/bnQOcZ90Pk606g9ULIfZYBsW6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=U6lYtNM4; arc=none smtp.client-ip=115.124.30.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="hT6VmRkb"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="U6lYtNM4"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1781505990; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=MkI+1TpE0aUAl41JF553jaqHkvoJvgRTmIJlr1KvO1s=;
-	b=hT6VmRkbAGlCp2p6zUIhjwDYQXCXUwneB6AytFd+uCdxHFUuwHpLmib6ts3eib8ITdq2a+f97QXbeJlYbp1rJF/mYRA0oPSJiNuP3K1CAadKvR+T/j9m3WEi4TV2z5S/7nmSYZSlpRtXl6de0BLUcOwK2zbHM2K/Paqjy9lrJQw=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R891e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0X4q36AT_1781505988;
-Received: from 30.74.144.140(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X4q36AT_1781505988 cluster:ay36)
+	t=1781506277; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=hrkz43e0CktTxobQYWEmQydCF6benCwIbJSIRVKApEE=;
+	b=U6lYtNM4VHS82osL29XiVYCc0oxmVAruMefgCJnAnERFVTsDkRF9CAEfqbIdEdjBsYSncY5Km3fIBxMtDg6P8K6plWpBBTKAiJDQb6UtsUq64Qcp7TkF1Vo5a5bBnjJDxQVT1gXMf4CNr+SGFQuTbkQ3+tN0TzRN4J5ASiy9UAw=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0X4qX61x_1781506274;
+Received: from 30.74.144.140(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X4qX61x_1781506274 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Mon, 15 Jun 2026 14:46:28 +0800
-Message-ID: <2d201ef2-0279-454d-ace0-ef7882e1385f@linux.alibaba.com>
-Date: Mon, 15 Jun 2026 14:46:27 +0800
+          Mon, 15 Jun 2026 14:51:15 +0800
+Message-ID: <01b9caf7-241a-4140-a05c-826756611e7b@linux.alibaba.com>
+Date: Mon, 15 Jun 2026 14:51:14 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,61 +34,84 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 04/11] mm: khugepaged: add shmem mTHP collapse
- support
-To: Nico Pache <npache@redhat.com>, Lance Yang <lance.yang@linux.dev>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
- hughd@google.com, willy@infradead.org, ziy@nvidia.com, liam@infradead.org,
+Subject: Re: [RFC PATCH v2 08/11] selftests: mm: extend the check_huge() to
+ support mTHP check
+To: Nico Pache <npache@redhat.com>, akpm@linux-foundation.org,
+ david@kernel.org, ljs@kernel.org, hughd@google.com
+Cc: willy@infradead.org, ziy@nvidia.com, liam@infradead.org,
  ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ lance.yang@linux.dev, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-References: <3895c09794739bbfae99d9e021ffacf8a51fb8e2.1781083630.git.baolin.wang@linux.alibaba.com>
- <20260610124416.46522-1-lance.yang@linux.dev>
- <443feb66-94ab-458e-8cd8-0ad440d0d067@redhat.com>
+References: <cover.1781083630.git.baolin.wang@linux.alibaba.com>
+ <bbedc5afc56b0f7b2073324a3551159ed9cf5f9c.1781083630.git.baolin.wang@linux.alibaba.com>
+ <9c424084-2223-4d69-87b9-cd21c443b396@redhat.com>
 From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <443feb66-94ab-458e-8cd8-0ad440d0d067@redhat.com>
+In-Reply-To: <9c424084-2223-4d69-87b9-cd21c443b396@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 
 
-On 6/12/26 6:22 PM, Nico Pache wrote:
+On 6/12/26 6:32 PM, Nico Pache wrote:
 > 
 > 
-> On 6/10/26 6:44 AM, Lance Yang wrote:
+> On 6/10/26 4:29 AM, Baolin Wang wrote:
+>> To support checking for various sized mTHPs during mTHP collapse, extend the
+>> check_huge() function prototype to accept two new parameters specifying the
+>> address range and mTHP size, in preparation for the following patches.
 >>
->> On Wed, Jun 10, 2026 at 06:29:12PM +0800, Baolin Wang wrote:
->> [...]
->>> @@ -1512,8 +1517,12 @@ static enum scan_result mthp_collapse(struct mm_struct *mm,
->>> 			enum scan_result ret;
->>>
->>> 			collapse_address = address + offset * PAGE_SIZE;
->>> -			ret = collapse_huge_page(mm, collapse_address, referenced,
->>> -						 unmapped, cc, order);
->>> +			if (file)
->>> +				ret = collapse_file(mm, collapse_address, file,
->>> +						start + offset, cc, order);
->>> +			else
->>> +				ret = collapse_huge_page(mm, collapse_address,
->>> +						referenced, unmapped, cc, order);
->>>
->>> 			switch (ret) {
->>> 			/* Cases where we continue to next collapse candidate */
->>> @@ -1521,6 +1530,7 @@ static enum scan_result mthp_collapse(struct mm_struct *mm,
->>> 				collapsed += nr_ptes;
->>> 				fallthrough;
->>> 			case SCAN_PTE_MAPPED_HUGEPAGE:
+>> No functional changes.
 >>
->> Looks like SCAN_PTE_MAPPED_HUGEPAGE from collapse_file() get lost for
->> the PMD-order case.
-> 
-> This is kinda my fault... I reused the enum PTE_MAPPED_HUGEPAGE (which was only
-> really used in file collapse) when reporting that a collapse attempts is smaller
-> or equal to the current order of the folio.
-> 
-> if (!is_pmd_order(order) && folio_order(folio) >= order) {
-> 
-> I will change that in my follow up to use its own (or a different enum).
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   .../selftests/mm/folio_split_race_test.c      |  2 +-
+>>   tools/testing/selftests/mm/khugepaged.c       | 66 ++++++++++---------
+>>   .../testing/selftests/mm/prctl_thp_disable.c  |  2 +-
+>>   tools/testing/selftests/mm/soft-dirty.c       |  2 +-
+>>   .../selftests/mm/split_huge_page_test.c       | 14 ++--
+>>   tools/testing/selftests/mm/uffd-common.c      |  4 +-
+>>   tools/testing/selftests/mm/vm_util.c          |  6 +-
+>>   tools/testing/selftests/mm/vm_util.h          |  6 +-
+>>   8 files changed, 55 insertions(+), 47 deletions(-)
+>>
 
-Maybe use SCAN_PAGE_COMPOUND? Anyway, I’ve already fixed the issue Lance 
-raised locally.
+[snip]
+
+>> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+>> index 311fc5b4513e..b43adfa92116 100644
+>> --- a/tools/testing/selftests/mm/vm_util.c
+>> +++ b/tools/testing/selftests/mm/vm_util.c
+>> @@ -247,17 +247,17 @@ bool __check_huge(void *addr, char *pattern, int nr_hpages,
+>>   	return thp == (nr_hpages * (hpage_size >> 10));
+>>   }
+>>   
+>> -bool check_huge_anon(void *addr, int nr_hpages, uint64_t hpage_size)
+>> +bool check_huge_anon(void *addr, unsigned long size, int nr_hpages, uint64_t hpage_size)
+> 
+> Whats the purpose of adding 'size' here?
+> 
+>>   {
+>>   	return __check_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
+>>   }
+>>   
+>> -bool check_huge_file(void *addr, int nr_hpages, uint64_t hpage_size)
+>> +bool check_huge_file(void *addr, unsigned long size, int nr_hpages, uint64_t hpage_size)
+>>   {
+>>   	return __check_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
+> 
+> Same?
+> 
+>>   }
+>>   
+>> -bool check_huge_shmem(void *addr, int nr_hpages, uint64_t hpage_size)
+>> +bool check_huge_shmem(void *addr, unsigned long size, int nr_hpages, uint64_t hpage_size)
+>>   {
+>>   	return __check_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
+> 
+> And here?
+> 
+> Perhaps I find out in the next patch :)
+
+This is to specify the address range, so that when calling 
+gather_folio_orders(), it can count the number of hugepages within that 
+range.
