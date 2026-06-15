@@ -1,77 +1,206 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B573AE706;
-	Mon, 15 Jun 2026 21:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09D03B6C16
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 21:29:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781558445; cv=none; b=ax/yt2FscerHuP+J82hNjVuvEA+TkWHnWKTJ8zu4T/tC/ze03zev90nSSIFwJvK+/edUAKaMeKl/gxAg9u0xlVJ9fLcWtiv6IgP0o68U7eBJ1+YpPg0ssb1FmK3DnaBv7pLKmo/VDinE7P5d9BJbGau3gWaSWfV2QRHue+y1sqE=
+	t=1781558967; cv=none; b=JnAbfByBP7JX+4uDkjrGOHK031+gp1pB912CXBqOa+Zg0aXGPhoshc8/ChhKtg1j+sVHTXCa58esEsrNZJldLxMTBGVVwc7gLVm+LCwCyFgd5e5R9pIegLFKrnI1ryV4ibM2PJeoG2LoEdUcwahieS1VQM5bwxa1Qf4tlie6On8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781558445; c=relaxed/simple;
-	bh=lwMiZA0PVhBjGIxlXjCZxvblaO57+GTOMoT0+3bOXYk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Ba8pMkBTuyjixGossZ9/C0F7lacMHUr0FuokgyFeSFHj87TEb5EfXd9v/m63TV+fgMYJwCaXbl02mPin2sez/yZGCdsxLdn/FK8POKwRiKMzQqt/6AttC71f2hCwTkvrZH2oY2epLBRPw9S/FnUVJ7GIyjbn+2FqzxYEWDjuwvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oynQtO5x; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781558967; c=relaxed/simple;
+	bh=rNvdyzbUoXMVk3xtHbEFF9hvMw4FG4kSsUInu9i58fw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=W9P0zoB8kRMiI+9jGmMfSKY97W4XYGMrjb6R7VPlQD9e0JUVEn/26C6ZHXWE1DfBCh4fAB2v3paFFtBvw9Ip7cCtIj6c1PpYsvP6YcngSVKMZdT1r2vcHntMjWr+V21GUF2TUC3/vMlntqEHliexyVM60/ixrZcPPnhBVSfMU30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IP/4NxJo; arc=none smtp.client-ip=209.85.167.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oynQtO5x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10DA91F000E9;
-	Mon, 15 Jun 2026 21:20:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781558444;
-	bh=s4Qbe+W/lEvK6Mb1Mos7N4Qvk6t3oGI2t9y8rUkD/XA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=oynQtO5xh6fJq+YqFbWHP0xv0JbM2DWEBGyZ9ApAfObzRgmDsH2xBIeKQ2/+l/JEZ
-	 QDzaGu2OthSeJoxg6bqaXS+Ps5t0kclI5sp9yk2GjAC/BFH5hJNzVjpMXA/l/gQe6/
-	 E2oT9leJIVJeXOdmQE4JAE9eY4cvAcK/ro5VAwMUWQO0tt87M8jN9iUPCulKWy2K0M
-	 jbbKtqfZ/hp1U7lfGchpL2iv0LbiVPwLxVhkm4NduG2l8vGbXWmaj+VONRgJxd1QJd
-	 2ZARBdCloyA6HkHESJxDYHnN/og96hthXHSrlDYAd1y6xFVtGfBEfP2sNRWygSweZ4
-	 KnqTo8+44MPRw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568B33839A06;
-	Mon, 15 Jun 2026 21:20:40 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IP/4NxJo"
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-485ecc0f2dfso2648810b6e.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 14:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781558965; x=1782163765; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H8fRTrzwESqu+d4IERJzTYfMwrtXeimkMnJ+xEbFDmw=;
+        b=IP/4NxJoZMH8dfhJjRL9ogCGp1ZYkxKWRWbUhvCxV+PqWT4prCNwGWgdnhaaDnqcc6
+         YTjKJLeJkdnPvEV2vJh/sQQYZb64XAhcgQQX6RSlXKZ44cYYoq7RQoAo0idzhaQsaep+
+         wJ5tskCZWbaFkcshrYFRqJsAf0nJdRRyCSBIQizEumFrR6eGkDskHYsjcAsGNfN++upF
+         P/M6OJoS0t1OVZsJX1QNowqU49SGwPck9n68TNM4QGzcjGcxvBgPtKnUkgx1EfCBJp1Z
+         QfBvkQDwsLCGtjNK+q4eEewi+++FxkdJdM3Zlr84sLL6dPJEVKk79nm7tSAYwLyPhzKU
+         pOhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781558965; x=1782163765;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H8fRTrzwESqu+d4IERJzTYfMwrtXeimkMnJ+xEbFDmw=;
+        b=smpvaUTUdC4in3q69kKiB3xV2McYESCYqcjYU4gDPZq7lZ2mIJl06gXpEuyLX/PHKY
+         NZfCbndDaEhVr5dLKx+AYvDYGcSxl6Thut2zRAetrzv/r4AgI9NZEUhzGdZONLWoKpGH
+         bTNL86ypJDIC7XA7hwrXwh/4kibbn0LRt2od4ZkfXvgLZKKmINhMXURpK4W/uewapRM7
+         mVmeyt2ZN0PktbHh4xO+2olizYHGWqQeD6xe6r/imyTgXpvPJbbSb3dn1Iwd6c8ZT7W1
+         QDVcmdqQQs5nbgqJ1kio1l1OrQeDI0sTiYD0Pc3UepS4MeswfmeGgkfwD4t1asUKlJxJ
+         pQbQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/+s7rnS5r/m2qoXEbcpu9ukB8J4ibKAYa7aekzjzo6K93YJ353JRHg8/n2BPbzaYrcGMb/jzvGQkdktuTuC84=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4R0mfbhscEz7XnlE6SoXeL949APsA3OJfmdeF3t3woqm+qrP3
+	uc8dc6G3/ipJKo9VdFXecBTzoJxx/8AJhJBLCfC7Solx5rt64+mTlyJ7
+X-Gm-Gg: Acq92OEhkoxcZIr5mRGSEr8K2HsTOZWEJ3sqjgIjeVI4TmClVWv+aOxOL/DE2UhZjw9
+	FfSDAq0idaq2Kv+WrkBrS0Fc6UyQw63RN6Ki0WWGjzNTm7htOUO1YI+6Gl3NQ4u2ruo26++AqMG
+	INLQiLS6bNlXmNVDGN1sZxeYbXpxmSU3sGH9wD7+uqPJagCMnARrLLrB/iHMokSUguYqr1ewbbw
+	/oXeqthcNXlYEKSPNKxFQC8Cbg+gVZTZMKjbXqzyD6CF6DO0G7s0eZBFnHMrVj5JWZ0GNA4FyQo
+	67ekQxS4ix3wMamVfcm+zkPd9v3mo9AaTnFwPptz4MOFtBJ/uvbCD868mvKotJBmVmHc+XtwHbO
+	EtdetaDwo6sIi4LPGpOMGnjk1mP1lC2nrh3MN8qmodBb4CIuL6/n243cLfzmj2p4BJwHIdszWvx
+	Ds0Y36xJPgsmKANmu0/YacXUVgES7VjFe13owy7h7YkleIalGjU5T6YFlH7gvAsRbmYU1zFiWlm
+	3Ss0WFTyiR+saqxpg==
+X-Received: by 2002:a05:6809:19:10b0:472:b43a:3063 with SMTP id 5614622812f47-4884d07604bmr470583b6e.38.1781558964622;
+        Mon, 15 Jun 2026 14:29:24 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:54::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e79f5bb911sm5204742a34.11.2026.06.15.14.29.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Jun 2026 14:29:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests/net/openvswitch: add SET action test
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178155843888.301119.8263394079175828047.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Jun 2026 21:20:38 +0000
-References: <20260612130503.311240-1-houminxi@gmail.com>
-In-Reply-To: <20260612130503.311240-1-houminxi@gmail.com>
-To: Minxi Hou <houminxi@gmail.com>
-Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com,
- i.maximets@ovn.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- dev@openvswitch.org, linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 15 Jun 2026 14:29:22 -0700
+Message-Id: <DJ9XY0Y2D2R8.16S9E0QFFMLQS@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Quentin Monnet"
+ <qmo@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <kernel-patches-bot@fb.com>
+Subject: Re: [PATCH bpf-next v6 11/12] selftests/bpf: Add test to verify
+ xlated insns for global percpu data
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc
+References: <20260615152646.27639-1-leon.hwang@linux.dev>
+ <20260615152646.27639-12-leon.hwang@linux.dev>
+In-Reply-To: <20260615152646.27639-12-leon.hwang@linux.dev>
 
-Hello:
+On Mon Jun 15, 2026 at 8:26 AM PDT, Leon Hwang wrote:
+> Add a test to verify global percpu data related xlated insns:
+>
+> 1. ld_imm64: compare xlated one with the one in ELF object file.
+> 2. mov64_percpu_reg: it is added by verifier.
+>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  .../bpf/prog_tests/global_data_init.c         | 87 +++++++++++++++++++
+>  .../bpf/progs/test_global_percpu_data.c       | 11 +++
+>  2 files changed, 98 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/=
+tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> index e4c290492ff8..fcc2c4ec8644 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> @@ -279,6 +279,91 @@ static void test_global_percpu_data_verifier_log(voi=
+d)
+>  	RUN_TESTS(test_global_percpu_data);
+>  }
+> =20
+> +static int find_ld_imm64(const struct bpf_insn *insns, size_t insn_cnt, =
+struct bpf_insn *ld_imm64)
+> +{
+> +	size_t i;
+> +
+> +	for (i =3D 0; i < insn_cnt; i++) {
+> +		if (insns[i].code =3D=3D (BPF_LD | BPF_IMM | BPF_DW)) {
+> +			ld_imm64[0] =3D insns[i];
+> +			ld_imm64[1] =3D insns[i + 1];
+> +			return i;
+> +		}
+> +	}
+> +
+> +	return -ENOENT;
+> +}
+> +
+> +/*
+> + * Special (internal-only) form of mov, used to resolve per-CPU addrs:
+> + * dst_reg =3D src_reg + <percpu_base_off>
+> + * BPF_ADDR_PERCPU is used as a special insn->off value.
+> + */
+> +#define BPF_ADDR_PERCPU	(-1)
+> +
+> +#define BPF_MOV64_PERCPU_REG(DST, SRC)				\
+> +	((struct bpf_insn) {					\
+> +		.code  =3D BPF_ALU64 | BPF_MOV | BPF_X,		\
+> +		.dst_reg =3D DST,					\
+> +		.src_reg =3D SRC,					\
+> +		.off   =3D BPF_ADDR_PERCPU,			\
+> +		.imm   =3D 0 })
+> +
+> +static __u64 ld_imm64_to_u64(const struct bpf_insn *insn)
+> +{
+> +	return ((__u64)(__u32) insn[1].imm << 32) | (__u32) insn[0].imm;
+> +}
+> +
+> +static void test_global_percpu_data_xlated(void)
+> +{
+> +	struct bpf_insn ld_imm64_raw[2], ld_imm64_xlated[2], mov64_percpu_reg, =
+*insns =3D NULL;
+> +	size_t insn_sz =3D sizeof(struct bpf_insn);
+> +	struct test_global_percpu_data *skel;
+> +	struct bpf_program *prog;
+> +	int idx, err;
+> +	__u32 cnt;
+> +
+> +	skel =3D test_global_percpu_data__open();
+> +	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
+> +		return;
+> +
+> +	prog =3D skel->progs.verifier_percpu_read;
+> +	idx =3D find_ld_imm64(bpf_program__insns(prog), bpf_program__insn_cnt(p=
+rog), ld_imm64_raw);
+> +	if (!ASSERT_GE(idx, 0, "find_ld_imm64 raw"))
+> +		goto out;
+> +
+> +	err =3D test_global_percpu_data__load(skel);
+> +	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
+> +		goto out;
+> +
+> +	err =3D get_xlated_program(bpf_program__fd(prog), &insns, &cnt);
+> +	if (!ASSERT_OK(err, "get_xlated_program"))
+> +		goto out;
+> +
+> +	idx =3D find_ld_imm64(insns, cnt, ld_imm64_xlated);
+> +	if (!ASSERT_GE(idx, 0, "find_ld_imm64 xlated"))
+> +		goto out;
+> +
+> +	if (!ASSERT_GT(cnt, idx + 2, "xlated insn count"))
+> +		goto out;
+> +
+> +	ASSERT_EQ(ld_imm64_xlated[0].code, ld_imm64_raw[0].code, "ld_imm64 opco=
+de");
+> +	ASSERT_TRUE(ld_imm64_xlated[0].dst_reg =3D=3D ld_imm64_raw[0].dst_reg, =
+"ld_imm64 dst_reg");
+> +	/*
+> +	 * The xlated instruction has the map ID in imm and the offset
+> +	 * in the next instruction's imm. The raw instruction just has
+> +	 * the offset in its imm.
+> +	 */
+> +	ASSERT_EQ(ld_imm64_xlated[1].imm, ld_imm64_to_u64(ld_imm64_raw), "ld_im=
+m64 off");
+> +
+> +	mov64_percpu_reg =3D BPF_MOV64_PERCPU_REG(ld_imm64_raw[0].dst_reg, ld_i=
+mm64_raw[0].dst_reg);
+> +	ASSERT_MEMEQ(&insns[idx + 2], &mov64_percpu_reg, insn_sz, "mov64_percpu=
+_reg");
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+If the point of the test was to check that percpu_array_map_direct_value_me=
+ta()
+computes 'off' correctly then it failed to achieve that goal.
+It checks that map ID is correct which is a pointless test.
+Either make it a real test or drop this patch.
 
-On Fri, 12 Jun 2026 21:05:03 +0800 you wrote:
-> Add test_action_set exercising OVS_ACTION_ATTR_SET with an ipv4 dst
-> rewrite. The test verifies the SET action in three steps: first
-> confirm normal forwarding, then apply set(ipv4(dst=10.0.0.99)) to
-> rewrite the destination to an address nobody owns and verify ping
-> fails, then restore normal forwarding and verify connectivity
-> recovers.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next] selftests/net/openvswitch: add SET action test
-    https://git.kernel.org/netdev/net-next/c/3b165c2a29cf
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
