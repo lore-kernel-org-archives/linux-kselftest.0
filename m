@@ -1,67 +1,67 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77BD3D9661
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 17:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A7740B6DE
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 17:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781543945; cv=none; b=Ox4mpCp6XL9DztP0IC3Dm4KE7zIBo67dd4WjfGGdy2tI4nAs8QxWrn53VHu3YVantUBYBai6WMOi7+MkmM3ez6e+Z8YtEsq6Z20kAduJWrS+6VJAiwHjXsLSPVW8Diii+NJy2Tga8QaqyLgvvy9A9pa1fiq+DVXlF9B5yl6okMI=
+	t=1781543982; cv=none; b=SX6P1jymVXaZc/o0L5Qi8Pw0Vy45E1ou+g03x3GBx6R4oxhZ1xHR6cPGPHV73zoJjH6zR+asMw1AopTPz9Y6qd86dKMcMERiFRSJ9bRSbzG1eO48dB2urajpWYMvLOICQoIv+bJ4c7Jr8vL1WnOIaX/WohZ+CyO/0k7chjgENH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781543945; c=relaxed/simple;
-	bh=4Hgp1eZaIIZlXcpvtWbU1jde9U+H0EE4XG+fFfe/s4c=;
+	s=arc-20240116; t=1781543982; c=relaxed/simple;
+	bh=pc+4G2GsAw6cjwEmMrzoIc5kPC5M4vvHq6buvisX8qI=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=D+Xhwjlq7o5Af1VGKxnXC12JiyS8CmEsG0a2THk69t+stIsTkgmHJ2+ZzChDZWoX8K/bb8gPAxdZzsj6NwdvqDSy9KKGUCYe18KsB0TGc44k2IB1yhIYQO+W6ZzWQSXVjTyx92zPCXQG6ZcHRhKqbf+hZCJZbRHh2h5jY20jWDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YDc7Eo95; arc=none smtp.client-ip=74.125.82.173
+	 Content-Type:MIME-Version; b=CTZenBzXdJupTZGmOPwU9HexrvefMUNYhSfhfHGy0ckuyCjTXIZVUfJ4q7rW8H/DO0NQhj/+SGUOk9O0iA3cCqasw15Qsf16jU7xW+VHZshH95b5Cpr07IcsmXCe1+fN+b0qXUn0NkpQLKB6mm3pqNwHhdyPQZ6gKxocYUdUQ+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YE/aFE9Y; arc=none smtp.client-ip=74.125.82.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YDc7Eo95"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-30807ba471bso10234521eec.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 10:19:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YE/aFE9Y"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-30b6dad2382so2683226eec.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 10:19:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781543944; x=1782148744; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781543981; x=1782148781; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=4Hgp1eZaIIZlXcpvtWbU1jde9U+H0EE4XG+fFfe/s4c=;
-        b=YDc7Eo95BuA3dlU1r6uzobdiuf2W9zURfIY1sFRgMQn08GN2PUN6WeJGHyyNE/MHwL
-         DpmowI0NxeBYjCwxZeMP+Kj1sQprhKfeCLjrRlTDHuldebH3bxs/3wx3Go39gxbxhtOf
-         uBjjW2FeRKmcap13WuqCvdWP+jfgopO1Wbsa0F2XyVoqo+SIZc9Hc6uudozT2AZ0d7ey
-         30DVNrVstJIRdnA521f2c1GyHXOYm3j1loKHq3VbTT9Ls99rTLp0+70vK70b4MDFjK5q
-         sPHOygKelhWlfhfc0IEBbyVsusRnMazk1L+sszNofO9V08UMbnuZKlGB6a0XRvSG/gvm
-         Pr1Q==
+        bh=pc+4G2GsAw6cjwEmMrzoIc5kPC5M4vvHq6buvisX8qI=;
+        b=YE/aFE9YM7Tcm/AOvEyWwt9hS8yQ0bb3Mc6FWS8QDhyJp5fmZcFZkZWOlnrSMAGWCx
+         PIGlIkcQuzlfsqJLU3aJ4lnROjpfK81GiPSlWWbCWPbdbP0Vw9sN86GGvmj4Vy3X3dJB
+         qz3ECpdpUoa3l9nsqhuEoOQFKWo0cXho1NEInwgGwclVSJPzJ70bIG1zKP8FKDF2uHJR
+         CtpiZeeQjXuZMT4lQJg4ZIyDG/W6oxS4CDB7p6sVaLt/MPoEqYmiEoS2K20rUVZ+Tofo
+         m/DZv0L4Yqxxr4zPe3pl7rOg9tZ67h1T8NfzvKx1gL6kUgaVlQx3Nq40GTmjSTsk1dO2
+         23LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781543944; x=1782148744;
+        d=1e100.net; s=20251104; t=1781543981; x=1782148781;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Hgp1eZaIIZlXcpvtWbU1jde9U+H0EE4XG+fFfe/s4c=;
-        b=CmB+R7g477DM9TiKQWQyWz8sS4OTRd7z+OjjB5Py9ow6X+mQT/EDpj5YcgJreMM9Xu
-         WAeJoAG0ax6M1o4J41oqyVIePOZPlvYnJ5zet4olL9D8tDBkUbNzogXliX3EP7fxru1k
-         DtpSQR69f0AshiRD7Q1oKzwaR7l7SZJgUMbW2JJZb9+wwgWHEBIISgkKfzSqEtOi3ms3
-         QQXE6geottU4qQu+FOl/+ctOuoBRb+1545cNxk7kzVc2Kxo3B2Id77fRRTtoShYVBUHp
-         or1S14fFkBSTp28QbTEN6NYl9cqhphLbabJNhUlvYEyl50uEZWPXK6lp4vuy6FonaLVd
-         2dvQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8doHzBfijW7gXFCek4nVEtI7whN+rFKfOpRqqU5MGnTq0ZHzKWQW2zdkhg7IIzFMzftZjKh9lnczPfp3wLIuc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNoW+SMpSFebX6MrcmyeDjQCanFmf3QGlbf5B8MVaq0awyruLK
-	qhRaCrP/S1+g0mOYdbVKcVsi2Z7k1HwfCqGIjXXKInpLkaRl5t2l5qAk
-X-Gm-Gg: Acq92OFsXutShgUnmXuNdYctUr/HQv3TZHXz6dPWonpDdJ4A49jrk+M1o8kMOgluc8Q
-	PamjWO92pX/uSTC6kNwBIDfnp90/nNc/qgEs/ohxnfxT7+96rLqezx7zWn+UfRuasV1xzQ1mwp3
-	lYzZ7TMzyidxPiHqc/n4s024QEahL69DWXrAlAkGe1foYkYjPHtctVaU2k8eA22Q4wWqqSNcRuw
-	Kl2SgYfgaD3KUh0zD0qvS+IZswuOnU417pUdlFXLkbYplvZY/EpOZqzHEeEZtIldbjVil8Ass/5
-	9AcRNoZlhu353rtJ+K314gRDdTowniW5OtaFvzT4ftL8wxhv+QFWxo3sHSejGOjo/IrE6WJBZFA
-	lDjKJ6/LlheaMNn5fwTxsrBuVW+VDr2JR0/bPCgWKH6eHJ/G88bRBAz/0FqEqzibYGp1/LN+N3e
-	I25rZjPiz4NWHbBvl3ujER7o08UyoiyvUk3FlSzSOHGM7yEPTzEJZ91cZzsNqD8Ow4ZnFyoKsqZ
-	UsEs90=
-X-Received: by 2002:a05:7300:fe07:b0:2ef:9961:27fa with SMTP id 5a478bee46e88-30ba5f669c6mr65053eec.18.1781543943688;
-        Mon, 15 Jun 2026 10:19:03 -0700 (PDT)
+        bh=pc+4G2GsAw6cjwEmMrzoIc5kPC5M4vvHq6buvisX8qI=;
+        b=CdKwsbzFND+j0B7PV7l5GaEn0DnEea6d8X9Yhrys2RP37FuemFosOybO+7KvlpYvVH
+         kHMTzJPumot4fD9Z/suks98/qVrZfEewPirBdkEviKYQ97/SdJXKs/LiIdUL5HDAZLk/
+         KIPUygoTy57X1mcZ6CQQFqGEtJbKYzsd1n5AP4vttqz4DcPTDVfAu0PjgiynnjHxel3U
+         ycnAJTTF4RQ1lvo1KYVDgMQRRkJ8CgwuHHnAGqzHrv35IgTkdIjdKv9i7Y6qWBbGYxiA
+         DiFxNkq8eMkVg+Z//uAKnD7bek1AdVbxyjhUGRZlOxtE5HL47ocORrot5DB37RArri1x
+         8+tQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9sUR3j9tjlNbOFYl0L1lsKbomRotCJE6DH5t/6eAckWWL/wbM2wJU/NBDjjPGCPwHoYCk6O7ezPSmGSeLhryo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9PhOWoFZEWPQGVaUJGVX+lJU/iak6XfaLXtsW2CSS3a7hfOjA
+	UK3qxY7uW6/Fck09aDLc0uSakF9iMs8iv/b2EDpLQs1zcnuY5QIIBUsy
+X-Gm-Gg: Acq92OGN2O7HwnNOKueBzG/z1ewE1J4AI4CbGRxKur22Ea0bhhSbCH1hjSTcomaD01e
+	Y3FwxTxGKdvzraNvmOA994u4yeDz+MUagHzsxv5DS2t74PB3GrRKNrOXJq6rF3Z6vJRL3Wuz7fp
+	YT/49rvziFnSeXY7QUPdn9NSQCyP8Tzdh5NTJYrP75SJfH0zVN0eERA2Y850pciCcRs5lo9fcHJ
+	hwL0IeCQPg9Zc7CPo3PWliBW7rN8RZHAXI52mzVbfIaiGy4w7acb851v1y82Om2E/3YhX3HIn5G
+	JdKDGjfIXaFhR9vyab+OfMkm4yRFPyen1TnHhvZPCfgJk3EJXJR3EJGoWvHkKI30yuGy6goiy7j
+	cB+DNMTeVpsIQm3cCyXOHcmArVyQik1hYKqsnS9VH0C6kJAl3VkwHP+Z8c1/gWycdrcOXLD3Zj5
+	1QPzDXvveHH8FxPnceYxqD7wjDnvI1tz17h2F/uppHMt4OZMkwgClWXe5x0LU5pBQGRRAQ0hk99
+	srt6/DmfJeZPN1bnA==
+X-Received: by 2002:a05:7300:3212:b0:2ea:b85c:153d with SMTP id 5a478bee46e88-308200b5d75mr8177066eec.27.1781543980562;
+        Mon, 15 Jun 2026 10:19:40 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:755:4880:8bc0:de02? ([2620:10d:c090:500::3:317a])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081e4898c0sm16010175eec.3.2026.06.15.10.19.01
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081e4898c0sm16011974eec.3.2026.06.15.10.19.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 10:19:02 -0700 (PDT)
-Message-ID: <56e68303368c8057227e6f35f839bf6426db9ede.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Preserve pointer spill metadata
- during half-slot cleanup
+        Mon, 15 Jun 2026 10:19:40 -0700 (PDT)
+Message-ID: <703aeb9e7f93fa35f992fde04f6999974475312e.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover half-slot cleanup of
+ pointer spills
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, Alexei Starovoitov
  <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
@@ -71,11 +71,11 @@ To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, Alexei Starovoitov
  Tsalapatis <emil@etsalapatis.com>, Shuah Khan	 <shuah@kernel.org>
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org
-Date: Mon, 15 Jun 2026 10:19:00 -0700
-In-Reply-To: <20260615-f01-06-half-slot-pointer-spill-v1-1-47f1c18a8965@mails.tsinghua.edu.cn>
+Date: Mon, 15 Jun 2026 10:19:38 -0700
+In-Reply-To: <20260615-f01-06-half-slot-pointer-spill-v1-2-47f1c18a8965@mails.tsinghua.edu.cn>
 References: 
 	<20260615-f01-06-half-slot-pointer-spill-v1-0-47f1c18a8965@mails.tsinghua.edu.cn>
-	 <20260615-f01-06-half-slot-pointer-spill-v1-1-47f1c18a8965@mails.tsinghua.edu.cn>
+	 <20260615-f01-06-half-slot-pointer-spill-v1-2-47f1c18a8965@mails.tsinghua.edu.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
@@ -87,25 +87,13 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Mon, 2026-06-15 at 16:09 +0800, Nuoqi Gui wrote:
-> __clean_func_state() cleans dead stack slots in 4-byte halves. When the
-> high half of a STACK_SPILL slot is dead and the low half remains live,
-> cleanup converts the live low half to STACK_MISC or STACK_ZERO and clears
-> the saved spilled_ptr metadata.
+> Add a verifier regression test for a pointer spill whose high half is
+> cleaned dead while the low half remains live. Force checkpoint creation
+> with BPF_F_TEST_STATE_FREQ and assert the verifier log reaches the
+> checkpoint and the subsequent 32-bit fill before rejecting the partial fi=
+ll
+> from a non-scalar spill.
 >=20
-> That conversion is safe only for scalar spills. For a pointer spill, this
-> metadata clear lets a later 32-bit fill from the still-live half avoid th=
-e
-> normal non-scalar register-fill check and be treated as an ordinary scala=
-r
-> stack read.
->=20
-> Leave non-scalar spill slots intact in this half-live shape. This is
-> conservative for pruning and preserves the existing
-> check_stack_read_fixed_off() rejection path for partial fills from pointe=
-r
-> spills.
->=20
-> Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
 > Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 > ---
 
