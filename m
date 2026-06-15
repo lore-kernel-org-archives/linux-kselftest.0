@@ -1,61 +1,63 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02533305698
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 07:39:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57782F8EB1
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 07:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781509165; cv=none; b=PCTmc4dWt9f2mg2TsciOYVyrZkP+pQ6KKucflqUcR3s32JsKSqLxpwxYlqmLiVSe1QOmgIPuK9wX3teZ5veN8DW0U0D29/Fp0VeJgqQIuZnB6v5fU/ajVWAGlpA4wyXa1O69OIA7SpdDvINfbOa7Y1VbK0iMW+xAw70B09h1LXA=
+	t=1781509172; cv=none; b=G6CWXczHc4q80TCU9e5SPZ7qxCk31GBoTs6A75YgMWtY/dSMZCccuUPfYkHKvaQJCfCPIzMmYH5VXvGKHW2FJfv7sTXvoxkISAYF3OtvG9Nn3TsCjyApIU9P34YNKutp17PcPSJ1PJJXi8KfmMgrjDT+3ZScpkLj1UPujpCzSFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781509165; c=relaxed/simple;
-	bh=XsOF+ksD2Ssq1KVAnWleC9rUm1HJ7I7wyrO6hTFxv5U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QIwwtAupYonG9d75CqBwV71Qh1+L6xO32uu6I9UyLEa4Blpo5ef8k8cy5RR6U7ktraU47u/nEVHVSJO366s7GZIxH0ELbHrR8xOgmfxpT8U1jrUaexfOpWUBftksFKj02g0NS2j67WA/Szjku6z7jmnhG5T6tMpWyGGVUg6Kgk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ou9FZkhX; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1781509172; c=relaxed/simple;
+	bh=GhXEyKkP29VXLeRmonNXmZuNyFF8Y5CTi4bvaeAk+uc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fo893hFyFcCrt9KyexBrJRqk8SQiFgSnX1TeU2PrbGTH1siUryORFVbAhNBcqiPrJrGCFfmGMJynoCTm3WY6Pg6jF7zBqBMoTDc5hUnUGLj7eD62ripemtLdUqD6gfgmqObVCIwiJBWxIiMtelHm5kwPMqv9fcnyPc2DJ6jQxFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rr4/Y4Qt; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ou9FZkhX"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2c0c1e0d00bso27082055ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 00:39:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rr4/Y4Qt"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2bf2e8ccca1so18642845ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 00:39:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781509163; x=1782113963; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ErjRsxDLnQwk8o4LMq0j/er9sDOr3c+Mh91+omcleio=;
-        b=ou9FZkhXdwrQMtKlDdLl9weyextM3HShTTbiHKCXsuft3hhnu4GBhe5alVx812AhvQ
-         0q/pjNMqys+8jc64h2ltQCKGjq4iiVaHm1g1Xeoxmv6ur9B4MHwFfvIuatx9GJFeVc9j
-         pak9EAcsb1PLNLefxHUFrrh7yMPfb8O4+uaXUBenvkC7HMfdwjlZeWwJDZJE6D84jlZ7
-         kPfN6wvos9OkfDIAAALboecmEIQ79DanrYmCTgRstIvVR+ownQ9m5bvbrfisQLoSsVLl
-         zHSmkiRj4g/avnnDTAnE35B08VdtibFSnVFqaMB58eAiRbjnYygH0zDlf51GiDWxAnW2
-         lLtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781509163; x=1782113963;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781509171; x=1782113971; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ErjRsxDLnQwk8o4LMq0j/er9sDOr3c+Mh91+omcleio=;
-        b=Y5mEjn9z2ZwF2Z8VxjhnyPegQCWR8K3lv5CT7pf9gbRY5SejezG/T4x5lgu0cvzzng
-         iiGwHkA8JWKb3xO3609i/bWzDIjZEkIosKMA2nkrDolsYYh5pNUk9w62UEZcleeT7pho
-         dFlC0I60x3khiFywHA0nrfnJddSn7/Lk/OuEmzRNxstiIh1bBRU5EI10Wqo7jVFZLGng
-         DYkmOAMx7Pr8jr3qNBJPc2CRIbrZI8THazhLo8FbDHq+yzqcYWtNOtq+PWF2Ut4k/41S
-         KbaD4fO7dHxWZ92hw2zHI7k8I7ftfYQE1raYLBHh+NNFZDqTVNyY6rEersjSSyCyoHme
-         ED+A==
-X-Forwarded-Encrypted: i=1; AFNElJ8IbzI2x14OrTIP/zuf1ICrnBJGt8vQ/g+2LQ3aHKFZ329s/y0jwDM2iQAcFDJ265ET+A+Kz50XNKmhqtRD5mc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy++XysayYYdY206w3HKvq8z9vpNHh6RXNSUk3gyq+QJn7G4IDH
-	1cqVVcb+1MGfb84/wYyNb+3SrjL+L2I/E1W5waDOMvzgD583KWJO7wVm
-X-Gm-Gg: Acq92OFpPDsfGiXzDzCXeF46B2BhivxTlq102bcgd4zDtr3tpn7vA9YSQVeJx0tzRhS
-	PrAKVNclVQrsMTt3vzJzQ1FYcvWCv+DEqd9ivopvOiMygdMBGmargAOcA5L709ab7ywpSbtmAiW
-	2dhZDOmjOhq4q2F4Z38/e9I9TPb++aJIILihErnKOWMp6xv9xRVD7TBzFj4grWZlqut5bbF51G5
-	BYT7s9yqm6wF4IHpzhX0Z2q4W6lakTgcBwffI7vir4zxuzYKkxvJW1SWR6jTXYmPFnCR9HK9Gzt
-	NPmMyxnEOyxAESzSkaqPG2w9rZkIuBqknzQhjqtag/AnmvVsnhksyZNLlEznKcTMlypxNtbSXjU
-	qHB3B8QPyB9ytX7xaFB8zosXR/Ekqleuopjr5ksokfW6wftfdSLT5mFxlvN7k1PGwpSUCqbk5TC
-	sr/uy0c9OM3J/wnmGK9NlpTyvpY5N+EI9JXs+b5u9utFpBIj64X2LnygRH11vEB/4=
-X-Received: by 2002:a17:902:c401:b0:2c2:27be:39aa with SMTP id d9443c01a7336-2c411d7b1efmr139013815ad.17.1781509163251;
-        Mon, 15 Jun 2026 00:39:23 -0700 (PDT)
+        bh=CLEgrGhLLiPgaGmE3Is2kQZUG4Kfq7t6C+1yr+NyMNM=;
+        b=rr4/Y4QtNFmxPXRI+sAgboLescjFzj4MrCOekGhnAvbvmaas6yt5MoE5+a0rhxYyAT
+         nzAmqJcRzaFXzLvkcdjYRJc+pGJRnwz2zSmorFZilPdlSensyNzkn4zhYvph2nP7JRjo
+         dgv5+63AH2BYBShK+iyx7whSnunCjUDX0UcaH2QNgy01X7L8PPfocovBAlimw2jLkFkW
+         BscXnZadeg+GxdDEjHd4Y+Y/p2dGmdn0IQiXcvp0w+Q5wVJeDRb0JyawZzt2OSrNLVB3
+         Dp7in6an2SI9lw7gAA4KF2p/hVzBDnWd1bvhBb+cCvNNvojPg+FEoEmTPSPIB9wZYrGl
+         zquw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781509171; x=1782113971;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=CLEgrGhLLiPgaGmE3Is2kQZUG4Kfq7t6C+1yr+NyMNM=;
+        b=DrCJagtRUa0/1eg5HHtrkLveiwqD/0Xb/CylHB/c/ue5Bl7Di8kqqQ+CpOE7lWuWJM
+         m7cGSC92bPPFATn6IykzY4K4ZPUrYxifImipDpoQbbnc2ckslEwiCFLA+9Vx7hBFiaSr
+         mF7hGo7JdBunomfso6G0x9MCCI9icFU/QQox0kBnu2W9+T482UbKfGiQvUzKEcaJ5fv6
+         nbyaMrl8PnCvPkgtgSjSjp79Z3T8z7Frl/6HX/BiIc7mMy1q/QtvrDfDzbRMayJxlrJG
+         8WT1gnAmN6gy1T5q+OH/ryh2NHCyD8/S5Go1fOyZ8jOkPqPB4V7wa0mP0XTJKy3vxCz4
+         v5Fg==
+X-Forwarded-Encrypted: i=1; AFNElJ/ueH4tR3Ncgo06SP9krCnFN/g/Ovz5QtfcpyCMY1LCdcKizj2dGnJVO6u4Lw/P2ceJfSJyYq2O4JWxq1JW7yg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlXxkNaIuGZ0UIl8OnZg8I1OPWtJMYxEiY0RPJrFxSCbcjwl5M
+	G3nvqCBsguehSk3UwhXHp9AIG0mpCuzbCvFJ4tlXxvUuWvjRVtz6mIsF
+X-Gm-Gg: Acq92OGv0nRCCzLkLKHv40UDNN4MR4M38EOAwKLVchHzTxmMJlUQWVJaim4b3GOygNs
+	87Q6RlittDrA9JOQec1j3DMjbO5RLGORXEc47BjbTaI+VtZeWutlHHoihOE1aDSy+Y5ScXcebdk
+	JO887rV8pKJDL5Gm43VKVJ++AkwmSQYFlWSbTOlXeVwKZGzKm/xprNMPwPe9Qj8wg5uPnmQTpFD
+	sBSGF48UjE74BEviomlSKnxt5+z9n1IoTtllsbRRzGjxMZsnDGXZ9G8hGEcMvRjK8FiyyDCcS9Y
+	BRh1yRrC3nwabWKsC1/NtMj4ZYPkZbenX5x3cjt33UDsB82G4HsTegEPiLAL2XLZU2f6zUxDpTu
+	NVJ3feNCyYBASyGMIDUxTZembHnlgXcWIqNKnkXqdNxWayNxWuF58sPuaQI/9amgnZnXl565CXI
+	5Fnu9pOtDynXhJ7xTeUvZR67laXxjUdIjsRXLNGz/w8xhDCQIZsUXFBgZtEWzRJwQ=
+X-Received: by 2002:a17:903:1acc:b0:2b0:b016:773f with SMTP id d9443c01a7336-2c410414f4emr136000405ad.11.1781509171045;
+        Mon, 15 Jun 2026 00:39:31 -0700 (PDT)
 Received: from localhost.localdomain ([2a12:a304:100::209f])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c43307a259sm91271345ad.68.2026.06.15.00.39.16
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c43307a259sm91271345ad.68.2026.06.15.00.39.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 00:39:22 -0700 (PDT)
+        Mon, 15 Jun 2026 00:39:30 -0700 (PDT)
 From: Sun Jian <sun.jian.kdev@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -73,10 +75,12 @@ Cc: netdev@vger.kernel.org,
 	shuah@kernel.org,
 	paul.chaignon@gmail.com,
 	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf 0/2] Fix partial copy of non-linear skb test_run output
-Date: Mon, 15 Jun 2026 15:38:54 +0800
-Message-ID: <20260615073856.152479-1-sun.jian.kdev@gmail.com>
+Subject: [PATCH bpf 1/2] bpf: Fix partial copy of non-linear skb test_run output
+Date: Mon, 15 Jun 2026 15:38:55 +0800
+Message-ID: <20260615073856.152479-2-sun.jian.kdev@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260615073856.152479-1-sun.jian.kdev@gmail.com>
+References: <20260615073856.152479-1-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,39 +89,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series fixes BPF_PROG_TEST_RUN copy-out handling for non-linear skbs
-when userspace provides a short data_out buffer.
+For non-linear skbs, bpf_test_finish() derives the linear head copy
+length from copy_size - frag_size. This only matches the skb head length
+when copy_size is the full packet size.
 
-Patch 1 fixes bpf_test_finish() to compute the skb linear head copy length
-from the skb layout instead of deriving it from the clamped copy size.
+When userspace provides a short data_out buffer, copy_size is clamped to
+that buffer size. If copy_size is smaller than frag_size, the computed
+length becomes negative and bpf_test_finish() returns -ENOSPC before
+copying the packet prefix or updating data_size_out.
 
-Patch 2 adds a selftest covering a non-linear skb with a short data_out
-buffer. The test checks that test_run returns -ENOSPC, reports the full
-packet length through data_size_out, and copies the packet prefix into
-data_out.
+Compute the linear head length from the skb layout instead, and clamp the
+head copy length to copy_size. This preserves the expected partial-copy
+semantics: return -ENOSPC, copy the packet prefix that fits in data_out,
+and report the full packet length through data_size_out.
 
-Tested with:
+Fixes: 838baa351cee ("bpf: Craft non-linear skbs in BPF_PROG_TEST_RUN")
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+---
+ net/bpf/test_run.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-./test_progs -t skb_load_bytes
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-./test_progs -t skb_load_bytes -v
-test_nonlinear_data_out_partial:PASS:nonlinear_partial_err
-test_nonlinear_data_out_partial:PASS:nonlinear_partial_data_size_out
-test_nonlinear_data_out_partial:PASS:nonlinear_partial_data_out
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-./test_progs -t skb
-Summary: 14/92 PASSED, 0 SKIPPED, 0 FAILED
-
-Sun Jian (2):
-  bpf: Fix partial copy of non-linear skb test_run output
-  selftests/bpf: Cover partial copy of non-linear skb test_run output
-
- net/bpf/test_run.c                            | 11 +++---
- .../selftests/bpf/prog_tests/skb_load_bytes.c | 35 +++++++++++++++++++
- 2 files changed, 39 insertions(+), 7 deletions(-)
-
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 2bc04feadfab..976e8fa31bc9 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -453,19 +453,16 @@ static int bpf_test_finish(const union bpf_attr *kattr,
+ 	}
+ 
+ 	if (data_out) {
+-		int len = sinfo ? copy_size - frag_size : copy_size;
+-
+-		if (len < 0) {
+-			err = -ENOSPC;
+-			goto out;
+-		}
++		u32 head_len = size - frag_size;
++		u32 len = min(copy_size, head_len);
+ 
+ 		if (copy_to_user(data_out, data, len))
+ 			goto out;
+ 
+ 		if (sinfo) {
+-			int i, offset = len;
++			u32 offset = len;
+ 			u32 data_len;
++			int i;
+ 
+ 			for (i = 0; i < sinfo->nr_frags; i++) {
+ 				skb_frag_t *frag = &sinfo->frags[i];
 -- 
 2.43.0
 
