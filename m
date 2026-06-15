@@ -1,94 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72AFC3BFAD3;
-	Mon, 15 Jun 2026 08:48:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CCCC336EF8;
+	Mon, 15 Jun 2026 08:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781513335; cv=none; b=JVWwvzxQA0Qsnbc5jXGdUg16al2PMw3kxh5B01jVgos/d1IkReneS3/pv8sE16MdyYzPoBgRiA6bKuFZQUXWOEXYU+3i+R7FxqWPpuMPRLUdvsWkY4ghzOKqvW3VTzh7Rsd6Kbi4tAQrd/oEUrpzqfURJV+zZf0g8ZwoRICwDP0=
+	t=1781513853; cv=none; b=qQT0BGo0ZyFsKjoiRlN1qHgwziqYzor0iXOQTRxjaP2t61NMH3ThdauUlQ1GfgmUcVUgFXbej01JHN/FaHfIs5PMTGOUSe2BBpx1ydi32Dq+Pdem/MTpNfR5MueLMmobOc8SmksY/IUoqO5icAO+Z5cAhMgfb3bKeYNIfhJ72iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781513335; c=relaxed/simple;
-	bh=/j3NBrlTLaudkDSka2M6EE293V8ehR6UrpETXseRjuE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=W3PJbqkxViwqwXtbnJv0XotZzhuivyC2D3aZH0SGCHcGBzAQi1HE17u4+hyW6Q2bCh9zDnlpQGbAqCUf2lskzzj3DEeXLvrgJ7StLe3a0BAZpasatc4kdgl6k+gMF+WbtXb3N2KiO38AFPGqSHiUFZJf9XtFsFpt9SwoAt/N/LM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJhripag; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781513853; c=relaxed/simple;
+	bh=y1e+Nvux4Y05P+8yrZaQFsU1IEgZjmCpx9N8Tq6Mj8A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NUt88OpZuhUaAz5IjvPXZTjZ/eQBx/aBLJ3IzRNmb0GDA+SBFJ8sFJZCE+njWt1xQCrNSaHjjOSRXAJtg2T/EBopLI90W7xFcWC3TbfDCGFelDxQRLkji75wNEU90bdsxDwYTyjO3orJVWC4CDiz5DuSqXxpz/KhN9eTW/P8ffc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=H1SH1SzE; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJhripag"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A3521F00A3A;
-	Mon, 15 Jun 2026 08:48:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781513329;
-	bh=aKn5TMpsqQkbVXFHdW1ResVJ/Nc5/kBI3zl/0q/Cats=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=DJhripag3BhQHwhamRVbVYmW1D2agvg3BNkocUj80oXa3b9OsOAjhNNm9WsmWKF7W
-	 biTYVf3joD+3GR2QV5Uq+SeSDMA58B72ktdPgHnW1OVPPswRBln+rXHqq1rXHqN+BX
-	 7p9dooKtGilKboynbHVWVd2aZKQhJ5t01c/2CicjR3r4PpkrlmOegpQtroexeHtMWp
-	 99GJI7q0RPks17VzSH63w8ncAwKvaNfTJ6t9QPPZx605mjCcYB2j2ANNvsHaJ30ODO
-	 ZUJkIC0OjV2jfaB4kkdHGX9yCPa6OfQTEhi/iYHoD/bNqCr1dvKGFfFs8gIJnrO3O2
-	 1NGPwdQhIZEjQ==
-Content-Type: multipart/mixed; boundary="===============5023186984400448720=="
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="H1SH1SzE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
+	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	To:Cc; bh=gqdmvKRuruDvU1EYN3ZtEkzXReYCIkxcbVe7iApoUqY=; b=H1SH1S
+	zEGgENxw49wUEzC+3pkTqGPPJ10CCSYOsRFpS9kvSeW078IScRhYy5SRIKbTJlOW
+	J9Wr9CHqJuNM8Nf4Lt/gBWJ8fG1jVUSq3Ix2KA4BAVZTqs6TRNif6R2Zm8aShJeJ
+	DYYDyeOiACsQ4z2O/R9OEEqrOjaKtjvq2nnTc=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web5 (Coremail) with SMTP id zAQGZQA37r1vvi9qPuFwAg--.22668S2;
+	Mon, 15 Jun 2026 16:57:21 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Subject: [PATCH bpf 0/2] bpf: Preserve rdonly_cast dynptr slice lifetime
+Date: Mon, 15 Jun 2026 16:57:16 +0800
+Message-Id: <20260615-f01-09-rdonly-cast-dynptr-lifetime-v1-0-2dd0a369e153@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ba187060a5a8232b69cbd080223bd36f806556fc877c07f470b938870b9e4a05@mail.kernel.org>
-In-Reply-To: <20260615-f01-06-half-slot-pointer-spill-v1-1-47f1c18a8965@mails.tsinghua.edu.cn>
-References: <20260615-f01-06-half-slot-pointer-spill-v1-1-47f1c18a8965@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Preserve pointer spill metadata during half-slot cleanup
-From: bot+bpf-ci@kernel.org
-To: gnq25@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,gnq25@mails.tsinghua.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 15 Jun 2026 08:48:49 +0000 (UTC)
-
---===============5023186984400448720==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGy+L2oC/yWNQQ6CMBAAv0L27CZdFIJ+xXgo7VbXYGm21UgIf
+ 7fqceYws0JmFc5walZQfkmWOVagXQPuZuOVUXxlaE3bm546DIbQHFH9HKcFnc0F/RJTUZwkcJE
+ Ho2eiA3eWhv0ANZSUg7x/kzOMKcDlL/NzvLMr3zxs2wdGasKqiwAAAA==
+X-Change-ID: 20260615-f01-09-rdonly-cast-dynptr-lifetime-de114e5a1838
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781513842; l=2792;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=y1e+Nvux4Y05P+8yrZaQFsU1IEgZjmCpx9N8Tq6Mj8A=;
+ b=hZu9XfOpTd0nz6dCOsTPDRwQXBcgI177LLwZ6tO3k49cr6/xRhyUXwkK3ZL5BaTbzq3haFPCI
+ RHaV/ViZyPeA9kriUL6dd0Qyj+uhuIJlaZUc+G+PmpvtnBUtfz2029l
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:zAQGZQA37r1vvi9qPuFwAg--.22668S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw1rJr1DAw13tw13uryUJrb_yoW5Wr17pa
+	1FgFWYg34kJ3W7Ca9xAa12gFyF9rs5WF13Gr9rtryUZFn8WryFvrWUKa4jqF9Iya4kCr4F
+	qw4qgas8CFWxZFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
+	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
+	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
+	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xS
+	Y4AK67AK6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
+	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+	AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
+	1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfUxv38DUUUU
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQYTA2ovr0If+QAAsZ
 
->     bpf: Preserve pointer spill metadata during half-slot cleanup
->
->     __clean_func_state() cleans dead stack slots in 4-byte halves. When the
->     high half of a STACK_SPILL slot is dead and the low half remains live,
->     cleanup converts the live low half to STACK_MISC or STACK_ZERO and clears
->     the saved spilled_ptr metadata.
->
->     That conversion is safe only for scalar spills. For a pointer spill, this
->     metadata clear lets a later 32-bit fill from the still-live half avoid the
->     normal non-scalar register-fill check and be treated as an ordinary scalar
->     stack read.
->
->     Leave non-scalar spill slots intact in this half-live shape. This is
->     conservative for pruning and preserves the existing
->     check_stack_read_fixed_off() rejection path for partial fills from pointer
->     spills.
->
->     Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
->     Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+bpf_rdonly_cast() is an identity operation at runtime, but the verifier
+currently assigns the result fresh return-state metadata. When the source
+pointer comes from bpf_dynptr_slice(), that drops the relationship needed
+to invalidate the alias when the dynptr is released.
 
-Is the Fixes: tag pointing at the right commit?
+Preserve the dynptr-slice lifetime metadata across bpf_rdonly_cast(), and
+add verifier selftests covering cases where a dynptr slice is cast and then
+read after the dynptr is released or after the originating dynptr stack slot is
+overwritten while a clone still holds the reference. Also cover the valid clone
+case where the cast alias is derived from the clone and remains usable after
+the original dynptr is overwritten.
 
-The commit referenced, 2cb27158adb3 ("bpf: poison dead stack slots"), adds
-STACK_POISON handling in kernel/bpf/verifier.c and does not contain the
-half-slot cleanup logic being corrected here.
+This fixes regressions introduced by 66e3a13e7c2c ("bpf: Add
+bpf_dynptr_slice and bpf_dynptr_slice_rdwr") and a35b9af4ec2c ("bpf: Add a
+kfunc for generic type cast").
 
-The 4-byte half-slot cleanup in __clean_func_state() that downgrades a
-still-live STACK_SPILL low half to STACK_MISC/STACK_ZERO and clears the
-saved spilled_ptr metadata without checking for SCALAR_VALUE was introduced
-by be23266b4a08 ("bpf: 4-byte precise clean_verifier_state"). That commit
-added the lo_live/hi_live model and the exact block this patch corrects:
+Impact is bounded to verifier lifetime tracking for CAP-required BPF
+programs. The evidence confirms stale read acceptance after dynptr release,
+including a typed field-read shape, but does not demonstrate unprivileged
+reachability, cross-context disclosure, controlled reuse, arbitrary kernel
+read, write-capable aliasing, privilege escalation, crash, or KASAN/UAF
+signal. No CVE, embargo, or security escalation is claimed.
 
-	if (lo_live && stype == STACK_SPILL) {
+Validation:
+- The new dynptr_fail.c subtests exercise the verifier's dynptr-slice
+  lifetime invariant across bpf_rdonly_cast(): a cast alias of a
+  bpf_dynptr_slice() result must be invalidated when the dynptr is released or
+  its stack slot overwritten, while a cast alias derived from a surviving clone
+  must stay usable.
+- Unpatched bpf at 76f62d237538: test_progs -t dynptr FAILs as expected,
+  because the four __failure subtests
+  (dynptr_rdonly_cast_{,typed_}slice_after_{release,overwrite}) are wrongly
+  accepted - the stale read survives dynptr release.
+- Patched with this series: test_progs -t dynptr PASSes, because those four
+  casts are now rejected with "invalid mem access 'scalar'" and the two
+  __success clone subtests remain accepted (all six dynptr_rdonly_cast_*
+  subtests OK, rc 0).
 
-be23266b4a08 predates both 2cb27158adb3 and this fix. Should the tag be:
-
-  Fixes: be23266b4a08 ("bpf: 4-byte precise clean_verifier_state")
-
-
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Nuoqi Gui (2):
+      bpf: Preserve dynptr slice lifetime across rdonly_cast
+      selftests/bpf: Cover rdonly_cast dynptr slice lifetime
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27533304560
---===============5023186984400448720==--
+ include/linux/bpf_verifier.h                    |   5 +
+ kernel/bpf/verifier.c                           |  36 ++++--
+ tools/testing/selftests/bpf/progs/dynptr_fail.c | 160 ++++++++++++++++++++++++
+ 3 files changed, 193 insertions(+), 8 deletions(-)
+---
+base-commit: 76f62d237538b456354a44e796a541cde03c6e28
+change-id: 20260615-f01-09-rdonly-cast-dynptr-lifetime-de114e5a1838
+
+Best regards,
+--  
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+
