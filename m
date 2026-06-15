@@ -1,335 +1,196 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745C223AE9B;
-	Mon, 15 Jun 2026 01:15:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6BB718DB26;
+	Mon, 15 Jun 2026 01:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781486109; cv=none; b=SN4yZ/dsYq9NvwaQlM+lsGYbFeag0t0ekQvE1Wc52jwoSouHNRrE0jVD6foYS1HBf239N3y72CIHFif9uHgNMh3dOBywRUM5ctnylYUXMk4xpXEf7XVSAqlkBDRq+jT7VqChtDteVHKKPX+I5fwRvqEdzXCQiOFpcQpifGLeT1s=
+	t=1781486433; cv=none; b=l1enXqk5jR86Aelbhz0pJAtoId8LgJ171KPnT/6S6NbodHB4OEkqDlRDCebv+fqetwq81pvKVKbIDag3gFDrSs6EyyYCrOAFOTBsBjECqV9dhlE8WAR3YQj9RZi69fkOoa2krbeM+kKBuLZ+1M5IwYnEldzntAanJQLCH5JEQHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781486109; c=relaxed/simple;
-	bh=2gbGpeTnQ3xwfgUizZJhvwxIMVWMU2qo2kmnGeqg79M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B1Niz9SS90Db62GhPpDDVHNWwTku+EF3ZonoaQLfXMMUlrEmMH0J69L7MDPTfdwIpRGLOqvXxjcj+AwaC5xIuaksuTTnuzo1i35dk2wXbKvvZfW3upR38i4yKB3uz9fX3YT8CdD84GpI7g/YJ/YPoW0iiDYnhBRzUptm2KDPk8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Na2GGHdv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781486433; c=relaxed/simple;
+	bh=EvaH+h58GYm4IQiMvlgenwEoK1ZGDPeyN3jeqXhLUw8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NCTwy2S/iR0lc3CkgzyfO1k/I9JSLFtBIE0f1ar7/K9Ff8Jo/cyUygoYYhJ7j8VX7yQlmu/PUo6JrhO0YnWlQKsWH8Zq4uT7BvzhAfMSFNFZTfQizGbmj/E7M8oIvqyeZeYCYdESxf8g8p5QwrT5G4DYlswMHgPSDsjrUsPP//g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MXsx03Wd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Na2GGHdv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B8B1F000E9;
-	Mon, 15 Jun 2026 01:15:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MXsx03Wd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF2281F000E9;
+	Mon, 15 Jun 2026 01:20:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781486108;
-	bh=iuoEwhP2oR4WEh2tptEFvI9x4dBI8JcfSUdnlfhKqPk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Na2GGHdvZE4vfFXZPrs4BeHkdfmXB01KGn/h730RWSGhvc9CfxGDyjeu7VLfrvoxB
-	 DMCz1ywEhYcIz1Dpto3Yau+CA0omp/k/iD/S2tAneZv7ZlT8I8dG6q/qg+0KsY8ZHX
-	 koFmCfYhC+a+o9zHO9j6PawO1AvK5O556sRRI4peOW8zGXVTDJ6zpmjWbGmw1gSBWr
-	 keonB/YPzRVbuSEeabn0YFPVdVZJxFE5SA2MFtS/wUhU9SS4fAfgwRZYAgJa5pizmU
-	 mxYXlUjnSUWZJ7EtjC68tQPDDFZWA5diC7ajQNJoCR+XQSM9bb3T8HAsNIl6nC2Q1e
-	 +cxVO9QyM5N8g==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+	s=k20260515; t=1781486431;
+	bh=rYwZ2eVwOLWaAkHwno3LEyxTco9cvFVt3Q1mmJlReC8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=MXsx03WdITf3HmhydUJ5OgLaBLMaOPcBcBuaaknFTU+pFovh4q4XfVpGTDNjnrTZ0
+	 YS1kq51da+JmogOuO3uZeyw7zVfkNE41FmDX9Di8SMow0AgMua7o1ZP7NgiDNxjuqX
+	 l1xsT1vZc/uJA7BM24vbEkFL2TKwirUmPw9+iZKPvWAufBxgprFX6HxBiRFbSBc7b4
+	 uuYrzzjcNsltJAeQCx4M0UBzMN4YcgTbR1sTm0fEQl1iBreBf+pV+8vaNAPzLsAF6M
+	 8ac26hwL+1RIkpxZTXfcWXAjDxkTMuJDmtvfHcPpZeKd89e7nJQNrTe4aRcxGc6LAG
+	 p413kxgkTuC+Q==
+Date: Mon, 15 Jun 2026 01:20:29 +0000
+From: Yixun Lan <dlan@kernel.org>
+To: Guodong Xu <docular.xu@gmail.com>
 Cc: Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <skhan@linuxfoundation.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 7/7] tracing/probes: Add a new testcase for BTF typecasts
-Date: Mon, 15 Jun 2026 10:15:03 +0900
-Message-ID: <178148610386.185520.5851243426387466200.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <178148603548.185520.3389196102475741865.stgit@devnote2>
-References: <178148603548.185520.3389196102475741865.stgit@devnote2>
-User-Agent: StGit/0.19
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Zong Li <zong.li@sifive.com>, Deepak Gupta <debug@rivosinc.com>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@gmail.com>, linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Conor Dooley <conor@kernel.org>, devicetree@vger.kernel.org,
+	spacemit@lists.linux.dev, sophgo@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, Palmer Dabbelt <palmer@sifive.com>
+Subject: Re: [PATCH v4 10/16] riscv: dts: spacemit: k3: Add Zic64b ISA
+ extension
+Message-ID: <20260615012029-GKA1003249@kernel.org>
+References: <20260611-rva23u64-hwprobe-v2-v4-0-3f01a2449488@gmail.com>
+ <20260611-rva23u64-hwprobe-v2-v4-10-3f01a2449488@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260611-rva23u64-hwprobe-v2-v4-10-3f01a2449488@gmail.com>
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Hi Guodong,
 
-With the introduction of container_of-style BTF typecasting and
-per-CPU variable access support in trace probes, we need a way to
-verify their functionality and prevent regressions.
+On 16:12 Thu 11 Jun     , Guodong Xu wrote:
+> The K3 X100 cores have 64-byte cache blocks, already described by their
+> cbom/cbop/cboz-block-size of 64, so they implement Zic64b, a mandatory
+> RVA23 extension.  Declare it in each core's riscv,isa-extensions.
+> 
+> Signed-off-by: Guodong Xu <docular.xu@gmail.com>
 
-Add a new ftrace kselftest and update the trace event sample module
-to test and validate these features.
+Reviewed-by: Yixun Lan <dlan@kernel.org>
 
-Specifically, update the trace-events-sample module to set up a
-periodic timer whose callback accesses a per-CPU counter. Introduce
-a new sample trace event, foo_timer_fn, to trace this callback
-and log the current counter value.
+> ---
+> v4: No change.
+> v3: New patch.
+> ---
+>  arch/riscv/boot/dts/spacemit/k3.dtsi | 48 ++++++++++++++++++------------------
+>  1 file changed, 24 insertions(+), 24 deletions(-)
+> 
+> diff --git a/arch/riscv/boot/dts/spacemit/k3.dtsi b/arch/riscv/boot/dts/spacemit/k3.dtsi
+> index 4ac457399b583..b5aa983f0bfa1 100644
+> --- a/arch/riscv/boot/dts/spacemit/k3.dtsi
+> +++ b/arch/riscv/boot/dts/spacemit/k3.dtsi
+> @@ -35,9 +35,9 @@ cpu_0: cpu@0 {
+>  					       "svinval", "svnapot", "svpbmt", "za64rs",
+>  					       "zawrs", "zba", "zbb", "zbc", "zbs", "zca",
+>  					       "zcb", "zcd", "zcmop", "zfa", "zfbfmin",
+> -					       "zfh", "zfhmin", "zicbom", "zicbop", "zicboz",
+> -					       "ziccamoa", "ziccif", "zicclsm", "ziccrse", "zicntr",
+> -					       "zicond", "zicsr", "zifencei", "zihintntl",
+> +					       "zfh", "zfhmin", "zic64b", "zicbom", "zicbop",
+> +					       "zicboz", "ziccamoa", "ziccif", "zicclsm", "ziccrse",
+> +					       "zicntr", "zicond", "zicsr", "zifencei", "zihintntl",
+>  					       "zihintpause", "zihpm", "zimop", "zkt", "zvbb",
+>  					       "zvbc", "zvfbfmin", "zvfbfwma", "zvfh",
+>  					       "zvfhmin", "zvkb", "zvkg", "zvkn", "zvknc",
+> @@ -76,9 +76,9 @@ cpu_1: cpu@1 {
+>  					       "svinval", "svnapot", "svpbmt", "za64rs",
+>  					       "zawrs", "zba", "zbb", "zbc", "zbs", "zca",
+>  					       "zcb", "zcd", "zcmop", "zfa", "zfbfmin",
+> -					       "zfh", "zfhmin", "zicbom", "zicbop", "zicboz",
+> -					       "ziccamoa", "ziccif", "zicclsm", "ziccrse", "zicntr",
+> -					       "zicond", "zicsr", "zifencei", "zihintntl",
+> +					       "zfh", "zfhmin", "zic64b", "zicbom", "zicbop",
+> +					       "zicboz", "ziccamoa", "ziccif", "zicclsm", "ziccrse",
+> +					       "zicntr", "zicond", "zicsr", "zifencei", "zihintntl",
+>  					       "zihintpause", "zihpm", "zimop", "zkt", "zvbb",
+>  					       "zvbc", "zvfbfmin", "zvfbfwma", "zvfh",
+>  					       "zvfhmin", "zvkb", "zvkg", "zvkn", "zvknc",
+> @@ -117,9 +117,9 @@ cpu_2: cpu@2 {
+>  					       "svinval", "svnapot", "svpbmt", "za64rs",
+>  					       "zawrs", "zba", "zbb", "zbc", "zbs", "zca",
+>  					       "zcb", "zcd", "zcmop", "zfa", "zfbfmin",
+> -					       "zfh", "zfhmin", "zicbom", "zicbop", "zicboz",
+> -					       "ziccamoa", "ziccif", "zicclsm", "ziccrse", "zicntr",
+> -					       "zicond", "zicsr", "zifencei", "zihintntl",
+> +					       "zfh", "zfhmin", "zic64b", "zicbom", "zicbop",
+> +					       "zicboz", "ziccamoa", "ziccif", "zicclsm", "ziccrse",
+> +					       "zicntr", "zicond", "zicsr", "zifencei", "zihintntl",
+>  					       "zihintpause", "zihpm", "zimop", "zkt", "zvbb",
+>  					       "zvbc", "zvfbfmin", "zvfbfwma", "zvfh",
+>  					       "zvfhmin", "zvkb", "zvkg", "zvkn", "zvknc",
+> @@ -158,9 +158,9 @@ cpu_3: cpu@3 {
+>  					       "svinval", "svnapot", "svpbmt", "za64rs",
+>  					       "zawrs", "zba", "zbb", "zbc", "zbs", "zca",
+>  					       "zcb", "zcd", "zcmop", "zfa", "zfbfmin",
+> -					       "zfh", "zfhmin", "zicbom", "zicbop", "zicboz",
+> -					       "ziccamoa", "ziccif", "zicclsm", "ziccrse", "zicntr",
+> -					       "zicond", "zicsr", "zifencei", "zihintntl",
+> +					       "zfh", "zfhmin", "zic64b", "zicbom", "zicbop",
+> +					       "zicboz", "ziccamoa", "ziccif", "zicclsm", "ziccrse",
+> +					       "zicntr", "zicond", "zicsr", "zifencei", "zihintntl",
+>  					       "zihintpause", "zihpm", "zimop", "zkt", "zvbb",
+>  					       "zvbc", "zvfbfmin", "zvfbfwma", "zvfh",
+>  					       "zvfhmin", "zvkb", "zvkg", "zvkn", "zvknc",
+> @@ -199,9 +199,9 @@ cpu_4: cpu@4 {
+>  					       "svinval", "svnapot", "svpbmt", "za64rs",
+>  					       "zawrs", "zba", "zbb", "zbc", "zbs", "zca",
+>  					       "zcb", "zcd", "zcmop", "zfa", "zfbfmin",
+> -					       "zfh", "zfhmin", "zicbom", "zicbop", "zicboz",
+> -					       "ziccamoa", "ziccif", "zicclsm", "ziccrse", "zicntr",
+> -					       "zicond", "zicsr", "zifencei", "zihintntl",
+> +					       "zfh", "zfhmin", "zic64b", "zicbom", "zicbop",
+> +					       "zicboz", "ziccamoa", "ziccif", "zicclsm", "ziccrse",
+> +					       "zicntr", "zicond", "zicsr", "zifencei", "zihintntl",
+>  					       "zihintpause", "zihpm", "zimop", "zkt", "zvbb",
+>  					       "zvbc", "zvfbfmin", "zvfbfwma", "zvfh",
+>  					       "zvfhmin", "zvkb", "zvkg", "zvkn", "zvknc",
+> @@ -240,9 +240,9 @@ cpu_5: cpu@5 {
+>  					       "svinval", "svnapot", "svpbmt", "za64rs",
+>  					       "zawrs", "zba", "zbb", "zbc", "zbs", "zca",
+>  					       "zcb", "zcd", "zcmop", "zfa", "zfbfmin",
+> -					       "zfh", "zfhmin", "zicbom", "zicbop", "zicboz",
+> -					       "ziccamoa", "ziccif", "zicclsm", "ziccrse", "zicntr",
+> -					       "zicond", "zicsr", "zifencei", "zihintntl",
+> +					       "zfh", "zfhmin", "zic64b", "zicbom", "zicbop",
+> +					       "zicboz", "ziccamoa", "ziccif", "zicclsm", "ziccrse",
+> +					       "zicntr", "zicond", "zicsr", "zifencei", "zihintntl",
+>  					       "zihintpause", "zihpm", "zimop", "zkt", "zvbb",
+>  					       "zvbc", "zvfbfmin", "zvfbfwma", "zvfh",
+>  					       "zvfhmin", "zvkb", "zvkg", "zvkn", "zvknc",
+> @@ -281,9 +281,9 @@ cpu_6: cpu@6 {
+>  					       "svinval", "svnapot", "svpbmt", "za64rs",
+>  					       "zawrs", "zba", "zbb", "zbc", "zbs", "zca",
+>  					       "zcb", "zcd", "zcmop", "zfa", "zfbfmin",
+> -					       "zfh", "zfhmin", "zicbom", "zicbop", "zicboz",
+> -					       "ziccamoa", "ziccif", "zicclsm", "ziccrse", "zicntr",
+> -					       "zicond", "zicsr", "zifencei", "zihintntl",
+> +					       "zfh", "zfhmin", "zic64b", "zicbom", "zicbop",
+> +					       "zicboz", "ziccamoa", "ziccif", "zicclsm", "ziccrse",
+> +					       "zicntr", "zicond", "zicsr", "zifencei", "zihintntl",
+>  					       "zihintpause", "zihpm", "zimop", "zkt", "zvbb",
+>  					       "zvbc", "zvfbfmin", "zvfbfwma", "zvfh",
+>  					       "zvfhmin", "zvkb", "zvkg", "zvkn", "zvknc",
+> @@ -322,9 +322,9 @@ cpu_7: cpu@7 {
+>  					       "svinval", "svnapot", "svpbmt", "za64rs",
+>  					       "zawrs", "zba", "zbb", "zbc", "zbs", "zca",
+>  					       "zcb", "zcd", "zcmop", "zfa", "zfbfmin",
+> -					       "zfh", "zfhmin", "zicbom", "zicbop", "zicboz",
+> -					       "ziccamoa", "ziccif", "zicclsm", "ziccrse", "zicntr",
+> -					       "zicond", "zicsr", "zifencei", "zihintntl",
+> +					       "zfh", "zfhmin", "zic64b", "zicbom", "zicbop",
+> +					       "zicboz", "ziccamoa", "ziccif", "zicclsm", "ziccrse",
+> +					       "zicntr", "zicond", "zicsr", "zifencei", "zihintntl",
+>  					       "zihintpause", "zihpm", "zimop", "zkt", "zvbb",
+>  					       "zvbc", "zvfbfmin", "zvfbfwma", "zvfh",
+>  					       "zvfhmin", "zvkb", "zvkg", "zvkn", "zvknc",
+> 
+> -- 
+> 2.43.0
+> 
 
-Then, add a new test case, btf_probe_event.tc, which defines a
-dynamic probe on the timer callback. The probe uses BTF typecasting
-to recover the parent structure from the timer argument and
-this_cpu_read() to fetch the per-CPU counter. The test verifies
-the integrity of the implementation by ensuring the values
-recorded by the dynamic probe match those from the static tracepoint.
-
-Assisted-by: Antigravity:gemini-3.5-flash
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v4:
-  - Fix uprobe $current test.
- Changes in v3:
-  - Add syntax test case.
-  - Update testcase to use this_cpu_read()
- Changes in v2:
-  - Use timer_shutdown_sync() instead of timer_delete_sync() for teardown.
----
- samples/trace_events/trace-events-sample.c         |   40 +++++++++++++++-
- samples/trace_events/trace-events-sample.h         |   34 ++++++++++++-
- .../ftrace/test.d/dynevent/btf_probe_event.tc      |   51 ++++++++++++++++++++
- .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    9 ++++
- .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    9 ++++
- .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    5 ++
- 6 files changed, 143 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-
-diff --git a/samples/trace_events/trace-events-sample.c b/samples/trace_events/trace-events-sample.c
-index 0b7a6efdb247..ca5d98c360cb 100644
---- a/samples/trace_events/trace-events-sample.c
-+++ b/samples/trace_events/trace-events-sample.c
-@@ -94,6 +94,20 @@ static int simple_thread_fn(void *arg)
- static DEFINE_MUTEX(thread_mutex);
- static int simple_thread_cnt;
- 
-+static struct foo_timer_data *foo_timer_data;
-+
-+static void sample_timer_cb(struct timer_list *t)
-+{
-+	struct foo_timer_data *data = container_of(t, struct foo_timer_data, timer);
-+
-+	get_cpu();
-+	trace_foo_timer_fn(data);
-+	(*this_cpu_ptr(data->counter))++;
-+	put_cpu();
-+
-+	mod_timer(t, jiffies + HZ);
-+}
-+
- int foo_bar_reg(void)
- {
- 	mutex_lock(&thread_mutex);
-@@ -132,9 +146,27 @@ void foo_bar_unreg(void)
- 
- static int __init trace_event_init(void)
- {
-+	foo_timer_data = kzalloc_obj(*foo_timer_data, GFP_KERNEL);
-+	if (!foo_timer_data)
-+		return -ENOMEM;
-+
-+	foo_timer_data->name = "sample_timer_counter";
-+	foo_timer_data->counter = alloc_percpu(int);
-+	if (!foo_timer_data->counter) {
-+		kfree(foo_timer_data);
-+		return -ENOMEM;
-+	}
-+
-+	timer_setup(&foo_timer_data->timer, sample_timer_cb, 0);
-+	mod_timer(&foo_timer_data->timer, jiffies + HZ);
-+
- 	simple_tsk = kthread_run(simple_thread, NULL, "event-sample");
--	if (IS_ERR(simple_tsk))
--		return -1;
-+	if (IS_ERR(simple_tsk)) {
-+		timer_shutdown_sync(&foo_timer_data->timer);
-+		free_percpu(foo_timer_data->counter);
-+		kfree(foo_timer_data);
-+		return PTR_ERR(simple_tsk);
-+	}
- 
- 	return 0;
- }
-@@ -147,6 +179,10 @@ static void __exit trace_event_exit(void)
- 		kthread_stop(simple_tsk_fn);
- 	simple_tsk_fn = NULL;
- 	mutex_unlock(&thread_mutex);
-+
-+	timer_shutdown_sync(&foo_timer_data->timer);
-+	free_percpu(foo_timer_data->counter);
-+	kfree(foo_timer_data);
- }
- 
- module_init(trace_event_init);
-diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_events/trace-events-sample.h
-index 1a05fc153353..816848a456a2 100644
---- a/samples/trace_events/trace-events-sample.h
-+++ b/samples/trace_events/trace-events-sample.h
-@@ -247,12 +247,14 @@
-  */
- 
- /*
-- * It is OK to have helper functions in the file, but they need to be protected
-- * from being defined more than once. Remember, this file gets included more
-- * than once.
-+ * It is OK to have helper functions and data structures in the file, but they
-+ * need to be protected from being defined more than once. Remember, this file
-+ * gets included more than once.
-  */
- #ifndef __TRACE_EVENT_SAMPLE_HELPER_FUNCTIONS
- #define __TRACE_EVENT_SAMPLE_HELPER_FUNCTIONS
-+#include <linux/timer.h>
-+
- static inline int __length_of(const int *list)
- {
- 	int i;
-@@ -270,6 +272,13 @@ enum {
- 	TRACE_SAMPLE_BAR = 4,
- 	TRACE_SAMPLE_ZOO = 8,
- };
-+
-+struct foo_timer_data {
-+	const char		*name;
-+	struct timer_list	timer;
-+	int __percpu		*counter;
-+};
-+
- #endif
- 
- /*
-@@ -595,6 +604,25 @@ TRACE_EVENT(foo_rel_loc,
- 		  __get_rel_bitmask(bitmask),
- 		  __get_rel_cpumask(cpumask))
- );
-+
-+TRACE_EVENT(foo_timer_fn,
-+
-+	TP_PROTO(struct foo_timer_data *data),
-+
-+	TP_ARGS(data),
-+
-+	TP_STRUCT__entry(
-+		__string(	name,			data->name	)
-+		__field(	int,			count		)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name);
-+		__entry->count	= *this_cpu_ptr(data->counter);
-+	),
-+
-+	TP_printk("name=%s count=%d", __get_str(name), __entry->count)
-+);
- #endif
- 
- /***** NOTICE! The #if protection ends here. *****/
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-new file mode 100644
-index 000000000000..96791e120b7d
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-@@ -0,0 +1,51 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: BTF event with typecast and percpu access
-+# requires: dynamic_events "this_cpu_read(<fetcharg>)":README "[(structname[,field])]<argname>[->field[->field|.field...]]":README
-+
-+# Check if the sample module is loaded
-+if ! lsmod | grep -q trace_events_sample; then
-+  modprobe trace-events-sample || exit_unsupported
-+fi
-+
-+echo 0 > events/enable
-+echo > dynamic_events
-+
-+# The sample_timer_cb(struct timer_list *t) is called.
-+# We want to check (STRUCT,FIELD)VAR typecast and this_cpu_read() access.
-+# (foo_timer_data,timer)t converts t to struct foo_timer_data * using container_of.
-+# data->counter is a per-cpu pointer to int.
-+# this_cpu_read(data->counter) should give the value of the counter.
-+
-+echo 'f:mysample/myevent sample_timer_cb name=(foo_timer_data,timer)t->name:string count=this_cpu_read((foo_timer_data,timer)t->counter)' >> dynamic_events
-+
-+echo 1 > events/mysample/myevent/enable
-+echo 1 > events/sample-trace/foo_timer_fn/enable
-+
-+sleep 2
-+
-+echo 0 > events/mysample/myevent/enable
-+echo 0 > events/sample-trace/foo_timer_fn/enable
-+
-+# Compare the values.
-+MATCH=0
-+while read line; do
-+  if echo $line | grep -q "foo_timer_fn:"; then
-+    NAME=`echo $line | sed 's/.*name=\([^ ]*\) .*/\1/'`
-+    COUNT=`echo $line | sed 's/.*count=\([^ ]*\).*/\1/'`
-+    if grep -q "myevent:.*name=\"${NAME}\" count=$COUNT" trace; then
-+       MATCH=$((MATCH+1))
-+    fi
-+  fi
-+done < trace
-+
-+if [ $MATCH -eq 0 ]; then
-+  echo "No matching events found"
-+  exit_fail
-+fi
-+
-+# Clean up
-+echo 0 > events/mysample/myevent/enable
-+echo 0 > events/sample-trace/foo_timer_fn/enable
-+echo > dynamic_events
-+clear_trace
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-index fee479295e2f..b781ec07c0d0 100644
---- a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-@@ -112,6 +112,15 @@ check_error 'f vfs_read%return $retval->^foo'	# NO_PTR_STRCT
- check_error 'f vfs_read file->^foo'		# NO_BTF_FIELD
- check_error 'f vfs_read file^-.foo'		# BAD_HYPHEN
- check_error 'f vfs_read ^file:string'		# BAD_TYPE4STR
-+if grep -qF "[(structname" README ; then
-+check_error 'f vfs_read arg1=(task_struct)file^'		# TYPECAST_REQ_FIELD
-+check_error 'f vfs_read arg1=(f)((f)((f)((f)^((f)file->f)->f)->f)->f)->f'	# TOO_MANY_NESTED
-+check_error 'f vfs_read arg1=(task_struct,^in_execve)file->comm'	# TYPECAST_NOT_ALIGNED
-+check_error 'f vfs_read arg1=(task_struct,se^->group_node)file->comm'	# TYPECAST_BAD_ARROW
-+check_error 'f vfs_read arg1=(task_struct,^->pid)file->comm'	# TYPECAST_BAD_ARROW
-+check_error 'f vfs_read arg1=(task_struct,^.pid)file->comm'	# BTF_BAD_TID
-+check_error 'f vfs_read arg1=(task_struct,^.)file->comm'	# BTF_BAD_TID
-+fi
- fi
- 
- else
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-index 8f1c58f0c239..78f015c8c010 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-@@ -115,6 +115,15 @@ check_error 'p vfs_read+20 ^$arg*'		# NOFENTRY_ARGS
- check_error 'p vfs_read ^hoge'			# NO_BTFARG
- check_error 'p kfree ^$arg10'			# NO_BTFARG (exceed the number of parameters)
- check_error 'r kfree ^$retval'			# NO_RETVAL
-+if grep -qF "[(structname" README ; then
-+check_error 'p vfs_read arg1=(task_struct)file^'		# TYPECAST_REQ_FIELD
-+check_error 'p vfs_read arg1=(f)((f)((f)((f)^((f)file->f)->f)->f)->f)->f'	# TOO_MANY_NESTED
-+check_error 'p vfs_read arg1=(task_struct,^in_execve)file->comm'	# TYPECAST_NOT_ALIGNED
-+check_error 'p vfs_read arg1=(task_struct,se^->group_node)file->comm'	# TYPECAST_BAD_ARROW
-+check_error 'p vfs_read arg1=(task_struct,^->pid)file->comm'	# TYPECAST_BAD_ARROW
-+check_error 'p vfs_read arg1=(task_struct,^.pid)file->comm'	# BTF_BAD_TID
-+check_error 'p vfs_read arg1=(task_struct,^.)file->comm'	# BTF_BAD_TID
-+fi
- else
- check_error 'p vfs_read ^$arg*'			# NOSUP_BTFARG
- fi
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-index c817158b99db..e12dc967ec76 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-@@ -28,4 +28,9 @@ if grep -q ".*symstr.*" README; then
- check_error 'p /bin/sh:10 $stack0:^symstr'	# BAD_TYPE
- fi
- 
-+# $current is not supported by uprobe
-+if grep -q "\$current.*" README; then
-+check_error 'p /bin/sh:10 ^$current:u8'	# BAD_VAR
-+fi
-+
- exit 0
-
+-- 
+Yixun Lan (dlan)
