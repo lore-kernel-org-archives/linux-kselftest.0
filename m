@@ -1,255 +1,114 @@
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3E138F653
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 09:05:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9B03D9DB7;
+	Mon, 15 Jun 2026 09:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781514320; cv=none; b=XjtRMwjlYUmVk+YSPJTMLHeE6Qgq6tB4IoJ7JYH8vlGMDZgsaX2IwsEfIuBRmUTqziRtswmY6wpvGA3YhmNxkffPaeAIXYkRPaMgvPUSwOxnT72H3B0cuKJ2wSyAxmw62NGOCDfKVGnxvk6DvJd4ZduC5SbmZPcGVeINSwIphCI=
+	t=1781514952; cv=none; b=ZdLqHZRM1I3ztCjGVRBC8PTX3658HQSQZYDb6ZVq4pJsmhWZSICCqWdxOragg3y+gdz2FQOfbXlupq9anz82B5ix6/FLP2i7jF3ya8S5UpcRiNbkuvAxSIUwFs2WKJH9ldYOLiFJHFUEpb0mfi8uU3AMuKMNkJiNT0Gwo6ezmLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781514320; c=relaxed/simple;
-	bh=is0aUcqvIZ1xcT2jK43lwzQy9+ksca8vwiUx2SlLA9s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ouXUF7lfYkSteADq3fsa5A/dg8MOUFysxOTpbCCO4YbEuNsLqAf/ttr8mt/rWQX3lMwyI9x6DywkgbEnPOrrKnEx4KZbO/BMKCBZ90n1Bj1QOlxwTMY1jZ87X0PgFwdP0EaPSud4KTO0+83fh7jSD0GJoufTOjGHKB4arbXTZr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F2VSxmuZ; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781514952; c=relaxed/simple;
+	bh=LVAo4Ed2o+uU2kdmhbF/FvxsYQACAQEf1KFVg/vCYHQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=ZxHG0QEnnv04tqSPA0noufxZ22ful5EXsql9QgNiMlVX42eXTkCRUCnvOlOCW/H4M0PyqMe5TUvF+2h9xvRHSK+bn6VpGZYaTdVBGCUaSzIaF4xzuhhOVGujR4IJb7pbKzQx4X4vzRe5kuJ8ecrEsDbdNNtpk//mARC9g00pqek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D5enJjr9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F2VSxmuZ"
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-8cc0ef7c306so28602646d6.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 02:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781514318; x=1782119118; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OvV17BgpJQmVQrI1yyaY3qROAJv7ED+Gi/LtXIZqMPI=;
-        b=F2VSxmuZK3+lLiaTVErbvzZRXcA0gpZd111o4WAO/7BG2E47jI/iYOeprIWpPMJ7DT
-         edFsRWqxMHU4K7Sd8Q3D0UDbeRhqUfgBr1aEX4Yfks42AjeWLGOsGujU6DEsXa7C64tj
-         7I+UqBD6kA/a91zOzFprsyECq0COBq/I/Uk9a9q2C/EYfStgf5ux4UFp4xGGyc8PckAf
-         3pjOma9ymSGyzmmjB9ZoH7JaGVlzl78NnK5ktAQH73+Y76bV0cz7sBFqs3TFX3rg4GKG
-         zQu6m150M6jVXc+n4wb4CLKIln0+U9qpVOidX1Sm52UTfppfG56mFKlgWYEuM9o4tKgB
-         XNIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781514318; x=1782119118;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=OvV17BgpJQmVQrI1yyaY3qROAJv7ED+Gi/LtXIZqMPI=;
-        b=CwBRUh61j6ZOY1Rn4G8ZPZs8nOyD+GtMHAI0z6fsx1w4o/AHWMeOx2elMd5CnfS2Y2
-         lAHEo/gh2nlQeCjcYaY7Bs0LIKE2w60U5NkRCcqHfxp5Qd6YC3gUEAkBHZ2E5fifyHcM
-         JY5nLRU+RfYd9JPJ42E9FGUNELmQPpPDJtjM15XTGLuQ6Wm9lIrakxAuMSl9REzHl+N2
-         WatPfUN5c90jggOrp1sKsYubBDSK8Hgv9ueP4IUNvEkJC58KsEs9MyM4Cdre6/xPh23g
-         6uvex4mJwlXkHM7RHKCiEQghb4Hkc4ImGljZFLDBhdm+d7QIVn/OQzSIss64FYh5p7z8
-         F3DA==
-X-Forwarded-Encrypted: i=1; AFNElJ/Pg9oUvWCECtqMIfeP4FTC6Sn3NwSz6hX3IqomUkc76UAnYN9bjo+gjLIpfjnujPFR6MrGZJRMfMi46WZmAt8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYNBP1CARTHVESDU2XMHEwcpdWxFVRSHZBj2EZSUWfboGTRbhW
-	jrrj7NQ3JGKurYl7qS4nC2TpbZLs37N1ircAXb0owXLlvBbwyvPN51gk
-X-Gm-Gg: Acq92OFusa+rxDs/SwVYucG1s7RhHVXtBggvDpnN544opkddG774QD+thRZOJJ1WVo0
-	9wZ9RPRnofx+KNv8t9N1pyfU2NDobeHvOPuu/cggNoc8fhYPLeAJYlDcy96YGo1QckCQwf7v/Cx
-	5E9bLaz5AOGbfauh9t42llJQ/Mof/u0W9J+nzzGfTu4HFz7dT7ksW4zL4grDg6C9JsTp+XB6sSx
-	pDAxRmiTP0oFAk/D7rJ4pcrLLJP6prVIcwERAo1VrtJZ/e8LtjSb+h4Rkkr2q3lRBdx2pF4F/Le
-	KW3afAE+JkvvkXB9+ALuFOkrJvazt1mYt+4V0hlGsNVmPNAVL5lg7T7lVI2uGsBRenYunp9qvqS
-	DIfmULn0islolsOSZFNbpbTYwCUQ9muz7fLrJm8YgXA4CIj9K2xU5Q11yPmf1oiEFb/YBE46B+P
-	OZRNua1aSgJEfMIe3d9hcJQaU=
-X-Received: by 2002:ad4:5761:0:b0:8ae:62aa:665a with SMTP id 6a1803df08f44-8d32d858216mr244104566d6.28.1781514318228;
-        Mon, 15 Jun 2026 02:05:18 -0700 (PDT)
-Received: from houminxi.lan ([163.123.141.225])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8d302114676sm109704966d6.20.2026.06.15.02.05.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 02:05:17 -0700 (PDT)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: aconole@redhat.com,
-	echaudro@redhat.com,
-	i.maximets@ovn.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	dev@openvswitch.org,
-	linux-kselftest@vger.kernel.org,
-	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH net-next v2] selftests/net/openvswitch: add ICMPv6 echo type match test
-Date: Mon, 15 Jun 2026 17:05:07 +0800
-Message-ID: <20260615090507.3647256-1-houminxi@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260613141429.3084962-1-houminxi@gmail.com>
-References: <20260613141429.3084962-1-houminxi@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D5enJjr9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB0CA1F000E9;
+	Mon, 15 Jun 2026 09:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781514947;
+	bh=LVAo4Ed2o+uU2kdmhbF/FvxsYQACAQEf1KFVg/vCYHQ=;
+	h=Date:Subject:To:References:From:Cc:In-Reply-To;
+	b=D5enJjr9pxzCGfW0djSw6PRO1G8OwqsFGWvmn2Bpbjlw1aepA5k8VByBZqljAUyh4
+	 OG/qhWT5z7m1K3zgPPKhlErCDGOCtNChGTx6fdONSm5855NM/BiTC5eCIQxtVv0rvr
+	 pHPo1eQqKvHkRr5j7fZGhgDoHkSColVteNcP6PnIsPxFL8TvO3FMFB0U9Nkqft/9+m
+	 RTCIEF6o+OCBBhDteeGpGAPetOb4tYDP5uO+ptW6b/pX8HqCgZRFx1E/qJlYrpUQyp
+	 Ge08eqfFIyRNkAaWpOIgTe6sVt6jaxSvW2GkPT1KXunc6r96K4R2si8xCdHIW6tPdV
+	 dOvmiMzEblyeg==
+Message-ID: <fac2b43c-4121-41b3-a7fe-d52ddb63f413@kernel.org>
+Date: Mon, 15 Jun 2026 11:15:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net-next] selftests: net: do not detect PPPoX loopback
+To: Qingfang Deng <qingfang.deng@linux.dev>
+References: <20260603061746.23452-1-qingfang.deng@linux.dev>
+From: Matthieu Baerts <matttbe@kernel.org>
+Content-Language: fr
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-ppp@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20260603061746.23452-1-qingfang.deng@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Register OVS_KEY_ATTR_ICMPV6 in the flow key parser so that
-icmpv6(type=...) can be used in flow specifications. Without this
-registration the parser silently drops the token and the kernel
-rejects the flow with EINVAL because the expected ICMPv6 key
-attribute is missing.
+Hi Qingfang,
 
-While here, add convert_int() to the ovs_key_ipv6 and ovs_key_icmp
-fields_map entries so that specifying a field value produces the
-correct wildcard mask. The IPv6 flow label uses convert_int(20) to
-produce a 20-bit mask (0x000FFFFF), matching the kernel constraint in
-flow_netlink.c that rejects masks with bits 20-31 set; byte-wide
-fields use convert_int(8). The ipv4 counterpart already does this via
-convert_int(); the ipv6 and icmp classes were simply missing the fifth
-tuple element. Existing callers that pass empty parentheses are
-unaffected because convert_int("") returns (0, 0).
+On 03/06/2026 08:17, Qingfang Deng wrote:
+> By default, pppd attempts to detect loopbacks on the underlying
+> interface using a pseudo-randomly generated magic number and checks if
+> the same value is received. The seed for the PRNG is a hash of hostname
+> XOR current time XOR pid, which is likely to collide on NIPA, causing
+> false positives. Disable magic number generation.
 
-Add test_icmpv6 exercising the ICMPv6 echo flow key. The test uses
-static neighbour entries to bypass NDP, then verifies in three steps:
-install icmpv6(type=128) and icmpv6(type=129) flows and confirm ping
-works, remove the flows and confirm ping fails, reinstall and confirm
-recovery.
+Thank you for the fix!
 
-Signed-off-by: Minxi Hou <houminxi@gmail.com>
----
-v2: fix ovs_key_ipv6 label mask to use convert_int(20) instead of
-    convert_int(32); the IPv6 flow label is 20 bits and the kernel
-    rejects masks with bits 20-31 set in validate_set().
+It looks like the test is no longer flaky [1], so I just unignored it on
+NIPA.
 
- .../selftests/net/openvswitch/openvswitch.sh  | 63 +++++++++++++++++++
- .../selftests/net/openvswitch/ovs-dpctl.py    | 26 +++++---
- 2 files changed, 82 insertions(+), 7 deletions(-)
+[1] https://netdev.bots.linux.dev/contest.html?skip=0&test=pppol2tp-sh
 
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index d533decca5c1..8923224fa88e 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -31,6 +31,7 @@ tests="
- 	pop_vlan				vlan: POP_VLAN action strips tag
- 	dec_ttl					ttl: dec_ttl decrements IP TTL
- 	flow_set				flow-set: Flow modify
-+	icmpv6					icmpv6: ICMPv6 echo type match
- 	psample					psample: Sampling packets with psample"
- 
- info() {
-@@ -377,6 +378,68 @@ test_flow_set() {
- 	return 0
- }
- 
-+test_icmpv6() {
-+	sbx_add "test_icmpv6" || return $?
-+	ovs_add_dp "test_icmpv6" icmpv6 || return 1
-+
-+	info "create namespaces"
-+	for ns in client server; do
-+		ovs_add_netns_and_veths "test_icmpv6" "icmpv6" \
-+			"$ns" "${ns:0:1}0" "${ns:0:1}1" || return 1
-+	done
-+
-+	ip netns exec client ip addr add fd00::1/64 dev c1 nodad
-+	ip netns exec client ip link set c1 up
-+	ip netns exec server ip addr add fd00::2/64 dev s1 nodad
-+	ip netns exec server ip link set s1 up
-+
-+	local cl_mac sl_mac
-+	cl_mac=$(ip netns exec client \
-+		ip link show c1 | awk '/link\/ether/ {print $2}')
-+	[ -z "$cl_mac" ] && \
-+		{ info "failed to get c1 hwaddr"; return 1; }
-+	sl_mac=$(ip netns exec server \
-+		ip link show s1 | awk '/link\/ether/ {print $2}')
-+	[ -z "$sl_mac" ] && \
-+		{ info "failed to get s1 hwaddr"; return 1; }
-+	ip netns exec client \
-+		ip -6 neigh add fd00::2 lladdr "$sl_mac" dev c1
-+	ip netns exec server \
-+		ip -6 neigh add fd00::1 lladdr "$cl_mac" dev s1
-+
-+	ovs_add_flow "test_icmpv6" icmpv6 \
-+	  'in_port(1),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6(type=128)' \
-+	  '2' || return 1
-+	ovs_add_flow "test_icmpv6" icmpv6 \
-+	  'in_port(2),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6(type=129)' \
-+	  '1' || return 1
-+
-+	info "verify ICMPv6 echo with type-specific flows"
-+	ovs_sbx "test_icmpv6" ip netns exec client \
-+		ping -6 -c 1 -W 2 fd00::2 || return 1
-+
-+	ovs_del_flows "test_icmpv6" icmpv6
-+
-+	info "verify ping fails without echo flows"
-+	ovs_sbx "test_icmpv6" ip netns exec client \
-+		ping -6 -c 1 -W 2 fd00::2 >/dev/null 2>&1 \
-+		&& { info "FAIL: ping should fail without flows"
-+		     return 1; }
-+
-+	ovs_add_flow "test_icmpv6" icmpv6 \
-+	  'in_port(1),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6(type=128)' \
-+	  '2' || return 1
-+	ovs_add_flow "test_icmpv6" icmpv6 \
-+	  'in_port(2),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6(type=129)' \
-+	  '1' || return 1
-+
-+	info "verify connectivity restored"
-+	ovs_sbx "test_icmpv6" ip netns exec client \
-+		ping -6 -c 1 -W 2 fd00::2 || return 1
-+
-+	return 0
-+}
-+
- # psample test
- # - use psample to observe packets
- test_psample() {
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index e1ecfad2c03e..f3edd198223f 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -1255,11 +1255,16 @@ class ovskey(nla):
-                 lambda x: ipaddress.IPv6Address(x).packed if x else 0,
-                 convert_ipv6,
-             ),
--            ("label", "label", "%d", lambda x: int(x) if x else 0),
--            ("proto", "proto", "%d", lambda x: int(x) if x else 0),
--            ("tclass", "tclass", "%d", lambda x: int(x) if x else 0),
--            ("hlimit", "hlimit", "%d", lambda x: int(x) if x else 0),
--            ("frag", "frag", "%d", lambda x: int(x) if x else 0),
-+            ("label", "label", "%d", lambda x: int(x) if x else 0,
-+                convert_int(20)),
-+            ("proto", "proto", "%d", lambda x: int(x) if x else 0,
-+                convert_int(8)),
-+            ("tclass", "tclass", "%d", lambda x: int(x) if x else 0,
-+                convert_int(8)),
-+            ("hlimit", "hlimit", "%d", lambda x: int(x) if x else 0,
-+                convert_int(8)),
-+            ("frag", "frag", "%d", lambda x: int(x) if x else 0,
-+                convert_int(8)),
-         )
- 
-         def __init__(
-@@ -1344,8 +1349,10 @@ class ovskey(nla):
-         )
- 
-         fields_map = (
--            ("type", "type", "%d", lambda x: int(x) if x else 0),
--            ("code", "code", "%d", lambda x: int(x) if x else 0),
-+            ("type", "type", "%d", lambda x: int(x) if x else 0,
-+                convert_int(8)),
-+            ("code", "code", "%d", lambda x: int(x) if x else 0,
-+                convert_int(8)),
-         )
- 
-         def __init__(
-@@ -1982,6 +1989,11 @@ class ovskey(nla):
-                 "icmp",
-                 ovskey.ovs_key_icmp,
-             ),
-+            (
-+                "OVS_KEY_ATTR_ICMPV6",
-+                "icmpv6",
-+                ovskey.ovs_key_icmpv6,
-+            ),
-             (
-                 "OVS_KEY_ATTR_TCP_FLAGS",
-                 "tcp_flags",
--- 
-2.54.0
-
+Cheers,
+Matt
