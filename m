@@ -1,128 +1,179 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59E147D93B
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 17:07:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781629622; cv=none; b=BwVWeNX1pflj9Db3ytndMd1QOoYHLzAHkKjRVgAR0TbE5BfB7r/UAt2lIIXX2FgzJsV+MZls9m0Q2ZLvSM1uovjHMq4kFHFpxSyqfVTAVYKPDKw6x8M9PHIHbfiCLZxvpQ+0K7KUYR2WefWBJMkoreQwbA3fn/SNE+QqtjPykN4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781629622; c=relaxed/simple;
-	bh=7g+3VFOqzLTevM//CB6btZhXREAjis1zBYeItrSo5zk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=OGCwtgx/RUsmshsjDjqk16jFK7jYpQD8OMRW4zPTB/T8Qn6spXBTP7u0WXCKjCHz0wVgMp6/0gSNnxV9KI/obaDnWhEanrNvmbDbPz/AZ6NqDxFI1qdey9uWmsYeXzDzu/LswkCXV2Z8Eg8Vl1CMMZLssaAwT/t6dQmRcA2LQgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Xa1EgxqC; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1AA47B422
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 17:16:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781630204; cv=pass; b=qsvACfiJzLcscsmnhOdsadzTZZJ8oXpN/LP2iqPJbUe/hRyhgSsWlzrz7ZSPog3TmxD74YKA22fSADMsoWQhWLYwDHDXRaPmB/O6fM0W4imz+bH0T96SXuRpFdffT1POzg3YZEMa2EX3Jq9KI5WxaLyEJnamUTdpnLRgl/MJ8NA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781630204; c=relaxed/simple;
+	bh=Nh4pQEP/JXI3ej0cc0N9+1DaTtnfkzaHu46z64YzAqA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uv13Isv00MeT++umkOs0Mit59hdUEIc6UzZq19H3c/erSI9WfzCk5IhqoyVTaAZAf7513FyHiFsmAUmNEeGVwbkyXfKnX/Xtc/zddNkYeS7dVgiIghP+DhlDtzssZwvJEDBcW2GqIahzoE0KG4sx3GcdumUBcy2+YXy7ufFosZc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ogGjHaG3; arc=pass smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xa1EgxqC"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-84247fed609so2605686b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 10:07:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ogGjHaG3"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-7dd5a8dc8a2so28913447b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 10:16:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781630198; cv=none;
+        d=google.com; s=arc-20240605;
+        b=M5gqP0wzshLvUaZQKT4wkBbUKI21ztOeD12Q++oxRkDtDq1SfkpswBtGGIIGAn96tX
+         9CU4kdnoskv/iUkmL6N5APLF/UToWy4WSzKxr//AL2HpdvY6d//B/h9ACPk+xMYJzNV4
+         i1N9O2kitJyROzTlfC+4Ncu6jXt+SwOKfuae3KBBmm/RhrKXgUY1FDSqkfCrKuXhNTeg
+         +CbRKPWil2ORymhwM9yx1XNZ76IdFRZQJpRxfEE3EwJlW4S+u7nsLTdleHwrbXpV3cY9
+         /3sZHts3iv8at5b1gEthEhSY0VzDmo/uOh86EU9FeLm7sM517s2u7g6aOpvxWJCTHi87
+         XREQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=m0Na40jsKjOOHid0+S5827JBwf9AggIFrx0Gx8lBHzA=;
+        fh=dA9beEorahrhchECHyEr3rTlgoP+Ymn6pzZmUF+IkG0=;
+        b=URijzPIZDLZXM3sUpZfN3RtuAZxPLvT8OJSP13OmvCUHLo/Nzz6Mawr+qkMZDV3frh
+         ZEHXSSazc96/NxABalk72ov8xl/rRlhnOt0We0mz1Oxng2s7GrGRXP62+lcqzBhrJ8qD
+         irBh30ONIxFU3OI8MqUqdtdJg56qw6AoJ1yEpWp0kVOMV46WZL+Sp/sASXH9fU6Wni17
+         gJ1IpyCYtLfhOOeMSIPj8A/t981kvlvVdHI5cZ6E6G/Pur+79KECoqUPKiaB5mzlCaHf
+         bk6Xd5A47NN9W5WcLi1X0NunLsfv89Sce8K9WpZpBCpHwPHbFiR2TAlpb2v24IHoM6mQ
+         qvfw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781629620; x=1782234420; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MuFT5oHokDW0bk02xVZpBpyZ66QlfdjnHGkLbhNe2ho=;
-        b=Xa1EgxqCs881RK9mo+li2JPIv6hqLAnUJVmI10LlJHZc2Q669sKY6VB4NK5wLuatlf
-         DpRAmwG2FN0HvWt/MCuCVrFPjDzICyawOIwlBlVIeDwe0WYjA/lkFzzC/w+dt7HaOWRU
-         miLsY23TifR77ygF7HgHycW0MyKER2X9JotN8QII5stO19OoYOyVEKlFUqOUVH282p4Y
-         oXHZwbSXGik/J+SNgKAFTv3Sg5DXRdBuW+NMmxVpJOGNMbE9K4d1ZeMebJBlv+CsxnCR
-         ZE5IYx9mCv0EZTO6ol0BZ1eWco6lQ7EaBsVZzduOxYaj1yHp0l8Z45760zy0EUZGb7AP
-         spaA==
+        d=gmail.com; s=20251104; t=1781630198; x=1782234998; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m0Na40jsKjOOHid0+S5827JBwf9AggIFrx0Gx8lBHzA=;
+        b=ogGjHaG3FFir+++MTSWO002gmUl64b68C/JGm7TDn4weBDzqwq2HhTKAVqUVg6n7BA
+         fmOjrXkwaduxS2Nkxb22h3pD++L8PkchBwudECRDIFqgtJ5dIgeeCIprCq6RtjU7Vp1J
+         Df1F0IhcD49OldeP8v9BtAaNnJaK0dkssJ5U6iErX2VCq+DYISjtTLWBqWbMCXNzQilc
+         e38XQJxm/fqmkubdqZg5LfnE+uZa7Vz26NPGknYbEsWgyMnxFTO8AND7TT+3E0nk7D8m
+         JM5x+hhEOBrqQsxIHx/BATfkM+VTwYJGwoFV+jPcDIVnD8PjKc4HVUe4N8GM2XtB9Di1
+         i+xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781629620; x=1782234420;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MuFT5oHokDW0bk02xVZpBpyZ66QlfdjnHGkLbhNe2ho=;
-        b=P0a5H/YOy7lk6W+3K++mWpVDSguzyH0hOaq44gZec9zK+tuY+I+3b160v23pfdAi1o
-         f1X5T9ixaXeSjbjKtLmarU7rMT45mMZsILLnzJ9Lv1JoPVbw4ymEE2jbtr4wIamJ6DpC
-         paT0hNyiNeFxGtNAe4wEWFlP7R1ojzFDhoyq3yGoOcUN6DG4865piAcIM2Ftq5CwD199
-         xUYrsAquO95mJy0jadaxihmCWGDec4xjiybXjeylMb/jgS2Un6A/x59qSJWegEq3kai5
-         HM0rLw8jLABlVCxjsQr4D2gJjL0w1noE7iw9+3HPh8rnlrE2MhLgvhNuM+vAGd1QRzTD
-         CgfQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+jYAHbNGYr/aKWQJd2drirDthCPg9ahVwJxMTHSe51551gvubuI5aSDDvPxs4dpxyu4BBIh9sk2+FmHGndQyw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDTq1umtp1AcV07RoAmWUWdikWKfQm3c2Z+Zzc2hE6++gcFPrY
-	ifNJr0cSeiQbo6YBiJESdn+GlHPdOIxobNOyKypCDi/TW5Gxx8bhgrCDyn+qXcQitM6JwpWa/0B
-	HYIY0YQ==
-X-Received: from pfbfj40.prod.google.com ([2002:a05:6a00:3a28:b0:842:3d2d:1e84])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:600a:b0:841:dcb5:e6f2
- with SMTP id d2e1a72fcca58-84524561d40mr12669b3a.23.1781629619966; Tue, 16
- Jun 2026 10:06:59 -0700 (PDT)
-Date: Tue, 16 Jun 2026 10:06:59 -0700
-In-Reply-To: <CAEvNRgFPKC2uOMaams7SS9B7LxvfU4h8DrPM5vXFb=pmXsgPbA@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1781630198; x=1782234998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=m0Na40jsKjOOHid0+S5827JBwf9AggIFrx0Gx8lBHzA=;
+        b=XjoldAa/2RyAEwgcNSHN2xsm3zXxlEZ+2bn4WgNJwdPcfClygfjf3OGqqs6UmW8A97
+         mfGGOTFF59O+fe7lm+heeDrKNgwaIeJbUGow7qO2gbFV/11RqfXMKip2SJkGPcybRocZ
+         2FZZ1MVg+sI2s/KYZ3F67wWmmab98cFlNXvkV5VwBcFzPCNGBxQvbc7welp36119X/6B
+         UTi1bQspKHbhZ25EpY3vFEIogh45bR87K+N5P5glKtvhRhP72eE86wD25OFFe8Pyr0WJ
+         t9i/f5ajCWBhnyi8Hp+NQDAG0oxPfJdz56djF7a6VPuXeIeyI1C8CyMtTMWsVP0/25BM
+         hErA==
+X-Forwarded-Encrypted: i=1; AFNElJ9VwPS+KUCRE1mdJUHm5pDSslUXvJol/MVFB54ibeeT3r0y/Hlq6siDRZksE13Od/cjKp+BpDjIwHfGLxnvXPQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWrv2kc6HSnHKP3+JJfjM2/POIZcpWQvS/SCoaMN+IXSYjPHQO
+	BWKoIZwdYeoPoep1l71WFqZ9vMXnfV6m8X4cdfrlTpco/iHNHNeJF4cWT/Ql9i3bEVDYaaooEbX
+	ID4iWfVzssb45EjuGqOg6QhpYlQGglzs3Y3cFJbaJXw==
+X-Gm-Gg: AfdE7cl8BAt7tEZVTO/gxsUBUanmSg7+SuTt/aGkakU30d1E/ORAyCxKe8lAXXmbpuq
+	sN245NP3UOMzyJA3kqNpI8guxMA4RWNc0yQdfvo7i5Yoi/nqyYDnvfkO5W8e9ItasuXY2ksHY9x
+	d9lTPgDVk5YeMPWils6Mwdgyq214NZXM+geMoRxYNmbVTgZpWax5ID4kajVwmHv/RQO0Nly4p0x
+	muLwzj56rq6T4BMo6DJjf2ggzNyUMj91w3exGUDZlnQ08zUBFN2ora77GymsmVIXKcHURXshIO7
+	DbZRiHZOoPdPn9xAIlF4A26NGrlrZbOo+t2Sh5rs/gB0cksCiuY=
+X-Received: by 2002:a05:690c:c11:b0:7f8:7e60:aca with SMTP id
+ 00721157ae682-7fd00b41bfcmr45333267b3.47.1781630198070; Tue, 16 Jun 2026
+ 10:16:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
- <20260521-tdx-selftests-v13-v13-19-6983ae4c3a4d@google.com>
- <CAEvNRgHEq-hHcTivUw8TYBeMu-RpS=Ho4DXaNXKQKLPL_biTgg@mail.gmail.com>
- <aiMOWkiVBqoQDAPd@google.com> <CAEvNRgF09SfDm=OgbrS8-wpfxbNecQkqAQwf1ELq1jWu7NjbUA@mail.gmail.com>
- <aiM2Nm9Eh68mIVX3@google.com> <CAEvNRgHjno=XDnMpTvZcNCR6D5RAi1rbynrL4CnnEa7Y-M3VLg@mail.gmail.com>
- <ajFfb9u6dU47Nj3v@google.com> <CAEvNRgFPKC2uOMaams7SS9B7LxvfU4h8DrPM5vXFb=pmXsgPbA@mail.gmail.com>
-Message-ID: <ajGCs3W_zMyFmJjR@google.com>
-Subject: Re: [PATCH v13 19/22] KVM: selftests: Finalize TD memory as part of kvm_arch_vm_finalize_vcpus
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
-	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Erdem Aktas <erdemaktas@google.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
-	Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+References: <20260616093103.471444-1-sun.jian.kdev@gmail.com>
+ <20260616093103.471444-2-sun.jian.kdev@gmail.com> <ajFQvedGURQuKqbX@mail.gmail.com>
+In-Reply-To: <ajFQvedGURQuKqbX@mail.gmail.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Wed, 17 Jun 2026 01:16:25 +0800
+X-Gm-Features: AVVi8CfQ9aqklUqfMKfjhMBGm3tuyh-ykNo01OgpkMaLz69xQ_iTRgzZV4nsZPM
+Message-ID: <CABFUUZHV2be01_BVO1ZAVf9_z1UOzsYZ7hH1FKrwmJUxPnrR_A@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 1/2] bpf: Fix partial copy of non-linear test_run output
+To: Paul Chaignon <paul.chaignon@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org, 
+	john.fastabend@gmail.com, sdf@fomichev.me, toke@redhat.com, 
+	lorenzo@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 16, 2026, Ackerley Tng wrote:
-> >> 1. What do you think of a kvm_arch_vm_finalize() that calls
-> >>    vm_sev_launch() and tdx_vm_finalize()? My key issue is that
-> >>    kvm_arch_vm_finalize_*vcpus*() seems to be for finalizing vCPUs
-> >>    rather than the whole VM.
+On Tue, Jun 16, 2026 at 9:33=E2=80=AFPM Paul Chaignon <paul.chaignon@gmail.=
+com> wrote:
+>
+> On Tue, Jun 16, 2026 at 05:31:02PM +0800, Sun Jian wrote:
+> > For non-linear test_run output, bpf_test_finish() derives the linear
+> > data copy length from copy_size - frag_size. This only matches the
+> > linear data length when copy_size is the full packet size.
 > >
-> > Key word "seems".  I'm pretty sure Oliver picked kvm_arch_vm_finalize_vcpus() as
-> > the name in commit 8911c7dbc607 ("KVM: arm64: selftests: Create a VGICv3 for
-> > 'default' VMs") for the same reasons I think it's a good fit for coco VMs: like
-> > finalizing TDX VMs, initializing the vGIC effectively finalizes vCPUs.
+> > When userspace provides a short data_out buffer, copy_size is clamped t=
+o
+> > that buffer size. If copy_size is smaller than frag_size, the computed
+> > length becomes negative and bpf_test_finish() returns -ENOSPC before
+> > copying the packet prefix or updating data_size_out.
 > >
-> > We could rename it to kvm_arch_vm_finalize(), but that won't change the fact that
-> > we'll need to decide between automagic vs. manual finalization, and it definitely
-> > should be a separate discussion.
+> > Compute the linear data length from the packet layout instead, and clam=
+p
+> > the linear copy length to copy_size. This preserves the expected
+> > partial-copy semantics: return -ENOSPC, copy the packet prefix that fit=
+s
+> > in data_out, and report the full packet length through data_size_out.
 > >
-> 
-> This definitely should not block this series.
-> 
-> It's coming together for me now with your explanation:
-> kvm_arch_vm_finalize_vcpus() actually means finalizing vCPUs! vGIC ==
-> Virtual Generic Interrupt Controller, which has to be done after all the
-> vCPUs are set up. Since the name is describing where in the VM
-> creation/setup flow the hook is called (after creating VM and after
-> creating vCPUs), maybe something like kvm_arch_vm_post_vcpu_create()?
+> > Fixes: 7855e0db150ad ("bpf: test_run: add xdp_shared_info pointer in bp=
+f_test_finish signature")
+> > Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> > ---
+> >  net/bpf/test_run.c | 11 ++++-------
+> >  1 file changed, 4 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> > index 2bc04feadfab..976e8fa31bc9 100644
+> > --- a/net/bpf/test_run.c
+> > +++ b/net/bpf/test_run.c
+> > @@ -453,19 +453,16 @@ static int bpf_test_finish(const union bpf_attr *=
+kattr,
+> >       }
+> >
+> >       if (data_out) {
+> > -             int len =3D sinfo ? copy_size - frag_size : copy_size;
+> > -
+> > -             if (len < 0) {
+> > -                     err =3D -ENOSPC;
+> > -                     goto out;
+> > -             }
+> > +             u32 head_len =3D size - frag_size;
+> > +             u32 len =3D min(copy_size, head_len);
+> >
+> >               if (copy_to_user(data_out, data, len))
+> >                       goto out;
+> >
+> >               if (sinfo) {
+> > -                     int i, offset =3D len;
+> > +                     u32 offset =3D len;
+> >                       u32 data_len;
+> > +                     int i;
+>
+> That doesn't look needed.
+>
+> >
+> >                       for (i =3D 0; i < sinfo->nr_frags; i++) {
+> >                               skb_frag_t *frag =3D &sinfo->frags[i];
+> > --
+> > 2.43.0
+> >
 
-No, because I would expect post_vcpu_create() to run after creating each vCPU,
-not after creating all vCPUs.  E.g. see KVM's kvm_arch_vcpu_{pre,post}create().
+Hi Paul,
 
-> Renaming this to kvm_arch_vm_finalize() makes it sound like it is
-> finalizing the VM, but this function shouldn't finalize the VM since for
-> CoCo finalizing the VM also loads the guest image into the guest - deals
-> with memory, not just vCPUs.
-> 
-> 8911c7dbc607 ("KVM: arm64: selftests: Create a VGICv3 for 'default'
-> VMs") also includes a test_disable_default_vgic() function, we could
-> also use something like that to skip CoCo VM finalization for some
-> tests? Maybe that's a good middle ground.
+Thanks for taking another look.
 
-That probably won't work well, and in practice it's just shuffling deck chairs
-on the Titanic.  For vGIC, and pre-create hook works because the tests that opt
-out of automatic vGIC instantiation want that behavior to apply to all VMs that
-the test creates.  That's not the case for sev_smoke_test though, because some
-testcases need deferred launch (test_sync_vmsa()), whereas others can use
-automatic launch (test_sev()).
+Agreed, I'll keep the fix patch minimal and leave offset as-is.
 
-The other wrinkle is that SEV at least needs to provide the policy, which again
-varies per VM within a single test.
+For the selftest patch, I'll try to reuse pkt_v4 and the existing TC
+program where possible, and keep only the minimal XDP frags program for the
+XDP case.
+
+Thanks,
+Sun Jian
