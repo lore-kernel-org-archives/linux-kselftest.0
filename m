@@ -1,193 +1,125 @@
-Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172423C8738;
-	Tue, 16 Jun 2026 04:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF933B100A
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 04:34:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781583889; cv=none; b=u5ZLQzSQED2iZZLOX9NWIeXKKDpWYud+K7GA4AeVmR/yUHdS5EufG34NbUG14OufKm7tb9Yi7vs0/gHSucl/pVkXvwY836I+BJ1Jb2R4AlMykCsk+GqqPCK6WNokx0rRLgjHWO2rNV1y4FLMLZuPgpZHg/DlM4BFDoRkNjY5vsk=
+	t=1781584444; cv=none; b=Mt/BJX6qkKh6P094sV1/dorAouMojo5ox3g59c5QnJ/dM/1bzoKrat577dM7E9LBrvVXMHOSMdhvLmzcsPAVkz7S4z930nwDo/oe/9NFFZ8xHE9nUf52r82Nq2XTUJpx50I9AKt6LYcIYMvSLRzhxNe/1s/E4wk2x4iLiSDOPjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781583889; c=relaxed/simple;
-	bh=TooB9fuNzqFzvlDpyy/qp361HVzKFMwkSEWbbK7EuS0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NpBkjH27+zUy51kEOkgfncA/ziebcarOmUNf7B5R6bT1OZvFil1H6F3XUabMuZSxwsZuVaV4vTup4fDQhAJOLKACg8cj/sGuDDVM77PUK143ntjMHI0nf0gd9kiOIjVy3wh5/+ZYt4uOfe+4Q9t3c6u1H5qmMWXha7HoeQVacr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=who-t.net; spf=pass smtp.mailfrom=who-t.net; dkim=pass (2048-bit key) header.d=who-t.net header.i=@who-t.net header.b=LgBzFEHK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YVRs7coz; arc=none smtp.client-ip=103.168.172.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=who-t.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=who-t.net
+	s=arc-20240116; t=1781584444; c=relaxed/simple;
+	bh=LUKEtGqgxTHViq6iBN8Jg2duqnbgRJYePDpTCKI4HrY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oqSdC4bb8e07CGiRchcluM3/6YTuWzLEvpwnnAvpfnseFSXk7ULYtJgSV520Q28gP4x9mG0nrnzQXPzG0BZfNZ9dsRzNJVvUrs8t04jn79Kse2zkTBCr4fgzRWPdWJS1Ix/itHTYG3lEbQDqRbTKb+23iHcc4HxNrjxRNjDDmmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ft8/ERt5; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=who-t.net header.i=@who-t.net header.b="LgBzFEHK";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YVRs7coz"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfout.phl.internal (Postfix) with ESMTP id F1332EC0032;
-	Tue, 16 Jun 2026 00:24:46 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Tue, 16 Jun 2026 00:24:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1781583886; x=1781670286; bh=aIbjbQoCoZ
-	WMWxtel90tXuoxffLrjBDNWsWDrpsWKmI=; b=LgBzFEHK/Akw5SEzLDrCNTvBM+
-	VY62UW58979lF2YvUaR36oj4fLVLiSPn+boVxpdDhWn8QqTXjG3/4m7gCnIPYpP6
-	N2IpprFU0sVGEUUnlQpZzaUoBWqLd8spZrTyImZ7CFIMprsutU+jV3gudutlOLl/
-	Nf/0fpPtTDUjS2YDHOvrdHWt+1N5MVeLyDJ1fDO7FddWriA4UpaVeKv7ZidN157g
-	wgj0+2c9OpbHxXinw1b5uQoTw2usNWhvjcnu1Acew1fTHsoMaIru5fnSQy3xlB5u
-	QLfKRoDwtDSxAI+oPmFtjSFqJMB64z8i2iWZnRe3R7+cmhVmErlUfihLfnlg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1781583886; x=1781670286; bh=aIbjbQoCoZWMWxtel90tXuoxffLrjBDNWsW
-	DrpsWKmI=; b=YVRs7coztl+SGKpIhsNi6UH5OgARFPBK6QljsBzmaLGjN4xDJ85
-	lUhuOevl0xmHXe6qBATyn+unw+N3aWkCQdAeNrJbDLlyYaFfuAEoV6H4DPPSZHqg
-	WDJFrCeVtsFxWahVIeeXwrHLqj8Qc4TG0kgyiyDV87zjMheyHyHLtIq7RiVGZERk
-	IA96PMvEbr1Ooh3Fu+is5pIC4aIoo+ucjLSXQDNchM6twYFQFnjmC/mx0V9Tow82
-	7oM+zW+QFar9AC34cYRiRdvIhFcRUoor5/MhvBFF8O/+0ouW0/UpvjsHmSRzI67J
-	6Iv8ytZxT58eCFtqoBc2KNpfNoCmhdKgBKA==
-X-ME-Sender: <xms:DtAwahXPCNolTxTMDa_vKii9sfBaDn0DgLzNsSSEJ_q9KHt9A7483Q>
-    <xme:DtAwanmBK7Y-RHcJMGDuRQKbBftEhoTUZNMGrnK1PA6s3U294f0X9q1PMxeDovv-6
-    UwIWYGYq-ONgwOFine5xBQRP2Wk9NaSxte8EMOerrW6yMupb96iVQ>
-X-ME-Received: <xmr:DtAwaoM_JYSaoCwQ0lZVHBYeIsGmpPVvmQ8_pn1PN8eHQfusu7Ln9F_2k-Z4TE-13LwcDIA-yoGD1Q1vpjHsmVCO-ns16agCpA>
-X-ME-Proxy-Cause: dmFkZTFTwNYV1A9vcUb2j+PTRx6CVToqXdqHI4adD1QS9KOCGDCdueKGbhjKs1LJlhHjmr
-    0VK9oFORXz9+5X1344a6E6/OCbrawVN5mCjeKD4QMVCkaO4D2VWJpAVXfMoSHypnNt4CnB
-    5ixfxlQobP6y2umFS0QcJ6Qkvl34YRP6YU64M/ZF0j/WX71t2j1k5f7X/DmqhNm98lZjIH
-    QDUqwSjWqzlHcj2rDW+EzV8F0lxz77kD8HMay/afW4Wj+K886b9dz1Pg27hyV2fLi1d0Th
-    5Cmxx6dZUJjFmD+2FvyY6s9ROVcBY9uHg/mrVg4JVszbCMWyiGD9puPZdZJ1dJ3RJlIwg3
-    7soxpiNR2/kUpxBE58575RJKfXvG+Cu96fV911ml1M0SGqCQRi+9nr5iF82Oy1LHGGvTAw
-    apYX6J0oM+bLVkatnQliFxwiTiUIEYYf6oMmRSsWSqzNletICuPLBv/xkcrRwNm55jEcX0
-    tVT9EIyzl/ZTWwwsWDgancCUOxhC/AL5tbhZ0C0Qf/3iwICVS02mfFm1PczQbQswD61LXk
-    fx74NAp7XzpdrzqxvP7pBgCRoz7dRX/SvAmJidvg/7dT8feje2JvK/+1BoLhVAaKC7+47/
-    AtkLji6iL8c43NWF4E2Lh9eNHI6MOiPXc2o7KvRTBd2i2T8UakqnnnjKiMtA
-X-ME-Proxy: <xmx:DtAwanLNIaRMP4BLXzb67L1MJZteapRGYVFi30XSSWKIx1E-Gy_tNg>
-    <xmx:DtAwaq2niwuL8XZrDZ9xg0eoKAZ4X1txBq0gW-ihynwI09CpMTTmFA>
-    <xmx:DtAwarVYEF89C3h3B0LatGaLJHI-Ty3dW0bFLs9HnyU13HA1zrErww>
-    <xmx:DtAwasOm0t0FtBdJ1CEIlMg9FExuUBxljTPtDR4IkZoTUwKGPLGtNw>
-    <xmx:DtAwasvS0UwXcE2TTUAKkK92_Q-rwW2xamkqoOt-oLhXb0ReJDDU0Fn1>
-Feedback-ID: i7ce144cd:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 16 Jun 2026 00:24:42 -0400 (EDT)
-Date: Tue, 16 Jun 2026 14:24:38 +1000
-From: Peter Hutterer <peter.hutterer@who-t.net>
-To: Rong Zhang <i@rong.moe>
-Cc: devnull+peter.hutterer.who-t.net@kernel.org, bentiss@kernel.org, 
-	dmitry.torokhov@gmail.com, jikos@kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org, 
-	vadim@cirque.com
-Subject: Re: [PATCH v2 1/4] HID: multitouch: set INPUT_PROP_PRESSUREPAD based
- on Digitizer/Button Type
-Message-ID: <ajDO531wxzVZlL4g@quokka>
-References: <20251222-wip-hid-pressurepad-v2-1-054ac9689bb7@who-t.net>
- <fb198851093477d958eae61665e9cfda0be5b48f.camel@rong.moe>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ft8/ERt5"
+Message-ID: <b1efbbb0-d2ea-4050-aef7-e35db35bd8d9@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781584431;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8Gq0+z1rQrdFQFlUMw8WzxC/rc8erTBIXTVTj5Az1WQ=;
+	b=ft8/ERt5YZeIoJPxdApVC4NzHxWQvvl4MECoVLr2tnBDD1p5in2moBAac77BQNpA88Zm2X
+	KTBocwtr1LScgPRSqjo+FMk7U9UEaZXYugT1HPqfqmXsHgpoPtcz1MSUvySzIZ/6acYFle
+	vvAsLFKyP4xD08dGHYPDHiEqnyLkGN0=
+Date: Tue, 16 Jun 2026 12:33:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fb198851093477d958eae61665e9cfda0be5b48f.camel@rong.moe>
+Subject: Re: [PATCH bpf-next v6 11/12] selftests/bpf: Add test to verify
+ xlated insns for global percpu data
+Content-Language: en-US
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ kernel-patches-bot@fb.com
+References: <20260615152646.27639-1-leon.hwang@linux.dev>
+ <20260615152646.27639-12-leon.hwang@linux.dev>
+ <DJ9XY0Y2D2R8.16S9E0QFFMLQS@gmail.com>
+ <d9eaffaa-6bbd-4af1-97cd-e5e37917c526@linux.dev>
+ <CAADnVQLnnSrHDbw4OQCPrXz38wZ15PC1HuS1-aSB7LZxOQhd1g@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAADnVQLnnSrHDbw4OQCPrXz38wZ15PC1HuS1-aSB7LZxOQhd1g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Rong,
+On 16/6/26 12:23, Alexei Starovoitov wrote:
+> On Mon, Jun 15, 2026 at 9:19 PM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>> On 16/6/26 05:29, Alexei Starovoitov wrote:
+>>> On Mon Jun 15, 2026 at 8:26 AM PDT, Leon Hwang wrote:
+>> [...]
+>>>> +    ASSERT_EQ(ld_imm64_xlated[0].code, ld_imm64_raw[0].code, "ld_imm64 opcode");
+>>>> +    ASSERT_TRUE(ld_imm64_xlated[0].dst_reg == ld_imm64_raw[0].dst_reg, "ld_imm64 dst_reg");
+>>>> +    /*
+>>>> +     * The xlated instruction has the map ID in imm and the offset
+>>>> +     * in the next instruction's imm. The raw instruction just has
+>>>> +     * the offset in its imm.
+>>>> +     */
+>>>> +    ASSERT_EQ(ld_imm64_xlated[1].imm, ld_imm64_to_u64(ld_imm64_raw), "ld_imm64 off");
+>>>> +
+>>>> +    mov64_percpu_reg = BPF_MOV64_PERCPU_REG(ld_imm64_raw[0].dst_reg, ld_imm64_raw[0].dst_reg);
+>>>> +    ASSERT_MEMEQ(&insns[idx + 2], &mov64_percpu_reg, insn_sz, "mov64_percpu_reg");
+>>>
+>>> If the point of the test was to check that percpu_array_map_direct_value_meta()
+>>> computes 'off' correctly then it failed to achieve that goal.
+>>
+>> It was to check the 'off' and the mov64_percpu_reg insn.
+>>
+>> To avoid relying on the insns loaded from ELF obj, use raw insns to
+>> check the 'off' with a percpu_array map:
+>>
+>>         struct bpf_insn raw_insns[] = {
+>>                 BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0),
+>>                 BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, 0),
+>>                 BPF_EXIT_INSN(),
+>>         };
+>>
+>>         skel = test_global_percpu_data__open_and_load();
+>>         exp_off = offsetof(struct test_global_percpu_data__percpu,
+>> struct_data.nums[6]);
+>>         raw_insns[0].imm = bpf_map__fd(skel->maps.percpu);
+>>         raw_insns[1].imm = exp_off;
+>>
+>>         prog_fd = bpf_prog_load(...);
+>>         err = get_xlated_program(prog_fd, &insns, &cnt);
+>>         idx = find_percpu_ld_imm64(insns, cnt);
+>>
+>>         ASSERT_EQ(insns[idx + 1].imm, exp_off, "exp_off");
+>>
+>> Would this achieve that goal?
+> 
+> Hmm. There is nothing like that in the patch.
+> What are you talking about?
+> Some future improvement to the patch?
 
-On Tue, Jun 02, 2026 at 01:25:57AM +0800, Rong Zhang wrote:
-> 
-> Hi all,
-> 
-> Hopefully I'm not too late to show up here.
-> 
-> > From: Peter Hutterer <peter.hutterer@who-t.net>
-> > 
-> > A Digitizer/Button Type value of 1 indicates the device is a
-> > pressurepad, see
-> > https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/touchpad-windows-precision-touchpad-collection#device-capabilities-feature-report
-> > 
-> > Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
-> > ---
-> >  drivers/hid/hid-multitouch.c | 12 +++++++++++-
-> >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-> > index 179dc316b4b518d78bdc900d9fd15756c5eba83e..382e6f50c4f7e663af7d028abb8be7cb2e6e7b8e 100644
-> > --- a/drivers/hid/hid-multitouch.c
-> > +++ b/drivers/hid/hid-multitouch.c
-> > @@ -81,6 +81,7 @@ MODULE_LICENSE("GPL");
-> >  #define MT_INPUTMODE_TOUCHPAD		0x03
-> >  
-> >  #define MT_BUTTONTYPE_CLICKPAD		0
-> > +#define MT_BUTTONTYPE_PRESSUREPAD	1
-> >  
-> >  enum latency_mode {
-> >  	HID_LATENCY_NORMAL = 0,
-> > @@ -179,6 +180,7 @@ struct mt_device {
-> >  	__u8 inputmode_value;	/* InputMode HID feature value */
-> >  	__u8 maxcontacts;
-> >  	bool is_buttonpad;	/* is this device a button pad? */
-> > +	bool is_pressurepad;	/* is this device a pressurepad? */
-> >  	bool is_haptic_touchpad;	/* is this device a haptic touchpad? */
-> >  	bool serial_maybe;	/* need to check for serial protocol */
-> >  
-> > @@ -530,8 +532,14 @@ static void mt_feature_mapping(struct hid_device *hdev,
-> >  		}
-> >  
-> >  		mt_get_feature(hdev, field->report);
-> > -		if (field->value[usage->usage_index] == MT_BUTTONTYPE_CLICKPAD)
-> > +		switch (field->value[usage->usage_index]) {
-> > +		case MT_BUTTONTYPE_CLICKPAD:
-> >  			td->is_buttonpad = true;
-> > +			break;
-> > +		case MT_BUTTONTYPE_PRESSUREPAD:
-> > +			td->is_pressurepad = true;
-> > +			break;
-> > +		}
-> >  
-> >  		break;
-> >  	case 0xff0000c5:
-> > @@ -1393,6 +1401,8 @@ static int mt_touch_input_configured(struct hid_device *hdev,
-> >  
-> >  	if (td->is_buttonpad)
-> >  		__set_bit(INPUT_PROP_BUTTONPAD, input->propbit);
-> > +	if (td->is_pressurepad)
-> > +		__set_bit(INPUT_PROP_PRESSUREPAD, input->propbit);
-> 
-> I noticed that this leads to dual reporting on my device.
-> 
-> Consider previous checks:
-> 
-> 	if (application == HID_DG_TOUCHPAD) {
-> 		mt_application->mt_flags |= INPUT_MT_POINTER;
-> 		td->inputmode_value = MT_INPUTMODE_TOUCHPAD;
-> 	}
-> 
-> ...
-> 
-> 	/* check for clickpads */
-> 	if ((app->mt_flags & INPUT_MT_POINTER) &&
-> 	    (app->buttons_count == 1))
-> 		td->is_buttonpad = true;
-> 
-> ... where `td->is_buttonpad' is set to true when a pressure pad has only
-> one button, i.e., the "touchpad button integrated with digitizer" [1].
-> Most (if not all) pressure pads fall into this category. As a result,
-> the presence of INPUT_PROP_PRESSUREPAD is always accompanied by the
-> presence of INPUT_PROP_BUTTONPAD.
+It is future improvement to the patch. Sorry, it is too far from the patch.
 
-Yes, this is intended, see commit
-ae8966b7b5bd69b86209cc34bcca1ba9f18b68e6 which lists this in the commit
-message:
+> My question was about the patch you posted.
+> What was the point of it?
 
-```
-    This means:
-    - clickpad: INPUT_PROP_BUTTONPAD
-    - pressurepad: INPUT_PROP_BUTTONPAD + INPUT_PROP_PRESSUREPAD
-    - pressurepad with configurable haptics:
-      INPUT_PROP_BUTTONPAD + INPUT_PROP_PRESSUREPAD + FF_HAPTIC
-```
+The point of the patch was to check that
+percpu_array_map_direct_value_meta() computes 'off' correctly against
+the 'off' encoded in ELF obj, and a mov64_percpu_reg insn should be
+added after loading the prog.
 
-We have to keep setting BUTTONPAD on all pressurepads because otherwise 
-we'd break existing userspace which relies on this.
-
-Cheers,
-  Peter
-
+Thanks,
+Leon
 
