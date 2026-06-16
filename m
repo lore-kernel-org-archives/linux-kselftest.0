@@ -1,792 +1,545 @@
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB953EEAD7
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 06:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781592150; cv=none; b=fvC2LPwnZvNX4TZtGawALt1PA2LFvL9ZQ7EF0mPY73ajnQaGU9pDWrmBPD4U3cYR4MrmtjrEQwrA5RVfyvNbDEjUSH/RRNyippqvEzz36PZb5OFs1814520MlEmsDRBgHEVYdBX9IE8L8vbjRwvAohoaYVBXjFxY4egUl/ymwxo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781592150; c=relaxed/simple;
-	bh=WcZjrEZRfh3S+gNhBagj2KSvnMhBuQ9BnZjQPPnfosw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o52emwHI5WAJzovyKuNFaWa/D4/doQLxWZmYiGEm8H2TQoDJL0nrmfQ+2HmlDyTgebBvlRgHBcqEu6pTykTn021DOAcaEdwAHnxzx8qsKOlZf3TwG6Pl12qy7b8+x1hh4tvIRuAU1L3SFo4FRUYaNwZGFN4IpWe+DCTFCU8KWko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J0KIce9H; arc=none smtp.client-ip=74.125.82.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE4D30568D;
+	Tue, 16 Jun 2026 06:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781592569; cv=fail; b=Tf9mwvYU3pmCXrQWzaIGBtMI8mqRAOfm+0lgkb+bkwI2dZnPoyTxOqr4KzQnGyCZWeJjE6pX4JXpvHD/nf+qx/o87ApS90qJnTMHf1Tkz5eOckl5nQY3itsROuzdmlaBu8NV7kkNns7EqzZK75ujuZDehtm+8gjFMmkIJSBjPII=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781592569; c=relaxed/simple;
+	bh=IRYvOqUbsBcikbWknLCUlv5yUaIy3/yDFS9ZUPYAbfI=;
+	h=Message-ID:Date:Subject:To:References:Cc:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=j0cecI1RxUmPh++55Dc9kGaN0kSDcF5l4kAo43ygsHRRkLvDyoVc7pdSRfeH+BrqG2s+yeh5z6L+Tj61E2+IDgtD8O2pN57344jQKZ5bQxTbz6TLix6IrjQjcuiUh8mQ5GguWasDXOM0d3JKc07mWfSLHHAu37ytyKNBQ7+RJGk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Qs1MUN9E; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=l81Kt9YY; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J0KIce9H"
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-1384eb94d20so7672864c88.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 23:42:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Qs1MUN9E";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="l81Kt9YY"
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65FJhX6f1349246;
+	Tue, 16 Jun 2026 06:48:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=PBjsNmogYJDFNJNERnWkReC1Z4B0usGw7EMqGw7tZJk=; b=
+	Qs1MUN9EaqRtiXC70wKCzT3gD/tP5tnvnmk0ewvG8s+Kz5valnKB2EQ0YEPbhH5e
+	SQwp5PX2PLo1svr9oTiLroFpsTbY9Qfi0jK3G7D6Ha4TEJyNCtNtP/eo5pOr2hD3
+	4DWgpryLqtVMSHWHRnyiAqAWAnMxUrfDzfI3ZoJykmKc7FtXXiA2nlTnzQcAkvGB
+	DuTSyOQcnXdhs3ucfR/HLeWsqyvMrATH9MQSR7rMtzKKSuCMOYVZcMqNdVn4BXfA
+	zofWH71bWRaaeZhNQ2gE/54o5JZuGPA1w0MSiWrXGGyKmAlXMJv8haNf39xZUNLV
+	G1hawdYW9qgajsjgeOSyVA==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4es1acbwhw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 16 Jun 2026 06:48:41 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 65G6mVDV022583;
+	Tue, 16 Jun 2026 06:48:40 GMT
+Received: from bl0pr03cu003.outbound.protection.outlook.com (mail-eastusazon11012005.outbound.protection.outlook.com [52.101.53.5])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4erwnq4jsm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 16 Jun 2026 06:48:39 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Cd2ICzqx2/Y9HQdnST7U5KOo34EHX5qqTpFrejphSETyAS2LlfHl1iUsTfARKw/eqi9/7uOIetSjtMsrR4tDFOV19u93s7AIzXr6SHc6gd0moyHxTxvepx2QgK8gvKqAajS7IZGGzIvAO9C9vOuYqthfpzYuAeXILH0lqZ6NcD6CsOAdIpDCCgxHY4e/jnKoB08rUdkm6AT/f209DRv9FM658DngXIduy5qX6ERLaA8kcCjnNV51pvQ2gysYBhynnErwj/+Sa7uocQDDHIjqobxJRqpHjwyGFTA9jwOEsavqMK0J5/G/tBAVA5iR3uOQjKhcVZAcSpE5RuUAOgzMTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PBjsNmogYJDFNJNERnWkReC1Z4B0usGw7EMqGw7tZJk=;
+ b=ib48SsWPM9r+UonPCZcCNvaqXuqS1BJ8oprkyDSeH0XWxwx42uxBy68OHFDNKma/Oe0o8a9hvJNeI0E4i4YLgtsst854qbsyIiVBGsOhbSjswj3SOyBoemhHWTeHYAL5bh/Qyc9o3J2PEuSSPdFpBO4W6gIpk8zW1l+ALTSWwbJgycj8p+4ZZOsaR1p/yENb53w9tQv0YP00PoBslnRv67g/JR8i7ZQECy4/ajygbNtbrS84OXiety1W3QTaf0PxprSrkJpXnUtjRgf4BZvSeEt9waOBlBoDo3/c+h9SeTJn8cKZyhu6Im8Lo3gRxQOKytc1elhlIgXS2Cy2I/iQIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781592147; x=1782196947; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gdc1n+XKhvad81vsVkXIxxp7+FIV7UAbFF/cS0eyfrM=;
-        b=J0KIce9H301kNnYBKMaQM0948+SBU0IVW7itqJpf3XbX4VwpKXZCWuKe+Etgm5gcBZ
-         1MSeH0JeYERbuWcb5hvOYr7dLRCyg+QEHpO7MBZUCNxUQbLZiYCLhkQyQEnXxuT2Hqei
-         vKntKi4B3XRZWlhn65Epn0m4CrGEJQVa8z8tyGf+7cfblAzmiM2Vp0MWzlYJqxjMTRb1
-         v+RlqT0vLs9O2mdXaEEtyICQGzCHk1m1gRHrs5/a35Y3oRBfBG6g8oDZZAaH25MJ3tgo
-         nSTirVrlA4HJviIq7CK17HIKjUd0sczZJYHNEDweCosn4ZrQyz64xMVeltMgVocZa9ba
-         t8WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781592147; x=1782196947;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gdc1n+XKhvad81vsVkXIxxp7+FIV7UAbFF/cS0eyfrM=;
-        b=M8yHg/NFBNmragEYsDZYMiMUl5gc5EMWiDwY+GACI8otb79JsQxCN3ZeCGo8b75RI4
-         HxO3NAGMoWmm4A+fcRYuarxltwn4DBbahjmmtlPVzo8Yp5jDBj/qqYuEBpK7KZJh/7LF
-         nLOS3DaZXvZOvOWUmUWXXtzcUa3CxuXvqy1b00qCPqyQ89XJvLcJQzbExVXhO31axhr5
-         R65xsDwGoI8gx8mC8YWXTaYJ4tOjEl/vx8oshiagZ2xcLJpx2/gX/KwqAGfTa9vhJtbv
-         XgQnNz8c3GO2HoSHnlY6Kr6/abBWgA4IWSEOfdkFCxJOzWFlSd6p9Ow9iCYvHJtO4dBJ
-         R/Mg==
-X-Forwarded-Encrypted: i=1; AFNElJ+HsXf0Lf0yQm7dSXiAt2rpR76zJ9VjucPPXZAzhSsaxuGJx99v1/S6zomtHri5xqgp7tNuZgjdwfbRAVw3Ec0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyehxjkwrh4YrVm9R5rokkW5le090OGwgPuXo+/wSkHCaWS+hrG
-	34QYt00+P7f6ZpMrlbM5CWL+cQELFFRmLh8kHs/Mz7byNOPHGMGi3GU5
-X-Gm-Gg: Acq92OGTMwo0DevdRJYHVo9iUctMKl83rltUv+N3bg1JCe1ABXBxh1FafqyWjfJJYcJ
-	MSCMliKpCVDk/vkUHATR6AgXcRY7IhXCMzKubdcm4ooK58zx/iLo1bEVleFANgRaAKiRz2cWpi7
-	Ri2BlDOQ0mc4H+puDp+mb80PdX5d3OZ6NJMgsWYJ85B/f6QSH28ZbGUeZz7QVmLHK/DkQOH9r6s
-	2E9H9IUKf8nHbX67KD6Z0j35rKwtlPjN/g0WG2/s5Dev1X3Ls1tovqN/GoieFjT1OeNIHS/PuZb
-	D8XPUnXD6rR0dB2bvXNR57nu688N2hRJ6FRdQuMo/1E2R0Jqt6LrnrFJp4uzdhZiAShrC+Iweat
-	8wYE1fFiURvZT8H8Rl4X5PB4CYdrUWD5GMFnZccAUpvU1BDUXEiKwVJsNkZmEmbGm4UyjFbzpE6
-	45i7URZMOaRvm4GdlxQ3BX7qhGu3TEnlevuj895g==
-X-Received: by 2002:a05:7022:f9a:b0:139:89ad:8deb with SMTP id a92af1059eb24-13989ad9011mr314176c88.9.1781592146682;
-        Mon, 15 Jun 2026 23:42:26 -0700 (PDT)
-Received: from localhost.localdomain ([2408:8607:1b00:8:55be:2dbe:9cd4:7306])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384b910c51sm12499158c88.4.2026.06.15.23.42.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 23:42:24 -0700 (PDT)
-From: Li Pengfei <ljdlns1987@gmail.com>
-X-Google-Original-From: Li Pengfei <lipengfei28@xiaomi.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	lipengfei28@xiaomi.com,
-	zhangbo56@xiaomi.com,
-	kernel test robot <lkp@intel.com>
-Subject: [RFC PATCH v4 3/3] trace: add documentation, selftest and tooling for stackmap
-Date: Tue, 16 Jun 2026 14:41:19 +0800
-Message-Id: <20260616064119.438063-4-lipengfei28@xiaomi.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260616064119.438063-1-lipengfei28@xiaomi.com>
-References: <20260616064119.438063-1-lipengfei28@xiaomi.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PBjsNmogYJDFNJNERnWkReC1Z4B0usGw7EMqGw7tZJk=;
+ b=l81Kt9YYbQjfxP/WeZpjIhWUhOW3H7Y9KmgFrK6/+41LeaurzK0bL/QKd/pqAH//0jI5Xn3QJpWsV1Ub8AFl1B9ScyADjYmiyL+MnY6BiV7QiW/9pm0E7k1WFnR0i/+IxHqDPAXpBOwP04kNtGniwZ1IHVtM9h6yPy4rlsLOSQY=
+Received: from BN0PR10MB5109.namprd10.prod.outlook.com (2603:10b6:408:124::23)
+ by SA2PR10MB4540.namprd10.prod.outlook.com (2603:10b6:806:110::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.18; Tue, 16 Jun
+ 2026 06:47:42 +0000
+Received: from BN0PR10MB5109.namprd10.prod.outlook.com
+ ([fe80::d9fa:7ad2:804b:bb83]) by BN0PR10MB5109.namprd10.prod.outlook.com
+ ([fe80::d9fa:7ad2:804b:bb83%6]) with mapi id 15.21.0113.015; Tue, 16 Jun 2026
+ 06:47:42 +0000
+Message-ID: <77f541f7-b346-4c86-8e66-3d2439e29cbb@oracle.com>
+Date: Mon, 15 Jun 2026 23:47:39 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 04/34] KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for
+ accurate KVM clock migration
+To: David Woodhouse <dwmw2@infradead.org>, x86@kernel.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+References: <20260608145455.89187-1-dwmw2@infradead.org>
+ <20260608145455.89187-5-dwmw2@infradead.org>
+Content-Language: en-US
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Paul Durrant <paul@xen.org>, Jonathan Cameron <jic23@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Sascha Bischoff <Sascha.Bischoff@arm.com>,
+        Jack Allister <jalliste@amazon.com>, joe.jin@oracle.com,
+        Joey Gouly <joey.gouly@arm.com>
+From: Dongli Zhang <dongli.zhang@oracle.com>
+In-Reply-To: <20260608145455.89187-5-dwmw2@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR05CA0185.namprd05.prod.outlook.com
+ (2603:10b6:a03:330::10) To BN0PR10MB5109.namprd10.prod.outlook.com
+ (2603:10b6:408:124::23)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN0PR10MB5109:EE_|SA2PR10MB4540:EE_
+X-MS-Office365-Filtering-Correlation-Id: a858dcc5-5782-4abb-2a0d-08decb732a45
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|23010399003|22082099003|18002099003|3023799007|4143699003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	DYIClzSVTp3sAqy5/1XAbk0wUHMK54c/0EXWxKHFwUV/V5279UuwQPuNu5+fFDg4HbB9bjaWQ9K89NDWm6Vx+Za6ZwsUsW8NPZpfB6OvnllL7baelArT9LtpjSol55qA2WaxWKOWwpmv5MVd3Dk7JKXMPhKCCyI0vYX8I2NiNAOrr//T67vkzJ0v5XXdcl7Lggg7u5Xw8Hm1yzE48VLjOFPVroHee159Lt/5RHO7VLXQPnmp30wIoNyvqEeiJRwGJ8/mesZd02W+MKXz8/aL0Ht/xLQ55mrp19aYQuzSW9EQCJ2pcJ8n/z7whWoV1TkrDBZJOoQT9w8M0cM+qhbpPC205G8YBymK9HYiKK89rXLTTzd+7y9yD4FMET82zjIuCfz/mHaNnAAUlfZHSZ4f0BT35TIeRFBZRWTvJi6qQqG0F3oI3VjyKq9lVqaL1/YXBrwt2TbW4kfPY/Y2mzsnt61tJn+p/TjFdyYOOBeo+ZxT48XhA72q2AeOVEN0lg0mAXuAS/A4y333VX/Feb825RHrszq1HF0HvSoPBRlf20osac+/lwxAGjBtqfFHi07XZOEIEOB9M8BK8tjdlE10jH6dbwEuKxPJPFtVvaW4nhOWSOqChOm+rTCWt1LHeY34975/4X3FNrvanhn7M1pflb/hUDAC2q457ZnqA6p8mDhIFo70yK8mTAwH6J3TYg/TYMOUOqrmAJNtRNIUYzAS0g==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5109.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(23010399003)(22082099003)(18002099003)(3023799007)(4143699003)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MVJMVytxcGhzYnBIdTlFVDlZWnZDcG14bnZDb1g1bXRBUVM4Z3RSenZ2VzB0?=
+ =?utf-8?B?amNoaFM5TzN0UkhuL2swL1MwZFp1LzViajlRSVY4R1JiTm94dUR4czNoTUwv?=
+ =?utf-8?B?NWJlRXQrRmpKVTBBRWMwVCtDMVVKeVJ0T0RwbWhGRnhCUVBNZHU0U254aE1K?=
+ =?utf-8?B?MTkzZDFXOEViaVdFTFMyV2h0OWdWSFc0d05HYUxDZFV4aGxDdXJ4YWNLbnFs?=
+ =?utf-8?B?b01UakhZL1c5Z0VwUGNJR2QrUXVsUFQ2UlpDZ0w4WitlVnNlbG15dVA0alIv?=
+ =?utf-8?B?UDB3L3hrS0lpd3VoTEc3dTlJWjZPSVg1TmpEd1RPRzdFUG9TeitTYzY0SUIr?=
+ =?utf-8?B?QmhYTTB6Qno0dEhnWUR5VHlPbTRNQkVUUUVRcVlxblpaWUxPM2VrRlpKUVlC?=
+ =?utf-8?B?cEw2MGg4SElIRDVpZ2NDbXFIL09TemFNMXhOdjZicW5YSjQzK3N2dlY5Q2JL?=
+ =?utf-8?B?S3ZMTm80NDl6ZjZwV21xSit6d1MxUWQ0TW93Y2pHUnBCNDRUckJDSlo2OUEv?=
+ =?utf-8?B?UTFha0JBbk9IS1FZNEVxNE91TEJQNzBTUDRMMTNqc3VMWHhmN3JVVmJNdjhu?=
+ =?utf-8?B?R0wveU1kRFBveW9WV1Npc211aFJmSkR0OTJlZnJHR3g5NkRrbGV2L25SU3pE?=
+ =?utf-8?B?bkRjY1ErWkwwRE0zTGttWlNUUFFWNG51UXVNSFF3eUNoS29nVjhQYUlYMTdR?=
+ =?utf-8?B?R1pySG9kc242SllxeUpoU1NuQTdZeEdsY1FOV1dxbEhTNWpvSGpLdUdseEp4?=
+ =?utf-8?B?dGVNQnJ4MWVBMlVZUTM3bXplK0xMaVl6RisyekQ5YUdyRktTUXcxWGN1QzJE?=
+ =?utf-8?B?WTRhbVdVTzB2UjRmOWZtcHBLUFA3bGkydEFCdHc5WUIxQjJ5T2FRYlcyRExP?=
+ =?utf-8?B?Y253WVlPQnRYbUdkQTVaUk82eStUUzd4TWdwQnV1OWtOUHBSeFNkeVNUM01D?=
+ =?utf-8?B?c1d6ZjhtNXMxaEx1R0VnRStXR2hZR3dxUTVjbGxGbGwyVnJUNmNlRWVIWk5Q?=
+ =?utf-8?B?UWhpbGJFNHZURDI4K1E4b1Q0KzhMQlptWGNadjZZNzVzbHdaVGo2N1JuQmpM?=
+ =?utf-8?B?SHppRHZicUVocm1vMkg3VDRtbDFJQjI0WThWUTlGTDlDTUFsa3g1UnlZdmk0?=
+ =?utf-8?B?OGluTmo2RmhjYmROL2V3eEQ0cEZyd1pyZFBYa2wzSndCQmplbUtWTmRmQjgv?=
+ =?utf-8?B?RWJKSXNPK2FVdjVpdk1zVGh6RWExOFdjbk1sUWxwdGw2a0t6VVQwaXFad05S?=
+ =?utf-8?B?MGhxTjArODgvVXE3MzFBWlVGclNsRS9ZMFh1K1pKQ0NFYVA4MVNVSkpUTmpJ?=
+ =?utf-8?B?c1Fpejk0VVRtTG1XYXh3N3RRNWJqMDlHVmxzRkR5d1ZLRVV6alNYWnNCTWdK?=
+ =?utf-8?B?VFFLUW96SEJESFora3VLZG40V0lKRHR2QjA5YTRzaUdpRDhNN3dhVVNWWHpa?=
+ =?utf-8?B?RmxIaWFCeitBR2hvWXpESThISlBCODJkT09JKzVwUUJCSEp1eUt5dmM3U3B0?=
+ =?utf-8?B?M0xPMllvQkNZejdlRWU3NnZLeG1hMXc1SVFiaUd4azYrdXpRMGhHa2JLaDVw?=
+ =?utf-8?B?MmF2QW9DOStOWUg5Z3N4T3dTdEUvRHpQcUJCM3p6S1pUTHMweDhEVEJPZHdD?=
+ =?utf-8?B?em95MUZLdnVVTnphN05pU3o4VHBxQW82TFlteUlWclcxUnJWRVo2aC80YXM5?=
+ =?utf-8?B?bmxCMkN6akREN3ZCZnFvVkFDekE4NXpYNndaQ1dNQjNCNGtjVEZlMEF5a2hP?=
+ =?utf-8?B?UUhPZmNMVjJmRXVKMTk0NFU0NXJXTjVRQWN6Vk5WalhaU3ZyUDFFNy9XclBj?=
+ =?utf-8?B?M3VqT2ZOZitKTGtOSVBRQ2wvbG82R3BSbzRPNXdDYkxzRFpGMjhQL1hITDg1?=
+ =?utf-8?B?OTVzQmVYN01lK3BDdHFRSHB2dTZYRlBHVEc3eVl5NXVMKzlnZXZreTVrMS80?=
+ =?utf-8?B?M3FMN3lZcWxpK0hQSm1jZExoZ1RXSHJ2L0wwQ3lUSGtJTkI0Qi9YbVJsUDJx?=
+ =?utf-8?B?dXRNL0N0eWh5UmdTV3NVd3I3U2hrWk9DK1BYQ3htMVgxYTB6Q3pnaFQrL2l6?=
+ =?utf-8?B?ZjVqVzAxY2NQL1IyaGR0YUlzelh2TFFsVGRXcXZ3ZG82bXhGckFpSkl3eWtI?=
+ =?utf-8?B?TDR3bWUzZnZQTFM4cENZV2ozUlJBcFBISG9saml5d0dGSmdwNGd4dC9oWWhP?=
+ =?utf-8?B?cndNbEczbTc1ZDJjZVlyZkVEbm91WmxEY3gxeE9MQkI4ak5kNndUeXllWTlY?=
+ =?utf-8?B?UndWTzJ1ZUVqS2xmUVllUkl4YVdsWmhPUm1ITEozS2hxMGtCT1FyUldjTWlV?=
+ =?utf-8?B?KzlHRmhiTTZaSWw4bVhrNGRUbDZFaVFTOElXb2tyQ0JLTTR5VmNVZz09?=
+X-Exchange-RoutingPolicyChecked:
+	ZR++TwQ1b0x4OJVFCxhyfHjAXJFpcWXUa4mbshdU/bKpJztpvljSJKd4X+XOXaDWV6MO+HG5BightjgLKXIPw2HFCvAHnJcCng3QLsWMeEHtlVyR62cWBfcKWEgKMSJgYQtDHHe2tZkkAAI64xr4u6UR326dgVBh9GBMdOPEEtgk3/Uf+vDK5Cxrusm6d7f4V2IVq1s/ToaD8w3kt7P8Bq1RrrTxYu8HNhA9kuGDBqzJJ/ZgQdsE3LC0T/zCNdzzudRE+ImIxof/5n56D5b5kg7M9/nfHsN+vYUApqNjNoa7esM9yuki2oXpQFSrqtLwkGFIjov3l3Ar3TDQDZ7WcQ==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	KiMFHKzRvpPoJLFvnwreo0giIm65TSoouCdkmtMd1QdF7Oz1F91uCse+Mb4UR/b1/C46/Ku5Mr9ne/a3l5tWJ/wpni5wMEL8itZWdlCkFcUmJZri00AHeLYe+c9dIUVx+0znpjQ6jPWlKMr3C8kY5dNN0nw5d99dqAg3k5k+cYYEMXPPytAlGLVfmpRkBcyAuWHSu3+zCpSM5/9OFZ48Xr2sF/4hxJ1OEllT0xHE3eSZADN0PQaPwEBoyPdQdX+BZDUxbgfP+QrEj0W9x94Gdns0995k/jBDTUVQrOY+H3gby9FuOQwJJbrhoELkVM48RMndDaLiFUkjmer+05dK0zws7JlAwTDiZIDjU9VgpepzZ9p12a/g8316ydk/1p4qU0lOe42Hc0PFcmIViu1hJyTOIQhKp72CKIV0legLI4MTGNClcHz9j1CxWcublZoLIdh0vmWm/1dbpxQdD8JoHpIsafvKd1bYjZPqEL44DscCKDLe9SN6/WhEpBb/55rVcrdljNQbEHK9cbWB1GhUG+TOzQ3JF4bqaYPsxAR8d6QqXAAwXZusBlI4upMyIily4mM20PEDIuPuD71GNmfVMyqiXgo8bNFj+xXiZEuFWJ8=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a858dcc5-5782-4abb-2a0d-08decb732a45
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5109.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2026 06:47:42.7065
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PiBEOcrn5MEnPqf38+sPcEJfX+ET2OzK2d1RsaOWVm4ed3e9dsdpSivGbtQF7eaZ5L0PTPnGbU7hwVccs/0OwQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4540
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-16_02,2026-06-15_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
+ phishscore=0 malwarescore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=999 adultscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2606040000 definitions=main-2606160066
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE2MDA2NSBTYWx0ZWRfX3XnmVOlkedqm
+ d6Q8+SMsIFt+vl8Qaxv8Li3GvU5zvVtTEg7iUuTTXRKuvLc3EKnCpazet11EFE21z1GBIshFNYL
+ FizqCjvlK2KeLOtZN/GXEFo5U05y8PKjoM4uf5zwdzNlOFrBrjokECZcnTw7YDYscr1vTERNun7
+ MJsAJWeg6qb4vRdwMrLd1RjMLbpw5dtUD9TvTHtLqRiATOG+4oa3bax/nTrxszh0Fd0pHIb7Jdh
+ dhH9OJJLwCm+I46vEy7RU3l8RU2C1yeYUVYv+PNHDkPbyLern5X62AkGaBP3PTWYcFSyGgHZo1b
+ YLaOi1nqC5oldmUYOz7O7cgMDOe8VEg4IUM8yGXWgQ/qT9IPMbNmbXicZUQJaJsKwrOpdrc3iQL
+ l7cThqXQolHLr0yhIqHZxV22Fa1g51VHvALpt4O/T6boc7FaopTyma/SfIIAphJYiyXXUOYOfEd
+ p+ai7Cra3v9aOFTLWEJDcF0wkF+mmt1lNnN9WAQE=
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE2MDA2NSBTYWx0ZWRfX0i3umPsQnfqW
+ 1m2U4O1Ywbdp9p131gJls0xg9o5cfUbGW56J2RmTTXtPykeedMEyfXatRD/pybype/JW6B+Hx5u
+ iJLh4GafO1FQMspXH+KmnHiVBYbq4S7nRbOoVP/8g/eYNn7yZW7P
+X-Proofpoint-ORIG-GUID: FeX2pajFOXgT-37ZOnZ8gQrdR972yi-M
+X-Proofpoint-GUID: FeX2pajFOXgT-37ZOnZ8gQrdR972yi-M
+X-Authority-Analysis: v=2.4 cv=IqQutr/g c=1 sm=1 tr=0 ts=6a30f1c9 b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=FelO9ux0wxsA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22 a=VwQbUJbxAAAA:8
+ a=yPCof4ZbAAAA:8 a=vggBfdFIAAAA:8 a=pBOR-ozoAAAA:8 a=mLnsDVdbAAAA:8
+ a=RXWFDia8kwHKEAyOmR0A:9 a=QEXdDO2ut3YA:10 a=xnp1pY6zelCj5OLna2To:22
+ a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12313
 
-From: Pengfei Li <lipengfei28@xiaomi.com>
+I tested patches 02, 03, 04, and 26 by customizing QEMU to support kexec live
+updates (LUO and KHO), preserving the memfd across kexec.
 
-Add supporting files for the ftrace stackmap feature:
+For my use case, I used KVM_[GS]ET_CLOCK_GUEST instead of the existing
+KVM_[GS]ET_CLOCK. I didn't account the downtime in my QEMU code, although host
+TSC never resets across kexec.
 
-Documentation/trace/ftrace-stackmap.rst:
-  Documentation covering design, usage, tracefs interface, binary
-  format, and performance characteristics. Added to the 'Core Tracing
-  Frameworks' toctree in Documentation/trace/index.rst. Documents:
-  - Reset is destructive: it requires tracing to be stopped and also
-    clears the ring buffer so no stale <stack_id N> survives
-  - Boot-time activation via trace_options=stackmap
-  - bits parameter range [10, 18] and worst-case memory usage
-  - tracefs file modes (0640 / 0440)
-  - Best-effort snapshot semantics for stack_map_bin, serialized
-    against reset via the reader_sem
-  - Counter naming: successes (events served), drops, success_rate;
-    successes/drops are best-effort and saturate on long runs
-  - Gravestone amplification when the pool is exhausted
+Clock drift was zero, and I did not observe any unnecessary master clock updates
+after KVM_SET_CLOCK_GUEST completed.
 
-tools/testing/selftests/ftrace/test.d/ftrace/stackmap-basic.tc:
-  Functional selftest verifying:
-  - stackmap tracefs nodes exist
-  - enabling stackmap + stacktrace produces stack_id events
-  - stack_map_stat shows non-zero successes (a nonzero drops count is
-    a legitimate by-design fallback and is not treated as failure;
-    only zero successes alongside nonzero drops is fatal)
-  - reset clears entries when tracing is stopped
-  - reset is rejected (-EBUSY) while tracing is active
-  Test reads trace contents BEFORE switching back to the nop tracer
-  (tracer_init() unconditionally resets the ring buffer). The
-  function:tracer dependency is declared in '# requires:' so
-  ftracetest skips on kernels without CONFIG_FUNCTION_TRACER instead
-  of failing spuriously.
 
-tools/testing/selftests/ftrace/test.d/ftrace/stackmap-reset.tc:
-  Verifies the destructive-reset semantics and the binary ABI header:
-  - after 'echo 0 > stack_map', the trace buffer no longer contains
-    any stale <stack_id N>
-  - stack_map_bin begins with the expected magic and version
+Another interesting observation from my experiments is that tsc_khz changes
+across kexec. Since the TSC value itself does not reset across kexec, I'm
+wondering whether there is any reason to switch to the new tsc_khz value after
+the kexec.
 
-tools/testing/selftests/ftrace/test.d/ftrace/stackmap-instance-gate.tc:
-  Verifies the option is gated to the top-level instance: a secondary
-  instance neither exposes options/stackmap nor the stack_map* nodes,
-  and writing 'stackmap' to its aggregate trace_options file is
-  rejected rather than accepted as a no-op.
+I previously sent a QEMU patch that takes advantage of your KVM commit
+ffbb61d09fc5 ("KVM: x86: Accept KVM_[GS]ET_TSC_KHZ as a VM ioctl.").
 
-tools/tracing/stackmap_dump.py:
-  Python script to parse the binary stack_map_bin export.
-  Features:
-  - Automatic endianness detection via magic number
-  - Batched addr2line via stdin (avoids ARG_MAX with large stacks)
-  - JSON output mode (ips are always hex addresses; the ftrace
-    trampoline marker is shown only in the resolved symbols)
-  - Top-N filtering by ref_count
+[PATCH 1/1] target/i386/kvm: set VM ioctl KVM_SET_TSC_KHZ to maintain TSC
+synchronization
+https://lore.kernel.org/qemu-devel/20260210202041.153736-1-dongli.zhang@oracle.com
 
-Binary format: all fields are native-endian. The parser detects
-byte order by reading the magic value (0x46534D42 = 'FSMB').
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202605160010.fakzGVVq-lkp@intel.com/
-Signed-off-by: Pengfei Li <lipengfei28@xiaomi.com>
----
- Documentation/trace/ftrace-stackmap.rst       | 177 ++++++++++++++++++
- Documentation/trace/index.rst                 |   1 +
- .../ftrace/test.d/ftrace/stackmap-basic.tc    | 111 +++++++++++
- .../test.d/ftrace/stackmap-instance-gate.tc   |  54 ++++++
- .../ftrace/test.d/ftrace/stackmap-reset.tc    |  76 ++++++++
- tools/tracing/stackmap_dump.py                | 164 ++++++++++++++++
- 6 files changed, 583 insertions(+)
- create mode 100644 Documentation/trace/ftrace-stackmap.rst
- create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/stackmap-basic.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/stackmap-instance-gate.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/stackmap-reset.tc
- create mode 100755 tools/tracing/stackmap_dump.py
+While live migration involves two different machines, kexec is performed on the
+same machine. Given that the TSC value itself is preserved across kexec, would
+it make sense to reuse the pre-kexec tsc_khz value instead of using the new
+tsc_khz after kexec?
 
-diff --git a/Documentation/trace/ftrace-stackmap.rst b/Documentation/trace/ftrace-stackmap.rst
-new file mode 100644
-index 000000000000..8d0b5c389862
---- /dev/null
-+++ b/Documentation/trace/ftrace-stackmap.rst
-@@ -0,0 +1,177 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+======================
-+Ftrace Stack Map
-+======================
-+
-+:Author: Pengfei Li <lipengfei28@xiaomi.com>
-+
-+Overview
-+========
-+
-+The ftrace stack map provides stack trace deduplication for the ftrace
-+ring buffer. When enabled, instead of storing full kernel stack traces
-+(typically 80-160 bytes each) in the ring buffer for every event, ftrace
-+stores only a 4-byte ``stack_id``. The full stacks are maintained in a
-+separate hash table and exported via tracefs for userspace to resolve.
-+
-+This is inspired by eBPF's ``BPF_MAP_TYPE_STACK_TRACE`` but integrated
-+into ftrace's infrastructure, requiring no userspace daemon.
-+
-+Configuration
-+=============
-+
-+Enable ``CONFIG_FTRACE_STACKMAP=y`` in the kernel config.
-+
-+Kernel command line parameters:
-+
-+- ``ftrace_stackmap.bits=N`` - Set map capacity to 2^N unique stacks
-+  (default: 14 → 16384 stacks; valid range: 10-18).
-+
-+  At ``bits=18`` the kernel reserves roughly 130 MB of vmalloc memory
-+  for the element pool. Each ``open()`` of ``stack_map_bin`` may
-+  briefly allocate a similar amount for a snapshot. The cap is set
-+  intentionally to bound memory usage.
-+
-+Usage
-+=====
-+
-+Enable stack deduplication::
-+
-+    echo 1 > /sys/kernel/debug/tracing/options/stackmap
-+    echo 1 > /sys/kernel/debug/tracing/options/stacktrace
-+    echo function > /sys/kernel/debug/tracing/current_tracer
-+
-+The trace output will show ``<stack_id N>`` instead of full stack traces::
-+
-+    sh-1234 [006] d.h.. 123.456789: <stack_id 42>
-+
-+To view the actual stacks::
-+
-+    cat /sys/kernel/debug/tracing/stack_map
-+
-+Output format::
-+
-+    stack_id 42 [ref 1337, depth 8]
-+      [0] schedule+0x48/0xc0
-+      [1] schedule_timeout+0x1c/0x30
-+      ...
-+
-+To view statistics::
-+
-+    cat /sys/kernel/debug/tracing/stack_map_stat
-+
-+Output::
-+
-+    entries:      2500 / 16384
-+    table_size:   32768
-+    successes:    148923
-+    drops:        0
-+    success_rate: 100%
-+
-+To reset the stack map (tracing must be stopped first)::
-+
-+    echo 0 > /sys/kernel/debug/tracing/tracing_on
-+    echo 0 > /sys/kernel/debug/tracing/stack_map
-+
-+Reset returns ``-EBUSY`` if tracing is currently active, or if another
-+reset is already in progress.
-+
-+Reset is destructive to the trace buffer: because the ring buffer may
-+still hold ``<stack_id N>`` events that reference soon-to-be-reused
-+slots, resetting the map also resets the owning trace buffer (and its
-+snapshot, if allocated). This keeps ring-buffer stack_ids and the map
-+coherent. Read out any trace data you need before resetting.
-+
-+Boot-time activation
-+====================
-+
-+The stackmap option can be enabled from the kernel command line::
-+
-+    trace_options=stackmap,stacktrace
-+
-+Trace events that fire before the tracefs filesystem is initialized
-+(``fs_initcall`` time) fall back to recording full stack traces; once
-+``ftrace_stackmap_create()`` runs, subsequent events are deduplicated.
-+The crossover is automatic and lossless — no events are dropped, but
-+early-boot stacks recorded before the crossover are not deduplicated.
-+
-+Tracefs Nodes
-+=============
-+
-+The stack_map files are owned by root and not world-readable
-+(``stack_map``: 0640; ``stack_map_stat`` and ``stack_map_bin``: 0440).
-+
-+``stack_map``
-+    Text export of all deduplicated stacks with symbol resolution.
-+    Writing ``0`` or ``reset`` clears all entries (only when tracing
-+    is stopped).
-+
-+``stack_map_stat``
-+    Statistics: entries (allocated unique stacks), table_size,
-+    successes (events served), drops (events that fell back to
-+    full-stack recording), and success_rate. Drops accumulate when
-+    the element pool is exhausted; once that happens, slots that
-+    won the cmpxchg but failed to allocate an element remain
-+    "claimed but empty" and increase probe pressure for any future
-+    insert hashing to the same bucket. Reset (when tracing is
-+    stopped) clears these gravestones.
-+
-+``stack_map_bin``
-+    Binary export for efficient userspace consumption. Format:
-+
-+    - Header (16 bytes): magic(u32) + version(u32) + nr_stacks(u32) + reserved(u32)
-+    - Per stack: stack_id(u32) + nr(u32) + ref_count(u32) + reserved(u32) + ips(u64 × nr)
-+
-+    All fields are written in the kernel's native byte order.
-+    Userspace tools detect endianness by reading the magic value.
-+    Magic: ``0x46534D42`` ('FSMB'), Version: 1.
-+
-+    Trampoline frames are exported as the sentinel value
-+    ``0x7fffffff`` (FTRACE_TRAMPOLINE_MARKER); all other addresses are
-+    passed through ``trace_adjust_address()`` so they match the
-+    ``stack_map`` text output's address-adjustment rules. Note this is
-+    the same adjustment ftrace applies to its own trace output (mainly
-+    relevant for persistent / last-boot buffers), not a general KASLR
-+    un-offset: resolving these addresses offline still requires the
-+    matching kernel's symbol information.
-+
-+    The export is a best-effort snapshot allocated at ``open()``;
-+    concurrent inserts during the snapshot may be truncated. A
-+    bounds check ensures no overflow.
-+
-+Design
-+======
-+
-+The stack map is modeled after ``tracing_map.c`` (used by hist triggers),
-+using a lock-free design based on Dr. Cliff Click's non-blocking hash table
-+algorithm:
-+
-+- **Lookup/Insert**: Lock-free via ``cmpxchg``, safe in NMI/IRQ/any context
-+- **Memory**: Pre-allocated element pool, zero allocation on the hot path
-+  (no GFP_ATOMIC failures under memory pressure)
-+- **Collision**: Linear probing with a 2x over-provisioned table; probe
-+  length is bounded so worst-case insert/lookup is O(1)
-+- **Scope**: Currently supports the global trace instance
-+- **Hash**: 32-bit jhash with a per-instance random seed; full ``memcmp``
-+  confirms matches
-+
-+Deduplication is best-effort, not strict: if two CPUs race in the
-+insert path with the same ``key_hash`` (i.e. the same stack), the
-+``cmpxchg`` loser advances by one slot and may insert the same stack
-+again. Under heavy contention this can produce a small number of
-+duplicate entries for the same stack; ``ref_count`` is then split
-+across the duplicates. Total memory is still bounded by the element
-+pool size, and lookup correctness is unaffected (each duplicate is
-+a self-consistent entry with its own ``stack_id``). The trade-off is
-+intentional and keeps the hot path lock-free.
-+
-+Performance
-+===========
-+
-+Typical results on an aarch64 SMP system (function tracer, 2 seconds):
-+
-+- Unique stacks: ~3000
-+- Dedup rate: 84-98% (depends on workload diversity)
-+- Ring buffer savings: ~80% for stack data
-+- Overhead per event: ~50ns (one jhash + hash table lookup)
-diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
-index 5d9bf4694d5d..ac8b1141c23a 100644
---- a/Documentation/trace/index.rst
-+++ b/Documentation/trace/index.rst
-@@ -33,6 +33,7 @@ the Linux kernel.
-    ftrace
-    ftrace-design
-    ftrace-uses
-+   ftrace-stackmap
-    kprobes
-    kprobetrace
-    fprobetrace
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/stackmap-basic.tc b/tools/testing/selftests/ftrace/test.d/ftrace/stackmap-basic.tc
-new file mode 100644
-index 000000000000..64dfe7cc66bd
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/stackmap-basic.tc
-@@ -0,0 +1,111 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: ftrace - stackmap basic functionality
-+# requires: stack_map options/stackmap function:tracer
-+
-+# Test that ftrace stackmap deduplication works:
-+# 1. Enable stackmap + stacktrace options
-+# 2. Run function tracer briefly
-+# 3. Verify trace contains <stack_id> events (read BEFORE switching
-+#    tracer back to nop, since tracer_init() resets the ring buffer)
-+# 4. Verify stack_map has entries and at least some successes (drops is
-+#    a legitimate by-design fallback counter and is allowed to be nonzero;
-+#    only zero successes alongside nonzero drops indicates breakage)
-+# 5. Verify reset is rejected (-EBUSY) while tracing is active
-+# 6. Verify reset clears the map when tracing is stopped
-+
-+fail() {
-+    echo "FAIL: $1"
-+    exit_fail
-+}
-+
-+# Restore state on any exit (success, fail, or interrupt) so a
-+# half-finished test does not leave stacktrace/stackmap enabled.
-+cleanup() {
-+    disable_tracing 2>/dev/null
-+    echo nop > current_tracer 2>/dev/null
-+    echo 0 > options/stackmap 2>/dev/null
-+    echo 0 > options/stacktrace 2>/dev/null
-+}
-+trap cleanup EXIT
-+
-+disable_tracing
-+clear_trace
-+
-+# Verify stackmap files exist
-+test -f stack_map      || fail "stack_map file missing"
-+test -f stack_map_stat || fail "stack_map_stat file missing"
-+test -f stack_map_bin  || fail "stack_map_bin file missing"
-+
-+# Enable stackmap dedup
-+echo 1 > options/stackmap
-+echo 1 > options/stacktrace
-+
-+# Run function tracer briefly
-+echo function > current_tracer
-+enable_tracing
-+sleep 1
-+disable_tracing
-+
-+# Read trace contents NOW, before switching tracer back to nop.
-+# tracer_init() unconditionally calls tracing_reset_online_cpus(),
-+# so the ring buffer would be empty after 'echo nop > current_tracer'.
-+count=$(grep -c "<stack_id" trace || true)
-+: "${count:=0}"
-+if [ "$count" -eq 0 ]; then
-+    fail "trace has no <stack_id> events"
-+fi
-+
-+# Now safe to switch back and disable options
-+echo nop > current_tracer
-+echo 0 > options/stackmap
-+
-+# Check stack_map_stat
-+entries=$(cat stack_map_stat | grep "^entries:" | awk '{print $2}')
-+: "${entries:=0}"
-+if [ "$entries" -eq 0 ]; then
-+    fail "stackmap has zero entries after tracing"
-+fi
-+
-+successes=$(cat stack_map_stat | grep "^successes:" | awk '{print $2}')
-+: "${successes:=0}"
-+if [ "$successes" -eq 0 ]; then
-+    fail "stackmap has zero successes"
-+fi
-+
-+drops=$(cat stack_map_stat | grep "^drops:" | awk '{print $2}')
-+: "${drops:=0}"
-+# drops is a legitimate by-design fallback counter: when the map is full
-+# or under heavy probe pressure, stackmap falls back to recording a full
-+# stack instead of a stack_id. A nonzero drops count is therefore not a
-+# failure. Only treat it as fatal if dedup never worked at all (no
-+# successes), which would indicate the feature is genuinely broken rather
-+# than merely under pressure.
-+if [ "$successes" -eq 0 ] && [ "$drops" -ne 0 ]; then
-+    fail "stackmap had $drops drops and zero successes (feature broken?)"
-+fi
-+
-+# Check stack_map text output is parseable
-+first_id=$(cat stack_map | grep "^stack_id" | head -1 | awk '{print $2}')
-+if [ -z "$first_id" ]; then
-+    fail "stack_map output has no stack_id entries"
-+fi
-+
-+# Test that reset is rejected while tracing is active
-+enable_tracing
-+if echo 0 > stack_map 2>/dev/null; then
-+    disable_tracing
-+    fail "stackmap reset should fail while tracing is active"
-+fi
-+disable_tracing
-+
-+# Test reset works when tracing is stopped
-+echo 0 > stack_map
-+entries_after=$(cat stack_map_stat | grep "^entries:" | awk '{print $2}')
-+: "${entries_after:=-1}"
-+if [ "$entries_after" -ne 0 ]; then
-+    fail "stackmap reset did not clear entries (got $entries_after)"
-+fi
-+
-+echo "stackmap basic test passed: $entries unique stacks, $successes successes, $drops drops"
-+exit 0
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/stackmap-instance-gate.tc b/tools/testing/selftests/ftrace/test.d/ftrace/stackmap-instance-gate.tc
-new file mode 100644
-index 000000000000..28810ba20432
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/stackmap-instance-gate.tc
-@@ -0,0 +1,54 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: ftrace - stackmap option is gated to the top-level trace instance
-+# requires: stack_map options/stackmap instances
-+
-+# The 'stackmap' option is added to TOP_LEVEL_TRACE_FLAGS, matching the
-+# convention used for global-only options like 'printk' and 'record-cmd'.
-+# Verify that:
-+# 1. The global instance exposes options/stackmap and the stack_map* nodes.
-+# 2. A newly created secondary instance under instances/ does NOT expose
-+#    options/stackmap or stack_map* nodes.
-+
-+fail() {
-+    echo "FAIL: $1"
-+    rmdir instances/test_stackmap_gate 2>/dev/null
-+    exit_fail
-+}
-+
-+# 1. Global instance must expose the option and the nodes
-+test -e options/stackmap || fail "options/stackmap missing on global instance"
-+test -e stack_map        || fail "stack_map missing on global instance"
-+test -e stack_map_stat   || fail "stack_map_stat missing on global instance"
-+test -e stack_map_bin    || fail "stack_map_bin missing on global instance"
-+
-+# 2. Create a secondary instance and verify it does NOT see the option
-+#    or the stack_map* nodes.
-+mkdir instances/test_stackmap_gate || fail "could not create secondary instance"
-+
-+if [ -e instances/test_stackmap_gate/options/stackmap ]; then
-+    fail "secondary instance unexpectedly exposes options/stackmap"
-+fi
-+
-+for f in stack_map stack_map_stat stack_map_bin; do
-+    if [ -e instances/test_stackmap_gate/$f ]; then
-+        fail "secondary instance unexpectedly has $f"
-+    fi
-+done
-+
-+# 3. The aggregate trace_options file still reaches set_tracer_flag(),
-+#    so writing 'stackmap' there must be rejected on a secondary
-+#    instance. Otherwise the bit could appear set in trace_options
-+#    while the hot path silently falls back to a full stack trace
-+#    (tr->stackmap == NULL).
-+if echo stackmap > instances/test_stackmap_gate/trace_options 2>/dev/null; then
-+    fail "secondary instance accepted 'echo stackmap > trace_options'"
-+fi
-+if grep -qw stackmap instances/test_stackmap_gate/trace_options; then
-+    fail "secondary instance trace_options reports stackmap as set"
-+fi
-+
-+rmdir instances/test_stackmap_gate || fail "could not remove secondary instance"
-+
-+echo "stackmap option gating to top-level instance works"
-+exit 0
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/stackmap-reset.tc b/tools/testing/selftests/ftrace/test.d/ftrace/stackmap-reset.tc
-new file mode 100644
-index 000000000000..803cc282f9ab
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/stackmap-reset.tc
-@@ -0,0 +1,76 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: ftrace - stackmap reset clears the trace buffer and ABI header
-+# requires: stack_map options/stackmap function:tracer
-+
-+# Lock in the two things most likely to regress in the stackmap ABI /
-+# lifetime:
-+#   1. Resetting the stackmap (echo 0 > stack_map, tracing stopped) also
-+#      clears the trace buffer, so no stale <stack_id N> can be left
-+#      dangling against an emptied map.
-+#   2. The stack_map_bin header carries the expected magic ('FSMB' =
-+#      0x46534D42) and version (1).
-+
-+fail() {
-+    echo "FAIL: $1"
-+    exit_fail
-+}
-+
-+cleanup() {
-+    disable_tracing 2>/dev/null
-+    echo nop > current_tracer 2>/dev/null
-+    echo 0 > options/stackmap 2>/dev/null
-+    echo 0 > options/stacktrace 2>/dev/null
-+}
-+trap cleanup EXIT
-+
-+disable_tracing
-+clear_trace
-+
-+echo 1 > options/stackmap
-+echo 1 > options/stacktrace
-+echo function > current_tracer
-+enable_tracing
-+sleep 1
-+disable_tracing
-+
-+# Sanity: the buffer must contain stack_id events before reset, otherwise
-+# the post-reset emptiness check below would be meaningless.
-+before=$(grep -c "<stack_id" trace || true)
-+: "${before:=0}"
-+if [ "$before" -eq 0 ]; then
-+    fail "no <stack_id> events captured before reset"
-+fi
-+
-+# Reset while tracing is stopped. This must succeed AND clear the trace
-+# buffer (destructive reset semantics).
-+echo 0 > stack_map || fail "reset rejected while tracing stopped"
-+
-+after=$(grep -c "<stack_id" trace || true)
-+: "${after:=0}"
-+if [ "$after" -ne 0 ]; then
-+    fail "trace still has $after stale <stack_id> events after reset"
-+fi
-+
-+entries=$(cat stack_map_stat | grep "^entries:" | awk '{print $2}')
-+: "${entries:=-1}"
-+if [ "$entries" -ne 0 ]; then
-+    fail "stackmap still has $entries entries after reset"
-+fi
-+
-+# Binary export header: magic 'FSMB' (0x46534D42) + version 1.
-+# od -tx4 renders the 32-bit words in the target's native byte order,
-+# which matches what the kernel wrote, so the comparison is endian-safe.
-+if command -v od >/dev/null 2>&1; then
-+    magic=$(od -An -tx4 -N4 stack_map_bin | tr -d ' \n')
-+    if [ "$magic" != "46534d42" ]; then
-+        fail "stack_map_bin bad magic: 0x$magic (expected 46534d42)"
-+    fi
-+    ver=$(od -An -tx4 -j4 -N4 stack_map_bin | tr -d ' \n')
-+    if [ "$ver" != "00000001" ]; then
-+        fail "stack_map_bin bad version: 0x$ver (expected 00000001)"
-+    fi
-+fi
-+
-+echo "stackmap reset test passed: cleared $before stack_id events, ABI header ok"
-+exit 0
-diff --git a/tools/tracing/stackmap_dump.py b/tools/tracing/stackmap_dump.py
-new file mode 100755
-index 000000000000..2d9c49b776e6
---- /dev/null
-+++ b/tools/tracing/stackmap_dump.py
-@@ -0,0 +1,164 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+"""
-+stackmap_dump.py - Parse and display ftrace stack_map_bin binary export.
-+
-+Usage:
-+    # Pull from device and parse
-+    adb pull /sys/kernel/debug/tracing/stack_map_bin /tmp/stack_map.bin
-+    python3 stackmap_dump.py /tmp/stack_map.bin
-+
-+    # With vmlinux for offline symbol resolution
-+    python3 stackmap_dump.py /tmp/stack_map.bin --vmlinux vmlinux
-+
-+    # JSON output for tooling
-+    python3 stackmap_dump.py /tmp/stack_map.bin --json
-+"""
-+
-+import struct
-+import sys
-+import argparse
-+import json
-+import subprocess
-+
-+MAGIC = 0x46534D42  # 'FSMB'
-+HEADER_SIZE = 16  # 4 x u32
-+ENTRY_SIZE = 16   # 4 x u32
-+
-+# __ftrace_trace_stack() replaces trampoline addresses with this marker
-+# (FTRACE_TRAMPOLINE_MARKER == (unsigned long)INT_MAX) before the stack
-+# is stored, so the binary export carries it verbatim.
-+FTRACE_TRAMPOLINE_MARKER = 0x7fffffff
-+TRAMPOLINE_LABEL = '[FTRACE TRAMPOLINE]'
-+
-+
-+def detect_endianness(data):
-+    """Detect byte order from magic number in header."""
-+    if len(data) < 4:
-+        raise ValueError("File too small")
-+    magic_le = struct.unpack_from('<I', data, 0)[0]
-+    if magic_le == MAGIC:
-+        return '<'
-+    magic_be = struct.unpack_from('>I', data, 0)[0]
-+    if magic_be == MAGIC:
-+        return '>'
-+    raise ValueError(f"Bad magic: 0x{magic_le:08x} (neither LE nor BE)")
-+
-+
-+def batch_addr2line(vmlinux, addrs):
-+    """Resolve multiple addresses in one addr2line invocation."""
-+    if not addrs:
-+        return {}
-+    try:
-+        # Feed addresses on stdin to avoid ARG_MAX limits with large
-+        # numbers of addresses (one stack can have 30+ frames; a
-+        # snapshot can have thousands of unique stacks).
-+        stdin = '\n'.join(hex(a) for a in addrs) + '\n'
-+        result = subprocess.run(
-+            ['addr2line', '-f', '-e', vmlinux],
-+            input=stdin, capture_output=True, text=True, timeout=60
-+        )
-+        lines = result.stdout.split('\n')
-+        # addr2line outputs 2 lines per address: function name + source location
-+        symbols = {}
-+        for i, addr in enumerate(addrs):
-+            idx = i * 2
-+            if idx < len(lines) and lines[idx] and lines[idx] != '??':
-+                symbols[addr] = lines[idx]
-+        return symbols
-+    except (subprocess.TimeoutExpired, FileNotFoundError) as e:
-+        print(f"warning: addr2line failed: {e}", file=sys.stderr)
-+        return {}
-+
-+
-+def parse_stackmap_bin(data):
-+    """Parse binary stackmap data, yield (stack_id, ref_count, [ips])."""
-+    if len(data) < HEADER_SIZE:
-+        raise ValueError("File too small for header")
-+
-+    endian = detect_endianness(data)
-+    header_fmt = f'{endian}IIII'
-+    entry_fmt = f'{endian}IIII'
-+
-+    magic, version, nr_stacks, _ = struct.unpack_from(header_fmt, data, 0)
-+    if version != 1:
-+        raise ValueError(f"Unsupported version: {version}")
-+
-+    offset = HEADER_SIZE
-+    for _ in range(nr_stacks):
-+        if offset + ENTRY_SIZE > len(data):
-+            break
-+        stack_id, nr, ref_count, _ = struct.unpack_from(entry_fmt, data, offset)
-+        offset += ENTRY_SIZE
-+
-+        ips_size = nr * 8
-+        if offset + ips_size > len(data):
-+            break
-+        ips = struct.unpack_from(f'{endian}{nr}Q', data, offset)
-+        offset += ips_size
-+
-+        yield stack_id, ref_count, list(ips)
-+
-+
-+def main():
-+    parser = argparse.ArgumentParser(description='Parse ftrace stack_map_bin')
-+    parser.add_argument('file', help='Path to stack_map_bin file')
-+    parser.add_argument('--vmlinux', help='Path to vmlinux for symbol resolution')
-+    parser.add_argument('--json', action='store_true', help='JSON output')
-+    parser.add_argument('--top', type=int, default=0,
-+                        help='Show only top N stacks by ref_count')
-+    args = parser.parse_args()
-+
-+    with open(args.file, 'rb') as f:
-+        data = f.read()
-+
-+    stacks = list(parse_stackmap_bin(data))
-+
-+    if args.top > 0:
-+        stacks.sort(key=lambda x: x[1], reverse=True)
-+        stacks = stacks[:args.top]
-+
-+    # Batch symbol resolution
-+    symbols = {}
-+    if args.vmlinux:
-+        all_addrs = set()
-+        for _, _, ips in stacks:
-+            all_addrs.update(ip for ip in ips
-+                             if ip != FTRACE_TRAMPOLINE_MARKER)
-+        symbols = batch_addr2line(args.vmlinux, list(all_addrs))
-+
-+    def render(ip):
-+        if ip == FTRACE_TRAMPOLINE_MARKER:
-+            return TRAMPOLINE_LABEL
-+        return symbols.get(ip, f'0x{ip:x}')
-+
-+    if args.json:
-+        output = []
-+        for stack_id, ref_count, ips in stacks:
-+            entry = {
-+                'stack_id': stack_id,
-+                'ref_count': ref_count,
-+                'ips': [f'0x{ip:x}' for ip in ips]
-+            }
-+            if args.vmlinux:
-+                entry['symbols'] = [render(ip) for ip in ips]
-+            output.append(entry)
-+        print(json.dumps(output, indent=2))
-+    else:
-+        for stack_id, ref_count, ips in stacks:
-+            print(f"stack_id {stack_id} [ref {ref_count}, depth {len(ips)}]")
-+            for i, ip in enumerate(ips):
-+                if ip == FTRACE_TRAMPOLINE_MARKER:
-+                    print(f"  [{i}] {TRAMPOLINE_LABEL}")
-+                    continue
-+                sym = symbols.get(ip, '')
-+                if sym:
-+                    sym = f' {sym}'
-+                print(f"  [{i}] 0x{ip:x}{sym}")
-+            print()
-+
-+    print(f"Total: {len(stacks)} unique stacks", file=sys.stderr)
-+
-+
-+if __name__ == '__main__':
-+    main()
--- 
-2.34.1
+I tested this by using LUO to preserve tsc_khz across kexec, and the results
+looked good.
+
+Thank you very much!
+
+Dongli Zhang
+
+On 2026-06-08 7:47 AM, David Woodhouse wrote:
+> From: Jack Allister <jalliste@amazon.com>
+> 
+> In the common case (where kvm->arch.use_master_clock is true), the KVM
+> clock is defined as a simple arithmetic function of the guest TSC, based
+> on a reference point stored in kvm->arch.master_kernel_ns and
+> kvm->arch.master_cycle_now.
+> 
+> The existing KVM_[GS]ET_CLOCK functionality does not allow for this
+> relationship to be precisely saved and restored by userspace. All it can
+> currently do is set the KVM clock at a given UTC reference time, which
+> is necessarily imprecise.
+> 
+> So on live update, the guest TSC can remain cycle accurate at precisely
+> the same offset from the host TSC, but there is no way for userspace to
+> restore the KVM clock accurately.
+> 
+> Even on live migration to a new host, where the accuracy of the guest
+> time-keeping is fundamentally limited by the accuracy of wallclock
+> synchronization between the source and destination hosts, the clock jump
+> experienced by the guest's TSC and its KVM clock should at least be
+> *consistent*. Even when the guest TSC suffers a discontinuity, its KVM
+> clock should still remain the *same* arithmetic function of the guest
+> TSC, and not suffer an *additional* discontinuity.
+> 
+> To allow for accurate migration of the KVM clock, add per-vCPU ioctls
+> which save and restore the actual PV clock info in
+> pvclock_vcpu_time_info.
+> 
+> The restoration in KVM_SET_CLOCK_GUEST works by creating a new reference
+> point in time just as kvm_update_masterclock() does, and calculating the
+> corresponding guest TSC value. This guest TSC value is then passed
+> through the user-provided pvclock structure to generate the *intended*
+> KVM clock value at that point in time, and through the *actual* KVM
+> clock calculation. Then kvm->arch.kvmclock_offset is adjusted to
+> eliminate the difference.
+> 
+> Where kvm->arch.use_master_clock is false (because the host TSC is
+> unreliable, or the guest TSCs are configured strangely), the KVM clock
+> is *not* defined as a function of the guest TSC so KVM_GET_CLOCK_GUEST
+> returns an error. In this case, as documented, userspace shall use the
+> legacy KVM_GET_CLOCK ioctl. The loss of precision is acceptable in this
+> case since the clocks are imprecise in this mode anyway.
+> 
+> On *restoration*, if kvm->arch.use_master_clock is false, an error is
+> returned for similar reasons and userspace shall fall back to using
+> KVM_SET_CLOCK. This does mean that, as documented, userspace needs to
+> use *both* KVM_GET_CLOCK_GUEST and KVM_GET_CLOCK and send both results
+> with the migration data (unless the intent is to refuse to resume on a
+> host with bad TSC).
+> 
+> Co-developed-by: David Woodhouse <dwmw@amazon.co.uk>
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> Signed-off-by: Jack Allister <jalliste@amazon.com>
+> Reviewed-by: Paul Durrant <paul@xen.org>
+> Cc: Dongli Zhang <dongli.zhang@oracle.com>
+> ---
+>  Documentation/virt/kvm/api.rst |  37 ++++++++
+>  arch/x86/kvm/x86.c             | 164 +++++++++++++++++++++++++++++++++
+>  include/uapi/linux/kvm.h       |   3 +
+>  3 files changed, 204 insertions(+)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 52bbbb553ce1..2268b4442df6 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -6553,6 +6553,43 @@ KVM_S390_KEYOP_SSKE
+>    Sets the storage key for the guest address ``guest_addr`` to the key
+>    specified in ``key``, returning the previous value in ``key``.
+>  
+> +4.145 KVM_GET_CLOCK_GUEST
+> +----------------------------
+> +
+> +:Capability: none
+> +:Architectures: x86_64
+> +:Type: vcpu ioctl
+> +:Parameters: struct pvclock_vcpu_time_info (out)
+> +:Returns: 0 on success, <0 on error
+> +
+> +Retrieves the current time information structure used for KVM/PV clocks,
+> +in precisely the form advertised to the guest vCPU, which gives parameters
+> +for a direct conversion from a guest TSC value to nanoseconds.
+> +
+> +When the KVM clock is not in "master clock" mode, for example because the
+> +host TSC is unreliable or the guest TSCs are oddly configured, the KVM clock
+> +is actually defined by the host CLOCK_MONOTONIC_RAW instead of the guest TSC.
+> +In this case, the KVM_GET_CLOCK_GUEST ioctl returns -EINVAL.
+> +
+> +4.146 KVM_SET_CLOCK_GUEST
+> +----------------------------
+> +
+> +:Capability: none
+> +:Architectures: x86_64
+> +:Type: vcpu ioctl
+> +:Parameters: struct pvclock_vcpu_time_info (in)
+> +:Returns: 0 on success, <0 on error
+> +
+> +Sets the KVM clock (for the whole VM) in terms of the vCPU TSC, using the
+> +pvclock structure as returned by KVM_GET_CLOCK_GUEST. This allows the precise
+> +arithmetic relationship between guest TSC and KVM clock to be preserved by
+> +userspace across migration.
+> +
+> +When the KVM clock is not in "master clock" mode, and the KVM clock is actually
+> +defined by the host CLOCK_MONOTONIC_RAW, this ioctl returns -EINVAL. Userspace
+> +may choose to set the clock using the less precise KVM_SET_CLOCK ioctl, or may
+> +choose to fail, denying migration to a host whose TSC is misbehaving.
+> +
+>  .. _kvm_run:
+>  
+>  5. The kvm_run structure
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index d9ef165df6a1..b7e5f6e3dc6c 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -6205,6 +6205,162 @@ static int kvm_get_reg_list(struct kvm_vcpu *vcpu,
+>  	return 0;
+>  }
+>  
+> +#ifdef CONFIG_X86_64
+> +static int kvm_vcpu_ioctl_get_clock_guest(struct kvm_vcpu *v, void __user *argp)
+> +{
+> +	struct pvclock_vcpu_time_info hv_clock = {};
+> +	struct kvm_vcpu_arch *vcpu = &v->arch;
+> +	struct kvm_arch *ka = &v->kvm->arch;
+> +	unsigned int seq;
+> +
+> +	/*
+> +	 * If KVM_REQ_CLOCK_UPDATE is already pending, or if the pvclock
+> +	 * has never been generated at all, call kvm_guest_time_update().
+> +	 */
+> +	if (kvm_check_request(KVM_REQ_CLOCK_UPDATE, v) || !vcpu->hw_tsc_hz) {
+> +		int idx = srcu_read_lock(&v->kvm->srcu);
+> +		int ret = kvm_guest_time_update(v);
+> +
+> +		srcu_read_unlock(&v->kvm->srcu, idx);
+> +		if (ret)
+> +			return -EINVAL;
+> +	}
+> +
+> +	/*
+> +	 * Reconstruct the pvclock from the master clock state, matching
+> +	 * exactly what kvm_guest_time_update() writes to the guest.
+> +	 */
+> +	do {
+> +		seq = read_seqcount_begin(&ka->pvclock_sc);
+> +
+> +		if (!ka->use_master_clock)
+> +			return -EINVAL;
+> +
+> +		hv_clock.tsc_timestamp = kvm_read_l1_tsc(v, ka->master_cycle_now);
+> +		hv_clock.system_time = ka->master_kernel_ns + ka->kvmclock_offset;
+> +	} while (read_seqcount_retry(&ka->pvclock_sc, seq));
+> +
+> +	hv_clock.tsc_shift = vcpu->pvclock_tsc_shift;
+> +	hv_clock.tsc_to_system_mul = vcpu->pvclock_tsc_mul;
+> +	hv_clock.flags = PVCLOCK_TSC_STABLE_BIT;
+> +
+> +	if (copy_to_user(argp, &hv_clock, sizeof(hv_clock)))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Reverse the calculation in the hv_clock definition.
+> + *
+> + * time_ns = ( (cycles << shift) * mul ) >> 32;
+> + * (although shift can be negative, so that's bad C)
+> + *
+> + * So for a single second,
+> + * NSEC_PER_SEC = ( ( FREQ_HZ << shift) * mul ) >> 32
+> + * NSEC_PER_SEC << 32 = ( FREQ_HZ << shift ) * mul
+> + * ( NSEC_PER_SEC << 32 ) / mul = FREQ_HZ << shift
+> + * ( NSEC_PER_SEC << 32 ) / mul ) >> shift = FREQ_HZ
+> + */
+> +static u64 hvclock_to_hz(u32 mul, s8 shift)
+> +{
+> +	u64 tm = NSEC_PER_SEC << 32;
+> +
+> +	/* Maximise precision. Shift right until the top bit is set */
+> +	tm <<= 2;
+> +	shift += 2;
+> +
+> +	/* While 'mul' is even, increase the shift *after* the division */
+> +	while (!(mul & 1)) {
+> +		shift++;
+> +		mul >>= 1;
+> +	}
+> +
+> +	tm /= mul;
+> +
+> +	if (shift > 0)
+> +		return tm >> shift;
+> +	else
+> +		return tm << -shift;
+> +}
+> +
+> +static int kvm_vcpu_ioctl_set_clock_guest(struct kvm_vcpu *v, void __user *argp)
+> +{
+> +	struct pvclock_vcpu_time_info user_hv_clock;
+> +	struct kvm *kvm = v->kvm;
+> +	struct kvm_arch *ka = &kvm->arch;
+> +	u64 curr_tsc_hz, user_tsc_hz;
+> +	u64 user_clk_ns;
+> +	u64 guest_tsc;
+> +	int rc = 0;
+> +
+> +	if (copy_from_user(&user_hv_clock, argp, sizeof(user_hv_clock)))
+> +		return -EFAULT;
+> +
+> +	if (user_hv_clock.pad0 || user_hv_clock.pad[0] || user_hv_clock.pad[1])
+> +		return -EINVAL;
+> +
+> +	if (!user_hv_clock.tsc_to_system_mul)
+> +		return -EINVAL;
+> +
+> +	if (user_hv_clock.tsc_shift < -32 || user_hv_clock.tsc_shift > 32)
+> +		return -EINVAL;
+> +
+> +	user_tsc_hz = hvclock_to_hz(user_hv_clock.tsc_to_system_mul,
+> +				    user_hv_clock.tsc_shift);
+> +
+> +	kvm_hv_request_tsc_page_update(kvm);
+> +
+> +	/*
+> +	 * kvm_start_pvclock_update() takes tsc_write_lock and opens
+> +	 * the pvclock seqcount; kvm_end_pvclock_update() closes both.
+> +	 * All clock state modifications between them are atomic with
+> +	 * respect to readers in kvm_guest_time_update().
+> +	 */
+> +	kvm_start_pvclock_update(kvm);
+> +	pvclock_update_vm_gtod_copy(kvm);
+> +
+> +	if (!ka->use_master_clock) {
+> +		rc = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	curr_tsc_hz = (u64)get_cpu_tsc_khz() * 1000;
+> +	if (unlikely(curr_tsc_hz == 0)) {
+> +		rc = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	if (kvm_caps.has_tsc_control)
+> +		curr_tsc_hz = kvm_scale_tsc(curr_tsc_hz,
+> +					    v->arch.l1_tsc_scaling_ratio);
+> +
+> +	/*
+> +	 * Allow for a discrepancy of 1 kHz either way between the TSC
+> +	 * frequency used to generate the user's pvclock and the current
+> +	 * host's measured frequency, since they may not precisely match.
+> +	 */
+> +	if (user_tsc_hz < curr_tsc_hz - 1000 ||
+> +	    user_tsc_hz > curr_tsc_hz + 1000) {
+> +		rc = -ERANGE;
+> +		goto out;
+> +	}
+> +
+> +	/*
+> +	 * Calculate the guest TSC at the new reference point, and the
+> +	 * corresponding KVM clock value according to user_hv_clock.
+> +	 * Adjust kvmclock_offset so both definitions agree.
+> +	 */
+> +	guest_tsc = kvm_read_l1_tsc(v, ka->master_cycle_now);
+> +	user_clk_ns = __pvclock_read_cycles(&user_hv_clock, guest_tsc);
+> +	ka->kvmclock_offset = user_clk_ns - ka->master_kernel_ns;
+> +
+> +out:
+> +	kvm_end_pvclock_update(kvm);
+> +	return rc;
+> +}
+> +#endif
+> +
+>  long kvm_arch_vcpu_ioctl(struct file *filp,
+>  			 unsigned int ioctl, unsigned long arg)
+>  {
+> @@ -6605,6 +6761,14 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
+>  		srcu_read_unlock(&vcpu->kvm->srcu, idx);
+>  		break;
+>  	}
+> +#ifdef CONFIG_X86_64
+> +	case KVM_SET_CLOCK_GUEST:
+> +		r = kvm_vcpu_ioctl_set_clock_guest(vcpu, argp);
+> +		break;
+> +	case KVM_GET_CLOCK_GUEST:
+> +		r = kvm_vcpu_ioctl_get_clock_guest(vcpu, argp);
+> +		break;
+> +#endif
+>  #ifdef CONFIG_KVM_HYPERV
+>  	case KVM_GET_SUPPORTED_HV_CPUID:
+>  		r = kvm_ioctl_get_supported_hv_cpuid(vcpu, argp);
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 6c8afa2047bf..9b50191b859c 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1669,4 +1669,7 @@ struct kvm_pre_fault_memory {
+>  	__u64 padding[5];
+>  };
+>  
+> +#define KVM_SET_CLOCK_GUEST	_IOW(KVMIO, 0xd6, struct pvclock_vcpu_time_info)
+> +#define KVM_GET_CLOCK_GUEST	_IOR(KVMIO, 0xd7, struct pvclock_vcpu_time_info)
+> +
+>  #endif /* __LINUX_KVM_H */
 
