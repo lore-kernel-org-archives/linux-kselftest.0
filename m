@@ -1,171 +1,137 @@
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B68413DBD57
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 19:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129BC38911B
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 20:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781638598; cv=none; b=Fqj84yEZZEchPJnqcgUkUxq+/9hmGJ0ClwXZ5g1CeLVNX1EUeEZwWKmb2CnyT3fmhwlKE1vxiWnas4sD3kwozYwtQZme7sKHsea0W2xYCWPO/V/eEQo/y2kW88YBg9LhoKA4UU9HeXR2i7YeZHY586KkxkpPy2oYfhMZUsLSKhI=
+	t=1781641017; cv=none; b=Cfpr718NlzmNwokTwzkGkhZjOeculTz4OdTgURvP1A87vaoW5MBUrXJGV/I4q4pXlX1KWot3jfuXXwsjxpoq6Eu/2mi7jITraPBG53Qd2pC19Fe7zEUixRLyRvU0NMIwdMzsYf6wlHaOV8KchyjD0nHSxBpunFUadI3XCswd8iA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781638598; c=relaxed/simple;
-	bh=x4vuvjMjK3Siqy6TliGJe8+jhWlv6O6RxnFPsOmVF7A=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=e13aoDZZZvxoCUsGoi/K0Ggdh+H3MNUjwidJu8nJzjmY0dU2hZHCKi8e4jf6qquU481C4G7MuTLLY8MHbkCvAq/JjAbQMPMBoVvMMNLKEilLVsVkDsncqf8toEdYJghtfr+YF0w6lba8azZuhUn5BLtGuy/0MidtgAcRt0P7r74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GC8Anh5V; arc=none smtp.client-ip=209.85.210.41
+	s=arc-20240116; t=1781641017; c=relaxed/simple;
+	bh=NDPe7BjRqQO81lM7S/gk96lWQXHDy2NfdCGZ9cKvSfg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=M9K+nK8TdMh5Jxjmxw7kc3ZH6xw60caPBE877o8T1JgbOVBvSz+bojw5od/p1IdcsgEkXVNbEe6TditbthWRAfJJgcROiGtSczhDsG51pX8WnLr6uk1Ma/Ar//fuXNHp8NG1avhWkmN7JiKACOTDftGE0aTMEMG8FYOeOI9z9fE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kq38Z4FV; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GC8Anh5V"
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7e74a827212so2308982a34.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 12:36:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kq38Z4FV"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-4600ddc4017so3784356f8f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 13:16:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781638596; x=1782243396; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781641014; x=1782245814; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8EO/9z4OOJVGQlHYYaBZaNw8VQwWazXkqSJi3LxEM90=;
-        b=GC8Anh5VfSrdFDAjBCA+t3VBlW9IQNj5CS2020mtctSOl0TPtqgqnGjyN+MItcjWCE
-         R0j+pM5rZJAV44nYdGQv7jC3qjGRKFk5ryfZPJP6ggkny9bOvT5PsAWDBqNcZnOUDHzW
-         55at24VAlGj21mPIJaKOSHd4NigWRARptROZhFH3vPAFtWHmD3Dcc2orE/BzygvegpF8
-         MYKIXU7AGLmA1BXhbVVUIyvaoI5TvJOVe0/vMdnU4AZCkGAi3uDlSMlvfvJARjsCEL6h
-         eT6d5OdfnVWITLk0Pho0d6JAb83fB8Ys9lco4IUXjCHAL6DfOFBC6BEmxTmI4sb3ZPRt
-         MAjw==
+        bh=5ZHhd9DZXAW4wgKJX/mXTrxz0x9KgaM+DPaZGQCTuSg=;
+        b=kq38Z4FVvBxl8kKxz6uizR6o7FvFkKKgk6E+SpK5yIJGXpEhyhMgA5/L622GJAtdRl
+         S25Newj6Z4vcGrtkW2GV1ynCyLuRLlBbAvjmmcHc4NgONuwhf6PVlccDDFhKnAmWaf6Y
+         K8HpQq1sLAfLLKzILxEhOc4gzlN8aFDNO3iWnaT/abjZfE6HcuDpz2Ji3i/rRalZ/gei
+         79c5+69HeaLgxVxgZbMTW1qIyFUKGqZwd97Hbo8pLzFPrSDwAreBX87C0IuyzN87CjGy
+         b2skhi6zApUyQroxJVuPGHXhQZLw+A2pkYD6djGjdDVxEErDVVm898wSpwsiJIp8bw7h
+         x0tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781638596; x=1782243396;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8EO/9z4OOJVGQlHYYaBZaNw8VQwWazXkqSJi3LxEM90=;
-        b=NShmE18hEWzelM7B2pIUiTJgtVR5pOGzFr8F203OeaYGjirqzHcrFgIEvoSQllhP8v
-         AqIIEZie7su1r/8/Ycj4I8VYiUj9HhqNJozm6S5RveBY4fST8CskBg/GH599UrfNG2cD
-         MvsWccY87SkITeYIozY9uZVJnlpUMptMzOBIPoDE3ooV0wCHiCzMaqR5WmXkXMQObBzn
-         nPb+y1JyPytc4PXRAuS+rzbuRLCib4pGjU2VUKeS+dh4JSXcK/JmY0ISuBCgjU4+1qtQ
-         qrKfNTgh/W05NcJpm/tURHCQi0aYdkNU9etbJMGRKJ9skd2TrpmnB2FdhiYQTg1Ux+8O
-         PEgQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8gajxQoSHm3YxLGUpdiktlhCTGw45hB9KQNCQoVREiChl90xIPOsQjC/ZKB/GZqwbycqmo0IVJf1yepuXlTfo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsVKJ7edbzMkqDbEMBnuW+K6pQYTg+8/poM5j0iH95oPwmBxYv
-	liTqc8uihi1VEatTRGakFX3OjvQkjMyNlODgLFoNLMQ49N2GPdc3WdQk
-X-Gm-Gg: Acq92OELCHinH1+tjzxR7pufJC3eGMqzNGnTowniLStD4/aMZbOVaUwlq/K9NXB9r+0
-	oMj2yeJU5CsBCuFLVNKSdPEYQNbud1CRdGEvn27UXcP4Y9p0GxDBWlGaKWniwjp8kMXX4qoidnn
-	Tz0uYbNUUn9tc0ntv/aBJBba5Zd0Ou3OcJDCrecZdYNTrkZCrTdABdNxYuAsRYiiWqf6htTsZM5
-	ZZOnHgKSXScGGgU99JIItYnRWklCg4KuwGUe3pFGEaTO9ijru/0StnoqnGJYBsg3/pJ7y8UqIsg
-	Tza3ObrPMUePitAUXfYzaj/crdhkvmzbUeqpNty8XEl6ha8jvt6fT9ooLPyy/AmczYsoDakEu11
-	vhmtLwM7fMUeq9iyVvdjhp2vvUaOZI1igHN1J875rqFopm9OYfCLXowFUbqR9hqZ/aIebsvuUpM
-	VxrGzMTYmAj2AHrb0uxLNXHNgKAxnYRX+5gLzktrrSdTJKHraGO7ilw5jiNlR+b4lBtiKZGRm6h
-	DM7fQkiO3Wx74u6xQ==
-X-Received: by 2002:a05:6808:1b28:b0:479:faf5:ef4c with SMTP id 5614622812f47-48944641750mr389992b6e.32.1781638595545;
-        Tue, 16 Jun 2026 12:36:35 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:53::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4875ddda6b6sm4881214b6e.8.2026.06.16.12.36.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jun 2026 12:36:34 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781641014; x=1782245814;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5ZHhd9DZXAW4wgKJX/mXTrxz0x9KgaM+DPaZGQCTuSg=;
+        b=HA9as0wNdmt1aHsMsE2gUHOkOCcb77ygYr4GhenSnATuL/5mrXfa6skhP1wfhBJ5OU
+         T8RLE2sfjSY6O8LG3SkEqET6boT0gQY0PjKIZSgNaB1UIggDItfsgmDbr4zWrY81uA8+
+         RxOdb5iloPO0PVxg/ZGEup0j6b4kD3QCBVoqbCk3VrAZlrhFQZVp/LxoanA4uvLcCdyZ
+         +sp4q+a3HcimdK2NGe1whCd6uYO83sV9zEzUxJknQYoVv65JNQl41roLXGVqNzKPDey4
+         ehxBBF6r21dxREpNIbTwORuq1sW91rgNe14T0DiC38mynDLMwxFnerXG11iZFLDFnYQ+
+         iD0g==
+X-Forwarded-Encrypted: i=1; AFNElJ9rYxulX04MstUkH3k6gG2pxYPlqhZ8rhdFL+Fja4qZaKwYMI2XXequ8AyX8JGM/FdX2RjNJS281Nbsb6yo/Js=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqhE9vAKP6Gntl1mpwSkMf//a4eP4xKG5L2YRSBvvF23qdXTf8
+	WgYiTFKm3mYOBwZdspkbEkqUpjvS+US3BI12dmWossqxaczMS/4p7wkM
+X-Gm-Gg: Acq92OHGz+sJm1KtDgygvJ8vepVHkK7LK5vP71cnzbzg8nbY9z7Cx9+ueCyd1ubfj4s
+	g0MFZ/6289RbEeAytLlnyibAtAmrWVdcsFnSBNIXRQ3dSfXGoUtANpiXXOTFgoLFNECl1gF/T5Z
+	uw0Pe9QBXvxkWvD8ryLpb10Y6WC3z0p7slhCLVOcF9KGhNvgjaExkFj+nGWphESXcQFdaVQmicO
+	8UykpgICqplzcnsKEzMJrdaD0I6+xkpQUXnLVGWyd/FI6GoC544R8f9uA82U2VUYAfqwXG/fHe5
+	xdq+FBYMvWsUKZ+iI1vBC4kc/xdAdswPUxscDqFNsNyj1q5HEsxP6jVhNdftAuCDE63L3kCCzqA
+	9QekII9W7HQAf2AEFb/ACOvW9cvNLpasb/5WZ9qZ0+n3Mp7ouCB3q/JvlWAAUCqUlyxhEk6YKt9
+	DohTmxdoIxBxiJJ+Y6IQ8BP+uwAx3awXwt+8ehQuD/TywKpUyQLDoVrbTK6seiUsv8o2KX8PI=
+X-Received: by 2002:a5d:4650:0:b0:461:a16c:a5f4 with SMTP id ffacd0b85a97d-462391826aemr1168139f8f.33.1781641014427;
+        Tue, 16 Jun 2026 13:16:54 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4619fb12edbsm10160310f8f.17.2026.06.16.13.16.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2026 13:16:53 -0700 (PDT)
+Date: Tue, 16 Jun 2026 21:16:52 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@meta.com
+Subject: Re: [PATCH net-next 2/2] udp: convert udp_lib_getsockopt to
+ sockopt_t
+Message-ID: <20260616211652.448d6b0e@pumpkin>
+In-Reply-To: <ajF4Odi_L28LdIXC@gmail.com>
+References: <20260612-getsockopt_phase2-v1-0-7b01f1f5d106@debian.org>
+	<20260612-getsockopt_phase2-v1-2-7b01f1f5d106@debian.org>
+	<aiy7ZR7Yz2Z4Ioyd@devvm7509.cco0.facebook.com>
+	<ajF4Odi_L28LdIXC@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 16 Jun 2026 12:36:31 -0700
-Message-Id: <DJAQ65ZVYAN7.2Z8DNW7Z0JE7V@gmail.com>
-Cc: <pablo@netfilter.org>, <fw@strlen.de>, <phil@nwl.cc>,
- <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
- <pabeni@redhat.com>, <horms@kernel.org>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <shuah@kernel.org>, <kartikey406@gmail.com>, <coreteam@netfilter.org>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Guard conntrack opts error writes
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>, <bpf@vger.kernel.org>,
- <netfilter-devel@vger.kernel.org>
-X-Mailer: aerc
-References: <cover.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
- <70aeec0ab762aebe65129cf6052e132c7329edc2.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
-In-Reply-To: <70aeec0ab762aebe65129cf6052e132c7329edc2.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon Jun 15, 2026 at 10:42 PM PDT, Yiyang Chen wrote:
-> The conntrack lookup and allocation kfuncs take an opts pointer
-> together with an opts__sz argument. The verifier checks only the memory
-> range described by opts__sz, but the wrappers unconditionally write
-> opts->error whenever the internal lookup or allocation helper returns an
-> error.
->
-> For an invalid size smaller than the end of opts->error, that write can
-> land outside the verifier-checked range. Keep returning NULL for invalid
-> arguments, but only report the error through opts->error when the
-> supplied size includes the field.
->
-> This preserves error reporting for the supported 12-byte and 16-byte
-> layouts, and for other invalid sizes that still include opts->error.
->
-> Fixes: b4c2b9593a1c ("net/netfilter: Add unstable CT lookup helpers for X=
-DP and TC-BPF")
-> Fixes: d7e79c97c00c ("net: netfilter: Add kfuncs to allocate and insert C=
-T")
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> ---
->  net/netfilter/nf_conntrack_bpf.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
->
-> diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrac=
-k_bpf.c
-> index 40c261cd0af38..3c182024ec509 100644
-> --- a/net/netfilter/nf_conntrack_bpf.c
-> +++ b/net/netfilter/nf_conntrack_bpf.c
-> @@ -65,6 +65,11 @@ enum {
->  	NF_BPF_CT_OPTS_SZ =3D 16,
->  };
-> =20
-> +static bool bpf_ct_opts_has_error(u32 opts_len)
-> +{
-> +	return opts_len >=3D offsetofend(struct bpf_ct_opts, error);
-> +}
-> +
->  static int bpf_nf_ct_tuple_parse(struct bpf_sock_tuple *bpf_tuple,
->  				 u32 tuple_len, u8 protonum, u8 dir,
->  				 struct nf_conntrack_tuple *tuple)
-> @@ -298,7 +303,8 @@ bpf_xdp_ct_alloc(struct xdp_md *xdp_ctx, struct bpf_s=
-ock_tuple *bpf_tuple,
->  	nfct =3D __bpf_nf_ct_alloc_entry(dev_net(ctx->rxq->dev), bpf_tuple, tup=
-le__sz,
->  				       opts, opts__sz, 10);
->  	if (IS_ERR(nfct)) {
-> -		opts->error =3D PTR_ERR(nfct);
-> +		if (bpf_ct_opts_has_error(opts__sz))
-> +			opts->error =3D PTR_ERR(nfct);
+On Tue, 16 Jun 2026 09:22:52 -0700
+Breno Leitao <leitao@debian.org> wrote:
 
-LLMs have no taste.
+> On Fri, Jun 12, 2026 at 07:10:15PM -0700, Stanislav Fomichev wrote:
+> > On 06/12, Breno Leitao wrote:  
+> 
+> > >  int udp_lib_getsockopt(struct sock *sk, int level, int optname,
+> > > -		       char __user *optval, int __user *optlen)
+> > > +		       sockopt_t *opt)
+> > >  {
+> > >  	struct udp_sock *up = udp_sk(sk);
+> > >  	int val, len;
+> > >  
+> > > -	if (get_user(len, optlen))
+> > > -		return -EFAULT;  
+> > 
+> > [..]
+> >   
+> > > -	if (len < 0)
+> > > -		return -EINVAL;  
+> > 
+> > I see this part now in sockopt_init_user, but you mention that it's a
+> > transitional helper. When we drop it, will we loose this <0 check?
+> > Maybe keep `if ((int)opt->optlen < 0))` here for backwards
+> > compatibility?  
+> 
+> Good idea. I will do it and respin (once net-next reopens).
 
-Above two lines could have been one helper
-   bpf_ct_opts_set_error(opts, opts__sz, PTR_ERR(nfct));
+The best place for the negative length check is in the syscall wrapper code.
+Pass an unsigned length through to all the protocol code.
+No need to require every function to do the test.
 
-Or we can do a step further and simplify the code more.
-Turn this:
-   if (IS_ERR(nfct)) {
-           opts->error =3D PTR_ERR(nfct);
-           return NULL;
-   }
-   return (struct nf_conn___init *)nfct;
-into:
-   return (struct nf_conn___init *)bpf_ct_opts_result(opts, opts__sz, nfct)=
-;
+Note that the length check was actually broken in many protocols
+going way back well before git.
+There has pretty much always been an unsigned min() check that converted
+negative values to small(ish) positive ones before the check for it being
+negative.
+(That predates min() being a #define.)
 
-static void *bpf_ct_opts_result(struct bpf_ct_opts *opts, u32 opts__sz, voi=
-d *ret)
-{
-  if (!IS_ERR(ret))
-    return ret;
-  if (opts__sz >=3D offsetofend(struct bpf_ct_opts, error))
-    opts->error =3D PTR_ERR(ret);
-  return NULL;
-}
+The recent change to actually error optlen < 0 might actually have broken
+some applications that passed uninitialised stack that was always negative!
 
-This kind of small improvements should be obvious to any human developer.
-Please do NOT send us patches straight out of LLM.
-Review it first and think how to improve it.
+-- David
 
-pw-bot: cr
+> 
+> Thanks for the review,
+> --breno
+> 
+
