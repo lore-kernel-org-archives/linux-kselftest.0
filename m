@@ -1,86 +1,95 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D31B35F197;
-	Tue, 16 Jun 2026 20:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2150399007
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 20:58:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781642868; cv=none; b=old0ysisw52ZfznLfroEgSFpgQ8NpLntpD587bzK97oyw8Lhw8GKgtOMcrnhiB8H5UNlXjK7WQmQq22lPGF0rLfOZgLsvoaLVi2mFdUJJUKLKf56QmGGEX/3mcNRrc8GZ4NMc73VOkzdBcbfEZEVVMqBsusP1I/38XM64Jc8cLI=
+	t=1781643486; cv=none; b=L1Lkn4Q8T2BtjfWDTsIieU6rLlKcNbvP5oOUcuoEHGxzFoRarKF5t9ACQALJdX+p+vllaP0KGkmAXStvyUWGDrztdrZJg70bLri27cRjjmqngKVgaqUe0BNW5HQDeCQ+YmlqGzL+15lBMvM94ArQxKWksDqb8INg7800dUb3rcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781642868; c=relaxed/simple;
-	bh=fa7Y3qx6gblR451C+xwmA06qp8aBTIQpJLG39CEKCZA=;
+	s=arc-20240116; t=1781643486; c=relaxed/simple;
+	bh=MUmT4WQ8gikQW/FOLoONsetD5u39tuO3VxiIsFbd268=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IkZTP4B3YF1fRDJWJvedAlvwRyu99WzCPqU8WK5aZSd7x36O8eU1Dao2hsfBYKn8vKwztbKf2apbTliWyJfU+tfZyxx4vNEe5JF/cAgWzgfP2jxcGtIRUzirXviFjbhFA+w60Oa5GyT+LPFGkR/e+I+jo1NqjhC1UoSZAOs4mGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joshtriplett.org; spf=pass smtp.mailfrom=joshtriplett.org; dkim=pass (2048-bit key) header.d=joshtriplett.org header.i=@joshtriplett.org header.b=NvU2MT3U; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kJiR7r/+; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joshtriplett.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joshtriplett.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wl6vK6Gv8LMig/kx98ZbpSzrpDBOLcOhPZLiXdEuz+EXiCMmVMH/ienvRB1mdC3uc34QDtNaq/dgeAj3ZhWSy68Lsmmv8GxCfsMGsP4GJnjilS9ovglMzSJRL1V1nxONdSCOcyIUe2NOSdcThol/WoKQfrn3UpZQIjbsEsp8ErI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sD26MNSY; arc=none smtp.client-ip=209.85.167.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=joshtriplett.org header.i=@joshtriplett.org header.b="NvU2MT3U";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kJiR7r/+"
-Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
-	by mailfout.stl.internal (Postfix) with ESMTP id 3E3F11D00045;
-	Tue, 16 Jun 2026 16:47:45 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-12.internal (MEProxy); Tue, 16 Jun 2026 16:47:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	joshtriplett.org; h=cc:cc:content-type:content-type:date:date
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1781642865;
-	 x=1781729265; bh=fa7Y3qx6gblR451C+xwmA06qp8aBTIQpJLG39CEKCZA=; b=
-	NvU2MT3UMdzRuW3e0CLzmi4tt+7s5v3E+B+KSQvNeAYKsj/BPBIA+t/fJ/5f8sy3
-	okYvG51r6LhXw0ElImBGpaAirrsRZfgorv34V/BSLbGPNmKlRhAYm5JA/mojXjMG
-	/VLCcZrajrue+z9b3jEbm7APOQ7C7bJYWYkWMxQITegUUImSFmnkQQIVhKQcG9Jz
-	Xgseo1mLklOgJoNf43FkEY4nwIYtjHmuOqn77QvDNAXxy+8vRStB/nmADlZ1/l79
-	0aHx2qKJmQEJqh6AdNzWE0DTZ0HG4KbQcGrFAq+Rni+92xqrI4xzPpUuy/q4CUZV
-	LsFEX55mN1n+i+VAXnPzbQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1781642865; x=1781729265; bh=fa7Y3qx6gblR451C+xwmA06qp8aBTIQpJLG
-	39CEKCZA=; b=kJiR7r/+KpxVNHRyx/xX8JukmSxkSvjLisQR2PxWBlCcr0p+TpZ
-	hQtjEoYqO1u+ASZfvXqZfm9dIlAuN/orVfpnsoifYJjAfU/GtZXVTAjvrT89cmge
-	NoywETGDbDP67cRpAB100TB3aPBSBZE701WEIBvsRR1f40u+waxZ0NoC3EH745f1
-	is8o9V1/SsQ9+/orZQuo0FIrEYqdGH3dlX6uP5gb1jO+AUq/hjVCsmW4wuDtXGGm
-	sml2KZJmlkcPNf1az931ZIpm2lwvkq8S541ywDfeeaIgDIYtAcO2SBxg4vXt5e7A
-	hK0xjifDzbw0/NmgfWAOj7N7B1szyXD9ITA==
-X-ME-Sender: <xms:cLYxaiVS2VEGkPnvPaxHVVic5171kqh55MUckedxPuIy7_DziC_xcA>
-    <xme:cLYxao9MpnDsXCPOWQaSx61QKnu0L_0TOAj7mIT8D9HSwulE2rgWm7HyPICFBCZy6
-    Tv86Zo5XBdgq4zQr2NFFjgqEzP01NFafVt7iG5biFC0B0znPCaqmg>
-X-ME-Received: <xmr:cLYxasiyMaJWK-dvJ2aFCFciSzjzO8CKg9RCoIePy9Y62E3spc0MFgPWhg>
-X-ME-Proxy-Cause: dmFkZTGkKVs8VRXq2x/QRQMoEoqcUcoTUcJT+jdduJpS5EJcJJXm/nxwKzJKHI52Cuet39
-    ltx4/+ev+PouJ6vAj02W4UN7E4pWTZwvPXyMOaFSnxulyM7UnhBwYdnec2rFITtr8ZjYO0
-    5nTTMPyA6Tklaho60LobCf3cqxlCG6VnmqO0TB96TitMGTlXjg4IcNaH9p6HUZouBU8ID0
-    CPHg6O8+QOtsmCdPO3ZlJIkScsA0P/ee5Z11Y3w4N48tPeSyI1Z8T3LpJeNQ1r5xYn+PMi
-    2t7T0vNzvVHaOOOcde9rxfurw/o9aiFvVj2L2vI0VZ7ixKGtS++b8a7zu2eyb9cF8yQoGH
-    gSQtqDTMvISmMkOIm8kHgUE1vnL951h2ONS5PAc8g7GBVidoEEtz2veqy2WRLIEMoqvbIB
-    vECD6qTEWNk0RIPbLyiQc2WnWRjQ6HJTWGMq3EAiqRRUVcHvYhjhNMhZnkmkuITWW9kZUB
-    58aU9oHSyJDVs52MpWdfERKPOLs7iOP3LxPObRLx8J6+GbmyVjf5w/kQfaV8+wWQ4nJ4GV
-    MfgiMv/L7I8J0cespzn/2xFu0oBuhq5AEkiDleDsitradTYtBHq6Co5F1gzeB4yMbGZXnw
-    hbBxveE4CQXw3eBJ+zIyg3dEkxTJEcmDlNA/8zoZbQ/slgnpkNPd79w7RMgA
-X-ME-Proxy: <xmx:cLYxakfzjxHFNiP-wvKJRerJAoYt4xRp4KLsL3IcX0rNZEXQGyL3sg>
-    <xmx:cLYxalJkezpXIqdEJkwveaipFZ5-0klQkUe0ZlTPHC0hOg7LWE2n2w>
-    <xmx:cLYxahnW7Y2LuI6TJAv69FUaUpg7gmvSBm-_8mVRhFPaTf4ZkMBjpA>
-    <xmx:cLYxatcOjopzmnwbybUR23odF4w8aL1xY1Oh663mBaO0xEwHIXquFw>
-    <xmx:cbYxav1Xb87qQ5eh8EQkjDNMT-ucWbrVJt5CkpO0pMBwu3yEmmiuIDNg>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 16 Jun 2026 16:47:42 -0400 (EDT)
-Date: Tue, 16 Jun 2026 13:47:42 -0700
-From: Josh Triplett <josh@joshtriplett.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Shuah Khan <shuah@kernel.org>, Mateusz Guzik <mjguzik@gmail.com>,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, shakeel.butt@linux.dev,
-	jlayton@kernel.org, oleg@redhat.com, axboe@kernel.dk,
-	kernel-team@meta.com
-Subject: Re: [PATCH v3 0/2] fs/pipe: reduce pipe->mutex contention by
- pre-allocating outside the lock
-Message-ID: <ajG2bmhu6j9UWvh4@localhost>
-References: <20260524-fix_pipe-v3-0-bb4a75d23a90@debian.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sD26MNSY"
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-486b93fc7c8so2054981b6e.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 13:58:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781643484; x=1782248284; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rG4yjs4p+4H4P31U7PQCtrU7WZ2EeT+JyZMQJymeW5U=;
+        b=sD26MNSYv9ZLMxqb1P8qI+3XPTH8FSD8SWooLHUuiCQ1s6THX8h2d9oZK9otgepkmZ
+         L+7vw5kRLiFhMm4ptzIFb5v7SpJrr4VPdidEvKSkm3rQM7zsNu16TuLbxqzbvApfenPl
+         Bc92wTJuZwFBksaYq+LNEJtqL8qMNArEaK/atLfBq4M5ys37Mkq3NJqEO3nDsQ3RjZnm
+         uAZgzEI+ZYytvvmatKMEPQNndEF5C7AER/T55UeFVWLeLPCZqneogbKrZrNsOsahY1JO
+         gpRzR0Fuf69BQoin4mtTuxrSj23kj93piIP2Ibn1fjn5ZOkwXSlYiw7aRLu3ADWyY4e5
+         CTyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781643484; x=1782248284;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rG4yjs4p+4H4P31U7PQCtrU7WZ2EeT+JyZMQJymeW5U=;
+        b=tY2aKdXcnOswUeeLCaJZTDnfL3xHbSfqSbTgAH8blR5qyMmwSJ2krds2xL56tqD8n2
+         kTT9Zagz/KcG1zwAfzZxgYi/f9GpVm6mJRXq9eGok8gTIX4eRseW2mLnbhciB8vfWUWU
+         +h1gAucnop2O7m+OmecrOxVmqvHvqHe3Cywz3VIg0S3otDKYvXbwhdoCrbBkTx7oxQp7
+         k8/+6C+dcL3goGb5PFjwOP9idEIGVaQg/uZntcDxaMp6tBhfrIK350GVzI8dJoKa+Hac
+         lJ2doJjPdIWlbst8agOHOsIqInMdFKfAY5ZWG6V29Y6Limq8BSL7IwszzuKuD3wIovMu
+         xxwQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/FWBbt77zy2uG7HMLmxuPgq46xjt58Ic8ib8zN0kBO/SvoGGVtmUztuxGmd8ExGJvnJgCgklfHre4sxzcU80Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhFCtDMZIuq6y5uxx9jBWkene5FPZxqfbE+Fy0NutwhGH/+AyF
+	EdKC8qlcsc2JUN8Gt66UD8S4Vfbhl/NVb0VZmCiQFa61Bx2FvBS2yd4u
+X-Gm-Gg: Acq92OEAR1h5dS4UfH4sakrEPgV1SYuF8FACMKf/GnRyIivtrqv2ndp/48yKCI7K9CW
+	RFcAqKi5TAn7gDYuriUKk22/2AZt6QVm702K0Usw2X/b51AJGB6B5B4ngaqlgzqwCgjuNDWwG7K
+	0BbwT2iJSKFakO1Ww6rq07/dhlvvy3pQ1IXbo6CsPoqP1FDPIB9EO7yP0AVy52LjHHlY0F8VOwU
+	5NS4x4Ecwu+zMG2u0m0ojCAvDIFNdJXjShnEcC0Ht59Wmp4ppj3EI/CglLNlrlvSSFHT/S7OPNM
+	5A0IbOJ7Ky5m/yjScw4Mvvf/YAYUXoUk5QdVhZj5FKXHbQWYJLZ2XspNHJQC4uKe8ku3/z1fk3k
+	uZ3wOI2HCf1uEe7eTklXMCo0efYPkoQTUzOnEmEfIhQ/a6ceLB+h2yzo6imQYfflZoyVGyh9W69
+	1cA4aroe0dfDtr3RHWGhrBIA/SZ8JoeA4FO1ivKqYkPYo=
+X-Received: by 2002:a05:6808:2f0f:b0:479:f7e7:4a81 with SMTP id 5614622812f47-489425d7d4cmr1016628b6e.0.1781643483758;
+        Tue, 16 Jun 2026 13:58:03 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:8::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4875df7fc36sm5099675b6e.9.2026.06.16.13.57.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2026 13:58:03 -0700 (PDT)
+Date: Tue, 16 Jun 2026 13:57:49 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: "Kasireddy, Vivek" <vivek.kasireddy@intel.com>
+Cc: Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	"linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"sdf@fomichev.me" <sdf@fomichev.me>,
+	"razor@blackwall.org" <razor@blackwall.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"almasrymina@google.com" <almasrymina@google.com>,
+	"matttbe@kernel.org" <matttbe@kernel.org>,
+	"skhawaja@google.com" <skhawaja@google.com>,
+	"dw@davidwei.uk" <dw@davidwei.uk>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v2 2/4] udmabuf: emit one sg entry per pinned
+ folio
+Message-ID: <ajG4zaK9zu7qZT1+@devvm29614.prn0.facebook.com>
+References: <20260611-tcpdm-large-niovs-v2-0-ee2bf15e7523@meta.com>
+ <20260611-tcpdm-large-niovs-v2-2-ee2bf15e7523@meta.com>
+ <IA0PR11MB71852246277F773AC41DAAA3F8E52@IA0PR11MB7185.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,26 +98,150 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260524-fix_pipe-v3-0-bb4a75d23a90@debian.org>
+In-Reply-To: <IA0PR11MB71852246277F773AC41DAAA3F8E52@IA0PR11MB7185.namprd11.prod.outlook.com>
 
-On Sun, May 24, 2026 at 07:44:57AM -0700, Breno Leitao wrote:
-> This series pre-allocates pages outside pipe->mutex in
-> anon_pipe_write(): for writes that span more than one full page, up
-> to PIPE_PREALLOC_MAX (8) pages are allocated via a per-page
-> alloc_page() loop before the mutex is taken. anon_pipe_get_page()
-> then drains the prealloc array first, falls back to the per-pipe
-> tmp_page[] cache, and only enters the allocator under the mutex for
-> the leftover pages (writes larger than PIPE_PREALLOC_MAX, single-page
-> writes that skip prealloc, or shortfalls when the prealloc loop
-> fails). Leftover prealloc pages are recycled into tmp_page[] before
-> unlock and any remainder is put_page()'d after unlock, keeping the
-> allocator out of the critical section on both sides.
-[...]
-> I also vibe-coded a microbenchmark to validate the change. It sweeps
-> writers x readers over {1,2,5} x {1,5,10} with 64KB writes against a
-> 1 MB pipe and prints throughput + latency percentiles per config.
+On Tue, Jun 16, 2026 at 06:04:03AM +0000, Kasireddy, Vivek wrote:
+> Adding Jason to this discussion.
+> 
+> Hi Bobby,
+> 
+> > Subject: [PATCH net-next v2 2/4] udmabuf: emit one sg entry per pinned
+> > folio
+> > 
+> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+> > 
+> > get_sg_table() emitted one PAGE_SIZE sg entry per page even when the
+> > underlying folio was larger.
+> > 
+> > Instead, walk folios[] and emit one sg entry per folio. When folios
+> We have recently merged a patch (that will make it into 7.2) from Jason that
+> replaced sg_set_folio() with sg_alloc_table_from_pages() in udmabuf driver:
+> https://gitlab.freedesktop.org/drm/tip/-/commit/5bf888673e0dda5a53220fa0c4956271a46c353c
+> 
+> Since you are relying on sg_set_folio(), the core argument against its usage
+> in udmabuf is that it doesn't work well with offsets > PAGE_SIZE, resulting
+> in a malformed scatterlist. Not sure if this can be fixed easily.
+> 
+> > represent large pages (as is for MFD_HUGETLB), each sg entry is a large
+> > page. Normal PAGE_SIZE sg tables are unchanged.
+> > 
+> > This is helpful for importers like net/core/devmem that expect dmabuf sg
+> IMO, udmabuf needs to detect whether importers can handle segments that
+> are > PAGE_SIZE and set the entries appropriately. Please look into how the
+> GPU drivers and other dmabuf exporters/importers handle this situation, so
+> that we can adopt best practices to address this issue.
+> 
+> Thanks,
+> Vivek
 
-How do the numbers compare with 1-byte writes/reads? (It's fine if
-they're not *faster*, just want to make sure they don't get any
-*worse*. This case comes up a lot with pipes used for synchronization or
-event reporting, such as with make.)
+Hey Vivek,
+
+It sounds looks like that patch might solve my problem. I'll apply and
+troubleshoot from there.
+
+Thanks!
+
+Best,
+Bobby
+
+> 
+> > entries to be size and length aligned. Prior to this patch udmabuf
+> > handed over one PAGE_SIZE sg entry per page, so devmem only saw
+> > PAGE_SIZE chunks regardless of the underlying folio size.
+> > 
+> > dma_map_sgtable() does not always merge contiguous pages for us, so we
+> > do this internally before exporting.
+> > 
+> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> > ---
+> >  drivers/dma-buf/udmabuf.c | 52
+> > ++++++++++++++++++++++++++++++++++++++++++-----
+> >  1 file changed, 47 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+> > index 94b8ecb892bb..9b751dd98b12 100644
+> > --- a/drivers/dma-buf/udmabuf.c
+> > +++ b/drivers/dma-buf/udmabuf.c
+> > @@ -141,26 +141,68 @@ static void vunmap_udmabuf(struct dma_buf
+> > *buf, struct iosys_map *map)
+> >  	vm_unmap_ram(map->vaddr, ubuf->pagecount);
+> >  }
+> > 
+> > +/* Return the number of contiguous pages backed by the folio at @i.
+> > + * A udmabuf may map only part of a folio, or reference the same folio
+> > + * in multiple non-contiguous runs, so folio_nr_pages() can't be used.
+> > + */
+> > +static pgoff_t udmabuf_folio_nr_pages(struct udmabuf *ubuf, pgoff_t i)
+> > +{
+> > +	struct folio *f = ubuf->folios[i];
+> > +	pgoff_t j;
+> > +
+> > +	for (j = 1; i + j < ubuf->pagecount; j++) {
+> > +		if (ubuf->folios[i + j] != f)
+> > +			break;
+> > +		/* Same folio, but not a sequential offset within it. */
+> > +		if (ubuf->offsets[i + j] != ubuf->offsets[i] + j * PAGE_SIZE)
+> > +			break;
+> > +	}
+> > +	return j;
+> > +}
+> > +
+> > +/* Count the contiguous folio runs in @ubuf, one sg entry per run.
+> > + *
+> > + * Coalescing folios into a single sg entry up front lets importers actually
+> > + * see large chunks. We can't rely on dma_map_sgtable() to do this for us
+> > as
+> > + * the dma_map_direct() path preserves the input scatterlist lengths
+> > verbatim.
+> > + */
+> > +static unsigned int udmabuf_sg_nents(struct udmabuf *ubuf)
+> > +{
+> > +	unsigned int nents = 0;
+> > +	pgoff_t i;
+> > +
+> > +	for (i = 0; i < ubuf->pagecount; i += udmabuf_folio_nr_pages(ubuf,
+> > i))
+> > +		nents++;
+> > +	return nents;
+> > +}
+> > +
+> >  static struct sg_table *get_sg_table(struct device *dev, struct dma_buf
+> > *buf,
+> >  				     enum dma_data_direction direction)
+> >  {
+> >  	struct udmabuf *ubuf = buf->priv;
+> > -	struct sg_table *sg;
+> >  	struct scatterlist *sgl;
+> > -	unsigned int i = 0;
+> > +	struct sg_table *sg;
+> > +	pgoff_t i, run;
+> > +	unsigned int nents;
+> >  	int ret;
+> > 
+> > +	nents = udmabuf_sg_nents(ubuf);
+> > +
+> >  	sg = kzalloc_obj(*sg);
+> >  	if (!sg)
+> >  		return ERR_PTR(-ENOMEM);
+> > 
+> > -	ret = sg_alloc_table(sg, ubuf->pagecount, GFP_KERNEL);
+> > +	ret = sg_alloc_table(sg, nents, GFP_KERNEL);
+> >  	if (ret < 0)
+> >  		goto err_alloc;
+> > 
+> > -	for_each_sg(sg->sgl, sgl, ubuf->pagecount, i)
+> > -		sg_set_folio(sgl, ubuf->folios[i], PAGE_SIZE,
+> > +	sgl = sg->sgl;
+> > +	for (i = 0; i < ubuf->pagecount; i += run) {
+> > +		run = udmabuf_folio_nr_pages(ubuf, i);
+> > +		sg_set_folio(sgl, ubuf->folios[i], run << PAGE_SHIFT,
+> >  			     ubuf->offsets[i]);
+> > +		sgl = sg_next(sgl);
+> > +	}
+> > 
+> >  	ret = dma_map_sgtable(dev, sg, direction, 0);
+> >  	if (ret < 0)
+> > 
+> > --
+> > 2.53.0-Meta
+> 
