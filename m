@@ -1,504 +1,199 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8D547CC82
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 17:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781631195; cv=none; b=hZc3a492FXHeS9vrHnQiJplxjalzqWa/Px2IAy5eF3GU3bLppfIL+cN9B72H9JSZi8msyF2YcpEI1Y1hh3y2c4nSbf4U+ojK3vgxLX/ufb81G/sOEghi+iMVqACNTFy4EGMdSS1ZMyd6uRMqSEGKXYioj45J6zJvJGgT8TqI2Og=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781631195; c=relaxed/simple;
-	bh=0zTaGck00WCDmGFTrGRwlCgjeuIkm1YIgxiXoPhe/ZI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tE7dzRFQIU0dy0tyMu7IQw9AWqMqo/dNKUAqenUlQZQOAY2vSzqsxSb7F9PnGTmslOIrTgnxruMsCBtmb5o0rldEVhxsBuYVGnsszvQHZ8taXV/bfS9VhsOTbOD1Pcc4qcvSE73dsc2ZPS4kKvIJgsPBaekZKtCamoi+1jjXgoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qVUlmtKa; arc=none smtp.client-ip=74.125.82.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF97B3D669A
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 17:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781632287; cv=pass; b=j9wre08WmCUxiJPH8fsdeepA/gFzllrqw7GIarr8qrPBRi8pobZJBFZ7+dE65JFUXqtBl4/p3Q8gCz53y7niJ/7KUpGS0mGjCxGlhWVl5eCxH7LnFhsuMliardMEqPa9OHsxy7zKGVkpM/iD50C11bfXXvlHGMDtMXUYa4gJeLo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781632287; c=relaxed/simple;
+	bh=p2ANGxzNJ20KDUvX+I4Q+f5qJmFbZs4+5xfreNmKUKU=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b63swfTZpl4YKzJbHQE+HRCzYXGsRM7hWwBz79ewAJ+eYnUErrQJybL/9mngswKl63URkRRF//KkhDi39NXUn51RcmKtvDfChWth8f6X1VxLtuMeqIcHExMzmgjbQ+2wFt0TXApWaQWfGO5Xxi/VAaencMyHE0Vp9gqcziedYS0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tEqNkDh7; arc=pass smtp.client-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qVUlmtKa"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-1384eb94d20so9148396c88.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 10:33:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tEqNkDh7"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-13810b63a1aso10843298c88.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 10:51:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781632285; cv=none;
+        d=google.com; s=arc-20240605;
+        b=eibNiu2JSIk0EUtsad4oc7O7oRm5F5l7NoVpVWaS5mRwXzl2iHclN+a6wD+3r9HDQi
+         lXfPdtnI5PASjTotBFkZUtIU3ElYlw0lby39sZ6A0v6EbfATWcxDgKD/g2IbDoSAfO5a
+         NO9MR0FWp7TRN2BKOXeAIZ8OvRcLjc93j0P/aeeiIrr/D6NG04qAmeLj9GuzUNAWkVpG
+         bmjBKb1ASyMBclCxug626uv5DkE7ccTT+bUyHMqVzF7HzFEypMv67j2SJIlEwKgfCYbB
+         ISSmxOaC8NwyiSAx/x1SN7Iov8e6t3rae0KGS1N2s7Yrems2k4YQt8VAtmf3oi0m0rSp
+         /4fw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=vAJ+Zx927BzPJvAUqjNTscby/9Gt71bp8RVRdDOhQVA=;
+        fh=a5erEPo89G+TsH//VtX9Oui1lIa1UXY3v2ICTeIFdiI=;
+        b=R1/FFxgH+oHFFOrEL9tgpRYOA87DZuI0ZNGmUPjxJKqGgevcZdJ3c9xAvWo8/3x56O
+         uV+XxTbPsk745AW3znDrVY0aelBsEvn4fbz6yESQ3knGD9FZ4BPpYGQ2wXgqKfsEhdWU
+         /Iwpa4csmJLioD7cMhXCESsmI06IS8wuwpa9hTW4Ke560RqTFPnE1MgsuHP3LKYLF10J
+         mXW0Gc740TMwgsmo6NURb1Lk1EnKOGE39fLm00JBez8FUhv/jp8yxmF3SEHIgoZPc0mi
+         KovXZC7tqBGTfGEI7cwHVaGXZXzKzEbCIQ1M/Q1akzb6a1iDW6b0gB8tJhqI769CGwCc
+         zEPQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781631193; x=1782235993; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kZItjPd3qFLxrRcJE2CSJDnMZ4oYVdjNoHqhzSxIojQ=;
-        b=qVUlmtKaH/pJqFJqVDv8nTDy3Ozg2RTk3xxQ1+B+I6qpZTXJLXi2aMWvELOzO4V8Ko
-         IwALscrtv/b+oBy985Coot5HY0s4A9JGh8OfegHc74QByFA0E4z2x0AO96eqMPYV2Mnj
-         XmBXfiImAjQjh2NjcMDrujUBY04KYGq3dzpfc45TQu6ED5oI51B/ugQQEtqSe2ug+CPv
-         C/kLj+4gIX89OFsF/tVLyVsEksaVDGu9CjfzEUPDUdhzu2pmV8pWdiFSD9KuM0DjDbza
-         AJrPnX53/xLC7P4EbGKscQdUn+xwcOnLJ3XjvFU4Ak9aBXCubdF9g8/7tDHM2nT05QPK
-         Lwgg==
+        d=google.com; s=20251104; t=1781632285; x=1782237085; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vAJ+Zx927BzPJvAUqjNTscby/9Gt71bp8RVRdDOhQVA=;
+        b=tEqNkDh7OtzEQM5+tlxJ/beQBKLyfBhH5umGzBWse3QiQcvfJ3i4bt/PYPbmsBRyQj
+         qlRmNtgkJtfuemc1OaIMsxV2Y961+21h/N0eS/iuG4Y7avMs8Tr6fNATc14iq5De2dQz
+         /SZXKbwUeBervzs5CgbnqC3PWzhU0yiTKWnsMPDMy9LgNtm8XvvIQKKk5aGgN0ITe9dl
+         qcOgY3i3T2sh4H6ARzHVDGCUeDgfTcqF1PV6eQb/LyhTUCpDZwvuFCdWztpT88FGWQhb
+         atMfH10w0nLsTMfefjjMU4PD4wnQHM7RcZ9AmmM/QSuNMlCnwdSq6Yx6TLB22eWD2b5F
+         L/lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781631193; x=1782235993;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kZItjPd3qFLxrRcJE2CSJDnMZ4oYVdjNoHqhzSxIojQ=;
-        b=LpeACguiO5Y4qzNiNIu0MPXQfNOUHXyaMkOLS4P1MDnKJYNRvT5k49eElfGy1P5n2z
-         pi0uXLhxR0w6kL2iqv4/axUg8AnUCI3Zswf0j9zTrQYU2hQ+in73R3m5FOkHMRRA7d/R
-         jaL13u8OCwEJZMx1wBcqy+dF8Exr3UCPD997e/Jj6HyGkAV2Hj6uunQQ8HQDu+feAwLR
-         jTSZuhgDOR7UoAeY3Xwds7KQBRinxbZy/Y/qTmWzEY4KhnPOBRVO5BNRDq4zw0+4s0T7
-         dsF+tNiFYtyV70Nyw91HcOPku+hOqhpsTlrYPlut59hwnDAtXsadMw9mZP6r8jqjvWOA
-         Q9+w==
-X-Forwarded-Encrypted: i=1; AFNElJ/mQGC9WaxieXjUjekkgPCXG7MHOhS9I2ZGy2iwNhkKJ4hZhShCcaA1d2tsMaPyooG8MB0JYb6DcG4gA9bO0Wg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/bOrWOc7owzpMOVdVtPm34tatbZvG5OYaunb2pn6+6RGsc4q+
-	GVmszFMhzduRMZwOM34RJvt0dRgw5T58HS6Sw9kqQ5nNmnjISfU+ReUw
-X-Gm-Gg: Acq92OGCNpVUt751yhWOgb/7CECM+P8ikzXKYCGffNUtZF101VosOnFOsJWt44tqNOb
-	3Uuez1fiQU42zrxnUYMi/3oExzkPMNUeKfd969UiOXs2WZNOh1tkcjQoQphtiOF2qttVmHnufwG
-	d6X6C0WefI+pVmRxmA9lk5rrgQ6BzsC9Oy2kyD+2z3k770kwDsWuvSkyTjEdc7Uxgq2FOI/VMGh
-	MAElGF7U80chqO+besgjqqcVhAgaiUb01Bmj5xJEyrai981LWZvEfbMHCzONZalCWSKGlCs66sp
-	WhrYwMrQ6zBLIJJ7m0Ppe09v+D1uTS2VjujYH2vHLKbb4FlQv4zbMvzdOPf5VlXEMZ2mGOE4oU6
-	I7SYU8xeMwjhSNzo17YxdXY28qiU21MfHQa+/AF78/EM6EbHdIiaSwsRmNKQf7S/ypTZc+1Vi0G
-	GoFhF0RHyaxg4IRRjjFGhluuklXh+rgFhAWYYuHhF3/aKBIfBnS9E11MOX5r7MJ1gUpWeX
-X-Received: by 2002:a05:693c:3103:b0:2ed:e15:c927 with SMTP id 5a478bee46e88-30bca0e332fmr150994eec.35.1781631192821;
-        Tue, 16 Jun 2026 10:33:12 -0700 (PDT)
-Received: from fx.tailc0aff1.ts.net ([206.206.192.132])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30ba6b7f840sm5431554eec.19.2026.06.16.10.33.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2026 10:33:12 -0700 (PDT)
-From: Weiming Shi <bestswngs@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: "Starke, Daniel" <daniel.starke@siemens.com>,
-	Xiang Mei <xmei5@asu.edu>,
-	linux-serial@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Weiming Shi <bestswngs@gmail.com>
-Subject: [PATCH v2 2/2] selftests: tty: add base regression test for n_gsm line discipline
-Date: Tue, 16 Jun 2026 10:32:40 -0700
-Message-ID: <20260616173240.3665059-3-bestswngs@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260616173240.3665059-1-bestswngs@gmail.com>
-References: <20260616173240.3665059-1-bestswngs@gmail.com>
+        d=1e100.net; s=20251104; t=1781632285; x=1782237085;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vAJ+Zx927BzPJvAUqjNTscby/9Gt71bp8RVRdDOhQVA=;
+        b=X53XiNo1X6Beawibguoyi0IzKeOnKVkC3ZYI9brnpNh/xnSinp/qWbPgm1HRwax7df
+         O0uK0uJXmvzz4ofteJDFv7lbTXNYXKBR+kLFw2SJM/ZW7tttiXAHRYe8RU8S/0tmbJgN
+         rc045HdOULSJuz5WhVFe2NRLFidRROLlf6+3obuE0rk14mK0+YvphGKKOYE3yeYcQPIg
+         JCPID5xgSrQsI4Kw0sdjqNPPIyNzguBw0sF6pgsrq3EufoJE/Sal1Y6SwY2fAxa3i3Ho
+         0nMZkBoptSvkFfvwP0iudsaWLCv+L3n5/jikp6hhUNS0HkBMe3hoxZIadpT1alLL0Ti1
+         PC/Q==
+X-Forwarded-Encrypted: i=1; AFNElJ8wkrAw9fKqyLOL25s5XgR9zXLM53Yk24x0yB06RtTHrA7rQyQfsbwjCmSAN4i4WAu8cZ1FaWgCMxBZ/FurP+8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx94IetKblv53BLKVYI5tR7yDq3CExpzz3jEDLSpz7B9ocixEml
+	UqTpVlh28VWkGYMUbwWoi097WTCWNlVKuqRjDLULpcHNgDXJxvcz9TPm2PLxKAe15pTz8XbzFKS
+	kwaHV1ZgqJ9irwo3R6D4YqWCf+7hN0zHyyB9SgP96
+X-Gm-Gg: Acq92OEcv6JoLfNt+LnuO/iV2UYQQZUL3Yi2u0eD98aVqxKd/4zQJCj8+ebh1uz9/G0
+	/gjdhfuitRRJSLeZJfUViU7rpS25G2BAPUwa7wMXvd1fK+vIKURbOjQUy+LKqLb4PEaGlJlvBi7
+	M8NmaoR/W4GdVpbtEEF7gypuClYHAeUJwpbMm2NSxq+rSizyLvAG8ExbinKp6TugUxeSPU6Im3H
+	cITkI9W7jWtLn4NO//s4ma4I8guSJCXTCBxyk5W/c1NCdlhh85tGJG0Ua2lFOk2CTi4uxD1iLMP
+	0WdWK/Asxjo7c0n2eetljy7fdMOLn46WpIJo1MXiCdtoLdntV3UAdcpvmbjdS5g0wh/drQ==
+X-Received: by 2002:a05:7022:6890:b0:12d:c730:c7f with SMTP id
+ a92af1059eb24-13985f391b7mr2153523c88.33.1781632284036; Tue, 16 Jun 2026
+ 10:51:24 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 16 Jun 2026 10:51:23 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 16 Jun 2026 10:51:23 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Tue, 16 Jun 2026 10:51:23 -0700
+X-Gm-Features: AVVi8CeVvqhvGF5MX5YfSPvn-N1x5SmL7ZQyivueF-K8QCQbzjfdjv9TTd4B_6A
+Message-ID: <CAEvNRgH7Lk=z9NqcY4OZXv=y5SeCZHnDNcB0=kHfarjCA4ZPTw@mail.gmail.com>
+Subject: Re: [PATCH v13 00/22] TDX KVM selftests
+To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
+	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
+	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
+	Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org, 
+	Adrian Hunter <adrian.hunter@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-n_gsm has no selftest coverage.  Add a base functional regression test
-that drives the line discipline over a local pty pair, so no real serial
-hardware or modem is required, and exercises the GSM 07.10 / 3GPP TS 27.010
-basic-option mux from userspace.
+Lisa Wang <wyihan@google.com> writes:
 
-The test attaches N_GSM to the pty master, then:
+> This patch series focuses on setting up a TDX VM and adding all code
+> necessary to run a basic lifecycle test.
+>
+> Unlike standard KVM selftests can set up the VM through guest registers,
+> TDX module protects TDs' register state from the host. This feature of
+> TDX causes problems on VM boot state initialization and the ucall
+> implementation.
+>
+> In standard KVM selftests, the host directly initializes the guest state
+> by manipulating Special Registers (SREGs) and General Purpose Registers
+> (GPRs) via IOCTLs (KVM_SET_SREGS, etc.) before the first KVM_RUN.
+>
+> To bypass direct register initialization by the host, we utilize the
+> standard x86 reset vector as the default entry point.
+>
+> The mechanism works as follows:
+> 1. The host places register values into a specific memory region and
+>    inserts boot code at the VM's default starting point.
+> 2. When the VM starts, it executes this boot code to "pull" values from
+>    memory and manually set up its own SREGs and GPRs.
+> 3. Once the environment is ready, the boot code jumps to the guest code.
+>
+> The standard x86 ucall() implementation uses PIO, but it does not
+> actually transmit data through the 4-byte PIO data. Instead, it relies
+> on the host reading the ucall address directly from the guest's RDI
+> register.
+>
+> TDX selftests cannot utilize the standard x86 ucall implementation,
+> because the host is unable to access the guest's RDI register. Based on
+> this restriction, we considered these potential solutions for the TDX
+> ucall implementation.
+>
+> 1. TDCALL PIO with RCX-bits Passthrough
+> We first considered passing the RDI value through RCX bits to bypass the
+> hardware's register protection, which could be the closest approach to
+> the non-TDX implementation as per Sean's suggestion[1]. However, this
+> approach is blocked by the software-side implementation: KVM_GET_REGS
+> currently does not support TDX VMs and returns -EINVAL. To make this
+> work, the KVM ioctl would need a test-only hack.
+>
+> 2. TDCALL PIO with buffer indexing
+> To keep a PIO-based approach and unify the get_ucall implementation for
+> both TDX and non-TDX VMs, we considered TDCALL PIO with buffer indexing.
+> Since the ucall buffer is initialized prior to execution, the VM could
+> just pass a buffer index rather than an 8-byte ucall address to fit
+> within the 4-byte PIO data limit. The host, already knowing the ucall
+> buffer's base address, could then resolve the ucall content via this
+> index. We abandoned this solution because it would require changes to
+> the common ucall structure and impact other non-x86 architectures.
+>
+> 3. TDCALL MMIO (Selected solution)
+> We ultimately selected TDCALL with an 8-byte MMIO data. This method only
+> requires initializing an MMIO GPA and adding TDCALL MMIO implementation
+> for TDX under the original x86 ucall path. While this diverges from the
+> non-TDX PIO, it provides the cleanest implementation with minimal
+> disruption to the overall ucall architecture.
+>
 
-  - basic:     brings up the mux (SETCONF, initiator side), drives the
-               DLCI 0 control channel SABM/UA handshake and tears it down.
-  - getconf:   round-trips GSMIOC_GETCONF/GSMIOC_SETCONF and checks the
-               configuration is preserved.
-  - data_dlci: opens a data DLCI (DLCI 1) via the SABM/UA exchange and
-               verifies the responder side answers, covering the control
-               -> data DLCI path.
+Sean, Lisa evaluated your suggestion [1] (summarized as 1. above) but we
+think TDCALL MMIO is better, what do you think?
 
-Frames are encoded by hand against 3GPP TS 27.010 (address EA/C-R/DLCI
-bits, SABM/UA/UIH control fields, the reversed CRC-8 FCS) with the clause
-numbers referenced in the comments, so the test doubles as a small,
-readable description of the on-wire format.
++ Jump directly to where the mmio is used: [2]
++ And here's [3] how tdx_mmio_write() is implemented, with no more
+  throwing everything in a structure. It's also not macroed/prototyped
+  like you suggested in [4], but I think those prototypes can evolve out
+  of future tdx functions?
 
-It is a functional/regression test, not a race reproducer: it gives the
-subsystem a green baseline to catch behavioural regressions, including in
-the gsm_queue() control-frame dispatch path.
+Let us know so Lisa can try another option (if necessary) while we
+collect more reviews :)
 
-Wire it into the tty selftest Makefile, add CONFIG_N_GSM=y to the config
-fragment, and ignore the built binary.  The test SKIPs cleanly when N_GSM
-is not built, /dev/ptmx is missing, or it lacks the capability to attach
-the ldisc.
+[1] https://lore.kernel.org/all/aQTcDH9LRezI30dm@google.com/
+[2] https://lore.kernel.org/all/20260521-tdx-selftests-v13-v13-21-6983ae4c3a4d@google.com/
+[3] https://lore.kernel.org/all/20260521-tdx-selftests-v13-v13-20-6983ae4c3a4d@google.com/
+[4] https://lore.kernel.org/all/aQTdTkMIukzt-YlA@google.com/
 
-Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-Assisted-by: Claude:claude-opus-4-8
----
- tools/testing/selftests/tty/.gitignore       |   1 +
- tools/testing/selftests/tty/Makefile         |   2 +-
- tools/testing/selftests/tty/config           |   1 +
- tools/testing/selftests/tty/tty_n_gsm_test.c | 344 +++++++++++++++++++
- 4 files changed, 347 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/tty/tty_n_gsm_test.c
-
-diff --git a/tools/testing/selftests/tty/.gitignore b/tools/testing/selftests/tty/.gitignore
-index 2453685d2..e3fcee15e 100644
---- a/tools/testing/selftests/tty/.gitignore
-+++ b/tools/testing/selftests/tty/.gitignore
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- tty_tiocsti_test
- tty_tstamp_update
-+tty_n_gsm_test
-diff --git a/tools/testing/selftests/tty/Makefile b/tools/testing/selftests/tty/Makefile
-index 7f6fbe5a0..ae546d0d4 100644
---- a/tools/testing/selftests/tty/Makefile
-+++ b/tools/testing/selftests/tty/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- CFLAGS = -O2 -Wall
--TEST_GEN_PROGS := tty_tstamp_update tty_tiocsti_test
-+TEST_GEN_PROGS := tty_tstamp_update tty_tiocsti_test tty_n_gsm_test
- LDLIBS += -lcap
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/tty/config b/tools/testing/selftests/tty/config
-index c6373aba6..66a5ffc9e 100644
---- a/tools/testing/selftests/tty/config
-+++ b/tools/testing/selftests/tty/config
-@@ -1 +1,2 @@
- CONFIG_LEGACY_TIOCSTI=y
-+CONFIG_N_GSM=y
-diff --git a/tools/testing/selftests/tty/tty_n_gsm_test.c b/tools/testing/selftests/tty/tty_n_gsm_test.c
-new file mode 100644
-index 000000000..064231512
---- /dev/null
-+++ b/tools/testing/selftests/tty/tty_n_gsm_test.c
-@@ -0,0 +1,344 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * n_gsm line discipline test
-+ *
-+ * Exercise the n_gsm (GSM 07.10 mux) control paths over a pty, so the driver
-+ * can be regression-tested without the real modem hardware. The test attaches
-+ * the ldisc, configures the mux, opens DLCI 0, drives a control frame through
-+ * the receive path (reaching gsm_control_reply()) and reconfigures, which
-+ * tears the mux down and frees the DLCI. It is a functional coverage test of
-+ * the receive and teardown paths, not a reproducer for any specific race.
-+ *
-+ * The frame encoding follows 3GPP TS 07.10 (a.k.a. 27.010), basic option.
-+ *
-+ * Requires CONFIG_N_GSM and CAP_NET_ADMIN to attach the ldisc.
-+ */
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <fcntl.h>
-+#include <errno.h>
-+#include <poll.h>
-+#include <time.h>
-+#include <termios.h>
-+#include <sys/ioctl.h>
-+#include <linux/tty.h>
-+#include <linux/gsmmux.h>
-+
-+#include "../kselftest_harness.h"
-+
-+#ifndef N_GSM0710
-+#define N_GSM0710 21
-+#endif
-+
-+/*
-+ * GSM 07.10 basic option framing. Field encodings below are from
-+ * 3GPP TS 07.10 (a.k.a. 27.010): the basic-option flag (section 5.2.6.1),
-+ * the address field with EA/C-R/DLCI bits (5.2.1.2, command vs response
-+ * C/R from table 1), the control field codings (5.2.1.3, table 2), the
-+ * length field (5.2.1.5), and the control-channel message types (5.4.6.3).
-+ */
-+#define GSM0_SOF	0xf9		/* basic-option flag, 1001 1111 */
-+#define ADDR_DLCI0	0x03		/* EA=1, C/R=1, DLCI=0 (command) */
-+#define ADDR_DLCI0_RSP	0x01		/* EA=1, C/R=0, DLCI=0 (response) */
-+#define ADDR_DLCI1	0x07		/* EA=1, C/R=1, DLCI=1 (command) */
-+#define GSM_PF		0x10		/* poll/final bit */
-+#define CTRL_SABM	(0x2f | GSM_PF)	/* SABM command */
-+#define CTRL_UA		(0x63 | GSM_PF)	/* UA, the SABM acknowledgment */
-+#define CTRL_UIH	0xef		/* UIH command/response */
-+#define INIT_FCS	0xff
-+#define CMD_TEST_EA	0x23		/* (CMD_TEST << 1) | EA, type 5.4.6.3.4 */
-+
-+#define MAX_FRAME	64
-+
-+/* Reversed CRC-8 table (poly 0x07), from 3GPP TS 07.10 annex B.3.5. */
-+static const unsigned char gsm_fcs8[256] = {
-+0x00, 0x91, 0xe3, 0x72, 0x07, 0x96, 0xe4, 0x75, 0x0e, 0x9f, 0xed, 0x7c, 0x09, 0x98, 0xea, 0x7b,
-+0x1c, 0x8d, 0xff, 0x6e, 0x1b, 0x8a, 0xf8, 0x69, 0x12, 0x83, 0xf1, 0x60, 0x15, 0x84, 0xf6, 0x67,
-+0x38, 0xa9, 0xdb, 0x4a, 0x3f, 0xae, 0xdc, 0x4d, 0x36, 0xa7, 0xd5, 0x44, 0x31, 0xa0, 0xd2, 0x43,
-+0x24, 0xb5, 0xc7, 0x56, 0x23, 0xb2, 0xc0, 0x51, 0x2a, 0xbb, 0xc9, 0x58, 0x2d, 0xbc, 0xce, 0x5f,
-+0x70, 0xe1, 0x93, 0x02, 0x77, 0xe6, 0x94, 0x05, 0x7e, 0xef, 0x9d, 0x0c, 0x79, 0xe8, 0x9a, 0x0b,
-+0x6c, 0xfd, 0x8f, 0x1e, 0x6b, 0xfa, 0x88, 0x19, 0x62, 0xf3, 0x81, 0x10, 0x65, 0xf4, 0x86, 0x17,
-+0x48, 0xd9, 0xab, 0x3a, 0x4f, 0xde, 0xac, 0x3d, 0x46, 0xd7, 0xa5, 0x34, 0x41, 0xd0, 0xa2, 0x33,
-+0x54, 0xc5, 0xb7, 0x26, 0x53, 0xc2, 0xb0, 0x21, 0x5a, 0xcb, 0xb9, 0x28, 0x5d, 0xcc, 0xbe, 0x2f,
-+0xe0, 0x71, 0x03, 0x92, 0xe7, 0x76, 0x04, 0x95, 0xee, 0x7f, 0x0d, 0x9c, 0xe9, 0x78, 0x0a, 0x9b,
-+0xfc, 0x6d, 0x1f, 0x8e, 0xfb, 0x6a, 0x18, 0x89, 0xf2, 0x63, 0x11, 0x80, 0xf5, 0x64, 0x16, 0x87,
-+0xd8, 0x49, 0x3b, 0xaa, 0xdf, 0x4e, 0x3c, 0xad, 0xd6, 0x47, 0x35, 0xa4, 0xd1, 0x40, 0x32, 0xa3,
-+0xc4, 0x55, 0x27, 0xb6, 0xc3, 0x52, 0x20, 0xb1, 0xca, 0x5b, 0x29, 0xb8, 0xcd, 0x5c, 0x2e, 0xbf,
-+0x90, 0x01, 0x73, 0xe2, 0x97, 0x06, 0x74, 0xe5, 0x9e, 0x0f, 0x7d, 0xec, 0x99, 0x08, 0x7a, 0xeb,
-+0x8c, 0x1d, 0x6f, 0xfe, 0x8b, 0x1a, 0x68, 0xf9, 0x82, 0x13, 0x61, 0xf0, 0x85, 0x14, 0x66, 0xf7,
-+0xa8, 0x39, 0x4b, 0xda, 0xaf, 0x3e, 0x4c, 0xdd, 0xa6, 0x37, 0x45, 0xd4, 0xa1, 0x30, 0x42, 0xd3,
-+0xb4, 0x25, 0x57, 0xc6, 0xb3, 0x22, 0x50, 0xc1, 0xba, 0x2b, 0x59, 0xc8, 0xbd, 0x2c, 0x5e, 0xcf,
-+};
-+
-+static unsigned char fcs_header(const unsigned char *p, int n)
-+{
-+	unsigned char fcs = INIT_FCS;
-+	int i;
-+
-+	for (i = 0; i < n; i++)
-+		fcs = gsm_fcs8[fcs ^ p[i]];
-+	return 0xff - fcs;
-+}
-+
-+/*
-+ * Build a GSM0 frame: SOF addr ctrl len [data] FCS SOF.
-+ * Returns the frame length, or -1 if it would not fit in MAX_FRAME.
-+ */
-+static int build_frame(unsigned char *out, unsigned char addr,
-+		       unsigned char ctrl, const unsigned char *data, int dlen)
-+{
-+	unsigned char hdr[3] = { addr, ctrl, (unsigned char)((dlen << 1) | 1) };
-+	int i = 0, j;
-+
-+	if (dlen < 0 || dlen + 6 > MAX_FRAME)
-+		return -1;
-+
-+	out[i++] = GSM0_SOF;
-+	out[i++] = addr;
-+	out[i++] = ctrl;
-+	out[i++] = (unsigned char)((dlen << 1) | 1);
-+	for (j = 0; j < dlen; j++)
-+		out[i++] = data[j];
-+	out[i++] = fcs_header(hdr, 3);
-+	out[i++] = GSM0_SOF;
-+	return i;
-+}
-+
-+static int gsm_setconf(int fd, int mtu)
-+{
-+	struct gsm_config c;
-+
-+	memset(&c, 0, sizeof(c));
-+	c.adaption = 1;
-+	c.encapsulation = 0;	/* basic option framing */
-+	c.initiator = 0;	/* responder: the peer (master side) drives DLCI 0 */
-+	c.mru = 64;
-+	c.mtu = mtu;
-+	c.i = 1;		/* UIH frames */
-+	c.k = 2;		/* window size */
-+	/* Short timers and a single retry so open/close handshakes and the
-+	 * teardown complete quickly within the test.
-+	 */
-+	c.t1 = 1;
-+	c.t2 = 1;
-+	c.n2 = 1;
-+	return ioctl(fd, GSMIOC_SETCONF, &c);
-+}
-+
-+/*
-+ * Open a pty pair with a raw master and the n_gsm ldisc on the slave.
-+ * Returns 0 and fills *mfd (master) / *sfd (slave/ldisc) on success, or
-+ * -errno otherwise.
-+ */
-+static int gsm_open(int *mfd, int *sfd)
-+{
-+	int ldisc = N_GSM0710;
-+	char sname[128];
-+	struct termios tio;
-+	int m, s, e;
-+
-+	m = open("/dev/ptmx", O_RDWR | O_NOCTTY);
-+	if (m < 0)
-+		return -errno;
-+	if (grantpt(m) || unlockpt(m) || ptsname_r(m, sname, sizeof(sname))) {
-+		e = errno;
-+		close(m);
-+		return -e;
-+	}
-+	s = open(sname, O_RDWR | O_NOCTTY);
-+	if (s < 0) {
-+		e = errno;
-+		close(m);
-+		return -e;
-+	}
-+	if (tcgetattr(m, &tio) == 0) {
-+		cfmakeraw(&tio);
-+		tcsetattr(m, TCSANOW, &tio);
-+	}
-+	if (ioctl(s, TIOCSETD, &ldisc) < 0) {
-+		e = errno;
-+		close(s);
-+		close(m);
-+		return -e;
-+	}
-+	*mfd = m;
-+	*sfd = s;
-+	return 0;
-+}
-+
-+static long now_ms(void)
-+{
-+	struct timespec ts;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &ts);
-+	return ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
-+}
-+
-+/*
-+ * Wait until the mux sends a frame on DLCI 0 with the given address and
-+ * control field, e.g. the UA that acknowledges SABM (addr 0x03), or the
-+ * CMD_TEST reply (response addr 0x01). Returns 1 if a matching frame header
-+ * (SOF, addr, ctrl) is seen, 0 on timeout. Matching the SOF + address +
-+ * control sequence (rather than a lone control byte) avoids false hits on
-+ * FCS or payload bytes that happen to equal the control value.
-+ */
-+static int wait_for_frame(int mfd, unsigned char addr, unsigned char ctrl,
-+			  int timeout_ms)
-+{
-+	struct pollfd pfd = { .fd = mfd, .events = POLLIN };
-+	long deadline = now_ms() + timeout_ms;
-+	unsigned char buf[256];
-+	int left;
-+
-+	while ((left = deadline - now_ms()) > 0) {
-+		int ret, n, i;
-+
-+		ret = poll(&pfd, 1, left);
-+		if (ret < 0) {
-+			if (errno == EINTR)
-+				continue;
-+			return 0;
-+		}
-+		if (ret == 0 || !(pfd.revents & POLLIN))
-+			continue;
-+
-+		n = read(mfd, buf, sizeof(buf));
-+		if (n <= 0)
-+			continue;
-+		for (i = 0; i + 2 < n; i++) {
-+			if (buf[i] == GSM0_SOF && buf[i + 1] == addr &&
-+			    buf[i + 2] == ctrl)
-+				return 1;
-+		}
-+	}
-+	return 0;
-+}
-+
-+FIXTURE(n_gsm)
-+{
-+	int mfd;	/* pty master */
-+	int sfd;	/* pty slave, carrying the n_gsm ldisc */
-+};
-+
-+FIXTURE_SETUP(n_gsm)
-+{
-+	int ret;
-+
-+	/* So FIXTURE_TEARDOWN does not close fd 0 if setup bails early. */
-+	self->mfd = -1;
-+	self->sfd = -1;
-+
-+	ret = gsm_open(&self->mfd, &self->sfd);
-+
-+	if (ret == -EPERM || ret == -EACCES)
-+		SKIP(return, "need CAP_NET_ADMIN to attach n_gsm ldisc");
-+	if (ret == -EINVAL || ret == -ENODEV)
-+		SKIP(return, "CONFIG_N_GSM not enabled");
-+	if (ret == -ENOENT)
-+		SKIP(return, "no pty support (/dev/ptmx missing)");
-+	ASSERT_EQ(ret, 0)
-+		TH_LOG("gsm_open failed: %d", ret);
-+}
-+
-+FIXTURE_TEARDOWN(n_gsm)
-+{
-+	if (self->sfd >= 0)
-+		close(self->sfd);
-+	if (self->mfd >= 0)
-+		close(self->mfd);
-+}
-+
-+/*
-+ * Configure the mux, open DLCI 0 and push a control frame through the receive
-+ * path, then reconfigure to tear the mux down. This needs no hardware and
-+ * verifies the n_gsm receive/teardown paths are reachable and do not crash.
-+ */
-+TEST_F(n_gsm, basic)
-+{
-+	unsigned char sabm[MAX_FRAME], cmd_test[MAX_FRAME];
-+	/*
-+	 * CMD_TEST control command: cmd byte = (CMD_TEST << 1) | EA, then a
-+	 * length-EA byte (0x01) meaning zero bytes of test data.
-+	 */
-+	unsigned char payload[2] = { CMD_TEST_EA, 0x01 };
-+	int slen, tlen;
-+
-+	/* Activate the mux; this allocates DLCI 0. */
-+	ASSERT_EQ(gsm_setconf(self->sfd, 64), 0)
-+		TH_LOG("GSMIOC_SETCONF failed: %m");
-+
-+	slen = build_frame(sabm, ADDR_DLCI0, CTRL_SABM, NULL, 0);
-+	tlen = build_frame(cmd_test, ADDR_DLCI0, CTRL_UIH, payload, sizeof(payload));
-+	ASSERT_GT(slen, 0);
-+	ASSERT_GT(tlen, 0);
-+
-+	/* Open DLCI 0 and wait for the UA reply confirming it reached OPEN. */
-+	ASSERT_EQ(write(self->mfd, sabm, slen), slen);
-+	ASSERT_EQ(wait_for_frame(self->mfd, ADDR_DLCI0, CTRL_UA, 1000), 1)
-+		TH_LOG("DLCI 0 did not open (no UA reply)");
-+
-+	/*
-+	 * Drive a CMD_TEST control frame; the receive path reaches
-+	 * gsm_control_reply(), which sends a CMD_TEST reply back on the
-+	 * response address. Wait for that reply so we know the frame was
-+	 * processed, rather than sleeping.
-+	 */
-+	ASSERT_EQ(write(self->mfd, cmd_test, tlen), tlen);
-+	EXPECT_EQ(wait_for_frame(self->mfd, ADDR_DLCI0_RSP, CTRL_UIH, 1000), 1)
-+		TH_LOG("no CMD_TEST reply seen");
-+
-+	/* Reconfigure: tears the mux down and frees DLCI 0. */
-+	EXPECT_EQ(gsm_setconf(self->sfd, 127), 0);
-+}
-+
-+/*
-+ * Configure the mux and read the configuration back with GSMIOC_GETCONF,
-+ * checking the value round-trips.
-+ */
-+TEST_F(n_gsm, getconf)
-+{
-+	struct gsm_config c;
-+
-+	ASSERT_EQ(gsm_setconf(self->sfd, 64), 0)
-+		TH_LOG("GSMIOC_SETCONF failed: %m");
-+
-+	memset(&c, 0, sizeof(c));
-+	ASSERT_EQ(ioctl(self->sfd, GSMIOC_GETCONF, &c), 0)
-+		TH_LOG("GSMIOC_GETCONF failed: %m");
-+	EXPECT_EQ(c.mtu, 64u);
-+}
-+
-+/*
-+ * Open DLCI 0, then open a data channel (DLCI 1) with SABM and check the mux
-+ * acknowledges it with a UA. This exercises gsm_dlci_alloc() and the data DLCI
-+ * open path, not just the control channel.
-+ */
-+TEST_F(n_gsm, data_dlci)
-+{
-+	unsigned char sabm[MAX_FRAME];
-+	int slen;
-+
-+	ASSERT_EQ(gsm_setconf(self->sfd, 64), 0)
-+		TH_LOG("GSMIOC_SETCONF failed: %m");
-+
-+	slen = build_frame(sabm, ADDR_DLCI0, CTRL_SABM, NULL, 0);
-+	ASSERT_GT(slen, 0);
-+	ASSERT_EQ(write(self->mfd, sabm, slen), slen);
-+	ASSERT_EQ(wait_for_frame(self->mfd, ADDR_DLCI0, CTRL_UA, 1000), 1)
-+		TH_LOG("DLCI 0 did not open");
-+
-+	/* Open DLCI 1 (a data channel) and wait for its UA. */
-+	slen = build_frame(sabm, ADDR_DLCI1, CTRL_SABM, NULL, 0);
-+	ASSERT_GT(slen, 0);
-+	ASSERT_EQ(write(self->mfd, sabm, slen), slen);
-+	EXPECT_EQ(wait_for_frame(self->mfd, ADDR_DLCI1, CTRL_UA, 1000), 1)
-+		TH_LOG("DLCI 1 did not open (no UA reply)");
-+
-+	/* Tear the mux down. */
-+	EXPECT_EQ(gsm_setconf(self->sfd, 127), 0);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.43.0
-
+> 4. A note on #VE and x86 ucall simplification
+> It is worth noting that the use of a Virtualization Exception (#VE)
+> is orthogonal to the PIO vs. MMIO discussion; rather, it is a question
+> of how much we want to simplify the x86 ucall implementation. A #VE
+> handler is one option to allow VMs use PIO/MMIO identical to the
+> non-TDX case. Alternatively, having an MMIO_WRITE wrapper macro, as Sean
+> suggested[2], is another option. Either way, discussion for this is
+> likely a premature optimization right now, since the PIO/MMIO call is
+> only used under ucall_arch_do_ucall(), and standard and TDX VMs use
+> different ones now. We should optimize this in the future, but for now,
+> invoking TDCALL directly is more robust and concise.
+>
+>
+> [...snip...]
+>
