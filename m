@@ -1,697 +1,212 @@
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D6E382284
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 14:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599CC3A7F54
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 14:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781620198; cv=none; b=KbeseyGBJre44SxAe+Ai8XtY4uOlXdPGxiOJERS5mFmwwMY6q5XE0RNQheTNiJSvb+8w3NteqAz3k/Tq7prPLGf1siTxOP92iMrCz4aMJTk06KI6JvalFK47IFvGYJeGUPM+UiJQ7gABpIHtZHbeGHYEH3qnHP09j6Z3z+mNSdc=
+	t=1781620594; cv=none; b=EpjOwRFDjWoKv9VVGDB1ypAWEp0XVufvgm4/NoqwA+ba/BKeKdoB74k0aLMKnKcbpQdpCQACm/avjFBEFpxHYfq87DsIxvd+kYkG/SFGmf+Gcw0AS+iX/tRP4uknNndqH2KJNFjBerYTvYDIDFhP2WmHUj9C83GqWLYKuFcSdCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781620198; c=relaxed/simple;
-	bh=y5brgVzambFq77rNajEP84tsgPPGdVJQYLBG6xf/O3Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I4o77KfeuGOUvL8jsdXJpXi1NUSvWoK7u0YH99gq8VZ2rZtfTBA+VBdSSFT7XkMKO8QlKaKzr15BmfkINX2tUEooOuiWSv05riT/6Km7q89XuaX/GxrrZNfxVZ2gyPz3F0kW7mjlVIdhVvTW6e6ID3jdW/QYyTbQnZFyaTuRrzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=OyqOFUBc; arc=none smtp.client-ip=195.121.94.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
+	s=arc-20240116; t=1781620594; c=relaxed/simple;
+	bh=AbpNe24xlhwm/PgmZ5FVGnfkuQ7wHlOr/56VCgER2Wg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=eCPaAhAAIKL9DDbpAy7+LNpDKDhfcURQyxZecH/Bn6bJSTtl1DO5We4KEQ6nebxte1A7t7ir+C+bS2iFFa+6nKdGyIj1opl2GNsA0eTNZK5SdPGkIjKgYLi4dKXZPxe4rKfZOKUGlsJWfrXANCVVF9Ej164J6GxeQdEFb3EICtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DAHr/Tfd; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="OyqOFUBc"
-X-KPN-MessageId: d4813a74-698f-11f1-afe8-005056994fde
-Received: from smtp.kpnmail.nl (unknown [10.31.155.6])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id d4813a74-698f-11f1-afe8-005056994fde;
-	Tue, 16 Jun 2026 16:29:49 +0200 (CEST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DAHr/Tfd"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2c6a3ece0d8so4378165ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 07:36:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xs4all.nl; s=xs4all01;
-	h=mime-version:message-id:date:subject:to:from;
-	bh=mZF1xELyL4OHuYN/UOAekcjln1qmxPPpJjLiXZSBCIY=;
-	b=OyqOFUBclroF9hMzcc9igiwPUjQSCba3ONkOLRepL+ndaMbpBEBx27LXut+Dm2dxJyIzIvc3FaVfU
-	 Rz4tAdoqtE17wAnMZhPDYjqkKlHTQc3yjLH1mLBTc97Yc3EnfcFwdAbRjhx/XOG9KvXbOSiHSCh6pP
-	 MFW8XCU9YRXa8orCuF8GQXNo41VegT/NEZ5x4FIPf0YsEiJt06etcAfT6HpmKMnAwljVLa8lRgd1yk
-	 KNAyI47FkbPGYGV3OatUAQxyss+/3nbdTuIOm3xw7UFyFFS2/Hr76hhH+zzuWJznGadmJONGzhryUN
-	 ovM7JvETFm4rVBzn5pyydXpANWdzTcA==
-X-KPN-MID: 33|19VPXMto9QkPKYl6+jpgM7bzP6+xdkOrd36QMApV0jESrOYX4vepQFlQbE3eqh3
- va2d9cCTSJsNsgBXXbwI3vJHHk6TVQqrpbzIRt3Vps2I=
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|aeWtTqRTO1vN/JWMaR/qQPH5O3Xl6yt3iQjF3r3afvEpjGaB/X1XYojnLEIESLp
- KbZnvdGlEEGxlBBgc+NYNUA==
-Received: from daedalus.home (unknown [178.230.193.174])
-	by smtp.xs4all.nl (Halon) with ESMTPSA
-	id d4052995-698f-11f1-a77e-00505699772e;
-	Tue, 16 Jun 2026 16:29:48 +0200 (CEST)
-From: Jori Koolstra <jkoolstra@xs4all.nl>
-To: brauner@kernel.org,
-	cyphar@cyphar.com,
-	Shuah Khan <shuah@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org,
-	Jori Koolstra <jkoolstra@xs4all.nl>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	netdev@vger.kernel.org (open list:NETWORKING [GENERAL])
-Subject: [PATCH v2 4/4] selftest: Add tests for useful handling of LSM denials on SCM_RIGHTS
-Date: Tue, 16 Jun 2026 16:30:04 +0200
-Message-ID: <20260616143020.3458085-4-jkoolstra@xs4all.nl>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260616143020.3458085-1-jkoolstra@xs4all.nl>
-References: <20260616143020.3458085-1-jkoolstra@xs4all.nl>
+        d=google.com; s=20251104; t=1781620593; x=1782225393; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gyflg7buPy8xj/laUw+X3H9z80FdaQb7zGq2p9sCm08=;
+        b=DAHr/TfdSROSIq0FEJ9RBEdIil+2lmlExRzPHAssaIIZTUzmf2QLoC4+3FdqCEKFAc
+         NLtgxT6+QgDj+gg+owC2G7K+KfRaiNKynGA2Giu1B2RRiX8dbsexuomd1JWpaPeet17S
+         0pPuoXePMHgbVhM6ehzyZUTk3uXzIhf//3HAvCuIdF4hu0XS+63w7tkhKCfylKlNKvCK
+         57x+uoPqm3a+xQZ4VsDv5nTJXOIxJ/7JeFiAGLH7RoDX6KWacUEdIo3K0X1tOU6OvF3+
+         q1MUtTmbjbqUekG9Aw01V4zraM/0+n00D434Q55n9Apo7QpJVRyvEUn8qz0r+Ugc9zy2
+         TiEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781620593; x=1782225393;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gyflg7buPy8xj/laUw+X3H9z80FdaQb7zGq2p9sCm08=;
+        b=TEFw3jMsQa+yyc9f2U9Ez8Em7S9mZ6pKLiUh0SQqmFnBTHjxdViTsJmBnY59GRKPHY
+         gb08QHNxwYUGU+6jphmUuB9EAeGKz6dvdJaIuJWLJ2tp6VpyYvM3vt/wYJNs55g+26zK
+         tRNovx5/2IhfcMRcwa+I0hxsg9VGVCIaN+KaeQcQApb8L1ZYtjm1TwfaQXUJcXvkQGN6
+         W6yLrZHK9GRvg/30SpkaIDACYwRjlB5QVV4HniBWnvUuwmYm5OS8cr4vkMM4KtJ6biZ+
+         K2xK/N856sSm9v+4Ciwdqxf0sknB4ey88Ixx+LfQOf/XoFglJxhtN6k2+Yv+ehVTgdYs
+         DzJg==
+X-Forwarded-Encrypted: i=1; AFNElJ9FQbZS/luhkhjX49hUORJz+3PcOX/+4Neo+MY/mk2C1mww79aMTSYEvme7JXJgOdOTVfnNrv0D97YvX5P1hU4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqlrJpis7StxZx+jnzbz5d3X2gyl0nrR1LZsHISsUhKTSzpGvj
+	420jYRzYEGVzEmo8gNrxtS+RfU0xnEuaBjGr5hbKOIXgwJquhyPjHjamwzOTdKRZZPB2PmmFo0k
+	4SwXfxg==
+X-Received: from plsk16.prod.google.com ([2002:a17:902:ba90:b0:2c6:779e:5007])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f70b:b0:2be:e3bc:e8e4
+ with SMTP id d9443c01a7336-2c69a186b29mr41194995ad.18.1781620592472; Tue, 16
+ Jun 2026 07:36:32 -0700 (PDT)
+Date: Tue, 16 Jun 2026 07:36:31 -0700
+In-Reply-To: <CAEvNRgHjno=XDnMpTvZcNCR6D5RAi1rbynrL4CnnEa7Y-M3VLg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-19-6983ae4c3a4d@google.com>
+ <CAEvNRgHEq-hHcTivUw8TYBeMu-RpS=Ho4DXaNXKQKLPL_biTgg@mail.gmail.com>
+ <aiMOWkiVBqoQDAPd@google.com> <CAEvNRgF09SfDm=OgbrS8-wpfxbNecQkqAQwf1ELq1jWu7NjbUA@mail.gmail.com>
+ <aiM2Nm9Eh68mIVX3@google.com> <CAEvNRgHjno=XDnMpTvZcNCR6D5RAi1rbynrL4CnnEa7Y-M3VLg@mail.gmail.com>
+Message-ID: <ajFfb9u6dU47Nj3v@google.com>
+Subject: Re: [PATCH v13 19/22] KVM: selftests: Finalize TD memory as part of kvm_arch_vm_finalize_vcpus
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
+	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>, 
+	linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, 
+	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, 
+	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Tests SCM_RIGHTS fd passing on a socket with the new socket option
-SO_RIGHTS_NOTRUNC turned on.
+On Mon, Jun 15, 2026, Ackerley Tng wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > On Fri, Jun 05, 2026, Ackerley Tng wrote:
+> >> Sean Christopherson <seanjc@google.com> writes:
+> >> Many tests use vm_userspace_mem_region_add(), CoCo tests that require
+> >> finalizing shouldn't be disallowed that option.
+> >
+> > What does that have to do with finalizing the VM?
+> 
+> I could add more memslots after finalizing the VM, but then I'd have to
+> make the guest accept more memory. Hence, I'd rather set up all the
+> memslots and then finalize the VM.
 
-The test uses the following Smack labels:
+Why?  It's not like the performance of this code matters terribly.
 
-   "Sender"   - label for the sending process
-   "Receiver" - label for the receiving process
-   "SecretX"   - labels for the files being passed
+Regardless, nothing *requires* a test to go down that route.  As I said before,
+my goal with the selftests infrastructure is to effectively optimize the entire
+experience, i.e. to provide default behavior that works well for the majority of
+tests.  Attempting to provide default behavior that perfectly fits *every* test
+is simply impossible.
 
-Socket communication (Sender <-> Receiver) is always allowed.
-The tests control whether Receiver can access "SecretX"-labeled fds.
-When the LSM blocks an fd, we should see a sentinel that corresponds to
-the error returned by the LSM, such as -EACCES.
+> sev_smoke_test currently has a separate vm_sev_launch(), which is the
+> equivalent of tdx_init_mem_region(), and that's called in the tests
+> themselves.
+> 
+> sev_smoke_test also uses vcpu_args_set() after creating the VM with
+> vm_create_shape_with_one_vcpu(). Would that work if vm_sev_launch() got
+> moved into kvm_arch_vm_finalize_vcpus()?
 
-Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
----
- tools/testing/selftests/Makefile              |   1 +
- .../net/af_unix/scm_rights_denial/.gitignore  |   2 +
- .../net/af_unix/scm_rights_denial/Makefile    |  13 ++
- .../net/af_unix/scm_rights_denial/helper.h    |  38 ++++
- .../net/af_unix/scm_rights_denial/receiver.c  | 195 ++++++++++++++++++
- .../scm_rights_denial/scm_rights_denial.sh    | 171 +++++++++++++++
- .../net/af_unix/scm_rights_denial/sender.c    | 126 +++++++++++
- 7 files changed, 546 insertions(+)
- create mode 100644 tools/testing/selftests/net/af_unix/scm_rights_denial/.gitignore
- create mode 100644 tools/testing/selftests/net/af_unix/scm_rights_denial/Makefile
- create mode 100644 tools/testing/selftests/net/af_unix/scm_rights_denial/helper.h
- create mode 100644 tools/testing/selftests/net/af_unix/scm_rights_denial/receiver.c
- create mode 100755 tools/testing/selftests/net/af_unix/scm_rights_denial/scm_rights_denial.sh
- create mode 100644 tools/testing/selftests/net/af_unix/scm_rights_denial/sender.c
+No, because vCPU state would be encrypted at that point.  Moving vm_sev_launch()
+would also break test_sev_dbg(), which sets a global buffer to all 0xaa prior to
+encrypting that data.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 8d4db2241cc2..7ff876692267 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -74,6 +74,7 @@ TARGETS += mseal_system_mappings
- TARGETS += nci
- TARGETS += net
- TARGETS += net/af_unix
-+TARGETS += net/af_unix/scm_rights_denial
- TARGETS += net/can
- TARGETS += net/forwarding
- TARGETS += net/hsr
-diff --git a/tools/testing/selftests/net/af_unix/scm_rights_denial/.gitignore b/tools/testing/selftests/net/af_unix/scm_rights_denial/.gitignore
-new file mode 100644
-index 000000000000..5a1c58ff005f
---- /dev/null
-+++ b/tools/testing/selftests/net/af_unix/scm_rights_denial/.gitignore
-@@ -0,0 +1,2 @@
-+sender
-+receiver
-diff --git a/tools/testing/selftests/net/af_unix/scm_rights_denial/Makefile b/tools/testing/selftests/net/af_unix/scm_rights_denial/Makefile
-new file mode 100644
-index 000000000000..03eb6d1427d7
---- /dev/null
-+++ b/tools/testing/selftests/net/af_unix/scm_rights_denial/Makefile
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0
-+top_srcdir := ../../../../../..
-+include $(top_srcdir)/scripts/Makefile.compiler
-+
-+cc-option = $(call __cc-option, $(CC),,$(1),$(2))
-+
-+CFLAGS += $(KHDR_INCLUDES) -Wall $(call cc-option,-Wflex-array-member-not-at-end)
-+
-+TEST_PROGS := scm_rights_denial.sh
-+
-+TEST_GEN_FILES := sender receiver
-+
-+include ../../../lib.mk
-diff --git a/tools/testing/selftests/net/af_unix/scm_rights_denial/helper.h b/tools/testing/selftests/net/af_unix/scm_rights_denial/helper.h
-new file mode 100644
-index 000000000000..2ecdf2b8b973
---- /dev/null
-+++ b/tools/testing/selftests/net/af_unix/scm_rights_denial/helper.h
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <unistd.h>
-+#include <fcntl.h>
-+
-+#ifndef SO_RIGHTS_NOTRUNC
-+#define SO_RIGHTS_NOTRUNC 85
-+#endif
-+
-+#define CMSG_IS_SCM_RIGHTS(cmsg) ({		\
-+	typeof(cmsg) _cmsg = (cmsg);		\
-+	_cmsg &&				\
-+	_cmsg->cmsg_level == SOL_SOCKET &&	\
-+	_cmsg->cmsg_type == SCM_RIGHTS;		\
-+})
-+
-+#define MIN(a, b) ({ \
-+	typeof(a) _a = (a); \
-+	typeof(b) _b = (b); \
-+	_a < _b ? _a : _b; \
-+})
-+
-+#define MAX_FDS 10
-+
-+static inline int read_current_label(char *label, size_t size)
-+{
-+	int fd = open("/proc/self/attr/current", O_RDONLY);
-+	if (fd < 0)
-+		return fd;
-+
-+	ssize_t r = read(fd, label, size - 1);
-+	close(fd);
-+	if (r < 0)
-+		return r;
-+
-+	label[r] = '\0';
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/net/af_unix/scm_rights_denial/receiver.c b/tools/testing/selftests/net/af_unix/scm_rights_denial/receiver.c
-new file mode 100644
-index 000000000000..a9bd49a6e214
---- /dev/null
-+++ b/tools/testing/selftests/net/af_unix/scm_rights_denial/receiver.c
-@@ -0,0 +1,195 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * receiver.c - Receive a file descriptor over a Unix domain socket via SCM_RIGHTS
-+ *
-+ * Usage: ./receiver <socket_path>
-+ *
-+ * Listens on the given Unix socket path, accepts a connection, and
-+ * attempts to receive file descriptors via SCM_RIGHTS. Reports
-+ * whether the fds were delivered or blocked.
-+ *
-+ * Used for testing LSM (Smack) blocking of fd passing.
-+ */
-+
-+#include <sys/socket.h>
-+#include <sys/un.h>
-+#include <sys/xattr.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <fcntl.h>
-+
-+#include "helper.h"
-+
-+#define RECV_LOG(fmt, ...) printf("receiver: " fmt, ##__VA_ARGS__)
-+#define RECV_ERR(fmt, ...) fprintf(stderr, "receiver: " fmt, ##__VA_ARGS__)
-+
-+static int recv_fds(int sock, int *fds)
-+{
-+	char buf[1];
-+	char ctrl[CMSG_SPACE(MAX_FDS * sizeof(int))];
-+
-+	struct iovec iov = {
-+		.iov_base = buf,
-+		.iov_len  = sizeof(buf),
-+	};
-+	struct msghdr msg = {
-+		.msg_iov        = &iov,
-+		.msg_iovlen     = 1,
-+		.msg_control    = ctrl,
-+		.msg_controllen = sizeof(ctrl),
-+	};
-+
-+	ssize_t bytes_read = recvmsg(sock, &msg, 0);
-+	if (bytes_read < 0) {
-+		perror("receiver: recvmsg");
-+		return -1;
-+	}
-+	if (bytes_read == 0) {
-+		RECV_ERR("connection closed, no data received\n");
-+		return -1;
-+	}
-+
-+	struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
-+	if (!CMSG_IS_SCM_RIGHTS(cmsg)) {
-+		RECV_ERR("no SCM_RIGHTS in control message\n");
-+		return -1;
-+	}
-+
-+	int num_fd_slots = (cmsg->cmsg_len - CMSG_LEN(0)) / sizeof(int);
-+	memcpy(fds, CMSG_DATA(cmsg), num_fd_slots  * sizeof(int));
-+
-+	RECV_LOG("got %d fd slot(s):", num_fd_slots);
-+	for (int i = 0; i < num_fd_slots ; i++) {
-+		if (fds[i] < 0)
-+			printf(" %s", strerrorname_np(-fds[i]));
-+		else
-+			printf(" %d", fds[i]);
-+	}
-+	putchar('\n');
-+
-+	return num_fd_slots;
-+}
-+
-+static inline int print_current_label(void)
-+{
-+	char label[256];
-+	if (!read_current_label(label, sizeof(label))) {
-+		RECV_LOG("running with Smack label '%s'\n", label);
-+		return 0;
-+	}
-+	return -1;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	if (argc != 2) {
-+		fprintf(stderr, "Usage: %s <socket_path>\n", argv[0]);
-+		return -1;
-+	}
-+
-+	if (print_current_label()) {
-+		RECV_ERR("cannot read process Smack label");
-+		return -1;
-+	}
-+
-+	int listen_sock = socket(AF_UNIX, SOCK_STREAM, 0);
-+	if (listen_sock < 0) {
-+		perror("receiver: socket");
-+		return -1;
-+	}
-+
-+	struct sockaddr_un addr = {};
-+	addr.sun_family = AF_UNIX;
-+	strncpy(addr.sun_path, argv[1], sizeof(addr.sun_path) - 1);
-+
-+	/* Remove any stale socket file */
-+	unlink(argv[1]);
-+
-+	if (bind(listen_sock, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-+		perror("receiver: bind");
-+		return -1;
-+	}
-+
-+	if (listen(listen_sock, 1) < 0) {
-+		perror("receiver: listen");
-+		return -1;
-+	}
-+
-+	RECV_LOG("listening on '%s'\n", argv[1]);
-+
-+	int conn_sock = accept(listen_sock, NULL, NULL);
-+	if (conn_sock < 0) {
-+		perror("receiver: accept");
-+		return -1;
-+	}
-+
-+	RECV_LOG("connection accepted\n");
-+
-+	int one = 1;
-+	if (setsockopt(conn_sock, SOL_SOCKET, SO_RIGHTS_NOTRUNC,
-+		       &one, sizeof(one)) < 0) {
-+		perror("receiver: setsockopt(SO_RIGHTS_NOTRUNC)");
-+		goto out_sock;
-+	}
-+
-+	/* Try to receive the fds */
-+	int fds[MAX_FDS];
-+	int num_fds = recv_fds(conn_sock, fds);
-+	if (num_fds < 0)
-+		goto out_sock;
-+
-+	/* Try to use the received fds -- read and print their contents */
-+	RECV_LOG("attempting to read from received fds...\n");
-+	int i;
-+	for (i = 0; i < num_fds; ++i) {
-+		char readbuf[256];
-+
-+		if (fds[i] < 0) {
-+			RECV_LOG("fd in position %i blocked\n", i);
-+			continue;
-+		} else if (fds[i] == 0) {
-+			RECV_LOG("bad fd in position %i\n", i);
-+			goto out_recv;
-+		}
-+
-+		ssize_t n = read(fds[i], readbuf, sizeof(readbuf) - 1);
-+		if (n < 0) {
-+			perror("receiver: read from received fd");
-+			goto out_recv;
-+		}
-+
-+		readbuf[n] = '\0';
-+		RECV_LOG("read %zd bytes from fd at position %i: '%s'\n", n, i, readbuf);
-+	}
-+
-+	RECV_LOG("final result:\n");
-+	for (int j = 0; j < num_fds; ++j) {
-+		if (fds[j] < 0) {
-+			printf("BLOCKED");
-+		} else {
-+			printf("PASSED");
-+			close(fds[j]);
-+		}
-+		putchar(' ');
-+	}
-+
-+	close(conn_sock);
-+	close(listen_sock);
-+	unlink(argv[1]);
-+	return 0;
-+
-+out_recv:
-+	for (int j = 0; j < num_fds; ++j) {
-+		if (fds[j] > 0)
-+			close(fds[j]);
-+	}
-+
-+out_sock:
-+	close(conn_sock);
-+	close(listen_sock);
-+	unlink(argv[1]);
-+	return -1;
-+}
-diff --git a/tools/testing/selftests/net/af_unix/scm_rights_denial/scm_rights_denial.sh b/tools/testing/selftests/net/af_unix/scm_rights_denial/scm_rights_denial.sh
-new file mode 100755
-index 000000000000..9d7d4530cadd
---- /dev/null
-+++ b/tools/testing/selftests/net/af_unix/scm_rights_denial/scm_rights_denial.sh
-@@ -0,0 +1,171 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+#
-+# test_scm_rights_smack.sh - Test SCM_RIGHTS fd passing using Smack LSM blocking
-+#
-+# Must be run as root on a kernel with Smack enabled (security=smack).
-+# Requires: capsh (libcap), setfattr/getfattr (attr)
-+#
-+# We use the following Smack labels:
-+#   "Sender"   - label for the sending process
-+#   "Receiver" - label for the receiving process
-+#   "SecretX"   - labels for the files being passed
-+#
-+# Socket communication (Sender <-> Receiver) is always allowed.
-+# The tests control whether Receiver can access "SecretX"-labeled fds.
-+#
-+
-+set -e
-+
-+readonly SENDER="./sender"
-+readonly RECEIVER="./receiver"
-+
-+readonly TESTDIR="$(mktemp -d)"
-+readonly SOCK="$TESTDIR/scm_test.sock"
-+readonly TESTFILE1="$TESTDIR/secret_1"
-+readonly TESTFILE2="$TESTDIR/secret_2"
-+
-+trap 'rm -rf "$TESTDIR"' EXIT
-+
-+run_tests() {
-+
-+	preflight
-+	setup
-+
-+	run_test "TEST 1" \
-+		"Receiver should NOT have access to Secret1." \
-+		"Receiver Secret1 ---
-+Receiver Secret2 ---" \
-+		"$TESTFILE1" \
-+		"BLOCKED"
-+
-+	run_test "TEST 2" \
-+		"Receiver should have access to Secret1." \
-+		"Receiver Secret1 r--
-+Receiver Secret2 ---" \
-+		"$TESTFILE1" \
-+		"PASSED"
-+
-+	run_test "TEST 3" \
-+		"Receiver should have access to Secret2, but NOT Secret1." \
-+		"Receiver Secret1 ---
-+Receiver Secret2 r--" \
-+		"$TESTFILE1 $TESTFILE2" \
-+		"BLOCKED PASSED"
-+}
-+
-+run_test() {
-+	local name="$1"
-+	local description="$2"
-+	local rules="$3"
-+	local files="$4"
-+	local expected="$5"
-+
-+	echo ""
-+	echo "$name: $description"
-+	echo "Rules:"
-+	echo "$rules"
-+	echo "Expected: $expected"
-+	echo ""
-+
-+	while IFS= read -r rule; do
-+		[ -n "$rule" ] && echo "$rule" > /sys/fs/smackfs/load2
-+	done <<< "$rules"
-+
-+	local output status last_line
-+	output=$(send_fds "$SOCK" $files)
-+	status=$?
-+	echo "$output"
-+	last_line=$(echo "$output" | tail -n 1 | xargs)
-+
-+	if [ "$status" -ne 0 ]; then
-+		echo "TEST FAILED: receiver returned $status"
-+		return 1
-+	fi
-+
-+	if [[ "$last_line" == "$expected" ]]; then
-+		echo "TEST PASSED: outcome was $expected as expected"
-+		return 0
-+	else
-+		echo "TEST FAILED: expected $expected, got '$last_line'"
-+		return 1
-+	fi
-+}
-+
-+setup() {
-+
-+	printf "Secret 1" > "$TESTFILE1"
-+	printf "Secret 2" > "$TESTFILE2"
-+
-+	setfattr -n security.SMACK64 -v "Secret1" "$TESTFILE1"
-+	setfattr -n security.SMACK64 -v "Secret2" "$TESTFILE2"
-+	setfattr -n security.SMACK64 -v "Tmp" /tmp
-+	setfattr -n security.SMACK64 -v "Tmp" "$TESTDIR"
-+
-+	echo "Sender	Receiver	-w-" > /sys/fs/smackfs/load2
-+	echo "Receiver	Sender		-w-" > /sys/fs/smackfs/load2
-+	echo "Sender	Tmp 		rwx" > /sys/fs/smackfs/load2
-+	echo "Receiver	Tmp		rwx" > /sys/fs/smackfs/load2
-+	echo "Sender	Secret1		r--" > /sys/fs/smackfs/load2
-+	echo "Sender	Secret2		r--" > /sys/fs/smackfs/load2
-+}
-+
-+send_fds() {
-+
-+	local sk="$1"
-+	shift
-+	local files="$*"
-+
-+	(
-+	    echo "Receiver" > /proc/self/attr/current
-+	    exec capsh --drop=cap_mac_override,cap_mac_admin -- -c "$RECEIVER $sk"
-+	) &
-+	local recv_pid=$!
-+	sleep 1
-+
-+	(
-+	    echo "Sender" > /proc/self/attr/current
-+	    exec capsh --drop=cap_mac_override,cap_mac_admin -- -c "$SENDER $sk $files"
-+	) || true
-+
-+	local recv_status=0
-+	wait "$recv_pid" || recv_status=$?
-+
-+	if [ "$recv_status" -ne 0 ]; then
-+	    echo "receiver exited with $recv_status"
-+	fi
-+	return "$recv_status"
-+}
-+
-+preflight() {
-+
-+	if [ "$(id -u)" -ne 0 ]; then
-+	    echo "ERROR: must be run as root"
-+	    exit 1
-+	fi
-+
-+	if ! grep -q smack /sys/kernel/security/lsm 2>/dev/null; then
-+	    echo "ERROR: Smack is not active"
-+	    echo "  Check: cat /sys/kernel/security/lsm"
-+	    echo "  Boot with: security=smack"
-+	    exit 1
-+	fi
-+
-+	if ! mountpoint -q /sys/fs/smackfs 2>/dev/null; then
-+	    echo "Mounting smackfs..."
-+	    mount -t smackfs smackfs /sys/fs/smackfs
-+	fi
-+
-+	if ! command -v capsh &>/dev/null; then
-+	    echo "ERROR: capsh not found (install libcap)"
-+	    exit 1
-+	fi
-+
-+	if [ ! -x "$SENDER" ] || [ ! -x "$RECEIVER" ]; then
-+	    echo "ERROR: $SENDER / $RECEIVER not built (run 'make' first)"
-+	    exit 1
-+	fi
-+
-+}
-+
-+run_tests
-diff --git a/tools/testing/selftests/net/af_unix/scm_rights_denial/sender.c b/tools/testing/selftests/net/af_unix/scm_rights_denial/sender.c
-new file mode 100644
-index 000000000000..b1c76d23b8bd
---- /dev/null
-+++ b/tools/testing/selftests/net/af_unix/scm_rights_denial/sender.c
-@@ -0,0 +1,126 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * sender.c - Send file descriptors over a Unix domain socket via SCM_RIGHTS
-+ *
-+ * Usage: ./sender <socket_path> <file_to_send> [<file_to_send>...]
-+ *
-+ * Opens the specified files and sends their fds to a receiver connected
-+ * on the given Unix socket path. Used for testing LSM blocking of fd
-+ * passing.
-+ */
-+
-+#include <sys/socket.h>
-+#include <sys/un.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <stdio.h>
-+#include <fcntl.h>
-+
-+#include "helper.h"
-+
-+#define SEND_LOG(fmt, ...) fprintf(stdout, "sender: " fmt, ##__VA_ARGS__)
-+#define SEND_ERR(fmt, ...) fprintf(stderr, "sender: " fmt, ##__VA_ARGS__)
-+
-+static int send_fds(int sock, int *fds, int num_fds)
-+{
-+	if (num_fds > MAX_FDS)
-+		return -1;
-+
-+	char buf[1] = { 'X' };
-+	char ctrl[CMSG_SPACE(MAX_FDS * sizeof(int))] = { 0 };
-+
-+	struct iovec iov = {
-+		.iov_base = buf,
-+		.iov_len  = sizeof(buf),
-+	};
-+	struct msghdr msg = {
-+		.msg_iov        = &iov,
-+		.msg_iovlen     = 1,
-+		.msg_control    = ctrl,
-+		.msg_controllen = CMSG_SPACE(num_fds * sizeof(int)),
-+	};
-+
-+	struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
-+	cmsg->cmsg_level = SOL_SOCKET;
-+	cmsg->cmsg_type  = SCM_RIGHTS;
-+	cmsg->cmsg_len   = CMSG_LEN(num_fds * sizeof(int));
-+	memcpy(CMSG_DATA(cmsg), fds, num_fds * sizeof(int));
-+
-+	ssize_t bytes_send = sendmsg(sock, &msg, 0);
-+	if (bytes_send < 0) {
-+		perror("sender: sendmsg");
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static inline int print_current_label(void)
-+{
-+	char label[256];
-+	if (!read_current_label(label, sizeof(label))) {
-+		SEND_LOG("running with Smack label '%s'\n", label);
-+		return 0;
-+	}
-+	return -1;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	if (argc < 3 || argc > 2 + MAX_FDS) {
-+		fprintf(stderr, "Usage: %s <socket_path> <file_to_send> [<file_to_send>...]\\n",
-+			argv[0]);
-+		fprintf(stderr, "Up to a maximum of %d files", MAX_FDS);
-+		return -1;
-+	}
-+
-+	if (print_current_label()) {
-+		SEND_ERR("cannot read process Smack label");
-+		return -1;
-+	}
-+
-+	int sock = socket(AF_UNIX, SOCK_STREAM, 0);
-+	if (sock < 0) {
-+		perror("sender: socket");
-+		return -1;
-+	}
-+
-+	struct sockaddr_un addr = {};
-+	addr.sun_family = AF_UNIX;
-+	strncpy(addr.sun_path, argv[1], sizeof(addr.sun_path) - 1);
-+
-+	if (connect(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-+		perror("sender: connect");
-+		goto out_sock;
-+	}
-+
-+	SEND_LOG("connected to '%s'\n", argv[1]);
-+
-+	int num_files = argc - 2;
-+	int fds[MAX_FDS];
-+	int i;
-+	for (i = 0; i < num_files; i++) {
-+		fds[i] = open(argv[2 + i], O_RDONLY);
-+		if (fds[i] < 0) {
-+			perror("sender: open file");
-+			goto out_opened;
-+		}
-+		SEND_LOG("opened '%s' as fd %d\n", argv[2 + i], fds[i]);
-+	}
-+
-+	if (send_fds(sock, fds, num_files) < 0)
-+		goto out_opened;
-+
-+	SEND_LOG("fds successfully sent:");
-+	for (int j = 0; j < num_files; j++)
-+		printf(" %d", fds[j]);
-+	putchar('\n');
-+
-+out_opened:
-+	for (int j = 0; j < i; j++)
-+		close(fds[j]);
-+out_sock:
-+	close(sock);
-+	return -1;
-+}
--- 
-2.54.0
+> >> >> It's also possible to have some kvm_vm_finalize() call that can be
+> >> >> explicitly and manually invoked from selftests just for CoCo selftests.
+> >> >
+> >> > Why bother?  It's obviously possible to all kvm_arch_vm_finalize_vcpus() directly.
+> >>
+> >> Works for me to call directly. Do you mean kvm_arch_vm_finalize_vcpus()
+> >> is the right function where the TD is finalized?
+> >>
+> >> For tests that need to do more setup after creating a vm, is the only
+> >> way out to call __vm_create() then vm_vcpu_add() to avoid premature
+> >> finalization in __vm_create_with_vcpus() when
+> >> kvm_arch_vm_finalize_vcpus() is called?
+> >
+> > Depends on what you're doing.  Sometimes, the answer will be yes.  That's why
+> > there are "low level" APIs, so that some tests can do fancy things, while most
+> > tests can leave the details to the infrastructure.
+> >
+> > If there's a recurring problem, or we anticipate one, then we can and should
+> > figure out how to minimize the pain so that tests don't have to deal with the
+> > same boilerplate issues over and over.  Hence the __shared idea.
+> 
+> I still think kvm_arch_vm_finalize_vcpus() is an odd place to be
+> finalizing the VM.
 
+That's literally why the function exists though.  The one and only existing
+implementation (on arm64) uses it to initialize the vGIC.
+
+  void kvm_arch_vm_finalize_vcpus(struct kvm_vm *vm)
+  {
+	if (vm->arch.has_gic)
+		__vgic_v3_init(vm->arch.gic_fd);
+  }
+
+That's *very* similar to the proposed TDX usage, where some per-VM asset(s) can
+be initialized/frozen only after all vCPUs have been added.  In other words, the
+name is describing where in the VM creation/setup flow the hook is called, and
+perhaps more importantly, the impact of the call: vCPUs are finalized (obviously
+with a different definition of "finalized" based on the VM properties).
+
+> I would prefer to not have to explicitly call some function like
+> kvm_arch_vm_finalize() (no vcpu in the name), but a common arch function
+> calling vm_sev_launch() and tdx_vm_finalize() is what I can think of
+> for test setup flexibility, without too much magic.
+
+We can't have our cake and eat it too.  Either we launch/finalize SEV/TDX VMs as
+part of the common VM creation flows (as proposed for TDX), or we force tests to
+manually launch/finalize the VM after additional setup.  The only way to have it
+both ways is to utilize crazy macro shenanigans to execute arbitrary code between
+creating the VM and launching/finalizing the VM, and even I would balk at that.
+
+I honestly don't see any reason to try to figure out which of the two approaches
+is optimal at this time.  Whatever decision we make isn't set in stone, and in
+fact should be relative easy to change.  And without being able to see all the
+TDX/SEV tests that are waiting in the wings, it's more or less impossible to make
+an informed decision.
+
+I definitely want to have SEV and TDX use the same core approach in the end, but
+I don't think we should force the issue right now, because the cost of reworking
+the SEV and/or TDX infrastructure when there are only a bare handful of tests is
+so low.  It will cost more to try to predict the future of a 50/50 outcome than
+it will to make a completely wild guess between the two options and rework things
+if we guess wrong.
+
+> For now, I can't think of many uses of __shared. ucall shared memory is
+> allocated dynamically, and we can also make it shared cleanly within
+> ucall code.
+
+Uh, every selftest that uses global variables to communicate between guest and
+host?
+
+> The global variables (sync_global_to_guest()) will appear in the guest
+> as long as sync_global_to_guest() is called before
+> kvm_arch_vm_finalize(), which I think makes sense to people writing
+> tests for CoCo.
+
+Yes, but that's completely orthogonal to all of this.
+
+> So 2 questions to push this along:
+> 
+> 1. What do you think of a kvm_arch_vm_finalize() that calls
+>    vm_sev_launch() and tdx_vm_finalize()? My key issue is that
+>    kvm_arch_vm_finalize_*vcpus*() seems to be for finalizing vCPUs
+>    rather than the whole VM.
+
+Key word "seems".  I'm pretty sure Oliver picked kvm_arch_vm_finalize_vcpus() as
+the name in commit 8911c7dbc607 ("KVM: arm64: selftests: Create a VGICv3 for
+'default' VMs") for the same reasons I think it's a good fit for coco VMs: like
+finalizing TDX VMs, initializing the vGIC effectively finalizes vCPUs.
+
+We could rename it to kvm_arch_vm_finalize(), but that won't change the fact that
+we'll need to decide between automagic vs. manual finalization, and it definitely
+should be a separate discussion.
+
+> 3. Would you like __shared implemented together with this series, as a
+>    prerequisite, or later?
+
+Only if __shared is a hard requirement for base TDX support, which I assume is
+not the case.
