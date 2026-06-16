@@ -1,85 +1,125 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26BAF1E8320;
-	Tue, 16 Jun 2026 16:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21BFA47799E;
+	Tue, 16 Jun 2026 16:35:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781626987; cv=none; b=X9HU0e0ThFRk8Ixb+j5hIZ2cXVRbhxRC2t/CDIjCL3A6PSxpLQa1g1KcOo5eeJdgDHISAzhXPqpeQ9QQl3EG6aIpunva+cpLcf9Wj6/pYfjbKLEqB00XkpQyhV/CW/NqmmqK2U+xBqV3bMRskwo2q/4L1jrWtReHDQRycCgAinw=
+	t=1781627734; cv=none; b=VDorut+dvrelgXIqJhMIBlSNRiUehj8Uu+ZM6KcGeKi1aSqmJXq5IUPU/cI11fXSQuz4FSMaubDasVAoJiTZHEP7PP6GLi+BQfXiDGID3zz1zGCGhjJij6qVF0mg3NT+f4ycrnQCW+iiASxSRwhXpUIcOSep6S30CC3mvEs1eSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781626987; c=relaxed/simple;
-	bh=IXsEAwgWvm+ambQ9+3AGPStMs5cLfc6BF+yzHqadZSo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uBlXoQ1fH9wig+WjDaQM5CgInoCBwswiFj25kXDPfTv204t+gz3ugxmNnv0wTCCrE/QV13mFSu3lWqFv7nA65wH3TFru1xF2mD6eK+nG1u+p2i1uip+cUrMBHeFS+V1BY/mEYecD5tRSeNFE3ffORVMcrDN/yn/ZoxDB2ArXGuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=RIzm9+Pn; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1781627734; c=relaxed/simple;
+	bh=qbEFuI4yeXvZ2MwBQP4YSJlQk5kKM8aRC3sQB8VOSi8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Qpc9oGf4sGu5VUbrQS5dvLNCBB2AYna/HhSSYPUcgBnJjdTdrTTbNBBjtnEbOb1sKyhZ5uBrsVBF/IEJ0pVsz7gPoJgHt5S4JICpuQmiUkjeFidYliL1pV8aTwUHGQR7wOcChDp5Aq9/lokWo7nzFWHTPaxHLGnDkTUh3EnvJTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=cvpG0k5J; arc=none smtp.client-ip=13.75.44.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="RIzm9+Pn"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=IRo7D4zv4MpQ9wRyO+ve3dpnbeFV2Oef1k+e+ZUWC0o=; b=RIzm9+PnNC5LEFOKtIe0rhQkOw
-	yRbg8nyVKvPht00btnI5Uu1JqpkM+9V9lpIstwBWoUizaMWByMMM6QWCGjCPJqsSvWbRp6CvcK6UW
-	8JBvEegSB7dv51EMsVNZdbkq0ZF1fxnXD2ANCZ+b060SJbLZdm8aOt1Nr1LkU6pac4RrSY49JU+EB
-	kc830XpfwH+NzHYbS0ql09r0GHzssD+6eaH+crVD8wiTdzVYwRXb/e3+45WRwGQiIlZzE6QseWZpY
-	ZxNVpHUr5d5eZdKuN5K6iWetwugTLjdb7KidVFDkgOArjiVmz3bLhv4Bzu0AkJGW8ZIlVr5VhYpvo
-	aHci+zWQ==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wZWYz-00DyOR-2K;
-	Tue, 16 Jun 2026 16:22:58 +0000
-Date: Tue, 16 Jun 2026 09:22:52 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next 2/2] udp: convert udp_lib_getsockopt to sockopt_t
-Message-ID: <ajF4Odi_L28LdIXC@gmail.com>
-References: <20260612-getsockopt_phase2-v1-0-7b01f1f5d106@debian.org>
- <20260612-getsockopt_phase2-v1-2-7b01f1f5d106@debian.org>
- <aiy7ZR7Yz2Z4Ioyd@devvm7509.cco0.facebook.com>
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="cvpG0k5J"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=+rrWj
+	roSdQ+G389uqQdakkrfKwWhXx8nkavz2LbiPlY=; b=cvpG0k5Jihili3DbgIZjW
+	5/ZuZ50pOid/qDsLvyOiGbIqr2DtDbl42t5PvIVMR/D5BrKt0nrjBRXqHcUQ1/IA
+	WYgPyVhZoll4truNdBM7bpHvgXkUSUV4Jj13ek8YcSOYDuSu61HyuDFAMFbsQRcF
+	KKzvhPwrhcwstZ9fSQfSzo=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web4 (Coremail) with SMTP id ywQGZQDn+6A9ezFqyT1PAg--.61078S2;
+	Wed, 17 Jun 2026 00:35:13 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-input@vger.kernel.org
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] HID: bpf: Fix hid_bpf_get_data() range check
+Date: Tue, 16 Jun 2026 16:35:05 +0000
+Message-Id: <cover.1781627122.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aiy7ZR7Yz2Z4Ioyd@devvm7509.cco0.facebook.com>
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ywQGZQDn+6A9ezFqyT1PAg--.61078S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrW5uw1fuFWDCFyUXF4Utwb_yoW8tw45pa
+	n5Grs0kr1DtFy7uw1xAFW8tryrCFZ7X3yUCryxZry7Z3ZagFy8GFyIkFyDWF93GrWFgr12
+	9r10qrsF9w12yFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUmFb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwV
+	C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq
+	07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r
+	18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vI
+	r41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4
+	kS14v26r4a6rW5MxkIecxEwVAFwVWUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+	CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+	0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
+	KfnxnUUI43ZEXa7xRLXoxUUUUUU==
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-On Fri, Jun 12, 2026 at 07:10:15PM -0700, Stanislav Fomichev wrote:
-> On 06/12, Breno Leitao wrote:
+hid_bpf_get_data() exposes a pointer into the HID-BPF context data when
+the caller-provided offset and size fit inside ctx->allocated_size.
+The helper currently checks that range with:
 
-> >  int udp_lib_getsockopt(struct sock *sk, int level, int optname,
-> > -		       char __user *optval, int __user *optlen)
-> > +		       sockopt_t *opt)
-> >  {
-> >  	struct udp_sock *up = udp_sk(sk);
-> >  	int val, len;
-> >  
-> > -	if (get_user(len, optlen))
-> > -		return -EFAULT;
-> 
-> [..]
-> 
-> > -	if (len < 0)
-> > -		return -EINVAL;
-> 
-> I see this part now in sockopt_init_user, but you mention that it's a
-> transitional helper. When we drop it, will we loose this <0 check?
-> Maybe keep `if ((int)opt->optlen < 0))` here for backwards
-> compatibility?
+  rdwr_buf_size + offset > ctx->allocated_size
 
-Good idea. I will do it and respin (once net-next reopens).
+Since both operands are unsigned, a very large size can wrap the sum and
+make an out-of-range request look valid.
 
-Thanks for the review,
---breno
+Patch 1 changes the helper to reject offset values beyond the allocation
+and then compare the requested size against the remaining bytes.
+
+Patch 2 adds a HID-BPF regression check that asks hid_bpf_get_data() for
+offset 2 and size ~0ULL from an rdesc_fixup callback and expects NULL.
+It also adds KHDR_INCLUDES to the HID selftest build so the userspace
+test sees current kernel UAPI HID definitions.
+
+Validation, rebased and tested on bpf-next master e4287bf34f97
+("selftests/bpf: Work around llvm stack overflow in crypto progs"):
+
+  git diff --check origin/master..HEAD: OK
+  scripts/checkpatch.pl --strict -g origin/master..HEAD: OK
+  make O=/root/ebpf-verifier-bug-detection/kernel-build/bpf-next-hidbpf-20260616 \
+    drivers/hid/bpf/hid_bpf_dispatch.o: OK
+  make -C tools/testing/selftests/hid \
+    O=/root/ebpf-verifier-bug-detection/kernel-build/bpf-next-hidbpf-20260616 \
+    OUTPUT=/tmp/hid-selftest-026 \
+    VMLINUX_BTF=/root/ebpf-verifier-bug-detection/kernel-build/bpf-next-hidbpf-20260616/vmlinux \
+    KHDR_INCLUDES=-isystem /root/ebpf-verifier-bug-detection/kernel-build/bpf-next-hidbpf-20260616/usr/include \
+    hid_bpf: OK
+
+The sanitized UAPI headers were generated in the build tree with
+headers_install.  The final install/copy step reported missing rsync in
+this environment, but the generated build-tree usr/include was present
+and used for the selftest build.
+
+Yiyang Chen (2):
+  HID: bpf: Fix hid_bpf_get_data() range check
+  selftests/hid: Cover hid_bpf_get_data() size overflow
+
+ drivers/hid/bpf/hid_bpf_dispatch.c      |  3 ++-
+ tools/testing/selftests/hid/Makefile    |  2 +-
+ tools/testing/selftests/hid/hid_bpf.c   | 11 +++++++++++
+ tools/testing/selftests/hid/progs/hid.c | 18 ++++++++++++++++++
+ 4 files changed, 32 insertions(+), 2 deletions(-)
+
+
+base-commit: e4287bf34f97a88c7d9322f5bde828724c073a6b
+-- 
+2.34.1
+
