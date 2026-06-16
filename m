@@ -1,124 +1,128 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 912EF33AD9B;
-	Tue, 16 Jun 2026 16:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59E147D93B
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 17:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781629098; cv=none; b=LtgtnbgPC5Xg74oSzjocHWXy+RsnvZhMMgJMZqYvB0/WNF6eLO5J3XtL4V0gZUzXpiCiScQ0njMDHKwccpd6phtCz8rd6rqsUR3olDw4Z3G9cBK3UAwD6U5ES231z+fhTcK5FVfLry0qHHo5Xq01Md7yAT2fu/1JClArKSmKEvE=
+	t=1781629622; cv=none; b=BwVWeNX1pflj9Db3ytndMd1QOoYHLzAHkKjRVgAR0TbE5BfB7r/UAt2lIIXX2FgzJsV+MZls9m0Q2ZLvSM1uovjHMq4kFHFpxSyqfVTAVYKPDKw6x8M9PHIHbfiCLZxvpQ+0K7KUYR2WefWBJMkoreQwbA3fn/SNE+QqtjPykN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781629098; c=relaxed/simple;
-	bh=+dNQk66iZLl1hXIly5cn5vELYpkbJBzGkEzSPgeFOKA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Gu1X4URHs+TgyIxyztYNroOmpE1HHK68Ez0gYPhEBidZEFuNS8WFaR74cIkuRp95wPwtME8f5JyqUxE6lz0YtMmKEVVYkiVGhxYk+QSh23usTAa8pku5ye9cwkWPE/tgailt6NbIpmbUKUFqVfRVjr8nLJtkB37Q25jKIvQatsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Ey1fmg9T; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781629622; c=relaxed/simple;
+	bh=7g+3VFOqzLTevM//CB6btZhXREAjis1zBYeItrSo5zk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=OGCwtgx/RUsmshsjDjqk16jFK7jYpQD8OMRW4zPTB/T8Qn6spXBTP7u0WXCKjCHz0wVgMp6/0gSNnxV9KI/obaDnWhEanrNvmbDbPz/AZ6NqDxFI1qdey9uWmsYeXzDzu/LswkCXV2Z8Eg8Vl1CMMZLssaAwT/t6dQmRcA2LQgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Xa1EgxqC; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Ey1fmg9T"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xa1EgxqC"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-84247fed609so2605686b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 10:07:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=snvsb6VD95Gi4ytz6Pwvl4jwEfiPU7m
-	qT610BL69bbY=; b=Ey1fmg9T94NX2CRmEhEQXgHzlAarrsepezN8rU4c/psEyUt
-	6Re4rdCKEosoZNFEDtxZwgfnUwpM2fyqM4qzxYvuSYh3KEWcsvwoUAiF5oESpdkm
-	xP5oAavfdRVTv5X3u7rEEKfw5VXppG8EB1hByzCDMPIeaDkwr4Bhvr8mN70o=
-Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web4 (Coremail) with SMTP id ywQGZQBneJ2VgDFqKUxPAg--.57407S4;
-	Wed, 17 Jun 2026 00:57:57 +0800 (CST)
-From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Wed, 17 Jun 2026 00:57:56 +0800
-Subject: [PATCH bpf 2/2] selftests/bpf: Cover stack nospec slot indexing
+        d=google.com; s=20251104; t=1781629620; x=1782234420; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MuFT5oHokDW0bk02xVZpBpyZ66QlfdjnHGkLbhNe2ho=;
+        b=Xa1EgxqCs881RK9mo+li2JPIv6hqLAnUJVmI10LlJHZc2Q669sKY6VB4NK5wLuatlf
+         DpRAmwG2FN0HvWt/MCuCVrFPjDzICyawOIwlBlVIeDwe0WYjA/lkFzzC/w+dt7HaOWRU
+         miLsY23TifR77ygF7HgHycW0MyKER2X9JotN8QII5stO19OoYOyVEKlFUqOUVH282p4Y
+         oXHZwbSXGik/J+SNgKAFTv3Sg5DXRdBuW+NMmxVpJOGNMbE9K4d1ZeMebJBlv+CsxnCR
+         ZE5IYx9mCv0EZTO6ol0BZ1eWco6lQ7EaBsVZzduOxYaj1yHp0l8Z45760zy0EUZGb7AP
+         spaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781629620; x=1782234420;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MuFT5oHokDW0bk02xVZpBpyZ66QlfdjnHGkLbhNe2ho=;
+        b=P0a5H/YOy7lk6W+3K++mWpVDSguzyH0hOaq44gZec9zK+tuY+I+3b160v23pfdAi1o
+         f1X5T9ixaXeSjbjKtLmarU7rMT45mMZsILLnzJ9Lv1JoPVbw4ymEE2jbtr4wIamJ6DpC
+         paT0hNyiNeFxGtNAe4wEWFlP7R1ojzFDhoyq3yGoOcUN6DG4865piAcIM2Ftq5CwD199
+         xUYrsAquO95mJy0jadaxihmCWGDec4xjiybXjeylMb/jgS2Un6A/x59qSJWegEq3kai5
+         HM0rLw8jLABlVCxjsQr4D2gJjL0w1noE7iw9+3HPh8rnlrE2MhLgvhNuM+vAGd1QRzTD
+         CgfQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+jYAHbNGYr/aKWQJd2drirDthCPg9ahVwJxMTHSe51551gvubuI5aSDDvPxs4dpxyu4BBIh9sk2+FmHGndQyw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDTq1umtp1AcV07RoAmWUWdikWKfQm3c2Z+Zzc2hE6++gcFPrY
+	ifNJr0cSeiQbo6YBiJESdn+GlHPdOIxobNOyKypCDi/TW5Gxx8bhgrCDyn+qXcQitM6JwpWa/0B
+	HYIY0YQ==
+X-Received: from pfbfj40.prod.google.com ([2002:a05:6a00:3a28:b0:842:3d2d:1e84])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:600a:b0:841:dcb5:e6f2
+ with SMTP id d2e1a72fcca58-84524561d40mr12669b3a.23.1781629619966; Tue, 16
+ Jun 2026 10:06:59 -0700 (PDT)
+Date: Tue, 16 Jun 2026 10:06:59 -0700
+In-Reply-To: <CAEvNRgFPKC2uOMaams7SS9B7LxvfU4h8DrPM5vXFb=pmXsgPbA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260617-f01-11-stack-nospec-slot-index-v1-2-e3a080b0cd7e@mails.tsinghua.edu.cn>
-References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
-In-Reply-To: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Luis Gerhorst <luis.gerhorst@fau.de>, Shuah Khan <shuah@kernel.org>, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781629079; l=1480;
- i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=+dNQk66iZLl1hXIly5cn5vELYpkbJBzGkEzSPgeFOKA=;
- b=NilFRY5Hs82Ps02tipPyYNLT773zSFAond0IwdaH4T/CC1usbtNdR+1kTN1QbTZve54efdzwE
- 9m8LbBzfA41BLBopzRl/R3z7mKQAGGH+sto0/mUECObO7NxgI82cH36
-X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
- pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:ywQGZQBneJ2VgDFqKUxPAg--.57407S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7WrWkAr4UKryDXw1xtw1DJrb_yoW8XrWDpa
-	4vgF9I9347WF12gw1fAFW8GFyrJr4kXrWUGF1fZw15AanxAr9Iqrs7K347J3Z3AFs3ZFZY
-	vF12vas8u3WkAa7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9G1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1U
-	M28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxV
-	AIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv
-	8VW8Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II
-	8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl
-	c2xSY4AK67AK6r1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMx
-	C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
-	wI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
-	vE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v2
-	0xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
-	W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU8TqcUUUUUU==
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQEAA2oxeAYIeAABsX
+Mime-Version: 1.0
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-19-6983ae4c3a4d@google.com>
+ <CAEvNRgHEq-hHcTivUw8TYBeMu-RpS=Ho4DXaNXKQKLPL_biTgg@mail.gmail.com>
+ <aiMOWkiVBqoQDAPd@google.com> <CAEvNRgF09SfDm=OgbrS8-wpfxbNecQkqAQwf1ELq1jWu7NjbUA@mail.gmail.com>
+ <aiM2Nm9Eh68mIVX3@google.com> <CAEvNRgHjno=XDnMpTvZcNCR6D5RAi1rbynrL4CnnEa7Y-M3VLg@mail.gmail.com>
+ <ajFfb9u6dU47Nj3v@google.com> <CAEvNRgFPKC2uOMaams7SS9B7LxvfU4h8DrPM5vXFb=pmXsgPbA@mail.gmail.com>
+Message-ID: <ajGCs3W_zMyFmJjR@google.com>
+Subject: Re: [PATCH v13 19/22] KVM: selftests: Finalize TD memory as part of kvm_arch_vm_finalize_vcpus
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
+	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
+	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
+	Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Add a verifier test for the fixed-offset stack write case where two 4-byte
-stores initialize opposite halves of the same stack slot.
+On Tue, Jun 16, 2026, Ackerley Tng wrote:
+> >> 1. What do you think of a kvm_arch_vm_finalize() that calls
+> >>    vm_sev_launch() and tdx_vm_finalize()? My key issue is that
+> >>    kvm_arch_vm_finalize_*vcpus*() seems to be for finalizing vCPUs
+> >>    rather than the whole VM.
+> >
+> > Key word "seems".  I'm pretty sure Oliver picked kvm_arch_vm_finalize_vcpus() as
+> > the name in commit 8911c7dbc607 ("KVM: arm64: selftests: Create a VGICv3 for
+> > 'default' VMs") for the same reasons I think it's a good fit for coco VMs: like
+> > finalizing TDX VMs, initializing the vGIC effectively finalizes vCPUs.
+> >
+> > We could rename it to kvm_arch_vm_finalize(), but that won't change the fact that
+> > we'll need to decide between automagic vs. manual finalization, and it definitely
+> > should be a separate discussion.
+> >
+> 
+> This definitely should not block this series.
+> 
+> It's coming together for me now with your explanation:
+> kvm_arch_vm_finalize_vcpus() actually means finalizing vCPUs! vGIC ==
+> Virtual Generic Interrupt Controller, which has to be done after all the
+> vCPUs are set up. Since the name is describing where in the VM
+> creation/setup flow the hook is called (after creating VM and after
+> creating vCPUs), maybe something like kvm_arch_vm_post_vcpu_create()?
 
-The test uses the CAP_BPF-without-CAP_PERFMON loader lane so Spectre v4
-mitigation remains active. It expects both half-slot writes to emit nospec
-in the translated program.
+No, because I would expect post_vcpu_create() to run after creating each vCPU,
+not after creating all vCPUs.  E.g. see KVM's kvm_arch_vcpu_{pre,post}create().
 
-Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
----
- .../testing/selftests/bpf/progs/verifier_unpriv.c  | 23 ++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+> Renaming this to kvm_arch_vm_finalize() makes it sound like it is
+> finalizing the VM, but this function shouldn't finalize the VM since for
+> CoCo finalizing the VM also loads the guest image into the guest - deals
+> with memory, not just vCPUs.
+> 
+> 8911c7dbc607 ("KVM: arm64: selftests: Create a VGICv3 for 'default'
+> VMs") also includes a test_disable_default_vgic() function, we could
+> also use something like that to skip CoCo VM finalization for some
+> tests? Maybe that's a good middle ground.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index c16f8382cf17d..9ebbd4b531df1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -976,4 +976,27 @@ l0_%=:	exit;						\
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("noperfmon: Spectre v4 stack write slot index")
-+__success __success_unpriv
-+__caps_unpriv(CAP_BPF)
-+__retval(0)
-+#ifdef SPEC_V4
-+__xlated_unpriv("r0 = 0")
-+__xlated_unpriv("*(u32 *)(r10 -4) = r0")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("*(u32 *)(r10 -8) = r0")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("exit")
-+#endif
-+__naked void stack_write_nospec_slot_index(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+	*(u32 *)(r10 - 4) = r0;			\
-+	*(u32 *)(r10 - 8) = r0;			\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
+That probably won't work well, and in practice it's just shuffling deck chairs
+on the Titanic.  For vGIC, and pre-create hook works because the tests that opt
+out of automatic vGIC instantiation want that behavior to apply to all VMs that
+the test creates.  That's not the case for sev_smoke_test though, because some
+testcases need deferred launch (test_sync_vmsa()), whereas others can use
+automatic launch (test_sev()).
 
--- 
-2.34.1
-
+The other wrinkle is that SEV at least needs to provide the policy, which again
+varies per VM within a single test.
