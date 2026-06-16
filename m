@@ -1,263 +1,221 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010059.outbound.protection.outlook.com [52.101.84.59])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FFC8438FF3;
-	Tue, 16 Jun 2026 12:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781611612; cv=none; b=M8AK7b+UK/+wgNf8beTTBBzOo9IMecw+xk6zfMj8LbzWKJwUntRupjnGOXTngvJdXgejeq88HdGo3Pm+19DFhZw1QXDUF8wiOwqZfE/kdZuscV6xA4eTXOjmOEqjx56yYbNHAXgezWgQ2aAYOGmiadm+6xBvnrlrnUfkvIU99AI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781611612; c=relaxed/simple;
-	bh=zom3if6p40pVA1oDb93siAg0Qr2qwaRFCv9D6fDmwT8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fW6rNScaSrt5dMN4Gf+FwJwxW4kce+8Z7SHIErOauJ3u6DNTDJcxRvJgLYbYp+iG95AUZ/9jeEMGAGFaTFfxvBxSfgLlNpmseWH049vd3EP2dqu1Wd/YkLnqOFDajNgeeLiBUS7y0ZqMZacLNOir7rhYuo2sqH/3iY/hVModrdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id D6ABF1EA01F; Tue, 16 Jun 2026 20:06:41 +0800 (AWST)
-X-Spam-Level: 
-Received: from [IPV6:2001:8003:8810:ea00::9c4] (unknown [IPv6:2001:8003:8810:ea00::9c4])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id AA7691EA00D;
-	Tue, 16 Jun 2026 20:06:33 +0800 (AWST)
-Message-ID: <51f89811-2976-44c7-99f3-5e24d5535aa8@davidgow.net>
-Date: Tue, 16 Jun 2026 20:06:31 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A8C317161;
+	Tue, 16 Jun 2026 12:23:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.59
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781612597; cv=fail; b=eC5nCWppP3PsKABKF+wSfp+Ht2aTmFvk+OyPAb164OheS10Ulq0La75Rr0egXbF/Fv1q/lHq+5Oz12br6tXE/QpvV+skXBjtfxc7lN0VH0lT7G7cuPDXo7m6nEtdkd0xFNcbWUNwdljhojdyMW8Is4JpZIAaW7qA+AMuU9gGdwY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781612597; c=relaxed/simple;
+	bh=IQpHO5ax+8oOywQFnYPIhZNfiZIh+EAAUy8qWkHQwbc=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=uqJQcqFTwIdr/LYeYKGOSh+XvldU8LXgOwTswJyN70h+vmS5cRhP6dPvghHJ/rWbqcp2QTGUrHdyLXpD6qTQ/88by3tPR4zkP8RyXMAKU3WklKbL5if8aHh4VDZmBypJf+5hhfPwE5TbSyB6OzsB2wrnnWR7zSS8tJTY1e7/X1M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=RYEwiFOc; arc=fail smtp.client-ip=52.101.84.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="RYEwiFOc"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=wHZJoo8hRQygt868Ec7wzcUihnJ3Kc7V0U0HbLJTQHLZjP/ZY9wsNibA+5MGiZNSsYLIGObHpesIDUMC7HMXe5A13Zs6kxTXSxtU0gZSF5Tsr42lCGWwXudggAmnv391pKula0H6f3uGsobQYDczQZG+nxcihiFb6d8UuqD10wjF9WuEtXq/m6kL8D6UPWLs6G5sXVjyBcXBGW4esOWsj3TtmNI5zKZQEOtmqDs176SxCuMfC94oL1Rk1UuONRBtTXwuCZmsMXM1jphB0wtmGUKFtLsWnRFrsmLOvkwAmFoZxVrt2dAvcSV2ODX4fKsaHlyMZVABwBNamkEaHafn5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IQpHO5ax+8oOywQFnYPIhZNfiZIh+EAAUy8qWkHQwbc=;
+ b=myFKiFCR6WBYhaTz4uWeShv0odyw9INbHMBt8wAGAnOwPSFDewaXrJc2qk7ZyA7E2L8QQqHolvhc/AJCyHJvO9Lm/4bfqVo3YupDq28NG9DpXgtkVJc2wAQbYUCf1Y6PrDqBFgc4UEuQiDNmTYUeNeReaGgyLZa6YxHJ/JrTTekOZZc2mpHxb210VXyqXt/H7cZaAHE5U9VS4TMDGpxs0w3AXSHfVPsXV5k/yKBB1PO5pl55YjM6gLCSIhwCz5peuX4TCnmGC8l+V/6A/OZHGgSpEZ2IjLZW5cpBP1isiEq1vhEfO4+9AIdNKElUzlOwx/14zbb382rtqFGiPSzLKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IQpHO5ax+8oOywQFnYPIhZNfiZIh+EAAUy8qWkHQwbc=;
+ b=RYEwiFOcddwTL+et/kh97oeIcYc/xi3+n0FyTN5MYpx0l6UzDht5Gvh81SRyYMC/oUmgIhP1pnnPUGJStq+HLb3SzEZ0oR1cQN8i3KbaN57VIBKT3fcjvU6nrHF5LSN0yOvIj/PdwAc1Uq02nTlB8GmPM6STMUWr06iOXLKDjTlcXXjeZeOKgskSYRLJy/11c/KuUcHRd9JiGgdXtsXAJKZXJjx+XAWgVWLF9kRNxRaE4zL0osr5tx9suYitsS/q9DLYK4oQA7M4ffMV07gWyYlVG3QvkABzQG7iPdjlTLRJEaoxfOUPaff2hq6Xit4jADwEho+/QGuk5hOqcORHgg==
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
+ by OSKPR07MB10469.eurprd07.prod.outlook.com (2603:10a6:e10:97::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.18; Tue, 16 Jun
+ 2026 12:23:11 +0000
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::f708:4bd3:9987:b9e5]) by PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::f708:4bd3:9987:b9e5%4]) with mapi id 15.21.0113.015; Tue, 16 Jun 2026
+ 12:23:11 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: Jakub Kicinski <kuba@kernel.org>, "edumazet@google.com"
+	<edumazet@google.com>, "ncardwell@google.com" <ncardwell@google.com>
+CC: "jolsa@kernel.org" <jolsa@kernel.org>, "yonghong.song@linux.dev"
+	<yonghong.song@linux.dev>, "song@kernel.org" <song@kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"memxor@gmail.com" <memxor@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>,
+	"martin.lau@linux.dev" <martin.lau@linux.dev>, "ast@kernel.org"
+	<ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"andrii@kernel.org" <andrii@kernel.org>, "eddyz87@gmail.com"
+	<eddyz87@gmail.com>, "horms@kernel.org" <horms@kernel.org>,
+	"dsahern@kernel.org" <dsahern@kernel.org>, "bpf@vger.kernel.org"
+	<bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "jhs@mojatatu.com"
+	<jhs@mojatatu.com>, "stephen@networkplumber.org"
+	<stephen@networkplumber.org>, "davem@davemloft.net" <davem@davemloft.net>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
+	<donald.hunter@gmail.com>, "kuniyu@google.com" <kuniyu@google.com>,
+	"ij@kernel.org" <ij@kernel.org>, "Koen De Schepper (Nokia)"
+	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
+	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
+	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
+	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
+	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
+Subject: RE: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with
+ tso_segs() CC callback for TCP Prague
+Thread-Topic: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with
+ tso_segs() CC callback for TCP Prague
+Thread-Index: AQHc+84N6RcutbkfqUyYk6P3JjhYGrZAbY8AgAAHRgCAAKg9wA==
+Date: Tue, 16 Jun 2026 12:23:11 +0000
+Message-ID:
+ <PAXPR07MB7984585F9348BB3F000EB330A3E52@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20260614071756.239686-1-chia-yu.chang@nokia-bell-labs.com>
+	<20260615185102.5e8de52d@kernel.org> <20260615191704.31be22da@kernel.org>
+In-Reply-To: <20260615191704.31be22da@kernel.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|OSKPR07MB10469:EE_
+x-ms-office365-filtering-correlation-id: d81d2116-b6de-4f44-4f74-08decba207ed
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|376014|23010399003|366016|1800799024|56012099006|11063799006|3023799007|4143699003|6133799003|38070700021|22082099003|18002099003;
+x-microsoft-antispam-message-info:
+ PgMOD0iS2IqLl01CXw/Xk+haHmpvgOypPWK3nKpnL1y6XehLG2ounJdidoPtpYL1eQ0WWB6dFexgZE548Zp1nJ6KIzRbr5VEgXNLr3zwfvPbVKfW2hnYMeOgCBsiXugM6OToC4TlgUFXcwyH2zlsOrHdlfkkfITIKnq7zb6Sz9+p1WK9Eh8MDEmevzUrc1wcj9FqnILZLOT6+LYRuSi9d7wP51XzYC1eyYuyGgTxInxiVuCXSu/ceGU6YalbQWdebqkuDiCvRnptzZUZ9MZyx952/+gebpzHTmKIsa5IuvZM0yz912WDgAAqW3DC0g2zI6Arn4Z17nQv36SDUgi0/RD7rs7gXAklYVd0zm5D3HproJFNB+3CCkHW5S+iz3I5zr7iObV64D8OR5G+qoEFwJq8cecsnCGnLoDV4ElrBkrPOhG9P5ix/4NTIgwO4h/y4y2eGk5KLVinTrYX0qb74FHaAhD/gcDB2HhhUi2cf8SFlgkzJr9s81meH0X6LcREj0UZERZ1jc0F0i98kGbEMx0OAhHXRKVk1Lim46Or4csv9UVNWOHZg0Sc+qb1OOURuj+dFNSetdIUNrPp+wy7Uim6FIe9cVJ7Dt1Rze9Y9aNRFVjnlGFTqyQPtwBEUF8B0PN1TABwmW3PgHvtX0I8OepnxloBjvEXY4PhMOqItw/HPojlr2NWtcqM/Z+Ek/BKy4wLQWbbWqN9NIoQTxKtI7rEB3mjV41iToNbekQ/3LD4aLGdIKiIv7/UKlEypBYx
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(23010399003)(366016)(1800799024)(56012099006)(11063799006)(3023799007)(4143699003)(6133799003)(38070700021)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?z3Ajbw8TWwPFcQjMpwkVfC+/PmV76hLslRobNso7aqhC3wM2Lk8E/lTK1j98?=
+ =?us-ascii?Q?1Tuv0ChvlBxwJ+xuW2RJ57VqQbhdf2lZ4LEEd1jtLP4KBRKX4tk0cxFAGs+T?=
+ =?us-ascii?Q?j7yVndnDCTtSIxflTKKrrLjCQB61t6MALrkHA3sQ04/SLuJw62+PvYUo448i?=
+ =?us-ascii?Q?DM7o+EwQxge1v/WgNsnqJWcVLG5QfU8Xyj2VBEIglofCMXcR4cNLxuGTiFLW?=
+ =?us-ascii?Q?w4OZDf9gEkwdOQIhne8F5UesvIDKiCBEluZFhQnALYxmYjL2fLSNv9Jdv/31?=
+ =?us-ascii?Q?moTmk6Z1Hdm9v+Vqmbn+XnF9PapbAU490ezrYNH/mcvpU23yXKgCf8bN3QEV?=
+ =?us-ascii?Q?HKybauI6M75xI2FX9j70CBHl30+EbrNLzvVvr0cm+b2qjZ6P4V4sglYCDPyu?=
+ =?us-ascii?Q?45vhV/z03IeEdSBfud0frGpw9P0IcBGJr/RYoi78WcMyGhO2Svj8ioLkNEz/?=
+ =?us-ascii?Q?UuQO40jptGAKqBnbnJPOkdsDBubrcl2WfrdvnUKelH7eJIgRdBS80s2+CoPB?=
+ =?us-ascii?Q?Qkvx9HbekVMLZXg+F6zH4CnyyF6zAUyONqSDX9xA9rfb3/nJ4IFKeB1xkSFu?=
+ =?us-ascii?Q?DN7V0hXE9D1mZNE/mOp+0jckxkzuRz8LtnnNorSiNABwC0dW7HuJDt4CV8uE?=
+ =?us-ascii?Q?gMflSEkgTENetQG3sODrQuS43mHnB4c70qj/ltFe50Yo+Tp0D3GYqneu/jWY?=
+ =?us-ascii?Q?EWGt5E3OKm0x6hVsrMK5SJcDCO4YBaWauJWo3dMGWuqctFQm2QiaKm6+RrX0?=
+ =?us-ascii?Q?0uC72yOwjMGdzcJwx79wpni78W4eLnMTaeGmLCdFpoNbg7i1Alp7jjc7Sy4t?=
+ =?us-ascii?Q?rsRFdykGa812WZv935w1rIDKqRrnGeYe+v7DQYYmG54LQY6Kjayrv2cOdjnc?=
+ =?us-ascii?Q?qX8VznTL2Ep+166TNlsDH0wElAa20Jno8lL5lqx3hv0U1KpU/PF6qSHvYAna?=
+ =?us-ascii?Q?sA6dNmin6cK7fzf4Clnf8rzB5sR+mPRhtp2gK+GrqNsxQmmFmajJOJhGX2tz?=
+ =?us-ascii?Q?F9OIl7s2VgWGu4uaYB1xpuglCISf5FJ/xlMTvhqAq8dc3c9bBmzvaMFZksEH?=
+ =?us-ascii?Q?/K8YiZGjZmD9ey1Tbf5lCry9uSQR8svpCH/vpyk6lbssBpwUY2XbX4GbNusC?=
+ =?us-ascii?Q?SLLT+PQzR5iwRoOlATnTc3XbsahinWzW7iTHC7pLQbA0OprH30AI0ggqqY3z?=
+ =?us-ascii?Q?ExE2ywRGHZPiNrvl8XDbZuz8rvanCHZS7W2SXHiWSyn8YXDVvzARZJ6li7fa?=
+ =?us-ascii?Q?QD7Nee6eYEJxWeIL0RUJx+T4NQIFxqCiPUeFrQunCzUQS5IEI9+7CIL0KdHn?=
+ =?us-ascii?Q?Rts44KXblpJF8Wj4I+TOeBfA/h/Azy6khvzMSOeIxITLKHsZBR730DqXnBt3?=
+ =?us-ascii?Q?zKjKVenWqE1f319Sx9NvyEEfybdIVIFqhcStCxZH/mqAbukNWWz0w/in20wI?=
+ =?us-ascii?Q?Xt0R3bXOyrZj3cdJF5ZsbeO0b1EitnyxtRD0f/zAg3mGPiPVTSnfy6WbFCov?=
+ =?us-ascii?Q?T0YwOxAGy+KptYJ3VWAOvexeT8uHaRqaa41w0iMEAfO/0TBJWcxA0Y4Jp66B?=
+ =?us-ascii?Q?2w4KrksZE2sZr/kGJSDGvn+B7Mz875BkleP+nm4pcy0unoRNZgEmWCWj0V6x?=
+ =?us-ascii?Q?SkzyXx9+cV/TOkb87OVQvVzu1SUtCVcwKbM0zBGialh41y0t/pynRRJre2r8?=
+ =?us-ascii?Q?sl+WmYRfWWcWI95JlQe8LqJ1labJChOX0wdFNS3jz3jsTLJz4gJnICNKfKzu?=
+ =?us-ascii?Q?nDR59E1hbz2vPHP1a1E9j/Y6DHyZ/Hc=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 0/4] kunit: Add support for suppressing warning
- backtraces
-To: Albert Esteve <aesteve@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
- Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Andrew Morton <akpm@linux-foundation.org>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- dri-devel@lists.freedesktop.org, workflows@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org,
- peterz@infradead.org, Alessandro Carminati <acarmina@redhat.com>,
- Guenter Roeck <linux@roeck-us.net>, Kees Cook <kees@kernel.org>,
- Linux Kernel Functional Testing <lkft@linaro.org>,
- =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
- Dan Carpenter <error27@gmail.com>, Simona Vetter <simona.vetter@ffwll.ch>
-References: <20260515-kunit_add_support-v13-0-18ee42f96e7b@redhat.com>
- <CADSE00+typ3Zi5Vf0Z276+e0G7PuS7mt7oA9h5awBu3YgYKw0g@mail.gmail.com>
-From: David Gow <david@davidgow.net>
-Content-Language: fr
-In-Reply-To: <CADSE00+typ3Zi5Vf0Z276+e0G7PuS7mt7oA9h5awBu3YgYKw0g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d81d2116-b6de-4f44-4f74-08decba207ed
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2026 12:23:11.1204
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yYUWn/9w515Nr51eZXSxbbbciO+v6BaDRCB30R83SFC4PYmJVBS5Dv45PJuVipYjK9COfMij/WrmYJHhN4FpzespZ5JvhIpevykSPJlwdLn/rQ+YnDer2BbcxsYRHUrI
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSKPR07MB10469
 
-Le 16/06/2026 à 7:44 PM, Albert Esteve a écrit :
-> On Fri, May 15, 2026 at 2:29 PM Albert Esteve <aesteve@redhat.com> wrote:
->>
->> Some unit tests intentionally trigger warning backtraces by passing bad
->> parameters to kernel API functions. Such unit tests typically check the
->> return value from such calls, not the existence of the warning backtrace.
->>
->> Such intentionally generated warning backtraces are neither desirable
->> nor useful for a number of reasons:
->> - They can result in overlooked real problems.
->> - A warning that suddenly starts to show up in unit tests needs to be
->>   investigated and has to be marked to be ignored, for example by
->>   adjusting filter scripts. Such filters are ad hoc because there is
->>   no real standard format for warnings. On top of that, such filter
->>   scripts would require constant maintenance.
->>
->> One option to address the problem would be to add messages such as
->> "expected warning backtraces start/end here" to the kernel log.
->> However, that would again require filter scripts, might result in
->> missing real problematic warning backtraces triggered while the test
->> is running, and the irrelevant backtrace(s) would still clog the
->> kernel log.
->>
->> Solve the problem by providing a means to suppress warning backtraces
->> originating from the current kthread while executing test code.
->> Since each KUnit test runs in its own kthread, this effectively scopes
->> suppression to the test that enabled it, without requiring any
->> architecture-specific code.
->>
->> Overview:
->> Patch#1 Introduces the suppression infrastructure integrated into
->>         KUnit's hook mechanism.
->> Patch#2 Adds selftests to validate the functionality.
->> Patch#3 Demonstrates real-world usage in the DRM subsystem.
->> Patch#4 Documents the new API and usage guidelines.
->>
->> Design Notes:
->> Suppression is integrated into the existing KUnit hooks infrastructure,
->> reusing the kunit_running static branch for zero overhead
->> when no tests are running. The implementation lives entirely in the
->> kunit module; only a static-inline wrapper and a function pointer
->> slot are added to built-in code.
->>
->> Suppression is checked at three points in the warning path:
->> - In `warn_slowpath_fmt()` (kernel/panic.c), for architectures without
->>   __WARN_FLAGS. The check runs before any output, fully suppressing
->>   both message and backtrace.
->> - In `__warn_printk()` (kernel/panic.c), for architectures that define
->>   __WARN_FLAGS but not their own __WARN_printf (arm64, loongarch,
->>   parisc, powerpc, riscv, sh). The check suppresses the warning message
->>   text that is printed before the trap enters __report_bug().
->> - In `__report_bug()` (lib/bug.c), for architectures that define
->>   __WARN_FLAGS. The check runs before `__warn()` is called, suppressing
->>   the backtrace and stack dump.
->>
->> To avoid double-counting on architectures where both `__warn_printk()`
->> and `__report_bug()` run for the same warning, the hook takes a bool
->> parameter: true to increment the suppression counter, false to suppress
->> without counting.
->>
->> The suppression state is dynamically allocated via kunit_kzalloc() and
->> tied to the KUnit test lifecycle via `kunit_add_action()`, ensuring
->> automatic cleanup at test exit. Writer-side access to the global
->> suppression list is serialized with a spinlock; readers use RCU.
->>
->> Two API forms are provided:
->> - kunit_warning_suppress(test) { ... }: scoped blocks with automatic
->>   cleanup. The suppression handle is not accessible outside the block,
->>   so warning counts (if needed) must be checked inside. Multiple
->>   sequential suppression blocks are allowed.
->> - kunit_start/end_suppress_warning(test): direct functions that return
->>   an explicit handle. Use when the handle needs to be retained, or passed
->>   across helpers. Multiple sequential suppression blocks are allowed.
->>
->> This series is based on the RFC patch and subsequent discussion at
->> https://patchwork.kernel.org/project/linux-kselftest/patch/02546e59-1afe-4b08-ba81-d94f3b691c9a@moroto.mountain/
->> and offers a more comprehensive solution of the problem discussed there.
->>
->> Changes since RFC:
->> - Introduced CONFIG_KUNIT_SUPPRESS_BACKTRACE
->> - Minor cleanups and bug fixes
->> - Added support for all affected architectures
->> - Added support for counting suppressed warnings
->> - Added unit tests using those counters
->> - Added patch to suppress warning backtraces in dev_addr_lists tests
->>
->> Changes since v1:
->> - Rebased to v6.9-rc1
->> - Added Tested-by:, Acked-by:, and Reviewed-by: tags
->>   [I retained those tags since there have been no functional changes]
->> - Introduced KUNIT_SUPPRESS_BACKTRACE configuration option, enabled by
->>   default.
->>
->> Changes since v2:
->> - Rebased to v6.9-rc2
->> - Added comments to drm warning suppression explaining why it is needed.
->> - Added patch to move conditional code in arch/sh/include/asm/bug.h
->>   to avoid kerneldoc warning
->> - Added architecture maintainers to Cc: for architecture specific patches
->> - No functional changes
->>
->> Changes since v3:
->> - Rebased to v6.14-rc6
->> - Dropped net: "kunit: Suppress lock warning noise at end of dev_addr_lists tests"
->>   since 3db3b62955cd6d73afde05a17d7e8e106695c3b9
->> - Added __kunit_ and KUNIT_ prefixes.
->> - Tested on interessed architectures.
->>
->> Changes since v4:
->> - Rebased to v6.15-rc7
->> - Dropped all code in __report_bug()
->> - Moved all checks in WARN*() macros.
->> - Dropped all architecture specific code.
->> - Made __kunit_is_suppressed_warning nice to noinstr functions.
->>
->> Changes since v5:
->> - Rebased to v7.0-rc3
->> - Added RCU protection for the suppressed warnings list.
->> - Added static key and branching optimization.
->> - Removed custom `strcmp` implementation and reworked
->>   __kunit_is_suppressed_warning() entrypoint function.
->>
->> Changes since v6:
->> - Moved suppression checks from WARN*() macros to warn_slowpath_fmt()
->>   and __report_bug().
->> - Replaced stack-allocated suppression struct with kunit_kzalloc() heap
->>   allocation tied to the KUnit test lifecycle.
->> - Changed suppression strategy from function-name matching to task-scoped:
->>   all warnings on the current task are suppressed between START and END,
->>   rather than only warnings originating from a specific named function.
->> - Simplified macro API: removed KUNIT_DECLARE_SUPPRESSED_WARNING(),
->>   the START macro now takes (test) and handles allocation internally.
->> - Removed static key and branching optiomization, as by the time it
->>   was executed, callers are already in warn slowpaths.
->> - Link to v6: https://lore.kernel.org/r/20260317-kunit_add_support-v6-0-dd22aeb3fe5d@redhat.com
->>
->> Changes since v7:
->> - Integrated suppression into existing KUnit hooks infrastructure
->> - Removed CONFIG_KUNIT_SUPPRESS_BACKTRACE
->> - Added suppression check in __warn_printk()
->> - Added spinlock for writer-side RCU protection
->> - Replaced explicit rcu_read_lock/unlock with guard(rcu)()
->> - Added scoped API (kunit_warning_suppress) using __cleanup attribute
->> - Updated DRM patch to use scoped API
->> - Expanded self-tests: incremental counting, cross-kthread isolation
->> - Rewrote documentation covering all three API forms with examples
->> - Link to v7: https://lore.kernel.org/r/20260420-kunit_add_support-v7-0-e8bc6e0f70de@redhat.com
->>
->> Changes since v8:
->> - Rebased to v7.1-rc2
->> - Remove KUNIT_START/END_SUPPRESSED_WARNING() macros
->> - Add KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT checks to drm tests
->> - Link to v8: https://lore.kernel.org/r/20260504-kunit_add_support-v8-0-3e5957cdd235@redhat.com
->>
->> Changes since v9:
->> - Fix silent false-pass when kunit_start_suppress_warning() returns NULL
->> - Fix RCU lockdep splat for kunit_is_suppressed_warning() calls
->> - Move disable_trace_on_warning() in __report_bug()
->> - Make suppress counter atomic
->> - Mark helper warn functions in selftest as noinline
->> - Add kunit_skip() for CONFIG_BUG=n in selftests
->> - Fix potentially uninitialized data.was_active in kthread seltest
->> - Add kthread_stop() in kthread selftest early exit
->> - Initialize scaling_factor to INT_MIN in DRM scaling tests
->> - Add include for bool in test-bug.h to fix CONFIG_KUNIT=n case
->> - Link to v9: https://lore.kernel.org/r/20260508-kunit_add_support-v9-0-99df7aa880f6@redhat.com
->>
->> Changes since v10:
->> - Remove synchronize_rcu() to avoid sleeping in atomic context
->> - Pin task_struct refcount to prevent ABA false-positive matches
->> - Loop in suppression selftest to prevent use-after-free on kthread exit
->> - Skip DRM rect tests on CONFIG_BUG=n
->> - Link to v10: https://lore.kernel.org/r/20260513-kunit_add_support-v10-0-e379d206c8cd@redhat.com
->>
->> Changes since v11:
->> - Use call_rcu() to defer free without blocking
->> - Remove #ifdef CONFIG_KUNIT guard in lib/bug.c
->> - Remove stale config checks from selftest
->> - Replace skip on DRM rect tests with conditional expectation
->> - Link to v11: https://lore.kernel.org/r/20260514-kunit_add_support-v11-0-b36a530a6d8f@redhat.com
->>
->> Changes since v12:
->> - Reverted to the v9 synchronize_rcu() approach
->> - Add in_task() check at the top of __kunit_is_suppressed_warning_impl()
->> - Link to v12: https://lore.kernel.org/r/20260515-kunit_add_support-v12-0-a216dc228be8@redhat.com
-> 
-> Hi all,
-> 
-> I am not sure if there is a decision to merge this series or if any
-> work remains to be done.
-> 
-> I reckon I sent a few versions back-to-back last time as I was
-> struggling with Sashiko. However, there are no significant changes,
-> the core strategy remains unchanged, involving only the addition of
-> safety checks and the removal of some redundancies to satisfy the AI.
-> I am just clarifying in case the last versions/respins were unclear. I
-> tried running AI reviews locally but Sashiko always found more issues
-> than my local model could.
-> 
-The latest version was fine. It's just landed for 7.2:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=42eb3a5ef6bc56192bf450c79a3f274e081f8131
+git send-email --to=3D'jolsa@kernel.org' --to=3D'yonghong.song@linux.dev' -=
+-to=3D'song@kernel.org' --to=3D'linux-kselftest@vger.kernel.org' --to=3D'me=
+mxor@gmail.com' --to=3D'shuah@kernel.org' --to=3D'martin.lau@linux.dev' --t=
+o=3D'ast@kernel.org' --to=3D'daniel@iogearbox.net' --to=3D'andrii@kernel.or=
+g' --to=3D'eddyz87@gmail.com' --to=3D'horms@kernel.org' --to=3D'dsahern@ker=
+nel.org' --to=3D'bpf@vger.kernel.org' --to=3D'netdev@vger.kernel.org' --to=
+=3D'pabeni@redhat.com' --to=3D'jhs@mojatatu.com' --to=3D'kuba@kernel.org' -=
+-to=3D'stephen@networkplumber.org' --to=3D'davem@davemloft.net' --to=3D'edu=
+mazet@google.com' --to=3D'andrew+netdev@lunn.ch' --to=3D'donald.hunter@gmai=
+l.com' --to=3D'kuniyu@google.com' --to=3D'ij@kernel.org' --to=3D'ncardwell@=
+google.com' --to=3D'koen.de_schepper@nokia-bell-labs.com' --to=3D'g.white@c=
+ablelabs.com' --to=3D'ingemar.s.johansson@ericsson.com' --to=3D'mirja.kuehl=
+ewind@ericsson.com' --to=3D'cheshire@apple.com' --to=3D'rs.ietf@gmx.at' --t=
+o=3D'Jason_Livingood@comcast.com' --to=3D'vidhi_goel@apple.com' ~/L4S_patch=
+es_20260613/linux_net_next_prague_series0/*.patch --from=3D'chia-yu.chang@n=
+okia-bell-labs.com' --smtp-server=3D'mailrelay.int.nokia.com' --smtp-server=
+-port=3D25
 
-Thanks for all of your work,
--- David
+
+> -----Original Message-----
+> From: Jakub Kicinski <kuba@kernel.org>=20
+> Sent: Tuesday, June 16, 2026 4:17 AM
+> To: edumazet@google.com; ncardwell@google.com
+> Cc: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>; jolsa@kern=
+el.org; yonghong.song@linux.dev; song@kernel.org; linux-kselftest@vger.kern=
+el.org; memxor@gmail.com; shuah@kernel.org; martin.lau@linux.dev; ast@kerne=
+l.org; daniel@iogearbox.net; andrii@kernel.org; eddyz87@gmail.com; horms@ke=
+rnel.org; dsahern@kernel.org; bpf@vger.kernel.org; netdev@vger.kernel.org; =
+pabeni@redhat.com; jhs@mojatatu.com; stephen@networkplumber.org; davem@dave=
+mloft.net; andrew+netdev@lunn.ch; donald.hunter@gmail.com; kuniyu@google.co=
+m; ij@kernel.org; Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-lab=
+s.com>; g.white@cablelabs.com; ingemar.s.johansson@ericsson.com; mirja.kueh=
+lewind@ericsson.com; cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@co=
+mcast.com; vidhi_goel@apple.com
+> Subject: Re: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with tso=
+_segs() CC callback for TCP Prague
+>=20
+>=20
+> CAUTION: This is an external email. Please be very careful when clicking =
+links or opening attachments. See the URL nok.it/ext for additional informa=
+tion.
+>=20
+>=20
+>=20
+> On Mon, 15 Jun 2026 18:51:02 -0700 Jakub Kicinski wrote:
+> > On Sun, 14 Jun 2026 09:17:56 +0200 chia-yu.chang@nokia-bell-labs.com
+> > wrote:
+> > > This patch replaces existing min_tso_segs() with tso_segs() CC=20
+> > > callbak for CC algorithm to provides explicit tso segment number of=20
+> > > each data burst and overrides tcp_tso_autosize().
+> > >
+> > > No functional change.
+> >
+> > Eric, Neal, looks good?
+> >
+> > The min rtt thing in tcp_tso_autosize() helps a bit but if the sender=20
+> > gets congested for a longer stretch min_rtts on new connections are=20
+> > high and we're back to sending small TSO, keeping the sender overloaded=
+.
+> > Which is to say - I _hope_ this also solves some of Meta's problems :)
+>=20
+> Ugh, I didn't see the Sashiko report, it's only CCed to the author and bp=
+f@, not to netdev :/
+>=20
+> The zero-check sounds legit. Let's revisit this after the merge window.
+
+Thanks for the comment, I will take action after the merge window.
+
+And, please correct me if I am wrong, the next eligible submission is expec=
+ted from 30-June, right?
+Thanks!
+
+Chia-Yu
