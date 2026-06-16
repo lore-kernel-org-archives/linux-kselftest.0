@@ -1,117 +1,85 @@
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B618C3D891B
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 06:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670C23D9DAA;
+	Tue, 16 Jun 2026 06:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781589996; cv=none; b=RBjQL6sTWzFfDChT3keZTPolh3O7fxfG4XC6UoBn1zgY+jkKHO640mxFTKLtMvgRVEqag5e7dY3R2vEis5jW8Mh6v7FxM/Ny2pUh/2RmaRlXLIt61fisWzA7haCWcao/uPN2kFXmB1B4O2Kp7dUlNRf45QGHtGvGfnRxDDdPHz8=
+	t=1781590767; cv=none; b=GyYO7kCWBK594soPQcnpWAFiLYS5jcVnEro+okY5Xu2dHz5uWV+Ijl7Gj2vetjw5tVpfraJfClpt3PNLVY2JmeXnmJ6Z7RuIbhIg3rmDCRi4gJqZUFOWpzUrNcNvmIZcgoTsNhsQCUcjckbGehoaPYPYLcjjNtFHBccO2Bm8/vU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781589996; c=relaxed/simple;
-	bh=mePsKDgnT7KOddPsWmdqbXoE1a6nKcnpxg0gh2nBVl0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C1w6pXht/UdDswF/FktjG9ETfRsJKlFuD3O4nOkp/no3aOusJpjVyKtv+HdZNVpHkOe8pMKrkchNcw02keKkCSEoV24olcw4RB+i/I1RBabquJTHeV1k0jA6uT5fncqHSl7mmq2feTwikZUfu28Bkr9rOE9lsCZrOvPc6SR4QZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UsRXjzhh; arc=none smtp.client-ip=74.125.82.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781590767; c=relaxed/simple;
+	bh=Vo2k0LfQVac0ODGfCOErn06Hel+nUpmTzPJj2QnKDmg=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=uC2307kr76EarK6VvMWyd/igE7m16VX68cDQsgUQZRyoKiJi37uw/Tn1X4nrcOzEgwBjJQIFYIhx+GX3aDrwT/QEwB0fAWYQOeGyEMEDB8JTQB8o362ggWVvLG0t+3NUnGb1cq65EH2x19OleY/86SiAGAyIrvv4Ejiyd38iYCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=htjfmaR3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UsRXjzhh"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-137ec563a95so4523572c88.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 23:06:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781589995; x=1782194795; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IYT2HIZ/TljEaPuQNyUPwKuwE+O4A3F++I0Be4tA0UM=;
-        b=UsRXjzhh/OPRjISmvTo/9WfMbQdKEGrdt3absXsOCVkL+IU9aoHRe/USl0dQD1RCiW
-         AhYg/uwMkg+blc9s/8JI3jwvDyfgh3zV9SraUR/NwCgPUNdumH5nJevwgpKBDdus3Qt7
-         jAGQ+9rUQCBx641pyaBNpkFtqwDZlL+XXje9JET9IW35adAKfQwhGxsdldxUbUHF+X2k
-         QayaiDrJdCF4/+lLViZSpatRRNy+T2sLPpLG+1tZq2vq3zSvZz5mWCvo8ByHNvvho3F/
-         BeNSb3eEfXLL64YEANpULqntGFHZvUaTB0hVCCAJxnRYaYZB4FIooebNzbQSdKlqg1q9
-         P3jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781589995; x=1782194795;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IYT2HIZ/TljEaPuQNyUPwKuwE+O4A3F++I0Be4tA0UM=;
-        b=aRVvpx0e7AqxJVZCqoRaknMc8V9bh9YJbRnQMOXtKQ+J2TYuajKIYBWF/3ikSgFGDU
-         DZfcT7xXKfj3OCZ4KNcu9TsLtJq+jPsjH7gZuXwn0Woah9ub1T48WPKB4ZT2AA/KrZyM
-         +ZNraNekpvKHQaf9g0Q1ntrIx3tfU+X9hcRJciZFU6k8wswoVdybJGSgrM8T7P6RfXQW
-         EugRmrjqDmzHWOX0cQx8Bkzb3pe6OgtmEbizZHU27vQBxq/r91us+P1tB9dGYLdVLW1J
-         x6dIUosHIfuizWZsRiwZXTsCL9oYnRCpmGRarkX7vJUgIo+XKuamW3+UZuJh2usxFn8M
-         nMGw==
-X-Forwarded-Encrypted: i=1; AFNElJ9w9peQ3b0L+ULY1ZX8aHIpslLIepeHYUm8vS1dexW0BwNNaIAw6sYLsHCSpUzNea/N3aLRmOD7+BnbtjGPUzY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEh5FA6YLnyJP2E3F5JV74N6qoJ6WfC4zweK7UBv5XpaJPcsG/
-	9axM56g5FcStUma5N+bfF371koKjkquKumBlmMyMZ3/NdTFkZQ5tgini
-X-Gm-Gg: Acq92OHuDE91xpxf9IDczF9W6QRZ7w+sytA5Sl/ca7SfJm7y05Tf656ZFvBxgq45lti
-	RV6egNjRzSkMXiv3XYz4Ej/lhxdabqOp88zY9PLb9nTyvCc9ycBbRkwuBvrjrza9jHHRJPgu7qa
-	ZBX0ihnywcFdQucrVloqT4oSyQSHEmeRWjX32BZo3+Koz/nYhieHPU4wMLczF75KuYg6yZjXtAW
-	y09lpPKKg/ObG3iJ4m5nnD6EVsKdqhxS+AHGyIblkhaIgkjbZcKKoAakSHyZUkKcX9wF5keuhmY
-	9VQzNH7MxSVDXQCUbWJOe61xvtm8P5pU833tVbAgTmXY8JEL7RAwxczOkOpHq64Y2DG4JNYnf1G
-	V2Zu+0KunShO0uqQp7Ag1ORpVkq0+Y1dkOtLtyvIxOhR2jenQ99srV/Ns5DXQq3Boi3UJA4OSgv
-	8XbrLeZ6g7f/0=
-X-Received: by 2002:a05:7022:305:b0:136:b370:64de with SMTP id a92af1059eb24-1387901e454mr5481988c88.32.1781589994812;
-        Mon, 15 Jun 2026 23:06:34 -0700 (PDT)
-Received: from blinky ([2601:647:6700:64d0::92d1])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384b96d6c4sm12930812c88.9.2026.06.15.23.06.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 23:06:33 -0700 (PDT)
-Date: Mon, 15 Jun 2026 23:06:30 -0700
-From: Charlie Jenkins <thecharlesjenkins@gmail.com>
-To: Nam Cao <namcao@linutronix.de>
-Cc: Charlie Jenkins via B4 Relay <devnull+thecharlesjenkins.gmail.com@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
-	Atish Patra <atish.patra@linux.dev>,
-	Conor Dooley <conor@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 04/16] riscv: kprobes: Use generated instruction headers
-Message-ID: <ajDn5oINgUzKhELv@blinky>
-References: <20260407-riscv_insn_table-v1-0-54b4736a1e77@gmail.com>
- <20260407-riscv_insn_table-v1-4-54b4736a1e77@gmail.com>
- <87mrx1eh8c.fsf@yellow.woof>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="htjfmaR3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BD541F000E9;
+	Tue, 16 Jun 2026 06:19:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781590766;
+	bh=z6vwvm9C81RodtkTn+jwD/0+BlSWKsFhyWVVK8Ua9uc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=htjfmaR3GZyzSLoVBiZAF9YwFzYoSSh45+Ne0b//4YHYG8xQzoqxL6mr8hlwhmyHJ
+	 SSSmX09DUawlYf7hE76Udk1OfYM7r4XIKZmW7m4JhMeRvCOMqu8DJAne/1uEPFIdtT
+	 TEHvq8A3ysieu0KgPuYGtWdc5VTQRFerkjDpLzLR9fRV5pePnxlsrvxHxq0AcxrZLF
+	 w4NRKzcKZYdIm0HkVYQzj/Ul1Zm6P+BmGqUxlrrzUVvmMqWmtQBURDZSk4itcKqoXh
+	 K6Hfx9KNy7WhjiHddj+hcTS2IWscQ2aIpRBYv/bapCvAV/L9MO8dbDlc1ai0tLNnSB
+	 0gqHAdzAMArlg==
+Content-Type: multipart/mixed; boundary="===============5462730251977183201=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mrx1eh8c.fsf@yellow.woof>
+Message-Id: <b1f9eebb7c2252b81dee09b0dc0d488e44c22d1d31f8fe51c803e199f2c87aaa@mail.kernel.org>
+In-Reply-To: <c4c898dd23181b676ebf6b6b4d9c54f51bb69c75.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
+References: <c4c898dd23181b676ebf6b6b4d9c54f51bb69c75.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover small conntrack opts error writes
+From: bot+bpf-ci@kernel.org
+To: chenyy23@mails.tsinghua.edu.cn,bpf@vger.kernel.org,netfilter-devel@vger.kernel.org
+Cc: chenyy23@mails.tsinghua.edu.cn,pablo@netfilter.org,fw@strlen.de,phil@nwl.cc,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,kartikey406@gmail.com,coreteam@netfilter.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 16 Jun 2026 06:19:25 +0000 (UTC)
 
-On Thu, Jun 11, 2026 at 08:14:27AM +0200, Nam Cao wrote:
-> Charlie Jenkins via B4 Relay
-> <devnull+thecharlesjenkins.gmail.com@kernel.org> writes:
-> >  bool __kprobes simulate_c_jr(u32 opcode, unsigned long addr, struct pt_regs *regs)
-> >  {
-> > -	return simulate_c_jr_jalr(opcode, addr, regs, false);
-> > +	unsigned long next_addr;
-> > +	unsigned long *regs_ptr = (unsigned long *)regs;
-> > +
-> > +	next_addr = regs_ptr[riscv_insn_c_jr_extract_xs1(opcode)];
-> > +	instruction_pointer_set(regs, next_addr);
-> > +
-> > +	regs->ra = addr + 2;
-> 
-> c.jr does not change ra.
+--===============5462730251977183201==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Looks like my tests need some work :/
+> selftests/bpf: Cover small conntrack opts error writes
+>
+> Add a conntrack kfunc regression check for opts__sz values that do not
+> cover opts->error. The BPF program initializes opts->error with a guard
+> value, calls the lookup and allocation kfuncs with opts__sz set to
+> sizeof(opts->netns_id), and verifies that the guard is still intact
+> after the kfunc returns NULL.
+>
+> Without the conntrack wrapper guard, the kfunc error path overwrites
+> that guard with -EINVAL even though the verifier checked only the first
+> four bytes of the options object.
+>
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 
-> 
-> > +	return true;
-> >  }
-> 
-> We have CONFIG_RISCV_KPROBES_KUNIT now, please try that.
+This is a regression test for the out-of-bounds opts->error write that
+is fixed in the prior series commit 86b813c37ee5 ("bpf: Guard conntrack
+opts error writes"), but it carries no Fixes: tags.
 
-I can try to extend those to cover more.
+A regression test usually carries the same Fixes: tags as the fix it
+covers, so it gets backported to stable alongside that fix. The two new
+test cases map onto the two commits that introduced the kfuncs: the
+small-opts lookup case covers the lookup kfunc and the small-opts alloc
+case covers the alloc kfunc.
 
-- Charlie
+Should this include:
 
-> 
-> Nam
+  Fixes: b4c2b9593a1c ("net/netfilter: Add unstable CT lookup helpers for XDP and TC-BPF")
+  Fixes: d7e79c97c00c ("net: netfilter: Add kfuncs to allocate and insert CT")
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27597459087
+--===============5462730251977183201==--
