@@ -1,53 +1,53 @@
 Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021110.outbound.protection.outlook.com [52.101.100.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9414E441027;
-	Tue, 16 Jun 2026 15:24:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657FB4418D7;
+	Tue, 16 Jun 2026 15:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.100.110
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781623501; cv=fail; b=HlcbWwsyfvY1vt/ap64RtN06peJPZTBT6AhPbdzGSXKen/A2mNh1W0YSvtKJp8MSMn7U8rz/TIIZPTjv89zGeVr5upGYKba23VuOJh3+Vd92qzldu9nTFQvsyzbLJjwGbtCVGwjK3LtmKpo859gaDls2uDwy5E+d4FcR5oD5oFg=
+	t=1781623502; cv=fail; b=sDI4wy6Ki3diKPanv/mHP4LKXPIjYhCva4tln/4V4VKwzoFmGeycmgYL+kViqrrWYcESu4qlkDAtVpNd27wb0HAcQpWgoRWpTWPDDcRznBp2NKCz1cRxZG3oimy9sA/Oq7j4IgLj/xGg7vMY/JmSf7AX1V0SKyL8a6bl2ZLMpeU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781623501; c=relaxed/simple;
-	bh=2wOsMrPBVbJf5kmVvjapCV0pHbqdCz8omftAJkBQv+s=;
+	s=arc-20240116; t=1781623502; c=relaxed/simple;
+	bh=fOKF66hkC7dPGQr9prIUflTkDI6yNvAOwIAL/mCKPjA=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=UX/94vywY8FeaXxuCZpTB/sPnpqCma5G3Sk9k7Zc1AjSPoQODuIgzgxCOhS4BkLmUlFNwYArMQILSL44UNAbbqLaxCnBL0q08DnKerngerXmB1JkLb2ML8wdCZSHiihXrNuquypUSJNrnKxUFhEPGPXZ/gDW99bhLvUZCpzyQsg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=C2xi6qM6; arc=fail smtp.client-ip=52.101.100.110
+	 To:Cc:MIME-Version; b=m90C/72IaQWFDA7R0NAMfyg+Ir25TFio6YdA7G+uvRX8UFJ5gWEySjoZEOWh4DQuDUJslrlVNfvkVEipK1XuEDdgwkeiG7atl7x5cIYmbXgQT4KR5nOjh/p7p4d4uvUN//mwiy+QCuV5cVfUBMBJAdBN5lkBoGB2e48oP5EoZNo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=bgl2GOxg; arc=fail smtp.client-ip=52.101.100.110
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="C2xi6qM6"
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="bgl2GOxg"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PEhU8VfIewUuvCpmrpH8ONRwz2hKIOfzA7r6LxJyW3Lvb/YHtwyYtAmCi/sTkocTmB7QeY37bzn8eVxAJysuvcaxjYhXYSX9q/VXftOIBsRr38VkLGi342HznONxlZhqwL8WRGvUZJQIGdRPGRkIgmrMYsFYv/8qKE7AcVxOM5sp2OTKX/XpP5vCOV0uByINIj8UHpJfViQE1ZmpZYRBco1ojvBPEifzv/kKg3PD0GrVz7W2PwzUrfVyRm2nGBdk1n5Lmeo3rixr6JyckDNMxOEDhfC/Vs96XCAmQVqfa5iMLEQZOT033GkjqDUoQJELvOt/oFdkNKDDonC1AkemMw==
+ b=J28yVR3ll6w94gkn6ORDamwRqXO7nNlw8B2rsdUtCPASQMyDrtDDTpd/d7aZME/Qp6NR9gwLxh1gd4TjNMrmCbmu4NuHPLM7LTQ6mAprgf4eSY3ozzvDJN6gHrbjUh1I4OKCXPZvFnkY7kZotQ58B0Cs/rt9rEFtJFp4FCXfdZtS7uO9wDTqm/U/lACtpPeX+QBTBMcOApMVzbHKLl2gky2FRA8oCgKhWbQm7UiQgoHH5Spaa/rwKdz5LTAQYknEawDjgE7Jv2FYwgQJBO4jYCvKijaSE0CuGcSFsC3/WzU4JMYmzgrd9fptNqU8YdLKW3779SPdV9/vTwVInCD6uQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ELLxeIBaknb+40qY2sFf0+QlUZa611oyvyVir4kHb+Y=;
- b=gcYrwqVD8cFkIAft0kJ17RgLwt0b44J+4sL09jU6ytJX0eAa81vgSHrSNToHyVn5c5ihq7R/GqPL/o1LAP/f0XkcSVdHPqK3K7904qDQv0Z3XIwXvw/nu/MMmlyjGW371HmHGC3qfkgJGCcne5EcpyrO9cLdBC5KJLCxwwarSgERhaRYTXd1fBBvrl/aoJ4T3powHT8ChUeapcN/aUB4wMGg0DXb2hoP1UvYDiDjUfUDHYV3pvHxHDy0D82dkAomNln1X92C+hOzyQKXLCputvaDv9jbQkD9ISofrxva6aB9PuOupIrPqcAjHjoB8E8lVvKDMm66QaYgyIvWnbboeQ==
+ bh=RrWiom7sntD8aRjQVEyi+djUUeTd1CamYfJer6/YzDI=;
+ b=hR/DEjTXuHeUOUsJ7I6MGoGID/GAs16H0R8ZwkKSwwjee/T1JXiVEez8aAPrbSwmmtu6BoCiGJXf4ENiHInDCJkTdRYdOpXxQrqeMoOO1L/r7CaFZSsQfzFQ1LXODqrUPA7TzDLN9CYjKSLUS8bFbWEJkxjD9t6uSe059A0HDepNVy8MmL7ZuEolx4KRCj91c0u6V9w/jk5943ue2xnVvuxdGliflXSlHG/ir6Xcj6kc+TA8mt7a1iZt4WlMxitVNGwXkrEsCbTL3Z60tb0QlH/w0dPrAW5LJEem7rPLLzbhvg+07ApyAqmwNCKa5AxFPcE7At5zyA+Fi63saY+jDg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
  dkim=pass header.d=garyguo.net; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ELLxeIBaknb+40qY2sFf0+QlUZa611oyvyVir4kHb+Y=;
- b=C2xi6qM6ZgALgxw+NepzLcv/hQtdNmfaWURuocm34dSQ517JpkC2R0OVj3fKLuKJPlBRoK/gRpbvguy7eTtHqAXhObtA6zI8rkOH0OVPOBHV3qTndLQyE0fLA7dAgMrdRpZF0e8Loy+oDDXQIXqQSw/5qmCYXAVJtOmJtBEiW+4=
+ bh=RrWiom7sntD8aRjQVEyi+djUUeTd1CamYfJer6/YzDI=;
+ b=bgl2GOxguOhNA51J2Iz37Mmi/rxFO7YpYgZiaA7tQrbkK5a0lgUGDddABAYhKsXmu0sakglGfQUqqccC9ZCcdjacAqXjERHwg/1bqdYJ6NXMSHP7rUaJuvcKgDTFq+43RkyoCJOg6atbPKURIdxvgI6jV0N4ePtOiHvlZL/N5N0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=garyguo.net;
 Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
  by LO2P265MB2878.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:17c::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.18; Tue, 16 Jun
- 2026 15:24:53 +0000
+ 2026 15:24:54 +0000
 Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
  ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
  ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.21.0113.015; Tue, 16 Jun 2026
  15:24:53 +0000
 From: Gary Guo <gary@garyguo.net>
-Date: Tue, 16 Jun 2026 16:24:50 +0100
-Subject: [PATCH 2/3] rust: kunit: use `line!()` inside `kunit_assert!`
+Date: Tue, 16 Jun 2026 16:24:51 +0100
+Subject: [PATCH 3/3] rust: doctest: generate Rust kunit test suites
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260616-kunit-v1-2-b191604a8d6b@garyguo.net>
+Message-Id: <20260616-kunit-v1-3-b191604a8d6b@garyguo.net>
 References: <20260616-kunit-v1-0-b191604a8d6b@garyguo.net>
 In-Reply-To: <20260616-kunit-v1-0-b191604a8d6b@garyguo.net>
 To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
@@ -65,11 +65,11 @@ Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
  Gary Guo <gary@garyguo.net>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781623491; l=6458;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781623491; l=4697;
  i=gary@garyguo.net; s=20221204; h=from:subject:message-id;
- bh=2wOsMrPBVbJf5kmVvjapCV0pHbqdCz8omftAJkBQv+s=;
- b=/nnWcxkF3h7F0WxpHt9ov5zwFcRSjaBZJl5b+K1e4irHCDSDT2082Aik5gF8ar403x1nRfbb/
- Kev69FWB5e8DDccIXR1gPPhoHlNLGbSeEB7+3jfxQIqTKOy8Tzu6bOO
+ bh=fOKF66hkC7dPGQr9prIUflTkDI6yNvAOwIAL/mCKPjA=;
+ b=DP/LNbG0BumPiaKjIERN3K55yvC+SnyzuTkH9bf5byWLYrY/j9QrnjZ1ARH76i4r0kgjLEd0d
+ NMb5xnqo7UFBtToiFW5sQrpkHWn9uE7aVkxGCaOeOyiNv6Lz1/ksmPG
 X-Developer-Key: i=gary@garyguo.net; a=ed25519;
  pk=vB3uIX95SM4eVrIqo1DWNWKDKD2xzB+yLLLr0yOPYMo=
 X-ClientProxiedBy: LO4P265CA0280.GBRP265.PROD.OUTLOOK.COM
@@ -83,218 +83,213 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|LO2P265MB2878:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c04910b-7fbd-4bf0-4685-08decbbb69f2
+X-MS-Office365-Filtering-Correlation-Id: 91312b4e-615d-41b2-e6ef-08decbbb6a28
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
- BCL:0;ARA:13230040|366016|376014|7416014|1800799024|23010399003|10070799003|921020|56012099006|5023799004|3023799007|6133799003|22082099003|18002099003;
+ BCL:0;ARA:13230040|366016|376014|7416014|1800799024|23010399003|10070799003|921020|56012099006|3023799007|6133799003|22082099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
- mgIIkl//8oT2fL1cPj75yEXgKIvVYMOMgoZIPyIjw1Y+I2Gm07e9i/2hxi68E2RVOWMtW5Gbaktwq36Wso9a1CICI4K4TT+pvTjrD5TLvE9ymraXal8cbKziDDy0lTiXRytQXQLmFUVwTxfagF0gLPbAzjmCL1DqmgmL3sAplPpwRFVdoxELG3gvVzB4ZzjYDo7xSZEDcqZsaHHY6AJtJuyRgTMC6ezovLe/e2gHkF1z6OtrVqpJmLCxdkM5qMhyTYExfkj8HjSz6GWvNUyGhWveJHHhTx0ljaSVV8UJdX3w5f6w/ml9fD2nJeOc2VwU29b9NFDaiThyuUwRysBBz+e07VZJ+p4jFGYUCzTKnD+KkLt74TmC3Yvc57AgG2M98JnYSdxmuyavxwgmopP9EucIi5Kx5O3mDmR+5fhURCa/5aneX7zzXluz9lwA9EvJIot5u4Smtrw/NqfxVhWh6OXSpsr6lY1o3H1Co+9ZfOk+mf7uavRIRlwPuWtOb+Jam8DQZIz4Lz7plQ2Zj1Z3TyD5X1BvmjZUT4+eo31BtKgQNwh/Qk2KAfzvAXqPz3szH/WLmeVUpPhWfE2y0ieEO2zW5ui3O4uWpvCogt0Gprvpg+SzgCKee4llA8EFYhnf8RnUHACvsVbgPraQkr6Uu8MLK8FTjqIZewrMiWPAmd10KC8Dw++mYJphChHxVRiw0MaYzAKCBMwtJNovQiIlkyiAltfodxNp3yAzd2IVLbg=
+ zIuJOIRYOtjWxu7C1ZzQzQwh03Lrh3vynzYa8RChYNQKa5VsZfdBJHUniyPZirFgmchXaTKiDQ4pZBbVzeGOxARyGOS08QKNOJ49Wi80UYyKSRVta+/y/iYjJfaTZiyGwmMRP1dEUy2z5jYaT8j/T9si6xW8Xhv3yajhSNxOvjoab5a8V3m8VoBOLREg//4/WINSCwOTXSESComc8fFOdPE3UQfXiWolM9e73y4zISZurD2Hu630/KPnhi8tksEXiRyXB+IHLrYVL181aEQE8r/CZGqE3DUreLlJLOGEKXQ6tCT07wqKLLvWeYfnyxCt80+U5ueCXnV4LaHzl+nzUQGi5K9/uBtG2zPTi8oOZJQ3NwWGvb7n86CiJ9C572bJzgug28kvOoEI06Eng4twAP5H3XM27v3SFgflLkDnJodLCvZ3V34w+tY9mC63OpQM7dH3ufsk/wwlV7fC69cse2E5OBD7fREoX9kKPJghH2XjDwv28Alz2whS0IIk+3JPaRmudVzUa8p2VM2fTG3lPQV6vXmJhmYPgdhjBPE3jvVJbS4XtJDHBJQN+Ws79GojJyJstk+P2WLPlRCnFBLbHuRaVoLQUiEgHL07fHncAdnLJIXeDJyXhxJ/OX3C+tPvV9i5O0uCZAsqKabyCXJPYJh5zmuujZs8kkLGgkbbmgTn9rtf1ms/qtmiHqE1pcXHEBIZA5D7cg2fqdn/kfWpjnbB0VvIn07S3mWwPLkBJHc=
 X-Forefront-Antispam-Report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(23010399003)(10070799003)(921020)(56012099006)(5023799004)(3023799007)(6133799003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(23010399003)(10070799003)(921020)(56012099006)(3023799007)(6133799003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
- =?utf-8?B?ODJkclVJSDEyUnU5ZkxQakR6VFVsaFNRQ3Z1K29TcTRGdFU4aFNGcDhTWEN3?=
- =?utf-8?B?ZVYzM1B5R001ME9jNlRJaWxmN1JWUlcrclB2MUJyRm9ucTNaWnBWcEJ2NWF4?=
- =?utf-8?B?eWkxVjNTVnh0c2FJNjF0T3VkVWxaQVVXYkQxTGEwUy90NkJlZFJOa2M5MzRL?=
- =?utf-8?B?TUNUVWJiZHgrK1VUWHhUcjQzZWpwck03MVhsWjMrMHVzWHNjN29ORmk2OUxF?=
- =?utf-8?B?SXZyd1oraU9MSThvVEJmRDRIcVpLcm16emdiL3FPVGpLcS9EaUUzbDB6Wmhh?=
- =?utf-8?B?Y3hzRFVha2ZCOWtFNkpsUXFBbkQ3UStGRGxjUjR6K08rNDYwMWRZNWVMQVdE?=
- =?utf-8?B?T3ZqbjBhQWZmblJ5QlNiK0krQTRGaUcrYTRMTFpnaVZDNzNqeHBxck1OR2l5?=
- =?utf-8?B?aWZyR2djSkM1QjBDTUVRSFZLdTRSZXFHSE1hai9CYWNqS3QvN3hoNUMvdDFv?=
- =?utf-8?B?TEtwdkFIaFFFTERKUzh2a2grc0Vycm1jR1laOVpVc25Hc1ZRbW9pZjFZcGk3?=
- =?utf-8?B?MzhBQjI4KzhhTUZLZEVlODdPdVBsRitwVlB3Mzg2eWlISjA5YjdpTFBvdzN5?=
- =?utf-8?B?MUh6SmNUaFVUZDdXemdLa0l0ak1lSk1lRGpRWW9ON2pKTmMxS0ZjOGhYYTNW?=
- =?utf-8?B?TmV4eDJ1VGR2N0lUWFF6RHVqM0VBSXBVMFhnWmZERnphd0NESXZhVEhtOWlF?=
- =?utf-8?B?bTQxUzFJSDBudzJmWDV6d2U0NkEzRllVUVRXMVBzVmhiMVV5S2JGWEp2ZlJZ?=
- =?utf-8?B?Wm1Kb3JZWm5yZGVXMFd5bUtRcFpuN053ZUxRcTVkbUFsWVFjSm82anRWNFRy?=
- =?utf-8?B?d1A4RmZwM2UzekVickoyOHFuQXYzeE5TL3RxVTVsU0FNNC8zZW9FWUttV2Fw?=
- =?utf-8?B?dmR6aENLaEJKaVE5QURiQkl0OTlWRmM5WnNsQVBlMnh6MmZ2bzZhRDZzclh6?=
- =?utf-8?B?cjZsT3FBck05RVlsNlFld00zVEsyREJkbWlkTzZRWVdpT3NjbW9HbUorSWNH?=
- =?utf-8?B?U3VUa1MxWDdWSDdHbDM2T0Q2bVZaSmRKUXdQRldjUnZOTXR4L01zbTRNTy9W?=
- =?utf-8?B?TEJNcnJqVjhLN3pRYW0vdkRaclBnMDZZWXpCRkpYT25DNkNwSUpWOUZmL29S?=
- =?utf-8?B?SnY4VmRmdzFFSGdIbGVTWEVHVFQ3T2dNYnQ1YjV3SzN0d0NZQVE1RHR4V3l6?=
- =?utf-8?B?ZnNJZmNQVXl5V3p3bWNpanpOdkllMEE0cm54M2xNeTV2L2JwclI1dXNhNGlV?=
- =?utf-8?B?OUlDdXZ6STUwNzVCa3pnV2g0MEpxQnlOdUN4a1lxNG9EaXhYT1VobEh3NzNT?=
- =?utf-8?B?M2xSbHQwb1RJV29IYmJkYlRBVFdubEFoUDRwUmhOUHZMU1NLQm9zS2VyS2Y2?=
- =?utf-8?B?bHNrYmlBMlF1SXc5RVZLcnVGU2RTQkhFZ1F4cU5GK3c4M21ncllNR3RyUzF2?=
- =?utf-8?B?Ulpnc3VqVnpwMDN6MEMxWjlkTXIzK2FOOTNMbDAwenNOSkVNY0hlMHhiMHpj?=
- =?utf-8?B?amJWZ29BMVY5NEZBeHhlTDJuZmI0cVd3TE5hcURoeVpTRU43MlZublJXYkli?=
- =?utf-8?B?ZlluM2IrTk5kT0tORE16S0QrQmZjNWpUV2RWaEgxcG1kb2QySjREQlRnbDYr?=
- =?utf-8?B?WWM5YmxwNFUwZjZqMHdWNmVuNFpqdjlneElnenU5TVk4alYxaGFLY2IwWFhr?=
- =?utf-8?B?UkNJWUdjZ1V5di82S3Q5dUtCM2hDRzNWQ2xPL0xtdzd3M3h3RWxXZzBvSHFy?=
- =?utf-8?B?OFQ2K0htWXVTWU9mTzBQbEZFcTRtWm9Nb0pleHdrNk5aNHBqektuUS83YW9q?=
- =?utf-8?B?TkZKcW12b3lJbHgyL3IzK0NicXRZcGtjaHd5ZkR0djBmMUdTR1FJbUdvcFVX?=
- =?utf-8?B?aysxQUY3Z2pYV1hCalFkL3NQeitqN3E1RThCUUM2M2ZLVjd5M2pTUmNzc3F3?=
- =?utf-8?B?UUJqZ0EzL0hvbDVNcTUyaSttSlVDRTFKNzE5aC9qTmhMMFdMY05rWG8vL0Zn?=
- =?utf-8?B?YjlIelBWQkZpTFVHMmdRVW1CYTk3aTdNTkNiY1o1NlEvV2JCU3l1SkFudXNs?=
- =?utf-8?B?WUI1WXNlajlSUWtpSmYxOE0zRUQrM1ZkVDludkpFWUg4dm0wbmN4bjhQTito?=
- =?utf-8?B?NTJwYnJJYW9STnRJeXVsa0ViYVlpYWNjYlhXUVgxNlRrTFZ0MHQzYWZmMWsx?=
- =?utf-8?B?VjF1SjFPd2tBSk9XdHVpT2hCc3NlYUZvWnBsWGs0NmtQa3YyeTVqUmU3TVpM?=
- =?utf-8?B?eU43Y0NBOGtHbnZGTXFNelNxL3ByTGhlM3FVNUgxYzFybDhpdU1qeGp5SlVq?=
- =?utf-8?B?S0hGNk1aaXpOZTgvSTFHR3FFVG0zN1BBSnNkSmw0bEJRVVBRalQ2dz09?=
+ =?utf-8?B?ZXJ0UW9hb2FtVkk0TEFmOTY5UnRPOFlkRVBrSkN2UURxVmVQT094cmxyUDVz?=
+ =?utf-8?B?ZDllWTFJQlZvd3JoUXlveU5sdE91MVUxajFNWTVEZmVOdUNsNmVDWFE2Q2cr?=
+ =?utf-8?B?Y0ZEWGhRdW53OHNidjl6cGdOcWplZnFPMVdkZjJHemlBRlRsT0tGS1NCa2JV?=
+ =?utf-8?B?cmNxNkRtaHlIQ1Y4TWgxcDJGMEcyWU1yR2NqRWpxbVpNU0gzYW56U3RHZ202?=
+ =?utf-8?B?TXQwTXZZeVViZTB1Z0hVcXpvZEFOelZzaS9xeGZBZ2o5ckdxeFNkbUhKZEx5?=
+ =?utf-8?B?eHloT0lndDNneFFDRE01SDF4R016alVCWU05VmpLRDhUVnAxMHcraHlibU5R?=
+ =?utf-8?B?ZzVDR3VnRDRRSFFvcjN2NWtZeTloRWZuVmFINHBrL0l5MzNVUlIyV3J1TjNp?=
+ =?utf-8?B?em1zcnhQNGgxMXh1UnM4NHMrTGQ2WFlSNDZCK0ZRaTZIS1pFRW14QlJ5b1E5?=
+ =?utf-8?B?L2hMVGh3RzFlTWEySnlTclZrMU4wV0lpeU11eUxrRzlRWXV2Rm1LRk53OWl4?=
+ =?utf-8?B?VzJoUS93MVNqTVo2MnFRSUpDd0FmUHdScjFKbFV2WEN2ck56czdVRDJiSXhG?=
+ =?utf-8?B?UktXRTdmL2Jjblk5d3hiZnlFZXRBWXQ5T2p5MThxMkJFSWQzK2VqcVJqeGpM?=
+ =?utf-8?B?NU0vVEpPU3lXVlVOUVF1VVlPNXd2WHg1bFpPczRnOU9BblYySDNrM29iS0sx?=
+ =?utf-8?B?UHRoNVJSbjMrOHplUnJSNElJbVdpSjZqRGVLeUQyWUhIZXIxU2h4YzBiVC9P?=
+ =?utf-8?B?djUxTUMrTGY0a3F0bmVXT24xdGpXQnB1SUdCbGN0bk95aEF5MUFaWW5EWUNh?=
+ =?utf-8?B?YTQ1bDNwRmxJaVZTRTJrU1RQb29zWXpkQURhdVZQUGNrdjYxWlFXWk1Lck0w?=
+ =?utf-8?B?Zkw5Yk5QNkorb3pNYnJ3TWV4a2FuYmZWSllkbFZxZFNrT2NxbUFMeWVEd0Rk?=
+ =?utf-8?B?MGhzMmNMY0Y5QlVKSlNBdFgydzlwTVFjYXpaUDFmUGcwZ2dGOXUzclI4Vyt4?=
+ =?utf-8?B?TUFVZExaS0wrVlNidDlXcW9VMjJSaTJCSUJ5MXpTOWMwRUtXbGx2UUdnTDBs?=
+ =?utf-8?B?aTIxaWdBSE93eFdzZXJ3M3RIQ0ZHZVdNQzI0V0NVQkdjR2JoMTJPenIzSlBG?=
+ =?utf-8?B?bnp5RkNrS2srMVFuRjFZRlB2WGl1eTRUTEsydk92S0ZrcG44UDllTVRDclBI?=
+ =?utf-8?B?VnI2d1U3dStXc2xUN3E3SmVKSnNnZ21DenFlcHlOV2ljOTkvcEl3c3dmMERs?=
+ =?utf-8?B?NDJqaXVlZG53Z2VEMFNYTnBPUVlOaXM4aElBQmRIU2VpMWM2RzF1UDJ3RldI?=
+ =?utf-8?B?SjYvLzhZTDNtTWlEdjlXMDZNd2U1TG5nSmdLdHJYVHpvcm51OVppUUFuWjBZ?=
+ =?utf-8?B?TlBhS2psSVk0ZGtKRDRVa1BUSmRkdHlWbzNKL1Q2QlFzdkZtTU5Sejl5YXhh?=
+ =?utf-8?B?V1VQMnQ5TUhvdEpnMnhYNWJCblFWSHZ1NUdkWHc0ajN0WWRQZThzKzNBTFVM?=
+ =?utf-8?B?R3habUpXZ2llMGFDT1VtWVJBMkxDbndac0tRbE4wdWFiVk4vS1ZsLzhTbUNU?=
+ =?utf-8?B?SU9QU3Z5TnBQV2lHVzNydjBpdU1DazBaSitmdFdqNUY5MEJJS1drSkdZNkJk?=
+ =?utf-8?B?cVpONWlwdyswMHFvVE1CdHg2bk5yZ29qZlNhMjNuQVUybm0xUWxjNDdaNHhE?=
+ =?utf-8?B?QkdaSER1OUhkMUEzdXlIODM0MUhQdE0zZmZRZlBSMGpFS243YTkrcFBYZ2JQ?=
+ =?utf-8?B?SGhxOWg1Skl2bjFyTWtndjhibFBDdjd4eTJzTEcvNXcrQWs5S1pObDVObkEw?=
+ =?utf-8?B?Z3V6K0ZaaEpZSnU1U3VxQTVqSGRsak42TVVIQmw1ZGVWTWNUSEdVdUJtZVIv?=
+ =?utf-8?B?RlUraEZWM2xwVzFPRTFiVWlob01WWEtZaFlLU2Rhb1I0dmhzNkpHRWp1cHdB?=
+ =?utf-8?B?WnFTdE93Y1VhU21QZjJ1a1l5THdiMTBwRDdsYVdlcHVMOEJSdDZjbGtPTktZ?=
+ =?utf-8?B?VEtoc3MycGErbklIVjJRTGJlZzkxZDkvK3Zaa3EyNG85Qko4NVFOekplajVx?=
+ =?utf-8?B?MHB3MFh2Q0J5MTBTcUhqR1dtbDVraUlJalkxS0dRb1ZhdkxhVGRhM0VPM0NK?=
+ =?utf-8?B?Qy9GUUNwRDVZWENsaXZuUWVWR2xYMXhnVFZzdmh4WklnUlVTRFBwaWNEWkdm?=
+ =?utf-8?B?RExmam9UT2JqQ0pLMFo3OGlxNU1IV0RSY2kyNEo3Z2txTWdLSEcreUxQRGoz?=
+ =?utf-8?B?d1NRL0JMZjlNMWlURFI1UEg0LzJuVitCazRuZ05TaWtuR3pKakVUalZhdkdn?=
+ =?utf-8?B?YWNjWkdFWXJxU2thdHBiK1lINGc4WW9iSWZzVVFQLy85Rm4rZkM3Zz09?=
 X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c04910b-7fbd-4bf0-4685-08decbbb69f2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91312b4e-615d-41b2-e6ef-08decbbb6a28
 X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2026 15:24:53.0634
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2026 15:24:53.4531
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9dTUlnGmPN89xFjlb/6GAN6XwOCj0S2tU921mTLKzAMCQ/a0lXjxz0TdXKU7QwEON5j39KdlrJ/k/OWYcfrLmQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: SEGpKX8dq133WCHeZg8jGd7cjOnKPopeGBtIm3eMdnRXciiCZPiWvu418QeN1q3C8khgN8wKix3mE2CQhWWQBA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO2P265MB2878
 
-The `diff` parameter is needed currently because doctests want to override
-the line number. Simplify it by changing it to use `line!()`. Have doctests
-override `line!()` macro to achieve the current behavior.
-
-A few current doctests (or their invoked macros) require `line!()` to
-expand to literal; they're updated to use `::core::line!()` instead.
+For doctest, instead of generating C FFI functions, generate a Rust test
+suite with `#[kunit_tests]` and `#[test]` attributes. This makes the C glue
+no longer needed.
 
 Signed-off-by: Gary Guo <gary@garyguo.net>
 ---
- rust/kernel/device_id.rs    |  2 +-
- rust/kernel/kunit.rs        |  8 ++++----
- rust/kernel/str.rs          |  2 +-
- rust/macros/kunit.rs        |  4 ++--
- scripts/rustdoc_test_gen.rs | 16 ++++++++++++----
- 5 files changed, 20 insertions(+), 12 deletions(-)
+ rust/Makefile               |  4 +--
+ scripts/rustdoc_test_gen.rs | 69 ++++++---------------------------------------
+ 2 files changed, 10 insertions(+), 63 deletions(-)
 
-diff --git a/rust/kernel/device_id.rs b/rust/kernel/device_id.rs
-index 8e9721446014..20e2fe137202 100644
---- a/rust/kernel/device_id.rs
-+++ b/rust/kernel/device_id.rs
-@@ -195,7 +195,7 @@ macro_rules! module_device_table {
-     ($table_type: literal, $module_table_name:ident, $table_name:ident) => {
-         #[rustfmt::skip]
-         #[export_name =
--            concat!("__mod_device_table__", line!(),
-+            concat!("__mod_device_table__", ::core::line!(),
-                     "__kmod_", module_path!(),
-                     "__", $table_type,
-                     "__", stringify!($table_name))
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index 157fd0634708..58dfec66b4f6 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -58,7 +58,7 @@ pub fn info(args: fmt::Arguments<'_>) {
- #[doc(hidden)]
- #[macro_export]
- macro_rules! kunit_assert {
--    ($name:literal, $diff:expr, $condition:expr $(,)?) => {
-+    ($name:literal, $condition:expr $(,)?) => {
-         'out: {
-             // Do nothing if the condition is `true`.
-             if $condition {
-@@ -67,7 +67,7 @@ macro_rules! kunit_assert {
+diff --git a/rust/Makefile b/rust/Makefile
+index a870d1616c71..8c95dd4f6aee 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -36,10 +36,8 @@ obj-$(CONFIG_RUST) += exports.o
+ always-$(CONFIG_RUST) += libproc_macro2.rlib libquote.rlib libsyn.rlib
  
-             // Use `file!()` instead of `::core::file!()` here so it can be overridden.
-             static FILE: &'static $crate::str::CStr = $crate::c_str!(file!());
--            static LINE: i32 = ::core::line!() as i32 - $diff;
-+            static LINE: i32 = line!() as i32;
-             static CONDITION: &'static $crate::str::CStr = $crate::c_str!(stringify!($condition));
+ always-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated.rs
+-always-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated_kunit.c
  
-             // SAFETY: FFI call without safety requirements.
-@@ -165,10 +165,10 @@ unsafe impl Sync for UnaryAssert {}
- #[doc(hidden)]
- #[macro_export]
- macro_rules! kunit_assert_eq {
--    ($name:literal, $diff:expr, $left:expr, $right:expr $(,)?) => {{
-+    ($name:literal, $left:expr, $right:expr $(,)?) => {{
-         // For the moment, we just forward to the expression assert because, for binary asserts,
-         // KUnit supports only a few types (e.g. integers).
--        $crate::kunit_assert!($name, $diff, $left == $right);
-+        $crate::kunit_assert!($name, $left == $right);
-     }};
- }
+ obj-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated.o
+-obj-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated_kunit.o
  
-diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-index b3caa9a1c898..644b4279a116 100644
---- a/rust/kernel/str.rs
-+++ b/rust/kernel/str.rs
-@@ -411,7 +411,7 @@ fn as_ref(&self) -> &BStr {
- /// const BAD: &CStr = c_str!("literal");
- ///
- /// // `c_str!` is still needed for static non-literal C strings.
--/// const GOOD: &CStr = c_str!(concat!(file!(), ":", line!(), ": My CStr!"));
-+/// const GOOD: &CStr = c_str!(concat!(file!(), ":", ::core::line!(), ": My CStr!"));
- /// ```
- #[macro_export]
- macro_rules! c_str {
-diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
-index 936eff014870..e9152b9d51f9 100644
---- a/rust/macros/kunit.rs
-+++ b/rust/macros/kunit.rs
-@@ -113,7 +113,7 @@ pub(crate) fn kunit_tests(test_suite: Ident, mut module: ItemMod) -> Result<Toke
-             #[allow(unused)]
-             macro_rules! assert {
-                 ($cond:expr $(,)?) => {{
--                    kernel::kunit_assert!(#test_str, 0, $cond);
-+                    kernel::kunit_assert!(#test_str, $cond);
-                 }}
-             }
-         });
-@@ -121,7 +121,7 @@ macro_rules! assert {
-             #[allow(unused)]
-             macro_rules! assert_eq {
-                 ($left:expr, $right:expr $(,)?) => {{
--                    kernel::kunit_assert_eq!(#test_str, 0, $left, $right);
-+                    kernel::kunit_assert_eq!(#test_str, $left, $right);
-                 }}
-             }
-         });
+ always-$(subst y,$(CONFIG_RUST),$(CONFIG_JUMP_LABEL)) += kernel/generated_arch_static_branch_asm.rs
+ ifndef CONFIG_UML
+@@ -387,7 +385,7 @@ quiet_cmd_rustdoc_test_kernel = RUSTDOC TK $<
+ 		$< $(rustdoc_test_kernel_quiet); \
+ 	$(objtree)/scripts/rustdoc_test_gen
+ 
+-%/doctests_kernel_generated.rs %/doctests_kernel_generated_kunit.c: \
++%/doctests_kernel_generated.rs: \
+     $(src)/kernel/lib.rs $(obj)/kernel.o \
+     $(objtree)/scripts/rustdoc_test_builder \
+     $(objtree)/scripts/rustdoc_test_gen FORCE
 diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
-index 37f4877f52e2..acc4debe8592 100644
+index acc4debe8592..601f7a5b3672 100644
 --- a/scripts/rustdoc_test_gen.rs
 +++ b/scripts/rustdoc_test_gen.rs
-@@ -169,18 +169,26 @@ fn main() {
+@@ -118,9 +118,7 @@ fn main() {
+     // Sort paths.
+     paths.sort();
+ 
+-    let mut rust_tests = String::new();
+-    let mut c_test_declarations = String::new();
+-    let mut c_test_cases = String::new();
++    let mut tests = String::new();
+     let mut body = String::new();
+     let mut last_file = String::new();
+     let mut number = 0;
+@@ -165,10 +163,10 @@ fn main() {
+ 
+         use std::fmt::Write;
+         write!(
+-            rust_tests,
++            tests,
              r#"/// Generated `{name}` KUnit test case from a Rust documentation test.
- #[no_mangle]
- pub extern "C" fn {kunit_name}(__kunit_test: *mut ::kernel::bindings::kunit) {{
--    /// Overrides the usual [`file!`] macro with one that expands to the real path.
-+    // Overrides the usual [`file!`] macro with one that expands to the real path.
+-#[no_mangle]
+-pub extern "C" fn {kunit_name}(__kunit_test: *mut ::kernel::bindings::kunit) {{
++#[test]
++fn {kunit_name}() {{
+     // Overrides the usual [`file!`] macro with one that expands to the real path.
      #[allow(unused)]
      macro_rules! file {{
-         () => {{ "{real_path}" }}
+@@ -183,26 +181,6 @@ macro_rules! line {{
+         () => {{ const {{ ::core::line!() - __DOCTEST_ANCHOR + {line} }} }}
      }}
  
-+    // Overrides the usual [`line!`] macro with one that expands to the real line number.
-+    #[allow(unused)]
-+    macro_rules! line {{
-+        // NOTE: This does not expand to a literal, but a constant expression.
-+        // Therefore code that depends on `line!()` being overrideable needs special adjustment.
-+        () => {{ const {{ ::core::line!() - __DOCTEST_ANCHOR + {line} }} }}
-+    }}
-+
-     /// Overrides the usual [`assert!`] macro with one that calls KUnit instead.
+-    /// Overrides the usual [`assert!`] macro with one that calls KUnit instead.
+-    #[allow(unused)]
+-    macro_rules! assert {{
+-        ($cond:expr $(,)?) => {{{{
+-            ::kernel::kunit_assert!(
+-                "{kunit_name}", $cond
+-            );
+-        }}}}
+-    }}
+-
+-    /// Overrides the usual [`assert_eq!`] macro with one that calls KUnit instead.
+-    #[allow(unused)]
+-    macro_rules! assert_eq {{
+-        ($left:expr, $right:expr $(,)?) => {{{{
+-            ::kernel::kunit_assert_eq!(
+-                "{kunit_name}", $left, $right
+-            );
+-        }}}}
+-    }}
+-
+     // Many tests need the prelude, so provide it by default.
      #[allow(unused)]
-     macro_rules! assert {{
-         ($cond:expr $(,)?) => {{{{
-             ::kernel::kunit_assert!(
--                "{kunit_name}", __DOCTEST_ANCHOR - {line}, $cond
-+                "{kunit_name}", $cond
-             );
-         }}}}
-     }}
-@@ -190,7 +198,7 @@ macro_rules! assert {{
-     macro_rules! assert_eq {{
-         ($left:expr, $right:expr $(,)?) => {{{{
-             ::kernel::kunit_assert_eq!(
--                "{kunit_name}", __DOCTEST_ANCHOR - {line}, $left, $right
-+                "{kunit_name}", $left, $right
-             );
-         }}}}
-     }}
-@@ -212,7 +220,7 @@ macro_rules! assert_eq {{
+     use ::kernel::prelude::*;
+@@ -231,14 +209,9 @@ macro_rules! assert_eq {{
+ "#
+         )
+         .unwrap();
+-
+-        write!(c_test_declarations, "void {kunit_name}(struct kunit *);\n").unwrap();
+-        write!(c_test_cases, "    KUNIT_CASE({kunit_name}),\n").unwrap();
+     }
  
-     /// The anchor where the test code body starts.
-     #[allow(unused)]
--    static __DOCTEST_ANCHOR: i32 = ::core::line!() as i32 + {body_offset} + 2;
-+    static __DOCTEST_ANCHOR: u32 = ::core::line!() + {body_offset} + 2;
-     {{
-         #![allow(unreachable_pub, clippy::disallowed_names)]
-         {body}
+-    let rust_tests = rust_tests.trim();
+-    let c_test_declarations = c_test_declarations.trim();
+-    let c_test_cases = c_test_cases.trim();
++    let tests = tests.trim();
+ 
+     write!(
+         BufWriter::new(File::create("rust/doctests_kernel_generated.rs").unwrap()),
+@@ -246,34 +219,10 @@ macro_rules! assert_eq {{
+ 
+ const __LOG_PREFIX: &[u8] = b"rust_doctests_kernel\0";
+ 
+-{rust_tests}
+-"#
+-    )
+-    .unwrap();
+-
+-    write!(
+-        BufWriter::new(File::create("rust/doctests_kernel_generated_kunit.c").unwrap()),
+-        r#"/*
+- * `kernel` crate documentation tests.
+- */
+-
+-#include <kunit/test.h>
+-
+-{c_test_declarations}
+-
+-static struct kunit_case test_cases[] = {{
+-    {c_test_cases}
+-    {{ }}
+-}};
+-
+-static struct kunit_suite test_suite = {{
+-    .name = "rust_doctests_kernel",
+-    .test_cases = test_cases,
+-}};
+-
+-kunit_test_suite(test_suite);
+-
+-MODULE_LICENSE("GPL");
++#[kernel::macros::kunit_tests(rust_doctests_kernel)]
++mod tests {{
++{tests}
++}}
+ "#
+     )
+     .unwrap();
 
 -- 
 2.54.0
