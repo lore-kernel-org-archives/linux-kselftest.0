@@ -1,221 +1,120 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010059.outbound.protection.outlook.com [52.101.84.59])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A8C317161;
-	Tue, 16 Jun 2026 12:23:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781612597; cv=fail; b=eC5nCWppP3PsKABKF+wSfp+Ht2aTmFvk+OyPAb164OheS10Ulq0La75Rr0egXbF/Fv1q/lHq+5Oz12br6tXE/QpvV+skXBjtfxc7lN0VH0lT7G7cuPDXo7m6nEtdkd0xFNcbWUNwdljhojdyMW8Is4JpZIAaW7qA+AMuU9gGdwY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781612597; c=relaxed/simple;
-	bh=IQpHO5ax+8oOywQFnYPIhZNfiZIh+EAAUy8qWkHQwbc=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=uqJQcqFTwIdr/LYeYKGOSh+XvldU8LXgOwTswJyN70h+vmS5cRhP6dPvghHJ/rWbqcp2QTGUrHdyLXpD6qTQ/88by3tPR4zkP8RyXMAKU3WklKbL5if8aHh4VDZmBypJf+5hhfPwE5TbSyB6OzsB2wrnnWR7zSS8tJTY1e7/X1M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=RYEwiFOc; arc=fail smtp.client-ip=52.101.84.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC1C35CB87
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 12:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781613623; cv=none; b=fNR5HpzUOOECaufH64XbmJsUZsXgkEaOqeNf7kzgTcj5ATjaGf+DKtWXqSunlLRGwneJQAi9jOYot8p+0avITy0PqpW4G6kdxS/8E3QFh9KOevoW7m5te7s6I7emNa7INeui/937k6bqr906DjlbTp4HnDZWJ6dXjJzPOMr+3/Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781613623; c=relaxed/simple;
+	bh=tPbjX8dfzPLu8onhnfm0DNzfCkJoWXqGLy1Lxvc2NUs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dfz08Eh07eiS1LZ0p9w8Opz/5QCQNfKoTcyL+H8cJSkbfG59aHBk+QJIcqO8oJ837iA6JxYdHCir/UFIi7QxnPK8Br+UGIgSDxhrrMuE65eO8Xug2pFi8tfS76LK76La0Dsd2E/1F44uIw9kqYVmZvk6slaKXJW9mH/7XKhl1aE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=LkPMS57S; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="RYEwiFOc"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wHZJoo8hRQygt868Ec7wzcUihnJ3Kc7V0U0HbLJTQHLZjP/ZY9wsNibA+5MGiZNSsYLIGObHpesIDUMC7HMXe5A13Zs6kxTXSxtU0gZSF5Tsr42lCGWwXudggAmnv391pKula0H6f3uGsobQYDczQZG+nxcihiFb6d8UuqD10wjF9WuEtXq/m6kL8D6UPWLs6G5sXVjyBcXBGW4esOWsj3TtmNI5zKZQEOtmqDs176SxCuMfC94oL1Rk1UuONRBtTXwuCZmsMXM1jphB0wtmGUKFtLsWnRFrsmLOvkwAmFoZxVrt2dAvcSV2ODX4fKsaHlyMZVABwBNamkEaHafn5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IQpHO5ax+8oOywQFnYPIhZNfiZIh+EAAUy8qWkHQwbc=;
- b=myFKiFCR6WBYhaTz4uWeShv0odyw9INbHMBt8wAGAnOwPSFDewaXrJc2qk7ZyA7E2L8QQqHolvhc/AJCyHJvO9Lm/4bfqVo3YupDq28NG9DpXgtkVJc2wAQbYUCf1Y6PrDqBFgc4UEuQiDNmTYUeNeReaGgyLZa6YxHJ/JrTTekOZZc2mpHxb210VXyqXt/H7cZaAHE5U9VS4TMDGpxs0w3AXSHfVPsXV5k/yKBB1PO5pl55YjM6gLCSIhwCz5peuX4TCnmGC8l+V/6A/OZHGgSpEZ2IjLZW5cpBP1isiEq1vhEfO4+9AIdNKElUzlOwx/14zbb382rtqFGiPSzLKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
- header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IQpHO5ax+8oOywQFnYPIhZNfiZIh+EAAUy8qWkHQwbc=;
- b=RYEwiFOcddwTL+et/kh97oeIcYc/xi3+n0FyTN5MYpx0l6UzDht5Gvh81SRyYMC/oUmgIhP1pnnPUGJStq+HLb3SzEZ0oR1cQN8i3KbaN57VIBKT3fcjvU6nrHF5LSN0yOvIj/PdwAc1Uq02nTlB8GmPM6STMUWr06iOXLKDjTlcXXjeZeOKgskSYRLJy/11c/KuUcHRd9JiGgdXtsXAJKZXJjx+XAWgVWLF9kRNxRaE4zL0osr5tx9suYitsS/q9DLYK4oQA7M4ffMV07gWyYlVG3QvkABzQG7iPdjlTLRJEaoxfOUPaff2hq6Xit4jADwEho+/QGuk5hOqcORHgg==
-Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
- by OSKPR07MB10469.eurprd07.prod.outlook.com (2603:10a6:e10:97::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.18; Tue, 16 Jun
- 2026 12:23:11 +0000
-Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
- ([fe80::f708:4bd3:9987:b9e5]) by PAXPR07MB7984.eurprd07.prod.outlook.com
- ([fe80::f708:4bd3:9987:b9e5%4]) with mapi id 15.21.0113.015; Tue, 16 Jun 2026
- 12:23:11 +0000
-From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
-To: Jakub Kicinski <kuba@kernel.org>, "edumazet@google.com"
-	<edumazet@google.com>, "ncardwell@google.com" <ncardwell@google.com>
-CC: "jolsa@kernel.org" <jolsa@kernel.org>, "yonghong.song@linux.dev"
-	<yonghong.song@linux.dev>, "song@kernel.org" <song@kernel.org>,
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="LkPMS57S"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-51778069c31so40309761cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 05:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1781613621; x=1782218421; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tPbjX8dfzPLu8onhnfm0DNzfCkJoWXqGLy1Lxvc2NUs=;
+        b=LkPMS57SheHWUiSvnK76MNPuPeTpmepRr/zvfJ4ZpBSaUTrCEOpDnjQIDbl4YV/8pK
+         0RvEWX124XtPixmZGL7nu5gP6/f8YLcuJcemmDyc9fyshX/R+SxjdOfeGu82kKdDYZho
+         Cd9Pz1ccepPbodA6fjVyV8/JveKyJe3KP8MRwGAwYk9TlUcvrqnzf0p67yRmqK1zFBkn
+         ueRtbFdomSo6KVgL++OLAEQDKjcHqEnR+zzX9N0gqBkuWhJN80xWe9ysGRvBjlwR0mH0
+         ufusAQb6vCoO1JcuHxGMggFcSZTI3SlLFb/IbD7/qTV/l7St0K9Px/RxVE6ka7P8+N04
+         W1fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781613621; x=1782218421;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tPbjX8dfzPLu8onhnfm0DNzfCkJoWXqGLy1Lxvc2NUs=;
+        b=l3ZbNrYdLjhLbHc5Pm4qWCf7EKfzHLZJ/j6UIyOVCFJaSdUB3ZFddwvvs6kWRmwaIj
+         MKu5Yf9V7EtvzdLWe5blk6cSu8dOJD5U6oxYS1DYYe4rBJqFU6fvuKMafaWsJKt3+uWp
+         FYHvmBS2kaa7zX4BpejNFlHLGu//SsH/ZoUWGn+tf7Rds5cBi+KAPKy2HW/uJA45RnJg
+         SwUVEcOaRJlKVwiaGUryFio2MK2TH78CjXJxxioysZyn2nieaxodgvuYpngRsEoNYjUX
+         BPCp1krY9/xtsI9YGDFPCBf+BqwW7m8s9V6Tb9c6ypKXt1KrxV/fShNVTd2Wpgl62oPd
+         xxpQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9LuwEHrGswoqZEJfBT3kXkMWo+ImCgjR7fUXU5EC+/0Zc65S6uIvaCLy8/tSwyHJjMZ5LmZ5+R0eADvM53v1U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzO0IZm/9gHrSnKqbAmETm9aAcoH+F991yzJk0+AMGJ4ak6BgqI
+	Jc1OPtRBj2wper1WXZFLscxC2//+3SJ8MiHJCNFPjfk8d3bnTo1mW48wMLGC9fXsE4M=
+X-Gm-Gg: Acq92OG5Panutl25gSmniUusuRwyK+2D80T4qb7D3mjAg11Ppazl3m3uuUOkzL245dZ
+	f/g49QUWEXspxY7MdGCa5AyrQW9TI3SsmO/m8bgEyYJp3fG7JPa9PSUH96q77a5OdBrgK2/3Shi
+	QIcQonmg+vSh1XX/NTMg5N0dPa14yj++FjmYQmGqh/nbUtpmwXl0YY2kfoa5ZxdaCpamAjctC0z
+	0zVbPPOsnJP1c4QhNbtNLMRp5cnG6O4n/ID70Fs8jVnszUm+ziSpckOauRcnsbbFlafAPLzWNFY
+	d7K3aZ1A+4trZdiyUiBuhlF1fc5OYiaLmbr1KaOkwxKHny3EwR7NYwU/lN3bvR2V2mg5MeriRTY
+	4YFTlGH9x95QNQrQH7k0UjAKWLw7z0Wetuz2Vp4CYngBIhtykaYdLni4SL16ArS1m5kcPyvMmNm
+	jJIo6lZgfx/XhJoRs9uHDzFGNpY6JH2JW5ZO7WerDdz+LLAG0mUzZwcTEUK1ZodsCE9UB2Vfo4m
+	Tnpxw==
+X-Received: by 2002:a05:622a:2282:b0:517:6804:1fb3 with SMTP id d75a77b69052e-517fe230d82mr282972431cf.18.1781613620607;
+        Tue, 16 Jun 2026 05:40:20 -0700 (PDT)
+Received: from ziepe.ca (crbknf0213w-47-54-130-67.pppoe-dynamic.high-speed.nl.bellaliant.net. [47.54.130.67])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-517fb61d948sm133785221cf.1.2026.06.16.05.40.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2026 05:40:19 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1wZT5X-0000000Fzb5-0uZr;
+	Tue, 16 Jun 2026 09:40:19 -0300
+Date: Tue, 16 Jun 2026 09:40:19 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: "Kasireddy, Vivek" <vivek.kasireddy@intel.com>
+Cc: Bobby Eshleman <bobbyeshleman@gmail.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	"linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
 	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"memxor@gmail.com" <memxor@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>,
-	"martin.lau@linux.dev" <martin.lau@linux.dev>, "ast@kernel.org"
-	<ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"andrii@kernel.org" <andrii@kernel.org>, "eddyz87@gmail.com"
-	<eddyz87@gmail.com>, "horms@kernel.org" <horms@kernel.org>,
-	"dsahern@kernel.org" <dsahern@kernel.org>, "bpf@vger.kernel.org"
-	<bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"pabeni@redhat.com" <pabeni@redhat.com>, "jhs@mojatatu.com"
-	<jhs@mojatatu.com>, "stephen@networkplumber.org"
-	<stephen@networkplumber.org>, "davem@davemloft.net" <davem@davemloft.net>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
-	<donald.hunter@gmail.com>, "kuniyu@google.com" <kuniyu@google.com>,
-	"ij@kernel.org" <ij@kernel.org>, "Koen De Schepper (Nokia)"
-	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
-	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
-	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
-	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
-	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
-	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
-Subject: RE: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with
- tso_segs() CC callback for TCP Prague
-Thread-Topic: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with
- tso_segs() CC callback for TCP Prague
-Thread-Index: AQHc+84N6RcutbkfqUyYk6P3JjhYGrZAbY8AgAAHRgCAAKg9wA==
-Date: Tue, 16 Jun 2026 12:23:11 +0000
-Message-ID:
- <PAXPR07MB7984585F9348BB3F000EB330A3E52@PAXPR07MB7984.eurprd07.prod.outlook.com>
-References: <20260614071756.239686-1-chia-yu.chang@nokia-bell-labs.com>
-	<20260615185102.5e8de52d@kernel.org> <20260615191704.31be22da@kernel.org>
-In-Reply-To: <20260615191704.31be22da@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|OSKPR07MB10469:EE_
-x-ms-office365-filtering-correlation-id: d81d2116-b6de-4f44-4f74-08decba207ed
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|7416014|376014|23010399003|366016|1800799024|56012099006|11063799006|3023799007|4143699003|6133799003|38070700021|22082099003|18002099003;
-x-microsoft-antispam-message-info:
- PgMOD0iS2IqLl01CXw/Xk+haHmpvgOypPWK3nKpnL1y6XehLG2ounJdidoPtpYL1eQ0WWB6dFexgZE548Zp1nJ6KIzRbr5VEgXNLr3zwfvPbVKfW2hnYMeOgCBsiXugM6OToC4TlgUFXcwyH2zlsOrHdlfkkfITIKnq7zb6Sz9+p1WK9Eh8MDEmevzUrc1wcj9FqnILZLOT6+LYRuSi9d7wP51XzYC1eyYuyGgTxInxiVuCXSu/ceGU6YalbQWdebqkuDiCvRnptzZUZ9MZyx952/+gebpzHTmKIsa5IuvZM0yz912WDgAAqW3DC0g2zI6Arn4Z17nQv36SDUgi0/RD7rs7gXAklYVd0zm5D3HproJFNB+3CCkHW5S+iz3I5zr7iObV64D8OR5G+qoEFwJq8cecsnCGnLoDV4ElrBkrPOhG9P5ix/4NTIgwO4h/y4y2eGk5KLVinTrYX0qb74FHaAhD/gcDB2HhhUi2cf8SFlgkzJr9s81meH0X6LcREj0UZERZ1jc0F0i98kGbEMx0OAhHXRKVk1Lim46Or4csv9UVNWOHZg0Sc+qb1OOURuj+dFNSetdIUNrPp+wy7Uim6FIe9cVJ7Dt1Rze9Y9aNRFVjnlGFTqyQPtwBEUF8B0PN1TABwmW3PgHvtX0I8OepnxloBjvEXY4PhMOqItw/HPojlr2NWtcqM/Z+Ek/BKy4wLQWbbWqN9NIoQTxKtI7rEB3mjV41iToNbekQ/3LD4aLGdIKiIv7/UKlEypBYx
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(23010399003)(366016)(1800799024)(56012099006)(11063799006)(3023799007)(4143699003)(6133799003)(38070700021)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?z3Ajbw8TWwPFcQjMpwkVfC+/PmV76hLslRobNso7aqhC3wM2Lk8E/lTK1j98?=
- =?us-ascii?Q?1Tuv0ChvlBxwJ+xuW2RJ57VqQbhdf2lZ4LEEd1jtLP4KBRKX4tk0cxFAGs+T?=
- =?us-ascii?Q?j7yVndnDCTtSIxflTKKrrLjCQB61t6MALrkHA3sQ04/SLuJw62+PvYUo448i?=
- =?us-ascii?Q?DM7o+EwQxge1v/WgNsnqJWcVLG5QfU8Xyj2VBEIglofCMXcR4cNLxuGTiFLW?=
- =?us-ascii?Q?w4OZDf9gEkwdOQIhne8F5UesvIDKiCBEluZFhQnALYxmYjL2fLSNv9Jdv/31?=
- =?us-ascii?Q?moTmk6Z1Hdm9v+Vqmbn+XnF9PapbAU490ezrYNH/mcvpU23yXKgCf8bN3QEV?=
- =?us-ascii?Q?HKybauI6M75xI2FX9j70CBHl30+EbrNLzvVvr0cm+b2qjZ6P4V4sglYCDPyu?=
- =?us-ascii?Q?45vhV/z03IeEdSBfud0frGpw9P0IcBGJr/RYoi78WcMyGhO2Svj8ioLkNEz/?=
- =?us-ascii?Q?UuQO40jptGAKqBnbnJPOkdsDBubrcl2WfrdvnUKelH7eJIgRdBS80s2+CoPB?=
- =?us-ascii?Q?Qkvx9HbekVMLZXg+F6zH4CnyyF6zAUyONqSDX9xA9rfb3/nJ4IFKeB1xkSFu?=
- =?us-ascii?Q?DN7V0hXE9D1mZNE/mOp+0jckxkzuRz8LtnnNorSiNABwC0dW7HuJDt4CV8uE?=
- =?us-ascii?Q?gMflSEkgTENetQG3sODrQuS43mHnB4c70qj/ltFe50Yo+Tp0D3GYqneu/jWY?=
- =?us-ascii?Q?EWGt5E3OKm0x6hVsrMK5SJcDCO4YBaWauJWo3dMGWuqctFQm2QiaKm6+RrX0?=
- =?us-ascii?Q?0uC72yOwjMGdzcJwx79wpni78W4eLnMTaeGmLCdFpoNbg7i1Alp7jjc7Sy4t?=
- =?us-ascii?Q?rsRFdykGa812WZv935w1rIDKqRrnGeYe+v7DQYYmG54LQY6Kjayrv2cOdjnc?=
- =?us-ascii?Q?qX8VznTL2Ep+166TNlsDH0wElAa20Jno8lL5lqx3hv0U1KpU/PF6qSHvYAna?=
- =?us-ascii?Q?sA6dNmin6cK7fzf4Clnf8rzB5sR+mPRhtp2gK+GrqNsxQmmFmajJOJhGX2tz?=
- =?us-ascii?Q?F9OIl7s2VgWGu4uaYB1xpuglCISf5FJ/xlMTvhqAq8dc3c9bBmzvaMFZksEH?=
- =?us-ascii?Q?/K8YiZGjZmD9ey1Tbf5lCry9uSQR8svpCH/vpyk6lbssBpwUY2XbX4GbNusC?=
- =?us-ascii?Q?SLLT+PQzR5iwRoOlATnTc3XbsahinWzW7iTHC7pLQbA0OprH30AI0ggqqY3z?=
- =?us-ascii?Q?ExE2ywRGHZPiNrvl8XDbZuz8rvanCHZS7W2SXHiWSyn8YXDVvzARZJ6li7fa?=
- =?us-ascii?Q?QD7Nee6eYEJxWeIL0RUJx+T4NQIFxqCiPUeFrQunCzUQS5IEI9+7CIL0KdHn?=
- =?us-ascii?Q?Rts44KXblpJF8Wj4I+TOeBfA/h/Azy6khvzMSOeIxITLKHsZBR730DqXnBt3?=
- =?us-ascii?Q?zKjKVenWqE1f319Sx9NvyEEfybdIVIFqhcStCxZH/mqAbukNWWz0w/in20wI?=
- =?us-ascii?Q?Xt0R3bXOyrZj3cdJF5ZsbeO0b1EitnyxtRD0f/zAg3mGPiPVTSnfy6WbFCov?=
- =?us-ascii?Q?T0YwOxAGy+KptYJ3VWAOvexeT8uHaRqaa41w0iMEAfO/0TBJWcxA0Y4Jp66B?=
- =?us-ascii?Q?2w4KrksZE2sZr/kGJSDGvn+B7Mz875BkleP+nm4pcy0unoRNZgEmWCWj0V6x?=
- =?us-ascii?Q?SkzyXx9+cV/TOkb87OVQvVzu1SUtCVcwKbM0zBGialh41y0t/pynRRJre2r8?=
- =?us-ascii?Q?sl+WmYRfWWcWI95JlQe8LqJ1labJChOX0wdFNS3jz3jsTLJz4gJnICNKfKzu?=
- =?us-ascii?Q?nDR59E1hbz2vPHP1a1E9j/Y6DHyZ/Hc=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	"sdf@fomichev.me" <sdf@fomichev.me>,
+	"razor@blackwall.org" <razor@blackwall.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"almasrymina@google.com" <almasrymina@google.com>,
+	"matttbe@kernel.org" <matttbe@kernel.org>,
+	"skhawaja@google.com" <skhawaja@google.com>,
+	"dw@davidwei.uk" <dw@davidwei.uk>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v2 2/4] udmabuf: emit one sg entry per pinned
+ folio
+Message-ID: <20260616124019.GA3577091@ziepe.ca>
+References: <20260611-tcpdm-large-niovs-v2-0-ee2bf15e7523@meta.com>
+ <20260611-tcpdm-large-niovs-v2-2-ee2bf15e7523@meta.com>
+ <IA0PR11MB71852246277F773AC41DAAA3F8E52@IA0PR11MB7185.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d81d2116-b6de-4f44-4f74-08decba207ed
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2026 12:23:11.1204
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yYUWn/9w515Nr51eZXSxbbbciO+v6BaDRCB30R83SFC4PYmJVBS5Dv45PJuVipYjK9COfMij/WrmYJHhN4FpzespZ5JvhIpevykSPJlwdLn/rQ+YnDer2BbcxsYRHUrI
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSKPR07MB10469
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <IA0PR11MB71852246277F773AC41DAAA3F8E52@IA0PR11MB7185.namprd11.prod.outlook.com>
 
-git send-email --to=3D'jolsa@kernel.org' --to=3D'yonghong.song@linux.dev' -=
--to=3D'song@kernel.org' --to=3D'linux-kselftest@vger.kernel.org' --to=3D'me=
-mxor@gmail.com' --to=3D'shuah@kernel.org' --to=3D'martin.lau@linux.dev' --t=
-o=3D'ast@kernel.org' --to=3D'daniel@iogearbox.net' --to=3D'andrii@kernel.or=
-g' --to=3D'eddyz87@gmail.com' --to=3D'horms@kernel.org' --to=3D'dsahern@ker=
-nel.org' --to=3D'bpf@vger.kernel.org' --to=3D'netdev@vger.kernel.org' --to=
-=3D'pabeni@redhat.com' --to=3D'jhs@mojatatu.com' --to=3D'kuba@kernel.org' -=
--to=3D'stephen@networkplumber.org' --to=3D'davem@davemloft.net' --to=3D'edu=
-mazet@google.com' --to=3D'andrew+netdev@lunn.ch' --to=3D'donald.hunter@gmai=
-l.com' --to=3D'kuniyu@google.com' --to=3D'ij@kernel.org' --to=3D'ncardwell@=
-google.com' --to=3D'koen.de_schepper@nokia-bell-labs.com' --to=3D'g.white@c=
-ablelabs.com' --to=3D'ingemar.s.johansson@ericsson.com' --to=3D'mirja.kuehl=
-ewind@ericsson.com' --to=3D'cheshire@apple.com' --to=3D'rs.ietf@gmx.at' --t=
-o=3D'Jason_Livingood@comcast.com' --to=3D'vidhi_goel@apple.com' ~/L4S_patch=
-es_20260613/linux_net_next_prague_series0/*.patch --from=3D'chia-yu.chang@n=
-okia-bell-labs.com' --smtp-server=3D'mailrelay.int.nokia.com' --smtp-server=
--port=3D25
+On Tue, Jun 16, 2026 at 06:04:03AM +0000, Kasireddy, Vivek wrote:
 
+> > This is helpful for importers like net/core/devmem that expect dmabuf sg
+> IMO, udmabuf needs to detect whether importers can handle segments that
+> are > PAGE_SIZE and set the entries appropriately. Please look into how the
+> GPU drivers and other dmabuf exporters/importers handle this situation, so
+> that we can adopt best practices to address this issue.
 
-> -----Original Message-----
-> From: Jakub Kicinski <kuba@kernel.org>=20
-> Sent: Tuesday, June 16, 2026 4:17 AM
-> To: edumazet@google.com; ncardwell@google.com
-> Cc: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>; jolsa@kern=
-el.org; yonghong.song@linux.dev; song@kernel.org; linux-kselftest@vger.kern=
-el.org; memxor@gmail.com; shuah@kernel.org; martin.lau@linux.dev; ast@kerne=
-l.org; daniel@iogearbox.net; andrii@kernel.org; eddyz87@gmail.com; horms@ke=
-rnel.org; dsahern@kernel.org; bpf@vger.kernel.org; netdev@vger.kernel.org; =
-pabeni@redhat.com; jhs@mojatatu.com; stephen@networkplumber.org; davem@dave=
-mloft.net; andrew+netdev@lunn.ch; donald.hunter@gmail.com; kuniyu@google.co=
-m; ij@kernel.org; Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-lab=
-s.com>; g.white@cablelabs.com; ingemar.s.johansson@ericsson.com; mirja.kueh=
-lewind@ericsson.com; cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@co=
-mcast.com; vidhi_goel@apple.com
-> Subject: Re: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with tso=
-_segs() CC callback for TCP Prague
->=20
->=20
-> CAUTION: This is an external email. Please be very careful when clicking =
-links or opening attachments. See the URL nok.it/ext for additional informa=
-tion.
->=20
->=20
->=20
-> On Mon, 15 Jun 2026 18:51:02 -0700 Jakub Kicinski wrote:
-> > On Sun, 14 Jun 2026 09:17:56 +0200 chia-yu.chang@nokia-bell-labs.com
-> > wrote:
-> > > This patch replaces existing min_tso_segs() with tso_segs() CC=20
-> > > callbak for CC algorithm to provides explicit tso segment number of=20
-> > > each data burst and overrides tcp_tso_autosize().
-> > >
-> > > No functional change.
-> >
-> > Eric, Neal, looks good?
-> >
-> > The min rtt thing in tcp_tso_autosize() helps a bit but if the sender=20
-> > gets congested for a longer stretch min_rtts on new connections are=20
-> > high and we're back to sending small TSO, keeping the sender overloaded=
-.
-> > Which is to say - I _hope_ this also solves some of Meta's problems :)
->=20
-> Ugh, I didn't see the Sashiko report, it's only CCed to the author and bp=
-f@, not to netdev :/
->=20
-> The zero-check sounds legit. Let's revisit this after the merge window.
+Importers have to handle arbitary scatterlists, devmem is just broken
+if it can't handle the output of sg_alloc_table_from_pages().
 
-Thanks for the comment, I will take action after the merge window.
-
-And, please correct me if I am wrong, the next eligible submission is expec=
-ted from 30-June, right?
-Thanks!
-
-Chia-Yu
+Jason
