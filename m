@@ -1,172 +1,392 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C24847798F;
-	Tue, 16 Jun 2026 16:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.175.55.52
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4AC472769
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 16:51:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781627735; cv=none; b=ck1A+4ATKyE6dSS1zwmlhTxOGxE3XslgyFTfm+UeKDD3efDKYZ/tkQzDGROo0AWnlrCmcnA6oE71uveIU6tD71t8xYEa4fC+Ymks+Uvugtykm6Qm1455FNmrUQwpjWaegA946KQyvwcRrbaR6cI/UMNZjXsmT2mJROo4NaH4BlM=
+	t=1781628665; cv=none; b=VUxx4v4Fmb95tAbSQ2qSJOODVxnBO5lDXHkyF/pkqJpVIex8nlkzojRPQC8uTjIuDH7VycSDIQtVyyEspO8sTIU5QDpXntEEuoLaGBFQ5i19gEaVqn3c/5jWwnV0TKC2edB3qrd/o1V3ZVkpQTvT72DZDZamZkbtKouADgQN+78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781627735; c=relaxed/simple;
-	bh=3AdscZiyC3SH3kykjnoLOpSAi35WUcbnKC8DOkiTQ9s=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PB41RyTEBu9JEsaCDApo/WLlZPZg/CFXZ2wJaI2YAb+PathCcuE5UOdcMpAqa0ZlyGBo2u4w22LFFRo7YpCYGshgjHxITp1BNLnepB8e67e0AyN4BEuz3CyODFlUT1UPD85eURs37J1ZoKNxupTvggdsbKF8SMVLVnQpJF9a4bo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=UM5OOmT8; arc=none smtp.client-ip=52.175.55.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781628665; c=relaxed/simple;
+	bh=jitglgJ45fsE0O8Dne3B8fAMDpX/24Xt7Rej/Bc7tXI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Nu1MgWL1dVmNEvluL03W1F/Tkky+rlDqiKBSIk80Hh5sUKOzcHCSKU7dbpcHMMeNBQZuioNIDfZnEv0G/Sk9ikikWFTCDc+d9jmsrcdAMZi+VjWzXRyyprt+TDvdjYGlFSxsXzeE0KtK9MEfhMGKSSLGRFXU9RG0paSUxF8XOw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iBcL0JV1; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="UM5OOmT8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iBcL0JV1"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2c6a48fb4d5so6742015ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 09:51:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=KxcOMLqb+mnXNhlu+7F6Tg5siIZQZ3ClJf
-	HAupYilt8=; b=UM5OOmT8Orn1nC7izyxat963f9JWsWlMobM2q/MSPKs+hghMs9
-	kYEuIj2jC2zT4mrK0X0R1s134DbcPcTNFcg+gYPu3bkGKrDeUM9U4cZh2cfT9/zo
-	rclGvQwNAKmiabZreolh92HwbZTU7SHF0Hx/1H6NF9c+XBZa6yTRTvX3w=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web4 (Coremail) with SMTP id ywQGZQDn+6A9ezFqyT1PAg--.61078S4;
-	Wed, 17 Jun 2026 00:35:17 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-input@vger.kernel.org
-Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/hid: Cover hid_bpf_get_data() size overflow
-Date: Tue, 16 Jun 2026 16:35:07 +0000
-Message-Id: <49d892af0a5e994676723a81d2584fb91bc22a9d.1781627122.git.chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1781627122.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1781627122.git.chenyy23@mails.tsinghua.edu.cn>
+        d=google.com; s=20251104; t=1781628663; x=1782233463; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4vWdS0gGh8Qnkd6KWcp4c6P4oeAatRbK+RzZ1mQj5U=;
+        b=iBcL0JV117PWvXX7ksn67U6TAYsgfiJQfdi9x82WRa6qPV3cf6AIhOqob1KScFiAFQ
+         dstl67slnNGvEETCpHZ0Vn1wKh8ZYLHd+UjjwE2vBOcDlVV91/X1/TJjU6Owj04b+ph9
+         MS2hogwa2EGj08y9vWC3o8ZtC8N9I+R1wEuQd2oi7bH3aglz8QYlcpc3JwnDxLfXXwLI
+         q3oi4FCsfppFUPsu42XY4T5SlQ1tODm4mDGIlTeZljSA4uFNUcVJCwzdLlhDAubfWj3l
+         EF3n+X8Md4Bh30yWbZ0KwdFzkVl+HtkcQLX4liv1EXRUa2s7s7LGsxAtuCigEhNZQR2z
+         DMlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781628663; x=1782233463;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4vWdS0gGh8Qnkd6KWcp4c6P4oeAatRbK+RzZ1mQj5U=;
+        b=aRG1hhjRzGzldavBrFYtIbVqt78LxfbGP+Qim5306B6cCFdyUx0RmdCg6ke7LazUYh
+         TWeAzmRzukmJzjkQA6O2oLGSGe9UHw+hLX0E9aLHa16a0SG5myLOXkS3th9mo+fXLhXu
+         48wuO8KviS7OniNBZAkW0BHHwOSKn35MC5HeyHgxHHnbghm0XLkisVso9ZbJretPoeBn
+         jZwsguxVa3fYndgLgy0VxttLh4t0cdc3XcvQpcmzPMiIzTyZg+we5DwiCVyHm5BVrdip
+         qWOWTb8NsvrVSgZwtSXKayCS8I1ScCocAG+s59bvIOa5QruUQv+YOj5T3kGHN8Cuh96D
+         t22A==
+X-Forwarded-Encrypted: i=1; AFNElJ/DQLVfLs2gaxatc+/TnFQJmyWBauKgC6tkycj5Z5IGbNNo+Ecs4zD9vMeWx8+EP6xK30BZl07rZjQ1j78aRyU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVUhHkb2BQylBwdONdh61znpVqE5w0qFN7LsNbktcgl35BtMhc
+	GfWY2vKd46qCfpU7zYbQ7esWrrkaUlgd4vDrBS+kC+WdbkYyM5Njx2q2v+ha0jRbbCpcc/JS3sk
+	i08qUkA==
+X-Received: from plbmf16.prod.google.com ([2002:a17:902:fc90:b0:2b9:53bb:4a09])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:944:b0:2c4:608:167c
+ with SMTP id d9443c01a7336-2c410cd152emr203328415ad.6.1781628663233; Tue, 16
+ Jun 2026 09:51:03 -0700 (PDT)
+Date: Tue, 16 Jun 2026 09:51:02 -0700
+In-Reply-To: <e0b99e9a-c20f-4def-ac4b-0070996c10ef@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ywQGZQDn+6A9ezFqyT1PAg--.61078S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFy8tF13Cw13urWrXw43ZFb_yoW5trW8pa
-	95Za90kr1ktFn7Ww18Gr4DuFWrGF1kXrW0qr1xAFW5ZwsavrW8Xr1xtFWjqF15CrZ09wnx
-	Ca4IgasrZ3WxX3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUdFb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-	8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF
-	64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
-	CY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv
-	6xkF7I0E14v26r4UJVWxJr1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcV
-	AaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0E
-	x4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI
-	8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_
-	GFv_Wrylc2xSY4AK67AK6r1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-	14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-	IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-	UI43ZEXa7xRltCxUUUUUU==
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
+Mime-Version: 1.0
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-1-6983ae4c3a4d@google.com> <e0b99e9a-c20f-4def-ac4b-0070996c10ef@intel.com>
+Message-ID: <ajF-9isiWxPyzxci@google.com>
+Subject: Re: [PATCH v13 01/22] KVM: selftests: Add macros to simplify creating
+ VM shapes for non-default types
+From: Sean Christopherson <seanjc@google.com>
+To: Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Ackerley Tng <ackerleytng@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
+	Chao Gao <chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Erdem Aktas <erdemaktas@google.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
+	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
+	Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Add a HID-BPF regression check for hid_bpf_get_data() requests whose
-size would overflow when added to the offset.
+On Tue, Jun 16, 2026, Xiaoyao Li wrote:
+> On 5/22/2026 7:16 AM, Lisa Wang wrote:
+> > diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> > index dc70c6da63fa..041bdbfb93f7 100644
+> > --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> > +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> > @@ -233,6 +233,19 @@ kvm_static_assert(sizeof(struct vm_shape) == sizeof(u64));
+> >   	shape;					\
+> >   })
+> > +#define __VM_TYPE(__mode, __type)		\
+> 
+> It seems the name "__VM_SHAPE" fits better?
+> 
+> > +({						\
+> > +	struct vm_shape shape = {		\
+> > +		.mode = (__mode),		\
+> > +		.type = (__type)		\
+> > +	};					\
+> > +						\
+> > +	shape;					\
+> > +})
+> > +
+> > +#define VM_TYPE(__type)				\
+> > +	__VM_TYPE(VM_MODE_DEFAULT, __type)
+> 
+> and I think making it one line would be OK?
+> 
+> So something on top:
+> 
+> ---8<---
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h
+> b/tools/testing/selftests/kvm/include/kvm_util.h
+> index 041bdbfb93f7..a1b5d2029d05 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -223,17 +223,7 @@ kvm_static_assert(sizeof(struct vm_shape) ==
+> sizeof(u64));
+> 
+>  #define VM_TYPE_DEFAULT                        0
+> 
+> -#define VM_SHAPE(__mode)                       \
+> -({                                             \
+> -       struct vm_shape shape = {               \
+> -               .mode = (__mode),               \
+> -               .type = VM_TYPE_DEFAULT         \
+> -       };                                      \
+> -                                               \
+> -       shape;                                  \
+> -})
+> -
+> -#define __VM_TYPE(__mode, __type)              \
+> +#define __VM_SHAPE(__mode, __type)             \
+>  ({                                             \
+>         struct vm_shape shape = {               \
+>                 .mode = (__mode),               \
+> @@ -243,8 +233,8 @@ kvm_static_assert(sizeof(struct vm_shape) ==
+> sizeof(u64));
+>         shape;                                  \
+>  })
+> 
+> -#define VM_TYPE(__type)                                \
+> -       __VM_TYPE(VM_MODE_DEFAULT, __type)
+> +#define VM_SHAPE(__mode)       __VM_SHAPE(__mode, VM_TYPE_DEFAULT)
+> +#define VM_TYPE(__type)                __VM_SHAPE(VM_MODE_DEFAULT, __type)
 
-The new rdesc fixup callback asks for offset 2 and size ~0ULL, then
-records whether the helper returns NULL. A vulnerable kernel returns a
-non-NULL pointer because the runtime check wraps the addition. A fixed
-kernel rejects the request. The test only checks the helper result and
-does not dereference the returned pointer.
+Oh, that's way better!  I say we go straight there:
 
-Also add KHDR_INCLUDES to the HID selftest build so hid_bpf.c sees the
-current kernel UAPI HID definitions on systems whose installed headers do
-not provide enum hid_report_type.
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Tue, 28 Oct 2025 21:20:27 +0000
+Subject: [PATCH] KVM: selftests: Add macros to simplify creating VM shapes for
+ non-default types
 
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Add VM_TYPE() and __VM_SHAPE() macros to create a vm_shape structure given
+a type (and mode), and use the macros to define VM_SHAPE_{SEV,SEV_ES,SNP}
+shapes for x86's SEV family of VM shapes.  Providing common infrastructure
+will avoid having to copy+paste vm_sev_create_with_one_vcpu() for TDX.
+
+Use the new SEV+ shapes and drop vm_sev_create_with_one_vcpu().
+
+Opportunistically move the existing VM_SHAPE() (now __VM_SHAPE()) macro
+below the definitions of VM_MODE_DEFAULT so that all of the SHAPE/TYPE
+macros are bundled together.
+
+No functional change intended.
+
+Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/hid/Makefile    |  2 +-
- tools/testing/selftests/hid/hid_bpf.c   | 11 +++++++++++
- tools/testing/selftests/hid/progs/hid.c | 18 ++++++++++++++++++
- 3 files changed, 30 insertions(+), 1 deletion(-)
+ .../testing/selftests/kvm/include/kvm_util.h  | 28 +++++++------
+ .../selftests/kvm/include/x86/processor.h     |  4 ++
+ tools/testing/selftests/kvm/include/x86/sev.h |  2 -
+ tools/testing/selftests/kvm/lib/x86/sev.c     | 16 --------
+ .../selftests/kvm/x86/sev_smoke_test.c        | 40 +++++++++----------
+ 5 files changed, 40 insertions(+), 50 deletions(-)
 
-diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
-index 50ec9e0406aba..357c6eb5ff5ee 100644
---- a/tools/testing/selftests/hid/Makefile
-+++ b/tools/testing/selftests/hid/Makefile
-@@ -24,7 +24,7 @@ CXX ?= $(CROSS_COMPILE)g++
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index dc70c6da63fa..46bae183d7fc 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -221,18 +221,6 @@ struct vm_shape {
  
- HOSTPKG_CONFIG := pkg-config
+ kvm_static_assert(sizeof(struct vm_shape) == sizeof(u64));
  
--CFLAGS += -g -O0 -rdynamic -Wall -Werror -I$(OUTPUT)
-+CFLAGS += -g -O0 -rdynamic -Wall -Werror -I$(OUTPUT) $(KHDR_INCLUDES)
- CFLAGS += -I$(OUTPUT)/tools/include
+-#define VM_TYPE_DEFAULT			0
+-
+-#define VM_SHAPE(__mode)			\
+-({						\
+-	struct vm_shape shape = {		\
+-		.mode = (__mode),		\
+-		.type = VM_TYPE_DEFAULT		\
+-	};					\
+-						\
+-	shape;					\
+-})
+-
+ extern enum vm_guest_mode vm_mode_default;
  
- LDLIBS += -lelf -lz -lrt -lpthread
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 1e979fb3542ba..f0a210900e63d 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -887,6 +887,17 @@ TEST_F(hid_bpf, test_rdesc_fixup)
- 	ASSERT_EQ(rpt_desc.value[4], 0x42);
+ #if defined(__aarch64__)
+@@ -270,8 +258,24 @@ extern enum vm_guest_mode vm_mode_default;
+ 
+ #endif
+ 
++#define VM_TYPE_DEFAULT			0
++
++#define __VM_SHAPE(__mode, __type)			\
++({						\
++	struct vm_shape shape = {		\
++		.mode = (__mode),		\
++		.type = (__type),		\
++	};					\
++						\
++	shape;					\
++})
++
++
++#define VM_SHAPE(__mode)	__VM_SHAPE(__mode, VM_TYPE_DEFAULT)
+ #define VM_SHAPE_DEFAULT	VM_SHAPE(VM_MODE_DEFAULT)
+ 
++#define VM_TYPE(__type)		__VM_SHAPE(VM_MODE_DEFAULT, __type)
++
+ #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
+ #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
+ 
+diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
+index 77f576ee7789..0aa6eecfcbde 100644
+--- a/tools/testing/selftests/kvm/include/x86/processor.h
++++ b/tools/testing/selftests/kvm/include/x86/processor.h
+@@ -365,6 +365,10 @@ static inline unsigned int x86_model(unsigned int eax)
+ 	return ((eax >> 12) & 0xf0) | ((eax >> 4) & 0x0f);
  }
  
-+TEST_F(hid_bpf, test_rdesc_fixup_get_data_overflow)
-+{
-+	const struct test_program progs[] = {
-+		{ .name = "hid_rdesc_fixup_get_data_overflow" },
-+	};
++#define VM_SHAPE_SEV		VM_TYPE(KVM_X86_SEV_VM)
++#define VM_SHAPE_SEV_ES		VM_TYPE(KVM_X86_SEV_ES_VM)
++#define VM_SHAPE_SNP		VM_TYPE(KVM_X86_SNP_VM)
 +
-+	LOAD_PROGRAMS(progs);
-+
-+	ASSERT_EQ(self->skel->bss->get_data_overflow_check, 1);
-+}
-+
- static int libbpf_print_fn(enum libbpf_print_level level,
- 			   const char *format, va_list args)
+ #define PHYSICAL_PAGE_MASK      GENMASK_ULL(51, 12)
+ 
+ #define PAGE_SHIFT		12
+diff --git a/tools/testing/selftests/kvm/include/x86/sev.h b/tools/testing/selftests/kvm/include/x86/sev.h
+index 1af44c151d60..944c59dbe510 100644
+--- a/tools/testing/selftests/kvm/include/x86/sev.h
++++ b/tools/testing/selftests/kvm/include/x86/sev.h
+@@ -53,8 +53,6 @@ void snp_vm_launch_start(struct kvm_vm *vm, u64 policy);
+ void snp_vm_launch_update(struct kvm_vm *vm);
+ void snp_vm_launch_finish(struct kvm_vm *vm);
+ 
+-struct kvm_vm *vm_sev_create_with_one_vcpu(u32 type, void *guest_code,
+-					   struct kvm_vcpu **cpu);
+ void vm_sev_launch(struct kvm_vm *vm, u64 policy, u8 *measurement);
+ 
+ kvm_static_assert(SEV_RET_SUCCESS == 0);
+diff --git a/tools/testing/selftests/kvm/lib/x86/sev.c b/tools/testing/selftests/kvm/lib/x86/sev.c
+index 93f916903461..95d8520eea34 100644
+--- a/tools/testing/selftests/kvm/lib/x86/sev.c
++++ b/tools/testing/selftests/kvm/lib/x86/sev.c
+@@ -158,22 +158,6 @@ void snp_vm_launch_finish(struct kvm_vm *vm)
+ 	vm_sev_ioctl(vm, KVM_SEV_SNP_LAUNCH_FINISH, &launch_finish);
+ }
+ 
+-struct kvm_vm *vm_sev_create_with_one_vcpu(u32 type, void *guest_code,
+-					   struct kvm_vcpu **cpu)
+-{
+-	struct vm_shape shape = {
+-		.mode = VM_MODE_DEFAULT,
+-		.type = type,
+-	};
+-	struct kvm_vm *vm;
+-	struct kvm_vcpu *cpus[1];
+-
+-	vm = __vm_create_with_vcpus(shape, 1, 0, guest_code, cpus);
+-	*cpu = cpus[0];
+-
+-	return vm;
+-}
+-
+ void vm_sev_launch(struct kvm_vm *vm, u64 policy, u8 *measurement)
  {
-diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
-index 5ecc845ef7921..c6ae2cd045b0e 100644
---- a/tools/testing/selftests/hid/progs/hid.c
-+++ b/tools/testing/selftests/hid/progs/hid.c
-@@ -13,6 +13,7 @@ struct attach_prog_args {
+ 	if (is_sev_snp_vm(vm)) {
+diff --git a/tools/testing/selftests/kvm/x86/sev_smoke_test.c b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+index 1a49ee391586..fe2c438882ae 100644
+--- a/tools/testing/selftests/kvm/x86/sev_smoke_test.c
++++ b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+@@ -104,7 +104,7 @@ static void compare_xsave(u8 *from_host, u8 *from_guest)
+ 		abort();
+ }
  
- __u64 callback_check = 52;
- __u64 callback2_check = 52;
-+__u64 get_data_overflow_check;
- 
- SEC("?struct_ops/hid_device_event")
- int BPF_PROG(hid_first_event, struct hid_bpf_ctx *hid_ctx, enum hid_report_type type)
-@@ -240,6 +241,23 @@ struct hid_bpf_ops rdesc_fixup = {
- 	.hid_rdesc_fixup = (void *)hid_rdesc_fixup,
- };
- 
-+SEC("?struct_ops.s/hid_rdesc_fixup")
-+int BPF_PROG(hid_rdesc_fixup_get_data_overflow, struct hid_bpf_ctx *hid_ctx)
-+{
-+	__u8 *data;
-+
-+	data = hid_bpf_get_data(hid_ctx, 2 /* offset */, ~0ULL /* size */);
-+	if (!data)
-+		get_data_overflow_check = 1;
-+
-+	return 0;
-+}
-+
-+SEC(".struct_ops.link")
-+struct hid_bpf_ops rdesc_fixup_get_data_overflow = {
-+	.hid_rdesc_fixup = (void *)hid_rdesc_fixup_get_data_overflow,
-+};
-+
- SEC("?struct_ops/hid_device_event")
- int BPF_PROG(hid_test_insert1, struct hid_bpf_ctx *hid_ctx, enum hid_report_type type)
+-static void test_sync_vmsa(u32 type, u64 policy)
++static void test_sync_vmsa(struct vm_shape shape, u64 policy)
  {
--- 
-2.34.1
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+@@ -114,7 +114,7 @@ static void test_sync_vmsa(u32 type, u64 policy)
+ 	double x87val = M_PI;
+ 	struct kvm_xsave __attribute__((aligned(64))) xsave = { 0 };
+ 
+-	vm = vm_sev_create_with_one_vcpu(type, guest_code_xsave, &vcpu);
++	vm = vm_create_shape_with_one_vcpu(shape, &vcpu, guest_code_xsave);
+ 	gva = vm_alloc_shared(vm, PAGE_SIZE, KVM_UTIL_MIN_VADDR,
+ 			      MEM_REGION_TEST_DATA);
+ 	hva = addr_gva2hva(vm, gva);
+@@ -150,13 +150,13 @@ static void test_sync_vmsa(u32 type, u64 policy)
+ 	kvm_vm_free(vm);
+ }
+ 
+-static void test_sev(void *guest_code, u32 type, u64 policy)
++static void test_sev(void *guest_code, struct vm_shape shape, u64 policy)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 	struct ucall uc;
+ 
+-	vm = vm_sev_create_with_one_vcpu(type, guest_code, &vcpu);
++	vm = vm_create_shape_with_one_vcpu(shape, &vcpu, guest_code);
+ 
+ 	/* TODO: Validate the measurement is as expected. */
+ 	vm_sev_launch(vm, policy, NULL);
+@@ -201,12 +201,12 @@ static void guest_shutdown_code(void)
+ 	__asm__ __volatile__("ud2");
+ }
+ 
+-static void test_sev_shutdown(u32 type, u64 policy)
++static void test_sev_shutdown(struct vm_shape shape, u64 policy)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 
+-	vm = vm_sev_create_with_one_vcpu(type, guest_shutdown_code, &vcpu);
++	vm = vm_create_shape_with_one_vcpu(shape, &vcpu, guest_shutdown_code);
+ 
+ 	vm_sev_launch(vm, policy, NULL);
+ 
+@@ -218,28 +218,28 @@ static void test_sev_shutdown(u32 type, u64 policy)
+ 	kvm_vm_free(vm);
+ }
+ 
+-static void test_sev_smoke(void *guest, u32 type, u64 policy)
++static void test_sev_smoke(void *guest, struct vm_shape shape, u64 policy)
+ {
+ 	const u64 xf_mask = XFEATURE_MASK_X87_AVX;
+ 
+-	if (type == KVM_X86_SNP_VM)
+-		test_sev(guest, type, policy | SNP_POLICY_DBG);
++	if (shape.type == KVM_X86_SNP_VM)
++		test_sev(guest, shape, policy | SNP_POLICY_DBG);
+ 	else
+-		test_sev(guest, type, policy | SEV_POLICY_NO_DBG);
+-	test_sev(guest, type, policy);
++		test_sev(guest, shape, policy | SEV_POLICY_NO_DBG);
++	test_sev(guest, shape, policy);
+ 
+-	if (type == KVM_X86_SEV_VM)
++	if (shape.type == KVM_X86_SEV_VM)
+ 		return;
+ 
+-	test_sev_shutdown(type, policy);
++	test_sev_shutdown(shape, policy);
+ 
+ 	if (kvm_has_cap(KVM_CAP_XCRS) &&
+ 	    (xgetbv(0) & kvm_cpu_supported_xcr0() & xf_mask) == xf_mask) {
+-		test_sync_vmsa(type, policy);
+-		if (type == KVM_X86_SNP_VM)
+-			test_sync_vmsa(type, policy | SNP_POLICY_DBG);
++		test_sync_vmsa(shape, policy);
++		if (shape.type == KVM_X86_SNP_VM)
++			test_sync_vmsa(shape, policy | SNP_POLICY_DBG);
+ 		else
+-			test_sync_vmsa(type, policy | SEV_POLICY_NO_DBG);
++			test_sync_vmsa(shape, policy | SEV_POLICY_NO_DBG);
+ 	}
+ }
+ 
+@@ -247,13 +247,13 @@ int main(int argc, char *argv[])
+ {
+ 	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SEV));
+ 
+-	test_sev_smoke(guest_sev_code, KVM_X86_SEV_VM, 0);
++	test_sev_smoke(guest_sev_code, VM_SHAPE_SEV, 0);
+ 
+ 	if (kvm_cpu_has(X86_FEATURE_SEV_ES))
+-		test_sev_smoke(guest_sev_es_code, KVM_X86_SEV_ES_VM, SEV_POLICY_ES);
++		test_sev_smoke(guest_sev_es_code, VM_SHAPE_SEV_ES, SEV_POLICY_ES);
+ 
+ 	if (kvm_cpu_has(X86_FEATURE_SEV_SNP))
+-		test_sev_smoke(guest_snp_code, KVM_X86_SNP_VM, snp_default_policy());
++		test_sev_smoke(guest_snp_code, VM_SHAPE_SNP, snp_default_policy());
+ 
+ 	return 0;
+ }
 
+base-commit: e49bb0b5e1e3a8d7783bc7222c02cc6ff90fa2aa
+--
