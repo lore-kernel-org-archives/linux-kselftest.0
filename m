@@ -1,160 +1,170 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011003.outbound.protection.outlook.com [52.101.57.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188E330E0E4;
-	Tue, 16 Jun 2026 07:05:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.3
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781593503; cv=fail; b=PB7wJ5wt0m40i5PoVGSIy3nCcPz3JQdmrtDeJ2RgmbKRmB5QZ8e7/USgzMdAWq3lzEWVOSXAG32VEbzLrYjQIGAzp6cGiBE4ElcyoQ6qrmaHwMHf6GVChTLf4xwiSC5rUSh52v+Y5eteD5CTl4d0t+sNXoatynLueuyc4MxrNus=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781593503; c=relaxed/simple;
-	bh=2E00JxBaD7+MDwzn14gYGWCFv74musqMDxr/0VW5LeA=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=KE9PFYK2uNhBusKGM3Mi5lu6Y1MiMR4rfGq57pSUCIzjz+uiA9lf5uWsHbjArkfi0SF8ado7+8oEA9uLD3qxgMd/coKDqs572TVb6WHUq6GMxfjOUI6uzepZbTOs4Y/YAdwKQSy7NbCxaIsXj1qtAoRyoLsgC0UD/7a3Gc1xYZk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=tn5H5vZa; arc=fail smtp.client-ip=52.101.57.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="tn5H5vZa"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=yD12iWkpi91d7UlEpuKaa8PP3la1FuynPyFEy05ECpaC7V/K8kHhRVjjsaSYwNzEcWxw7hqEVxv3TSWbz0ICq1o50QyUjGwocWKAqhtowDQDfN+EZxYv5A5hWjYcdIC3qvIfQQgB0w3ISNKM3Zjr21cPmeO+f3ucdG92XHnoKxvuL1Q1XuvMaLs0QnkuT0J873pxNu3VnAQesHpr7kQiph1XGkcX2wbPgqN5SxPbXMHNdekz6GLqY+PllfgB8JPCXpsxNU9YOrnv0+Yygd0a6JR4+UtFkwK6DCQyNkO1mK4kjB3+jK4A1wodp5n9ZZauJc28oiokvOZJxcJvcZHoVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eOk5blE+JNnwCDzOdO4ZfzrJXrhgv/6kEPEaLPUhorw=;
- b=o36GD1+glM+rtm32x3N5gP7iN5qXQJq3Ea9LWn7SHsgizBKZdleaboLl7cN7hkxnDuN4dsdYRHuKJz1Dq+32Z3st4jLnUL3WGl6Bm74D8xN+wGmhh4/mR/qPmCCFrmDAASEFDHTw3PuQrLD6/kbHg1Pz05IpWWARwcyszJCFbUBLSC/6sYpREGoeWFEZiBIVl4kaf+Q+NDxPm5/eKyCAb6wEXYcomHKv73X5fXUYWSZOfW7dlCWkkJ4if3pUa1MAETbSzF9C/i/6HEsMfLiZS8rjU0ye4NuQLa8RD5Xb+vwpfsZFgNxhoad5/y15zqIItdr8ElVm4P7sYT3zpQyYbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eOk5blE+JNnwCDzOdO4ZfzrJXrhgv/6kEPEaLPUhorw=;
- b=tn5H5vZanEm5z8lbi9YGWyWVWO4a4c7XMJiJ4tF935BJlk9VW2yk4i/lICEiSMaAa8z6D8WeycY2zqIq8s6CpFg6E5Uqxzi0cgTOV5HfdMO1p78xgQ3fWtKkDMPd2HG4zRrwcJQ1d2JykAc4CJwudLyh54q1pFkpxTbNgh09pTc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by PH0PR12MB8005.namprd12.prod.outlook.com (2603:10b6:510:26c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.13; Tue, 16 Jun
- 2026 07:04:58 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c%5]) with mapi id 15.21.0092.006; Tue, 16 Jun 2026
- 07:04:58 +0000
-Message-ID: <86e401f4-911f-4515-adf0-3bedba2b3f7a@amd.com>
-Date: Tue, 16 Jun 2026 09:04:46 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3 2/4] udmabuf: emit one sg entry per pinned
- folio
-To: Jakub Kicinski <kuba@kernel.org>, Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Andrew Lunn <andrew+netdev@lunn.ch>, Gerd Hoffmann <kraxel@redhat.com>,
- Vivek Kasireddy <vivek.kasireddy@intel.com>,
- Sumit Semwal <sumit.semwal@linaro.org>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org,
- sdf@fomichev.me, razor@blackwall.org, daniel@iogearbox.net,
- almasrymina@google.com, matttbe@kernel.org, skhawaja@google.com,
- dw@davidwei.uk, Bobby Eshleman <bobbyeshleman@meta.com>
-References: <20260612-tcpdm-large-niovs-v3-0-a3b693e76fcb@meta.com>
- <20260612-tcpdm-large-niovs-v3-2-a3b693e76fcb@meta.com>
- <20260615145757.0b2ddcf3@kernel.org>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20260615145757.0b2ddcf3@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BN9P222CA0027.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:408:10c::32) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDBD1409608;
+	Tue, 16 Jun 2026 08:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781599550; cv=none; b=WSJv0QOKHGqNqvOo2+Z0ZgZiKIGOGT/sCL3oigVUKcNF36Lpog9WVGTlSpUhFxV+5npDn0foa3YXuq/UWvukpQ/I253in/R5b51N6+XwgiWtYUtWLSzaC54z3X5u16dfXE4rjkHmY5fX7S8YbOBRoTWEkNw30927HXwYA1/Rbv0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781599550; c=relaxed/simple;
+	bh=kN7K3MlEQhvRvlV/bLifGWm2hCPjoLAO+4k5Xnlex7o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GUHXUOH/jLlmd58BCOtyX2l9DkzS8Z2QSR45j7kEbFMP3iFjV6T66dXtEcrvnnMGSrrChUkmm9lt5sYQHoaLP3teiBEITFcVmVIAtBHkx68UGH9s8ndy2Um+yw7fADPsqbXY7FxkbJ7jaCYR5+nlVLlTyZKE5pnX5t/7jsPrgc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.2.5.213])
+	by gateway (Coremail) with SMTP id _____8DxBOk4DTFqsa8UAA--.48101S3;
+	Tue, 16 Jun 2026 16:45:44 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.5.213])
+	by front1 (Coremail) with SMTP id qMiowJAxXcI0DTFquQaoAA--.54652S2;
+	Tue, 16 Jun 2026 16:45:40 +0800 (CST)
+From: Bibo Mao <maobibo@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: kvm@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] LoongArch: KVM: User internal API to deliver interrupt in kernel mode
+Date: Tue, 16 Jun 2026 16:45:38 +0800
+Message-Id: <20260616084538.2274484-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|PH0PR12MB8005:EE_
-X-MS-Office365-Filtering-Correlation-Id: c2fb8fd2-1265-4010-03e7-08decb759314
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|22082099003|18002099003|4143699003|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	JxtDSX807mxqnz4gbybDYZc8t3y+3yNT9tE9v0tsin0PFOlMVaJAiX0Q/iUqjXM66LuvR73Ygxr6MsOgUIOHnTXKD7osuJ1sjJT7+7wgQpCiwgzKatdpsFc2pq1b4vD/rrbJg5hfuBznCEWRHQd+Ls8FbJfAKuLFNd1pCRhn+w49vRare5pms1pfimrLcimMB3/Inj92G4ka7bYrpteVUidS5JoB7dfbTQesXNTe/U1xbOm7sICAfHx3QZaUTEVrB7yGOb2YvMQnQkWbK7CglRyCCahJ5Mf1NAiQG4a1wlIJZChkQ4Ah5+Mete2jHBQvr2OrqtrkQ/ZoXsb6S/k8cIZh6GeuQ3wVkt9XEfPov8OO/6FZ3KMjdY3DXb/Uo+WHcuqKT48ZYl95iAzrhBj+g409dwMf8TERGPeGmB5r0MmBPdseaQB8aUi+6iQ4jrqNasY2SXCCw6O6jAL3XrssQCrEZRiQJkLA0dhPANP2e+cNfuTbzyUNj5txx3iOAI6Uh/joI5f+LJx9xygI+TKmZuw0kQolg9pDQDDS6nB+DZQfslPBx8eyaZBJfOXQ0W9mYNCm0ilgYYNRq7Y+NlbI4+EuoiDYP9iZOH1PogqPaScfHoELzgXVuP/Ia0JVHGt2QT70yJAoUU41Ote3/PwsA3x3RdLYkcfz+HVKg750lX7zAfoBMZvsCdWko35laJtd
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(22082099003)(18002099003)(4143699003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?a3cvc3Ntb1Y2eWlkd2ltakt0R3FhTTA1aG1UdUJHVkFMK28zaStYeEY4N1o2?=
- =?utf-8?B?dFJwazhBVml6RXFqQ091Sm1lL2cwakZoR2UwZjB3NDQ5bmhKU0hSTWg5T0cr?=
- =?utf-8?B?ZGxldXIwbGRSWmhVd1pORTgyOVpYQy9jR2ZwdkphRmY3dnZMSFNmOXA2YWFm?=
- =?utf-8?B?TkdGdUgxTWcxZVF0cDYwelZVV1U1NVZKWE9tZ01Ba2hMNDg4cExNTXJFVm9i?=
- =?utf-8?B?STJ0UG5rTzFoMDNWdVBhQ290UlJCTEhBbks2SzNyNHBQcGd0eDE2cm9UdTdP?=
- =?utf-8?B?cEptTW9YczRWZW42bTZEWHVpUUtaUFVaRFJHYkFUcEtXZWo4T2cvZGtyZTcv?=
- =?utf-8?B?aTNIVVB5U2RuK0ZGdlgyTVRMRGd3S3cxS3hKL0FuaVIxVURKeEJ6RjFiVGcr?=
- =?utf-8?B?N3p6NHE1Z2pSQ0RUUXJhb3BLYXVvQURCMHJ5MmtvR1Z3MW1wY0lQdFM1SlFk?=
- =?utf-8?B?bWZBZWhjTzdYeFVIM0JZMVdHYkUxeVRTTVdoeGp2YWJ3Yk9IaFNOQy9XS1d0?=
- =?utf-8?B?SGw4MnAvTGlKZ2xZT24zbG5NalpXMWVXTFE5aG1VSFREdHJLVXZXVHhiKy9l?=
- =?utf-8?B?cTJ4NG8rbGVLcVdZaC9pWTlwWnVidXU2a3VEeGxjSEpMejg2K0FHSW9oSkxV?=
- =?utf-8?B?RzcvT2UxL1U3MktFQTRMZmVFd3RPRTBFKzhSTDJqelJGNTV4QjRYb283dFNt?=
- =?utf-8?B?aUQ1cWovQ0Z1SitFM0dWQzlidS9CLzBlNUN6R3M5SXFCWkNGVHlmdHhmazZI?=
- =?utf-8?B?aVdISjQxN0ZZVnZUMGxyeVJiQWFMbFBCeDYrRENkeVZJdnhGaVFITko2NWRw?=
- =?utf-8?B?Y2lGcG9jaUNJc0MrN0dadGVXM2gwUWtMRXRqMW8rL09UekpYNDgvVk5yVERU?=
- =?utf-8?B?cEplN0dIS3V5QWpwTUV4VFozNFlodC9Md2h0eThBaUdQYlFtNzN0Y3o3SFBI?=
- =?utf-8?B?ZDA0dHZmMnJ5ZHhKUmo5Q0VHdFBweXhJVmRNY0tCRkp3NzZuTlE4L0x2bWJD?=
- =?utf-8?B?ODIyUnNoTjNzY2t0SzhZaThTbmR6cnJuVG51RGtlQjNoZlFxTGNwdmZ0akVG?=
- =?utf-8?B?SThKOWFyZFhHWW41QmU0WmFQbFBXbzI3a2s2MUwrSm5GVkFoejVDOUxDYkZk?=
- =?utf-8?B?N0NuUDVRdGRPSVEwMkVaRm9kMUlWUy95ayszNEQ5NDRBSEdFNi8rR2xyYWpy?=
- =?utf-8?B?Vmt2Tlg3bzVRc1dHaDRjRDlKMmxhNkZsaitxZmRZRCtySkdLczRDKy9lT0Y4?=
- =?utf-8?B?aGh1QmMzdEpCR2gyV292UW5nWEJUdE13T1pBL1BWd1BuK1M2YXZJbDFPd00z?=
- =?utf-8?B?bXMwMVJ6QUdLNXJTaXFCKzZ2SGRUTmp6bFk0cFNhOU5VaFJpZEUvZlFWdTQ2?=
- =?utf-8?B?a1R2TnpNY3hNZTBEWnJZck5TVmdkVWFpWi9NQm02VFR6eitIWW44anJ1NVl4?=
- =?utf-8?B?TTZEYWhZTWM3UFZveWttNTFGY2pNRGpKS1RYUm4wS0NuOUVxeUxmSVkwaTFF?=
- =?utf-8?B?bU54bEdNZVkvd0M1VDFSaHdmYmgzSjk3Qmh4UDZMY1A2bmJwSGZUa0JkaW84?=
- =?utf-8?B?Z0dwck9Ya3pjWHVLUERmNzFWc250NFF0TTJlMU1KS3VGMDJsSTVXZFBFRTNs?=
- =?utf-8?B?SGlNbnpBREkyWFNOdzB0bzRadndJanBRL1cxamltNEVYdkpxMkNGWUc2bU9Y?=
- =?utf-8?B?YlBVbmJ3SHMxSzlMMnFtU1FMN09BZi9VRUdubWMzV2drVlJackI5V2FqQkh1?=
- =?utf-8?B?MTg3Y1RMMzQxOVlGM01SYTY2dWNhYzk1eGhzUlgyd0hpUkVkajJ0T05iWklN?=
- =?utf-8?B?cGJLVjJremR1M2RxOVZhT05zSFhFVEY4cjdPMkdNT3ZHdEU3ZnJGdVZaZE0x?=
- =?utf-8?B?UnREcEJLbmZCamhnWUJKbWs4V1pRd0ZPcVZPMDZ6cnR4ZlNJZTFRZ0VlWExt?=
- =?utf-8?B?ZWVQSHA1WTdtRGZhWWZLL0duTDV4WnB2SHFNWEtmSHlMWTAxZFZsLy9oUjJK?=
- =?utf-8?B?TU43RGJhVkZQM1pMNmxkUk1NbWtYbTQ0dm9oNjIxSUpmT2E5UzZIN2dZSTZj?=
- =?utf-8?B?U2JUOG5jOExIZEp6ZUtheEcxUytPRzhoNjdlZDZSZ29LbEsrSlQ3Qi9CWHlz?=
- =?utf-8?B?dkU5V3VnNzZnRDBtYzJscVpNR2pMdWZTcU9rbEVuYlc1TkhKekYxZVhnTjg0?=
- =?utf-8?B?Z1UweUZtODZ3THlJWVBUR2RSKzVUZ3dCbGsxSXRCV3lWZUtqUk9abldJZVFl?=
- =?utf-8?B?YVYzMHE5UlJSekowWi9QV3dOTjRHR083TFdjTlpyOG1NVjRzYW9LL2hJbmdw?=
- =?utf-8?Q?bCs8kQK0b4fXvQVzSl?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2fb8fd2-1265-4010-03e7-08decb759314
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2026 07:04:57.4096
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2Ur2tQbZofG4fcJi3cFnfAKISzmd2k9X2Ml3yTJsRaNrmujqtHSndGaW3CmyjlKf
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8005
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAxXcI0DTFquQaoAA--.54652S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+	nUUI43ZEXa7xR_UUUUUUUUU==
 
-On 6/15/26 23:57, Jakub Kicinski wrote:
-> On Fri, 12 Jun 2026 09:25:58 -0700 Bobby Eshleman wrote:
->> dma_map_sgtable() does not always merge contiguous pages for us, so we
->> do this internally before exporting.
->>
->> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
->> ---
->>  drivers/dma-buf/udmabuf.c 
-> 
-> This will need at the very least an ack from DMABUF maintainers,
-> so it's a bit late to consider it for 7.2
+API kvm_vcpu_ioctl_interrupt() is mainly to used to deliver interrupt
+from user mode, and internal APIs kvm_queue_irq() and kvm_dequeue_irq()
+are used in kernel mode.
 
-Sorry for not replying earlier. I already nailed Bobby with questions on the why and what from the DMA-buf side and while I don't have time to in deep review the code the high level rational looks sane to me.
+Also this patch removes unnecessary printk information with inject
+unsupported interrupt with number 0.
 
-Feel free to add Acked-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+---
+ arch/loongarch/kvm/intc/dmsintc.c |  7 ++++---
+ arch/loongarch/kvm/intc/eiointc.c |  8 +++++---
+ arch/loongarch/kvm/intc/ipi.c     | 10 ++++------
+ arch/loongarch/kvm/vcpu.c         |  4 +---
+ 4 files changed, 14 insertions(+), 15 deletions(-)
 
-Regards,
-Christian.
+diff --git a/arch/loongarch/kvm/intc/dmsintc.c b/arch/loongarch/kvm/intc/dmsintc.c
+index de25735ce039..a726c6cafec3 100644
+--- a/arch/loongarch/kvm/intc/dmsintc.c
++++ b/arch/loongarch/kvm/intc/dmsintc.c
+@@ -47,7 +47,6 @@ void dmsintc_inject_irq(struct kvm_vcpu *vcpu)
+ int dmsintc_deliver_msi_to_vcpu(struct kvm *kvm,
+ 				struct kvm_vcpu *vcpu, u32 vector, int level)
+ {
+-	struct kvm_interrupt vcpu_irq;
+ 	struct dmsintc_state *ds = &vcpu->arch.dmsintc_state;
+ 
+ 	if (!level)
+@@ -57,9 +56,11 @@ int dmsintc_deliver_msi_to_vcpu(struct kvm *kvm,
+ 	if (!ds)
+ 		return -ENODEV;
+ 
+-	vcpu_irq.irq = INT_AVEC;
++	if (!kvm_guest_has_msgint(&vcpu->arch))
++		return -EINVAL;
++
+ 	set_bit(vector, (unsigned long *)&ds->vector_map);
+-	kvm_vcpu_ioctl_interrupt(vcpu, &vcpu_irq);
++	kvm_queue_irq(vcpu, INT_AVEC);
+ 	kvm_vcpu_kick(vcpu);
+ 
+ 	return 0;
+diff --git a/arch/loongarch/kvm/intc/eiointc.c b/arch/loongarch/kvm/intc/eiointc.c
+index 2ab7fafa86d5..63f917de7903 100644
+--- a/arch/loongarch/kvm/intc/eiointc.c
++++ b/arch/loongarch/kvm/intc/eiointc.c
+@@ -36,7 +36,6 @@ static void eiointc_update_irq(struct loongarch_eiointc *s, int irq, int level)
+ {
+ 	int ipnum, cpu, found;
+ 	struct kvm_vcpu *vcpu;
+-	struct kvm_interrupt vcpu_irq;
+ 
+ 	ipnum = (s->ipmap >> (irq / 32 * 8)) & 0xff;
+ 	if (!(s->status & BIT(EIOINTC_ENABLE_INT_ENCODE))) {
+@@ -67,8 +66,11 @@ static void eiointc_update_irq(struct loongarch_eiointc *s, int irq, int level)
+ 	if (found < EIOINTC_IRQS)
+ 		return; /* other irq is handling, needn't update parent irq */
+ 
+-	vcpu_irq.irq = level ? (INT_HWI0 + ipnum) : -(INT_HWI0 + ipnum);
+-	kvm_vcpu_ioctl_interrupt(vcpu, &vcpu_irq);
++	if (level)
++		kvm_queue_irq(vcpu, INT_HWI0 + ipnum);
++	else
++		kvm_dequeue_irq(vcpu, INT_HWI0 + ipnum);
++	kvm_vcpu_kick(vcpu);
+ }
+ 
+ static inline void eiointc_update_sw_coremap(struct loongarch_eiointc *s,
+diff --git a/arch/loongarch/kvm/intc/ipi.c b/arch/loongarch/kvm/intc/ipi.c
+index 1f6ebbd0af5c..ab3d894eb146 100644
+--- a/arch/loongarch/kvm/intc/ipi.c
++++ b/arch/loongarch/kvm/intc/ipi.c
+@@ -10,15 +10,14 @@
+ static void ipi_set(struct kvm_vcpu *vcpu, uint32_t data)
+ {
+ 	uint32_t status;
+-	struct kvm_interrupt irq;
+ 
+ 	spin_lock(&vcpu->arch.ipi_state.lock);
+ 	status = vcpu->arch.ipi_state.status;
+ 	vcpu->arch.ipi_state.status |= data;
+ 	spin_unlock(&vcpu->arch.ipi_state.lock);
+ 	if ((status == 0) && data) {
+-		irq.irq = LARCH_INT_IPI;
+-		kvm_vcpu_ioctl_interrupt(vcpu, &irq);
++		kvm_queue_irq(vcpu, LARCH_INT_IPI);
++		kvm_vcpu_kick(vcpu);
+ 	}
+ }
+ 
+@@ -40,15 +39,14 @@ static void ipi_send(struct kvm *kvm, uint64_t data)
+ static void ipi_clear(struct kvm_vcpu *vcpu, uint64_t data)
+ {
+ 	uint32_t status;
+-	struct kvm_interrupt irq;
+ 
+ 	spin_lock(&vcpu->arch.ipi_state.lock);
+ 	vcpu->arch.ipi_state.status &= ~data;
+ 	status = vcpu->arch.ipi_state.status;
+ 	spin_unlock(&vcpu->arch.ipi_state.lock);
+ 	if (status == 0) {
+-		irq.irq = -LARCH_INT_IPI;
+-		kvm_vcpu_ioctl_interrupt(vcpu, &irq);
++		kvm_dequeue_irq(vcpu, LARCH_INT_IPI);
++		kvm_vcpu_kick(vcpu);
+ 	}
+ }
+ 
+diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
+index e28084c49e68..bd90be3f498b 100644
+--- a/arch/loongarch/kvm/vcpu.c
++++ b/arch/loongarch/kvm/vcpu.c
+@@ -1492,10 +1492,8 @@ int kvm_vcpu_ioctl_interrupt(struct kvm_vcpu *vcpu, struct kvm_interrupt *irq)
+ 		kvm_queue_irq(vcpu, intr);
+ 	else if (intr < 0)
+ 		kvm_dequeue_irq(vcpu, -intr);
+-	else {
+-		kvm_err("%s: invalid interrupt ioctl %d\n", __func__, irq->irq);
++	else
+ 		return -EINVAL;
+-	}
+ 
+ 	kvm_vcpu_kick(vcpu);
+ 
+
+base-commit: 0e0611827f3349d0a2ac121c023a6d3260dcecdb
+-- 
+2.39.3
+
