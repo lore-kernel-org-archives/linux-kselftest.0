@@ -1,50 +1,40 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9729411664;
-	Tue, 16 Jun 2026 08:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A429A3B42E0;
+	Tue, 16 Jun 2026 09:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781600237; cv=none; b=ptSgiHhW4ZmUl6KmpQNn57nnB1Lj0EEaEOT4q7kml3UwMZpVZSroZkDzCN1at21acYqF+shrK40a4UH52fF34J97cRjnwkaj03NkgOfxuY783QTXrLlSfSij/QcFnnPUPFNHb0FwHHgx+UsuMGgeLJ5R2dnnzaEloJKlKy9bQtA=
+	t=1781600881; cv=none; b=oNL25Acp1bBeLRZrOPzuvDTEO4hvDfQNYqUx247lhad4vleJuh+Af+5d1sNTYXNHWaQmOwuB9ZQJOqyKul4aSgVYw51uc7RQxgfigmPHCbPPmc1iqQgsdsR09GbUPSQlG9v2+tAfUBWAZAJbasY0Q1aYt4DJnWEm9C51mNp9oZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781600237; c=relaxed/simple;
-	bh=1e3LlVBULL94K4OR2/cvcZTCxBPThyoWu9as3n1vewo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BDI2BDzUT0xlRqtl1lQz0ic96xlaWZuScAp+nz13X1riCUMicD7npXoOJrZQ23sG0KUJRVGlCoHiTSpdbGMLpi3n+qp3oI8ZnKSSHs4hqanatUl/k0fj9apTwizat9hwUgYcl1HNOQMqcekBnXS3qsx9l9js5LE0lKWett5hEiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W1nvaNBG; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781600881; c=relaxed/simple;
+	bh=s4SMwKlC/vOKKlZaGssZALB68bILzCaOblVSJpSShi4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=QoZ8rfxdRCagwyamhQvt+P3+XHRehoPc2pqC4wAXUgPVafkMGMJN2S5hGbaqWK9DkGM7ESRrQjrxNYuDyJmaK1Va14RQjg6kole5mRMb/57xOPNeObSpfn1+xzF0qK0zj8rdRlzdQFfnxGFbcRlOWt54d+s+SjRe2jwH76IMOEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ptQ3lVuP; arc=none smtp.client-ip=113.46.200.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W1nvaNBG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781600236; x=1813136236;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1e3LlVBULL94K4OR2/cvcZTCxBPThyoWu9as3n1vewo=;
-  b=W1nvaNBGthFdeZwRcv1VzYygM1zOJd5hEtQ35ekUIoOEGeQiA7QlT8t4
-   +6Lqdl6wRZY7NUPKVJWN1KqedzS6B3qz7M2QvEAVY2tgIt2jorrGRuzQY
-   AE/+SxPb8AGa3FO2eJ67IceGqqgy0NBN62CAaaMV2rcBv+rs3il+RYXNB
-   71YhENmBTmJuaMHvT8eoUf1YSfJTT15GZuoQ7g/xRsuXiU1HSHFf6BLyg
-   URqdw0lJ3iqz9rlTVsBpDLXuS/XduErPUGTDvOTVQSUgomzm5eH0yA5NE
-   tMFCZMHCXEPW9if+uz1OrKdXQdHVRQN3zPLsYieTAXMWL9BbC3gd8g+e7
-   g==;
-X-CSE-ConnectionGUID: LVF6q0wXR1CZNUMaLINHNw==
-X-CSE-MsgGUID: HwASjuMpT5CbIlJi5Qxzdg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11818"; a="82371496"
-X-IronPort-AV: E=Sophos;i="6.24,208,1774335600"; 
-   d="scan'208";a="82371496"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 01:57:16 -0700
-X-CSE-ConnectionGUID: gXEoff+HTrS779D3//JQAw==
-X-CSE-MsgGUID: GKR0w9PmQt+FMMvj+u2huA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,208,1774335600"; 
-   d="scan'208";a="252021497"
-Received: from unknown (HELO [10.239.158.65]) ([10.239.158.65])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 01:57:09 -0700
-Message-ID: <e0b99e9a-c20f-4def-ac4b-0070996c10ef@intel.com>
-Date: Tue, 16 Jun 2026 16:57:07 +0800
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="ptQ3lVuP"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=sU3QkWiFrN4SZorLI8GgUb3+KhkdTqA+waJhyvDUrRY=;
+	b=ptQ3lVuPq4HoFoxQoiDf81+5iqfP5Xi9RbH0Mjcou6X98sDc9Nc6dVXQKiJQlcbUwpkUzFi8+
+	vowuf4jlqCC/8z8m/3YdsDMiWEFdTSsI9S5uau1II6Obp9meNJfyS9gpltVfJ2rPdgG9HOzvZIq
+	VXJXF4bKX8ns5TqH2ovoIjY=
+Received: from mail.maildlp.com (unknown [172.19.163.163])
+	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4gfgt10GB9z1K9D8;
+	Tue, 16 Jun 2026 16:59:53 +0800 (CST)
+Received: from kwepemo100012.china.huawei.com (unknown [7.202.195.139])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9B03A405D2;
+	Tue, 16 Jun 2026 17:07:49 +0800 (CST)
+Received: from [10.67.120.222] (10.67.120.222) by
+ kwepemo100012.china.huawei.com (7.202.195.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.36; Tue, 16 Jun 2026 17:07:48 +0800
+Message-ID: <df30b9e0-6938-47f5-bb5d-5b1e67c8879c@huawei.com>
+Date: Tue, 16 Jun 2026 17:07:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,124 +42,63 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 01/22] KVM: selftests: Add macros to simplify creating
- VM shapes for non-default types
-To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Binbin Wu
- <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
- <20260521-tdx-selftests-v13-v13-1-6983ae4c3a4d@google.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20260521-tdx-selftests-v13-v13-1-6983ae4c3a4d@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v7 11/20] KVM: arm64: Enforce PMU event filter at
+ vcpu_load()
+To: Colton Lewis <coltonlewis@google.com>, <kvm@vger.kernel.org>
+CC: Alexandru Elisei <alexandru.elisei@arm.com>, Paolo Bonzini
+	<pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Russell King
+	<linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+	<oliver.upton@linux.dev>, Mingwei Zhang <mizhang@google.com>, Joey Gouly
+	<joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
+	<yuzenghui@huawei.com>, Mark Rutland <mark.rutland@arm.com>, Shuah Khan
+	<shuah@kernel.org>, Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+	James Clark <james.clark@linaro.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <linux-perf-users@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, wangyushan <wangyushan12@huawei.com>,
+	<fanghao11@huawei.com>, Zhou Wang <wangzhou1@hisilicon.com>,
+	<prime.zeng@hisilicon.com>, <xuwei5@huawei.com>
+References: <20260504211813.1804997-1-coltonlewis@google.com>
+ <20260504211813.1804997-12-coltonlewis@google.com>
+From: wuyifan <wuyifan50@huawei.com>
+In-Reply-To: <20260504211813.1804997-12-coltonlewis@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemo100012.china.huawei.com (7.202.195.139)
 
-On 5/22/2026 7:16 AM, Lisa Wang wrote:
-> From: Sean Christopherson<seanjc@google.com>
-> 
-> Add VM_TYPE() and __VM_TYPE() macros to create a vm_shape structure given
-> a type (and mode), and use the macros to define VM_SHAPE_{SEV,SEV_ES,SNP}
-> shapes for x86's SEV family of VM shapes.  Providing common infrastructure
-> will avoid having to copy+paste vm_sev_create_with_one_vcpu() for TDX.
-> 
-> Use the new SEV+ shapes and drop vm_sev_create_with_one_vcpu().
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson<seanjc@google.com>
-> Signed-off-by: Sagi Shahar<sagis@google.com>
-> Reviewed-by: Binbin Wu<binbin.wu@linux.intel.com>
-> Reviewed-by: Ira Weiny<ira.weiny@intel.com>
-> Signed-off-by: Lisa Wang<wyihan@google.com>
+Hi Colton,
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
-
-> ---
->   tools/testing/selftests/kvm/include/kvm_util.h     | 13 +++++++
->   .../testing/selftests/kvm/include/x86/processor.h  |  4 +++
->   tools/testing/selftests/kvm/include/x86/sev.h      |  2 --
->   tools/testing/selftests/kvm/lib/x86/sev.c          | 16 ---------
->   tools/testing/selftests/kvm/x86/sev_smoke_test.c   | 40 +++++++++++-----------
->   5 files changed, 37 insertions(+), 38 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> index dc70c6da63fa..041bdbfb93f7 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -233,6 +233,19 @@ kvm_static_assert(sizeof(struct vm_shape) == sizeof(u64));
->   	shape;					\
->   })
->   
-> +#define __VM_TYPE(__mode, __type)		\
-
-It seems the name "__VM_SHAPE" fits better?
-
-> +({						\
-> +	struct vm_shape shape = {		\
-> +		.mode = (__mode),		\
-> +		.type = (__type)		\
-> +	};					\
-> +						\
-> +	shape;					\
-> +})
+On 5/5/2026 5:18 AM, Colton Lewis wrote:
+> +	for_each_set_bit(i, &guest_counters, ARMPMU_MAX_HWEVENTS) {
+> +		if (i == ARMV8_PMU_CYCLE_IDX) {
+> +			val = __vcpu_sys_reg(vcpu, PMCCFILTR_EL0);
+> +			evsel = ARMV8_PMUV3_PERFCTR_CPU_CYCLES;
+> +		} else {
+> +			val = __vcpu_sys_reg(vcpu, PMEVTYPER0_EL0 + i);
+> +			evsel = val & kvm_pmu_event_mask(vcpu->kvm);
+> +		}
 > +
-> +#define VM_TYPE(__type)				\
-> +	__VM_TYPE(VM_MODE_DEFAULT, __type)
-
-and I think making it one line would be OK?
-
-So something on top:
-
----8<---
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h 
-b/tools/testing/selftests/kvm/include/kvm_util.h
-index 041bdbfb93f7..a1b5d2029d05 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -223,17 +223,7 @@ kvm_static_assert(sizeof(struct vm_shape) == 
-sizeof(u64));
-
-  #define VM_TYPE_DEFAULT                        0
-
--#define VM_SHAPE(__mode)                       \
--({                                             \
--       struct vm_shape shape = {               \
--               .mode = (__mode),               \
--               .type = VM_TYPE_DEFAULT         \
--       };                                      \
--                                               \
--       shape;                                  \
--})
--
--#define __VM_TYPE(__mode, __type)              \
-+#define __VM_SHAPE(__mode, __type)             \
-  ({                                             \
-         struct vm_shape shape = {               \
-                 .mode = (__mode),               \
-@@ -243,8 +233,8 @@ kvm_static_assert(sizeof(struct vm_shape) == 
-sizeof(u64));
-         shape;                                  \
-  })
-
--#define VM_TYPE(__type)                                \
--       __VM_TYPE(VM_MODE_DEFAULT, __type)
-+#define VM_SHAPE(__mode)       __VM_SHAPE(__mode, VM_TYPE_DEFAULT)
-+#define VM_TYPE(__type)                __VM_SHAPE(VM_MODE_DEFAULT, __type)
-
-  extern enum vm_guest_mode vm_mode_default;
-
-
+> +		guest_include_el2 = (val & ARMV8_PMU_INCLUDE_EL2);
+> +		val &= ~evtyper_clr;
+> +
+> +		if (unlikely(is_hyp_ctxt(vcpu)) && guest_include_el2)
+> +			val &= ~ARMV8_PMU_EXCLUDE_EL1;
+> +
+> +		if (vcpu->kvm->arch.pmu_filter &&
+> +		    !test_bit(evsel, vcpu->kvm->arch.pmu_filter))
+> +			val |= evtyper_set;
+> +
+> +		if (i == ARMV8_PMU_CYCLE_IDX) {
+> +			write_sysreg(val, pmccntr_el0);
+This should be pmccfiltr_el0.
+Writing the filter bits to pmccntr_el0 would corrupt the cycle count value.
+> +		} else {
+> +			write_sysreg(i, pmselr_el0);
+> +			write_sysreg(val, pmxevtyper_el0);
+> +		}
+> +	}
+> +}
+Thanks,
+Yifan
