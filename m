@@ -1,143 +1,79 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7238B30648C
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 13:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF92337688;
+	Tue, 16 Jun 2026 13:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781616835; cv=none; b=MGaAsA6x1FE1V11wCqLWJm7ZuB1KncucbMPmfCm4dtlsKvbe/X3cDPhB+iesTgvyz46ucel1r46tMZJH++2LTahgxu1Y38PvuJ3U/Evm2Zv0lsDtBEfI/SuVEPCFGgJP3BT8+8SaP4hFKpLi3RqmasCdBZwlOaY/ZAkuKIJtinM=
+	t=1781618129; cv=none; b=Uy5iKH9jVzTkC2Tmi6+T9gyro2yiw7gxqSkSLjzSmyIlGgkzqVK4Iv+vXcYEUC9VSVBqVM/FKc4jEeDDJvOdOyjMY4lnJmWaQ3pLWwd6zmodMIHLPV4lzapeIwvC4sWHloXC5v5GfR15hxsGmTNomtTTPGfXDseanrc//a4IDck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781616835; c=relaxed/simple;
-	bh=Sj4HWP9QisEzm9JzhjUCOB4XKgrZNOLEhL7geAA/29c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cPtm8Uci1ymZz8fHBiRoYJDcwML/fzM8HdzkLWrxBAcMZFQW6qphaPZtmWBTty3+N+ES/HZ6S+Ji+0O/W/OkNdwlOfkMEAYLExWG4FbjPWzTFZVrfPHL+ROx//IU+9JQ/ieIj/T7nXyuGsibuyZDYKtnaoTuXXkK6xwegyWtPJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mYrtHlTR; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781618129; c=relaxed/simple;
+	bh=AaUDgRAYKXQQd7PyYa2zrQQR4Ktrj0DDDZ01cUpLe5c=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=npjflqtQ25YEC26WCAqW72ZqKZNgFycl3rKmepEWwhgdvAWGb2c8XFecCN1LffEttAAMKfL41eG4H5f/SUWzFCQpEei+xkMFKNHbYA4GHsEmgfieZ/B1YBGyxlXT5qz5b2lIAqmxVB0KgzsAc28m5O0UeNZGZkSNVt8ObL+GLTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fHtswDRL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mYrtHlTR"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-45ef189aa1cso3102415f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 06:33:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781616833; x=1782221633; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lvYxCng4UXLcQ/XoznoR8Er/jzsFv5UY/bjt0wk6M20=;
-        b=mYrtHlTRdxgA3QyRxqM98M3oCUow0xVbxWsJIoBCSQB5kHzUCYSvhTWJ5vFzmEdvih
-         tXJzr/GCI+jNAMdr8g9ipvNeUMn57kf4iKxAPO7yXDKMCdinPWG7PDPGmdMKmRLP6DHF
-         60khKnZY3ImNbn+QlfBD/s3IHOTA0gWX0P7qmmgICE/fhtsg2PYR8g92tKpdUtJMQuKt
-         M2P8bWOOQ6Q5POIH8JB70Tipi7QXKTTQzTnCag53sXEq/mJa01dH4AjESnuPkdlPEhf9
-         JMybhn1k2kqUbjsHf5ZAJxop9Nwl02qvn9qa0uftl/MkUq0hqMVhMZ783kmzvT9yQ6DI
-         1mhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781616833; x=1782221633;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lvYxCng4UXLcQ/XoznoR8Er/jzsFv5UY/bjt0wk6M20=;
-        b=BRlCd7Ta2t+0vW37b6Qy7siMQR14WvW1L/RCiOUN4ObgIsYaI9D3nX5D1Sy3f8sNl1
-         IF1V1w7viQdu0dj1IxwuyPkcDPMayorPMSGCfxClWEIpc7REYxof1PPAAdsSw/87feVE
-         2GTFJMXBJeln1azwaE2C5tPTz8/LbOtiqfzVNR49tO+miqyBurLY7nKXExRnTtw3Rfff
-         +eJKiC5wegsjVAnU9q2ZRI/LDqOVlZeiRprefNBmJd5EqLYoxwUWHEsl4scr1AdLtPJA
-         4+8gOTMUdk3ixj/y1SzoZADD6sg448HVophAoaA1V1LhbUzVyCY6rtHfeRcM+TtiAEax
-         nV2Q==
-X-Forwarded-Encrypted: i=1; AFNElJ9vrnkUUY3nk/p0fOvG1mGbQXx9KAESceiW4WZAvjytNghDyCM+RVGK/L98jsLAnE5+c5XQVOB2Vx9FKlXNrOw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxpt6MSG1pf9qMshV/UseeF729gzj1WoDpIqYOUraEYumaUOgyh
-	LE49MKrK9nwEBg+jjIxSF7SGHCwZrRW6lIpA4rYgHeI3gcPaZgYwTYNK
-X-Gm-Gg: Acq92OEEtUQjO3KUo6y6nZm28xK2qvDfCYHiegJNE9QBTnH/MLzlELbCNqkvT4Ejofj
-	yBQBMxJj+3ldYJ359Kc0xLvIY8pUnoydse/TDeaI4gdiJSfN/FUzJDIhPD8s7fTk6Sff9XjaZdu
-	e4XXxL2AQufYv2cizSniRoWjOIWwC9WXKR6ekFF17RKQtTe2rkNApSimlg5qrXPafZXMJbUIES7
-	+b+S7k6dHpvtyYeGuT4+m4t07gi5w7U9KReywZlxOn2RcBXglbi2ospM4wiu9saJwBROjz9zpkX
-	+K5FflKkwn7806IciSlAsVHliixzytGTeCrr3zxU0ffHvIOO4WmcmR2Qmt8XPCrpNFrNI6SghqA
-	8Y1y+bLFcs8PAhUz3PXRPSDE1hkU5/RYUHF9I3CtyFo/AwE79lpLR+lKVUAu3hZGNmm0HMcONhN
-	YvBLuBRDd0S8rDhLV4iXJqhDME5jEB79lRUz3eRyOGgQep5WxAtZsgYmlKXTicJXDcauq3OVaBp
-	C2uiAvSWWhitD0xIv/dSUdPzYt8ftj8MjIJ1Kz7CvUsVMx4bp1xcligsA/MG17SCT0hd9JXfbbb
-	Os73ZJ0wSIRrgDFMI3UuTR2HVm9/5coQekNlcREsq0Q=
-X-Received: by 2002:a05:6000:986:b0:44b:7ec9:2d76 with SMTP id ffacd0b85a97d-4619f383d22mr7296064f8f.7.1781616832689;
-        Tue, 16 Jun 2026 06:33:52 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e004325bddd753d2e35.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:4325:bddd:753d:2e35])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4619a041986sm20656081f8f.23.2026.06.16.06.33.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2026 06:33:51 -0700 (PDT)
-Date: Tue, 16 Jun 2026 15:33:49 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
-	toke@redhat.com, lorenzo@kernel.org
-Subject: Re: [PATCH bpf v2 1/2] bpf: Fix partial copy of non-linear test_run
- output
-Message-ID: <ajFQvedGURQuKqbX@mail.gmail.com>
-References: <20260616093103.471444-1-sun.jian.kdev@gmail.com>
- <20260616093103.471444-2-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fHtswDRL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE3931F000E9;
+	Tue, 16 Jun 2026 13:55:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781618128;
+	bh=QyF84nqSk9ebDNws1PdrM6L0rUUvlTQZheOw/Il6Zbg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=fHtswDRL+VZvqlH6MaqUfWr91+VRYWrJc0UX0mpeCqETVowWwLdywrv1toWQJ18wL
+	 RJwsSyBfzLtAloKRY0EwCIk+yml43WKHjG6LkjCakmXrKGBKpDsfVB98tlSyiQhgD2
+	 60EI6JLWtPq0nw9sXaiAJOMb048QoiXn9eSWGSJjsX3Jm1uvNkD0qr5c6oeTQZgyT1
+	 VJwGMBpOGRW1EoQ/u0Q1L/33eznB7Ib4YS/jYY1RWc9NAb7oQxaUV4ffAr1/EpZd2+
+	 gvaEI9mqH5AkYPYo6o4mDDk6utOWBVV85zCBC+LQy70ROWS7+9J9j4pT43P5OAfl+m
+	 ci8uj//KUNjxA==
+Content-Type: multipart/mixed; boundary="===============8414396918092606343=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260616093103.471444-2-sun.jian.kdev@gmail.com>
+Message-Id: <22624c18aedcefcada9ef30f7b9b2d03bf228d0314de708c5474f9115680d319@mail.kernel.org>
+In-Reply-To: <20260616164741.32252-6-adubey@linux.ibm.com>
+References: <20260616164741.32252-6-adubey@linux.ibm.com>
+Subject: Re: [bpf v8 5/7] powerpc64/bpf: fix compare instruction emitted for tailcall
+From: bot+bpf-ci@kernel.org
+To: adubey@linux.ibm.com,bpf@vger.kernel.org
+Cc: hbathini@linux.ibm.com,linuxppc-dev@lists.ozlabs.org,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,adubey@linux.ibm.com,sashiko-bot@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 16 Jun 2026 13:55:27 +0000 (UTC)
 
-On Tue, Jun 16, 2026 at 05:31:02PM +0800, Sun Jian wrote:
-> For non-linear test_run output, bpf_test_finish() derives the linear
-> data copy length from copy_size - frag_size. This only matches the
-> linear data length when copy_size is the full packet size.
-> 
-> When userspace provides a short data_out buffer, copy_size is clamped to
-> that buffer size. If copy_size is smaller than frag_size, the computed
-> length becomes negative and bpf_test_finish() returns -ENOSPC before
-> copying the packet prefix or updating data_size_out.
-> 
-> Compute the linear data length from the packet layout instead, and clamp
-> the linear copy length to copy_size. This preserves the expected
-> partial-copy semantics: return -ENOSPC, copy the packet prefix that fits
-> in data_out, and report the full packet length through data_size_out.
-> 
-> Fixes: 7855e0db150ad ("bpf: test_run: add xdp_shared_info pointer in bpf_test_finish signature")
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
->  net/bpf/test_run.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 2bc04feadfab..976e8fa31bc9 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -453,19 +453,16 @@ static int bpf_test_finish(const union bpf_attr *kattr,
->  	}
->  
->  	if (data_out) {
-> -		int len = sinfo ? copy_size - frag_size : copy_size;
-> -
-> -		if (len < 0) {
-> -			err = -ENOSPC;
-> -			goto out;
-> -		}
-> +		u32 head_len = size - frag_size;
-> +		u32 len = min(copy_size, head_len);
->  
->  		if (copy_to_user(data_out, data, len))
->  			goto out;
->  
->  		if (sinfo) {
-> -			int i, offset = len;
-> +			u32 offset = len;
->  			u32 data_len;
-> +			int i;
+--===============8414396918092606343==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-That doesn't look needed.
+> The tail_call_info field can contain either a scalar counter
+> value or a 64-bit pointer to the counter, using a 32-bit
+> compare (cmplwi) only checks the lower 32 bits, which can lead
+> to incorrect comparisions when location of counter is near 4GB
+> boundary. Use instruction cmpldi for accurate comparision in
+> all cases.
 
->  
->  			for (i = 0; i < sinfo->nr_frags; i++) {
->  				skb_frag_t *frag = &sinfo->frags[i];
-> -- 
-> 2.43.0
-> 
+The change now uses cmpldi on ppc64 and cmplwi on ppc32 through the new
+PPC_RAW_CMPLLI macro, so should this sentence read "Use cmpldi/cmplwi
+instruction" rather than "Use instruction cmpldi"?
+
+This wording was raised in the v7 review by Hari Bathini
+<hbathini@linux.ibm.com>:
+
+https://lore.kernel.org/bpf/5c095e3d-d554-4506-9dbc-96d568b4be5e@linux.ibm.com/
+
+  This should be "Use cmpldi/cmplwi instruction" instead of "Use
+  instruction cmpldi"
+
+The technical part of that feedback (defining PPC_RAW_CMPLLI rather than
+using PPC_RAW_CMPLDI directly in the shared file) appears to be addressed
+in this version, but the wording still reads "Use instruction cmpldi".
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27620315552
+--===============8414396918092606343==--
