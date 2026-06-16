@@ -1,154 +1,171 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D420E450902
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 18:48:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B68413DBD57
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 19:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781635690; cv=none; b=c+Qi04y78sOF0ShM1U5IOqKFQWcn/YwrXCqycD36DYsdse1Gf40HnBWPpbVJoQO7ku4gdS1TUTHtsL1RP/XSLQKTXPr0XdFQVkr450h3RJvwNi887GF+p7eW6wTY4iG6DYmlf6C+W3d4Fj8KAcsSm7V8noZ+AuGemDdLwmLbCwk=
+	t=1781638598; cv=none; b=Fqj84yEZZEchPJnqcgUkUxq+/9hmGJ0ClwXZ5g1CeLVNX1EUeEZwWKmb2CnyT3fmhwlKE1vxiWnas4sD3kwozYwtQZme7sKHsea0W2xYCWPO/V/eEQo/y2kW88YBg9LhoKA4UU9HeXR2i7YeZHY586KkxkpPy2oYfhMZUsLSKhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781635690; c=relaxed/simple;
-	bh=Xx05wp4cyHtf9W47TC/Dwjp1vIDUaS1Eegfg4Ib+/tk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=uX9YmveHQlCipJMjBAXRjPnd3cP3X2HJrZn5H3TG+sA4TETA8LbitsDl7Q1cREQJWEgFS8e0Ha2RXuhrzsslnFjm11V57RSSyk9+D3R7Ojx5CxG0jSgqWupisyMZclwBRm+/WihCm1gw8Ku/L4b35Dj86oTYKpKgnNytV4Fu/04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Esf9WQYt; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1781638598; c=relaxed/simple;
+	bh=x4vuvjMjK3Siqy6TliGJe8+jhWlv6O6RxnFPsOmVF7A=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=e13aoDZZZvxoCUsGoi/K0Ggdh+H3MNUjwidJu8nJzjmY0dU2hZHCKi8e4jf6qquU481C4G7MuTLLY8MHbkCvAq/JjAbQMPMBoVvMMNLKEilLVsVkDsncqf8toEdYJghtfr+YF0w6lba8azZuhUn5BLtGuy/0MidtgAcRt0P7r74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GC8Anh5V; arc=none smtp.client-ip=209.85.210.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Esf9WQYt"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-842208d5b0eso3886077b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 11:48:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GC8Anh5V"
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7e74a827212so2308982a34.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 12:36:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781635688; x=1782240488; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P3dgH42zNflWYjVlKpWQxlbi6GFJLYhVFZGxy7D/Xxg=;
-        b=Esf9WQYt7SS9xIbABVXiDRjexvP32v+fGndsyuIjrBhBtvevnfJKio+eWQCj2PlVDb
-         kFTmm+T2bQiPYwHPyOpEygFHXSphr+IjkZYmpMQbLTe0A7okl7fnFFtb1ZapiPpeApr4
-         j/j1PXOxn/aCSxuYnbverME4dAIzioOfaRyHslykQPDqpmLYBeySsAmRHfTO4fJN/pQq
-         mbMZXYZgQODQctWmPBd8JcurGeUbehH80X0yL4KUyf1aGHAoQRQjxA+EKAhca3f9JhkP
-         4qYVGK1jHRTVQApPRUKoF7J0wpf1b+GQ70psXzQ6rzs8RiI/rAOOwF8IMSLCilkGDKQw
-         WlxQ==
+        d=gmail.com; s=20251104; t=1781638596; x=1782243396; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8EO/9z4OOJVGQlHYYaBZaNw8VQwWazXkqSJi3LxEM90=;
+        b=GC8Anh5VfSrdFDAjBCA+t3VBlW9IQNj5CS2020mtctSOl0TPtqgqnGjyN+MItcjWCE
+         R0j+pM5rZJAV44nYdGQv7jC3qjGRKFk5ryfZPJP6ggkny9bOvT5PsAWDBqNcZnOUDHzW
+         55at24VAlGj21mPIJaKOSHd4NigWRARptROZhFH3vPAFtWHmD3Dcc2orE/BzygvegpF8
+         MYKIXU7AGLmA1BXhbVVUIyvaoI5TvJOVe0/vMdnU4AZCkGAi3uDlSMlvfvJARjsCEL6h
+         eT6d5OdfnVWITLk0Pho0d6JAb83fB8Ys9lco4IUXjCHAL6DfOFBC6BEmxTmI4sb3ZPRt
+         MAjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781635688; x=1782240488;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P3dgH42zNflWYjVlKpWQxlbi6GFJLYhVFZGxy7D/Xxg=;
-        b=X7dTLcD6yKunCQ378W2aoBRy0UG/bwQ4SLoz2adkq/7gBOZ+RAdpZV4VX9/doFlNC4
-         9EMbMAIucHYfS4cQZXr9onvx7WNU79ftgTrRiKiznwsiYGxNdiWiAdWQPHXeLIzdbDG9
-         7Mq/3M1ke9flARUkuSS2KjSMGRCDDvdZpNROGqan81Zib7tP59p+e09WJwcATmeuB5SP
-         yyHc3219OKgkx0NbVAslfJ4+4bM3kzZsehH/+a6hFuY7J/DzRd+ZRc1OYuewEXPeoQpM
-         MP/ujjgPvtJDQ12QrUKDPLLmy7DGqX1R6pm/+h/3Gyx3sbp+BQFOAgsoQFitrlGMAk79
-         /1Bw==
-X-Forwarded-Encrypted: i=1; AFNElJ+aVzVAzdrtE58hil0e8Dlnq8DN8u2uhDTW7ML0VZtvNOV6jZ9dheS3zcYSqLGjnjg3PzeTIvOaX1xcsCCs/Q8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpsIFDB/WoTl7fxd+naF7DCFfCCb316TSZ3+/aH/CxGk1lz+Ns
-	EykwiJKgm07565Yh2KH0+T3P7eOS9UuLeJVG+JsY5+S/0oa95m+Z1rLXhCDXlGNPvzJ3KpzoFrN
-	Ptzxsdg==
-X-Received: from pfbih9.prod.google.com ([2002:a05:6a00:8c09:b0:835:3fa4:894a])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2d25:b0:842:6f13:1461
- with SMTP id d2e1a72fcca58-84524476bcdmr384546b3a.11.1781635687806; Tue, 16
- Jun 2026 11:48:07 -0700 (PDT)
-Date: Tue, 16 Jun 2026 11:48:07 -0700
-In-Reply-To: <CAEvNRgH7Lk=z9NqcY4OZXv=y5SeCZHnDNcB0=kHfarjCA4ZPTw@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1781638596; x=1782243396;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8EO/9z4OOJVGQlHYYaBZaNw8VQwWazXkqSJi3LxEM90=;
+        b=NShmE18hEWzelM7B2pIUiTJgtVR5pOGzFr8F203OeaYGjirqzHcrFgIEvoSQllhP8v
+         AqIIEZie7su1r/8/Ycj4I8VYiUj9HhqNJozm6S5RveBY4fST8CskBg/GH599UrfNG2cD
+         MvsWccY87SkITeYIozY9uZVJnlpUMptMzOBIPoDE3ooV0wCHiCzMaqR5WmXkXMQObBzn
+         nPb+y1JyPytc4PXRAuS+rzbuRLCib4pGjU2VUKeS+dh4JSXcK/JmY0ISuBCgjU4+1qtQ
+         qrKfNTgh/W05NcJpm/tURHCQi0aYdkNU9etbJMGRKJ9skd2TrpmnB2FdhiYQTg1Ux+8O
+         PEgQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8gajxQoSHm3YxLGUpdiktlhCTGw45hB9KQNCQoVREiChl90xIPOsQjC/ZKB/GZqwbycqmo0IVJf1yepuXlTfo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsVKJ7edbzMkqDbEMBnuW+K6pQYTg+8/poM5j0iH95oPwmBxYv
+	liTqc8uihi1VEatTRGakFX3OjvQkjMyNlODgLFoNLMQ49N2GPdc3WdQk
+X-Gm-Gg: Acq92OELCHinH1+tjzxR7pufJC3eGMqzNGnTowniLStD4/aMZbOVaUwlq/K9NXB9r+0
+	oMj2yeJU5CsBCuFLVNKSdPEYQNbud1CRdGEvn27UXcP4Y9p0GxDBWlGaKWniwjp8kMXX4qoidnn
+	Tz0uYbNUUn9tc0ntv/aBJBba5Zd0Ou3OcJDCrecZdYNTrkZCrTdABdNxYuAsRYiiWqf6htTsZM5
+	ZZOnHgKSXScGGgU99JIItYnRWklCg4KuwGUe3pFGEaTO9ijru/0StnoqnGJYBsg3/pJ7y8UqIsg
+	Tza3ObrPMUePitAUXfYzaj/crdhkvmzbUeqpNty8XEl6ha8jvt6fT9ooLPyy/AmczYsoDakEu11
+	vhmtLwM7fMUeq9iyVvdjhp2vvUaOZI1igHN1J875rqFopm9OYfCLXowFUbqR9hqZ/aIebsvuUpM
+	VxrGzMTYmAj2AHrb0uxLNXHNgKAxnYRX+5gLzktrrSdTJKHraGO7ilw5jiNlR+b4lBtiKZGRm6h
+	DM7fQkiO3Wx74u6xQ==
+X-Received: by 2002:a05:6808:1b28:b0:479:faf5:ef4c with SMTP id 5614622812f47-48944641750mr389992b6e.32.1781638595545;
+        Tue, 16 Jun 2026 12:36:35 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:53::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4875ddda6b6sm4881214b6e.8.2026.06.16.12.36.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jun 2026 12:36:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com> <CAEvNRgH7Lk=z9NqcY4OZXv=y5SeCZHnDNcB0=kHfarjCA4ZPTw@mail.gmail.com>
-Message-ID: <ajGaZyAcDv5j3nFc@google.com>
-Subject: Re: [PATCH v13 00/22] TDX KVM selftests
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
-	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Erdem Aktas <erdemaktas@google.com>, Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
-	Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, x86@kernel.org, 
-	Adrian Hunter <adrian.hunter@intel.com>
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 16 Jun 2026 12:36:31 -0700
+Message-Id: <DJAQ65ZVYAN7.2Z8DNW7Z0JE7V@gmail.com>
+Cc: <pablo@netfilter.org>, <fw@strlen.de>, <phil@nwl.cc>,
+ <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+ <pabeni@redhat.com>, <horms@kernel.org>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <shuah@kernel.org>, <kartikey406@gmail.com>, <coreteam@netfilter.org>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Guard conntrack opts error writes
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>, <bpf@vger.kernel.org>,
+ <netfilter-devel@vger.kernel.org>
+X-Mailer: aerc
+References: <cover.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
+ <70aeec0ab762aebe65129cf6052e132c7329edc2.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
+In-Reply-To: <70aeec0ab762aebe65129cf6052e132c7329edc2.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
 
-On Tue, Jun 16, 2026, Ackerley Tng wrote:
-> Lisa Wang <wyihan@google.com> writes:
-> 
-> > This patch series focuses on setting up a TDX VM and adding all code
-> > necessary to run a basic lifecycle test.
-> >
-> > Unlike standard KVM selftests can set up the VM through guest registers,
-> > TDX module protects TDs' register state from the host. This feature of
-> > TDX causes problems on VM boot state initialization and the ucall
-> > implementation.
-> >
-> > In standard KVM selftests, the host directly initializes the guest state
-> > by manipulating Special Registers (SREGs) and General Purpose Registers
-> > (GPRs) via IOCTLs (KVM_SET_SREGS, etc.) before the first KVM_RUN.
-> >
-> > To bypass direct register initialization by the host, we utilize the
-> > standard x86 reset vector as the default entry point.
-> >
-> > The mechanism works as follows:
-> > 1. The host places register values into a specific memory region and
-> >    inserts boot code at the VM's default starting point.
-> > 2. When the VM starts, it executes this boot code to "pull" values from
-> >    memory and manually set up its own SREGs and GPRs.
-> > 3. Once the environment is ready, the boot code jumps to the guest code.
-> >
-> > The standard x86 ucall() implementation uses PIO, but it does not
-> > actually transmit data through the 4-byte PIO data. Instead, it relies
-> > on the host reading the ucall address directly from the guest's RDI
-> > register.
-> >
-> > TDX selftests cannot utilize the standard x86 ucall implementation,
-> > because the host is unable to access the guest's RDI register. Based on
-> > this restriction, we considered these potential solutions for the TDX
-> > ucall implementation.
-> >
-> > 1. TDCALL PIO with RCX-bits Passthrough
-> > We first considered passing the RDI value through RCX bits to bypass the
-> > hardware's register protection, which could be the closest approach to
-> > the non-TDX implementation as per Sean's suggestion[1]. However, this
-> > approach is blocked by the software-side implementation: KVM_GET_REGS
-> > currently does not support TDX VMs and returns -EINVAL. To make this
-> > work, the KVM ioctl would need a test-only hack.
-> >
-> > 2. TDCALL PIO with buffer indexing
-> > To keep a PIO-based approach and unify the get_ucall implementation for
-> > both TDX and non-TDX VMs, we considered TDCALL PIO with buffer indexing.
-> > Since the ucall buffer is initialized prior to execution, the VM could
-> > just pass a buffer index rather than an 8-byte ucall address to fit
-> > within the 4-byte PIO data limit. The host, already knowing the ucall
-> > buffer's base address, could then resolve the ucall content via this
-> > index. We abandoned this solution because it would require changes to
-> > the common ucall structure and impact other non-x86 architectures.
-> >
-> > 3. TDCALL MMIO (Selected solution)
-> > We ultimately selected TDCALL with an 8-byte MMIO data. This method only
-> > requires initializing an MMIO GPA and adding TDCALL MMIO implementation
-> > for TDX under the original x86 ucall path. While this diverges from the
-> > non-TDX PIO, it provides the cleanest implementation with minimal
-> > disruption to the overall ucall architecture.
-> >
-> 
-> Sean, Lisa evaluated your suggestion [1] (summarized as 1. above) but we
-> think TDCALL MMIO is better, what do you think?
+On Mon Jun 15, 2026 at 10:42 PM PDT, Yiyang Chen wrote:
+> The conntrack lookup and allocation kfuncs take an opts pointer
+> together with an opts__sz argument. The verifier checks only the memory
+> range described by opts__sz, but the wrappers unconditionally write
+> opts->error whenever the internal lookup or allocation helper returns an
+> error.
+>
+> For an invalid size smaller than the end of opts->error, that write can
+> land outside the verifier-checked range. Keep returning NULL for invalid
+> arguments, but only report the error through opts->error when the
+> supplied size includes the field.
+>
+> This preserves error reporting for the supported 12-byte and 16-byte
+> layouts, and for other invalid sizes that still include opts->error.
+>
+> Fixes: b4c2b9593a1c ("net/netfilter: Add unstable CT lookup helpers for X=
+DP and TC-BPF")
+> Fixes: d7e79c97c00c ("net: netfilter: Add kfuncs to allocate and insert C=
+T")
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+> ---
+>  net/netfilter/nf_conntrack_bpf.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
+>
+> diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrac=
+k_bpf.c
+> index 40c261cd0af38..3c182024ec509 100644
+> --- a/net/netfilter/nf_conntrack_bpf.c
+> +++ b/net/netfilter/nf_conntrack_bpf.c
+> @@ -65,6 +65,11 @@ enum {
+>  	NF_BPF_CT_OPTS_SZ =3D 16,
+>  };
+> =20
+> +static bool bpf_ct_opts_has_error(u32 opts_len)
+> +{
+> +	return opts_len >=3D offsetofend(struct bpf_ct_opts, error);
+> +}
+> +
+>  static int bpf_nf_ct_tuple_parse(struct bpf_sock_tuple *bpf_tuple,
+>  				 u32 tuple_len, u8 protonum, u8 dir,
+>  				 struct nf_conntrack_tuple *tuple)
+> @@ -298,7 +303,8 @@ bpf_xdp_ct_alloc(struct xdp_md *xdp_ctx, struct bpf_s=
+ock_tuple *bpf_tuple,
+>  	nfct =3D __bpf_nf_ct_alloc_entry(dev_net(ctx->rxq->dev), bpf_tuple, tup=
+le__sz,
+>  				       opts, opts__sz, 10);
+>  	if (IS_ERR(nfct)) {
+> -		opts->error =3D PTR_ERR(nfct);
+> +		if (bpf_ct_opts_has_error(opts__sz))
+> +			opts->error =3D PTR_ERR(nfct);
 
-I think y'all should have responded to that thread with "that doesn't work
-because host userspace can't access the registers".  Reviews are multi-way
-discussions, not one-way streams of "do this".  And the expectation is that
-either review feedback is addressed in the next version, or the dicussion is
-closed/resolved *before* posting the next version.
+LLMs have no taste.
 
-Remaining silent and then writing a thesis in the cover letter of a future version
-of the series is very inefficient for everyone involved.  I obviously don't read
-cover letters all that closely at v13 and I gotta imagine a *lot* of effort went
-into the above (which I greatly appreciate!).  The paper trail also becomes
-impossible to follow, because anyone reading my response would probably make the
-same assumption as me: it was a viable idea and that's what we implemented.
+Above two lines could have been one helper
+   bpf_ct_opts_set_error(opts, opts__sz, PTR_ERR(nfct));
 
-I'm a-ok with using MMIO, because yeah, there doesn't seem to be a better option.
+Or we can do a step further and simplify the code more.
+Turn this:
+   if (IS_ERR(nfct)) {
+           opts->error =3D PTR_ERR(nfct);
+           return NULL;
+   }
+   return (struct nf_conn___init *)nfct;
+into:
+   return (struct nf_conn___init *)bpf_ct_opts_result(opts, opts__sz, nfct)=
+;
+
+static void *bpf_ct_opts_result(struct bpf_ct_opts *opts, u32 opts__sz, voi=
+d *ret)
+{
+  if (!IS_ERR(ret))
+    return ret;
+  if (opts__sz >=3D offsetofend(struct bpf_ct_opts, error))
+    opts->error =3D PTR_ERR(ret);
+  return NULL;
+}
+
+This kind of small improvements should be obvious to any human developer.
+Please do NOT send us patches straight out of LLM.
+Review it first and think how to improve it.
+
+pw-bot: cr
