@@ -1,105 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30A83478E26;
-	Tue, 16 Jun 2026 17:18:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5750347AF5D
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 17:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781630283; cv=none; b=O/Qm0y4/KSpKfaSP0gYY3fk3ADRpgKrLa31+sysaafAvLDMLo0NH3T6xhqNtFCtLIpFxLddnRYPZUrXiGR4GuJwfqdqiqVilDpzAmZv12PLhj1aRPu2QirOdgJVmQqqs+nw4zrgn+XpqNjl5VccEw1qCPxxvnLIeSivQRNp/Vlw=
+	t=1781631186; cv=none; b=TbASs4ExAk4/ACwmeZw09cJjHAgw0idb46uDrR2p4y1ur2xzvBGYuTmPirOn77bvUg09QOLcrnF4hr0UqjJeTrMqQelZCVCjGggB6y7sVqg3cm+6NqctB0PwTs3dYiun9lGjfEhCRIZ6ovss3ZwvG+0wYVjukUqptwtJ47gEUPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781630283; c=relaxed/simple;
-	bh=Yu9t08q0QZ+4NB7xEvUGFMKDeGPu82aMJl9C8jONfQA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ofK53Bky3aszwlZaZ3MeB2ncq0K1gtC5yzbcvUaCCufyJy5E+3YO7rEeGGRf+1jtCb0/L9WqqF2co4B2P6yLEchVTgPiafovglDL47JEntBWJWdCgdGmPaKZ9+917C1lBupDhqMr2wrsSGlbiuIYhAhNLnNYHuzZEl0NVeisUyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ow3jjE1w; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781631186; c=relaxed/simple;
+	bh=+q/g007+aO/UHimxmV0Ih/bgR3YyUAWftdajmVeUjbQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PPzXsFvW6ZePxHXRkU6xx0Hloy6CyKUTCCZo21p8bTY6VUyw4PAl0SMrWCA6Gc/ZZfsB4iOqAfMf1siYGSlJQ49NfXrdU2xVLXZvDACp+ZUmtnI35PwpXqEHWyXA40WczkvgChHRwW+YBJaiYYv5RG1cXqGwhQmpbOytM4rOHLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b32hocRz; arc=none smtp.client-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ow3jjE1w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A491F00A3A;
-	Tue, 16 Jun 2026 17:18:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781630282;
-	bh=awWNOq8ZwqZkNg/uk1VV3V3qfIhQ6bUIVUTqPS2E3vE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ow3jjE1wRC21kxf605kG4L2JHx/wgA/z9a7kyGqnJmQR2whHzjSKJwBhfsU3Yc/aZ
-	 fWQapiMn6Hg2e1CDL+VSruQaYGhZ2/NNdw5TUH8ipo7WLUMpGQU984p1hwIH+LHK1p
-	 NS+Tww2rDnXW0B4/r3xliHRf0Lm/w45yHBZYGxZ4GW8RlLH1G2rTXd7IVH49HWG3tF
-	 dlu/V1lHwXe/ix821w5wBuDXpm1+h0o0DLHCgMczrxXT6zT3+3sosATwEdtGqs5sTx
-	 GJgjO2w2HxvGms9k25swOduviOvRhgGaYxYODcnxx1zabAqw1PJb/6CrjOcfVIUBe/
-	 dY2Up38AS7nUg==
-Content-Type: multipart/mixed; boundary="===============4017712549315767575=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b32hocRz"
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-13721dfd471so5346747c88.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 10:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781631184; x=1782235984; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WMNZjiW8tS8vPiFakgGpgrB0JBuBFIJhbYt8HcOFzdU=;
+        b=b32hocRz04br2LMqils4rylgbLdgemBzQvJslTEqgMdR24JQRsFMVbHJUYSOFq4AKL
+         PmmLla+bEm1kF11VtvNOoqIOId3Pn/f2QjPgo0KyB1wHs3DiweFc+bWy0fZdC2RZmh4i
+         /cVc7p27K07e5oG1Qb9HWX38tQIBYKu8RXnIaopZG0K17mOAXOu0RU8pLkgA5YamxYRz
+         InsNGvirT0Sf93PcHksDHGkx+tPZ2S6d76a/o4GZh8BLxkX3uP3u4ewEGp6TNkffQtLn
+         P6S6YvaY/N+B+/mzS1FzPR26uJ3cxwOjch5V3dJZlxYjghfzwBNQN635yulVAyloLzvs
+         lpKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781631184; x=1782235984;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WMNZjiW8tS8vPiFakgGpgrB0JBuBFIJhbYt8HcOFzdU=;
+        b=mj4TYVG6Vo+EiiQofq+pWRaE8WM3gyTN/BmHytaagkVRsHuSSpqepgLX6KPbyPvY7E
+         6JQclEOEYQdc88KDwEliuEfhvUyyQqO+JTpJ9ccHD0NVyezYTWBD7WyW8IDqg+yrw7ac
+         5yHeTqR8p59yxhcMsLcZUZlVnzrO9Cd9fiW5MCBApLFFZ2Q0JJ2qeBBvm6L9SzbxXefx
+         cn3tRS6QbiMsn2hu0me+f2R0tfGL21Ix09A8APMYR+fQn7/yXpAFJun0fcLGg7Eq70GG
+         9lzNFDEOE0umbFvyGspOfYE51HthLtyaKwiZz4vUaYkCPFxRLDtLBNVzm8OTpha5yiaK
+         6zwQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8U8mN3OPC87cGNllmO3gnryeGMhMx0mws5YWzWAaf0NEGu+UDQJaQCd5YMxWllulOF+JvA+rJH6dVEsm8nJSk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqG/29aszXG4ypEkmffpUsvZGcyomt+y6dBl5dlAo/ukSGYzYk
+	nbbktYWhnpsUaEhivSw80KYNmA8HAoVwq2HfElydXoM9KbU86yUpDLvt
+X-Gm-Gg: Acq92OEuV8B5/jTrE5C4tnFuhVNi0P/7Tua8lYEVNmasV6Otw+9t6e+GxiMJlXe2wXN
+	zEp7PTW1s3JvpRmcQGmGqqlKbB/iTwDLQi4H3+Uttyr1/m2qUHU8aE4bLBq4xsOhk4rke7XZGme
+	/cTWbNgEH4nibky3B6Wg3H9iCSnxPJvh2b0zqfeznaXVTIDO7h2vb0Lg1yDQ2y2aq3RdgvOpXRW
+	nUv/al82ZSpJ7Ec3n7DPVNxZiyQsyHYJjg2s/GQq4xaH/WFv2zd3Djap0lPpE2B0w5FOYkS4WWA
+	C1BAFoNsrknLLed500So4rz6Dy56WT1Gi9Er3OvOrdm8uoMaHOHnxNvuv5txs9fMctsClWrHRJ3
+	DtqM38bqeKv7Ov9bd4lnAP+mbcOlJRf0I7E8LqwFAC9M3IrUlHFkYr3J65Gdid+1yuMPnT1VaOC
+	EDDt70sYaW9AZNSxxSfF1AN4QJyAxwxtciO31jlOo+4hfakpa2vog+oajtiR0d/QYlLEjo
+X-Received: by 2002:a05:7300:4347:b0:304:8364:e95c with SMTP id 5a478bee46e88-30bc9f12a25mr177854eec.15.1781631184354;
+        Tue, 16 Jun 2026 10:33:04 -0700 (PDT)
+Received: from fx.tailc0aff1.ts.net ([206.206.192.132])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30ba6b7f840sm5431554eec.19.2026.06.16.10.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2026 10:33:03 -0700 (PDT)
+From: Weiming Shi <bestswngs@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: "Starke, Daniel" <daniel.starke@siemens.com>,
+	Xiang Mei <xmei5@asu.edu>,
+	linux-serial@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Weiming Shi <bestswngs@gmail.com>
+Subject: [PATCH v2 0/2] tty: n_gsm: fix gsm_queue() UAF and add a base regression test
+Date: Tue, 16 Jun 2026 10:32:38 -0700
+Message-ID: <20260616173240.3665059-1-bestswngs@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <509c1ebe734f2319372b2c5f9b02979f07a7ad5dfb44dfc9062501c1440b6633@mail.kernel.org>
-In-Reply-To: <783681f27625a11ed58f00221be046643232a2fc.1781627122.git.chenyy23@mails.tsinghua.edu.cn>
-References: <783681f27625a11ed58f00221be046643232a2fc.1781627122.git.chenyy23@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next 1/2] HID: bpf: Fix hid_bpf_get_data() range check
-From: bot+bpf-ci@kernel.org
-To: chenyy23@mails.tsinghua.edu.cn,jikos@kernel.org,bentiss@kernel.org,bpf@vger.kernel.org,linux-input@vger.kernel.org
-Cc: chenyy23@mails.tsinghua.edu.cn,shuah@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 16 Jun 2026 17:18:01 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============4017712549315767575==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+The receive worker walks gsm->dlci[] without gsm->mutex while a
+concurrent GSMIOC_SETCONF -> gsm_cleanup_mux() frees the DLCIs, so the
+control handlers can dereference a freed gsm_dlci. v1's NULL check only
+narrowed the window; v2 fixes the use-after-free itself.
 
-> commit 7c433bf4ab2de03b77e22dbd3984e39a386997a2
-> Author: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> Date:   Tue Jun 16 16:35:06 2026 +0000
->
->     HID: bpf: Fix hid_bpf_get_data() range check
->
->     hid_bpf_get_data() returns a pointer into the HID-BPF context data when
->     the caller-provided offset and size fit inside ctx->allocated_size.
->
->     The current check adds rdwr_buf_size and offset before comparing the
->     result against ctx->allocated_size. Since both values are unsigned, a
->     very large size can wrap the sum below ctx->allocated_size and make the
->     helper return a pointer even though the requested range is not contained
->     in the backing buffer.
->
->     Use a non-wrapping range check instead: reject offsets beyond the
->     allocation, then compare the requested size with the remaining bytes
->     after the offset.
->
->     Fixes: 4171954f56fb ("HID: bpf/dispatch: regroup kfuncs definitions")
->     Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+The fix pins each DLCI the dispatch dereferences with its existing
+tty_port reference (option 2), so the data path stays lock-free. See the
+patch 1 commit message for details, including why the late destructor
+uses cmpxchg() so it cannot wipe a re-created mux (Daniel's teardown
+concern).
 
-The Fixes tag points to commit 4171954f56fb, but that commit only moved
-hid_bpf_get_data() without changing its logic. Its commit message states
-"No code change, just move down the hid_bpf_get_data() kfunc definition".
+Changes since v1:
+ - Fix the UAF by reference-pinning instead of a NULL check in the
+   handlers; no gsm->mutex in the data path (Greg, Daniel).
+ - Pin every DLCI the dispatch touches, not just the addressed one:
+   MSC/RLS/PN operate on gsm->dlci[k] named in the payload.
+ - Add a base selftest (patch 2), as Greg asked.
 
-The vulnerable addition pattern 'rdwr_buf_size + offset > ctx->allocated_size'
-was actually introduced in commit 658ee5a64fcf ("HID: bpf: allocate data
-memory for device_event BPF programs"), which changed the field from ctx->size
-to ctx->allocated_size while keeping the same overflow-prone check.
+Verification (KASAN, panic_on_warn=1): the originally reported splat is
+the gsm_control_reply() / CMD_TEST path (see the Link in patch 1). A
+reproducer targeting the MSC handler crashes the unpatched kernel and
+survives 270 race rounds on v2. The selftest passes on both the clean
+and patched kernel (pass:3 fail:0 skip:0).
 
-Should the Fixes tag reference the commit that introduced the buggy code:
+Weiming Shi (2):
+  tty: n_gsm: fix use-after-free in gsm_queue() control frame dispatch
+  selftests: tty: add base regression test for n_gsm line discipline
 
-  Fixes: 658ee5a64fcf ("HID: bpf: allocate data memory for device_event BPF programs")
+ drivers/tty/n_gsm.c                          | 105 +++++-
+ tools/testing/selftests/tty/.gitignore       |   1 +
+ tools/testing/selftests/tty/Makefile         |   2 +-
+ tools/testing/selftests/tty/config           |   1 +
+ tools/testing/selftests/tty/tty_n_gsm_test.c | 344 +++++++++++++++++++
+ 5 files changed, 443 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/tty/tty_n_gsm_test.c
 
-> diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-> index d0130658091b..09b45c40d84f 100644
-> --- a/drivers/hid/bpf/hid_bpf_dispatch.c
-> +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-> @@ -299,7 +299,8 @@ hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t rdwr
->
->  	ctx_kern = container_of(ctx, struct hid_bpf_ctx_kern, ctx);
->
-> -	if (rdwr_buf_size + offset > ctx->allocated_size)
-> +	if (offset > ctx->allocated_size ||
-> +	    rdwr_buf_size > ctx->allocated_size - offset)
->  		return NULL;
->
->  	return ctx_kern->data + offset;
+-- 
+2.43.0
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27633665618
---===============4017712549315767575==--
