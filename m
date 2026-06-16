@@ -1,80 +1,80 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79BC137AA8C
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 01:44:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4362A37C0F8
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 01:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781574249; cv=pass; b=oUnKwkjK+QQeDalL3V5lfu7/OaOln/oOZ77xyTRuRJuIdLA1XKBk2PPjMQo7/1CiB41UA7HO2tI4sE7chfVjnqBDzjKSbwcOxpMub3AIo+E2hIfzZ9vLBrQPORwbxuGFfuFVl43B0p0AAB7a6VIhLIEspmL4GZUHfuPDepfTw6U=
+	t=1781574297; cv=pass; b=jk8ex92rn73ak4TwhIMSEgb/FqVg/ElOOXoG4sCijfZsF+JVyhFi2AU8OvORCHcWcG7dtgsuKGMMxiQTnJiFQ3a/ewIkFc4eava5lofGxJ+vsPna4kBwMJA0O2DuCb7LKf32wHSLo/LHTdCk/uChJei2z+bKykBq3LMklVwl9PA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781574249; c=relaxed/simple;
-	bh=236fBEIJz/KEeeV7woGGo3ZYcOTNrCWyCpSWEhiGQK4=;
+	s=arc-20240116; t=1781574297; c=relaxed/simple;
+	bh=8tb1U1aZ9n4reEv10sQy7avbCZsN68fkX6jT/KPserc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dlwu2xWmKckUKCLenBERgo7fcEgemHogO300lM/Fo/6Un90if27i9FMW/Ikto9a7SekOSaa1DVzMkxMMTU9ufKLlZ91zbS+YB4g5mIa3LZW+/ytfEVLD17PJ2asdLXAoNX7Zh/RrFgjJXFWt5tUhiHR9u4uwjHs+G8WBTTxn/Cc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E2o0frn2; arc=pass smtp.client-ip=209.85.128.169
+	 To:Cc:Content-Type; b=Ho9gx6LbAa/QSKIVSXtFaEFmsYRCVo3OAfXV7+4nuBvljqIG+arFB2R8kg8Uuy9xkS/j8ueCYVlwHoFCSH76RvhwU71coLbUSVhPAtiksos/ab8mBHyqox9TuStUbTZ2gQpPbaVabH6yINiFEFv5E0F++jnj8z+vXQLajNDY0P8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OwnPR6I5; arc=pass smtp.client-ip=209.85.128.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E2o0frn2"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7e3b2a435ecso43611587b3.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 18:44:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781574247; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OwnPR6I5"
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-7e3b2a435ecso43616177b3.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 18:44:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781574295; cv=none;
         d=google.com; s=arc-20240605;
-        b=f3XyPw2SyIrdEXCWF78TY+2cP62D0PafjJz7AIEIO7o/ht5xeJOjvyZIblYC/876KF
-         G+1QE1bOUpsSnlgyQmB4urLZph748UX0sGJ4oWW9P1ZdZijjV9P3BhBV6Y5brUAnWWxX
-         Ov7iZnSBoAfNIBAZLiiTddAsgmJB+TycNgpcuORJdjoZ+dn5fhXgj8drBoFbHZBNRVJA
-         fzAd1GxB9FUvAgzIvLJWkWqirdryX4sGMw0EFywsO4UJU4aYGKPcHdQm3o2vEjHk7UG9
-         /wxJHv52zIIkvOwp5Fv1vcwxyMksq9ACDqyn1QjyBcPM7eqbTSdyLBeNmbqfZLpOLTqs
-         QYpA==
+        b=Z8pKt3/8Xvcy1qefkq+xc2BTKoXmFCG6bGRQAw2BITUxZGitboJzIL0Rpl3wH8+802
+         GWXI4Z+SQQbg0lmD7i1MgxCFjhjM8Btd/RhqtMBkjJ4GyQmOZ/5+Prf/7g/v7ARGIPin
+         n/23s36IonYpguDmA6aqiaJ9FsFy6u+Egrc4AAgAXKgBfR8uaobh6QpGbRG0TXv05uNg
+         MlrGWD+T2FEu+Bbvq25aFc0CZYAgebRuoaOFADA44zKZP26N/xrZ7JlLzd+NMWivea01
+         CeskG53c+yVZ9drKcERMnjGIxIDKZJKzG3u2Q80clq6dt4cGriFCiP6Nt2VcIsLL/JoK
+         cE4Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=+oKKpyH4QTZmF9PWO5iAvNe25h+SsPEG6KTMiiFXfCc=;
-        fh=QEdcdBoe6ZOJ7KlT8TzECY4on7/0MSSEva7cB9HB5A0=;
-        b=Ex1oNzdb/rGW6NCixvSlm+eKrJGq88TGUtFVcZJWnd0hI4jG0OqxLIx2vHSkHt8+Hl
-         /EKOWqLowFvs2p2fSpLE/XewiDrHeXflb1ZkJMeMC19if2ElhF2Q0qRsawPrmgRfxo5R
-         wcYvxUzlm9Cf0P67mU9aPvu/l6INF/yQDjTy+pVfnsp7vtNZV0jFUFT3jp5/eKTiFSOc
-         I4sXyCQNxPlkG7/INVoTZSamXZ4anwQqEyKpjxp2Ze5rGcf+3f7vTvlmYKOZoXt2KacP
-         GXnIIdM60c4Sm07tef7UZ5NSf7FkryZqFaJ88yWXb+Ol4WFUKdrmeVHGKQCsT9O9iIax
-         hJgA==;
+        bh=73H1rmBZsR9HB0wLO22wKQ4YOh6GObKN7jR8HYwzlak=;
+        fh=T4SsCNVB23boyrulUklW2pTdn5Ayl9zTBsfFsOAG4DI=;
+        b=DKXGptjneUm4L4hxBJpgYnkaY7rZjU5uLBCpdyfe6XRZwRA6mH5t0amibTcmUEwUXC
+         p8gNNZBFFjRZHsW61JmkxjgaOOifNu8aA5QMvreimSG0sbPmI+Vlee/3SrI7pz1FeIkE
+         lhdbGDQ5EZfB0/BErMdBn5taT88fXA6zACreTmPsL0z++qtDtI7mH8I89ZPGRiazDmvv
+         CgTP2MlLPqq3fVNzVk63d1KYK5Dmu9Ui/EDUJRblevG6/b0JUjE+YSfTpvYsG8lGxtQG
+         FR0ijJ5VLaY1TB4M36jYV/hu/QcKSRVFDCRJNIgyyYRyH7ooIn8pe8vpgvPUuzb9/lvW
+         FFpQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781574247; x=1782179047; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781574295; x=1782179095; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+oKKpyH4QTZmF9PWO5iAvNe25h+SsPEG6KTMiiFXfCc=;
-        b=E2o0frn2KSkwnFR4DV7A6TqMGa/Oei7dB2VJLSbtZxgmj/8asuPSLDfPSjAg7Tgo9s
-         ZaL9wyUtGjGBjjNQo7B+ywKOAzZ2qYwDsYuTP4yHYGHB/+FJfE15KvbQb+pkhulZ8lSM
-         jcXzc+7loptnXJaYbCw2OIGI4KLG/S+6fswjUIq+0+zXdIP0TUCVAFxP7ioa2w+F5FfR
-         26cVzvsrGnC0mbgCQm6ED96BK3uOUoPQ7T26lFDZFmBj1hib2zi3TOoGd+dkIZBV5jqd
-         8hgBt7a4jMW53dT4SiudefPd6660+zv4qhyu2aLAWNr2+3kT3nkkUxmhjgdrK72MGyqB
-         pKkA==
+        bh=73H1rmBZsR9HB0wLO22wKQ4YOh6GObKN7jR8HYwzlak=;
+        b=OwnPR6I5iIs3RNyIl7li/ifWPBaRoWSLpVjjuEyDVWS62jUrE/MoAVNMhCMGpbIqrE
+         /2i6BuHuX5b8az7Yo1OrPtmAge1WunOi45at90gpQXXA/h+ywccJRNjhtDGcvoWRkalM
+         0t8GYkldhbtUdD8qInwfGg2TvXqpUAa202NBRcM/1pWS3TcgtOwUXQ/YXcL73q8uHwyZ
+         WQ88gK2/RAaSyRGDAb/uKncOtos2rQsrinmHOu8QAoAUV1OX5Ot4heHifAaX1zRLChWf
+         p+itmcyBFTIaP3TS2nXxeGozYEFk8Ycz22PxffOZOP78k/qVNtZ68Yss6STa5J3UfeAr
+         eUPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781574247; x=1782179047;
+        d=1e100.net; s=20251104; t=1781574295; x=1782179095;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+oKKpyH4QTZmF9PWO5iAvNe25h+SsPEG6KTMiiFXfCc=;
-        b=By8vAKFz0hsLS8kw9asGgnvlUCp7rFcZnYq90aPdJDHzltK3ZZhNchx1ePFWfOjnIK
-         rrD11Z/NnNkScwcqWTT0Hecfc4bWwoliBdnAoUDWeXFWHHdcaa2oPDC4XlKCfsL58jP4
-         SbBpy671tH2f1JqB9cB5hL3DadDh7wdjs9MPYUWT2n6pMGLjhmhGeOQ4UZQVbMze2O0o
-         IlwIjpEaFlopD/IfyCdQSRebuV/Wd8D6elpMYo7o54hcEkbnL8hWHBTraKPe2TChSo6o
-         WusUhcE1t784rvN5olqzb++Y7pgv6juFdMoujSSiMGGm+QQHkEKLiBKkPXeb/pAdfOac
-         5xKw==
-X-Forwarded-Encrypted: i=1; AFNElJ9cZFmmuvSxVuMnPJ3vpm9Y9WORWlaPw/zVwPBDjLoHbMOT2HGLIYtX9ICTtXQpLyXgVk8XK3Q5oLq5HH/Yj3w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7YXDacE2Y0E1Ngx/OjyEr/BVpiJ9ZrOZL9Q2ZEseL03tF1JIS
-	02X1dgFojXSMlZROld0Tn7B23P6CxilcpoOEX3g2FnnoLgfWJrhcZ/ai91pMBjA2recxD8FEP2v
-	S2+TiKgql6jG3j04tl2SFe0pedZxgm8k=
-X-Gm-Gg: Acq92OEhHTZzmnvS1UD1uNOgi2/E87YCyx+QxBRq1mYYkkwON7uhqZJfgW9HgV/rpmk
-	gYuAmhCUZoi78LA4lujrEBANbNFHGEgmuNLa/vn7cBOV5jJmQwif4hL4jwkreGoOSa3HvSHBqE3
-	ycI6o6nrlJro0Q/xqRsOQsgx0C4+R0xtGJ83XRZEdQfki7JcOxporBrlAfDrbrEhWV80vnWGSGI
-	xL41G8Fx+vhgZ3AsZc7azVUibFgkmOS9js2G2MRRZXznoMWHsVCP+1iPW0aNcb8mUy1ekKIPZpB
-	fC1OKIN2OAQDi/OOJyS+OX7eKsqBoTuWUjq36r9rcztwM5HG1Mr29UeJIz1n3w==
+        bh=73H1rmBZsR9HB0wLO22wKQ4YOh6GObKN7jR8HYwzlak=;
+        b=WesyqaOO6v2qUBskZFsSI3mT3sHoskKA3ANMfEtFIhy/Ba11ztvrDw1hSDsF0/RfCd
+         b9ZL9NO3uGs+7JBthpRqrBC14mQpu6pRaUHm7TZcDc3uVTQROPeV+R4lW2OYZRTj4UUf
+         le/stwO/NI9OCO9OKKCkXXKQQYA3mE+DfjTEsLKZtCeY6GVXLPd9e3g4YliG17esALf3
+         ou+c/H+xrbhIW6yV0elNI1azxvMaqIrlZkCVDcAKvkz4XR2GmmXhW/U9LBTc6vt/SjP+
+         uDQtQZLbu5GQnPLxeOh/OPvKEE37yZGEEeoQE7ZTYP2ho8bQZOopNDSyxQEUxQZ3xwJg
+         AgKw==
+X-Forwarded-Encrypted: i=1; AFNElJ/OgBqFjqBSU/kVrW6uFPLA5xPq83wz66CaGL6CRvNIS9PCyOe3MgW4bbNeFedKoHqRidAay6i/sC0jOduHH7Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5JDHFzeQIs4Zgek1nEBSPaUlDreI8Oa31XnoNEmy10jOpJYMd
+	e8koouf4YACG6jVc1yRqEUJKYYCakMUCkLKcHuqvQ1WppI8DWi6wR8dFLMJcqe8/f3UmqgrA6KX
+	ZtjLb9561YzsCFv+Fpp+rwGSO2rmPepc=
+X-Gm-Gg: Acq92OFS8OJwC6BTuTKrc5ki0Xi2xZIPtiXv6xf9IC+GrRLGDPrHxDolYK3a/Tl+mdl
+	YQJtTTEm4VGRmB5aX4XxexSGMqee7K0h/utcGUelFPqUXpNM9Z0wIAtmMwPDqpOVbJLHfb9cLLh
+	8YNCBRcLDtZitmPRxxc2y2q21wmkJUUDHJyhy/kSezoAPt3BsnFUpQWXTvZIj427zyZtxXpJmIj
+	GZIGPh8YxgQLpsWGTcBrYFMlhmQMeUbeSSKZN7AQYCaESbn3ucU7fIP7m9PhxBxTReGo3ucnBBm
+	90mFaGiBUaPVRkCXaPCFuiJYwle+y2g9+hv2DKWDMOTGEgEoOuc=
 X-Received: by 2002:a05:690c:4902:b0:7a3:7ad3:3e9e with SMTP id
- 00721157ae682-7f8c37d34b1mr121804007b3.32.1781574247418; Mon, 15 Jun 2026
- 18:44:07 -0700 (PDT)
+ 00721157ae682-7f8c37d34b1mr121816437b3.32.1781574295274; Mon, 15 Jun 2026
+ 18:44:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,13 +82,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260615073856.152479-1-sun.jian.kdev@gmail.com>
- <20260615073856.152479-2-sun.jian.kdev@gmail.com> <ajAAkIv0R3ztfc5g@mail.gmail.com>
-In-Reply-To: <ajAAkIv0R3ztfc5g@mail.gmail.com>
+ <20260615073856.152479-3-sun.jian.kdev@gmail.com> <ajAIdJHvvIH9ZSrM@mail.gmail.com>
+In-Reply-To: <ajAIdJHvvIH9ZSrM@mail.gmail.com>
 From: sun jian <sun.jian.kdev@gmail.com>
-Date: Tue, 16 Jun 2026 09:43:57 +0800
-X-Gm-Features: AVVi8Cf7im9Wiat3H2R_vuZVWzFKDi57wMkvXVzURWHo32EAr5QTdOPWPc2BPvI
-Message-ID: <CABFUUZFKTsaHLSzoMDogSnnzUCikZcb6TzxQ4G640oO4OxmAjA@mail.gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: Fix partial copy of non-linear skb test_run output
+Date: Tue, 16 Jun 2026 09:44:45 +0800
+X-Gm-Features: AVVi8CfJxceWjHoo-gL6bJqNaLI_gcPFSgsxs1Oced6jE74a7o2xoyErdyfibJ4
+Message-ID: <CABFUUZEkndSQyxckpNZ8tbP6_o7zL7fBNdrsWNia4JDiHD-NHw@mail.gmail.com>
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: Cover partial copy of non-linear
+ skb test_run output
 To: Paul Chaignon <paul.chaignon@gmail.com>
 Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org, 
@@ -98,83 +99,96 @@ Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 15, 2026 at 9:39=E2=80=AFPM Paul Chaignon <paul.chaignon@gmail.=
-com> wrote:
+On Mon, Jun 15, 2026 at 10:13=E2=80=AFPM Paul Chaignon <paul.chaignon@gmail=
+.com> wrote:
 >
-> On Mon, Jun 15, 2026 at 03:38:55PM +0800, Sun Jian wrote:
-> > For non-linear skbs, bpf_test_finish() derives the linear head copy
-> > length from copy_size - frag_size. This only matches the skb head lengt=
-h
-> > when copy_size is the full packet size.
+> On Mon, Jun 15, 2026 at 03:38:56PM +0800, Sun Jian wrote:
+> > Add a test case for BPF_PROG_TEST_RUN with a non-linear skb and a short
+> > data_out buffer.
 > >
-> > When userspace provides a short data_out buffer, copy_size is clamped t=
-o
-> > that buffer size. If copy_size is smaller than frag_size, the computed
-> > length becomes negative and bpf_test_finish() returns -ENOSPC before
-> > copying the packet prefix or updating data_size_out.
->
-> Thanks for fixing this!
->
+> > The test verifies that test_run returns -ENOSPC, reports the full packe=
+t
+> > length through data_size_out, and copies the packet prefix into data_ou=
+t.
+> > The test uses a 100-byte data_out buffer with a 64-byte linear head, so=
+ the
+> > expected output spans both the skb head and the first fragment.
 > >
-> > Compute the linear head length from the skb layout instead, and clamp t=
-he
-> > head copy length to copy_size. This preserves the expected partial-copy
-> > semantics: return -ENOSPC, copy the packet prefix that fits in data_out=
-,
-> > and report the full packet length through data_size_out.
-> >
-> > Fixes: 838baa351cee ("bpf: Craft non-linear skbs in BPF_PROG_TEST_RUN")
->
-> Wouldn't this bug actually go back to 7855e0db150ad ("bpf: test_run:
-> add xdp_shared_info pointer in bpf_test_finish signature") and also
-> affect the XDP bpf_prog_test_run_xdp()? If so, could you also add a
-> selftest that covers it for XDP?
->
 > > Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 > > ---
-> >  net/bpf/test_run.c | 11 ++++-------
-> >  1 file changed, 4 insertions(+), 7 deletions(-)
+> >  .../selftests/bpf/prog_tests/skb_load_bytes.c | 35 +++++++++++++++++++
+> >  1 file changed, 35 insertions(+)
 > >
-> > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> > index 2bc04feadfab..976e8fa31bc9 100644
-> > --- a/net/bpf/test_run.c
-> > +++ b/net/bpf/test_run.c
-> > @@ -453,19 +453,16 @@ static int bpf_test_finish(const union bpf_attr *=
-kattr,
-> >       }
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/skb_load_bytes.c b/=
+tools/testing/selftests/bpf/prog_tests/skb_load_bytes.c
+> > index d7f83c0a40a5..134be0ea8ed7 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/skb_load_bytes.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/skb_load_bytes.c
+> > @@ -3,6 +3,39 @@
+> >  #include <network_helpers.h>
+> >  #include "skb_load_bytes.skel.h"
 > >
-> >       if (data_out) {
-> > -             int len =3D sinfo ? copy_size - frag_size : copy_size;
-> > -
-> > -             if (len < 0) {
-> > -                     err =3D -ENOSPC;
-> > -                     goto out;
-> > -             }
-> > +             u32 head_len =3D size - frag_size;
-> > +             u32 len =3D min(copy_size, head_len);
+> > +#define NONLINEAR_PKT_LEN 9000
+> > +#define NONLINEAR_HEAD_LEN 64
+> > +#define SHORT_OUT_LEN 100
+> > +
+> > +static void test_nonlinear_data_out_partial(int prog_fd)
+> > +{
+> > +     LIBBPF_OPTS(bpf_test_run_opts, tattr);
+> > +     __u8 pkt[NONLINEAR_PKT_LEN];
+> > +     __u8 out[SHORT_OUT_LEN];
+> > +     struct __sk_buff skb =3D {};
+> > +     int err, i;
+> > +
+> > +     for (i =3D 0; i < sizeof(pkt); i++)
+> > +             pkt[i] =3D i & 0xff;
+> > +
+> > +     memset(out, 0xa5, sizeof(out));
+> > +
+> > +     skb.data_end =3D NONLINEAR_HEAD_LEN;
+> > +
+> > +     tattr.data_in =3D pkt;
+> > +     tattr.data_size_in =3D sizeof(pkt);
+> > +     tattr.data_out =3D out;
+> > +     tattr.data_size_out =3D sizeof(out);
+> > +     tattr.ctx_in =3D &skb;
+> > +     tattr.ctx_size_in =3D sizeof(skb);
+> > +
+> > +     err =3D bpf_prog_test_run_opts(prog_fd, &tattr);
+> > +
+> > +     ASSERT_EQ(err, -ENOSPC, "nonlinear_partial_err");
+> > +     ASSERT_EQ(tattr.data_size_out, sizeof(pkt), "nonlinear_partial_da=
+ta_size_out");
+> > +     ASSERT_OK(memcmp(out, pkt, sizeof(out)), "nonlinear_partial_data_=
+out");
+> > +}
+> > +
+> >  void test_skb_load_bytes(void)
+> >  {
+> >       struct skb_load_bytes *skel;
+> > @@ -40,6 +73,8 @@ void test_skb_load_bytes(void)
+> >       if (!ASSERT_EQ(test_result, 0, "offset 10"))
+> >               goto out;
 > >
-> >               if (copy_to_user(data_out, data, len))
-> >                       goto out;
-> >
-> >               if (sinfo) {
-> > -                     int i, offset =3D len;
-> > +                     u32 offset =3D len;
-> >                       u32 data_len;
-> > +                     int i;
-> >
-> >                       for (i =3D 0; i < sinfo->nr_frags; i++) {
-> >                               skb_frag_t *frag =3D &sinfo->frags[i];
+> > +     test_nonlinear_data_out_partial(prog_fd);
+> > +
+>
+> Maybe prog_tests/prog_run_opts.c would be a better place to cover this?
+> test_skb_load_bytes() is meant to cover the bpf_skb_load_bytes helper.
+>
+> >  out:
+> >       skb_load_bytes__destroy(skel);
+> >  }
 > > --
 > > 2.43.0
 > >
 
 Hi Paul,
 
-Thanks for taking a look.
+Thanks, agreed. The test is really about BPF_PROG_TEST_RUN copy-out
+semantics, not the bpf_skb_load_bytes() helper.
 
-Yes, that makes sense. I'll re-check the Fixes tag against
-7855e0db150ad and add XDP coverage in v2, since the issue is in the
-shared bpf_test_finish() path.
+I'll move it to prog_run_opts.c in v2.
 
 Thanks,
 Sun Jian
