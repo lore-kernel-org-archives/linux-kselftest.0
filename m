@@ -1,178 +1,149 @@
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4B33D45CB
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 18:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781633402; cv=pass; b=HCltNrFqheU82IB4VJlid33hyRFhlZxczz+h7uwykzSbOjdj5RB+XOlG5Tza9xcg+qF6IT3NRGP9gKUdCxr+OLbP/VPCwx5yeu2IwBv/R3DMFoHu9S0NaJgASumYUgefTbizRLH+5laLyLKoNPycJdalrMxuAfrEHF90M1Ijml8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781633402; c=relaxed/simple;
-	bh=hbZ7AtqKeATB2r4kr93uGgpM+Y/zj6+leroFxw5uOv8=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mARvxXTcT0/GAooakcWVe8PfJvarksBQaFEjlToPED4AelVkwNmr7hqGU4GdsG4/dxRh2EJTpw/XB4MEIEVtOUT9ztp5qUSMCei4IzVieW4j92cSQOksk/xA6wXzdi0lRusKhuLOYNflpfSmRfWO/o3x4IAvjSMeDobwo4/3wFY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JXYp3gXJ; arc=pass smtp.client-ip=74.125.82.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9287D466B5E
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 18:21:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781634065; cv=none; b=DBF5Tmq+0SNc8gaaH5OcsJf6AtC/MoWhKBDUYj8ph+XM+QE5BbCYSCB34Y+MzerymglorQhjIMOYc8eHGseNeIsl8SvUMc7zclt90drWp6jF5q3PKJwSf0T9gsu38XRKMAE2tqNP/Xx38/YtN+ABhqlWN0GMeiBkMqs4pGbBBvY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781634065; c=relaxed/simple;
+	bh=0tSUUNVDEBGwYBjppBS1BH3TrzovrW9yOtoZpZdMF8Q=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=IDRhSoolOCq8XqK/xwYakrnXL7GKZ7UNbMM2gQXB55rljDDNH/lcMToITScwJeFaBG1MVNa22DVEDYvXnQHPU+I7nZ2y4lFig2E/zXWu4y5xvg06VUQb29K/rfXs/QjJeA2VnQgQ+9ceVcKZfDNZP7B51FLjbWrQMTZfRDLFvXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dbo1XmI2; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JXYp3gXJ"
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-1370417c01cso6355278c88.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 11:10:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781633400; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QUniXpxkdNwjN+6VdyWmhWqj4thWz2mGtwN4c+oK1IYRRQEb1k+OB42yFr7/Sinh3W
-         tJ7vJKaUgGGRTd3HQNr2IQH4SbTFTx7/9VYrrkXcSu8rLm/UcjpcEXxwTrR3pa69y+2i
-         aqRRjCh8uO3M0eZv6NjlBw5JUXtSF79jkowC0c9IkShnut7lB+YjVJHojwgEAtAgcIHi
-         egiKW9TXmKKfXgaP7mDusfBWiI6u+O8lCYVEB8MY1qpMBSjEvKas4y5MlWe9BWy0WHqN
-         ATo7BJjbeOvMMYjytmoakkqCp6jKRT3YuoxOrVVfj2b1uUMSKT8WZ+/9aA4K6Uk/m248
-         E9BA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=o82nbH8071ZDGLm0iYK2gdlkX600tsvrzfNh6VLN4Fo=;
-        fh=SI5Kki2FhxWcFFSxpS0nxxayR/vkTBulGcA2TsCwtRU=;
-        b=ZuyewUlmAG6jCdBQHuqtSyjm7i70SdoOihrHVcSdzpqRLXuo1jsoZuLx8QGR1YGYuN
-         nq8aa/prYTxQZqgEjyUdWRlcv75+JyurMPZWV+UrqQaRrco3nFkdTTgHcP7iWBT2Oh9L
-         iUQtLWxHwtJpZI7Nr7HlnmNm52CT6NGB/GfOr+6WDbnRZHXcKEPe6vieT/og/Hk9jdKk
-         EJY0y5P5R8fJ5ahFl2gMoXYIOXhmxXNA02HjI4GEJb8PmwnZvxxsiojNCnAiHnvrl7UF
-         Ceb7u/j7AcDEoGx++OwmRsg18dTJjA7YgUu0Xq2fMyjsnF9DJ/ZHL+NIahNL56KB7oRZ
-         m3rA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dbo1XmI2"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-8422a0eee68so6374800b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 11:21:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781633400; x=1782238200; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o82nbH8071ZDGLm0iYK2gdlkX600tsvrzfNh6VLN4Fo=;
-        b=JXYp3gXJ7pMeF9WaAOYYO6gSbS5mjDcaZxz/wPa+8kEWDLwRfwwM6/7YMe2P9Bahyn
-         QWCBOe0P47hudynegfdEKLzfJzJ50p5G9IZzB/TTy8x9k1JR1j7Z6u/j+ICZSpnlxamK
-         KwEMdQVsm6CrQVJ9s6SsKMxpPqN8ci892isftjagSgFrlTT+bZ3nzDqyC3alo0ibbE7N
-         5Jp5Rzf/kg2KLIWQnSE/R36/vK1J1yPYiSZXIno0NkMP96yH2uT6W0kq5HyLw1RAOs1+
-         qwKMzNSkS6pv0v8wqU5fidqR5I1KRaGca9PsyMp/PMygj2YDYxrvI6xwT9ugbtMif/+t
-         gbdw==
+        d=google.com; s=20251104; t=1781634063; x=1782238863; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PDGQwmie0FsFOW5zpiubju2q1B2vV8kB05baSk3HG50=;
+        b=dbo1XmI2HdZ9FlZn05IJSPRX8vG6iJEUl6iYRtinBXhtr2pbjZzvNu8RUy6ff2y1cH
+         3rRTOxlru6/43NXpLPlntN32wW/23Yk87gbTVUcA+BEKgnb1YYHLD5ircXSpwNmTLUDy
+         xciTKSawcGYQbIrdpiGMTcvYfaJ4kyYu6FDTvFumkZbQFENKatkCdo3bLIt62hH3r5sw
+         k3nsQEt1osL1svOlVlNvDHqbfxJoLkNUaZSPw3y8YePhAFet7FnRg/la8n1QVPSodBnq
+         J5zG6DXlg/3AtylA8e7QTYEidKhV59/3AnX+ostTY9v5l1eW28STKGod/6Je9hCM+/uX
+         /gog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781633400; x=1782238200;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o82nbH8071ZDGLm0iYK2gdlkX600tsvrzfNh6VLN4Fo=;
-        b=mzlTwhbXlQnGHL5QJcdO+z3nZCBZjfVBLW8Cp0lwOTskYh/zPwLrfi+hUV9BWRfb7H
-         ZzObjfn4fNsgAGC8L1lYQG7B0wefZ0yvom2lIdoTegGpuQrciTWYsVYRseyIzu2OZtNA
-         a6cLGzHwL3cjQ6d2k444cWjTV1Gma65nfmXe8lXMJFdSecoctHH5gll4h1DzWCVrPMrA
-         W6Q8Ls+eOh0CNgwQzA/nG8O+wn7c/k8G1sKte0jV0o8h7wr6TeBrMrBHgsxv+KeH5W3S
-         soL6W6RFC7eQdSLsY/RyQxmchPUv/ylXA5DCcUJmFx/FAPAVovi+UxUq4iXDXD6W/hWP
-         uK0A==
-X-Forwarded-Encrypted: i=1; AFNElJ8J/ZpW5Gio3GoOaPn1xsHSpagNBkxlmnoohOwriqAtRBlyro0hFz2iqB0RdnXPhP87PObcYQUUmlVNoLYCK3w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxdzw0d1b9xwID9Nmhl/pJt6s7zL81xuQJ3aKnFNUtiI6gfSNn9
-	UCkG4khig6vs+v5dg4uUTIPo33+SuyL4pOYq12ou/xSu3rdv4YAqPNmkWqmg75M/bFdrFCYtm4M
-	ZxfrNNFCCUmulWa7xl2ZXrrJZ42hzai3mitcTDQjW
-X-Gm-Gg: Acq92OFbWwooNW4xujMO98ggHfY2XaC3r6e3dx9uuC0280nPV8FQnRpM3ms0IGoNxhw
-	qdeon/VvYPml2SP/AryF84OnF7wpPzoN61VpKwpiKW7r7nS4Q14er3lhGQ24165RLwqxINj2KnU
-	t0oOv2UoEdvxDq3IY9shXeDI/SdMtXcMIADw2tr/2AY3KMzGg84/oDhzGUUbcI17awy8UC//jz4
-	GG2Ig7dnfiJ8WzSvR+3ctTZIkdTjZnEDG8pj9VQPzeuYG03VYnS6PHRdZ3lUqH/PSPsLcm3028Q
-	aNmCGHcizZf0LRdevRRXol7nObbClMMHi0PB0ZbaGF6vrdgcZZIe7b+81RXZrDNoVBPR1MR0B88
-	LtWhy
-X-Received: by 2002:a05:7022:622:b0:137:9399:fc59 with SMTP id
- a92af1059eb24-1398f69626amr23221c88.21.1781633399141; Tue, 16 Jun 2026
- 11:09:59 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 16 Jun 2026 11:09:58 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 16 Jun 2026 11:09:58 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <1e77f24d-315a-4f68-a109-2f4520343c0c@kernel.org>
-References: <20260611-shivank-gmem-migrate-v1-0-2d266bfc6f95@amd.com>
- <ai_XK__RTXMCEcCG@raptor> <ai_aczmeH2IA6JaB@raptor> <ajA4z_Wkb93cTW4m@google.com>
- <1e77f24d-315a-4f68-a109-2f4520343c0c@kernel.org>
+        d=1e100.net; s=20251104; t=1781634063; x=1782238863;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PDGQwmie0FsFOW5zpiubju2q1B2vV8kB05baSk3HG50=;
+        b=ZHgz6TmcfyN4PZqk99hHs5dn7nAELAPgwB2lYGCfGK9me7qZkeHOpbDqCOnAGb/ZQE
+         1/DECOpMYAhX07dWaEFqbBuOEjqSUQwjYbn5Gtk3C7lpoK51xtZMtCWIPhOj/ZafDcun
+         EgHULU9YAR7W50MZ/BceAUDhtRMVRPSkvHVMmNImIBTWU4Jygkf1B9XWVkrt8B8027yQ
+         mryTlrnkr7Hiff8hf2WZrlqTWREGD/cN3LwE/FTzXGOxpbpnWVwQfxGq98bA/LWIP3XF
+         LJyGsgI+S8ssY6dMRE80upGACOVEbV0ZcoCmKNFXz83LS5pAGjT8403r6v83IGGuVnPp
+         RDsQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9UAFNg44G3e5T0qiFnKkTpbEFLxgaIn1nngtbRumwneIgHcP/5LQOFh/RfWY4JSAucdBfadekv5ca6D52rOu8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyG1RcOKk2PDwKF3a0b9DY8cXfMLWoAAQggXcZOIH4rrJcrbqQj
+	OeJvORlL+RKAYqtuC1lh5Br8gfkCjFVNU5zfLTXhPo68WZe/T5o92LKHoT24BVSS+CVpLumpwst
+	BNkJTBg==
+X-Received: from pfh18.prod.google.com ([2002:a05:6a00:12d2:b0:843:492b:a9f6])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:a211:b0:83e:e897:a394
+ with SMTP id d2e1a72fcca58-8452442d041mr320027b3a.7.1781634062694; Tue, 16
+ Jun 2026 11:21:02 -0700 (PDT)
+Date: Tue, 16 Jun 2026 11:20:53 -0700
+In-Reply-To: <20260521-tdx-selftests-v13-v13-20-6983ae4c3a4d@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Date: Tue, 16 Jun 2026 11:09:58 -0700
-X-Gm-Features: AVVi8Cfci2aZVOJMaXs8XbxR0646nJUtiwZFbcmm9wi2jMlpzFimiOSyoy_glyY
-Message-ID: <CAEvNRgFQLEsKanKrj=ePHoShiY2cgQgxtGs_2CJcZHP=JOjidg@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/3] KVM: guest_memfd: folio migration for
- non-confidential VMs
-To: "David Hildenbrand (Arm)" <david@kernel.org>, Sean Christopherson <seanjc@google.com>, 
-	Alexandru Elisei <alexandru.elisei@arm.com>
-Cc: Shivank Garg <shivankg@amd.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
-	Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, 
-	Matthew Brost <matthew.brost@intel.com>, Joshua Hahn <joshua.hahnjy@gmail.com>, 
-	Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Chao Peng <chao.p.peng@linux.intel.com>, Nikunj A Dadhania <nikunj@amd.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Michael Roth <michael.roth@amd.com>, 
-	Pankaj Gupta <pankaj.gupta@amd.com>, Fuad Tabba <tabba@google.com>, 
-	Vishal Annapurve <vannapurve@google.com>, Nikita Kalyazin <nikita.kalyazin@linux.dev>, 
-	Patrick Roy <patrick.roy@linux.dev>, Pratik Sampat <prsampat@amd.com>, 
-	Ashish Kalra <Ashish.Kalra@amd.com>, linux-fsdevel@vger.kernel.org, 
-	linux-coco@lists.linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com> <20260521-tdx-selftests-v13-v13-20-6983ae4c3a4d@google.com>
+Message-ID: <ajGUBQ3y8lvwM6_N@google.com>
+Subject: Re: [PATCH  v13 20/22] KVM: selftests: Implement MMIO WRITE for the
+ TDX VM
+From: Sean Christopherson <seanjc@google.com>
+To: Lisa Wang <wyihan@google.com>
+Cc: Andrew Jones <ajones@ventanamicro.com>, Ackerley Tng <ackerleytng@google.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
+	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>, 
+	linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, 
+	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, 
+	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-"David Hildenbrand (Arm)" <david@kernel.org> writes:
+On Thu, May 21, 2026, Lisa Wang wrote:
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> new file mode 100644
+> index 000000000000..810ca7423c84
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef SELFTESTS_TDX_TDX_H
+> +#define SELFTESTS_TDX_TDX_H
+> +
+> +#include <linux/types.h>
+> +
+> +enum mmio_size {
+> +	MMIO_SIZE_1B = 1,
+> +	MMIO_SIZE_2B = 2,
+> +	MMIO_SIZE_4B = 4,
+> +	MMIO_SIZE_8B = 8
 
-> On 6/15/26 19:39, Sean Christopherson wrote:
->> On Mon, Jun 15, 2026, Alexandru Elisei wrote:
->>> Hi,
->>>
->>> On Mon, Jun 15, 2026 at 11:43:14AM +0100, Alexandru Elisei wrote:
->>>> Hi,
->>>>
->>>>
->>>> I always thought that one of the nice things about using guest_memfd as a
->>>> memory backend, as opposed to host userspace mappings, is that the host
->>>> cannot unmap VM memory because of KSM, automatic NUMA balancing, hugepage
->>>> collapse, compaction, etc, acting on the host userspace mapping of the
->>>> VM memory, and outside of the VMM's or KVM's control.
->>
->> +1000.  It's not just "nice to have", it's a core design principle of guest_memfd.
->
-> Right, and I raised in the guest_memfd call also the rough idea of Alexandru's
-> use case of having non-movable guest_memfd pages such that we can support use
-> cases where we can hopefully guarantee that a stage-2 mapping will not just
-> randomly go away.
->
->>
->>>> I think it would be useful to preserve this behaviour, even in the absence
->>>> of confidential VMs (i.e, guest_memfd file descriptor created with
->>>> GUEST_MEMFD_FLAG_MMAP).
->>>
->>> Just to be clear, I was thinking that it might be useful for both
->>> behaviours to exist (migratable and non-migratable) for non-confidential
->>> VMs, and allow KVM or userspace to decide which they prefer for a
->>> guest_memfd.
+This is absurd.  Either open code the literals or use sizeof() where appropriate.
 
-More concretely, are y'all pointing towards a
-GUEST_MEMFD_FLAG_MIGRATABLE, which will set .migrate =
-kvm_gmem_migrate_folio, and for now, error out for CoCo VMs?
+> +};
+> +
+> +u64 tdx_mmio_write(u64 address, enum mmio_size size, u64 data_in);
+> +
+> +#endif // SELFTESTS_TDX_TDX_H
+> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
+> new file mode 100644
+> index 000000000000..f19be79fe11f
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
+> @@ -0,0 +1,30 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include "tdx/tdx.h"
+> +
+> +#define TDG_VP_VMCALL 0
+> +#define TDG_VP_VMCALL_VE_REQUEST_MMIO    48
+> +#define TDVMCALL_MMIO_WRITE		  1
+> +#define TDVMCALL_EXPOSE_REGS_MASK    0xFC00
+> +
+> +u64 tdx_mmio_write(u64 address, enum mmio_size size, u64 data_in)
+> +{
+> +	register u64 r10_reg asm("r10") = TDG_VP_VMCALL;
+> +	register u64 r11_reg asm("r11") = TDG_VP_VMCALL_VE_REQUEST_MMIO;
+> +	register u64 r12_reg asm("r12") = size;
+> +	register u64 r13_reg asm("r13") = TDVMCALL_MMIO_WRITE;
+> +	register u64 r14_reg asm("r14") = address;
+> +	register u64 r15_reg asm("r15") = data_in;
+> +	register u64 rax_reg asm("rax") = TDG_VP_VMCALL;
+> +	register u64 rcx_reg asm("rcx") = TDVMCALL_EXPOSE_REGS_MASK;
 
->>
->> For the purposes of this discussion, we should separate the physical act of
->> migrating pages from the features that trigger migration.  As I said in last week's
->> guest-memfd call, I am a-ok with supporting page migration as a mechanism, but I
->> am dead set against supporting NUMA balancing, KSM, LRU-based swap/reclaim, and
->> anything else that goes against the goal of guest-first memory.
->
-> Right. Page migration for supporting ZONE_MOVABLE/CMA, compaction, memory
-> offlining, virtio-mem and possibly some collapse mechanism if we were to support
-> THP of some sorts in guest_memfd would are all reasonable.
->
+This needs to be proper assembly, i.e. in a .S file.  Using register like this
+is *extremely* dangerous, because the compiler is (stupidly) allowed to clobber
+registers between their declarations/initialization and their consumption in
+the asm() blob.
 
-Background question: how would virtio-mem use migration in the host/guest_memfd?
-
-> As soon as we mix in access/lru semantics, we're going into the wrong direction.
->
-> Fortunately KSM is anon-only and not even worth a rant here :)
->
->
->
-> --
-> Cheers,
->
-> David
+> +
+> +	asm volatile(
+> +	 ".byte 0x66,0x0f,0x01,0xcc" /* tdcall */
+> +	 : "+r" (r10_reg), "+r" (r11_reg)
+> +	 : "r" (r12_reg), "r" (r13_reg), "r" (r14_reg), "r" (r15_reg),
+> +	   "r" (rax_reg), "r" (rcx_reg)
+> +	 : "cc", "memory"
+> +	);
+> +
+> +	return r10_reg;
+> +}
+> 
+> -- 
+> 2.54.0.746.g67dd491aae-goog
+> 
