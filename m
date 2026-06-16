@@ -1,247 +1,128 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2150399007
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 20:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1493A6F0A
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 21:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781643486; cv=none; b=L1Lkn4Q8T2BtjfWDTsIieU6rLlKcNbvP5oOUcuoEHGxzFoRarKF5t9ACQALJdX+p+vllaP0KGkmAXStvyUWGDrztdrZJg70bLri27cRjjmqngKVgaqUe0BNW5HQDeCQ+YmlqGzL+15lBMvM94ArQxKWksDqb8INg7800dUb3rcA=
+	t=1781644298; cv=none; b=kvGk4SiXJSJ6QRC4js7aWekZoOnklLdfEV8lc86DFAx4MCxJjMbCAV/lEKveLjOZkxDAei4CWLKWPQHfI16CHBkPorQEG0siV3j4Y3IRJEXiupyryL4AlPW5Wsallx3Rct64GXVL4R6JAtJf6mEH/VqijaMNcE8nJEmpCL6dPCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781643486; c=relaxed/simple;
-	bh=MUmT4WQ8gikQW/FOLoONsetD5u39tuO3VxiIsFbd268=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wl6vK6Gv8LMig/kx98ZbpSzrpDBOLcOhPZLiXdEuz+EXiCMmVMH/ienvRB1mdC3uc34QDtNaq/dgeAj3ZhWSy68Lsmmv8GxCfsMGsP4GJnjilS9ovglMzSJRL1V1nxONdSCOcyIUe2NOSdcThol/WoKQfrn3UpZQIjbsEsp8ErI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sD26MNSY; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781644298; c=relaxed/simple;
+	bh=dTScQgtBwOK2hwTaGqbBqTlipviyaPVWGKAq5jz6pQo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Kfo+gKF7GOLqFEOQistkbMbo+u4XEgnn2o9HgbvMYg90dv3ICP7tCaT8+nZpltsYwTsxeveodU92nY2KeQKM7h0snZkcpQEKV2HEjdWJv0xyD/kLOHX+zPw2LbuNrv8sCWPYBXRxlZiAUQox9Ziqt2ZcLhAZVDcqNK9+BSzs0n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=WZrBbQRw; arc=none smtp.client-ip=74.125.82.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sD26MNSY"
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-486b93fc7c8so2054981b6e.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 13:58:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="WZrBbQRw"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-1390f75d8bbso94405c88.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 14:11:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781643484; x=1782248284; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rG4yjs4p+4H4P31U7PQCtrU7WZ2EeT+JyZMQJymeW5U=;
-        b=sD26MNSYv9ZLMxqb1P8qI+3XPTH8FSD8SWooLHUuiCQ1s6THX8h2d9oZK9otgepkmZ
-         L+7vw5kRLiFhMm4ptzIFb5v7SpJrr4VPdidEvKSkm3rQM7zsNu16TuLbxqzbvApfenPl
-         Bc92wTJuZwFBksaYq+LNEJtqL8qMNArEaK/atLfBq4M5ys37Mkq3NJqEO3nDsQ3RjZnm
-         uAZgzEI+ZYytvvmatKMEPQNndEF5C7AER/T55UeFVWLeLPCZqneogbKrZrNsOsahY1JO
-         gpRzR0Fuf69BQoin4mtTuxrSj23kj93piIP2Ibn1fjn5ZOkwXSlYiw7aRLu3ADWyY4e5
-         CTyA==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781644297; x=1782249097; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sAcBK62HKnF0ILRgaewfo9ZdRQ5WRb1ndFmhkIlqveA=;
+        b=WZrBbQRw0+GonJJoDpDaKN4rUCpVcE5+xXWpOcyM5T2crzQb9EgyAlIy228bTWzhBT
+         idm4/J/j1UhDpClvdYfuQUO/UXFvF2u4dzdtD0z2OL8wDpYY8wPXSKLMWYlG9csjKHI5
+         uG9klvoR49UnDvp5XMhyTNz1b0U68Isjz8lBGm6mcnAjgVDv9Mk9dUAN4yWNVFrpJHy8
+         Z8P8tk8/u1e2HezStfKPT2OpA+nzyN4U3CgXHRKmMydictI0UozQiCh2EqLJ5tovrAN8
+         C55vmclf4LKHR4j+HAX8OECa+UNUousDpfEQ/wfvvwfs2MTiWs6SH5/+GjpRKy9YJpQ/
+         iIGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781643484; x=1782248284;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rG4yjs4p+4H4P31U7PQCtrU7WZ2EeT+JyZMQJymeW5U=;
-        b=tY2aKdXcnOswUeeLCaJZTDnfL3xHbSfqSbTgAH8blR5qyMmwSJ2krds2xL56tqD8n2
-         kTT9Zagz/KcG1zwAfzZxgYi/f9GpVm6mJRXq9eGok8gTIX4eRseW2mLnbhciB8vfWUWU
-         +h1gAucnop2O7m+OmecrOxVmqvHvqHe3Cywz3VIg0S3otDKYvXbwhdoCrbBkTx7oxQp7
-         k8/+6C+dcL3goGb5PFjwOP9idEIGVaQg/uZntcDxaMp6tBhfrIK350GVzI8dJoKa+Hac
-         lJ2doJjPdIWlbst8agOHOsIqInMdFKfAY5ZWG6V29Y6Limq8BSL7IwszzuKuD3wIovMu
-         xxwQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/FWBbt77zy2uG7HMLmxuPgq46xjt58Ic8ib8zN0kBO/SvoGGVtmUztuxGmd8ExGJvnJgCgklfHre4sxzcU80Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhFCtDMZIuq6y5uxx9jBWkene5FPZxqfbE+Fy0NutwhGH/+AyF
-	EdKC8qlcsc2JUN8Gt66UD8S4Vfbhl/NVb0VZmCiQFa61Bx2FvBS2yd4u
-X-Gm-Gg: Acq92OEAR1h5dS4UfH4sakrEPgV1SYuF8FACMKf/GnRyIivtrqv2ndp/48yKCI7K9CW
-	RFcAqKi5TAn7gDYuriUKk22/2AZt6QVm702K0Usw2X/b51AJGB6B5B4ngaqlgzqwCgjuNDWwG7K
-	0BbwT2iJSKFakO1Ww6rq07/dhlvvy3pQ1IXbo6CsPoqP1FDPIB9EO7yP0AVy52LjHHlY0F8VOwU
-	5NS4x4Ecwu+zMG2u0m0ojCAvDIFNdJXjShnEcC0Ht59Wmp4ppj3EI/CglLNlrlvSSFHT/S7OPNM
-	5A0IbOJ7Ky5m/yjScw4Mvvf/YAYUXoUk5QdVhZj5FKXHbQWYJLZ2XspNHJQC4uKe8ku3/z1fk3k
-	uZ3wOI2HCf1uEe7eTklXMCo0efYPkoQTUzOnEmEfIhQ/a6ceLB+h2yzo6imQYfflZoyVGyh9W69
-	1cA4aroe0dfDtr3RHWGhrBIA/SZ8JoeA4FO1ivKqYkPYo=
-X-Received: by 2002:a05:6808:2f0f:b0:479:f7e7:4a81 with SMTP id 5614622812f47-489425d7d4cmr1016628b6e.0.1781643483758;
-        Tue, 16 Jun 2026 13:58:03 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:8::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4875df7fc36sm5099675b6e.9.2026.06.16.13.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2026 13:58:03 -0700 (PDT)
-Date: Tue, 16 Jun 2026 13:57:49 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: "Kasireddy, Vivek" <vivek.kasireddy@intel.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Gerd Hoffmann <kraxel@redhat.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	"linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>,
-	"razor@blackwall.org" <razor@blackwall.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"almasrymina@google.com" <almasrymina@google.com>,
-	"matttbe@kernel.org" <matttbe@kernel.org>,
-	"skhawaja@google.com" <skhawaja@google.com>,
-	"dw@davidwei.uk" <dw@davidwei.uk>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v2 2/4] udmabuf: emit one sg entry per pinned
- folio
-Message-ID: <ajG4zaK9zu7qZT1+@devvm29614.prn0.facebook.com>
-References: <20260611-tcpdm-large-niovs-v2-0-ee2bf15e7523@meta.com>
- <20260611-tcpdm-large-niovs-v2-2-ee2bf15e7523@meta.com>
- <IA0PR11MB71852246277F773AC41DAAA3F8E52@IA0PR11MB7185.namprd11.prod.outlook.com>
+        d=1e100.net; s=20251104; t=1781644297; x=1782249097;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sAcBK62HKnF0ILRgaewfo9ZdRQ5WRb1ndFmhkIlqveA=;
+        b=MLmG9/qfpFmpeXZNZ+nRG+GTCHxMNwTQ76/2wqufGTIPg9iBGnZxyD8CFMZS8YuchB
+         CHASBe6XHUg84B1tkn5GNFVmuU/w0o9w50Ylrpv1T60RfzZ3apzKAmR6l2PIAjvZPINr
+         l0F+Iimx4IJQ+HRX6Uyj4RIWPBgkJ3rlRNXoiQK4btKcWJ0FKBePuWNqxuvM5Rw/YeZW
+         6j7jzfcTJjukmZS05QZaFDvnfW9hKbzFkLIrfhqbWxKHYO43HGBlZIo1xz97mkfM1VzE
+         xezyqXjMWY0XPqRbkKsgpr7TdoLSetg7ztQUoWU/RXiurYqDi3kK7V1vD+SOp74YFtU7
+         6lQA==
+X-Forwarded-Encrypted: i=1; AFNElJ+tN1715ZwZHBa3aeKbYqCc7oMQQbU/5HMv/Lk2RkFntVv1qkV3ow/4XqJmeXNsHvbucOM/YG/V6Q24yav8jno=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAxZIj0uACcxIzDdVCI6y2K7m5KtAT+GYBrvKYSq8UOqadPLCK
+	Ow/46V3GwbJcFKBIycagNxxn0YmsW8g2CVSd1IVJ8NyARdglqrxjAdN4DUaW0idvBfA=
+X-Gm-Gg: Acq92OGDcjB6x5Tl1QMUcRWqvBcRWjLZbTKb3iXJbxfMFxnifBpi2wczr+sHskhtULU
+	ex6kUJb492xnOcFmd3WQ/LetN/H2/5HtAEy08cIB1sLDo/Po6Yyp7djWjKpjgntUDMdoBylSwqA
+	ub4COWAXEqHYHII1YUsLClyniyAuiwzHjqBqK2g/Dx5ge5eNePBd75Pd9omTe9TWKdBA4VANRaR
+	dO5GwWPmvMphGF0WNpnCPtRSgeM8Tz1yjEFxDeojbvcQ28ks3sCAPhKFj5ZwFGLpIChjp7Egbl6
+	Ui43Tp9ZyszWQL3ph0GINsWVjk9kS2bDmZ08znsX/tvbfx/eBICS5GU3BLpbAG1GrG5JAZmK9DD
+	FefD1TSzwybhYqjymTC7DPEY9E7ooBzOByEhnQRhZhC+xDWY2ZZ/bYnUZm7NPZjIpWsleHIBJio
+	royjAE
+X-Received: by 2002:a05:7300:80d2:b0:30a:e5d4:1663 with SMTP id 5a478bee46e88-30bc9cad60cmr722692eec.7.1781644296622;
+        Tue, 16 Jun 2026 14:11:36 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::1a8e])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081ea4f7a0sm18675598eec.24.2026.06.16.14.11.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jun 2026 14:11:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <IA0PR11MB71852246277F773AC41DAAA3F8E52@IA0PR11MB7185.namprd11.prod.outlook.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 16 Jun 2026 17:11:33 -0400
+Message-Id: <DJAS6XB7815V.1K8T5ZD0UVJQU@etsalapatis.com>
+Cc: "John Fastabend" <john.fastabend@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Luis Gerhorst" <luis.gerhorst@fau.de>, "Shuah
+ Khan" <shuah@kernel.org>, <bpf@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf 1/2] bpf: Fix stack slot index in nospec checks
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn> <20260617-f01-11-stack-nospec-slot-index-v1-1-e3a080b0cd7e@mails.tsinghua.edu.cn>
+In-Reply-To: <20260617-f01-11-stack-nospec-slot-index-v1-1-e3a080b0cd7e@mails.tsinghua.edu.cn>
 
-On Tue, Jun 16, 2026 at 06:04:03AM +0000, Kasireddy, Vivek wrote:
-> Adding Jason to this discussion.
-> 
-> Hi Bobby,
-> 
-> > Subject: [PATCH net-next v2 2/4] udmabuf: emit one sg entry per pinned
-> > folio
-> > 
-> > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> > 
-> > get_sg_table() emitted one PAGE_SIZE sg entry per page even when the
-> > underlying folio was larger.
-> > 
-> > Instead, walk folios[] and emit one sg entry per folio. When folios
-> We have recently merged a patch (that will make it into 7.2) from Jason that
-> replaced sg_set_folio() with sg_alloc_table_from_pages() in udmabuf driver:
-> https://gitlab.freedesktop.org/drm/tip/-/commit/5bf888673e0dda5a53220fa0c4956271a46c353c
-> 
-> Since you are relying on sg_set_folio(), the core argument against its usage
-> in udmabuf is that it doesn't work well with offsets > PAGE_SIZE, resulting
-> in a malformed scatterlist. Not sure if this can be fixed easily.
-> 
-> > represent large pages (as is for MFD_HUGETLB), each sg entry is a large
-> > page. Normal PAGE_SIZE sg tables are unchanged.
-> > 
-> > This is helpful for importers like net/core/devmem that expect dmabuf sg
-> IMO, udmabuf needs to detect whether importers can handle segments that
-> are > PAGE_SIZE and set the entries appropriately. Please look into how the
-> GPU drivers and other dmabuf exporters/importers handle this situation, so
-> that we can adopt best practices to address this issue.
-> 
-> Thanks,
-> Vivek
+On Tue Jun 16, 2026 at 12:57 PM EDT, Nuoqi Gui wrote:
+> check_stack_write_fixed_off() computes the byte slot for a fixed-offset
+> stack write as -off - 1, and records each written byte in slot_type[] wit=
+h
+> (slot - i) % BPF_REG_SIZE.
+>
+> The Spectre v4 sanitization pre-check uses slot_type[i] instead. For a
+> 4-byte write at fp-8 after the lower half of fp-8 has been zeroed, the
+> pre-check scans bytes 0..3 and sees STACK_ZERO while the actual write upd=
+ates
+> bytes 7..4. That can leave the second half-slot write without nospec_resu=
+lt
+> even though the bytes being overwritten still require sanitization.
+>
+> Use the same slot index in the sanitization pre-check that the write path=
+ uses
+> when updating slot_type[].
+>
+> Fixes: e4f4db47794c ("bpf: Fix pointer-leak due to insufficient speculati=
+ve store bypass mitigation")
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 
-Hey Vivek,
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-It sounds looks like that patch might solve my problem. I'll apply and
-troubleshoot from there.
+> ---
+>  kernel/bpf/verifier.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2abc79dbf281c..50e80dbbc1784 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3479,7 +3479,8 @@ static int check_stack_write_fixed_off(struct bpf_v=
+erifier_env *env,
+>  		bool sanitize =3D reg && is_spillable_regtype(reg->type);
+> =20
+>  		for (i =3D 0; i < size; i++) {
+> -			u8 type =3D state->stack[spi].slot_type[i];
+> +			u8 type =3D state->stack[spi].slot_type[(slot - i) %
+> +							      BPF_REG_SIZE];
+> =20
+>  			if (type !=3D STACK_MISC && type !=3D STACK_ZERO) {
+>  				sanitize =3D true;
 
-Thanks!
-
-Best,
-Bobby
-
-> 
-> > entries to be size and length aligned. Prior to this patch udmabuf
-> > handed over one PAGE_SIZE sg entry per page, so devmem only saw
-> > PAGE_SIZE chunks regardless of the underlying folio size.
-> > 
-> > dma_map_sgtable() does not always merge contiguous pages for us, so we
-> > do this internally before exporting.
-> > 
-> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> > ---
-> >  drivers/dma-buf/udmabuf.c | 52
-> > ++++++++++++++++++++++++++++++++++++++++++-----
-> >  1 file changed, 47 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-> > index 94b8ecb892bb..9b751dd98b12 100644
-> > --- a/drivers/dma-buf/udmabuf.c
-> > +++ b/drivers/dma-buf/udmabuf.c
-> > @@ -141,26 +141,68 @@ static void vunmap_udmabuf(struct dma_buf
-> > *buf, struct iosys_map *map)
-> >  	vm_unmap_ram(map->vaddr, ubuf->pagecount);
-> >  }
-> > 
-> > +/* Return the number of contiguous pages backed by the folio at @i.
-> > + * A udmabuf may map only part of a folio, or reference the same folio
-> > + * in multiple non-contiguous runs, so folio_nr_pages() can't be used.
-> > + */
-> > +static pgoff_t udmabuf_folio_nr_pages(struct udmabuf *ubuf, pgoff_t i)
-> > +{
-> > +	struct folio *f = ubuf->folios[i];
-> > +	pgoff_t j;
-> > +
-> > +	for (j = 1; i + j < ubuf->pagecount; j++) {
-> > +		if (ubuf->folios[i + j] != f)
-> > +			break;
-> > +		/* Same folio, but not a sequential offset within it. */
-> > +		if (ubuf->offsets[i + j] != ubuf->offsets[i] + j * PAGE_SIZE)
-> > +			break;
-> > +	}
-> > +	return j;
-> > +}
-> > +
-> > +/* Count the contiguous folio runs in @ubuf, one sg entry per run.
-> > + *
-> > + * Coalescing folios into a single sg entry up front lets importers actually
-> > + * see large chunks. We can't rely on dma_map_sgtable() to do this for us
-> > as
-> > + * the dma_map_direct() path preserves the input scatterlist lengths
-> > verbatim.
-> > + */
-> > +static unsigned int udmabuf_sg_nents(struct udmabuf *ubuf)
-> > +{
-> > +	unsigned int nents = 0;
-> > +	pgoff_t i;
-> > +
-> > +	for (i = 0; i < ubuf->pagecount; i += udmabuf_folio_nr_pages(ubuf,
-> > i))
-> > +		nents++;
-> > +	return nents;
-> > +}
-> > +
-> >  static struct sg_table *get_sg_table(struct device *dev, struct dma_buf
-> > *buf,
-> >  				     enum dma_data_direction direction)
-> >  {
-> >  	struct udmabuf *ubuf = buf->priv;
-> > -	struct sg_table *sg;
-> >  	struct scatterlist *sgl;
-> > -	unsigned int i = 0;
-> > +	struct sg_table *sg;
-> > +	pgoff_t i, run;
-> > +	unsigned int nents;
-> >  	int ret;
-> > 
-> > +	nents = udmabuf_sg_nents(ubuf);
-> > +
-> >  	sg = kzalloc_obj(*sg);
-> >  	if (!sg)
-> >  		return ERR_PTR(-ENOMEM);
-> > 
-> > -	ret = sg_alloc_table(sg, ubuf->pagecount, GFP_KERNEL);
-> > +	ret = sg_alloc_table(sg, nents, GFP_KERNEL);
-> >  	if (ret < 0)
-> >  		goto err_alloc;
-> > 
-> > -	for_each_sg(sg->sgl, sgl, ubuf->pagecount, i)
-> > -		sg_set_folio(sgl, ubuf->folios[i], PAGE_SIZE,
-> > +	sgl = sg->sgl;
-> > +	for (i = 0; i < ubuf->pagecount; i += run) {
-> > +		run = udmabuf_folio_nr_pages(ubuf, i);
-> > +		sg_set_folio(sgl, ubuf->folios[i], run << PAGE_SHIFT,
-> >  			     ubuf->offsets[i]);
-> > +		sgl = sg_next(sgl);
-> > +	}
-> > 
-> >  	ret = dma_map_sgtable(dev, sg, direction, 0);
-> >  	if (ret < 0)
-> > 
-> > --
-> > 2.53.0-Meta
-> 
