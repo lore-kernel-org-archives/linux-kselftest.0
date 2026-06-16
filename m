@@ -1,85 +1,284 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670C23D9DAA;
-	Tue, 16 Jun 2026 06:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365293DA5DE
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 06:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781590767; cv=none; b=GyYO7kCWBK594soPQcnpWAFiLYS5jcVnEro+okY5Xu2dHz5uWV+Ijl7Gj2vetjw5tVpfraJfClpt3PNLVY2JmeXnmJ6Z7RuIbhIg3rmDCRi4gJqZUFOWpzUrNcNvmIZcgoTsNhsQCUcjckbGehoaPYPYLcjjNtFHBccO2Bm8/vU=
+	t=1781592123; cv=none; b=KkCIdyERE5SfmVCQVKdzZmCC4wJcixxg3yBArkATnNpLKL7vJCuBvk9bvcpzxsnZmgcdx4Kb1wEl0lvgvsaG49qWHCneeRi0l9ujnqd/4/sPDGNSWNxaTpO7F/4IIpYQCu/8Px6SyKY/5G/6BNWEuMpfNDKRfaW6Ly9XoApFVxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781590767; c=relaxed/simple;
-	bh=Vo2k0LfQVac0ODGfCOErn06Hel+nUpmTzPJj2QnKDmg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=uC2307kr76EarK6VvMWyd/igE7m16VX68cDQsgUQZRyoKiJi37uw/Tn1X4nrcOzEgwBjJQIFYIhx+GX3aDrwT/QEwB0fAWYQOeGyEMEDB8JTQB8o362ggWVvLG0t+3NUnGb1cq65EH2x19OleY/86SiAGAyIrvv4Ejiyd38iYCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=htjfmaR3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781592123; c=relaxed/simple;
+	bh=WuHs7pvtH2baovnauiy7L8A2sXk7Cwcl2Uqq2xBgYzs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qZCTD6jCG6IJPrvXpfaOLumi5oNWYAYyXHY9rZc88t7qJA+G/6sA5tzaahrJmAaMyW7aZHBzPOj1eh8GYYIz9JNkTwtXivQmY6MTlfRmGvwSPditcStkI20oDmk0kPcZ3nPW7gbPiGgwOvPVzjfRnJu9fulmjfarF2vPIF4ofOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y0yuInHl; arc=none smtp.client-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="htjfmaR3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BD541F000E9;
-	Tue, 16 Jun 2026 06:19:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781590766;
-	bh=z6vwvm9C81RodtkTn+jwD/0+BlSWKsFhyWVVK8Ua9uc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=htjfmaR3GZyzSLoVBiZAF9YwFzYoSSh45+Ne0b//4YHYG8xQzoqxL6mr8hlwhmyHJ
-	 SSSmX09DUawlYf7hE76Udk1OfYM7r4XIKZmW7m4JhMeRvCOMqu8DJAne/1uEPFIdtT
-	 TEHvq8A3ysieu0KgPuYGtWdc5VTQRFerkjDpLzLR9fRV5pePnxlsrvxHxq0AcxrZLF
-	 w4NRKzcKZYdIm0HkVYQzj/Ul1Zm6P+BmGqUxlrrzUVvmMqWmtQBURDZSk4itcKqoXh
-	 K6Hfx9KNy7WhjiHddj+hcTS2IWscQ2aIpRBYv/bapCvAV/L9MO8dbDlc1ai0tLNnSB
-	 0gqHAdzAMArlg==
-Content-Type: multipart/mixed; boundary="===============5462730251977183201=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y0yuInHl"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-13986d61b4eso1000662c88.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2026 23:42:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781592120; x=1782196920; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cpxz8uat0VAwhdnDYW8Lc9U4R0TwiGMD6WGOkNlDK5k=;
+        b=Y0yuInHl4X/WTdJ4vCmlM8nw+q029YD5yrsSQVPEA/WWhfqJu7cxcw/sFytwyuJ4OJ
+         M9qrnP8lI+l4JH78DRup5Qofb2Ps4EBBXB+Uxg9iDgUxdVrYItGAi6xej+yOdDPmpCfO
+         xGnENVhv6gblLEDGXVcEZEj4jKTq3OpwzMxbaC06FfBIgR+isJXpRXq4AYJ+X9Veh3d7
+         qebe5YK7u5kc3MhjtPsfd0qsfPl8Aq4ugrBYeauNAcOC7on+9Ed+VW5i9pamdSyEjY9X
+         vMHavllz/Snd2AQXgbmGJuyj/7P1Eg8mqhspDrm0wPKwB2lgia1Jw8WWx27AHGLsEGNR
+         Stpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781592120; x=1782196920;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cpxz8uat0VAwhdnDYW8Lc9U4R0TwiGMD6WGOkNlDK5k=;
+        b=IWBzGzXGifZCx+qzPxd12mYUM+fIwqsl/IFS0KFykDa97rRCGeiHbD2FlfsSzsCD/v
+         x0jVYj0Ic8n0I5M9ON6t+Qeof2P4szim2Spyc7IONkkUt+73jQdi9r+eIiwPNw66dS1T
+         c7o/uDPS5aa+KbIGQmcwd12vqFOSW9rKipd7wxgF1F81wiqRLsq5MbnHmT0tCpN4BMOi
+         UFIZC27SnL87zQVP67dkNnrBd6aPlrPkpVsiy/BbxwTLKIchCGC2wzLIIVu1jQT+OS1r
+         kya3+9lZwGXM5jTiadr9Acl8An8ilsV5YFUe+YqCB0c4YYVze5CO/lmip3LuR1KRPVPj
+         NjDQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8GQutCyuZdAjqJ31Ru0LmU4pjexnKhQHtslFACUgc9+ZlL0YZKqBJB31djp/EJTciQ5UCXrbCfTthQxAOLcFQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4dg8iGWVs8hTGQUCZfgTcjYrHOJYvv5VqhaWjCZtTPqLwaThN
+	iqY7plwNgFk8MwoBRs8RsjVMwE/G9FVIRWmag0zNYE7tgos6jztj/Gye
+X-Gm-Gg: Acq92OFiOP72mpkZ3bgHQWOO4xt5AlQaG0Ag5v+QyPqPac50aV1rJJyphCiKobQi8De
+	ZwJk/lLALo18/xoT6MRTd7Qx+7EJ+QApM2qE+f1sETLVeGc67onvG+baQivx7L4vrQVXXAI95Dm
+	epjP146aHmHsvOjnbQgfHTihsXC4Wh444JsG8OTccgTRKdBBLJbGZA5oUB0FncYhOxegBHd50Lx
+	pIhNsFfOH9ZoIrXBV8haamEGhNIjigIYY21jZo1QbJFYOugOEyp9xqgPi2uq7SUjQjDR64C2hv9
+	9Ab4KKH5jBHcFlMjDYxu4qdC9dgjmo0S1//rXMkHKv4GJtp3JwPcilii3OS3RdoptrvrNsWnTEq
+	Iuc1wy+iBBRo+YEG97mBUbeDXejTO0hpT+xFkOWNJOUYhAJxpPlCHTSjn3xUSZ471CzONVnujy5
+	BQI34TOzJThoyC/QDzg0W+5LMPIsES8HjMiSgJn74OChFC9qz8
+X-Received: by 2002:a05:7022:38d:b0:138:212b:705b with SMTP id a92af1059eb24-13985eab60emr1374091c88.12.1781592120124;
+        Mon, 15 Jun 2026 23:42:00 -0700 (PDT)
+Received: from localhost.localdomain ([2408:8607:1b00:8:55be:2dbe:9cd4:7306])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384b910c51sm12499158c88.4.2026.06.15.23.41.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2026 23:41:59 -0700 (PDT)
+From: Li Pengfei <ljdlns1987@gmail.com>
+X-Google-Original-From: Li Pengfei <lipengfei28@xiaomi.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	lipengfei28@xiaomi.com,
+	zhangbo56@xiaomi.com
+Subject: [RFC PATCH v4 0/3] trace: stack trace deduplication for ftrace ring buffer
+Date: Tue, 16 Jun 2026 14:41:16 +0800
+Message-Id: <20260616064119.438063-1-lipengfei28@xiaomi.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b1f9eebb7c2252b81dee09b0dc0d488e44c22d1d31f8fe51c803e199f2c87aaa@mail.kernel.org>
-In-Reply-To: <c4c898dd23181b676ebf6b6b4d9c54f51bb69c75.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
-References: <c4c898dd23181b676ebf6b6b4d9c54f51bb69c75.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover small conntrack opts error writes
-From: bot+bpf-ci@kernel.org
-To: chenyy23@mails.tsinghua.edu.cn,bpf@vger.kernel.org,netfilter-devel@vger.kernel.org
-Cc: chenyy23@mails.tsinghua.edu.cn,pablo@netfilter.org,fw@strlen.de,phil@nwl.cc,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,kartikey406@gmail.com,coreteam@netfilter.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 16 Jun 2026 06:19:25 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============5462730251977183201==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Pengfei Li <lipengfei28@xiaomi.com>
 
-> selftests/bpf: Cover small conntrack opts error writes
->
-> Add a conntrack kfunc regression check for opts__sz values that do not
-> cover opts->error. The BPF program initializes opts->error with a guard
-> value, calls the lookup and allocation kfuncs with opts__sz set to
-> sizeof(opts->netns_id), and verifies that the guard is still intact
-> after the kfunc returns NULL.
->
-> Without the conntrack wrapper guard, the kfunc error path overwrites
-> that guard with -EINVAL even though the verifier checked only the first
-> four bytes of the options object.
->
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Hi Masami, Steven, all,
 
-This is a regression test for the out-of-bounds opts->error write that
-is fixed in the prior series commit 86b813c37ee5 ("bpf: Guard conntrack
-opts error writes"), but it carries no Fixes: tags.
+This is v4 of the ftrace stackmap series. It is sent as a new thread.
 
-A regression test usually carries the same Fixes: tags as the fix it
-covers, so it gets backported to stable alongside that fix. The two new
-test cases map onto the two commits that introduced the kfuncs: the
-small-opts lookup case covers the lookup kfunc and the small-opts alloc
-case covers the alloc kfunc.
+v3: https://lore.kernel.org/all/cover.1779769138.git.lipengfei28@xiaomi.com/
 
-Should this include:
+The series adds stack trace deduplication to ftrace. When the
+'stackmap' option is enabled alongside 'stacktrace', the ring buffer
+stores a 4-byte stack_id instead of a full kernel stack trace, and the
+full stacks are exported once via tracefs (stack_map / stack_map_bin).
 
-  Fixes: b4c2b9593a1c ("net/netfilter: Add unstable CT lookup helpers for XDP and TC-BPF")
-  Fixes: d7e79c97c00c ("net: netfilter: Add kfuncs to allocate and insert CT")
+Rebased onto v7.1-rc5 (e8c2f9fdadee).
 
+Motivation
+==========
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+The target use case is long-duration, from-boot kernel tracing where
+the same stacks recur enormously often and the bottleneck is ring
+buffer space, not CPU.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27597459087
---===============5462730251977183201==--
+Concretely: tracing the slab allocator from boot for hours to study
+memory aging and to catch the allocation backtraces behind a usage
+peak. With a stacktrace trigger on the slab tracepoints, every event
+today carries a full kernel stack (~80-160 bytes). On a fixed-size
+ring buffer that bounds how far back in time the trace reaches: the
+buffer wraps in seconds to minutes and the early-boot history -- the
+part we care about -- is overwritten before it can be consumed.
+
+In this workload the set of distinct stacks is small and highly
+repetitive, so storing a 4-byte stack_id per event and the full stack
+only once dramatically increases the time span a given buffer covers.
+The intended operating model is exactly the low-overhead one ftrace is
+good at: let the trace run for a long time producing a comparatively
+small, dense log, then resolve stack_ids offline (cat stack_map, or
+parse stack_map_bin with the included tool) during analysis.
+
+This is complementary to, not a replacement for, the existing full
+stack recording: deep stacks and the early pre-init window still fall
+back to full stacks (see below).
+
+Effect on retention
+====================
+
+Same fixed per-CPU buffer, slab allocation workload with a shallow
+kernel stack (kmem_cache_alloc), stackmap OFF vs ON:
+
+                  retained events   bytes/event   time span
+  stackmap OFF        645,068          ~104 B        15.0 s
+  stackmap ON       1,397,741           ~48 B        27.7 s
+                     2.17x             2.17x          1.85x
+
+The buffer holds ~2.17x more events and reaches ~1.85x further back in
+time for the same memory. The win grows with stack depth and with how
+repetitive the stacks are; for deep, highly-repeated stacks the
+per-event size approaches the 4-byte stack_id plus event header.
+
+Changes since v3
+================
+
+Correctness:
+  - Deep stacks are never silently truncated or merged. A stack deeper
+    than FTRACE_STACKMAP_MAX_DEPTH (64) now falls back to a full stack
+    trace; ftrace_stackmap_get_id() returns -E2BIG rather than
+    truncating, so two distinct stacks sharing their first 64 frames
+    can no longer collapse to one stack_id.
+  - reset is now genuinely destructive and coherent: under the
+    reader_sem write lock it clears the owning trace_array's ring
+    buffer (and snapshot) BEFORE clearing the map, and uses
+    tracing_reset_all_cpus() rather than _online_cpus() so a
+    TRACE_STACK_ID written by a now-offline CPU cannot survive and
+    dangle against a cleared map.
+  - __ftrace_trace_stack() reserves the TRACE_STACK_ID ring-buffer
+    slot before inserting into the map, so stack_map_stat counters and
+    ref_count stay consistent with what the ring buffer actually
+    references (failed reservation -> full stack, map untouched).
+  - ref_count / successes / drops now saturate (INT_MAX / LONG_MAX)
+    instead of wrapping on multi-hour, billions-of-hits traces.
+
+Global-instance gating:
+  - Enabling 'stackmap' on a secondary instance via the aggregate
+    trace_options file is now rejected, not just hidden in the
+    per-instance options/ directory.
+  - tracefs init is failure-atomic: the required stack_map file is
+    created before the map pointer is published; if it cannot be
+    created the map is destroyed and never published. An init-state
+    (PENDING/DONE/FAILED) lets boot-time trace_options=stackmap set
+    the flag before the map exists (hot path falls back until it is
+    published) while still rejecting enables after a permanent init
+    failure, so options/stackmap never reports an enabled no-op.
+
+ABI / tooling:
+  - Binary magic corrected to 0x46534D42 ('FSMB'); version is 1 (first
+    upstream ABI). Documentation, tool and selftest updated to match.
+  - Text and binary exports now follow the same trampoline-marker and
+    trace_adjust_address() handling as the normal stack print path.
+  - stackmap_dump.py emits hex addresses in 'ips' and shows the ftrace
+    trampoline marker only in the resolved 'symbols'.
+
+Selftests:
+  - New stackmap-reset.tc: verifies reset clears stale <stack_id N>
+    from the trace buffer and checks the stack_map_bin magic/version.
+  - stackmap-instance-gate.tc extended to verify the trace_options
+    write path is rejected on a secondary instance.
+  - stackmap-basic.tc no longer treats a nonzero drops count as a
+    failure (drops is a by-design fallback); only zero successes with
+    nonzero drops is fatal.
+
+Open questions for maintainers
+==============================
+
+Two design points where I would value direction before polishing
+further:
+
+1. Eager vs lazy allocation. The element pool is allocated at
+   fs_initcall when CONFIG_FTRACE_STACKMAP=y, regardless of whether
+   userspace ever enables the option (~8 MB at the default bits=14,
+   up to ~135 MB at bits=18). This keeps the hot path allocation-free
+   with no allocation-failure path under tracing pressure. Is eager
+   allocation acceptable, or would you prefer lazy allocation on the
+   first 'echo 1 > options/stackmap'?
+
+2. Binary ABI now or later. stack_map_bin is a new tracefs binary
+   interface (magic 0x46534D42, version 1). Is it acceptable to
+   introduce it now, or would you prefer the first version ship with
+   the text stack_map interface only and add the binary export once
+   trace-cmd / libtraceevent integration is designed?
+
+Test results
+============
+
+QEMU (aarch64 virt, v7.1-rc5 + this series), boot to init smoke test:
+  - stackmap functional suite: 16/16 PASS, including reset clearing the
+    trace buffer (stale <stack_id> count 48 -> 0), stack_map_bin
+    magic/version, global-vs-secondary instance gating, and the
+    trace_options rejection on a secondary instance.
+  - boot-time activation (trace_options=stackmap,stacktrace on the
+    kernel cmdline): 3/3 PASS -- the option survives the
+    pre-initialization window and the map is live once published.
+  - ftrace startup self-tests pass with the new TRACE_STACK_ID entry.
+
+Device retention numbers above were collected on a Xiaomi SM8850
+(ARM64) running an Android workload, comparing the same buffer with
+the option off and on.
+
+Known limitations
+=================
+
+- Per-instance stackmap support is not included; the option is gated
+  to the global instance (in the tracefs layout and at the
+  set_tracer_flag() write path). Per-instance maps are a follow-up.
+- Deduplication is best-effort, not strict: under heavy concurrent
+  contention two CPUs racing with the same stack hash may each claim a
+  different slot, producing a few duplicate entries; ref_count is then
+  split across them. This keeps the hot path lock-free.
+- The stackmap covers kernel stacks only.
+- stack_map_bin is a best-effort snapshot, serialized against reset
+  but not a fully atomic export.
+- trace-cmd / libtraceevent integration is left for follow-up once the
+  binary format settles (see open question 2).
+
+Usage
+=====
+
+  echo 1 > /sys/kernel/debug/tracing/options/stackmap
+  echo 1 > /sys/kernel/debug/tracing/options/stacktrace
+
+Pengfei Li (3):
+  trace: add lock-free stackmap for stack trace deduplication
+  trace: integrate stackmap into ftrace stack recording path
+  trace: add documentation, selftest and tooling for stackmap
+
+ Documentation/trace/ftrace-stackmap.rst       | 177 ++++
+ Documentation/trace/index.rst                 |   1 +
+ kernel/trace/Kconfig                          |  22 +
+ kernel/trace/Makefile                         |   1 +
+ kernel/trace/trace.c                          | 216 ++++-
+ kernel/trace/trace.h                          |  17 +
+ kernel/trace/trace_entries.h                  |  15 +
+ kernel/trace/trace_output.c                   |  23 +
+ kernel/trace/trace_selftest.c                 |   1 +
+ kernel/trace/trace_stackmap.c                 | 889 ++++++++++++++++++
+ kernel/trace/trace_stackmap.h                 |  57 ++
+ .../ftrace/test.d/ftrace/stackmap-basic.tc    | 111 +++
+ .../test.d/ftrace/stackmap-instance-gate.tc   |  54 ++
+ .../ftrace/test.d/ftrace/stackmap-reset.tc    |  76 ++
+ tools/tracing/stackmap_dump.py                | 164 ++++
+ 15 files changed, 1821 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/trace/ftrace-stackmap.rst
+ create mode 100644 kernel/trace/trace_stackmap.c
+ create mode 100644 kernel/trace/trace_stackmap.h
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/stackmap-basic.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/stackmap-instance-gate.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/stackmap-reset.tc
+ create mode 100755 tools/tracing/stackmap_dump.py
+
+-- 
+2.34.1
+
