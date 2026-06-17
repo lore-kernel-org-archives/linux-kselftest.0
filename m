@@ -1,55 +1,110 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B0533859A;
-	Wed, 17 Jun 2026 09:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD4C39280C
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 09:43:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781689249; cv=none; b=RSV//R7cqndh/oTEGP/fvH3RT0WHrxgvLw0MegZZJVLwjDcRV6R9QEOVl8ovC1ze5hLVia7KD1yEOJmfRpyV+lb3xs1vKItmD3Cl/5Wh4e+Q06AzI9iTnZIuhLUnDHa1xoUnAm8pQQz6rj5TsccIhQ5n2DvpdZNg5D7HlwCF3oQ=
+	t=1781689381; cv=none; b=DbyD/T1tTXfpEA9C3giGKgM88zYxdH6ZIHJ28hITcKFSBMA17BeMlxSCchV65KKyef+mQsrk990WkXzRlDc25W3yxY2rx7caTRn13JHFQXoB7bv6f3FWoPG+c0S0wNp8f9C41VSe85+sBf9NT01aXMd+ludzCQ5qzJhjIZINOB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781689249; c=relaxed/simple;
-	bh=aIQ0rqYNiHXa9y7GmYvya0yl5Baj2l98FKvSvypf6fI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aeM0SBN4h8wpxIsYRCwFdQdq63AgNS4q5nZtVusHQQjOvLX3drKA08X4U8sJwnSiv4DSEBGRYwk2tYpbrmzd7iUYmr67wCQyfjN93gEGQIFapPNQ4O1UWG36dy0uhojBbXKxGKB3M4shxDAqI755MIjAYsRz7XThVmH5Ob6oa3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=a1NqyOZT; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1781689381; c=relaxed/simple;
+	bh=6dk1V2FkwIjUDraVd9ebLKZ6skrFu0NoYQrzqg9QeDE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=LVxNizZBqzKL0CKi+6TMCBTG9dq5Psv4ZFw9aHeo0xGk4FFLMrSzinAGkKyi865Mh8QqBR5xAWvR/2HzJGOK4o0KFDzEyGW64OpXcZWqjBgctz8knKZ/wYnnIDFlnqCPp1WaeRKd7oRdeI3/Oq++v9vKtn7DzzOMkaG0x/TOoOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hIWmu4s9; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ExKhtE1L; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="a1NqyOZT"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=o/OJ3K9rTkOIlY7WWVITVWwnzTwDC6V7F9kkJkXQoTo=; b=a1NqyOZTRvdH/2jRwOv2SEzPR4
-	w9g+aT75GU3bVUstqfQFMqP3TvZgSLyAKzSpai1RgWWTlBC4ZgxP0AB9tB2i2GqbQzG6I7zVdv0U5
-	r0eur5xDS7+7NiOIhnRSxPyGwzObWhKDLsAN57WGenyNSjVpZLcwBF7rMI0hVwbpz8jWJ3MsKwFxh
-	5n1GUJfkhzzJkXhsX6JsqcjeITzTZeuCnQVrDr5OkehVDKWLgFLskCp+Lb2PTJRkP23suSb6xkAOh
-	SR/lRmnaBOYtaw+7wAg8VeK2X1ur7ef62V/PCw1l+r7UuAAmSCooAWiSCshP2FTuujBJmPysig/9D
-	CiFgGAKw==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wZmkn-00EWde-0g;
-	Wed, 17 Jun 2026 09:40:13 +0000
-Date: Wed, 17 Jun 2026 02:40:06 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Miaohe Lin <linmiaohe@huawei.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>, lance.yang@linux.dev, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v9 0/6] mm/memory-failure: add panic option for
- unrecoverable pages
-Message-ID: <ajJq-uVRBH5SBkwK@gmail.com>
-References: <20260609-ecc_panic-v9-0-432a74002e74@debian.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hIWmu4s9";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ExKhtE1L"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781689379;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ozmBpImS8oeWooI3eg5F7+EjraI/5E3NnIle2PdR8uw=;
+	b=hIWmu4s9Rxruex8hxqgHpz9ZxtezH5DE6NhzkCOXv7x4UslDLrRdMoS2+nf1IWYvniSiQu
+	KUL4Cj1n0kc6VqV6nZTy+iEDxItCWUPIRLgtuD+slJd4t7Y/eU6UnBBKTJfGV34nwNz64X
+	BNS+NZQHi7DA6t/JsyuOyBgrnnMjUyI=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-616-7cxsupzWNUW5Jk6rOff-qg-1; Wed, 17 Jun 2026 05:42:58 -0400
+X-MC-Unique: 7cxsupzWNUW5Jk6rOff-qg-1
+X-Mimecast-MFC-AGG-ID: 7cxsupzWNUW5Jk6rOff-qg_1781689377
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-490c840efe6so7174565e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 02:42:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1781689377; x=1782294177; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ozmBpImS8oeWooI3eg5F7+EjraI/5E3NnIle2PdR8uw=;
+        b=ExKhtE1LQVvWuOJR+cmR/EVFSOQuYdEGrodZfVZ0P0/AEM35HQep2W4Jra0kkFagGy
+         LRdD9nmY/mlIvtPM8vqcw6eV/WmOfAIi15FcYVp1ELeXhmth3kesItjJW01n0sR3Ja1f
+         x3iVpwDU+SIci+9fo6+Oj+t797ibT8PVcHuHPZ1XoWqEoWcMtxiUeoeQjwMdP23WSAHu
+         KBRooVSupDi91wmsKJM6r+MYHX/D7pv2GYy+GFzVIzZlKrD/PFYkfgtAhio3v3oE/vdr
+         GSS7UkkbgJ6Ivx9av4ceOes3MM/4stPEybdw1NtTmc1DjQb9pahB9jcv54JrpLUrjS8n
+         nNqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781689377; x=1782294177;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ozmBpImS8oeWooI3eg5F7+EjraI/5E3NnIle2PdR8uw=;
+        b=BMYW3jsEoXsv2G+/GV1Vs81P4M/z8/lOgTCGW4L97SuXHrtvW/8J8KdnpOd6bIEQK0
+         HHCr0/fBxC+UtMopgExH2AZKXwzAm52e0DG5b3AX0lDTRw2qloHdn3qynSF6A+yzeiOl
+         zhW+RP0JIKWQvVMjqSPiQo9amva1TvaXiL8QG0fJ/s4wfQMN26iwAuxAkSd/qiNidp6H
+         M0QfnLI8ZHi2yqgLZUVya4FQOpGHXZxhulUvlV+WmN8vFWv6VsRZi1Hh+6s0eYve/19E
+         DZG2elFfucfZEhlurKAxFmH+S93YOG49JuUaUQFJTc84BT064AA72Ys3toVgAxVJ2qAe
+         H7zg==
+X-Forwarded-Encrypted: i=1; AFNElJ96YH8ggjQU6M9RQUHyThhQTDXaAIcCZ5qFUgGy0vSf9hI3UO1iRDzRRFLc0hEYmYWsk6w1PBwtcGbO9ML41jw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxH9vNNEN3MjpXGNau/sJ1Vp+TT7j/nflRPby9aukqWZrVAaqd/
+	A2cPa1nKuh6qNZXXBwvYffhygv81GmWvyD4VgA6TFq69XA4wNINgBtzXTERHUdE6S+RJZUvjRWt
+	tXoG0KCDpMNDr3DrQgRcfmksrhDvAu/4nKS7jgC1dF856Kean+d4KmaQl87WlmV+rekP4PQ==
+X-Gm-Gg: Acq92OFVcNQ/4hcNF6vUT4c/fsgHcw5JnoEMjNL9fUkSexp5MSmoLKtschVeMMk0bxo
+	F8h+vQoNFkT203tXpkldTKS7ZQq9F7ZYui8G2VIo0P0rQRy0H4nKJcLk9254O+QksrOmcIQFeNK
+	B9Om5rCLpPgeAhra9DyEAW+XjqkoLpMpfkL1+Gr3GuLSLe5yxsSx7Tlq9O68v0gYiVF5K29RghX
+	uKUbh++MsYBrm93O9qtsPnLArfbn0x+TSg/C6GUFHk7ct4QW+Pkt1EISWQ3a4sESmcFduqk0rtX
+	3UVaFaGB3e7PQq5ywghlgzYXmco7XQKqzf8e9T6JgQ42dR9rUg/uRpDFLcdqKsG2EilCmN5B1hX
+	c1eFL37TOE0lmxNNZTHegcUGsYjDHn5+4C5XAOA==
+X-Received: by 2002:a05:600c:46cf:b0:490:b4cb:3866 with SMTP id 5b1f17b1804b1-492340e7632mr28942795e9.10.1781689376572;
+        Wed, 17 Jun 2026 02:42:56 -0700 (PDT)
+X-Received: by 2002:a05:600c:46cf:b0:490:b4cb:3866 with SMTP id 5b1f17b1804b1-492340e7632mr28942185e9.10.1781689375972;
+        Wed, 17 Jun 2026 02:42:55 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4922fa8b423sm146401065e9.11.2026.06.17.02.42.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2026 02:42:55 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id D20C38074C9; Wed, 17 Jun 2026 11:42:53 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Avinash Duduskar <avinash.duduskar@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+ <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Mykyta
+ Yatsenko <yatsenko@meta.com>, Leon Hwang <leon.hwang@linux.dev>, KP Singh
+ <kpsingh@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>, Amery
+ Hung <ameryhung@gmail.com>, Eyal Birger <eyal.birger@gmail.com>, Rong Tao
+ <rongtao@cestc.cn>, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 3/4] bpf: Add BPF_FIB_LOOKUP_VLAN_INPUT flag
+ to bpf_fib_lookup() helper
+In-Reply-To: <20260616223426.3568080-4-avinash.duduskar@gmail.com>
+References: <20260616223426.3568080-1-avinash.duduskar@gmail.com>
+ <20260616223426.3568080-4-avinash.duduskar@gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Wed, 17 Jun 2026 11:42:53 +0200
+Message-ID: <874ij1h59e.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,92 +112,168 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260609-ecc_panic-v9-0-432a74002e74@debian.org>
-X-Debian-User: leitao
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 09, 2026 at 03:56:54AM -0700, Breno Leitao wrote:
-> A multi-bit ECC error on a kernel-owned page that the memory failure
-> handler cannot recover is currently swallowed: PG_hwpoison is set, the
-> event is logged, and the kernel keeps running.  The corrupted memory
-> remains accessible to the kernel and either drives silent data
-> corruption or surfaces seconds-to-minutes later as an apparently
-> unrelated crash.  In a large fleet that delayed, unattributable crash
-> turns into significant engineering effort to root-cause; in a kdump
-> configuration, by the time the crash happens the original error
-> context (faulting PFN, MCE/GHES record, page state) is long gone.
-> 
-> This series adds an opt-in sysctl,
-> vm.panic_on_unrecoverable_memory_failure, that converts an
-> unrecoverable kernel-page hwpoison event into an immediate panic with
-> a clean dmesg/vmcore that still contains the original failure
-> context.  The default is disabled so existing workloads see no
-> change.
-> 
-> There is a selftest that test different cases, and I tested it using
-> the following variants:
-> 
->   ┌─────────┬──────────┬───────────────────────────────────────────────────────────┐
->   │ Variant │   PFN    │                          Result                           │
->   ├─────────┼──────────┼───────────────────────────────────────────────────────────┤
->   │ rodata  │ 0x2600   │ Panic with "Memory failure: 0x2600: unrecoverable page"   │
->   ├─────────┼──────────┼───────────────────────────────────────────────────────────┤
->   │ slab    │ 0x100032 │ Panic with "Memory failure: 0x100032: unrecoverable page" │
->   ├─────────┼──────────┼───────────────────────────────────────────────────────────┤
->   │ pgtable │ 0x100000 │ Panic with "Memory failure: 0x100000: unrecoverable page" │
->   └─────────┴──────────┴───────────────────────────────────────────────────────────┘
-> 
-> Each one shows the same call trace, exactly the path the series builds:
-> 
->   hard_offline_page_store
->     → memory_failure
->       → action_result
->         → panic("Memory failure: %#lx: unrecoverable page")
+Avinash Duduskar <avinash.duduskar@gmail.com> writes:
 
-Debugging another issue earlier today, just found a kernel crash that is
-hitting a ignored page later in the day, and randomly misbehaving/crashing.
+> BPF_FIB_LOOKUP_VLAN resolves a VLAN egress. The reverse is also
+> useful: an XDP program receiving a VLAN-tagged frame on a physical
+> device wants the lookup to behave as if the packet had arrived on the
+> corresponding VLAN subinterface, so iif-based policy routing and VRF
+> table selection use the right ingress.
+>
+> Add BPF_FIB_LOOKUP_VLAN_INPUT. When set, params->h_vlan_proto and
+> params->h_vlan_TCI are read as an input VLAN tag and the matching VLAN
+> device of params->ifindex is resolved with __vlan_find_dev_deep_rcu().
+> The device must be up and in the same network namespace as
+> params->ifindex (a VLAN device can be moved to another netns while
+> registered on its parent; receive would deliver into that other
+> namespace, which a lookup here cannot represent). If params->ifindex
+> is itself a VLAN device, its inner (QinQ) subinterface is matched.
+> For a bond or team, a tag on a port matches no device and returns
+> NOT_FWDED; pass the master's ifindex.
+> The lookup then runs with the resolved device as the ingress;
+> params->ifindex itself is not modified on the input side. When the
+> resolved device is enslaved to a VRF, both the full lookup (via the
+> l3mdev rule) and BPF_FIB_LOOKUP_DIRECT (via l3mdev_fib_table_rcu())
+> select the VRF's table from the resolved ingress. That follows from
+> feeding the resolved device to the flow as the ingress
+> (fl4.flowi4_iif =3D dev->ifindex), which is what makes l3mdev resolve
+> the VRF master from the subinterface rather than from
+> params->ifindex.
+>
+> The two failure classes get different treatment on purpose. A
+> h_vlan_proto other than 802.1Q/802.1ad is API misuse and returns
+> -EINVAL, since it would otherwise reach the WARN in vlan_proto_idx()
+> with a program-controlled value. An unmatched VID, a device that is
+> down, or one in another namespace is a data outcome and returns
+> BPF_FIB_LKUP_RET_NOT_FWDED, matching the DIRECT path when
+> fib_get_table() finds no table and mirroring real ingress, where the
+> receive path drops such frames. A VID of 0 (a priority tag) is looked
+> up literally and normally fails the same way; receive instead
+> processes such frames untagged, so callers should not set the flag for
+> priority tags. Proceeding on the physical device for any of these
+> would be fail-open for the policy-routing cases above.
+>
+> The h_vlan fields share a union with tbid, so the flag cannot be
+> combined with BPF_FIB_LOOKUP_TBID. It describes ingress, so it also
+> cannot be combined with BPF_FIB_LOOKUP_OUTPUT. Both combinations
+> return -EINVAL; restricting now keeps a later relaxation backward
+> compatible. Combining with BPF_FIB_LOOKUP_VLAN is allowed: the tag is
+> consumed on the ingress side and the egress tag is written on
+> success.
+>
+> Under !CONFIG_VLAN_8021Q the __vlan_find_dev_deep_rcu() stub returns
+> NULL, so every lookup with the flag returns NOT_FWDED, which is
+> correct since no VLAN device can exist.
+>
+> Suggested-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> Signed-off-by: Avinash Duduskar <avinash.duduskar@gmail.com>
+> ---
+>  include/uapi/linux/bpf.h       | 34 ++++++++++++++-
+>  net/core/filter.c              | 80 +++++++++++++++++++++++++++++++---
+>  tools/include/uapi/linux/bpf.h | 34 ++++++++++++++-
+>  3 files changed, 141 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index f77aa9472bf1..57e28da3336a 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -3552,6 +3552,35 @@ union bpf_attr {
+>   *			reports the route mtu in *params*->mtu_result, and on
+>   *			the tc path without tot_len the mtu check runs after
+>   *			the swap, against the parent device.
+> + *		**BPF_FIB_LOOKUP_VLAN_INPUT**
+> + *			Treat *params*->h_vlan_proto and *params*->h_vlan_TCI
+> + *			as an input VLAN tag (e.g. parsed from the packet) and
+> + *			run the lookup as if ingress had happened on the VLAN
+> + *			subinterface carrying that tag for *params*->ifindex,
+> + *			rather than on *params*->ifindex itself. The VID is the
+> + *			low 12 bits of *params*->h_vlan_TCI;
+> + *			*params*->h_vlan_proto must be ETH_P_8021Q or
+> + *			ETH_P_8021AD in network byte order (any other value
+> + *			returns **-EINVAL**). The
+> + *			subinterface is the one configured for that tag on
+> + *			*params*->ifindex; if *params*->ifindex is itself a
+> + *			VLAN device, its inner (QinQ) subinterface is matched.
+> + *			For a bond or team, a tag on a port matches no
+> + *			device and returns NOT_FWDED; pass the master's
+> + *			ifindex.
+> + *			If no matching subinterface exists, or it is not up,
+> + *			or it was moved to another network namespace, the
+> + *			lookup returns **BPF_FIB_LKUP_RET_NOT_FWDED**,
+> + *			mirroring real ingress, which drops a frame whose tag
+> + *			is unconfigured or whose VLAN device is down. A VID of
+> + *			0 (a priority-tagged frame) is looked up literally like
+> + *			any other VID; receive instead processes such frames
+> + *			untagged on the device itself, so do not set this flag
+> + *			for priority tags.
+> + *			Cannot be combined with **BPF_FIB_LOOKUP_TBID** (both
+> + *			use the same input fields) or **BPF_FIB_LOOKUP_OUTPUT**
+> + *			(this flag is ingress-only); doing so returns
+> + *			**-EINVAL**.
 
- Memory failure: 0x140ae: unhandlable page.
- Memory failure: 0x140ae: recovery action for get hwpoison page: Ignored                     <-- Ignored 
- loop0: detected capacity change from 0 to 15241056
- EDAC MC0: 1 UE multi-bit ECC on LP5x_0 LP5x_0 (node:0 card:0 module:0 rank:0 bank:2 device:28 row:42700 column:96
- {3}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 308
- {3}[Hardware Error]: event severity: recoverable
- {3}[Hardware Error]:  imprecise tstamp: 2026-06-16 02:50:03
- {3}[Hardware Error]:  Error 0, type: recoverable
- {3}[Hardware Error]:   section_type: memory error
- {3}[Hardware Error]:   physical_address: 0x0000000aeccde180
- {3}[Hardware Error]:   physical_address_mask: 0xfffffffffffff000
- {3}[Hardware Error]:   node:0 card:0 module:0 rank:0 bank:2 device:28 row:42700 column:960 requestor_id:0x0000000
- {3}[Hardware Error]:   error_type: 3, multi-bit ECC
- {3}[Hardware Error]:   DIMM location: LP5x_0 LP5x_0
- Memory failure: 0xaeccd: recovery action for dirty LRU page: Recovered
+This comment is also overly long - please trim.
 
- Internal error: synchronous external abort: 0000000096000410 [#1]  SMP
- Modules linked in: ghes_edac(E) squashfs(E) act_gact(E) sch_fq(E) tcp_diag(E) inet_diag(E) cls_bpf(E) evdev(E) sm
- CPU: 51 UID: 0 PID: 1 Comm: systemd Kdump: loaded Tainted: G   M       OE K     6.16.1-0_fbk2_0_gf40efc324cc8 #1
- Tainted: [M]=MACHINE_CHECK, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE, [K]=LIVEPATCH
- pstate: 834010c9 (Nzcv daIF +PAN -UAO +TCO +DIT +SSBS BTYPE=--)
- pc : clear_inode+0x34/0x108
- lr : proc_evict_inode.llvm.1771226604092943895+0x28/0x68
- sp : ffff800083f6f8d0
- x29: ffff800083f6f8e0 x28: 0000000000000011 x27: ffff0000c1378788
- x26: ffffffffffffffff x25: ffff800082747de0 x24: ffff0000c0ae9898
- x23: ffff8000819155f8 x22: ffff0000c0ae9888 x21: ffff0000c0ae9808
- x20: ffff0000c0ae9818 x19: ffff0000c0ae9788 x18: 000000000000001c
- x17: 0000000000000018 x16: 0000000000000040 x15: 0000000000000000
- x14: 0000000000000001 x13: 0000000000000000 x12: 0000000000002710
- x11: ffff0000c0ae9898 x10: ffff0000c1299b58 x9 : 0000000000000001
- x8 : ffff0000c0ae9900 x7 : ffff8000828db000 x6 : 0000000000005040
- x5 : ffffffffffffffff x4 : ffffffdfc05c8aa0 x3 : ffff000126470000
- x2 : ffffffffffffffff x1 : 0000000000000000 x0 : ffff0000c0ae9788
- Call trace:
-  clear_inode+0x34/0x108 (P)
-  proc_evict_inode.llvm.1771226604092943895+0x28/0x68
-  evict+0xec/0x328
-  iput+0xa8/0x310
-  dentry_unlink_inode+0xa4/0x188
-  __dentry_kill+0x74/0x358
-  shrink_dentry_list+0xc8/0x198
- ....
+>   *
+>   *		*ctx* is either **struct xdp_md** for XDP programs or
+>   *		**struct sk_buff** tc cls_act programs.
+> @@ -7348,6 +7377,7 @@ enum {
+>  	BPF_FIB_LOOKUP_SRC     =3D (1U << 4),
+>  	BPF_FIB_LOOKUP_MARK    =3D (1U << 5),
+>  	BPF_FIB_LOOKUP_VLAN    =3D (1U << 6),
+> +	BPF_FIB_LOOKUP_VLAN_INPUT =3D (1U << 7),
+>  };
+>=20=20
+>  enum {
+> @@ -7416,7 +7446,9 @@ struct bpf_fib_lookup {
+>  		struct {
+>  			/* output with BPF_FIB_LOOKUP_VLAN: set from the
+>  			 * resolved egress VLAN device (see the flag); zeroed
+> -			 * on other successful lookups.
+> +			 * on other successful lookups. input with
+> +			 * BPF_FIB_LOOKUP_VLAN_INPUT: the VLAN tag to scope
+> +			 * the lookup by.
+>  			 */
+>  			__be16	h_vlan_proto;
+>  			__be16	h_vlan_TCI;
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index b37a12321fba..cfbdd842ce61 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -6158,6 +6158,41 @@ static int bpf_fib_set_fwd_params(struct net_devic=
+e *dev,
+>=20=20
+>  	return 0;
+>  }
+> +
+> +/* With BPF_FIB_LOOKUP_VLAN_INPUT the caller passes the packet's VLAN ta=
+g in
+> + * params->h_vlan_proto and params->h_vlan_TCI; the lookup is done as if
+> + * ingress had happened on the matching VLAN subinterface of *dev. Resol=
+ve
+> + * it and store it in *dev. params is not modified.
+> + *
+> + * A protocol other than 802.1Q/802.1AD is API misuse (it would otherwise
+> + * reach the WARN in vlan_proto_idx()), so it is rejected with -EINVAL. =
+An
+> + * unmatched VID, a matching device that is down, or one that was moved
+> + * to another netns (receive would deliver into that netns' stack, which
+> + * a lookup here cannot represent) is a data outcome, reported as
+> + * NOT_FWDED, the same way the DIRECT path reports a missing table. Under
+> + * !CONFIG_VLAN_8021Q __vlan_find_dev_deep_rcu() returns NULL, so every
+> + * call returns NOT_FWDED, which is correct since no subinterface can
+> + * exist.
+> + */
+
+As in the previous patch, please drop this comment.
+
+> +static int bpf_fib_vlan_input_dev(struct net_device **dev,
+> +				  const struct bpf_fib_lookup *params)
+> +{
+
+Just return the dev pointer and use ERR_PTR for errors? That's what we
+usually do for these kinds of functions.
+
+-Toke
+
