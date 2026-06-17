@@ -1,100 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABAE364EBF
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 08:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218ED3128BE;
+	Wed, 17 Jun 2026 08:52:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781686376; cv=none; b=OPi9IIQNY3Y+xLCqes7anmGytpVjw/I4BBikcNQwXsFZ7YdfWvGSJ35hU3Jo/AiMKXIiMFER8RXeaIS+Gmx8ijELLp51MLqqkWu5yjaEBVBFiDpRIfsN8XtoXJOWa0S+M36HlYyFHExVG8MT9iW6qvG7yzR3o89QmWo59V93EA8=
+	t=1781686379; cv=none; b=Seb1dPTm4ieYTc4RuucYsC42APVAFIVjI0GfltqMjOqtyvhC7r+VHdf+p0EXR5NuAgVw9A0RDrop8FkEwSY4LEU+gFdF6VfsC5KHg4xL4Y50DSC2992KOgIXHtsBeOzsNTBHBxbpGtxSIsGfO0bBkShuNxKjMW4RIAUL9dVHHQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781686376; c=relaxed/simple;
-	bh=2fN8/T+cfqifizgv0Zy/OFN+fYVdQCBq8wVfmK8kEwo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KPLB7kQemX3XBCF8jwt1R4TmxR+FtkYoNd6zUQ1pLOZYCdxVu8Gy3YfhItzgx9/KtDHp6zqxWThV3AdmDsqKoOqkslLSU0AOo+SsBPjy9H93pteyAI912FCNmw+RKPMAhxHr//KxHGNzt+TunJvGtUJf/lFx3MfwsrqzuanYFYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bnLJG9i4; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1781686379; c=relaxed/simple;
+	bh=pUvQSNLWLRh7OpfgodfrsgtToT9DzCGSyR/QzanlZTA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=blkW1Ox0zw8l93WA4LiV2Y+gv5Z6iiaY2EE8KT1IlP03IqPx07uEEMSxn9Ed/j3t3onpziTKwjdEGW89LZOK1xgVLVSJJtHLjpg/B+jPdL39K3tiE/oF0XF2fj/5DX+WGB8t6U9Pv/QCGpq1pNPP/k0vosyREKUt7rFc0HJF3VE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=U8O7i/mO; arc=none smtp.client-ip=131.188.11.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bnLJG9i4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781686373;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2fN8/T+cfqifizgv0Zy/OFN+fYVdQCBq8wVfmK8kEwo=;
-	b=bnLJG9i47AXSBx4v5CRKbHunkon6PKEqsqiN+SA6UM423oxGgsU/4KtT0AoOiSCeVW1ym5
-	clzjxGJuYIPR8b8uB9nMmWJa9sP2TWHd+QMcptjaKv228iT6aLl4fdLjdP0WZaAjPPn807
-	XX8u0HT5PbHtXfsZlC17B+pBRgfaeNw=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-457-aYefdb43OuKhaVR0c9iWJw-1; Wed,
- 17 Jun 2026 04:52:50 -0400
-X-MC-Unique: aYefdb43OuKhaVR0c9iWJw-1
-X-Mimecast-MFC-AGG-ID: aYefdb43OuKhaVR0c9iWJw_1781686368
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="U8O7i/mO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
+	t=1781685955; bh=EnC+xQ4kjAflTt/HOK2e1CKwIXuOTQTQ4uzmcNK7l4w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From:To:CC:
+	 Subject;
+	b=U8O7i/mOH0wiYi63S/ed+enhvGbhDDC2J+vtgA0p5pjaRr5qEsz22ixJcMGdvhEcw
+	 BwnPOmws5mCBdlcInMHUlJIqxlS8UzyjGjEJey4rr9XOiI35zxuQXSye0yA5sAVFAm
+	 BnjHqhFVq6h13T9Yr8nf9x5eHPJtw5qXyA9qoLFVyLhAYi2uxyzOVLLdkS1zq3ex4v
+	 fZ6PbVwD/cJMDwB1I6882xFY43K6Ucn0frybtQZAiiGA6AOs1Yg2kSyUREYina0F4E
+	 ZPty9+V4DE9IQgBM897cNiYvuLLcWQs1s5B9WFjybcGVXXsx2igmfx56Vpe2yRA7ui
+	 TJH+vg7p4iqrQ==
+Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 50FDC1800EF3;
-	Wed, 17 Jun 2026 08:52:47 +0000 (UTC)
-Received: from fedora (unknown [10.44.33.75])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id C91D13008DC3;
-	Wed, 17 Jun 2026 08:52:41 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed, 17 Jun 2026 10:52:46 +0200 (CEST)
-Date: Wed, 17 Jun 2026 10:52:40 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Josh Triplett <josh@joshtriplett.org>
-Cc: Breno Leitao <leitao@debian.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Shuah Khan <shuah@kernel.org>, Mateusz Guzik <mjguzik@gmail.com>,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, shakeel.butt@linux.dev,
-	jlayton@kernel.org, axboe@kernel.dk, kernel-team@meta.com
-Subject: Re: [PATCH v3 0/2] fs/pipe: reduce pipe->mutex contention by
- pre-allocating outside the lock
-Message-ID: <ajJgWBCFYwz9OIo3@redhat.com>
-References: <20260524-fix_pipe-v3-0-bb4a75d23a90@debian.org>
- <ajG2bmhu6j9UWvh4@localhost>
+	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4ggHWR51djzPjj5;
+	Wed, 17 Jun 2026 10:45:55 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at boeck5.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Flag: Not-Spam
+X-RRZE-Submit-IP: 2001:620:618:5b8:2:80b3:0:d9e
+Received: from localhost (unknown [IPv6:2001:620:618:5b8:2:80b3:0:d9e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: U2FsdGVkX1+7VQ1Fq7UmwSr5wNINd1K9w5LBzRtcyQg=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4ggHWN4LgxzPkny;
+	Wed, 17 Jun 2026 10:45:52 +0200 (CEST)
+From: Luis Gerhorst <luis.gerhorst@fau.de>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>,  Eduard Zingerman
+ <eddyz87@gmail.com>,  Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  John
+ Fastabend <john.fastabend@gmail.com>,  Martin KaFai Lau
+ <martin.lau@linux.dev>,  Shuah Khan <shuah@kernel.org>,
+  bpf@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: Cover stack nospec slot indexing
+In-Reply-To: <20260617-f01-11-stack-nospec-slot-index-v1-2-e3a080b0cd7e@mails.tsinghua.edu.cn>
+	(Nuoqi Gui's message of "Wed, 17 Jun 2026 00:57:56 +0800")
+References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
+	<20260617-f01-11-stack-nospec-slot-index-v1-2-e3a080b0cd7e@mails.tsinghua.edu.cn>
+User-Agent: mu4e 1.12.12; emacs 30.2
+Date: Wed, 17 Jun 2026 10:45:50 +0200
+Message-ID: <871pe5v9kx.fsf@fau.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ajG2bmhu6j9UWvh4@localhost>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Type: text/plain
 
-On 06/16, Josh Triplett wrote:
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn> writes:
+
+> Add a verifier test for the fixed-offset stack write case where two 4-byte
+> stores initialize opposite halves of the same stack slot.
 >
-> On Sun, May 24, 2026 at 07:44:57AM -0700, Breno Leitao wrote:
-> > This series pre-allocates pages outside pipe->mutex in
-> > anon_pipe_write(): for writes that span more than one full page, up
-> > to PIPE_PREALLOC_MAX (8) pages are allocated via a per-page
-> > alloc_page() loop before the mutex is taken. anon_pipe_get_page()
-> > then drains the prealloc array first, falls back to the per-pipe
-> > tmp_page[] cache, and only enters the allocator under the mutex for
-> > the leftover pages (writes larger than PIPE_PREALLOC_MAX, single-page
-> > writes that skip prealloc, or shortfalls when the prealloc loop
-> > fails). Leftover prealloc pages are recycled into tmp_page[] before
-> > unlock and any remainder is put_page()'d after unlock, keeping the
-> > allocator out of the critical section on both sides.
-> [...]
-> > I also vibe-coded a microbenchmark to validate the change. It sweeps
-> > writers x readers over {1,2,5} x {1,5,10} with 64KB writes against a
-> > 1 MB pipe and prints throughput + latency percentiles per config.
+> The test uses the CAP_BPF-without-CAP_PERFMON loader lane so Spectre v4
+> mitigation remains active. It expects both half-slot writes to emit nospec
+> in the translated program.
 >
-> How do the numbers compare with 1-byte writes/reads? (It's fine if
-> they're not *faster*, just want to make sure they don't get any
-> *worse*. This case comes up a lot with pipes used for synchronization or
-> event reporting, such as with make.)
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> ---
+>  .../testing/selftests/bpf/progs/verifier_unpriv.c  | 23 ++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+> index c16f8382cf17d..9ebbd4b531df1 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+> @@ -976,4 +976,27 @@ l0_%=:	exit;						\
+>  	: __clobber_all);
+>  }
+>  
+> +SEC("socket")
+> +__description("noperfmon: Spectre v4 stack write slot index")
+> +__success __success_unpriv
+> +__caps_unpriv(CAP_BPF)
 
-Note the "for writes that span more than one full page" above. Pre-allocate
-does nothing if total_len <= PAGE_SIZE.
+Not sure if the conditions that led Kartikeya and Eduard to add
+__caps_unpriv(CAP_BPF) explicitly for some tests also apply here.
 
-Oleg.
+It seems adding it to this test will not provide much benefit because
+the other tests in verifier_unpriv.c already assume
+sysctl_unprivileged_bpf_disabled=0.
 
+Because this already affects the more restricted 'unpriv process under
+sysctl_unprivileged_bpf_disabled=0 without CAP_BPF' environment, I
+suggest dropping __caps_unpriv(CAP_BPF) it.
+
+> +__retval(0)
+> +#ifdef SPEC_V4
+> +__xlated_unpriv("r0 = 0")
+> +__xlated_unpriv("*(u32 *)(r10 -4) = r0")
+> +__xlated_unpriv("nospec")
+> +__xlated_unpriv("*(u32 *)(r10 -8) = r0")
+> +__xlated_unpriv("nospec")
+> +__xlated_unpriv("exit")
+> +#endif
+> +__naked void stack_write_nospec_slot_index(void)
+> +{
+> +	asm volatile ("					\
+> +	r0 = 0;						\
+> +	*(u32 *)(r10 - 4) = r0;			\
+> +	*(u32 *)(r10 - 8) = r0;			\
+> +	exit;						\
+> +"	::: __clobber_all);
+> +}
+> +
+>  char _license[] SEC("license") = "GPL";
+
+Acked-by: Luis Gerhorst <luis.gerhorst@fau.de>
