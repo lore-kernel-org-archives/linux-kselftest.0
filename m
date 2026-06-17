@@ -1,114 +1,118 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15CF02FF15B
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 22:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F20D2EEE74
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 23:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781736909; cv=none; b=oLBJAE8driejbQNTaQAKzFcTJNlr3sMJW5dYTWpsqtszE+6dlgPfLlAb/eHN1z19EbYzhX4hU/GfHwvSYVlTM01u32+/+tZkvPNsvydZOwfbaNYLRVrPFzihsX1jVDB2sfmedO88teOXAEaYXJ8Wi8ev9s1+FICGxolao0yNNBg=
+	t=1781738368; cv=none; b=Bvu9C0bUVeDiruqPeA0OBdg4kH58GAaC0vxEod+ZKgzSJ+Jh/a8L+5jFrsXMPLz6ftpXgLRHvYUaOn1goPaZfxlQlpLUQbKsg8E6ANOO1viadeRyvji7ysJd4Lrtw3l77B2MY9pliTxG+YAvL8SRAqXrMzJ3cVBGTAWfBv/cp7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781736909; c=relaxed/simple;
-	bh=XZNQCD0Wlzebe8+k82p0GQLAE+XVfMCy17xY+qRHYtY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=USb33THPPendhZSYuyWbkVo+3ta/0PPWA3Youd7Os/2hzgbjXJVDcuhdWm/DVDoPtx+n52lEGMiIVQa6IXWBittrhVkee997khjPn5nkKsB3K7AV5m+jP5uwDEV5QTfmE2MuFhhZ2hmN1l+TeWk1T5hC4rdSPcE6u9+a8umFxJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bOjR2tpW; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1781738368; c=relaxed/simple;
+	bh=kjmM2f9Y4tTpSANdrgbzkRs/GfUPSsXsu6fFj7lu1Lo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Bys3OlONRHUk56dqarNp3ros6Mbgk1KchCMG/Rjke2H7CNAhZLH4YrBgQtK2Os7e6LZIBWDUn2z/T/tvZSnBnFYEh744h/VVQfRNYwQcwFvB1mro8plQSkPXjK3jp5o5myobTuPcZoCU8mZ5agrnHh5vBxh1hZibIpStIKIOQv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NWhZdEHX; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bOjR2tpW"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2bf1f074a12so3341885ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 15:55:06 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NWhZdEHX"
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7e6cfdc8382so237700a34.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 16:19:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781736906; x=1782341706; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=31pm6bOQX9ZGFrg4v1e61iShzXMdpZDAT+S55BgXi9I=;
-        b=bOjR2tpWG0AYQDC8avd4GdHSX7j782z8Cgjq/6OJUzIYiYoazTRpi/Wzj+0f5Wy8UR
-         l0Mcc4gbrrYC3xdOTJD69DbsUZgHO0w8ztyx0258WwnlvT+N1hDQfhAyPH6RvmIivB85
-         y4Qefx5vxOm8M/ELtpfNye2NwSgnNdlX19bgoD6XLHDU2pgDAIyxU1IvwaRQPytgpHaj
-         tZxxO85cOCTy8ULqq8kY6wV+R+IYNn3dJB+dukJ7ftA9eryOMzmAoIMotkgoUklOYQJO
-         Y2BxsONgtQqYO/CFF6QERttj+j7vVyBUHhW9hv2F2IZHuircQVYqM+9z95fC9FEc6T38
-         UIqA==
+        d=linuxfoundation.org; s=google; t=1781738365; x=1782343165; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vMBMjuCrro73P2KY+e0B51nJwwuq2WSOY+l9c5fER/U=;
+        b=NWhZdEHXP2pPa4HY/2a5P/BLElzgETN2gIwP9bslL0sdvGc5WQP8YMgxFBGIyXlMc4
+         b32u8xz/V3Y5E0zczUEY37LJ1WRO6GGgjd8DRJs4cyJirttEh53Wj0diwYtXagqoFH1q
+         p4wi/PocscpYyJuMvj07yEMAKyP6PuirYH6A4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781736906; x=1782341706;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=31pm6bOQX9ZGFrg4v1e61iShzXMdpZDAT+S55BgXi9I=;
-        b=rcd4Ij8IYq0JhLqIaIBOyt1ubyADGV/Nbmgk0O5PCQOhOcrwL10zSyPNB0B4GoFjGA
-         e0PSHOSl5AIJZAWA84z2gdghJxxN5aCUssOgE9xX7YqwvStQKZiItcdrdvFhAnwwN/Kk
-         fF7mrWjJvvuquKJYwmbWCPVD7yfx3WnbOpmDhJiUzqfg7ar+PnFjwVJt41EaEJKl/crT
-         XTaVUvkf5yoRHPaUfRNC4Yj0ouin4AryU+albKo7MoVc59G7x+USNS68ueBPx40CHSPD
-         GEYZtEPbQO/MfCzM9JD/UTgoCDVdFscwgfjUWFK5N83gAtU/HQx+6YG5Cl4jpr0saHw3
-         U8dw==
-X-Forwarded-Encrypted: i=1; AFNElJ8hziSIXi0skPyRdhZlXvkfa2W6f97zZ5jloun1J4U6MlrGGpQdyIVMQsN3D1ZZijrNeTFqVZbrNq43MldMeYs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq9BweC6b4zHcV2ZHJNWNzKkuWDK0BQPX3K2oeypJJoCc43EVc
-	JVIo0YyEdTFw+7RpOmUaauBw5IBqpL2w41fB0O3ft+Ub6Isd27wXSTwRYce1v8YmtXEVBLJSCxD
-	0kYls5A==
-X-Gm-Gg: AfdE7cks1EZIkbg1HEFPca1fsWEBj1jLytaVKhtR5BKnpwwZF7JHjtBDeCeXHHatsTA
-	RXXVQne+Uw24ecIOlcwDsacPoyNXPzrApGCop9wOC4LfXHtgRiCtJdJ5Uz2Ec9Ng8mHVBFmI7+j
-	q3JDNqNVixzhFuHzpoSR51QFHJqNhAFPY/h7uPkvzHmWTWnIom/mmRVBbIRIhaLoxjfUWLiMn4Q
-	KcbC6H367YgG26R9qxulWwC83bqYP9FRdo7GoYofM7HEH6p4nCVgD52J8m6Za9UQS9KMDJXLEF+
-	KZB4Uhe9chLmFk8HF3HLBjqrOyTUWZmg8G8Ne3q2dBTYMb1WgX+WUZ9D/MMyoKTz919seuNfkfB
-	q8wXGCn4+bh7SEePRd4Djn46IsX2tmZePzQ/o2TdOZmLayygWsmmXkDeNPyY5Mjp4Y91+L6zOhJ
-	UuOtf2LchMX1npD7VWeKXlfMVTCRuoHqLZTZUnREiNaczHUgiQcOk=
-X-Received: by 2002:a17:903:196b:b0:2c6:cbcd:a0d7 with SMTP id d9443c01a7336-2c6cbcda883mr35120735ad.25.1781736906001;
-        Wed, 17 Jun 2026 15:55:06 -0700 (PDT)
-Received: from google.com (56.149.168.34.bc.googleusercontent.com. [34.168.149.56])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c42fbb5411sm172146015ad.32.2026.06.17.15.55.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 15:55:05 -0700 (PDT)
-Date: Wed, 17 Jun 2026 22:55:02 +0000
-From: David Matlack <dmatlack@google.com>
-To: Alex Mastro <amastro@fb.com>
-Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	Vipin Sharma <vipinsh@google.com>, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v4 0/2] vfio: selftests: Add allocation assert helpers
- and avoid VLAs
-Message-ID: <ajMlxuklmaDfg84X@google.com>
-References: <20260617-scratch-amastro-vfio-selftests-avoid-vlas-v4-0-b9f52f1e2c5a@fb.com>
+        d=1e100.net; s=20251104; t=1781738365; x=1782343165;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vMBMjuCrro73P2KY+e0B51nJwwuq2WSOY+l9c5fER/U=;
+        b=ogxFQNVQVg/2XNCP3N+XOJj9w0ksh9BldhWjp6A/wXb8SNeqIR5RVafbfv69kQbb9f
+         uSGiCaVnSLfiWolho6cSHBbpOu+hpUsuPpwg3BXfUCFLdn3UY6kkyV3267pTaZx4Fi3R
+         84vgcpZlhWdSsjUNa8PrSWp4sgOS0Jy6+TmNnwNolm0oUPu+kEOlQzY482LYpb5LRKeq
+         A7nCHfKuOfdxg6G4KMZ12sORXpb3yayCAeYf4QpYDhsblLivfjkYv7FCM2WTqcuAou2/
+         yIf2PC9/NxQsjB63oxxUYCUfRq8FFzg1WWdH0oOOWfUcqsATp2bl1BQTEW0eSMklBFe5
+         AWZg==
+X-Forwarded-Encrypted: i=1; AFNElJ8G8Djc8LZNeiGRyCaTgNg02u4MbRZJKT874won5M0K6T1NBbZV9Jq82833HKO/KCEuU2bIGLFfgQWuc/KW8II=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2ub7QnggRGePkFpaSwJhCRP9g03JDM92SaHty2z97cEdWs0V2
+	0O8bmdgCJelUikcrfhW60V4lsD/7lcSjS7Nrxvf8a9RxUJFYzV0PJ1A/fL7UcSJKJWw=
+X-Gm-Gg: Acq92OF2B3uRE0FeJFBARdDYrhStV7/0POhPWxiSiCUL7NoQsnvmXfoLLyHEDXEKW5D
+	DK+xQMvgzX2/RmxrRbP82qF3ptsMIrtYvkBTR3YEw4nH5u61/fWNN9Kh1JaGisvc46aKReTiFzC
+	huOWHNHA4+Bcf7KwlMD2biLJZzwflWI9MWfAcCoAL7KXWvLE2UjVmF2XbjUCnlzlrah5uFw5Trj
+	llnMTx6Bei4++1ctHDuhwrhRkR1Z6OLZWJr0fO2XQEh6mdetvHwP5cXrFx2hJCpWFn4g3DyDv+7
+	bL7SJwvcSNjfhJbPBItLcbx1ikwbmX2zSchSnhyzEDSICT3sUP9IVG+0rqX5qDpQEDqOz0C7bfM
+	SBuuwx9dw3mUteWk7JruH5ac6OmTM54FdrrHVpUlVWz1JLGvvZadBkv0IWRrtxvZkvHMmH+yldq
+	T5Rd+htHNvkiCYZK7I/Hkn
+X-Received: by 2002:a05:6830:916:b0:7e6:ed97:ce5a with SMTP id 46e09a7af769-7e90b2af148mr5858277a34.4.1781738365560;
+        Wed, 17 Jun 2026 16:19:25 -0700 (PDT)
+Received: from [192.168.1.14] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e79f6df8d6sm10146721a34.22.2026.06.17.16.19.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Jun 2026 16:19:24 -0700 (PDT)
+Message-ID: <602d46d6-0ca1-4f05-8cfd-a6007aff560b@linuxfoundation.org>
+Date: Wed, 17 Jun 2026 17:19:23 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260617-scratch-amastro-vfio-selftests-avoid-vlas-v4-0-b9f52f1e2c5a@fb.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] selftests/ftrace: Account for 8-byte aligned
+ trace_marker_raw events
+To: Steven Rostedt <rostedt@goodmis.org>, Hui Wang <hui.wang@canonical.com>
+Cc: mhiramat@kernel.org, mathieu.desnoyers@efficios.com, pjw@kernel.org,
+ linux-trace-kernel@vger.kernel.org, shuah@kernel.org, wangfushuai@baidu.com,
+ linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20260607072431.125633-1-hui.wang@canonical.com>
+ <20260607072431.125633-3-hui.wang@canonical.com>
+ <20260608125049.092d4543@fedora>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20260608125049.092d4543@fedora>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 2026-06-17 11:57 AM, Alex Mastro wrote:
-> Add VFIO selftest {malloc,calloc}_assert() helpers, then use
-> them in places that open-code malloc() or calloc() followed by
-> VFIO_ASSERT_NOT_NULL().
+On 6/8/26 10:50, Steven Rostedt wrote:
+> On Sun,  7 Jun 2026 15:24:31 +0800
+> Hui Wang <hui.wang@canonical.com> wrote:
+> 
+>> trace_marker_raw.tc assumes that the raw marker payload length
+>> reported in trace_pipe is the result of int((id + 3) / 4) * 4, but
+>> that is not true on kernels with CONFIG_HAVE_64BIT_ALIGNED_ACCESS
+>> enabled.
+>>
+>> With forced 8-byte alignment, the ring buffer event forces 8-byte
+>> alignment. The event length is stored in array[0], the payload data
+>> and id are placed in a struct raw_data_entry which is stored starting
+>> at array[1]. In this case, the printed payload data length is 8*N+4
+>> bytes.
+>>
+>> To make the testcase pass in this case, add a kconfig_enabled() helper
+>> and use it to detect CONFIG_HAVE_64BIT_ALIGNED_ACCESS so
+>> trace_marker_raw.tc can calculate the expected length correctly.
+>>
+>> Assisted-by: Copilot:gpt-5.5
+>> Signed-off-by: Hui Wang <hui.wang@canonical.com>
+> 
+> NACK
+> 
+> Let's not change the kernel for a broken test. Also this has already
+> been fixed but appears not to be applied yet.
+> 
+> Shuah, can you please apply the below fix.
+> 
+>    https://lore.kernel.org/all/20260601023251.1916483-1-dtcccc@linux.alibaba.com/
 
-Thanks!
+I applied the above to linux-kselftest next - will send it up later
+this week to for Linux 7.2-rc1
 
-> Use the helpers to replace VLAs with heap allocations. This avoids GCC
-> rejecting initialized VLAs and avoids treating a u8 buffer as a possibly
-> under-aligned VFIO request struct.
-> 
-> Changes in v4:
-> - Add malloc_assert().
-> - Link to v3: https://patch.msgid.link/20260615-scratch-amastro-vfio-selftests-avoid-vlas-v3-0-b3798415c72a@fb.com
-> 
-> Changes in v3:
-> - Add the calloc_assert() helper as a precursor patch.
-> - Convert existing VFIO selftest calloc() assertion sites.
-> - Update the VLA fix to use calloc_assert().
-> - Link to v2: https://patch.msgid.link/20260615-scratch-amastro-vfio-selftests-avoid-vlas-v2-1-4e4df462908a@fb.com
-> 
-> Changes in v2:
-> - Reverse xmas tree variable ordering
-> - Link to v1: https://patch.msgid.link/20260612-scratch-amastro-vfio-selftests-avoid-vlas-v1-1-ba3acb635f0a@fb.com
-> 
-> Signed-off-by: Alex Mastro <amastro@fb.com>
-> ---
-> Alex Mastro (2):
->       vfio: selftests: Add allocation assert helpers
->       vfio: selftests: Avoid VLAs
-
-Reviewed-by: David Matlack <dmatlack@google.com>
+thanks,
+-- Shuah
