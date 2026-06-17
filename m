@@ -1,50 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CB22652A2;
-	Wed, 17 Jun 2026 02:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5146347C6;
+	Wed, 17 Jun 2026 03:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781663891; cv=none; b=ADFxJgXfZ9e/LVyZJuknENEitpcOvzKkLKUEePIPHwDliSW3k8pkoTinnh2zZoH6tLvPpexoj+FOseHOCPMHAbZbu+RSfwZUj/BNeM2WfSgWlwDHV717qVVM7x+mtGir6LuxWGHR4k3Fva3Uw83rKkoVVpbtibl5BtnGDX2JUbs=
+	t=1781665479; cv=none; b=VkXeKTn5yfPsYPG/j+tHZxl9bXiVemCSh9FGBBFFBv9dlkDjbQjSbh9Owni2YOENZkS8WnVzVbxDgRAkK513RI8QwW3Ec1juhkcZ1Pogf5AMH4Mi0DYm0DwKOrH1GXGDN7tvq2o/v0UqjCp2Yh2K8JXknJIurECtthEqhqpwZlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781663891; c=relaxed/simple;
-	bh=BCedZ8Rz/sbsae+H5+CU0ZsEreiRmGlqG1pWD3F6WcI=;
+	s=arc-20240116; t=1781665479; c=relaxed/simple;
+	bh=H4ydynFSsshwEIH3dpamwI/BxsImmPBYTlJKbEbi59M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q2IXYsy9mb0+acDEZ4BgEaRrx5lhGyjE1EjSXubB71W79RvxUuyHuVv0poAXBGQM2oVX7P4r3aFA3J/0IlrDX0QtYXr9xuw27T3B6yuPScPkgBBb8VXp4rZ4iYJkr6yBTE092mG3wohHGmfIcuTnL7KpvSf7kSk25wCVnOtus5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OkDhKX55; arc=none smtp.client-ip=192.198.163.17
+	 In-Reply-To:Content-Type; b=d4FLx+qcTYZmEgKXfwzY2P4OpFb9amkExq7YEqp4wZYrTp2bVEVRMKod9xoOvF7Fr8aZe5DcZNihUY3Da+uDm/kk57VM1rwzuuQYzuVKqaa8hyUUS6m9LLrZH3vnhWBAu+kZfWz3OSxIQ8ZhV2tQrvF90kJPHiIVdANNTS0f1qY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EWZWcSAf; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OkDhKX55"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EWZWcSAf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781663889; x=1813199889;
+  t=1781665477; x=1813201477;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=BCedZ8Rz/sbsae+H5+CU0ZsEreiRmGlqG1pWD3F6WcI=;
-  b=OkDhKX55bAYWryneruz1t9ZxfxMlU6lB6fjqH0TYmYcK/mqcIAbsgBDV
-   ai3VG/WYCNpN+DLPcwxBM5hzlH5U0/s2aFnM8djm2TccWx8bQCeOwPACN
-   3z62VB2SHV6kB32N/FTRNmu8blZ27g8VaLD1mdy4mZiUaZDWrqy2s6Vye
-   swBWFAHChflnGviwXX8Tk6A1X6A/B4CIppev1UnIamwjc5q9KyM000Wx7
-   sM6TUnuVzxXgB91cEyikgeiSzhJQZ+iqP/ab2fy/i1aBbd8AnFon6I6LJ
-   ZgVqPcrJiEGes53oo/yzRE9OWXeNQVb73OeM109r74fpwX5uqKHr+G3lC
-   Q==;
-X-CSE-ConnectionGUID: mmFqlQYiScyPHRCkp4+GcQ==
-X-CSE-MsgGUID: vPxoqpEDRKmiCq8BwGyy6Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11819"; a="82315494"
+  bh=H4ydynFSsshwEIH3dpamwI/BxsImmPBYTlJKbEbi59M=;
+  b=EWZWcSAfm+rhUEIRxjKghX9cE80rcbMGPvZgUbdUOIRFtIIkWvhPowYm
+   +iABLYNIhDczCKrLgM01QcRHo4MLkI1hoh7+KvvsXaiFu2DgQJv5jtRc3
+   cTBSPUzoltrdYiaHlR/HzM7rY0gRdzjjPD3cPAkBXWobT+ii+1D1m1RzN
+   ybe87YR0ZRwutNU6TAj3avIMiOsTXQRo2HVlLBySJ+LUd/BATk+vpEZ95
+   vaXsq3k2uedvaSayHuMYrhCubgJ0W8bTXFJCpd9M3SHkrY4N86ZTlozHf
+   oIFNOXKShoUA8IAKv+S4J1rvvvqhTFq7q2E4v563oTN0ALdd739Kj5UC+
+   w==;
+X-CSE-ConnectionGUID: D+IiCuJSSxG20KCdZq1yVw==
+X-CSE-MsgGUID: Z1nhfbaSSLyCWFFmW3dYBw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11819"; a="82648265"
 X-IronPort-AV: E=Sophos;i="6.24,208,1774335600"; 
-   d="scan'208";a="82315494"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 19:38:04 -0700
-X-CSE-ConnectionGUID: Eb653s8HSTyqv1EOEU4eoA==
-X-CSE-MsgGUID: bIk3G2dsRWWKXPPFJ45fuw==
+   d="scan'208";a="82648265"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 20:04:37 -0700
+X-CSE-ConnectionGUID: oY7QmKPpR3SM1762toGLGw==
+X-CSE-MsgGUID: cSQoqFtsS3aFRa1zAs5RhQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,208,1774335600"; 
-   d="scan'208";a="271657628"
+   d="scan'208";a="243567773"
 Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.18]) ([10.124.240.18])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 19:37:54 -0700
-Message-ID: <d8a9a574-1c15-4c94-b33d-fa72e1b5096d@intel.com>
-Date: Wed, 17 Jun 2026 10:37:50 +0800
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 20:04:29 -0700
+Message-ID: <a92a8101-469c-48ab-8425-0302da3d735c@intel.com>
+Date: Wed, 17 Jun 2026 11:04:25 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,9 +52,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 02/22] KVM: selftests: Update
- kvm_init_vm_address_properties() for TDX
-To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
+Subject: Re: [PATCH v13 01/22] KVM: selftests: Add macros to simplify creating
+ VM shapes for non-default types
+To: Sean Christopherson <seanjc@google.com>
+Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
  Ackerley Tng <ackerleytng@google.com>, Binbin Wu
  <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
  Chenyi Qiang <chenyi.qiang@intel.com>,
@@ -66,100 +67,106 @@ To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
  Reinette Chatre <reinette.chatre@intel.com>,
  Rick Edgecombe <rick.p.edgecombe@intel.com>,
  Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org,
- Adrian Hunter <adrian.hunter@intel.com>
+ Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>,
+ Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>,
+ kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+ linux-kernel@vger.kernel.org, x86@kernel.org
 References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
- <20260521-tdx-selftests-v13-v13-2-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-1-6983ae4c3a4d@google.com>
+ <e0b99e9a-c20f-4def-ac4b-0070996c10ef@intel.com>
+ <ajF-9isiWxPyzxci@google.com>
 Content-Language: en-US
 From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20260521-tdx-selftests-v13-v13-2-6983ae4c3a4d@google.com>
+In-Reply-To: <ajF-9isiWxPyzxci@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/22/2026 7:16 AM, Lisa Wang wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On 6/17/2026 12:51 AM, Sean Christopherson wrote:
+> From: Sean Christopherson<seanjc@google.com>
+> Date: Tue, 28 Oct 2025 21:20:27 +0000
+> Subject: [PATCH] KVM: selftests: Add macros to simplify creating VM shapes for
+>   non-default types
 > 
-> Initialize the TDX S-bit and the GPA tag mask in
-> kvm_init_vm_address_properties() for TDX VMs, similar to how the C-bit
-> is initialized for SEV VMs.
+> Add VM_TYPE() and __VM_SHAPE() macros to create a vm_shape structure given
+> a type (and mode), and use the macros to define VM_SHAPE_{SEV,SEV_ES,SNP}
+> shapes for x86's SEV family of VM shapes.  Providing common infrastructure
+> will avoid having to copy+paste vm_sev_create_with_one_vcpu() for TDX.
 > 
-> The TDX S-bit is used to distinguish between shared and private guest
-> physical addresses. Its position is determined by the guest physical
-> address width, which is either 48 or 52 bits for current TDX
-> implementations.
+> Use the new SEV+ shapes and drop vm_sev_create_with_one_vcpu().
 > 
-> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
-> Co-developed-by: Adrian Hunter <adrian.hunter@intel.com>
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Co-developed-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Lisa Wang <wyihan@google.com>
+> Opportunistically move the existing VM_SHAPE() (now __VM_SHAPE()) macro
+> below the definitions of VM_MODE_DEFAULT so that all of the SHAPE/TYPE
+> macros are bundled together.
+> 
+> No functional change intended.
+> 
+> Reviewed-by: Binbin Wu<binbin.wu@linux.intel.com>
+> Reviewed-by: Ira Weiny<ira.weiny@intel.com>
+> Signed-off-by: Sean Christopherson<seanjc@google.com>
 
 Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
 
+some nits below
+
 > ---
->   tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h | 14 ++++++++++++++
->   tools/testing/selftests/kvm/lib/x86/processor.c        | 12 ++++++++++--
->   2 files changed, 24 insertions(+), 2 deletions(-)
+>   .../testing/selftests/kvm/include/kvm_util.h  | 28 +++++++------
+>   .../selftests/kvm/include/x86/processor.h     |  4 ++
+>   tools/testing/selftests/kvm/include/x86/sev.h |  2 -
+>   tools/testing/selftests/kvm/lib/x86/sev.c     | 16 --------
+>   .../selftests/kvm/x86/sev_smoke_test.c        | 40 +++++++++----------
+>   5 files changed, 40 insertions(+), 50 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
-> new file mode 100644
-> index 000000000000..f647e6ca6b34
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
-> @@ -0,0 +1,14 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef SELFTESTS_TDX_TDX_UTIL_H
-> +#define SELFTESTS_TDX_TDX_UTIL_H
-> +
-> +#include <stdbool.h>
-> +
-> +#include "kvm_util.h"
-> +
-> +static inline bool is_tdx_vm(struct kvm_vm *vm)
-> +{
-> +	return vm->type == KVM_X86_TDX_VM;
-> +}
-> +
-> +#endif /* SELFTESTS_TDX_TDX_UTIL_H */
-> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
-> index b51467d70f6e..b68ad1dc7e02 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
-> @@ -11,6 +11,7 @@
->   #include "smm.h"
->   #include "svm_util.h"
->   #include "sev.h"
-> +#include "tdx/tdx_util.h"
->   #include "vmx.h"
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index dc70c6da63fa..46bae183d7fc 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -221,18 +221,6 @@ struct vm_shape {
 >   
->   #ifndef NUM_INTERRUPTS
-> @@ -1311,12 +1312,19 @@ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
+>   kvm_static_assert(sizeof(struct vm_shape) == sizeof(u64));
 >   
->   void kvm_init_vm_address_properties(struct kvm_vm *vm)
->   {
-> +	u32 gpa_bits = kvm_cpu_property(X86_PROPERTY_GUEST_MAX_PHY_ADDR);
-> +
-> +	vm->arch.sev_fd = -1;
-> +
->   	if (is_sev_vm(vm)) {
->   		vm->arch.sev_fd = open_sev_dev_path_or_exit();
->   		vm->arch.c_bit = BIT_ULL(this_cpu_property(X86_PROPERTY_SEV_C_BIT));
->   		vm->gpa_tag_mask = vm->arch.c_bit;
-> -	} else {
-> -		vm->arch.sev_fd = -1;
-> +	} else if (is_tdx_vm(vm)) {
-> +		TEST_ASSERT(gpa_bits == 48 || gpa_bits == 52,
-> +			    "TDX: bad X86_PROPERTY_GUEST_MAX_PHY_ADDR value: %u", gpa_bits);
-> +		vm->arch.s_bit = BIT_ULL(gpa_bits - 1);
-> +		vm->gpa_tag_mask = vm->arch.s_bit;
->   	}
->   }
+> -#define VM_TYPE_DEFAULT			0
+> -
+> -#define VM_SHAPE(__mode)			\
+> -({						\
+> -	struct vm_shape shape = {		\
+> -		.mode = (__mode),		\
+> -		.type = VM_TYPE_DEFAULT		\
+> -	};					\
+> -						\
+> -	shape;					\
+> -})
+> -
+>   extern enum vm_guest_mode vm_mode_default;
 >   
-> 
+>   #if defined(__aarch64__)
+> @@ -270,8 +258,24 @@ extern enum vm_guest_mode vm_mode_default;
+>   
+>   #endif
+>   
+> +#define VM_TYPE_DEFAULT			0
+> +
+> +#define __VM_SHAPE(__mode, __type)			\
+
+inconsistent indentation with below lines.
+
+> +({						\
+> +	struct vm_shape shape = {		\
+> +		.mode = (__mode),		\
+> +		.type = (__type),		\
+> +	};					\
+> +						\
+> +	shape;					\
+> +})
+> +
+> +
+
+one extra new line.
+
+> +#define VM_SHAPE(__mode)	__VM_SHAPE(__mode, VM_TYPE_DEFAULT)
+>   #define VM_SHAPE_DEFAULT	VM_SHAPE(VM_MODE_DEFAULT)
+>   
+> +#define VM_TYPE(__type)		__VM_SHAPE(VM_MODE_DEFAULT, __type)
+> +
+>   #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
+>   #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
 
