@@ -1,172 +1,165 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA63EEA8
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 01:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CB22652A2;
+	Wed, 17 Jun 2026 02:38:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781659845; cv=none; b=LgYa/yQq7wmDn+WI8kjTxsv4+E80UqL4M1mQmClejaVhWQMdLYO/MtNW9SBXA7W5H3Yw8M6ZZCENYViI2ClTyPOkoPlTFvrqc+7lIs82cmw1L0i6H3W+DFF0uyYb55yD3c5ma/IAZB4B+2Qx9mxC0ZaM99P10UnRIHtbHtG2JOA=
+	t=1781663891; cv=none; b=ADFxJgXfZ9e/LVyZJuknENEitpcOvzKkLKUEePIPHwDliSW3k8pkoTinnh2zZoH6tLvPpexoj+FOseHOCPMHAbZbu+RSfwZUj/BNeM2WfSgWlwDHV717qVVM7x+mtGir6LuxWGHR4k3Fva3Uw83rKkoVVpbtibl5BtnGDX2JUbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781659845; c=relaxed/simple;
-	bh=Fnmd794AbnXpu3k3viU+pwAgaaSfmyIGqDXeEpfFxjI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=F3ABW0gesFN3nnAiuj+oyszEh/NRutipZ2uw2WGC42YftzSXEzsh1MxmU6McO0wJn1MAm8435FHQQtwCQzHJ2ff8VqanZQcNEq8ukhnMTfdGoFIXHIHXuDY24qjsSZBbjogwCLd6HBMRxmH54vx/JLPWlaQf9Aa4nSbwDV+/7gE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=h5R623+v; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1781663891; c=relaxed/simple;
+	bh=BCedZ8Rz/sbsae+H5+CU0ZsEreiRmGlqG1pWD3F6WcI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=q2IXYsy9mb0+acDEZ4BgEaRrx5lhGyjE1EjSXubB71W79RvxUuyHuVv0poAXBGQM2oVX7P4r3aFA3J/0IlrDX0QtYXr9xuw27T3B6yuPScPkgBBb8VXp4rZ4iYJkr6yBTE092mG3wohHGmfIcuTnL7KpvSf7kSk25wCVnOtus5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OkDhKX55; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="h5R623+v"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-307263ad0cbso8314782eec.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 18:30:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781659842; x=1782264642; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=foa9TfDTwAbcXqfmpgXrr65v3TLgk179Ri/oJcEA6IE=;
-        b=h5R623+vyrd0HpXH+0XiaqttUSwHKtTR39ZM8Vs4hYrugaahvd4/SNl1+42UaszDqt
-         8jJcw7djVHWcghN4EkCA8a8bRbQpz9eQMbFW8sEaqo7thZahXwq2B40gB9CffJrMHEIA
-         lw9ssEBjv8YDYknvlIrR1dcz5FZ782cjE10J+Wcw99o083ckOrv1V2AZJdAtumhQEORw
-         jnenK6LguPTNcaZt11sr+X2rxu8V3kFBbHnORzNZweFCV/3aCMop2/NghmmUMDeSKDr8
-         YQN0Ie79r2WJct/4dvjaAGrIsr20v8IByw/BsTdbKYJ3My0y0HMS7Xnqk3dUoob41epI
-         PqBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781659842; x=1782264642;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=foa9TfDTwAbcXqfmpgXrr65v3TLgk179Ri/oJcEA6IE=;
-        b=k5iuSD4lXw84DEYEpIzJTn7pVOTrjaWWrA2c7C9KAZ3rfexHUH4yi3du5XpEjmFre9
-         6mvSOlxvt8+O8B5jCWQJcSosvi2n6ljVvvqFGt4UEZGMP8T213K6uzNaI/MA1imH8DzF
-         TIWIDk8pn8x9pF+HSWtJuw45ALap0HNk8MeVm6PaZR5J8+XCpYtA3sUml031pSushwxo
-         p9Zj7yDb2whyIdHU0OP+no2HmPg0aqEF2tjRe07BE5k2Xden+whXZ0fp5J3JZ/iLFKTn
-         4pg9bT+VLsV3vOlgMG9jYun8nryAQC9auu2mfMd9L0o55ME+9kp1RvxwZRH19du7rEiy
-         U+jg==
-X-Forwarded-Encrypted: i=1; AFNElJ9UZAOrlUYlpQeRFdLsoJF7XfROcKzxo3c40os0g4P8xKr7Zhw2TdfGX6NLfcorAfd0EbuH9FOrNImKkr1/dik=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNVtNd+rnF/EH+g4oB5nFMKA0zjR2+lhMnFY8O7v/5ZFqblzjU
-	fHXsDn/IjYAjDxO9Qg1EJxcc2n67LfvlQlm6EBwvfI/47qDwTyaZzWqSwHbXGmUxczA=
-X-Gm-Gg: AfdE7ckRYEFX8aIH7KlwL+JBfUCo6t9LcTZdzTYVfi1fKiDRqwaQ1M+g+tpv68mNYAV
-	u1AU9mBS9kJrMb3eByhqJKjKdQRv84iPZ9ZUsbzPBVbqE7tQWDRzkDtsHymTqRGWG8JBeh+ocCI
-	SID0lmpBu59KaleiUEk/Jm7qxWrTOmvTp+l3RVi4IXXJBKHAq/renJX/l8FZcLxzEbr02EP/pNv
-	45i7a/fAowBdYkKn53gPmiZYsVTzg4QHljR9UDV0q2P2fwF6+/xlBzjOu0KR7JnM4jx/QtzaInA
-	57h39NopbcOhlK1kmXIVEppMJ71UgoVyfAwEQ1OzRcevl+x+TEH/EI2kYNSqjSeozGa+Yl/CPHY
-	eQImgMWwKqKcpjMeUR3bva6YajbiT3DNmlr/B0i6DleH9SEr7Klx0MoPihp05irP07ZLjUN9kuU
-	TuFDUr
-X-Received: by 2002:a05:7301:100b:b0:307:934e:da79 with SMTP id 5a478bee46e88-30bca0aacbbmr1227152eec.34.1781659841751;
-        Tue, 16 Jun 2026 18:30:41 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::2568])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081ddaf69asm21886860eec.0.2026.06.16.18.30.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jun 2026 18:30:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OkDhKX55"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781663889; x=1813199889;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BCedZ8Rz/sbsae+H5+CU0ZsEreiRmGlqG1pWD3F6WcI=;
+  b=OkDhKX55bAYWryneruz1t9ZxfxMlU6lB6fjqH0TYmYcK/mqcIAbsgBDV
+   ai3VG/WYCNpN+DLPcwxBM5hzlH5U0/s2aFnM8djm2TccWx8bQCeOwPACN
+   3z62VB2SHV6kB32N/FTRNmu8blZ27g8VaLD1mdy4mZiUaZDWrqy2s6Vye
+   swBWFAHChflnGviwXX8Tk6A1X6A/B4CIppev1UnIamwjc5q9KyM000Wx7
+   sM6TUnuVzxXgB91cEyikgeiSzhJQZ+iqP/ab2fy/i1aBbd8AnFon6I6LJ
+   ZgVqPcrJiEGes53oo/yzRE9OWXeNQVb73OeM109r74fpwX5uqKHr+G3lC
+   Q==;
+X-CSE-ConnectionGUID: mmFqlQYiScyPHRCkp4+GcQ==
+X-CSE-MsgGUID: vPxoqpEDRKmiCq8BwGyy6Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11819"; a="82315494"
+X-IronPort-AV: E=Sophos;i="6.24,208,1774335600"; 
+   d="scan'208";a="82315494"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 19:38:04 -0700
+X-CSE-ConnectionGUID: Eb653s8HSTyqv1EOEU4eoA==
+X-CSE-MsgGUID: bIk3G2dsRWWKXPPFJ45fuw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,208,1774335600"; 
+   d="scan'208";a="271657628"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.18]) ([10.124.240.18])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 19:37:54 -0700
+Message-ID: <d8a9a574-1c15-4c94-b33d-fa72e1b5096d@intel.com>
+Date: Wed, 17 Jun 2026 10:37:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 16 Jun 2026 21:30:38 -0400
-Message-Id: <DJAXPAPT515H.2W1O5R59RISH7@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, "Andrew Werner" <awerner32@gmail.com>,
- "Zvi Effron" <zeffron@riotgames.com>, "Andrii Nakryiko" <andriin@fb.com>
-Subject: Re: [PATCH bpf 4/6] libbpf: ringbuf: Use compiler atomics
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Tamir Duberstein" <tamird@kernel.org>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, "Andrea Righi" <arighi@nvidia.com>, "Xu Kuohai"
- <xukuohai@huawei.com>, "Andrea Righi" <andrea.righi@canonical.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260613-bpf-ringbuf-fixes-v1-0-e623481cb724@kernel.org>
- <20260613-bpf-ringbuf-fixes-v1-4-e623481cb724@kernel.org>
-In-Reply-To: <20260613-bpf-ringbuf-fixes-v1-4-e623481cb724@kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 02/22] KVM: selftests: Update
+ kvm_init_vm_address_properties() for TDX
+To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Binbin Wu
+ <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+ linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org,
+ Adrian Hunter <adrian.hunter@intel.com>
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-2-6983ae4c3a4d@google.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20260521-tdx-selftests-v13-v13-2-6983ae4c3a4d@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat Jun 13, 2026 at 9:48 PM EDT, Tamir Duberstein wrote:
-> Consumer-side ring buffer code uses architecture-specific smp_* helpers
-> for shared memory accesses.
->
-> Use compiler atomics instead. They provide equivalent acquire and
-> release ordering through a portable userspace interface and allow the
-> next commit to use compiler fences in the wakeup protocol without mixing
-> atomic interfaces.
->
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
+On 5/22/2026 7:16 AM, Lisa Wang wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> 
+> Initialize the TDX S-bit and the GPA tag mask in
+> kvm_init_vm_address_properties() for TDX VMs, similar to how the C-bit
+> is initialized for SEV VMs.
+> 
+> The TDX S-bit is used to distinguish between shared and private guest
+> physical addresses. Its position is determined by the guest physical
+> address width, which is either 48 or 52 bits for current TDX
+> implementations.
+> 
+> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Co-developed-by: Adrian Hunter <adrian.hunter@intel.com>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Co-developed-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Lisa Wang <wyihan@google.com>
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
 
 > ---
->  tools/lib/bpf/ringbuf.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
->
-> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-> index b7adce37b519..1c24a83f59d5 100644
-> --- a/tools/lib/bpf/ringbuf.c
-> +++ b/tools/lib/bpf/ringbuf.c
-> @@ -264,13 +264,13 @@ static int64_t ringbuf_process_ring(struct ring *r,=
- size_t n)
->  	if (n =3D=3D 0)
->  		return 0;
-> =20
-> -	cons_pos =3D smp_load_acquire(r->consumer_pos);
-> +	cons_pos =3D __atomic_load_n(r->consumer_pos, __ATOMIC_ACQUIRE);
->  	do {
->  		got_new_data =3D false;
-> -		prod_pos =3D smp_load_acquire(r->producer_pos);
-> +		prod_pos =3D __atomic_load_n(r->producer_pos, __ATOMIC_ACQUIRE);
->  		while (cons_pos !=3D prod_pos) {
->  			len_ptr =3D r->data + (cons_pos & r->mask);
-> -			len =3D smp_load_acquire(len_ptr);
-> +			len =3D __atomic_load_n(len_ptr, __ATOMIC_ACQUIRE);
-> =20
->  			/* sample not committed yet, bail out for now */
->  			if (len & BPF_RINGBUF_BUSY_BIT)
-> @@ -284,14 +284,16 @@ static int64_t ringbuf_process_ring(struct ring *r,=
- size_t n)
->  				err =3D r->sample_cb(r->ctx, sample, len);
->  				if (err < 0) {
->  					/* update consumer pos and bail out */
-> -					smp_store_release(r->consumer_pos,
-> -							  cons_pos);
-> +					__atomic_store_n(r->consumer_pos,
-> +							 cons_pos,
-> +							 __ATOMIC_RELEASE);
->  					return err;
->  				}
->  				cnt++;
->  			}
-> =20
-> -			smp_store_release(r->consumer_pos, cons_pos);
-> +			__atomic_store_n(r->consumer_pos, cons_pos,
-> +					 __ATOMIC_RELEASE);
-> =20
->  			if (cnt >=3D n)
->  				goto done;
-> @@ -406,8 +408,8 @@ struct ring *ring_buffer__ring(struct ring_buffer *rb=
-, unsigned int idx)
-> =20
->  unsigned long ring__consumer_pos(const struct ring *r)
->  {
-> -	/* Synchronizes with smp_store_release() in ringbuf_process_ring(). */
-> -	return smp_load_acquire(r->consumer_pos);
-> +	/* Synchronizes with the release store in ringbuf_process_ring(). */
-> +	return __atomic_load_n(r->consumer_pos, __ATOMIC_ACQUIRE);
->  }
-> =20
->  unsigned long ring__producer_pos(const struct ring *r)
-> @@ -415,7 +417,7 @@ unsigned long ring__producer_pos(const struct ring *r=
-)
->  	/* Synchronizes with smp_store_release() in __bpf_ringbuf_reserve() in
->  	 * the kernel.
->  	 */
-> -	return smp_load_acquire(r->producer_pos);
-> +	return __atomic_load_n(r->producer_pos, __ATOMIC_ACQUIRE);
->  }
-> =20
->  size_t ring__avail_data_size(const struct ring *r)
+>   tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h | 14 ++++++++++++++
+>   tools/testing/selftests/kvm/lib/x86/processor.c        | 12 ++++++++++--
+>   2 files changed, 24 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> new file mode 100644
+> index 000000000000..f647e6ca6b34
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> @@ -0,0 +1,14 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef SELFTESTS_TDX_TDX_UTIL_H
+> +#define SELFTESTS_TDX_TDX_UTIL_H
+> +
+> +#include <stdbool.h>
+> +
+> +#include "kvm_util.h"
+> +
+> +static inline bool is_tdx_vm(struct kvm_vm *vm)
+> +{
+> +	return vm->type == KVM_X86_TDX_VM;
+> +}
+> +
+> +#endif /* SELFTESTS_TDX_TDX_UTIL_H */
+> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+> index b51467d70f6e..b68ad1dc7e02 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+> @@ -11,6 +11,7 @@
+>   #include "smm.h"
+>   #include "svm_util.h"
+>   #include "sev.h"
+> +#include "tdx/tdx_util.h"
+>   #include "vmx.h"
+>   
+>   #ifndef NUM_INTERRUPTS
+> @@ -1311,12 +1312,19 @@ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
+>   
+>   void kvm_init_vm_address_properties(struct kvm_vm *vm)
+>   {
+> +	u32 gpa_bits = kvm_cpu_property(X86_PROPERTY_GUEST_MAX_PHY_ADDR);
+> +
+> +	vm->arch.sev_fd = -1;
+> +
+>   	if (is_sev_vm(vm)) {
+>   		vm->arch.sev_fd = open_sev_dev_path_or_exit();
+>   		vm->arch.c_bit = BIT_ULL(this_cpu_property(X86_PROPERTY_SEV_C_BIT));
+>   		vm->gpa_tag_mask = vm->arch.c_bit;
+> -	} else {
+> -		vm->arch.sev_fd = -1;
+> +	} else if (is_tdx_vm(vm)) {
+> +		TEST_ASSERT(gpa_bits == 48 || gpa_bits == 52,
+> +			    "TDX: bad X86_PROPERTY_GUEST_MAX_PHY_ADDR value: %u", gpa_bits);
+> +		vm->arch.s_bit = BIT_ULL(gpa_bits - 1);
+> +		vm->gpa_tag_mask = vm->arch.s_bit;
+>   	}
+>   }
+>   
+> 
 
