@@ -1,63 +1,63 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6203F7ABD
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 12:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA44E3FE679
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 12:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781699144; cv=none; b=J+72pdy60t1JteSCdQ/DgYzXnegKA3zAsUQ+t1cRBXHEUkwSNNMOndoOnNu35fsd/IR81yjY0W6z/lb2pldfxvSqCH11Oaa3GzfcvhcIX1JWbMa2Es6+XxXdXh6PBMW5SUnsE73mSRDhATADFrrRh/1BwTrnSaDOX3Xqc3HCSJo=
+	t=1781699170; cv=none; b=tyHMuu048qvJtK8vXb11q3vpXLkS6HZVbC6YFaO/ZK5iWsgs/2pqBtYNSl3qD6zETgKtuKeeUY7V+M1M4wRZczR0JamuEQj4mZPcxSHBBugVJ+ruj9efjTJ7Q5inxJf49t9F4yKiNFkPZ3Dwy0oLIhDEoZeRIzAFlOWgM3Wb7Ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781699144; c=relaxed/simple;
-	bh=55oehVVJrmbgSWpqFQjMcXle7kXrC4IU8zhtK3UJFn0=;
+	s=arc-20240116; t=1781699170; c=relaxed/simple;
+	bh=jXv3Lp1VAkZliGQZVvjo9P0HvOkaYz9n//YoA1Z/TW0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wcko9IfF11VX9Zb/DdlyA/180aeXkBDn+VeK953ZtsBoGWH82bVCJpOrgQlT6S5eBY9Glqf9qW3J5aiO590Yv5T9J5c2QvStEU34kkUZyOlBr2P91olUsWx2GSgfQbRjVNvFqxp366dPDxXzNtKoD+5j5GfVidHnZx/Z7jVL/9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PL5Zse+k; arc=none smtp.client-ip=209.85.221.52
+	 Content-Type:Content-Disposition:In-Reply-To; b=fgpC/hC6OCAtbvqK8F8mmtohooCBATEiQ0m/alNIURR0/ucfRL04ufyMOoBQ1cw+z+D3gkQxzXZj1K6UKBuUMhraWqPaaDvZ65z6A5+Ky/0A6dt+v8fYfwMbbZj+Isq02krqf615G4Z4FNWR3lBr2eszun/lj0Kdz9s3NAeVrrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SbUyNTX1; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PL5Zse+k"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-4626fdc829aso625528f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 05:25:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SbUyNTX1"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-4631679f204so219088f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 05:26:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1781699139; x=1782303939; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1781699164; x=1782303964; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0GtI51H7Zd74M1RsBhYXt9g8xAv+Fn70VlHsGIGT064=;
-        b=PL5Zse+kBTa3E2DF8RlgL+llKyk9XrWurGnrRud3SssnE9D9BXFbCI/DazFsFYfapo
-         zNZQU19WfyxIIUF3ftuWyF2dCmq4AH7hrxDdWznVzpYYxzDeGVFExJIujjmIZ/eefJYX
-         ZJ9Wd66ZODnJy8cY7bQ8CCfZnioAG6mWYjRyERtqYkYlpMJdeNg4Rb3kTJ/cubdRKgl8
-         PNv+/p2utPSqaC99enUM+FHWX6mMfsoJccwrA/1t8XATC9j3B4hAjIBqPlszfV1H5/hy
-         etqUVf3ssG8fr4zINGWfGRh53HqJBrOrahuLCW7GDARod7HExCeOSChbQQut2uc1fPfa
-         EcdQ==
+        bh=UPt25DcGCAYbTcLBdAYH1YOTb8QxGJA5VYhPTuLTerQ=;
+        b=SbUyNTX1MZBASicJ68JQ/I9QN8XY1IZkGhvUKf8al6VPdI+pPol9XrpZIduVTClmmO
+         qsQwdW71wAL/UazVDTm/hvcEflzQrsRBct9zgv3OLn8JAocOORddIi0k0+kOfdPsnZ7R
+         db8KpzLvoM2t0lCS9J8rS8SLo44fMak7eo/kgtRAdfvs4Ay8kaYtkbYEh+CSL6hYHNB1
+         f4BKBfRmb7oMtmbBd2tR4VD0BERtnhtSBs7SwVraM194iiv2tJWX5Cg6qzV3RvTib06x
+         X3tU52UveN506IxYsMO9GMDOrgTWq87j6B4eHx9dE103iwER7VsnMi8yYlDWG+QBU8AK
+         Ozbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781699139; x=1782303939;
+        d=1e100.net; s=20251104; t=1781699164; x=1782303964;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0GtI51H7Zd74M1RsBhYXt9g8xAv+Fn70VlHsGIGT064=;
-        b=NbmkbsGRKsyiN2Yd24JdrjBFHlKuoKn6VysZWD6LMv0CicICff6OlfSxwrZtOrj6Bb
-         CWIWI6lasLeAsbmdKHdmaB/MkrXqxCkI6ZZ/xj0F0x0/Ie5rJpATym1qVQ56gZOO2QCy
-         ZyHkxmRq0SEUY8tEo0zhhLhtcPiZxckMBhGWtuKPd1wSc1CgVMWGetu8c+qfTs4IczyY
-         WSNHdm9u+WpJiB7lqp5x8bqeKSZOUM8R02QUvnYycwRVOgdRKvjv9qoZ9sjIILO3r0Xa
-         7u7HrpRJ1LVL8gK73+X9QPHHOSvA6lqXgx5xXygkSnvYNzGwgwZojw9XGk4uGtxsbvgc
-         Ny2Q==
-X-Forwarded-Encrypted: i=1; AFNElJ/sv1FA3uNhDzJS03x1e6jDS++5PcJIOTejO+Wqsh8krnWoj9uCUs1wkkZkks61N4at2yoiL1keNemTlt9kC5c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydA16vfWtPczCEa5Los56gMdzmS4YoF8XpF5b44QNPDoexsY6o
-	JDcMx6fTrn5Pvz5dg9UiJRdN99hssCruFKHeTrhLh3MNaeHmJB4rnllhQPDcFEMbmF8=
-X-Gm-Gg: AfdE7clyylQnN5uQFdcEjpilAd846JPN/x/O5qGK9iPMuAvwWoX08Fa9adv4gTESFwU
-	38SO+X5xkoZ5ONE8+QkfSYflErKPlQSxLGoK/1Bt6WnZTwre4etbBG8g11LauSluKrZIlVAlakx
-	FA2pxSAef1ikbYK/zzdCg1JyX6z8qeznPuoHNZMgSsqwnNYXX1A1U/myEBScMF2nqYlPiRT8vPb
-	39kydjns86HFgNn+KMAdoezzAybYyZsAG5ji8HspBQs36thZr58Tk1phbZdMRMxUlxnXhah30Dv
-	dwF3edTycNnsGwj375sO30s0yy9LDUZ5Gj8wdkh5fWAFuOJxhHXaAU5LDl+O/hBKLOUqPP/7LfA
-	xhOQrxmfFj1pyL6dnO6mjmgSTcrbluqicQEQH+gdS6vynMz8snRGjRYSoC2CJlJgkxvB7kLeDWC
-	gMFtchIgtpyakfTHd9cA==
-X-Received: by 2002:a5d:588d:0:b0:43f:dbbf:6d93 with SMTP id ffacd0b85a97d-462410d3c5bmr5999253f8f.27.1781699138624;
-        Wed, 17 Jun 2026 05:25:38 -0700 (PDT)
+        bh=UPt25DcGCAYbTcLBdAYH1YOTb8QxGJA5VYhPTuLTerQ=;
+        b=QDLsyXGhsBwjGw5DeSBfcy3VZSSDXhfDDI6tVjwqQQNJgWaPx0tJp1JYDUu3VvrU44
+         N6zvjZQsqZJlGnPLjq6N/ChCZlpReAgVgz6KrgXoClRn86PKiywjA+t3nI3OJft4iXTN
+         DH4NfnXzGI2eBds5gF9gzouvQ98FhvMBjjgpdKBhMMrGRW3jmNQh03LTd2tnRiom+ym9
+         52XdMcEGNjqQUPghVJDFKtyhC0IzMfQsVs9cVGX1ghC2kW6x3weQ6gdZUg93TqHW/6Gn
+         F8/4PHrosazy44laxlByd/VTW4OwaMa621Jp9LzMCGIUScFWrporQH+QS/PEyFQXtM+U
+         rgDw==
+X-Forwarded-Encrypted: i=1; AFNElJ+wf896fQc1XfB6eFC6d2Rky6SQpQXkfzHqNojIurBLgG6Mcdk9I2jkSl7dACyhfF6Gw2zbCnLGcbG2qMfErJk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZAqj3WFF5n59mCuZr8c40NMdh+jWHGmxi6BT2Shtts+QG3vY1
+	ykU5DLswDwe0BzP7a82hM72JfMM+W0kHeeiteA61p4oW4r+nd8kN8ovdrUGQR8hjJyg=
+X-Gm-Gg: AfdE7cm/3lli4V5sAMVARuPCpjC1n//ZYgMVpccSYwHPyW4OrKCazl/Bfyllo7XMd1v
+	VyAeeh0onvEwspdFGx1mxX0VjLDesKHsdDhVJ9gqGfkcefBzD4kiuNOCbUQuH6jo/kUTqT3w9CL
+	C1T4Ich68wpYrwvuaytzOO9TwJmBlvL/+kD23OFjjIS6j3iDJgcEr1ODIdjx7M8xOqki1FZr2AI
+	IHat7Wd4iHALi5QWRbtYF7Puj/rmnjJWUCifGuyXPE2yVIGkTmiR1+HE6mcIbvXmZCgOP0Gy3YP
+	G7klOJKXzxNwokRuHTtJEH4FS9S/1T1HnAyNNRcDXfPjVZmq8GiG08WstT+cIF/vL1bWs6Yih35
+	NPN80Gpsz5Y4FqjXhnanu5hMF3I90B/Y9DofmC1tjt7C9OmnH03oSgYle76eGkAxf73ap3RWw3b
+	UxZZ7/RChgvSw0oRd51ebC2iYZsOL2
+X-Received: by 2002:a05:6000:603:b0:463:1d06:ab33 with SMTP id ffacd0b85a97d-4631d06ab96mr1913666f8f.27.1781699163597;
+        Wed, 17 Jun 2026 05:26:03 -0700 (PDT)
 Received: from localhost.localdomain ([62.77.90.70])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f26f726sm51008107f8f.15.2026.06.17.05.25.37
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-462e7fc53fasm3497433f8f.33.2026.06.17.05.26.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 05:25:38 -0700 (PDT)
-Date: Wed, 17 Jun 2026 14:25:36 +0200
+        Wed, 17 Jun 2026 05:26:03 -0700 (PDT)
+Date: Wed, 17 Jun 2026 14:26:01 +0200
 From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
 To: Li Wang <li.wang@linux.dev>
 Cc: akpm@linux-foundation.org, tj@kernel.org, longman@redhat.com, 
@@ -65,12 +65,11 @@ Cc: akpm@linux-foundation.org, tj@kernel.org, longman@redhat.com,
 	nphamcs@gmail.com, chengming.zhou@linux.dev, shuah@kernel.org, linux-mm@kvack.org, 
 	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Michal Hocko <mhocko@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH v7 1/8] selftests/cgroup: skip test_zswap if zswap is
- globally disabled
-Message-ID: <ajJu85Kq26jWeiCy@localhost.localdomain>
+	Shakeel Butt <shakeel.butt@linux.dev>
+Subject: Re: [PATCH v7 2/8] selftests/cgroup: avoid OOM in test_swapin_nozswap
+Message-ID: <ajKRLmEoR3P2QTNW@localhost.localdomain>
 References: <20260424040059.12940-1-li.wang@linux.dev>
- <20260424040059.12940-2-li.wang@linux.dev>
+ <20260424040059.12940-3-li.wang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,62 +77,56 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xz3b5522yngbc7la"
+	protocol="application/pgp-signature"; boundary="n7t6jkbdigw2ibo4"
 Content-Disposition: inline
-In-Reply-To: <20260424040059.12940-2-li.wang@linux.dev>
+In-Reply-To: <20260424040059.12940-3-li.wang@linux.dev>
 
 
---xz3b5522yngbc7la
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+--n7t6jkbdigw2ibo4
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v7 1/8] selftests/cgroup: skip test_zswap if zswap is
- globally disabled
+Subject: Re: [PATCH v7 2/8] selftests/cgroup: avoid OOM in test_swapin_nozswap
 MIME-Version: 1.0
 
-On Fri, Apr 24, 2026 at 12:00:52PM +0800, Li Wang <li.wang@linux.dev> wrote:
-> test_zswap currently only checks whether zswap is present by testing
-> /sys/module/zswap. This misses the runtime global state exposed in
-> /sys/module/zswap/parameters/enabled.
->=20
-> When zswap is built/loaded but globally disabled, the zswap cgroup
-> selftests run in an invalid environment and may fail spuriously.
->=20
-> Check the runtime enabled state before running the tests:
->   - skip if zswap is not configured,
->   - fail if the enabled knob cannot be read,
->   - skip if zswap is globally disabled.
->=20
-> Also print a hint in the skip message on how to enable zswap.
->=20
-> Signed-off-by: Li Wang <li.wang@linux.dev>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Michal Hocko <mhocko@kernel.org>
-> Cc: Michal Koutn=FD <mkoutny@suse.com>
-> Cc: Muchun Song <muchun.song@linux.dev>
-> Cc: Nhat Pham <nphamcs@gmail.com>
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Shakeel Butt <shakeel.butt@linux.dev>
-> Cc: Yosry Ahmed <yosryahmed@google.com>
-> Acked-by: Yosry Ahmed <yosry@kernel.org>
-> Acked-by: Nhat Pham <nphamcs@gmail.com>
-> ---
->  tools/testing/selftests/cgroup/test_zswap.c | 19 +++++++++++++++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
+On Fri, Apr 24, 2026 at 12:00:53PM +0800, Li Wang <li.wang@linux.dev> wrote:
+> test_swapin_nozswap can hit OOM before reaching its assertions on some
+> setups.
 
-Reviewed-by: Michal Koutn=FD <mkoutny@suse.com>
+Is it because of differences in available IO or what does it depend on?
 
---xz3b5522yngbc7la
+> The test currently sets memory.max=3D8M and then allocates/reads
+> 32M with memory.zswap.max=3D0, which may over-constrain reclaim and kill
+> the workload process.
+>=20
+> Replace hardcoded sizes with PAGE_SIZE-based values:
+>   - control_allocation_size =3D PAGE_SIZE * 512
+>   - memory.max =3D control_allocation_size * 3 / 4
+>   - minimum expected swap =3D control_allocation_size / 4
+>=20
+> This keeps the test pressure model intact (allocate/read beyond memory.ma=
+x to
+> force swap-in/out) while making it more robust across different environme=
+nts.
+
+I see you used allocation value that is preserve absolute values from 64k s=
+ystems
+test is differnt on 4k ones. Any specific reason for that?
+
+
+Thanks,
+Michal
+
+--n7t6jkbdigw2ibo4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCajKSOxsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+Ag2DAEA2nNoiQ15OgJR5VxoVnSf
-lqGp2dpx3cwAQ5ux10qjH68A/1bVmadDbo1mKFNPpy/OmWnyJnAthaTKN3GT+oTM
-BcoO
-=cwDP
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCajKSVRsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AhqQQEAhKvnU2uXdtmJBVHmhU0h
+vihGBStgNmEeFai/1TzvfbMA/jfIjPkmuNEjQrWZRoxCNCCn746++JvMF9TKwDBC
+VKQL
+=xbR8
 -----END PGP SIGNATURE-----
 
---xz3b5522yngbc7la--
+--n7t6jkbdigw2ibo4--
