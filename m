@@ -1,109 +1,111 @@
-Received: from mx-rz-3.rrze.uni-erlangen.de (mx-rz-3.rrze.uni-erlangen.de [131.188.11.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C41D3191BA;
-	Wed, 17 Jun 2026 07:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.22
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781682490; cv=none; b=TGBZrBzu+FoLS32nwOm0sY8IVK2nmD2hWxg5s/zfnKOCp76vJVQBUGKwaRboTir3Zr3HFJ1CoS7GaIM+Eg3Zl0+jrclCV981ZCBZFyZMQTRplv7sESd9YXgE1MnJ0pI+Kye6rl5QubFEm3TaGS5jPZWOyoHn7xqQIC3munyo82A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781682490; c=relaxed/simple;
-	bh=nRfuCt93gFk3vbumuajPbWPzVHh37GYRRbFniBp4is0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=oVCqDDI8rEhZjfADd65DJO6W2XyA8WzMzhFxh1kbolLg8AhDUg5JYKHOxP0N4H+rkJjoKSUbvj/uATAJvcMch7/52DX4K+6mc8Rfhf8ZAmi5Fdtav17sRJkatTl3GrPkNJ45/wGy85iAxt6mMdFzwYAk855GieeIcKyqGi5O+2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=uo4+lRgY; arc=none smtp.client-ip=131.188.11.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98003389E13
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 08:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781684561; cv=pass; b=fjwHAqyrYOOQHjvpuSlzD/T/SST7XnoP+KbQRG/4GITMXyQAoCg9xpb8zk46H7BiFXlFaDxOZHZKlbF+48NMGCxmpneP4Qykfrc75fKij9z/ryd9SwtckNB8aLc3pBOu93zthzbZ77AAjNos9HU4OLUpKtnNh51h45DFNh6W15U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781684561; c=relaxed/simple;
+	bh=xvOTAcL/OEi1dP4MlZ52ki7wL7tL1sQQL7OUhgqBmNM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IsHY4fqZZd1AaDpJ6b12TdMsd7hS5jInPV4UbKbBaYlKIeAh+pGdVDZzPtrWngHlZ3czRsQqk21pE9e6iPcAwvSNEFBflIbfUMS+g8xawbJwIyAiwU25myfOTSoV84JhlqUNGyA7p/5xfIKk3OSJ7nacUiU4gRuTilFRuRrOgAQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=szeredi.hu; spf=pass smtp.mailfrom=szeredi.hu; dkim=pass (1024-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b=rMi0iNIN; arc=pass smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=szeredi.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=szeredi.hu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="uo4+lRgY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1781682079; bh=RKVWZMqrUacOZc0Vngz6mdjmDS6/q5LpvjOTD5B8Iio=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From:To:CC:
-	 Subject;
-	b=uo4+lRgYO1+Ccbpc4+baQwba6mx6OeYNUK5/EXttxkL+WD4Ju8An+JK7mjZl3/ipO
-	 adKdn7DvZZpZ1piZHuNe7p5HVv0X/6GErwYGfqePzfN4o3FOFTeD16efpc8fis8HsY
-	 XacH1meV+FjrqrdOJ8VbhzyCGQlojcjRHOlxWukCBSUCKTjpZS9124zh4FAKO0Fot/
-	 lpLor9Zm/neSSzIWUOveHy/WhMSHRtHSHBcyzl0IA3ZOGFZ5ihivqsJvMDMsMIlwes
-	 eU/yEDNWeBBtkS7S3fAwiAQAHOXPPSo18nMG/4lTrS72yviQ1n/CPNkMBcGo5SDkn9
-	 MdiYGW7AFjZ1g==
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-rz-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4ggG4v0NdPz1xpg;
-	Wed, 17 Jun 2026 09:41:19 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at boeck4.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Not-Spam
-X-RRZE-Submit-IP: 2001:620:618:5b8:2:80b3:0:d9e
-Received: from localhost (unknown [IPv6:2001:620:618:5b8:2:80b3:0:d9e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX1/aeCQqU27acxigRb0HWE/fB1Z4zAFgx3o=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4ggG4r1cF7z1xrr;
-	Wed, 17 Jun 2026 09:41:16 +0200 (CEST)
-From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Eduard
- Zingerman <eddyz87@gmail.com>,  Kumar Kartikeya Dwivedi
- <memxor@gmail.com>,  John Fastabend <john.fastabend@gmail.com>,  Martin
- KaFai Lau <martin.lau@linux.dev>,  Shuah Khan <shuah@kernel.org>,
-  bpf@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf 1/2] bpf: Fix stack slot index in nospec checks
-In-Reply-To: <20260617-f01-11-stack-nospec-slot-index-v1-1-e3a080b0cd7e@mails.tsinghua.edu.cn>
-	(Nuoqi Gui's message of "Wed, 17 Jun 2026 00:57:55 +0800")
-References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
-	<20260617-f01-11-stack-nospec-slot-index-v1-1-e3a080b0cd7e@mails.tsinghua.edu.cn>
-User-Agent: mu4e 1.12.12; emacs 30.2
-Date: Wed, 17 Jun 2026 09:41:13 +0200
-Message-ID: <871pe5y5pi.fsf@fau.de>
+	dkim=pass (1024-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b="rMi0iNIN"
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-51764768c36so75959871cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 01:22:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781684556; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Ikdn4ZGYP9PiG5++9pzHbCzGPFR1SAApGI08ad6iWsfiBbsKNR0Tv2m746YSqwtdSg
+         dAJ85c/Yytoqc+o109mdeHBmTysbpmhWwUTr05yUoE4lhQfVVyrH1qqlOCh2e1OK7DoF
+         1oyyBO0J/ytBS2Q99Lbi09G8Xw0ZWw0pd6Xx+E+A7MmXn13+5T+/NFu0cjul/+oQ7HIj
+         nJ50aWOzJ/dIIEZxczZQvJv/UCOK1guM9F09OfEtTMRfJSjTVuJPGCdTEjVFKDuuwJzC
+         ywPfohn+SNUQ+HiJZ068S0PGH82+2j40LqILDW3rHs6FW+jWtmq44s6+Ay/tqfkyrFqo
+         84AQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=BU5fXnVq2Oqd0AAAN7spvlRTj86TwPYYP6Lo343Jbco=;
+        fh=i1uAfrbR7vVM74hXR3GZxYoD9WE/FHoQPyLF2U8UlXc=;
+        b=aU+wWOyypWDtIXsn1AIwa3inubYAOWl/nPCNXkCKZPXQL/9b0RdPLHpVslt9RLLA7a
+         l+qm63kvKEgv7+H6AcOnO024hNSueQLvSiS5WJt3661IJQO+p4ecIHYOJD5rYi4NVYuf
+         w3xkNmISaxzPFsCpZjWqD03cqqsDXrU+W/32EKtIagQp40OzSqRMc8V/gaZUsk49GMUv
+         TRd4eCqPpJWwnx6VB8pcU4RtzK55VcTe+ul8UAHiLwk8e7J38fTS8pJXJNp9d3A0mZDX
+         WgQikR3Uwx8E+7Vcq+CZNoyKUmYxiuOXoVgnvwaDG++SoxdVKJc0wGRQVT/B1zuwGHKm
+         /4UA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google; t=1781684556; x=1782289356; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BU5fXnVq2Oqd0AAAN7spvlRTj86TwPYYP6Lo343Jbco=;
+        b=rMi0iNINHVIIU04xYxHAox8+KXWg3Km2fZo8UC0ogLSyCYukBp48Y2LATQmEzeKIZ3
+         sOokLNQNeqIhVniNeFcxvWMePu7oQKia5baTHQFYKvoJEU7Ctxt3I7Kto5pqxNRT5bPU
+         07LzofAiUvuU4B+PFpuYAOSrFfE219M22LYGI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781684556; x=1782289356;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BU5fXnVq2Oqd0AAAN7spvlRTj86TwPYYP6Lo343Jbco=;
+        b=pWuv8O0iGzOp2Ava2kL6MCtwXVIZI6eRTWpshZoY0bv7Y3GTMIfLzA6/KrMV23Cg0a
+         TiYvDfvloJEUvjG9F79zL0SgLxpw9CskXZ2Z/rIdrhWW+Swq73S0tC9Y2NbCPKbD4i4F
+         bIb1ov/cOVqDVIuJsHyDQHXJ58G5fzk+a7TsWycd2yYIZ3wltIb+hFLDkydLggrijiS5
+         lxFZP0yT6odm0bPT+Jv8w3YMofUNkfBNqiOyqYABumuPt/PMhEwN36DL7ojXyv97HfZ0
+         tixJhGHzyq1Pg06EZrSj3UXBf36dZCqYQ9Ox2yW+7JMdEtvtLqsCHBcmWR/KHoa+6cks
+         jqYg==
+X-Forwarded-Encrypted: i=1; AFNElJ/Ttipf+s6ApKjx5r5uZdf/X88gL7mIkay+1S39H4j3Hi/ja3iNIL4K6yN8A9st8TAzC8rD/i19VLQeaBFwBXg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxH4P6HI13xeF50PRGjCNIp6rTsVPlgnmtCUO6RW1piq1Ae6t2p
+	yffsPEDFfPYTrg0dQNv0FsMszS2dwPZC+u+9ml3PU9vXOMNLTbYyJjupyEiKgnjgE4d45HJ3zML
+	A4L/VlkAwdeAZCd66sblz4d4n1aISW2yiWzXne6Nkbg==
+X-Gm-Gg: Acq92OHI+MPTxoyqAvfYCHr4uuTJNFiz7mtOtYVuc149lwW0bRI19uFWRX0tbJC2e3J
+	4WQvzxiOBM48t32YYJMTC64bMmX0UwHtSlU+w+Au1L9L56Pxyw5yf5bmwR6WU3QpAxRZpnOWZvk
+	V9y22YnTM7BhFdCiZnDn6FSp1jmJgznzVmSUAg5sXIlJu/70A4+TpkAFN5fi8dRuNuGO3Oho0dG
+	zxGwe4rKyDhE9/gmYvpec/b15SHnrrbomscjRCVlrClo7aZYjVMf51KdpUwbsk29ZuAFyG7Y5vD
+	rCQ4YY2BfgBQ0cFC+CIavvYFV4M=
+X-Received: by 2002:a05:622a:5516:b0:517:97f9:78f5 with SMTP id
+ d75a77b69052e-519a8c6606emr50572071cf.10.1781684556219; Wed, 17 Jun 2026
+ 01:22:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20260616151909.916667-1-jamz@amazon.com> <20260616151909.916667-2-jamz@amazon.com>
+In-Reply-To: <20260616151909.916667-2-jamz@amazon.com>
+From: Miklos Szeredi <miklos@szeredi.hu>
+Date: Wed, 17 Jun 2026 10:22:24 +0200
+X-Gm-Features: AVVi8CfLUvw9HEz1q1LlF1z_PcpL4rUpzyaGd12mSg8e3Xcq01aL572WH-arImg
+Message-ID: <CAJfpeguaa4U6Tsxh5opeaLeYQQxP6MQsRMu_JATJwwgj=OBt3Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] fuse: allow FUSE_SYNCFS for privileged userspace servers
+To: Jimmy Zuber <jamz@amazon.com>
+Cc: fuse-devel@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-api@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Nuoqi Gui <gnq25@mails.tsinghua.edu.cn> writes:
+On Tue, 16 Jun 2026 at 17:20, Jimmy Zuber <jamz@amazon.com> wrote:
 
-> check_stack_write_fixed_off() computes the byte slot for a fixed-offset
-> stack write as -off - 1, and records each written byte in slot_type[] with
-> (slot - i) % BPF_REG_SIZE.
->
-> The Spectre v4 sanitization pre-check uses slot_type[i] instead. For a
-> 4-byte write at fp-8 after the lower half of fp-8 has been zeroed, the
-> pre-check scans bytes 0..3 and sees STACK_ZERO while the actual write updates
-> bytes 7..4. That can leave the second half-slot write without nospec_result
-> even though the bytes being overwritten still require sanitization.
->
-> Use the same slot index in the sanitization pre-check that the write path uses
-> when updating slot_type[].
->
-> Fixes: e4f4db47794c ("bpf: Fix pointer-leak due to insufficient speculative store bypass mitigation")
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> ---
->  kernel/bpf/verifier.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2abc79dbf281c..50e80dbbc1784 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3479,7 +3479,8 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
->  		bool sanitize = reg && is_spillable_regtype(reg->type);
->  
->  		for (i = 0; i < size; i++) {
-> -			u8 type = state->stack[spi].slot_type[i];
-> +			u8 type = state->stack[spi].slot_type[(slot - i) %
-> +							      BPF_REG_SIZE];
->  
->  			if (type != STACK_MISC && type != STACK_ZERO) {
->  				sanitize = true;
+> +/*
+> + * A server can stall syncfs()/sync(), so only honor FUSE_HAS_SYNCFS for
+> + * mounts owned by the initial user namespace, i.e. set up with host
+> + * privilege (like virtiofs and fuseblk).
+> + */
+> +static bool fuse_syncfs_enable(struct fuse_conn *fc, u64 flags)
+> +{
+> +       return (flags & FUSE_HAS_SYNCFS) && fc->user_ns == &init_user_ns;
+> +}
 
-Acked-by: Luis Gerhorst <luis.gerhorst@fau.de>
+Sounds really easy to trick: start the server in the initial user ns,
+then clone the mounter with a new user/mount namespace.   The
+init_user_ns test will pass happily, since the server is running in
+the initial namespace.
 
-I have briefly checked the other uses of slot_type[i] and they look
-fine.
+Thanks,
+Miklos
