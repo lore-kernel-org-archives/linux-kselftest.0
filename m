@@ -1,178 +1,132 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FCC93F20ED;
-	Wed, 17 Jun 2026 12:16:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8435C3F54C6
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 12:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781698581; cv=none; b=V/gPNVh6dt+aVSn9CsQzuAFI+i59OpirXnL4ykj939nGkJ9sgjsEnZsvjgS4nvjfF2FjTy7CmemjiUbBY7I/4LbPmObx5VJRlWeubs45gYpPfVcvIojU2BwMsZwruK5MQMvvd/4D8NsTgT0SWm4pyRu84FKwJ9Gz2F1wRUkf1OQ=
+	t=1781699122; cv=none; b=P3deSvFBr9TyOqMaXi9bYNX988dcs5pyYq2f48WmjzCczHc3gS4MeFWPhs/WGweLGuaxDJGWbdhmUU34ner+7G8ANmK7t4iNrXSFuiGmJbDFXQr9e4W2v4eIMvLWifdBBr44C495z50zbNMPn87OkdX0dK02jxUpbDEvMpx1rUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781698581; c=relaxed/simple;
-	bh=rWMmuPXNPZYuXCf0IK8PiNj/naG3EltoCFg7IKUVDe8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H2Kbq1J+u8HJfiCc3gv7StC377nVMVpPJLr9USx5ZrkxJKI/+kOGjfHHl5sm+UG/x3pBi36VkCeG062j5Fs+UGn2hIPH0WNdqyKOzWkUol6lq1ar4AZ+7EnACbVSf5EHCCl0JJm1iLJzZcpeCy4/fbSOI8wI3Hh5ObrrBnRAYkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Jq38LFTz; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1781699122; c=relaxed/simple;
+	bh=1yJxZq3tkF0bDvOTRpsnisysrPdGXlXB3E4O1ntJTHg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FfRQt1QWnx9g8MT9WMmO5VYuK1f5dwuLZKJ+AJEFQigfXE/FISG63YN7e1OHcgUnvLgg9AXV/wl0ZkSaNLvIKhcKcmM+1bfrRQwTkeM4bg4nQMUBzlpjGySAvUezPmsV1F5k0IFDCJkD4KHUR22wgln9h8LxJuq8Pffio+IsFjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=al3ub1Aa; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Jq38LFTz"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65H8m9Nm4104751;
-	Wed, 17 Jun 2026 12:16:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=Lp5ORq++2+BvA9FkC
-	wo+C6vv3BB15kQyt4s6LN66vUk=; b=Jq38LFTzNTG9MasRhUCfAjbKb4BBUpFBo
-	Fig4RGOpYtZa0y6K4y8hvu7UamDIl/K8bYV9PvCXDys55aLhEu258sh21aP7pZg5
-	eAPdpLWhfpxyGll5VARcrmb4jiMDlKYZCEgAW3YJw/svjBCxKOx5JNdmCssH48Km
-	SOKZWp2GGbKNEu6SvJFYrWzlKEXxscx2Qu43JD0EfMMkCvyLaEaIMUvHQsD7O/3y
-	NnqPpSvzwiO0GNuBuBGTbUpubXSCqiAhM8ijsDxKehpGyetIIrTxMdOxl/p3sR+M
-	3NXfJYHPK/J2XsFNwQrkINcSsM3JWCGFX2asYjQqgoV38pH9rvoyA==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4eueqvtst5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jun 2026 12:16:06 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65HC4caL005518;
-	Wed, 17 Jun 2026 12:16:05 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4eudva329r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jun 2026 12:16:05 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65HCG35q65995134
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 17 Jun 2026 12:16:04 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D431F5805E;
-	Wed, 17 Jun 2026 12:16:03 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 73B435805A;
-	Wed, 17 Jun 2026 12:15:59 +0000 (GMT)
-Received: from vaibhav?linux.ibm.com (unknown [9.39.28.81])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with SMTP;
-	Wed, 17 Jun 2026 12:15:59 +0000 (GMT)
-Received: by vaibhav@linux.ibm.com (sSMTP sendmail emulation); Wed, 17 Jun 2026 17:45:57 +0530
-From: Vaibhav Jain <vaibhav@linux.ibm.com>
-To: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Cc: Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>
-Subject: [PATCH v3 3/3] kunit: Add example of test suite that can be skipped at runtime
-Date: Wed, 17 Jun 2026 17:45:23 +0530
-Message-ID: <20260617121535.462459-4-vaibhav@linux.ibm.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260617121535.462459-1-vaibhav@linux.ibm.com>
-References: <20260617121535.462459-1-vaibhav@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="al3ub1Aa"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-491b390f9e9so48488005e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 05:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1781699118; x=1782303918; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1yJxZq3tkF0bDvOTRpsnisysrPdGXlXB3E4O1ntJTHg=;
+        b=al3ub1Aa+DrvVM6gEt0RcABwn0dqsOPQ81H94gI0H3nh9GyialPhTFd5qEOsHPTU74
+         JZmfLGrLJId7/F6PaUqLQsYMvvDNOAFxc1WEsHIgjSebRtKiTN0Scfw0Sn+9EM6WIB0E
+         LQkQt5nVWCa5gPYxoC/ydL597UQHpBGfB138pdRMJZpPKh3l4zwaqprm3n9aXRxYkH+T
+         4toaU5y3NsvTO8nte6GpVestg4GkoVJOvxrFGQ+Ymwshgx7euPt1pIez3OShMK0r+kto
+         j8zFGVxW986Vd43ctXl7JdQ+TPrTg7LGkpVXEPwMGKJ18Nb4bE61GZNqPjlKP8IkWlGz
+         o/jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781699118; x=1782303918;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1yJxZq3tkF0bDvOTRpsnisysrPdGXlXB3E4O1ntJTHg=;
+        b=WAdQ74iZg4+wn6JIk3JQ8XZpHkZq1x999+qhAVsLgloVFA2soiLLNEjyGxw9RYnqTa
+         g7BFgTFQNbEaFoAPFdxi2Es+jbgAeDToawiRHA5pkF0sr7j342KeFC7sApxSxfxL9r+0
+         uliVmpybNQAZl5eVjbiaD/EQLP++xp8WeODGE8bbEWXhf3H7224KZTrzD7JhyH8SUjRa
+         9Le0GmYLcdEqVXxIXLgXSe80JpR1C8WfxsauKY8CXGG9rBnbc24UrDZCQxGEKHJOruGi
+         howPxzSjsG2xVpUX4/F+Pj78cXlgCfGrisZucblrai7RjvtjqExtbb6vgwa63yPe11MB
+         DWEQ==
+X-Forwarded-Encrypted: i=1; AFNElJ97qKMOejAdSCDHXkYa6JagQJ1De5Q4CQU79kZG7T/ROppO8OfQUN93jtWczBkUEk3koZA9y7X5K5QfpfSU+PQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyh1U/Ynq92kKhdUWan/EW45vyGLE2FHfhIBL6H5Toi2U5osskY
+	iV2a5HNBvnljo4hxAHnxlWu1DyiIwRzXPQg8rln1OWaexk+PS8kXEGPB69eK1ZUhRR4=
+X-Gm-Gg: Acq92OFKtshC3fb45FEgRsZQP1Z7slzbNBpBpFWMSZO2au1SeIQELeOoiSqqUF9Klaj
+	j8ngpxUzfRYUbFJsrglwdcsyDcASTSCTb/BMx6Z7cIEyb95DH20hgfviOlPLFWmBLaMMBmvfqVN
+	ckc9iMcQ8QPFzP32pxKpZl5lGo8ywFWssl3SbN4yOoLXBD04u/A32Gv/0dp8DstYgxcerz8/sG5
+	ZWRA9vivVlsG3njbq0boygUfNyFiZkP9sO3qRL62IqpZfEkUYkiBeh/J+PscDg8w9T+9wEpRJi1
+	bW5FhroQnx9QiyDX+wKB4vDXS+Bsah8mi/gJMnXiHXNjX92CAxPcDqf/9WXHaPIvNq22l9fiOln
+	dwKXXQfi1WajV2ruDpxUdZfSUKWgsJdgAm86OY1puUuuXtGb7zstgMqDqWOVF8TOp/2gRutKEh4
+	dvu2mnNPF8/lB4DDtRng==
+X-Received: by 2002:a05:600c:c0d2:10b0:490:e5c1:b8c6 with SMTP id 5b1f17b1804b1-492333a16c3mr51513355e9.8.1781699117684;
+        Wed, 17 Jun 2026 05:25:17 -0700 (PDT)
+Received: from localhost.localdomain ([62.77.90.70])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49230a9a399sm140088385e9.14.2026.06.17.05.25.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2026 05:25:16 -0700 (PDT)
+Date: Wed, 17 Jun 2026 14:25:14 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Li Wang <li.wang@linux.dev>
+Cc: akpm@linux-foundation.org, tj@kernel.org, longman@redhat.com, 
+	roman.gushchin@linux.dev, hannes@cmpxchg.org, yosry@kernel.org, jiayuan.chen@linux.dev, 
+	nphamcs@gmail.com, chengming.zhou@linux.dev, shuah@kernel.org, linux-mm@kvack.org, 
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Michal Hocko <mhocko@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>
+Subject: Re: [PATCH v7 3/8] selftests/cgroup: use runtime page size for
+ zswpin check
+Message-ID: <ajJwNecLWRvX_7Tw@localhost.localdomain>
+References: <20260424040059.12940-1-li.wang@linux.dev>
+ <20260424040059.12940-4-li.wang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE3MDExMiBTYWx0ZWRfX5lzwSdkU5kUj
- NG1yV/KtkjqcP/AsxETM84zNeHsaveU1l2CjISjaVV4WpUbFBi3TQj3JEPM0ePRIFxMbqrFZWmd
- exL4cmQQ5vbDIN89YW40RiBazad90m0=
-X-Proofpoint-GUID: ohnN4LU32mtJ1IAQ9HdXvLriLk6aEjkO
-X-Authority-Analysis: v=2.4 cv=bMgm5v+Z c=1 sm=1 tr=0 ts=6a329007 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=ER9KG9QWV2A1lhMn8r8A:9
-X-Proofpoint-ORIG-GUID: liK3RVwI3Oltud2mHYGxdyTLYwibjwiH
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE3MDExMiBTYWx0ZWRfX+P7OcCe9CDMc
- uBttvxxMAYuKSb3KfqpwjcOY3I3qJwIZb7yV698Fc/1H2v2IG7JbR7cdtTs7FD71DArgN2+KD3L
- A3KK5VLsWrUYAtuodd0WnrVRsY4ofRyl6z9dV9eJsYUc4Fx5kyqU5L8jcNnqZkBRfQ4fY7S2rI2
- Xk/V/wmalDebVoKuTvrBxITH2it8mOv7X/1JHMro/jLNQCyWwPuQuI4wcCVYBEFNtDFNZy0NE7k
- ihqiPkTYcNIUWVt70ltFipvS3ndeAfYbnRWev/mgFFlpzGBOVBHKRak0jccnX4bd4lwVYFKImgQ
- qjfgmMM7pbtqRzGFsp35b1nZujdUGAYfBazbRED1y67u7+VHKwOh/ZeDV9e7w6bYLbvtehjUC/x
- uOAwDSGMImHz0bIYacyP9xN63+QPhehcXlsbnn1j4HJuQreSaA59iliJuxN93u+5YDOk5RyjrB6
- P1bjbFYj+OMXpbAIpEA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-17_01,2026-06-16_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 impostorscore=0 malwarescore=0 adultscore=0 spamscore=0
- bulkscore=0 priorityscore=1501 phishscore=0 clxscore=1015 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606170112
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="fw3psxfcciuimhrk"
+Content-Disposition: inline
+In-Reply-To: <20260424040059.12940-4-li.wang@linux.dev>
 
-Add an example test suite name 'example_test_skip_suite' to
-'kunit-example-test.c' that shows how to skip an entire test suite based on
-runtime conditions.
 
-The example suite 'example_skip_suite' provides a 'suite_init' callback
-named example_skip_suite_init() which marks the entire suite as skipped
-using kunit_mark_skipped().
+--fw3psxfcciuimhrk
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v7 3/8] selftests/cgroup: use runtime page size for
+ zswpin check
+MIME-Version: 1.0
 
-This demonstrates a way for conditionally skipping test suites when any
-prerequisites for kunit_suite execution are not met. The 'suite_init'
-callback can perform any necessary checks and mark the suite as skipped,
-preventing all test cases from executing while also indicating why the
-suite was skipped.
+On Fri, Apr 24, 2026 at 12:00:54PM +0800, Li Wang <li.wang@linux.dev> wrote:
+> test_zswapin compares memory.stat:zswpin (counted in pages) against a
+> byte threshold converted with PAGE_SIZE. In cgroup selftests, PAGE_SIZE
+> is hardcoded to 4096, which makes the conversion wrong on systems with
+> non-4K base pages (e.g. 64K).
+>=20
+> As a result, the test requires too many pages to pass and fails
+> spuriously even when zswap is working.
+>=20
+> Use sysconf(_SC_PAGESIZE) for the zswpin threshold conversion so the
+> check matches the actual system page size.
+>=20
+> Signed-off-by: Li Wang <li.wang@linux.dev>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Michal Koutn=FD <mkoutny@suse.com>
+> Cc: Muchun Song <muchun.song@linux.dev>
+> Cc: Nhat Pham <nphamcs@gmail.com>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Shakeel Butt <shakeel.butt@linux.dev>
+> Reviewed-by: Yosry Ahmed <yosry@kernel.org>
+> Acked-by: Nhat Pham <nphamcs@gmail.com>
+>
+Reviewed-by: Michal Koutn=FD <mkoutny@suse.com>
 
-Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
----
-Changelog
-=========
-V2->V3:
-Link:
-https://lore.kernel.org/all/20260608090438.219497-3-vaibhav@linux.ibm.com
-* Updated patch index in the series
+--fw3psxfcciuimhrk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-V1->V2:
-Link:
-https://lore.kernel.org/all/20260604162805.556135-3-vaibhav@linux.ibm.com/
-* Added RB from 'David Gow'
----
- lib/kunit/kunit-example-test.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-index 0bae7b7ca0b0..b8ded54fa46d 100644
---- a/lib/kunit/kunit-example-test.c
-+++ b/lib/kunit/kunit-example-test.c
-@@ -591,5 +591,34 @@ static struct kunit_suite example_init_test_suite = {
-  */
- kunit_test_init_section_suites(&example_init_test_suite);
- 
-+/*
-+ * This test should always be skipped.
-+ */
-+static void example_skip_suite_test(struct kunit *test)
-+{
-+	/* This line should never be seen */
-+	KUNIT_FAIL(test, "You should not see a this.");
-+}
-+
-+static struct kunit_case  example_skip_suite_test_cases[] = {
-+	KUNIT_CASE(example_skip_suite_test),
-+	{}
-+};
-+
-+static int example_skip_suite_init(struct kunit_suite *suite)
-+{
-+	kunit_mark_skipped(suite, "Test suite expected to be skipped");
-+	return 0;
-+}
-+
-+static struct kunit_suite example_test_skip_suite = {
-+	.name = "example_skip_suite",
-+	.suite_init = example_skip_suite_init,
-+	.test_cases = example_skip_suite_test_cases,
-+};
-+
-+/* This registers a test suite that will be skipped */
-+kunit_test_suite(example_test_skip_suite);
-+
- MODULE_DESCRIPTION("Example KUnit test suite");
- MODULE_LICENSE("GPL v2");
--- 
-2.54.0
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCajKSJBsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AifigEAsoKP16b+0Ymtb3KGVhyI
+va7ay0/8bjusHJQkcZqNicIA/1Wml5S9Nn0nE+3XPCz+4d6nCaUqIpGdRKFGT56w
+XSAD
+=y8NZ
+-----END PGP SIGNATURE-----
 
+--fw3psxfcciuimhrk--
