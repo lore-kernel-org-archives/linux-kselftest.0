@@ -1,119 +1,124 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1294B8DF9
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 16:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 926C54A3407;
+	Wed, 17 Jun 2026 16:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781712290; cv=none; b=lBVtYs87BYq7/rnEAFfaRc2fFfM+iZCu+akKq3WZDiBIC4iVyPHd841CBYKuGZW+vXwPAf75d5K1kjatqN3eo+z5xEYWFJVU5RZKoTmkPGKCXS0Mh0SBLG9Isv+isM/lVgSXkGNQUztPmemgGQy1N2MfwPtMir1l4pXt0ptRxaw=
+	t=1781714768; cv=none; b=BlCf8UhpeH557Z6CR+dlHWRydPlWvIZptd9vCmmkzwsf+3LNf/7wMn+sEpinn/Qxw6d4Dc8v+GkPJWyZzMMLoG5wOotEDr9sQPy3TXEVm7ny1gdR2NY3KTKFxi+dBJqFtDXB2qT9MniPVP+I1ZRoZKLCPnAImD5LStDJILaMEpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781712290; c=relaxed/simple;
-	bh=KOiU33IV2cODyCHRlJgpxMwSvHxKrxsq/G2o98UDqwo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ojNaUW4+O4X5y/7Rl6jn+og8VjCSCPnPYhfC3iNJebguCHTHVciOm57hiJ1EVOcXAMlAvhn9akOhmf27ryrzHRnO/fSOFqTWXv/d75Yq7VJWRBrxuMNGD9W/+GYvX/K4v0jjyC0l1+x7bYcuyodmq0q4httudjjeswodRTnxMH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B8D7mwvW; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1781714768; c=relaxed/simple;
+	bh=TxA/GMyfEtXid4vLtOA0LpW0bDr+lSoc4vKrJRDxEqM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=ozilTplu3ZEpnSU3rhRj/W0UH4E7SZlxvQ+TwXERz4JtgbafO82LNYwfOAx+ZWgZndIwdsKp4YENVtGpVVL9YUuNZ0au0RtVnWVkqb3lIc2nyYC+1D3Kh7Stz1b2mLasmXB5dpyC+hs886wO7ddr4u2Tt01OFc4cPtUeRmYBzJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=eAhcBPPb; arc=none smtp.client-ip=162.243.164.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B8D7mwvW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781712278;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hNlWcD0axJF9L+9kvljyn4/AnuPGjT6Qc1ucnZDV/kc=;
-	b=B8D7mwvW9vT1hH1/iF0S7IECktbnpNTtQ7lUIwfQs9odbgM5lnooPQx98JsycGxg7kV3Pv
-	fuwc2uky7lE+4fPLXre87sJbmKd5SNB5DjFO8s1vqAovY+DVb1rsJ544EdFP5ds0RwMNhn
-	qe7IX/bemjo55sPXfOs5NWdB2Jb3s1Y=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-91-kNGru7W5M56lo7O-An6v3A-1; Wed,
- 17 Jun 2026 12:04:34 -0400
-X-MC-Unique: kNGru7W5M56lo7O-An6v3A-1
-X-Mimecast-MFC-AGG-ID: kNGru7W5M56lo7O-An6v3A_1781712270
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 72B7E18009DF;
-	Wed, 17 Jun 2026 16:04:30 +0000 (UTC)
-Received: from fedora (unknown [10.44.33.75])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 648B119540CE;
-	Wed, 17 Jun 2026 16:04:25 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed, 17 Jun 2026 18:04:30 +0200 (CEST)
-Date: Wed, 17 Jun 2026 18:04:24 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Mateusz Guzik <mjguzik@gmail.com>
-Cc: Breno Leitao <leitao@debian.org>, Josh Triplett <josh@joshtriplett.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	shakeel.butt@linux.dev, jlayton@kernel.org, axboe@kernel.dk,
-	kernel-team@meta.com
-Subject: Re: [PATCH v3 0/2] fs/pipe: reduce pipe->mutex contention by
- pre-allocating outside the lock
-Message-ID: <ajLFiIHlSG0KAz5a@redhat.com>
-References: <20260524-fix_pipe-v3-0-bb4a75d23a90@debian.org>
- <ajG2bmhu6j9UWvh4@localhost>
- <ajJgWBCFYwz9OIo3@redhat.com>
- <ajJ1Xi1p9UhQvILi@gmail.com>
- <CAGudoHEyDz-Tbj=CZFK5XMLuLyE8B17NumdFVLf6MTTekFgRRA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="eAhcBPPb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=9375B2zXhMeSdvs5cw7DKAxe9sMAc8H
+	BR76s1Wae8no=; b=eAhcBPPbpnAR5UpfQFHLej82g605inQqlTPajKVpMOoj/3g
+	foUUPfu8SDk+TT/oYRwTYw++biGPwdAFTpRD1xhoMYtrELiCOprHbq+YrUCIl9Ay
+	Qv/xOVlUTZ6VipfR/O3yfimKnOA1BOIAD6PMMdC1w/GPCZrZbnjKv9+yy1ss=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web5 (Coremail) with SMTP id zAQGZQA38cA1zzJqb498Ag--.43034S4;
+	Thu, 18 Jun 2026 00:45:42 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Date: Thu, 18 Jun 2026 00:45:44 +0800
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Cover stack nospec slot indexing
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGudoHEyDz-Tbj=CZFK5XMLuLyE8B17NumdFVLf6MTTekFgRRA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260618-f01-11-stack-nospec-slot-index-v2-2-ede9495359b6@mails.tsinghua.edu.cn>
+References: <20260618-f01-11-stack-nospec-slot-index-v2-0-ede9495359b6@mails.tsinghua.edu.cn>
+In-Reply-To: <20260618-f01-11-stack-nospec-slot-index-v2-0-ede9495359b6@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Luis Gerhorst <luis.gerhorst@fau.de>, Shuah Khan <shuah@kernel.org>, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781714744; l=1452;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=TxA/GMyfEtXid4vLtOA0LpW0bDr+lSoc4vKrJRDxEqM=;
+ b=UjO5G1XvFicCtli6iF1t5mXT4yGmYOSgGPbwweQAr0OwFoFVjQF1OxyBavHtAlI5SWCXdUWg8
+ dX1QTOLiyCfD0nRw7U8p7g84HhK28h06FFDorSSs84q5NvlO6kT9vqE
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:zAQGZQA38cA1zzJqb498Ag--.43034S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7WrWkAr4DKFy3Jry5Aw1fJFb_yoW8Xr4rpa
+	4vgF9Ik347WF12gr1fAFW8GFyrJr4kXrWUCF4Sq345ZanxAr9aqFs7G347J3Z3AFs3ZFZ5
+	ZF12vas8u3WkAFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPl1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1U
+	M28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAac4AC62xK8x
+	CEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80
+	ewAv7VCjz48v1sIEY20_GrWkJr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+	vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+	n4kS14v26r1q6r43MxkIecxEwVAFwVWUMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1s
+	IEY20_GrWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC2
+	0s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI
+	0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv2
+	0xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2js
+	IE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZF
+	pf9x0Jjb_-PUUUUU=
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgEBA2oytAo7NwAAsr
 
-On 06/17, Mateusz Guzik wrote:
->
-> There are trivial touch ups which can be done by adding a bunch of
-> predicts and inlining kill_fasync if someone can be bothered.
+Add a verifier test for the fixed-offset stack write case where two 4-byte
+stores initialize opposite halves of the same stack slot.
 
-Speaking of trivial touch ups...
+The test runs through the unprivileged loader lane and expects both
+half-slot writes to emit nospec in the translated program.
 
-anon_pipe_write() does:
-
-	 * Epoll nonsensically wants a wakeup whether the pipe
-	 * was already empty or not.
-	 */
-	if (was_empty || pipe->poll_usage)
-		wake_up_interruptible_sync_poll(&pipe->rd_wait, EPOLLIN | EPOLLRDNORM);
-
-Again, I have no idea if the unnecessary wakeup affects the performance,
-probably not. But somehow this "|| poll_usage" condition looks annoying
-to me...
-
-Perhaps it makes sense to change pipe_poll() to not set ->poll_usage
-unconditionally?
-
-Oleg.
+Acked-by: Luis Gerhorst <luis.gerhorst@fau.de>
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
+ .../testing/selftests/bpf/progs/verifier_unpriv.c  | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/fs/pipe.c b/fs/pipe.c
-index 429b0714ec57..a60be1b71eb7 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -760,10 +760,12 @@ pipe_poll(struct file *filp, poll_table *wait)
- 	struct pipe_inode_info *pipe = filp->private_data;
- 	union pipe_index idx;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+index c16f8382cf17d..d54e5b59e62e5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
++++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+@@ -976,4 +976,26 @@ l0_%=:	exit;						\
+ 	: __clobber_all);
+ }
  
-+#ifdef CONFIG_EPOLL
- 	/* Epoll has some historical nasty semantics, this enables them */
--	if (unlikely(!READ_ONCE(pipe->poll_usage)))
-+	if ((filp->f_mode & FMODE_READ) && filp->f_ep
-+	    && unlikely(!READ_ONCE(pipe->poll_usage)))
- 		WRITE_ONCE(pipe->poll_usage, true);
--
++SEC("socket")
++__description("unpriv: Spectre v4 stack write slot index")
++__success __success_unpriv
++__retval(0)
++#ifdef SPEC_V4
++__xlated_unpriv("r0 = 0")
++__xlated_unpriv("*(u32 *)(r10 - 4) = r0")
++__xlated_unpriv("nospec")
++__xlated_unpriv("*(u32 *)(r10 - 8) = r0")
++__xlated_unpriv("nospec")
++__xlated_unpriv("exit")
 +#endif
- 	/*
- 	 * Reading pipe state only -- no need for acquiring the semaphore.
- 	 *
++__naked void stack_write_nospec_slot_index(void)
++{
++	asm volatile ("					\
++	r0 = 0;					\
++	*(u32 *)(r10 - 4) = r0;			\
++	*(u32 *)(r10 - 8) = r0;			\
++	exit;					\
++"	::: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
+
+-- 
+2.34.1
 
