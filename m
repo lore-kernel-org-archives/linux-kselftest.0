@@ -1,63 +1,63 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8435C3F54C6
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 12:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6203F7ABD
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 12:25:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781699122; cv=none; b=P3deSvFBr9TyOqMaXi9bYNX988dcs5pyYq2f48WmjzCczHc3gS4MeFWPhs/WGweLGuaxDJGWbdhmUU34ner+7G8ANmK7t4iNrXSFuiGmJbDFXQr9e4W2v4eIMvLWifdBBr44C495z50zbNMPn87OkdX0dK02jxUpbDEvMpx1rUg=
+	t=1781699144; cv=none; b=J+72pdy60t1JteSCdQ/DgYzXnegKA3zAsUQ+t1cRBXHEUkwSNNMOndoOnNu35fsd/IR81yjY0W6z/lb2pldfxvSqCH11Oaa3GzfcvhcIX1JWbMa2Es6+XxXdXh6PBMW5SUnsE73mSRDhATADFrrRh/1BwTrnSaDOX3Xqc3HCSJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781699122; c=relaxed/simple;
-	bh=1yJxZq3tkF0bDvOTRpsnisysrPdGXlXB3E4O1ntJTHg=;
+	s=arc-20240116; t=1781699144; c=relaxed/simple;
+	bh=55oehVVJrmbgSWpqFQjMcXle7kXrC4IU8zhtK3UJFn0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FfRQt1QWnx9g8MT9WMmO5VYuK1f5dwuLZKJ+AJEFQigfXE/FISG63YN7e1OHcgUnvLgg9AXV/wl0ZkSaNLvIKhcKcmM+1bfrRQwTkeM4bg4nQMUBzlpjGySAvUezPmsV1F5k0IFDCJkD4KHUR22wgln9h8LxJuq8Pffio+IsFjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=al3ub1Aa; arc=none smtp.client-ip=209.85.128.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wcko9IfF11VX9Zb/DdlyA/180aeXkBDn+VeK953ZtsBoGWH82bVCJpOrgQlT6S5eBY9Glqf9qW3J5aiO590Yv5T9J5c2QvStEU34kkUZyOlBr2P91olUsWx2GSgfQbRjVNvFqxp366dPDxXzNtKoD+5j5GfVidHnZx/Z7jVL/9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PL5Zse+k; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="al3ub1Aa"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-491b390f9e9so48488005e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 05:25:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PL5Zse+k"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-4626fdc829aso625528f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 05:25:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1781699118; x=1782303918; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1781699139; x=1782303939; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1yJxZq3tkF0bDvOTRpsnisysrPdGXlXB3E4O1ntJTHg=;
-        b=al3ub1Aa+DrvVM6gEt0RcABwn0dqsOPQ81H94gI0H3nh9GyialPhTFd5qEOsHPTU74
-         JZmfLGrLJId7/F6PaUqLQsYMvvDNOAFxc1WEsHIgjSebRtKiTN0Scfw0Sn+9EM6WIB0E
-         LQkQt5nVWCa5gPYxoC/ydL597UQHpBGfB138pdRMJZpPKh3l4zwaqprm3n9aXRxYkH+T
-         4toaU5y3NsvTO8nte6GpVestg4GkoVJOvxrFGQ+Ymwshgx7euPt1pIez3OShMK0r+kto
-         j8zFGVxW986Vd43ctXl7JdQ+TPrTg7LGkpVXEPwMGKJ18Nb4bE61GZNqPjlKP8IkWlGz
-         o/jQ==
+        bh=0GtI51H7Zd74M1RsBhYXt9g8xAv+Fn70VlHsGIGT064=;
+        b=PL5Zse+kBTa3E2DF8RlgL+llKyk9XrWurGnrRud3SssnE9D9BXFbCI/DazFsFYfapo
+         zNZQU19WfyxIIUF3ftuWyF2dCmq4AH7hrxDdWznVzpYYxzDeGVFExJIujjmIZ/eefJYX
+         ZJ9Wd66ZODnJy8cY7bQ8CCfZnioAG6mWYjRyERtqYkYlpMJdeNg4Rb3kTJ/cubdRKgl8
+         PNv+/p2utPSqaC99enUM+FHWX6mMfsoJccwrA/1t8XATC9j3B4hAjIBqPlszfV1H5/hy
+         etqUVf3ssG8fr4zINGWfGRh53HqJBrOrahuLCW7GDARod7HExCeOSChbQQut2uc1fPfa
+         EcdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781699118; x=1782303918;
+        d=1e100.net; s=20251104; t=1781699139; x=1782303939;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1yJxZq3tkF0bDvOTRpsnisysrPdGXlXB3E4O1ntJTHg=;
-        b=WAdQ74iZg4+wn6JIk3JQ8XZpHkZq1x999+qhAVsLgloVFA2soiLLNEjyGxw9RYnqTa
-         g7BFgTFQNbEaFoAPFdxi2Es+jbgAeDToawiRHA5pkF0sr7j342KeFC7sApxSxfxL9r+0
-         uliVmpybNQAZl5eVjbiaD/EQLP++xp8WeODGE8bbEWXhf3H7224KZTrzD7JhyH8SUjRa
-         9Le0GmYLcdEqVXxIXLgXSe80JpR1C8WfxsauKY8CXGG9rBnbc24UrDZCQxGEKHJOruGi
-         howPxzSjsG2xVpUX4/F+Pj78cXlgCfGrisZucblrai7RjvtjqExtbb6vgwa63yPe11MB
-         DWEQ==
-X-Forwarded-Encrypted: i=1; AFNElJ97qKMOejAdSCDHXkYa6JagQJ1De5Q4CQU79kZG7T/ROppO8OfQUN93jtWczBkUEk3koZA9y7X5K5QfpfSU+PQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyh1U/Ynq92kKhdUWan/EW45vyGLE2FHfhIBL6H5Toi2U5osskY
-	iV2a5HNBvnljo4hxAHnxlWu1DyiIwRzXPQg8rln1OWaexk+PS8kXEGPB69eK1ZUhRR4=
-X-Gm-Gg: Acq92OFKtshC3fb45FEgRsZQP1Z7slzbNBpBpFWMSZO2au1SeIQELeOoiSqqUF9Klaj
-	j8ngpxUzfRYUbFJsrglwdcsyDcASTSCTb/BMx6Z7cIEyb95DH20hgfviOlPLFWmBLaMMBmvfqVN
-	ckc9iMcQ8QPFzP32pxKpZl5lGo8ywFWssl3SbN4yOoLXBD04u/A32Gv/0dp8DstYgxcerz8/sG5
-	ZWRA9vivVlsG3njbq0boygUfNyFiZkP9sO3qRL62IqpZfEkUYkiBeh/J+PscDg8w9T+9wEpRJi1
-	bW5FhroQnx9QiyDX+wKB4vDXS+Bsah8mi/gJMnXiHXNjX92CAxPcDqf/9WXHaPIvNq22l9fiOln
-	dwKXXQfi1WajV2ruDpxUdZfSUKWgsJdgAm86OY1puUuuXtGb7zstgMqDqWOVF8TOp/2gRutKEh4
-	dvu2mnNPF8/lB4DDtRng==
-X-Received: by 2002:a05:600c:c0d2:10b0:490:e5c1:b8c6 with SMTP id 5b1f17b1804b1-492333a16c3mr51513355e9.8.1781699117684;
-        Wed, 17 Jun 2026 05:25:17 -0700 (PDT)
+        bh=0GtI51H7Zd74M1RsBhYXt9g8xAv+Fn70VlHsGIGT064=;
+        b=NbmkbsGRKsyiN2Yd24JdrjBFHlKuoKn6VysZWD6LMv0CicICff6OlfSxwrZtOrj6Bb
+         CWIWI6lasLeAsbmdKHdmaB/MkrXqxCkI6ZZ/xj0F0x0/Ie5rJpATym1qVQ56gZOO2QCy
+         ZyHkxmRq0SEUY8tEo0zhhLhtcPiZxckMBhGWtuKPd1wSc1CgVMWGetu8c+qfTs4IczyY
+         WSNHdm9u+WpJiB7lqp5x8bqeKSZOUM8R02QUvnYycwRVOgdRKvjv9qoZ9sjIILO3r0Xa
+         7u7HrpRJ1LVL8gK73+X9QPHHOSvA6lqXgx5xXygkSnvYNzGwgwZojw9XGk4uGtxsbvgc
+         Ny2Q==
+X-Forwarded-Encrypted: i=1; AFNElJ/sv1FA3uNhDzJS03x1e6jDS++5PcJIOTejO+Wqsh8krnWoj9uCUs1wkkZkks61N4at2yoiL1keNemTlt9kC5c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YydA16vfWtPczCEa5Los56gMdzmS4YoF8XpF5b44QNPDoexsY6o
+	JDcMx6fTrn5Pvz5dg9UiJRdN99hssCruFKHeTrhLh3MNaeHmJB4rnllhQPDcFEMbmF8=
+X-Gm-Gg: AfdE7clyylQnN5uQFdcEjpilAd846JPN/x/O5qGK9iPMuAvwWoX08Fa9adv4gTESFwU
+	38SO+X5xkoZ5ONE8+QkfSYflErKPlQSxLGoK/1Bt6WnZTwre4etbBG8g11LauSluKrZIlVAlakx
+	FA2pxSAef1ikbYK/zzdCg1JyX6z8qeznPuoHNZMgSsqwnNYXX1A1U/myEBScMF2nqYlPiRT8vPb
+	39kydjns86HFgNn+KMAdoezzAybYyZsAG5ji8HspBQs36thZr58Tk1phbZdMRMxUlxnXhah30Dv
+	dwF3edTycNnsGwj375sO30s0yy9LDUZ5Gj8wdkh5fWAFuOJxhHXaAU5LDl+O/hBKLOUqPP/7LfA
+	xhOQrxmfFj1pyL6dnO6mjmgSTcrbluqicQEQH+gdS6vynMz8snRGjRYSoC2CJlJgkxvB7kLeDWC
+	gMFtchIgtpyakfTHd9cA==
+X-Received: by 2002:a5d:588d:0:b0:43f:dbbf:6d93 with SMTP id ffacd0b85a97d-462410d3c5bmr5999253f8f.27.1781699138624;
+        Wed, 17 Jun 2026 05:25:38 -0700 (PDT)
 Received: from localhost.localdomain ([62.77.90.70])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49230a9a399sm140088385e9.14.2026.06.17.05.25.15
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f26f726sm51008107f8f.15.2026.06.17.05.25.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 05:25:16 -0700 (PDT)
-Date: Wed, 17 Jun 2026 14:25:14 +0200
+        Wed, 17 Jun 2026 05:25:38 -0700 (PDT)
+Date: Wed, 17 Jun 2026 14:25:36 +0200
 From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
 To: Li Wang <li.wang@linux.dev>
 Cc: akpm@linux-foundation.org, tj@kernel.org, longman@redhat.com, 
@@ -65,12 +65,12 @@ Cc: akpm@linux-foundation.org, tj@kernel.org, longman@redhat.com,
 	nphamcs@gmail.com, chengming.zhou@linux.dev, shuah@kernel.org, linux-mm@kvack.org, 
 	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Michal Hocko <mhocko@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>
-Subject: Re: [PATCH v7 3/8] selftests/cgroup: use runtime page size for
- zswpin check
-Message-ID: <ajJwNecLWRvX_7Tw@localhost.localdomain>
+	Shakeel Butt <shakeel.butt@linux.dev>, Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH v7 1/8] selftests/cgroup: skip test_zswap if zswap is
+ globally disabled
+Message-ID: <ajJu85Kq26jWeiCy@localhost.localdomain>
 References: <20260424040059.12940-1-li.wang@linux.dev>
- <20260424040059.12940-4-li.wang@linux.dev>
+ <20260424040059.12940-2-li.wang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,30 +78,33 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fw3psxfcciuimhrk"
+	protocol="application/pgp-signature"; boundary="xz3b5522yngbc7la"
 Content-Disposition: inline
-In-Reply-To: <20260424040059.12940-4-li.wang@linux.dev>
+In-Reply-To: <20260424040059.12940-2-li.wang@linux.dev>
 
 
---fw3psxfcciuimhrk
+--xz3b5522yngbc7la
 Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v7 3/8] selftests/cgroup: use runtime page size for
- zswpin check
+Subject: Re: [PATCH v7 1/8] selftests/cgroup: skip test_zswap if zswap is
+ globally disabled
 MIME-Version: 1.0
 
-On Fri, Apr 24, 2026 at 12:00:54PM +0800, Li Wang <li.wang@linux.dev> wrote:
-> test_zswapin compares memory.stat:zswpin (counted in pages) against a
-> byte threshold converted with PAGE_SIZE. In cgroup selftests, PAGE_SIZE
-> is hardcoded to 4096, which makes the conversion wrong on systems with
-> non-4K base pages (e.g. 64K).
+On Fri, Apr 24, 2026 at 12:00:52PM +0800, Li Wang <li.wang@linux.dev> wrote:
+> test_zswap currently only checks whether zswap is present by testing
+> /sys/module/zswap. This misses the runtime global state exposed in
+> /sys/module/zswap/parameters/enabled.
 >=20
-> As a result, the test requires too many pages to pass and fails
-> spuriously even when zswap is working.
+> When zswap is built/loaded but globally disabled, the zswap cgroup
+> selftests run in an invalid environment and may fail spuriously.
 >=20
-> Use sysconf(_SC_PAGESIZE) for the zswpin threshold conversion so the
-> check matches the actual system page size.
+> Check the runtime enabled state before running the tests:
+>   - skip if zswap is not configured,
+>   - fail if the enabled knob cannot be read,
+>   - skip if zswap is globally disabled.
+>=20
+> Also print a hint in the skip message on how to enable zswap.
 >=20
 > Signed-off-by: Li Wang <li.wang@linux.dev>
 > Cc: Johannes Weiner <hannes@cmpxchg.org>
@@ -112,21 +115,25 @@ On Fri, Apr 24, 2026 at 12:00:54PM +0800, Li Wang <li.wang@linux.dev> wrote:
 > Cc: Tejun Heo <tj@kernel.org>
 > Cc: Roman Gushchin <roman.gushchin@linux.dev>
 > Cc: Shakeel Butt <shakeel.butt@linux.dev>
-> Reviewed-by: Yosry Ahmed <yosry@kernel.org>
+> Cc: Yosry Ahmed <yosryahmed@google.com>
+> Acked-by: Yosry Ahmed <yosry@kernel.org>
 > Acked-by: Nhat Pham <nphamcs@gmail.com>
->
+> ---
+>  tools/testing/selftests/cgroup/test_zswap.c | 19 +++++++++++++++----
+>  1 file changed, 15 insertions(+), 4 deletions(-)
+
 Reviewed-by: Michal Koutn=FD <mkoutny@suse.com>
 
---fw3psxfcciuimhrk
+--xz3b5522yngbc7la
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCajKSJBsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AifigEAsoKP16b+0Ymtb3KGVhyI
-va7ay0/8bjusHJQkcZqNicIA/1Wml5S9Nn0nE+3XPCz+4d6nCaUqIpGdRKFGT56w
-XSAD
-=y8NZ
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCajKSOxsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+Ag2DAEA2nNoiQ15OgJR5VxoVnSf
+lqGp2dpx3cwAQ5ux10qjH68A/1bVmadDbo1mKFNPpy/OmWnyJnAthaTKN3GT+oTM
+BcoO
+=cwDP
 -----END PGP SIGNATURE-----
 
---fw3psxfcciuimhrk--
+--xz3b5522yngbc7la--
