@@ -1,141 +1,114 @@
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D2363F1AB8
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 13:18:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781702341; cv=pass; b=HEcw+q+Dqtl71PenKXfHzj/JiCE/j0Pq6XdUwPgOqCQu+Nuu1kVEFd5WQobYrpS/esfPmYJ18REZ60dmwEvo96yjglrroAIK+bXPDn94NnWJbtvrKJuGYnfsk4IsO9Pat2xjbLTWLeYRaXkj0xOuuesDmPaQiwVnFMyvWJaQxko=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781702341; c=relaxed/simple;
-	bh=e7bU8MJb5s+ub36roUmBLbpiDK10cOGBN2EWwm2KP4E=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j9t+LeaMiA2pfbz6I9MCuudg/AhhjZGaP2Lrt9n1zApPcu4ozwLo7caDn1Q4p+FWt9N3yp5njYVrfcPUBeKJIQ434grViK5sSZ6OWRIm980Tbbpgck/pfJrsmGKcs+bhluSLoP4bfFizdoWdiBkqhW5fadXkZQqpKYxksIiJH34=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CYxJEKLl; arc=pass smtp.client-ip=74.125.82.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 443D3407CDA;
+	Wed, 17 Jun 2026 14:01:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781704916; cv=none; b=kkIany571SgPVuikT1j4kAkFw6rFfv/0uWY4CN+hEagUaTTQiuAb39cpnq3LvknfgchVS7uVQy948XzdfJduiKMoboL735G+/0iH9g4nildQBCM2PR06Fq0OJr693z4lCzuhGLP2GTk310paEQh/vRqLhs1M7/p2O30UlL0tyu8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781704916; c=relaxed/simple;
+	bh=aVIqX3+SY58Zm6FgHw2cvB3Wd31JDxcEdcyQod/y4e0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=DJvO90keFj+S0IFd7oqOKPRaUqx/OIcu8xEeELM43/DnVwCgeI4SEvAvtrRhVmM+B8TRLNsm7TgpjMSBQEm5I6UrIoQJyYKvozlnYY+pyn2MidNI0050H5Z03cLHIqUZ5MZEYtvruMNGLSb6r2eTcsRf62ST77BR9vh1Q+UNJKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Jc/IFtEG reason="signature verification failed"; arc=none smtp.client-ip=209.97.182.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CYxJEKLl"
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-1363fe80fe8so8205949c88.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 06:18:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781702339; cv=none;
-        d=google.com; s=arc-20240605;
-        b=DECoio61RiDtIdWFD37ZZlVaJeLImHsenfRQM6LiBuohNE1Ah7j/NzMM43lole3uZZ
-         aSCj0umqYzlDe8KErF5T4zuL+LK+YEVtM30kpBMXDQ5+6cQTTUFjL2azwxnZJLdjw6JC
-         JK30nHi7v19/1bL6yZ8XSkhRPIJHWLRiTwKCespV5EfR0qGQrYkso84fTNgUDB52mXFZ
-         anIOZ77GL/OmCl/0nYHqTRaorQe60tQyJc3ReDSYFh5y2lRh8D+mSFeT6goIGqk9Vyyi
-         Znmerp0D8EM3F2A+4llCNf7ghTmzHwgPcd1NfMywHHGTBg6nsvmQTeWDh8Qy2xu+kk5+
-         MCww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=TXAYl00t3pBUlh7QAs2TCcfP6P29I/Yz3jzTX2aYa7Y=;
-        fh=qrsH0GxjQy9Aifkr+a75Waa/icCvAeSzGo9opgWK2so=;
-        b=HXmvVwRsdE73Z+kdej6SI/CjD6LaFOw3HIspBjiV3x1mE8U3gKzl2t0qLiYpjr6rMr
-         rK93eftYjVDNsk4nS5FfkcRvwMjaDpnMKCqrb73bYzJ7NSFVSqbZNtPz837ImoIh6tRS
-         ONN9ibNZWIYmSOdOeaZ9c1QY0wpHOziYMsQv99ppnIulpce65LZNtbFyQXpu/TddrDfK
-         qdN6ycNqQH8zssWQ7b3DJZN/3AwvqbH6H5SDYL+xRq/WWFFjnBLdnz82kLq5jEWeruVM
-         TUXBRbCRuITMhBhIX/rHLCTGv1ISC4m3sFKD96SAtt/DoJPIhadOYRmoPJ24nJO51wBy
-         5sCw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Jc/IFtEG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781702339; x=1782307139; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TXAYl00t3pBUlh7QAs2TCcfP6P29I/Yz3jzTX2aYa7Y=;
-        b=CYxJEKLlaHA7qaL362OFwfsiLymTqSAKK9bclU6AEHeTJUxU1bLzZA6g2XB6LF2IPV
-         jFzbK7ikFrJ9BFW0iPve+8385Pt/xl+BOI8UXDkDNN6VdEoasWbkvU516YIV0qdxuvk7
-         PpHLP59QoksY9tGuURpcfrPmECv5BfQnUVAP+kix2m5frMSV2xmyN88E4h0gRlbzhNte
-         sWazsFGeqZT8a0e2CYGNX8SzPFDKj1qXxM9aGfdpeCQCA8XzhpSNbOP5sI4h5I6HF7nf
-         pIB+fDjr6DWP67i+XbZSbu7varKGTcVq5Abwh+5hr0JruO42uV9/Gva4vuOhR3XV0xKy
-         iqOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781702339; x=1782307139;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TXAYl00t3pBUlh7QAs2TCcfP6P29I/Yz3jzTX2aYa7Y=;
-        b=szAxYy4QQrviSKzOGeaexlhafIn5S8mzNqQW/6vuDbNuFvodRwR3R5KuQ8ra4kUjYM
-         7msZnq61mtPf5VL406X56HO5PD7GhAdGcs4oWOzPl9CPyjXz0ai5me9SC7dy3GVmSxaj
-         R9XtTIda7leJNff2n7pqKCFj6zRMd48vuuYJ6bVzDraqQPLTYvh9NxjPmgINz/GvKgvZ
-         jRMOSrqTn0r21UJPh4Qb1IwAl6RXwrMncj0kTfj/Z2WC4hdh0FQT/aUsML7fcgNc8v8h
-         tl6PMdPsicOv90M74AAIsqXn/yBQc98pmUqVfvsJy8WhTz4y6CWQ3SL1CxunWEb2kAvb
-         6KYQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/Jav35P1XF33LF8oqU/1rY2irBiDHsuWAFJ7XaSfsOrnWTmf/xz4fodNooZNDeJSwpPvhI6TXNoWW0w/tdJe8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHg5iNMQZQ9zN0Z+taf82+ljikaDURVFl8CkxQOm/nqCdtF0MA
-	hQd8Ej7MgzFGz6+12yRm34qL3lmDNo+o+njM72omvFmmAY+m0Y9b709W7tSS+Ha+cdP7NpEe9/f
-	xeZb44O4/QF8w+qEvUfouQx9jGN7qm0bKOMvGguKQ
-X-Gm-Gg: Acq92OEgiCJJJV0MO3QsTH/aoiA4S22vsB1SXVUwuYUaTfXISzGjgXjL3lg+o/XBtZq
-	+hfZMzmh7f0Ss7501qjaPGfkXsae3qjV6gugEyI6jPSr1zATcq7kGCKzjaXs+QDGoL74+olvKJk
-	FzFFSEicYF/NERkGQ9iqMuospaVlKh6/kWPgcvvco+PMlUgug6BxETpaueUc9pA3xULYUIzdX5J
-	jSXHvNuVPMjdbLqSMl9GoGMEScTS7hEHzPzMDgV7FoJXHe9nQcdbgoT1IUOfowJewOmtb97c5Ac
-	tCEuLMqbiwX8u6YLivFCbqOsYgdpcs99l5jGE68=
-X-Received: by 2002:a05:7022:f8c:b0:138:916:5179 with SMTP id
- a92af1059eb24-1398f676bd6mr1477937c88.14.1781702337644; Wed, 17 Jun 2026
- 06:18:57 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 17 Jun 2026 06:18:56 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 17 Jun 2026 06:18:56 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <20260602-memory-failure-mf-delayed-fix-v4-4-a5bc7db5a9b2@google.com>
-References: <20260602-memory-failure-mf-delayed-fix-v4-0-a5bc7db5a9b2@google.com>
- <20260602-memory-failure-mf-delayed-fix-v4-4-a5bc7db5a9b2@google.com>
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
+	Subject:In-Reply-To:References:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-ID; bh=R0pPewL4HkezeiTmuNSpdDO
+	4u/7PaTORdo2JzLu+GSU=; b=Jc/IFtEGi4/5a4i79qq+vSXB/TLGCFejUawYVQ9
+	dC0koiCMtIRBkfmN+sfQynQ79jURT5ugNxo3ztX9biMS2YA8WD0RB/sv8MQk5aTq
+	thfGaaAcqCUDzpBtm7lYSicwQYkdI5nRp7BctMIfFFA+k9PuYHTbTbmAplxP/AZg
+	UR54=
+Received: from gnq25$mails.tsinghua.edu.cn ( [59.66.19.181] ) by
+ ajax-webmail-web4 (Coremail) ; Wed, 17 Jun 2026 22:01:24 +0800 (GMT+08:00)
+Date: Wed, 17 Jun 2026 22:01:24 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
+To: "Emil Tsalapatis" <emil@etsalapatis.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Eduard Zingerman" <eddyz87@gmail.com>,
+	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+	"John Fastabend" <john.fastabend@gmail.com>,
+	"Martin KaFai Lau" <martin.lau@linux.dev>,
+	"Luis Gerhorst" <luis.gerhorst@fau.de>,
+	"Shuah Khan" <shuah@kernel.org>, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH bpf 2/2] selftests/bpf: Cover stack nospec slot
+ indexing
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
+ 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
+In-Reply-To: <DJAS8Y6NFDM3.2UBTXDT6CKACA@etsalapatis.com>
+References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
+ <20260617-f01-11-stack-nospec-slot-index-v1-2-e3a080b0cd7e@mails.tsinghua.edu.cn>
+ <DJAS8Y6NFDM3.2UBTXDT6CKACA@etsalapatis.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 17 Jun 2026 06:18:56 -0700
-X-Gm-Features: AVVi8CeEQPoqGj6Tm5lqS6hWOuYsOw4ghr_S2X43a6pbnMXpEzjcnbUm6R99GZE
-Message-ID: <CAEvNRgE-karT5BYOCePr2mM2hu2AgQ39qhVN6hk=NK+XWcvAJA@mail.gmail.com>
-Subject: Re: [PATCH v4 4/7] mm: memory_failure: Generalize extra_pins handling
- to all MF_DELAYED cases
-To: Lisa Wang <wyihan@google.com>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, David Hildenbrand <david@kernel.org>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Cc: rientjes@google.com, seanjc@google.com, vannapurve@google.com, 
-	michael.roth@amd.com, jiaqiyan@google.com, tabba@google.com, 
-	dave.hansen@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <592abb4b.7e4ff.19ed5e2ff61.Coremail.gnq25@mails.tsinghua.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID:ywQGZQDX66C0qDJqfVFTAg--.34080W
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQYBA2oyQ815QwA
+	Csr
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-Lisa Wang <wyihan@google.com> writes:
-
->
-> [...snip...]
->
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 3aff0c981fcd..dcc56bedcb28 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -1052,18 +1052,14 @@ static int me_pagecache_clean(struct page_state *ps, struct page *p)
->  		goto out;
->  	}
->
-> -	/*
-> -	 * The shmem page is kept in page cache instead of truncating
-> -	 * so is expected to have an extra refcount after error-handling.
-> -	 */
-> -	extra_pins = shmem_mapping(mapping);
-> -
->  	/*
->  	 * Truncation is a bit tricky. Enable it per file system for now.
->  	 *
->  	 * Open: to take i_rwsem or not for this? Right now we don't.
->  	 */
->  	ret = truncate_error_folio(folio, page_to_pfn(p), mapping);
-> +
-> +	extra_pins = ret == MF_DELAYED;
->  	if (has_extra_refcount(ps, p, extra_pins))
->  		ret = MF_FAILED;
->
-
-Reviewed-by: Ackerley Tng <ackerleytng@google.com>
+CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiRW1pbCBUc2FsYXBhdGlz
+IiA8ZW1pbEBldHNhbGFwYXRpcy5jb20+Cj4gU2VuZCB0aW1lOldlZG5lc2RheSwgMTcvMDYvMjAy
+NiAwNToxNDoxMgo+IFRvOiAiTnVvcWkgR3VpIiA8Z25xMjVAbWFpbHMudHNpbmdodWEuZWR1LmNu
+PiwgIkFsZXhlaSBTdGFyb3ZvaXRvdiIgPGFzdEBrZXJuZWwub3JnPiwgIkRhbmllbCBCb3JrbWFu
+biIgPGRhbmllbEBpb2dlYXJib3gubmV0PiwgIkFuZHJpaQo+ICBOYWtyeWlrbyIgPGFuZHJpaUBr
+ZXJuZWwub3JnPiwgIkVkdWFyZCBaaW5nZXJtYW4iIDxlZGR5ejg3QGdtYWlsLmNvbT4sICJLdW1h
+ciBLYXJ0aWtleWEgRHdpdmVkaSIgPG1lbXhvckBnbWFpbC5jb20+Cj4gQ2M6ICJKb2huIEZhc3Rh
+YmVuZCIgPGpvaG4uZmFzdGFiZW5kQGdtYWlsLmNvbT4sICJNYXJ0aW4gS2FGYWkgTGF1IiA8bWFy
+dGluLmxhdUBsaW51eC5kZXY+LCAiTHVpcyBHZXJob3JzdCIgPGx1aXMuZ2VyaG9yc3RAZmF1LmRl
+PiwgIlNodWFoCj4gIEtoYW4iIDxzaHVhaEBrZXJuZWwub3JnPiwgYnBmQHZnZXIua2VybmVsLm9y
+ZywgbGludXgta3NlbGZ0ZXN0QHZnZXIua2VybmVsLm9yZywgbGludXgta2VybmVsQHZnZXIua2Vy
+bmVsLm9yZwo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggYnBmIDIvMl0gc2VsZnRlc3RzL2JwZjogQ292
+ZXIgc3RhY2sgbm9zcGVjIHNsb3QgaW5kZXhpbmcKPiAKPiBPbiBUdWUgSnVuIDE2LCAyMDI2IGF0
+IDEyOjU3IFBNIEVEVCwgTnVvcWkgR3VpIHdyb3RlOgo+ID4gQWRkIGEgdmVyaWZpZXIgdGVzdCBm
+b3IgdGhlIGZpeGVkLW9mZnNldCBzdGFjayB3cml0ZSBjYXNlIHdoZXJlIHR3byA0LWJ5dGUKPiA+
+IHN0b3JlcyBpbml0aWFsaXplIG9wcG9zaXRlIGhhbHZlcyBvZiB0aGUgc2FtZSBzdGFjayBzbG90
+Lgo+ID4KPiA+IFRoZSB0ZXN0IHVzZXMgdGhlIENBUF9CUEYtd2l0aG91dC1DQVBfUEVSRk1PTiBs
+b2FkZXIgbGFuZSBzbyBTcGVjdHJlIHY0Cj4gPiBtaXRpZ2F0aW9uIHJlbWFpbnMgYWN0aXZlLiBJ
+dCBleHBlY3RzIGJvdGggaGFsZi1zbG90IHdyaXRlcyB0byBlbWl0IG5vc3BlYwo+ID4gaW4gdGhl
+IHRyYW5zbGF0ZWQgcHJvZ3JhbS4KPiA+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBOdW9xaSBHdWkgPGdu
+cTI1QG1haWxzLnRzaW5naHVhLmVkdS5jbj4KPiAKPiBSZXZpZXdlZC1ieTogRW1pbCBUc2FsYXBh
+dGlzIDxlbWlsQGV0c2FsYXBhdGlzLmNvbT4KPiAKPiBUcml2aWFsIHN0eWxlIG5pdHMuCj4gCj4g
+PiAtLS0KPiA+ICAuLi4vdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3ZlcmlmaWVyX3VucHJp
+di5jICB8IDIzICsrKysrKysrKysrKysrKysrKysrKysKPiA+ICAxIGZpbGUgY2hhbmdlZCwgMjMg
+aW5zZXJ0aW9ucygrKQo+ID4KPiA+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
+cy9icGYvcHJvZ3MvdmVyaWZpZXJfdW5wcml2LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9i
+cGYvcHJvZ3MvdmVyaWZpZXJfdW5wcml2LmMKPiA+IGluZGV4IGMxNmY4MzgyY2YxN2QuLjllYmJk
+NGI1MzFkZjEgMTAwNjQ0Cj4gPiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJv
+Z3MvdmVyaWZpZXJfdW5wcml2LmMKPiA+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Jw
+Zi9wcm9ncy92ZXJpZmllcl91bnByaXYuYwo+ID4gQEAgLTk3Niw0ICs5NzYsMjcgQEAgbDBfJT06
+CWV4aXQ7CQkJCQkJXAo+ID4gIAk6IF9fY2xvYmJlcl9hbGwpOwo+ID4gIH0KPiA+ICAKPiA+ICtT
+RUMoInNvY2tldCIpCj4gPiArX19kZXNjcmlwdGlvbigibm9wZXJmbW9uOiBTcGVjdHJlIHY0IHN0
+YWNrIHdyaXRlIHNsb3QgaW5kZXgiKQo+ID4gK19fc3VjY2VzcyBfX3N1Y2Nlc3NfdW5wcml2Cj4g
+PiArX19jYXBzX3VucHJpdihDQVBfQlBGKQo+ID4gK19fcmV0dmFsKDApCj4gPiArI2lmZGVmIFNQ
+RUNfVjQKPiA+ICtfX3hsYXRlZF91bnByaXYoInIwID0gMCIpCj4gPiArX194bGF0ZWRfdW5wcml2
+KCIqKHUzMiAqKShyMTAgLTQpID0gcjAiKQo+ID4gK19feGxhdGVkX3VucHJpdigibm9zcGVjIikK
+PiA+ICtfX3hsYXRlZF91bnByaXYoIioodTMyICopKHIxMCAtOCkgPSByMCIpCj4gCj4gTm8gd2hp
+dGVzcGFjZSB0byB0aGUgcmlnaHQgb2YgLQo+IAo+ID4gK19feGxhdGVkX3VucHJpdigibm9zcGVj
+IikKPiA+ICtfX3hsYXRlZF91bnByaXYoImV4aXQiKQo+ID4gKyNlbmRpZgo+ID4gK19fbmFrZWQg
+dm9pZCBzdGFja193cml0ZV9ub3NwZWNfc2xvdF9pbmRleCh2b2lkKQo+ID4gK3sKPiA+ICsJYXNt
+IHZvbGF0aWxlICgiCQkJCQlcCj4gPiArCXIwID0gMDsJCQkJCQlcCj4gPiArCSoodTMyICopKHIx
+MCAtIDQpID0gcjA7CQkJXAo+ID4gKwkqKHUzMiAqKShyMTAgLSA4KSA9IHIwOwkJCVwKPiAKPiBV
+bmFsaWduZWQgXCAKPiAKPiA+ICsJZXhpdDsJCQkJCQlcCj4gPiArIgk6OjogX19jbG9iYmVyX2Fs
+bCk7Cj4gPiArfQo+ID4gKwo+ID4gIGNoYXIgX2xpY2Vuc2VbXSBTRUMoImxpY2Vuc2UiKSA9ICJH
+UEwiOwoKVGhhbmtzLgoKSSdsbCBmaXggdGhlIHNlbGZ0ZXN0IGZvcm1hdHRpbmcgYnkgYWRkaW5n
+IHRoZSBtaXNzaW5nIHdoaXRlc3BhY2UgaW4gdGhlCl9feGxhdGVkX3VucHJpdigpIHN0cmluZ3Mg
+YW5kIGFsaWduaW5nIHRoZSBpbmxpbmUgYXNtICdcJyBtYXJrZXJzLgo=
