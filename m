@@ -1,97 +1,144 @@
-Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B5930E847;
-	Wed, 17 Jun 2026 03:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD42E134CCF;
+	Wed, 17 Jun 2026 03:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781666665; cv=none; b=CKT5VzcC5vJxCOISHJKRUg1QtPlTqGRRzYlQlDlOsBaw93PNRXhS09THP+1ECXcx05xTO6fHl4wIncUppKXD95bS4TLRqEJKNVOpvkEx6dP1+uljg9k0rZ2eZ57Y2jHP7vhR4x/Fobt9oJRxUQItzX05F8Jbomhe8gZTy4rnFhU=
+	t=1781668340; cv=none; b=V3qKMhhF1I+seHWrEU0AyrXR0CSsQHO0yTB3MocTNtRUg3YfjJlBsBA2P/6zHYYnXVp3hAMC4eRGHX83mfTtaCBZLjwYk4ul99gM9iNLyv2y1+3diU23RIumLMY8v2EEAnpGH5VNi9CjnS23MllEjCSiSsUHkVCH8sufB/Gyy8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781666665; c=relaxed/simple;
-	bh=t1xxz5K4qN1IYVWQH30iGGO+YtYanpKqJtMFDCYmAZs=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=X5eeH3CH+b/H2iYqK74IIb2m08LehFagFUOWZNMtmFPbwEn/bC5pfxp55S0MDqx3W6j5NghdYAKDpxu5/nZPeO35C5QEEz7jWdX4p2ESGXGiQP2dZlyXgW3/2TtiEFRR6VOsGCNpzns4Xwupj2W+v9rSJn6qcca3ySayb4/kUVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=LA1KyDtw; arc=none smtp.client-ip=113.46.200.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1781668340; c=relaxed/simple;
+	bh=tQIbKSGCggsDjsPRQYgkiN1yqMvDId6VFgfc4clu/AE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DAWBQMD91RXv+5E9d8/gScCfPg3XJpJjB4WrF0PIdcpSdIK6SCAE1o2sfxyAtMaFB7ygVMwXtXOuI9GsRBYA3jjsdvIYOeQxinhysbJet9zNiWz0pHMtqkRfBNJJLPlna0XR3ryoYDbCKWobdWY1Y6g3hf6o84aJw82gkiFqjFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dAM810Fk; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="LA1KyDtw"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=QXpgPLCGZMBAJlhoq6iPX1R1MqV1uv8ilwrrn60/bL8=;
-	b=LA1KyDtw3R5x/rV5uAch8d0C04aDQivZ2h4t1Hz9AeLUdzfsQ+ExwOqkzGgnQ2szCDpcKv1LU
-	DBdB63k7PKs9cNMqouWifcVcbcvgUQT9VlOS5cZyNVZZdOqeMTT2Q3caCqQSiuweoiKs+LsxSJ7
-	bErq0V0cGYCOCWzDBPb4hb0=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gg8By2QM6zKmTb;
-	Wed, 17 Jun 2026 11:16:10 +0800 (CST)
-Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
-	by mail.maildlp.com (Postfix) with ESMTPS id 320BD405D1;
-	Wed, 17 Jun 2026 11:24:11 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 17 Jun 2026 11:24:11 +0800
-Received: from [10.173.124.160] (10.173.124.160) by
- kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 17 Jun 2026 11:24:09 +0800
-Subject: Re: [PATCH v4 5/7] mm: selftests: Add shmem into memory failure test
-To: Lisa Wang <wyihan@google.com>
-CC: <rientjes@google.com>, <seanjc@google.com>, <ackerleytng@google.com>,
-	<vannapurve@google.com>, <michael.roth@amd.com>, <jiaqiyan@google.com>,
-	<tabba@google.com>, <dave.hansen@linux.intel.com>, Naoya Horiguchi
-	<nao.horiguchi@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, "Paolo
- Bonzini" <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Hugh Dickins
-	<hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, "David
- Hildenbrand" <david@kernel.org>, Lorenzo Stoakes
-	<lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren
- Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20260602-memory-failure-mf-delayed-fix-v4-0-a5bc7db5a9b2@google.com>
- <20260602-memory-failure-mf-delayed-fix-v4-5-a5bc7db5a9b2@google.com>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <c5758613-38b0-fb9a-81ec-0ef709c786ec@huawei.com>
-Date: Wed, 17 Jun 2026 11:24:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dAM810Fk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781668338; x=1813204338;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tQIbKSGCggsDjsPRQYgkiN1yqMvDId6VFgfc4clu/AE=;
+  b=dAM810FkquGwRor8IRw48eA4egv+peULBUUJ/6tV9gWFF7YjtNTL6cpC
+   cBEZr0hNts9R6OlO2e0JgMf7TmswWjoo+8n9Ed9qcbkLp3ptF9xh//Fkk
+   IN+mW/xwc7oGV0n5WoiOJzZ0R2hnE2fYQUDftA1592kyeHQS9BVmIuPAm
+   oWFdHccfU4P9viSmAhd2ep/pI7SahQK1vtLXBz80UcQ/4kHOOH5SEDl+K
+   JRFo8UUVzshTtWSGVOvfADOF+wi2MJETGYJnbHXLTCHjMje12o8bvqFPB
+   Ls/O/NtSw+zAskzxBXoKqoOiunM4hQrao5U166z//l9fgdVUFYYqy4HN7
+   Q==;
+X-CSE-ConnectionGUID: XMLQlR9qT1a3CTU0rBSv6A==
+X-CSE-MsgGUID: 6L6Qh6KRT1qB6kJR03GHXw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11819"; a="81581037"
+X-IronPort-AV: E=Sophos;i="6.24,209,1774335600"; 
+   d="scan'208";a="81581037"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 20:51:58 -0700
+X-CSE-ConnectionGUID: zSVH7aMSSmWNkKi6YvOJ8w==
+X-CSE-MsgGUID: UdMBFn0qRjeB2ZEEfriO6g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,209,1774335600"; 
+   d="scan'208";a="278153339"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.18]) ([10.124.240.18])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 20:51:49 -0700
+Message-ID: <e0847903-e9ee-4b3c-b120-aaba46894ada@intel.com>
+Date: Wed, 17 Jun 2026 11:51:46 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260602-memory-failure-mf-delayed-fix-v4-5-a5bc7db5a9b2@google.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 04/22] KVM: selftests: TDX: Use KVM_TDX_CAPABILITIES
+ to validate TDs' attribute configuration
+To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Binbin Wu
+ <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+ linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-4-6983ae4c3a4d@google.com>
 Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20260521-tdx-selftests-v13-v13-4-6983ae4c3a4d@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemq500010.china.huawei.com (7.202.194.235)
 
-On 2026/6/3 5:55, Lisa Wang wrote:
-> Add a shmem memory failure selftest to test the shmem memory failure is
-> correct after modifying shmem return value.
+On 5/22/2026 7:16 AM, Lisa Wang wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
 > 
-> Specifically, test the expected behavior under various scenarios
-> combining page dirtiness (dirty vs clean) and failure types (hard vs
-> soft):
-> + Dirty + Hard: Trigger a SIGBUS on injection, and trigger another
->   SIGBUS when reading the page again.
-> + Dirty + Soft: No SIGBUS is triggered, and the original value can be
->   read successfully.
-> + Clean + Hard: No SIGBUS is triggered on injection, but trigger a
->   SIGBUS when trying to read the page again.
-> + Clean + Soft: No SIGBUS is triggered, and the page can be read
->   successfully.
+> Make sure that all the attributes enabled by the test are reported as
+> supported by both the TDX module and KVM. KVM filters out the attributes
+> not supported by itself.
 > 
+> This also exercises the KVM_TDX_CAPABILITIES ioctl.
+> 
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Co-developed-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 > Signed-off-by: Lisa Wang <wyihan@google.com>
 
-With David's comment addressed:
+Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
 
-Acked-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>   tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c | 14 ++++++++++++++
+>   1 file changed, 14 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> index 868ff62e22f2..e5c998874a0d 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> @@ -110,6 +110,18 @@ static void tdx_filter_cpuid(struct kvm_vm *vm,
+>   	free(tdx_cap);
+>   }
+>   
+> +static void tdx_check_attributes(struct kvm_vm *vm, u64 attributes)
+> +{
+> +	struct kvm_tdx_capabilities *tdx_cap;
+> +
+> +	tdx_cap = tdx_read_capabilities(vm);
 
-Thanks.
-.
+well, this is another caller of tdx_read_capabilities().
+
+As I commented in the previous patch, it's worth caching the result in 
+tdx_read_capabilities() like what kvm_get_supported_cpuid() does for 
+kvm_supported_cpuid.
+
+And it can help only print the debug once.
+
+> +	/* Make sure all the attributes are reported as supported */
+> +	TEST_ASSERT_EQ(attributes & tdx_cap->supported_attrs, attributes);
+> +
+> +	free(tdx_cap);
+> +}
+> +
+>   void tdx_init_vm(struct kvm_vm *vm, u64 attributes)
+>   {
+>   	struct kvm_tdx_init_vm *init_vm;
+> @@ -129,6 +141,8 @@ void tdx_init_vm(struct kvm_vm *vm, u64 attributes)
+>   	memcpy(&init_vm->cpuid, cpuid, kvm_cpuid2_size(cpuid->nent));
+>   	free(cpuid);
+>   
+> +	tdx_check_attributes(vm, attributes);
+> +
+>   	init_vm->attributes = attributes;
+>   
+>   	tdx_vm_ioctl(vm, KVM_TDX_INIT_VM, 0, init_vm);
+> 
+
