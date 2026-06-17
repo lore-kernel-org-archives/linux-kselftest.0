@@ -1,103 +1,111 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551D031F9AE
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 19:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72462EEE74
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 22:22:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781723312; cv=none; b=T0kzVpYYAmNwExK3Q+OBjxlHa1XTY4m0BOaGeU2HDM1Y5YoyAMpv8GJmpwyasVyn9IrmqcaLJxS5WZFQqt+bChlarRLfzSXHCnuyKqT6Sw/1PIivcc4JTGpiBaQiPGXiu3kaLPlrFo7NapsXwbmAU+IKbUerL50PLPTQdtYjTiQ=
+	t=1781734943; cv=none; b=esIwwQhYn9EY6cR2iSkXG7rN6R8+wL+lixQmTMs0HK+09Wya/84abbJmYhFuKiQG+Oxowrf3QAnnosM0gnafrdZuzxSjIi6+8vZajcuuyLv0hOjqmSYJoKrvpP/cro+KwU3rN3/7Qa/62tcW+Re6mxV7E1eTMiUQxts4MQrrtww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781723312; c=relaxed/simple;
-	bh=o8Soy+GG06sJoGEVVtsbHdZkGXoSQoZUBkizaoLwmd0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ecA8aQpx68jUGt2QvDi+hUBAhnsS7H+W2e+uVHPM7o/zZm8V0iolQmQucT8mFiiTcPjk9YE0IePEOq8/CHPF+KRGm+FLEmgoEVMVRIf4soN6pDixxSI14ew1WV75nkg9F3amc9TRl/mj/ZrHJ4WAlxcFtQOoIwxnpfvox6unV4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GbrNuoAJ; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1781734943; c=relaxed/simple;
+	bh=f9ltjWijChP+XwlEfqLXkwLf6HWaXOC5djnNtTmN11E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EGybNVniq95rnuW8twB+QmA5WOsZBFDSdK6eu/4nw88nvCiVdGQ8XiVIwUg5WeD1XpVfhpMmbkx/o3jBWPp/g6r/2TOMunNEUbHkRBKvDPL/kXel5l6qSQi6pUTyeTH33fACHQobLJkuymTgB9Kj/qwtrYpUE3l9qYDClIXF8Z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fGNf2bsu; arc=none smtp.client-ip=209.85.167.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GbrNuoAJ"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2c6a4eccab1so10245ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 12:08:31 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fGNf2bsu"
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-4866834f8deso107755b6e.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 15:22:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781723311; x=1782328111; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=j+uzwrFGJAcNQVQMCnTHy2evwlubyHfh6u8CWpZkX/U=;
-        b=GbrNuoAJ9DC3JwE6rojBU4KPCwdC0/JN8Ngqjm/53z+XqCetNy61K+uLKD0tQ6ozJ4
-         2Gfo4P3YIksCanUA0MucvFXbwpeGM8vexglqrGNMnmJRUFTa1PKu1gpKNySDDcYfULmc
-         epfHtNQG21sUIfdPUD33CDEP1kwg0f+ossTegBE33bQmb6w/yjuJIAIWVF7eTkPLXE6W
-         Pcb3E0UTJtUVX82eqFs/FZXQ9s9MyZ/1Xq4zf7VTrcmkYgLAeeY0SL1Zp0nMd5eWChd+
-         TUida0mcztaLW/3vnAq3ss8f94gnp+faHw0YhWb6nDdAJi8SZxFFv3sQ04e6mQ6RdN8F
-         Mefg==
+        d=linuxfoundation.org; s=google; t=1781734940; x=1782339740; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BTXpAyQa5yxfc977tpz0ZoWkhTqW+Yu4kmTVOCchAW4=;
+        b=fGNf2bsuUxZwgA+6ZxlSMRi2ip+2f7gbiME4RjQMqyxAqh9/tZKsW2TClyq63QDL9M
+         isGj7/2ZuATaEc455C5vgzjAfWcMDa6Tn7Gc2WpOKkGHbwF5qa0NIK2rbcj/gZNzKYfm
+         3UxFyDUqo05G6OnhBITfs1hbvEzMZCY8a8u50=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781723311; x=1782328111;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=j+uzwrFGJAcNQVQMCnTHy2evwlubyHfh6u8CWpZkX/U=;
-        b=TesW/MPdpl74Ki6yK+EKnU7+PgNyNg10utB7F/mwPPPR/M2MzuDF1E1t0BcuZsiUQM
-         pY1EtEEiqeLaxqQLCkNLw0rV8kMIiWm2I2etZhyiVIRptuiySYOuYmqsumGx6LzhZj8t
-         cTk1cKlQGbHZkeoNZJoDcm5tx4jvxXnTuqZnCv6C2MEfKbJf0r7ERpq9AQEtVTJjqLjH
-         XRyJzPXcgKNuXLEA2lFNrYAG2zDcxYyyu8XrIbSp6Jv0UoCDvf8k5URZhgMpZ2y6PYFT
-         kNfudep4/aIofM4ea+u6g2dn4lK9Roy8phhGJBdXCVsGQQEU9YAdpHZ6WxR7r4xEcMRA
-         MsOg==
-X-Forwarded-Encrypted: i=1; AFNElJ9aMohNY7Uaz/X3fL3XH2zZwFVOLjUbjuVmGwgQF69IKTTuxzS+MSX3XVNf6x/4nMwJEvcYC5wtLSgr4qO6yQA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3W8ZpL9w+Hq8GxP0RWOHIRENVR+hyOiVgSvja2qsbshLEuDiC
-	okly2Ukc4PQWO4bc1tY8BN7kQcRbuQnFC91rbl4Os8I8PwPdcq1AmUCjPAkYBNURag==
-X-Gm-Gg: AfdE7ck/jkaOm8nmPSKFyJe3ZDTKI9uQPmn5KU/pA3M1VCn29TVb44hebGhxL29oNDU
-	EucyeUH85sQpPKfBfm/S3tZUIUsslJeHtou5Sv52+DNhHzfBeoT1/Bv8T2xJ7hUb08eSu8TU02b
-	gKDS5ti9UwcvgayUL9FjlRo1M6uOWNS/sLBGwc56FNn0GCrXWdUgNZZURIzkwGl2FHGd+ElD2ou
-	lnYtUUKaO6fyYCX+duKm0sORfasdroXR2RT23tAsdHtcFxl7NgO/8p3mSLu67nKY4NsYrEVU1CR
-	+6SkwMGgemqa3do7x2OSQZbj8+jsr8MZOuA2jhtHfP8zLr45Ed1btn4IehKE6Mk46JT516Y89rm
-	apysBn6qavdchsqatyktCMdbtAjdo6KEw/Gk0KWIgTAL+JtN6BuIYDbhRhQuNUyhQmna2PTraqd
-	QRk05u8zq1JDqWNL9V1VnzvzbbR9DIGkrI/ldmb415nnwJTVA=
-X-Received: by 2002:a17:903:350c:b0:2bd:6dad:3dfb with SMTP id d9443c01a7336-2c6e2435553mr295865ad.25.1781723310281;
-        Wed, 17 Jun 2026 12:08:30 -0700 (PDT)
-Received: from google.com (60.89.247.35.bc.googleusercontent.com. [35.247.89.60])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c866325d156sm15559385a12.13.2026.06.17.12.08.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 12:08:29 -0700 (PDT)
-Date: Wed, 17 Jun 2026 12:08:25 -0700
-From: Vipin Sharma <vipinsh@google.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: pasha.tatashin@soleen.com, pratyush@kernel.org, tarunsahu@google.com, 
-	skhawaja@google.com, shuah@kernel.org, dmatlack@google.com, 
-	linux-kernel@vger.kernel.org, kexec@lists.infradead.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] Make liveupdate selftests library
-Message-ID: <20260617190754.GC2704872.vipinsh@google.com>
-References: <20260612214512.464146-1-vipinsh@google.com>
- <ajLtfkuMP4DEGlqe@kernel.org>
+        d=1e100.net; s=20251104; t=1781734940; x=1782339740;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BTXpAyQa5yxfc977tpz0ZoWkhTqW+Yu4kmTVOCchAW4=;
+        b=M1oT9YGpXltYJ/UqzlGFtZzu7CLvvhNYXq5YVGRwdrkkSHynNpNX9E+4SSmJnHML34
+         mPkYSS1XELuZ6P4gON05j2AcuZC15bpP5xQ/zaF8HPltVV2J85NXbpo7XkMbvgktq4l8
+         8goVyT0Yc6Seiok7c9Y5IIMOTwe56N2DsZ8GSVuOs6E5Or+X3665PkMfFVZspp49UIAY
+         aaownZm5AGvtAXqIuGycmzOydmqOhF/PVWkHacUAfzopkTYDxZNEJWMEX+umN1uMCx73
+         OhDfb13tAiHLRXgNjwQ2UXSA6kiyeDk26ks28+NhTyvNI2ZfWkpIZjtZ5qcT06rKULyc
+         kryA==
+X-Forwarded-Encrypted: i=1; AFNElJ+wjVrZtE94NaXgxcaAkZpckxxFXbc5NO3VAsFibNv7m6bsXBVqiM3Mgy4p3EyXKMu5DmG2b5G6a+ha523/854=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmQdkvM+Dka/KA2k7GCb4nZS3eNBGKmm6tt4C3wmaGUhrsUnvu
+	L8swK+LXYjmx4sezzXAgdnnwjO+Pmw0pFDVzcuD1cHipE/gzVbC+CJoP7dM6l8znY/pfEA40UN/
+	+O3i5
+X-Gm-Gg: Acq92OGcRJHaGDWHWEUENtvo0OLzTsGrrT4W90J8RHPuhDQdFc4mbr2v97l7xo9YHfF
+	ISxNZEy6pSXvaEhs0Pdb9AYutGGNd/ToNeud8sfP85jfpg3aoaUuZkMtmBy+YeNfxv1aGtNLaJO
+	Uqbm09EUgiZ8g+MiVLrxn6qhZurtd2k+NpWGW4aTUYturVyWXxXY7IxSUfImc5bRILKDgWuDYHA
+	WmGoJl81z26+oF4FbmRhwPMvKZW9pityEtQbXZSUGHMIN4bnmR+TdR7TlWqC8eIjTt3n8I+yco1
+	f9/N8hYQV/HSxwnXKdXhEcY+P73O84Nx/YldEe9DhhdmvPewL2q7MRIP0DT+DyS+m2eUv3V3ZAZ
+	JNaM1zXmgwxJcA/8rP6DEcvELF5F2hiPwn60LhfkaFrXmjcndp4lpzuAWh42rI8dD/T1ryIM9Wh
+	rk1yeGxLbkx8TUCJGDfBBk
+X-Received: by 2002:a05:6808:1483:b0:479:fca7:4647 with SMTP id 5614622812f47-48944472537mr4208022b6e.2.1781734939814;
+        Wed, 17 Jun 2026 15:22:19 -0700 (PDT)
+Received: from [192.168.1.14] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4875df8284asm7093338b6e.11.2026.06.17.15.22.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Jun 2026 15:22:18 -0700 (PDT)
+Message-ID: <787e5047-04cb-4fde-9563-2d6eab23cf64@linuxfoundation.org>
+Date: Wed, 17 Jun 2026 16:22:17 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ajLtfkuMP4DEGlqe@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/ftrace: Drop invalid top-level local in
+ test_ownership
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>
+Cc: CaoRuichuang <create0818@163.com>, mathieu.desnoyers@efficios.com,
+ shuah@kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20260407102613.81419-1-create0818@163.com>
+ <20260407203727.442b583c@gandalf.local.home>
+ <20260601133146.b16b0ad7c2204adcc168c945@kernel.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20260601133146.b16b0ad7c2204adcc168c945@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 17, 2026 at 09:54:54PM +0300, Mike Rapoport wrote:
-> Hi Vipin,
+On 5/31/26 22:31, Masami Hiramatsu (Google) wrote:
+> On Tue, 7 Apr 2026 20:37:27 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
-> On Fri, Jun 12, 2026 at 02:45:10PM -0700, Vipin Sharma wrote:
-> > Hello,
-> > 
-> > This is v3 series of refactoring liveupdate selftests as a library. It
-> > exposes common liveupdate ioctls as a library which can be used by other
-> > selftests like VFIO and IOMMU.
+>>
+>> Shuah,
+>>
+>> Care to take this through your tree. Probably could even add:
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 8b55572e51805 ("tracing/selftests: Add tracefs mount options test")
+>>
+>> As well as:
+>>
+>> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>>
 > 
-> Let's revisit this after -rc1 is out.
-> I don't think there would a need to change anything, it's just the matter
-> of applying the patches to the right base :)
+> Shuah, here is my ack too.
+> 
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
 
-Sounds good, thank you!
->  
-> > Currently, there are no users of this change but it is being used in
-> > VFIO and iommu liveupdate series.
-> 
-> -- 
-> Sincerely yours,
-> Mike.
+Thanks - sorry for the delay. I will send this up for Linux 7.2-rc1
+
+thanks,
+-- Shuah
