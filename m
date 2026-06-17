@@ -1,33 +1,59 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0579F33F8C1;
-	Wed, 17 Jun 2026 17:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.175.55.52
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBC73876CF;
+	Wed, 17 Jun 2026 18:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781718649; cv=none; b=QbWLFASwPDBMZzcAHsRJFzXgQFtDWSfUo4a2VP4CFUggjkd2iL4AevDSvTfAO6d4fJXsEt4gJ47/Vf661bUnKHrh9kjk1AGtT+YddXoCiHDkfDgfG/SOVwjzJ3S8wQ3Ea2jJRFH3Jdn6BjPn4cwwaELmB++v3tJrR6uO07+VfwY=
+	t=1781721370; cv=none; b=HvkXwv81wzOtz9fHl64U6I2LGjwxFwE5hDV/aSKsUkcJpBzoLDKu2LdvOseUBnhK4DPT07C2DTTFxjdxj4XMlbalVXP4njZhkDnMIoeGcQLk0wksW8Yf//WSE6UgzB2Ffq6wmRqzz3+7ZpinXcMajniu9RWyKcpDya9WzLRpoLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781718649; c=relaxed/simple;
-	bh=KFUS8v1ApS7LKUzOJ1hF+nwYz/jvRCtAs/XN1SeVkl8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=svSnCFjEtm5iW6kTR2+6pMYMuitcKr9JHaHdB5Wqr1TV/VpC7Lh3eK0IawdMRW81BpwU30HGUKe5OWGB5n4WvyojnYyVqZN9INf9PttfOCCOqWdE07HtTCMXNElTcR/0qv012dhEKyFDD603DnpKbOE+UevtqnH4VnUVwX6s0t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=q6KljoSJ; arc=none smtp.client-ip=52.175.55.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781721370; c=relaxed/simple;
+	bh=NF3MxxzABB/RAkQQz1nmgKSOVW3XhgMn3EpdAiD8Tsk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K0s8Oi1FpTMwzb9/BX7cDcQyXeko2fkTIgG1ObJjAyl0KyrCDVZ3pOFZ+4SyYCJR+FZpH1VvRTIDO/XH1y1HbUwJjOj0d6Lw2pPvvVVJ1q4UinJohUQDuOBpSONH+PXJQXEo/FFzCmbqNewRXrYFN4gUUg9BJjzphtyy2QSztKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=Ns5SkmoR; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="q6KljoSJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
-	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	To:Cc; bh=wPYssxUSfeUqBF4i65FL97dI1+4Cv4ljoXAUl50LvtE=; b=q6Kljo
-	SJZOuCVgK72tqaJiWxg80ekXa8uOXCGGBiIISiDJo0P7bMHOzeKtL5HLKFsl2pXd
-	8ksnyCeqqcQAXhrBzWzbvaZbyfIe+kfZwxvGiTttUcF8DkQdrsaGdsP6PPoG00ZT
-	f0KLzSRN53DKNJM0vG299gavi4kWrd+eX0QME=
-Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web2 (Coremail) with SMTP id yQQGZQAH5Jtk3jJq2CFbAg--.21290S2;
-	Thu, 18 Jun 2026 01:50:28 +0800 (CST)
-From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Subject: [PATCH bpf v3 0/2] bpf: Fix stack slot index for Spectre v4 nospec
- checks
-Date: Thu, 18 Jun 2026 01:50:25 +0800
-Message-Id: <20260618-f01-11-stack-nospec-slot-index-v3-0-780297041721@mails.tsinghua.edu.cn>
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="Ns5SkmoR"
+Received: from pps.filterd (m0528004.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65HHdvE8499792;
+	Wed, 17 Jun 2026 11:36:02 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
+	 bh=CpzEQMu49VAH+7hFBiin6hegp7MIbSfAR5d4+T0ZuI0=; b=Ns5SkmoRyWSR
+	tCt6/RC+kRmGpODoO+Emax+vg+0yuJVOwNRiDXCFpMr+o8m+PAhn+xfjbO7brPJ3
+	BvqjpeM4KH1qjGbEyfVX9zlohNjeV7qM0gcrmbSeSouGeCvs9IFzFHQAsre+35vp
+	tBmgcM302IZ7fLTrNvZKGFGn2pXkRSfzfQKH9pcCmpQoDNI1o2SpI6DM3e7QMq4v
+	LAwH9f1zN8lTeI65/yElPzA0Htz6kCnGYqfG6Ax2CwRyFEvyyKFhB2yYXxIMXIcA
+	aXn2j8SVHxT8pfmFybYMRSaycQHJrk+DF5O+knTcRZpR71LrhEqtSszjVNyafvhh
+	zclJfz9A7Q==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4euegqxfnm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Wed, 17 Jun 2026 11:36:01 -0700 (PDT)
+Received: from devgpu015.cco6.facebook.com (2620:10d:c0a8:1b::8e35) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.41; Wed, 17 Jun 2026 18:36:00 +0000
+Date: Wed, 17 Jun 2026 11:35:52 -0700
+From: Alex Mastro <amastro@fb.com>
+To: David Matlack <dmatlack@google.com>
+CC: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+        Raghavendra Rao Ananta <rananta@google.com>,
+        Vipin Sharma
+	<vipinsh@google.com>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Shuah Khan
+	<skhan@linuxfoundation.org>
+Subject: Re: [PATCH v3 1/2] vfio: selftests: Add calloc_assert() helper
+Message-ID: <ajLpCCbqhPYLkd15@devgpu015.cco6.facebook.com>
+References: <20260615-scratch-amastro-vfio-selftests-avoid-vlas-v3-0-b3798415c72a@fb.com>
+ <20260615-scratch-amastro-vfio-selftests-avoid-vlas-v3-1-b3798415c72a@fb.com>
+ <CALzav=ekpRKjyUTNax17SRMHg21OHa4Jq3OGzu+Y0TXW12EeJQ@mail.gmail.com>
+ <ajF0Fistyj7SXlDi@devgpu015.cco6.facebook.com>
+ <CALzav=cbgg=09hyRb0nnrjGF8qn2Tn5uSEsZa7i7bTtviVynNQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,96 +61,218 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAGHeMmoC/4WOy26DMBBFfyXyuoNsE/Poqv8RZeHHEKZNDGIMI
- or49wLNIpsqy3t1dc59CMaBkMXn4SEGnIipi2vIPw7CtzZeECisWWipC1koA41UoBRwsv4HYsc
- 9euBrl4BiwBlQGeO09cFUpVgh/YANzbvgJFzfiPNfyaP7Rp829DZriVM33Pcbk9rHT2P5zjgpk
- IC5lZV00ocSv26WrpwlpnhpR5thGDMfd/GkX9HVW7Te0AHrY21yU7viP/SyLL8bJaF9SgEAAA=
- =
-X-Change-ID: 20260615-f01-11-stack-nospec-slot-index-e155b2acd587
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Luis Gerhorst <luis.gerhorst@fau.de>, Shuah Khan <shuah@kernel.org>, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, 
- Jiayuan Chen <jiayuan.chen@linux.dev>, 
- Emil Tsalapatis <emil@etsalapatis.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781718629; l=2098;
- i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=KFUS8v1ApS7LKUzOJ1hF+nwYz/jvRCtAs/XN1SeVkl8=;
- b=nLy1cboX9zITm5z6bfDuTtUCh1dZOTPxUyLT9BPF3IMBeVaXOno71a551m6fXKPG0GK0mcWo/
- /Z5smfyJS8ZCW8JBZL7Jg1i+dpt27To325noL8FfEafPG6DbkJNcq7O
-X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
- pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:yQQGZQAH5Jtk3jJq2CFbAg--.21290S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4Dtw1DuFWrKw1rWF15Jwb_yoW8uF45pF
-	Z2kF1Sya4UGFyxWF1Sy3W8GF95urWkGr43Xr1Iqw15Zws3CFyxWFZ2k345Zw1fAaykX3yF
-	yFW3XF909ayUAFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l
-	84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1lnxkEFVAIw20F6cxK64vIFxWle2I262
-	IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx2
-	6r4rKr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4
-	CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY
-	02Avz4vE14v_GwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4rKr1UJr1l4I
-	8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-	xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-	AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-	cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
-	4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU4na9DUUUU
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQIBA2oytN5J7QAAsX
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALzav=cbgg=09hyRb0nnrjGF8qn2Tn5uSEsZa7i7bTtviVynNQ@mail.gmail.com>
+X-Authority-Analysis: v=2.4 cv=Cbk4Irrl c=1 sm=1 tr=0 ts=6a32e911 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=GbPsI2Ihf5RTnMjR_gZv:22 a=FOH2dFAWAAAA:8
+ a=jGBhGEbKD5VQjbqLd_kA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: uTg9P5cbSKcEqP02RF4TvcN_gKfTeoHi
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE3MDE3OSBTYWx0ZWRfX5W1pStlZ+NN9
+ FRTxLaKyeBv+cQGu7oN5zJr6G8V1JLiiQSAu2L/KXL/olstKpPotXYXrozt2lhRk3rx20aOQ7kd
+ RWFpBATKXTW4DfhHNTGtOaii8E6wxf1CtHdN/H7txt4TK3rQt2F1E+h30OkfqRM2LfNL3u/oOB6
+ NtPToo6uPCNFipT4Wv9XOmc8otjl2W2HuucM8IYs5MdBzIU//QtxrqXKgFZQtWFLRzuQeWR8T8A
+ 9ejVuxfdqEhFVl1Ic5CrqGFEVNlWoOUJRH1s5ga5kmRJOSUef0OOE5YVCtb0j0QsUol+52owbkh
+ twftosZAthZXt13ueplYDG4E9SvnDLmba+UIUJL8G9xkNS+0YmeZF1LYukuwSGyEVJOBGj2CX0p
+ 42en2T0m/ETXezkeuXb3UtAGdp8qKHO0HZNOSmBoN+2+TDry527VeCmDmvk1TYwDqnokX8LYPNa
+ GubqQ2JTuJDQxZ/f6BQ==
+X-Proofpoint-ORIG-GUID: uTg9P5cbSKcEqP02RF4TvcN_gKfTeoHi
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE3MDE3OSBTYWx0ZWRfX1221y97OukZp
+ jQM7HoVaB2pWiGiMX1SKH78X9uXxJxaSCD21xqGB3uhAlRK/CQzKaulJxk9XkqZWwMLHXXB/Il6
+ xe//obs/CK85WJUTKn4BE30uAyCyrhI=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-17_02,2026-06-17_03,2025-10-01_01
 
-check_stack_write_fixed_off() uses one byte-indexing scheme when checking
-whether a fixed-offset stack write needs Spectre v4 sanitization, and another
-scheme when recording the write into slot_type[].
+On Wed, Jun 17, 2026 at 08:30:08AM -0700, David Matlack wrote:
+> On Tue, Jun 16, 2026 at 9:04 AM Alex Mastro <amastro@fb.com> wrote:
+> >
+> > On Mon, Jun 15, 2026 at 03:51:26PM -0700, David Matlack wrote:
+> > > On Mon, Jun 15, 2026 at 12:45 PM Alex Mastro <amastro@fb.com> wrote:
+> > > >
+> > > > Add a calloc_assert() helper alongside the existing ioctl_assert() and
+> > > > snprintf_assert() helpers.
+> > > >
+> > > > Use it for VFIO selftest allocations that immediately assert a
+> > > > non-NULL result.
+> > > >
+> > > > Assisted-by: Codex:gpt-5.5-high
+> > > > Signed-off-by: Alex Mastro <amastro@fb.com>
+> > > > ---
+> > > >  tools/testing/selftests/vfio/lib/include/libvfio/assert.h    | 10 ++++++++++
+> > > >  tools/testing/selftests/vfio/lib/iommu.c                     | 12 ++++--------
+> > > >  tools/testing/selftests/vfio/lib/iova_allocator.c            |  4 +---
+> > > >  tools/testing/selftests/vfio/lib/sysfs.c                     |  3 +--
+> > > >  tools/testing/selftests/vfio/lib/vfio_pci_device.c           |  6 ++----
+> > > >  .../testing/selftests/vfio/vfio_pci_device_init_perf_test.c  |  4 ++--
+> > > >  6 files changed, 20 insertions(+), 19 deletions(-)
+> > > >
+> > > > diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/assert.h b/tools/testing/selftests/vfio/lib/include/libvfio/assert.h
+> > > > index 77b68c7129a6..f0490a403826 100644
+> > > > --- a/tools/testing/selftests/vfio/lib/include/libvfio/assert.h
+> > > > +++ b/tools/testing/selftests/vfio/lib/include/libvfio/assert.h
+> > > > @@ -3,6 +3,7 @@
+> > > >  #define SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_ASSERT_H
+> > > >
+> > > >  #include <stdio.h>
+> > > > +#include <stdlib.h>
+> > > >  #include <string.h>
+> > > >  #include <sys/ioctl.h>
+> > > >
+> > > > @@ -45,6 +46,15 @@
+> > > >         VFIO_LOG_AND_EXIT(_fmt, ##__VA_ARGS__);                 \
+> > > >  } while (0)
+> > > >
+> > > > +#define calloc_assert(_nmemb, _size) ({                                \
+> > > > +       size_t __nmemb = (_nmemb);                              \
+> > > > +       size_t __size = (_size);                                \
+> > > > +       void *__ptr = calloc(__nmemb, __size);                  \
+> > > > +       VFIO_ASSERT_NOT_NULL(__ptr, "calloc(%zu, %zu) failed",  \
+> > > > +                            __nmemb, __size);                  \
+> > > > +       __ptr;                                                  \
+> > > > +})
+> > > > +
+> > > >  #define ioctl_assert(_fd, _op, _arg) do {                                                     \
+> > > >         void *__arg = (_arg);                                                                  \
+> > > >         int __ret = ioctl((_fd), (_op), (__arg));                                              \
+> > > > diff --git a/tools/testing/selftests/vfio/lib/iommu.c b/tools/testing/selftests/vfio/lib/iommu.c
+> > > > index 035dac069d60..31aba9fda8e5 100644
+> > > > --- a/tools/testing/selftests/vfio/lib/iommu.c
+> > > > +++ b/tools/testing/selftests/vfio/lib/iommu.c
+> > > > @@ -286,8 +286,7 @@ static struct vfio_iommu_type1_info *vfio_iommu_get_info(int container_fd)
+> > > >  {
+> > > >         struct vfio_iommu_type1_info *info;
+> > > >
+> > > > -       info = malloc(sizeof(*info));
+> > > > -       VFIO_ASSERT_NOT_NULL(info);
+> > > > +       info = calloc_assert(1, sizeof(*info));
+> > > >
+> > > >         *info = (struct vfio_iommu_type1_info) {
+> > > >                 .argsz = sizeof(*info),
+> > > > @@ -324,8 +323,7 @@ static struct iommu_iova_range *vfio_iommu_iova_ranges(struct iommu *iommu,
+> > > >         cap_range = container_of(hdr, struct vfio_iommu_type1_info_cap_iova_range, header);
+> > > >         VFIO_ASSERT_GT(cap_range->nr_iovas, 0);
+> > > >
+> > > > -       ranges = calloc(cap_range->nr_iovas, sizeof(*ranges));
+> > > > -       VFIO_ASSERT_NOT_NULL(ranges);
+> > > > +       ranges = calloc_assert(cap_range->nr_iovas, sizeof(*ranges));
+> > > >
+> > > >         for (u32 i = 0; i < cap_range->nr_iovas; i++) {
+> > > >                 ranges[i] = (struct iommu_iova_range){
+> > > > @@ -357,8 +355,7 @@ static struct iommu_iova_range *iommufd_iova_ranges(struct iommu *iommu,
+> > > >         VFIO_ASSERT_EQ(errno, EMSGSIZE);
+> > > >         VFIO_ASSERT_GT(query.num_iovas, 0);
+> > > >
+> > > > -       ranges = calloc(query.num_iovas, sizeof(*ranges));
+> > > > -       VFIO_ASSERT_NOT_NULL(ranges);
+> > > > +       ranges = calloc_assert(query.num_iovas, sizeof(*ranges));
+> > > >
+> > > >         query.allowed_iovas = (uintptr_t)ranges;
+> > > >
+> > > > @@ -424,8 +421,7 @@ struct iommu *iommu_init(const char *iommu_mode)
+> > > >         struct iommu *iommu;
+> > > >         int version;
+> > > >
+> > > > -       iommu = calloc(1, sizeof(*iommu));
+> > > > -       VFIO_ASSERT_NOT_NULL(iommu);
+> > > > +       iommu = calloc_assert(1, sizeof(*iommu));
+> > > >
+> > > >         INIT_LIST_HEAD(&iommu->dma_regions);
+> > > >
+> > > > diff --git a/tools/testing/selftests/vfio/lib/iova_allocator.c b/tools/testing/selftests/vfio/lib/iova_allocator.c
+> > > > index 8c1cc86b70cd..2e7d54e1b4c6 100644
+> > > > --- a/tools/testing/selftests/vfio/lib/iova_allocator.c
+> > > > +++ b/tools/testing/selftests/vfio/lib/iova_allocator.c
+> > > > @@ -29,8 +29,7 @@ struct iova_allocator *iova_allocator_init(struct iommu *iommu)
+> > > >         ranges = iommu_iova_ranges(iommu, &nranges);
+> > > >         VFIO_ASSERT_NOT_NULL(ranges);
+> > > >
+> > > > -       allocator = malloc(sizeof(*allocator));
+> > > > -       VFIO_ASSERT_NOT_NULL(allocator);
+> > > > +       allocator = calloc_assert(1, sizeof(*allocator));
+> > >
+> > > Did you mean to replace malloc() with calloc()? Feel free to add a
+> > > malloc_assert().
+> >
+> > Yes! Since all malloc() can be expressed as calloc() (because we shouldn't care
+> > about potentially redundant zeroing overhead), I think the single
+> > calloc_assert() is fine.
+> 
+> I agree the extra zeroing overhead is not a big deal for these
+> allocations. But it is odd to see calloc being used where it is not
+> needed, and there may be future users that truly want a
+> malloc_assert() over calloc_assert(). Let's just add a malloc_assert()
+> in this patch. It should be a simple change.
 
-For sub-8-byte writes this can make the sanitization check look at bytes that
-are not overwritten by the write. A zeroed lower half-slot followed by a write
-to the upper half-slot can therefore miss the nospec barrier for the second
-write.
+SGTM - I'll add it in v4.
 
-Use the same stack-byte index for the sanitization check and the slot update,
-and add a focused verifier selftest that expects both half-slot writes to emit
-nospec through the unprivileged loader lane.
-
-Bounded impact: this fixes verifier/JIT Spectre v4 mitigation emission for a
-fixed-offset stack-write corner case. No architectural verifier memory-safety
-bypass, exploit chain, CVE, embargo, or security escalation is claimed.
-
-Fixes: 2039f26f3aca ("bpf: Fix leakage due to insufficient speculative store bypass mitigation")
-
-Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
----
-Changes in v3:
-- selftests/bpf: drop the stray space in the __xlated_unpriv stack-store
-  expectations ("(r10 - 4)"/"(r10 - 8)" -> "(r10 -4)"/"(r10 -8)")
-- Link to v2: https://lore.kernel.org/bpf/20260618-f01-11-stack-nospec-slot-index-v2-0-ede9495359b6@mails.tsinghua.edu.cn/
-
-Changes in v2:
-- drop __caps_unpriv(CAP_BPF) from the selftest
-- fix selftest style
-- use Fixes: 2039f26f3aca per review
-- Link to v1: https://lore.kernel.org/bpf/20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn/
-
----
-Nuoqi Gui (2):
-      bpf: Fix stack slot index in nospec checks
-      selftests/bpf: Cover stack nospec slot indexing
-
- kernel/bpf/verifier.c                              |  3 ++-
- .../testing/selftests/bpf/progs/verifier_unpriv.c  | 22 ++++++++++++++++++++++
- 2 files changed, 24 insertions(+), 1 deletion(-)
----
-base-commit: e4287bf34f97a88c7d9322f5bde828724c073a6b
-change-id: 20260615-f01-11-stack-nospec-slot-index-e155b2acd587
-
-Best regards,
---  
-Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-
+> 
+> >
+> > >
+> > > >
+> > > >         *allocator = (struct iova_allocator){
+> > > >                 .ranges = ranges,
+> > > > @@ -90,4 +89,3 @@ iova_t iova_allocator_alloc(struct iova_allocator *allocator, size_t size)
+> > > >                 allocator->range_offset = 0;
+> > > >         }
+> > > >  }
+> > > > -
+> > > > diff --git a/tools/testing/selftests/vfio/lib/sysfs.c b/tools/testing/selftests/vfio/lib/sysfs.c
+> > > > index 11415448b2e2..98a46a2543cd 100644
+> > > > --- a/tools/testing/selftests/vfio/lib/sysfs.c
+> > > > +++ b/tools/testing/selftests/vfio/lib/sysfs.c
+> > > > @@ -107,8 +107,7 @@ char *sysfs_sriov_vf_bdf_get(const char *pf_bdf, int i)
+> > > >         char *out_vf_bdf;
+> > > >
+> > > >         /* Fit "0000:00:00.0" */
+> > > > -       out_vf_bdf = calloc(16, sizeof(char));
+> > > > -       VFIO_ASSERT_NOT_NULL(out_vf_bdf);
+> > > > +       out_vf_bdf = calloc_assert(16, sizeof(char));
+> > > >
+> > > >         snprintf_assert(path, PATH_MAX, "/sys/bus/pci/devices/%s/virtfn%d", pf_bdf, i);
+> > > >         readlink_base(path, "%s", out_vf_bdf);
+> > > > diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> > > > index 94dc5fcecbeb..eb40f7159bae 100644
+> > > > --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> > > > +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> > > > @@ -343,8 +343,7 @@ const char *vfio_pci_get_cdev_path(const char *bdf)
+> > > >         char *cdev_path;
+> > > >         DIR *dir;
+> > > >
+> > > > -       cdev_path = calloc(PATH_MAX, 1);
+> > > > -       VFIO_ASSERT_NOT_NULL(cdev_path);
+> > > > +       cdev_path = calloc_assert(PATH_MAX, 1);
+> > > >
+> > > >         snprintf_assert(dir_path, sizeof(dir_path), "/sys/bus/pci/devices/%s/vfio-dev/", bdf);
+> > > >
+> > > > @@ -425,8 +424,7 @@ struct vfio_pci_device *vfio_pci_device_alloc(const char *bdf, struct iommu *iom
+> > > >  {
+> > > >         struct vfio_pci_device *device;
+> > > >
+> > > > -       device = calloc(1, sizeof(*device));
+> > > > -       VFIO_ASSERT_NOT_NULL(device);
+> > > > +       device = calloc_assert(1, sizeof(*device));
+> > > >
+> > > >         VFIO_ASSERT_NOT_NULL(iommu);
+> > > >         device->iommu = iommu;
+> > > > diff --git a/tools/testing/selftests/vfio/vfio_pci_device_init_perf_test.c b/tools/testing/selftests/vfio/vfio_pci_device_init_perf_test.c
+> > > > index 33b0c31fe2ed..e1a54e153cd3 100644
+> > > > --- a/tools/testing/selftests/vfio/vfio_pci_device_init_perf_test.c
+> > > > +++ b/tools/testing/selftests/vfio/vfio_pci_device_init_perf_test.c
+> > > > @@ -45,8 +45,8 @@ FIXTURE_SETUP(vfio_pci_device_init_perf_test)
+> > > >         int i;
+> > > >
+> > > >         self->iommu = iommu_init(variant->iommu_mode);
+> > > > -       self->threads = calloc(nr_devices, sizeof(self->threads[0]));
+> > > > -       self->thread_args = calloc(nr_devices, sizeof(self->thread_args[0]));
+> > > > +       self->threads = calloc_assert(nr_devices, sizeof(self->threads[0]));
+> > > > +       self->thread_args = calloc_assert(nr_devices, sizeof(self->thread_args[0]));
+> > > >
+> > > >         pthread_barrier_init(&self->barrier, NULL, nr_devices);
+> > > >
+> > > >
+> > > > --
+> > > > 2.53.0-Meta
+> > > >
