@@ -1,103 +1,125 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4BD217F27;
-	Wed, 17 Jun 2026 14:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492C939DBD4
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 14:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781706365; cv=none; b=dHrXT7XS2gOzBW3Qs+WE7WQRO0L8OK0ohLHxoIjgK8NoNhy4RuIOawNgR5CdPcU0re8ddL5e3zg8usySBqVbbymCoxn/DUIdBzOSARC0HICXbwi6xZlNHqhtDCghy9Iho5Cr9OoFZULaNFmGZNvK7jI3y8yfrLcm3H5Q/QNwFbM=
+	t=1781707059; cv=none; b=EsifXjtAEy3QCBhWVITbpP/QzblwqKzx8py8H3j0L496JN7iSaMT3+qQnKokcl7d8MJZKst9X5kVfDK99ku6LpZrslNO8AncDCTr7VERw7/Zge8JO3Fbc0qgK2iLgZpEuK8xfi6kYqIi1gK6hvXmr/Dal+FE0oWbGf7rQFrM0dk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781706365; c=relaxed/simple;
-	bh=WhYbhmTimzXV0DLL7tx/fRIspiZZC/Ou1otC3RLLRes=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=qe0XedW/sJdTfj1SXo2U61hQhf85rnCkmFghPMwHcObwsHMXvUl0BU/9vynCXwpjLAsvikCJEFA/n3zrK5R4WylVD8mnDRdSkaotaQ1nzeT/MvsZNlUmGgQL1necgiKq2UX6hAPJAn72ambpuDDcSmfDXmfbIkhXvo5Ye5Hrx6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=q6b8CMx8 reason="signature verification failed"; arc=none smtp.client-ip=13.76.78.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781707059; c=relaxed/simple;
+	bh=Vu5yG++Fsun3z+ZBMGUo/vK8Cs0yE9PE0k63+S7J9So=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=STMwgfrdX0Fa68mvN6UCpa8SsTnZYkvoeSMNQ9atLQ/TfoV7yWrXScOYFKXay1+D6nESwEng945dwyojplNeTtnx+VkqdBIy9qI6cBOQw1FQ0JgQzZqZnrcVmyywj5Y7IUpO9zRaYB2LrnV8M+M0WOmXqbpN9xmYsZJE/SthvWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hvc3AK9e; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="q6b8CMx8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
-	Subject:In-Reply-To:References:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID; bh=dAVtTN98vnuJ60CDUNlNwPB
-	3oVJ8GgGt4oQ8I3pU88E=; b=q6b8CMx8HiqJpeBpzOwEEuwoRm8uuQDnyBxfaZ3
-	fZHE4REFjXOF2CFuuuPrM17A1KEIpLWz9ZTcsXb0uabNUJYTCS5ClN+WFUcWVxe3
-	Bnqonb92Y974JwLbr5VNhf495XZYD4m04w/YH7gK+7RRXxpTtI1Arwmj4wknx2RE
-	55sk=
-Received: from gnq25$mails.tsinghua.edu.cn ( [59.66.19.181] ) by
- ajax-webmail-web4 (Coremail) ; Wed, 17 Jun 2026 22:25:37 +0800 (GMT+08:00)
-Date: Wed, 17 Jun 2026 22:25:37 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: "Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Emil Tsalapatis" <emil@etsalapatis.com>,
-	"John Fastabend" <john.fastabend@gmail.com>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Luis Gerhorst" <luis.gerhorst@fau.de>,
-	"Shuah Khan" <shuah@kernel.org>, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH bpf 1/2] bpf: Fix stack slot index in nospec checks
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
- 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
-In-Reply-To: <14d43777-e979-42b4-a9ec-cc5d46f4e01e@linux.dev>
-References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
- <20260617-f01-11-stack-nospec-slot-index-v1-1-e3a080b0cd7e@mails.tsinghua.edu.cn>
- <14d43777-e979-42b4-a9ec-cc5d46f4e01e@linux.dev>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hvc3AK9e"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781707057;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YX043t9gPavpfU+MHUkAn7xO12mke7Fw7RKJtVvD+Xc=;
+	b=hvc3AK9efGvdjakrg1RhOn9/AJEJXgj5J0ozqRAWH4JFqqnNRSWF/+BlF+mSYxhcsmSAqY
+	X3hRDcWaBpNQUucsTVzPdTuBvzVwsBVpTZazfS9QJbu3pEFEQ3KEP2qcQmp+QYoWwFH6F7
+	71a1XxBYJg1Vpyzpjt18RxxGRyEIBE4=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-259-7Mz_reY3MU28mx4luDUPGw-1; Wed,
+ 17 Jun 2026 10:37:33 -0400
+X-MC-Unique: 7Mz_reY3MU28mx4luDUPGw-1
+X-Mimecast-MFC-AGG-ID: 7Mz_reY3MU28mx4luDUPGw_1781707051
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DAEDA1800A34;
+	Wed, 17 Jun 2026 14:37:30 +0000 (UTC)
+Received: from fedora (unknown [10.44.33.75])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id B78861955BC2;
+	Wed, 17 Jun 2026 14:37:25 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed, 17 Jun 2026 16:37:30 +0200 (CEST)
+Date: Wed, 17 Jun 2026 16:37:24 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Mateusz Guzik <mjguzik@gmail.com>
+Cc: Breno Leitao <leitao@debian.org>, Josh Triplett <josh@joshtriplett.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	shakeel.butt@linux.dev, jlayton@kernel.org, axboe@kernel.dk,
+	kernel-team@meta.com
+Subject: Re: [PATCH v3 0/2] fs/pipe: reduce pipe->mutex contention by
+ pre-allocating outside the lock
+Message-ID: <ajKxJM5k9U5L05AF@redhat.com>
+References: <20260524-fix_pipe-v3-0-bb4a75d23a90@debian.org>
+ <ajG2bmhu6j9UWvh4@localhost>
+ <ajJgWBCFYwz9OIo3@redhat.com>
+ <ajJ1Xi1p9UhQvILi@gmail.com>
+ <CAGudoHEyDz-Tbj=CZFK5XMLuLyE8B17NumdFVLf6MTTekFgRRA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <4228110d.7e56d.19ed5f92d1a.Coremail.gnq25@mails.tsinghua.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID:ywQGZQDX66BhrjJqZXhTAg--.34152W
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQEBA2oyQ831mAA
-	As5
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGudoHEyDz-Tbj=CZFK5XMLuLyE8B17NumdFVLf6MTTekFgRRA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiSmlheXVhbiBDaGVuIiA8
-amlheXVhbi5jaGVuQGxpbnV4LmRldj4KPiBTZW5kIHRpbWU6V2VkbmVzZGF5LCAxNy8wNi8yMDI2
-IDE5OjA4OjQwCj4gVG86ICJOdW9xaSBHdWkiIDxnbnEyNUBtYWlscy50c2luZ2h1YS5lZHUuY24+
-LCAiQWxleGVpIFN0YXJvdm9pdG92IiA8YXN0QGtlcm5lbC5vcmc+LCAiRGFuaWVsIEJvcmttYW5u
-IiA8ZGFuaWVsQGlvZ2VhcmJveC5uZXQ+LCAiQW5kcmlpIE5ha3J5aWtvIiA8YW5kcmlpQGtlcm5l
-bC5vcmc+LCAiRWR1YXJkIFppbmdlcm1hbiIgPGVkZHl6ODdAZ21haWwuY29tPiwgIkt1bWFyIEth
-cnRpa2V5YSBEd2l2ZWRpIiA8bWVteG9yQGdtYWlsLmNvbT4sICJFbWlsIFRzYWxhcGF0aXMiIDxl
-bWlsQGV0c2FsYXBhdGlzLmNvbT4KPiBDYzogIkpvaG4gRmFzdGFiZW5kIiA8am9obi5mYXN0YWJl
-bmRAZ21haWwuY29tPiwgIk1hcnRpbiBLYUZhaSBMYXUiIDxtYXJ0aW4ubGF1QGxpbnV4LmRldj4s
-ICJMdWlzIEdlcmhvcnN0IiA8bHVpcy5nZXJob3JzdEBmYXUuZGU+LCAiU2h1YWggS2hhbiIgPHNo
-dWFoQGtlcm5lbC5vcmc+LCBicGZAdmdlci5rZXJuZWwub3JnLCBsaW51eC1rc2VsZnRlc3RAdmdl
-ci5rZXJuZWwub3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnCj4gU3ViamVjdDogUmU6
-IFtQQVRDSCBicGYgMS8yXSBicGY6IEZpeCBzdGFjayBzbG90IGluZGV4IGluIG5vc3BlYyBjaGVj
-a3MKPiAKPiAKPiBPbiA2LzE3LzI2IDEyOjU3IEFNLCBOdW9xaSBHdWkgd3JvdGU6Cj4gPiBjaGVj
-a19zdGFja193cml0ZV9maXhlZF9vZmYoKSBjb21wdXRlcyB0aGUgYnl0ZSBzbG90IGZvciBhIGZp
-eGVkLW9mZnNldAo+ID4gc3RhY2sgd3JpdGUgYXMgLW9mZiAtIDEsIGFuZCByZWNvcmRzIGVhY2gg
-d3JpdHRlbiBieXRlIGluIHNsb3RfdHlwZVtdIHdpdGgKPiA+IChzbG90IC0gaSkgJSBCUEZfUkVH
-X1NJWkUuCj4gPgo+ID4gVGhlIFNwZWN0cmUgdjQgc2FuaXRpemF0aW9uIHByZS1jaGVjayB1c2Vz
-IHNsb3RfdHlwZVtpXSBpbnN0ZWFkLiBGb3IgYQo+ID4gNC1ieXRlIHdyaXRlIGF0IGZwLTggYWZ0
-ZXIgdGhlIGxvd2VyIGhhbGYgb2YgZnAtOCBoYXMgYmVlbiB6ZXJvZWQsIHRoZQo+ID4gcHJlLWNo
-ZWNrIHNjYW5zIGJ5dGVzIDAuLjMgYW5kIHNlZXMgU1RBQ0tfWkVSTyB3aGlsZSB0aGUgYWN0dWFs
-IHdyaXRlIHVwZGF0ZXMKPiA+IGJ5dGVzIDcuLjQuIFRoYXQgY2FuIGxlYXZlIHRoZSBzZWNvbmQg
-aGFsZi1zbG90IHdyaXRlIHdpdGhvdXQgbm9zcGVjX3Jlc3VsdAo+ID4gZXZlbiB0aG91Z2ggdGhl
-IGJ5dGVzIGJlaW5nIG92ZXJ3cml0dGVuIHN0aWxsIHJlcXVpcmUgc2FuaXRpemF0aW9uLgo+ID4K
-PiA+IFVzZSB0aGUgc2FtZSBzbG90IGluZGV4IGluIHRoZSBzYW5pdGl6YXRpb24gcHJlLWNoZWNr
-IHRoYXQgdGhlIHdyaXRlIHBhdGggdXNlcwo+ID4gd2hlbiB1cGRhdGluZyBzbG90X3R5cGVbXS4K
-PiA+Cj4gPiBGaXhlczogZTRmNGRiNDc3OTRjICgiYnBmOiBGaXggcG9pbnRlci1sZWFrIGR1ZSB0
-byBpbnN1ZmZpY2llbnQgc3BlY3VsYXRpdmUgc3RvcmUgYnlwYXNzIG1pdGlnYXRpb24iKQo+ID4g
-U2lnbmVkLW9mZi1ieTogTnVvcWkgR3VpIDxnbnEyNUBtYWlscy50c2luZ2h1YS5lZHUuY24+Cj4g
-Cj4gCj4gSSB0aGluayB0aGUgRml4ZXMgdGFnIHNob3VsZCBiZcKgIDIwMzlmMjZmM2FjYSAoImJw
-ZjogRml4IGxlYWthZ2UgZHVlIHRvIAo+IGluc3VmZmljaWVudCBzcGVjdWxhdGl2ZSBzdG9yZSBi
-eXBhc3MgbWl0aWdhdGlvbiIpID8KPiAKPiBPdGhlcndpc2UsIGxvb2tzIGdvb2QgdG8gbWUuCj4g
-Cj4gUmV2aWV3ZWQtYnk6IEppYXl1YW4gQ2hlbiA8amlheXVhbi5jaGVuQGxpbnV4LmRldj4KClRo
-YW5rcy4KSSdsbCBjaGFuZ2UgdGhlIEZpeGVzIHRhZyBpbiB2MiB0bzoKRml4ZXM6IDIwMzlmMjZm
-M2FjYSAoImJwZjogRml4IGxlYWthZ2UgZHVlIHRvIGluc3VmZmljaWVudCAKc3BlY3VsYXRpdmUg
-c3RvcmUgYnlwYXNzIG1pdGlnYXRpb24iKQo=
+On 06/17, Mateusz Guzik wrote:
+>
+> There are trivial touch ups which can be done by adding a bunch of
+> predicts and inlining kill_fasync if someone can be bothered.
+
+I was thinking about another change, see below. It assumes that in the
+likely case another writer won't steal the pages from ->tmp_page[]
+before we take pipe->mutex.
+
+I'm not sure this makes sense, and I have no idea how it would impact
+performance in "real" workloads.
+
+Oleg.
+---
+
+diff --git a/fs/pipe.c b/fs/pipe.c
+index 429b0714ec57..9f07f469830a 100644
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -131,7 +131,8 @@ struct anon_pipe_prealloc {
+  * pipe->mutex hold-time being shrunk. Any shortfall is covered by the
+  * in-lock alloc_page() fallback in anon_pipe_get_page().
+  */
+-static void anon_pipe_get_page_prealloc(struct anon_pipe_prealloc *prealloc,
++static void anon_pipe_get_page_prealloc(struct pipe_inode_info *pipe,
++					struct anon_pipe_prealloc *prealloc,
+ 					size_t total_len)
+ {
+ 	unsigned int want, i;
+@@ -144,6 +145,11 @@ static void anon_pipe_get_page_prealloc(struct anon_pipe_prealloc *prealloc,
+ 	want = min_t(unsigned int, DIV_ROUND_UP(total_len, PAGE_SIZE),
+ 		     PIPE_PREALLOC_MAX);
+ 
++	for (i = 0; i < ARRAY_SIZE(pipe->tmp_page); i++) {
++		if (pipe->tmp_page[i] && !--want)
++			return;
++	}
++
+ 	for (i = 0; i < want; i++) {
+ 		page = alloc_page(GFP_HIGHUSER | __GFP_ACCOUNT);
+ 		if (!page)
+@@ -548,7 +554,7 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
+ 	if (unlikely(total_len == 0))
+ 		return 0;
+ 
+-	anon_pipe_get_page_prealloc(&prealloc, total_len);
++	anon_pipe_get_page_prealloc(pipe, &prealloc, total_len);
+ 
+ 	mutex_lock(&pipe->mutex);
+ 
+
