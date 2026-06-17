@@ -1,114 +1,321 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E1337F735;
-	Wed, 17 Jun 2026 15:26:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781709980; cv=none; b=eaEjmEiYvqpkZYhugAdApbnWA/qHpymU09xm5ApuDwmpgtC+EjOPf1gDdrl/05VrVE5jvudNvZeWCI0QN6RLlKWYPcqPNrsJz/BwGjM2PCTXDTD03sVjwHLxU9dj5lGnFQuWzVSN3ILtcyJSdyx/p2TvU2CbfFKuju4HdCc6dfo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781709980; c=relaxed/simple;
-	bh=lex1Sa6IrrZnTHVP75Ze96aKHjsggTCawxWnLB3WRZ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GvuIwVDpRfn6DjpDWt7BBEvD6eKy7zBrVUs2gAIWKyjYSG0FLaVfvF50zCRR4fsGgzQ9AilXckjOkY5dCnoRnW0sc8KMFf9Ds7PV3/4HJHcrSOVBt81QEindivFE85eWmMgK3bXB1qH+6eAMv5J3kmLLoVsqKW3seVSYhs5rgmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=JfeQ51d8; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7644B4921B2
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 15:30:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781710247; cv=pass; b=NxjaPi0NJhxozVAeWaTyJU++pitKeB3a+7jh9Qymnv45P3vIFoXjVQK896EhyXmne3eC3jVVm3P/TJ0MnWGuxT7RUfG8FaeQnyZ4i6Yt8oyX+2AhU1fZtFyMD54FCVlletwJpp3KoWy0gf3ZStZDFXTjYwxUnYG2iB7efk8m9tk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781710247; c=relaxed/simple;
+	bh=hZoWH+tzmfw9BZGoI6OlpbQZAksQKMil6t6sUOwkoFY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X50B5iuz/IR8nsAAXMCzZMPtz4Tl4KSJvJJxmVjcIcRIxP/L4xf9EbW/m1Ah7ndD02ir9pfjGOE2AI+9MexWj25mwZuyvVchqETotrVJs4DBlUrrZSUe9KhJxuyo6+DlIUEmtYNreLKDzXnIgA/BXLxkqP4oye2Inl+tNMSx55M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HqqDFiP/; arc=pass smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="JfeQ51d8"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=nEx33SVN+jDwWu4ahWlgYqgU4PnskQsGXsyT0OtwT14=; b=JfeQ51d80Kbkc6ocZnjWFcw7U9
-	yTlPnJioYXoq54YCK4TZM/M9soWgzH5ph2SL3J78GMo4a3CtJRWNmsjjHZ9ciSg84MNLAjJVpWJS0
-	S0WxoXtP542WVVk/5xLz2yFGmWabfWu1O4psJ4U/RzdvEw3wclc9Q2ts8MEW6QoWrSFB14OH6LV7Y
-	I6EWceBs/L+g34b7k16g4i3v9a1P2VUYykGW5wyodrcgI1D5jRbAU6YB2nTvesxjrvOtX3yGBOHdP
-	adltTCEjObASRQ9DrSAmo/PG6i2C4B7l+SyWYMbfhlmw5K7VWO0gFC3CFmDw7Xb/+ZXQhEBrylpG4
-	Cf4S/BTg==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wZs9X-00EiF9-0a;
-	Wed, 17 Jun 2026 15:26:07 +0000
-Date: Wed, 17 Jun 2026 08:26:02 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Mateusz Guzik <mjguzik@gmail.com>
-Cc: Oleg Nesterov <oleg@redhat.com>, Josh Triplett <josh@joshtriplett.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, shakeel.butt@linux.dev, jlayton@kernel.org, axboe@kernel.dk, 
-	kernel-team@meta.com
-Subject: Re: [PATCH v3 0/2] fs/pipe: reduce pipe->mutex contention by
- pre-allocating outside the lock
-Message-ID: <ajK711r4YyumuTpJ@gmail.com>
-References: <20260524-fix_pipe-v3-0-bb4a75d23a90@debian.org>
- <ajG2bmhu6j9UWvh4@localhost>
- <ajJgWBCFYwz9OIo3@redhat.com>
- <ajJ1Xi1p9UhQvILi@gmail.com>
- <CAGudoHEyDz-Tbj=CZFK5XMLuLyE8B17NumdFVLf6MTTekFgRRA@mail.gmail.com>
- <ajKxJM5k9U5L05AF@redhat.com>
- <ajKy5ghjlgyN4tFv@gmail.com>
- <CAGudoHGKyN6k+eSAUm35_WDSZcxxtm4QL6fO+4rYJTvtObMqzA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HqqDFiP/"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-1363fe80fe8so8476407c88.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 08:30:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781710237; cv=none;
+        d=google.com; s=arc-20240605;
+        b=jiqoP1nrlu2Nf80UwSQcm0BPZaEtsPsC/rdDpoJoIOS8Mp+xB+178Kld+B249F2unx
+         BAqxdupTakzmdxhLp7l1+aj/zvNsRV5WHVmIZEB1fsnketBH3hWrWLmD316wUPfSRJWD
+         dIs8pqgFd0CI8qMVoRhNgCXn1TD7qsHXiqZhdgNOMUPfa3SJpGh/jOwhz8Iq2QcZ4jRg
+         3lSYC50MZy6mFTydKsB5LH8fsL/dO7DAExNZ/19dYEG1QFCwMUCDkIRIhq7isSSFh1n3
+         QjBaQl8X9jG3shOL1/nxCjwTiR3a2Vr2LGGJUF6+Lmy+62a5ELBzIrC5KKwt/JIaduB8
+         ruew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ngFih+jQ2ELuwuQpCE5AZDhkpTWG0tYdh6zEUh333vs=;
+        fh=UCpVGf0IIRCtO0TmGaU5vRrA7Zn00UTD46rwXOOa7A0=;
+        b=dZTB0grlmc7CDOeq8DFQecHXyrFyrCv56xCcUA5bqbdQVj3HXWdENDFV9UakEAQg4A
+         zX/lMTgsAFiAVbSz4/FRCmq4AhUBOeCO8AlzNhuePhmET6gwvF1KyICh3u9yA7KXl6VJ
+         RqmwjkhkHHtjT9DHuRyaMZ2oFKyb9qXVMtwI1sYbyi/uQDxNKwvb64W8G2HhyOCWNatO
+         QFOm9+vpbcBcl9oTrDJoIbSXlIDpVmYDo26WPNXhl4w8/fuJwdeXRRyMZMYhvDcQFVmb
+         v+zAHYEiIr+hY7mvVQH7YoybdqVm1uC8oNZo2bx+0XyWSU6DV0sksr5Hg66lXr27RVwP
+         z/9Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1781710237; x=1782315037; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ngFih+jQ2ELuwuQpCE5AZDhkpTWG0tYdh6zEUh333vs=;
+        b=HqqDFiP/gAiMKOfyIKt5ddk2u5Ox8jwEMbcL2/3Uh6N97FCFx7mwrVvtC3gd+l2gP/
+         g9eRceSQ/Q/TPdszP9MXTaidMNhq/gxiiMe2pALQAdw1mXOhrivjZhtC9t86l4Z3E+g2
+         r2x6OzsArRgvB4BKtWKrO7By39MAe5107gdyUFLsR4S3SzYL6SMgjd427aM9w7ai7GTt
+         BXwrPq9D3JHqN+noXVUP+cqyiyDwYFAh52TCGvf5DNA05itK9B2xhF62gxetsmYXZEH4
+         b0TgZbj/H2mnQoSqnU1E0gOdhY5A42l0YUe7kusfaSRu8jrq0ZGnBrGis3aM55xmbUm9
+         vcUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781710237; x=1782315037;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ngFih+jQ2ELuwuQpCE5AZDhkpTWG0tYdh6zEUh333vs=;
+        b=bkhawzcUhT1IvGMlQhmMChcXs7w4SAScu7fH+HIuVHZH3eSPOc+sEKV4Rv9Cn5YB+m
+         /g+iuRSw7m9fkYHS7moXDyHiXZaE6juTdCD/skzD7DNOfeXIe1EaZiHvmF0/Mh3I2p76
+         YDq57+nq6fqeSpc2yCuHAgLI7spDaFvKIGAe/4q1XS36jU7YxWdQQBI0VKm5gU1QGoqr
+         pdw38UB0UwdSr/qdPmrQQ86wrC4ZBa+EbFQZdLRmJjGR9APSS3tvqZWHUzQujt6/3gBr
+         dVP1BWlwLD1vm3yd/olbHc8ydm15qV0C7aPqIbeszACtkKkTrVa7BGOedrmM+6fSw/Jq
+         NJNQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+GL+LfSr6Z2B/t12Ly/6xO5xwexf5gZ39kTHhtGm3UnDIl0pvMEjPN1+VOxH+jXIYAEDLL+4FlubchJ4Cr5Rw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDaF4h0CxvY3pB6p23/6X/T9NmwOGUsAFwik+UhOeRQo0CsMJF
+	daXelZ3ytzTDiPCOpoz6HwrqKaGItc1XKPFBIWjOyuiLJSVBMHeXoVagAmRH0gig8Jr1RAFnYVO
+	o5p198nWD028VNJwocaWfvZyji40lu16By3VIADPM
+X-Gm-Gg: Acq92OFO2uzh9ZosO3MbPnGQ8TnXd5a0dWGK48POUaSd3zSh9lfbR2cKKVGCAZdRWeP
+	ZlRJYr0VYjq+dLL21UxRZ5dCL3ASGOevrp9SMGQHa2+FFG71V9UogSZBKqB048/bbTLBLn7XVSK
+	DS+AtYNRyLckQmMCF0piwP8tSJVEPREaWa1OJWASpHe9ZpWjmLY+VtXj81gfFLhDjNF6O1UXSdW
+	tOUOG36wvPHrmTDIGx+WBESpGB9ARQ2L7BQA1b8nQfem+yNs5JaTu7Y6ydxx94OGHyPxDx23kDW
+	EAhRFYY=
+X-Received: by 2002:a05:7022:326:b0:138:22f:9a2c with SMTP id
+ a92af1059eb24-1398f66b115mr1812057c88.5.1781710236408; Wed, 17 Jun 2026
+ 08:30:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGudoHGKyN6k+eSAUm35_WDSZcxxtm4QL6fO+4rYJTvtObMqzA@mail.gmail.com>
-X-Debian-User: leitao
+References: <20260615-scratch-amastro-vfio-selftests-avoid-vlas-v3-0-b3798415c72a@fb.com>
+ <20260615-scratch-amastro-vfio-selftests-avoid-vlas-v3-1-b3798415c72a@fb.com>
+ <CALzav=ekpRKjyUTNax17SRMHg21OHa4Jq3OGzu+Y0TXW12EeJQ@mail.gmail.com> <ajF0Fistyj7SXlDi@devgpu015.cco6.facebook.com>
+In-Reply-To: <ajF0Fistyj7SXlDi@devgpu015.cco6.facebook.com>
+From: David Matlack <dmatlack@google.com>
+Date: Wed, 17 Jun 2026 08:30:08 -0700
+X-Gm-Features: AVVi8CeHk9pkviFn0yqBZwvK95FPCk-wXkr971zts8bYljh9HBFxozbipL582dA
+Message-ID: <CALzav=cbgg=09hyRb0nnrjGF8qn2Tn5uSEsZa7i7bTtviVynNQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] vfio: selftests: Add calloc_assert() helper
+To: Alex Mastro <amastro@fb.com>
+Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>, 
+	Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma <vipinsh@google.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 17, 2026 at 04:57:16PM +0200, Mateusz Guzik wrote:
-> On Wed, Jun 17, 2026 at 4:47 PM Breno Leitao <leitao@debian.org> wrote:
-> >
-> > Hello Mateusz,
-> >
-> > On Wed, Jun 17, 2026 at 04:37:24PM +0200, Oleg Nesterov wrote:
-> > > On 06/17, Mateusz Guzik wrote:
-> > > >
-> > > > There are trivial touch ups which can be done by adding a bunch of
-> > > > predicts and inlining kill_fasync if someone can be bothered.
+On Tue, Jun 16, 2026 at 9:04=E2=80=AFAM Alex Mastro <amastro@fb.com> wrote:
+>
+> On Mon, Jun 15, 2026 at 03:51:26PM -0700, David Matlack wrote:
+> > On Mon, Jun 15, 2026 at 12:45=E2=80=AFPM Alex Mastro <amastro@fb.com> w=
+rote:
 > > >
-> > > I was thinking about another change, see below. It assumes that in the
-> > > likely case another writer won't steal the pages from ->tmp_page[]
-> > > before we take pipe->mutex.
+> > > Add a calloc_assert() helper alongside the existing ioctl_assert() an=
+d
+> > > snprintf_assert() helpers.
+> > >
+> > > Use it for VFIO selftest allocations that immediately assert a
+> > > non-NULL result.
+> > >
+> > > Assisted-by: Codex:gpt-5.5-high
+> > > Signed-off-by: Alex Mastro <amastro@fb.com>
+> > > ---
+> > >  tools/testing/selftests/vfio/lib/include/libvfio/assert.h    | 10 ++=
+++++++++
+> > >  tools/testing/selftests/vfio/lib/iommu.c                     | 12 ++=
+++--------
+> > >  tools/testing/selftests/vfio/lib/iova_allocator.c            |  4 +-=
+--
+> > >  tools/testing/selftests/vfio/lib/sysfs.c                     |  3 +-=
+-
+> > >  tools/testing/selftests/vfio/lib/vfio_pci_device.c           |  6 ++=
+----
+> > >  .../testing/selftests/vfio/vfio_pci_device_init_perf_test.c  |  4 ++=
+--
+> > >  6 files changed, 20 insertions(+), 19 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/assert.=
+h b/tools/testing/selftests/vfio/lib/include/libvfio/assert.h
+> > > index 77b68c7129a6..f0490a403826 100644
+> > > --- a/tools/testing/selftests/vfio/lib/include/libvfio/assert.h
+> > > +++ b/tools/testing/selftests/vfio/lib/include/libvfio/assert.h
+> > > @@ -3,6 +3,7 @@
+> > >  #define SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_ASSERT_H
+> > >
+> > >  #include <stdio.h>
+> > > +#include <stdlib.h>
+> > >  #include <string.h>
+> > >  #include <sys/ioctl.h>
+> > >
+> > > @@ -45,6 +46,15 @@
+> > >         VFIO_LOG_AND_EXIT(_fmt, ##__VA_ARGS__);                 \
+> > >  } while (0)
+> > >
+> > > +#define calloc_assert(_nmemb, _size) ({                             =
+   \
+> > > +       size_t __nmemb =3D (_nmemb);                              \
+> > > +       size_t __size =3D (_size);                                \
+> > > +       void *__ptr =3D calloc(__nmemb, __size);                  \
+> > > +       VFIO_ASSERT_NOT_NULL(__ptr, "calloc(%zu, %zu) failed",  \
+> > > +                            __nmemb, __size);                  \
+> > > +       __ptr;                                                  \
+> > > +})
+> > > +
+> > >  #define ioctl_assert(_fd, _op, _arg) do {                           =
+                          \
+> > >         void *__arg =3D (_arg);                                      =
+                            \
+> > >         int __ret =3D ioctl((_fd), (_op), (__arg));                  =
+                            \
+> > > diff --git a/tools/testing/selftests/vfio/lib/iommu.c b/tools/testing=
+/selftests/vfio/lib/iommu.c
+> > > index 035dac069d60..31aba9fda8e5 100644
+> > > --- a/tools/testing/selftests/vfio/lib/iommu.c
+> > > +++ b/tools/testing/selftests/vfio/lib/iommu.c
+> > > @@ -286,8 +286,7 @@ static struct vfio_iommu_type1_info *vfio_iommu_g=
+et_info(int container_fd)
+> > >  {
+> > >         struct vfio_iommu_type1_info *info;
+> > >
+> > > -       info =3D malloc(sizeof(*info));
+> > > -       VFIO_ASSERT_NOT_NULL(info);
+> > > +       info =3D calloc_assert(1, sizeof(*info));
+> > >
+> > >         *info =3D (struct vfio_iommu_type1_info) {
+> > >                 .argsz =3D sizeof(*info),
+> > > @@ -324,8 +323,7 @@ static struct iommu_iova_range *vfio_iommu_iova_r=
+anges(struct iommu *iommu,
+> > >         cap_range =3D container_of(hdr, struct vfio_iommu_type1_info_=
+cap_iova_range, header);
+> > >         VFIO_ASSERT_GT(cap_range->nr_iovas, 0);
+> > >
+> > > -       ranges =3D calloc(cap_range->nr_iovas, sizeof(*ranges));
+> > > -       VFIO_ASSERT_NOT_NULL(ranges);
+> > > +       ranges =3D calloc_assert(cap_range->nr_iovas, sizeof(*ranges)=
+);
+> > >
+> > >         for (u32 i =3D 0; i < cap_range->nr_iovas; i++) {
+> > >                 ranges[i] =3D (struct iommu_iova_range){
+> > > @@ -357,8 +355,7 @@ static struct iommu_iova_range *iommufd_iova_rang=
+es(struct iommu *iommu,
+> > >         VFIO_ASSERT_EQ(errno, EMSGSIZE);
+> > >         VFIO_ASSERT_GT(query.num_iovas, 0);
+> > >
+> > > -       ranges =3D calloc(query.num_iovas, sizeof(*ranges));
+> > > -       VFIO_ASSERT_NOT_NULL(ranges);
+> > > +       ranges =3D calloc_assert(query.num_iovas, sizeof(*ranges));
+> > >
+> > >         query.allowed_iovas =3D (uintptr_t)ranges;
+> > >
+> > > @@ -424,8 +421,7 @@ struct iommu *iommu_init(const char *iommu_mode)
+> > >         struct iommu *iommu;
+> > >         int version;
+> > >
+> > > -       iommu =3D calloc(1, sizeof(*iommu));
+> > > -       VFIO_ASSERT_NOT_NULL(iommu);
+> > > +       iommu =3D calloc_assert(1, sizeof(*iommu));
+> > >
+> > >         INIT_LIST_HEAD(&iommu->dma_regions);
+> > >
+> > > diff --git a/tools/testing/selftests/vfio/lib/iova_allocator.c b/tool=
+s/testing/selftests/vfio/lib/iova_allocator.c
+> > > index 8c1cc86b70cd..2e7d54e1b4c6 100644
+> > > --- a/tools/testing/selftests/vfio/lib/iova_allocator.c
+> > > +++ b/tools/testing/selftests/vfio/lib/iova_allocator.c
+> > > @@ -29,8 +29,7 @@ struct iova_allocator *iova_allocator_init(struct i=
+ommu *iommu)
+> > >         ranges =3D iommu_iova_ranges(iommu, &nranges);
+> > >         VFIO_ASSERT_NOT_NULL(ranges);
+> > >
+> > > -       allocator =3D malloc(sizeof(*allocator));
+> > > -       VFIO_ASSERT_NOT_NULL(allocator);
+> > > +       allocator =3D calloc_assert(1, sizeof(*allocator));
 > >
-> > Do you think we could eventually eliminate the tmp_page[] array and
-> > consolidate everything into the prealloc pages? That would unify the two
-> > page pools currently used in the pipe write path.
+> > Did you mean to replace malloc() with calloc()? Feel free to add a
+> > malloc_assert().
+>
+> Yes! Since all malloc() can be expressed as calloc() (because we shouldn'=
+t care
+> about potentially redundant zeroing overhead), I think the single
+> calloc_assert() is fine.
+
+I agree the extra zeroing overhead is not a big deal for these
+allocations. But it is odd to see calloc being used where it is not
+needed, and there may be future users that truly want a
+malloc_assert() over calloc_assert(). Let's just add a malloc_assert()
+in this patch. It should be a simple change.
+
+>
 > >
-> > When I examined this previously, it appeared non-trivial but potentially
-> > feasible.
-> >
-> 
-> I think I commented on this in my first e-mail.
-> 
-> In order for this to be acceptable there would have to be a way to
-> reclaim these pages in case of memory shortage.
-
-Hmm, I understand scenario doesn't apply to the patch that got accepted.
-The series doesn't grow the cache: tmp_page[] is still the existing 2-entry
-array
-
-anon_pipe_refill_tmp_pages() only fills empty tmp_page[] slots; every
-other prealloc page is put_page()'d before the write() returns.
-
-So an idle pipe holds at most 2 cached pages — the same cap mainline
-already maintains via anon_pipe_put_page() on the release side, freed in
-free_pipe_info().
-
-	/* Runs after mutex_unlock() to keep put_page() out of the critical section. */
-	static void anon_pipe_free_pages(struct anon_pipe_prealloc *prealloc)
-	{
-		while (prealloc->count) {
-			prealloc->count--;
-			put_page(prealloc->pages[prealloc->count]);
-		}
-	}
-
-Net new unreclaimable footprint from this series is zero.
+> > >
+> > >         *allocator =3D (struct iova_allocator){
+> > >                 .ranges =3D ranges,
+> > > @@ -90,4 +89,3 @@ iova_t iova_allocator_alloc(struct iova_allocator *=
+allocator, size_t size)
+> > >                 allocator->range_offset =3D 0;
+> > >         }
+> > >  }
+> > > -
+> > > diff --git a/tools/testing/selftests/vfio/lib/sysfs.c b/tools/testing=
+/selftests/vfio/lib/sysfs.c
+> > > index 11415448b2e2..98a46a2543cd 100644
+> > > --- a/tools/testing/selftests/vfio/lib/sysfs.c
+> > > +++ b/tools/testing/selftests/vfio/lib/sysfs.c
+> > > @@ -107,8 +107,7 @@ char *sysfs_sriov_vf_bdf_get(const char *pf_bdf, =
+int i)
+> > >         char *out_vf_bdf;
+> > >
+> > >         /* Fit "0000:00:00.0" */
+> > > -       out_vf_bdf =3D calloc(16, sizeof(char));
+> > > -       VFIO_ASSERT_NOT_NULL(out_vf_bdf);
+> > > +       out_vf_bdf =3D calloc_assert(16, sizeof(char));
+> > >
+> > >         snprintf_assert(path, PATH_MAX, "/sys/bus/pci/devices/%s/virt=
+fn%d", pf_bdf, i);
+> > >         readlink_base(path, "%s", out_vf_bdf);
+> > > diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/too=
+ls/testing/selftests/vfio/lib/vfio_pci_device.c
+> > > index 94dc5fcecbeb..eb40f7159bae 100644
+> > > --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> > > +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> > > @@ -343,8 +343,7 @@ const char *vfio_pci_get_cdev_path(const char *bd=
+f)
+> > >         char *cdev_path;
+> > >         DIR *dir;
+> > >
+> > > -       cdev_path =3D calloc(PATH_MAX, 1);
+> > > -       VFIO_ASSERT_NOT_NULL(cdev_path);
+> > > +       cdev_path =3D calloc_assert(PATH_MAX, 1);
+> > >
+> > >         snprintf_assert(dir_path, sizeof(dir_path), "/sys/bus/pci/dev=
+ices/%s/vfio-dev/", bdf);
+> > >
+> > > @@ -425,8 +424,7 @@ struct vfio_pci_device *vfio_pci_device_alloc(con=
+st char *bdf, struct iommu *iom
+> > >  {
+> > >         struct vfio_pci_device *device;
+> > >
+> > > -       device =3D calloc(1, sizeof(*device));
+> > > -       VFIO_ASSERT_NOT_NULL(device);
+> > > +       device =3D calloc_assert(1, sizeof(*device));
+> > >
+> > >         VFIO_ASSERT_NOT_NULL(iommu);
+> > >         device->iommu =3D iommu;
+> > > diff --git a/tools/testing/selftests/vfio/vfio_pci_device_init_perf_t=
+est.c b/tools/testing/selftests/vfio/vfio_pci_device_init_perf_test.c
+> > > index 33b0c31fe2ed..e1a54e153cd3 100644
+> > > --- a/tools/testing/selftests/vfio/vfio_pci_device_init_perf_test.c
+> > > +++ b/tools/testing/selftests/vfio/vfio_pci_device_init_perf_test.c
+> > > @@ -45,8 +45,8 @@ FIXTURE_SETUP(vfio_pci_device_init_perf_test)
+> > >         int i;
+> > >
+> > >         self->iommu =3D iommu_init(variant->iommu_mode);
+> > > -       self->threads =3D calloc(nr_devices, sizeof(self->threads[0])=
+);
+> > > -       self->thread_args =3D calloc(nr_devices, sizeof(self->thread_=
+args[0]));
+> > > +       self->threads =3D calloc_assert(nr_devices, sizeof(self->thre=
+ads[0]));
+> > > +       self->thread_args =3D calloc_assert(nr_devices, sizeof(self->=
+thread_args[0]));
+> > >
+> > >         pthread_barrier_init(&self->barrier, NULL, nr_devices);
+> > >
+> > >
+> > > --
+> > > 2.53.0-Meta
+> > >
