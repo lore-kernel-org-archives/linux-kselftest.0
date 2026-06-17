@@ -1,102 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B553481FC5
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 15:45:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE259481A85;
+	Wed, 17 Jun 2026 16:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781711129; cv=none; b=MhD4X5blscOW6d7zpip4jX9C6IRSR6j0DLPcYm9lZp+co9rdG3GY39VUGyx0dBBN97SmeUajWgeO8Cl7tIdsIH2+pUI0yOTPEwKeiIc6AhVmp57cCpJlDHKmiLnajBZ+AKC8FMu5opaCgb3cHm3dpM6wRCvneewMw8L/kBCMjtw=
+	t=1781712144; cv=none; b=Q4vxbBFYkaeB7DyNZgnPgXUk6tnDGeszZjJoQmdX9MN6OWsRlahc18wTshDUD7uk9Cw1XQNVB/80tmPf3nJHNz7/a7Zd9hFNcomPidiA0i0X1Un3Uy0F+BowmTyPiI+qlcV3Y2+aE/6Q5k7cCOgzQU18dEaDV+xWs8uPGsQR8xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781711129; c=relaxed/simple;
-	bh=9R3Hhcnuf6VMO/UcfQ6Whdfy6m+JpQX1F6wD26z19Us=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q5xSerMs2Gtne7jDIvHonqeiG4Se5jJhuINgS0RpYfD7TsZzc9B6iI3P+OZBqKeR6EXwvFPiLJNn4V/Bnv2uXZuj0i4BMYJlBpXGjT2ibyDlGYZ3X7ApEs8awJmPA8Y2a8EJJ0uK/yhbXLUNfi6PpIbMS3ewNlywQf2bRUOwXxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NYqX8UNH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1781712144; c=relaxed/simple;
+	bh=LOOK3Ax2+U5s+COFznkSh0iIRKsckBDMd7vWn2OhtqE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=CBA4COTWwfNgm3P/B1Sl5e7yWh5n8KsXtXZDRadINBNMuSIn+rVslNr1zWsPXdsZh2fHRFeI01IaimHt/MgzyJWAkL6OqrFokcPwPT+OCvGg7RhqMrLzt5t0sa/mvy747UyJwJpYYL0cIS993LuNW3fdWnOk/Vafu4QeLx7L1ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4/SJJ+C; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NYqX8UNH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781711116;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9R3Hhcnuf6VMO/UcfQ6Whdfy6m+JpQX1F6wD26z19Us=;
-	b=NYqX8UNHBTOC8xElFBHMF7+6qVpfK4uNveVcNacBNyaNild8Pb/MF6eBaUG+bhGEOtaoJM
-	3MFpCJq0Oqg3ccHCSNR48CXpxb95fGM/bBS47MWCwS+Iys5byLiKROlQxTTnXJ9DWoQfyR
-	gJylKH/PbVyhAtm/ZcCBNGqaXYkoi/Y=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-648-ZpeGR43oPau3MysE_WBgjQ-1; Wed,
- 17 Jun 2026 11:45:12 -0400
-X-MC-Unique: ZpeGR43oPau3MysE_WBgjQ-1
-X-Mimecast-MFC-AGG-ID: ZpeGR43oPau3MysE_WBgjQ_1781711111
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A15531800BE7;
-	Wed, 17 Jun 2026 15:45:10 +0000 (UTC)
-Received: from fedora (unknown [10.44.33.75])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 35729180056E;
-	Wed, 17 Jun 2026 15:45:04 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed, 17 Jun 2026 17:45:10 +0200 (CEST)
-Date: Wed, 17 Jun 2026 17:45:03 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: Mateusz Guzik <mjguzik@gmail.com>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	shakeel.butt@linux.dev, jlayton@kernel.org, axboe@kernel.dk,
-	kernel-team@meta.com
-Subject: Re: [PATCH v3 0/2] fs/pipe: reduce pipe->mutex contention by
- pre-allocating outside the lock
-Message-ID: <ajLA_zxsYyKISkwp@redhat.com>
-References: <20260524-fix_pipe-v3-0-bb4a75d23a90@debian.org>
- <ajG2bmhu6j9UWvh4@localhost>
- <ajJgWBCFYwz9OIo3@redhat.com>
- <ajJ1Xi1p9UhQvILi@gmail.com>
- <CAGudoHEyDz-Tbj=CZFK5XMLuLyE8B17NumdFVLf6MTTekFgRRA@mail.gmail.com>
- <ajKxJM5k9U5L05AF@redhat.com>
- <ajKy5ghjlgyN4tFv@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4/SJJ+C"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D29AA1F000E9;
+	Wed, 17 Jun 2026 16:02:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781712133;
+	bh=5JH3aBmd+dEJ/OlpyLd6p/5ZSwevGj8hkc5VtZxzLx0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=j4/SJJ+CALrB1zdiJyg+ntxZ1g4ibWZa79lgXtoj4YP/UoROWxeyKNdclaeXkuWkW
+	 ZJA79BbP9gRLR5TucTvhfwQ6KQR3T73I1G77T2tZL0zrofec/GIJ2Jw0vqvC7JAiUB
+	 7KY+ghxLftZFVMDnskXtgKGZWS4Y/bB69wdmNT1KNY0hPKh8kh7IrDehbnGANz1ewj
+	 eJqIEfwU96NEBebb4W3A5ewN36HL6RdLKzqq+ceEAYBO7dOJ8ajrOJUyirutcY/KRg
+	 UAxvY1I3mFO4MjOr5XtheUP2Z38/mzqONZohu0+RqWs6/ArIx25VBn5rjDOfugVn7r
+	 whBtQTKhEZlMA==
+Content-Type: multipart/mixed; boundary="===============4488830804621448735=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ajKy5ghjlgyN4tFv@gmail.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <e69f8ee202519923dfd2fae4e49d8fa31072503af7bb0895a13e4f1e981bea28@mail.kernel.org>
+In-Reply-To: <20260617-f01-06-half-slot-pointer-spill-v2-2-42b9cdc3cf64@mails.tsinghua.edu.cn>
+References: <20260617-f01-06-half-slot-pointer-spill-v2-2-42b9cdc3cf64@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover half-slot cleanup of pointer spills
+From: bot+bpf-ci@kernel.org
+To: gnq25@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,gnq25@mails.tsinghua.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 17 Jun 2026 16:02:12 +0000 (UTC)
 
-On 06/17, Breno Leitao wrote:
+--===============4488830804621448735==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+>     selftests/bpf: Cover half-slot cleanup of pointer spills
 >
-> Hello Mateusz,
+>     Add a verifier regression test for a pointer spill whose high half is
+>     cleaned dead while the low half remains live. Force checkpoint creation
+>     with BPF_F_TEST_STATE_FREQ and assert the verifier log reaches the
+>     checkpoint and the subsequent 32-bit fill before rejecting the partial fill
+>     from a non-scalar spill.
 >
-> On Wed, Jun 17, 2026 at 04:37:24PM +0200, Oleg Nesterov wrote:
-> > On 06/17, Mateusz Guzik wrote:
-> > >
-> > > There are trivial touch ups which can be done by adding a bunch of
-> > > predicts and inlining kill_fasync if someone can be bothered.
-> >
-> > I was thinking about another change, see below. It assumes that in the
-> > likely case another writer won't steal the pages from ->tmp_page[]
-> > before we take pipe->mutex.
->
-> Do you think we could eventually eliminate the tmp_page[] array and
-> consolidate everything into the prealloc pages? That would unify the two
-> page pools currently used in the pipe write path.
+>     Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+>     Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 
-Cough... When I saw the 1st version of your patches, my first thought was:
-we need to unify prealloc and tmp_page[] somehow.
+This is a regression test for a verifier bug where a partial 32-bit fill
+from a pointer spill whose high half was cleaned dead could read a
+non-scalar stack slot past the register-fill check.
 
-But nothing simple came to my mind ;)
+The half-slot cleanup that destroys the spilled_ptr metadata when the hi
+half is dead was introduced in __clean_func_state() by:
 
-Oleg.
+  be23266b4a08 ("bpf: 4-byte precise clean_verifier_state")
 
+Should this test carry a Fixes: tag pointing at that commit, matching the
+accompanying fix?
+
+  Fixes: be23266b4a08 ("bpf: 4-byte precise clean_verifier_state")
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27700639579
+--===============4488830804621448735==--
