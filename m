@@ -1,63 +1,63 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA44E3FE679
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 12:26:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F694400DE2
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 12:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781699170; cv=none; b=tyHMuu048qvJtK8vXb11q3vpXLkS6HZVbC6YFaO/ZK5iWsgs/2pqBtYNSl3qD6zETgKtuKeeUY7V+M1M4wRZczR0JamuEQj4mZPcxSHBBugVJ+ruj9efjTJ7Q5inxJf49t9F4yKiNFkPZ3Dwy0oLIhDEoZeRIzAFlOWgM3Wb7Ag=
+	t=1781699176; cv=none; b=IB2XdlnylR1Km5hDqgpWWu8lhrHMY/IDkmGbYvLxpDAHGV2R50gA5D5PH2IGwfe7jQur8e5WvXhv5EfOCu5//J81wrLIHFZRlo4X/VL1EWFYg4oLPxtznxnXyC0pfVlzW5/H0H9pKXbzM5/Gc/cl2AQmpe+sh9Sg0fYIpQaHJ+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781699170; c=relaxed/simple;
-	bh=jXv3Lp1VAkZliGQZVvjo9P0HvOkaYz9n//YoA1Z/TW0=;
+	s=arc-20240116; t=1781699176; c=relaxed/simple;
+	bh=oaz3MeK8t59MilWFzgrN7JxYEFiRZHAVlA6cq0zb+U4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fgpC/hC6OCAtbvqK8F8mmtohooCBATEiQ0m/alNIURR0/ucfRL04ufyMOoBQ1cw+z+D3gkQxzXZj1K6UKBuUMhraWqPaaDvZ65z6A5+Ky/0A6dt+v8fYfwMbbZj+Isq02krqf615G4Z4FNWR3lBr2eszun/lj0Kdz9s3NAeVrrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SbUyNTX1; arc=none smtp.client-ip=209.85.221.44
+	 Content-Type:Content-Disposition:In-Reply-To; b=t4MNZ/h7kBoMwF1ij9FTx2uK1bgP6mV+5xHw7dZrxW/brOmuZ7LjNTc9YzEKHH5Ep75HSBgRQ8QMFnyigaiXbkLx+m8IoetH49cH7dbRXKA0TkYdEA9iymddC2PjxU0OXRVI+7ARwP1xDY7bKBIpLm3hl8UNFPqns8kfV5pnlQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=I8wEw6y8; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SbUyNTX1"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-4631679f204so219088f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 05:26:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="I8wEw6y8"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-490b4a8e28bso42911995e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 05:26:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1781699164; x=1782303964; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1781699172; x=1782303972; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UPt25DcGCAYbTcLBdAYH1YOTb8QxGJA5VYhPTuLTerQ=;
-        b=SbUyNTX1MZBASicJ68JQ/I9QN8XY1IZkGhvUKf8al6VPdI+pPol9XrpZIduVTClmmO
-         qsQwdW71wAL/UazVDTm/hvcEflzQrsRBct9zgv3OLn8JAocOORddIi0k0+kOfdPsnZ7R
-         db8KpzLvoM2t0lCS9J8rS8SLo44fMak7eo/kgtRAdfvs4Ay8kaYtkbYEh+CSL6hYHNB1
-         f4BKBfRmb7oMtmbBd2tR4VD0BERtnhtSBs7SwVraM194iiv2tJWX5Cg6qzV3RvTib06x
-         X3tU52UveN506IxYsMO9GMDOrgTWq87j6B4eHx9dE103iwER7VsnMi8yYlDWG+QBU8AK
-         Ozbg==
+        bh=3YBXCuE6tuFht3k3o9SLsq14tW7sWyyo0dU5FVc07Z8=;
+        b=I8wEw6y8OeWlwrWo1LOrG8Lu+9huJ7uAuTaoWo7hud2L6bLkCs588HSUzd0ZtyCN1z
+         ElsWQCo45qq1TMavK9xfSIUWzNWTeTepZ4jh/iZtiM4SOe64OggaKSdouw9loielihMQ
+         IfmLbo0L2QDjXJ54F022cbEr5fNCeisqh5w/DF6bqZga7Dq9+nvnvDcqse48jRfKKusR
+         RcKP4pMUF0M6lqb46lXrvsjMgPNlz2WXQThB7rvLzxUVWYYU++fMMibjznCV6nE2sf8q
+         RLKm858BA3hUqRHh5qHqMG6uxR9UopErmW/xGEAR55cxdgm1FwdnYWYhT3byxae566KS
+         hunw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781699164; x=1782303964;
+        d=1e100.net; s=20251104; t=1781699172; x=1782303972;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UPt25DcGCAYbTcLBdAYH1YOTb8QxGJA5VYhPTuLTerQ=;
-        b=QDLsyXGhsBwjGw5DeSBfcy3VZSSDXhfDDI6tVjwqQQNJgWaPx0tJp1JYDUu3VvrU44
-         N6zvjZQsqZJlGnPLjq6N/ChCZlpReAgVgz6KrgXoClRn86PKiywjA+t3nI3OJft4iXTN
-         DH4NfnXzGI2eBds5gF9gzouvQ98FhvMBjjgpdKBhMMrGRW3jmNQh03LTd2tnRiom+ym9
-         52XdMcEGNjqQUPghVJDFKtyhC0IzMfQsVs9cVGX1ghC2kW6x3weQ6gdZUg93TqHW/6Gn
-         F8/4PHrosazy44laxlByd/VTW4OwaMa621Jp9LzMCGIUScFWrporQH+QS/PEyFQXtM+U
-         rgDw==
-X-Forwarded-Encrypted: i=1; AFNElJ+wf896fQc1XfB6eFC6d2Rky6SQpQXkfzHqNojIurBLgG6Mcdk9I2jkSl7dACyhfF6Gw2zbCnLGcbG2qMfErJk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZAqj3WFF5n59mCuZr8c40NMdh+jWHGmxi6BT2Shtts+QG3vY1
-	ykU5DLswDwe0BzP7a82hM72JfMM+W0kHeeiteA61p4oW4r+nd8kN8ovdrUGQR8hjJyg=
-X-Gm-Gg: AfdE7cm/3lli4V5sAMVARuPCpjC1n//ZYgMVpccSYwHPyW4OrKCazl/Bfyllo7XMd1v
-	VyAeeh0onvEwspdFGx1mxX0VjLDesKHsdDhVJ9gqGfkcefBzD4kiuNOCbUQuH6jo/kUTqT3w9CL
-	C1T4Ich68wpYrwvuaytzOO9TwJmBlvL/+kD23OFjjIS6j3iDJgcEr1ODIdjx7M8xOqki1FZr2AI
-	IHat7Wd4iHALi5QWRbtYF7Puj/rmnjJWUCifGuyXPE2yVIGkTmiR1+HE6mcIbvXmZCgOP0Gy3YP
-	G7klOJKXzxNwokRuHTtJEH4FS9S/1T1HnAyNNRcDXfPjVZmq8GiG08WstT+cIF/vL1bWs6Yih35
-	NPN80Gpsz5Y4FqjXhnanu5hMF3I90B/Y9DofmC1tjt7C9OmnH03oSgYle76eGkAxf73ap3RWw3b
-	UxZZ7/RChgvSw0oRd51ebC2iYZsOL2
-X-Received: by 2002:a05:6000:603:b0:463:1d06:ab33 with SMTP id ffacd0b85a97d-4631d06ab96mr1913666f8f.27.1781699163597;
-        Wed, 17 Jun 2026 05:26:03 -0700 (PDT)
+        bh=3YBXCuE6tuFht3k3o9SLsq14tW7sWyyo0dU5FVc07Z8=;
+        b=bt3Ot5xRqrB0nzxGn3DHelJjHsfpXvgu2L3cJov1d1fbXoUltOCR7Z8pPIX+dZpDeM
+         8xWmOWj9Xe74NTWiLOD3B8vh8l+GKgARvO0SyF9u1W/oqiT1X9UqisLMLz7aLl+s8bWd
+         ID1W9evqJExFK+ZScfOBxJqfcQL8tm6Zfqz2Hmh5CNZ8GW7WZ9L92X/YKwVZZxdMhzM5
+         ZhxLVbKk7ndrIBUEJuEfAZOOTaHFnJfFrOldZiCoGlzhbc8398NLoC+DUnb1AJq+C6Jv
+         tXBM7qQNKyeBRLYpRu2wX928Eu7Q1YFEOO8YildXLxqMDWd69j3bW+w4tEpLaIvjy0gP
+         EnLg==
+X-Forwarded-Encrypted: i=1; AFNElJ924zsW8z75rA9gPCUgKGurUKRMH2XbpYTI0ZLUS+bTph/Znu4UDpkt9marj2Uvi1Up5yahrKRv0jqN6iXbOzw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSp6Vaf4wVqTTKlZwP+McEWPFX2ohfgJgjCAhLWX4S5GSHxQeO
+	6dS44HfXy7blfNfAbLCYBQbP1VsWE29sdayvTDQ8zdL79XO45VGP04tD9YrRpi0Qa5A=
+X-Gm-Gg: Acq92OFyGVvQPb001GAMLWoKb1UXk/fFE1DAOgxPolmsXQsHG4hz26r0PniqrDn2Cuu
+	/pBfBVXlAz5Rf+Lprenb94S+5BDR8QxV9d6cQ1T4VioLlnnH8QB0YTKfAOQbmIjuACV37OnqZBM
+	IOAftv5X73EpNPoJ0JRuomogkdgdDp4NIcgw9R2Zv4V+3F9luJudR5EfQXsOnjYxu3h/HJjMmky
+	/WNUhdi9J5mIrX+a5xlXMwDjDrKTu8VTpZo1Y3u506foMNrQceCRiQimDjNZ9nH4gb70j3nna+x
+	uzJpaekp2Uk68KEBZepRchgwqgyKdC+1PDW+ZsAWZV/O7qDtAzRGrzmIWbFg2Pzcbm9wiSE5ZRF
+	pzdPEPTPfjAfjB/0u+qyaCgpAxT9oK3wnNIZD+1JqdvBsR2T+eeuUm4OnNLOewex9zER7Xk4U+2
+	UgJVye7b7R45KfeI1T7A==
+X-Received: by 2002:a05:600c:8b43:b0:490:bbc4:76a6 with SMTP id 5b1f17b1804b1-4923341fdb8mr74870325e9.21.1781699171664;
+        Wed, 17 Jun 2026 05:26:11 -0700 (PDT)
 Received: from localhost.localdomain ([62.77.90.70])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-462e7fc53fasm3497433f8f.33.2026.06.17.05.26.02
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4922fa3abd0sm179575345e9.1.2026.06.17.05.26.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 05:26:03 -0700 (PDT)
-Date: Wed, 17 Jun 2026 14:26:01 +0200
+        Wed, 17 Jun 2026 05:26:11 -0700 (PDT)
+Date: Wed, 17 Jun 2026 14:26:09 +0200
 From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
 To: Li Wang <li.wang@linux.dev>
 Cc: akpm@linux-foundation.org, tj@kernel.org, longman@redhat.com, 
@@ -65,11 +65,12 @@ Cc: akpm@linux-foundation.org, tj@kernel.org, longman@redhat.com,
 	nphamcs@gmail.com, chengming.zhou@linux.dev, shuah@kernel.org, linux-mm@kvack.org, 
 	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Michal Hocko <mhocko@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>
-Subject: Re: [PATCH v7 2/8] selftests/cgroup: avoid OOM in test_swapin_nozswap
-Message-ID: <ajKRLmEoR3P2QTNW@localhost.localdomain>
+	Shakeel Butt <shakeel.butt@linux.dev>, Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH v7 8/8] selftests/cgroup: test_zswap: wait for
+ asynchronous writeback
+Message-ID: <ajKLmjRIjKTNKGTn@localhost.localdomain>
 References: <20260424040059.12940-1-li.wang@linux.dev>
- <20260424040059.12940-3-li.wang@linux.dev>
+ <20260424040059.12940-9-li.wang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,56 +78,113 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="n7t6jkbdigw2ibo4"
+	protocol="application/pgp-signature"; boundary="rhxkikwyiqml4ro5"
 Content-Disposition: inline
-In-Reply-To: <20260424040059.12940-3-li.wang@linux.dev>
+In-Reply-To: <20260424040059.12940-9-li.wang@linux.dev>
 
 
---n7t6jkbdigw2ibo4
+--rhxkikwyiqml4ro5
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v7 2/8] selftests/cgroup: avoid OOM in test_swapin_nozswap
+Subject: Re: [PATCH v7 8/8] selftests/cgroup: test_zswap: wait for
+ asynchronous writeback
 MIME-Version: 1.0
 
-On Fri, Apr 24, 2026 at 12:00:53PM +0800, Li Wang <li.wang@linux.dev> wrote:
-> test_swapin_nozswap can hit OOM before reaching its assertions on some
-> setups.
 
-Is it because of differences in available IO or what does it depend on?
+On Fri, Apr 24, 2026 at 12:00:59PM +0800, Li Wang <li.wang@linux.dev> wrote:
+> @@ -345,7 +366,10 @@ static int test_zswap_writeback_one(const char *cgro=
+up, bool wb)
+>  		return -1;
+> =20
+>  	/* Verify that zswap writeback occurred only if writeback was enabled */
+> -	zswpwb_after =3D get_cg_wb_count(cgroup);
+> +	if (wb)
+> +		zswpwb_after =3D wait_for_writeback(cgroup, 5000);
 
-> The test currently sets memory.max=3D8M and then allocates/reads
-> 32M with memory.zswap.max=3D0, which may over-constrain reclaim and kill
-> the workload process.
->=20
-> Replace hardcoded sizes with PAGE_SIZE-based values:
->   - control_allocation_size =3D PAGE_SIZE * 512
->   - memory.max =3D control_allocation_size * 3 / 4
->   - minimum expected swap =3D control_allocation_size / 4
->=20
-> This keeps the test pressure model intact (allocate/read beyond memory.ma=
-x to
-> force swap-in/out) while making it more robust across different environme=
-nts.
+We should have something like
+	cg_read_key_long_poll(cgroup,
+	                      "memory.stat",
+			      "zswpwb",
+			      0,
+			      500,
+	                      DEFAULT_WAIT_INTERVAL_US);
+for this.
 
-I see you used allocation value that is preserve absolute values from 64k s=
-ystems
-test is differnt on 4k ones. Any specific reason for that?
+Although this also needs further change like (and respective adjustment):
 
+diff --git a/tools/testing/selftests/cgroup/lib/cgroup_util.c b/tools/testi=
+ng/selftests/cgroup/lib/cgroup_util.c
+index a7b3380d88d77..c0511853db9c6 100644
+--- a/tools/testing/selftests/cgroup/lib/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/lib/cgroup_util.c
+@@ -188,8 +188,8 @@ long cg_read_key_long(const char *cgroup, const char *c=
+ontrol, const char *key)
+ }
 
-Thanks,
-Michal
+ long cg_read_key_long_poll(const char *cgroup, const char *control,
+-                          const char *key, long expected, int retries,
+-                          useconds_t wait_interval_us)
++                          const char *key, enum exp_op expected_op, long e=
+xpected,
++                          int retries, useconds_t wait_interval_us)
+ {
+        long val =3D -1;
+        int i;
+@@ -199,7 +199,9 @@ long cg_read_key_long_poll(const char *cgroup, const ch=
+ar *control,
+                if (val < 0)
+                        return val;
 
---n7t6jkbdigw2ibo4
+-               if (val =3D=3D expected)
++               if (expected_op =3D=3D EXP_EQUAL && val =3D=3D expected)
++                       break;
++               if (expected_op =3D=3D EXP_GT && val > expected)
+                        break;
+
+                usleep(wait_interval_us);
+diff --git a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h b/too=
+ls/testing/selftests/cgroup/lib/include/cgroup_util.h
+index 567b1082974c5..3e9bfb66cf5a9 100644
+--- a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
++++ b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
+@@ -19,6 +19,11 @@
+
+ #define DEFAULT_WAIT_INTERVAL_US (100 * 1000) /* 100 ms */
+
++enum exp_op {
++       EXP_EQUAL,
++       EXP_GT,
++};
++
+ /*
+  * Checks if two given values differ by less than err% of their sum.
+  */
+@@ -69,8 +74,8 @@ extern long cg_read_long(const char *cgroup, const char *=
+control);
+ extern long cg_read_long_fd(int fd);
+ long cg_read_key_long(const char *cgroup, const char *control, const char =
+*key);
+ long cg_read_key_long_poll(const char *cgroup, const char *control,
+-                          const char *key, long expected, int retries,
+-                          useconds_t wait_interval_us);
++                          const char *key, enum exp_op expected_op, long e=
+xpected,
++                          int retries, useconds_t wait_interval_us);
+ extern long cg_read_lc(const char *cgroup, const char *control);
+ extern int cg_write(const char *cgroup, const char *control, char *buf);
+ extern int cg_open(const char *cgroup, const char *control, int flags);
+
+--rhxkikwyiqml4ro5
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCajKSVRsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AhqQQEAhKvnU2uXdtmJBVHmhU0h
-vihGBStgNmEeFai/1TzvfbMA/jfIjPkmuNEjQrWZRoxCNCCn746++JvMF9TKwDBC
-VKQL
-=xbR8
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCajKSXRsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+Ahk/gEA8MFcY73q1d/mRp6IVc/w
+CQOVsXy+oQ7vXkS8eyOailYBAKUGPqDDIcVYrCtsuMyhJ+LOoh7WKCiXRcrKQPNr
+iBMI
+=ROyv
 -----END PGP SIGNATURE-----
 
---n7t6jkbdigw2ibo4--
+--rhxkikwyiqml4ro5--
