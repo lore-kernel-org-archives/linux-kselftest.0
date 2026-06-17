@@ -1,134 +1,103 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E9B378D92
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 05:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919233B1EC6
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 06:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781675672; cv=none; b=DDQVyU5cruydFTotIp/r9486qvjGvEH5gNQaI1eYW2iX3dsYCndMOXPWg0ThxnfMH/A/Jichh7qHlFH3+JiLw5qLO/1j7bqk29YUV+gGV838MJF2I1KJZLGBnpmU+v4rxecIcYa6R7kl28X76XGoMi3uVN49T59zaVo9P13P03k=
+	t=1781676592; cv=none; b=qi0oI9DjBomiR1cfzXc1wiaFOr1tTUwRQg25dYqtUZKtENhzyXPDHh14zLA3fAyKULBzlYDE6JbYcNGyhmpVgwjNyX90vK9j6WjRIUcSAEn01J3WbDY8Yz7Q3NvM37RmNixIxjbjlNYW8o+7VGz6ROZi7boDPF2edkfO+3JMeGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781675672; c=relaxed/simple;
-	bh=JPSEZ5DBfGgXCMRrMt7tkKE0iaKqNP+5j0HVvURBbbQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=agFaF6gLUxbbJFtcNyOa2vjJJ0YrQW1G2suMr/kdt9zkcg+/f+Q68pLgcnE/PPe7z1HnSyL//gqHaRUAgUDLm0nGEhZv5cnf/sGdRMMDyx1igObEPdw1qeBeahrMvoBo35XAwhdUTOI3OTDBoTUyQqHr7VE6YtE1IZLnev9RELc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQ2BYWGM; arc=none smtp.client-ip=74.125.82.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781676592; c=relaxed/simple;
+	bh=qNq2Np2owAOATAEvweRdUBgEUHLpklaQw2z58nEY6JQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O5YpfZi2qw6NxC3OJHvE2hgjVAuHH+B9Z4wDr+ahpkytHSPDzuFLkH1d/KCrwjMYVraKPIe1U2zeiuFcu+89V/rf2jrFOvWbFXbx/mhuXNL3QvfZJjhwR2wev2Rfgx77/b8fRzlw8EIwytQEMYvpj99tckFn1QMvBLZKhSDnnE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=Ykmj+LP5; arc=none smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQ2BYWGM"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-30bd59b6eb9so420625eec.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 22:54:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781675670; x=1782280470; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lgHWRJeHkWZRclnQwk3a2RIt682Ls8zcqusIx8RTJdE=;
-        b=MQ2BYWGMh6QLCDsqL8KDmQK5BXhbObmHpPKhYW+1aIncnUo8bvUqrN3JhjEadylnFt
-         wz2B3p4THdocXM7AX+G7OrtB9Ffgx1D0kTRujsa1XE3Ls8Nr46waqD4xqAdEa/i0w8/A
-         xpmnN7erR4fpRY6NBMhxNWCKRxV/vFLUaDcd9Mojh+/zlnflijkmNcuG8MvlN9g/Jrvg
-         UNGawByMbN7Je/Bi8lxsA9kyGRJHYbywN4A68aGC5CxJLbxLAjjCkMr0/G2/x8N/N1vC
-         KbXcn+cB04AzsuOpu2pl4HhSv/lKYcAxJQHboImdQnO6ovbM/1oA4+KNlWllKFBkVeb9
-         aEjQ==
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="Ykmj+LP5"
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EECD63F60F
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 06:09:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1781676587;
+	bh=qNq2Np2owAOATAEvweRdUBgEUHLpklaQw2z58nEY6JQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=Ykmj+LP5FdcVz5e00/BDxa1RCIJBOVkaECMng0PQQssl1UeQ5iRjvmdPSJLELX8Um
+	 pEMpS04S0TF4M9Md5dkJRMM46uv07xiLlGbyJGC2OhFbQaKAiLvKbykX0WcR5bHMcw
+	 6fwkuMOy1NdNvINENLntAU92irmCg5H6zLJL7UhQ3qImY0pPjsAAPwUw6EoPq7JUS3
+	 /uFCdEbec9prSc/eUHL0Ezfne6TApcPjTkgYwG2Ze0oZkvb8umZJ1EDPQVSoFi/2pV
+	 akLwbIShOFcFGji7bGttM10L3iZCPWeIyzQjCqqYsHFcmlX/nhPz3CbTB2bhWCIX/P
+	 KNip2k5kl14pQMAOj2i0VmCU4m5eg6vurrlYKoGE+uQyCe5RJ/9ITLZt0wMkpclxWr
+	 vCWvZhKPJqCpx/AKa3WYAaMRGgLgQOtE95guyTEzM+pizIFZIJkzB7uKhA2i9zb4Uy
+	 7/g6M1O+asIDeZWpBbSjJxytPHksMgnM7gKdkrr9X+LYFn315m3K3EDLHS12Rfneap
+	 0eaEXvptcqmPSb1jkjNwOZSGGJpE3Dx9IyPey45pvJMb6V9JM5CQQDj5Cd7uic68gk
+	 LbqXR+pVnEEk74iU3ZKuOo5hQ1Bhp7SmipD9IRgNftiBbvJ1i4fAEoYdUG9TuJfGrC
+	 /65T78Wz0Kc3PBTfucB0zGtk=
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-490bde3d239so35225595e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2026 23:09:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781675670; x=1782280470;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lgHWRJeHkWZRclnQwk3a2RIt682Ls8zcqusIx8RTJdE=;
-        b=tOFd0+55U+0pNUm/LhzAK5bOtbbPQoyvUtbpH/47XmNHwpSkMzKm5yizopcIN5l49C
-         FTsZ7WcPUxqOXoQEisd+3vJRwgQ79GYYvRLhRxy6KJ8+Tze1+PFDf4WRAei/vsSSwsl5
-         qAYNHAA6q79NKZOTD2rFvIkvtnDdnBMMAUHemsVp7/e8anCMbXpL1qyiZBwDBXnUXQmO
-         uYoD26dMZOAm+nb/HKNQ7hsTpPoy2GNMSmjoHJzcG2AMjeFQSGY3IXP6hTc+DyJ1e9/Y
-         7ST188xdxLKo09r/lnsTFtPPCS/sbcWxzlvOs+mSxI2DdGuSq7C0bQyipjJFbga7aj6Q
-         U8QQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/okU/5vfUmMtmr4dgJsYwSFyVdadbNRDjdCNUK3NDhqD/Aq1PdWWaQFm0Ne1ZzeMtd9f6lz2H8O8xrvwRZFIU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yysw00cH1NFJ/12aur2woD2hO7hh9bnz+Zc44dANYkC+eO6jmAS
-	QSZSFNaClZaHP4qLL5D4bQGs3jsUx/mI9G/ZTS6AU5ml9dOBwW78gp5Q
-X-Gm-Gg: AfdE7ckFUkwuaIUo8BSaPExCzMRLIC9r0KDj0qEKa48uXVS60870k+JSiQxkjo+g5K7
-	b/q7++waU5gXuCq1l0s5a0fC2cVnDhzBRxypOLRi6MWaGqAXDtjbBGvkQEMr+ol5m9jvQO1vjXT
-	eiiA5ROzM+ncNmgVXvDcg/IfAs4ZKZWG3MV5sCORn55nx35OWSdFY1iNneocom/mx8bsO5OytWu
-	IsQh9ersxGB613wtQt7L3fbLbGtK3R9lUB9QCpyGq41mXzPjCRQUgXH0o9y9el9+budBvaei21W
-	TsHUY3QFBCoX7LXauO/cmfHVNzkElJ3uICi9DZ1tPA3DxIIqJX55EgUIe0m0kmpU3Pmo8uVNXl7
-	owqWBj4gm9hkpKSbru7BV63M/Krvn9ZnJ3TjkM3Uq6jT4cW1Vy6sWku6YY5rBTiZL5uziLj/Ngv
-	H3C6ljVuIfrjIUzSLwX1dP2Mrjb0yz2MSUyxzpcsQj
-X-Received: by 2002:a05:7301:10c5:b0:304:6d18:3646 with SMTP id 5a478bee46e88-30bc917139dmr1162248eec.0.1781675670206;
-        Tue, 16 Jun 2026 22:54:30 -0700 (PDT)
-Received: from localhost ([198.176.50.157])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081e5d0828sm23558239eec.10.2026.06.16.22.54.27
+        d=1e100.net; s=20251104; t=1781676587; x=1782281387;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qNq2Np2owAOATAEvweRdUBgEUHLpklaQw2z58nEY6JQ=;
+        b=M25zeBVaiDov0Iuea+hYREqkL2B3StbgZvH0ZOHkL6uE6nAujZ+8SlfD3Dj8i4hxoP
+         WSPeFUwZU17lodCD2hKcEIXxpvfQQs2TRNZUenK9hAFfqZGxgluvpxeuWjupoAdImNWm
+         07SbEeBRu9W/pgL7QNnKpqM5zf6FbqFjW22a69RIgyRKEmfEI2lGlQwLZJONoVmTohXn
+         JrWYXQQ3QEyIXMsWZtiCR5+fnVnuua2htLZZb9gqKuKuCf6LxprB0pWf2YA9FDJlwcbk
+         XQ/c0jMpmkMAEXQlBNvgmC1ykSUVTQcj6dGqQTF17zpjSCmGroO7Z3BE0ELPCf3R+sP3
+         IU+Q==
+X-Gm-Message-State: AOJu0YzEjp4A5fAP3Ym4qdG35QP1dNAf1YyCvv77iOmBxPsHpggVBhK0
+	9Ypf55VjU7fvBjIPIl4utL0D3SpbW5jj+OaMK/S9IZa+70FBDZ56NS0227dEQvoFnjZMOkVvkFP
+	vGvjJktl+c4ahMhvdx3r/tBc7CL9fxAisjDbTfLnM0gQ3VjW64E62DKUmNCaSvEtwXyD4GFjkxh
+	FPQ12yoQyRww==
+X-Gm-Gg: Acq92OEwlah9GZJDsn3EiCvzCf5t86TMeco6G3cmCG6zadZKA7ZEr26J91NuKEvgDiJ
+	7kXIGu8kReDQqG6ChwIgACj5B0KJzwa9abjahmijMgr3RmaLTDQa+Hg4oVKFGXC2hbkNgNa7HCt
+	z+vSWh7rb4Syhikyoy0AVCotR5PNCXWUFvHr7C0q3iypF16svonTiFLYWZfvROegWfZG8kqjb7T
+	jKnFGzMOFNyVKr4CVcPmWTnVzMb3YZ7tEuhv/4zF0RqbbuTYLxng3pqzFZycSl60Bs00PMss/72
+	ZEnNlQuk0Q25tm/yIw1eK9ONyk0LxE/frI00vnDk4zCCAbXxzBZ1Iw76cOth/bsLHKAejPf3YVh
+	OPg7bfdvi+x9Nku7F11wEzyu3z+oFZ5MzF/nAf76u
+X-Received: by 2002:a05:600c:1553:b0:490:d354:d15b with SMTP id 5b1f17b1804b1-492334282b7mr37259845e9.29.1781676587600;
+        Tue, 16 Jun 2026 23:09:47 -0700 (PDT)
+X-Received: by 2002:a05:600c:1553:b0:490:d354:d15b with SMTP id 5b1f17b1804b1-492334282b7mr37259505e9.29.1781676587312;
+        Tue, 16 Jun 2026 23:09:47 -0700 (PDT)
+Received: from ?IPV6:2001:67c:1562:8007::aac:41a0? ([2001:67c:1562:8007::aac:41a0])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2c5266sm57092036f8f.29.2026.06.16.23.09.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jun 2026 22:54:29 -0700 (PDT)
+        Tue, 16 Jun 2026 23:09:46 -0700 (PDT)
+Message-ID: <0265091e-3722-4b93-a644-e9b3dbd57a3e@canonical.com>
+Date: Wed, 17 Jun 2026 18:09:38 +1200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 17 Jun 2026 13:54:25 +0800
-Message-Id: <DJB3B9GN52TI.P6PBYUEDRQW2@gmail.com>
-Cc: "Jiri Slaby" <jirislaby@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
- "Starke, Daniel" <daniel.starke@siemens.com>, "Xiang Mei" <xmei5@asu.edu>,
- <linux-serial@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/2] tty: n_gsm: fix gsm_queue() UAF and add a base
- regression test
-From: "Weiming Shi" <bestswngs@gmail.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Weiming Shi"
- <bestswngs@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260616173240.3665059-1-bestswngs@gmail.com>
- <2026061722-explode-predator-59f4@gregkh>
-In-Reply-To: <2026061722-explode-predator-59f4@gregkh>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/1] selftests: net: fix file owner for
+ broadcast_ether_dst test
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ stable@vger.kernel.org, edoardo.canepa@canonical.com, davem@davemloft.net,
+ edumazet@google.com, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ oscmaes92@gmail.com, bacs@librecast.net, linux-kernel@vger.kernel.org
+References: <20260610062230.71573-2-ross.porter@canonical.com>
+ <20260613213254.174421-1-kuba@kernel.org>
+From: Ross Porter <ross.porter@canonical.com>
+Content-Language: en-US
+In-Reply-To: <20260613213254.174421-1-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed Jun 17, 2026 at 9:24 AM CST, Greg Kroah-Hartman wrote:
-> On Tue, Jun 16, 2026 at 10:32:38AM -0700, Weiming Shi wrote:
->> The receive worker walks gsm->dlci[] without gsm->mutex while a
->> concurrent GSMIOC_SETCONF -> gsm_cleanup_mux() frees the DLCIs, so the
->> control handlers can dereference a freed gsm_dlci. v1's NULL check only
->> narrowed the window; v2 fixes the use-after-free itself.
->>=20
->> The fix pins each DLCI the dispatch dereferences with its existing
->> tty_port reference (option 2), so the data path stays lock-free. See the
->> patch 1 commit message for details, including why the late destructor
->> uses cmpxchg() so it cannot wipe a re-created mux (Daniel's teardown
->> concern).
->
-> Cool, but wow, that's complex for something that will never actually
-> happen in a real device :)
->
-> So do we want to add that complexity?  if so, why?
->
-> Ideally Daniel can verfiy this change is ok as they are the only known
-> user here.
->
-> And thanks for the test patch, but that's just a functional test, while
-> great to have, and not one that can actually mimic a real device with
-> its timing constraints, right?
->
-> thanks,
->
-> greg k-h
-
-Hi,
-
-The complexity is just the cmpxchg() in gsm_dlci_free(). The actual UAF fix
-is only the tty_port pin (dlci_get/put) around the dispatch, which doesn't=
-=20
-touch any fast path. The cmpxchg() only guards the teardown+recreate case=
-=20
-Daniel mentioned, and isn't needed for the UAF.
-
-So should I drop it and respin a v3 with the pin only? The use-after-free=
-=20
-is fully fixed either way.
-
-Daniel, does the pin approach look right to you?
-
-And yes, the test is functional only (pty bring-up/teardown, no timing).=20
-It's the base regression test, not a race reproducer.
+On 14/06/2026 09:32, Jakub Kicinski wrote:
+> Could the -Z root argument be moved before the icmp filter expression?
+That's a good catch, I'll resubmit a v2.
 
 Thanks,
-Weiming Shi
-
+Ross
