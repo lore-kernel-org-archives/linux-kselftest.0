@@ -1,105 +1,143 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90EED3B95F8;
-	Wed, 17 Jun 2026 10:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A763F39EA;
+	Wed, 17 Jun 2026 10:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781691860; cv=none; b=Fa0bgFbXUgUq6kmd67kvb+SpIkkyu81hDu1ZgEB3zTl7o1xrIWjPhz5JM6jakQHDn/A48DHZsw6QffvDfgPRTpwUiro8OG2P6aesWI3pK8PSfpfnyY/pygkB35u6B/MN3yuE0xiPWF8BCAVQkJEQW/MmI5n6gJAZLkjrAlmXe00=
+	t=1781692270; cv=none; b=LRXZq4PTQuoBDo41P15d4WVnooRQZ4CRoBCY4P44gxBl7pkKh13EWgXEAqYx0iQe+ikKBsKfVBL6zTZiCjAGs68IGW8sKho5ga3J4zlDCndMRqE64UFgFfMiyvDC96Yd4/30PTsDQnUoxjuflRLyXirhw2prUtIlQ6NZbxATRcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781691860; c=relaxed/simple;
-	bh=RBjZ+xKgnYCukmvql2bhRtb5M3XjwEAV+EY1WqzzMjs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZCd6gGLFgriKGDKePqUxc5nQP2/bRy5hiqT/rbqoPqolvuFpZlwKhlQ03+CHTub0t/nYvFXsaEy/M1cEQVzk3auKxbZZQJ77V9Hl2zg3lvWUZEg9fgqJOvZirHJPcl6rtYy2ARDwTLPohWO7ibChZl6+N/10zpY0JZ/hhZgtvBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=NDWo+zYh; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1781692270; c=relaxed/simple;
+	bh=bepZvFwC0kuKVlHrcnGIZVDYxk3YMdG2buaGxwd2CvM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=PPKd6ItbQNKuZ4+FDqOB/qFrqkX6cP9YN10sa6KDh2yI9UzS7rFlmbhiYmTGp7ukmd227vIqr7mAdjmWcKpzu3PJKb96b2wC9AcawgNUnUVx1Z/12ADqQCBwOW8VyLpaLWWLx3k0CUYgKvux9h1QmCk+CAKhF9Eahgw/QaeOm2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CnyzbjZt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="NDWo+zYh"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=QWmxyRB2DXwUpHN/BGvJF4UVPz/NFDw/d+t0YjnWzGg=; b=NDWo+zYhmh4Zu3urJKliPrU7iL
-	rCbc7tMjsoEnWH1HZS38OLGVAxHUXY3sO6LHfmWgo0JEFZ6VQy1M1nOcZZ1PZp6p/QsWmao9aZmD+
-	AQLSxXEACVIA9008HpO2J0KeIMiG1vemw05bI45+OJK9TZt9cQVtRbWLKyw6SXaH3MOSmRRj+KNUB
-	yAYubcnwCe3Nj167GcWguKDYg8/8WyoJC154ItBmZEZ7bR5NLffhxC6vYf9ArrVcmogkSptC1kbHp
-	KYDfcmztybYNy+ZwWf3oYV7GweujbLeoCvK6hcR7f1A1xyqPr9CPNh4Wx8JrCp21Ya5hZESeNSpXg
-	YZoK7BvA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wZnR9-00EYDO-0L;
-	Wed, 17 Jun 2026 10:23:59 +0000
-Date: Wed, 17 Jun 2026 03:23:54 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Josh Triplett <josh@joshtriplett.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, Mateusz Guzik <mjguzik@gmail.com>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, shakeel.butt@linux.dev, 
-	jlayton@kernel.org, axboe@kernel.dk, kernel-team@meta.com
-Subject: Re: [PATCH v3 0/2] fs/pipe: reduce pipe->mutex contention by
- pre-allocating outside the lock
-Message-ID: <ajJ1Xi1p9UhQvILi@gmail.com>
-References: <20260524-fix_pipe-v3-0-bb4a75d23a90@debian.org>
- <ajG2bmhu6j9UWvh4@localhost>
- <ajJgWBCFYwz9OIo3@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CnyzbjZt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4621B1F000E9;
+	Wed, 17 Jun 2026 10:31:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781692269;
+	bh=4s8B06hQ1rOc/7iH9nprTQEQF8ufGwjXXUdHj5x0TCs=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=CnyzbjZtGuF/6gdPW7lMycDU4SZO4IcXziYsHEThVqK11jpusegvDd3+2KvQgM67A
+	 gqezhFH9DgwFxksLVboLCIkxXgTvOy05v1/TyOLygKgX2Z5A9TMibduMm4DNbaaiRn
+	 UgePUvkKdV7WxODY3i9H7kFVO4fmIR//dZpj4hErX2VaIdQH0NVlSvllS9NY5kcPV5
+	 0mQCWr28tgt2AX7Jkdi016MrkmcgL8wp2UgeulVXnLWkVSLSMwXcz/pCMC63s6ZIKZ
+	 KLi2CxKWgIZMZ6ghcFT2P3UIwQK6H/p7oNMkEwI4t+hNkxkO5ij6TjqbwEatm0gzBr
+	 GR5sviGA0gjmA==
+Content-Type: multipart/mixed; boundary="===============8536718724851256273=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ajJgWBCFYwz9OIo3@redhat.com>
-X-Debian-User: leitao
+Message-Id: <2dad9b5c184fa101d7cffa1d8f5eea5b5df60f53533d98c68175c9e3ec5ee6ac@mail.kernel.org>
+In-Reply-To: <20260617093557.63880-3-sun.jian.kdev@gmail.com>
+References: <20260617093557.63880-3-sun.jian.kdev@gmail.com>
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Cover partial copy of non-linear test_run output
+From: bot+bpf-ci@kernel.org
+To: sun.jian.kdev@gmail.com,bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,toke@redhat.com,lorenzo@kernel.org,paul.chaignon@gmail.com,sun.jian.kdev@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 17 Jun 2026 10:31:08 +0000 (UTC)
 
-On Wed, Jun 17, 2026 at 10:52:40AM +0200, Oleg Nesterov wrote:
-> On 06/16, Josh Triplett wrote:
-> >
-> > On Sun, May 24, 2026 at 07:44:57AM -0700, Breno Leitao wrote:
-> > > This series pre-allocates pages outside pipe->mutex in
-> > > anon_pipe_write(): for writes that span more than one full page, up
-> > > to PIPE_PREALLOC_MAX (8) pages are allocated via a per-page
-> > > alloc_page() loop before the mutex is taken. anon_pipe_get_page()
-> > > then drains the prealloc array first, falls back to the per-pipe
-> > > tmp_page[] cache, and only enters the allocator under the mutex for
-> > > the leftover pages (writes larger than PIPE_PREALLOC_MAX, single-page
-> > > writes that skip prealloc, or shortfalls when the prealloc loop
-> > > fails). Leftover prealloc pages are recycled into tmp_page[] before
-> > > unlock and any remainder is put_page()'d after unlock, keeping the
-> > > allocator out of the critical section on both sides.
-> > [...]
-> > > I also vibe-coded a microbenchmark to validate the change. It sweeps
-> > > writers x readers over {1,2,5} x {1,5,10} with 64KB writes against a
-> > > 1 MB pipe and prints throughput + latency percentiles per config.
-> >
-> > How do the numbers compare with 1-byte writes/reads? (It's fine if
-> > they're not *faster*, just want to make sure they don't get any
-> > *worse*. This case comes up a lot with pipes used for synchronization or
-> > event reporting, such as with make.)
-> 
-> Note the "for writes that span more than one full page" above. Pre-allocate
-> does nothing if total_len <= PAGE_SIZE.
+--===============8536718724851256273==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Exactly.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
+> index 01f1d1b6715a..9cc898e6a9f7 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
+> @@ -4,6 +4,10 @@
+>
+>  #include "test_pkt_access.skel.h"
+>
+> +#define NONLINEAR_PKT_LEN 9000
+> +#define NONLINEAR_LINEAR_DATA_LEN 64
+> +#define SHORT_OUT_LEN 100
+> +
+
+[ ... ]
+
+> @@ -20,6 +24,69 @@ static void check_run_cnt(int prog_fd, __u64 run_cnt)
+>  	      "incorrect number of repetitions, want %llu have %llu\n", run_cnt, info.run_cnt);
+>  }
+>
+> +static void init_pkt(__u8 *pkt, size_t len)
+> +{
+> +	size_t i;
+> +
+> +	for (i = 0; i < len; i++)
+> +		pkt[i] = i & 0xff;
+> +}
+
+A question was raised on v2 about whether pkt_v4 could be reused by
+reducing the linear area to ETH_HLEN, rather than introducing a custom
+init_pkt() with a 9000-byte stack packet.
+
+Can't we reuse pkt_v4 here by reducing the linear area to ETH_HLEN?
+The v3 still adds init_pkt() and the NONLINEAR_PKT_LEN packet, so this
+doesn't seem to have been picked up.
+
+> +
+> +static void test_skb_nonlinear_data_out_partial(struct test_pkt_access *skel)
+> +{
+> +	LIBBPF_OPTS(bpf_test_run_opts, topts);
+> +	__u8 pkt[NONLINEAR_PKT_LEN];
+> +	__u8 out[SHORT_OUT_LEN];
+> +	struct __sk_buff skb = {};
+> +	int prog_fd, err;
+> +
+> +	init_pkt(pkt, sizeof(pkt));
+> +
+> +	skb.data_end = NONLINEAR_LINEAR_DATA_LEN;
+> +
+> +	topts.data_in = pkt;
+> +	topts.data_size_in = sizeof(pkt);
+> +	topts.data_out = out;
+> +	topts.data_size_out = sizeof(out);
+> +	topts.ctx_in = &skb;
+> +	topts.ctx_size_in = sizeof(skb);
+> +
+> +	prog_fd = bpf_program__fd(skel->progs.tc_pass_prog);
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/test_pkt_access.c b/tools/testing/selftests/bpf/progs/test_pkt_access.c
+> index bce7173152c6..cd284401eebd 100644
+> --- a/tools/testing/selftests/bpf/progs/test_pkt_access.c
+> +++ b/tools/testing/selftests/bpf/progs/test_pkt_access.c
+> @@ -150,3 +150,15 @@ int test_pkt_access(struct __sk_buff *skb)
+>
+>  	return TC_ACT_UNSPEC;
+>  }
+> +
+> +SEC("tc")
+> +int tc_pass_prog(struct __sk_buff *skb)
+> +{
+> +	return TC_ACT_OK;
+> +}
+> +
+> +SEC("xdp.frags")
+> +int xdp_frags_pass_prog(struct xdp_md *ctx)
+> +{
+> +	return XDP_PASS;
+> +}
+
+A related suggestion on v2 was that, once pkt_v4 is reused, the existing
+BPF program could be reused instead of adding new pass-through programs.
+
+Could tc_pass_prog and xdp_frags_pass_prog be dropped in favour of the
+existing program? The v3 still adds both of these, so this point also
+seems to be open.
 
 
-The pre-allocation only triggers for multi-page writes:
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-anon_pipe_get_page_prealloc() returns immediately when total_len <= PAGE_SIZE,
-so a 1-byte (or any sub-page) write never enters the new path.
-
-anon_pipe_get_page() then falls through to the existing tmp_page/alloc_page
-logic exactly as before; the only added cost is one length check and a NULL
-prealloc pop, both trivially predicted.
-
-Measured it to _just be sure_, 1-byte ping-pong (perf bench sched pipe -s 1):
-
-    baseline:  2.674 usecs/op
-    patched:   2.710 usecs/op   (+1.3%, within run-to-run noise)
-
---breno
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27680511802
+--===============8536718724851256273==--
