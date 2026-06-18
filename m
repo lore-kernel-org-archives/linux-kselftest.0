@@ -1,361 +1,118 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A2633E34B
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 03:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E3128CF5F
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 03:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781752369; cv=none; b=Jvj58fZO1NSP5UH2pvZdO2SAqzVtOgUM3D6gwuRqmlG+T38+cJGy1G2wQoDXvQjCA0zznLD2iADG8RwBy+cl8TZJZT25PeLpuHQoNUwpBCz84MPa2SUtrqPWCa8F3+Bu/x3wGAtRaWlrcQ80z7T6DvaWCWA+5D1dzoHsZKMwjnw=
+	t=1781753933; cv=none; b=VSp8orxIGUnQG72XLlS46yGfVpDx2aUI83YSGAARQ4rgPjGBopvh5F4ANe/PE6J8r+mIiJ+iCg2Lfd+KxMk6VzQykJScTvHrpikaNvKM+Qszg9NQLPyqVREtfJA0bT/6i6rv1vsYaQeJyf8W49ucj5gOci0KCYECs7DR1CYkrlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781752369; c=relaxed/simple;
-	bh=sFs7mynJbe12HuAxVNUwUdIyzOYLmiTuiC6AfxKdZXc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Nk+KFtqj6HfaYveDrvbpgtQo+WWeSvKNcbFYgaHocFOOnF3Coh2OoP6JzSwiwuazWFh99sHZYsxERTFDt6sker+dTP7/vmdIt09RSd2Y+XKZv5ao45Hu+jc+chaHXu12WnNIPcb05H9msE56PnlsjvxOj/O/kZwc69DJrnDU7w0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=crKDOiIJ; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781753933; c=relaxed/simple;
+	bh=anaz+9ZZxyfRKUcRTPbX7Ph3HodpI6dtwKZOS0roqnc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=J5MZY4OTd+6wVVt90GwnCd+Jdsbq6G8RdWsKCp8Rz0Z6aT0EgaRuIcElpN/8AFoM7oQSJDfWBxPm4MLpHANhZfHPAOWVuwTXo/8Xiq14ufXTu8xop20HH1bVoTdElB8iIEk1LdCf4ceQykofd2hSfCQxWvEF7mQJ/ZcfSnipumQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QKubptTE; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="crKDOiIJ"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2c6b67d5fa1so4058195ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 20:12:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781752367; x=1782357167; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EAMlJUtgJr93wlY4Vrgrp/rfGIjYwybe1wRU3OQLFss=;
-        b=crKDOiIJ+3vKsFMXjsHxDDuyInXKr6ZbM7f5q1ZDmMeA6uRS3Bb2BYhuZtS6wEynNi
-         p1MB8ok+AB3CbvCM9bMLeecS0eJn7UAXcOzltlfGri40RG0E3iwubEoJTpKrsH1HcV6a
-         m4tq3a8sD3czy2PCM4HyXTvbHBRiuLgP+ULmQsllwKBsSC8SVnlfVjX5zvSATwHqECmv
-         bEGMhjQAT+xeerFrgznm3954Yj/Nb7mA9htAztoGDf6j2xOYdAfi8sCBG27zeSpCGrq/
-         7F4V87e4yZp+qpHQ57Am52AXBzh03xYxbNAWOXv0Y1xI+FO/0AA+Fjz4S5xvFusCHjOB
-         kxAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781752367; x=1782357167;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EAMlJUtgJr93wlY4Vrgrp/rfGIjYwybe1wRU3OQLFss=;
-        b=hw8SyM79Pw2dEQLVLjAAudrRhml+E12NxwPf0frfKpD3etAE8BnbmiwG0P1Z7LtXXf
-         uJy53XId4ShRb+/2Aeh7vHpzNIAAs9m+zGdnRVHYni8NI//mCFEVbJ5fPIyeDZQMIlZT
-         vA1mFf7GBChQHBYNpCSjslSUyX0vcEjLElBPeS7jwxH0NFhMoIStQTyOg3Ja4guw3prx
-         xgk3dl20NILUNYTHFB+R+yVZm2OGvusqUqKW/LNyMpyikaP6pRY69sJ9tl4I9l2+Rwmd
-         SQY9H0RQ9/wCy/DLi3XrGfvcAdQ6LaWX/Ivkx46+4Bhl1XXYH16DrX74rD81NBJgy1te
-         Qy3g==
-X-Forwarded-Encrypted: i=1; AFNElJ+1xthQKM80H7dOnYmyPX/prjf+nY+8NtlwVNOyFNgmJAhkw0bUpqSkzS/38HGLYtBelvwBWkEkRX5wVeyu/oM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/nPX5IAp9eExAss5RJwLUpxBfzjxruaMErUDQ0V3x1R4SoPHB
-	AdPUmBBgUIlWTNfLpofYd1xseV0N3CDO8xsDbMiQRrTKrFVyivW18wao
-X-Gm-Gg: AfdE7cnbzXbTOE0mHiJn1od5/qT2xftaMEApblUSCxL29sw6G/EBWWr9iQq3QFu6lFk
-	5JMv/ORTC1Bh7YnHsdxvSClLgyds1IyqG712n+j5gE2j+iScsTHRagA9rDFdI2dBaAVPYC2MUmg
-	8MQ3WTigMyYWmufhsXlVq6RPV0z/Oyt52Blhmep0IHnwz6w2jECrl5IVOPChrmuAUdU1Q+Hhv1J
-	UOIJ97I5xVCKhiAbc79mWEvxNGvEzEqRtMXa+rfGAPeAxFqbOeP6ZwWvbPGRYTwyFkwzbxSA2Bx
-	HnMQMD1IlEuYllTdxWjvbidvI8/QAhq1kC39OcKANqhdHcgJGb/quF1IVHmZ0tGJGCpBlAeCS7S
-	vgBhpuqll7rMMvQ/3Ng5hp+p0G/k1xyej4iCOUXj2pnRXhrOWRZJoDpp1FCLyBI+wHhhsSuVCm+
-	9ydKrpjsH9EaI=
-X-Received: by 2002:a17:902:f547:b0:2c2:bd0d:3cfa with SMTP id d9443c01a7336-2c6bc0c6684mr67014325ad.11.1781752366951;
-        Wed, 17 Jun 2026 20:12:46 -0700 (PDT)
-Received: from [127.0.1.1] ([138.199.21.246])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c6a403b242sm60152975ad.31.2026.06.17.20.12.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 20:12:46 -0700 (PDT)
-From: Jing Wu <realwujing@gmail.com>
-Date: Thu, 18 Jun 2026 11:11:24 +0800
-Subject: [PATCH v3 13/13] selftests/cgroup: Add kernel-noise isolation test
- to cpuset selftest
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QKubptTE"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781753919;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cGvmfKekfBpASW5+N5hmq6REiUIEtZPpTONmmCc5MJg=;
+	b=QKubptTEFnxfHcl43nVdAdwAMqz2UCSrozLyUD3gutlWhEu2VmlbnNb8uHOvaRrHgK00Lr
+	BKV+CGKsO7IuXZIsVnmXFjUOc9H5sXm4/K27BIvBlkxX3owyWoXwmlHD1V1ARLVJkhBELz
+	5OhvzMpPD+17UC94ipDa4lDVTknMqQE=
+From: George Guo <dongtai.guo@linux.dev>
+To: chenhuacai@kernel.org,
+	yangtiezhu@loongson.cn,
+	hengqi.chen@gmail.com
+Cc: kernel@xen0n.name,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	George Guo <guodongtai@kylinos.cn>
+Subject: [PATCH 0/5] LoongArch: BPF: arena instruction gating, private stack and exceptions
+Date: Thu, 18 Jun 2026 11:38:04 +0800
+Message-Id: <20260618033809.98253-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260618-wujing-dhm-v3-13-28f1a4d83b68@gmail.com>
-References: <20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com>
-In-Reply-To: <20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com>
-To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
- "Paul E. McKenney" <paulmck@kernel.org>, 
- Frederic Weisbecker <frederic@kernel.org>, 
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
- Joel Fernandes <joelagnelf@nvidia.com>, 
- Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>, 
- Uladzislau Rezki <urezki@gmail.com>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
- Anna-Maria Behnsen <anna-maria@linutronix.de>, Tejun Heo <tj@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>
-Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org, 
- cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Jing Wu <realwujing@gmail.com>, 
- Qiliang Yuan <yuanql9@chinatelecom.cn>
-X-Mailer: b4 0.13.0
+X-Migadu-Flow: FLOW_OUT
 
-Add test_hk_noise_isolated() to test_cpuset_prs.sh to verify that
-creating and destroying an isolated cpuset partition updates both the
-domain isolation state and the kernel-noise (nohz_full) state.
+From: George Guo <guodongtai@kylinos.cn>
 
-For domain isolation, the test checks cpuset.cpus.isolated before and
-after the partition create/destroy cycle.
+This series adds three LoongArch BPF JIT features, plus the accompanying
+selftest changes:
 
-For kernel-noise isolation, the test reads
-/sys/devices/system/cpu/nohz_full to confirm that the CPUs placed in
-an isolated partition appear in the nohz_full mask while the partition
-is active, and are removed from it once the partition is destroyed.
-This sysfs attribute only exists when CONFIG_NO_HZ_FULL is enabled;
-the nohz_full checks are skipped when it is absent so the test remains
-usable on kernels without NO_HZ_FULL.
+  1. Gate the arena instructions the JIT does not implement (atomics and
+     sign-extending loads on arena pointers) via bpf_jit_supports_insn(),
+     so the verifier rejects such programs early with a clear message
+     instead of letting them fail late in the JIT.
+  2. Per-program private stack (bpf_jit_supports_private_stack()): the BPF
+     stack of deep/recursive tracing programs is moved off the kernel
+     stack into a per-CPU allocation bracketed by overflow/underflow
+     guards that are checked on teardown.
+  3. Exceptions / bpf_throw (bpf_jit_supports_exceptions()): unwind to the
+     exception boundary program via arch_bpf_stack_walk() (built on the
+     ORC unwinder) and reuse its frame in the exception callback. Gated on
+     CONFIG_UNWINDER_ORC.
 
-Add cpu_in_cpulist() to correctly determine whether a CPU number falls
-within a kernel cpulist string (e.g. "4-7").  A plain grep cannot
-detect membership in the interior of a range; cpu_in_cpulist() walks
-each comma-separated element and handles both single values and
-lo-hi ranges explicitly.
+Patches 4-5 are the selftests side: a LoongArch deny list (arena_atomics,
+which patch 1 deliberately rejects) and enabling the struct_ops private
+stack test on LoongArch. They touch tools/testing/selftests/bpf, hence the
+bpf@vger / linux-kselftest Cc.
 
-The test also covers: rejection of all-CPU isolation, the SMT sibling
-constraint, nested partition inheritance, and a 100-cycle pressure test.
-nohz_full is verified to be restored to its pre-test value after each
-create/destroy cycle and after the pressure test.
+The series is independent of the earlier "LoongArch: BPF: Support
+internal-only MOV to resolve per-CPU addrs" / "Add timed may_goto support"
+patches [1] (no functional or apply dependency) and targets the LoongArch
+tree.
 
-Fix awk invocation to drop the spurious -e flag.
+Testing on a LoongArch board (test_progs):
+  - exceptions:               117 subtests, 0 failed
+  - struct_ops_private_stack: private_stack / _fail / _recur, 0 failed
+  - arena list/htab/strsearch and verifier_arena*: pass
+  - arena_atomics: rejected by the verifier as expected
+      ("BPF_ATOMIC stores into Rn arena is not allowed"), hence the
+      deny-list entry in patch 4
 
-Signed-off-by: Jing Wu <realwujing@gmail.com>
-Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
----
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 204 +++++++++++++++++++++-
- 1 file changed, 203 insertions(+), 1 deletion(-)
+[1] <https://lore.kernel.org/all/20260609041407.122384-1-dongtai.guo@linux.dev/>
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index a56f4153c64df..047db14953fac 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -20,7 +20,7 @@ skip_test() {
- WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
- 
- # Find cgroup v2 mount point
--CGROUP2=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
-+CGROUP2=$(mount -t cgroup2 | head -1 | awk '{print $3}')
- [[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
- SUBPARTS_CPUS=$CGROUP2/.__DEBUG__.cpuset.cpus.subpartitions
- CPULIST=$(cat $CGROUP2/cpuset.cpus.effective)
-@@ -1204,9 +1204,211 @@ test_inotify()
- 	echo "" > cpuset.cpus
- }
- 
-+#
-+# cpu_in_cpulist <cpu> <cpulist>
-+#
-+# Return 0 if <cpu> appears in <cpulist> (a kernel cpumask list such as
-+# "0-3,8-31"), non-zero otherwise.  The kernel cpulist format uses ranges
-+# ("lo-hi") and comma-separated items; a simple grep cannot detect that a
-+# number falls in the middle of a range, so walk each element explicitly.
-+#
-+cpu_in_cpulist()
-+{
-+	local cpu=$1 list=$2 range lo hi
-+	for range in $(echo "$list" | tr ',' ' '); do
-+		if [[ "$range" == *-* ]]; then
-+			lo=${range%-*}
-+			hi=${range#*-}
-+			[[ $cpu -ge $lo && $cpu -le $hi ]] && return 0
-+		else
-+			[[ $cpu -eq $range ]] && return 0
-+		fi
-+	done
-+	return 1
-+}
-+
-+#
-+# Test that isolated partition creation/destruction drives kernel-noise
-+# housekeeping mask updates and remains correct under pressure.
-+#
-+# Requires: >=8 CPUs, no isolcpus= boot conflict, root
-+#
-+test_hk_noise_isolated()
-+{
-+	local ISOL_BEFORE TEST_CPUS i PART ISOL_AFTER ISOL_RESTORE
-+	local NOHZ_FILE NOHZ_BEFORE NOHZ_AFTER NOHZ_RESTORE
-+	local HK_NOHZ_CHECK=0
-+	local LOOPS=100
-+
-+	[[ $NR_CPUS -ge 8 ]] || {
-+		echo "HK-noise test skipped: need >=8 CPUs, have $NR_CPUS"
-+		return 0
-+	}
-+
-+	# Detect whether CONFIG_NO_HZ_FULL is active: the sysfs attribute
-+	# /sys/devices/system/cpu/nohz_full exposes the current nohz_full
-+	# cpumask and is only present when NO_HZ_FULL is enabled.
-+	NOHZ_FILE=/sys/devices/system/cpu/nohz_full
-+	[[ -r "$NOHZ_FILE" ]] && HK_NOHZ_CHECK=1
-+
-+	cd $CGROUP2/test
-+	echo member > cpuset.cpus.partition 2>/dev/null
-+	echo "" > cpuset.cpus 2>/dev/null
-+
-+	ISOL_BEFORE=$(cat $CGROUP2/cpuset.cpus.isolated)
-+	[[ $HK_NOHZ_CHECK -eq 1 ]] && NOHZ_BEFORE=$(cat $NOHZ_FILE)
-+	TEST_CPUS="4-7"
-+	echo $TEST_CPUS > cpuset.cpus
-+
-+	#
-+	# Basic create/destroy cycle — verify domain isolation and
-+	# kernel-noise (nohz_full) changes together.
-+	#
-+	console_msg "HK-noise: basic create/destroy cycle"
-+	echo isolated > cpuset.cpus.partition
-+
-+	ISOL_AFTER=$(cat $CGROUP2/cpuset.cpus.isolated)
-+	[[ $ISOL_AFTER != "$ISOL_BEFORE" ]] || {
-+		echo "FAIL: isolated set unchanged after partition create"
-+		exit 1
-+	}
-+
-+	if [[ $HK_NOHZ_CHECK -eq 1 ]]; then
-+		NOHZ_AFTER=$(cat $NOHZ_FILE)
-+		# Verify that the newly isolated CPUs (4-7) appear in nohz_full.
-+		# nohz_full = inverse of housekeeping, so isolating 4-7 should
-+		# add them to nohz_full.
-+		for cpu in 4 5 6 7; do
-+			if ! cpu_in_cpulist $cpu "$NOHZ_AFTER"; then
-+				echo "FAIL: cpu${cpu} not in nohz_full after isolation" \
-+				     "(got: '$NOHZ_AFTER')"
-+				exit 1
-+			fi
-+		done
-+		console_msg "HK-noise: nohz_full after isolation: $NOHZ_AFTER"
-+	fi
-+
-+	echo member > cpuset.cpus.partition
-+
-+	ISOL_RESTORE=$(cat $CGROUP2/cpuset.cpus.isolated)
-+	[[ $ISOL_RESTORE = "$ISOL_BEFORE" ]] || {
-+		echo "FAIL: expected '$ISOL_BEFORE' after destroy, got '$ISOL_RESTORE'"
-+		exit 1
-+	}
-+
-+	if [[ $HK_NOHZ_CHECK -eq 1 ]]; then
-+		NOHZ_RESTORE=$(cat $NOHZ_FILE)
-+		[[ "$NOHZ_RESTORE" = "$NOHZ_BEFORE" ]] || {
-+			echo "FAIL: nohz_full not restored: expected '$NOHZ_BEFORE'," \
-+			     "got '$NOHZ_RESTORE'"
-+			exit 1
-+		}
-+	fi
-+
-+	#
-+	# Reject all-CPU isolation (must leave at least one housekeeping CPU)
-+	#
-+	console_msg "HK-noise: reject all-CPU isolation"
-+	echo 0-$((NR_CPUS - 1)) > cpuset.cpus
-+	echo isolated > cpuset.cpus.partition
-+	PART=$(cat cpuset.cpus.partition)
-+	[[ $PART = *invalid* || $PART = member ]] || {
-+		echo "FAIL: all-CPU isolation was not rejected, got '$PART'"
-+		exit 1
-+	}
-+
-+	#
-+	# SMT safety: partial sibling isolation
-+	#
-+	console_msg "HK-noise: SMT sibling constraint"
-+	echo $TEST_CPUS > cpuset.cpus
-+	echo isolated > cpuset.cpus.partition
-+	PART=$(cat cpuset.cpus.partition)
-+	[[ $PART = isolated ]] || {
-+		echo "FAIL: could not create isolated partition, got '$PART'"
-+		exit 1
-+	}
-+	echo member > cpuset.cpus.partition
-+
-+	#
-+	# Nested partition: parent root → child isolated
-+	#
-+	console_msg "HK-noise: nested partition inheritance"
-+	echo $TEST_CPUS > cpuset.cpus
-+	test_partition root
-+	mkdir -p HK_SUB
-+	cd HK_SUB
-+	echo 4-5 > cpuset.cpus
-+	echo isolated > cpuset.cpus.partition
-+	ISOL_AFTER=$(cat $CGROUP2/cpuset.cpus.isolated)
-+	[[ -n $ISOL_AFTER ]] || {
-+		echo "FAIL: nested isolated partition not reflected in cpuset.cpus.isolated"
-+		exit 1
-+	}
-+	echo member > cpuset.cpus.partition
-+	cd $CGROUP2/test
-+	echo member > cpuset.cpus.partition
-+	rmdir HK_SUB 2>/dev/null
-+
-+	#
-+	# Pressure test: 100 create/destroy cycles
-+	#
-+	console_msg "HK-noise: pressure test ($LOOPS cycles)"
-+	echo $TEST_CPUS > cpuset.cpus
-+	for i in $(seq 1 $LOOPS); do
-+		echo isolated > cpuset.cpus.partition
-+		PART=$(cat cpuset.cpus.partition)
-+		[[ $PART = isolated ]] || {
-+			echo "FAIL: cycle $i create failed, got '$PART'"
-+			exit 1
-+		}
-+		echo member > cpuset.cpus.partition
-+		PART=$(cat cpuset.cpus.partition)
-+		[[ $PART = member ]] || {
-+			echo "FAIL: cycle $i destroy failed, got '$PART'"
-+			exit 1
-+		}
-+	done
-+
-+	#
-+	# Stability: after pressure test, verify final state
-+	#
-+	console_msg "HK-noise: post-pressure cleanup"
-+	echo isolated > cpuset.cpus.partition
-+	ISOL_AFTER=$(cat $CGROUP2/cpuset.cpus.isolated)
-+	[[ -n $ISOL_AFTER ]] || {
-+		echo "FAIL: isolated set empty after pressure test"
-+		exit 1
-+	}
-+	echo member > cpuset.cpus.partition
-+	echo "" > cpuset.cpus
-+	ISOL_RESTORE=$(cat $CGROUP2/cpuset.cpus.isolated)
-+	[[ $ISOL_RESTORE = "$ISOL_BEFORE" ]] || {
-+		echo "FAIL: final isolated '$ISOL_RESTORE' != '$ISOL_BEFORE'"
-+		exit 1
-+	}
-+
-+	if [[ $HK_NOHZ_CHECK -eq 1 ]]; then
-+		NOHZ_RESTORE=$(cat $NOHZ_FILE)
-+		[[ "$NOHZ_RESTORE" = "$NOHZ_BEFORE" ]] || {
-+			echo "FAIL: nohz_full not restored after pressure test:" \
-+			     "expected '$NOHZ_BEFORE', got '$NOHZ_RESTORE'"
-+			exit 1
-+		}
-+	fi
-+
-+	cd $CGROUP2
-+	if [[ $HK_NOHZ_CHECK -eq 1 ]]; then
-+		console_msg "HK-noise: PASSED (with nohz_full verification)"
-+	else
-+		console_msg "HK-noise: PASSED (nohz_full skipped: CONFIG_NO_HZ_FULL not active)"
-+	fi
-+}
-+
- trap cleanup 0 2 3 6
- run_state_test TEST_MATRIX
- run_remote_state_test REMOTE_TEST_MATRIX
- test_isolated
- test_inotify
-+test_hk_noise_isolated
- echo "All tests PASSED."
+George Guo (5):
+  LoongArch: BPF: Gate unsupported arena instructions via
+    bpf_jit_supports_insn()
+  LoongArch: BPF: Add private stack support
+  LoongArch: BPF: Add exceptions (bpf_throw) support
+  selftests/bpf: Add LoongArch deny list
+  selftests/bpf: Enable struct_ops private stack test for LoongArch
 
+ arch/loongarch/kernel/stacktrace.c            |  52 ++++++
+ arch/loongarch/net/bpf_jit.c                  | 172 +++++++++++++++++-
+ arch/loongarch/net/bpf_jit.h                  |   1 +
+ .../testing/selftests/bpf/DENYLIST.loongarch  |   2 +
+ .../bpf/prog_tests/struct_ops_private_stack.c |   2 +-
+ 5 files changed, 222 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/DENYLIST.loongarch
+
+
+base-commit: 186d3c4e92242351afc24d9784f31cb4cd08a4b7
 -- 
-2.43.0
+2.25.1
 
