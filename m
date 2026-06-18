@@ -1,117 +1,74 @@
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D81383FBEAA
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 15:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F221E3264DA;
+	Thu, 18 Jun 2026 15:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781796301; cv=none; b=pWyBvGRvJt+WxwG31jfQ8D9IAgANulvbnFXRIpzSXTvsyQlJsOWwA4U/gDUGtEPbji83IiY4F/PLlQ3f7K1neWevhXHbL8XJUnZzIVZS53Gqd5tD+GMcM6zlqKzFtwr+BdQKoqJK9ZMBEUcaPhBbJe3+98BoTUspAzCxicY3X/U=
+	t=1781796695; cv=none; b=UANQJMF20rIBCyW6IiJZTOCUUrDEsDxVMp97m+kjDyotXxzSrT159jokXcQGkj4sNmNjShjfL7M0Mt5XMnUlFJMlh9aHBOucSuwKS/6ae6Ru7EjY1FZN0HQ6QO9AaM3N4fOkVmNtRQ0zA8e7mDnG13CgaCB1kRaWhaAzghfidaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781796301; c=relaxed/simple;
-	bh=ZfPLf442w3sL0RwDvNRk/yFGjnO35Q+6suC1CWmYzDk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o/Umg5KXvip5tejLpS3RAorXmWcC6eIDq51t79BbEje3XZuHDUyLsPXK34HKkNrDrcRpXfxcnJ/kHxd7nAInH/VFasJF6sTzBNSvYMCgM5LSqHrDiNNEZ1lwh1NkE4dzH1XtGrHoBc/XgRyRVEs91fIxmfQsAKHfPzcA1Dx7nQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hE/VNCs2; arc=none smtp.client-ip=209.85.161.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1781796695; c=relaxed/simple;
+	bh=RAAaHoeh/MJumT7Jl018zpIQtLKmhwOXGGNn3ZLlRog=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=moJJeg644vvIp4qYIdbInAkWcSkt/yyen4zZk5i978M+Bf+vDGiaHNIu35lQwhdhHPp7xR/4pOtp12KyqUSgseZiL++3ylJRNaMIfTdP3xSWfUzQRU61JP3xrjYwdMxlBwS4nTy4t7bvRTybxSBI8WXtKp8qO6oBZboxX81rFuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=f4b+IXkQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=t2jc4irZ; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hE/VNCs2"
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-69e505c7e22so375399eaf.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 08:24:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1781796299; x=1782401099; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lBx2MJdHGb6d75Q1J7l/vf2fQDboake9HxhnnU/k+eg=;
-        b=hE/VNCs2VydPoKqwaY0f9fOjiBb+Hf/9lINSfRojO12P5ZGpCjc2nCzC4V1oIj7uy+
-         VLhPXhy60a49UvRzLjcTZmmX5fXOhVs4cvr3mQetqIA39rubyfMpha6W6Ofb5gwAJRk3
-         W0cI8USeulj5OZpjQF07FA8Xzg6TD9BfOvfAM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781796299; x=1782401099;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lBx2MJdHGb6d75Q1J7l/vf2fQDboake9HxhnnU/k+eg=;
-        b=hr8d+/9qVqhBqmFnr0Cq2tYeXKFHQw2vgKEx27sAMog8NSpu6OALGXvWAOrbnNzP98
-         lMxkwFwONSOI3AWe9ce0C65B7u/ZVtBTKNrGGCRGc4mVaobo0v+DNnL9Sh0pyLYeN6M0
-         I0+VEIBEg5o6iniRZI2QQSbr95bTbaacdR4vIjspfAPoQhNTsOHyrUIbtEokJnB/eKrW
-         eQJU9hMDAt76OotjgqD+GKGMQ3RU/nfwHzPmil5aU/LaoNx8jWQ0CqqKUTtD4F1DiEAC
-         aXPvvkfox+9ir2VEP9EG/2F7btx8V4PILph92xggWEYiJ6lrqVup7X+yWyJd1LlGHBtG
-         qqfw==
-X-Forwarded-Encrypted: i=1; AFNElJ+bhOyYER61g7cKmj+9xzhP9Bh4ikQUWC9RKqAJ1p/4t3BfZdI7fBsZQALvyMksZgZuGQdpnJIAOOhO5lTQVj0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTA/tDH3dXaRCTx1w5meOx4J/MPRGkKypHWv1LfvVfCMxIN7iz
-	Xzm5UrswTD70lsjzfu+NWr1jxnai0PhGu36/AWiuCql234m4k550i6SblF2ZIPFIMhg=
-X-Gm-Gg: AfdE7clyW/S+Dp7kUeNVhH7I5miobEjwk4SF9ixxUy9i2UYsjbr3ATGNgglRjWKbFlZ
-	+1nT+Qq7aGcA1i8PPMAX+TBDlkcORiCc87PALRuTyxSiZP3Wr62DudnXffaKfFZ3r7EPm2hieCA
-	7PbNe+tB/sY+3fKSXf48g6mdp4hUKOMm34hIhItwlXG8s7rgS7245t/QcA4RuHUWJ92YDzWGXmS
-	dSuXtLEUiRT7Us6XJ29QIXsutdpOGhVUrTNQmzfrd6f0F8EPDq60Vksu8QMe+9zwXv5xIb/5BdO
-	a6nPTsC/4w5ToYq44/fWnfV6QfGEBIYYNQpg/UqFp6aLGo4xmY3keG+VHnlp+Wsyuf/8Hbyxfw8
-	gHhBHN2q3yjMTM/+T4rkyVNhS8iNS6vZAs9TOXjH09FhmfRVuVSwob3I6UXefBlDEbYN/1kemGI
-	2K97sYtOktMfHmNjbPJWlY
-X-Received: by 2002:a05:6820:174a:b0:69e:2e0a:58dd with SMTP id 006d021491bc7-6a0b618d9demr7357214eaf.38.1781796298724;
-        Thu, 18 Jun 2026 08:24:58 -0700 (PDT)
-Received: from [192.168.1.14] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69f00b41ed1sm9150146eaf.0.2026.06.18.08.24.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jun 2026 08:24:57 -0700 (PDT)
-Message-ID: <16ef9ff1-4c98-4c89-aefa-734a9e775df2@linuxfoundation.org>
-Date: Thu, 18 Jun 2026 09:24:55 -0600
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="f4b+IXkQ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="t2jc4irZ"
+From: Nam Cao <namcao@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1781796692;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RAAaHoeh/MJumT7Jl018zpIQtLKmhwOXGGNn3ZLlRog=;
+	b=f4b+IXkQhTwpjwvjeIS1sST2BLVtsjL1UEdnmxNOL3lPDXGXN8p4pBZTulWxnvylYeKVFG
+	uGbMKdwi+CpjyDB9PBq7i6vVXxyG8S7BCgaClErdpvv1yr9NTz2M+bFLuy8zG75x1SYbaS
+	I5Y9y3yuOPT48X3zoEALahwLSuvgH0Q8Z9+txzIcZmx49i0Hh3TBkpmj6sAJTM29MEshDP
+	D2zBkkEYZ1hnAs7p/LoLBujaAGEGCdM4L0Z33LPyovOnyyDwz00riz8cpvuLnW8BW887CI
+	zRIBZp7UkIF0mKRU2sNooS78DgPMPr5zjfTxECII4a6DfL3Lt7WcjsCvWBnliQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1781796692;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RAAaHoeh/MJumT7Jl018zpIQtLKmhwOXGGNn3ZLlRog=;
+	b=t2jc4irZweu5KNBW2cs9NoLMghLuOSyOya4gG6B0vbJPWT7FpL5OwzHy+GB23sGgly2aig
+	sV+QDO9IaCT6MHAA==
+To: Charlie Jenkins <thecharlesjenkins@gmail.com>
+Cc: Charlie Jenkins via B4 Relay
+ <devnull+thecharlesjenkins.gmail.com@kernel.org>, Paul Walmsley
+ <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti
+ <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, Atish Patra
+ <atish.patra@linux.dev>, Conor Dooley <conor@kernel.org>, Paolo Bonzini
+ <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Shuah
+ Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 04/16] riscv: kprobes: Use generated instruction headers
+In-Reply-To: <ajOezhejx7PcOw_x@blinky>
+References: <20260407-riscv_insn_table-v1-0-54b4736a1e77@gmail.com>
+ <20260407-riscv_insn_table-v1-4-54b4736a1e77@gmail.com>
+ <87jys5egum.fsf@yellow.woof> <ajOezhejx7PcOw_x@blinky>
+Date: Thu, 18 Jun 2026 17:31:31 +0200
+Message-ID: <87fr2jq2zw.fsf@yellow.woof>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: proc: include fcntl.h in proc-pidns
-To: Amin Vakil <info@aminvakil.com>, Shuah Khan <shuah@kernel.org>
-Cc: Aleksa Sarai <cyphar@cyphar.com>, Christian Brauner <brauner@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20260618151444.124739-1-info@aminvakil.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20260618151444.124739-1-info@aminvakil.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 6/18/26 09:14, Amin Vakil wrote:
-> proc-pidns.c uses open() and O_* flags, but does not include
-> <fcntl.h>. This breaks the proc selftests build with errors such as:
-> 
->    error: implicit declaration of function 'open'
->    error: 'O_WRONLY' undeclared
->    error: 'O_CREAT' undeclared
->    error: 'O_RDONLY' undeclared
-> 
-> Include <fcntl.h> to provide the declaration and flag definitions.
+Charlie Jenkins <thecharlesjenkins@gmail.com> writes:
+> Since I was checking against the previous version it's not possible to
+> do a straight one-to-one conversion to the kunit. I think it might be
+> possible to do something similar but I will need to mess with that to
+> determine a good way of doing it.
 
-Did you install headers before compiling the test?
+Perhaps not to the existing kunit, but a new kunit which calls the
+simulate_*() functions directly. Just an idea.
 
-> 
-> Fixes: 5554d820f71c ("selftests/proc: add tests for new pidns APIs")
-> Tested with:
->    make -C tools/testing/selftests TARGETS=proc
-> 
-> Signed-off-by: Amin Vakil <info@aminvakil.com>
-> ---
->   tools/testing/selftests/proc/proc-pidns.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/proc/proc-pidns.c b/tools/testing/selftests/proc/proc-pidns.c
-> index 25b9a2933c45..6f7c10fe97b3 100644
-> --- a/tools/testing/selftests/proc/proc-pidns.c
-> +++ b/tools/testing/selftests/proc/proc-pidns.c
-> @@ -6,6 +6,7 @@
->   
->   #include <assert.h>
->   #include <errno.h>
-> +#include <fcntl.h>
->   #include <sched.h>
->   #include <stdbool.h>
->   #include <stdlib.h>
-
-thanks,
--- Shuah
+Nam
