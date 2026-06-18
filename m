@@ -1,65 +1,67 @@
 Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2FE32B125
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 03:11:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70D0331EAA
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 03:11:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781752283; cv=none; b=a1t0r4aug0pWwi/jqUATV5obLdYUGm8oluTGsK4YFFa6xuMS24K5bLsMiIKoqzn40UxRitSw95Db5xDO4X3M/Yq8ITEIMFn3juNT2yUgzMGbZ3q2PkDs70LIvtVCQd4XNRDJ8v0kexLnGPooaIeQLqk3xrWywntceXoLFf9mdA0=
+	t=1781752293; cv=none; b=SOhrAY8fqixWYUTXzeTyM7cERaY5ANOdr63mjTLdnoZZLRUUpwDapWG1N5Wh4GjB6c5gGuoOxHhkx08SmnK/s7SIAiFVbBy0baV1kPF7IJPRZSnC+GWfRENGBDpbBIccpDv6+BpqRhkpPpIcHP7Ntf7Piiz3k1EhCFZbC8BiH6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781752283; c=relaxed/simple;
-	bh=Xa5StEN2UH086bDikWsQrqqqrc9uy1URBleR3Pv/RuI=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mXUGgwDgAqEgWHacNNMHaZruGHeahDdnTCo6LKWCHi5D7RVLlDmzWTDWb5jrOKputdU7j+Fk+tAd5ThJuku1bqGwPTBJA839Z5ZSHnF68cadAtky7HSFRm7PtE1ShPvhF+pZIpMetm970k+d+RqeAWmTMLUljDAj1Zxv6OtUsyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XTRDT8rP; arc=none smtp.client-ip=209.85.214.182
+	s=arc-20240116; t=1781752293; c=relaxed/simple;
+	bh=LFnUvZsdMV36HeugdzJp7p/REa5uLOArHKOIqQWkJY0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=ILbEDDkEzRbB1+zu1dh7zIHfNWktKEsFIeQOI8d3aob9d+0d6ZuGhNFg8O1IYA4qCcQ2/9BL52rcfUkF7dlu+hV2Qpug8byqzHJRNhx7lyZmmNzPbKkJp6OpTjWNQ3oAycXLWMd4Za2qL7ZClUmhkzRHwg7Ql9jXGvL3yKwIEIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=djEp0eok; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XTRDT8rP"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2c6dadfbaafso5149715ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 20:11:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="djEp0eok"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2c6bb8a5980so3214535ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 20:11:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781752281; x=1782357081; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CJIpWsHRh9AKKYRu7jgv8q277vRNDwM5z3jTZiQx1lI=;
-        b=XTRDT8rPpb1rok5YcsfdkCFn5xepyXLOhNXa+rIw5uMymVh8ILY3E0XxNialBahegb
-         aFJ6yi8FTOuNfMUutWSQQWW5hoE5EPNk/e4ZK6wTqK6IUpVYbQTtLNmyQDD8wMe5R1GZ
-         hspO2RY2IRxhav77+cE64G6ECphZd8032RI2pb97QhTISlKhzv6gdy65x5xx5ejn5M/y
-         PGWwhknRZIrieY02awERilsrb9WarsQuJvQN5lnjhZIijnFkO0u7UO6vqYIIQRjZvgYm
-         Z0jAcNrrVZWywlspd4uto83Tl2Di+O6Me5cOdAVCH1KPwd8ilNVeVkDrvc7Ayz0H0h9f
-         H2EA==
+        d=gmail.com; s=20251104; t=1781752291; x=1782357091; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WzKJaLY4P29xr36n94cF6pafuVv3SDEbWpOz12HsOhM=;
+        b=djEp0eokhQ2NMzAcX24vYUFw7KCOYo04rjPuhwnJxmAZUa3gbFVTm+4j3DGzDUGPyI
+         DIKUBNI+QvlSbkuKWdia3u4U+ICMFPC3G4vw5fJBciBwb87g6yNhgaJ79ePKvvyAG1to
+         9AFC9zVvEUuU9Tqk5/+GOczqNlBGwyrLCrfNsLfoW0VUE4mzaoS6FrnEaeP8/8TNjG4V
+         eCAKW3knJoh8YMN/rAVJAbLfn/W5c2Jte6eAUKlcwCD9/yVhgUqSsEmstPkEWKKeoC1l
+         /djM+oK4tN5Iayfhe9A6NKs26Jrap7Gkn+J4WbhSaj8NM5Idz3QanszWiLIJseWhGKgR
+         xHxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781752281; x=1782357081;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CJIpWsHRh9AKKYRu7jgv8q277vRNDwM5z3jTZiQx1lI=;
-        b=HL1QmIpdYJyqv2DxaKEXg1vtdKRdfNzhdPd/HY+VyVuW7AUEK1jSPhRSxpuDSsiS9W
-         FNa1SDE8UtWlPpkEEZ2LwU1Gae3dYyXPtx3NXz93o8G/O9re/ToU90rbK8wXt4vggD96
-         vzEIZp4Azxir5XFTMSvz7bzGtkD0cUhJIrTtie9p1Ym45eOgUaYVv1XmUJCb9Wf1vH5T
-         oFwZCI59rPW64vhtYsKi9QjZCf/UyX7smUBFytAFITBOxSP7b6uy4C31/m2PMj6zQoyk
-         R1WszQSZvtqamg5KYQbeuV7gokQYgLTigJk2CkBNx1uwklAntnYu7csLPqXCxNE4IdkK
-         xQ4Q==
-X-Forwarded-Encrypted: i=1; AFNElJ8IBPxURs6tpESWQ0rfMZQ5k4o+IxJwdd3p1KTZb6TMkTE8N5aAoQiA9KzEca9NNfKqPSdsWBGDmYaxZqDsj44=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCvRlzmfvX3iB091ImievCMdin+MVAbICWg+2nAEfEu8Lt+pIb
-	wF+vUmS7mTuisFw2Qt8BiueVrTICORM9uEWRvQ1CATDQSnufyJNEybWY
-X-Gm-Gg: AfdE7cmkuby5bnjb0WlRfgKqOujTff6wiJpkzRW3z0vKfkQMmxTIEL+A7nXjGwUR/Zd
-	/DcBfsL2WN7FmvKS6+XLXEYv0/kBQ98VcwwPPy44cQ6j/BBtfTTLq1Icgk6IwbUMkBC82h1Fq6O
-	PgzZgJIKj0geoVOLoHGAGjMsbaE+ci+fZ6DRmyV5Zc1KMxz+j093TDM/5UYCtCvvoTAgsYvPfys
-	LO1JKwezk57C83/Nptad1+my4/ENKXf7qrQaPF8qiWs13rAkAzySQuD580+QYZoAq1AQ3uoLau4
-	vU8z3l+GTuLhsQHDmhVGmS5MOQF1tpeEA76uVDw/ydXIisng+4eZxkjr8drPx1kZ1fV1TA8rNCY
-	OTAnAJ5eUVFbzpIkTx5bSkjBpoq64Rt2uZn+6o+sVflvoytFkxrkmgpT6Yj29tcz72LmtbM90Vo
-	MXwlFf/kfK7Cs=
-X-Received: by 2002:a17:903:1d2:b0:2bd:5ab:af95 with SMTP id d9443c01a7336-2c6e2464d52mr16755565ad.0.1781752281045;
-        Wed, 17 Jun 2026 20:11:21 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781752291; x=1782357091;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WzKJaLY4P29xr36n94cF6pafuVv3SDEbWpOz12HsOhM=;
+        b=YP71ldkw2RB9pdl/rgrVwNZ8lmlGv35FN8nz6iYWCCnW+lFb0N8At9k8qdekOuXJ5v
+         ynsLL+XGn56AFvAx+53a3bAsOxMN3Wr4tZ1q6WLaZZq4Skwtp7T6EeQJuxTWE6xTAKJT
+         74bgz+xnWDuwRc1qiDZjK7gMnDI7QWjlNQUfEc+nh7i9Ch7NzPFygmxXn0WPN+brSHAn
+         o61T7KAgd0a+0wiB/nspJFdz1Sszm5s//qLnAKULPcYwx0OB8YCwVQ9WNGN2T9apWwVM
+         4WC5XBRddBX9aE7gD1I3cyLucp/VAfPzxmhHdInixl7hRecewIYq9ZHCCP2IQj9UDPQ+
+         XKkg==
+X-Forwarded-Encrypted: i=1; AFNElJ9gnUcnU/9RA36QdjGjo7yVRdONHaBH9HwMtKG8+2I8IfgPkkSX41OZ2by1PQsNjaE8UDoLazxls09SVcB4b88=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtTvcL//nghIEztEv68C/yaCNCS/aVMSPmQW7wPgtHGZTtmk9e
+	0WY5o2+zpBo1j+7q4ljorNEphEAs7VRCONovii8hrfvHz+530r+hnEXf
+X-Gm-Gg: AfdE7cnRkku67+hq+IOk9pQCb7oCDtkxfzw0I2aWXz8LncmZr+x6gKhLDMaI2PyURw0
+	IEYFpVSU87Y4leWDRkqAngqLNr/EdNwfb/oW5O5NT3w419WcijaRqsJycPQwK4DuZ9fcMNIEEFn
+	rAmdVVLmPRqYrBH9cmyvxR8IDWW5TkwCd/+Z4XT3p7CXsbUldJj/1IN8zpkxiKedJtv+FpTMN61
+	lwDOA/5zfzMObfbVeSLBDyB86OWsdMcjamwkvqmNuf0YxRmTGYD6sA98L3Lp+B07HERLDbxEIbA
+	+TDfcvNDyw0vFyvwK+2oKJz7DMFI6Kp1Yo3A856QZGhVw5R9VzdJme5/J7GCNDECSp9dipzhSvI
+	ikQ/di+/oUDIDcBZVsa3DBVne/pwWZ2RWncX9k2v80AOp7rnf3eeXCmVY1fsj/qAMAyoGT+MF6A
+	1ivkjYP3cgsWk=
+X-Received: by 2002:a17:902:f688:b0:2c6:c66b:4b03 with SMTP id d9443c01a7336-2c6e4746cb1mr16305205ad.10.1781752290966;
+        Wed, 17 Jun 2026 20:11:30 -0700 (PDT)
 Received: from [127.0.1.1] ([138.199.21.246])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c6a403b242sm60152975ad.31.2026.06.17.20.11.14
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c6a403b242sm60152975ad.31.2026.06.17.20.11.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 20:11:20 -0700 (PDT)
+        Wed, 17 Jun 2026 20:11:30 -0700 (PDT)
 From: Jing Wu <realwujing@gmail.com>
-Subject: [PATCH v3 00/13] Dynamic Housekeeping Management (DHM) via CPUSets
-Date: Thu, 18 Jun 2026 11:11:11 +0800
-Message-Id: <20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com>
+Date: Thu, 18 Jun 2026 11:11:12 +0800
+Subject: [PATCH v3 01/13] sched/isolation: Replace notifier chain with
+ explicit callback interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,11 +70,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAM9hM2oC/13O0YrCMBCF4VeRXG+WZFJr69W+xyISJ5N2ljaVx
- MYV6btvKoKydzkD/0fuIlFkSmK/uYtImRNPoQzzsRHY29CRZFe2AAW1qlQjr/MPh066fpSNrwy
- Bq1p0jSjBOZLn3wf2fSi753SZ4u1hZ1ivT0abdyaDVFLVzoNGe7Jb99WNlodPnEaxMlm/UgPb0
- hDLrEF6DnYor5K3ukW0YNA6/y+PHl89qFp6spc5knS3YEfGI6dpwPOcjk94/Y2yO63ppHBXvXP
- LsvwB3W6kfjIBAAA=
+Message-Id: <20260618-wujing-dhm-v3-1-28f1a4d83b68@gmail.com>
+References: <20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com>
+In-Reply-To: <20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com>
 To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
  Juri Lelli <juri.lelli@redhat.com>, 
  Vincent Guittot <vincent.guittot@linaro.org>, 
@@ -96,114 +96,174 @@ Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
  Qiliang Yuan <yuanql9@chinatelecom.cn>
 X-Mailer: b4 0.13.0
 
-This series introduces Dynamic Housekeeping Management (DHM) to the Linux
-kernel, enabling runtime reconfiguration of kernel-noise housekeeping
-(nohz_full tick suppression, RCU NOCB offloading, and managed IRQ
-migration) through the existing cgroup v2 cpuset isolated partition
-mechanism — no new kernel ABI required.
+Replace the blocking notifier chain with an explicit per-type callback
+table (struct housekeeping_cbs).  Each subsystem registers callbacks
+at initcall time; pre_validate() runs before the RCU pointer swap to
+allow rejecting the update, and apply() runs after synchronize_rcu()
+when the new mask is visible to readers.
 
-When a cpuset partition is set to isolated mode, the CPUs in that
-partition are removed from the kernel's global housekeeping masks.  The
-housekeeping subsystems (tick/nohz, RCU NOCB, genirq) react via explicit
-registered callbacks, applying the new masks at runtime.  Destroying the
-partition restores the CPUs to all housekeeping masks.
-
-The architecture uses a per-type callback table (struct housekeeping_cbs)
-with pre_validate/apply hooks, replacing the previous notifier chain.
-Housekeeping cpumask pointers are RCU-protected to allow lock-free readers
-during updates.
+The table is limited to HK_MAX_CBS (4) slots per type, sufficient for
+the kernel-noise subsystems and avoiding unbounded dynamic allocation
+in the update path.  The interface provides deterministic callback
+order and explicit registration, giving each subsystem maintainer clear
+visibility into when and why its callback is invoked — unlike the
+opaque priority-based dispatch of notifier chains.
 
 Signed-off-by: Jing Wu <realwujing@gmail.com>
 Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
 ---
-V2 -> V3:
-- Replace notifier chain with explicit per-type callback interface
-  (struct housekeeping_cbs with .name, .pre_validate, .apply fields).
-- RCU-protect all housekeeping cpumask pointers; callers must hold
-  rcu_read_lock() or use housekeeping_cpumask_rcu() in apply() callbacks.
-- Drop 5 patches from v2: HK_TYPE enum separation (upstream aliases are
-  already correct), no-op timer/hrtimer patches, kthread dead code, and
-  workqueue double-update.
-- Fix deadlock in rcu_hk_workfn(): remove cpus_read_lock() wrapper around
-  remove_cpu()/add_cpu() which take cpu_hotplug_lock write side.
-- Fix UAF in rcu_hk_apply(): snapshot the housekeeping cpumask inside the
-  work function under rcu_read_lock(), not at apply() time where the old
-  pointer may be freed by synchronize_rcu() before the work runs.
-- Fix tick apply(): snapshot housekeeping_cpumask_rcu() under
-  rcu_read_lock() as required by lockdep for runtime-mutable types.
-- Activate context_tracking dynamically via ct_cpu_track_user() /
-  ct_cpu_untrack_user() in tick apply(), eliminating the dependency on
-  CONFIG_CONTEXT_TRACKING_USER_FORCE flagged by tglx.
-- Fix genirq apply(): snapshot HK_TYPE_MANAGED_IRQ mask under
-  rcu_read_lock() before the IRQ iteration loop.
-- Simplify cpuset noise_types to BIT(HK_TYPE_KERNEL_NOISE) |
-  BIT(HK_TYPE_MANAGED_IRQ), replacing the redundant per-alias bitmask.
-- housekeeping_update_types(): always use cpu_possible_mask as base
-  for HK_TYPE_KERNEL_NOISE, so de-isolation restores the mask to all
-  possible CPUs rather than leaving it at its last non-trivial value.
-- Initialize watchdog_cpumask from HK_TYPE_KERNEL_NOISE (not
-  HK_TYPE_TIMER) at boot; keep it in sync at runtime via a new
-  housekeeping_cbs callback.
-- Add kernel-noise selftest to test_cpuset_prs.sh, including
-  cpu_in_cpulist() for correct cpulist range membership detection and
-  nohz_full sysfs verification when CONFIG_NO_HZ_FULL is active.
-- Add RCU caller fixes: sched/core (HK_TYPE_KERNEL_NOISE) and
-  drivers/hv (HK_TYPE_MANAGED_IRQ) are required because those types
-  are updated at runtime; hrtimer (HK_TYPE_TIMER) and arm64/topology
-  (HK_TYPE_TICK) are defensive fixes.
-- Reorder patches so all subsystem callbacks are registered before the
-  cpuset patch that triggers housekeeping_update_types().
+ include/linux/sched/isolation.h | 31 +++++++++++++++
+ kernel/sched/isolation.c        | 87 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 118 insertions(+)
 
-V1 -> V2:
-- Rebrand series from DHEI to DHM (Dynamic Housekeeping Management).
-- Drop custom sysfs interface entirely.
-- Integrate housekeeping control into cgroup v2 cpuset isolated partition
-  mechanism.
-- Add SMT-aware isolation constraints to prevent splitting SMT siblings.
-- Add comprehensive documentation and cgroup functional selftests.
-- Refactor mask transition logic to use RCU-safe handover.
+diff --git a/include/linux/sched/isolation.h b/include/linux/sched/isolation.h
+index cf0fd03dd7a24..f362876b3ebdf 100644
+--- a/include/linux/sched/isolation.h
++++ b/include/linux/sched/isolation.h
+@@ -46,6 +46,33 @@ extern bool housekeeping_test_cpu(int cpu, enum hk_type type);
+ extern int housekeeping_update(struct cpumask *isol_mask);
+ extern void __init housekeeping_init(void);
+ 
++/**
++ * struct housekeeping_cbs - Per-subsystem callbacks for housekeeping mask changes
++ * @name:		Subsystem name for diagnostic messages
++ * @pre_validate:	Run before RCU pointer swap.  Return -EINVAL
++ *			to reject the update.
++ * @apply:		Run after synchronize_rcu().  Reconfigure subsystem
++ *			state.  The new mask is visible to readers.
++ *
++ * Register subsystem callbacks at initcall time.
++ * Invoke callbacks in registration order when the corresponding
++ * housekeeping mask changes.  Skip types not present in the update
++ * mask.
++ *
++ * Replace the notifier-chain pattern with deterministic callback
++ * ordering.
++ */
++struct housekeeping_cbs {
++	const char			*name;
++	int	(*pre_validate)(enum hk_type type,
++				const struct cpumask *cur_mask,
++				const struct cpumask *new_mask);
++	void	(*apply)(enum hk_type type);
++};
++
++int housekeeping_register_cbs(enum hk_type type, struct housekeeping_cbs *cbs);
++int housekeeping_unregister_cbs(enum hk_type type, struct housekeeping_cbs *cbs);
++
+ #else
+ 
+ static inline int housekeeping_any_cpu(enum hk_type type)
+@@ -73,6 +100,10 @@ static inline bool housekeeping_test_cpu(int cpu, enum hk_type type)
+ 
+ static inline int housekeeping_update(struct cpumask *isol_mask) { return 0; }
+ static inline void housekeeping_init(void) { }
++static inline int housekeeping_register_cbs(enum hk_type type,
++					    struct housekeeping_cbs *cbs) { return 0; }
++static inline int housekeeping_unregister_cbs(enum hk_type type,
++					      struct housekeeping_cbs *cbs) { return 0; }
+ #endif /* CONFIG_CPU_ISOLATION */
+ 
+ static inline bool housekeeping_cpu(int cpu, enum hk_type type)
+diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+index ef152d401fe20..aae4dff7fbfc8 100644
+--- a/kernel/sched/isolation.c
++++ b/kernel/sched/isolation.c
+@@ -28,6 +28,93 @@ struct housekeeping {
+ 
+ static struct housekeeping housekeeping;
+ 
++/*
++ * Maintain an explicit callback table indexed by housekeeping type.
++ * Invoke callbacks for affected types in deterministic order:
++ * pre_validate() before the RCU pointer swap, apply() after
++ * synchronize_rcu().
++ */
++#define HK_MAX_CBS 4
++
++static struct {
++	struct housekeeping_cbs *cbs[HK_MAX_CBS];
++	int nr;
++} housekeeping_cbs_table[HK_TYPE_MAX];
++
++/**
++ * housekeeping_register_cbs - Register explicit callbacks for a housekeeping type
++ * @type:	Housekeeping type to register for
++ * @cbs:	Callback structure containing pre_validate() and apply()
++ *
++ * Callbacks run in registration order when the mask for @type changes:
++ * pre_validate() before the RCU swap may reject the update; apply()
++ * after synchronize_rcu() reconfigures subsystem state.
++ *
++ * Return: 0 on success, -EINVAL if @type or @cbs is invalid,
++ * -ENOSPC if the per-type table is full.
++ */
++int housekeeping_register_cbs(enum hk_type type, struct housekeeping_cbs *cbs)
++{
++	if (type >= HK_TYPE_MAX || !cbs)
++		return -EINVAL;
++	if (housekeeping_cbs_table[type].nr >= HK_MAX_CBS)
++		return -ENOSPC;
++	housekeeping_cbs_table[type].cbs[housekeeping_cbs_table[type].nr++] = cbs;
++	return 0;
++}
++EXPORT_SYMBOL_GPL(housekeeping_register_cbs);
++
++/**
++ * housekeeping_unregister_cbs - Remove previously registered callbacks
++ * @type:	Housekeeping type
++ * @cbs:	Callback structure to remove
++ *
++ * Return: 0 on success, -EINVAL if arguments are invalid,
++ * -ENOENT if @cbs was not registered.
++ */
++int housekeeping_unregister_cbs(enum hk_type type, struct housekeeping_cbs *cbs)
++{
++	int i;
++
++	if (type >= HK_TYPE_MAX || !cbs)
++		return -EINVAL;
++	for (i = 0; i < housekeeping_cbs_table[type].nr; i++) {
++		if (housekeeping_cbs_table[type].cbs[i] == cbs) {
++			housekeeping_cbs_table[type].cbs[i] =
++				housekeeping_cbs_table[type].cbs[--housekeeping_cbs_table[type].nr];
++			return 0;
++		}
++	}
++	return -ENOENT;
++}
++EXPORT_SYMBOL_GPL(housekeeping_unregister_cbs);
++
++static int housekeeping_pre_validate_cbs(enum hk_type type,
++					 const struct cpumask *cur,
++					 const struct cpumask *new)
++{
++	int i, ret;
++
++	for (i = 0; i < housekeeping_cbs_table[type].nr; i++) {
++		if (!housekeeping_cbs_table[type].cbs[i]->pre_validate)
++			continue;
++		ret = housekeeping_cbs_table[type].cbs[i]->pre_validate(type, cur, new);
++		if (ret < 0)
++			return ret;
++	}
++	return 0;
++}
++
++static void housekeeping_apply_cbs(enum hk_type type)
++{
++	int i;
++
++	for (i = 0; i < housekeeping_cbs_table[type].nr; i++) {
++		if (housekeeping_cbs_table[type].cbs[i]->apply)
++			housekeeping_cbs_table[type].cbs[i]->apply(type);
++	}
++}
++
+ bool housekeeping_enabled(enum hk_type type)
+ {
+ 	return !!(READ_ONCE(housekeeping.flags) & BIT(type));
 
-v2: https://lore.kernel.org/r/20260413-wujing-dhm-v2-0-06df21caba5d@gmail.com
-v1: https://lore.kernel.org/all/20260325-dhei-v12-final-v1-0-919cca23cadf@gmail.com
-
----
-Jing Wu (13):
-      sched/isolation: Replace notifier chain with explicit callback interface
-      sched/isolation: Add housekeeping_update_types() for kernel-noise masks
-      sched/isolation: RCU-protect all housekeeping cpumask readers
-      sched/isolation: Fix RCU protection for runtime-mutable cpumask callers
-      cpu/hotplug: Reserve CPUHP states for nohz_full and managed IRQ down-paths
-      tick/nohz, context_tracking: Prepare for runtime nohz_full updates
-      rcu/nocb: Add explicit housekeeping callback for runtime NOCB toggling
-      genirq: Add explicit housekeeping callback for managed IRQ migration
-      watchdog/lockup_detector: Register housekeeping callback for kernel-noise
-      sched: Guard sched_tick_start/stop against uninitialized tick_work_cpu
-      cgroup/cpuset: Extend isolated partition to trigger kernel-noise isolation
-      docs: cgroup-v2: Document kernel-noise isolation via isolated partitions
-      selftests/cgroup: Add kernel-noise isolation test to cpuset selftest
-
- Documentation/admin-guide/cgroup-v2.rst           |   8 +
- arch/arm64/kernel/topology.c                      |   9 +-
- drivers/hv/channel_mgmt.c                         |  50 +++--
- include/linux/context_tracking.h                  |   1 +
- include/linux/cpuhotplug.h                        |   2 +
- include/linux/sched/isolation.h                   |  41 ++++
- kernel/cgroup/cpuset.c                            |  23 +-
- kernel/context_tracking.c                         |  23 +-
- kernel/irq/manage.c                               |  86 ++++++++
- kernel/rcu/tree.c                                 | 104 +++++++++
- kernel/sched/core.c                               |   7 +-
- kernel/sched/isolation.c                          | 256 ++++++++++++++++++++--
- kernel/time/hrtimer.c                             |   5 +-
- kernel/time/tick-sched.c                          | 157 ++++++++++++-
- kernel/watchdog.c                                 |  56 ++++-
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 204 ++++++++++++++++-
- 16 files changed, 968 insertions(+), 64 deletions(-)
----
-base-commit: eb3f4b7426cfd2b79d65b7d37155480b32259a11
-change-id: 20260408-wujing-dhm-8f43e2d49cd8
-
-Best regards,
 -- 
-Jing Wu <realwujing@gmail.com>
+2.43.0
 
