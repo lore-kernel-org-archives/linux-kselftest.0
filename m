@@ -1,67 +1,67 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6518933EAEC
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 03:12:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D77C33C18B
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 03:12:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781752356; cv=none; b=aFPpP1b6ELsIEqJWIFHSDlpB2HyJcFt0u3xRRoH6clqNyKrhirP9n5TOuPC+9BHVpeIcWYsIOLxRKDW9C6FJ0QJQW532zPT7Eu9dARGaVKDtiBaRpljKg0TSc6NejKsXp08p6HNd2TGY0URq6bmcV7qMxxoYxq72nqtgbpR1daQ=
+	t=1781752362; cv=none; b=mknYOK/3Qv71oFv6N1G2mxJj+xSir8saZfb2/3CvTIvPpL76+7999h2GGv9Xis+/KP9eFhDD5sx80bdwB4j5IrWjingTgj+jDF1x2gvqgk0Onw4EywQ0GgEAXUphpG3JTK4b+dB9pKjPcNptitAi10Yy2XYAYQOupMTSp7tWicY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781752356; c=relaxed/simple;
-	bh=1wFtiEBV/eExa/0fk9lHm27dQyGmUqkvypCV6YhwRzY=;
+	s=arc-20240116; t=1781752362; c=relaxed/simple;
+	bh=SZSfvX12VlEuwZl+6hAVKIfqxpPnB1VqKOp94X4ryo0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Q/vopwg6620mImx9p0Zqhwr85CK1KtK36ZNxpyLS17XqFhedjOsfQKGDnmSke+rMOq3pkaMoHvbtG0r8De16XbQSdfg5HGp1YgC0r85tfbzq1Y+hCqda0vYS/N6CtHunztXahPAb/Rs6E22ZIp9Y61a9ifCDYN9u/V9VaGNalzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VsaYj/jr; arc=none smtp.client-ip=209.85.215.170
+	 In-Reply-To:To:Cc; b=PABc0P9BIxRD+NelpEjC83XVkA1kAXl61gIxkWGE602ekYW4rEKm8FkG9xX5mnIb0X7Q7q8+dX5MgK329Hao7MzbM/iVmF+lWbGM/Me9ulCGmG9BF2UzuxUuWl4aFVhUoOy4LuLUQi41K+FRUnnI06RMZ6RSqp2/DQm3dju32ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CZqe4DdH; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VsaYj/jr"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c85b73ffb52so215582a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 20:12:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CZqe4DdH"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2bf125989f2so2930405ad.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 20:12:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781752355; x=1782357155; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781752361; x=1782357161; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=115mykkTwm3kAcmxwjkRrMY9t8k6+X+EEMpEx7hgUEU=;
-        b=VsaYj/jrf+ZEe5Imp3Ek8cO/T2bMuZNeZTotlq3vYw8xilW7zHAGNKorbVZdo3YJSq
-         aIBB0cD/0HMBDeUaDLkvJ834mUUS33tDonCbToIMcorUcxlLR4V+scQ7bu5nnJbjuz+A
-         L2aVa/LLqsOkG1hoC3GRhgwYxotJl8xbGtv00+WzMjQgrblHsDuXs7QALbjCEA0UxpZp
-         LRSlXzk0ixotFpQzgR7+3g5yW43Q2T9hunXg2yFsPi4XSduYvxGEgTilfe8OPNUtL+jd
-         3Fvx2D5yh4bv0soZV0neOlkkfSFRb2dF00j3fZ7ogOqBYnvZz0b/o3zldRW4ljdjRq9H
-         M4dg==
+        bh=v3I6IX1xUYJMTfIXEi0w2UhaS8cMsiIG3uPORXy/Kqg=;
+        b=CZqe4DdHuvA83HXuWHxNF+zbSnA/5STgQ7D8CWrVBB6gmc4KskyUW59tKbRVl1V3vC
+         iEnxeIbNe3Xk0TsPZiLIVbK3M1WDMzKTjnTvV9gA2Y5bT1L1ZRtvGxWDT2KP1sVCWjaO
+         DN04QcsZ6c6SDbsjZakOm/AD3yccCOyNCXMMd6c1EsiqTocuIJ9wUGoy5B6H/OgIey5M
+         G6vWB6sE3qPynStWyu7ckXbk8zpmAUQ7G1rwosSEp8tUxgEfCqd83FBTwaIBr2xpeNe7
+         kXFDpdpf+DCO9kP2Wb9HfyfFet0xxaYu/Aj2ft5pOLvWHGzAaqcqE8i/AruzjUBA22wT
+         CLWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781752355; x=1782357155;
+        d=1e100.net; s=20251104; t=1781752361; x=1782357161;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=115mykkTwm3kAcmxwjkRrMY9t8k6+X+EEMpEx7hgUEU=;
-        b=nWmE5ngrzmF5mrPig2dmzmbGLcJIquDB2pR6byjc4alGSOeT7XWzCTGze0zVhROyQB
-         Adi8HVHoMR42rmIfrc47oMkHw9Re0878xg0mn61fHd8jIxeEwWOdttHVsg1UuJfeXIWK
-         tspyuqoiuwKsIZ9E2MG2P7aM0V3VXzIGVUlA6KEYn3AmZiPTRhOwlvvnTU2Ok0xcFg2N
-         YxrWGw+XM02ml3C5Dynv/mXORHyuBGu6IDCFmsGX/MCDTEhoDDN+My2s1uYWZm+1nElz
-         gQOjv2Df4F8XbfHLYe5d1Xdc7fnCElFt7FxgXAFCrs6fVelBakCOflfvMoIJgYL8iE87
-         zUQg==
-X-Forwarded-Encrypted: i=1; AFNElJ+tg1a0ofK3aTwC6ND8lmBNONRDV/MAETIBZEWNVkyzYXIUu8Zaz8qtAK8XrqsjwAJH/UXHsKY+5ZeSmix4AM0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxsw52XSOPs1z61p8h/4hy6JCSN19UJWhl4KzCFJcRe9IwRtJun
-	LnWTORP/9Z+R5Wv5H3SjreFWBbI8E9O0Ez2ww7U4Z45BaUwAc2Hzdmfw
-X-Gm-Gg: Acq92OGk+QXiIWj7jzt0n4opCMxoh9OhPiX6cDi5rGyjn3gqsph4guIXmpjTP3rZRi2
-	yiQbMBk/fNNEh2kMjXkF0bKuTwovgLHX+zcNYPLD9GQhk89oIjtyiddHv9QSAuoE12DW7mDNjGi
-	9MKatxdCilxl5LuC85/BN7MpYeoVQfdNk4hPMivCVIeAx/xRN6lUZtGFXzfiEU8Y4y7/3ke5a5/
-	PTiTlQa3j+6LWxHG28rUYehaILlTe+RlVSOH0O5Q77eh/itFirs2OYwqxIr7qSmedYE3sxzFBd8
-	7Sm0QilYZlf4bANhfyXjqsIL0eWvoxAn4prMfKrHFYOTJNJx56zHc/PDkc5NJEJXQbaT8qNDciv
-	/C/aJ2ZF2H426O+M7cpXvNEh35BcZwo9O85JEERVx2pBg+m+jjZFDQZ0j2S2M4KW9HjEV3fmAtK
-	opRY8/y2J/vWnrHKWVJGlX/A==
-X-Received: by 2002:a17:902:ced0:b0:2c0:c625:400d with SMTP id d9443c01a7336-2c6e52debf1mr15847925ad.37.1781752354656;
-        Wed, 17 Jun 2026 20:12:34 -0700 (PDT)
+        bh=v3I6IX1xUYJMTfIXEi0w2UhaS8cMsiIG3uPORXy/Kqg=;
+        b=QKbStVKOAAJ5bOuSaGt2+KVLVQY5kIxn6UpDfFI4UKCkzogcK6oskK+vcgqQdX8T8+
+         KjXigCAMlSkFRU5YMSUfxYzzagYpj0yU6Cqykxtriqh8NK5StXbawT+MKCvR+XhA+0fj
+         BhufTIYJ85zlOrZDpdgeKbvEoIPRKt/La1QZGBj6ERpqksEV/FMIx1yrBEW4AHmsAbXM
+         leKXVpOUphtowxtGvRCfA1drtokwBgRqbGIPCFF8FZv+5ODd6zVfY2wSUyyVzLHA1/FU
+         JdNXXttPOG6dY5sApIo4ivsf1Rl57/j8sQIGdS3bMjA2JR9fo2o3qeZ0kYqz930IToo+
+         18aA==
+X-Forwarded-Encrypted: i=1; AFNElJ8WiVOUnl34Fc8Tjt1p0Y8PikmwkffOwr4H2XGqu+J0tyca1EZNTPzUclIOKcYW4KIfjhl338MTOpJiglw7PKM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEeCPUCGXdhWqnLH3J0aoyIQKcZjrvA4KTgYiMh6MPoill4MQF
+	ZNmJXW6D0a+k8UFF7PKXGYgriNgk6O7aCQJOMHn+1VebnoxDSLKfidaj
+X-Gm-Gg: AfdE7ckR1foTTZFIqjnV/zUGaJmhaC/vIgXOnUbcnqzcqBVZFKRAYlMZg8ELawEQN9L
+	KBhgMilpiIsGf+xch32ZKUj8thpORZlf1NNZ+yzbd3arY/eAkjE4lQAvC6Lmrs8JfX62hzpIS0/
+	esEkvTcYzW8wD5nUWWKzBHCPOCpE9Dclf3W26+d1x2V7ofYSk+YBgTv/UNELuZbVfzUUUURpCoz
+	xsItvjPVFi6GQa7kc71eXsF3EmYWpmcIChS7KAxyLXEkazaMKhT/DTlUT9R8N7ao/4+FVNhW9DA
+	HC1fFMmqxLElDTcxi912k1q10la2hwU4WV/nfQmRn3z4ve5bGCMYBbCwBmWOkJTzBWJQlMlQMeC
+	ZknhsIPVgKuRvWqgi/yFuuFUPTsH8HEsYsDywERoB3KSs3fUpNDlpdSSwwS+i3K70yH8Z5VoarP
+	4sgJP5vUJfa6w=
+X-Received: by 2002:a17:902:ea07:b0:2be:22cc:e227 with SMTP id d9443c01a7336-2c6bbf9dfa0mr65761055ad.4.1781752360871;
+        Wed, 17 Jun 2026 20:12:40 -0700 (PDT)
 Received: from [127.0.1.1] ([138.199.21.246])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c6a403b242sm60152975ad.31.2026.06.17.20.12.28
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c6a403b242sm60152975ad.31.2026.06.17.20.12.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 20:12:34 -0700 (PDT)
+        Wed, 17 Jun 2026 20:12:40 -0700 (PDT)
 From: Jing Wu <realwujing@gmail.com>
-Date: Thu, 18 Jun 2026 11:11:22 +0800
-Subject: [PATCH v3 11/13] cgroup/cpuset: Extend isolated partition to
- trigger kernel-noise isolation
+Date: Thu, 18 Jun 2026 11:11:23 +0800
+Subject: [PATCH v3 12/13] docs: cgroup-v2: Document kernel-noise isolation
+ via isolated partitions
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260618-wujing-dhm-v3-11-28f1a4d83b68@gmail.com>
+Message-Id: <20260618-wujing-dhm-v3-12-28f1a4d83b68@gmail.com>
 References: <20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com>
 In-Reply-To: <20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com>
 To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
@@ -96,63 +96,38 @@ Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
  Qiliang Yuan <yuanql9@chinatelecom.cn>
 X-Mailer: b4 0.13.0
 
-When a cpuset isolated partition is created or destroyed, also drive
-kernel-noise housekeeping types (HK_TYPE_KERNEL_NOISE and
-HK_TYPE_MANAGED_IRQ) through housekeeping_update_types().  The sched
-domain mask (HK_TYPE_DOMAIN) is updated first via the existing
-housekeeping_update() call, then the explicit callback chain in
-housekeeping_update_types() invokes subsystem apply() handlers to
-toggle nohz_full, managed IRQ migration, and RCU NOCB offloading.
-
-The update runs outside cpuset_mutex and cpus_read_lock, protected
-only by cpuset_top_mutex.
+Document that cpuset.cpus.partition=isolated now drives runtime updates
+of the housekeeping masks for kernel-noise types: nohz_full (tick
+suppression), RCU NOCB offloading, and managed IRQ migration.  No
+additional cgroupfs files are required; the partition update path
+automatically triggers explicit housekeeping callbacks for all affected
+subsystems.
 
 Signed-off-by: Jing Wu <realwujing@gmail.com>
 Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
 ---
- kernel/cgroup/cpuset.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+ Documentation/admin-guide/cgroup-v2.rst | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 5c33ab20cc208..67b93bd4d58f2 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1347,17 +1347,30 @@ static void cpuset_update_sd_hk_unlock(void)
- 		rebuild_sched_domains_locked();
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 6efd0095ed995..7c3b048e75cb5 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -2721,6 +2721,14 @@ Cpuset Interface Files
+ 	kernel boot command line option.  If those CPUs are to be put
+ 	into a partition, they have to be used in an isolated partition.
  
- 	if (update_housekeeping) {
-+		static const unsigned long noise_types =
-+			BIT(HK_TYPE_KERNEL_NOISE) | BIT(HK_TYPE_MANAGED_IRQ);
++	When an isolated partition is created or destroyed, the kernel
++	automatically drives runtime updates of the housekeeping masks
++	for kernel-noise types (nohz_full, RCU NOCB, managed IRQ
++	interrupts).  This extends isolation beyond scheduler domains:
++	the tick is stopped on isolated CPUs, RCU callbacks are
++	offloaded to housekeeping cores, and managed interrupts are
++	migrated away.  No additional cgroupfs files are required.
 +
- 		update_housekeeping = false;
- 		cpumask_copy(isolated_hk_cpus, isolated_cpus);
  
--		/*
--		 * housekeeping_update() is now called without holding
--		 * cpus_read_lock and cpuset_mutex. Only cpuset_top_mutex
--		 * is still being held for mutual exclusion.
--		 */
- 		mutex_unlock(&cpuset_mutex);
- 		cpus_read_unlock();
-+
-+		/*
-+		 * Update the sched domain mask first; it must succeed
-+		 * before the kernel-noise types because workqueue flush
-+		 * and timer migration depend on the sched domain mask.
-+		 */
- 		WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus));
-+
-+		/*
-+		 * Drive kernel-noise types through the new explicit
-+		 * callback chain.  Tik/rcu/genirq subtypes react
-+		 * through their registered housekeeping_cbs apply()
-+		 * handlers.
-+		 */
-+		WARN_ON_ONCE(housekeeping_update_types(noise_types,
-+						       isolated_hk_cpus));
- 		mutex_unlock(&cpuset_top_mutex);
- 	} else {
- 		cpuset_full_unlock();
+ Device controller
+ -----------------
 
 -- 
 2.43.0
