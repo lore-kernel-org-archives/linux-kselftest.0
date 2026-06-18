@@ -1,120 +1,80 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FBE0343D8A
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 19:40:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BE117A2F6;
+	Thu, 18 Jun 2026 19:49:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781811640; cv=none; b=X1NjmAVXHAIVrhjs0oY1NvN4eS82eBmpZ8toErzXlcRWfnzgJiqzS3NYTrsGWcDkatOkmpTDnzqcnCEtoaEEuBL266gMhpgb4pNtMx1TQdN/RNXlMZbt/UgYezY7+6eUNNpeyWFDLdDoXlbcIAytyhgNSHbxKohtMsFTU5o+DBQ=
+	t=1781812184; cv=none; b=Gb+KlrnAo9UWiK2kTy39UAmnAmy0qI3b3AXfVm+7GBkpYdbraA59LN306N4Ps43ojB7OGsXpx8+6IsazBAey+83w2yDv+FbFiO+2MNsDzB3OY88y+obDTevcN0Tgua3BPfdVyl4KUDVMHZWDWVR3mOmt/kqnxvI2ttFKFqRgLB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781811640; c=relaxed/simple;
-	bh=n960G0WbEysoBhnGymCrWI4l0mKCoKXRtjKJSRfDpR0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VO0l/6sQs7Pr5fJmUt+JJVY3/JQJ6N5QXnHlhvhIxJBh0TzArkzMuw22GJfsD+/uZKSCeQmcJDIWRiZayDvrU22qEKVJwGnMvFjI5NvgKgRbcKq11gnCZ/gEi7v8B8F3IjGGsnLkAse8a6yWY245aAp1gs/W4ft2+U/fByA5gGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T+Kl8zUP; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781812184; c=relaxed/simple;
+	bh=V8ppcrVCR+AH4dpZ3fmksxIZ/nZYlUy0y027NLtpvdI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=l1sW603qI8zS685Gvr1ezo6wjHVpAZS973cQm3A6u648KUNZrIPQUY0LtE9KGaFKO/qbW1h80fmnIMBAhFuAJ91jl2eZJLToXWfL6YITNcTvbY12sliuZWVQlPlzFoO+W7dKsZGk2mT7oCI7qYqG9eIzp0XE0Wj+5MDidyjJEdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kzClxa3b; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T+Kl8zUP"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-490c0c92cffso9204615e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 12:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781811638; x=1782416438; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mytEw3yWgPCxxwojWD6Q0wm+6CDWu7pQ8oL/Dn+vGsM=;
-        b=T+Kl8zUPPXAQSW6PMcrhpLqQtV9SNi6WfrXn/WkS8v8NYoxSCWp0J/el5Ldr0JW9ml
-         x6V12Bb7oaaMc4IEBHA3LuDDIdPA6d7DuEOyyk10wuTgIfxE5Q+DRdOBSN/m3eMwJdhV
-         BTRVDReohYjndUN+2XTFQIBDE1RzX+nA/9JCvxowTVdc5a/bCreBr/YwzPSSHhTfbQR/
-         +Q4eOhaJiOp5D2Er/2ve+npCx7uihGVTQIA/IPbeXmtnp8pmo+LJUvOZ+GbIkgearIJa
-         YySwPqwCR8ZL2+cPI2qyWPmyxf4jZMyY5sO9O/Stq8r/UOTYuBAX68u6HmgFCwaLMDrj
-         xPww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781811638; x=1782416438;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mytEw3yWgPCxxwojWD6Q0wm+6CDWu7pQ8oL/Dn+vGsM=;
-        b=OrUmsNaY8It/m8q+4ek1OWyuwKoQXBCX2yyXPbJnRTbgGJZMl9jGxZvprTFxeN9Vd/
-         k7mDTwWjUU9cJlnfNdnKIiekTmgiR4H2fl8xE/oyGG+HH00xHs3Xkd3N9NGthaU7Vm89
-         0LraRDxobXfR/CiXIjcFxf5N+Q6GE6xg0CUn7QW1XrCEXubqaoFaDzfloxeRZIeB2CNn
-         /fGGItW7+wyo1GIHud1PmWMVjou4vjvQkD3ONYcqWiLEesTYMBewHCL+8Er1FPV39m+8
-         uDXrmMrH6rAFRgQPyWPQ4SJ26L+ggGClNcti+f2q68LdXuV0Gp6M4ttaBIfOpzSZ5eR1
-         SM3g==
-X-Forwarded-Encrypted: i=1; AFNElJ+IKagpx3CDJgk7tQr9vahnVqfDEfaUONvrmllu7IceicKyRLLObQmArNzVKABJrBK6CCwLGzsobO9tlhOVnlw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxo+VksEHfZmTKxu2T9Zvy5eLii1v2FL6UnB5K9vBm49VyBXJTG
-	1hr2JSsedLAV6z+wP9DXoc+6FESu6mTc98uoucBakxe88WrFyKDq275ZYbAdhYuOT5w=
-X-Gm-Gg: AfdE7cnEZ/+GIJi/BtRS3jx2UnV+jyIroGqg5a/YmlQGHj5AYRssDE53z4U4GyPmZ3u
-	zwP314iMV9goXDHUJFPu55p6HtwYWbOW0DEnAGl+OEXJZQZYbidaXJVMs3s8JkuRxn+Bi/6h/7L
-	9LDoxozblw3xSJIDDNiVd02rK2trjNlRpXU3wY9G3mxHg+gUWLnGh3e+SB2D0RQhKycIxABfdBo
-	T4eRGsGYiPBoo3fmSY8d2TxkLuDLGEbDgf/WumXZ+4uRpVNsgUEbK6rTY1DZ1lAXej06qdOMS5l
-	65tSBASCONCXzz2ABaQvY1EGBIMWKIXmA3JtIQT7XjKINdw6gkWYptPpJSKx/M1icKj59xgnMER
-	dt+a+gL+bDJASXwzHNE0qprzJhv4tJUowvFtyqpKfwTwzps7Nj3C4VvZtyDd0nb4wNqX1dZXCZf
-	nF/iPm8WPBtG3/5TV6MaAP5VHGBUT2fR4lZQG/dhLyoMc=
-X-Received: by 2002:a05:600c:8288:b0:492:404a:9605 with SMTP id 5b1f17b1804b1-49240e7fb51mr5194705e9.17.1781811637821;
-        Thu, 18 Jun 2026 12:40:37 -0700 (PDT)
-Received: from hisam ([39.40.61.95])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49240f054e3sm3590535e9.2.2026.06.18.12.40.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2026 12:40:37 -0700 (PDT)
-From: Hisam Mehboob <hisamshar@gmail.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: "Paul E . McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Hisam Mehboob <hisamshar@gmail.com>
-Subject: [PATCH] selftests/rseq: Replace glibc-specific __GNUC_PREREQ with  portable check
-Date: Fri, 19 Jun 2026 00:37:25 +0500
-Message-ID: <20260618193724.589113-2-hisamshar@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kzClxa3b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5711B1F000E9;
+	Thu, 18 Jun 2026 19:49:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781812183;
+	bh=vBkcS6rlXa3Mc6LJBo3bIbi51glgCWUH1Ymj1PNXpAU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=kzClxa3bE2V+TB8Vx48D9lgilu48B12FhPg0tOFM269QwoRxfD4Uqc2zWcKoUjDGv
+	 Q2T7NKvPZKm3l3dIZl85pEMF8D+J2cOtnVTsRXRlvx/Gct7nFRdGmP8mWUR1Df6yer
+	 ZAgJNWp6fxt6PlyashZFt7i9QkJmqlHfkveWXjkoKdYrksyIrGw967pK8/DkIr6FgF
+	 Y2pB+i8FH2MF0wx+CkU9dK/DmP8OIlOe2Yf7RG2DDVZVEAZI5PTk4qO/O5l0vIP4Mz
+	 LeJOnJp1Gpr6SA/Vyn77C1QT2ClgHO3CtDkHI0102vj2/Mqxoro/FDi+iuPJgNkgBS
+	 1zZil3AV/rKKA==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Jing Wu <realwujing@gmail.com>, Ingo Molnar <mingo@redhat.com>, Peter
+ Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
+ <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, Ben
+ Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Valentin
+ Schneider <vschneid@redhat.com>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, Josh
+ Triplett <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>, Uladzislau
+ Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang@linux.dev>, Anna-Maria Behnsen
+ <anna-maria@linutronix.de>, Tejun Heo <tj@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan
+ <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Jing Wu <realwujing@gmail.com>, Qiliang
+ Yuan <yuanql9@chinatelecom.cn>
+Subject: Re: [PATCH v3 06/13] tick/nohz, context_tracking: Prepare for
+ runtime nohz_full updates
+In-Reply-To: <87ik7fep2j.ffs@fw13>
+References: <20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com>
+ <20260618-wujing-dhm-v3-6-28f1a4d83b68@gmail.com> <87ik7fep2j.ffs@fw13>
+Date: Thu, 18 Jun 2026 21:49:40 +0200
+Message-ID: <87eci3eii3.ffs@fw13>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Building the rseq selftests against musl libc fails because musl's
-<features.h> does not provide the glibc-specific __GNUC_PREREQ macro:
+On Thu, Jun 18 2026 at 19:27, Thomas Gleixner wrote:
+> On Thu, Jun 18 2026 at 11:11, Jing Wu wrote:
+>> Remove __init from ct_cpu_track_user() and __initdata from the
+>> initialized flag so context tracking can be activated on CPUs that
+>> join nohz_full at runtime.  Drop the __ro_after_init attribute from
+>> the context_tracking_key static key, allowing static_branch_dec()
+>> when a CPU leaves nohz_full.
+>>
+>> Add ct_cpu_untrack_user() to reverse ct_cpu_track_user(), decrementing
+>> the static key and clearing the per-CPU tracking state.
+>
+> Please do not enumerate WHAT the patch is doing. Explain the context and
+> the WHY
+>
+>   https://docs.kernel.org/process/maintainer-tip.html#changelog
 
-  error: missing binary operator before token '('
-
-Replace __GNUC_PREREQ(11, 1) with an equivalent check using __GNUC__
-and __GNUC_MINOR__ directly.  This pattern is portable across all C
-library implementations and is already used elsewhere in the tools/
-tree (e.g., tools/include/linux/string.h).
-
-This also allows removing the #include <features.h>, which was only
-needed for __GNUC_PREREQ.
-
-Fixes: 886ddfba933f ("selftests/rseq: Introduce thread pointer getters")
-Signed-off-by: Hisam Mehboob <hisamshar@gmail.com>
----
- tools/testing/selftests/rseq/rseq-x86-thread-pointer.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/rseq/rseq-x86-thread-pointer.h b/tools/testing/selftests/rseq/rseq-x86-thread-pointer.h
-index d3133587d996..5a29d6bec51f 100644
---- a/tools/testing/selftests/rseq/rseq-x86-thread-pointer.h
-+++ b/tools/testing/selftests/rseq/rseq-x86-thread-pointer.h
-@@ -8,13 +8,11 @@
- #ifndef _RSEQ_X86_THREAD_POINTER
- #define _RSEQ_X86_THREAD_POINTER
- 
--#include <features.h>
--
- #ifdef __cplusplus
- extern "C" {
- #endif
- 
--#if __GNUC_PREREQ (11, 1)
-+#if __GNUC__ > 11 || (__GNUC__ == 11 && __GNUC_MINOR__ >= 1)
- static inline void *rseq_thread_pointer(void)
- {
- 	return __builtin_thread_pointer();
--- 
-2.51.0
-
+Just for the record. I told your colleague the same thing already....
