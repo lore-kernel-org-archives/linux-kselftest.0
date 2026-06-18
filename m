@@ -1,62 +1,40 @@
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2880740D56D
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 01:05:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E890C2E6CA8;
+	Thu, 18 Jun 2026 01:53:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781744706; cv=none; b=ST6WnPblNUt+D2bXAqPP/jNl4PvHTKcdgLmsXWsTGuxcdDNYRbLIRk6rzEuJg2/MxfjtHZrrbbYvkD/AlXyENKL0/9ik5ALjKa3ZXXD5wAye4+H+vejXAvXk82IaYFwzdP7izkYMD3q1rGNZYfFAY8Gr7Lf+ENyiGQr6iI/E4Wk=
+	t=1781747601; cv=none; b=awB+0FbBOI2aW/q9x33UZ+2DYzA+n5SFp70bM8K+T0iYaKGwPiXH3+w2ouO4kMOf8gWJuOjlxhLLVeEqdLxOb8F7LvD+e+fkgg8u0Zfpf2uyQ2CnT3Yb72tipkhf3PZGZ/cfrnyrD4PYkiPi4U+9xjNwmhZ5U+itjq2+GaaZxO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781744706; c=relaxed/simple;
-	bh=lP/UWIR6XD0RATLTWtMbingCRoKAeXTmwz1I63Z3kDQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qvsiSWU8AmmNuvktsBPDepj+ftKDckzsBSMlbmDpoli77dscFgFaMF8muuccWJE8m7m5V5myeK+G9CHFnjFChhjiF7EfWpwNnoB3cFBXn+7PIdRBNTsKBn/HA8lDf3cdogE61ITE1EH21pac12fZzEJOMNa5p8BZCkglG9zBASU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=idDDb4L7; arc=none smtp.client-ip=209.85.161.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1781747601; c=relaxed/simple;
+	bh=Hcc23D1q9nY6KeBD9c4ZLceM+isPNUT/sbG7Ak1FYks=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Or+nETrMrS5EY0V8Ms5WeDhSZyiyDvB8X9j3I4QccEzPS03n/Zf3Dfzit9nliyou4VJAG2Q6hH5Jum9aMERsiiokscpzLt4NtZRkqV5yKyTk2EzvT6vpi2nnpb7XO39aqk2aN3Crr/kLjXWG8gS53oeaI1CtSFOBgWafXAVDcXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ovFV3Jzh; arc=none smtp.client-ip=113.46.200.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="idDDb4L7"
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-69e4483cfe9so833318eaf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 18:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1781744704; x=1782349504; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DG4WfrI5uGpYpp/RrAn3uAACKhpvlfwH7HOXG2FaZec=;
-        b=idDDb4L7ipCbnD0ibjAwix2SbZX0dI4x24YOG+7nA+mBV3LmZAuoB/nIGnUUSbBR4D
-         JezRBF5y0utmz16ldF8D2PE3gbM3vCIxVWBZFwPrTEXMEAdpncJMMqmQvEdux9G4UYG+
-         oCxn7H4eHCBRFF0+g5dUpB/0dAy9Bmf0Xhxw8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781744704; x=1782349504;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DG4WfrI5uGpYpp/RrAn3uAACKhpvlfwH7HOXG2FaZec=;
-        b=gdB1A3qwzqxdNZLNruj/No0Ch1OmJaBbsczvtutuume0zW6S0oYIp3upE5Owojr1Ic
-         vv0MDYoB9vg/VnvFdKLn0nRGTtKVEkSIcWx+UQiB5YzCFWcqNkOQG6pNqQqFPHI385tG
-         soViUtsUzuUso0NwRzIRuLL7NHz5CoKABq1BFTN9uA0TBfg6qsnuQMwwSZawzg8dNXm3
-         EGX0hbqbY38ePyoILJoBpbQT/tzDBjWLOgofvulmjhGWajfZC0s/o6qofAd52UzIB+E4
-         /Pc6AMkz6oMFTwQWBPX8W4Mt3EKyDo8V2oVdDA8NiDqaqgcrTm1z7dK/r9DXUc/RmgA+
-         JXvA==
-X-Gm-Message-State: AOJu0Yzw/Ekr0E7kUOtiJCxbty85PvkmFF+7rmT1C7XIIafjIGyDaKwr
-	n2gs3Q8tYc5ylDkdAXQz7q8UfVtAp3b7E9lg/JtNhXlKC9BvAyAJHZzxtbMr4SV0OPk=
-X-Gm-Gg: Acq92OHzPah+qFApDFmv9GOtCz8Yho1FOU36QtYLqdfaiEjtEgEp8Xt5BjrbuZtpK6o
-	LG2ekhnDaNTiyUe6HUTt+U/18zc9ZhlI6mm5MnoiCV7aZDAL/w45Z3uGe4xOKcFQ42ArTcOndMN
-	NTqS+vPll0n3rTS5osBiQPr4NDGN+UjkTg+In9mrPPb0/dYwJ6xhmgc6Aojwr5bOCZGTKGm0PtR
-	CHMyoZPijyK3hVaDcOsJydYUhlMm/cdJCk2SePO83yZ98E+g5okadHlcb+1FW0DPYrZJgpGGULR
-	s7WGGCyRP9qpvVYk62Y7PXPauVtt2+4wwF1SCex/PDPjz7wzsUhADRgW6EbKBIxvolk9CConEAi
-	YJiSEQ4Y7pJF5D6rlxVkFY9FxltucG9S5JKQImx1UKFiu0uRQUOgF5K3LfiCx567qdubu+dDOag
-	780G0lXTwC1+VuIA361qLj
-X-Received: by 2002:a05:6820:f022:b0:69e:98c0:a91 with SMTP id 006d021491bc7-6a0c744dbb1mr1461703eaf.36.1781744704016;
-        Wed, 17 Jun 2026 18:05:04 -0700 (PDT)
-Received: from [192.168.1.14] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-44308f09405sm5479598fac.12.2026.06.17.18.05.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jun 2026 18:05:03 -0700 (PDT)
-Message-ID: <20868e21-ea0d-42f7-921c-987625b4e471@linuxfoundation.org>
-Date: Wed, 17 Jun 2026 19:05:02 -0600
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="ovFV3Jzh"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=baDTuvvK2rnBrTQYWqm7ATQZOTdxwB6p+v1mQB0ln0U=;
+	b=ovFV3JzhO8N/0lbfun2Dcbo+s3uduzoqK6QFiVNFlaRGSRIEv7jpAN6XoJ/16TPzR05Bm0y3K
+	q0Q304PdA32b4ir8vfHLLV/ktI355N4ho4ZwfONYG/0uu4IaRlj7h7Kg7ymGFOpS9QcGSyGrSLy
+	tIfTWIw3ciHOxrbyGqYCBH8=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4ggk7d4TTKzRhRL;
+	Thu, 18 Jun 2026 09:45:17 +0800 (CST)
+Received: from kwepemo100012.china.huawei.com (unknown [7.202.195.139])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5E8B340538;
+	Thu, 18 Jun 2026 09:53:16 +0800 (CST)
+Received: from [10.67.120.222] (10.67.120.222) by
+ kwepemo100012.china.huawei.com (7.202.195.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.36; Thu, 18 Jun 2026 09:53:15 +0800
+Message-ID: <6dca2d6e-54d0-42c4-95df-45a30a473e0b@huawei.com>
+Date: Thu, 18 Jun 2026 09:53:15 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,57 +42,54 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kselftest docs: remove reference to obsolete/archived
- wiki
-To: Rafael Passos <rafael@rcpassos.me>, shuah@kernel.org, corbet@lwn.net
-Cc: linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20260617235740.74029-1-rafael@rcpassos.me>
- <865def83-a07e-4eba-b795-7da66e0e2d69@linuxfoundation.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <865def83-a07e-4eba-b795-7da66e0e2d69@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v7 15/20] perf: arm_pmuv3: Handle IRQs for Partitioned PMU
+ guest counters
+To: Colton Lewis <coltonlewis@google.com>, <kvm@vger.kernel.org>
+CC: Alexandru Elisei <alexandru.elisei@arm.com>, Paolo Bonzini
+	<pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Russell King
+	<linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+	<oliver.upton@linux.dev>, Mingwei Zhang <mizhang@google.com>, Joey Gouly
+	<joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
+	<yuzenghui@huawei.com>, Mark Rutland <mark.rutland@arm.com>, Shuah Khan
+	<shuah@kernel.org>, Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+	James Clark <james.clark@linaro.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <linux-perf-users@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, wangyushan <wangyushan12@huawei.com>, Zhou
+ Wang <wangzhou1@hisilicon.com>, <xuwei5@huawei.com>,
+	<prime.zeng@hisilicon.com>, <fanghao11@huawei.com>
+References: <20260504211813.1804997-1-coltonlewis@google.com>
+ <20260504211813.1804997-16-coltonlewis@google.com>
+From: wuyifan <wuyifan50@huawei.com>
+In-Reply-To: <20260504211813.1804997-16-coltonlewis@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemo100012.china.huawei.com (7.202.195.139)
 
-On 6/17/26 19:03, Shuah Khan wrote:
-> On 6/17/26 17:57, Rafael Passos wrote:
->> This link in the docs point to a wiki that is no longer active.
->>
->> The wiki was moved to archive.kernel.org, and there is a warning:
->> "OBSOLETE CONTENT This wiki has been archived and the content is
->> no longer updated."
->>
->> Signed-off-by: Rafael Passos <rafael@rcpassos.me>
->> ---
->>
->>   Documentation/dev-tools/kselftest.rst | 5 -----
->>   1 file changed, 5 deletions(-)
->>
->> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
->> index d7bfe320338c..64c0ec7428a2 100644
->> --- a/Documentation/dev-tools/kselftest.rst
->> +++ b/Documentation/dev-tools/kselftest.rst
->> @@ -15,11 +15,6 @@ able to run that test on an older kernel. Hence, it is important to keep
->>   code that can still test an older kernel and make sure it skips the test
->>   gracefully on newer releases.
->> -You can find additional information on Kselftest framework, how to
->> -write new tests using the framework on Kselftest wiki:
->> -
->> -https://kselftest.wiki.kernel.org/
->> -
->>   On some systems, hot-plug tests could hang forever waiting for cpu and
->>   memory to be ready to be offlined. A special hot-plug target is created
->>   to run the full range of hot-plug tests. In default mode, hot-plug tests run
-> 
-> 
-> Looks good to me.
-> 
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Hi Colton,
 
-Jon,
+On 5/5/2026 5:18 AM, Colton Lewis wrote:
+>   static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
+>   {
+> -	u64 pmovsr;
+>   	struct perf_sample_data data;
+>   	struct pmu_hw_events *cpuc = this_cpu_ptr(cpu_pmu->hw_events);
+>   	struct pt_regs *regs;
+> +	u64 host_set = kvm_pmu_host_counter_mask(cpu_pmu);
+> +	u64 pmovsr;
+kvm_pmu_host_counter_mask() is called from armv8pmu_handle_irq(). This
+interrupt fires in both host and guest contexts.
 
-I can take this through kselftest tree as I usually do.
+However, kvm_pmu_host_counter_mask() dereferences
+host_data_ptr(nr_event_counters). This indirection requires
+kvm_arm_hyp_percpu_base[cpu] to be initialized, which only happens during
+KVM hypervisor setup. When the interrupt fires in a guest kernel where 
+KVM is
+compiled but not active, the per-CPU base is NULL and the dereference 
+faults.
 
-thanks,
--- Shuah
+Thanks,
+Yifan
+
