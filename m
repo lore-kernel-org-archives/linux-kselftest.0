@@ -1,91 +1,74 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6211E30E827;
-	Thu, 18 Jun 2026 03:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF252C11CB;
+	Thu, 18 Jun 2026 04:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781754004; cv=none; b=nbUl4zqy/FNJFsF3bx0ULwT+V5V8OGsarN4bSNg63bddoReCPYrE8mkMNh5yLo12wsLvFP7gdlO1iLAgmxXKurRINiFMernX800HoHwdPgqCqd170FVnhCY7YzdbKAhxQpd9tWpilJQtyWSL63FPcmTdkELpBvAFM5cE0SgbRGk=
+	t=1781756382; cv=none; b=IDMKMpJMRqYfHaaAtuU78YHyqHtO2x5GWWmtyG+MjvArkvp0ZafWYWRyfYrPFyuU+aI6XJeTXwEGvljlWoyK7nyh2SWhUV+KWTu36mVQ9h+52d8IHcHcMesvJYrLXmMKgaDbTt/BcElTATuZRXL3/guzIRLhV+Po6HUXcbbA5mA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781754004; c=relaxed/simple;
-	bh=u0BHccFFok4W4K1qDbFRTw5PIdV34AfWS/g7edMPN4g=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PcjRBacnM/8p8Z5ceYqVewaGTxrSX2DEh9fTWwAWewml6uFDvXwzqRopNCJpmLBwZ8GDZRSZiamMKdQJkl5T9FaRY7xcrx76/7J4JGYXLSUWnYCQylPMpvSCs505YPJNPjg5UXiSvhAoANk7i5J1IXG9q1pBY3uwk9cTHLI18gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PzqAvyVv; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781756382; c=relaxed/simple;
+	bh=1MW4VNkbZyVG64tjfqXLS8sUktdXvdrJeVTDqNjx+ms=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=dtguD+husvpAz4PIrNwQ/eTSLkPnPCfeeVQppCgknqpfS+nooCyLIt3Z8feo9iPRCr9ud5OOTrouWHpJXNg2AyYEFkFChrtY8N6QNedTwiwQC9L1tpTUbmKNiMYsi0qoxQiF2IZB17cvS+oq6iUlylUNbffgLo0mZQpmDLOhUy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H1sLS9hX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PzqAvyVv"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781753991;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2ZJcV8qkE/533ZNLQ7MwZZ6HE6w38xEeqB7Q6PXDQMU=;
-	b=PzqAvyVvflt9XZhitNyiEXKOGl/qgok3prFKz/mNMEDJpjos0CERegjwwmzjOTBnKhY0gl
-	UpulZi6nCtN5exM+d2ypB13WEZbUxrBewY8PHSrtkMb44TIkoa3YbvsiOg5JMOUgZmJR/3
-	Tmn2jlbhhAofTCXei4G6rZNFaUIWoEw=
-From: George Guo <dongtai.guo@linux.dev>
-To: chenhuacai@kernel.org,
-	yangtiezhu@loongson.cn,
-	hengqi.chen@gmail.com
-Cc: kernel@xen0n.name,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	George Guo <guodongtai@kylinos.cn>
-Subject: [PATCH 5/5] selftests/bpf: Enable struct_ops private stack test for LoongArch
-Date: Thu, 18 Jun 2026 11:38:09 +0800
-Message-Id: <20260618033809.98253-6-dongtai.guo@linux.dev>
-In-Reply-To: <20260618033809.98253-1-dongtai.guo@linux.dev>
-References: <20260618033809.98253-1-dongtai.guo@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H1sLS9hX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4951F000E9;
+	Thu, 18 Jun 2026 04:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781756380;
+	bh=ROVddDfOyk8zu86ME/wG6+AbO6JfOCq+Z2d8XvM+8G0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=H1sLS9hXMgSJ35QGbWdZFXbC2Wb91YkGd+c2CuTjTaPissvSOu7A1brYYYDav2CwF
+	 CcWeUf99ka4Zl1VAMjc1n/jAIJQVNoRpICyyXCPvmvCLBQnKcPk/4y4xLzimVgdQBb
+	 ebb4iMTSdlaZxGnN+yuiSbKpLtrIxAUKX9ZwdpHTFq3Mxg0wuomrS+XBco8/oaH3iv
+	 BvnRptt2zx8cyecCITzzSE6oxRq5+OvfZWAvMYdaL6jZv57kBCVqi6Rwb3Eh3puGOe
+	 OllBBT2i8xRP7842uAynv0JUiNotuy0DuLQgmIhHhfF+N+ChocaG89icNXwM9Wk/89
+	 Q8j7jsAUQRkWw==
+Content-Type: multipart/mixed; boundary="===============3276329233012674368=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <7e996535cf04f95d2c4e54b1173f4e2d0a96102c737fe030decc432164df97a6@mail.kernel.org>
+In-Reply-To: <20260618033809.98253-2-dongtai.guo@linux.dev>
+References: <20260618033809.98253-2-dongtai.guo@linux.dev>
+Subject: Re: [PATCH 1/5] LoongArch: BPF: Gate unsupported arena instructions via bpf_jit_supports_insn()
+From: bot+bpf-ci@kernel.org
+To: dongtai.guo@linux.dev,chenhuacai@kernel.org,yangtiezhu@loongson.cn,hengqi.chen@gmail.com
+Cc: kernel@xen0n.name,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,loongarch@lists.linux.dev,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,guodongtai@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 18 Jun 2026 04:19:40 +0000 (UTC)
 
-From: George Guo <guodongtai@kylinos.cn>
+--===============3276329233012674368==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-LoongArch now supports BPF private stacks via
-bpf_jit_supports_private_stack(), so let the struct_ops private stack
-runtime test (private_stack / private_stack_fail / private_stack_recur)
-run there instead of being skipped.
+>     The JIT does not implement atomics on arena pointers (BPF_PROBE_ATOMIC)
+>     nor sign-extending loads from the arena (BPF_PROBE_MEM32SX). Without a
+>     bpf_jit_supports_insn() callback the verifier assumes both are available,
+>     so such programs are accepted only to fail later in the JIT with a
+>     confusing -EINVAL 'unknown opcode'.
+>     Implement bpf_jit_supports_insn() to reject these instructions in the
+>     arena case. The verifier then rejects the program early with a clear
+>     message ('BPF_ATOMIC stores into R<n> ... is not allowed' / 'sign
+>     extending loads from arena are not supported yet'). Regular arena
+>     accesses (BPF_PROBE_MEM32 loads/stores of all sizes) remain supported.
+>     Signed-off-by: George Guo <guodongtai@kylinos.cn>
 
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
+This looks like it fixes a gap that was introduced when arena support
+was first advertised via bpf_jit_supports_arena() returning true.
+Should this carry a Fixes: tag?
+
+  Fixes: 4fdb5dd8aeba ("LoongArch: BPF: Implement bpf_addr_space_cast instruction")
+
+
 ---
- .../testing/selftests/bpf/prog_tests/struct_ops_private_stack.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-index 98db9bafa44b..fcc86f1dfd15 100644
---- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-@@ -5,7 +5,7 @@
- #include "struct_ops_private_stack_fail.skel.h"
- #include "struct_ops_private_stack_recur.skel.h"
- 
--#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__)
-+#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__) || defined(__loongarch__)
- static void test_private_stack(void)
- {
- 	struct struct_ops_private_stack *skel;
--- 
-2.25.1
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27735575341
+--===============3276329233012674368==--
