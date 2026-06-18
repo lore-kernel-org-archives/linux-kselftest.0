@@ -1,105 +1,114 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EFB13446DE
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 20:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E602E737B;
+	Thu, 18 Jun 2026 20:50:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781815412; cv=none; b=VCGrovsHt1irdaqagtpbois17VQuT3q5jmDyPfCaHNpaIEqyqDIDwsZ6L1XREBIuBkltqHqJpfQafPkgpHz3uUTbpdaEhT1agQH7NY1wII7zyjID8Rjl+bKx6X58JvB3hB1x9Mt7bu7J5XbEzYMCce1hVepNo9bC9dF2bh12h+c=
+	t=1781815840; cv=none; b=h4kEk4NCupS/70zuFTokjsEbQW8YW4QxrspzjiHdPThhzoe2HnIjadBUfw3vmTUE0dSJTOcuEkJSZuK4ZKnp9gJYwd/7qW/nZaVK8p46N4JXgZbDpObJcaIugymfk/sTSrlNZgzglKxqrOCalN1Qznu6hnjnuQ+ckYLZ2Jd2FQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781815412; c=relaxed/simple;
-	bh=8hBCLfH/eUYN/8OyUODW+AbWvZee25ehqy42zoDceEU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mBjhubI8ClRZIp8a5nZI6sbGhglpOYp8IuaKl/LMu91IfkW2WwwyghKBh4/Zkdi7Xga0unG3/p0YRk71MSwkS72dSxGAnNnchfs19tjFEuRrWlMLLgzyq+EvjI+GFY5b0lRuXr3SyElVZyz7uXWX4QJY0AH1XydFItYlz5+fI8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=inusxuyK; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1781815840; c=relaxed/simple;
+	bh=bE4mxSV42B/qGzQEP+mK50Iv1fi3dCKSirbPlybje2A=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=F71EzKmKi1ABI//wraOBSwWshS0KS/uJ8BAdr+MLHnNTcx82bBb7hqgpy+rzZLkmnCZIpB9tQS8EoSo0013FxXd97dvPXjtBnG775cfH6jf/KRqxtwD9wuhvvnQkGXTPRuma+yz9ckaphppzVTKGVa1necvQ951aDMEgTqvDUwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QtuFBKzM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="inusxuyK"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-842358aaf36so637745b3a.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 13:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781815409; x=1782420209; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cl1wOvElj8v4VpvcZneMj5bA/9tCB8HmI7qNhRYEvSg=;
-        b=inusxuyKj4Ggnj9/OAxZcVO5oPVjLoKWl4wqrAWDwVpl2fb10SaboVexcZwtYjlgLQ
-         HozXVi5unI2w3kx5N0O/LXgNDMumzdm7C0W4SB2d2HcIQpV2+w0QQOAhl2jdMUF7IF1v
-         CNCsIJGHWZp228UbETaoZKlqqwuYxinZmYGVLl3tmfeZg/MsvSTrl0FhuYkfflQS83cJ
-         9Rm9unr/VqW75h9FISq9WDBLZSa+Q7gTiFCEtGfhlJVbydPwlksPS99KhXD0OnQP+/h1
-         mkY8V+k7E55dGDSsbC+eNrER0fm+nEhGYEH7sQxydazXYKisvRa/2vsvsTXg4Slz9ph8
-         h3/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781815409; x=1782420209;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cl1wOvElj8v4VpvcZneMj5bA/9tCB8HmI7qNhRYEvSg=;
-        b=tG1xSigTUcXA25fEBQMvA/jnXJzWPAKdsWPmwG93Qx10nsFjL96uDU9vKbg7bzdHWN
-         6NuKfu2Xe6WZecEm6vItx1zugA7tbbPdj00DkRtAH31pcqX1rCC5xRd5muqiY83wSLjF
-         OKUOxhmqyy+v6aZNQYEkNd58zq5l7h68+51NRr6fEA6BZIoXBGE+bCx4ZQg7NVxZacN+
-         LXzImRbmVaYtcGh1lXG3Fuu+O1fn5ZdCKdI68tdPWzrl4YgBjo7ui6ejwK9iWuN9TUBF
-         xYV4VNxUsq72alIXGE5JwyWkexhSIiObQrBwGXspyTQ3pVmFFSkAYLRkPJaTYZMvc7TP
-         qNzw==
-X-Forwarded-Encrypted: i=1; AFNElJ9kPY/VraNqPD5hT7pC4CjTLTSIHXawVmJBKSQqXfbnz1Z2PRl/yDxM6SomYTvmUKfHbyVuIFbRo6v2ACNqM/g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqfQxiAJk7GFonqgFXID76pfaTaYmmZbpzT+ul0L1QwXBKyVwA
-	SjlENcqUyza/Hk4mmuIo40z8c6qAX5iTI5t7HcrjJfb5fn6PN/N6+oq6Hg0qSqJlPv0ceWizNGw
-	e6HjDVQ==
-X-Gm-Gg: AfdE7ckDLbTj0PEQDqPm7jYd5KozH75Zyv8xyZ8FpPnywQIZoR7Csq+zdjIWxMGTncr
-	S4mD095oV4WzWt0che/7GGPFRovmdVj35xwsEOXwh/OeEuE6x7hx1hfH+YKgHIZF/WibjACW3Nz
-	tlBXEc/2x530g/pFAxVGv7ecpfkG9NqHR0Ax6JYDjGX2Wi1NzXpvdPAtUqrdx9VKmSLlSXbPRfg
-	7Z4Gis4VHd+89+Qy9v3iJa8yZrz5Hm66qJROiYW5JDBii2rA3Mqyv7YDnybbEWaw9o0rMwtkgHZ
-	59DOR7PRxNC0HSDo+SdMtS0R2Vl0YNwzir36vrc+IYf1+UNPpm7QyUo8Bc2wb02Oa7XefX3Vg9/
-	iKyfgkjrk2KTJgVzpA+3MPoiLPjwZi0pZc9oDObUA+1uogzSXw/VEm5fwRrALj55TprVnxdBK9+
-	5z58mU0w9LsYEMWNSuFCRiI8MHHy5OlTM7HUtKvl1CQt2p53X/le4=
-X-Received: by 2002:a05:6a00:2a0c:b0:842:7cb7:a3aa with SMTP id d2e1a72fcca58-8455089274bmr650023b3a.33.1781815408580;
-        Thu, 18 Jun 2026 13:43:28 -0700 (PDT)
-Received: from google.com (56.149.168.34.bc.googleusercontent.com. [34.168.149.56])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8455364d4e7sm28363b3a.11.2026.06.18.13.43.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2026 13:43:28 -0700 (PDT)
-Date: Thu, 18 Jun 2026 20:43:24 +0000
-From: David Matlack <dmatlack@google.com>
-To: Rubin Du <rubind@nvidia.com>
-Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v14 4/4] vfio: selftests: Add NVIDIA Falcon driver for
- DMA testing
-Message-ID: <ajRYbI-4ZczC_V7B@google.com>
-References: <20260609232855.3808971-1-rubind@nvidia.com>
- <20260609232855.3808971-5-rubind@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QtuFBKzM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C7551F000E9;
+	Thu, 18 Jun 2026 20:50:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781815838;
+	bh=NjQaXqvd1MgaodW0+ZFLqVF9VrwJ8j/HY7edbbcJLaw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=QtuFBKzMTQLJ1nETSLiku2/CNkkt28qCy2g9RnRSTE/3LtcF7dVD0IN+sh3QThuCQ
+	 YdOdeDqayKgOw7Jv1UHeEV6kG0eZqOHmhxDdDNhAEwh992DeDAK1SD2d7JDe8vcUw5
+	 PFWRIHC7UtxICjdTqaMaC0W92ETR5TCucCP0YQ0JuRxEFEeb3m79cXWsPzudCCoSx/
+	 AeAOxbEOmAIG6zpasuvKTIO8ms7Fz6jXA9Ln0IdASp/1IDHQFS4l9U4uOQZx6KT6uo
+	 PKSCh5iTafCgk5i7TGC5F9oJ2LvBwFO15QGWLvErQJZ7nwPAmVQdaDhI2WPLBZBRLv
+	 KDzrBgj8CjNYQ==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Jing Wu <realwujing@gmail.com>, Ingo Molnar <mingo@redhat.com>, Peter
+ Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
+ <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, Ben
+ Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Valentin
+ Schneider <vschneid@redhat.com>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, Josh
+ Triplett <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang@linux.dev>, Anna-Maria Behnsen
+ <anna-maria@linutronix.de>, Tejun Heo <tj@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan
+ <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Jing Wu <realwujing@gmail.com>, Qiliang
+ Yuan <yuanql9@chinatelecom.cn>
+Subject: Re: [PATCH v3 10/13] sched: Guard sched_tick_start/stop against
+ uninitialized tick_work_cpu
+In-Reply-To: <20260618-wujing-dhm-v3-10-28f1a4d83b68@gmail.com>
+References: <20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com>
+ <20260618-wujing-dhm-v3-10-28f1a4d83b68@gmail.com>
+Date: Thu, 18 Jun 2026 22:50:35 +0200
+Message-ID: <87a4srefok.ffs@fw13>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260609232855.3808971-5-rubind@nvidia.com>
+Content-Type: text/plain
 
-On 2026-06-09 04:28 PM, Rubin Du wrote:
-> Add a new VFIO PCI driver for NVIDIA GPUs that enables DMA testing
-> via the Falcon (Fast Logic Controller) microcontrollers. This driver
-> extracts and adapts the DMA test functionality from NVIDIA's
-> gpu-admin-tools project and integrates it into the existing VFIO
-> selftest framework.
-> 
-> Falcons are general-purpose microcontrollers present on NVIDIA GPUs
-> that can perform DMA operations between system memory and device
-> memory. By leveraging Falcon DMA, this driver allows NVIDIA GPUs to
-> be tested alongside Intel IOAT and DSA devices using the same
-> selftest infrastructure.
-> 
-> The driver is named 'nv_falcon' to reflect that it specifically
-> controls the Falcon microcontrollers for DMA operations, rather
-> than exposing general GPU functionality.
-> 
-> Reference implementation:
-> https://github.com/NVIDIA/gpu-admin-tools
-> 
-> Signed-off-by: Alex Williamson <alex.williamson@nvidia.com>
-> Signed-off-by: Rubin Du <rubind@nvidia.com>
+On Thu, Jun 18 2026 at 11:11, Jing Wu wrote:
+> sched_tick_start() and sched_tick_stop() are called during CPU hotplug
+> for CPUs not in the HK_TYPE_KERNEL_NOISE set.  They dereference
+> tick_work_cpu, which is allocated by sched_tick_offload_init() and only
+> called from housekeeping_init() when nohz_full= is present at boot.
+>
+> When the DHM subsystem first-enables HK_TYPE_KERNEL_NOISE at runtime via
+> housekeeping_update_types(), tick_work_cpu remains NULL because
+> sched_tick_offload_init() is __init-only and cannot be re-invoked.  A
+> subsequent CPU offline/online cycle for an isolated CPU triggers
+> WARN_ON_ONCE(!tick_work_cpu) followed by a NULL-pointer dereference in
+> per_cpu_ptr(tick_work_cpu, cpu), crashing the kernel.
+>
+> Since nohz_full= was not active at boot, tick_nohz_full_running remains
+> false and the tick-offload infrastructure is never activated; isolated
+> CPUs continue to receive their own ticks.  Guard both helpers with an
+> additional !tick_work_cpu check so they become no-ops in this case.
 
-Acked-by: David Matlack <dmatlack@google.com>
+This is the same fake functionality as with the tick itself. Seriously?
+
+> -	if (housekeeping_cpu(cpu, HK_TYPE_KERNEL_NOISE))
+> +	if (housekeeping_cpu(cpu, HK_TYPE_KERNEL_NOISE) || !tick_work_cpu)
+>  		return;
+>  
+>  	WARN_ON_ONCE(!tick_work_cpu);
+> @@ -5799,7 +5799,7 @@ static void sched_tick_stop(int cpu)
+>  	struct tick_work *twork;
+>  	int os;
+>  
+> -	if (housekeeping_cpu(cpu, HK_TYPE_KERNEL_NOISE))
+> +	if (housekeeping_cpu(cpu, HK_TYPE_KERNEL_NOISE) || !tick_work_cpu)
+>  		return;
+>  
+>  	WARN_ON_ONCE(!tick_work_cpu);
+
+Brilliant stuff that. Guard against tick_work_cpu == NULL and then keep
+the WARN_ON() there, which became completely pointless.
+
+But that's all just mindless tinkering and fixing the symptoms.
+
+If all of this is runtime managed, then all the initialization needs to
+be made unconditional. Yes, that wastes a few bytes of memory per CPU if
+it's not used, but avoids these completely inconsistent hacks all over
+the place and provides a coherent user interface.
+
+Stop trying to duct tape this in. This needs more thoughts than just
+sprinkling works a few works for me hacks all over the place.
+
+Thanks,
+
+        tglx
