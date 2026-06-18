@@ -1,59 +1,58 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F221E3264DA;
-	Thu, 18 Jun 2026 15:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA8631ED7D;
+	Thu, 18 Jun 2026 16:06:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781796695; cv=none; b=UANQJMF20rIBCyW6IiJZTOCUUrDEsDxVMp97m+kjDyotXxzSrT159jokXcQGkj4sNmNjShjfL7M0Mt5XMnUlFJMlh9aHBOucSuwKS/6ae6Ru7EjY1FZN0HQ6QO9AaM3N4fOkVmNtRQ0zA8e7mDnG13CgaCB1kRaWhaAzghfidaM=
+	t=1781798806; cv=none; b=Gt+IZ92GArG/QPv657nG3SgfQ8toRrrzbEkRj+6Yk3g0DTqajH11yM7g0+3y9pLQf/+KY2/hjoks0/9d/qqeV0qDDnFX3CkpynWl5mzozdpninpd1csvrFMpjThDHixHDD/xThRzH4rK2QfcdKLYeqU/bCryj9mhnMWV7Z/LTgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781796695; c=relaxed/simple;
-	bh=RAAaHoeh/MJumT7Jl018zpIQtLKmhwOXGGNn3ZLlRog=;
+	s=arc-20240116; t=1781798806; c=relaxed/simple;
+	bh=NWBKKhk/6xsHpvh58NSa3ma7bMlAH3QHjJJSfoiRTDQ=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=moJJeg644vvIp4qYIdbInAkWcSkt/yyen4zZk5i978M+Bf+vDGiaHNIu35lQwhdhHPp7xR/4pOtp12KyqUSgseZiL++3ylJRNaMIfTdP3xSWfUzQRU61JP3xrjYwdMxlBwS4nTy4t7bvRTybxSBI8WXtKp8qO6oBZboxX81rFuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=f4b+IXkQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=t2jc4irZ; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	 MIME-Version:Content-Type; b=p7xOyaBecsh3PqcieMPUeLcPKjXSjU4t74MuqTGY7tKGEjLujtvhR5KvKbc+tDsqMgJy1pUX/kb9nGr86PGYgsl14y++rRdKJMOPlGRjLgONz+sdfPNS9BkM5WqU9mRUXlXUCOLjGxkpoJzM126dwWoFj00lf1nyJqKTJy4kciU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ffTr70mi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="f4b+IXkQ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="t2jc4irZ"
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1781796692;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RAAaHoeh/MJumT7Jl018zpIQtLKmhwOXGGNn3ZLlRog=;
-	b=f4b+IXkQhTwpjwvjeIS1sST2BLVtsjL1UEdnmxNOL3lPDXGXN8p4pBZTulWxnvylYeKVFG
-	uGbMKdwi+CpjyDB9PBq7i6vVXxyG8S7BCgaClErdpvv1yr9NTz2M+bFLuy8zG75x1SYbaS
-	I5Y9y3yuOPT48X3zoEALahwLSuvgH0Q8Z9+txzIcZmx49i0Hh3TBkpmj6sAJTM29MEshDP
-	D2zBkkEYZ1hnAs7p/LoLBujaAGEGCdM4L0Z33LPyovOnyyDwz00riz8cpvuLnW8BW887CI
-	zRIBZp7UkIF0mKRU2sNooS78DgPMPr5zjfTxECII4a6DfL3Lt7WcjsCvWBnliQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1781796692;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RAAaHoeh/MJumT7Jl018zpIQtLKmhwOXGGNn3ZLlRog=;
-	b=t2jc4irZweu5KNBW2cs9NoLMghLuOSyOya4gG6B0vbJPWT7FpL5OwzHy+GB23sGgly2aig
-	sV+QDO9IaCT6MHAA==
-To: Charlie Jenkins <thecharlesjenkins@gmail.com>
-Cc: Charlie Jenkins via B4 Relay
- <devnull+thecharlesjenkins.gmail.com@kernel.org>, Paul Walmsley
- <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti
- <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, Atish Patra
- <atish.patra@linux.dev>, Conor Dooley <conor@kernel.org>, Paolo Bonzini
- <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Shuah
- Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 04/16] riscv: kprobes: Use generated instruction headers
-In-Reply-To: <ajOezhejx7PcOw_x@blinky>
-References: <20260407-riscv_insn_table-v1-0-54b4736a1e77@gmail.com>
- <20260407-riscv_insn_table-v1-4-54b4736a1e77@gmail.com>
- <87jys5egum.fsf@yellow.woof> <ajOezhejx7PcOw_x@blinky>
-Date: Thu, 18 Jun 2026 17:31:31 +0200
-Message-ID: <87fr2jq2zw.fsf@yellow.woof>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ffTr70mi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01CC81F000E9;
+	Thu, 18 Jun 2026 16:06:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781798803;
+	bh=GFJ910Nv9NJncfqGCeAFA1Jf6vpmd6wpUP1Hnqw3glw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=ffTr70miIAv2QzdbUBh1pJwaCw0U4usX+rPcYeq7Oaq325gf/NRUfvy8P3RnyYBYe
+	 pAoUC8z4iGE+Tv2Xpmm/JIqxPV+J2S74SBZWvz14dG0KK1hYA68miwSGp7zliXen5J
+	 IFeSSgo2V//PEUNpBJ7R4+BBx2C9+1Uo1B9/9vESmZcGKj27eqMCf1fy0ozV4edcIF
+	 OENZJ6fmEyU+ofpAT78G7XM+MjAvetJaZJ2i8Jp2WS31PCqzLBPdCQO/Q3pyE41iyd
+	 QUMj2ZzLsu7X+I75N3SfAr7A1YzRPwlM3ygja9nVMkth4nnQMiEm2Zn6OVz4BZBY6b
+	 8djoBayrR1ZIA==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Jing Wu <realwujing@gmail.com>, Ingo Molnar <mingo@redhat.com>, Peter
+ Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
+ <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, Ben
+ Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Valentin
+ Schneider <vschneid@redhat.com>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, Josh
+ Triplett <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang@linux.dev>, Anna-Maria Behnsen
+ <anna-maria@linutronix.de>, Tejun Heo <tj@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan
+ <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Jing Wu <realwujing@gmail.com>, Qiliang
+ Yuan <yuanql9@chinatelecom.cn>
+Subject: Re: [PATCH v3 05/13] cpu/hotplug: Reserve CPUHP states for
+ nohz_full and managed IRQ down-paths
+In-Reply-To: <20260618-wujing-dhm-v3-5-28f1a4d83b68@gmail.com>
+References: <20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com>
+ <20260618-wujing-dhm-v3-5-28f1a4d83b68@gmail.com>
+Date: Thu, 18 Jun 2026 18:06:40 +0200
+Message-ID: <871pe3de9b.ffs@fw13>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,13 +61,28 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-Charlie Jenkins <thecharlesjenkins@gmail.com> writes:
-> Since I was checking against the previous version it's not possible to
-> do a straight one-to-one conversion to the kunit. I think it might be
-> possible to do something similar but I will need to mess with that to
-> determine a good way of doing it.
+On Thu, Jun 18 2026 at 11:11, Jing Wu wrote:
+> Add CPUHP_AP_NO_HZ_FULL_DYING and CPUHP_AP_IRQ_AFFINITY_DYING to the
+> cpuhp_state enum.  These dying callbacks are invoked during CPU offline
+> before the tick is stopped, enabling clean tick handover and managed
+> IRQ migration when a CPU transitions between isolated and housekeeping
+> states.
+>
+> The existing CPUHP_AP_IRQ_AFFINITY_ONLINE already handles managed IRQ
+> restoration on CPU online.  The new dying callback completes the pair,
+> migrating managed interrupts away from the CPU before it goes down.
 
-Perhaps not to the existing kunit, but a new kunit which calls the
-simulate_*() functions directly. Just an idea.
+What? They are migrated away today already when the CPU goes down unless
+the CPU is the last one in the affinity set of the interrupt. So why do
+you need a new step for something which already exists?
 
-Nam
+> Subsequent patches register handlers for these states.
+>
+> Signed-off-by: Jing Wu <realwujing@gmail.com>
+> Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
+
+This SOB chain is broken (in all patches). See Documentation/process/...
+
+Thanks,
+
+        tglx
