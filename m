@@ -1,74 +1,365 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF252C11CB;
-	Thu, 18 Jun 2026 04:19:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF42B370AFD
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 06:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781756382; cv=none; b=IDMKMpJMRqYfHaaAtuU78YHyqHtO2x5GWWmtyG+MjvArkvp0ZafWYWRyfYrPFyuU+aI6XJeTXwEGvljlWoyK7nyh2SWhUV+KWTu36mVQ9h+52d8IHcHcMesvJYrLXmMKgaDbTt/BcElTATuZRXL3/guzIRLhV+Po6HUXcbbA5mA=
+	t=1781764923; cv=none; b=qnCtoVJuqX4dSfhHBdxi/MgjCzWsH5SLTdJNyxeDtvTd2apc65MGcZATMiS9O5hIGLeLsRYI7lj3DEfIYezZqBxPlfQTb1Uv0TS6cZEviSDVS3zXwAvpTBrfjCmOy/DBUVEu5lBXEUpBikVmJPm1v+l0fDhvtJkCh0Vu/7X2FoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781756382; c=relaxed/simple;
-	bh=1MW4VNkbZyVG64tjfqXLS8sUktdXvdrJeVTDqNjx+ms=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=dtguD+husvpAz4PIrNwQ/eTSLkPnPCfeeVQppCgknqpfS+nooCyLIt3Z8feo9iPRCr9ud5OOTrouWHpJXNg2AyYEFkFChrtY8N6QNedTwiwQC9L1tpTUbmKNiMYsi0qoxQiF2IZB17cvS+oq6iUlylUNbffgLo0mZQpmDLOhUy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H1sLS9hX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781764923; c=relaxed/simple;
+	bh=7z7rFVfq3N/QcZqXeg0TorLymH8gTqPV44j/HuhDaGo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=UX8TxHLnYGyXMbpXYW0ruLB3po4AsOQ4yQdL7rRrtziAvh4zpP1DWDcgZjFvGGvesVGVaUbC46ZasDtRXKlgxYmZFN8sgNYzsYPNE2UOplYoJw2fffaQQKWvyN2VqOuT5k0Uz9RGY2+0RBY287l70g4NYPnNabcjTwu0kU4tyqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=TTnmIRYo; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H1sLS9hX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4951F000E9;
-	Thu, 18 Jun 2026 04:19:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781756380;
-	bh=ROVddDfOyk8zu86ME/wG6+AbO6JfOCq+Z2d8XvM+8G0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=H1sLS9hXMgSJ35QGbWdZFXbC2Wb91YkGd+c2CuTjTaPissvSOu7A1brYYYDav2CwF
-	 CcWeUf99ka4Zl1VAMjc1n/jAIJQVNoRpICyyXCPvmvCLBQnKcPk/4y4xLzimVgdQBb
-	 ebb4iMTSdlaZxGnN+yuiSbKpLtrIxAUKX9ZwdpHTFq3Mxg0wuomrS+XBco8/oaH3iv
-	 BvnRptt2zx8cyecCITzzSE6oxRq5+OvfZWAvMYdaL6jZv57kBCVqi6Rwb3Eh3puGOe
-	 OllBBT2i8xRP7842uAynv0JUiNotuy0DuLQgmIhHhfF+N+ChocaG89icNXwM9Wk/89
-	 Q8j7jsAUQRkWw==
-Content-Type: multipart/mixed; boundary="===============3276329233012674368=="
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="TTnmIRYo"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-37c8e7c8185so288255a91.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 23:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781764916; x=1782369716; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6ItFCfybx0ZD8S2a6ZaD9XV0K7xnLCnKs+Inx+8dh6k=;
+        b=TTnmIRYo+aOLCYXFf93KtcqyY/DrbXvk4ZmGcHL9fWEW0a+eA0QomBlXH8sElY0pSb
+         5O9nDtsmfT0d/hXl0jxdQ6duxaxm/8zGLz/Cdo2zVHVmJAEvdqDJKOQkgTLUYvmm75nS
+         BlzLdtCwPFnVwowMaZGvkevf8RDBUu3lTLBfNxpk7e3LMeTNmkgBmmDtZipZcIl7rh9G
+         CGd+70UrPzm0JNJEh6Br42FrYl0BVXbmsGD3fqxhcGcTqDOoQoA0nBw4Fcyt0J8G0ldH
+         Invq24OPZAFQ5XoAJKPgcS8otUAqxvQf1uuchrL7fjp8zdxciGPTBVhHDbPYXFpO8QyZ
+         /oWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781764916; x=1782369716;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6ItFCfybx0ZD8S2a6ZaD9XV0K7xnLCnKs+Inx+8dh6k=;
+        b=j7YkK2FPIuCfSLDV7C5NVZuPb9WwZgrBL2d/4xZq6vFsKCgk/F/RvJA5fzG5v3+eKS
+         flCP0hdw5xW8VEA5K1E8otxVNvoG8wCj5fB0+aqwT5UG7qXGdXSR9IQUeWdk8h4JVXr9
+         9T79pesSzFoLM/NkLcdXdK2IcWLLs1IZg/CHlpOvjIcw4X3MWYPQBw13+J6CVbuZ0M9j
+         YwcYk0mx11oYd49awDN4KMAK79W/Yr5pRrDlCpwohjDNJwOILTfu1/snLW4/7Mg5wYXN
+         w/ktQD+xFtLd6N4xFZpqxiSW6+uwP0jMrDTd5dqDaH3QN14yx5+ss7eUH+AaNYGNLGc8
+         3uWg==
+X-Forwarded-Encrypted: i=1; AFNElJ8bh3JIDqH9uezTFnmDfvQpZIDR0UnB3H5hyKiZQ51/gxg0EGg9rrwo1nJo7TMHSw0G1s9a66hFpLdRg5rXigY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcQOf6bwA8ybwVaM9qUZfVPesUnoFI+X0iBtjAqJtfYD4yVdAT
+	2o3/ntGMP6O6S5LK16M8IPf+55/eZ2Ng2idDcZ6Sr045AiJRmA5/ogIUOibwPqNMoA4=
+X-Gm-Gg: AfdE7ckWOjwJjQm/s4kWNd3gK5hxMM9gW6GQXqCOj4ulg2EX6bwLnXpf3e80DrFx6ha
+	WpPV962E/GVZfUa798GLVFNoyyTF/17wvuT+We7VAT8+boRG0MqJ/bFpfPBes6aLqDFwRSu2Z6O
+	qOw43VvmlCyL1ng/RfKYIQBmW1QpzEqb1QguYIYtM8K4mgYLn1NInin7QHgnoG5+YrA9QBLU4N8
+	sxakeXsC1UnxqP4TxMKePmpfwTXHp5HCtcJ/CMjUjtHiChh8lsSOVBWnpO9k1FztG62ErSndiGU
+	tTVQfYuOFzD/eqadktbSrdHWOlWNl0Cf4NVZvC0Pq+cfKI4fUMBX9VPnEzL6oMlBq5Ym98bRmvr
+	c6uhBDZRHc8siQUzw1oq/zYFfxmbtv6W85IbGIJQ7/aRs0fqtDo+3YZl4n8JjDwtAzC/lzTG1RJ
+	rrVHQsZEWyykj6elFDJuTVbZhjCo/eAwhRNPKh5WqveVFE
+X-Received: by 2002:a17:90b:37c8:b0:36b:9798:4f6a with SMTP id 98e67ed59e1d1-37ce44ead65mr2031950a91.10.1781764915590;
+        Wed, 17 Jun 2026 23:41:55 -0700 (PDT)
+Received: from localhost (S0106d8b37028eeb5.vc.shawcable.net. [24.84.91.85])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37ce68cab02sm1178167a91.7.2026.06.17.23.41.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Jun 2026 23:41:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <7e996535cf04f95d2c4e54b1173f4e2d0a96102c737fe030decc432164df97a6@mail.kernel.org>
-In-Reply-To: <20260618033809.98253-2-dongtai.guo@linux.dev>
-References: <20260618033809.98253-2-dongtai.guo@linux.dev>
-Subject: Re: [PATCH 1/5] LoongArch: BPF: Gate unsupported arena instructions via bpf_jit_supports_insn()
-From: bot+bpf-ci@kernel.org
-To: dongtai.guo@linux.dev,chenhuacai@kernel.org,yangtiezhu@loongson.cn,hengqi.chen@gmail.com
-Cc: kernel@xen0n.name,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,loongarch@lists.linux.dev,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,guodongtai@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 18 Jun 2026 04:19:40 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 18 Jun 2026 02:41:54 -0400
+Message-Id: <DJBYY5JF4YBQ.2QJVU2QKJ16N2@etsalapatis.com>
+Subject: Re: [PATCH bpf 5/6] libbpf: ringbuf: Prevent missed wakeups
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Tamir Duberstein" <tamird@kernel.org>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>, "Andrea Righi" <arighi@nvidia.com>, "Xu Kuohai"
+ <xukuohai@huawei.com>, "Andrea Righi" <andrea.righi@canonical.com>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, "Andrew Werner" <awerner32@gmail.com>,
+ "Zvi Effron" <zeffron@riotgames.com>, "Andrii Nakryiko" <andriin@fb.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260613-bpf-ringbuf-fixes-v1-0-e623481cb724@kernel.org>
+ <20260613-bpf-ringbuf-fixes-v1-5-e623481cb724@kernel.org>
+In-Reply-To: <20260613-bpf-ringbuf-fixes-v1-5-e623481cb724@kernel.org>
 
---===============3276329233012674368==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Sat Jun 13, 2026 at 9:48 PM EDT, Tamir Duberstein wrote:
+> After consuming the last visible record, ringbuf_process_ring()
+> publishes the consumer position and checks the producer position. These
+> operations lack a full StoreLoad barrier. A producer can therefore
+> commit a new record but read the old consumer position while the
+> consumer reads the old producer position. The producer sends no
+> notification and the consumer waits despite a queued record.
+>
+> Insert a full barrier before checking for new data, ensuring that either
+> the consumer observes the producer update or the producer observes the
+> consumer update and sends a notification. Apply the same handshake when
+> a busy record follows records whose consumer position was published.
+>
+> Add an edge-triggered epoll test with a concurrent producer. Without the
+> barrier, a missed notification leaves the producer dropping records from
+> a full ring while the consumer times out. Document that bounded
+> consumers and callbacks that terminate consumption must drain before
+> waiting again.
+>
+> Fixes: bf99c936f947 ("libbpf: Add BPF ring buffer support")
+> Reported-by: Andrew Werner <awerner32@gmail.com>
+> Assisted-by: Codex:gpt-5.5
+> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
+> ---
+>  tools/lib/bpf/libbpf.h                           | 22 +++++++
+>  tools/lib/bpf/ringbuf.c                          | 14 +++-
+>  tools/testing/selftests/bpf/prog_tests/ringbuf.c | 84 ++++++++++++++++++=
+++++++
+>  3 files changed, 117 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index 9ba6b9ad3498..a3b8f606a91d 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -1439,6 +1439,10 @@ struct ring_buffer;
+>  struct ring;
+>  struct user_ring_buffer;
+> =20
+> +/* A negative return stops consumption; non-negative values continue. St=
+opping
 
->     The JIT does not implement atomics on arena pointers (BPF_PROBE_ATOMIC)
->     nor sign-extending loads from the arena (BPF_PROBE_MEM32SX). Without a
->     bpf_jit_supports_insn() callback the verifier assumes both are available,
->     so such programs are accepted only to fail later in the JIT with a
->     confusing -EINVAL 'unknown opcode'.
->     Implement bpf_jit_supports_insn() to reject these instructions in the
->     arena case. The verifier then rejects the program early with a clear
->     message ('BPF_ATOMIC stores into R<n> ... is not allowed' / 'sign
->     extending loads from arena are not supported yet'). Regular arena
->     accesses (BPF_PROBE_MEM32 loads/stores of all sizes) remain supported.
->     Signed-off-by: George Guo <guodongtai@kylinos.cn>
+Sashiko is right on this, let's use regular kernel style for new
+comments.
 
-This looks like it fixes a gap that was introduced when arena support
-was first advertised via bpf_jit_supports_arena() returning true.
-Should this carry a Fixes: tag?
+> + * can leave records queued without a new readiness notification. Before
+> + * waiting for readiness again, consume until no records remain.
+> + */
+>  typedef int (*ring_buffer_sample_fn)(void *ctx, void *data, size_t size)=
+;
+> =20
+>  struct ring_buffer_opts {
+> @@ -1455,6 +1459,20 @@ LIBBPF_API int ring_buffer__add(struct ring_buffer=
+ *rb, int map_fd,
+>  				ring_buffer_sample_fn sample_cb, void *ctx);
+>  LIBBPF_API int ring_buffer__poll(struct ring_buffer *rb, int timeout_ms)=
+;
+>  LIBBPF_API int ring_buffer__consume(struct ring_buffer *rb);
+> +
+> +/**
+> + * @brief **ring_buffer__consume_n()** consumes up to a requested number=
+ of
+> + * records from a ring buffer manager without event polling.
+> + *
+> + * @param rb A ring buffer manager object.
+> + * @param n Maximum number of records to consume.
+> + * @return The number of records consumed, or a negative error code on f=
+ailure.
+> + *
+> + * Reaching the requested bound does not establish that every ring is em=
+pty.
+> + * Records can remain queued without a new readiness notification. Befor=
+e
+> + * waiting on ring_buffer__epoll_fd(), call ring_buffer__consume() until=
+ it
+> + * returns 0.
+> + */
+>  LIBBPF_API int ring_buffer__consume_n(struct ring_buffer *rb, size_t n);
+>  LIBBPF_API int ring_buffer__epoll_fd(const struct ring_buffer *rb);
+> =20
+> @@ -1537,6 +1555,10 @@ LIBBPF_API int ring__consume(struct ring *r);
+>   * @param r A ringbuffer object.
+>   * @param n Maximum number of records to consume.
+>   * @return The number of records consumed, or a negative error code on f=
+ailure.
+> + *
+> + * Reaching the requested bound does not establish that the ring is empt=
+y.
+> + * Records can remain queued without a new readiness notification. Befor=
+e
+> + * waiting on ring__map_fd(), call ring__consume() until it returns 0.
+>   */
+>  LIBBPF_API int ring__consume_n(struct ring *r, size_t n);
+> =20
+> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+> index 1c24a83f59d5..ea8909fec4e9 100644
+> --- a/tools/lib/bpf/ringbuf.c
+> +++ b/tools/lib/bpf/ringbuf.c
+> @@ -255,7 +255,7 @@ static int64_t ringbuf_process_ring(struct ring *r, s=
+ize_t n)
+>  	/* 64-bit to avoid overflow in case of extreme application behavior */
+>  	int64_t cnt =3D 0;
+>  	unsigned long cons_pos, prod_pos;
+> -	bool got_new_data;
+> +	bool got_new_data, needs_wakeup =3D false;
 
-  Fixes: 4fdb5dd8aeba ("LoongArch: BPF: Implement bpf_addr_space_cast instruction")
+The extra new variable feels overly complicated. I think this is becuase
+the new code is going off of the got_new_data pattern, which imo is also
+unnecessary. We should just remove got_new data and just do:
+
+while (true) {
+	prod_pos =3D __atomic_load_n(r->producer_pos, __ATOMIC_ACQUIRE);
+	if (cons_pos =3D=3D prod_pos)
+		break;
+
+	while (cons_pos !=3D prod_pos) {
+		...
+	}
+}
+
+>  	void *sample;
+> =20
+>  	err =3D ringbuf_validate(r);
+> @@ -267,14 +267,21 @@ static int64_t ringbuf_process_ring(struct ring *r,=
+ size_t n)
+>  	cons_pos =3D __atomic_load_n(r->consumer_pos, __ATOMIC_ACQUIRE);
+>  	do {
+>  		got_new_data =3D false;
+> +		if (needs_wakeup) {
+> +			/* Ensure either this sees a new record or its producer sees
+> +			 * the updated consumer position and sends a notification.
+> +			 */
+> +			__atomic_thread_fence(__ATOMIC_SEQ_CST);
+> +			needs_wakeup =3D false;
+> +		}
+
+Now on this, I think to address Sashiko's warning instead of the if
+above...
+
+>  		prod_pos =3D __atomic_load_n(r->producer_pos, __ATOMIC_ACQUIRE);
+>  		while (cons_pos !=3D prod_pos) {
+>  			len_ptr =3D r->data + (cons_pos & r->mask);
+>  			len =3D __atomic_load_n(len_ptr, __ATOMIC_ACQUIRE);
+> =20
+> -			/* sample not committed yet, bail out for now */
+> +			/* Retry a busy record once after publishing prior records. */
+>  			if (len & BPF_RINGBUF_BUSY_BIT)
+> -				goto done;
+> +				break;
+> =20
+>  			got_new_data =3D true;
+>  			cons_pos +=3D roundup_len(len);
+> @@ -294,6 +301,7 @@ static int64_t ringbuf_process_ring(struct ring *r, s=
+ize_t n)
+> =20
+>  			__atomic_store_n(r->consumer_pos, cons_pos,
+>  					 __ATOMIC_RELEASE);
+> +			needs_wakeup =3D true;
+> =20
+>  			if (cnt >=3D n)
+>  				goto done;
+
+We just add an smp_mb() here. And since AFAICT smb_mb is available here,
+we can also avoid the move from smp_* to __atomic in the previous patch.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/tes=
+ting/selftests/bpf/prog_tests/ringbuf.c
+> index 9ce996bcea8c..5f0c679bf9a6 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+> @@ -492,6 +492,88 @@ static void ringbuf_null_cb_subtest(void)
+>  	test_ringbuf_n_lskel__destroy(skel_n);
+>  }
+> =20
+> +#define N_WAKEUP_SAMPLES 20000
+> +
+> +struct wakeup_ctx {
+> +	bool stop;
+> +};
+> +
+> +static void *wakeup_producer(void *arg)
+> +{
+> +	struct wakeup_ctx *ctx =3D arg;
+> +
+> +	while (!__atomic_load_n(&ctx->stop, __ATOMIC_RELAXED))
+
+Why __ATOMIC_RELAXED here? Maybe just declare the variable volatile and
+do regular reads?
+
+> +		syscall(__NR_getpgid);
+> +	return NULL;
+> +}
+> +
+> +static void ringbuf_wakeup_subtest(void)
+> +{
+> +	struct test_ringbuf_n_lskel *skel_n;
+> +	struct ring_buffer *ringbuf =3D NULL;
+> +	struct epoll_event event =3D {
+> +		.events =3D EPOLLIN | EPOLLET,
+> +	};
+> +	struct wakeup_ctx ctx =3D {};
+> +	pthread_t producer;
+> +	int epoll_fd =3D -1;
+> +	int err, total =3D 0;
+> +
+> +	skel_n =3D test_ringbuf_n_lskel__open();
+> +	if (!ASSERT_OK_PTR(skel_n, "test_ringbuf_n_lskel__open"))
+> +		return;
+> +
+> +	skel_n->maps.ringbuf.max_entries =3D getpagesize();
+> +	skel_n->bss->pid =3D getpid();
+> +	skel_n->bss->value =3D SAMPLE_VALUE;
+> +
+> +	err =3D test_ringbuf_n_lskel__load(skel_n);
+> +	if (!ASSERT_OK(err, "test_ringbuf_n_lskel__load"))
+> +		goto cleanup;
+> +
+> +	err =3D test_ringbuf_n_lskel__attach(skel_n);
+> +	if (!ASSERT_OK(err, "test_ringbuf_n_lskel__attach"))
+> +		goto cleanup;
+> +
+> +	ringbuf =3D ring_buffer__new(skel_n->maps.ringbuf.map_fd,
+> +				   process_noop_sample, NULL, NULL);
+> +	if (!ASSERT_OK_PTR(ringbuf, "ring_buffer__new"))
+> +		goto cleanup;
+> +
+> +	epoll_fd =3D epoll_create1(EPOLL_CLOEXEC);
+> +	if (!ASSERT_OK_FD(epoll_fd, "epoll_create1"))
+> +		goto cleanup_ringbuf;
+> +
+> +	err =3D epoll_ctl(epoll_fd, EPOLL_CTL_ADD, skel_n->maps.ringbuf.map_fd,
+> +			&event);
+> +	if (!ASSERT_OK(err, "epoll_ctl"))
+> +		goto cleanup_epoll;
+> +
+> +	err =3D pthread_create(&producer, NULL, wakeup_producer, &ctx);
+> +	if (!ASSERT_OK(err, "pthread_create"))
+> +		goto cleanup_epoll;
+> +
+> +	while (total < N_WAKEUP_SAMPLES) {
+> +		err =3D epoll_wait(epoll_fd, &event, 1, 1000);
+> +		if (!ASSERT_EQ(err, 1, "epoll_wait"))
+> +			goto cleanup_thread;
+> +		while ((err =3D ring_buffer__consume(ringbuf)) > 0)
+> +			total +=3D err;
+> +		if (!ASSERT_OK(err, "ring_buffer__consume"))
+> +			goto cleanup_thread;
+
+Label is unnecessary, just call break;
+
+> +	}
+> +
+> +cleanup_thread:
+> +	__atomic_store_n(&ctx.stop, true, __ATOMIC_RELAXED);
+> +	pthread_join(producer, NULL);
+> +cleanup_epoll:
+> +	close(epoll_fd);
+> +cleanup_ringbuf:
+> +	ring_buffer__free(ringbuf);
+> +cleanup:
+> +	test_ringbuf_n_lskel__destroy(skel_n);
+> +}
+> +
+>  static void ringbuf_n_subtest(void)
+>  {
+>  	struct test_ringbuf_n_lskel *skel_n;
+> @@ -672,6 +754,8 @@ void test_ringbuf(void)
+>  		ringbuf_n_subtest();
+>  	if (test__start_subtest("ringbuf_null_cb"))
+>  		ringbuf_null_cb_subtest();
+> +	if (test__start_subtest("ringbuf_wakeup"))
+> +		ringbuf_wakeup_subtest();
+>  	if (test__start_subtest("ringbuf_map_key"))
+>  		ringbuf_map_key_subtest();
+>  	if (test__start_subtest("ringbuf_write"))
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27735575341
---===============3276329233012674368==--
+pw-bot: cr
