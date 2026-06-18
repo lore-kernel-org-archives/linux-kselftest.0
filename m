@@ -1,67 +1,67 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5635632E757
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 03:11:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3C432E757
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2026 03:12:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781752318; cv=none; b=Dunha3tkeq/f7LexjjUCWtwzEKoJEZnd2Bh9Cola1XI4My0PpLeX9QQpUxotCl7oCnpby0YXbYEEJtySKxNHcYGw/WFKIBgrxaaU2WLO1jdFM7Lf4dT6H5uQa69cTExSvkguwgGIed1AnOmqTduHQE3porkz/ETkHhRTyBItDmI=
+	t=1781752326; cv=none; b=GDF3hqKUb4OKvp57HRi0EY7k7OVXvQPjL6s/1wQPoT+21lEYLlzcy0GonZIeq7gtPETSqrOooCaTAgyYrnJDYsDgHgU2jPCceKbdtEVHpoQ96SX3479jurpBz9UEWIF8y+dZ646J6Puvkxz7bDbixaPTe3+SoFaS5vZHquT+moU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781752318; c=relaxed/simple;
-	bh=su/86e8IzEx6KCsYE6y2QU0JcZeTp1olU2GBvdI7t20=;
+	s=arc-20240116; t=1781752326; c=relaxed/simple;
+	bh=NGMo6Qrww1dJu/rQIpKoY8Dsqru3A+nBInxhSjZKlJw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LX7YuAEjnD6DpEyXyxdQo2qH4REMxs9+b5PA+mEktxcbzKhoJykdFBHGluJp8PfhhSb7sbWKjG/bag6+ys4wo76f0j0Tc9hheEYwV9nvBkBgnW9UIuYZAUXtx37WrDgXzQOpV1ICd4noVZmILx8mQ2/jzZ2sPFLcopKh2DosM7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lE0c4K8i; arc=none smtp.client-ip=209.85.214.182
+	 In-Reply-To:To:Cc; b=H5fZgg0ajaeV9w5DqyOxijSjCn1EO9GRgyOI5Lr++V1Go1BY5ReyG3OX/qkj02cW2TpWPumGGSy9aA6N8tfzn+4Nwd2d1X7NKRDQhNZbbWUG91R0y6JxIim+mudLNeD+GXDCNSR2qNh0l4c59ZA8tL/bBCJ8ZfnKOvi2vC4eS3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VgIzoKEG; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lE0c4K8i"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2c40397e746so2964245ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 20:11:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VgIzoKEG"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2c6c101aeafso2963035ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2026 20:12:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781752317; x=1782357117; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781752323; x=1782357123; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1y36uZa5QHApqDykuJpc+gggPAc0ysbP66IjBiya9ds=;
-        b=lE0c4K8itEg+Udz8swnAs0DMm9NEQS93H7SjpXkhcvWUEwJnhnU/xR48vyy0XhXk2N
-         MdJOogr7iXhhOwXLm0xDH0XwHqsrCgzUwchmzmjqkqHXNPy+xwSPGJLrLXbULNlz0Otx
-         egOr0btUqP8K22O1JJkbUWEFsozL3Zi3FpSjZYnZzFKg9kR/vr4OBKDeODwa9Vsqd4Vd
-         xIEgBQ/ocu1aXvcqqRmg2ztmLlc26PqWk/qIZzukj3Lw4HSDQI0GAsm2hUmGKOAAdEUE
-         T7JbVmotbagk9OmX2uQG0MVyO6sU2GwTb0lW0oSkG174onZS+pxv2BuUMA9jvA9xwk26
-         XjwA==
+        bh=HHPKcwKivbUSuSD1ETvryOn1BWPlqo5A5EDmYEYSw9g=;
+        b=VgIzoKEGvj64yDtKUpABwC6fSoqI9NQdNIRNsIvl208WEH5OtxLqVw1TVszBPx8jKB
+         2fTUZEMpm9oE/7jQ5URCsEs0LVwVwhb9hlPsvi3tidk0+HOJkGxcnRByebmG26Ta6XIz
+         5hrOJMN2G9nWHfC5ZLH0AVIZ2JUcqMGp1wRRz53BqxAipuNzphl5SEzYOAEhjDGmRwD1
+         rLVbJDjL8TFmtli9WfD2SUIXvYQOY48UV2QNy7xOHKghB2nZ4ouiIQM7LGFU0IrdoQu7
+         1UKK4ZluK6eV4M/MN4tfBhwsPqGk8fKWzkfO28s3Mm9lX0hN6/r3EJIYrzmTQf/tlata
+         IhiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781752317; x=1782357117;
+        d=1e100.net; s=20251104; t=1781752323; x=1782357123;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=1y36uZa5QHApqDykuJpc+gggPAc0ysbP66IjBiya9ds=;
-        b=no0Omb9SKWqggPeGSmCsoQ04/3tho9YMGBrOlbBnaMo0V+mrYHdG5wPzGMt6DeAgA3
-         W9lckVRya8nAx6MqhAjX7cU9kEqBgqYr0a2pxoxvTWNlUapmrG60bczY6yBoB8/XYo8w
-         Hz7/SPwXkSXT9AvcNYuy3FaRWGsaRiOpJJqEyyTZjhBTd+WB26oNIrpitu6AXbtocTl7
-         WaiRof9jildZYZ3cqas19NfxZWM65TY/xD/X3vOuEJXwlaEWxQogCuTrBXQZ0ZCtMx4t
-         E/xKCp4WAUvVsNESlY2DNSq+UyLbUaZfVCTAuExF4ActJPUnFoJzA3EEK9KZ+M8pdUU2
-         Blgg==
-X-Forwarded-Encrypted: i=1; AFNElJ8rc/D8r+ZVokp5f5z0mxI3mrZQ/Isaw8ttn60AZMz3S4iHklqi6CKH371KlF5hVF365HfQW9wTh6SxnGICzzs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmPzxXo656hN5+SBSnL+5SrEFaL/NXYiS1h9wGNBvyz31ioBYM
-	vYkQUwI21QA6FDO6KVpATQYw3ykQ8tIP2icUTfn+NVaqc2mSrUpYQnHv
-X-Gm-Gg: AfdE7cnVatAXlPIhg2p25z5RCk6RRi1nfBzKdIgntg3vrHfjzCsCiwNmjjteJUjxvNC
-	CYWXBdeH4I8lhOfD9MlLb37iOeGs5Pnfm5hJMpRJE6VZ+x6H5UjjWCdJj1LUmpIRYou6RJ3snmZ
-	U9af3jRjYcPEdkP+QMlxUWtm34FEkm/TpoSgL9Vi0Nd7Y2T5D6GRnvuE/dGrOIJfx9jiwoNPXaG
-	aiGXmALjphtZyYzfO6iBnYpef22UMdkdqsMfxG+94MrUXB4jKJjxyd0gjEl83pbyO5WZvzZwI4P
-	bjk3nJHzbO58CGlGtKOs2+tZMymIo6bxkLlOOq3jhm/K/Q6TjxjBadGXCEM+MZYPzvle0FqURyk
-	XmBs8t/MQZ+/562u915VaeUVm5M1n/WxMy/Eg8LeumGsgearFMxZnngbB6ZW70F2lMpqriWYwxo
-	V5tdmjQWp2gXI=
-X-Received: by 2002:a17:903:240e:b0:2c0:a360:45da with SMTP id d9443c01a7336-2c6f34744e6mr5011065ad.32.1781752316749;
-        Wed, 17 Jun 2026 20:11:56 -0700 (PDT)
+        bh=HHPKcwKivbUSuSD1ETvryOn1BWPlqo5A5EDmYEYSw9g=;
+        b=J2ARGqLxktptnl9I6vcugbzKWGcl9zkCGsYxLxjq9VHYEcgMtBNecPAqi0F9BlQ8Kj
+         CHrGq4HhgzPCcIJruLM0h6nHdRdBL2BaKrswApeCJ0eg+NydqcFL4byVBFKqGnpWohBl
+         4pP3w4awsV+D+NlVcihHq4EW7KTgY0NjVE7S2ccSu2h8U9Vlk3ooh2YtbPPyVTXKSi9y
+         kUoMmyrv6R6D8cVAfFWjUWcA/R6Pa9t3vtegYL3+42w0C8TY51A6WQoJb8YadI520rSM
+         4p19CIMGC/fdG9D3qpSIdgFKylpt9SrOKCSPbQgzbf7Mvx5A8RFoZBIWcL56l0KO90OT
+         ixmA==
+X-Forwarded-Encrypted: i=1; AFNElJ+lbqjepwRsrJmQX70cTgQXmIRkcJU/mH1+SERcdvbgylro4x5GksXpGDYyA4sBDnFkt5C6Ye5+0a533hmKYWs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPFVhFm3x0X48x3ZGm6dQ8kQMksJzelJvpDwEmkRi5YhPd06V1
+	D8whACsn2dapyWzYsL6kqGefKFGsvvimyBHzVF/yN+0OLeu3MlAFhUwf
+X-Gm-Gg: AfdE7clYYlibD8W78RjdrzG/4HEjP8ONEfSaTX4iD4VuqPumQjaDyG37bQZvYbO0dSq
+	E0Jd0bXfEWqk7zjOB6yTKvcWfCvrylJq+zO36RedrCDcN9vmdihLPJsHYrZ9irNVHtmSswoSpbC
+	LWNvOTMcHXxnP5GX30qNZycRlnSjn+ZiTdcHgy4LAYcP2nHTFMIBvn8+Pmbv5HIPNIeDGF8qt2b
+	NVfR5E/pw7ulAKWOn3Jq4UFTZ1faNuNSS/XMOF+ief5Sqrsoqr2JNE9pBfdl4S471G2RQbS8Moy
+	DL0Q0bGlrVyZoh34bqfjFoCkIEFfx5svTE+yMxbtWONmB/kheCStc0ifjVdK5SgSile+qUeRfzm
+	bh2xnZgvfdXuHO/pGELEmoEHZcqtkocX6QaTo6LiwuNHjWCaNauqR9eNBNYpTdA+PEqvBjR5kvA
+	ygVEyqVTfX5wU=
+X-Received: by 2002:a17:903:32d0:b0:2c1:ef9:4516 with SMTP id d9443c01a7336-2c6e52e23edmr17236945ad.35.1781752323371;
+        Wed, 17 Jun 2026 20:12:03 -0700 (PDT)
 Received: from [127.0.1.1] ([138.199.21.246])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c6a403b242sm60152975ad.31.2026.06.17.20.11.50
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c6a403b242sm60152975ad.31.2026.06.17.20.11.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 20:11:56 -0700 (PDT)
+        Wed, 17 Jun 2026 20:12:03 -0700 (PDT)
 From: Jing Wu <realwujing@gmail.com>
-Date: Thu, 18 Jun 2026 11:11:16 +0800
-Subject: [PATCH v3 05/13] cpu/hotplug: Reserve CPUHP states for nohz_full
- and managed IRQ down-paths
+Date: Thu, 18 Jun 2026 11:11:17 +0800
+Subject: [PATCH v3 06/13] tick/nohz, context_tracking: Prepare for runtime
+ nohz_full updates
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,8 +69,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260618-wujing-dhm-v3-5-28f1a4d83b68@gmail.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260618-wujing-dhm-v3-6-28f1a4d83b68@gmail.com>
 References: <20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com>
 In-Reply-To: <20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com>
 To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
@@ -96,37 +96,296 @@ Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
  Qiliang Yuan <yuanql9@chinatelecom.cn>
 X-Mailer: b4 0.13.0
 
-Add CPUHP_AP_NO_HZ_FULL_DYING and CPUHP_AP_IRQ_AFFINITY_DYING to the
-cpuhp_state enum.  These dying callbacks are invoked during CPU offline
-before the tick is stopped, enabling clean tick handover and managed
-IRQ migration when a CPU transitions between isolated and housekeeping
-states.
+Remove __init from ct_cpu_track_user() and __initdata from the
+initialized flag so context tracking can be activated on CPUs that
+join nohz_full at runtime.  Drop the __ro_after_init attribute from
+the context_tracking_key static key, allowing static_branch_dec()
+when a CPU leaves nohz_full.
 
-The existing CPUHP_AP_IRQ_AFFINITY_ONLINE already handles managed IRQ
-restoration on CPU online.  The new dying callback completes the pair,
-migrating managed interrupts away from the CPU before it goes down.
+Add ct_cpu_untrack_user() to reverse ct_cpu_track_user(), decrementing
+the static key and clearing the per-CPU tracking state.
 
-Subsequent patches register handlers for these states.
+Register a housekeeping_cbs for HK_TYPE_KERNEL_NOISE that:
+- pre_validate: checks CONFIG_NO_HZ_FULL is available.
+- apply: snapshots the new HK_TYPE_KERNEL_NOISE mask under an RCU
+  read lock (the lockdep annotation in housekeeping_cpumask() requires
+  this even after synchronize_rcu() completes), computes nohz_full as
+  the complement of the housekeeping mask, then under tick_nohz_lock:
+  - Activates context tracking (ct_cpu_track_user()) on CPUs newly
+    added to nohz_full, and deactivates it (ct_cpu_untrack_user()) on
+    CPUs returning to the housekeeping set.  This activates the
+    context_tracking_key static key dynamically, eliminating the
+    need for CONFIG_CONTEXT_TRACKING_USER_FORCE.
+  - Updates tick_nohz_full_mask in-place (legacy EXPORT_SYMBOL_GPL
+    snapshot, eventually consistent).
+  - Migrates tick_do_timer_cpu if it moved into the isolated set.
+  - Kicks all CPUs to re-evaluate tick behaviour.
+
+When CONFIG_CONTEXT_TRACKING_USER_FORCE is enabled and nohz_full= is
+given at boot, tick_nohz_init() now calls context_tracking_init()
+before iterating over tick_nohz_full_mask to call ct_cpu_track_user().
+This ensures the per-CPU tracking state is set up before any CPU is
+tracked, which is also required for CPUs later added to nohz_full at
+runtime via DHM isolated partitions.
 
 Signed-off-by: Jing Wu <realwujing@gmail.com>
 Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
 ---
- include/linux/cpuhotplug.h | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/context_tracking.h |   1 +
+ kernel/context_tracking.c        |  23 ++----
+ kernel/time/tick-sched.c         | 157 +++++++++++++++++++++++++++++++++++++--
+ 3 files changed, 161 insertions(+), 20 deletions(-)
 
-diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-index 22ba327ec2278..075cfa8161334 100644
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -186,6 +186,8 @@ enum cpuhp_state {
- 	CPUHP_AP_SMPCFD_DYING,
- 	CPUHP_AP_HRTIMERS_DYING,
- 	CPUHP_AP_TICK_DYING,
-+	CPUHP_AP_IRQ_AFFINITY_DYING,
-+	CPUHP_AP_NO_HZ_FULL_DYING,
- 	CPUHP_AP_X86_TBOOT_DYING,
- 	CPUHP_AP_ARM_CACHE_B15_RAC_DYING,
- 	CPUHP_AP_ONLINE,
+diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
+index af9fe87a09225..632cfc97b5b22 100644
+--- a/include/linux/context_tracking.h
++++ b/include/linux/context_tracking.h
+@@ -12,6 +12,7 @@
+ 
+ #ifdef CONFIG_CONTEXT_TRACKING_USER
+ extern void ct_cpu_track_user(int cpu);
++extern void ct_cpu_untrack_user(int cpu);
+ 
+ /* Called with interrupts disabled.  */
+ extern void __ct_user_enter(enum ctx_state state);
+diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
+index a743e7ffa6c00..e68fb02b25ad4 100644
+--- a/kernel/context_tracking.c
++++ b/kernel/context_tracking.c
+@@ -411,7 +411,7 @@ static __always_inline void ct_kernel_enter(bool user, int offset) { }
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/context_tracking.h>
+ 
+-DEFINE_STATIC_KEY_FALSE_RO(context_tracking_key);
++DEFINE_STATIC_KEY_FALSE(context_tracking_key);
+ EXPORT_SYMBOL_GPL(context_tracking_key);
+ 
+ static noinstr bool context_tracking_recursion_enter(void)
+@@ -674,28 +674,21 @@ void user_exit_callable(void)
+ }
+ NOKPROBE_SYMBOL(user_exit_callable);
+ 
+-void __init ct_cpu_track_user(int cpu)
++void ct_cpu_track_user(int cpu)
+ {
+-	static __initdata bool initialized = false;
+-
+ 	if (!per_cpu(context_tracking.active, cpu)) {
+ 		per_cpu(context_tracking.active, cpu) = true;
+ 		static_branch_inc(&context_tracking_key);
+ 	}
++}
+ 
+-	if (initialized)
++void ct_cpu_untrack_user(int cpu)
++{
++	if (!per_cpu(context_tracking.active, cpu))
+ 		return;
+ 
+-#ifdef CONFIG_HAVE_TIF_NOHZ
+-	/*
+-	 * Set TIF_NOHZ to init/0 and let it propagate to all tasks through fork
+-	 * This assumes that init is the only task at this early boot stage.
+-	 */
+-	set_tsk_thread_flag(&init_task, TIF_NOHZ);
+-#endif
+-	WARN_ON_ONCE(!tasklist_empty());
+-
+-	initialized = true;
++	per_cpu(context_tracking.active, cpu) = false;
++	static_branch_dec(&context_tracking_key);
+ }
+ 
+ #ifdef CONFIG_CONTEXT_TRACKING_USER_FORCE
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index cbbb87a0c6e7c..a7fe097042f7d 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -26,6 +26,7 @@
+ #include <linux/irq_work.h>
+ #include <linux/posix-timers.h>
+ #include <linux/context_tracking.h>
++#include <linux/sched/isolation.h>
+ #include <linux/mm.h>
+ 
+ #include <asm/irq_regs.h>
+@@ -653,11 +654,6 @@ void __init tick_nohz_init(void)
+ 	if (!tick_nohz_full_running)
+ 		return;
+ 
+-	/*
+-	 * Full dynticks uses IRQ work to drive the tick rescheduling on safe
+-	 * locking contexts. But then we need IRQ work to raise its own
+-	 * interrupts to avoid circular dependency on the tick.
+-	 */
+ 	if (!arch_irq_work_has_interrupt()) {
+ 		pr_warn("NO_HZ: Can't run full dynticks because arch doesn't support IRQ work self-IPIs\n");
+ 		cpumask_clear(tick_nohz_full_mask);
+@@ -676,6 +672,16 @@ void __init tick_nohz_init(void)
+ 		}
+ 	}
+ 
++	/*
++	 * Pre-initialize context tracking for all possible CPUs so
++	 * ctx tracking is already active when a CPU is later added to
++	 * nohz_full at runtime.  The tracking overhead is negligible
++	 * because the static key is not incremented yet — only per-CPU
++	 * tracking state is set up.
++	 */
++	if (IS_ENABLED(CONFIG_CONTEXT_TRACKING_USER_FORCE))
++		context_tracking_init();
++
+ 	for_each_cpu(cpu, tick_nohz_full_mask)
+ 		ct_cpu_track_user(cpu);
+ 
+@@ -686,6 +692,147 @@ void __init tick_nohz_init(void)
+ 	pr_info("NO_HZ: Full dynticks CPUs: %*pbl.\n",
+ 		cpumask_pr_args(tick_nohz_full_mask));
+ }
++
++static int tick_nohz_hk_validate(enum hk_type type,
++				 const struct cpumask *cur_mask,
++				 const struct cpumask *new_mask)
++{
++	if (!IS_ENABLED(CONFIG_NO_HZ_FULL))
++		return -EOPNOTSUPP;
++	return 0;
++}
++
++static void tick_nohz_hk_apply(enum hk_type type)
++{
++	static DEFINE_SPINLOCK(tick_nohz_lock);
++	cpumask_var_t nohz_full, added, removed;
++	bool was_running;
++	int cpu;
++
++	if (!alloc_cpumask_var(&nohz_full, GFP_KERNEL))
++		return;
++	if (!alloc_cpumask_var(&added, GFP_KERNEL)) {
++		free_cpumask_var(nohz_full);
++		return;
++	}
++	if (!alloc_cpumask_var(&removed, GFP_KERNEL)) {
++		free_cpumask_var(added);
++		free_cpumask_var(nohz_full);
++		return;
++	}
++
++	/*
++	 * Snapshot the new HK_TYPE_KERNEL_NOISE mask under an RCU read lock.
++	 * housekeeping_update_types() completes synchronize_rcu() before
++	 * invoking apply(), so the new pointer is stable; however the lockdep
++	 * annotation in housekeeping_cpumask() still requires an RCU read-side
++	 * critical section for runtime-mutable types.
++	 */
++	rcu_read_lock();
++	cpumask_andnot(nohz_full, cpu_possible_mask,
++		       housekeeping_cpumask_rcu(HK_TYPE_KERNEL_NOISE));
++	rcu_read_unlock();
++
++	/*
++	 * When "nohz_full=" was not passed at boot, tick_nohz_full_running is
++	 * false and the full dynticks infrastructure (sched_tick_offload_init,
++	 * RCU nohz quiescent-state reporting, context-tracking bootstrap) was
++	 * never initialised.  In that case restrict the update to
++	 * tick_nohz_full_mask so the /sys/devices/system/cpu/nohz_full sysfs
++	 * attribute reflects DHM-isolated CPUs without enabling tick
++	 * suppression, context tracking, or timer migration – all of which
++	 * require boot-time setup and would deadlock on the first
++	 * synchronize_rcu() call after CPUs are offlined.
++	 */
++	was_running = READ_ONCE(tick_nohz_full_running);
++
++	spin_lock(&tick_nohz_lock);
++
++	/*
++	 * When nohz_full= was active at boot, compute the delta and update
++	 * context tracking for CPUs joining or leaving the nohz_full set.
++	 * Skip when !was_running: ct_cpu_track_user() calls
++	 * static_branch_inc() which may sleep (jump_label_update on the
++	 * 0→1 transition) – illegal inside a spinlock.
++	 */
++	if (IS_ENABLED(CONFIG_CONTEXT_TRACKING_USER) &&
++	    was_running &&
++	    cpumask_available(tick_nohz_full_mask)) {
++		cpumask_andnot(added, nohz_full, tick_nohz_full_mask);
++		cpumask_andnot(removed, tick_nohz_full_mask, nohz_full);
++		for_each_cpu(cpu, added)
++			ct_cpu_track_user(cpu);
++		for_each_cpu(cpu, removed)
++			ct_cpu_untrack_user(cpu);
++	}
++
++	/*
++	 * Update tick_nohz_full_mask unconditionally: this is the snapshot
++	 * read by the /sys/devices/system/cpu/nohz_full sysfs attribute and
++	 * must reflect the current isolation set even in the DHM runtime case.
++	 */
++	if (cpumask_available(tick_nohz_full_mask))
++		cpumask_copy(tick_nohz_full_mask, nohz_full);
++
++	/*
++	 * Only modify tick_nohz_full_running and migrate the global tick when
++	 * nohz_full= was set at boot; without boot-time setup, setting
++	 * tick_nohz_full_running would suppress ticks on isolated CPUs and
++	 * prevent RCU quiescent-state reporting, causing synchronize_rcu()
++	 * to stall permanently when a CPU is subsequently offlined.
++	 */
++	if (was_running) {
++		tick_nohz_full_running = !cpumask_empty(nohz_full);
++
++		if (tick_nohz_full_running) {
++			cpu = READ_ONCE(tick_do_timer_cpu);
++			if (cpu < nr_cpu_ids &&
++			    !housekeeping_test_cpu(cpu, HK_TYPE_KERNEL_NOISE)) {
++				int new_cpu;
++
++				new_cpu = housekeeping_any_cpu(HK_TYPE_KERNEL_NOISE);
++				if (new_cpu < nr_cpu_ids)
++					WRITE_ONCE(tick_do_timer_cpu, new_cpu);
++			}
++		}
++	}
++
++	spin_unlock(&tick_nohz_lock);
++
++	if (was_running)
++		tick_nohz_full_kick_all();
++	free_cpumask_var(removed);
++	free_cpumask_var(added);
++	free_cpumask_var(nohz_full);
++}
++
++static struct housekeeping_cbs tick_nohz_hk_cbs = {
++	.name		= "tick/nohz",
++	.pre_validate	= tick_nohz_hk_validate,
++	.apply		= tick_nohz_hk_apply,
++};
++
++static int __init tick_nohz_hk_init_late(void)
++{
++	int ret;
++
++	/*
++	 * Ensure tick_nohz_full_mask is allocated so that tick_nohz_hk_apply()
++	 * can update it (and the /sys/devices/system/cpu/nohz_full sysfs
++	 * attribute) when CPUs are isolated at runtime via DHM.  If "nohz_full="
++	 * was passed at boot the mask is already allocated; allocate an empty
++	 * one here for the runtime-only case.
++	 */
++	if (!cpumask_available(tick_nohz_full_mask) &&
++	    !zalloc_cpumask_var(&tick_nohz_full_mask, GFP_KERNEL))
++		pr_warn("tick/nohz: failed to allocate nohz_full_mask for DHM\n");
++
++	ret = housekeeping_register_cbs(HK_TYPE_KERNEL_NOISE, &tick_nohz_hk_cbs);
++	if (ret)
++		pr_warn("tick/nohz: Failed to register hk callback: %d\n", ret);
++	return 0;
++}
++late_initcall(tick_nohz_hk_init_late);
+ #endif /* #ifdef CONFIG_NO_HZ_FULL */
+ 
+ /*
 
 -- 
 2.43.0
