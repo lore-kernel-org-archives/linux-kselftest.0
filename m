@@ -1,93 +1,93 @@
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F60358369
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 10:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B669378D82
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 10:46:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781865394; cv=pass; b=ecMjsF//7LI3HUZNzZEzlBCDcSZ0cOMgfOgc85Y1NCcN9feFA0HlbjGo2mTto53coxg824C7Hq7wqWjVy7U7riuVVTl9PoQwdm5Fvh6AK30v5hncolOxCx8HBQ5q4FY5f3FBaFHE/u2Yvax7z1hD+kcnZGcQ4jR5mZCYCOdobgQ=
+	t=1781866008; cv=pass; b=Plei2uQ4Xokwl3kXaMWXx9JfVQbenL3SlSiFTInYIi9exlbWN7ICKLHjba+XiYIwOsWxlf/41rrdhc00m/13sFE0/nocBpLWYuPyR5GgbloMGulkCKC8MkIOar2bcQVoEUPy/NczY/cl9ZDr298bY1V69L4C8sCpYH1mBcvAczI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781865394; c=relaxed/simple;
-	bh=Kpv/JcmfGFx2o0miFAoqUveVveGjW/t0twGJIKckgXc=;
+	s=arc-20240116; t=1781866008; c=relaxed/simple;
+	bh=GBE1TgSby7J232lUKGK26nn+IlCCdnbJXDX5316EbVI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FQ1EakpfTo5Novsvc+I0uj6tIxGppMqxOJTPe9tAURzDT5ursif6aB3Y0KWJTrAP0YTyyIiRgghL0Wbww3HxdVkWcBHkY13Yf+QDgc5v+OjYcOs5ndSxiVNgDQZOP9YGk3Bqu4q+MF8BgWr9OE6ZU4wZtYtHdg0JY+Jo8yvqHCY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WGAoUpmh; arc=pass smtp.client-ip=209.85.160.182
+	 To:Cc:Content-Type; b=JUJtah4/Gkw6xSZ3x2U5hbN/kqPIVa526jzsx0pbvCZNvsT7oQBorgiPO0DzPnnC4rZfLWa/501ItgCQrA7k6FatTLpYwXoS3eGPu+7TEcq82jCkCPNMVHRNQqgJhgCzR3grVTDrobuNFGA8QV8DKscLwqrIU3JQEP/wcOrT2fo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U75CQJbP; arc=pass smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WGAoUpmh"
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-519ed52bcc6so131021cf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 03:36:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781865392; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U75CQJbP"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-51765531803so232071cf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 03:46:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781866005; cv=none;
         d=google.com; s=arc-20260327;
-        b=NSeczr/lED5hUeKXAHcMgSu6vcsdYCmEuPZcd9XYZQbniK0yyxQ3PkG20Ic2gjJ+Ns
-         APPXt65o+wSCYDQK3eQpras0GhCbT5EaXi6fxPjZ9V+ErkkNsm+JEjbCJzttUNT7JlOC
-         jBbTkUgTdbGyUAWw1ODJPOCv5qhzBVgs/7yau/fErejMZm9YuS0DK4Jz2507REN28nNh
-         0puR0s/dTztx41wDJGvZkWm71GHRR/7JubRE2HN8zw3r2CfLOZJ6nCmcE2jEO/uajScj
-         HazRHoLLlZBd6/g6FBpVrifesixbM7Orh3daLjUEyc/t7aUIfhieI+zSl+I86pSmFSSj
-         oC6g==
+        b=jTyRrzqFbKZlepi34pQsnTNraA54OBp3WHWmg6kmu+1xbBrfXHb3YpqlRnAZN3IhrZ
+         PIFcHW2wO7BmUMu2AuwkyFZnmHxufBh7nkgphrMAc/2Ls4t+1FFUnaR+woP3a8jeDDDr
+         Kn4ThQVJKe8xgOyZcrPhbyqXsNbKeWseOGq9/sZexJD2nm3fSDFLpVm19vQ8bRaZFgNP
+         j7U6/jDY20Vv9BbPaEirw5xRWFDgokbnNqVEytKOY2Tn7BMk156jEI1EnEU2GmMPFWaK
+         TiX29S0Dd3JG6137N+pEXj3rQpUDY2/lAkcjnjboIHNosizcyi4dTk9573/O/9wyepB4
+         eeGQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=YuuXVoQ2ecZDLg/Pv4tnmec6MwmZ/WlSis1mzF80Zmw=;
-        fh=BsocCb0kssYfePOtavyCEVVkBYPhF6qNdsh1RF9+12w=;
-        b=WoJMlCPHVrP04LTsxA0alxQGi1kjcS+od4Q9kGNDoUCiPYDUeXUGG/WOmUKoobbuaf
-         i50hnthwDef2aSsaabNL0f1k5pb+ZxuaP6eT+pnNnO0aZWWDAosxGQGaHDDni4lIuCAP
-         ALxuVOY6TCIpC99PdxO2DFNWwEC+lwAwwfRwWA7EPDAkV4KDm99nfFdNtSa5VBEXkWcq
-         qheAM3suerjLfN9X/i3M1EJSd1f2TqqD7/cIetDUtJgj1Cj6aPklrBPtRX/QNpDjtq0l
-         D/McKbIMVmYnLidKVRt9UQt4b4xTQ6P49hfuOWwhUiRDqKjH/Gj6uOg/2ZoiQcu+1P3p
-         9bJA==;
+        bh=tqVqdR7eGLFAsCQYmX5JI1ornwlzeYgCHzhYfEkLeRM=;
+        fh=CDGPJLqJTR+viZFr6dNcuRJj7sPC5UIWLQvcCu0M9Zs=;
+        b=GQg15R+ky28RYQ6TRTcSCYZG24TNj2/bgDoJM+CqQOgnkVUnPsl+R3dHeDJuQI31nR
+         jRFWF/vuwgI0X1/sbA24zRrf8QC8O2HR5cIblN8msLUaYazGUoEgMmDyTbQjg4ze/smk
+         3iOMTpPRf35xOpw0OOGi6FDWtuHrRmoyJRjUVeAyt/4cIC8jPhXeC7xLG1OlunzgnpPo
+         ZmoiIEi4x3w5hEHqcG240O0vLrUavnxw3aJm7/AUOHQHOJIgtean7g7WzBnRe67UkB+r
+         dW2jb4VQs2ciglM2s3afG3C8n9okUf4rs9TbilvJySf3ZNvPdYgHMlqzjj1f+RXau5+p
+         /Cqw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781865392; x=1782470192; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1781866005; x=1782470805; darn=vger.kernel.org;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=YuuXVoQ2ecZDLg/Pv4tnmec6MwmZ/WlSis1mzF80Zmw=;
-        b=WGAoUpmhQ+IxkfmaF8P6q+6M+AipZQrlXcmwjrGopuJ5XlQyVVX4eqBvL9VZ1BGeex
-         IKPW1ZuMiyGky0Ob3hbgfSk0Ro3gYtPjykGTu+ohOAVKoEBhZkwkAL1OGJ19inww/LZV
-         aRFdTtiwlmbgjN06XGq59ve/+Ohf8vivTKzTgwYd9jLtXYRcNexRIXlWVY0vr79vlY/g
-         VPUKPpAq8286MgEtaXYZVAwqbeZr9qaeH0rACLR0w/eqOA0/oKelBb4g8r8oBYxtYn2v
-         0KGW+laRi9T8eH9Gf4PcLqyTy3QB2UukHfrh92uFDWdNsbSgkYo5LMfRHqcgvODWdZLE
-         uqwQ==
+        bh=tqVqdR7eGLFAsCQYmX5JI1ornwlzeYgCHzhYfEkLeRM=;
+        b=U75CQJbPcSNy7b3rqNQlOkqM3d9AAFeN+w9Y+3TxossyxgYPBaPMs5YymOB1n4gKgk
+         fEjKdJv4RFKQtPh9n/tPH5u2C4dUPWhS8cieaRDcY9tSSgEuNkb03E9A2RLCFmqcA+kg
+         Q2TvuYSvO41PrHwye+FSfBAENNXa4JUMv/GVmnCcN+r2gnmI+HXnldQVnpHtCJtcWnDN
+         DXRz10L6pTc5gzwRTRJQ/yUvGtzmOFdn8T/Jsnbdo70Mu/AhB1wFr0G/NPHtXJkm8bWN
+         Q9dF3ArHPxIlJy2gGqv6ryeGx+XhZ82IXM3bnz7n6pJylDpY6qQuzbseg7375z7kxqr0
+         mk9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781865392; x=1782470192;
+        d=1e100.net; s=20251104; t=1781866005; x=1782470805;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=YuuXVoQ2ecZDLg/Pv4tnmec6MwmZ/WlSis1mzF80Zmw=;
-        b=O4TAL5yppSuabwhT7EbZf3xiyTZuKwAkifaeLmMTNoOJMkOw1IscM1ARpY0Pu+fwF2
-         Z0bNjCF/515C/Gm1/Ffjhh5rOYvFCBl+dml4LCTVSX2j1l5ovGLKofQIvlEB+IMriPqg
-         KsAKEZfeKicQdleyuojsF9Xoa2yVJZnYch/IcKhVEtOwt1WWDkfzj3eRPFRh1reg69v8
-         zjrfZoO5VkwwaWl/d/2+IhSaNu6jOewqSotYzRYPdrOPGvcGrB62poCQWSchFBDoMamG
-         GxCT5jC2CqOr2YNwWbdTXDMbukzcsie8vvdKWDXeALIMeIyQxgTSOIM0dcdiBTfvpM7R
-         Mq/g==
-X-Forwarded-Encrypted: i=1; AFNElJ9mXTe/FHfr+PeFmC+L3wZXRIUayVpdg27Wd7uRGEkM8kvHMPIfEFQliEYINoFJSj3emG1q8n6NYJfgU2CauP8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9e7q6lrTISFtz3oh9FSKMurjp+l4PYqKK6KOh62b2VGkirJEE
-	KjfakfS+a3isY20FgTmDdrBqt37pFAffpx5U3JcO7I44rScWzEDpo680kwKXpaH79gGOxRudUlO
-	wAbV0psMQJgX2Neb3EFUfYpMFyAWbsPuPjz4FBRI6
-X-Gm-Gg: AfdE7cnrCvSkTAOccsE+JDzWGSyBJS6iMmuukMeJw+wCl8Xx0vpxEFxLmUHU5TCXWQu
-	m0MClFPTMWplo1gjZ+85t9qcoZrq0cBCal7KC56jP1Du24UksySOg0TUmwyrgCkUsnBhEwqOWN0
-	gC/CZizjVBKVOWWmplcdnyT41ZfLTQ5aKEzilHIV3LPhRLsOUrR0gLAsXr+ocbFPEvAd+jdknpx
-	x1NGSE77ovLEmXkuXewNc3meg/avNnGUq5JIz+6GQVK6VoETcJriFCAHLD7vtp0jpyPnlTo8w==
-X-Received: by 2002:a05:622a:82:b0:50f:ce97:3b84 with SMTP id
- d75a77b69052e-519e48867afmr7169791cf.6.1781865391025; Fri, 19 Jun 2026
- 03:36:31 -0700 (PDT)
+        bh=tqVqdR7eGLFAsCQYmX5JI1ornwlzeYgCHzhYfEkLeRM=;
+        b=UlLvSHaVjMPS3zEtVFZqtpncOONzHOdge0xVVP6KYwWX0m8cfphgw6j3GmV7k4P8rb
+         BQitY/5zukoiEf3reW9i87eDsLvvGaiTRccDq1hvQ+Sn9KD/8iDv7PPWbJfmGXXc5nUB
+         I2Woy8lrlce/58DZweTzkZRMiUb0sdHzAitawXvGGEO1azGGQRQ8ElmDACdif3YOM+gx
+         yIA+RGB3dlIgxS73Y0tUFEnAcTOIbi6tBwEPnCFk4zhuAa8Re0+rZoWI1CJAbKO/k327
+         EivVMSxxs4+ektZNmoYMEAaJOLLlmjBg0rngXTHIuBiKLLBWW8pOTaTrr7AiZW3n15JC
+         SFbw==
+X-Forwarded-Encrypted: i=1; AFNElJ+aAxP9aOb8VXhB0LdUko45CnBYmt3SZk1kaNCJwogSKUK4JwHGX57nJHr6Mj9U6qOB2dHx5vgs6j4QAMUn5fI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAJ64s78YX4CzBPtT0e+DTfhAUNxyNWdpgzl8rkRrBqbCzybSg
+	ncwHkE7qaXaK1tyOv2IcIu/zn2qMj+uk/CxT9lszUJsJoXdyOziKz2NwF8xBp0zqNgxC/m3qfDO
+	Rhrea7Q3khntRvGqB4QLdv3/kVyPBTy6vrccqAZH3
+X-Gm-Gg: AfdE7ckhitucOGXDxVl9c8BIaSvpYADXA0/ogUWV+heZLD251b1CYVpKig5ksLzUdQs
+	+/KMyF9Ys8Mx8g57WrJTki4Hxli+gkOiWqZYh0FdOU0/M3rfCrepGomnGvLVM3TpCHvTxqcaDse
+	fiwPW7MT53X52576N4u0AZYbjgzvOOloXksOgClXBaVJj3CAHmz5Smbnd1slDOthlZb5N2pPNII
+	N3TO6lujophK+fEewx2DTFHGEG6TZYFpXOTcrOXscgeeuqmljBBJjyZwiK/KOeX2mMDbNnjuw==
+X-Received: by 2002:a05:622a:1b1d:b0:516:3def:1cf4 with SMTP id
+ d75a77b69052e-519e877e8c5mr5598281cf.1.1781866004326; Fri, 19 Jun 2026
+ 03:46:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com> <20260618-gmem-inplace-conversion-v8-17-9d2959357853@google.com>
-In-Reply-To: <20260618-gmem-inplace-conversion-v8-17-9d2959357853@google.com>
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com> <20260618-gmem-inplace-conversion-v8-19-9d2959357853@google.com>
+In-Reply-To: <20260618-gmem-inplace-conversion-v8-19-9d2959357853@google.com>
 From: Fuad Tabba <tabba@google.com>
-Date: Fri, 19 Jun 2026 11:35:54 +0100
-X-Gm-Features: AVVi8CcjKXQn8ypCrAeWLOhyWs6z3Z6iNQ-s7Ah4piPeXrrDDhzORiMG-WJ9jpU
-Message-ID: <CA+EHjTzZ0GO9fspPaTzruj8331+ShEZmg2PF2AczcwJ94VvgvQ@mail.gmail.com>
-Subject: Re: [PATCH v8 17/46] KVM: guest_memfd: Advertise KVM_SET_MEMORY_ATTRIBUTES2
- ioctl
+Date: Fri, 19 Jun 2026 11:46:06 +0100
+X-Gm-Features: AVVi8Ccyp37Iml659Lz9n-v90nTTG1Iev3H81NTyrRm5pUpcj70uW3l4zFQ5-a4
+Message-ID: <CA+EHjTxr1KrtZDakniWCF+c0E6s9_YbQ_gMVqCFnwEP3USEXXw@mail.gmail.com>
+Subject: Re: [PATCH v8 19/46] KVM: guest_memfd: Use actual size for
+ invalidation in kvm_gmem_release()
 To: ackerleytng@google.com
 Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
 	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
@@ -122,206 +122,49 @@ On Fri, 19 Jun 2026 at 01:31, Ackerley Tng via B4 Relay
 >
 > From: Ackerley Tng <ackerleytng@google.com>
 >
-> Introduce KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES to advertise the
-> availability of the KVM_SET_MEMORY_ATTRIBUTES2 ioctl.
+> __kvm_gmem_invalidate_begin() and __kvm_gmem_invalidate_end() actually do
+> not specially handle -1ul. -1ul is used as a huge number, which legal
+> indices do not exceed, and hence the invalidation works as expected.
 >
-> KVM_SET_MEMORY_ATTRIBUTES2 is a guest_memfd-scoped version of the existing
-> KVM_SET_MEMORY_ATTRIBUTES VM ioctl. It allows userspace to manage memory
-> attributes, such as KVM_MEMORY_ATTRIBUTE_PRIVATE, directly on a guest_memfd
-> file descriptor.
+> Since a later patch is going to make use of the exact range, calculate the
+> size of the guest_memfd inode and use it as the end range for invalidating
+> SPTEs.
 >
-> This new version uses struct kvm_memory_attributes2, which adds an
-> error_offset field to the output. This allows KVM to return the specific
-> offset that triggered an error, which is especially useful for handling
-> EAGAIN results caused by transient page reference counts during attribute
-> conversions.
->
-> Update the KVM API documentation to define the new ioctl and its behavior,
-> and add the necessary UAPI definitions and capability checks.
->
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Suggested-by: Michael Roth <michael.roth@amd.com>
 > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
 
 Reviewed-by: Fuad Tabba <tabba@google.com>
 
 Cheers,
 /fuad
-> ---
->  Documentation/virt/kvm/api.rst | 78 +++++++++++++++++++++++++++++++++++++++++-
->  include/uapi/linux/kvm.h       |  2 ++
->  virt/kvm/kvm_main.c            | 23 +++++++++----
->  3 files changed, 95 insertions(+), 8 deletions(-)
+
+>  virt/kvm/guest_memfd.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 >
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index a833d90845b95..73878f34f6d2e 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -117,7 +117,7 @@ description:
->        x86 includes both i386 and x86_64.
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index d163559da0235..d72ecbfcc3144 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -366,6 +366,7 @@ static long kvm_gmem_fallocate(struct file *file, int mode, loff_t offset,
 >
->    Type:
-> -      system, vm, or vcpu.
-> +      system, vm, vcpu or guest_memfd.
->
->    Parameters:
->        what parameters are accepted by the ioctl.
-> @@ -6373,6 +6373,8 @@ S390:
->  Returns -EINVAL if the VM has the KVM_VM_S390_UCONTROL flag set.
->  Returns -EINVAL if called on a protected VM.
->
-> +.. _KVM_SET_MEMORY_ATTRIBUTES:
-> +
->  4.141 KVM_SET_MEMORY_ATTRIBUTES
->  -------------------------------
->
-> @@ -6566,6 +6568,80 @@ KVM_S390_KEYOP_SSKE
->    Sets the storage key for the guest address ``guest_addr`` to the key
->    specified in ``key``, returning the previous value in ``key``.
->
-> +4.145 KVM_SET_MEMORY_ATTRIBUTES2
-> +---------------------------------
-> +
-> +:Capability: KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES
-> +:Architectures: all
-> +:Type: guest_memfd ioctl
-> +:Parameters: struct kvm_memory_attributes2 (in/out)
-> +:Returns: 0 on success, <0 on error
-> +
-> +Errors:
-> +
-> +  ========== ===============================================================
-> +  EINVAL     The specified `offset` or `size` were invalid (e.g. not
-> +             page aligned, causes an overflow, or size is zero).
-> +  EFAULT     The parameter address was invalid.
-> +  EAGAIN     Some page within requested range had unexpected refcounts. The
-> +             offset of the page will be returned in `error_offset`.
-> +  ENOMEM     Ran out of memory trying to track private/shared state
-> +  ========== ===============================================================
-> +
-> +KVM_SET_MEMORY_ATTRIBUTES2 is an extension to
-> +KVM_SET_MEMORY_ATTRIBUTES that supports returning (writing) values to
-> +userspace.  The original (pre-extension) fields are shared with
-> +KVM_SET_MEMORY_ATTRIBUTES identically.
-> +
-> +Attribute values are shared with KVM_SET_MEMORY_ATTRIBUTES.
-> +
-> +::
-> +
-> +  struct kvm_memory_attributes2 {
-> +       /* in */
-> +       union {
-> +               __u64 address;
-> +               __u64 offset;
-> +       };
-> +       __u64 size;
-> +       __u64 attributes;
-> +       __u64 flags;
-> +       /* out */
-> +       __u64 error_offset;
-> +       __u64 reserved[11];
-> +  };
-> +
-> +  #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
-> +
-> +Set attributes for a range of offsets within a guest_memfd to
-> +KVM_MEMORY_ATTRIBUTE_PRIVATE to limit the specified guest_memfd backed
-> +memory range for guest_use. Even if KVM_CAP_GUEST_MEMFD_MMAP is
-> +supported, after a successful call to set
-> +KVM_MEMORY_ATTRIBUTE_PRIVATE, the requested range will not be mappable
-> +into host userspace and will only be mappable by the guest.
-> +
-> +To allow the range to be mappable into host userspace again, call
-> +KVM_SET_MEMORY_ATTRIBUTES2 on the guest_memfd again with
-> +KVM_MEMORY_ATTRIBUTE_PRIVATE unset.
-> +
-> +KVM does not directly manipulate the memory contents of pages during
-> +attribute updates. However, the process of setting these attributes,
-> +which includes operations such as unmapping pages from the host or
-> +stage-2 page tables, may result in side effects on memory contents
-> +that vary across different trusted firmware implementations.
-> +
-> +If this ioctl returns -EAGAIN, the offset of the page with unexpected
-> +refcounts will be returned in `error_offset`. This can occur if there
-> +are transient refcounts on the pages, taken by other parts of the
-> +kernel.
-> +
-> +Userspace is expected to figure out how to remove all known refcounts
-> +on the shared pages, such as refcounts taken by get_user_pages(), and
-> +try the ioctl again. A possible source of these long term refcounts is
-> +if the guest_memfd memory was pinned in IOMMU page tables.
-> +
-> +See also: :ref: `KVM_SET_MEMORY_ATTRIBUTES`.
-> +
->  .. _kvm_run:
->
->  5. The kvm_run structure
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 876c0429f9d4e..129d6f6303251 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -997,6 +997,7 @@ struct kvm_enable_cap {
->  #define KVM_CAP_S390_KEYOP 247
->  #define KVM_CAP_S390_VSIE_ESAMODE 248
->  #define KVM_CAP_S390_HPAGE_2G 249
-> +#define KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES 250
->
->  struct kvm_irq_routing_irqchip {
->         __u32 irqchip;
-> @@ -1649,6 +1650,7 @@ struct kvm_memory_attributes {
->         __u64 flags;
->  };
->
-> +/* Available with KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES */
->  #define KVM_SET_MEMORY_ATTRIBUTES2              _IOWR(KVMIO,  0xd2, struct kvm_memory_attributes2)
->
->  struct kvm_memory_attributes2 {
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index a08b518cdb175..044486f128c37 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -2434,18 +2434,22 @@ static int kvm_vm_ioctl_clear_dirty_log(struct kvm *kvm,
->  }
->  #endif /* CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT */
->
-> +#ifdef kvm_arch_has_private_mem
-> +static u64 kvm_supports_private_mem(struct kvm *kvm)
-> +{
-> +       return !kvm || kvm_arch_has_private_mem(kvm);
-> +}
-> +#else
-> +#define kvm_supports_private_mem(kvm) false
-> +#endif
-> +
->  #ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
->  static u64 kvm_supported_vm_mem_attributes(struct kvm *kvm)
+>  static int kvm_gmem_release(struct inode *inode, struct file *file)
 >  {
-> -#ifdef kvm_arch_has_private_mem
-> -       if (gmem_in_place_conversion)
-> +       if (gmem_in_place_conversion || !kvm_supports_private_mem(kvm))
->                 return 0;
+> +       pgoff_t end = i_size_read(inode) >> PAGE_SHIFT;
+>         struct gmem_file *f = file->private_data;
+>         struct kvm_memory_slot *slot;
+>         struct kvm *kvm = f->kvm;
+> @@ -396,9 +397,9 @@ static int kvm_gmem_release(struct inode *inode, struct file *file)
+>          * Zap all SPTEs pointed at by this file.  Do not free the backing
+>          * memory, as its lifetime is associated with the inode, not the file.
+>          */
+> -       __kvm_gmem_invalidate_start(f, 0, -1ul,
+> +       __kvm_gmem_invalidate_start(f, 0, end,
+>                                     kvm_gmem_get_invalidate_filter(inode));
+> -       __kvm_gmem_invalidate_end(f, 0, -1ul);
+> +       __kvm_gmem_invalidate_end(f, 0, end);
 >
-> -       if (!kvm || kvm_arch_has_private_mem(kvm))
-> -               return KVM_MEMORY_ATTRIBUTE_PRIVATE;
-> -#endif
-> -
-> -       return 0;
-> +       return KVM_MEMORY_ATTRIBUTE_PRIVATE;
->  }
+>         list_del(&f->entry);
 >
->  /*
-> @@ -4969,6 +4973,11 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
->                 return 1;
->         case KVM_CAP_GUEST_MEMFD_FLAGS:
->                 return kvm_gmem_get_supported_flags(kvm);
-> +       case KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES:
-> +               if (!gmem_in_place_conversion || !kvm_supports_private_mem(kvm))
-> +                       return 0;
-> +
-> +               return KVM_MEMORY_ATTRIBUTE_PRIVATE;
->  #endif
->         default:
->                 break;
 >
 > --
 > 2.55.0.rc0.738.g0c8ab3ebcc-goog
