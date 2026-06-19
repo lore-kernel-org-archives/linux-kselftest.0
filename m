@@ -1,138 +1,120 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A991140D594
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 20:05:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B723C0604;
+	Fri, 19 Jun 2026 20:50:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781899529; cv=none; b=OftWzxwYecTPHM1707MtnK4xtQLrpNiY6ZpucNWbptwbLc6AV5gnlPmiyO8XZoZH574b43cCZgE11wLmrGz0zpOBmucKx1y2eHvViiMBT1Y2E8AIGQokqhxZc3y/CmdUys4ggJz9uYictEwVmvjF5UCrmSDBvjktEfrBwqot6bE=
+	t=1781902245; cv=none; b=pAg8Dlc/8mwkNC66th6YDWyjRgaRrW2k4Cvag6SHAeq6fKD5r6zjMjj9xST3WKWPf33f3HUIKaPrSLAZy4XS+/pJOazbPND8fjArijm4nHyLgOH4ze0K/6hsUJj2sAIrpYcMdcDcivj2A/4lmr+YLmFkiHN8bZPVM3UzdfmlqyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781899529; c=relaxed/simple;
-	bh=0T4Z7K/rb2nHa13lr/ex8NbDdCu91yZhRTr7Sid9GFM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=izSr8XW09isixAfbsbdNSoBC3zUGXJS8Bg1hZaLxVrSiDBD+WrKiI6u3Jjrct5YPe1U1AUCBCVPoIjgwB0Yhsu1LSU68Podh+i5XriUxdHnfcGnB76HfE1sDhDruXp6ojBsEtJK8qiwWZZUy/H2mjQXHKWotYXnwAo4HUWxMqjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O4On/ejR; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781902245; c=relaxed/simple;
+	bh=ajgvYhqUtWSFk9GBi9nR3h0PR5l1Tcuumuxmv3cYT38=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=o6dbKukyqczOIbHVPDZUdnxsbRSSBfy0Vp1zW1h9UyizHs5AarHidmTM3eEuwCqY8RCOB3lN+jlbk3p0RVSrtmOtUEpkM4sw2qGcsLPRQUE3elg6w+ySFtzANLSGO+JgTdc2w70WUK2Vti12bEPodhUHbqCpSJAjvHq1ljCWr6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IU2bkaQA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O4On/ejR"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2bf1cda2b17so14989835ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 13:05:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781899527; x=1782504327; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zH4OXFXG3GUtu3xSOVczzw0mmgwnoj/HVff9AySNWfk=;
-        b=O4On/ejRCxff79FXdpvy8qxPlHq67Q/v64j/KfEDq7ma+IR6aJSodNYEVpXxJp2z8/
-         ZJTJCwJVzTAdv5HoCCVkTbdCDSw7XW6ukrd9rMm6sobdxTsmqHVQatZUPxqfqX9oZfXc
-         BSAPxyFGSXe4dz+9iU8TaUHSc2kPL/zmoQEkHosdwXWgLxzXuo0SVxWGRFuCtDUeGazO
-         WZQVrQska7zYxBkUBQXIDc+LIoa7A3sYc/YZ5o+SCcwKog58/5E2hQPhY5+19gplz+LU
-         ORCQLy2MhqBUe/ZWEp84T2+tfj3WXGjBkNYhLPT4frlf7DL17UrAFLlh7F9JieHdfAKf
-         JF8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781899527; x=1782504327;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zH4OXFXG3GUtu3xSOVczzw0mmgwnoj/HVff9AySNWfk=;
-        b=G4fXIFGLgB2P2U1e7DgazQ4KaFdfvqGKeU1ACTd7uCIZy5yjT9s8ihqvMXIww+rkgu
-         z24cDio1hm22ZNBDgh6dg23PzlI9PMPqnJguF83nI6t/dVa4UuXNnQLtQRYsl1Jf7DHB
-         6ZKfdqcNlcJV03pkNap1vofWEo5glPCn+fqfOJeWuuAqqZUGFtS1poS24hlp9CRqzZyj
-         OGxYglaEJWTwXUEMuL7qIxQXAlpTpxJp19roXQoWQHKfISlE1dzIPEGf8HtkbLEh9UHD
-         JNq4G0oNu5IczEUOXdvbcYHz+8pI34Z4XSDVL9OD7gQaZ6ZJu+CZG7n4QJpgwaZcELuP
-         BZkA==
-X-Forwarded-Encrypted: i=1; AFNElJ/gh0Zt9Gbw4RMDa1dywtpPpxO846d9GVzXOEhv3ZtYxMls8PxqAPE5y3FWq16B9qWIkqs/kO30fhDBVhLMpEE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVaxvr3RBzxCyI3kdLXeAflhvAxlasIIFDOFa2dKcUMs741jIS
-	tDTzIMIB77/QRDJcx6za9qHInedOsKjFyrIbEQmTkKG4D+Mc3pAXEXWq
-X-Gm-Gg: AfdE7cnnl5MMWkGaW9m0Ykm9A8JmHIY5AT/92mp0UQRZVZPNfCpoCwvVIJKns6gQLHD
-	G/9q6B1RZII58UO800EwdwyXoiacNJEYW2ZUnXRSIVLRTVKWCg1gEUdqCzYlKXpxO+WZ38LfZNO
-	9OmLEubWoLuY+BglOcFn+Y8CLcU2b0Z9BDU+dQYAbcxiLbvVtTCdvrv3ZFYuj/S3YKjyWDkf9m6
-	43B5xRcFBNldaT1j8iHhWhLoL1Fl68upeYJmTbsqPli3KD2nK9bu57KoIIOCPVfn8WZgNpGSgps
-	15kvP7YGRgAQvwnoVW5qSdJfJfJLZhsxqCziI3JIra2QZBM4O6SSlZc+64JKfTHDzjyuZEESu/4
-	SEYXPqGXS+OvNMdHBN+X9dObqj0LFHCZp1TjBzZ2g/gMMBRkVTMFQ3Ayqx2oFA/PmAIErfz9Alx
-	X+VHOa5b+24eiJU5n7DiyUWvqjEvI0i6n6aMxLdAL8Aw==
-X-Received: by 2002:a17:902:c401:b0:2bc:ac76:c1d0 with SMTP id d9443c01a7336-2c719626ed0mr40699335ad.17.1781899526920;
-        Fri, 19 Jun 2026 13:05:26 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7439f8d1dsm2592035ad.51.2026.06.19.13.05.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 13:05:25 -0700 (PDT)
-Message-ID: <a15079723c8834a2baf3f35c6a8ed52c63addeb9.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Require CAP_BPF for pseudo-BTF ksym
- loads
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song	 <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis	 <emil@etsalapatis.com>, Hao Luo
- <haoluo@google.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
- 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Fri, 19 Jun 2026 13:05:22 -0700
-In-Reply-To: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-1-f950f69fe60c@mails.tsinghua.edu.cn>
-References: 
-	<20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn>
-	 <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-1-f950f69fe60c@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IU2bkaQA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DBD61F00A3A;
+	Fri, 19 Jun 2026 20:50:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781902244;
+	bh=DHbc+zUM7ND1EZuKKgb/Vu7RbRDJAn82TUt8szpPF8A=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=IU2bkaQA6EnI75YHVhRky4huHYuYkhAJsE61pqD7R9qgLyNISkG/XSHEgPgy1fl20
+	 pZZjzajPyAbIjP4vcIj0Bp3n5LUFlbL9qELi0BMfqagXIPyTa8RNbh/XCiQH6ShMwO
+	 U7X7lBgo2XppJDRBzDNTX4ZlhA2TbyaWjXGZvariNm9402KrEzTs/gkO1c++ySjZoI
+	 Zg4u7NlGyw4E7hb7U9YG/ZKRT++b2ml7i9qZfYFXtoi/YG3I/jHqvqVujtPN2quPt+
+	 Dl/32WjNsrinbYHbZYoVFfi39M/w4ZIsTbvgkHba1p/mRfuXD0pyA3qCoHYiF3J6KV
+	 Kk7w5/0fG4XLQ==
+Content-Type: multipart/mixed; boundary="===============2092253668122568770=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <dd9c6b6d282bc710c610e6f431562c211cab0e58b5c8a1469c3604c334570996@mail.kernel.org>
+In-Reply-To: <20260619195759.41254-3-siddharthcibi@icloud.com>
+References: <20260619195759.41254-3-siddharthcibi@icloud.com>
+Subject: Re: [PATCH 2/2] selftests/bpf: validate rx_queue_index in xdp_metadata
+From: bot+bpf-ci@kernel.org
+To: siddharthcibi@icloud.com,ast@kernel.org
+Cc: siddharthcibi@icloud.com,daniel@iogearbox.net,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,netdev@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 19 Jun 2026 20:50:43 +0000 (UTC)
 
-On Sat, 2026-06-20 at 00:04 +0800, Nuoqi Gui wrote:
-> BPF_PSEUDO_BTF_ID is resolved before the main verifier pass. The resolver
-> looks up the referenced kernel symbol through kallsyms and rewrites the
-> ldimm64 immediate to the concrete address that later becomes verifier
-> state.
->=20
-> Require CAP_BPF before doing that materialization. This keeps typed ksym
-> address resolution on the privileged side and prevents loaders without
-> CAP_BPF from receiving a verifier log that contains the resolved address.
->=20
-> Fixes: 4976b718c3551 ("bpf: Introduce pseudo_btf_id")
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> ---
->  kernel/bpf/verifier.c | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index ed7ba0e6a9ce..dbf5df995fc2 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -17639,6 +17639,11 @@ static int check_pseudo_btf_id(struct bpf_verifi=
-er_env *env,
->  	int btf_fd;
->  	int err;
-> =20
-> +	if (!env->bpf_capable) {
-> +		verbose(env, "BPF_PSEUDO_BTF_ID loads require CAP_BPF\n");
-> +		return -EACCES;
-> +	}
-> +
+--===============2092253668122568770==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thank you for identifying this issue.
-I think the correct way to fix it is to extend the `is_ptr && !allow_ptr_le=
-aks`
-logic in kernel/bpf/disasm.c:print_bpf_insn().
-Note that it seems there are additional cases that are not covered,
-something like below seem warranted:
+> Extend xdp_metadata selftest coverage to validate that
+> ctx->rx_queue_index is preserved and observable after XDP redirect
+> execution.
+>
+> Capture rx_queue_index in metadata and assert that it matches the
+> expected queue during packet verification.
+>
+> Signed-off-by: Siddharth_Cibi <siddharthcibi@icloud.com>
+
+The changelog says the test validates that ctx->rx_queue_index is
+"preserved and observable after XDP redirect execution".
+
+Looking at the program in progs/xdp_metadata.c, rx() reads
+ctx->rx_queue_index and then redirects into an XSKMAP:
+
+	meta->rx_queue_index = ctx->rx_queue_index;
+	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
+
+The AF_XDP delivery path copies the frame and metadata straight into
+the umem and does not re-run an XDP program after the redirect, so the
+value stored in meta->rx_queue_index is the one read in the original
+ingress context rather than a value restored on a later re-execution.
+
+Does the assert in verify_xsk_metadata() actually exercise a
+redirect-restore path, or does it pass purely from the value captured
+in the ingress program?
+
+This isn't a bug, but could the changelog describe which redirect path
+the test exercises, since the AF_XDP (XSKMAP) path does not re-run an
+XDP program after the redirect?
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+> index 5c31054ad4a4..f8cabbbe7bb7 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+> @@ -309,7 +309,8 @@ static int verify_xsk_metadata(struct xsk *xsk, bool sent_from_af_xdp)
+>
+>  	if (!ASSERT_NEQ(meta->rx_hash, 0, "rx_hash"))
+>  		return -1;
+> -
+> +	if (!ASSERT_EQ(meta->rx_queue_index, QUEUE_ID, "rx_queue_index"))
+> +        	return -1;
+
+This isn't a bug, but the new return is indented with eight spaces
+followed by a tab, while the other return -1; statements in
+verify_xsk_metadata() use two tabs. Could it use tabs to match the
+surrounding lines?
+
+>  	if (!sent_from_af_xdp) {
+>  		if (!ASSERT_NEQ(meta->rx_hash_type & XDP_RSS_TYPE_L4, 0, "rx_hash_type"))
+>  			return -1;
+> diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
+> index 09bb8a038d52..62ae83860d7f 100644
+> --- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
+> +++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
+> @@ -98,7 +98,7 @@ int rx(struct xdp_md *ctx)
+>  	bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_hash_type);
+>  	bpf_xdp_metadata_rx_vlan_tag(ctx, &meta->rx_vlan_proto,
+>  				     &meta->rx_vlan_tci);
+> -
+> +	meta->rx_queue_index = ctx->rx_queue_index;
+>  	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
+>  }
 
 
-  bool is_ptr =3D insn->src_reg =3D=3D BPF_PSEUDO_MAP_FD    ||
-                insn->src_reg =3D=3D BPF_PSEUDO_MAP_VALUE  ||
-                insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX    ||
-                insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX_VALUE ||
-                insn->src_reg =3D=3D BPF_PSEUDO_BTF_ID;
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Could you please double check?
-
->  	btf_fd =3D insn[1].imm;
->  	if (btf_fd) {
->  		btf =3D btf_get_by_fd(btf_fd);
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27846609854
+--===============2092253668122568770==--
