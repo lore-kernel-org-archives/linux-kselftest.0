@@ -1,157 +1,177 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D6C40D579
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 08:03:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781856206; cv=none; b=tfQFc5r4thCVwcL9T/F3WkCS9FMZkqW/0iuyeHxsbp2E+OD95AiXzEusE6IZ8ojy1ksmlG5exvGhBEGZcJGCnPeZ2ftBiMXcsBWpgMqiNSKFhGFQw2eI/JsoGP4MJxHuS8dkAc5iLjk7yXumg9NqqiAv1V+nHDsvVGkqbLfxSAs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781856206; c=relaxed/simple;
-	bh=zB4TCxIDgStDFP1rlZaKRZHke2hrvj4RkhmGkk6WUC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sM0Bu/KODmu7z8KxwUmLwyXcJwT/pYXHGSvLhvC2jNDTu6oogKNSmnjZjjT8bEj1gjjCQcXxnq4snHN2Ns0KeAcvz8X5cm20mBaRbuKwoPDUaWaGniV14RO6psOn8hsXseZofqGQqOMGGrcCesSMAR6AtIeL3grzTIVX5BBTvY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n6+KcSfr; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE2835E1A8
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 08:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781856679; cv=pass; b=PNPB2FhVEDBwccSqxb1Vb5hWNb/lYrUYaVR1hzlKIWvgONKhhDKAmiN03/s6le5caQsGQgPRZLaBN7z+IpDRcC0So26vF0KGZY8qiCmc6TULNCQCG/B6PFwfyZPb7brN9Vi6eG7d+YxvB5r67Tgdz/XFNegHSiaTft4OJ9BaU44=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781856679; c=relaxed/simple;
+	bh=pR0Zn2zvw6IcMAbbufKDgeBYie2BeloIDPjTlVVsmpY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dIK3qytOVcF2ghc4BbskLACjNRzq4oFKLsyemi5rv3E6vy+o3/VPTLSvARiyfja8LN9IJ3fkkT4cQgPOefeFp0zqyrl4KJ6FSaoeAwObTWOGJ4MGwZG5Q2q7Bu7IhTGAFRe3BArSV0xkaQOVPWel2dEOLTAKfgJ3O+e5vAU4qac=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=loj6O+Nd; arc=pass smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n6+KcSfr"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4921e4dd62dso13484965e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 01:03:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="loj6O+Nd"
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-51765531803so194091cf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 01:11:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781856677; cv=none;
+        d=google.com; s=arc-20260327;
+        b=H7lBleBM3sdeAni5pD3+A89zirBGFzAXv0n1swddJgeuBUO8UGRb2hUPn/b84Yeqhz
+         UCLhh6qTWQyspH9OYpc+lVJpdHWP4P3dnt8an98m9zcfRsMi7ZaOLBASOpgmuykaapFH
+         N7cwzZwdK2qR5hE/Z9cSt8n9cRMLU60jCcssP7+zlqTgQYP4oEidO/9y7uK7gnQkR+pj
+         H5e1FRc5VwNB5tCUcfrt/LoVx+QhbBPXsQLsqZUMH7GXGCmpmh0X57aIAv30t9d+L1X9
+         hvluxyiJDBX9wrAH+3gw8AzG0YGQK7eI/3Ly//DZOyuhwAiQ2hW1dcA3aiDZtYAhAa3P
+         KIlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=iM+8nrvlghRqxLR5gEfhNSNnyjY3ZW8GVmgYtfXOYBs=;
+        fh=EBWhofTu1hiXbue2mTT4Bo7X2u2Ev37Vh7MLtdpNSSI=;
+        b=GYLTh1mULyo6UH66kmM2+vs+khmVB32GdqYW1AenSDDW183B2Kuq1RK1aNPv4eAYuG
+         gYTpa5NyL1CJytzTrj1KVJHk4WMXS64+AeGUhzgaEcXRMJeSI3G15UCxFmjo6y10THnL
+         OSP6TNg7wO8aB7a+rpAyq6USX49lWKJLpDuIcxnLQzwkCSQ3Xbs20p2MYHl4w04Fvb98
+         ef3u6O9z3AhIxgw0efGxpCIi5IebsENdGKlfpyhH3dtG/HKSJkB+jGGqFDEZOYGFysIc
+         Tghgi5noDawzsLfGG7e5OuCpbh3beJ0p9lsgf0Tof6OVhbRJqgLB6S4awS1K8EuRGFjP
+         /4FA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781856203; x=1782461003; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kpJwL24GNas0k68J2nJFxWElqOxVpyI/1xu9RZENp00=;
-        b=n6+KcSfraEgMTfhU1nMSD52t73wf191Fox8ivGsan2CAFJJyh9JoolTMEusK23HO/I
-         lbT3xxPqErAZoARh39+fW6BZe5FK1LWAxy8jNJWCsB80dx1nxtIYTNeuiTdShj3NnYDz
-         ms1z8rIPfzZBT3hQfMw94hwfCYuxFTwCh7AbnL0vvRrASxxxq4NccP4YcSweBZklSdxy
-         muVGQVLMBHQhHfpumWoqVeTl/v+dkMbUxlPT7leVOKdzDTjDfzlZdQyBeJOQaKxfj35y
-         9g+9ykIn1c68jILcHdzqXtcre7ZuVoSf2CvkDI9L3ILlwpp8Xnc3Xgz1Y0b/xuxA9lVX
-         NKDA==
+        d=google.com; s=20251104; t=1781856677; x=1782461477; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=iM+8nrvlghRqxLR5gEfhNSNnyjY3ZW8GVmgYtfXOYBs=;
+        b=loj6O+NddywcN7wL1xrCwqxjT4ZN9Ac53eU9ll7nxx7Xviu1AaXETFnmHI/NWxcXPr
+         2tJOyD13+0Tc2mMvt/0jxvDCuCjQofn+Eu1lFwOxzQPdnek4cWrSyMzp69H5jZFbIiFw
+         m2pL4MTAUSKIkrjvSWB4RIgyxLuYxhB4w0JU4cYiC64ASHdlO/8i+aQuJJ/04hbsN+UP
+         CIkZGrA68OtXu619RPX4SuoMTzikB/Xhko55vP/fH4az0XznVHWuLwRXzWnVI33Ch5FK
+         QkyQ18CymOUUlU5PsHCF5MaeIZWokQZr5ZD+UljGKqNfiM3VTMDvcyk35TUGjxVIQpru
+         2+Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781856203; x=1782461003;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kpJwL24GNas0k68J2nJFxWElqOxVpyI/1xu9RZENp00=;
-        b=jBWs+Gan+IHRGGT/cDOCY3hy31o44Ro8ECJkh8eGPwDQ/JriKNbkdakPGeP89xoBcj
-         6bDHJftASFWojAsklNpNt5cJdNYuzqdwHisoMbefee6EduTe53yFt9eCq0gIk3KEiN9T
-         PuZFiVuYaDNdeAZU4uvUQ4ouPnXrPONlzv3VWx+riWs0Guc1qhPRNCZ8Kv4jdO/XPXBv
-         vp9YAK/XBY4D4sjGqfapHky/Jr5TtUEbI2VsYYRqMtM+78Y/U2PWkwrMGIg8K2ZRMxvs
-         eWtB1TYwpUn78gB/7gtcuINpmIQyswh4DZpt+1zK7hYE3odg1vcqVppXzHzgTKRetWwZ
-         tx7Q==
-X-Forwarded-Encrypted: i=1; AFNElJ9EnRK+FCGT+/oEaYIKYhKFvZzjAX1GnRXH3hUB3q7NXDLKXLn/0q+qUEysBYh5Y7m6xRbs0W9M6B3+QWstkDM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlX4fdkebvAf8NtSLLNP/y5FrtquJAVdyCswgvzM/RRpjCiBRw
-	jtAy0jsYA4ClqNio5/zhNjbG2FRkkpQeX65JZ8tVRfRUOqYvdwgFqQv7
-X-Gm-Gg: AfdE7ck7JEJDOx5wtIblZbMr4NHjEx+0SH9apVTXM2on59yMcL9t97MYCb/J+uP3WsH
-	M+BZXjpix+3AWJ913LSdYNt2Wemr3bMY8rWxYgZyBb2xFOBSskRKxih84cuMDK+CmJFKjoVbzjg
-	5bi2ZasgNQx44ahdopjoLLlXHxB4YXqemy8TmlvTBsfBkj13BFEHR1irmgYDJBiXtlE82yvGjoW
-	mmP/m0h7MfL3QW7xM+5XnmUeYwFVBvRpYX/9o/QcUqS8HM57KCpBj1lbBi34H0croxhFxQlS5tD
-	RJRg1XMvLzfSP1dXBvFXObM913tMoIhmn0YLndb898wmkiS/fQDWk2RRm7yIFKpKQz9M8eqyDXb
-	FixIhQS7UNAQnldwvBDxfgecjBoaWOiXpO5vxte7fYp6Ss0ggkGgzDwa0gWXWbChzqtQFRX/d5P
-	o0bIEYF+S/3XInE2fg7YsUPP257jEML45iw3E7v2k+EaRdZcdPP5Uh3nkpSjD2W32rp+gFDVZPw
-	Ol7/ydGk/Tb5mWQJF0dFhttkaX3aDxBWZSCQEdCbQEJ1IPSA+RnUPEd15EH97m6gh9eIzL+GtNJ
-	pJBIXoe6apCMkbeK19rBg5mRJz5Y5jL+
-X-Received: by 2002:a05:600c:4583:b0:490:3cf0:8d81 with SMTP id 5b1f17b1804b1-49240a44b63mr31293065e9.13.1781856202842;
-        Fri, 19 Jun 2026 01:03:22 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e002f165db642aa45e9.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:2f16:5db6:42aa:45e9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fd1fe8esm55234915e9.13.2026.06.19.01.03.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 01:03:21 -0700 (PDT)
-Date: Fri, 19 Jun 2026 10:03:19 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: sun jian <sun.jian.kdev@gmail.com>
-Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
-	toke@redhat.com, lorenzo@kernel.org, martin.lau@kernel.org,
-	clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Cover partial copy of
- non-linear test_run output
-Message-ID: <ajT3x2H0swzg4yhm@mail.gmail.com>
-References: <20260617093557.63880-3-sun.jian.kdev@gmail.com>
- <2dad9b5c184fa101d7cffa1d8f5eea5b5df60f53533d98c68175c9e3ec5ee6ac@mail.kernel.org>
- <CABFUUZFeh18OjQ6EhjD17ZwQKb1aiVNkYKv-hAkVGrHhPpjE4Q@mail.gmail.com>
- <ajOv_oOd1zInaW1b@mail.gmail.com>
- <CABFUUZHCr=4kb7kSaaPGpc4nkyn32i-svD9v7ONF+TYrrQ-xaQ@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1781856677; x=1782461477;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=iM+8nrvlghRqxLR5gEfhNSNnyjY3ZW8GVmgYtfXOYBs=;
+        b=BweTkSavMkq/OfEoeDXl4ucl/BwVVSVWQ2foBhroAGnXjE1jOhz1FMGEyDil66Ubqr
+         yid1ht2J3W2x0VOmd1gZTwaDc96zkvTmcpGJn6Ztn8mqqTjVtAGEZG8Ef4x62kxllXt0
+         cGEI/uU6qsESsgYxT7ERVvEWohoJofFZ7rJS7G6sFmL+lqcO1yW9+AxTmzzutDjUgCpm
+         ipQRoGV2AgDsl1RgFYMkyhbkWuGTQukZ3bhTbqoDEXqUjBt0IkdOSpmbW3b5gU0Y5GZO
+         o4c5aEiy/rTjwtRUA/vklFWDcGjMYcQCsnzJ5jKB0/vHwlymgQvkXWcfBpCq6fAD3OmU
+         pdkw==
+X-Forwarded-Encrypted: i=1; AFNElJ/eQW2ZZ8UL4HR0tnynwWnBT27ODd4Gz3AKylQAvu2RKmbJWEUCy+iAVzwyZrMnDsVwOSRVAwJKv5fYJU0arX8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQdvi/bkt1XVC4GTPIivo9Fek3laueNVmWSqnSbwyiLyv/GjYf
+	90wG/G2lRCTWELlNpshKsEGdKJkuVBnMBeuYxa3nZOk56h0CU1Ls5O24aveTj0t//Zv4xXYkBya
+	J50UCr3+ebXSS3yna8AzEiT43nbqtsVYrh1jMZm83
+X-Gm-Gg: AfdE7cnkpoMiOup9PWp2M6jQKfD0WBV648USOMGt5qVBsFWyx/DVZjFfaM6QP/c/t+T
+	UYMpVODZxIueOIJmvJiKUVO6wuNunohZ5SaTfdm0Avo+OxocQN0qsmn3QCNvtbHW6YQYcFwVDTf
+	atFKYE/fmjolgwoyz+Vn4lY5utCpv6zaYmisSi7JFft5yXAYakneBThaJ9GFeE5HAp39jdqUjtJ
+	07hxLeuOOiqWawbkEqX3Wckk/kx/TEOOIYrBc2py/F/IwRiyn6siM0UhVyZfiY9auffPs+rIA==
+X-Received: by 2002:a05:622a:191d:b0:517:38aa:c2b3 with SMTP id
+ d75a77b69052e-519e48d02b3mr6024501cf.14.1781856676299; Fri, 19 Jun 2026
+ 01:11:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABFUUZHCr=4kb7kSaaPGpc4nkyn32i-svD9v7ONF+TYrrQ-xaQ@mail.gmail.com>
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com> <20260618-gmem-inplace-conversion-v8-4-9d2959357853@google.com>
+In-Reply-To: <20260618-gmem-inplace-conversion-v8-4-9d2959357853@google.com>
+From: Fuad Tabba <tabba@google.com>
+Date: Fri, 19 Jun 2026 09:10:39 +0100
+X-Gm-Features: AVVi8CdHX5FmAYr_l4a3mgee9sp6dg3wXgxt_dR1E7cWLhRy0b4A0kukfNDJw2g
+Message-ID: <CA+EHjTxT9tcPk4HtyPXs1eo0bUQvwf3=G7P8ZTfJhDpXNm=ntg@mail.gmail.com>
+Subject: Re: [PATCH v8 04/46] KVM: Decouple kvm_has_arch_private_mem from CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+To: ackerleytng@google.com
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
+	yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
+	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jun 18, 2026 at 06:45:18PM +0800, sun jian wrote:
-> On Thu, Jun 18, 2026 at 4:44 PM Paul Chaignon <paul.chaignon@gmail.com> wrote:
-> >
-> > On Wed, Jun 17, 2026 at 10:19:52PM +0800, sun jian wrote:
-> > > On Wed, Jun 17, 2026 at 6:31 PM <bot+bpf-ci@kernel.org> wrote:
+On Fri, 19 Jun 2026 at 01:31, Ackerley Tng via B4 Relay
+<devnull+ackerleytng.google.com@kernel.org> wrote:
+>
+> From: Sean Christopherson <seanjc@google.com>
+>
+> When memory attributes become trackable in guest_memfd, the concept of
+> having private memory is no longer dependent on
+> CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
+>
+> With this, on x86, kvm_arch_has_private_mem() is defined if some CoCo
+> platform support (or the testing CONFIG_KVM_SW_PROTECTED_VM) is compiled
+> in.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 
-[...]
+Reviewed-by: Fuad Tabba <tabba@google.com>
 
-> > > I tried reusing pkt_v4 and the existing TC program, but they do not fit
-> > > the skb case this test is trying to cover.
-> > >
-> > > For skb test_run, IPv4/IPv6 inputs with a too-short L3 header in the
-> > > linear area are rejected before bpf_test_finish(). With pkt_v4 and a
-> > > linear area of ETH_HLEN, the test fails with -EINVAL before reaching the
-> > > partial copy-out path. If the linear area is increased enough to pass the
-> > > IPv4 check, pkt_v4 is too small to both trigger the old
-> > > copy_size - frag_size path and verify that the copied prefix spans the
-> > > linear data and the first fragment. pkt_v6 has the same issue: after
-> > > making the IPv6 header linear, only 20 bytes remain in frags.
-> > >
-> > > The existing test_pkt_access program has its own packet-access coverage
-> > > goals and is not just a pass-through carrier. With such a short linear
-> > > area or small packet fixture, it can fail before the test hits the
-> > > bpf_test_finish()'s partial copy-out path. A pass-through TC program is
-> > > therefore a better fit, because it keeps the test focused on the
-> > > bpf_test_finish() copy-out semantics.
-> >
-> > If we're keeping tc_pass_prog() then can't we use pkt_v4 and get rid of
-> > init_pkt?
-> >
-> 
-> pkt_v4 is too small to construct a meaningful nonlinear skb with a stable
-> linear/frag split while still exercising the partial copy-out boundary in
-> bpf_test_finish().
-> 
-> With pkt_v4, we either do not reach a fragmented layout, or lose control over
-> the linear/frag boundary needed to exercise the regression path.
-
-I think I'm missing something. Why can't we use pkt_v4 with
-tc_pass_prog() and a linear area of ETH_HLEN? That would leave 42 bytes
-of non-linear area, so a SHORT_OUT_LEN of 30 should work to trigger the
-bug, no?
-
-> 
-> This test uses a 9000B packet so it does not depend on small-packet
-> allocation details. Smaller packets might work depending on allocation
-> state, but 9000B reliably gives us a non-linear skb with page frags and a
-> stable linear/frag boundary for the copy-out regression.
-> 
-> init_pkt() is needed to ensure deterministic byte content across both linear
-> and fragmented regions so that the memcmp-based validation is stable.
-> 
-> Thanks,
-> Sun Jian
-> 
-> 
-> > >
-> > > For XDP, this object does not have an existing xdp.frags pass-through
-> > > program, so the small XDP frags program is needed to cover the other
-> > > caller of the shared bpf_test_finish() path.
-> > >
-> > > Thanks,
-> > > Sun Jian
+Cheers,
+/fuad
+> ---
+>  arch/x86/include/asm/kvm_host.h | 4 +++-
+>  include/linux/kvm_host.h        | 2 +-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 8e8eb8a5e8a6b..1bde67cf6eb0e 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -2394,7 +2394,9 @@ void kvm_configure_mmu(bool enable_tdp, int tdp_forced_root_level,
+>                        int tdp_max_root_level, int tdp_huge_page_level);
+>
+>
+> -#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+> +#if defined(CONFIG_KVM_SW_PROTECTED_VM) ||     \
+> +       defined(CONFIG_KVM_INTEL_TDX) ||        \
+> +       defined(CONFIG_KVM_AMD_SEV)
+>  #define kvm_arch_has_private_mem(kvm) ((kvm)->arch.has_private_mem)
+>  #endif
+>
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 201d0f2143976..d370e834d619e 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -722,7 +722,7 @@ static inline int kvm_arch_vcpu_memslots_id(struct kvm_vcpu *vcpu)
+>  }
+>  #endif
+>
+> -#ifndef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+> +#ifndef kvm_arch_has_private_mem
+>  static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
+>  {
+>         return false;
+>
+> --
+> 2.55.0.rc0.738.g0c8ab3ebcc-goog
+>
+>
