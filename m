@@ -1,126 +1,192 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E457D387585
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 12:51:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21CC3803E1
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 12:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781873513; cv=none; b=d12ua/V2JBhQdfW4JBZsqwOzDkUsYsfiKL6BzaB/GR6Tvw0LAb+9tCTC4te2P51HSpvH6iYV0BKeQkANwEkWo7rPlZHbY6uGH1C5kq++q/434uqg51ZnnoENNCcbWVR3bXn4CLbAY671pvKFlUPTrvkdt026FY6duq1jaZdBzgw=
+	t=1781873564; cv=none; b=HDot796Q0iQ1QO3LfBZ+MyH2INUum00avX4qxWKAKQzCUba8UuT16Oc65aWlkwIWadMPUrfALnEd9UQ2BRa2ExsyGwS4xgizADAPhVBTKCJcAkamOrqvTGXU7mYBNXj2YzOyBKeSCO/TrYTKIUIBLVNZr79Pr2Hg0zHPg2KEHFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781873513; c=relaxed/simple;
-	bh=AoSchuXJGAayDzDPFIuHozNVcqm/iWheUa1nSVya5uQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N+Lh1OJ1w3d2uJRZgbeT64Us0FzEzs/IBGIQGCfIyCqNZY1RG6YfDQr9NgGwZZU1G3mm7N5Pa3R+aDH880DNJWoqPSDy5D9OtS7cNhmIP9v2rJGb0Aom75cORYVBEMLcsuCkDvsjnTUCq77ZiRI3IsyHe9G/Opd76Z7VFSDfIvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M6G6hYoQ; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781873564; c=relaxed/simple;
+	bh=gS344rqBaOfPtMyJsIU+dq4Kf5tEDY+PnQYW8VOmWQ8=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=kvJ4RWoaJfRbd28EFYZi255C3ql/fP3tsU5FUHpT7YXoPH2h+/4Ocwl3wSfzScbIZrJvAHjERI9tZwAD8VcEXXRMQcPD2rzySs3cH2OnSR1Cj+CHFB4loIb/C45utDnDnCePAc+ZkE6PX1zDyQ8u1M4S4ZZBCp245/V32n1/RzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=tDVGQWQO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=gBVKFEfq; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=tDVGQWQO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=gBVKFEfq; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M6G6hYoQ"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso27193585e9.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 05:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781873510; x=1782478310; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=laROZbWnzE0hCDsDDd6yA+mJoystSAqNpvIVq0sPclE=;
-        b=M6G6hYoQGyEFSHNFdRWBdU4G7ykRDxlAROTSMAlGePNeLH6fwR2d2KwGFBeEjya4rC
-         BRr787JIbVdi566ccw22qNGtfsdczdqKskU/r6th6LF/XO1W4RTPjDvJOEFwDwcX8tWN
-         RBnFtBY6AuYGPkhzKAQrGFCtaLpIxcRVixGOH4fegOPJ5UowVOqCf5cAIeNCNJZ8hDup
-         qz5s3dFSMMomrLxtqxUvwyl/SBfZTK1ylwbeLWnXudrPTqQQbXpRViclUOlHlmy9AP4w
-         NFz5R1imyhysVzPS3PZmBxVKnDZWwqB8qgCxNP4yX1s8Xs6rgA9q4gryRQbXbqd88BBI
-         Mk8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781873510; x=1782478310;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=laROZbWnzE0hCDsDDd6yA+mJoystSAqNpvIVq0sPclE=;
-        b=iXRgyhd3go3a2/wmV4rnb7fZj/wOJRbHKma+iYvpV+F7X48qPraEE36YlkG/wCYnYM
-         axoCVmoiYaSM02AsZ69NTTMjZM1kItPbk5PfWDbeFGphydlxc85dOPgpRQBi7CaQwF50
-         LVL8KzhwHn9n00aEpFyieJ/q2puQUqM3spBWeir7VeK0+xExJQJIZKnnd0p7TjNAzP+3
-         SRubblrxENCvNYlWIO45D5PLO6IgeNQZyv9oEveObWuCBevCi+yFjIFYLRLMpzUkaaga
-         hfuO3v5yHyzf59yIgNi5C4vwihCgAW+ZExHIt/FPoqAab03C2m6brpFZ73BR1iY922MO
-         xMkw==
-X-Forwarded-Encrypted: i=1; AFNElJ86p37vftzJCGfWZ3QRM7Mi1IlWdPfrOOVbDCsoR8v18FFz605pw4PLYoeRAOueP5YLt9FxcF/xsk555GWeStw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9JIw0HqMX5BIZt7Fbcesw0B5n6Q4ZHOoxYvSaaMJbXBLLGk/C
-	rysqeQcvO/xG7g0605G7tzU19Q5vjrmXyw0HLdjT4rPrmmF4DJZwPhTJ
-X-Gm-Gg: AfdE7cnaQDXX4+M5Iituxxs0zXqgKWXaz5A9kKCTfcjlFoUGS9k7llnV5qe7hspH9Pi
-	154TTM2vNPiFOPdtqt0nP5H4iUUhqsyrTGQW4gDAFJs2jdX+6fvXUdeHVi41NSu180hnevgIjMD
-	cGvHsPv1K8G/YE8J95JjXiCbyOkuoPOJ5ZWA9x+wnvdklYAt9P4cjdqiKsWKEhuHdB6jmdiJwlT
-	lka1W47oGnuCTjGcN0mUR0U3KqcdrbXHUUMbBStHY6mftKPOr1UOfNIjCY2OisrQZwBLepu90W/
-	FUHgWZjfqlmamHGz9Zx2YuYTo3KL0u0V31pJV7Q9sn9H2xIpH7soId0wl7tgBRuyR0kgjrGt9ey
-	XDe74ZaStiAqO0SFl/piKnsBvVHHFWpl+pHeJZBJ8xMI9XqIcm/Km9/xc2hZVLc9BSoCzsan3aO
-	+Rs2Sg4keD5Due0KyNavubzFnfCd7smctlWFE1f0uNfmjr7PJjBQXhNsDdeudgYCly4e4JmJvQz
-	dJFReg=
-X-Received: by 2002:a05:600c:8b10:b0:490:b00c:8e6a with SMTP id 5b1f17b1804b1-4923f58988dmr65892965e9.28.1781873510164;
-        Fri, 19 Jun 2026 05:51:50 -0700 (PDT)
-Received: from [10.128.11.42] (195-23-151-163.net.novis.pt. [195.23.151.163])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4650c115fd8sm7984157f8f.35.2026.06.19.05.51.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jun 2026 05:51:48 -0700 (PDT)
-Sender: Julian Braha <julian.braha@gmail.com>
-Message-ID: <8e53844c-f2f8-4a4b-bf72-f3140c170d43@gmail.com>
-Date: Fri, 19 Jun 2026 13:51:45 +0100
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="tDVGQWQO";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="gBVKFEfq";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="tDVGQWQO";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="gBVKFEfq"
+Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
+	by smtp-out2.suse.de (Postfix) with ESMTP id 6C61B75D6E;
+	Fri, 19 Jun 2026 12:52:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1781873555; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=10MybaT8uhwU4FwKD/1Am9bdRifrNZCBHaBCJsY2cfw=;
+	b=tDVGQWQOA8kKFACOY+RjR2OiLqt3mxh+SwNdq+LPD2Cwr6AvdJPw1IHHiqEyNhrMzqQjmW
+	kGdjJrFZb5oHyttXzE+xkCgp5pTHRliH96RCCed0nH2j7amccJvmUM+ekgMyoL8bfEabz+
+	lV0MwpC1eVZerLMn8i6LYYGe2pPSlrQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1781873555;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=10MybaT8uhwU4FwKD/1Am9bdRifrNZCBHaBCJsY2cfw=;
+	b=gBVKFEfqAeKBWijNpzZIDTjDjHHRzkivruNesExmWmHb1NX+H2czjZm4Imxjo8S8Z0ab+o
+	vU7tDN2ae+sqX0CQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=tDVGQWQO;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=gBVKFEfq
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1781873555; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=10MybaT8uhwU4FwKD/1Am9bdRifrNZCBHaBCJsY2cfw=;
+	b=tDVGQWQOA8kKFACOY+RjR2OiLqt3mxh+SwNdq+LPD2Cwr6AvdJPw1IHHiqEyNhrMzqQjmW
+	kGdjJrFZb5oHyttXzE+xkCgp5pTHRliH96RCCed0nH2j7amccJvmUM+ekgMyoL8bfEabz+
+	lV0MwpC1eVZerLMn8i6LYYGe2pPSlrQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1781873555;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=10MybaT8uhwU4FwKD/1Am9bdRifrNZCBHaBCJsY2cfw=;
+	b=gBVKFEfqAeKBWijNpzZIDTjDjHHRzkivruNesExmWmHb1NX+H2czjZm4Imxjo8S8Z0ab+o
+	vU7tDN2ae+sqX0CQ==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 05/46] KVM: Make CONFIG_KVM_VM_MEMORY_ATTRIBUTES
- selectable
-To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- david@kernel.org, jmattson@google.com, jthoughton@google.com,
- michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
- qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
- shivankg@amd.com, steven.price@arm.com, tabba@google.com,
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
- forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
- aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-5-9d2959357853@google.com>
-Content-Language: en-US
-From: Julian Braha <julianbraha@gmail.com>
-In-Reply-To: <20260618-gmem-inplace-conversion-v8-5-9d2959357853@google.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 4/4] selftests: livepatch: Add information about
+ minimum kernel support
+From: Miroslav Benes <mbenes@suse.cz>
+To: Petr Mladek <pmladek@suse.com>
+Cc: Marcos Paulo de Souza <mpdesouza@suse.com>, 
+ Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Miroslav Benes <mbenes@suse.cz>, Joe Lawrence <joe.lawrence@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ marcos@mpdesouza.com
+In-Reply-To: <aiLn4slwOcpXhDhn@pathway.suse.cz>
+References: <20260524-livepatch-unload-on-fail-v1-0-7465de7f741d@suse.com>
+ <20260524-livepatch-unload-on-fail-v1-4-7465de7f741d@suse.com>
+ <aiLn4slwOcpXhDhn@pathway.suse.cz>
+Date: Fri, 19 Jun 2026 14:52:30 +0200
+Message-Id: <178187355038.95039.14074541772688700998.b4-reply@b4>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2551; i=mbenes@suse.cz;
+ h=from:subject:message-id; bh=gS344rqBaOfPtMyJsIU+dq4Kf5tEDY+PnQYW8VOmWQ8=;
+ b=owGbwMvMwMHYWJt9x2W1tA7jabUkhixT6z6mCe/eJ/rO56ssFn4YuaWGIVySe/350lXfSn5FO
+ DH9qs3sZPRnYWDkYLAUU2R5vddZznBKroFm9bu7MINYmUCmSIs0MAABCwNfbmJeqZGOkZ6ptqGe
+ IZChY8TAxSkAU53CxsHQx6UzK3pVmIKcQwPHvmf7Z8ZPtDy4t0TOof6OoU/4xbi4Z6m78n/w5f0
+ U3rHNU0VxpkucvcXEyCLG6dwn5K7+PRFyeGLFodMv//5eJqL3RHRFxjKrSqZYtoORUbL/J96TYH
+ 9869+ziP1v39SvshXZfvFC4OwnM85J9scEbFh2a/Fd+dCV5dLXE63zDkVvPHh0/55lUZZ57Ts7E
+ j+kzDoQdj3z68tzF8KzvKJm1q/UfnXgxybeI5GyHw6Ib6nN3HUxWfzfp6AID5FdHIZff2ptDTH6
+ If/I6MH8daUPTudEh7Izdhxhmt7T/11+6YSl245aqKhGTsmb+MVu0hqZvxzMHTwMyqfllvNUm+t
+ 4futsAwA=
+X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
+ fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
+X-Spam-Flag: YES
+X-Rspamd-Action: add header
+X-Spam-Level: *****************
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [17.29 / 50.00];
+	SPAM_FLAG(5.00)[];
+	NEURAL_SPAM_LONG(3.50)[1.000];
+	HFILTER_HELO_5(3.00)[localhost.localdomain];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_SPAM_SHORT(2.90)[0.966];
+	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
+	RDNS_NONE(2.00)[];
+	ONCE_RECEIVED(1.20)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DIRECT_TO_MX(0.00)[b4 0.15.2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:1b::12ef:from];
+	RCVD_COUNT_ZERO(0.00)[0];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.cz:dkim]
+X-Spamd-Bar: +++++++++++++++++
+X-Rspamd-Queue-Id: 6C61B75D6E
+X-Spam-Score: 17.29
+X-Spam: Yes
 
-Hi Ackerley,
+On 2026-06-05 17:14:42+02:00, Petr Mladek wrote:
+> On Sun 2026-05-24 20:50:33, Marcos Paulo de Souza wrote:
+> 
+> > The current livepatch selftests are compatible with kernel 4.12, so add
+> > a note about it for future developers willing to contribute with new
+> > tests.
+> > 
+> > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> > ---
+> >  tools/testing/selftests/livepatch/README | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/selftests/livepatch/README
+> > index d2035dd64a2b..293f4730b927 100644
+> > --- a/tools/testing/selftests/livepatch/README
+> > +++ b/tools/testing/selftests/livepatch/README
+> > @@ -54,3 +54,6 @@ check_result().  The latter function greps the kernel's ring buffer for
+> >  those strings for result comparison.  Other utility functions include
+> >  general module loading and livepatch loading helpers (waiting for patch
+> >  transitions, sysfs entries, etc.)
+> > +
+> > +All new tests and test modules MUST be compatible with kernel version 4.12 and
+> > +later, including current upstream kernels.
+> 
+> I do not have a good feeling about this. One thing is to accept fixes/workarounds
+> for the backward compatibility. But forcing contributors to keep the
+> compatibility might be too demanding.
 
-On 6/19/26 01:31, Ackerley Tng via B4 Relay wrote:
+I agree. This patch should be dropped. I think that the first two of the
+series make sense on their own since the cleanup is a reasonable thing
+to do in general. The third one is in "why not" area. But this one is
+wrong. Sashiko summed it up well.
 
->  config KVM_VM_MEMORY_ATTRIBUTES
-> -	bool
-> +	depends on KVM_SW_PROTECTED_VM || KVM_INTEL_TDX || KVM_AMD_SEV
-> +	bool "Enable per-VM PRIVATE vs. SHARED attributes (for CoCo VMs)"
+> I might be wrong. But I think that you would need a pretty old
+> userspace to run 4.12 kernel. And most people could not get it easily.
+> 
+> Honestly, I though more about this effort and I am not sure how
+> complicated it would be in the long term.
+> 
+> I know about two pending patchsets which are breaking the backward
+> compatibility:
+> 
+>   + Better integration of callbacks and shadow variables with the states API [1]
+>   + Introduce replace set support [2]
+> 
+> Especially the 1st one is a pain. It is 19th patches and most of them
+> are fixing/reworking the selftests. I think that it was the reason
+> why nobody reviewed it yet. And it might be even worse if we wanted
+> to make it backward compatible.
 
-Sorry for the style nitpick, but could you keep the type and prompt as
-the first attribute in the Kconfig option definition (like the other
-options do)?
+I would not be too bothered about it. If keeping the backward
+compatibility is difficult, it could be put aside. This patch set is not
+that complicated and I think that it can be sold like reasonable changes
+on their own.
 
-- Julian Braha
+
