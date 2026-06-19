@@ -1,93 +1,92 @@
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7F6349CDC
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 11:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51ACB326928
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 11:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.172
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781867008; cv=pass; b=pZZicl6HNBo8r9wLV1zTljIUeNq87Yga5sidQ807R8i8yUsX0jJLiRe2btL7BY8vwfvn3xi0zcJ4VlFHcIbzKVLQzCE0I8L7beszVePPIcpo9aJDwDM1Q1tS96NZqVas25d/AePp6ySIUBV0tHllMYsLA59GB1QKbnEDnnzpNKY=
+	t=1781867436; cv=pass; b=Qy0D2/2VCHDveqYGROIRYqDzrtuOAOYraXVWfAve3yzW5IXpY+LU9hKss49dvj7bmhV4SRaA7rQFiFeuU0fr/f51dbRfgN7mzwFP9Pkp00/ophYVZhvKKvKDtOd9sIfYMn1e+e8uBJ6uqmla9i2REb8w+twClUro1voqf5JcO3Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781867008; c=relaxed/simple;
-	bh=GsiXIcEdAu1JNPx0o0Rkb8mPpCDUCHPoupmGVgfFazA=;
+	s=arc-20240116; t=1781867436; c=relaxed/simple;
+	bh=btKm2haKQomkQw+uhQB5pBRiK+95+O2o3qtewMx7Z8c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qYHwLf9lrUu7QRF9yO1HVagkRWtveMS38wcqWS0EXb/Jv0mzYz6tGGEYc+pcucKp5xNZBSrkz2Ot7YmBUH3BH25nlZ/ApyZTGMANr2kNg/icxsgrc14S+SA0eSNFxPREKlYC6PLSGWID2z8sndCuhKkh08xGrNcLz3aBgEUrI+w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bbcADlBT; arc=pass smtp.client-ip=209.85.160.182
+	 To:Cc:Content-Type; b=ZRvVdqwaMTC0NnLh1Lt80TcD2bSoPq04QKDr+1AWZtTNuNibIsjsZosoJ3Zxnw4lrH56e2IE23VZq/yfdGHkFScuP1zri9NhDWJcOHZW1dr7FQfPrY9BeIS65MyLmNQQ/TIsmd0WrEk9crV+tNBFnyS6sJHy5f4kRcTRPvtVOrw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=of3g3E9E; arc=pass smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bbcADlBT"
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-51765331535so158131cf.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 04:03:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781867006; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="of3g3E9E"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-51765531803so237781cf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 04:10:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781867432; cv=none;
         d=google.com; s=arc-20260327;
-        b=Cr0Tfuydu/YHT2A+xyZdt7TEGQPpdWQnUWFct3NkcwdNbGh4aBGfDBkBNZ+zWVIyJ0
-         vKR1xf79aTVqO2cjFYopd+y1mS/U52pxjXgFaX/jwjg4VWFcSGaTqDN6gXYGdUGH3xRl
-         C09x/9jqLz3liYKUeXq9dQB3Vfpd93+6jTvua1yxH/mFyRQMvkrPTO/WodkaQvTflNcs
-         aSkw4iQRW2df7zSH+YgQdmVhDnkYQMP9IR0pd9X2+r6/WQkxBSqg+EqZTvmbFRgUnpRl
-         D6DfzQUtww3FsaSzqKpXzuAVWb090rTKTwNfjzCxmf32DEuE77Lh89t7G0zaIlqi6QEV
-         jRww==
+        b=KbVh4qd3esa1UQDDrjs+9nQty90XjefXt4ohjUwCN1O/XdA/VbIVSCIU5/+S2/MA2N
+         h/AbSN+QbI01I939hUSrFU+viojUPFY2/eWoX59B+f/bA1M4gl1apqQs0R6rDK9PaH68
+         H/Z0ZYZ34rK2VTg52VsnQ4CLM2l+7mLkSob1ktHcB7WRYDKqwavsJlXhN4dXd7B05igR
+         7rJkJZcf3ZwiBa5Ul6Ji9E9G43V/ig1Sacn1AHGXIGnOF62iKvuT2JKXjdhv/3rPjhv9
+         Ph7KQc/5YDywwxQpn03GAMJSWIEX+zqva1LHdB2zE/Mliu0uPnPsp2hsmTN+4z5MDfgP
+         WLow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=tjw3cW/Oozrva+KBRQ9a1eMgdLYrVdyOI99ohvpEcUU=;
-        fh=52/CEm2KvBBA6qjuVmAe1BhOkutgAJsBajygk8BnyZY=;
-        b=UUnOlexXoH+pnon0n/ZbAdOpT2uKza8LVmdwF7VhL4Pv+jlrFprWorMFu6QdUh+FvL
-         cL9kxIFK/BphJAjSWiEiEUqiMUK/3nYtkwS6Aj+5CYDePWEBM48kiPIiaWZAx64jcD4l
-         Vu2oDHTj8Ez/Y4X6O25awn1VZqR9/hAeCPy7hDN9LKmRK2XGgPoMpVnA7UqqL6Pfr8fc
-         raxXChWL0jZJTnyNqQh5GmJg5oORnmFvwDHSZET8KnaDi4V1pYty/ZUiCYuTYkY28kaD
-         /mM83jFGlMSaWYh2Vf2wtZQFlrS0OCJ8UTblDYIap9abmdul+OQVEmP2H/3set+wyGhz
-         9zuw==;
+        bh=WoD6HBjRT9eDykv3AXG3feHx1dss625bK8G+vITqymE=;
+        fh=oJ1RKH3BqK2qp6dgf4o1k/oqGrl3kLnKz5wNtWH6KKg=;
+        b=O3xS8ulTjdP8UrpWd5IO9Y/WyTTY0vjrWphJdqb2qa38ILLuy1khau0vEJ0Lg7QB/M
+         xkTPQYtFrhbvOLcYkoJ2IQIPQtjRD20DvHSxRvUJjA1RC3awF1rErkMWNa0niML6V1wo
+         +ClobKZPUP97pHkAiedy2BSFl4FIlhVvY1DByzBCVc/QQ5c0Qysg0YFN1UAV7Q1SrYgG
+         ymNF9pDlOMzvkV8KaMkWWfD/Dn3qSGjdxJScN6Lg8Txk1N+QlhPkXbXOtsPDQ8ZNBqUb
+         81I6JNFFDTWnyAi0eeed/U1opWE1REHKqXo3IDYbZY8XfHk5j6P4XZGWgiFnzph6AJ7s
+         fZyQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781867006; x=1782471806; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1781867432; x=1782472232; darn=vger.kernel.org;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=tjw3cW/Oozrva+KBRQ9a1eMgdLYrVdyOI99ohvpEcUU=;
-        b=bbcADlBT8HbCLpMyMG3EPLwa3qTHe3eGPyIP2OI/A91UMFYoORXh/tpHAi7X8NSPDG
-         1kUSIlZt6BWlvj52JyUoPE5hWasC7NKFkEsSQ0zAQxyvdOSpVW/T9hp2/bKg/I/m036v
-         8k/FTTc24b5mC/Wy/SGzNiZUA1pm+0qncVvvI3GyBB9Or5pUGPslfJCOrCxbkLpuDX1z
-         iudVNAW/M9tbgf1Roi70sGQW6/1bKZ1SEuHX9zl8rOg1gnAB9kPVgYUpQRXULbgRJaCD
-         354fbnoesOQTMqVG0pBEdnTJgKCYMdZmpTEl/iwyaixm8tLgehHqCuWfY07hoPgS32CV
-         +r7Q==
+        bh=WoD6HBjRT9eDykv3AXG3feHx1dss625bK8G+vITqymE=;
+        b=of3g3E9EWrUYK2VJsf21DH2lVzJYSFekJNs53pg/sCEMq/9gqzry6oRfbRUT7w8vTW
+         T9fVtrBBP+n3Rf2X5wlpZPQSO1/9ABHl53gpE0wx3gZ9xqAYAwgGzoXVuzKljkkUuj45
+         wjJexN7C9et7BkauciDx6nv9LeEY+MlDqRnaVoThgNRSUldTvu+UGMHDyKtLxiYnsLbM
+         Q28hkkzwfBr64cA5YNZeWfm5DQMlPSeW6dd13XO7RsInRVbK6OqteljFnd83iH27XMpk
+         Z35kcD25KiV4e7pqZefO/Kgjfd7hwm5fZxwuP/XTumbyP4+of7kd8/H5G74VM0fJ3+0t
+         MQeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781867006; x=1782471806;
+        d=1e100.net; s=20251104; t=1781867432; x=1782472232;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=tjw3cW/Oozrva+KBRQ9a1eMgdLYrVdyOI99ohvpEcUU=;
-        b=T+1vOnPnSE0ZH5YC40cRQkSXDA+RabB41/D8jiYR08W2g6yhaTanTDzHx9TxlzOLrG
-         dNg2PQC93hzGZzjqyQWqoyIoshYrRT9WBNA5xWLXcRYmUCCSgWMX2LENLvvIGt/QFPCm
-         D+C4lLqF0gBsehp5wV1GzTrZTxC/OnuhH/CuusD4l+9vaUyre08V7TYsBPdpP7vJmZAL
-         vQUGdPkW68Msqa27ETIoEWbgOAf5fuichbdHUONniPZdyMjmc8KUXIRSAh4rj3uwpchc
-         qdBGrA8wQPmwc91ARKUHUYMq4lYwQ5akV1f6aGZRO13I/2fZ1wRAbH5kIbjgKthwjWkT
-         EOTA==
-X-Forwarded-Encrypted: i=1; AFNElJ8fYRFu52tCksUxjdE2busd+paY1BFpnsZ68faSnWS7CfVTdRdwQJdgALSgDm68aklB3Yrnufxq1C5u6y16WOs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2kUuMnMAMTw5VSeLBgpDUto7t0ESnmjnvcTiDzEudBZ9cKhwn
-	JBGEeJzyi4ZRAGxb/RWum7lU7dpSIBrDbf3KM35sqeXGDBs41n4h0PT6Tur/jW2D5n3IWFfhmww
-	eCMUTENmrONkeCxskh9CxsGSmeNUMSVbixRdWfNcN
-X-Gm-Gg: AfdE7cnA08Vw5pYLmlDFWtO41rCUi/Mn51UdWWGJnEt+PdGW55OwW2qzUmFxIj+xuu6
-	y0PYci9znbszpcsQWBmsYpcXp1cPpSDD7InICv8Ico/SVZBL+fpLRgrwr7l3Yab0WVmx9FZuHCb
-	+Jd2bSLTUYjm0246qVuKHoo2rDYDDal+/AhaQyvUqy1UbAgyTBgCBlSXcuJtUzUk65fvUJnYf3p
-	1g4wdrYdr0hN+oP4AV0Hj++sYemiGcjvs7BznWvOIPObV/oMSJn6G62mQc3AY/T6XNBqGckuA==
-X-Received: by 2002:a05:622a:5a12:b0:50f:af60:3496 with SMTP id
- d75a77b69052e-519e878bcd3mr6572861cf.1.1781867005698; Fri, 19 Jun 2026
- 04:03:25 -0700 (PDT)
+        bh=WoD6HBjRT9eDykv3AXG3feHx1dss625bK8G+vITqymE=;
+        b=cz1Rg87HhnTy4KnPScL0CSQLB25ol6N6kpo3i+uoz4r5z3SBElI9eUEL8dgbGGOeJe
+         d4fT/+t9Wy4HFgU8j5IPwMrZOeWjEYjfTCiuqjNqShXZxxfP0o+M6EYpk9uTBbdveOp6
+         5eN+eaKfBEDgoBmBn1GLRZLlxJ16QhU0ltwjgL5gAKIf+5Ql04cR2zSLqKjXeZX1BqhB
+         ggTTIegzpp3iA6dLHSpLVWmnZ+jN+24p6QOyJB9sSC1SuQK/17TUluS9vpK/b6nHXK/a
+         Tt3e/m0h4sl+SvYtcQnTS4u9qfX7w1cb1glNqyHWAF2qlnMVe4QIIcGhCS05U2C81wXW
+         0E9w==
+X-Forwarded-Encrypted: i=1; AFNElJ8pNtF4EWyK9M05kfAyCAkTbqDe/RP/ssKctZw3QCgnkVUjZD6QT8DQQzJ49M/zZQY9FdEL97d7iv3EETA4nkE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8+855qlazzS7M8SEQvg5AR05Mb3iPslGp7GXtSoHX8C+3C5YL
+	xiJI/Y3CJz3YqLYTccHWzU+/d8xxd27HOw78xXaSp4g2YEl7Jrw9YEu29gzlq1h5aT+J7t66+WJ
+	UZ8Xkn7/OHdhoN/umzWYUbvAOrUCcjUe+NE4Upde0
+X-Gm-Gg: AfdE7ck6sk+0VfXB8TITCSm1anOaRNegZRppTdc7rvCG0Y+ckd5GygEZtx4evln9/4f
+	bVRyfvplDlrG20SOG3e8wRS4vHcccKLO6/l0FtBySlYBTR0kB06BTk1tip+wpDTI6EQmKN/p7UF
+	MAOJ9SCEHkS292fsB12hgKBhpMRRkjSpeYctmp3hvPm0DCpzcBSc/x1JNscrt1MbZIWPH08hiUV
+	8S6DH0F3fjsEjP4GSsBAivm9n7saYYOE6E9YfUIqY2Lv3u3FexCbd9gHijUwguPs8xOKVaovw==
+X-Received: by 2002:a05:622a:2b08:b0:517:99ea:ab7a with SMTP id
+ d75a77b69052e-519e4ab67d5mr7722981cf.26.1781867431624; Fri, 19 Jun 2026
+ 04:10:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com> <20260618-gmem-inplace-conversion-v8-11-9d2959357853@google.com>
-In-Reply-To: <20260618-gmem-inplace-conversion-v8-11-9d2959357853@google.com>
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com> <20260618-gmem-inplace-conversion-v8-23-9d2959357853@google.com>
+In-Reply-To: <20260618-gmem-inplace-conversion-v8-23-9d2959357853@google.com>
 From: Fuad Tabba <tabba@google.com>
-Date: Fri, 19 Jun 2026 12:02:47 +0100
-X-Gm-Features: AVVi8CdeH8_e_cqUhrAt8PYHFeMtnUwZS7qxotCUws3_NP2cjS-AO0E0Squx-po
-Message-ID: <CA+EHjTxd4_x-J8DurWuhPostfZqsxMUV87tWN5GzLCknH5wfQw@mail.gmail.com>
-Subject: Re: [PATCH v8 11/46] KVM: Consolidate private memory and guest_memfd
- ifdeffery in kvm_host.h
+Date: Fri, 19 Jun 2026 12:09:54 +0100
+X-Gm-Features: AVVi8CeUT44zBCOt4kdWsDDIMV1MwoUKi9VlfHD19GzvGrkCGzRWMwEiO6g5I68
+Message-ID: <CA+EHjTyj-JdW8H0ii2j3dayqnT2s3VV+brSG++p335=FGd2GXg@mail.gmail.com>
+Subject: Re: [PATCH v8 23/46] KVM: TDX: Make source page optional for KVM_TDX_INIT_MEM_REGION
 To: ackerleytng@google.com
 Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
 	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
@@ -120,88 +119,81 @@ Content-Type: text/plain; charset="UTF-8"
 On Fri, 19 Jun 2026 at 01:31, Ackerley Tng via B4 Relay
 <devnull+ackerleytng.google.com@kernel.org> wrote:
 >
-> From: Sean Christopherson <seanjc@google.com>
+> From: Ackerley Tng <ackerleytng@google.com>
 >
-> Move the kvm_arch_has_private_mem() stub and a few guest_memfd function
-> definitions/declarations "down" in kvm_host.h to utilize existing #ifdefs,
-> and so that related code is clustered together.
+> Update tdx_gmem_post_populate() to handle cases where a source page is
+> not explicitly provided. Instead of returning -EOPNOTSUPP when src_page
+> is NULL, default to using the page associated with the destination PFN.
 >
-> No functional change intended.
+> This change allows for in-place memory conversion where the data is
+> already present in the target PFN, ensuring the TDX module has a valid
+> source page reference for the TDH.MEM.PAGE.ADD operation.
 >
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
 
-SoB fix please. With that...
+Sashiko flagged that when src_page = pfn_to_page(pfn),
+tdh_mem_page_add gets identical physical addresses for r8
+(destination) and r9 (source), reading with host KeyID and writing
+with TD KeyID on the same address. I don't know enough about the TDX
+module's operand constraints to confirm whether it allows overlapping
+source and destination, but the concern looks legitimate.
 
-Reviewed-by: Fuad Tabba <tabba@google.com>
+nit: why does it have Sean's SoB?
 
 Cheers,
 /fuad
-> ---
->  include/linux/kvm_host.h | 37 ++++++++++++++++---------------------
->  1 file changed, 16 insertions(+), 21 deletions(-)
+
+
+>  Documentation/virt/kvm/x86/intel-tdx.rst |  4 ++++
+>  arch/x86/kvm/vmx/tdx.c                   | 11 ++++++++---
+>  2 files changed, 12 insertions(+), 3 deletions(-)
 >
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index acb552745b428..9c1cf1a6559e3 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -722,27 +722,6 @@ static inline int kvm_arch_vcpu_memslots_id(struct kvm_vcpu *vcpu)
->  }
->  #endif
+> diff --git a/Documentation/virt/kvm/x86/intel-tdx.rst b/Documentation/virt/kvm/x86/intel-tdx.rst
+> index 6a222e9d09541..74357fe87f9ec 100644
+> --- a/Documentation/virt/kvm/x86/intel-tdx.rst
+> +++ b/Documentation/virt/kvm/x86/intel-tdx.rst
+> @@ -158,6 +158,10 @@ KVM_TDX_INIT_MEM_REGION
+>  Initialize @nr_pages TDX guest private memory starting from @gpa with userspace
+>  provided data from @source_addr. @source_addr must be PAGE_SIZE-aligned.
 >
-> -#ifndef kvm_arch_has_private_mem
-> -static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
-> -{
-> -       return false;
-> -}
-> -#endif
-> -
-> -#ifdef CONFIG_KVM_GUEST_MEMFD
-> -bool kvm_arch_supports_gmem_init_shared(struct kvm *kvm);
-> -
-> -static inline u64 kvm_gmem_get_supported_flags(struct kvm *kvm)
-> -{
-> -       u64 flags = GUEST_MEMFD_FLAG_MMAP;
-> -
-> -       if (!kvm || kvm_arch_supports_gmem_init_shared(kvm))
-> -               flags |= GUEST_MEMFD_FLAG_INIT_SHARED;
-> -
-> -       return flags;
-> -}
-> -#endif
-> -
->  #ifndef kvm_arch_has_readonly_mem
->  static inline bool kvm_arch_has_readonly_mem(struct kvm *kvm)
->  {
-> @@ -2572,6 +2551,11 @@ static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
->  #else
->  #define gmem_in_place_conversion false
->
-> +static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
-> +{
-> +       return false;
-> +}
+> +If guest_memfd in-place conversion is enabled, pass NULL for @source_addr to
+> +initialize the memory region using memory contents already populated in
+> +guest_memfd memory.
 > +
->  static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
->  {
->         return false;
-> @@ -2580,6 +2564,17 @@ static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
+>  Note, before calling this sub command, memory attribute of the range
+>  [gpa, gpa + nr_pages] needs to be private.  Userspace can use
+>  KVM_SET_MEMORY_ATTRIBUTES to set the attribute.
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index ffe9d0db58c59..56d10333c61a7 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -3198,8 +3198,12 @@ static int tdx_gmem_post_populate(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
+>         if (KVM_BUG_ON(kvm_tdx->page_add_src, kvm))
+>                 return -EIO;
 >
->  #ifdef CONFIG_KVM_GUEST_MEMFD
->  bool kvm_gmem_is_private(struct kvm *kvm, gfn_t gfn);
-> +bool kvm_arch_supports_gmem_init_shared(struct kvm *kvm);
+> -       if (!src_page)
+> -               return -EOPNOTSUPP;
+> +       if (!src_page) {
+> +               if (!gmem_in_place_conversion)
+> +                       return -EOPNOTSUPP;
 > +
-> +static inline u64 kvm_gmem_get_supported_flags(struct kvm *kvm)
-> +{
-> +       u64 flags = GUEST_MEMFD_FLAG_MMAP;
-> +
-> +       if (!kvm || kvm_arch_supports_gmem_init_shared(kvm))
-> +               flags |= GUEST_MEMFD_FLAG_INIT_SHARED;
-> +
-> +       return flags;
-> +}
+> +               src_page = pfn_to_page(pfn);
+> +       }
 >
->  int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
->                      gfn_t gfn, kvm_pfn_t *pfn, struct page **page,
+>         kvm_tdx->page_add_src = src_page;
+>         ret = kvm_tdp_mmu_map_private_pfn(arg->vcpu, gfn, pfn);
+> @@ -3278,7 +3282,8 @@ static int tdx_vcpu_init_mem_region(struct kvm_vcpu *vcpu, struct kvm_tdx_cmd *c
+>                         break;
+>                 }
+>
+> -               region.source_addr += PAGE_SIZE;
+> +               if (region.source_addr)
+> +                       region.source_addr += PAGE_SIZE;
+>                 region.gpa += PAGE_SIZE;
+>                 region.nr_pages--;
+>
 >
 > --
 > 2.55.0.rc0.738.g0c8ab3ebcc-goog
