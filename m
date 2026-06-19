@@ -1,74 +1,73 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D10A351C14;
-	Fri, 19 Jun 2026 06:36:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C82340D579;
+	Fri, 19 Jun 2026 07:08:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781850969; cv=none; b=gIFra80oXyecXF9c5TFgUNnMacN5VokVwd2sA8f8Gx29UlYut8MrgQuQeQEqln/Tu9itmEaB5JMQLZGQSEdhU5qzBrEhUuWHmgPY5gSQcph1o9e1lkNmqLjtHWpH2NCNYYI/ecWqdKJErpE3LBCT+uBjo179doeo+gFnFcrgb1E=
+	t=1781852939; cv=none; b=LbA7zSrla01gbt1C+wJGlugzVtYbzwRMe9ptqc+AZ1W0hctp8K4NYusIlUl3JpOV7WCUWU3T35yWPWuqmCW8w1E3cWYZPv4nf4dOHq2BPyPHlUB49r63gqBSDKAJfILy0vIy+LhyrNfvRYhfOCkON3moNVr6NGg1Jh6n1eU7mJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781850969; c=relaxed/simple;
-	bh=rOArnfKPATJkYYumpandljz3xZTiXVcjL/j0XUj+YII=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c0ATcB1R+XS5P3R3KtAnXKVc4+8zdqvsXwfBEUYX0TYnNX2EjEY+n77/2nk0Z3E7bhB5JxL3OGGNHB9bqEpncOmyFRVNFkFrZ2iyZbaFyXimdi1tVuE9AvetKdLhWpzbZqmG89Hqcd2Bh9sWBRF9YsHgQLC87PI02SI39ofuRlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZIdlrU9k; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781852939; c=relaxed/simple;
+	bh=J3TsOZyALZLv2Ge9eOw7b/RW9oDRDk51X8FkIq5J53A=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=UmBdGIgd+OaLmFqemToMyixryCLwV8+9VfcqboFVp6vuVOT0xT2JFwiYsEN6hgmmFhSe4RidJ8YZhrTJaWVFk4ROigICziiqJuoom0xzgxgLweqQ+dmZrqnKacjuhvbnR0/2b7bCNeqPXKaJQWfhca6BDW7bkDV8NijoCfUjXU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fs+GLxc3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZIdlrU9k"
-Message-ID: <97e15692-af14-4a3f-99ed-61fda50fe68f@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781850966;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rOArnfKPATJkYYumpandljz3xZTiXVcjL/j0XUj+YII=;
-	b=ZIdlrU9kkEk7gMIEDcoZTRyKTmSYK4eElAgHE0eYDq7kdhaPD1s7/wVFKarpoxd0yj4tbY
-	ucxkXUZ75D+OIhiICK0xgULYcAy2alParSxDsHCB9mLwKbnaCZNJ1Rzp6YdzsTq8M73Wjy
-	anF8szLSmHxjheQNWEr2AdZApi+Wa9U=
-Date: Fri, 19 Jun 2026 14:35:49 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fs+GLxc3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79AAF1F000E9;
+	Fri, 19 Jun 2026 07:08:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781852937;
+	bh=RIMQb1yKuHonfOKSP0klQ3dfROBzfdEbzclWDXcbWek=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Fs+GLxc3OUyph1MNj30Soz3TdK4Onl90fcB5kJ1XqOP/gM5N2AjdYeWiGC/Nun6wg
+	 WCXX92qO1JIAjPSs/29HKhywK3UXqKGPJX73WIDN+IhEzSHXfFESMKxRw8Mamh7fIZ
+	 dUX6IL08/yjwmSJhle8R34jB2SkqyUPX1MjPhI5ntYa4HzjdST5326x4CaoEm3ikS3
+	 +eQBkvJLGsMWW0Spx2t+zFWAA3DxfV5K61I9Jjc4MZeEJjZstbTBa6wM/JGnhiwdQt
+	 m93MbA/ZQWxZ/ma7GAlwtlO30P43TbxgNj9iNdMwgSoGIjs2DCVcmM+3LCWkVmKEbu
+	 K0fpXUd2dsIjg==
+Content-Type: multipart/mixed; boundary="===============3794738048082045466=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v4 3/3] selftests/bpf: test rejection of a
- packet-modifying SK_SKB stream parser
-To: Sechang Lim <rhkrqnwk98@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S . Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn
- <willemb@google.com>, Shuah Khan <shuah@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Simon Horman <horms@kernel.org>, Bobby Eshleman <bobbyeshleman@gmail.com>,
- Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260619062959.3277612-1-rhkrqnwk98@gmail.com>
- <20260619062959.3277612-4-rhkrqnwk98@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
+Message-Id: <3166d652f38d3acdda9304a12482191496434a5c0b706318b4f0d6e194de8658@mail.kernel.org>
 In-Reply-To: <20260619062959.3277612-4-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20260619062959.3277612-4-rhkrqnwk98@gmail.com>
+Subject: Re: [PATCH bpf v4 3/3] selftests/bpf: test rejection of a packet-modifying SK_SKB stream parser
+From: bot+bpf-ci@kernel.org
+To: rhkrqnwk98@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,john.fastabend@gmail.com,jakub@cloudflare.com,davem@davemloft.net,kuba@kernel.org,edumazet@google.com,pabeni@redhat.com,kuniyu@google.com,willemb@google.com,shuah@kernel.org
+Cc: jolsa@kernel.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,horms@kernel.org,bobbyeshleman@gmail.com,jiayuan.chen@linux.dev,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 19 Jun 2026 07:08:57 +0000 (UTC)
+
+--===============3794738048082045466==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-
-On 6/19/26 2:29 PM, Sechang Lim wrote:
+> selftests/bpf: test rejection of a packet-modifying SK_SKB stream parser
+>
 > Verify that attaching an SK_SKB stream parser that can modify the packet
 > is rejected, while a read-only parser still attaches.
 >
 > Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 
+This test exercises the rejection of a stream parser that resizes the skb,
+which is the use-after-free path introduced when sk_skb programs gained
+access to packet data. An earlier single-patch version of this work
+carried a Fixes: tag pointing at that commit, and it appears to have been
+dropped when the series was split into multiple patches.
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Should this commit include:
+
+  Fixes: 8a31db561566 ("bpf: add access to sock fields and pkt data from sk_skb programs")
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27809861429
+--===============3794738048082045466==--
