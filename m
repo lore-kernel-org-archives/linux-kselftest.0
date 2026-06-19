@@ -1,66 +1,66 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35479347BC4
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 19:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F5E33D511
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 19:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781897334; cv=none; b=tvZStpGIj8tLn9JhdAe5GKQI1s1+pj3N3wUVLzf7wDh+znxUER8PC2iwWkNzxdQqqDn5LxZomsLHCmC4PU8j7Uy7HTEhwkICdv9qYSve+s8SSrkTTdHOgI4dERjcWPJ4TfCDba88Gfrh97+J2arxeMlrSiDI3qqDQBBfdIoSV2U=
+	t=1781897411; cv=none; b=B1Xb3jGP6D5hRZIsGfvUsSJPGvR3FDkiKL5ZLeFwII1dtiJRbGYV/KAUjMoUsdSQrv8C3woTY3o+GrvqFLqWpEslLq9cOXlO4CMBH8ohCwYoShJswlkkY6+Xoqoq92x215TDo/qODAnYrNwZE4I2eGAeHn2HaVHDpfHwrq+sWUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781897334; c=relaxed/simple;
-	bh=FlqRMTgwnEYTgwBo0M4QMzzgXOiGkRJeDRkX7I5vYZo=;
+	s=arc-20240116; t=1781897411; c=relaxed/simple;
+	bh=Oh2ybLLGC9jnpxFv2cvrWqY59mjTNtmLCVMVU0nxLTA=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oIKmWp/PASNfkwHbG3REvhDfBfY50OeZJg2moYCU8ElE0tP5qOxbsXaQuiryuUUKoQoAXyDCqru+ZUE2DpWbALQrH8fiQv7xh4iAs3SuiWI0aFFZYTtivhmJ0qFm6wV0V3N6bxGrp0d8Di30lJYHNj9UEYH89DnENtOyF+jr+MI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IU5dTAWH; arc=none smtp.client-ip=209.85.216.44
+	 Content-Type:MIME-Version; b=WRNXtO8ie1EdwAx5dbphdegtyqFeW/xSdpjiaZS1DDOtvL8DtXJyIBuN/fghf7jIuG9LOva+5x5uqwo/5CNSSvgu2FmgF103IpJg6fYauLida8AdVlkP73Egd9alIa68FSodixbU7xOIow+lVBaFg9W0W81WP2FiEEF3dKWATTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IF5Oom64; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IU5dTAWH"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-36b95eb4bb4so1537610a91.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 12:28:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IF5Oom64"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-36d630c0e35so2412652a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 12:30:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781897332; x=1782502132; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781897409; x=1782502209; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=tdZietZ1vzrwOz+XYJNjMrGChV39Xfbmkh2IyU4ikh0=;
-        b=IU5dTAWHKzT+NpMVAP6hRKK/sKAoftG0M/mm5M/H1j+X4sLT3vGFFGrzOgn+RM8rVV
-         BtrxrsTm4X7szyrrTTDhfanHHQF7HUY2w4q+QJGnOlO3K0RmC+Ok/BNZcybnxzq12ono
-         J7KZK2e7R7ka2iniVazPTLwv3zlwuwcKGSV5u0aMubReFj1vX81fIxrp8ccz7u/e4Yey
-         KeCI9Uy6GFMJheUU6CmhePlFm2tT0QJwl++2V1jZHqO0oJOoGGEET3XaxpgxJXsnC+0S
-         9XbEjNXTK2z+9qegr4zQeWwgSAneIqbNLqPZ1jXHeN2unmYBcKB6jE/X1TZ0fvOjrh8A
-         fHcg==
+        bh=7uOIAj81pDb7DXTvtaboe/dWyr0Wn96ZBecKWdg1P6Q=;
+        b=IF5Oom6449vLnhIMgVWPw4Sr5Oh81jM7a9PwpYu6wYYunqkVz9heUGHhcr0VWahYtJ
+         tzx5IPAKjMKnGkVssX3/4FDQbK7g3txsFEENFeZubKiNKnhpcwRVw0/PPEUec9khuwWi
+         i6Da77lAVwHBTwfASrJ21I1T2OVcZMp8f3wnb+JUGP6KHOjrWY2nSowv/YRt2Vs/V6E9
+         y49McxBlxBZmuBc2N2EWb5jNzFXIbYMifVd3ER9PzgQUJEpkE6VNUdK7TzVshWBtLb8p
+         4rDsdyqOiZcQ+O+fKwM9SuqwRJZ6NDlPuC8ZJy6PTVtCI9+AlM4Fm4Yu2OKOq1othuqy
+         pERQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781897332; x=1782502132;
+        d=1e100.net; s=20251104; t=1781897409; x=1782502209;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tdZietZ1vzrwOz+XYJNjMrGChV39Xfbmkh2IyU4ikh0=;
-        b=VndwrHr47D20V1VZAhhAa9cx/3Vpu4vJ2jOxquM0VqsiE6JBxOiQgfvHyMUyDLxaXB
-         nE/TbwPAsTgZmSbjvxIGq4qqun1hzbQxL4lIMYAJJJGL2joYMU0wMt57aQMSgckI0daL
-         U7WLWYaMGCliTBiVk6JD23546XxzNdCC09vmDo5lnKPHpei1ohUSsCZEqoc7jF82fV4S
-         GSd31gKjRksj4umqS9wcLka9F3SYO0XJb8SXcptQ5DP1LFkGKiBkk93SCq2OpAeD5TSN
-         iFYchWSo0M43sUX8OGEktCCaoQVNxQpcpfDit94jkYNNbwXxMs4Nw+wggvlPvvN+eca/
-         5dKQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/HXoIaWC0gU4jqBmgyc+XckuvDrtYaPzuObLkLrzQ0HvUq0LCkIGJ6pkBh1GEkzegnVP2zS+79C+35P3W8F34=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzf6poS877dMTPntWfKKwZ2LsOy2sjOFKkV5/PSvFfQWtzqZM/7
-	HfAAYni5hdgkNIHMTN+ynvbq3yW3b/6kdzJ66FFBXhFdnenSNmg/BTpN
-X-Gm-Gg: AfdE7ckSR8GFoTJs2dTuLON/2J7Sms3KmRm37N9yIeclUluwSkAWEYEALWdooLyByLo
-	C6PHF+NOGr0AexkSyE465ZKWeogRNdlg84BliMcl0NoYLIrIpYrN3T0bqzHXdQC2w/iXsmQJBKX
-	AnmPLtLsCEpZbTJxSeOQ1Q/flNBkQupWlbHfZww75wQhBzsQu5WssEPZdxC3LfuQK8aH83waEYK
-	Ue3YtMtPL5+9JmqN/04OeE1YvaniHPkZjvxdLNzixLKBxdxaYd1QP+1oMIZHOqolFN19HceiJVn
-	korQpKG01+lfDiPkG9imaBaA20ugly/O0zPRMhgK1n59Z6QQ/ZWEeWiilqiwK+qz3e6qOpAePBi
-	vsaUiK7x3zB4S518ra/7Q21cpz3UGd3YD2pKfTQrKeG6i/yYlnatf/e2QKnYEyV0HpSKKTiYwhk
-	U1TciJcq3ZEDOZri1rL+kndDq6Cylzd1jKK0aAZQFI2Q==
-X-Received: by 2002:a17:90b:4a90:b0:366:10f1:3d91 with SMTP id 98e67ed59e1d1-37d160bec36mr4958120a91.1.1781897332384;
-        Fri, 19 Jun 2026 12:28:52 -0700 (PDT)
+        bh=7uOIAj81pDb7DXTvtaboe/dWyr0Wn96ZBecKWdg1P6Q=;
+        b=MlzypebI9EeBL6sKeFeo3zRRyUhwDBWL6BoHjc3A3EwidPD/+LQNF4Ww2QYTJMLDSa
+         3KPJKfMP0O/x/c06QHyDmDd141HFWQy8A5anK+gjUh2PyOkx6V2MxJ/JVYhxV1Euh2Q9
+         PzVsJH/UmrF8Baf6rVUI1NIw68xP20vs1Wf8L68jItb22Tt8LJ/2V+FgY4yfkAIyWtoQ
+         FKvpn/dGACjA2+2vCpfHXhAD2Ev3i+nBhOf/M8fJsbxISezBPooPw8tzzA49GOo1w/xP
+         eZ/2VpZm5V0aoNl/Adm2L0ggUW59S+G3dTyqiay9E0hIEwBYYnpi440KCa8OBOQV8FQ9
+         zapQ==
+X-Forwarded-Encrypted: i=1; AFNElJ864b8pMKhFJIQgLgEuH8h3F6IQ/ATYiDeJ2Z7h1tCXe56HdZbmFUNciyitryE0lvllXlde1noHLpKVCbnXg1w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUGhTWlWfYAyLPL5eAk1VLavj6W/IuW5UVZ5HzvGeSD+UNB27R
+	WDYI+F3K+vJEWR5PsJcgoJkfct+psMxIz+K2Ffkn6pCfwJPmHTNqHCsi
+X-Gm-Gg: AfdE7clEdzCGenc3dRlf37KpkSQphlHxarcO0XS5qetH9tXVg+sEBHRWtO4h0X6SKIR
+	iG9pSmF0pbgeiekUjfxoqHJN4cW1tbjFY6Cfciqxw/BRieewwiDlSzsBNU3y9dZhU+GK2obp4i0
+	z9xgo0HfDB5xsB3Mkx4mweUKjBH0JJknwtb5qkrXxPbFgoWqvXQ7hifFJ7nap+5JGQU69RA3u0E
+	i5UYEJklEIt8ucZMGVFW/jJeqIx+x5PeKSW8+GVvdb94JuiOUpIo527w9p9IBclrVujKtxj7w9R
+	O3bGGAcJpHj09DZ3NxgPF5f3wMklvHbs5j+N6bfJxSj7gXogz0o3mO8GD7fX6GbaT0kFOev3hDK
+	RXxJGE1iq2NPfebp9mydP1V07f9479iXy6U3gGC3CnePIz7djEz7+OEQ7x1hYCy3MpULVtRX2Cf
+	U2ybONn90n3I4sX3fe4scZmW5PWuIkzFuHNzjsX5YakQ==
+X-Received: by 2002:a17:90b:2709:b0:35f:b987:4dac with SMTP id 98e67ed59e1d1-37d15e51976mr5755105a91.12.1781897409221;
+        Fri, 19 Jun 2026 12:30:09 -0700 (PDT)
 Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d4f225870sm363308a91.8.2026.06.19.12.28.51
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d1558c6cfsm3705447a91.8.2026.06.19.12.30.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 12:28:51 -0700 (PDT)
-Message-ID: <5986dad827772fb0060f7c4adfb811ad93755a52.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Reject offset refcount acquire
- arguments
+        Fri, 19 Jun 2026 12:30:08 -0700 (PDT)
+Message-ID: <a180a5f633b3555630d9a9d2bef2573852918112.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover refcount acquire node
+ offsets
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
 	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
@@ -72,10 +72,10 @@ Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau
  <vmalik@redhat.com>, Leon Hwang <leon.hwang@linux.dev>, Dave Marchevsky	
  <davemarchevsky@fb.com>, bpf@vger.kernel.org,
  linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org
-Date: Fri, 19 Jun 2026 12:28:48 -0700
-In-Reply-To: <fa2336b329055908a401ec3b18f8498ebc03846f.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
+Date: Fri, 19 Jun 2026 12:30:05 -0700
+In-Reply-To: <264dd4a10d3abdd037e01ccc6da44e5a5758dee2.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
 References: <cover.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
-	 <fa2336b329055908a401ec3b18f8498ebc03846f.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
+	 <264dd4a10d3abdd037e01ccc6da44e5a5758dee2.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
@@ -87,58 +87,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Fri, 2026-06-19 at 07:59 +0000, Yiyang Chen wrote:
-> bpf_refcount_acquire() increments the refcount at the caller-supplied
-> pointer plus the refcount field offset, then returns the caller-supplied
-> pointer unchanged.
->=20
-> The verifier records the return value as a base pointer to the refcounted
-> object.
->=20
-> bpf_list_pop_front() and bpf_rbtree_remove() can return embedded graph-no=
-de
-> pointers as PTR_TO_BTF_ID | MEM_ALLOC with a fixed offset equal to the no=
-de
-> field offset. Passing such a pointer directly to bpf_refcount_acquire()
-> currently passes the refcounted-kptr type check.
->=20
-> That makes the runtime operation start from base + node_off while the
-> verifier models the returned pointer as the object base.
->=20
-> Require refcount-acquire arguments to have zero offset. Programs can stil=
-l
-> acquire a refcount from a graph-node-derived pointer after normalizing it
-> with container_of().
->=20
-> Fixes: 7c50b1cb76aca ("bpf: Add bpf_refcount_acquire kfunc")
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> ---
 
-Hi Yiyang,
+[...]
 
-thank you for the bug report.
-
->  kernel/bpf/verifier.c | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2abc79dbf..4510fe0b4 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -12392,6 +12392,11 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_kfunc_call_
->  					reg_arg_name(env, argno));
->  				return -EINVAL;
->  			}
-> +			if (reg->var_off.value !=3D 0) {
-
-I think this check should be handled by check_func_arg_reg_off() /
-__check_ptr_off_reg(), could you please reorganize the code such that
-it is handled there?
-
-> +				verbose(env, "%s must have zero offset when passed to %s\n",
-> +					reg_arg_name(env, argno), meta->func_name);
-> +				return -EINVAL;
-> +			}
->  			if (!type_is_non_owning_ref(reg->type))
->  				meta->arg_owning_ref =3D true;
+> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/=
+testing/selftests/bpf/progs/refcounted_kptr.c
+> index 61906f480..7955a9973 100644
+> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+> @@ -741,6 +741,39 @@ int list_push_back_uninit_head(void *ctx)
+>  	return ret;
+>  }
 > =20
+> +SEC("tc")
+> +__description("refcount_acquire_list_pop_container: acquire normalized l=
+ist pop")
+> +__success __retval(0)
+> +int refcount_acquire_list_pop_container(void *ctx)
+> +{
+> +	struct node_data *node, *base, *ref;
+> +	struct bpf_list_node *list_node;
+> +	long err;
+> +
+> +	node =3D bpf_obj_new(typeof(*node));
+> +	if (!node)
+> +		return -1;
+> +
+> +	bpf_spin_lock(&lock);
+> +	err =3D bpf_list_push_front(&head, &node->l);
+> +	if (err) {
+> +		bpf_spin_unlock(&lock);
+> +		bpf_obj_drop(node);
+> +		return -2;
+> +	}
+> +
+> +	list_node =3D bpf_list_pop_front(&head);
+> +	bpf_spin_unlock(&lock);
+> +	if (!list_node)
+> +		return -3;
+> +
+> +	base =3D container_of(list_node, struct node_data, l);
+> +	ref =3D bpf_refcount_acquire(base);
+> +	bpf_obj_drop(ref);
+> +	bpf_obj_drop(base);
+> +	return 0;
+> +}
+> +
+
+Why do you think the positive test case is necessary?
+
+[...]
