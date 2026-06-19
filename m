@@ -1,158 +1,100 @@
-Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C126934D397
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 08:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1DDBA34;
+	Fri, 19 Jun 2026 08:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781857979; cv=none; b=grk4lT0YJLVhMmhx+57akPAvVG6HlGtR91ZbhuKAiB1FUBc+zG2gAVRHrcJftcdm+W5H1MU8RA6obq3sV5si+r5/oEGTLHUA3G6fBxOj5Lnm40/uXbUq36o154JxKhIYwyOlNmvzCVtIyD6NwLRVPzmtsQ7ts7DXP3E7FNNvK3o=
+	t=1781857987; cv=none; b=maCq07Pje8uNvJwIJXqRJW1yLAg6QIk917t3IONNEJ5Hb5s/0sfA/LMWnVLz9OdhIDmPXmKSYylwiP/ahqUahSymMDeSrTWJwRoNDd12p5Ph3jgU2UiaklWyLzg9aFX+hvEIb3+qAbKQSUQ7h6r7DQhSmzmrIhx/kS8Yh7+8mgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781857979; c=relaxed/simple;
-	bh=lcghnOgksc6K+V+60sUOKH8n4KczTxPimTMIG8NYUeo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fgnqx2QhLqhfJU5Z5BCwjUHEvDp+J7oSWVe6VBu0RExXv6ubRex3/26PF92IN6J0YeZAizFKzU3Fnu0UDqU3aMc3njNnpRzJVOv6vBPFkSIn+YMD7KhOgEaZEv60S+TP7ikBzLReKq6wn/0rWO9QV6UzV1dRJ4fFJwQ1HSPkW1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Cwv4/6bg; arc=none smtp.client-ip=185.125.25.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1781857987; c=relaxed/simple;
+	bh=I+tQqGD0L4UBX5q0DnT9f2pN9Gx6XZaZ/9c6st6ziS8=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=rCTldKy4fiZ2IkG14G2PLn/Laooo6G/0UxZZ/YQottgc4KHUcv7QecvXdylGOB2pJTG8c7730TVmatTAujnq+Ih6OLLtZ2T8IdMDIrlAtTCh+5G9SN7RaJ5/LPgnlu3JruqO4aOupaAayv59RNkysozRdiq/+mTH0LFrdip975A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oGHmM465; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Cwv4/6bg"
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ghW7Q2Ycrzjb0;
-	Fri, 19 Jun 2026 10:32:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1781857970;
-	bh=TINzsjs7sBCgOdj6Zwmh7AnMmqEBiyCV2/FS4lTZiEY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Cwv4/6bgV0w/feEyfVInIsWZHiMNedNcv2d3bfpcq/mMGA1b0LXXHaWc9N83g/SUO
-	 pZe2EwU+7TmS7NPTdVj7pvnKTe6P0glLIQhmfGYZh1C4IGuLOIE56fhLMLzOxabgek
-	 /ynttDEvfxJ5t3QAIXciGNd8xN15d+pFdON4IMBk=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4ghW7P47gjzp2Z;
-	Fri, 19 Jun 2026 10:32:49 +0200 (CEST)
-Date: Fri, 19 Jun 2026 10:32:45 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Maximilian Heyne <mheyne@amazon.de>
-Cc: stable@vger.kernel.org, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/landlock: explicitly disable audit
-Message-ID: <20260619.Ang7AiGeishu@digikod.net>
-References: <20260529-welsh-nagoya-b4d9ca60@mheyne-amazon>
- <20260604.Gee4caexei8o@digikod.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oGHmM465"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2152D1F000E9;
+	Fri, 19 Jun 2026 08:33:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781857986;
+	bh=ZEWWUQknWTX9e4FkWKGZzS31KK9gLz4SZbX4DfHXsl0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=oGHmM465IppHHaNyj2y7/2v3/cbfz4+o1v8YarcrIgKY8qEvHwC0XLGSM8R4Umhcg
+	 TifN/eZrRPRlqtGdmjjFS/CoFquk3C8GnJU+gGW7AvBzYzPtvO1TYHkzUGWqqsRs0x
+	 QdSHeXNZofrX8/uTtdXGrfS4GLvKA4FY9IvT/e6/S7eSRqaKDLDyQ2ViCVkzqYLWf4
+	 FIeoo3pAnEOr03i/r7Df+3SWwiJE8qsFvoTov/HzlxU9nABRTU60qGXR6AtXRb9cRD
+	 DsUAlNB1cKF36vjoTgxAVKEDEg8ki9HllgvjDjfFNroC3ffZenGY2IKExeMviQ8SXR
+	 prLOJRqJ1CTvA==
+Date: Fri, 19 Jun 2026 17:33:01 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, Shuah
+ Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 1/7] tracing/events: Fix to check the simple_tsk_fn
+ creation
+Message-Id: <20260619173301.624aba2869adad19e11bf59e@kernel.org>
+In-Reply-To: <178165817322.269421.3992299509400184196.stgit@devnote2>
+References: <178165816303.269421.7302603996990753309.stgit@devnote2>
+	<178165817322.269421.3992299509400184196.stgit@devnote2>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260604.Gee4caexei8o@digikod.net>
-X-Infomaniak-Routing: alpha
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-I extended your patch and merged it:
-https://git.kernel.org/mic/c/next&id=0302cd72fe196aee933e3fb76f6d175d1ab0e843
+Let me pick this fix to probes/core.
 
-Thanks!
+Thanks,
 
-On Tue, Jun 09, 2026 at 12:51:03AM +0200, Mickaël Salaün wrote:
-> Thanks for this patch.  I merged a few fixes and I'd be interested to
-> know if this one fix the issue you spotted:
-> https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git/commit/?h=next&id=d8dfb4c7faa87c3e41a8678f38f136c2c7c036fa
+On Wed, 17 Jun 2026 10:02:53 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > 
+> Sashiko pointed that this sample code does not correctly handle the
+> failure of thread creation because kthread_run() can return -errno.
 > 
-> On Fri, May 29, 2026 at 08:03:41PM +0000, Maximilian Heyne wrote:
-> > I'm seeing sporadic selftest failures, such as
-> > 
-> >   #  RUN           scoped_audit.connect_to_child ...
-> >   # scoped_abstract_unix_test.c:314:connect_to_child:Expected 0 (0) == records.access (8)
-> >   # connect_to_child: Test failed
-> >   #          FAIL  scoped_audit.connect_to_child
-> >   not ok 19 scoped_audit.connect_to_child
-> > 
-> > This seems similar to what commit 3647a4977fb73d ("selftests/landlock:
-> > Drain stale audit records on init") tried to fix. However, the added
-> > drain loop is not effective. When setting the AUDIT_STATUS_PID, the
-> > kauditd_thread is woken up starting to send messages from the hold queue
-> > to the netlink. Depending on scheduling of this kthread not all messages
-> > might be send via the netlink in the 1 us interval.
-> > 
-> > Therefore, instead of trying to drain the queue, let's just disable
-> > audit when running non-audit tests or more precisely disable it after
-> > audit-tests. This way we won't generate any new audit message that could
-> > interfere with the other tests.
-> > 
-> > The comment saying that on process exit audit will be disabled is wrong.
-> > The closed file descriptor just causes an auditd_reset(), not a
-> > disablement. So future messages will be queued in the hold queue.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Fixes: 6a500b22971c ("selftests/landlock: Add tests for audit flags and domain IDs")
-> > Signed-off-by: Maximilian Heyne <mheyne@amazon.de>
-> > ---
-> > 
-> > I've seen the failures on the 6.18 kernels but haven't tested on latest
-> > upstream. However, I still think this is an issue.
-> > 
-> > ---
-> >  tools/testing/selftests/landlock/audit.h | 13 +++++--------
-> >  1 file changed, 5 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/landlock/audit.h b/tools/testing/selftests/landlock/audit.h
-> > index 834005b2b0f09..7842330875f53 100644
-> > --- a/tools/testing/selftests/landlock/audit.h
-> > +++ b/tools/testing/selftests/landlock/audit.h
-> > @@ -494,10 +494,9 @@ static int audit_init_filter_exe(struct audit_filter *filter, const char *path)
-> >  static int audit_cleanup(int audit_fd, struct audit_filter *filter)
+> Check the simple_tsk_fn is correctly initialized (created) or not.
 > 
-> audit_cleanup() should be called for audit_exec tests too.
+> Link: https://sashiko.dev/#/patchset/178092865666.163648.10457567771536160909.stgit%40devnote2
 > 
-> >  {
-> >  	struct audit_filter new_filter;
-> > +	int err;
-> >  
-> >  	if (audit_fd < 0 || !filter) {
-> > -		int err;
-> > -
-> >  		/*
-> >  		 * Simulates audit_init_with_exe_filter() when called from
-> >  		 * FIXTURE_TEARDOWN_PARENT().
-> > @@ -518,12 +517,10 @@ static int audit_cleanup(int audit_fd, struct audit_filter *filter)
-> >  	audit_filter_exe(audit_fd, filter, AUDIT_DEL_RULE);
-> >  	audit_filter_drop(audit_fd, AUDIT_DEL_RULE);
-> >  
-> > -	/*
-> > -	 * Because audit_cleanup() might not be called by the test auditd
-> > -	 * process, it might not be possible to explicitly set it.  Anyway,
-> > -	 * AUDIT_STATUS_ENABLED will implicitly be set to 0 when the auditd
-> > -	 * process will exit.
-> > -	 */
+> Fixes: 9cfe06f8cd5c ("tracing/events: add trace-events-sample")
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
+>  Changes in v4:
+>    - Fix to remove decrementing counter in error path, since foo_bar_reg() always returns 0.
+>    - Add a newline to error message.
+>  Changes in v3:
+>    - Recover the usage counter.
+> ---
+>  samples/trace_events/trace-events-sample.c |    4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Please add a comment that explains that the audit state is not restored
-> but just disabled.
+> diff --git a/samples/trace_events/trace-events-sample.c b/samples/trace_events/trace-events-sample.c
+> index ecc7db237f2e..0b7a6efdb247 100644
+> --- a/samples/trace_events/trace-events-sample.c
+> +++ b/samples/trace_events/trace-events-sample.c
+> @@ -107,6 +107,10 @@ int foo_bar_reg(void)
+>  	 * for consistency sake, we still take the thread_mutex.
+>  	 */
+>  	simple_tsk_fn = kthread_run(simple_thread_fn, NULL, "event-sample-fn");
+> +	if (IS_ERR_OR_NULL(simple_tsk_fn)) {
+> +		pr_err("Failed to create simple_thread_fn\n");
+> +		simple_tsk_fn = NULL;
+> +	}
+>   out:
+>  	mutex_unlock(&thread_mutex);
+>  	return 0;
 > 
-> > +	err = audit_set_status(audit_fd, AUDIT_STATUS_ENABLED, 0);
-> > +	if (err)
-> > +		return err;
-> > +
-> >  	return close(audit_fd);
-> 
-> FDs should always be closed.
-> 
-> >  }
-> >  
-> > -- 
-> > 2.50.1
-> > 
-> > 
-> > 
-> > 
-> > Amazon Web Services Development Center Germany GmbH
-> > Tamara-Danz-Str. 13
-> > 10243 Berlin
-> > Geschaeftsfuehrung: Christof Hellmis, Andreas Stieger
-> > Eingetragen am Amtsgericht Charlottenburg unter HRB 257764 B
-> > Sitz: Berlin
-> > Ust-ID: DE 365 538 597
-> > 
-> > 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
