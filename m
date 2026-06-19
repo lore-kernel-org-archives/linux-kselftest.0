@@ -1,192 +1,121 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from confino.investici.org (confino.investici.org [93.190.126.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21CC3803E1
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 12:52:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74800383310;
+	Fri, 19 Jun 2026 13:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.190.126.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781873564; cv=none; b=HDot796Q0iQ1QO3LfBZ+MyH2INUum00avX4qxWKAKQzCUba8UuT16Oc65aWlkwIWadMPUrfALnEd9UQ2BRa2ExsyGwS4xgizADAPhVBTKCJcAkamOrqvTGXU7mYBNXj2YzOyBKeSCO/TrYTKIUIBLVNZr79Pr2Hg0zHPg2KEHFI=
+	t=1781874659; cv=none; b=OEFOzTPT+hhBGGfdISIQuefDVvf0bhow8LGRP7VeX74cBz2aLd6o+4+bdE4xpbEVe5uodUQojL51ZyqtZvyJ0JJnbLjekRukgHHqs+B8z0gSmkjUnKuNRp3vneevN2aeuvZI91lqjWeVkUnuJi19ajYt9S++EE17re5rZF/P2ZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781873564; c=relaxed/simple;
-	bh=gS344rqBaOfPtMyJsIU+dq4Kf5tEDY+PnQYW8VOmWQ8=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=kvJ4RWoaJfRbd28EFYZi255C3ql/fP3tsU5FUHpT7YXoPH2h+/4Ocwl3wSfzScbIZrJvAHjERI9tZwAD8VcEXXRMQcPD2rzySs3cH2OnSR1Cj+CHFB4loIb/C45utDnDnCePAc+ZkE6PX1zDyQ8u1M4S4ZZBCp245/V32n1/RzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=tDVGQWQO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=gBVKFEfq; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=tDVGQWQO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=gBVKFEfq; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1781874659; c=relaxed/simple;
+	bh=0X1jycyDDJxqmtpyDdqGsvAfsAmRndcVeVafJnjQbPQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ps4b+YNKDtLXvNm4+q/vXgoPlpDz57Lldq+44vP1qhBYaIDOUAyqBGJlnksGv58p5aOBCt2qk8ircwKnGKnBDGBf+0gUpozL8I/5wbBzsN8uW9EnEKe34rsEUfpUAM8JsML8X27rf6++mx7FdI8RSieUHj/Vse8gatSaiCpC0kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grrlz.net; spf=pass smtp.mailfrom=grrlz.net; dkim=pass (1024-bit key) header.d=grrlz.net header.i=@grrlz.net header.b=raQQXusM; arc=none smtp.client-ip=93.190.126.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grrlz.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grrlz.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="tDVGQWQO";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="gBVKFEfq";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="tDVGQWQO";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="gBVKFEfq"
-Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
-	by smtp-out2.suse.de (Postfix) with ESMTP id 6C61B75D6E;
-	Fri, 19 Jun 2026 12:52:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1781873555; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=10MybaT8uhwU4FwKD/1Am9bdRifrNZCBHaBCJsY2cfw=;
-	b=tDVGQWQOA8kKFACOY+RjR2OiLqt3mxh+SwNdq+LPD2Cwr6AvdJPw1IHHiqEyNhrMzqQjmW
-	kGdjJrFZb5oHyttXzE+xkCgp5pTHRliH96RCCed0nH2j7amccJvmUM+ekgMyoL8bfEabz+
-	lV0MwpC1eVZerLMn8i6LYYGe2pPSlrQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1781873555;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=10MybaT8uhwU4FwKD/1Am9bdRifrNZCBHaBCJsY2cfw=;
-	b=gBVKFEfqAeKBWijNpzZIDTjDjHHRzkivruNesExmWmHb1NX+H2czjZm4Imxjo8S8Z0ab+o
-	vU7tDN2ae+sqX0CQ==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=tDVGQWQO;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=gBVKFEfq
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1781873555; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=10MybaT8uhwU4FwKD/1Am9bdRifrNZCBHaBCJsY2cfw=;
-	b=tDVGQWQOA8kKFACOY+RjR2OiLqt3mxh+SwNdq+LPD2Cwr6AvdJPw1IHHiqEyNhrMzqQjmW
-	kGdjJrFZb5oHyttXzE+xkCgp5pTHRliH96RCCed0nH2j7amccJvmUM+ekgMyoL8bfEabz+
-	lV0MwpC1eVZerLMn8i6LYYGe2pPSlrQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1781873555;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=10MybaT8uhwU4FwKD/1Am9bdRifrNZCBHaBCJsY2cfw=;
-	b=gBVKFEfqAeKBWijNpzZIDTjDjHHRzkivruNesExmWmHb1NX+H2czjZm4Imxjo8S8Z0ab+o
-	vU7tDN2ae+sqX0CQ==
+	dkim=pass (1024-bit key) header.d=grrlz.net header.i=@grrlz.net header.b="raQQXusM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grrlz.net;
+	s=stigmate; t=1781874188;
+	bh=HB8w+kNLRgDlrK5vN0aqYNaykc6XjEtmpeJdfRJsSBg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=raQQXusMvw4lhdPSevMt3FW60un+lmaoDvTr7Hvaq0JPqJAHUW3POzXkAxXuruFYx
+	 CBYB0DIjpSGLsMpFbFeMOnQUvmBsnVgHm7wiBnQ34RG1FQzujVyTTm7DrTKO8rTOmm
+	 VloR2DbXu4egwd2mmNO5HqM/NHcj17jV/jIkppUA=
+Received: from mx1.investici.org (unknown [127.0.0.1])
+	by confino.investici.org (Postfix) with ESMTP id 4ghd7J6yCFz11N8;
+	Fri, 19 Jun 2026 13:03:08 +0000 (UTC)
+Received: by mx1.investici.org (Postfix) id 4ghd7J0ztFz11N1;
+	Fri, 19 Jun 2026 13:03:08 +0000 (UTC)
+From: Bradley Morgan <include@grrlz.net>
+To: linux-security-module@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Bradley Morgan <include@grrlz.net>,
+	stable@vger.kernel.org,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 2/2] lsm: fix size queries for getselfattr with NULL buffer
+Date: Fri, 19 Jun 2026 13:03:04 +0000
+Message-ID: <20260619130305.27779-2-include@grrlz.net>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260619130305.27779-1-include@grrlz.net>
+References: <20260619130305.27779-1-include@grrlz.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH 4/4] selftests: livepatch: Add information about
- minimum kernel support
-From: Miroslav Benes <mbenes@suse.cz>
-To: Petr Mladek <pmladek@suse.com>
-Cc: Marcos Paulo de Souza <mpdesouza@suse.com>, 
- Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
- Miroslav Benes <mbenes@suse.cz>, Joe Lawrence <joe.lawrence@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- marcos@mpdesouza.com
-In-Reply-To: <aiLn4slwOcpXhDhn@pathway.suse.cz>
-References: <20260524-livepatch-unload-on-fail-v1-0-7465de7f741d@suse.com>
- <20260524-livepatch-unload-on-fail-v1-4-7465de7f741d@suse.com>
- <aiLn4slwOcpXhDhn@pathway.suse.cz>
-Date: Fri, 19 Jun 2026 14:52:30 +0200
-Message-Id: <178187355038.95039.14074541772688700998.b4-reply@b4>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2551; i=mbenes@suse.cz;
- h=from:subject:message-id; bh=gS344rqBaOfPtMyJsIU+dq4Kf5tEDY+PnQYW8VOmWQ8=;
- b=owGbwMvMwMHYWJt9x2W1tA7jabUkhixT6z6mCe/eJ/rO56ssFn4YuaWGIVySe/350lXfSn5FO
- DH9qs3sZPRnYWDkYLAUU2R5vddZznBKroFm9bu7MINYmUCmSIs0MAABCwNfbmJeqZGOkZ6ptqGe
- IZChY8TAxSkAU53CxsHQx6UzK3pVmIKcQwPHvmf7Z8ZPtDy4t0TOof6OoU/4xbi4Z6m78n/w5f0
- U3rHNU0VxpkucvcXEyCLG6dwn5K7+PRFyeGLFodMv//5eJqL3RHRFxjKrSqZYtoORUbL/J96TYH
- 9869+ziP1v39SvshXZfvFC4OwnM85J9scEbFh2a/Fd+dCV5dLXE63zDkVvPHh0/55lUZZ57Ts7E
- j+kzDoQdj3z68tzF8KzvKJm1q/UfnXgxybeI5GyHw6Ib6nN3HUxWfzfp6AID5FdHIZff2ptDTH6
- If/I6MH8daUPTudEh7Izdhxhmt7T/11+6YSl245aqKhGTsmb+MVu0hqZvxzMHTwMyqfllvNUm+t
- 4futsAwA=
-X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
- fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
-X-Spam-Flag: YES
-X-Rspamd-Action: add header
-X-Spam-Level: *****************
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [17.29 / 50.00];
-	SPAM_FLAG(5.00)[];
-	NEURAL_SPAM_LONG(3.50)[1.000];
-	HFILTER_HELO_5(3.00)[localhost.localdomain];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_SPAM_SHORT(2.90)[0.966];
-	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
-	RDNS_NONE(2.00)[];
-	ONCE_RECEIVED(1.20)[];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DIRECT_TO_MX(0.00)[b4 0.15.2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:1b::12ef:from];
-	RCVD_COUNT_ZERO(0.00)[0];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.cz:dkim]
-X-Spamd-Bar: +++++++++++++++++
-X-Rspamd-Queue-Id: 6C61B75D6E
-X-Spam-Score: 17.29
-X-Spam: Yes
+Content-Transfer-Encoding: 8bit
 
-On 2026-06-05 17:14:42+02:00, Petr Mladek wrote:
-> On Sun 2026-05-24 20:50:33, Marcos Paulo de Souza wrote:
-> 
-> > The current livepatch selftests are compatible with kernel 4.12, so add
-> > a note about it for future developers willing to contribute with new
-> > tests.
-> > 
-> > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> > ---
-> >  tools/testing/selftests/livepatch/README | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/selftests/livepatch/README
-> > index d2035dd64a2b..293f4730b927 100644
-> > --- a/tools/testing/selftests/livepatch/README
-> > +++ b/tools/testing/selftests/livepatch/README
-> > @@ -54,3 +54,6 @@ check_result().  The latter function greps the kernel's ring buffer for
-> >  those strings for result comparison.  Other utility functions include
-> >  general module loading and livepatch loading helpers (waiting for patch
-> >  transitions, sysfs entries, etc.)
-> > +
-> > +All new tests and test modules MUST be compatible with kernel version 4.12 and
-> > +later, including current upstream kernels.
-> 
-> I do not have a good feeling about this. One thing is to accept fixes/workarounds
-> for the backward compatibility. But forcing contributors to keep the
-> compatibility might be too demanding.
+The lsm_get_self_attr() syscall allows callers to pass in a NULL context
+buffer to find out the size of the output needed. That path still
+compared the computed entry size against the caller provided size first,
+so a NULL buffer with size 0 incorrectly returned -E2BIG rather than
+reporting the required size.
 
-I agree. This patch should be dropped. I think that the first two of the
-series make sense on their own since the cleanup is a reasonable thing
-to do in general. The third one is in "why not" area. But this one is
-wrong. Sashiko summed it up well.
+Only enforce the available buffer length after checking for the NULL
+buffer. Cover the zero length sizing query in the self test.
 
-> I might be wrong. But I think that you would need a pretty old
-> userspace to run 4.12 kernel. And most people could not get it easily.
-> 
-> Honestly, I though more about this effort and I am not sure how
-> complicated it would be in the long term.
-> 
-> I know about two pending patchsets which are breaking the backward
-> compatibility:
-> 
->   + Better integration of callbacks and shadow variables with the states API [1]
->   + Introduce replace set support [2]
-> 
-> Especially the 1st one is a pain. It is 19th patches and most of them
-> are fixing/reworking the selftests. I think that it was the reason
-> why nobody reviewed it yet. And it might be even worse if we wanted
-> to make it backward compatible.
+Fixes: d7cf3412a9f6 ("lsm: consolidate buffer size handling into lsm_fill_user_ctx()")
+Cc: stable@vger.kernel.org
+Signed-off-by: Bradley Morgan <include@grrlz.net>
+---
+ security/security.c                                  | 8 ++++----
+ tools/testing/selftests/lsm/lsm_get_self_attr_test.c | 5 ++---
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-I would not be too bothered about it. If keeping the backward
-compatibility is difficult, it could be put aside. This patch set is not
-that complicated and I think that it can be sold like reasonable changes
-on their own.
-
+diff --git a/security/security.c b/security/security.c
+index 71aea8fdf014..fa0d7e036249 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -406,15 +406,15 @@ int lsm_fill_user_ctx(struct lsm_ctx __user *uctx, u32 *uctx_len,
+ 	int rc = 0;
+ 
+ 	nctx_len = ALIGN(struct_size(nctx, ctx, val_len), sizeof(void *));
++	/* no buffer - return success/0 and set @uctx_len to the req size */
++	if (!uctx)
++		goto out;
++
+ 	if (nctx_len > *uctx_len) {
+ 		rc = -E2BIG;
+ 		goto out;
+ 	}
+ 
+-	/* no buffer - return success/0 and set @uctx_len to the req size */
+-	if (!uctx)
+-		goto out;
+-
+ 	nctx = kzalloc(nctx_len, GFP_KERNEL);
+ 	if (nctx == NULL) {
+ 		rc = -ENOMEM;
+diff --git a/tools/testing/selftests/lsm/lsm_get_self_attr_test.c b/tools/testing/selftests/lsm/lsm_get_self_attr_test.c
+index 60caf8528f81..2f5ababc2b95 100644
+--- a/tools/testing/selftests/lsm/lsm_get_self_attr_test.c
++++ b/tools/testing/selftests/lsm/lsm_get_self_attr_test.c
+@@ -39,15 +39,14 @@ TEST(size_null_lsm_get_self_attr)
+ 
+ TEST(ctx_null_lsm_get_self_attr)
+ {
+-	const long page_size = sysconf(_SC_PAGESIZE);
+-	__u32 size = page_size;
++	__u32 size = 0;
+ 	int rc;
+ 
+ 	rc = lsm_get_self_attr(LSM_ATTR_CURRENT, NULL, &size, 0);
+ 
+ 	if (attr_lsm_count()) {
+ 		ASSERT_NE(-1, rc);
+-		ASSERT_NE(1, size);
++		ASSERT_NE(0, size);
+ 	} else {
+ 		ASSERT_EQ(-1, rc);
+ 	}
+-- 
+2.53.0
 
