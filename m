@@ -1,210 +1,135 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D1C11CBA
-	for <linux-kselftest@vger.kernel.org>; Sat, 20 Jun 2026 01:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96861CA5A
+	for <linux-kselftest@vger.kernel.org>; Sat, 20 Jun 2026 02:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781920439; cv=none; b=iUmCIW5r2Egz32penavFCN2nfVdcjhohkVaUNhd6jWFKj+BYsTlJ9GgkkwXqtoqA7jOEfe71Kw2SwNFNrmPPQYJNNwvuXgL24kNB6Vfn+hOqg1F5KRkFabc5S/zuo7Ivw/6XtXe+312tq/RqG8pDBZqgFf2sOEsYk96HA+1jTEU=
+	t=1781923478; cv=none; b=fnzC7puZu8lDZz4Gbt4pr2HXtFqV8ZKHI+Hn3sGoTt+zpi8ie0TfUYt+URmcwhV49L06jjBRoIGrYIGe1gQFkAhWejy9fE0gnbt6ZB/sUcQ92m2dOD58I/lR7BZlLfcMbIQXCg3KKGltFpIC79UhMtvwewNGf6j+CDyIDg/ruGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781920439; c=relaxed/simple;
-	bh=mM7hNa2kfVQS0T/C1BMUgERGqTk4zdDV+theH4eUk1M=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=o2Qs3emyBPU9ZmwnvR7I/X/ONKlmNN6L2BTrCC0fWwGWD7wXTJWADs0210zve0iFLnx8LtK74IjKOKQmroboVAJyvrA9whYCdbkMXapWKE7r+Vg4fxdA1IpcrnQBhhCfdJ+M14ta8Bug62SU1/FIcyk+6ZJKkOlHGnJJ687D6So=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l2+sEn9y; arc=none smtp.client-ip=209.85.215.176
+	s=arc-20240116; t=1781923478; c=relaxed/simple;
+	bh=NP4quYUiUG5ir6Lfp/c0pxMjxtMtKmPdVnpeYKXlUh4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=so1j013Njz5tn51T9R5vLqceY9SLHO55+YZ+OpJGcWk/rFtT0JXIF+LQjut2SFSBOPxvjFg8JU77UC3IVeSgs5Ea8AlFN8tsDxvus9dCD9HkhZR01wBxbi4Q4y7q/Ootz9R1fxNjbvjVkrFe4j6613Swx1GqF+nZDzkLvk0LPKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dv1hXSxK; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l2+sEn9y"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c85d8615b09so1800929a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 18:53:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dv1hXSxK"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-37c867bd3e0so1281580a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 19:44:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781920438; x=1782525238; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jywBCOj+R5S6acN/5CBd5A/rAfngCi91JbR/5wlEEho=;
-        b=l2+sEn9y5swE+3Jt596e8avR6Ch9f6LafnGavwBhydNV71CWjShaZPlt3RSnU1zS7Q
-         CIzrRJfICs2iCpKK3kh7BJrf4ZQynJZBkH54UpsM/5EYNa90wnLBmfQNx01XRN5Jc9K/
-         w8l988AR/dPQP1jRTQMsfqlqY62tHNROIsqwfRt9aRw2S/0WdqTjph905n6crX1bg4j6
-         HDZCYTr/Uq46Wtakleqt9WTakUkU0BpxnsJr4jAY6fiO6ptfn70i0k5jBhWR/CS6obO8
-         a5HQtXe/d8xte7+zdpBpOF7OIra8Z7tU7AXUwVEeKUuOxmgmGwDjI+BxAKbLGHt65jt8
-         X9TA==
+        d=gmail.com; s=20251104; t=1781923476; x=1782528276; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tEtBLcfn+4nL/oLFXcmstWWRDWBHHiHGLWZQy1ZHB3Y=;
+        b=Dv1hXSxKUXJ9TVQynNVZA6sCZscNGNjyUl8o1fETyyQSirtnuAPVeKpX5BoLCbWuVC
+         md18EqGZZovQGbvXGFqTDG+WpsXkUZVlX1BhQy28REFKzmtq6zw/zfEzqVQA4J5KQSgp
+         bes/khJf490M9lrJm66nWmRTSmIe35AuV2d67ClIhGOFbAfARQ4Vd0UR0EhbkADcrwbQ
+         BLkySwSFMcWaQvrfOINQzmOUsFphR5ue/T8PVVgJQYSUaU3LAI+zcQnuAbAdHlHoG65P
+         a1OBGs3Ih+i0rA6vJ11aqEjeltGVp3twUfLPyDkpFMCQ9u/SNo6JeVGPzNd4mQH2eHcc
+         pqBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781920438; x=1782525238;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jywBCOj+R5S6acN/5CBd5A/rAfngCi91JbR/5wlEEho=;
-        b=lgP13RigLRCNFO7zKXc9s2A7Bd92I09v41AKcIK+Qn1CCS2xECWwXpQsLJm5BKQjiL
-         7OE99ClSczUmbeHXq0QUq8LC2UeLnoa/DxZBaMz0CUCakOWkMhFfbE6+110rYdeeCWnB
-         /xXC02DBEntSIjBfjUrHlwoFWQUud8dGCnjoPZi3vUmYhF7KZrvgpyYPbkJrVuA67eSh
-         hRXoE8+95SlDY1QeumOehJ2lYQ4D6I5EPB6QGEKEUJCwSrGX0nW/U0MlTAUZoGz96oEw
-         vLJo35VWVpCXY6a984Pc6Z9WhGXwE/c38MlhmjeGABfCJ3e2bRgA5Oq1INxPlqU5kv5N
-         JRuw==
-X-Forwarded-Encrypted: i=1; AFNElJ/RhFDZ+fqkXVrlgwAZ5hAhfJZ8zsmFnfdk/ahHWpRKskhapLh84z6liJ8E136AVPu6F49Mbkt6PgQRNrdXrXw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwE7FqxBHAB9wcRGG1ZCSCtRwq5cSXVGumYlfCQbxuOgQLF4BDa
-	URMGDOYgdg9AUdBp1TxnZaTYszD8heZv8dDEqH69Ag+RYHa600oISDLHDhZ72uexG9ggng==
-X-Gm-Gg: AfdE7clgMyybziFzgfSajuGtH6T13Sk+OJJmNbW96uOqdkq2LEgFHvTtmYt5a5I8tqt
-	UKkURqoYwWr5khvOYcxPpa/t8tGDl5fvmGUqSqjCodlxLkGwsuFKTQx8UfFz8JnYrfaC0jK4tEp
-	1KXnL4lwed81Ajdc/rGQzmtqiZ3vxQDhRu+jAf2uIcxKo8jHc05Ra8pEqy2NHSesrueIlDkBVmr
-	RpW4z9+Sz/xsJpFaIL6T6hrGqOSDdmH2fSZleUue5A1dvZQtDvMA8Mcy9VsADCHUEvBpLYF4eWm
-	AGftBsevyZIR3AgRk9cOUVp+VS3VlI2PNvW81N2EpktFL0e+2NKAiRMaP0JamN9m5IygvPDcob0
-	HNhoLbpy3H4+UyLRHNNOyICBALqPSzRfTumpyLy7R7Qw/UjvXu9Bi9/ZXonW8vhXMuDMgJzJZ36
-	7OgyNnzRZxskIt72OqXxIaVpec0H+LhhI8SJnHDx10gA==
-X-Received: by 2002:a05:6a20:3ca6:b0:3a2:dd8a:5084 with SMTP id adf61e73a8af0-3bb3424481emr7229934637.37.1781920437716;
-        Fri, 19 Jun 2026 18:53:57 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8bc2c8d8a9sm925283a12.5.2026.06.19.18.53.56
+        d=1e100.net; s=20251104; t=1781923476; x=1782528276;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tEtBLcfn+4nL/oLFXcmstWWRDWBHHiHGLWZQy1ZHB3Y=;
+        b=AHzF/Ad0CGOrTdYlJT/1vJEnNRK+xkIUX8adnLYH8ZUNTzDsc1A5gdg/3aDBbJ+IbD
+         +c031qYzChKumHivHU/lFklQBDW4DdKX+cK3tZCjgIKwFf3IwjS59LT7ZWmQ2/o2T9kj
+         hzP3Ln3+SXBtiOYXRAb2UAptoO/3KtER9aJ4LVvLlpS08Oo6ntn54c8ITtbWisOvip4X
+         6864J8wkAyN8kbVKjs+0MqW7msvESusmYzMP+I87Y0AyNDaU/UTBIN8l0veiRrXZmejW
+         9B3fBT8tGVCfMpG1rxsYmqU8bmtfItaAXzxdmQa7TOIQaxJkv4aq2XiONdj6mdQWr5vy
+         3FCg==
+X-Forwarded-Encrypted: i=1; AFNElJ+vPEXTZvjH5ccQpUsNZTuLdlrbyvZOdvsLU4ULF2WOl40xR/H/rrNVk5FVVD0laKO5V/k3qfvLoikaG1GX6K4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKQ19YCqUdcnTn4xg91SnUq51iEohRDSB9W9jRJs6pKZBd2qgg
+	BnJ8YZL1WFLcF3C1wnFyf76t+/b2cQvNkXwT2Oo1sgwdF5u8TzLOcgu4
+X-Gm-Gg: AfdE7clLNKdcNE+opla7QI32rZmXLaRd8VWQfPR4tYS2onIARLtfsVxEsoRuECMAz63
+	WXY2seZnr4P+ZTROOELsRH6WU5gg0x34R/LLdnZkMYehzuE+IIuQSybcEpXerMZm8+U75qsEDe1
+	XdxA+MNVbomT8Pbj03h/RHgx6ASi8Hdci41MB4fih82pxueKUhRB//fOIvQlXNMk+JGihztSuBY
+	oT++izMvN1AsqelgU888vXSjroESBbYGoZjv+gewsRhosxAYAIwUitMOPbXBTzf5ZZDpoZ5Y/RY
+	24aZDlGFId0nRxL3rslrrkbsfxXQCDLbnsh/TsPxjg25OMNqX7qIKexd3bw31Cf1eVGdh539z95
+	HCrcjIcdJIGR+VtdXzh6A5LDqcIgR70plu00G/ydlD/WUfvqcHba0lKXAMCcpZ8ONSeCVMMqoN2
+	TG22ZxPZ3/tKHf5FyWO4c7SgimCWY71TpQ0nraUh8dL9VOIWlvjlU=
+X-Received: by 2002:a17:90a:f94f:b0:365:a5f6:4a5c with SMTP id 98e67ed59e1d1-37d15dce559mr6675282a91.1.1781923475789;
+        Fri, 19 Jun 2026 19:44:35 -0700 (PDT)
+Received: from cps-manycore-1.. ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d1600975asm1087971a91.0.2026.06.19.19.44.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 18:53:57 -0700 (PDT)
-Message-ID: <be221942819c7654f054b53907fe9ff2e9526f79.camel@gmail.com>
-Subject: Re: [PATCH bpf v2 8/8] libbpf: ringbuf: Prevent missed wakeups
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Tamir Duberstein <tamird@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Kumar
- Kartikeya Dwivedi	 <memxor@gmail.com>, Song Liu <song@kernel.org>, Yonghong
- Song	 <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan	
- <shuah@kernel.org>, Andrea Righi <arighi@nvidia.com>, Xu Kuohai	
- <xukuohai@huawei.com>, Andrea Righi <andrea.righi@canonical.com>,
- Bing-Jhong Billy Jheng <billy@starlabs.sg>, David Vernet
- <void@manifault.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>, Zvi
- Effron	 <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>, Emil
- Tsalapatis	 <emil@etsalapatis.com>, Sashiko <sashiko-bot@kernel.org>
-Date: Fri, 19 Jun 2026 18:53:54 -0700
-In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-8-33fde039ddf3@kernel.org>
-References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org>
-	 <20260618-bpf-ringbuf-fixes-v2-8-33fde039ddf3@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        Fri, 19 Jun 2026 19:44:35 -0700 (PDT)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Eric Dumazet <edumazet@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemb@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Bobby Eshleman <bobby.eshleman@bytedance.com>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v5 0/3] bpf, sockmap: reject a packet-modifying SK_SKB stream parser
+Date: Sat, 20 Jun 2026 02:44:15 +0000
+Message-ID: <20260620024423.4141004-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, 2026-06-18 at 20:26 -0400, Tamir Duberstein wrote:
-> After consuming the last visible record, ringbuf_process_ring()
-> publishes the consumer position and checks the producer position. These
-> operations lack a full StoreLoad barrier. A producer can therefore
-> commit a new record but read the old consumer position while the
-> consumer reads the old producer position. The producer sends no
-> notification and the consumer waits despite a queued record.
->=20
-> Insert a full barrier between publishing a consumer position and the
-> next producer position load. When a record bound or callback ends the
-> current invocation first, execute the barrier before returning so the
-> load in a later invocation completes the same handshake.
->=20
-> Add an edge-triggered epoll test that drains one record per call while a
-> concurrent producer fills the ring. Without the barrier, a missed
-> notification leaves the producer dropping records from a full ring while
-> the consumer times out. Document that bounded consumers and callbacks
-> that terminate consumption must drain before waiting again.
->=20
-> Fixes: bf99c936f947 ("libbpf: Add BPF ring buffer support")
-> Reported-by: Andrew Werner <awerner32@gmail.com>
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/bpf/20260614015716.945AF1F000E9@smtp.kern=
-el.org/
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
-> ---
+A BPF_PROG_TYPE_SK_SKB stream parser runs on strparser's message head,
+which can chain skbs through frag_list. A parser that resizes the skb
+frees the frag_list segments that strparser still tracks through
+skb_nextp, leading to a use-after-free.
 
-Took me a while, but I agree there is a race here.
-FWIW, here is the description of the race as far as I understand it.
+A stream parser is only meant to measure the next message, not to modify
+the packet, so reject a packet-modifying parser at attach time.
 
-Simplified pseudo-code for the consumer (ringbuf_process_ring)
+v5:
+ - target bpf-next instead of bpf
+ - add Reviewed-by tag (Jiayuan Chen)
 
-    cons_pos =3D load_acquire(consumer_pos);      // op#1 [orders before 2,=
-3,4,5]
-    do {
-      got_new_data =3D false;
-      prod_pos =3D load_acquire(producer_pos);    // op#2 [orders before 3,=
-4,5]
-      while (cons_pos < prod_pos) {
-        len_ptr =3D ... cons_pos ...;
-        len =3D load_acquire(len_ptr);            // op#3 [orders before 4,=
-5]
-        got_new_data =3D true;
-        callback(... cons_pos ...);             // op#4
-        cons_pos +=3D len;
-        store_release(consumer_pos, cons_pos);  // op#5 [orders after 2,3,4=
-; ordering relative to 2' not defined]
-      }
-    } while (got_new_data);
+v4:
+ - https://lore.kernel.org/all/20260619062959.3277612-1-rhkrqnwk98@gmail.com/
 
-  The patch fixes the issue with op#5, store_release operation is
-  ordered after operations 2,3,4, but it's ordering relative to op#2
-  from the next outer loop iteration (denoted as 2') is not defined.
+v3:
+ - https://lore.kernel.org/all/20260618102718.2331468-1-rhkrqnwk98@gmail.com/
 
-Simplified pseudo-code for the producer (bpf_ringbuf_{reserve,commit})
+v2:
+ - https://lore.kernel.org/all/20260612123553.2724240-1-rhkrqnwk98@gmail.com/
 
-    // reserve
-    store_release(producer_pos, ...);
+v1:
+ - https://lore.kernel.org/all/20260609112316.3685738-1-rhkrqnwk98@gmail.com/
 
-    // commit
-    xchg(... clear BUSY_BIT ...);
-    cons_pos =3D load_acquire(consumer_pos);
-    if (cons_pos =3D=3D rec_pos)
-        schedule_wakeup();
+Sechang Lim (3):
+  selftests/bpf: don't modify the skb in the strparser parser prog
+  bpf, sockmap: reject a packet-modifying SK_SKB stream parser
+  selftests/bpf: test rejection of a packet-modifying SK_SKB stream
+    parser
 
-A possible sequence of events
+ net/core/sock_map.c                           | 20 ++++++++++++
+ .../selftests/bpf/prog_tests/sockmap_strp.c   | 31 +++++++++++++++++++
+ .../selftests/bpf/progs/sockmap_parse_prog.c  | 22 -------------
+ .../selftests/bpf/progs/test_sockmap_strp.c   |  7 +++++
+ 4 files changed, 58 insertions(+), 22 deletions(-)
 
-  Producer:
+-- 
+2.43.0
 
-    // submits a record such that:
-    consumer_pos =3D 0   (initial state)
-    producer_pos =3D 10
-
-  Consumer:
-
-    cons_pos =3D load_acquire(consumer_pos)     -> cons_pos =3D 0
-    prod_pos =3D load_acquire(producer_pos)     -> prod_pos =3D 10
-      len =3D load_acquire(len_ptr)             -> len =3D 10
-      callback(...)                           -> (record at pos 0 consumed)
-      cons_pos +=3D len                         -> cons_pos =3D 10
-      store_release(consumer_pos, cons_pos)   -> consumer_pos =3D 10   (iss=
-ued; global visibility deferred)
-      (cons_pos < prod_pos) 10 < 10           -> false, exit inner loop
-    while (got_new_data)                      -> true, re-enter outer loop
-    prod_pos =3D load_acquire(producer_pos)     -> prod_pos =3D 10       (r=
-eads current value; record at pos 10 not published yet)
-      (cons_pos < prod_pos) 10 < 10           -> false, skip inner loop
-    while (got_new_data)                      -> false; consumer returns 0 =
-and enters an epoll wait
-
-  Producer (reserves and submits a new record):
-
-    store_release(producer_pos, 20)           -> producer_pos =3D 20   (rec=
-ord at pos 10 reserved)
-    xchg(... clear BUSY_BIT ...)              -> (record at pos 10 committe=
-d)
-    cons_pos =3D load_acquire(consumer_pos)     -> cons_pos =3D 0        (c=
-onsumer's store of 10 not visible yet)
-      rec_pos =3D 10; cons_pos =3D=3D rec_pos       -> 0 =3D=3D 10 false ->=
- NO WAKEUP
-
-  Consumer:
-
-    (deferred store becomes visible)          -> consumer_pos =3D 10   (too=
- late)
-
----
-
-Consumer exits while a new record is available in the buffer,
-and the producer fails to notify the consumer via epoll.
-The added barrier prevents such sequence of events.
-
-For the fix:
-
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
-
-Please move the test to a separate commit, I'll review it a bit later.
-
-[...]
