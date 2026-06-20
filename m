@@ -1,50 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6A024677B;
-	Sat, 20 Jun 2026 17:22:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D202F32B9B5;
+	Sat, 20 Jun 2026 17:22:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781976177; cv=none; b=p+xk1soQZ6AS5Jn35AiqP0GrKVUTYecchibe91O5zv4hmfFE8xVvQwIpGYmI49a+PUlETaxrXnqlg5S7jYIG70VjMmUzMOuNj2jcLaS/MOWDuMnu9mn2jSX2mGjOuNs1UfPcKzHvjjm4Kvt18+L/gILNaQSPtbPcPpvdzuNn6Bc=
+	t=1781976178; cv=none; b=bZ7ro35WqQCUI70vpRdoYEYWuctnMM11+R9K86aMMCoNlIs0qi4o3VsgaLhnOPTTGDLxq7rlcXTGZsQ80Yd14SGOyy3GaCBqAdldxSFSu2E6Sc/uf8QVlNFjtdDRTum4pprhZSDP8qG+Py2diIUm8KfPmL6tSBXvkzlIOE3Bti8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781976177; c=relaxed/simple;
-	bh=8Aanmz0Dvd1GDoZkhHNkaix+Wtm6xY3dMVaOWfddS+Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NRYxtv0Ydo6FU5wZGZ1txwP5R/VCc/MQnoZjHd534zAiGNpF88609a7O3WOM1DaeIauGLzCtsyKscupWamXYcZgsXpQt7bjBK1G08+DOJ+y25xJj1t24YEaRW6puORaCpSq6AuxSZnsmMtDX140MZvrBzWLSmWrnX8gewRGX9Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iuyi5ggm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781976178; c=relaxed/simple;
+	bh=4qvCPMZ4f/BTRHBhPjuPfH/ksnZQhiXOziSUFm4y4xY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sj6m27iRI1gYa3f5rXojcWBUHUNAz/MigkSCqy2nf+LyDiK5DKoEsXDga9g0fmCVtQGjad6Oga9vtL8MTwPt9I4TY0BgnAT0nDiSTzPzEcw5bk+7Mz6+0RsA8tuCEA48Y4Kd5qhz96uWYe+6f+S/AwSizFvU2QG/plx/HVUTH3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PHuwwO9B; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iuyi5ggm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF2101F000E9;
-	Sat, 20 Jun 2026 17:22:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PHuwwO9B"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B25431F00A3E;
+	Sat, 20 Jun 2026 17:22:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781976175;
-	bh=h+feMnzBSlgDokl+hk6/kvzQur6aofhh+JGbxs86k9Y=;
-	h=From:To:Cc:Subject:Date;
-	b=Iuyi5ggmnFZk67+k61TzLwwpXd6dzbhiq7CxDCPQ/2O/N5G+wA3Wg4UZBzSOxSZBN
-	 PzPBG8YhoTSjWxscMc9YONVhbn7gxxe8I7WMfsBeEZ4rsjRt4nesvgr5dzRtvzDp92
-	 W+OdkOPjiKC5LJclbKZyFFGD3q4vBuKrsyLuZhi5JVpdePvujfSAb2jSS5xm4X+Q5f
-	 tJ+RdTQVDkdHqhlXKwlakoqfJGDqdhxKHzX3HfFjWAZ8ZhOV5DrgBCQ8wYBx8A43hK
-	 1KOfwv56Z2AGdk/t448u07ExluqcE3zq91CYXPsHvYxgjiOYnjcP/oZkHdwjT8KKZE
-	 vzW4fl5IDUCyQ==
+	s=k20260515; t=1781976177;
+	bh=dGqKzRnIP+DKXc/Th2v0SJe+T3xtV4bAe2ASi7qsS9Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=PHuwwO9B54CWPTt5BvV46KzE/1dreh00K6wX1qBuSsMco5Bn1SOUpZnm7VX6JvLYW
+	 MdMGZO/UZwcviUhyhuxUrslPReBGjTOPXhZv3/T4fJMgqp1rO4e5P6NifuetqTaOP/
+	 D9Z72oVcZeluSY7G24yR4lozkuCFFNzX5KcX0sxQcke7w2nODKUudV0iH1waL4z6jI
+	 Pz7+d6t0wC3TjdpD/+0KA7Ue8w/jtG6iAWY7evrZpedJzzrZBA+v/YqU4ByFp4//fJ
+	 NVdd6RsgPOoPXpwAWlWe+2qcSO/R+fhskyUox+my14LWp3X7sdHpPM4ifecZbx53Zj
+	 NDGS2i00Mo4TQ==
 From: SeongJae Park <sj@kernel.org>
 To: 
 Cc: SeongJae Park <sj@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Brendan Higgins <brendan.higgins@linux.dev>,
 	David Gow <davidgow@davidgow.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
 	damon@lists.linux.dev,
 	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: [RFC PATCH v1.1 00/13] mm/damon: optimize out nr_accesses_bp
-Date: Sat, 20 Jun 2026 10:22:30 -0700
-Message-ID: <20260620172244.90953-1-sj@kernel.org>
+	linux-mm@kvack.org
+Subject: [RFC PATCH v1.1 02/13] mm/damon/tests/core-kunit: test damon_mvsum()
+Date: Sat, 20 Jun 2026 10:22:32 -0700
+Message-ID: <20260620172244.90953-3-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260620172244.90953-1-sj@kernel.org>
+References: <20260620172244.90953-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,109 +51,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-TLDR: Replace damon_region->nr_accesses_bp, which is easy to be wrong,
-with a simpler on-demand moving sum function, damon_nr_accesses_mvsum().
+Add a simple unit test for damon_nr_accesses_mvsum()'s internal core
+logic, damon_mvsum().  The test contains cases for just-started windows,
+partially completed windows, and just-completed windows.
 
-Background
-==========
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ mm/damon/tests/core-kunit.h | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-DAMON's monitoring output (access pattern snapshot, or more technically
-speaking, damon_region->nr_accesses) is completed once per aggregation
-interval, which is 100 ms by default.  Users can arbitrarily increase
-the interval for demand.  Under the suggested intervals auto-tuning
-setup, it can span up to 200 seconds.  If the aggregation interval is
-too long, the snapshot users cannot use it in reasonable time.  To
-mitigate this, we introduced a new field of damon_region, namely
-nr_accesses_bp.  It contains a pseudo moving sum of nr_accesses in bp
-units and is updated for each sampling interval.
-
-It turned out keeping it correctly updated every sampling interval is
-not that easy.  From online parameter update feature development and
-more experimental hacks, we found it is easy to be corrupted.  Once it
-is corrupted, DAMON's monitoring outputs become quite insane.  Hence we
-added a few validation checks.  It is easy  to be corrupted because it
-requires every update per sampling interval to be correct.
-
-Solution
-========
-
-There is no real reason to keep it updated every sampling interval.  Due
-to the simple pseudo-moving sum mechanism and existing helper field
-(last_nr_accesses), we can also calculate the pseudo moving sum on
-demand in a much simpler way.
-
-Implement a function for getting the pseudo moving sum on demand, and
-replace nr_accessses_bp uses with the new function.  Also remove no more
-needed tests for nr_accesses_bp and the per-sampling interval update
-functions.  Finally, remove the nr_accesses_bp.  The new function is
-quite simple.
-
-Discussion
-==========
-
-Depending on the use case, multiple nr_accesses readers could be
-executed in the same kdamond_fn() main loop iteration, which is executed
-once per sampling interval.  Such readers include DAMON region exporting
-tracepoints (damon_[region_]aggregated and damos_before_apply), DAMOS,
-and DAMON sysfs interface logic for update_schemes_tried_regions
-command.  In this case, the new function will be called multiple times
-and this could be overhead compared to the old logic, which simply reads
-the field without any additional work.  Nonetheless, the new function is
-quite simple.  And the new approach does nothing while there is no need
-to read.  The old approach had to execute its update function for each
-region for every sampling interval.  Hence the new approach is believed
-to be even more lightweight in common case, and the overhead is anyway
-negligible.
-
-One more advantage of this change is that one field from the
-damon_region struct is removed.  On setups that uses a high number of
-DAMON regions, this could be a potential memory space benefit.
-
-Patches Sequence
-================
-
-Patch 1 introduces the new function for getting the pseudo moving sum of
-nr_accesses on demands.  Patch 2 implements a unit test for the new
-function's internal logic.  Patches 3-5 replace uses of nr_accesses_bp
-in DAMOS, tracepoints and DAMON sysfs interface with the new function,
-respectively.  Patches 6-8 removes nr_accesses_bp validation functions
-in DAMON core, one by one.  Patches 9 and 10 further remove tests and
-test helper for nr_accesses_bp, respectively. Patches 11 removes the
-setups and updates or nr_accesses_bp field.  Patch 12 removes the
-function that was used for updating nr_accesses_bp field with its unit
-test, which is the single remaining caller of the function.  Finally,
-patch 13 removes damon_region->nr_accesses_bp field.
-
-Changes from RFC v1
-- RFC v1: https://lore.kernel.org/20260619193415.73833-1-sj@kernel.org
-- Avoid divide-by-zero from zero aggregation interval.
-- Call damon_nr_accesses_mvsum() for damos tracing only when it is enabled.
-- Remove obsolete mentioning of nr_accesses_bp in comments.
-
-SeongJae Park (13):
-  mm/damon: introduce damon_nr_accesses_mvsum()
-  mm/damon/tests/core-kunit: test damon_mvsum()
-  mm/damon/core: use damon_nr_accesses_mvsum() in __damos_valid_target()
-  mm/damon/core: use damon_nr_accesses_mvsum() for damos region tracing
-  mm/damon/sysfs-schemes: use damon_nr_accesses_mvsum() for damo regions
-  mm/damon/core: remove damon_warn_fix_nr_accesses_corruption()
-  mm/damon/core: remove damon_verify_reset_aggregated()
-  mm/damon/core: remove damon_verify_merge_regions_of()
-  mm/damon/tests/core-kunit: remove nr_accesses_bp setup and tests
-  selftests/damon/drgn_dump_damon_status: do not dump nr_accesses_bp
-  mm/damon/core: remove nr_accesses_bp setups and updates
-  mm/damon/core: remove damon_moving_sum() and its unit test
-  mm/damon: remove damon_region->nr_accesses_bp
-
- include/linux/damon.h                         |  12 +-
- include/trace/events/damon.h                  |   8 +-
- mm/damon/core.c                               | 180 +++++++-----------
- mm/damon/sysfs-schemes.c                      |   6 +-
- mm/damon/tests/core-kunit.h                   |  37 ++--
- .../selftests/damon/drgn_dump_damon_status.py |   1 -
- 6 files changed, 96 insertions(+), 148 deletions(-)
-
-
-base-commit: a74bff7aaa4b3a64070425b4b367a459388a8233
+diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
+index 4e448c08c724a..cdab14396250f 100644
+--- a/mm/damon/tests/core-kunit.h
++++ b/mm/damon/tests/core-kunit.h
+@@ -623,6 +623,30 @@ static void damon_test_moving_sum(struct kunit *test)
+ 	}
+ }
+ 
++static void damon_test_mvsum(struct kunit *test)
++{
++	unsigned long input_expects[] = {
++		/* current value, last value, remaining window (bp) */
++		0, 49, 10000, 49,	/* 0 + 49 * 1 */
++		3, 10, 7000, 10,	/* 3 + 10 * 0.7 */
++		3, 10, 5000, 8,		/* 3 + 10 * 0.5 */
++		32, 100, 1000, 42,	/* 32 + 100 * 0.1 */
++		42, 49, 0, 42,		/* 42 + 49 * 0 */
++	};
++
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(input_expects); i += 4) {
++		unsigned long current_nr = input_expects[i];
++		unsigned long last_nr = input_expects[i + 1];
++		unsigned long left_window_bp = input_expects[i + 2];
++		unsigned long expect = input_expects[i + 3];
++
++		KUNIT_EXPECT_EQ(test, damon_mvsum(current_nr, last_nr,
++					left_window_bp), expect);
++	}
++}
++
+ static void damos_test_new_filter(struct kunit *test)
+ {
+ 	struct damos_filter *filter;
+@@ -1501,6 +1525,7 @@ static struct kunit_case damon_test_cases[] = {
+ 	KUNIT_CASE(damon_test_update_monitoring_result),
+ 	KUNIT_CASE(damon_test_set_attrs),
+ 	KUNIT_CASE(damon_test_moving_sum),
++	KUNIT_CASE(damon_test_mvsum),
+ 	KUNIT_CASE(damos_test_new_filter),
+ 	KUNIT_CASE(damos_test_commit_quota_goal),
+ 	KUNIT_CASE(damos_test_commit_quota_goals),
 -- 
 2.47.3
