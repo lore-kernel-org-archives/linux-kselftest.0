@@ -1,63 +1,63 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0254418A92F
-	for <linux-kselftest@vger.kernel.org>; Sat, 20 Jun 2026 02:44:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CEEE1B6CE9
+	for <linux-kselftest@vger.kernel.org>; Sat, 20 Jun 2026 02:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781923491; cv=none; b=P/9OFloxnpJKGz8C0Jpl7zUUTZ0UrK/oyEx6NG1N4yhLkNBqRX1F9w3nMjK06Opbxmt7LBSA7JRoT3/0/l1+6fL6UJlWsxzM6wRU4PLjPDFLkue00+0eIJBLcxtKSRytmJunY7kQ41ll5k5IdyApt9/M4ArzB9UKr0WUleoGml8=
+	t=1781923497; cv=none; b=ae0WM4x0wTRkwMjx8IWfCU2uLXRiE7lu6bqraB02hX4sb/2g1Be6bGSdD4Ox2NCaLMw7NQQYTKcTNa6/4UclVpo5aI5cM/0eKg1zviIBQIPJYXiZfVboe8glzB36VEkn2XJmEM6bi4MmOmgXEpfkL5K6672vYxgUv+GJLlFW87Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781923491; c=relaxed/simple;
-	bh=ICe0YCbrGI7sBHtFtcCp34hkMsz3q51a3eQfk8LvR2Q=;
+	s=arc-20240116; t=1781923497; c=relaxed/simple;
+	bh=YXXYvTua7xSnHRRQX7UMZYFBwjxqSm8D+R0Oz3PNVes=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=org+q85MqmALKc3FQ13PZO9gGSlK7cIotvWjbugVHutQKeE2xb6xwQArCSV8rMzAISJ9Btr8p6i5+ke6lnlpk6LTOJ37bdqv8H3SKC62wJhaNqajmWfzgYxt2Dt8lqeVGQxLS1CvsUZ5rIkHQTajxiZ2J16HSJsEMnFxaU21WNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=smtYZSy8; arc=none smtp.client-ip=209.85.216.48
+	 MIME-Version; b=ClnmQzwg67yj/LU2QkgxMqQIAo2qemycDIrMsD8YqYEKe+oSvW9Lh5sOJgBY3TIUskpsFDL4AZIA+x2nEmnsHf2OiiRQhwyyob0Y4loPoON+2jaI/n4nksneKu98igABevpn/IMGQfiGHdnLSdhJK97tGE0JQnkQObngRmrrFNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X7kWZhmU; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="smtYZSy8"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-37d4ab2e7c5so392136a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 19:44:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X7kWZhmU"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-37ce68a54f8so1598359a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 19:44:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781923489; x=1782528289; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781923495; x=1782528295; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lVKLDOFeXyaay66vBGJwQRzoXktAX8oCClhBBafjj4U=;
-        b=smtYZSy8B6A+UYgyHNHhKK1EJoH4ncCC3svmMDL52YUZtyYU4fWKN2AOwP34C6Mw6f
-         9coFClJm8BHXRG5ABuKPUBHH4xG9vnhY9dOQlf1qy9Lktqvoldt85mfhmLPcWA+3MKaq
-         /GeJvVL5yts+c5gveXosxDwu4zr/aK9sJzypbfOMACNEPhAZbMA5fNbxMCAw3F0jdNzh
-         ZShnL0TI543DWVDVUotT9IvNhxe5bdsdzGsc8cN/p2ipz1iRnLnDWJAuNruZsuNjfqGE
-         L/WoxTe9tjwSJEHftDnXQNosEXcKeBaTe4gtw46dzMGb3h65edb+rxvDDK6hXVqF8tSB
-         l1jg==
+        bh=CoheuMpaBBYEB0ARICeSI4vr55A0uKbRHvd5QkzvWCs=;
+        b=X7kWZhmUZrK3J7H/3V5xmtseDKk5KU1sA4ueKvNdkrDLh0XT9ziaCP6RpzQgdI1eR3
+         8F4NdXcrVkGaypjvUKNMpoBJIJ90iDQRSuk7I5itD5E1rUsEr1Ed15/cN0+4N0MMefku
+         JSjZ2KAm6TMShnentWZJX1WBAyTvHgGz19baF+hoUtxpOgfX+x3KuL/ufZL1rO1mZCsv
+         FRND7ecxlhc0dpVOpYqtO5geqfCK6e84JD5QHgf53VBWDi4TwJjkvwjvddnoLOp2PtiQ
+         T/Jp4hVraSQD7bkuD675nOx0DVPosEvrNcLIpM/z1phLj0DndLtHogZ2xap7od4+9Dpd
+         wnXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781923489; x=1782528289;
+        d=1e100.net; s=20251104; t=1781923495; x=1782528295;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lVKLDOFeXyaay66vBGJwQRzoXktAX8oCClhBBafjj4U=;
-        b=lGSN/+JUg5qZ3imAxGrbiPOB3GC5YD3Na+AfV9O8kYL46znvYkZpIqYPOkSXE1ZSjo
-         PC6PQRfvnSjMq5nwEBdkNx/zEaqdBg02MJVFl5u73VzG7AHvuvH7RzzoumejUx8sMI5K
-         EgkIWoBpjg3G1B9G8gBeTC8n/RY+NJxAjvTqj2SBE9dnftZTR6U1Twq9GJHxKicVC56O
-         rE8qzCzagwLp8c4w8nnKhaN9oOlMrtvsnzCpaRWERdAA7AJzUoRZEsezQTzLidKm29HU
-         yMjHKBMHzcJQ6oByZUCjBa8vnD7NFmx9Xx3FgTKdy2Iei8zuma0GDbtgb70Pe/ihQrEc
-         30jg==
-X-Forwarded-Encrypted: i=1; AFNElJ9HsbnMSq/y1GHA06FJFh0NCEfctIV4bntRjggZWCbAwFkjPtyDqZvNTjN2zbr/u2UewAR8S11O9ThbK4+q3rg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuTSEs9UC8DzPGW02rLrGdsgnHIeEzsedEju6qu0M7aILEJGaq
-	GDvdN+cyjRLX//YCq5DN+MXfM+Y4s/IhSGqKpk/5MMHGNPcaNvfGzr10
-X-Gm-Gg: AfdE7ckwu9BqvWUGRB1J5RFdnph88pcEZEtAQ2LakB6V5P4+uax2rx67uXWOvTG+RAF
-	ruvvHiUD6du42ma4jKua6aZh0E4i1KYDHSV/Bv8/WAx6gvgd45U9EA2SyUrwi0izE8qlpCmZXoI
-	JKh/1kEvcr4JZDgWQNhxmNREyQWsOKMOqt0u6zj6/WKfTL2KoN8BQBcvnf88hrldD+wT9uIcIQx
-	Fx+WSSq+hHjEvz/XJFdKcf57dT9OIr7AZaw7QdB+/vIrz5+rdSv7Xq2CtkdIPRYOJgCIAPPJO6p
-	q8a+hPkPBLVl7vnbbTFSMi1GxaRabGLTRZBZDzcls773wzDCNEjbbKHt2tWuXj1JKOvkRykdpQj
-	SFoTg9lbfIAirFYTthqU1uhYjinMGR2RFeIqG67WaXfS85tFfgFJKEPjmIkF0HY9OoIVLxc/LUm
-	FWrvk+0Ri4ObEQrKbGAD6YiScKoWVLX7LhMSucvrz61i9caQK4O1o=
-X-Received: by 2002:a17:90a:d644:b0:35b:8d89:719b with SMTP id 98e67ed59e1d1-37d15dc1067mr6028692a91.1.1781923489162;
-        Fri, 19 Jun 2026 19:44:49 -0700 (PDT)
+        bh=CoheuMpaBBYEB0ARICeSI4vr55A0uKbRHvd5QkzvWCs=;
+        b=F6WBk9Nn2GF7aQCJN/6bBKDAa37z2C9LdNZbPNiAmr7+vLgU14JlA4J+agsd8TLiEP
+         fFq4BWhKKH+Vh1y6RhCJ+k9YICFWs8t6PzlAJY95X2SQGtvYYZzhY+jW9f7lxiMcoBlS
+         GZ21UOEsaTgcAQi4hWzzK1UhwndM13ynIdyY5UYMOcRvWDJNQ0kfJhvxG1caYeV4Uyp8
+         Axekvos7n1LUaI0slFcb86MJsSrhjUWbkrn6UvqK5jp5ycvExz8QhbelBPW57SLFSbh/
+         AHVw+Xl2ZvN1M55eOhLYSxWKqEjpLKYYz6LNq4gsnYmyF6d1yUu7vNfjGST/ENfYe56R
+         +q4A==
+X-Forwarded-Encrypted: i=1; AFNElJ+PKRBz9v18uDnYAB8k7nHLyA34pCdDeYQznVyXm3s3Ti/Vevf55mdb7lYMx+ltRenXH+1qFhqaU+IKemsFpzU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxblS3EFYrN23Ix/ybGXJjAw230j6RJ4bsEOrHKeeX9EtUwwSVx
+	i6KhuGssSBMBmqgQvRsQiI8d6yHzzfJpRsIy1gEUhXRFMnQ131oJ2Dgj
+X-Gm-Gg: AfdE7cmIXdo3TAXYMoXwIMU/18JxIwHQuJ/QMnwF417zKOy7BwF4PalJ5FbB+/MJUIL
+	QXDx4C5yS6s8cbJ6aWmnZk9FsCv2HMPGx+kaG5b/bF1ORKoURCYU2mRr6rbQ3ByVh0N2Tl1fTkk
+	hhx1DaI3kLdujArGOYc7u0UVofS4QtcnmIdGvZzr6tnFmeuWef2+w13Lw6i+gWgd0DGE+KkQEwb
+	S9SOYb3gtI0kCs5RkPAhr1PfJx6cpe6iuB/SnvPh7tjZKCfZzzJPbYwZ3YdwLqnBn295gwxVVPg
+	4nT7XBrk3EG74y9YuBVK3nEc4cG4vbAovE42vOWhZu1MnduPt3FlNMSNJ+zs3lMJKtKmrb809P/
+	9naXQpL+n9omxWNjkyjZLj6tcHmRZg34L0LsdsZuVShgsB1gsjOZkI/kHUn/PNDUVdBv/7nTjQ+
+	vHBOZ7hC8WSVI6jBsmLQw1XMFnigKlnjcOqmyIVW5R9XrmD4mFSW0=
+X-Received: by 2002:a17:90b:4b84:b0:36d:5dbe:2a0d with SMTP id 98e67ed59e1d1-37d1e82238fmr4681205a91.7.1781923495427;
+        Fri, 19 Jun 2026 19:44:55 -0700 (PDT)
 Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d1600975asm1087971a91.0.2026.06.19.19.44.42
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d1600975asm1087971a91.0.2026.06.19.19.44.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 19:44:48 -0700 (PDT)
+        Fri, 19 Jun 2026 19:44:55 -0700 (PDT)
 From: Sechang Lim <rhkrqnwk98@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -84,9 +84,9 @@ Cc: Eric Dumazet <edumazet@google.com>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v5 2/3] bpf, sockmap: reject a packet-modifying SK_SKB stream parser
-Date: Sat, 20 Jun 2026 02:44:17 +0000
-Message-ID: <20260620024423.4141004-3-rhkrqnwk98@gmail.com>
+Subject: [PATCH bpf-next v5 3/3] selftests/bpf: test rejection of a packet-modifying SK_SKB stream parser
+Date: Sat, 20 Jun 2026 02:44:18 +0000
+Message-ID: <20260620024423.4141004-4-rhkrqnwk98@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260620024423.4141004-1-rhkrqnwk98@gmail.com>
 References: <20260620024423.4141004-1-rhkrqnwk98@gmail.com>
@@ -98,133 +98,79 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-sk_psock_strp_parse() runs the BPF_PROG_TYPE_SK_SKB stream-parser program
-to find the length of the next message. strparser assembles a message out
-of several received skbs by chaining them onto the head's frag_list and
-recording where to append the next one in strp->skb_nextp:
-
-	*strp->skb_nextp = skb;
-	strp->skb_nextp = &skb->next;
-
-and then calls the parser on the head:
-
-	len = (*strp->cb.parse_msg)(strp, head);
-
-The parser is only meant to inspect the skb, but the program may call
-bpf_skb_change_tail() -- or the sibling bpf_skb_pull_data(),
-bpf_skb_change_head(), bpf_skb_adjust_room(), all allowed for SK_SKB.
-Once the head carries a frag_list these go
-
-	... -> skb_ensure_writable -> pskb_may_pull -> __pskb_pull_tail
-
-and __pskb_pull_tail() frees the frag_list skbs that strparser still
-tracks through skb_nextp:
-
-	while ((list = skb_shinfo(skb)->frag_list) != insp) {
-		skb_shinfo(skb)->frag_list = list->next;
-		consume_skb(list);
-	}
-
-strp->skb_nextp now points into a freed sk_buff. The next segment of
-the same message arrives in __strp_recv(), which links it with
-*strp->skb_nextp = skb, an 8-byte write into the freed skb. The free
-and the write happen in different __strp_recv() calls, so the message
-has to span at least three segments before it triggers.
-
-  BUG: KASAN: slab-use-after-free in __strp_recv+0x447/0xda0
-  Write of size 8 at addr ffff88810db86140 by task repro/349
-
-  Call Trace:
-   <IRQ>
-   __strp_recv+0x447/0xda0
-   __tcp_read_sock+0x13d/0x590
-   tcp_bpf_strp_read_sock+0x195/0x320
-   strp_data_ready+0x267/0x340
-   sk_psock_strp_data_ready+0x1ce/0x350
-   tcp_data_queue+0x1364/0x2fd0
-   tcp_rcv_established+0xe07/0x1640
-   [...]
-
-  Allocated by task 349:
-   skb_clone+0x17b/0x210
-   __strp_recv+0x2c3/0xda0
-   __tcp_read_sock+0x13d/0x590
-   [...]
-
-  Freed by task 349:
-   kmem_cache_free+0x150/0x570
-   __pskb_pull_tail+0x57b/0xc20
-   skb_ensure_writable+0x236/0x260
-   __bpf_skb_change_tail+0x1d4/0x590
-   sk_skb_change_tail+0x2a/0x40
-   bpf_prog_1b285dcd6c41373e+0x27/0x30
-   bpf_prog_run_pin_on_cpu+0xf3/0x260
-   sk_psock_strp_parse+0x118/0x1e0
-   __strp_recv+0x4f6/0xda0
-   [...]
-
-The same resize also leaves the head's length inconsistent with its
-frags, so a later __pskb_pull_tail() can instead hit the
-BUG_ON(skb_copy_bits(...)) in net/core/skbuff.c.
-
-A stream parser is only meant to measure the next message, not to modify
-the packet. Reject a parser whose program can change packet data
-(prog->aux->changes_pkt_data) at attach time. The check is shared by
-sock_map_prog_update() and sock_map_link_update_prog(), which between them
-cover prog attach, link create and link update. Verdict programs are
-unaffected and may still modify the skb.
+Verify that attaching an SK_SKB stream parser that can modify the packet
+is rejected, while a read-only parser still attaches.
 
 Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 ---
- net/core/sock_map.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ .../selftests/bpf/prog_tests/sockmap_strp.c   | 31 +++++++++++++++++++
+ .../selftests/bpf/progs/test_sockmap_strp.c   |  7 +++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 99e3789492a0..c60ba6d292f9 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -1515,6 +1515,17 @@ static int sock_map_prog_link_lookup(struct bpf_map *map, struct bpf_prog ***ppr
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
+index 621b3b71888e..1d7231728eaf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
+@@ -431,6 +431,35 @@ static void test_sockmap_strp_verdict(int family, int sotype)
+ 	test_sockmap_strp__destroy(strp);
  }
  
-+static int sock_map_prog_attach_check(enum bpf_attach_type attach_type,
-+				      struct bpf_prog *prog)
++static void test_sockmap_strp_parser_reject(void)
 +{
-+	/* A stream parser must not modify the skb, only measure it. */
-+	if (prog && attach_type == BPF_SK_SKB_STREAM_PARSER &&
-+	    prog->aux->changes_pkt_data)
-+		return -EINVAL;
++	struct test_sockmap_strp *strp = NULL;
++	int parser_mod, parser_ro, link;
++	int err, map;
 +
-+	return 0;
-+}
++	strp = test_sockmap_strp__open_and_load();
++	if (!ASSERT_OK_PTR(strp, "test_sockmap_strp__open_and_load"))
++		return;
 +
- /* Handle the following four cases:
-  * prog_attach: prog != NULL, old == NULL, link == NULL
-  * prog_detach: prog == NULL, old != NULL, link == NULL
-@@ -1533,6 +1544,10 @@ static int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
- 	if (ret)
- 		return ret;
- 
-+	ret = sock_map_prog_attach_check(which, prog);
-+	if (ret)
-+		return ret;
++	map = bpf_map__fd(strp->maps.sock_map);
++	parser_mod = bpf_program__fd(strp->progs.prog_skb_parser_resize);
++	parser_ro = bpf_program__fd(strp->progs.prog_skb_parser);
 +
- 	/* for prog_attach/prog_detach/link_attach, return error if a bpf_link
- 	 * exists for that prog.
- 	 */
-@@ -1776,6 +1791,11 @@ static int sock_map_link_update_prog(struct bpf_link *link,
- 		ret = -EINVAL;
- 		goto out;
- 	}
++	err = bpf_prog_attach(parser_mod, map, BPF_SK_SKB_STREAM_PARSER, 0);
++	ASSERT_ERR(err, "bpf_prog_attach parser_mod");
 +
-+	ret = sock_map_prog_attach_check(link->attach_type, prog);
-+	if (ret)
++	link = bpf_link_create(parser_ro, map, BPF_SK_SKB_STREAM_PARSER, NULL);
++	if (!ASSERT_GE(link, 0, "bpf_link_create parser_ro"))
 +		goto out;
 +
- 	if (!sockmap_link->map) {
- 		ret = -ENOLINK;
- 		goto out;
++	err = bpf_link_update(link, parser_mod, NULL);
++	ASSERT_ERR(err, "bpf_link_update parser_mod");
++out:
++	if (link >= 0)
++		close(link);
++	test_sockmap_strp__destroy(strp);
++}
++
+ void test_sockmap_strp(void)
+ {
+ 	if (test__start_subtest("sockmap strp tcp pass"))
+@@ -451,4 +480,6 @@ void test_sockmap_strp(void)
+ 		test_sockmap_strp_multiple_pkt(AF_INET, SOCK_STREAM);
+ 	if (test__start_subtest("sockmap strp tcp dispatch"))
+ 		test_sockmap_strp_dispatch_pkt(AF_INET, SOCK_STREAM);
++	if (test__start_subtest("sockmap strp parser reject pkt mod"))
++		test_sockmap_strp_parser_reject();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_strp.c b/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
+index dde3d5bec515..fe88fa6d40bc 100644
+--- a/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
+@@ -50,4 +50,11 @@ int prog_skb_parser_partial(struct __sk_buff *skb)
+ 	return 10;
+ }
+ 
++SEC("sk_skb/stream_parser")
++int prog_skb_parser_resize(struct __sk_buff *skb)
++{
++	bpf_skb_change_tail(skb, skb->len, 0);
++	return skb->len;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
