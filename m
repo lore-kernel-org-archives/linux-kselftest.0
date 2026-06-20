@@ -1,27 +1,27 @@
 Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA06D36728C;
-	Sat, 20 Jun 2026 11:07:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80A131813A;
+	Sat, 20 Jun 2026 11:07:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781953670; cv=none; b=Q6N3OyAcz6wD7F3KSFJPJ4cSbeddgis1CItIwRhD7/4l6eriVfop17dWsW9mkSZBar15r0iQCluwEIpKFMSPNp1IdlFBHydkHrNhV3eUVzLHCr6VzrElIAI2poFz4y8ZuAC1ahMYk3baYwoCReyReRwslAxNDufyXu+zr3q73eo=
+	t=1781953678; cv=none; b=YR6lre1U5MaOSkPpy3sXPPa7bLqThsi50Ki6DDwDnNFTC6g6LXr+fku/98hx/JwSbtJ/IUsli1WIuXIVHHrLCjFifTu0/jDixXCO6cBApBpFLyIqRQO7Dy6NHbUpbrn9jI4sgfcPAN5/vZtTtgMoBEdKur0SMk7FGSwr3grgBII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781953670; c=relaxed/simple;
-	bh=a4kiTPVVIRbkBR+5v4hAy2u/lyLrPk2L42VgVwpxVWY=;
+	s=arc-20240116; t=1781953678; c=relaxed/simple;
+	bh=kmpMg28vbbAQW9GLCFo5jh+z11w+o0UqDvAktk5a9Yc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BTtxMKbpcdpBJDS0Fa42N6vqbxtbllRjeVRoPL8q4O6z04XCnJo1CEPnknxCMQp/C2hZ93gdjNYLF2oYXImXJlg+IDz5GJkZ04yuMfER/z0aHGqrDQwBXyc34LPWlVHmrD2J9FoSZfVTxEIHdtz2Aakc3tmLLy8D17rr/KxLVv4=
+	 In-Reply-To:Content-Type; b=KDJ++qVrj1dtNpa/TKf3806kkdJ2BOe/1s+VHmq3r0k0k3a6TOcfbtZsqq8Mf7c2UQsD1VqYrU/N1UPE66t1OnOBrMBGOy/RAZMhEU53d5ZGDgoZbPc6RF70LGp8jHYWD3BYqBXTVouMoPpHH7Uf6npDM2RsU/5IfGKlMmecPQ4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 9E01C1EA349; Sat, 20 Jun 2026 19:07:40 +0800 (AWST)
+	id 121811EA341; Sat, 20 Jun 2026 19:07:55 +0800 (AWST)
 X-Spam-Level: 
 Received: from [IPV6:2001:8003:8810:ea00::9c4] (unknown [IPv6:2001:8003:8810:ea00::9c4])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 14B791EA240;
-	Sat, 20 Jun 2026 19:07:35 +0800 (AWST)
-Message-ID: <b1ed3259-553d-48e6-ba2a-8ddbd04ea4f0@davidgow.net>
-Date: Sat, 20 Jun 2026 19:07:35 +0800
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id 616161EA331;
+	Sat, 20 Jun 2026 19:07:52 +0800 (AWST)
+Message-ID: <e30d16ec-f5a3-4cd8-9b25-96e0dfa8b9d2@davidgow.net>
+Date: Sat, 20 Jun 2026 19:07:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -29,7 +29,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] rust: kunit: use `line!()` inside `kunit_assert!`
+Subject: Re: [PATCH 3/3] rust: doctest: generate Rust kunit test suites
 To: Gary Guo <gary@garyguo.net>, Miguel Ojeda <ojeda@kernel.org>,
  Boqun Feng <boqun@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
  <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
@@ -42,168 +42,172 @@ To: Gary Guo <gary@garyguo.net>, Miguel Ojeda <ojeda@kernel.org>,
 Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 References: <20260616-kunit-v1-0-b191604a8d6b@garyguo.net>
- <20260616-kunit-v1-2-b191604a8d6b@garyguo.net>
+ <20260616-kunit-v1-3-b191604a8d6b@garyguo.net>
 From: David Gow <david@davidgow.net>
 Content-Language: fr
-In-Reply-To: <20260616-kunit-v1-2-b191604a8d6b@garyguo.net>
+In-Reply-To: <20260616-kunit-v1-3-b191604a8d6b@garyguo.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 Le 16/06/2026 à 11:24 PM, Gary Guo a écrit :
-> The `diff` parameter is needed currently because doctests want to override
-> the line number. Simplify it by changing it to use `line!()`. Have doctests
-> override `line!()` macro to achieve the current behavior.
-> 
-> A few current doctests (or their invoked macros) require `line!()` to
-> expand to literal; they're updated to use `::core::line!()` instead.
+> For doctest, instead of generating C FFI functions, generate a Rust test
+> suite with `#[kunit_tests]` and `#[test]` attributes. This makes the C glue
+> no longer needed.
 > 
 > Signed-off-by: Gary Guo <gary@garyguo.net>
 > ---
 
-Much nicer, thanks!
+Thanks very much for this. It's been on the to-do list for a while, and
+it's definitely much nicer than generating lots of C code.
 
 Reviewed-by: David Gow <david@davidgow.net>
 
->  rust/kernel/device_id.rs    |  2 +-
->  rust/kernel/kunit.rs        |  8 ++++----
->  rust/kernel/str.rs          |  2 +-
->  rust/macros/kunit.rs        |  4 ++--
->  scripts/rustdoc_test_gen.rs | 16 ++++++++++++----
->  5 files changed, 20 insertions(+), 12 deletions(-)
+My feeling is that this series should go via the rust-for-linux tree,
+rather than the KUnit tree, as there's lots of poking around in common
+rust files, and no change to the KUnit C code. But if you'd rather it go
+in via kselftest/kunit, that's possible too.
+
+Cheers,
+-- David
+
+>  rust/Makefile               |  4 +--
+>  scripts/rustdoc_test_gen.rs | 69 ++++++---------------------------------------
+>  2 files changed, 10 insertions(+), 63 deletions(-)
 > 
-> diff --git a/rust/kernel/device_id.rs b/rust/kernel/device_id.rs
-> index 8e9721446014..20e2fe137202 100644
-> --- a/rust/kernel/device_id.rs
-> +++ b/rust/kernel/device_id.rs
-> @@ -195,7 +195,7 @@ macro_rules! module_device_table {
->      ($table_type: literal, $module_table_name:ident, $table_name:ident) => {
->          #[rustfmt::skip]
->          #[export_name =
-> -            concat!("__mod_device_table__", line!(),
-> +            concat!("__mod_device_table__", ::core::line!(),
->                      "__kmod_", module_path!(),
->                      "__", $table_type,
->                      "__", stringify!($table_name))
-> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-> index 157fd0634708..58dfec66b4f6 100644
-> --- a/rust/kernel/kunit.rs
-> +++ b/rust/kernel/kunit.rs
-> @@ -58,7 +58,7 @@ pub fn info(args: fmt::Arguments<'_>) {
->  #[doc(hidden)]
->  #[macro_export]
->  macro_rules! kunit_assert {
-> -    ($name:literal, $diff:expr, $condition:expr $(,)?) => {
-> +    ($name:literal, $condition:expr $(,)?) => {
->          'out: {
->              // Do nothing if the condition is `true`.
->              if $condition {
-> @@ -67,7 +67,7 @@ macro_rules! kunit_assert {
+> diff --git a/rust/Makefile b/rust/Makefile
+> index a870d1616c71..8c95dd4f6aee 100644
+> --- a/rust/Makefile
+> +++ b/rust/Makefile
+> @@ -36,10 +36,8 @@ obj-$(CONFIG_RUST) += exports.o
+>  always-$(CONFIG_RUST) += libproc_macro2.rlib libquote.rlib libsyn.rlib
 >  
->              // Use `file!()` instead of `::core::file!()` here so it can be overridden.
->              static FILE: &'static $crate::str::CStr = $crate::c_str!(file!());
-> -            static LINE: i32 = ::core::line!() as i32 - $diff;
-> +            static LINE: i32 = line!() as i32;
->              static CONDITION: &'static $crate::str::CStr = $crate::c_str!(stringify!($condition));
+>  always-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated.rs
+> -always-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated_kunit.c
 >  
->              // SAFETY: FFI call without safety requirements.
-> @@ -165,10 +165,10 @@ unsafe impl Sync for UnaryAssert {}
->  #[doc(hidden)]
->  #[macro_export]
->  macro_rules! kunit_assert_eq {
-> -    ($name:literal, $diff:expr, $left:expr, $right:expr $(,)?) => {{
-> +    ($name:literal, $left:expr, $right:expr $(,)?) => {{
->          // For the moment, we just forward to the expression assert because, for binary asserts,
->          // KUnit supports only a few types (e.g. integers).
-> -        $crate::kunit_assert!($name, $diff, $left == $right);
-> +        $crate::kunit_assert!($name, $left == $right);
->      }};
->  }
+>  obj-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated.o
+> -obj-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated_kunit.o
 >  
-> diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-> index b3caa9a1c898..644b4279a116 100644
-> --- a/rust/kernel/str.rs
-> +++ b/rust/kernel/str.rs
-> @@ -411,7 +411,7 @@ fn as_ref(&self) -> &BStr {
->  /// const BAD: &CStr = c_str!("literal");
->  ///
->  /// // `c_str!` is still needed for static non-literal C strings.
-> -/// const GOOD: &CStr = c_str!(concat!(file!(), ":", line!(), ": My CStr!"));
-> +/// const GOOD: &CStr = c_str!(concat!(file!(), ":", ::core::line!(), ": My CStr!"));
->  /// ```
->  #[macro_export]
->  macro_rules! c_str {
-> diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
-> index 936eff014870..e9152b9d51f9 100644
-> --- a/rust/macros/kunit.rs
-> +++ b/rust/macros/kunit.rs
-> @@ -113,7 +113,7 @@ pub(crate) fn kunit_tests(test_suite: Ident, mut module: ItemMod) -> Result<Toke
->              #[allow(unused)]
->              macro_rules! assert {
->                  ($cond:expr $(,)?) => {{
-> -                    kernel::kunit_assert!(#test_str, 0, $cond);
-> +                    kernel::kunit_assert!(#test_str, $cond);
->                  }}
->              }
->          });
-> @@ -121,7 +121,7 @@ macro_rules! assert {
->              #[allow(unused)]
->              macro_rules! assert_eq {
->                  ($left:expr, $right:expr $(,)?) => {{
-> -                    kernel::kunit_assert_eq!(#test_str, 0, $left, $right);
-> +                    kernel::kunit_assert_eq!(#test_str, $left, $right);
->                  }}
->              }
->          });
+>  always-$(subst y,$(CONFIG_RUST),$(CONFIG_JUMP_LABEL)) += kernel/generated_arch_static_branch_asm.rs
+>  ifndef CONFIG_UML
+> @@ -387,7 +385,7 @@ quiet_cmd_rustdoc_test_kernel = RUSTDOC TK $<
+>  		$< $(rustdoc_test_kernel_quiet); \
+>  	$(objtree)/scripts/rustdoc_test_gen
+>  
+> -%/doctests_kernel_generated.rs %/doctests_kernel_generated_kunit.c: \
+> +%/doctests_kernel_generated.rs: \
+>      $(src)/kernel/lib.rs $(obj)/kernel.o \
+>      $(objtree)/scripts/rustdoc_test_builder \
+>      $(objtree)/scripts/rustdoc_test_gen FORCE
 > diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
-> index 37f4877f52e2..acc4debe8592 100644
+> index acc4debe8592..601f7a5b3672 100644
 > --- a/scripts/rustdoc_test_gen.rs
 > +++ b/scripts/rustdoc_test_gen.rs
-> @@ -169,18 +169,26 @@ fn main() {
+> @@ -118,9 +118,7 @@ fn main() {
+>      // Sort paths.
+>      paths.sort();
+>  
+> -    let mut rust_tests = String::new();
+> -    let mut c_test_declarations = String::new();
+> -    let mut c_test_cases = String::new();
+> +    let mut tests = String::new();
+>      let mut body = String::new();
+>      let mut last_file = String::new();
+>      let mut number = 0;
+> @@ -165,10 +163,10 @@ fn main() {
+>  
+>          use std::fmt::Write;
+>          write!(
+> -            rust_tests,
+> +            tests,
 >              r#"/// Generated `{name}` KUnit test case from a Rust documentation test.
->  #[no_mangle]
->  pub extern "C" fn {kunit_name}(__kunit_test: *mut ::kernel::bindings::kunit) {{
-> -    /// Overrides the usual [`file!`] macro with one that expands to the real path.
-> +    // Overrides the usual [`file!`] macro with one that expands to the real path.
+> -#[no_mangle]
+> -pub extern "C" fn {kunit_name}(__kunit_test: *mut ::kernel::bindings::kunit) {{
+> +#[test]
+> +fn {kunit_name}() {{
+>      // Overrides the usual [`file!`] macro with one that expands to the real path.
 >      #[allow(unused)]
 >      macro_rules! file {{
->          () => {{ "{real_path}" }}
+> @@ -183,26 +181,6 @@ macro_rules! line {{
+>          () => {{ const {{ ::core::line!() - __DOCTEST_ANCHOR + {line} }} }}
 >      }}
 >  
-> +    // Overrides the usual [`line!`] macro with one that expands to the real line number.
-> +    #[allow(unused)]
-> +    macro_rules! line {{
-> +        // NOTE: This does not expand to a literal, but a constant expression.
-> +        // Therefore code that depends on `line!()` being overrideable needs special adjustment.
-> +        () => {{ const {{ ::core::line!() - __DOCTEST_ANCHOR + {line} }} }}
-> +    }}
-> +
->      /// Overrides the usual [`assert!`] macro with one that calls KUnit instead.
+> -    /// Overrides the usual [`assert!`] macro with one that calls KUnit instead.
+> -    #[allow(unused)]
+> -    macro_rules! assert {{
+> -        ($cond:expr $(,)?) => {{{{
+> -            ::kernel::kunit_assert!(
+> -                "{kunit_name}", $cond
+> -            );
+> -        }}}}
+> -    }}
+> -
+> -    /// Overrides the usual [`assert_eq!`] macro with one that calls KUnit instead.
+> -    #[allow(unused)]
+> -    macro_rules! assert_eq {{
+> -        ($left:expr, $right:expr $(,)?) => {{{{
+> -            ::kernel::kunit_assert_eq!(
+> -                "{kunit_name}", $left, $right
+> -            );
+> -        }}}}
+> -    }}
+> -
+>      // Many tests need the prelude, so provide it by default.
 >      #[allow(unused)]
->      macro_rules! assert {{
->          ($cond:expr $(,)?) => {{{{
->              ::kernel::kunit_assert!(
-> -                "{kunit_name}", __DOCTEST_ANCHOR - {line}, $cond
-> +                "{kunit_name}", $cond
->              );
->          }}}}
->      }}
-> @@ -190,7 +198,7 @@ macro_rules! assert {{
->      macro_rules! assert_eq {{
->          ($left:expr, $right:expr $(,)?) => {{{{
->              ::kernel::kunit_assert_eq!(
-> -                "{kunit_name}", __DOCTEST_ANCHOR - {line}, $left, $right
-> +                "{kunit_name}", $left, $right
->              );
->          }}}}
->      }}
-> @@ -212,7 +220,7 @@ macro_rules! assert_eq {{
+>      use ::kernel::prelude::*;
+> @@ -231,14 +209,9 @@ macro_rules! assert_eq {{
+>  "#
+>          )
+>          .unwrap();
+> -
+> -        write!(c_test_declarations, "void {kunit_name}(struct kunit *);\n").unwrap();
+> -        write!(c_test_cases, "    KUNIT_CASE({kunit_name}),\n").unwrap();
+>      }
 >  
->      /// The anchor where the test code body starts.
->      #[allow(unused)]
-> -    static __DOCTEST_ANCHOR: i32 = ::core::line!() as i32 + {body_offset} + 2;
-> +    static __DOCTEST_ANCHOR: u32 = ::core::line!() + {body_offset} + 2;
->      {{
->          #![allow(unreachable_pub, clippy::disallowed_names)]
->          {body}
+> -    let rust_tests = rust_tests.trim();
+> -    let c_test_declarations = c_test_declarations.trim();
+> -    let c_test_cases = c_test_cases.trim();
+> +    let tests = tests.trim();
+>  
+>      write!(
+>          BufWriter::new(File::create("rust/doctests_kernel_generated.rs").unwrap()),
+> @@ -246,34 +219,10 @@ macro_rules! assert_eq {{
+>  
+>  const __LOG_PREFIX: &[u8] = b"rust_doctests_kernel\0";
+>  
+> -{rust_tests}
+> -"#
+> -    )
+> -    .unwrap();
+> -
+> -    write!(
+> -        BufWriter::new(File::create("rust/doctests_kernel_generated_kunit.c").unwrap()),
+> -        r#"/*
+> - * `kernel` crate documentation tests.
+> - */
+> -
+> -#include <kunit/test.h>
+> -
+> -{c_test_declarations}
+> -
+> -static struct kunit_case test_cases[] = {{
+> -    {c_test_cases}
+> -    {{ }}
+> -}};
+> -
+> -static struct kunit_suite test_suite = {{
+> -    .name = "rust_doctests_kernel",
+> -    .test_cases = test_cases,
+> -}};
+> -
+> -kunit_test_suite(test_suite);
+> -
+> -MODULE_LICENSE("GPL");
+> +#[kernel::macros::kunit_tests(rust_doctests_kernel)]
+> +mod tests {{
+> +{tests}
+> +}}
+>  "#
+>      )
+>      .unwrap();
 > 
 
