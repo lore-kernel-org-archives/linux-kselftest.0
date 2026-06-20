@@ -1,123 +1,93 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Received: from outbound.qs.icloud.com (qs-2002e-snip4-11.eps.apple.com [57.103.87.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7555B364E9E;
-	Sat, 20 Jun 2026 11:08:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF7A2222AA
+	for <linux-kselftest@vger.kernel.org>; Sat, 20 Jun 2026 12:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.87.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781953720; cv=none; b=qVbcYNXy/7CIDR3bkdQR2vztJbEpQFV/t6q7zGP40tLVLVgprubkhh9HV7yU1ohadKL9fCuIPmmsgx+Ldb7yMe61LPO+L9E3+Lwe0IjfitOySIBeh2mQeV/bq7mWRU5PhV75hJdJ3Mc0vhSbJGa/stfBN5YWMqj+uDyaUbnDEbo=
+	t=1781957636; cv=none; b=G7RVmENPfiNoY/yMllMyLKMe0ST7cu3iGT7adJVnYs5uT4qT4A5rVko6RndGX+WOp/zs3y6KFKBUHO6TThMeRs2Vvvnf+MEBfYZXsmfX1DPoAOlPog8yNifS52uTx0AZ8CxK4YTYezK/67jNFSnrUUgE3ezr2VehxUtKOiAeji8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781953720; c=relaxed/simple;
-	bh=+1vJhbi/C4sCLvgM534Y33japY7HojDMq/sR6v6MIY8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Uns9fN+sQXk3NdnBBM9u7p+kkSJsXwkos61rpI+GL4aHnxyRs4Uxt1QykupBqwq51TpdF59r/ft+eeBD29ggbW1hR7pgw2GSkOspHgBr6LrQ/qUGnJmwYl7YhN/kkCm8RPkVbTpK2WDm3xYKQTn0nWuByXobEb4n0bxjrMBnLsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 8E6A21EA343; Sat, 20 Jun 2026 19:08:37 +0800 (AWST)
-X-Spam-Level: 
-Received: from [IPV6:2001:8003:8810:ea00::9c4] (unknown [IPv6:2001:8003:8810:ea00::9c4])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id EBC441EA33A;
-	Sat, 20 Jun 2026 19:08:35 +0800 (AWST)
-Message-ID: <94e796b8-aba6-426d-bb84-92259300fe66@davidgow.net>
-Date: Sat, 20 Jun 2026 19:08:33 +0800
+	s=arc-20240116; t=1781957636; c=relaxed/simple;
+	bh=aeRCG9IbJCYM/pLLbDklq0PuQs1TcxJY82pk0IPGOaA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b9oy6wSDPNmfqst+92H5eNeTRg46YXd7AXUF3g9v+JcZieq8C8+2qpIh1S6lSVoneHm4FVErsstu79Y30AqEuEe92aBSNlspaK7oBJZRfNvEdYweA4+TAXebJp4kY/dNVnvAay7sE0N6fJwPoa6W//MuA6W6ePswAl+obuFjum0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=k1FV5e9f; arc=none smtp.client-ip=57.103.87.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="k1FV5e9f"
+Received: from outbound.qs.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-east-2d-10-percent-2 (Postfix) with ESMTPS id D0AF9300017A;
+	Sat, 20 Jun 2026 12:13:51 +0000 (UTC)
+X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQpOHV8CXhxBAFYLWxcOVk1KEVcJXwpABFEbWg9eK1sTVRdGCRkIXR0ZHldQXgheH0wcHQ5YBhICWkUKTV8OXh8EF0YZVQRHHl1WQh4ZAlEcVg1XQ1QEX1BJDEFQbFoARxdIHV0ZWW9QXRwOBFQHXQVdVlACWktfGV1FD18HWQRAD0oDXAVaAUIIVgdYBVkFXQhVQARTD1oRSwxbDl4JWzBQG18CQg8cE1YVDU1DEkIVBBFQAVgeVg==
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1781957635; x=1784549635; bh=SaO0TQnbwTAbu9emSwCT5mBn4ilASYCmpin95gfilp4=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=k1FV5e9f6BDlf6nI50sDjBVADxNC6Pz3mFN6NeH4nx5UufLAaMRMBqMAMJsjfcrXkxU6zLlm6htC9uS78vMmQ0ytSgnxr2fRgXWyQWdjWAecjPbdI43UkdUWl9AbDhU5/Tk39qFUFHWUYQJv3ITVXGHt6mS63VtBuXxU2nAXjBS6apbRnwvcPkbKpuSrEUXqSK7pKJsNOarorjVlVTHHmDxTjPx8TicBFXIEK3ScQLB0q+S/SBS0icYbIi1GSTHf0GCdHGPKakDPRRjwbWlbv7vkBekq0PTLwINeYceN0bb3GhZo2oQXiJBNcmKnIUNHCQurCfh+CLCNffTq9otABg==
+Received: from cibi (unknown [17.57.155.37])
+	by p00-icloudmta-asmtp-us-east-2d-10-percent-2 (Postfix) with ESMTPSA id 12F463000179;
+	Sat, 20 Jun 2026 12:13:46 +0000 (UTC)
+From: Siddharth C <siddharthcibi@icloud.com>
+To: ast@kernel.org,
+	kuba@kernel.org,
+	hawk@kernel.org,
+	andrii@kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Siddharth C <siddharthcibi@icloud.com>
+Subject: 
+Date: Sat, 20 Jun 2026 12:13:12 +0000
+Message-ID: <20260620121321.45227-1-siddharthcibi@icloud.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] kunit: Add example of test suite that can be
- skipped at runtime
-To: Vaibhav Jain <vaibhav@linux.ibm.com>, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>,
- Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>
-References: <20260617121535.462459-1-vaibhav@linux.ibm.com>
- <20260617121535.462459-4-vaibhav@linux.ibm.com>
-From: David Gow <david@davidgow.net>
-Content-Language: fr
-In-Reply-To: <20260617121535.462459-4-vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: op2Efvtf60g00WP6aSZVh7xoob9iGw7B
+X-Proofpoint-GUID: op2Efvtf60g00WP6aSZVh7xoob9iGw7B
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIwMDEyMSBTYWx0ZWRfX7u+BgaOek0wq
+ 9vqprgTUg2wDJwOUdOSynKkyHLga9jkJSreJ4xI80CJ1FYFr6oFrGz7XChxYseN2PUX012z2KQJ
+ P2OtMSm0Gp6fpFro+N0x5NT5fNXKQC7zLOhx3+IgId54CVH1zXt3i4A6n1si+RTtysUBFDVNqYq
+ mHQKZ9tcJidbXB+7zgPO3GNObVd7nqVHkdm7jmJ/Qcb8GzldOU2inFStRIARwwsrBNy4Giv5zOD
+ 4au6WisL/vA/NOaEnKz9+QmaZSvHlCKWJ80iHX7Da44upapve8oWH/XgwCkrJ9dtmowBbRpcXRY
+ MNO/utzQtTSAAG/sBkW
+X-Apple-Category-Label: MjA0NzgyOTUxNDY6JGNhdGVnb3J5JF9QZXJzb25hbCw=
 
-Le 17/06/2026 à 8:15 PM, Vaibhav Jain a écrit :
-> Add an example test suite name 'example_test_skip_suite' to
-> 'kunit-example-test.c' that shows how to skip an entire test suite based on
-> runtime conditions.
-> 
-> The example suite 'example_skip_suite' provides a 'suite_init' callback
-> named example_skip_suite_init() which marks the entire suite as skipped
-> using kunit_mark_skipped().
-> 
-> This demonstrates a way for conditionally skipping test suites when any
-> prerequisites for kunit_suite execution are not met. The 'suite_init'
-> callback can perform any necessary checks and mark the suite as skipped,
-> preventing all test cases from executing while also indicating why the
-> suite was skipped.
-> 
-> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
-> ---
+Subject: [PATCH 0/2] bpf: preserve rx_queue_index across XDP redirects
 
-Reviewed-by: David Gow <david@davidgow.net>
+XDP programs executed after redirect through cpumap and devmap
+currently lose ingress RX queue information because rx_queue_index
+is not preserved across xdp_buff to xdp_frame conversion.
+
+Preserve rx_queue_index in struct xdp_frame and restore it when
+rebuilding xdp_rxq_info for redirected execution paths.
+
+Add a selftest validating that ctx->rx_queue_index remains available
+through redirected execution.
+
+Testing:
+* Built modified kernel objects
+* Ran tools/testing/selftests/bpf/test_progs -t xdp_metadata -v
+* Verified xdp_metadata passes
+* Added explicit rx_queue_index assertion
 
 
+Siddharth C (1):
+  bpf: preserve rx_queue_index across XDP redirects
 
-> Changelog
-> =========
-> V2->V3:
-> Link:
-> https://lore.kernel.org/all/20260608090438.219497-3-vaibhav@linux.ibm.com
-> * Updated patch index in the series
-> 
-> V1->V2:
-> Link:
-> https://lore.kernel.org/all/20260604162805.556135-3-vaibhav@linux.ibm.com/
-> * Added RB from 'David Gow'
-> ---
->  lib/kunit/kunit-example-test.c | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-> index 0bae7b7ca0b0..b8ded54fa46d 100644
-> --- a/lib/kunit/kunit-example-test.c
-> +++ b/lib/kunit/kunit-example-test.c
-> @@ -591,5 +591,34 @@ static struct kunit_suite example_init_test_suite = {
->   */
->  kunit_test_init_section_suites(&example_init_test_suite);
->  
-> +/*
-> + * This test should always be skipped.
-> + */
-> +static void example_skip_suite_test(struct kunit *test)
-> +{
-> +	/* This line should never be seen */
-> +	KUNIT_FAIL(test, "You should not see a this.");
-> +}
-> +
-> +static struct kunit_case  example_skip_suite_test_cases[] = {
-> +	KUNIT_CASE(example_skip_suite_test),
-> +	{}
-> +};
-> +
-> +static int example_skip_suite_init(struct kunit_suite *suite)
-> +{
-> +	kunit_mark_skipped(suite, "Test suite expected to be skipped");
-> +	return 0;
-> +}
-> +
-> +static struct kunit_suite example_test_skip_suite = {
-> +	.name = "example_skip_suite",
-> +	.suite_init = example_skip_suite_init,
-> +	.test_cases = example_skip_suite_test_cases,
-> +};
-> +
-> +/* This registers a test suite that will be skipped */
-> +kunit_test_suite(example_test_skip_suite);
-> +
->  MODULE_DESCRIPTION("Example KUnit test suite");
->  MODULE_LICENSE("GPL v2");
+Siddharth_Cibi (1):
+  selftests/bpf: validate rx_queue_index in xdp_metadata
+
+ include/net/xdp.h                                     | 2 ++
+ kernel/bpf/cpumap.c                                   | 2 +-
+ kernel/bpf/devmap.c                                   | 5 ++++-
+ net/core/xdp.c                                        | 1 +
+ tools/testing/selftests/bpf/prog_tests/xdp_metadata.c | 3 ++-
+ tools/testing/selftests/bpf/progs/xdp_metadata.c      | 2 +-
+ tools/testing/selftests/bpf/xdp_metadata.h            | 1 +
+ 7 files changed, 12 insertions(+), 4 deletions(-)
+
+-- 
+2.53.0
 
