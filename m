@@ -1,108 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E9733E36A;
-	Sat, 20 Jun 2026 15:11:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229941C8603;
+	Sat, 20 Jun 2026 15:17:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781968269; cv=none; b=DwvIYTvsbsuJ1ZQlO5brZK29VYv64OhIMYs3Z9ljfHdGQ+ePv25paMC0u+JwBktOeTSJ+2ZhJFAAmc74hngw4QlIosQQODN+l4iCP/Xoepn2S/sNb6zrTw2V5s2EumhofSpSaPTMtIhqEprVBoTGsAXS4gN6vABOecy4ccGSWRk=
+	t=1781968629; cv=none; b=cyiP7ye3mqk5GOepsToKfK5b4G7B4siHETxDpo99tPwgN3a4QWReCD5uxTUOWtz1K9mOXwBuKasiDldBST+8oZX4yxCvyIY+Fa/y/bnELM8iKPuh1vJYBYJlRJwDHCdARqfzCLnuCE0MesxaVn95HY8vL7i79xZqW7g8wP2Gp14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781968269; c=relaxed/simple;
-	bh=JSSy07a1fddV0ZEcUrT8Xs2OmKCf7cuJkbRuUvXWwg8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=qpapKnzwgv18YX61Z8yCa6oyG2WcbYROVZsUYUbMOSLKSRY+ocwqzVcKr4YLozmPnJmI9/hqRyuQkjr2fLU2Uc9q8TYOSZkEE4QyWsAmEqsQ8A/Ma41yvqs26M9Io4D5bdN81/U+qMeFHtgiaZJdsc8TkreY7nAL5V3w5aemTMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+CAstK3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781968629; c=relaxed/simple;
+	bh=jeJsoZHHjsHCB1QaVDspMd45ZNErBfh+X4RXxFkMx0A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=j0JlQ48Ds/2s2ZdENPA35FOqvjbxZh2wfcS8iCc+v+sTrNE6lhL4uEuJjKv55txtMmYGmRZ4o79BL2kF8j5f5ocUaTSoeTdOe4sb3LSn7cCPn8FjNcRb4PRBZSQp93HDS8ustut8Sn/85O7+f0wPDPofmroOAu8ePvLS6C+PodU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e1HvPZUn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+CAstK3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BECD71F00A3A;
-	Sat, 20 Jun 2026 15:11:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e1HvPZUn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 851181F000E9;
+	Sat, 20 Jun 2026 15:17:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781968268;
-	bh=ukvHGq6sDhVLiCbcFdESl+aKas2jmQWGuLL7J0OAtjQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=F+CAstK3tdpZSW3Q6bkfVIycW48WP7zOAuSrYARXh4FjPaQeRSMSV/4VKrDXjdMRt
-	 b/lIINfF54mkxL/O9HPiTBmYLmQMh6GSLn+RvqajVDwbNhq3sPRvFNaXBeDIVeEojU
-	 QFfpxo8rUHbZg1qccgxn2XHHv5xUHIeMhtHlogTgqORBnbEojgkRX6r598kMZQ1nna
-	 RhUGn7rASzEmg5NJ0e9ui/CXLyN4yX7W0NR0RKkkxZKZrfFrNzSWcbvZqIIuYE6+z+
-	 s/sj0ZV4aSXBDgjJSU4+DF7DlKxsKISgtD+9Xtf6nfKMBF+Wjw0StUzKQKJnRAElKz
-	 4SoUu9WfwVecw==
-Content-Type: multipart/mixed; boundary="===============7268032707533913629=="
+	s=k20260515; t=1781968627;
+	bh=eyiRJczF7wbhF8VDuUywOe9gqRXCgnMSHEuOuFReqC4=;
+	h=From:To:Cc:Subject:Date;
+	b=e1HvPZUnit82bOtHf4Nsw/c5vzf2zO9M5MoLqZGJ9PD1PiaEonJR7AZu5sY1LDaDe
+	 vtvr6TgurTH6InKTuoS7E/TkrlUbESkOA+lRz/r5RVs/7plmB2xG5j5x60V/O1rESb
+	 hnuq+RTjiT2/Y9Hd22X41CPlvhkKzDwpERD7nas9TO1AXCMuuVpv6bA+3zJPVxakzk
+	 usSIBbDNdFMM7GfeF/8g58fhn1xDPQj584m8h44G1jnCo3nPnlQrsb0l4C8x+FaOwK
+	 FqRmqdoPKUX5/Suh/41tky1V9QCuCiZI+silB6HI1RPuzjtESxOryuNfXx2lej76c1
+	 KPslwesEaL8Gg==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v6 0/8] tracing/probes: Add more typecast features
+Date: Sun, 21 Jun 2026 00:17:02 +0900
+Message-ID: <178196862271.560995.5255615288323003663.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b3b148b42eb198ac7194c1c0547e47275b9f5d31133eececaf1389f17caed5af@mail.kernel.org>
-In-Reply-To: <b9c4b268b403e2b41362dd678dca8feb35d34a9c.1781964949.git.chenyy23@mails.tsinghua.edu.cn>
-References: <b9c4b268b403e2b41362dd678dca8feb35d34a9c.1781964949.git.chenyy23@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/hid: Cover hid_bpf_get_data() size overflow
-From: bot+bpf-ci@kernel.org
-To: chenyy23@mails.tsinghua.edu.cn,jikos@kernel.org,bentiss@kernel.org,bpf@vger.kernel.org,linux-input@vger.kernel.org
-Cc: chenyy23@mails.tsinghua.edu.cn,shuah@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 20 Jun 2026 15:11:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
---===============7268032707533913629==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi,
 
-> selftests/hid: Cover hid_bpf_get_data() size overflow
->
->     Add a HID-BPF regression check for hid_bpf_get_data() requests whose
->     size would overflow when added to the offset.
->
->     The new rdesc fixup callback asks for offset 2 and size ~0ULL, then
->     records whether the helper returns NULL. A vulnerable kernel returns a
->     non-NULL pointer because the runtime check wraps the addition. A fixed
->     kernel rejects the request. The test only checks the helper result and
->     does not dereference the returned pointer.
->
->     Also add KHDR_INCLUDES to the HID selftest build so hid_bpf.c sees the
->     current kernel UAPI HID definitions on systems whose installed headers do
->     not provide enum hid_report_type.
->
->     Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Here is the 6th version of series to introduce more typecast features
+to probe events. The previous version is here:
 
-This adds a regression test for the hid_bpf_get_data() size-overflow
-bug, where the range check wrapped on a large size and returned an
-out-of-bounds pointer.
+ 
 
-That wrapping check was introduced in 658ee5a64fcf, and the fix commit
-carries a Fixes: tag for it. Should this test commit carry the same tag?
+In this version, I fixed some issues found by Sashiko reviews (again),
+drop the first bugfix which is merged to probes/core, add new fetcharg
+dump patch[1/8] and make typecast always nested[3/8]. This version also
+allows all probe events to use $current.
 
-  Fixes: 658ee5a64fcf ("HID: bpf: allocate data memory for device_event BPF programs")
+Steve introduced BTF typecast feature for eprobe[1].
+This series extends it and add more options:
 
-> diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
-> index 5ecc845ef792..b21fbb13c926 100644
-> --- a/tools/testing/selftests/hid/progs/hid.c
-> +++ b/tools/testing/selftests/hid/progs/hid.c
-> @@ -240,6 +241,20 @@ struct hid_bpf_ops rdesc_fixup = {
->  	.hid_rdesc_fixup = (void *)hid_rdesc_fixup,
->  };
->
-> +SEC("?struct_ops.s/hid_rdesc_fixup")
-> +int BPF_PROG(hid_rdesc_fixup_get_data_overflow, struct hid_bpf_ctx *hid_ctx)
-> +{
-> +	if (!hid_bpf_get_data(hid_ctx, 2 /* offset */, ~0ULL /* size */))
-> +		get_data_overflow_check = 1;
-> +
-> +	return 0;
-> +}
+1. Expanding BTF typecast to kprobe and fprobe.
+   (currently only function entry/exit)
 
-This was raised on an earlier posting and does not look addressed:
-the callback stores the result in the get_data_overflow_check global
-and always returns 0, while the userspace test asserts on that global
-rather than on the callback return value.
+2. Introduce container_of like typecast. This adds a "assigned
+   member" option to the typecast.
 
-Could the callback just return the helper result so the test can check
-the return value directly, instead of routing it through a separate
-global?
+   (STRUCT,MEMBER)VAR->ANOTHER_MEMBER
 
+   This casts VAR to STRUCT type but the VAR is as the address
+   of STRUCT.MEMBER. In C, it is:
+
+   container_of(VAR, STRUCT, MEMBER)->ANOTHER_MEMBER
+
+3. Support nested typecast, e.g.
+
+   (STRUCT)((STRUCT2)VAR->MEMBER2)->MEMBER
+
+   the nest level must be smaller than 3.
+
+4. Add $current variable to point "current" task_struct.
+   This is useful with typecast, e.g.
+
+   (task_struct)$current->pid
+
+5. per-cpu dereference support.
+
+   Intrdouce this_cpu_read(VAR) and this_cpu_ptr(VAR) to
+   access per-cpu data on the current CPU (accessing other CPU
+   data is not stable, because it can be changed.)
+
+   You can access the member of per-cpu data structure using
+   typecast like:
+
+   (STRUCT)this_cpu_ptr(VAR)->MEMBER
+
+And added fetcharg dump feature (for debug) and updated test scripts
+to test part of them.
+
+Thanks,
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-id: cfae4cb90fc8113d52fea1f0a62cd6a36d9df149
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27874238868
---===============7268032707533913629==--
+Masami Hiramatsu (Google) (8):
+      tracing/probes: Support dumping fetcharg program for debugging dynamic events
+      tracing/probes: Support typecast for various probe events
+      tracing/probes: Support nested typecast
+      tracing/probes: Type casting always involves nested calls
+      tracing/probes: Support field specifier option for typecast
+      tracing/probes: Add $current variable support
+      tracing/probes: Add this_cpu_read() and this_cpu_ptr() dereference method to fetcharg
+      tracing/probes: Add a new testcase for BTF typecasts
+
+
+ Documentation/trace/eprobetrace.rst                |    9 
+ Documentation/trace/fprobetrace.rst                |   10 
+ Documentation/trace/kprobetrace.rst                |   11 
+ kernel/trace/Kconfig                               |   11 
+ kernel/trace/trace.c                               |    8 
+ kernel/trace/trace_eprobe.c                        |    2 
+ kernel/trace/trace_fprobe.c                        |    2 
+ kernel/trace/trace_kprobe.c                        |    2 
+ kernel/trace/trace_probe.c                         |  571 ++++++++++++++++----
+ kernel/trace/trace_probe.h                         |   95 ++-
+ kernel/trace/trace_probe_tmpl.h                    |   25 +
+ kernel/trace/trace_uprobe.c                        |    3 
+ samples/trace_events/trace-events-sample.c         |   40 +
+ samples/trace_events/trace-events-sample.h         |   34 +
+ .../ftrace/test.d/dynevent/btf_probe_event.tc      |   51 ++
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   11 
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   11 
+ .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    5 
+ 18 files changed, 747 insertions(+), 154 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
