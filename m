@@ -1,113 +1,392 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B452E3998AF;
-	Sat, 20 Jun 2026 15:18:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.175.55.52
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFDE5395ACC;
+	Sat, 20 Jun 2026 15:18:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781968694; cv=none; b=UmUZteGT5UWpENS+uv10++wJzjOk9Uj0Pq5VS5jTMPGHypPnABNBxCANfe4VD03E743IjBLK0y+kiB+BafvIXm+SW+ODqvnvvlzRRt4XBKFn7/O7q0yD8m/VI7DT58+XGVnRRNO9qDCMmnYTleoBWOmYEUSGAiEMGhzlsMgrwDQ=
+	t=1781968696; cv=none; b=DEtH4cNs8mSrJgaDy+JZ3VYb/Grbw9ISjCo3k9UhoKVnrJ1Uvb3dcvI7+tmfMuM83ZiJzw3bEDqN9c+Fo3ScJW2SGqZrXo+MvQ/bQZVbUXoGITeoOEAkaiwN11ojb9SzEsJJIxAbAqixHFSiEC8kuKOi2jNYF6anRO9XA1cu8EI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781968694; c=relaxed/simple;
-	bh=fEM8KJrxOZJdWWmKgAjX9yMvm8/bIHgQQpB8ceyakmY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HahcJ+/bhkrtWZIZT2mi5s/tOPMYac2gmg2sql9yyQVjY1e7K6a0TajudUDpPlLhi3wTQn8C2HMoihBlkRVmIqWRQC/pMSD2amyuuncWuVqxYpx/PiKgFFTkOVxASP/VmDAKPkRyIs/JZj8Cc+iLpVMRQ17KgWLiEmNSm5SO0YA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=gtH9Yf/G; arc=none smtp.client-ip=52.175.55.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781968696; c=relaxed/simple;
+	bh=grhVsv92HwtzJ1z25VXSER+hAQ3AtmZLfrW04YbNswU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YcbSrc/TsrAKdCtgx2Y+TDgGc3XiYrz1QZS0vtoWb0b/naUot9AqXJWqdR4Cw4yV6teRDino5xxQkCzr62id/fUvTM5rIV5A5oGzfPFdPzYR184lNGOhiHlJh0jmQEOdFGa6B8IcSla24gjCryJaJrIbKgeLMIxbcr69wc5NIMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mxxbyvdx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="gtH9Yf/G"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=J62ERBuF5D+z9S0HzdBYBCqRQCU40uKrCz
-	kzi6R9Y6Q=; b=gtH9Yf/GA5JxkOunzyb7Ddu0075aRbIIdSM+so4kVa9lC1l5jG
-	8tOnbhVi3yrjSalBOfuEV9gxFu0c9xxGeB7/7U3p7x8+UPRayojoit0YbdJra1CT
-	sRD9Denu+eLsDxt1LPe55Yk1wmxR/HORMW2h4kDokMj/2WUbhdZweZqPI=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web3 (Coremail) with SMTP id ygQGZQD3Q5EbrzZq3PmUAg--.8562S3;
-	Sat, 20 Jun 2026 23:17:55 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 1/2] bpf: Preserve nullable RCU pointer state on unlock
-Date: Sat, 20 Jun 2026 15:17:44 +0000
-Message-Id: <aaad3eeba3ea62f2c332701b28bc28387dcd5a42.1781968391.git.chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1781968391.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1781968391.git.chenyy23@mails.tsinghua.edu.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mxxbyvdx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F6601F000E9;
+	Sat, 20 Jun 2026 15:18:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781968693;
+	bh=Iu5b6HLd6iSKHACOwtjHyyGxZlrBlnnKzLtAPwJTtiU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=MxxbyvdxCawL7Sklg1J+aXwpB6BsOfrIwVKnPfvJdnD0O2zcbNDmlFKGER7txxnE9
+	 JTzjeiCo53QGXPuTNMN72fv2wN/z+riSie1le+nTdF1ApIEptMa09yju2K1H1Vh93E
+	 AYldYJKhd9IG2BIUpksgI0zY00Q1FJuFDDvLHkQPXufN86eYT30vm3XreNp840sREO
+	 ET06hEcTtHmJjzU8U9pvZy0a4u2Bewf/A2k0DIQSQzvaHJFisiYcjJ//lna8dSssdl
+	 JW37Lcjg+GGgzQ2Ojzq8A81pK57ktZsLof4dxBCMWaY1qwH5iRh35C+JQbcTzrzw/B
+	 G6zwWFHRbSfQw==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v6 7/8] tracing/probes: Add this_cpu_read() and this_cpu_ptr() dereference method to fetcharg
+Date: Sun, 21 Jun 2026 00:18:08 +0900
+Message-ID: <178196868885.560995.2729911104302349156.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <178196862271.560995.5255615288323003663.stgit@devnote2>
+References: <178196862271.560995.5255615288323003663.stgit@devnote2>
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ygQGZQD3Q5EbrzZq3PmUAg--.8562S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZryxJr15JrWUAF13JryDtrb_yoW8XF1UpF
-	48W3srKrW5Cw17CasrZF48ury5WF98Jw47C3W8Zw4SyFn8Wr10vF4jkFy5XF9IyFWkKw4F
-	vr15XrWqqw4UZaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUdFb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-	8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
-	64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcV
-	CY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv
-	6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEnc
-	xIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E
-	87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c
-	0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a
-	6rW5MxkIecxEwVAFwVW5WwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-	C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-	wI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-	v20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-	87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnU
-	UI43ZEXa7sRqedUUUUUUU==
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-bpf_rcu_read_unlock() converts RCU-protected verifier registers to
-untrusted pointers so that programs cannot keep using RCU-trusted
-references after the read-side critical section ends.
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-That conversion also clears PTR_MAYBE_NULL. For fields from the
-BTF_TYPE_SAFE_RCU_OR_NULL allowlist, such as skb->sk, the verifier records
-MEM_RCU | PTR_MAYBE_NULL while inside the RCU read-side critical section.
-Clearing both flags on unlock drops the nullable state and allows a direct
-post-unlock BTF member load without an explicit NULL check.
+When tracing the kernel local variables, sometimes we need to get the
+CPU local variables. To access it, current simple dereference is not
+enough.
 
-Only clear MEM_RCU during RCU unlock invalidation. Preserve PTR_MAYBE_NULL
-so normal nullable-pointer checks reject direct access, while an explicit
-NULL check can still refine the pointer before use.
+Thus, introduce a special this_cpu_read() dereference to access per-cpu
+variable for the current CPU (accessing other CPU variable may race with
+updates on other CPUs). Also this_cpu_ptr() is for accessing per-cpu
+pointer.
 
-Fixes: 30ee9821f943 ("bpf: Allowlist few fields similar to __rcu tag.")
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Those are working as same as the kernel percpu macro.
+
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Changes in v6:
+  - Rebased on dump fetcharg patch.
+  - Fix to fetch static percpu variable with @SYM correctly.
+ Changes in v5:
+  - Simplify this_cpu_read() into +0(this_cpu_ptr()).
+ Changes in v3:
+  - Remove NULL check for percpu var because it is just an offset, could be 0.
+  - Simplify process_fetch_insn_bottom() code.
+  - If the last operation is this_cpu_read(), read only memory of the specific
+    size (of type).
+ Changes in v2:
+  - Drop +CPU/+PCPU and introduce this_cpu_read() and this_cpu_ptr().
+  - Support these method with BTF typecast.
+  - Just check the base address is NOT NULL instead of is_kernel_percpu_address().
+---
+ Documentation/trace/eprobetrace.rst |    2 
+ Documentation/trace/fprobetrace.rst |    2 
+ Documentation/trace/kprobetrace.rst |    2 
+ kernel/trace/trace.c                |    1 
+ kernel/trace/trace_probe.c          |  143 ++++++++++++++++++++++++++---------
+ kernel/trace/trace_probe.h          |    1 
+ kernel/trace/trace_probe_tmpl.h     |   22 ++++-
+ 7 files changed, 129 insertions(+), 44 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2abc79dbf..e53c4bfe4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9001,7 +9001,7 @@ static void invalidate_rcu_protected_refs(struct bpf_verifier_env *env)
+diff --git a/Documentation/trace/eprobetrace.rst b/Documentation/trace/eprobetrace.rst
+index 680e0af43d5d..279396951b34 100644
+--- a/Documentation/trace/eprobetrace.rst
++++ b/Documentation/trace/eprobetrace.rst
+@@ -39,6 +39,8 @@ Synopsis of eprobe_events
+   @SYM[+|-offs]	: Fetch memory at SYM +|- offs (SYM should be a data symbol)
+   $comm		: Fetch current task comm.
+   +|-[u]OFFS(FETCHARG) : Fetch memory at FETCHARG +|- OFFS address.(\*3)(\*4)
++  this_cpu_read(FETCHARG) : Read the value of the per-CPU variable FETCHARG on the current CPU.
++  this_cpu_ptr(FETCHARG) : Get the address of the per-CPU variable FETCHARG on the current CPU.
+   \IMM		: Store an immediate value to the argument.
+   NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
+   FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
+diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fprobetrace.rst
+index 3392cab016b3..3439bc9bd351 100644
+--- a/Documentation/trace/fprobetrace.rst
++++ b/Documentation/trace/fprobetrace.rst
+@@ -52,6 +52,8 @@ Synopsis of fprobe-events
+   $comm         : Fetch current task comm.
+   $current      : Fetch the address of the current task_struct.
+   +|-[u]OFFS(FETCHARG) : Fetch memory at FETCHARG +|- OFFS address.(\*4)(\*5)
++  this_cpu_read(FETCHARG) : Read the value of the per-CPU variable FETCHARG on the current CPU.
++  this_cpu_ptr(FETCHARG) : Get the address of the per-CPU variable FETCHARG on the current CPU.
+   \IMM          : Store an immediate value to the argument.
+   NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
+   FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
+diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
+index 81e4fe38791d..9ae330eb0a52 100644
+--- a/Documentation/trace/kprobetrace.rst
++++ b/Documentation/trace/kprobetrace.rst
+@@ -55,6 +55,8 @@ Synopsis of kprobe_events
+   $comm		: Fetch current task comm.
+   $current      : Fetch the address of the current task_struct.
+   +|-[u]OFFS(FETCHARG) : Fetch memory at FETCHARG +|- OFFS address.(\*3)(\*4)
++  this_cpu_read(FETCHARG) : Read the value of the per-CPU variable FETCHARG on the current CPU.
++  this_cpu_ptr(FETCHARG) : Get the address of the per-CPU variable FETCHARG on the current CPU.
+   \IMM		: Store an immediate value to the argument.
+   NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
+   FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 7a5676524f1a..d4121acc2938 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -4332,6 +4332,7 @@ static const char readme_msg[] =
+ 	"\t           $stack<index>, $stack, $retval, $comm, $current\n"
+ #endif
+ 	"\t           +|-[u]<offset>(<fetcharg>), \\imm-value, \\\"imm-string\"\n"
++	"\t           this_cpu_read(<fetcharg>), this_cpu_ptr(<fetcharg>)\n"
+ 	"\t     kernel return probes support: $retval, $arg<N>, $comm\n"
+ 	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, char, string, symbol,\n"
+ 	"\t           b<bit-width>@<bit-offset>/<container-size>, ustring,\n"
+diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+index 1ddd0a804e39..a64edb0c6baa 100644
+--- a/kernel/trace/trace_probe.c
++++ b/kernel/trace/trace_probe.c
+@@ -349,6 +349,100 @@ static int parse_trace_event(char *arg, struct fetch_insn *code,
+ 	return -EINVAL;
+ }
  
- 	bpf_for_each_reg_in_vstate_mask(env->cur_state, state, reg, stack, clear_mask, ({
- 		if (reg->type & MEM_RCU) {
--			reg->type &= ~(MEM_RCU | PTR_MAYBE_NULL);
-+			reg->type &= ~MEM_RCU;
- 			reg->type |= PTR_UNTRUSTED;
++/* this_cpu_* parser */
++#define THIS_CPU_PTR_PREFIX "this_cpu_ptr("
++#define THIS_CPU_READ_PREFIX "this_cpu_read("
++#define THIS_CPU_PTR_LEN (sizeof(THIS_CPU_PTR_PREFIX) - 1)
++#define THIS_CPU_READ_LEN (sizeof(THIS_CPU_READ_PREFIX) - 1)
++
++static int
++parse_probe_arg(char *arg, const struct fetch_type *type,
++		struct fetch_insn **pcode, struct fetch_insn *end,
++		struct traceprobe_parse_context *ctx);
++
++/* handle dereference nested call */
++static inline int handle_dereference(char *arg, struct fetch_insn **pcode,
++	struct fetch_insn *end, struct traceprobe_parse_context *ctx,
++	int deref, long offset)
++{
++	const struct fetch_type *type = find_fetch_type(NULL, ctx->flags);
++	struct fetch_insn *code = *pcode;
++	int cur_offs = ctx->offset;
++	char *tmp;
++	int ret;
++
++	tmp = strrchr(arg, ')');
++	if (!tmp) {
++		trace_probe_log_err(ctx->offset + strlen(arg),
++					DEREF_OPEN_BRACE);
++		return -EINVAL;
++	}
++
++	*tmp = '\0';
++	ret = parse_probe_arg(arg, type, &code, end, ctx);
++	if (ret)
++		return ret;
++	ctx->offset = cur_offs;
++	if (code->op == FETCH_OP_COMM || code->op == FETCH_OP_DATA) {
++		trace_probe_log_err(ctx->offset, COMM_CANT_DEREF);
++		return -EINVAL;
++	}
++
++	/*
++	 * this_cpu_ptr(@SYM) does not use SYM value, but use SYM address.
++	 * So we overwrite the last FETCH_OP_DEREF with FETCH_OP_CPU_PTR.
++	 */
++	if (!(deref == FETCH_OP_CPU_PTR && *arg == '@')) {
++		code++;
++		if (code == end) {
++			trace_probe_log_err(ctx->offset, TOO_MANY_OPS);
++			return -EINVAL;
++		}
++		*pcode = code;
++	}
++
++	code->op = deref;
++	code->offset = offset;
++	/* Reset the last type if used */
++	ctx->last_type = NULL;
++	return 0;
++}
++
++static int parse_this_cpu(char *arg, struct fetch_insn **pcode,
++			  struct fetch_insn *end,
++			  struct traceprobe_parse_context *ctx)
++{
++	struct fetch_insn *code;
++	bool is_ptr = false;
++	int ret;
++
++	if (str_has_prefix(arg, THIS_CPU_PTR_PREFIX)) {
++		arg += THIS_CPU_PTR_LEN;
++		ctx->offset += THIS_CPU_PTR_LEN;
++		is_ptr = true;
++	} else if (str_has_prefix(arg, THIS_CPU_READ_PREFIX)) {
++		arg += THIS_CPU_READ_LEN;
++		ctx->offset += THIS_CPU_READ_LEN;
++	} else
++		return -EINVAL;
++
++	ret = handle_dereference(arg, pcode, end, ctx, FETCH_OP_CPU_PTR, 0);
++	if (ret || is_ptr)
++		return ret;
++
++	/* this_cpu_read(VAR) -> +0(this_cpu_ptr(VAR)) */
++	code = *pcode;
++	code++;
++	if (code == end) {
++		trace_probe_log_err(ctx->offset, TOO_MANY_OPS);
++		return -EINVAL;
++	}
++	code->op = FETCH_OP_DEREF;
++	code->offset = 0;
++	*pcode = code;
++	return 0;
++}
++
+ #ifdef CONFIG_PROBE_EVENTS_BTF_ARGS
+ 
+ static u32 btf_type_int(const struct btf_type *t)
+@@ -925,11 +1019,6 @@ static char *find_matched_close_paren(char *s)
+ 	return NULL;
+ }
+ 
+-static int
+-parse_probe_arg(char *arg, const struct fetch_type *type,
+-		struct fetch_insn **pcode, struct fetch_insn *end,
+-		struct traceprobe_parse_context *ctx);
+-
+ static int handle_typecast(char *arg, struct fetch_insn **pcode,
+ 			   struct fetch_insn *end,
+ 			   struct traceprobe_parse_context *ctx)
+@@ -982,7 +1071,9 @@ static int handle_typecast(char *arg, struct fetch_insn **pcode,
+ 		/* Skip '(' */
+ 		ctx->offset += 1;
+ 		tmp++;
+-	} else if (*tmp == '+' || *tmp == '-') {
++	} else if (*tmp == '+' || *tmp == '-' ||
++		   str_has_prefix(tmp, THIS_CPU_PTR_PREFIX) ||
++		   str_has_prefix(tmp, THIS_CPU_READ_PREFIX)) {
+ 		/* Dereference can have another field access inside it. */
+ 		char *open = strchr(tmp + 1, '(');
+ 
+@@ -1486,36 +1577,9 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
  		}
- 	}));
--- 
-2.34.1
+ 		ctx->offset += (tmp + 1 - arg) + (arg[0] != '-' ? 1 : 0);
+ 		arg = tmp + 1;
+-		tmp = strrchr(arg, ')');
+-		if (!tmp) {
+-			trace_probe_log_err(ctx->offset + strlen(arg),
+-					    DEREF_OPEN_BRACE);
+-			return -EINVAL;
+-		} else {
+-			const struct fetch_type *t2 = find_fetch_type(NULL, ctx->flags);
+-			int cur_offs = ctx->offset;
+-
+-			*tmp = '\0';
+-			ret = parse_probe_arg(arg, t2, &code, end, ctx);
+-			if (ret)
+-				break;
+-			ctx->offset = cur_offs;
+-			if (code->op == FETCH_OP_COMM ||
+-			    code->op == FETCH_OP_DATA) {
+-				trace_probe_log_err(ctx->offset, COMM_CANT_DEREF);
+-				return -EINVAL;
+-			}
+-			if (++code == end) {
+-				trace_probe_log_err(ctx->offset, TOO_MANY_OPS);
+-				return -EINVAL;
+-			}
+-			*pcode = code;
+-
+-			code->op = deref;
+-			code->offset = offset;
+-			/* Reset the last type if used */
+-			ctx->last_type = NULL;
+-		}
++		ret = handle_dereference(arg, pcode, end, ctx, deref, offset);
++		if (ret < 0)
++			return ret;
+ 		break;
+ 	case '\\':	/* Immediate value */
+ 		if (arg[1] == '"') {	/* Immediate string */
+@@ -1536,15 +1600,18 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
+ 		ret = handle_typecast(arg, pcode, end, ctx);
+ 		break;
+ 	default:
+-		if (isalpha(arg[0]) || arg[0] == '_') {	/* BTF variable */
++		if (str_has_prefix(arg, THIS_CPU_PTR_PREFIX) ||
++		    str_has_prefix(arg, THIS_CPU_READ_PREFIX)) {
++			ret = parse_this_cpu(arg, pcode, end, ctx);
++		} else if (isalpha(arg[0]) || arg[0] == '_') {	/* BTF variable */
+ 			if (!tparg_is_function_entry(ctx->flags) &&
+ 			    !tparg_is_function_return(ctx->flags)) {
+ 				trace_probe_log_err(ctx->offset, NOSUP_BTFARG);
+ 				return -EINVAL;
+ 			}
+ 			ret = parse_btf_arg(arg, pcode, end, ctx);
+-			break;
+ 		}
++		break;
+ 	}
+ 	if (!ret && code->op == FETCH_OP_NOP) {
+ 		/* Parsed, but do not find fetch method */
+diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+index 488d6790b5ef..e79e019b922d 100644
+--- a/kernel/trace/trace_probe.h
++++ b/kernel/trace/trace_probe.h
+@@ -101,6 +101,7 @@ typedef int (*print_type_func_t)(struct trace_seq *, void *, void *);
+ 	/* Stage 2 (dereference) ops */					\
+ 	FETCH_OP(DEREF, offset)		/* Dereference: .offset */	\
+ 	FETCH_OP(UDEREF, offset)	/* User-space dereference: .offset */\
++	FETCH_OP(CPU_PTR, none)		/* Per-CPU pointer: .offset */	\
+ 	/* Stage 3 (store) ops */					\
+ 	FETCH_OP(ST_RAW, store)		/* Raw value: .size */		\
+ 	FETCH_OP(ST_MEM, store)		/* Memory: .offset, .size */	\
+diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
+index f630930288d2..9265b03cf19d 100644
+--- a/kernel/trace/trace_probe_tmpl.h
++++ b/kernel/trace/trace_probe_tmpl.h
+@@ -129,25 +129,35 @@ process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
+ 	struct fetch_insn *s3 = NULL;
+ 	int total = 0, ret = 0, i = 0;
+ 	u32 loc = 0;
+-	unsigned long lval = val;
++	unsigned long lval, llval = val;
+ 
+ stage2:
+ 	/* 2nd stage: dereference memory if needed */
+ 	do {
+-		if (code->op == FETCH_OP_DEREF) {
+-			lval = val;
++		lval = val;
++		switch (code->op) {
++		case FETCH_OP_DEREF:
+ 			ret = probe_mem_read(&val, (void *)val + code->offset,
+ 					     sizeof(val));
+-		} else if (code->op == FETCH_OP_UDEREF) {
+-			lval = val;
++			break;
++		case FETCH_OP_UDEREF:
+ 			ret = probe_mem_read_user(&val,
+ 				 (void *)val + code->offset, sizeof(val));
+-		} else
+ 			break;
++		case FETCH_OP_CPU_PTR:
++			val = (unsigned long)this_cpu_ptr((void __percpu *)val);
++			ret = 0;
++			break;
++		default:
++			lval = llval;
++			goto out;
++		}
+ 		if (ret)
+ 			return ret;
++		llval = lval;
+ 		code++;
+ 	} while (1);
++out:
+ 
+ 	s3 = code;
+ stage3:
 
