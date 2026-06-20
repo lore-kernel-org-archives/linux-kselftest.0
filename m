@@ -1,167 +1,251 @@
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 416F71A682C
-	for <linux-kselftest@vger.kernel.org>; Sat, 20 Jun 2026 03:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CD131813A;
+	Sat, 20 Jun 2026 11:07:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781926188; cv=none; b=jtiSRjDinRkAPSsMRvNSkdW5RB49W+2XoWNI0jjuktgNRx3pv1mm2+HvSpdacsqj4unSDlw0d2f4TOep21jjpvgodQ9TBg1gxehc8jkRGn+Rdi+tL8mG925WCF5rxRg6VG42qGQALfqxDtXUFOZxWRZIeSB3Aww+7RWSXhnCdAU=
+	t=1781953668; cv=none; b=tfW0GbIicTn/ePDPoJlanfTZb/C4ZBSiDJHgLgi1vJdLux92ygJnUYzmr+7myjABJSUISddU03E0qELFSzuu4Pmw6DG7O50QqQBEslAA+4+Tr5ZMlPZlX69pAb77t4VF3SDpVy24ZK+/40Urihiw6nHr69XgbqIuIV7HzuyL+eU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781926188; c=relaxed/simple;
-	bh=V4fEGk23ufHa6RDD3ITKwuQgnoDx8CZs/Ah+IFbxtfM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=eumrAN0CLCWR5znT0XRGUnXLjva4rWEJ2Fnica0cxy8R/oPum1lmPhpMqlW+rwtXYWmZlnd6qWEI+exVImAnAr++OGECA42saEVQmEYc0EJ8NcOTGSUIFipluyj+o7nM0C0HBSEz8XlmGgCcrmknyr9+MyKNbEc9BXaGgpchOjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e0CC6auw; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e0CC6auw"
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-6a0db321df5so1164345eaf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2026 20:29:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781926186; x=1782530986; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+TnvN+8UuJTY/MiJiIrk1qDxzqryb2D2zBpSi70DDYw=;
-        b=e0CC6auwM1CRGR3O3gQUSvT4f++0PbcZBaB4LaYLG0BhcJmYenW8nhf+uGJyz6t+gA
-         eijtyP38SqBIHzuSx3kQzW+Nax7Llro6jcHaoD/we9yNWCihV6ozNII/ns80DFg0xZY/
-         YWO4jkXqv9elInO3wDifLItkjUC1Hi80TM8jgsx2WYMyL0p54gsAo06Bl60+Pv7lcLds
-         iauwtp4TIbIkQgYkxT1aHuDpXwPWNJrLKzWLJMaD+TqGAJqsP12sav1qGN/pHoboswKI
-         Y09tZD7HP5ZjVFCj8T6oZcKOs3KqmgcrvUASnXoNYZBYX164Poigk/yUQH/iyB/0dDcf
-         fhTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781926186; x=1782530986;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+TnvN+8UuJTY/MiJiIrk1qDxzqryb2D2zBpSi70DDYw=;
-        b=r8MpHLN8pgsMAxuN/SCZ71KM2N9lB2zVFdAxjmqxuFgoBgSZvuRClmCgpIdZyc9Sta
-         so6hLHKKEzvXV7/WKrQuChDQKOtMZxvYb73qsaRFitFFUHcjjtn7has3NaVOmDSrBmJa
-         Tvx9U1s8+PG3z5dIkSRF5JxwlypFByVM6JVtP9eI7EwKBcCZjt3+9keqFxK84FJh6nmO
-         xpG+k2OyJE6/tgfbCSi7pBKeGNhwu270yG5m0C+sJPV+eulxC2zHllStyKy9UxUWwTZ3
-         NE1e4BGx4+xxOCjwq/NFU00UMSe5Ifky5X+oKarwoHR8D25F2+xNPG0d5wfnk+1AYp2k
-         wgrg==
-X-Forwarded-Encrypted: i=1; AFNElJ/JQmJdgZBF0uS/E9q3krAdBrcmhbdvC3+bnsrUp7ZHGLHKtVarWoSmsUaKQEk1B2rXThIvbnVgTbSU+OcP298=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhOT6Ysn2UoDE6Fn+ExwNAAMWxGUfO0nzt3HCk26NA1ReugrJK
-	vsn5QXaoq5CeumG0//GilOnNg9jF3KtTKVxeWMrXE8AeJ4LMCZSdwmrV
-X-Gm-Gg: AfdE7cnMQDIL4O50EIrqe//EDY3AgjUddEqyhDsCL5EVYk8RxiJkRG6uri1r4AeLJ5O
-	ypDxdcaK1RP81lSJ+QUoaHXL5kqbQtPnbtn35sFjkDU9DNRfQsSkYRynA42obU6j/XtTyfeX+io
-	beHRbQoxbC88J1m3x/YbwzhyJqtUg79U41fsYCHiev/3Vsmz69p/3QRpFHdDs4+Rth/L0xx3PDu
-	ctqoUuvS9TPjiNItVXkp3xmc7kQ0yVAHrvNJY/khJWcIXW5OkqHe15YeCUKK/Vp+qomESs7EOCr
-	N0j3mT8JuEEulyRPbvsbcZu0D+NcQZoXDbGIfSWoyvb7CDWOTEusIQzmC/OmAcGW/ZcWMgmr/HK
-	GhM/Era+yypdm+hQvYT6v1TvvwFiq0TF4r+pJ62TV4ngV/iRexI+PmG5bz7Qe+Y7ticbLzcf1Ia
-	KCckyKLop9IWX1Ho+ScElRvW/14UWFxuQL7LNPmkh8p87Z///6Bdi+e8YU4e27F6WSAOYcQXkGb
-	YB9LxQ=
-X-Received: by 2002:a05:6820:81d3:b0:69d:fd96:c3e with SMTP id 006d021491bc7-6a0d8d14caemr5089817eaf.41.1781926186124;
-        Fri, 19 Jun 2026 20:29:46 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:53::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6a0e9da0e34sm1194869eaf.0.2026.06.19.20.29.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jun 2026 20:29:44 -0700 (PDT)
+	s=arc-20240116; t=1781953668; c=relaxed/simple;
+	bh=XN01UbbGA2FdQ/af7XvdvFWe0up1fhvoxgHVmw1i3Sw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J6hQrh/3eyRroKTwbMq4A8wovwqEfuhwRrvS8bbshYFHI6QVVCIHDMQw4dqS9yrHZUY/6XxZRdtYfIZInf/xxkpIlTA4KdtuhXqnQUmsAFmypRUJ6+6jgQtSU7ZRla5nzrbPqdDLW5IXo8/Jobxz/Msd6i/k/su1P5FWwLV9D8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 005061EA341; Sat, 20 Jun 2026 19:07:37 +0800 (AWST)
+X-Spam-Level: 
+Received: from [IPV6:2001:8003:8810:ea00::9c4] (unknown [IPv6:2001:8003:8810:ea00::9c4])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id A3F3D1EA331;
+	Sat, 20 Jun 2026 19:07:31 +0800 (AWST)
+Message-ID: <fa276fee-c173-4595-a5c7-e0342c555990@davidgow.net>
+Date: Sat, 20 Jun 2026 19:07:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] rust: kunit: use `file!()` inside `kunit_assert!`
+To: Gary Guo <gary@garyguo.net>, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot
+ <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
+ Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <20260616-kunit-v1-0-b191604a8d6b@garyguo.net>
+ <20260616-kunit-v1-1-b191604a8d6b@garyguo.net>
+From: David Gow <david@davidgow.net>
+Content-Language: fr
+In-Reply-To: <20260616-kunit-v1-1-b191604a8d6b@garyguo.net>
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 19 Jun 2026 20:29:43 -0700
-Message-Id: <DJDK43Q9Y1RJ.3SDUVLSC5I50E@gmail.com>
-Cc: "bpf" <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Quentin Monnet" <qmo@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "open
- list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- <kernel-patches-bot@fb.com>
-Subject: Re: [PATCH bpf-next v6 11/12] selftests/bpf: Add test to verify
- xlated insns for global percpu data
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Leon Hwang" <leon.hwang@linux.dev>
-X-Mailer: aerc
-References: <20260615152646.27639-1-leon.hwang@linux.dev>
- <20260615152646.27639-12-leon.hwang@linux.dev>
- <DJ9XY0Y2D2R8.16S9E0QFFMLQS@gmail.com>
- <d9eaffaa-6bbd-4af1-97cd-e5e37917c526@linux.dev>
- <CAADnVQLnnSrHDbw4OQCPrXz38wZ15PC1HuS1-aSB7LZxOQhd1g@mail.gmail.com>
- <b1efbbb0-d2ea-4050-aef7-e35db35bd8d9@linux.dev>
-In-Reply-To: <b1efbbb0-d2ea-4050-aef7-e35db35bd8d9@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Mon Jun 15, 2026 at 9:33 PM PDT, Leon Hwang wrote:
-> On 16/6/26 12:23, Alexei Starovoitov wrote:
->> On Mon, Jun 15, 2026 at 9:19=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev=
-> wrote:
->>>
->>> On 16/6/26 05:29, Alexei Starovoitov wrote:
->>>> On Mon Jun 15, 2026 at 8:26 AM PDT, Leon Hwang wrote:
->>> [...]
->>>>> +    ASSERT_EQ(ld_imm64_xlated[0].code, ld_imm64_raw[0].code, "ld_imm=
-64 opcode");
->>>>> +    ASSERT_TRUE(ld_imm64_xlated[0].dst_reg =3D=3D ld_imm64_raw[0].ds=
-t_reg, "ld_imm64 dst_reg");
->>>>> +    /*
->>>>> +     * The xlated instruction has the map ID in imm and the offset
->>>>> +     * in the next instruction's imm. The raw instruction just has
->>>>> +     * the offset in its imm.
->>>>> +     */
->>>>> +    ASSERT_EQ(ld_imm64_xlated[1].imm, ld_imm64_to_u64(ld_imm64_raw),=
- "ld_imm64 off");
->>>>> +
->>>>> +    mov64_percpu_reg =3D BPF_MOV64_PERCPU_REG(ld_imm64_raw[0].dst_re=
-g, ld_imm64_raw[0].dst_reg);
->>>>> +    ASSERT_MEMEQ(&insns[idx + 2], &mov64_percpu_reg, insn_sz, "mov64=
-_percpu_reg");
->>>>
->>>> If the point of the test was to check that percpu_array_map_direct_val=
-ue_meta()
->>>> computes 'off' correctly then it failed to achieve that goal.
->>>
->>> It was to check the 'off' and the mov64_percpu_reg insn.
->>>
->>> To avoid relying on the insns loaded from ELF obj, use raw insns to
->>> check the 'off' with a percpu_array map:
->>>
->>>         struct bpf_insn raw_insns[] =3D {
->>>                 BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0),
->>>                 BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, 0),
->>>                 BPF_EXIT_INSN(),
->>>         };
->>>
->>>         skel =3D test_global_percpu_data__open_and_load();
->>>         exp_off =3D offsetof(struct test_global_percpu_data__percpu,
->>> struct_data.nums[6]);
->>>         raw_insns[0].imm =3D bpf_map__fd(skel->maps.percpu);
->>>         raw_insns[1].imm =3D exp_off;
->>>
->>>         prog_fd =3D bpf_prog_load(...);
->>>         err =3D get_xlated_program(prog_fd, &insns, &cnt);
->>>         idx =3D find_percpu_ld_imm64(insns, cnt);
->>>
->>>         ASSERT_EQ(insns[idx + 1].imm, exp_off, "exp_off");
->>>
->>> Would this achieve that goal?
->>=20
->> Hmm. There is nothing like that in the patch.
->> What are you talking about?
->> Some future improvement to the patch?
->
-> It is future improvement to the patch. Sorry, it is too far from the patc=
-h.
->
->> My question was about the patch you posted.
->> What was the point of it?
->
-> The point of the patch was to check that
-> percpu_array_map_direct_value_meta() computes 'off' correctly against
-> the 'off' encoded in ELF obj, and a mov64_percpu_reg insn should be
-> added after loading the prog.
+Le 16/06/2026 à 11:24 PM, Gary Guo a écrit :
+> This parameter is needed currently because doctests want to override the
+> file. Simplify it by changing it to use `file!()`. Have doctests override
+> `file!()` macro to achieve the current behavior.
+> 
+> This allows us to remove the `file` helper and associated Kconfig options.
+> 
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> ---
 
-If that was the goal then it wasn't achieved. Just test manually
-that the 'off' is updated correctly and skip such selftest.
-There is little value.
+Looks good to me.
+
+Reviewed-by: David Gow <david@davidgow.net>
+
+Cheers,
+-- David
+
+>  Documentation/rust/general-information.rst |  4 ++--
+>  init/Kconfig                               |  3 ---
+>  rust/kernel/kunit.rs                       |  9 +++++----
+>  rust/macros/helpers.rs                     | 16 ----------------
+>  rust/macros/kunit.rs                       |  5 ++---
+>  rust/macros/lib.rs                         |  5 -----
+>  scripts/rustdoc_test_gen.rs                | 10 ++++++++--
+>  7 files changed, 17 insertions(+), 35 deletions(-)
+> 
+> diff --git a/Documentation/rust/general-information.rst b/Documentation/rust/general-information.rst
+> index 09234bed272c..20e3178ebfd4 100644
+> --- a/Documentation/rust/general-information.rst
+> +++ b/Documentation/rust/general-information.rst
+> @@ -157,5 +157,5 @@ numerical comparisons, one may define a new Kconfig symbol:
+>  
+>  .. code-block:: kconfig
+>  
+> -	config RUSTC_HAS_SPAN_FILE
+> -		def_bool RUSTC_VERSION >= 108800
+> +	config RUSTC_HAS_FILE_AS_C_STR
+> +		def_bool RUSTC_VERSION >= 109100
+
+Are we using RUSTC_FILE_AS_C_STR for this? I know it's used elsewhere,
+and it makes sense to replace RUSTC_HAS_SPAN_FILE with something that's
+used _somewhere_, but I do see a hardcoded c_str!(file!()) below. I'm
+assuming that RUSTC_FILE_AS_C_STR isn't something useful there.
+
+(This is just out of my own curiosity, rather than an actual suggestion.)
+
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 5230d4879b1c..e118fdb9df11 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -178,9 +178,6 @@ config LD_CAN_USE_KEEP_IN_OVERLAY
+>  	# https://github.com/llvm/llvm-project/pull/130661
+>  	def_bool LD_IS_BFD || LLD_VERSION >= 210000
+>  
+> -config RUSTC_HAS_SPAN_FILE
+> -	def_bool RUSTC_VERSION >= 108800
+> -
+>  config RUSTC_HAS_UNNECESSARY_TRANSMUTES
+>  	def_bool RUSTC_VERSION >= 108800
+>  
+> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+> index cdee5f27bd7f..157fd0634708 100644
+> --- a/rust/kernel/kunit.rs
+> +++ b/rust/kernel/kunit.rs
+> @@ -58,14 +58,15 @@ pub fn info(args: fmt::Arguments<'_>) {
+>  #[doc(hidden)]
+>  #[macro_export]
+>  macro_rules! kunit_assert {
+> -    ($name:literal, $file:literal, $diff:expr, $condition:expr $(,)?) => {
+> +    ($name:literal, $diff:expr, $condition:expr $(,)?) => {
+>          'out: {
+>              // Do nothing if the condition is `true`.
+>              if $condition {
+>                  break 'out;
+>              }
+>  
+> -            static FILE: &'static $crate::str::CStr = $file;
+> +            // Use `file!()` instead of `::core::file!()` here so it can be overridden.
+> +            static FILE: &'static $crate::str::CStr = $crate::c_str!(file!());
+>              static LINE: i32 = ::core::line!() as i32 - $diff;
+>              static CONDITION: &'static $crate::str::CStr = $crate::c_str!(stringify!($condition));
+>  
+> @@ -164,10 +165,10 @@ unsafe impl Sync for UnaryAssert {}
+>  #[doc(hidden)]
+>  #[macro_export]
+>  macro_rules! kunit_assert_eq {
+> -    ($name:literal, $file:literal, $diff:expr, $left:expr, $right:expr $(,)?) => {{
+> +    ($name:literal, $diff:expr, $left:expr, $right:expr $(,)?) => {{
+>          // For the moment, we just forward to the expression assert because, for binary asserts,
+>          // KUnit supports only a few types (e.g. integers).
+> -        $crate::kunit_assert!($name, $file, $diff, $left == $right);
+> +        $crate::kunit_assert!($name, $diff, $left == $right);
+>      }};
+>  }
+>  
+> diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
+> index d18fbf4daa0a..8cc9a20f470e 100644
+> --- a/rust/macros/helpers.rs
+> +++ b/rust/macros/helpers.rs
+> @@ -38,22 +38,6 @@ pub(crate) fn value(&self) -> String {
+>      }
+>  }
+>  
+> -pub(crate) fn file() -> String {
+> -    #[cfg(not(CONFIG_RUSTC_HAS_SPAN_FILE))]
+> -    {
+> -        proc_macro::Span::call_site()
+> -            .source_file()
+> -            .path()
+> -            .to_string_lossy()
+> -            .into_owned()
+> -    }
+> -
+> -    #[cfg(CONFIG_RUSTC_HAS_SPAN_FILE)]
+> -    {
+> -        proc_macro::Span::call_site().file()
+> -    }
+> -}
+> -
+>  /// Obtain all `#[cfg]` attributes.
+>  pub(crate) fn gather_cfg_attrs(attr: &[Attribute]) -> impl Iterator<Item = &Attribute> + '_ {
+>      attr.iter().filter(|a| a.path().is_ident("cfg"))
+> diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
+> index ae20ed6768f1..936eff014870 100644
+> --- a/rust/macros/kunit.rs
+> +++ b/rust/macros/kunit.rs
+> @@ -109,12 +109,11 @@ pub(crate) fn kunit_tests(test_suite: Ident, mut module: ItemMod) -> Result<Toke
+>          // Before the test, override usual `assert!` and `assert_eq!` macros with ones that call
+>          // KUnit instead.
+>          let test_str = test.to_string();
+> -        let path = CString::new(crate::helpers::file()).expect("file path cannot contain NUL");
+>          processed_items.push(parse_quote! {
+>              #[allow(unused)]
+>              macro_rules! assert {
+>                  ($cond:expr $(,)?) => {{
+> -                    kernel::kunit_assert!(#test_str, #path, 0, $cond);
+> +                    kernel::kunit_assert!(#test_str, 0, $cond);
+>                  }}
+>              }
+>          });
+> @@ -122,7 +121,7 @@ macro_rules! assert {
+>              #[allow(unused)]
+>              macro_rules! assert_eq {
+>                  ($left:expr, $right:expr $(,)?) => {{
+> -                    kernel::kunit_assert_eq!(#test_str, #path, 0, $left, $right);
+> +                    kernel::kunit_assert_eq!(#test_str, 0, $left, $right);
+>                  }}
+>              }
+>          });
+> diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+> index 4a48fabbc268..6b00f9789772 100644
+> --- a/rust/macros/lib.rs
+> +++ b/rust/macros/lib.rs
+> @@ -8,11 +8,6 @@
+>  
+>  // Stable since Rust 1.87.0.
+>  #![feature(extract_if)]
+> -//
+> -// Stable since Rust 1.88.0 under a different name, `proc_macro_span_file`,
+> -// which was added in Rust 1.88.0. This is why `cfg_attr` is used here, i.e.
+> -// to avoid depending on the full `proc_macro_span` on Rust >= 1.88.0.
+> -#![cfg_attr(not(CONFIG_RUSTC_HAS_SPAN_FILE), feature(proc_macro_span))]
+>  
+>  mod concat_idents;
+>  mod export;
+> diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
+> index d61a77219a8c..37f4877f52e2 100644
+> --- a/scripts/rustdoc_test_gen.rs
+> +++ b/scripts/rustdoc_test_gen.rs
+> @@ -169,12 +169,18 @@ fn main() {
+>              r#"/// Generated `{name}` KUnit test case from a Rust documentation test.
+>  #[no_mangle]
+>  pub extern "C" fn {kunit_name}(__kunit_test: *mut ::kernel::bindings::kunit) {{
+> +    /// Overrides the usual [`file!`] macro with one that expands to the real path.
+> +    #[allow(unused)]
+> +    macro_rules! file {{
+> +        () => {{ "{real_path}" }}
+> +    }}
+> +
+>      /// Overrides the usual [`assert!`] macro with one that calls KUnit instead.
+>      #[allow(unused)]
+>      macro_rules! assert {{
+>          ($cond:expr $(,)?) => {{{{
+>              ::kernel::kunit_assert!(
+> -                "{kunit_name}", c"{real_path}", __DOCTEST_ANCHOR - {line}, $cond
+> +                "{kunit_name}", __DOCTEST_ANCHOR - {line}, $cond
+>              );
+>          }}}}
+>      }}
+> @@ -184,7 +190,7 @@ macro_rules! assert {{
+>      macro_rules! assert_eq {{
+>          ($left:expr, $right:expr $(,)?) => {{{{
+>              ::kernel::kunit_assert_eq!(
+> -                "{kunit_name}", c"{real_path}", __DOCTEST_ANCHOR - {line}, $left, $right
+> +                "{kunit_name}", __DOCTEST_ANCHOR - {line}, $left, $right
+>              );
+>          }}}}
+>      }}
+> 
 
