@@ -1,227 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A9F395ACC;
-	Sat, 20 Jun 2026 15:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781968685; cv=none; b=o12PVU2aqJXF5oHaMRxt9zWUN73pFKu/BiUI/OaLTKqfh80pFkVdxKJAs2KZ772tjo5THRfl3547KBPaAdePPGrRDpAcTMc8d3abbZakS6PAVw1ZdWSOB7NOTTiyoghkSEdqvZ8WrwqzvSh21/E4jytInTwE1vEoQbF1g/nKBYQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781968685; c=relaxed/simple;
-	bh=xU6zuM/HbYMaltYcjwukisTr0VSMBwt6jbjQ3T3zIHY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=d5d4H1WmF0sC4HN9ZYwuiQAiUfiezRB395nfJjGrtonCY59l/G8w01DtNYOKt9sM+H7x5pCVQj84k0gFZkMc7Vmr64/BaoexyLYb/lOqCq6vAxhApZKX1I07Jl4kz35QVQ74M8L/rXyJeX1gKP+bMQ2KCNVzkqqaa317eZ3CXFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EggPYTK0; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EggPYTK0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F6D71F000E9;
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA6EB327BFB;
 	Sat, 20 Jun 2026 15:18:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781968683;
-	bh=l19KSv81H8CLDh/l6df6UqO1an9RpFg82puag8/Glqc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=EggPYTK0NogK5aruoOxM7qn0xZurCHFDURUXh6bk4DJNrSulDs5rAarJwLGncYxni
-	 +grlsUvSFtlqP/439CY4CW1TJ5WFSUfWLnecViXwLIYzfK/qnOFQ+99DSK8T9asuor
-	 v+x7C9p3wVpyRSjJLva9o1jefIXmpnhJLPEGG+RqwsDmf6sZeY4jn9F+H28N3bwtSx
-	 msUNHWDWRNoDNwwi6aLr+Ck7o06vYz2hAv7XUVhUY+x6HSqN5MHVxvqzVhO9oPKx4U
-	 3YhSIxNWyW+LpZGbEAAUwStVsaKbj3ZkTgQ/ShvmO18wA4b6laMr+abdoanwe3Rs0E
-	 sLzMggoBB9SdQ==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 6/8] tracing/probes: Add $current variable support
-Date: Sun, 21 Jun 2026 00:18:00 +0900
-Message-ID: <178196867995.560995.15590604737375758388.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <178196862271.560995.5255615288323003663.stgit@devnote2>
-References: <178196862271.560995.5255615288323003663.stgit@devnote2>
-User-Agent: StGit/0.19
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781968686; cv=none; b=aipQRMGdHxYmC25fNpCtfedGaDdKY+Xa4CbmJzaB5oBrD3o3Jv+rEsSrcxrQJb3Kd8mrBQ+JRcprG5+lany1mlu7zEY6k2vHHs15Jc9xea6MbTQXG+UmUHrI5rGX0memWFgh4UgcytvYcPr3qV8IYNe/8HGKl0P62LlBytIO8nk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781968686; c=relaxed/simple;
+	bh=OpOjMdbQ8++TILHVWXC0YLsoz6GMhAAEpCYTX9eZP6Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KpeT1xuQoZaGPklPW8yhj7lWgl5c92HaiTxEaeUmlx+j6Wmh+uzgKUpQZdefqN68a4/sTmzxmpfYfxQCBaNzuo14waQRYmdr5cDanSI5Pj/nCENURSCdq87OTbDi6+bkB6E1VtoaHpHi1mWYWlVnhD0VEwXBUrvv8iU7SBpaZmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=IQxeVcFl; arc=none smtp.client-ip=4.193.249.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="IQxeVcFl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=6NbRD
+	5BW7VWdRoHkhlmFlXIaRtETnANpowlq9Y+jZlw=; b=IQxeVcFlcJpWZg4QfQ5wZ
+	ECRGx8vd2jnUO5PahhqrDuz4Ns990iMUFRYjwXujvoPzmqoYM4urOVeBJzMZLtoz
+	2lAguhGQPt3sovDhOsycVxQlEnmg4KgoEhclY0mB8uzoj1/IO/4UYrmBwh3NPL+0
+	1xdr8f0VGMguTnF5h0BYbc=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web3 (Coremail) with SMTP id ygQGZQD3Q5EbrzZq3PmUAg--.8562S2;
+	Sat, 20 Jun 2026 23:17:52 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] bpf: Preserve RCU pointer nullness after unlock
+Date: Sat, 20 Jun 2026 15:17:43 +0000
+Message-Id: <cover.1781968391.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ygQGZQD3Q5EbrzZq3PmUAg--.8562S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GF1DWF4rZw15WrW8JF4kXrb_yoWDWFX_ur
+	y0y34DJr1xAFn8KFW3Aw1fXrW09r4YkFyxJF4UGrnrtryUJr15ur4kXry5A3sF9ay8KwnI
+	yrs5G3ySyr1YgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbDAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+	6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr
+	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
+	rcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE14
+	v_XrWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AK
+	xVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrx
+	kI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v2
+	6F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUDkuxU
+	UUUU=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+bpf_rcu_read_unlock() converts MEM_RCU verifier registers to
+PTR_UNTRUSTED, but currently clears PTR_MAYBE_NULL at the same time.
 
-Since we can use the BTF to cast value to a structure pointer type,
-it is useful to introduce "$current" special variable support to
-fetcharg.
+That loses the nullable state for BTF_TYPE_SAFE_RCU_OR_NULL fields such as
+skb->sk. A program can read skb->sk while in an RCU read-side critical
+section, unlock RCU, and then dereference the pointer directly without the
+verifier requiring an explicit NULL check.
 
-User can define a fetcharg to access current task_struct properties
-using BTF info. e.g.
+Patch 1 preserves PTR_MAYBE_NULL when removing MEM_RCU.
+Patch 2 adds a focused regression test for the unchecked dereference and a
+matched null-checked control.
 
-  $current->cpus_ptr
+Yiyang Chen (2):
+  bpf: Preserve nullable RCU pointer state on unlock
+  selftests/bpf: Cover nullable RCU pointer use after unlock
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v6:
-  - Rebased on dump fetcharg patch.
-  - Remove function name/eprobe requirement for $current.
- Changes in v5:
-  - Use s32 for bof_find_btf_id().
- Changes in v4:
-  - Add $current in README when CONFIG_HAVE_FUNCTION_ARG_ACCESS_API=y case.
-  - Fix to prohibit using $current in eprobes and address based kprobes.
- Changes in v3:
-  - Remove $current support from eprobes (because eprobes is only for event)
-  - Prohibit uprobes to use $current.
- Changes in v2:
-   - Support to parse $current in parse_btf_arg().
-   - If no typecast on $current, it automatically casted to task_struct.
-   - Check error case if $current follows something except for "-".
----
- Documentation/trace/fprobetrace.rst |    1 +
- Documentation/trace/kprobetrace.rst |    1 +
- kernel/trace/trace.c                |    4 ++--
- kernel/trace/trace_probe.c          |   40 ++++++++++++++++++++++++++++++++++-
- kernel/trace/trace_probe.h          |    1 +
- kernel/trace/trace_probe_tmpl.h     |    3 +++
- 6 files changed, 47 insertions(+), 3 deletions(-)
+ kernel/bpf/verifier.c                         |  2 +-
+ .../selftests/bpf/prog_tests/rcu_read_lock.c  | 17 ++++++++++++++++
+ .../selftests/bpf/progs/rcu_read_lock.c       | 20 +++++++++++++++++++
+ 3 files changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fprobetrace.rst
-index 290a9e6f7491..3392cab016b3 100644
---- a/Documentation/trace/fprobetrace.rst
-+++ b/Documentation/trace/fprobetrace.rst
-@@ -50,6 +50,7 @@ Synopsis of fprobe-events
-   $argN         : Fetch the Nth function argument. (N >= 1) (\*2)
-   $retval       : Fetch return value.(\*3)
-   $comm         : Fetch current task comm.
-+  $current      : Fetch the address of the current task_struct.
-   +|-[u]OFFS(FETCHARG) : Fetch memory at FETCHARG +|- OFFS address.(\*4)(\*5)
-   \IMM          : Store an immediate value to the argument.
-   NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
-diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
-index a62707e6a9f2..81e4fe38791d 100644
---- a/Documentation/trace/kprobetrace.rst
-+++ b/Documentation/trace/kprobetrace.rst
-@@ -53,6 +53,7 @@ Synopsis of kprobe_events
-   $argN		: Fetch the Nth function argument. (N >= 1) (\*1)
-   $retval	: Fetch return value.(\*2)
-   $comm		: Fetch current task comm.
-+  $current      : Fetch the address of the current task_struct.
-   +|-[u]OFFS(FETCHARG) : Fetch memory at FETCHARG +|- OFFS address.(\*3)(\*4)
-   \IMM		: Store an immediate value to the argument.
-   NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 0e36af853199..7a5676524f1a 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -4323,13 +4323,13 @@ static const char readme_msg[] =
- 	"\t     args: <name>=fetcharg[:type]\n"
- 	"\t fetcharg: (%<register>|$<efield>), @<address>, @<symbol>[+|-<offset>],\n"
- #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
--	"\t           $stack<index>, $stack, $retval, $comm, $arg<N>,\n"
-+	"\t           $stack<index>, $stack, $retval, $comm, $arg<N>, $current\n"
- #ifdef CONFIG_PROBE_EVENTS_BTF_ARGS
- 	"\t           [(structname[,field])]<argname>[->field[->field|.field...]],\n"
- 	"\t           [(structname[,field])](fetcharg)->field[->field|.field...],\n"
- #endif
- #else
--	"\t           $stack<index>, $stack, $retval, $comm,\n"
-+	"\t           $stack<index>, $stack, $retval, $comm, $current\n"
- #endif
- 	"\t           +|-[u]<offset>(<fetcharg>), \\imm-value, \\\"imm-string\"\n"
- 	"\t     kernel return probes support: $retval, $arg<N>, $comm\n"
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 8c21c378fac7..1ddd0a804e39 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -700,7 +700,9 @@ static int parse_btf_arg(char *varname,
- 	int i, is_ptr, ret;
- 	u32 tid;
- 
--	if (!ctx->funcname && !(ctx->flags & TPARG_FL_TEVENT))
-+	/* Note: field is not separated at this point, so check prefix. */
-+	if (!str_has_prefix(varname, "$current") &&
-+	    !ctx->funcname && !(ctx->flags & TPARG_FL_TEVENT))
- 		return -EINVAL;
- 
- 	is_ptr = split_next_field(varname, &field, ctx);
-@@ -713,6 +715,24 @@ static int parse_btf_arg(char *varname,
- 		return -EOPNOTSUPP;
- 	}
- 
-+	if (!strcmp(varname, "$current")) {
-+		code->op = FETCH_OP_CURRENT;
-+		/* If no typecast is specified for $current, use task_struct by default */
-+		if (!ctx->struct_btf) {
-+			s32 ttid = bpf_find_btf_id("task_struct", BTF_KIND_STRUCT,
-+						   &ctx->struct_btf);
-+
-+			if (ttid < 0) {
-+				trace_probe_log_err(ctx->offset, NO_BTF_ENTRY);
-+				return -ENOENT;
-+			}
-+			/* btf_type_skip_modifier() requires u32 for type id. */
-+			tid = ttid;
-+			ctx->last_struct = btf_type_skip_modifiers(ctx->struct_btf, tid, &tid);
-+		}
-+		goto found;
-+	}
-+
- 	if (ctx->flags & TPARG_FL_RETURN && !strcmp(varname, "$retval")) {
- 		code->op = FETCH_OP_RETVAL;
- 		/* Check whether the function return type is not void, even with typecast. */
-@@ -1273,6 +1293,24 @@ static int parse_probe_vars(char *orig_arg, const struct fetch_type *t,
- 		return 0;
- 	}
- 
-+	/* $current returns the address of the current task_struct. */
-+	if (str_has_prefix(arg, "current")) {
-+		/* $current is only supported by kernel probe. */
-+		if (!(ctx->flags & TPARG_FL_KERNEL)) {
-+			err = TP_ERR_BAD_VAR;
-+			goto inval;
-+		}
-+		arg += strlen("current");
-+		if (*arg == '-' && IS_ENABLED(CONFIG_PROBE_EVENTS_BTF_ARGS))
-+			return parse_btf_arg(orig_arg, pcode, end, ctx);
-+
-+		if (*arg != '\0')
-+			goto inval;
-+
-+		code->op = FETCH_OP_CURRENT;
-+		return 0;
-+	}
-+
- #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
- 	len = str_has_prefix(arg, "arg");
- 	if (len) {
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index bc3ac148a655..488d6790b5ef 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -92,6 +92,7 @@ typedef int (*print_type_func_t)(struct trace_seq *, void *, void *);
- 	FETCH_OP(RETVAL, none)		/* Return value */		\
- 	FETCH_OP(IMM, imm)		/* Immediate: .immediate */	\
- 	FETCH_OP(COMM, none)		/* Current comm */		\
-+	FETCH_OP(CURRENT, none)		/* Current task_struct address */\
- 	FETCH_OP(ARG, param)		/* Argument: .param = index */	\
- 	FETCH_OP(FOFFS, imm)		/* File offset: .immediate */	\
- 	FETCH_OP(DATA, ptr)		/* Allocated data: .data */	\
-diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
-index f39b37fcdb3b..f630930288d2 100644
---- a/kernel/trace/trace_probe_tmpl.h
-+++ b/kernel/trace/trace_probe_tmpl.h
-@@ -112,6 +112,9 @@ process_common_fetch_insn(struct fetch_insn *code, unsigned long *val)
- 	case FETCH_OP_DATA:
- 		*val = (unsigned long)code->data;
- 		break;
-+	case FETCH_OP_CURRENT:
-+		*val = (unsigned long)current;
-+		break;
- 	default:
- 		return -EILSEQ;
- 	}
+
+base-commit: a975094bf98ca97be9146f9d3b5681a6f9cf5ce3
+-- 
+2.34.1
 
