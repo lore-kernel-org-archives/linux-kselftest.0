@@ -1,161 +1,254 @@
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590D23C07A;
-	Sun, 21 Jun 2026 14:36:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E8C36F8EA
+	for <linux-kselftest@vger.kernel.org>; Sun, 21 Jun 2026 14:43:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782052597; cv=none; b=PIbD5KOI3UOpcBZ8Tu86px4fK0JpiZF3/0Z5Dv+KICQF+s0ShZX7Gzxk+uovBsbowixTkQDY7N0/YFqchbhGd4yj9zd6iRrYEvMTYb3aWCxqm7ueKmC9ArGkuH6PstpLFhaoUXl+J0BesAizCg49MlWGpcV6Kynnr2H3IS4JpFA=
+	t=1782052994; cv=none; b=cjdvGDA6BEvk4Zc+sbRnwVjY9roY+6LrHCUxb71GHGJUqZJeP8HwRU4oCOcp+umZIKc51pic2v0EIOlT6wxroF6eDX1oN2JBvyMQMiU4rCrzQI/50QPbsYgtbZwkQK33YrML6dfJhdi2J79741Ky6NcC8YPmRDXE4YZ2rYS6kRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782052597; c=relaxed/simple;
-	bh=xJ2ebWVRvG1hb1+4o+mytX6T6w1AcG5tyFQQyiFv2YI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ClPZ1Aup9+RosIMRbIAchW6kJrNoqOFa+n3sPGk/oHOolbgGPj5of6KbZHsJa+kcjjN3EaDXoO6qFkh2uDvopVBlOPScjx/xxEdQ39jrIPPfPDqLgtL9q9/4ne5ZukIyb/r+Gu9kyxT9eYTp1ZdfKqlRDSljpr/3wcQlVoQ+3Kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Dz2egSQy; arc=none smtp.client-ip=115.124.30.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1782052994; c=relaxed/simple;
+	bh=7b/5/uuFY0iMAiAkkmjH/SZ4lUwfkNtTGXcNmQ3L7zI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iMqep072eFQyK/ZKhpbHQaW5sHHxVtvnXwozexPPEiDiyJqMEQXG1mdVAIpnwWZQBDujttt06+FVSUYI5sG+2dIagJp4sXR7qO2bP+TJAEAuMfxw4Hv8e7tQaVVAQjiuPC7nEOWSQMu2ZP2gBr3LVTMKhZReXE3TIu40AaHXSv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iEyyakpZ; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Dz2egSQy"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1782052587; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=giyWaz2rbcgHxviVzOBaO9+sHfE30gVkb6c05dSu02Y=;
-	b=Dz2egSQy0279DrUckFNjW8YeEvZU5VqNodLOiuavBk6AP85rQaJY/4oJa88UZ4kX548lMCYhdZUPp5jrrNahxtxDS4NRQez+C+qes01SolEYJZG8J9Wx03pRFOtjWNqOcHs/FYzDJeML3bJycC1V1/8SQJWsffFrmUAhIklN8Pk=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=zelin.deng@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0X5FNjQ1_1782052585;
-Received: from 30.180.85.62(mailfrom:zelin.deng@linux.alibaba.com fp:SMTPD_---0X5FNjQ1_1782052585 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Sun, 21 Jun 2026 22:36:26 +0800
-Message-ID: <ccfed9b6-9a73-4299-b305-da7b593a52fd@linux.alibaba.com>
-Date: Sun, 21 Jun 2026 22:36:24 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iEyyakpZ"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-84347ad88edso2947292b3a.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 21 Jun 2026 07:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782052992; x=1782657792; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=j21QVkqcaKlx86cBO+UHi3ihgP8Gq0rj/qDDVA+Xps4=;
+        b=iEyyakpZeeQcyGRZAGYpALJe6PttsMDfVJLiyeCQQRYMShGm+yqlsBq/zBmVrxot1N
+         2OOSQywuDWxIID7Sgp7StxJcnIaYOZAhZ2FsLmcuUF4t1DhV/ECinJcig8QAUxeCiCH2
+         xUzag6olcG2FRjQjIL4XqRM26NzS/YZCqTpkLSR0hFl1Y9AWQ4Rx1NufTZcUHQ3SqdYB
+         nIIMrORXU5PkhEslgLHAs/g3UCbpplgCBgWXglCdBvpL9wO2gvBYF8psCjqwzOgc2CWv
+         1khc8tjHyrDAQEUt3dwdA3d0GycrKvnYsrRv7UIqqnngxczJIDyGesFeE9Yw/n2B7Cs7
+         +ajQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782052992; x=1782657792;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j21QVkqcaKlx86cBO+UHi3ihgP8Gq0rj/qDDVA+Xps4=;
+        b=VeUkbmHL110DL6OnuiGVN39hjEA0T1UOBgBVcFNs1ZegoRwj2TdlYlPyjFvKQj79lb
+         9SC5cZ8Ky5Mwy3HGjQYl1ZczTPE/j+86zOks5GIL0WxXVNr4h/CafLgTrrWELaoJVgL6
+         IcIMrJ56tSFpc5QTikRKgjQY7EbRlQvbg8A3jXZ/wQ+QyRcHhdGhxMhv6JPJWEVhnf6A
+         hk0NH9vrnkT1uZVlsU8UY2EtL7hkIlkXJoga4/dlZ/eIkdOmXeT3NIF+kZInAfEWt0MO
+         vFY0ULrLPoYcXZ6DTeAYDzGj5W1DeLLUjjE/Ht2w9uXLo1K1FFGlKR7HG6D0tojIy/qF
+         9XRw==
+X-Forwarded-Encrypted: i=1; AFNElJ8gM/csyWNokAqh0ApKoVkDXiiko9jX7piNLYMB1JKpT5Nc7wupLMEf7B3Qqh1RaxmTdM/7F/KY9t4+nHSpFD8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGncJzzAbQzhVC5rtviA+E3a3sJLD+15AS0fQXJWSa8C3KHxUx
+	ske3JchK5C7+ObvihIOoChvvs4tRMH+KUu2kzM6UMTnAd3wa0RcKXIVU
+X-Gm-Gg: AfdE7clCv+kZGCnTyjpfHejjZoYRGrDUHchujGptMSNAh9tTw7NK5/U8nnoSyIqVlaO
+	SMe3+X84kqZDUAFt81Ky6cLjDKouWP1F2EkGQ4TngjuJND44SoxihopjcOPYz1pWWUz37m7laNz
+	tO2TDCNl9zcM0/w29jnKGAihE5KzfezqD3zFzr87735FFflI/w82LMne/BYbbtSxeuDN/Asra3c
+	gEOd1kaG1wRkG9YkNNLj6AZZiFWD7YCnMvTxNWvm+87oETJA9xjEv7JM1JbVB6+2RpfOFL1U1Bs
+	BQSndLtt4EEbDwk5JTqcwO0AwjvHY2b2XltN/2d7OHmLgy+Elr6HLZNsVN5uiM/OczaF+aCgx26
+	prrgK4adJUDjovNrljtBzLTbVmvalIFkiZyigH79pgwrdO39ZXDmDTk9ukrTGykKKJ57uquySeB
+	VWLhDqYdrttO/ePgddGYZLDSV1dNntvODg1Hv9jQs=
+X-Received: by 2002:a05:6a00:2eaa:b0:842:7992:bdd6 with SMTP id d2e1a72fcca58-845508a31e5mr11541607b3a.36.1782052992276;
+        Sun, 21 Jun 2026 07:43:12 -0700 (PDT)
+Received: from computer ([2a09:bac5:3b4a:8aa::dd:17])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84564e7687csm4963254b3a.35.2026.06.21.07.43.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Jun 2026 07:43:11 -0700 (PDT)
+From: Varun R Mallya <varunrmallya@gmail.com>
+To: pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	bjorn@kernel.org
+Cc: alex@ghiti.fr,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	pulehui@huawei.com,
+	puranjay@kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	varunrmallya@gmail.com
+Subject: [PATCH bpf-next 0/3] Add BPF Exceptions support for RISC-V
+Date: Sun, 21 Jun 2026 20:12:56 +0530
+Message-ID: <20260621144259.288135-1-varunrmallya@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: livepatch: unset sub_make_done in case top
- level Makefile be overwritten
-To: Miroslav Benes <mbenes@suse.cz>
-Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org,
- live-patching@vger.kernel.org, mpdesouza@suse.com
-References: <20260525083721.27857-1-zelin.deng@linux.alibaba.com>
- <alpine.LSU.2.21.2606191638540.26638@pobox.suse.cz>
-From: Zelin Deng <zelin.deng@linux.alibaba.com>
-In-Reply-To: <alpine.LSU.2.21.2606191638540.26638@pobox.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+This patchset aims to add BPF exceptions supports for riscv64 by
+implementing the arch_bpf_stack_walk function and then updating the
+prologue and epilogue for BPF JIT on riscv. Also,
+bpf_jit_supports_exceptions() returns true now so that the verifier does
+not reject programs containing BPF exceptions on riscv64. 
 
-在 2026/6/19 22:42, Miroslav Benes 写道:
-> On Mon, 25 May 2026, Zelin Deng wrote:
->
->> After I did: make kselftest-all in top level of kernel source tree, top
->> level Makefile was overwritten by auto generated contents by
->> filechk_makefile:
->> [root@emr: /home/shiyu.dzl/linux-next]$ cat Makefile
->> export KBUILD_OUTPUT = .
->> export KBUILD_EXTMOD = /home/shiyu.dzl/linux-next
->> export KBUILD_EXTMOD_OUTPUT = /home/shiyu.dzl/linux-next
->> include /home/shiyu.dzl/linux-next/Makefile
->>
->> Top-level Makefile export sub_make_done=1, leaks into unrelated re-invocations
->> of the top-level Makefile when recursive descent through selftests -
->> building test_module of livepatch. That causes KBUILD_EXTMOD setup to be
->> skipped, which leads to a relative/absolute path mismatch in srcroot vs
->> CURDIR, falsely setting building_out_of_srctree, and ultimately overwriting
->> the source tree's Makefile with a generated stub.
->>
->> Clear sub_make_done before re-invoking the kernel Makefile.
->>
->> Fixes: c4bbe83d27c2 ("livepatch: Move tests from lib/livepatch to selftests/livepatch")
->> Signed-off-by: Zelin Deng <zelin.deng@linux.alibaba.com>
-> Adding Marcos and KLP ML.
->
-> I cannot reproduce and I do not understand it much from the changelog (I
-> am by far not a Kbuild expert). Could you share the exact steps to
-> reproduce please? If I just run 'make kselftest-all' in the top level, it
-> passes and livepatch test_modules are not even touched.
->
-> Miroslav
+On riscv the unwinder used by arch_bpf_stack_walk() is the frame-pointer
+unwinder, so exception support is gated on CONFIG_FRAME_POINTER.
 
-Thank you for replying.
+In the prologue and epilogue of the RISC-V JIT, I saved the
+return address and then the frame-pointer according to [1]. Also,
+according to [2], s0 to s11 are callee saved registers, which is why a
+new array (rv_exception_csave_regs) has been created to save these
+registers which contains all the required registers along with the frame
+pointer as well as return address.
 
-Per my understanding, to build livepatch test_modules KDIR must be 
-either set explicitly when doing 'make kselftest-all 
-KDIR=<path-to-kernel-build-dir>' or have the kernel devel package 
-installed. Otherwise the compilation could be skipped. (see 
-tools/testing/selftests/livepatch/test_modules/Makefile)
+The following demonstrates that all the selftests for BPF exceptions
+apart from the ones that mix bpf-to-bpf calls and tailcalls pass.
+This patch was tested using vmtest.sh to run the selftests.
 
-KDIR ?= /lib/modules/$(shell uname -r)/build
+test_exceptions_success:PASS:exceptions__open 0 nsec
+libbpf: prog 'exception_tail_call': BPF program load failed: -EINVAL
+libbpf: prog 'exception_tail_call': -- BEGIN PROG LOAD LOG --
+0: R1=ctx() R10=fp0
+; volatile int ret = 0; @ exceptions.c:106
+0: (b4) w2 = 0                        ; R2=0
+1: (63) *(u32 *)(r10 -4) = r2         ; R2=0 R10=fp0
+; ret = exception_tail_call_subprog(ctx); @ exceptions.c:108
+2: (85) call pc+4
+caller:
+ R10=fp0
+callee:
+ frame1: R1=ctx() R2=0 R10=fp0
+7: frame1: R1=ctx() R10=fp0
+; int exception_tail_call_subprog(struct __sk_buff *ctx) @ exceptions.c:96
+7: (bf) r6 = r1                       ; frame1: R1=ctx() R6=ctx()
+; volatile int ret = 10; @ exceptions.c:98
+8: (b4) w1 = 10                       ; frame1: R1=10
+9: (63) *(u32 *)(r10 -4) = r1         ; frame1: R1=10 R10=fp0 fp-8=mmmm????
+; asm volatile("r1 = %[ctx]\n\t" @ bpf_helpers.h:169
+10: (18) r7 = 0xff60000080df1800      ; frame1: R7=map_ptr(map=jmp_table,ks=4,vs=4)
+12: (bf) r1 = r6                      ; frame1: R1=ctx() R6=ctx()
+13: (bf) r2 = r7                      ; frame1: R2=map_ptr(map=jmp_table,ks=4,vs=4) R7=map_ptr(map=jmp_table,ks=4,vs=4)
+14: (b7) r3 = 0                       ; frame1: R3=0
+15: (85) call bpf_tail_call#12
+mixing of tail_calls and bpf-to-bpf calls is not supported
+processed 11 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+-- END PROG LOAD LOG --
+libbpf: prog 'exception_tail_call': failed to load: -EINVAL
+libbpf: failed to load object 'exceptions'
+libbpf: failed to load BPF skeleton 'exceptions': -EINVAL
+test_exceptions_success:FAIL:exceptions__load unexpected error: -22 (errno 22)
+tester_init:PASS:tester_log_buf 0 nsec
+process_subtest:PASS:obj_open_mem 0 nsec
+process_subtest:PASS:specs_alloc 0 nsec
+tester_init:PASS:tester_log_buf 0 nsec
+process_subtest:PASS:obj_open_mem 0 nsec
+process_subtest:PASS:specs_alloc 0 nsec
+#113/1   exceptions/reject_exception_cb_type_1:OK
+#113/2   exceptions/reject_exception_cb_type_2:OK
+#113/3   exceptions/reject_exception_cb_type_3:OK
+#113/4   exceptions/reject_exception_cb_type_4:OK
+#113/5   exceptions/reject_exception_cb_type_5:OK
+#113/6   exceptions/reject_async_callback_throw:OK
+#113/7   exceptions/reject_with_lock:OK
+#113/8   exceptions/reject_subprog_with_lock:OK
+#113/9   exceptions/reject_with_rcu_read_lock:OK
+#113/10  exceptions/reject_subprog_with_rcu_read_lock:OK
+#113/11  exceptions/reject_with_rbtree_add_throw:OK
+#113/12  exceptions/reject_with_reference:OK
+#113/13  exceptions/reject_global_subprog_throw_with_reference:OK
+#113/14  exceptions/reject_with_cb_reference:OK
+#113/15  exceptions/reject_with_cb:OK
+#113/16  exceptions/reject_with_subprog_reference:OK
+#113/17  exceptions/reject_throwing_exception_cb:OK
+#113/18  exceptions/reject_exception_cb_call_global_func:OK
+#113/19  exceptions/reject_exception_cb_call_static_func:OK
+#113/20  exceptions/reject_multiple_exception_cb:OK
+#113/21  exceptions/reject_exception_throw_cb:OK
+#113/22  exceptions/reject_exception_throw_cb_diff:OK
+#113/23  exceptions/reject_subprog_rcu_lock_throw:OK
+#113/24  exceptions/reject_subprog_throw_preempt_lock:OK
+#113/25  exceptions/reject_subprog_throw_irq_lock:OK
+#113/26  exceptions/reject_set_exception_cb_bad_ret1:OK
+#113/27  exceptions/reject_set_exception_cb_bad_ret2:OK
+#113/28  exceptions/reject_out_of_range_global_throw:OK
+#113/29  exceptions/check_assert_eq_int_min:OK
+#113/30  exceptions/check_assert_eq_int_max:OK
+#113/31  exceptions/check_assert_eq_zero:OK
+#113/32  exceptions/check_assert_eq_llong_min:OK
+#113/33  exceptions/check_assert_eq_llong_max:OK
+#113/34  exceptions/check_assert_lt_pos:OK
+#113/35  exceptions/check_assert_lt_zero:OK
+#113/36  exceptions/check_assert_lt_neg:OK
+#113/37  exceptions/check_assert_le_pos:OK
+#113/38  exceptions/check_assert_le_zero:OK
+#113/39  exceptions/check_assert_le_neg:OK
+#113/40  exceptions/check_assert_gt_pos:OK
+#113/41  exceptions/check_assert_gt_zero:OK
+#113/42  exceptions/check_assert_gt_neg:OK
+#113/43  exceptions/check_assert_ge_pos:OK
+#113/44  exceptions/check_assert_ge_zero:OK
+#113/45  exceptions/check_assert_ge_neg:OK
+#113/46  exceptions/check_assert_range_s64:OK
+#113/47  exceptions/check_assert_range_u64:OK
+#113/48  exceptions/check_assert_single_range_s64:OK
+#113/49  exceptions/check_assert_single_range_u64:OK
+#113/50  exceptions/check_assert_generic:OK
+#113/51  exceptions/check_assert_with_return:OK
+#113     exceptions:FAIL
 
-...
+All error logs:
+test_exceptions_success:PASS:exceptions__open 0 nsec
+libbpf: prog 'exception_tail_call': BPF program load failed: -EINVAL
+libbpf: prog 'exception_tail_call': -- BEGIN PROG LOAD LOG --
+0: R1=ctx() R10=fp0
+; volatile int ret = 0; @ exceptions.c:106
+0: (b4) w2 = 0                        ; R2=0
+1: (63) *(u32 *)(r10 -4) = r2         ; R2=0 R10=fp0
+; ret = exception_tail_call_subprog(ctx); @ exceptions.c:108
+2: (85) call pc+4
+caller:
+ R10=fp0
+callee:
+ frame1: R1=ctx() R2=0 R10=fp0
+7: frame1: R1=ctx() R10=fp0
+; int exception_tail_call_subprog(struct __sk_buff *ctx) @ exceptions.c:96
+7: (bf) r6 = r1                       ; frame1: R1=ctx() R6=ctx()
+; volatile int ret = 10; @ exceptions.c:98
+8: (b4) w1 = 10                       ; frame1: R1=10
+9: (63) *(u32 *)(r10 -4) = r1         ; frame1: R1=10 R10=fp0 fp-8=mmmm????
+; asm volatile("r1 = %[ctx]\n\t" @ bpf_helpers.h:169
+10: (18) r7 = 0xff60000080df1800      ; frame1: R7=map_ptr(map=jmp_table,ks=4,vs=4)
+12: (bf) r1 = r6                      ; frame1: R1=ctx() R6=ctx()
+13: (bf) r2 = r7                      ; frame1: R2=map_ptr(map=jmp_table,ks=4,vs=4) R7=map_ptr(map=jmp_table,ks=4,vs=4)
+14: (b7) r3 = 0                       ; frame1: R3=0
+15: (85) call bpf_tail_call#12
+mixing of tail_calls and bpf-to-bpf calls is not supported
+processed 11 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+-- END PROG LOAD LOG --
+libbpf: prog 'exception_tail_call': failed to load: -EINVAL
+libbpf: failed to load object 'exceptions'
+libbpf: failed to load BPF skeleton 'exceptions': -EINVAL
+test_exceptions_success:FAIL:exceptions__load unexpected error: -22 (errno 22)
 
-# Ensure that KDIR exists, otherwise skip the compilation
-modules:
-ifneq ("$(wildcard $(KDIR))", "")
-     $(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
-endif
+[1]: https://riscv-non-isa.github.io/riscv-elf-psabi-doc/#_frame_pointer_convention
+[2]: https://riscv-non-isa.github.io/riscv-elf-psabi-doc/#_integer_register_convention
 
-...
+Varun R Mallya (3):
+  riscv: stacktrace: Implement arch_bpf_stack_walk() for BPF
+  riscv, bpf: Add support for BPF exceptions
+  riscv, bpf: Remove BPF exceptions from BPF CI denylist
 
-Here're how I reproduce the issue:
+ arch/riscv/kernel/stacktrace.c               |  28 +++++
+ arch/riscv/net/bpf_jit_comp64.c              | 102 +++++++++++++++++++
+ tools/testing/selftests/bpf/DENYLIST.riscv64 |   1 -
+ 3 files changed, 130 insertions(+), 1 deletion(-)
 
-1. pull linux-next, reset to HEAD, for example 
-3ce97bd3c4f18608335e709c24d6a40e7036cab8 (tag next-20260619)
-
-2. at linux-next tree: make all -j$(nproc) && make modules_install 
-headers_install -j$(nproc) && make install && reboot
-
-3. at linux-next tree: make kselftest-all
-
-4. top level Makefile in linux-next has been overwritten by
-
-     export KBUILD_OUTPUT = .
-     export KBUILD_EXTMOD = /home/shiyu.dzl/linux-next
-     export KBUILD_EXTMOD_OUTPUT = /home/shiyu.dzl/linux-next
-     include /home/shiyu.dzl/linux-next/Makefile
-
-it is a stub generated by filechk_makefile.
-
-
-I'm not quite sure that it could be related to my toolchain (like make 
-version ?), I briefed analysis the root cause on my environment (KDIR 
-'/lib/modules/7.1.0-next-20260619/build' which actually a symbol link to 
-my kernel source -> '/home/shiyu.dzl/linux-next'):
-
-   1. sub_make_done leaks via environment. The top-level Makefile sets 
-export sub_make_done := 1 after its first-pass initialization.
-   Because it is exported, every child make process inherits it.
-   2. livepatch test_modules re-invokes the top-level Makefile. The call 
-chain is: top-level Makefile → kselftest-% pattern rule →
-   tools/testing/selftests/ → livepatch test_modules/Makefile → $(MAKE) 
--C $(KDIR) modules KBUILD_EXTMOD=..., which re-enters the top-level 
-Makefile to
-   build an external module.
-   3. The inherited sub_make_done=1 skips critical initialization. The 
-top-level Makefile's first-pass block (ifneq ($(sub_make_done),1)) is
-   skipped entirely. This block is responsible for correctly parsing 
-command-line variables and setting up KBUILD_EXTMOD-related paths.
-   4. Path mismatch triggers false out-of-tree detection. With the 
-initialization skipped, srcroot and CURDIR end up with mismatched values 
-(e.g.,
-   absolute vs. relative). The comparison (ifeq ($(srcroot),$(CURDIR))) 
-fails, so building_out_of_srctree is incorrectly set to 1.
-   5. outputmakefile overwrites the source tree's Makefile. Because 
-building_out_of_srctree is set, the filechk_makefile rule fires and 
-replaces the
-   real top-level Makefile with a generated stub containing 
-KBUILD_OUTPUT, KBUILD_EXTMOD, and an include directive.
-
-   Why make -C tools/testing/selftests/ all is unaffected: it enters the 
-selftests directory directly without ever executing the top-level Makefile
-   first, so sub_make_done is never exported into the environment. When 
-livepatch test_modules later invokes $(MAKE) -C $(KDIR), the top-level 
-Makefile
-   runs its full initialization normally.
-
-Thanks,
-
-Zelin
+-- 
+2.54.0
 
