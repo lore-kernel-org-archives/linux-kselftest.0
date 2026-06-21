@@ -1,343 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63A663002C8;
-	Sun, 21 Jun 2026 03:27:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590D23C07A;
+	Sun, 21 Jun 2026 14:36:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782012466; cv=none; b=b4VkX5JZy+lNYzHAWbck1XxjXZ04hb3Ew7Juv0LppzRW8VU4YWBSvG9zjte7j/WJJ8iZkuTvkStOYAFS1LVIdST4FASRLX9CaWrU7EdKmxpjEtXT2runTcwDFhBLFaaWQrWnlRDkvPvj4cdl8d8T2QIbCs3epV4QKi1PFc+YXws=
+	t=1782052597; cv=none; b=PIbD5KOI3UOpcBZ8Tu86px4fK0JpiZF3/0Z5Dv+KICQF+s0ShZX7Gzxk+uovBsbowixTkQDY7N0/YFqchbhGd4yj9zd6iRrYEvMTYb3aWCxqm7ueKmC9ArGkuH6PstpLFhaoUXl+J0BesAizCg49MlWGpcV6Kynnr2H3IS4JpFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782012466; c=relaxed/simple;
-	bh=mLEzXNoUaolYDkSzISUgjiSyeMmx7spgUbpsbHy41eM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XelVmSY1leNvoUGWuiOEhkyNqJ9oPxl7F5U29U92YTEMwccV+0WTfddjwGJ44nkP8dyfpTv++M4udzJX7VsZ5sfMeTRQwqFV/eWqxbOfL7Oywg6l/LSPpXY6V/Suq2uhq7infpNYAKC++6a3ONKMz1EX72YYowGCKqXMSYnj8tA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UElUqEVs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782052597; c=relaxed/simple;
+	bh=xJ2ebWVRvG1hb1+4o+mytX6T6w1AcG5tyFQQyiFv2YI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ClPZ1Aup9+RosIMRbIAchW6kJrNoqOFa+n3sPGk/oHOolbgGPj5of6KbZHsJa+kcjjN3EaDXoO6qFkh2uDvopVBlOPScjx/xxEdQ39jrIPPfPDqLgtL9q9/4ne5ZukIyb/r+Gu9kyxT9eYTp1ZdfKqlRDSljpr/3wcQlVoQ+3Kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Dz2egSQy; arc=none smtp.client-ip=115.124.30.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UElUqEVs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A56F31F000E9;
-	Sun, 21 Jun 2026 03:27:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782012465;
-	bh=caJSDRsjJHydSioOXhqDSYWRboMVNZqx5hqLzOIv4xQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=UElUqEVsdBWJ6CjYQfL3levX0R/rJt2s+hhKqvtOPXr7koiNxEnTvpy81PaCh1WkU
-	 pfV7rkbufigInRAs62BaaBp6/8dA9Jay99LfOzHC/7eJC9cCU0nhw6jIoanBMoN4oN
-	 rgnoIlpDWSogFpSQ+tssNjyrjTNbt2kD/6AQL4ywqOgWjeTDRW5DWfPl1MTeGRhPRP
-	 T5BuHdIM0+jsVU0rkpNT1+a4j5qrfwepJmXAngTdfx5SmzodaEQoOUdObCMNiwppWN
-	 gwSKJWn/Q6udm2VlxON2FLTQmCGmc8usqNZc1jffwAjC+QLvR1U4JM1nnjjnarsgUj
-	 DXMdRoTEglprg==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [RESEND PATCH v6 8/8] tracing/probes: Add a new testcase for BTF typecasts
-Date: Sun, 21 Jun 2026 12:27:41 +0900
-Message-ID: <178201246105.570818.16850907320213925812.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <178201238795.570818.15573963115625446598.stgit@devnote2>
-References: <178201238795.570818.15573963115625446598.stgit@devnote2>
-User-Agent: StGit/0.19
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Dz2egSQy"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1782052587; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=giyWaz2rbcgHxviVzOBaO9+sHfE30gVkb6c05dSu02Y=;
+	b=Dz2egSQy0279DrUckFNjW8YeEvZU5VqNodLOiuavBk6AP85rQaJY/4oJa88UZ4kX548lMCYhdZUPp5jrrNahxtxDS4NRQez+C+qes01SolEYJZG8J9Wx03pRFOtjWNqOcHs/FYzDJeML3bJycC1V1/8SQJWsffFrmUAhIklN8Pk=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=zelin.deng@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0X5FNjQ1_1782052585;
+Received: from 30.180.85.62(mailfrom:zelin.deng@linux.alibaba.com fp:SMTPD_---0X5FNjQ1_1782052585 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Sun, 21 Jun 2026 22:36:26 +0800
+Message-ID: <ccfed9b6-9a73-4299-b305-da7b593a52fd@linux.alibaba.com>
+Date: Sun, 21 Jun 2026 22:36:24 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: livepatch: unset sub_make_done in case top
+ level Makefile be overwritten
+To: Miroslav Benes <mbenes@suse.cz>
+Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ live-patching@vger.kernel.org, mpdesouza@suse.com
+References: <20260525083721.27857-1-zelin.deng@linux.alibaba.com>
+ <alpine.LSU.2.21.2606191638540.26638@pobox.suse.cz>
+From: Zelin Deng <zelin.deng@linux.alibaba.com>
+In-Reply-To: <alpine.LSU.2.21.2606191638540.26638@pobox.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-With the introduction of container_of-style BTF typecasting and
-per-CPU variable access support in trace probes, we need a way to
-verify their functionality and prevent regressions.
+在 2026/6/19 22:42, Miroslav Benes 写道:
+> On Mon, 25 May 2026, Zelin Deng wrote:
+>
+>> After I did: make kselftest-all in top level of kernel source tree, top
+>> level Makefile was overwritten by auto generated contents by
+>> filechk_makefile:
+>> [root@emr: /home/shiyu.dzl/linux-next]$ cat Makefile
+>> export KBUILD_OUTPUT = .
+>> export KBUILD_EXTMOD = /home/shiyu.dzl/linux-next
+>> export KBUILD_EXTMOD_OUTPUT = /home/shiyu.dzl/linux-next
+>> include /home/shiyu.dzl/linux-next/Makefile
+>>
+>> Top-level Makefile export sub_make_done=1, leaks into unrelated re-invocations
+>> of the top-level Makefile when recursive descent through selftests -
+>> building test_module of livepatch. That causes KBUILD_EXTMOD setup to be
+>> skipped, which leads to a relative/absolute path mismatch in srcroot vs
+>> CURDIR, falsely setting building_out_of_srctree, and ultimately overwriting
+>> the source tree's Makefile with a generated stub.
+>>
+>> Clear sub_make_done before re-invoking the kernel Makefile.
+>>
+>> Fixes: c4bbe83d27c2 ("livepatch: Move tests from lib/livepatch to selftests/livepatch")
+>> Signed-off-by: Zelin Deng <zelin.deng@linux.alibaba.com>
+> Adding Marcos and KLP ML.
+>
+> I cannot reproduce and I do not understand it much from the changelog (I
+> am by far not a Kbuild expert). Could you share the exact steps to
+> reproduce please? If I just run 'make kselftest-all' in the top level, it
+> passes and livepatch test_modules are not even touched.
+>
+> Miroslav
 
-Add a new ftrace kselftest and update the trace event sample module
-to test and validate these features.
+Thank you for replying.
 
-Specifically, update the trace-events-sample module to set up a
-periodic timer whose callback accesses a per-CPU counter. Introduce
-a new sample trace event, foo_timer_fn, to trace this callback
-and log the current counter value.
+Per my understanding, to build livepatch test_modules KDIR must be 
+either set explicitly when doing 'make kselftest-all 
+KDIR=<path-to-kernel-build-dir>' or have the kernel devel package 
+installed. Otherwise the compilation could be skipped. (see 
+tools/testing/selftests/livepatch/test_modules/Makefile)
 
-Then, add a new test case, btf_probe_event.tc, which defines a
-dynamic probe on the timer callback. The probe uses BTF typecasting
-to recover the parent structure from the timer argument and
-this_cpu_read() to fetch the per-CPU counter. The test verifies
-the integrity of the implementation by ensuring the values
-recorded by the dynamic probe match those from the static tracepoint.
+KDIR ?= /lib/modules/$(shell uname -r)/build
 
-Assisted-by: Antigravity:gemini-3.5-flash
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v6:
-  - Update testcase according to changes.
- Changes in v5:
-  - Add more syntax test cases.
- Changes in v4:
-  - Fix uprobe $current test.
- Changes in v3:
-  - Add syntax test case.
-  - Update testcase to use this_cpu_read()
- Changes in v2:
-  - Use timer_shutdown_sync() instead of timer_delete_sync() for teardown.
----
- samples/trace_events/trace-events-sample.c         |   40 +++++++++++++++-
- samples/trace_events/trace-events-sample.h         |   34 ++++++++++++-
- .../ftrace/test.d/dynevent/btf_probe_event.tc      |   51 ++++++++++++++++++++
- .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   11 ++++
- .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   11 ++++
- .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    5 ++
- 6 files changed, 147 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
+...
 
-diff --git a/samples/trace_events/trace-events-sample.c b/samples/trace_events/trace-events-sample.c
-index 0b7a6efdb247..ca5d98c360cb 100644
---- a/samples/trace_events/trace-events-sample.c
-+++ b/samples/trace_events/trace-events-sample.c
-@@ -94,6 +94,20 @@ static int simple_thread_fn(void *arg)
- static DEFINE_MUTEX(thread_mutex);
- static int simple_thread_cnt;
- 
-+static struct foo_timer_data *foo_timer_data;
-+
-+static void sample_timer_cb(struct timer_list *t)
-+{
-+	struct foo_timer_data *data = container_of(t, struct foo_timer_data, timer);
-+
-+	get_cpu();
-+	trace_foo_timer_fn(data);
-+	(*this_cpu_ptr(data->counter))++;
-+	put_cpu();
-+
-+	mod_timer(t, jiffies + HZ);
-+}
-+
- int foo_bar_reg(void)
- {
- 	mutex_lock(&thread_mutex);
-@@ -132,9 +146,27 @@ void foo_bar_unreg(void)
- 
- static int __init trace_event_init(void)
- {
-+	foo_timer_data = kzalloc_obj(*foo_timer_data, GFP_KERNEL);
-+	if (!foo_timer_data)
-+		return -ENOMEM;
-+
-+	foo_timer_data->name = "sample_timer_counter";
-+	foo_timer_data->counter = alloc_percpu(int);
-+	if (!foo_timer_data->counter) {
-+		kfree(foo_timer_data);
-+		return -ENOMEM;
-+	}
-+
-+	timer_setup(&foo_timer_data->timer, sample_timer_cb, 0);
-+	mod_timer(&foo_timer_data->timer, jiffies + HZ);
-+
- 	simple_tsk = kthread_run(simple_thread, NULL, "event-sample");
--	if (IS_ERR(simple_tsk))
--		return -1;
-+	if (IS_ERR(simple_tsk)) {
-+		timer_shutdown_sync(&foo_timer_data->timer);
-+		free_percpu(foo_timer_data->counter);
-+		kfree(foo_timer_data);
-+		return PTR_ERR(simple_tsk);
-+	}
- 
- 	return 0;
- }
-@@ -147,6 +179,10 @@ static void __exit trace_event_exit(void)
- 		kthread_stop(simple_tsk_fn);
- 	simple_tsk_fn = NULL;
- 	mutex_unlock(&thread_mutex);
-+
-+	timer_shutdown_sync(&foo_timer_data->timer);
-+	free_percpu(foo_timer_data->counter);
-+	kfree(foo_timer_data);
- }
- 
- module_init(trace_event_init);
-diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_events/trace-events-sample.h
-index 1a05fc153353..816848a456a2 100644
---- a/samples/trace_events/trace-events-sample.h
-+++ b/samples/trace_events/trace-events-sample.h
-@@ -247,12 +247,14 @@
-  */
- 
- /*
-- * It is OK to have helper functions in the file, but they need to be protected
-- * from being defined more than once. Remember, this file gets included more
-- * than once.
-+ * It is OK to have helper functions and data structures in the file, but they
-+ * need to be protected from being defined more than once. Remember, this file
-+ * gets included more than once.
-  */
- #ifndef __TRACE_EVENT_SAMPLE_HELPER_FUNCTIONS
- #define __TRACE_EVENT_SAMPLE_HELPER_FUNCTIONS
-+#include <linux/timer.h>
-+
- static inline int __length_of(const int *list)
- {
- 	int i;
-@@ -270,6 +272,13 @@ enum {
- 	TRACE_SAMPLE_BAR = 4,
- 	TRACE_SAMPLE_ZOO = 8,
- };
-+
-+struct foo_timer_data {
-+	const char		*name;
-+	struct timer_list	timer;
-+	int __percpu		*counter;
-+};
-+
- #endif
- 
- /*
-@@ -595,6 +604,25 @@ TRACE_EVENT(foo_rel_loc,
- 		  __get_rel_bitmask(bitmask),
- 		  __get_rel_cpumask(cpumask))
- );
-+
-+TRACE_EVENT(foo_timer_fn,
-+
-+	TP_PROTO(struct foo_timer_data *data),
-+
-+	TP_ARGS(data),
-+
-+	TP_STRUCT__entry(
-+		__string(	name,			data->name	)
-+		__field(	int,			count		)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name);
-+		__entry->count	= *this_cpu_ptr(data->counter);
-+	),
-+
-+	TP_printk("name=%s count=%d", __get_str(name), __entry->count)
-+);
- #endif
- 
- /***** NOTICE! The #if protection ends here. *****/
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-new file mode 100644
-index 000000000000..96791e120b7d
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-@@ -0,0 +1,51 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: BTF event with typecast and percpu access
-+# requires: dynamic_events "this_cpu_read(<fetcharg>)":README "[(structname[,field])]<argname>[->field[->field|.field...]]":README
-+
-+# Check if the sample module is loaded
-+if ! lsmod | grep -q trace_events_sample; then
-+  modprobe trace-events-sample || exit_unsupported
-+fi
-+
-+echo 0 > events/enable
-+echo > dynamic_events
-+
-+# The sample_timer_cb(struct timer_list *t) is called.
-+# We want to check (STRUCT,FIELD)VAR typecast and this_cpu_read() access.
-+# (foo_timer_data,timer)t converts t to struct foo_timer_data * using container_of.
-+# data->counter is a per-cpu pointer to int.
-+# this_cpu_read(data->counter) should give the value of the counter.
-+
-+echo 'f:mysample/myevent sample_timer_cb name=(foo_timer_data,timer)t->name:string count=this_cpu_read((foo_timer_data,timer)t->counter)' >> dynamic_events
-+
-+echo 1 > events/mysample/myevent/enable
-+echo 1 > events/sample-trace/foo_timer_fn/enable
-+
-+sleep 2
-+
-+echo 0 > events/mysample/myevent/enable
-+echo 0 > events/sample-trace/foo_timer_fn/enable
-+
-+# Compare the values.
-+MATCH=0
-+while read line; do
-+  if echo $line | grep -q "foo_timer_fn:"; then
-+    NAME=`echo $line | sed 's/.*name=\([^ ]*\) .*/\1/'`
-+    COUNT=`echo $line | sed 's/.*count=\([^ ]*\).*/\1/'`
-+    if grep -q "myevent:.*name=\"${NAME}\" count=$COUNT" trace; then
-+       MATCH=$((MATCH+1))
-+    fi
-+  fi
-+done < trace
-+
-+if [ $MATCH -eq 0 ]; then
-+  echo "No matching events found"
-+  exit_fail
-+fi
-+
-+# Clean up
-+echo 0 > events/mysample/myevent/enable
-+echo 0 > events/sample-trace/foo_timer_fn/enable
-+echo > dynamic_events
-+clear_trace
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-index fee479295e2f..e111d426a984 100644
---- a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-@@ -112,6 +112,17 @@ check_error 'f vfs_read%return $retval->^foo'	# NO_PTR_STRCT
- check_error 'f vfs_read file->^foo'		# NO_BTF_FIELD
- check_error 'f vfs_read file^-.foo'		# BAD_HYPHEN
- check_error 'f vfs_read ^file:string'		# BAD_TYPE4STR
-+if grep -qF "[(structname" README ; then
-+check_error 'f vfs_read arg1=(task_struct)file^'		# TYPECAST_REQ_FIELD
-+check_error 'f vfs_read arg1=(a)((b)((c)(^(d)file->d)->c)->b)->a'	# TOO_MANY_NESTED
-+check_error 'f vfs_read arg1=(task_struct,^in_execve)file->comm'	# TYPECAST_NOT_ALIGNED
-+check_error 'f vfs_read arg1=(task_struct,^foo_bar)file->pid'	# NO_BTF_FIELD
-+check_error 'f vfs_read arg1=(^task_struct1234)file->pid'	# NO_PTR_STRCT
-+check_error 'f vfs_read arg1=(task_struct,se^->group_node)file->comm'	# TYPECAST_BAD_ARROW
-+check_error 'f vfs_read arg1=(task_struct,^->pid)file->comm'	# NO_BTF_FIELD
-+check_error 'f vfs_read arg1=(task_struct,^.pid)file->comm'	# NO_BTF_FIELD
-+check_error 'f vfs_read arg1=(task_struct,^.)file->comm'	# NO_BTF_FIELD
-+fi
- fi
- 
- else
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-index 8f1c58f0c239..626adeb2e840 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-@@ -115,6 +115,17 @@ check_error 'p vfs_read+20 ^$arg*'		# NOFENTRY_ARGS
- check_error 'p vfs_read ^hoge'			# NO_BTFARG
- check_error 'p kfree ^$arg10'			# NO_BTFARG (exceed the number of parameters)
- check_error 'r kfree ^$retval'			# NO_RETVAL
-+if grep -qF "[(structname" README ; then
-+check_error 'p vfs_read arg1=(task_struct)file^'		# TYPECAST_REQ_FIELD
-+check_error 'p vfs_read arg1=(a)((b)((c)(^(d)file->d)->c)->b)->a'	# TOO_MANY_NESTED
-+check_error 'p vfs_read arg1=(task_struct,^in_execve)file->comm'	# TYPECAST_NOT_ALIGNED
-+check_error 'p vfs_read arg1=(task_struct,^foo_bar)file->pid'	# NO_BTF_FIELD
-+check_error 'p vfs_read arg1=(^task_struct1234)file->pid'		# NO_PTR_STRCT
-+check_error 'p vfs_read arg1=(task_struct,se^->group_node)file->comm'	# TYPECAST_BAD_ARROW
-+check_error 'p vfs_read arg1=(task_struct,^->pid)file->comm'	# NO_BTF_FIELD
-+check_error 'p vfs_read arg1=(task_struct,^.pid)file->comm'	# NO_BTF_FIELD
-+check_error 'p vfs_read arg1=(task_struct,^.)file->comm'	# NO_BTF_FIELD
-+fi
- else
- check_error 'p vfs_read ^$arg*'			# NOSUP_BTFARG
- fi
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-index c817158b99db..e12dc967ec76 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-@@ -28,4 +28,9 @@ if grep -q ".*symstr.*" README; then
- check_error 'p /bin/sh:10 $stack0:^symstr'	# BAD_TYPE
- fi
- 
-+# $current is not supported by uprobe
-+if grep -q "\$current.*" README; then
-+check_error 'p /bin/sh:10 ^$current:u8'	# BAD_VAR
-+fi
-+
- exit 0
+# Ensure that KDIR exists, otherwise skip the compilation
+modules:
+ifneq ("$(wildcard $(KDIR))", "")
+     $(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
+endif
+
+...
+
+Here're how I reproduce the issue:
+
+1. pull linux-next, reset to HEAD, for example 
+3ce97bd3c4f18608335e709c24d6a40e7036cab8 (tag next-20260619)
+
+2. at linux-next tree: make all -j$(nproc) && make modules_install 
+headers_install -j$(nproc) && make install && reboot
+
+3. at linux-next tree: make kselftest-all
+
+4. top level Makefile in linux-next has been overwritten by
+
+     export KBUILD_OUTPUT = .
+     export KBUILD_EXTMOD = /home/shiyu.dzl/linux-next
+     export KBUILD_EXTMOD_OUTPUT = /home/shiyu.dzl/linux-next
+     include /home/shiyu.dzl/linux-next/Makefile
+
+it is a stub generated by filechk_makefile.
+
+
+I'm not quite sure that it could be related to my toolchain (like make 
+version ?), I briefed analysis the root cause on my environment (KDIR 
+'/lib/modules/7.1.0-next-20260619/build' which actually a symbol link to 
+my kernel source -> '/home/shiyu.dzl/linux-next'):
+
+   1. sub_make_done leaks via environment. The top-level Makefile sets 
+export sub_make_done := 1 after its first-pass initialization.
+   Because it is exported, every child make process inherits it.
+   2. livepatch test_modules re-invokes the top-level Makefile. The call 
+chain is: top-level Makefile → kselftest-% pattern rule →
+   tools/testing/selftests/ → livepatch test_modules/Makefile → $(MAKE) 
+-C $(KDIR) modules KBUILD_EXTMOD=..., which re-enters the top-level 
+Makefile to
+   build an external module.
+   3. The inherited sub_make_done=1 skips critical initialization. The 
+top-level Makefile's first-pass block (ifneq ($(sub_make_done),1)) is
+   skipped entirely. This block is responsible for correctly parsing 
+command-line variables and setting up KBUILD_EXTMOD-related paths.
+   4. Path mismatch triggers false out-of-tree detection. With the 
+initialization skipped, srcroot and CURDIR end up with mismatched values 
+(e.g.,
+   absolute vs. relative). The comparison (ifeq ($(srcroot),$(CURDIR))) 
+fails, so building_out_of_srctree is incorrectly set to 1.
+   5. outputmakefile overwrites the source tree's Makefile. Because 
+building_out_of_srctree is set, the filechk_makefile rule fires and 
+replaces the
+   real top-level Makefile with a generated stub containing 
+KBUILD_OUTPUT, KBUILD_EXTMOD, and an include directive.
+
+   Why make -C tools/testing/selftests/ all is unaffected: it enters the 
+selftests directory directly without ever executing the top-level Makefile
+   first, so sub_make_done is never exported into the environment. When 
+livepatch test_modules later invokes $(MAKE) -C $(KDIR), the top-level 
+Makefile
+   runs its full initialization normally.
+
+Thanks,
+
+Zelin
 
