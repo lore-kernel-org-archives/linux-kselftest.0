@@ -1,79 +1,242 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4903A382F;
-	Mon, 22 Jun 2026 09:46:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A48F3793CC
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 09:54:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782121568; cv=none; b=loHp926iZotaQo+Y1Q9iVDeSBY7BYjQLFzCGKxg1oPZ7jQW0WM1nKg49JAYsc5uwZGTSPLCd8CNAzpoPNMQ/XxXjBzRXm8avnup8psJs7snbq8qeKOncORrRDZZodATXDUEjFqBiB6JDBKKOMjNqsRHz+idBZ3ZUsGqlha5F4BA=
+	t=1782122060; cv=none; b=Z5TgXEOi2m46yIQFDbJv6FAHiT2Ude4PsK4kn52VvIfPrefv87rgLhuQah3jUSlc279kAeTeeUS82/Mks4r6tEq8CnWyauO/iSWVs3pV9qjdnpSu6l0l03GhWi5rrBjeOsLoAN3w+t1D8MOQxyTvYHlE47BT2SCpHfHSVCEGjqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782121568; c=relaxed/simple;
-	bh=Q00CUE1AZx2Is/tR2ZY+tJyYPGGBbW4ZIr/9ZAf2s/U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=qTf9I7/lAyAEyY96Ahd9hjdxjy7I9W+kowwaaa/BYWmdD9NQf3hP3awxU4akK7jex2viyRb1z19GSKosnu991DITw6W0RP9l+E7DRHo3oZyZFLleoco4MclX5+O+Tx6UXAxmk15nPTFTA9WJ7nIRr6gQkcYRXH1YLlJWidP/OZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m27Mm4H+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782122060; c=relaxed/simple;
+	bh=6dZ4zYdErrEzfiYdiDusqu5liRpk/yR1ucrJzKf7SNU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u4Fsb4pvbC+sJ+krGPRB7oNezoaesWaMtWZmUn51utl8i6v5zmQlcZCr0ib4KvDPMgYwoIvxfBI5cfUTHExcJzHslLaNA17D56KCUuMkHGqqXWQ2qk2Qf7EL2Lg8ClChu7Y7sbEhsif+0Gfd/uEXegTsWDxwyS8CAteuN03aU6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=pA7DnmgH; arc=none smtp.client-ip=195.121.94.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m27Mm4H+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C2D1F00A3A;
-	Mon, 22 Jun 2026 09:45:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782121564;
-	bh=Q00CUE1AZx2Is/tR2ZY+tJyYPGGBbW4ZIr/9ZAf2s/U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=m27Mm4H+bNsp/UDzGbjPabw8c3K52wf9UvHVc04VXLJqtFs2HQ68r8BWa7uMKa6Uz
-	 S5Ie1fqQgf9OQCGrT50avcE/nsutuav9+kJz6dZkE2eH55R6B5ANRZ/RPCLhlLPhN1
-	 jPj4Vr4Xlr9NTE7DvZBi8Stc8apcARyyfE+JEBIH5VIuohm1SPrugrQ9W6RqrwOJra
-	 fc79nL/Q9WEkS4VUMWrmYkX/J8miWIsFI/oN5Yn1v2AzEfv6WGLC7/q8FGAX2/3EVy
-	 vzWdtoGdFg+SriZ2BTaJODZoVQnfiNUTRT5zARyVT/H30Zio5IOpRiQUXpMwpcyKBM
-	 3duxEp7ZNlfsw==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: Alvin Sun <alvin.sun@linux.dev>, Miguel Ojeda <ojeda@kernel.org>, Boqun
- Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6r?=
- =?utf-8?Q?n?= Roy Baron
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Alice Ryhl
- <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
- <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
- <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Daniel Almeida <daniel.almeida@collabora.com>, Arnd
- Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, Breno
- Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>
-Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org,
- driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org,
- nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, Alvin Sun <alvin.sun@linux.dev>
-Subject: Re: [PATCH v3 6/6] rust: configfs: use `LocalModule` for `THIS_MODULE`
-In-Reply-To: <20260622-fix-fops-owner-v3-6-49d45cb37032@linux.dev>
-References: <20260622-fix-fops-owner-v3-0-49d45cb37032@linux.dev>
- <20260622-fix-fops-owner-v3-6-49d45cb37032@linux.dev>
-Date: Mon, 22 Jun 2026 11:38:11 +0200
-Message-ID: <87pl1iewzg.fsf@t14s.mail-host-address-is-not-set>
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="pA7DnmgH"
+X-KPN-MessageId: 2adeddfa-6e20-11f1-861a-005056aba152
+Received: from smtp.kpnmail.nl (unknown [10.31.155.38])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id 2adeddfa-6e20-11f1-861a-005056aba152;
+	Mon, 22 Jun 2026 11:53:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=xs4all.nl; s=xs4all01;
+	h=content-type:mime-version:message-id:subject:to:from:date;
+	bh=WYB+eqZtyTPDHDqFA/TVCR7NlWihAxG6DNjwFRFTBik=;
+	b=pA7DnmgH6rlhfUQCpXYlI79jxsfH4rimPjNAm+HZgGflODLNdTkaX4xurSyY7FZUd2CZSvlA/3qYW
+	 VGHME4+tuQ4ybG9E2W8pUC2QQScYL5igOxw9uUq0uYsZ+6OWKYGJ46ApOk5j/H7/BV3EPWAJQAEL6n
+	 QiZ9DQr7F5xDg2nMlo81D7JLEjcUqTLnuAEJVj9p+5aoS9m9gIhrABljmG1dj38h89zUS0Qc4ZbWXF
+	 Q3J/A5HGgZntfdXdrMZx4Qn638DNnd0bVMOMF0fOJfT8/Int4tt5xCrlQS9zxtxEWpS1BSBCGG0d6y
+	 d7UaoDTawtYAZ6BNhOn3/1y1owRkGhw==
+X-KPN-MID: 33|s6Wv9LN1ctw9HwwAkq60iXR8T4RFFzsoMvf18EvtivVebnxoErdXWyg+mBfQNzt
+ JcB8gBRLVydk7A7QQppsb/kKHvLRMPEAu/QaKHmnyFOs=
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|o3S6nZtqmTOz249rQvIuKjiBhadAu4toWXmgwvxawbt1t7IkATPkQ3/os34uKRa
+ X/uqlDigkjeOjG0/uek/mvQ==
+Received: from localhost (142-169-144-85.ftth.glasoperator.nl [85.144.169.142])
+	by smtp.xs4all.nl (Halon) with ESMTPSA
+	id 2a610af9-6e20-11f1-a997-005056abf0db;
+	Mon, 22 Jun 2026 11:53:06 +0200 (CEST)
+Date: Mon, 22 Jun 2026 11:53:04 +0200
+From: Jori Koolstra <jkoolstra@xs4all.nl>
+To: Farid Zakaria <farid.m.zakaria@gmail.com>
+Cc: kees@kernel.org, brauner@kernel.org, viro@zeniv.linux.org.uk, 
+	jack@suse.cz, shuah@kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] fs: support $ORIGIN in ELF interpreter paths
+Message-ID: <ajkEA0yqLhRjlJT_@lt-jori.localdomain>
+Mail-Followup-To: Jori Koolstra <jkoolstra@xs4all.nl>, 
+	Farid Zakaria <farid.m.zakaria@gmail.com>, kees@kernel.org, brauner@kernel.org, viro@zeniv.linux.org.uk, 
+	jack@suse.cz, shuah@kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
+ <20260622043934.179879-2-farid.m.zakaria@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260622043934.179879-2-farid.m.zakaria@gmail.com>
 
-Alvin Sun <alvin.sun@linux.dev> writes:
+Hi Farid,
 
-> Replace the `THIS_MODULE` static reference in the `configfs_attrs!`
-> macro with `this_module::<LocalModule>()`, and update
-> rnull to import `LocalModule` instead of `THIS_MODULE`, consistent
-> with the move of `THIS_MODULE` into the `ModuleMetadata` trait.
->
-> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
+On Sun, Jun 21, 2026 at 09:39:33PM -0700, Farid Zakaria wrote:
+> Currently, standard ELF and ELF FDPIC loaders expect a fixed path to the
+> dynamic linker/interpreter (PT_INTERP). However, for systems utilizing
+> relocatable dynamic interpreters (such as Nix/store-based environments),
+> hardcoding this path is inflexible and breaks binary portability.
+> 
+> Introduce support for resolving the $ORIGIN placeholder in the ELF
+> interpreter path. This maps the dynamic linker relative to the path
+> of the binary being executed, matching user-space origin resolution.
+> 
+> To avoid code duplication, implement a shared 'resolve_elf_interpreter()'
+> helper in the VFS exec layer. For safety, limit detection strictly to
+> the prefix string "$ORIGIN" to prevent complex parsing exploits.
+> 
+> Assisted-by: Antigravity:Gemini-Pro
 
-Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
+This isn't a requirement from the community or anything, but I always
+find it useful if I see an Assisted-by tag to know what assistence was
+actually delivered by an LLM. Otherwise we might as well add
+assisted-by tags for any editor.
+
+Talking about LLMs, your patch has some issues flagged by Sashiko[1].
+Please take a look.
 
 
-Best regards,
-Andreas Hindborg
+> Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
+> ---
+>  fs/binfmt_elf.c         | 11 +++++++++--
+>  fs/binfmt_elf_fdpic.c   | 15 +++++++++++++--
+>  fs/exec.c               | 42 +++++++++++++++++++++++++++++++++++++++++
+>  include/linux/binfmts.h |  2 ++
+>  4 files changed, 66 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> index 16a56b6b3..af11f96ae 100644
+> --- a/fs/binfmt_elf.c
+> +++ b/fs/binfmt_elf.c
+> @@ -872,7 +872,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+>  
+>  	elf_ppnt = elf_phdata;
+>  	for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
+> -		char *elf_interpreter;
+> +		char *elf_interpreter, *resolved_interp;
+>  
+>  		if (elf_ppnt->p_type == PT_GNU_PROPERTY) {
+>  			elf_property_phdata = elf_ppnt;
+> @@ -904,8 +904,15 @@ static int load_elf_binary(struct linux_binprm *bprm)
+>  		if (elf_interpreter[elf_ppnt->p_filesz - 1] != '\0')
+>  			goto out_free_interp;
+>  
+> -		interpreter = open_exec(elf_interpreter);
+> +		resolved_interp = resolve_elf_interpreter(bprm, elf_interpreter);
+>  		kfree(elf_interpreter);
+> +		if (IS_ERR(resolved_interp)) {
+> +			retval = PTR_ERR(resolved_interp);
+> +			goto out_free_ph;
+> +		}
+> +
+> +		interpreter = open_exec(resolved_interp);
+> +		kfree(resolved_interp);
+>  		retval = PTR_ERR(interpreter);
+>  		if (IS_ERR(interpreter))
+>  			goto out_free_ph;
+> diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
+> index 7e3108489..e85727d71 100644
+> --- a/fs/binfmt_elf_fdpic.c
+> +++ b/fs/binfmt_elf_fdpic.c
+> @@ -230,7 +230,9 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
+>  
+>  	for (i = 0; i < exec_params.hdr.e_phnum; i++, phdr++) {
+>  		switch (phdr->p_type) {
+> -		case PT_INTERP:
+> +		case PT_INTERP: {
+> +			char *resolved_interp;
+> +
+>  			retval = -ENOMEM;
+>  			if (phdr->p_filesz > PATH_MAX)
+>  				goto error;
+> @@ -259,7 +261,15 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
+>  			kdebug("Using ELF interpreter %s", interpreter_name);
+>  
+>  			/* replace the program with the interpreter */
+> -			interpreter = open_exec(interpreter_name);
+> +			resolved_interp = resolve_elf_interpreter(bprm, interpreter_name);
+> +			kfree(interpreter_name);
+> +			if (IS_ERR(resolved_interp)) {
+> +				retval = PTR_ERR(resolved_interp);
+> +				goto error;
+> +			}
+> +
+> +			interpreter = open_exec(resolved_interp);
+> +			kfree(resolved_interp);
+>  			retval = PTR_ERR(interpreter);
+>  			if (IS_ERR(interpreter)) {
+>  				interpreter = NULL;
+> @@ -284,6 +294,7 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
+>  
+>  			interp_params.hdr = *((struct elfhdr *) bprm->buf);
+>  			break;
+> +		}
+>  
+>  		case PT_LOAD:
+>  #ifdef CONFIG_MMU
+> diff --git a/fs/exec.c b/fs/exec.c
+> index b92fe7db1..0978ae613 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -2024,6 +2024,48 @@ static int __init init_fs_exec_sysctls(void)
+>  fs_initcall(init_fs_exec_sysctls);
+>  #endif /* CONFIG_SYSCTL */
+>  
+> +char *resolve_elf_interpreter(struct linux_binprm *bprm, const char *elf_interpreter)
+> +{
+> +	char *pathbuf, *path, *slash, *resolved;
+> +
+> +	if (strncmp(elf_interpreter, "$ORIGIN", 7) != 0) {
+> +		char *ret = kstrdup(elf_interpreter, GFP_KERNEL);
+> +
+> +		return ret ? ret : ERR_PTR(-ENOMEM);
+> +	}
+> +
+> +	pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
+> +	if (!pathbuf)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	path = file_path(bprm->file, pathbuf, PATH_MAX);
+> +	if (IS_ERR(path)) {
+> +		kfree(pathbuf);
+> +		return (char *)path;
+> +	}
+> +
+> +	slash = strrchr(path, '/');
+> +	if (slash) {
+> +		if (slash == path)
+> +			*(slash + 1) = '\0';
+> +		else
+> +			*slash = '\0';
+> +	} else {
+> +		kfree(pathbuf);
+> +		char *ret = kstrdup(elf_interpreter, GFP_KERNEL);
+> +
+> +		return ret ? ret : ERR_PTR(-ENOMEM);
+> +	}
+> +
+> +	resolved = kasprintf(GFP_KERNEL, "%s%s", path, elf_interpreter + 7);
+> +	kfree(pathbuf);
+> +	if (!resolved)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	return resolved;
+> +}
+> +EXPORT_SYMBOL(resolve_elf_interpreter);
+> +
+>  #ifdef CONFIG_EXEC_KUNIT_TEST
+>  #include "tests/exec_kunit.c"
+>  #endif
+> diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
+> index 2c77e383e..17419cd3d 100644
+> --- a/include/linux/binfmts.h
+> +++ b/include/linux/binfmts.h
+> @@ -150,4 +150,6 @@ extern ssize_t read_code(struct file *, unsigned long, loff_t, size_t);
+>  int kernel_execve(const char *filename,
+>  		  const char *const *argv, const char *const *envp);
+>  
+> +char *resolve_elf_interpreter(struct linux_binprm *bprm, const char *elf_interpreter);
+> +
+>  #endif /* _LINUX_BINFMTS_H */
+> -- 
+> 2.51.2
+> 
 
+Thanks,
+Jori.
 
-
+[1]: https://sashiko.dev/#/patchset/20260622043934.179879-1-farid.m.zakaria%40gmail.com
