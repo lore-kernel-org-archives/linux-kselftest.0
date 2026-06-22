@@ -1,370 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E529475;
-	Mon, 22 Jun 2026 00:01:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782086467; cv=none; b=U0BzczihwvOE/R9wjnLniu9ZG/BxRPzUyMf+/PDUhjuTXCMiQ8l89Tw8vrAdETws4ILW4sLskpdenOGe6O1FsWpZTZwnqopyHlYZrY25YsFYfUd7E83dpPWFW1W8wna08ULdyHJY9+yO+s/lDSSZwbNE3Ae87B2oRXIiSN7LVQQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782086467; c=relaxed/simple;
-	bh=7QhfewhlqMKdju09JxDulEQdt6cYyGZg8ueUqh8nyV8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Fq91+nTuL9rGx3TUHqjxpUq89CFuVzGCd+oW4VIowPkTmYR2F6xbmgtk61Cze0CODHNKc2hatUrFgxEW1bg37g8w2UWB4mWPudSS4RxQfUvP8nO1FfuNS2PsC4a2f8riOa6Fs7B8udfXyzIt2ioK8EQz6bNkOcN6dIB2JTeRA9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k74WazRd; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB96413D8B1
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 00:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782089444; cv=pass; b=tRp9Yk+Dh8GzDSx6jf6fVlM0s4U+zJkHjtmq7Ezhkim/LXPlEblCep6S0Q/n/x9wfb/qVD3eX59IRcA2ZbtnPfl9CShuNGjiZjr2Tsfpu1pjMCi+hQHoBktQ+UBOxkb6OoeLYBsccVCLbmP1Rtjdqlhixajr0DiQZGCj7U9otbM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782089444; c=relaxed/simple;
+	bh=63hAvK0P+13Cg1qv9m4P4nXfQ5cLqRvPBO/ZWgGLbbI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MOVEZ+uBN+ZU/jZiEIFtnq5g1lf1zvqoFPGIbyqXD0ecBNb5LlqYN1DlLGAigRC0YvXqFZrn/CBvaOFL2rCZdqjyP7rZGMsZxjW0+/UyVEvML3fxVsVfylDc7dVAbwyMrxFs93qDC7aqe24+jkcbPqzgn6O2AGWclE0bmoUmFDM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=svXfqEVI; arc=pass smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k74WazRd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF3F1F000E9;
-	Mon, 22 Jun 2026 00:01:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782086465;
-	bh=YdkLfWDFs2R25zvjXEg6EfrwOX7ZSNvk5hmIgUBerv8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=k74WazRd2JEO0rfFV9o5s9ZuEATOS0AaK2HkecSHqP5kk35uaoDQc6AA+ArBRjvVL
-	 iAmIPQDmfYpnR8FJDT3Gnhzr5fFSNkCTNSQ2uvHvYzSdqbVPf9DL9IVWzh3qxCJ9O1
-	 bf/Y0KTKrTbFS5DJAVp/fJRjU46FRqAE1ctiICGdwTcDc2VydzH8xqKya29AJDZnvH
-	 9LjhxdNy4ZhpKw0jZMop6lXdosgiDeQZd6WhJvpAaU5Ra/xZW2UwYV0f/qMWjdR6c9
-	 4EjpLEwlG8VZAREtnXogF6ncCp510f/br9LtWekpIaD8ZqZw09qQDcauy84YvaUcFT
-	 Pu2FDPP2GWgPw==
-Date: Mon, 22 Jun 2026 09:01:00 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, Shuah
- Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 1/8] tracing/probes: Support dumping fetcharg program
- for debugging dynamic events
-Message-Id: <20260622090100.27f1cd94c90e7a8fd541b51b@kernel.org>
-In-Reply-To: <178196863297.560995.16891637449659873905.stgit@devnote2>
-References: <178196862271.560995.5255615288323003663.stgit@devnote2>
-	<178196863297.560995.16891637449659873905.stgit@devnote2>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="svXfqEVI"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-36d8b644473so2773958a91.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 21 Jun 2026 17:50:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782089441; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MKJN4cv+F68tRrAMEA1LODQtojtFb5UC5bOoeOwgzAt9kIW/MTVg+Hp9Mb0O84vN4G
+         RX6wMyXIvKy8oWIfTsFs1DtAcPiAexACWIL4InFB1UPqOrddlqAyimV8uPr5+EWHJPG3
+         qzgDBRLmP7p1qprnQivT/MOEhxL1D0U9wbtHB0XS9fPcHqoHph4GJbT+nAtOQ2ovNTa5
+         S9IaQ7auN+pQQ3b7rQ6N5h+ItqFEtLCywl37KH1pX1Mi5o/gQi/E5W10357UYGDlnsUf
+         7z4rKrva1BcYF2EctomjWBuoP/ZgNisajjTwl1kXer39lLqAApbIEUn3BsXMRkOgeTat
+         xLRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=++nZIIXfioR85B1LhnWkjS9gFw8En/kZb/6oprgdiBo=;
+        fh=tJARVZyE08RhyKFWfOseHCzG+e/49INP30awlx6fScM=;
+        b=RlNUMUL1EIia3Gji4wrreomrX1/Wa3p4zs5JEC1kJvwdyiL+EnyFWpH0sFIN+lUu8b
+         rvSttdT+J1bIoAdAJ4E1QmjRePNQV6IszJajzG/yPw2AEEIItZkUEMUsxY1OkXFT3OtM
+         5yVYSmy5I3Kq2cEAimaXECIYz2YzfZIrETOcrfd0bIKInyvHwnuZwuemKPl5AZlhz5MC
+         689mTgasw5pNTLFq8pxk/Et3dFIYvWl6VlTnPQtAr/XmSwTvF2VWDNI8WcbDVU3hdxRi
+         kWbWmGWdXbv21rxmTIYd7nBLu4G6kE8B7nPy1jYEEtroQvBnEMp5cJefpxfy12lwDraS
+         Jm0w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782089441; x=1782694241; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=++nZIIXfioR85B1LhnWkjS9gFw8En/kZb/6oprgdiBo=;
+        b=svXfqEVIDVyoNNcKkhKE+/urjbdfl7dXdogneD94bwn7RM+J/WZUdXizvszcxcqgP0
+         VjCVpEUWKxQ9yrQoFGEXZcQ5xC+iKWrJgjuD4r+s04aA75RjRpxM/9sRbGNmzS8sTKqX
+         Zhf9u3JrrpO59QhPmhrOG6Ezae8si3a8xNXxJroNNV6uoxYStZgCOblF84MwhdSD3TPg
+         zluSwitZbZ3mdoF4Qj822tf5bpDZRUhg6a+CV2YoHSYixU0Jeqin19PvgFBi4WEeP3gL
+         i9eCg13Wqmd6bEa5PdPhi6rI8AIQAwk8++xNa1kGKQtXh+I6ag4v3/SmNm28mMXz5k+l
+         kkvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782089441; x=1782694241;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=++nZIIXfioR85B1LhnWkjS9gFw8En/kZb/6oprgdiBo=;
+        b=d4Cdvv89xspClZ2P7VHTYnER9ZTIwj2H6AbA7KwJHbfryd5PJcfjNJm7Xe0GJ+D/i7
+         eqZXdW440VkVIqMrCFcLcIDn7mIUrtpNY15CIYacxaOpJYKuvkPGW4Xgw1k8ANOIzFAP
+         A9VH3IVU8mMjQpSBNafYR3+3tuuP21O4pZjOlbRB0Iw7jRC8Wlr+Iq/aK0q5XfUeZc9c
+         /PTKRHnf72ov1qfYqoJQjmRxUPTF0IRnZMnXQi/Wcb2tZFXdwzN3S7CNQksreWEIOSXK
+         5iWaobVwQKt5MqtutR8CUiQoEM0uXOExBxzw56R6jE2ZZUtwhFeAsx6ymUJq37veyRo0
+         n20w==
+X-Forwarded-Encrypted: i=1; AHgh+RqKtrdVC95E+8SE40P4GhR9Z5RilHIyHpHRXtkARQsEYFSTSknFikmedy8CkI2ypP/vJWXcCcN31qF+1GxKhRQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzy+BlIU4NQViFrW0nRnic4wbMB784YYSV4hMn+1WlerBZMoJR7
+	kI7dgjY/JIDCSbyWiMPu8/Hbaq7lM06gFfpM8SzAgd0jsbOStzVPAq9EUHrnCDezyPUJ/Ua+Mkn
+	1/TUeFFoszO2cA5aQdIoumAMhjX/1qP4=
+X-Gm-Gg: AfdE7ckRepR6aGF/tyWUP8PJAVjajD7O6PCKzdZB0AHlsrfL8LjOP/6cK7kdSBBV+O1
+	ycAJ+VOkotsWH1DehpH4GiktduWnuX/4anL5FzGS6Mvo/tsH00thwtlyKrSKhMyLxuuPpcmpKeh
+	1Q7zm5i6mLpJRNgzmnTQsJtDQSCW6tc0MtpqXMLz1Nf/PefPn8xxZgcLKLwkHjndCRsfchBY5zH
+	R/m0unkaxrXRs90KN7xi0s/NrbemJWck0RLOBkWJSzKTkalA5+96t7dIKCbqs71oYaOGzAzD/3b
+	MEk3reZGotv1ue5A0LLFTZSvhvSSbjJowDedaag8teLcUWdspjGakHZHjSgKzVf1unzdArrbhqC
+	f+cxLu0JbsWVvMQ==
+X-Received: by 2002:a17:90b:380f:b0:368:af5c:5925 with SMTP id
+ 98e67ed59e1d1-37d160d9177mr12277371a91.23.1782089441027; Sun, 21 Jun 2026
+ 17:50:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20260613-f01-03-scalar-add-bpf-next-v2-v2-0-ce07bec3f72b@mails.tsinghua.edu.cn>
+ <20260613-f01-03-scalar-add-bpf-next-v2-v2-1-ce07bec3f72b@mails.tsinghua.edu.cn>
+In-Reply-To: <20260613-f01-03-scalar-add-bpf-next-v2-v2-1-ce07bec3f72b@mails.tsinghua.edu.cn>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sun, 21 Jun 2026 17:50:29 -0700
+X-Gm-Features: AVVi8CejstBP2Lr0-ueAypLuIoufl56JFGdN5oweKOCPTLmUjg9EiRBE_Ca3tc8
+Message-ID: <CAADnVQLSh7TSgKogAkE3Lhuqbu8296axTu+i6xFPKHbANSkifw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Preserve untrusted memory pointer
+ type on scalar add
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi
-
-Sashiko found another bug about FETCH_OP_TP_ARG. which seems using
-fetch_insn parameter wrongly (using different parameters).
-I need to fix it first.
-We also may need to rename FETCH_OP_DATA to FETCH_OP_IMMSTR.
-
-Thanks,
-
-On Sun, 21 Jun 2026 00:17:13 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> For debugging probe events, it is helpful to verify the compiled
-> fetch instructions for each probe argument. This introduces a new
-> kernel config CONFIG_PROBE_EVENTS_DUMP_FETCHARG to decode the
-> instruction sequence of each argument and display it under a
-> commented line starting with '#' immediately following the dynamic
-> event definition (such as in dynamic_events, kprobe_events,
-> uprobe_events, etc.).
-> 
-> For example:
-> /sys/kernel/tracing # cat dynamic_events
-> p:kprobes/p_vfs_read_0 vfs_read arg1=+0(file):ustring arg2=%ax:x16
-> #  arg1: ARG(0) -> ST_USTRING(offset=0,size=4) -> END
-> #  arg2: REG(80) -> ST_RAW(size=2) -> END
-> 
-> Assisted-by: Antigravity:gemini-3.5-flash
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Sat, Jun 13, 2026 at 5:38=E2=80=AFAM Nuoqi Gui <gnq25@mails.tsinghua.edu=
+.cn> wrote:
+>
+> scalar +=3D rdonly_untrusted_mem reaches adjust_ptr_min_max_vals() with t=
+he
+> pointer as the source register. The untrusted PTR_TO_MEM case returns the=
+re
+> without updating the scalar destination, leaving stale verifier state.
+>
+> Handle the untrusted PTR_TO_MEM case before the early return. Addition an=
+d
+> pointer-minus-scalar subtraction preserve the pointer type and keep the
+> existing "do not track offsets" rule for untrusted memory.
+> Scalar-minus-pointer and unsupported pointer ALU operations are still
+> rejected instead of being accepted by the early return.
+>
+> Fixes: f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 > ---
->  Changes in v6:
->    - Newly added.
-> ---
->  kernel/trace/Kconfig        |   11 +++++
->  kernel/trace/trace_eprobe.c |    2 +
->  kernel/trace/trace_fprobe.c |    2 +
->  kernel/trace/trace_kprobe.c |    2 +
->  kernel/trace/trace_probe.c  |   90 +++++++++++++++++++++++++++++++++++++++++++
->  kernel/trace/trace_probe.h  |   77 ++++++++++++++++++++++---------------
->  kernel/trace/trace_uprobe.c |    3 +
->  7 files changed, 157 insertions(+), 30 deletions(-)
-> 
-> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-> index e130da35808f..ed83fbfb4b7c 100644
-> --- a/kernel/trace/Kconfig
-> +++ b/kernel/trace/Kconfig
-> @@ -779,6 +779,17 @@ config PROBE_EVENTS_BTF_ARGS
->  	  kernel function entry or a tracepoint.
->  	  This is available only if BTF (BPF Type Format) support is enabled.
->  
-> +config PROBE_EVENTS_DUMP_FETCHARG
-> +	depends on PROBE_EVENTS
-> +	bool "Dump of dynamic probe event fetch-arguments"
-> +	default n
-> +	help
-> +	  This shows the dump of fetch-arguments of dynamic probe events
-> +	  alongside their event definitions in the dynamic_events file
-> +	  as comment lines. This is useful to debug the probe events.
-> +
-> +	  If unsure, say N.
-> +
->  config KPROBE_EVENTS
->  	depends on KPROBES
->  	depends on HAVE_REGS_AND_STACK_ACCESS_API
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index b66d6196338d..fdb4ce993cad 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -87,6 +87,8 @@ static int eprobe_dyn_event_show(struct seq_file *m, struct dyn_event *ev)
->  		seq_printf(m, " %s=%s", ep->tp.args[i].name, ep->tp.args[i].comm);
->  	seq_putc(m, '\n');
->  
-> +	trace_probe_dump_args(m, &ep->tp);
-> +
->  	return 0;
->  }
->  
-> diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
-> index 4d1abbf66229..536781cd4c47 100644
-> --- a/kernel/trace/trace_fprobe.c
-> +++ b/kernel/trace/trace_fprobe.c
-> @@ -1449,6 +1449,8 @@ static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev)
->  		seq_printf(m, " %s=%s", tf->tp.args[i].name, tf->tp.args[i].comm);
->  	seq_putc(m, '\n');
->  
-> +	trace_probe_dump_args(m, &tf->tp);
-> +
->  	return 0;
->  }
->  
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index a8420e6abb56..cfa807d8e760 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -1320,6 +1320,8 @@ static int trace_kprobe_show(struct seq_file *m, struct dyn_event *ev)
->  		seq_printf(m, " %s=%s", tk->tp.args[i].name, tk->tp.args[i].comm);
->  	seq_putc(m, '\n');
->  
-> +	trace_probe_dump_args(m, &tk->tp);
-> +
->  	return 0;
->  }
->  
-> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> index 98532c503d02..9d174cd1fb1c 100644
-> --- a/kernel/trace/trace_probe.c
-> +++ b/kernel/trace/trace_probe.c
-> @@ -2393,3 +2393,93 @@ int trace_probe_print_args(struct trace_seq *s, struct probe_arg *args, int nr_a
->  	}
->  	return 0;
->  }
-> +
-> +#ifdef CONFIG_PROBE_EVENTS_DUMP_FETCHARG
-> +
-> +struct fetch_op_decode {
-> +	const char *name;
-> +	void (*decode)(struct seq_file *m, struct fetch_insn *insn);
-> +};
-> +
-> +static const struct fetch_op_decode fetch_op_decode[];
-> +
-> +static void fetcharg_decode_none(struct seq_file *m, struct fetch_insn *insn)
-> +{
-> +	seq_puts(m, fetch_op_decode[insn->op].name);
-> +}
-> +
-> +static void fetcharg_decode_param(struct seq_file *m, struct fetch_insn *insn)
-> +{
-> +	seq_printf(m, "%s(%u)", fetch_op_decode[insn->op].name, insn->param);
-> +}
-> +
-> +static void fetcharg_decode_imm(struct seq_file *m, struct fetch_insn *insn)
-> +{
-> +	seq_printf(m, "%s(0x%lx)", fetch_op_decode[insn->op].name, insn->immediate);
-> +}
-> +
-> +static void fetcharg_decode_ptr(struct seq_file *m, struct fetch_insn *insn)
-> +{
-> +	seq_printf(m, "%s(%p)", fetch_op_decode[insn->op].name, insn->data);
-> +}
-> +
-> +static void fetcharg_decode_symbol(struct seq_file *m, struct fetch_insn *insn)
-> +{
-> +	seq_printf(m, "%s(%s)", fetch_op_decode[insn->op].name, (char *)insn->data);
-> +}
-> +
-> +static void fetcharg_decode_offset(struct seq_file *m, struct fetch_insn *insn)
-> +{
-> +	seq_printf(m, "%s(offset=%d)", fetch_op_decode[insn->op].name, insn->offset);
-> +}
-> +
-> +static void fetcharg_decode_store(struct seq_file *m, struct fetch_insn *insn)
-> +{
-> +	if (insn->op == FETCH_OP_ST_RAW)
-> +		seq_printf(m, "%s(size=%u)", fetch_op_decode[insn->op].name, insn->size);
-> +	else
-> +		seq_printf(m, "%s(offset=%d,size=%u)", fetch_op_decode[insn->op].name, insn->offset, insn->size);
-> +}
-> +
-> +static void fetcharg_decode_bf(struct seq_file *m, struct fetch_insn *insn)
-> +{
-> +	seq_printf(m, "%s(basesize=%u,lshift=%u,rshift=%u)",
-> +		   fetch_op_decode[insn->op].name, insn->basesize, insn->lshift, insn->rshift);
-> +}
-> +
-> +#define FETCH_OP(opname, decode_fn) \
-> +	[FETCH_OP_##opname] = { .name = #opname, .decode = fetcharg_decode_##decode_fn },
-> +
-> +static const struct fetch_op_decode fetch_op_decode[] = {
-> +	FETCH_OP_LIST
-> +};
-> +#undef FETCH_OP
-> +
-> +static void trace_probe_dump_arg(struct seq_file *m, struct probe_arg *parg)
-> +{
-> +	int i;
-> +
-> +	seq_printf(m, "#  %s: ", parg->name);
-> +	for (i = 0; i < FETCH_INSN_MAX; i++) {
-> +		struct fetch_insn *insn = parg->code + i;
-> +
-> +		if (insn->op >= ARRAY_SIZE(fetch_op_decode) || !fetch_op_decode[insn->op].decode)
-> +			seq_printf(m, "unknown(%d)", insn->op);
-> +		else
-> +			fetch_op_decode[insn->op].decode(m, insn);
-> +
-> +		if (insn->op == FETCH_OP_END)
-> +			break;
-> +		seq_puts(m, " -> ");
-> +	}
-> +	seq_putc(m, '\n');
-> +}
-> +
-> +void trace_probe_dump_args(struct seq_file *m, struct trace_probe *tp)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < tp->nr_args; i++)
-> +		trace_probe_dump_arg(m, &tp->args[i]);
-> +}
-> +#endif /* CONFIG_PROBE_EVENTS_DUMP_FETCHARG */
-> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> index 0f09f7aaf93f..b428ef42b229 100644
-> --- a/kernel/trace/trace_probe.h
-> +++ b/kernel/trace/trace_probe.h
-> @@ -83,38 +83,47 @@ static nokprobe_inline u32 update_data_loc(u32 loc, int consumed)
->  /* Printing function type */
->  typedef int (*print_type_func_t)(struct trace_seq *, void *, void *);
->  
-> +#define FETCH_OP_LIST							\
-> +	/* Stage 1 (load) ops */					\
-> +	FETCH_OP(NOP, none)		/* NOP */			\
-> +	FETCH_OP(REG, param)		/* Register: .param = offset */	\
-> +	FETCH_OP(STACK, param)		/* Stack: .param = index */	\
-> +	FETCH_OP(STACKP, none)		/* Stack pointer */		\
-> +	FETCH_OP(RETVAL, none)		/* Return value */		\
-> +	FETCH_OP(IMM, imm)		/* Immediate: .immediate */	\
-> +	FETCH_OP(COMM, none)		/* Current comm */		\
-> +	FETCH_OP(ARG, param)		/* Argument: .param = index */	\
-> +	FETCH_OP(FOFFS, imm)		/* File offset: .immediate */	\
-> +	FETCH_OP(DATA, ptr)		/* Allocated data: .data */	\
-> +	FETCH_OP(EDATA, offset)		/* Entry data: .offset */	\
-> +	FETCH_OP(TP_ARG, param)		/* Tracepoint argument: .data */\
-> +	/* Stage 2 (dereference) ops */					\
-> +	FETCH_OP(DEREF, offset)		/* Dereference: .offset */	\
-> +	FETCH_OP(UDEREF, offset)	/* User-space dereference: .offset */\
-> +	/* Stage 3 (store) ops */					\
-> +	FETCH_OP(ST_RAW, store)		/* Raw value: .size */		\
-> +	FETCH_OP(ST_MEM, store)		/* Memory: .offset, .size */	\
-> +	FETCH_OP(ST_UMEM, store)	/* User memory: .offset, .size */\
-> +	FETCH_OP(ST_STRING, store)	/* String: .offset, .size */	\
-> +	FETCH_OP(ST_USTRING, store)	/* User string: .offset, .size */\
-> +	FETCH_OP(ST_SYMSTR, store)	/* Symbol name: .offset, .size */\
-> +	FETCH_OP(ST_EDATA, offset)	/* Entry data: .offset */	\
-> +	/* Stage 4 (modify) op */					\
-> +	FETCH_OP(MOD_BF, bf)		/* Bitfield: .basesize, .lshift, .rshift*/\
-> +	/* Stage 5 (loop) op */						\
-> +	FETCH_OP(LP_ARRAY, param)	/* Loop array: .param = count */\
-> +	/* End */							\
-> +	FETCH_OP(END, none)						\
-> +	/* Unresolved Symbol holder */					\
-> +	FETCH_OP(NOP_SYMBOL, symbol)	/* Non loaded symbol: .data = symbol name */
-> +
-> +#define FETCH_OP(opname, decode_fn) FETCH_OP_##opname,
->  enum fetch_op {
-> -	FETCH_OP_NOP = 0,
-> -	// Stage 1 (load) ops
-> -	FETCH_OP_REG,		/* Register : .param = offset */
-> -	FETCH_OP_STACK,		/* Stack : .param = index */
-> -	FETCH_OP_STACKP,	/* Stack pointer */
-> -	FETCH_OP_RETVAL,	/* Return value */
-> -	FETCH_OP_IMM,		/* Immediate : .immediate */
-> -	FETCH_OP_COMM,		/* Current comm */
-> -	FETCH_OP_ARG,		/* Function argument : .param */
-> -	FETCH_OP_FOFFS,		/* File offset: .immediate */
-> -	FETCH_OP_DATA,		/* Allocated data: .data */
-> -	FETCH_OP_EDATA,		/* Entry data: .offset */
-> -	// Stage 2 (dereference) op
-> -	FETCH_OP_DEREF,		/* Dereference: .offset */
-> -	FETCH_OP_UDEREF,	/* User-space Dereference: .offset */
-> -	// Stage 3 (store) ops
-> -	FETCH_OP_ST_RAW,	/* Raw: .size */
-> -	FETCH_OP_ST_MEM,	/* Mem: .offset, .size */
-> -	FETCH_OP_ST_UMEM,	/* Mem: .offset, .size */
-> -	FETCH_OP_ST_STRING,	/* String: .offset, .size */
-> -	FETCH_OP_ST_USTRING,	/* User String: .offset, .size */
-> -	FETCH_OP_ST_SYMSTR,	/* Kernel Symbol String: .offset, .size */
-> -	FETCH_OP_ST_EDATA,	/* Store Entry Data: .offset */
-> -	// Stage 4 (modify) op
-> -	FETCH_OP_MOD_BF,	/* Bitfield: .basesize, .lshift, .rshift */
-> -	// Stage 5 (loop) op
-> -	FETCH_OP_LP_ARRAY,	/* Array: .param = loop count */
-> -	FETCH_OP_TP_ARG,	/* Trace Point argument */
-> -	FETCH_OP_END,
-> -	FETCH_NOP_SYMBOL,	/* Unresolved Symbol holder */
-> +	FETCH_OP_LIST
->  };
-> +#undef FETCH_OP
-> +
-> +#define FETCH_NOP_SYMBOL FETCH_OP_NOP_SYMBOL
->  
->  struct fetch_insn {
->  	enum fetch_op op;
-> @@ -370,6 +379,14 @@ bool trace_probe_match_command_args(struct trace_probe *tp,
->  int trace_probe_create(const char *raw_command, int (*createfn)(int, const char **));
->  int trace_probe_print_args(struct trace_seq *s, struct probe_arg *args, int nr_args,
->  		 u8 *data, void *field);
-> +#ifdef CONFIG_PROBE_EVENTS_DUMP_FETCHARG
-> +void trace_probe_dump_args(struct seq_file *m, struct trace_probe *tp);
-> +#else
-> +static inline void trace_probe_dump_args(struct seq_file *m, struct trace_probe *tp)
-> +{
-> +	return;
-> +}
-> +#endif
->  
->  #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
->  int traceprobe_get_entry_data_size(struct trace_probe *tp);
-> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-> index c274346853d1..b2e264a4b96c 100644
-> --- a/kernel/trace/trace_uprobe.c
-> +++ b/kernel/trace/trace_uprobe.c
-> @@ -765,6 +765,9 @@ static int trace_uprobe_show(struct seq_file *m, struct dyn_event *ev)
->  		seq_printf(m, " %s=%s", tu->tp.args[i].name, tu->tp.args[i].comm);
->  
->  	seq_putc(m, '\n');
-> +
-> +	trace_probe_dump_args(m, &tu->tp);
-> +
->  	return 0;
->  }
->  
-> 
+>  kernel/bpf/verifier.c | 28 ++++++++++++++++++++++++++--
+>  1 file changed, 26 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index c8d980fdd709..26c67c53166b 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -13729,8 +13729,32 @@ static int adjust_ptr_min_max_vals(struct bpf_ve=
+rifier_env *env,
+>          * Accesses to untrusted PTR_TO_MEM are done through probe
+>          * instructions, hence no need to track offsets.
+>          */
+> -       if (base_type(ptr_reg->type) =3D=3D PTR_TO_MEM && (ptr_reg->type =
+& PTR_UNTRUSTED))
+> -               return 0;
+> +       if (base_type(ptr_reg->type) =3D=3D PTR_TO_MEM &&
+> +           (ptr_reg->type & PTR_UNTRUSTED)) {
 
+do not introduce line wrap.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> +               switch (opcode) {
+> +               case BPF_ADD:
+> +                       *dst_reg =3D *ptr_reg;
+> +                       return 0;
+> +               case BPF_SUB:
+> +                       if (dst_reg =3D=3D off_reg) {
+> +                               verbose(env, "R%d tried to subtract point=
+er from scalar\n",
+> +                                       dst);
+> +                               return -EACCES;
+> +                       }
+> +                       *dst_reg =3D *ptr_reg;
+> +                       return 0;
+> +               case BPF_AND:
+> +               case BPF_OR:
+> +               case BPF_XOR:
+> +                       verbose(env, "R%d bitwise operator %s on pointer =
+prohibited\n",
+> +                               dst, bpf_alu_string[opcode >> 4]);
+> +                       return -EACCES;
+> +               default:
+> +                       verbose(env, "R%d pointer arithmetic with %s oper=
+ator prohibited\n",
+> +                               dst, bpf_alu_string[opcode >> 4]);
+> +                       return -EACCES;
+
+No need to arbitrary rejection.
+All ALUs should be allowed.
+Something like
+if (ptr_reg !=3D dst_reg)
+  *dst_reg =3D *ptr_reg;
+
+pw-bot: cr
