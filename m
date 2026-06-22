@@ -1,61 +1,63 @@
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BC5346ACD
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 04:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97846346ACD
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 04:39:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782103183; cv=none; b=cMnHMHoLHdi8RUU+9vDp29EqHZ9bBnWoSxNCHkDSIM1sO9rOG8AoC+SU8Qnbul4SnPbo6XbIFot/ux87GvipTX5jnwTxxYUhStCdAD46dE9+9zYcpMTyhpfY3fGxBHnMjONlMEtGKgfAmsfey/NfMTOFCXZeOdpM9MtUZfelBe0=
+	t=1782103189; cv=none; b=DwszlnNSN7htNX6v/XstiWGk7GHhrM2rf4kD6UTj/GpbEyPEjnHbH2W9no/mXi86d7ok4EtUog7SuBOMXdlgFsNyzq/AeSma6wf2llQCIsHW2xWx31pfodhgKvamYwsK4xTZcZdfXEr9pzWTQk4urJrhrAqxJpFRSS33YMXv6+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782103183; c=relaxed/simple;
-	bh=QRlGIdhxVJez3ArgaIw3nHcRgcOp/IS9Jhys52DHq5E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VMDsRCiz03J0KT/XdHnPdFfP0FyRaaTCkA5p92QbaA4Nf5Q3q7EZXAzxPlRHqKU1YK2quxTOIXai+375BaS+ANDIBhdRZgzlI/BP6fBdcXEIcz4yQEBWkglqEjhTjL3PXwx4jZ/3oNMEgAaOkq5KK0Ec/ianfSoHmY6hCD+UQNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bfFXE/RY; arc=none smtp.client-ip=209.85.210.45
+	s=arc-20240116; t=1782103189; c=relaxed/simple;
+	bh=XXnZ0ZKvcb4NQKdoZxO1XTo5lGuDLJGHFkV7ikEF3xE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ss/t5Z40XAsYNXqXeE9efDkRQpc/0w0XJ3YMkUDgDjY6HNHN5Ocsf84jhqvLPwIMlBFaqv04KFH++DpgRt+WF03vnSQpxl2X1Z3zk0h3yJNXw/H6F+o+NhMIyKTegoAIxD3NGcAFIwwN23mC8bYCQyP3P4sN2B+45nrU9Wkyups=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i9HUfFvJ; arc=none smtp.client-ip=209.85.210.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bfFXE/RY"
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7e94d272a86so857284a34.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 21 Jun 2026 21:39:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i9HUfFvJ"
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7e943356247so1559810a34.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 21 Jun 2026 21:39:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782103181; x=1782707981; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LWLk8vwBsRQV/8chPVVuiTE+2TLYOW07i2z27bitdoE=;
-        b=bfFXE/RYlxUv40EUqJ5obhRsAH5b7ql29tGvdA3nlKTxLHonmjAjQmQWSRlWm+qeGh
-         0bZh6SKWi/r6hOAf8G2ft0y9gqi0ldUbaxdtiVQ0u7FJoDBTnkhhaLbQJI5V89SSx+/x
-         fR64tGb4bb4w5rEb3WWU4GSuPfoHfTV7pn4PuFveOorKAcQhaKTyr+S0H975/7qKWNM8
-         +Z45+f9evpl5hSb3l/nYkh1YuibdS8J01/LM2PQmnBxJFECJUrF73Sbu7d91P0qRbzrt
-         6bRZFSgc07wxfaA/BQwrCI61pB+LA3efb6frq9VKzSbYQucSFf9pDgfItb9PA8bd0E1C
-         JsPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782103181; x=1782707981;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1782103187; x=1782707987; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LWLk8vwBsRQV/8chPVVuiTE+2TLYOW07i2z27bitdoE=;
-        b=mgoxDl9L66h96zPrkHOXglCruDDfO6zTSI7yN1RDEzYv3kkRhaKmhijKBYWUIhIRAc
-         504ODACi6k/gDMZ3HOkz//8vTWp3xRgypO/Z1s+N0Y5Qk6rJag6qmbrnKD4qmMf05QRn
-         BdwEq8UpyoP+VRaF3Nv9XCxPm8OfAybVfVXMAp/aOqSNSkZP6OqQpXyCmO03CKk9OGl7
-         nLyPqyhCqc4q8IzHqyXL+k8VwFwDEf02WexAwe/DJayfLpC32SXo43jEaOlum9KRlKhX
-         nfy9hUJuDw0O5hiCqVn8te69+BGwQW8Fku0slfgQzE17PtcI1XmYOfVu/SYcIaJFIS/D
-         LYqQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9SI4ZzAuqLi66apAKJ3Sad82iOibcbe+dPcFig1gcM0NeKV4BSVX5Ou6hJlnwI4c8kk/SYGLKK7ep6+zBTvdA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzE/1LCNPxPBavYK0GBBjb8ljlRYGjN7Qbq6LKBV5iErxByYmxM
-	vNiPl9ugXU6/Ui8ZIjbobg9N2/K6cXK0EZDyBxGzPvQiloQNxaG8J4Y2
-X-Gm-Gg: AfdE7clsBO3uD2eU0PFJYGrMrB6fvCdw3qG1atEC2oZfeass5TKuxC9EI/8S8iaXNfF
-	HU49tp6FFNp2OK+A0wobLu2LNev1F9C50OciJDzJpMqTVEUNKpnvB3btBXmgqykzoDc0+qAkIOV
-	eb2StqYCpKguj2dvnE+Bs/0ncFuJKzmh7HuQeGyEfnW6WjDpsbMkxaXA0o6tn/hrxb/mOHTfq8+
-	wugQJ5jBtkwrBXXAmEqqsbvyVpBDu2nMvbi9sY5zt7/3/Hkf92MlWJAzcoxkGt7Vs12jFc3ogJK
-	lEm3lezTuKRCN5abGfIUFDiRaZbu/ki3gz6jGyD64U43/P83n2PvklLfUNCLcB+M8YW33gnKVYm
-	TikK+DjmFye7R+ODBQcBNxLGFXFXEzngoSnddmu6vE17AjrG0IsJgH12okeGNlOeFBaSEqb7qgG
-	lX9Y+1kAGcGDj5r5vktyA6MGThRM6ZaoHFdYi43tpQd+Qi
-X-Received: by 2002:a05:6830:83aa:b0:7e6:f5bc:496 with SMTP id 46e09a7af769-7e92d8eedc8mr11244425a34.16.1782103180884;
-        Sun, 21 Jun 2026 21:39:40 -0700 (PDT)
+        bh=Q2URiiwAmBLau2vT0+5EPFKTJxMl3ImoKXAHWV/E4x4=;
+        b=i9HUfFvJQ6fOcWpizFphuTLzryzzP/zt+SlNyqsSIoLmT+7orfU9jKRs8wLlQm5FEr
+         QY0H6GtQgxbtS5T10Afvu3hD8w/hhZOf3q9/jx0vDud+RwHrRU0ZjXTAWxUvkDNodt2q
+         UNHWqxdfC8RV5WjF11Z7txzwi1plLliG0cBBhd4dcAcE8AnzOkj+Kmpv36ZpslGM1WNN
+         EChrdlqmPC+IeB0Buc9OWe+wRFAXzf1lTPvIRvm9S0uji+RK2wmSDdlhrlpKmt58G44o
+         difdMX3hk/0TEN75avJHNAJsoRiQh2vy0fU3CJz385hebL6L6ibuGGgptNJdfQ5CKB+l
+         +uww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782103187; x=1782707987;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Q2URiiwAmBLau2vT0+5EPFKTJxMl3ImoKXAHWV/E4x4=;
+        b=U9YsI8qBGWyszZc5nbk4bAAF4r6MoNH036DgcYy1FM0a+6kjQ5IRM8JKeOmljVvkMd
+         J4wJ0bTTn20Hzqwo9SHftVqyx8GL9yqEDmS3BGi5s2o3AYorrZOSTgRkIw8GOdfu5lwz
+         MBCuaKEC8WjlCcEnC2toSyINnU3avuyr2yGDHDlojqbJS4o1TskYyvdwljIAZYto4MuT
+         uEy7DTpw4q+59JSvv+0xWcX/3/w9qp7bGCYuXLGtaCsrubXBGFwJF8Zy8RZmPezD+cPP
+         ttRzaKqeyWJpLpd/HjrpFq9JlBbR8gGziw4lnMtCO+4AY9JOapSLBBM5wrkYgORlU0sP
+         1tyA==
+X-Forwarded-Encrypted: i=1; AFNElJ8sxHRDA1tGBszkVY6KvZtvoi3jC9YPyOTCptNog3YdO8EuKqcwQzGBeIZmz7r01wuM0xBN1TweGewM7EysRns=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwD4trO59pcFsYWR0Jk14iqqw4v/rcx4au9Xrs6a+r+DShl6wg9
+	ko5oK9vCH5/RtsijHZ+GdQNNS8/Ej417ePpmFZ5IksAzGqR4xtXCMCCK
+X-Gm-Gg: AfdE7ckpd57nhR1+X0RjpEcr0z1WzXChP3tMvl8VratuAXtStD6iLH/IX3XX1TuekV4
+	KkAYt0l4t76i6UHL7MzoByDvOgU/qEvT5CfiQAi7jPZBoCazjbrNxSPTcWjm4cR2UF9HA5uemTD
+	Gxhv9V9jz9LazFMgZ5NeqebjvhpFUzEC6+3YsFjQ0NWS2zbrJS46mVKtZHc5fD2MhALCcRLmRvX
+	/YFRx5x+ng5aHb45mW+Q9VqNDY+bpj2E5D2c0mibF7abrJaMbyMnJMZil1Q2Pz0eFuWa2X/+bbu
+	uWsqAF3c9qIqtyQmr8K9UqANIADN3lRh42wSuzHZ2oy43vpqyGXMmJjDqlQVkvdLzVGSaFJtwqh
+	NXRi+HKlvgDMvXY7bcIr819jVuvJ4QtOGP/kwVzKCyioxdGHSKelyiqI9LT0o8wE3YfMtjoFHLz
+	ATmqSYCgXv8T/Qk5q/uhbX/RM7I9DYrQ6DBA==
+X-Received: by 2002:a05:6808:5290:b0:485:507:ee5d with SMTP id 5614622812f47-4896aa2ce16mr12307300b6e.10.1782103187573;
+        Sun, 21 Jun 2026 21:39:47 -0700 (PDT)
 Received: from nyx.tail25a6.ts.net ([2605:59c8:74db:6e0c:3a80:a3f:f9f0:1b3c])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e9442ea144sm5428453a34.27.2026.06.21.21.39.39
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e9442ea144sm5428453a34.27.2026.06.21.21.39.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Jun 2026 21:39:40 -0700 (PDT)
+        Sun, 21 Jun 2026 21:39:47 -0700 (PDT)
 From: Farid Zakaria <farid.m.zakaria@gmail.com>
 To: kees@kernel.org,
 	brauner@kernel.org,
@@ -67,10 +69,12 @@ Cc: jack@suse.cz,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Farid Zakaria <farid.m.zakaria@gmail.com>
-Subject: [PATCH 0/2] fs: support $ORIGIN in ELF interpreter paths
-Date: Sun, 21 Jun 2026 21:39:32 -0700
-Message-ID: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
+Subject: [PATCH 1/2] fs: support $ORIGIN in ELF interpreter paths
+Date: Sun, 21 Jun 2026 21:39:33 -0700
+Message-ID: <20260622043934.179879-2-farid.m.zakaria@gmail.com>
 X-Mailer: git-send-email 2.51.2
+In-Reply-To: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
+References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,57 +83,162 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, standard ELF and ELF FDPIC loaders require a fixed, absolute
-path to the dynamic linker/interpreter (specified via PT_INTERP). This
-creates significant inflexibility for relocatable dynamic interpreters,
-where binaries are packaged independent of global system paths.
+Currently, standard ELF and ELF FDPIC loaders expect a fixed path to the
+dynamic linker/interpreter (PT_INTERP). However, for systems utilizing
+relocatable dynamic interpreters (such as Nix/store-based environments),
+hardcoding this path is inflexible and breaks binary portability.
 
-The primary goal of this patch series is to support relocatable binaries
-in Nix, where packages are stored in a read-only store (typically /nix/store).
-Allowing the ELF interpreter path to be resolved dynamically relative to
-the binary's location via $ORIGIN enables Nix packages to be relocated
-without needing patchelf or wrapper scripts.
+Introduce support for resolving the $ORIGIN placeholder in the ELF
+interpreter path. This maps the dynamic linker relative to the path
+of the binary being executed, matching user-space origin resolution.
 
-For details on the design and motivation for this in Nix, see:
-https://fzakaria.com/2026/06/21/nix-needs-relocatable-binaries
+To avoid code duplication, implement a shared 'resolve_elf_interpreter()'
+helper in the VFS exec layer. For safety, limit detection strictly to
+the prefix string "$ORIGIN" to prevent complex parsing exploits.
 
-This series introduces support for resolving the $ORIGIN placeholder in 
-the ELF interpreter path, bringing the kernel's binary loading behavior
-in line with user-space dynamic linker origin resolution. 
+Assisted-by: Antigravity:Gemini-Pro
+Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
+---
+ fs/binfmt_elf.c         | 11 +++++++++--
+ fs/binfmt_elf_fdpic.c   | 15 +++++++++++++--
+ fs/exec.c               | 42 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/binfmts.h |  2 ++
+ 4 files changed, 66 insertions(+), 4 deletions(-)
 
-To achieve this cleanly:
-- We introduce a shared 'resolve_elf_interpreter()' helper in the VFS
-  exec subsystem to avoid code duplication across loader implementations.
-- For security, we restrict detection strictly to the prefix string
-  "$ORIGIN" to prevent complex parsing exploits in kernel space.
-
-Testing & Verification:
-- Added a KUnit test case verifying path resolution logic.
-- Added a kselftests integration test checking that a dynamically
-  linked binary with its interpreter set to '$ORIGIN/mock_interp' successfully
-  loads the mock interpreter (built statically using nolibc to avoid
-  glibc TLS setup constraints during interpreter load-time).
-- Verified end-to-end correct execution (PASS) using a minimal initramfs
-  under QEMU.
-
-Farid Zakaria (2):
-  fs: support $ORIGIN in ELF interpreter paths
-  selftests/exec: add test suites for $ORIGIN interpreter resolution
-
- fs/binfmt_elf.c                               | 11 ++++-
- fs/binfmt_elf_fdpic.c                         | 15 ++++++-
- fs/exec.c                                     | 42 +++++++++++++++++++
- fs/tests/exec_kunit.c                         | 26 ++++++++++++
- include/linux/binfmts.h                       |  2 +
- tools/testing/selftests/exec/Makefile         | 12 ++++--
- tools/testing/selftests/exec/mock_interp.c    |  6 +++
- tools/testing/selftests/exec/origin_interp.sh | 16 +++++++
- tools/testing/selftests/exec/test_prog.c      |  5 +++
- 9 files changed, 128 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/exec/mock_interp.c
- create mode 100755 tools/testing/selftests/exec/origin_interp.sh
- create mode 100644 tools/testing/selftests/exec/test_prog.c
-
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 16a56b6b3..af11f96ae 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -872,7 +872,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 
+ 	elf_ppnt = elf_phdata;
+ 	for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
+-		char *elf_interpreter;
++		char *elf_interpreter, *resolved_interp;
+ 
+ 		if (elf_ppnt->p_type == PT_GNU_PROPERTY) {
+ 			elf_property_phdata = elf_ppnt;
+@@ -904,8 +904,15 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 		if (elf_interpreter[elf_ppnt->p_filesz - 1] != '\0')
+ 			goto out_free_interp;
+ 
+-		interpreter = open_exec(elf_interpreter);
++		resolved_interp = resolve_elf_interpreter(bprm, elf_interpreter);
+ 		kfree(elf_interpreter);
++		if (IS_ERR(resolved_interp)) {
++			retval = PTR_ERR(resolved_interp);
++			goto out_free_ph;
++		}
++
++		interpreter = open_exec(resolved_interp);
++		kfree(resolved_interp);
+ 		retval = PTR_ERR(interpreter);
+ 		if (IS_ERR(interpreter))
+ 			goto out_free_ph;
+diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
+index 7e3108489..e85727d71 100644
+--- a/fs/binfmt_elf_fdpic.c
++++ b/fs/binfmt_elf_fdpic.c
+@@ -230,7 +230,9 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
+ 
+ 	for (i = 0; i < exec_params.hdr.e_phnum; i++, phdr++) {
+ 		switch (phdr->p_type) {
+-		case PT_INTERP:
++		case PT_INTERP: {
++			char *resolved_interp;
++
+ 			retval = -ENOMEM;
+ 			if (phdr->p_filesz > PATH_MAX)
+ 				goto error;
+@@ -259,7 +261,15 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
+ 			kdebug("Using ELF interpreter %s", interpreter_name);
+ 
+ 			/* replace the program with the interpreter */
+-			interpreter = open_exec(interpreter_name);
++			resolved_interp = resolve_elf_interpreter(bprm, interpreter_name);
++			kfree(interpreter_name);
++			if (IS_ERR(resolved_interp)) {
++				retval = PTR_ERR(resolved_interp);
++				goto error;
++			}
++
++			interpreter = open_exec(resolved_interp);
++			kfree(resolved_interp);
+ 			retval = PTR_ERR(interpreter);
+ 			if (IS_ERR(interpreter)) {
+ 				interpreter = NULL;
+@@ -284,6 +294,7 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
+ 
+ 			interp_params.hdr = *((struct elfhdr *) bprm->buf);
+ 			break;
++		}
+ 
+ 		case PT_LOAD:
+ #ifdef CONFIG_MMU
+diff --git a/fs/exec.c b/fs/exec.c
+index b92fe7db1..0978ae613 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -2024,6 +2024,48 @@ static int __init init_fs_exec_sysctls(void)
+ fs_initcall(init_fs_exec_sysctls);
+ #endif /* CONFIG_SYSCTL */
+ 
++char *resolve_elf_interpreter(struct linux_binprm *bprm, const char *elf_interpreter)
++{
++	char *pathbuf, *path, *slash, *resolved;
++
++	if (strncmp(elf_interpreter, "$ORIGIN", 7) != 0) {
++		char *ret = kstrdup(elf_interpreter, GFP_KERNEL);
++
++		return ret ? ret : ERR_PTR(-ENOMEM);
++	}
++
++	pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
++	if (!pathbuf)
++		return ERR_PTR(-ENOMEM);
++
++	path = file_path(bprm->file, pathbuf, PATH_MAX);
++	if (IS_ERR(path)) {
++		kfree(pathbuf);
++		return (char *)path;
++	}
++
++	slash = strrchr(path, '/');
++	if (slash) {
++		if (slash == path)
++			*(slash + 1) = '\0';
++		else
++			*slash = '\0';
++	} else {
++		kfree(pathbuf);
++		char *ret = kstrdup(elf_interpreter, GFP_KERNEL);
++
++		return ret ? ret : ERR_PTR(-ENOMEM);
++	}
++
++	resolved = kasprintf(GFP_KERNEL, "%s%s", path, elf_interpreter + 7);
++	kfree(pathbuf);
++	if (!resolved)
++		return ERR_PTR(-ENOMEM);
++
++	return resolved;
++}
++EXPORT_SYMBOL(resolve_elf_interpreter);
++
+ #ifdef CONFIG_EXEC_KUNIT_TEST
+ #include "tests/exec_kunit.c"
+ #endif
+diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
+index 2c77e383e..17419cd3d 100644
+--- a/include/linux/binfmts.h
++++ b/include/linux/binfmts.h
+@@ -150,4 +150,6 @@ extern ssize_t read_code(struct file *, unsigned long, loff_t, size_t);
+ int kernel_execve(const char *filename,
+ 		  const char *const *argv, const char *const *envp);
+ 
++char *resolve_elf_interpreter(struct linux_binprm *bprm, const char *elf_interpreter);
++
+ #endif /* _LINUX_BINFMTS_H */
 -- 
 2.51.2
 
