@@ -1,230 +1,142 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4801E36C9D0
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 22:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54C7B34C124
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 22:32:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782167462; cv=none; b=qBSuNgC5TsythuQ7z+IAQx75OzXZfOuldVwhShgahhSafxNUmp72xnNOs1/oEM9HItZS3qfMda8Pu2EQrjUjitVbz9rOO6u9V3BX0pl1qcQ9WUxvv07pAOPLZnMcmLdINExG4BfcnE+dnNegUbuPOUYdy/ZNYt0ZYVlDDEhv3ZI=
+	t=1782167576; cv=none; b=nY+7BRv3uLPHu4VyAeK3j8iy5qJVyGBuMyHDb7XMMPxCK2Hg6ouS9AtsZJP49cw3jZzkAvR4vXmbZ+3Rwgonps3ZmKSOD53G/hJV7OfipYAz7WkpEkVcJ3zfcquvu49v9/AmvafA0wUsZMmErBRLS80AlZOcSzLGt+7KQbkU63o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782167462; c=relaxed/simple;
-	bh=9HELMpqCt/y3v6IUP1S7Pqa4RFgPwrMJSOa+ysR78VY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PSQD5BAgRL+GUSIWfrsSH0RtBWNiJT04B5b7YPtGpzjK+wmJSoOUn8UcRHq+Vh4IaUkHus7NqP/tuCOvH3JUqF6WEz8KilqxC/05XNEMGPW7kdSb1/FqSQ4YLly97J1PzZhQs+MIhO8FfVZWrDvQv/jhpd9gDecgDvoZFWwoou8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AMwXaxhg; arc=none smtp.client-ip=74.125.82.176
+	s=arc-20240116; t=1782167576; c=relaxed/simple;
+	bh=GTrgiK6YZW/87K2ASsSbJjCcOhmlzHAMF/U2Or9B9PE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=cM6hserbipnLbCSdPamhXS6wbzxZIRZQG0493aQU0Zj4nagRyLscAlHGArb/snq0VeySFMcFOYnPg2R5Fo4tnHfIN3c0ec9/6BaZ61G7abqbAXu5RIUaPk1kAB2zpK+tYWigT/Hr++brlc5MGkqVpa3MFniV14qgcrBuIVaBQ38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MadtyKnm; arc=none smtp.client-ip=209.85.210.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AMwXaxhg"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-3078e0dcd67so5845998eec.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 15:31:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MadtyKnm"
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7e92c443cbcso2671713a34.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 15:32:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782167460; x=1782772260; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/sSLAyQBB0ORo4zFV8ubNZ09Kp6OqMCTr7MLDPfNDVA=;
-        b=AMwXaxhgT9awindLVqM+JjpS82HFRPMNCWyPO0w+c0Umxg5DxvgVI49vKoE5x9eRao
-         2Nvux9k7hmRvdi5v6ec/4ki1DBTRxh81zQ0L1r7dhP9TarNTaP1bYEBOQI+AGBLKeZkw
-         cCjlKVCmphpFHjfWTYoTqcJWQrzv/5QtbtDDPPYnFcvFACJGmOHKSbz7WZXXsZLbYThJ
-         9HD9SKKrhVw0u3NZiVOnb72deZRxoFCQy7xJdaJ3nQu8wvBAWWyUB+/uemHHyl63Gjzw
-         RU2DfxB8TFG7lpAv6Vvonsj4gm1SIEze1R4u8bbgENLWhBnwaAj8Rr4+59p0/hAbE5zH
-         67+g==
+        d=gmail.com; s=20251104; t=1782167574; x=1782772374; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TNMt0SALBc9dR+2Mkf/0/J5cVE9RUiLWYRooeHFSC9w=;
+        b=MadtyKnm5uSmIUVx3YRDIVSIL270KLeCsV50TfSxxpfORa0sanjziOsk8oaKmwE0qz
+         DjZ2GT/Fm1RtiIf6JyEbGfephpFHeyU8VkGS6MB1KGFLB6sIorGEpekPgJn4Tu74X61G
+         Xr7shP2aAjdgvZ1OnaYd+3XP9KXPhA/vHocqFGyOqP51008apj68jzLbVPL6cVtBEvzk
+         56DUNGSHg/pE6d0sNrSckfeqKSMtafxg+5+tW6HICxgCjbVvExwZYNX9KTGN39/MSFHf
+         MiVmoo12fYu5ZFQg52ohcCTigkAn/R8GO5GZ5Sd2PzAWjonvLwVcS3ej+50Xsa3CTUiM
+         hq2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782167460; x=1782772260;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/sSLAyQBB0ORo4zFV8ubNZ09Kp6OqMCTr7MLDPfNDVA=;
-        b=E8Nz+hN0jLoBxdBH9z6bARmDShVntrZnqVFD8v5coZLpFtEz1mKFGTBzmiz4birTSZ
-         vpUFaQR2Uos0ed1m7bDCkYt2ZeG1lCzCjdiL4oK0AbVC0JlhiKxPKkscgUJ9SdlB5tNb
-         imzI33tNZYQSMcMkLIPaeTkcDyeZ9vk13rsMNLb1XNXVvKc5aWbYMWRaYAVrcw0QfTB9
-         aqQNlvr1LLOUHyn6dSozMR3r2IrNplnSxCXMSDsntJX/zlA71WbTq9vUyjScedjDZ4Cc
-         y079/Gg/ifBmM8Ukqxgc2k/8ZoGLpB0JXT8IEjxuAb6qtfhhknHujfU07VIf28/wuJhe
-         86gA==
-X-Forwarded-Encrypted: i=1; AHgh+RoLjN6v7WRf8pU3Ie+fZVlM/yn77BiT+RClAxWBLpLxOpCvWnEhrFdG3HgsVpTSIdtT6t3f64w2gJXn3BjnhEc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJD1CRyjpspWl/bVSv8Bt2TgvnIbdpZvDR5nVJTbTavyFIeJFP
-	fZlEf8k1OVXWHTb8Is3fzgtDEl9DcPCbJ5L3YhSFF18nv2GyxtUrO8P3
-X-Gm-Gg: AfdE7clgOUk7IQcURlesR7ENBBANKin8Y2XJkqwK3sRD3oOaEPhBO87k6K8/3yQOJIB
-	5hgB9/oedk2Rf0azV10VPq/vVrofrhKfJ8NDG8iX6w237XTijwtnrYun+kEJpJq6CjPutoG8lLd
-	bxmuEELLHjQCmofkks2HiixeyyDUd0wsy/2fJRFbT3W5zsXUTLmtSVsSz7s2hrUYirB/iHhG8Wp
-	lHTtUSxUQaymzfWT80atJ7gq6LE4dZj9bOx+ZWnyGj+Kg2fEsi2zMSzIkiS31lTGZFAmtg+k5Va
-	vSWNIAgcaiCNDG8IWMZzWQBeD4ON6h0EJcYhhMPeJ9ME2eFgGxD69ef9RW+x+kz5z2eSukrxnpY
-	YokF8YNKwPV5aw3BpPkaKJy0tavyysTP/DxxW38R1JXqKNoXmuchzLe+MXSi2hxAnqwXOyFSc4q
-	ZRoi0tkmrk74E5MWTUoau75HbjhRlXDwWX4cbOzMtTym72mNa2FMDGp+J9tT1diFE/cRsn7w==
-X-Received: by 2002:a05:7300:5b89:b0:307:393a:8f1d with SMTP id 5a478bee46e88-30c07056474mr11226290eec.14.1782167460233;
-        Mon, 22 Jun 2026 15:31:00 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:c4f4:7a34:78e2:a600? ([2620:10d:c090:500::2:e8d1])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1ba635d8sm13152237eec.10.2026.06.22.15.30.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 15:30:59 -0700 (PDT)
-Message-ID: <170c35441f167931b1a651e5bf07f671bc429368.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Cover refcount acquire
- node offsets
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
-	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
-	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
- <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, Viktor Malik	
- <vmalik@redhat.com>, Leon Hwang <leon.hwang@linux.dev>, Dave Marchevsky	
- <davemarchevsky@fb.com>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org
-Date: Mon, 22 Jun 2026 15:30:57 -0700
-In-Reply-To: <5c0605718efd58ae3b8c44f70637ad1bd5ebb76e.1781979133.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1781963957.git.chenyy23@mails.tsinghua.edu.cn>
-	 <cover.1781979133.git.chenyy23@mails.tsinghua.edu.cn>
-	 <5c0605718efd58ae3b8c44f70637ad1bd5ebb76e.1781979133.git.chenyy23@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        d=1e100.net; s=20251104; t=1782167574; x=1782772374;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TNMt0SALBc9dR+2Mkf/0/J5cVE9RUiLWYRooeHFSC9w=;
+        b=J317saCR6nkhSe9gcUvOqOCAAOBFrAuY/GoLXFpzTdIpy3aR5Hk3kb19W35h3LH5RQ
+         dbjE6AMioWBPAzEJkEiF+jQcJEa6Rhgjwwu0PyI1jqqKiL5dYfMRjUdmK55iMw9agFl0
+         nQxdRwQGWtwlvoU0Wk0wFINaFsD/WSjeEzNkHr4pVb53iMTBneUqN6P+R4gWQUnu0tBO
+         B8KkKPNvQKCC7Q4HBh79h3bWjaAQyiBTJPAxEg0tucFmwLMtI1/OMNOoFLbI0bl5z0ui
+         xKGjm/8k/zD+wJxzgFDZ5bT3Da3MFiQJLEvPSTdVy5h7JahhpTv9EBZMtDmjuWuCqysC
+         Iugg==
+X-Forwarded-Encrypted: i=1; AFNElJ9lgoR+WfHoA608mn/egKRmz0D6rqLgm5J/8TUIXBg7IgOjMJ/fhWE83XPQmcu3sVTZ292mQnp+QxZYkEstECQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrcqXSBxtg5al8P3hpE+Fpq0/pemqjnKL3wYT4i/daUfQCCKUQ
+	o027aR7zdZb4TnQf7e+fVgIbs9mXKPv1rh+jH39AfAoldvyoy14KU0kX
+X-Gm-Gg: AfdE7ckDbVi9dxSNCk7itsUWVOwFB61gXQbRMrjs7PuPI4Ysf+vrfOBB9K5pVP56nv6
+	WLVb4DaGHRVrc2PUz8eQTY17FSmKXrXqEPlT8pb1uTLibdwVEWlMTEBYYPjeq/igm+ATwMoRHGV
+	pAHAVcO28fKXcbctyePL/vGXTZSFFTbui/n5MwdsjzhRwSEwWvzPM/DKKAn00oBWr7ObljEOujv
+	BTJqTVl5YcuHlytMkVw3KoFEU3bsTrdy2qRK5RMtydbnEBayxlua2BG8E/R0BbVku6sAVUsKpbv
+	OKbRYAswsZnJlpKuSABdgCBk7kAs+eRsH+2/rHESo8UrZIGdYZ4FsfzETn/IbZKsQuZMGvxNn8o
+	4sra48wuqOtq6JMi579VyDZjiSMpG5JzJ15by2TVeNiH5Q71biLrvpMdOAdHkAPRqqiMwr9Kz6N
+	1EqDZdqKySbLXQ3fWiHS7pzTlBkO1CIzHyhm5opyBWZc6+fshZ1z84rHQBdUC0ZYEmoquFPYJa8
+	hXOgQ==
+X-Received: by 2002:a05:6830:4488:b0:7d7:570b:6800 with SMTP id 46e09a7af769-7e97999d908mr71007a34.23.1782167574242;
+        Mon, 22 Jun 2026 15:32:54 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:4::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e94429a5bdsm7867392a34.22.2026.06.22.15.32.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jun 2026 15:32:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 22 Jun 2026 15:32:52 -0700
+Message-Id: <DJFXOGFS8DXY.4CDI7LHXGHWN@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Gyutae Bae" <gyutae.opensource@navercorp.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, <bpf@vger.kernel.org>
+Cc: "John Fastabend" <john.fastabend@gmail.com>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Minsu
+ Jeon" <minsu.jeon@navercorp.com>, "Siwan Kim" <siwan.kim@navercorp.com>,
+ "Jonghyeon Kim" <jong-hyeon.kim@navercorp.com>, "Gyutae Bae"
+ <gyutae.bae@navercorp.com>
+Subject: Re: [RFC bpf-next 0/3] bpf: compare-and-delete (BPF_F_COMPARE) for
+ hash maps
+X-Mailer: aerc
+References: <20260622071649.31541-1-gyutae.opensource@navercorp.com>
+In-Reply-To: <20260622071649.31541-1-gyutae.opensource@navercorp.com>
 
-On Mon, 2026-06-22 at 02:25 +0000, Yiyang Chen wrote:
-> Add regression coverage for bpf_refcount_acquire() on graph-node-derived
-> pointers.
->=20
-> The rejected cases pass popped list and rbtree node pointers directly to
-> bpf_refcount_acquire(), which must fail because those pointers carry
-> non-zero fixed offsets.
->=20
-> Do not add a positive container_of() case here. Existing refcounted_kptr
-> coverage already exercises valid base-pointer acquisitions, and this patc=
-h
-> only checks the rejected offset forms.
+On Mon Jun 22, 2026 at 12:16 AM PDT, Gyutae Bae wrote:
+> From: Gyutae Bae <gyutae.bae@navercorp.com>
+>
+> This series adds an atomic compare-and-delete primitive to BPF hash
+> maps, motivated by a TOCTOU race in Cilium's conntrack GC [1]: the
+> batched GC snapshots CT entries, decides which expired, then deletes
+> them by key in a later syscall; between snapshot and delete the
+> datapath can refresh the same entry, so a live entry is deleted. A
+> userspace re-check before delete can't close it (lookup and delete are
+> separate, individually bucket-locked calls).
+>
+> BPF_F_COMPARE lets userspace delete a key only if a chosen value region
+> is unchanged, with the compare and the delete done atomically under the
+> hash bucket lock:
+>
+>     attr.flags |=3D BPF_F_COMPARE;
+>     attr.compare =3D <expected>;
+>     attr.compare_offset =3D <off>;
+>     attr.compare_size =3D <len>;
+>
+> mismatch -> -EBUSY, absent -> -ENOENT, unsupported map -> -EOPNOTSUPP.
+> The compare* fields without the flag are rejected (-EINVAL) so a dropped
+> flag can't silently become an unconditional delete; maps whose value
+> carries BTF-managed fields (spin_lock/timer/kptr/...) are rejected
+> (-EOPNOTSUPP) since those bytes are sanitised on lookup.
+>
+> Atomicity boundary (please scrutinise): the compare is atomic vs every
+> bucket-lock holder, but NOT vs a BPF program writing the value in place
+> via the pointer from bpf_map_lookup_elem() (no bucket lock). It
+> collapses the race window from the whole GC batch to one bucket-locked
+> critical section; full closure wants the compared region treated as a
+> synchronization variable (e.g. a monotonic revision). The selftest
+> models this.
+>
+> Scope of this RFC: per-element compare-and-delete on BPF_MAP_TYPE_HASH
+> only. Deferred (will follow once the approach is agreed): batch delete +
+> its attr fields, a libbpf wrapper, LRU-hash and other map types, a
+> compare-and-swap *update*.
+>
+> Open questions:
+>   - flag name: BPF_F_COMPARE vs something else?
+>   - mismatch errno: -EBUSY vs -EAGAIN?
+>   - new ->map_delete_elem_cmp() op vs extending ->map_delete_elem?
 
-This paragraph is completely unnecessary.
+Sorry, this is no go.
+There is bpf_spin_lock that use can use to synchronize access
+between bpf progs and user space.
+lookup_and_delete with BPF_F_LOCK uses the same lock.
+Or add another syscall program that is triggered from user space
+that operates on the same map.
+Or convert everything to arena and use whatever algorithm you prefer.
 
-> Fixes: 7c50b1cb76aca ("bpf: Add bpf_refcount_acquire kfunc")
-
-I don't think the fixes tag applies to the test.
-
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> ---
->  .../bpf/progs/refcounted_kptr_fail.c          | 77 +++++++++++++++++++
->  1 file changed, 77 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/t=
-ools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> index 7247a20c0..77cda5ca2 100644
-> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> @@ -13,12 +13,22 @@ struct node_acquire {
->  	struct bpf_refcount refcount;
->  };
-> =20
-> +struct node_refcounted {
-> +	long key;
-> +	struct bpf_rb_node rb;
-> +	struct bpf_list_node list;
-> +	struct bpf_refcount refcount;
-> +};
-> +
->  extern void bpf_rcu_read_lock(void) __ksym;
->  extern void bpf_rcu_read_unlock(void) __ksym;
-> =20
->  #define private(name) SEC(".data." #name) __hidden __attribute__((aligne=
-d(8)))
->  private(A) struct bpf_spin_lock glock;
->  private(A) struct bpf_rb_root groot __contains(node_acquire, node);
-> +private(B) struct bpf_spin_lock lock;
-> +private(B) struct bpf_rb_root root __contains(node_refcounted, rb);
-> +private(B) struct bpf_list_head head __contains(node_refcounted, list);
-> =20
->  static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
->  {
-> @@ -31,6 +41,17 @@ static bool less(struct bpf_rb_node *a, const struct b=
-pf_rb_node *b)
->  	return node_a->key < node_b->key;
->  }
-> =20
-> +static bool less_refcounted(struct bpf_rb_node *a, const struct bpf_rb_n=
-ode *b)
-> +{
-> +	struct node_refcounted *node_a;
-> +	struct node_refcounted *node_b;
-> +
-> +	node_a =3D container_of(a, struct node_refcounted, rb);
-> +	node_b =3D container_of(b, struct node_refcounted, rb);
-> +
-> +	return node_a->key < node_b->key;
-> +}
-> +
->  SEC("?tc")
->  __failure __msg("Unreleased reference id=3D4 alloc_insn=3D{{[0-9]+}}")
->  long rbtree_refcounted_node_ref_escapes(void *ctx)
-> @@ -93,6 +114,62 @@ long rbtree_refcounted_node_ref_escapes_owning_input(=
-void *ctx)
->  	return 0;
->  }
-> =20
-> +SEC("?tc")
-> +__failure __msg("dereference of modified ptr_ ptr R1")
-> +long refcount_acquire_list_node_offset(void *ctx)
-> +{
-> +	struct node_refcounted *node, *base, *ref;
-> +	struct bpf_list_node *list_node;
-> +
-> +	node =3D bpf_obj_new(typeof(*node));
-> +	if (!node)
-> +		return 1;
-> +
-> +	bpf_spin_lock(&lock);
-> +	bpf_list_push_front(&head, &node->list);
-> +	list_node =3D bpf_list_pop_front(&head);
-> +	bpf_spin_unlock(&lock);
-> +	if (!list_node)
-> +		return 2;
-> +
-> +	base =3D container_of(list_node, struct node_refcounted, list);
-> +	ref =3D bpf_refcount_acquire(list_node);
-> +	if (ref)
-> +		bpf_obj_drop(ref);
-> +	bpf_obj_drop(base);
-> +	return 0;
-> +}
-> +
-> +SEC("?tc")
-> +__failure __msg("dereference of modified ptr_ ptr R1")
-> +long refcount_acquire_rbtree_node_offset(void *ctx)
-
-Why is this test necessary? Does it exercise any paths that the
-previous one does not check?
-
-> +{
-> +	struct node_refcounted *node, *base, *ref;
-> +	struct bpf_rb_node *rb_node;
-> +
-> +	node =3D bpf_obj_new(typeof(*node));
-> +	if (!node)
-> +		return 1;
-> +
-> +	node->key =3D 1;
-> +
-> +	bpf_spin_lock(&lock);
-> +	bpf_rbtree_add(&root, &node->rb, less_refcounted);
-> +	rb_node =3D bpf_rbtree_first(&root);
-> +	if (rb_node)
-> +		rb_node =3D bpf_rbtree_remove(&root, rb_node);
-> +	bpf_spin_unlock(&lock);
-> +	if (!rb_node)
-> +		return 2;
-> +
-> +	base =3D container_of(rb_node, struct node_refcounted, rb);
-> +	ref =3D bpf_refcount_acquire(rb_node);
-> +	if (ref)
-> +		bpf_obj_drop(ref);
-> +	bpf_obj_drop(base);
-> +	return 0;
-> +}
-> +
->  SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
->  __failure __msg("function calls are not allowed while holding a lock")
->  int BPF_PROG(rbtree_fail_sleepable_lock_across_rcu,
