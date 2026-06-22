@@ -1,186 +1,209 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12CE349CFD
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 19:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047593546CF;
+	Mon, 22 Jun 2026 21:09:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782157411; cv=none; b=uH/Dm1oCv6Gua9MsaObz3usTsdoS6a7yDUrok1WKiKbG01bCUW4yLAp1kqzWUpYiP0WDbtzhq++hbxj7CNxvGQdUimeiErG4VMo4iEICVcYz2erBOEf/edNSw4uNCvQZkYr20mV5hmxHb++2BdlX82AuULAZZA/EZg9+3PTS0vE=
+	t=1782162559; cv=none; b=oTcy0dMtOWs2iwaQjF/dQWkixs7F6LprM/IFMYSlK9GDVwvYXCdPTOYevo4+HsZDn5O5Re923MnQzxbj3DHhnTMhadsL8QheOtEQGF2G5dLhQM1lmZxKg20FXLyNZIM7jYm+7UuPELZPyUGdfX/qEB+m1NiWmrxXvd5Tum/GzEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782157411; c=relaxed/simple;
-	bh=Kk3o03hgyW8kM5/HNI84/GHxr++YhhzFEuplQ1IujJA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eq73qfbOTv4pNVIEpTRH1mi5Vzm5Xb6tNXuwk6d33msi8Mmgb7YEM6LpMjB5iGsIP1LCESCuOgoxXMntfqY4iMjsxNdwdjBQotmDWxRaLRuw0cfwSwYPXt3yAZIowO13PIMEvwSKVMeqXlwEtRFZxmfvsHZ7+vFgJMcyejj22O4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OJp6//F6; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ej27qgex; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782162559; c=relaxed/simple;
+	bh=vnvGl0rxCI7iftJLJm8pM9IaRAPGP3yEZnDEqnh8u9U=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=daureH64uVrgpJgAEcLUEhVRx4dF1eKK3z97D5b4vQGhh4UUqAIWJZBt7V7/vCqouSnOMmh8kufn9VMjnRMChXra0GeDunQQAvcjUcsXXiUmqtRao02Hytti5Fo14sW8ePC4XeLPIdC7VmGLdV3FlpX9FL7R03GtFuqR+igV/GE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=johnericson.me; spf=pass smtp.mailfrom=johnericson.me; dkim=pass (2048-bit key) header.d=johnericson.me header.i=@johnericson.me header.b=JjDXNvTL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WLlfasY5; arc=none smtp.client-ip=202.12.124.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=johnericson.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=johnericson.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OJp6//F6";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ej27qgex"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782157408;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=HoMUloaAKg8ODmRbwKoyKyJ1xKK05TMqALvJhnJx1T4=;
-	b=OJp6//F6v9s3s2MZkkiDmQ5AUmZMjhfuZEhajtZdjcJWL11MSoggErA3fk3EjtAgiNl24Q
-	mPfD8kjgAEhGi9Ec397itkvPWN+hN2awPE63J7h+aIRBpvSVOuEf19jtXzxjz3vK2J/za8
-	Gl2i4zZlwIqd1AVH0pd80EnaKUi/OTs=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-441-E_Unf8SQMJ-Me7zHkwYiQQ-1; Mon, 22 Jun 2026 15:43:25 -0400
-X-MC-Unique: E_Unf8SQMJ-Me7zHkwYiQQ-1
-X-Mimecast-MFC-AGG-ID: E_Unf8SQMJ-Me7zHkwYiQQ_1782157405
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-91598af506cso461965985a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 12:43:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782157405; x=1782762205; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HoMUloaAKg8ODmRbwKoyKyJ1xKK05TMqALvJhnJx1T4=;
-        b=ej27qgextzr67ahtxU+KCPt/ouirG7ZlzjFtiWyGSlr68PvdjEJtdMHOhdQE3x6vRM
-         TXxSVmh9+PnPZAim8d8S08n2nqs4iRRPUr1G/wmyciy4WiwzbBQhST1rOXcxqn75y63+
-         ekEwpwxJwzFk3+kR/ad2qiRLG6/jofrrywsnfrIvMvDjYhyWHL2JGGtVve89DcwX3RHo
-         Swe+wtV2Ypi9VrZR4h/jm2QhYv9PRVXGbHTV5XsYBp2VmxTwCe3LRP17aydNNYUA/naH
-         iZoiVxoi8NHIRZ19RfRSjO2BZDES+14SjkR4cTSN2veGAgcL5H3Ts3QOv7UXMUh7OHj6
-         yh5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782157405; x=1782762205;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HoMUloaAKg8ODmRbwKoyKyJ1xKK05TMqALvJhnJx1T4=;
-        b=Yy6wMwfilWPYxn8KcN1Bq/J+Ddjlrn173xSuu+pZpQVevma0FILbN3mymdDF6gxWoH
-         /e30rIRV5KAZRDwEJ7ApFXXbp4YmsyeehGpCwfs24eaBF5TgIUlayxZDhKSCwVWmLREG
-         kPcrGTAxyZ/SKONhOUUHPFjoq3niT8KoYxWla+eQrWPNr30eO0tg6Bh8JgFbhFBfSy8Y
-         sR7f5zdEDOT+BTTWIKQ7j6eSb/+TN9JEcBqlKXJBZ8wJCoVMDjNPq8C1RuS1W8545dR2
-         tYeOiC63KDJZNS2cD093JlPvm/NV/798JK2PFkSpDkmvnzMo/v+jFJLtSaPApu/wriSc
-         uMsg==
-X-Forwarded-Encrypted: i=1; AFNElJ/4kMunfBTBc+WmPcshVcaK+Z19it8ihbytjFug0P/xuuQOJbAV9frJINJRmlLkr5y+xygFrHg26JaEKGjh4ag=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNk+fxgvz+pzQu5HvhVN1j5bFcOzGwPUhM5cdb/PnVVIRWU7sA
-	0vxfDtYekW47G3JM8QaLEbfLj8kAMjWAG9ESBoXYU7Fh7qaCTCeUcI+ouKlE2I1iAsppCOfKrIw
-	A3iONNFK67GaAyiQy2zTekDwKa5r71txbbKTVxnLw8jWDDoGNvbMJtVnv+CrHF56n+ZNLOw==
-X-Gm-Gg: AfdE7cnBFMq3TTtf11lfMkCp+AqHWwoPdWgJbPFAm1aG6jtcQq0M1Q+4pMoGv0255Ju
-	dIo0BJjyB/LXvHTItCHMpDOnhk5ub2aVukX8NaXIuVQmtaz4tQU+n9WM2yQD2KvBfggs9D5O26v
-	tGN+6l9fX2BkkGNjicMEmBWGZx7Nsqn6+MSZ3y+9nTt365xwt0dM4DdpLzaONrUk1qC3zeT00Z4
-	n48UF5zkcx8uFdgC4OjDDjqVRwSTsZsa3PMd8JvA7lRL9WSRdXzdze1WH6ZyssaAs/KRVkAi2hK
-	Xyt0bpL7fq3cWIIdqWjae9z1isrJRWcMoURJnF1tp+FiDK+XIFlOmIkNZYHkZ5dFmpYyZWjqPka
-	cxFd8E8/N3NWEvRGXayTyO3wG0ct1c3KnPQ==
-X-Received: by 2002:a05:620a:2592:b0:922:92b1:9dfc with SMTP id af79cd13be357-92292b1aff4mr1606117485a.14.1782157404800;
-        Mon, 22 Jun 2026 12:43:24 -0700 (PDT)
-X-Received: by 2002:a05:620a:2592:b0:922:92b1:9dfc with SMTP id af79cd13be357-92292b1aff4mr1606108685a.14.1782157404145;
-        Mon, 22 Jun 2026 12:43:24 -0700 (PDT)
-Received: from oak (c-73-148-124-98.hsd1.va.comcast.net. [73.148.124.98])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-926000c1c39sm61506485a.26.2026.06.22.12.43.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 12:43:23 -0700 (PDT)
-From: Joe Simmons-Talbott <joest@redhat.com>
-To: Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Joe Simmons-Talbott <joest@redhat.com>,
-	cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests/cgroup: Adjust cpu.max quota based on HZ
-Date: Mon, 22 Jun 2026 15:43:04 -0400
-Message-ID: <20260622194305.601392-1-joest@redhat.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=johnericson.me header.i=@johnericson.me header.b="JjDXNvTL";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WLlfasY5"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id DF7A01D000BD;
+	Mon, 22 Jun 2026 17:09:16 -0400 (EDT)
+Received: from phl-imap-16 ([10.202.2.88])
+  by phl-compute-05.internal (MEProxy); Mon, 22 Jun 2026 17:09:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=johnericson.me;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
+	 t=1782162556; x=1782248956; bh=jFF/WpwMh/jCc3BLFtGeQFz4k3VdPzDt
+	JzJgsPoc2ts=; b=JjDXNvTLRkJP8G4o3k6kxSzI5fI7C80VTDYCmwZVyITaGw2p
+	MlP/OFM08F+mlL6r+coXorXYJdMmELrehBOFmmvIgU5iXipmG1ME/5xJeVr4WiJi
+	uRcZPB/XzuO/iWuurWYq1BtElt0usel2oHHxb2Ayw02bxWEuSWb8Y0XHGn58iflt
+	T2Joy1j3xiLaheY+E4ViLcQLI7Pfnvn3LtLievLNtPSyWlPpa5U3nM01ZjimkF5k
+	phrcElQkYRLTmQt+GLKbmkIZRsnE7+bkTsFKy295b6sCh+UaRgCfXA20MREl4GO8
+	sGBYABQ+NoSW5iBNevazW4nOYwX0ZYBTyLuniA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1782162556; x=
+	1782248956; bh=jFF/WpwMh/jCc3BLFtGeQFz4k3VdPzDtJzJgsPoc2ts=; b=W
+	LlfasY5e7w+oscXqcB6O27BTOkksrfqZa8OlZ/d2arPYtuFS0MjJlTct5wzdwIP3
+	cjENgsOkP3nAGQCGdOcdy2lNrAm11K5g9N8kRa7tKkHQz0JXixGmSWwJvEiOudh6
+	h71NUBPrbvWjdj/IRebQzxRjb4ApDbfW6c5R5XMYnCITj/fW/VMmEcciq9YqqzP+
+	DEQR6manN8pmfAdORjT7gLkWox3o7idAsn/llhqjHWswvWzJ/Ea/PI61EzpqeAOq
+	vV8SqW2duCvWvr2Hlpyxyl83ep2MP6PgbDNKGEG1sf76EPvAjW1jRZVXuVtYXRzj
+	odztZik2ezkgpPxlD8lOw==
+X-ME-Sender: <xms:fKQ5al6OBAcIKa_8caFGgVAAPJJg0I2Bcjr8Zog7FOfJWUn2aboe3Q>
+    <xme:fKQ5atvlD7PRXEcBcG30SWUZpepuy5MJAdFosUmjew5JibSC7hQdoncv7kX5Kmre7
+    RIk0JfBG0LVNEjV93Dept7zBBJbennRnBZvoUWp7jprKX_fgiR-pX0>
+X-ME-Proxy-Cause: dmFkZTE85SJkWCmf2DIiBDqyTS4Lx7ehehEXg9gN/dFnuHNNyltCkyeNImba15iNnqYRcD
+    usVsuOhsm0DKJ4FgEZ33iHQitzrQDLVPbCHJa8XHAFeTpJeni0d7Qd+nfvePxkda54MRvA
+    eRvTPogsdOaimkzw/J7KJ+qn92CcGFzoAOnfXRxDbA3Z5LQ/TVtSuq7OW+xrvBISc2lflC
+    +hcram3W8y5GO32+l74XClWEinJ4kthd1I9l8bo3qnLJKD50e9MmIfPRCNFca4/LfyM9q8
+    IzHmDHVWuHEEQY+CoqTJf2mhPExROeZ0h4bdHYcT61zf458kRCi/VIndwhRdWi08drdeUZ
+    vqOWB6h6eYFW+39vy2hDBuLfjoCIRsFgfg5XEgSOFbTMypSE1YmeRYch0pknsf0AaxGuOF
+    fzpweTTMhDo00Tt9dvONEPOccrorgjAJTZkZGHKeMys3zMGwR/up56Sbr1sUwu5rEhdFP8
+    KGf7D6/Sw53wgAEYpbVHmci6z4asoKewTVumy+Q8YZT8jXyJqVExvg/226buNRtK99ZUUG
+    MpS4p6pvP3RE8TX+IzRnshupAjf9T1BpCJjsZyB9Y1pr4KbhXTdCXYrf4hCwDkCN+PHZe5
+    Aj8QFTFuXwfNrTz/UGnCVbjOD8epeFmXjHCYJSBFvYBhRhxIJ8/jBRUOD4Uw
+X-ME-Proxy: <xmx:fKQ5avfGmpKLPK1pQtHkbMGK9G56tzvFyruhiymL2zmR_DyAkR8-XA>
+    <xmx:fKQ5ahF0QQ8q6d5KgDYz8zM3IU2QMGGfarTEiw1fk9CmB1_wCGdV1g>
+    <xmx:fKQ5aljMnNoqTdKwZx0nwmUOlqG_VAaYmWAuyQQWvO2jVvNIDY0jIA>
+    <xmx:fKQ5al18q2I234xnKPB64pMI5lUioDlNJNQT9fQubXnzCIP47Il3dQ>
+    <xmx:fKQ5al8QtQg2La8O0VrMSfKgeZjVi8h8SWzOBORZSXV25DaMAkgM5tlL>
+Feedback-ID: ieb4144f1:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id EA6062CC0083; Mon, 22 Jun 2026 17:09:15 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: A1dANeNfTnWJ
+Date: Mon, 22 Jun 2026 17:08:55 -0400
+From: "John Ericson" <mail@johnericson.me>
+To: "Farid Zakaria" <farid.m.zakaria@gmail.com>, "Jan Kara" <jack@suse.cz>
+Cc: "Kees Cook" <kees@kernel.org>, "Christian Brauner" <brauner@kernel.org>,
+ "Al Viro" <viro@zeniv.linux.org.uk>, shuah@kernel.org,
+ linux-fsdevel <linux-fsdevel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+ linux-kselftest <linux-kselftest@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>
+Message-Id: <24420045-a6eb-4999-ab19-1e344eaba8a4@app.fastmail.com>
+In-Reply-To: 
+ <CACCo2jkDuwy5w_yhX8833m+s-rY736pk8xtKjxg3_y_7BCOHeg@mail.gmail.com>
+References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
+ <sfv7zc6jboy2oxv7zuyofysas4ncbzenwsuzveiyduisfr6i7q@mx23er7uxdbg>
+ <CACCo2jkDuwy5w_yhX8833m+s-rY736pk8xtKjxg3_y_7BCOHeg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] fs: support $ORIGIN in ELF interpreter paths
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-For lower HZ values a quota of 1000us is much lower than the amount
-of microseconds per tick which makes the tests test_cpucg_max and
-test_cpugc_max_nested fail. Use the amount of microseconds per tick
-as the quota value.
+Hi, I am another Nix developer, and have participated in some LKML
+discussions in the (recent and distant) past, and thought I should weigh
+in here too.
 
-Signed-off-by: Joe Simmons-Talbott <joest@redhat.com>
----
-changes since v1:
-- Try checking /proc/config.gz to get the actual kernel HZ value and
-  fallback to 1000 if the value cannot be determined.
+On Mon, Jun 22, 2026, at 1:15 PM, Farid Zakaria wrote:
+> On Mon, Jun 22, 2026 at 3:40=E2=80=AFAM Jan Kara <jack@suse.cz> wrote:
+> > Thanks for the patches! Before dwelving into implementation details =
+we
+> > need to discuss whether something like this even belongs to the kern=
+el.
+> > Frankly to me this looks rather arbitrary and tied to the particular=
+ way
+> > you've decided to setup your package management system.
+> >
+> > I don't know enough details to really judge but it seems to me like =
+you are
+> > trying to workaround a mess in userspace with kernel changes.
+>
+> Having put forward the patch, I'm clearly biased toward thinking this
+> support should exist in the kernel.
+> If I had to think to strengthen my argument would be that the kernel
+> should not be imposing how the interpreter is found on userland.
+> Finding the interpreter relative to the binary would be useful for
+> package deployment scenarios similar to app-bundles beyond systems
+> like Nix -- which is the originating reason why $ORIGIN exists in the
+> dynamic linker.
 
- tools/testing/selftests/cgroup/test_cpu.c | 33 +++++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
+Yes, the idea of making "relocatable software" is not a new one, and
+indeed it is why `$ORIGIN` is supported in the RPATH etc. in the first
+place.
 
-diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
-index 7a40d76b9548..65e09555309f 100644
---- a/tools/testing/selftests/cgroup/test_cpu.c
-+++ b/tools/testing/selftests/cgroup/test_cpu.c
-@@ -639,6 +639,29 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
- 	return run_cpucg_nested_weight_test(root, false);
- }
- 
-+/*
-+ * Best effort attempt to get the kernel's HZ value from the config.
-+ * Return the HZ value if found otherwise return -1 to indicate failure.
-+ */
-+static long
-+_get_config_hz(void)
-+{
-+	long hz = -1;
-+	FILE *f;
-+	char cmd[256] = "zcat /proc/config.gz 2>/dev/null | grep '^CONFIG_HZ='";
-+
-+	f = popen(cmd, "r");
-+
-+	if (!f)
-+		goto out;
-+
-+	fscanf(f, "CONFIG_HZ=%ld", &hz);
-+
-+out:
-+	pclose(f);
-+	return hz;
-+}
-+
- /*
-  * This test creates a cgroup with some maximum value within a period, and
-  * verifies that a process in the cgroup is not overscheduled.
-@@ -646,7 +669,8 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
- static int test_cpucg_max(const char *root)
- {
- 	int ret = KSFT_FAIL;
--	long quota_usec = 1000;
-+	long hz = _get_config_hz();
-+	long quota_usec;
- 	long default_period_usec = 100000; /* cpu.max's default period */
- 	long duration_seconds = 1;
- 
-@@ -655,6 +679,8 @@ static int test_cpucg_max(const char *root)
- 	char *cpucg;
- 	char quota_buf[32];
- 
-+	quota_usec = hz != -1 ? USEC_PER_SEC / hz : 1000;
-+
- 	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
- 
- 	cpucg = cg_name(root, "cpucg_test");
-@@ -710,7 +736,8 @@ static int test_cpucg_max(const char *root)
- static int test_cpucg_max_nested(const char *root)
- {
- 	int ret = KSFT_FAIL;
--	long quota_usec = 1000;
-+	long quota_usec;
-+	long hz = _get_config_hz();
- 	long default_period_usec = 100000; /* cpu.max's default period */
- 	long duration_seconds = 1;
- 
-@@ -719,6 +746,8 @@ static int test_cpucg_max_nested(const char *root)
- 	char *parent, *child;
- 	char quota_buf[32];
- 
-+	quota_usec = hz != -1 ? USEC_PER_SEC / hz : 1000;
-+
- 	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
- 
- 	parent = cg_name(root, "cpucg_parent");
--- 
-2.54.0
+Most of the programming model for writing relocatable software is fixed
+at this point. For example, /proc/self/exe made it much easier to look
+up arbitrary stuff relevant to the current executable. It is just some
+initial entry point stuff (the ELF interpreter, and shebangs) which is a
+glaring exception. Those should support `$ORIGIN` too. There is no good
+technical justification (that I can think of) for some but not all of
+these supporting `$ORIGIN` --- either it makes sense everywhere, or it
+makes sense nowhere.
 
+(I suspect the only reason it didn't happen was pure inertia/Conway's
+law --- easier for whoever was excited about `$ORIGIN` to change the
+glibc loader than the kernel.)
+
+> To me, the gap is that prior to systems like Nix, the idea of wanting
+> your dynamic linker to be part of your app bundle was not necessary
+> but Nix models the dependency chain down to the loader. Such
+> functionality would be even more correct for these other bundled
+> solutions as well, making them portable across userspace glibc
+> versions for instance.
+
+Yes, exactly. Traditionally people thought "eh `/lib/ld-linux.so.*`
+doesn't change too much", and decided relocatable software that
+nonetheless hard-coded that absolute path to an unknown system-provided
+ELF interpreter was good enough. (Or if they weren't good enough, they
+went with static linking, but that imposes other costs.)
+
+Now there do exist purely-user-space work-arounds, like
+https://github.com/Mic92/wrap-buddy, but they are quite complex, and
+involve various patching trickery that is likely to scare a lot of
+security analysis tools. A kernel-based solution that allows clean
+declarative expression of intent with `$ORIGIN` is much more elegant.
+
+> > In particular the
+> > usual answer for situations like these is to use namespaces which you
+> > discount in your blog with: "If you are using tools like Bazel or Bu=
+ck2
+> > they likely already employ their own sandboxing via namespacing for =
+builds.
+> > Integrating Nix into these ecosystems becomes incredibly impractical
+> > because we run into nested user namespace and mount restrictions."
+
+I think it is good to see what Conda does as documented in
+<https://docs.conda.io/projects/conda-build/en/stable/resources/make-rel=
+ocatable.html>
+and consider why relying on namespaces vs good old-fashioned relocatable
+isn't good enough for them either.
+
+(I don't doubt that Conda would find this approach more robust than
+their sedding tricks, and prefer to use it where possible.)
+
+The short answer is while all of us in the build system space love
+sandboxing during the build, we don't want that to lead to *requiring*
+run time sandboxing of the built artifacts. For example, we can
+certainly arrange sandboxing so `/lib/ld-linux.so.*` is the one that
+some executable expects now, but every time that executable is run, it
+*must* be run in a root filesystem where `/lib/ld-linux.so.*` is the
+loader it expects.
+
+If you have multiple programs that (for whatever reasons) expect
+multiple different loaders, all spawning one another, it would
+potentially incur quite the development cost to ensure that they all do
+the proper unsharing to make everything work.
+
+Relocatability recognizes that whether or not namespaces exist, in an
+"open world" scenario where we don't know how the software we are
+writing will be combined with other software for deployment downstream
+in different ways, it is easiest to adopt an idiom where different
+things can be placed at different absolute paths, at the user's
+discretion, and so conflicts are always avoidable.
+
+> > Anyway I'm pretty sure Christian will have more educated answer than=
+ me but
+> > I just wanted to express my skepticism about this approach and that =
+perhaps
+> > you wait for feedback from him before spending more time on these pa=
+tches.
+> >
+> >                                                                 Honza
+> > --
+> > Jan Kara <jack@suse.com>
+> > SUSE Labs, CR
+
+Waiting makes sense, I am curious too what he will have to say.
