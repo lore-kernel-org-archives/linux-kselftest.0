@@ -1,35 +1,55 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42ECE8248B;
-	Mon, 22 Jun 2026 01:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9877D30BF6D;
+	Mon, 22 Jun 2026 02:26:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782090437; cv=none; b=MJM4QB9wWnaCWVHgdfFdoHx7ALPYyIJ9luKjLWLs8CM4TRLYbNHxnyWNCtb/Ao/ojINpEBljqqDjVQN6VgEh/9bm3DcRKp2F/85y1HAN9PYprx0LWcFONVZlU7CrJdQNuGniuUgbVn2q15RijhLtYeh8ryGkY/GiaxlR68uFf10=
+	t=1782095196; cv=none; b=LsamH7KOgs2C0HhYhE31Qknlg62YHsXWIyPbcwQg2SvPZ15leuJXsl66Qwy4ag1OkiwD4TWrO0t65Nl4b4Gyaeg3cMm90nvgyEVozmHT/t+MBCuYQ5Ejg9peqLUhDVPhPSmHTxuX0kY4afGDnnWojlGyyxxnGscT5uX4niQmGu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782090437; c=relaxed/simple;
-	bh=2pd1rYFyW2zTPDf+pEi5Bq8irAnKLQagRH8it2h0bks=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=bCX0ddOIMKz15eStEossvXgl9w2cz/x3IXhwNeDq4TwO/GbpWKo2qgg6Qa+5jjtN9i2Sls4gkJ02JzvtIvR3yz3h3kpAOF3HpI90Pnz6H267NAum0ZDXxww8KVe8jO3oS47KIbvGugfA7Q9+HeThJz92JV3nAAgheXIVtevfsDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YRtqLH7Q; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782095196; c=relaxed/simple;
+	bh=21oQHF+/lIgWotzmxsqlDlg1xetFznJxeGdmAtt6W08=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=eBIQ8PKzbe+I+4Pa0oByDnW5oYG2TfHjffhw1IlxJjJr+4qG5Z6kRPqtKoh6e/jYF3vh5lAm4nNsr32FGyALaUF132rBfm7q+GgFYI1rGzOvTlULyiAySaeygzA/GYbuqbx1t5bqeLXbLg0dYVHbLp6Q1YP/79X8zOrN+LYTzOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Q0LWeVUr; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YRtqLH7Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC98A1F000E9;
-	Mon, 22 Jun 2026 01:07:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782090436;
-	bh=1JLZddvmI8W9DSIwo6SYX2iL6bvSV9iWTZ1WrAHQe4k=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=YRtqLH7QsGne+vAFkSZ6JXC2UNa4gDUCUaxZlcyWq9Z4n643nJ8vf3bLvshJe1OGe
-	 HFYGHSlGZ0vSFBGzO3TIicbCfbO7g5L45td901BXgwYbQCXZbS/02nz6kxKwBXWQnN
-	 /fDez+vho8v06Uoq0JA+Z0na7HxMDkkAe4mpMO3Lev6VFeDV6q2QgnMruKjuCwISO7
-	 PDvvq4StiPS5PjNdy41KRFOXusVhHnydQOUAjGNVa0rRmc1frKQ+dbYQAArFC0ngpN
-	 cUjXzEBAySkRs7EgqA5pP57B4Hq443Tgg92T6i3qNV8ec6wRO2YeEjaj0IC2mEFNEo
-	 XoEqv43sC3eFg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56B113AAA6EF;
-	Mon, 22 Jun 2026 01:07:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Q0LWeVUr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=iUfKMHWzEuWYfUDM/wUw3ltrpuHWMEOMP+
+	TGJ1nkcjc=; b=Q0LWeVUrwtpgWyoQpZuf5KGd9VF0lCm32g6n954+AJ2sKoJOEb
+	+GNaqj63ugg/f7JBI/qNLKJqSxwxhmXpy75XY0FXAzmuXousChgdJs2p8ykqL44r
+	Bm5M28cgZcxPkZMkS+I6Y4BKg+vK3QkIYu/JU9AtE6eo+DPg9tgCYQwvs=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web5 (Coremail) with SMTP id zAQGZQCHQcEynThqj7qZAg--.19827S4;
+	Mon, 22 Jun 2026 10:26:14 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Dave Marchevsky <davemarchevsky@fb.com>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Cover refcount acquire node offsets
+Date: Mon, 22 Jun 2026 02:25:52 +0000
+Message-Id: <5c0605718efd58ae3b8c44f70637ad1bd5ebb76e.1781979133.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1781979133.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1781963957.git.chenyy23@mails.tsinghua.edu.cn> <cover.1781979133.git.chenyy23@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,50 +57,151 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v3 0/2] bpf: Fix stack slot index for Spectre v4
- nospec
- checks
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178209042679.554493.16748055730753195339.git-patchwork-notify@kernel.org>
-Date: Mon, 22 Jun 2026 01:07:06 +0000
-References: 
- <20260618-f01-11-stack-nospec-slot-index-v3-0-780297041721@mails.tsinghua.edu.cn>
-In-Reply-To: 
- <20260618-f01-11-stack-nospec-slot-index-v3-0-780297041721@mails.tsinghua.edu.cn>
-To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, john.fastabend@gmail.com,
- martin.lau@linux.dev, luis.gerhorst@fau.de, shuah@kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, jiayuan.chen@linux.dev, emil@etsalapatis.com
+X-CM-TRANSID:zAQGZQCHQcEynThqj7qZAg--.19827S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxGF1kKF15tr4fKw17Zr1kXwb_yoWrWw15pr
+	40ga45AF48X3yxury0yayDZrnaq3W8XrWrG395Cw1fAr97X3s3Xa1xZFyjvFyrJr4xKrnF
+	qr4jgFW7ZF4DZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUH014x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAa
+	c4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
+	Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
+	6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxw
+	ACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Avz4vE14v_Gr1l
+	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r
+	4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+	cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRi-eOtUUUUU==
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Hello:
+Add regression coverage for bpf_refcount_acquire() on graph-node-derived
+pointers.
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+The rejected cases pass popped list and rbtree node pointers directly to
+bpf_refcount_acquire(), which must fail because those pointers carry
+non-zero fixed offsets.
 
-On Thu, 18 Jun 2026 01:50:25 +0800 you wrote:
-> check_stack_write_fixed_off() uses one byte-indexing scheme when checking
-> whether a fixed-offset stack write needs Spectre v4 sanitization, and another
-> scheme when recording the write into slot_type[].
-> 
-> For sub-8-byte writes this can make the sanitization check look at bytes that
-> are not overwritten by the write. A zeroed lower half-slot followed by a write
-> to the upper half-slot can therefore miss the nospec barrier for the second
-> write.
-> 
-> [...]
+Do not add a positive container_of() case here. Existing refcounted_kptr
+coverage already exercises valid base-pointer acquisitions, and this patch
+only checks the rejected offset forms.
 
-Here is the summary with links:
-  - [bpf,v3,1/2] bpf: Fix stack slot index in nospec checks
-    https://git.kernel.org/bpf/bpf/c/d1d53aa30ab3
-  - [bpf,v3,2/2] selftests/bpf: Cover stack nospec slot indexing
-    https://git.kernel.org/bpf/bpf/c/a93ae7ed5972
+Fixes: 7c50b1cb76aca ("bpf: Add bpf_refcount_acquire kfunc")
+Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+---
+ .../bpf/progs/refcounted_kptr_fail.c          | 77 +++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+index 7247a20c0..77cda5ca2 100644
+--- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+@@ -13,12 +13,22 @@ struct node_acquire {
+ 	struct bpf_refcount refcount;
+ };
+ 
++struct node_refcounted {
++	long key;
++	struct bpf_rb_node rb;
++	struct bpf_list_node list;
++	struct bpf_refcount refcount;
++};
++
+ extern void bpf_rcu_read_lock(void) __ksym;
+ extern void bpf_rcu_read_unlock(void) __ksym;
+ 
+ #define private(name) SEC(".data." #name) __hidden __attribute__((aligned(8)))
+ private(A) struct bpf_spin_lock glock;
+ private(A) struct bpf_rb_root groot __contains(node_acquire, node);
++private(B) struct bpf_spin_lock lock;
++private(B) struct bpf_rb_root root __contains(node_refcounted, rb);
++private(B) struct bpf_list_head head __contains(node_refcounted, list);
+ 
+ static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
+ {
+@@ -31,6 +41,17 @@ static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
+ 	return node_a->key < node_b->key;
+ }
+ 
++static bool less_refcounted(struct bpf_rb_node *a, const struct bpf_rb_node *b)
++{
++	struct node_refcounted *node_a;
++	struct node_refcounted *node_b;
++
++	node_a = container_of(a, struct node_refcounted, rb);
++	node_b = container_of(b, struct node_refcounted, rb);
++
++	return node_a->key < node_b->key;
++}
++
+ SEC("?tc")
+ __failure __msg("Unreleased reference id=4 alloc_insn={{[0-9]+}}")
+ long rbtree_refcounted_node_ref_escapes(void *ctx)
+@@ -93,6 +114,62 @@ long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("?tc")
++__failure __msg("dereference of modified ptr_ ptr R1")
++long refcount_acquire_list_node_offset(void *ctx)
++{
++	struct node_refcounted *node, *base, *ref;
++	struct bpf_list_node *list_node;
++
++	node = bpf_obj_new(typeof(*node));
++	if (!node)
++		return 1;
++
++	bpf_spin_lock(&lock);
++	bpf_list_push_front(&head, &node->list);
++	list_node = bpf_list_pop_front(&head);
++	bpf_spin_unlock(&lock);
++	if (!list_node)
++		return 2;
++
++	base = container_of(list_node, struct node_refcounted, list);
++	ref = bpf_refcount_acquire(list_node);
++	if (ref)
++		bpf_obj_drop(ref);
++	bpf_obj_drop(base);
++	return 0;
++}
++
++SEC("?tc")
++__failure __msg("dereference of modified ptr_ ptr R1")
++long refcount_acquire_rbtree_node_offset(void *ctx)
++{
++	struct node_refcounted *node, *base, *ref;
++	struct bpf_rb_node *rb_node;
++
++	node = bpf_obj_new(typeof(*node));
++	if (!node)
++		return 1;
++
++	node->key = 1;
++
++	bpf_spin_lock(&lock);
++	bpf_rbtree_add(&root, &node->rb, less_refcounted);
++	rb_node = bpf_rbtree_first(&root);
++	if (rb_node)
++		rb_node = bpf_rbtree_remove(&root, rb_node);
++	bpf_spin_unlock(&lock);
++	if (!rb_node)
++		return 2;
++
++	base = container_of(rb_node, struct node_refcounted, rb);
++	ref = bpf_refcount_acquire(rb_node);
++	if (ref)
++		bpf_obj_drop(ref);
++	bpf_obj_drop(base);
++	return 0;
++}
++
+ SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+ __failure __msg("function calls are not allowed while holding a lock")
+ int BPF_PROG(rbtree_fail_sleepable_lock_across_rcu,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
