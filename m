@@ -1,65 +1,66 @@
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1C0346E51
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 18:50:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6997157487
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 18:51:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782154231; cv=none; b=so1HIt5r+vml0J9aL981Cp1VTS2yuAlitCBHFbopIjlTCY6raFSIuhylz9d5sS8kcIuPh2VT9kx0SbTay/K7ktGfXDsVL7Nl0741bBF4iTqjLL1fa2zRXAKi4GERms+UjPjOHusH9Er53QdMrdCLlF4IOvfHnI1wIWOZGkwXUb4=
+	t=1782154276; cv=none; b=KXLtBsC0ED+UR62faUPmLyPYiXvK6LpZQPOUtJMrjr6hrb8/PtHHJQ6EtDRADFbegeB+4TTdCOP19Ok8L1HBo9TpGg9H9JumFV7OiuxNeS29kQ6w59MOaW+muy6hVxE21L71rHVqe9f/y+eTqx3Tzd1R1wST6BEGAXZFyjdmVZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782154231; c=relaxed/simple;
-	bh=6CP8ytn9kEga82EaEb6SHoo5YmHT3Lz98rg8ozQ8T00=;
+	s=arc-20240116; t=1782154276; c=relaxed/simple;
+	bh=6UIQirELPadVMjM0vUy1/xS19vG9UcIUXiKx10fU0u0=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XTy0SCX/fRUNMQoLHVrYok6FQ2qJoMXSMz8YTsc9oZyDwd+uqdk0smJD1uJYOXXfEhn3zb2m+8kRwsydUpdmNPOeeGxR98klg2qtN3yHCry670RnMmuBkLdYv6NhXKa6FmfUVlU/ELlrnwsQIDPji2StOSNh+UYv7BMDkZBVS9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NC3d6mVk; arc=none smtp.client-ip=74.125.82.49
+	 Content-Type:MIME-Version; b=gHZag58s0kQtLVXYvqtbSBTFMvgfqFFi4p9+jdX+7/LruAuvJZ64pgyCF8Plsr1cA7/gENumia5sU3YljScxyp4HPSkSzRpCUlY97aRIi6MaXqst3V9jOYZ1prphAgoRRCZUyf2sx7g/56N4NVSEesNHk168ze4JNqloQraTZrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VeP4nh0L; arc=none smtp.client-ip=74.125.82.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NC3d6mVk"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-13986d61b4fso5756251c88.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 11:50:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VeP4nh0L"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-139a5f4ca15so3342921c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 11:51:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782154229; x=1782759029; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782154274; x=1782759074; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=6CP8ytn9kEga82EaEb6SHoo5YmHT3Lz98rg8ozQ8T00=;
-        b=NC3d6mVkRkb37NTX3M6DrLbB/ZV99ryheF85ke7g4AqMKVkst8ISHHZqEDs6zzjTng
-         1HhDnzPhxAD4XCpL8cXg+wsKs0e6CPiHTRXNGImozcuc+RT0JqXraLRXsVUSGwncbmw0
-         iYZvRsz8cpX08SjMAmREjZw9xVJs0bf4xVzfvXL+OOhzEEoERXeHBADebnCYC7d36n+2
-         nb3puXv88whNHA6PKWQ6CjuTGU7IiiaEueNMwHo29XHVBW0Q/4gwwG4dwYiFpbVQFI4x
-         UfZV+CzT1Gktpgr9DR5WkdHpAOgnAxQtmIGDCdM7vkhU+xK6/Fox1Du3uTxdFymryG0H
-         mIGw==
+        bh=6UIQirELPadVMjM0vUy1/xS19vG9UcIUXiKx10fU0u0=;
+        b=VeP4nh0LzHki/gljTQ5NRvRV5oYNZY61x2h6AXttAp4J8B3P8LqCh0VKTfwtfqPsc8
+         hihRlFishlhVUoSB64AjJdJxiuugTTX53hplFbAvVkCDuM0COJZ9dpEH/wfuu2QthdjV
+         24mrQuMsO6g/4oCwFuLZE3vmHZDy/gsHR/pIlUMMVPH4yk1RLE3yPgM7oaALGSNpHoy2
+         5r1C5AW8Rn3Phh0vD7DEMC3ATlEw0UOdyI2gUn+W6NC6Ako4diXrCFU1WanVdlqhLyVg
+         AmhnpNjchMZM1/Nqh9JtpRF1j6HVQAHj9fEm2+yGP3qdj00SUJ5+DubqoODzF99JYyNX
+         ckWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782154229; x=1782759029;
+        d=1e100.net; s=20251104; t=1782154274; x=1782759074;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6CP8ytn9kEga82EaEb6SHoo5YmHT3Lz98rg8ozQ8T00=;
-        b=hx8woze8S5clgpZ7D+gfUmdLCtKYPnmncx8diDd/do7TGL5VN6E3GKODjmpa0/ZjJP
-         DwuV5ZXjbsOXVyqmjmrsGiTU3v5zgi176sXiiNRMldPEvNHj1TZ0KAgacFDyv4Qs9oae
-         diKKCOF1u/89GQ7D95CnKbvEXKqUUPxCIV0RfDy+DaVNYDg9ToENJPcmpdW0/gGXJgbF
-         CjfmU0cW5k3J8OGIoHVJ8IivYFvuLwj3sWAbmbhbHJukQMvwEE9/lUMeRyVAKInZykAN
-         J0GRDjyHYXRae+eWAUQFcQgDaJzB4xZQ9uXM0VGPK3DWNtDlMCLVmCIPliGF3OuRPKVA
-         v6mg==
-X-Forwarded-Encrypted: i=1; AFNElJ9YZJym0W7DrS8hvfHjDu6jhV/15k3B1NiCs9+maDD3gWuNxuzljk3RzCbiTbyl9cUZrW4hO9hTjTGuQvWgKTE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYcv8hCisjsYe+oz9uhdXrHqvHWaHXoxYW9THiQ6kK7C/afm9w
-	qxrJhgQqK2PV5UMxLlGqSdzU7TyQ7+f1V1IxhdK9IwRl/zaWTh4DqtU9
-X-Gm-Gg: AfdE7cnOtoFMJtNTrvXrSQte1gfAh3FNJXGsh73DIVhuvXQduDDq853SQhIM18z5mIX
-	Z9aze27eiZhSBMOTXhhxMF7vgBjdafMjf6P8NwoFeGYSk+YI3ZknBSQ9F+lTbY4xbXKQtP1SdE/
-	fp714X7Cx2rmiG31ImQSy13UfyEMIZJpjdZOi+fOwjBjG+Qc9c3V47Pb5OnpwlZ3zhX6oONbcjX
-	hAaeX/gfyKdtkNxxRobEFhKINJMO5ehZOH3nOi5Dm44Zh7oeyaM6Rce0Zr3TDQzKvnF7yrFMTB1
-	hYY3Nqm0SHT8tKcZHOt0P+psmqCumsD1ijKpWuC33cO6MEldyLKGxXSoSRaVx6N9WzW+xDm+GMY
-	3tBgpN47fmbtfFhO0VHzwELbSo78D0eDUM+qWH7tlKdLUJwoa/nRp/7au0akTHUGYoXZXYpUV7r
-	Vnz2pn68iBm4+vAXbT0nz/ZRqGHMpd1rQ8SXxa6fvFt4FuGc4GuIcEoS6HoCZzRs0h2CA=
-X-Received: by 2002:a05:7022:b87:b0:12c:2cf8:2f30 with SMTP id a92af1059eb24-139a205d12bmr10025200c88.15.1782154229019;
-        Mon, 22 Jun 2026 11:50:29 -0700 (PDT)
+        bh=6UIQirELPadVMjM0vUy1/xS19vG9UcIUXiKx10fU0u0=;
+        b=N0VkfCq33C8WZrzjSU1a6Tsc/EpXR84FQcaDveYIIgq/my00H0mJqytoHdm4u0jPs2
+         7SoTpYeSCEaWEDBssQpoL2afPWL37vOtvnn+yBNN5Vr9h1zRFawGBNvUNv9Jd7GPjc/1
+         WO1cZG9BcseMwhgpfi9uvohgKuy41UKIvrv9BCFx72SRu/kXzZ5I/vOIpU9WprGy/JSV
+         +83FENsRdnSG5Msz6MM1ZUgEwPx70lmQUGKJKi/bxiWJun8EA+9iIDpqxSzpxtEO7dYW
+         s4jYM36Dht/PJp1lfpkLjp0/IW4xXAmCSFOE2wQxkh7FrjChON4SSl0E0WPbHDtmbRWP
+         ykEg==
+X-Forwarded-Encrypted: i=1; AFNElJ+pHHTAWcGwPo3dnK9FMLde6pzQO1z/U0WV0AMnMUAH0JISa/tUm7KnPmh1ZTwy7x+wk4+DI3NvBX+TYPz+mqY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtSDsrp9G9aQ4B9FKCecmS+/F4N7IGDZC8/7SGaNIeFQ3KFcFf
+	50v4shMwNXKU/o85dD02btLQGJtwt4rEL2i2ZtQi1oo8Yqr3ONT9+nZh
+X-Gm-Gg: AfdE7cnVX7QbB0/sboFxiqFInW/eP9i4xIw+G8bgvBc/fOc0oCE5l74Nmh8eG4BPWuZ
+	kNnyY1CQE2qEOnka4YkWWq0cBiNOFHkunZR3P/jcjd6LyV5fs4mzhfVirTCeYDr61n9Yjdq39I2
+	rl+gYCP7cNpaEYOTNEKHwBwha6ZmCdRlsu7YK92UhNgcyS6rTAWLyzjUcQ8ipO5W15ooqRXLLKy
+	4rYhQvp0ApMXBEUCHmNBNlUxTS1YZcL7ztBtEmiZ0UwQ74WlM16LiJi1OiazBYcPuqLov7apc6x
+	qVGTjhZtJbeAzI6LilFB8j20hbINp29C4QZSBRrmPbkA+Q0gdkijBldqpXKTXSHOY8t7tY1UCk/
+	cv5MG2SbnnWQCaOMsm98hyM5qtU9HFjXOJ6l1peLu2kjpclLfgxkhFpzq1381duTHtLrwvwx2jd
+	WDeOX6MFEpAvs3l+/ErnWvFJFHCNX7uu0FYEpmWOXVsW2xJQoSsqiWVD6f0m2jpyrN4As=
+X-Received: by 2002:a05:7022:ff44:b0:136:5c88:d917 with SMTP id a92af1059eb24-139a34dbbaamr8472687c88.2.1782154274017;
+        Mon, 22 Jun 2026 11:51:14 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:6e2:c699:67c:63fe? ([2620:10d:c090:500::1:5387])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-139add73a44sm8240512c88.13.2026.06.22.11.50.26
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-139adcc5f14sm9247956c88.6.2026.06.22.11.51.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 11:50:28 -0700 (PDT)
-Message-ID: <08299ecffff6d5ba708b8de7693eb12a4775e715.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Reject flexible-array allocation types
+        Mon, 22 Jun 2026 11:51:13 -0700 (PDT)
+Message-ID: <935a7c6dd40466aca387d270c233ce9a8fa4eea1.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover flexible-array
+ allocation rejection
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
 	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
@@ -69,10 +70,10 @@ Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau
  <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
  <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
  	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Mon, 22 Jun 2026 11:50:25 -0700
-In-Reply-To: <c230ebd7f2e28e0cc3820bcb2701ec517933063e.1782100805.git.chenyy23@mails.tsinghua.edu.cn>
+Date: Mon, 22 Jun 2026 11:51:11 -0700
+In-Reply-To: <5b0ecdf774f8f5de5c1d8ecd56368720afb5a14d.1782100805.git.chenyy23@mails.tsinghua.edu.cn>
 References: <cover.1782100805.git.chenyy23@mails.tsinghua.edu.cn>
-	 <c230ebd7f2e28e0cc3820bcb2701ec517933063e.1782100805.git.chenyy23@mails.tsinghua.edu.cn>
+	 <5b0ecdf774f8f5de5c1d8ecd56368720afb5a14d.1782100805.git.chenyy23@mails.tsinghua.edu.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
@@ -84,32 +85,19 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Mon, 2026-06-22 at 04:56 +0000, Yiyang Chen wrote:
-> bpf_obj_new() and bpf_percpu_obj_new() allocate the static BTF size for
-> the selected program-BTF type. A struct type can still end with a
-> zero-length flexible array, and generic BTF struct walks have special
-> handling that can accept accesses beyond the static struct size through
-> such a member.
+> Add a linked_list negative loader case for a program-BTF type whose last
+> member is a zero-length flexible array. The program writes through the
+> first flexible-array element so an incorrect allocation-time acceptance
+> would leave the verifier to approve an access outside the allocated objec=
+t.
 >=20
-> Reject allocation kfunc types with trailing flexible arrays before markin=
-g
-> the return value as PTR_TO_BTF_ID | MEM_ALLOC. This keeps the
-> verifier-visible BTF access shape aligned with the object size allocated =
-by
-> the runtime kfunc.
+> Use the explicit _impl kfunc forms in this negative test so the case is
+> scoped to the allocation type check and not to implicit kfunc wrapper
+> resolution.
 >=20
-> Fixes: 958cf2e273f0 ("bpf: Introduce bpf_obj_new")
-> Fixes: 36d8bdf75a93 ("bpf: Add alloc/xchg/direct_access support for local=
- percpu kptr")
 > Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 > ---
 
-Hi Yiyang, thank you for the report.
-
-I think this should be handled at the btf_struct_walk() level by
-checking MEM_ALLOC flag. And there is no need to check if the array is
-flex or not, checking if the final offset reaches past the allocated
-object boundary should be sufficient.
-
-pw-bot: cr.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
 [...]
