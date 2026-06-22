@@ -1,166 +1,186 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EDD8346FAD
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 18:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12CE349CFD
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 19:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782154557; cv=none; b=g7Opb+ZX1+8u6UCJJ3zoMWA1HJej6t0pv1aM/9TFT+gr95cXpGsRRhlW+rEdToxpnLg3sSLTp34zANm1UPohPmdNQnlKOXklR2PuO3X+z+ZZyE9o79d42rMyLYbHR+jvBMJu0TGT+a4hhG70CAHZjPC/RGNS8CzSF79N86wrZbY=
+	t=1782157411; cv=none; b=uH/Dm1oCv6Gua9MsaObz3usTsdoS6a7yDUrok1WKiKbG01bCUW4yLAp1kqzWUpYiP0WDbtzhq++hbxj7CNxvGQdUimeiErG4VMo4iEICVcYz2erBOEf/edNSw4uNCvQZkYr20mV5hmxHb++2BdlX82AuULAZZA/EZg9+3PTS0vE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782154557; c=relaxed/simple;
-	bh=Lq9Vsdtmw9mWQ8fpK2xIbVncRHl92ljreJitSqndqng=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ZoIgCYBBCF3Lw8utskYI3ltEEwp/PD6E5k66cGdraL7z/zOkzsxq46DHksKxEO7FAOaEFKJ0OVGo2I4r1qW9oIT+Ti5d6WZdWTppTJAjWZLnAmwT9g+ueEX8pz7Q6amelXujgPMBCjJ0J5+7/bCDCL2N2CHDqbycpibf+sipSr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S6Hmr2xB; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
+	s=arc-20240116; t=1782157411; c=relaxed/simple;
+	bh=Kk3o03hgyW8kM5/HNI84/GHxr++YhhzFEuplQ1IujJA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eq73qfbOTv4pNVIEpTRH1mi5Vzm5Xb6tNXuwk6d33msi8Mmgb7YEM6LpMjB5iGsIP1LCESCuOgoxXMntfqY4iMjsxNdwdjBQotmDWxRaLRuw0cfwSwYPXt3yAZIowO13PIMEvwSKVMeqXlwEtRFZxmfvsHZ7+vFgJMcyejj22O4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OJp6//F6; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ej27qgex; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S6Hmr2xB"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4924a7ae480so23196825e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 11:55:55 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OJp6//F6";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ej27qgex"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782157408;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HoMUloaAKg8ODmRbwKoyKyJ1xKK05TMqALvJhnJx1T4=;
+	b=OJp6//F6v9s3s2MZkkiDmQ5AUmZMjhfuZEhajtZdjcJWL11MSoggErA3fk3EjtAgiNl24Q
+	mPfD8kjgAEhGi9Ec397itkvPWN+hN2awPE63J7h+aIRBpvSVOuEf19jtXzxjz3vK2J/za8
+	Gl2i4zZlwIqd1AVH0pd80EnaKUi/OTs=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-441-E_Unf8SQMJ-Me7zHkwYiQQ-1; Mon, 22 Jun 2026 15:43:25 -0400
+X-MC-Unique: E_Unf8SQMJ-Me7zHkwYiQQ-1
+X-Mimecast-MFC-AGG-ID: E_Unf8SQMJ-Me7zHkwYiQQ_1782157405
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-91598af506cso461965985a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 12:43:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782154555; x=1782759355; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nac52aGX3C1Hx+TvqYDuAOPnfxayVFA5kQK+3l4OkYQ=;
-        b=S6Hmr2xBTY1BpgDDwcStkzbIak+eG/e9ZXsQsdQtXL7isoBIJBpsNEcxdhb/f9HvjW
-         QOkWxnBWKQq34Q4UuKHAGgFT4B++TwRAIt6BpO3KebvOCLj+Cq8UAkVlcod8xuOdKW4i
-         uyxaAsHMiWDJt3woRO5N7Ur1JTi+XuA/ZYIuPpHlgpHzdlG+0SOrjp7dLShpHa4LTeDS
-         tOr0c5sF8eKYqVJG+K3RRydLZ5gnttfzJLnduaEnHm8iOyodejPZCFb2j95Ne/WbdJz2
-         45jsqQRj8q69w2OcMDbITBQo3Oxm/IWg2DF5hkU1hZUmxiFt2x3OrmU68vp8J2huwG/s
-         I58w==
+        d=redhat.com; s=google; t=1782157405; x=1782762205; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HoMUloaAKg8ODmRbwKoyKyJ1xKK05TMqALvJhnJx1T4=;
+        b=ej27qgextzr67ahtxU+KCPt/ouirG7ZlzjFtiWyGSlr68PvdjEJtdMHOhdQE3x6vRM
+         TXxSVmh9+PnPZAim8d8S08n2nqs4iRRPUr1G/wmyciy4WiwzbBQhST1rOXcxqn75y63+
+         ekEwpwxJwzFk3+kR/ad2qiRLG6/jofrrywsnfrIvMvDjYhyWHL2JGGtVve89DcwX3RHo
+         Swe+wtV2Ypi9VrZR4h/jm2QhYv9PRVXGbHTV5XsYBp2VmxTwCe3LRP17aydNNYUA/naH
+         iZoiVxoi8NHIRZ19RfRSjO2BZDES+14SjkR4cTSN2veGAgcL5H3Ts3QOv7UXMUh7OHj6
+         yh5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782154555; x=1782759355;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nac52aGX3C1Hx+TvqYDuAOPnfxayVFA5kQK+3l4OkYQ=;
-        b=lIbBbLhPA7gsS+nnSztqusTOy0mFcR+DsQQGvtqrlXFk1oqKijSSHle+/Pqdt79fhs
-         BDl3doNVoeptBCv/Jehzftg4LUJN4Unt0lDzFfAF7l2Fp2LuPkyiz8TyYK+PX/yIk0GP
-         F3V+fJ/Bg1bc5nK8E5ODU9yDas9lOjpR7JOvJbfN9AQV6M8OuD5dQqlP4g2ExEIboP2N
-         utYfUmdbcEAmoIo2mEBcAuOJRonjZIr7IaxsJUdHjCSD92G0AeSvem8grr6EB3tgiWV7
-         tt2lIvcYFbW+5s5ckgnCUw5C6LUBnAbvnGS4k1BZJwkR3f0eNaOyTmvnlMOlXhMXJ9tF
-         51mw==
-X-Forwarded-Encrypted: i=1; AFNElJ/uBmosv3fC4V5pOXfodfFv+Rw5AV401+nQWfHHMNVaKmSoKmkdKvrAXM8YJu4/0BaXWsEOUcEyFucREB1makw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzytIg9LssDS8OM0TI7fqL8rbm/XVjIwd5vZL4MPN91+lH3LSHh
-	gysZE5Tt/Yfhv88WTpoO3rpspPuHvuhwfUWzNSZSUxT1yHkBdiQKfRxOGqXaCZYEWCAA1E4+SSR
-	vUv3fB5+IrPofum2a5g==
-X-Received: from wmbg28.prod.google.com ([2002:a05:600c:a41c:b0:492:413d:b354])
- (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:3516:b0:490:c2a2:e91c with SMTP id 5b1f17b1804b1-4924258fbbdmr240564905e9.34.1782154554506;
- Mon, 22 Jun 2026 11:55:54 -0700 (PDT)
-Date: Mon, 22 Jun 2026 18:55:53 +0000
-In-Reply-To: <20260622184851.2309827-1-tarunsahu@google.com>
+        d=1e100.net; s=20251104; t=1782157405; x=1782762205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HoMUloaAKg8ODmRbwKoyKyJ1xKK05TMqALvJhnJx1T4=;
+        b=Yy6wMwfilWPYxn8KcN1Bq/J+Ddjlrn173xSuu+pZpQVevma0FILbN3mymdDF6gxWoH
+         /e30rIRV5KAZRDwEJ7ApFXXbp4YmsyeehGpCwfs24eaBF5TgIUlayxZDhKSCwVWmLREG
+         kPcrGTAxyZ/SKONhOUUHPFjoq3niT8KoYxWla+eQrWPNr30eO0tg6Bh8JgFbhFBfSy8Y
+         sR7f5zdEDOT+BTTWIKQ7j6eSb/+TN9JEcBqlKXJBZ8wJCoVMDjNPq8C1RuS1W8545dR2
+         tYeOiC63KDJZNS2cD093JlPvm/NV/798JK2PFkSpDkmvnzMo/v+jFJLtSaPApu/wriSc
+         uMsg==
+X-Forwarded-Encrypted: i=1; AFNElJ/4kMunfBTBc+WmPcshVcaK+Z19it8ihbytjFug0P/xuuQOJbAV9frJINJRmlLkr5y+xygFrHg26JaEKGjh4ag=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNk+fxgvz+pzQu5HvhVN1j5bFcOzGwPUhM5cdb/PnVVIRWU7sA
+	0vxfDtYekW47G3JM8QaLEbfLj8kAMjWAG9ESBoXYU7Fh7qaCTCeUcI+ouKlE2I1iAsppCOfKrIw
+	A3iONNFK67GaAyiQy2zTekDwKa5r71txbbKTVxnLw8jWDDoGNvbMJtVnv+CrHF56n+ZNLOw==
+X-Gm-Gg: AfdE7cnBFMq3TTtf11lfMkCp+AqHWwoPdWgJbPFAm1aG6jtcQq0M1Q+4pMoGv0255Ju
+	dIo0BJjyB/LXvHTItCHMpDOnhk5ub2aVukX8NaXIuVQmtaz4tQU+n9WM2yQD2KvBfggs9D5O26v
+	tGN+6l9fX2BkkGNjicMEmBWGZx7Nsqn6+MSZ3y+9nTt365xwt0dM4DdpLzaONrUk1qC3zeT00Z4
+	n48UF5zkcx8uFdgC4OjDDjqVRwSTsZsa3PMd8JvA7lRL9WSRdXzdze1WH6ZyssaAs/KRVkAi2hK
+	Xyt0bpL7fq3cWIIdqWjae9z1isrJRWcMoURJnF1tp+FiDK+XIFlOmIkNZYHkZ5dFmpYyZWjqPka
+	cxFd8E8/N3NWEvRGXayTyO3wG0ct1c3KnPQ==
+X-Received: by 2002:a05:620a:2592:b0:922:92b1:9dfc with SMTP id af79cd13be357-92292b1aff4mr1606117485a.14.1782157404800;
+        Mon, 22 Jun 2026 12:43:24 -0700 (PDT)
+X-Received: by 2002:a05:620a:2592:b0:922:92b1:9dfc with SMTP id af79cd13be357-92292b1aff4mr1606108685a.14.1782157404145;
+        Mon, 22 Jun 2026 12:43:24 -0700 (PDT)
+Received: from oak (c-73-148-124-98.hsd1.va.comcast.net. [73.148.124.98])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-926000c1c39sm61506485a.26.2026.06.22.12.43.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jun 2026 12:43:23 -0700 (PDT)
+From: Joe Simmons-Talbott <joest@redhat.com>
+To: Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Joe Simmons-Talbott <joest@redhat.com>,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests/cgroup: Adjust cpu.max quota based on HZ
+Date: Mon, 22 Jun 2026 15:43:04 -0400
+Message-ID: <20260622194305.601392-1-joest@redhat.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260622184851.2309827-1-tarunsahu@google.com>
-Message-ID: <9huzwlvqqu9y.fsf@tarunix.c.googlers.com>
-Subject: Re: [PATCH v3 0/9] liveupdate: kvm: guest_memfd preservation
-From: tarunsahu@google.com
-To: Jonathan Corbet <corbet@lwn.net>, Mike Rapoport <rppt@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Alexander Graf <graf@amazon.com>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Pratyush Yadav <pratyush@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>, seanjc@google.com, 
-	ackerleytng@google.com, aneesh.kumar@kernel.org, fvdl@google.com, 
-	sagis@google.com, david@redhat.com, dmatlack@google.com, mark.rutland@arm.com
-Cc: kvm@vger.kernel.org, linux-mm@kvack.org, kexec@lists.infradead.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
+For lower HZ values a quota of 1000us is much lower than the amount
+of microseconds per tick which makes the tests test_cpucg_max and
+test_cpugc_max_nested fail. Use the amount of microseconds per tick
+as the quota value.
 
-+ Adding More people to the series (To:) which I missed in my original message.
+Signed-off-by: Joe Simmons-Talbott <joest@redhat.com>
+---
+changes since v1:
+- Try checking /proc/config.gz to get the actual kernel HZ value and
+  fallback to 1000 if the value cannot be determined.
 
-~Tarun
+ tools/testing/selftests/cgroup/test_cpu.c | 33 +++++++++++++++++++++--
+ 1 file changed, 31 insertions(+), 2 deletions(-)
 
-Tarun Sahu <tarunsahu@google.com> writes:
+diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
+index 7a40d76b9548..65e09555309f 100644
+--- a/tools/testing/selftests/cgroup/test_cpu.c
++++ b/tools/testing/selftests/cgroup/test_cpu.c
+@@ -639,6 +639,29 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
+ 	return run_cpucg_nested_weight_test(root, false);
+ }
+ 
++/*
++ * Best effort attempt to get the kernel's HZ value from the config.
++ * Return the HZ value if found otherwise return -1 to indicate failure.
++ */
++static long
++_get_config_hz(void)
++{
++	long hz = -1;
++	FILE *f;
++	char cmd[256] = "zcat /proc/config.gz 2>/dev/null | grep '^CONFIG_HZ='";
++
++	f = popen(cmd, "r");
++
++	if (!f)
++		goto out;
++
++	fscanf(f, "CONFIG_HZ=%ld", &hz);
++
++out:
++	pclose(f);
++	return hz;
++}
++
+ /*
+  * This test creates a cgroup with some maximum value within a period, and
+  * verifies that a process in the cgroup is not overscheduled.
+@@ -646,7 +669,8 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
+ static int test_cpucg_max(const char *root)
+ {
+ 	int ret = KSFT_FAIL;
+-	long quota_usec = 1000;
++	long hz = _get_config_hz();
++	long quota_usec;
+ 	long default_period_usec = 100000; /* cpu.max's default period */
+ 	long duration_seconds = 1;
+ 
+@@ -655,6 +679,8 @@ static int test_cpucg_max(const char *root)
+ 	char *cpucg;
+ 	char quota_buf[32];
+ 
++	quota_usec = hz != -1 ? USEC_PER_SEC / hz : 1000;
++
+ 	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
+ 
+ 	cpucg = cg_name(root, "cpucg_test");
+@@ -710,7 +736,8 @@ static int test_cpucg_max(const char *root)
+ static int test_cpucg_max_nested(const char *root)
+ {
+ 	int ret = KSFT_FAIL;
+-	long quota_usec = 1000;
++	long quota_usec;
++	long hz = _get_config_hz();
+ 	long default_period_usec = 100000; /* cpu.max's default period */
+ 	long duration_seconds = 1;
+ 
+@@ -719,6 +746,8 @@ static int test_cpucg_max_nested(const char *root)
+ 	char *parent, *child;
+ 	char quota_buf[32];
+ 
++	quota_usec = hz != -1 ? USEC_PER_SEC / hz : 1000;
++
+ 	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
+ 
+ 	parent = cg_name(root, "cpucg_parent");
+-- 
+2.54.0
 
-> Hello,
-> This is Non-RFC patch series for guest_memfd preservation. After
-> having multiple discussion across hypervisor liveupdate meeting,
-> guest_memfd bi-weekly meeting, the design for the basic support of
-> guest_memfd preservation is final. This series is going to include
-> guest_memfd which are fully shared and does not support private mem
-> and backed by PAGE_SIZE pages.
->
-> Steps to test:
-> 1. Compile Kernel with CONFIG_LIVEUPDATE_GUEST_MEMFD=y
-> 2. boot kernel with command line: kho=on liveupdate=on
-> 3. run the following kselftest
-> 	$ .selftests/kvm/guest_memfd_preservation_test --stage 1
-> 	$ <kexec> --reuse-cmdline
-> 	$ .selftests/kvm/guest_memfd_preservation_test --stage 2
->
-> NOTE: Assert the following:
-> 	$ ls /dev/liveupdate
-> 	$ ls /dev/kvm
-> 	$ dmesg | grep liveupdate # (should have kvm_vm_luo &&
-> 		# guest_memfd_luo handler registered)
->
-> The changes are rebased on:
-> 	kvm/next + liveupdate/next (merge) + [3] + [4] + [5]
-> 	Where,
-> 	[3]: luo: conversion of serialized_data to KHOSER_PTR
-> 	[4]: luo: APIs to retrieve file internally from session
-> 	[5]: selftests: liveupdate sefltests library
-> Here is the github repo:
-> 	https://github.com/tar-unix/linux/tree/gmem-pre
->
-> V3 <- RFC V2 [2]
-> 1. Finalize the design
-> 2. resolve sashiko reported bugs
-> 3. Use of KHOSER_PTR instead of raw serialized_data as per [3]
->
-> RFC V2 [2] <- RFC V1 [1]
-> 1. Removed mem_attr_array as it is not needed for fully-shared
-> 2. Removed pre-faulted condition
-> 3. Added vm_type preservation for ARM64.
-> 4. Removed liveupdate_get_file_incoming api patch as it is sent
->    separately [4] by Samiullah.
->
-> [1] https://lore.kernel.org/all/cover.1779080766.git.tarunsahu@google.com/
-> [2] https://lore.kernel.org/all/c054ba0fb2639932bbe354420d3f4f84cce84905.1780676742.git.tarunsahu@google.com/
-> [3] https://lore.kernel.org/all/20260622111215.4157974-1-tarunsahu@google.com/
-> [4] https://lore.kernel.org/all/20260613012521.835490-1-skhawaja@google.com/
-> [5] https://lore.kernel.org/all/20260612214512.464146-1-vipinsh@google.com/
->
-> Tarun Sahu (9):
->   liveupdate: Add LIVEUPDATE_GUEST_MEMFD config option
->   kvm: Prepare core VM structs and helpers for LUO support
->   kvm: kvm_luo: Allow kvm preservation with LUO
->   kvm: guest_memfd: Move internal definitions and helper to new header
->   kvm: guest_memfd: Add support for freezing and unfreezing mappings
->   kvm: guest_memfd_luo: add support for guest_memfd preservation
->   docs: add documentation for guest_memfd preservation via LUO
->   selftests: kvm: Split ____vm_create() to expose init helpers
->   selftests: kvm: Add guest_memfd_preservation_test
->
->  Documentation/core-api/liveupdate.rst         |   1 +
->  Documentation/liveupdate/vmm.rst              | 107 ++++
->  MAINTAINERS                                   |  14 +
->  include/linux/kho/abi/kvm.h                   | 106 ++++
->  include/linux/kvm_host.h                      |  14 +
->  kernel/liveupdate/Kconfig                     |  15 +
->  tools/testing/selftests/kvm/Makefile.kvm      |   6 +-
->  .../kvm/guest_memfd_preservation_test.c       | 236 +++++++++
->  .../testing/selftests/kvm/include/kvm_util.h  |   2 +
->  tools/testing/selftests/kvm/lib/kvm_util.c    |  26 +-
->  virt/kvm/Makefile.kvm                         |   1 +
->  virt/kvm/guest_memfd.c                        | 185 +++++--
->  virt/kvm/guest_memfd.h                        |  44 ++
->  virt/kvm/guest_memfd_luo.c                    | 497 ++++++++++++++++++
->  virt/kvm/kvm_luo.c                            | 195 +++++++
->  virt/kvm/kvm_main.c                           |  94 +++-
->  virt/kvm/kvm_mm.h                             |  15 +
->  17 files changed, 1477 insertions(+), 81 deletions(-)
->  create mode 100644 Documentation/liveupdate/vmm.rst
->  create mode 100644 include/linux/kho/abi/kvm.h
->  create mode 100644 tools/testing/selftests/kvm/guest_memfd_preservation_test.c
->  create mode 100644 virt/kvm/guest_memfd.h
->  create mode 100644 virt/kvm/guest_memfd_luo.c
->  create mode 100644 virt/kvm/kvm_luo.c
->
-> -- 
-> 2.55.0.rc0.786.g65d90a0328-goog
