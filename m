@@ -1,253 +1,441 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D00836A377
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 23:54:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782172462; cv=pass; b=vCci9D1rpyGjtBYFF/lDV2K5L65cLYBq1pawr8ryAJdvfqinAWfFOViOzH4A5fgHLWlxcmYIPSsoFDb2vE5EezHRz98V0g5gv9kgJkm2Bl8YKB+ncK0z/Ui/r0172uhldPveC6H3Rsnw2tOJBvkq/6vVLnniyz6QmOsCYeQLFIg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782172462; c=relaxed/simple;
-	bh=I1YUlMWYpoFKoByVcCt8Rqs1cgeontbmcE6KLy6U/tc=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o+F8v1pf7itIcmEZDzN8zUaQ9VJlbgwcVFjr6AuYuwzONkw/R6ulzN/i/WnabxwS3gJA0plXhNEaLuiBTtj+tWvtcsBcMQ9c9QxuMzyiiOu72jX+ttrNtGxRgnvhd54xteth8amAtFXocXtBoYwevqARtw6SLjKM44eAze79KDU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jPsTpHfr; arc=pass smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A0629CB24
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 23:57:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782172633; cv=none; b=Mnq6+6r935jrSKdgtzUyRa86DoHCYWLq+q1GwdKnbQ/6aggxBTiB8OEz6wjnGf0M2LzYQFDOCHcEeRFmEB9taoRp2t56792rd1wgjHCPHJTHpe6wkm+LsjY1j+ceJ14TDOzmtQ+nRgtoot57ZNrW3PN45UZEElN9lEEMixrvY6Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782172633; c=relaxed/simple;
+	bh=APQyAu8u5IH9CVRpou0XR9SFmkwuafb3rUB0ZW/wfg4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=AepcG++iaQ8/z6DWA2h7EdN2WQp7dlgW+drOl1hwfZErj5DVCO9MBhqu7FQNgvEg6K+rmeddlnN5jHpVdiz1eocrRf2s2jniZVIAb5Fz5jfAvLxaYrgo/oxoxG7qGp72yCyuXPDDRPqBbmJGJ1qQzci4EpdOfdiAZ1gcTfxbFZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EArQ0biK; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jPsTpHfr"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c08922c23ebso602460166b.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 16:54:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782172459; cv=none;
-        d=google.com; s=arc-20240605;
-        b=f5Xf546fPIKD4m5DPxOh8K0k2bFv0vkyJPRkBmuIpaf4CS3oU1ppXcZ62xEiMk1duX
-         UVrVaaFYKzvZZw1GBDEiQXqEoDlnADplw2ZRCtJWC8i+5Gd5qSuSf8Lp5OEbeppEOJk4
-         LI+uFLycStGFMKppQde7yl//z5MmTGAGZEN1iyvnaDO5lgJ8g2+jT59QX7wg1hWXCztZ
-         dTxVVrag2AxQ0h2OwUhBxtclvbqFR7frqjIaL3yrtKuJjyd9IrCQBgMvKWwwuUxrAm/q
-         Yt6pYnL24gbcvORqaPGmiVB2aXy99BF5wed8+s8hBMcJZxotIr7rY+RGkyPsTRz1rZfj
-         +FnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=mnhxRL5NSWx2qm5cF+jOJULziDkVFS523GcKtm3BW0s=;
-        fh=Sq8drxi6ePseYBTmYCiDCc31SlG1i1N+NppbTalTgHQ=;
-        b=gAkppvKea4uuYXB+bkIOemcppEFoZy93ieFjntuzqGkx7VNr0cVZ+kUx92t3SqJMeu
-         9il4hKTQbeWB5j3wcCYTGA6KCBvFsp62alGbkbT6UCFdUfm5UFwLzaFOh5yD+8NTF7cU
-         +FpX3MMWTiskln+TsfCwnU0N4vVksYZP7uqbx5u2Pnk1eb9xP8hNfw62m/tOqBacNKdg
-         i6emx1YMJOvBrrBm+7grvlWvHtTT/DnApikxnwKoioq5czLedvVcU9o2RIMWSVLM1MKw
-         5pSVtOEbk+UdVC9/OvvnIwTaHtuzZjAy/hBBUC42eGR/3F/iy8LTGaj28m7ZJEZrBaxJ
-         p4lQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EArQ0biK"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7e94d272a86so1736751a34.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 16:57:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782172459; x=1782777259; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mnhxRL5NSWx2qm5cF+jOJULziDkVFS523GcKtm3BW0s=;
-        b=jPsTpHfrfh5ppMR+gyIUraMIwJm/OYLJsOd3N6OB9vvTjThH38ksYWY8D2FkYROTyT
-         ZgSscTWoUdDnsJQqcFcC/PUIqjc+4bmZymQRLfc0ygApUzPtlp0kouCgEcRg7wTXtuov
-         ubH5HACVSgpKbL6ZBAosYe5cg3G+ndkWDi0S5sNXeff0DrhdbBd5SnvLvSCP1ix0N8Bp
-         7v2sUOKQ7v9//5QbDiEfzd8xgU7FGkmplZdLsYMwI7oEvh2uz/O0tI6/btHYt+nyrl38
-         9Vxnt0A9w3JRt6Yr2k/5pM4l8AqrMV4PPjvsAi7U01/bXYcy4/tk6rrgZfHbYlJV1cQ1
-         v2Ug==
+        d=gmail.com; s=20251104; t=1782172631; x=1782777431; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+Xre0hTc6txTQLEgTuWM5CYVELF8O6F2bFrxuzUUqLo=;
+        b=EArQ0biKUGHv5IGKPM1wrGTSzDWbilnOwNZZdp0CTBtiNn7F4v0VTAKSBlLCaY5CtW
+         sQvOaTp+TczJCRslPzHlMRGrCDt/2RFTelBqw7UJ9VB6/0BkGQnBbM+UYtLcN3EKVoqA
+         Q8ZHAPMzPnIKhfHlWPVJEN616LmLJWpR7l/KVOM1sRhQR2LRjagawQDsiO9q+0BvcXKQ
+         jYBhQyHG1kDIITD7AfXgtS2tO3bZzV8gYT+dXYd3lE428S7wfZ+HfKYwjON8szBiJZU+
+         3SbZC+tFaX/+7L7J/8qf3MDpii7eznKLzPTuGgbNpZMSUPfocI/rGQV3LuK4OWnN99JE
+         ndyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782172459; x=1782777259;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mnhxRL5NSWx2qm5cF+jOJULziDkVFS523GcKtm3BW0s=;
-        b=JYDnEOsSiT8OKVyaVgUST/XesMfL9fX4SmJUa6j79L0Y2c3RT9mhSLN/lzZuEDm00O
-         8aY8xvV4B146xVe6shH8LDJbxNdxga8YC555oKXA9rK20Gy3lzvkopbWkp9VTZrK5VyO
-         u+v/DaqwGYyKeLKTCKjMfTWC/GgmY3vtRpHqz3BcX+wliqhgqFiIbKvhh9G98dsA8Z1e
-         nGa8LCeQvJ/wXxe5HXLEMZMv82lbU2ce0zEbp5olG/Y6Fp6cJ5xl0Eqdt7aciIpc3mTP
-         Dc2uhhcdIuZaVsstyqGHUsDlU1FU6pgKwTztDvXCFT0R+LUNtPQBlxjK10LjXS4Z46ga
-         HoXw==
-X-Gm-Message-State: AOJu0YyLxWfoz3jCbBbLy+oLxpRfC2zGkTQ1F+K3fQAxs9yuJZ1WApxf
-	HL9UxffC61NSZ+cgvv+RGns39c/52aL+4Kapvn83JsmPXjEDQpQ3H4wyDi8z94Rj5Z0DbYOZtQu
-	Q0PiIXrmOmcU72ZfsKVILieCi7Pf3FRatyi6+sbSo
-X-Gm-Gg: AfdE7cnQQNcqrVsw7ThD5dJaPdXV+FzdyzQG6R8rEp/daJw6eUoeROKRIMvYZv/FO/t
-	j6Y9LFHu6elU9sEhQ17T3YKLOMctzptTz5Ofs1+kShX1VIWtC+aa2iUtKt5bFV2YK03C14litU8
-	ElSra4mBzTe3pKf2nHpBRpeGdUkhc1FdyCA8p+7KpouUaH/LnB4dcxMkwoPLorE/Z9HNUHn9DPp
-	Ngn2ikf+e2cyFxGxZxXeb/duZAF1bULrMhzomH7gv/5p/EyyHfms0HUaxhZ1Qh9heB+60Eu0lNP
-	SXHeGkwRdn6ZbHy4hFCxxRET+xST+Hk2ACDwmihh4zLGcv2zTV+/zta9MQQ=
-X-Received: by 2002:a17:907:a394:b0:c10:1041:65a4 with SMTP id
- a640c23a62f3a-c1080b8e977mr13124066b.42.1782172458193; Mon, 22 Jun 2026
- 16:54:18 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 22 Jun 2026 16:54:15 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 22 Jun 2026 16:54:15 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <48777f4749fa43d5648085dbb2037aa99c144a88.1780676742.git.tarunsahu@google.com>
-References: <cover.1780676742.git.tarunsahu@google.com> <48777f4749fa43d5648085dbb2037aa99c144a88.1780676742.git.tarunsahu@google.com>
+        d=1e100.net; s=20251104; t=1782172631; x=1782777431;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+Xre0hTc6txTQLEgTuWM5CYVELF8O6F2bFrxuzUUqLo=;
+        b=VaacNzGj6GEvGX5+s2YAMU1ybVDRYgJFq0BxAi8EJu6oANhU3yDWvnCPFdM6pbKYTO
+         6Us0tjzayr7QhDScb9efs0AfLnwR+WJpfc4npHGnlWkxmSRoaY9SWbt4AgitXkREnXJD
+         2cCmP1R7XikLzgyvQxYg1JhmWvCl44h9hScq1QhrpXur1G87wQFBVZVs5aJ1NZdrQDLd
+         qjtPGeo0BEs8briVm4c9X3ZeuWZJ1oVDMt5LcCQpIiboewwHp9SxU4BBPDc52MH5n1HQ
+         n/KQ2LT2tkohlZ9zXORjhFEc1JnVdm9JD+u9QSf2cu2LwTgq/tH1RqHUODeTfYV9xYOD
+         1wkQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9RyM5VUZhqvRRLAjFq5vBdvby8fWXoaPNPRrzIgH0117WMEAWalYw+ZuOFsH6AMcEQr6+GF7epRb4VWVZMXac=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDYJSbZMgf9hgiDsz6WeiNYoEbRgpwwVIP1Fcer2q55h6zl37/
+	vMofF25HSpfZZfPXp/gqq1zISVdkky3o7VnnDHjMQbnc3CTsmK4EOq6S
+X-Gm-Gg: AfdE7ckKo5YWjxwN9Qu9p3V/aXXC2DafqnNzxBOH2+czM2UWC2F3S+TYlRP/s/2i1ff
+	/zbzrPESK/1lJKPI760tjnCEyvE3xtrYHdHjQ7ErUJL2XXS6BXqWrE56Qm9HkiX8GOpetD25qKC
+	WhyYXL9MEzVIPJuXVnOwvmorHbss203q6e/FgYt5yo+61okAeL3SKwNJahQlGz/8WH7LWa5+iBl
+	vrOJ10WfoGq1EUMY71p+sYoJaAr1rBn/JzYo6fOxRA0nJFvW22nL+1M0yb2+ASslioQ+76ZHoRa
+	Jl/UZOmTYSEj/ZbTuNWcXqHKEV0AiTxE63qff0D95Eu+86KwxZi7aZUqQ2WYKT9+0jtOxdZG4sK
+	73Q+GNDCgpCKGMHkynGuSWxCLoiqZE3BxxUYKmG+30lvZGiRj7USvJw3dv7DlJFir+ulKC8xNG8
+	TQfgr+jwUGNeHTgHxrsbi2FuHa5JvGRKrJPvILELEOmqNnNitzdkOuS3KqKpU66NC0AH2kWltW3
+	ZBlfc8=
+X-Received: by 2002:a05:6830:440c:b0:7e7:868:ded5 with SMTP id 46e09a7af769-7e9799211bdmr289228a34.18.1782172630489;
+        Mon, 22 Jun 2026 16:57:10 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:71::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e944008fe7sm7895698a34.6.2026.06.22.16.57.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jun 2026 16:57:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Date: Mon, 22 Jun 2026 16:54:15 -0700
-X-Gm-Features: AVVi8Cc74PEpV2YXCZJIskraOwZy9-czhUt_HBd1DYeN4YnAJwWFzkRCg6GbGig
-Message-ID: <CAEvNRgFEHciT3T9y+qEYRvXhDwfrggoU7Rm=f9hT3OrV+wgpNQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 06/10] kvm: guest_memfd: Add support for freezing
- and unfreezing mappings
-To: Tarun Sahu <tarunsahu@google.com>, Jonathan Corbet <corbet@lwn.net>, vannapurve@google.com, 
-	fvdl@google.com, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, sagis@google.com, aneesh.kumar@kernel.org, 
-	skhawaja@google.com, vipinsh@google.com, Pratyush Yadav <pratyush@kernel.org>, 
-	david@redhat.com, dmatlack@google.com, mark.rutland@arm.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
-	seanjc@google.com, axelrasmussen@google.com
-Cc: linux-kselftest@vger.kernel.org, kexec@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 22 Jun 2026 16:57:08 -0700
+Message-Id: <DJFZGYZFMN73.1799LMXW49WZO@gmail.com>
+Cc: <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+ <linux-integrity@vger.kernel.org>, <selinux@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: add bpf_init_inode_xattr kfunc for
+ atomic inode labeling
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "David Windsor" <dwindsor@gmail.com>, <viro@zeniv.linux.org.uk>,
+ <brauner@kernel.org>, <jack@suse.cz>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>, <martin.lau@linux.dev>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <emil@etsalapatis.com>, <kpsingh@kernel.org>, <mattbobrowski@google.com>,
+ <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+ <zohar@linux.ibm.com>, <roberto.sassu@huawei.com>,
+ <dmitry.kasatkin@gmail.com>, <eric.snowberg@oracle.com>,
+ <stephen.smalley.work@gmail.com>, <omosnace@redhat.com>,
+ <casey@schaufler-ca.com>, <shuah@kernel.org>
+X-Mailer: aerc
+References: <20260618203411.73917-1-dwindsor@gmail.com>
+ <20260618203411.73917-2-dwindsor@gmail.com>
+In-Reply-To: <20260618203411.73917-2-dwindsor@gmail.com>
 
-Tarun Sahu <tarunsahu@google.com> writes:
-
-> This patch introduces the freeze on gmem_inode which prevents
-
-Can't find the reference now, but commit messages should take the
-imperative mood and avoid "this patch" [*]
-
-[*] https://lore.kernel.org/all/YKRWNaqzo4GVDxHP@google.com/
-
-> the fallocate call and any new page fault allocation. This will avoid
-> gmem file modification when it is being preserved
->
-> Used srcu lock to synchronise the freeze call, where write blocks
-> until all the reads are free. And reads are re-entrant.
->
-> Incase fault fails, It return -EPERM and VM_EXIT to userspace. userspace
-> must handle this properly as every new fault will fail.
->
-> Signed-off-by: Tarun Sahu <tarunsahu@google.com>
->
-> [...snip...]
->
-> @@ -105,12 +108,20 @@ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
->  	if (!IS_ERR(folio))
->  		return folio;
->
-> +	idx = srcu_read_lock(&kvm_gmem_freeze_srcu);
-> +	if (kvm_gmem_is_frozen(inode)) {
-> +		srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
-> +		return ERR_PTR(-EPERM);
-> +	}
+On Thu Jun 18, 2026 at 1:34 PM PDT, David Windsor wrote:
 > +
->  	policy = mpol_shared_policy_lookup(&GMEM_I(inode)->policy, index);
->  	folio = __filemap_get_folio_mpol(inode->i_mapping, index,
->  					 FGP_LOCK | FGP_CREAT,
->  					 mapping_gfp_mask(inode->i_mapping), policy);
->  	mpol_cond_put(policy);
->
-> +	srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
-> +
->  	/*
->  	 * External interfaces like kvm_gmem_get_pfn() support dealing
->  	 * with hugepages to a degree, but internally, guest_memfd currently
-> @@ -273,16 +284,30 @@ static long kvm_gmem_allocate(struct inode *inode, loff_t offset, loff_t len)
->  static long kvm_gmem_fallocate(struct file *file, int mode, loff_t offset,
->  			       loff_t len)
->  {
-> +	struct inode *inode = file_inode(file);
->  	int ret;
-> +	int idx;
->
-> -	if (!(mode & FALLOC_FL_KEEP_SIZE))
-> -		return -EOPNOTSUPP;
-> +	idx = srcu_read_lock(&kvm_gmem_freeze_srcu);
-> +	if (kvm_gmem_is_frozen(inode)) {
-> +		srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
-> +		return -EPERM;
-> +	}
-
-fallocate may eventually go to kvm_gmem_get_folio(), so that would check
-kvm_gmem_is_frozen() twice. Is this meant to catch the punch hole case?
-
->
-> -	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE))
-> -		return -EOPNOTSUPP;
-> +	if (!(mode & FALLOC_FL_KEEP_SIZE)) {
-> +		ret = -EOPNOTSUPP;
-> +		goto out;
-> +	}
->
-> -	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
-> -		return -EINVAL;
-> +	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE)) {
-> +		ret = -EOPNOTSUPP;
-> +		goto out;
-> +	}
-> +
-> +	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len)) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-
-There's some reordering here. Why not let the validation happen like
-before, then check kvm_gmem_is_frozen()?
-
->
->  	if (mode & FALLOC_FL_PUNCH_HOLE)
->  		ret = kvm_gmem_punch_hole(file_inode(file), offset, len);
->
-> [...snip...]
->
-> +
-> +/**
-> + * kvm_gmem_freeze - Freeze or unfreeze a guest_memfd inode mapping.
-> + * @inode: The guest_memfd inode.
-> + * @freeze: True to freeze, false to unfreeze.
-> + *
-> + * This API is used strictly during the live update / preservation transition
-> + * window to prevent host userspace and guest-side faults from making any
-> + * mapping modifications (such as fallocate or page fault allocation)
-> + * to the guest_memfd page cache.
-> + *
-> + * Synchronization Strategy (Sleepable RCU):
-> + * To avoid high-contention VFS locks (like inode_lock or
-> + * filemap_invalidate_lock) on the vCPU page fault hot paths, this subsystem
-> + * implements a lightweight, system-wide Sleepable RCU (SRCU) mechanism
-> + * (`kvm_gmem_freeze_srcu`):
-> + *
-> + * Global vs. Per-Inode SRCU
-> + * ======================
-> + * A single system-wide global static `srcu_struct` is used instead of a
-> + * per-inode SRCU structure to completely prevent unprivileged users from
-> + * exhausting the host's per-CPU memory allocator. Because
-> + * `init_srcu_struct()` allocates per-CPU memory via `alloc_percpu()`, which
-> + * is not accounted by memory cgroups (memcg),
-> + * a per-inode SRCU structure would allow a tenant to bypass cgroup limits and
-> + * trigger a system-wide Out-of-Memory (OOM) crash simply by spawning a large
-> + * number of guest_memfd file descriptors (bounded only by RLIMIT_NOFILE).
-> + *
-> + * Flag Modification Note:
-> + * Since `GUEST_MEMFD_F_MAPPING_FROZEN` is the ONLY flag in
-> + * `GMEM_I(inode)->flags` that is mutated dynamically at runtime (all other
-> + * flags are creation-time flags which remain strictly read-only), there is
-> + * no possibility of concurrent bit-modification races. Therefore, a standard
-> + * `WRITE_ONCE` is fully safe and does not require complex `cmpxchg`
-> + * synchronization loops.
-> + */
-> +void kvm_gmem_freeze(struct inode *inode, bool freeze)
+> +static int __bpf_init_inode_xattr(struct xattr_ctx *xattr_ctx,
+> +				  const char *name__str,
+> +				  const struct bpf_dynptr *value_p)
 > +{
-> +	u64 flags = READ_ONCE(GMEM_I(inode)->flags);
+> +	struct bpf_dynptr_kern *value_ptr =3D (struct bpf_dynptr_kern *)value_p=
+;
+> +	size_t name_len;
+> +	void *xattr_value;
+> +	struct xattr *xattr;
+> +	struct xattr *xattrs;
+> +	int *xattr_count;
+> +	const void *value;
+> +	u32 value_len;
 > +
-> +	if (freeze)
-> +		flags |= GUEST_MEMFD_F_MAPPING_FROZEN;
-> +	else
-> +		flags &= ~GUEST_MEMFD_F_MAPPING_FROZEN;
+> +	if (!xattr_ctx || !name__str)
+> +		return -EINVAL;
 > +
-> +	WRITE_ONCE(GMEM_I(inode)->flags, flags);
-> +
-> +	if (freeze)
-> +		synchronize_srcu(&kvm_gmem_freeze_srcu);
+> +	xattrs =3D xattr_ctx->xattrs;
+> +	xattr_count =3D xattr_ctx->xattr_count;
+> +	if (!xattrs || !xattr_count)
+> +		return -EINVAL;
+> +	if (bpf_xattrs_used(xattr_ctx) >=3D BPF_LSM_INODE_INIT_XATTRS)
+> +		return -ENOSPC;
 
-Why only synchronize on freeze but not unfreeze?
+This check is good to have, but it's enough. No need to duplicate it.
+More below.
 
+> +
+> +	name_len =3D strlen(name__str);
+> +	if (name_len =3D=3D 0 || name_len > XATTR_NAME_MAX)
+> +		return -EINVAL;
+> +	if (strncmp(name__str, XATTR_BPF_LSM_SUFFIX,
+> +		    sizeof(XATTR_BPF_LSM_SUFFIX) - 1))
+> +		return -EPERM;
+> +
+> +	value_len =3D __bpf_dynptr_size(value_ptr);
+> +	if (value_len =3D=3D 0 || value_len > XATTR_SIZE_MAX)
+> +		return -EINVAL;
+> +
+> +	value =3D __bpf_dynptr_data(value_ptr, value_len);
+> +	if (!value)
+> +		return -EINVAL;
+> +
+> +	/* Combine xattr value + name into one allocation. */
+> +	xattr_value =3D kmalloc(value_len + name_len + 1, GFP_KERNEL);
+> +	if (!xattr_value)
+> +		return -ENOMEM;
+> +
+> +	memcpy(xattr_value, value, value_len);
+> +	memcpy(xattr_value + value_len, name__str, name_len);
+> +	((char *)xattr_value)[value_len + name_len] =3D '\0';
+> +
+> +	xattr =3D lsm_get_xattr_slot(xattr_ctx);
+> +	if (!xattr) {
+> +		kfree(xattr_value);
+> +		return -ENOSPC;
+> +	}
+> +
+> +	xattr->value =3D xattr_value;
+> +	xattr->name =3D (const char *)xattr_value + value_len;
+> +	xattr->value_len =3D value_len;
+> +
+> +	return 0;
 > +}
 > +
->
-> [...snip...]
->
+> +/**
+> + * bpf_init_inode_xattr - set an xattr on a new inode from inode_init_se=
+curity
+> + * @xattr_ctx: inode_init_security xattr state from the hook context
+> + * @name__str: xattr name (e.g., "bpf.file_label")
+> + * @value_p: dynptr containing the xattr value
+> + *
+> + * Only callable from lsm/inode_init_security programs.
+> + *
+> + * Return: 0 on success, negative error on failure.
+> + */
+> +__bpf_kfunc int bpf_init_inode_xattr(struct xattr_ctx *xattr_ctx,
+> +				     const char *name__str,
+> +				     const struct bpf_dynptr *value_p)
+> +{
+> +	return __bpf_init_inode_xattr(xattr_ctx, name__str, value_p);
+> +}
+> +
+>  __bpf_kfunc_end_defs();
+> =20
+>  BTF_KFUNCS_START(bpf_fs_kfunc_set_ids)
+> @@ -385,13 +477,25 @@ BTF_ID_FLAGS(func, bpf_get_file_xattr, KF_SLEEPABLE=
+)
+>  BTF_ID_FLAGS(func, bpf_set_dentry_xattr, KF_SLEEPABLE)
+>  BTF_ID_FLAGS(func, bpf_remove_dentry_xattr, KF_SLEEPABLE)
+>  BTF_ID_FLAGS(func, bpf_real_inode, KF_SLEEPABLE | KF_RET_NULL)
+> +BTF_ID_FLAGS(func, bpf_init_inode_xattr, KF_SLEEPABLE)
+>  BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
+> =20
+> +BTF_ID_LIST(bpf_lsm_inode_init_security_btf_ids)
+> +BTF_ID(func, bpf_lsm_inode_init_security)
+> +
+> +BTF_ID_LIST(bpf_init_inode_xattr_btf_ids)
+> +BTF_ID(func, bpf_init_inode_xattr)
+> +
+>  static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc_i=
+d)
+>  {
+>  	if (!btf_id_set8_contains(&bpf_fs_kfunc_set_ids, kfunc_id) ||
+> -	    prog->type =3D=3D BPF_PROG_TYPE_LSM)
+> +	    prog->type =3D=3D BPF_PROG_TYPE_LSM) {
+> +		/* bpf_init_inode_xattr only attaches to inode_init_security. */
+> +		if (kfunc_id =3D=3D bpf_init_inode_xattr_btf_ids[0] &&
+> +		    prog->aux->attach_btf_id !=3D bpf_lsm_inode_init_security_btf_ids[=
+0])
+> +			return -EACCES;
+
+This is unnecessary. Only one hook will have xattr_ctx type.
+The normal verifier type enforcement will do its work.
+
+>  		return 0;
+> +	}
+>  	return -EACCES;
+>  }
+> =20
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 7719f6528445..f14bfcda78db 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1752,6 +1752,7 @@ struct bpf_prog_aux {
+>  	u32 real_func_cnt; /* includes hidden progs, only used for JIT and free=
+ing progs */
+>  	u32 func_idx; /* 0 for non-func prog, the index in func array for func =
+prog */
+>  	u32 attach_btf_id; /* in-kernel BTF type id to attach to */
+> +	u32 attach_limit; /* max concurrent attachments (0 =3D unlimited) */
+
+no need.
+
+>  	u32 attach_st_ops_member_off;
+>  	u32 ctx_arg_info_size;
+>  	u32 max_rdonly_access;
+> diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+> index 143775a27a2a..b655c708818e 100644
+> --- a/include/linux/bpf_lsm.h
+> +++ b/include/linux/bpf_lsm.h
+> @@ -19,6 +19,9 @@
+>  #include <linux/lsm_hook_defs.h>
+>  #undef LSM_HOOK
+> =20
+> +/* max bpf xattrs per inode */
+> +#define BPF_LSM_INODE_INIT_XATTRS 4
+> +
+>  struct bpf_storage_blob {
+>  	struct bpf_local_storage __rcu *storage;
+>  };
+> diff --git a/include/linux/evm.h b/include/linux/evm.h
+> index 913f4573b203..0aa151288b36 100644
+> --- a/include/linux/evm.h
+> +++ b/include/linux/evm.h
+> @@ -12,6 +12,8 @@
+>  #include <linux/integrity.h>
+>  #include <linux/xattr.h>
+> =20
+> +struct xattr_ctx;
+> +
+>  #ifdef CONFIG_EVM
+>  extern int evm_set_key(void *key, size_t keylen);
+>  extern enum integrity_status evm_verifyxattr(struct dentry *dentry,
+> @@ -21,8 +23,8 @@ extern enum integrity_status evm_verifyxattr(struct den=
+try *dentry,
+>  int evm_fix_hmac(struct dentry *dentry, const char *xattr_name,
+>  		 const char *xattr_value, size_t xattr_value_len);
+>  int evm_inode_init_security(struct inode *inode, struct inode *dir,
+> -			    const struct qstr *qstr, struct xattr *xattrs,
+> -			    int *xattr_count);
+> +			    const struct qstr *qstr,
+> +			    struct xattr_ctx *xattr_ctx);
+>  extern bool evm_revalidate_status(const char *xattr_name);
+>  extern int evm_protected_xattr_if_enabled(const char *req_xattr_name);
+>  extern int evm_read_protected_xattrs(struct dentry *dentry, u8 *buffer,
+> @@ -63,8 +65,7 @@ static inline int evm_fix_hmac(struct dentry *dentry, c=
+onst char *xattr_name,
+> =20
+>  static inline int evm_inode_init_security(struct inode *inode, struct in=
+ode *dir,
+>  					  const struct qstr *qstr,
+> -					  struct xattr *xattrs,
+> -					  int *xattr_count)
+> +					  struct xattr_ctx *xattr_ctx)
+>  {
+>  	return 0;
+>  }
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.=
+h
+> index 65c9609ec207..f62780fbeb9e 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -116,8 +116,8 @@ LSM_HOOK(int, 0, inode_alloc_security, struct inode *=
+inode)
+>  LSM_HOOK(void, LSM_RET_VOID, inode_free_security, struct inode *inode)
+>  LSM_HOOK(void, LSM_RET_VOID, inode_free_security_rcu, void *inode_securi=
+ty)
+>  LSM_HOOK(int, -EOPNOTSUPP, inode_init_security, struct inode *inode,
+> -	 struct inode *dir, const struct qstr *qstr, struct xattr *xattrs,
+> -	 int *xattr_count)
+> +	 struct inode *dir, const struct qstr *qstr,
+> +	 struct xattr_ctx *xattr_ctx)
+>  LSM_HOOK(int, 0, inode_init_security_anon, struct inode *inode,
+>  	 const struct qstr *name, const struct inode *context_inode)
+>  LSM_HOOK(int, 0, inode_create, struct inode *dir, struct dentry *dentry,
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index b4f8cad53ddb..710e48caaeba 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -200,20 +200,18 @@ extern struct lsm_static_calls_table static_calls_t=
+able __ro_after_init;
+> =20
+>  /**
+>   * lsm_get_xattr_slot - Return the next available slot and increment the=
+ index
+> - * @xattrs: array storing LSM-provided xattrs
+> - * @xattr_count: number of already stored xattrs (updated)
+> + * @ctx: xattr state shared by inode_init_security hooks
+>   *
+> - * Retrieve the first available slot in the @xattrs array to fill with a=
+n xattr,
+> - * and increment @xattr_count.
+> + * Retrieve the first available slot in the @ctx->xattrs array to fill w=
+ith an
+> + * xattr, and increment @ctx->xattr_count.
+>   *
+> - * Return: The slot to fill in @xattrs if non-NULL, NULL otherwise.
+> + * Return: The slot to fill in @ctx->xattrs if non-NULL, NULL otherwise.
+>   */
+> -static inline struct xattr *lsm_get_xattr_slot(struct xattr *xattrs,
+> -					       int *xattr_count)
+> +static inline struct xattr *lsm_get_xattr_slot(struct xattr_ctx *ctx)
+>  {
+> -	if (unlikely(!xattrs))
+> +	if (unlikely(!ctx || !ctx->xattrs || !ctx->xattr_count))
+>  		return NULL;
+> -	return &xattrs[(*xattr_count)++];
+> +	return &ctx->xattrs[(*ctx->xattr_count)++];
+>  }
+> =20
+>  #endif /* ! __LINUX_LSM_HOOKS_H */
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 153e9043058f..1f8e84e7dd7e 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -68,6 +68,11 @@ struct watch;
+>  struct watch_notification;
+>  struct lsm_ctx;
+> =20
+> +struct xattr_ctx {
+> +	struct xattr *xattrs;
+> +	int *xattr_count;
+> +};
+> +
+>  /* Default (no) options for the capable function */
+>  #define CAP_OPT_NONE 0x0
+>  /* If capable should audit the security request */
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index 564071a92d7d..86a8e188b900 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -113,6 +113,9 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *=
+prog,
+>  }
+>  #endif
+> =20
+> +BTF_ID_LIST_SINGLE(bpf_lsm_inode_init_security_btf_ids, func,
+> +		   bpf_lsm_inode_init_security)
+> +
+>  int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+>  			const struct bpf_prog *prog)
+>  {
+> @@ -137,6 +140,12 @@ int bpf_lsm_verify_prog(struct bpf_verifier_log *vlo=
+g,
+>  		return -EINVAL;
+>  	}
+> =20
+> +	/* bpf reserves a fixed number of xattr slots for itself.
+> +	 * Set the attach limit so the trampoline rejects excess attaches.
+> +	 */
+> +	if (btf_id =3D=3D bpf_lsm_inode_init_security_btf_ids[0])
+> +		prog->aux->attach_limit =3D BPF_LSM_INODE_INIT_XATTRS;
+> +
+>  	return 0;
+>  }
+> =20
+> @@ -315,6 +324,7 @@ BTF_ID(func, bpf_lsm_inode_create)
+>  BTF_ID(func, bpf_lsm_inode_free_security)
+>  BTF_ID(func, bpf_lsm_inode_getattr)
+>  BTF_ID(func, bpf_lsm_inode_getxattr)
+> +BTF_ID(func, bpf_lsm_inode_init_security)
+>  BTF_ID(func, bpf_lsm_inode_mknod)
+>  BTF_ID(func, bpf_lsm_inode_need_killpriv)
+>  BTF_ID(func, bpf_lsm_inode_post_setxattr)
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index 1a721fc4bef5..b41b02173e24 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -859,6 +859,9 @@ static int bpf_trampoline_add_prog(struct bpf_trampol=
+ine *tr,
+>  	}
+>  	if (cnt >=3D BPF_MAX_TRAMP_LINKS)
+>  		return -E2BIG;
+> +	if (node->link->prog->aux->attach_limit &&
+> +	    tr->progs_cnt[kind] >=3D node->link->prog->aux->attach_limit)
+> +		return -E2BIG;
+
+No need. The check inside kfunc is enough.
+
+>  	if (!hlist_unhashed(&node->tramp_hlist))
+>  		/* prog already linked */
+>  		return -EBUSY;
+> diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
+> index 40efde233f3a..d7c44c5c0e30 100644
+> --- a/security/bpf/hooks.c
+> +++ b/security/bpf/hooks.c
+> @@ -30,6 +30,7 @@ static int __init bpf_lsm_init(void)
+> =20
+>  struct lsm_blob_sizes bpf_lsm_blob_sizes __ro_after_init =3D {
+>  	.lbs_inode =3D sizeof(struct bpf_storage_blob),
+> +	.lbs_xattr_count =3D BPF_LSM_INODE_INIT_XATTRS,
+>  };
+> =20
+>  DEFINE_LSM(bpf) =3D {
+> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/e=
+vm_main.c
+> index b59e3f121b8a..e0a05162accc 100644
+> --- a/security/integrity/evm/evm_main.c
+> +++ b/security/integrity/evm/evm_main.c
+> @@ -1062,14 +1062,16 @@ static int evm_inode_copy_up_xattr(struct dentry =
+*src, const char *name)
+>   * evm_inode_init_security - initializes security.evm HMAC value
+>   */
+>  int evm_inode_init_security(struct inode *inode, struct inode *dir,
+> -			    const struct qstr *qstr, struct xattr *xattrs,
+> -			    int *xattr_count)
+> +			    const struct qstr *qstr,
+> +			    struct xattr_ctx *xattr_ctx)
+
+the rest looks good.
+Pls split the patch. Introduce xattr_ctx first across the LSMs.
+Then another patch with a new kfunc.
+
+pw-bot: cr
