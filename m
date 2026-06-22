@@ -1,97 +1,278 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D19D3290BA;
-	Mon, 22 Jun 2026 02:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA2234A78E;
+	Mon, 22 Jun 2026 04:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782096945; cv=none; b=aik9NMU1afRlq0ly6J4qZad8YQ0AULoT45d6FeJUOyDbqd3M8NNtbiK9kca7GUucCHOEK3kdLCEXpP7jK2zHHTqsO40xwoUzsaUpjN8Pd366LzE3l9apJWI40EH8GLoYYE4/trud+ytIZPzGMrejKpaoz6mJFNkQp64U4fXl740=
+	t=1782100901; cv=none; b=fxM9tFXXoEF8EWdQNbuAddYVPH/GqfV314rEmnV+vPdhx3m8vm4lDNMNEMzAG81Q+U6L71dTr+cXPvKdXd+DFnhWuV4tBReIBeuXT6xqcbNcCtT5W6wXlFFMcMddQi0SqFZZ9af3gAONrlh6+1IQzRr9XVQXh+s27xp837YFlCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782096945; c=relaxed/simple;
-	bh=xPT6DAdg86ekeubsFUyJE8zxGgUJMoz3jyqa9JhEVkU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cJDBqDmEwMkMH5Ro2EhWWwn4cY2zFs0cjrEhLHa5pZXs09EiYEkLEjx0A2LFzyNQyuMDjLJkxaQvBQ5aamFOZPqPfMAu6anOxMuCnaejVVeg8t4Z6dcd/hlooZP8oayCvSwQGIaZa0nwtHBleeMjd7ZppgCJsOj7V148gQndUec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Tto3Rx1j; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782100901; c=relaxed/simple;
+	bh=yH+WzegEs+zPyrnewAU8tfya6oMKUvKLC+l4fiOSOyg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=ftIJw9tDciEZgJdTKMxXT+B8DhlpDwlve+mOsFQDEKjKUy//Q8wxdXWsxWeORuJCWbCMdZSXKmREkxSPDN/fVfjI8zIrZ3Kt0xEWvCL/kGIs9Wh6BocS6jJ3uaGVNDy4HRXaf12i9yGWVWTknL9JL3cdff3xvxhgRwGB38/r5/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D1EGjueR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Tto3Rx1j"
-Message-ID: <02e9be5f-8dfa-4a4f-8a70-627ed1124b91@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782096942;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xPT6DAdg86ekeubsFUyJE8zxGgUJMoz3jyqa9JhEVkU=;
-	b=Tto3Rx1jAaHFtdkhawr4dGV2oKUQ+FH3oxDMEtfUe30AqTgIxxAqLJzSwSTl3FHaQCi9kl
-	8DSHCQJxWmTNAgouSdXaK156DzQRkSoeITF8p9plSxjrB2oLwl/FA9EjLfTd3z4zp8l83i
-	Ss3MyZcgf5r8XpkmwL+rT4BP/ncSct4=
-Date: Mon, 22 Jun 2026 10:52:44 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D1EGjueR"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6C708C2BCF6;
+	Mon, 22 Jun 2026 04:01:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1782100901;
+	bh=yH+WzegEs+zPyrnewAU8tfya6oMKUvKLC+l4fiOSOyg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=D1EGjueReeWatNRIyhyuN3rUNAWyJQ3oUCyctAgkQk3ANOfArwTBXOBKT0dkZzp8w
+	 lu38yi+XIPKFkoiZDnlqHo2mvm70H0mmN6fJpEh7swWpVlRfbAck8aa+Td8XPvtQD/
+	 VwjOyHBIDda0cqIv5i+C6NylKnNJ2f2FD39OSywDJXmRvAx95LIqVsJ57fqvyO5b/E
+	 Qz3uVRGCiC+IDL4SDEFPV7ZIHjyu1uYw9Uz78OloksjPTWGtOAUbC8rujyJOrQd6eq
+	 +OWcu69Qp7umi/dK+JSK8FJPfcHclw9VrYB0h68a2B+3cHNLuYw2T2m0KmP6UHn4ti
+	 XjIBnwOclLudA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FCE8CD98F6;
+	Mon, 22 Jun 2026 04:01:41 +0000 (UTC)
+From: Charlie Jenkins via B4 Relay <devnull+thecharlesjenkins.gmail.com@kernel.org>
+Date: Sun, 21 Jun 2026 21:01:20 -0700
+Subject: [PATCH v2 02/16] riscv: alternatives: Use generated instruction
+ headers for patching code
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 3/7] rust: doctest: add LocalModule fallback for
- #[vtable] ThisModule
-To: Andreas Hindborg <a.hindborg@kernel.org>, Gary Guo <gary@garyguo.net>,
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>, Arnd Bergmann
- <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
- Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>
-Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org,
- driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org,
- nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-block@vger.kernel.org
-References: <20260521-fix-fops-owner-v2-0-fd99079c5a04@linux.dev>
- <20260521-fix-fops-owner-v2-3-fd99079c5a04@linux.dev>
- <87fr2kf3m2.fsf@t14s.mail-host-address-is-not-set>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Alvin Sun <alvin.sun@linux.dev>
-In-Reply-To: <87fr2kf3m2.fsf@t14s.mail-host-address-is-not-set>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260621-riscv_insn_table-v2-2-7f0810ee2274@gmail.com>
+References: <20260621-riscv_insn_table-v2-0-7f0810ee2274@gmail.com>
+In-Reply-To: <20260621-riscv_insn_table-v2-0-7f0810ee2274@gmail.com>
+To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Nam Cao <namcao@linutronix.de>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, 
+ Conor Dooley <conor@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+ =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <radim.krcmar@oss.qualcomm.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+ linux-kselftest@vger.kernel.org, 
+ Charlie Jenkins <thecharlesjenkins@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782100900; l=7576;
+ i=thecharlesjenkins@gmail.com; s=20260605; h=from:subject:message-id;
+ bh=qT7TaAXs9xJHwiZtIc+DhKQ0DUJ/foDaC5z2Xsev0Gc=;
+ b=/u85iHT70EYTXXRqfcVxuy+eKwFcv1Sm2g06wLEvHak3vEGteG8Ldc7KcaqMfE6OBxJ7lA1lT
+ 3pl0ydafEiwCvE6sFXti2/uSXa2yef6V//ebUsmR2dpfwpT6liIzDX7
+X-Developer-Key: i=thecharlesjenkins@gmail.com; a=ed25519;
+ pk=ajnnRQ98PIdwKp4HeMkq9U32okYbnh6Zb4G3o5XXvkg=
+X-Endpoint-Received: by B4 Relay for thecharlesjenkins@gmail.com/20260605
+ with auth_id=810
+X-Original-From: Charlie Jenkins <thecharlesjenkins@gmail.com>
+Reply-To: thecharlesjenkins@gmail.com
+
+From: Charlie Jenkins <thecharlesjenkins@gmail.com>
+
+Migrate the alternatives patching code to use the generated instruction
+headers instead of the hand-written instruction composition functions.
+
+Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
+
+---
+
+These function expansions are very simple and almost expand to the same
+thing in the new and old version. The main difference is
+riscv_insn_auipc_extract_imm() in the new version expands to:
+
+((_insn >> 12 & GENMASK(19, 0)) << 12)
+
+while it expands to the following in the old version:
+
+((_insn >> 0) & GENMASK(31, 12))
+
+These are the same thing, but GCC is unable to properly optimize the
+second one so the first one ends up using almost half as many
+instructions. With this finding and other similar examples, I made
+the generated headers construct in the first way to help GCC optimize
+all of these functions.
+
+Brute force can also be checked with this code:
+
+void check_auipc_jalr() {
+	for (unsigned int auipc = 0; auipc < ((1ULL << 12) - 1); auipc++) {
+		for (unsigned int jalr = 0; jalr < ((1ULL << 20) - 1); jalr++) {
+			unsigned int auipc_t=riscv_insn_auipc(auipc, 0), jalr_t=riscv_insn_jalr(jalr, 0, 0), auipc_t2=riscv_insn_auipc(auipc, 0), jalr_t2=riscv_insn_jalr(jalr, 0, 0);
+			riscv_alternative_fix_auipc_jalr(&auipc_t, &jalr_t, 0);
+			riscv_alternative_fix_auipc_jalr2(&auipc_t2, &jalr_t2, 0);
+
+			if (auipc_t != auipc_t2) {
+				printf("auipcs don't match %u, %u: %u != %u\n", auipc, jalr, auipc_t, auipc_t2);
+				return;
+			}
+
+			if (jalr_t != jalr_t2) {
+				printf("jalrs don't match %u: %u != %u\n", i, jalr_t, jalr_t2);
+			}
+		}
+	}
+}
+---
+ arch/riscv/include/asm/insn.h   | 74 -----------------------------------------
+ arch/riscv/kernel/alternative.c | 23 +++++++++----
+ 2 files changed, 17 insertions(+), 80 deletions(-)
+
+diff --git a/arch/riscv/include/asm/insn.h b/arch/riscv/include/asm/insn.h
+index d562b2b40ba1..d0e137f9bcd7 100644
+--- a/arch/riscv/include/asm/insn.h
++++ b/arch/riscv/include/asm/insn.h
+@@ -514,78 +514,4 @@ static __always_inline bool riscv_insn_is_branch(u32 code)
+ 
+ #define RVV_EXTRACT_VL_VS_WIDTH(x) RVFDQ_EXTRACT_FL_FS_WIDTH(x)
+ 
+-/*
+- * Get the immediate from a J-type instruction.
+- *
+- * @insn: instruction to process
+- * Return: immediate
+- */
+-static inline s32 riscv_insn_extract_jtype_imm(u32 insn)
+-{
+-	return RV_EXTRACT_JTYPE_IMM(insn);
+-}
+-
+-/*
+- * Update a J-type instruction with an immediate value.
+- *
+- * @insn: pointer to the jtype instruction
+- * @imm: the immediate to insert into the instruction
+- */
+-static inline void riscv_insn_insert_jtype_imm(u32 *insn, s32 imm)
+-{
+-	/* drop the old IMMs, all jal IMM bits sit at 31:12 */
+-	*insn &= ~GENMASK(31, 12);
+-	*insn |= (RV_X_MASK(imm, RV_J_IMM_10_1_OFF, RV_J_IMM_10_1_MASK) << RV_J_IMM_10_1_OPOFF) |
+-		 (RV_X_MASK(imm, RV_J_IMM_11_OFF, RV_J_IMM_11_MASK) << RV_J_IMM_11_OPOFF) |
+-		 (RV_X_MASK(imm, RV_J_IMM_19_12_OFF, RV_J_IMM_19_12_MASK) << RV_J_IMM_19_12_OPOFF) |
+-		 (RV_X_MASK(imm, RV_J_IMM_SIGN_OFF, 1) << RV_J_IMM_SIGN_OPOFF);
+-}
+-
+-/*
+- * Put together one immediate from a U-type and I-type instruction pair.
+- *
+- * The U-type contains an upper immediate, meaning bits[31:12] with [11:0]
+- * being zero, while the I-type contains a 12bit immediate.
+- * Combined these can encode larger 32bit values and are used for example
+- * in auipc + jalr pairs to allow larger jumps.
+- *
+- * @utype_insn: instruction containing the upper immediate
+- * @itype_insn: instruction
+- * Return: combined immediate
+- */
+-static inline s32 riscv_insn_extract_utype_itype_imm(u32 utype_insn, u32 itype_insn)
+-{
+-	s32 imm;
+-
+-	imm = RV_EXTRACT_UTYPE_IMM(utype_insn);
+-	imm += RV_EXTRACT_ITYPE_IMM(itype_insn);
+-
+-	return imm;
+-}
+-
+-/*
+- * Update a set of two instructions (U-type + I-type) with an immediate value.
+- *
+- * Used for example in auipc+jalrs pairs the U-type instructions contains
+- * a 20bit upper immediate representing bits[31:12], while the I-type
+- * instruction contains a 12bit immediate representing bits[11:0].
+- *
+- * This also takes into account that both separate immediates are
+- * considered as signed values, so if the I-type immediate becomes
+- * negative (BIT(11) set) the U-type part gets adjusted.
+- *
+- * @utype_insn: pointer to the utype instruction of the pair
+- * @itype_insn: pointer to the itype instruction of the pair
+- * @imm: the immediate to insert into the two instructions
+- */
+-static inline void riscv_insn_insert_utype_itype_imm(u32 *utype_insn, u32 *itype_insn, s32 imm)
+-{
+-	/* drop possible old IMM values */
+-	*utype_insn &= ~(RV_U_IMM_31_12_MASK);
+-	*itype_insn &= ~(RV_I_IMM_11_0_MASK << RV_I_IMM_11_0_OPOFF);
+-
+-	/* add the adapted IMMs */
+-	*utype_insn |= (imm & RV_U_IMM_31_12_MASK) + ((imm & BIT(11)) << 1);
+-	*itype_insn |= ((imm & RV_I_IMM_11_0_MASK) << RV_I_IMM_11_0_OPOFF);
+-}
+ #endif /* _ASM_RISCV_INSN_H */
+diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
+index 7642704c7f18..b26a90eb65cc 100644
+--- a/arch/riscv/kernel/alternative.c
++++ b/arch/riscv/kernel/alternative.c
+@@ -11,6 +11,7 @@
+ #include <linux/cpu.h>
+ #include <linux/uaccess.h>
+ #include <asm/alternative.h>
++#include <asm/insn.h>
+ #include <asm/module.h>
+ #include <asm/sections.h>
+ #include <asm/vdso.h>
+@@ -78,14 +79,24 @@ static void riscv_alternative_fix_auipc_jalr(void *ptr, u32 auipc_insn,
+ 					     u32 jalr_insn, int patch_offset)
+ {
+ 	u32 call[2] = { auipc_insn, jalr_insn };
++	u32 auipc_imm;
+ 	s32 imm;
+ 
+ 	/* get and adjust new target address */
+-	imm = riscv_insn_extract_utype_itype_imm(auipc_insn, jalr_insn);
++	imm = riscv_insn_auipc_extract_imm(auipc_insn) + riscv_insn_jalr_extract_imm(jalr_insn);
+ 	imm -= patch_offset;
+ 
++	/*
++	 * When the 32-bit immediate is split across auipc and jalr, the
++	 * constructed immediates need to be treated as individually sign
++	 * extended numbers. Add the sign bit of the lower 12 bits to the upper
++	 * 20 bits to undo the bleeding of the sign.
++	 */
++	auipc_imm = imm + (BIT(11) << 1);
++
+ 	/* update instructions */
+-	riscv_insn_insert_utype_itype_imm(&call[0], &call[1], imm);
++	riscv_insn_auipc_insert_imm(&call[0], auipc_imm);
++	riscv_insn_jalr_insert_imm(&call[1], imm);
+ 
+ 	/* patch the call place again */
+ 	patch_text_nosync(ptr, call, sizeof(u32) * 2);
+@@ -96,11 +107,11 @@ static void riscv_alternative_fix_jal(void *ptr, u32 jal_insn, int patch_offset)
+ 	s32 imm;
+ 
+ 	/* get and adjust new target address */
+-	imm = riscv_insn_extract_jtype_imm(jal_insn);
++	imm = riscv_insn_jal_extract_imm(jal_insn);
+ 	imm -= patch_offset;
+ 
+ 	/* update instruction */
+-	riscv_insn_insert_jtype_imm(&jal_insn, imm);
++	riscv_insn_jal_insert_imm(&jal_insn, imm);
+ 
+ 	/* patch the call place again */
+ 	patch_text_nosync(ptr, &jal_insn, sizeof(u32));
+@@ -127,7 +138,7 @@ void riscv_alternative_fix_offsets(void *alt_ptr, unsigned int len,
+ 				continue;
+ 
+ 			/* if instruction pair is a call, it will use the ra register */
+-			if (RV_EXTRACT_RD_REG(insn) != 1)
++			if (riscv_insn_jalr_extract_xd(insn) != 1)
+ 				continue;
+ 
+ 			riscv_alternative_fix_auipc_jalr(alt_ptr + i * sizeof(u32),
+@@ -136,7 +147,7 @@ void riscv_alternative_fix_offsets(void *alt_ptr, unsigned int len,
+ 		}
+ 
+ 		if (riscv_insn_is_jal(insn)) {
+-			s32 imm = riscv_insn_extract_jtype_imm(insn);
++			s32 imm = riscv_insn_jal_extract_imm(insn);
+ 
+ 			/* Don't modify jumps inside the alternative block */
+ 			if ((alt_ptr + i * sizeof(u32) + imm) >= alt_ptr &&
+
+-- 
+2.54.0
 
 
-On 6/18/26 20:13, Andreas Hindborg wrote:
-> Alvin Sun <alvin.sun@linux.dev> writes:
->
->> Add a `LocalModule` struct with a null-pointer `ModuleMetadata` impl
->> in the doctest harness, so that `crate::LocalModule` (auto-inserted
->> by `#[vtable]`) resolves correctly when there is no `module!` macro.
->>
->> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
-> Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
->
-> Does this need to be ordered before the vtable auto insert in the patch series?
-
-Yes, you're right — this patch would be better placed before the vtable
-auto-insert patch to avoid a temporary state where the doctest harness
-doesn't provide the LocalModule fallback that #[vtable] expects.
-
-Thanks for the suggestions from you and Gary. v3 has been sent to the
-list:
-
-https://lore.kernel.org/rust-for-linux/20260622-fix-fops-owner-v3-0-49d45cb37032@linux.dev
-
-Best regards,
-Alvin Sun
-
->
-> Best regards,
-> Andreas Hindborg
->
->
