@@ -1,30 +1,32 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD263AFD16
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 14:37:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724E03BB109
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 14:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782139024; cv=none; b=PADvpcC1y45NBAe/8KL9T7WjNqJL9U8ZcDdrHnIy/2PbeDegC9yP6HO2KNAI8yxAld6kHcfKykLu737X7IkYUbaQjSPRzsscF8KaAoxp4+cZjve1vneSKgwNzK1nTvcORaG/MBQnOorkVkJZIFh36dKaB1xjBO8uqO/1PEOtHJk=
+	t=1782139026; cv=none; b=mCPpENoL7oOqsuTEMiBVBUaEYR9gLeS1YrxlIXZqQww8jMKuXhENqHiSJleUgF54qSuRGdAI7f2VM0ANhrMcXIsQPxoKfrQ6VN4T6a1awI5pp+SUFiLKCMa9lYsz4Vp/uRXnYbp1vhn6DhHbmu0fO5ugWTL118iRjzYzw043l+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782139024; c=relaxed/simple;
-	bh=vqE9RfH0yY8YN8A6HA0B40zCVJhgAlI8JogxlqA/Uc8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B4HZB4FFoeWaHWp12qmIsmOVT9lswuRmtw1MC6cACLPW3UW4q1VdkYKTDr1VKPuRNXpVhThAz/Qfsrk9M1A+Q3m1IOFF3AkiqdYPzHWts/jV1VATOeTfAwEkaMsIpjTUswAHPD7lBxUcfdiIvPr7PUR17BwLDWgFGBJi1Dth0ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U9BVtGZv; arc=none smtp.client-ip=91.218.175.170
+	s=arc-20240116; t=1782139026; c=relaxed/simple;
+	bh=Fq3WYTnSqZS5zJK7JL8kP38nBrMaU9mMaFvCQOx9saI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=T9fBMtyZs2wAihwH1wCAISeEV08/qSMOKkiKS/V1Poy8zycxEHY5/lzCzJObhqgy9bR5Ec2ZxRkblWX76hAeOLEwULD/2RDExTD6WTUmq8KAMh98f/9J96hn6Ki8QUoUTCOR6+Kdc7nok1Ca+08tFpf3v6SY4v3GMOS9c7MJtE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ID4pRR07; arc=none smtp.client-ip=91.218.175.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U9BVtGZv"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ID4pRR07"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782139009;
+	t=1782139022;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=BlJKmvLaLVegl76TdGtW//8swbbgqpUbWnybP+a20HE=;
-	b=U9BVtGZvzHNUXraW/L1KFUNAEcf1yVF4PZrEG5WpI4suzakf9ySnCrBpxuJJaJ967U7sEE
-	ZfuqbFzw1WeVY6VdYDO/CcuasyOIAVmeHDF4kzVhPK8esJu3rWj7Ah51ES6lxbILa1e1EV
-	ZZ2+T89V2c3cZxU0XkgAxai0u9KpEPI=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yCMiiSAWxWBXgCBfZXqftEZxdWrpCAJoKV6Pf7Wc5UA=;
+	b=ID4pRR07awIdlZljgbBCNhQC8LQXSLSRcfBttXFVF8QUp13Y3VlDUd4WC39YU+Ls+I6eQs
+	V+iqNG5LK+P+QrjS38B/DnkGcYFx/NJzmJ+YpQkw9VCTZmhNdnT6DCiLJoiFVz2I6ZSPdT
+	bHSIlsDBgX8zjSk0OGx0iL41efOZPqA=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -43,9 +45,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v7 00/11] bpf: Introduce global percpu data
-Date: Mon, 22 Jun 2026 22:35:46 +0800
-Message-ID: <20260622143557.22955-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v7 02/11] bpf: Disallow interpreter fallback for user BPF_ADDR_SPACE_CAST insn
+Date: Mon, 22 Jun 2026 22:35:48 +0800
+Message-ID: <20260622143557.22955-3-leon.hwang@linux.dev>
+In-Reply-To: <20260622143557.22955-1-leon.hwang@linux.dev>
+References: <20260622143557.22955-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,169 +59,54 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-This patch set introduces global percpu data, similar to commit
-6316f78306c1 ("Merge branch 'support-global-data'"), to reduce restrictions
-in C for BPF programs.
+Since interpreter is unable to handle the 'insn_is_cast_user()' insn,
+require JIT in __bpf_prog_select_runtime() when the prog has the insn.
 
-With this enhancement, it becomes possible to define and use global percpu
-variables, like the DEFINE_PER_CPU() macro in the kernel
-include/linux/percpu-defs.h.
+Fixes: 142fd4d2dcf5 ("bpf: Add x86-64 JIT support for bpf_addr_space_cast instruction.")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ include/linux/bpf.h | 1 +
+ kernel/bpf/core.c   | 1 +
+ kernel/bpf/fixups.c | 2 ++
+ 3 files changed, 4 insertions(+)
 
-The section name for global peurcpu data is ".percpu". Even though, a one-byte
-percpu variable (e.g., char run SEC(".percpu") = 0;) can trigger a crash
-with Clang 17 [1], users are expected to use such small variables as global
-percpu data with newer Clang versions, which don't have the issue.
-
-The idea stems from the bpfsnoop [2], which itself was inspired by
-retsnoop [3]. During testing of bpfsnoop on the v6.6 kernel, two LBR
-(Last Branch Record) entries were observed related to the
-bpf_get_smp_processor_id() helper.
-
-Since commit 1ae6921009e5 ("bpf: inline bpf_get_smp_processor_id() helper"),
-the bpf_get_smp_processor_id() helper has been inlined on x86_64, reducing
-the overhead and consequently minimizing these two LBR records.
-
-However, the introduction of global percpu data offers a more robust
-solution. By leveraging the percpu_array map and percpu instruction,
-global percpu data can be implemented intrinsically.
-
-This feature also facilitates sharing percpu information between tail
-callers and callees or between freplace callers and callees through a
-shared global percpu variable. Previously, this was achieved using a
-1-entry percpu_array map, which this patch set aims to improve upon.
-
-Links:
-[1] https://lore.kernel.org/bpf/fd1b3f58-c27f-403d-ad99-644b7d06ecb3@linux.dev/
-[2] https://github.com/bpfsnoop/bpfsnoop
-[3] https://github.com/anakryiko/retsnoop
-
-Changes:
-v6 -> v7:
-* Use tgt_endian() in bpf_gen__map_update_elem() in patch #6. (Sashiko)
-* Use sizeof(args) in verifier_snprintf test in patch #10. (Sashiko)
-* Drop xlated test of v6. (Alexei)
-* v6: https://lore.kernel.org/bpf/20260615152646.27639-1-leon.hwang@linux.dev/
-
-v5 -> v6:
-* Prevent running user addr_space_cast and addr_percpu insns in
-  interpreter. (Sashiko)
-* Cast __percpu pointer to u64 with (__force unsigned long). (lkp)
-* Exclude BPF_MAP_TYPE_PERCPU_ARRAY in check_mem_access() before calling
-  bpf_map_direct_read(), and add a test to verify it.
-  (Sashiko, bot+bpf-ci)
-* Skip percpu data variables for subskeleton in bpftool. (Sashiko)
-* Protect skel->percpu using mprotect(..., PROT_READ) in light skeleton.
-  (Sashiko, bot+bpf-ci)
-* Drop roundup() in tests. (Sashiko)
-* Call test_global_percpu_data_verifier_log() without
-  test__start_subtest(). (Sashiko)
-* Cast insn->imm to __u64 with (__u32) in xlated test. (Sashiko)
-* Check cnt using the new idx in xlated test. (Sashiko)
-* v5: https://lore.kernel.org/bpf/20260608145113.65857-1-leon.hwang@linux.dev/
-
-v4 -> v5:
-* Add prog->jit_requested check to prevent running percpu data in
-  interpreter in patch #1.
-* Factor out verifier log tests using its own patch.
-* Address comments from Alexei:
-  * Move map_type check from check_mem_access() to bpf_map_direct_read()
-    in patch #2.
-  * Move BPF_MAP_TYPE_INSN_ARRAY map_type check from const_reg_xfer() to
-    bpf_map_direct_read() in patch #2.
-  * Add a test to verify that the off of xlated ldimm64 insn matches the
-    off encoded in the ELF ldimm64 insn.
-  * Drop patch #5 of v4.
-* Address reviews from Sashiko:
-  * Update commit message of patch #6 to indicate that maps.percpu->mmaped
-    has been marked as read-only in libbpf.
-  * Lookup elem on specified CPU using BPF_F_CPU in tests.
-  * Drop unnecessary err == -EOPNOTSUPP in test.
-  * Locate target field using its offset in the iter test.
-* v4: https://lore.kernel.org/bpf/20260414132421.63409-1-leon.hwang@linux.dev/
-
-v3 -> v4:
-* Drop duplicate blank lines in verifier.
-* Add percpu data feature probe in libbpf.
-* Update percpu_array map using BPF_F_ALL_CPUS flag for lskel, if no cpu flag
-  is set.
-* Add two tests to verify verifier log.
-* Add a test to verify mov64_percpu_reg instruction.
-* Add a test to verify bpf_iter for percpu data map.
-* Update percpu_array map using BPF_F_ALL_CPUS flag in libbpf
-  (per Alexei and Andrii).
-* Address comments from Andrii:
-  * Use .percpu as section identifier.
-  * Use bpf_jit_supports_percpu_insn() instead of CONFIG_SMP.
-  * Drop bpf_map__is_internal_percpu() API.
-  * Drop unnecessary __aligned(8) in libbpf, verified by selftest.
-  * Make mmap data read-only after loading prog.
-v3: https://lore.kernel.org/bpf/20250526162146.24429-1-leon.hwang@linux.dev/
-
-v2 -> v3:
-  * Use ".data..percpu" as PERCPU_DATA_SEC.
-  * Address comment from Alexei:
-    * Add u8, array of ints and struct { .. } vars to selftest.
-v2: https://lore.kernel.org/bpf/20250213161931.46399-1-leon.hwang@linux.dev/
-
-v1 -> v2:
-  * Address comments from Andrii:
-    * Use LIBBPF_MAP_PERCPU and SEC_PERCPU.
-    * Reuse mmaped of libbpf's struct bpf_map for .percpu map data.
-    * Set .percpu struct pointer to NULL after loading skeleton.
-    * Make sure value size of .percpu map is __aligned(8).
-    * Use raw_tp and opts.cpu to test global percpu variables on all CPUs.
-  * Address comments from Alexei:
-    * Test non-zero offset of global percpu variable.
-    * Test case about BPF_PSEUDO_MAP_IDX_VALUE.
-v1: https://lore.kernel.org/bpf/20250127162158.84906-1-leon.hwang@linux.dev/
-
-rfc -> v1:
-  * Address comments from Andrii:
-    * Keep one image of global percpu variable for all CPUs.
-    * Reject non-ARRAY map in bpf_map_direct_read(), check_reg_const_str(),
-      and check_bpf_snprintf_call() in verifier.
-    * Split out libbpf changes from kernel-side changes.
-    * Use ".percpu" as PERCPU_DATA_SEC.
-    * Use enum libbpf_map_type to distinguish BSS, DATA, RODATA and
-      PERCPU_DATA.
-    * Avoid using errno for checking err from libbpf_num_possible_cpus().
-    * Use "map '%s': " prefix for error message.
-rfc: https://lore.kernel.org/bpf/20250113152437.67196-1-leon.hwang@linux.dev/
-
-Leon Hwang (11):
-  bpf: Drop duplicate blank lines in verifier
-  bpf: Disallow interpreter fallback for user BPF_ADDR_SPACE_CAST insn
-  bpf: Disallow interpreter fallback for BPF_ADDR_PERCPU insn
-  bpf: Introduce global percpu data
-  libbpf: Probe percpu data feature
-  libbpf: Add support for global percpu data
-  bpftool: Generate skeleton for global percpu data
-  selftests/bpf: Add tests to verify global percpu data
-  selftests/bpf: Add test to verify accessing rdonly percpu_array
-  selftests/bpf: Add tests to verify verifier log for global percpu data
-  selftests/bpf: Add test to verify bpf_iter for global percpu data
-
- include/linux/bpf.h                           |   6 +-
- kernel/bpf/arraymap.c                         |  39 ++-
- kernel/bpf/const_fold.c                       |   1 -
- kernel/bpf/core.c                             |   2 +
- kernel/bpf/fixups.c                           |  41 +++
- kernel/bpf/verifier.c                         |  30 +-
- tools/bpf/bpftool/gen.c                       |  43 ++-
- tools/lib/bpf/bpf_gen_internal.h              |   3 +-
- tools/lib/bpf/features.c                      |  35 +++
- tools/lib/bpf/gen_loader.c                    |   3 +-
- tools/lib/bpf/libbpf.c                        |  68 ++++-
- tools/lib/bpf/libbpf_internal.h               |   2 +
- tools/lib/bpf/skel_internal.h                 |  24 +-
- tools/testing/selftests/bpf/Makefile          |   2 +-
- .../bpf/prog_tests/global_data_init.c         | 286 ++++++++++++++++++
- .../bpf/prog_tests/global_percpu_subskel.c    |  37 +++
- .../bpf/progs/test_global_percpu_data.c       |  79 +++++
- 17 files changed, 655 insertions(+), 46 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/global_percpu_subskel.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7719f6528445..5e1843d2859e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1781,6 +1781,7 @@ struct bpf_prog_aux {
+ 	bool changes_pkt_data;
+ 	bool might_sleep;
+ 	bool kprobe_write_ctx;
++	bool has_addr_space_cast_insn;
+ 	struct {
+ 		s32 keyring_serial;
+ 		u8 keyring_type;
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 649cce41e13f..49398b5bd172 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2620,6 +2620,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
+ 		goto finalize;
+ 
+ 	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
++	    fp->aux->has_addr_space_cast_insn ||
+ 	    bpf_prog_has_kfunc_call(fp))
+ 		jit_needed = true;
+ 
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 3cf2cc6e3ab6..2d5958774b61 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1523,6 +1523,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 				insn->off = 0;
+ 				insn->imm = 0;
+ 			} /* cast from as(0) to as(1) should be handled by JIT */
++			if (insn_is_cast_user(insn))
++				prog->aux->has_addr_space_cast_insn = true;
+ 			goto next_insn;
+ 		}
+ 
 -- 
 2.54.0
 
