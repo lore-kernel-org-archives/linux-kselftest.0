@@ -1,58 +1,86 @@
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.168])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A48F3793CC
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 09:54:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC2A372663
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 10:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782122060; cv=none; b=Z5TgXEOi2m46yIQFDbJv6FAHiT2Ude4PsK4kn52VvIfPrefv87rgLhuQah3jUSlc279kAeTeeUS82/Mks4r6tEq8CnWyauO/iSWVs3pV9qjdnpSu6l0l03GhWi5rrBjeOsLoAN3w+t1D8MOQxyTvYHlE47BT2SCpHfHSVCEGjqQ=
+	t=1782124805; cv=none; b=jlYn6FGpj20n5cH2Mhb9wPa3FYGFR34RfGNkndHJy0hziTyjtLinicMT6UY8lHWuivAZZ0VZWAtYH39AHSMr0O0jiWPyAe19FaudyQR4y20s/qjqOI//u/NvdLaUF+TuNS2t0vi2xfHRgPe75qnHdbAUvmNKZs7PrhQF6WeT7Ck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782122060; c=relaxed/simple;
-	bh=6dZ4zYdErrEzfiYdiDusqu5liRpk/yR1ucrJzKf7SNU=;
+	s=arc-20240116; t=1782124805; c=relaxed/simple;
+	bh=/M98N0nWbPLHBSGDEZ/remPQFSTrMRR6mILK2OdC3is=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u4Fsb4pvbC+sJ+krGPRB7oNezoaesWaMtWZmUn51utl8i6v5zmQlcZCr0ib4KvDPMgYwoIvxfBI5cfUTHExcJzHslLaNA17D56KCUuMkHGqqXWQ2qk2Qf7EL2Lg8ClChu7Y7sbEhsif+0Gfd/uEXegTsWDxwyS8CAteuN03aU6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=pA7DnmgH; arc=none smtp.client-ip=195.121.94.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
+	 Content-Type:Content-Disposition:In-Reply-To; b=iTMY/pz6m1Xc5t5sMmSG28xS+qp8U8TxWTJPRg3R7iRPqljkAIMB+/44uFqwiqteDSjxB8kCwm5Xh9rshOSx05gpvGfG6ePN6UP2oyP/KVZPsmcOfKblHssVnBI3tnxLtpA5+fkxGWOpZ0e6XkjlGxzJSQltkMfXxwKeCDRQKt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Nr2pAkOR; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=AGIoKqh/; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Nr2pAkOR; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=AGIoKqh/; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="pA7DnmgH"
-X-KPN-MessageId: 2adeddfa-6e20-11f1-861a-005056aba152
-Received: from smtp.kpnmail.nl (unknown [10.31.155.38])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 2adeddfa-6e20-11f1-861a-005056aba152;
-	Mon, 22 Jun 2026 11:53:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xs4all.nl; s=xs4all01;
-	h=content-type:mime-version:message-id:subject:to:from:date;
-	bh=WYB+eqZtyTPDHDqFA/TVCR7NlWihAxG6DNjwFRFTBik=;
-	b=pA7DnmgH6rlhfUQCpXYlI79jxsfH4rimPjNAm+HZgGflODLNdTkaX4xurSyY7FZUd2CZSvlA/3qYW
-	 VGHME4+tuQ4ybG9E2W8pUC2QQScYL5igOxw9uUq0uYsZ+6OWKYGJ46ApOk5j/H7/BV3EPWAJQAEL6n
-	 QiZ9DQr7F5xDg2nMlo81D7JLEjcUqTLnuAEJVj9p+5aoS9m9gIhrABljmG1dj38h89zUS0Qc4ZbWXF
-	 Q3J/A5HGgZntfdXdrMZx4Qn638DNnd0bVMOMF0fOJfT8/Int4tt5xCrlQS9zxtxEWpS1BSBCGG0d6y
-	 d7UaoDTawtYAZ6BNhOn3/1y1owRkGhw==
-X-KPN-MID: 33|s6Wv9LN1ctw9HwwAkq60iXR8T4RFFzsoMvf18EvtivVebnxoErdXWyg+mBfQNzt
- JcB8gBRLVydk7A7QQppsb/kKHvLRMPEAu/QaKHmnyFOs=
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|o3S6nZtqmTOz249rQvIuKjiBhadAu4toWXmgwvxawbt1t7IkATPkQ3/os34uKRa
- X/uqlDigkjeOjG0/uek/mvQ==
-Received: from localhost (142-169-144-85.ftth.glasoperator.nl [85.144.169.142])
-	by smtp.xs4all.nl (Halon) with ESMTPSA
-	id 2a610af9-6e20-11f1-a997-005056abf0db;
-	Mon, 22 Jun 2026 11:53:06 +0200 (CEST)
-Date: Mon, 22 Jun 2026 11:53:04 +0200
-From: Jori Koolstra <jkoolstra@xs4all.nl>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Nr2pAkOR";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="AGIoKqh/";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Nr2pAkOR";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="AGIoKqh/"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 5082A75B66;
+	Mon, 22 Jun 2026 10:40:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1782124802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NkRuo/RALBae4rTRv8OE22ZA7JcrZTDytq9aKv/jWx0=;
+	b=Nr2pAkORoAbYHVh90pXxrF7Z3nfKZSL+HUm6JhBdUjwAqSDmMqMNsGNgNBq79NwQo/Xqam
+	4MZ0dJvxsegm9PX+fhpL9Uegqd6vqvmyEXppXGirgE9fVYBZ+DrkEDSAjVLRd6z8KVMyda
+	CNVCzk0Ryxv/TYLMOL3/yscp0wrp9pc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1782124802;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NkRuo/RALBae4rTRv8OE22ZA7JcrZTDytq9aKv/jWx0=;
+	b=AGIoKqh/cXXPyqn81qUZONwGXhOJgKygXJbyKGuoEpoj2EzB6ydGlBlIFbcfTOc4VS1CLe
+	tZTo0zPpqP/jCKCA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=Nr2pAkOR;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b="AGIoKqh/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1782124802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NkRuo/RALBae4rTRv8OE22ZA7JcrZTDytq9aKv/jWx0=;
+	b=Nr2pAkORoAbYHVh90pXxrF7Z3nfKZSL+HUm6JhBdUjwAqSDmMqMNsGNgNBq79NwQo/Xqam
+	4MZ0dJvxsegm9PX+fhpL9Uegqd6vqvmyEXppXGirgE9fVYBZ+DrkEDSAjVLRd6z8KVMyda
+	CNVCzk0Ryxv/TYLMOL3/yscp0wrp9pc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1782124802;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NkRuo/RALBae4rTRv8OE22ZA7JcrZTDytq9aKv/jWx0=;
+	b=AGIoKqh/cXXPyqn81qUZONwGXhOJgKygXJbyKGuoEpoj2EzB6ydGlBlIFbcfTOc4VS1CLe
+	tZTo0zPpqP/jCKCA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 43B3B779A8;
+	Mon, 22 Jun 2026 10:40:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id CiWBEAIROWpGfQAAD6G6ig
+	(envelope-from <jack@suse.cz>); Mon, 22 Jun 2026 10:40:02 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id DF419A12DE; Mon, 22 Jun 2026 12:39:57 +0200 (CEST)
+Date: Mon, 22 Jun 2026 12:39:57 +0200
+From: Jan Kara <jack@suse.cz>
 To: Farid Zakaria <farid.m.zakaria@gmail.com>
 Cc: kees@kernel.org, brauner@kernel.org, viro@zeniv.linux.org.uk, 
 	jack@suse.cz, shuah@kernel.org, linux-fsdevel@vger.kernel.org, 
 	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] fs: support $ORIGIN in ELF interpreter paths
-Message-ID: <ajkEA0yqLhRjlJT_@lt-jori.localdomain>
-Mail-Followup-To: Jori Koolstra <jkoolstra@xs4all.nl>, 
-	Farid Zakaria <farid.m.zakaria@gmail.com>, kees@kernel.org, brauner@kernel.org, viro@zeniv.linux.org.uk, 
-	jack@suse.cz, shuah@kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] fs: support $ORIGIN in ELF interpreter paths
+Message-ID: <sfv7zc6jboy2oxv7zuyofysas4ncbzenwsuzveiyduisfr6i7q@mx23er7uxdbg>
 References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
- <20260622043934.179879-2-farid.m.zakaria@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,182 +89,82 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260622043934.179879-2-farid.m.zakaria@gmail.com>
+In-Reply-To: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 5082A75B66
+X-Spam-Flag: NO
+X-Spam-Score: -1.51
+X-Spam-Level: 
+X-Spamd-Result: default: False [-1.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	SUBJECT_HAS_CURRENCY(1.00)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.com:email]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 
-Hi Farid,
-
-On Sun, Jun 21, 2026 at 09:39:33PM -0700, Farid Zakaria wrote:
-> Currently, standard ELF and ELF FDPIC loaders expect a fixed path to the
-> dynamic linker/interpreter (PT_INTERP). However, for systems utilizing
-> relocatable dynamic interpreters (such as Nix/store-based environments),
-> hardcoding this path is inflexible and breaks binary portability.
+On Sun 21-06-26 21:39:32, Farid Zakaria wrote:
+> Currently, standard ELF and ELF FDPIC loaders require a fixed, absolute
+> path to the dynamic linker/interpreter (specified via PT_INTERP). This
+> creates significant inflexibility for relocatable dynamic interpreters,
+> where binaries are packaged independent of global system paths.
 > 
-> Introduce support for resolving the $ORIGIN placeholder in the ELF
-> interpreter path. This maps the dynamic linker relative to the path
-> of the binary being executed, matching user-space origin resolution.
+> The primary goal of this patch series is to support relocatable binaries
+> in Nix, where packages are stored in a read-only store (typically /nix/store).
+> Allowing the ELF interpreter path to be resolved dynamically relative to
+> the binary's location via $ORIGIN enables Nix packages to be relocated
+> without needing patchelf or wrapper scripts.
 > 
-> To avoid code duplication, implement a shared 'resolve_elf_interpreter()'
-> helper in the VFS exec layer. For safety, limit detection strictly to
-> the prefix string "$ORIGIN" to prevent complex parsing exploits.
+> For details on the design and motivation for this in Nix, see:
+> https://fzakaria.com/2026/06/21/nix-needs-relocatable-binaries
 > 
-> Assisted-by: Antigravity:Gemini-Pro
+> This series introduces support for resolving the $ORIGIN placeholder in 
+> the ELF interpreter path, bringing the kernel's binary loading behavior
+> in line with user-space dynamic linker origin resolution. 
 
-This isn't a requirement from the community or anything, but I always
-find it useful if I see an Assisted-by tag to know what assistence was
-actually delivered by an LLM. Otherwise we might as well add
-assisted-by tags for any editor.
+Thanks for the patches! Before dwelving into implementation details we
+need to discuss whether something like this even belongs to the kernel.
+Frankly to me this looks rather arbitrary and tied to the particular way
+you've decided to setup your package management system. In particular the
+usual answer for situations like these is to use namespaces which you
+discount in your blog with: "If you are using tools like Bazel or Buck2
+they likely already employ their own sandboxing via namespacing for builds.
+Integrating Nix into these ecosystems becomes incredibly impractical
+because we run into nested user namespace and mount restrictions."
 
-Talking about LLMs, your patch has some issues flagged by Sashiko[1].
-Please take a look.
+I don't know enough details to really judge but it seems to me like you are
+trying to workaround a mess in userspace with kernel changes.
 
+Anyway I'm pretty sure Christian will have more educated answer than me but
+I just wanted to express my skepticism about this approach and that perhaps
+you wait for feedback from him before spending more time on these patches.
 
-> Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
-> ---
->  fs/binfmt_elf.c         | 11 +++++++++--
->  fs/binfmt_elf_fdpic.c   | 15 +++++++++++++--
->  fs/exec.c               | 42 +++++++++++++++++++++++++++++++++++++++++
->  include/linux/binfmts.h |  2 ++
->  4 files changed, 66 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-> index 16a56b6b3..af11f96ae 100644
-> --- a/fs/binfmt_elf.c
-> +++ b/fs/binfmt_elf.c
-> @@ -872,7 +872,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
->  
->  	elf_ppnt = elf_phdata;
->  	for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
-> -		char *elf_interpreter;
-> +		char *elf_interpreter, *resolved_interp;
->  
->  		if (elf_ppnt->p_type == PT_GNU_PROPERTY) {
->  			elf_property_phdata = elf_ppnt;
-> @@ -904,8 +904,15 @@ static int load_elf_binary(struct linux_binprm *bprm)
->  		if (elf_interpreter[elf_ppnt->p_filesz - 1] != '\0')
->  			goto out_free_interp;
->  
-> -		interpreter = open_exec(elf_interpreter);
-> +		resolved_interp = resolve_elf_interpreter(bprm, elf_interpreter);
->  		kfree(elf_interpreter);
-> +		if (IS_ERR(resolved_interp)) {
-> +			retval = PTR_ERR(resolved_interp);
-> +			goto out_free_ph;
-> +		}
-> +
-> +		interpreter = open_exec(resolved_interp);
-> +		kfree(resolved_interp);
->  		retval = PTR_ERR(interpreter);
->  		if (IS_ERR(interpreter))
->  			goto out_free_ph;
-> diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
-> index 7e3108489..e85727d71 100644
-> --- a/fs/binfmt_elf_fdpic.c
-> +++ b/fs/binfmt_elf_fdpic.c
-> @@ -230,7 +230,9 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
->  
->  	for (i = 0; i < exec_params.hdr.e_phnum; i++, phdr++) {
->  		switch (phdr->p_type) {
-> -		case PT_INTERP:
-> +		case PT_INTERP: {
-> +			char *resolved_interp;
-> +
->  			retval = -ENOMEM;
->  			if (phdr->p_filesz > PATH_MAX)
->  				goto error;
-> @@ -259,7 +261,15 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
->  			kdebug("Using ELF interpreter %s", interpreter_name);
->  
->  			/* replace the program with the interpreter */
-> -			interpreter = open_exec(interpreter_name);
-> +			resolved_interp = resolve_elf_interpreter(bprm, interpreter_name);
-> +			kfree(interpreter_name);
-> +			if (IS_ERR(resolved_interp)) {
-> +				retval = PTR_ERR(resolved_interp);
-> +				goto error;
-> +			}
-> +
-> +			interpreter = open_exec(resolved_interp);
-> +			kfree(resolved_interp);
->  			retval = PTR_ERR(interpreter);
->  			if (IS_ERR(interpreter)) {
->  				interpreter = NULL;
-> @@ -284,6 +294,7 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
->  
->  			interp_params.hdr = *((struct elfhdr *) bprm->buf);
->  			break;
-> +		}
->  
->  		case PT_LOAD:
->  #ifdef CONFIG_MMU
-> diff --git a/fs/exec.c b/fs/exec.c
-> index b92fe7db1..0978ae613 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -2024,6 +2024,48 @@ static int __init init_fs_exec_sysctls(void)
->  fs_initcall(init_fs_exec_sysctls);
->  #endif /* CONFIG_SYSCTL */
->  
-> +char *resolve_elf_interpreter(struct linux_binprm *bprm, const char *elf_interpreter)
-> +{
-> +	char *pathbuf, *path, *slash, *resolved;
-> +
-> +	if (strncmp(elf_interpreter, "$ORIGIN", 7) != 0) {
-> +		char *ret = kstrdup(elf_interpreter, GFP_KERNEL);
-> +
-> +		return ret ? ret : ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
-> +	if (!pathbuf)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	path = file_path(bprm->file, pathbuf, PATH_MAX);
-> +	if (IS_ERR(path)) {
-> +		kfree(pathbuf);
-> +		return (char *)path;
-> +	}
-> +
-> +	slash = strrchr(path, '/');
-> +	if (slash) {
-> +		if (slash == path)
-> +			*(slash + 1) = '\0';
-> +		else
-> +			*slash = '\0';
-> +	} else {
-> +		kfree(pathbuf);
-> +		char *ret = kstrdup(elf_interpreter, GFP_KERNEL);
-> +
-> +		return ret ? ret : ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	resolved = kasprintf(GFP_KERNEL, "%s%s", path, elf_interpreter + 7);
-> +	kfree(pathbuf);
-> +	if (!resolved)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	return resolved;
-> +}
-> +EXPORT_SYMBOL(resolve_elf_interpreter);
-> +
->  #ifdef CONFIG_EXEC_KUNIT_TEST
->  #include "tests/exec_kunit.c"
->  #endif
-> diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
-> index 2c77e383e..17419cd3d 100644
-> --- a/include/linux/binfmts.h
-> +++ b/include/linux/binfmts.h
-> @@ -150,4 +150,6 @@ extern ssize_t read_code(struct file *, unsigned long, loff_t, size_t);
->  int kernel_execve(const char *filename,
->  		  const char *const *argv, const char *const *envp);
->  
-> +char *resolve_elf_interpreter(struct linux_binprm *bprm, const char *elf_interpreter);
-> +
->  #endif /* _LINUX_BINFMTS_H */
-> -- 
-> 2.51.2
-> 
-
-Thanks,
-Jori.
-
-[1]: https://sashiko.dev/#/patchset/20260622043934.179879-1-farid.m.zakaria%40gmail.com
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
