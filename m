@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D56352004;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20955352019;
 	Mon, 22 Jun 2026 04:01:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782100902; cv=none; b=p3NPpmYELiEKTXqlVm/VTAIH5XtUnAJOUM/6cve2ioVQsdfX2ymwLt45WV8tgVMqiJvil/PvPknuPLGIdPpMu0Z1x2kkccbagIvX9i3LXfDXDdU9emT7r/Z1oSwRdNj2C40Ldx+VAHwwyBTb7KfD4IW+KNmPSw73CpZPV31lpP4=
+	t=1782100902; cv=none; b=kVqGSp6rtLQz9jOvmj20FYQVXTpjT5wyMCIfHtaiq1iDW1JI3c7gVdACtQ8GEpEpA3By/N0fUM9Nr96tawi6HPgz0piga4sh4z2pYuwYubbJ1vlTJslOLyGEgAWDJKm7m4iCcdiVltMh6RHZbjHtLOON9oGZe8FsNer5vnNdRG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782100902; c=relaxed/simple;
-	bh=csu2MCYhTGbt4aW3Xcpruk4V6nSoe7kLM25kmO7C5Zw=;
+	bh=rIBUZlayDDUlElwH4STZyo3eLQ1aroKzxTDoI9morMI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=doVrv3EwGvABS9DxPGY2xc5g1CYlp/Rvds3khvswH7JUF7+MLsLA9sbdo8+6qITAcFoOHzO7gpJsObdlOiT3VKvbKaD0V03SlVlb+eOd62G8PjATcu5BZo1gi5dFpnnnLzAq19tUz6Tmzv8hH1mqsOz3UtDnesgZSrZApUBvsBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cojGf6gS; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=ezA4+OGcnj5A/Kvo56+3LryQbwygxE2Wt+krXcxEf1Nos9RCU8z+HDK3Aax2EHpLOnD2l4D1Jr5XuIBVJQborRhw9HYlwoxsbnzcG17g5blgXwWqiW51ZASpdLOCKVrB9uPI2ZieParmS4pQHIy7qrLIqJ58SCvAGnNAwAq5VwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ya7NX0ie; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cojGf6gS"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E32F7C2BCC6;
-	Mon, 22 Jun 2026 04:01:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ya7NX0ie"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0221AC2BD04;
+	Mon, 22 Jun 2026 04:01:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1782100901;
-	bh=csu2MCYhTGbt4aW3Xcpruk4V6nSoe7kLM25kmO7C5Zw=;
+	s=k20201202; t=1782100902;
+	bh=rIBUZlayDDUlElwH4STZyo3eLQ1aroKzxTDoI9morMI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=cojGf6gSn0t86iKP/5DGkHFo3U6GLCU+jspsEpoCUixdiGRXZchgp/2B1Jj6VB66t
-	 x9uAxQcau6QcC5DcoGHRMQqvD0Nbm26Cey06oSNO4oUag7758PnUtZmz41d4TAnDVp
-	 qey7RWhGfYZJdQUT2tnma0sDCDTzzpbztz0Tb2V3MaMTlYg6LuAJqHcxu46CtY3rAt
-	 Vp9RZAalmevwU1yX77YWGGnnjfm4JnUXfyH6qGZRDbDhiunUXoMx9xasOHDFxhJT1k
-	 h9vTYXd11SJRL0L973oOEQckJQ5vGkUiWVWkq5L7dgNkSKgRWYWmMudhXjLyzTnyFo
-	 jMvGle+tzzJ0Q==
+	b=Ya7NX0iejpWjN4INkrPT4cunQJNOz+kfjITMaADVO98IMZP7uZdFS5otKCRXh3RIc
+	 0c5W+lkRUD4ZKeUOam0jy9vpxKe4MKjSmQ3XOPYt/DTOCVq6VEpo1TQs08PD8VUioV
+	 7xikwqRjowWfBoW5Zpq/3qYcxU96ti+HCKQW7THW95uibOybiMuQd9FV7B/4/FrY5Y
+	 7CvCOi9DFptWR2sr0hIvTZyHFC1tHpyRkXp1QPQH07Elf/Bny2ODi4aCgUGjpKdehH
+	 7xLqS1vqeDnuGvUuPnNHMfjzJXAchlOtzAtI5KpzHysc/Z5NYL8ByVNUrQTJqUDaUD
+	 dat8kjhduBM5Q==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB8F8CDB471;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE473CD98F6;
 	Mon, 22 Jun 2026 04:01:41 +0000 (UTC)
 From: Charlie Jenkins via B4 Relay <devnull+thecharlesjenkins.gmail.com@kernel.org>
-Date: Sun, 21 Jun 2026 21:01:27 -0700
-Subject: [PATCH v2 09/16] KVM: device: Add test device
+Date: Sun, 21 Jun 2026 21:01:28 -0700
+Subject: [PATCH v2 10/16] KVM: riscv: selftests: Add mmio test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,7 +40,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260621-riscv_insn_table-v2-9-7f0810ee2274@gmail.com>
+Message-Id: <20260621-riscv_insn_table-v2-10-7f0810ee2274@gmail.com>
 References: <20260621-riscv_insn_table-v2-0-7f0810ee2274@gmail.com>
 In-Reply-To: <20260621-riscv_insn_table-v2-0-7f0810ee2274@gmail.com>
 To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
@@ -54,11 +54,11 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, 
  Charlie Jenkins <thecharlesjenkins@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1782100900; l=6960;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782100900; l=7221;
  i=thecharlesjenkins@gmail.com; s=20260605; h=from:subject:message-id;
- bh=8x/+xJ625ZFQvZhfM5utyV4o1uRb4g8LDdlC/Z0H7Ts=;
- b=UM7AHwZEBBNUuyGHLpLRDfyWFeXAXIC6/FahtGuQ7frwifqZ3I46OYfVM4iffX01r/Y+BwMDD
- Ra5vLynJycqB6hGQ/PXRPPp5iZLOCjJQe7MNXtygYkF9+brb0HtIC5l
+ bh=nCg2zsUhW9tVCXwueee6U43Tp4lvMvAC4x/Uj6w1DKc=;
+ b=FiX8G4yh2kmXn5pRN+SXywegB4kTjVIWJ6CUVfln9IvG8p5Z0j49ic/ko/Q6oCDElSlvSzUMQ
+ yGr78gl5jtACmSIhKleRZqcsS7hOJnL88KBuW01ZcepJnD6n0cykO4M
 X-Developer-Key: i=thecharlesjenkins@gmail.com; a=ed25519;
  pk=ajnnRQ98PIdwKp4HeMkq9U32okYbnh6Zb4G3o5XXvkg=
 X-Endpoint-Received: by B4 Relay for thecharlesjenkins@gmail.com/20260605
@@ -68,250 +68,218 @@ Reply-To: thecharlesjenkins@gmail.com
 
 From: Charlie Jenkins <thecharlesjenkins@gmail.com>
 
-Create a KVM test device to help verify mmio reads and write emulation.
-This is a simple device that will store the data in a buffer on writes
-and echo back that stored data on a read.
+Use the test KVM device to validate that reads and writes to a device
+are properly emulated by KVM. This test checks all load and store
+instructions that are emulated by KVM.
 
 Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
 ---
- include/uapi/linux/kvm.h |  2 +
- lib/Kconfig.debug        |  6 +++
- virt/kvm/Kconfig.debug   | 16 ++++++++
- virt/kvm/Makefile.kvm    |  1 +
- virt/kvm/kvm_main.c      |  8 ++++
- virt/kvm/mmio_test.c     | 95 ++++++++++++++++++++++++++++++++++++++++++++++++
- virt/kvm/mmio_test.h     | 18 +++++++++
- 7 files changed, 146 insertions(+)
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ tools/testing/selftests/kvm/riscv/mmio_test.c | 184 ++++++++++++++++++++++++++
+ 2 files changed, 185 insertions(+)
 
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 6c8afa2047bf..abbbf74627a2 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1235,6 +1235,8 @@ enum kvm_device_type {
- #define KVM_DEV_TYPE_LOONGARCH_DMSINTC	KVM_DEV_TYPE_LOONGARCH_DMSINTC
- 	KVM_DEV_TYPE_ARM_VGIC_V5,
- #define KVM_DEV_TYPE_ARM_VGIC_V5	KVM_DEV_TYPE_ARM_VGIC_V5
-+	KVM_DEV_TYPE_TEST,
-+#define KVM_DEV_TYPE_TEST		KVM_DEV_TYPE_TEST
- 
- 	KVM_DEV_TYPE_MAX,
- 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 8ff5adcfe1e0..0d235bdc94ec 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -754,6 +754,12 @@ source "net/Kconfig.debug"
- 
- endmenu # "Networking Debugging"
- 
-+menu "KVM Debugging"
-+
-+source "virt/kvm/Kconfig.debug"
-+
-+endmenu # "KVM Debugging"
-+
- menu "Memory Debugging"
- 
- source "mm/Kconfig.debug"
-diff --git a/virt/kvm/Kconfig.debug b/virt/kvm/Kconfig.debug
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 9118a5a51b89..07a5fc2bf67c 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -214,6 +214,7 @@ TEST_GEN_PROGS_s390 += mmu_stress_test
+ TEST_GEN_PROGS_riscv = $(TEST_GEN_PROGS_COMMON)
+ TEST_GEN_PROGS_riscv += riscv/sbi_pmu_test
+ TEST_GEN_PROGS_riscv += riscv/ebreak_test
++TEST_GEN_PROGS_riscv += riscv/mmio_test
+ TEST_GEN_PROGS_riscv += access_tracking_perf_test
+ TEST_GEN_PROGS_riscv += arch_timer
+ TEST_GEN_PROGS_riscv += coalesced_io_test
+diff --git a/tools/testing/selftests/kvm/riscv/mmio_test.c b/tools/testing/selftests/kvm/riscv/mmio_test.c
 new file mode 100644
-index 000000000000..d24709f5bcbf
+index 000000000000..9726860a269a
 --- /dev/null
-+++ b/virt/kvm/Kconfig.debug
-@@ -0,0 +1,16 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config KVM_MMIO_TEST
-+       bool "Enable kvm mmio testing"
-+       depends on KVM
-+       depends on KVM_MMIO
-+       default n
-+       help
-+         Enable testing for kvm mmio. This is a test-only mmio device that
-+         stores writes in a buffer and returns the buffered data on a read.
-+         
-+         This is useful for testing the kvm mmio emulation code. Enabling
-+         this does not run any tests, just builds in the support for the test
-+         device into the kernel.
-+
-+         If unsure, say N.
-diff --git a/virt/kvm/Makefile.kvm b/virt/kvm/Makefile.kvm
-index d047d4cf58c9..bd4da8c23923 100644
---- a/virt/kvm/Makefile.kvm
-+++ b/virt/kvm/Makefile.kvm
-@@ -8,6 +8,7 @@ KVM ?= ../../../virt/kvm
- kvm-y := $(KVM)/kvm_main.o $(KVM)/eventfd.o $(KVM)/binary_stats.o
- kvm-$(CONFIG_KVM_VFIO) += $(KVM)/vfio.o
- kvm-$(CONFIG_KVM_MMIO) += $(KVM)/coalesced_mmio.o
-+kvm-$(CONFIG_KVM_MMIO_TEST) += $(KVM)/mmio_test.o
- kvm-$(CONFIG_KVM_ASYNC_PF) += $(KVM)/async_pf.o
- kvm-$(CONFIG_HAVE_KVM_IRQ_ROUTING) += $(KVM)/irqchip.o
- kvm-$(CONFIG_HAVE_KVM_DIRTY_RING) += $(KVM)/dirty_ring.o
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 881f92d7a469..d9bbe570eddd 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -58,6 +58,7 @@
- #include "async_pf.h"
- #include "kvm_mm.h"
- #include "vfio.h"
-+#include "mmio_test.h"
- 
- #include <trace/events/ipi.h>
- 
-@@ -6532,6 +6533,10 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
- 	if (WARN_ON_ONCE(r))
- 		goto err_vfio;
- 
-+	r = kvm_mmio_test_ops_init();
-+	if (WARN_ON_ONCE(r))
-+		goto err_mmio_test;
-+
- 	r = kvm_gmem_init(module);
- 	if (r)
- 		goto err_gmem;
-@@ -6559,6 +6564,8 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
- err_gmem:
- 	kvm_vfio_ops_exit();
- err_vfio:
-+	kvm_mmio_test_ops_exit();
-+err_mmio_test:
- 	kvm_async_pf_deinit();
- err_async_pf:
- 	kvm_irqfd_exit();
-@@ -6589,6 +6596,7 @@ void kvm_exit(void)
- 		free_cpumask_var(per_cpu(cpu_kick_mask, cpu));
- 	kmem_cache_destroy(kvm_vcpu_cache);
- 	kvm_gmem_exit();
-+	kvm_mmio_test_ops_exit();
- 	kvm_vfio_ops_exit();
- 	kvm_async_pf_deinit();
- 	kvm_irqfd_exit();
-diff --git a/virt/kvm/mmio_test.c b/virt/kvm/mmio_test.c
-new file mode 100644
-index 000000000000..fa84c2b4c5fc
---- /dev/null
-+++ b/virt/kvm/mmio_test.c
-@@ -0,0 +1,95 @@
++++ b/tools/testing/selftests/kvm/riscv/mmio_test.c
+@@ -0,0 +1,184 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * mmio_test.c - Kernel module side for testing the KVM riscv mmio functionality.
++ * mmio_test.c - Tests the mmio functionality.
 + */
++#include "kvm_util.h"
++#include "ucall_common.h"
 +
-+#include <linux/kvm_host.h>
++#define MMIO_TEST_REGION 0x20000000
 +
-+#include <kvm/iodev.h>
-+#include "mmio_test.h"
-+
-+struct mmio_test {
-+	struct kvm *kvm;
-+	struct kvm_io_device dev;
-+	unsigned long start;
-+	unsigned long size;
-+	char cache[16];
-+};
-+
-+static struct mmio_test *kvm_to_mmio_test_dev(const struct kvm_io_device *dev)
-+{
-+	return container_of(dev, struct mmio_test, dev);
++#define test_standard_read(len, instruction, name, options)					\
++static void test_##name(void)									\
++{												\
++	unsigned long mmio_result, reference_result;						\
++	/* Configure the MMIO to return 0xff for each byte to check sign extension */		\
++	unsigned long reference = ((unsigned long)-1 >> ((sizeof(long) - len) * 8));		\
++	*((unsigned long *)MMIO_TEST_REGION) = reference;					\
++	/* Check that reads through MMIO are equivalent to standard reads. */			\
++	asm volatile (										\
++		".option push\n"								\
++		options										\
++		#instruction "	%[mmio_res], 0(%[region])\n"					\
++		#instruction "	%[ref_res], 0(%[ref])\n"					\
++		".option pop\n"									\
++		: [mmio_res] "=&cr" (mmio_result), [ref_res] "=&cr" (reference_result)		\
++		: [region] "cr" (MMIO_TEST_REGION), [ref] "cr" (&reference)			\
++	);											\
++	GUEST_ASSERT_EQ(mmio_result, reference_result);						\
++	GUEST_DONE();										\
 +}
 +
-+static int mmio_read(struct kvm_vcpu *vcpu, struct kvm_io_device *dev,
-+		     gpa_t addr, int len, void *val)
-+{
-+	struct mmio_test *mmio_test = kvm_to_mmio_test_dev(dev);
-+
-+	if ((addr - mmio_test->start) >= mmio_test->size)
-+		return -1;
-+
-+	/* Write back cached value */
-+	memcpy(val, &mmio_test->cache[(addr - mmio_test->start)], len);
-+	return 0;
++#define test_sp_read(len, instruction, name)							\
++static void test_##name(void)									\
++{												\
++	unsigned long mmio_result, reference_result;						\
++	unsigned long tmp;									\
++	/* Configure the MMIO to return 0xff for each byte to check sign extension */		\
++	unsigned long reference = ((unsigned long)-1 >> ((sizeof(long) - len) * 8));		\
++	*(((unsigned long *)MMIO_TEST_REGION)) = reference;					\
++	/* Check that reads through MMIO are equivalent to standard reads. */			\
++	asm volatile (										\
++		"mv	%[tmp], sp\n"								\
++		"mv	sp, %[region]\n"							\
++		".option push\n"								\
++		".option arch,+c\n"								\
++		#instruction "	%[mmio_res], 0(sp)\n"						\
++		"mv	sp, %[ref]\n"								\
++		#instruction "	%[ref_res], 0(sp)\n"						\
++		".option pop\n"									\
++		"mv	sp, %[tmp]\n"								\
++		: [mmio_res]  "=&cr" (mmio_result), [ref_res] "=&cr" (reference_result),	\
++		  [tmp] "=&r" (tmp)								\
++		: [region] "r" (MMIO_TEST_REGION), [ref] "cr" (&reference)			\
++	);											\
++	GUEST_ASSERT_EQ(mmio_result, reference_result);						\
++	GUEST_DONE();										\
 +}
 +
-+static int mmio_write(struct kvm_vcpu *vcpu, struct kvm_io_device *dev,
-+		      gpa_t addr, int len, const void *val)
-+{
-+	struct mmio_test *mmio_test = kvm_to_mmio_test_dev(dev);
++test_standard_read(1, lb, lb, "")
++test_standard_read(1, lbu, lbu, "")
++test_standard_read(4, lw, lw, "")
++test_standard_read(4, c.lw, c_lw, ".option arch,+c\n")
++test_sp_read(4, c.lwsp, c_lwsp)
 +
-+	if ((addr - mmio_test->start) >= mmio_test->size)
-+		return -1;
-+
-+	/* Cache value */
-+	memcpy(&mmio_test->cache[(addr - mmio_test->start)], val, len);
-+	return 0;
-+}
-+
-+static const struct kvm_io_device_ops mmio_ops = {
-+	.read = mmio_read,
-+	.write = mmio_write,
-+};
-+
-+static int mmio_test_create(struct kvm_device *dev, u32 type)
-+{
-+	struct mmio_test *mmio_test;
-+
-+	mmio_test = kzalloc(sizeof(*mmio_test), GFP_KERNEL);
-+	if (!mmio_test)
-+		return -ENOMEM;
-+
-+	mmio_test->start = 0x20000000;
-+	mmio_test->size = 0x16;
-+
-+	dev->private = mmio_test;
-+
-+	kvm_iodevice_init(&mmio_test->dev, &mmio_ops);
-+	kvm_io_bus_register_dev(dev->kvm, KVM_MMIO_BUS, mmio_test->start,
-+				mmio_test->size, &mmio_test->dev);
-+
-+	return 0;
-+}
-+
-+static void mmio_test_release(struct kvm_device *dev)
-+{
-+	kfree(dev->private);
-+}
-+
-+struct kvm_device_ops kvm_riscv_mmio_test_device_ops = {
-+	.name = "kvm-riscv-mmio_test",
-+	.create = mmio_test_create,
-+	.release = mmio_test_release,
-+};
-+
-+int kvm_mmio_test_ops_init(void)
-+{
-+	return kvm_register_device_ops(&kvm_riscv_mmio_test_device_ops,
-+					KVM_DEV_TYPE_TEST);
-+}
-+
-+void kvm_mmio_test_ops_exit(void)
-+{
-+	kvm_unregister_device_ops(KVM_DEV_TYPE_TEST);
-+}
-diff --git a/virt/kvm/mmio_test.h b/virt/kvm/mmio_test.h
-new file mode 100644
-index 000000000000..49a6e900eec9
---- /dev/null
-+++ b/virt/kvm/mmio_test.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __KVM_MMIO_TEST_H
-+#define __KVM_MMIO_TEST_H
-+
-+#ifdef CONFIG_KVM_MMIO_TEST
-+int kvm_mmio_test_ops_init(void);
-+void kvm_mmio_test_ops_exit(void);
-+#else
-+static inline int kvm_mmio_test_ops_init(void)
-+{
-+	return 0;
-+}
-+static inline void kvm_mmio_test_ops_exit(void)
-+{
-+}
++#if __riscv_xlen == 64
++test_standard_read(2, lh, lh, "")
++test_standard_read(2, lhu, lhu, "")
++test_standard_read(4, lwu, lwu, "")
++test_standard_read(8, ld, ld, "")
++test_standard_read(8, c.ld, c_ld, ".option arch,+c\n")
++test_sp_read(8, c.ldsp, c_ldsp)
 +#endif
 +
++#define test_standard_write(len, write, read, name, options)					\
++static void test_##name(void)									\
++{												\
++	unsigned long result;									\
++	unsigned long reference = (0x55555555UL >> ((sizeof(long) - len) * 8));			\
++	/* Check that we can write and then read the same value. */				\
++	asm volatile (										\
++		".option push\n"								\
++		options										\
++		#write "	%[ref], 0(%[region])\n"						\
++		#read "		%[res], 0(%[region])\n"						\
++		".option pop\n"									\
++		: [res] "=&cr" (result)								\
++		: [region] "cr" (MMIO_TEST_REGION), [ref] "cr" (reference)			\
++	);											\
++	GUEST_ASSERT_EQ(result, reference);							\
++	GUEST_DONE();										\
++}
++
++#define test_sp_write(len, write, read, name)							\
++static void test_##name(void)									\
++{												\
++	unsigned long result;									\
++	unsigned long tmp;									\
++	unsigned long reference = (0x55555555UL >> ((sizeof(long) - len) * 8));			\
++	/* Check that we can write and then read the same value. */				\
++	asm volatile (										\
++		"mv	%[tmp], sp\n"								\
++		"mv	sp, %[region]\n"							\
++		".option push\n"								\
++		".option arch,+c\n"								\
++		#write "	%[ref], 0(sp)\n"						\
++		#read "		%[res], 0(sp)\n"						\
++		".option pop\n"									\
++		"mv	sp, %[tmp]\n"								\
++		: [res] "=&cr" (result), [tmp] "=&r" (tmp)					\
++		: [region] "cr" (MMIO_TEST_REGION), [ref] "cr" (reference)			\
++	);											\
++	GUEST_ASSERT_EQ(result, reference);							\
++	GUEST_DONE();										\
++}
++
++test_standard_write(1, sb, lb, sb, "")
++test_standard_write(2, sh, lh, sh, "")
++test_standard_write(4, sw, lw, sw, "")
++test_standard_write(4, c.sw, c.lw, c_sw, ".option arch,+c\n")
++test_sp_write(4, c.swsp, c.lwsp, c_swsp)
++
++#if __riscv_xlen == 64
++test_standard_write(8, sd, ld, sd, "")
++test_standard_write(8, c.sd, c.ld, c_sd, ".option arch,+c\n")
 +#endif
++
++static void run(void *guest_code, char *instruction)
++{
++	struct ucall uc;
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
++
++	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++	kvm_create_device(vm, KVM_DEV_TYPE_TEST);
++
++	virt_map(vm, (unsigned long)MMIO_TEST_REGION, MMIO_TEST_REGION, 1);
++
++	vcpu_run(vcpu);
++
++	TEST_ASSERT(get_ucall(vcpu, &uc) == UCALL_DONE,
++		    "MMIO with instruction '%s' failed: '%s'", instruction,
++		    uc.buffer);
++
++	kvm_vm_free(vm);
++}
++
++void test_mmio_read_sign_extension(void)
++{
++	run(test_lb, "lb");
++	run(test_lbu, "lbu");
++	run(test_lw, "lw");
++	run(test_c_lw, "c.lw");
++	run(test_c_lwsp, "c.lwsp");
++
++#if __riscv_xlen == 64
++	run(test_lh, "lh");
++	run(test_lhu, "lhu");
++	run(test_lwu, "lwu");
++	run(test_ld, "ld");
++	run(test_c_ld, "c.ld");
++	run(test_c_ldsp, "c.ldsp");
++#endif
++}
++
++void test_mmio_write(void)
++{
++	run(test_sb, "sb");
++	run(test_sh, "sh");
++	run(test_sw, "sw");
++	run(test_c_sw, "c.sw");
++	run(test_c_swsp, "c.swsp");
++
++#if __riscv_xlen == 64
++	run(test_sd, "sd");
++	run(test_c_sd, "c.sd");
++#endif
++}
++
++int main(void)
++{
++	test_mmio_read_sign_extension();
++	test_mmio_write();
++
++	return 0;
++}
 
 -- 
 2.54.0
