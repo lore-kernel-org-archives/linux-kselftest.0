@@ -1,175 +1,173 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615313BB122
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 14:38:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBD03101A5
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 14:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782139115; cv=none; b=JFLRO1K+yh0fEhO3F8EB7zZZ/PcCtLjf0C7PTehioLidQuKp8vQEaQNHdukxfzW1YzFyrDshtU8en/Yg4ASTZNChnCyJ9xRtjwxQFN8pfrpRBPFNesrjJ7IUVLkF38lQ4dOIIlkOuGa/6J1yDpZyurefoct1kKTHlW6eNcT4+hA=
+	t=1782140289; cv=none; b=kSH5YnRkHoEWXB2XdwVh0VmNKR+s03NmNzmjoNIPWDNpyp737ZcNVUU28RNc0jYx402uCFBM7yYXRqJENrv32fkBtWhKnd8tBV7n/u6Prk66/ZVvV52cN7Xp+JxCXDAapU4hG9BiJp91LDPiY+F9mUZJCNoH9GmrcB60uoZnKVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782139115; c=relaxed/simple;
-	bh=fUlHDhqMND/+L5o8UANvRTu5cPuiJV9GP64c+IU43TU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Jcy1sM2+yCsWK0owvo46DIsEFddy7NoVsgxsilFDIlpu/ljC6ClFmH0ClLnD1/ygPo3Xt90nxTVZeEWj5wwMJYO+hjQNNped3O62squ4dBwDpYq1plZjVqw6R5aaDEprKpdm7uMyVdjx881ODkGuiKLU3NF7EoY+B/WB3gXeelc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PS1b7DfH; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782140289; c=relaxed/simple;
+	bh=k28+ZIV2l5YWcgHsEzl4opaw1tbnkXbA/EEb1aiO1qQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iK9zXuAjNBHXojo4H52J0/Kr1h7QcdrWALP1AAc3ceP60gHo/QLy/YDCEuoiqI+5EzBp6GYx3zEvfokeNCt99liVjTy6JErrkEaeH9mXArvGM1qY/Y1twkxnc90qkQ0Oh1G8Z08nKuVK6dYC0NMSHi0KfxlDAlHdFDp+RIUliz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ssml1LFe; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PS1b7DfH"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782139110;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oL91VbNPZmNAnrvPuLt4rbdhEqEsR9yfGCAnPPhy9Oc=;
-	b=PS1b7DfHY5caMB7qEPJvwqkCXQIL9KW4nbMR0TJT2ENDj/Zb24jv4MdztkvXNvpHcV6sh8
-	S9m28zUbPLRGh3LACxB47M5CiYGWgj4PWtnAPTeB5YUU83zW+rDM1ficwjPQK+ixVaKl6m
-	CVAbpUKFQF/OH5+ytaOjeYzUsKFV5+I=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ssml1LFe"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso67766635e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 07:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782140286; x=1782745086; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9fezmz/BGRlRBwNLlrK8/Pu93nh9Kq6eKRwwsJESYo0=;
+        b=Ssml1LFeFKEqZ0sDnVVK2+DjoK+Wc5rOcLsSGE74gwnFinoQGlvQkDnfNg1OUBLSHi
+         CYfaZPny3LDPqzgyfee248VGqhcCaR9fGQDqJOkCl62nga6Z0Q2sMVFsvr3P6mI3YRDh
+         9Zmc0Dd0xxs81HNCCbRin4wB77sCVEw5VndivQWwgjuLhzC6Bt02ualjT9+iWQD/vit/
+         ahPLqqRbCMdI1S1LDtjF5T+xD4umZPgv8lLm0/kXFYQCATnT7sORkpsCK5M8IjRd9nuV
+         mg6mMnr8wizcT7pk36fG83buqBMX2XGP/vmFQKmUd1Jd4sn47CH/jfe76B6ZIwk1MhOo
+         kyvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782140286; x=1782745086;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9fezmz/BGRlRBwNLlrK8/Pu93nh9Kq6eKRwwsJESYo0=;
+        b=gjYUvXhzLLfSTuiA/j2R7B68j3C1rOXbRdzd1KUGlumkTSPePWdsmAWJWXUyT4E1e2
+         /E/jbIXVSFaeAqOoGBfSm0Hwil92Ekt8XenNe1UhW/Y7HnTXkVNhYBNa6rpae4RL3DWH
+         u6N1caq53j88VcyTCidyuRh4dIND+zWPfVeWgk+2kEbenSE2JcwlEKQRbemHr3MYRXeQ
+         e5Mh0GJ02pzS17GxE8ZaH28UT8Lw2GlAfjgU4ypCIbvx7cFC4O4MraFjbvmUknIBxcGW
+         n7pJDWKby/fcMIhXYITstx+I6cFmpp1AkVAijPUr1CxkVdque3o9VbmxeoqOf5D3CtNe
+         4Ykw==
+X-Forwarded-Encrypted: i=1; AFNElJ8uefWdUEUqWrmSxCWqJpSOPFfesl9Uu+PxjcLmWZiIIpKriQY46K5fTEzeSfRK9An3egzyS1/v1oglIuOGqro=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx67DogD8FptJq+OTfXBKaGg3YD1VIB6Dy4Q2MltcKj2exCFa83
+	7NocQmN7KaA8tDQqXCS4e1Wcg1oBI/KsK3ZcSD00KlJZ4VjBRAcxGlj+
+X-Gm-Gg: AfdE7clVc5FlPhrQ7+7hbCw6LYNiHk9WGRZwRFXvInOVrOQBaSLH38E0cxG9n1YNCkS
+	kaIwLaDYol3NiRlVOJ7hESzgIiLREDao/PfZ863yNrmQX8J4AGkMFYPvUm7d3tEuF/2BthiW1Hg
+	z79HVEa39OYm18eXrwa0WocRs6MrnukIgzwnQFpu2c7gY6u6YpsfftV0qWoloy/m93Vqln8ak6P
+	p7BfNNlFhq6s4tqqdf+rf35S1ciU6FbZ66nY4CAhXFkmewmZVHjiyjGllPlIs0wy8zqJ0Zr9bb0
+	XlubI0QkslnLk7XOe3MgSthacNq3t+dKSTj417lQL1HRjv6oPzLMs+JIqZrPL9T9+NjEyEuR8S8
+	bXOj0wMZEw/7NhhN2oHUw7n9wHdb6NMci4kDz0XqMDn1fTVHfbLjOBSFG7IPLf0/TWPfNYqb9Rv
+	tc+b1BHtSvhABd5vQSZsHviw==
+X-Received: by 2002:a05:600c:5489:b0:492:4668:27b5 with SMTP id 5b1f17b1804b1-4924668299emr206920795e9.6.1782140286009;
+        Mon, 22 Jun 2026 07:58:06 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46667221da1sm26522740f8f.36.2026.06.22.07.58.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jun 2026 07:58:05 -0700 (PDT)
+Date: Mon, 22 Jun 2026 15:08:03 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v7 11/11] selftests/bpf: Add test to verify bpf_iter for global percpu data
-Date: Mon, 22 Jun 2026 22:35:57 +0800
-Message-ID: <20260622143557.22955-12-leon.hwang@linux.dev>
-In-Reply-To: <20260622143557.22955-1-leon.hwang@linux.dev>
-References: <20260622143557.22955-1-leon.hwang@linux.dev>
+	Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Enforce gotox targets against
+ subprog bounds
+Message-ID: <ajlP057yizpEQJ0r@mail.gmail.com>
+References: <20260613-f01-02-gotox-bpf-next-v2-send-v2-0-ff980bc5a329@mails.tsinghua.edu.cn>
+ <20260613-f01-02-gotox-bpf-next-v2-send-v2-1-ff980bc5a329@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260613-f01-02-gotox-bpf-next-v2-send-v2-1-ff980bc5a329@mails.tsinghua.edu.cn>
 
-Add a test to verify that it is OK to iter the percpu_array map used for
-global percpu data.
+On 26/06/13 05:33PM, Nuoqi Gui wrote:
+> CFG construction records the modeled gotox target set in
+> insn_aux_data->jt. It includes INSN_ARRAY maps based on whether the map
+> target is in the current subprog. check_indirect_jump() later validates and
+> follows the current PTR_TO_INSN register's actual INSN_ARRAY map. The
+> verifier does not check that targets copied from that map stay inside the
+> same subprog as the gotox instruction.
+> 
+> This lets one gotox instruction observe two different INSN_ARRAY maps. CFG
+> can select a map whose target is in the current subprog. Another path to
+> the same gotox can carry a PTR_TO_INSN value from a map whose target points
+> at a different subprog. The verifier then accepts a cross-subprog edge that
+> CFG construction did not allow for this gotox instruction.
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../bpf/prog_tests/global_data_init.c         | 52 +++++++++++++++++++
- .../bpf/progs/test_global_percpu_data.c       | 25 +++++++++
- 2 files changed, 77 insertions(+)
+Functionally, the patch is ok. But IMHO the commit message is too complex.
+Please consider making it shorter, if it will be respinned.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index e4c290492ff8..32734e1dbfb0 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -279,6 +279,56 @@ static void test_global_percpu_data_verifier_log(void)
- 	RUN_TESTS(test_global_percpu_data);
- }
- 
-+static void test_global_percpu_data_iter(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct test_global_percpu_data *skel;
-+	union bpf_iter_link_info linfo = {};
-+	struct bpf_link *link = NULL;
-+	int fd, num_cpus, len, err;
-+	char buf[16];
-+
-+	num_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	skel = test_global_percpu_data__open();
-+	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-+		return;
-+
-+	skel->rodata->num_cpus = num_cpus;
-+	skel->rodata->offsetof_num = offsetof(struct test_global_percpu_data__percpu, struct_data);
-+	skel->rodata->offsetof_num += sizeof(skel->percpu->struct_data) - sizeof(int);
-+	skel->rodata->elem_sz = roundup(sizeof(struct test_global_percpu_data__percpu), 8);
-+	skel->percpu->struct_data.nums[6] = 0xc0de;
-+
-+	err = test_global_percpu_data__load(skel);
-+	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-+		goto out;
-+
-+	linfo.map.map_fd = bpf_map__fd(skel->maps.percpu);
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(skel->progs.dump_percpu_data, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto out;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
-+		goto out;
-+
-+	while ((len = read(fd, buf, sizeof(buf))) > 0)
-+		do { } while (0);
-+	ASSERT_EQ(len, 0, "read iter");
-+	ASSERT_TRUE(skel->bss->run_iter, "run_iter");
-+	ASSERT_EQ(skel->bss->percpu_data_sum, 0xc0de * num_cpus, "percpu_data_sum");
-+
-+	close(fd);
-+out:
-+	bpf_link__destroy(link);
-+	test_global_percpu_data__destroy(skel);
-+}
-+
- void test_global_percpu_data(void)
- {
- 	if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
-@@ -293,4 +343,6 @@ void test_global_percpu_data(void)
- 	if (test__start_subtest("rdonly_direct_read"))
- 		test_global_percpu_data_rdonly_direct_read();
- 	test_global_percpu_data_verifier_log();
-+	if (test__start_subtest("iter"))
-+		test_global_percpu_data_iter();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index a6109e835948..eef88fd61af5 100644
---- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -51,4 +51,29 @@ int verifier_snprintf(void *ctx)
- 	return 0;
- }
- 
-+volatile const __u32 num_cpus = 0;
-+volatile const int offsetof_num;
-+volatile const int elem_sz;
-+__u32 percpu_data_sum = 0;
-+bool run_iter = false;
-+
-+SEC("iter/bpf_map_elem")
-+__auxiliary
-+int dump_percpu_data(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	void *pptr = ctx->value;
-+	int i;
-+
-+	if (!pptr)
-+		return 0;
-+
-+	run_iter = true;
-+
-+	for (i = 0; i < num_cpus; i++) {
-+		percpu_data_sum += *(int *) (pptr + offsetof_num);
-+		pptr += elem_sz;
-+	}
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.54.0
+> On x86, gotox becomes a raw indirect jump in the JIT image. Accepting a
+> target outside the gotox subprog can enter another subprog without a
+> matching BPF call frame and crash when executed. Validation observed a GPF
+> in bpf_test_run().
+> 
+> Fix this by requiring every target copied from the actual PTR_TO_INSN
+> map to stay within the subprog that contains the current gotox instruction.
 
+'the subprog that contains the current gotox instruction' -> 'the calling subprog'?
+
+> Reject the program before pushing verifier states for any cross-subprog
+> target.
+
+Is this sentence needed at all? ^
+
+> 
+> Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> ---
+>  kernel/bpf/verifier.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index eb46a81a8c51..98d3fa2f162a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -17145,9 +17145,11 @@ static int indirect_jump_min_max_index(struct bpf_verifier_env *env,
+>  static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  {
+>  	struct bpf_verifier_state *other_branch;
+> +	struct bpf_subprog_info *subprog;
+>  	struct bpf_reg_state *dst_reg;
+>  	struct bpf_map *map;
+>  	u32 min_index, max_index;
+> +	int subprog_start, subprog_end;
+>  	int err = 0;
+>  	int n;
+>  	int i;
+> @@ -17188,6 +17190,25 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
+>  		return -EINVAL;
+>  	}
+>  
+> +	subprog = bpf_find_containing_subprog(env, env->insn_idx);
+> +	if (verifier_bug_if(!subprog, env,
+> +			    "gotox insn %d is outside subprog bounds\n",
+> +			    env->insn_idx))
+> +		return -EFAULT;
+> +	subprog_start = subprog->start;
+> +	subprog_end = (subprog + 1)->start;
+> +
+> +	for (i = 0; i < n; i++) {
+> +		u32 target = env->gotox_tmp_buf->items[i];
+> +
+> +		if (target < subprog_start || target >= subprog_end) {
+> +			verbose(env,
+> +				"gotox target %u from map id=%d is outside subprog [%d,%d)\n",
+> +				target, map->id, subprog_start, subprog_end);
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+
+This could have been a helper to share code with create_jt(),
+but looks small enough to keep it as is.
+
+Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
+
+>  	for (i = 0; i < n - 1; i++) {
+>  		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
+>  		other_branch = push_stack(env, env->gotox_tmp_buf->items[i],
+> 
+> -- 
+> 2.34.1
+> 
