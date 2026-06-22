@@ -1,1182 +1,252 @@
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97BAF36C9C2;
-	Mon, 22 Jun 2026 09:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5570F39FCB1;
+	Mon, 22 Jun 2026 09:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782120030; cv=none; b=s6T+pFIuEU7Ue7XB/YtnKuKIs1q54Nq3TpxJSkPU1wLM9cfOo8aX5+GIfktSu6UrMMkLeM4MHygemIiPjGiAuxifaEgiu1uqRFkIuIykPrM+hWYyTjAMR9QW41VyItnjINi9KT/OJHUcf7obWeN7d0DFZIOlB3F1j6IvrfSS0c8=
+	t=1782120031; cv=none; b=t+YdZfix3Ie4+Flva6UdQeINkHiVcmVOnBaLcL6Z23Rqnf7NCn8B+8co/gjCM73Tmo6+VIJmQI9qMuppu8o7smj7cn9WjTGFBSzfomQyQlfjMpiWnKZaLBZOu4AIlbLKmOrbI70VwaSQEP1PKE4YrO6wBbmsSRMhFoId0gLkUXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782120030; c=relaxed/simple;
-	bh=6ByB7Okee7twuKSW8YtCinD8oB+AHI9omjxPGj5zexY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=iMwPfzuEyBF9VHmml99dvE/P9DJDq+bwU6hEIqsZO2WufnHljIVMf2HKopDS3oBs3J+RvkPE8ReILwVygBhgsRoCSxRTlwLdepbNEhFvI4uqAPSNK3MayWrEmvc/f2z8AGjO0LXakY4OyBVUFoMiOw6sipbFVdg8o3ePdswBvZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7F8201A030D;
-	Mon, 22 Jun 2026 11:20:14 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E83301A02CA;
-	Mon, 22 Jun 2026 11:20:13 +0200 (CEST)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 9BC931800086;
-	Mon, 22 Jun 2026 17:20:11 +0800 (+08)
-From: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
-To: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	jhs@mojatatu.com,
-	jiri@resnulli.us,
-	horms@kernel.org,
-	shuah@kernel.org,
-	vladimir.oltean@nxp.com,
-	vinicius.gomes@intel.com,
-	fejes@inf.elte.hu,
-	xiaoliang.yang_1@nxp.com
-Subject: [PATCH net-next 6/6] selftests: net: add kselftest for IEEE 802.1CB FRER tc action
-Date: Mon, 22 Jun 2026 17:21:18 +0800
-Message-Id: <20260622092118.6846-7-xiaoliang.yang_1@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20260622092118.6846-1-xiaoliang.yang_1@nxp.com>
-References: <20260622092118.6846-1-xiaoliang.yang_1@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+	s=arc-20240116; t=1782120031; c=relaxed/simple;
+	bh=+AvsZHdQo7ixFPGCuNhf/fpgpfW3jGk7eN+2ccCvb9Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Uv6mq5fMGPot+qzTevsI1sswzMcFNkhibiOzW7xMXjjXAqn8Hwvq0h05pvV8HWb2lLXDdikP7/p+U7U5L1D55ODx18i6i51EHeDK1/GC8Y+9GmCSTCVVUGK+Pa2mW1rPV2XFRqshOiN6vsXMRKAe4cNXsCS7E6dwxvfFLz2jX8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DP6wql/N; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DP6wql/N"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65M5Ikfc1814109;
+	Mon, 22 Jun 2026 09:20:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=0JUZe5
+	dJJdUpHkKuRqCR5BVM3FwjgxO8hAmWO2x8SHQ=; b=DP6wql/NmsQjPYpz2cOcHC
+	B1VLiSlU+dg6z5ztZeVCAWcHKzLp3rUFKbrGQk65Thr3Pxke13fRzc2f7BA5bpht
+	75opS4+wKNavlDLAgl0c1KzcuRiuPn0r8IBDcB3xWslDhCvUwcavsFyBoXzumtZt
+	KeL4NKMx+J20xaKeJuDdr9aD8AYn/pHCoLe02UdzVaP6Kn+rmUiYijuwgvPlEonA
+	5Il9lCGME28yeLuPYrMetUnM0HgcZGZFk3H/HZA/fVKWpVMT9/zKI8OgZPNJQgCZ
+	o8byYYkdcj1rabEpkFkYpjSSk00m1Vd5ZEOv3f9owGXUEfzzsAEPY+sY0LmxrBbg
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ewjhqg894-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Jun 2026 09:20:07 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65M9JbJ6017045;
+	Mon, 22 Jun 2026 09:20:06 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ex6ph5by2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Jun 2026 09:20:05 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65M9K1ok59638238
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 22 Jun 2026 09:20:01 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9D43620040;
+	Mon, 22 Jun 2026 09:20:01 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 664E92004D;
+	Mon, 22 Jun 2026 09:19:59 +0000 (GMT)
+Received: from [9.89.240.192] (unknown [9.89.240.192])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 22 Jun 2026 09:19:59 +0000 (GMT)
+Message-ID: <f0658993-b904-4b42-8cf3-916875703523@linux.ibm.com>
+Date: Mon, 22 Jun 2026 14:49:58 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [bpf v8 7/7] powerpc/bpf: fix buffer overflow in JIT for large
+ BPF programs
+To: adubey@linux.ibm.com, bpf@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com, ast@kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        sashiko-bot@kernel.org
+References: <20260616164741.32252-1-adubey@linux.ibm.com>
+ <20260616164741.32252-8-adubey@linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <20260616164741.32252-8-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=I4VVgtgg c=1 sm=1 tr=0 ts=6a38fe47 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=8c-tPXck8-7YJIjhN78A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIyMDA5MSBTYWx0ZWRfX9pq+SPCazsoW
+ +OFptsHwBuucHwdW0AswjL/Stu4HBy+mxvmOfgagyF4Ov0BOFUIScFngjVELe1xU6wEfF5o5VVz
+ UxBgcJ/eRRndN05Q8XQ9kCYusdbCkBWLq0WHkulKX0lNCHTRgc4djG/kG/EsZUWuSy9wZ2h96QK
+ GCtzuy+XCx713BAszJLI1MHmsVf7COOwFvGrG+5QyWLHlnZcSLfC0U+McLP2tAq/PkwdHFrgSa3
+ AFBwzI8ezqJZkmkaHytiUUJNbOqKO5myZzPa37UMhBTvY4xXN5qw9Sq1Xgi0gcpb7xCkc3fyNgT
+ mCO3zb/wOM3Gh+Z9iLHiCWE68lCkfRu6tzumdSvH+c1qRdUepFbs64ge6X+LNE6SKSOVKuvrW/T
+ gQkXAkgJambTrU6tLOlnisOctMj+xUFa9BKq4cuA2dl1Xx0OmDnHXEFOeeUNLZc1Vs22NdWSuJ3
+ Vnn1Xxf5bQAyr7ggDxg==
+X-Proofpoint-GUID: SUrNjkj5cl5S2zcJEP9e6-yHbL9EFKqO
+X-Proofpoint-ORIG-GUID: SUrNjkj5cl5S2zcJEP9e6-yHbL9EFKqO
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIyMDA5MSBTYWx0ZWRfX8LWFzgmxznWG
+ LNesHjg2Xz4H7IMU+gUPtKtc8QJl6VdQTtWl8WaUuI7c955wyM1AD3tB1uhBbdzPjP3z/S2FHEC
+ fmfcSUxKJMUJFSusfIk7r53y7tPlywM=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-22_01,2026-06-18_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 impostorscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 priorityscore=1501
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2606220091
 
-Add frer_test.sh, a TAP-format kselftest script covering the FRER
-(IEEE 802.1CB Frame Replication and Elimination for Reliability)
-tc action (act_frer).
 
-Tests 1-4 use a bond-based two-namespace topology:
+Hi Abhishek,
 
-  ns_talker
-  +---------------------------+
-  | bond0 (IP_SRC, balance-rr)|
-  |   slave: veth_a0 (frer push + mirror to veth_b0)|
-  |   slave: veth_b0 (frer push + mirror to veth_a0)|
-  +-------+---------------+--+
-          |               |
-     veth_a0         veth_b0
-          |               |
-     veth_a1         veth_b1
-          |               |
-  +-------+---------------+--+
-  | bond1 (IP_DST, balance-rr)|
-  |   slave: veth_a1 (frer recover ingress)          |
-  |   slave: veth_b1 (frer recover ingress)          |
-  +---------------------------+
-  ns_listener
+On 16/06/26 10:17 pm, adubey@linux.ibm.com wrote:
+> From: Abhishek Dubey <adubey@linux.ibm.com>
+> 
+> During size calculation in pass-0, exit_addr is 0 since addrs[fp->len]
+> is not yet populated. bpf_jit_emit_exit_insn() treats a zero exit_addr
+> as in-range and skips bpf_jit_build_epilogue(), so the alternate inline
+> epilogue instructions are not counted in alloclen.
+> 
+> In later passes, if the real exit_addr falls outside the 32MB branch
+> range, the full inline epilogue is emitted into the already-allocated
+> buffer, writing past its end and corrupting adjacent memory.
+> 
+> Fix by ensuring exit_addr is non-zero before treating it as in-range,
+> so pass-0 always falls through to bpf_jit_build_epilogue() and
+> conservatively accounts for all epilogue instructions in alloclen.
+> Also range check alt_exit_addr directly in the else-if condition.
+> 
+> Since exit_addr handling now falls through to the epilogue, two
+> related issues in bpf_int_jit_compile() must also be addressed:
+> 
+> 1. Reset cgctx.alt_exit_addr before the second size-calculation pass.
+>     Without this, a stale alt_exit_addr from the first pass causes the
+>     second pass to emit a single jump instead of the full epilogue,
+>     undercounting alloclen and introducing the overflow.
+> 
+> 2. Recompute addrs[fp->len] at the end of each code-generation pass.
+>     The larger body from pass-0 might shrink in later passes; a stale
+>     addrs[fp->len] would leave exit branching past the real epilogue
+>     into the padding.
+> 
+> Reported-by: sashiko-bot@kernel.org
+> Closes: https://lore.kernel.org/bpf/20260529015855.364704-2-adubey@linux.ibm.com/T/#mfcb23909d977b949727cca4f59ee56a13fd69b92
+> Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> ---
+>   arch/powerpc/net/bpf_jit_comp.c | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index 1c274df2b4f7..d48bc722d0dc 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -128,11 +128,10 @@ void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context
+>   int bpf_jit_emit_exit_insn(u32 *image, u32 *fimage, struct codegen_context *ctx,
+>   							int tmp_reg, long exit_addr)
+>   {
+> -	if (!exit_addr || is_offset_in_branch_range(exit_addr - (ctx->idx * 4))) {
+> +	if (exit_addr && is_offset_in_branch_range(exit_addr - (long)(ctx->idx * 4))) {
+>   		PPC_JMP(exit_addr);
+> -	} else if (ctx->alt_exit_addr) {
+> -		if (WARN_ON(!is_offset_in_branch_range((long)ctx->alt_exit_addr - (ctx->idx * 4))))
+> -			return -1;
+> +	} else if (ctx->alt_exit_addr && is_offset_in_branch_range(
+> +			(long)(ctx->alt_exit_addr) - (long)(ctx->idx * 4))) {
+>   		PPC_JMP(ctx->alt_exit_addr);
+>   	} else {
+>   		ctx->alt_exit_addr = ctx->idx * 4;
+> @@ -303,6 +302,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+>   	 */
+>   	if (cgctx.seen & SEEN_TAILCALL || !is_offset_in_branch_range((long)cgctx.idx * 4)) {
+>   		cgctx.idx = 0;
+> +		cgctx.alt_exit_addr = 0;
+>   		if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false))
+>   			goto out_err;
+>   	}
+> @@ -347,6 +347,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+>   			bpf_jit_binary_pack_free(fhdr, hdr);
+>   			goto out_err;
+>   		}
 
-  IP_SRC is assigned to bond0; IP_DST is assigned to bond1.  FRER push
-  is configured on both veth_a0 and veth_b0 egress with cross-mirroring
-  so every frame sent by either bond slave carries an R-TAG and a
-  mirrored copy reaches the peer slave.  Tests 1-4 exercise shared and
-  individual recover modes on the listener side.
+> +		addrs[fp->len] = cgctx.idx * 4;
 
-Test 5 uses a self-contained single-path (no bond) topology:
+Something like the below is needed to fix the potential branching issues
+due to code shrinkage, reported by sashiko-bot in the other thread:
 
-  ns_p2p_src                        ns_p2p_dst
-  +----------------------+          +----------------------+
-  | frer_p2p_a0 (IP_P2P_SRC)| <---> | frer_p2p_a1 (IP_P2P_DST)|
-  | egress: frer push     |          | ingress: frer recover |
-  +----------------------+          +----------------------+
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index af510da12d8e..09cb7128c46b 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -14,6 +14,13 @@
+  #include <asm/ppc-opcode.h>
+  #include <linux/build_bug.h>
 
-Test 6 uses a four-namespace relay topology:
-
-  ns_talker -- bridge0 (br_r0) -+- path A -+- bridge1 (br_r1) -- ns_listener
-                                 \- path B -/
-
-  bridge0 acts as sequence generator (frer push + replicate to both
-  redundant paths); bridge1 acts as eliminator (frer shared recover with
-  tag-pop on both ingress ports).
-
-Six functional test cases are included:
-
-  1. push verify              - confirm that the frer push action inserts
-                                an R-TAG (EtherType 0xF1C1) on egress;
-                                tcpdump on both veth_a1 and veth_b1 must
-                                capture at least one R-TAG frame each.
-
-  2. shared recover e2e       - veth_a1 and veth_b1 share one recover
-                                action; the action passes exactly one copy
-                                and discards the duplicate; verified via
-                                ping success, tcpdump frame count on bond1,
-                                and tc stats (passed >= PING_COUNT,
-                                discarded >= PING_COUNT).
-
-  3. individual recover       - veth_a1 and veth_b1 use independent recover
-                                actions so both copies are passed without
-                                cross-port deduplication; verified via
-                                per-slave tcpdump and tc stats
-                                (discarded = 0 on each port).
-
-  4. no tag-pop               - shared recover without tag-pop leaves the
-                                R-TAG on passed frames; verified by
-                                capturing EtherType 0xF1C1 (expect >= 1)
-                                and plain ICMP (expect 0) on bond1.
-
-  5. simple point-to-point    - single-path push + individual recover (with
-                                tag-pop) end-to-end ping test; no bond.
-
-  6. relay e2e                - four-namespace bridge relay topology; bridge0
-                                pushes R-TAG and replicates to two paths;
-                                bridge1 recovers (shared, tag-pop) and
-                                forwards deduplicated frames to listener;
-                                verified via ping success, tcpdump frame
-                                count on listener, and bridge1 tc stats.
-
-The script conforms to the kselftest framework (TAP output, KSFT_PASS /
-KSFT_FAIL / KSFT_SKIP exit codes).  It loads kselftest/lib.sh when
-available and falls back to a minimal inline implementation otherwise.
-All tests are skipped gracefully when act_frer is not available in the
-running kernel.
-
-Signed-off-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
----
- tools/testing/selftests/net/Makefile     |    1 +
- tools/testing/selftests/net/frer_test.sh | 1013 ++++++++++++++++++++++
- 2 files changed, 1014 insertions(+)
- create mode 100755 tools/testing/selftests/net/frer_test.sh
-
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 6a190a525a39..67b896611f08 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -38,6 +38,7 @@ TEST_PROGS := \
- 	fib_rule_tests.sh \
- 	fib_tests.sh \
- 	fin_ack_lat.sh \
-+	frer_test.sh \
- 	fq_band_pktlimit.sh \
- 	gre_gso.sh \
- 	gre_ipv6_lladdr.sh \
-diff --git a/tools/testing/selftests/net/frer_test.sh b/tools/testing/selftests/net/frer_test.sh
-new file mode 100755
-index 000000000000..ecd88952f495
---- /dev/null
-+++ b/tools/testing/selftests/net/frer_test.sh
-@@ -0,0 +1,1013 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright 2026 NXP
-+#
-+# frer_test.sh - IEEE 802.1CB FRER tc action kselftest
-+#
-+# Topology for tests 1-4:
-+#
-+#   ns_talker  bond0 (veth_a0 + veth_b0)  <--->  bond1 (veth_a1 + veth_b1)  ns_listener
-+#
-+#   IP_SRC assigned to bond0;  IP_DST assigned to bond1
-+#
-+#   bond mode: balance-rr (round-robin), so frames are distributed across
-+#              both slaves.  FRER push is configured on both veth_a0 and
-+#              veth_b0 egress with cross-mirror so every frame sent by either
-+#              slave carries an R-TAG and a mirrored copy reaches the peer.
-+#   FRER recover: veth_a1/veth_b1 ingress, shared or individual recover per test
-+#
-+#   Ping runs from bond0 to bond1; tcpdump captures on bond1 (or on individual
-+#   slave interfaces for tests where both copies must be observable).
-+#
-+# Test 5: simple point-to-point, self-contained topology (no bond).
-+# Test 6: relay system, self-contained topology.
-+#
-+# All namespaces, veth pairs, bond interfaces, tc rules and addresses are
-+# created and destroyed within this script.  External dependencies:
-+#   - kernel with CONFIG_NET_ACT_FRER and CONFIG_BONDING
-+#   - iproute2 tc with frer action support
-+#   - tcpdump, ping
-+#   - root privileges
++/*
++ * We need at least 2 passes for proper code generation, and may need
++ * additional passes if code size changes between passes.
++ */
++#define CODEGEN_MIN_PASSES	2
++#define CODEGEN_MAX_PASSES	3
 +
-+# ----------------------------------------------------------------------------
-+# kselftest library: TAP output + exit-code constants
-+# ----------------------------------------------------------------------------
-+ksft_lib="${KSFT_LIB:-$(dirname "$0")/../kselftest/lib.sh}"
-+if [ -f "$ksft_lib" ]; then
-+	# shellcheck source=/dev/null
-+	. "$ksft_lib"
-+else
-+	# Minimal fallback when run outside the kselftest tree
-+	KSFT_PASS=0
-+	KSFT_FAIL=1
-+	KSFT_SKIP=4
-+	_ksft_count=0
-+	_ksft_pass=0
-+	_ksft_fail=0
-+	_ksft_skip=0
+  #ifdef CONFIG_PPC64_ELF_ABI_V1
+  #define FUNCTION_DESCR_SIZE	24
+  #else
+diff --git a/arch/powerpc/net/bpf_jit_comp.c 
+b/arch/powerpc/net/bpf_jit_comp.c
+index 904d5fe157bd..f8c1d1a39a90 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -335,8 +335,10 @@ struct bpf_prog *bpf_int_jit_compile(struct 
+bpf_verifier_env *env, struct bpf_pr
+  	code_base = (u32 *)(image + FUNCTION_DESCR_SIZE);
+  	fcode_base = (u32 *)(fimage + FUNCTION_DESCR_SIZE);
+
+-	/* Code generation passes 1-2 */
+-	for (pass = 1; pass < 3; pass++) {
++	/* Code generation passes 1-2+, loop until program size converges. */
++	for (pass = 1; pass <= CODEGEN_MAX_PASSES; pass++) {
++		u32 prev_proglen = proglen;
 +
-+	ksft_print_header() { echo "TAP version 13"; }
-+	ksft_set_plan()     { echo "1..$1"; }
-+	ksft_test_result_pass() {
-+		_ksft_count=$((_ksft_count + 1)); _ksft_pass=$((_ksft_pass + 1))
-+		echo "ok $_ksft_count - $*"
-+	}
-+	ksft_test_result_fail() {
-+		_ksft_count=$((_ksft_count + 1)); _ksft_fail=$((_ksft_fail + 1))
-+		echo "not ok $_ksft_count - $*"
-+	}
-+	ksft_test_result_skip() {
-+		_ksft_count=$((_ksft_count + 1)); _ksft_skip=$((_ksft_skip + 1))
-+		echo "ok $_ksft_count - $* # SKIP"
-+	}
-+	ksft_print_cnts() {
-+		echo "# Totals: pass=$_ksft_pass fail=$_ksft_fail skip=$_ksft_skip"
-+	}
-+	ksft_exit_pass()     { exit $KSFT_PASS; }
-+	ksft_exit_fail()     { exit $KSFT_FAIL; }
-+	ksft_exit_fail_msg() { echo "# FATAL: $*" >&2; exit $KSFT_FAIL; }
-+fi
+  		/* Now build the prologue, body code & epilogue for real. */
+  		cgctx.idx = 0;
+  		cgctx.alt_exit_addr = 0;
+@@ -350,9 +352,23 @@ struct bpf_prog *bpf_int_jit_compile(struct 
+bpf_verifier_env *env, struct bpf_pr
+  		addrs[fp->len] = cgctx.idx * 4;
+  		bpf_jit_build_epilogue(code_base, fcode_base, &cgctx);
+
++		proglen = cgctx.idx * 4;
 +
-+# ----------------------------------------------------------------------------
-+# Configuration (override via environment)
-+# ----------------------------------------------------------------------------
-+TC="${TC:-tc}"
-+PING="${PING:-ping}"
-+TCPDUMP="${TCPDUMP:-tcpdump}"
-+PING_COUNT="${PING_COUNT:-5}"
-+PING_TIMEOUT="${PING_TIMEOUT:-2}"
-+SKIP_MODPROBE="${SKIP_MODPROBE:-0}"
+  		if (bpf_jit_enable > 1)
+  			pr_info("Pass %d: shrink = %d, seen = 0x%x\n", pass,
+-				proglen - (cgctx.idx * 4), cgctx.seen);
++				prev_proglen - proglen, cgctx.seen);
 +
-+# Bond topology interfaces (tests 1-4)
-+readonly VETH_A0="frer_a0"
-+readonly VETH_A1="frer_a1"
-+readonly VETH_B0="frer_b0"
-+readonly VETH_B1="frer_b1"
-+readonly BOND0="frer_bond0"
-+readonly BOND1="frer_bond1"
++		/* Check if program size has converged, but ensure minimum passes */
++		if (pass >= CODEGEN_MIN_PASSES && proglen == prev_proglen)
++			break;
 +
-+readonly NS_TALKER="frer_ns_talker"
-+readonly NS_LISTENER="frer_ns_listener"
-+
-+readonly IP_SRC="10.0.0.1"
-+readonly IP_DST="10.0.0.2"
-+
-+# Point-to-point topology interfaces (test 5)
-+readonly P2P_NS_SRC="frer_p2p_src"
-+readonly P2P_NS_DST="frer_p2p_dst"
-+readonly P2P_VETH_A0="frer_p2p_a0"
-+readonly P2P_VETH_A1="frer_p2p_a1"
-+readonly IP_P2P_SRC="10.0.1.1"
-+readonly IP_P2P_DST="10.0.1.2"
-+
-+# Relay topology interfaces (test 6)
-+#
-+#   ns_talker (talker_eth.100) -- talker_eth/br0_uplink -- bridge0 (br_r0)
-+#                                         |-- br0_swp0/br1_swp0 --\
-+#                                         \-- br0_swp1/br1_swp1 --+--\
-+#		bridge1 (br_r1) -- br1_downlink/listener_eth -- ns_listener
-+#
-+# bridge0 acts as sequence generator (frer push + replicate to both paths).
-+# bridge1 acts as eliminator (frer recover, shared, tag-pop).
-+readonly R_NS_TALKER="frer_r_talker"
-+readonly R_NS_BRIDGE0="frer_r_bridge0"
-+readonly R_NS_BRIDGE1="frer_r_bridge1"
-+readonly R_NS_LISTENER="frer_r_listener"
-+readonly R_TALKER_ETH="r_tlk_eth"       # talker-side physical port
-+readonly R_BR0_UPLINK="r_br0_uplink"    # bridge0 uplink facing talker
-+readonly R_BR0_SWP0="r_br0_swp0"        # bridge0 redundant path port 0
-+readonly R_BR0_SWP1="r_br0_swp1"        # bridge0 redundant path port 1
-+readonly R_BR1_SWP0="r_br1_swp0"        # bridge1 redundant path port 0
-+readonly R_BR1_SWP1="r_br1_swp1"        # bridge1 redundant path port 1
-+readonly R_BR1_DOWNLINK="r_br1_dwnlnk"  # bridge1 downlink facing listener
-+readonly R_LISTENER_ETH="r_lst_eth"     # listener-side physical port
-+readonly R_BR0="br_r0"
-+readonly R_BR1="br_r1"
-+readonly R_VLAN=100
-+readonly R_IP_TALKER="10.1.0.1"
-+readonly R_IP_LISTENER="10.1.0.2"
-+
-+# FRER action index constants
-+readonly IDX_PUSH=1
-+readonly IDX_SHARED_RCVY=10
-+readonly IDX_INDV_RCVY_A=20
-+readonly IDX_INDV_RCVY_B=21
-+readonly IDX_NO_POP=30
-+readonly IDX_P2P_RCVY=40
-+readonly IDX_RELAY_PUSH=50
-+readonly IDX_RELAY_RCVY=60
-+
-+readonly NUM_TESTS=6
-+
-+# ----------------------------------------------------------------------------
-+# Prerequisite check
-+# ----------------------------------------------------------------------------
-+check_prerequisites()
-+{
-+	local missing=0
-+
-+	[ "$(id -u)" -eq 0 ] || { echo "# Must be run as root" >&2; missing=1; }
-+
-+	for cmd in ip "$TC" "$TCPDUMP" "$PING"; do
-+		command -v "$cmd" >/dev/null 2>&1 || {
-+			echo "# Missing command: $cmd" >&2
-+			missing=1
++		if (pass == CODEGEN_MAX_PASSES && proglen != prev_proglen) {
++			pr_err("BPF JIT: Program did not converge after %d passes\n",
++			       CODEGEN_MAX_PASSES);
++			bpf_arch_text_copy(&fhdr->size, &hdr->size, sizeof(hdr->size));
++			bpf_jit_binary_pack_free(fhdr, hdr);
++			goto out_err;
 +		}
-+	done
-+
-+	if [ "$missing" -ne 0 ]; then
-+		ksft_set_plan "$NUM_TESTS"
-+		for i in $(seq 1 "$NUM_TESTS"); do
-+			ksft_test_result_skip "prerequisites not met (test $i)"
-+		done
-+		ksft_print_cnts
-+		exit "$KSFT_SKIP"
-+	fi
-+}
-+
-+load_module()
-+{
-+	[ "$SKIP_MODPROBE" = "1" ] && return
-+	if ! modprobe act_frer 2>/dev/null; then
-+		echo "# modprobe act_frer failed - may be built-in or unavailable" >&2
-+	fi
-+	if ! modprobe bonding 2>/dev/null; then
-+		echo "# modprobe bonding failed - may be built-in or unavailable" >&2
-+	fi
-+}
-+
-+check_frer_action()
-+{
-+	ip netns exec "$NS_TALKER" \
-+		$TC actions add action frer push index 999 2>/dev/null || return 1
-+	ip netns exec "$NS_TALKER" \
-+		$TC actions del action frer index 999 2>/dev/null || true
-+	return 0
-+}
-+
-+# ----------------------------------------------------------------------------
-+# Bond topology setup / teardown (used by tests 1-4)
-+# ----------------------------------------------------------------------------
-+setup_topology()
-+{
-+	for n in "$NS_TALKER" "$NS_LISTENER"; do
-+		ip netns add "$n"
-+	done
-+
-+	ip link add "$VETH_A0" type veth peer name "$VETH_A1"
-+	ip link set "$VETH_A0" netns "$NS_TALKER"
-+	ip link set "$VETH_A1" netns "$NS_LISTENER"
-+
-+	ip link add "$VETH_B0" type veth peer name "$VETH_B1"
-+	ip link set "$VETH_B0" netns "$NS_TALKER"
-+	ip link set "$VETH_B1" netns "$NS_LISTENER"
-+
-+	# ns_talker: create bond0 (balance-rr), frames round-robin across both slaves.
-+	ip netns exec "$NS_TALKER" ip link set lo up
-+	ip netns exec "$NS_TALKER" ip link add "$BOND0" type bond mode balance-rr miimon 100
-+	ip netns exec "$NS_TALKER" ip link set "$VETH_A0" master "$BOND0"
-+	ip netns exec "$NS_TALKER" ip link set "$VETH_B0" master "$BOND0"
-+	ip netns exec "$NS_TALKER" ip link set "$VETH_A0" up
-+	ip netns exec "$NS_TALKER" ip link set "$VETH_B0" up
-+	ip netns exec "$NS_TALKER" ip link set "$BOND0" up
-+	ip netns exec "$NS_TALKER" ip addr add "${IP_SRC}/24" dev "$BOND0"
-+
-+	# ns_listener: create bond1 (balance-rr).
-+	ip netns exec "$NS_LISTENER" ip link set lo up
-+	ip netns exec "$NS_LISTENER" ip link add "$BOND1" type bond mode balance-rr miimon 100
-+	ip netns exec "$NS_LISTENER" ip link set "$VETH_A1" master "$BOND1"
-+	ip netns exec "$NS_LISTENER" ip link set "$VETH_B1" master "$BOND1"
-+	ip netns exec "$NS_LISTENER" ip link set "$VETH_A1" up
-+	ip netns exec "$NS_LISTENER" ip link set "$VETH_B1" up
-+	ip netns exec "$NS_LISTENER" ip link set "$BOND1" up
-+	ip netns exec "$NS_LISTENER" ip addr add "${IP_DST}/24" dev "$BOND1"
-+
-+	# Static ARP so L2 forwarding works without ARP broadcasts.
-+	# With balance-rr both slaves share the bond MAC.
-+	local mac_bond0 mac_bond1
-+	mac_bond0=$(ip netns exec "$NS_TALKER"   cat /sys/class/net/"$BOND0"/address)
-+	mac_bond1=$(ip netns exec "$NS_LISTENER" cat /sys/class/net/"$BOND1"/address)
-+	ip netns exec "$NS_TALKER"   ip neigh add "$IP_DST" lladdr "$mac_bond1" dev "$BOND0"
-+	ip netns exec "$NS_LISTENER" ip neigh add "$IP_SRC" lladdr "$mac_bond0" dev "$BOND1"
-+}
-+
-+cleanup()
-+{
-+	for n in "$NS_TALKER" "$NS_LISTENER" \
-+		"$P2P_NS_SRC" "$P2P_NS_DST" \
-+		"$R_NS_TALKER" "$R_NS_BRIDGE0" "$R_NS_BRIDGE1" "$R_NS_LISTENER"; do
-+		ip netns del "$n" 2>/dev/null || true
-+	done
-+}
-+trap cleanup EXIT
-+
-+# ----------------------------------------------------------------------------
-+# TC rule helpers
-+# ----------------------------------------------------------------------------
-+
-+# Push on both veth_a0 and veth_b0 egress using the same shared frer push
-+# action (IDX_PUSH).  Each slave also mirrors to the other so that every
-+# outgoing frame is replicated onto both paths regardless of which slave the
-+# bond currently selects.  This prevents packet loss during bond link changes.
-+setup_push_mirror()
-+{
-+	ip netns exec "$NS_TALKER" $TC qdisc add dev "$VETH_A0" clsact
-+	ip netns exec "$NS_TALKER" $TC filter add dev "$VETH_A0" egress \
-+		protocol ip flower skip_hw \
-+		action frer push index $IDX_PUSH \
-+		action mirred egress mirror dev "$VETH_B0"
-+
-+	ip netns exec "$NS_TALKER" $TC qdisc add dev "$VETH_B0" clsact
-+	ip netns exec "$NS_TALKER" $TC filter add dev "$VETH_B0" egress \
-+		protocol ip flower skip_hw \
-+		action frer push index $IDX_PUSH \
-+		action mirred egress mirror dev "$VETH_A0"
-+}
-+
-+teardown_tc()
-+{
-+	for dev in "$VETH_A0" "$VETH_B0"; do
-+		ip netns exec "$NS_TALKER" $TC qdisc del dev "$dev" clsact \
-+			2>/dev/null || true
-+	done
-+	for dev in "$VETH_A1" "$VETH_B1"; do
-+		ip netns exec "$NS_LISTENER" $TC qdisc del dev "$dev" clsact \
-+			2>/dev/null || true
-+	done
-+	ip netns exec "$NS_TALKER"   $TC actions flush action frer 2>/dev/null || true
-+	ip netns exec "$NS_LISTENER" $TC actions flush action frer 2>/dev/null || true
-+}
-+
-+# ----------------------------------------------------------------------------
-+# Packet-capture helpers
-+#
-+# capture_start_on NS IFACE PCAP [BPF_FILTER]
-+#   Starts tcpdump in namespace NS on IFACE, writing to PCAP.
-+#   Stores PID in _CAP_PID.
-+#
-+# capture_stop
-+#   Waits for tcpdump (stored in _CAP_PID) to finish.
-+#
-+# capture_count_on NS PCAP
-+#   Prints the number of captured packets.
-+#
-+# Convenience wrappers capture_start / capture_count target bond1 in
-+# NS_LISTENER (the primary observation point for tests 2 and 4).
-+# ----------------------------------------------------------------------------
-+_CAP_PID=""
-+
-+capture_start_on()
-+{
-+	local ns="$1" iface="$2" pcap="$3" filter="${4:-}"
-+
-+	if [ -n "$filter" ]; then
-+		ip netns exec "$ns" timeout 4 \
-+			$TCPDUMP -i "$iface" -w "$pcap" \
-+			--immediate-mode -Z root -y EN10MB \
-+			$filter >/dev/null 2>&1 &
-+	else
-+		ip netns exec "$ns" timeout 4 \
-+			$TCPDUMP -i "$iface" -w "$pcap" \
-+			--immediate-mode -Z root -y EN10MB \
-+			>/dev/null 2>&1 &
-+	fi
-+	_CAP_PID=$!
-+
-+	# Wait until tcpdump opens a packet socket (max ~2.5 s).
-+	local tries=0
-+	while [ $tries -lt 50 ]; do
-+		ip netns exec "$ns" grep -q "$iface" /proc/net/packet 2>/dev/null && break
-+		sleep 0.05
-+		tries=$((tries + 1))
-+	done
-+}
-+
-+capture_stop()
-+{
-+	[ -n "$_CAP_PID" ] || return 0
-+	wait "$_CAP_PID" 2>/dev/null || true
-+	_CAP_PID=""
-+}
-+
-+capture_count_on()
-+{
-+	local ns="$1" pcap="$2"
-+	ip netns exec "$ns" \
-+		$TCPDUMP -r "$pcap" --no-promiscuous-mode 2>/dev/null \
-+		| grep -c "^[0-9]" || true
-+}
-+
-+# Convenience wrappers: default to bond1 in NS_LISTENER
-+capture_start() { capture_start_on "$NS_LISTENER" "$BOND1" "$@"; }
-+capture_count() { capture_count_on "$NS_LISTENER" "$1"; }
-+
-+# ----------------------------------------------------------------------------
-+# Ping helper
-+# ----------------------------------------------------------------------------
-+do_ping()
-+{
-+	local rc=0
-+	ip netns exec "$NS_TALKER" \
-+		$PING -c "$PING_COUNT" -W "$PING_TIMEOUT" -i 0.2 -q \
-+		"$IP_DST" >/dev/null 2>&1 || rc=$?
-+	return $rc
-+}
-+
-+# ----------------------------------------------------------------------------
-+# tc statistics parser
-+# ----------------------------------------------------------------------------
-+tc_stat()
-+{
-+	local dump="$1" field="$2"
-+	echo "$dump" | awk -F"${field}=" 'NF>1{split($2,a," ");print a[1];exit}' || echo "0"
-+}
-+
-+# ----------------------------------------------------------------------------
-+# TEST 1: PUSH VERIFY (bond topology)
-+#
-+# Only push is configured on the talker side; no recover on the listener.
-+# The push action on veth_a0 egress inserts an R-TAG and mirrors a copy to
-+# veth_b0, so both listener slaves (veth_a1 and veth_b1) receive a frame
-+# with EtherType 0xF1C1.  Captures run sequentially on each slave to verify
-+# that both paths carry R-TAG frames.
-+#
-+# Pass criteria:
-+#   - veth_a1 captures >= 1 R-TAG frame
-+#   - veth_b1 captures >= 1 R-TAG frame
-+# ----------------------------------------------------------------------------
-+test_push_verify_bond()
-+{
-+	local pcap_a pcap_b cap_a cap_b
-+	local result="pass"
-+
-+	setup_push_mirror
-+
-+	# Capture 1: R-TAG frames on veth_a1 (path A)
-+	pcap_a=$(mktemp /tmp/frer_bond_push_a_XXXXXX.pcap)
-+	capture_start_on "$NS_LISTENER" "$VETH_A1" "$pcap_a" "ether proto 0xf1c1"
-+	ip netns exec "$NS_TALKER" \
-+		$PING -c 3 -W 1 -i 0.2 -q "$IP_DST" >/dev/null 2>&1 || true
-+	capture_stop
-+	cap_a=$(capture_count_on "$NS_LISTENER" "$pcap_a")
-+	rm -f "$pcap_a"
-+
-+	# Capture 2: R-TAG frames on veth_b1 (path B, mirrored copy)
-+	pcap_b=$(mktemp /tmp/frer_bond_push_b_XXXXXX.pcap)
-+	capture_start_on "$NS_LISTENER" "$VETH_B1" "$pcap_b" "ether proto 0xf1c1"
-+	ip netns exec "$NS_TALKER" \
-+		$PING -c 3 -W 1 -i 0.2 -q "$IP_DST" >/dev/null 2>&1 || true
-+	capture_stop
-+	cap_b=$(capture_count_on "$NS_LISTENER" "$pcap_b")
-+	rm -f "$pcap_b"
-+
-+	teardown_tc
-+
-+	echo "# bond push verify: veth_a1 R-TAG=$cap_a veth_b1 R-TAG=$cap_b"
-+
-+	[ "$cap_a" -ge 1 ] || result="fail"
-+	[ "$cap_b" -ge 1 ] || result="fail"
-+
-+	if [ "$result" = "pass" ]; then
-+		ksft_test_result_pass \
-+			"bond push verify: R-TAG on both paths (a1=$cap_a b1=$cap_b)"
-+	else
-+		ksft_test_result_fail \
-+			"bond push verify: expected R-TAG on both paths (a1=$cap_a b1=$cap_b)"
-+	fi
-+}
-+
-+# ----------------------------------------------------------------------------
-+# TEST 2: SHARED RECOVER E2E (bond topology)
-+#
-+# veth_a1 and veth_b1 ingress share one recover action (idx=10) with tag-pop.
-+# The listener receives two R-TAG copies per request; the shared recover passes
-+# exactly one and discards the other.  The recovered plain ICMP reaches bond1's
-+# IP stack and a reply is sent, making ping succeed.
-+#
-+# Pass criteria:
-+#   - ping succeeds (rc=0)
-+#   - tcpdump on bond1 captures exactly PING_COUNT ICMP echo-request frames
-+#     (filter is restricted to type=8 to exclude echo replies, which would
-+#     double the count since bond1 also originates the reply packets)
-+#   - tc stats on veth_a1: passed >= PING_COUNT, discarded >= PING_COUNT
-+# ----------------------------------------------------------------------------
-+test_shared_recover_bond()
-+{
-+	local pcap cap_count ping_rc=0
-+	local dump_a
-+	local total_passed total_discarded tagless
-+	local result="pass"
-+
-+	setup_push_mirror
-+
-+	# veth_a1 ingress: create shared recover action with tag-pop
-+	ip netns exec "$NS_LISTENER" $TC qdisc add dev "$VETH_A1" clsact
-+	ip netns exec "$NS_LISTENER" $TC filter add dev "$VETH_A1" ingress \
-+		protocol all flower skip_hw \
-+		action frer recover alg vector history-length 16 \
-+			reset-time 2000 tag-pop index $IDX_SHARED_RCVY
-+
-+	# veth_b1 ingress: bind to the same shared action by index
-+	ip netns exec "$NS_LISTENER" $TC qdisc add dev "$VETH_B1" clsact
-+	ip netns exec "$NS_LISTENER" $TC filter add dev "$VETH_B1" ingress \
-+		protocol all flower skip_hw \
-+		action frer recover index $IDX_SHARED_RCVY
-+
-+	pcap=$(mktemp /tmp/frer_bond_shared_XXXXXX.pcap)
-+	capture_start "$pcap" "icmp[icmptype] == icmp-echo"
-+
-+	do_ping || ping_rc=$?
-+
-+	capture_stop
-+
-+	cap_count=$(capture_count "$pcap")
-+	rm -f "$pcap"
-+
-+	dump_a=$(ip netns exec "$NS_LISTENER" \
-+		$TC -s filter show dev "$VETH_A1" ingress 2>/dev/null)
-+
-+	teardown_tc
-+
-+	total_passed=$(tc_stat    "$dump_a" "passed")
-+	total_discarded=$(tc_stat "$dump_a" "discarded")
-+	tagless=$(tc_stat         "$dump_a" "tagless")
-+	total_discarded=$((total_discarded - tagless))
-+
-+	echo "# bond shared recover: ping_rc=$ping_rc cap=$cap_count" \
-+		"passed=$total_passed discarded=$total_discarded"
-+
-+	[ "$ping_rc"         -eq 0 ]            || result="fail"
-+	[ "$cap_count"       -eq "$PING_COUNT" ] || result="fail"
-+	[ "$total_passed"    -ge "$PING_COUNT" ] || result="fail"
-+	[ "$total_discarded" -ge "$PING_COUNT" ] || result="fail"
-+
-+	if [ "$result" = "pass" ]; then
-+		ksft_test_result_pass \
-+			"bond shared recover: ping OK, cap=$cap_count" \
-+			"passed=$total_passed discarded=$total_discarded"
-+	else
-+		ksft_test_result_fail \
-+			"bond shared recover: ping_rc=$ping_rc cap=$cap_count" \
-+			"passed=$total_passed discarded=$total_discarded" \
-+			"(expected ping OK, cap=$PING_COUNT," \
-+			"passed>=$PING_COUNT, discarded>=$PING_COUNT)"
-+	fi
-+}
-+
-+# ----------------------------------------------------------------------------
-+# TEST 3: INDIVIDUAL RECOVER (bond topology)
-+#
-+# veth_a1 and veth_b1 use independent recover actions (idx=20 and idx=21).
-+# Each port maintains its own sequence history so both copies of every frame
-+# are passed (no cross-port deduplication).  With active-backup bond1, only
-+# the active slave's (veth_a1) recovered frame reaches bond1's IP stack, so
-+# ping succeeds.  The absence of deduplication is verified via per-slave
-+# tcpdump (each slave should capture PING_COUNT ICMP frames) and tc stats.
-+#
-+# Pass criteria:
-+#   - ping succeeds
-+#   - veth_a1 captures PING_COUNT ICMP frames (passed, not discarded)
-+#   - veth_b1 captures PING_COUNT ICMP frames (passed independently)
-+#   - tc stats: veth_a1 passed=PING_COUNT discarded=0
-+#               veth_b1 passed=PING_COUNT discarded=0
-+# ----------------------------------------------------------------------------
-+test_individual_recover_bond()
-+{
-+	local pcap_a pcap_b cap_a cap_b ping_rc=0
-+	local dump_a dump_b
-+	local passed_a discarded_a passed_b discarded_b tagless_a tagless_b
-+	local result="pass"
-+
-+	setup_push_mirror
-+
-+	# veth_a1 ingress: individual recover idx=20 (independent state)
-+	ip netns exec "$NS_LISTENER" $TC qdisc add dev "$VETH_A1" clsact
-+	ip netns exec "$NS_LISTENER" $TC filter add dev "$VETH_A1" ingress \
-+		protocol all flower skip_hw \
-+		action frer recover individual alg vector history-length 16 \
-+			reset-time 2000 tag-pop index $IDX_INDV_RCVY_A
-+
-+	# veth_b1 ingress: individual recover idx=21 (separate independent state)
-+	ip netns exec "$NS_LISTENER" $TC qdisc add dev "$VETH_B1" clsact
-+	ip netns exec "$NS_LISTENER" $TC filter add dev "$VETH_B1" ingress \
-+		protocol all flower skip_hw \
-+		action frer recover individual alg vector history-length 16 \
-+			reset-time 2000 tag-pop index $IDX_INDV_RCVY_B
-+
-+	# Per-slave capture A: verify veth_a1 passes frames; also use this run
-+	# for the overall ping_rc check (do_ping targets bond0->bond1).
-+	pcap_a=$(mktemp /tmp/frer_bond_indv_a_XXXXXX.pcap)
-+	capture_start_on "$NS_LISTENER" "$VETH_A1" "$pcap_a" "icmp"
-+	do_ping || ping_rc=$?
-+	capture_stop
-+	cap_a=$(capture_count_on "$NS_LISTENER" "$pcap_a")
-+	rm -f "$pcap_a"
-+
-+	# Per-slave capture B: verify veth_b1 also passes frames (balance-rr
-+	# distributes egress across both slaves, so both paths carry traffic).
-+	pcap_b=$(mktemp /tmp/frer_bond_indv_b_XXXXXX.pcap)
-+	capture_start_on "$NS_LISTENER" "$VETH_B1" "$pcap_b" "icmp"
-+	do_ping || true
-+	capture_stop
-+	cap_b=$(capture_count_on "$NS_LISTENER" "$pcap_b")
-+	rm -f "$pcap_b"
-+
-+	dump_a=$(ip netns exec "$NS_LISTENER" \
-+		$TC -s filter show dev "$VETH_A1" ingress 2>/dev/null)
-+	dump_b=$(ip netns exec "$NS_LISTENER" \
-+		$TC -s filter show dev "$VETH_B1" ingress 2>/dev/null)
-+
-+	teardown_tc
-+
-+	passed_a=$(tc_stat    "$dump_a" "passed")
-+	discarded_a=$(tc_stat "$dump_a" "discarded")
-+	tagless_a=$(tc_stat   "$dump_a" "tagless")
-+	passed_b=$(tc_stat    "$dump_b" "passed")
-+	discarded_b=$(tc_stat "$dump_b" "discarded")
-+	tagless_b=$(tc_stat   "$dump_b" "tagless")
-+	discarded_a=$((discarded_a - tagless_a))
-+	discarded_b=$((discarded_b - tagless_b))
-+
-+	echo "# bond individual recover: ping_rc=$ping_rc" \
-+		"a1: cap=$cap_a passed=$passed_a discarded=$discarded_a" \
-+		"b1: cap=$cap_b passed=$passed_b discarded=$discarded_b"
-+
-+	[ "$ping_rc"   -eq 0 ]            || result="fail"
-+	[ "$cap_a"     -ge "$PING_COUNT" ] || result="fail"
-+	[ "$cap_b"     -ge "$PING_COUNT" ] || result="fail"
-+	[ "$passed_a"  -ge "$PING_COUNT" ] || result="fail"
-+	[ "$passed_b"  -ge "$PING_COUNT" ] || result="fail"
-+	[ "$discarded_a" -eq 0 ]           || result="fail"
-+	[ "$discarded_b" -eq 0 ]           || result="fail"
-+
-+	if [ "$result" = "pass" ]; then
-+		ksft_test_result_pass \
-+			"bond individual recover: ping OK" \
-+			"a1: cap=$cap_a passed=$passed_a/0" \
-+			"b1: cap=$cap_b passed=$passed_b/0"
-+	else
-+		ksft_test_result_fail \
-+			"bond individual recover: ping_rc=$ping_rc" \
-+			"a1: cap=$cap_a passed=$passed_a discarded=$discarded_a" \
-+			"b1: cap=$cap_b passed=$passed_b discarded=$discarded_b"
-+	fi
-+}
-+
-+# ----------------------------------------------------------------------------
-+# TEST 4: NO TAG-POP (bond topology)
-+#
-+# Shared recover runs without tag-pop; passed frames still carry the R-TAG
-+# when they reach bond1.
-+#
-+# Pass criteria:
-+#   - tcpdump on bond1 with "ether proto 0xf1c1" captures >= 1 R-TAG frame
-+#   - tcpdump on bond1 with "icmp" captures 0 frames (outer EtherType is
-+#     0xF1C1, not 0x0800, so plain-IP ICMP filter does not match)
-+# ----------------------------------------------------------------------------
-+test_no_tag_pop_bond()
-+{
-+	local pcap_rtag pcap_icmp rtag_count icmp_count
-+	local result="pass"
-+
-+	setup_push_mirror
-+
-+	# veth_a1 ingress: shared recover WITHOUT tag-pop
-+	ip netns exec "$NS_LISTENER" $TC qdisc add dev "$VETH_A1" clsact
-+	ip netns exec "$NS_LISTENER" $TC filter add dev "$VETH_A1" ingress \
-+		protocol all flower skip_hw \
-+		action frer recover alg vector history-length 16 \
-+			reset-time 2000 index $IDX_NO_POP
-+
-+	# veth_b1 ingress: bind to the same shared action
-+	ip netns exec "$NS_LISTENER" $TC qdisc add dev "$VETH_B1" clsact
-+	ip netns exec "$NS_LISTENER" $TC filter add dev "$VETH_B1" ingress \
-+		protocol all flower skip_hw \
-+		action frer recover index $IDX_NO_POP
-+
-+	# Capture 1: frames with R-TAG EtherType on bond1 (expect >= 1)
-+	pcap_rtag=$(mktemp /tmp/frer_bond_nopop_rtag_XXXXXX.pcap)
-+	capture_start "$pcap_rtag" "ether proto 0xf1c1"
-+	ip netns exec "$NS_TALKER" \
-+		$PING -c 3 -W 1 -i 0.2 -q "$IP_DST" >/dev/null 2>&1 || true
-+	capture_stop
-+	rtag_count=$(capture_count "$pcap_rtag")
-+	rm -f "$pcap_rtag"
-+
-+	# Capture 2: plain ICMP frames on bond1 (expect 0)
-+	pcap_icmp=$(mktemp /tmp/frer_bond_nopop_icmp_XXXXXX.pcap)
-+	capture_start "$pcap_icmp" "icmp"
-+	ip netns exec "$NS_TALKER" \
-+		$PING -c 3 -W 1 -i 0.2 -q "$IP_DST" >/dev/null 2>&1 || true
-+	capture_stop
-+	icmp_count=$(capture_count "$pcap_icmp")
-+	rm -f "$pcap_icmp"
-+
-+	teardown_tc
-+
-+	echo "# bond no tag-pop: rtag=$rtag_count (expected >=1) icmp=$icmp_count (expected 0)"
-+
-+	[ "$rtag_count" -ge 1 ] || result="fail"
-+	[ "$icmp_count" -eq 0 ] || result="fail"
-+
-+	if [ "$result" = "pass" ]; then
-+		ksft_test_result_pass \
-+			"bond no tag-pop: R-TAG present on bond1 " \
-+			"(rtag=$rtag_count), ICMP absent (icmp=$icmp_count)"
-+	else
-+		ksft_test_result_fail \
-+			"bond no tag-pop: rtag=$rtag_count icmp=$icmp_count " \
-+			"(expected rtag>=1 icmp=0)"
-+	fi
-+}
-+
-+# ----------------------------------------------------------------------------
-+# TEST 5: SIMPLE POINT-TO-POINT (no bond)
-+#
-+# Self-contained single-path topology: push on p2p_a0 egress, individual
-+# recover (with tag-pop) on p2p_a1 ingress.  IP is assigned directly to the
-+# veth interfaces (no bond).
-+#
-+# Pass criteria:
-+#   - ping succeeds (rc=0)
-+#   - veth_a1 recover stats: passed >= PING_COUNT, discarded = 0
-+# ----------------------------------------------------------------------------
-+test_simple_point_to_point()
-+{
-+	local ping_rc=0
-+	local dump_a1 passed discarded
-+	local result="pass"
-+
-+	# Create self-contained p2p namespaces
-+	ip netns add "$P2P_NS_SRC"
-+	ip netns add "$P2P_NS_DST"
-+
-+	ip link add "$P2P_VETH_A0" type veth peer name "$P2P_VETH_A1"
-+	ip link set "$P2P_VETH_A0" netns "$P2P_NS_SRC"
-+	ip link set "$P2P_VETH_A1" netns "$P2P_NS_DST"
-+
-+	ip netns exec "$P2P_NS_SRC" ip link set lo up
-+	ip netns exec "$P2P_NS_SRC" ip link set "$P2P_VETH_A0" up
-+	ip netns exec "$P2P_NS_SRC" ip addr add "${IP_P2P_SRC}/24" dev "$P2P_VETH_A0"
-+
-+	ip netns exec "$P2P_NS_DST" ip link set lo up
-+	ip netns exec "$P2P_NS_DST" ip link set "$P2P_VETH_A1" up
-+	ip netns exec "$P2P_NS_DST" ip addr add "${IP_P2P_DST}/24" dev "$P2P_VETH_A1"
-+
-+	local mac_a0 mac_a1
-+	mac_a0=$(ip netns exec "$P2P_NS_SRC" cat /sys/class/net/"$P2P_VETH_A0"/address)
-+	mac_a1=$(ip netns exec "$P2P_NS_DST" cat /sys/class/net/"$P2P_VETH_A1"/address)
-+	ip netns exec "$P2P_NS_SRC" ip neigh add "$IP_P2P_DST" lladdr "$mac_a1" dev "$P2P_VETH_A0"
-+	ip netns exec "$P2P_NS_DST" ip neigh add "$IP_P2P_SRC" lladdr "$mac_a0" dev "$P2P_VETH_A1"
-+
-+	# veth_a0 egress: push R-TAG
-+	ip netns exec "$P2P_NS_SRC" $TC qdisc add dev "$P2P_VETH_A0" clsact
-+	ip netns exec "$P2P_NS_SRC" $TC filter add dev "$P2P_VETH_A0" egress \
-+		protocol ip flower skip_hw \
-+		action frer push index $IDX_PUSH
-+
-+	# veth_a1 ingress: individual recover with tag-pop
-+	ip netns exec "$P2P_NS_DST" $TC qdisc add dev "$P2P_VETH_A1" clsact
-+	ip netns exec "$P2P_NS_DST" $TC filter add dev "$P2P_VETH_A1" ingress \
-+		protocol all flower skip_hw \
-+		action frer recover individual alg vector history-length 16 \
-+			reset-time 2000 tag-pop index $IDX_P2P_RCVY
-+
-+	ip netns exec "$P2P_NS_SRC" \
-+		$PING -c "$PING_COUNT" -W "$PING_TIMEOUT" -i 0.2 -q \
-+		"$IP_P2P_DST" >/dev/null 2>&1 || ping_rc=$?
-+
-+	dump_a1=$(ip netns exec "$P2P_NS_DST" \
-+		$TC -s filter show dev "$P2P_VETH_A1" ingress 2>/dev/null)
-+
-+	# Teardown p2p topology
-+	for dev in "$P2P_VETH_A0"; do
-+		ip netns exec "$P2P_NS_SRC" $TC qdisc del dev "$dev" clsact \
-+			2>/dev/null || true
-+	done
-+	for dev in "$P2P_VETH_A1"; do
-+		ip netns exec "$P2P_NS_DST" $TC qdisc del dev "$dev" clsact \
-+			2>/dev/null || true
-+	done
-+	ip netns exec "$P2P_NS_SRC" $TC actions flush action frer 2>/dev/null || true
-+	ip netns exec "$P2P_NS_DST" $TC actions flush action frer 2>/dev/null || true
-+	ip netns del "$P2P_NS_SRC" 2>/dev/null || true
-+	ip netns del "$P2P_NS_DST" 2>/dev/null || true
-+
-+	passed=$(tc_stat    "$dump_a1" "passed")
-+	discarded=$(tc_stat "$dump_a1" "discarded")
-+	local tagless
-+	tagless=$(tc_stat   "$dump_a1" "tagless")
-+	discarded=$((discarded - tagless))
-+
-+	echo "# p2p: ping_rc=$ping_rc passed=$passed discarded=$discarded"
-+
-+	[ "$ping_rc"   -eq 0 ]            || result="fail"
-+	[ "$passed"    -ge "$PING_COUNT" ] || result="fail"
-+	[ "$discarded" -eq 0 ]            || result="fail"
-+
-+	if [ "$result" = "pass" ]; then
-+		ksft_test_result_pass \
-+			"simple p2p: ping OK, passed=$passed discarded=$discarded"
-+	else
-+		ksft_test_result_fail \
-+			"simple p2p: ping_rc=$ping_rc passed=$passed discarded=$discarded"
-+	fi
-+}
-+
-+# ----------------------------------------------------------------------------
-+# TEST 6: RELAY E2E (self-contained, no bond)
-+#
-+# Talker sends VLAN-100 frames into bridge0 (sequence generator).  Bridge0
-+# pushes an R-TAG and replicates to two redundant paths.  Bridge1 (eliminator)
-+# recovers (shared, tag-pop) on both paths and forwards the deduplicated frame
-+# to the listener.
-+#
-+# Topology:
-+#   ns_talker (talker_eth.100) -- talker_eth/br0_uplink
-+#       -- bridge0 (br_r0) -+- br0_swp0/br1_swp0 -+
-+#                            \- br0_swp1/br1_swp1 -+
-+#       -- bridge1 (br_r1) -- br1_downlink/listener_eth -- ns_listener
-+#
-+# FRER rules:
-+#   bridge0 / br0_uplink ingress  : push idx=50, redirect br0_swp0, mirror br0_swp1
-+#   bridge1 / br1_swp0 ingress    : recover (shared, tag-pop) idx=60, redirect br1_downlink
-+#   bridge1 / br1_swp1 ingress    : recover idx=60 (bind same), redirect br1_downlink
-+#   bridge1 / br1_downlink ingress: redirect br1_swp0 (reply path, bypass FDB)
-+#
-+# Pass criteria:
-+#   - ping from ns_talker to ns_listener succeeds (rc=0)
-+#   - tcpdump on listener captures exactly PING_COUNT ICMP echo-request frames
-+#   - br1_swp0 tc stats: passed >= PING_COUNT, discarded >= PING_COUNT
-+# ----------------------------------------------------------------------------
-+teardown_relay_tc()
-+{
-+	for dev in "$R_BR0_UPLINK"; do
-+		ip netns exec "$R_NS_BRIDGE0" $TC qdisc del dev "$dev" clsact \
-+			2>/dev/null || true
-+	done
-+	for dev in "$R_BR1_SWP0" "$R_BR1_SWP1" "$R_BR1_DOWNLINK"; do
-+		ip netns exec "$R_NS_BRIDGE1" $TC qdisc del dev "$dev" clsact \
-+			2>/dev/null || true
-+	done
-+	ip netns exec "$R_NS_BRIDGE0" $TC actions flush action frer 2>/dev/null || true
-+	ip netns exec "$R_NS_BRIDGE1" $TC actions flush action frer 2>/dev/null || true
-+}
-+
-+test_relay_e2e()
-+{
-+	local ping_rc=0
-+	local dump_r1swp0
-+	local total_passed total_discarded
-+	local result="pass"
-+	local ns
-+
-+	for ns in "$R_NS_TALKER" "$R_NS_BRIDGE0" "$R_NS_BRIDGE1" "$R_NS_LISTENER"; do
-+		ip netns add "$ns" || {
-+			echo "# relay e2e: failed to create netns $ns" >&2
-+			ksft_test_result_skip "relay e2e: netns setup failed"
-+			return
-+		}
-+	done
-+
-+	ip link add "$R_TALKER_ETH"   type veth peer name "$R_BR0_UPLINK"
-+	ip link add "$R_BR0_SWP0"     type veth peer name "$R_BR1_SWP0"
-+	ip link add "$R_BR0_SWP1"     type veth peer name "$R_BR1_SWP1"
-+	ip link add "$R_BR1_DOWNLINK" type veth peer name "$R_LISTENER_ETH"
-+
-+	ip link set "$R_TALKER_ETH"   netns "$R_NS_TALKER"
-+	ip link set "$R_BR0_UPLINK"   netns "$R_NS_BRIDGE0"
-+	ip link set "$R_BR0_SWP0"     netns "$R_NS_BRIDGE0"
-+	ip link set "$R_BR0_SWP1"     netns "$R_NS_BRIDGE0"
-+	ip link set "$R_BR1_SWP0"     netns "$R_NS_BRIDGE1"
-+	ip link set "$R_BR1_SWP1"     netns "$R_NS_BRIDGE1"
-+	ip link set "$R_BR1_DOWNLINK" netns "$R_NS_BRIDGE1"
-+	ip link set "$R_LISTENER_ETH" netns "$R_NS_LISTENER"
-+
-+	local ns_dev
-+	for ns_dev in \
-+		"$R_NS_TALKER:$R_TALKER_ETH" \
-+		"$R_NS_BRIDGE0:$R_BR0_UPLINK" "$R_NS_BRIDGE0:$R_BR0_SWP0" \
-+		"$R_NS_BRIDGE0:$R_BR0_SWP1" \
-+		"$R_NS_BRIDGE1:$R_BR1_SWP0" "$R_NS_BRIDGE1:$R_BR1_SWP1" \
-+		"$R_NS_BRIDGE1:$R_BR1_DOWNLINK" \
-+		"$R_NS_LISTENER:$R_LISTENER_ETH"; do
-+		local _ns="${ns_dev%%:*}"
-+		local _dev="${ns_dev##*:}"
-+		ip netns exec "$_ns" ip link set lo up
-+		ip netns exec "$_ns" ip link set "$_dev" up
-+	done
-+
-+	# bridge0: sequence generator, VLAN filtering
-+	ip netns exec "$R_NS_BRIDGE0" ip link add name "$R_BR0" type bridge vlan_filtering 1
-+	ip netns exec "$R_NS_BRIDGE0" ip link set "$R_BR0" up
-+	ip netns exec "$R_NS_BRIDGE0" ip link set "$R_BR0_UPLINK" master "$R_BR0"
-+	ip netns exec "$R_NS_BRIDGE0" ip link set "$R_BR0_SWP0" master "$R_BR0"
-+	ip netns exec "$R_NS_BRIDGE0" ip link set "$R_BR0_SWP1" master "$R_BR0"
-+
-+	ip netns exec "$R_NS_BRIDGE0" bridge vlan add dev "$R_BR0_UPLINK" vid "$R_VLAN"
-+	ip netns exec "$R_NS_BRIDGE0" bridge vlan add dev "$R_BR0_SWP0" vid "$R_VLAN"
-+	ip netns exec "$R_NS_BRIDGE0" bridge vlan del dev "$R_BR0_SWP1" vid 1
-+	ip netns exec "$R_NS_BRIDGE0" bridge vlan add dev "$R_BR0_SWP1" \
-+		vid "$R_VLAN" pvid untagged
-+	ip netns exec "$R_NS_BRIDGE0" bridge link set dev "$R_BR0_SWP0" learning off
-+	ip netns exec "$R_NS_BRIDGE0" bridge link set dev "$R_BR0_SWP1" learning off
-+	ip netns exec "$R_NS_BRIDGE0" bridge vlan set dev "$R_BR0_SWP0" vid "$R_VLAN" noflood
-+	ip netns exec "$R_NS_BRIDGE0" bridge vlan set dev "$R_BR0_SWP1" vid "$R_VLAN" noflood
-+
-+	# bridge1: eliminator, VLAN filtering
-+	ip netns exec "$R_NS_BRIDGE1" ip link add name "$R_BR1" type bridge vlan_filtering 1
-+	ip netns exec "$R_NS_BRIDGE1" ip link set "$R_BR1" up
-+	ip netns exec "$R_NS_BRIDGE1" ip link set "$R_BR1_SWP0" master "$R_BR1"
-+	ip netns exec "$R_NS_BRIDGE1" ip link set "$R_BR1_SWP1" master "$R_BR1"
-+	ip netns exec "$R_NS_BRIDGE1" ip link set "$R_BR1_DOWNLINK" master "$R_BR1"
-+
-+	ip netns exec "$R_NS_BRIDGE1" bridge vlan add dev "$R_BR1_SWP0" vid "$R_VLAN"
-+	ip netns exec "$R_NS_BRIDGE1" bridge vlan del dev "$R_BR1_SWP1" vid 1
-+	ip netns exec "$R_NS_BRIDGE1" bridge vlan add dev "$R_BR1_SWP1" \
-+		vid "$R_VLAN" pvid untagged
-+	ip netns exec "$R_NS_BRIDGE1" bridge vlan add dev "$R_BR1_DOWNLINK" vid "$R_VLAN"
-+	ip netns exec "$R_NS_BRIDGE1" bridge link set dev "$R_BR1_SWP0" learning off
-+	ip netns exec "$R_NS_BRIDGE1" bridge link set dev "$R_BR1_SWP1" learning off
-+	ip netns exec "$R_NS_BRIDGE1" bridge vlan set dev "$R_BR1_SWP0" vid "$R_VLAN" noflood
-+	ip netns exec "$R_NS_BRIDGE1" bridge vlan set dev "$R_BR1_SWP1" vid "$R_VLAN" noflood
-+
-+	# ns_talker: VLAN sub-interface
-+	ip netns exec "$R_NS_TALKER" ip link add link "$R_TALKER_ETH" \
-+		name "${R_TALKER_ETH}.${R_VLAN}" type vlan id "$R_VLAN"
-+	ip netns exec "$R_NS_TALKER" ip link set "${R_TALKER_ETH}.${R_VLAN}" up
-+	ip netns exec "$R_NS_TALKER" ip addr add "${R_IP_TALKER}/24" \
-+		dev "${R_TALKER_ETH}.${R_VLAN}"
-+
-+	# ns_listener: VLAN sub-interface
-+	ip netns exec "$R_NS_LISTENER" ip link add link "$R_LISTENER_ETH" \
-+		name "${R_LISTENER_ETH}.${R_VLAN}" type vlan id "$R_VLAN"
-+	ip netns exec "$R_NS_LISTENER" ip link set "${R_LISTENER_ETH}.${R_VLAN}" up
-+	ip netns exec "$R_NS_LISTENER" ip addr add "${R_IP_LISTENER}/24" \
-+		dev "${R_LISTENER_ETH}.${R_VLAN}"
-+
-+	# Static ARP (VLAN 100 flooding is disabled)
-+	local mac_talker mac_listener
-+	mac_talker=$(ip netns exec "$R_NS_TALKER" \
-+		cat /sys/class/net/"${R_TALKER_ETH}.${R_VLAN}"/address)
-+	mac_listener=$(ip netns exec "$R_NS_LISTENER" \
-+		cat /sys/class/net/"${R_LISTENER_ETH}.${R_VLAN}"/address)
-+	ip netns exec "$R_NS_TALKER"   ip neigh add "$R_IP_LISTENER" \
-+		lladdr "$mac_listener" dev "${R_TALKER_ETH}.${R_VLAN}"
-+	ip netns exec "$R_NS_LISTENER" ip neigh add "$R_IP_TALKER" \
-+		lladdr "$mac_talker"   dev "${R_LISTENER_ETH}.${R_VLAN}"
-+
-+	# bridge0 / br0_uplink ingress: push R-TAG then replicate to both redundant paths.
-+	# mirror must come before redirect because redirect is a terminating action.
-+	ip netns exec "$R_NS_BRIDGE0" $TC qdisc add dev "$R_BR0_UPLINK" clsact
-+	ip netns exec "$R_NS_BRIDGE0" $TC filter add dev "$R_BR0_UPLINK" ingress \
-+		protocol 802.1Q flower skip_hw vlan_id "$R_VLAN" \
-+		action frer push index $IDX_RELAY_PUSH \
-+		action mirred egress mirror  dev "$R_BR0_SWP1" \
-+		action mirred egress redirect dev "$R_BR0_SWP0"
-+
-+	# bridge1 / br1_swp0 ingress: create shared recover action (tag-pop)
-+	ip netns exec "$R_NS_BRIDGE1" $TC qdisc add dev "$R_BR1_SWP0" clsact
-+	ip netns exec "$R_NS_BRIDGE1" $TC filter add dev "$R_BR1_SWP0" ingress \
-+		protocol all flower skip_hw \
-+		action frer recover alg vector history-length 16 \
-+			reset-time 2000 tag-pop index $IDX_RELAY_RCVY \
-+		action mirred egress redirect dev "$R_BR1_DOWNLINK"
-+
-+	# bridge1 / br1_swp1 ingress: bind to the same shared recover action
-+	ip netns exec "$R_NS_BRIDGE1" $TC qdisc add dev "$R_BR1_SWP1" clsact
-+	ip netns exec "$R_NS_BRIDGE1" $TC filter add dev "$R_BR1_SWP1" ingress \
-+		protocol all flower skip_hw \
-+		action frer recover index $IDX_RELAY_RCVY \
-+		action mirred egress redirect dev "$R_BR1_DOWNLINK"
-+
-+	# bridge1 / br1_downlink ingress: redirect VLAN 100 replies directly to br1_swp0
-+	ip netns exec "$R_NS_BRIDGE1" $TC qdisc add dev "$R_BR1_DOWNLINK" clsact
-+	ip netns exec "$R_NS_BRIDGE1" $TC filter add dev "$R_BR1_DOWNLINK" ingress \
-+		protocol 802.1Q flower skip_hw vlan_id "$R_VLAN" \
-+		action mirred egress redirect dev "$R_BR1_SWP0"
-+
-+	# Capture ICMP echo-requests on listener_eth.VLAN to verify exactly
-+	# PING_COUNT deduplicated frames reach the listener after recovery.
-+	local pcap cap_count
-+	pcap=$(mktemp /tmp/frer_relay_XXXXXX.pcap)
-+	capture_start_on "$R_NS_LISTENER" "${R_LISTENER_ETH}.${R_VLAN}" \
-+		"$pcap" "icmp[icmptype] == icmp-echo"
-+
-+	ip netns exec "$R_NS_TALKER" \
-+		$PING -c "$PING_COUNT" -W "$PING_TIMEOUT" -i 0.2 -q \
-+		"$R_IP_LISTENER" >/dev/null 2>&1 || ping_rc=$?
-+
-+	capture_stop
-+	cap_count=$(capture_count_on "$R_NS_LISTENER" "$pcap")
-+	rm -f "$pcap"
-+
-+	dump_br1_swp0=$(ip netns exec "$R_NS_BRIDGE1" \
-+		$TC -s filter show dev "$R_BR1_SWP0" ingress 2>/dev/null)
-+
-+	teardown_relay_tc
-+	for ns in "$R_NS_TALKER" "$R_NS_BRIDGE0" "$R_NS_BRIDGE1" "$R_NS_LISTENER"; do
-+		ip netns del "$ns" 2>/dev/null || true
-+	done
-+
-+	total_passed=$(tc_stat    "$dump_br1_swp0" "passed")
-+	total_discarded=$(tc_stat "$dump_br1_swp0" "discarded")
-+	local tagless
-+	tagless=$(tc_stat         "$dump_br1_swp0" "tagless")
-+	total_discarded=$((total_discarded - tagless))
-+
-+	echo "# relay e2e: ping_rc=$ping_rc cap=$cap_count" \
-+		"passed=$total_passed discarded=$total_discarded"
-+
-+	[ "$ping_rc"         -eq 0 ]            || result="fail"
-+	[ "$cap_count"       -eq "$PING_COUNT" ] || result="fail"
-+	[ "$total_passed"    -ge "$PING_COUNT" ] || result="fail"
-+	[ "$total_discarded" -ge "$PING_COUNT" ] || result="fail"
-+
-+	if [ "$result" = "pass" ]; then
-+		ksft_test_result_pass \
-+			"relay e2e: ping OK, cap=$cap_count " \
-+			"passed=$total_passed discarded=$total_discarded"
-+	else
-+		ksft_test_result_fail \
-+			"relay e2e: ping_rc=$ping_rc cap=$cap_count " \
-+			"passed=$total_passed discarded=$total_discarded" \
-+			"(expected ping OK, cap=$PING_COUNT," \
-+			"passed>=$PING_COUNT, discarded>=$PING_COUNT)"
-+	fi
-+}
-+
-+# ----------------------------------------------------------------------------
-+# Main
-+# ----------------------------------------------------------------------------
-+main()
-+{
-+	ksft_print_header
-+	check_prerequisites
-+	load_module
-+	setup_topology
-+
-+	if ! check_frer_action; then
-+		ksft_set_plan "$NUM_TESTS"
-+		for i in $(seq 1 "$NUM_TESTS"); do
-+			ksft_test_result_skip \
-+				"frer action not available in this kernel (test $i)"
-+		done
-+		ksft_print_cnts
-+		exit "$KSFT_SKIP"
-+	fi
-+
-+	ksft_set_plan "$NUM_TESTS"
-+
-+	test_push_verify_bond        # TEST 1: push on a0/b0, no recover, R-TAG on both paths
-+	test_shared_recover_bond     # TEST 2: shared recover, dedup, ping succeeds
-+	test_individual_recover_bond # TEST 3: individual recover, no dedup, double frames
-+	test_no_tag_pop_bond         # TEST 4: shared recover without tag-pop, R-TAG preserved
-+	test_simple_point_to_point   # TEST 5: single-path p2p, no bond
-+	test_relay_e2e               # TEST 6: relay bridge topology
-+
-+	ksft_print_cnts
-+
-+	[ "$_ksft_fail" -eq 0 ] && ksft_exit_pass || ksft_exit_fail
-+}
-+
-+main "$@"
--- 
-2.17.1
+  	}
 
+  	if (bpf_jit_enable > 1)
+
+
+- Hari
