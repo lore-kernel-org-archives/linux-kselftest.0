@@ -1,142 +1,359 @@
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54C7B34C124
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 22:32:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782167576; cv=none; b=nY+7BRv3uLPHu4VyAeK3j8iy5qJVyGBuMyHDb7XMMPxCK2Hg6ouS9AtsZJP49cw3jZzkAvR4vXmbZ+3Rwgonps3ZmKSOD53G/hJV7OfipYAz7WkpEkVcJ3zfcquvu49v9/AmvafA0wUsZMmErBRLS80AlZOcSzLGt+7KQbkU63o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782167576; c=relaxed/simple;
-	bh=GTrgiK6YZW/87K2ASsSbJjCcOhmlzHAMF/U2Or9B9PE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=cM6hserbipnLbCSdPamhXS6wbzxZIRZQG0493aQU0Zj4nagRyLscAlHGArb/snq0VeySFMcFOYnPg2R5Fo4tnHfIN3c0ec9/6BaZ61G7abqbAXu5RIUaPk1kAB2zpK+tYWigT/Hr++brlc5MGkqVpa3MFniV14qgcrBuIVaBQ38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MadtyKnm; arc=none smtp.client-ip=209.85.210.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ACD329CB24
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 23:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782169296; cv=pass; b=srKbMS+AYTrkhArlpf4JpmYFhb0zDG3Z/QErSsoUrxy8nNoc0XtLEwuP10INOofC4s734RRCmxFthDn1Dsij5NmfehHOZJyq45Gr8o05WIeqEuHiKRyYIDP+Hpy111iJ6gy4M9pHhX/MAWU3Gl+55Al0YGR2Gux6BL9Nvrguibc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782169296; c=relaxed/simple;
+	bh=BWQPMoKQOTeGkRSmowzT6uGFQN8jRHlTD1UMypmkjkw=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X0RJmPpgi5kY6wSXaw1S0Tg6WEFRyAm5vTsOTKaNlofw4if7q7yr1x3G1TXEhH0m10J/G4kDWrNlw0FCsBhIzqYX27whKhBjrHOZQrme5d3RE2gIdbci32oECSJ0kiWpXEddnbpjomtly2ScMRofhgIdGoPRX+ReSb5yEjGX7Og=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hQ5ArTg5; arc=pass smtp.client-ip=74.125.82.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MadtyKnm"
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7e92c443cbcso2671713a34.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 15:32:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hQ5ArTg5"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-13988680a69so11461776c88.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 16:01:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782169294; cv=none;
+        d=google.com; s=arc-20240605;
+        b=D2ctvR9zna2falRbOvjV3gsCf0A3ipxs3urUkmCJ5bqVNycZTTnjCDEC0MFOBucQlc
+         CXGpGcJPI46EOQSyRh04vzg1h5hcv2Hg8RLmjzz/Rm0+K8u6MdbbhpizWVG0FFzF1PGc
+         jbWqt8bGA7150YFvRJC85iIEdK2bdGuqUNRnpLw15zJWIVumDFyBd3ZyZrVk5kh1lVG7
+         bm1M6PhQNpxeoq43+VKcohrgFMenOItK1kcwILIEIEIr/IocAtXbE3fzsyB9qQG4IGJl
+         yIzoFLMBXpSH4M8b2x21gdpnl8GzAgflkChIf0ngrIieYvTv2g//dvDZ16cMjlZjrpn/
+         192Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=Se78T3ehOJrnIX6EVHqhbA3McVgxD20iSWZ28XYCDdw=;
+        fh=Sq8drxi6ePseYBTmYCiDCc31SlG1i1N+NppbTalTgHQ=;
+        b=bVfBwpTB0fzvOwKKPTNX3cqI1wzTyGmN8xMq8QHZIY5iCmrcY/T7pJReTbD3/aA2g+
+         jAkCDbsCPgp5xr9n9IaPA6t0EShHX+jUATglNE2LyNnCaTCWbvcXVjGRNHS1unw+oadE
+         vD8byxGDiRoWEmh2HJ9GzE+tsWYag9AkzhJF0+lBPcjxZ9g907Z7Uzy//oz+Yq2IH96D
+         Wd9K9+iLW7TyrWDUyko4mew+paa/G6VPRtG+VNga0AsmLCU3SRfY/vCU85C++Yj7A/EH
+         Kwsdd5ICQLO1G1w5FE6A6YUAVVXsQDNtg23+TY/OiTknTSy5hBbjjFiT/bn4ACgscemc
+         GYDw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782167574; x=1782772374; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TNMt0SALBc9dR+2Mkf/0/J5cVE9RUiLWYRooeHFSC9w=;
-        b=MadtyKnm5uSmIUVx3YRDIVSIL270KLeCsV50TfSxxpfORa0sanjziOsk8oaKmwE0qz
-         DjZ2GT/Fm1RtiIf6JyEbGfephpFHeyU8VkGS6MB1KGFLB6sIorGEpekPgJn4Tu74X61G
-         Xr7shP2aAjdgvZ1OnaYd+3XP9KXPhA/vHocqFGyOqP51008apj68jzLbVPL6cVtBEvzk
-         56DUNGSHg/pE6d0sNrSckfeqKSMtafxg+5+tW6HICxgCjbVvExwZYNX9KTGN39/MSFHf
-         MiVmoo12fYu5ZFQg52ohcCTigkAn/R8GO5GZ5Sd2PzAWjonvLwVcS3ej+50Xsa3CTUiM
-         hq2w==
+        d=google.com; s=20251104; t=1782169294; x=1782774094; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Se78T3ehOJrnIX6EVHqhbA3McVgxD20iSWZ28XYCDdw=;
+        b=hQ5ArTg5XGxCJHfOdIAcgVkEzKgWkrdxkJbbNGv+gr4IcPaNZhb5VnfCKOLxedvtcP
+         zt4e+JVJXVk7YlPldZUftjmYgnKC78UfmkrrRn4ZfgHj2HXK0CbOhAGc9r23qscShAGo
+         4gtVTDHZpRydJx0/2FEGhfHtdgFa0+mJrhJ7l7tYqKRp1iDMfmmpbk1BaN4KagbDuyeC
+         6DJPPSFqb/n1LK3OhgOdr7Xoj3civzFe0/oSXjigGaQCfF9J0aVWj3CcuTt/adVJC/Qu
+         7eMMCiBapIHMdyAZ3Sfweiu2yWkeeEbJ79UYjpShn4823piYNO3LlCAXq8yuljjN2tmf
+         zyBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782167574; x=1782772374;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TNMt0SALBc9dR+2Mkf/0/J5cVE9RUiLWYRooeHFSC9w=;
-        b=J317saCR6nkhSe9gcUvOqOCAAOBFrAuY/GoLXFpzTdIpy3aR5Hk3kb19W35h3LH5RQ
-         dbjE6AMioWBPAzEJkEiF+jQcJEa6Rhgjwwu0PyI1jqqKiL5dYfMRjUdmK55iMw9agFl0
-         nQxdRwQGWtwlvoU0Wk0wFINaFsD/WSjeEzNkHr4pVb53iMTBneUqN6P+R4gWQUnu0tBO
-         B8KkKPNvQKCC7Q4HBh79h3bWjaAQyiBTJPAxEg0tucFmwLMtI1/OMNOoFLbI0bl5z0ui
-         xKGjm/8k/zD+wJxzgFDZ5bT3Da3MFiQJLEvPSTdVy5h7JahhpTv9EBZMtDmjuWuCqysC
-         Iugg==
-X-Forwarded-Encrypted: i=1; AFNElJ9lgoR+WfHoA608mn/egKRmz0D6rqLgm5J/8TUIXBg7IgOjMJ/fhWE83XPQmcu3sVTZ292mQnp+QxZYkEstECQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrcqXSBxtg5al8P3hpE+Fpq0/pemqjnKL3wYT4i/daUfQCCKUQ
-	o027aR7zdZb4TnQf7e+fVgIbs9mXKPv1rh+jH39AfAoldvyoy14KU0kX
-X-Gm-Gg: AfdE7ckDbVi9dxSNCk7itsUWVOwFB61gXQbRMrjs7PuPI4Ysf+vrfOBB9K5pVP56nv6
-	WLVb4DaGHRVrc2PUz8eQTY17FSmKXrXqEPlT8pb1uTLibdwVEWlMTEBYYPjeq/igm+ATwMoRHGV
-	pAHAVcO28fKXcbctyePL/vGXTZSFFTbui/n5MwdsjzhRwSEwWvzPM/DKKAn00oBWr7ObljEOujv
-	BTJqTVl5YcuHlytMkVw3KoFEU3bsTrdy2qRK5RMtydbnEBayxlua2BG8E/R0BbVku6sAVUsKpbv
-	OKbRYAswsZnJlpKuSABdgCBk7kAs+eRsH+2/rHESo8UrZIGdYZ4FsfzETn/IbZKsQuZMGvxNn8o
-	4sra48wuqOtq6JMi579VyDZjiSMpG5JzJ15by2TVeNiH5Q71biLrvpMdOAdHkAPRqqiMwr9Kz6N
-	1EqDZdqKySbLXQ3fWiHS7pzTlBkO1CIzHyhm5opyBWZc6+fshZ1z84rHQBdUC0ZYEmoquFPYJa8
-	hXOgQ==
-X-Received: by 2002:a05:6830:4488:b0:7d7:570b:6800 with SMTP id 46e09a7af769-7e97999d908mr71007a34.23.1782167574242;
-        Mon, 22 Jun 2026 15:32:54 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:4::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e94429a5bdsm7867392a34.22.2026.06.22.15.32.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Jun 2026 15:32:53 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782169294; x=1782774094;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Se78T3ehOJrnIX6EVHqhbA3McVgxD20iSWZ28XYCDdw=;
+        b=dlXuEFeMFx+IRNZPG1bEFkfwVxtN/ALN2SIguJk30rbVmrUINTZChctSLo1oqpyvDk
+         G+lZW8dS6a4PEk9DEL9bnTMu2wbEqUzHatJWCBCbEDWZX9gDu6VJJWHYQqPL/cjUJQrh
+         LF6GT2nOkhAjO9rgxHXpqyx4pgGp1EHzm7xYNiEVC5v7CwzOCy8wbxmoWPRPI+0R8SLZ
+         mi3cI2gx7lyEiDsMe8MdOulNittdxonZHWdtqZH3RcXfWGO72jECg3uoMbSBZp663LHQ
+         6/tT3AvKIIJtFL27Hd/nvXXVpGwFYfrHEOZ43TMQCHQaaB/ClioeucBO4CyLtWEjqSiZ
+         FWpg==
+X-Gm-Message-State: AOJu0YzgpuihNEAmoqakzaXJ+ClcOov+a0+oUbY8ds2BnhoM8Ljlocso
+	nX674HI6sMM9gbWGmP5ne3nzE9drVNKxk12ls4rsJezEAV7N12J1ZE5RqIkGOVJcjDA3iJFqG4P
+	YEcWRmMPFMcCo71CDhVmeL6b/2dvj3qcG1mX6WFca
+X-Gm-Gg: AfdE7clAUW7wkGui4P+XDHFbeXdUf8P++rRD2OrR6cVBCdXfC6Y7+lfYtg6yHLLFgBO
+	8VU0VAe5QtOhugx7RQ4dHTJH/LErxE40Vrh9eE1QIGgc+D2d7Wr6G87hB9Jwf3dbXoiEF18VVgv
+	oHpVN4G2nEXE6ZSvHhdc8SxQN7ad4YtwIiaxKeiRja55eA+vlCPUMl/LzNB2Q19+lwNhqOFfpJY
+	DpBWgpBivQw5JdEdAR9BWHmJhJ2P821JMQwf0ybbREGBtdP+FySiDKmXS/q36A5MvBnUbMGoDKH
+	WJH5OnNOPmwbOEWWVZn6CQWnVnVCz1LzJ1hXGaOdjtZyE8e9HZ49cz7rVLY=
+X-Received: by 2002:a05:7022:78c:b0:137:938a:1044 with SMTP id
+ a92af1059eb24-139a216738cmr11302655c88.33.1782169292599; Mon, 22 Jun 2026
+ 16:01:32 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 22 Jun 2026 16:01:31 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 22 Jun 2026 16:01:31 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <deb20fbe3584a8c6bfda276447fe464c6553737d.1780676742.git.tarunsahu@google.com>
+References: <cover.1780676742.git.tarunsahu@google.com> <deb20fbe3584a8c6bfda276447fe464c6553737d.1780676742.git.tarunsahu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 22 Jun 2026 15:32:52 -0700
-Message-Id: <DJFXOGFS8DXY.4CDI7LHXGHWN@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Gyutae Bae" <gyutae.opensource@navercorp.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, <bpf@vger.kernel.org>
-Cc: "John Fastabend" <john.fastabend@gmail.com>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Minsu
- Jeon" <minsu.jeon@navercorp.com>, "Siwan Kim" <siwan.kim@navercorp.com>,
- "Jonghyeon Kim" <jong-hyeon.kim@navercorp.com>, "Gyutae Bae"
- <gyutae.bae@navercorp.com>
-Subject: Re: [RFC bpf-next 0/3] bpf: compare-and-delete (BPF_F_COMPARE) for
- hash maps
-X-Mailer: aerc
-References: <20260622071649.31541-1-gyutae.opensource@navercorp.com>
-In-Reply-To: <20260622071649.31541-1-gyutae.opensource@navercorp.com>
+MIME-Version: 1.0
+Date: Mon, 22 Jun 2026 16:01:31 -0700
+X-Gm-Features: AVVi8Cfmvsh-tLhJUbMrgpAzFVY6IGOEzbMnkY3GArVYdQhVqbDKG-2CuMgaTr4
+Message-ID: <CAEvNRgE2GZNiDg_g6SP_H9CDsDDAnpN7KTRWJEK18wxpTZFJZw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 10/10] selftests: kvm: Add guest_memfd_preservation_test
+To: Tarun Sahu <tarunsahu@google.com>, Jonathan Corbet <corbet@lwn.net>, vannapurve@google.com, 
+	fvdl@google.com, Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, sagis@google.com, aneesh.kumar@kernel.org, 
+	skhawaja@google.com, vipinsh@google.com, Pratyush Yadav <pratyush@kernel.org>, 
+	david@redhat.com, dmatlack@google.com, mark.rutland@arm.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
+	seanjc@google.com, axelrasmussen@google.com
+Cc: linux-kselftest@vger.kernel.org, kexec@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon Jun 22, 2026 at 12:16 AM PDT, Gyutae Bae wrote:
-> From: Gyutae Bae <gyutae.bae@navercorp.com>
->
-> This series adds an atomic compare-and-delete primitive to BPF hash
-> maps, motivated by a TOCTOU race in Cilium's conntrack GC [1]: the
-> batched GC snapshots CT entries, decides which expired, then deletes
-> them by key in a later syscall; between snapshot and delete the
-> datapath can refresh the same entry, so a live entry is deleted. A
-> userspace re-check before delete can't close it (lookup and delete are
-> separate, individually bucket-locked calls).
->
-> BPF_F_COMPARE lets userspace delete a key only if a chosen value region
-> is unchanged, with the compare and the delete done atomically under the
-> hash bucket lock:
->
->     attr.flags |=3D BPF_F_COMPARE;
->     attr.compare =3D <expected>;
->     attr.compare_offset =3D <off>;
->     attr.compare_size =3D <len>;
->
-> mismatch -> -EBUSY, absent -> -ENOENT, unsupported map -> -EOPNOTSUPP.
-> The compare* fields without the flag are rejected (-EINVAL) so a dropped
-> flag can't silently become an unconditional delete; maps whose value
-> carries BTF-managed fields (spin_lock/timer/kptr/...) are rejected
-> (-EOPNOTSUPP) since those bytes are sanitised on lookup.
->
-> Atomicity boundary (please scrutinise): the compare is atomic vs every
-> bucket-lock holder, but NOT vs a BPF program writing the value in place
-> via the pointer from bpf_map_lookup_elem() (no bucket lock). It
-> collapses the race window from the whole GC batch to one bucket-locked
-> critical section; full closure wants the compared region treated as a
-> synchronization variable (e.g. a monotonic revision). The selftest
-> models this.
->
-> Scope of this RFC: per-element compare-and-delete on BPF_MAP_TYPE_HASH
-> only. Deferred (will follow once the approach is agreed): batch delete +
-> its attr fields, a libbpf wrapper, LRU-hash and other map types, a
-> compare-and-swap *update*.
->
-> Open questions:
->   - flag name: BPF_F_COMPARE vs something else?
->   - mismatch errno: -EBUSY vs -EAGAIN?
->   - new ->map_delete_elem_cmp() op vs extending ->map_delete_elem?
+Tarun Sahu <tarunsahu@google.com> writes:
 
-Sorry, this is no go.
-There is bpf_spin_lock that use can use to synchronize access
-between bpf progs and user space.
-lookup_and_delete with BPF_F_LOCK uses the same lock.
-Or add another syscall program that is triggered from user space
-that operates on the same map.
-Or convert everything to arena and use whatever algorithm you prefer.
+> Add a new KVM selftest `guest_memfd_preservation_test` to verify that
+> guest memory backed by guest_memfd is preserved properly.
+>
 
+Don't think using backticks in commit messages is a common practice but
+I might be wrong here.
+
+> The test leverages the Live Update Orchestrator (LUO) infrastructure
+> to validate that memory folios and configuration layouts are
+> successfully saved and then restored during kernel live updates,
+> preventing any memory loss for the guest.
+>
+> Here, I have used the kvm selftests framework by creating a new
+> vm and mapping two memory slots to it. One is the code that is executed
+> inside the vm and other is the guest_memfd whose memory is being
+> written by the guest code.
+>
+
+Don't think commit messages with "I" are common either
+
+> In Phase 1: Once data is written the vm exits and wait for the user
+> to trigger the kexec.
+>
+> In Phase 2: A new vm is created with retrieved kvm and again two
+> memory slots are assigned. Once for guest code, and another is for
+> retrieved guest_memfd where guest_memfd memory is verified by the
+> executed guest code. If verification succeeds, The test passes.
+>
+>
+> [...snip...]
+>
+> +#define SESSION_NAME "gmem_vm_preservation_session"
+> +#define VM_TOKEN 0x1001
+> +#define GMEM_TOKEN 0x1002
+> +
+> +#define GMEM_SIZE (16ULL * 1024 * 1024)
+> +#define DATA_SIZE (5ULL * 1024 * 1024)
+> +
+> +static size_t page_size;
+> +
+> +/* Deterministic byte pattern generation based on offset */
+> +static inline uint8_t get_pattern_byte(size_t offset)
+> +{
+> +	return (uint8_t)(offset ^ 0x5A);
+> +}
+> +
+> +static void guest_code_phase1(uint64_t gpa, uint64_t size, uint64_t data_size)
+> +{
+> +	uint8_t *mem = (uint8_t *)gpa;
+> +	size_t i;
+> +
+> +	for (i = 0; i < data_size; i++)
+> +		mem[i] = get_pattern_byte(i);
+> +
+> +	GUEST_DONE();
+> +}
+> +
+> +static void guest_code_phase2(uint64_t gpa, uint64_t size, uint64_t data_size)
+> +{
+> +	uint8_t *mem = (uint8_t *)gpa;
+> +	size_t i;
+> +
+> +	for (i = 0; i < data_size; i++) {
+> +		uint8_t val = get_pattern_byte(i);
+> +
+> +		__GUEST_ASSERT(mem[i] == val,
+> +			       "Data mismatch at offset %lu! Expected 0x%x, got 0x%x",
+> +			       i, val, mem[i]);
+> +	}
+> +
+> +	GUEST_DONE();
+> +}
+> +
+> +static void do_phase1(void)
+> +{
+> +	uint64_t flags = GUEST_MEMFD_FLAG_MMAP | GUEST_MEMFD_FLAG_INIT_SHARED;
+
+Is there a reason to set GUEST_MEMFD_FLAG_MMAP? We're not really
+accessing that memory from the host in this test.
+
+> +	int gmem_fd, dev_luo_fd, session_fd, ret;
+> +	const uint64_t gpa = SZ_4G;
+> +	struct kvm_vcpu *vcpu;
+> +	const int slot = 1;
+> +	struct kvm_vm *vm;
+> +
+> +	vm = __vm_create_shape_with_one_vcpu(VM_SHAPE_DEFAULT, &vcpu, 1,
+> +					guest_code_phase1);
+> +	gmem_fd = vm_create_guest_memfd(vm, GMEM_SIZE, flags);
+> +	vm_set_user_memory_region2(vm, slot, KVM_MEM_GUEST_MEMFD, gpa, GMEM_SIZE, NULL,
+> +				 gmem_fd, 0);
+> +
+> +	for (size_t i = 0; i < GMEM_SIZE; i += page_size)
+> +		virt_pg_map(vm, gpa + i, gpa + i);
+> +
+> +	vcpu_args_set(vcpu, 3, gpa, GMEM_SIZE, DATA_SIZE);
+
+If GMEM_SIZE and DATA_SIZE are static I think we don't have to set those
+as vcpu_args_set(), they can be used as macros from within the guest.
+
+> +
+> +	vcpu_run(vcpu);
+> +	TEST_ASSERT_EQ(get_ucall(vcpu, NULL), UCALL_DONE);
+> +
+> +	dev_luo_fd = luo_open_device();
+> +	TEST_ASSERT(dev_luo_fd >= 0, "Failed to open /dev/liveupdate");
+> +
+> +	session_fd = luo_create_session(dev_luo_fd, SESSION_NAME);
+> +	TEST_ASSERT(session_fd >= 0, "Failed to create LUO session");
+> +
+> +	ret = luo_session_preserve_fd(session_fd, vm->fd, VM_TOKEN);
+> +	TEST_ASSERT(ret == 0, "Failed to preserve VM file descriptor");
+> +
+> +	ret = luo_session_preserve_fd(session_fd, gmem_fd, GMEM_TOKEN);
+> +	TEST_ASSERT(ret == 0, "Failed to preserve guest_memfd file descriptor");
+> +
+
+Thanks for showing how this works :)
+
+> +	printf("\n============================================================\n");
+> +	printf("Phase 1 Complete Successfully!\n");
+> +	printf("VM file and guest_memfd file have been preserved via LUO.\n");
+> +	printf("Tokens: VM_TOKEN=0x%x, GMEM_TOKEN=0x%x\n", VM_TOKEN, GMEM_TOKEN);
+> +	printf("Machine Size: %llu MB, Data Size: %llu MB\n", GMEM_SIZE / SZ_1M,
+> +				 DATA_SIZE / SZ_1M);
+> +	printf("------------------------------------------------------------\n");
+> +
+> +	daemonize_and_wait();
+> +}
+> +
+> +static struct kvm_vm *vm_create_from_fd(int resurrected_vm_fd,
+> +					struct vm_shape shape)
+> +{
+> +	struct kvm_vm *vm;
+> +
+> +	vm = calloc(1, sizeof(*vm));
+> +	TEST_ASSERT(vm != NULL, "Insufficient Memory");
+> +
+> +	vm_init_fields(vm, shape);
+
+What would happen if the shape was changed between preserving and
+restoring?
+
+> +
+> +	vm->kvm_fd = open_path_or_exit(KVM_DEV_PATH, O_RDWR);
+> +	vm->fd = resurrected_vm_fd;
+> +
+> +	if (kvm_has_cap(KVM_CAP_BINARY_STATS_FD))
+> +		vm->stats.fd = vm_get_stats_fd(vm);
+> +	else
+> +		vm->stats.fd = -1;
+> +
+> +	vm_init_memory_properties(vm);
+> +
+> +	return vm;
+> +}
+> +
+
+I think vm_create_from_fd() could be introduced in an earlier patch to
+reduce the amount of new code in this patch. Also, I think it could
+perhaps be moved to kvm_util.c assuming that other test will use it too.
+
+> +static void do_phase2(void)
+> +{
+> +	int retrieved_vm_fd, retrieved_gmem_fd, dev_luo_fd, session_fd;
+> +	struct vm_shape shape = VM_SHAPE_DEFAULT;
+> +	const uint64_t gpa = SZ_4G;
+> +	struct kvm_vcpu *vcpu;
+> +	const int slot = 1;
+> +	struct kvm_vm *vm;
+> +
+> +	dev_luo_fd = luo_open_device();
+> +	TEST_ASSERT(dev_luo_fd >= 0, "Failed to open /dev/liveupdate");
+> +
+> +	session_fd = luo_retrieve_session(dev_luo_fd, SESSION_NAME);
+> +	TEST_ASSERT(session_fd >= 0, "Failed to retrieve LUO session");
+> +
+> +	retrieved_vm_fd = luo_session_retrieve_fd(session_fd, VM_TOKEN);
+> +	TEST_ASSERT(retrieved_vm_fd >= 0, "Failed to retrieve VM file descriptor");
+> +
+> +	retrieved_gmem_fd = luo_session_retrieve_fd(session_fd, GMEM_TOKEN);
+> +	TEST_ASSERT(retrieved_gmem_fd >= 0, "Failed to retrieve guest_memfd file descriptor");
+> +
+> +	vm = vm_create_from_fd(retrieved_vm_fd, shape);
+> +
+> +	u64 nr_pages = 2048; /* 8MB is plenty for slot0 pages */
+> +
+
+I don't think declarations are usually mixed with regular code.
+
+> +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, 0);
+> +	kvm_vm_elf_load(vm, program_invocation_name);
+> +
+> +	for (int i = 0; i < NR_MEM_REGIONS; i++)
+> +		vm->memslots[i] = 0;
+> +
+> +	struct userspace_mem_region *slot0 = memslot2region(vm, 0);
+> +
+> +	ucall_init(vm, slot0->region.guest_phys_addr + slot0->region.memory_size);
+> +
+> +	vm_set_user_memory_region2(vm, slot, KVM_MEM_GUEST_MEMFD, gpa, GMEM_SIZE, NULL,
+> +				   retrieved_gmem_fd, 0);
+> +
+> +	for (size_t i = 0; i < GMEM_SIZE; i += page_size)
+> +		virt_pg_map(vm, gpa + i, gpa + i);
+> +
+> +	vcpu = vm_vcpu_add(vm, 0, guest_code_phase2);
+> +	kvm_arch_vm_finalize_vcpus(vm);
+> +
+> +	vcpu_args_set(vcpu, 3, gpa, GMEM_SIZE, DATA_SIZE);
+> +
+> +	printf("Resuming / Running VM in Phase 2...\n");
+> +	vcpu_run(vcpu);
+> +	TEST_ASSERT_EQ(get_ucall(vcpu, NULL), UCALL_DONE);
+> +
+> +	printf("\nSUCCESS: Phase 2 Complete! All 5MB complex data verified intact!\n");
+> +
+> +	luo_session_finish(session_fd);
+> +	close(session_fd);
+> +	close(dev_luo_fd);
+> +	/* This will also close the vm_fd */
+> +	kvm_vm_free(vm);
+> +	close(retrieved_gmem_fd);
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	bool phase2 = false;
+> +
+> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_GUEST_MEMFD));
+> +	page_size = getpagesize();
+> +
+> +	for (int i = 1; i < argc; i++) {
+> +		if (strcmp(argv[i], "--phase2") == 0)
+> +			phase2 = true;
+> +	}
+> +
+
+Maybe use getopt() here?
+
+> +	if (phase2)
+> +		do_phase2();
+> +	else
+> +		do_phase1();
+> +
+> +	return 0;
+> +}
+> --
+> 2.54.0.1032.g2f8565e1d1-goog
+
+I think we also need tests for trying to allocate while frozen, and
+conversion while frozen, and trying to preserve while preservation is
+not allowed.
