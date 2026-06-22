@@ -1,80 +1,52 @@
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08FD63502A9
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 04:39:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 149E618AE2;
+	Mon, 22 Jun 2026 04:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782103195; cv=none; b=P94NDVtKjwgjB1aiRLebHsEC1R7JQGHqo1Eaz4lOAc/TmCV2pDJ/E/AFieC7W5CjPfCBEYMxFRbjNNyt6ZpyQaiur6TwbFLnLWeu5ogNwIGdUUfv1X6pJTvJyQLAkXdX0YhxP1c1z2wIxSo5Y51qIe/c5xS/WZdglhnEGPIyx0o=
+	t=1782104225; cv=none; b=Vc9LvF6OAIg0u7bx3uCh71Gq5s6j811hq9OkNs4CKv1ZOkHl+J+cWXTDUMS04+TFjaZ7SoKzcTOZL74nFTKZzWeT+/KTIOx5SGXd/RcHr3uRvFhbiwHHDT2HsGstxRUk2U1lfxzMA+bxBDXxNoJCPQrdoglIU/eOzrBxwZ6CqSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782103195; c=relaxed/simple;
-	bh=LjxX8Klr+G34KM3rSGV4EWy2BeuZZEAefpqD8YkOBms=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NOCtb5P1MuVi+R8RvD8mtmrGu2ZS7BfzK9We1hbarjRIrLP7n+sAGAqGhcLEbKvuKa2MJhBqVkyoOu3XRXSiBUJWJlILGGWqrwEhTia/PdhvHjhhME+UPA3BkPQv6BgWdAitCov9jk82Mcsl6DIplH0eYly+R/zHFuVLYj32BQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K3ZhiGSa; arc=none smtp.client-ip=209.85.210.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782104225; c=relaxed/simple;
+	bh=2MnsrNw/tOEaUXQc7FinVhtDq/QeHrcPeynq4B5vp9g=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=RLdbTn7oB/0bCbnrZUVHUg5kIcw2kAWtOQwe4r7IDBEhxCr5D1W3ycU+qVFH4Jpq802NcUYBdu2L2TzRjfMl/L5D0gRf12UsEt2Y+NLdnJ2hmQ7hrEpDlXld5sVAVuXx3kvarqHXomFkHcxKvaQAu57ruTsruXR2vZPkLaYTfuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=cVMVbA3L; arc=none smtp.client-ip=13.75.44.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K3ZhiGSa"
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7e6b5c374e5so3615519a34.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 21 Jun 2026 21:39:53 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="cVMVbA3L"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782103193; x=1782707993; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oKMHfcfhMGcxiR57N856X9q08MvdnvQ8rtbS1nGojyw=;
-        b=K3ZhiGSaEdDMTAAMGtQgSOsWUyUY9inQ13wzM+al1rTMVfN/WIGtX1e9eAstDD8jUQ
-         QQx71QRZVJSkOOHKFSl+j71KjQHaJCbfh00btCfODbEi5yz00J9EYMfz16QKLij7yoI4
-         im3TFj/xzOOTpLyfDaD+iTGk8q7vzt/1ETAZ1yfo2WoHDeE3CHXq9/izh+EcTGmmWHU2
-         u733cjKR/NOwDx5FP/nn9BOmlPTX0fwXwZCmy7OH4z9bVJZkCzLGtqIm8r47pCWmC/T5
-         tyY/UkRDNqRlM14+IDilwFIogaKOgxoNQSC1sbV41mk5S0GV/Q7Hg/KQzViEIJ4npK5Q
-         XqSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782103193; x=1782707993;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=oKMHfcfhMGcxiR57N856X9q08MvdnvQ8rtbS1nGojyw=;
-        b=mtMlsIuO2fpj1hW3+LI9Bekco47kcqitUz2xl0zqVhrYedvIvytr2vrqZ2P8Dx4V/T
-         1y+JG6S786NTeGHDY30V1I1X4kWgCyVqpc2yJ7YouSbs3T1JViLIQlo/DS5/HvpdBsEY
-         VltHOe6JaaP3Mj/sTPOkmq4TkYFfYUOPFCkou9w7s1QM8WB6vZLOMgHlvRsSucXKL8kC
-         V/7PWvSk0YsxnA0/4f+6RG5Y9zoCsE8+dJRjvtNRRV5F5L/DIY4U20Rbn6i03JH5Fgxz
-         XHvLWMp6pIEdi/7Xb7XRXJ2Da9D7t3avna1mcmB7udG7vwd7XkbHWOj8px3B/d88AJrc
-         xX/A==
-X-Forwarded-Encrypted: i=1; AFNElJ8Xs+tOZFSHp8RrmyqlfKJYd79TI8R2Q/YnsCKGqwi5nHLKfBJ6jgp+m4HymNYSdUt9N521KVQQaNrcBbtyiR0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBGQ3YkChm6z0VIWOjCUCVMM25Zg15YmXriKDhq+CILdsAHRw3
-	5NWgUBjyoOdMmUE1ICrME1Z3nkbFXi9gXYXTCI1vCeMN5COh7PtJBPyr
-X-Gm-Gg: AfdE7cnPU8ZeKDL3MC/UXgnTCmMDmzxvIXESkvvlHtPuPrZF+glwyAuXJdPO1cLpIs6
-	6WMpWs5NTAvgGvQjr0ZFn+2iJTIX6q8AYFBMsABfuguuDBFMEyibAUrKu5vQWmjOajdv4m5JeXo
-	tkyZf0hOJwVSeAMktC2G78/nPPbj/OWhBlU1yTMaUSPqVBdVzgznzpq7Esknt3WdhZKDoWqcxX1
-	hPx/T4V5RCSA71sOBbEio+USabS8Iu84nlOjdT9w84QXRz0ZXpZ0LDbVFKRZenyBAgTtQHEWSCs
-	+j5uLqSb5K9K7pAhZIksTXSSF7sJ4FP+ELGxjsAjT33cDglOFJ7Xzl4CVxIMutEnzkQvItNgEVy
-	4kT4X5Wzw4Y5GojiMcuTjg3OzEDKF199JeF+HGMItEpWptnGTXJ1BB03NN0BECuUXGt5EFKNKTv
-	6kIFRipUu6eMsiaJCuPMUUFeUU44hXAX/t5A==
-X-Received: by 2002:a9d:6ad0:0:b0:7d7:45b7:ed8a with SMTP id 46e09a7af769-7e92cb41280mr6746119a34.5.1782103193153;
-        Sun, 21 Jun 2026 21:39:53 -0700 (PDT)
-Received: from nyx.tail25a6.ts.net ([2605:59c8:74db:6e0c:3a80:a3f:f9f0:1b3c])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e9442ea144sm5428453a34.27.2026.06.21.21.39.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Jun 2026 21:39:52 -0700 (PDT)
-From: Farid Zakaria <farid.m.zakaria@gmail.com>
-To: kees@kernel.org,
-	brauner@kernel.org,
-	viro@zeniv.linux.org.uk
-Cc: jack@suse.cz,
-	shuah@kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=+oe2H5Yw8tGj0MNWAtTbhprqmEjDg0kV+m
+	ECpTtqyi0=; b=cVMVbA3LUUMhfI9xTgp/G9qGbtlESkNDr+gnx2LwBwFkQJnajL
+	C3h5HArcML9YVWwLSZK95z7DBbz3ryG0kEgdidsKQFildI1L7NMox3pWPYbE5VV3
+	yfrgcTQCHdMaEfLdIJ4xtuQrP0USoYQlWtgJaGNfqW/lsjs8QN4e3UAKM=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web4 (Coremail) with SMTP id ywQGZQBHWZ6GwDhqUmtwAg--.53540S3;
+	Mon, 22 Jun 2026 12:56:49 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Farid Zakaria <farid.m.zakaria@gmail.com>
-Subject: [PATCH 2/2] selftests/exec: add test suites for $ORIGIN interpreter resolution
-Date: Sun, 21 Jun 2026 21:39:34 -0700
-Message-ID: <20260622043934.179879-3-farid.m.zakaria@gmail.com>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
-References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 1/2] bpf: Reject flexible-array allocation types
+Date: Mon, 22 Jun 2026 04:56:36 +0000
+Message-Id: <c230ebd7f2e28e0cc3820bcb2701ec517933063e.1782100805.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1782100805.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1782100805.git.chenyy23@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,145 +54,90 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ywQGZQBHWZ6GwDhqUmtwAg--.53540S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw1DGr1UGFWfur1fWryxAFb_yoW8KrWUpF
+	48J34Yyr4kJrW7WwnxJa15CryYqw48J3y7Ga45Z340yFs3Xr1DZF4UC340vFyYkF4kG340
+	qr4vvFZxGw17ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAa
+	c4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
+	Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
+	6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxw
+	ACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE14v_Gryl
+	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F
+	4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+	6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUUzV1UUUUU
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Add verification suites to test the kernel VFS and ELF loader $ORIGIN
-interpreter resolution.
+bpf_obj_new() and bpf_percpu_obj_new() allocate the static BTF size for
+the selected program-BTF type. A struct type can still end with a
+zero-length flexible array, and generic BTF struct walks have special
+handling that can accept accesses beyond the static struct size through
+such a member.
 
-1. Add a KUnit unit test 'exec_test_resolve_elf_interpreter()' verifying
-   path resolution format logic.
-2. Add a kselftests integration test containing:
-   - A nolibc-based statically linked mock interpreter that prints a
-     success message and returns 42. nolibc is used to bypass glibc's
-     static startup code which segfaults when loaded as an interpreter
-     due to AT_PHDR mismatches.
-   - A dynamic test program configured to look for the interpreter at
-     $ORIGIN/mock_interp.
-   - A shell script harness checking for a PASS result.
+Reject allocation kfunc types with trailing flexible arrays before marking
+the return value as PTR_TO_BTF_ID | MEM_ALLOC. This keeps the
+verifier-visible BTF access shape aligned with the object size allocated by
+the runtime kfunc.
 
-Assisted-by: Antigravity:Gemini-Pro
-Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
+Fixes: 958cf2e273f0 ("bpf: Introduce bpf_obj_new")
+Fixes: 36d8bdf75a93 ("bpf: Add alloc/xchg/direct_access support for local percpu kptr")
+Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 ---
- fs/tests/exec_kunit.c                         | 26 +++++++++++++++++++
- tools/testing/selftests/exec/Makefile         | 12 ++++++---
- tools/testing/selftests/exec/mock_interp.c    |  6 +++++
- tools/testing/selftests/exec/origin_interp.sh | 16 ++++++++++++
- tools/testing/selftests/exec/test_prog.c      |  5 ++++
- 5 files changed, 62 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/exec/mock_interp.c
- create mode 100755 tools/testing/selftests/exec/origin_interp.sh
- create mode 100644 tools/testing/selftests/exec/test_prog.c
+ kernel/bpf/verifier.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/fs/tests/exec_kunit.c b/fs/tests/exec_kunit.c
-index 1c32cac09..991b9abad 100644
---- a/fs/tests/exec_kunit.c
-+++ b/fs/tests/exec_kunit.c
-@@ -119,8 +119,34 @@ static void exec_test_bprm_stack_limits(struct kunit *test)
- 	}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2abc79dbf..c3a574cc0 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10955,6 +10955,30 @@ static bool __btf_type_is_scalar_struct(struct bpf_verifier_env *env,
+ 	return true;
  }
  
-+static void exec_test_resolve_elf_interpreter(struct kunit *test)
++static bool btf_type_has_trailing_flex_array(const struct btf *btf,
++					     const struct btf_type *t)
 +{
-+	struct linux_binprm bprm = { .file = NULL };
-+	struct file *f;
-+	char *resolved;
++	const struct btf_type *member_type;
++	const struct btf_member *member;
++	const struct btf_array *array;
++	u32 vlen;
 +
-+	// Test 1: Non-$ORIGIN interpreter path should just be duplicated
-+	resolved = resolve_elf_interpreter(&bprm, "/lib64/ld-linux-x86-64.so.2");
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, resolved);
-+	KUNIT_EXPECT_STREQ(test, resolved, "/lib64/ld-linux-x86-64.so.2");
-+	kfree(resolved);
++	if (!btf_type_is_struct(t))
++		return false;
 +
-+	// Test 2: $ORIGIN interpreter path
-+	f = filp_open("/", O_RDONLY, 0);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, f);
-+	bprm.file = f;
++	vlen = btf_type_vlen(t);
++	if (!vlen)
++		return false;
 +
-+	resolved = resolve_elf_interpreter(&bprm, "$ORIGIN/../lib/ld.so");
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, resolved);
-+	KUNIT_EXPECT_STREQ(test, resolved, "//../lib/ld.so");
-+	kfree(resolved);
++	member = btf_type_member(t) + vlen - 1;
++	member_type = btf_type_skip_modifiers(btf, member->type, NULL);
++	if (!btf_type_is_array(member_type))
++		return false;
 +
-+	filp_close(f, NULL);
++	array = btf_array(member_type);
++	return !array->nelems;
 +}
 +
- static struct kunit_case exec_test_cases[] = {
- 	KUNIT_CASE(exec_test_bprm_stack_limits),
-+	KUNIT_CASE(exec_test_resolve_elf_interpreter),
- 	{},
- };
+ enum kfunc_ptr_arg_type {
+ 	KF_ARG_PTR_TO_CTX,
+ 	KF_ARG_PTR_TO_ALLOC_BTF_ID,    /* Allocated object */
+@@ -12749,6 +12773,10 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_ca
+ 			verbose(env, "bpf_obj_new/bpf_percpu_obj_new type ID argument must be of a struct\n");
+ 			return -EINVAL;
+ 		}
++		if (btf_type_has_trailing_flex_array(ret_btf, ret_t)) {
++			verbose(env, "bpf_obj_new type must not contain a flexible array\n");
++			return -EINVAL;
++		}
  
-diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
-index 45a3cfc43..5e2e305cb 100644
---- a/tools/testing/selftests/exec/Makefile
-+++ b/tools/testing/selftests/exec/Makefile
-@@ -10,9 +10,9 @@ ALIGN_PIES        := $(patsubst %,load_address.%,$(ALIGNS))
- ALIGN_STATIC_PIES := $(patsubst %,load_address.static.%,$(ALIGNS))
- ALIGNMENT_TESTS   := $(ALIGN_PIES) $(ALIGN_STATIC_PIES)
- 
--TEST_PROGS := binfmt_script.py check-exec-tests.sh
--TEST_GEN_PROGS := execveat non-regular $(ALIGNMENT_TESTS)
--TEST_GEN_PROGS_EXTENDED := false inc set-exec script-exec.inc script-noexec.inc
-+TEST_PROGS := binfmt_script.py check-exec-tests.sh origin_interp.sh
-+TEST_GEN_PROGS := execveat non-regular $(ALIGNMENT_TESTS) test_prog
-+TEST_GEN_PROGS_EXTENDED := false inc set-exec script-exec.inc script-noexec.inc mock_interp
- TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
- # Makefile is a run-time dependency, since it's accessed by the execveat test
- TEST_FILES := Makefile
-@@ -55,3 +55,9 @@ $(OUTPUT)/script-exec.inc: $(CHECK_EXEC_SAMPLES)/script-exec.inc
- 	cp $< $@
- $(OUTPUT)/script-noexec.inc: $(CHECK_EXEC_SAMPLES)/script-noexec.inc
- 	cp $< $@
-+
-+$(OUTPUT)/mock_interp: mock_interp.c
-+	$(CC) $(CFLAGS) $(LDFLAGS) -static -nostdlib -include ../../../include/nolibc/nolibc.h $< -o $@
-+
-+$(OUTPUT)/test_prog: test_prog.c $(OUTPUT)/mock_interp
-+	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-dynamic-linker,'$$ORIGIN/mock_interp' $< -o $@
-diff --git a/tools/testing/selftests/exec/mock_interp.c b/tools/testing/selftests/exec/mock_interp.c
-new file mode 100644
-index 000000000..9c9ca1098
---- /dev/null
-+++ b/tools/testing/selftests/exec/mock_interp.c
-@@ -0,0 +1,6 @@
-+// SPDX-License-Identifier: GPL-2.0
-+int main(void)
-+{
-+	write(1, "Hello from mock interpreter!\n", 29);
-+	return 42;
-+}
-diff --git a/tools/testing/selftests/exec/origin_interp.sh b/tools/testing/selftests/exec/origin_interp.sh
-new file mode 100755
-index 000000000..635a40839
---- /dev/null
-+++ b/tools/testing/selftests/exec/origin_interp.sh
-@@ -0,0 +1,16 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Execute the test program which has its interpreter set to $ORIGIN/mock_interp
-+# Note that mock_interp must be in the same directory.
-+dir=$(dirname "$0")
-+out=$("$dir"/test_prog 2>&1)
-+exit_code=$?
-+
-+if [ $exit_code -eq 42 ] && [ "$out" = "Hello from mock interpreter!" ]; then
-+	echo "origin_interp: PASS"
-+	exit 0
-+else
-+	echo "origin_interp: FAIL (exit_code=$exit_code, output='$out')"
-+	exit 1
-+fi
-diff --git a/tools/testing/selftests/exec/test_prog.c b/tools/testing/selftests/exec/test_prog.c
-new file mode 100644
-index 000000000..451614def
---- /dev/null
-+++ b/tools/testing/selftests/exec/test_prog.c
-@@ -0,0 +1,5 @@
-+// SPDX-License-Identifier: GPL-2.0
-+int main(void)
-+{
-+	return 0; /* Should never be reached if interpreter is loaded instead */
-+}
+ 		if (is_bpf_percpu_obj_new_kfunc(meta->func_id)) {
+ 			if (ret_t->size > BPF_GLOBAL_PERCPU_MA_MAX_SIZE) {
 -- 
-2.51.2
+2.34.1
 
