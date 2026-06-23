@@ -1,377 +1,171 @@
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C712C390CBA
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 19:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D1C38944E
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 20:06:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782244205; cv=none; b=q1RQNhbl5Djbv6NuMkUtUiGqXhlvf8GsD1IpEq3vxWIs0In4iTkP0UIw0uyWGrxPehyO3BmJhXsSTQ2yG8RMsVma+rkf+lkLSzhd8y222KLEh3uwjgteHRjrVQMpeqf+HfAqj5IFQD/HE/mZiYqDXDJ/sWIW2ylI9+yKgIjZXiU=
+	t=1782245205; cv=none; b=PZ5w4lOmYMSdAf74/4xZjdv+frcx8uLrhXI0wdobyT1PPrhRjFtUMgyDuIwycVRg/jgsTkJwwAnp5lCO50TDcCydpRPQe0KlgyDh766PD7mxEHaksmVcb78v4WlJ4GERzGYejewG0LyST1lq6n838cwJaJuAdThWjPXm758/MuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782244205; c=relaxed/simple;
-	bh=PCdxZHaDVmkm3TCzXBWX11/NSB4PaHEtWEjQDmjXAX0=;
+	s=arc-20240116; t=1782245205; c=relaxed/simple;
+	bh=ykMC2ieYQYVSxbapdFkuFJd/A1i/SI/0S63Ag5SQ2+E=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=gAThb7ssX3Sj3zodJh7C47oFB9+fyoA3+2Ih+q1Mt/e7bym5w9I8yceZ5GTfuP6RtGNA8I/haWdbdkAUaxsn7FYqS7QqtR9sKsmGgDiqRkaK3PjdgUmw/GAxEKw76Gir38baynGRQuI8JazeX+PXB6BAMkP8lH/3v3AvKS2Z5YA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YPwRq5wt; arc=none smtp.client-ip=209.85.208.74
+	 To:Cc:Content-Type; b=IRMx8gS1Lay8UvSxPVBWG/DGUeYrsRsp4uX/dip6xO//elmATS3dypq/RmYPxyn9/cZUyKgoOp7PxR5hYlsP6NFvBkETtaDOoA/yxt4d/sHmet6gpGLwxL7TjExNg3GAAG29vEpDA+BZZunNvL9jFBxRE7Jkj33EZZ2Yzv5xHN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hItVHB/p; arc=none smtp.client-ip=209.85.208.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YPwRq5wt"
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-697df3655d8so121827a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 12:50:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hItVHB/p"
+Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-695796f97aeso163049a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 13:06:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782244202; x=1782849002; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1782245203; x=1782850003; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zdsj6Guo7r326E75XLxyGx3YlVfMh6UQRvA3w5OPiCM=;
-        b=YPwRq5wtAMcjgrky1GfhZg5Sq9cYpXmGlUdarAT287bU5lv82QwzRtupJvjWurvuyn
-         fLC2oDnRGb8EQ2VbzjhDkG44c3G2anlU5dUUqdwwn2ot7bfW+tvR2o8dYlSINLbskgaG
-         +tf+xYOmPZQbAVqB2OnS6gJ7Zdah1zZsnmtfIgWG6OktTruQvKrDbCHtbNzF2c6GTA3I
-         0NwS/dEKIFa5SmnbJ4WbUR+iBK6aUY5pgQuTTQYgHr7YwfqCmZVMgDKylvghq5qLMB8L
-         tCjZgg5Gmon7qXfqIVqWITRm1TXiOejw1NkVyli8xABGnWFn7HXAqhegYfln4PHm2wqA
-         z1gQ==
+        bh=kYPy5Kp/eciXGU33EP09NXjsbX2uzzGfRHxirk+T+0A=;
+        b=hItVHB/p6ViFVNt7PxMzW+TnRr3F7wzqELOAGwnVrgdqD7j0ceDj9QeSkB/wMVAvZo
+         bV/gGRlk+etAb/RTu9kTPIS03VXX7FdRRuQz8FrfWfscyJLD7OOxHdNYaAj9B4ka5KTE
+         iH5bxbf+4A3d6ZhCrc0zzuiEARShuiAiP+m89iv94cok2uUkaNbxLjOSPMbUkYV6Bvp2
+         4bvOBNPQTjO/+VkQCqn0YjKra2i/UVG9w5OG0HvdqLFrEweVYQXclb2EB3sYoQHoKDNx
+         oCpWw77zyfkhx7L9foHDxNstlsTNv94HID+mnWG2As+J9ck6LEul/e2p47tGaycrbjGC
+         Bn8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782244202; x=1782849002;
+        d=1e100.net; s=20251104; t=1782245203; x=1782850003;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zdsj6Guo7r326E75XLxyGx3YlVfMh6UQRvA3w5OPiCM=;
-        b=imG9L6NTbLoYFOsxGcmXMZV0mW4x3/ic6uckGNMjz6QUh29ccHqRQg47glou5YdCgn
-         dR5CwtlfpG8yf0+7fiuEQsbqL7Ui7ZA0EIIVPJOhl8OXZe5O0I8+5HSHWNjuP8WVS11P
-         uaUczMMvssensxXNHgZYiF5YS9eIZ6u14x0AeMdGW6DZ3XnfxN9gxM67+l8FVtcL/1RC
-         P7jJfEZiL2ZwDi0ji/qH0XrgHn97czdPbw8Ie9iLQF/h0B9n+1gYydYRY3PEi0nbUl0o
-         bAI6+Qr3fnviV4gafrc+glYP7Y9n4e6fAwbi4KMgw3eRMaRpHTOpCVPyxio4juMWyWTX
-         YTyg==
-X-Gm-Message-State: AOJu0YzUElXegr6uw5/2/f8ga9+K82un2kKwdR6cB413IbKSh7WkgE54
-	jJbaKbQ2ZClvz4rKIlj735Vf/Z8sfX7LNSyHi0NTfutlxkPTFT2tSumRLUc3naLYO9StHjyr7bI
-	/78NXI4r3iwsm7Dtbtg==
-X-Received: from edbbp7.prod.google.com ([2002:a05:6402:1467:b0:692:efc2:c022])
+        bh=kYPy5Kp/eciXGU33EP09NXjsbX2uzzGfRHxirk+T+0A=;
+        b=UAZrt+DBcp8Ae5HQovgJHBWLPG8br0sPo/etIRpL1pZgnHkfOOIZvVIBrutw98WM98
+         eTlWJuSdGggou/Xbs8Jt361IdB1E07XZUI32Okp6Kp3dd08A+7ml+3WzQ4oX+4dXokc3
+         M1C228Ns8ckowqMVrzX0NE8aS5n7Dv/fO824NckBIc9N2NaEL78ongt+FbBR+cQSL/0x
+         VWObRp9fbK2kKfnK6055xYvLginhH9p+5JhzqqEJryp5tb67Wy9i2q0qXicDgCj41pyP
+         A9fuLYZQHym0bekDPqQqoPPs0oCP2zWhXLZFzlRRHpBE5BJacmZ8bviU7h/ETzYDyvDD
+         9ZYA==
+X-Forwarded-Encrypted: i=1; AFNElJ/X5f+DyxEYItOaPe9L1JE3PL/+TghYsBTFMp9MjlKfW+0uztQaOcxcIuEyd5hL1xRrE6Z6MKRYH8tcLVKUU6w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSvA8OQYU3UAnHGI0TnoI4cMB+iobw/SV73vPdxguF06s9Fap4
+	0MOLX4DzRm2dLAZA0PP8yZXEp7WnBNoFZPWY8w01zCNhO6DaU7PNpYAX6Q9cozvuvno9CMMCiCs
+	1Lp7fJRW4TE8ejI2aaA==
+X-Received: from edyc13.prod.google.com ([2002:aa7:df0d:0:b0:697:e99f:d111])
  (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:5253:b0:697:aee0:7a4d with SMTP id 4fb4d7f45d1cf-697dba62033mr2212935a12.6.1782244201867;
- Tue, 23 Jun 2026 12:50:01 -0700 (PDT)
-Date: Tue, 23 Jun 2026 19:50:00 +0000
-In-Reply-To: <CAEvNRgE2GZNiDg_g6SP_H9CDsDDAnpN7KTRWJEK18wxpTZFJZw@mail.gmail.com>
+ 2002:a05:6402:3554:b0:691:b5aa:5a7a with SMTP id 4fb4d7f45d1cf-697f3adf4a5mr19296a12.21.1782245202451;
+ Tue, 23 Jun 2026 13:06:42 -0700 (PDT)
+Date: Tue, 23 Jun 2026 20:06:41 +0000
+In-Reply-To: <2vxz8q85mdyh.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <cover.1780676742.git.tarunsahu@google.com> <deb20fbe3584a8c6bfda276447fe464c6553737d.1780676742.git.tarunsahu@google.com>
- <CAEvNRgE2GZNiDg_g6SP_H9CDsDDAnpN7KTRWJEK18wxpTZFJZw@mail.gmail.com>
-Message-ID: <9huzldc5m3yv.fsf@tarunix.c.googlers.com>
-Subject: Re: [RFC PATCH v2 10/10] selftests: kvm: Add guest_memfd_preservation_test
+References: <cover.1780676742.git.tarunsahu@google.com> <48777f4749fa43d5648085dbb2037aa99c144a88.1780676742.git.tarunsahu@google.com>
+ <CAEvNRgFEHciT3T9y+qEYRvXhDwfrggoU7Rm=f9hT3OrV+wgpNQ@mail.gmail.com>
+ <9huztsqtmihs.fsf@tarunix.c.googlers.com> <2vxz8q85mdyh.fsf@kernel.org>
+Message-ID: <9huzv7b910oe.fsf@tarunix.c.googlers.com>
+Subject: Re: [RFC PATCH v2 06/10] kvm: guest_memfd: Add support for freezing
+ and unfreezing mappings
 From: tarunsahu@google.com
-To: Ackerley Tng <ackerleytng@google.com>, Jonathan Corbet <corbet@lwn.net>, vannapurve@google.com, 
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: Ackerley Tng <ackerleytng@google.com>, Jonathan Corbet <corbet@lwn.net>, vannapurve@google.com, 
 	fvdl@google.com, Pasha Tatashin <pasha.tatashin@soleen.com>, 
 	Shuah Khan <skhan@linuxfoundation.org>, sagis@google.com, aneesh.kumar@kernel.org, 
 	skhawaja@google.com, vipinsh@google.com, Pratyush Yadav <pratyush@kernel.org>, 
 	david@redhat.com, dmatlack@google.com, mark.rutland@arm.com, 
 	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
-	seanjc@google.com, axelrasmussen@google.com
-Cc: linux-kselftest@vger.kernel.org, kexec@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-mm@kvack.org
+	seanjc@google.com, axelrasmussen@google.com, linux-kselftest@vger.kernel.org, 
+	kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 
-Ackerley Tng <ackerleytng@google.com> writes:
+Pratyush Yadav <pratyush@kernel.org> writes:
 
-> Tarun Sahu <tarunsahu@google.com> writes:
+> On Tue, Jun 23 2026, tarunsahu@google.com wrote:
 >
->> Add a new KVM selftest `guest_memfd_preservation_test` to verify that
->> guest memory backed by guest_memfd is preserved properly.
+>> Ackerley Tng <ackerleytng@google.com> writes:
 >>
+>>> Tarun Sahu <tarunsahu@google.com> writes:
+>>>
+>>>>  static long kvm_gmem_fallocate(struct file *file, int mode, loff_t offset,
+>>>>  			       loff_t len)
+>>>>  {
+>>>> +	struct inode *inode = file_inode(file);
+>>>>  	int ret;
+>>>> +	int idx;
+>>>>
+>>>> -	if (!(mode & FALLOC_FL_KEEP_SIZE))
+>>>> -		return -EOPNOTSUPP;
+>>>> +	idx = srcu_read_lock(&kvm_gmem_freeze_srcu);
+>>>> +	if (kvm_gmem_is_frozen(inode)) {
+>>>> +		srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
+>>>> +		return -EPERM;
+>>>> +	}
+>>>
+>>> fallocate may eventually go to kvm_gmem_get_folio(), so that would check
+>>> kvm_gmem_is_frozen() twice. Is this meant to catch the punch hole case?
 >
-> Don't think using backticks in commit messages is a common practice but
-> I might be wrong here.
+> Yeah, I reckon you can get away with doing this check only in
+> kvm_gmem_get_folio(). Normally you'd like to fail early, but as of now I
+> don't see much of a problem. If you drop the check here and fail in
+> kvm_gmem_get_folio() you'd end up taking and releasing the mapping
+> invalidate_lock, but this isn't a fast path anyway so I don't think it
+> should matter much.
+
+No, Don't agree.
+kvm_gmem_get_folios already have the is_frozen check. which blocks the
+kvm_gmem_allocate. But not kvm_gmem_punch_hole. Your argument is correct
+for kvm_gmem_allocate only. So is_frozen check in fallocate is to
+block the punch hole as well. What ackerley said is correct.
+
 >
->> The test leverages the Live Update Orchestrator (LUO) infrastructure
->> to validate that memory folios and configuration layouts are
->> successfully saved and then restored during kernel live updates,
->> preventing any memory loss for the guest.
+> I think either way can work just as fine...
+>
+>>>
+>>>>
+>>>> -	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE))
+>>>> -		return -EOPNOTSUPP;
+>>>> +	if (!(mode & FALLOC_FL_KEEP_SIZE)) {
+>>>> +		ret = -EOPNOTSUPP;
+>>>> +		goto out;
+>>>> +	}
+>>>>
+>>>> -	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
+>>>> -		return -EINVAL;
+>>>> +	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE)) {
+>>>> +		ret = -EOPNOTSUPP;
+>>>> +		goto out;
+>>>> +	}
+>>>> +
+>>>> +	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len)) {
+>>>> +		ret = -EINVAL;
+>>>> +		goto out;
+>>>> +	}
+>>>
+>>> There's some reordering here. Why not let the validation happen like
+>>> before, then check kvm_gmem_is_frozen()?
+>
+> There is no reordering, if I am reading the diff correctly. The diff is
+> somewhat misleading. The kvm_gmem_is_frozen() call is added at the top
+> of the function, and then all the later checks are in the same place but
+> get a goto out (and hence a full body to the if block). So the diff
+> reads like reordering, but there is none.
+>
+
+That is right. I thought Ackerley was asking why not add the check after
+the all the if condition and before the kvm_gmem_punch_hole/allocate calls.
+
+> It would be very neat if scru had a cleanup.h style scope-based locking
+> function, but on a quick glance I can't see one.
+>
 >>
->> Here, I have used the kvm selftests framework by creating a new
->> vm and mapping two memory slots to it. One is the code that is executed
->> inside the vm and other is the guest_memfd whose memory is being
->> written by the guest code.
+>> To align with design. "stop the fallocate call if inode is frozen, No
+>> need to go further". I dont have strict opinion on this. I am fine with
+>> taking it across punch hole as well to make it more fine grained. But it
+>> will no longer claims stop the fallocate call (allocation one is stopped
+>> in separate path: fault path) , though functionally it does the same
+>> thing.
 >>
->
-> Don't think commit messages with "I" are common either
-
-
-Will take care of commit message everywhere as per the guidelines,
-Sorry about that.
->
->> In Phase 1: Once data is written the vm exits and wait for the user
->> to trigger the kexec.
+>> WDYT?
 >>
->> In Phase 2: A new vm is created with retrieved kvm and again two
->> memory slots are assigned. Once for guest code, and another is for
->> retrieved guest_memfd where guest_memfd memory is verified by the
->> executed guest code. If verification succeeds, The test passes.
->>
->>
->> [...snip...]
->>
->> +#define SESSION_NAME "gmem_vm_preservation_session"
->> +#define VM_TOKEN 0x1001
->> +#define GMEM_TOKEN 0x1002
->> +
->> +#define GMEM_SIZE (16ULL * 1024 * 1024)
->> +#define DATA_SIZE (5ULL * 1024 * 1024)
->> +
->> +static size_t page_size;
->> +
->> +/* Deterministic byte pattern generation based on offset */
->> +static inline uint8_t get_pattern_byte(size_t offset)
->> +{
->> +	return (uint8_t)(offset ^ 0x5A);
->> +}
->> +
->> +static void guest_code_phase1(uint64_t gpa, uint64_t size, uint64_t data_size)
->> +{
->> +	uint8_t *mem = (uint8_t *)gpa;
->> +	size_t i;
->> +
->> +	for (i = 0; i < data_size; i++)
->> +		mem[i] = get_pattern_byte(i);
->> +
->> +	GUEST_DONE();
->> +}
->> +
->> +static void guest_code_phase2(uint64_t gpa, uint64_t size, uint64_t data_size)
->> +{
->> +	uint8_t *mem = (uint8_t *)gpa;
->> +	size_t i;
->> +
->> +	for (i = 0; i < data_size; i++) {
->> +		uint8_t val = get_pattern_byte(i);
->> +
->> +		__GUEST_ASSERT(mem[i] == val,
->> +			       "Data mismatch at offset %lu! Expected 0x%x, got 0x%x",
->> +			       i, val, mem[i]);
->> +	}
->> +
->> +	GUEST_DONE();
->> +}
->> +
->> +static void do_phase1(void)
->> +{
->> +	uint64_t flags = GUEST_MEMFD_FLAG_MMAP | GUEST_MEMFD_FLAG_INIT_SHARED;
+>> ~Tarun
 >
-> Is there a reason to set GUEST_MEMFD_FLAG_MMAP? We're not really
-> accessing that memory from the host in this test.
-
-Right, We can skip it.
-
->
->> +	int gmem_fd, dev_luo_fd, session_fd, ret;
->> +	const uint64_t gpa = SZ_4G;
->> +	struct kvm_vcpu *vcpu;
->> +	const int slot = 1;
->> +	struct kvm_vm *vm;
->> +
->> +	vm = __vm_create_shape_with_one_vcpu(VM_SHAPE_DEFAULT, &vcpu, 1,
->> +					guest_code_phase1);
->> +	gmem_fd = vm_create_guest_memfd(vm, GMEM_SIZE, flags);
->> +	vm_set_user_memory_region2(vm, slot, KVM_MEM_GUEST_MEMFD, gpa, GMEM_SIZE, NULL,
->> +				 gmem_fd, 0);
->> +
->> +	for (size_t i = 0; i < GMEM_SIZE; i += page_size)
->> +		virt_pg_map(vm, gpa + i, gpa + i);
->> +
->> +	vcpu_args_set(vcpu, 3, gpa, GMEM_SIZE, DATA_SIZE);
->
-> If GMEM_SIZE and DATA_SIZE are static I think we don't have to set those
-> as vcpu_args_set(), they can be used as macros from within the guest.
-
-Yes, There are multiple places we can skip it, Like passing them as the
-argument in the guest_code_phase1/2. Will update it.
-
->
->> +
->> +	vcpu_run(vcpu);
->> +	TEST_ASSERT_EQ(get_ucall(vcpu, NULL), UCALL_DONE);
->> +
->> +	dev_luo_fd = luo_open_device();
->> +	TEST_ASSERT(dev_luo_fd >= 0, "Failed to open /dev/liveupdate");
->> +
->> +	session_fd = luo_create_session(dev_luo_fd, SESSION_NAME);
->> +	TEST_ASSERT(session_fd >= 0, "Failed to create LUO session");
->> +
->> +	ret = luo_session_preserve_fd(session_fd, vm->fd, VM_TOKEN);
->> +	TEST_ASSERT(ret == 0, "Failed to preserve VM file descriptor");
->> +
->> +	ret = luo_session_preserve_fd(session_fd, gmem_fd, GMEM_TOKEN);
->> +	TEST_ASSERT(ret == 0, "Failed to preserve guest_memfd file descriptor");
->> +
->
-> Thanks for showing how this works :)
-
-Glad to know. it helped.
-. .
- v
-
-
->
->> +	printf("\n============================================================\n");
->> +	printf("Phase 1 Complete Successfully!\n");
->> +	printf("VM file and guest_memfd file have been preserved via LUO.\n");
->> +	printf("Tokens: VM_TOKEN=0x%x, GMEM_TOKEN=0x%x\n", VM_TOKEN, GMEM_TOKEN);
->> +	printf("Machine Size: %llu MB, Data Size: %llu MB\n", GMEM_SIZE / SZ_1M,
->> +				 DATA_SIZE / SZ_1M);
->> +	printf("------------------------------------------------------------\n");
->> +
->> +	daemonize_and_wait();
->> +}
->> +
->> +static struct kvm_vm *vm_create_from_fd(int resurrected_vm_fd,
->> +					struct vm_shape shape)
->> +{
->> +	struct kvm_vm *vm;
->> +
->> +	vm = calloc(1, sizeof(*vm));
->> +	TEST_ASSERT(vm != NULL, "Insufficient Memory");
->> +
->> +	vm_init_fields(vm, shape);
->
-> What would happen if the shape was changed between preserving and
-> restoring?
-Shape must be consistent across kexec. It may break. struct vm_shape
-includes two fields
-1. mode: 4k, 16k or 64k mapping, how many page table bit etc.
-         which are used to setup mapping with guest code, and memory.
-         guest_memfd does not support mapping other than PAGE_SIZE.
-2. type: This is userspace side of the vm type. And it will not have
-         information about the preserved vm_type via vm_file (kernel).
-         If userspace changes this on stage2, some action might not
-         work. for example, if userspace is expecting vm_type to be
-         COCO VM and preserved vm_type is shared, this will have
-         conflict when userspace will try to perform some operation that
-         only works with COCO VM.
-
-
-My Question is: Why should someone change the shape, unless they are
-                planning to make the vm fail?
-
->
->> +
->> +	vm->kvm_fd = open_path_or_exit(KVM_DEV_PATH, O_RDWR);
->> +	vm->fd = resurrected_vm_fd;
->> +
->> +	if (kvm_has_cap(KVM_CAP_BINARY_STATS_FD))
->> +		vm->stats.fd = vm_get_stats_fd(vm);
->> +	else
->> +		vm->stats.fd = -1;
->> +
->> +	vm_init_memory_properties(vm);
->> +
->> +	return vm;
->> +}
->> +
->
-> I think vm_create_from_fd() could be introduced in an earlier patch to
-> reduce the amount of new code in this patch. Also, I think it could
-> perhaps be moved to kvm_util.c assuming that other test will use it too.
->
-Makes sense, Will take of it next revision v4.
-
-
->> +static void do_phase2(void)
->> +{
->> +	int retrieved_vm_fd, retrieved_gmem_fd, dev_luo_fd, session_fd;
->> +	struct vm_shape shape = VM_SHAPE_DEFAULT;
->> +	const uint64_t gpa = SZ_4G;
->> +	struct kvm_vcpu *vcpu;
->> +	const int slot = 1;
->> +	struct kvm_vm *vm;
->> +
->> +	dev_luo_fd = luo_open_device();
->> +	TEST_ASSERT(dev_luo_fd >= 0, "Failed to open /dev/liveupdate");
->> +
->> +	session_fd = luo_retrieve_session(dev_luo_fd, SESSION_NAME);
->> +	TEST_ASSERT(session_fd >= 0, "Failed to retrieve LUO session");
->> +
->> +	retrieved_vm_fd = luo_session_retrieve_fd(session_fd, VM_TOKEN);
->> +	TEST_ASSERT(retrieved_vm_fd >= 0, "Failed to retrieve VM file descriptor");
->> +
->> +	retrieved_gmem_fd = luo_session_retrieve_fd(session_fd, GMEM_TOKEN);
->> +	TEST_ASSERT(retrieved_gmem_fd >= 0, "Failed to retrieve guest_memfd file descriptor");
->> +
->> +	vm = vm_create_from_fd(retrieved_vm_fd, shape);
->> +
->> +	u64 nr_pages = 2048; /* 8MB is plenty for slot0 pages */
->> +
->
-> I don't think declarations are usually mixed with regular code.
-Okay, will udpate that.
-
->
->> +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, 0);
->> +	kvm_vm_elf_load(vm, program_invocation_name);
->> +
->> +	for (int i = 0; i < NR_MEM_REGIONS; i++)
->> +		vm->memslots[i] = 0;
->> +
->> +	struct userspace_mem_region *slot0 = memslot2region(vm, 0);
->> +
->> +	ucall_init(vm, slot0->region.guest_phys_addr + slot0->region.memory_size);
->> +
->> +	vm_set_user_memory_region2(vm, slot, KVM_MEM_GUEST_MEMFD, gpa, GMEM_SIZE, NULL,
->> +				   retrieved_gmem_fd, 0);
->> +
->> +	for (size_t i = 0; i < GMEM_SIZE; i += page_size)
->> +		virt_pg_map(vm, gpa + i, gpa + i);
->> +
->> +	vcpu = vm_vcpu_add(vm, 0, guest_code_phase2);
->> +	kvm_arch_vm_finalize_vcpus(vm);
->> +
->> +	vcpu_args_set(vcpu, 3, gpa, GMEM_SIZE, DATA_SIZE);
->> +
->> +	printf("Resuming / Running VM in Phase 2...\n");
->> +	vcpu_run(vcpu);
->> +	TEST_ASSERT_EQ(get_ucall(vcpu, NULL), UCALL_DONE);
->> +
->> +	printf("\nSUCCESS: Phase 2 Complete! All 5MB complex data verified intact!\n");
->> +
->> +	luo_session_finish(session_fd);
->> +	close(session_fd);
->> +	close(dev_luo_fd);
->> +	/* This will also close the vm_fd */
->> +	kvm_vm_free(vm);
->> +	close(retrieved_gmem_fd);
->> +}
->> +
->> +int main(int argc, char *argv[])
->> +{
->> +	bool phase2 = false;
->> +
->> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_GUEST_MEMFD));
->> +	page_size = getpagesize();
->> +
->> +	for (int i = 1; i < argc; i++) {
->> +		if (strcmp(argv[i], "--phase2") == 0)
->> +			phase2 = true;
->> +	}
->> +
->
-> Maybe use getopt() here?
-
-In V3, it is update to use liveupdate library.
->
->> +	if (phase2)
->> +		do_phase2();
->> +	else
->> +		do_phase1();
->> +
->> +	return 0;
->> +}
->> --
->> 2.54.0.1032.g2f8565e1d1-goog
->
-> I think we also need tests for trying to allocate while frozen, and
-> conversion while frozen, and trying to preserve while preservation is
-> not allowed.
-
-Yes, We need those tests. For this series, I wanted to focus on design.
-Now that we are aligned, next revision, I will send with more tests.
-
-~Tarun
+> -- 
+> Regards,
+> Pratyush Yadav
