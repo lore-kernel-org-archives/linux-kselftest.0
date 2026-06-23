@@ -1,83 +1,192 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67273932FF;
-	Tue, 23 Jun 2026 20:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0604395ACB;
+	Tue, 23 Jun 2026 20:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782245261; cv=none; b=MRgpyBIV5TahyzSmfUWoRXYkicLi3Gi8xer1UU364CscKDiwCwlBSfrmkH4n6m7qi9C4bE+nr8g1wzvLrlLdzsYbFl49EI6pTfB2RV0hT+0Ki60QD9EHZkc9nAeDtdRy3p1Sa3TZTc0Cx9rc23xAWa5/S7CcNM18uLD1KjiZuto=
+	t=1782245676; cv=none; b=KZ6fIK8cqS05txYoDlYs/fGdAkp2Y++IzCiC9vG8FiRefoPBaRdbCnRQU6t0fwbWbTgpoqx4n+oMi76eozgDeRBhuQa54Dy7+OyFf42GKPh06VghqVfRUZ0wNUVTLCjPWBOrcWMI1PWNOsupdqQV2KDOtpriB+G4nIM9hpGzuh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782245261; c=relaxed/simple;
-	bh=8QIsMnJbf4Lbi5vO5rZNPxESsinFfltveRyhQQl9rGU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=D5KbzpfwU2rgJT2XvEt/6PhJVG3crDVaEF04oRA+CH0Im4MgcxG9pyWlY0nxFMX/9q625ounaZRSSVj55fLmWMmfNPeDGGHUT2+Aw826z5ZWNh3DRS1FGDcA1QTA9URc6hn7dq0Zhvkl64COB6ly/J7N1ZG7KyPlXz0b7xKsef8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BAaQXCqe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782245676; c=relaxed/simple;
+	bh=+NGHr3JwJhFyeVqNLHlK3enumdKIlg00Zx4KtBXAj6A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M5OgTBunzPoPJshGSQsKGBYdFSuPHwSx+LBAzI2dgxNLnXn8dbYdJ+XPb6fJKyc/A96VJ1sqKgGvYA3de6KjYg5anWd23PZZ9f5qpwh+zpW8PlrCMcnotKveuDSri7nGOGG52Dv0a8J7Qr6fKYJHqbnu6ATZYWvB/9yem8w6vmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZJAZRpdB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BAaQXCqe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56B021F000E9;
-	Tue, 23 Jun 2026 20:07:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZJAZRpdB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB461F00A3A;
+	Tue, 23 Jun 2026 20:14:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782245260;
-	bh=XWHa62l/YiCsFLEmqWnO1R3ebE4heGP/6x4UVAPjgds=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=BAaQXCqe+0gOROgwKims9hjNuTtcOYeu7FT7Os3GgzLHUg+O75W1gGIM6rgN6ZHTA
-	 rs7wYg61r+qBb9cJMUdf2sg/BHAqlrJ0tXJu/cXWEWLpPUIv8+PaUIu67FgF3tkCGR
-	 dCKHvlSCcgfmYTUrGNb79dvBY9DHXz2D55Az3HtK5r/xSpq717G/3mMUgk2BvENkjt
-	 i/XgGfhw8RJH5awZgoy59w7Z/M/uNzGyDzjwyPrSL7zFMl6luNvIb5+OsnJMEK+bD2
-	 AIGSxcqpIDPt76p9fLNwRxYPhgc4gQoNOJVHuBU3lK7YKTWqkFcqQsgHeXQEpneyl4
-	 ZBnElVhS0Rwzg==
-Content-Type: multipart/mixed; boundary="===============0809908519728760187=="
+	s=k20260515; t=1782245674;
+	bh=Ra1bLWv4R1sxRHDql8Lrgj/OtpZzKuZ/JFVnOfvRwes=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ZJAZRpdBwWufrpjPgspdDTMpomP3SINRtHl8ZOxMtF3PzVz1QwLXUZTwQeAf+uol9
+	 1eIpnqZcQyu2eA9WuB6vdOXm9HrjZdTgIPf+GrfrgLo8/1h8rMn/j5yDRNaQWYcg1z
+	 SoHVXI9jcgMMPfJkeYwgC4Aatt17v9Hrbt5Q4aTLYVl0YHTUn9K219XN/LW5EzZI0y
+	 B0d5t1wmHvNPJk9v6TNFwFUo5f4iAyISIUYJYHJhlyOkJaw1/mmdsfWGo5L315qei/
+	 YFO0TfeLjSI4hSuiUWmQa08cUvaJ9yIlXFnzTK6RlmVc+HJmDya/kd/485ShKYpsJz
+	 AZUK1DyLQaYzA==
+Date: Tue, 23 Jun 2026 13:14:34 -0700
+From: Kees Cook <kees@kernel.org>
+To: Farid Zakaria <farid.m.zakaria@gmail.com>
+Cc: brauner@kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
+	shuah@kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] fs: support $ORIGIN in ELF interpreter paths
+Message-ID: <202606231236.325C882A78@keescook>
+References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
+ <20260622043934.179879-2-farid.m.zakaria@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <aaba19274fbd51ba6014af6f1a9928eb202775b6278c2fbac3d0be9f26863d01@mail.kernel.org>
-In-Reply-To: <20260623231411.6216-3-adubey@linux.ibm.com>
-References: <20260623231411.6216-3-adubey@linux.ibm.com>
-Subject: Re: [PATCH bpf v9 2/8] powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
-From: bot+bpf-ci@kernel.org
-To: adubey@linux.ibm.com,bpf@vger.kernel.org
-Cc: hbathini@linux.ibm.com,linuxppc-dev@lists.ozlabs.org,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 23 Jun 2026 20:07:40 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260622043934.179879-2-farid.m.zakaria@gmail.com>
 
---===============0809908519728760187==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Sun, Jun 21, 2026 at 09:39:33PM -0700, Farid Zakaria wrote:
+> Currently, standard ELF and ELF FDPIC loaders expect a fixed path to the
+> dynamic linker/interpreter (PT_INTERP). However, for systems utilizing
+> relocatable dynamic interpreters (such as Nix/store-based environments),
+> hardcoding this path is inflexible and breaks binary portability.
+> 
+> Introduce support for resolving the $ORIGIN placeholder in the ELF
+> interpreter path. This maps the dynamic linker relative to the path
+> of the binary being executed, matching user-space origin resolution.
+> 
+> To avoid code duplication, implement a shared 'resolve_elf_interpreter()'
+> helper in the VFS exec layer. For safety, limit detection strictly to
+> the prefix string "$ORIGIN" to prevent complex parsing exploits.
 
-> Move the long branch address field to the bottom of the long
-> branch stub. This allows uninterrupted disassembly until the
-> last 8 bytes. The last bytes exclusion is logically necessary to
-> prevent disassembly failure, otherwise the actual program layout
-> is never altered. Hence no effect on overall program size.
-> Also, align dummy_tramp_addr field with 8-byte boundary.
+Does any other OS that implements ELF support also support $ORIGIN in
+the loader? $ORIGIN isn't even part of the ELF spec at all and is a
+glibc extension, IIUC.
 
-The commit message describes fixing a disassembly issue and updating
-offset calculations for bpf_arch_text_poke(). The change modifies how
-dummy_tramp_addr is positioned and how its offset is calculated.
+I'm not excited about path-based string manipulations as they end up
+being racy, and mucking with loader path seems like we're inviting
+trouble (since the _binary_ specifies setuid-ness), and we've seen
+issues with $ORIGIN before, even strictly outside of the kernel:
+https://seclists.org/fulldisclosure/2010/Oct/257
 
-Looking at the diff, the offset calculation in bpf_arch_text_poke()
-changes from:
+> [...]
+> diff --git a/fs/exec.c b/fs/exec.c
+> index b92fe7db1..0978ae613 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -2024,6 +2024,48 @@ static int __init init_fs_exec_sysctls(void)
+>  fs_initcall(init_fs_exec_sysctls);
+>  #endif /* CONFIG_SYSCTL */
+>  
+> +char *resolve_elf_interpreter(struct linux_binprm *bprm, const char *elf_interpreter)
+> +{
+> +	char *pathbuf, *path, *slash, *resolved;
+> +
+> +	if (strncmp(elf_interpreter, "$ORIGIN", 7) != 0) {
+> +		char *ret = kstrdup(elf_interpreter, GFP_KERNEL);
+> +
+> +		return ret ? ret : ERR_PTR(-ENOMEM);
+> +	}
 
-> -		ret = patch_ulong((void *)(bpf_func_end - bpf_jit_long_branch_stub - SZL),
-> +		ret = patch_ulong((void *)(bpf_func_end - SZL), /* SZL: dummy_tramp_addr offset */
+But even if we did take this, I really don't want to incur a universal
+penalty on exec for it. This is doing a kmalloc+dup (and later kfree)
+for all non-$ORIGIN execs. So even if this gets added, it needs to be
+handled differently.
 
-This corrects a calculation that was introduced when long branch stubs
-were added. The original implementation placed dummy_tramp_addr at the
-top of the stub and calculated its location using the stub size. This
-commit moves it to the bottom and simplifies the calculation.
+I would probably say this helper should return a struct file * instead
+and have a fast-path for the common case. I think a check for leading
+'$' (if strncmp doesn't get inlined) would be okay here as far as
+"incurring common performance cost"; that string is almost certainly
+cache-hot.
 
-Should this include a Fixes tag for the commit that introduced the
-original placement and offset calculation?
+> +	pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
+> +	if (!pathbuf)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	path = file_path(bprm->file, pathbuf, PATH_MAX);
+> +	if (IS_ERR(path)) {
+> +		kfree(pathbuf);
+> +		return (char *)path;
+> +	}
 
-  Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
+This still just _feels_ like an info leak or a race condition to me. I
+can't give a credible example, though. But it creeps me out. :)
+(I note the blog post also says "and the shabang" and I get even more
+creeped out about seeing that patch.)
 
+> +
+> +	slash = strrchr(path, '/');
+> +	if (slash) {
+> +		if (slash == path)
+> +			*(slash + 1) = '\0';
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+This is not idiomatic string manipulation.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28051760380
---===============0809908519728760187==--
+> +		else
+> +			*slash = '\0';
+
+More readable, IMO, as:
+
+	if (slash)
+		slash[1] = '\0';
+	else
+		path = "";
+
+But does this match the glibc resolution logic? i.e. should it be:
+
+	if (strncmp(elf_interpreter, "$ORIGIN/", 8) != 0)
+	...
+	if (!slash)
+		slash = path;
+	*slash = '\0';
+	...
+	resolved = kasprintf(GFP_KERNEL, "%s/%s", path, elf_interpreter + 8);
+
+(requires the trailing /)
+
+> +	} else {
+> +		kfree(pathbuf);
+> +		char *ret = kstrdup(elf_interpreter, GFP_KERNEL);
+> +
+> +		return ret ? ret : ERR_PTR(-ENOMEM);
+
+This is the same as the logic top of the function. This repetition smells
+of the LLM. :)
+
+> +	}
+> +
+> +	resolved = kasprintf(GFP_KERNEL, "%s%s", path, elf_interpreter + 7);
+> +	kfree(pathbuf);
+> +	if (!resolved)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	return resolved;
+> +}
+> +EXPORT_SYMBOL(resolve_elf_interpreter);
+> +
+>  #ifdef CONFIG_EXEC_KUNIT_TEST
+>  #include "tests/exec_kunit.c"
+>  #endif
+> diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
+> index 2c77e383e..17419cd3d 100644
+> --- a/include/linux/binfmts.h
+> +++ b/include/linux/binfmts.h
+> @@ -150,4 +150,6 @@ extern ssize_t read_code(struct file *, unsigned long, loff_t, size_t);
+>  int kernel_execve(const char *filename,
+>  		  const char *const *argv, const char *const *envp);
+>  
+> +char *resolve_elf_interpreter(struct linux_binprm *bprm, const char *elf_interpreter);
+> +
+>  #endif /* _LINUX_BINFMTS_H */
+> -- 
+> 2.51.2
+> 
+
+So, I guess, I'd like more convincing, but I'm very happy to see a KUnit
+test included!
+
+-Kees
+
+-- 
+Kees Cook
