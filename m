@@ -1,94 +1,94 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FA9370D71
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 22:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE7E3769E3
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 22:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782254784; cv=pass; b=M0DrGvSSlgTbDI+1hwQjocJ72n2wNNBQAfckr1vTrGu1s3NM0Mrz68Cg3HQZZQzGgoMTVW5R6phCQVFfHN2gcLRoOyrIFCju7uHJe8zlokoSTrmA6zl3nvxsSkYmjP3L84KpYI+Hv+2c6lpkeaiYSKLie1xRBxcyd1bt563XvNs=
+	t=1782254797; cv=pass; b=b3PhqgnDJ2LBjUgu/IBll8fM+rUhZWoa6SZ5A0U8Laein+zSWG5GJEvFtf2n77ikg0Psyp87YFXzF9d5kgAKr0WuR1/iSWrKNTKYzSXZRoxC9yUvMRbuwIaFDnHWuNtnXSr2Y2kDqDn+R3L1v2hXYMiiRrkXaFv6ZXjRmJDw4LE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782254784; c=relaxed/simple;
-	bh=2KfuZmVM/gMcaXgErOb5bxKkcTPuwXT7L/88bA0HkXA=;
+	s=arc-20240116; t=1782254797; c=relaxed/simple;
+	bh=EoNa88wmRRzgNbTcw8bzW3CIxyyn/g31iBHhffrV7JI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tURt7oLvlaVVZOAnAK/7hsvuZPpgCEIJbDpu7rtJJUR9G4kcQ3Yveq9G5Sbafxx34TPV34B3e6Pssc4Nh70LZzuysjKwuCKXoubyNbtLImzA/yHKGCx4rfvOn1eWvhpyldzFwN+eVbj5cypGwuCWvwOOIEZldIB2At7mMAH7BnQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R/A32Cje; arc=pass smtp.client-ip=209.85.214.173
+	 To:Cc:Content-Type; b=p57CfcGfDzFgkHYNaYN9EaYwtDqRwYpPjTr38basZyQ538Emv1ww7wiVScJ9495JYLwkRXuHjlgR8Ja9WmbtLtz3v/34f3IJM2i01S90Xan6fOHOcVJfNIwJwnZMk1i+NT0LOlw5jcj3xDs4Pvfx8lcqvTjXmAPJnXcZPtzOx6w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ms6JfkGI; arc=pass smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R/A32Cje"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2c6ab886da6so1973055ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 15:46:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782254782; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ms6JfkGI"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-37c8e7c8185so262965a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 15:46:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782254795; cv=none;
         d=google.com; s=arc-20240605;
-        b=b3byTB9kidIR+XuA5s4uU6YV7eTM3NjdrILIF6gD/zLA9Ta7c+Wj58uehjccub7mnR
-         KKrfdZD8vGi/bF024U5y1/b2llkg5CtdC0PMCwsSe/WcE/8zxXHSgeTeggL3qAq1bmNn
-         yDixp7cKFyj/y9rK6ErV04UbqACuvQM45/TU976tFmtzdkPZ5HuI55OjujCFXMywXU4v
-         QN6YJmBg8fR+3nJX7tmq+Yq66RsQoYfK3g31mZ+VH5ZzJK5eKjbTUGrf0saktYkxLA5i
-         B6b098w5eFO4hU+rwJWh4kFj0v7z+VAIppQ4vA55tu8kv5PDt9tAWcJk1G/X4skFXBSa
-         EfEA==
+        b=OT2pgXnLjyjffYoT3ju5NbxA+TwsmbvoafbhCIRDzORsZSyuhrTmj4fxxBsL0qM2Ye
+         0g86SkrD+RuMwn9uM8StzYK9r+fqDC94AqcrPwaV0KDaKhNnsKc2uVAST/n2W1uUnY4R
+         Ykb7pd1tlfNkR0JK1x3L7ylA2Kg0pHDE6mZdDywAPXEc8NYuBb9KWeHDp/B9k+a5xx/X
+         DXXOZzYtaAXLdCrEawL6B+5/X3S+Tu/l1/CnK/IpfbjDy5Wzcq0h5csLDPQIVik1UqMN
+         Zh9rz2CKuSACWpNR39YbSn8uD606s8xzF/sT4f6fwb6JwbEpiJceWS+h/FqrrN8LxOrg
+         ivSQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=LG2kX0FyH0fi9b0fEy2d9lpzMp4yF/LqqDGrDnJk65A=;
-        fh=m/mq7BWYbVg2moL+UsRrZOc+tIY7ouz9oa6LOFg8I+E=;
-        b=a4Aa7Ob1tdhxMpjs7zsDmivfTkBZYKddYKnfU44Kvx5KPFeb6MFpH9guObyQDC9WYO
-         Q8nDNC1Fz19DPENcj7Ar7vhYr+1vQ1HzwGghYhuzf96qUNQIlDovWizg5rUge4ZwiGCV
-         uV1imqcWquNgiwO2LnxTzLSIfRHfk7kLaiaAA5J3DSAA5xVwRBnFFW2XJbwtB1l1MiIv
-         m1jrvkYs4pq7Xc7WbEv50YtEOgaU4vryX6apHw7r/61Bes0ozI5V3DiS51cp3TuxRW96
-         hl9aXQs4gIF4yG8M1mBncV/OgpWVbLGnjZBGPZ/PSPOOJdFkiXJDCyQuJ1cyL+FvazJi
-         Kq7Q==;
+        bh=4cQeF60kgONMVqNgnkSoiO81INVKj/yr1+GUEevj9iM=;
+        fh=vq87Uf0mwwP/aBXIbzG0Bp4IlpCMpgkhsTqFTfM5IQY=;
+        b=SkaoxkK1C5rttkHT3nB7SFJroqoTXptkwUVEI1m8qWSyn+Bm/pZ+y7wk63eXwtx6+i
+         91WWNQyUTlcnVFjh9k5WKMU6Y2/I357V8H2OPgSDIo+g7m1VzK3NbdZatGQCJ7K+uaHA
+         IB9/6l7D/CFrz5LtsZ6BGSRqpwLwVIw6yoW34HAfsc+uxi71nVgSBLEVDETPMAQLpNGz
+         LAYjSvupq99mDA0MZRBIsoVrQeq0UB94WfGcLLvJYwUmHrdbHJWbSJd7YxRIUxr04jOA
+         mYyAFzxADgZPdkuuNLwaD+Nj1juxWOxMPhtCuq2qDFXi2DxOxf4tO6CRS7w68qnAMCzJ
+         KLnw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782254782; x=1782859582; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782254795; x=1782859595; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LG2kX0FyH0fi9b0fEy2d9lpzMp4yF/LqqDGrDnJk65A=;
-        b=R/A32Cjerpc/032rWMm9ZS/T7o81vkYKOWDTydhy9ANYA2qxavW5TBtMTGjJoBGvtP
-         4yGMoPH+QZ4vmoYsdIvVQ6URjxoHeTwSBX8ghkUDj663WQrN5xmMxxxqdsjk/ed8TEXV
-         nYQuDLHx/zJ8p3o6V3iLTiJcVXToj74tEadXEqplabrf7iOUvSHoQPIlbKw6KV26EXVJ
-         cqxo2lJ5sLqZJ26+5yxX8l/Y+4gGUnPF5mqCD0COYIgcON9oojB/YGWiPfr6xLXQjqRk
-         ZlBOyg1rbaUtcZMBqL50f50X5ghX6FdNXmtaQbyaPNNiXbX0e5dS3eAGfUraVhTetPoA
-         9Vuw==
+        bh=4cQeF60kgONMVqNgnkSoiO81INVKj/yr1+GUEevj9iM=;
+        b=Ms6JfkGINuzIe/mAzUHh9cn/cBcZj33HtV9vrtrrkvMsfzNBLdv/IqRoGs3z1hYK0m
+         zhUMAScAwDEy5/y1J5CyXKTLiI54QqUc62/EuTbgKIl2VmqmJogpyS2bSH0bLvugw35L
+         +KU3g5cPJCvNCgWFgsDU99syulZhGZIIOMNzzdBK4C3IDybvXLDmQGNhE403korEy9Hx
+         uhBPBPx6Z0acExZRhWnskTKEYo1spzwf7PzhOcc4Q5g2Awy6gnTS7EplVtFDLtZjrmQU
+         3GCzuBvSRBBl1kPYJtgxzW53/BGkopJFqkVKVbIBrJYSVlV8Zis9e22oT4NKCW58/ax6
+         sqlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782254782; x=1782859582;
+        d=1e100.net; s=20251104; t=1782254795; x=1782859595;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=LG2kX0FyH0fi9b0fEy2d9lpzMp4yF/LqqDGrDnJk65A=;
-        b=Gl4jui2HptCDiomm3x1WgueU6dP+tjgvpNqcJSzGwB5If9n78C3OGS993GeG8c1F1X
-         1JCY0FyZJUcrsLCXpGwuHriGjC++q1Wxhek2+dJpy76h+Mz7iOXIOdNMleUh6s5Bh6Ij
-         d8TjWX/c7KCcKHtY4rA9a13bz0KZj5dPvDUf4f1xfWfBv0ueyZG9Jo3YfF2kljLaCs3r
-         F2kFZ/6ddUBSG1lAJ4DlISNBKt8tnIzYuAYq/ZVRy2rZMsZmxKR9M4wf31Lz9XDORois
-         P4S/NMNYQNXcNjG5B5TDt8AuaXM9rVgH7/kHZL7Up176VBfFh3KoSeszwfMCSzg6rIB8
-         85sQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rqqxbz05LwExGOK0rhgL/9cPGAhasfH5ePwk3L4qqOKgwp0PlQqUGxcMGu3fdcVxaeVXJjECcXP2Vqu2Y7yuS4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/rxARBy9iXpLYZXnQxYX1oLwMurbczidx+34Ndn0dlQSRgQRF
-	5yu42yvXoYyrj/VhvqXKNaU3VwlVY1rqjSC0QjCoXgrb+CYjRycj7hEdeI78mVTXqzAR1dbxlOG
-	lPa+e21LX4FnstRyf2534AGBJaexSDjQ=
-X-Gm-Gg: AfdE7clA9DztFMF9Xs7ZRQOTQS0xxj+thllD2kmFkg04VwBmu0dutkfhkTEtCejKu4L
-	otwLu/qoeVpRsSBYm4ximUH0UL0tHiN2Uo/2PZogu9nLoyewhcm67jLFchR51pvvCdewx/71C/X
-	fhVDUrercEYAQ7o4/J6WjwzKPRff1rpeOVk6MMRi2D9rWK4AN7GZatyIv8uBrJxB3Qr3H2vu8Ej
-	BqUczxuniBDoWwLsXQgkLzb5aLADJrrHONfZ/aAWxO29iGc39x+CPPVs4I954nKAk5LX7SZkv3K
-	fqPSs/CL1yZcO24CoKTJh195oxEUUmxm0SXYKU4EVGk9+xFt2xYlYSI6jbaNRTeuAURnOA==
-X-Received: by 2002:a17:902:ccca:b0:2bd:9803:9308 with SMTP id
- d9443c01a7336-2c7e1599b6bmr7966225ad.36.1782254782100; Tue, 23 Jun 2026
- 15:46:22 -0700 (PDT)
+        bh=4cQeF60kgONMVqNgnkSoiO81INVKj/yr1+GUEevj9iM=;
+        b=BRxduq9+IQx2QR1sW4+znnVDGNbQl8i+jScPYki05wqxUze6P5i1pC7pNBr5Iia2T9
+         jf3205tYrILdaRS8pawOQK0TIYWdhqN4sdxAVaINP8zf3uw7F7itn5M9NzKu9Ij7a6FS
+         i/Phhz7UOcuk7Md6mQuMwOi3tYe+Wb3wB5PIvhw3s0J3Exw8V/c3U2JvorrL8STkQCHx
+         FzYCNUczfJxKcNsQQzpwugy5qyePxPxKJhKxsVTrhmCVlZ4lowrCm7LmYrrOge04xBDB
+         hI0noHNVkEmuT8wdi4sCMskXwwrQBcgN8TEyOCnBNQ/aHSL6XVr4fBrtM2a/XD234ukU
+         paUA==
+X-Forwarded-Encrypted: i=1; AHgh+RoB05vS3lsUH8BqAJjpthBvqvlpiccib45l/yhoE4dOMidu5CMITNxGVYGPimB8cDxI/CtyjjV4EvwZD5eeE6I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpWbgGZdEiCjR1U3IryKj7BVVq58Qq9RoDn3KWpsIh4OSjPnCJ
+	rixDlkAGAaXSQQ6BEruDM5ReFIY79l/+KqSwBhwMlyGMuZG2LxRK83+aodyGqwXZFgn2sK8kudh
+	fLFcKHb/sHKZZ4GBycVgiWnUnkQrt5wI=
+X-Gm-Gg: AfdE7cnPdUevCJ38vVdRV4mjdpKL9AajT63opeVYMqchMxCr/dZ2TsVakCSVtQ3yYc4
+	S7QuL4IxuopNvEwlBAppEisPha1RsmJP64M8HifvoDgmjl7VvmMoCPg2Ss+bttGShsN1OU+yjha
+	Yi2KPMBfeXRv0mR9N7hPxb/InOEViiooZWOnQbM0chYWsOoOPeYAE5erRkAdUsT0embWvM9NovT
+	giZYN3XtXmR3/cHA3qF0fFKXLHzo4JtKYhamEhL51UguUaVRSdnP/HW6cCNxKuvpd2thSlcRGFv
+	WySFvJiHGRHMHiBV7fbZYtEg8nhOHAIWy/NbtWfG9jlKzpRn2jeKXHI842k1zU7SaiFTKg==
+X-Received: by 2002:a17:903:2450:b0:2c1:ed61:36ab with SMTP id
+ d9443c01a7336-2c7e1538eb1mr8422395ad.19.1782254795349; Tue, 23 Jun 2026
+ 15:46:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260622143557.22955-1-leon.hwang@linux.dev> <20260622143557.22955-8-leon.hwang@linux.dev>
-In-Reply-To: <20260622143557.22955-8-leon.hwang@linux.dev>
+References: <20260622143557.22955-1-leon.hwang@linux.dev> <20260622143557.22955-10-leon.hwang@linux.dev>
+In-Reply-To: <20260622143557.22955-10-leon.hwang@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 23 Jun 2026 15:46:03 -0700
-X-Gm-Features: AVVi8CcgnEvwwbjcYZujttXeSs_xcAFmcG2-55vXm4A13ZgA43xyrkXYm4hX8Rw
-Message-ID: <CAEf4Bzay2Wssj1J4fEq3T7iTOBDswEZunm1OQNDJvPr2Cz2Usg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 07/11] bpftool: Generate skeleton for global
- percpu data
+Date: Tue, 23 Jun 2026 15:46:15 -0700
+X-Gm-Features: AVVi8CeDV0iyWUJxT8tqR7wuW7mpOknFgq_TU9la-Qich4uiJgyQft90YUTPtII
+Message-ID: <CAEf4Bzbmj-ekwYQ6oGW-BRnzLBDvWgLyn_QsU5g1yNt_8A0H3g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 09/11] selftests/bpf: Add test to verify
+ accessing rdonly percpu_array
 To: Leon Hwang <leon.hwang@linux.dev>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -101,117 +101,98 @@ Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 22, 2026 at 7:37=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+On Mon, Jun 22, 2026 at 7:38=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
 rote:
 >
-> Enhance bpftool to generate skeletons that properly handle global percpu
-> variables. The generated skeleton now includes a dedicated structure for
-> percpu data, allowing users to initialize and access percpu variables mor=
-e
-> efficiently.
+> Since percpu_array supports direct-read, it should not break accessing
+
+what does "it" refer to here?
+
+> rdonly percpu_array.
 >
-> For global percpu variables, the skeleton now includes a nested
-> structure, e.g.:
->
-> struct test_global_percpu_data {
->         struct bpf_object_skeleton *skeleton;
->         struct bpf_object *obj;
->         struct {
->                 struct bpf_map *percpu;
->         } maps;
->         // ...
->         struct test_global_percpu_data__percpu {
->                 int data;
->                 char run;
->                 struct {
->                         char set;
->                         int i;
->                         int nums[7];
->                 } struct_data;
->                 int nums[7];
->         } *percpu;
->
->         // ...
-> };
->
->   * The "struct test_global_percpu_data__percpu *percpu" points to
->     initialized data, which is actually "maps.percpu->mmaped".
->   * Before loading the skeleton, updating the
->     "struct test_global_percpu_data__percpu *percpu" modifies the initial
->     value of the corresponding global percpu variables.
->   * After loading the skeleton, "maps.percpu->mmaped" has been marked as
->     read-only in libbpf. If users want to update the global percpu
->     variables, they have to update the "maps.percpu" map instead.
->   * For lightweight skeleton, "lskel->percpu" will be protected by
->     "mprotect(p, sz, PROT_READ)".
->   * For subskeleton, those variables of global percpu data will be
->     skipped.
+> Add a test to verify that adding '.map_direct_value_addr' to percpu_array
+> won't break the case.
+
+what case?
+
+I think you are testing (read-only) direct access to read-only per-CPU
+array, is that right? Just write that out? Though, really, negative
+test (we *cannot* access read-only per-cpu map for write operation)
+would be more trustworthy for this...
+
+
 >
 > Assisted-by: Codex:gpt-5.5-xhigh
 > Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
->  tools/bpf/bpftool/gen.c       | 43 +++++++++++++++++++++++++++--------
->  tools/lib/bpf/skel_internal.h | 24 +++++++++++++++++--
->  2 files changed, 56 insertions(+), 11 deletions(-)
+>  .../bpf/prog_tests/global_data_init.c         | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
 >
-
-[...]
-
-> @@ -263,13 +268,12 @@ static bool is_mmapable_map(const struct bpf_map *m=
-ap, char *buf, size_t sz)
->                 return true;
->         }
->
-> -       if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF=
-_F_MMAPABLE))
-> -               return false;
-> -
-> -       if (!get_map_ident(map, buf, sz))
-> -               return false;
-> +       if (bpf_map__is_internal(map) &&
-> +           ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) || bpf_map_is_per=
-cpu_data(map)) &&
-> +           get_map_ident(map, buf, sz))
-> +               return true;
->
-
-just add `if (bpf_map_is_percpu_data(map) return true;`? maybe also
-move get_map_ident check a bit earlier. I think that will be a bit
-cleaner, this condition is quite hard to follow
-
-> -       return true;
-> +       return false;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/=
+tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> index ea7e4e3d91cf..f59d83919058 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> @@ -232,6 +232,48 @@ static void test_global_percpu_data_lskel(void)
+>         free(online);
 >  }
 >
->  static int codegen_datasecs(struct bpf_object *obj, const char *obj_name=
-)
-> @@ -343,6 +347,9 @@ static int codegen_subskel_datasecs(struct bpf_object=
- *obj, const char *obj_name
->                 if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
->                         continue;
->
-> +               if (bpf_map_is_percpu_data(map))
-> +                       continue;
+> +static void test_global_percpu_data_rdonly_direct_read(void)
+> +{
+> +       LIBBPF_OPTS(bpf_map_create_opts, map_opts,
+> +                   .map_flags =3D BPF_F_RDONLY_PROG,
+> +       );
+> +       struct bpf_insn insns[] =3D {
+> +               BPF_ST_MEM(BPF_W, BPF_REG_10, -8, 0),
+> +               BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+> +               BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+> +               BPF_LD_MAP_FD(BPF_REG_1, 0),
+> +               BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lo=
+okup_elem),
+> +               BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
+> +               BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 0),
+> +               BPF_EXIT_INSN(),
+> +       };
+> +       int key =3D 0, map_fd, prog_fd =3D -1, err;
+> +       __u64 value =3D 0;
 > +
->                 sec =3D find_type_for_map(btf, map_ident);
->                 if (!sec)
->                         continue;
-> @@ -669,7 +676,7 @@ static void codegen_destroy(struct bpf_object *obj, c=
-onst char *obj_name)
->                 if (!get_map_ident(map, ident, sizeof(ident)))
->                         continue;
->                 if (bpf_map__is_internal(map) &&
-> -                   (bpf_map__map_flags(map) & BPF_F_MMAPABLE))
-> +                   ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) || bpf_ma=
-p_is_percpu_data(map)))
-
-also we can add a helper to check if it's an internal map with a
-dedicated data section in the skeleton (too lazy to think of a good
-name right now.. ;)
-
->                         printf("\tskel_free_map_data(skel->%1$s, skel->ma=
-ps.%1$s.initial_value, %2$zu);\n",
->                                ident, bpf_map_mmap_sz(map));
->                 codegen("\
-
-[...]
+> +       map_fd =3D bpf_map_create(BPF_MAP_TYPE_PERCPU_ARRAY, "percpu_ro_m=
+ap", sizeof(int),
+> +                               sizeof(__u64), 1, &map_opts);
+> +       if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
+> +               return;
+> +
+> +       err =3D bpf_map_update_elem(map_fd, &key, &value, BPF_F_ALL_CPUS)=
+;
+> +       if (!ASSERT_OK(err, "bpf_map_update_elem"))
+> +               goto out;
+> +
+> +       err =3D bpf_map_freeze(map_fd);
+> +       if (!ASSERT_OK(err, "bpf_map_freeze"))
+> +               goto out;
+> +
+> +       insns[3].imm =3D map_fd;
+> +       prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, "percpu_ro=
+_prog", "GPL", insns,
+> +                               ARRAY_SIZE(insns), NULL);
+> +       ASSERT_GE(prog_fd, 0, "bpf_prog_load");
+> +
+> +out:
+> +       if (prog_fd >=3D 0)
+> +               close(prog_fd);
+> +       close(map_fd);
+> +}
+> +
+>  void test_global_percpu_data(void)
+>  {
+>         if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
+> @@ -243,4 +285,6 @@ void test_global_percpu_data(void)
+>                 test_global_percpu_data_init();
+>         if (test__start_subtest("lskel"))
+>                 test_global_percpu_data_lskel();
+> +       if (test__start_subtest("rdonly_direct_read"))
+> +               test_global_percpu_data_rdonly_direct_read();
+>  }
+> --
+> 2.54.0
+>
