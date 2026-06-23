@@ -1,119 +1,80 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300CA30ACF2;
-	Tue, 23 Jun 2026 06:49:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE93299929;
+	Tue, 23 Jun 2026 07:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782197346; cv=none; b=CkIBz8SC+4a50qepz1vV+MqBh80oj8dKZ/QGFaHDmHkUHYLIDIEzGP+KyFOXH7KYImvQb+UFSNR5nsrqGopvoHQBvTG69sIN3kgQRwCGZMHD6Tpw06aWPxJBxXJfc83ECfhnu0TdTgM2/eoWm+e4+sjR3N9BVm89x2rXMgoOyZE=
+	t=1782198102; cv=none; b=IrPzQsHqsL2QZmSE2FHi767IrxSUKqzGyCBc45Y9ZWpmJGciXBQOKUC2u7MeRaVkdMI6jHr/7w3v+gU9cVwoNx93wNvmESQVHSRlEZv0zyCQDzzlCFq+5l5uFdkFfVX7zMxI0R6WkZm0Y0v/sIIipNDefvnUTFtOzDN0Mba4dQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782197346; c=relaxed/simple;
-	bh=h8AQJDX3UfNiJ86zepeJMtjP8yPCQGflfnfOwDXysvw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eTfvdOD/UfQiD7fgQuiCVOMxtTtyKbo2fMNpwx+DU/GZ6u+iJITeufvAQIpamJ91/JUZBIRIsHfo6tvpMv7bbMcUyiAvBV+nPj7W/onnWTAb/JakLo6LXQ1FEvVKhrpJrq90TNMmolq3C4QRFvwzu+QZyjy1Hb419zu1FNLmI74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bXK1xsux; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1782198102; c=relaxed/simple;
+	bh=i1G7hi4tSc8oeFcKEankYvkLkvvD0Ica9ViGXxUmFHY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=EekhzMKL0Afc88Rqbt+2kJA6f2BZtr9OkseTDPO6+Gygf06/7UeoXtx/Qwis8XSNdWsGu00754Ka+8kEFWtPTPruZjbQoknUts4ZMabSismklivfE6FiN4vCytUCVWH7KplU5cxlff1Wr00PDfvcq5lMzAIgQ2FAiOJvjV+Jggs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXSNBc7D; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bXK1xsux"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782197344; x=1813733344;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=h8AQJDX3UfNiJ86zepeJMtjP8yPCQGflfnfOwDXysvw=;
-  b=bXK1xsuxNccQ8Ip6aNhtnU6cXJtpMepuLUyp1On0HmupbKsCHCfw1KAy
-   c8kjycCVFLMLfrGqWVpbnXVYBozuVEr5y4vUv9urHvVpdzei7ylN32uNZ
-   t4cT/HQSrzG7DSzKUjyuQPvE0K2GP9RFT8JdXysujXqTd4HBFybRUtIFm
-   xG0B1Fydsw8OSjQTc6ssAurth7UCbnm1xZxpeSbC6TKkxhpQThxQVw+js
-   /5+OeDxIHZ5lSbqzIxT7p20wn3KM2CcCgLDy058hbS/gubvI0ljpnPO7G
-   hGGBgaI/Iz49bd6b4piunb7P+h1OIYn2pghPYqXOTm3e+9pr/An/9asfF
-   Q==;
-X-CSE-ConnectionGUID: VamQVzpbRgmoOQA8+QBoqQ==
-X-CSE-MsgGUID: eu4+u/1wQ9ioe4cLA93wEg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="82701955"
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="82701955"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 23:49:03 -0700
-X-CSE-ConnectionGUID: UQ6n62bSSPGTWfszTIj7Fw==
-X-CSE-MsgGUID: AN4e/MmzQW2EM/WlHV3RkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="243076433"
-Received: from unknown (HELO [10.238.2.81]) ([10.238.2.81])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 23:48:50 -0700
-Message-ID: <120b6d16-4218-4ba6-824e-54c62dd3d74f@linux.intel.com>
-Date: Tue, 23 Jun 2026 14:48:47 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXSNBc7D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE111F000E9;
+	Tue, 23 Jun 2026 07:01:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782198101;
+	bh=6Bp+V4V6uXwT5iBStYAzo9/nlF4+JEwkkLFhf9we2pg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=IXSNBc7DOdi5hS2RaRGJVD3B1jx4L2FyHrkBAhjNvmVqM9prYEtIV+L+W/a/DEeO8
+	 ktN75DEJw5J28pboGAuPyPSpsJt3HKVwTB8sqQldMNlavQpJvBW8AkQT8ZsmKwHZYS
+	 3oIAfDzMu+4XKLloM73PHF+faGjT+s0oNVp1v29r42aD4fXBglhODdF/iOFfmH380z
+	 1F8mAkUH4Bgr0RIijxUtUEn5JHAUx+Vf3WmjOuAJrs+BGw83PcqQhy/YvEQpqkR8uN
+	 lBzmhTz9KwgouutqH7sLNCVrUFU4U7MnBcimGjy9WKMEWPlrln2SpCI9TpvB+mwauW
+	 1f/kWsGww2RPw==
+Content-Type: multipart/mixed; boundary="===============2676016477562247553=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 12/46] KVM: guest_memfd: Only prepare folios for
- private pages
-To: ackerleytng@google.com
-Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
- chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
- jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
- pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
- rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
- tabba@google.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>,
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-12-9d2959357853@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20260618-gmem-inplace-conversion-v8-12-9d2959357853@google.com>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <2c2797dac0dc56bf183087ed97aed819d1184568d2249b11439ab542afa43b4a@mail.kernel.org>
+In-Reply-To: <2f894647f56f71838fdddeb97a3e057ed35ea92e.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
+References: <2f894647f56f71838fdddeb97a3e057ed35ea92e.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Reject offset refcount acquire arguments
+From: bot+bpf-ci@kernel.org
+To: chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: chenyy23@mails.tsinghua.edu.cn,john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,vmalik@redhat.com,leon.hwang@linux.dev,davemarchevsky@fb.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 23 Jun 2026 07:01:41 +0000 (UTC)
+
+--===============2676016477562247553==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
-> 
-> All-shared guest_memfd used to be only supported for non-CoCo VMs where
-> preparation doesn't apply. INIT_SHARED is about to be supported for CoCo
-> VMs in a later patch in this series.
-> 
-> In addition, KVM_SET_MEMORY_ATTRIBUTES2 is about to be supported in
-> guest_memfd in a later patch in this series.
-> 
-> This means that the kvm fault handler may now call kvm_gmem_get_pfn() on a
-> shared folio for a CoCo VM where preparation applies.
-> 
-> Add a check to make sure that preparation is only performed for private
-> folios.
-> 
-> Preparation will be undone on freeing (see kvm_gmem_free_folio()) and on
-> conversion to shared.
-> 
-> Suggested-by: Michael Roth <michael.roth@amd.com>
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2abc79dbf281..f65eff28ecd2 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+[ ... ]
 
+> @@ -12135,7 +12146,8 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>
+>  		if (regno == meta->release_regno)
+>  			arg_type |= OBJ_RELEASE;
+> -		ret = check_func_arg_reg_off(env, reg, argno, arg_type);
+> +		ret = __check_func_arg_reg_off(env, reg, argno, arg_type,
+> +					       btf_id_fixed_off_ok);
+
+This isn't a bug, but does this call need to be split across two lines?
+The line length limit is 100 characters, and it looks like it would fit
+on a single line:
+
+		ret = __check_func_arg_reg_off(env, reg, argno, arg_type, btf_id_fixed_off_ok);
+
+>  		if (ret < 0)
+>  			return ret;
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28007209948
+--===============2676016477562247553==--
