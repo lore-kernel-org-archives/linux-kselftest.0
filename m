@@ -1,142 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B592930B509;
-	Tue, 23 Jun 2026 16:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782231260; cv=none; b=vAlzajOkHwDOZLzg3tjGdCE2ETjwLooeSPRKBfsSGVgLqd5Cq62aFNJEvIv8R3p8sMNEL7QvTyzSPmH/JEVoP9L2Qh2sH3yBxfh3mnDYN6zICidANJqCBOYekhXNOLa1oDMr0nFVeC2ab/3Vwk4dVtRgSAZt5DQr2coEk2jWp58=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782231260; c=relaxed/simple;
-	bh=6hqXlMyZk/NIPh19SfXJJkeRRc522Hu2RsCH3wrlF3g=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=IxH3oQWNv0WyBE4BKDjLl3CxMHnbWSqoyfHo+5A8FpOvwc/5UYyhi/Odsvr5VkjLZIPcaou+4LPj/tAMxmGqAqcYjmE32WKQVv/zKRcXOpAd2B6+SSAqFmR9tllDoz5YJ6muJhQJBiNaLpLI+yLX3FGC/qFPRnC+YO+usBKxF3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VUvN9dWT; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C2D388E7C
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 17:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782234755; cv=pass; b=h5HOwz629MTPFNRBcsOxyQjz8MuKRo/0T3yg8Kyfg86up3J7q3THWoP4u4ukIKqSTRKmEAXlhU+24GZ8v52pCGyc51ZjJioWP/smRNWg5hvf4TNzxZIKec5vQXF0aXDJe390BbVjduUsH4z0YbaV3ZG5eyuWx3HWMkWXjDJqVBg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782234755; c=relaxed/simple;
+	bh=hmR9D8Br+YBjZG2zebbyzPQBf1lj2xBVoaEGicS5Dc4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZQ1M8Mta9BZj/CanFNmeEYKXLtZT11OvOdi6wByjyqSAHUFvz4MnTvToI/pnMr2+v0qjJXVjjXasrI2I5LWGubxbCpoxMa8WymRd/9hwE9e7ycXJegKMbnlKWl24u+kAws2U6o73dDULMADN02af9jHom/xvBiyatypEetoq7cM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZIInnUlR; arc=pass smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VUvN9dWT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CEC91F000E9;
-	Tue, 23 Jun 2026 16:14:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782231259;
-	bh=PcajKOa6/fzwx6pWaVxtdohrAAfHL26/qCXeO5E8rLc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=VUvN9dWTAFZGuCKtcfMvwtECLwgU5Wn05mBuXFWgGS2j0291eyLug/KqLvXNurhj/
-	 8XotdQA07OI7UyAE1bzQQth+XawZek8UmEXl5zi6EpiYijhaMUlUJJvhJFaRD104BV
-	 WSewTcfsySn74qg/SifAN6imZ0ebWGBZX9eMMD5P3Up66ERqjHY6jHDFS9zow2Whvo
-	 EH9CmPWwa04RWZUyBQ6oqDohYdic1xUJ9pxNV4PSDsEqsyvdBuzfIV+aHFobf9FdME
-	 gCMk4kdb3Ug2lmPiMTQaaDPOtCOcdeMdsSuEkgncoxS9U/PjwQFvHs1W+y7sglXYOl
-	 cOVui2PvK+BAg==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: tarunsahu@google.com
-Cc: Ackerley Tng <ackerleytng@google.com>,  Jonathan Corbet
- <corbet@lwn.net>,  vannapurve@google.com,  fvdl@google.com,  Pasha
- Tatashin <pasha.tatashin@soleen.com>,  Shuah Khan
- <skhan@linuxfoundation.org>,  sagis@google.com,  aneesh.kumar@kernel.org,
-  skhawaja@google.com,  vipinsh@google.com,  Pratyush Yadav
- <pratyush@kernel.org>,  david@redhat.com,  dmatlack@google.com,
-  mark.rutland@arm.com,  Paolo Bonzini <pbonzini@redhat.com>,  Mike
- Rapoport <rppt@kernel.org>,  Alexander Graf <graf@amazon.com>,
-  seanjc@google.com,  axelrasmussen@google.com,
-  linux-kselftest@vger.kernel.org,  kexec@lists.infradead.org,
-  linux-kernel@vger.kernel.org,  linux-doc@vger.kernel.org,
-  kvm@vger.kernel.org,  linux-mm@kvack.org
-Subject: Re: [RFC PATCH v2 06/10] kvm: guest_memfd: Add support for freezing
- and unfreezing mappings
-In-Reply-To: <9huztsqtmihs.fsf@tarunix.c.googlers.com> (tarunsahu@google.com's
-	message of "Tue, 23 Jun 2026 14:36:15 +0000")
-References: <cover.1780676742.git.tarunsahu@google.com>
-	<48777f4749fa43d5648085dbb2037aa99c144a88.1780676742.git.tarunsahu@google.com>
-	<CAEvNRgFEHciT3T9y+qEYRvXhDwfrggoU7Rm=f9hT3OrV+wgpNQ@mail.gmail.com>
-	<9huztsqtmihs.fsf@tarunix.c.googlers.com>
-Date: Tue, 23 Jun 2026 18:14:14 +0200
-Message-ID: <2vxz8q85mdyh.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZIInnUlR"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-4629d80fa08so121227f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 10:12:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782234753; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WK2a7Jgl+ATTyGSF5OtafO/xfJvKF6l4XbuGcGNdUDuVuKH5++s9f1cE5jJ3KuVbUt
+         QU/aOvaIuVnGp1PTQzeRvrMHaf8XjGKU4M+/fuaXd4Epvqc1pSCC3wY93VmSgdaBg5+7
+         mucllIQh8VxKDFMphKget0rtKbFXFga+vNyND+jYHPdA/CWro0H9n6W7WgR2DRGrJY9S
+         HnN4HFnHm+m6eBiOzASqzwOCxMwQaoyDTCKazpxPQCTjVGK9XPYK5iXpXU1n36hZiUgr
+         L/KwdrlKDKvFGw3sEyME39RnGjLMJ3gVXDNBbPG1mSRCXA5DbytTcyRbIMN3a5qx4oGn
+         xczA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=GQis8KO7+Cr37wQe2wy0qBtYljKSNFAIw/U+lZxu9Bk=;
+        fh=HQNwwXzM0syOCI59CnDqtN7aZ0MLw1tNr7IZW89Q+gg=;
+        b=AzaUyHEAWCneQYuKIfQpfRGEg4vzGT9dV01/Nu1KjpbqJq15AqXRgpdnGnNePbtqld
+         hj34Q2h7v6Hd44PbCAxq9nKdx4umpAqT0K4YrS86e0KsVutY4l/LmOqreep2vobZ4FaF
+         Ha0cAIc2JG7WZ1MwPmbme8RBdG/XHgoza38GtDqj+tRtssNdjj67EnyApf0JZ3spQPvf
+         apk7mZ+vZwvKnRTGCTR7HuIwd1yX/ZWPargzzcR7FGwOetWvBaxAw3BMzRwg/ACVfRYG
+         PRLwELJDBzQFxpBL7rbQemENcQf+sMLX4FAxlZnakysLRbgRtmaMxH352fjAsCfVXXU6
+         HImQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782234753; x=1782839553; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GQis8KO7+Cr37wQe2wy0qBtYljKSNFAIw/U+lZxu9Bk=;
+        b=ZIInnUlRpJBrBLa4YHmK1T/YeHww3CriuYJ+s05YmBTe9hKCb9ZRskiq3iOgtmPzFd
+         BO5+sawX5DP/dYIkp48lyGPGLZuMlU2B5ExSz6tAaPXbflRW58jxxcbYBY3wy3+6VUHy
+         BuAv1K2BT2xt+XlBgLMoXmDB+Us7uSmvTTxbrDRRhv5nnWvjCsyd7yvFRxohrkF6M/PU
+         KImC9eeyFb9l/9wbKy3v/jFfZV5c0b6MFsfYsy5jWI5o1kvtNzCAVMMBR2X7c28sWRoh
+         KkRWX0jEeHOEQo/qs3fbGUlQTtm0uuWVbu/2igo1pXV7K+rMeUPCowk4apnjv5mQ8zxO
+         ocmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782234753; x=1782839553;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GQis8KO7+Cr37wQe2wy0qBtYljKSNFAIw/U+lZxu9Bk=;
+        b=FUsSc9s26VucxioMTjbDgRl/b4l4wu8KpvFZ4HABwXaU2LpUUHOjPVB7k8GKqWFUNO
+         uG9BIN3lqMTBqwcpxG4LvvPpNp+mmK9YZ4yiEFbmSWAcSs2QeX/p/0UFpMJcNYuuhxqq
+         fs+ZFTO0hN3RqSmrqp9mdKAd3CLofv1N3XbJBs4dwjyUqE+4yOnYtkPZ/tTYkKGH68vM
+         Ab4Zxq+aBUPKE/ufcV+P+qNC/GQn0Vqe5FdHmRmWR1DBwOz0a/CEMDFLl6MEMl+6MD/z
+         U3g7iHw4iCD32dI5cekq5KMxiqgdvwsU5SBLUzNP+loqQeYn7b6iq+rTRXxho8Y2BoZh
+         WPig==
+X-Forwarded-Encrypted: i=1; AHgh+RpawKjiA+KP7no6h+iQht/I2jZQIGYRuGjj7aVmtVfLUYHkS6IyJP4qlpmBH9oplcgG8/M+ENxHUo0iwud/cjo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyC+qe/c3vL/rriNn+eqzJ82NlmzMrYttFH8d9nvsOjSGZvssX
+	m8c29dQL07JAXqL6mVd1dDW3onoPHm1YcmXFg8SCh9PZl29g5nmznL//K9HcZVGmndjEEDdFB7d
+	s70MV0H3A5IQTbk9/Ia+m44wfjs7gJjw=
+X-Gm-Gg: AfdE7cl4PO/+ycG2AfR1qoy8j9gRitwUFzJSgn3kwrmSuvlaRp8mtxR4clEfxWFpMSm
+	uNUGvhQg+C83x3K3mJx37J1e30d4KYamb3tT0NRUePNQVq2Xle0pAjDtUK1U1usvKgz7pyHjGhe
+	QpYHcsfgzCPrK/zKkZdk1k1W4mHRnTlQd0JVSXDVpMmP0TyC3UdTwG2mY6brF3HdF2Kb8PoNucR
+	KOF/TQZvAbJ7OttDTnfkYnEXPPVoDfj5UISZE+ff34jvsPp3zi3kGtFyYeRNPvfmEkMeN9NGSwG
+	zCNlBDKUpTmVEXWbmuEBYmR3aVN5vbfJOBPUB0o=
+X-Received: by 2002:adf:f182:0:b0:460:6b0e:a75e with SMTP id
+ ffacd0b85a97d-46506c35d0cmr25528866f8f.16.1782234752678; Tue, 23 Jun 2026
+ 10:12:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20260623111533.2285005-1-ptikhomirov@virtuozzo.com> <20260623111533.2285005-3-ptikhomirov@virtuozzo.com>
+In-Reply-To: <20260623111533.2285005-3-ptikhomirov@virtuozzo.com>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Tue, 23 Jun 2026 10:12:20 -0700
+X-Gm-Features: AVVi8CdfcxG5r5FMFto7l_ai_RfkpnO9NQCVALwgDokVA4D7LTvynw9skPuPn8c
+Message-ID: <CAKEwX=OaKTfNqzwa=djLxZDeBbR1+DKdqDnxdfPfZFKB-K+ECA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] ovl: support cachestat() syscall on overlayfs files
+To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, Amir Goldstein <amir73il@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>, linux-unionfs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 23 2026, tarunsahu@google.com wrote:
-
-> Ackerley Tng <ackerleytng@google.com> writes:
+On Tue, Jun 23, 2026 at 4:15=E2=80=AFAM Pavel Tikhomirov
+<ptikhomirov@virtuozzo.com> wrote:
 >
->> Tarun Sahu <tarunsahu@google.com> writes:
->>
->>>  static long kvm_gmem_fallocate(struct file *file, int mode, loff_t offset,
->>>  			       loff_t len)
->>>  {
->>> +	struct inode *inode = file_inode(file);
->>>  	int ret;
->>> +	int idx;
->>>
->>> -	if (!(mode & FALLOC_FL_KEEP_SIZE))
->>> -		return -EOPNOTSUPP;
->>> +	idx = srcu_read_lock(&kvm_gmem_freeze_srcu);
->>> +	if (kvm_gmem_is_frozen(inode)) {
->>> +		srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
->>> +		return -EPERM;
->>> +	}
->>
->> fallocate may eventually go to kvm_gmem_get_folio(), so that would check
->> kvm_gmem_is_frozen() twice. Is this meant to catch the punch hole case?
-
-Yeah, I reckon you can get away with doing this check only in
-kvm_gmem_get_folio(). Normally you'd like to fail early, but as of now I
-don't see much of a problem. If you drop the check here and fail in
-kvm_gmem_get_folio() you'd end up taking and releasing the mapping
-invalidate_lock, but this isn't a fast path anyway so I don't think it
-should matter much.
-
-I think either way can work just as fine...
-
->>
->>>
->>> -	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE))
->>> -		return -EOPNOTSUPP;
->>> +	if (!(mode & FALLOC_FL_KEEP_SIZE)) {
->>> +		ret = -EOPNOTSUPP;
->>> +		goto out;
->>> +	}
->>>
->>> -	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
->>> -		return -EINVAL;
->>> +	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE)) {
->>> +		ret = -EOPNOTSUPP;
->>> +		goto out;
->>> +	}
->>> +
->>> +	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len)) {
->>> +		ret = -EINVAL;
->>> +		goto out;
->>> +	}
->>
->> There's some reordering here. Why not let the validation happen like
->> before, then check kvm_gmem_is_frozen()?
-
-There is no reordering, if I am reading the diff correctly. The diff is
-somewhat misleading. The kvm_gmem_is_frozen() call is added at the top
-of the function, and then all the later checks are in the same place but
-get a goto out (and hence a full body to the if block). So the diff
-reads like reordering, but there is none.
-
-It would be very neat if scru had a cleanup.h style scope-based locking
-function, but on a quick glance I can't see one.
-
+> Overlayfs forwards data I/O to the real (upper/lower) file, so the page
+> cache lives in the real inode's mapping and cachestat() on an overlay
+> fd returned all zeroes.
 >
-> To align with design. "stop the fallocate call if inode is frozen, No
-> need to go further". I dont have strict opinion on this. I am fine with
-> taking it across punch hole as well to make it more fine grained. But it
-> will no longer claims stop the fallocate call (allocation one is stopped
-> in separate path: fault path) , though functionally it does the same
-> thing.
+> Implement the ->cachestat() file operation by forwarding to the real
+> file via vfs_cachestat(), the same way ovl_fadvise() forwards
+> for fadvise.
 >
-> WDYT?
+> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+> ---
+>  fs/overlayfs/file.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 >
-> ~Tarun
+> diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
+> index 27cc07738f33b..a7e252a91ea43 100644
+> --- a/fs/overlayfs/file.c
+> +++ b/fs/overlayfs/file.c
+> @@ -518,6 +518,21 @@ static int ovl_fadvise(struct file *file, loff_t off=
+set, loff_t len, int advice)
+>                 return vfs_fadvise(realfile, offset, len, advice);
+>  }
+>
+> +#ifdef CONFIG_CACHESTAT_SYSCALL
+> +static int ovl_cachestat(struct file *file, struct cachestat_range *csr,
+> +                        struct cachestat *cs)
+> +{
+> +       struct file *realfile;
+> +
+> +       realfile =3D ovl_real_file(file);
+> +       if (IS_ERR(realfile))
+> +               return PTR_ERR(realfile);
 
--- 
-Regards,
-Pratyush Yadav
+We're propagating the error of ovl_real_file() all the way to
+userspace right? I think we need to handle this.
+
+For example, we might get -EIO here, which is unexpected and
+undocumented from cachestat's POV.
+
+Maybe handle it and just return -EBADF or sth like that (with some
+updated documentations, etc.)
+
+The rest LGTM, but I'll let overlayfs maintainers check the
+overlayfs-specific bits :)
+
+> +
+> +       with_ovl_creds(file_inode(file)->i_sb)
+> +               return vfs_cachestat(realfile, csr, cs);
+> +}
