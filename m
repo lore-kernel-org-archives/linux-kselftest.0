@@ -1,311 +1,192 @@
-Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855E62989B5
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 15:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782228810; cv=none; b=HjMZJ/6FdNcDUgxC1vBQ936/8AqrZiVlKk96KKRjnBQGmoINysB+HIuvT6E0Q4BQ6sM0YolS7xluuXNuJ0Xb1Lf6SNiVhEyiDYlIzoP4/lfJrJ54zT9eJ1aBEjpC40qAu8TPI9NHvkcvIL+RcNEMVvh0CNTmQeXjk4nu0XAp9W8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782228810; c=relaxed/simple;
-	bh=lpOwfglJZDHPn+JDNnBl4hYd48fcElWX5MTh1iwTlg8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=M1pBVN+QZB8xtMVGWYbzc6cNY1V0ZbOHN9bYZx2qZ0XhVzuF6qstw0bf0T4J93YVpZq5S0bmLVW9X1Hy/ehJvVq4gx1KdD0x72+ZRK/TqttvDhtok++pWQOej1WRS1O4ud3IZxbNO/JjxIk/i0/SWpwZ4ERyKMl37VM7s0baO30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sKh8VY/j; arc=none smtp.client-ip=209.85.208.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA30A2DA74C
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 15:35:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782228902; cv=pass; b=muNCo3UmhH0KMeNVYC3WieNhMGy45ADv2q+hJUCWbYzNBlUv2437ETqB6GA8NB1S3QKD5JjMmyhVO7RaBM+Eimn9/5XGWWxfNn//AQua7dkUrXhu91gxQu1rf1wuPl/UwGLp3LDPtrHmEDcGVjGFt29MWrQhioRQxzlMtqnGaxk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782228902; c=relaxed/simple;
+	bh=F5jxOgOxeIGxOiAIJVL5hSxhOncVvBstJWDCLkelQbQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rd2f/5vaEKl8BvZsW3gIz9TK15l2jSt/aNE/nVN6TT4GQlhZ10Ot1jLxcefoX++iWkPUQswnRMvYlvQR7XKFRYDh20wAHTlT2X+34ab7q84xLC3MLCs1M0v9i5g9Q/udsu6390CJq+z4/zaKf7lxwv7bZEycLOIQnulDqKCxDug=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rQ8WPs7M; arc=pass smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sKh8VY/j"
-Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-695f710d929so5874477a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 08:33:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rQ8WPs7M"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6974a6e54dbso7863896a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 08:35:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782228899; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FzlFs8zSsN1LECq5FCOefmnGBF50GXoG2R2u/Y/K3zVto41jjLh4ZhWHg3sCb+6ccl
+         UcGaCJRTg2U/lcxTrwxEYtr+6mkhiEv3SVkjGFz8n5leHX6MMLEkLIKeoDofZRJrpe1Q
+         CrBXdB/2/G22Rs5i49K7em4BnehmlhxHSNVPeDGrb8PfyiaLiIM8eMYr8J6xxoEw6stU
+         ycV1M1HbrCtNUL15jdLU9cVxbcG1r8K6+HP3cJI3ryHxPjpq45Ebns9nIAsSZvKIIuue
+         cE7PFKyXvWmXZk6zWOgaEIo1f7Eu5yaAIommes9JM0pJ/HRazgIf3QEVnOou9IABHTJ4
+         L0EA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=jGc5O48HR7pepVvOkH86p+d+WQn7/E2BGrsqzSwA0sE=;
+        fh=IMY7vZCWt4Y910UENYQ36hVrqVrcAq8xafOZX5kYxBY=;
+        b=Wk533oSA/USt7FLDYKevDwA/84Or+CHAgUCTBzbcng1A+1GLTGPrpBlskFyWAN8S83
+         WvYC/T0/JKPP/E/h6YFleFpGVWhI+4RHdaDxTkVg70jipD9isPwQfMkJbwq2ddzpVkvh
+         v1u9NXjzDUaK2UCXAe14IyrNabJXryzI8A8kRE/lBtsaSYI8y+aJB0WmZDiMaV756xeK
+         UCrFDzQBBAUezA3JYEcbOYWfo5p89VUQ3Dub+fZHJdnOG65ZEEPp3yK5z17nABIeWaWH
+         qO4vqJkvlLb75aeHyOWgaSkSG7QQGdLAgIhP0TSpO1xEApaDVZbDQiv/zejbsenVw7/N
+         zKzA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782228807; x=1782833607; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i1Bny3807BZgTs2uePjipxUsmHzpP562txJFNUNSguI=;
-        b=sKh8VY/jKz/LI3HDBO4pigU3vQrOCt00aQMAZ2m6gQGMf+9JqplOH4HgWEQlCdbvjT
-         dGe5xDVTdbY8r72xujtKjrAu3nma3vTmkzLAhm0Hol03PtWYk5n6nV9hEWje+Nve1aSD
-         wycBI0fs13bStMMLO/vSbKKTfVOycRiH770/DBobyKo8pGq0IU+bSLWxLc7UGBut34WT
-         M/Qza8f8W+CatJeBQS3stH96thE5Gt9GIv4IjJ7xNIvtYfwT77CfE1jWvJIZ5gYO3QPj
-         eOn+ocG68PwZRazDnhQkRwex/recdKPrdJTY/i/AuEYb9J2WFE8qdoNpuiUJBLL1MfcF
-         DF4w==
+        d=gmail.com; s=20251104; t=1782228899; x=1782833699; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jGc5O48HR7pepVvOkH86p+d+WQn7/E2BGrsqzSwA0sE=;
+        b=rQ8WPs7MMgstdoLPEEQHPzKfrSKlXdTayEAxfEKaqHXZ8R3Dfr7OR+Zov9IhAfcoqc
+         LbwgrXbHiB2WQ5+HBmaLWQlV3jxkYznxSD7T39Ojx8Xw+L6zhpI2PIDqbsNH8qzkzFaQ
+         +SUuHSiq3TKBJV+g1KS/eEhiL/49objPT2kGr7EAsfUdBlXOEt9/d8EwAR+ErGE87Vsn
+         wWJhd8YpUr4U9ZSZ0bvsqngAq2EyGFHcJPgykxQKqaswZkiaZUmadADo/sEI05deBjy+
+         J3SRo69S04IXqY9Rz5fMPQC6wLOsOS66F0nTc9lAuE+3b1Q0jMZHOhKBKIV1pwll89T4
+         g6iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782228807; x=1782833607;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i1Bny3807BZgTs2uePjipxUsmHzpP562txJFNUNSguI=;
-        b=Fc2xQfxuCNZqMTJRz2qAo/m1bRGmHigl3oA+jUcKLT2uBqLlzp+r8r+RdO6BCVNIbu
-         AJn8LLKHpQSpA5UQHAkLcHiaw5URflpSBA25PZw1sj4zsjsV1LtOJutbVd3i/ye2zKko
-         pOpvuHgVgy78sLaRv/xBUwWqoCcOce1TjRBTBm+KXEM3XBFsM6OGDSRKdSU5V66SWTkB
-         dh4/Ex+XGjk/AFuQ2jhVosUXahJ3BqfcsNis+3LjzaNRQ0M30gwK4OyZaP+JeGTcSQ0l
-         tkLMlVbiitxdidkokwN+NN2SBHx6crTxR67eoD8Y25of9eq0vYIj4QkgXi5fuCCUmsLM
-         5/1w==
-X-Gm-Message-State: AOJu0YxH4dJZj2uHF8G0RD/XGzLt7IqaNVJKPabdsz8SzC3Rgs6NOSdm
-	sdhVOjqAXcwmLcsStB5aihTg+t0OntqirOmug6Mv+4ngUj8464vKLSeMOPRcT+VfN8qVSWjB75v
-	nQUoVB5YK2C0xKvYcOA==
-X-Received: from edgd28-n1.prod.google.com ([2002:a05:6402:a51c:10b0:695:d3d9:5811])
- (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:5253:b0:697:96c2:b591 with SMTP id 4fb4d7f45d1cf-69796c2c000mr5685499a12.11.1782228806744;
- Tue, 23 Jun 2026 08:33:26 -0700 (PDT)
-Date: Tue, 23 Jun 2026 15:33:26 +0000
-In-Reply-To: <CAEvNRgGharGxs9s_ow0Z4iiQ9PCzdghch-4Fk6UMjiPP9tX-5g@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1782228899; x=1782833699;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=jGc5O48HR7pepVvOkH86p+d+WQn7/E2BGrsqzSwA0sE=;
+        b=Rjktg4U0HIoOoTgcUh6F03sC7Dw4AELCaDBSrpJFtYZy6jydFvMSAtJi3kHUUSjgFR
+         dp4T5Cmf36hj/5j7li6klT33AREKj69FekoEv9ghudf5+wWJ6TyJxv95WycCFyoOE3JP
+         7zE7WNHXMkkiZ49NpTXalvMbCR+QUZd1oFBuWg0TLLHj45Z9WQlcqcpvlW8ZCN9ZRIPN
+         voq9v10rkfb1MqexzUOjDE6Ij0+0z2wHpW9t2bLer2PrkQlOoaFlIxMKSywoNe9FInWn
+         MGKM0v1vuhpT0443fUvJCRu2mxBKL7ZeyrtU5YqgO1eUUcBOyXX9pYBNT1YZhQDteQ0K
+         U0nw==
+X-Forwarded-Encrypted: i=1; AFNElJ8Z038jshSa4+MrP7iECIEmwA5mjHnY6/PD7xaMeMhdo8cmyuYXO2xYHJYhBbaGwzy8xYdNPdQKel8hd35KFQU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDLoXvRSqxJdmov+r9eetIY93mEDh3UuJi7eEWeo9vOegKH4aG
+	Dckjlw1ryBfgbIgr6Bw26qmovNuvoxvJUrl4iKUtdgIrIIVL301io9Ak+k4BVZvyNBcPuwXQa83
+	qrcm2y7ZNbC88bDmmWh81j7oJCj7DTNo=
+X-Gm-Gg: AfdE7clJiIE1whcUdGDLvsLvk68ursGG2eSOJlT7E3H3REiUI62GCdnfiHPdanS4mYr
+	NPvVGQkv9U40h2KvUBbB2HRYeD0NziBTy3mgJNLGP1J14gjG/RdVuBFlkBm6hmeRfMJ9WcJphbr
+	9vT3ciFiUa17DZUooTsbE+/VeujwpFLp8BXwWWwBjeNE/tw9t4HExLVEKvz7BH7DNvmywlhilMY
+	peNrQOiXs0Nn9iWgpbLye5D8IJAaH/CZNOCsa6doouw2k0jpj263IpmM1ZBaj80dcEbSfEMWXW5
+	eUVKgg3fcamD4pa1OgHFYjcoQNGZF5U=
+X-Received: by 2002:a05:6402:3205:b0:687:7fa4:faa0 with SMTP id
+ 4fb4d7f45d1cf-69711e0602bmr1457590a12.23.1782228898944; Tue, 23 Jun 2026
+ 08:34:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1780676742.git.tarunsahu@google.com> <20ae20f9d1a198b289444ebb4c824314cbba1bcf.1780676742.git.tarunsahu@google.com>
- <CAEvNRgGharGxs9s_ow0Z4iiQ9PCzdghch-4Fk6UMjiPP9tX-5g@mail.gmail.com>
-Message-ID: <9huzo6h1mfuh.fsf@tarunix.c.googlers.com>
-Subject: Re: [RFC PATCH v2 03/10] kvm: Prepare core VM structs and helpers for
- LUO support
-From: tarunsahu@google.com
-To: Ackerley Tng <ackerleytng@google.com>, Jonathan Corbet <corbet@lwn.net>, vannapurve@google.com, 
-	fvdl@google.com, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, sagis@google.com, aneesh.kumar@kernel.org, 
-	skhawaja@google.com, vipinsh@google.com, Pratyush Yadav <pratyush@kernel.org>, 
-	david@redhat.com, dmatlack@google.com, mark.rutland@arm.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
-	seanjc@google.com, axelrasmussen@google.com
-Cc: linux-kselftest@vger.kernel.org, kexec@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-mm@kvack.org
+MIME-Version: 1.0
+References: <20260623111533.2285005-1-ptikhomirov@virtuozzo.com>
+ <20260623111533.2285005-2-ptikhomirov@virtuozzo.com> <ajqOyIA8tPQsxfz6@cmpxchg.org>
+ <3f6392aa-c1f6-4263-8892-978dacbbd8ca@virtuozzo.com>
+In-Reply-To: <3f6392aa-c1f6-4263-8892-978dacbbd8ca@virtuozzo.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Tue, 23 Jun 2026 17:34:47 +0200
+X-Gm-Features: AVVi8Cecv2_TqQ_O8FYC-won9z3vUEfkkWOTSNMZJamaSksyTs_hA8rdhn2B_co
+Message-ID: <CAOQ4uxhras5YAr8_HBpuHSDwvfiEF8vAr0NDB0R_PXtGDhnqjQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] fs, mm: add ->cachestat() file operation
+To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Miklos Szeredi <miklos@szeredi.hu>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Nhat Pham <nphamcs@gmail.com>, Shuah Khan <shuah@kernel.org>, linux-unionfs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Ackerley Tng <ackerleytng@google.com> writes:
+On Tue, Jun 23, 2026 at 4:55=E2=80=AFPM Pavel Tikhomirov
+<ptikhomirov@virtuozzo.com> wrote:
+>
+>
+>
+> On 6/23/26 15:48, Johannes Weiner wrote:
+> > On Tue, Jun 23, 2026 at 01:14:48PM +0200, Pavel Tikhomirov wrote:
+> >> The cachestat() syscall reads page cache statistics straight from the
+> >> file's f_mapping. Stackable filesystems such as overlayfs keep the dat=
+a
+> >> pages in an underlying inode's mapping rather than in the overlay
+> >> inode's, so cachestat() reports all zeroes for them.
+> >>
+> >> Add a ->cachestat() file operation and route the syscall through a new
+> >> vfs_cachestat() helper that calls it when present, falling back to
+> >> file's f_mapping otherwise. This lets stackable filesystems forward th=
+e
+> >> query to the file that actually owns the page cache. No behaviour chan=
+ge
+> >> for regular files.
+> >>
+> >> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+> >> ---
+> >> Note: Memset change might be a bit tricky, I moved it to no
+> >> ->cachestat() path to avoid multiple memset on nested overlayfs, that
+> >> means that ->cachestat() is expected to be able to handle unitialized
+> >> cs.
+> >> ---
+> >>  include/linux/fs.h | 10 ++++++++++
+> >>  mm/filemap.c       | 43 +++++++++++++++++++++++++++++++++++--------
+> >>  2 files changed, 45 insertions(+), 8 deletions(-)
+> >>
+> >> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> >> index 6da44573ce450..966b6564707e4 100644
+> >> --- a/include/linux/fs.h
+> >> +++ b/include/linux/fs.h
+> >> @@ -53,6 +53,8 @@
+> >>
+> >>  struct bdi_writeback;
+> >>  struct bio;
+> >> +struct cachestat_range;
+> >> +struct cachestat;
+> >>  struct io_comp_batch;
+> >>  struct fiemap_extent_info;
+> >>  struct kiocb;
+> >> @@ -1963,6 +1965,8 @@ struct file_operations {
+> >>                                 struct file *file_out, loff_t pos_out,
+> >>                                 loff_t len, unsigned int remap_flags);
+> >>      int (*fadvise)(struct file *, loff_t, loff_t, int);
+> >> +    int (*cachestat)(struct file *file, struct cachestat_range *csr,
+> >> +                     struct cachestat *cs);
+> >
+> > I suppose you can't just have it return the real file because of the
+> > with_ovl_creds() scope you need during access?
+>
+> Yes, AFAIU in overlay when we use realfile we should always use it
+> with_ovl_creds(), even though I don't think there is anything cred relate=
+d
+> in filemap_cachestat(), I still think we should follow the common pattern
+> other overlay helpers use (similar to ovl_fadvise() and ovl_flush()).
+>
+> note: Actually some places get ovl_real_file() and use it without
+> with_ovl_creds(), e.g.: ovl_read_iter, ovl_write_iter, ovl_splice_read,
+> ovl_splice_write. But those look more of an exception than the general
+> rule. All other instances use with_ovl_creds().
 
-> Tarun Sahu <tarunsahu@google.com> writes:
->
->> Introduce core infrastructure to support VM preservation with LUO.
->>
->> First two changes are just refactoring, no functional change, third
->> change introduces a new member in struct kvm.
->> - Move ITOA_MAX_LEN to kvm_mm.h for reuse by upcoming kvm_luo code.
->> - Add a public kvm_create_vm_file() helper wrapping kvm_create_vm()
->>   and anon_inode_getfile() to provide a unified VM file creation API.
->> - Track a weak reference to the backing file in struct kvm under
->>   CONFIG_LIVEUPDATE_GUEST_MEMFD to enable reverse file resolution
->>   without circular lifetime dependencies.
->>
->
-> Given the above, I think this should be separate patches.
->
->> Signed-off-by: Tarun Sahu <tarunsahu@google.com>
->> ---
->>  include/linux/kvm_host.h | 14 +++++++
->>  virt/kvm/kvm_main.c      | 79 +++++++++++++++++++++++++++++-----------
->>  virt/kvm/kvm_mm.h        |  3 ++
->>  3 files changed, 75 insertions(+), 21 deletions(-)
->>
->> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
->> index 4c14aee1fb06..9111a28637af 100644
->> --- a/include/linux/kvm_host.h
->> +++ b/include/linux/kvm_host.h
->> @@ -874,6 +874,18 @@ struct kvm {
->>  #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
->>  	/* Protected by slots_lock (for writes) and RCU (for reads) */
->>  	struct xarray mem_attr_array;
->> +#endif
->> +#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
->> +	/*
->> +	 * Weak reference to the VFS file backing this KVM instance. Stored
->> +	 * without incrementing the file refcount to prevent a circular lifetime
->> +	 * dependency (since file->private_data already pins this struct kvm).
->> +	 * Used exclusively to resolve the file pointer back from struct kvm.
->> +	 *
->> +	 * Written/cleared via rcu_assign_pointer() and read locklessly under
->> +	 * RCU (e.g. via get_file_active() to prevent ABA races).
->> +	 */
->> +	struct file *vm_file;
->>  #endif
->
-> We didn't really talk about this during the calls, but it seems weird to
-> preserve a vm_file with pretty much nothing other than the vm type. The
-> entire VM is re-created, which means it could potentially be a
-> completely different VM?
->
-> In some sense it's more flexible since the guest_memfd can be restored
-> with some completely different VM, but it seems like it could introduce
-> other issues.
->
-> I think other KVM folks would probably have more thoughts here.
->
->>  	char stats_id[KVM_STATS_NAME_SIZE];
->>  };
->> @@ -1074,7 +1086,9 @@ void kvm_get_kvm(struct kvm *kvm);
->>  bool kvm_get_kvm_safe(struct kvm *kvm);
->>  void kvm_put_kvm(struct kvm *kvm);
->>  bool file_is_kvm(struct file *file);
->> +struct file *kvm_create_vm_file(unsigned long type, const char *fdname);
->>  void kvm_put_kvm_no_destroy(struct kvm *kvm);
->> +void kvm_uevent_notify_vm_create(struct kvm *kvm);
->>
->>  static inline struct kvm_memslots *__kvm_memslots(struct kvm *kvm, int as_id)
->>  {
->> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
->> index 89489996fbc1..65f0c5fb353e 100644
->> --- a/virt/kvm/kvm_main.c
->> +++ b/virt/kvm/kvm_main.c
->> @@ -67,9 +67,6 @@
->>  #include <linux/kvm_dirty_ring.h>
->>
->>
->> -/* Worst case buffer size needed for holding an integer. */
->> -#define ITOA_MAX_LEN 12
->> -
->>  MODULE_AUTHOR("Qumranet");
->>  MODULE_DESCRIPTION("Kernel-based Virtual Machine (KVM) Hypervisor");
->>  MODULE_LICENSE("GPL");
->> @@ -1349,6 +1346,19 @@ static int kvm_vm_release(struct inode *inode, struct file *filp)
->>  {
->>  	struct kvm *kvm = filp->private_data;
->>
->> +#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
->> +	/*
->> +	 * Clear the weak reference of the vm file.
->> +	 * In case vm file is closed by userspace, but kvm still has
->> +	 * other users like vCPUs, clearing this pointer ensures
->> +	 * that we don't have a dangling pointer to a closed file.
->> +	 *
->> +	 * Cleared via rcu_assign_pointer() to ensure proper memory visibility
->> +	 * for concurrent lockless readers under RCU.
->> +	 */
->> +	rcu_assign_pointer(kvm->vm_file, NULL);
->> +#endif
->> +
->>  	kvm_irqfd_release(kvm);
->>
->>  	kvm_put_kvm(kvm);
->> @@ -5476,11 +5486,47 @@ bool file_is_kvm(struct file *file)
->>  }
->>  EXPORT_SYMBOL_FOR_KVM_INTERNAL(file_is_kvm);
->>
->> +struct file *kvm_create_vm_file(unsigned long type, const char *fdname)
->> +{
->> +	struct kvm *kvm = kvm_create_vm(type, fdname);
->> +	struct file *file;
->> +
->> +	if (IS_ERR(kvm))
->> +		return ERR_CAST(kvm);
->> +
->> +	file = anon_inode_getfile("kvm-vm", &kvm_vm_fops, kvm, O_RDWR);
->> +	if (IS_ERR(file)) {
->> +		kvm_put_kvm(kvm);
->> +		return file;
->> +	}
->> +
->> +#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
->> +	/*
->> +	 * Weak reference to the file (without get_file()) to prevent a circular
->> +	 * dependency. Safe because the file's release path clears this pointer
->> +	 * and drops its reference to the VM.
->> +	 *
->> +	 * Written via rcu_assign_pointer() because the pointer can be read
->> +	 * locklessly under RCU (e.g., in kvm_gmem_luo_preserve() via
->> +	 * get_file_active() to prevent lockless ABA races).
->> +	 */
->> +	rcu_assign_pointer(kvm->vm_file, file);
->> +#endif
->> +
->> +	/*
->> +	 * Don't call kvm_put_kvm anymore at this point; file->f_op is
->> +	 * already set, with ->release() being kvm_vm_release().  In error
->> +	 * cases it will be called by the final fput(file) and will take
->> +	 * care of doing kvm_put_kvm(kvm).
->> +	 */
->> +
->> +	return file;
->> +}
->> +
->>  static int kvm_dev_ioctl_create_vm(unsigned long type)
->>  {
->>  	char fdname[ITOA_MAX_LEN + 1];
->>  	int r, fd;
->> -	struct kvm *kvm;
->>  	struct file *file;
->>
->>  	fd = get_unused_fd_flags(O_CLOEXEC);
->> @@ -5489,31 +5535,17 @@ static int kvm_dev_ioctl_create_vm(unsigned long type)
->>
->>  	snprintf(fdname, sizeof(fdname), "%d", fd);
->>
->> -	kvm = kvm_create_vm(type, fdname);
->> -	if (IS_ERR(kvm)) {
->> -		r = PTR_ERR(kvm);
->> -		goto put_fd;
->> -	}
->> -
->> -	file = anon_inode_getfile("kvm-vm", &kvm_vm_fops, kvm, O_RDWR);
->> +	file = kvm_create_vm_file(type, fdname);
->>  	if (IS_ERR(file)) {
->>  		r = PTR_ERR(file);
->> -		goto put_kvm;
->> +		goto put_fd;
->>  	}
->>
->> -	/*
->> -	 * Don't call kvm_put_kvm anymore at this point; file->f_op is
->> -	 * already set, with ->release() being kvm_vm_release().  In error
->> -	 * cases it will be called by the final fput(file) and will take
->> -	 * care of doing kvm_put_kvm(kvm).
->> -	 */
->> -	kvm_uevent_notify_change(KVM_EVENT_CREATE_VM, kvm);
->> +	kvm_uevent_notify_change(KVM_EVENT_CREATE_VM, file->private_data);
->
-> Notifying with file->private_data threw me off... I would rather inline
-> the rcu_assign_pointer() in this function and have this line read
-> notify(..., kvm) like before.
+Use with_ovl_creds() is a good practice to keep the mental security model,
+but it is useless if the security check (can_do_cachestat) is not in the
+vfs helper (vfs_cachestat), so please move it there.
 
-Yes, I will update it to:
-
-     struct kvm *kvm;
-     ...
-     kvm = file->private_data;
-     notify (..., kvm);
-
-About rcu_assign_pointer, I am not sure, IIUC. that only set the
-kvm->vm_file pointer, which does not have any relation with
-file->private_data. And keeping the rcu_assign_pointer(kvm->vm_file,
-file) at the current place (inside kvm_create_vm_file) logically makes
-sense. because, kvm_create_vm_file creates the struct kvm and vm_file,
-So, all the relation variables should get updated there.
+Also it kind of makes more sense to check (flags !=3D 0) in sys_cachestats
+before checking permissions.
 
 >
->>
->>  	fd_install(fd, file);
->>  	return fd;
->>
->> -put_kvm:
->> -	kvm_put_kvm(kvm);
->>  put_fd:
->>  	put_unused_fd(fd);
->>  	return r;
->> @@ -6341,6 +6373,11 @@ static void kvm_uevent_notify_change(unsigned int type, struct kvm *kvm)
->>  	kfree(env);
->>  }
->>
->> +void kvm_uevent_notify_vm_create(struct kvm *kvm)
->> +{
->> +	kvm_uevent_notify_change(KVM_EVENT_CREATE_VM, kvm);
->> +}
->> +
->>  static void kvm_init_debug(void)
->>  {
->>  	const struct file_operations *fops;
->> diff --git a/virt/kvm/kvm_mm.h b/virt/kvm/kvm_mm.h
->> index 9fcc5d5b7f8d..7aa1d65c3d46 100644
->> --- a/virt/kvm/kvm_mm.h
->> +++ b/virt/kvm/kvm_mm.h
->> @@ -3,6 +3,9 @@
->>  #ifndef __KVM_MM_H__
->>  #define __KVM_MM_H__ 1
->>
->> +/* Worst case buffer size needed for holding an integer as a string. */
->> +#define ITOA_MAX_LEN 12
->> +
->>  /*
->>   * Architectures can choose whether to use an rwlock or spinlock
->>   * for the mmu_lock.  These macros, for use in common code
->> --
->> 2.54.0.1032.g2f8565e1d1-goog
+> Also there are simingly no other file_operations which return "realfile"
+> for further processing, mostly the operation from fsops simply replaces
+> general operation with its own logic completely.
+>
+> Thanks for your review!
+>
+> ps: Hope overlay maintainers will correctly if I'm getting this wrong.
+>
+
+I don't think this is wrong per-se, except for can_do_cachestat().
+
+Just be aware that the real file could change from one cachestat
+call to the next (i.e. due to copy up).
+
+Thanks,
+Amir.
