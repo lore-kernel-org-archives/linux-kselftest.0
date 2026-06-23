@@ -1,135 +1,152 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD4123D092E;
-	Tue, 23 Jun 2026 10:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782211439; cv=none; b=kuQdLUI/FyW+/Hm8Ea3iza/OMnihb7K/D5AWfT9sJtC0XitIinxy8JV/vt6YXtrStc4WfIX72KcDmDv9hPXPlLJhuZYoq2PS0LKgeze0kNTI9H2hK9izezwgN8WauUlY08OXeaPTG1QP5eu3RMzzRu3HbBKOQ+qkr3sA7Vmg+nY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782211439; c=relaxed/simple;
-	bh=VUVe4/SjGaTfCsH8K/XuqCMt6jXdc7XiVSxyqnlFUQg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ugfOmUq+877XzyzOWBHrqWAY/AXgeqOpLlEOLk+XcQKZpj3WW2cLPLI22dUk6+NZg9JYM4WZ4Nv2oKMeNWyZbwaKNvd2WSqqy82p6WfMP2t4b9NIsYnlpzxzXvgTgQNXPT8h1O2E6YlyFwvUNU2WHtIAqH+GilKHy9SS078l8ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=UuPv0gz3; arc=none smtp.client-ip=4.193.249.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11021073.outbound.protection.outlook.com [52.101.70.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857A3340D9A;
+	Tue, 23 Jun 2026 11:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782213348; cv=fail; b=GrId6SR50gNatcu1CNOzU8lnBvBM3SgHACk08pC6MkJ2N5zdBZKbzqaxSa33q58IbFY+3gspilQmCpMwlIxr3wKvcnvktkqmWYFfwQ7Y0bVUaMKgZe52yDe/TGU5YP7Y0sCnjsMh/yqSDSreozB2aIjrmlGZRO2XpcaV4u5Xfwo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782213348; c=relaxed/simple;
+	bh=5j96r1ZMgSCwSH/UWn97RVYfVgQKQ6GH298OfdmN1Ro=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=B5UJJnD15DS637z86llFb4m82AxNo7hiNmdSYBzSaQdHMSjWWUuTbOs7Efeoqet3xUnl9KdeX0fujRJoRC9+JKpBOAoNtnwysjb5WAdzg9zmMeyuRfHppORcnk+Chig88DXtxbGZ6ga8RT8a8Ax23KGjFh44s+VwGO3TzO1ykAk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=IPm75NVT; arc=fail smtp.client-ip=52.101.70.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="UuPv0gz3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
-	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	To:Cc; bh=BEzK54WsZZQQY6H6ksb7bS3O/Ub4RxBDB18ifaBNHbI=; b=UuPv0g
-	z3dYeQfu3LX69+Y0K/QL9x29DQFGTPK4i/4JsOZ4/4WTGFPRE0Qyo6Ial6J0hONW
-	6kG3MLo45P3BlO1EkQIWZR9QuKfgpk4Az0uQmfXHMqGIy/MqrT+Tob0oYVwZkFI5
-	zypAnNyBLVOtJfPqvEd9Vc3ew6cE2NPEPy+mE=
-Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web3 (Coremail) with SMTP id ygQGZQAHU5BbYzpq5jGnAg--.34960S2;
-	Tue, 23 Jun 2026 18:43:39 +0800 (CST)
-From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Subject: [PATCH bpf-next v2 0/2] bpf: Mask pseudo pointer values in
- verifier logs
-Date: Tue, 23 Jun 2026 18:43:37 +0800
-Message-Id: <20260623-f01-13-pseudo-btf-id-cap-bpf-v2-0-a190ebb8f3e2@mails.tsinghua.edu.cn>
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="IPm75NVT"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=acBubLu4QcQ8hcU/9FQWZVHBn2tUA2U6ql3Kgi4yQ73Psp06h3Aaq5SHHfjTpMJa8e9AV5N5pzR+D5KVSPvYMsN19zZ1u9TZzx6L+AmKzK4yAqW18cjzoOvHNpgbzflLBkHIqa2XzYqkxQaCB+5m4kS8o30M4xN0dKEbN0KwrOQ+FilVySGK6jNYWJlImTWcuK6RrZuLTDWbHnVEy/fmpyYatYGNfTSyetVt4+8HKtAyAC6rO+umqf6FZi3yl9hfCZrwJQITth+b0uDmMmCRXgPvbZJUyjNeGUACW5zDlY+4a9Kub25rU+s1XC5b8sBqmegBrGvgcwaBItAfE/O8Uw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vdc0QsLVq28JvKfkSRqyzi8qzBdIB1LyvSAVuBUKuSg=;
+ b=KLCaWh+PhkmfGX8LPHCxe3CoEmVkSqVx8ilZb6Jm2IImwU+qTwNxUt+oycNG0R/fcPHfvuUKa7ytXKbndz2rC/3cf6tIFc0KqBIVjK41DRciFMUXVFJsBOW8f6YEgUpzywUE24fHi8HHwvcgZsyVO1LHsn4ntpb/krpVlG18ivwAvB7hNj6KyrmaigoDSNjcTKHZyxRxbCN0bBUML+4XsDkfJln4lgEWIqKJ++5K5rDAeKTj0N5kh+RNZ2w862uTRWvs3F/Bho22Sxs5pcME3bszNBQRIlLQQbAsfITGjmJWKFxnhbI3vS7SYq7eK49Bws16WDRhohGF2ZWBealoiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vdc0QsLVq28JvKfkSRqyzi8qzBdIB1LyvSAVuBUKuSg=;
+ b=IPm75NVTaRxY3UhFH3PsKZLLIbHhG6MNeep9bK3uj1Ip5J+AhcPSXzrFSEftcvbezftVzf644eXXT5pdFsJTgnLXwNpCEnyCmPRnshu710E79DeCrBdFuifPTjSDj6gebB7Ydv+TFAdH0KUv2Gsz3EdKxnzGcuYfuRTeowOJnjANay/L9sTyVVoG35G3kGZetkRpWwcZBW9BGRb2K2bHPYY7eUDgHaCzQJ2ESjbKz9q89pBT/0K9f4Rs/BZSBtJKjRmmD/CZLL69rmiID798baYyrVF3HGlArOPXeOO76K/BOYtwUjUqIuI6OPcTc4sU/WyuPXWise5NTL4x0L/zdg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from AM0PR08MB11804.eurprd08.prod.outlook.com
+ (2603:10a6:20b:747::14) by AS2PR08MB9974.eurprd08.prod.outlook.com
+ (2603:10a6:20b:643::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.12; Tue, 23 Jun
+ 2026 11:15:43 +0000
+Received: from AM0PR08MB11804.eurprd08.prod.outlook.com
+ ([fe80::bf46:f137:f6d2:5b3a]) by AM0PR08MB11804.eurprd08.prod.outlook.com
+ ([fe80::bf46:f137:f6d2:5b3a%6]) with mapi id 15.21.0139.018; Tue, 23 Jun 2026
+ 11:15:43 +0000
+From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+To: Miklos Szeredi <miklos@szeredi.hu>,
+	Amir Goldstein <amir73il@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nhat Pham <nphamcs@gmail.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-unionfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Subject: [PATCH 0/3] ovl: make cachestat() work
+Date: Tue, 23 Jun 2026 13:14:47 +0200
+Message-ID: <20260623111533.2285005-1-ptikhomirov@virtuozzo.com>
+X-Mailer: git-send-email 2.54.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: FR4P281CA0175.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b7::12) To AM0PR08MB11804.eurprd08.prod.outlook.com
+ (2603:10a6:20b:747::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFljOmoC/32OQQ6DIBBFr9LMumOARiJd9R6NC8RBaVo0AsbGe
- Pei7rv8mfffnxUCTY4C3C8rTDS74Aafg7hewPTad4SuzRkEE5JJrtAyjvyGY6DUDthEmwE0esR
- mtFhWpVUVaSNkBVkxTmTdcuifsAOelgj1eQmpeZGJu31nexfiMH2PT2Z+NM5Rwf6PzhwzoUpmp
- bIkmXl8tHuHIgbnuz7pgtpUGA/1tm0/xme2jPAAAAA=
-X-Change-ID: 20260619-f01-13-pseudo-btf-id-cap-bpf-585f98eac268
-To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Hao Luo <haoluo@google.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: Andrii Nakryiko <andriin@fb.com>, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1782211420; l=2147;
- i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=VUVe4/SjGaTfCsH8K/XuqCMt6jXdc7XiVSxyqnlFUQg=;
- b=hun+HWPtare31FaVrlemv/0Zadg54cOSV+aOhzK11JW8o0QkbCuIlV1X7RxpOfms24LY5Gg6P
- diMZPfDpvDXDK7StjyBNRwHRqIKkdbTCgy77k0NocYtixXo21gwv8kE
-X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
- pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:ygQGZQAHU5BbYzpq5jGnAg--.34960S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ArW8CFykJrWDuF47ZF4fXwb_yoW8tr4rpa
-	n7Gr4avr48Aw1kCanIya42kF9YqasYkr13GrnrJw15AFn8XayUXwn2va1UWr1Yk3y0kw1a
-	yFW3X34j934UXrJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBa1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
-	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r1Y6r17M2vYz4IE04k24VAvwV
-	AKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-	6x8ErcxFaVAv8VW8Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrw
-	ACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_GFv_Wrylc2xSY4AK67AK6r4DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY2
-	0_GrWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-	3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIx
-	AIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAI
-	cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-	IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUCdgAUUUUU=
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgEHA2o6NDluQgAAs2
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR08MB11804:EE_|AS2PR08MB9974:EE_
+X-MS-Office365-Filtering-Correlation-Id: c1c5559a-7ccd-4bf3-e08d-08ded118c3ed
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|23010399003|10070799003|366016|376014|7416014|52116014|56012099006|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	DMCZ0mP1gen3TNwhrwndYeCD/+hmJmeA8n5e+aKSEDdnW78uMglDvlJGq3HAbgILhVWi304ON+eDy9u/HpoZH/sUiTydIL9VfPfRaNsC5ls9UCSfBkAlg3uZK6Ul1dFp04+senqVQczEES9K6sH1lZdDziTIXsDg2pSAz7VpxNwaeo/BfSI0NrbSyAbd2UkQT6fTuD28tWoYprg2xDmV8adEGy76rmYnNr8ASxdYHJ9ex1+IOqPnfq5QCHgyUMJUstVYF3iz9caXB8DnEBpDlVtEb6G2zeWfpzoAkPBl0i8gqdJPR2feyXgGD/ybkqpQaWAs3eg/uYCw+xjU5dj2LGNMGPx8vFJXEMsnuDvq/NmgTJUdeMqMy5h3wXAZFljbhc4ASutp0VZIEHRbLSgerM9NleNCbxJtDtJ/uzovXwcqs+LbevS2DQPEZ6JpplJ53xHRmxiK68fY9o/2HISBh2nOjtpFRkSGkKOrtT5EdGQCEkh0Uj3YeuzDnOudzNhVaIQIIpOSuQlMtdkM5sWk7QIMd/sjQJZT9ff142Mla4Oy8usXCrxDJ/gC9HLAZTiwVlqBZD3nnjF54Z/XDwrvIyXSTjSnG2OqCrtX00wTVpqw7g2v6h0CrKPB+Xbfk5ZHWAGfgvvzX8qNSoumtwspfKvd3w7XyxJ4VoE7qyiMLnE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR08MB11804.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(10070799003)(366016)(376014)(7416014)(52116014)(56012099006)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?F/uPcyfTGxIzGjdBVmd1z5XywUBU591PhwTaQ2+dbU7HGh0z1wQH/fBjleBb?=
+ =?us-ascii?Q?vCb9qm4HalrIc4lrNZ2EH0PMdeePpOfCSFRBqhUxFksj6M5V7La4mAU9OsTd?=
+ =?us-ascii?Q?Q5kVORgp9GqawbpEgSQoQVI13o9ocHgheYruJIbaZvmYPhkXQGXjbGULNtwm?=
+ =?us-ascii?Q?e/pSyAU+3+kgjH2iV4CD01U83IZyF+1imFVlequSAa63PypY6i1c0rPMvqJb?=
+ =?us-ascii?Q?CEux2vndibpXtaByHutqacV7MIPh7CqDHQa6sXGGPNvA1W1I3x9A/S3E6j93?=
+ =?us-ascii?Q?n0zYV6uYKms2PQJpNgPfDe3DzIQZO8Iagtz/FjT2HMqdeYdCPoNX9pRjJReD?=
+ =?us-ascii?Q?qS66/n3gHpFfTq6WwbnHIInYcxwHxTkd2gIJZsr8G+btik+wEXgo+IVBLtcZ?=
+ =?us-ascii?Q?AyWcGbiTv0JOBExrD91XMwNwIJbewdesG3nKO/pnoE8dqjO7kZO1S/q3Y9pA?=
+ =?us-ascii?Q?VIDBSxk2PCM4f+sQWuxUDuHx7mHpgPfZW0kyRMGQMntPoeknMkeVmtMPCMI2?=
+ =?us-ascii?Q?9aFQdUmUPQJ1LLmFeYVuvh05xQ34nRvcJTcR8zM3dBN79+KLkeHLGMoGZuRf?=
+ =?us-ascii?Q?Xcfktczrh2vBCaQH3jBbeMBvaIFwUN5szorWLaZKkwE//TN21n7TpPdtUH71?=
+ =?us-ascii?Q?jax+8nHpGcoCpHVlOJjSSTZuIyc4wx4bJ8/eqxeMf+5PjYEJM05gt9R5q/S6?=
+ =?us-ascii?Q?lLufHlpjQ22w/Z7443BvlvlAmjO9G889XIVFuGx1rHcbDfTHs9K1WuyVMMI5?=
+ =?us-ascii?Q?dwWNOFDsP7jiYdmOTIGCdRYqV3KpsQX2smo0/izvBbPGCTDEUqHVHcpabw49?=
+ =?us-ascii?Q?+wjRuTKVVB38D2vpLAQuLgdqUdXqJqfvUDYn6whQ0p+K0Ot17BCLYvlllBU5?=
+ =?us-ascii?Q?oJ36RH3v8L0tn5kWBAPW9ZgIhsVQP0PGD2dsgYIRIDiqMT2slDBb7175cd5E?=
+ =?us-ascii?Q?GY+vbLtfMPnF6SANxu6IBZimZM1/b5/s6PSdgwDM4BYXH7J2e2DnAh8OhHMO?=
+ =?us-ascii?Q?sBu/BRV3mSQ7MV6n01UmCL4CoMiMW/+HK2xjOczxob5vXpnKkkKG2+tLSte6?=
+ =?us-ascii?Q?KfEozkRM10KSv1lAxyQCxxvDaOyqV2eV6gI3iCB5IKrX0KHeTcPL7Vr2aHn/?=
+ =?us-ascii?Q?QZfcIcBU+nBcj6NUS8Nz9SnUzsWnreruIMBRzP+h8KlIx0UNkU/71qJeNQVJ?=
+ =?us-ascii?Q?uq2n+SxErjx2T3z48uVzTsnTh9u6rw4ccJcYifGNAo01uBwYTAAugvCf9IEL?=
+ =?us-ascii?Q?yFhiuH72v7vQbt9a7bj12g6SVDpi3cUBjIFDGfqID0pMOEOdHT+i0LnhTpIY?=
+ =?us-ascii?Q?Df9DTVsGG6MwBocz7R914MJDChvNBM2tYgwiM4Y2uGsINjgufXLB+UvrdOvL?=
+ =?us-ascii?Q?dPIn5M4EnDfizrnZ2aA4JAYRdbSYzuFpbNM04BOmj8BsIJu9uwW17UpjcxBJ?=
+ =?us-ascii?Q?2/EANNvV04K/cDD4izDWUj1qv5m0GVe1aypRKsxQiDwBBnJkFDOzinqvmrdm?=
+ =?us-ascii?Q?9bSfxPTmsdvORFo3ds02XIO4e/C7e+MIKkK6FDHugpYqvRms+Zs1lBWSGMmM?=
+ =?us-ascii?Q?/P6JfKxcTWloMxrniQvuotGPo+YejGId2mm9wt+LaCZ17z2253tb2p/y/2jg?=
+ =?us-ascii?Q?wyldl1eJUWL830mHgHk2IW0PYyK1ka4wYptFPtahi2b1zU9pGABQ38O5DaB+?=
+ =?us-ascii?Q?S4Doe1/2BG2eW8DJyAiEVITzH1ZAdJoRcPRHKr9dJHkdnXlfwMpci+4yIbHH?=
+ =?us-ascii?Q?aXnv+ZyS4JlL++oRjyIzHDMn1tlfxMWW7ug3CBFmSsUJJhJmzWLvlRhqLphy?=
+X-MS-Exchange-AntiSpam-MessageData-1: +aY7WzR6v17xeWR0kbzhNdalTWW5kdSZUTc=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1c5559a-7ccd-4bf3-e08d-08ded118c3ed
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR08MB11804.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2026 11:15:43.2405
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kXG2CiqrI95srvXHNFzvgSKY7J4GdFu9lFbM2ZfeBMHXGeXkWfHfCa9BUjqABg+7bxypcZu/Pm9wJoEtAvL1xZ50KjvP3vNnIGwrlyOq6ks=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB9974
 
-Verifier log printing already hides ldimm64 immediates for map FD and
-map value pseudo sources when pointer leaks are not allowed. The same
-print path also sees rewritten immediates for BPF_PSEUDO_MAP_IDX,
-BPF_PSEUDO_MAP_IDX_VALUE, and BPF_PSEUDO_BTF_ID, but those sources were
-not included in the pointer classification.
+We were using cachestat() for our internal Virtuozzo cache related tests
+and I saw that test behaves wrong on overlayfs, syscall returns all
+zeroes instead of any meaningful cache statistics there. Let's fix it
+similar to what was done for fadvise().
 
-Extend the existing masking so all pointer-producing ldimm64 pseudo
-sources print as 0x0 when allow_ptr_leaks is false.
+Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
 
-Patch 1 extends the disassembler-side masking.
-Patch 2 adds verifier selftest coverage for pseudo-BTF ksym logs.
+Pavel Tikhomirov (3):
+  fs, mm: add ->cachestat() file operation
+  ovl: support cachestat() syscall on overlayfs files
+  selftests/cachestat: add an overlayfs test case
 
-Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
----
-Changes in v2:
-- Replace the CAP_BPF gate with verifier-log masking in print_bpf_insn().
-- Also mask BPF_PSEUDO_MAP_IDX and BPF_PSEUDO_MAP_IDX_VALUE immediates.
-- Update selftests to check masked pseudo-BTF ksym logs.
-- Link to v1: https://patch.msgid.link/20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn
+ fs/overlayfs/file.c                           | 18 +++++
+ include/linux/fs.h                            | 10 +++
+ mm/filemap.c                                  | 43 +++++++++--
+ .../selftests/cachestat/test_cachestat.c      | 75 ++++++++++++++++++-
+ 4 files changed, 137 insertions(+), 9 deletions(-)
 
-To: Quentin Monnet <qmo@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-To: Hao Luo <haoluo@google.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Andrii Nakryiko <andriin@fb.com>
-Cc: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-
----
-Nuoqi Gui (2):
-      bpf: Mask pseudo pointer values in verifier logs
-      selftests/bpf: Cover pseudo-BTF ksym log masking
-
- kernel/bpf/disasm.c                                 |  5 ++++-
- tools/testing/selftests/bpf/progs/verifier_unpriv.c | 19 +++++++++++++++++++
- 2 files changed, 23 insertions(+), 1 deletion(-)
----
-base-commit: a3847994b4d20c0701ccc54fe110920ea78e73dc
-change-id: 20260619-f01-13-pseudo-btf-id-cap-bpf-585f98eac268
-
-Best regards,
---  
-Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+-- 
+2.54.0
 
