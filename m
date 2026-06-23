@@ -1,171 +1,113 @@
-Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D1C38944E
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 20:06:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5353932FF;
+	Tue, 23 Jun 2026 20:07:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782245205; cv=none; b=PZ5w4lOmYMSdAf74/4xZjdv+frcx8uLrhXI0wdobyT1PPrhRjFtUMgyDuIwycVRg/jgsTkJwwAnp5lCO50TDcCydpRPQe0KlgyDh766PD7mxEHaksmVcb78v4WlJ4GERzGYejewG0LyST1lq6n838cwJaJuAdThWjPXm758/MuA=
+	t=1782245260; cv=none; b=On8moalM0hXDNuU5MDli4gDN2nSvVDBBBixBGF4etvVQpfeJdw+fhH6TlMq6EnkbHj9iC0Hu0AUoHcaH5PAVh7ogciddONji3IV7E184qIJMEV49rjqjXjhRodumZXnff3JjR1cAWhjiUGyQ63r92WENRpunqvVGCh0U3fay3SQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782245205; c=relaxed/simple;
-	bh=ykMC2ieYQYVSxbapdFkuFJd/A1i/SI/0S63Ag5SQ2+E=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=IRMx8gS1Lay8UvSxPVBWG/DGUeYrsRsp4uX/dip6xO//elmATS3dypq/RmYPxyn9/cZUyKgoOp7PxR5hYlsP6NFvBkETtaDOoA/yxt4d/sHmet6gpGLwxL7TjExNg3GAAG29vEpDA+BZZunNvL9jFBxRE7Jkj33EZZ2Yzv5xHN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hItVHB/p; arc=none smtp.client-ip=209.85.208.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
+	s=arc-20240116; t=1782245260; c=relaxed/simple;
+	bh=peScxMWlzri2gAH8LnxIQmX7XQWXWeurIYU2L4wVMiY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Ij6W3/K1abu8vbgxKC7V0kiCDoLGCRZ3fQ8R+yYuMFByMsEZy9tSuSTkJYCvXuCl+/ZDapJSIVuUXaLjTV2Z0cGNqaBuEdz1Tl26wBGWZdAzNQ9wZyYzr1yuUmxHTwBn7guJbn98PsNP79OgsDISvNoMO76UkcKA+6uLs5oXM1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mtgC7vu1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hItVHB/p"
-Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-695796f97aeso163049a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 13:06:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782245203; x=1782850003; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kYPy5Kp/eciXGU33EP09NXjsbX2uzzGfRHxirk+T+0A=;
-        b=hItVHB/p6ViFVNt7PxMzW+TnRr3F7wzqELOAGwnVrgdqD7j0ceDj9QeSkB/wMVAvZo
-         bV/gGRlk+etAb/RTu9kTPIS03VXX7FdRRuQz8FrfWfscyJLD7OOxHdNYaAj9B4ka5KTE
-         iH5bxbf+4A3d6ZhCrc0zzuiEARShuiAiP+m89iv94cok2uUkaNbxLjOSPMbUkYV6Bvp2
-         4bvOBNPQTjO/+VkQCqn0YjKra2i/UVG9w5OG0HvdqLFrEweVYQXclb2EB3sYoQHoKDNx
-         oCpWw77zyfkhx7L9foHDxNstlsTNv94HID+mnWG2As+J9ck6LEul/e2p47tGaycrbjGC
-         Bn8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782245203; x=1782850003;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kYPy5Kp/eciXGU33EP09NXjsbX2uzzGfRHxirk+T+0A=;
-        b=UAZrt+DBcp8Ae5HQovgJHBWLPG8br0sPo/etIRpL1pZgnHkfOOIZvVIBrutw98WM98
-         eTlWJuSdGggou/Xbs8Jt361IdB1E07XZUI32Okp6Kp3dd08A+7ml+3WzQ4oX+4dXokc3
-         M1C228Ns8ckowqMVrzX0NE8aS5n7Dv/fO824NckBIc9N2NaEL78ongt+FbBR+cQSL/0x
-         VWObRp9fbK2kKfnK6055xYvLginhH9p+5JhzqqEJryp5tb67Wy9i2q0qXicDgCj41pyP
-         A9fuLYZQHym0bekDPqQqoPPs0oCP2zWhXLZFzlRRHpBE5BJacmZ8bviU7h/ETzYDyvDD
-         9ZYA==
-X-Forwarded-Encrypted: i=1; AFNElJ/X5f+DyxEYItOaPe9L1JE3PL/+TghYsBTFMp9MjlKfW+0uztQaOcxcIuEyd5hL1xRrE6Z6MKRYH8tcLVKUU6w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSvA8OQYU3UAnHGI0TnoI4cMB+iobw/SV73vPdxguF06s9Fap4
-	0MOLX4DzRm2dLAZA0PP8yZXEp7WnBNoFZPWY8w01zCNhO6DaU7PNpYAX6Q9cozvuvno9CMMCiCs
-	1Lp7fJRW4TE8ejI2aaA==
-X-Received: from edyc13.prod.google.com ([2002:aa7:df0d:0:b0:697:e99f:d111])
- (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:3554:b0:691:b5aa:5a7a with SMTP id 4fb4d7f45d1cf-697f3adf4a5mr19296a12.21.1782245202451;
- Tue, 23 Jun 2026 13:06:42 -0700 (PDT)
-Date: Tue, 23 Jun 2026 20:06:41 +0000
-In-Reply-To: <2vxz8q85mdyh.fsf@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mtgC7vu1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996831F000E9;
+	Tue, 23 Jun 2026 20:07:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782245258;
+	bh=6Kmx0mi/Yz50Wgq4l7LEOUoM/N7dSVgue1OpRg96emw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=mtgC7vu1b8rxzkq0Xdavu/GlMTv+4n+D8qxXWeiHmpga4P5LNvQ+nuoGfBcpM26H3
+	 wO3+BzB8wKxaKvlsUJtBxNgrH2jEstdh/SdmR9z6IrIIsdvCI53xkjq1dCQpwAARVh
+	 B8MU+/b9X+U2/x4UGI5LsTpbfWU2x9AwlmvrGQ9n2qUFTdNPjxlLITg2lc6nKgPjqB
+	 xt7XlyKXMvc5ZDJDvJlIIRTl5+dIhrLWBmYKLyi/2uxG8t8KcHn9awaeka8cGHVMXI
+	 W6nk+bo/vE0TuIxyVYOohVX9QRtMEe/PEc+fM+qrwWsL8UZmGBBCvEtRQ/3crbym7P
+	 mdNsp6XLBIZTQ==
+Content-Type: multipart/mixed; boundary="===============2442528478780633523=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1780676742.git.tarunsahu@google.com> <48777f4749fa43d5648085dbb2037aa99c144a88.1780676742.git.tarunsahu@google.com>
- <CAEvNRgFEHciT3T9y+qEYRvXhDwfrggoU7Rm=f9hT3OrV+wgpNQ@mail.gmail.com>
- <9huztsqtmihs.fsf@tarunix.c.googlers.com> <2vxz8q85mdyh.fsf@kernel.org>
-Message-ID: <9huzv7b910oe.fsf@tarunix.c.googlers.com>
-Subject: Re: [RFC PATCH v2 06/10] kvm: guest_memfd: Add support for freezing
- and unfreezing mappings
-From: tarunsahu@google.com
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Ackerley Tng <ackerleytng@google.com>, Jonathan Corbet <corbet@lwn.net>, vannapurve@google.com, 
-	fvdl@google.com, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, sagis@google.com, aneesh.kumar@kernel.org, 
-	skhawaja@google.com, vipinsh@google.com, Pratyush Yadav <pratyush@kernel.org>, 
-	david@redhat.com, dmatlack@google.com, mark.rutland@arm.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
-	seanjc@google.com, axelrasmussen@google.com, linux-kselftest@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Message-Id: <979553f5ed74dcb555e9aba6aad660ad2a208c643ab7aeac6d5e74992427f362@mail.kernel.org>
+In-Reply-To: <20260623231411.6216-4-adubey@linux.ibm.com>
+References: <20260623231411.6216-4-adubey@linux.ibm.com>
+Subject: Re: [PATCH bpf v9 3/8] selftest/bpf: Fixing powerpc JIT disassembly failure
+From: bot+bpf-ci@kernel.org
+To: adubey@linux.ibm.com,bpf@vger.kernel.org
+Cc: hbathini@linux.ibm.com,linuxppc-dev@lists.ozlabs.org,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 23 Jun 2026 20:07:38 +0000 (UTC)
 
-Pratyush Yadav <pratyush@kernel.org> writes:
+--===============2442528478780633523==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> On Tue, Jun 23 2026, tarunsahu@google.com wrote:
->
->> Ackerley Tng <ackerleytng@google.com> writes:
->>
->>> Tarun Sahu <tarunsahu@google.com> writes:
->>>
->>>>  static long kvm_gmem_fallocate(struct file *file, int mode, loff_t offset,
->>>>  			       loff_t len)
->>>>  {
->>>> +	struct inode *inode = file_inode(file);
->>>>  	int ret;
->>>> +	int idx;
->>>>
->>>> -	if (!(mode & FALLOC_FL_KEEP_SIZE))
->>>> -		return -EOPNOTSUPP;
->>>> +	idx = srcu_read_lock(&kvm_gmem_freeze_srcu);
->>>> +	if (kvm_gmem_is_frozen(inode)) {
->>>> +		srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
->>>> +		return -EPERM;
->>>> +	}
->>>
->>> fallocate may eventually go to kvm_gmem_get_folio(), so that would check
->>> kvm_gmem_is_frozen() twice. Is this meant to catch the punch hole case?
->
-> Yeah, I reckon you can get away with doing this check only in
-> kvm_gmem_get_folio(). Normally you'd like to fail early, but as of now I
-> don't see much of a problem. If you drop the check here and fail in
-> kvm_gmem_get_folio() you'd end up taking and releasing the mapping
-> invalidate_lock, but this isn't a fast path anyway so I don't think it
-> should matter much.
+> diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> index 3558fe10e28c..11428cad5b2d 100644
+> --- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> +++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> @@ -178,10 +178,12 @@ int get_jited_program_text(int fd, char *text, size_t text_sz)
+>  {
+>  	struct bpf_prog_info info = {};
+>  	__u32 info_len = sizeof(info);
+> -	__u32 jited_funcs, len, pc;
+> +	__u32 jited_funcs, len, pc, disasm_len;
+> +	__u32 trunc_len = 0;
+>  	__u32 *func_lens = NULL;
+>  	FILE *text_out = NULL;
+>  	uint8_t *image = NULL;
+> +	char *triple = NULL;
 
-No, Don't agree.
-kvm_gmem_get_folios already have the is_frozen check. which blocks the
-kvm_gmem_allocate. But not kvm_gmem_punch_hole. Your argument is correct
-for kvm_gmem_allocate only. So is_frozen check in fallocate is to
-block the punch hole as well. What ackerley said is correct.
+This isn't a bug, but would it be clearer to follow the traditional C
+style by grouping related variables together? The disasm_len variable
+could be declared closer to where it's used along with trunc_len, and
+adding a blank line before the fprintf() statement in the loop might
+improve readability.
 
->
-> I think either way can work just as fine...
->
->>>
->>>>
->>>> -	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE))
->>>> -		return -EOPNOTSUPP;
->>>> +	if (!(mode & FALLOC_FL_KEEP_SIZE)) {
->>>> +		ret = -EOPNOTSUPP;
->>>> +		goto out;
->>>> +	}
->>>>
->>>> -	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
->>>> -		return -EINVAL;
->>>> +	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE)) {
->>>> +		ret = -EOPNOTSUPP;
->>>> +		goto out;
->>>> +	}
->>>> +
->>>> +	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len)) {
->>>> +		ret = -EINVAL;
->>>> +		goto out;
->>>> +	}
->>>
->>> There's some reordering here. Why not let the validation happen like
->>> before, then check kvm_gmem_is_frozen()?
->
-> There is no reordering, if I am reading the diff correctly. The diff is
-> somewhat misleading. The kvm_gmem_is_frozen() call is added at the top
-> of the function, and then all the later checks are in the same place but
-> get a goto out (and hence a full body to the if block). So the diff
-> reads like reordering, but there is none.
->
+[ ... ]
 
-That is right. I thought Ackerley was asking why not add the check after
-the all the if condition and before the kvm_gmem_punch_hole/allocate calls.
+> @@ -225,9 +227,30 @@ int get_jited_program_text(int fd, char *text, size_t text_sz)
+>  	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd #2"))
+>  		goto out;
+>
+> +	/*
+> +	 * last 8 bytes contains dummy_trampoline address in JIT
+> +	 * output on 64-bit and last 4 bytes on 32-bit powerpc,
+> +	 * which can't disassemble to a valid instruction.
+> +	 */
+> +	triple = LLVMGetDefaultTargetTriple();
+> +	if (triple) {
+> +		if (strstr(triple, "powerpc64") || strstr(triple, "ppc64"))
+> +			trunc_len = 8;
+> +		else if (strstr(triple, "powerpc") || strstr(triple, "ppc"))
+> +			trunc_len = 4;
+> +		LLVMDisposeMessage(triple);
+> +	}
+> +
+>  	for (pc = 0, i = 0; i < jited_funcs; ++i) {
+> +
+>  		fprintf(text_out, "func #%d:\n", i);
+> -		disasm_one_func(text_out, image + pc, func_lens[i]);
+> +		/*
+> +		 * Disabled JIT have zero func_lens, hence underflow
+> +		 */
+> +		disasm_len = func_lens[i] > trunc_len ?
+> +					func_lens[i] - trunc_len : 0;
+> +		disasm_one_func(text_out, image + pc, disasm_len);
+> +
+>  		fprintf(text_out, "\n");
+>  		pc += func_lens[i];
+>  	}
 
-> It would be very neat if scru had a cleanup.h style scope-based locking
-> function, but on a quick glance I can't see one.
->
->>
->> To align with design. "stop the fallocate call if inode is frozen, No
->> need to go further". I dont have strict opinion on this. I am fine with
->> taking it across punch hole as well to make it more fine grained. But it
->> will no longer claims stop the fallocate call (allocation one is stopped
->> in separate path: fault path) , though functionally it does the same
->> thing.
->>
->> WDYT?
->>
->> ~Tarun
->
-> -- 
-> Regards,
-> Pratyush Yadav
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28051760380
+--===============2442528478780633523==--
