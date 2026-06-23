@@ -1,225 +1,146 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E9E385D9C
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 01:41:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E646377019;
+	Tue, 23 Jun 2026 01:44:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782178863; cv=none; b=bZsREE3G94pA95yrT4SPSU3yyPbExLpTiywW5QizO2J6m569aux3v848JhXXwxw2tKQCWYPFkqcMFuDF+8PXu5sHEvXDl34JHZGORbCS7qdPMPV4czgwnRqGPUIWW8iilFcZ7jOVbHCblIltCXILghbqauiez2C8zhR3hnB+yQo=
+	t=1782179055; cv=none; b=J7+ULdMxo7u02bYZCr/uRxI5Jv3Uxe1idfrqoWZp5drRe6JYeopGRJtj/+QI9WgGkeif0+xwC4J3mdQWh5n3Lmz1SlgA/l4bSUPtO7CLVuW2LZII+hxXrsH42fqNFdaY2jiBc+kNDrFVyGxAADjp0LDKja1FnF5uifZ7mnqzk8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782178863; c=relaxed/simple;
-	bh=TeljXPih3XySpBflJVQVLxHCds/34/7xYyQklL7E838=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dFU6gc+XMhLaHiyZF4HK4kBf2EOz8QriEQf5+JPS0T39m0oVZVBOBTJExrKKkoy0Ec9SlPlu3k56gknW0KMVwpi0G8mQ5TK6gupxC2ukGJCEsTYLgMpuake8NCOkM5f0qafDdkWALqR2Lk8mJQK4UxaEpL89vLjGsHmscM0O21I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cdJmT8bU; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782179055; c=relaxed/simple;
+	bh=ty118v/GEIKgPHRF7FkPEb1YYTctfSyI9LDfVCc8uBw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dnSrwMAR9M6GST8HTwJZa1YmHM/HP9vBALjheGdOgo/rZ7dw/pLS0LrOnxzJcRaD8Uwalvy/ucZ5RmY1Ewc70N/x9fm412hl26HOUsTbW1ofwYlIVwlX/bp+kU2e5EnBYRuzpNgCC/0afQEwEnyxha5fGOnwBBHDcnHSx365WcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jZeo4cWT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cdJmT8bU"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c88973b6965so240672a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 18:41:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782178860; x=1782783660; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dGVecrSz6dhJP1jTtBAIJOkndE4qmahRc7vcfNDXjzo=;
-        b=cdJmT8bUvgv6nOcVBX7TUVeG9a+WndOa4sBxFrA7k8Vh2ZWTaTyaBZUQYY1sloZt5F
-         r+qHxY92zLdyVLeVB5j2bVxYUUDEIWINUosiYpYzvHpia/xTxYWUHUstMEZLeE/PaqEQ
-         vf7ojUb0mMBvPFmrtJOmu1Rfn9pDZbwXpv7/a+dd/jVTIBSlAL2h3SkqCoqTRxwPAB9d
-         +FbIR86hR3PfeL63Ts2zFqsoBiCpIvryrlJv7WfY46IIlUtlxH3OrldnZdavQawaPhkM
-         eOqXQq65J1vRtwd7aIevD/07QKsvj/LP3dKKZvPRqHLkJ8ypU+qppVklFYr8r9PfrdkU
-         jD8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782178860; x=1782783660;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dGVecrSz6dhJP1jTtBAIJOkndE4qmahRc7vcfNDXjzo=;
-        b=DPaodsRhoPFm+PvxjhOUgRSjpVPenZsLF4NkkQDvf2NHlyhRuprWQI/XgK9OWQq1wV
-         BFnMrGrmUwTL6oGA4d22acuYh2rpO1kyVkLFCNO1rrLStUz7EjCaqsf/MIlhfc1oAvoT
-         1YnYkd51H14rXPs+RqPOTdgM6MxTSXH+ev5NbasQnm8tdOseRUIOngqccZ3PVwtVpR5N
-         CuGQ9wGYSSTmipFoyZghjNz2ru4aezLvDojvSnK1CbbNZEyZecr0nurtI7W7i7ri762D
-         9yGS88A+SaieY/qm0C7VSSA+1urYDWqfCcxqyjvfEF8INzs4/bp5+k4rqWeMefxvj7Es
-         HZTg==
-X-Forwarded-Encrypted: i=1; AHgh+RpqBo3IBptzHVPEaHkmxKNAHKsJsYgByZNyY++iiOYtIkfYcaWUU77/wXUnMoEBNupJ2KzRhoWFXmID164Uy48=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzc39m5GNoaFMWm0SiCu3svEnSOUwkcTOPRGQga4fG0fN4VZh7+
-	QsslyBAWDAcmN+zBujpyJLXY+HwMW2B4Cc+8ah98Ld93fy+vSeukbUge
-X-Gm-Gg: AfdE7clwXe/+V7Be1VjHfpVp0RX7uYrRsbzh96KupGr21mTYxwxEMMlBGhvDieuYDMk
-	FEeZKgHyWAUoT/Jem87Po1EPNIK1IoHiYoh2Gk8YnwOYr6Yi/B/CBqijdig2rVPKFfOvd5y4iH9
-	xZIMI8EP8z7LEAZ126jFXtOjcFMLO+K1h8G3Wu9TavQjnMkvKTVIplqS1viWWvlQNIW3TXScwS9
-	UbjVb/eXOT/baaHuVB6DJzuR0mdXDuyW7CE+JIer10GuSJWn0On1ystqe0VmvNILcOgIgF18u9t
-	kaIdErlFFW62MQ/JxEpd3m8nQaCG2GGLzFvOxJpN0SBYtl8FoX5AM3QD5e2AFQp6uHGhLwkcjCL
-	Vmx7FbI9f7X3uoRzE/MlpMf5UVMwtGxiI/ySH3XPKpFHxdBUpIwpV8r5tTqphDPn0VGkVQP9wkO
-	ZoJWN5/XsrpOC04a0eR5oC1rVC+grsxdYzAZrfk0z556cKR7xFH4XlcAfevzKgrJ9TOTpc86cxe
-	PfY+R676zg=
-X-Received: by 2002:a17:903:4b4f:b0:2ba:6601:8e3d with SMTP id d9443c01a7336-2c7c3d5e7a0mr11648095ad.9.1782178859632;
-        Mon, 22 Jun 2026 18:40:59 -0700 (PDT)
-Received: from localhost.localdomain ([202.8.105.120])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7444aad83sm90093085ad.79.2026.06.22.18.40.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 18:40:59 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jZeo4cWT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 386DD1F000E9;
+	Tue, 23 Jun 2026 01:44:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782179054;
+	bh=vni5Lyip3mgwniFnSgkoIOM9DFuNAQmCprTMRCiORoU=;
+	h=From:To:Cc:Subject:Date;
+	b=jZeo4cWTbOi4j3PW944Wwi8m+/QXtToDpe7N3uOJzT60jex6ZikMn6LvXCqG7GHMv
+	 q9k0q1V+TgggdtJkR+aCiufi5rt/fgZrSmjZg2yMz5DbjelHq7a5ZGdG8F4hYM63kL
+	 zNOOn/gqW/fGF5KI216G5d0HNxPyz76ViI59nGSkKEq/JswvFhwQYkfA4EnL86hQDW
+	 dqetFDoeTneXCXBYOZy7LNfbWFsWbeZ0cEUFIgQF2DGUyo/KZZ0zkS4p3WnSoSU3eM
+	 yigvj8RMw3O1xC/N3il+KbSvokgRHsjUB+rirELEAYWl0f4sY9a/D75/ZVC8hxiY4X
+	 h7y2iyWUnWD3A==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	paul.chaignon@gmail.com,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf v4] selftests/bpf: Cover partial copy of non-linear test_run output
-Date: Tue, 23 Jun 2026 09:40:27 +0800
-Message-ID: <20260623014027.402820-1-sun.jian.kdev@gmail.com>
+	linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v7 00/10] tracing/probes: Add more typecast features
+Date: Tue, 23 Jun 2026 10:44:10 +0900
+Message-ID: <178217904992.643090.15726197350652241270.stgit@devnote2>
 X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-prog_run_opts already verifies that BPF_PROG_TEST_RUN returns -ENOSPC
-for a short data_out buffer while still reporting the full output size
-through data_size_out.
+Hi,
 
-Add the same coverage for non-linear test_run output. Use pass-through
-TC and XDP programs with a 9000-byte packet, a 64-byte linear data area,
-and a 100-byte data_out buffer. The expected output spans both the linear
-data and the first fragment.
+Here is the 7th version of series to introduce more typecast features
+to probe events. The previous version is here:
 
-Verify that test_run returns -ENOSPC, reports the full packet length
-through data_size_out, and copies the packet prefix into data_out for
-both non-linear skb and XDP frags paths.
+ https://lore.kernel.org/all/178201238795.570818.15573963115625446598.stgit@devnote2/
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+In this version, I added 2 new fix and cleanup patches and update
+according to Sashiko's review. [1/10] is a long-lived issue about
+@+FOFFS, which was wrongly adding offset twice. [2/10] is a clean
+up patch for renaming fetch_op name (good to dump it). 
+This is applicable against probes/core branch on linux-trace tree.
+
+Steve introduced BTF typecast feature for eprobe[1].
+This series extends it and add more options:
+
+1. Expanding BTF typecast to kprobe and fprobe.
+   (currently only function entry/exit)
+
+2. Introduce container_of like typecast. This adds a "assigned
+   member" option to the typecast.
+
+   (STRUCT,MEMBER)VAR->ANOTHER_MEMBER
+
+   This casts VAR to STRUCT type but the VAR is as the address
+   of STRUCT.MEMBER. In C, it is:
+
+   container_of(VAR, STRUCT, MEMBER)->ANOTHER_MEMBER
+
+3. Support nested typecast, e.g.
+
+   (STRUCT)((STRUCT2)VAR->MEMBER2)->MEMBER
+
+   the nest level must be smaller than 3.
+
+4. Add $current variable to point "current" task_struct.
+   This is useful with typecast, e.g.
+
+   (task_struct)$current->pid
+
+5. per-cpu dereference support.
+
+   Intrdouce this_cpu_read(VAR) and this_cpu_ptr(VAR) to
+   access per-cpu data on the current CPU (accessing other CPU
+   data is not stable, because it can be changed.)
+
+   You can access the member of per-cpu data structure using
+   typecast like:
+
+   (STRUCT)this_cpu_ptr(VAR)->MEMBER
+
+And added fetcharg dump feature (for debug) and updated test scripts
+to test part of them.
+
+Thanks,
+
 ---
+base-commit: 3ec75d0067f30eb5e0730f033766d6ab2feca7ae
 
-v4:
-- Send only the selftest patch; the fix patch has been applied to bpf/master.
-- Initialize data_out buffers to avoid reading uninitialized stack memory if
-  bpf_prog_test_run_opts() fails unexpectedly.
+Masami Hiramatsu (Google) (10):
+      tracing/probes: Fix double addition of offset for @+FOFFSET
+      tracing/probes: Rename FETCH_OP_DATA to FETCH_OP_IMMSTR
+      tracing/probes: Support dumping fetcharg program for debugging dynamic events
+      tracing/probes: Support typecast for various probe events
+      tracing/probes: Support nested typecast
+      tracing/probes: Type casting always involves nested calls
+      tracing/probes: Support field specifier option for typecast
+      tracing/probes: Add $current variable support
+      tracing/probes: Add this_cpu_read() and this_cpu_ptr() dereference method to fetcharg
+      tracing/probes: Add a new testcase for BTF typecasts
 
- .../selftests/bpf/prog_tests/prog_run_opts.c  | 70 +++++++++++++++++++
- .../selftests/bpf/progs/test_pkt_access.c     | 12 ++++
- 2 files changed, 82 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
-index 01f1d1b6715a..beb6fa78fd94 100644
---- a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
-+++ b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
-@@ -4,6 +4,10 @@
- 
- #include "test_pkt_access.skel.h"
- 
-+#define NONLINEAR_PKT_LEN 9000
-+#define NONLINEAR_LINEAR_DATA_LEN 64
-+#define SHORT_OUT_LEN 100
-+
- static const __u32 duration;
- 
- static void check_run_cnt(int prog_fd, __u64 run_cnt)
-@@ -20,6 +24,69 @@ static void check_run_cnt(int prog_fd, __u64 run_cnt)
- 	      "incorrect number of repetitions, want %llu have %llu\n", run_cnt, info.run_cnt);
- }
- 
-+static void init_pkt(__u8 *pkt, size_t len)
-+{
-+	size_t i;
-+
-+	for (i = 0; i < len; i++)
-+		pkt[i] = i & 0xff;
-+}
-+
-+static void test_skb_nonlinear_data_out_partial(struct test_pkt_access *skel)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	__u8 pkt[NONLINEAR_PKT_LEN];
-+	__u8 out[SHORT_OUT_LEN] = {};
-+	struct __sk_buff skb = {};
-+	int prog_fd, err;
-+
-+	init_pkt(pkt, sizeof(pkt));
-+
-+	skb.data_end = NONLINEAR_LINEAR_DATA_LEN;
-+
-+	topts.data_in = pkt;
-+	topts.data_size_in = sizeof(pkt);
-+	topts.data_out = out;
-+	topts.data_size_out = sizeof(out);
-+	topts.ctx_in = &skb;
-+	topts.ctx_size_in = sizeof(skb);
-+
-+	prog_fd = bpf_program__fd(skel->progs.tc_pass_prog);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+
-+	ASSERT_EQ(err, -ENOSPC, "skb_partial_err");
-+	ASSERT_EQ(topts.data_size_out, sizeof(pkt), "skb_partial_size");
-+	ASSERT_OK(memcmp(out, pkt, sizeof(out)), "skb_partial_data");
-+}
-+
-+static void test_xdp_nonlinear_data_out_partial(struct test_pkt_access *skel)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	__u8 pkt[NONLINEAR_PKT_LEN];
-+	__u8 out[SHORT_OUT_LEN] = {};
-+	struct xdp_md ctx = {};
-+	int prog_fd, err;
-+
-+	init_pkt(pkt, sizeof(pkt));
-+
-+	ctx.data = 0;
-+	ctx.data_end = NONLINEAR_LINEAR_DATA_LEN;
-+
-+	topts.data_in = pkt;
-+	topts.data_size_in = sizeof(pkt);
-+	topts.data_out = out;
-+	topts.data_size_out = sizeof(out);
-+	topts.ctx_in = &ctx;
-+	topts.ctx_size_in = sizeof(ctx);
-+
-+	prog_fd = bpf_program__fd(skel->progs.xdp_frags_pass_prog);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+
-+	ASSERT_EQ(err, -ENOSPC, "xdp_partial_err");
-+	ASSERT_EQ(topts.data_size_out, sizeof(pkt), "xdp_partial_size");
-+	ASSERT_OK(memcmp(out, pkt, sizeof(out)), "xdp_partial_data");
-+}
-+
- void test_prog_run_opts(void)
- {
- 	struct test_pkt_access *skel;
-@@ -69,6 +136,9 @@ void test_prog_run_opts(void)
- 	run_cnt += topts.repeat;
- 	check_run_cnt(prog_fd, run_cnt);
- 
-+	test_skb_nonlinear_data_out_partial(skel);
-+	test_xdp_nonlinear_data_out_partial(skel);
-+
- cleanup:
- 	if (skel)
- 		test_pkt_access__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/test_pkt_access.c b/tools/testing/selftests/bpf/progs/test_pkt_access.c
-index bce7173152c6..cd284401eebd 100644
---- a/tools/testing/selftests/bpf/progs/test_pkt_access.c
-+++ b/tools/testing/selftests/bpf/progs/test_pkt_access.c
-@@ -150,3 +150,15 @@ int test_pkt_access(struct __sk_buff *skb)
- 
- 	return TC_ACT_UNSPEC;
- }
-+
-+SEC("tc")
-+int tc_pass_prog(struct __sk_buff *skb)
-+{
-+	return TC_ACT_OK;
-+}
-+
-+SEC("xdp.frags")
-+int xdp_frags_pass_prog(struct xdp_md *ctx)
-+{
-+	return XDP_PASS;
-+}
--- 
-2.43.0
+ Documentation/trace/eprobetrace.rst                |    9 
+ Documentation/trace/fprobetrace.rst                |   10 
+ Documentation/trace/kprobetrace.rst                |   11 
+ kernel/trace/Kconfig                               |   11 
+ kernel/trace/trace.c                               |    8 
+ kernel/trace/trace_eprobe.c                        |    2 
+ kernel/trace/trace_fprobe.c                        |    2 
+ kernel/trace/trace_kprobe.c                        |    2 
+ kernel/trace/trace_probe.c                         |  582 ++++++++++++++++----
+ kernel/trace/trace_probe.h                         |   98 ++-
+ kernel/trace/trace_probe_tmpl.h                    |   27 +
+ kernel/trace/trace_uprobe.c                        |    3 
+ samples/trace_events/trace-events-sample.c         |   40 +
+ samples/trace_events/trace-events-sample.h         |   34 +
+ .../ftrace/test.d/dynevent/btf_probe_event.tc      |   51 ++
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   11 
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   11 
+ .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    5 
+ 18 files changed, 756 insertions(+), 161 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
 
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
