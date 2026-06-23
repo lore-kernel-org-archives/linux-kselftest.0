@@ -1,152 +1,181 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A651712C534;
-	Tue, 23 Jun 2026 02:49:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDDB363C6C
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 02:52:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782182943; cv=none; b=C/tjbn0sA1hscNOmFGGD6u7aBv6c9/EzIl7KUUweDRh5mCEevSvFO62211Ot0AMpEjpkZgEME6TdrA+cD3k7T7aq/+Ebyky4ak2tScCl1/aVIjdi8sghu/DZUnOOb2dsN+WzFMv7glwygB4uW80QF8Im6P1Y0pKVRvjpzAyOcSE=
+	t=1782183121; cv=none; b=Xf55heFNTQzx8OzZZq1T8o34i0SO3a7+75SFQCHNOKHyNgI/iz5MJjEWxMmWvnQ1WHBEty4LnheYtajny+g16dbGZrLZ7qYWsRGzn6kqQu9p0fjj+xS6KeF8BPSeXrrs2NYvEkvy0zupsqWrQuQ/D5hDSE3vUAwSGK5VSL0Gfys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782182943; c=relaxed/simple;
-	bh=ArTZKS9r3TPMaQgQTYCYM5ecuBaoroMU8Bd1y5b6InM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ha76xv2LD2nCPW50TW9Hs9PQcG548r+EtZdkad2L8+wCDWLhsUqEXZMLuAEuI0Q9Hk0a3P+xKEboVUgzoa0bQy7amL/Jg8lw3n72bKK00wqGveO4hKIfGnG+V1l3tfZJlyc6k6nvxPB2MKDfeHZMz06QDZTgTwIX3a0rnyboPRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dXoHy5sa; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1782183121; c=relaxed/simple;
+	bh=p+nffAW408DMeJGJh50kWk8zhQg2b3tHyUIep+5bpYk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WEBt8KVMugA0OB7ELHTjsagxg9+pdVPYi9QEvNbDte8/t+ohD9+dF+u6484sG0pLo9oyxogJjToYjv+kw79af6s+q44Z2eyXxamPBgBHNHIuhiMS6YmCl9EBVG/aunUU3Gx0pK6K384kR1rriAFRixcwLBVyDynZmvRNeYLLy9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O/DR/nIg; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dXoHy5sa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782182942; x=1813718942;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ArTZKS9r3TPMaQgQTYCYM5ecuBaoroMU8Bd1y5b6InM=;
-  b=dXoHy5sarqEj5a0KUrSbpVBQ8DLF6VNKGNj8jG+rEj21YIl5JrP9UJIO
-   MXynErSo3ypODBROL3rs9YfkgqcNbXHioIC+yH0t1Un6EacHo70mNH4UD
-   wbktJ4B9/rWDfcedviHlqM8oPSnsvLWXQI3E9TNXe4eJM5FLf+48UBCk+
-   kw8xv20DgODcR5jYyd6PXW3D+bU7pQX+bPx3FUcvOXyYm416aELoQqBDt
-   D4forreRG//xrSyMKk/n+n0XV63JxJxd72L8Va8v+1VUOCZdpiIjxvq2S
-   m2vX2gr79KvC//BWlms+yhCSP7zYMeYn7LPrTfLEtwR+b06lf00d8umHW
-   w==;
-X-CSE-ConnectionGUID: 6kX36fGsSiGnscGOn2SfFw==
-X-CSE-MsgGUID: FLRXOuHZRvOMijy+m3B7cg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="108462681"
-X-IronPort-AV: E=Sophos;i="6.24,219,1774335600"; 
-   d="scan'208";a="108462681"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 19:49:02 -0700
-X-CSE-ConnectionGUID: VyLcM+fpRMG4zA1uPD/clw==
-X-CSE-MsgGUID: qZ1vfIQ/Rfi813vIpp5Oqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,219,1774335600"; 
-   d="scan'208";a="249521046"
-Received: from unknown (HELO [10.238.2.81]) ([10.238.2.81])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 19:48:48 -0700
-Message-ID: <47e32f37-ba46-49d0-919b-8c0889afb0ff@linux.intel.com>
-Date: Tue, 23 Jun 2026 10:48:46 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O/DR/nIg"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c891d27b10eso3364178a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 19:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782183119; x=1782787919; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KV2chNMnw+kmRFfisbGqimiQM5mDTuIEZMht/aRpHIc=;
+        b=O/DR/nIgi7j9J6O+k0kOUIYS6iTDPzoPM0oac4ANwIJvAhSBE8MDbijgo4KrNuGkl3
+         YZ9njHxQ2FjFEJxWkMT29p3GPI1RCFDW8IcuEyf2TyhyAX09h3+DNRRiVEwUQ6/5CqO4
+         5r5z4QXcEdRedSfd05g2Y1F2MgUnCsTsBmYPfOENKvIrBgbzUOiXY9VhDqqMvuYuCQrQ
+         t0gi48TCtJAUSiEjHZh3mAZMbiqiSEUO/PKKDE+cfYDWvWopfYM3PFOQTxffD8udCDiG
+         OWQ/xVRktN+AqltlgENRhIn8UqCYTq9MJi9R/nSsuCQiqtLgR7MiKUibALg9xii1KwQ2
+         B01Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782183119; x=1782787919;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KV2chNMnw+kmRFfisbGqimiQM5mDTuIEZMht/aRpHIc=;
+        b=Qg1923LoC27Y5nJntJ2p/sB+rxWs7P1ekwRMa97LF5LELxim3a/rBgT5X/RvBlnJxh
+         chPjTuiJ9nEGcHkY9fjl9vsECCOWDcGG7/4zWYmlhubXHwLOihOUp/l+1bAdGsP26sva
+         9vptgi+xNfGaZ+Cjg7An4pH/82mlZo3ergsSFbA4MlZomzj2Oq19qWX2KFCk9PgrKm7G
+         wmqZmg6cL49hU9QlXO7VgdRP1hQgkvl0hDWwnSaUUU1nQZgsioB1NKJIMZeSSQHFabc2
+         AZmfA8sfTFOm2rfVV81konU1LlAqfBujZ+a8v9tBp8buxSeAfL89XAqivp0zvOZYN1XY
+         RDQQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqEegX2GpSC+EPAI9K3KWbMDtcCm0cdlLmT26fwvH2a0A46cvrxIlTQMF8uWz0Zr5oZ88jwVKTG0tABqDc8Q7w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy669AUwqSqKiDi9Fk4HZmgZOf7M6RlsyrQq8xO2VYahG+JT57u
+	8o8gRR1oa3GbuiKGMBRC00WgxM9iwl/S4FkqPbG4W9KEPSkujvAnM7B+
+X-Gm-Gg: AfdE7ckanuwGw3Ul9EpUkm8oeFnWfA9GvLTuBcOP30Thjlu7r8uxZUrLKvlWYJt4i7o
+	ZTM0btkJN/mYNcS5pplk/kqkNRRSnkbHl2Y84K7bO1Nc+ivGUQgdrKlHtlvRNYlIS5yeuwUwZo0
+	JzgdEol11xlJYDW/h6qhHr75IZ6Bwog1QbYNFIrraI4uEBCKxQDf8szDq0J4QdlC6sKM2uLeQX6
+	d2M68ajaKnSGQBoqQWaDmBSDOf0hTBf45TZ5Of3D3fGx1bRzaqRxcJGdtgGkbVtZi088yLj/Tup
+	o6rZJMrW8WLIA8Dl4OqB1t8pyselvPEWkCtucCgxn+1YKIlWC7Ae/PVQj//cQBc3ahoC1VBOspd
+	GoC7+9lX/gxaCq62cOvwZxBbTEn/B6/gDtXr4jtWgyLTWTi8DRjZwpy1lz2gbKVJh6nOed+rll3
+	ud4/KUtd5OL7if72pFnucPLhY0dySEi5mPR5q+GFmEWB9KRE6pDBXFWHHRlPDq
+X-Received: by 2002:a17:902:e5c7:b0:2bf:379b:53d2 with SMTP id d9443c01a7336-2c7c995af52mr4223915ad.15.1782183119337;
+        Mon, 22 Jun 2026 19:51:59 -0700 (PDT)
+Received: from r912.tailbb6e1e.ts.net ([182.70.116.80])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7439f8e51sm102704625ad.39.2026.06.22.19.51.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jun 2026 19:51:58 -0700 (PDT)
+From: Avinash Duduskar <avinash.duduskar@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org
+Cc: eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	hawk@kernel.org,
+	yatsenko@meta.com,
+	leon.hwang@linux.dev,
+	kpsingh@kernel.org,
+	a.s.protopopov@gmail.com,
+	ameryhung@gmail.com,
+	rongtao@cestc.cn,
+	eyal.birger@gmail.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	toke@redhat.com,
+	dsahern@kernel.org
+Subject: [PATCH bpf-next v4 0/3] bpf: bidirectional VLAN support for bpf_fib_lookup()
+Date: Tue, 23 Jun 2026 08:21:44 +0530
+Message-ID: <20260623025147.1001664-1-avinash.duduskar@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 03/46] KVM: Move KVM_VM_MEMORY_ATTRIBUTES config
- definition to x86
-To: ackerleytng@google.com
-Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
- chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
- jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
- pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
- rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
- tabba@google.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>,
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-3-9d2959357853@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20260618-gmem-inplace-conversion-v8-3-9d2959357853@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> Bury KVM_VM_MEMORY_ATTRIBUTES in x86 to discourage other architectures
-> from adding support for per-VM memory attributes, because tracking private
-> vs. shared memory on a per-VM basis is now deprecated in favor of tracking
-> on a per-guest_memfd basis, and while RWX memory attributes are on the
-> horizon, they too are expected to be x86-only.
-> 
-> This will also allow modifying KVM_VM_MEMORY_ATTRIBUTES to be
-> user-selectable (in x86) without creating weirdness in KVM's Kconfigs.
-> Now that guest_memfd supports in-place conversions, it's entirely possible
-> to run x86 CoCo VMs without support for KVM_VM_MEMORY_ATTRIBUTES.
-> 
-> Leave the code itself in common KVM so that it's trivial to undo this
-> change if new per-VM attributes do come along.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+This series adds VLAN awareness to bpf_fib_lookup() in both directions.
+BPF_FIB_LOOKUP_VLAN resolves a VLAN egress to its underlying real device
+plus the VLAN tag (XDP programs need this because VLAN devices have no XDP
+xmit), and BPF_FIB_LOOKUP_VLAN_INPUT runs the lookup as if a tagged frame
+had arrived on the matching VLAN subinterface, for iif policy routing and
+VRF table selection.
 
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+The independent l3mdev/VRF flow-init fix, patch 1 in v1 and v2, was split
+out and merged to bpf separately.
 
-> ---
->  arch/x86/kvm/Kconfig | 3 +++
->  virt/kvm/Kconfig     | 3 ---
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-> index 26f6afd51bbdc..24f96396cfa1c 100644
-> --- a/arch/x86/kvm/Kconfig
-> +++ b/arch/x86/kvm/Kconfig
-> @@ -80,6 +80,9 @@ config KVM_WERROR
->  
->  	  If in doubt, say "N".
->  
-> +config KVM_VM_MEMORY_ATTRIBUTES
-> +	bool
-> +
->  config KVM_SW_PROTECTED_VM
->  	bool "Enable support for KVM software-protected VMs"
->  	depends on EXPERT
-> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
-> index 5119cb37145fc..297e4399fbd49 100644
-> --- a/virt/kvm/Kconfig
-> +++ b/virt/kvm/Kconfig
-> @@ -100,9 +100,6 @@ config KVM_ELIDE_TLB_FLUSH_IF_YOUNG
->  config KVM_MMU_LOCKLESS_AGING
->         bool
->  
-> -config KVM_VM_MEMORY_ATTRIBUTES
-> -       bool
-> -
->  config KVM_GUEST_MEMFD
->         select XARRAY_MULTI
->         bool
-> 
+v4 changes what bpf_fib_lookup() returns in one case. v3 left a VLAN
+egress that cannot be reduced to a physical device plus one tag (a QinQ
+egress, or a parent in another namespace) as best-effort SUCCESS with
+the VLAN device's ifindex. In his v3 review Toke asked for a distinct
+error code there instead, so an XDP program cannot mistake an unresolved
+VLAN egress for a physical one, and suggested the name
+BPF_FIB_LKUP_RET_VLAN_FAILURE; v4 implements that. The
+code is appended after BPF_FIB_LKUP_RET_NO_SRC_ADDR (nothing renumbered,
+tools/ mirror updated) and is returned only when BPF_FIB_LOOKUP_VLAN is
+set, so no existing caller can observe it. On that failure params->ifindex
+is left at the input, like the input-side failures; a tc or XDP program
+that wants the VLAN device's own ifindex re-issues the lookup without the
+flag, the recovery path he described.
+
+The reason for a distinct code rather than best-effort SUCCESS: SUCCESS
+on an unreducible egress silently blackholed XDP. A redirect to the VLAN
+device drops at xdp_do_flush() with no in-band signal to the program;
+VLAN_FAILURE makes the unreducible case explicit, and a live-frames
+selftest exercises both the redirected and the passed paths. Only the
+immediate parent is resolved, so QinQ and foreign-netns are the
+unreducible cases; bond, team, TBID and VRF egress resolve, as the
+selftest table pins.
+
+Changes v3 -> v4:
+
+- Patch 1: return BPF_FIB_LKUP_RET_VLAN_FAILURE for an unreducible VLAN
+  egress, leaving params->ifindex at the input.
+
+- Patch 3: the QinQ-egress and cross-namespace-egress arms expect
+  VLAN_FAILURE; an escape-hatch arm re-issues without the flag for the
+  inner VLAN device's ifindex; and test_fib_lookup_vlan_redirect drives
+  live frames (BPF_F_TEST_XDP_LIVE_FRAMES) through the native redirect
+  path, asserting a reducible egress is delivered and a QinQ egress is
+  passed to the stack. The selftest's VLAN_FAILURE arms are IPv4 only,
+  since bpf_ipv6_fib_lookup() restores params->ifindex with the same code
+  as the IPv4 path that the arms exercise.
+
+The three other v3 questions Toke marked fine as-is, and v4 keeps them: an
+unmatched, down, or cross-namespace tag on input returns NOT_FWDED;
+OUTPUT | VLAN_INPUT is rejected with -EINVAL; the BPF_FIB_LOOKUP_VLAN_INPUT
+name is kept.
+
+Taking the tag as lookup input follows the approach David Ahern suggested
+in the 2021 fwmark discussion:
+https://lore.kernel.org/bpf/6248c547-ad64-04d6-fcec-374893cc1ef2@gmail.com/
+
+v3: https://lore.kernel.org/all/20260617224729.1428662-1-avinash.duduskar@gmail.com/
+v2: https://lore.kernel.org/all/20260616223426.3568080-1-avinash.duduskar@gmail.com/
+v1: https://lore.kernel.org/all/20260609172052.81613-1-avinash.duduskar@gmail.com/
+
+Avinash Duduskar (3):
+  bpf: Add BPF_FIB_LOOKUP_VLAN flag to bpf_fib_lookup() helper
+  bpf: Add BPF_FIB_LOOKUP_VLAN_INPUT flag to bpf_fib_lookup() helper
+  selftests/bpf: Add bpf_fib_lookup() VLAN flag tests
+
+ include/uapi/linux/bpf.h                      |  47 +-
+ net/core/filter.c                             | 133 +++-
+ tools/include/uapi/linux/bpf.h                |  47 +-
+ .../selftests/bpf/prog_tests/fib_lookup.c     | 696 +++++++++++++++++-
+ .../testing/selftests/bpf/progs/fib_lookup.c  |  36 +
+ 5 files changed, 930 insertions(+), 29 deletions(-)
+
+
+base-commit: a975094bf98ca97be9146f9d3b5681a6f9cf5ce3
+-- 
+2.54.0
 
