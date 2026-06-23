@@ -1,45 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B563AE6E9
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 23:05:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675153A8727
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 23:05:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782255911; cv=none; b=D3Zggv3o3NiF3zQgj2Rtqya1i/kjiLNVdrC/o/gWMfpvD0JWzzuW5NuEADKRgFAg36tCV2NWdKM0/edjpJkYNpuCLlsLRqVy+c9BNIeK7X93VF3EqHAEk/04cQ0UxIJZkWSZUqUKiTbhRV2Ppdk5YAmbzF2SyGWVQjhGQ128Iz0=
+	t=1782255912; cv=none; b=oM+Uq9VVknuVS+ja1boGUTfXZ2YikBphO6DThBCv5F5N0CTKS2KyJldmNj8SoS2D02RQ0e8TkZa2rY3Su99xNcjhSb+W5QPQiXgCk1eisO+6VT20KGrhHktipcI/6KYRBwL+R/w7MkGGPAnWZcMFlVUfjmSLA+GoSwwa/jt+m00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782255911; c=relaxed/simple;
-	bh=NOWm49NtWeSP+HGDLgYO2W+bn53eMINx0zG2lhRG5pE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WVgmMnPojAoI56mkufniudgcRIgzLrUjWIFMQTDEFNBSZdOvXR7lUSd61yakkF+/Z1VLMVMm8pD1vjFnl3J1TZ5j6N8EHPpx59Wg+eGFlEYg7zPH7PvDgbiRcivRPyBeXwt5ltQbTVSEOsqoBm2aIlpgH54HhMtjOu9EkhWm0tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ehvTiSNl; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1782255912; c=relaxed/simple;
+	bh=GFnvqzOA+msWCU116qHmV5FrXG/LnYNeFPPmReb2Bi4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=UHwRnoDvj979a7RhrOrBqZ+YrfZ1lfVW3u56rasX1emJTLRFxG8kuJnVnuv65DP9e+75gbTVQ1fuXR3hmgANdePufc+VFvYOngm0ygNZ/o5sl4EEScMj0YgH0oN0LBxblj4n2/xQedijUqX7QCInhWFGRKsg1cD+/uFsgji/T+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bHGvuthT; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ehvTiSNl"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bHGvuthT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782255904;
+	s=mimecast20190719; t=1782255910;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=bBUFqxbe5JSvwRcjo5zgOOA2wcQYy9lkMF0E+6kIiuo=;
-	b=ehvTiSNlRX6p8fVkZUMeAZJpLptGJ8fFtBwvSK/c6QUxGFbhGnFxi6SShEmpcj3v/86auQ
-	vsrxNZqmev/45+VBaSAEzlq7vaWWuZg2DqilKVqAJGDCSnRNP4UTXnOuSuk8bKG6mMxnMd
-	7QTcDvpgpoePL88OEoa+0nNdgDsbZc0=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=o0JYaxtKq5T6dSoG39+ki+lC5EFXV1/igQMvJlCVGE8=;
+	b=bHGvuthTa/6wxy/IXPsZ/CJP7OGdUKgzz5cyZgcOFNI8X5X9/gulLmT2/McbefhPWXsZmU
+	l0ISRYFtnhGps5u5PRTz7M7ytjzICkfLxpLB5op1wI6fAqCoEVSs9Quk4cO6h+jeHz7lvW
+	Eg1qMAo2OnrC89thdbHSIxrkdiYGAlg=
 Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-128-SjuaneBgPxalr4-PjMIVWA-1; Tue,
- 23 Jun 2026 19:05:01 -0400
-X-MC-Unique: SjuaneBgPxalr4-PjMIVWA-1
-X-Mimecast-MFC-AGG-ID: SjuaneBgPxalr4-PjMIVWA_1782255899
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-658-Q6dTz-U-PUKZbDoNYwaZXw-1; Tue,
+ 23 Jun 2026 19:05:07 -0400
+X-MC-Unique: Q6dTz-U-PUKZbDoNYwaZXw-1
+X-Mimecast-MFC-AGG-ID: Q6dTz-U-PUKZbDoNYwaZXw_1782255906
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BE4A51956040;
-	Tue, 23 Jun 2026 23:04:58 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AC06E19560A6;
+	Tue, 23 Jun 2026 23:05:05 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.2.17.30])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 447AF1955F6D;
-	Tue, 23 Jun 2026 23:04:55 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B38631955F6D;
+	Tue, 23 Jun 2026 23:05:02 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Tejun Heo <tj@kernel.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
@@ -52,9 +54,11 @@ Cc: cgroups@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 0/2] cgroup/cpuset: Miscellaneous fixes and cleanups
-Date: Tue, 23 Jun 2026 19:04:11 -0400
-Message-ID: <20260623230413.1984188-1-longman@redhat.com>
+Subject: [PATCH v2 2/2] cgroup/cpuset: Rebind/migrate mm only for threadgroup leader in cpuset_update_tasks_nodemask()
+Date: Tue, 23 Jun 2026 19:04:13 -0400
+Message-ID: <20260623230413.1984188-3-longman@redhat.com>
+In-Reply-To: <20260623230413.1984188-1-longman@redhat.com>
+References: <20260623230413.1984188-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,29 +68,64 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
- v2:
-  - Update patch 1 as suggested by Ridong Chen and add new test cases.
-  - Minor update to patch 2 code and comment log.
+As reported by sashiko [1], cpuset_update_tasks_nodemask() will do
+mpol_rebind_mm() and possibly cpuset_migrate_mm() for all threads of
+a multithreaded process. Since commit 3df9ca0a2b8b ("cpuset: migrate
+memory only for threadgroup leaders"), cpuset_attach() had been updated
+to rebind and migrate memory only for threadgroup leaders to mark the
+group leader as the owner of the mm_struct.
 
-Patch 1 updates compute_effective_cpumask() and adds new
-compute_effective_nodemask() helper to make sure that effective_cpus
-and effective_mems will inherit parent's versions for v2 if
-cpuset.cpus/cpuset.mems is empty.
+To be consistent and avoid unnecessary performance overhead for heavily
+multithreaded processes, follow the cpuset_attach() example and perform
+memory rebind and migration only for threadgroup leaders.
 
-Patch 2 makes cpuset_update_tasks_nodemask() to perform memory rebind
-and migration only for thread group leader like cpuset_attach().
+Also add a paragraph in cgroup-v2.rst under cpuset.mems that the
+threadgroup leader is the memory owner of that threadgroup. Therefore
+the non-leading threads shouldn't be in other cgroups whose "cpuset.mems"
+doesn't fully overlap that of the group leader.
 
-Waiman Long (2):
-  cgroup/cpuset: Avoid unnecessary cpus & mems update in
-    cpuset_hotplug_update_tasks()
-  cgroup/cpuset: Rebind/migrate mm only for threadgroup leader in
-    cpuset_update_tasks_nodemask()
+[1] https://sashiko.dev/#/patchset/20260621032816.1806773-1-longman%40redhat.com
 
- Documentation/admin-guide/cgroup-v2.rst       |  7 +++
- kernel/cgroup/cpuset.c                        | 49 ++++++++++++-------
- .../selftests/cgroup/test_cpuset_prs.sh       | 11 ++++-
- 3 files changed, 46 insertions(+), 21 deletions(-)
+Signed-off-by: Waiman Long <longman@redhat.com>
+Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+---
+ Documentation/admin-guide/cgroup-v2.rst | 7 +++++++
+ kernel/cgroup/cpuset.c                  | 4 ++++
+ 2 files changed, 11 insertions(+)
 
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 993446ab66d0..f9c353174a7e 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -2527,6 +2527,13 @@ Cpuset Interface Files
+ 	a need to change "cpuset.mems" with active tasks, it shouldn't
+ 	be done frequently.
+ 
++	For a multithreaded process, the threadgroup leader is
++	considered the owner of the group's memory. Memory policy
++	rebinding and migration will only happen with respect to the
++	threadgroup leader. To avoid unexpected result, non-leading
++	threads shouldn't be put into another cgroup whose "cpuset.mems"
++	doesn't fully overlap that of the threadgroup leader.
++
+   cpuset.mems.effective
+ 	A read-only multiple values file which exists on all
+ 	cpuset-enabled cgroups.
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 044ddbf66f8e..055ae54a040a 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -2673,6 +2673,10 @@ void cpuset_update_tasks_nodemask(struct cpuset *cs)
+ 
+ 		cpuset_change_task_nodemask(task, &newmems);
+ 
++		/* Rebind and migrate mm only for thread group leader */
++		if (!thread_group_leader(task))
++			continue;
++
+ 		mm = get_task_mm(task);
+ 		if (!mm)
+ 			continue;
 -- 
 2.54.0
 
