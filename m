@@ -1,50 +1,40 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E82711C3F31;
-	Tue, 23 Jun 2026 01:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0027F30D3E0;
+	Tue, 23 Jun 2026 02:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782179996; cv=none; b=f6ki2oy8RZ9mfDFUUXiF/zmPD6PCuseVIToiQWH6jX4LkyO0f8vybBwMq44pX/AOaVZp4EPMWuV3IavDvkztPQXNvv77w6rXcIoCvGufEdg+zXCziaocf1+4UbTMf00F1HruoHOY708gP0litf5zSfHNe3iiF/CscfTphMgIF+0=
+	t=1782180726; cv=none; b=N/TGQLh1SjHUSKrccVhgRi9LJ1u7flOS1OBByb44jheuAzCHK0xv9Qjbrj5y9vrql1Qj0wXM6NW+u6q6phxHZnpie47h0jEdxKsDLDvcwEkkDV//oCY2Lxaa1p+u1QxBXt8W9zCkp/xCBI9/b8xOZwSELabGIyDCYOo4qvtYduk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782179996; c=relaxed/simple;
-	bh=y8r7p0aS42aPKj2cF+3PhRwu0lZj2g44SnufwIbftTU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C1t8huQ8zsFwXR3Jmo8rijDrVmliziO2HFNWblvoRxG4sGMawnpXMhAlTzE4DVed1IMxQiMwt0VTQ4cAtL5oDkMwfb76RQEUv5RTV9o0uRKtWyni233yDcJZU5NL2ypymKWfaOs8MtXInty4yoh3bA2+HOHGmNzVI2sy6rjnl9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CJKCQgUg; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782180726; c=relaxed/simple;
+	bh=l9oyzbXNcsHmt1DmxFt6zVwM/N2xIVgjz/nadnI1CNw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=VDwqdstYtQ/mEljUF21KDkDdjPRVZnHPryR2KZ6Q4lFTgWYQAQPIeKLP9Zt7F7K4YJoc7CsFdNNbxLZVgh/bo0a6fMKEsn2vj/KPwT1dStJOZF9JruMtDesVaCahVj5As+fGAZCTRi5kB/aiwRFw9wORhAtUrgz3ZAwq9d39Jq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=XnjYqRCM; arc=none smtp.client-ip=113.46.200.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CJKCQgUg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782179996; x=1813715996;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=y8r7p0aS42aPKj2cF+3PhRwu0lZj2g44SnufwIbftTU=;
-  b=CJKCQgUgKDZX/XTiGASRLbHEFq148Npmo5TDv8/nT3Di+EPO1ZVPV6rJ
-   mOGU3Qo0wap6kARME9HHMVVo66vaWG8O+SfWJQybkCyJiUHo5Ty1FwqQb
-   /JitArMcDvPmSSJDwYtu/x2jyI9kK1WpeiL9qS3ws0UBBFC1S1IRVqz2k
-   V/tlk8YEOKjH3TTsA1db7K1+6gXVJIzLLsNAxFxqKwNsVAT2fPPQeAHFP
-   P8EOMVAbKWXlZtILESay1vgw167ObYgd1hfqmLeXaGifAHpphadRMSM21
-   PSa9R3/TjbRzNmPVKZ9ahGWghcLYhsTAryNm7va6dHNt6eol5RQJCC82X
-   A==;
-X-CSE-ConnectionGUID: 38qUYbefRa6inmScDTacSw==
-X-CSE-MsgGUID: WrFZZcm8Sj2je62OvZJCGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="82687631"
-X-IronPort-AV: E=Sophos;i="6.24,219,1774335600"; 
-   d="scan'208";a="82687631"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 18:59:55 -0700
-X-CSE-ConnectionGUID: kOVtgx2ZTwaWXu+0vapFSQ==
-X-CSE-MsgGUID: hAzyAjTCQhS3Gq4ocdIzKA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,219,1774335600"; 
-   d="scan'208";a="251316609"
-Received: from unknown (HELO [10.239.158.46]) ([10.239.158.46])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 18:59:46 -0700
-Message-ID: <1b332812-f3f4-41d3-936b-829f2f9f7968@intel.com>
-Date: Tue, 23 Jun 2026 09:59:44 +0800
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="XnjYqRCM"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=AGsszw77KlcZ5rp/LEwZTApNpU8N3RBDg6T3bY4aWNs=;
+	b=XnjYqRCMLgZPQ4C2MokrD8cBJJFFd/fIMgHXNY0qWJci8OUgEcIvf7WOEaEQ9lg2aQSEPRfas
+	w25DK6f5MY2Ba3yjTgcKNwc79KAmp1cIPkyl9WRWNzub1pVrgW/0G3vxzxGqI+op1G5621dGnJI
+	diWXGxh8DBe7JCkNqduJIa4=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gkpJ15JYPznTVX;
+	Tue, 23 Jun 2026 10:03:13 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id 60A244055B;
+	Tue, 23 Jun 2026 10:11:58 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 23 Jun
+ 2026 10:11:57 +0800
+Message-ID: <b6e8c677-5fff-4de1-8483-fc23361898dc@huawei.com>
+Date: Tue, 23 Jun 2026 10:11:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,149 +42,210 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 08/22] KVM: selftests: Add TDX boot code
-To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Binbin Wu
- <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
- <20260521-tdx-selftests-v13-v13-8-6983ae4c3a4d@google.com>
+Subject: Re: [PATCH bpf-next 2/3] riscv, bpf: Add support for BPF exceptions
 Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20260521-tdx-selftests-v13-v13-8-6983ae4c3a4d@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: Varun R Mallya <varunrmallya@gmail.com>, <pjw@kernel.org>,
+	<palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+	<memxor@gmail.com>, <bjorn@kernel.org>
+CC: <alex@ghiti.fr>, <martin.lau@linux.dev>, <song@kernel.org>,
+	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+	<puranjay@kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20260621144259.288135-1-varunrmallya@gmail.com>
+ <20260621144259.288135-3-varunrmallya@gmail.com>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20260621144259.288135-3-varunrmallya@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
-On 5/22/2026 7:16 AM, Lisa Wang wrote:
-> From: Erdem Aktas <erdemaktas@google.com>
+
+
+On 2026/6/21 22:42, Varun R Mallya wrote:
+> Add the JIT support required for BPF exceptions (bpf_throw()) on riscv64.
 > 
-> Add code to boot a TDX test VM. Since TDX registers are inaccessible to
-> KVM, the boot code loads the relevant values from memory into the
-> registers before jumping to the guest code.
+> Two kinds of program need special prologue/epilogue handling:
 > 
-
-<snip>
-
-> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/td_boot.h b/tools/testing/selftests/kvm/include/x86/tdx/td_boot.h
-> index af4474dee387..e5d54a20ed72 100644
-> --- a/tools/testing/selftests/kvm/include/x86/tdx/td_boot.h
-> +++ b/tools/testing/selftests/kvm/include/x86/tdx/td_boot.h
-> @@ -66,4 +66,9 @@ struct td_boot_parameters {
->   	struct td_per_vcpu_parameters per_vcpu[];
+>    - A program acting as an exception boundary must save the full set of
+>      riscv callee-saved GP registers (ra, s0-s11), not just the ones it
+>      happens to clobber, so that the exception callback can restore the
+>      state that was live at the boundary. ra and fp are stored first so
+>      the saved ra/fp pair forms a valid stackframe record for the
+>      unwinder.
+> 
+>    - The exception callback (exception_cb) does not allocate its own
+>      frame. It reuses the boundary program's frame, whose frame pointer
+>      is passed in a2, by setting SP = FP - stack_adjust. This lines the
+>      epilogue's loads up with the registers the boundary saved, so both
+>      paths restore the same order.
+> 
+> Wire up bpf_jit_support to be true only when CONFIG_FRAME_POINTER is
+> enabled.
+> 
+> Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
+> ---
+>   arch/riscv/net/bpf_jit_comp64.c | 102 ++++++++++++++++++++++++++++++++
+>   1 file changed, 102 insertions(+)
+> 
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index c03c1de16b79..eafac0655dab 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -56,6 +56,30 @@ static const int pt_regmap[] = {
+>   	[RV_REG_T0] = offsetof(struct pt_regs, t0),
 >   };
 >   
-> +void td_boot(void);
-> +void td_boot_code_end(void);
-> +
-> +#define TD_BOOT_CODE_SIZE (td_boot_code_end - td_boot)
-> +
->   #endif /* SELFTEST_TDX_TD_BOOT_H */
-> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/td_boot_asm.h b/tools/testing/selftests/kvm/include/x86/tdx/td_boot_asm.h
-> new file mode 100644
-> index 000000000000..10b4b527595c
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/include/x86/tdx/td_boot_asm.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef SELFTEST_TDX_TD_BOOT_ASM_H
-> +#define SELFTEST_TDX_TD_BOOT_ASM_H
-> +
 > +/*
-> + * GPA where TD boot parameters will be loaded.
-> + *
-> + * TD_BOOT_PARAMETERS_GPA is arbitrarily chosen to
-> + *
-> + * + be within the 4GB address space
-> + * + provide enough contiguous memory for the struct td_boot_parameters such
-> + *   that there is one struct td_per_vcpu_parameters for KVM_MAX_VCPUS
+> + * Full set of RISC-V callee-saved GP registers (ra, s0-s11) saved by a program
+> + * acting as an exception boundary, in the order they are stored on the stack.
+> + * RA and FP come first so the saved ra/fp pair forms a valid stackframe record
+> + * at [FP-8]/[FP-16] for the unwinder. The exception callback reuses the
+> + * boundary program's frame and restores this same set in its epilogue, so both
+> + * paths must agree on the contents and ordering of this list.
 > + */
-> +#define TD_BOOT_PARAMETERS_GPA 0xffff0000
-
-Why not just put it into tdx_boot.h where it also gets referenced?
-
-And even just define it in patch 06.
-
-> +#endif  // SELFTEST_TDX_TD_BOOT_ASM_H
-> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S b/tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S
-> new file mode 100644
-> index 000000000000..7aa33caa9a78
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S
-> @@ -0,0 +1,60 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +static const int rv_exception_csave_regs[] = {
+> +	RV_REG_RA,
+> +	RV_REG_FP,
+> +	RV_REG_S1,
+> +	RV_REG_S2,
+> +	RV_REG_S3,
+> +	RV_REG_S4,
+> +	RV_REG_S5,
+> +	RV_REG_S6,
+> +	RV_REG_S7,
+> +	RV_REG_S8,
+> +	RV_REG_S9,
+> +	RV_REG_S10,
+> +	RV_REG_S11,
+> +};
 > +
-> +#include "tdx/td_boot_asm.h"
-> +#include "tdx/td_boot_offsets.h"
-> +#include "processor_asm.h"
+>   enum {
+>   	RV_CTX_F_SEEN_TAIL_CALL =	0,
+>   	RV_CTX_F_SEEN_CALL =		RV_REG_RA,
+> @@ -231,6 +255,22 @@ static void emit_imm(u8 rd, s64 val, struct rv_jit_context *ctx)
+>   static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
+>   {
+>   	int stack_adjust = ctx->stack_size, store_offset = stack_adjust - 8;
+> +	struct bpf_prog_aux *aux = ctx->prog->aux;
+> +	int i;
 > +
-> +.code32
+> +	if (aux->exception_boundary || aux->exception_cb) {
+> +		/*
+> +		 * An exception boundary saved the full callee-saved register
+> +		 * set and the exception callback restores it from the boundary's
+> +		 * frame. Both restore the same fixed set, in the same order it
+> +		 * was stored by bpf_jit_build_prologue().
+> +		 */
+> +		for (i = 0; i < ARRAY_SIZE(rv_exception_csave_regs); i++) {
+> +			emit_ld(rv_exception_csave_regs[i], store_offset, RV_REG_SP, ctx);
+> +			store_offset -= 8;
+> +		}
+> +		goto epilogue_tail;
+> +	}
+>   
+>   	if (seen_reg(RV_REG_RA, ctx)) {
+>   		emit_ld(RV_REG_RA, store_offset, RV_REG_SP, ctx);
+> @@ -267,6 +307,7 @@ static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
+>   		store_offset -= 8;
+>   	}
+>   
+> +epilogue_tail:
+>   	emit_addi(RV_REG_SP, RV_REG_SP, stack_adjust, ctx);
+>   	/* Set return value. */
+>   	if (!is_tail_call)
+> @@ -2002,11 +2043,61 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+>   {
+>   	int i, stack_adjust = 0, store_offset, bpf_stack_adjust;
+> +	struct bpf_prog_aux *aux = ctx->prog->aux;
+>   
+>   	bpf_stack_adjust = round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
+>   	if (bpf_stack_adjust)
+>   		mark_fp(ctx);
+>   
+> +	if (aux->exception_boundary || aux->exception_cb) {
+> +		/*
+> +		 * A program acting as an exception boundary saves the full set
+> +		 * of riscv callee saved registers (ra, s0-s11).
+> +		 */
+> +		stack_adjust = round_up(ARRAY_SIZE(rv_exception_csave_regs) * 8,
+> +					STACK_ALIGN);
+> +		stack_adjust += bpf_stack_adjust;
+> +		store_offset = stack_adjust - 8;
 > +
-> +.globl td_boot
-> +td_boot:
-> +	/* In this procedure, edi is used as a temporary register. */
-> +	cli
+> +		/* emit kcfi type preamble immediately before the first insn */
+> +		emit_kcfi(is_subprog ? cfi_bpf_subprog_hash : cfi_bpf_hash, ctx);
 > +
-> +	/* Paging is off. */
+> +		/* nops reserved for auipc+jalr pair */
+> +		for (i = 0; i < RV_FENTRY_NINSNS; i++)
+> +			emit(rv_nop(), ctx);
+> +
+> +		/* First instruction is always setting the tail-call-counter
+> +		 * (TCC) register. This instruction is skipped for tail calls.
+> +		 * Force using a 4-byte (non-compressed) instruction.
+> +		 */
+> +		emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
 
-It's weird to put such a comment here. Put it together with the comment 
-above cli?
+We don't need to duplicate code. Please merge it.
 
-> +	movl $TD_BOOT_PARAMETERS_GPA, %ebx
 > +
+> +		if (!aux->exception_cb && aux->exception_boundary) {
+> +			/*
+> +			 * Boundary program: allocate the frame and save the
+> +			 * full callee-saved set, capturing the caller's values.
+> +			 */
+> +			emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
+> +			for (i = 0; i < ARRAY_SIZE(rv_exception_csave_regs); i++) {
+> +				emit_sd(RV_REG_SP, store_offset,
+> +					rv_exception_csave_regs[i], ctx);
+> +				store_offset -= 8;
+> +			}
+> +			emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+> +		} else {
+> +			/*
+> +			 * Exception callback, reuse the boundary program's
+> +			 * frame, whose frame pointer is passed in a2. Setting
+
+something confused—why is it A2? I feel like I missed something.
+
+> +			 * SP = FP - stack_adjust lines the epilogue's loads up
+> +			 * with the registers the boundary saved.
+> +			 */
+> +			emit_mv(RV_REG_FP, RV_REG_A2, ctx);
+> +			emit_addi(RV_REG_SP, RV_REG_FP, -stack_adjust, ctx);
+> +		}
+> +
+> +		goto tail_setup;
+> +	}
+> +
+>   	if (seen_reg(RV_REG_RA, ctx))
+>   		stack_adjust += 8;
+>   	stack_adjust += 8; /* RV_REG_FP */
+> @@ -2082,6 +2173,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+>   
+>   	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+>   
+> +tail_setup:
+>   	if (bpf_stack_adjust)
+>   		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
+>   
+> @@ -2157,3 +2249,13 @@ bool bpf_jit_supports_fsession(void)
+>   {
+>   	return true;
+>   }
+> +
+> +bool bpf_jit_supports_exceptions(void)
+> +{
 > +	/*
-> +	 * Find the address of struct td_per_vcpu_parameters for this
-> +	 * vCPU based on esi (TDX spec: initialized with vCPU id). Put
-> +	 * struct address into register for indirect addressing.
+> +	 * bpf_throw() unwinds by walking the frame-pointer chain from inside
+> +	 * the kernel back into the BPF frames (see arch_bpf_stack_walk()), so
+> +	 * exceptions require the frame-pointer unwinder to be enabled.
 > +	 */
-> +	movl $SIZEOF_TD_PER_VCPU_PARAMETERS, %eax
-> +	mul %esi
-> +	leal TD_BOOT_PARAMETERS_PER_VCPU(%ebx), %edi
-> +	addl %edi, %eax
-> +
-> +	/* Setup stack. */
-> +	movl TD_PER_VCPU_PARAMETERS_ESP_GVA(%eax), %esp
-> +
-> +	/* Setup GDT. */
-> +	leal TD_BOOT_PARAMETERS_GDT(%ebx), %edi
-> +	lgdt (%edi)
-> +
-> +	/* Setup IDT. */
-> +	leal TD_BOOT_PARAMETERS_IDT(%ebx), %edi
-> +	lidt (%edi)
-> +
-> +	/*
-> +	 * Set up control registers (There are no instructions to mov from
-> +	 * memory to control registers, hence use edi as a scratch register).
-> +	 */
-> +	movl TD_BOOT_PARAMETERS_CR4(%ebx), %edi
-> +	movl %edi, %cr4
-> +	movl TD_BOOT_PARAMETERS_CR3(%ebx), %edi
-> +	movl %edi, %cr3
-> +	movl TD_BOOT_PARAMETERS_CR0(%ebx), %edi
-> +	movl %edi, %cr0
-> +
-> +	/* Switching to 64bit mode after ljmp and then jump to guest code */
-> +	ljmp $(KERNEL_CS),$1f
-> +1:
-> +	jmp *TD_PER_VCPU_PARAMETERS_GUEST_CODE(%eax)
-> +
-> +/* Leave marker so size of td_boot code can be computed. */
-> +.globl td_boot_code_end
-> +td_boot_code_end:
-> +
-> +/* Disable executable stack. */
-> +.section .note.GNU-stack,"",%progbits
-> 
+> +	return IS_ENABLED(CONFIG_FRAME_POINTER);
 
+riscv select ARCH_WANT_FRAME_POINTERS, so this will always true
+
+> +}
