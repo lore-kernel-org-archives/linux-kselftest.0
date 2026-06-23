@@ -1,158 +1,253 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0ED37EFE4;
-	Tue, 23 Jun 2026 13:54:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A45F235C01
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 14:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782222897; cv=none; b=Mm7q3m7x60aN1ekkAB9IeNspqtQLmUMMLgwos9dYrxEQ/c6cUTbQfzbTHbVxa4cSGmkHa9tB1jC6wlTBczAQqySH6erbUBtpwWuyk8S06NMR/weYAU3XI1MTMq2xswtaBx/DDJvtqVjzW14OnevuiCPVzB6fb/IOQyHA7k3lQYM=
+	t=1782223359; cv=none; b=tGZIphRsAlwf+bI5AVpun5/J6qFBnlxSAwT2k8+8AidVMTeUt0dKU6UXC3y5UcPJSoTJLh8Li72iM7yzflaKIOy7AmZhasw51GJUtpUym8L8pQeF5JUFeEZyvnTTppc0Y/Paj+2zEJDr9vSLtkEa9MO/1mOp8jDEforBfB9tDBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782222897; c=relaxed/simple;
-	bh=/68utzRqhR106IezMe6HL563F8EtUs0AW9xqTvzK6pU=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=JPFVm7CMpiJY6mu/BQcJLA0DLD+0NGaNoad62hFiAT5EAd2up+yL6o3SSSqSkwnqrkrnDIQ0vnZQ1MCNagtBskNlw0de0LhYQiaB4J6K8L35F5i5rIxu3srJxDmVVLmixHm/yRZ+bHwUypaCXfYFliIB7UsJEaJzAtvv62rhDAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vcll6fbK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782223359; c=relaxed/simple;
+	bh=uM16q7ixvDLNzU4v08QmwcMF9g91pvd5QII7UaO6Yl4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=OJR8eaof7XHec4SK2KH0AaFJpij4On3XfCSlbg4MWGIFk/yIRgO0yMk9x+AW4EVMsoiAbhhiYFVjaJ1phv3JT0wOmUpSMQg2Lck3LGU20bxQWdZhtVILw6+o3qDsl7kjAgrPjxWfKBb+uc1tAT0i6A1XoVqfH7EJNMSafSVTyVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XUNvbXav; arc=none smtp.client-ip=209.85.208.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vcll6fbK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 027501F000E9;
-	Tue, 23 Jun 2026 13:54:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782222896;
-	bh=aSCji0pWv4eufX4fgSb7qGv1Ss7fXCfVYg+H9V0MoFA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Vcll6fbKB7wYNJOLSQqyu5EOox1GdzMr/y4GV8TovfKTlZtHKgVEurVRVauJ3FR4p
-	 RFL+ivmEZQOlurnxl45pYlV/K6xwHdxv5txErxm2yWZ8zKljPrdYuqMyLFwleu+e9N
-	 T/LgLPg0qxeJl/lF1CDUCS0eYZ0zdJ3wsupon5GmyZksyJPFFAIUefZQBT+BSN5Vrt
-	 TCuwNjRzG0cH5ea3duUJtcUg0fZ/sqMRQtv+/wym2kj6vMokfcs9U3UKRPGAHX9vh4
-	 4BMl0xW0sgpGvO2uD6BSC1uQosw2NhP/ooHfB91wvbdsNup3RM8ykoK7n+VOPDhS7F
-	 ptz6K4rCygWWw==
-Date: Tue, 23 Jun 2026 22:54:52 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, Shuah
- Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v7 00/10] tracing/probes: Add more typecast features
-Message-Id: <20260623225452.d0c8bba7a7a21126a08ed8b7@kernel.org>
-In-Reply-To: <178217904992.643090.15726197350652241270.stgit@devnote2>
-References: <178217904992.643090.15726197350652241270.stgit@devnote2>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XUNvbXav"
+Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-697ce645cefso1358932a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 07:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782223357; x=1782828157; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=g8d+9heMc41zxWGzXNGvGuprR44PnpkmTW2E3tdN2iM=;
+        b=XUNvbXav7totg9vS3uJFoyrO2JD6MXExwdAUNIVXYLKbXcgYGp/cxfLU3wO7MdFrmy
+         065ALXDwDX9vqdgDKMnyzBMHvkDJlTpLMn9fSN4z/fLnEIDPNx0k90Q905Ys+/KMyTqu
+         s3qL1trpKoYT2CEAVT5s2TZadm1SeFGQjTPqO/NhUNQU1Iv00e18PeM3rtkeWdtUfQCn
+         WgT+KFaqRn75t8KsBx3YSNwUPOQWEHG6BvJtLcIwg1/xhjwQUqykV0C7RfrTFQhbdzXR
+         1j9mABmqXjj2i8As7bIkFYsFlhXUYYQtRl1UhB7gaDcsrpc5+fbXOgHd5pRTzdhQm4A2
+         Os6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782223357; x=1782828157;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g8d+9heMc41zxWGzXNGvGuprR44PnpkmTW2E3tdN2iM=;
+        b=bbot9h2cc28hy4AZugo6FIbfsS3YTQr08uGqw5qnNmr3HERFm3XKPnHhqMRA3Fmov/
+         LYDqfn3TyqfjCs3gsGOwuZpwva5ibN3OexoOpM1MvcfLVl4ykA7XxcDG3dn8GPG1gOPe
+         b1c+KjJ0iDdhdCHfOt5NCj589So6IS9GGNsiTDK2R/wXUiLB2W3v8k20v4BoXiUKXvvQ
+         a0EAdjHfSjysY0UVCLr1lErqO1vkSI6tmZo+l3U6DwNxx3aoV2g7TagYnn3zAVJ5TIgc
+         VFmB+iHLXUor4NFp99DENEdBv5tvQDFgUzKMbK64ZRPThJvcS7eh2tFnZp0QRnUR7CfM
+         8rGw==
+X-Gm-Message-State: AOJu0Yz/izSZS8l4ZwI6eVpQzjQchyqi9XhV23fjZgB6ZECDLhmxPP2l
+	O8dLdQ7tmS70sAqEaJ04ZZWGjguuty5/+FujU3BXrVmIAf7WdE1JQKZs01muATc5J/UQ1MfnUH1
+	wvgmLZSRrd8Awo3zSNw==
+X-Received: from educ24.prod.google.com ([2002:a05:6402:1018:b0:688:baf2:39d7])
+ (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6402:3487:b0:693:2a2:9e41 with SMTP id 4fb4d7f45d1cf-69711df46a6mr10466827a12.19.1782223356390;
+ Tue, 23 Jun 2026 07:02:36 -0700 (PDT)
+Date: Tue, 23 Jun 2026 14:02:35 +0000
+In-Reply-To: <CAEvNRgFEHciT3T9y+qEYRvXhDwfrggoU7Rm=f9hT3OrV+wgpNQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-
-On Tue, 23 Jun 2026 10:44:10 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-
-> Hi,
-> 
-> Here is the 7th version of series to introduce more typecast features
-> to probe events. The previous version is here:
-> 
->  https://lore.kernel.org/all/178201238795.570818.15573963115625446598.stgit@devnote2/
-> 
-> In this version, I added 2 new fix and cleanup patches and update
-> according to Sashiko's review. [1/10] is a long-lived issue about
-> @+FOFFS, which was wrongly adding offset twice. [2/10] is a clean
-> up patch for renaming fetch_op name (good to dump it). 
-> This is applicable against probes/core branch on linux-trace tree.
-
-I'll take the first 2 patches to probes/core, since those
-are obvious fix and cleanup.
-
-Thanks,
-
-> 
-> Steve introduced BTF typecast feature for eprobe[1].
-> This series extends it and add more options:
-> 
-> 1. Expanding BTF typecast to kprobe and fprobe.
->    (currently only function entry/exit)
-> 
-> 2. Introduce container_of like typecast. This adds a "assigned
->    member" option to the typecast.
-> 
->    (STRUCT,MEMBER)VAR->ANOTHER_MEMBER
-> 
->    This casts VAR to STRUCT type but the VAR is as the address
->    of STRUCT.MEMBER. In C, it is:
-> 
->    container_of(VAR, STRUCT, MEMBER)->ANOTHER_MEMBER
-> 
-> 3. Support nested typecast, e.g.
-> 
->    (STRUCT)((STRUCT2)VAR->MEMBER2)->MEMBER
-> 
->    the nest level must be smaller than 3.
-> 
-> 4. Add $current variable to point "current" task_struct.
->    This is useful with typecast, e.g.
-> 
->    (task_struct)$current->pid
-> 
-> 5. per-cpu dereference support.
-> 
->    Intrdouce this_cpu_read(VAR) and this_cpu_ptr(VAR) to
->    access per-cpu data on the current CPU (accessing other CPU
->    data is not stable, because it can be changed.)
-> 
->    You can access the member of per-cpu data structure using
->    typecast like:
-> 
->    (STRUCT)this_cpu_ptr(VAR)->MEMBER
-> 
-> And added fetcharg dump feature (for debug) and updated test scripts
-> to test part of them.
-> 
-> Thanks,
-> 
-> ---
-> base-commit: 3ec75d0067f30eb5e0730f033766d6ab2feca7ae
-> 
-> Masami Hiramatsu (Google) (10):
->       tracing/probes: Fix double addition of offset for @+FOFFSET
->       tracing/probes: Rename FETCH_OP_DATA to FETCH_OP_IMMSTR
->       tracing/probes: Support dumping fetcharg program for debugging dynamic events
->       tracing/probes: Support typecast for various probe events
->       tracing/probes: Support nested typecast
->       tracing/probes: Type casting always involves nested calls
->       tracing/probes: Support field specifier option for typecast
->       tracing/probes: Add $current variable support
->       tracing/probes: Add this_cpu_read() and this_cpu_ptr() dereference method to fetcharg
->       tracing/probes: Add a new testcase for BTF typecasts
-> 
-> 
->  Documentation/trace/eprobetrace.rst                |    9 
->  Documentation/trace/fprobetrace.rst                |   10 
->  Documentation/trace/kprobetrace.rst                |   11 
->  kernel/trace/Kconfig                               |   11 
->  kernel/trace/trace.c                               |    8 
->  kernel/trace/trace_eprobe.c                        |    2 
->  kernel/trace/trace_fprobe.c                        |    2 
->  kernel/trace/trace_kprobe.c                        |    2 
->  kernel/trace/trace_probe.c                         |  582 ++++++++++++++++----
->  kernel/trace/trace_probe.h                         |   98 ++-
->  kernel/trace/trace_probe_tmpl.h                    |   27 +
->  kernel/trace/trace_uprobe.c                        |    3 
->  samples/trace_events/trace-events-sample.c         |   40 +
->  samples/trace_events/trace-events-sample.h         |   34 +
->  .../ftrace/test.d/dynevent/btf_probe_event.tc      |   51 ++
->  .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   11 
->  .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   11 
->  .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    5 
->  18 files changed, 756 insertions(+), 161 deletions(-)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-> 
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+References: <cover.1780676742.git.tarunsahu@google.com> <48777f4749fa43d5648085dbb2037aa99c144a88.1780676742.git.tarunsahu@google.com>
+ <CAEvNRgFEHciT3T9y+qEYRvXhDwfrggoU7Rm=f9hT3OrV+wgpNQ@mail.gmail.com>
+Message-ID: <9huzzf0lmk1w.fsf@tarunix.c.googlers.com>
+Subject: Re: [RFC PATCH v2 06/10] kvm: guest_memfd: Add support for freezing
+ and unfreezing mappings
+From: tarunsahu@google.com
+To: Ackerley Tng <ackerleytng@google.com>, Jonathan Corbet <corbet@lwn.net>, vannapurve@google.com, 
+	fvdl@google.com, Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, sagis@google.com, aneesh.kumar@kernel.org, 
+	skhawaja@google.com, vipinsh@google.com, Pratyush Yadav <pratyush@kernel.org>, 
+	david@redhat.com, dmatlack@google.com, mark.rutland@arm.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
+	seanjc@google.com, axelrasmussen@google.com
+Cc: linux-kselftest@vger.kernel.org, kexec@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks for reviewing!
+
+Ackerley Tng <ackerleytng@google.com> writes:
+
+> Tarun Sahu <tarunsahu@google.com> writes:
+>
+>> This patch introduces the freeze on gmem_inode which prevents
+>
+> Can't find the reference now, but commit messages should take the
+> imperative mood and avoid "this patch" [*]
+>
+> [*] https://lore.kernel.org/all/YKRWNaqzo4GVDxHP@google.com/
+>
+
+ACK. Will take care of it.
+
+>> the fallocate call and any new page fault allocation. This will avoid
+>> gmem file modification when it is being preserved
+>>
+>> Used srcu lock to synchronise the freeze call, where write blocks
+>> until all the reads are free. And reads are re-entrant.
+>>
+>> Incase fault fails, It return -EPERM and VM_EXIT to userspace. userspace
+>> must handle this properly as every new fault will fail.
+>>
+>> Signed-off-by: Tarun Sahu <tarunsahu@google.com>
+>>
+>> [...snip...]
+>>
+>> @@ -105,12 +108,20 @@ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+>>  	if (!IS_ERR(folio))
+>>  		return folio;
+>>
+>> +	idx = srcu_read_lock(&kvm_gmem_freeze_srcu);
+>> +	if (kvm_gmem_is_frozen(inode)) {
+>> +		srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
+>> +		return ERR_PTR(-EPERM);
+>> +	}
+>> +
+>>  	policy = mpol_shared_policy_lookup(&GMEM_I(inode)->policy, index);
+>>  	folio = __filemap_get_folio_mpol(inode->i_mapping, index,
+>>  					 FGP_LOCK | FGP_CREAT,
+>>  					 mapping_gfp_mask(inode->i_mapping), policy);
+>>  	mpol_cond_put(policy);
+>>
+>> +	srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
+>> +
+>>  	/*
+>>  	 * External interfaces like kvm_gmem_get_pfn() support dealing
+>>  	 * with hugepages to a degree, but internally, guest_memfd currently
+>> @@ -273,16 +284,30 @@ static long kvm_gmem_allocate(struct inode *inode, loff_t offset, loff_t len)
+>>  static long kvm_gmem_fallocate(struct file *file, int mode, loff_t offset,
+>>  			       loff_t len)
+>>  {
+>> +	struct inode *inode = file_inode(file);
+>>  	int ret;
+>> +	int idx;
+>>
+>> -	if (!(mode & FALLOC_FL_KEEP_SIZE))
+>> -		return -EOPNOTSUPP;
+>> +	idx = srcu_read_lock(&kvm_gmem_freeze_srcu);
+>> +	if (kvm_gmem_is_frozen(inode)) {
+>> +		srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
+>> +		return -EPERM;
+>> +	}
+>
+> fallocate may eventually go to kvm_gmem_get_folio(), so that would check
+> kvm_gmem_is_frozen() twice. Is this meant to catch the punch hole case?
+>
+
+Right. To catch punch hole case. And read lock being re-entrant, so I
+blocked the fallocate call completely.
+
+>>
+>> -	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE))
+>> -		return -EOPNOTSUPP;
+>> +	if (!(mode & FALLOC_FL_KEEP_SIZE)) {
+>> +		ret = -EOPNOTSUPP;
+>> +		goto out;
+>> +	}
+>>
+>> -	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
+>> -		return -EINVAL;
+>> +	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE)) {
+>> +		ret = -EOPNOTSUPP;
+>> +		goto out;
+>> +	}
+>> +
+>> +	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len)) {
+>> +		ret = -EINVAL;
+>> +		goto out;
+>> +	}
+>
+> There's some reordering here. Why not let the validation happen like
+> before, then check kvm_gmem_is_frozen()?
+>
+>>
+>>  	if (mode & FALLOC_FL_PUNCH_HOLE)
+>>  		ret = kvm_gmem_punch_hole(file_inode(file), offset, len);
+>>
+>> [...snip...]
+>>
+>> +
+>> +/**
+>> + * kvm_gmem_freeze - Freeze or unfreeze a guest_memfd inode mapping.
+>> + * @inode: The guest_memfd inode.
+>> + * @freeze: True to freeze, false to unfreeze.
+>> + *
+>> + * This API is used strictly during the live update / preservation transition
+>> + * window to prevent host userspace and guest-side faults from making any
+>> + * mapping modifications (such as fallocate or page fault allocation)
+>> + * to the guest_memfd page cache.
+>> + *
+>> + * Synchronization Strategy (Sleepable RCU):
+>> + * To avoid high-contention VFS locks (like inode_lock or
+>> + * filemap_invalidate_lock) on the vCPU page fault hot paths, this subsystem
+>> + * implements a lightweight, system-wide Sleepable RCU (SRCU) mechanism
+>> + * (`kvm_gmem_freeze_srcu`):
+>> + *
+>> + * Global vs. Per-Inode SRCU
+>> + * ======================
+>> + * A single system-wide global static `srcu_struct` is used instead of a
+>> + * per-inode SRCU structure to completely prevent unprivileged users from
+>> + * exhausting the host's per-CPU memory allocator. Because
+>> + * `init_srcu_struct()` allocates per-CPU memory via `alloc_percpu()`, which
+>> + * is not accounted by memory cgroups (memcg),
+>> + * a per-inode SRCU structure would allow a tenant to bypass cgroup limits and
+>> + * trigger a system-wide Out-of-Memory (OOM) crash simply by spawning a large
+>> + * number of guest_memfd file descriptors (bounded only by RLIMIT_NOFILE).
+>> + *
+>> + * Flag Modification Note:
+>> + * Since `GUEST_MEMFD_F_MAPPING_FROZEN` is the ONLY flag in
+>> + * `GMEM_I(inode)->flags` that is mutated dynamically at runtime (all other
+>> + * flags are creation-time flags which remain strictly read-only), there is
+>> + * no possibility of concurrent bit-modification races. Therefore, a standard
+>> + * `WRITE_ONCE` is fully safe and does not require complex `cmpxchg`
+>> + * synchronization loops.
+>> + */
+>> +void kvm_gmem_freeze(struct inode *inode, bool freeze)
+>> +{
+>> +	u64 flags = READ_ONCE(GMEM_I(inode)->flags);
+>> +
+>> +	if (freeze)
+>> +		flags |= GUEST_MEMFD_F_MAPPING_FROZEN;
+>> +	else
+>> +		flags &= ~GUEST_MEMFD_F_MAPPING_FROZEN;
+>> +
+>> +	WRITE_ONCE(GMEM_I(inode)->flags, flags);
+>> +
+>> +	if (freeze)
+>> +		synchronize_srcu(&kvm_gmem_freeze_srcu);
+>
+> Why only synchronize on freeze but not unfreeze?
+
+It was not needed because
+
+Freeze => True
+When an user setting freeze to true.
+
+"Preservation will be stalled till all the current ongoing allocation
+finished, and future allocations are already stopped."
+
+Freeze => False
+When an user unfreezing, current allocation/fallocate will
+return -EPERM, and future one will be succeeded as freeze is set
+to false. Synchronization will only stall the user, behviour does
+not change.
+
+Unless, user expects that it should be waiting for all the ongoing
+drains.
+
+>
+>> +}
+>> +
+>>
+>> [...snip...]
+>>
