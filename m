@@ -1,150 +1,151 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B033A3E67;
-	Tue, 23 Jun 2026 05:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0272EA732
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 05:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782192342; cv=none; b=u1qfz/l3vPJg7RfmEtWx0oY54OHeG6RkCWytsFjpXKeqJnMk3tozRdSKFn6v2nPJ7gECiYcK/JQk9vaQ8oOF5Kza2dhT8coqJ2zpJORyY9v7TCEBrEjp+H7ATpTI8nLEH8CPCTCKdbmb4+01qZJHN51Ts6xgGCg3kwgk30LACs8=
+	t=1782192754; cv=none; b=fVlzCMrsc3U2u2SKqOmzfcv70qFPvFBMb3unTWVCDS8Vf654HxiLGYGN9E7ikr1aNzZdp5MOSGxbI8BLOGm8L06LEZJ/eN8f+QvKp1BwGDLzQ1nwYUuH/3iyNBkCTFFeEZNTa4Z1co4VdCUGvOZz0l6tuL8sw+PcBY4d4n5MJdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782192342; c=relaxed/simple;
-	bh=Uq5PeCcyAK+bL5pMg1ybj6yxp4BAEe7DhiVVYVptiko=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rf5b3U1Dt5a4zL+eAtBVGEVlO42NDEwLQwMz+Au/K7CZrHPS1GUZVy2w9+CpepKdGf+C4s0tY2yBSw2eglZ6RmksCU2u/MHyNgPnD/8CzVlXjb6atkbuodTNxtFlJXwAogBMxG3Oq8zfNcpPPdIqTdGYEWUu8GDup7vx93EvNww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BgvzCYVT; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1782192754; c=relaxed/simple;
+	bh=WjgemQKk8VvtW4p3u+TSCBp7n51QPrPM3uFj0rPy9sc=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=JPZlt9ouMZjr94J0jJpqCLF9E5Vi/OYZMNphJIo0j31jxH7blnRlYLkWl8yM6eO71dnTreROlwWCZvQsG98vV+pXTUlNVJLRAVG9V31semsONCdctZ/zdtd/dRd85M8hBKd/lFAAXYa/Z/p3ULH0Qf2/y/SEPdo0iT+QjKW2RyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Pk3sAxNj; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BgvzCYVT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782192341; x=1813728341;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Uq5PeCcyAK+bL5pMg1ybj6yxp4BAEe7DhiVVYVptiko=;
-  b=BgvzCYVT7WekwkghBtpcD1qh2JYOV8asN7CSeE4a0wEjhWbnjOQSZejL
-   dtYHLbQvujqFcyXFqqLJLK/sEk4b8mYRH7x48vvadqeBxTuAhI14vBYBs
-   bqOdUKXjF1DzbStpCPw0f6KxGdaBDnvIB+YYQLJ6xumGDcQaAgZX172fj
-   8egJBTf4c8Xx0ycpbqOJzQIMEZEgzazZRfptbfZ4D+09MHa30zAMQ7LrQ
-   j7JK7Kse6NYefL+Xe5oEPq4z9S0riyVLJLkNbOwa2DwWVP/aOXgEYdeto
-   JRUtManq0SXxpIXz3q2vePFR6EuQ881u1m75dFdkoi068A/rTaoS0kU/u
-   A==;
-X-CSE-ConnectionGUID: uNk5dytXQHiYMnaEYhhnzw==
-X-CSE-MsgGUID: J3dTFPg3RT+es+zT7QTH/Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="86834044"
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="86834044"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 22:25:40 -0700
-X-CSE-ConnectionGUID: +QKs7F9+Ru2ErBNCyvGNzg==
-X-CSE-MsgGUID: MlbtBeXQTPSGpda7Y/yfxQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="245058541"
-Received: from unknown (HELO [10.238.2.81]) ([10.238.2.81])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 22:25:26 -0700
-Message-ID: <1b59fec2-a464-4429-8532-880394912af5@linux.intel.com>
-Date: Tue, 23 Jun 2026 13:25:24 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Pk3sAxNj"
+Message-ID: <d8bdf9ef-a393-4734-8639-308ac3eaa05c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782192739;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=T0uys3soVbuibRlNP9S0ARwcaMI6iOsJGPYrN8ZQRpI=;
+	b=Pk3sAxNj1QkhNWvYXZ8vXg+ZsJdtuWM1WEK5s9S1eaex4kZGAPHRqk1ZUyxJfoWnHl+rwC
+	hhLuVuCGP/z1Sv3sCdh+M/o5zNf//ix6Z7P/PNO6SAcgxpqSSmVvQzkxBqYQohsWqEFlqx
+	xaAj60vLA3g/4Df2yjdob0Doy1o15JU=
+Date: Tue, 23 Jun 2026 13:32:08 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 09/46] KVM: guest_memfd: Introduce function to check
- GFN private/shared status
-To: ackerleytng@google.com
-Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
- chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
- jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
- pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
- rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
- tabba@google.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>,
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-9-9d2959357853@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20260618-gmem-inplace-conversion-v8-9-9d2959357853@google.com>
+Cc: cui.tao@linux.dev, cgroups@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/cgroup: Adjust cpu.max quota based on HZ
+To: Joe Simmons-Talbott <joest@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+References: <20260622194305.601392-1-joest@redhat.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <20260622194305.601392-1-joest@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
+Hi Joe,
 
-On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
+One comment on the fallback:
+
+  quota_usec = hz != -1 ? USEC_PER_SEC / hz : 1000;
+
+When HZ can't be determined (no CONFIG_IKCONFIG_PROC, or zcat missing),
+the fallback to 1000 is the exact value that fails at low HZ — so this
+doesn't actually fix such kernels. A larger fallback (e.g. 10000, the
+HZ=100 equivalent) would make the tests robust regardless of whether the
+config is exposed.
+
+在 2026/6/23 03:43, Joe Simmons-Talbott 写道:
+> For lower HZ values a quota of 1000us is much lower than the amount
+> of microseconds per tick which makes the tests test_cpucg_max and
+> test_cpugc_max_nested fail. Use the amount of microseconds per tick
+> as the quota value.
 > 
-> Introduce function for KVM to check the private/shared status of guest
-           ^
-Nit:       a
- > memory at a given GFN.
+> Signed-off-by: Joe Simmons-Talbott <joest@redhat.com>
+> ---
+> changes since v1:
+> - Try checking /proc/config.gz to get the actual kernel HZ value and
+>   fallback to 1000 if the value cannot be determined.
 > 
-> This will be used in a later patch.
-
-[...]
-
+>  tools/testing/selftests/cgroup/test_cpu.c | 33 +++++++++++++++++++++--
+>  1 file changed, 31 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
+> index 7a40d76b9548..65e09555309f 100644
+> --- a/tools/testing/selftests/cgroup/test_cpu.c
+> +++ b/tools/testing/selftests/cgroup/test_cpu.c
+> @@ -639,6 +639,29 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
+>  	return run_cpucg_nested_weight_test(root, false);
+>  }
 >  
-> +bool kvm_gmem_is_private(struct kvm *kvm, gfn_t gfn)
+> +/*
+> + * Best effort attempt to get the kernel's HZ value from the config.
+> + * Return the HZ value if found otherwise return -1 to indicate failure.
+> + */
+> +static long
+> +_get_config_hz(void)
 > +{
-> +	struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
-> +	struct inode *inode;
+> +	long hz = -1;
+> +	FILE *f;
+> +	char cmd[256] = "zcat /proc/config.gz 2>/dev/null | grep '^CONFIG_HZ='";
 > +
-> +	/*
-> +	 * If this gfn has no associated memslot, there's no chance of the gfn
-> +	 * being backed by private memory, since guest_memfd must be used for
-> +	 * private memory,
-
-"guest_memfd must be used for private memory" is a bit confusing to me.
-
-
-> and guest_memfd must be associated with some memslot.
-> +	 */
-> +	if (!slot)
-> +		return 0;
+> +	f = popen(cmd, "r");
 > +
-> +	CLASS(gmem_get_file, file)(slot);
-> +	if (!file)
-> +		return 0;
+> +	if (!f)
+> +		goto out;
 > +
-> +	inode = file_inode(file);
+> +	fscanf(f, "CONFIG_HZ=%ld", &hz);
 > +
-> +	/*
-> +	 * Rely on the maple tree's internal RCU lock to ensure a
-> +	 * stable result. This result can become stale as soon as the
-> +	 * lock is dropped, so the caller _must_ still protect
-> +	 * consumption of private vs. shared by checking
-> +	 * mmu_invalidate_retry_gfn() under mmu_lock to serialize
-> +	 * against ongoing attribute updates.
-> +	 */
-> +	return kvm_gmem_is_private_mem(inode, kvm_gmem_get_index(slot, gfn));
+> +out:
+> +	pclose(f);
+> +	return hz;
 > +}
-> +EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_gmem_is_private);
 > +
->  static struct file_operations kvm_gmem_fops = {
->  	.mmap		= kvm_gmem_mmap,
->  	.open		= generic_file_open,
-> 
+>  /*
+>   * This test creates a cgroup with some maximum value within a period, and
+>   * verifies that a process in the cgroup is not overscheduled.
+> @@ -646,7 +669,8 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
+>  static int test_cpucg_max(const char *root)
+>  {
+>  	int ret = KSFT_FAIL;
+> -	long quota_usec = 1000;
+> +	long hz = _get_config_hz();
+> +	long quota_usec;
+>  	long default_period_usec = 100000; /* cpu.max's default period */
+>  	long duration_seconds = 1;
+>  
+> @@ -655,6 +679,8 @@ static int test_cpucg_max(const char *root)
+>  	char *cpucg;
+>  	char quota_buf[32];
+>  
+> +	quota_usec = hz != -1 ? USEC_PER_SEC / hz : 1000;
+> +
+>  	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
+>  
+>  	cpucg = cg_name(root, "cpucg_test");
+> @@ -710,7 +736,8 @@ static int test_cpucg_max(const char *root)
+>  static int test_cpucg_max_nested(const char *root)
+>  {
+>  	int ret = KSFT_FAIL;
+> -	long quota_usec = 1000;
+> +	long quota_usec;
+> +	long hz = _get_config_hz();
+>  	long default_period_usec = 100000; /* cpu.max's default period */
+>  	long duration_seconds = 1;
+>  
+> @@ -719,6 +746,8 @@ static int test_cpucg_max_nested(const char *root)
+>  	char *parent, *child;
+>  	char quota_buf[32];
+>  
+> +	quota_usec = hz != -1 ? USEC_PER_SEC / hz : 1000;
+> +
+>  	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
+>  
+>  	parent = cg_name(root, "cpucg_parent");
 
