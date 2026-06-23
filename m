@@ -1,125 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48AC73C4574;
-	Tue, 23 Jun 2026 06:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300CA30ACF2;
+	Tue, 23 Jun 2026 06:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782196210; cv=none; b=C7d7vbJEPt9ctmxrOu8Q25MJNWXKVNMxpc3dVRCFWwvHW1gChNLhM29JxOcbyovbXtCTbtPntpGfqQr0HBfbNcmVCo36E9gaIzbk5cNLv+NyrTUifknwV2cEj+dEPkSUyiQ+XirMYX3f5tyb0mh9EzCQu7X1Tjqc0aCwU31yMqM=
+	t=1782197346; cv=none; b=CkIBz8SC+4a50qepz1vV+MqBh80oj8dKZ/QGFaHDmHkUHYLIDIEzGP+KyFOXH7KYImvQb+UFSNR5nsrqGopvoHQBvTG69sIN3kgQRwCGZMHD6Tpw06aWPxJBxXJfc83ECfhnu0TdTgM2/eoWm+e4+sjR3N9BVm89x2rXMgoOyZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782196210; c=relaxed/simple;
-	bh=MUwIWDeyTGINk8eYw/EGHpKhVS1I+NdvU8holZVt0xA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Kzm68zNURm59gDMijgazd1akU7alfsq43tUN2PtwLOtPYgksyLEMSqAO9vJW5szO5jvyIyx4e+1peWSRNFKoh0xI/zo+tuTO+H0dCmmJMEn+cYpbkniRkpZBqeLKgxcThAofo9816Z9nvtoNpfQBMtUne5FEusuKvXn3K5FapaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PAv1VDXO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1782197346; c=relaxed/simple;
+	bh=h8AQJDX3UfNiJ86zepeJMtjP8yPCQGflfnfOwDXysvw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eTfvdOD/UfQiD7fgQuiCVOMxtTtyKbo2fMNpwx+DU/GZ6u+iJITeufvAQIpamJ91/JUZBIRIsHfo6tvpMv7bbMcUyiAvBV+nPj7W/onnWTAb/JakLo6LXQ1FEvVKhrpJrq90TNMmolq3C4QRFvwzu+QZyjy1Hb419zu1FNLmI74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bXK1xsux; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PAv1VDXO"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F3761C2BCF4;
-	Tue, 23 Jun 2026 06:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
-	t=1782196210; bh=MUwIWDeyTGINk8eYw/EGHpKhVS1I+NdvU8holZVt0xA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=PAv1VDXOr8Qlr+kw2XWmVLWj7Ohn8obhw/SMc51GYgwovjV4wXwochWzR/xEPZvTz
-	 Hb7JOuny4CVUFshzLaFWQ7uozBN4TJ7K7xQFX2OQliz5tknQMoMsznG/NsFSod5+Z3
-	 Jox6mFJmaw5Ld9Eqkt3/yiHYHUA9VCKgoMRNbQh4=
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4F43CDB47D;
-	Tue, 23 Jun 2026 06:30:09 +0000 (UTC)
-From: Alvin Sun <alvin.sun@linux.dev>
-Date: Tue, 23 Jun 2026 14:29:52 +0800
-Subject: [PATCH v4 9/9] rust: macros: remove `THIS_MODULE` static from
- `module!`
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bXK1xsux"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782197344; x=1813733344;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=h8AQJDX3UfNiJ86zepeJMtjP8yPCQGflfnfOwDXysvw=;
+  b=bXK1xsuxNccQ8Ip6aNhtnU6cXJtpMepuLUyp1On0HmupbKsCHCfw1KAy
+   c8kjycCVFLMLfrGqWVpbnXVYBozuVEr5y4vUv9urHvVpdzei7ylN32uNZ
+   t4cT/HQSrzG7DSzKUjyuQPvE0K2GP9RFT8JdXysujXqTd4HBFybRUtIFm
+   xG0B1Fydsw8OSjQTc6ssAurth7UCbnm1xZxpeSbC6TKkxhpQThxQVw+js
+   /5+OeDxIHZ5lSbqzIxT7p20wn3KM2CcCgLDy058hbS/gubvI0ljpnPO7G
+   hGGBgaI/Iz49bd6b4piunb7P+h1OIYn2pghPYqXOTm3e+9pr/An/9asfF
+   Q==;
+X-CSE-ConnectionGUID: VamQVzpbRgmoOQA8+QBoqQ==
+X-CSE-MsgGUID: eu4+u/1wQ9ioe4cLA93wEg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="82701955"
+X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
+   d="scan'208";a="82701955"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 23:49:03 -0700
+X-CSE-ConnectionGUID: UQ6n62bSSPGTWfszTIj7Fw==
+X-CSE-MsgGUID: AN4e/MmzQW2EM/WlHV3RkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
+   d="scan'208";a="243076433"
+Received: from unknown (HELO [10.238.2.81]) ([10.238.2.81])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 23:48:50 -0700
+Message-ID: <120b6d16-4218-4ba6-824e-54c62dd3d74f@linux.intel.com>
+Date: Tue, 23 Jun 2026 14:48:47 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 12/46] KVM: guest_memfd: Only prepare folios for
+ private pages
+To: ackerleytng@google.com
+Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
+ chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
+ jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
+ pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
+ rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
+ tabba@google.com, willy@infradead.org, wyihan@google.com,
+ yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
+ suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>,
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-12-9d2959357853@google.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20260618-gmem-inplace-conversion-v8-12-9d2959357853@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260623-fix-fops-owner-v4-9-0daf5f077d5c@linux.dev>
-References: <20260623-fix-fops-owner-v4-0-0daf5f077d5c@linux.dev>
-In-Reply-To: <20260623-fix-fops-owner-v4-0-0daf5f077d5c@linux.dev>
-To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
- Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
- Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
- Leon Romanovsky <leon@kernel.org>, Igor Korotin <igor.korotin@linux.dev>, 
- FUJITA Tomonori <fujita.tomonori@gmail.com>, 
- Bjorn Helgaas <bhelgaas@google.com>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
- =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, 
- Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
- Carlos Llamas <cmllamas@google.com>
-Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
- driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org, 
- nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com, linux-block@vger.kernel.org, 
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-pci@vger.kernel.org, Alvin Sun <alvin.sun@linux.dev>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1782196206; l=1634;
- i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
- bh=MUwIWDeyTGINk8eYw/EGHpKhVS1I+NdvU8holZVt0xA=;
- b=3Wu3lIDcbXp8WsWvNgwJtUDQdTKQMZngklAC5s7CH/cFu9Cyeb9s51Rij3zkvfLA0qhWG9IcI
- ouIq1J6XJzTANQBX3W3FalWDRrlJ9IrTCoWrCUXWjUsEHt4I+HcHlQ/
-X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
- pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
-X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
- auth_id=684
 
-All users have been migrated to `ModuleMetadata::THIS_MODULE` const or
-`this_module::<LocalModule>()` helper. The `static THIS_MODULE`
-generated by the `module!` macro is no longer referenced anywhere,
-so remove it to avoid having two sources of the same `ThisModule`
-pointer.
+On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
+> From: Ackerley Tng <ackerleytng@google.com>
+> 
+> All-shared guest_memfd used to be only supported for non-CoCo VMs where
+> preparation doesn't apply. INIT_SHARED is about to be supported for CoCo
+> VMs in a later patch in this series.
+> 
+> In addition, KVM_SET_MEMORY_ATTRIBUTES2 is about to be supported in
+> guest_memfd in a later patch in this series.
+> 
+> This means that the kvm fault handler may now call kvm_gmem_get_pfn() on a
+> shared folio for a CoCo VM where preparation applies.
+> 
+> Add a check to make sure that preparation is only performed for private
+> folios.
+> 
+> Preparation will be undone on freeing (see kvm_gmem_free_folio()) and on
+> conversion to shared.
+> 
+> Suggested-by: Michael Roth <michael.roth@amd.com>
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 
-Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
----
- rust/macros/module.rs | 16 ----------------
- 1 file changed, 16 deletions(-)
-
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index aa9a618d5d19e..23b6a1b456b80 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -497,22 +497,6 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
-         /// Used by the printing macros, e.g. [`info!`].
-         const __LOG_PREFIX: &[u8] = #name_cstr.to_bytes_with_nul();
- 
--        // SAFETY: `__this_module` is constructed by the kernel at load time and will not be
--        // freed until the module is unloaded.
--        #[cfg(MODULE)]
--        static THIS_MODULE: ::kernel::ThisModule = unsafe {
--            extern "C" {
--                static __this_module: ::kernel::types::Opaque<::kernel::bindings::module>;
--            };
--
--            ::kernel::ThisModule::from_ptr(__this_module.get())
--        };
--
--        #[cfg(not(MODULE))]
--        static THIS_MODULE: ::kernel::ThisModule = unsafe {
--            ::kernel::ThisModule::from_ptr(::core::ptr::null_mut())
--        };
--
-         /// The `LocalModule` type is the type of the module created by `module!`,
-         /// `module_pci_driver!`, `module_platform_driver!`, etc.
-         type LocalModule = #type_;
-
--- 
-2.43.0
-
+Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
 
