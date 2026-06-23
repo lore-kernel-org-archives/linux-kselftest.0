@@ -1,241 +1,278 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DAC39E9D5
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 20:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0623A6B8F
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 20:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.179
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782246439; cv=pass; b=JvK9cnEv3NWCKwIP465/R+5IuS7H0J0O/68uEuZWGIclY8UcCqIM3y+JH6+B8Odj8/SsA1AqGXUhfgS2w2pAyHVE/2Jqe6DEPqkpt8uqp/Qp2KHtmjeBRdOJw07mPadcMmc9//gPrUdAw4WSuZd1gdR7J/Y8Ri+wZjOTBr+ffwY=
+	t=1782246918; cv=pass; b=iFGmdSvzH76k+XosR67JqKs1Lcn8JgyWqZfmekkEkVQkwdc3GSE83R+W33axBw7xx1Az7vEztLCumGj3Ay0Pn1c52CY07+FvtbFAlyEn9sMO3Tm97QhovWeTFa/w/FOly63a9zmMGbioI2yk37zfhHIr2ii/z0N1DvheRMvKmMI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782246439; c=relaxed/simple;
-	bh=0givHChfCtgJoG3Jw5N8bUWO/zkCW2u8xflNqGJxbDo=;
+	s=arc-20240116; t=1782246918; c=relaxed/simple;
+	bh=1u1zjusxjkl7u4PKGa1cGLQbRmP20DgSwXktq2yu5B0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cAdZ/nOvenLuHbxAUkcnnkA6rc4JtxS6YvA6XaAB0d4CBt9T+w7K65CIpx/+wcDu8ewQXb/0vLg4b0L4ZxGLTaYGZF8kLz+IgkLB3k3yHb6PNl3mdGDHP/1u1JsnHKTWeKBIBONLin0+yakDlOgnTmIup1roQL965yQYptd9Qrk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z9c1OcuF; arc=pass smtp.client-ip=209.85.214.175
+	 To:Cc:Content-Type; b=emiDH+xAcpf1WoP8pGA8f6eeD8Hx4Cm6nE5lsHmQWxBt6RS5PhTwfDy75I8YKAqKGH0fyJu79t159iBf+978ioLOgfPrC33ud4EST5eKpbgkPYxJBjxsdhEXms4JvAGA+Q99gzwchYPSu2at5tbrR3EIIcj5eX4ir/fIbmG1h6w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cbAMVJKC; arc=pass smtp.client-ip=209.85.167.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z9c1OcuF"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2c40397e746so1605565ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 13:27:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782246438; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cbAMVJKC"
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-4865b9e16d4so159065b6e.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 13:35:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782246916; cv=none;
         d=google.com; s=arc-20240605;
-        b=ZmZViyDklg5EC0/G4IHNFCnfrj+4GpkSlGw5IJr/Vh0aT0Y+7bNEo6DMJfsj0+y/0h
-         ewquQrll6k3NmVB/Ylyhz08vHYU5pIc23vIs2cGEj/GutZOdzUnT085yXrATqXNmUqCQ
-         +0FE4UAxk1Q1RCEthv3dDQndKa1Le9qc8y0Un3ip8Nt9YDoB3Zcm/5218tk85SrxDZWv
-         iAFliCBFPGZRrUY5BtUdkdcjhokNLlkSbs35/HTFSwFYT0Z0J4rzXfr4xtnFdtB3ntVs
-         vWX5edb92rk6hBqbCJOVz6S0QtZSbZPmfK8oa8Di+ami6awgpqfpGwQAvt2KvC+/1x8n
-         TiKw==
+        b=e99viA8RmtyqXV2VuTrGSdq/aE1ana9mTFOp7YMgbYymxxPwxWlN1vkj/yIxSiBHYL
+         FhLex1Y+BhFLvqHFXaRX0R1pTU5xvtM8EGv9SZnIl9yCNvMaCSmqYk5bPNtqpbWUQKuk
+         qdb21ygmLhtuqsH5lnVJW5VENRA7Q7WBwNz4YzWKMiQ/X19eOUce6XFeOLr1qJcs8WzC
+         caTIQcm+8vG0R64f94GKC3WiAlvNpU9h2sOBDvGL1XCquCZwa7Rn1Jb77nSgtHRhF80t
+         muGeRW16EB7sCtGegkj2HwFkYJRWfNp9ltR0nl84Bd1yjFN/2NwMY1fCTaakl1AoLr7Z
+         REJg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=A2p3VMqob0x6dZXFsBHs+SV7dY60+U6kj2FwO5qGa2o=;
-        fh=jiFJuFhq0xH9a6gfjPtBmAzCkX4omitDkRLCx7OAEbg=;
-        b=Dv0buID1KI2/87ZamBZVu7iZ3xPVeorQ0+qM9ENTbT6j2Txn1dwHIF+sE5fcL6VqL5
-         Pg/0s9e7qzbQPpn16EXY4OD7GS2KS+kZ2f3lBr/rJ/kBoxS5dsPzGYZTrIlkkpHD58PC
-         hLdq092GPq4dXfgkeFOWz/C9bXi5pyyoNS3sPVwK6dURlo6PL9UANy+K2KcZVPyPZdM9
-         /qjVmlkFgjXyzbZD/3RQwOHcybSIqKY9kmzERkYEjmYUuH0QylwAlWTIWSCeYHUBWXH6
-         L+PEBO+LeUsjgHckwSoKL//komsOaSpRUtu3Zzm48OTQIUinM+VkhQg8QXYlvdSS+scK
-         B6mw==;
+        bh=2jn7ncJBrXK948Ro9HzPmcDhz0jzCr17fg/cQrz5PFQ=;
+        fh=QEOjxzKBFfD6K3ShqIARD6rcOyrxaW9zhbmTwEkyaP8=;
+        b=UBp+oDbPqv6nXIpjlv66nYGJ+QqMHrWF44TwXF5u0TZieE20GXtMx9xjDGn6mEf6j3
+         ik0xqjgycTwgz9sht10K5E8IUST3A77u4kSNDPHsZ4Js7dJJR82ThrVTMNVzorLUsYEu
+         MWnjtSJZB+Oh/0FYDkIH8Fk5qgaOBIIIuC2uNSWBbIldSfzn+MfMmv6uXiqTwA1vjr/5
+         M535MFyjGTxoDcPRczpSm16MsPnp8FNiKSjsuYikN3LBgbnO+7Qj0t0eCN2XF2mgaqkB
+         AxysRBatnw8/2FqVq5Tj9BTIBAOTj4JQ7OvwSsBSuU2vJEqClhfmoHqFDUKcHHsLoKbe
+         /NxQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782246438; x=1782851238; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782246916; x=1782851716; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A2p3VMqob0x6dZXFsBHs+SV7dY60+U6kj2FwO5qGa2o=;
-        b=Z9c1OcuFHmBWV7Ua7iIv195QoBl60M5YfeP4Yx3FsIsMloirTWshGhrF7mUoYjQQ7F
-         UubvpL6zUTp9Lq64ALr60qaFrBSqFblKK3l7icw9Z8609FpXp1LJb6HhDjYS0oMOUnvp
-         Ezpk3fjyjIpCTOrGGGQUqxLEVkzC+idDV9PxUMNpRVE4jD9XIX1kjEHcWaZz2T3c32Yc
-         DfuQE8hx9gCbbZoZNZvAZ6/yIQsNWfCYVWrCUI2+gcMHgG8KOW0mVwOMI+hpKudiE2z1
-         9KpJkcMUpyR4SC64b+NEmHejaXNAQK00xBtW690qvssYszxKyiTz49ZcaSgr8MV2gXsa
-         hDSw==
+        bh=2jn7ncJBrXK948Ro9HzPmcDhz0jzCr17fg/cQrz5PFQ=;
+        b=cbAMVJKC0PWsgVd3yli7zB6KSnLdDgAqV3OC2mXGK6KAmFlh9xJfG6xG3Z5Oag9qWn
+         RjH2SpB72hKH3TQJPPg2Wnk0KgnVqDhRILOWmd4O8tUJWbPm23JPGIIDy00DXG/W6gph
+         cxgqGTpdvfk5MDMuuA8AVMoiksNaeEfMeJOxskrJ1QRyYOWEFbh17CRpWC/Mlqe38uRY
+         bSb0liTKibG7riL1DVJ282MPX2W4cHvPJYz2GjoVvwV/BTsrLPevRqYVZy6OsOuLCNPm
+         Ar8hRfIDqBQKhP/Z/AwpNIdOiQmWn4kiVnOs3r9Lww0M5rJkarZtQRunxL2qwIo32yug
+         yb2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782246438; x=1782851238;
+        d=1e100.net; s=20251104; t=1782246916; x=1782851716;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=A2p3VMqob0x6dZXFsBHs+SV7dY60+U6kj2FwO5qGa2o=;
-        b=pD7YM3s/CwJzowV7liaIRR6UyB8uBZ3ZLCjKbyRGFR9FGXsKM7QFQcGFOfIl/aoykM
-         fODfBhG+dk+O3ednisgg/ImOgVF+K7lBifTLkwWhupRh8XMa5j60ZWGs1tv3hHd0wh59
-         Z5tKIOpQgLidmQQ7LPXU30nEu2hFDgRNpeB31nM5e0GGS1Si1B96gDs2iSlGX2Kv1rzV
-         hd+kLyoMvIL3oghuyofZdqGqWRKfzqk8hPLhLdA5K/WdFyt9o/wRcvLXMlvhuouw6r6i
-         FT9X7toeS9bGEPOpns50GDj3vsHhSmOsTti1mHwuLXnPngzh804TDLlV89XI7Bt7g1d6
-         ngPA==
-X-Forwarded-Encrypted: i=1; AHgh+Rri69ARqtq6Pv375xejXRyA6VuphQ03EXRX8WotSQJFvz8vIXXu07fkeNttSVAEPR4X/br6sncv97maOI6CHe0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqS7vwbolLahvp8R3L+MDuMcVHPJwV4fACrJCnLF9d4Uf+K49q
-	+nVG6PnQ+X+Tqm6ECP/K0In2JRgonwTKL0quJUbrRf8qirrK8VmdQZWnxvlxT2BIiub31WXqdbM
-	pxcYRtxtkr3+rSZtRJ8Tp9PTv74E9VbU=
-X-Gm-Gg: AfdE7ckwCkJiaIPNhw/YyMtMR0m0ng2Ld2M1KKw+fOYkUAOn+4OIPfpsYLLKzqLCym/
-	0ghqYH6T/dPxtpICF3jlfv10Dj63QvgKTg9ymhSiixi9sHO5vt3JwsgfTOPRZYeHlEniYjSNwrg
-	B75pqmDN2QZZM4s405Dmepv/wXvi2TycpFTI0pORV4GafZgyZi2L1e+J+9cXIgDLMo95CWAHgcr
-	47RDvCvvdo4K25aqQSbA3oo5nM/T3ZLimGULHlGjOqQCTDwPQ/0CjzA5I6mLv6wdJfPdaTDWPAp
-	34VURYdrbKK1OVkVdKpJIQ5qREyRvTjHmK54D1hxKEhwpBlchXgO4EeZ+shee4g8LZD6Lg==
-X-Received: by 2002:a17:902:d505:b0:2bf:23c3:34ba with SMTP id
- d9443c01a7336-2c742b3e10emr162283065ad.28.1782246437819; Tue, 23 Jun 2026
- 13:27:17 -0700 (PDT)
+        bh=2jn7ncJBrXK948Ro9HzPmcDhz0jzCr17fg/cQrz5PFQ=;
+        b=o7DxVdkxwgR9EjN2ehWkqEK3hzzffQeLUeOb5E/Ih2+S6LZREBCZfteemgAiKoN6lL
+         +XpVFMNwcYzdL9TX7FFr7rYxHQ8wwfwZdqDzQhjGIJiYEcLVPBstRYC9KppdpNjB044d
+         ufmj5jZa7x/9mzpzW+GQDJtIVFJ44OtBmyB7PzwaC1Dao9jGlLvbLAK97DF6N6kQtM3F
+         h5TDh8kDC0Un/lc0A3SJfcZ5KrHHkzmWtTKijHS8n9razDi6yfUZesCJaEfn/P6xAnKP
+         JUTsxNSYnzSXVSUGsmBpJNg0++KTLc2rqAnmfApH+/smvqllqLa8PWTy9e5PGlFmNn6Q
+         nUMw==
+X-Forwarded-Encrypted: i=1; AFNElJ/eVRpgq+4K4RkOtM+b3A0S4BRk6eUvfgFNUStY0c2cHe97l3cuUmONJ1GjP6daVt17DxYTSOIwEa31RvCc1NA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywa1f56sAtcRpiGLSZseYKUvA0u7tFiALAg4i6aAF9Bexp3FQn1
+	WV+jSGeP/VppjKcnAIFZOgd7RBBpAsSytJOZEos+CB3MKu2TKYloM0Kd3zK46tn0wEETVSfegmN
+	aUtpgziCIzf1vtThdaYnXqA0mdtU6QN0=
+X-Gm-Gg: AfdE7cnpjnMPIvD06hCln8GkcoGnePCpa2HyVhWizfdp+Gmdb2A71xI+CvRNYnPvEvE
+	kK5ev+FaSj2DWEfGOtepGNpMGTZU8pHWyabuQ/aRhZh2Zm/VbR0s4HFLxj6Ej6UnUWQt0zHpfMM
+	Oe+qoFmeVL3TOJQGvLKcsSf9dAGugl8Ik9Wgs19pNES/Wvdxrm1t3yRxshBUgmsEDa0wISCD8zX
+	FZIKy0dI/pGW2NJnwLqUZVGqh1zTtF04VYflR49qZyXF0aOTVR40DtDv+Dz41qNiFJzVpU0Y9WR
+	RlbUeqdTsmESmiZHvg0ueOgmGjt12eS2xYN47tvM
+X-Received: by 2002:a05:6808:c185:b0:48a:aaf2:5b67 with SMTP id
+ 5614622812f47-49079496167mr265841b6e.31.1782246915981; Tue, 23 Jun 2026
+ 13:35:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-8-33fde039ddf3@kernel.org>
-In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-8-33fde039ddf3@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 23 Jun 2026 13:27:03 -0700
-X-Gm-Features: AVVi8CeXtZ15zdMfAxyxFrRffuXWFGGoz7UAyF138iQEs558FIoN6NKA4iLQNGs
-Message-ID: <CAEf4BzYKewRUpOboOmPcxdX25731tF0w63V0Ha=_f4D_F-ie3w@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 8/8] libbpf: ringbuf: Prevent missed wakeups
-To: Tamir Duberstein <tamird@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Andrea Righi <arighi@nvidia.com>, Xu Kuohai <xukuohai@huawei.com>, 
-	Andrea Righi <andrea.righi@canonical.com>, Bing-Jhong Billy Jheng <billy@starlabs.sg>, 
-	David Vernet <void@manifault.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>, 
-	Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Sashiko <sashiko-bot@kernel.org>
+References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
+ <20260622043934.179879-2-farid.m.zakaria@gmail.com> <202606231236.325C882A78@keescook>
+In-Reply-To: <202606231236.325C882A78@keescook>
+From: Farid Zakaria <farid.m.zakaria@gmail.com>
+Date: Tue, 23 Jun 2026 13:35:04 -0700
+X-Gm-Features: AVVi8Cc6baAOrvpg7bti2txnm7y_PAHygqiZFWgpLTsnuazHS3APcFuR3dcSQas
+Message-ID: <CACCo2jmyExCoWyWy7VKvm9nVpKi1Oet6jGaSsNs0Wddr3Hu+hw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] fs: support $ORIGIN in ELF interpreter paths
+To: Kees Cook <kees@kernel.org>
+Cc: brauner@kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, 
+	shuah@kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 18, 2026 at 5:27=E2=80=AFPM Tamir Duberstein <tamird@kernel.org=
-> wrote:
+Thanks for all the improvement suggestions.
+Yes, I leveraged an LLM to generate the initial code (open & honest)
+but I'm willing to keep refining it to whatever state upstream
+requires.
+Thank you for not dismissing it outright right away.
+(FWIW, the initial code was even worse so this is the product of me
+intervening and editing it, despite my lack of C expertise).
+
+A few more attempts at convincing :)
+* musl also supports $ORIGIN
+[https://elixir.bootlin.com/musl/v1.2.5/source/ldso/dynlink.c#L911] so
+there seems to be strong convergence on the concept beyond glibc
+* ideologically, everything about a program should be portable easily
+from one environment to another (the goal of systems such as Nix).
+Userland has allowed this support in nearly ever-space and the
+DT_INTERP / shebang path from the kernel seems to be a missing gap.
+
+We also have the shebang patch ready (CC @alan.urman@gmail.com ) but
+we wanted to see the reception to this first.
+
+I will wait to update the patch based on your feedback and Sashiko's,
+if you are convinced just to avoid spamming us with more patch files
+:)
+
+Farid Zakaria
+
+On Tue, Jun 23, 2026 at 1:14=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
 >
-> After consuming the last visible record, ringbuf_process_ring()
-> publishes the consumer position and checks the producer position. These
-> operations lack a full StoreLoad barrier. A producer can therefore
-> commit a new record but read the old consumer position while the
-> consumer reads the old producer position. The producer sends no
-> notification and the consumer waits despite a queued record.
->
-> Insert a full barrier between publishing a consumer position and the
-> next producer position load. When a record bound or callback ends the
-> current invocation first, execute the barrier before returning so the
-> load in a later invocation completes the same handshake.
->
-> Add an edge-triggered epoll test that drains one record per call while a
-> concurrent producer fills the ring. Without the barrier, a missed
-> notification leaves the producer dropping records from a full ring while
-> the consumer times out. Document that bounded consumers and callbacks
-> that terminate consumption must drain before waiting again.
->
-> Fixes: bf99c936f947 ("libbpf: Add BPF ring buffer support")
-> Reported-by: Andrew Werner <awerner32@gmail.com>
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/bpf/20260614015716.945AF1F000E9@smtp.kern=
-el.org/
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
-> ---
->  tools/lib/bpf/libbpf.h                           | 23 +++++++
->  tools/lib/bpf/ringbuf.c                          | 24 +++++--
->  tools/testing/selftests/bpf/prog_tests/ringbuf.c | 83 ++++++++++++++++++=
-++++++
->  3 files changed, 123 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index ae46b17feaa6..3a649ed87034 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -1440,6 +1440,11 @@ struct ring;
->  struct user_ring_buffer;
->
->  /* Callback-based consumption is unsupported for BPF_F_RB_OVERWRITE maps=
-. */
-> +/*
-> + * A negative return stops consumption; non-negative values continue. St=
-opping
-> + * can leave records queued without a new readiness notification. Before
-> + * waiting for readiness again, consume until no records remain.
-> + */
->  typedef int (*ring_buffer_sample_fn)(void *ctx, void *data, size_t size)=
-;
->
->  struct ring_buffer_opts {
-> @@ -1456,6 +1461,20 @@ LIBBPF_API int ring_buffer__add(struct ring_buffer=
- *rb, int map_fd,
->                                 ring_buffer_sample_fn sample_cb, void *ct=
-x);
->  LIBBPF_API int ring_buffer__poll(struct ring_buffer *rb, int timeout_ms)=
-;
->  LIBBPF_API int ring_buffer__consume(struct ring_buffer *rb);
-> +
-> +/**
-> + * @brief **ring_buffer__consume_n()** consumes up to a requested number=
- of
-> + * records from a ring buffer manager without event polling.
-> + *
-> + * @param rb A ring buffer manager object.
-> + * @param n Maximum number of records to consume.
-> + * @return The number of records consumed, or a negative error code on f=
-ailure.
-> + *
-> + * Reaching the requested bound does not establish that every ring is em=
-pty.
-> + * Records can remain queued without a new readiness notification. Befor=
+> On Sun, Jun 21, 2026 at 09:39:33PM -0700, Farid Zakaria wrote:
+> > Currently, standard ELF and ELF FDPIC loaders expect a fixed path to th=
 e
-> + * calling ring_buffer__poll() or waiting on ring_buffer__epoll_fd(), ca=
-ll
-> + * ring_buffer__consume() until it returns 0.
-> + */
->  LIBBPF_API int ring_buffer__consume_n(struct ring_buffer *rb, size_t n);
->  LIBBPF_API int ring_buffer__epoll_fd(const struct ring_buffer *rb);
+> > dynamic linker/interpreter (PT_INTERP). However, for systems utilizing
+> > relocatable dynamic interpreters (such as Nix/store-based environments)=
+,
+> > hardcoding this path is inflexible and breaks binary portability.
+> >
+> > Introduce support for resolving the $ORIGIN placeholder in the ELF
+> > interpreter path. This maps the dynamic linker relative to the path
+> > of the binary being executed, matching user-space origin resolution.
+> >
+> > To avoid code duplication, implement a shared 'resolve_elf_interpreter(=
+)'
+> > helper in the VFS exec layer. For safety, limit detection strictly to
+> > the prefix string "$ORIGIN" to prevent complex parsing exploits.
 >
-> @@ -1538,6 +1557,10 @@ LIBBPF_API int ring__consume(struct ring *r);
->   * @param r A ringbuffer object.
->   * @param n Maximum number of records to consume.
->   * @return The number of records consumed, or a negative error code on f=
-ailure.
-> + *
-> + * Reaching the requested bound does not establish that the ring is empt=
-y.
-> + * Records can remain queued without a new readiness notification. Befor=
-e
-> + * waiting on ring__map_fd(), call ring__consume() until it returns 0.
->   */
->  LIBBPF_API int ring__consume_n(struct ring *r, size_t n);
+> Does any other OS that implements ELF support also support $ORIGIN in
+> the loader? $ORIGIN isn't even part of the ELF spec at all and is a
+> glibc extension, IIUC.
 >
-> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-> index 141f2cbe56eb..0598f6c2f7da 100644
-> --- a/tools/lib/bpf/ringbuf.c
-> +++ b/tools/lib/bpf/ringbuf.c
-> @@ -271,7 +271,7 @@ static int64_t ringbuf_process_ring(struct ring *r, s=
-ize_t n)
->                 return 0;
+> I'm not excited about path-based string manipulations as they end up
+> being racy, and mucking with loader path seems like we're inviting
+> trouble (since the _binary_ specifies setuid-ness), and we've seen
+> issues with $ORIGIN before, even strictly outside of the kernel:
+> https://seclists.org/fulldisclosure/2010/Oct/257
 >
->         cons_pos =3D __atomic_load_n(r->consumer_pos, __ATOMIC_ACQUIRE);
-> -       do {
-> +       for (;;) {
->                 got_new_data =3D false;
->                 prod_pos =3D __atomic_load_n(r->producer_pos, __ATOMIC_AC=
-QUIRE);
->                 /* Positions wrap; the consumer cannot logically pass the=
- producer. */
-> @@ -279,9 +279,9 @@ static int64_t ringbuf_process_ring(struct ring *r, s=
-ize_t n)
->                         len_ptr =3D r->data + (cons_pos & r->mask);
->                         len =3D __atomic_load_n(len_ptr, __ATOMIC_ACQUIRE=
-);
+> > [...]
+> > diff --git a/fs/exec.c b/fs/exec.c
+> > index b92fe7db1..0978ae613 100644
+> > --- a/fs/exec.c
+> > +++ b/fs/exec.c
+> > @@ -2024,6 +2024,48 @@ static int __init init_fs_exec_sysctls(void)
+> >  fs_initcall(init_fs_exec_sysctls);
+> >  #endif /* CONFIG_SYSCTL */
+> >
+> > +char *resolve_elf_interpreter(struct linux_binprm *bprm, const char *e=
+lf_interpreter)
+> > +{
+> > +     char *pathbuf, *path, *slash, *resolved;
+> > +
+> > +     if (strncmp(elf_interpreter, "$ORIGIN", 7) !=3D 0) {
+> > +             char *ret =3D kstrdup(elf_interpreter, GFP_KERNEL);
+> > +
+> > +             return ret ? ret : ERR_PTR(-ENOMEM);
+> > +     }
 >
-> -                       /* sample not committed yet, bail out for now */
-> +                       /* Retry a busy record once after publishing prio=
-r records. */
->                         if (len & BPF_RINGBUF_BUSY_BIT)
-> -                               goto done;
-> +                               break;
-
-so we do this one time retry just so that we can reuse the same memory
-barrier, is that right? and similarly all those error-returning
-conditions with cnt =3D err. Wouldn't it be cleaner and easier to
-mentally follow to have `goto done` which would just duplicate memory
-barrier and exit with whatever value err is?
-
+> But even if we did take this, I really don't want to incur a universal
+> penalty on exec for it. This is doing a kmalloc+dup (and later kfree)
+> for all non-$ORIGIN execs. So even if this gets added, it needs to be
+> handled differently.
 >
->                         got_new_data =3D true;
->                         cons_pos +=3D roundup_len(len);
-
-[...]
+> I would probably say this helper should return a struct file * instead
+> and have a fast-path for the common case. I think a check for leading
+> '$' (if strncmp doesn't get inlined) would be okay here as far as
+> "incurring common performance cost"; that string is almost certainly
+> cache-hot.
+>
+> > +     pathbuf =3D kmalloc(PATH_MAX, GFP_KERNEL);
+> > +     if (!pathbuf)
+> > +             return ERR_PTR(-ENOMEM);
+> > +
+> > +     path =3D file_path(bprm->file, pathbuf, PATH_MAX);
+> > +     if (IS_ERR(path)) {
+> > +             kfree(pathbuf);
+> > +             return (char *)path;
+> > +     }
+>
+> This still just _feels_ like an info leak or a race condition to me. I
+> can't give a credible example, though. But it creeps me out. :)
+> (I note the blog post also says "and the shabang" and I get even more
+> creeped out about seeing that patch.)
+>
+> > +
+> > +     slash =3D strrchr(path, '/');
+> > +     if (slash) {
+> > +             if (slash =3D=3D path)
+> > +                     *(slash + 1) =3D '\0';
+>
+> This is not idiomatic string manipulation.
+>
+> > +             else
+> > +                     *slash =3D '\0';
+>
+> More readable, IMO, as:
+>
+>         if (slash)
+>                 slash[1] =3D '\0';
+>         else
+>                 path =3D "";
+>
+> But does this match the glibc resolution logic? i.e. should it be:
+>
+>         if (strncmp(elf_interpreter, "$ORIGIN/", 8) !=3D 0)
+>         ...
+>         if (!slash)
+>                 slash =3D path;
+>         *slash =3D '\0';
+>         ...
+>         resolved =3D kasprintf(GFP_KERNEL, "%s/%s", path, elf_interpreter=
+ + 8);
+>
+> (requires the trailing /)
+>
+> > +     } else {
+> > +             kfree(pathbuf);
+> > +             char *ret =3D kstrdup(elf_interpreter, GFP_KERNEL);
+> > +
+> > +             return ret ? ret : ERR_PTR(-ENOMEM);
+>
+> This is the same as the logic top of the function. This repetition smells
+> of the LLM. :)
+>
+> > +     }
+> > +
+> > +     resolved =3D kasprintf(GFP_KERNEL, "%s%s", path, elf_interpreter =
++ 7);
+> > +     kfree(pathbuf);
+> > +     if (!resolved)
+> > +             return ERR_PTR(-ENOMEM);
+> > +
+> > +     return resolved;
+> > +}
+> > +EXPORT_SYMBOL(resolve_elf_interpreter);
+> > +
+> >  #ifdef CONFIG_EXEC_KUNIT_TEST
+> >  #include "tests/exec_kunit.c"
+> >  #endif
+> > diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
+> > index 2c77e383e..17419cd3d 100644
+> > --- a/include/linux/binfmts.h
+> > +++ b/include/linux/binfmts.h
+> > @@ -150,4 +150,6 @@ extern ssize_t read_code(struct file *, unsigned lo=
+ng, loff_t, size_t);
+> >  int kernel_execve(const char *filename,
+> >                 const char *const *argv, const char *const *envp);
+> >
+> > +char *resolve_elf_interpreter(struct linux_binprm *bprm, const char *e=
+lf_interpreter);
+> > +
+> >  #endif /* _LINUX_BINFMTS_H */
+> > --
+> > 2.51.2
+> >
+>
+> So, I guess, I'd like more convincing, but I'm very happy to see a KUnit
+> test included!
+>
+> -Kees
+>
+> --
+> Kees Cook
