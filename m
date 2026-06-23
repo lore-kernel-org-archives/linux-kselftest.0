@@ -1,170 +1,377 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF34331EA4
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 19:45:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C712C390CBA
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 19:50:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782243913; cv=none; b=H3WOHT6354lbF7/OWMuJtwR6kRFiNHlVv6rtcJD2vyfIr4ao4YbFkdI61DGBGVk8jl1R2qVXAq/cS7Q0zXGBGSM2NFYESHMcPuNC+X0xxEExYA4iwrbKQbhBxGzLpY1yPmUN3Lj9XfW3RumKRpPuQlIU77Nd9mpElFP8oMXGECQ=
+	t=1782244205; cv=none; b=q1RQNhbl5Djbv6NuMkUtUiGqXhlvf8GsD1IpEq3vxWIs0In4iTkP0UIw0uyWGrxPehyO3BmJhXsSTQ2yG8RMsVma+rkf+lkLSzhd8y222KLEh3uwjgteHRjrVQMpeqf+HfAqj5IFQD/HE/mZiYqDXDJ/sWIW2ylI9+yKgIjZXiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782243913; c=relaxed/simple;
-	bh=w0LYy/lkhOkRJ1mcPpKcBJQ8WkRX9RNPOn4dmhRbI5Q=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QfwLrnnZhMvSH2K9wNt5CAz5058Gy2hzecw9sdh58Z62a/UoGEe0baQXH3hCuNzdJXXZdhLbb/QyCzkarWOKql9vv0lreU3rPwOlUPBsFDihWPgDy20RAh0aD2ftR1VHq7pdHhAg54CdTORW2tXMIWcNSQYKzLgkKm6EvkdM/yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=H2wWzv3B; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=UjIEQNPU; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782244205; c=relaxed/simple;
+	bh=PCdxZHaDVmkm3TCzXBWX11/NSB4PaHEtWEjQDmjXAX0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=gAThb7ssX3Sj3zodJh7C47oFB9+fyoA3+2Ih+q1Mt/e7bym5w9I8yceZ5GTfuP6RtGNA8I/haWdbdkAUaxsn7FYqS7QqtR9sKsmGgDiqRkaK3PjdgUmw/GAxEKw76Gir38baynGRQuI8JazeX+PXB6BAMkP8lH/3v3AvKS2Z5YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YPwRq5wt; arc=none smtp.client-ip=209.85.208.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H2wWzv3B";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="UjIEQNPU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782243911;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qROIoP7Ox4zuQ1KlaWsTu9O+Pw1tden3SzMg+Ihd/Yg=;
-	b=H2wWzv3BZv/A/oZrzte7WS60CbbQ0STE4rNJq92LG2JjrFwkcOP5mx9aHfyfDtCySw3KWB
-	tg8MMNe+EUUphNNkqwDHT5SI+kwrqJKeo9S2uuyLSZG9B4ug0yfpeSimNgQmZoG0x6RwCd
-	Bz1V9H//fsgu/f9T3Ny+d4MduFLvZTE=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-414-7ZHHM3ToPni4G0r7cF_rhA-1; Tue, 23 Jun 2026 15:45:10 -0400
-X-MC-Unique: 7ZHHM3ToPni4G0r7cF_rhA-1
-X-Mimecast-MFC-AGG-ID: 7ZHHM3ToPni4G0r7cF_rhA_1782243909
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-bf4ba05fd18so17797466b.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 12:45:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YPwRq5wt"
+Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-697df3655d8so121827a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 12:50:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782243909; x=1782848709; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qROIoP7Ox4zuQ1KlaWsTu9O+Pw1tden3SzMg+Ihd/Yg=;
-        b=UjIEQNPUMkiH4TwPruAPCW4v81RyCjUhxAdBRCU+jiFaYQF1MeZZ3WmGmIj6y31dr0
-         APSrj9pIqpIbIw3X4K8OTRWQkhWkRYA8aiE3EKhyHGI94q+NW/FHXJ9R3hBlzk8/MY0/
-         Ixyhtob4WtIM1AWkGnuB/prI2d0K2nyys1scIlrmjbTZvFHib5UzPigw/BJjIv4ECqpA
-         +hlmX853OkyiNu9LIQvkn42vOmYCWgvkQ3Oyo/rfoRjhVAfq+NnP3NJL438AmCToBKRd
-         s04v0/sfyvGj6kghTpRdKXd3UCiMhh7qg8wttzZ5cL+wt99cX+PiusDPVfYKOzrP1CUX
-         /3Hw==
+        d=google.com; s=20251104; t=1782244202; x=1782849002; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zdsj6Guo7r326E75XLxyGx3YlVfMh6UQRvA3w5OPiCM=;
+        b=YPwRq5wtAMcjgrky1GfhZg5Sq9cYpXmGlUdarAT287bU5lv82QwzRtupJvjWurvuyn
+         fLC2oDnRGb8EQ2VbzjhDkG44c3G2anlU5dUUqdwwn2ot7bfW+tvR2o8dYlSINLbskgaG
+         +tf+xYOmPZQbAVqB2OnS6gJ7Zdah1zZsnmtfIgWG6OktTruQvKrDbCHtbNzF2c6GTA3I
+         0NwS/dEKIFa5SmnbJ4WbUR+iBK6aUY5pgQuTTQYgHr7YwfqCmZVMgDKylvghq5qLMB8L
+         tCjZgg5Gmon7qXfqIVqWITRm1TXiOejw1NkVyli8xABGnWFn7HXAqhegYfln4PHm2wqA
+         z1gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782243909; x=1782848709;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qROIoP7Ox4zuQ1KlaWsTu9O+Pw1tden3SzMg+Ihd/Yg=;
-        b=QNmnCScFi28DUZP46xeg/YMZochpuNt959dXq/sx/OY9wj7sHrmRiovQXvn3idLS3y
-         pfL8nKaz1TXjshlxoa3vtbdtyv5ZfKHjqxaWG0z7zXlIT+biJWR7v14RCAcgyiJK240I
-         /9y/L9oyAQdZvrFf0+12BazhixIP71o9td4bINsXQ89umJOTA1NkIpX9YQWZoT0p1BhX
-         X9hrf5gygzgJXHWLWSflk6uEFckg9OJhjpTgA57tcJegTTB74RK6iAPJvf108xCI8L8C
-         Sm9Lvl4paMKuh2YGqLJLoCJDY9vG6fPDPbzoiwd/H/25RU8M8/dpsjV3qJL6NXQRXSxg
-         Enzg==
-X-Forwarded-Encrypted: i=1; AFNElJ8wRYIJJGhMD8Cr4Tsl3Z7coNReLaxfp7Gl+7iSiOB8ic7MGOIAaER2CSh8tWriL1wOhxi+HnwXIkIPi4yYou0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9SPB6NPY7CArm2Bh1EzdsAM5o4BWAMvuNfnHDXGHXQFeVMrtQ
-	KvAtPfcMubLaEcXVLEdBvuvOlg6jhmYSGFUaxBQn52yZGwyUI9ttG8hEKXSGVdwRATuM92evXkd
-	8XT/y9DfBaPh8j6XbATgEULRs6a2h0wOeTJdkn/PiJiqBtL2XJ9oG97vU9M4JBXMEuhhKmw==
-X-Gm-Gg: AfdE7ckpDw4/BTQ+Ona+m1i3hSLChPmCId5fXdZIT7UZJCL2c3T41w21j04rJkXlq/0
-	1OViKvamr/5xwLhnseaAQl1UCE88nop5eDML0MxPqSeciiMYupTR2Rn99lj8DrHYNWA+GzRlic4
-	ymh9jjzIaodyy3huqhSMbqVrZP2AB+B8i8Ocm/t/z5Yt1Z4PSaI5Mi7VfK+VkAvl25V5gUT9C+M
-	ZLUOBKJgecf+f/a2R6iP52ym22nrPEIPUGZMJ29xpM0yJDZ+Rrrqly5xrD9ulcDy5/0EY/VNmnL
-	hywF3t6cit560Ee9K8/6oNpLkbxXs4eKgl3+fWDf7gbNiG2rHzhw2UHujqU8/MkHtodVZEvBlEg
-	hwx8bnYYGlMugB46r41oLPVwR2XVvslr9pQEjLg==
-X-Received: by 2002:a17:906:99c2:b0:bec:2d7f:fe03 with SMTP id a640c23a62f3a-c107e0dffb5mr233287966b.17.1782243908586;
-        Tue, 23 Jun 2026 12:45:08 -0700 (PDT)
-X-Received: by 2002:a17:906:99c2:b0:bec:2d7f:fe03 with SMTP id a640c23a62f3a-c107e0dffb5mr233285566b.17.1782243908159;
-        Tue, 23 Jun 2026 12:45:08 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c0c610e4c76sm563520866b.46.2026.06.23.12.45.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2026 12:45:07 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 25089808D82; Tue, 23 Jun 2026 21:45:06 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- dsahern@kernel.org
-Subject: Re: [PATCH bpf-next v4 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-In-Reply-To: <20260623182849.2623521-1-avinash.duduskar@gmail.com>
-References: <20260623025147.1001664-1-avinash.duduskar@gmail.com>
- <20260623025147.1001664-2-avinash.duduskar@gmail.com>
- <877bnpeaeq.fsf@toke.dk>
- <20260623182849.2623521-1-avinash.duduskar@gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 23 Jun 2026 21:45:06 +0200
-Message-ID: <87y0g5ca7x.fsf@toke.dk>
+        d=1e100.net; s=20251104; t=1782244202; x=1782849002;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zdsj6Guo7r326E75XLxyGx3YlVfMh6UQRvA3w5OPiCM=;
+        b=imG9L6NTbLoYFOsxGcmXMZV0mW4x3/ic6uckGNMjz6QUh29ccHqRQg47glou5YdCgn
+         dR5CwtlfpG8yf0+7fiuEQsbqL7Ui7ZA0EIIVPJOhl8OXZe5O0I8+5HSHWNjuP8WVS11P
+         uaUczMMvssensxXNHgZYiF5YS9eIZ6u14x0AeMdGW6DZ3XnfxN9gxM67+l8FVtcL/1RC
+         P7jJfEZiL2ZwDi0ji/qH0XrgHn97czdPbw8Ie9iLQF/h0B9n+1gYydYRY3PEi0nbUl0o
+         bAI6+Qr3fnviV4gafrc+glYP7Y9n4e6fAwbi4KMgw3eRMaRpHTOpCVPyxio4juMWyWTX
+         YTyg==
+X-Gm-Message-State: AOJu0YzUElXegr6uw5/2/f8ga9+K82un2kKwdR6cB413IbKSh7WkgE54
+	jJbaKbQ2ZClvz4rKIlj735Vf/Z8sfX7LNSyHi0NTfutlxkPTFT2tSumRLUc3naLYO9StHjyr7bI
+	/78NXI4r3iwsm7Dtbtg==
+X-Received: from edbbp7.prod.google.com ([2002:a05:6402:1467:b0:692:efc2:c022])
+ (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6402:5253:b0:697:aee0:7a4d with SMTP id 4fb4d7f45d1cf-697dba62033mr2212935a12.6.1782244201867;
+ Tue, 23 Jun 2026 12:50:01 -0700 (PDT)
+Date: Tue, 23 Jun 2026 19:50:00 +0000
+In-Reply-To: <CAEvNRgE2GZNiDg_g6SP_H9CDsDDAnpN7KTRWJEK18wxpTZFJZw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <cover.1780676742.git.tarunsahu@google.com> <deb20fbe3584a8c6bfda276447fe464c6553737d.1780676742.git.tarunsahu@google.com>
+ <CAEvNRgE2GZNiDg_g6SP_H9CDsDDAnpN7KTRWJEK18wxpTZFJZw@mail.gmail.com>
+Message-ID: <9huzldc5m3yv.fsf@tarunix.c.googlers.com>
+Subject: Re: [RFC PATCH v2 10/10] selftests: kvm: Add guest_memfd_preservation_test
+From: tarunsahu@google.com
+To: Ackerley Tng <ackerleytng@google.com>, Jonathan Corbet <corbet@lwn.net>, vannapurve@google.com, 
+	fvdl@google.com, Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, sagis@google.com, aneesh.kumar@kernel.org, 
+	skhawaja@google.com, vipinsh@google.com, Pratyush Yadav <pratyush@kernel.org>, 
+	david@redhat.com, dmatlack@google.com, mark.rutland@arm.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
+	seanjc@google.com, axelrasmussen@google.com
+Cc: linux-kselftest@vger.kernel.org, kexec@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
-Avinash Duduskar <avinash.duduskar@gmail.com> writes:
+Ackerley Tng <ackerleytng@google.com> writes:
 
-> Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> writes:
+> Tarun Sahu <tarunsahu@google.com> writes:
 >
->> I think it's better to just move the assignment of params->ifindex
->> entirely into bpf_fib_set_fwd_params(), instead of this restore dance.
->> That way this can be simplified to:
+>> Add a new KVM selftest `guest_memfd_preservation_test` to verify that
+>> guest memory backed by guest_memfd is preserved properly.
 >>
->> 	err =3D bpf_fib_set_fwd_params(dev, params, flags, mtu);
->> 	if (!err && fwd_dev)
->> 		*fwd_dev =3D dev;
->> 	return err;
 >
-> The caller-side restore is ungainly, agreed, but the assignment can't move
-> all the way into the helper. The early params->ifindex =3D dev->ifindex
-> sits above the neighbour lookup on purpose: that is d1c362e1dd68a
-> ("bpf: Always return target ifindex in bpf_fib_lookup"), which took it
-> out of bpf_fib_set_fwd_params() and put it there so a program still
-> gets the target ifindex on the BPF_FIB_LKUP_RET_NO_NEIGH path and can
-> bpf_redirect_neigh() on it. bpf_fib_set_fwd_params() is called only at
-> the set_fwd_params label, below the NO_NEIGH return (and below the IPv6
-> NO_SRC_ADDR return), so an assignment living in the helper never runs
-> on those paths and params->ifindex falls back to the input. That would
-> change the reported ifindex for plain bpf_fib_lookup() callers hitting
-> NO_NEIGH, not only the VLAN ones.
-
-Right. Well, seems I forgot about that patch, even though I seem to have
-written it :)
-
-> I can still get the caller down to your form by keeping the early write
-> and moving just the VLAN_FAILURE rewind into the helper, with one extra
-> parameter, the input ifindex saved before the egress write:
+> Don't think using backticks in commit messages is a common practice but
+> I might be wrong here.
 >
-> 	err =3D bpf_fib_set_fwd_params(dev, params, flags, mtu, in_ifindex);
-> 	if (!err && fwd_dev)
-> 		*fwd_dev =3D dev;
-> 	return err;
+>> The test leverages the Live Update Orchestrator (LUO) infrastructure
+>> to validate that memory folios and configuration layouts are
+>> successfully saved and then restored during kernel live updates,
+>> preventing any memory loss for the guest.
+>>
+>> Here, I have used the kvm selftests framework by creating a new
+>> vm and mapping two memory slots to it. One is the code that is executed
+>> inside the vm and other is the guest_memfd whose memory is being
+>> written by the guest code.
+>>
 >
-> and the helper owning the rewind in the unreducible branch:
+> Don't think commit messages with "I" are common either
+
+
+Will take care of commit message everywhere as per the guidelines,
+Sorry about that.
 >
-> 	} else {
-> 		params->ifindex =3D in_ifindex;
-> 		return BPF_FIB_LKUP_RET_VLAN_FAILURE;
-> 	}
+>> In Phase 1: Once data is written the vm exits and wait for the user
+>> to trigger the kexec.
+>>
+>> In Phase 2: A new vm is created with retrieved kvm and again two
+>> memory slots are assigned. Once for guest code, and another is for
+>> retrieved guest_memfd where guest_memfd memory is verified by the
+>> executed guest code. If verification succeeds, The test passes.
+>>
+>>
+>> [...snip...]
+>>
+>> +#define SESSION_NAME "gmem_vm_preservation_session"
+>> +#define VM_TOKEN 0x1001
+>> +#define GMEM_TOKEN 0x1002
+>> +
+>> +#define GMEM_SIZE (16ULL * 1024 * 1024)
+>> +#define DATA_SIZE (5ULL * 1024 * 1024)
+>> +
+>> +static size_t page_size;
+>> +
+>> +/* Deterministic byte pattern generation based on offset */
+>> +static inline uint8_t get_pattern_byte(size_t offset)
+>> +{
+>> +	return (uint8_t)(offset ^ 0x5A);
+>> +}
+>> +
+>> +static void guest_code_phase1(uint64_t gpa, uint64_t size, uint64_t data_size)
+>> +{
+>> +	uint8_t *mem = (uint8_t *)gpa;
+>> +	size_t i;
+>> +
+>> +	for (i = 0; i < data_size; i++)
+>> +		mem[i] = get_pattern_byte(i);
+>> +
+>> +	GUEST_DONE();
+>> +}
+>> +
+>> +static void guest_code_phase2(uint64_t gpa, uint64_t size, uint64_t data_size)
+>> +{
+>> +	uint8_t *mem = (uint8_t *)gpa;
+>> +	size_t i;
+>> +
+>> +	for (i = 0; i < data_size; i++) {
+>> +		uint8_t val = get_pattern_byte(i);
+>> +
+>> +		__GUEST_ASSERT(mem[i] == val,
+>> +			       "Data mismatch at offset %lu! Expected 0x%x, got 0x%x",
+>> +			       i, val, mem[i]);
+>> +	}
+>> +
+>> +	GUEST_DONE();
+>> +}
+>> +
+>> +static void do_phase1(void)
+>> +{
+>> +	uint64_t flags = GUEST_MEMFD_FLAG_MMAP | GUEST_MEMFD_FLAG_INIT_SHARED;
+>
+> Is there a reason to set GUEST_MEMFD_FLAG_MMAP? We're not really
+> accessing that memory from the host in this test.
 
-OK, if we do need to restore it, I think it's better to do it there.
+Right, We can skip it.
 
-Also, wrt the fwd_dev parameter: Do we really have a use case from using
-this from TC? In TC you can just redirect to the VLAN device; this is
-meant for XDP which can't do that. So how about we just reject the flag
-on the TC side, and get rid of the fwd_dev parameter entirely?
+>
+>> +	int gmem_fd, dev_luo_fd, session_fd, ret;
+>> +	const uint64_t gpa = SZ_4G;
+>> +	struct kvm_vcpu *vcpu;
+>> +	const int slot = 1;
+>> +	struct kvm_vm *vm;
+>> +
+>> +	vm = __vm_create_shape_with_one_vcpu(VM_SHAPE_DEFAULT, &vcpu, 1,
+>> +					guest_code_phase1);
+>> +	gmem_fd = vm_create_guest_memfd(vm, GMEM_SIZE, flags);
+>> +	vm_set_user_memory_region2(vm, slot, KVM_MEM_GUEST_MEMFD, gpa, GMEM_SIZE, NULL,
+>> +				 gmem_fd, 0);
+>> +
+>> +	for (size_t i = 0; i < GMEM_SIZE; i += page_size)
+>> +		virt_pg_map(vm, gpa + i, gpa + i);
+>> +
+>> +	vcpu_args_set(vcpu, 3, gpa, GMEM_SIZE, DATA_SIZE);
+>
+> If GMEM_SIZE and DATA_SIZE are static I think we don't have to set those
+> as vcpu_args_set(), they can be used as macros from within the guest.
 
-If we do that we're back to just a plain 'return bpf_fib_set_fwd_params()' =
-:)
+Yes, There are multiple places we can skip it, Like passing them as the
+argument in the guest_code_phase1/2. Will update it.
 
--Toke
+>
+>> +
+>> +	vcpu_run(vcpu);
+>> +	TEST_ASSERT_EQ(get_ucall(vcpu, NULL), UCALL_DONE);
+>> +
+>> +	dev_luo_fd = luo_open_device();
+>> +	TEST_ASSERT(dev_luo_fd >= 0, "Failed to open /dev/liveupdate");
+>> +
+>> +	session_fd = luo_create_session(dev_luo_fd, SESSION_NAME);
+>> +	TEST_ASSERT(session_fd >= 0, "Failed to create LUO session");
+>> +
+>> +	ret = luo_session_preserve_fd(session_fd, vm->fd, VM_TOKEN);
+>> +	TEST_ASSERT(ret == 0, "Failed to preserve VM file descriptor");
+>> +
+>> +	ret = luo_session_preserve_fd(session_fd, gmem_fd, GMEM_TOKEN);
+>> +	TEST_ASSERT(ret == 0, "Failed to preserve guest_memfd file descriptor");
+>> +
+>
+> Thanks for showing how this works :)
 
+Glad to know. it helped.
+. .
+ v
+
+
+>
+>> +	printf("\n============================================================\n");
+>> +	printf("Phase 1 Complete Successfully!\n");
+>> +	printf("VM file and guest_memfd file have been preserved via LUO.\n");
+>> +	printf("Tokens: VM_TOKEN=0x%x, GMEM_TOKEN=0x%x\n", VM_TOKEN, GMEM_TOKEN);
+>> +	printf("Machine Size: %llu MB, Data Size: %llu MB\n", GMEM_SIZE / SZ_1M,
+>> +				 DATA_SIZE / SZ_1M);
+>> +	printf("------------------------------------------------------------\n");
+>> +
+>> +	daemonize_and_wait();
+>> +}
+>> +
+>> +static struct kvm_vm *vm_create_from_fd(int resurrected_vm_fd,
+>> +					struct vm_shape shape)
+>> +{
+>> +	struct kvm_vm *vm;
+>> +
+>> +	vm = calloc(1, sizeof(*vm));
+>> +	TEST_ASSERT(vm != NULL, "Insufficient Memory");
+>> +
+>> +	vm_init_fields(vm, shape);
+>
+> What would happen if the shape was changed between preserving and
+> restoring?
+Shape must be consistent across kexec. It may break. struct vm_shape
+includes two fields
+1. mode: 4k, 16k or 64k mapping, how many page table bit etc.
+         which are used to setup mapping with guest code, and memory.
+         guest_memfd does not support mapping other than PAGE_SIZE.
+2. type: This is userspace side of the vm type. And it will not have
+         information about the preserved vm_type via vm_file (kernel).
+         If userspace changes this on stage2, some action might not
+         work. for example, if userspace is expecting vm_type to be
+         COCO VM and preserved vm_type is shared, this will have
+         conflict when userspace will try to perform some operation that
+         only works with COCO VM.
+
+
+My Question is: Why should someone change the shape, unless they are
+                planning to make the vm fail?
+
+>
+>> +
+>> +	vm->kvm_fd = open_path_or_exit(KVM_DEV_PATH, O_RDWR);
+>> +	vm->fd = resurrected_vm_fd;
+>> +
+>> +	if (kvm_has_cap(KVM_CAP_BINARY_STATS_FD))
+>> +		vm->stats.fd = vm_get_stats_fd(vm);
+>> +	else
+>> +		vm->stats.fd = -1;
+>> +
+>> +	vm_init_memory_properties(vm);
+>> +
+>> +	return vm;
+>> +}
+>> +
+>
+> I think vm_create_from_fd() could be introduced in an earlier patch to
+> reduce the amount of new code in this patch. Also, I think it could
+> perhaps be moved to kvm_util.c assuming that other test will use it too.
+>
+Makes sense, Will take of it next revision v4.
+
+
+>> +static void do_phase2(void)
+>> +{
+>> +	int retrieved_vm_fd, retrieved_gmem_fd, dev_luo_fd, session_fd;
+>> +	struct vm_shape shape = VM_SHAPE_DEFAULT;
+>> +	const uint64_t gpa = SZ_4G;
+>> +	struct kvm_vcpu *vcpu;
+>> +	const int slot = 1;
+>> +	struct kvm_vm *vm;
+>> +
+>> +	dev_luo_fd = luo_open_device();
+>> +	TEST_ASSERT(dev_luo_fd >= 0, "Failed to open /dev/liveupdate");
+>> +
+>> +	session_fd = luo_retrieve_session(dev_luo_fd, SESSION_NAME);
+>> +	TEST_ASSERT(session_fd >= 0, "Failed to retrieve LUO session");
+>> +
+>> +	retrieved_vm_fd = luo_session_retrieve_fd(session_fd, VM_TOKEN);
+>> +	TEST_ASSERT(retrieved_vm_fd >= 0, "Failed to retrieve VM file descriptor");
+>> +
+>> +	retrieved_gmem_fd = luo_session_retrieve_fd(session_fd, GMEM_TOKEN);
+>> +	TEST_ASSERT(retrieved_gmem_fd >= 0, "Failed to retrieve guest_memfd file descriptor");
+>> +
+>> +	vm = vm_create_from_fd(retrieved_vm_fd, shape);
+>> +
+>> +	u64 nr_pages = 2048; /* 8MB is plenty for slot0 pages */
+>> +
+>
+> I don't think declarations are usually mixed with regular code.
+Okay, will udpate that.
+
+>
+>> +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, 0);
+>> +	kvm_vm_elf_load(vm, program_invocation_name);
+>> +
+>> +	for (int i = 0; i < NR_MEM_REGIONS; i++)
+>> +		vm->memslots[i] = 0;
+>> +
+>> +	struct userspace_mem_region *slot0 = memslot2region(vm, 0);
+>> +
+>> +	ucall_init(vm, slot0->region.guest_phys_addr + slot0->region.memory_size);
+>> +
+>> +	vm_set_user_memory_region2(vm, slot, KVM_MEM_GUEST_MEMFD, gpa, GMEM_SIZE, NULL,
+>> +				   retrieved_gmem_fd, 0);
+>> +
+>> +	for (size_t i = 0; i < GMEM_SIZE; i += page_size)
+>> +		virt_pg_map(vm, gpa + i, gpa + i);
+>> +
+>> +	vcpu = vm_vcpu_add(vm, 0, guest_code_phase2);
+>> +	kvm_arch_vm_finalize_vcpus(vm);
+>> +
+>> +	vcpu_args_set(vcpu, 3, gpa, GMEM_SIZE, DATA_SIZE);
+>> +
+>> +	printf("Resuming / Running VM in Phase 2...\n");
+>> +	vcpu_run(vcpu);
+>> +	TEST_ASSERT_EQ(get_ucall(vcpu, NULL), UCALL_DONE);
+>> +
+>> +	printf("\nSUCCESS: Phase 2 Complete! All 5MB complex data verified intact!\n");
+>> +
+>> +	luo_session_finish(session_fd);
+>> +	close(session_fd);
+>> +	close(dev_luo_fd);
+>> +	/* This will also close the vm_fd */
+>> +	kvm_vm_free(vm);
+>> +	close(retrieved_gmem_fd);
+>> +}
+>> +
+>> +int main(int argc, char *argv[])
+>> +{
+>> +	bool phase2 = false;
+>> +
+>> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_GUEST_MEMFD));
+>> +	page_size = getpagesize();
+>> +
+>> +	for (int i = 1; i < argc; i++) {
+>> +		if (strcmp(argv[i], "--phase2") == 0)
+>> +			phase2 = true;
+>> +	}
+>> +
+>
+> Maybe use getopt() here?
+
+In V3, it is update to use liveupdate library.
+>
+>> +	if (phase2)
+>> +		do_phase2();
+>> +	else
+>> +		do_phase1();
+>> +
+>> +	return 0;
+>> +}
+>> --
+>> 2.54.0.1032.g2f8565e1d1-goog
+>
+> I think we also need tests for trying to allocate while frozen, and
+> conversion while frozen, and trying to preserve while preservation is
+> not allowed.
+
+Yes, We need those tests. For this series, I wanted to focus on design.
+Now that we are aligned, next revision, I will send with more tests.
+
+~Tarun
