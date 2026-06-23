@@ -1,181 +1,153 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDDB363C6C
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 02:52:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021A336B076;
+	Tue, 23 Jun 2026 02:52:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782183121; cv=none; b=Xf55heFNTQzx8OzZZq1T8o34i0SO3a7+75SFQCHNOKHyNgI/iz5MJjEWxMmWvnQ1WHBEty4LnheYtajny+g16dbGZrLZ7qYWsRGzn6kqQu9p0fjj+xS6KeF8BPSeXrrs2NYvEkvy0zupsqWrQuQ/D5hDSE3vUAwSGK5VSL0Gfys=
+	t=1782183122; cv=none; b=m49EoHILnL38HrXdDxgZp8jLmKX10LYpyThrmmjyJkD6XB90scbJvJdhkPjbeMJ0UnQHDT6TTjfhCEwyrTi57NXlfY15eTIkVFOjuW2600w6rN0SAM0NFQzeVl760z1b1JQtoV7+oUyZRRMiimnRS69IF2OTmwkbddcd/FBpG3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782183121; c=relaxed/simple;
-	bh=p+nffAW408DMeJGJh50kWk8zhQg2b3tHyUIep+5bpYk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WEBt8KVMugA0OB7ELHTjsagxg9+pdVPYi9QEvNbDte8/t+ohD9+dF+u6484sG0pLo9oyxogJjToYjv+kw79af6s+q44Z2eyXxamPBgBHNHIuhiMS6YmCl9EBVG/aunUU3Gx0pK6K384kR1rriAFRixcwLBVyDynZmvRNeYLLy9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O/DR/nIg; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782183122; c=relaxed/simple;
+	bh=fjVDDQxNLoarUNyLHXojlIytkjIfDGYDPBQea8XedRo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RkzLznCy/ZmFOJanuxoflGDAECZ80X49J0ROzA2ZgMOGuwT53PIZNakua6eszTTTNOcxZv5NBs249unRKOBF38JCq61AjYVkrD1oM8bynePue31s4EzK4Hk5qyeVciqOCOmkGuSIEIaV3TP7xUDQQu8OJ105sobIINTk9YE8Mvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gHQ7fW2z; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O/DR/nIg"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c891d27b10eso3364178a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 19:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782183119; x=1782787919; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KV2chNMnw+kmRFfisbGqimiQM5mDTuIEZMht/aRpHIc=;
-        b=O/DR/nIgi7j9J6O+k0kOUIYS6iTDPzoPM0oac4ANwIJvAhSBE8MDbijgo4KrNuGkl3
-         YZ9njHxQ2FjFEJxWkMT29p3GPI1RCFDW8IcuEyf2TyhyAX09h3+DNRRiVEwUQ6/5CqO4
-         5r5z4QXcEdRedSfd05g2Y1F2MgUnCsTsBmYPfOENKvIrBgbzUOiXY9VhDqqMvuYuCQrQ
-         t0gi48TCtJAUSiEjHZh3mAZMbiqiSEUO/PKKDE+cfYDWvWopfYM3PFOQTxffD8udCDiG
-         OWQ/xVRktN+AqltlgENRhIn8UqCYTq9MJi9R/nSsuCQiqtLgR7MiKUibALg9xii1KwQ2
-         B01Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782183119; x=1782787919;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KV2chNMnw+kmRFfisbGqimiQM5mDTuIEZMht/aRpHIc=;
-        b=Qg1923LoC27Y5nJntJ2p/sB+rxWs7P1ekwRMa97LF5LELxim3a/rBgT5X/RvBlnJxh
-         chPjTuiJ9nEGcHkY9fjl9vsECCOWDcGG7/4zWYmlhubXHwLOihOUp/l+1bAdGsP26sva
-         9vptgi+xNfGaZ+Cjg7An4pH/82mlZo3ergsSFbA4MlZomzj2Oq19qWX2KFCk9PgrKm7G
-         wmqZmg6cL49hU9QlXO7VgdRP1hQgkvl0hDWwnSaUUU1nQZgsioB1NKJIMZeSSQHFabc2
-         AZmfA8sfTFOm2rfVV81konU1LlAqfBujZ+a8v9tBp8buxSeAfL89XAqivp0zvOZYN1XY
-         RDQQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqEegX2GpSC+EPAI9K3KWbMDtcCm0cdlLmT26fwvH2a0A46cvrxIlTQMF8uWz0Zr5oZ88jwVKTG0tABqDc8Q7w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy669AUwqSqKiDi9Fk4HZmgZOf7M6RlsyrQq8xO2VYahG+JT57u
-	8o8gRR1oa3GbuiKGMBRC00WgxM9iwl/S4FkqPbG4W9KEPSkujvAnM7B+
-X-Gm-Gg: AfdE7ckanuwGw3Ul9EpUkm8oeFnWfA9GvLTuBcOP30Thjlu7r8uxZUrLKvlWYJt4i7o
-	ZTM0btkJN/mYNcS5pplk/kqkNRRSnkbHl2Y84K7bO1Nc+ivGUQgdrKlHtlvRNYlIS5yeuwUwZo0
-	JzgdEol11xlJYDW/h6qhHr75IZ6Bwog1QbYNFIrraI4uEBCKxQDf8szDq0J4QdlC6sKM2uLeQX6
-	d2M68ajaKnSGQBoqQWaDmBSDOf0hTBf45TZ5Of3D3fGx1bRzaqRxcJGdtgGkbVtZi088yLj/Tup
-	o6rZJMrW8WLIA8Dl4OqB1t8pyselvPEWkCtucCgxn+1YKIlWC7Ae/PVQj//cQBc3ahoC1VBOspd
-	GoC7+9lX/gxaCq62cOvwZxBbTEn/B6/gDtXr4jtWgyLTWTi8DRjZwpy1lz2gbKVJh6nOed+rll3
-	ud4/KUtd5OL7if72pFnucPLhY0dySEi5mPR5q+GFmEWB9KRE6pDBXFWHHRlPDq
-X-Received: by 2002:a17:902:e5c7:b0:2bf:379b:53d2 with SMTP id d9443c01a7336-2c7c995af52mr4223915ad.15.1782183119337;
-        Mon, 22 Jun 2026 19:51:59 -0700 (PDT)
-Received: from r912.tailbb6e1e.ts.net ([182.70.116.80])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7439f8e51sm102704625ad.39.2026.06.22.19.51.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 19:51:58 -0700 (PDT)
-From: Avinash Duduskar <avinash.duduskar@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org
-Cc: eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	hawk@kernel.org,
-	yatsenko@meta.com,
-	leon.hwang@linux.dev,
-	kpsingh@kernel.org,
-	a.s.protopopov@gmail.com,
-	ameryhung@gmail.com,
-	rongtao@cestc.cn,
-	eyal.birger@gmail.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	toke@redhat.com,
-	dsahern@kernel.org
-Subject: [PATCH bpf-next v4 0/3] bpf: bidirectional VLAN support for bpf_fib_lookup()
-Date: Tue, 23 Jun 2026 08:21:44 +0530
-Message-ID: <20260623025147.1001664-1-avinash.duduskar@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gHQ7fW2z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782183121; x=1813719121;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fjVDDQxNLoarUNyLHXojlIytkjIfDGYDPBQea8XedRo=;
+  b=gHQ7fW2zmjieCgAX6DEQzG0VlLoSm8ph9ymp56ju59azb2TR04jhxQ4O
+   cVIF0qrtkpmorm894yv9N/ZQQIMizWfbojTG5ENrORLLzjh40kdNyasz3
+   uQi9+E1QhbzCfpDZuzMQ9pJm2ii8SfmE60MlSMavCd2s8xp/36YnX8JUC
+   Z/SfXhe4cTEpSahToYLfCRj0WTkuK4IkXwrqeNV92nxjbVjyW6T7OmEQ/
+   i1Y7sIvPxxsDkaK4S8PWnoz4BBgRPZrOVcRwyDRMW7k38Nm489nBTsFSh
+   DotZ2WoRw+WzHIdVglVVa6vaxLAO8pcOnDWFGuhlkcPWEnlycyP1Zupxh
+   Q==;
+X-CSE-ConnectionGUID: GYqSyXu3SB2IDsBUEIMfRw==
+X-CSE-MsgGUID: r3touAfoRYOjht3jh/qiAQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="83010782"
+X-IronPort-AV: E=Sophos;i="6.24,219,1774335600"; 
+   d="scan'208";a="83010782"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 19:52:01 -0700
+X-CSE-ConnectionGUID: DX/WscZvQoiIRwAKC5Kyvg==
+X-CSE-MsgGUID: axAQd5q8QI2J7SjgRPnb8Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,219,1774335600"; 
+   d="scan'208";a="254374133"
+Received: from unknown (HELO [10.238.2.81]) ([10.238.2.81])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 19:51:47 -0700
+Message-ID: <a21bfc05-787e-4cd8-89af-8579357e6a12@linux.intel.com>
+Date: Tue, 23 Jun 2026 10:51:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 04/46] KVM: Decouple kvm_has_arch_private_mem from
+ CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+To: ackerleytng@google.com
+Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
+ chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
+ jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
+ pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
+ rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
+ tabba@google.com, willy@infradead.org, wyihan@google.com,
+ yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
+ suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>,
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-4-9d2959357853@google.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20260618-gmem-inplace-conversion-v8-4-9d2959357853@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-This series adds VLAN awareness to bpf_fib_lookup() in both directions.
-BPF_FIB_LOOKUP_VLAN resolves a VLAN egress to its underlying real device
-plus the VLAN tag (XDP programs need this because VLAN devices have no XDP
-xmit), and BPF_FIB_LOOKUP_VLAN_INPUT runs the lookup as if a tagged frame
-had arrived on the matching VLAN subinterface, for iif policy routing and
-VRF table selection.
+On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
+> From: Sean Christopherson <seanjc@google.com>
+> 
+> When memory attributes become trackable in guest_memfd, the concept of
+> having private memory is no longer dependent on
+> CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
+> 
+> With this, on x86, kvm_arch_has_private_mem() is defined if some CoCo
+> platform support (or the testing CONFIG_KVM_SW_PROTECTED_VM) is compiled
+> in.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 
-The independent l3mdev/VRF flow-init fix, patch 1 in v1 and v2, was split
-out and merged to bpf separately.
+Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
 
-v4 changes what bpf_fib_lookup() returns in one case. v3 left a VLAN
-egress that cannot be reduced to a physical device plus one tag (a QinQ
-egress, or a parent in another namespace) as best-effort SUCCESS with
-the VLAN device's ifindex. In his v3 review Toke asked for a distinct
-error code there instead, so an XDP program cannot mistake an unresolved
-VLAN egress for a physical one, and suggested the name
-BPF_FIB_LKUP_RET_VLAN_FAILURE; v4 implements that. The
-code is appended after BPF_FIB_LKUP_RET_NO_SRC_ADDR (nothing renumbered,
-tools/ mirror updated) and is returned only when BPF_FIB_LOOKUP_VLAN is
-set, so no existing caller can observe it. On that failure params->ifindex
-is left at the input, like the input-side failures; a tc or XDP program
-that wants the VLAN device's own ifindex re-issues the lookup without the
-flag, the recovery path he described.
+One nit below.
 
-The reason for a distinct code rather than best-effort SUCCESS: SUCCESS
-on an unreducible egress silently blackholed XDP. A redirect to the VLAN
-device drops at xdp_do_flush() with no in-band signal to the program;
-VLAN_FAILURE makes the unreducible case explicit, and a live-frames
-selftest exercises both the redirected and the passed paths. Only the
-immediate parent is resolved, so QinQ and foreign-netns are the
-unreducible cases; bond, team, TBID and VRF egress resolve, as the
-selftest table pins.
+> ---
+>  arch/x86/include/asm/kvm_host.h | 4 +++-
+>  include/linux/kvm_host.h        | 2 +-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 8e8eb8a5e8a6b..1bde67cf6eb0e 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -2394,7 +2394,9 @@ void kvm_configure_mmu(bool enable_tdp, int tdp_forced_root_level,
+>  		       int tdp_max_root_level, int tdp_huge_page_level);
+>  
+>  
+> -#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+> +#if defined(CONFIG_KVM_SW_PROTECTED_VM) ||	\
+> +	defined(CONFIG_KVM_INTEL_TDX) ||	\
+> +	defined(CONFIG_KVM_AMD_SEV)
 
-Changes v3 -> v4:
-
-- Patch 1: return BPF_FIB_LKUP_RET_VLAN_FAILURE for an unreducible VLAN
-  egress, leaving params->ifindex at the input.
-
-- Patch 3: the QinQ-egress and cross-namespace-egress arms expect
-  VLAN_FAILURE; an escape-hatch arm re-issues without the flag for the
-  inner VLAN device's ifindex; and test_fib_lookup_vlan_redirect drives
-  live frames (BPF_F_TEST_XDP_LIVE_FRAMES) through the native redirect
-  path, asserting a reducible egress is delivered and a QinQ egress is
-  passed to the stack. The selftest's VLAN_FAILURE arms are IPv4 only,
-  since bpf_ipv6_fib_lookup() restores params->ifindex with the same code
-  as the IPv4 path that the arms exercise.
-
-The three other v3 questions Toke marked fine as-is, and v4 keeps them: an
-unmatched, down, or cross-namespace tag on input returns NOT_FWDED;
-OUTPUT | VLAN_INPUT is rejected with -EINVAL; the BPF_FIB_LOOKUP_VLAN_INPUT
-name is kept.
-
-Taking the tag as lookup input follows the approach David Ahern suggested
-in the 2021 fwmark discussion:
-https://lore.kernel.org/bpf/6248c547-ad64-04d6-fcec-374893cc1ef2@gmail.com/
-
-v3: https://lore.kernel.org/all/20260617224729.1428662-1-avinash.duduskar@gmail.com/
-v2: https://lore.kernel.org/all/20260616223426.3568080-1-avinash.duduskar@gmail.com/
-v1: https://lore.kernel.org/all/20260609172052.81613-1-avinash.duduskar@gmail.com/
-
-Avinash Duduskar (3):
-  bpf: Add BPF_FIB_LOOKUP_VLAN flag to bpf_fib_lookup() helper
-  bpf: Add BPF_FIB_LOOKUP_VLAN_INPUT flag to bpf_fib_lookup() helper
-  selftests/bpf: Add bpf_fib_lookup() VLAN flag tests
-
- include/uapi/linux/bpf.h                      |  47 +-
- net/core/filter.c                             | 133 +++-
- tools/include/uapi/linux/bpf.h                |  47 +-
- .../selftests/bpf/prog_tests/fib_lookup.c     | 696 +++++++++++++++++-
- .../testing/selftests/bpf/progs/fib_lookup.c  |  36 +
- 5 files changed, 930 insertions(+), 29 deletions(-)
+Nit:
+Vertically align the defined(XXX) statements for better readability?
 
 
-base-commit: a975094bf98ca97be9146f9d3b5681a6f9cf5ce3
--- 
-2.54.0
+>  #define kvm_arch_has_private_mem(kvm) ((kvm)->arch.has_private_mem)
+>  #endif
+>  
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 201d0f2143976..d370e834d619e 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -722,7 +722,7 @@ static inline int kvm_arch_vcpu_memslots_id(struct kvm_vcpu *vcpu)
+>  }
+>  #endif
+>  
+> -#ifndef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+> +#ifndef kvm_arch_has_private_mem
+>  static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
+>  {
+>  	return false;
+> 
 
