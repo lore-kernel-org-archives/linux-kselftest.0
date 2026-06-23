@@ -1,98 +1,124 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECC937C925
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 14:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782223419; cv=none; b=rCkuQcYwY1/keoMQo/jyDUG3WtaGdqpaPDe8AcZ9d8NhAmWm8WIsckC2Ejy7AiBRasamwxIyojXXN4JihmUVfVf6GkRuDD9FydnI1yQU9yxplP6e92hUIjyKH5L+n8GaV8p0DmARY5LO8nyEnChOz0O6CiHT6pvzh4LStgOVNc4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782223419; c=relaxed/simple;
-	bh=Hn8y55bhgcCgZF0i9rw2W2DfMko1tyW8cgX8/rRvBP8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=QMFBkRzN0b3NlifkmRJFmS07gDSycHbXW98fC+ukyuP702ldrzVRe7inpNV0e5bOxULPKEB8HSzi9lFEeGCPPideuk5KnRU49ur0txLRvDvNrqoBTUbdFeQuRE/wlEfsO4rime7W6ZHz0bSqql0GQzz0rzmGh8EnOWF+htc5erg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=khAeAjMC; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B743803D7
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 14:07:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782223670; cv=pass; b=h8AnIDyEx05Wifogvsy2eqb570OnXV1SJwxL6bY+NvjB6AqAku/PQhTphAmc1Xf+jmGwRk7JCzQKRgteyOWFBOfwsSAsYvMuS0QmQEFAoKXlAb2YYkXWjFrfPM6CWZGuMwHqwRwNdXr+rX36NPvdSk/hqGvjtrFuryqAmyxgrO0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782223670; c=relaxed/simple;
+	bh=G67U1RwSbF+mPt7N0lSoGZbUv0SpaaN+gXs+8BGSMz4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f7f6sNBpTWpg8Gvux1s5qeaPYeF3KIxHBifC6pRl6dZsQboxE0UzoTWujmZx2/RXCVtt3fqkuEnSGAiFaePAbHz3ONtKklohnvC8Rsexor1dLK7gp+qAq9UQGz9qM2WLAWJiiEqNQzLwu5YWXukqmIy/E94txjwl5jJ1GGwWzOo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G9LNQ4iK; arc=pass smtp.client-ip=209.85.210.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="khAeAjMC"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4924e099a17so13500805e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 07:03:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G9LNQ4iK"
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7e93cd4e64bso2992556a34.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 07:07:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782223669; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kKnF/NAlFRT+tvRR39WI7QqNKsp3mprEjawk352I3Mkl0KS4/NDh5toQP9dTP8vIhO
+         XqOEZm2c2gR+j85/g5c7lcKhQ/B+FZuzgNOjThXQa/PIp4d27D6nKUR1Efyi/Xg06F/H
+         K8+OkH9LBfRcHbdvSYCyH0ehmMSPi5HK2s7kwtZ1Vk8WwMHrNdTiL+v2Vw6JvZorTj69
+         afOKzl7T9fUWNa8Oz6xRdVy9gt5luwoeLZ1duK33T59/YS+3OkPtf3NwIH+psPHMFMGF
+         T2kYkxlxuN15aQ9Zo9o1r5dOVqFP2SfhAhV4dbRf+AmZLILxKgN6S3KwD+aLelSEG6DH
+         +sow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=G67U1RwSbF+mPt7N0lSoGZbUv0SpaaN+gXs+8BGSMz4=;
+        fh=WeP+c8ybtf6lsnrSI56zTKZKeu9JoxMbrLt5HYu3QbI=;
+        b=Fuu1vrFk5tZRRJGTp50wY5XmHYle6rPBmvE22a6xkyeWixW5+pOAI/PtrN5HJ58gfr
+         Jq8RgVsx6GL4i8pEVXy2806uLY4+IdiGrifceOC7JvSmJZvmsGwpJzadsvDUetLWyVnw
+         f0K9XiqFH9oR6jaFUFiO/iGXFTMbbrs5fRWvHwCgvzjLT0Gyv2TKTqEeQSnCsee3kHY4
+         Q8aeGOL4VZwx/BCbA0kaN3wNfEX+7QKGxwCmbqIx4YF1oAI05t2U8WLm+T5XOzOssQGe
+         ePzaSrfSct0/st71+q0WvqSOZT2hFNKdL0SpOrHkfAM23Fs3Av9Ge1meoxcvESEjVV1j
+         jg/g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782223416; x=1782828216; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pndzfg2mCWavHm/LZE4HxmOjSPKqkdyz2Mxcm9023NE=;
-        b=khAeAjMCX7kDLlXd7jnEOh2TB3kS1E+KsM2jtelv6ms8Y/gsEPGuvIeIG/gkrqHhWj
-         T671/NDTZMCMbLsC+/FdhFMXZgDdqwIASbPBAEMGb+46hKAaGnY/3kQHVDm1wtJ+YfM1
-         l7xk7XzWlxXzoufUROr5Olo1lmdhoJl0cy9O6yAjXPIWYIjXAUodM0SBDE4yki52HrHD
-         eG/3u5NI+vQu4kpt9wFNoJKYdfddAIrMrE03ZhRdCmwepZAY6j1ghF7SIAc3xr4vElDX
-         v6UPDI9vIiWFCt79H++LV9lK65e+6dQQh+Lb/QP4wPGSXvivDroOmmg9SMzWhO5TV+QQ
-         wAuw==
+        d=gmail.com; s=20251104; t=1782223669; x=1782828469; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G67U1RwSbF+mPt7N0lSoGZbUv0SpaaN+gXs+8BGSMz4=;
+        b=G9LNQ4iKOngGapFwTTcCg9vD1z8ruMZzeCYxO9kVKERYXNM9gOTaQhZtCEkgT7fEYO
+         vmT2sUd50U1PPmG8aBEHBx1wndUsF7JZsK9aU7Ja6NXauG6doLgs/iDShHO3+w+/s2+S
+         v5GMLmXDv+/B1x4cBOwkaqrm5qNiaKA0n82JCVUDcz7ZgBpnm0PTgsuJtRTOHnu96vOH
+         PyBMtqBQHq6mPVOoPORzr8+Bjq1bEI1eK8A8wHT+9QDwYkPlgzdlT+wT5cJwdGcpDVAM
+         XBY+lL4oDt/gs+8EfnbSaPI3KqTvTUU1a07yKkmu1smGE4KnNjfD6YqczZ6qQ7iPhiGF
+         smxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782223416; x=1782828216;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pndzfg2mCWavHm/LZE4HxmOjSPKqkdyz2Mxcm9023NE=;
-        b=Ghc8KZE+pDHVkLEMOADXfimEhDlO5Fjplgam56IDJDD5iqjTC8oXZzCV5J/k7VkqVo
-         NYbptHXRs96308ftGAoPRt9jqX/9XpH8LX0s6LYK9knG6/upC6GXRz7UtIYBabnE7mzN
-         OpRFJt5rRaY4b07yS4hfmC7MrYNTrflDintRLQ/MfzER3FPTiHuyvf1O8/NDQ/7j6A4K
-         ol44L3w5xWj35SbGAg+gLYr8/LDJq8/EfayjqTmxms3GpZET20xh25F2xd3wmwbkKUEQ
-         oT3XlkMiBCm8k8XoFPQCEmt+kjWRWU/kvhkzE+go571ljhAHpvYNNAUug3zosNeS27j+
-         /PvQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/5W4uVtZ9LEISsm6dggloDNO+CUYhAGkLTStcCM3ThxsWExNx+AJU4CJ8Ku0tTVmZ3TROlVMvGR4LdNfJbYrc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHEtcvER4eE9zTh6gZRDlSJjkumlfnLaf2jqm2cK07h9ta7AAG
-	Iaft/yyJxW7u+G4TuwIcTOfzBqtGvj2bmwRTd86KCq6dOjuTgju58w2oAMxTTafTTxSLDoyC79W
-	AKk7VnGnWLXO9ptJk/A==
-X-Received: from wmo12.prod.google.com ([2002:a05:600c:230c:b0:492:346d:8d96])
- (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:3f0f:b0:492:3214:cbe6 with SMTP id 5b1f17b1804b1-49240e7f6f2mr330026535e9.23.1782223415994;
- Tue, 23 Jun 2026 07:03:35 -0700 (PDT)
-Date: Tue, 23 Jun 2026 14:03:35 +0000
-In-Reply-To: <ajnOnzdknfwbuJ9g@google.com>
+        d=1e100.net; s=20251104; t=1782223669; x=1782828469;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=G67U1RwSbF+mPt7N0lSoGZbUv0SpaaN+gXs+8BGSMz4=;
+        b=kIkyfCtaHFASSr9K3/EmZNUvmhpGQQBVSkOu8crNa4OC+cxye0UDh3lJr2xvDvfZKq
+         ge8Z0oFJfH6yO7TWXE/Wq06li3FZdLVWOk+94LwcGO8xoylGyJEjnOPVWfEsxuQv+qPM
+         +gt65wd6uLxWXhH6Cd8YD/lUDJexG7PtkPAHfpVC/uHAjwbanpSHtogZna00zqkdTBi+
+         6+h8TREpVce9vgj6kqysGYm97MLjIPAh5R42QhS2wz72wXpiVubUzV0Jk60fwQcNgCq9
+         JiDrVW5+HQQYYadDiWS49Anf9+HTnN/vItooB9zQ00QvQqBAOY0Yyu3NSn1ZvADu5vcN
+         32Ew==
+X-Forwarded-Encrypted: i=1; AFNElJ9LmpaX4IHt5yebA7pSSuU2wYzSHGBm3coUm5nUpgHydEps2ZOZMl1zv16IdixREPw9bi32lHvddjIuVKo3Qf0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMJHkiatgEh41KY/G41AjhsFA/O0HXamSqFepDcM970vbcJPea
+	TFnsskxCwJU3aPN4DEfyQtQR7sNPHmgDpu1pLNodoWucIKo8d8wsBY97hXGfLNiqkhIxCJ09dg5
+	o0GofxVaXrFLSlM023DltX/v1TDmtl9Y=
+X-Gm-Gg: AfdE7ckEsG2/IFROL1K+v9TKI4LvCHjSmSbHzdidBXEdRsxeD1ENfauWNdjBpHNRgdB
+	mvK9Nkf/RcIbjxmJJV6mfvxu3a/dTDb65f2qNDhrkRB4F8DxR08htODF2Y1mn1S+VpV/zUqd1cn
+	uF7aVhr9GCiAEPCWh5qqckJgFLF2fbhMRC2P8tMzi2q82wfxXodt+wwlG4rtrBkO0/AroQyCoHi
+	f9iGXAjPGY4VgeBgCbqALgK0lKPCBTFNyAVlCRJKTHWoF4d7363TfaOqzH/dFpU4V/ym6OUrGSJ
+	bRBcJSmsmxt213Q5LqTI2/jPO7hbpSKWbcghGPg=
+X-Received: by 2002:a05:6808:1b06:b0:479:eb19:6e66 with SMTP id
+ 5614622812f47-48f29eb5fcamr2080626b6e.38.1782223668359; Tue, 23 Jun 2026
+ 07:07:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1780676742.git.tarunsahu@google.com> <48777f4749fa43d5648085dbb2037aa99c144a88.1780676742.git.tarunsahu@google.com>
- <CAEvNRgFEHciT3T9y+qEYRvXhDwfrggoU7Rm=f9hT3OrV+wgpNQ@mail.gmail.com> <ajnOnzdknfwbuJ9g@google.com>
-Message-ID: <9huzwlvpmk08.fsf@tarunix.c.googlers.com>
-Subject: Re: [RFC PATCH v2 06/10] kvm: guest_memfd: Add support for freezing
- and unfreezing mappings
-From: tarunsahu@google.com
-To: Sean Christopherson <seanjc@google.com>, Ackerley Tng <ackerleytng@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, vannapurve@google.com, fvdl@google.com, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Shuah Khan <skhan@linuxfoundation.org>, sagis@google.com, 
-	aneesh.kumar@kernel.org, skhawaja@google.com, vipinsh@google.com, 
-	Pratyush Yadav <pratyush@kernel.org>, david@redhat.com, dmatlack@google.com, 
-	mark.rutland@arm.com, Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, 
-	Alexander Graf <graf@amazon.com>, axelrasmussen@google.com, linux-kselftest@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
+MIME-Version: 1.0
+References: <20260622183109.1137245-1-dwindsor@gmail.com> <20260623084327.GU48970@noisy.programming.kicks-ass.net>
+In-Reply-To: <20260623084327.GU48970@noisy.programming.kicks-ass.net>
+From: David Windsor <dwindsor@gmail.com>
+Date: Tue, 23 Jun 2026 10:07:36 -0400
+X-Gm-Features: AVVi8Ce4azXvS8RMtuB5ZswOmmVhWcuumJwHulSPO1SroME3hfaP0NykDEwpcDg
+Message-ID: <CAEXv5_g8NZ+dBxH_towkEzJAH1emabsmmnCiX2gzikOqoAso7Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] x86/uprobes: Keep shadow stack in sync for emulated CALLs
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: mhiramat@kernel.org, oleg@redhat.com, tglx@linutronix.de, mingo@redhat.com, 
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, shuah@kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Sean Christopherson <seanjc@google.com> writes:
-
-> On Mon, Jun 22, 2026, Ackerley Tng wrote:
->> Tarun Sahu <tarunsahu@google.com> writes:
->> 
->> > This patch introduces the freeze on gmem_inode which prevents
->> 
->> Can't find the reference now, but commit messages should take the
->> imperative mood and avoid "this patch" [*]
+On Tue, Jun 23, 2026 at 4:43=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
 >
-> From Documentation/process/submitting-patches.rst:
+> On Mon, Jun 22, 2026 at 02:31:08PM -0400, David Windsor wrote:
+> > Uprobe CALL emulation updates the normal user stack, but not the CET us=
+er
+> > shadow stack. The subsequent RET then sees a stale shadow stack entry a=
+nd
+> > raises #CP.
+> >
+> > Update the relative CALL emulation and XOL CALL fixup paths to keep the
+> > shadow stack in sync.
+> >
+> > Fixes: 488af8ea7131 ("x86/shstk: Wire in shadow stack interface")
 >
->   Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
->   instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
->   to do frotz", as if you are giving orders to the codebase to change
->   its behaviour.
+> I can confirm this patch fixes the included test case, so yay for that.
 >
-> Documentation/process/maintainer-tip.rst and Documentation/process/maintainer-kvm-x86.rst
-> elaborate more on the preferred style (I do most of the guest_memfd maintenance,
-> and so for all intents and purpose it's bound by KVM x86 "rules").
+> However, should this not be:
+>
+> Fixes: 1713b63a07a2 ("x86/shstk: Make return uprobe work with shadow stac=
+k")
+>
+> ?
+>
 
-
-Thanks!. Will take care of that.
+Hmm, this commit appears to only be concerned with the uretprobe case?
