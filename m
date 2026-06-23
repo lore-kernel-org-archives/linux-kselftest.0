@@ -1,151 +1,103 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C2D388E7C
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 17:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782234755; cv=pass; b=h5HOwz629MTPFNRBcsOxyQjz8MuKRo/0T3yg8Kyfg86up3J7q3THWoP4u4ukIKqSTRKmEAXlhU+24GZ8v52pCGyc51ZjJioWP/smRNWg5hvf4TNzxZIKec5vQXF0aXDJe390BbVjduUsH4z0YbaV3ZG5eyuWx3HWMkWXjDJqVBg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782234755; c=relaxed/simple;
-	bh=hmR9D8Br+YBjZG2zebbyzPQBf1lj2xBVoaEGicS5Dc4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZQ1M8Mta9BZj/CanFNmeEYKXLtZT11OvOdi6wByjyqSAHUFvz4MnTvToI/pnMr2+v0qjJXVjjXasrI2I5LWGubxbCpoxMa8WymRd/9hwE9e7ycXJegKMbnlKWl24u+kAws2U6o73dDULMADN02af9jHom/xvBiyatypEetoq7cM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZIInnUlR; arc=pass smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F43D30BF69;
+	Tue, 23 Jun 2026 17:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782236086; cv=none; b=hMhhA1xtUALGwvrANoaKerIXPQwZEFuM434WlCOVwXquMAFsqmQtWEPtLrtGgBPB5JSCTMPSEpbGQ5ydNDQsD8Mf0AAF4dLKBxeHmL6MZ7iyfrIV4dGxr88HOsqMxhwowqarTmz03TjBLcsSNs5bV1L4vg/cUe+E1EAOm0HWX20=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782236086; c=relaxed/simple;
+	bh=PYCRYsLrIsR4tx3VA5k/UtpRuiBcUN4bCCsX/cOyCrw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=P9jCjB5ST9CDzE/bnd5/G6mo5rNWsr7Pl41418o/DnH7UfRvHgstiJeNCzITEu0lYvIUnfVADTS0WxX5JSd29UOofngzS4LFAmM/4nMSkiBpUMS9JbWkIrVfRT+kdH6NVgYXschadev9xVsOkDJ8Spw1tihdap/HbJDQT8DeN2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=C4ZeqRDm; arc=none smtp.client-ip=207.46.229.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZIInnUlR"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-4629d80fa08so121227f8f.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 10:12:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782234753; cv=none;
-        d=google.com; s=arc-20240605;
-        b=WK2a7Jgl+ATTyGSF5OtafO/xfJvKF6l4XbuGcGNdUDuVuKH5++s9f1cE5jJ3KuVbUt
-         QU/aOvaIuVnGp1PTQzeRvrMHaf8XjGKU4M+/fuaXd4Epvqc1pSCC3wY93VmSgdaBg5+7
-         mucllIQh8VxKDFMphKget0rtKbFXFga+vNyND+jYHPdA/CWro0H9n6W7WgR2DRGrJY9S
-         HnN4HFnHm+m6eBiOzASqzwOCxMwQaoyDTCKazpxPQCTjVGK9XPYK5iXpXU1n36hZiUgr
-         L/KwdrlKDKvFGw3sEyME39RnGjLMJ3gVXDNBbPG1mSRCXA5DbytTcyRbIMN3a5qx4oGn
-         xczA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GQis8KO7+Cr37wQe2wy0qBtYljKSNFAIw/U+lZxu9Bk=;
-        fh=HQNwwXzM0syOCI59CnDqtN7aZ0MLw1tNr7IZW89Q+gg=;
-        b=AzaUyHEAWCneQYuKIfQpfRGEg4vzGT9dV01/Nu1KjpbqJq15AqXRgpdnGnNePbtqld
-         hj34Q2h7v6Hd44PbCAxq9nKdx4umpAqT0K4YrS86e0KsVutY4l/LmOqreep2vobZ4FaF
-         Ha0cAIc2JG7WZ1MwPmbme8RBdG/XHgoza38GtDqj+tRtssNdjj67EnyApf0JZ3spQPvf
-         apk7mZ+vZwvKnRTGCTR7HuIwd1yX/ZWPargzzcR7FGwOetWvBaxAw3BMzRwg/ACVfRYG
-         PRLwELJDBzQFxpBL7rbQemENcQf+sMLX4FAxlZnakysLRbgRtmaMxH352fjAsCfVXXU6
-         HImQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="C4ZeqRDm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782234753; x=1782839553; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GQis8KO7+Cr37wQe2wy0qBtYljKSNFAIw/U+lZxu9Bk=;
-        b=ZIInnUlRpJBrBLa4YHmK1T/YeHww3CriuYJ+s05YmBTe9hKCb9ZRskiq3iOgtmPzFd
-         BO5+sawX5DP/dYIkp48lyGPGLZuMlU2B5ExSz6tAaPXbflRW58jxxcbYBY3wy3+6VUHy
-         BuAv1K2BT2xt+XlBgLMoXmDB+Us7uSmvTTxbrDRRhv5nnWvjCsyd7yvFRxohrkF6M/PU
-         KImC9eeyFb9l/9wbKy3v/jFfZV5c0b6MFsfYsy5jWI5o1kvtNzCAVMMBR2X7c28sWRoh
-         KkRWX0jEeHOEQo/qs3fbGUlQTtm0uuWVbu/2igo1pXV7K+rMeUPCowk4apnjv5mQ8zxO
-         ocmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782234753; x=1782839553;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GQis8KO7+Cr37wQe2wy0qBtYljKSNFAIw/U+lZxu9Bk=;
-        b=FUsSc9s26VucxioMTjbDgRl/b4l4wu8KpvFZ4HABwXaU2LpUUHOjPVB7k8GKqWFUNO
-         uG9BIN3lqMTBqwcpxG4LvvPpNp+mmK9YZ4yiEFbmSWAcSs2QeX/p/0UFpMJcNYuuhxqq
-         fs+ZFTO0hN3RqSmrqp9mdKAd3CLofv1N3XbJBs4dwjyUqE+4yOnYtkPZ/tTYkKGH68vM
-         Ab4Zxq+aBUPKE/ufcV+P+qNC/GQn0Vqe5FdHmRmWR1DBwOz0a/CEMDFLl6MEMl+6MD/z
-         U3g7iHw4iCD32dI5cekq5KMxiqgdvwsU5SBLUzNP+loqQeYn7b6iq+rTRXxho8Y2BoZh
-         WPig==
-X-Forwarded-Encrypted: i=1; AHgh+RpawKjiA+KP7no6h+iQht/I2jZQIGYRuGjj7aVmtVfLUYHkS6IyJP4qlpmBH9oplcgG8/M+ENxHUo0iwud/cjo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyC+qe/c3vL/rriNn+eqzJ82NlmzMrYttFH8d9nvsOjSGZvssX
-	m8c29dQL07JAXqL6mVd1dDW3onoPHm1YcmXFg8SCh9PZl29g5nmznL//K9HcZVGmndjEEDdFB7d
-	s70MV0H3A5IQTbk9/Ia+m44wfjs7gJjw=
-X-Gm-Gg: AfdE7cl4PO/+ycG2AfR1qoy8j9gRitwUFzJSgn3kwrmSuvlaRp8mtxR4clEfxWFpMSm
-	uNUGvhQg+C83x3K3mJx37J1e30d4KYamb3tT0NRUePNQVq2Xle0pAjDtUK1U1usvKgz7pyHjGhe
-	QpYHcsfgzCPrK/zKkZdk1k1W4mHRnTlQd0JVSXDVpMmP0TyC3UdTwG2mY6brF3HdF2Kb8PoNucR
-	KOF/TQZvAbJ7OttDTnfkYnEXPPVoDfj5UISZE+ff34jvsPp3zi3kGtFyYeRNPvfmEkMeN9NGSwG
-	zCNlBDKUpTmVEXWbmuEBYmR3aVN5vbfJOBPUB0o=
-X-Received: by 2002:adf:f182:0:b0:460:6b0e:a75e with SMTP id
- ffacd0b85a97d-46506c35d0cmr25528866f8f.16.1782234752678; Tue, 23 Jun 2026
- 10:12:32 -0700 (PDT)
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=SImGT
+	Daeemmk9Ot9FDkfdNXfdAxQdSFL1gE6A0cL9Zk=; b=C4ZeqRDm8jmp9bG/HG3RZ
+	qEsfojzLePMAP7uf1D4Z1auLEJPCNxRUUs6SQZWrXagniCDVpY6vs5rqSlfInnIw
+	dHWxTg13KX7YTrBg2jBojPt1yYGYqWgN6XucqUTUUq8kep/LUC9btBfyDWo5h1PQ
+	i9zqZ7bcJE7n61zILTqSSY=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web2 (Coremail) with SMTP id yQQGZQBnP5eYwzpqIo19Ag--.49585S2;
+	Wed, 24 Jun 2026 01:34:31 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/2] bpf: Reject MEM_ALLOC BTF accesses past bounds
+Date: Tue, 23 Jun 2026 17:34:11 +0000
+Message-Id: <cover.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260623111533.2285005-1-ptikhomirov@virtuozzo.com> <20260623111533.2285005-3-ptikhomirov@virtuozzo.com>
-In-Reply-To: <20260623111533.2285005-3-ptikhomirov@virtuozzo.com>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Tue, 23 Jun 2026 10:12:20 -0700
-X-Gm-Features: AVVi8CdfcxG5r5FMFto7l_ai_RfkpnO9NQCVALwgDokVA4D7LTvynw9skPuPn8c
-Message-ID: <CAKEwX=OaKTfNqzwa=djLxZDeBbR1+DKdqDnxdfPfZFKB-K+ECA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] ovl: support cachestat() syscall on overlayfs files
-To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-Cc: Miklos Szeredi <miklos@szeredi.hu>, Amir Goldstein <amir73il@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>, linux-unionfs@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:yQQGZQBnP5eYwzpqIo19Ag--.49585S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZry7uF4UurWfCw1kury7GFg_yoWkKwb_ua
+	y8trWDurs8XF15Aa4vkF1fAa95Cr45Gr97AFWqqr43GrnxCry5Xw4kJr13A34jqanayry3
+	Zrs5ua40yF17tjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbDkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+	0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+	Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
+	W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI2
+	0VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxEwV
+	AFwVW8MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjb_-DUU
+	UUU==
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-On Tue, Jun 23, 2026 at 4:15=E2=80=AFAM Pavel Tikhomirov
-<ptikhomirov@virtuozzo.com> wrote:
->
-> Overlayfs forwards data I/O to the real (upper/lower) file, so the page
-> cache lives in the real inode's mapping and cachestat() on an overlay
-> fd returned all zeroes.
->
-> Implement the ->cachestat() file operation by forwarding to the real
-> file via vfs_cachestat(), the same way ovl_fadvise() forwards
-> for fadvise.
->
-> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-> ---
->  fs/overlayfs/file.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->
-> diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
-> index 27cc07738f33b..a7e252a91ea43 100644
-> --- a/fs/overlayfs/file.c
-> +++ b/fs/overlayfs/file.c
-> @@ -518,6 +518,21 @@ static int ovl_fadvise(struct file *file, loff_t off=
-set, loff_t len, int advice)
->                 return vfs_fadvise(realfile, offset, len, advice);
->  }
->
-> +#ifdef CONFIG_CACHESTAT_SYSCALL
-> +static int ovl_cachestat(struct file *file, struct cachestat_range *csr,
-> +                        struct cachestat *cs)
-> +{
-> +       struct file *realfile;
-> +
-> +       realfile =3D ovl_real_file(file);
-> +       if (IS_ERR(realfile))
-> +               return PTR_ERR(realfile);
+BTF struct walks can relax the top-level struct-size check for trailing
+flexible arrays. That relaxation must not let a PTR_TO_BTF_ID | MEM_ALLOC
+access escape the bytes allocated by bpf_obj_new() or bpf_percpu_obj_new().
 
-We're propagating the error of ovl_real_file() all the way to
-userspace right? I think we need to handle this.
+Patch 1 rejects MEM_ALLOC BTF walks whose access range reaches past the
+current struct size before applying the flexible-array relaxation. Patch 2
+adds a linked_list negative loader case for this path.
 
-For example, we might get -EIO here, which is unexpected and
-undocumented from cachestat's POV.
+Changes in v2:
+- Move the check from bpf_obj_new() type validation to BTF struct walking.
+- Reject MEM_ALLOC accesses that reach past the allocated object bounds.
+- Update the selftest expected verifier error and carry Eduard's Acked-by.
 
-Maybe handle it and just return -EBADF or sth like that (with some
-updated documentations, etc.)
+v1:
+https://lore.kernel.org/bpf/cover.1782100805.git.chenyy23@mails.tsinghua.edu.cn/
 
-The rest LGTM, but I'll let overlayfs maintainers check the
-overlayfs-specific bits :)
+Yiyang Chen (2):
+  bpf: Reject MEM_ALLOC BTF accesses past object bounds
+  selftests/bpf: Cover MEM_ALLOC access past object bounds
 
-> +
-> +       with_ovl_creds(file_inode(file)->i_sb)
-> +               return vfs_cachestat(realfile, csr, cs);
-> +}
+ kernel/bpf/btf.c                              | 14 +++++++----
+ .../selftests/bpf/prog_tests/linked_list.c    |  1 +
+ .../selftests/bpf/progs/linked_list_fail.c    | 23 +++++++++++++++++++
+ 3 files changed, 33 insertions(+), 5 deletions(-)
+
+
+base-commit: a975094bf98ca97be9146f9d3b5681a6f9cf5ce3
+-- 
+2.34.1
+
