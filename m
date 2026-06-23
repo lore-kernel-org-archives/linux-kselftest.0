@@ -1,126 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A1D364028;
-	Tue, 23 Jun 2026 09:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3451033F361;
+	Tue, 23 Jun 2026 09:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782208120; cv=none; b=NQ1Y4/UUJnyoXPdrsUhZbwPH+103n2v5Ig10bhdvGE7eBUHo24so9z1CNolrHHlChQGfvCz2Cnwk/b0vYmRhW3AzFhkvB09JoifEkldWd0iZozuTzue8+ki15yS5dah6NyDAkvpBL2zNa7L5havsIEW0fGuN995wQJE8kUDfzFM=
+	t=1782208621; cv=none; b=qRuq/5qMinhf7QGTHQrWzHn7ahCRcERb9NXkOmhp+wZDt1iMNfzwyEyQBiRLo9YqlP00aOFlalGxFUj00rs2fTJQTIlm0mBPkk+SS8t73tW2hflLEZmWdIJ9W8Ruidy0TcjEdBui17svWs647b06h1f7I687LBz8VcjSGEZktuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782208120; c=relaxed/simple;
-	bh=5923JLJcSnP+ammi926uhmSL7dT/T35P5AbtWqZVok4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ciiKaUMGa84h68WdY1T1ASu0iq+ySji3PzvORcqE5By8l4cJrhXiNTUX94E/PmJEOQP1bxOPmsEtj+azBfjaEpvtJP3BOMRvUi/6HdMy8zw3zeVa5LkW5lWylDOflo6DOv3Prcvv9MOkQDz2SF+b1Ram4WiCeaq2gffyhbjvmz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ME1VcZpF; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ME1VcZpF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782208120; x=1813744120;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5923JLJcSnP+ammi926uhmSL7dT/T35P5AbtWqZVok4=;
-  b=ME1VcZpFzF2OCbL72i0cVwa6Ngw32RzHDS6NyvVLYcJpXpBG9vy5NtAW
-   RTuKzXJgD/bBYRWL9InJa4DcBcgO6imcjv8NLmxRodDholSCkNs+BEsoS
-   dcUo9g27r+B4CMgz/+jEUQGs0EhAPoDW/PaGVQq8diE2S5nJSt5ijIF0K
-   liklGk4Gkz3tTGUi/54ubhU/JetzbJkLnpS0tRfll3ixr4dQMbsFf+hym
-   Zna8OTEvtSVXV6xLq4aDmg6xUaAJCLIKshS/4OjQ5H7IifiWLUxbvQxMj
-   hxlKnYjSjdrwGalvLonzfonbByDGP54PjgEVLH1kLQlb14w3cCZKKJAzw
-   A==;
-X-CSE-ConnectionGUID: W9TauyN9TeW0LwkQwKboow==
-X-CSE-MsgGUID: CmHTuVfgQAO3g8BTCP96CA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="82988601"
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="82988601"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 02:48:38 -0700
-X-CSE-ConnectionGUID: MXLmCZy4SperyKCaH8GJSA==
-X-CSE-MsgGUID: DGnOq6mSRvK9V69SMz9Zcg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="254572830"
-Received: from unknown (HELO [10.238.2.81]) ([10.238.2.81])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 02:48:26 -0700
-Message-ID: <6fc7f450-6d0a-494d-b295-297e4703148d@linux.intel.com>
-Date: Tue, 23 Jun 2026 17:48:24 +0800
+	s=arc-20240116; t=1782208621; c=relaxed/simple;
+	bh=yG4yXRaZ3kft6oknPdvtgINUD4v3PqTns8m7+GPGKCc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=I1NkZTgItDPCb8gXzyj4Y6YwUt0qglSEF1NqwMHtPz6z4TgMLA7u6Ve9b+/6xuDwFwTAVGNshCHK+CrNZI3K9L76hgAZeiim0s3Gml38sfUcNV5lG0rPAUkAmo1AOIBDYqcoOrlP6vuHsvKJ7NMhxZiLY26rrCR7K8ddLCIGsGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: dbd692386ee911f1aa26b74ffac11d73-20260623
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:d7523a35-4669-4746-a931-191c1311e91b,IP:0,U
+	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:25
+X-CID-META: VersionHash:e7bac3a,CLOUDID:21992dfea4215b877f41caa6ae3c6d5c,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|83|102|123|136|850|865|898,TC:nil,
+	Content:0|15|50,EDM:5,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:
+	nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: dbd692386ee911f1aa26b74ffac11d73-20260623
+X-User: luoliang@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <luoliang@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 889360935; Tue, 23 Jun 2026 17:56:51 +0800
+From: luoliang@kylinos.cn
+To: Shuah Khan <shuah@kernel.org>
+Cc: Liang Luo <luoliang@kylinos.cn>,
+	Christian Brauner <brauner@kernel.org>,
+	"Eric W . Biederman" <ebiederm@xmission.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nsfs: fix wrong error check of NS_GET_USERNS result
+Date: Tue, 23 Jun 2026 17:56:48 +0800
+Message-Id: <20260623095648.440638-1-luoliang@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260618070805.144324-1-luoliang@kylinos.cn>
+References: <20260618070805.144324-1-luoliang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 18/46] KVM: guest_memfd: Handle lru_add fbatch
- refcounts during conversion safety check
-To: ackerleytng@google.com
-Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
- chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
- jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
- pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
- rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
- tabba@google.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>,
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-18-9d2959357853@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20260618-gmem-inplace-conversion-v8-18-9d2959357853@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
-> @@ -606,12 +608,20 @@ static bool kvm_gmem_is_safe_for_conversion(struct inode *inode, pgoff_t start,
->  	next = start;
->  	while (safe && filemap_get_folios(mapping, &next, last, &fbatch)) {
->  
-> -		for (i = 0; i < folio_batch_count(&fbatch); ++i) {
-> +		for (i = 0; i < folio_batch_count(&fbatch);) {
->  			struct folio *folio = fbatch.folios[i];
->  
-> -			if (folio_ref_count(folio) !=
-> -			    folio_nr_pages(folio) + filemap_get_folios_refcount) {
-> -				safe = false;
-> +			safe = (folio_ref_count(folio) ==
-> +				folio_nr_pages(folio) +
-> +				filemap_get_folios_refcount);
-> +
-> +			if (safe) {
-> +				++i;
-> +			} else if (folio_may_be_lru_cached(folio) &&
-> +				   !lru_drained) {
-> +				lru_add_drain_all();
+From: Liang Luo <luoliang@kylinos.cn>
 
-It seems unprivileged userspace is able to trigger lru_add_drain_all() repeatedly
-by invoking KVM_SET_MEMORY_ATTRIBUTES2 in a loop, which could lead to DoS risk?
+Adding Christian Brauner and linux-fsdevel to Cc. Running
+get_maintainer.pl on the parent directory
+tools/testing/selftests/filesystems/ surfaces additional frequent
+contributors that the per-file invocation did not.
 
-> +				lru_drained = true;
-> +			} else {
->  				*err_index = max(start, folio->index);
->  				break;
->  			}
-> 
+Original patch:
+https://lore.kernel.org/all/20260618070805.144324-1-luoliang@kylinos.cn/
 
+Thanks,
+Liang
