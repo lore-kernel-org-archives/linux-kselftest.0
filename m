@@ -1,92 +1,182 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8839374E6C;
-	Tue, 23 Jun 2026 11:50:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7613D3CEA
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 11:52:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782215417; cv=none; b=otBXoznA3idB3/laO0oWTtHo3F46+gJZTgmSIc3if/6R/X7xRyhhG5t3/O6pNVd6ptkJO57tYUgoqRaEdO6cRro4MkktLWJwrBsNJGkVn3JULyW7fzOz8PjjSmtVg6hM1GuLA6MOURG7THrNsFtcNJTrC7ZK3wZ/uGkcJy2CzuM=
+	t=1782215522; cv=none; b=TTRC5nNlnW5hQtQIK2UaznSjmbDewz+M9WwCSofxhrWRSNlxGnOG7DXLn3Eu5RdAnFAS5zO7LOTzJZIbC2PCoXJJhBn3eMxF69B0Qo2b7bfQvqGDzg7EhHCaTPTNuZ7d+9GzF2JIs7fc8qAvQzmR8UweH3olbi7zmg9ONgDZF0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782215417; c=relaxed/simple;
-	bh=n9OhQRcivBTU+0Hw5QfVQWAdoHhSvvpTs4h0+H96Yv8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=g5XgzlJhsavMn/2uj17D0VKUIx4KkP9PzdFPiQcnpYeIw6OSsuZ7kcfk1jbvhmtCrdlhlTXis0zDRlqGgrMTOmJN8rmXjnJj96nsDYlbSOReXNOf8/13IbiOUAmbJulBmlz1oJmirsV/n0hwjTU/zMtRTZY7ySMgKg0W1rrwE0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aoytTKJp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782215522; c=relaxed/simple;
+	bh=/l47Kc9yJkx+XNz925xiZzIZRoSo2GKP0MroQbjp7kQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rSEaajCya1yJqrDt/hqB/phAS6f7JIdfAWeR3xPRAeUypTtsLKEDhr3Ah/Khk+vb+K4FjdEv8m4sboKZMrSrZO11YfvUhkGzhQgnpa9S0yeSRRCWL5epTHK+hTjqe59D0LR2Nokfzv7JfCK0wINB6CUMt+FXFj1ejxloPCPvMBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LPkbbK+7; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aoytTKJp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554ED1F000E9;
-	Tue, 23 Jun 2026 11:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782215416;
-	bh=d62k19kj1SfRjgL7jcO1Hvgy3SxR7Y2lcNyjJKm9tsY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=aoytTKJpKqwrv0PxU7BckYroUsYWDez6dmQNqqy/xFmhsf4WiIX2f0iDLTacI7n/0
-	 prIGaAvGrMEq29qEsx89JxkRvNnp3w8vIiHPSGQsmTxO4RhTSFeMFP7C6cU0Uvq3nA
-	 P0qfK+RBTWf2NHRbIF0RK1rOKsqV4rqIYP7SyrWRbBELcnEDwXfiZzPYzHIow/dfmb
-	 R8XbxHZYzpEmLI0OeHqnWtA0Hu4jv5g/T7xNgcifsXb8h1H+lm/hYohWfPQ/H9pYrc
-	 IkPWQ7w+AqL6qzcP2WGTmDJzKdiuH/09lYcsVRcXTskKy3tCkjlngeYp1pl4xCaF4R
-	 C7NlqrVd62+0A==
-Date: Tue, 23 Jun 2026 20:50:11 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, Shuah
- Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v7 06/10] tracing/probes: Type casting always involves
- nested calls
-Message-Id: <20260623205011.6f295bbf425412435f25b72f@kernel.org>
-In-Reply-To: <178217910709.643090.6379198143797177881.stgit@devnote2>
-References: <178217904992.643090.15726197350652241270.stgit@devnote2>
-	<178217910709.643090.6379198143797177881.stgit@devnote2>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LPkbbK+7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782215519;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=S74gSn64dmM2ax5iC5oLh+bId+plYMetRVPgRAIEZk0=;
+	b=LPkbbK+71KCmFn2peVXSI2bH8j3tTdQFJoHmOdAtuzMDW2ponj4g8IQEP09hWWIA9No3f3
+	PzFZDaUNly/B5k7EGaVFnK94A8uqY5qOs6rcM4NP6Bi8tiKe/LAiVHbm6UWDglKe8Wu2sw
+	vzklx1+bziE3m9BsvMzo/TycH9pRQ30=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-542-SM2MpXe8Pie_BkmvQbQ-aQ-1; Tue,
+ 23 Jun 2026 07:51:56 -0400
+X-MC-Unique: SM2MpXe8Pie_BkmvQbQ-aQ-1
+X-Mimecast-MFC-AGG-ID: SM2MpXe8Pie_BkmvQbQ-aQ_1782215515
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 66B951955F44;
+	Tue, 23 Jun 2026 11:51:54 +0000 (UTC)
+Received: from oak (unknown [10.22.80.162])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A820A1956052;
+	Tue, 23 Jun 2026 11:51:52 +0000 (UTC)
+Date: Tue, 23 Jun 2026 07:51:33 -0400
+From: Joe Simmons-Talbott <josimmon@redhat.com>
+To: Tao Cui <cui.tao@linux.dev>
+Cc: Joe Simmons-Talbott <joest@redhat.com>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/cgroup: Adjust cpu.max quota based on HZ
+Message-ID: <20260623115110.GA8885@oak>
+References: <20260622194305.601392-1-joest@redhat.com>
+ <d8bdf9ef-a393-4734-8639-308ac3eaa05c@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d8bdf9ef-a393-4734-8639-308ac3eaa05c@linux.dev>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-
-Sashiko commented:
-
-> > +	}
-> > +	*close = '\0';
-> >  
-> > -		ctx->offset += 1;	/* for the '(' */
-> > -		/* We need to parse the nested one */
-> > -		ret = parse_probe_arg(tmp + 1, find_fetch_type(NULL, ctx->flags),
-> > -				pcode, end, ctx);
-> > -		if (ret < 0)
-> > -			return ret;
-> > -		ctx->nested_level--;
-> > -		clear_struct_btf(ctx);
-> > +	/* We need to parse the nested one */
-> > +	ret = parse_probe_arg(tmp, find_fetch_type(NULL, ctx->flags),
-> > +			      pcode, end, ctx);
+On Tue, Jun 23, 2026 at 01:32:08PM +0800, Tao Cui wrote:
 > 
-> Does routing the nested argument through parse_probe_arg() instead of 
-> parse_btf_arg() break the documented eprobe syntax (STRUCT)FIELD->MEMBER?
-> Since this patch removes the TPARG_FL_TEVENT handling block from
-> parse_btf_arg(), and handle_typecast() now recursively invokes 
-> parse_probe_arg() on the extracted FIELD name, a bare eprobe FIELD name 
-> that does not start with a '$' prefix will hit the default case in 
-> parse_probe_arg().
-> This causes it to be unconditionally rejected with -EINVAL (NOSUP_BTFARG) 
-> because eprobe flags (TPARG_FL_TEVENT) do not satisfy 
-> tparg_is_function_entry() or tparg_is_function_return(). This acts as an 
-> ABI breakage for existing user-space scripts relying on this eprobe syntax.
+> Hi Joe,
+> 
+> One comment on the fallback:
+> 
+>   quota_usec = hz != -1 ? USEC_PER_SEC / hz : 1000;
+> 
+> When HZ can't be determined (no CONFIG_IKCONFIG_PROC, or zcat missing),
+> the fallback to 1000 is the exact value that fails at low HZ — so this
+> doesn't actually fix such kernels. A larger fallback (e.g. 10000, the
+> HZ=100 equivalent) would make the tests robust regardless of whether the
+> config is exposed.
 
-Wait... Did the type-casting support patch accidentally allow access to
-event fields without the "$"?
+Hi Tao Cui,
 
-Hmm, if so, it should be documented, and need to support correctly
-with/without typecast.
+Thank you for your review.
 
-Thank you,
+I am happy to use 10000 as the fallback value.  I will address this as
+well as the sashiko comments in v3.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks,
+Joe
+> 
+> 在 2026/6/23 03:43, Joe Simmons-Talbott 写道:
+> > For lower HZ values a quota of 1000us is much lower than the amount
+> > of microseconds per tick which makes the tests test_cpucg_max and
+> > test_cpugc_max_nested fail. Use the amount of microseconds per tick
+> > as the quota value.
+> > 
+> > Signed-off-by: Joe Simmons-Talbott <joest@redhat.com>
+> > ---
+> > changes since v1:
+> > - Try checking /proc/config.gz to get the actual kernel HZ value and
+> >   fallback to 1000 if the value cannot be determined.
+> > 
+> >  tools/testing/selftests/cgroup/test_cpu.c | 33 +++++++++++++++++++++--
+> >  1 file changed, 31 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
+> > index 7a40d76b9548..65e09555309f 100644
+> > --- a/tools/testing/selftests/cgroup/test_cpu.c
+> > +++ b/tools/testing/selftests/cgroup/test_cpu.c
+> > @@ -639,6 +639,29 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
+> >  	return run_cpucg_nested_weight_test(root, false);
+> >  }
+> >  
+> > +/*
+> > + * Best effort attempt to get the kernel's HZ value from the config.
+> > + * Return the HZ value if found otherwise return -1 to indicate failure.
+> > + */
+> > +static long
+> > +_get_config_hz(void)
+> > +{
+> > +	long hz = -1;
+> > +	FILE *f;
+> > +	char cmd[256] = "zcat /proc/config.gz 2>/dev/null | grep '^CONFIG_HZ='";
+> > +
+> > +	f = popen(cmd, "r");
+> > +
+> > +	if (!f)
+> > +		goto out;
+> > +
+> > +	fscanf(f, "CONFIG_HZ=%ld", &hz);
+> > +
+> > +out:
+> > +	pclose(f);
+> > +	return hz;
+> > +}
+> > +
+> >  /*
+> >   * This test creates a cgroup with some maximum value within a period, and
+> >   * verifies that a process in the cgroup is not overscheduled.
+> > @@ -646,7 +669,8 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
+> >  static int test_cpucg_max(const char *root)
+> >  {
+> >  	int ret = KSFT_FAIL;
+> > -	long quota_usec = 1000;
+> > +	long hz = _get_config_hz();
+> > +	long quota_usec;
+> >  	long default_period_usec = 100000; /* cpu.max's default period */
+> >  	long duration_seconds = 1;
+> >  
+> > @@ -655,6 +679,8 @@ static int test_cpucg_max(const char *root)
+> >  	char *cpucg;
+> >  	char quota_buf[32];
+> >  
+> > +	quota_usec = hz != -1 ? USEC_PER_SEC / hz : 1000;
+> > +
+> >  	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
+> >  
+> >  	cpucg = cg_name(root, "cpucg_test");
+> > @@ -710,7 +736,8 @@ static int test_cpucg_max(const char *root)
+> >  static int test_cpucg_max_nested(const char *root)
+> >  {
+> >  	int ret = KSFT_FAIL;
+> > -	long quota_usec = 1000;
+> > +	long quota_usec;
+> > +	long hz = _get_config_hz();
+> >  	long default_period_usec = 100000; /* cpu.max's default period */
+> >  	long duration_seconds = 1;
+> >  
+> > @@ -719,6 +746,8 @@ static int test_cpucg_max_nested(const char *root)
+> >  	char *parent, *child;
+> >  	char quota_buf[32];
+> >  
+> > +	quota_usec = hz != -1 ? USEC_PER_SEC / hz : 1000;
+> > +
+> >  	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
+> >  
+> >  	parent = cg_name(root, "cpucg_parent");
+> 
+> 
+
