@@ -1,109 +1,133 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC7B37B40C;
-	Tue, 23 Jun 2026 06:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D872F39060B;
+	Tue, 23 Jun 2026 06:23:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782195597; cv=none; b=mWNgN3jsexIlcsa3yH3n7zz6pJKkk71zUvh1u1dHMhc7Lyo9oUqQIH0lgBwCMha1F9taM1O+/TWnT6iQLQ/Gro2T4xUwm/1JfDV2YREmNFesQEZCKjWYjBtN6rDPfSizuiZ7jAMPdCxA2A7FYgn9Dgen2f0/VBOa5pKDFEmECZM=
+	t=1782195824; cv=none; b=jA+satzufJ2beLhQKTtaBjg5s4ya+gGGnLryrFK7wWS6XjiCKZO8E4Uou9rJZNfYXztZW06zSZJdkHzbi6Z+sm7q5zR4O5kboL6V81ihHZrE5u0Os8len0xaip0KW4932Ueq19FHG3swegbcTBob4LQQRO/C9Ns2NbcEhY5YK+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782195597; c=relaxed/simple;
-	bh=OVl0lauamZ9UP82xgjaUBVhU9XMWc3+GnTCVk+DPPMA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=REI7sv6jWcW0SfpgGvP6NTMUgH5t1YJP6sWMBcr+WX+o1AQ3gZc1R3V7PmNsoN7T7G+++ZP/MMnbnre+AR/HUpkopzYKWV5rvXMsEF+XwgdlWbk2N6QxBMTvhYx0BGnvjSOVTxHz+RneWJUITmx/aEYxaqfCd8W9Xwiys2HTYJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TERLac2S; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1782195824; c=relaxed/simple;
+	bh=UEKI5XyyrKyd+53gsALTgR8Kp3Pdc7P1e5RZFL9e16c=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bn8U2TMsAlehS+EYdEYyiYjJsWdoloYd70d2/Ph+mHUrxahKx+BUykThgtVfRTAxyQr+HH4k74oEyiiwQ/EQyuAonQ1/vWhK+pJUGDZe/1ATKCsm/naIUfWdPGy+UwCbvdIdNQXlC1Xmeu2SoPtakCqbsNzu9EhEUtA9KUVYI3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=VbSEG5y6; arc=none smtp.client-ip=13.76.78.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TERLac2S"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782195590; x=1813731590;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=OVl0lauamZ9UP82xgjaUBVhU9XMWc3+GnTCVk+DPPMA=;
-  b=TERLac2SaCJt8ng8/OiCxjT7VaZN/MXAwbUc0fnkeDZaXSY+Gv6j8vl1
-   foBxEsoxX14B+9M6FY/ddM+M86cpovUTBic8vadrYdO3Trzg8GmmfV/Di
-   EwlOeIqU5U+WQYCE4QoxkgVz3G0PAWJ1lU0JHoxB5qrqRULZkHhg022wu
-   jMxu+e3RWOdK1zBE4A6Pe5ibJZ04lqAp2NfGplKvw1wlZX/kYKC5hNNEp
-   xAkveGH+oN0uYLhBWttGSMtQXyeYtjbvkvUwSAOVqWF23cL7MO9ZIt2do
-   uyVESymvc0vXDfFo0lTCX6W8ddP9R32woXIm08l7MiPOegoQNiIs0+GKB
-   Q==;
-X-CSE-ConnectionGUID: 5ZK4yfkIRwmINNWSgPr5Mw==
-X-CSE-MsgGUID: TIqqBXnaT4iEhncQYFtcdg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="93293804"
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="93293804"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 23:19:49 -0700
-X-CSE-ConnectionGUID: 7CTGyGSsSQeyst4z2E8mrA==
-X-CSE-MsgGUID: 3FFN9xRISGGDv0urrvE/jQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="248279937"
-Received: from unknown (HELO [10.238.2.81]) ([10.238.2.81])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 23:19:36 -0700
-Message-ID: <49cee70e-86a4-46b6-b690-0d48aeb94221@linux.intel.com>
-Date: Tue, 23 Jun 2026 14:19:33 +0800
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="VbSEG5y6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=xRBZU
+	xJ2G2amxV0G6KtKYpBDOev4SgzYGyEIllHZPtY=; b=VbSEG5y6Sny6c79qRzGQJ
+	5pnx3hfmomcBslmcfUfWyprJ7ZLtvpg+ONYqyH1KhKOJqdesFkTdLWAjYjG6w8vw
+	6ZdFa6JV1czYh0ToouSMUsJp+7YMnbnj1eXTqoqvzMjt9e/Zcw9d+DgN4jSGpPBc
+	Ibx0daVXRD/Y48XyAz5QSE=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web4 (Coremail) with SMTP id ywQGZQBXO5tVJjpq+xV3Ag--.45930S2;
+	Tue, 23 Jun 2026 14:23:26 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-input@vger.kernel.org
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v4 0/3] HID: bpf: Fix hid_bpf_get_data() range check
+Date: Tue, 23 Jun 2026 06:23:12 +0000
+Message-Id: <20260623062315.2694160-1-chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 11/46] KVM: Consolidate private memory and guest_memfd
- ifdeffery in kvm_host.h
-To: ackerleytng@google.com
-Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
- chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
- jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
- pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
- rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
- tabba@google.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>,
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-11-9d2959357853@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20260618-gmem-inplace-conversion-v8-11-9d2959357853@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ywQGZQBXO5tVJjpq+xV3Ag--.45930S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrWrAw1DWw4xWrWrJrWxCrg_yoW5JFy7pF
+	Z5Ww45Kr1Dtr1xCrn7KrWUCry5Gan5XF4UWry8Wa4rZwsxWF18X34I9FyY9FZ8A34vg3WY
+	va40qFnF93ZrZa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPY14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r
+	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
+	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc2xSY4AK67
+	AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRYYLkU
+	UUUU=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> Move the kvm_arch_has_private_mem() stub and a few guest_memfd function
-> definitions/declarations "down" in kvm_host.h to utilize existing #ifdefs,
-> and so that related code is clustered together.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+hid_bpf_get_data() exposes a pointer into the HID-BPF context data when
+the caller-provided offset and size fit inside ctx->allocated_size.
+The helper currently checks that range with:
 
-After fixing SoB ...
+  rdwr_buf_size + offset > ctx->allocated_size
 
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+Since both operands are unsigned, a very large size can wrap the sum and
+make an out-of-range request look valid.
+
+Patch 1 changes the helper to use check_add_overflow() for the range end
+and then compare the computed end against ctx->allocated_size.
+
+Patch 2 updates the HID selftest loader to create only the struct_ops
+maps requested by the current test, so unrelated programs from the shared
+HID-BPF skeleton are not autoloaded.
+
+Patch 3 adds a HID-BPF regression check that asks hid_bpf_get_data() for
+offset 2 and size ~0ULL from an rdesc_fixup callback and expects NULL.
+It also adds KHDR_INCLUDES to the HID selftest build so the userspace
+test sees current kernel UAPI HID definitions.
+
+Changes in v4:
+  - Use check_add_overflow() in hid_bpf_get_data() before comparing the
+    computed range end against ctx->allocated_size.
+  - Update the fix commit message to describe the overflow-helper check.
+
+Changes in v3:
+  - Split out a HID selftest loader fix that disables autocreate for
+    unrelated struct_ops maps.
+  - Add a Fixes tag to the selftest patch.
+  - Keep the BSS result flag in the rdesc fixup callback and explain why
+    the callback must still return 0.
+
+Changes in v2:
+  - Drop the temporary data variable around the overflow
+    hid_bpf_get_data() call in the selftest callback.
+  - Correct the Fixes tag to commit 658ee5a64fcf ("HID: bpf: allocate
+    data memory for device_event BPF programs").
+
+v3: https://lore.kernel.org/bpf/20260622065246.414380-1-chenyy23@mails.tsinghua.edu.cn/
+v2: https://lore.kernel.org/bpf/cover.1781964949.git.chenyy23@mails.tsinghua.edu.cn/
+v1: https://lore.kernel.org/bpf/cover.1781627122.git.chenyy23@mails.tsinghua.edu.cn/
+
+Yiyang Chen (3):
+  HID: bpf: Fix hid_bpf_get_data() range check
+  selftests/hid: Load only requested struct_ops maps
+  selftests/hid: Cover hid_bpf_get_data() size overflow
+
+ drivers/hid/bpf/hid_bpf_dispatch.c      |  5 +++-
+ tools/testing/selftests/hid/Makefile    |  2 +-
+ tools/testing/selftests/hid/hid_bpf.c   | 36 ++++++++++++++++++++-----
+ tools/testing/selftests/hid/progs/hid.c | 15 +++++++++++
+ 4 files changed, 49 insertions(+), 9 deletions(-)
+
+
+base-commit: a975094bf98ca97be9146f9d3b5681a6f9cf5ce3
+-- 
+2.34.1
 
