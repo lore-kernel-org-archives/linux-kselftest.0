@@ -1,81 +1,80 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D231331EA2
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 03:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E61939DBD6
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 04:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.170
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782187155; cv=pass; b=tWkdlq3w9NK/GL2VVtmpjZFzJgEpK766J/glRTGsuUfhb+EtDYrEbuRbC5z890DvqzQT8FTwa2F5qOwtapJIEdnF4ytkFnNa3cboSjOA22ppCxiVf5zTma6KfyRWc4Wn9Dy5QjWTrTRDlCS6QKbEYf8pZUolSU75HoQ3W0RDNjA=
+	t=1782187334; cv=pass; b=XxFXKGXgkS8XwCg/7E4zxFKQHly16T4FanbuU9hAPmnVJmeg+UnA+3EaLDmb2y/tAG7wf0l1ShDrlpGjStDroMuuHiqIGlb2qWwfdzAVaWnFWSNDDIfLMd2Sz76GnL+N3J4vFvLPP/QVfV1L0F660gV+lBWskKNhoxMvozvgb5g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782187155; c=relaxed/simple;
-	bh=gG3nM6GM0xXcee7k3sO2+otJiw1n1BGZCjCkgApMqe8=;
+	s=arc-20240116; t=1782187334; c=relaxed/simple;
+	bh=F0wTGQkkGlxpSFeNyjD6eaC/VlWEy1Nj2KPYSgkBaLA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bum7orSfIhB/jFBcdfvfOfdyJODB4qKtRboFklU+Rj1ZEJez6Eswz5LFuom5tFb5S2Zp68o9T1ypMiIMY2NNm+un8K+ACsx4NBPFC0ETs1kCvxEtiHQ3aa3LVuOLMZ2pgxRcgUJkASsALfDog2pkMr6xhC6B0TqNltlSXEipxAo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ayc6Yxc9; arc=pass smtp.client-ip=209.85.214.180
+	 To:Cc:Content-Type; b=opIBfsnnzAmGJ2cUPMR7H26K0psyW+5GkMM1lR53Wf/fNQqH98QAeVOL+ZTz/60yUsxIcCwjfJ7toq1gFIasBgz+ERwtIr2dgVMPTtZilhwxOBW1ZPNaq74vPim693M30SAEM+FtfSHxBs+K/+H9h4s+I1AGG/bUqcHLCvGOIo4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kvfEHe85; arc=pass smtp.client-ip=209.85.222.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ayc6Yxc9"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2c6d31bfc8aso34895735ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 20:59:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782187153; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kvfEHe85"
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-9158fbaa4bbso582378785a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2026 21:02:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782187328; cv=none;
         d=google.com; s=arc-20240605;
-        b=SfxLhtkDMs2bpp9Rs4UquTQAAfuTIRtZD0rfRtTjHxpCmKrzEe0yoC606mMjp6lukI
-         7YZoBQCibSNXuvVKLWMQeLs+FUOaIM6fuyIeLQ+H2/WmP6HaFAT9JhEQL3lXvobWoDj6
-         aeDPhxGPdGLoBdEoHfqRb1VNSrtJ6baSc+5wWEt2jVZFveWDPKxET+xBEvIbdT5D7lrc
-         ehH3aTfCBICNChGhZ4yUE10xH1q+CqHKSrLC9G7bUHMjyecM438VZuVcPHYikECkoOow
-         +P6Z9+A4iINhz9xm/gHn+7ArGJufu250x8vruKYfKqR8xp1rRnN6KHZMbnqPASH3h24w
-         LEDA==
+        b=Mg1MNpyzPxBtPXMWDQJ95/+m4KdCsYf6wkwyhqlsF8arCjV1PcwV8CigXVws3KmkQ+
+         OGQ8W9evz0v6DCzFJNTGpUSx745aVoSeLSoH0yUoJY1V25QR51r2MNVa+T8AEeZ3xvNO
+         1xrvBu/LHYklJ9r1hKbzu6wlOk6RCvVhlHJqD2lcNzlERW7AHSFWHfeh/QOIaYJ1nbT3
+         QDv9teSx7kiuMfSgcGh9qBxP2Lo2Ugr1olOUG6X3C5OJPNUqqNn+1nMTWTIOMqmJRmfO
+         Df5WcRUbYgaP9/K8pBYOPRwOGE2mnbpuV/JRywb33neD8+QwVwQoPoMN7dpa+ja6I3H4
+         v5wg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=fv4+YQzwW9vJ3yUowssNEEOn5d5CfHMnYf5q6sRM4Aw=;
-        fh=HZx+0mjU1WAYm8n49t75L83vOI9sulihS8RUXlnnUjU=;
-        b=BrXLxpm6StepB3wQ0hbXWNPH3TpEE+6w19fEzgaDMaZn1JdKaW6vWUOheYPp44sTle
-         gGhha/OaI57RamomL7omMUnTUPc6m7J7BEq0RVo54LJpz3tAzIw6zQtzCabgHH/7xsSb
-         M/oIWdTXnmvStKDRaqGZOBEwJtmlsNZPG3iJ6VFt/fTApTnF5mla9TZxRdL48X7joi5z
-         ARRRNRMc/LFop2cZRnH2Da1ABr+01wjzIyjzUFbkybdiw5rEfDPskImPa5m6Xb2bfxZZ
-         UkuxumHD+VmRUsSrHAMKjyM01x+34vyzMxe6JJtOmvPONUZVf0u0k2SjfO2UEPq9VvXA
-         hviw==;
+        bh=eW8+mqrmr6N7CBulx1m18TzlUYk2VeJ10g5AWzjPQEQ=;
+        fh=F+GbuvYPU2OEIH03ZIWEyp9eRbHCcT/Pbg90PJJY16U=;
+        b=c0LJ3wrlidbPYvHwVHs4WmWex8l0utEZNhjwhcM05xLvnMa1u/APZYcUjMlNM6BsdI
+         aoNl4RgZ+e8JWFA4R4o+vnEZt8fLKLgZuvaeluC89hbtUparUQ5ImqVZllHBqw9xd6xb
+         mKoYAWeM+ZVaqAak8pTnya8742G0SVPsnprM9VovZH90lkPeCgyDkZYEVWPIQd4I5bu2
+         CG0MFq/mbSD7VmJoogc5jPXXZJOSzko+pXbUxF/DqUqF/Em7CRtIi4aOAe0yP3CISxpx
+         V25PCfW1Etc93sm3gAC1AFlrEioSijfjzIxYwTuB/s9XayXFMAGkA76DYmgedu4un4Ms
+         M5kA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782187153; x=1782791953; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782187328; x=1782792128; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fv4+YQzwW9vJ3yUowssNEEOn5d5CfHMnYf5q6sRM4Aw=;
-        b=ayc6Yxc9BZ+MZUTfJWUjsUjR6/AmNZnL8Egi5GytMU1FqCvZDNwOE7s9xkQgfiztdR
-         nn4jlG1gEP78vF/wMFDw8ZTiKMBvy6GjmBy58WtRFUjFfG2V+u5XAAY7w46Umife8eo4
-         qgQIM+1syaO/b2udQFkxZ7jSfGNGACFkI2L+6E0oZqfxuHmPaMTbJHenO6rubQThlvf6
-         IDKcvkU59HSHmQBC4k2UWtPEk2TmMMqqQhgwttGAdhfDFjuCbbnKbl/0gH7QzexsqcgP
-         d0WhSZcBajAwY5rIT2/lcz1WT6GLNYVvfcU3GF7DH7yfScHes7q+viapvK0ytMpyzOXI
-         YRgQ==
+        bh=eW8+mqrmr6N7CBulx1m18TzlUYk2VeJ10g5AWzjPQEQ=;
+        b=kvfEHe85g9lUYBp4b+HBBNOtnEXPs2FhHtjfbueg3OXE/2zsiVDDCk5Sf2KOR1lxib
+         zIoQxQiskpChFQyo21WNgATlA1ZTx/GP/aSDvLer8bGK1k/DXX2aghlwkYqQv2pFkyFz
+         oked1raJu7gLr0qxR3h80MSU/LFbvjxaK41XdPy0f5iGOahOso5D6brjklO00daNIfq1
+         gIxALTWLg3bznUVXFcT2ZVDOgIwpidNjrhE9Sc+zhNk1C8e6f6KiwIxKTskiB6kpTBMK
+         w1nNx8ay0Yr5pDD5SIS7zDfDIGIW66P2uO5D9Xu05DDJK12HXpSTUlR+6N1r5JyQ9KZc
+         sUcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782187153; x=1782791953;
+        d=1e100.net; s=20251104; t=1782187328; x=1782792128;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=fv4+YQzwW9vJ3yUowssNEEOn5d5CfHMnYf5q6sRM4Aw=;
-        b=GcxkqxaZ9GhseA2Pq2tmT4mIKHjczHZmAZuS9XO0zqGDF6mpB6lxFhB25rU0lNdxHr
-         L3P0a6S1JJ2LKrKJqFPTcTReJAa6roiKttnzCpTlWC8hlBaAUMYQziBBOLQO1qES8zM+
-         oaNL8x+xSEmYHa+MY1m7U+DcxEoJEzqUqDWx29u0czQku/q8S+why3Pvoa1e06Bzbm27
-         vSme+E/TqW+mUsZVOe3U+yJDIDp/tXemm4AIgh837JyXXPJbdIMkgsjWo8Qnq1VjTGMp
-         ufgDiNnsRtL/hlJa2SFSfhP3g7HYBDPCqLEE36lGwodntcINheJRdStm1FHEcMHzsUWo
-         iVZg==
-X-Forwarded-Encrypted: i=1; AHgh+Ro9DjbBPwqVCIFFLCb0aZzLHFWJwJfnsWUMKm0FNUxAqxIcdUi2fhYPb1P66T/uxi4VJIHGGP68A96rn84QQus=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXLTU9UN6VeeUaSWP0RifvDOBYAPtm6Dg+acCZqI6hIZ7mhl68
-	WY2jT9ZQtS6zc8LIhfcAGUVBtX2a7P8UAg89w77BSJF6TAQ41PFPz/2GxBAzlnXvkR1ZnzLVk46
-	R/lFwHzig5k0I8c/oLLt8pOqvW+xdUbE=
-X-Gm-Gg: AfdE7cnGzvd8w05R7R4cYgf23FpJwyhIwXTvP9MkQN0RveB/8IpQFoepcPeogGMpN6q
-	WWTP/SHL/01RgPoYc7RxHlTPn1/6HIR7bBZaD/i7u1SVHrbXH2DC8vuLYzPy4ES51EQx3Pwe+VY
-	D2B+6KQRHRZrkiJYgU5uGFJe6/f8mPROmYdzEnaC7ZopxqGg6RREvhC3UkH0NFZqfBuc+adQoDY
-	u6Zohe6YVgkP20/2nZYLnE9pZUdFhYiSW70RnW3CMLA65YpoM05C9sOg4yCHfLU4JcWVQKABV/6
-	wdXKnJhiNmW/UsssY/WswjI+q7kPZ9CGfDbNH8ilBTuMcDdkDwvMRRu29irRredGXW5ylDMCHOk
-	AxIyHejRRTKfwfw==
-X-Received: by 2002:a17:902:db04:b0:2c6:bb31:4564 with SMTP id
- d9443c01a7336-2c7c9ae9c89mr6495325ad.34.1782187153306; Mon, 22 Jun 2026
- 20:59:13 -0700 (PDT)
+        bh=eW8+mqrmr6N7CBulx1m18TzlUYk2VeJ10g5AWzjPQEQ=;
+        b=Dog9Xm6hr8BIqRckK9GA5B9ESZDyrp7Jg+UwaXE0K55PAkR2zDb+hn6xYQH0x7v0hD
+         JMdMZM7uHid0uNKFaooTgTHiSR4M7eZoxh0qD7ONBOXmiw735Hm3jCNDwkYMwDYefRQv
+         gBob5RFqZTjTDOytmg2JDbcxWv9CqUhYrYAGoLpBpcTno7Mhu5eyday5fAj0pMEfAfOu
+         8538OQ9a1p7v85gK5X+yHiyvWIDDB9Czrj2c3N3QMvv7ZQ8uWdIzghhE5OATswoeecEP
+         QOJA8QZFbW2buY6KmS3B9aOKv6wFNr1RVP07xOr9GMJzVJb2eUHXcYUTZibj8O+My1BB
+         u4QQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9TmvE6OpIvzml2nPW1aQlhwRfc4Z0pZ0IULa5FKVt7Et+s56ePFMULJM6NXotnFkh2+uT+IZcMgDrdWl59YlY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDYH6+KWgWmKs8LbQbiFfqMylSjdHISlakzm2NBh5fCzElCqsf
+	Lp1IxQsG1EfmzWngTsBawVSb90PFKtziOBcOQWVCYDj7XJ1jY13qNJPZKQKrddQ5gl48nsKdkla
+	Rv7lHRzKh9ZCYk8P6/PamfhC6fw3jYKw=
+X-Gm-Gg: AfdE7ck0H/OwPr2KAuyhKhW4pd80IVWxyYKU/yu5nO2dIkwiZJ3e/9rvYyamz60c0Ml
+	T8+kmSUBNOMoO82UFmogUAFPq4vWTA0ZYUEv1hVk6pGys8CuRZMYPJReCTlYXzvPCeEzWjVFrpS
+	EauYAgRpWDvy8YUmjxXG2IVPUY03NR9ohMksJatmEDfycgv6CstWLm2aXy08NR4JMUPgJ3wgUvK
+	HKWwvD6ZbXarONADK/qoqm+MY53dxVLONYh+8eIvZICEUZIfyD3bZt25lAf/U75NCcJh4BXUulA
+	tF8+gfIWakLkBjCt+CVg6WTOHAdGJiPi8SX88g==
+X-Received: by 2002:a05:620a:4808:b0:915:e9c3:f1a0 with SMTP id
+ af79cd13be357-9208f05c232mr2733502085a.12.1782187328229; Mon, 22 Jun 2026
+ 21:02:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,14 +83,15 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260618203411.73917-1-dwindsor@gmail.com> <20260618203411.73917-2-dwindsor@gmail.com>
  <DJFZGYZFMN73.1799LMXW49WZO@gmail.com> <CAEXv5_jVXS4JoExcd71YkXEE2WXPJ0_9STO-uCwgNF+Eia_h5w@mail.gmail.com>
-In-Reply-To: <CAEXv5_jVXS4JoExcd71YkXEE2WXPJ0_9STO-uCwgNF+Eia_h5w@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 22 Jun 2026 20:59:01 -0700
-X-Gm-Features: AVVi8CcolJU9x8Dp8q7P56rN1jCQzLpqqLG-VPMeXHQRVjQ7aayUcNcv-uHuUCc
-Message-ID: <CAADnVQJsdrL2RjxM4UE1WyWrT9KsprFP+=xLHRtFhUSccDqQcg@mail.gmail.com>
+ <CAADnVQJsdrL2RjxM4UE1WyWrT9KsprFP+=xLHRtFhUSccDqQcg@mail.gmail.com>
+In-Reply-To: <CAADnVQJsdrL2RjxM4UE1WyWrT9KsprFP+=xLHRtFhUSccDqQcg@mail.gmail.com>
+From: David Windsor <dwindsor@gmail.com>
+Date: Tue, 23 Jun 2026 00:01:56 -0400
+X-Gm-Features: AVVi8CdBJDCEtsjZ6Cr-k5RWu5qRO4rCaGhk6aOZoAtNJHl7U-y4zrw2gKO9F3E
+Message-ID: <CAEXv5_jTxeTRdWpv71=6k_VTN4ZCes30xPs746Frw96fShfe4w@mail.gmail.com>
 Subject: Re: [PATCH bpf-next v3 1/2] bpf: add bpf_init_inode_xattr kfunc for
  atomic inode labeling
-To: David Windsor <dwindsor@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
@@ -111,80 +111,30 @@ Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 22, 2026 at 8:49=E2=80=AFPM David Windsor <dwindsor@gmail.com> =
-wrote:
+On Mon, Jun 22, 2026 at 11:59=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On Mon, Jun 22, 2026 at 7:57=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
 > >
-> > On Thu Jun 18, 2026 at 1:34 PM PDT, David Windsor wrote:
-> > > +
-> > > +static int __bpf_init_inode_xattr(struct xattr_ctx *xattr_ctx,
-> > > +                               const char *name__str,
-> > > +                               const struct bpf_dynptr *value_p)
-> > > +{
-> > > +     struct bpf_dynptr_kern *value_ptr =3D (struct bpf_dynptr_kern *=
-)value_p;
-> > > +     size_t name_len;
-> > > +     void *xattr_value;
-> > > +     struct xattr *xattr;
-> > > +     struct xattr *xattrs;
-> > > +     int *xattr_count;
-> > > +     const void *value;
-> > > +     u32 value_len;
-> > > +
-> > > +     if (!xattr_ctx || !name__str)
-> > > +             return -EINVAL;
-> > > +
-> > > +     xattrs =3D xattr_ctx->xattrs;
-> > > +     xattr_count =3D xattr_ctx->xattr_count;
-> > > +     if (!xattrs || !xattr_count)
-> > > +             return -EINVAL;
-> > > +     if (bpf_xattrs_used(xattr_ctx) >=3D BPF_LSM_INODE_INIT_XATTRS)
-> > > +             return -ENOSPC;
+> > > > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> > > > index 1a721fc4bef5..b41b02173e24 100644
+> > > > --- a/kernel/bpf/trampoline.c
+> > > > +++ b/kernel/bpf/trampoline.c
+> > > > @@ -859,6 +859,9 @@ static int bpf_trampoline_add_prog(struct bpf_t=
+rampoline *tr,
+> > > >       }
+> > > >       if (cnt >=3D BPF_MAX_TRAMP_LINKS)
+> > > >               return -E2BIG;
+> > > > +     if (node->link->prog->aux->attach_limit &&
+> > > > +         tr->progs_cnt[kind] >=3D node->link->prog->aux->attach_li=
+mit)
+> > > > +             return -E2BIG;
+> > >
+> > > No need. The check inside kfunc is enough.
+> > >
 > >
-> > This check is good to have, but it's enough. No need to duplicate it.
-> > More below.
-> >
+> > Paul wanted this check because it occurs at bpf prog attach time,
+> > whereas the one in the kfunc is at inode creation time.
 >
-> > > +
-> > >  static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfu=
-nc_id)
-> > >  {
-> > >       if (!btf_id_set8_contains(&bpf_fs_kfunc_set_ids, kfunc_id) ||
-> > > -         prog->type =3D=3D BPF_PROG_TYPE_LSM)
-> > > +         prog->type =3D=3D BPF_PROG_TYPE_LSM) {
-> > > +             /* bpf_init_inode_xattr only attaches to inode_init_sec=
-urity. */
-> > > +             if (kfunc_id =3D=3D bpf_init_inode_xattr_btf_ids[0] &&
-> > > +                 prog->aux->attach_btf_id !=3D bpf_lsm_inode_init_se=
-curity_btf_ids[0])
-> > > +                     return -EACCES;
-> >
-> > This is unnecessary. Only one hook will have xattr_ctx type.
-> > The normal verifier type enforcement will do its work.
-> >
->
-> Good point, thanks.
->
-> > > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> > > index 1a721fc4bef5..b41b02173e24 100644
-> > > --- a/kernel/bpf/trampoline.c
-> > > +++ b/kernel/bpf/trampoline.c
-> > > @@ -859,6 +859,9 @@ static int bpf_trampoline_add_prog(struct bpf_tra=
-mpoline *tr,
-> > >       }
-> > >       if (cnt >=3D BPF_MAX_TRAMP_LINKS)
-> > >               return -E2BIG;
-> > > +     if (node->link->prog->aux->attach_limit &&
-> > > +         tr->progs_cnt[kind] >=3D node->link->prog->aux->attach_limi=
-t)
-> > > +             return -E2BIG;
-> >
-> > No need. The check inside kfunc is enough.
-> >
->
-> Paul wanted this check because it occurs at bpf prog attach time,
-> whereas the one in the kfunc is at inode creation time.
+> Sorry, we're not adding redundant code to the verifier.
 
-Sorry, we're not adding redundant code to the verifier.
+Thanks, will send v4 soon.
