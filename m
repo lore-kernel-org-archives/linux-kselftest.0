@@ -1,156 +1,347 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4E334C9AD;
-	Tue, 23 Jun 2026 12:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5BE319CD1B
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 12:48:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782218292; cv=none; b=mg+YXeosk32A/htzBLbLpapPsigNiqiQ2k79sMwnT2Cy+mq4RMHVL6f+qAR36QPReUnjx4F89F1Hts+nHJsdoIXdWkMJjTTzvoKXfzI5mZh4zXbGlY3KzQUjh57G4EeEf4CcI8mrt4TR9EnBg9BWaElc46PwdRdyQXjXrni1FKg=
+	t=1782218889; cv=none; b=apMSPlcejNOZJgZFKgglsp0aBCMZDHUxCysFDc1AeyFokbhNEfWidsxwYfU9wfNgQOj/Vr/3cU4pWz07ya5R83SXp+IMxmA6wmjCR6fcQ6SEGIDbARRBfVNiMzdztehbJIXZVmPfekhfdAnblJh8Q72Z9AsOuX3OgTIJaXWIvHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782218292; c=relaxed/simple;
-	bh=h653bIgjXltHaURrSBDDbFgYViiGWwyVeGsxyv3j5wA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O3CVALiRBjJ7Rr2t2pDCIr4s1UvUacbN1fq9DzySDU55OZ5/Ik8uSZkACpG/rcx6vNRbewAhVf2XoWHkl5XdmOWZMV2AJ21HN5Jx0Hbq/EGh8c3yfyGGK+H+nEMsY9XIX64QBHzIuwffs5/o50oXRFY6dv3GFKJmUn5eSx9Okg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VYeBQom5; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782218889; c=relaxed/simple;
+	bh=KLdcXGUDbDtcm3zmjDpLY3GdOVEJUtoRKDldcctTNJE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=h5HUYmjguSg93SzLHkJ/iwuX0tcOcfp6RO3C6DmvXTNqMatT8/Fl4KOlcHYX6841oG0KJNiq2jmJWi/PVM7F7uFUJl8ByeGCFGq4cMrkkVlaEWvqzVxtnwCkPXZMBzvSVbbvxcy9TlLQqc8Obqv/M8QZBFo+Oope4MzqlvwrDvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X6ko92Zd; arc=none smtp.client-ip=209.85.208.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VYeBQom5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782218289; x=1813754289;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=h653bIgjXltHaURrSBDDbFgYViiGWwyVeGsxyv3j5wA=;
-  b=VYeBQom5U5fJAUb8m9SNxVqHpIRWWcr5ghXVLCBABnACcdQxkpfbHcKf
-   vivmcqzXVfEJs3MlGj4XDAX456JAnmPk0L3YwvK/HtJCktxvbr/R9Nm+S
-   D1UOWC/ZoAr5/YvDsP+JYslz5Z4Ca8jni7DO1iy6OOSgQvIiQiJ+7vX1h
-   WMpsO46HS3b2X0zr5BxGc4CUour7lNuuRbiX1VrDK2xdnWO0ycc8QpRNP
-   tHO2DRYulWlHxD6uMEkEmlw11FuvdeohqzqvKW3PxQSfU+iB/v2WphELX
-   fhJ1m6gdZg7XaTe4cI121z2b1uKnW9Z/BF+qMXUe8cPT5AZucAfTcMhVa
-   A==;
-X-CSE-ConnectionGUID: UX8cjhFyTjiD+ysWzdSUWg==
-X-CSE-MsgGUID: kCU2VGpwQ2WL6ibaMIQbmg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="82063875"
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="82063875"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 05:38:08 -0700
-X-CSE-ConnectionGUID: R5zIMnSvTw2+gUuXk1c4CA==
-X-CSE-MsgGUID: DlZxwkCaTxWl1+N3yuucbg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="249366207"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 23 Jun 2026 05:38:01 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wc0O2-000000002WH-1rQC;
-	Tue, 23 Jun 2026 12:37:54 +0000
-Date: Tue, 23 Jun 2026 20:36:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, eddyz87@gmail.com,
-	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
-	john.fastabend@gmail.com, sdf@fomichev.me, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
-	yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
-	a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
-	eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v4 3/3] selftests/bpf: Add bpf_fib_lookup() VLAN
- flag tests
-Message-ID: <202606232057.G1fSw98N-lkp@intel.com>
-References: <20260623025147.1001664-4-avinash.duduskar@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X6ko92Zd"
+Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-6954c28316cso4811308a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 05:48:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782218886; x=1782823686; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=C0THPKzcpbI+KoIcav1Em77/NkteBjAW5LeD9D18IyY=;
+        b=X6ko92Zdk/65tPzTrik8s6Jl6esPbJ5dA5J2/VSHP1HB/DIjlxA8kdG06HwLFkKwOY
+         Vci3dfFb/AMn1q04sWKPXKTLtPAfmDOix7DjA/AXqGJvstkDWjoPHQbHp3XcAzuubFjE
+         vBlyWHNJDKJ5O3yBqPxY7T5T9Ic12Bq4WfKINe80Re6utDVBBAWV3BMCybGoXLvkr/dh
+         W8wyUCBEN10A98BLi0CBI6lrsSV4OGw9cs6vG1EgHjZAfFbLlhPcq7NatMEY0VQqi8ay
+         1Z+iJfdES+clAXWFpu3stjEkBbONS9B4E5Mp3Puc3l3W8HRAI3/1y1oc3um5ftmwCaAY
+         dMcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782218886; x=1782823686;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C0THPKzcpbI+KoIcav1Em77/NkteBjAW5LeD9D18IyY=;
+        b=PU0hLP5t049DypXh63/vL5VPls64cS8q+rylQz6JQloNx5tYa9Asj3KOnkaaasCjna
+         HPkcESjmwGMjPGashvM6zt0u+4C+8+TOTqedUNlxFq6vFtK5wYlys41ameVwLauj/+ej
+         dvIWHE1DOtrvI4dJRmbla2FAhHZ+B/w7/PdogrTyyFYBwAeBddbXKV/oG6/bxhZpbw7j
+         gVLgbmuQjRiKkKHDnXGnKvgEdQLCiQOm5sTlOAMAVuoJceAGsh0IPy3wPoGUAll4Uzuw
+         4FfXatgpBtXplwy9ZIO2h6GszwYb4OSbxNXLiAOXoEMPIWGRYMMyDIvn3MnwilpAFwNa
+         ZpHQ==
+X-Gm-Message-State: AOJu0Yz1+dy/9frfxMq1eWWgObwyDV5ooCdBvLinOzqwcH3XkMZCfJ6G
+	q3UzcfxONgDVH+jzLDj2Bw0WdacTtcmJW2Q/AP8FCBLZPR7BZl9HxDIEfLUDW8y5QPQGFHbDZrd
+	TJ6oOF03We4TOj/QtCg==
+X-Received: from edqg18.prod.google.com ([2002:aa7:c592:0:b0:697:def8:bbbf])
+ (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6402:4022:b0:676:9c6d:7448 with SMTP id 4fb4d7f45d1cf-697dbae3105mr1388022a12.22.1782218885755;
+ Tue, 23 Jun 2026 05:48:05 -0700 (PDT)
+Date: Tue, 23 Jun 2026 12:48:05 +0000
+In-Reply-To: <CAEvNRgGharGxs9s_ow0Z4iiQ9PCzdghch-4Fk6UMjiPP9tX-5g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260623025147.1001664-4-avinash.duduskar@gmail.com>
-
-Hi Avinash,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on a975094bf98ca97be9146f9d3b5681a6f9cf5ce3]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Avinash-Duduskar/bpf-Add-BPF_FIB_LOOKUP_VLAN-flag-to-bpf_fib_lookup-helper/20260623-105336
-base:   a975094bf98ca97be9146f9d3b5681a6f9cf5ce3
-patch link:    https://lore.kernel.org/r/20260623025147.1001664-4-avinash.duduskar%40gmail.com
-patch subject: [PATCH bpf-next v4 3/3] selftests/bpf: Add bpf_fib_lookup() VLAN flag tests
-config: i386-buildonly-randconfig-006-20260623 (https://download.01.org/0day-ci/archive/20260623/202606232057.G1fSw98N-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260623/202606232057.G1fSw98N-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606232057.G1fSw98N-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/core/filter.c:6567:14: warning: unused variable 'net' [-Wunused-variable]
-    6567 |         struct net *net = dev_net(skb->dev);
-         |                     ^~~
-   1 warning generated.
+Mime-Version: 1.0
+References: <cover.1780676742.git.tarunsahu@google.com> <20ae20f9d1a198b289444ebb4c824314cbba1bcf.1780676742.git.tarunsahu@google.com>
+ <CAEvNRgGharGxs9s_ow0Z4iiQ9PCzdghch-4Fk6UMjiPP9tX-5g@mail.gmail.com>
+Message-ID: <9huz4iito22i.fsf@tarunix.c.googlers.com>
+Subject: Re: [RFC PATCH v2 03/10] kvm: Prepare core VM structs and helpers for
+ LUO support
+From: tarunsahu@google.com
+To: Ackerley Tng <ackerleytng@google.com>, Jonathan Corbet <corbet@lwn.net>, vannapurve@google.com, 
+	fvdl@google.com, Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, sagis@google.com, aneesh.kumar@kernel.org, 
+	skhawaja@google.com, vipinsh@google.com, Pratyush Yadav <pratyush@kernel.org>, 
+	david@redhat.com, dmatlack@google.com, mark.rutland@arm.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
+	seanjc@google.com, axelrasmussen@google.com
+Cc: linux-kselftest@vger.kernel.org, kexec@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
 
-vim +/net +6567 net/core/filter.c
+Hi,
 
-87f5fc7e48dd31 David Ahern            2018-05-09  6563  
-87f5fc7e48dd31 David Ahern            2018-05-09  6564  BPF_CALL_4(bpf_skb_fib_lookup, struct sk_buff *, skb,
-87f5fc7e48dd31 David Ahern            2018-05-09  6565  	   struct bpf_fib_lookup *, params, int, plen, u32, flags)
-87f5fc7e48dd31 David Ahern            2018-05-09  6566  {
-4f74fede40df8d David Ahern            2018-05-21 @6567  	struct net *net = dev_net(skb->dev);
-f392520e15094e Avinash Duduskar       2026-06-23  6568  	struct net_device *fwd_dev = NULL;
-4c79579b44b187 David Ahern            2018-06-26  6569  	int rc = -EAFNOSUPPORT;
-2c0a10af688c02 Jesper Dangaard Brouer 2021-02-09  6570  	bool check_mtu = false;
-4f74fede40df8d David Ahern            2018-05-21  6571  
-87f5fc7e48dd31 David Ahern            2018-05-09  6572  	if (plen < sizeof(*params))
-87f5fc7e48dd31 David Ahern            2018-05-09  6573  		return -EINVAL;
-87f5fc7e48dd31 David Ahern            2018-05-09  6574  
-31de4105f00d64 Martin KaFai Lau       2023-02-17  6575  	if (flags & ~BPF_FIB_LOOKUP_MASK)
-9ce64f192d161a David Ahern            2018-05-29  6576  		return -EINVAL;
-9ce64f192d161a David Ahern            2018-05-29  6577  
-2c0a10af688c02 Jesper Dangaard Brouer 2021-02-09  6578  	if (params->tot_len)
-2c0a10af688c02 Jesper Dangaard Brouer 2021-02-09  6579  		check_mtu = true;
-2c0a10af688c02 Jesper Dangaard Brouer 2021-02-09  6580  
-87f5fc7e48dd31 David Ahern            2018-05-09  6581  	switch (params->family) {
-87f5fc7e48dd31 David Ahern            2018-05-09  6582  #if IS_ENABLED(CONFIG_INET)
-87f5fc7e48dd31 David Ahern            2018-05-09  6583  	case AF_INET:
-f392520e15094e Avinash Duduskar       2026-06-23  6584  		rc = bpf_ipv4_fib_lookup(net, params, flags, check_mtu,
-f392520e15094e Avinash Duduskar       2026-06-23  6585  					 &fwd_dev);
-4f74fede40df8d David Ahern            2018-05-21  6586  		break;
-87f5fc7e48dd31 David Ahern            2018-05-09  6587  #endif
-87f5fc7e48dd31 David Ahern            2018-05-09  6588  #if IS_ENABLED(CONFIG_IPV6)
-87f5fc7e48dd31 David Ahern            2018-05-09  6589  	case AF_INET6:
-f392520e15094e Avinash Duduskar       2026-06-23  6590  		rc = bpf_ipv6_fib_lookup(net, params, flags, check_mtu,
-f392520e15094e Avinash Duduskar       2026-06-23  6591  					 &fwd_dev);
-4f74fede40df8d David Ahern            2018-05-21  6592  		break;
-87f5fc7e48dd31 David Ahern            2018-05-09  6593  #endif
-87f5fc7e48dd31 David Ahern            2018-05-09  6594  	}
-4f74fede40df8d David Ahern            2018-05-21  6595  
-2c0a10af688c02 Jesper Dangaard Brouer 2021-02-09  6596  	if (rc == BPF_FIB_LKUP_RET_SUCCESS && !check_mtu) {
-f392520e15094e Avinash Duduskar       2026-06-23  6597  		/* without tot_len, check the skb against the FIB-result
-f392520e15094e Avinash Duduskar       2026-06-23  6598  		 * device's MTU
-2c0a10af688c02 Jesper Dangaard Brouer 2021-02-09  6599  		 */
-f392520e15094e Avinash Duduskar       2026-06-23  6600  		if (!is_skb_forwardable(fwd_dev, skb))
-4c79579b44b187 David Ahern            2018-06-26  6601  			rc = BPF_FIB_LKUP_RET_FRAG_NEEDED;
-e1850ea9bd9eca Jesper Dangaard Brouer 2021-02-09  6602  
-f392520e15094e Avinash Duduskar       2026-06-23  6603  		params->mtu_result = fwd_dev->mtu; /* union with tot_len */
-4f74fede40df8d David Ahern            2018-05-21  6604  	}
-4f74fede40df8d David Ahern            2018-05-21  6605  
-4c79579b44b187 David Ahern            2018-06-26  6606  	return rc;
-87f5fc7e48dd31 David Ahern            2018-05-09  6607  }
-87f5fc7e48dd31 David Ahern            2018-05-09  6608  
+Thanks for reviewing the patch.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Ackerley Tng <ackerleytng@google.com> writes:
+
+> Tarun Sahu <tarunsahu@google.com> writes:
+>
+>> Introduce core infrastructure to support VM preservation with LUO.
+>>
+>> First two changes are just refactoring, no functional change, third
+>> change introduces a new member in struct kvm.
+>> - Move ITOA_MAX_LEN to kvm_mm.h for reuse by upcoming kvm_luo code.
+>> - Add a public kvm_create_vm_file() helper wrapping kvm_create_vm()
+>>   and anon_inode_getfile() to provide a unified VM file creation API.
+>> - Track a weak reference to the backing file in struct kvm under
+>>   CONFIG_LIVEUPDATE_GUEST_MEMFD to enable reverse file resolution
+>>   without circular lifetime dependencies.
+>>
+>
+> Given the above, I think this should be separate patches.
+
+Okay.
+
+>
+>> Signed-off-by: Tarun Sahu <tarunsahu@google.com>
+>> ---
+>>  include/linux/kvm_host.h | 14 +++++++
+>>  virt/kvm/kvm_main.c      | 79 +++++++++++++++++++++++++++++-----------
+>>  virt/kvm/kvm_mm.h        |  3 ++
+>>  3 files changed, 75 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+>> index 4c14aee1fb06..9111a28637af 100644
+>> --- a/include/linux/kvm_host.h
+>> +++ b/include/linux/kvm_host.h
+>> @@ -874,6 +874,18 @@ struct kvm {
+>>  #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+>>  	/* Protected by slots_lock (for writes) and RCU (for reads) */
+>>  	struct xarray mem_attr_array;
+>> +#endif
+>> +#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
+>> +	/*
+>> +	 * Weak reference to the VFS file backing this KVM instance. Stored
+>> +	 * without incrementing the file refcount to prevent a circular lifetime
+>> +	 * dependency (since file->private_data already pins this struct kvm).
+>> +	 * Used exclusively to resolve the file pointer back from struct kvm.
+>> +	 *
+>> +	 * Written/cleared via rcu_assign_pointer() and read locklessly under
+>> +	 * RCU (e.g. via get_file_active() to prevent ABA races).
+>> +	 */
+>> +	struct file *vm_file;
+>>  #endif
+>
+> We didn't really talk about this during the calls, but it seems weird to
+> preserve a vm_file with pretty much nothing other than the vm type. The
+> entire VM is re-created, which means it could potentially be a
+> completely different VM?
+>
+> In some sense it's more flexible since the guest_memfd can be restored
+> with some completely different VM, but it seems like it could introduce
+> other issues.
+>
+> I think other KVM folks would probably have more thoughts here.
+
+IIUC,
+you are asking "Why preserve vm_fd with guest_memfd when we only
+preserve vm_type?"
+
+We discussed about this. Also explained here: (also copying it down)
+[RFC PATCH v2 04/10] kvm: kvm_luo: Allow kvm preservation with LUO
+https://lore.kernel.org/all/8730c0e11acbd0d645a8b7187cd5cd7de373380e.1780676742.git.tarunsahu@google.com/
+
+and
+https://lore.kernel.org/all/cover.1780667929.git.tarunsahu@google.com/
+(This cover letter was sent separately from the patches due to a problem
+in my automated script)
+
+vm_fd is needed for guest_memfd retrieval, because guest_memfd can
+not be retrieved without struct kvm and there is no other way to pass
+that. (We talked about alternative like LINK IOCTL or break the
+CREATE_GUEST_MEMFD IOCTL in two IOCTL: one just create GUEST_MEMFD
+and another attach it to the vm_file (struct kvm)). We discarded the
+alternative approach because it changes the guest_memfd design.
+
+This patch also set the infrastucture to preserve the vm_fd which
+will be extended later in future when we will introduce private support.
+where TDX related data (sPTE) might be preserved via struct kvm. Also,
+vCPUs state, IRQ routing table etc if needed can also be preserved.
+
+
+>> +	struct file *vm_file;
+
+If You are asking about, the diff above (why vm_file is there)
+There is no way to get vm_file from struct kvm which is needed
+in guest_memfd preservation during freeze call to preserve the token of
+vm_fd. This is used on retrieval time.
+
+
+I have sent V3 as well here:
+https://lore.kernel.org/all/20260622184851.2309827-1-tarunsahu@google.com/
+
+V3 includes the few minor fixes suggested by sashiko.
+we can continue reviewing on V2/V3. I will include all of the
+suggestions in V4.
+
+>
+>>  	char stats_id[KVM_STATS_NAME_SIZE];
+>>  };
+>> @@ -1074,7 +1086,9 @@ void kvm_get_kvm(struct kvm *kvm);
+>>  bool kvm_get_kvm_safe(struct kvm *kvm);
+>>  void kvm_put_kvm(struct kvm *kvm);
+>>  bool file_is_kvm(struct file *file);
+>> +struct file *kvm_create_vm_file(unsigned long type, const char *fdname);
+>>  void kvm_put_kvm_no_destroy(struct kvm *kvm);
+>> +void kvm_uevent_notify_vm_create(struct kvm *kvm);
+>>
+>>  static inline struct kvm_memslots *__kvm_memslots(struct kvm *kvm, int as_id)
+>>  {
+>> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+>> index 89489996fbc1..65f0c5fb353e 100644
+>> --- a/virt/kvm/kvm_main.c
+>> +++ b/virt/kvm/kvm_main.c
+>> @@ -67,9 +67,6 @@
+>>  #include <linux/kvm_dirty_ring.h>
+>>
+>>
+>> -/* Worst case buffer size needed for holding an integer. */
+>> -#define ITOA_MAX_LEN 12
+>> -
+>>  MODULE_AUTHOR("Qumranet");
+>>  MODULE_DESCRIPTION("Kernel-based Virtual Machine (KVM) Hypervisor");
+>>  MODULE_LICENSE("GPL");
+>> @@ -1349,6 +1346,19 @@ static int kvm_vm_release(struct inode *inode, struct file *filp)
+>>  {
+>>  	struct kvm *kvm = filp->private_data;
+>>
+>> +#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
+>> +	/*
+>> +	 * Clear the weak reference of the vm file.
+>> +	 * In case vm file is closed by userspace, but kvm still has
+>> +	 * other users like vCPUs, clearing this pointer ensures
+>> +	 * that we don't have a dangling pointer to a closed file.
+>> +	 *
+>> +	 * Cleared via rcu_assign_pointer() to ensure proper memory visibility
+>> +	 * for concurrent lockless readers under RCU.
+>> +	 */
+>> +	rcu_assign_pointer(kvm->vm_file, NULL);
+>> +#endif
+>> +
+>>  	kvm_irqfd_release(kvm);
+>>
+>>  	kvm_put_kvm(kvm);
+>> @@ -5476,11 +5486,47 @@ bool file_is_kvm(struct file *file)
+>>  }
+>>  EXPORT_SYMBOL_FOR_KVM_INTERNAL(file_is_kvm);
+>>
+>> +struct file *kvm_create_vm_file(unsigned long type, const char *fdname)
+>> +{
+>> +	struct kvm *kvm = kvm_create_vm(type, fdname);
+>> +	struct file *file;
+>> +
+>> +	if (IS_ERR(kvm))
+>> +		return ERR_CAST(kvm);
+>> +
+>> +	file = anon_inode_getfile("kvm-vm", &kvm_vm_fops, kvm, O_RDWR);
+>> +	if (IS_ERR(file)) {
+>> +		kvm_put_kvm(kvm);
+>> +		return file;
+>> +	}
+>> +
+>> +#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
+>> +	/*
+>> +	 * Weak reference to the file (without get_file()) to prevent a circular
+>> +	 * dependency. Safe because the file's release path clears this pointer
+>> +	 * and drops its reference to the VM.
+>> +	 *
+>> +	 * Written via rcu_assign_pointer() because the pointer can be read
+>> +	 * locklessly under RCU (e.g., in kvm_gmem_luo_preserve() via
+>> +	 * get_file_active() to prevent lockless ABA races).
+>> +	 */
+>> +	rcu_assign_pointer(kvm->vm_file, file);
+>> +#endif
+>> +
+>> +	/*
+>> +	 * Don't call kvm_put_kvm anymore at this point; file->f_op is
+>> +	 * already set, with ->release() being kvm_vm_release().  In error
+>> +	 * cases it will be called by the final fput(file) and will take
+>> +	 * care of doing kvm_put_kvm(kvm).
+>> +	 */
+>> +
+>> +	return file;
+>> +}
+>> +
+>>  static int kvm_dev_ioctl_create_vm(unsigned long type)
+>>  {
+>>  	char fdname[ITOA_MAX_LEN + 1];
+>>  	int r, fd;
+>> -	struct kvm *kvm;
+>>  	struct file *file;
+>>
+>>  	fd = get_unused_fd_flags(O_CLOEXEC);
+>> @@ -5489,31 +5535,17 @@ static int kvm_dev_ioctl_create_vm(unsigned long type)
+>>
+>>  	snprintf(fdname, sizeof(fdname), "%d", fd);
+>>
+>> -	kvm = kvm_create_vm(type, fdname);
+>> -	if (IS_ERR(kvm)) {
+>> -		r = PTR_ERR(kvm);
+>> -		goto put_fd;
+>> -	}
+>> -
+>> -	file = anon_inode_getfile("kvm-vm", &kvm_vm_fops, kvm, O_RDWR);
+>> +	file = kvm_create_vm_file(type, fdname);
+>>  	if (IS_ERR(file)) {
+>>  		r = PTR_ERR(file);
+>> -		goto put_kvm;
+>> +		goto put_fd;
+>>  	}
+>>
+>> -	/*
+>> -	 * Don't call kvm_put_kvm anymore at this point; file->f_op is
+>> -	 * already set, with ->release() being kvm_vm_release().  In error
+>> -	 * cases it will be called by the final fput(file) and will take
+>> -	 * care of doing kvm_put_kvm(kvm).
+>> -	 */
+>> -	kvm_uevent_notify_change(KVM_EVENT_CREATE_VM, kvm);
+>> +	kvm_uevent_notify_change(KVM_EVENT_CREATE_VM, file->private_data);
+>
+> Notifying with file->private_data threw me off... I would rather inline
+> the rcu_assign_pointer() in this function and have this line read
+> notify(..., kvm) like before.
+>
+>>
+>>  	fd_install(fd, file);
+>>  	return fd;
+>>
+>> -put_kvm:
+>> -	kvm_put_kvm(kvm);
+>>  put_fd:
+>>  	put_unused_fd(fd);
+>>  	return r;
+>> @@ -6341,6 +6373,11 @@ static void kvm_uevent_notify_change(unsigned int type, struct kvm *kvm)
+>>  	kfree(env);
+>>  }
+>>
+>> +void kvm_uevent_notify_vm_create(struct kvm *kvm)
+>> +{
+>> +	kvm_uevent_notify_change(KVM_EVENT_CREATE_VM, kvm);
+>> +}
+>> +
+>>  static void kvm_init_debug(void)
+>>  {
+>>  	const struct file_operations *fops;
+>> diff --git a/virt/kvm/kvm_mm.h b/virt/kvm/kvm_mm.h
+>> index 9fcc5d5b7f8d..7aa1d65c3d46 100644
+>> --- a/virt/kvm/kvm_mm.h
+>> +++ b/virt/kvm/kvm_mm.h
+>> @@ -3,6 +3,9 @@
+>>  #ifndef __KVM_MM_H__
+>>  #define __KVM_MM_H__ 1
+>>
+>> +/* Worst case buffer size needed for holding an integer as a string. */
+>> +#define ITOA_MAX_LEN 12
+>> +
+>>  /*
+>>   * Architectures can choose whether to use an rwlock or spinlock
+>>   * for the mmu_lock.  These macros, for use in common code
+>> --
+>> 2.54.0.1032.g2f8565e1d1-goog
