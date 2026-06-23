@@ -1,93 +1,93 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6BB25A2DD
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 22:45:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF242D8762
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 22:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782254735; cv=pass; b=AiFXMj0wYHldFQYT+9aMH/3U4kJM4x4h5GqXbzQi/j2XAuo0r6t19NJYMR5BVcQx9IuinOaudaY8TSO9VwN3zMPE3HrBLw/9/cNfMXkVO80QMn+5vNN6oACs0hCEP8z0a7BRPlTQKaSSNcSxZAojc5MWqrh8zM4uq0vUUWrjAcI=
+	t=1782254743; cv=pass; b=jh5hioyRaMonDUxsVfOzocssemV+ISJbMktaNgHWk1jSi7oQ8gUgeyj1ftkM56nxV5mxUYflzn65dYJPRZGGys5jQM670qYfH/VcQveq1Rf0sRayyXw/8TT9ff0GJIFIFBnJOqruXlfMeISfQp79N9Mke/fSFoYqgYBx14osfLs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782254735; c=relaxed/simple;
-	bh=hrZgMFYyT9DEm/vsnt3KYYGCovrOMN5tcXZ3in6a5EY=;
+	s=arc-20240116; t=1782254743; c=relaxed/simple;
+	bh=EcQz2tTRCt0BX6S5kgMK111zSXuRsybPVvE3xOCbydU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DgXVPJZURb0DOeUVs80cJZe4fZVHTbt2xH4xuI/0c5J4vp+0q6/PFNlhTyIIBjzpb7m9NOOGP7FMeGxM5LH6wm5Py3cKGTdk/4Ui16cFPpW2MhJxNLLlW9qo7eRJxJr0FH1w21M4WGIeFit3q32yndaBUQRGww7pA4Qo3n/ViEg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kMef/w9w; arc=pass smtp.client-ip=209.85.214.172
+	 To:Cc:Content-Type; b=Le1/n+fjQBIaoOrsWbLcbXmFQ/uxfDAuEX+Fo/GcFQjqzf/E848Y2Xav5gC737FSX6sm4tdf5LQoO4EJHXNteLmxOAoZtQKVeeerhnTApEfFA6w1tjNQRYp5TGhOGnXsagu345GtPADJJpbT4034p0n7t/pKSDigUeJI0wYwxGM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jwxSi0+K; arc=pass smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kMef/w9w"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2c6be9cd89bso1564005ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 15:45:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782254733; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jwxSi0+K"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2c7d329fe93so2000855ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 15:45:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782254741; cv=none;
         d=google.com; s=arc-20240605;
-        b=X/qa3ajr5FgHum07T+YVJFzhkZaJxnftIQuydfLKqNt2/AK61KmxhHMPMCgaO249u8
-         mjoPtNhI52U1TpXjZRzbBB1/hdBE8TlW1/dX8FQIGTr8SlLe/cnhgKjxOGO6p4E9Kcpt
-         BiP72cQmUCppNtrH1Wd1xC6SBgH7Z1FFw6Jgs8dP7GlXXhl1VHJXzIEeBiJLRL3Yr3uS
-         IZsYT9BIaOW+JbIs59Gb3CrTx4rD21zA0i7pb1RpKkqJf4D7kP3bAc2AH9fC19EuQXx9
-         EETCtd/N+ecswwRmYSx5sydYBLr36WFbIeVdxz0ORWlvks9gMbltY3WnBQ5oE51jlL4B
-         /jBw==
+        b=SxKr3h+QN2y6fOhVTUwWNvVRWbLieDYnDweKOGldxlAyzRoxpYUgqXbfeiiNHXfeaP
+         86D7DdMLZXMyn+B0y7iJpHfl2Im994Bt9y1vpIy522PrSKjD7pU0WRbTuviRL2qPYbuP
+         r8NinG3KA6A++aUNlEnmcwxAtx3j6n7bpCAhH9DfWIMz0Uj+UdLyxqvUhM3Z9bkvavBz
+         PR/KlJbt1Tms57QwDB5NCojILPfPoLAU3FmgFz/MRiyQD96E18ijFa4yr2tHjSIbMITj
+         ERxuTtXtE35iiCPYZSkYgevRuXLLnpHM5pWHHqcBQ8NmgqIE7PxT1LaOHBFz27TiGlx4
+         1GdQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=wXxOG/jfQg0/T7gomCIYREfQOagj5s1RFOGCHTxehnc=;
-        fh=G5NyXqK/P771ZVJiAzMCe0Jq383J/4cjUp8f9exIDiI=;
-        b=h01m//y+K3UhHFzbillTqVvTri90eFs05FJmGDbC55BioOTYSIuFozPkUOXzLnNGB4
-         oUe6YGXms8XX3wRxGU2Xz6fJ+0jKmxWkcZV6St4VECKh1r7b/S3SH6RRy3Hvri8S2zq5
-         DpmYkblbCsLmi5cVpU9cPd8EKj14+/lFjCpIH3KpmHkGNI3g56P5zDV8Tc642LD5E5um
-         iHLX8JS43Ovis5tV1qXAAQO/sDYzmUlefBBdsVOJu6Qr0bc22OQJ3xAsEv1Jy3goGK5P
-         YnLc4ORLe3lw2w10cthMxDHhr0daMb/x8u1zD9UgR6PwbiXT5/9MQXA0GM6q+UPzyd9c
-         Wvqg==;
+        bh=CxaZisx38WO5ky73juK3oEqNc5IIVKneXBsSZc4DwHI=;
+        fh=/vEKkzpjO0nXWpFmPT5RFwnlx8NoUMxI2DkUrnJlGQY=;
+        b=ObfrcjifQ6Oaq8nqUANKMAGG2sDN3pb7YCZRgY+pghSTUc9m9NTUqBL4U2h2ShsLhT
+         6/qqD7TF3Zc9FXwMYmHvx0X66qNDR2nC+WVUI+aX+PgG+e6fTHO0ATJ0PaIIBfaYEftA
+         4LUa68oCEEnRrjUx6Ij5dIstDfawkjOL48LxSWtKHpbpB7IihWndKmVjsfq0pX9Qspew
+         RtLh9T2ZOdHnN+o/sDv34Y7JlVEdN21yeXQQ1WvhLg0VmUpsQsEqV8gUMmv5+nVvlYtb
+         F0SCPQfYSGM1KM5XbcxVDnvhWwuEFYvV6EfRYgmJCJ9N9pTLu927j2S/HypdHUO9Kisx
+         HeYQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782254733; x=1782859533; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782254741; x=1782859541; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wXxOG/jfQg0/T7gomCIYREfQOagj5s1RFOGCHTxehnc=;
-        b=kMef/w9wnqFT/EVtrKq2nYspo7aTrxsyZkI8OySsbOiGassqbZ5HkkMIwV0KWrYZB8
-         9WqAH5jWbI3FvkN5015imhXgCBNMGAH5toLB6s024CHNfvZQfa6dusoRm/Ekxf+etPPn
-         C9trfwcN5Yg7qLU/AZBSfXyMctLfK7EwUMyzsATxOU4i5l+V36hvLDoNB9DJfjQbEMEe
-         Xf2HhD9/a02wyd2aiMEaKcRfHnf9fmeXLi5X0ti3B+mi/nEDBKVov3bYtVuNH1XS/Paq
-         N0yEgupsMgLd4zzzzTczfxqraPPkKFN7KNGX3lALUq6Fo2B3fLYwMBoegKlmJOZyNuGw
-         Q1hw==
+        bh=CxaZisx38WO5ky73juK3oEqNc5IIVKneXBsSZc4DwHI=;
+        b=jwxSi0+Kx68zD5k0YOo3gAHdYc8NNsQyQILJwYZbL7O1ZnID7bjkLjtl2E7CdzNfpL
+         RO4TuINhfdlFlsmFL97TZEGkpueIwXDq5EB3s3aaoE7xP/BsJ0XHCrOVAz+PEC8BoOkT
+         6+fW1j/M2yzh0Xf/6zWf0OQ7RsTB21yalmE3oFVe8eqEsJ3LLG6THcPXsoVNc7RWBK9Z
+         usKyBykCsXCtNg2jLijkc8NFbfiqXrpqlgEeleTYjN1XBjqgt/43NTxTkANnzZ61KccF
+         wGRW+S4XJt798koudXYI++RX6p4T+VbKHnBWM57eptIjyACCcCGiDBPnusHMKeGYBbtU
+         tGFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782254733; x=1782859533;
+        d=1e100.net; s=20251104; t=1782254741; x=1782859541;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=wXxOG/jfQg0/T7gomCIYREfQOagj5s1RFOGCHTxehnc=;
-        b=nE5py79wnoseiPLXvqwht81g4dZHupEGoOE/Uihb1EP4CRyy93edMVtEdXC3JvgCnx
-         QIFcJyiVwaz+pI9CcrsiS8L6vcybIcwItidTx1wRXZr2nBa0F0bttsySdxJG8FPYnhj9
-         IJaaQMhUYp++lSSYkGU3F/2L43Lo1Q2ebEj6dB+qk+78GP5dU0s2nZd0LFMijKESpcmU
-         xBqdFqi57RUlUH7BJdQVTFtEG+0kK+9qpwZpKRLS7kymHy2JLk9arip4l3CwuvhSBM65
-         e91mXaX2DGFlgFcbcOgeYmyTGDglzYqLNIc6Z9OklsL/qADHPWqWWCL9gF/x1SRn8Q4b
-         NtbA==
-X-Forwarded-Encrypted: i=1; AHgh+Rp3mY4+cx/vN73jhIKvwIIlTKm9pFkq96xAX4zZnE0NMq0FiL5PGMmjP9rn4KM/y6OT+43iXhDkyPIEJWdcsMw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmbcPhisp+wxWDzEw1UAODZ0ufY24GzR9SyaVc928yuDUbHakY
-	z6RrWiVLKb++CYyS2cyj8qzGBkvEDOy86FSn1Dmt5kq3NnWfmUNdwU/8kHt2Jzej5ShFuVtqqRA
-	ILmuVO/wqazr8vFuCeRCqUrHhsuJIqWk=
-X-Gm-Gg: AfdE7ckDgdvxdZVlWPLhcV7eFln1Lh+9s83YS/+pR4ET08umE1Yf+JYs7Bf1NOZ0jdM
-	U1rrmIcOUkH8Gw/QzPwmFbPNiyX7SSj3vQHGDDkxuhGa1PIcEtmdixU7TagtEKgrCjY7btIkhRx
-	ec6+e15ipYE8364QZvM9vTOrzvaFdlLDNciC7KPl9f+aBUDxMpb96YhnkpXkz32jG4ZYxaG2357
-	QFJYX1Zm9Fl8enUEaf5P9GuEms3jJXcXws6wKFFl3OMr5PTkV+t3tjSTy+Vz4jkT0nTRHkYbBLn
-	QXj8oePmPUP6svJZpYP9GHOWMUKKOQfVqUBdOGlNEQIJx3Ia1tdCIiiFKKYA5x0Ee3lHIg==
-X-Received: by 2002:a17:902:e843:b0:2c6:ef2c:4405 with SMTP id
- d9443c01a7336-2c7e13bdfe2mr7595515ad.5.1782254733479; Tue, 23 Jun 2026
- 15:45:33 -0700 (PDT)
+        bh=CxaZisx38WO5ky73juK3oEqNc5IIVKneXBsSZc4DwHI=;
+        b=dQtt4N5wC5fN9GRMWhOiBK2PTDgxVynsIvmuq3m2fA92xO1I6lojU6Ttmb1KmUf1zR
+         4Abt+nhGrY8JnX6z0VBvo+bjGI03rtMvTvRTpqpjVIhlLbZvikpEWxu9+JRzHZMIlIUz
+         Kcb5tYFkA+D21e/0mVeG3XYWs10KBPw05ZtdBElO8l9Mg4ez1LP9UwuFRz7A0XIcpZ02
+         SkuIZObkvlIRMW77YaVnoiRDbAgdnDiR3ZV+/ScIooKe+utmm2i77Uo7126R6RKt/UHC
+         sOkOaEzfWyk+Q8d5ytcNGAQ7/u191f/+Pgi+t/XvKj8jB5+gCzBrVzf7NkN1xO5rjeIx
+         8jOw==
+X-Forwarded-Encrypted: i=1; AHgh+RqhnCtraqx+HEtEFwJW01R4vIpIP4rXmGnBuFFIFUyYb4QrTmSvnRykjlhpZVn9yA4BFvtSrsgw4zASLmS5kME=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJZQlI4CkaFEN3VgTa0PjwkAw6LKs/94HuzmZHcqSgIXI5GZU8
+	QFF4r7Cq4nllTdL5Yt1GDfTZ+KgBkoaYwqx6JosUBB5BXfuF8oaPZ8rF2sUdKzjx7xBoTQRaH+v
+	2+gUh1SfQrCVAlMl5M42mJnTcdEspxWM=
+X-Gm-Gg: AfdE7ckF/PziqagIT1wttoLg07ynZQ0gBH9N1wBc79VcsMK3xaUrdqOMPXqvzpW01N1
+	Id8QshwzD6oPA5957DPBuNdKEd2r5DoXuJLk4yXKnTB1YFM3DP6uWDBwJrH7duZhG92Klq9rhU7
+	oPS9KyOkJwBiyCSKEsWv6hRUuOI6UDBEK0coeP0xCG1DAnRddGiFIRK3b+RNe/15J3zovohdDve
+	WG1MzmypSJi/5DuWUgolRlsrnmK9JalYnbkN4MKmoF2fSZffAxbeu+qk8JG9Y/CPsKBZED5B0En
+	MtHUgNWa/JIAsfV+WUd8kGKBWBX9XJD1q07qQ/nYocDJWQW5kMQMtpo26AdCRFyJhwTsYg==
+X-Received: by 2002:a17:902:f712:b0:2be:22cc:e227 with SMTP id
+ d9443c01a7336-2c7e13c0197mr8634395ad.4.1782254741178; Tue, 23 Jun 2026
+ 15:45:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260622143557.22955-1-leon.hwang@linux.dev> <20260622143557.22955-5-leon.hwang@linux.dev>
-In-Reply-To: <20260622143557.22955-5-leon.hwang@linux.dev>
+References: <20260622143557.22955-1-leon.hwang@linux.dev> <20260622143557.22955-6-leon.hwang@linux.dev>
+In-Reply-To: <20260622143557.22955-6-leon.hwang@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 23 Jun 2026 15:45:17 -0700
-X-Gm-Features: AVVi8Ceoru0wYWL826ra81zuTyttk0w5Uc3IpjDkIWpGEbDG0bNldeRs_-InEgw
-Message-ID: <CAEf4Bza8aqNsiiBHJ64+Sj-2twUFxeSuBZ89tVroig3OWC9_Ng@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 04/11] bpf: Introduce global percpu data
+Date: Tue, 23 Jun 2026 15:45:22 -0700
+X-Gm-Features: AVVi8CfTg_P5yy6rFlXP2Y75Gi68t--pXmgrpEK_h8GYkYYP5jkqdB9wKTC9KFE
+Message-ID: <CAEf4BzZ+1Zc4QerMGVeS0MJ_gkk14VVKCKS0PfOUJ5P_Q_92WA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 05/11] libbpf: Probe percpu data feature
 To: Leon Hwang <leon.hwang@linux.dev>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -103,138 +103,97 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Jun 22, 2026 at 7:37=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
 rote:
 >
-> Introduce global percpu data, inspired by the commit
-> 6316f78306c1 ("Merge branch 'support-global-data'"). It enables the
-> definition of global percpu variables in BPF, similar to the
-> include/linux/percpu-defs.h::DEFINE_PER_CPU() macro.
+> libbpf needs a reliable way to distinguish kernels that can support
+> global percpu data from those that cannot.
 >
-> For example, in BPF, it is able to define a global percpu variable like:
->
-> int data SEC(".percpu");
->
-> With this patch, tools like retsnoop [1] and bpfsnoop [2] can simplify
-> their BPF code for handling LBRs. The code can be updated from
->
-> static struct perf_branch_entry lbrs[1][MAX_LBR_ENTRIES] SEC(".data.lbrs"=
-);
->
-> to
->
-> static struct perf_branch_entry lbrs[MAX_LBR_ENTRIES] SEC(".percpu.lbrs")=
-;
->
-> This eliminates the need to retrieve the CPU ID using the
-> bpf_get_smp_processor_id() helper.
->
-> Additionally, by reusing global percpu data map, sharing information
-> between tail callers and callees or freplace callers and callees becomes
-> simpler compared to reusing percpu_array maps.
->
-> Links:
-> [1] https://github.com/anakryiko/retsnoop
-> [2] https://github.com/bpfsnoop/bpfsnoop
+> Add a dedicated feature probe, so libbpf can make capability decisions
+> early and fail predictably when global percpu data is unavailable.
 >
 > Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
->  kernel/bpf/arraymap.c   | 39 +++++++++++++++++++++++++++++++++++++--
->  kernel/bpf/const_fold.c |  1 -
->  kernel/bpf/fixups.c     | 34 ++++++++++++++++++++++++++++++++++
->  kernel/bpf/verifier.c   | 15 +++++++++++++++
->  4 files changed, 86 insertions(+), 3 deletions(-)
+>  tools/lib/bpf/features.c        | 35 +++++++++++++++++++++++++++++++++
+>  tools/lib/bpf/libbpf_internal.h |  2 ++
+>  2 files changed, 37 insertions(+)
 >
-> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-> index 248b4818178c..876aa2604f41 100644
-> --- a/kernel/bpf/arraymap.c
-> +++ b/kernel/bpf/arraymap.c
-> @@ -259,6 +259,38 @@ static void *percpu_array_map_lookup_elem(struct bpf=
-_map *map, void *key)
->         return this_cpu_ptr(array->pptrs[index & array->index_mask]);
+
+lgtm
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+
+> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> index b7e388f99d0b..ef9581c11303 100644
+> --- a/tools/lib/bpf/features.c
+> +++ b/tools/lib/bpf/features.c
+> @@ -620,6 +620,38 @@ static int probe_bpf_syscall_common_attrs(int token_=
+fd)
+>         return probe_sys_bpf_ext();
 >  }
 >
-> +static int percpu_array_map_direct_value_addr(const struct bpf_map *map,=
- u64 *imm, u32 off)
+> +static int probe_kern_percpu_data(int token_fd)
 > +{
-> +       struct bpf_array *array =3D container_of(map, struct bpf_array, m=
-ap);
+> +       struct bpf_insn insns[] =3D {
+> +               BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0),
+> +               BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, 0),
+> +               BPF_EXIT_INSN(),
+> +       };
+> +       LIBBPF_OPTS(bpf_map_create_opts, map_opts,
+> +               .token_fd =3D token_fd,
+> +               .map_flags =3D token_fd ? BPF_F_TOKEN_FD : 0,
+> +       );
+> +       LIBBPF_OPTS(bpf_prog_load_opts, prog_opts,
+> +               .token_fd =3D token_fd,
+> +               .prog_flags =3D token_fd ? BPF_F_TOKEN_FD : 0,
+> +       );
+> +       int ret, map, insn_cnt =3D ARRAY_SIZE(insns);
 > +
-> +       if (map->max_entries !=3D 1)
-> +               return -EOPNOTSUPP;
-> +       if (off >=3D map->value_size)
-> +               return -EINVAL;
-> +       if (!bpf_jit_supports_percpu_insn())
-> +               return -EOPNOTSUPP;
+> +       map =3D bpf_map_create(BPF_MAP_TYPE_PERCPU_ARRAY, "libbpf_percpu"=
+, sizeof(int), 8, 1,
+> +                            &map_opts);
+> +       if (map < 0) {
+> +               pr_warn("Error in %s(): %s. Couldn't create simple percpu=
+_array map.\n",
+> +                       __func__, errstr(map));
+> +               return map;
+> +       }
 > +
-> +       *imm =3D (u64)(__force unsigned long) array->pptrs[0];
-> +       return 0;
+> +       insns[0].imm =3D map;
+> +
+> +       ret =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", i=
+nsns, insn_cnt, &prog_opts);
+> +       close(map);
+> +       return probe_fd(ret);
 > +}
 > +
-> +static int percpu_array_map_direct_value_meta(const struct bpf_map *map,=
- u64 imm, u32 *off)
-> +{
-> +       struct bpf_array *array =3D container_of(map, struct bpf_array, m=
-ap);
-> +       u64 base =3D (u64)(__force unsigned long) array->pptrs[0];
-> +       u64 range =3D array->elem_size;
-> +
-> +       if (map->max_entries !=3D 1)
-> +               return -EOPNOTSUPP;
-> +       if (imm < base || imm >=3D base + range)
-
-nit: not sure what's the value of range local variable, single place
-where you use array->elem_size
-
-> +               return -ENOENT;
-> +       if (!bpf_jit_supports_percpu_insn())
-> +               return -EOPNOTSUPP;
-> +
-> +       *off =3D imm - base;
-> +       return 0;
-> +}
-> +
->  /* emit BPF instructions equivalent to C code of percpu_array_map_lookup=
-_elem() */
->  static int percpu_array_map_gen_lookup(struct bpf_map *map, struct bpf_i=
-nsn *insn_buf)
->  {
-> @@ -551,9 +583,10 @@ static int array_map_check_btf(struct bpf_map *map,
->                                const struct btf_type *key_type,
->                                const struct btf_type *value_type)
->  {
-> -       /* One exception for keyless BTF: .bss/.data/.rodata map */
-> +       /* One exception for keyless BTF: .bss/.data/.rodata/.percpu map =
-*/
->         if (btf_type_is_void(key_type)) {
-> -               if (map->map_type !=3D BPF_MAP_TYPE_ARRAY ||
-> +               if ((map->map_type !=3D BPF_MAP_TYPE_ARRAY &&
-> +                    map->map_type !=3D BPF_MAP_TYPE_PERCPU_ARRAY) ||
->                     map->max_entries !=3D 1)
->                         return -EINVAL;
+>  typedef int (*feature_probe_fn)(int /* token_fd */);
 >
-> @@ -832,6 +865,8 @@ const struct bpf_map_ops percpu_array_map_ops =3D {
->         .map_get_next_key =3D bpf_array_get_next_key,
->         .map_lookup_elem =3D percpu_array_map_lookup_elem,
->         .map_gen_lookup =3D percpu_array_map_gen_lookup,
-> +       .map_direct_value_addr =3D percpu_array_map_direct_value_addr,
-> +       .map_direct_value_meta =3D percpu_array_map_direct_value_meta,
->         .map_update_elem =3D array_map_update_elem,
->         .map_delete_elem =3D array_map_delete_elem,
->         .map_lookup_percpu_elem =3D percpu_array_map_lookup_percpu_elem,
-> diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
-> index b2a19acadb91..5787246bef30 100644
-> --- a/kernel/bpf/const_fold.c
-> +++ b/kernel/bpf/const_fold.c
-> @@ -182,7 +182,6 @@ static void const_reg_xfer(struct bpf_verifier_env *e=
-nv, struct const_arg_info *
->                 u64 val =3D 0;
+>  static struct kern_feature_cache feature_cache;
+> @@ -707,6 +739,9 @@ static struct kern_feature_desc {
+>         [FEAT_BPF_SYSCALL_COMMON_ATTRS] =3D {
+>                 "BPF syscall common attributes support", probe_bpf_syscal=
+l_common_attrs,
+>         },
+> +       [FEAT_PERCPU_DATA] =3D {
+> +               "kernel supports percpu data", probe_kern_percpu_data,
+> +       },
+>  };
 >
->                 if (!bpf_map_is_rdonly(map) || !map->ops->map_direct_valu=
-e_addr ||
-> -                   map->map_type =3D=3D BPF_MAP_TYPE_INSN_ARRAY ||
-
-can you please elaborate on why this change is needed?
-
->                     off < 0 || off + size > map->value_size ||
->                     bpf_map_direct_read(map, off, size, &val, is_ldsx)) {
->                         *dst =3D unknown;
-
-[...]
+>  bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_=
+id feat_id)
+> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+> index 04cd303fb5a8..47ae39125f68 100644
+> --- a/tools/lib/bpf/libbpf_internal.h
+> +++ b/tools/lib/bpf/libbpf_internal.h
+> @@ -401,6 +401,8 @@ enum kern_feature_id {
+>         FEAT_BTF_LAYOUT,
+>         /* Kernel supports BPF syscall common attributes */
+>         FEAT_BPF_SYSCALL_COMMON_ATTRS,
+> +       /* Kernel supports percpu data */
+> +       FEAT_PERCPU_DATA,
+>         __FEAT_CNT,
+>  };
+>
+> --
+> 2.54.0
+>
