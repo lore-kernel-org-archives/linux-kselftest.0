@@ -1,94 +1,131 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08A7038E11A;
-	Tue, 23 Jun 2026 06:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5C7396D15;
+	Tue, 23 Jun 2026 06:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782195157; cv=none; b=mDoULwosxeSOob1H/kqAMiqjWIC5bWnMaYXpseELBURbhH1j1PAfyanbc4NnNoYxe6Pgp9fYCUlKLp1mTzXCCUrpp6wWGyBjPfxeREiPP2x2J9a438TMEsL2cbt+mZUnCaVZbgoA02u/HAHRqNyMl4MDefkezu3BlJ7V9SQb2jg=
+	t=1782195320; cv=none; b=NvfLqY6jvxEH0Gs8pCxPJgAVibLfQ9g1bDCo5N3tOOEDDD+ProRR7/i8TQ60lcooK5OvGQeySnZKDbNpBRMzFOdCufxGiV9mrTsfqOfEsJJHZWsUA8Tm3rMaleht2xEHEBGVtpLQAToNyMO6JD630Om2jUJCJ94aEGsmE3jtAIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782195157; c=relaxed/simple;
-	bh=23lwhzWfgdMDmDczAVwgWgTHK6r/bqze9OcPfuLjQZg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PVvY6+CHwkBqdRo4yahPRvd+REA12GGLKS3WAMyPqfmffwBh2GzGT7+HEzFSz6yHu1ly9SF571Vn7p6lPFOyOSJb73LO6RN79q6AGpXQwKLqtgOixQpSQiVbAQr87dy34gqe89OfGJ9N1PGqYS8owRjemXnQZoh+knVmcvsmV3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=nu6qsrzI; arc=none smtp.client-ip=4.193.249.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1782195320; c=relaxed/simple;
+	bh=iDJQ8q9y8/lBVlCSKCHv2KFuzeprLfn94oYskcqsbro=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nA6PqsNDCUybHLtJpNOFn9NEhOi32UlveO0eIWYgP2q68h4Lh7vM8k7FjWQGJmljnm20YKicoMgLIV1rFO6MC15VeucgT0ey6Dha68NDQxyEcUyKwSdFT4ie3QCp2yrVqzFtAtEYWR0Wq+GOYE0TUlk5okgTyOaWbgPB825FUxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EW0G8ol9; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="nu6qsrzI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=23lwhzWfgdMDmDczAVwgWgTHK6r/bqze9O
-	cPfuLjQZg=; b=nu6qsrzIvi6qiOzbiVvLqkbI+ykCOw3XvoAZx70gqKfZGPhyrZ
-	43vyYlVA2Lvq4L4A69icsfPenUCoHDvcrVIe1Y7N3l4G+E0saE0FugESecW115zv
-	eFAqb4oGXJpaLOVH5E4CgOLUzBnDApSceF3/ThrpntfnTeSGvIFzUXE9g=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web3 (Coremail) with SMTP id ygQGZQBHk5C4IzpqE2KmAg--.12123S2;
-	Tue, 23 Jun 2026 14:12:16 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: eddyz87@gmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	chenyy23@mails.tsinghua.edu.cn,
-	daniel@iogearbox.net,
-	davemarchevsky@fb.com,
-	emil@etsalapatis.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	leon.hwang@linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	shuah@kernel.org,
-	song@kernel.org,
-	vmalik@redhat.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Cover refcount acquire node offsets
-Date: Tue, 23 Jun 2026 06:12:05 +0000
-Message-Id: <20260623061205.2691322-1-chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <170c35441f167931b1a651e5bf07f671bc429368.camel@gmail.com>
-References: <170c35441f167931b1a651e5bf07f671bc429368.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EW0G8ol9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782195318; x=1813731318;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iDJQ8q9y8/lBVlCSKCHv2KFuzeprLfn94oYskcqsbro=;
+  b=EW0G8ol9BtzNIz6smi8tAUi3HcP9KttzCn3jMZ6QW05V7AStaHkI0jtP
+   U2hiK80Uotz7Ym/oUoTa3eJCsVJRFVfkbQRoQOH1ZW3qzp9dT0q84mlIY
+   NJOm9uPElbkugpICVqquohNUglq6RkJ4ZitxlbienuUJKgLa7wSkr/cK4
+   XQpNioFwFeaOF2nFsBneyAoXGEcwxIeFt4ky1M1RdfxMNk40ryc0Hxtdk
+   Gv17HASbDZGdPsBWPMuJ9Xs9DcygqRcSCkWZdHIkA5yPC23nEQJecub2g
+   +2m29GxwR07fuPcVMRaQ0Lg63JQcIDNVvGqnTpIJ2tEwHQf1reumX6JhX
+   A==;
+X-CSE-ConnectionGUID: FsIqkeOnSvCf/ZSa9t2B3g==
+X-CSE-MsgGUID: nXUwkrN5SOSuLi6+ual4sQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="93293247"
+X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
+   d="scan'208";a="93293247"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 23:15:17 -0700
+X-CSE-ConnectionGUID: HBGg64mmROGLAXtatw76Ug==
+X-CSE-MsgGUID: FlT3tdEoQW+kTfbe58pb3w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
+   d="scan'208";a="248278935"
+Received: from unknown (HELO [10.238.2.81]) ([10.238.2.81])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 23:15:04 -0700
+Message-ID: <2ef455c3-a3f5-4ba1-86ea-b96416d163ce@linux.intel.com>
+Date: Tue, 23 Jun 2026 14:15:01 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ygQGZQBHk5C4IzpqE2KmAg--.12123S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO57AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E
-	6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-	kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8I
-	cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
-	Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvE
-	ncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I
-	8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I2
-	1c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVAFwVW8Aw
-	CF04k20xvY0x0EwIxGrwCF54CYxVCY1x0262kKe7AKxVW8ZVWrXwCFx2IqxVCFs4IE7xkE
-	bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
-	AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
-	42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCw
-	CI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnI
-	WIevJa73UjIFyTuYvjfU5YFCUUUUU
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 10/46] KVM: guest_memfd: Wire up core private/shared
+ attribute interfaces
+To: ackerleytng@google.com
+Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
+ chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
+ jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
+ pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
+ rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
+ tabba@google.com, willy@infradead.org, wyihan@google.com,
+ yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
+ suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>,
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-10-9d2959357853@google.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20260618-gmem-inplace-conversion-v8-10-9d2959357853@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jun 22, 2026 at 03:30:57PM -0700, Eduard Zingerman wrote:
-> This paragraph is completely unnecessary.
->
-> I don't think the fixes tag applies to the test.
->
-> Why is this test necessary? Does it exercise any paths that the
-> previous one does not check?
+On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
 
-Thanks, all addressed in v4.
+[...]
 
-I removed the paragraph, dropped the Fixes tag from the selftest patch,
-and removed the rbtree test. The list-node case exercises the same
-refcount-acquire fixed-offset rejection path, so the rbtree variant is
-redundant for this regression coverage.
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index bca912db5be6e..e0e544ef47d69 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -926,6 +926,24 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+>  EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_gmem_get_pfn);
+>  
+>  #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_POPULATE
+> +static bool kvm_gmem_range_is_private(struct file *file, pgoff_t index,
+> +				      size_t nr_pages, struct kvm *kvm, gfn_t gfn)
+> +{
+> +	struct maple_tree *mt = &GMEM_I(file_inode(file))->attributes;
+> +	pgoff_t end = index + nr_pages - 1;
+> +	void *entry;
+> +
+> +	if (!gmem_in_place_conversion)
+> +		return kvm_range_has_vm_memory_attributes(kvm, gfn, gfn + nr_pages,
+> +							  KVM_MEMORY_ATTRIBUTE_PRIVATE,
+> +							  KVM_MEMORY_ATTRIBUTE_PRIVATE);
+> +
+> +	mt_for_each(mt, entry, index, end) {
+> +		if (xa_to_value(entry) != KVM_MEMORY_ATTRIBUTE_PRIVATE)
+> +			return false;
+> +	}
 
-Yiyang
+Patch 1 noted that "Ensuring every index is represented in the maple tree at all times".
+So I think the queried range should not be a hole in the maple tree.
+However, there is a inconsistency: in patch 1 kvm_gmem_get_attributes() explicitly
+checks for holes, but this patch does not.
 
+> +	return true;
+> +}
+>  
