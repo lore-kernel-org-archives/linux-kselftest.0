@@ -1,216 +1,233 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CWXP265CU008.outbound.protection.outlook.com (mail-ukwestazon11020093.outbound.protection.outlook.com [52.101.195.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1118137E2F7
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 13:52:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782222756; cv=none; b=jD7ibA+Gub5q5ffu0FkiAe0IqpBQGnQC3doB2MDFDIpXa+BqcfumDDK4vRWyDRpPDXvuWJom0nuKV8e8uow1bqdRsgrlj0WPNOOq6fSst/OouPaHD1aid+Z6UfG9o5HqE8v+SfoEmrxqB8KQzcRnQOA9UtVPRWmPybGG1oDNjT4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782222756; c=relaxed/simple;
-	bh=qQDzdCIM36hTAqOEAnWir+7wrUqqW1kd9jhGVeFV15I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZsjWH8azOkHjqZTXj65OfZFpimFtW+oAmaNJWbEjfxHkxqBII6Krp9ieCKmnMtjIkZG+bBMY5jq68v3yYhDpA73+HdUpYE9z5JA8y44BlKg1e4wd3hVRDfJrtAedwTcMwXmOaHyDSI5J7kTOAYYu0AgNC5F7xb+IsWOZ7u2eJEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ADOSpobz; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3285237DE9D;
+	Tue, 23 Jun 2026 13:53:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.195.93
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782222793; cv=fail; b=cXI9amz+YghluRtfziiMJYKMktz4NZRBMYhovnFcZon5dpdaruJYfvRIuxeaTLTSXnIeAyHLA1TmAAAw4WBXBnMbHwyBNSiv9MRRaWTA9T04Li5UOEnBCUZedfYt3VWZKcgSKJ5JMvJ9e2ELBp0BxHK11B9+A/LXrlbjU5QxseM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782222793; c=relaxed/simple;
+	bh=ifouXrtcQSwRRkW+v6eaSpau+zVw+26wOzIWNNNqTiM=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
+	 In-Reply-To:MIME-Version; b=u7LnyMkR5CJdGSwwCWJR/dTtB2DEgKlJY3krWJy8STRQr3pYXsFrNbQrgyE7rlF2b/XFFIjHzxWj1NCmcezlYZtqxwsPtbeLGkKiW7sk52AYks0NPr5VgOBnec8oTQVfCIrAx5rfj0Frv96Kr2gc+qHMbh4/K72zNOOzjWGg+8E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=SBznQRsz; arc=fail smtp.client-ip=52.101.195.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ADOSpobz"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4924944fe6bso22206285e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 06:52:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1782222753; x=1782827553; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PHObhepawfnCQqRNz4R+JkWCcyuhA+vOquuYLNzbdAc=;
-        b=ADOSpobzjcEHMkYS/sXIZQVl12XUJxZyCde6NbG569ry62GsvfZJQbNIabmCIXW0c6
-         WTjV7ynnXngK/dxEitSDCKJbdG7zjJv2XH1NLDpXqs2XZexUN0Q22p8Yx1FZXv/uoT9d
-         T/ixCXEyGiH7t7+cr94+LJYCD6Xjp3vOAEgNXyrP2DfWeBwRa8BoRojdKIZJ0SALOY3V
-         SLqj00yV936CMBQZecJ2hXJ9Sx/vC1Q21TWGjMYiQADpE8K7Ja7H+PwVlfLVOvJkMGN3
-         lpIKPP+H92mjgMti9Af3DKaF74AAGaxkFBqyaKGotAGSuknI1/YH6vk/y6vaY2xiSB+n
-         nTNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782222753; x=1782827553;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PHObhepawfnCQqRNz4R+JkWCcyuhA+vOquuYLNzbdAc=;
-        b=An1OGKmSHpPROc+Y39eTTmwZ4kSDjbEgHxIjUTsGuxuhT6VKr3Unh7PzwKFgL2jR5s
-         R/T6stL4E/QAdXxyhL7nRFTJIRrF7+62oy1KLSjiwvPpK25JgwAEZPymLrvwEUkkrUp8
-         UmM08W+7m/e5SavVDIlN+NhMj/Mla1VNAMVhkx40GStcL2eSAOveZXSRhfMyDj91vHkr
-         njHnzaaHapBhpnFI4PTc5WcC2OdDv54vxnBUqeEW1WG5Ud02GRm8iY2gNzzAoldXwsMh
-         AcVhVFzFGQLJAYdp0ISZLgYZlaGfpc/fkEIyLCcQtM5skgFAXb4NWcxrRx8dR3sDw/0G
-         6IWA==
-X-Forwarded-Encrypted: i=1; AFNElJ8buKVuDVtGMzxQmfOYd9OoZdH34R0wDf+YfWuIQ/IDkNrR6ndq9of7L4/Vznx6H2Q6ZChun3/qJUfVPoTcYXY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEaTXIlLehZFAjhmW6nrbEfKzt+E9zsvm1atd3LcatYS3/YS/2
-	1N+DwlNiABApbbBGEyxxk9RlRuhecxwTAyjcPqbiOipI6Q0MPYkRWadyBVK4QLKwP0M=
-X-Gm-Gg: AfdE7clGXl4D8HnqPrK8YALgMm0gXIr8Y/B9+wf9qYYJOir82he0RmzZA8KjY12Rgl7
-	yhfZV/ah0azc/fT0VJeds/OiNrFrmEvT3i/EM3B55RSgFkRtry7vBFdlkksHxUM6HK502KbCFkl
-	Ye9HX6lXJZ0B95flf+c7Za+ox5j74/jtBWVby5WqJIWRPdpXQAZWpjazq4A7zfdu04kXuHDvdwX
-	XAs+Ov24FjPTRhB1jghVZ9YlC1UFFVcWM4TaMTWGwDPNs7BcOL7N/RsPJ1viohmT2XrWpvrn4jb
-	xOmrgbUExk5+teg7H3VqrLqjxMnyOAD1Cl/jVuQKNU7erhYhtvZZG9OeC5ISJwvTzenmajnPJpW
-	v+hUthTa4mEdSuipDwGa65BrE+74Y2HdUIoZ96NxoglMJC3Uu4Gr3t5Xo7lmxJ5iyCit5gLqCCI
-	IcoFRRlBo6TPrlB30qXQ==
-X-Received: by 2002:a05:600c:1d1e:b0:492:4ca9:a46d with SMTP id 5b1f17b1804b1-4924ca9a4e8mr212679495e9.5.1782222753308;
-        Tue, 23 Jun 2026 06:52:33 -0700 (PDT)
-Received: from localhost.localdomain ([62.77.90.70])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fd15470sm438068605e9.2.2026.06.23.06.52.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2026 06:52:32 -0700 (PDT)
-Date: Tue, 23 Jun 2026 15:52:30 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Joe Simmons-Talbott <joest@redhat.com>
-Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Sebastian Chlad <sebastian.chlad@suse.com>
-Subject: Re: [PATCH v2] selftests/cgroup: Adjust cpu.max quota based on HZ
-Message-ID: <ajqBjmJ-VT3UDPMr@localhost.localdomain>
-References: <20260622194305.601392-1-joest@redhat.com>
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="SBznQRsz"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cXjMcrQf+5jPSdXJlFd6p0TuEcRwgoMHZGYV9hnC4o2JXfod+672uhUq04toqy/NGAeJq6pCGPjvur9XxqWbhb25UnOkttuT3qCLAa6539LT6quJpLQXF4mt1r+qrq6cnDf87wBTbSrNG/UjlHZUaV1tUDE05QIdYvZZBXWeOSUiPlO7sZ2XiR0O+/i64uWDH8hhHjNZn2QTKkD7jfdIGY9H60631PErH45MlnoUWyvD+1uXWTFsi+AWTaxgbr6btOltq98HcExUxCrHHRvHlSYKixlqZwNN5hAWyK9uojPYt9BRcsmNZEV3BViqu3BXFh52nA421hizXiitJllz8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6qXEkNzwatS6h9KxR4kxYVsCiLdw6WrOTofmLgcL1kE=;
+ b=sZMEAF2nR22xILE4mlkdGiHK22NXJ9Q26BqLOyZM6Rm0umtUirlQMF0kBbl074p7winCcrU5oJuVNf98/OBbW83gyydlq3bgJfWWAMvixZc36NEO7AStfroCCEC5Nnf/iPtCX+iWXFK1mR+npjKuWNc75pk2cMKnucX/FipCrOwkH67BGK8ypVAG8wiuPXMkEPkLRUL3UNp+H5jTto+nEsgTmWBrzF+u8nSv/c++S9VB6edIBg38j84qJKuvil4e+pcngtq57lIg/yGQtfqYtSDWIQ8dcHkVO3oxt2OMhdcTsBs6Ernm7Ng9fNVc/LujZxdIgvfrRv5mgcrGnzIEgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6qXEkNzwatS6h9KxR4kxYVsCiLdw6WrOTofmLgcL1kE=;
+ b=SBznQRsz9SY7FU7Le7LZD8xDlvDQTxNNpUYvauR5qkHO4MBilJWRBb0wqm/l9Ed/NblLWLp2/Yq6nZDJArdNc3fA/gNxtfheF98D9fXE6ZC8Jg4OJZa/WCEi14+j/9BPGvG62qkJWW0SqOuueTHxiNVve06W0qynIC1YY6gOp9M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
+ by CWXP265MB5847.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1ae::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.12; Tue, 23 Jun
+ 2026 13:53:08 +0000
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.21.0139.020; Tue, 23 Jun 2026
+ 13:53:08 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 23 Jun 2026 14:53:07 +0100
+Message-Id: <DJGH91QS6MA2.2RQ1CQPRMBF1Z@garyguo.net>
+Cc: <rust-for-linux@vger.kernel.org>, <linux-modules@vger.kernel.org>,
+ <driver-core@lists.linux.dev>, <dri-devel@lists.freedesktop.org>,
+ <nova-gpu@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
+ <kunit-dev@googlegroups.com>, <linux-block@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v4 7/9] rust: configfs: use `LocalModule` for
+ `THIS_MODULE`
+From: "Gary Guo" <gary@garyguo.net>
+To: "Alvin Sun" <alvin.sun@linux.dev>, "Miguel Ojeda" <ojeda@kernel.org>,
+ "Boqun Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
+ <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
+ Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
+ Krummrich" <dakr@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Petr
+ Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez" <da.gomez@kernel.org>, "Sami
+ Tolvanen" <samitolvanen@google.com>, "Aaron Tomlin" <atomlin@atomlin.com>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
+ <simona@ffwll.ch>, "Daniel Almeida" <daniel.almeida@collabora.com>, "Arnd
+ Bergmann" <arnd@arndb.de>, "Brendan Higgins" <brendan.higgins@linux.dev>,
+ "David Gow" <david@davidgow.net>, "Rae Moar" <raemoar63@gmail.com>, "Breno
+ Leitao" <leitao@debian.org>, "Jens Axboe" <axboe@kernel.dk>, "Dave Ertman"
+ <david.m.ertman@intel.com>, "Ira Weiny" <ira.weiny@intel.com>, "Leon
+ Romanovsky" <leon@kernel.org>, "Igor Korotin" <igor.korotin@linux.dev>,
+ "FUJITA Tomonori" <fujita.tomonori@gmail.com>, "Bjorn Helgaas"
+ <bhelgaas@google.com>, =?utf-8?q?Krzysztof_Wilczy=C5=84ski?=
+ <kwilczynski@kernel.org>, =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?=
+ <arve@android.com>, "Todd Kjos" <tkjos@android.com>, "Christian Brauner"
+ <brauner@kernel.org>, "Carlos Llamas" <cmllamas@google.com>
+X-Mailer: aerc 0.21.0
+References: <20260623-fix-fops-owner-v4-0-0daf5f077d5c@linux.dev>
+ <20260623-fix-fops-owner-v4-7-0daf5f077d5c@linux.dev>
+In-Reply-To: <20260623-fix-fops-owner-v4-7-0daf5f077d5c@linux.dev>
+X-ClientProxiedBy: LO4P265CA0126.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c6::17) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:488::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xyyzzujscooqtqev"
-Content-Disposition: inline
-In-Reply-To: <20260622194305.601392-1-joest@redhat.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|CWXP265MB5847:EE_
+X-MS-Office365-Filtering-Correlation-Id: 95650359-89fc-41a4-c64b-08ded12ec1be
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|7416014|376014|1800799024|366016|10070799003|4143699003|56012099006|6133799003|921020|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	r4bSLqBbahaCLhrcmDJRw36geA6b7mKa/GyQNNC2gDQBv8Ny30mHArIncAnYVJdHntYPEwyuYKmnDb+zp9h5RMW2pGU0XnCcSPr8Dncd+gaLbdv74UTBAHIDUC6IJ8oyjrSDnNFUbKA5AE3sI+0Zs4Liv4E1Ai5J5fDS7KE0hTr0GW20CBedYktIluYsDp+/x/w9Zz9jVXQnLdhArxYJO/eJAEl84OxkcyPFrdkzjvAqrDBkyLUyl6qjeq6ycmyaZQPAyXFBubr7dUUv033UKRzi84kvhzhvQKNxBeYdN+sH1qccPCuAjkmF82WifSNVLaiVvjNXD6FVbCSlYMZntUFos7KbcJAHq6hLkhU6OtPksK24n4qHEJwrxxa9wwwVt+An+P+gs/1RzptuQlNspahjZSlMjXxtmSs6LZepsIHTdqf1cBtgPIeN8f3DX/gGQ1WqWV5DUTi4vaEedYxWUuQ7nVUAOG9imA9DyRyvTu18KcMsNU4z/jB3E7TTzRdDz6Ter4y1JpblU57npygmUbDxYIkRBihHmQDYKSzOdwqg1eB+UCJdUWr6WPj376o1wp4MbYBC6KNEsEO+Cfj4vDC2g1iG8wFAVNxNLRRsY9+AKBhQQysvJkfh0/4tia08gMh55fKba7o+gfCihWp4jY7EDXrJGVzVTZ5scVdG7Gc8Gy0CPsuyq8pGDtFkdryBciYo3XVytFGGDo4Jh3LlDA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(1800799024)(366016)(10070799003)(4143699003)(56012099006)(6133799003)(921020)(22082099003)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VnM0S0pSa3FpVWFBZHFQQU5WMHRiWVUzT1pqRXJ0ZklMUFhTWjEzcEgwRVA3?=
+ =?utf-8?B?NUFUTmttY01vWmdndGphR0ZVZ01PVTQ4a1NaVzBtMmpmM29xSENSbFc4LzRw?=
+ =?utf-8?B?WUVPcTVDMGVFbnNGNE1CVGFCZHNpeTk4VzZwOURjWHJBZkJ0amZueWxSNGdC?=
+ =?utf-8?B?VFpXRXBPbktPUTZDYkVITTYxSlcvN2FseXhoSnkwTStaaVhZcUt1a1JmT0hP?=
+ =?utf-8?B?R0tpcTRsckp4M0JGb0hZZ0p5eU1WSDBXTnBZMW5jN09wQUJWaS9PZG52YnBE?=
+ =?utf-8?B?NXkrNE9GUEVsQm1namQyK2pWQmgxT3kxODFQVzl1UWxhK1ZoTlQxS1dvMy95?=
+ =?utf-8?B?d21HRG12ZytqeSt4SGZjZ3NLZm5iSVMxUWF5d202ODRwQkJCNGJmVGJhVG92?=
+ =?utf-8?B?SmZLYlFDNHNlNE80L0hjOURCTkRlYzQ4N1FHZUIvTDlONVVIQXZBS3l5Unli?=
+ =?utf-8?B?SU9Ldy9WVkZXb05xeGJFbEc3L2ptWlRQL3MzcS8yZTRUSklTS3I3OStJUTk4?=
+ =?utf-8?B?UDdsOUpoSVY1cEpxRUpGQ2FKYXpZOFNHQThERkE4ckRXQzVFMnh3U0NhL1B1?=
+ =?utf-8?B?YW1VTExHZDY0YXh6cTFzdkxhTEh2TjJyL0h5RjF1dmJsZEpPbkE2eGlNYW9S?=
+ =?utf-8?B?MTdKN3FqSVo1Nkk0blJJb0kwR1ZxSkJHYitZSE5GSEphZ2F0MDZabFNVYkZG?=
+ =?utf-8?B?czJzUnB0UXR6bTlrWjl0RFdqckZvTWdaMmlQbHUwZXFtWXNxUnlaUjhDeWFj?=
+ =?utf-8?B?cHhrR2s2QjdwcDFVWGhUci81OUdMSTZqY2JaTGsrbmNDS0lWbjI1RUVEOFRL?=
+ =?utf-8?B?Yi9ZcmZydWE0MVRzV003dUZXanUybTVJSGVTd0QyRzFCajZVd0xxditlZWNF?=
+ =?utf-8?B?cFVnWGRHbU8wNnY4alVBNk5kOC9VMy94aFlJMXhBTVlGa2xPb1psZFdQZXd2?=
+ =?utf-8?B?bEd6dU5XUGZoZ2p3WEZyd3YwTmlscURhbUtobU9GL2dlcGhacXdTcExKQUFL?=
+ =?utf-8?B?NzEzS2d3ZlJVWkV2YnBSOXRQbENtMXdIbFFhWXpzZmtKbGpORFFzdEYrRUM1?=
+ =?utf-8?B?U0ZvNEFoY1JJUlFLd1R6ODlxclFOTERBamM5TFNMVkN4ZHFpNVFrQ2t2cHQv?=
+ =?utf-8?B?TkVPem45ak5Eb2dsUDBaN3loMmtUbnpJU05xc0VUeUd6SHl3YVhicEY1WE1a?=
+ =?utf-8?B?TmR6bG9ZOFlQY0tUcGpVMEdNUFRvN3dIbko5L291M3R4K0cwU2RrQ2JyMTdE?=
+ =?utf-8?B?ZmVCTkc2YWt3Um5nV2FEUDJBSHJzanpXemdOY1R2RFVCSG5qRERQeUlKSW9K?=
+ =?utf-8?B?RnRscWJYWWthbWM2T01jTy9jNUYwVEFydWx4UGVFUnRwNGJSWWRxbnhqWVdr?=
+ =?utf-8?B?d3hLMXpoSjJZRHAycmd1TDkvVHpKeDVpaE9NZ3dzSWM4ZnFDU3V1a3NJOUJT?=
+ =?utf-8?B?QjFzMC81SEExbUhKOXQ1Y21rV24vb1N5bDVIem93cHpzR0dwMUF6QTVMNHZW?=
+ =?utf-8?B?amJpMEdFM0dvSWd4RXlVa25pNmtBZmJzcVh3aytvcWVVWU9zeUdGZ29xWDAv?=
+ =?utf-8?B?MjFPVXNGeWdKZzFqbDF3S2lodjl1SU5FUjVVc3ZWcUs0VC82RGdBZHcvYnQv?=
+ =?utf-8?B?Yk53TlRHTVoxWExCby8vTTBleXpSdG40OG80SjZDV3RGb0oyQWJRcWVJKy9m?=
+ =?utf-8?B?bFEvR1pFZXVJalhhVHBKOVpVbElrS0FuN2MycjZMNFgvQVZlbkphZEYyRXhT?=
+ =?utf-8?B?KzFRaDB1R2ZxYUJ4SjRCakhWYWptTFAzMitJL0JYTzArb2U3LzZNcnEzRzgv?=
+ =?utf-8?B?aXZSNmZuVnl1TE5JUGtlWUxIZ0xrRWd1eFdXYUxXdDRYeXlIQ3NoUkljbDM4?=
+ =?utf-8?B?ekpoR1JyVHBNSGNtSFNsYUg1UGk0VVFiaW5GNVcyb0wwZjdEOEhWTkp3TW5V?=
+ =?utf-8?B?bG1zcWFyVlVkMWFPUTlpcGpBVVhYbmdWVnpoWkFqd3NFelNVcUdEdy9pUHZp?=
+ =?utf-8?B?UDFaYTlXM21Sdm0vOCtrRjZTcEJEYmRLekNFd0NtNkQ0WUtzQTNtRlBET2ds?=
+ =?utf-8?B?MkcyTWl6UXE3TjkzVUI3UFhEMTk0UjRVY3RRRXlpU0FsS0hxQVpFZFRoODFN?=
+ =?utf-8?B?VTVSRkt0emxsQys4RXpLK0RtWU5FUk90ZGR1aHA3UG5VVTZKRlJYbGEyQWd6?=
+ =?utf-8?B?aGFSWk9vVnRsVVI5VEt2M0l5MS83K29RUGZ6THo4UllxQzJkK3pUUHFXQzVi?=
+ =?utf-8?B?WksyRDFPS3FrY3k1enZQN2tCZ2Q3bTRZdUk4YzBnQVdFL25OYVdoS1hJaXN2?=
+ =?utf-8?B?YXNzWUl4RHFJN1JJV0tWWWs2ckZCWmpWeGF4YWpXZGpCUHdPeVY4Zz09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95650359-89fc-41a4-c64b-08ded12ec1be
+X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2026 13:53:08.3172
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Vb2qHLwc9c+Cu3YxxEi4F61sw8pIwpX1TswL6dT+UDgwGHiNm+6hj0Lx0EZOS7+tSYJ4NQqFWfxpWIj6R0H+GQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWXP265MB5847
+
+On Tue Jun 23, 2026 at 7:29 AM BST, Alvin Sun wrote:
+> Replace the `THIS_MODULE` static reference in the `configfs_attrs!`
+> macro with `this_module::<LocalModule>()`, and update
+> rnull to import `LocalModule` instead of `THIS_MODULE`, consistent
+> with the move of `THIS_MODULE` into the `ModuleMetadata` trait.
+>
+> Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
+> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
+> ---
+>  drivers/block/rnull/configfs.rs | 6 ++----
+>  rust/kernel/configfs.rs         | 8 +++++---
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/block/rnull/configfs.rs b/drivers/block/rnull/config=
+fs.rs
+> index c10a55fc58948..b2547ad1e5ddd 100644
+> --- a/drivers/block/rnull/configfs.rs
+> +++ b/drivers/block/rnull/configfs.rs
+> @@ -1,9 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> =20
+> -use super::{
+> -    NullBlkDevice,
+> -    THIS_MODULE, //
+> -};
+> +use super::NullBlkDevice;
+> +use crate::LocalModule;
+>  use kernel::{
+>      block::mq::gen_disk::{
+>          GenDisk,
+> diff --git a/rust/kernel/configfs.rs b/rust/kernel/configfs.rs
+> index 2339c6467325d..b542422115461 100644
+> --- a/rust/kernel/configfs.rs
+> +++ b/rust/kernel/configfs.rs
+> @@ -875,7 +875,7 @@ fn as_ptr(&self) -> *const bindings::config_item_type=
+ {
+>  ///                 configfs::Subsystem<Configuration>,
+>  ///                 Configuration
+>  ///                 >::new_with_child_ctor::<N,Child>(
+> -///             &THIS_MODULE,
+> +///             ::kernel::module::this_module::<LocalModule>(),
+
+This should be `crate::LocalModule`.
+
+Best,
+Gary
+
+>  ///             &CONFIGURATION_ATTRS
+>  ///         );
+>  ///
+> @@ -1021,7 +1021,8 @@ macro_rules! configfs_attrs {
+> =20
+>                      static [< $data:upper _TPE >] : $crate::configfs::It=
+emType<$container, $data>  =3D
+>                          $crate::configfs::ItemType::<$container, $data>:=
+:new::<N>(
+> -                            &THIS_MODULE, &[<$ data:upper _ATTRS >]
+> +                            $crate::module::this_module::<LocalModule>()=
+,
+> +                            &[<$ data:upper _ATTRS >]
+>                          );
+>                  )?
+> =20
+> @@ -1030,7 +1031,8 @@ macro_rules! configfs_attrs {
+>                          $crate::configfs::ItemType<$container, $data>  =
+=3D
+>                              $crate::configfs::ItemType::<$container, $da=
+ta>::
+>                              new_with_child_ctor::<N, $child>(
+> -                                &THIS_MODULE, &[<$ data:upper _ATTRS >]
+> +                                $crate::module::this_module::<LocalModul=
+e>(),
+> +                                &[<$ data:upper _ATTRS >]
+>                              );
+>                  )?
+> =20
 
 
---xyyzzujscooqtqev
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] selftests/cgroup: Adjust cpu.max quota based on HZ
-MIME-Version: 1.0
-
-On Mon, Jun 22, 2026 at 03:43:04PM -0400, Joe Simmons-Talbott <joest@redhat=
-=2Ecom> wrote:
-> +static long
-> +_get_config_hz(void)
-> +{
-> +	long hz =3D -1;
-> +	FILE *f;
-> +	char cmd[256] =3D "zcat /proc/config.gz 2>/dev/null | grep '^CONFIG_HZ=
-=3D'";
-> +
-> +	f =3D popen(cmd, "r");
-> +
-> +	if (!f)
-> +		goto out;
-> +
-> +	fscanf(f, "CONFIG_HZ=3D%ld", &hz);
-> +
-> +out:
-> +	pclose(f);
-> +	return hz;
-> +}
-
-I like that you voiced this dependency on CONFIG_HZ and also that
-_SC_CLK_TCK is useless in this regards.
-(I see that BPF selftests have similar infra for this.)
-
-
-> +
->  /*
->   * This test creates a cgroup with some maximum value within a period, a=
-nd
->   * verifies that a process in the cgroup is not overscheduled.
-> @@ -646,7 +669,8 @@ test_cpucg_nested_weight_underprovisioned(const char =
-*root)
->  static int test_cpucg_max(const char *root)
->  {
->  	int ret =3D KSFT_FAIL;
-> -	long quota_usec =3D 1000;
-> +	long hz =3D _get_config_hz();
-> +	long quota_usec;
->  	long default_period_usec =3D 100000; /* cpu.max's default period */
->  	long duration_seconds =3D 1;
-
-I would not bend the tested value but it's expectation (so that
-approximately same quantity is tested acroos configs).
-
-I reckon the problem might be tasks that overrun the quota due to long
-tick, fortunately, we can assume this is compensated over multiple
-periods, so _on average_ quota should be honored (more) precisely.
-But the test duration may be not well aligned with all the compensation
-periods, to that must be accounted for in the expectation.
-
-When I write it all down, I get this:
-
---- a/tools/testing/selftests/cgroup/test_cpu.c
-+++ b/tools/testing/selftests/cgroup/test_cpu.c
-@@ -651,7 +651,9 @@ static int test_cpucg_max(const char *root)
-        long duration_seconds =3D 1;
-
-        long duration_usec =3D duration_seconds * USEC_PER_SEC;
--       long usage_usec, n_periods, remainder_usec, expected_usage_usec;
-+       long usage_usec, expected_usage_usec;
-+       long n_periods, spread_periods, unaligned;
-+       long tick_usec, low_usage, high_usage;
-        char *cpucg;
-        char quota_buf[32];
-
-@@ -687,9 +689,16 @@ static int test_cpucg_max(const char *root)
-         * the cpu hog is set to run as per wall-clock time
-         */
-        n_periods =3D duration_usec / default_period_usec;
--       remainder_usec =3D duration_usec - n_periods * default_period_usec;
--       expected_usage_usec
--               =3D n_periods * quota_usec + MIN(remainder_usec, quota_usec=
-);
-+       tick_usec =3D USEC_PER_SEC / hz;
-+       /* Up to tick_usec (over)run is compensated over multiple periods */
-+       spread_periods =3D MAX(1, tick_usec / quota_usec);
-+       low_usage =3D n_periods / spread_periods;
-+       high_usage =3D (n_periods + spread_periods - 1) / spread_periods;
-+       unaligned =3D n_periods % spread_periods;
-+
-+       expected_usage_usec =3D quota_usec * (
-+               unaligned * high_usage +
-+               (spread_periods - unaligned) * low_usage);
-
-        if (!values_close_report(usage_usec, expected_usage_usec, 10))
-                goto cleanup;
-
-
-(I neglected (and dropped) remainder_usec because it is zero with
-default values)
-
-However, not all preemptions are tick-based, so there'd be noise=20
-and one has to tune the values_clone_report(,,err) anyway.
-
-Then to reduce noise, the simpler solution is to let the test run
-longer
-
-duration_usec =3D duration_seconds * USEC_PER_SEC * 1000 / hz;
-
-(where 1000 is the CONFIG_HZ=3D1000 where the test runs sufficiently [1] we=
-ll.)
-
-Joe, how do to the two variants above (unalignment account and prolonged
-duration) affect test_cpu behavior on your setup?
-
-(I'm personally wondering what is bigger quantity: systemic error due to
-HZ quantization or random (SMP) error.)
-
-Thanks,
-Michal
-
-[1] Even there one runs into noise depending on nr_cpus, thus even that
-    fixed err=3D10 is not ideal.
-
---xyyzzujscooqtqev
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCajqPlBsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AjYkwEAkanTs6Oe4Wq8RbfJGWwj
-wfOgF9zepsGbVUE/9eQ+9FkBAIPJFLYaGnMSkGMcL8dWTL+iRmaz7E8a+o4mmZjT
-mKEM
-=5cZS
------END PGP SIGNATURE-----
-
---xyyzzujscooqtqev--
