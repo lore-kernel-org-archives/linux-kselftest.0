@@ -1,192 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0604395ACB;
-	Tue, 23 Jun 2026 20:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782245676; cv=none; b=KZ6fIK8cqS05txYoDlYs/fGdAkp2Y++IzCiC9vG8FiRefoPBaRdbCnRQU6t0fwbWbTgpoqx4n+oMi76eozgDeRBhuQa54Dy7+OyFf42GKPh06VghqVfRUZ0wNUVTLCjPWBOrcWMI1PWNOsupdqQV2KDOtpriB+G4nIM9hpGzuh0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782245676; c=relaxed/simple;
-	bh=+NGHr3JwJhFyeVqNLHlK3enumdKIlg00Zx4KtBXAj6A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M5OgTBunzPoPJshGSQsKGBYdFSuPHwSx+LBAzI2dgxNLnXn8dbYdJ+XPb6fJKyc/A96VJ1sqKgGvYA3de6KjYg5anWd23PZZ9f5qpwh+zpW8PlrCMcnotKveuDSri7nGOGG52Dv0a8J7Qr6fKYJHqbnu6ATZYWvB/9yem8w6vmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZJAZRpdB; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CABF13790B
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 20:15:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782245723; cv=pass; b=FiEWdOYwadXnGCfhNi1vijhwt4vjtwQzFw8stmf6oeNWVr/fZZB3DQHmWls3JX7thMrqHQ3k2kvhP348khJxYKVRL28xpEFHPsR3HFPbjN9k9KpBuQnXFWtLKy4iy1pftlXe2ocbhTKZeOMAI5yoBgDoGkRsFxRvvrb+BexWZ2w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782245723; c=relaxed/simple;
+	bh=VyUN5kc8pY9zeZGfxVG9I72IM00S38DsQj8XPbrh/jY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=o39U4LBDvx6mL0k8pTrjRqw3vgnFDZP2i+OKmY0MsNtb3R+CDGoFMkOGld34PJZh2z2X91/6/eDUwiCMIOIP8NgPVdfwNXVnIP2pUUxkeHBLviJvVxHKKeQpbEQdHzIGueoD0GuKp+rzrNwhydtSITIsytwtMRfj7v6OMdTU0ug=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GjLLGfF4; arc=pass smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZJAZRpdB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB461F00A3A;
-	Tue, 23 Jun 2026 20:14:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782245674;
-	bh=Ra1bLWv4R1sxRHDql8Lrgj/OtpZzKuZ/JFVnOfvRwes=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ZJAZRpdBwWufrpjPgspdDTMpomP3SINRtHl8ZOxMtF3PzVz1QwLXUZTwQeAf+uol9
-	 1eIpnqZcQyu2eA9WuB6vdOXm9HrjZdTgIPf+GrfrgLo8/1h8rMn/j5yDRNaQWYcg1z
-	 SoHVXI9jcgMMPfJkeYwgC4Aatt17v9Hrbt5Q4aTLYVl0YHTUn9K219XN/LW5EzZI0y
-	 B0d5t1wmHvNPJk9v6TNFwFUo5f4iAyISIUYJYHJhlyOkJaw1/mmdsfWGo5L315qei/
-	 YFO0TfeLjSI4hSuiUWmQa08cUvaJ9yIlXFnzTK6RlmVc+HJmDya/kd/485ShKYpsJz
-	 AZUK1DyLQaYzA==
-Date: Tue, 23 Jun 2026 13:14:34 -0700
-From: Kees Cook <kees@kernel.org>
-To: Farid Zakaria <farid.m.zakaria@gmail.com>
-Cc: brauner@kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
-	shuah@kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] fs: support $ORIGIN in ELF interpreter paths
-Message-ID: <202606231236.325C882A78@keescook>
-References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
- <20260622043934.179879-2-farid.m.zakaria@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GjLLGfF4"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c892935bcdeso92322a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 13:15:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782245720; cv=none;
+        d=google.com; s=arc-20240605;
+        b=UDNoqtVPLRwY9eV/KAtriVYVbx8IcpJ1/r/LABiMTzpAkBDGSCZRtda6r96/ypQz4r
+         eyLQs1T9oE3O3C0aMRXdPodyOsjQbyFvivAlgGzoC99nE+3MzJvDiUvyrd2ciso2Vjk5
+         Z+5+a02RXao/TX+63yLgRwvx7aszZZi5jeCVXiPmr62Pa2aBn6ea36ygscFlx1iSwDDx
+         l0AANh3F6DUVh21Iyir6Y9cD3XTyWVx1Zh5NMIta8j7xA3nmyzsavf/6DsPEqz2GGNg4
+         SzuroAXfkfCcSmNTce+sv/9vY+dfRo0+zAixayvTI5uVgurixo+WP2YIh3mcgQpQqZuA
+         fTpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=j+Z9M3ZKDsrVtD4vMbDb1w1q1I4K+UTdIQhD7+XfBGo=;
+        fh=I9nVNhg8MJpbHch5u3DgUTnyfne4VTTBrdQen/YVxII=;
+        b=jLd+N850CD5k7+2D/EgtkQdpeVLio1iWOFtNmN38Bua/cTJqha6xRgJG6wp/od+6Hg
+         /u5I/ANo4c4K0CKfQv0sOrv3eKVzJQJ7hGsZ655fXbs96rGXDmy5AEDJHuyNSBLPRPX9
+         xAOhCqmHzfhOLDSEBay2UVh/oaiylJD8TyBXbZuGXduL4dHd4P6Ro0UqzyDw0CHxhcY2
+         xXPH2rp/87xLHKJ20cb/muqLcchr0fehuYmONeydlBYbzmjBBd8PsyVxrkRNJRY6sP4M
+         aUYtqFnYTuxZf/VjoxFQH/nSGbLjangHfGdg9kmGIxs2tvlhuqKO8pKtKQz++Exw1sh8
+         N4tA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782245720; x=1782850520; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j+Z9M3ZKDsrVtD4vMbDb1w1q1I4K+UTdIQhD7+XfBGo=;
+        b=GjLLGfF4L8j+VK+0ZoajA4d5fc7wimo/cHSiWRUdfXvZ6mN15oM3m8zKhWoXu6MM4L
+         aYWtEM+Ecp6k9hFolJ+RPTzOffw6rGvPkeKXs8LV6zwpVSZsBD86dtLB0wm4x89lLXUw
+         qUYtEcZ+vkWEEZ2cVGyjD+q9a2YcqUOHRtPDFQTEgcxMNjFXBcydRqaX3Hprwn/WqWAE
+         THdgXuT/yQ3vFD23cKbIqm0Thby5m4fE9SjAJxBhlF8kZqItyfiXdL53gXOolhLJdikE
+         f048qFRZ4tkVkRbd1TDjdR3nw0v0G/QSZcl0xYnkkChHHzPxKODs5N+CUiYkOQp4oIg+
+         X0SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782245720; x=1782850520;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=j+Z9M3ZKDsrVtD4vMbDb1w1q1I4K+UTdIQhD7+XfBGo=;
+        b=HrgbkFDjFePD7WTr7INbXKha+tjNqjnEbFuNqMG/B1L06L4hBwaceeAgMhPawxXo8W
+         +4NwNPLk+bh5k8tDIASRAbyRMzZfhGlSGFDQYHpCvT08wA2j9Hg3rpq7sjC7pmZhsMNS
+         YvRU3VIeO+RngAAiHX1T557gjQ6UBzHLWr4UApiPI5M2VSou79Vav8Y86sLuopBdUV5m
+         nJBQ89EVe5/lcBY1RxGronEI3yzvfQ31nHnfR5H65XCkzSyLSm9utBEKijqlgnkUT36B
+         Tn0R+UyHtYLA2vvSStMboA/TLU4GTtGomI7jNPf5UpM83Ib9e7nxsILbQGf48zNwcXCn
+         i6hw==
+X-Forwarded-Encrypted: i=1; AHgh+RoOsDKdBVc58Z7keheo+2WsnE01w+c/zhxxq/DwJWBWsKzUvNmSTLsZ5qEW1MVz4HaLpz4PeuLRm16y4g9Ux+4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkwGEKFxJwGvl8v+ZIBXi23/3dHpfW8foDqdBoopZiooDi1Tg+
+	IbbAbXifa6J13K1vY6j4g542eWqUxbk9drfRDyuxsdcb/Gfnf6DJv/BP/sQtk1YRYaIBHulMaQb
+	JVL0Fs4kS+7MFNxY99dLTWJCS2rL4H5s=
+X-Gm-Gg: AfdE7cl/xo3Eb8Ar5y0wFyKVMtQ0vQ2NRDgG0e8q06RKsGPsizfJJFoaRovAi4nzaxX
+	7hTxIqWwkH5wFrV/QAK8D/OZg3zAXH5BS0ywy7bEbeWW9aBvKEyM6kv7Ov/2+IJ3dP0qxY46KDA
+	lYxUxkarjrxL+bMuCZRUDP77feCRsNCgyehHZx/jDVryMCfFPCYed9DY3G37xMeZIy5syCQwFfp
+	QDrlk3u4KFs/lwj2WPxni3sxYOnbYfljAqMTMVUoH8uZ/Z2WrW2Js+dJzbPvo3GGwhwadN0b0oX
+	SO7xmqzKtiICS5+LrBrkDNWUPVAwl3Sa2zakQXQtWn8OhhyFH1sDzULESfj8bQbAqCUfuA==
+X-Received: by 2002:a17:902:c947:b0:2c0:c3ac:4af3 with SMTP id
+ d9443c01a7336-2c7e14be9d1mr3830645ad.15.1782245720502; Tue, 23 Jun 2026
+ 13:15:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260622043934.179879-2-farid.m.zakaria@gmail.com>
+References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-6-33fde039ddf3@kernel.org>
+In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-6-33fde039ddf3@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 23 Jun 2026 13:15:06 -0700
+X-Gm-Features: AVVi8CfqHtnBLCweM7eX_1wpYpE6gYHvPw60CrJ-FzxF11Iv983c2apGCEnWOa8
+Message-ID: <CAEf4BzattX9GherSPJ7DBeKksfxsX_uKz4y4tYNU=gUjqkJP_A@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 6/8] bpf: user_ringbuf: Handle position wrap
+To: Tamir Duberstein <tamird@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Andrea Righi <arighi@nvidia.com>, Xu Kuohai <xukuohai@huawei.com>, 
+	Andrea Righi <andrea.righi@canonical.com>, Bing-Jhong Billy Jheng <billy@starlabs.sg>, 
+	David Vernet <void@manifault.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>, 
+	Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Sashiko <sashiko-bot@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jun 21, 2026 at 09:39:33PM -0700, Farid Zakaria wrote:
-> Currently, standard ELF and ELF FDPIC loaders expect a fixed path to the
-> dynamic linker/interpreter (PT_INTERP). However, for systems utilizing
-> relocatable dynamic interpreters (such as Nix/store-based environments),
-> hardcoding this path is inflexible and breaks binary portability.
-> 
-> Introduce support for resolving the $ORIGIN placeholder in the ELF
-> interpreter path. This maps the dynamic linker relative to the path
-> of the binary being executed, matching user-space origin resolution.
-> 
-> To avoid code duplication, implement a shared 'resolve_elf_interpreter()'
-> helper in the VFS exec layer. For safety, limit detection strictly to
-> the prefix string "$ORIGIN" to prevent complex parsing exploits.
+On Thu, Jun 18, 2026 at 5:27=E2=80=AFPM Tamir Duberstein <tamird@kernel.org=
+> wrote:
+>
+> User ring buffer positions are unsigned long counters, but
+> __bpf_user_ringbuf_peek() widens them to u64 before comparing and
+> subtracting them. On 32-bit systems, producer_pos wrapping below
+> consumer_pos therefore appears to move backwards and permanently stalls
+> the ring. The widened subtraction can also bypass the advertised-window
+> check.
+>
+> Keep the positions word-sized and derive the available data with
+> word-sized subtraction so the arithmetic wraps with the counters. Treat
+> a zero span as empty and reject spans larger than the ring before
+> reading a record header.
+>
+> Fixes: 205715673844 ("bpf: Add bpf_user_ringbuf_drain() helper")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Closes: https://lore.kernel.org/bpf/20260614020552.022A11F000E9@smtp.kern=
+el.org/
+> Assisted-by: Codex:gpt-5.5
+> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
+> ---
+>  kernel/bpf/ringbuf.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+> index 909880031fd3..19cbb9b74ee7 100644
+> --- a/kernel/bpf/ringbuf.c
+> +++ b/kernel/bpf/ringbuf.c
+> @@ -748,9 +748,9 @@ const struct bpf_func_proto bpf_ringbuf_discard_dynpt=
+r_proto =3D {
+>
+>  static int __bpf_user_ringbuf_peek(struct bpf_ringbuf *rb, void **sample=
+, u32 *size)
+>  {
+> +       unsigned long avail, cons_pos, prod_pos;
+>         int err;
+>         u32 hdr_len, sample_len, total_len, flags, *hdr;
+> -       u64 cons_pos, prod_pos;
+>
+>         /* Synchronizes with smp_store_release() in user-space producer. =
+*/
+>         prod_pos =3D smp_load_acquire(&rb->producer_pos);
+> @@ -759,8 +759,11 @@ static int __bpf_user_ringbuf_peek(struct bpf_ringbu=
+f *rb, void **sample, u32 *s
+>
+>         /* Synchronizes with smp_store_release() in __bpf_user_ringbuf_sa=
+mple_release() */
+>         cons_pos =3D smp_load_acquire(&rb->consumer_pos);
+> -       if (cons_pos >=3D prod_pos)
+> +       avail =3D prod_pos - cons_pos;
+> +       if (!avail)
+>                 return -ENODATA;
+> +       if (avail > ringbuf_total_data_sz(rb))
+> +               return -EINVAL;
 
-Does any other OS that implements ELF support also support $ORIGIN in
-the loader? $ORIGIN isn't even part of the ELF spec at all and is a
-glibc extension, IIUC.
+hm, should we use long and then replace cons_pos >=3D prod_pos checks
+with `cons_pos - prod_pos >=3D 0`, this will handle wrap correctly
 
-I'm not excited about path-based string manipulations as they end up
-being racy, and mucking with loader path seems like we're inviting
-trouble (since the _binary_ specifies setuid-ness), and we've seen
-issues with $ORIGIN before, even strictly outside of the kernel:
-https://seclists.org/fulldisclosure/2010/Oct/257
-
-> [...]
-> diff --git a/fs/exec.c b/fs/exec.c
-> index b92fe7db1..0978ae613 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -2024,6 +2024,48 @@ static int __init init_fs_exec_sysctls(void)
->  fs_initcall(init_fs_exec_sysctls);
->  #endif /* CONFIG_SYSCTL */
->  
-> +char *resolve_elf_interpreter(struct linux_binprm *bprm, const char *elf_interpreter)
-> +{
-> +	char *pathbuf, *path, *slash, *resolved;
-> +
-> +	if (strncmp(elf_interpreter, "$ORIGIN", 7) != 0) {
-> +		char *ret = kstrdup(elf_interpreter, GFP_KERNEL);
-> +
-> +		return ret ? ret : ERR_PTR(-ENOMEM);
-> +	}
-
-But even if we did take this, I really don't want to incur a universal
-penalty on exec for it. This is doing a kmalloc+dup (and later kfree)
-for all non-$ORIGIN execs. So even if this gets added, it needs to be
-handled differently.
-
-I would probably say this helper should return a struct file * instead
-and have a fast-path for the common case. I think a check for leading
-'$' (if strncmp doesn't get inlined) would be okay here as far as
-"incurring common performance cost"; that string is almost certainly
-cache-hot.
-
-> +	pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
-> +	if (!pathbuf)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	path = file_path(bprm->file, pathbuf, PATH_MAX);
-> +	if (IS_ERR(path)) {
-> +		kfree(pathbuf);
-> +		return (char *)path;
-> +	}
-
-This still just _feels_ like an info leak or a race condition to me. I
-can't give a credible example, though. But it creeps me out. :)
-(I note the blog post also says "and the shabang" and I get even more
-creeped out about seeing that patch.)
-
-> +
-> +	slash = strrchr(path, '/');
-> +	if (slash) {
-> +		if (slash == path)
-> +			*(slash + 1) = '\0';
-
-This is not idiomatic string manipulation.
-
-> +		else
-> +			*slash = '\0';
-
-More readable, IMO, as:
-
-	if (slash)
-		slash[1] = '\0';
-	else
-		path = "";
-
-But does this match the glibc resolution logic? i.e. should it be:
-
-	if (strncmp(elf_interpreter, "$ORIGIN/", 8) != 0)
-	...
-	if (!slash)
-		slash = path;
-	*slash = '\0';
-	...
-	resolved = kasprintf(GFP_KERNEL, "%s/%s", path, elf_interpreter + 8);
-
-(requires the trailing /)
-
-> +	} else {
-> +		kfree(pathbuf);
-> +		char *ret = kstrdup(elf_interpreter, GFP_KERNEL);
-> +
-> +		return ret ? ret : ERR_PTR(-ENOMEM);
-
-This is the same as the logic top of the function. This repetition smells
-of the LLM. :)
-
-> +	}
-> +
-> +	resolved = kasprintf(GFP_KERNEL, "%s%s", path, elf_interpreter + 7);
-> +	kfree(pathbuf);
-> +	if (!resolved)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	return resolved;
-> +}
-> +EXPORT_SYMBOL(resolve_elf_interpreter);
-> +
->  #ifdef CONFIG_EXEC_KUNIT_TEST
->  #include "tests/exec_kunit.c"
->  #endif
-> diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
-> index 2c77e383e..17419cd3d 100644
-> --- a/include/linux/binfmts.h
-> +++ b/include/linux/binfmts.h
-> @@ -150,4 +150,6 @@ extern ssize_t read_code(struct file *, unsigned long, loff_t, size_t);
->  int kernel_execve(const char *filename,
->  		  const char *const *argv, const char *const *envp);
->  
-> +char *resolve_elf_interpreter(struct linux_binprm *bprm, const char *elf_interpreter);
-> +
->  #endif /* _LINUX_BINFMTS_H */
-> -- 
-> 2.51.2
-> 
-
-So, I guess, I'd like more convincing, but I'm very happy to see a KUnit
-test included!
-
--Kees
-
--- 
-Kees Cook
+>
+>         hdr =3D (u32 *)((uintptr_t)rb->data + (uintptr_t)(cons_pos & rb->=
+mask));
+>         /* Synchronizes with smp_store_release() in user-space producer. =
+*/
+> @@ -770,7 +773,7 @@ static int __bpf_user_ringbuf_peek(struct bpf_ringbuf=
+ *rb, void **sample, u32 *s
+>         total_len =3D round_up(sample_len + BPF_RINGBUF_HDR_SZ, 8);
+>
+>         /* The sample must fit within the region advertised by the produc=
+er position. */
+> -       if (total_len > prod_pos - cons_pos)
+> +       if (total_len > avail)
+>                 return -EINVAL;
+>
+>         /* The sample must fit within the data region of the ring buffer.=
+ */
+>
+> --
+> 2.55.0.rc0.159.gbe5d7338c2
+>
