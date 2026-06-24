@@ -1,362 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E9F41F1534;
-	Wed, 24 Jun 2026 14:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEF03D7A07
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 14:57:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782312187; cv=none; b=jpYbCdUvEC3N0jGNxFtQzcTSgpz6BJ5aH36E5akIt6UhpWj8Sz5K11u+i4fPwnoqSTGcVs1ZUyghw1etJegdD1ILrCe5KHk9EkT/m4lAeZpVy66u3RixdFUJa9GbQQ/t9NMhBifVr8593MpYF1l+pVCCVdVOAPb1dapY78t12fY=
+	t=1782313078; cv=none; b=MuTOfGCrzGwG4yWT4MZXmLgpXBBigxKYfDfZ+Ymb7JrsrC4QGRaWSypg5Z8+bpat1FA8zRTafgPRiuvWv9TIOKW19HFtQaoK0868981kzEqyND7Z3xJ+g2MbDObwV6ynNV1elTFHl84h9CE27pHTB14kHdiT8Xr4F+EDdPTwaY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782312187; c=relaxed/simple;
-	bh=lh2LgTybg1wK04lsoAbfw4dvEkfhf3gDHcIBhMn3zpI=;
+	s=arc-20240116; t=1782313078; c=relaxed/simple;
+	bh=TDiA7zntPHCkesbe2HDhTkXNSMZ1tAv5vFsX39Fbk2g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=c+6nmGpecF80RUZQL77BZRZngm1k0kvaPEuR0MheZigeiHKgMHCHhNDFM8FvKx4Ge503xanz5L7aNuv/U2A22ND1aEDAn+ZGxUDHJfjcXJbwieIE9Z59o4Nbuvfin2E3MuWQ8mnt3HJKGrGABcpSQc6fFTK9Vnf6klY5rg6nOaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WBC60V/5; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=oDFDCg/GNJLpv6QBWQiNucYj1zZq+LB3mhp49KJ4yBteXo1wmUntjZV/cBTr4dgaeCuB4C7Wf91XmKwE3Cdg2VKK3T2B89kH0SkWAzvZ+WjjoAHPNfq2Op3RkupP4DNUOLa5EhdGZ/g1frO/JyNVzPOzvfJ4Kd0kpAVNR3sNF9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=icD9x9AA; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WBC60V/5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EEDF1F000E9;
-	Wed, 24 Jun 2026 14:43:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782312186;
-	bh=t8ypXbZd4DBQFeXyn+uTH/u4pUQXfzcrD6W+7YAgDnE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=WBC60V/55zZC1UTb5m6rOwPHEAjOwVU8I+dwTJjZ/FeQQkloQMRgJORblQPAZztrV
-	 +1pdUbzAxLLhSWFPYkKXp5BwjDqEqRObdOT8D3sar30SDE6LVWYsftzxNd56mpn/tS
-	 G7HHKlCQfTg55Ni+z9H1EV2CUTHkRuP7b3hjhUvVFSR0hxRmj7QQFOWTU9kcXg8eq7
-	 qYngPN8ZGI/QrTGqDW8Wmpt+7RsK2EQOYeyPSObIedeqPeVyGbsGNv3ipzBKzX8uia
-	 PUGknubeEUHjjCSrfmaEzJx/ybAMGPkgEMcQuFWjNK4+KsQ8LGwsWTJ3k/eDjCvHNs
-	 INnddics1+svQ==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v8 10/10] tracing/probes: Add a new testcase for BTF typecasts
-Date: Wed, 24 Jun 2026 23:43:02 +0900
-Message-ID: <178231218222.732967.10199014555928609643.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <178231208703.732967.1160700962651040729.stgit@devnote2>
-References: <178231208703.732967.1160700962651040729.stgit@devnote2>
-User-Agent: StGit/0.19
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="icD9x9AA"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-517b1f2c6adso9593951cf.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 07:57:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1782313076; x=1782917876; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5N7tLwBQJv8x9qNdxv/vKv4Fda4fwQcQqQmjxm5j+/M=;
+        b=icD9x9AAsnjMRLwQlaVbVKR2YIG/J/2Gobflp64kTAim5oCNjpOAZYcj3fYEx9SaHF
+         5o894UPqPDQVkXSdxrhycf3o9zfRe3K9em3lNk14+LYCt5NIFKL24CwO/795uaTVIHAM
+         ih3YjgPkUEqEkIg+XBLACCVWP3ju9WZbEb6WA7VIAJ30OBmEwF4XxzwXPu3zW6jHyWJX
+         FILBkIPUCjln5XpcVQ7ad/lj831zHHNGFwrbsPU6ntLJbiFF+Yb/aDObwy/gyXpZbKdY
+         jAZRDm4S10hNONnsSYZeNHfSLZPGE0cFm09qTM7Fh7/w0x8ljlHHWvOiru5aACQ6j4Pd
+         P3Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782313076; x=1782917876;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5N7tLwBQJv8x9qNdxv/vKv4Fda4fwQcQqQmjxm5j+/M=;
+        b=s0GxtiS9CFV2BVfVJuf1Iafj1rNw0SvquABLLua8MaZnGs58TUW+2Jx4bWEkDWAp08
+         qpfa3NmkLL+t8ub53THWMKu5QhQAVj7M+cuDX4gWdB0b6xoTheCI47yoh/W6iTkmyHWL
+         Gk9xDh84J/x2KpMTH1tlR1RftO1Fx1PEMCuLu+13xpjN/5BL3DWdYa5AqHNdPHN+YOh+
+         oRhjNuNa1EJ1eNy/AvapjfE++CA6qXzYSid5+N98Wj1JNfUqJF8+B3lybE+yWqn9pmlj
+         AlSeSt749Kp/rRAlqUSnHLJnRFwu1W8RbHcoxYoWEkmadrmsaNT8uSc9Kz2Zp4/mNTuc
+         hp4w==
+X-Forwarded-Encrypted: i=1; AFNElJ8qII4daG0cOMyLviV/jfrPGjsHrJCW48sP5uqbcK8YUmSP0EDtalWt4YeT4GtPKqkj4nSqEawK/2FaVIjTSnk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZ0sTOW+vaT0MKxXcZ9ML45FbgdGxrmj+MYZVlzoMNs7O8mEu9
+	FcxLpoFqW8WZalKWvIwNm7TolS26knHlWCS3i2im308OdFo4M4SrFbE0KgmxtDe/2MQ=
+X-Gm-Gg: AfdE7cn/et0zvmGdnpXNCUicsfW4QT+I0WpP1w5l2HhJ9Mq+R2FtXGezUHJCwCEj+pN
+	BNSTgJbekaxM978zVv5tkm2w1fXQRL1D6u11miYfZDn7VbFAtZlG7b0gnwrh4G53hJb1FVZMSJx
+	G1TGeJ/ik3ZdW8IgYwedd5LqWumFqQh77W/c9N0Ph+1MM9vpXcitXxvABgZXJQ+NikW+XAxTu7Y
+	MHdEJb0QTK6ZjBhrnO90pCEf8uaVZzMNMSSW0x2K2beYJgCGwMnEMMOsLvjeS/oAljIWJipckV7
+	NIUOrQJeYyphZ+vDktEfZN6/YaMHh5azqqUHLN3E+iFH9R1cuSh34mi+IEnRd88Zy5b2HFMWLzt
+	U7nN5xSysGXrI2gtEtOaXtXaQ1Ev/Ryje3KAbLRLhbDLXcDuTWj2YutRfvEhd7tTHZeNQCViX2h
+	3Tzh613b4BgJU8gMKkwvWHoTExjPnw7JqMsFSO5h7g4r5QTf51ZlCae6ZcPBg4o6PGPegVp3MeA
+	4If+JPDhx+1
+X-Received: by 2002:a05:622a:144f:b0:516:d84a:9f54 with SMTP id d75a77b69052e-51a5484ff5fmr102012121cf.38.1782313076353;
+        Wed, 24 Jun 2026 07:57:56 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51a51ae8ee7sm49502301cf.24.2026.06.24.07.57.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2026 07:57:55 -0700 (PDT)
+From: Gregory Price <gourry@gourry.net>
+To: linux-mm@kvack.org,
+	nvdimm@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org,
+	linux-cxl@vger.kernel.org,
+	driver-core@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	kernel-team@meta.com,
+	david@kernel.org,
+	osalvador@suse.de,
+	gregkh@linuxfoundation.org,
+	rafael@kernel.org,
+	dakr@kernel.org,
+	djbw@kernel.org,
+	vishal.l.verma@intel.com,
+	dave.jiang@intel.com,
+	akpm@linux-foundation.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	gourry@gourry.net,
+	alison.schofield@intel.com,
+	Smita.KoralahalliChannabasappa@amd.com,
+	ira.weiny@intel.com,
+	apopple@nvidia.com
+Subject: [PATCH v5 1/9] mm/memory: add memory_block_aligned_range() helper
+Date: Wed, 24 Jun 2026 10:57:36 -0400
+Message-ID: <20260624145744.3532049-2-gourry@gourry.net>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260624145744.3532049-1-gourry@gourry.net>
+References: <20260624145744.3532049-1-gourry@gourry.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Memory hotplug operations require ranges aligned to memory block
+boundaries.  This is a generic operation for hotplug.
 
-With the introduction of container_of-style BTF typecasting and
-per-CPU variable access support in trace probes, we need a way to
-verify their functionality and prevent regressions.
+Add memory_block_aligned_range() as a common helper in <linux/memory.h>
+that aligns the start address up and end address down to memory block
+boundaries.
 
-Add a new ftrace kselftest and update the trace event sample module
-to test and validate these features.
+Update dax/kmem to use this helper.
 
-Specifically, update the trace-events-sample module to set up a
-periodic timer whose callback accesses a per-CPU counter. Introduce
-a new sample trace event, foo_timer_fn, to trace this callback
-and log the current counter value.
-
-Then, add a new test case, btf_probe_event.tc, which defines a
-dynamic probe on the timer callback. The probe uses BTF typecasting
-to recover the parent structure from the timer argument and
-this_cpu_read() to fetch the per-CPU counter. The test verifies
-the integrity of the implementation by ensuring the values
-recorded by the dynamic probe match those from the static tracepoint.
-
-Assisted-by: Antigravity:gemini-3.5-flash
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Gregory Price <gourry@gourry.net>
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 ---
- Changes in v8:
-  - Add more test cases.
- Changes in v6:
-  - Update testcase according to changes.
- Changes in v5:
-  - Add more syntax test cases.
- Changes in v4:
-  - Fix uprobe $current test.
- Changes in v3:
-  - Add syntax test case.
-  - Update testcase to use this_cpu_read()
- Changes in v2:
-  - Use timer_shutdown_sync() instead of timer_delete_sync() for teardown.
----
- samples/trace_events/trace-events-sample.c         |   40 +++++++++++++++-
- samples/trace_events/trace-events-sample.h         |   34 ++++++++++++-
- .../ftrace/test.d/dynevent/btf_probe_event.tc      |   51 ++++++++++++++++++++
- .../test.d/dynevent/eprobes_syntax_errors.tc       |    3 +
- .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   12 +++++
- .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   12 +++++
- .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    5 ++
- 7 files changed, 152 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
+ drivers/dax/kmem.c     |  4 +---
+ include/linux/memory.h | 22 ++++++++++++++++++++++
+ 2 files changed, 23 insertions(+), 3 deletions(-)
 
-diff --git a/samples/trace_events/trace-events-sample.c b/samples/trace_events/trace-events-sample.c
-index 0b7a6efdb247..ca5d98c360cb 100644
---- a/samples/trace_events/trace-events-sample.c
-+++ b/samples/trace_events/trace-events-sample.c
-@@ -94,6 +94,20 @@ static int simple_thread_fn(void *arg)
- static DEFINE_MUTEX(thread_mutex);
- static int simple_thread_cnt;
+diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+index a18e2b968e4d..592171ec10f4 100644
+--- a/drivers/dax/kmem.c
++++ b/drivers/dax/kmem.c
+@@ -33,9 +33,7 @@ static int dax_kmem_range(struct dev_dax *dev_dax, int i, struct range *r)
+ 	struct dev_dax_range *dax_range = &dev_dax->ranges[i];
+ 	struct range *range = &dax_range->range;
  
-+static struct foo_timer_data *foo_timer_data;
-+
-+static void sample_timer_cb(struct timer_list *t)
+-	/* memory-block align the hotplug range */
+-	r->start = ALIGN(range->start, memory_block_size_bytes());
+-	r->end = ALIGN_DOWN(range->end + 1, memory_block_size_bytes()) - 1;
++	*r = memory_block_aligned_range(range);
+ 	if (r->start >= r->end) {
+ 		r->start = range->start;
+ 		r->end = range->end;
+diff --git a/include/linux/memory.h b/include/linux/memory.h
+index 463dc02f6cff..9f5ef0309f77 100644
+--- a/include/linux/memory.h
++++ b/include/linux/memory.h
+@@ -20,6 +20,7 @@
+ #include <linux/compiler.h>
+ #include <linux/mutex.h>
+ #include <linux/memory_hotplug.h>
++#include <linux/range.h>
+ 
+ #define MIN_MEMORY_BLOCK_SIZE     (1UL << SECTION_SIZE_BITS)
+ 
+@@ -100,6 +101,27 @@ int arch_get_memory_phys_device(unsigned long start_pfn);
+ unsigned long memory_block_size_bytes(void);
+ int set_memory_block_size_order(unsigned int order);
+ 
++/**
++ * memory_block_aligned_range - align a physical address range to memory blocks
++ * @range: the input range to align
++ *
++ * Aligns the start address up and the end address down to memory block
++ * boundaries. This is required for memory hotplug operations which must
++ * operate on memory-block aligned ranges.
++ *
++ * Returns the aligned range. Callers should check that the returned
++ * range is valid (aligned.start < aligned.end) before using it.
++ */
++static inline struct range memory_block_aligned_range(const struct range *range)
 +{
-+	struct foo_timer_data *data = container_of(t, struct foo_timer_data, timer);
++	struct range aligned;
 +
-+	get_cpu();
-+	trace_foo_timer_fn(data);
-+	(*this_cpu_ptr(data->counter))++;
-+	put_cpu();
++	aligned.start = ALIGN(range->start, memory_block_size_bytes());
++	aligned.end = ALIGN_DOWN(range->end + 1, memory_block_size_bytes()) - 1;
 +
-+	mod_timer(t, jiffies + HZ);
++	return aligned;
 +}
 +
- int foo_bar_reg(void)
- {
- 	mutex_lock(&thread_mutex);
-@@ -132,9 +146,27 @@ void foo_bar_unreg(void)
- 
- static int __init trace_event_init(void)
- {
-+	foo_timer_data = kzalloc_obj(*foo_timer_data, GFP_KERNEL);
-+	if (!foo_timer_data)
-+		return -ENOMEM;
-+
-+	foo_timer_data->name = "sample_timer_counter";
-+	foo_timer_data->counter = alloc_percpu(int);
-+	if (!foo_timer_data->counter) {
-+		kfree(foo_timer_data);
-+		return -ENOMEM;
-+	}
-+
-+	timer_setup(&foo_timer_data->timer, sample_timer_cb, 0);
-+	mod_timer(&foo_timer_data->timer, jiffies + HZ);
-+
- 	simple_tsk = kthread_run(simple_thread, NULL, "event-sample");
--	if (IS_ERR(simple_tsk))
--		return -1;
-+	if (IS_ERR(simple_tsk)) {
-+		timer_shutdown_sync(&foo_timer_data->timer);
-+		free_percpu(foo_timer_data->counter);
-+		kfree(foo_timer_data);
-+		return PTR_ERR(simple_tsk);
-+	}
- 
- 	return 0;
- }
-@@ -147,6 +179,10 @@ static void __exit trace_event_exit(void)
- 		kthread_stop(simple_tsk_fn);
- 	simple_tsk_fn = NULL;
- 	mutex_unlock(&thread_mutex);
-+
-+	timer_shutdown_sync(&foo_timer_data->timer);
-+	free_percpu(foo_timer_data->counter);
-+	kfree(foo_timer_data);
- }
- 
- module_init(trace_event_init);
-diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_events/trace-events-sample.h
-index 1a05fc153353..816848a456a2 100644
---- a/samples/trace_events/trace-events-sample.h
-+++ b/samples/trace_events/trace-events-sample.h
-@@ -247,12 +247,14 @@
-  */
- 
- /*
-- * It is OK to have helper functions in the file, but they need to be protected
-- * from being defined more than once. Remember, this file gets included more
-- * than once.
-+ * It is OK to have helper functions and data structures in the file, but they
-+ * need to be protected from being defined more than once. Remember, this file
-+ * gets included more than once.
-  */
- #ifndef __TRACE_EVENT_SAMPLE_HELPER_FUNCTIONS
- #define __TRACE_EVENT_SAMPLE_HELPER_FUNCTIONS
-+#include <linux/timer.h>
-+
- static inline int __length_of(const int *list)
- {
- 	int i;
-@@ -270,6 +272,13 @@ enum {
- 	TRACE_SAMPLE_BAR = 4,
- 	TRACE_SAMPLE_ZOO = 8,
- };
-+
-+struct foo_timer_data {
-+	const char		*name;
-+	struct timer_list	timer;
-+	int __percpu		*counter;
-+};
-+
- #endif
- 
- /*
-@@ -595,6 +604,25 @@ TRACE_EVENT(foo_rel_loc,
- 		  __get_rel_bitmask(bitmask),
- 		  __get_rel_cpumask(cpumask))
- );
-+
-+TRACE_EVENT(foo_timer_fn,
-+
-+	TP_PROTO(struct foo_timer_data *data),
-+
-+	TP_ARGS(data),
-+
-+	TP_STRUCT__entry(
-+		__string(	name,			data->name	)
-+		__field(	int,			count		)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name);
-+		__entry->count	= *this_cpu_ptr(data->counter);
-+	),
-+
-+	TP_printk("name=%s count=%d", __get_str(name), __entry->count)
-+);
- #endif
- 
- /***** NOTICE! The #if protection ends here. *****/
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-new file mode 100644
-index 000000000000..96791e120b7d
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-@@ -0,0 +1,51 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: BTF event with typecast and percpu access
-+# requires: dynamic_events "this_cpu_read(<fetcharg>)":README "[(structname[,field])]<argname>[->field[->field|.field...]]":README
-+
-+# Check if the sample module is loaded
-+if ! lsmod | grep -q trace_events_sample; then
-+  modprobe trace-events-sample || exit_unsupported
-+fi
-+
-+echo 0 > events/enable
-+echo > dynamic_events
-+
-+# The sample_timer_cb(struct timer_list *t) is called.
-+# We want to check (STRUCT,FIELD)VAR typecast and this_cpu_read() access.
-+# (foo_timer_data,timer)t converts t to struct foo_timer_data * using container_of.
-+# data->counter is a per-cpu pointer to int.
-+# this_cpu_read(data->counter) should give the value of the counter.
-+
-+echo 'f:mysample/myevent sample_timer_cb name=(foo_timer_data,timer)t->name:string count=this_cpu_read((foo_timer_data,timer)t->counter)' >> dynamic_events
-+
-+echo 1 > events/mysample/myevent/enable
-+echo 1 > events/sample-trace/foo_timer_fn/enable
-+
-+sleep 2
-+
-+echo 0 > events/mysample/myevent/enable
-+echo 0 > events/sample-trace/foo_timer_fn/enable
-+
-+# Compare the values.
-+MATCH=0
-+while read line; do
-+  if echo $line | grep -q "foo_timer_fn:"; then
-+    NAME=`echo $line | sed 's/.*name=\([^ ]*\) .*/\1/'`
-+    COUNT=`echo $line | sed 's/.*count=\([^ ]*\).*/\1/'`
-+    if grep -q "myevent:.*name=\"${NAME}\" count=$COUNT" trace; then
-+       MATCH=$((MATCH+1))
-+    fi
-+  fi
-+done < trace
-+
-+if [ $MATCH -eq 0 ]; then
-+  echo "No matching events found"
-+  exit_fail
-+fi
-+
-+# Clean up
-+echo 0 > events/mysample/myevent/enable
-+echo 0 > events/sample-trace/foo_timer_fn/enable
-+echo > dynamic_events
-+clear_trace
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-index 0e65e787e426..ae17eb344bf7 100644
---- a/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-@@ -21,6 +21,9 @@ check_error 'e:foo/^bar.1 syscalls/sys_enter_openat'	# BAD_EVENT_NAME
- 
- check_error 'e:foo/bar syscalls/sys_enter_openat arg=^$foo'	# BAD_ATTACH_ARG
- 
-+check_error 'e:foo/bar syscalls/sys_enter_openat arg=^COMM'	# NO_EVENT_FIELD
-+check_error 'e:foo/bar syscalls/sys_enter_openat arg=^current'	# NO_EVENT_FIELD
-+
- if grep -q '<attached-group>\.<attached-event>.*\[if <filter>\]' README; then
-   check_error 'e:foo/bar syscalls/sys_enter_openat if ^'	# NO_EP_FILTER
- fi
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-index fee479295e2f..e9d7e6919c7f 100644
---- a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-@@ -112,6 +112,18 @@ check_error 'f vfs_read%return $retval->^foo'	# NO_PTR_STRCT
- check_error 'f vfs_read file->^foo'		# NO_BTF_FIELD
- check_error 'f vfs_read file^-.foo'		# BAD_HYPHEN
- check_error 'f vfs_read ^file:string'		# BAD_TYPE4STR
-+if grep -qF "[(structname" README ; then
-+check_error 'f vfs_read arg1=(task_struct)file^'		# TYPECAST_REQ_FIELD
-+check_error 'f vfs_read arg1=(a)((b)((c)(^(d)file->d)->c)->b)->a'	# TOO_MANY_NESTED
-+check_error 'f vfs_read arg1=(task_struct,^in_execve)file->comm'	# TYPECAST_NOT_ALIGNED
-+check_error 'f vfs_read arg1=(task_struct,^foo_bar)file->pid'	# NO_BTF_FIELD
-+check_error 'f vfs_read arg1=(^task_struct1234)file->pid'	# NO_PTR_STRCT
-+check_error 'f vfs_read arg1=(task_struct,se^->group_node)file->comm'	# TYPECAST_BAD_ARROW
-+check_error 'f vfs_read arg1=(task_struct,^->pid)file->comm'	# NO_BTF_FIELD
-+check_error 'f vfs_read arg1=(task_struct,^.pid)file->comm'	# NO_BTF_FIELD
-+check_error 'f vfs_read arg1=(task_struct,^.)file->comm'	# NO_BTF_FIELD
-+check_error 'f vfs_read arg1=(task_struct)^@symbol+10->comm'	# TYPECAST_SYM_OFFSET
-+fi
- fi
- 
- else
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-index 8f1c58f0c239..21ce8414459f 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-@@ -115,6 +115,18 @@ check_error 'p vfs_read+20 ^$arg*'		# NOFENTRY_ARGS
- check_error 'p vfs_read ^hoge'			# NO_BTFARG
- check_error 'p kfree ^$arg10'			# NO_BTFARG (exceed the number of parameters)
- check_error 'r kfree ^$retval'			# NO_RETVAL
-+if grep -qF "[(structname" README ; then
-+check_error 'p vfs_read arg1=(task_struct)file^'		# TYPECAST_REQ_FIELD
-+check_error 'p vfs_read arg1=(a)((b)((c)(^(d)file->d)->c)->b)->a'	# TOO_MANY_NESTED
-+check_error 'p vfs_read arg1=(task_struct,^in_execve)file->comm'	# TYPECAST_NOT_ALIGNED
-+check_error 'p vfs_read arg1=(task_struct,^foo_bar)file->pid'	# NO_BTF_FIELD
-+check_error 'p vfs_read arg1=(^task_struct1234)file->pid'		# NO_PTR_STRCT
-+check_error 'p vfs_read arg1=(task_struct,se^->group_node)file->comm'	# TYPECAST_BAD_ARROW
-+check_error 'p vfs_read arg1=(task_struct,^->pid)file->comm'	# NO_BTF_FIELD
-+check_error 'p vfs_read arg1=(task_struct,^.pid)file->comm'	# NO_BTF_FIELD
-+check_error 'p vfs_read arg1=(task_struct,^.)file->comm'	# NO_BTF_FIELD
-+check_error 'p vfs_read arg1=(task_struct)^@symbol+10->comm'	# TYPECAST_SYM_OFFSET
-+fi
- else
- check_error 'p vfs_read ^$arg*'			# NOSUP_BTFARG
- fi
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-index c817158b99db..e12dc967ec76 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-@@ -28,4 +28,9 @@ if grep -q ".*symstr.*" README; then
- check_error 'p /bin/sh:10 $stack0:^symstr'	# BAD_TYPE
- fi
- 
-+# $current is not supported by uprobe
-+if grep -q "\$current.*" README; then
-+check_error 'p /bin/sh:10 ^$current:u8'	# BAD_VAR
-+fi
-+
- exit 0
+ struct memory_notify {
+ 	unsigned long start_pfn;
+ 	unsigned long nr_pages;
+-- 
+2.54.0
 
