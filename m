@@ -1,62 +1,64 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D13583D6CB0
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 14:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840AB3D9034
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 14:57:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782313079; cv=none; b=ahnqKLBgpKhls77Rq58sJi70VTZMMm1ufpI7VgeskmJIVs++8T2NaCHeBvLpL9oGCLpUDSidZmRxA2p16Z7YnO/B1Fv7eWBcf8M9hDHbxfX8wlc23n1twfdqEUD6RF0RnFkqbk0oX9FUK9frJjp3Y1Z9ghb3tuqgFM1PVrhyPvI=
+	t=1782313080; cv=none; b=Eklz7DSZyZ1wiYqBv2kFQykEQtP71MJ0IIeVF07GvrhQ/RaIv+dmP7lnyITEEcNRP9NxpVeoYCmb7cYilLHkpzx7Ge3HGfXPY+5a5Akbfkq/iMd1QtW61lGnGC8IZEDEoUid3evYZyCh9+2ZvZe9HaqHlHMao2oxJgZ2av8WsFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782313079; c=relaxed/simple;
-	bh=OELpNeuF4o3uKPmDaZimCE09x9LRfZSE6ZhO3qoWDnE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L/hT95UEFj7vVsXrPOEergLyeoncV17UfvMm13RIMErA7lfJj2up75BEwnk/KaBGw5t3fIAfsl4r4/q30/aeR0KGeXboQqBHp6u1LAwJMkybp7mR6uS1lmf+Ha9cHTuKVEXqtyebad/fFoVrVtx3p/lpbwpS5YX59lz8PXI+h1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=X17iEpF+; arc=none smtp.client-ip=209.85.160.181
+	s=arc-20240116; t=1782313080; c=relaxed/simple;
+	bh=cz/Kd5Fg1n6RVtyFBzJpN2apXZy9vJ9be28aEaW5jhc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=I1WrJoGEmQZ5RhziW00GDlqGLo9tiigHa6kL5jGpoLv/MpLhxoJwM9glKk5Z2ulTuR5tAgXXrTYvuqMvIDEPIZfm1ejGOaf0o5RPTvfvj22R08uJrLSyQ1oZhj46gHPoLi7pmX5MoYjqB0+D/en1TYiahJE1Xf2h7wMq6E2uaEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=gwSWxRJ/; arc=none smtp.client-ip=209.85.160.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="X17iEpF+"
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-517b1f2c6adso9593841cf.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 07:57:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="gwSWxRJ/"
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-519f9f13b06so9227601cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 07:57:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1782313076; x=1782917876; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=342v7Y1wIc5Ucn3x8pxabI10RJuF4OR+Mw4ajKzQlTY=;
-        b=X17iEpF+dly0f+2P4gQVF1jNdprEmscmq6StQGFf1bgqgIWZXsX9GCUety7UmYFLAh
-         FiZQBMX/ux1x3qtRpW6Naadri+aGJJzZrDNZzRwnYTIyQCGo4aebGtbUb4bMdxxeRCRq
-         ayrACRdSEjgyHa/cn5M5TszycIRcUTW5Rnw5/b/hLgLf/SMOv1Pu5Zr7jCkakel3xvlK
-         Xd6zBR/+nBSspOm+E4GNOwGSSzEieMvKM5ZSw1ha980olmqyqEChvgxlGVAcfpn9lQkO
-         8sGO7pmngrel/55AMMJ4ALReZqyp5Hyr58xN16kKyaE3vXoZ5HHh+AMqZQfNLzobFUPO
-         cWCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782313076; x=1782917876;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gourry.net; s=google; t=1782313078; x=1782917878; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=342v7Y1wIc5Ucn3x8pxabI10RJuF4OR+Mw4ajKzQlTY=;
-        b=dTZdvGLdGbzrHLUa5tu8YcrGMvv8B8CDtZDZpHi/W6mRXXBS+sxkjVZ/PchJsEP99Z
-         K1R3j1Sq1Kantms1vB0wCFhK9mHb+8C5hqiIEh/tNLfWnfaGc09tAVnPctpbAPt4/HNd
-         /04SRSes2HYjapCqibg53OXbOQH1ZM0Fg32aIhwBbd2pmxV/cacfP839++Kz5Zk9fL3t
-         nFVJA1LNxa3oOl6JIhROPAmvbioZCJYSNCkLj1PjyW+z+RzxuU3gujE/6ZP8GcWUysYg
-         t3meH/XZM8+ghRUdLdjeGHI2N9tQTa/ThBi/USsID22MhW2KldQgGpehCD4rc1x4jZUQ
-         tJHQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8WOTKzf2jogDyS1sPkS5Kxop+WmfLmIWuzmAGXwUIZUHVOt0OjxG7SYhoAE8xoJr0hU4W0opW9ir+93dYhc74=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKf2/oolaCwHOB/wy7ZVCodLHgyeuTqIpLYZy4I+g11Q1VmfRR
-	cn7KYLB5ftnl29CBWWJtEx3r4Wumq8qf99GNUyhx9oxriCtNiDyqKA5tbfBD+KWD9gI=
-X-Gm-Gg: AfdE7cmi66XtP2y8CsibxNF0uLt7BvmCNK50tM1BgrZK9DwsE/lUn/filGFySqMh0BJ
-	HpBBemCxPJAHujwR4cRzpr1zRrRMCdOxBEYv3nNdK77hOJSXU/Z+LRB3EC66RnXd4v9yDVtMjZP
-	37kj6BQbPrg8dmzMn0sDmEfj13512x7Z2tGAk+I1TStZp3W69OqJnwBwdZsfUdcxLHBftaSi0fL
-	tRPjsYSi6Znli1YWRL+SQJA5NR330FwxlnSrqkwcjJz6hv53riIxTHM26ZGPqg3p9nidBLrZ9Si
-	4L019aERDXlqNxxkuZLkzGWCFzVLrqXMtwFOnmN6NzTTs8E85XQ4a9RVVz40FeewJmUe/EbHLwZ
-	DplyXELf6y0uoPJJUvoFvKF2ALIt6JC7EMBSpQffVQaro7D8d0F2F3/WcUG4uRXllc1OvKH+OdA
-	CeSxU+ovHWhPy312WuPKeJvsg8k5W4phiKTYPCt2lSH8EZqfMKtNbbqNwoCQ9PzUhIwN1MmX4tZ
+        bh=UQoqst23Sd/uqsFRXXVKz4Ck7yyavMrD/eBg48X+nsY=;
+        b=gwSWxRJ/9hOo2kx43gdyE5gJacA7jTFLDluoTdWGhPNB3ahzdqbfCCwFu16yi57PBV
+         QwdHrQCMz9YcVQqDw8s33CaxXtaaVeePyhFn8drBndnIFqyZKEHsqiHV3JWPdbBCbi+L
+         V9gmanMdsLXh8CXpUWNmc9bWS23r+IVmLR8icUT6o0hFLNOxxSacBPq/VXzBsx5e28jP
+         Q1uDxQHI+2a4YA7iAGd6wX6Z7fxrUi2klZWr5WVXlZeXCV9DnETigX/hlAjk8lrk21WI
+         /pcCYdxvws2x48ez/OO5iJ1fIzbT/Gf2rJImHCFux27dee+gA1nbZ81AenUBpzRUrMAw
+         +AIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782313078; x=1782917878;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UQoqst23Sd/uqsFRXXVKz4Ck7yyavMrD/eBg48X+nsY=;
+        b=nEpKOMNZ4n+UBiuzJoEXkw23AskWjCyZZ/+UJGSMrl+IOTyRBCcFnVNRyIlcObu37B
+         3BrfUBQvJGiSNGq27ZVA7LU99c3Qurt6ILNnkU5rGGHwLRuH/iI9YGzIoAKzkitJV/lU
+         /sYMO5xaSzzUMcKGE0KjHqmtr4vM61bghILeAu7CDu5mCGhXixptMHURmxibh5sb5E7K
+         wnIg7vnLwkqAnHbgX3unO0/VJtM+RZDQhQ7Ss+p0AmLLPL+r1buCptQN2SFQgSaOjgxe
+         SBzCXOhmrLVuTolZc/6OsCR2Fw875waLTs0nS0BnqNrBr2qH0JiaXAPKwZDaA9eW9Izd
+         g9bg==
+X-Forwarded-Encrypted: i=1; AFNElJ82lOxJYea49617R0t4uMeI2AbgkSAypeyzSAwgxeLH/IiCCCdlCWrX53KTsl2AEcAW9Yl680HEr5ZrX3vdWGE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFzoaMKtcBEXHuC0S9t0BNKULdiW+WqZLyfyu0Bxi9bx6vBK4k
+	vyB2vHJQMopJ2SQ0DYc6ys+OHUMrtRAVKFbcM0FOJEn67zOTeuaJjPUvePRc8KJcUDA=
+X-Gm-Gg: AfdE7cmKlXI+tZcmPILJ7sMDOltfrlmJesliyZD80HYU+W0j6tGsY1JSrP7Vh7XPIEl
+	83G3tX2SG7krNquNR8Q97YLBwOtpACGidIJOUTgrUjfn6WbAu7cMeM1EICAAk2vzSxONphi3ur0
+	I4YZOVRfpshftDbC9lRcguS3qyvfCe2rHAsXcJkLS94GsICATMb41DXyGpd3mvhL4ZWim22UNne
+	YsMxp2zfuPAbhVl8EUqhx5GUcI8J1HO7GXG1VrUsvQZkUQ49LVir8GihURXaUX21xqAC+p+Fczs
+	GJvpv2890QrgpCtc7f1zkwszG7HuspydX7icnSP3126yX31nAp7DIS02pL/FTma4u7PoMMMa9i9
+	EvkruIQBY2q/mBuEWm6vlFBF0uFk+OQdPW/cWetZ+/4Merk+K0rzxNyNCKwROnj4bj5z3kcLMY9
+	EsXr5f+USSoKqH+sd9+B/1VVV+nPu8Bie9P9ryMZtLnJX8TEgbIyoSJUsIprPCsPJumyNf6P5/V
 	A==
-X-Received: by 2002:a05:622a:191f:b0:517:79f0:ae3d with SMTP id d75a77b69052e-51a5473239fmr101461321cf.21.1782313074271;
-        Wed, 24 Jun 2026 07:57:54 -0700 (PDT)
+X-Received: by 2002:ac8:7dce:0:b0:517:7e26:36a9 with SMTP id d75a77b69052e-51a5485b854mr12138801cf.39.1782313078372;
+        Wed, 24 Jun 2026 07:57:58 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51a51ae8ee7sm49502301cf.24.2026.06.24.07.57.51
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51a51ae8ee7sm49502301cf.24.2026.06.24.07.57.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 07:57:51 -0700 (PDT)
+        Wed, 24 Jun 2026 07:57:57 -0700 (PDT)
 From: Gregory Price <gourry@gourry.net>
 To: linux-mm@kvack.org,
 	nvdimm@lists.linux.dev
@@ -86,10 +88,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Smita.KoralahalliChannabasappa@amd.com,
 	ira.weiny@intel.com,
 	apopple@nvidia.com
-Subject: [PATCH v5 0/9] dax/kmem: atomic whole-device hotplug via sysfs
-Date: Wed, 24 Jun 2026 10:57:35 -0400
-Message-ID: <20260624145744.3532049-1-gourry@gourry.net>
+Subject: [PATCH v5 2/9] mm/memory_hotplug: pass online_type to online_memory_block() via arg
+Date: Wed, 24 Jun 2026 10:57:37 -0400
+Message-ID: <20260624145744.3532049-3-gourry@gourry.net>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260624145744.3532049-1-gourry@gourry.net>
+References: <20260624145744.3532049-1-gourry@gourry.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,101 +102,55 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The dax kmem driver onlines memory during probe using the system
-default policy, with no atomic control for the state of an entire
-region at runtime - only by toggling individual memory blocks.
+Modify online_memory_block() to accept the online type through its arg
+parameter rather than calling mhp_get_default_online_type() internally.
 
-Offlining and removing a whole region therefore races with other
-userland controllers that interfere between the offline and remove
-steps. This was discussed in the LPC2025 device memory sessions [1].
+This prepares for allowing callers to specify explicit online types.
 
-This series adds a sysfs "state" attribute for atomic whole-device
-hotplug control, plus the mm and dax plumbing to support it.
+Update the caller in add_memory_resource() to pass the default online
+type via a local variable.
 
-Transitions are atomic across every range of the device. The state
-names mirror the per-block memoryX/state ABI with one modification:
+No functional change.
 
-  - "unplugged":      memory blocks are not present
-  - "online":         online as system RAM, zone chosen by the kernel
-  - "online_kernel":  online in ZONE_NORMAL
-  - "online_movable": online in ZONE_MOVABLE
+Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
+Signed-off-by: Gregory Price <gourry@gourry.net>
+---
+ mm/memory_hotplug.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-"offline" (blocks present but offline) is reportable for backward
-compatibility but is not writable because it entices the race condition
-we are trying to solve (offlining all the memory blocks in one atomic
-and unplugging them in another atomic).
-
-mm preparation:
-  1. mm/memory: add memory_block_aligned_range() helper.
-  2. mm/memory_hotplug: pass online_type to online_memory_block().
-  3. mm/memory_hotplug: export mhp_get_default_online_type().
-  4. mm/memory_hotplug: add __add_memory_driver_managed() so a driver can
-     select the online policy.  The override is restricted to in-tree
-     modules via EXPORT_SYMBOL_FOR_MODULES().
-  5. mm/memory_hotplug: add offline_and_remove_memory_ranges() for atomic,
-     all-or-nothing offline+remove of several ranges under a single
-     lock_device_hotplug().
-
-dax/kmem feature:
-  6. Plumb online_type through the dax device creation path.
-  7. Extract hotplug/hotremove into helper functions.
-  8. Add the "hotplug" sysfs attribute.
-  9. selftests/dax: regression test for the attribute.
-
-DAX Kmem probe still creates the memory blocks by default, even when
-the default policy is "offline" to preserve backwards compatibility.
-
-Unplug (atomic offline+remove of the whole device) is the new
-capability provided by the attribute.
-
-I downgraded a BUG() to a WARN() when unbind is called while the device
-is not unplugged.  The old per-block toggling pattern is still used by
-userland tools and disconnects the 'hotplug' value from the real region
-state; until per-block control is deprecated or restricted in some way,
-WARN() flags that tools should move to the new atomic pattern.
-
-Changes since v4:
-  - renamed 'dax/hotplug' -> 'dax/state'
-  - refactored the work into a shared offline_and_remove_memory_ranges
-  - reworked MMOP_ helpers to re-use code
-  - fixed cached system default online_type regression
-  - nits
-
-Gregory Price (9):
-  mm/memory: add memory_block_aligned_range() helper
-  mm/memory_hotplug: pass online_type to online_memory_block() via arg
-  mm/memory_hotplug: export mhp_get_default_online_type
-  mm/memory_hotplug: add __add_memory_driver_managed() with online_type
-    arg
-  mm/memory_hotplug: add offline_and_remove_memory_ranges()
-  dax: plumb hotplug online_type through dax
-  dax/kmem: extract hotplug/hotremove helper functions
-  dax/kmem: add sysfs interface for atomic whole-device hotplug
-  selftests/dax: add dax/kmem hotplug sysfs regression test
-
- Documentation/ABI/testing/sysfs-bus-dax       |  26 +
- drivers/base/memory.c                         |   9 +
- drivers/dax/bus.c                             |   3 +
- drivers/dax/bus.h                             |   9 +
- drivers/dax/cxl.c                             |   1 +
- drivers/dax/dax-private.h                     |   4 +
- drivers/dax/hmem/hmem.c                       |   1 +
- drivers/dax/kmem.c                            | 475 ++++++++++++++----
- drivers/dax/pmem.c                            |   1 +
- include/linux/memory.h                        |  22 +
- include/linux/memory_hotplug.h                |  13 +
- mm/memory_hotplug.c                           | 162 ++++--
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/dax/Makefile          |   6 +
- tools/testing/selftests/dax/config            |   4 +
- .../testing/selftests/dax/dax-kmem-hotplug.sh | 207 ++++++++
- tools/testing/selftests/dax/settings          |   1 +
- 17 files changed, 806 insertions(+), 139 deletions(-)
- create mode 100644 tools/testing/selftests/dax/Makefile
- create mode 100644 tools/testing/selftests/dax/config
- create mode 100755 tools/testing/selftests/dax/dax-kmem-hotplug.sh
- create mode 100644 tools/testing/selftests/dax/settings
-
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index 7ac19fab2263..6833208cc17c 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -1337,7 +1337,9 @@ static int check_hotplug_memory_range(u64 start, u64 size)
+ 
+ static int online_memory_block(struct memory_block *mem, void *arg)
+ {
+-	mem->online_type = mhp_get_default_online_type();
++	enum mmop *online_type = arg;
++
++	mem->online_type = *online_type;
+ 	return device_online(&mem->dev);
+ }
+ 
+@@ -1494,6 +1496,7 @@ static int create_altmaps_and_memory_blocks(int nid, struct memory_group *group,
+ int add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags)
+ {
+ 	struct mhp_params params = { .pgprot = pgprot_mhp(PAGE_KERNEL) };
++	enum mmop online_type = mhp_get_default_online_type();
+ 	enum memblock_flags memblock_flags = MEMBLOCK_NONE;
+ 	struct memory_group *group = NULL;
+ 	u64 start, size;
+@@ -1582,7 +1585,8 @@ int add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags)
+ 
+ 	/* online pages if requested */
+ 	if (mhp_get_default_online_type() != MMOP_OFFLINE)
+-		walk_memory_blocks(start, size, NULL, online_memory_block);
++		walk_memory_blocks(start, size, &online_type,
++				   online_memory_block);
+ 
+ 	return ret;
+ error:
 -- 
 2.54.0
 
