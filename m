@@ -1,188 +1,257 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0463E5A14
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 21:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52031F03DE
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 21:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782335440; cv=pass; b=b6NR6Xi06PxHx4C0sZle9YZe+vcqkxZieRZUp+cP9yWrU3d/5x7waJeLe3O69wvJ8XtHzzoKOb0pji6exWvXa4Qe4aMUB9c4pg9Vi8DFyjLBZ4GNLpyvC9OYFa4ZFnvkCIxlXBbndthA0ZR2dqsZMxNtr0A4yZcz5qTrutG66wQ=
+	t=1782336189; cv=pass; b=MdU2ZuE92xADM7JRFhlc5SbyiCJYuZZi0rmlsqO4hMjLKT0+KfXIwAKcBOPbR9XJC+pbWXs15jx4QH5mYHdtAbaNWxzCCvm1fFVpjL3SyBJUeWvwd0mwOApBr/4J4Kb7mu0LThbrKZLI5Hycm/cWgAcCufcjFD+4RuYdZP3WlPI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782335440; c=relaxed/simple;
-	bh=/fqLeUK+2mBqGvKbYmtjhS3yw4ZIMajZ90sW7dKC8MY=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bj6n9jPLKGYRc70E9yqHZIsNJnsvTxggjEjoQaApPEOihUOxznNO1Kqp6KABB8UrQIYWmTqAUeH9aMmp1sWcNZGRdbr8s+osQrnxaFLkkCXft2ocyi+XXBXsX4Xs8s6G2brAmm4ar9sozDuuZF5GVs/1HYKBP7FIMPZWg8lVjw4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gZrCJnRz; arc=pass smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1782336189; c=relaxed/simple;
+	bh=e8FKnMxnQE6EcbhtFXm3u/ZDFx7rumJIKaX/xozB5Yw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X2D62CjYXN5HIxHNbg4AJPeO50+9J8QMbKz8LhkIwonNtc9ldSwhbINfyqKGt9KtUnb6C+b7mx6IiBfF4oLAIUENl4UU0MlvabyROPl7Lv+npVih/3QnLlw/xeLNjOiDfpfNMU+P9RE7gcZHqwiI3e9QFNyTfU8dHL6thKwZx8g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=raltZR9i; arc=pass smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gZrCJnRz"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1363fe80fe8so3042008c88.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 14:10:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782335438; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="raltZR9i"
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8e066990fb4so16313106d6.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 14:23:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782336187; cv=none;
         d=google.com; s=arc-20240605;
-        b=FhcN9KhGekZN6szkmIY55Uhojt9RNgqi2I2LRjJhJZYBtYN4UbG/FRxZzX91JB3dOZ
-         Vuxc//IQ26LmyhzpOQ0wnHDnr0POcPjE1qg/9o/MLykbrN6wZ8HDz31bJG1VFuScPgbZ
-         NUbnARn7vFvqHWtyA7sTAmsP0Vv6fYwfTkkStE2RgXaV0RnF/2HXgC/E6ixPlHe7tcsU
-         OevZQeHEsPqp0vf2Ua8jPlgEMMgrVgFhc29skTGVC3sr3A/wgaP+9oHS4sxivOTcjlu6
-         FT3/Dp5KyS2xJd5wYCB2SY8eIiWirHF8Cl+hFgzeAcRchDnFrI9l9RMZ2EG7167oxoS8
-         jB2w==
+        b=N+edtXHjWYrzBq4VkpTZDIEiodX6uPuizfzJY8Mfoc2jU6Jy7ZYTgF9GiRlWlCmGqj
+         yQ6re1SaIRJ2++Vk9V9X6bY1bw9hOoJpP8rvkkPM/TlaR7le78gGGxp0UNQNR9Fy7/KT
+         GP7qfRRLmq6pOyD3mK9Dfn/uT/1XClb1b5ZI2ryvw7bELXSI/VjEqzaBKZgcZjTC964Q
+         CGXkEajX5YdRl9XezUV1akMB63Z6SlqoQ9mMSJkUf1411YO3cMpl4MuVPM+VMD2EwrgD
+         U6ykcYPNkI2MpVxctpymOrPB7O2dJhbzldmyxOEeeXHx1OgvPXJqlr2p+FVTi+wQtkTS
+         cX8w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=1qhY5YTt9otpZBdjhswjpjNDeK/pN32eIQWKDjhQOPw=;
-        fh=BcecC1Ngq+SFfKkbTnhKyb9n3+exGUTGOxwGOvZe/Lo=;
-        b=Evxo6vf2NtuLpW/WskJR0pkqZvtkDN2ZAjKROHrHB+R7pMBJbMSeKDKscCLNjy7Pt6
-         DnZhmk/MPkPBsrpTHWDr9j/rpxQ+Id745Oo+uHp5yl70MWsR68831quzynoZ+22ulN2/
-         qD+tnfgjTKuqiKYO8KvluM2gXJcUqMU40tTZ49lOUNaoUyyk8BdMPmw2aAVClmRmtuFs
-         9l4EgNURG7A0/4P0rGyx6QN30QSUusR23Dk5M7dSekEahjP0/BPFup6Gs1NfAgwm0qFp
-         AjpcNZaHrS6HP2LRC667BLLNfZasmHFuYwslmZzMv9jECDyXJpJ6qodqhLZupyAZH+cz
-         ddpg==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qSoqZHCVaW6be7/8vwIAP/8yZ9kR/NSjkqmErBuSEOM=;
+        fh=vg0MDKDm2cq0rmauNIW3qFSYivuJqhcLKu83NB9msp0=;
+        b=NZ+nKNfHD+bzfDOGxhpc4yOP/cecQ96QLKj1GGYK7xmWIUS7o2396UKxHglbLE168I
+         d+S8tl4iOEyzfZBEsrcJC7sAo8UfTDCTU2O87JSCE4jH2gPXgcCIBeK6ySH8ZfNAyK2I
+         MFfQYEEzrT+uA+BoDUl5pAGG37u/HI2aMN3/7p8vTydlLVdvfqft94dgr1p4TqVafSGF
+         dF2dJRKTzSTR9kvcH0mqk1v6dqAuOP83Nde4DMetgtcyMuhQXZ4galP9rEJfUxIGD6d9
+         kBjeoKV/PnKCGfaGgibcKq5viZeXFjGQQdHiJD1mzdM6FRVjLe/cK1evGJbUs5MMFRmS
+         IRdA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782335438; x=1782940238; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1qhY5YTt9otpZBdjhswjpjNDeK/pN32eIQWKDjhQOPw=;
-        b=gZrCJnRziYALESi+EyO4zrNEGpp7soNo5xePz6vITzszfo4F6y/KtcKGvcLpyKvZrd
-         qtd0Q6THio+xAZ13GySQ7XR9xNuTXLNjTYxZHjxUD+jFV5qLjPimK8JsV5XtWPp+IAAE
-         nueZGNVCzR76HQiXS9fWPEkZW+FEfophypqL9S0rY23Umgws0WYROaJTvJcYM9FMRvD0
-         6v/Ue4mud2QRGPZtmqhpg5QOTD+bcStGRE/IYgeZ0R/CwpVQGH9tnaAkT8bojKXGfjeH
-         y9dVcengerUfzgIllLUNo7WRQx57pHQqltKIqtj6TIwC4MFBTmGuK/vib7CEbCBHOYOf
-         ZITA==
+        d=gmail.com; s=20251104; t=1782336187; x=1782940987; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qSoqZHCVaW6be7/8vwIAP/8yZ9kR/NSjkqmErBuSEOM=;
+        b=raltZR9ix+5bTVcUNHjV/cKP9ZaG1gEmiC+WOxk/Bti6+RV+yArkBmKtnOStqlTsK/
+         ae0P9i68bhil7Gs4F75D7Ra/1LP5Go/rBmccFGT1/FGT3CL9Sf28c0p0p23wUlHO4TRt
+         8bT8mMwUWidmP36ArLQDRrfkHJwY6KobR9od+7qm+0rMKRJMpZl1+0ZNwZaTG2+F906I
+         faqY01BZpg+808056MwqrwGc+i3OLXcjjfzyCxwtH2i9+NtMhOXCQQh4i1Kx019DCs+u
+         LrpW93yC6yNCe7eBQ9XrMxHxEChoF7qARpla1T2YvZlr35n1Yuk3SpCk2niUFbYZcner
+         +WAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782335438; x=1782940238;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1qhY5YTt9otpZBdjhswjpjNDeK/pN32eIQWKDjhQOPw=;
-        b=I8xYCRUTLHuhyI8XGg9y8ZLRi7TEoYKLC8fK9UFpuQW5vbSZwTIS848G7momtYR0QT
-         G1uzyxKg7xEd0flkqGrOql0P9+TKc9tJ4mzMdfUBL5U5/74Ft3W8M38cqU+EqBrARN8M
-         XOM2Qy25NsHaDFm1ThloW+pg9hPQojxZWmy/4s7qiD484DfZCZKOxL1dX0eOUD545ha1
-         OqiCgp9xaNBT2Zl2i2QX+OULi8tnL0fm0CgfcIfyd+ER3+YqN/8Bw+xCfm2219vNXOSa
-         KCQi+tMzkn2eTGgoG1szZ6jPm/cP+RklTWQK5V1V3pA+GRx3mthKuUc2tbhaHJdwFVJE
-         Koww==
-X-Forwarded-Encrypted: i=1; AFNElJ9f+JRWb/Q74SdY0ESVbaX0B7g716Ii5XIiLWzYh4qRnWYOLWdx6hBm+q1uMxqe7vE0wSX/kHp+q6ph/Ud1weM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YycdlpfxAI7L2EfNIC+wnWcp3xbiQnCwxIN7LTZ+BqXt9vj8c+y
-	RhR4x8LXUVGZXb9+NMRpQxJbfJZJD19HFPSvBj/PFGRb3VikdzMm4we0Mza5tnVtmmHoFdnmYQp
-	g0a+drAkFMRBOmS0uO3A3ufhWUpaAbsGFx4dUzq8G
-X-Gm-Gg: AfdE7cn9S10tUQVI16rkyecSjhh/Q7AXLqnjv63q00DyYfRZSIu73m2ly5C0Zzj3frg
-	68mgUCm1Ye1glFa6B7K5TmKMCh2HhqgRk6NOJwjMBl8rE3yUL8iC7dGEdeDxJYiR1onPwo9Dq8Z
-	ldoG0xidQMwkF3E51Ml2Qr1EKNuALZXrn95OGwjnUC2hSDJtt0LQgFIR707WT7JUDA9uQOlkmVZ
-	40i24iAH1e8896JAwkw0kLL//yuAWSKjMYrWcrxLwBWauegHZfmEtGMeUGyL9yqax4F60IESE9e
-	QV1q91MUbtRzXFINjmDbXEpDFSWzxGTH0hwF6XSA8GcgF0qI1bgS43ABrVI=
-X-Received: by 2002:a05:7022:ec4:b0:138:4e1:4701 with SMTP id
- a92af1059eb24-139d0bfe4c6mr3377918c88.7.1782335437124; Wed, 24 Jun 2026
- 14:10:37 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 24 Jun 2026 14:10:36 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 24 Jun 2026 14:10:36 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <ede86ac4-d560-49a6-82d6-b33ac5fc9355@linux.intel.com>
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-13-9d2959357853@google.com> <ede86ac4-d560-49a6-82d6-b33ac5fc9355@linux.intel.com>
+        d=1e100.net; s=20251104; t=1782336187; x=1782940987;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qSoqZHCVaW6be7/8vwIAP/8yZ9kR/NSjkqmErBuSEOM=;
+        b=LeMHNZKjSWeT5nHAq15NAW3Hzod9WvTLHeTYy4k8zeRSo480xefeOTstbZQjViAufr
+         DbaiXFfEKg0pi8zMJnTan3Ui1Y+gr6K8+jtbr0lHWHN071GSIori81/udncSGc3Qef81
+         d+70umPK75wlCIv+916QlR05+0gceECLEdKvuoJ4m1lRs/ZqMJrGKc2W9/DQ1Dh985cG
+         6OxXoBAEFLb8sipXq09NjpKf3yJCwWgCZKV3IjRJXEyWAdJXz94zgfETUZci8arKWkXQ
+         wNyVN2JvhzDDwEGzBxmSyARYTsYwaWh2tbCle5nDixgcOyM0J6S052SYPcpRgrYki0uD
+         ogPg==
+X-Forwarded-Encrypted: i=1; AHgh+RoZCVpWEC7Yoex1Vv8ByViNQqmAKFzhYS4KHiUHJ9kyr31+kcoR42vr9AIDe+EA767UfSbLBHKGEa3CdZOcvho=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwO0MdlPnRdrkUGE+GmhfMo4Y6rExEQ4mFAj3zZMCEzBPyqBJiY
+	B76dBYtwxo4BzWtBg+Dwv8YrLj6Np3A+omq1JLrM64pbiy4YCWiMRzg1OetFUEPT8yZewnmnXHC
+	CyjHKXadqWzUsxsk9QoQUHTYjWAvnvVc=
+X-Gm-Gg: AfdE7ckM//OtDFrevZZJ026bDt0RS8Q17zpU6CUiP2TCxUsDbg4veluuxN1gtpB9P4J
+	rZO5ba+NSHH+wvyZKrt+vWydcp8PAhc/QuRfvjt6JYBHnjY61dbm8iZekXQVd9fQaKp+lwlxRau
+	rheJP9wzipkTvPaqaA5Re1c3jrK2ZD7G+diRBCm0m81NM3HYS6er03LStvT6xgiLjUMVQavBX6P
+	H1VnSkYQkw/e2eGNbTCCUcWGYrcsh1erlSiBh4Sr9BQjZ5/5WT3dqAz6GmJQz4oqg7oBHNm8FG3
+	pLGCpqNIxyxWARSTE0g+AnDiN28=
+X-Received: by 2002:a05:6214:cc7:b0:8db:736b:b2fd with SMTP id
+ 6a1803df08f44-8e402a51b48mr148834946d6.26.1782336186403; Wed, 24 Jun 2026
+ 14:23:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 24 Jun 2026 14:10:36 -0700
-X-Gm-Features: AVVi8CebnA3rqvCzlkQD0wA3EY7nvdb5mQUucCUu-AjWUK6m396TQ3uUDm-u_rc
-Message-ID: <CAEvNRgGWwfWZbvXxBAKHxc3DYVGzDo8TYtii+8fVnJNtBwvCqg@mail.gmail.com>
-Subject: Re: [PATCH v8 13/46] KVM: guest_memfd: Add base support for KVM_SET_MEMORY_ATTRIBUTES2
-To: Binbin Wu <binbin.wu@linux.intel.com>
-Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org, 
-	chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com, 
-	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
-	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
-	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, tabba@google.com, 
-	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
-	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
-	aneesh.kumar@kernel.org, liam@infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
+References: <20260618203411.73917-2-dwindsor@gmail.com> <75d39fd9847cca915d704235264ab474@paul-moore.com>
+In-Reply-To: <75d39fd9847cca915d704235264ab474@paul-moore.com>
+From: David Windsor <dwindsor@gmail.com>
+Date: Wed, 24 Jun 2026 17:22:54 -0400
+X-Gm-Features: AVVi8CdrIOcn7xbcClmMBTsg427tmja6_i0WQl1k6YwRkJtqaPChbJXPc9S5D7w
+Message-ID: <CAEXv5_gSOoHnVn9bKsCdHB5aR_tNHRZ+m2trVcYNmbtS-K=4fQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
+ inode labeling
+To: Paul Moore <paul@paul-moore.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, ast@kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	kpsingh@kernel.org, mattbobrowski@google.com, jmorris@namei.org, 
+	serge@hallyn.com, zohar@linux.ibm.com, roberto.sassu@huawei.com, 
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
+	stephen.smalley.work@gmail.com, omosnace@redhat.com, casey@schaufler-ca.com, 
+	shuah@kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Binbin Wu <binbin.wu@linux.intel.com> writes:
-
-> On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
->> From: Ackerley Tng <ackerleytng@google.com>
->>
->> Introduce base support for KVM_SET_MEMORY_ATTRIBUTES2 in guest_memfd, which
->> just updates attributes tracked by guest_memfd.
->>
->> Validate input fields in general. Guard usage of KVM_SET_MEMORY_ATTRIBUTES2
->> by making sure requested attributes are supported for this instance of kvm.
->>
->> A new KVM_SET_MEMORY_ATTRIBUTES2 is defined to support writes (unlike
->> KVM_SET_MEMORY_ATTRIBUTES) in addition to reads so it can provide error
->> details to userspace. This will be used in a later patch.
->>
->> The two ioctls use their corresponding structs with no overlap, but
->> backward compatibility is baked in for future support of
->> KVM_SET_MEMORY_ATTRIBUTES2 and struct kvm_memory_attributes2 in the VM
->> ioctl.
->>
->> The process of setting memory attributes is set up such that the later half
->> will not fail due to allocation. Any necessary checks are performed before
->> the point of no return.
->>
->> Co-developed-by: Vishal Annapurve <vannapurve@google.com>
->> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
->> Co-developed-by: Sean Christoperson <seanjc@google.com>
->> Signed-off-by: Sean Christoperson <seanjc@google.com>
+On Tue, Jun 23, 2026 at 8:12=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
 >
-> s/Christoperson /Christopherson
+> I have a few specific comments below, inline with the patch, but I wanted
+> to make some general comments too.
+>
+> The kfunc additions really don't belong in the VFS kfunc file, please
+> create a LSM kfunc file (call it security/bpf_lsm_kfuncs.c) and add the
+> kfunc code to this new file.
 >
 
-Thanks!
+Makes sense. I will also do similarly for the selftests.
 
->> Reviewed-by: Fuad Tabba <tabba@google.com>
->> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
->> ---
->>  include/uapi/linux/kvm.h |  13 ++++++
->>  virt/kvm/Kconfig         |   1 +
->>  virt/kvm/guest_memfd.c   | 116 +++++++++++++++++++++++++++++++++++++++++++++++
->>  virt/kvm/kvm_main.c      |  12 +++++
->>  4 files changed, 142 insertions(+)
->>
->>
->
-> [...]
->
->> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
->> index 297e4399fbd49..cfa2c78ba5fb9 100644
->> --- a/virt/kvm/Kconfig
->> +++ b/virt/kvm/Kconfig
->> @@ -102,6 +102,7 @@ config KVM_MMU_LOCKLESS_AGING
->>
->>  config KVM_GUEST_MEMFD
->>         select XARRAY_MULTI
->> +       select KVM_MEMORY_ATTRIBUTES
->
-> What's this?
-> This config is gone.
+> While moving the kfunc additions to a LSM kfunc file does sort of convert
+> the VFS changes into LSM changes, Christian's comment about splitting
+> this patch two patches, one with the LSM hook changes and one with the
+> BPF additions, is still reasonable and a good suggestion.  I would still
+> CC the VFS folks on these patches and I would encourage reviews from the
+> VFS folks as there is a VFS component here, albeit a somewhat small one.
 >
 
-I'm surprised this compiles... I'll fix it, thanks!
+v4 will contain 3 patches: one to introduce struct lsm_xattrs, next to
+introduce the kfunc, and finally the selftests.
 
->>         bool
->>
+> > +
+> > +static int __bpf_init_inode_xattr(struct xattr_ctx *xattr_ctx,
+> > +                               const char *name__str,
+> > +                               const struct bpf_dynptr *value_p)
+> > +{
+> > +     struct bpf_dynptr_kern *value_ptr =3D (struct bpf_dynptr_kern *)v=
+alue_p;
+> > +     size_t name_len;
+> > +     void *xattr_value;
+> > +     struct xattr *xattr;
+> > +     struct xattr *xattrs;
+> > +     int *xattr_count;
+> > +     const void *value;
+> > +     u32 value_len;
+> > +
+> > +     if (!xattr_ctx || !name__str)
+> > +             return -EINVAL;
+> > +
+> > +     xattrs =3D xattr_ctx->xattrs;
+> > +     xattr_count =3D xattr_ctx->xattr_count;
+>
+> I'm not sure why the "xattrs" and "xattrs_count" local variables are
+> necessary, especially since they only appear to be used in the sanity
+> check below.  I would suggest just using the values in the struct
+> directly.
+>
+
+Leftover from the previous implementation, will fix.
+
+> > +/**
+> > + * bpf_init_inode_xattr - set an xattr on a new inode from inode_init_=
+security
+> > + * @xattr_ctx: inode_init_security xattr state from the hook context
+> > + * @name__str: xattr name (e.g., "bpf.file_label")
+> > + * @value_p: dynptr containing the xattr value
+> > + *
+> > + * Only callable from lsm/inode_init_security programs.
+> > + *
+> > + * Return: 0 on success, negative error on failure.
+> > + */
+> > +__bpf_kfunc int bpf_init_inode_xattr(struct xattr_ctx *xattr_ctx,
+> > +                                  const char *name__str,
+> > +                                  const struct bpf_dynptr *value_p)
+> > +{
+> > +     return __bpf_init_inode_xattr(xattr_ctx, name__str, value_p);
+> > +}
+>
+> I'm sure there is a reason why you split the code out into
+> __bpf_init_inode_xattr() as opposed to just putting it directly in this
+> kfunc, can you help me understand?
+
+Not sure, perhaps prior convention, or something with the verifier
+perhaps. I've removed it in -v4 and everything works.
+
+> > diff --git a/include/linux/security.h b/include/linux/security.h
+> > index 153e9043058f..1f8e84e7dd7e 100644
+> > --- a/include/linux/security.h
+> > +++ b/include/linux/security.h
+> > @@ -68,6 +68,11 @@ struct watch;
+> >  struct watch_notification;
+> >  struct lsm_ctx;
+> >
+> > +struct xattr_ctx {
+> > +     struct xattr *xattrs;
+> > +     int *xattr_count;
+> > +};
+>
+> I see the bots already pointed this out, and you acknowledged it, but
+> since I'm looking at this I felt obliged to remind you once again about
+> the rename to "struct lsm_xattrs" :)
+>
+
+Yeah, sorry about that. =3D)
+
+> Also, looking at this closer, is there a reason why the "xattr_count"
+> field is an integer pointer and not just an integer?  We're passing
+> the entire struct by reference to the individual LSMs so we shouldn't
+> need this to get an updated count in the caller and having it as a
+> regular integer should simplify things slightly (you could also
+> make it an unsigned int while you are it).
+>
+
+Copy/paste from v2. Will change xattr_count's type to unsigned int.
+
+> > --- a/kernel/bpf/trampoline.c
+> > +++ b/kernel/bpf/trampoline.c
+> > @@ -859,6 +859,9 @@ static int bpf_trampoline_add_prog(struct bpf_tramp=
+oline *tr,
+> >       }
+> >       if (cnt >=3D BPF_MAX_TRAMP_LINKS)
+> >               return -E2BIG;
+> > +     if (node->link->prog->aux->attach_limit &&
+> > +         tr->progs_cnt[kind] >=3D node->link->prog->aux->attach_limit)
+> > +             return -E2BIG;
+>
+> Re: Alexei's comments about this - if you look back at my previous
+> comments, my concern was around BPF LSMs using too many slots in the
+> xattr array and causing issues.  If the BPF folks want to do that check
+> in the kfunc located in the LSM framework I'm okay with that; the
+> important part is that the BPF LSMs don't use more space than they
+> previously requested.
+>
+
+Ack, will remove this attach-time check.
+
+> > diff --git a/security/security.c b/security/security.c
+> > index 71aea8fdf014..8f82a1352356 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -1334,6 +1334,7 @@ int security_inode_init_security(struct inode *in=
+ode, struct inode *dir,
+> >  {
+> >       struct lsm_static_call *scall;
+> >       struct xattr *new_xattrs =3D NULL;
+> > +     struct xattr_ctx xattr_ctx;
+> >       int ret =3D -EOPNOTSUPP, xattr_count =3D 0;
+>
+> Since we have the xattr array/pointer and count in the new "lsm_xattrs"
+> struct, I think we can remove the "new_xattrs" and "xattr_count" local
+> variables in favor of the fields in the new struct.
+>
+
+Thanks! These will be eliminated in v4.
+
+Best,
+David
