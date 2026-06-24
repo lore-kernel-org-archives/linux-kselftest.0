@@ -1,189 +1,74 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B2638C2C3
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 09:33:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1CD39C00A;
+	Wed, 24 Jun 2026 10:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782293600; cv=none; b=tq+pOUvZYPBUG6cN/cKouRJ6ZBgf+oItWnPhaOcRh0zDgC3zsTjFNkkLD2aK9AcPeT8XxFAf/Dnujc74x2s9cmLoW0LHdWjifuphpoMoOCaq2FthpCVI+6UajBo0sgJz8Qvnj/c2zQ3GiAsGYQvVoDZ1jb9rz/rA2IaX8tzfZwI=
+	t=1782295298; cv=none; b=KVQjDl0slBqii8aBfPabgOQ34NTmItjND6ZozWI93O2FHPe6dufPDT50Gr69nuUFgr9R2emJAv/GjKLICPIjzoBIIrTANcQiMLwaBUNJP4F49bl4EWPIRfUBm0caHTiK2rJPsxAt98rBYMqGu2oyL9rd5zOFsYSN/y9Vka/3CqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782293600; c=relaxed/simple;
-	bh=zVTzcAhu2sh1noRCqYQ5+3ri+BgXa4QWy0Rkq9VVdAo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=j3jpbH2cS9dz56Dazmsb5an/p2VEilUHLmPQaax7fykX7cYZKeF08uvuZCUljHqWVB3CBKzqQnJx+rEr/HXAyRmdar7id6BT6IDSqDzNd1UyyBP7RH2lcjPAAzTEjx2jjQSRzOWrO5XKsWN/+PmrO4CV5DGUwLjYtdpC3zXz7t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FXbiswNk; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=AzhYsAwN; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782295298; c=relaxed/simple;
+	bh=p5nX6wUcfv0bLpniNMX1Xti0A+mdnHioYdQs30tjulc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=GVT9OYYNqzznuS/MFezXsLl6xIad9MQ9UR/oV6X1msDjTD4B8mlSpgUpEg7mkHbizFbWN6QEM2q/IU5geUKj5YlIgyEZw+gHazR1joHKRSYy0z8szGI/FmBOw/xQ1Ti/zZBMZy3M4AVj53eb6KoGgB1TmPZ+aFy/5VeN4dmxceI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V3rsHo08; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FXbiswNk";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="AzhYsAwN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782293590;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oScmgVBAZdYqdklOiG9pSCq/MuJ7qIw0aEjZWIJM3Ks=;
-	b=FXbiswNk6E8YeoEyOuHOTPOaIfeWtEXgipX/UdaaXTMCkb+ddtrxhzSpnZC6H5zuFqkpfE
-	t1WshMH+K2t8fTJzyg9686ci/1EflZ4FZpTza1u9C5I22bv0B1aCx3wklcilPUzJNOrcse
-	XWeSsULm3O/b+t51VcQMyOletfIM88I=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-500-0AATYo2FOyGsxGpGyppvRQ-1; Wed, 24 Jun 2026 05:33:08 -0400
-X-MC-Unique: 0AATYo2FOyGsxGpGyppvRQ-1
-X-Mimecast-MFC-AGG-ID: 0AATYo2FOyGsxGpGyppvRQ_1782293587
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-490b9cd54f3so5113985e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 02:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782293587; x=1782898387; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oScmgVBAZdYqdklOiG9pSCq/MuJ7qIw0aEjZWIJM3Ks=;
-        b=AzhYsAwNr4C/fkY66dsoT2NUSL7zKlX9cXwHIWgOsiaBQPNybQ6R5nUSVR3LRk7vQa
-         haW8mhIYq4ZBMR3voaLUosC1g3+LZ/NUd3RIsKEzexF0YeOvgsjr8t75DQFxpUflhHk0
-         6XdqHGbu0BlgzY2+lFOJ4RE1GA/fz2jQNmxyPYUzVAegOemrytq0y+4R/Z6diV3+WRPc
-         qFCIGv7k9G6OqLo0cjX/Fhaq/iXpemM4V8dQibKyH3QT8HBBCVFJb80uVAQVGn3rlBKi
-         h5ab7TURLmAc2fYp0bC4l9KMDynhHVLaX5MbgWt2wUNbVH7hru35pe3uW70r8d3myQqV
-         AT9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782293587; x=1782898387;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oScmgVBAZdYqdklOiG9pSCq/MuJ7qIw0aEjZWIJM3Ks=;
-        b=TEO+scLnv2+BV+ODAbbAfH+mHlz8eNo3SIndogaCjn8Nul20hoDhN2e+uTcAnzMK+W
-         3lK+F3wvkw96uduU+KY5h6+a5E7nCyQnjVMzwi/XRFFy/Pr8A3jJ2xCJdVLKw/prkUXH
-         3pxoWYk0ZSZm3tERjj6fuRj1uNFlRezni0Vb73YyRX7qNXzopGJyesDqL6DEnVuUPvbj
-         ktLF8pjcmJaAFYWGUFFlV7QX/VjxWsBEy4vEpTCcI81h0IZ2TOWH+a7Y7h3XCL5Klxao
-         hVoisI04P23hDRgwGltIzzrKOd6/Foucunmhf5+AGY5EgFkwyu4+fXRb1Nsfcv8Mo3zr
-         fcBQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/91haYX7O4zusqSXi0LqMhPXAVtlvbCqTLGCaiFXDfrkZ09juXEEAyBkY7puBEUfWN3zt4KmdRAEVt0sthEYg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYsmXerucfJxnI2xR18ZyMfKeUorU5wLTu+ecGSrXGm+9NfvGl
-	oE0hVi9cEkXAivIXuc1R4X9dYxni3TekSAHMu2XwQoLxk6eadD8m3QAAh6UH6i1yBZ6lIrgq8kr
-	rS6VPzcftFLE5XcqrHz5qpJO0udYYe362EKzR3zFYINeFTsQNHNaRYrCY2WoWSOoDabgerQ==
-X-Gm-Gg: AfdE7ckA6CLbnDdnayMSm1L+PKqCMz2oXblYpdIiQ+01AASpEPBFPQlT8HC8bCDDnhd
-	szcS1YlCURqTkSzz+HoJQsA/8J0ixp/xIi109ejGfxrKF3WOdsDBuj9N+4menPrm06rypx1JMrJ
-	k5yNxarCT0hmiC/K8MFnZar3oJcnGGk7K+AafiSPgZcSSxGrBOs2fTM78I41/9HyQ7netXDkxzh
-	koXFFytqwn7nLreDWjHcmQzdfYCcejNyxCYYVprgjy2UJdIQ0KEb0eRqk0ubVIy7j265D+L9jDv
-	yU7SH4XbrYz3z03KsDK/U1C3zj74ueO0u2OFDOCKyFKGetQkznvhAzc0DTypDret6szsdVaEjyn
-	EY7QjrmgXdzysb2Okb/yDlZ4ik29aEbaDdvw=
-X-Received: by 2002:a05:600c:a012:b0:492:2e1c:1d19 with SMTP id 5b1f17b1804b1-49260875bbamr34892635e9.31.1782293586952;
-        Wed, 24 Jun 2026 02:33:06 -0700 (PDT)
-X-Received: by 2002:a05:600c:a012:b0:492:2e1c:1d19 with SMTP id 5b1f17b1804b1-49260875bbamr34892125e9.31.1782293586482;
-        Wed, 24 Jun 2026 02:33:06 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49261063d6esm26451795e9.2.2026.06.24.02.33.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 02:33:05 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 42FAF808FBD; Wed, 24 Jun 2026 11:33:04 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- dsahern@kernel.org
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-In-Reply-To: <20260624030530.3342884-2-avinash.duduskar@gmail.com>
-References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
- <20260624030530.3342884-2-avinash.duduskar@gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Wed, 24 Jun 2026 11:33:04 +0200
-Message-ID: <87pl1gcmgf.fsf@toke.dk>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3rsHo08"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5B5B1F000E9;
+	Wed, 24 Jun 2026 10:01:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782295297;
+	bh=aqqXSKkXqH7+z45YaZAA4CHT7QY3OOWzEo26MpYF8kU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=V3rsHo08Xd5O3+dnURCfCrPExjXp32zAOCeCnxQKU1ACjYEF9/taFEHGW9ZmV3SxV
+	 pGkICB3+QD0d6OTdlefvC63NH8kToDyuwWGXE+TabuDjKRaFD3mWIGWwQE4yL2X4uO
+	 u1B9J9gBj70RTzxFKvfvdJ7yYqxhl3ugcccCao7FDNda9i5lAYoUIDY8hN0iz+gswU
+	 I1PB+dr7/O+sTKFVycLqeiJEJHgyNgI4kSVCNOqmzTSRuRpjLRsYGHdjMcgshnqWdC
+	 9Xpfx3eYSdssu2Erzh49kVynEawLtxmVwPYpuJlJ3K1xTX2L3cZ6VLpSXeVEBbOjmF
+	 7Op2n38z8NQgQ==
+Content-Type: multipart/mixed; boundary="===============4585104688103906616=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <6d5d9ebb3da239a8e792edeb98b45b7bd67876870520d71f26d402301c7c7fb5@mail.kernel.org>
+In-Reply-To: <20260624-f01-12-fastcall-helper-stack-read-v1-2-e0a86085ef77@mails.tsinghua.edu.cn>
+References: <20260624-f01-12-fastcall-helper-stack-read-v1-2-e0a86085ef77@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: Cover fastcall helper stack reads
+From: bot+bpf-ci@kernel.org
+To: gnq25@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: john.fastabend@gmail.com,martin.lau@linux.dev,shuah@kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,gnq25@mails.tsinghua.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 24 Jun 2026 10:01:36 +0000 (UTC)
 
-Avinash Duduskar <avinash.duduskar@gmail.com> writes:
+--===============4585104688103906616==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> bpf_fib_lookup() returns the FIB-resolved egress ifindex straight
-> from the fib result. When the egress is a VLAN device, the returned
-> ifindex is the VLAN netdev's, which has no XDP xmit handler; XDP
-> programs that want to forward the frame (e.g. xdp-forward) must
-> instead target the underlying physical device and push the VLAN tag
-> themselves. Today the program has no way to learn either the
-> underlying ifindex or the VLAN tag without maintaining its own
-> VLAN-to-ifindex map in userspace and refreshing it on netlink
-> events.
+>     selftests/bpf: Cover fastcall helper stack reads
 >
-> Add BPF_FIB_LOOKUP_VLAN. When the caller sets this flag and the fib
-> result is a VLAN device whose immediate parent is a real (non-VLAN)
-> device in the same network namespace, populate the existing output
-> fields params->h_vlan_proto and params->h_vlan_TCI from the VLAN
-> device and replace params->ifindex with the parent's ifindex.
-> params->h_vlan_TCI carries the VID only, with PCP and DEI bits zero; a
-> consumer wanting to set egress priority writes PCP itself.
-> params->smac is the VLAN device's own address, which can differ from
-> the parent's.
+>     Add verifier_bpf_fastcall test where a spill/fill pair initializes a stack
+>     slot. bpf_csum_diff() later reads it through ARG_PTR_TO_MEM | MEM_RDONLY.
 >
-> Only the immediate parent is resolved, via vlan_dev_priv(dev)->real_dev
-> and not vlan_dev_real_dev(), which walks to the bottom of a stack. When
-> the immediate parent is not a real device in the same namespace, the
-> lookup returns BPF_FIB_LKUP_RET_VLAN_FAILURE and leaves params->ifindex
-> at the input. This covers a stacked VLAN (QinQ), where the immediate
-> parent is itself a VLAN device and one h_vlan_proto/h_vlan_TCI pair
-> cannot describe two tags, and a parent in another network namespace (a
-> VLAN device can be moved while its parent stays), whose ifindex would
-> be meaningless in the caller's namespace. A program that wants the VLAN
-> device's own ifindex re-issues the lookup without BPF_FIB_LOOKUP_VLAN,
-> so the unreducible case stays distinct from a physical egress. That
-> distinction matters for XDP: a program cannot xmit on a VLAN device, so
-> a success carrying the VLAN ifindex would make it redirect to a device
-> with no ndo_xdp_xmit and drop the frame at xdp_do_flush(). The swap and
-> the vlan fields are written only on the reduce path; other output
-> fields keep their existing behaviour, so a frag-needed result still
-> reports the route mtu in params->mtu_result.
+>     The translated program must keep the spill and fill materialized. Otherwise
+>     the helper reads stack bytes that no longer match the verifier model.
 >
-> BPF_FIB_LOOKUP_VLAN is only useful to XDP, which cannot redirect to a
-> VLAN device. A tc program can redirect to the VLAN device directly, so
-> bpf_skb_fib_lookup() rejects the flag with -EINVAL; bpf_xdp_fib_lookup()
-> accepts it. When the flag is not set, behaviour is unchanged:
-> h_vlan_proto and h_vlan_TCI are zeroed and ifindex is left at the FIB
-> result.
->
-> The new block is compiled only under CONFIG_VLAN_8021Q since
-> vlan_dev_priv() is not defined otherwise; without that config
-> is_vlan_dev() is constant false and the flag is accepted but never
-> acts. That is safe because no VLAN device can exist there, so every
-> egress is already physical.
->
-> This lets an XDP redirect target the physical device and learn the
-> tag to push in a single lookup, which xdp-forward's optional VLAN
-> mode (xdp-project/xdp-tools#504) wants from the kernel side.
->
-> The helper's input semantics are unchanged; the reverse direction
-> (supplying a tag as lookup input) is added in the following patch.
->
-> Suggested-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> Signed-off-by: Avinash Duduskar <avinash.duduskar@gmail.com>
+>     Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 
-Yes, this is way nicer - thanks! One nit below, otherwise LGTM:
+This test covers a fastcall spill/fill removal bug that the bpf_fastcall
+spill/fill removal mechanism introduced in commit 5b5f51bff1b66
+("bpf: no_caller_saved_registers attribute for helper calls").
 
-Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+Should this commit carry a Fixes: tag pointing at that commit?
 
-[..]
+  Fixes: 5b5f51bff1b66 ("bpf: no_caller_saved_registers attribute for helper calls")
 
-> +	if (flags & BPF_FIB_LOOKUP_VLAN)
-> +		return -EINVAL;
-> +
 
-This is fine, but we should probably reject the input flag as well in
-the next patch (for symmetry).
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
--Toke
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28089002726
+--===============4585104688103906616==--
