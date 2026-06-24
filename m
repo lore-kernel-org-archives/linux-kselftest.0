@@ -1,163 +1,99 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2901E1A17
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 16:48:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782319698; cv=pass; b=Qufljjgv3azDrQ6GKTBFcv0jZcgvSBCfu/rIpKJZx6pko22nJl3+5Ht1KxG+mMrKMnH7ZjizbwzjKfgGmi3cwuwkxbRTYII46fSLUFrj9J8KBboZqtRIRS5536fWrVBpVt1Wj7C9YCmOCzOPFs8TM24r4uv4DpItXki6mWs3N+s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782319698; c=relaxed/simple;
-	bh=D1dDY+PxqiBKFbSG6nmxEVOa3WMHNTh5EZ8F9r4yzQM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r6zy4Otc6ZmB9cd/i0UEtzMkhDGsmM9jvVK238Evh7eJwJwEYbHnaSML+FKS3glD+nY8Y79gvP9d0DCuaZTVGMttfQsQRLHLwJPRjbitxE+OHK+v4AP/OOCCNh02EUx7+wBy/Dh6iJ85gPBr8SmuJJr9ruo8u3+pAcVIm2LJ15c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tB0nNIO8; arc=pass smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D6D34029E
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 16:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782320227; cv=none; b=rYJc/vd4GNWzslLddKYQh4uYObay3jT2M7GCprvNSNtpiZeHMRRd9zOCrES/bdPjI/hAWLvQEr/aLgetxshOFHUynqn9oBWRXUMSs70PSqHLpIUKIOrAuWNhLkes7fb8dztji+b1cAmzGVEup1Xz7EbZ0TWCidB4bK9VP2uOELs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782320227; c=relaxed/simple;
+	bh=sFclBlGuLlklutyWalxOxdLRxtPJWxF7xb2dfh79PCc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=q9qW3TpZN3Qb4rzKoLac6BfGYu6D8Kws+14cKYD3+cHiik3av6VhtmiywmeLnkqV8ealhGcaxxn9+4MTWX5XKogNDtsbHWdub8n9rMDt/GKzc6/FxcGlU/iz4vZpEeOFPFK0aLsENS/IWd7r+WL0QGnqKVSeaeZdUzROC/viChA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GwH5XZT5; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tB0nNIO8"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-37c867bd3e0so854155a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 09:48:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782319697; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Oxay2TXHapfKu3T9ZtfjrR9Zp/MUtsgEdWLEWqNvs4MErr69xZmBG01boYHDwIND4p
-         i3BKCXE9qi1DPaETalp8/HtYx+h4G0C+sc7QrC4Y7I+GPTQ05arroqMfy2BcSOcpwypx
-         3agiUlEdyRPwbGTtqEj0Mey9OvuzFTNf5z7glsoggqHSqplKivV9b+hm1CSRbt9ORIDz
-         R/fIFE7yWOt+G3BQbUfDFcsFA9EWKfxOnnufwQlC0h9qnYQG831DrIoH382wM2VQfJmW
-         D8PJEwIpNlz+gXAzjWGVFV1EpKstk833cYvrqcqjUBkwrprb8fIUkzdWmKDI25qeTHvh
-         uNWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=W03tYUTCql9OC1n8+t5466/i+LRzkumE2EIqxm2Qnew=;
-        fh=TKvswtgvpnGkVWxBwqD4PSDLMMl+9LuXBqRQoByaWK8=;
-        b=ivgtLqfocvyF1AoqcdE+nzuxcB2Wv+sL9pkpbdbnHvElriMLXfNnRBfoPQ1KU0qljx
-         wC3GuxRiu/FmlHVNE8sR7RzVpG/EF1921o+38rGVijBjiC5Qc46Y+pqlyz4FTadaCrvZ
-         X9aNOqG0XIueppwhvs97rzVBVWfcOv7nN/AZloArmccJ/UIGdlLtWn4vuqFF6GFAUF86
-         Zt+VNdi7HkkmPeBk9vp/mZQwazgR1TpXTrA/CQTWChKWa2da2tGyJb2FARG2579NXEG+
-         cOyGHbJBZ3kS8NWYj1DVpKZ+HnDIXSvaZ0rkSI1eE6CHNFO5qrKMXRs00nVbrpeRFvw9
-         pvdw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GwH5XZT5"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2c0d0516ad7so8395685ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 09:57:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782319697; x=1782924497; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W03tYUTCql9OC1n8+t5466/i+LRzkumE2EIqxm2Qnew=;
-        b=tB0nNIO82BBgMwDiW5BsSYPK9GDMKyS18wf18771qxeileK/HxqJhdgyx+ZxmUIAzu
-         7+rZFKGQCpLXTV47PBlAgMbyBQok16jhU6OKsCCMe6t/q7St0a1QRFaskhjMIUzTALca
-         oh7InXVVoX2QsH0pp6FCgvjq2QHPmLkcBAXWlIvgDrKpgjsa5UiBMUyBy6As3rGcxgX+
-         WFac+rBLjQAMvZiwltklmouQa8tNleuNPHDno5LP1h0S9ZgTmrG1zgA+96N3XQHvAZpn
-         S8Ev7EnIlbpjfjkrO6K0AdW5wUez6yCWACzAzlnX/78UQnPtQQIAt5eOo/CaL/ESKT/M
-         IcoQ==
+        d=google.com; s=20251104; t=1782320225; x=1782925025; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bTiRAq90VFPvdthoswICGCbbk82NFtmBH/qctXPK1uM=;
+        b=GwH5XZT5Gjtb/KiCw8TnuO37Blpge4KdrQPeHuge+fZ2ETrA/7DHZDBZJhhj5T9t9T
+         +m0mKXolKbM+sB2/iw5PzfNG9X3CKDq8QaZGGePsE7ehLwyy7NViZtAxz1EOO0qgD91B
+         sDcE44mtf8Uhm/c6mfio2i7R7I2t77uN8d4RO/shjDMAyLXXQgp5TuL2qNZzfP9f491L
+         hVwGb2vv8u4P7+b4j3S6xKNDoGiGW6Vce2462lp2Fkt9ecdJ9NlzKImTGcEdh86+Wsxt
+         pkDn9q1v+NC7T5gda5AA0A7AC36NAdqEGWroymqCYDcuS/Wg2/x6jj5CxstfckPuFGkI
+         g4Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782319697; x=1782924497;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=W03tYUTCql9OC1n8+t5466/i+LRzkumE2EIqxm2Qnew=;
-        b=YVD0VMmgOlvCIKa5Kxpzl4f85o3oDpjZ+2ydMjdReLn2qFCsmCYsSAu8wjG4gwKHl+
-         sFbepWXRLsS8vQULf31wAUqGtmydpp/G4MKdaJp4joMJ3VH+cA72aJ29Ra3paJ0CEX/u
-         2qKeVcxENH1zWIj5eZRm33dWd2ZjxRzojJJ7oLU06sNiHyr1ZAX4yTLbOk9kcUia7VOE
-         RwYJB9J3h30VWGiz6QHJz4/e3tjXSUct2lKnNN6wSS8RnuBD4AMMf5xJglRCf/1KIxlO
-         TwjiZyPo/veiZIV907lEVT7/Cvg+n3NTu9Xld7IOhWg/Xz0gGqY6HLgjW+j+nQLS/wnW
-         54ig==
-X-Forwarded-Encrypted: i=1; AHgh+Rq/d6m8hilP6BHPUs7rg5rvP2K1FwsirXxc2MyfMqaUL77IfWay/jFV7sG37W3P+s/5XXLeqT4387McG76jr7I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9tVyRlmrL4OEwAVTTIfuWoKqK/sMI0OmEFu1eh4YpcawEnbmn
-	URqlrntIEz2PFpjG2sz6Pjm/1NLGIqoaZNXgs89CCBuwIS9R2lp1n1DdkqNbkix7szUnIqLSBWs
-	7qHoHAttajCUuqznFWYPNNvKSinoTqk4=
-X-Gm-Gg: AfdE7cl0GEGKl769hQF2yAyu+/6SdiVir7nXtFqFHwC0n/SOXeMTJA4SueTVpq4is5j
-	cCYe8YYJsY8XLZ6o+0P3wGq0m7cb4+pzkffR3H9NY5w1kkTGGtKK50PIOc/RUzp3bkBAlOeARkl
-	TsshTxujdYBW5mee13TbWmxIp6gUqDfrADUDILyBP7/FZaaCbKhUAV8dprxLqAmV37KArCnz2sR
-	2rZ7dc2EeSuD5wl8Js1oN8auUaSf/H9mvTlVO+F/kSAisfpHSXjbb0vjq8UBLaRt+U7QLwzenqV
-	Mbvt6Nxy+3/St6TNGmuEuAg/FyzNAkmNmSVzzP8LG3tWwpKyHf0CjdHzdkObbwllNmM=
-X-Received: by 2002:a17:903:1d0:b0:2bf:3309:ecce with SMTP id
- d9443c01a7336-2c7e15804acmr44655155ad.28.1782319696656; Wed, 24 Jun 2026
- 09:48:16 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782320225; x=1782925025;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bTiRAq90VFPvdthoswICGCbbk82NFtmBH/qctXPK1uM=;
+        b=B6XcksAV180M5dvjzeFbkVyx9PwWbl9IRkT3FUx9iS3qNafcmvLE/N9lIX3fkCijBO
+         FFm2WSXYXHvpg3u9PdLmP51w0Vnj772YB0qcuHkzY3IKflvzf87sUjb7UUfbeAM9td1f
+         xQrwsPuX2+ogaMatw/qkMIXoiZ3Jf8OERIrym056+GWwwBDpEYMRoaiBUtfqktlTTZ18
+         W+gNDkYto8kTxNWv7+xSqXODcTKiRbMyagdHEdFZ8OadpUf8rWfCJogzVj93wMy2Z4p9
+         llf+U9CrnJuieyHIBt59NopodZxoAAUWX8IezaP3uZCQD3CLJebDx3YLhwxJx6Wg89bA
+         BjVw==
+X-Forwarded-Encrypted: i=1; AHgh+Roj5bHQ80RRvQJFOGrNoJeew1o3O+m6T9WO3rSh36XZaMJQ6txpcHSP6pnc57GyPCDSHPNnS8wyAEjnB5EfoqQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIduwNsy3XgPngwLeumGISzMntVcwjzXmZGCy9tn9fn6NxIEv4
+	12i2D6uGAovwTEezPmUX8Re289Ugs0o0jRBHZfOStshvsYlGoBcE1DjK93ZgJNSmoktNHOp+bVC
+	diuKpQw==
+X-Received: from plpn21.prod.google.com ([2002:a17:902:9695:b0:2c6:b814:535b])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:fd47:b0:2c0:b081:84b1
+ with SMTP id d9443c01a7336-2c7e1464d1amr26763135ad.10.1782320224855; Wed, 24
+ Jun 2026 09:57:04 -0700 (PDT)
+Date: Wed, 24 Jun 2026 09:57:04 -0700
+In-Reply-To: <20260618-gmem-inplace-conversion-v8-18-9d2959357853@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260622143557.22955-1-leon.hwang@linux.dev> <20260622143557.22955-10-leon.hwang@linux.dev>
- <CAEf4Bzbmj-ekwYQ6oGW-BRnzLBDvWgLyn_QsU5g1yNt_8A0H3g@mail.gmail.com> <d6bd1b3c-17eb-40bd-af02-e7135db07fd5@linux.dev>
-In-Reply-To: <d6bd1b3c-17eb-40bd-af02-e7135db07fd5@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 24 Jun 2026 09:48:02 -0700
-X-Gm-Features: AVVi8CdKhrk157vucbetxQ_xx2ozhEEUK-qKqre-NlZyb581Wr69_5EUbHkA4Ls
-Message-ID: <CAEf4BzZHC3_oyWyA8zC-ogNFktsGFd35Stst5bswO05O=dL+Sg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 09/11] selftests/bpf: Add test to verify
- accessing rdonly percpu_array
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com> <20260618-gmem-inplace-conversion-v8-18-9d2959357853@google.com>
+Message-ID: <ajwMYCSrPlxg-Fok@google.com>
+Subject: Re: [PATCH v8 18/46] KVM: guest_memfd: Handle lru_add fbatch
+ refcounts during conversion safety check
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, Jun 23, 2026 at 9:16=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> On 24/6/26 06:46, Andrii Nakryiko wrote:
-> > On Mon, Jun 22, 2026 at 7:38=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
-v> wrote:
-> >>
-> >> Since percpu_array supports direct-read, it should not break accessing
-> >
-> > what does "it" refer to here?
-> >
-> >> rdonly percpu_array.
-> >>
-> >> Add a test to verify that adding '.map_direct_value_addr' to percpu_ar=
-ray
-> >> won't break the case.
-> >
-> > what case?
-> >
-> > I think you are testing (read-only) direct access to read-only per-CPU
-> > array, is that right? Just write that out? Though, really, negative
->
-> Right, will update the commit msg.
->
-> It was to test the change of patch #4:
->
-> @@ -6113,6 +6115,7 @@ static int check_mem_access(struct
-> bpf_verifier_env *env, int insn_idx, struct b
->                         if (tnum_is_const(reg->var_off) &&
->                             bpf_map_is_rdonly(map) &&
->                             map->ops->map_direct_value_addr &&
-> +                           map->map_type !=3D BPF_MAP_TYPE_PERCPU_ARRAY =
-&&
->                             map->map_type !=3D BPF_MAP_TYPE_INSN_ARRAY) {
->                                 int map_off =3D off + reg->var_off.value;
->                                 u64 val =3D 0;
->
-> > test (we *cannot* access read-only per-cpu map for write operation)
-> > would be more trustworthy for this...
-> >
->
-> Makes sense.
->
-> I think it is worth testing both positive and negative cases:
->
-> 1. (read-only) direct access the data of read-only percpu data's
->    percpu_array map to test the above change.
-> 2. direct writing the data of read-only percpu data's percpu_array map
->    is disallowed.
->
+On Thu, Jun 18, 2026, Ackerley Tng wrote:
+> When checking if a guest_memfd folio is safe for conversion, its refcount
+> is examined. A folio may be present in a per-CPU lru_add fbatch, which
+> temporarily increases its refcount. 
 
-both is even better, but negative test is testing a condition that is
-hard to miss because you won't try to do that in practice )
-
-> Thanks,
-> Leon
->
-> >
-> >> [...]
+Under what circumstances does this happen, and what alternatives are there for
+userspace to work around the issue?
