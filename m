@@ -1,98 +1,110 @@
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807C038C2A0;
-	Wed, 24 Jun 2026 08:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3089939B49D;
+	Wed, 24 Jun 2026 09:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782290421; cv=none; b=LUjp2NbWbz+TP6QjXZCPKsAmk4YOc04wTCzpOUFWPyk0fnqoWs7nSHA4jsAeOgWocXessPGrV2qxGJBXwm066z3HmWbFa1Qr92IgFQTAHf+SrfaTx0m6Y0gqq2cEBd1S876r7+0Ki1CnwVWrDS0ywEZ4i/iWF1om4Xv1x7A22fU=
+	t=1782291622; cv=none; b=XeXIEp0JZZD68jTtA8Ls3sHf8Ou+/sAScCIB5ipcGVVt5dJxfzM/f5fMqcBubyH+ZFxPEt4zFtalI2H+nMVX19odphFfr5Hns9Kug07CCpKMTPOjy6U9y+ltOWo6FF5mm47R4IflfthGLaaTatMPtM1zcb1DDqG2K+OYChI2M/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782290421; c=relaxed/simple;
-	bh=P39lXRa2jz3MWWU850wkJGkTqFPcGPr0sHxBte23N+k=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=l1HJjqcOuLeiULUO3Aio8mGAkzr8n7Da5vMdNOI1MocVZWXCWup1jO9zcvtKbdwsXXq0Yb/rqvrtdkEUWa3T2rxT6G7nelwXrAgieclAENvcOHIRK3WrRgLTEKY+fx0mWfK0HilNRvmcCSDvf3ZDTdSxA8ac9w6/1DbnoIsclq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=xmu7RoUE; arc=none smtp.client-ip=80.241.56.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+	s=arc-20240116; t=1782291622; c=relaxed/simple;
+	bh=L4K9ivM+4+gVc1NLw1F+WL2oVL3+icBZmgGeI06sjMc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=CkyduV84hYqCcYhQmfst7YEteBzq1YgsimUVZpl/0Q31SqTtF2ck/Za5mhkqggvbNh7Rbz2+17oKoBMzIb6RS+g52nco4OOqf+DVHdgPPrWQdvsvkHFd6GyS/wX0Dw2E8IlIdSCnTzl1qutIv5EHzd6lDnvIZb949joq8sYgw3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TxiostkA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="xmu7RoUE"
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4glb3h3Qpyz9vHW;
-	Wed, 24 Jun 2026 10:40:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1782290416;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P39lXRa2jz3MWWU850wkJGkTqFPcGPr0sHxBte23N+k=;
-	b=xmu7RoUEfspa3pQuaYW/w4no6pnLUSB8p9wUfW4w0C1l0umHYgWWvmiQQu+yxXYo4u9sKo
-	rtg8qjgD9eh5m757sWm0MLp4XavglYqGAoUVnL5cfCaPWpah3lms09u8q16oMxXeZg5fHb
-	RP7QJO4NIlcw9Hz5+GkZwrhoS7ddk9QYOXe5AcLb2GamZhS8BcCcbHy0Dq92mo+D0zADib
-	jb/552KEPSPlsql8Lcdc82JdAAcMqMEV009IiK+a6+8CELqc9nW4tfoKEc5ihq/0x3XLDU
-	CsXn0KyWZgwOx07MlKiMt6Cm5+zUx7FTYySzERFaRW7B9VpCn7H2EgjJg5DakA==
-Message-ID: <6fff0fe73bd8a3e45a96034a2251c7e0ca7de5c4.camel@mailbox.org>
-Subject: Re: [PATCH v2 1/2] cgroup/cpuset: Avoid unnecessary cpus & mems
- update in cpuset_hotplug_update_tasks()
-From: Manuel Ebner <manuelebner@mailbox.org>
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>, Johannes
- Weiner <hannes@cmpxchg.org>, Michal =?ISO-8859-1?Q?Koutn=FD?=
- <mkoutny@suse.com>, Ridong Chen	 <ridong.chen@linux.dev>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan	 <skhan@linuxfoundation.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Wed, 24 Jun 2026 10:40:04 +0200
-In-Reply-To: <20260623230413.1984188-2-longman@redhat.com>
-References: <20260623230413.1984188-1-longman@redhat.com>
-	 <20260623230413.1984188-2-longman@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TxiostkA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 011781F000E9;
+	Wed, 24 Jun 2026 09:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782291619;
+	bh=Ude7fxjRQOGddru++6y+sDXghtwPibadLNbHTLXVa74=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=TxiostkAILnXpHLtckz/50qP4hggIdYeAhWBv19SYeKJ2UsA9mpyAdTl2uFBwp9WX
+	 6rQlhX/86wZJ8Rg/hukqjeLq/PJ1gh5/K5qliq21GuuiBZJOknZm3gm2kjeuggfW/l
+	 7tOpYh3yBcXu3rG+ykqiuUCy+IpRbYB3CMPiOsOwmRQ84pZ08UfCoKnydrlLqqs33D
+	 sf4VR8FFbsINdyoz2C3WbEtK5Q+bOGPW7hoQKGqc/Y/G4Yw9OdF0ey2rmMxSWsdUGy
+	 2suMZpIhzvWsEFTVb3O2MWCoD3i88l/2K7UO6ib4PBq/JWQFVreG/YXusE1z9ZXUOg
+	 As5XjdYOpAngg==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: tarunsahu@google.com
+Cc: Pratyush Yadav <pratyush@kernel.org>,  Ackerley Tng
+ <ackerleytng@google.com>,  Jonathan Corbet <corbet@lwn.net>,
+  vannapurve@google.com,  fvdl@google.com,  Pasha Tatashin
+ <pasha.tatashin@soleen.com>,  Shuah Khan <skhan@linuxfoundation.org>,
+  sagis@google.com,  aneesh.kumar@kernel.org,  skhawaja@google.com,
+  vipinsh@google.com,  david@redhat.com,  dmatlack@google.com,
+  mark.rutland@arm.com,  Paolo Bonzini <pbonzini@redhat.com>,  Mike
+ Rapoport <rppt@kernel.org>,  Alexander Graf <graf@amazon.com>,
+  seanjc@google.com,  axelrasmussen@google.com,
+  linux-kselftest@vger.kernel.org,  kexec@lists.infradead.org,
+  linux-kernel@vger.kernel.org,  linux-doc@vger.kernel.org,
+  kvm@vger.kernel.org,  linux-mm@kvack.org
+Subject: Re: [RFC PATCH v2 06/10] kvm: guest_memfd: Add support for freezing
+ and unfreezing mappings
+In-Reply-To: <9huzv7b910oe.fsf@tarunix.c.googlers.com> (tarunsahu@google.com's
+	message of "Tue, 23 Jun 2026 20:06:41 +0000")
+References: <cover.1780676742.git.tarunsahu@google.com>
+	<48777f4749fa43d5648085dbb2037aa99c144a88.1780676742.git.tarunsahu@google.com>
+	<CAEvNRgFEHciT3T9y+qEYRvXhDwfrggoU7Rm=f9hT3OrV+wgpNQ@mail.gmail.com>
+	<9huztsqtmihs.fsf@tarunix.c.googlers.com> <2vxz8q85mdyh.fsf@kernel.org>
+	<9huzv7b910oe.fsf@tarunix.c.googlers.com>
+Date: Wed, 24 Jun 2026 11:00:14 +0200
+Message-ID: <2vxzzf0kl3dt.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MBO-RS-ID: b6772ffac49364ddedf
-X-MBO-RS-META: zpbdbadoti536qbhst7wsuo7h1on8h5b
+Content-Type: text/plain
 
-On Tue, 2026-06-23 at 19:04 -0400, Waiman Long wrote:
-> As reported by sashiko [1], cpuset_hotplug_update_tasks() may perform
-> unnecessary task iteration and updating of tasks' CPU and node masks
-> when mems_allowed and/or cpus_allowed are not set in cpuset v2. It is
-> due to the fact that the temporary new_cpus and new_mems masks do not
-> inherit parent's effective_cpus/mems when they are empty which is the
-> expected behavior for cpuset v2 since commit 4ec22e9c5a90 ("cpuset:
-> Enable cpuset controller in default hierarchy").
->=20
-> Fix that and avoid unnecessay work by enhancing
-> compute_effective_cpumask() to add the empty cpumask check
-> and inheriting the parent's versions if empty when in v2. A new
-> compute_effective_nodemask() helper is also added to perform similar
-> function for new effective_mems.
+On Tue, Jun 23 2026, tarunsahu@google.com wrote:
 
-perform a similar function
-or
-perform similar functions
+> Pratyush Yadav <pratyush@kernel.org> writes:
+>
+>> On Tue, Jun 23 2026, tarunsahu@google.com wrote:
+>>
+>>> Ackerley Tng <ackerleytng@google.com> writes:
+>>>
+>>>> Tarun Sahu <tarunsahu@google.com> writes:
+>>>>
+>>>>>  static long kvm_gmem_fallocate(struct file *file, int mode, loff_t offset,
+>>>>>  			       loff_t len)
+>>>>>  {
+>>>>> +	struct inode *inode = file_inode(file);
+>>>>>  	int ret;
+>>>>> +	int idx;
+>>>>>
+>>>>> -	if (!(mode & FALLOC_FL_KEEP_SIZE))
+>>>>> -		return -EOPNOTSUPP;
+>>>>> +	idx = srcu_read_lock(&kvm_gmem_freeze_srcu);
+>>>>> +	if (kvm_gmem_is_frozen(inode)) {
+>>>>> +		srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
+>>>>> +		return -EPERM;
+>>>>> +	}
+>>>>
+>>>> fallocate may eventually go to kvm_gmem_get_folio(), so that would check
+>>>> kvm_gmem_is_frozen() twice. Is this meant to catch the punch hole case?
+>>
+>> Yeah, I reckon you can get away with doing this check only in
+>> kvm_gmem_get_folio(). Normally you'd like to fail early, but as of now I
+>> don't see much of a problem. If you drop the check here and fail in
+>> kvm_gmem_get_folio() you'd end up taking and releasing the mapping
+>> invalidate_lock, but this isn't a fast path anyway so I don't think it
+>> should matter much.
+>
+> No, Don't agree.
+> kvm_gmem_get_folios already have the is_frozen check. which blocks the
+> kvm_gmem_allocate. But not kvm_gmem_punch_hole. Your argument is correct
+> for kvm_gmem_allocate only. So is_frozen check in fallocate is to
+> block the punch hole as well. What ackerley said is correct.
 
-> [...]
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index aff86acea701..044ddbf66f8e 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1094,12 +1094,35 @@ void cpuset_update_tasks_cpumask(struct cpuset *c=
-s, struct
-> cpumask *new_cpus)
-> =C2=A0 * @cs: the cpuset the need to recompute the new effective_cpus mas=
-k
-> =C2=A0 * @parent: the parent cpuset
-> =C2=A0 *
-> + * For v2, the parent's effective_cpus is inherited if cpumask empty.
+Oh, right. Then we do need the check in both places.
 
-+ * For v2, the parent's effective_cpus is inherited if cpumask is empty.
+[...]
 
-Thanks
- Manuel
+-- 
+Regards,
+Pratyush Yadav
