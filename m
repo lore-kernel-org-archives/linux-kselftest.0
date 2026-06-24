@@ -1,111 +1,236 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945FF3FBA7
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 12:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E5E2EC09F;
+	Wed, 24 Jun 2026 12:57:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782304229; cv=none; b=lp15iwN+udoYywlXETG7vELtqUpGGS7VTMcgtYFNDJCtC3Iob9ESicwdgj/txpfmjNlckaESah7gkZ4T+TNOIx3Tm8FllAKp70RgEFniD5lZIHaWRK2vLk1CJ8yVby7ZSn1RkIq2uUqrw+G0NtL8sF2NtreHgvwHAsqcIivorfg=
+	t=1782305854; cv=none; b=iAoAAQFSny/jLtQgfJyu6o7Q9+YNJzEmzHPhqT9BOdL1PpvfT48xuBbLxRSHZbZQT9zZBtbcAMshrVbPMdUZRzZJRDKfUKxR/by3mFYt2TMiXL/q1gbZp5Sq4DmjKUCDC80ZCQIzcFI7Xy4dA64jEum7CBnpXVX0uveu8TjqSp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782304229; c=relaxed/simple;
-	bh=oWZSy2vnXbzemBv3Qg4Trq/YGNygJUwHFXQxIa9sI0s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qMmphcq2RyNxL0pHAmNMlA4+IDtA3v+0HVCqjYNbkPCDWc12rQA+bRl3C5d1hlVvQMk8fs0+XUdaOO3QoQv6IhZAhcSiRiCI+rIhuRCTYm4sfpPs2na7QXrfE9q/PKoi9FLsboeeKcwMf8sv+OK+rH4gov1DSNLjDfDQPfpmEsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jdT26ra3; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782305854; c=relaxed/simple;
+	bh=S8BpAUMxXmLbUpuQFq+mwTLqJlR9c4l9ytkf4UReLGo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qolfPUx94/3P5EL4GZQ+Omc/RHi0/3gV8HUzdIXw1J+VG0BegxdRyczkL04Oc2Bo1oxOKMmlZFOlzfcUb/DoJ7xgMozy21VU+gx8BAn3GBzbCsKWImTDSlh2eTkOA4NSMgrtFswluaxInJ7rUQINVgcT20qVrimY9r1AD7F9fvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VcWeL1oC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jdT26ra3"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-804e46366d7so9823337b3.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 05:30:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782304226; x=1782909026; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+8k9TIVBzrtkJ+5AdlIoIq3eU8KFjMxgcsnRy+gI+28=;
-        b=jdT26ra32blMuBBmDt1H56hE/dwz8FR/vAvvDkBUVEdGFDwVPVURYXT2VHuMjCGRgE
-         95C09sVPZVWTGeRr+k8/IIyh4tHQcSbEN/LD+5evYUKKNRyZ77ECq7mhgNZegJLIPxFh
-         CruLZPY6AVzCpJQIpcu13Sd/BXxr7qiXQ1Ao93/44xo2SUfktFi+lVBlk4vIKN907pmk
-         kK51as2km6VU7lMYN/6rYg2RN8s8zo8xGdvWXNpRXz+Ht4lPD6uLtQapbkM0V2HyjoSZ
-         wfwsMQVjFhqdxedw4jqYdniwZV0KwsJVFv1ObRa/owEJSkkM955pzc4+k3ONAxB4up9e
-         dmqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782304226; x=1782909026;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+8k9TIVBzrtkJ+5AdlIoIq3eU8KFjMxgcsnRy+gI+28=;
-        b=r/met5lXzV6CyDOvnmp3SfYWr4iT6PJtzdpxhzNkV1W924NFsWFZRDx48E4M/KD6F6
-         3jRc1jxcw+h45NNob3/7tzqr8SaDj0f/o2vY1e5dmPX6yYOfy2gFZduARy7no213Pl0j
-         x3ca7PZj1goiM/+wevCR4ZJo047SMWIUKfoWanzfnrhnzpgwXJTUAkegdLETjuzXDxfe
-         2QFHpg2Azm2yQV8xZuPVme94H5ILcS9wdckY9FRpPgi01Sz8+ozTomz4nyHXrubn0+ps
-         lkYgkBXYXDC8qVAKgoK0j1Wk7y2fE8ghum9wCkcebFbsMFegr2MQ4zvDzISgT2VbH2gc
-         Xv9g==
-X-Forwarded-Encrypted: i=1; AHgh+RptkALEBsJ2nrQ8V8bCi0nPTvu2Lm2AmusW0aaTT9/foBd+uiGLyfryt8JByW7kejR87tzIYoH3nzHnzMd5BXw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLPA7ffOGG8v+hQiskBadOL0boiUIzUieez5ZtTtcrrVM389j4
-	LStxXXrLndTohmv2Bpsx9z5UYAMShfPBMNT9x9g+QPZ46UJo6kilIp1i
-X-Gm-Gg: AfdE7clZ0On7t6s2sLVwwbjhLFtwiJcMiglQjQl7vgJ47xfeLPZFET61QAQIs6N51+d
-	cSzVvP+l1+QOnwHT7OjXaAZ22oLkMbRJeZg8scfP9ZHlEng5eT5LzUNgQOpK27tn8YiVGhnaRk9
-	b6+B1ygpKyDYJ+RDPEc8X7271H7sJuLLOVX8ap/RJy5XQ27Dv+deaS/1YqWzhUfGdVQ+4POyBGO
-	7DigCeayOrSLO25Pc16eQmKIV6LJt/gqZWl4DrxyUPCnywD/nssLwPIzx1otQqC0GBs0bJryhDt
-	R9WyJXkOrJ30u/5Iwq5kzFwKmFHbALwhDVthbqP2aiVTvxf4pCF2C/8CfiFp1DAjd2QFL7Cgcsq
-	VgH+4W1SZWQ4DOf9H7NAasLDpC3xkwc1tox72h34Tl5DmLMIpZhQ7vctmwwDagJUuthp1Aptr1s
-	OjFscHD9XauGqDSY4mHzwVm3/zdw==
-X-Received: by 2002:a05:690c:c4f7:b0:7dc:c477:9e98 with SMTP id 00721157ae682-806c3a1a9ddmr62727187b3.31.1782304225501;
-        Wed, 24 Jun 2026 05:30:25 -0700 (PDT)
-Received: from Dev-Null-MSI ([2a0d:3344:52ac:a808:98a4:4381:be45:536f])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8025c96fdb3sm57601677b3.1.2026.06.24.05.30.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 05:30:25 -0700 (PDT)
-From: Yousef Alhouseen <alhouseenyousef@gmail.com>
-To: Jason@zx2c4.com
-Cc: shuah@kernel.org,
-	wireguard@lists.zx2c4.com,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yousef Alhouseen <alhouseenyousef@gmail.com>
-Subject: [PATCH] selftests: wireguard: avoid extglob in netns CPU count
-Date: Wed, 24 Jun 2026 14:30:09 +0200
-Message-ID: <20260624123009.7008-1-alhouseenyousef@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VcWeL1oC"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E616C2BCB7;
+	Wed, 24 Jun 2026 12:57:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
+	t=1782305854; bh=S8BpAUMxXmLbUpuQFq+mwTLqJlR9c4l9ytkf4UReLGo=;
+	h=From:Subject:Date:To:Cc:From;
+	b=VcWeL1oCshLvyQPXiiVP6MRyYyWGDfDSSPjmtOU6XNb3pjVepc1WE45Ytde0Rq1az
+	 OFInViwwaZ61taXlD88W5UjQKNLC2htt6Lw8Ij/P/ACYs2niyJGTOq+GWAVF20yFk8
+	 zQMbhzPCjpUKXwvH+gjXTkik7RmMAtZMXuCfM2/Q=
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43D64CDB479;
+	Wed, 24 Jun 2026 12:57:34 +0000 (UTC)
+From: Alvin Sun <alvin.sun@linux.dev>
+Subject: [PATCH v5 0/9] Fix missing fops.owner in Rust DRM/misc
+ abstractions
+Date: Wed, 24 Jun 2026 20:57:23 +0800
+Message-Id: <20260624-fix-fops-owner-v5-0-aa1cba242f05@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADPUO2oC/3XPy27DIBAF0F+xWJeIhzHBq/5HlQWPoUGqTQI2S
+ RX530sdqbVqdTmIc+/MA2VIATLqmwdKUEIOcayDeGmQPevxHXBwdUaMsI4IqrAPd+zjJeN4GyF
+ h4FpKY5i0nUUVXRLUH2vg2+k5J7jONXd6PiKjM2AbhyFMfVPkgeJkJdr29c1P2xCydVDwXI2Pa
+ dATVtpIOHJDLaV94ei75RzyFNPnekWha81/CxeKCWYOnDpy4jRtXz/CON8PtWWNKmzDGd1xVrl
+ 3ShGprNBkx/kv7xjbcV55q1wrrOGScPaXt1vOd7ytvG7thSdSOmG3fFmWLyxAcufPAQAA
+X-Change-ID: 20260519-fix-fops-owner-e3a77bb27c6c
+To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+ Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
+ Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>, 
+ Igor Korotin <igor.korotin@linux.dev>, 
+ FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+ =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, 
+ Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
+ Carlos Llamas <cmllamas@google.com>
+Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
+ driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org, 
+ nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+ kunit-dev@googlegroups.com, linux-block@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-pci@vger.kernel.org, Alvin Sun <alvin.sun@linux.dev>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782305851; l=8727;
+ i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
+ bh=S8BpAUMxXmLbUpuQFq+mwTLqJlR9c4l9ytkf4UReLGo=;
+ b=qdjRUUm+rexqQr5dKVAf/YsvjDB2bcHw6yDQWRe6yt3QYSgSLCACzc3uMn6rSpAxCUCszszZJ
+ fnuD5IJBKcpAe03VNg/6TQi+YRVtfa/W+/H3XcsSyugJZAjUz8nk4nA
+X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
+ pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
+X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
+ auth_id=684
 
-netns.sh enables extglob before using cpu+([0-9]) to count CPUs, but
-bash -n parses the whole script without executing that shopt command. This
-makes syntax checks fail even though the script is intended for bash.
+During tyr debugfs development, a kernel NULL pointer dereference was
+encountered after `rmmod tyr` while gnome-shell still held /dev/card1 open:
 
-Use the ordinary cpu[0-9]* glob instead. It matches the same CPU directory
-names without requiring extglob, and lets bash validate the script syntax.
+```
+  [158827.868132] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+  [158827.868918] Mem abort info:
+  [158827.869177]   ESR = 0x0000000086000004
+  [158827.869519]   EC = 0x21: IABT (current EL), IL = 32 bits
+  [158827.870000]   SET = 0, FnV = 0
+  [158827.870281]   EA = 0, S1PTW = 0
+  [158827.870571]   FSC = 0x04: level 0 translation fault
+  [158827.871043] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000108dec000
+  [158827.871623] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+  [158827.872242] Internal error: Oops: 0000000086000004 [#1]  SMP
+  [158827.872246] Modules linked in: tyr sunrpc snd_soc_simple_card rk805_pwrkey snd_soc_simple_card_utils rtw88_8822bu display_connector rtw88_usb rtw88_8822b snd_soc_rockchip_i2s_tdm snd_soc_hdmi_codec
+  rtw88_core]
+  [158827.872337] CPU: 4 UID: 1000 PID: 11276 Comm: gnome-s:disk$0 Tainted: G                 N  7.1.0-rc1+ #331 PREEMPT
+  [158827.880534] Tainted: [N]=TEST
+  [158827.880535] Hardware name: FriendlyElec NanoPi R6C/NanoPi R6C, BIOS v1.1 04/09/2025
+  [158827.880538] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+  [158827.880542] pc : 0x0
+  [158827.880547] lr : _RNvNtCs257m05FHVbX_3tyr2vm8pt_unmap+0x8c/0x12c [tyr]
+  [158827.880578] sp : ffff800083c236b0
+  [158827.880579] x29: ffff800083c236d0 x28: ffff00013f8a0000 x27: 0000000000000000
+  [158827.880585] x26: 000000000000007c x25: ffff000108e6ed80 x24: 0000000000401000
+  [158827.880590] x23: 0000000000000000 x22: 0000000040000000 x21: 0000000000001000
+  [158827.880595] x20: ffff00010f778138 x19: 0000000000400000 x18: 00000000ffffffff
+  [158827.880600] x17: 000000040044ffff x16: 045000f2b5503510 x15: 0720072007200720
+  [158827.880606] x14: 0720072007200720 x13: 0000000000401000 x12: 0000000000400000
+  [158827.880611] x11: ffff800083c239d0 x10: ffff000141e4fd88 x9 : 0000000000000000
+  [158827.880615] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000400000
+  [158827.880620] x5 : ffff00013f8a0000 x4 : 0000000000000000 x3 : 0000000000000001
+  [158827.880625] x2 : 0000000000001000 x1 : 0000000000400000 x0 : ffff00010f778138
+  [158827.880630] Call trace:
+  [158827.880632]  0x0 (P)
+  [158827.880635]  _RNvXs6_NtCs257m05FHVbX_3tyr2vmNtB5_9GpuVmDataNtNtNtCsgmSOfgXi5CZ_6kernel3drm5gpuvm11DriverGpuVm13sm_step_unmap+0x3c/0x120 [tyr]
+  [158827.891166]  _RNvMs4_NtNtNtCsgmSOfgXi5CZ_6kernel3drm5gpuvm6sm_opsINtB7_5GpuVmNtNtCs257m05FHVbX_3tyr2vm9GpuVmDataE13sm_step_unmapB13_+0x18/0x34 [tyr]
+  [158827.891187]  op_unmap_cb+0x78/0xb0
+  [158827.891196]  __drm_gpuvm_sm_unmap+0x18c/0x1b4
+  [158827.891204]  drm_gpuvm_sm_unmap+0x38/0x4c
+  [158827.891209]  _RNvMs5_NtCs257m05FHVbX_3tyr2vmNtB5_2Vm7exec_op+0x1cc/0x254 [tyr]
+  [158827.894085]  _RNvMs5_NtCs257m05FHVbX_3tyr2vmNtB5_2Vm11unmap_range+0x124/0x188 [tyr]
+  [158827.894105]  _RINvNtCs5hGKnPbRUFW_4core3ptr13drop_in_placeNtNtCs257m05FHVbX_3tyr3gem8KernelBoEBK_+0x44/0xd8 [tyr]
+  [158827.894125]  _RINvNtCs5hGKnPbRUFW_4core3ptr13drop_in_placeINtNtNtCsgmSOfgXi5CZ_6kernel5alloc4kvec3VecNtNtCs257m05FHVbX_3tyr2fw7SectionNtNtBL_9allocator7KmallocEEB1r_+0x3c/0x100 [tyr]
+  [158827.894147]  _RINvNtCs5hGKnPbRUFW_4core3ptr13drop_in_placeINtNtNtCsgmSOfgXi5CZ_6kernel4sync3arc3ArcNtNtCs257m05FHVbX_3tyr2fw8FirmwareEEB1p_+0x94/0x190 [tyr]
+  [158827.894167]  _RNvMs4_NtNtCsgmSOfgXi5CZ_6kernel3drm6deviceINtB5_6DeviceNtNtCs257m05FHVbX_3tyr6driver12TyrDrmDriverE7releaseBW_+0x30/0x98 [tyr]
+  [158827.899550]  drm_dev_put.part.0+0x88/0xc0
+  [158827.899557]  drm_minor_release+0x18/0x28
+  [158827.899562]  drm_release+0x144/0x170
+  [158827.899567]  __fput+0xe4/0x30c
+  [158827.899573]  ____fput+0x14/0x20
+  [158827.899579]  task_work_run+0x7c/0xe8
+  [158827.899586]  do_exit+0x2a8/0xac4
+  [158827.899590]  do_group_exit+0x34/0x90
+  [158827.899594]  get_signal+0xaac/0xabc
+  [158827.899599]  arch_do_signal_or_restart+0x90/0x3e8
+  [158827.899606]  exit_to_user_mode_loop+0x140/0x1d0
+  [158827.899613]  el0_svc+0x2f4/0x2f8
+  [158827.899620]  el0t_64_sync_handler+0xa0/0xe4
+  [158827.899627]  el0t_64_sync+0x198/0x19c
+  [158827.899632] ---[ end trace 0000000000000000 ]---
+```
 
-Signed-off-by: Yousef Alhouseen <alhouseenyousef@gmail.com>
+The root cause: `fops.owner` was `NULL` in Rust DRM drivers, so the kernel
+never blocked module unloading while file descriptors were open. This leads to
+use-after-free when drm_release (or other fops) is called on freed module code.
+
+The series moves `THIS_MODULE` into the `ModuleMetadata` as a const, threads it
+through `#[vtable]` to set `fops.owner` in DRM/miscdevice, and updates configfs
+and rnull to use `this_module::<LocalModule>()`.
+
+Assisted-by: opencode:glm-5.2
+Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 ---
- tools/testing/selftests/wireguard/netns.sh | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Changes in v5:
+- Add `#[inline]` to the `this_module()` helper.
+- Fix configfs doc comment to reference `crate::LocalModule` instead of
+  bare `LocalModule`.
+- Link to v4: https://lore.kernel.org/r/20260623-fix-fops-owner-v4-0-0daf5f077d5c@linux.dev
 
-diff --git a/tools/testing/selftests/wireguard/netns.sh b/tools/testing/selftests/wireguard/netns.sh
-index a8f550aec..98b423494 100755
---- a/tools/testing/selftests/wireguard/netns.sh
-+++ b/tools/testing/selftests/wireguard/netns.sh
-@@ -22,12 +22,11 @@
- # interfaces in $ns1 and $ns2. See https://www.wireguard.com/netns/ for further
- # details on how this is accomplished.
- set -e
--shopt -s extglob
- 
- exec 3>&1
- export LANG=C
- export WG_HIDE_KEYS=never
--NPROC=( /sys/devices/system/cpu/cpu+([0-9]) ); NPROC=${#NPROC[@]}
-+NPROC=( /sys/devices/system/cpu/cpu[0-9]* ); NPROC=${#NPROC[@]}
- netns0="wg-test-$$-0"
- netns1="wg-test-$$-1"
- netns2="wg-test-$$-2"
+Changes in v4:
+- Move module-related types into a new `rust/kernel/module.rs`.
+- Migrate binder from the `module!`-generated `THIS_MODULE` static to
+  `this_module::<LocalModule>()`.
+- Reorganise the series so that every commit builds independently, and
+  drop the legacy `THIS_MODULE` static once all users are migrated.
+- Link to v3: https://lore.kernel.org/r/20260622-fix-fops-owner-v3-0-49d45cb37032@linux.dev
+
+Changes in v3:
+- Renamed vtable associated type `ThisModule` to `OwnerModule`
+- Added `this_module()` helper for ergonomic `THIS_MODULE` access
+- Refined vtable macro implementation: one-liner detection and single `defined_items` set
+- Reordered commits to place doctest fallback before vtable auto-insert
+- Link to v2: https://lore.kernel.org/r/20260521-fix-fops-owner-v2-0-fd99079c5a04@linux.dev
+
+Changes in v2:
+- Merged old `static THIS_MODULE` and v1's `MODULE_PTR` into a single
+  `ModuleMetadata::THIS_MODULE` const
+- `#[vtable]` macro now auto-inserts `type ThisModule`, removing all per-driver
+  manual patches from v1
+- Added configfs & rnull usage site updates and doctest `LocalModule` fallback
+- Link to v1: https://lore.kernel.org/r/20260519-fix-fops-owner-v1-0-2ded9830da14@linux.dev
+
+---
+Alvin Sun (9):
+      rust: module: move module types into `module.rs`
+      rust: module: add `THIS_MODULE` const to `ModuleMetadata` trait
+      rust: doctest: add LocalModule fallback for #[vtable] ThisModule
+      rust: macros: auto-insert OwnerModule in #[vtable]
+      rust: drm: set fops.owner from driver module pointer
+      rust: miscdevice: set fops.owner from driver module pointer
+      rust: configfs: use `LocalModule` for `THIS_MODULE`
+      rust: binder: use `LocalModule` for `THIS_MODULE`
+      rust: macros: remove `THIS_MODULE` static from `module!`
+
+ drivers/android/binder/rust_binder_main.rs |  3 +-
+ drivers/block/rnull/configfs.rs            |  6 +--
+ rust/kernel/auxiliary.rs                   |  2 +-
+ rust/kernel/configfs.rs                    |  8 +--
+ rust/kernel/drm/device.rs                  |  3 +-
+ rust/kernel/drm/gem/mod.rs                 |  4 +-
+ rust/kernel/i2c.rs                         |  2 +-
+ rust/kernel/lib.rs                         | 75 +++-------------------------
+ rust/kernel/miscdevice.rs                  |  4 +-
+ rust/kernel/module.rs                      | 80 ++++++++++++++++++++++++++++++
+ rust/kernel/net/phy.rs                     |  6 ++-
+ rust/kernel/pci.rs                         |  2 +-
+ rust/kernel/platform.rs                    |  2 +-
+ rust/kernel/usb.rs                         |  2 +-
+ rust/macros/lib.rs                         |  6 +++
+ rust/macros/module.rs                      | 34 ++++++-------
+ rust/macros/vtable.rs                      | 41 +++++++++++++--
+ scripts/rustdoc_test_gen.rs                | 16 ++++++
+ 18 files changed, 188 insertions(+), 108 deletions(-)
+---
+base-commit: b7e5ac83cb16f7ffd11dc23736f84276602100ed
+change-id: 20260519-fix-fops-owner-e3a77bb27c6c
+prerequisite-change-id: 20260519-miscdev-use-format-9ab7e83b1c11:v3
+prerequisite-patch-id: 405b334ff0d48ad350014f05a2321bdbaa025400
+prerequisite-patch-id: 604b631c81d5423f4ebb2e12ba2d22e9ce371bfc
+prerequisite-patch-id: cb550d94cefe01920e0d3ced2b2bcbecd76f3907
+prerequisite-patch-id: 3bc830839742591460cb86d9472c04f4686dc600
+prerequisite-patch-id: 571058244bc8c7088638d2e3225713011246c7e9
+prerequisite-patch-id: 347c5a3c6dbef9832bfce8419fc23e6e08ba477f
+prerequisite-patch-id: 3e202d988b56b88446f7535e90d3f00cf5f15701
+
+Best regards,
 -- 
-2.54.0
+Alvin Sun <alvin.sun@linux.dev>
+
 
