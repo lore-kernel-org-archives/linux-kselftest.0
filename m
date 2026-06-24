@@ -1,190 +1,211 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC40C3C10A4
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 14:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7ED3C13FE
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 14:18:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782310602; cv=pass; b=Ot2zj0zsKERmEe0aIENIVa0+FoVeZSGx1FFkOj2V3JPlSUpzQPn2blwKOCBVkdcXJlVVCJME/uSvLTmobZ0GAQVunpERccbg1jKKPfe9E7w8cjmIrwoL0hlGDpaEI6qxe+78+YbKjvGic/DmUAGIyHP/hBzkpaUlTXcyhuqNOY8=
+	t=1782310731; cv=pass; b=MbYtjLKJmJ/VQ87ef/SbqHvqJvn7tDwwspBLqfr8ha/QX3PTb50DsXj+wWnpgH4eM17KbqfSB1ewMLStX8nL+cTGHMERnXWUCaZDg9WknDZEB1iJOq2BP1d0kVxscnoDEhCS2lJJhh3oL5ePYGGCHHYuihzIQVoi7vH45ZFu+Jg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782310602; c=relaxed/simple;
-	bh=C+gNPHz4KywkYN7bRW5o/LIam8QAzcc06RneqyLy4Ig=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D6vWqXs40oYhTbi1rK5qFjAi40jqyPhi2TO1KrWTnH4jwWPDhXbJ1zgQe1yOjuyHbkVdxim23174DV9pkVGx6zA0YtAaELftsmNX5H9KwCPkhAt/xHzvlDKeLAFnzCCcwSBFl/+Y/HaZtqmrl+P4RH84cWgECD5SSm/RIKo8OQU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mp7WPDsx; arc=pass smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782310731; c=relaxed/simple;
+	bh=S43KLHfWZf4rr+LSchiMooKQ2vnBu5Vtd0C00yl/idE=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TbTPXU1ryvwlb6LHhX+9IOU/grQw4pnJ5BS2eJ+eYuQclIdDMGJIxQrne67aGQYOCjXpuBxF201JizP8CCmeNrG9l4go4NQCoa4oryWp9AcWFIWW2FS7Jh853mvPIosNW70R1+KNiuqdxZFffekonxM/Mpz9v1NLeGw1tlNMzJE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=df3sqHyt; arc=pass smtp.client-ip=74.125.82.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mp7WPDsx"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c0b97e268f3so155526866b.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 07:16:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782310595; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="df3sqHyt"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-13986d61b4eso2706711c88.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 07:18:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782310727; cv=none;
         d=google.com; s=arc-20240605;
-        b=HoNp9cZNv/fiWo6gJ5d4KEaUDt1EvvNskJ4caLovyrgMwwHllWhXIEn1uej6pqQcTk
-         WCcZgTvmeqTBzE0oQCYJyJAVvWv7eQ9OJm5ueD0Fh1CCp92ykGSlkNDaI7RHdN5rFBZP
-         wlDxHYV7Xi0FbK/JdXVusX8+PsmfJP+tI66NOz9gKtQkS/oHtZwohnfqBaw/DpcFSerj
-         XB9snA00LNyggQ4AEBabtMEdR0ceDMdg7m3pHOPZ8uK03qqS490YKEPhIDvEnZFmRHzb
-         wGsS4lFQRZpPXBVFLE5snztuKSlY0jSpPau3nWfEBRZSl7OjfUUEC03eavH2ZB5s9Xza
-         ZW6w==
+        b=bfC8PilQxLJzk3g4dH2FGvC/s5pYwkpj1LYpF5knrRgJWvR1UJ7xTYhWLfJqQwlotA
+         onfAzomRLS9Taw/RbaA5A1jwxH5FTVomhrXzHCmQXykK1am1yul93VhdB19d0aUFIiLJ
+         PkGdK57lgqPmyN/6eLi12jwqd7stqq4Vs8ZGNk4osUfFJ+hOai8ypYuOG05U6McB24VS
+         GFMIpcxTqy2e4Y4QVLxExT70+HKGPtcuVkWW2mVPO7IofMy7ek0+OfzgwSeUE2nwb593
+         i7H+j9dQ+ndbRtr6KMXg05JOhhmKTfltrCxj3dJMoHK2dIYl2zVGOFcLA4hpU3e4mgM4
+         VlLQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ofp3hEpmgBuA2Xl9gZnye4TILLUrjr4efPci3kviMPY=;
-        fh=lBkkt7x2YsKUahcu5v0Ctkgz/3mV72Va5tGsRZ0Wgxc=;
-        b=cNIXqnCKysC0xUbE8MdMLAlNfoETt0m+lgYRzXg+QAwD3wMy/oRREfVzR/VEV2t7vL
-         0JLsKs0gsID36saQ8iHrhdGzw+Lec3NhWeR+K7LgHUsYtIc6pQKHMsqwUJHVl2Y5yNF0
-         7uc1zqDJXK3yodGx0HkLa5bryu+9kQe+MKXU9KDxl4oeuieIMAmH8LQ/l3BF0MugjRaS
-         WnrTq2gY5bKmygJnvIw5Rt8Vh213HO37AKF6wsxCyFjv0DYgKVWntF5iChGj28QRPG28
-         UzKFsbgS++awOYezWXlpPsVgL3tzGvveFmyV8gYl5DBfh/NsjPe5hHqUBbqRGqnT6JoJ
-         Gykw==;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=ucZ6vleVNv7XMe9m+p1ud+LWxJsaO5xEtX2/mrf+WGU=;
+        fh=jBcLLu3wPhXk4J4/WzrPvk1xKOai2mgWp0MaScg77cI=;
+        b=hD/HvRfyn3IOW7CfLMdeGJJUPuK/Yl5EHIfg6NfVx/lrQJrNU67v9HND9bFqeqj5CA
+         pZZnp3HQKAMZKnyACfmmgsU8yLyzdJTtWILwS0wCMhSGm+794Jd2sv1lGxabz34/k1/V
+         +ev8eIeqZF4eF1t6CRV0yrdeRN9lIT539vWS9NVgpCJdaMMmwK+fLAGH9Pts9Bi0rTZa
+         H2UIRIT/U6PVIMNhV7gJqSMBP6tKWZlCq945TPMCFN1ied3kOV2+XV9o2AVDLy2I1I2Q
+         pzmwUChWHOjUE1i1razI6I+2jGWzEJGxLe7QQeJ54X19dDdX4v8fwmftIFAJi0HxIGvU
+         6Osw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782310595; x=1782915395; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ofp3hEpmgBuA2Xl9gZnye4TILLUrjr4efPci3kviMPY=;
-        b=Mp7WPDsx9tx7+TGBJpV5bdT+0V6Bvluay+GgAv/yVjk4WJxpnu7uJ1O9gE2AVhNjNt
-         /SRvJRBDTtePlHTO1CYBZ80lkuvdeLV8Ik5ZzxmQ6cXXcRN1JyEUV4KwYar2q26ZS7QN
-         6IgAjj4SdBRTGQYZCYkVhdVXBBRD2gkZ3NpeF/JCjVn9927EP1XdbtwG/gjWy3OiLYzN
-         2yJ9kJqbNff012wpaNVw8CBiwu6fNfbof3rkMFvXb8yO6qIsM39l5d8x9uA+PbybiA2L
-         Gjxt1Gz/7d+SfdOzfkIjoQX+NQCeyfFUYNSlqeNxdGTiOvH5/tBtOSv9KMgdepqMHz7+
-         R4FQ==
+        d=google.com; s=20251104; t=1782310727; x=1782915527; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ucZ6vleVNv7XMe9m+p1ud+LWxJsaO5xEtX2/mrf+WGU=;
+        b=df3sqHytMdVQfm8AoVQf0XDsZFlP86k7xtk4HCgprtM4Sn9s7OAXQylD/qcfp/Ep9r
+         0t9p/fnfAiUBS/iQBNEPTdSrMRAMDtcJP1OwM4knL5F42tn5UEehXedN8s4JXkHtRTZK
+         VOqr9xe3z7xacVEAVUp0J8cETm9/thUkrXIXkD9i85dk8hbcnwljADl4eLtMcNHJUdq7
+         Y1FOh+re6oPej1vzugspLX8LP1l+xmKh7xNSPDHoAHZvo10EYqTi2dcHjOsy0YYdRivn
+         fRKFRvQUauDv62EyXbk7hRSdU8O/51XpfJwHFWCzmVQRJkPuzoLRk3OrekIrJxhOujO3
+         IjeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782310595; x=1782915395;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ofp3hEpmgBuA2Xl9gZnye4TILLUrjr4efPci3kviMPY=;
-        b=RaGuPaQLGjyFOKiRpl/cqnOGhgV+Iuzb8jdW9qxoSgcfHbM+tmwA63TLzdWwVBmiR9
-         USzkclOoVUVtg+2oDCy1f/KrUVfl4q+SVDojKgoMSLpayC5ydsYUisCP5vAQdI7B4xlV
-         JeT5iGcRyiO4GYxMBCpIo8K+eLQDO3VFK71sN5100MRMJ1Hc7q+ooC03QBNgvJ8GH4sv
-         7aCY760m/XQp9d9aNybw6aCWb2wAWpdn5nBOEfuo9MLxLGiAA13QZrJYkfTRHqJkJLTe
-         Di8Fp1anks8jDCIRImaO40g6qnpgG5Vs8uwanalSlG459W7I/2xVYVJ2FGxBPy+iq+yY
-         hA7A==
-X-Forwarded-Encrypted: i=1; AFNElJ+CjPNrXJzrsmSs9XH1wwGJ3zRkjO2s9Txh17yaYxyWj59ATTnHFjQes56YOpQZDg43rfOnDQfUOq6NAdCuenU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrVw/EJo/fdkQ09t+4ZvGEF92jlVdHDG15tITqnhr2EN4RriSw
-	SNqdaRavL8Fr+zYsBRKJhWxseRXtSVi8dtLi6epItmh8+d0bu7HP2PcAbuk88HLjn+bvLO587ec
-	+iMfRt7yG1d6V5+unpD0ETpHuYRybCLE=
-X-Gm-Gg: AfdE7clPif06FC01dJxqKlFQD24gR4r3ZbBnX1R3rK4JHhEnzbixRrBHHscAzZpHFrW
-	yLVcjopDLgecfISCymIs/KPxW08/y94pTpCKLyAHhVSWoA9+xVS4MgGliu/1uXziOdyrtIdgqCh
-	tpCv7prYvDXCitzb8wXPHkOGeMFKeDSvFWIojSgwLINGMtAXXdQ3aWSy1qAYIwSj9K38n/NqPgA
-	8d1FvjxZxV7NdPanEQZjMOddP007EoLzjXbQ20z48JkHNCbZIIFlnvSs3TVwX5Z+Q6SXSCwWFBX
-	horFMvLNletCVxiKKCj51H7uoQx6yItDQjxaC+jXsQ==
-X-Received: by 2002:a17:907:6092:b0:c08:93fa:2a62 with SMTP id
- a640c23a62f3a-c119ce79d5bmr206413566b.2.1782310594693; Wed, 24 Jun 2026
- 07:16:34 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782310727; x=1782915527;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ucZ6vleVNv7XMe9m+p1ud+LWxJsaO5xEtX2/mrf+WGU=;
+        b=WBRKjz6boSCK8vEdfcGISEFXVbqsrsVNDChKcxcvB3oGfVePYx3I4lKglrkmbThZHQ
+         4UiNa36T9uohLLbbep4tnqQJEizUPqTFtCTamy8LhBPHq/wmJDWgstOw5TzJe7CyU/nh
+         bVYlw1oqmQBYEbidiIDUHPSyjpDYwW2lQHTC3bV+ea/xcOhrnmSxZNEHP7roLc2I+GkR
+         +mb2AWdKWJeYlibKympBjr+wzy3K+5iKvXBrYnocm0hyN7tKdKtNynnw/1eMV3+S1cDj
+         Dwntnk3KeDDLSgBOyZsjUrflnse1xZ5yATqP00XbeU+NFIBao0vdqSlqZAkbHRtaV240
+         7SYw==
+X-Forwarded-Encrypted: i=1; AFNElJ/9+LwSQ4paWPZD64xtggnsi7MZ5zMdorDalhsyHh64ktLXar2CcSGTE8QldkiKMJkxNsEgOkkRt532FxwatYs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxjrn6b0rGIuJejj+CFjaXxcNZLGQF7tfnrsbEz93ZnHe2dhp9p
+	kHCG3pgf4Cd6D/iy6svOWyKivNO6EmsUi4KTl+HN7n6p6bEzM2E2wQDz1LI3/VNC++Dw3x5YkbS
+	2hRMpPI9EFGYP4LcmJryV5uFpt/6DaUz6NXnGEmyk
+X-Gm-Gg: AfdE7clxucgRVrZ1SqqhBwl2tgVKuzBpz/2Om3lU3UZlsinQqBKPDzxh1+Q5QB+RaTx
+	CC0+hpaaGrw9wHIFoppSPphE3xZ2+btCrk80NlrUjnxl2KOlmJ6efu0tgmNkjiaPtNXkOx3zPKk
+	HfTaDTFpqp215e9S61LiS6wHr6r59sQJnZbDHuUGQOuvj9Afj4xf0Zv0GsrR42n6+/+wrGA70zN
+	gtGGwKWhn84E/d4eRumSW0w4xfQl6lyUMtk0+qXYot6u3PPXZ6YC6kJ/buZCDH4WK3wVfsoWJMH
+	VOr4cumEUs2GooioC0c2sqnUhmWi
+X-Received: by 2002:a05:7022:43a0:b0:12d:de3e:86a8 with SMTP id
+ a92af1059eb24-139ad72bfe4mr15983384c88.38.1782310725876; Wed, 24 Jun 2026
+ 07:18:45 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 24 Jun 2026 07:18:45 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 24 Jun 2026 07:18:44 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <3ec15992-2a29-434b-8c99-8b86bfcf007e@arm.com>
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-8-9d2959357853@google.com>
+ <CA+EHjTw6x-mxDnJjnhE-6SV73tMrb0paKDTtOC2j6zJ1fXZDLA@mail.gmail.com>
+ <CA+EHjTxu32nQ+vPV7Zmcw76_-V4g2_g=P_UzRnnO2dP1PFO2ww@mail.gmail.com> <3ec15992-2a29-434b-8c99-8b86bfcf007e@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260623111533.2285005-1-ptikhomirov@virtuozzo.com>
- <20260623111533.2285005-3-ptikhomirov@virtuozzo.com> <CAKEwX=OaKTfNqzwa=djLxZDeBbR1+DKdqDnxdfPfZFKB-K+ECA@mail.gmail.com>
- <c390081b-7b2e-4b83-9bca-5f93eec6a939@virtuozzo.com>
-In-Reply-To: <c390081b-7b2e-4b83-9bca-5f93eec6a939@virtuozzo.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Wed, 24 Jun 2026 16:16:22 +0200
-X-Gm-Features: AVVi8Cf8pFFkEx_V7HqzrhdruZGs8cQ3Zufmxz4l6Wlncf8175EfLgSWMtHkhw4
-Message-ID: <CAOQ4uxhPROaeEyYceKNsL5QVwVPkTjGtbRr1P_TYXTA0fHvRoA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] ovl: support cachestat() syscall on overlayfs files
-To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-Cc: Nhat Pham <nphamcs@gmail.com>, Miklos Szeredi <miklos@szeredi.hu>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>, linux-unionfs@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Date: Wed, 24 Jun 2026 07:18:44 -0700
+X-Gm-Features: AVVi8CeUzt8nV1nzvS6dw32sjloWQ_ALAuG02W0rgNOvY8pSNnpach_kfV-0O1g
+Message-ID: <CAEvNRgEKB0FhD=qhyX=0m2o+d02Jz6n6njdbFmjyiUpK3Up-4Q@mail.gmail.com>
+Subject: Re: [PATCH v8 08/46] KVM: Provide generic interface for checking
+ memory private/shared status
+To: Suzuki K Poulose <suzuki.poulose@arm.com>, Fuad Tabba <tabba@google.com>
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
+	yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
+	aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 24, 2026 at 1:45=E2=80=AFPM Pavel Tikhomirov
-<ptikhomirov@virtuozzo.com> wrote:
->
->
->
-> On 6/23/26 19:12, Nhat Pham wrote:
-> > On Tue, Jun 23, 2026 at 4:15=E2=80=AFAM Pavel Tikhomirov
-> > <ptikhomirov@virtuozzo.com> wrote:
-> >>
-> >> Overlayfs forwards data I/O to the real (upper/lower) file, so the pag=
-e
-> >> cache lives in the real inode's mapping and cachestat() on an overlay
-> >> fd returned all zeroes.
-> >>
-> >> Implement the ->cachestat() file operation by forwarding to the real
-> >> file via vfs_cachestat(), the same way ovl_fadvise() forwards
-> >> for fadvise.
-> >>
-> >> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-> >> ---
-> >>  fs/overlayfs/file.c | 18 ++++++++++++++++++
-> >>  1 file changed, 18 insertions(+)
-> >>
-> >> diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
-> >> index 27cc07738f33b..a7e252a91ea43 100644
-> >> --- a/fs/overlayfs/file.c
-> >> +++ b/fs/overlayfs/file.c
-> >> @@ -518,6 +518,21 @@ static int ovl_fadvise(struct file *file, loff_t =
-offset, loff_t len, int advice)
-> >>                 return vfs_fadvise(realfile, offset, len, advice);
-> >>  }
-> >>
-> >> +#ifdef CONFIG_CACHESTAT_SYSCALL
-> >> +static int ovl_cachestat(struct file *file, struct cachestat_range *c=
-sr,
-> >> +                        struct cachestat *cs)
-> >> +{
-> >> +       struct file *realfile;
-> >> +
-> >> +       realfile =3D ovl_real_file(file);
-> >> +       if (IS_ERR(realfile))
-> >> +               return PTR_ERR(realfile);
-> >
-> > We're propagating the error of ovl_real_file() all the way to
-> > userspace right? I think we need to handle this.
-> >
-> > For example, we might get -EIO here, which is unexpected and
-> > undocumented from cachestat's POV.
-> >
-> > Maybe handle it and just return -EBADF or sth like that (with some
-> > updated documentations, etc.)
-> >
-> > The rest LGTM, but I'll let overlayfs maintainers check the
-> > overlayfs-specific bits :)
->
-> Yeh, we probably can use EBADF here instead of propagating:
->
-> Man cachestat(2) says:
->
->   EBADF  Invalid file descriptor.
->
-> not really a bad fd here, but probably close enough not to rewrite man.
-
-Please don't do that.
-
-Re-read what you just wrote - it is ridiculous
-Because of being lazy to update man page,
-we are going to send a confusing error to user which tells them
-that their fd is wrong, which it is not.
+Suzuki K Poulose <suzuki.poulose@arm.com> writes:
 
 >
-> I'm a bit hesitant though, since in other overlayfs operations we already
-> propagate, maybe that was by design?
+> [...snip...]
 >
+>>>> @@ -2546,7 +2546,7 @@ bool kvm_arch_pre_set_memory_attributes(struct kvm *kvm,
+>>>>   bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
+>>>>                                           struct kvm_gfn_range *range);
+>>>>
+>>>> -static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
+>>>> +static inline bool kvm_vm_mem_is_private(struct kvm *kvm, gfn_t gfn)
+>>
+>> Should have read the Sashiko review first, but where is this used?
+>> It's not used at all in this series...
+>
+> See below:
+>
+>>
+>> /fuad
+>>
+>>>>   {
+>>>>          return kvm_get_vm_memory_attributes(kvm, gfn) & KVM_MEMORY_ATTRIBUTE_PRIVATE;
+>>>>   }
+>>>> @@ -2557,6 +2557,16 @@ static inline bool kvm_mem_range_is_private(struct kvm *kvm, gfn_t start,
+>>>>                                                    KVM_MEMORY_ATTRIBUTE_PRIVATE,
+>>>>                                                    KVM_MEMORY_ATTRIBUTE_PRIVATE);
+>>>>   }
+>>>> +#endif  /* CONFIG_KVM_VM_MEMORY_ATTRIBUTES */
+>>>> +
+>>>> +#ifdef kvm_arch_has_private_mem
+>>>> +typedef bool (kvm_mem_is_private_t)(struct kvm *kvm, gfn_t gfn);
+>>>> +DECLARE_STATIC_CALL(__kvm_mem_is_private, kvm_mem_is_private_t);
+>>>> +
+>>>> +static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
+>>>> +{
+>>>> +       return static_call(__kvm_mem_is_private)(kvm, gfn);
+>>>> +}
+>>>>   #else
+>>>>   static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
+>>>>   {
+>>>> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+>>>> index 6669f1477013c..8b238e461b854 100644
+>>>> --- a/virt/kvm/kvm_main.c
+>>>> +++ b/virt/kvm/kvm_main.c
+>>>> @@ -2627,6 +2627,20 @@ static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+>>>>   }
+>>>>   #endif /* CONFIG_KVM_VM_MEMORY_ATTRIBUTES */
+>>>>
+>>>> +#ifdef kvm_arch_has_private_mem
+>>>> +DEFINE_STATIC_CALL_RET0(__kvm_mem_is_private, kvm_mem_is_private_t);
+>>>> +EXPORT_STATIC_CALL_GPL(__kvm_mem_is_private);
+>>>> +
+>>>> +static void kvm_init_memory_attributes(void)
+>>>> +{
+>>>> +#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+>>>> +       static_call_update(__kvm_mem_is_private, kvm_vm_mem_is_private);
+>>>> +#endif
+>>>> +}
+>
+>
+> Here ^^ as the static call update ?
+>
+>
+> Suzuki
 
-Exactly, plenty of overlayfs operations return EIO for unexpected
-conditions, often accompanied with some assertion as is the case
-with ovl_real_file().
+Thanks Suzuki, it is used here. kvm_mem_is_private() was and still is
+the function used to check if some gfn is private or shared. Hence, in
+this patch, the usages of kvm_mem_is_private() were not
+updated. Instead, kvm_mem_is_private() is now set up as a static call,
+and the static call is hard-wired to kvm_vm_mem_is_private() in this
+patch.
 
-Even though many man pages don't document an explicit EIO error
-code, it is obvious to any experienced sys admin that if EIO is observed
-they should look at the kernel logs, because an underlying subsystem
-may have reported critical errors.
+In the later wiring patch, all the places where attributes are looked up
+are updated all at once: if conversion enabled, take gmem route, else
+take VM route.
 
-But in general, man pages follow development, not the other way around.
+kvm_mem_is_private() is special in that the if-else is done at KVM load
+time rather than runtime, and I believe that's for performance reasons
+since this is checked quite often from the KVM fault handling code.
 
-Thanks,
-Amir.
+Buut I think perhaps Fuad was referring to kvm_mem_range_is_private(),
+which is indeed not used anywhere. Binbin also asked about this, I think
+we should drop kvm_mem_range_is_private(). My reply to Binbin is at [1].
+
+[1] https://lore.kernel.org/all/CAEvNRgGbBcrX5Fw3vNTsTOBNC=Ypi=9-S07674yPxLU9i4akjA@mail.gmail.com/
