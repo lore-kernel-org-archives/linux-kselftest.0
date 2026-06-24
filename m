@@ -1,110 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3089939B49D;
-	Wed, 24 Jun 2026 09:00:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B2638C2C3
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 09:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782291622; cv=none; b=XeXIEp0JZZD68jTtA8Ls3sHf8Ou+/sAScCIB5ipcGVVt5dJxfzM/f5fMqcBubyH+ZFxPEt4zFtalI2H+nMVX19odphFfr5Hns9Kug07CCpKMTPOjy6U9y+ltOWo6FF5mm47R4IflfthGLaaTatMPtM1zcb1DDqG2K+OYChI2M/Y=
+	t=1782293600; cv=none; b=tq+pOUvZYPBUG6cN/cKouRJ6ZBgf+oItWnPhaOcRh0zDgC3zsTjFNkkLD2aK9AcPeT8XxFAf/Dnujc74x2s9cmLoW0LHdWjifuphpoMoOCaq2FthpCVI+6UajBo0sgJz8Qvnj/c2zQ3GiAsGYQvVoDZ1jb9rz/rA2IaX8tzfZwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782291622; c=relaxed/simple;
-	bh=L4K9ivM+4+gVc1NLw1F+WL2oVL3+icBZmgGeI06sjMc=;
+	s=arc-20240116; t=1782293600; c=relaxed/simple;
+	bh=zVTzcAhu2sh1noRCqYQ5+3ri+BgXa4QWy0Rkq9VVdAo=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=CkyduV84hYqCcYhQmfst7YEteBzq1YgsimUVZpl/0Q31SqTtF2ck/Za5mhkqggvbNh7Rbz2+17oKoBMzIb6RS+g52nco4OOqf+DVHdgPPrWQdvsvkHFd6GyS/wX0Dw2E8IlIdSCnTzl1qutIv5EHzd6lDnvIZb949joq8sYgw3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TxiostkA; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=j3jpbH2cS9dz56Dazmsb5an/p2VEilUHLmPQaax7fykX7cYZKeF08uvuZCUljHqWVB3CBKzqQnJx+rEr/HXAyRmdar7id6BT6IDSqDzNd1UyyBP7RH2lcjPAAzTEjx2jjQSRzOWrO5XKsWN/+PmrO4CV5DGUwLjYtdpC3zXz7t4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FXbiswNk; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=AzhYsAwN; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TxiostkA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 011781F000E9;
-	Wed, 24 Jun 2026 09:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782291619;
-	bh=Ude7fxjRQOGddru++6y+sDXghtwPibadLNbHTLXVa74=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=TxiostkAILnXpHLtckz/50qP4hggIdYeAhWBv19SYeKJ2UsA9mpyAdTl2uFBwp9WX
-	 6rQlhX/86wZJ8Rg/hukqjeLq/PJ1gh5/K5qliq21GuuiBZJOknZm3gm2kjeuggfW/l
-	 7tOpYh3yBcXu3rG+ykqiuUCy+IpRbYB3CMPiOsOwmRQ84pZ08UfCoKnydrlLqqs33D
-	 sf4VR8FFbsINdyoz2C3WbEtK5Q+bOGPW7hoQKGqc/Y/G4Yw9OdF0ey2rmMxSWsdUGy
-	 2suMZpIhzvWsEFTVb3O2MWCoD3i88l/2K7UO6ib4PBq/JWQFVreG/YXusE1z9ZXUOg
-	 As5XjdYOpAngg==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: tarunsahu@google.com
-Cc: Pratyush Yadav <pratyush@kernel.org>,  Ackerley Tng
- <ackerleytng@google.com>,  Jonathan Corbet <corbet@lwn.net>,
-  vannapurve@google.com,  fvdl@google.com,  Pasha Tatashin
- <pasha.tatashin@soleen.com>,  Shuah Khan <skhan@linuxfoundation.org>,
-  sagis@google.com,  aneesh.kumar@kernel.org,  skhawaja@google.com,
-  vipinsh@google.com,  david@redhat.com,  dmatlack@google.com,
-  mark.rutland@arm.com,  Paolo Bonzini <pbonzini@redhat.com>,  Mike
- Rapoport <rppt@kernel.org>,  Alexander Graf <graf@amazon.com>,
-  seanjc@google.com,  axelrasmussen@google.com,
-  linux-kselftest@vger.kernel.org,  kexec@lists.infradead.org,
-  linux-kernel@vger.kernel.org,  linux-doc@vger.kernel.org,
-  kvm@vger.kernel.org,  linux-mm@kvack.org
-Subject: Re: [RFC PATCH v2 06/10] kvm: guest_memfd: Add support for freezing
- and unfreezing mappings
-In-Reply-To: <9huzv7b910oe.fsf@tarunix.c.googlers.com> (tarunsahu@google.com's
-	message of "Tue, 23 Jun 2026 20:06:41 +0000")
-References: <cover.1780676742.git.tarunsahu@google.com>
-	<48777f4749fa43d5648085dbb2037aa99c144a88.1780676742.git.tarunsahu@google.com>
-	<CAEvNRgFEHciT3T9y+qEYRvXhDwfrggoU7Rm=f9hT3OrV+wgpNQ@mail.gmail.com>
-	<9huztsqtmihs.fsf@tarunix.c.googlers.com> <2vxz8q85mdyh.fsf@kernel.org>
-	<9huzv7b910oe.fsf@tarunix.c.googlers.com>
-Date: Wed, 24 Jun 2026 11:00:14 +0200
-Message-ID: <2vxzzf0kl3dt.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FXbiswNk";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="AzhYsAwN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782293590;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oScmgVBAZdYqdklOiG9pSCq/MuJ7qIw0aEjZWIJM3Ks=;
+	b=FXbiswNk6E8YeoEyOuHOTPOaIfeWtEXgipX/UdaaXTMCkb+ddtrxhzSpnZC6H5zuFqkpfE
+	t1WshMH+K2t8fTJzyg9686ci/1EflZ4FZpTza1u9C5I22bv0B1aCx3wklcilPUzJNOrcse
+	XWeSsULm3O/b+t51VcQMyOletfIM88I=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-500-0AATYo2FOyGsxGpGyppvRQ-1; Wed, 24 Jun 2026 05:33:08 -0400
+X-MC-Unique: 0AATYo2FOyGsxGpGyppvRQ-1
+X-Mimecast-MFC-AGG-ID: 0AATYo2FOyGsxGpGyppvRQ_1782293587
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-490b9cd54f3so5113985e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 02:33:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1782293587; x=1782898387; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oScmgVBAZdYqdklOiG9pSCq/MuJ7qIw0aEjZWIJM3Ks=;
+        b=AzhYsAwNr4C/fkY66dsoT2NUSL7zKlX9cXwHIWgOsiaBQPNybQ6R5nUSVR3LRk7vQa
+         haW8mhIYq4ZBMR3voaLUosC1g3+LZ/NUd3RIsKEzexF0YeOvgsjr8t75DQFxpUflhHk0
+         6XdqHGbu0BlgzY2+lFOJ4RE1GA/fz2jQNmxyPYUzVAegOemrytq0y+4R/Z6diV3+WRPc
+         qFCIGv7k9G6OqLo0cjX/Fhaq/iXpemM4V8dQibKyH3QT8HBBCVFJb80uVAQVGn3rlBKi
+         h5ab7TURLmAc2fYp0bC4l9KMDynhHVLaX5MbgWt2wUNbVH7hru35pe3uW70r8d3myQqV
+         AT9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782293587; x=1782898387;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=oScmgVBAZdYqdklOiG9pSCq/MuJ7qIw0aEjZWIJM3Ks=;
+        b=TEO+scLnv2+BV+ODAbbAfH+mHlz8eNo3SIndogaCjn8Nul20hoDhN2e+uTcAnzMK+W
+         3lK+F3wvkw96uduU+KY5h6+a5E7nCyQnjVMzwi/XRFFy/Pr8A3jJ2xCJdVLKw/prkUXH
+         3pxoWYk0ZSZm3tERjj6fuRj1uNFlRezni0Vb73YyRX7qNXzopGJyesDqL6DEnVuUPvbj
+         ktLF8pjcmJaAFYWGUFFlV7QX/VjxWsBEy4vEpTCcI81h0IZ2TOWH+a7Y7h3XCL5Klxao
+         hVoisI04P23hDRgwGltIzzrKOd6/Foucunmhf5+AGY5EgFkwyu4+fXRb1Nsfcv8Mo3zr
+         fcBQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/91haYX7O4zusqSXi0LqMhPXAVtlvbCqTLGCaiFXDfrkZ09juXEEAyBkY7puBEUfWN3zt4KmdRAEVt0sthEYg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYsmXerucfJxnI2xR18ZyMfKeUorU5wLTu+ecGSrXGm+9NfvGl
+	oE0hVi9cEkXAivIXuc1R4X9dYxni3TekSAHMu2XwQoLxk6eadD8m3QAAh6UH6i1yBZ6lIrgq8kr
+	rS6VPzcftFLE5XcqrHz5qpJO0udYYe362EKzR3zFYINeFTsQNHNaRYrCY2WoWSOoDabgerQ==
+X-Gm-Gg: AfdE7ckA6CLbnDdnayMSm1L+PKqCMz2oXblYpdIiQ+01AASpEPBFPQlT8HC8bCDDnhd
+	szcS1YlCURqTkSzz+HoJQsA/8J0ixp/xIi109ejGfxrKF3WOdsDBuj9N+4menPrm06rypx1JMrJ
+	k5yNxarCT0hmiC/K8MFnZar3oJcnGGk7K+AafiSPgZcSSxGrBOs2fTM78I41/9HyQ7netXDkxzh
+	koXFFytqwn7nLreDWjHcmQzdfYCcejNyxCYYVprgjy2UJdIQ0KEb0eRqk0ubVIy7j265D+L9jDv
+	yU7SH4XbrYz3z03KsDK/U1C3zj74ueO0u2OFDOCKyFKGetQkznvhAzc0DTypDret6szsdVaEjyn
+	EY7QjrmgXdzysb2Okb/yDlZ4ik29aEbaDdvw=
+X-Received: by 2002:a05:600c:a012:b0:492:2e1c:1d19 with SMTP id 5b1f17b1804b1-49260875bbamr34892635e9.31.1782293586952;
+        Wed, 24 Jun 2026 02:33:06 -0700 (PDT)
+X-Received: by 2002:a05:600c:a012:b0:492:2e1c:1d19 with SMTP id 5b1f17b1804b1-49260875bbamr34892125e9.31.1782293586482;
+        Wed, 24 Jun 2026 02:33:06 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49261063d6esm26451795e9.2.2026.06.24.02.33.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2026 02:33:05 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 42FAF808FBD; Wed, 24 Jun 2026 11:33:04 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org
+Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
+ yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
+ a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
+ eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ dsahern@kernel.org
+Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
+ bpf_fib_lookup() helper
+In-Reply-To: <20260624030530.3342884-2-avinash.duduskar@gmail.com>
+References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
+ <20260624030530.3342884-2-avinash.duduskar@gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Wed, 24 Jun 2026 11:33:04 +0200
+Message-ID: <87pl1gcmgf.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 23 2026, tarunsahu@google.com wrote:
+Avinash Duduskar <avinash.duduskar@gmail.com> writes:
 
-> Pratyush Yadav <pratyush@kernel.org> writes:
+> bpf_fib_lookup() returns the FIB-resolved egress ifindex straight
+> from the fib result. When the egress is a VLAN device, the returned
+> ifindex is the VLAN netdev's, which has no XDP xmit handler; XDP
+> programs that want to forward the frame (e.g. xdp-forward) must
+> instead target the underlying physical device and push the VLAN tag
+> themselves. Today the program has no way to learn either the
+> underlying ifindex or the VLAN tag without maintaining its own
+> VLAN-to-ifindex map in userspace and refreshing it on netlink
+> events.
 >
->> On Tue, Jun 23 2026, tarunsahu@google.com wrote:
->>
->>> Ackerley Tng <ackerleytng@google.com> writes:
->>>
->>>> Tarun Sahu <tarunsahu@google.com> writes:
->>>>
->>>>>  static long kvm_gmem_fallocate(struct file *file, int mode, loff_t offset,
->>>>>  			       loff_t len)
->>>>>  {
->>>>> +	struct inode *inode = file_inode(file);
->>>>>  	int ret;
->>>>> +	int idx;
->>>>>
->>>>> -	if (!(mode & FALLOC_FL_KEEP_SIZE))
->>>>> -		return -EOPNOTSUPP;
->>>>> +	idx = srcu_read_lock(&kvm_gmem_freeze_srcu);
->>>>> +	if (kvm_gmem_is_frozen(inode)) {
->>>>> +		srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
->>>>> +		return -EPERM;
->>>>> +	}
->>>>
->>>> fallocate may eventually go to kvm_gmem_get_folio(), so that would check
->>>> kvm_gmem_is_frozen() twice. Is this meant to catch the punch hole case?
->>
->> Yeah, I reckon you can get away with doing this check only in
->> kvm_gmem_get_folio(). Normally you'd like to fail early, but as of now I
->> don't see much of a problem. If you drop the check here and fail in
->> kvm_gmem_get_folio() you'd end up taking and releasing the mapping
->> invalidate_lock, but this isn't a fast path anyway so I don't think it
->> should matter much.
+> Add BPF_FIB_LOOKUP_VLAN. When the caller sets this flag and the fib
+> result is a VLAN device whose immediate parent is a real (non-VLAN)
+> device in the same network namespace, populate the existing output
+> fields params->h_vlan_proto and params->h_vlan_TCI from the VLAN
+> device and replace params->ifindex with the parent's ifindex.
+> params->h_vlan_TCI carries the VID only, with PCP and DEI bits zero; a
+> consumer wanting to set egress priority writes PCP itself.
+> params->smac is the VLAN device's own address, which can differ from
+> the parent's.
 >
-> No, Don't agree.
-> kvm_gmem_get_folios already have the is_frozen check. which blocks the
-> kvm_gmem_allocate. But not kvm_gmem_punch_hole. Your argument is correct
-> for kvm_gmem_allocate only. So is_frozen check in fallocate is to
-> block the punch hole as well. What ackerley said is correct.
+> Only the immediate parent is resolved, via vlan_dev_priv(dev)->real_dev
+> and not vlan_dev_real_dev(), which walks to the bottom of a stack. When
+> the immediate parent is not a real device in the same namespace, the
+> lookup returns BPF_FIB_LKUP_RET_VLAN_FAILURE and leaves params->ifindex
+> at the input. This covers a stacked VLAN (QinQ), where the immediate
+> parent is itself a VLAN device and one h_vlan_proto/h_vlan_TCI pair
+> cannot describe two tags, and a parent in another network namespace (a
+> VLAN device can be moved while its parent stays), whose ifindex would
+> be meaningless in the caller's namespace. A program that wants the VLAN
+> device's own ifindex re-issues the lookup without BPF_FIB_LOOKUP_VLAN,
+> so the unreducible case stays distinct from a physical egress. That
+> distinction matters for XDP: a program cannot xmit on a VLAN device, so
+> a success carrying the VLAN ifindex would make it redirect to a device
+> with no ndo_xdp_xmit and drop the frame at xdp_do_flush(). The swap and
+> the vlan fields are written only on the reduce path; other output
+> fields keep their existing behaviour, so a frag-needed result still
+> reports the route mtu in params->mtu_result.
+>
+> BPF_FIB_LOOKUP_VLAN is only useful to XDP, which cannot redirect to a
+> VLAN device. A tc program can redirect to the VLAN device directly, so
+> bpf_skb_fib_lookup() rejects the flag with -EINVAL; bpf_xdp_fib_lookup()
+> accepts it. When the flag is not set, behaviour is unchanged:
+> h_vlan_proto and h_vlan_TCI are zeroed and ifindex is left at the FIB
+> result.
+>
+> The new block is compiled only under CONFIG_VLAN_8021Q since
+> vlan_dev_priv() is not defined otherwise; without that config
+> is_vlan_dev() is constant false and the flag is accepted but never
+> acts. That is safe because no VLAN device can exist there, so every
+> egress is already physical.
+>
+> This lets an XDP redirect target the physical device and learn the
+> tag to push in a single lookup, which xdp-forward's optional VLAN
+> mode (xdp-project/xdp-tools#504) wants from the kernel side.
+>
+> The helper's input semantics are unchanged; the reverse direction
+> (supplying a tag as lookup input) is added in the following patch.
+>
+> Suggested-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> Signed-off-by: Avinash Duduskar <avinash.duduskar@gmail.com>
 
-Oh, right. Then we do need the check in both places.
+Yes, this is way nicer - thanks! One nit below, otherwise LGTM:
 
-[...]
+Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
--- 
-Regards,
-Pratyush Yadav
+[..]
+
+> +	if (flags & BPF_FIB_LOOKUP_VLAN)
+> +		return -EINVAL;
+> +
+
+This is fine, but we should probably reject the input flag as well in
+the next patch (for symmetry).
+
+-Toke
+
