@@ -1,201 +1,133 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D00326927
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 05:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782280345; cv=none; b=gKKICCq89OuyjRlHk0jcVegTBBlsdx5ZWHhWxNt9oXGXaqKyPP7vzRFCknXCVNTiY/lWE9GOjCA8kj6yOdVKx3zYjG8B6yZCwevspeO9yDceZYzQmX6U3sX7r43mFYumB8eSTXJy1UvaTr0QOI8dAGw5shAV0k/Joq/n9+7XgpY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782280345; c=relaxed/simple;
-	bh=lNutLdgBVcfzaSe0zfB/rgX3VF9ibBXkW6a8qpgoRD0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ccZ3P32wu8H+rowFxMyfwhNLGcI0cg5jfVDlDJa57qbn/Ih0P/eKVsI3kR/ai4uirI0gjWymgNoFFbdxEQ7IgY296wAULeZTjD45VWnvyC8ZbMOq7z6G31DXQ6ymNJvZZxXM6Zha4BVgql4mD6XBbfBiCHaRQh/2EWyrXXh9uhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PJvOU0yi; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B22038A70B
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 06:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782284395; cv=pass; b=REm7m7Hs9AjMBBCb3Jl91Em7kLyNrBGp33YUeJ4Lipx4Nh5LRataocfugD1pkwNJlJ7b0CzbgZ02dgHR/rRUELs/xL1AbcHSIJKqkjgpKduHhXCFabxAsKLQNnsi6rf2IKXvQ0BHJ1nA7poOk+8AavRsS9TgaXr08M2VJK3Xa8g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782284395; c=relaxed/simple;
+	bh=44VgNbI0l91KEdDqjsLiBND2ODLDt3zLlCpOVTLuvwY=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=dtjvymgxE0tyJY3ox3MXfuqTU323XaPAb6csSvNJoa6fq/oKkF+inFqIKPoG/7xh+exNDZsHEDL0yL6ahfesnv1Xpokv5TwBRBH6u67NqjQKGf627mWDRwCI3CccP8MWg37VoFRu5ZjedLFNPtA1TKPTRuqKY6hcsbI+/fVS/Q8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RWkzwMjf; arc=pass smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PJvOU0yi"
-Message-ID: <2c59b7b7-a3c0-4799-8c39-2288299b117e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782280332;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RsiEnXmUmSVLGgTWzqORpnaRJ3h8lAWFGgmjylcqD+Q=;
-	b=PJvOU0yiGiDiKEW2Cb5tXVqblMIshjWRqG6uo7ZDMW152GopB276SmE7xkoKyNWI4DywHc
-	b6yPTTd6geCzZqYA4BUq8qaXuq7K4NLe69u8o2SBvIt/JVE8YtJA4zKgpBjrfPcrcdhHDr
-	vZ88B4C/16mQFWAd+iLuwxOdNBAqETI=
-Date: Wed, 24 Jun 2026 13:51:46 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RWkzwMjf"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c07ea058c1aso106219566b.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 23:59:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782284392; cv=none;
+        d=google.com; s=arc-20240605;
+        b=BoOAdq+LI8YRH6YNZtC/392vkrrovaO102NwRVBwC0mqv4Mhmh2SyGZIe3Pqhp3Jfd
+         VEW9yoQv6YMj2oopi5xGoncCRR7K0+ResNgBt/X/f/+97fw3zsZ9i7/SmrGJEVBo6qqU
+         up+plyHrBDD+rGdY2Y/M9WV5+dYOmfih+nxTUh15F8ZmUWJT0A5+8PFWkRR1sgI0JiD4
+         7q9t/aUi57wy+GYz3oHlK/5UWMoB3hIDuP32t/dDtcGkropFjKD2PmcmrJ/XmVYtz53G
+         qyHVpX6xeLdOHbOLusPWjVhhTTnOROcuZWMfYE8Ehn3zoGLBQ1VPJ97BwTnEgN/L4udd
+         bNwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=44VgNbI0l91KEdDqjsLiBND2ODLDt3zLlCpOVTLuvwY=;
+        fh=VZUSHYksyXKUJJiapMLuhPfxVpEdAR/o7X5W7n0YHZs=;
+        b=e2Yj1SoJGLaZIjYejEE0SafEdmg156QVesga/F7ZW3D91BsImGYWh+DuSiFj/jiQmI
+         vLZy0As5zUkEjlffaztjej6X2cLPn4byNlOayCUzkto0DcoAgCBqLdwIy7oQuaV6aWf2
+         RaezL4obOhZASPXAXnhqlsTDnNBHKzdwh4FOFC7OXYEfotIaneo1DxI+mmEUJxOhKItI
+         2FjK2lgVkduEuYJGCrTHZAVS8/PhIeh/nZ6t4HNlPOBeUz0CP5Vvg/eIGJ6r05X0yL7N
+         AmszrUv+Kyc2GYndqKhy4/8xVEHi0SIdRba/b0W+UEsSILISGU1DZENssjbXJ/pko7eu
+         4uMQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782284392; x=1782889192; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=44VgNbI0l91KEdDqjsLiBND2ODLDt3zLlCpOVTLuvwY=;
+        b=RWkzwMjfSbspuGMitpVnC20hjUGIfGntEprkZdgd3gHDn7maXw5PsQ1Ipd4GBmTZaQ
+         /pFbvKA7j6KDUm69QpvhQUgw5ldVOrifq4dZu4/F9+DFo+DbFW8ido/7Wu6pEOVvyOqP
+         QdZ2ehXh4sJmNq8uLNTvOEvhHtqhFjU7dGYKQcrlvskthhX+SaoLtrXJpK8MOO2LTIHX
+         7RVV8I4pG3e7Orm6h8SlU+CW0o6GdqHDt73boWVk1Thrr5Nt2Dd/gevyqIGj3Z+dYLak
+         Mo/7l0QXamYBuwWEU4UKuQqX9EIQijapP/XVr5p0jGcjwl2FQEgOV1uZC2j3SkXjoiR5
+         k57A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782284392; x=1782889192;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=44VgNbI0l91KEdDqjsLiBND2ODLDt3zLlCpOVTLuvwY=;
+        b=dkcFgs/mD7QWMuMpyDA19VyoGpSlmiF+xCjLUWxfQZxSJUrw8GqC3Gc5RFoLOgNqps
+         GKkKZ/hA/dIRjukfJHrrYe9ajhf7B5nOavu/9hanL0RyGoOiKSI2FPPMiazRXzxgEZst
+         JOVI9G6cI5+aJYeJ+y7BR8WTJdIZP6KQzaYvdueB2Tr3WVZoTP0gYar6GBbvgxCul1ny
+         JfqUHwcwet3GY05FigTkPrKfTUC5RtGPxaL6mp717LOWPrhTXDXDHWs7QT8nYL3c3xxY
+         8mrQaJKb8d4DYtNh6/nrkK9eHRyX4wik9vAHLtSGbeA/PpqgnOnOw9e3GQ3pKNE75gSx
+         /eLQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/Q8a41NRrBKwuOECLEwfM8OeigFCY/sgCqEXK80tazx6IS2423oNSvokF+poLvn/rEwnDRa/CSDJCfhf45xWA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6DAy/UWSV+vGsHJAR1E+/GDw+dM2ErjcZ0caaZ3/E/OiDelt8
+	yRu/X7Lq2uYMF3Qd9ktjSd9taNwNfhkCDG1wnU7TZpTNg56n30X3Jg9753IOaGNnxE7qq/q9goC
+	lVGSW4RvoW7KEJMlLEh9oWA8nWej5cBI=
+X-Gm-Gg: AfdE7cmZHQ9/FYNPbvmaavDNplVZhihiiA90hUalu1CNA152FiTvO4ERhvsDoT7Oe3X
+	WZdotgEYg3EYTSfa8U2IrY3tUcXdQNxog8mkz9IFoUohR5xtFHCxeGUXKcWlBoCTnEslMPkWu1H
+	ghcIsTWls6jNlXaixIj9U8hpGF1Rp9fxdbl91hNhgk0uzL/0CCu97VUVIEnZDLcCZWKoqxYroOS
+	uZcQDcCHDZopmtQWlE+9pEtUz4tRK0/N4xHaBJne9Izn1IPpYeFOwXSvz5FbTvHRiJckN33SLtN
+	EXAWawmF
+X-Received: by 2002:a17:907:a807:b0:bea:f5ec:e70d with SMTP id
+ a640c23a62f3a-c119cc73499mr81252166b.10.1782284392161; Tue, 23 Jun 2026
+ 23:59:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 1/2] cgroup/cpuset: Avoid unnecessary cpus & mems
- update in cpuset_hotplug_update_tasks()
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260623230413.1984188-1-longman@redhat.com>
- <20260623230413.1984188-2-longman@redhat.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <20260623230413.1984188-2-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+From: Ujjal Roy <royujjal@gmail.com>
+Date: Wed, 24 Jun 2026 12:29:36 +0530
+X-Gm-Features: AVVi8CcjqT2HGCtdY0b3TsVb5_1CyqP5ethEgfbUu0VypPx0SY_tnqJhPcFQITk
+Message-ID: <CAE2MWknz4X_gcNo6jkR87Lg8F0zfubkOc4Ujr57CS3aBMWrjEA@mail.gmail.com>
+Subject: Please backport bridge multicast exponential field encoding fix
+ series to stable kernels
+To: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, 
+	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>, Andy Roulin <aroulin@nvidia.com>, 
+	Yong Wang <yongwang@nvidia.com>, Petr Machata <petrm@nvidia.com>, stable@vger.kernel.org, 
+	Greg KH <greg@kroah.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Ujjal Roy <ujjal@alumnux.com>, bridge@lists.linux.dev, 
+	Kernel <netdev@vger.kernel.org>, Kernel <linux-kernel@vger.kernel.org>, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Greg,
 
+Please consider backporting the following bridge multicast fix series
+to all applicable stable kernels:
 
-On 6/24/2026 7:04 AM, Waiman Long wrote:
-> As reported by sashiko [1], cpuset_hotplug_update_tasks() may perform
-> unnecessary task iteration and updating of tasks' CPU and node masks
-> when mems_allowed and/or cpus_allowed are not set in cpuset v2. It is
-> due to the fact that the temporary new_cpus and new_mems masks do not
-> inherit parent's effective_cpus/mems when they are empty which is the
-> expected behavior for cpuset v2 since commit 4ec22e9c5a90 ("cpuset:
-> Enable cpuset controller in default hierarchy").
-> 
-> Fix that and avoid unnecessay work by enhancing
-> compute_effective_cpumask() to add the empty cpumask check
-> and inheriting the parent's versions if empty when in v2. A new
-> compute_effective_nodemask() helper is also added to perform similar
-> function for new effective_mems.
-> 
-> Add new test_cpuset_prs.sh test cases to confirm that effective_cpus
-> will inherit the parent's version if cpuset.cpus is empty.
-> 
-> [1] https://sashiko.dev/#/patchset/20260621032816.1806773-1-longman%40redhat.com
-> 
-> Suggested-by: Ridong Chen <ridong.chen@linux.dev>
-> Fixes: 4ec22e9c5a90 ("cpuset: Enable cpuset controller in default hierarchy")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->   kernel/cgroup/cpuset.c                        | 45 +++++++++++--------
->   .../selftests/cgroup/test_cpuset_prs.sh       | 11 ++++-
->   2 files changed, 35 insertions(+), 21 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index aff86acea701..044ddbf66f8e 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1094,12 +1094,35 @@ void cpuset_update_tasks_cpumask(struct cpuset *cs, struct cpumask *new_cpus)
->    * @cs: the cpuset the need to recompute the new effective_cpus mask
->    * @parent: the parent cpuset
->    *
-> + * For v2, the parent's effective_cpus is inherited if cpumask empty.
->    * The result is valid only if the given cpuset isn't a partition root.
->    */
->   static void compute_effective_cpumask(struct cpumask *new_cpus,
->   				      struct cpuset *cs, struct cpuset *parent)
->   {
-> -	cpumask_and(new_cpus, cs->cpus_allowed, parent->effective_cpus);
-> +	bool has_cpus;
-> +
-> +	has_cpus = cpumask_and(new_cpus, cs->cpus_allowed, parent->effective_cpus);
-> +	if (!has_cpus && is_in_v2_mode())
-> +		cpumask_copy(new_cpus, parent->effective_cpus);
-> +}
-> +
-> +/**
-> + * compute_effective_nodemask - Compute the effective nodemask of the cpuset
-> + * @new_cpus: the temp variable for the new effective_mems mask
-> + * @cs: the cpuset the need to recompute the new effective_mems mask
-> + * @parent: the parent cpuset
-> + *
-> + * For v2, the parent's effective_mems is inherited if nodemask empty.
-> + */
-> +static void compute_effective_nodemask(nodemask_t *new_mems,
-> +				       struct cpuset *cs, struct cpuset *parent)
-> +{
-> +	bool has_mems;
-> +
-> +	has_mems = nodes_and(*new_mems, cs->mems_allowed, parent->effective_mems);
-> +	if (!has_mems && is_in_v2_mode())
-> +		nodes_copy(*new_mems, parent->effective_mems);
->   }
->   
->   /*
-> @@ -2148,15 +2171,6 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
->   			goto update_parent_effective;
->   		}
->   
-> -		/*
-> -		 * If it becomes empty, inherit the effective mask of the
-> -		 * parent, which is guaranteed to have some CPUs unless
-> -		 * it is a partition root that has explicitly distributed
-> -		 * out all its CPUs.
-> -		 */
-> -		if (is_in_v2_mode() && !remote && cpumask_empty(tmp->new_cpus))
-> -			cpumask_copy(tmp->new_cpus, parent->effective_cpus);
-> -
->   		/*
->   		 * Skip the whole subtree if
->   		 * 1) the cpumask remains the same,
-> @@ -2704,14 +2718,7 @@ static void update_nodemasks_hier(struct cpuset *cs, nodemask_t *new_mems)
->   	cpuset_for_each_descendant_pre(cp, pos_css, cs) {
->   		struct cpuset *parent = parent_cs(cp);
->   
-> -		bool has_mems = nodes_and(*new_mems, cp->mems_allowed, parent->effective_mems);
-> -
-> -		/*
-> -		 * If it becomes empty, inherit the effective mask of the
-> -		 * parent, which is guaranteed to have some MEMs.
-> -		 */
-> -		if (is_in_v2_mode() && !has_mems)
-> -			*new_mems = parent->effective_mems;
-> +		compute_effective_nodemask(new_mems, cp, parent);
->   
->   		/* Skip the whole subtree if the nodemask remains the same. */
->   		if (nodes_equal(*new_mems, cp->effective_mems)) {
-> @@ -3923,7 +3930,7 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
->   
->   	parent = parent_cs(cs);
->   	compute_effective_cpumask(&new_cpus, cs, parent);
-> -	nodes_and(new_mems, cs->mems_allowed, parent->effective_mems);
-> +	compute_effective_nodemask(&new_mems, cs, parent);
->   
->   	if (!tmp || !cs->partition_root_state)
->   		goto update_tasks;
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index 0d41aa0d343d..ca9bc38fdb95 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -495,13 +495,20 @@ REMOTE_TEST_MATRIX=(
->   	# Narrowing cpuset.cpus to previously sibling-excluded CPUs should
->   	# not return CPUs that were never actually owned.
->   	"  C1-4:P1   .   C1-2:P1  C1-3:P2  .       .  \
-> -	      .      .     .         C3    .       .     p1:4|c11:1-2|c12:3 \
-> +	      .      .     .       C3      .       .     p1:4|c11:1-2|c12:3 \
->   							 p1:P1|c11:P1|c12:P2 3"
->   	# Expanding cpuset.cpus to include a previously sibling-excluded CPU
->   	# after the sibling has become a member should correctly request it.
->   	"  C1-4:P1   .   C1-2:P1  C1-3:P2  .       .  \
-> -	      .      .      P0     C2-3    .       .     p1:1,4|c11:1|c12:2-3 \
-> +	      .      .     P0      C2-3    .       .     p1:1,4|c11:1|c12:2-3 \
->   							 p1:P1|c11:P0|c12:P2 2-3"
-> +	# Cpusets with empty cpuset.cpus should inherit parent's effective_cpus
-> +	"  C1-4:P1 C5-6   C1-2     .       C5      .  \
-> +	      .      P1    P1      .       .       .     p1:3-4|p2:5-6|c11:1-2|c12:3-4|c21:5|c22:5-6 \
-> +							 p1:P1|p2:P1|c11:P1"
-> +	"  C1-4:P1 C5-6   C1-2     .       C5      .  \
-> +	      .      P1    P1      .      O5=0     .     p1:3-4|p2:6|c11:1-2|c12:3-4|c21:6|c22:6 \
-> +							 p1:P1|p2:P1|c11:P1"
->   )
->   
->   #
+726fa7da2d8c ("ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplify
+calculation")
+12cfb4ecc471 ("ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()")
+95bfd196f0dc ("ipv4: igmp: encode multicast exponential fields")
+e51560f4220a ("ipv6: mld: encode multicast exponential fields")
+529dbe762de0 ("selftests: net: bridge: add MRC and QQIC field encoding tests")
 
-LGTM.
+This series was merged via: db314398f618 ("net: bridge: mcast: support
+exponential field encoding")
 
-Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+History: The multicast stack currently supports decoding of IGMPv3 and
+MLDv2 exponential timer field encodings, but lacks the corresponding
+encoding logic when generating multicast query packets. As a result,
+query intervals and response codes exceeding the linear encoding range
+can be transmitted incorrectly. This can cause multicast queriers and
+listeners to interpret different timing values, resulting in protocol
+interoperability issues, membership timeouts, and premature multicast
+group expiration.
 
--- 
-Best regards
-Ridong
+Testing: The series adds the missing encoding support for both IGMPv3
+and MLDv2 and includes selftests that validate the behavior.
+I backported the series to v6.6.123.2 and verified the accompanying
+selftests. The selftests fail on the unpatched kernel and pass after
+applying the series, demonstrating both the bug and the effectiveness
+of the fix.
 
+Given that this is a protocol correctness issue affecting multicast
+query generation, please consider backporting the complete series to
+all applicable stable kernels.
+
+Thanks,
+Ujjal
