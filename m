@@ -1,131 +1,244 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F813BB125
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 14:03:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CCEB3BCD32
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 14:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782309790; cv=pass; b=Ka+CwxZXn0KiUcjGvf+HdIUpkn8tehRcui0UKAwj6mPSKiyqONhj534kYKV0oig81jZErxAPX13Pfqa5U1JY1nWAXXxiEOVnSzAd709FjL28Th55xVqxhTg/jjT5XcP0ZwEW2z1VG1Q4Uc1jxpCNc61gast79UxujFuork7HIgU=
+	t=1782310319; cv=pass; b=kNbu8QTj5upQim0UP7lngYreiF63pIV1fbxEuzGM2Zs8RpUt2AKQqV1PtZwgwGzHHJqi57xGVenW7g8kJH+cSTf6gRmJPWFAsVFJ9g0vzFwFfNhCWZoWT44Gy6poratiH/mcFJOZZ3SrnSHmrR3+MQrWoLTcPstNv2A2pQd6hbA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782309790; c=relaxed/simple;
-	bh=ksijtf2IRLNHsT3AVS8XAMToSq3zWqz1VXfdch2/aYo=;
+	s=arc-20240116; t=1782310319; c=relaxed/simple;
+	bh=lReMwpW9Ma9bFWZKkbvYIhQdFsGC9J9mvewCrG1dWU4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DNEskCTdSN6BFzS6D9m7ehguj8CcMRMMWYP+yMwpQl9r+UIbWppMyRnOC/lRJW8DyIMu1GjrhElOyll1eOv0u3xWbOSk27Lu6e8cPQucsJKRt8KXHFryMpZkiMPtioXuoRWVatgb+PP7Q+6XrL69Vz/+ENZbdZAzb8wgMw4m0DQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bOD/uamh; arc=pass smtp.client-ip=74.125.82.181
+	 To:Cc:Content-Type; b=A+fLEwbJGW3uswn/HXdPzkcE+i8oYPJBxyT5WPd061K+Vt63sSDq8jRjROQOVr2S5wGBJJGezkM8SfwRz8bI9N/QIgXxuu54LK3kMbi18nwxbkcPDJmFkIHph3/59L+hyhcLRHSASbQoJMYV9nPpEKNoYtbovgg2LGaQqhOL7vs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qLxUgC7z; arc=pass smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bOD/uamh"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-30bf42b0ad2so75144eec.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 07:03:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782309788; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qLxUgC7z"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-69531108f25so1901518a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 07:11:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782310317; cv=none;
         d=google.com; s=arc-20240605;
-        b=PtP3bJQxiCy33NNg9QoorKpbAdgbM5E/XsAohjCCdtkbhJ6KCxvb0c9/HTTSZSKRAs
-         5dWom0kyQE+WF9SvgYjb/g83kbpFgnsQrvxkBVEVstZNGKFB6qvQE0flY6s2J6roWgxr
-         iBhMbMQh4B+H1It5joY0u4+45YLiODqUTRtTvh//wYmqZtjOKFyowffs/mqgvnSkCBCw
-         lfugBj8tNnZAAA4Yz4DyEW/IDWylpiBA7EGyP7Sb1cZKxm0NGdirqampXfRwTd6SvRaA
-         qalde6pAIpmtFuhENLzX8Snf99A1ET763A1+Vj6qO8BgrvwHoJnCdpHN5tlEMyXfj1fg
-         gf7A==
+        b=aJqb0sAASVi9ZRyLYlfdO1WPGMjgJF4B37iDElPC5/3sNXbj6Mcei9DMg34SlChTOK
+         suO22MrJ34itNNMptVshCGzqj+qTXwxgRsEHVSiTlHSw5I1k4vZNBJcsJVqAIPyuDypa
+         zN+MUq+HhRJHEK94ZkNA0s1/Ib1DuhZoezyQGITUb/lsw9jkr5yWfxpCXVPAl2fN0tOq
+         HRk+kvwxCIzeboUj5GoE5MBib2fFsgPAKiMnkDSZclMf4xjO3rVmBQczU/LzlILfkfxh
+         UtulVFiAeNmtqBjWxpEFI6FaTNtZ9mVWGN71fQ2p5+7eGv7Rs4Q1a8TYCnpLIlUgToTv
+         iGvw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=ksijtf2IRLNHsT3AVS8XAMToSq3zWqz1VXfdch2/aYo=;
-        fh=U+2KMe5VeNmMvK6DDQ96kj0Y969T++5/hTFWHsgCcDY=;
-        b=HencGjFXITHqCPB43OKrQmXff4qsjSNS0l2mlZUzH512Pnc+muoWR97sKqhIhM9Xsz
-         bU16Y4msUTHJJI+EdId8Xtjsk/9XgESoXzZv78N0rVyK9KKDxpaBk1q/LHzNw89PyGg7
-         2AIPPixZE1807VnNXCosBGTn2cUwQr8Cs2HP4+1msXntgarNLrKyWLj+Q7lzSa66EImx
-         m051ubh2w7uEwU+Tu/VNNnU5lkflXlFSukLSkH5G9dC33rrOotmj//jDzeCguNfaJlgp
-         lOLb1W5IF4qXfLNSXI1QqeImQgnkw1Fj673ZLLLVULrQrpX0s42RqIHE7sqZfNd8MXuY
-         VuQg==;
+        bh=LG+grWd6UceBYXX1nWiBnDgEaC9++nTof5X97YF4TKI=;
+        fh=AKefHbo77eJC9vUdTUj9otVJ0gEvNStjEJp4p/ELAJE=;
+        b=ZDPwWdcbuPt1Kmp/Jv/v0fMMC5/7SWdY0EKxzCdovDca+oELn1vSIyLtktD7fyBdT/
+         KCuU646E89kcZbGM3UOT5KhubchT5GKRtO0+7GgSuWXvcKOmKenzNS2EC8whip1FgH1n
+         0caSmYuc4f6KKOtIYAZx/0i+8r8j7hU5/iyOrGQZYehVqFOmr0LdwNsaW9JiA5Dj6Kq1
+         R9gHqXHlSOCwep13MNIWKuqWervyEXJoEc9vjsHixfZBaqL+6XBkRQ8UZYaFF8ebwomX
+         ifgmFyrfHP5MGSfwTW/0ZtYak+PHa2x3xV8qkLMc/w47Q0gAUiIMiOGayKM5prIgBNx7
+         N1qw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782309788; x=1782914588; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782310317; x=1782915117; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ksijtf2IRLNHsT3AVS8XAMToSq3zWqz1VXfdch2/aYo=;
-        b=bOD/uamhEpcZJyswv53R84IDRMeI6M5+ChYBgjLyvLfT1fQ65r7lzzwQ1gmCC+wuEn
-         2vpGRI+m5uC/gsBm7DblfDULWdfIY9ZSe05VXEG08w57lGrNtLwN60ZcYfsqhVWvylng
-         bWEK2eVdZJ0Tmb5pCGX3UXUiIh3E+i6++a9NhVOOHmx/n5nJ0rOXw2ASWQ9fgoOTVTCB
-         3/28G0P4l5fMK7R9as4EUjduvq28vuDMkk4OmSZZcOF7jdfBx/hM62MM+5WWYAjBBcyO
-         /vcLrSxb4845JDcnkXx9wDzYjuWeHm0U98NS/Wqidu+uHZFS1rgP3ozC2XHYFw/vXnIx
-         udvw==
+        bh=LG+grWd6UceBYXX1nWiBnDgEaC9++nTof5X97YF4TKI=;
+        b=qLxUgC7ze1wp8fNLbbDPdUEt2hennFa92aZyyfQuledAyZt5en9tJL22oGG+LhwHEU
+         qZdwo93q7KGxIg1b+RbY6oSNZn/bmCmrfm+jQYgQ8qU6Mse49dJFF2/NQ9HcmbAEB1yi
+         pV2LRvYRfdkZzFSAvrmrG/MH9L6+J/8C07Qg4puxZdmIm3npY2E/xDneYSurQkPRCrsy
+         FkGalcIhaNnrYbOpSYePtwNDbeQVWeZVs4508fX7eZOCWY+zDnq1xzNhCji5gQgEM4Qs
+         0MQv/CfmIxtDHpO9QZf/2RaXfl335ZyEL/d30mzHym4Af8bQI4MzEdnl7ezUw2cUpeFB
+         691w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782309788; x=1782914588;
+        d=1e100.net; s=20251104; t=1782310317; x=1782915117;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ksijtf2IRLNHsT3AVS8XAMToSq3zWqz1VXfdch2/aYo=;
-        b=DBXVeBXwrlP9OeuFcGRmkXE+RNjtWxLzMMyUqMZWg6URlmZFxM/zV/9r5gxbh7ZG/s
-         j2oM0cSMJQJ/yNdrPlfs/0bw/1k0FOLUL5OgAwum0FzV8/7clceb9sB6nZPbExcFB+4a
-         4qg+mJtCYg2fyBlIQnampKpvNeCu+o7AuNG0Dw45xQN7RZHcZuQ64d/yBIxocTpXij79
-         SyvQ/0CnfWXqBfkPhbdN8kvQB8rkWyy/Kc5A80BHMWNvQML7EY8zdrDS/+AT2lL5x4Xa
-         qvfCCtooMSMTR4zDr26Z5y1YznPEoZHj+sXMKfPk3wh4/wM2l9KG8UGU1Tkw7izO//fJ
-         Iq0A==
-X-Forwarded-Encrypted: i=1; AHgh+RoW4/soQ5WKM9b3xwK77doxkMVnqMXi+yZOxTctM98Y0dbBnDAWH3MknuUyWmUqeQUOL/wjiho/1pZNf6Z/cSg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtU9j///y2NPb8HcITyM7bAPmgfYMKTrYnwrav6pI6rAF5/+dF
-	21435UDCghIot8nIhZEYsfds8SHzwjAhR3g3qLggx4BxcpfoHrZ4S6+tuuFI109pVVI0uYmpI9j
-	FtkV8d44IPaa/x0qRk6ImLR3SVl5zkMU=
-X-Gm-Gg: AfdE7ckzmbPH2lJvejTYfT8UGQf8zHmE/xAUbgxaz92sl3egRxrAAo+XsuGfBkR9yzF
-	d7JX+SHPQRjChPcJth15wCmCzkhpNO+X+qkVrtb09pN6usBSn3Nunitn3uWuZfhfYNtnYq0StCV
-	7UKH/0GoB3P3mCwf6tuQqV6ZAQSWoOWZAWtNI2zAnpqczxcBg66ME11ftkfmCbaXhTz0YPBJuMo
-	+bspnCLdUJYXaBC6FwTevJ5IJgqBxLucFaIUOAy7+flPSx+T767t78tFY2UEUxQlUESS5OZDVG5
-	Wp89XwWyIDMVraZxtu4HgxNkyuJO/9qLwgRFZWLKbwcO28Bdp81dDg8n0ZBhzoGJ9QVvPOQHnP7
-	yqI5HjZh5ZMDs
-X-Received: by 2002:a05:7301:658a:b0:30b:c8bb:588f with SMTP id
- 5a478bee46e88-30c5240f7damr3538472eec.5.1782309787929; Wed, 24 Jun 2026
- 07:03:07 -0700 (PDT)
+        bh=LG+grWd6UceBYXX1nWiBnDgEaC9++nTof5X97YF4TKI=;
+        b=k91kkBSz4qcnj9vrcn1lgZOs98kOtnNzsD6KcP7Coa7xnu1qeGYM8Pfm+2XnbJyJjx
+         nHTg5KiC7SR3EIwm9vM5pQEpi0bB4ou/26TKN2IK3c8fCwFdBVFBhpoUAd0nzOhx/IE1
+         /qpiE+iorFaWgZnH5raB4ejnCOR465sSI7E3NognMtWH2qV4+e8WyEQcNf3FxEkkFr/W
+         NpyZGszqAnnyMFhSgvQEaW7tfoaM/MbrQ+7FopUYp4Oq9pN72FGvY6eOx4euBMDTb5G+
+         FJoKlKH4zHw+hItOMNWBzsmX/Rwf2/z0txB9zoskV0XCuLh58K+iyshqToqaYBXjV5uW
+         pIRQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrtNv/qJW4B664DPgpxCjRBitAsMdDpNkBLNUw//aua55wmU0SPe6m7OPmj5O4Ek/CzfoTfwRH5VUxMkJyvu9s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbTaBFB5O/AS2zSPNL70bUd6rYYCu8CteKIaVU9pScE9kqdIXp
+	rbg7vVAjsViF3uhmwO6GSIfa7I4lqcMMNbDVpgqIIcah9DTVBFOqdUkCFgM0GIo+mHJPkCE4z+q
+	2liZKE71iPUDCDlFhjvelNfelQfwkO4g=
+X-Gm-Gg: AfdE7ckID2ghEymg9crJCDXtvy48IiPobniMJDE6pqqw4eovQHXJaX2/H/JzTrTk+9Q
+	DF6DEPIxJoSPe+wO+EOHkEIBeWBresf30LgLJv4JNcBGs9S0Vn9ULKi8OGhw+4qRVelFZ69xc4X
+	JnptFi7Aw5FLHuKOJytCu6ClAGcdBVbzWbl6Hy4WYcbLxsHKcvd31yB6pbaLaB2Mo9SwPzQrJKH
+	xpxmDR/mGN4hPwEQ9gK/OeUyaK0zw5yJTqKUst66oYm8aTGtgql7ogNXLKB8YrnpNgBp3Mcd6Kq
+	Im65q2abdxHUo/M9n78VQmL5GMmIQho=
+X-Received: by 2002:a05:6402:4310:b0:68c:4424:a08d with SMTP id
+ 4fb4d7f45d1cf-697f37711abmr1918540a12.2.1782310316342; Wed, 24 Jun 2026
+ 07:11:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260624-fix-fops-owner-v5-0-aa1cba242f05@linux.dev> <8ea21b29-9baf-4926-a16f-7d21c5a1a1b8@suse.com>
-In-Reply-To: <8ea21b29-9baf-4926-a16f-7d21c5a1a1b8@suse.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 24 Jun 2026 16:02:53 +0200
-X-Gm-Features: AVVi8CdZJD474qdF4GDgFLlfJ_vD8WsFaomaTI3YSRH6pluhcoRUR51gh_iz4VE
-Message-ID: <CANiq72m_LakPxHt99+3eBn2rXokr3vZbdJf=Wk-Yi8_ufQ2mvA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/9] Fix missing fops.owner in Rust DRM/misc abstractions
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Alvin Sun <alvin.sun@linux.dev>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
-	Rae Moar <raemoar63@gmail.com>, Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
-	Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>, 
-	Igor Korotin <igor.korotin@linux.dev>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	=?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
-	Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
-	Carlos Llamas <cmllamas@google.com>, rust-for-linux@vger.kernel.org, 
-	linux-modules@vger.kernel.org, driver-core@lists.linux.dev, 
-	dri-devel@lists.freedesktop.org, nova-gpu@lists.linux.dev, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20260623111533.2285005-1-ptikhomirov@virtuozzo.com>
+ <20260623111533.2285005-2-ptikhomirov@virtuozzo.com> <ajqOyIA8tPQsxfz6@cmpxchg.org>
+ <3f6392aa-c1f6-4263-8892-978dacbbd8ca@virtuozzo.com> <CAOQ4uxhras5YAr8_HBpuHSDwvfiEF8vAr0NDB0R_PXtGDhnqjQ@mail.gmail.com>
+ <5c7e8c24-0981-4677-aa42-9a74b67bac04@virtuozzo.com>
+In-Reply-To: <5c7e8c24-0981-4677-aa42-9a74b67bac04@virtuozzo.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Wed, 24 Jun 2026 16:11:45 +0200
+X-Gm-Features: AVVi8CedTisCQc6-w-aWZxlaYwfyFEiId3iuvNUGWT5KiajuyJpqODeKptPkY48
+Message-ID: <CAOQ4uxjoq7VGQ+XHi9TT-Hak-tqiudoG7nRJTsFenbNtZRmvcw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] fs, mm: add ->cachestat() file operation
+To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Miklos Szeredi <miklos@szeredi.hu>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Nhat Pham <nphamcs@gmail.com>, Shuah Khan <shuah@kernel.org>, linux-unionfs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 24, 2026 at 3:23=E2=80=AFPM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
+On Wed, Jun 24, 2026 at 1:59=E2=80=AFPM Pavel Tikhomirov
+<ptikhomirov@virtuozzo.com> wrote:
 >
-> I would only suggest adding the new file rust/kernel/module.rs in
-> patch #1 under the MODULE SUPPORT support entry in the MAINTAINERS file,
-> similarly to the other module-related Rust code, so that the module
-> maintainers are emailed when changes to this file are proposed. I think
-> you can change the existing 'F: rust/kernel/module_param.rs' to
-> 'F: rust/kernel/module*.rs'.
+>
+>
+> On 6/23/26 17:34, Amir Goldstein wrote:
+> > On Tue, Jun 23, 2026 at 4:55=E2=80=AFPM Pavel Tikhomirov
+> > <ptikhomirov@virtuozzo.com> wrote:
+> >>
+> >>
+> >>
+> >> On 6/23/26 15:48, Johannes Weiner wrote:
+> >>> On Tue, Jun 23, 2026 at 01:14:48PM +0200, Pavel Tikhomirov wrote:
+> >>>> The cachestat() syscall reads page cache statistics straight from th=
+e
+> >>>> file's f_mapping. Stackable filesystems such as overlayfs keep the d=
+ata
+> >>>> pages in an underlying inode's mapping rather than in the overlay
+> >>>> inode's, so cachestat() reports all zeroes for them.
+> >>>>
+> >>>> Add a ->cachestat() file operation and route the syscall through a n=
+ew
+> >>>> vfs_cachestat() helper that calls it when present, falling back to
+> >>>> file's f_mapping otherwise. This lets stackable filesystems forward =
+the
+> >>>> query to the file that actually owns the page cache. No behaviour ch=
+ange
+> >>>> for regular files.
+> >>>>
+> >>>> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+> >>>> ---
+> >>>> Note: Memset change might be a bit tricky, I moved it to no
+> >>>> ->cachestat() path to avoid multiple memset on nested overlayfs, tha=
+t
+> >>>> means that ->cachestat() is expected to be able to handle unitialize=
+d
+> >>>> cs.
+> >>>> ---
+> >>>>  include/linux/fs.h | 10 ++++++++++
+> >>>>  mm/filemap.c       | 43 +++++++++++++++++++++++++++++++++++--------
+> >>>>  2 files changed, 45 insertions(+), 8 deletions(-)
+> >>>>
+> >>>> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> >>>> index 6da44573ce450..966b6564707e4 100644
+> >>>> --- a/include/linux/fs.h
+> >>>> +++ b/include/linux/fs.h
+> >>>> @@ -53,6 +53,8 @@
+> >>>>
+> >>>>  struct bdi_writeback;
+> >>>>  struct bio;
+> >>>> +struct cachestat_range;
+> >>>> +struct cachestat;
+> >>>>  struct io_comp_batch;
+> >>>>  struct fiemap_extent_info;
+> >>>>  struct kiocb;
+> >>>> @@ -1963,6 +1965,8 @@ struct file_operations {
+> >>>>                                 struct file *file_out, loff_t pos_ou=
+t,
+> >>>>                                 loff_t len, unsigned int remap_flags=
+);
+> >>>>      int (*fadvise)(struct file *, loff_t, loff_t, int);
+> >>>> +    int (*cachestat)(struct file *file, struct cachestat_range *csr=
+,
+> >>>> +                     struct cachestat *cs);
+> >>>
+> >>> I suppose you can't just have it return the real file because of the
+> >>> with_ovl_creds() scope you need during access?
+> >>
+> >> Yes, AFAIU in overlay when we use realfile we should always use it
+> >> with_ovl_creds(), even though I don't think there is anything cred rel=
+ated
+> >> in filemap_cachestat(), I still think we should follow the common patt=
+ern
+> >> other overlay helpers use (similar to ovl_fadvise() and ovl_flush()).
+> >>
+> >> note: Actually some places get ovl_real_file() and use it without
+> >> with_ovl_creds(), e.g.: ovl_read_iter, ovl_write_iter, ovl_splice_read=
+,
+> >> ovl_splice_write. But those look more of an exception than the general
+> >> rule. All other instances use with_ovl_creds().
+> >
+> > Use with_ovl_creds() is a good practice to keep the mental security mod=
+el,
+> > but it is useless if the security check (can_do_cachestat) is not in th=
+e
+> > vfs helper (vfs_cachestat), so please move it there.
+>
+> Totally, I feel stupid now that I missed it originally, will move it in v=
+2.
+>
+> >
+> > Also it kind of makes more sense to check (flags !=3D 0) in sys_cachest=
+ats
+> > before checking permissions.
+> >
+> >>
+> >> Also there are simingly no other file_operations which return "realfil=
+e"
+> >> for further processing, mostly the operation from fsops simply replace=
+s
+> >> general operation with its own logic completely.
+> >>
+> >> Thanks for your review!
+> >>
+> >> ps: Hope overlay maintainers will correctly if I'm getting this wrong.
+> >>
+> >
+> > I don't think this is wrong per-se, except for can_do_cachestat().
+> >
+> > Just be aware that the real file could change from one cachestat
+> > call to the next (i.e. due to copy up).
+>
+> I guess the copy-up between two cachestat calls is an equivalent of cache=
+ pages
+> being dropped/reclaimed between the calls, right?
 
-That would be great, yes -- thanks!
+I guess so.
 
-Cheers,
-Miguel
+> (I assume old pages will not be used anymore and will be reclaimed in due=
+ time.)
+
+TBH as long as this overlayfs fd is kept open both real lower
+and real upper (post copy up) files are kept open, but the lower
+pages will not be accessed by overlayfs
+expect for the case ofMAP_SHARED mmap
+if this overlayfs file was mmaped before copy up, the
+lower inode pages will remain mapped to process address space
+and then cachestat will return stats which are disassociated from the
+pages accessed by mmap.
+
+This is documented in the `Non-standard behavior` section of overlayfs.rst
+and not a specific issue to cachestat. Just wanted to be aware of this.
+
+> So userspace should not be
+> overly confused by such a cache usage change.
+>
+
+Agree.
+
+Thanks,
+Amir.
