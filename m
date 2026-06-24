@@ -1,401 +1,367 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C773D902C
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 14:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6CA13D9058;
+	Wed, 24 Jun 2026 15:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782313098; cv=none; b=hyV7FA8hsgbLcyYh2Mtpknw9eZTAtU9mgumAhvlKhHkPXjL8TEDUdBGSNCwCSdIkv3PajO7KXjmK+01uozGT8B+xN3k3qbL1mUlEmjxyxbVQ0bp2DyU35N4UZjmuPnAnV3w4UHaiag7tEoiMBP2SsLh7Vf2kpB3dlMF0RYXWKNk=
+	t=1782313245; cv=none; b=Cq04ZPzSzz9N0DvycLQsuVLFWJ6tHGx4G2JyJyk0uTNSY7+UhyNZ4N5gkIA4ztrMuod6eHXsEiLaBCoQidTVp+YFOCwnYqLTyr/+FlnNFicXY0HeCygIS2ejAKEQkcleBaLYJ+Y0kto1EW9BSIj4jXDtX+DoORhZ7KCkZKq51r8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782313098; c=relaxed/simple;
-	bh=ii43xFy0tDyBF59C9FOLmKxiCEoKpj3fiU5W0+y+0f4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FIpOx6kgp2OT38Z5rUh0BN1EXROimz8rLFR4LuXtZ2M7X8pU9a+diCjJdt3zDUaSuzvAE357G9NqFPNPtsMIpSjh3LHIdlhV66us/pvsfAjyhDAhQfPV2+HabT4Yu3jFGf+0o3wMSmgN+quk9xknRtpXKqkosdffLNgZ4PrEalc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=e5tol/rG; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1782313245; c=relaxed/simple;
+	bh=eipGRG0ulKDLkHvlAF/UMuZbLCS2+kmPlmzN/ltBHIc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=YQNEWHAAeKd2THkS+cS0G2qB93jMaYJk3CQvQtfTEk/R5dbecq2EnPieWB4QTZfkq/s5mYL0i8FE3EDqB5XcQ8h950iwMzSvf9c+tPyyw/aqeSqYdcgujYyUgAU5uwH8muYyMvz+nltqqYuxv+MccOFjZPoqgPVCJdTaS6UK0x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AJ9qrK/c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="e5tol/rG"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-5177b9a02bdso12250491cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 07:58:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1782313095; x=1782917895; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ccu6+dOqqZdEpVufOt6x4Cg2c1A1kw030+HXK8hkrU0=;
-        b=e5tol/rGVHlChoF28S4B3+rCV4Vz3GKM/xfQIchdQp9Cv7KFrg9Wsq06Bfgii+gF45
-         +SlsX6YsOGF5hiacdUn708KDFyCH8wa+3NCbr+H2U5cjN6LepBjopSmtzR4+dxLYE9Ui
-         7FLFLdZpsVcT8bkJyVtQ5SVEkhXUCKJ+SlopyQCtgppqDGgdK4pW3fcjnWyuw+ok984S
-         RqyA9OBWkbbBrDLaDK1s3c/xIh41bDDf7owNHKNuB1uRCtLcCes6nkDa6PcF0hh7XhHq
-         E8rhXPq5fer2IaNlTjaa9y0RnsaBdYoWSxyBGMuM9j8wNCH/PtJTmMOlQI4a8Ou+TNGO
-         2Jfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782313095; x=1782917895;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Ccu6+dOqqZdEpVufOt6x4Cg2c1A1kw030+HXK8hkrU0=;
-        b=aAJoGa8rB3Di8gxXmWebu603WZ8VRx/ooQuyDmLtkaxNlfR/JqFsLziURgU1ytaVXP
-         UYUEblX2evQ1Ziy9HZxN1UGx3SiLUZoWJX4ftD8FTpQ56wiss5Fw1BZ7Vv1V9Ls6kXVI
-         fbfLBDiTVfg3f5cUBEr6u+dc5cL4cVg+6+vJ9GL40qvkCSZIj8eX7ClSKtRz61m+oGhX
-         FZh8qkcfqyvVoWNswUc6fBpu8yt9NIVB2aYPwqyrJrzYujYXOU9m48TWau6E4xuTBVko
-         OxHkOws8tKjHmnROk2dPtD34IrHSRVWF4H/VcPxzTHtyatz162M510mEvTUjEVzzh9Dm
-         kvmg==
-X-Forwarded-Encrypted: i=1; AFNElJ/KxRfCVtu6pyTEJVNGTkoXpuITlZY7Hp9uSQkb6BPQ2y+eziYCauKw4wvJlpmIORLKJdPu7aXMKG2i9iGPJHc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiOWQLztsXFzvGWcLtTJ99a3x6QelzWDEmVow+UYhGBTMEfD0l
-	xjU1hFLAbdI7pyLd5HrNy6EUT6E0EW8oD2+n/JzMr8ke/LHN1w8MDhgYYFPbPp+OkB8=
-X-Gm-Gg: AfdE7clHI/YRR3DAoXs7i9/Q2u5nosks2cBOoOjHpRpZBn2ZINCe+e0x9cPY5euz5Uo
-	bFqb3hM2TkKcCeDeGcv6HInox58PONVhuTkFba+iKNdLnt31Z1dRfdpQQYjlQzaGtBKCxiV7s7b
-	llTkxVyOVX+Na0gWZpXjSPvk+7XtbK9IlU4QXrhzp3UzU0P22IpH3dYRR2XuytCYdpIFWLMwh1N
-	yTSbwRhe3UndZmfKM9wphsYbqMMU3/PbS+vulAIywclCS1Nsw4ZR9I9jF+WhzLAwWvUUgjn02pf
-	y+PTIdQHmFRQhNIVKyjY1p9VFH68mARiolDfxf9NwpGXmwrG7sCZtvC4eWN6SrpgcrXYvAS57mA
-	9g7nTxYZiHDLodrFriJrPN98HgxI20LlYUOlDQl83sTWvoJRqULvmzeFOjVaTJsZ2boo5a9mX4F
-	hd9GvFIDSdsJv7NnLRib4/UcZWtQv7gIRxAD3TzGtPMvcM5ZZO9xc2fOv41XkDpgSrhWCSJksF5
-	Q==
-X-Received: by 2002:ac8:5f4d:0:b0:50f:c1d4:d9e1 with SMTP id d75a77b69052e-51a61bf7488mr58332751cf.38.1782313094317;
-        Wed, 24 Jun 2026 07:58:14 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51a51ae8ee7sm49502301cf.24.2026.06.24.07.58.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 07:58:13 -0700 (PDT)
-From: Gregory Price <gourry@gourry.net>
-To: linux-mm@kvack.org,
-	nvdimm@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	driver-core@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com,
-	david@kernel.org,
-	osalvador@suse.de,
-	gregkh@linuxfoundation.org,
-	rafael@kernel.org,
-	dakr@kernel.org,
-	djbw@kernel.org,
-	vishal.l.verma@intel.com,
-	dave.jiang@intel.com,
-	akpm@linux-foundation.org,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	gourry@gourry.net,
-	alison.schofield@intel.com,
-	Smita.KoralahalliChannabasappa@amd.com,
-	ira.weiny@intel.com,
-	apopple@nvidia.com
-Subject: [PATCH v5 9/9] selftests/dax: add dax/kmem hotplug sysfs regression test
-Date: Wed, 24 Jun 2026 10:57:44 -0400
-Message-ID: <20260624145744.3532049-10-gourry@gourry.net>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260624145744.3532049-1-gourry@gourry.net>
-References: <20260624145744.3532049-1-gourry@gourry.net>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AJ9qrK/c"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5E821C2BCB4;
+	Wed, 24 Jun 2026 15:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
+	t=1782313244; bh=eipGRG0ulKDLkHvlAF/UMuZbLCS2+kmPlmzN/ltBHIc=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=AJ9qrK/cLbeqYmu024wXMtZ4yO4k34armX4EVrEAIjTlWkQixPqcz4YN/Duy8T6XI
+	 CSp4oofEmeRlYWYL3jLlN+zi2GD0y9xMzxe64fdqfEq0icybECguaeIQ9QrekrelKP
+	 c6XuCI+13T356hfZvMoXL5wSut4lAy1fYY2eD0wY=
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43F1FCDB479;
+	Wed, 24 Jun 2026 15:00:44 +0000 (UTC)
+From: Alvin Sun <alvin.sun@linux.dev>
+Date: Wed, 24 Jun 2026 23:00:00 +0800
+Subject: [PATCH v6 01/10] rust: module: move module types into `module.rs`
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260624-fix-fops-owner-v6-1-5295e333cb3e@linux.dev>
+References: <20260624-fix-fops-owner-v6-0-5295e333cb3e@linux.dev>
+In-Reply-To: <20260624-fix-fops-owner-v6-0-5295e333cb3e@linux.dev>
+To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+ Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
+ Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>, 
+ Igor Korotin <igor.korotin@linux.dev>, 
+ FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+ =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, 
+ Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
+ Carlos Llamas <cmllamas@google.com>
+Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
+ driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org, 
+ nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+ kunit-dev@googlegroups.com, linux-block@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-pci@vger.kernel.org, Alvin Sun <alvin.sun@linux.dev>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782313241; l=10169;
+ i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
+ bh=eipGRG0ulKDLkHvlAF/UMuZbLCS2+kmPlmzN/ltBHIc=;
+ b=Nn4sZSSdIRHXaysb5CiHaG8opWgc/PwALgXUY2HbnyCeOL7dfkCAMur5LMWogT4Usau264hHs
+ x5cYDUq+9KsD0W9eFZAOLP109e8k3mDFcLdhViAfL2z4xz5NCPbgwlF
+X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
+ pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
+X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
+ auth_id=684
 
-Add a kselftest for the dax/kmem whole-device "state" sysfs attribute
-(/sys/bus/dax/devices/daxX.Y/state), which transitions a kmem-backed
-dax device between "unplugged", "online" and "online_movable".
+Move `Module`, `InPlaceModule`, `ModuleMetadata` and `ThisModule` from
+`lib.rs` into a new `rust/kernel/module.rs`. Re-export them from `lib.rs`
+to avoid tree-wide changes.
 
-The kselftest also includes a test to demonstrate the force-unbind
-does not deadlock - but this is a destructive test.  The dax device
-can never be rebound after doing this.
+Switch six bus driver registrations from `module.0` to the public
+`ThisModule::as_ptr()` accessor, since the field is no longer visible
+outside the new `module` submodule.
 
-Provisioning a devdax device and binding it to kmem needs daxctl/ndctl
-out of scope for an in-tree selftest, so the test discovers an already
-kmem-bound dax device and SKIPs when none are present or the memory
-cannot be freed to reach a known baseline.
+No functional change.
 
-When a device is available it validates the interface contract:
-  - online / online_movable actually add memory (MemTotal grows),
-  - online is idempotent,
-  - switching between online types without unplug is rejected,
-  - unplug removes memory and the reported state is "unplugged"
-  - invalid input is rejected.
-
-One specific regression test:
-    online -> unplug -> online_movable -> unplug
-
-Re-online must re-reserve per-range resources so subsequent unplug
-actually offlines and removes instead of silently reporting success
-while the memory stays online.
-
-Signed-off-by: Gregory Price <gourry@gourry.net>
+Assisted-by: opencode:glm-5.2
+Acked-by: Danilo Krummrich <dakr@kernel.org>
+Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 ---
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/dax/Makefile          |   6 +
- tools/testing/selftests/dax/config            |   4 +
- .../testing/selftests/dax/dax-kmem-hotplug.sh | 207 ++++++++++++++++++
- tools/testing/selftests/dax/settings          |   1 +
- 5 files changed, 219 insertions(+)
- create mode 100644 tools/testing/selftests/dax/Makefile
- create mode 100644 tools/testing/selftests/dax/config
- create mode 100755 tools/testing/selftests/dax/dax-kmem-hotplug.sh
- create mode 100644 tools/testing/selftests/dax/settings
+ rust/kernel/auxiliary.rs |  2 +-
+ rust/kernel/i2c.rs       |  2 +-
+ rust/kernel/lib.rs       | 75 +++++-------------------------------------------
+ rust/kernel/module.rs    | 71 +++++++++++++++++++++++++++++++++++++++++++++
+ rust/kernel/net/phy.rs   |  6 +++-
+ rust/kernel/pci.rs       |  2 +-
+ rust/kernel/platform.rs  |  2 +-
+ rust/kernel/usb.rs       |  2 +-
+ 8 files changed, 88 insertions(+), 74 deletions(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 6e59b8f63e41..8c2b4f97619c 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -14,6 +14,7 @@ TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += damon
-+TARGETS += dax
- TARGETS += devices/error_logs
- TARGETS += devices/probe
- TARGETS += dmabuf-heaps
-diff --git a/tools/testing/selftests/dax/Makefile b/tools/testing/selftests/dax/Makefile
+diff --git a/rust/kernel/auxiliary.rs b/rust/kernel/auxiliary.rs
+index 93c0db1f66555..4a02f83240be3 100644
+--- a/rust/kernel/auxiliary.rs
++++ b/rust/kernel/auxiliary.rs
+@@ -63,7 +63,7 @@ unsafe fn register(
+ 
+         // SAFETY: `adrv` is guaranteed to be a valid `DriverType`.
+         to_result(unsafe {
+-            bindings::__auxiliary_driver_register(adrv.get(), module.0, name.as_char_ptr())
++            bindings::__auxiliary_driver_register(adrv.get(), module.as_ptr(), name.as_char_ptr())
+         })
+     }
+ 
+diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
+index 7b908f0c5a58d..24eff08f47123 100644
+--- a/rust/kernel/i2c.rs
++++ b/rust/kernel/i2c.rs
+@@ -142,7 +142,7 @@ unsafe fn register(
+         }
+ 
+         // SAFETY: `idrv` is guaranteed to be a valid `DriverType`.
+-        to_result(unsafe { bindings::i2c_register_driver(module.0, idrv.get()) })
++        to_result(unsafe { bindings::i2c_register_driver(module.as_ptr(), idrv.get()) })
+     }
+ 
+     unsafe fn unregister(idrv: &Opaque<Self::DriverType>) {
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index b72b2fbe046d6..040ae85056509 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -93,6 +93,7 @@
+ pub mod maple_tree;
+ pub mod miscdevice;
+ pub mod mm;
++pub mod module;
+ pub mod module_param;
+ #[cfg(CONFIG_NET)]
+ pub mod net;
+@@ -139,79 +140,17 @@
+ #[doc(hidden)]
+ pub use bindings;
+ pub use macros;
++pub use module::{
++    InPlaceModule,
++    Module,
++    ModuleMetadata,
++    ThisModule, //
++};
+ pub use uapi;
+ 
+ /// Prefix to appear before log messages printed from within the `kernel` crate.
+ const __LOG_PREFIX: &[u8] = b"rust_kernel\0";
+ 
+-/// The top level entrypoint to implementing a kernel module.
+-///
+-/// For any teardown or cleanup operations, your type may implement [`Drop`].
+-pub trait Module: Sized + Sync + Send {
+-    /// Called at module initialization time.
+-    ///
+-    /// Use this method to perform whatever setup or registration your module
+-    /// should do.
+-    ///
+-    /// Equivalent to the `module_init` macro in the C API.
+-    fn init(module: &'static ThisModule) -> error::Result<Self>;
+-}
+-
+-/// A module that is pinned and initialised in-place.
+-pub trait InPlaceModule: Sync + Send {
+-    /// Creates an initialiser for the module.
+-    ///
+-    /// It is called when the module is loaded.
+-    fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, error::Error>;
+-}
+-
+-impl<T: Module> InPlaceModule for T {
+-    fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, error::Error> {
+-        let initer = move |slot: *mut Self| {
+-            let m = <Self as Module>::init(module)?;
+-
+-            // SAFETY: `slot` is valid for write per the contract with `pin_init_from_closure`.
+-            unsafe { slot.write(m) };
+-            Ok(())
+-        };
+-
+-        // SAFETY: On success, `initer` always fully initialises an instance of `Self`.
+-        unsafe { pin_init::pin_init_from_closure(initer) }
+-    }
+-}
+-
+-/// Metadata attached to a [`Module`] or [`InPlaceModule`].
+-pub trait ModuleMetadata {
+-    /// The name of the module as specified in the `module!` macro.
+-    const NAME: &'static crate::str::CStr;
+-}
+-
+-/// Equivalent to `THIS_MODULE` in the C API.
+-///
+-/// C header: [`include/linux/init.h`](srctree/include/linux/init.h)
+-pub struct ThisModule(*mut bindings::module);
+-
+-// SAFETY: `THIS_MODULE` may be used from all threads within a module.
+-unsafe impl Sync for ThisModule {}
+-
+-impl ThisModule {
+-    /// Creates a [`ThisModule`] given the `THIS_MODULE` pointer.
+-    ///
+-    /// # Safety
+-    ///
+-    /// The pointer must be equal to the right `THIS_MODULE`.
+-    pub const unsafe fn from_ptr(ptr: *mut bindings::module) -> ThisModule {
+-        ThisModule(ptr)
+-    }
+-
+-    /// Access the raw pointer for this module.
+-    ///
+-    /// It is up to the user to use it correctly.
+-    pub const fn as_ptr(&self) -> *mut bindings::module {
+-        self.0
+-    }
+-}
+-
+ #[cfg(not(testlib))]
+ #[panic_handler]
+ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
+diff --git a/rust/kernel/module.rs b/rust/kernel/module.rs
 new file mode 100644
-index 000000000000..25a4f3d73a5b
+index 0000000000000..be242a82e86d2
 --- /dev/null
-+++ b/tools/testing/selftests/dax/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+all:
++++ b/rust/kernel/module.rs
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+TEST_PROGS := dax-kmem-hotplug.sh
++//! Module-related types and helpers.
 +
-+include ../lib.mk
-diff --git a/tools/testing/selftests/dax/config b/tools/testing/selftests/dax/config
-new file mode 100644
-index 000000000000..4c9aaeb6ceb4
---- /dev/null
-+++ b/tools/testing/selftests/dax/config
-@@ -0,0 +1,4 @@
-+CONFIG_DEV_DAX=m
-+CONFIG_DEV_DAX_KMEM=m
-+CONFIG_MEMORY_HOTPLUG=y
-+CONFIG_MEMORY_HOTREMOVE=y
-diff --git a/tools/testing/selftests/dax/dax-kmem-hotplug.sh b/tools/testing/selftests/dax/dax-kmem-hotplug.sh
-new file mode 100755
-index 000000000000..803bbd5a6409
---- /dev/null
-+++ b/tools/testing/selftests/dax/dax-kmem-hotplug.sh
-@@ -0,0 +1,207 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Exercise the dax/kmem "state" sysfs attribute:
-+#   /sys/bus/dax/devices/daxX.Y/state  ->  unplugged | online | online_movable
-+#
-+# The test needs a dax device already bound to the kmem driver.
-+# If no suitable device is found the tests SKIP.
-+#
-+# A dax device can be provisioned with the memmap= boot param, e.g.:
-+#   memmap=2G!4G
-+#
-+# then, in the booted system:
-+#
-+#   ndctl create-namespace -m devdax -e namespace0.0 -f
-+#   daxctl reconfigure-device -N -m system-ram dax0.0   # bind kmem
-+#   ./dax-kmem-hotplug.sh
-+
-+# shellcheck disable=SC1091
-+DIR="$(dirname "$(readlink -f "$0")")"
-+. "$DIR"/../kselftest/ktap_helpers.sh
-+
-+DAX_BASE=/sys/bus/dax/devices
-+
-+memtotal_kb() { awk '/^MemTotal:/ {print $2}' /proc/meminfo; }
-+get_state() { cat "$HP" 2>/dev/null; }
-+# set_state STATE -- write a state to the state attribute; returns the
-+# write's exit status (0 = accepted by the kernel)
-+set_state() { echo "$1" > "$HP" 2>/dev/null; }
-+
-+find_kmem_dax() {
-+	local d drv
-+	for d in "$DAX_BASE"/dax*; do
-+		[ -e "$d/state" ] || continue
-+		drv=$(readlink "$d/driver" 2>/dev/null)
-+		[ "$(basename "${drv:-}")" = kmem ] || continue
-+		basename "$d"
-+		return 0
-+	done
-+	return 1
++/// The entrypoint to implementing a kernel module.
++///
++/// For any teardown or cleanup operations, your type may implement [`Drop`].
++pub trait Module: Sized + Sync + Send {
++    /// Called at module initialization time.
++    ///
++    /// Use this method to perform whatever setup or registration your module
++    /// should do.
++    ///
++    /// Equivalent to the `module_init` macro in the C API.
++    fn init(module: &'static ThisModule) -> crate::error::Result<Self>;
 +}
 +
-+ktap_print_header
++/// A module that is pinned and initialised in-place.
++pub trait InPlaceModule: Sync + Send {
++    /// Creates an initialiser for the module.
++    ///
++    /// It is called when the module is loaded.
++    fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, crate::error::Error>;
++}
 +
-+if [ "$UID" != 0 ]; then
-+	ktap_skip_all "must be run as root"
-+	exit "$KSFT_SKIP"
-+fi
++impl<T: Module> InPlaceModule for T {
++    fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, crate::error::Error> {
++        let initer = move |slot: *mut Self| {
++            let m = <Self as Module>::init(module)?;
 +
-+DAX=$(find_kmem_dax)
-+if [ -z "$DAX" ]; then
-+	ktap_skip_all "no kmem-bound dax device with a state attribute"
-+	exit "$KSFT_SKIP"
-+fi
-+HP=$DAX_BASE/$DAX/state
-+ORIG=$(get_state)
++            // SAFETY: `slot` is valid for write per the contract with `pin_init_from_closure`.
++            unsafe { slot.write(m) };
++            Ok(())
++        };
 +
-+# A failure to reach the baseline is environmental (memory in use), not an
-+# interface failure, so skip rather than fail.
-+set_state unplugged; rc=$?
-+if [ "$rc" != 0 ] || [ "$(get_state)" != unplugged ]; then
-+	ktap_skip_all "$DAX: cannot reach 'unplugged' baseline (memory in use?)"
-+	[ -n "$ORIG" ] && set_state "$ORIG"
-+	exit "$KSFT_SKIP"
-+fi
-+mt_unplugged=$(memtotal_kb)
++        // SAFETY: On success, `initer` always fully initialises an instance of `Self`.
++        unsafe { pin_init::pin_init_from_closure(initer) }
++    }
++}
 +
-+DRV=/sys/bus/dax/drivers/kmem
-+AOB=/sys/devices/system/memory/auto_online_blocks
++/// Metadata attached to a [`Module`] or [`InPlaceModule`].
++pub trait ModuleMetadata {
++    /// The name of the module as specified in the `module!` macro.
++    const NAME: &'static crate::str::CStr;
++}
 +
-+ktap_print_msg "using $DAX (initial state was: $ORIG)"
-+ktap_set_plan 11
++/// Equivalent to `THIS_MODULE` in the C API.
++///
++/// C header: [`include/linux/init.h`](srctree/include/linux/init.h)
++pub struct ThisModule(*mut crate::bindings::module);
 +
-+set_state online; rc=$?
-+mt_online=$(memtotal_kb)
-+if [ "$rc" = 0 ] && [ "$(get_state)" = online ] && [ "$mt_online" -gt "$mt_unplugged" ]; then
-+	ktap_test_pass "online: state=online, MemTotal $mt_unplugged -> $mt_online kB"
-+else
-+	ktap_test_fail "online: rc=$rc state=$(get_state) MemTotal $mt_unplugged -> $mt_online"
-+fi
++// SAFETY: `THIS_MODULE` may be used from all threads within a module.
++unsafe impl Sync for ThisModule {}
 +
-+set_state online; rc=$?
-+if [ "$rc" = 0 ] && [ "$(get_state)" = online ]; then
-+	ktap_test_pass "online idempotent"
-+else
-+	ktap_test_fail "online idempotent: rc=$rc state=$(get_state)"
-+fi
++impl ThisModule {
++    /// Creates a [`ThisModule`] given the `THIS_MODULE` pointer.
++    ///
++    /// # Safety
++    ///
++    /// The pointer must be equal to the right `THIS_MODULE`.
++    pub const unsafe fn from_ptr(ptr: *mut crate::bindings::module) -> ThisModule {
++        ThisModule(ptr)
++    }
 +
-+set_state online_movable; rc=$?
-+if [ "$rc" != 0 ] && [ "$(get_state)" = online ]; then
-+	ktap_test_pass "reject online_movable without intervening unplug"
-+else
-+	ktap_test_fail "online->online_movable not rejected: rc=$rc state=$(get_state)"
-+fi
-+
-+set_state unplugged; rc=$?
-+mt=$(memtotal_kb)
-+if [ "$rc" = 0 ] && [ "$(get_state)" = unplugged ] && [ "$mt" -lt "$mt_online" ]; then
-+	ktap_test_pass "unplug from online: MemTotal $mt_online -> $mt kB"
-+else
-+	ktap_test_fail "unplug from online: rc=$rc state=$(get_state) MemTotal $mt_online -> $mt"
-+fi
-+
-+set_state online_movable; rc=$?
-+mt_movable=$(memtotal_kb)
-+if [ "$rc" = 0 ] && [ "$(get_state)" = online_movable ] && [ "$mt_movable" -gt "$mt_unplugged" ]; then
-+	ktap_test_pass "online_movable after unplug: MemTotal $mt_unplugged -> $mt_movable kB"
-+else
-+	ktap_test_fail "online_movable after unplug: rc=$rc state=$(get_state) MemTotal=$mt_movable"
-+fi
-+
-+# The online -> unplug -> online_movable -> unplug cycle once regressed:
-+# a re-online failed to re-reserve the per-range resources, so the final unplug
-+# reported success while leaving the memory online.  Assert it is really freed.
-+set_state unplugged; rc=$?
-+mt=$(memtotal_kb)
-+if [ "$rc" != 0 ]; then
-+	ktap_test_skip "unplug from movable not accepted (memory in use?) rc=$rc"
-+elif [ "$(get_state)" = unplugged ] && [ "$mt" -lt "$mt_movable" ]; then
-+	ktap_test_pass "unplug from online_movable removed memory: $mt_movable -> $mt kB"
-+else
-+	ktap_test_fail "unplug from movable reported success but memory remained: state=$(get_state) MemTotal $mt_movable -> $mt"
-+fi
-+
-+set_state online_kernel; rc=$?
-+mt=$(memtotal_kb)
-+if [ "$rc" = 0 ] && [ "$(get_state)" = online_kernel ] && [ "$mt" -gt "$mt_unplugged" ]; then
-+	ktap_test_pass "online_kernel: MemTotal $mt_unplugged -> $mt kB"
-+else
-+	ktap_test_fail "online_kernel: rc=$rc state=$(get_state) MemTotal=$mt"
-+fi
-+set_state unplugged
-+
-+before=$(get_state)
-+set_state bogus_state; rc=$?
-+if [ "$rc" != 0 ] && [ "$(get_state)" = "$before" ]; then
-+	ktap_test_pass "reject invalid state string"
-+else
-+	ktap_test_fail "invalid state not rejected: rc=$rc state=$(get_state)"
-+fi
-+
-+# Run several online/unplug cycles and require that each one adds/removes memory
-+set_state unplugged
-+cycle_ok=1; fail_i=0
-+for i in 1 2 3; do
-+	if ! set_state online; then cycle_ok=0; fail_i=$i; break; fi
-+	on=$(memtotal_kb)
-+	if ! set_state unplugged; then cycle_ok=0; fail_i=$i; break; fi
-+	off=$(memtotal_kb)
-+	if [ "$on" -le "$mt_unplugged" ] || [ "$off" -ge "$on" ]; then
-+		cycle_ok=0; fail_i=$i; break
-+	fi
-+done
-+if [ "$cycle_ok" = 1 ]; then
-+	ktap_test_pass "online/unplug cycle re-acquires resources (3x: memory added and freed each time)"
-+else
-+	ktap_test_fail "online/unplug cycle regressed at iteration $fail_i (on=$on off=$off baseline=$mt_unplugged)"
-+fi
-+
-+# change system default online policy while the device is unbound, and show
-+# the new system default policy is utilized across bindings.
-+set_state unplugged
-+if [ -w "$AOB" ] && [ -w "$DRV/unbind" ] && [ -w "$DRV/bind" ]; then
-+	orig_aob=$(cat "$AOB")
-+	echo "$DAX" > "$DRV/unbind" 2>/dev/null
-+	echo offline > "$AOB" 2>/dev/null
-+	echo "$DAX" > "$DRV/bind" 2>/dev/null
-+	sleep 1
-+	st=$(get_state)
-+	echo "$orig_aob" > "$AOB" 2>/dev/null		# restore system policy
-+	if [ "$st" = offline ]; then
-+		ktap_test_pass "online policy resolved at bind: auto_online_blocks=offline -> state=offline"
-+	else
-+		ktap_test_fail "bind-time policy not honored: state=$st (expected offline)"
-+	fi
-+	set_state unplugged 2>/dev/null
-+else
-+	ktap_test_skip "auto_online_blocks or driver bind/unbind not writable"
-+fi
-+
-+[ -n "$ORIG" ] && set_state "$ORIG"
-+
-+# DESTRUCTIVE: unbinding the driver while memory is online causes the resources
-+# to leak - but the unbind should not deadlock.  Instead the driver leaks it
-+# with a single "suck online" warning. This leaves the memory online and the
-+# device unbound until reboot, so it runs last.
-+set_state unplugged; set_state online
-+if [ "$(get_state)" = online ] && [ -w "$DRV/unbind" ]; then
-+	mt_on=$(memtotal_kb)
-+	dmesg -C 2>/dev/null
-+	echo "$DAX" > "$DRV/unbind" 2>/dev/null
-+	mt_after=$(memtotal_kb)
-+	# The leaked "System RAM (kmem)" regions stay in the iomem tree; reading
-+	# their names dereferences res_name, which a buggy unbind already freed.
-+	# Walk /proc/iomem to provoke that use-after-free (caught by KASAN).
-+	cat /proc/iomem > /dev/null 2>&1
-+	splat=$(dmesg 2>/dev/null | grep -ciE "KASAN|BUG:|use-after-free|general protection|Oops|refcount_t")
-+	if [ "$splat" = 0 ] && [ "$mt_after" -ge "$mt_on" ]; then
-+		ktap_test_pass "unbind while online: memory left online, no UAF/oops (MemTotal $mt_on -> $mt_after kB)"
-+	else
-+		ktap_test_fail "unbind while online regressed: splat=$splat MemTotal $mt_on -> $mt_after kB"
-+	fi
-+else
-+	ktap_test_skip "could not online device for unbind-while-online test"
-+fi
-+
-+ktap_finished
-diff --git a/tools/testing/selftests/dax/settings b/tools/testing/selftests/dax/settings
-new file mode 100644
-index 000000000000..ba4d85f74cd6
---- /dev/null
-+++ b/tools/testing/selftests/dax/settings
-@@ -0,0 +1 @@
-+timeout=90
++    /// Access the raw pointer for this module.
++    ///
++    /// It is up to the user to use it correctly.
++    pub const fn as_ptr(&self) -> *mut crate::bindings::module {
++        self.0
++    }
++}
+diff --git a/rust/kernel/net/phy.rs b/rust/kernel/net/phy.rs
+index 3ca99db5cccf2..8b7036b8fe480 100644
+--- a/rust/kernel/net/phy.rs
++++ b/rust/kernel/net/phy.rs
+@@ -659,7 +659,11 @@ pub fn register(
+         // the `drivers` slice are initialized properly. `drivers` will not be moved.
+         // So it's just an FFI call.
+         to_result(unsafe {
+-            bindings::phy_drivers_register(drivers[0].0.get(), drivers.len().try_into()?, module.0)
++            bindings::phy_drivers_register(
++                drivers[0].0.get(),
++                drivers.len().try_into()?,
++                module.as_ptr(),
++            )
+         })?;
+         // INVARIANT: The `drivers` slice is successfully registered to the kernel via `phy_drivers_register`.
+         Ok(Registration { drivers })
+diff --git a/rust/kernel/pci.rs b/rust/kernel/pci.rs
+index af74ddff6114d..916ed2cb6b70b 100644
+--- a/rust/kernel/pci.rs
++++ b/rust/kernel/pci.rs
+@@ -86,7 +86,7 @@ unsafe fn register(
+ 
+         // SAFETY: `pdrv` is guaranteed to be a valid `DriverType`.
+         to_result(unsafe {
+-            bindings::__pci_register_driver(pdrv.get(), module.0, name.as_char_ptr())
++            bindings::__pci_register_driver(pdrv.get(), module.as_ptr(), name.as_char_ptr())
+         })
+     }
+ 
+diff --git a/rust/kernel/platform.rs b/rust/kernel/platform.rs
+index 8917d4ee499fb..9fdbafd53bc21 100644
+--- a/rust/kernel/platform.rs
++++ b/rust/kernel/platform.rs
+@@ -82,7 +82,7 @@ unsafe fn register(
+         }
+ 
+         // SAFETY: `pdrv` is guaranteed to be a valid `DriverType`.
+-        to_result(unsafe { bindings::__platform_driver_register(pdrv.get(), module.0) })
++        to_result(unsafe { bindings::__platform_driver_register(pdrv.get(), module.as_ptr()) })
+     }
+ 
+     unsafe fn unregister(pdrv: &Opaque<Self::DriverType>) {
+diff --git a/rust/kernel/usb.rs b/rust/kernel/usb.rs
+index 9c17a672cd275..213db32727c17 100644
+--- a/rust/kernel/usb.rs
++++ b/rust/kernel/usb.rs
+@@ -63,7 +63,7 @@ unsafe fn register(
+ 
+         // SAFETY: `udrv` is guaranteed to be a valid `DriverType`.
+         to_result(unsafe {
+-            bindings::usb_register_driver(udrv.get(), module.0, name.as_char_ptr())
++            bindings::usb_register_driver(udrv.get(), module.as_ptr(), name.as_char_ptr())
+         })
+     }
+ 
+
 -- 
-2.54.0
+2.43.0
+
 
