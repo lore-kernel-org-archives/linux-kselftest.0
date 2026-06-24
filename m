@@ -1,211 +1,271 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D99332623
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 19:07:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C7C3321DC
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 19:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782328029; cv=pass; b=Llvr5IZLTPEsNqi75nBOQUF4pdCDPQCDaCBswH9gIynzsFk6UIKxy4aOri7oE1IJasgIBl5R+hkcbPXWy2xd5MMIUwB2Us7VODOj4MwsycCVLggr//tEAYVCVH6mWW3xkOTM7XV98vnMw17ay2g63BFNDeDaoGYl1Qtu7x4eQoY=
+	t=1782328090; cv=pass; b=OwCfVDAcDhOx+ro3S93Qx1AJNwDNR2Nugb9awzzxB/i0Iz4zgR/n+TD/O86LZCA7g2PtvwMA2PMCxe74d5mbUhDYELU9i5chahxaGGSu5qFhzlVkwzNSsG81DPnOhhSM/U6nvOtR/xBOdCyPsE4Xv4x0nHdWdJSnvyD33VzsQAo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782328029; c=relaxed/simple;
-	bh=dTdPVfrtLsMlTfHUl6+zlBoUHaF6Mspj1nijccsc8Cg=;
+	s=arc-20240116; t=1782328090; c=relaxed/simple;
+	bh=UP+Dr5MrbTzrKOKcZX0iQlCSzBjZ6w5Lp2OCqKc9Uds=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LU3UXbnf2mcmFh5ETw3mhmz8Zbd8JI312Uz7N++zLltCESa4EcWZSyQotkiG7BpSMu8zMG+d9n9Um+w0ZYrug7W5fx8oT9w2kL0SS9RSURF+Fb6OLcIXkq/ViywlgLM6lhWb2FCq4EDELKDPiHMUZvQ0WQP5eXPplpbcp/yBGSM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gVhCoB3l; arc=pass smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=TpWZ6258hQ77NMOjZj04JZcZ2HFAablPepyRWTzOng1v1JN1NSuq2VWnAoVlPb5deSnxm828cGQlLMOnfhOQE7gl29NdF8MxdgCA1EU0TJ8ttjcAgTKJLmIcYJoxjnJnDDVDYUGY0TDRn2TTejjGTL9v1TuVLBcGkl0w8wp3SsA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vyjKq4HD; arc=pass smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gVhCoB3l"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-490b613a17bso13768795e9.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 12:07:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782328026; cv=none;
-        d=google.com; s=arc-20240605;
-        b=N1GqVRrqqe6iozoq0hztkki+R6OCfwjClTfvH8wTNwwOFynqS9kqngJ8iS83ZU4Dg0
-         pHG2vwkfVFUeytpIn3fPztDpWxQV8uX05B5zD0lS3cgwsJSy0kr9EoNv4kBLGqOSv1SH
-         QcTf7lPPa8tqbL5mvSUzs3K7hxTUmlLWF8ulMxxV/ZiM16qLWlgELuLLiZvb0oozqBa7
-         HA8G/1mYk/1ImZEAd0hkFmxVsYk1zwVEgNFpSbhHPxKElDkQnGasltJuXtAdL7Cn6Vun
-         3lq4jWgxfs1qUob0CQ4hBNxfjaaUAh1+JZuFqIaFCPEuIJbgTOzjUp3Lr4uITRSIeoCE
-         4GXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=62RtAAMdOG7011x74VLOvyQrp7SFTtUxM8XkYksByVQ=;
-        fh=eV/9pwEcaQYYcAqy6vFYaaz0hpe5vf+hP/awra4ko0U=;
-        b=cCHAWeSTVOFt2II/fpWsIAMy31SvxXAVGz38zPA9c+KpP4wyhZx6Hiqmnfo/PDhQmQ
-         UuV5sXHTwQq42LuSd98ylLV69au12p0E5llz5Z7wVlYr2Ft3PFfJy7g1Q/aOul1uBwcd
-         GSKJqjdesMQuqUuy6TeF9ILuBRhw2kTG3jzzfVk18BmOgUu1mRu6s+hDCw4/yntYWj9I
-         YerGa7gzX3eY09dEfCrgEdJimOg70zMYAzH6IaA7qcMfIgcMgsg/I316U/PklZdz1FY0
-         SDBo3jfkNAwdnj+WaMAgjnXqKKx+S6rB4Bc0OdZqgO8rRqY4OX10KM1sslm7oYDYfnaI
-         7pAw==;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vyjKq4HD"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-5177d1ff061so52921cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 12:08:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782328088; cv=none;
+        d=google.com; s=arc-20260327;
+        b=OwR/4Y5RQXrydz+yyGzsN1HpHsN8i4Swe23C2qZlQeg8aZvTo39Y08Qj1YAUYE4MyQ
+         d5rpTBH4m9yUDTb4PWXtITDAsuUkvzy7QKHLECiC88xayiwcfuXRpFfB6VYiYAwPa9os
+         FJDudKOUEwXMC8B1fx1sUaP9lTQ+k+dQbj5qPCv9KGMpemsO9p7h64TR/GUzsobXc98J
+         DUQlNMkzRhwF4x4NfvHszgwKvBFLX3gfeKHWA5b8jYYQXZlUzGlUK1LWbITDDSqY28x2
+         JquMb8oN28jRvp2nq8+ZiD2bYO7NF0PRK3IljyFVqTFK0/fQ6R7C2mI9t/VP4gNtzyf1
+         OeNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=TYok/yKaRGCFgGghY1Qu2/NCTVWG+h4PYN0XraBeOm8=;
+        fh=jgoGgMYP5+n7uvDHPWiWtBqgOrLmS3IA0cg3cnjxyB4=;
+        b=iKSV9XZgAPMDxpSg7INlBDbOK6TkN8pzJ9fGXzDuh9nvqhvKeBuQy9MzpLCdwcyhLK
+         aE1UEBa6MxsZ3zlNvsk0eHzBLmXpd+sXVxDuR2/f2quxeBXRzLjGl+c9RtjKbSrgsSD/
+         HDf6JyMWwNRUvINLEPIO+bcmocCpnHKmL8qKmcGEDYvRWuu80VHC6EiXsBnKdAxtJz1N
+         I+6HTzBlo7h6F5fspLfDwlkiD3ivlgqMz0U/O8aFCXrQaD0znr5Ub2VnMpy0Yp+CFZBE
+         OgrHmqYDl6BRZeoU7Uq7T74Erp/rkyYDRVwygetaSPDu8yAVp0QSrmNXoP/K6s6QkqBh
+         Rmaw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782328026; x=1782932826; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=62RtAAMdOG7011x74VLOvyQrp7SFTtUxM8XkYksByVQ=;
-        b=gVhCoB3lm1MXPO9T55GjGx0+DaVj/lztLpmUk96iRIeTyOxyNlRu2tJETAv7R13wSk
-         r+j3Dw7Omo3mMf9A8MDADHQei3+hgkzIhpwYsvgk48YSz2L6dKgHdDsrQ6IfCJx4bZiH
-         mMmPztehOn1YQOIMOcw70qOjm/bIbTZqTCPkVar5laaV7DVoNFJurlcm9yos0lnMeSZ7
-         rEz6ZohElOLpqEc88Dw/E7nXetz66Q24Mau9jFa6JteFAGFVWqpc7eFNy7ipzxGQFiAr
-         PEuZAxv2qDZtb2oB6NVt8iAmtNO9oZuxlxrCwln9/dbP9tA9yDuUvbUgTgWYLX71U8Ad
-         rC4A==
+        d=google.com; s=20251104; t=1782328088; x=1782932888; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=TYok/yKaRGCFgGghY1Qu2/NCTVWG+h4PYN0XraBeOm8=;
+        b=vyjKq4HDhyOZZLC37t9qCK5n7DBNlBckmKzrCG4i30jvmigF3gC4uA3yV53d7UmnSH
+         fU3di4SRXb4jZ8JnO0c/10AtnyIpfUBlsJ20bccijySXF/pLnuCpabU7elZ/xQsJ/dIJ
+         Wq2Rs/QTDAWXN/IMm7OypN2q7mtv5n48pPEZcjaDX0aqMt3zr66rijgBfxY7FOpITl5g
+         RXrkrOn7CcQJOjZ0R3po1ujJT4AztnZyj3Avv4EJwV4/TOo+sBefDXRON/GS4D2MoZkH
+         CCzMYCV7PIJN5l3UzE+v5JAqhe2ivTik+7DWYtWmwSFoWLWIcF8TXTYjF0yEuPr6QP37
+         1Wrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782328026; x=1782932826;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=62RtAAMdOG7011x74VLOvyQrp7SFTtUxM8XkYksByVQ=;
-        b=ZEPxFDxqy+R0eSqScuboJlz+jnm/+xUNb8qw5B3EQCsaGWDVB8XKiQ7HW7yV+37iw8
-         VQHSMgeMralgwmQeIKeT2es4McEy/+qPv71mlRDBEVNUMm9Cr2rcB+RFmB5ka+GlcycL
-         BGBAVwkuqi1OS5oRtsnQYQM/PxChFlUYVGB8mVMLpyc8rmHEU5Evrj/VdPS751Hr9M3/
-         KUTPo2ecVEGCToH8ATsp+tu+bZVASqF2yNzV0hqUJKmK4cUns+yTNJm0vQU91o+7rKji
-         3s+dku69w7fRc6y3zfNRXHiyASS1shAeA+HA1qoPfBlBxGI7qORNZgsTAlBuL1XJY8vA
-         RQpQ==
-X-Forwarded-Encrypted: i=1; AFNElJ94BznnSZp8Tcm4LvZhFVB1jdX2/RdhoiKuKpT6RrXh4ilBWnuGOa/8HgFpQ9rJxhEpUOjeiThYHndKtJyfXwE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3Q006WFE4zC7MwVCyTmiVN8BnsSKuFFJu9COa+Vi0bdhkd558
-	yCir07jKSPm0HKj7dL60oISOnZ+kTIuJr0f0i9sfP8794QtZh3Z9q+JPRZPiL++JLoISA1J9Aic
-	BdTzwtZF3/QJMzTbLbMsdCuEGbKv0qOA=
-X-Gm-Gg: AfdE7cm3sCavICzUTZGtf/VuvKYOXaPqboPsWy9+CHWvv749sr2P5C7z2/5b4gZ6Xhs
-	lEwrZhBzgSAQZzyyQwCivwOe2Lds/0p3NhEWB/z2In/KdbTEJQNSuxyNEtlGlERvYoG5PADLYvX
-	CtNwg8h01ezj//WOrReLRBzwrFiiEiVBADTcu/GQB5S5msg5t0Te9+e8tnhQScQnuw4+mggSBDs
-	xovphNZjIlStCujfPhVgIR/jjZSIfpN/nwYr2DUnPVQa6O6MejMH03m2CXPjQVaxPRaMBlCnGXH
-	PGXZDQTZb+ZF3DFvderi4fp9vry6YHj1A2eWt4A=
-X-Received: by 2002:a05:600c:a51:b0:492:379c:32ee with SMTP id
- 5b1f17b1804b1-49249083c09mr358068975e9.6.1782328025896; Wed, 24 Jun 2026
- 12:07:05 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782328088; x=1782932888;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=TYok/yKaRGCFgGghY1Qu2/NCTVWG+h4PYN0XraBeOm8=;
+        b=EnlBgvnaWwsYMtVuHvEWcVlttopujYIcYJkndiELoos/QnaIZqJNvmGXqV4rx/avfB
+         c7TzYy20BQO/5q4f7YSEzSvGDXH74EWUGfRC/N6RGp4Zz6g7nAtB102IK0skkJAyupC8
+         525ZgxGGgwCMPkbdCsTT8o+NT+KybSz3iikf3kthpaIaJe5H6iTTkTcymidE2ca7rIcT
+         PBR/FKJjmwgDPpUoHamGvY29ekVXGyKXTqR2/Ucbmc8IuI63EjXY4h4nHhKhFsDCXEbg
+         TYaPMcxsIy4pMkIbZJgBk6lflJknGXJGSU/QSqeqohql5sLUMkrrAoiMWwSomWIpRs6S
+         srFQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8gXWTriyusvnXiKMnMYHwWdJ8Q83o9QsUg1IL1RAi/KTQtrozDFVz+Rsy+HmPEwfxf/3VAvJsjqcL416/n2wc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkR9lNqsMKCCVFMHhHaJSc/eRsnsxHQU8EY3ya6Qf2R7S95mz1
+	PjkEIFdDR73o5ezCHSz+UPfJl+TdDTHocG2tHUjBwYH1sVLU+/ij7e/HhGYSI4FJTGefKOUSsKh
+	5heRNIc3/uezapSZH1mGZ7KQUAmgGFtQ/4PyAX+6R
+X-Gm-Gg: AfdE7cmyl2kFooKrHXGGUsvkgjy5dgcPD5zpqtYTlKeE9vGMdIo3jJ7bqgYOy7EaMrb
+	RopH9obkmKOKRvQi+3CXeK94C0d49e9e/pcchhlAu0bUXEj7K6qtElR1zj5fyTTbjpg+0TOfSmz
+	Wh+ou88vcBQSuMZKZ0qCNBOKw8lih9mgdDRgEpPIppSH6DH5jqT8J/zfhZ+baOF4pdwEWL+A5oG
+	HMWfbU0RiRzSzaQ4lRBAWATYy34te0+y5Y+EpObmV19RMqyM141hw4fBdHBgOI0N9pLF4ttyQ==
+X-Received: by 2002:a05:622a:aa89:20b0:50f:b69a:f4a8 with SMTP id
+ d75a77b69052e-51a6ec225f4mr979921cf.7.1782328086856; Wed, 24 Jun 2026
+ 12:08:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260623111533.2285005-1-ptikhomirov@virtuozzo.com>
- <20260623111533.2285005-3-ptikhomirov@virtuozzo.com> <CAKEwX=OaKTfNqzwa=djLxZDeBbR1+DKdqDnxdfPfZFKB-K+ECA@mail.gmail.com>
- <c390081b-7b2e-4b83-9bca-5f93eec6a939@virtuozzo.com> <CAOQ4uxhPROaeEyYceKNsL5QVwVPkTjGtbRr1P_TYXTA0fHvRoA@mail.gmail.com>
-In-Reply-To: <CAOQ4uxhPROaeEyYceKNsL5QVwVPkTjGtbRr1P_TYXTA0fHvRoA@mail.gmail.com>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Wed, 24 Jun 2026 12:06:54 -0700
-X-Gm-Features: AVVi8Cef9aZmI2zHP0TU9bg-9tvoxUc7Rq0PSUmFsfd-hngauFECj4f6N_uHz4Q
-Message-ID: <CAKEwX=MedyK8aDM=oe=Hbzo77mJOEp0Pmo0u8N4HhvikosVbSw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] ovl: support cachestat() syscall on overlayfs files
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>, Miklos Szeredi <miklos@szeredi.hu>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>, linux-unionfs@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com> <20260618-gmem-inplace-conversion-v8-28-9d2959357853@google.com>
+In-Reply-To: <20260618-gmem-inplace-conversion-v8-28-9d2959357853@google.com>
+From: Fuad Tabba <tabba@google.com>
+Date: Wed, 24 Jun 2026 20:07:29 +0100
+X-Gm-Features: AVVi8Cd8t5YxMdE0Ng1SGfAxSm9nIleavoz2HxsrURbnpplSd_eJ9V_CBlxTVmc
+Message-ID: <CA+EHjTwoMC3iZ=NVLCX7eypj3gwV4Ja4gLMoWsCwbXTd4980Vw@mail.gmail.com>
+Subject: Re: [PATCH v8 28/46] KVM: selftests: Add support for mmap() on
+ guest_memfd in core library
+To: ackerleytng@google.com
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
+	yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
+	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 24, 2026 at 7:16=E2=80=AFAM Amir Goldstein <amir73il@gmail.com>=
- wrote:
+On Fri, 19 Jun 2026 at 01:32, Ackerley Tng via B4 Relay
+<devnull+ackerleytng.google.com@kernel.org> wrote:
 >
-> On Wed, Jun 24, 2026 at 1:45=E2=80=AFPM Pavel Tikhomirov
-> <ptikhomirov@virtuozzo.com> wrote:
-> >
-> >
-> >
-> > On 6/23/26 19:12, Nhat Pham wrote:
-> > > On Tue, Jun 23, 2026 at 4:15=E2=80=AFAM Pavel Tikhomirov
-> > > <ptikhomirov@virtuozzo.com> wrote:
-> > >>
-> > >> Overlayfs forwards data I/O to the real (upper/lower) file, so the p=
-age
-> > >> cache lives in the real inode's mapping and cachestat() on an overla=
-y
-> > >> fd returned all zeroes.
-> > >>
-> > >> Implement the ->cachestat() file operation by forwarding to the real
-> > >> file via vfs_cachestat(), the same way ovl_fadvise() forwards
-> > >> for fadvise.
-> > >>
-> > >> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-> > >> ---
-> > >>  fs/overlayfs/file.c | 18 ++++++++++++++++++
-> > >>  1 file changed, 18 insertions(+)
-> > >>
-> > >> diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
-> > >> index 27cc07738f33b..a7e252a91ea43 100644
-> > >> --- a/fs/overlayfs/file.c
-> > >> +++ b/fs/overlayfs/file.c
-> > >> @@ -518,6 +518,21 @@ static int ovl_fadvise(struct file *file, loff_=
-t offset, loff_t len, int advice)
-> > >>                 return vfs_fadvise(realfile, offset, len, advice);
-> > >>  }
-> > >>
-> > >> +#ifdef CONFIG_CACHESTAT_SYSCALL
-> > >> +static int ovl_cachestat(struct file *file, struct cachestat_range =
-*csr,
-> > >> +                        struct cachestat *cs)
-> > >> +{
-> > >> +       struct file *realfile;
-> > >> +
-> > >> +       realfile =3D ovl_real_file(file);
-> > >> +       if (IS_ERR(realfile))
-> > >> +               return PTR_ERR(realfile);
-> > >
-> > > We're propagating the error of ovl_real_file() all the way to
-> > > userspace right? I think we need to handle this.
-> > >
-> > > For example, we might get -EIO here, which is unexpected and
-> > > undocumented from cachestat's POV.
-> > >
-> > > Maybe handle it and just return -EBADF or sth like that (with some
-> > > updated documentations, etc.)
-> > >
-> > > The rest LGTM, but I'll let overlayfs maintainers check the
-> > > overlayfs-specific bits :)
-> >
-> > Yeh, we probably can use EBADF here instead of propagating:
-> >
-> > Man cachestat(2) says:
-> >
-> >   EBADF  Invalid file descriptor.
-> >
-> > not really a bad fd here, but probably close enough not to rewrite man.
+> From: Sean Christopherson <seanjc@google.com>
 >
-> Please don't do that.
+> Accept gmem_flags in vm_mem_add() to be able to create a guest_memfd within
+> vm_mem_add().
 >
-> Re-read what you just wrote - it is ridiculous
-> Because of being lazy to update man page,
-> we are going to send a confusing error to user which tells them
-> that their fd is wrong, which it is not.
+> When vm_mem_add() is used to set up a guest_memfd for a memslot, set up the
+> provided (or created) gmem_fd as the fd for the user memory region. This
+> makes it available to be mmap()-ed from just like fds from other memory
+> sources. mmap() from guest_memfd using the provided gmem_flags and
+> gmem_offset.
+>
+> Add a kvm_slot_to_fd() helper to provide convenient access to the file
+> descriptor of a memslot.
+>
+> Update existing callers of vm_mem_add() to pass 0 for gmem_flags to
+> preserve existing behavior.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> [For guest_memfds, mmap() using gmem_offset instead of 0 all the time.]
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 
-I don't think we're being lazy here. It's technically more work to
-handle errors and updating documentations :)
+Reviewed-by: Fuad Tabba <tabba@google.com>
 
-I'm more concerned with undocumented/unexpected behavior (error type
-in this case). -EIO was an example that I saw in ovl_real_file()
-itself, but I'm not familiar enough with overlayfs to know if that's
-the extent of it.
+Cheers,
+/fuad
 
-But I'm OK with just updating the documentation with a simple note
-that other error maybe propagated from the underlying fs, if no one
-else thinks it's a problem :)
-
+> ---
+>  tools/testing/selftests/kvm/include/kvm_util.h     |  7 +++++-
+>  tools/testing/selftests/kvm/lib/kvm_util.c         | 27 ++++++++++++----------
+>  .../kvm/x86/private_mem_conversions_test.c         |  2 +-
+>  3 files changed, 22 insertions(+), 14 deletions(-)
 >
-> >
-> > I'm a bit hesitant though, since in other overlayfs operations we alrea=
-dy
-> > propagate, maybe that was by design?
-> >
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index d4c104cb0418f..0cacf3698b259 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -700,7 +700,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>                                  gpa_t gpa, u32 slot, u64 npages, u32 flags);
+>  void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+>                 gpa_t gpa, u32 slot, u64 npages, u32 flags,
+> -               int gmem_fd, u64 gmem_offset);
+> +               int gmem_fd, u64 gmem_offset, u64 gmem_flags);
 >
-> Exactly, plenty of overlayfs operations return EIO for unexpected
-> conditions, often accompanied with some assertion as is the case
-> with ovl_real_file().
+>  #ifndef vm_arch_has_protected_memory
+>  static inline bool vm_arch_has_protected_memory(struct kvm_vm *vm)
+> @@ -732,6 +732,11 @@ void *addr_gva2hva(struct kvm_vm *vm, gva_t gva);
+>  gpa_t addr_hva2gpa(struct kvm_vm *vm, void *hva);
+>  void *addr_gpa2alias(struct kvm_vm *vm, gpa_t gpa);
 >
-> Even though many man pages don't document an explicit EIO error
-> code, it is obvious to any experienced sys admin that if EIO is observed
-> they should look at the kernel logs, because an underlying subsystem
-> may have reported critical errors.
+> +static inline int kvm_slot_to_fd(struct kvm_vm *vm, u32 slot)
+> +{
+> +       return memslot2region(vm, slot)->fd;
+> +}
+> +
+>  #ifndef vcpu_arch_put_guest
+>  #define vcpu_arch_put_guest(mem, val) do { (mem) = (val); } while (0)
+>  #endif
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 9b482778f7379..d5bbc80b2bf1c 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -978,12 +978,13 @@ void vm_set_user_memory_region2(struct kvm_vm *vm, u32 slot, u32 flags,
+>  /* FIXME: This thing needs to be ripped apart and rewritten. */
+>  void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+>                 gpa_t gpa, u32 slot, u64 npages, u32 flags,
+> -               int gmem_fd, u64 gmem_offset)
+> +               int gmem_fd, u64 gmem_offset, u64 gmem_flags)
+>  {
+>         int ret;
+>         struct userspace_mem_region *region;
+>         size_t backing_src_pagesz = get_backing_src_pagesz(src_type);
+>         size_t mem_size = npages * vm->page_size;
+> +       off_t mmap_offset = 0;
+>         size_t alignment = 1;
 >
-> But in general, man pages follow development, not the other way around.
-
-Fair point.
-
+>         TEST_REQUIRE_SET_USER_MEMORY_REGION2();
+> @@ -1055,8 +1056,6 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
 >
-> Thanks,
-> Amir.
+>         if (flags & KVM_MEM_GUEST_MEMFD) {
+>                 if (gmem_fd < 0) {
+> -                       u32 gmem_flags = 0;
+> -
+>                         TEST_ASSERT(!gmem_offset,
+>                                     "Offset must be zero when creating new guest_memfd");
+>                         gmem_fd = vm_create_guest_memfd(vm, mem_size, gmem_flags);
+> @@ -1077,13 +1076,17 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+>         }
+>
+>         region->fd = -1;
+> -       if (backing_src_is_shared(src_type))
+> +       if (flags & KVM_MEM_GUEST_MEMFD && gmem_flags & GUEST_MEMFD_FLAG_MMAP) {
+> +               region->fd = kvm_dup(gmem_fd);
+> +               mmap_offset = gmem_offset;
+> +       } else if (backing_src_is_shared(src_type)) {
+>                 region->fd = kvm_memfd_alloc(region->mmap_size,
+>                                              src_type == VM_MEM_SRC_SHARED_HUGETLB);
+> +       }
+>
+> -       region->mmap_start = kvm_mmap(region->mmap_size, PROT_READ | PROT_WRITE,
+> -                                     vm_mem_backing_src_alias(src_type)->flag,
+> -                                     region->fd);
+> +       region->mmap_start = __kvm_mmap(region->mmap_size, PROT_READ | PROT_WRITE,
+> +                                       vm_mem_backing_src_alias(src_type)->flag,
+> +                                       region->fd, mmap_offset);
+>
+>         TEST_ASSERT(!is_backing_src_hugetlb(src_type) ||
+>                     region->mmap_start == align_ptr_up(region->mmap_start, backing_src_pagesz),
+> @@ -1129,10 +1132,10 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+>
+>         /* If shared memory, create an alias. */
+>         if (region->fd >= 0) {
+> -               region->mmap_alias = kvm_mmap(region->mmap_size,
+> -                                             PROT_READ | PROT_WRITE,
+> -                                             vm_mem_backing_src_alias(src_type)->flag,
+> -                                             region->fd);
+> +               region->mmap_alias = __kvm_mmap(region->mmap_size,
+> +                                               PROT_READ | PROT_WRITE,
+> +                                               vm_mem_backing_src_alias(src_type)->flag,
+> +                                               region->fd, mmap_offset);
+>
+>                 /* Align host alias address */
+>                 region->host_alias = align_ptr_up(region->mmap_alias, alignment);
+> @@ -1143,7 +1146,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>                                  enum vm_mem_backing_src_type src_type,
+>                                  gpa_t gpa, u32 slot, u64 npages, u32 flags)
+>  {
+> -       vm_mem_add(vm, src_type, gpa, slot, npages, flags, -1, 0);
+> +       vm_mem_add(vm, src_type, gpa, slot, npages, flags, -1, 0, 0);
+>  }
+>
+>  /*
+> diff --git a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
+> index 1d2f5d4fd45d7..861baff201e78 100644
+> --- a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
+> +++ b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
+> @@ -399,7 +399,7 @@ static void test_mem_conversions(enum vm_mem_backing_src_type src_type, u32 nr_v
+>         for (i = 0; i < nr_memslots; i++)
+>                 vm_mem_add(vm, src_type, BASE_DATA_GPA + slot_size * i,
+>                            BASE_DATA_SLOT + i, slot_size / vm->page_size,
+> -                          KVM_MEM_GUEST_MEMFD, memfd, slot_size * i);
+> +                          KVM_MEM_GUEST_MEMFD, memfd, slot_size * i, 0);
+>
+>         for (i = 0; i < nr_vcpus; i++) {
+>                 gpa_t gpa =  BASE_DATA_GPA + i * per_cpu_size;
+>
+> --
+> 2.55.0.rc0.738.g0c8ab3ebcc-goog
+>
+>
