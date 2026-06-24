@@ -1,156 +1,156 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B71632AABC
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 13:36:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782308171; cv=none; b=FCZ1XTRS7kUfmNTOsLHrDc1pcMl/WRTp3fvRSGzjSRN+yhPEBjC0vp7ikxe9CmZoHppDnkDvfzFm9eGPhDFwMvGu7V5C3O7DXpWkCN+VirjziAri6FuCN+UgrEQ8qxHXcLKCkF8VK40+LKwCygn9mCK0ll9KEDmEBz3GYmzzW3k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782308171; c=relaxed/simple;
-	bh=i/PjI4m04aPw0PQLU5HQ2rF0LE8MVaue1ZoAwrK1SYE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=tixXYjiD9gkzET5XH7V/tbc4G4Bv6r2l3Z6DyxKsieuDhiZXCM/5J4WoVR/LxndHyylExrKIu9bRkjk9Ps+TVyxNk56YycdKu1vGVvQykCmpNH0tgiul6paNLCoetx2JUhETYyeZ7VWK0Z7CDx1qp9EmPpApJxuHTwQnAgKxGdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=HpUn2zPj; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FA03B6C0E
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 13:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782308680; cv=pass; b=ilLi/eEKEQLmi53CS9qneenfzmrJdZWcdnDJt/QmqPvt0YQ1/0AdUAS9VaWw0q3q9GiW0FCTSra1U+q7+/aC0uji38hbTkHJ9iLVfkHXyfEG1dX3ASkTzRB1sPifGKomjgvtywBUhTQO+8mJR9QcXB8iLJidtcVC6p7Wu/ld9q8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782308680; c=relaxed/simple;
+	bh=qwRcQ/ClJ9JG4ryGwIJuvq/o3tliB127/9EJbI1JGOU=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GK5Sf33WDdXMvUmJIT8axJvMoO+2o+Yka33Jdi61HqpkS84eR6KVxtEOB9jRlJbKCXGussMCvsWF+cQLkRtiakPcZSqyYTyRhuUa9/UNGJbQU90WLrXT+o0Qr1QWDrp04L88c8sgXw54SPUwWS08Kn3W12YD697j/vzro80Yzhs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=arPYaw0m; arc=pass smtp.client-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="HpUn2zPj"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-697de23bd7dso1466696a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 06:36:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="arPYaw0m"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-139b5e604b9so1224482c88.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 06:44:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782308678; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ba4a/hWfe6+FraEGWpO+meRcNcOo5p7xXsSWn0i6GDCnORZu0cmKQhfm0wv64KN/UV
+         bHJ/5bt00UXJRlg2gAm88nla8qE4jVi/T2Emt2SFUxUioq1t5Kby71O6uiZkKDw4fZfi
+         r6VBF/AlndPhfRTRCTbGNLV4AFvs5NuW1sDirWZa6ypm5QEBf8psXBOyuWNYEH8jgmCA
+         dMPotYGO4n48/ogeSRM+4QHMXoqq40PPYodxW45oISTMnjfphii2o0km0Zx1WNpTUYA4
+         cpKGqO6xi2xln4VD4E6tmhkxN3sy9QxYw3Li5IuO1Jl0DcyAWKuXrHzkw9bPRQxOHIOO
+         9MRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=OMYX25sMe8BokvDqBMKpyH1gjAy6dHukDWPb7UeMT1Q=;
+        fh=n9ox88EZxSyooANreBsSQRjfvT5zYHBTwIg97ByehKc=;
+        b=IFVa5CLVaAJxRihbCave7HNl1FGr3qdmMjfZLk+kAFHUDSJVThhBjkHflnZ26OpSwK
+         WeDy4UZNGMS1CLSTctN0/GTlxXpYMSiwAnoOvi7pGDnJxtB/xoA5RHXgv+Xzge5H/Y6B
+         a8KmOTcAkum7GyOOMAexaGjVftKcB+ZwiuuFuNAGN3xFXXhjgbesxOGtggJsqOiDHIgE
+         FajILhfhNbmSRVWQk0Ox+7NsybQTus2bHGNqWBKMRQotdlLUYHt+bp4rKrCQ8Eq91p02
+         5OUkM2r6j+1rTnIwOPU6SZb3A0WLIFLPwSRoT4xrzQk3imUlSa0Sjl8niVmxkPLLQ4oJ
+         TX2g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1782308167; x=1782912967; darn=vger.kernel.org;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RvxFHr+pWEoc4bhYu8JwbhnPbjylaRVmeM2W41MKswU=;
-        b=HpUn2zPjP4mX6UAQRBTOkdF3i/ZQkh+OBP5R9zfZr4UV1ikejir6e27iIYyUjgSoOE
-         dydBVdYbDakXnIAcNbvMc34cqvyItyiDGLgHyWZYHJtDf9DtE2KY0rh1VqcQec7BPaQ7
-         VO+r1TEbGMNQKxrGX+7HcqyAcfIiuuvNi/7fzx5DKIZqi/sBPKIJDmxbUIX/2+IbgcwX
-         kPFggf+LXSmiiQUrgfNAjgv31sEpcUndyONlCE+p2mhtJIQtfUaqhLC6uJUe5A9f1NRe
-         vw0/X/Yc2ZSTrTtGxeHoSKuvUYx2yYk5yQJOYr1NbY6f/8kXw3/STbSUZ3WFKpYNolsl
-         xCHw==
+        d=google.com; s=20251104; t=1782308678; x=1782913478; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OMYX25sMe8BokvDqBMKpyH1gjAy6dHukDWPb7UeMT1Q=;
+        b=arPYaw0meVRjPYrgms4OkOLXFt/8P2iuU67wri+g544HgClaDMzfIAQhy6BtPLeVh4
+         2nSTG1S1xNZsTnS+t2dJfwbJ/WtjWp5jPYDuti7YH+wZSG1d0uJTdBdqVugF0F1GJqlm
+         mz+2HQHL4z1TPCf9je/KZBzz5f+CiZiX0tyQKqwTjW/ln09HIuiZ6YRJDPKI20kCZR91
+         3HAt6Csj4wOcpZv/Cji3sdK5CsaAUxp9ekhKCOUF/PICHIw1Igqy4Ciu3GdgYIPHK4QH
+         H/WjUDgtm4HpMCfS4bUR0sZrBlSONDoE9rG/SPXL+VDaKdXX8ycoZFH0P8eihDqUY/Hr
+         qBSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782308167; x=1782912967;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RvxFHr+pWEoc4bhYu8JwbhnPbjylaRVmeM2W41MKswU=;
-        b=R0gPYHhacsHNWnJvTftVYaQ3cmjq1S0g99bSb7m05y7vDNwy+viwbsBhp2aVzrAzSE
-         vx1kwD5k98+uPU3qJoP6HiZZmA8d9++yP313N04SBa6olLSSJi16/s+LFWUTmWMSYWhj
-         ZQpZnw4u+4/DnIa39iuxavvQLJhoSUIy+oCm7zLo0qM2nzxlL910jN/+Y65+ki4evWIQ
-         lsgeLJQZ7munupSSBLhzHvEwYLEXEQrwTMIZkaLC42yZNGocIB0sQlzZ8Y8rl4GiFoNv
-         STCpsRatFw9DX/PNuYo7cUWXeRpqT7+IPPIgFs6BRKCSrz/uEwHuGNby1TjTp2KNjHTG
-         nkxw==
-X-Forwarded-Encrypted: i=1; AHgh+RqOOMdwCWs7snIIqQrlQM2M++O/dgpmjqWytS0EPEZ032dl8OJj1Eyrbc/trnpd7rNUXixY18Pxwwf7f8ucX9M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbARh1roxR2yvfVpyGMjTzS38M5PjxkCj6nEovrXyNiFfZQVnL
-	Nqhu6/DmdDTX1cr+cIgXsic2rOf+vEjsRngveJdPgjIKgLP8gbZ7fIzR3nAvJUhGYxY=
-X-Gm-Gg: AfdE7cmTVHPE9q8ZH6U4G+vgXfcDX/sgRFvVsQyKTbsxrtehW6umi861bVQisDFiXz9
-	z6AQBy/e/Yxn0jqoJA5YICjEv93GOxKE3vQKJ1FDg9jErqY6rRDmenMlCuXrw7Ecj6knY3hVqjx
-	CRECThOEG3r3hVnD68RodGWbQKF/bReko1Z6xhpQlxbzXStCmU0bGo/n4PD8xkDacnU/TsaLaHF
-	FLc9G89Mt0k6O7FR58w1V0SjxmVxxo3rrg3JByVHAw8JgmS58q0gaeg36r54jwBT5/u9L33MXxj
-	XtwLKGrMIbkriHT2AtToEvQ6d9FbgBfndfQ6c8CpIBX0e8kvjfvoV9C2KFGE9R8EOMoOX0cqb3a
-	vA8+jQ68Jk6B0fGed+D+tjEoppldbyz8nZZQ3onfCidbTkcFUv+t1OOsKK9Xk160RKiVz9xr8LE
-	Z1H3a+XqOYRyx8HO8=
-X-Received: by 2002:a05:6402:1e91:b0:697:de64:ae9a with SMTP id 4fb4d7f45d1cf-697f376fafamr1997570a12.6.1782308167524;
-        Wed, 24 Jun 2026 06:36:07 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-697f4bd36adsm1202161a12.27.2026.06.24.06.36.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 06:36:07 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Michal Luczaj <mhal@rbox.co>, Willem de Bruijn
- <willemdebruijn.kernel@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,  Jiayuan Chen
- <jiayuan.chen@linux.dev>,  "David S. Miller" <davem@davemloft.net>,  Eric
- Dumazet <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo
- Abeni <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Alexei
- Starovoitov <ast@kernel.org>,  Cong Wang <cong.wang@bytedance.com>,
-  Daniel Borkmann <daniel@iogearbox.net>,  Andrii Nakryiko
- <andrii@kernel.org>,  Eduard Zingerman <eddyz87@gmail.com>,  Kumar
- Kartikeya Dwivedi <memxor@gmail.com>,  Martin KaFai Lau
- <martin.lau@linux.dev>,  Song Liu <song@kernel.org>,  Yonghong Song
- <yonghong.song@linux.dev>,  Jiri Olsa <jolsa@kernel.org>,  Emil Tsalapatis
- <emil@etsalapatis.com>,  Shuah Khan <shuah@kernel.org>,
-  netdev@vger.kernel.org,  bpf@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Don't leak UDP socks on
- lookup-bind-release
-In-Reply-To: <20260623-sockmap-lookup-udp-leak-v1-1-05804f9308e4@rbox.co>
-	(Michal Luczaj's message of "Tue, 23 Jun 2026 20:03:09 +0200")
-References: <20260623-sockmap-lookup-udp-leak-v1-0-05804f9308e4@rbox.co>
-	<20260623-sockmap-lookup-udp-leak-v1-1-05804f9308e4@rbox.co>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Wed, 24 Jun 2026 15:36:06 +0200
-Message-ID: <87wlvoxdq1.fsf@cloudflare.com>
+        d=1e100.net; s=20251104; t=1782308678; x=1782913478;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OMYX25sMe8BokvDqBMKpyH1gjAy6dHukDWPb7UeMT1Q=;
+        b=JcKR9pAfnEUWEVpaHTEfDichR4LKXIWwf+2wMF6v/gxuUONO9L4LgeG66784V3hUIF
+         +/HO7VlBnAODWoP+meofj0PEuozFwVs9Qn0PrYQZjsiqVTLmqKFUSORbMNNlwWn352Hy
+         5Rm8k35hk3BkpQD69XebYJq1mNYdKxoJXttNOhLry5JBRGlXsMz3P80WjuiVlbWe3+A2
+         phz8Qnc26nwcOwd00uLjjdG0EGhU8GysJ/pH/+ataOFcZYyLiaUN9/cPsqF+JqhciTU+
+         d7Gh9N/uvXZdG525Ta1obFUCIeLK0qHnCAFLJE7NbtYx0vhtCg761HJ0ze89PkCwqTWC
+         f2mg==
+X-Forwarded-Encrypted: i=1; AFNElJ9+zvQSr7z91DdjzFS1/7HNSTa/tBuGibKfKHVlWOWySkgvG4Dzv5xEF0fSXnPkHDWjExJggAgUxTq2bgVk30Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBy63Ypb17cQgm1oyXNiqfhDU5gMKxZXF96s0GzgZe3ShwG7wm
+	tFKePPosLO1rw4104Yw7BvPSDVBv8A4TLMwbXPZpFDGKXULA36k6w6mARNPCn1MBx5IU1qWlls5
+	pL5HiWg2i4+lLpTtRbbZ1zuJ4C/zez7UoSYS35ecZ
+X-Gm-Gg: AfdE7cm3F8E9+RXTAvdNxsJMpDNPy+AI7scFGCJQ3m76EhcxlGvbQ0WOECPgfQiT0WT
+	iNFgTz6DRqcDn7XnhJJI0eJ5Jz3hMgiFFqadIuymAqpzDQfULcXRKjTH70wgJvKr+CxRerDgYwB
+	tUGK/fAQV1uMk5BYkUm5htNjEp7IWfWlURYyUYoCnXDbs6PdnjI96vo6ThNSmxOxvSrJkJ+xRtB
+	0pw2khrK8Bhwf0zkyaKrDk0OCft9x8ugzmb5btgBjckLufX8gukzFW/byHiPL6LhShi5dD5P4W1
+	DuxpRk5SB4za/a9fKBqLDYkjYj5P
+X-Received: by 2002:a05:7022:ec0e:b0:137:eb26:10d with SMTP id
+ a92af1059eb24-139c5b99857mr4976083c88.0.1782308676421; Wed, 24 Jun 2026
+ 06:44:36 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 24 Jun 2026 06:44:35 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 24 Jun 2026 06:44:35 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <96fb369d-dbff-4ed6-b1f9-0ce63d7d4ed0@linux.intel.com>
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-7-9d2959357853@google.com> <96fb369d-dbff-4ed6-b1f9-0ce63d7d4ed0@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Date: Wed, 24 Jun 2026 06:44:35 -0700
+X-Gm-Features: AVVi8Ce7qJauzHB_wQ4GZOmMbMs8hfgU2sTfkjTDTjUh6bKjOQAsxLqy1nK_op4
+Message-ID: <CAEvNRgGbBcrX5Fw3vNTsTOBNC=Ypi=9-S07674yPxLU9i4akjA@mail.gmail.com>
+Subject: Re: [PATCH v8 07/46] KVM: Rename memory attribute APIs to prepare for
+ in-place gmem conversion
+To: Binbin Wu <binbin.wu@linux.intel.com>
+Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org, 
+	chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com, 
+	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
+	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
+	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, tabba@google.com, 
+	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
+	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
+	aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jun 23, 2026 at 08:03 PM +02, Michal Luczaj wrote:
-> UDP sockets get SOCK_RCU_FREE set when (auto-)bound. This means
-> sk_is_refcounted(unbound) = true, while sk_is_refcounted(bound) = false.
->
-> Because sockmap accepts unbound UDP sockets, a BPF program can increment a
-> socket's refcount via lookup. If the socket is subsequently bound, the
-> transition from unbound to bound causes bpf_sk_release() to skip the
-> decrement of the refcount, causing a memory leak.
->
-> unreferenced object 0xffff88810bc2eb40 (size 1984):
->   comm "test_progs", pid 2451, jiffies 4295320596
->   hex dump (first 32 bytes):
->     7f 00 00 01 7f 00 00 01 d2 04 1b b7 04 d2 00 00  ................
->     02 00 01 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
->   backtrace (crc bdee079d):
->     kmem_cache_alloc_noprof+0x557/0x660
->     sk_prot_alloc+0x69/0x240
->     sk_alloc+0x30/0x460
->     inet_create+0x2ce/0xf80
->     __sock_create+0x25b/0x5c0
->     __sys_socket+0x119/0x1d0
->     __x64_sys_socket+0x72/0xd0
->     do_syscall_64+0xa1/0x5f0
->     entry_SYSCALL_64_after_hwframe+0x76/0x7e
->
-> Maintain balanced refcounts across sk lookup/release: (re-)set
-> SOCK_RCU_FREE on proto update to treat the socket (whether bound or
-> unbound) as not requiring a refcount increment on (a RCU protected) lookup.
->
-> Fixes: 0c48eefae712 ("sock_map: Lift socket state restriction for datagram sockets")
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> ---
-> Note: this issue is related to commit 67312adc96b5 ("bpf: reject unhashed
-> sockets in bpf_sk_assign").
-> ---
->  net/ipv4/udp_bpf.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
-> index ad57c4c9eaab..970327b59582 100644
-> --- a/net/ipv4/udp_bpf.c
-> +++ b/net/ipv4/udp_bpf.c
-> @@ -173,6 +173,9 @@ int udp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
->  	if (sk->sk_family == AF_INET6)
->  		udp_bpf_check_v6_needs_rebuild(psock->sk_proto);
->  
-> +	/* Treat all sockets as non-refcounted, regardless of binding state. */
-> +	sock_set_flag(sk, SOCK_RCU_FREE);
-> +
->  	sock_replace_proto(sk, &udp_bpf_prots[family]);
->  	return 0;
->  }
+Binbin Wu <binbin.wu@linux.intel.com> writes:
 
-There is a side effect that an unhashed (unbound) UDP socket can now be
-selected in sk_lookup with bpf_sk_assign. Though perhaps that's for the
-better because TC bpf_sk_assign doesn't reject non-refcounted UDP
-sockets either, so we would have both socket dispatch sites behave the
-same way.
+>
+> [...snip...]
+>
+>> +static inline bool kvm_mem_range_is_private(struct kvm *kvm, gfn_t start,
+>> +					    gfn_t end)
+>> +{
+>> +	return kvm_range_has_vm_memory_attributes(kvm, start, end,
+>> +						  KVM_MEMORY_ATTRIBUTE_PRIVATE,
+>> +						  KVM_MEMORY_ATTRIBUTE_PRIVATE);
+>>  }
+>
+> This function is added, but never used in this patch series.
+> Is it intended to be called only when CONFIG_KVM_VM_MEMORY_ATTRIBUTES is
+> enabled?
+>
 
-Also, with this patch, if we insert & remove an unhashed UDP socket
-into/from a sockmap, we end up with an unhashed non-refcounted UDP
-socket. Not entirely sure if that is actually a problem or not.
+Thank you for catching this! I think in some earlier revision this was
+meant to be used from the guest_memfd populate flow.
 
-Willem, what is your take on having unhashed non-refcoted UDP sockets?
+I think the version of kvm_gmem_range_is_private in this revision is
+good because it is symmetric. If conversion is enabled, call the gmem
+range-has-attributes function, and if conversion is disabled, use the VM
+range-has-attributes function.
+
+Sean, if no new revision is needed would you be able to drop
+kvm_mem_range_is_private() while you're pulling it in?
+
+>>
+>> [...snip...]
+>>
