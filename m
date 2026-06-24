@@ -1,133 +1,98 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7FE039A7EA;
-	Wed, 24 Jun 2026 08:39:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807C038C2A0;
+	Wed, 24 Jun 2026 08:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782290392; cv=none; b=opeA2mUfI8AQuQZZtx5XcYyhpgM5+B5goqUlx/Z1qcDHxvCFyF1PRSkppee5zH3F6ELG5skmVb1FI6SGe7o74Wye0JWlt8N/QDfjhT4joWN58/as/9YSOa+7fTM1K6JGvNFzGghtQeoQAaeLa30mqp2LDLVSAoO+RASA5DAou3A=
+	t=1782290421; cv=none; b=LUjp2NbWbz+TP6QjXZCPKsAmk4YOc04wTCzpOUFWPyk0fnqoWs7nSHA4jsAeOgWocXessPGrV2qxGJBXwm066z3HmWbFa1Qr92IgFQTAHf+SrfaTx0m6Y0gqq2cEBd1S876r7+0Ki1CnwVWrDS0ywEZ4i/iWF1om4Xv1x7A22fU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782290392; c=relaxed/simple;
-	bh=TYpxeAJhJUy+qGp+Re96RXbhqMVA/7vgXZSu9t/CHNA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Doro9Jeg389Cu7BnMzE0Mw5fjhmNVj2q3HkOGObh15o00Y0LF1sCTyM3LXVgPcCpkYugPxNw6bMS/AyZYa2x2BRuiyDUstFuM/XvYWDOpnnw7G09U549Xk7urAHn0UHTbcZYLlXXKUROLO5JhdWZIbhX0X3tt0aDnU5coKwE3/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=dZn99NvZ; arc=none smtp.client-ip=207.46.229.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1782290421; c=relaxed/simple;
+	bh=P39lXRa2jz3MWWU850wkJGkTqFPcGPr0sHxBte23N+k=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=l1HJjqcOuLeiULUO3Aio8mGAkzr8n7Da5vMdNOI1MocVZWXCWup1jO9zcvtKbdwsXXq0Yb/rqvrtdkEUWa3T2rxT6G7nelwXrAgieclAENvcOHIRK3WrRgLTEKY+fx0mWfK0HilNRvmcCSDvf3ZDTdSxA8ac9w6/1DbnoIsclq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=xmu7RoUE; arc=none smtp.client-ip=80.241.56.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="dZn99NvZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=y8rgl9L8Uxe+0HgTrR8766zBevKJrMS
-	YT4Xbc1Q9fgM=; b=dZn99NvZYoWZNgaBd1tswh398uQEDwMnH3bwf+eQb4Fh23z
-	EUF7xbZJVqIFOZ7PMgckkTGPXJxVngQE+zPdKs2b7f6h2C0KdTOBI3HeUTr1vIBc
-	87M1+0xDqIdVfs70CNjtYCok1Tg0HE5MsbNRNVJfjij+z/5sKdMHqqragR5s=
-Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web2 (Coremail) with SMTP id yQQGZQCXcJjFlztqpEWBAg--.48810S4;
-	Wed, 24 Jun 2026 16:39:34 +0800 (CST)
-From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Wed, 24 Jun 2026 16:39:34 +0800
-Subject: [PATCH bpf 2/2] selftests/bpf: Cover fastcall helper stack reads
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="xmu7RoUE"
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4glb3h3Qpyz9vHW;
+	Wed, 24 Jun 2026 10:40:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1782290416;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=P39lXRa2jz3MWWU850wkJGkTqFPcGPr0sHxBte23N+k=;
+	b=xmu7RoUEfspa3pQuaYW/w4no6pnLUSB8p9wUfW4w0C1l0umHYgWWvmiQQu+yxXYo4u9sKo
+	rtg8qjgD9eh5m757sWm0MLp4XavglYqGAoUVnL5cfCaPWpah3lms09u8q16oMxXeZg5fHb
+	RP7QJO4NIlcw9Hz5+GkZwrhoS7ddk9QYOXe5AcLb2GamZhS8BcCcbHy0Dq92mo+D0zADib
+	jb/552KEPSPlsql8Lcdc82JdAAcMqMEV009IiK+a6+8CELqc9nW4tfoKEc5ihq/0x3XLDU
+	CsXn0KyWZgwOx07MlKiMt6Cm5+zUx7FTYySzERFaRW7B9VpCn7H2EgjJg5DakA==
+Message-ID: <6fff0fe73bd8a3e45a96034a2251c7e0ca7de5c4.camel@mailbox.org>
+Subject: Re: [PATCH v2 1/2] cgroup/cpuset: Avoid unnecessary cpus & mems
+ update in cpuset_hotplug_update_tasks()
+From: Manuel Ebner <manuelebner@mailbox.org>
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>, Johannes
+ Weiner <hannes@cmpxchg.org>, Michal =?ISO-8859-1?Q?Koutn=FD?=
+ <mkoutny@suse.com>, Ridong Chen	 <ridong.chen@linux.dev>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan	 <skhan@linuxfoundation.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Wed, 24 Jun 2026 10:40:04 +0200
+In-Reply-To: <20260623230413.1984188-2-longman@redhat.com>
+References: <20260623230413.1984188-1-longman@redhat.com>
+	 <20260623230413.1984188-2-longman@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260624-f01-12-fastcall-helper-stack-read-v1-2-e0a86085ef77@mails.tsinghua.edu.cn>
-References: <20260624-f01-12-fastcall-helper-stack-read-v1-0-e0a86085ef77@mails.tsinghua.edu.cn>
-In-Reply-To: <20260624-f01-12-fastcall-helper-stack-read-v1-0-e0a86085ef77@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1782290375; l=1666;
- i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=TYpxeAJhJUy+qGp+Re96RXbhqMVA/7vgXZSu9t/CHNA=;
- b=5dgFoeo6Yk0+s8lfQwN5MM0qrpRJo5u8uH8QAQKmEl1ygCZVeyL9TRD/JhjRbH6Hqs0xhCDuw
- PJGSfSfENTdCLliGr3lRHGBLqEdwhg1swW93f0YpFtk/KCiKBZ3BMtN
-X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
- pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:yQQGZQCXcJjFlztqpEWBAg--.48810S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFW5GFW7XrWxGrWDWFWxZwb_yoW8Ww13pF
-	929F9Ikry8AFnruwsxCayDAFW5Xr4vvay5Ar4ftry5ur4rXr1UJr1kKFsrJrZ5G3WI9wn5
-	AFyava4Dur1UAFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9m1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
-	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
-	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
-	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
-	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xS
-	Y4AK67AK6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
-	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-	AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-	0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JjcIDcUUUUU=
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQEIA2o7idQ5jAAIs6
+X-MBO-RS-ID: b6772ffac49364ddedf
+X-MBO-RS-META: zpbdbadoti536qbhst7wsuo7h1on8h5b
 
-Add verifier_bpf_fastcall test where a spill/fill pair initializes a stack
-slot. bpf_csum_diff() later reads it through ARG_PTR_TO_MEM | MEM_RDONLY.
+On Tue, 2026-06-23 at 19:04 -0400, Waiman Long wrote:
+> As reported by sashiko [1], cpuset_hotplug_update_tasks() may perform
+> unnecessary task iteration and updating of tasks' CPU and node masks
+> when mems_allowed and/or cpus_allowed are not set in cpuset v2. It is
+> due to the fact that the temporary new_cpus and new_mems masks do not
+> inherit parent's effective_cpus/mems when they are empty which is the
+> expected behavior for cpuset v2 since commit 4ec22e9c5a90 ("cpuset:
+> Enable cpuset controller in default hierarchy").
+>=20
+> Fix that and avoid unnecessay work by enhancing
+> compute_effective_cpumask() to add the empty cpumask check
+> and inheriting the parent's versions if empty when in v2. A new
+> compute_effective_nodemask() helper is also added to perform similar
+> function for new effective_mems.
 
-The translated program must keep the spill and fill materialized. Otherwise
-the helper reads stack bytes that no longer match the verifier model.
+perform a similar function
+or
+perform similar functions
 
-Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
----
- .../selftests/bpf/progs/verifier_bpf_fastcall.c    | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+> [...]
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index aff86acea701..044ddbf66f8e 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1094,12 +1094,35 @@ void cpuset_update_tasks_cpumask(struct cpuset *c=
+s, struct
+> cpumask *new_cpus)
+> =C2=A0 * @cs: the cpuset the need to recompute the new effective_cpus mas=
+k
+> =C2=A0 * @parent: the parent cpuset
+> =C2=A0 *
+> + * For v2, the parent's effective_cpus is inherited if cpumask empty.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-index fb4fa465d67c6..aab92e69673d2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-@@ -500,6 +500,38 @@ __naked void bad_helper_write(void)
- 	: __clobber_all);
- }
- 
-+SEC("tc")
-+__arch_x86_64
-+__xlated("1: *(u64 *)(r10 -8) = r1")
-+__xlated("...")
-+__xlated("3: r0 = &(void __percpu *)(r0)")
-+__xlated("...")
-+__xlated("5: r1 = *(u64 *)(r10 -8)")
-+__success
-+__naked void bad_helper_read(void)
-+{
-+	asm volatile (
-+	"r1 = 1;"
-+	/* bpf_fastcall pattern with stack offset -8 */
-+	"*(u64 *)(r10 - 8) = r1;"
-+	"call %[bpf_get_smp_processor_id];"
-+	"r1 = *(u64 *)(r10 - 8);"
-+	/* bpf_csum_diff() reads fp[-8], so keep the spill materialized */
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 8;"
-+	"r3 = 0;"
-+	"r4 = 0;"
-+	"r5 = 0;"
-+	"call %[bpf_csum_diff];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_smp_processor_id),
-+	  __imm(bpf_csum_diff)
-+	: __clobber_all);
-+}
-+
- SEC("raw_tp")
- __arch_x86_64
- /* main, not patched */
++ * For v2, the parent's effective_cpus is inherited if cpumask is empty.
 
--- 
-2.34.1
-
+Thanks
+ Manuel
