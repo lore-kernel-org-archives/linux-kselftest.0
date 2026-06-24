@@ -1,233 +1,181 @@
-Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE2D370AF8
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 23:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782256723; cv=none; b=J6H4sl997P1fRg5dXShEMfXJhi48joPpZV+zgI7J296yMcaIbUXzRv4EDGdngrCf91WWnmE0UDDMmxpYQktbujyqaHsYOm78nY87rhs2BomJhhyoBrisQYg6iJHiPxwV+QKE75jLFEWGuxPYL+h7BJekG6hZ+gIYeCZ21/X/Yv0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782256723; c=relaxed/simple;
-	bh=5n/QXvZJMGPIUw6mar8KB9fVldpShIPxMrK3iYCi6nw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=sXPcIs6orbnyYjJ7PSRZwxHgok0vkcCYQ9VVasXJaEWL4DXEzq3v8KsP0Rusi6Pj3urAsiUmFEZV5Yc0mlu65UQCXTxig56F6xzrCfw9JRtnd8rbRHQW7XjfhyIJKewld2yqUKAgdoyQBO7vNwgC2QqzJYpVop60w/OV+73NHmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=IabuqfW4; arc=none smtp.client-ip=74.125.82.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B10173
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 00:09:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782259769; cv=pass; b=jkqIh/20PsqGxaBa0/EGJRYE+75uh7BV0/PvfDD8Im9eFalKKayFlB8mNrarMPY28y++wT90j3Pa5pSSvl+DLsZP7nL5Q2ltfnTTTDqVEKciT0rdszytVPiPwJkUbVMk8A+tESlgo8tHl/LHS6brfw6Y1s8vs0rRalE/8ptSQaE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782259769; c=relaxed/simple;
+	bh=rQfqkBaw/xkmyQgEiFlC2Kezzoeugio7gq7U/cPAgVE=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NPB1FMLW8v3gHs7goyyVcQ28Nv8DCrjR+4qU5FdNxYyOf94yV9FWYS5+3LTNl4/NQKVEmGlW6L094l/xa1omDqC+4Czc6pAQLt4isNDhI+eeTXK2M9Z+Jha+YLxIlQCRH+UHXT/TR8I7RxPiHYT0M9OWXVcy8iK5s7/q22e4qPU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=veUsiC1C; arc=pass smtp.client-ip=74.125.82.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="IabuqfW4"
-Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-137dd4cc208so633491c88.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 16:18:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="veUsiC1C"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-13981833e13so523688c88.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 17:09:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782259768; cv=none;
+        d=google.com; s=arc-20240605;
+        b=NXsZdWYLqi6kDqs7dopk26pU0iBxB4g/ffbT0lhhkpX+/wdIjEAV4F2tAQFyx8GWgC
+         k/TrErIk51KFLD9XvYbQ/aYfXsar0i7onKg1g4fBkhXkO5x69kfjKJd2PTZTstxjnLIh
+         fkTxxsIorffeLz7gncKmjz4UtksvVDGASAbeWsDGe4sgt74H4oCwzWcawolazYVaIirc
+         bRaPzeNMeXN1Pu1ro+uDgezOt32GPSdVFWxv+n0yDVAlsPjBxX3zmYTqgiX+YFW+coN5
+         FID0xlUwibHNURgCTNZVWjhQQ8UwQwZgEUXKJPCRlKkhHj3EEUzg61P2eXhHtVG8DYNL
+         2ibw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=LOf9tviNFkAeKYv+XoLw2pXVKZU7weWckYUjDtw8Ax8=;
+        fh=Dku3wb/iO+1PQCkzZw5wP23+UzjbAUpCwEYeDzojoL4=;
+        b=JUx92xFpjFQkvJSxxlSFDGbBUu5BR5tnZBLuHv0YwSlWv7zQtWELEQnkbgZdUqz75c
+         gViygwu8I0+QDrrhB0cvf2irB9+h/dlXR+GQqlsKkCfu77I9bUYegRFnCGGTVjf2/dsD
+         beeecasVpHsx2HIzmnxhAA/fD0veCmDjKC+AoCN5hznDw+UEWg1Zls8cHHFZ/53GXZhP
+         taz36cDMAmQW/JmQnp6R3ROctkk3movW93CqAs1lvJTzfdEbAYSspH57BsTQhnmfYJnF
+         jVSSI/JIpmAkZnh0tGkXRM2xIDSo6ZQz8CsRNMigPAN1AZ1beTAVZympaq7ueJUYRJFu
+         MJQw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782256721; x=1782861521; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TYJtv+c85w7+pZmkL6Nw0woUwIf8pgennhXzWDFmEds=;
-        b=IabuqfW4ABncEl0qceaPOc1Q+/LQ1E9sLvsD8nLnYWecJPACMgN29DMCBkT7VbvV+D
-         kgnq2QlZcLcHLIbImNoS9CjqNjPySD3nm/pOO6UWRDoXJ53jw/6wOvucKqWomAjpQePG
-         /VlmdxKZVkpmMM310nWZS4Bf2iyi8Q8lZezCazKb1RqSR5ICzUdAqj7Fg1h7b0+P9X+2
-         iYaADsj1Ks6d75kji52oB+KC0gp3XAZIBpkvUExl/954cO5VIIKTElZxxq4WJAxdAphJ
-         rdztnP5E3g6jiTIdJXkvxzF0/UKlXbSLIsoQoZ6EGquaPOyO0zynOLbAOP+PObHFxH1e
-         KT4w==
+        d=google.com; s=20251104; t=1782259768; x=1782864568; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LOf9tviNFkAeKYv+XoLw2pXVKZU7weWckYUjDtw8Ax8=;
+        b=veUsiC1C69EY+fW+phEEcbGGJR1QtHjfW0d5G1V91rsvTaqXDyiTLhXXS9KvXQDxcZ
+         oWZfD4aPELOrcjBl0S4WaAofqhRsh7rEZ5pQO3FCfS3ra6aku162Pf0qCkXR+xXopq1O
+         IQKeS/G6Yi915cxG1Q5coGJU9a+qvcY+2pF5iSXRniVzMo3wiX9bpO5siiQcu5hv10zG
+         IRNmijyT3ZTFPax8idXSgIdxbUpbhO10FVExLS2PxXXeKQXDrr99e5Cw7mM91YAKYLN/
+         5W7OT8L10Oa4D+7xzkF7MBH1sJvrlSEyXhHEhhSosvwz7SMH4/WDaSXCQlJ4lOg1Sf2i
+         XC/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782256721; x=1782861521;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TYJtv+c85w7+pZmkL6Nw0woUwIf8pgennhXzWDFmEds=;
-        b=oI3+GXQPp1tF4it5rCKhjM5nhoIHZ06qLbYsTELAIbEV+NSmRimhGrTkbcCxNnZ3zj
-         g9mVxIFjWQlWQ4SkOHXMnzkjXmiYy1sUWnsG5MiUxqXv5E/ha8CU9DY8j/IH9qOlrzrW
-         iSB6zppjjkkia45fZxrI2mRFhVE45PxnEdGZPZTspP0MVQyhkbWa5aA2su5pNWDy64ZL
-         it6W1xQP7ieQoxS8ZJO9MWniSpJEaNP4/ymTQzAIWd7sv3bYbIH1raK/U0Uo622pnwzs
-         K5sgoYDOlTvznsNmUlsiDIlipvulDyoEckfpazC4GIDjzZ/G/rz8CQUIvwwMtIB2WiGL
-         AfdA==
-X-Forwarded-Encrypted: i=1; AFNElJ/1v6jjSn+f7kdvb0r+uK9Ul8NWoqyAa68JtrnMdfumOsT81ql6MDfEN/ufMd+oNEJ5Z3qz/hqCg7AEdgbzYpY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfaX7v6a/VNLoxmVthERtS4+zkO458O8xX8aQyGFVzPFjZ4DRO
-	m4fnITAhB+8Zt3FipxtyYymfNa/+MO+oyHKwdQ1D/Z59OEIaTcyZCLPk7yLS8LVhKcc=
-X-Gm-Gg: AfdE7cmjtKGnOTrnD0qU5HXD8vUk+1xKHqBuONQsE5GLW74o33TWjDbFTmGrtpTzmYN
-	DxHStBg67IFRwu34UVOn7Az6RSoR9CFv2ZeRdE8c1Z51JxV0sw7hEqfFiiwpqRKEi3Tx/DwR3Wa
-	coKtBZKkzc2/hQwQfg83dS/t6IW2RJcuzRUZjKE16d/d5E9B43otfl9JIXLNTrC/+V/KsTtWTsJ
-	RK3qQLvugwN6Yv0mU9Url0E7Sq5T6kUQG1yc9rxftdA98lZwTyyADWdZ5xpfwoZu+V4X56IypVG
-	qHGlxF9nlN1t0LEFcACy1eFYs8PaBOF+zNe2nibvQV+a3iLeaMfAJUugIdbeYWeozUDWeRjGqSe
-	pF1lBIvHxj+5oT2HkNKFzdeC+0Bgt6uSSAxHgo0ktxLjnnXc9sbMbe7COiC04bDfVZje+Hy59Va
-	fJ8twx
-X-Received: by 2002:a05:7022:f9b:b0:138:5049:cb88 with SMTP id a92af1059eb24-139c3c1f687mr4353186c88.8.1782256721278;
-        Tue, 23 Jun 2026 16:18:41 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::2526])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1be4b24esm18814840eec.27.2026.06.23.16.18.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jun 2026 16:18:40 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782259768; x=1782864568;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LOf9tviNFkAeKYv+XoLw2pXVKZU7weWckYUjDtw8Ax8=;
+        b=oPGFB0MaV84iSSU9V4SxExk2gWk2WftrPR6VomxSjtvLyg8a2IXmJY2cwnYMTueoun
+         66TuIIfVzi/gcc3+Jd9DjWEEiRdw+auS3eO65SutMDwB9EWmDfldORaVYYzl+wGHH6HS
+         ncPmkiOkT4vxe89U7kT6fbfWXyxmTaogIC50I7R/yxckU8ukdfb7HNiy3jadMie/tvku
+         s8Q6+Mnruav7ynbBw+G6W5TQhp6NXYnOAbGKOwq+yCFWIWOma3bwXsh4MNaVvlstYiPu
+         bfs69AcA0tLbUx/M8l8BAngipRMzVRz3zr12zFogh6mHXNd6iEAaGGf/W3ES3VCtnnXi
+         VJew==
+X-Forwarded-Encrypted: i=1; AFNElJ+rmc733B6umgj0uSbP/IpUiOIV/YMQYuHpcISWKhTbOoGPKh+1Ds4cGT/d2ddipsoejXeJ+HzJdaLr1y7/etU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUHEnLHdk0tftuAefE2GhcZOtRmltRRtuUbxx9K5u/HNbEXA+B
+	Sc58/5mcpF2lzBF1A8JouTcPzlthDPIVVyfkJWJMGwjp2UMRzDng+/wTeyT05QF5PGxve7A6EHn
+	OfERwLgVMYXnJTjLrNJe50am4C5lUmDSQdCEn9Vzx
+X-Gm-Gg: AfdE7cm2DBXmK7qT7LePNRC8OKO4ExU5BARBVzqC46Jw/558SmfNjB7C+ghEDJ/UWQw
+	04u0oOKqgA/Wol5tjOZHzq+DcpwKRgsCjjfo6ZpRuScjwoDFbuIXbL3HSVhVxvwqndjMVSgWmwT
+	NCTo6bmqZsQhDaYCU/pCL66t0TcDnyUfTr3Z3FL3a1/ngJLmjzJeTynJlyE98yy0Pl7li/EKwRl
+	oRYsAJQPHxWmpDNaP+ZZUoJP4nTcp2ymfnWDs16DFOsrqFSeBHKRVeJbUQCmO2IMxBpWQ9JObDf
+	21zxV8/xpMFYxJBhzId9+3pUzeGZ/WNP2a5kLR0NHoJ0Xyy4GUyCiDP5BPU=
+X-Received: by 2002:a05:7022:45a4:b0:127:3f2a:af21 with SMTP id
+ a92af1059eb24-139c5cff378mr4117596c88.15.1782259766886; Tue, 23 Jun 2026
+ 17:09:26 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 23 Jun 2026 17:09:25 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 23 Jun 2026 17:09:25 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <ajnjTJdQKD1Kz3tf@google.com>
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-1-9d2959357853@google.com>
+ <aceb07e1-77bc-49b6-a932-5fd9b5a21727@linux.intel.com> <ajnjTJdQKD1Kz3tf@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 23 Jun 2026 19:18:38 -0400
-Message-Id: <DJGTA190PW77.1GCDO0XHPPZZX@etsalapatis.com>
-Subject: Re: [PATCH bpf v4] selftests/bpf: Cover partial copy of non-linear
- test_run output
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Sun Jian" <sun.jian.kdev@gmail.com>, <bpf@vger.kernel.org>
-Cc: <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <andrii@kernel.org>, <martin.lau@linux.dev>, <paul.chaignon@gmail.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260623014027.402820-1-sun.jian.kdev@gmail.com>
-In-Reply-To: <20260623014027.402820-1-sun.jian.kdev@gmail.com>
+MIME-Version: 1.0
+Date: Tue, 23 Jun 2026 17:09:25 -0700
+X-Gm-Features: AVVi8Cdk7fD1H5RbfHSz0rAk7YN_q01NbBdLx3di9F5nnt4X6vdgAPFTH7tGEuQ
+Message-ID: <CAEvNRgFU4H5FrjQvLMQm9DOQ9ujiHfFfsV6zVKNVi-rzC_zSxA@mail.gmail.com>
+Subject: Re: [PATCH v8 01/46] KVM: guest_memfd: Introduce per-gmem attributes,
+ use to guard user mappings
+To: Sean Christopherson <seanjc@google.com>, Binbin Wu <binbin.wu@linux.intel.com>
+Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org, 
+	chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com, 
+	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
+	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
+	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, tabba@google.com, 
+	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
+	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
+	aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon Jun 22, 2026 at 9:40 PM EDT, Sun Jian wrote:
-> prog_run_opts already verifies that BPF_PROG_TEST_RUN returns -ENOSPC
-> for a short data_out buffer while still reporting the full output size
-> through data_size_out.
->
-> Add the same coverage for non-linear test_run output. Use pass-through
-> TC and XDP programs with a 9000-byte packet, a 64-byte linear data area,
-> and a 100-byte data_out buffer. The expected output spans both the linear
-> data and the first fragment.
->
-> Verify that test_run returns -ENOSPC, reports the full packet length
-> through data_size_out, and copies the packet prefix into data_out for
-> both non-linear skb and XDP frags paths.
->
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+Sean Christopherson <seanjc@google.com> writes:
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> On Mon, Jun 22, 2026, Binbin Wu wrote:
+>> On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
+>>
+>> [...]
+>>
+>> >
+>> > +static u64 kvm_gmem_get_attributes(struct inode *inode, pgoff_t index)
+>> > +{
+>> > +	struct maple_tree *mt = &GMEM_I(inode)->attributes;
+>> > +	void *entry = mtree_load(mt, index);
+>> > +
+>> > +	return WARN_ON_ONCE(!entry) ? 0 : xa_to_value(entry);
+>>
+>> If the entry is unexpectedly missing, returning 0 means the attribute would
+>> be treated as shared.  And then in kvm_gmem_fault_user_mapping(), it would
+>> allow the userspace to fault in the folio.
+>>
+>> Should gmem deny such edge case?
+>
+> After several bugs this year where a WARN_ON_ONCE() fired, but was entirely
+> insufficient to prevent true badness, I'm definitely senstive to making the "bad"
+> behavior as harmless as possible.
+>
 
-> ---
->
-> v4:
-> - Send only the selftest patch; the fix patch has been applied to bpf/mas=
-ter.
-> - Initialize data_out buffers to avoid reading uninitialized stack memory=
- if
->   bpf_prog_test_run_opts() fails unexpectedly.
->
->  .../selftests/bpf/prog_tests/prog_run_opts.c  | 70 +++++++++++++++++++
->  .../selftests/bpf/progs/test_pkt_access.c     | 12 ++++
->  2 files changed, 82 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c b/too=
-ls/testing/selftests/bpf/prog_tests/prog_run_opts.c
-> index 01f1d1b6715a..beb6fa78fd94 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
-> @@ -4,6 +4,10 @@
-> =20
->  #include "test_pkt_access.skel.h"
-> =20
-> +#define NONLINEAR_PKT_LEN 9000
-> +#define NONLINEAR_LINEAR_DATA_LEN 64
-> +#define SHORT_OUT_LEN 100
-> +
->  static const __u32 duration;
-> =20
->  static void check_run_cnt(int prog_fd, __u64 run_cnt)
-> @@ -20,6 +24,69 @@ static void check_run_cnt(int prog_fd, __u64 run_cnt)
->  	      "incorrect number of repetitions, want %llu have %llu\n", run_cnt=
-, info.run_cnt);
->  }
-> =20
-> +static void init_pkt(__u8 *pkt, size_t len)
-> +{
-> +	size_t i;
-> +
-> +	for (i =3D 0; i < len; i++)
-> +		pkt[i] =3D i & 0xff;
-> +}
-> +
-> +static void test_skb_nonlinear_data_out_partial(struct test_pkt_access *=
-skel)
-> +{
-> +	LIBBPF_OPTS(bpf_test_run_opts, topts);
-> +	__u8 pkt[NONLINEAR_PKT_LEN];
-> +	__u8 out[SHORT_OUT_LEN] =3D {};
-> +	struct __sk_buff skb =3D {};
-> +	int prog_fd, err;
-> +
-> +	init_pkt(pkt, sizeof(pkt));
-> +
-> +	skb.data_end =3D NONLINEAR_LINEAR_DATA_LEN;
-> +
-> +	topts.data_in =3D pkt;
-> +	topts.data_size_in =3D sizeof(pkt);
-> +	topts.data_out =3D out;
-> +	topts.data_size_out =3D sizeof(out);
-> +	topts.ctx_in =3D &skb;
-> +	topts.ctx_size_in =3D sizeof(skb);
-> +
-> +	prog_fd =3D bpf_program__fd(skel->progs.tc_pass_prog);
-> +	err =3D bpf_prog_test_run_opts(prog_fd, &topts);
-> +
-> +	ASSERT_EQ(err, -ENOSPC, "skb_partial_err");
-> +	ASSERT_EQ(topts.data_size_out, sizeof(pkt), "skb_partial_size");
-> +	ASSERT_OK(memcmp(out, pkt, sizeof(out)), "skb_partial_data");
-> +}
-> +
-> +static void test_xdp_nonlinear_data_out_partial(struct test_pkt_access *=
-skel)
-> +{
-> +	LIBBPF_OPTS(bpf_test_run_opts, topts);
-> +	__u8 pkt[NONLINEAR_PKT_LEN];
-> +	__u8 out[SHORT_OUT_LEN] =3D {};
-> +	struct xdp_md ctx =3D {};
-> +	int prog_fd, err;
-> +
-> +	init_pkt(pkt, sizeof(pkt));
-> +
-> +	ctx.data =3D 0;
-> +	ctx.data_end =3D NONLINEAR_LINEAR_DATA_LEN;
-> +
-> +	topts.data_in =3D pkt;
-> +	topts.data_size_in =3D sizeof(pkt);
-> +	topts.data_out =3D out;
-> +	topts.data_size_out =3D sizeof(out);
-> +	topts.ctx_in =3D &ctx;
-> +	topts.ctx_size_in =3D sizeof(ctx);
-> +
-> +	prog_fd =3D bpf_program__fd(skel->progs.xdp_frags_pass_prog);
-> +	err =3D bpf_prog_test_run_opts(prog_fd, &topts);
-> +
-> +	ASSERT_EQ(err, -ENOSPC, "xdp_partial_err");
-> +	ASSERT_EQ(topts.data_size_out, sizeof(pkt), "xdp_partial_size");
-> +	ASSERT_OK(memcmp(out, pkt, sizeof(out)), "xdp_partial_data");
-> +}
-> +
->  void test_prog_run_opts(void)
->  {
->  	struct test_pkt_access *skel;
-> @@ -69,6 +136,9 @@ void test_prog_run_opts(void)
->  	run_cnt +=3D topts.repeat;
->  	check_run_cnt(prog_fd, run_cnt);
-> =20
-> +	test_skb_nonlinear_data_out_partial(skel);
-> +	test_xdp_nonlinear_data_out_partial(skel);
-> +
->  cleanup:
->  	if (skel)
->  		test_pkt_access__destroy(skel);
-> diff --git a/tools/testing/selftests/bpf/progs/test_pkt_access.c b/tools/=
-testing/selftests/bpf/progs/test_pkt_access.c
-> index bce7173152c6..cd284401eebd 100644
-> --- a/tools/testing/selftests/bpf/progs/test_pkt_access.c
-> +++ b/tools/testing/selftests/bpf/progs/test_pkt_access.c
-> @@ -150,3 +150,15 @@ int test_pkt_access(struct __sk_buff *skb)
-> =20
->  	return TC_ACT_UNSPEC;
->  }
-> +
-> +SEC("tc")
-> +int tc_pass_prog(struct __sk_buff *skb)
-> +{
-> +	return TC_ACT_OK;
-> +}
-> +
-> +SEC("xdp.frags")
-> +int xdp_frags_pass_prog(struct xdp_md *ctx)
-> +{
-> +	return XDP_PASS;
-> +}
+I guess both are indeed awkward.
 
+> However, in this case I think we're just hosed.  If KVM treats the memory as
+> private, KVM will incorrectly do prepare(), incorrectly allow populate(), and
+> will caused missed invalidations (though I suppose __kvm_gmem_set_attributes()
+> "only" lies to userspace in that case).
+>
+> That said, assuming SHARED is definitely odd for cases where guest_memfd *can't*
+> hold shared memory.  Ditto for assuming PRIVATE.  What if we instead fall back to
+> the "init" state, e.g.?
+>
+> static u64 kvm_gmem_get_attributes(struct inode *inode, pgoff_t index)
+> {
+> 	struct maple_tree *mt = &GMEM_I(inode)->attributes;
+> 	void *entry = mtree_load(mt, index);
+>
+> 	if (WARN_ON_ONCE(!entry)) {
+> 		bool shared = GMEM_I(inode)->flags & GUEST_MEMFD_FLAG_INIT_SHARED;
+>
+> 		return shared ? 0 : KVM_MEMORY_ATTRIBUTE_PRIVATE;
+
+I was wondering if we should not only return the init state but also set
+the init state, but that would involve performing a conversion to the
+init state... Too complicated for an edge case.
+
+> 	}
+>
+> 	return xa_to_value(entry);
+> }
+
+Thanks Binbin and Sean!
