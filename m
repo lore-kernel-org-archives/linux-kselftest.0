@@ -1,133 +1,113 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B22038A70B
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 06:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782284395; cv=pass; b=REm7m7Hs9AjMBBCb3Jl91Em7kLyNrBGp33YUeJ4Lipx4Nh5LRataocfugD1pkwNJlJ7b0CzbgZ02dgHR/rRUELs/xL1AbcHSIJKqkjgpKduHhXCFabxAsKLQNnsi6rf2IKXvQ0BHJ1nA7poOk+8AavRsS9TgaXr08M2VJK3Xa8g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782284395; c=relaxed/simple;
-	bh=44VgNbI0l91KEdDqjsLiBND2ODLDt3zLlCpOVTLuvwY=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=dtjvymgxE0tyJY3ox3MXfuqTU323XaPAb6csSvNJoa6fq/oKkF+inFqIKPoG/7xh+exNDZsHEDL0yL6ahfesnv1Xpokv5TwBRBH6u67NqjQKGf627mWDRwCI3CccP8MWg37VoFRu5ZjedLFNPtA1TKPTRuqKY6hcsbI+/fVS/Q8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RWkzwMjf; arc=pass smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6552730674B
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 07:02:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782284547; cv=none; b=tM2APsuWw6Pz1PDAkYVZ8C6OP9Gl/u1MxVrPA8S6QtlBz7rrj613isbkPsZyKnTjfuaIILRnSo91iT6klaUDGeQ2Corhdvt9kDagdxlDs9zts6x/lpBXdgLzdZ4A+LbsvjPqG84ELzmfOV0ApQgUb/OLmeqntgy5TxCOiFwlnZ0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782284547; c=relaxed/simple;
+	bh=zFabr8Fzw4Bl5uw0Qs8RmWGhEjYWS5vtb8gjejcS818=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=DaNlpn8Ys93DU40AYC2dSKtyEB8kopFtdeHKpfqEy0P6u47Xa5sqpw/aDomdnzwvABGVEr3X8P91cpnniuj9CyTND8J30UUhlXycsTTpI3W3pF6M4di2aF1ymqWZtKIts836rBZs/3nawtPKUgzHo2W8o8p4q+XfGoC6Y8oFUiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZnNZYxy1; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RWkzwMjf"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c07ea058c1aso106219566b.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2026 23:59:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782284392; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BoOAdq+LI8YRH6YNZtC/392vkrrovaO102NwRVBwC0mqv4Mhmh2SyGZIe3Pqhp3Jfd
-         VEW9yoQv6YMj2oopi5xGoncCRR7K0+ResNgBt/X/f/+97fw3zsZ9i7/SmrGJEVBo6qqU
-         up+plyHrBDD+rGdY2Y/M9WV5+dYOmfih+nxTUh15F8ZmUWJT0A5+8PFWkRR1sgI0JiD4
-         7q9t/aUi57wy+GYz3oHlK/5UWMoB3hIDuP32t/dDtcGkropFjKD2PmcmrJ/XmVYtz53G
-         qyHVpX6xeLdOHbOLusPWjVhhTTnOROcuZWMfYE8Ehn3zoGLBQ1VPJ97BwTnEgN/L4udd
-         bNwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=44VgNbI0l91KEdDqjsLiBND2ODLDt3zLlCpOVTLuvwY=;
-        fh=VZUSHYksyXKUJJiapMLuhPfxVpEdAR/o7X5W7n0YHZs=;
-        b=e2Yj1SoJGLaZIjYejEE0SafEdmg156QVesga/F7ZW3D91BsImGYWh+DuSiFj/jiQmI
-         vLZy0As5zUkEjlffaztjej6X2cLPn4byNlOayCUzkto0DcoAgCBqLdwIy7oQuaV6aWf2
-         RaezL4obOhZASPXAXnhqlsTDnNBHKzdwh4FOFC7OXYEfotIaneo1DxI+mmEUJxOhKItI
-         2FjK2lgVkduEuYJGCrTHZAVS8/PhIeh/nZ6t4HNlPOBeUz0CP5Vvg/eIGJ6r05X0yL7N
-         AmszrUv+Kyc2GYndqKhy4/8xVEHi0SIdRba/b0W+UEsSILISGU1DZENssjbXJ/pko7eu
-         4uMQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZnNZYxy1"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c8952346bb9so576786a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2026 00:02:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782284392; x=1782889192; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+        d=google.com; s=20251104; t=1782284545; x=1782889345; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=44VgNbI0l91KEdDqjsLiBND2ODLDt3zLlCpOVTLuvwY=;
-        b=RWkzwMjfSbspuGMitpVnC20hjUGIfGntEprkZdgd3gHDn7maXw5PsQ1Ipd4GBmTZaQ
-         /pFbvKA7j6KDUm69QpvhQUgw5ldVOrifq4dZu4/F9+DFo+DbFW8ido/7Wu6pEOVvyOqP
-         QdZ2ehXh4sJmNq8uLNTvOEvhHtqhFjU7dGYKQcrlvskthhX+SaoLtrXJpK8MOO2LTIHX
-         7RVV8I4pG3e7Orm6h8SlU+CW0o6GdqHDt73boWVk1Thrr5Nt2Dd/gevyqIGj3Z+dYLak
-         Mo/7l0QXamYBuwWEU4UKuQqX9EIQijapP/XVr5p0jGcjwl2FQEgOV1uZC2j3SkXjoiR5
-         k57A==
+        bh=X0xSm0DnCMbD3nKdTY9I70C6lo4EhCK54JQTp8qUETk=;
+        b=ZnNZYxy1T2DTSLB4nO+J7wfUy3BQOlQ5qhemPHvDc3iWe1tsEoUu+GAEitbhc3ozaE
+         PwnvigxGuxQ74rA0sHz8/C6rQHnEDFSnLvIlzK6lrD10Gw3E3F3n8H8MkWhBYrPiK/W0
+         Y6Hxi/IlZbPcNSx90fb2VMDI9wJ72+y6owThJn4y8aQ1jNc+2x6b8x8OLzGVM9604Zd7
+         PJEOeLLwWqlftTX8W5uM9XEcxl2C5A9tJAIsfcNuUXuyeMLWdGAc3+Jjjf+GP/7vyn1Q
+         o2IQeqarToEulNbVxAUXXtDGPi6km1hdQKoKFUgoGir8RiWuahuGVQWNstE5BUHZJnbj
+         MjfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782284392; x=1782889192;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=44VgNbI0l91KEdDqjsLiBND2ODLDt3zLlCpOVTLuvwY=;
-        b=dkcFgs/mD7QWMuMpyDA19VyoGpSlmiF+xCjLUWxfQZxSJUrw8GqC3Gc5RFoLOgNqps
-         GKkKZ/hA/dIRjukfJHrrYe9ajhf7B5nOavu/9hanL0RyGoOiKSI2FPPMiazRXzxgEZst
-         JOVI9G6cI5+aJYeJ+y7BR8WTJdIZP6KQzaYvdueB2Tr3WVZoTP0gYar6GBbvgxCul1ny
-         JfqUHwcwet3GY05FigTkPrKfTUC5RtGPxaL6mp717LOWPrhTXDXDHWs7QT8nYL3c3xxY
-         8mrQaJKb8d4DYtNh6/nrkK9eHRyX4wik9vAHLtSGbeA/PpqgnOnOw9e3GQ3pKNE75gSx
-         /eLQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/Q8a41NRrBKwuOECLEwfM8OeigFCY/sgCqEXK80tazx6IS2423oNSvokF+poLvn/rEwnDRa/CSDJCfhf45xWA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6DAy/UWSV+vGsHJAR1E+/GDw+dM2ErjcZ0caaZ3/E/OiDelt8
-	yRu/X7Lq2uYMF3Qd9ktjSd9taNwNfhkCDG1wnU7TZpTNg56n30X3Jg9753IOaGNnxE7qq/q9goC
-	lVGSW4RvoW7KEJMlLEh9oWA8nWej5cBI=
-X-Gm-Gg: AfdE7cmZHQ9/FYNPbvmaavDNplVZhihiiA90hUalu1CNA152FiTvO4ERhvsDoT7Oe3X
-	WZdotgEYg3EYTSfa8U2IrY3tUcXdQNxog8mkz9IFoUohR5xtFHCxeGUXKcWlBoCTnEslMPkWu1H
-	ghcIsTWls6jNlXaixIj9U8hpGF1Rp9fxdbl91hNhgk0uzL/0CCu97VUVIEnZDLcCZWKoqxYroOS
-	uZcQDcCHDZopmtQWlE+9pEtUz4tRK0/N4xHaBJne9Izn1IPpYeFOwXSvz5FbTvHRiJckN33SLtN
-	EXAWawmF
-X-Received: by 2002:a17:907:a807:b0:bea:f5ec:e70d with SMTP id
- a640c23a62f3a-c119cc73499mr81252166b.10.1782284392161; Tue, 23 Jun 2026
- 23:59:52 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782284545; x=1782889345;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X0xSm0DnCMbD3nKdTY9I70C6lo4EhCK54JQTp8qUETk=;
+        b=QA4IKkoKWTyeSU8MrxHFTazx516j3UKmVjdBv1AE4uHTZkC7+zyy6S1S8xCPobvucm
+         2sn6MnaUR7WqIbHDZ1KT+RWiUxZyv5C5mwIKxuCIVHbIH3/4efIFYIOicSwKUoZumePy
+         XBBK4DHLGchIHGr4JtJse7jE6uehU58rVosapR3dA7EZ5K5LuaUEWX32kr2bz8QZ4LRa
+         b/e7hbmVd8rskcpAWqws0Gvu8xC/Lz49NB3oxYbrNPgYGHl8LqQLxrxBkxHYpX0BkxNk
+         LiO8F9LyvlqchAR+GJg/zl2awFXu8+iCkxLNxV9LH8D5BaHIEuHSRI5p02N8/v1pH/wY
+         Xt8w==
+X-Forwarded-Encrypted: i=1; AHgh+RrzFVVrC6Yp3vulWzjteoxfc2NoIhr0R5Zd/jngwg37p+97nUSnDHdqKTzAuiJD2qOCg7J6XhAEosIpwwemctM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxME7CBbfwFPQOsKESM6eIfo/29PP0WcyCY1VbV9WQxqoCifVGw
+	3qFTvBqzwPRo1cQDF9RGf+cA5K8ROSNyBznjP1WJJsayzvrun13fFPCOOXL8VBrFy7g4kH24Nlp
+	CHw==
+X-Received: from pjyl11.prod.google.com ([2002:a17:90a:ec0b:b0:37c:6982:b9df])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5241:b0:36d:8f51:fe29
+ with SMTP id 98e67ed59e1d1-37de4288fd4mr2263478a91.17.1782284545404; Wed, 24
+ Jun 2026 00:02:25 -0700 (PDT)
+Date: Wed, 24 Jun 2026 07:02:23 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-From: Ujjal Roy <royujjal@gmail.com>
-Date: Wed, 24 Jun 2026 12:29:36 +0530
-X-Gm-Features: AVVi8CcjqT2HGCtdY0b3TsVb5_1CyqP5ethEgfbUu0VypPx0SY_tnqJhPcFQITk
-Message-ID: <CAE2MWknz4X_gcNo6jkR87Lg8F0zfubkOc4Ujr57CS3aBMWrjEA@mail.gmail.com>
-Subject: Please backport bridge multicast exponential field encoding fix
- series to stable kernels
-To: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, 
-	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>, Andy Roulin <aroulin@nvidia.com>, 
-	Yong Wang <yongwang@nvidia.com>, Petr Machata <petrm@nvidia.com>, stable@vger.kernel.org, 
-	Greg KH <greg@kroah.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Ujjal Roy <ujjal@alumnux.com>, bridge@lists.linux.dev, 
-	Kernel <netdev@vger.kernel.org>, Kernel <linux-kernel@vger.kernel.org>, 
-	linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.rc0.799.gd6f94ed593-goog
+Message-ID: <20260624070223.1533167-1-wakel@google.com>
+Subject: [PATCH] selftests/futex: Dynamically skip unsupported tests
+From: Wake Liu <wakel@google.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Darren Hart <dvhart@infradead.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Wake Liu <wakel@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Greg,
+Some new futex tests rely on kernel features that may not be supported
+on all configurations (e.g., FUTEX2_NUMA or PR_FUTEX_HASH).
+Currently, these tests fail with EINVAL when the features are missing.
 
-Please consider backporting the following bridge multicast fix series
-to all applicable stable kernels:
+This patch adds dynamic skip logic to:
+1. futex_priv_hash: Skip if PR_FUTEX_HASH returns ENOSYS or EINVAL.
+2. futex_numa_mpol: Skip if futex2 or FUTEX2_NUMA returns ENOSYS or EINVAL.
 
-726fa7da2d8c ("ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplify
-calculation")
-12cfb4ecc471 ("ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()")
-95bfd196f0dc ("ipv4: igmp: encode multicast exponential fields")
-e51560f4220a ("ipv6: mld: encode multicast exponential fields")
-529dbe762de0 ("selftests: net: bridge: add MRC and QQIC field encoding tests")
+This allows the tests to pass (as SKIPPED) on kernels without support,
+while preserving coverage on configurations that do support them.
 
-This series was merged via: db314398f618 ("net: bridge: mcast: support
-exponential field encoding")
+Signed-off-by: Wake Liu <wakel@google.com>
+---
+ tools/testing/selftests/futex/functional/futex_numa_mpol.c | 2 ++
+ tools/testing/selftests/futex/functional/futex_priv_hash.c | 2 ++
+ 2 files changed, 4 insertions(+)
 
-History: The multicast stack currently supports decoding of IGMPv3 and
-MLDv2 exponential timer field encodings, but lacks the corresponding
-encoding logic when generating multicast query packets. As a result,
-query intervals and response codes exceeding the linear encoding range
-can be transmitted incorrectly. This can cause multicast queriers and
-listeners to interpret different timing values, resulting in protocol
-interoperability issues, membership timeouts, and premature multicast
-group expiration.
+diff --git a/tools/testing/selftests/futex/functional/futex_numa_mpol.c b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+index 78c0f7a59e17..d215acf88120 100644
+--- a/tools/testing/selftests/futex/functional/futex_numa_mpol.c
++++ b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+@@ -103,6 +103,8 @@ static void __test_futex(void *futex_ptr, int err_value, unsigned int futex_flag
+ 			break;
+ 		}
+ 		if (ret < 0) {
++			if (errno == ENOSYS || (errno == EINVAL && (futex_flags & FUTEX2_NUMA)))
++				ksft_exit_skip("futex2 or FUTEX2_NUMA not supported by kernel\n");
+ 			ksft_exit_fail_msg("Failed futex2_wake(%d, 0x%x): %m\n",
+ 					   to_wake, futex_flags);
+ 		}
+diff --git a/tools/testing/selftests/futex/functional/futex_priv_hash.c b/tools/testing/selftests/futex/functional/futex_priv_hash.c
+index e8079d7c65e8..27c3ea5ff3ed 100644
+--- a/tools/testing/selftests/futex/functional/futex_priv_hash.c
++++ b/tools/testing/selftests/futex/functional/futex_priv_hash.c
+@@ -145,6 +145,8 @@ TEST(priv_hash)
+ 	}
+ 	/* First thread, expect to be 0, not yet initialized */
+ 	ret = futex_hash_slots_get();
++	if (ret < 0 && errno == EINVAL)
++		ksft_exit_skip("PR_FUTEX_HASH not supported by kernel\n");
+ 	if (ret != 0)
+ 		ksft_exit_fail_msg("futex_hash_slots_get() failed: %d, %m\n", ret);
+ 
+-- 
+2.55.0.rc0.799.gd6f94ed593-goog
 
-Testing: The series adds the missing encoding support for both IGMPv3
-and MLDv2 and includes selftests that validate the behavior.
-I backported the series to v6.6.123.2 and verified the accompanying
-selftests. The selftests fail on the unpatched kernel and pass after
-applying the series, demonstrating both the bug and the effectiveness
-of the fix.
-
-Given that this is a protocol correctness issue affecting multicast
-query generation, please consider backporting the complete series to
-all applicable stable kernels.
-
-Thanks,
-Ujjal
