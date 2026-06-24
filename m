@@ -1,98 +1,115 @@
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C0A2ED870;
-	Wed, 24 Jun 2026 08:27:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33DE1389E1A;
+	Wed, 24 Jun 2026 08:39:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782289653; cv=none; b=Nzz28LF5wPGXtxuLkUW3QIVbPjkYLJIJRsTACAnAeHDjUBXmtt5UtmZ1x69EK2KPX7wSvnS8PzSMwsll3g6JiY19ufjSjruETgXKpnEPYW+HIJ9jD3/6ymCTxiTqgefQlTOHlTRILRiG/7gD7ChoZ3DWSqTn+csri1wHhE59znE=
+	t=1782290386; cv=none; b=GA3hLLmHQl7F7rQAjfbKZdEbag+YLIaXD3d0sMiu9OLJ88i4SyLa80e5fqFM5/j2kLykGmIR2Q63J+cLC1/css+cySH0uRJhAp0rgJ4waqALYWvvcylE3C0CziVzXi1cB5JxUfv6TXm8d75mfodbpfjty5HFBH7j23lFrrUd/V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782289653; c=relaxed/simple;
-	bh=fcL1wZTo5Iof1j41G+xiL2ZRRsKY5K5Tq8hfKX8GXYM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oawiAsUmZfRuGVrRc1JWL5QC9wIL75/pQsfle0oM/lFDqnL+Y+9kMwcgM+joMFBVHU9HS4tWMlYdSFcIrcXX6PmXdVP+Bn0P/pOIfCsICHKDZtRXZbeZky3xA3nHgJEdZo5ixyr4WODhn1ftuQXSqsvvBxyc8AL8/vJZ9UgOrq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=di8FgiRD; arc=none smtp.client-ip=80.241.56.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+	s=arc-20240116; t=1782290386; c=relaxed/simple;
+	bh=mMPadTpfViVxiqjJjC9KZKyMiSaBZktmUqUDWcl9xy8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=l3wCyt+J38Zht2zE4z7tQb6zxLeKKGZ+5Ydrg5C2I07aeqtcbYpFpkc/2i0flff+Rjytkl7FVy+19HW0l83NjKLW5R4Zx+SJmYoIvXifCK8TtSAb6wMwFqCnjQNQqbu6exvD3Xw4X0oE8b9Y8I0RH/IFWGiseO7UOOvTtyfUWdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=CfLrgoNj; arc=none smtp.client-ip=4.193.249.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="di8FgiRD"
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4glZmx21Znz9vZs;
-	Wed, 24 Jun 2026 10:27:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1782289649;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Wt808dCcXLJ2Yhhh/U8YWYGEfMzn/5sYiBK4jiGFSPM=;
-	b=di8FgiRDXzL39oMBw8wq+L3oGi0OlvGkhIjA2pXYXovtV9cSlmHMy/EoHan2Czcxn5CERl
-	BS5q9RLYOVyINz1AFUrns8hzEPHm4bUmaqt46EU5v0pHabRKcxVAcj9xT5q4Fnbn9IPL6O
-	4JEl6MGQDIf87Huc27i/OIz6hn88GvPgjE9vMaveYpOh9aahaRxSw2j7OwczQJ42r5kHrE
-	Pd1FkCI9RcVgSSefKCwBQSxAeIVFGuoydPrTPnuAKxrHOshwsWbKvhzYRRk7rz1clote4M
-	khNsM46O+CBSB5bgydjQVoyrW0wm/KLraqab/PgKHXLuDS60DyTc5hJOjoqKwQ==
-Message-ID: <d11beed83e8a9e18ca52c462991271b5bc291900.camel@mailbox.org>
-Subject: Re: [PATCH v2 2/2] cgroup/cpuset: Rebind/migrate mm only for
- threadgroup leader in cpuset_update_tasks_nodemask()
-From: Manuel Ebner <manuelebner@mailbox.org>
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>, Johannes
- Weiner <hannes@cmpxchg.org>, Michal =?ISO-8859-1?Q?Koutn=FD?=
- <mkoutny@suse.com>, Ridong Chen	 <ridong.chen@linux.dev>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan	 <skhan@linuxfoundation.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Wed, 24 Jun 2026 10:27:22 +0200
-In-Reply-To: <20260623230413.1984188-3-longman@redhat.com>
-References: <20260623230413.1984188-1-longman@redhat.com>
-	 <20260623230413.1984188-3-longman@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="CfLrgoNj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=PYpL6vwEBNdaYyq/TESmvHxh/8chgl8
+	3fT5RJbbrcfo=; b=CfLrgoNjK92Zxyfxy2lxEHJHoXyUL3c5deqsFeGLj7r6dBM
+	1axUao0rC4f3SU75MggBkg/AeYN/ASfMnm5j9YnGPG8aAJrxs2gsZRSrZy1a3fCl
+	hpqYNAhDDyx3ywVazdbIuUTn2fy4mB50DCFxjVvlmOVJAz4mbKVlMMxw86h4=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web2 (Coremail) with SMTP id yQQGZQCXcJjFlztqpEWBAg--.48810S3;
+	Wed, 24 Jun 2026 16:39:34 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Date: Wed, 24 Jun 2026 16:39:33 +0800
+Subject: [PATCH bpf 1/2] bpf: Keep fastcall spills for helper stack reads
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MBO-RS-ID: 012d370dc0172a5f126
-X-MBO-RS-META: mbrus14tea3ofbnpndompgkku3npmpqr
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260624-f01-12-fastcall-helper-stack-read-v1-1-e0a86085ef77@mails.tsinghua.edu.cn>
+References: <20260624-f01-12-fastcall-helper-stack-read-v1-0-e0a86085ef77@mails.tsinghua.edu.cn>
+In-Reply-To: <20260624-f01-12-fastcall-helper-stack-read-v1-0-e0a86085ef77@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782290375; l=1604;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=mMPadTpfViVxiqjJjC9KZKyMiSaBZktmUqUDWcl9xy8=;
+ b=vlZLku9e267Z3/EBGm5kGjfLsZE86iAs6E6kw+ROl2XbV0YOL6J33MrHWDWyyK+hWckCSvyfE
+ oic/b18UNicClJxbgVGe1iNOppi67qFEwBsNqyZ665/ZXY4p06VDq/X
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:yQQGZQCXcJjFlztqpEWBAg--.48810S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw1kAFWrArWUXw1DZFyxZrb_yoW8WF1Upr
+	97uFy2gr4kKa4vka12yr4xZa45Wrs5A3yxGryYyayYvrnxW34jgrWYgF4jyFyYyFZYvw1I
+	yF40vwsIyayUuaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9m1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
+	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
+	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
+	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xS
+	Y4AK67AK6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
+	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+	AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
+	0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JjcIDcUUUUU=
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgAIA2o7ifQ+0gAAsJ
 
-Hi
+The fastcall spill/fill rewrite is only sound while the stack slots used by
+the pattern are not accessed outside the pattern. Direct stack loads and
+stores already call check_fastcall_stack_contract() to enforce this.
 
-On Tue, 2026-06-23 at 19:04 -0400, Waiman Long wrote:
-> [...]
-> Also add a paragraph in cgroup-v2.rst under cpuset.mems that the
-> threadgroup leader is the memory owner of that threadgroup. Therefore
-> the non-leading threads shouldn't be in other cgroups whose "cpuset.mems"
-> doesn't fully overlap that of the group leader.
+Helper and kfunc memory-argument checks can validate PTR_TO_STACK reads
+through check_stack_range_initialized() without applying the same contract.
+When such a read overlaps a fastcall spill slot,
+bpf_remove_fastcall_spills_fills() can still remove the spill/fill pair.
+It can then shrink the subprogram stack depth even though a helper or kfunc
+reads that stack address.
 
-This sentence is long and complex, split into two if possible. I couldn't
-figure out how to do so.
+Apply check_fastcall_stack_contract() from check_stack_range_initialized()
+after the concrete stack range is known. Zero-sized accesses do not read or
+write memory, so leave the fastcall optimization unchanged for those.
 
-> [...]
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -2527,6 +2527,13 @@ Cpuset Interface Files
-> =C2=A0	a need to change "cpuset.mems" with active tasks, it shouldn't
-> =C2=A0	be done frequently.
-> =C2=A0
-> +	For a multithreaded process, the threadgroup leader is
-> +	considered the owner of the group's memory. Memory policy
-> +	rebinding and migration will only happen with respect to the
-> +	threadgroup leader. To avoid unexpected result, non-leading
+Fixes: 5b5f51bff1b66 ("bpf: no_caller_saved_registers attribute for helper calls")
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+---
+ kernel/bpf/verifier.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-/result/results/
-or=20
-To avoid an unexpected result,=20
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ff9b1f68ceca4..d77332eeab359 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6873,6 +6873,10 @@ static int check_stack_range_initialized(
+ 		max_off = reg->smax_value + off;
+ 	}
+ 
++	if (access_size)
++		check_fastcall_stack_contract(env, state, env->insn_idx,
++					      min_off);
++
+ 	if (meta && meta->raw_mode) {
+ 		/* Ensure we won't be overwriting dynptrs when simulating byte
+ 		 * by byte access in check_helper_call using meta.access_size.
 
-> +	threads shouldn't be put into another cgroup whose "cpuset.mems"
-> +	doesn't fully overlap that of the threadgroup leader.
+-- 
+2.34.1
 
-maybe
-/threadgroup/threadgroups/
-
-
-Thanks
- Manuel
