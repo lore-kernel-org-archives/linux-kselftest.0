@@ -1,248 +1,130 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E332E0B71
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 20:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFCEB330328
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 20:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782419601; cv=none; b=kIl0azjQEp6lsQrmJxx8fU23fmn1NgaIgTOzxFPwlyje4s4lqbC66xQ8JXu6UzjOL0+ycds4ecFX0Xt+A68XcCYcO+P3LLJL8z6LiYuza4b24GUQyG/u1W9krjdeTUdv9ixd45Nh6lsibG2p42WegHh8QoDXFKoTUxXNun45lyI=
+	t=1782419678; cv=none; b=uHXk3YQ5FAYlOT0NUoLQtIViEanKNc1yR7Tu2l2h8GPCW/kUI0oPhj8uaRzvjYlyBGPSWizumZftKYuoCeqSdO+7yQqIY2Nu5hz1VHPf/4LjMM2V8UCThgksI5HkyhN63NE3aqG8nNCpvp2UwWhgid6lFj7FfzFhUew5jnbqZjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782419601; c=relaxed/simple;
-	bh=Ib7zT38GwZXZa3psJDnOOJi5CQ6/V0vu2dtXG6oowj8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fPx7CsUCNi8EDIBKLtp2RjhA6MwxxKUG0vH0rHdTcsH3UnTUfQoFrjvfSGNckZLAK0bm/EYgUdxKXnbt2Kwf6JbzyC1UjBMDEkUec9LLJHrpR+L8O43D3pch33saI368/nvKj0KpoxDNlMEu0VHwGMAbYdSQnyMfg6JrCMfW13Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DvjeuUzg; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=dxnTHald; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782419678; c=relaxed/simple;
+	bh=jvefDCupa63B7z6ewc8630KRIlgmUwgjGlbSSSzOvhw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HoxXhchXpuPnM/SeKRihkgRpaOslrpSm2AjnOh0IfrZep7J0WTASmByIgqZlE0l1a3UGudebBeh5aXZncp6Gn2ESMozdhGxVo7w7M0laSyuShgeE1bOnW0S7YsB8Ly2HO6eGqe3iI7C6jt0sZr6+VOCYP2JM/HdZmLva5ZDqKr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q2ZBfBby; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DvjeuUzg";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="dxnTHald"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782419599;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ifHti/d727ookmtUS07phWJpYrrkEhsutg001BDn0q8=;
-	b=DvjeuUzg6pSdUSnOYp8eBP+T2+oMhH8ryPFmnxv/TBhzEYJ32tl1/ia3bMXVVwNEgGGXt+
-	QcUq+Fp/qcYvE/Z7N/jHr1gMxzWbshT4pF3yohGSJzQ84L4asdkmIby45eX9yx8WphzLbZ
-	7vfFZTHRRbqpKg8WY4ce+kytS0xl8fY=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-225-RMYnOlglOSONwgnPFVacsw-1; Thu, 25 Jun 2026 16:33:17 -0400
-X-MC-Unique: RMYnOlglOSONwgnPFVacsw-1
-X-Mimecast-MFC-AGG-ID: RMYnOlglOSONwgnPFVacsw_1782419597
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-8e05aa49693so6416126d6.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 13:33:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q2ZBfBby"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-845b6f34873so135994b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 13:34:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782419597; x=1783024397; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ifHti/d727ookmtUS07phWJpYrrkEhsutg001BDn0q8=;
-        b=dxnTHaldAwRH3zE3IZVm4iRMDvGWeZjwmOYRSjMO3m+2xjKz7/kNCqUBnma0wj7QrH
-         ISqSVJiinDeG7pxIUpYPxzTJvZqFaN4iDyXG9C+mHNuMW1pv05u7jbH34RFLg/aTOTKy
-         fsS7rXgCdkiWYlDZqB1NFqQWPWAT0oZNR8gH2N6rMFGVpZcD7srVERVRizq0uu79eSCL
-         DUC/1648w9qp+SJQsGV10dxgD/f9OxYnE60S9thloz4D+f9ocKQrWomvsHv+FfyhXLQe
-         /qPFyrYiwiO3TYSMrNk9FjmPagEhDz89KlKTWmZnokIFoJom/PSFc9xDHHmQ4itWmP+X
-         Epmg==
+        d=gmail.com; s=20251104; t=1782419676; x=1783024476; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=j4cziRsnOXU8udnzmTxz4VvnRIsHkxiDHnSiCu2+4Iw=;
+        b=Q2ZBfBbyP1DHdbTQM2KQsipfzQ3jCbx1FckHKtvFCFs57R0u3DHVOIj5rlKswpUKmE
+         EmQLfUQL9VmzKwe/zpd54DG2jlkBz2bUkLzaRxLuqGPYx6ebHNmcKrvKL0PdDIh+TIMG
+         5tfDyX76CJj8BUrvt6EX/+aLIjukAity0jpM1XCrN8fq1wdVlKW0+LYaCiwrliHyPJTc
+         kP+yXMUNB6RlHPfTjGK0c0hnPKk21QWyxKwTdG47jKFw3BLkdejTmo16QG5c0bd/flFa
+         xKW42k5cUxaPU2YzQE1kPGg3J/srKpHeQNU3zcZjhV7xyDynnGcn0hC9YiI/Hr1zSF2q
+         TXTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782419597; x=1783024397;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ifHti/d727ookmtUS07phWJpYrrkEhsutg001BDn0q8=;
-        b=FnT7GLeQNZzsOIbKbPxX+8tQyt1RsZSE9HN4Klt/4DDN7U0iSs8JIlRHWUz3O5mOO6
-         ajeUWvP+pzEfqjzPjUKoOoZPDpUVA/B/GqkRj+pJ1XfOOqrrTfgkljhOaOKXMBLtLR4e
-         0iTtmaeEc5rPfTiSgZdXo9URH8XSkfbsAhVN/akwgrKu0ltQDRI1DFCA0+5QUAiuRhGB
-         D86wAI9TU4SM4qgfXHdJl9czKs4K5/9QaVxL2ATQnwIV0KidCN9kVM0SouxU0ORgA2zQ
-         nhmzt/ktWX2zjNt4nhyEY7RW8RqqG5V4nztckqt0QG5sgJ5R5O+WtkjY6lpNzjWEDB5R
-         /Q9A==
-X-Forwarded-Encrypted: i=1; AHgh+RoQ0LPDsJNO5RPaRddcHI7GBA5yxDTLR1wZFpSf96Fyy9J5eaE63lhAv8wWIKwEhhbCrW8q9go53RjP3f8CfyM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy53z9KV8S55vG5o2qaUFynZKij7HxjktsynjxA4iSSiG+ywMTh
-	DvwIxxtz0wIHWHQtA4UnUf6CuNZZugLZyWtW9HUvHEXunXsIU7C2E5NpPvsyBAE1hJplQ1cFFGA
-	0SQK8CFC2/W66WSOuUo4CQNavhq9zyl642L3oHhT+Zj3K00s5srsMzrUPqg4cBz3SBFlLlA==
-X-Gm-Gg: AfdE7clcMoEWzRh3RK7WiOZTzYefssX9GLHe9lUwuasmvZfJxNOqwgAJqWWrm0F+Xmd
-	aUtSJ4oB6pzeP9IzFR2rJazdccLvniREcEpkMMagogOiHK3MLBlXN8ZZe6DMlHMZziuei5QX8S/
-	sKVwo+exheW19BqfeEXtaiDXufeEZH8foiWUeCq9Yl32hBFOv9sTsUAllsy37MXl7vIYZDqOFSO
-	ah2WFw4mDUZvkhghup/NDnNBbkBzun4YURfQ5rNQAEYh9r13EwsQ2OSsENrz7+wk9gkUsaX199I
-	/Q6uu9foxv5Y1ythI/wK50ya3CUiqwgfdlCcMxelxXWQy3z7+WWcSZgzD7lUsJjfZeozKGpcQTB
-	Ex8sySfEWckNlpIFczcxJ+4kOqTz1YxOG3WIy7aDZlrq4JzGd
-X-Received: by 2002:a05:6214:230f:b0:8ce:ba04:7bc2 with SMTP id 6a1803df08f44-8e6d6e61085mr68947946d6.38.1782419596811;
-        Thu, 25 Jun 2026 13:33:16 -0700 (PDT)
-X-Received: by 2002:a05:6214:230f:b0:8ce:ba04:7bc2 with SMTP id 6a1803df08f44-8e6d6e61085mr68946986d6.38.1782419596122;
-        Thu, 25 Jun 2026 13:33:16 -0700 (PDT)
-Received: from oak.redhat.com (c-73-148-124-98.hsd1.va.comcast.net. [73.148.124.98])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8df7f5ff5e6sm188635156d6.12.2026.06.25.13.33.14
+        d=1e100.net; s=20251104; t=1782419676; x=1783024476;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j4cziRsnOXU8udnzmTxz4VvnRIsHkxiDHnSiCu2+4Iw=;
+        b=WQCxyQaFnuABPLg5QlohheJZ77xrF+P2ZHvWErvDjCchOIYIhH5xeUEB7VR1WNg4mI
+         P4a9FS4igSTpt4OO1HAjro3/M78IYS8kLjKjbiJg//GXe1D1BbktsQoRdiIlf7qCBS3q
+         VvkgC78iE+1d89mr1UzPiKUGRCiENeHMlYxznLFDwxZZFLX/oVhk/eUMbfqMaHlXf55B
+         ZAVO0SbMcQuGm0gzQLSqq7TXfUluVV0feTQlqEIDqZxKzzkGaQrgM0QauT+4YYQg3sge
+         67X4ThWa6w5tmtw5guJMOO9+ClnNSDi3BVvwtzprnpRdkTEnMQQaU3J54pMRDmXqWR/6
+         NS5w==
+X-Forwarded-Encrypted: i=1; AHgh+RprnmRGztbc6HzCtucQBhmz/7+MhbFF+MC7cJ43JE9lqFOptAbUoXLLbgY22Cnc0ENo1JhxhEJPJ37Jffz4esQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBXxjfQA4cYRlc0YxIIsyTr0Nk5+VDhMld2AZ4yChDgO6RICIs
+	8JowPaU+0b82u9Z6L4cv4tIZepsRBnJy+x1t/+599SdrRW5yNP0xaUb+1jb0UkXJ4hk=
+X-Gm-Gg: AfdE7cnG4EY+stmHqVZQd3DS6vAereGgdlafm3d545YSzt0Cs9+nxFwfNOUO87lfY9p
+	rLIlUBA67OS1A2X/cwQw1AwRp6BUOpJcaGe490PbeBxJTTgnlfHrOAQoDfsQWzWAaVj4CWaDlqY
+	+aMKl71QGj8ZvLXmM93dhsVIbmUg55hvmTNbvkAd6AEdc9hL1bxTEy0c+58jhmRRMLLGqFt1Mit
+	79ElS476YGSXTTedqlXiRcU3kCBCt4RgnIw0kKBDwYavS4bPBrOSjuacHLQ4IiF+02iwJWfD+EV
+	xm+UQF6We8XbqnSPgjYCehpRg7Ks7B7GwKRxudECCCWotuDYSeK2fONPHTU/mjmRSA08yi85358
+	2fO2hRFqNKT4PyWdAfdlL0Z//5m9Vjk2ERLiFrQxa8kBXWQWWzZfxbS+fPwMciQHJ82itF+DtgD
+	/GBn8yTuOpUfugkJzCjd2xAFSq3eYu2UdcdGvmMIRykA==
+X-Received: by 2002:a05:6a00:b81:b0:842:7f81:8085 with SMTP id d2e1a72fcca58-845b39969a1mr5178575b3a.8.1782419676054;
+        Thu, 25 Jun 2026 13:34:36 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845ba19f72bsm1607019b3a.20.2026.06.25.13.34.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 13:33:15 -0700 (PDT)
-From: Joe Simmons-Talbott <joest@redhat.com>
-To: Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Joe Simmons-Talbott <joest@redhat.com>,
-	cui.tao@linux.dev,
-	Li Wang <li.wang@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Nhat Pham <nphamcs@gmail.com>,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>,
-	Sebastian Chlad <sebastianchlad@gmail.com>,
-	cgroups@vger.kernel.org (open list:CONTROL GROUP (CGROUP)),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH RESEND v4] selftests/cgroup: Adjust cpu test duration based on HZ
-Date: Thu, 25 Jun 2026 16:33:04 -0400
-Message-ID: <20260625203307.1114538-1-joest@redhat.com>
-X-Mailer: git-send-email 2.54.0
+        Thu, 25 Jun 2026 13:34:35 -0700 (PDT)
+Message-ID: <f1f1c8875b8ee2122aea8febafdc15d79898e6d2.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Reject MEM_ALLOC BTF accesses past
+ object bounds
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
+	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
+ <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+ 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Thu, 25 Jun 2026 13:34:24 -0700
+In-Reply-To: <703a2cbfeb17ae707fa4a003b795c5326cc0abb8.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
+	 <703a2cbfeb17ae707fa4a003b795c5326cc0abb8.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-For lower HZ values a quota of 1000us is much lower than the amount
-of microseconds per tick which makes the tests test_cpucg_max and
-test_cpugc_max_nested fail. Increase the test duration to accommodate
-for lower HZ values.
+On Tue, 2026-06-23 at 17:34 +0000, Yiyang Chen wrote:
+> BTF struct walks relax the struct-size check for accesses through a
+> trailing flexible array. That is valid for ordinary BTF type walking, but
+> PTR_TO_BTF_ID | MEM_ALLOC values point to objects allocated with the stat=
+ic
+> BTF type size.
+>=20
+> When walking a MEM_ALLOC object, reject the access before applying the
+> flexible-array relaxation if the access range extends past the struct siz=
+e.
+> This keeps verifier-approved BTF accesses within the bytes provided by th=
+e
+> allocation kfunc.
+>=20
+> Fixes: 958cf2e273f0 ("bpf: Introduce bpf_obj_new")
+> Fixes: 36d8bdf75a93 ("bpf: Add alloc/xchg/direct_access support for local=
+ percpu kptr")
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+> ---
 
-Link: https://lore.kernel.org/lkml/20260624160358.430354-1-joest@redhat.com/
-Signed-off-by: Joe Simmons-Talbott <joest@redhat.com>
----
-CC: cui.tao@linux.dev
-v3 -> v4:
-- Use usec for adjusting test duration for better accuracy.
-- Remove underscore from static function
-- Use 1000 as the fallback value for hz since it's the default.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-v2 -> v3:
-- Instead of changing cpu.max quota extend the test duration based on
-  the HZ value.
-- don't call pclose() if popen() fails.
-- check return value of fscanf().
+>  kernel/bpf/btf.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 15ae7c43f..3e68af9c1 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -7069,7 +7069,7 @@ enum bpf_struct_walk_result {
+>  static int btf_struct_walk(struct bpf_verifier_log *log, const struct bt=
+f *btf,
+>  			   const struct btf_type *t, int off, int size,
+>  			   u32 *next_btf_id, enum bpf_type_flag *flag,
+> -			   const char **field_name)
+> +			   const char **field_name, bool is_alloc)
 
-v1 -> v2:
-- Try checking /proc/config.gz to get the actual kernel HZ value and
-  fallback to 1000 if the value cannot be determined.
+Nit: 'walk_flex_arrays' would be a better name.
 
- .../cgroup/lib/include/cgroup_util.h          |  1 +
- tools/testing/selftests/cgroup/test_cpu.c     | 47 ++++++++++++++++---
- 2 files changed, 42 insertions(+), 6 deletions(-)
+>  {
+>  	u32 i, moff, mtrue_end, msize =3D 0, total_nelems =3D 0;
+>  	const struct btf_type *mtype, *elem_type =3D NULL;
 
-diff --git a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-index febc1723d090..8ebb2b4d4ec0 100644
---- a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-+++ b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-@@ -8,6 +8,7 @@
- 
- #define MB(x) (x << 20)
- 
-+#define NSEC_PER_USEC	1000L
- #define USEC_PER_SEC	1000000L
- #define NSEC_PER_SEC	1000000000L
- 
-diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
-index 7a40d76b9548..1f280c1db68a 100644
---- a/tools/testing/selftests/cgroup/test_cpu.c
-+++ b/tools/testing/selftests/cgroup/test_cpu.c
-@@ -639,6 +639,31 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
- 	return run_cpucg_nested_weight_test(root, false);
- }
- 
-+/*
-+ * Best effort attempt to get the kernel's HZ value from the config.
-+ * Return the HZ value if found otherwise return 1000 (the default) to
-+ * indicate failure.
-+ */
-+static long
-+get_config_hz(void)
-+{
-+	long hz = 1000;
-+	FILE *f;
-+	char cmd[256] = "zcat /proc/config.gz 2>/dev/null | grep '^CONFIG_HZ='";
-+
-+	f = popen(cmd, "r");
-+
-+	if (!f)
-+		return hz;
-+
-+	if (fscanf(f, "CONFIG_HZ=%ld", &hz) == EOF)
-+		goto out;
-+
-+out:
-+	pclose(f);
-+	return hz;
-+}
-+
- /*
-  * This test creates a cgroup with some maximum value within a period, and
-  * verifies that a process in the cgroup is not overscheduled.
-@@ -646,15 +671,20 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
- static int test_cpucg_max(const char *root)
- {
- 	int ret = KSFT_FAIL;
-+	long hz = get_config_hz();
- 	long quota_usec = 1000;
- 	long default_period_usec = 100000; /* cpu.max's default period */
- 	long duration_seconds = 1;
- 
--	long duration_usec = duration_seconds * USEC_PER_SEC;
-+	long duration_usec, duration_sec, duration_nsec;
- 	long usage_usec, n_periods, remainder_usec, expected_usage_usec;
- 	char *cpucg;
- 	char quota_buf[32];
- 
-+	duration_usec = duration_seconds * USEC_PER_SEC * 1000 / hz;
-+	duration_sec = duration_usec / USEC_PER_SEC;
-+	duration_nsec = duration_usec % USEC_PER_SEC * NSEC_PER_USEC;
-+
- 	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
- 
- 	cpucg = cg_name(root, "cpucg_test");
-@@ -670,8 +700,8 @@ static int test_cpucg_max(const char *root)
- 	struct cpu_hog_func_param param = {
- 		.nprocs = 1,
- 		.ts = {
--			.tv_sec = duration_seconds,
--			.tv_nsec = 0,
-+			.tv_sec = duration_sec,
-+			.tv_nsec = duration_nsec,
- 		},
- 		.clock_type = CPU_HOG_CLOCK_WALL,
- 	};
-@@ -710,15 +740,20 @@ static int test_cpucg_max(const char *root)
- static int test_cpucg_max_nested(const char *root)
- {
- 	int ret = KSFT_FAIL;
-+	long hz = get_config_hz();
- 	long quota_usec = 1000;
- 	long default_period_usec = 100000; /* cpu.max's default period */
- 	long duration_seconds = 1;
- 
--	long duration_usec = duration_seconds * USEC_PER_SEC;
-+	long duration_usec, duration_sec, duration_nsec;
- 	long usage_usec, n_periods, remainder_usec, expected_usage_usec;
- 	char *parent, *child;
- 	char quota_buf[32];
- 
-+	duration_usec = duration_seconds * USEC_PER_SEC * 1000 / hz;
-+	duration_sec = duration_usec / USEC_PER_SEC;
-+	duration_nsec = duration_usec % USEC_PER_SEC * NSEC_PER_USEC;
-+
- 	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
- 
- 	parent = cg_name(root, "cpucg_parent");
-@@ -741,8 +776,8 @@ static int test_cpucg_max_nested(const char *root)
- 	struct cpu_hog_func_param param = {
- 		.nprocs = 1,
- 		.ts = {
--			.tv_sec = duration_seconds,
--			.tv_nsec = 0,
-+			.tv_sec = duration_sec,
-+			.tv_nsec = duration_nsec,
- 		},
- 		.clock_type = CPU_HOG_CLOCK_WALL,
- 	};
--- 
-2.54.0
-
+[...]
