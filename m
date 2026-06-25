@@ -1,196 +1,230 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432C738655C;
-	Thu, 25 Jun 2026 08:50:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782377458; cv=none; b=i+hQh2sMLoVecR7E+p4jCBmPqTE7/h24Y/FpnLBfJUlKSTYOwxOubtLvu6aVaDCGV1C6HolNR6+DSnejhDLZCto3WAQPS66JArTzS8H/vw+uOg/hg/XWvRmDNOVnbr0l01TcN3cVaNlcs0HoVk9B9XK6XbmoaE89YQ/VM3PRqmQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782377458; c=relaxed/simple;
-	bh=YWjLajG3jUSlfnNHIHqvQH7npOW2FoDppQt4WSwGrdY=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=Ii4TPveAThp/mBEEnrjwWday4CbsfP3lGU1lA8mmjCmnepViVq0eQ7IimSYV4RuepPWMuDpJqyaF/LQJ5AHtj6QpreUMKD/wzhDwtWPridFBWVGgGwka/5hPosgKaGfiAxyAq7IlB8AHAN8IJ0WhJRj5ygHXBqOIagzdWzw2ekM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mit2xoCJ; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338413845D9
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 08:58:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782377923; cv=pass; b=Ya0wcb0gvcaqdRDxx8DzuOtRnHL9KmurpnCkKXg0nmpSJOOw5CJhMWq/+wQIBeobIZpxiw7vMRL+A4IbeeKmRUk3ZvUpVEk7pCEyLjH1xjiIMXJn3dj92Z3AEjVceWqB/HwVOQkyxwzJvqz0KCJXfkKpQ8gTHntgXMesesdfFsY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782377923; c=relaxed/simple;
+	bh=nIj/KPVXWgrY4C2B+8ZBQ4iBoKspX6TI4aa5GobFD10=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dYk0JjvbbZxlQOqKyj/OQtmrZRXrEeH3J49Fg40vOFQXbM5K11giAUR3QhdaGXy96InIkHHKmGrdjhta4ttdYNwty8tyxLTJb4gXx34e3cZCMAC8u84ADdwB0LByPoMyUTd97e2EaCdwpgDXFsJezwgSCfWj/IYp8mOkN7ycvRI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Zx3LaQha; arc=pass smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mit2xoCJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD931F00A3A;
-	Thu, 25 Jun 2026 08:50:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782377457;
-	bh=2OPM2QsERty8ncczG0J+oScu2vAmciLsKe1D4GkLBlw=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=Mit2xoCJBPEjBNx0LAYKxG3Cj3APh7/SkQ5Ko2v0NtcvZNcFPqpYoQiAvNwsLX1tJ
-	 U4Jn66pXvAalZ5osrav9nyxvrhb19PCq5cEWHWKt1VkLezWyVh+RKC7P0R6Xx5KY5X
-	 hdlsN6mDxbF8Ice+x5WO7sgORA5SEFX5gzDrGBBiOyqplfaogfRLMOcZwwWWRdenwH
-	 q4iq+BpK5UyGIAfO5gUXEUnGUqDVDAEZUAjiTrJX/W8ahqugi9vBKJUe/wYnsWtXr0
-	 vfbIK6qTPpk9/tJY05vcccFsN1HiQMHZzc0uy0VckYBNpOOd3YJzAa9OXd0BQdxyPT
-	 2U/RCre0IQP4g==
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Zx3LaQha"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-51765331535so156871cf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 01:58:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782377921; cv=none;
+        d=google.com; s=arc-20260327;
+        b=WlAdLXsnoyGmC/7tNMLac8gJzoo3l7dpLORGIJCut7XDq4OW2sdmK2WKIi6/uKGulF
+         wz6k5Om/5lvnzUexRsg8sxZVz9EQB4Hcdthl9OFz0X8K8yjYXpaDUmNsbXZQde6OTkxq
+         D+qwWJb4inU6znsoUPJcJ1+ohrxYLoh60y10hli1oL2NTbjlEqvjmxpB4BSfva5AW/yz
+         UvvFz3yPiBtuZWVSK6wOPmunQ3axsit17Db7AVyRW+Iw4mZe0eAbB/1/LIYz/MKOFD5C
+         jD7rISMSVhtTZRESXiDjBhqRxfF7Yj65P2mA8DZxGfb2H/M+lYmtkCtcxTFd9nh7/s16
+         vv5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=WlALM42viJ6jSZuQC8WWXMFlP84OGAnUizlvgeGuSiM=;
+        fh=EPVnWsQLTodDyxQlOb5McR49HI0HfqpvaI7f6WPwCE4=;
+        b=VHkoh526hbJbLXEi0eN+Mt/Sr3ArkiQVqWGUxmIugVImyT9rZeLUOGPpUKKp8t3Edw
+         n0lmgDt00g6D6j0An2niVF3U+yViiKeeq8DmElVtuuJajtlgcruzVFVOY9Jb9gc4dvpx
+         IkkGsvyjN5yR9aQVRGrKR7RHSLaRDvf/0K9dv4YNFawUThcRjLBCANpRXEdnjHaf0+wc
+         IZBJiobucEumkt3QdrmuVOCBb1jBttSWECqQKX30cDxgA1kBVEUtEcv4p/pxR7Qyit9m
+         BPh0IqZRmWSwvRkPI4ijAj+y9eYwE1Rox80b5eG+ywkZXRIQavwLtGyEpk3SIBSeqWUO
+         UIjQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782377921; x=1782982721; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WlALM42viJ6jSZuQC8WWXMFlP84OGAnUizlvgeGuSiM=;
+        b=Zx3LaQhagq9VYxuuf7uz5Me6IFi1uVku8YYoOCnJc6YQCvBEp0NKmOYA64WHyYjOkQ
+         8Az63MHNlciL8o7s1xy+OpW4GQnnCoOkvsbLJOq3bdL2v/2GxCvjdhOh25ucn2kwHS/s
+         yLK84wBDAoJjkofQ0Eh143/TPAhQdixGpQseyTIJiOimhxFauGmiHTXJ5XJuYTQzQqE9
+         jHf3pL60m/nUprNMJyt61y0XO/GaucEetdd0FQig1jKbKoe2oXqd8OokY2M6mEy6kl2D
+         GjEpNOa64HFjL+w5At/7FbSMySX2naZR5uFkbBgnf1vPhgOs4nvrjYmsWSkfXZvhsydw
+         rdpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782377921; x=1782982721;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=WlALM42viJ6jSZuQC8WWXMFlP84OGAnUizlvgeGuSiM=;
+        b=Zd/4nfrohqHKOqMzqI1d+fqqplL0VVb5ork3p+tZNWgRGISJa2yQ7Mooxfo86SJQX5
+         RnAB5qHOqliHJ0NDo1q5wjLwjc7mjGo1Bh7r4lV3QP5JV76zVniTLKnNvm5CATuPXgHg
+         +2LOJJ+OY+3gmyNy0c4lXzjn0i9RvOrJpO8V8Q40qTXkoFr19WpcsNXiRnDMrthMMpdq
+         0LTqmxk4Drd+30QqGKvZG9cntogIupy9LPa7i7mZE4HTaxMXyJ0C/Y20A4Fol9060s9G
+         uAdRk4dyhDE5r09RGgtW1kEGE1OX8LfRc0vIxitEU8gfKy6YazuGZnf05xBHdZsYXBwS
+         TKnA==
+X-Forwarded-Encrypted: i=1; AFNElJ9SLCA5savOZOYJEsyayhJ7YbVro2HH+e+TAO2ulqn18oo/D+uU0P/WT0uhAueFoJ2oRZDM404gTYKoLcELRQk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3DHXH0L6lLHcDBFuCksi87PQHlYpyUadGQHYhSE/MWbb0mfLu
+	imL5P45Z+fmatABq7hhjG1UhgsQKxR8FTnvD1GlvIfZ4CVeZn6a9Rgk88zrdAcAJGxQZkFQcJZx
+	pB25dzmCbz6556mh2tXV5XjKlppaz2axZv7LjgdbO
+X-Gm-Gg: AfdE7cnwyQmmLU24vIvec7bKxMLzSVs/8dcSmkXf5aIb86ZMtbcymxtfwxdWP1wiYgx
+	D0AjLInAvkRUqQ4XFYQXkDj0vFj+cBrXXFycH2ES4/Zt63Q3uWAWBputxsO4AqINBRy/VesCjEW
+	xaxrarCvzWr0MROUP5vnaaEVnvfSg73cp3usdDcLJuQSm8bVEdzCk20mHmfIrqxBwK8K+Muyv00
+	0UU0qPXTt4UskHYnnAf6BMqx79cyhKLp1VmKT1Yqk+GJj8ZocKCAipaYr3igbwqJMVyfL64ZA==
+X-Received: by 2002:a05:622a:4d99:b0:516:4f62:85ec with SMTP id
+ d75a77b69052e-51a7097cdf7mr6284681cf.17.1782377920655; Thu, 25 Jun 2026
+ 01:58:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/2] fs: support $ORIGIN in ELF interpreter paths
-From: Christian Brauner <brauner@kernel.org>
-To: John Ericson <mail@johnericson.me>
-Cc: Farid Zakaria <farid.m.zakaria@gmail.com>, Jan Kara <jack@suse.cz>, 
- Kees Cook <kees@kernel.org>, Christian Brauner <brauner@kernel.org>, 
- Al Viro <viro@zeniv.linux.org.uk>, shuah@kernel.org, 
- linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
- linux-mm <linux-mm@kvack.org>, 
- linux-kselftest <linux-kselftest@vger.kernel.org>, 
- LKML <linux-kernel@vger.kernel.org>
-In-Reply-To: <24420045-a6eb-4999-ab19-1e344eaba8a4@app.fastmail.com>
-References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
- <sfv7zc6jboy2oxv7zuyofysas4ncbzenwsuzveiyduisfr6i7q@mx23er7uxdbg>
- <CACCo2jkDuwy5w_yhX8833m+s-rY736pk8xtKjxg3_y_7BCOHeg@mail.gmail.com>
- <24420045-a6eb-4999-ab19-1e344eaba8a4@app.fastmail.com>
-Date: Thu, 25 Jun 2026 10:50:52 +0200
-Message-Id: <20260625-atomkraftgegner-hunger-kursbuch-b452ff2becab@brauner>
-X-Mailer: b4 0.16-dev-d9d01
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6562; i=brauner@kernel.org;
- h=from:subject:message-id; bh=YWjLajG3jUSlfnNHIHqvQH7npOW2FoDppQt4WSwGrdY=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTZvH4nE7tbujU0/s/WsOh44XiL7RvXiPQUNz/+taiyQ
- fEY95kFHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABN5JsDI0NwWeqnwedgvs+Nf
- NPVn5cp2q1b41m/SMf/y3mmPSf0FU4b/iYxZEdvvRB0RLM7ZqLxfvfPybl4Oya6D7IEKjqvPfdj
- ODwA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com> <20260618-gmem-inplace-conversion-v8-41-9d2959357853@google.com>
+In-Reply-To: <20260618-gmem-inplace-conversion-v8-41-9d2959357853@google.com>
+From: Fuad Tabba <tabba@google.com>
+Date: Thu, 25 Jun 2026 09:58:00 +0100
+X-Gm-Features: AVVi8CfUfIb60mScgDza3EFRj37-Gqen4zYG94Wyqg-j1BEdnIuc7f71TPLwtRQ
+Message-ID: <CA+EHjTyOX8Ewj1pc0-OJr9So5=wOQPUUvJeQEC1a7=0OODEAHA@mail.gmail.com>
+Subject: Re: [PATCH v8 41/46] KVM: selftests: Provide function to look up
+ guest_memfd details from gpa
+To: ackerleytng@google.com
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
+	yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
+	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 2026-06-22 17:08:55-04:00, John Ericson wrote:
-> Hi, I am another Nix developer, and have participated in some LKML
-> discussions in the (recent and distant) past, and thought I should weigh
-> in here too.
-> 
-> On Mon, Jun 22, 2026, at 1:15 PM, Farid Zakaria wrote:
-> 
-> > On Mon, Jun 22, 2026 at 3:40 AM Jan Kara <jack@suse.cz> wrote:
-> >
-> > Having put forward the patch, I'm clearly biased toward thinking this
-> > support should exist in the kernel.
-> > If I had to think to strengthen my argument would be that the kernel
-> > should not be imposing how the interpreter is found on userland.
-> > Finding the interpreter relative to the binary would be useful for
-> > package deployment scenarios similar to app-bundles beyond systems
-> > like Nix -- which is the originating reason why $ORIGIN exists in the
-> > dynamic linker.
-> 
-> Yes, the idea of making "relocatable software" is not a new one, and
-> indeed it is why `$ORIGIN` is supported in the RPATH etc. in the first
-> place.
-> 
-> Most of the programming model for writing relocatable software is fixed
-> at this point. For example, /proc/self/exe made it much easier to look
-> up arbitrary stuff relevant to the current executable. It is just some
-> initial entry point stuff (the ELF interpreter, and shebangs) which is a
-> glaring exception. Those should support `$ORIGIN` too. There is no good
-> technical justification (that I can think of) for some but not all of
-> these supporting `$ORIGIN` --- either it makes sense everywhere, or it
-> makes sense nowhere.
-> 
-> (I suspect the only reason it didn't happen was pure inertia/Conway's
-> law --- easier for whoever was excited about `$ORIGIN` to change the
-> glibc loader than the kernel.)
-> 
-> > To me, the gap is that prior to systems like Nix, the idea of wanting
-> > your dynamic linker to be part of your app bundle was not necessary
-> > but Nix models the dependency chain down to the loader. Such
-> > functionality would be even more correct for these other bundled
-> > solutions as well, making them portable across userspace glibc
-> > versions for instance.
-> 
-> Yes, exactly. Traditionally people thought "eh `/lib/ld-linux.so.*`
-> doesn't change too much", and decided relocatable software that
-> nonetheless hard-coded that absolute path to an unknown system-provided
-> ELF interpreter was good enough. (Or if they weren't good enough, they
-> went with static linking, but that imposes other costs.)
-> 
-> Now there do exist purely-user-space work-arounds, like
-> https://github.com/Mic92/wrap-buddy, but they are quite complex, and
-> involve various patching trickery that is likely to scare a lot of
-> security analysis tools. A kernel-based solution that allows clean
-> declarative expression of intent with `$ORIGIN` is much more elegant.
-> 
-> > > In particular the
-> 
-> I think it is good to see what Conda does as documented in
-> <https://docs.conda.io/projects/conda-build/en/stable/resources/make-relocatable.html>
-> and consider why relying on namespaces vs good old-fashioned relocatable
-> isn't good enough for them either.
-> 
-> (I don't doubt that Conda would find this approach more robust than
-> their sedding tricks, and prefer to use it where possible.)
-> 
-> The short answer is while all of us in the build system space love
-> sandboxing during the build, we don't want that to lead to *requiring*
-> run time sandboxing of the built artifacts. For example, we can
-> certainly arrange sandboxing so `/lib/ld-linux.so.*` is the one that
-> some executable expects now, but every time that executable is run, it
-> *must* be run in a root filesystem where `/lib/ld-linux.so.*` is the
-> loader it expects.
-> 
-> If you have multiple programs that (for whatever reasons) expect
-> multiple different loaders, all spawning one another, it would
-> potentially incur quite the development cost to ensure that they all do
-> the proper unsharing to make everything work.
-> 
-> Relocatability recognizes that whether or not namespaces exist, in an
-> "open world" scenario where we don't know how the software we are
-> writing will be combined with other software for deployment downstream
-> in different ways, it is easiest to adopt an idiom where different
-> things can be placed at different absolute paths, at the user's
-> discretion, and so conflicts are always avoidable.
-> 
-> > > Anyway I'm pretty sure Christian will have more educated answer than me but
-> 
-> Waiting makes sense, I am curious too what he will have to say.
+On Fri, 19 Jun 2026 at 01:32, Ackerley Tng via B4 Relay
+<devnull+ackerleytng.google.com@kernel.org> wrote:
+>
+> From: Ackerley Tng <ackerleytng@google.com>
+>
+> Introduce a new helper, kvm_gpa_to_guest_memfd(), to find the
+> guest_memfd-related details of a memory region that contains a given guest
+> physical address (GPA).
+>
+> The function returns the file descriptor for the memfd, the offset into
+> the file that corresponds to the GPA, and the number of bytes remaining
+> in the region from that GPA.
+>
+> kvm_gpa_to_guest_memfd() was factored out from vm_guest_mem_fallocate();
+> refactor vm_guest_mem_fallocate() to use the new helper.
+>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Co-developed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-The arguments I have heard from various people so far are:
+Reviewed-by: Fuad Tabba <tabba@google.com>
 
-(1) Userspace would be able to clone a random chroot to /woot and run a
-    binary from it without having to set up a complicated sandbox
-    effectively making dynamically linked binaries more like static
-    binaries in a sense.
+Cheers,
+/fuad
 
-(2) Quote:
-    "If you debootstrap/dnf a chroot to some location in your
-    home dir and try to run a binary from it, that it tries to load the
-    libraries from your /usr is a pretty unintuitive and not at all
-    useful behavior."
-
-(3) Quote:
-    "[Various remote execution things run in locked down containers that
-    disable userns, which makes the sandbox impossible and hence our
-    builds wouldn't work there."
-
-I'm discounting "Oh, userspace already allows this so why not the
-kernel.". I think that's generally a bad argument. Kernel and userspace
-aren't really alike in that regard.
-
-The userspace ORIGIN concept is guarded behind AT_SECURE. The kernel has
-to enforce the same rule. That means the loader now depends on the type
-of binary. I think this is a rather serious issue.
-
-First, it creates confusion in userspace what loader is used. Second, it
-means anything that any build/chroot that uses AT_SECURE binaries now
-has to use the sandboxing solution anyway or risk that some binaries use
-the system loader and others the chroot loader.
-
-Ignoring AT_SECURE, LSMs likely will need a say in whether that ORIGIN
-thing gets honored or not introducing yet another vector where this can
-be overriden or ignored.
-
-Also, we change long-standing kernel behavior which will be very
-surprising for any userspace that might implicitly rely on the fact that
-the system loader is used. So even if we were to do something like this
-it would very likely have to be configurable in some way.
-
-This makes this all ripe for malicious loader injection attacks. And we
-need to consider this possibility.
-
-So I'm not enthusiastic about this. I want this to be consistent.
-
+> ---
+>  tools/testing/selftests/kvm/include/kvm_util.h |  3 +++
+>  tools/testing/selftests/kvm/lib/kvm_util.c     | 37 ++++++++++++++++----------
+>  2 files changed, 26 insertions(+), 14 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index 79ab64ac8b869..3a6b1fa7f26ef 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -428,6 +428,9 @@ static inline void vm_enable_cap(struct kvm_vm *vm, u32 cap, u64 arg0)
+>         vm_ioctl(vm, KVM_ENABLE_CAP, &enable_cap);
+>  }
+>
+> +int kvm_gpa_to_guest_memfd(struct kvm_vm *vm, gpa_t gpa, off_t *fd_offset,
+> +                          size_t *nr_bytes);
+> +
+>  /*
+>   * KVM_SET_MEMORY_ATTRIBUTES{,2} overwrites _all_ attributes.  These
+>   * flows need significant enhancements to support multiple attributes.
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 524ef97d634bf..0b2256ea65ff9 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1305,27 +1305,20 @@ void vm_guest_mem_fallocate(struct kvm_vm *vm, u64 base, u64 size,
+>                             bool punch_hole)
+>  {
+>         const int mode = FALLOC_FL_KEEP_SIZE | (punch_hole ? FALLOC_FL_PUNCH_HOLE : 0);
+> -       struct userspace_mem_region *region;
+>         u64 end = base + size;
+> -       gpa_t gpa, len;
+>         off_t fd_offset;
+> -       int ret;
+> +       int fd, ret;
+> +       size_t len;
+> +       gpa_t gpa;
+>
+>         for (gpa = base; gpa < end; gpa += len) {
+> -               u64 offset;
+> -
+> -               region = userspace_mem_region_find(vm, gpa, gpa);
+> -               TEST_ASSERT(region && region->region.flags & KVM_MEM_GUEST_MEMFD,
+> -                           "Private memory region not found for GPA 0x%lx", gpa);
+> +               fd = kvm_gpa_to_guest_memfd(vm, gpa, &fd_offset, &len);
+> +               len = min(end - gpa, len);
+>
+> -               offset = gpa - region->region.guest_phys_addr;
+> -               fd_offset = region->region.guest_memfd_offset + offset;
+> -               len = min_t(u64, end - gpa, region->region.memory_size - offset);
+> -
+> -               ret = fallocate(region->region.guest_memfd, mode, fd_offset, len);
+> +               ret = fallocate(fd, mode, fd_offset, len);
+>                 TEST_ASSERT(!ret, "fallocate() failed to %s at %lx (len = %lu), fd = %d, mode = %x, offset = %lx",
+>                             punch_hole ? "punch hole" : "allocate", gpa, len,
+> -                           region->region.guest_memfd, mode, fd_offset);
+> +                           fd, mode, fd_offset);
+>         }
+>  }
+>
+> @@ -1662,6 +1655,22 @@ void *addr_gpa2alias(struct kvm_vm *vm, gpa_t gpa)
+>         return (void *) ((uintptr_t) region->host_alias + offset);
+>  }
+>
+> +int kvm_gpa_to_guest_memfd(struct kvm_vm *vm, gpa_t gpa, off_t *fd_offset,
+> +                          size_t *nr_bytes)
+> +{
+> +       struct userspace_mem_region *region;
+> +       gpa_t gpa_offset;
+> +
+> +       region = userspace_mem_region_find(vm, gpa, gpa);
+> +       TEST_ASSERT(region && region->region.flags & KVM_MEM_GUEST_MEMFD,
+> +                   "guest_memfd memory region not found for GPA 0x%lx", gpa);
+> +
+> +       gpa_offset = gpa - region->region.guest_phys_addr;
+> +       *fd_offset = region->region.guest_memfd_offset + gpa_offset;
+> +       *nr_bytes = region->region.memory_size - gpa_offset;
+> +       return region->region.guest_memfd;
+> +}
+> +
+>  /* Create an interrupt controller chip for the specified VM. */
+>  void vm_create_irqchip(struct kvm_vm *vm)
+>  {
+>
+> --
+> 2.55.0.rc0.738.g0c8ab3ebcc-goog
+>
+>
