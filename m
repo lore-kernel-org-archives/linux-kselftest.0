@@ -1,107 +1,128 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C0E3126D9
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 18:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA4A28C5CB;
+	Thu, 25 Jun 2026 19:22:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782413606; cv=none; b=htemQlLohu+YrOxY/HKivAHwGevDzSEheUy+HRtrNuSbS0J5524pZ3yZ9X06uZlCIQVXgURFfOjWBI+lyvWU+Amo5h7lyQzeVSZwOZ6t+C8GgBezU+iaWVTOCaqZ1dd4aIDS42rl1O4cKDV9ATrKQaUQ2cCLK8nkRfEEMsQKBNw=
+	t=1782415353; cv=none; b=g2c3OC+Qel+ekbpm3S6PSZwXZB634OSm+7OqhKT+KRb9pvpT/ny815hKiubpwYauvk2PPys/Ha8ZVR3JPbUyTVTFPqmb6o1yp7hyXtuy3CJHniX4BwF/fzxoEby6n5++s+GEGTftepXlbEFnTXwHr0mnokLyTCFNoRPGU6979Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782413606; c=relaxed/simple;
-	bh=jX4tjDS2TY1o65mCKlxOrdJcyr8jfpPpm95ymgwH6o8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=A+9TD1jxEFJpdvkTt4x35wRyqSyruLBKAbpjd/knsG4sQ+MICGfdq6sTmP1uLAPn/2VcEQVbaFWczWAhfQEX5W2D9c6kstHPEmtblPDP+MO+jv8hNnL7pm6AT/BChD1skrZ1PM3EAslbvip91d2jOeTmGjaLeGVAyZ7vvK6q/po=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qKttOaDz; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782415353; c=relaxed/simple;
+	bh=2Txf9qrtG9xFluLwOAAnwEEQ+9CPQg1+MFCaHyW7GqM=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=aFBCGwlvT2v1b81HGHCONrYWqIyYrwZZUeequMCA9FGdSKoY/xhIWqtVBN/F+WtwhAHM3qdsBczMmH0mTGpYF0anrN+gT47zz9vHvfIyaEfB3jCgdNtTNPO2eeHHFdJsgUEOqZnvMdi6sSsRvU3IRZJPJyMEobw6zL6wKD5ybGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VvKr3PZe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qKttOaDz"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2c6c57c5bcfso3028355ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 11:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782413604; x=1783018404; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jX4tjDS2TY1o65mCKlxOrdJcyr8jfpPpm95ymgwH6o8=;
-        b=qKttOaDzk25+CQnub6y7OvKXKEiCA8KpzD5HHFUpOh+DkktHoDXcKeO679lN4e5ehS
-         B7b2MH0CamvYW4ojDQrlQaOSWl8U8ih13XYhEZmik7ug8GYommbP2qfuoGDoTQs9uhrF
-         bykBr0ryFYT8u5/O9zavDNxh9D8LP1jc7JEja1eWBszdGDuC4Jtzi3kjc6yR3ioAA1Q1
-         e3lMIzOXEfAUnaNkEanbuf5fPK7tZIisI2dtWFW2b6RlPk4m4nb+TYGBH7KHPHXsBFjQ
-         ZaM9wFzi2V/i3MrpPb0lQ4nO+7mrqNCHqZAVEHEq0Fb9LRI1Vg4cmnoQIp2kgsiOuOy9
-         /G2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782413604; x=1783018404;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jX4tjDS2TY1o65mCKlxOrdJcyr8jfpPpm95ymgwH6o8=;
-        b=k81vx0lP92bXzfnnqz/BtBNV4Wm6rrqPzdhsN5WuMKf6zZsISv40zVzJjX7vjSmI32
-         90FtIGD7tuPXFF66EVycjRTwwGVwI3uf8UQfNmVJq44UTSzeFS4pKwG92mLqU5Zj1btO
-         qONOuYRi3w5UlZVRqEE7zWM23UUDXVOnElMAtje6qBh9ZwNJeoZbnwmiuKa2/NxtahNm
-         fcMQoc2a5NxyNztUc7c4t5mNcKbZDEHnR3q49Txfl0VXzH7T2FgLtzCXWb15sr3J1AVR
-         6aOyIJMPs4kLzncXcqAzcV6iFRYEYbdBHKrebHvIBR7xpFZ/VBEjGu8Xbp6sH3TiS2jR
-         kxWA==
-X-Forwarded-Encrypted: i=1; AHgh+RqsiJaUdgJF7gzTl66NqtaMMn6ZVt0P010JtkB8DvqLWYM2MYidLhDf14qNfBFA+1E9bONCI3SV2XWAWTr9l1M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIaPDcSreZLcO+TE2Bv3Hm6BpVAolblLU7z7zvTm/IX+f7dWep
-	w2dgn+a8vkXzYory6SyYj3i3uIAv1wqTtyLO03obCJ6QPwRgyxPqHdRI
-X-Gm-Gg: AfdE7cl0wuEnCCHcrjDj+Ri/C6DCw7tT0KbRq8wv0yGN0+uJmO8ZaKX338ZLAnmQ0kx
-	FOCPlMozqNh9BP2Jw9MstMdhottxZ2iDwj3myJM6vjdPbvPCk6jESTZtD+RyBJRGYoKHst0TSan
-	hF1ujr2DREa/SNrvVjQltkwG9DUSEatLzxQaSkS7wvHvOzYo9as8MKSLfcIZNt4X9px8+ji76hy
-	/+eiAE4h+1Yv3rLDFMplYTwFYNC/7cCXv9s1i9ZKW3biOjVD4Xu66GWurP9+yMaLpVIPEGncVJ/
-	2+rdWtzPTC9r9rddJKDW/hqf34FM52l8XBsRJgFaphYeZ0gmsjRoz3S6t1Y0byaLw7FmJDGm9TP
-	dKAR5lGUzowxbxUzzdakmjdiOnluO6O6HgxBMWLZnDHAHc5oXWL0Rh+vSj15ypBYQGzqKHHMt4A
-	w+3hTt+nwp6Cksfeco2UwlOkkPvt4lkyUh+bGA3IAYjKA0/D9HEz/0
-X-Received: by 2002:a17:902:c40e:b0:2bf:281c:d2d3 with SMTP id d9443c01a7336-2c7fc7300c6mr39782095ad.9.1782413604402;
-        Thu, 25 Jun 2026 11:53:24 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7f63d09f0sm26396125ad.56.2026.06.25.11.53.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 11:53:24 -0700 (PDT)
-Message-ID: <01858c50447df77199abbe570d3ce06288200721.camel@gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: Avoid eliding lookup NULLness for inner
- map templates
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Sun Jian <sun.jian.kdev@gmail.com>, bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, 	martin.lau@linux.dev, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, 	jolsa@kernel.org,
- shuah@kernel.org, dxu@dxuuu.xyz
-Date: Thu, 25 Jun 2026 11:53:13 -0700
-In-Reply-To: <20260624072031.735846-1-sun.jian.kdev@gmail.com>
-References: <20260624072031.735846-1-sun.jian.kdev@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VvKr3PZe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A8091F000E9;
+	Thu, 25 Jun 2026 19:22:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782415352;
+	bh=WnDS5j6lyeaeZIOZYGNYA3yrK95KQ7qc6yGTXVrMjFQ=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References;
+	b=VvKr3PZeX7jSfkhBXvRZF/pGRa5yn+mG6BinaFVmuNzoQ5PhPIIWhy2/1UUxx1e1g
+	 kc5vWDc4yzRS3iqPBagZ6kt+mryJBa6c6Gr+x5/2dvJYbFU5dGGEQSg/8HiLTv1GDW
+	 gQgW/jfq93EA/bwYELdwuKiPnKE8CVEj0QvTe/DpTi4OhG3aeCJ+hGHBEy6JvK83Js
+	 eYCa9/XrW+ms5Zkk7zfGCiRE8yg19Ukp/UJASML/vLapC3b34btcAVjN9QeUE0byNz
+	 YQaoL0kpPKmuXoV+fLwuddQFTrdlDC9BLVlEVyrorHzQhGGNS7qrEPgL+uKfVrAGoG
+	 hwFrk9CFbEHaw==
+Date: Thu, 25 Jun 2026 13:22:29 -0600 (MDT)
+From: Paul Walmsley <pjw@kernel.org>
+To: Wang Han <wanghan@linux.alibaba.com>
+cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+    Albert Ou <aou@eecs.berkeley.edu>, Steven Rostedt <rostedt@goodmis.org>, 
+    Alexandre Ghiti <alex@ghiti.fr>, Masami Hiramatsu <mhiramat@kernel.org>, 
+    Mark Rutland <mark.rutland@arm.com>, 
+    Catalin Marinas <catalin.marinas@arm.com>, 
+    Chen Pei <cp0613@linux.alibaba.com>, Andy Chiu <andybnac@gmail.com>, 
+    =?ISO-8859-15?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>, 
+    Deepak Gupta <debug@rivosinc.com>, Puranjay Mohan <puranjay@kernel.org>, 
+    Conor Dooley <conor.dooley@microchip.com>, 
+    Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+    Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+    Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+    Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+    Arnaldo Carvalho de Melo <acme@kernel.org>, 
+    Namhyung Kim <namhyung@kernel.org>, oliver.yang@linux.alibaba.com, 
+    xueshuai@linux.alibaba.com, zhuo.song@linux.alibaba.com, 
+    jkchen@linux.alibaba.com, linux-riscv@lists.infradead.org, 
+    linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+    live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v3 1/8] scripts/sorttable: Handle RISC-V patchable ftrace
+ entries
+In-Reply-To: <20260609063002.3943001-1-wanghan@linux.alibaba.com>
+Message-ID: <2a7abbb3-e2df-ab2a-087a-0e1604d188bb@kernel.org>
+References: <20260528082310.1994388-1-wanghan@linux.alibaba.com> <cover.194d76e3a15b.v3.riscv-livepatch.wanghan@linux.alibaba.com> <20260609063002.3943001-1-wanghan@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-On Wed, 2026-06-24 at 15:20 +0800, Sun Jian wrote:
-> Commit d2102f2f5d75 ("bpf: verifier: Support eliding map lookup
-> nullness") allowed the verifier to elide NULLness of
-> bpf_map_lookup_elem() for array maps when the key is statically known to
-> be within max_entries.
->=20
-> This is not valid for array maps used as inner map templates. For such
-> maps, the template's max_entries is not necessarily the same as the
-> max_entries of the concrete inner map used at runtime. As a result, a
-> key that is within the template's max_entries can still be out of range
-> for the concrete inner map, and the lookup may return NULL.
->=20
-> Do not elide lookup NULLness for array maps used as inner map templates.
->=20
-> Fixes: d2102f2f5d75 ("bpf: verifier: Support eliding map lookup nullness"=
-)
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
+Hi,
 
-This was already fixed by commit:
-53040a81ae57 ("bpf: Keep dynamic inner array lookups nullable")
-Please do not send stale patches.
+On Tue, 9 Jun 2026, Wang Han wrote:
 
-[...]
+> RISC-V uses -fpatchable-function-entry=8,4 when the compressed ISA is
+> enabled and -fpatchable-function-entry=4,2 otherwise. In both cases, the
+> patchable NOP area starts 8 bytes before the function symbol address.
+> The __mcount_loc entries therefore point at the patchable NOP area
+> associated with a function, while nm reports the function symbol at the
+> entry address used for the function range check.
+> 
+> After RISC-V selected HAVE_BUILDTIME_MCOUNT_SORT, sorttable started
+> applying that range check at build time. Without allowing entries just
+> before the reported function address, the mcount sorter treats valid
+> RISC-V ftrace callsites as invalid weak-function entries and writes
+> them back as zero. The resulting kernel boots with no ftrace entries,
+> breaking dynamic ftrace and users such as livepatch.
+> 
+> The failure is silent during the final link because zeroing weak-function
+> entries is an expected sorttable operation. At boot, those zero entries
+> are skipped by ftrace_process_locs(), so the only obvious symptom is that
+> the vmlinux ftrace table has lost valid callsites and ftrace users cannot
+> attach to them.
+> 
+> CONFIG_FTRACE_SORT_STARTUP_TEST also reports the table as sorted in this
+> state: it only checks that the __mcount_loc entries are in ascending
+> order, which a fully zeroed table trivially satisfies. The original
+> commit relied on this check and did not see the regression.
+> 
+> On an affected RISC-V QEMU boot with both CONFIG_FTRACE_SORT_STARTUP_TEST
+> and CONFIG_FTRACE_STARTUP_TEST enabled, the sort check still passes
+> while ftrace reports zero usable entries and the early selftests fail:
+> 
+>   [    0.000000] ftrace section at ffffffff8101da98 sorted properly
+>   [    0.000000] ftrace: allocating 0 entries in 128 pages
+>   [    0.054999] Testing tracer function: .. no entries found ..FAILED!
+>   [    0.172407] tracer: function failed selftest, disabling
+>   [    0.178186] Failed to init function_graph tracer, init returned -19
+> 
+> Handle RISC-V like arm64 for the function-range check and allow
+> patchable entries up to 8 bytes before the function address.
+> 
+> With this fix, a RISC-V QEMU smoke boot with ftrace startup tests shows
+> the vmlinux ftrace table is populated and dynamic ftrace still works:
+> 
+>   [    0.000000] ftrace: allocating 46749 entries in 184 pages
+>   [    0.051115] Testing tracer function: PASSED
+>   [    1.283782] Testing dynamic ftrace: PASSED
+>   [    6.275456] Testing tracer function_graph: PASSED
+> 
+> Fixes: 0ca1724b56af ("riscv: ftrace: select HAVE_BUILDTIME_MCOUNT_SORT")
+> Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
+> Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> Reviewed-by: Chen Pei <cp0613@linux.alibaba.com>
+> Link: https://lore.kernel.org/all/20260527113028.4b21a5de@fedora/
+> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
+
+Thanks, I'm going to pull this one out of the rest of your series since 
+this is clearly a fix and needs to go in sooner rather than later.  Queued 
+for v7.2-rc.
+
+
+- Paul
