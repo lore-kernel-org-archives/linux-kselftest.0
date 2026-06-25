@@ -1,206 +1,336 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011019.outbound.protection.outlook.com [52.101.62.19])
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11022100.outbound.protection.outlook.com [40.107.209.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1183EC2F6;
-	Thu, 25 Jun 2026 16:56:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1166A1E7C18;
+	Thu, 25 Jun 2026 17:33:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.100
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782406604; cv=fail; b=jLoxGndYy7XHDjhUZXf7+LJbcd8JuWfmWFml5SQR7p66w6Nq4/maa8YtRoCpsZshf0ifC9EtjEXYmpuPQFv5Ulyrqr/sgSxW7kMNmgziNHGCbhAKEY1/xsmEk++c+Dx7Q0EYqi/Kv3S9F5Z0gflqaqoGUFAQinYxA0X0MDZF1O0=
+	t=1782408838; cv=fail; b=BlrY4pmt9B8kcL0rMRXi8E4xNdWs+HaXB1IquS23ktjdV6dvwQXUiQ1I5U7i1j0B3eYrBsW5fcAqRfZ9NWh5SG78/VY6SJWO6bVWtEcwG84xyJWjRvpRBafKwSmCvqpBV8SHewZtawf4cgOWMf9qXPB0aktTBWiKKFopIpfvOew=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782406604; c=relaxed/simple;
-	bh=3/fkxY9UrCu5Fjr/pSIsPH1ttUJ1QtOpAAC7tmRPc04=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mqN4zEoIhCioCalSzf+sGw5QirDXjJ6sIupv5yqp8eqGj04dF51PYkyWVIghW7cjpVu1utu8RUThv+AWS4Yp6+wqnx/hQznl8e5eWGSo6EsLRaludZOmiiUnqy4ciI0km+kFrCncpLcJOm8V5CTmMcqAwNbGDJQMhi2C2R6gPww=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=QUiPtG2e; arc=fail smtp.client-ip=52.101.62.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1782408838; c=relaxed/simple;
+	bh=a2H0eZrlJAoh21LsPlhvh//HbAhjYPGClaN1wnSyKDo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RLJoN8b943WZFNCv3kYCnmWGBVmH3EFwHApaH6/pfBeBJGYPJUZmY/WLYWBtAsg51pWTZHq/H+LAsHP/Y99rc/wUMUMWbed1MsQJoOpMcR8iYE7fhndEJltesjBoJW34azTFE3yWcrsqhSvzmGITrtFWC37SGFXd7PYobCUMAMA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rambus.com; spf=fail smtp.mailfrom=rambus.com; dkim=pass (2048-bit key) header.d=rambus.com header.i=@rambus.com header.b=TWGizfCG; arc=fail smtp.client-ip=40.107.209.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rambus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=rambus.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="QUiPtG2e"
+	dkim=pass (2048-bit key) header.d=rambus.com header.i=@rambus.com header.b="TWGizfCG"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vRMc92bhI7KbsTGM4MSb/SbMk/xb/tecNKAeJDJoJftj5Hbncnq4DIfnVc0jjiDCmChg3r7ZLPXudwX3N/94nPcQ9jyD9aRRoEqNrTWp9TYIjYdJ5MEk/PHq4ng5LEzyVwDTuyZxZ3+FoTK2ib22fA7Qwln0qTDMWPUPEgr0AeqE0JyqsI20LzZK9mrpJnKQ+VTpMT7KxzWDyDBmRtEDhWOf8CtOHdHJ7eeIcZ+z5z1/AXS9LY0YKisu6spaz0SJ436ovaHbJsdgi4ZstV7mFhkgKu2BmsUmZfKayGIjfhLy8W0SaQBqmWCYgp7QaEFaNt1hDvHsRTNf0e1bksDNmw==
+ b=JBTThKw9BW3RQLt8cXOEOKClnKiwi35mXBDHm6cASyBzGY8soENRwp6qtq46kUqiZsoZikzPDG0SrkINDhizc+raP5w9QMbdlbtwnxvN9dGD39Mrlrb2DfUfwkjwRB0B7AbuGVGb+l2WWFs5R3vP46KlxY0xqJqnK6pdH8l2ks5o0BJrvG5ay4Hw0o4HAI/qmpuMiIlW66GofZjzCNUlIZ34w9O9tWhyVc2jxvjZqCl/3uH90SW/K/4Z88bUIdZAzImJSe8Knf55tfGX1MiyHdgOhwOkcYgi8p4W98Ymk6nDMtrzR4dIH8IC/Wk/HRT2F7gN7yo3S/Ay4YC7acEwgA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=14lhtxV58ZOG8RVlPCjyTYJmvBT8SJ3Zs8SLNuR3zO4=;
- b=OYfFmFUbv92r/FJQohECIZzh9KCP00MWnyxm9xIjZZ9TU/IQX0tT4ygPFDTP4G19xbDMM9BT2z0STkl8rk9vpN5FKYKbseUYTBhJgb2pUrrlul4DL+PF+KbV5uDknoeTAOmZM7jJapzvh5utTrqnlEceazDL31dPu+XiFk0iUyzehVraPiByg3PxSUykeBCQfs9EsZJRHwEN8yLnWU+2TGbdD5zTSYEzxsfKhLO0C3kqXNfn5sD5JsHWlaKe2QyhpCAcdYbTeSTzJDykGJ8xjoedmYWDCjtCsqMuvMV35QUC2n7X2g4y4LlXR1eoTMCUC6ry5+r1B+g8j2Mq1O5eTg==
+ bh=3tyjbk9mpFHaiQUgIPHsg9hhr8tY+3V72HqOkCYNpts=;
+ b=AHkwrW8NLa+1ie/ygXZ9BLqxkIU5wzMyinkE6neI3oXF/fxeLpakCnM6B7SCoATq3Gbk0UV8fsU+lqLehU+0xfBWP9hFOQ5OzwbU7madMFMG9BW84tsBcJ5LxYq0IL6EWTsnbO5QFbBlvypnIT3m+ek2u91cojIa1GgLLuYwncUBbJjqTj6V5HvGOY900CAlHRX+QkCuUl5SvNwZWkyL41kiIOWkwXmk3bfTQXULrONmHZkB75GhNRLOtQpBZZuSnd8rVaNcYZ8ugNsAxbqvnqOzackl0uds4tybEErhwmUndmSwxESQjtGONjCpEEx7PKKbZVS0DPP3pqBUFcLxRQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ 192.86.86.210) smtp.rcpttodomain=cryptography.com smtp.mailfrom=rambus.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=rambus.com;
  dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rambus.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=14lhtxV58ZOG8RVlPCjyTYJmvBT8SJ3Zs8SLNuR3zO4=;
- b=QUiPtG2eNMGd0aO0Bv3kLxkh4G3/6rtMrUV2Nhxb9qTuwo3wPgBXr5O/kxdx85ZIgLJ7J4BlBRQS3o07uCCMRUeIAnOujaMUsftL5y6vVSEqPXqvLbjyoFlV9lef2cY5ltTvzso+wSIKyYMYWwXe61hqmr8AWr8o8C156G8gMRyqYec8Nt5cIbygr3ztsj9u/dM/vV/J6I5YQRxOqDCn2j8N0soAKXDFeSPCA8QhmFoftLEeoJt2PkTm2aQMFMhQ1qpug3FTth5RSbrIviZ+bFynl2Se/9RPSM16ws3Y3/0BjZatEYS5wVq0JwdBPrpM1Yn4dKpUPF5ladZ0xYG1ZQ==
-Received: from BLAPR03CA0052.namprd03.prod.outlook.com (2603:10b6:208:32d::27)
- by SA0PR12MB4384.namprd12.prod.outlook.com (2603:10b6:806:9f::22) with
+ bh=3tyjbk9mpFHaiQUgIPHsg9hhr8tY+3V72HqOkCYNpts=;
+ b=TWGizfCGgt0Ax0IDx4tM3RWF+Ub/jrpUhQnZ8yGAueCq/HFSj+7Q68ubomllIqhbubfnhy0tZRMqKVuLVknQOhZmgQv+ijhYBD3F27q1FeTcY5cQJfL4+3h+UGPF2pEo9ZXfiGSUIHEpg/8jGiVJYWQWO6sXFc9lc36XW/y3eLGqqCJPOUwxbaxlK5zSAtu1ECKRaT5qA8sMApJevnVvU9fPR0TpTxAQxCtX5Gw7+QcyunIoxHJXqF8/6PQ666KvSDnaodHIgFI2xmFxU2bZGaS4ZMYxCXs4Kxp46enjHsfmq+RzYMz0CQvjB0sPnSzQeV2312J6kjc2Mw/+WRnK+g==
+Received: from PH8P222CA0006.NAMP222.PROD.OUTLOOK.COM (2603:10b6:510:2d7::22)
+ by BN8PR04MB6404.namprd04.prod.outlook.com (2603:10b6:408:7d::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.17; Thu, 25 Jun
- 2026 16:56:39 +0000
-Received: from BN3PEPF0000B078.namprd04.prod.outlook.com
- (2603:10b6:208:32d:cafe::10) by BLAPR03CA0052.outlook.office365.com
- (2603:10b6:208:32d::27) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.159.13 via Frontend Transport; Thu,
- 25 Jun 2026 16:56:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN3PEPF0000B078.mail.protection.outlook.com (10.167.243.123) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.181.6 via Frontend Transport; Thu, 25 Jun 2026 16:56:38 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 25 Jun
- 2026 09:56:10 -0700
-Received: from nvidia-4028GR-scsim.nvidia.com (10.126.230.37) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Thu, 25 Jun 2026 09:56:02 -0700
-From: <mhonap@nvidia.com>
-To: <djbw@kernel.org>, <alex@shazbot.org>, <jgg@ziepe.ca>, <jic23@kernel.org>,
-	<dave.jiang@intel.com>, <ankita@nvidia.com>,
-	<alejandro.lucero-palau@amd.com>, <alison.schofield@intel.com>,
-	<dave@stgolabs.net>, <dmatlack@google.com>, <gourry@gourry.net>,
-	<ira.weiny@intel.com>
-CC: <cjia@nvidia.com>, <kjaju@nvidia.com>, <vsethi@nvidia.com>,
-	<zhiw@nvidia.com>, <mhonap@nvidia.com>, <kvm@vger.kernel.org>,
-	<linux-cxl@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH v3 11/11] vfio/pci: Provide opt-out for CXL Type-2 extensions
-Date: Thu, 25 Jun 2026 22:24:07 +0530
-Message-ID: <20260625165407.1769572-12-mhonap@nvidia.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260625165407.1769572-1-mhonap@nvidia.com>
-References: <20260625165407.1769572-1-mhonap@nvidia.com>
+ 2026 17:33:51 +0000
+Received: from SA2PEPF000015C7.namprd03.prod.outlook.com
+ (2603:10b6:510:2d7:cafe::80) by PH8P222CA0006.outlook.office365.com
+ (2603:10b6:510:2d7::22) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.159.17 via Frontend Transport; Thu,
+ 25 Jun 2026 17:33:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 192.86.86.210)
+ smtp.mailfrom=rambus.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=rambus.com;
+Received-SPF: Pass (protection.outlook.com: domain of rambus.com designates
+ 192.86.86.210 as permitted sender) receiver=protection.outlook.com;
+ client-ip=192.86.86.210; helo=hqxsv-psmtppxy02.rambus.com; pr=C
+Received: from hqxsv-psmtppxy02.rambus.com (192.86.86.210) by
+ SA2PEPF000015C7.mail.protection.outlook.com (10.167.241.197) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.181.6
+ via Frontend Transport; Thu, 25 Jun 2026 17:33:50 +0000
+Received: from hqxsv-cmdev3-skrishnamoorthy.rambus.com (hqn-lb-int-float.rambus.com [10.12.20.20])
+	by hqxsv-psmtppxy02.rambus.com (Postfix) with ESMTPS id A5D93180174E;
+	Thu, 25 Jun 2026 17:33:49 +0000 (UTC)
+From: Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>
+To: Albert Ou <aou@eecs.berkeley.edu>,
+	Alex Ousherovitch <aousherovitch@rambus.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <pjw@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Alexandre Ghiti <alex@ghiti.fr>,
+	devicetree@vger.kernel.org,
+	Joel Wittenauer <Joel.Wittenauer@cryptography.com>,
+	linux-api@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	sipsupport@rambus.com,
+	Thi Nguyen <thin@rambus.com>
+Subject: [PATCH 00/19] crypto: cmh - add CRI CryptoManager Hub driver
+Date: Thu, 25 Jun 2026 10:33:08 -0700
+Message-ID: <20260625173328.1140487-1-skrishnamoorthy@rambus.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
+Content-Transfer-Encoding: quoted-printable
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B078:EE_|SA0PR12MB4384:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5d9ca088-2353-4a7a-cde2-08ded2dab955
+X-MS-TrafficTypeDiagnostic: SA2PEPF000015C7:EE_|BN8PR04MB6404:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 493b36c9-b90a-46c4-d525-08ded2dfeb84
+X-LD-Processed: bd0ba799-c2b9-413c-9c56-5d1731c4827c,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|82310400026|1800799024|36860700016|7416014|376014|3122999024|22082099003|18002099003|11063799006|56012099006|921020;
+	BCL:0;ARA:13230040|36860700016|82310400026|7416014|376014|1800799024|23010399003|18002099003|11063799006|56012099006|921020|6133799003|13003099007|3023799007;
 X-Microsoft-Antispam-Message-Info:
-	+HVNrroEXGNp+/LLUkC2RFDc0nFYwpOJkjGnrNEFL8NaP+8b1oN/BPjez1L8OU/aCCDET0DU0MMv07RJaZy/MH7OzoNn111VbT4mSNfoEV/l6eeJtiRbt2YD2aCu+VVtdDHg9p9qnGAqb1AWeBqSdTNks3VEIW+/J2dzdaRzZBNRqW3BvX07OpJtCXDDjKA9iE/rQ9J7ajQCdum03V8NseDgXWcFbB2nOqvuAOat8f/BtLSOtj3LHOYPdnidHkg8UnUXvpGII2Fjh6sdZ2B8mBsWDmuv7F3qBeIy8+BQ8hykuhu+mifOghPe5O1XywXNN+F+p1UsPHOhkvmq74RznLdBOFIfkRu03l53S4hsyUYQNY8Ty6ljrxjiwsqvdj57YhlrodRRUIbjXNawGZiyteRdsu2sehuGzxi/LhmeU8hIuAFaivqZDsaS9zlyFSzFNqabPNx3fE9kfQ0eN9R8b0Lx1+vEKpUii0w/BRGcdC914ob3Fa3l/lVTm9IqiJHCS730EALwhNEe53P2qLJEkNK53gvIJc/j51UjrOYSZu9K4CGM8h2dYXb6gey4K13sW6UZYEpVd/IXTjBB/5KU5MeCKaKo7lne6p3Attg3tPbty3JmgGFVb9lQsXvAudQ4Ti5JQLAetbGun/6bCSoQfkwDF2IEWDbtr3sAkH3HG645RhyOJAcmaF7qB43Xu/eTq2VP+W693O/f7UiwMJapbKsCdGX7ay+Stu7lZekrJM2oYudgPDyOBikdDuepREM5
+	FSHh3kU8fQAylXAG1qlvoHcfb+BGZVCD0mGm3b7gtnfvMIn92mvn6uq4xzy8O6Wr6MTK5I+XVusgJXxoFqTmP50LTYV12c3qYn263tUOEgKizSaQUrCg4c7tFhebfnnC3BlTcW/BvzqvVqUjwK3b9RUxRf24JZXfOMNG2Z8YNQcijzW8RXRhYlDX85St9qGddjMMn4ndHTyJDFIcUb/HgudTpj/GyF11wsHPXvpF4GxD0MUW4U6hLuh+39CbXcmSxJyN95nu9dtbXP7H9zrWLaTC9rdlxlUtRZ4LQ7si/wD2ikXjm9+sqH9WHfkFJdaOpMBrIqjrOiOspiM1408Qkp2zaGVn3zrbfmqnZUNK9meKss/5E9aGzJ5U1+At3TwxmINqGwohtw2v6TpjCZ5vK9JWVxmF/eza47Ti+g+wAVjiTGI2PT1zp05LEm+l+XFEYX7+9TJbZxSgJMrGyWjl36NiFKiMkp+m7KNt/yYHGYjsQKSkrBnJazRXwYkVMEigjya326elzh0oHM0n2QTGdiJbQPSke8Paxb+tdBoZu1lAewvR1ZLfG0eFy/YM6gnVS7dXQFB+2rAlbMbRgnEI67U+knfp6V/kD32kVNWF3gx7kwuvyoTq7ilk8R5mKAK2C4h1pPkEJvtWRvvqBajZaAJ1+glbhWDm43MxtWegRmcRZ+qYfeXyZYPsYs0fAtLQnmWaD4C25ALPIHW67TXH51kd4hQQXCd1hCBOe6LnYun0k9ONac5LkPObKtU1hfOb
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(23010399003)(82310400026)(1800799024)(36860700016)(7416014)(376014)(3122999024)(22082099003)(18002099003)(11063799006)(56012099006)(921020);DIR:OUT;SFP:1101;
+	CIP:192.86.86.210;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hqxsv-psmtppxy02.rambus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(82310400026)(7416014)(376014)(1800799024)(23010399003)(18002099003)(11063799006)(56012099006)(921020)(6133799003)(13003099007)(3023799007);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	5XnCEvrXuLp/0CHy8T5ExK5+SLkntbloq8W8Y8gGIl3NXyAF7FVKcTkCMPeeyr5IJC3CSYTjnI9BMAal571Xkn19f/RAL/qDZ13UaIgnJF5w3x3S9bQefuhKxL63jmuIo9uMmVdBucopsbyY80cc6+97p682O4rceA9j5BoBj/TTv0xWSQGpMVut1pidfUz0GvDq76sJ4v6HdhZ9zh0Dsk91CNdqRty4vLLrQqOl3CvGxXa4QqEz4266ZgBaeYGdStv81/cX1BHDySBPaQ7BqDT9beG0i8rY9PGpEKY9rEvZkkDHIN07CF35pL6xEei1IALbA8fCxswe1vr7lSOxaeFkP/0+QrooBMa/HH9vAPuf98NXmpBRkJr4hZRnVmAdgk903u01zfL6oqeMiAg+daurQmzRguuhsOOb+3GnUY9HyGzz/ukTPUs5v9eVSDZI
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2026 16:56:38.1386
+	+1bbqxJFj9ZxOpBypPbtCDPjK0ofF3H2mwoujFgOHlQdvb1gVx1wPuzmowZuzrUul+et03N7ev4yoCQ9O3pNucBNAaUbm6HHEcanTe158ypBZ5PVQwusrYYKJfG0PcMPJr0g32rkqNC4OTliQdnSf9GinJMqU4qAYt1zIe7efkFGURl4aa2UexjkpuSmX5WrIwIzM/wMfxUvIQeDHTOZecPHRG7CR6G1g1zAxu47jyRnj/xEfrdqlnLl9uByu5pFEhKkgZPOKpNHQaEaF1ZKIDufw9vhKM9DX1VOY9zNubXmQQL0DxVvY7j2ecxsD+DFHoAP1amwqlJ56fyqcUw6xhHp0G6g24ivjeEktTTPlh6hvPydxNzsQ2TAmnWmP2EmMv4v55EFTM1kCKFF5DJVdqybaPxsYj3HpXSgGo6To5epeucTtEV9xJjt3hhEWeY0
+X-OriginatorOrg: rambus.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2026 17:33:50.2768
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d9ca088-2353-4a7a-cde2-08ded2dab955
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-Network-Message-Id: 493b36c9-b90a-46c4-d525-08ded2dfeb84
+X-MS-Exchange-CrossTenant-Id: bd0ba799-c2b9-413c-9c56-5d1731c4827c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bd0ba799-c2b9-413c-9c56-5d1731c4827c;Ip=[192.86.86.210];Helo=[hqxsv-psmtppxy02.rambus.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B078.namprd04.prod.outlook.com
+	SA2PEPF000015C7.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4384
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR04MB6404
 
-From: Manish Honap <mhonap@nvidia.com>
+From: Alex Ousherovitch <aousherovitch@rambus.com>
 
-Add an opt-out so users can keep vfio-pci's CXL extensions out of the
-path for individual devices or for an entire vfio-pci instance.  The
-build-time gate is CONFIG_VFIO_PCI_CXL; the runtime gates are:
+crypto: cmh - add CRI CryptoManager Hub hardware crypto accelerator
 
-  - Module parameter vfio_pci.disable_cxl (bool, 0444).  Setting
-    disable_cxl=1 at modprobe time makes vfio_pci_probe() set
-    vdev->disable_cxl on every device it binds.
+This series adds a driver for the CRI CryptoManager Hub (CMH), a
+hardware cryptographic accelerator IP from Cryptography Research at
+Rambus Inc. (https://www.rambus.com/cryptographyresearch/).
+CMH provides a broad set of symmetric, asymmetric, and post-quantum
+cryptographic algorithms accelerated in hardware, accessed via a
+mailbox-based Virtual Command Queue (VCQ) interface.
 
-  - Variant drivers (mlx5, pds, hisi, nvgrace, xe, etc.) may set
-    vdev->disable_cxl=true in their own probe for per-device control
-    without needing the module parameter.  The bit lives on
-    struct vfio_pci_core_device so it's reachable from any variant.
+The hardware is a platform device matched via device tree
+(compatible =3D "cri,cmh").  It exposes a single MMIO register region
+(SIC) with per-mailbox doorbell, status, and command registers.
+Each mailbox has DMA-coherent queue memory for VCQ command
+submission and completion.
 
-vfio_pci_cxl_acquire() consults vdev->disable_cxl as the very first
-check and returns -ENODEV when set, which makes vfio-pci-core treat
-the device as a plain (non-CXL) PCI passthrough — no CAP_CXL, no HDM
-or COMP_REGS VFIO regions, no DVSEC clipping shim.
+Driver architecture:
 
-This mirrors the long-standing disable_denylist opt-out shape.
+  In-kernel users                       /dev/cmh_mgmt (ioctl)
+  (dm-crypt, IPsec, kTLS, fscrypt)      (key management)
+       |                                        |
+       v                                        v
+  +----------------------------------------------------+
+  |        Kernel Crypto API + hwrng (72 total)        |
+  |   ahash | skcipher | aead | akcipher | sig | kpp   |
+  +----------------------------------------------------+
+       |                                           |
+       v                                           v
+  +------------------+    +------------------------+
+  | Transaction Mgr  |--->| Key / Mgmt subsystem   |
+  | (kthread, CMQ)   |    | (datastore, ioctl ops) |
+  +------------------+    +------------------------+
+       |
+       v
+  +------------------+     +-------------------+
+  | MQI (VCQ pack,   |---->| Response Handler  |
+  |  DMA map, submit)|     | (threaded IRQ,    |
+  +------------------+     |  watchdog, unmap) |
+       |                   +-------------------+
+       v                          ^
+  +-----------+              +-----------+
+  | Hardware  |--- IRQ ----->| Hardware  |
+  | (mailbox) |              | (mailbox) |
+  +-----------+              +-----------+
 
-Signed-off-by: Manish Honap <mhonap@nvidia.com>
----
- drivers/vfio/pci/cxl/vfio_cxl_core.c | 9 +++++++++
- drivers/vfio/pci/vfio_pci.c          | 9 +++++++++
- include/linux/vfio_pci_core.h        | 1 +
- 3 files changed, 19 insertions(+)
+The transaction manager runs as a dedicated kthread that pulls
+requests from a central command queue, packs VCQ entries, maps DMA
+buffers, and submits to the least-loaded mailbox.  Completion is
+handled by per-mailbox threaded IRQs.  The driver returns
+-EINPROGRESS for async crypto requests and supports the
+CRYPTO_TFM_REQ_MAY_BACKLOG flag for queue-full backpressure.
 
-diff --git a/drivers/vfio/pci/cxl/vfio_cxl_core.c b/drivers/vfio/pci/cxl/vfio_cxl_core.c
-index 8a00b776d7c7..905f74f4e725 100644
---- a/drivers/vfio/pci/cxl/vfio_cxl_core.c
-+++ b/drivers/vfio/pci/cxl/vfio_cxl_core.c
-@@ -234,6 +234,15 @@ int vfio_pci_cxl_acquire(struct vfio_pci_core_device *vdev)
- 	u16 dvsec;
- 	int rc;
- 
-+	/*
-+	 * Honour the per-device opt-out (set by vfio-pci's module
-+	 * parameter disable_cxl, or by a variant driver before
-+	 * registration).  Returning -ENODEV here makes the caller
-+	 * treat this device as plain vfio-pci.
-+	 */
-+	if (vdev->disable_cxl)
-+		return -ENODEV;
-+
- 	if (!pcie_is_cxl(pdev))
- 		return -ENODEV;
- 
-diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
-index 0c771064c0b8..fd226cb65d8b 100644
---- a/drivers/vfio/pci/vfio_pci.c
-+++ b/drivers/vfio/pci/vfio_pci.c
-@@ -60,6 +60,12 @@ static bool disable_denylist;
- module_param(disable_denylist, bool, 0444);
- MODULE_PARM_DESC(disable_denylist, "Disable use of device denylist. Disabling the denylist allows binding to devices with known errata that may lead to exploitable stability or security issues when accessed by untrusted users.");
- 
-+#if IS_ENABLED(CONFIG_VFIO_PCI_CXL)
-+static bool disable_cxl;
-+module_param(disable_cxl, bool, 0444);
-+MODULE_PARM_DESC(disable_cxl, "Disable CXL Type-2 extensions for all devices bound to vfio-pci. Variant drivers may instead set vdev->disable_cxl in their probe for per-device control without needing this parameter.");
-+#endif
-+
- static bool vfio_pci_dev_in_denylist(struct pci_dev *pdev)
- {
- 	switch (pdev->vendor) {
-@@ -166,6 +172,9 @@ static int vfio_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		return PTR_ERR(vdev);
- 
- 	dev_set_drvdata(&pdev->dev, vdev);
-+#if IS_ENABLED(CONFIG_VFIO_PCI_CXL)
-+	vdev->disable_cxl = disable_cxl;
-+#endif
- 	vdev->pci_ops = &vfio_pci_dev_ops;
- 	ret = vfio_pci_core_register_device(vdev);
- 	if (ret)
-diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-index 541c1911e090..20e9599b3bd7 100644
---- a/include/linux/vfio_pci_core.h
-+++ b/include/linux/vfio_pci_core.h
-@@ -127,6 +127,7 @@ struct vfio_pci_core_device {
- 	bool			needs_pm_restore:1;
- 	bool			pm_intx_masked:1;
- 	bool			pm_runtime_engaged:1;
-+	bool			disable_cxl:1;
- 	struct pci_saved_state	*pci_saved_state;
- 	struct pci_saved_state	*pm_save;
- 	int			ioeventfds_nr;
--- 
-2.25.1
+Registered algorithms (72 total):
 
+  Type       Count  Algorithms
+  ---------  -----  --------------------------------------------------
+  ahash         15  SHA-{224,256,384,512}, SHA3-{224,256,384,512},
+                     SHAKE-{128,256}, cSHAKE-{128,256},
+                     KMAC-{128,256}, SM3
+  ahash(HMAC)    8  HMAC-SHA-{224,256,384,512},
+                     HMAC-SHA3-{224,256,384,512}
+  ahash(MAC)     4  CMAC(AES), CMAC(SM4), XCBC(SM4), Poly1305
+  skcipher      11  AES-{ECB,CBC,CTR,CFB,XTS},
+                     SM4-{ECB,CBC,CTR,CFB,XTS}, ChaCha20
+  aead           6  AES-{GCM,CCM}, SM4-{GCM,CCM},
+                     rfc7539(chacha20,poly1305),
+                     rfc7539esp(chacha20,poly1305)
+  akcipher       1  RSA (2048--4096 bit; 512/1024 legacy/test)
+  sig           23  ECDSA P-{256,384,521}, SM2 (verify-only),
+                     ML-DSA-{44,65,87},
+                     SLH-DSA (12 parameter sets),
+                     LMS, LMS-HSS, XMSS, XMSS-MT
+  kpp            3  ECDH P-{256,384}, X25519
+  hwrng          1  DRBG-backed /dev/hwrng
+
+Ioctl-only algorithms (not registered with the crypto API at all):
+  - EdDSA (Ed25519, Ed448): sign and verify
+  - ML-KEM (ML-KEM-512/768/1024): no standard kernel KEM API exists
+
+The driver also exposes /dev/cmh_mgmt, a misc device providing 44
+ioctl commands.  Relative to the in-kernel crypto API these fall into
+two groups; the distinction matters because some commands name the
+same primitives the driver also registers, and that overlap is
+deliberate and bounded:
+
+(1) Operations with no crypto API representation - the large
+    majority.  The crypto API has no transform type or verb for
+    these, so a character device is the only available UAPI:
+      - hardware key lifecycle: create, import, export, derive,
+        destroy, enumerate (keystore CRUD) - no keystore verb
+      - KIC key derivation (HKDF, AES-CMAC-KDF, DKEK)
+      - asymmetric key generation (RSA, EC, EdDSA, ML-DSA, SLH-DSA)
+        and public-key derivation - the crypto API has no keygen verb
+      - ML-KEM encapsulate/decapsulate - no kernel KEM API exists
+      - SM2 encrypt/decrypt and key exchange (multi-step GM/T 0003)
+      - EdDSA sign/verify - not registered with the crypto API
+      - EAC Chip Authentication and DRBG (re)configuration
+
+(2) Hardware-held-key operations on algorithms that ARE also
+    registered (RSA decrypt, ECDSA/ML-DSA/SLH-DSA sign, ECDH).  These
+    name the same primitives as the registered akcipher/sig/kpp
+    transforms, but the crypto API's set_priv_key()/set_secret()
+    accept only raw key bytes supplied by the caller; they cannot
+    reference a private key that is generated inside, and never
+    leaves, the hardware datastore - the central security property of
+    this device.  The ioctl path keeps the private key
+    hardware-resident, while the registered transforms serve raw-key
+    in-kernel users.  The two paths are complementary, not redundant.
+
+The device requires CAP_SYS_ADMIN.
+
+/dev/cmh_mgmt is built conditionally on CONFIG_CRYPTO_DEV_CMH_MGMT
+(default n); when disabled the ioctl interface is absent while all
+kernel crypto API algorithms remain registered.
+
+The ML-DSA sig algorithms are registered at priority 5001.  The
+kernel's crypto/mldsa.c registers at priority 5000 with verify-only
+(sign returns -EOPNOTSUPP).  Our driver provides full HW-accelerated
+sign + verify, so the higher priority ensures the hardware
+implementation is preferred when the driver is loaded.
+
+Power management uses DEFINE_SIMPLE_DEV_PM_OPS.  On suspend the
+transaction manager drains in-flight requests (configurable 10s
+timeout, returns -ECANCELED on timeout), stops the kthread, and
+masks IRQs.  On resume it re-verifies SIC/boot status and restarts
+the kthread.
+
+Dependencies:
+  - Kernel 7.1+ (based on Herbert Xu's cryptodev-2.6 tree, 7.1.0-rc2)
+  - sig_alg backend (upstream since 6.13)
+  - CRYPTO_AHASH_REQ_VIRT (native support, no fallback needed)
+  - CMH eSW loaded independently by hardware before driver probe
+
+The driver registers all algorithms through the standard in-kernel
+crypto API; in-kernel users (dm-crypt, fscrypt, IPsec, etc.) consume
+them directly.  Key provisioning and hardware-held-key operations are
+exposed to user space via /dev/cmh_mgmt ioctls.
+
+Public hardware documentation:
+  Product brief: https://go.rambus.com/ch-7xx-and-cc-7xx-product-brief
+  No public datasheets are currently available.  The driver was
+  developed against the CRI CryptoManager Hub Hardware Reference
+  Manual (Rambus Inc. confidential).  Detailed hardware reference is
+  available under NDA from Rambus Inc.; contact the maintainers listed
+  in MAINTAINERS for access during review.
+
+Tested on RISC-V and ARM64 QEMU emulation with the CMH hardware
+model (QEMU TCG, 512 MiB RAM).  Also exercised on Xilinx VMK180
+FPGA board with real CMH IP.
+
+  - testmgr: 41 CMH algorithm registrations matched by upstream
+    test vectors, all pass; 30 names report "No test for" (PQC
+    families, KMAC, cSHAKE - no upstream vectors yet).
+  - kselftest tools/testing/selftests/drivers/crypto/cmh:
+    6 pass, 0 fail.
+
+checkpatch.pl --strict: 0 errors, 0 warnings, 0 checks on all
+files (the only output is the expected per-file "does MAINTAINERS
+need updating?" reminder, satisfied by the MAINTAINERS patch).
+sparse (C=3D2): 0 warnings.
+W=3D1 -Werror: clean.
+make dt_binding_check: clean (dtschema validates the
+cri,cmh.yaml binding).
+
+Tested with the following debug options enabled simultaneously
+(submit-checklist "Test your code" item 1):
+  CONFIG_PROVE_LOCKING, CONFIG_PROVE_RCU, CONFIG_DEBUG_LOCK_ALLOC,
+  CONFIG_DEBUG_OBJECTS_RCU_HEAD, CONFIG_SLUB_DEBUG,
+  CONFIG_DEBUG_PAGEALLOC, CONFIG_DEBUG_MUTEXES, CONFIG_DEBUG_SPINLOCK,
+  CONFIG_DEBUG_PREEMPT, CONFIG_DEBUG_ATOMIC_SLEEP.
+  Result: no lockdep warnings, no ODEBUG splats, no slab corruption.
+
+Additionally tested (separate passes - mutually exclusive configs):
+  - CONFIG_KASAN + CONFIG_UBSAN + CONFIG_DEBUG_KMEMLEAK + CONFIG_KFENCE:
+    no sanitizer findings; KMEMLEAK scan reports 0 unreferenced objects.
+  - CONFIG_KCSAN (arm64; riscv64 lacks HAVE_ARCH_KCSAN):
+    0 data-race reports attributed to the driver.
+
+Stack usage: worst-case under 1 KB on both riscv64 and arm64
+(scripts/checkstack.pl).  Hardware command buffers live in
+per-request context (heap-allocated by the crypto framework).
+
+Alex Ousherovitch (19):
+  dt-bindings: crypto: add Rambus CryptoManager Hub
+  crypto: cmh - add core platform driver
+  crypto: cmh - add key provisioning and management
+  crypto: cmh - add SHA-2/SHA-3/SHAKE ahash
+  crypto: cmh - add HMAC ahash
+  crypto: cmh - add CSHAKE/KMAC ahash
+  crypto: cmh - add SM3 ahash
+  crypto: cmh - add AES skcipher/aead/cmac
+  crypto: cmh - add SM4 skcipher/aead/cmac/xcbc
+  crypto: cmh - add ChaCha20-Poly1305
+  crypto: cmh - add DRBG hwrng
+  crypto: cmh - add RSA akcipher
+  crypto: cmh - add ECDSA/SM2 sig
+  crypto: cmh - add ECDH/X25519 kpp
+  crypto: cmh - add ML-KEM/ML-DSA (QSE)
+  crypto: cmh - add SLH-DSA/LMS/XMSS (HCQ)
+  Documentation: ioctl: add CMH ioctl documentation and register 'J'
+  selftests: crypto: cmh - add kselftest for management ioctl
+  MAINTAINERS: add Rambus CryptoManager Hub (CMH)
+
+base-commit: 6ea0ce3a19f9c37a014099e2b0a46b27fa164564
+--
+2.43.7
+
+** This message and any attachments are for the sole use of the intended re=
+cipient(s). It may contain information that is confidential and privileged.=
+ If you are not the intended recipient of this message, you are prohibited =
+from printing, copying, forwarding or saving it. Please delete the message =
+and attachments and notify the sender immediately. **
+
+Rambus Inc.<http://www.rambus.com>
