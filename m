@@ -1,217 +1,110 @@
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096613C1418
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 09:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782381446; cv=pass; b=biWm65wdpz3oeqOIA9bdOWCANZzbqRn9FdQCLwnI4MShQGe7u6B2K8mxyKbCqbud9tJIO27t5vZOsDZbHCylvhiOfpAVqzo8QN5RRZRsAJXjVJsAFf75H2y3yQ1WMlIQWggX9DjKZn01KkJiiLdsqTrpalJIl+bZWa6p7mNudio=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782381446; c=relaxed/simple;
-	bh=qvhKJbkEFFfAWC+9rpTE+bYHpR0yaiYW1uDCpafn5Jk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SpDNZc6oqx9mB3fqjqzrCuVd2KfVSKAf87ZAEgCDzNV+nocIMIanMah3J6t7q1WVUX3svC6Vw2IE71sAItuVXVyS/g1z7XF32lCbKa/xP0ExzHMbv5JMt+/Pu2ZhKeGTVAvN2NTPJLDONdxlxsMER6aV9TX2d/ek2pQjc4Pk/fc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YeUlOIOo; arc=pass smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13424374E5B;
+	Thu, 25 Jun 2026 10:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782383809; cv=none; b=KT4gcF+3tQWG9KMINNzYoRdkXrPrubHeSAh8TqACW+9Qvy6mTxAsT0YZ4887hrktQ0Nfc9pj/P94IxSeskfbB94Xl+03KYRG+ppHV0eQp8iNGmveVrBniZQb77AZrhjcKXgbEb2HMnB8UOqw5GiiCrDKNaNZFDeIJHvrIbZEtv0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782383809; c=relaxed/simple;
+	bh=sxA68pq5S5gKI8RjSDeZoQAs04oas8GQddQ+uQZURLY=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=rjxpdgIBtbcRaGovsVXLjV94XNzWeeqwLouAnHRKiRh8wq8nt+wBfpMZ7uDT9DDJWuUo7mNN2lXirfyjoZNibs+QzVWEoRe3hp7Z4RbownrmsZ71wObeXHM/uPM0P+HHcn8wzD8+yPSnnHNB36a/8+H0FOr7SVn5RzaIxGKJ1fY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XUW8gAvd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YeUlOIOo"
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-5177d1ff061so183051cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 02:57:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782381444; cv=none;
-        d=google.com; s=arc-20260327;
-        b=FGe1mzkEEAYogetLGeVKMMUiBLYKHQOVw6CYpa3RioHjTSxzkdWndQdwUzwY/ydDyz
-         TK+1M8axRH5lMGs+//FOsT2iDivDrET4wW1wPFbbw2Xe6gCQp+myqnVaree3QovGaKed
-         Gam7W1sEd5cvfZ3RF2HNbKlQJOPBCAFwgRoAaXSC/Etgbzn5T7nXYhElXTAXyH6idzGA
-         wbrEDjkTVYzS4RIEdzrBB4FigVN/VkGdB544CGPZgXoRjs5jjiN3o8YVphXaQ4Aa1shE
-         Zy6isyRHTddUNA4aj246lHoTP+1kFlEYScYF6W9WQAiEZTt5sNQiUmnj8nfALIL0WKpk
-         XNSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=u/mrXMGknIREFr9L6V/jI2fkRAbyZYaUWGH07oXz/yk=;
-        fh=EoERUj0l3mdJ3vnFDbQnwKXbgcov+i8qoRRUzSkVK8U=;
-        b=E56A2Mjk8EWeH2SPjwYFC+jl5V51aeB0yT5+HMqHdIqg4e2xZskylkoapu//07QzU/
-         M5ILaTEPYC5b79g1wfivufYZHSJ2qS3ISEu7YNbFNzUnAHAZD9RFWmti9Fa50IRxAV2f
-         2MhO47oBQZDNOWCpseE61EuqxBnmVhnh8Z7NiUU5cORcYrYSqnHu5a5QufaUcc/iOQKo
-         SfXJFt40X1+JMog41WDkILktSHhN7+MCwm0DEe5J4KD7Be4UvSpKY/hxUzNJITA5QfNv
-         HqOE4gH0X+QZLcrk7NXdVaPgNTJCUeiVycodn9ecHP0uIMQkUcmcBJyYtik9M/j0OMyw
-         3JwA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782381444; x=1782986244; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=u/mrXMGknIREFr9L6V/jI2fkRAbyZYaUWGH07oXz/yk=;
-        b=YeUlOIOon6VjIzRK28YIwDj/KMrSn+Ynb1pNhJc3HEY/y+OVC6W3hscXNXbix6osJh
-         Zu6t+30Tcp2uooHxK4Ea/9Xm044Pzudjp6jpm5fs1q0oycEV2G1KpwXyhnu0QPMnY1Ru
-         x7bNKT2UnJpHJSFalXcSsG3zCRKcYKAfpmDrw970D3JAedFRaYpm53T2rXIjRgS8L+nx
-         STh4fc2vDih2hqwlqYO0BaliaE/YtSwwucxH1f5UZI1aswaXHcDqOUmNkJRO6gZAio5c
-         rbmlVK2FZxXDjJU8mL/5FNbnnrjFzDbYMEEbHxAS7b5OiGvIEJk3K82phs3ezRKNyOii
-         HQGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782381444; x=1782986244;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=u/mrXMGknIREFr9L6V/jI2fkRAbyZYaUWGH07oXz/yk=;
-        b=gt4obmOWBGa0V9OhSNCcO/RmG9ZIZyq6HOnfV7Ad8VMB52602KZS4ZlKYkihwhyudJ
-         7Md9OH1M53J+tNHUrGhwIVNuDCncIJgccgFZ/JPHDTWvq4raoPa0hXGsC1HaAlJiu6tP
-         SVMkqdi3gsWOImsqnk1khCxeNvsn3tWCShTz08v7JUlE/tk2BYMFMRiKRTYLdFXWUQB/
-         +F+YdhJtNscZpF7HSueqXPDWBnkfpwAvES/QC/GGJpkJVGobPNd+ryxPjWadRF5XJDrn
-         e2UPY8+BNelg0SFM41aL03ZBQ9VSuSAHn94pzpLihcGx4jJOdPNC0R3DFlZwtv2A263E
-         opNQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+1gEr8nK3QDfOvZuNM5ZB1B54SsqlEtqYamRHYOz3i4lazP+77t3da8Sxm0ivpF0zSUntqHtAV5o+I4txvR/w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3yiflLrNIi4qm/nbia0YpRnfgL6DHccOJibhdePKzJWfwPYq3
-	4idic0BUPe52sh44Mt8wouQPti0i40NSwzkN2FBP2tPrn723FRwq9aYfBk5ZWnOe1xCRf8JzWKG
-	SHpwAluR47ZD6ZWtezhv8q+wI89tvWbK7+V61Sbg1
-X-Gm-Gg: AfdE7cmoMYA34a1jH7xWxCHIUrOcpNOhqK+uB2dMZRa+3Etbd5jE/y6rXjesNfGuoMX
-	Ltd1p4SpiDpVnZYhNhc5ARoucoVfJO/HebntnQvfYQ064OrBdY0bPCEx1CrbamV632+E78GL1tv
-	CCXynpvi6XI7EplSDsuO2sxBYnt+9PAMU3XHNIicocjecjGhUGwmrK9N8MyRzepFVqpOihLnYpW
-	lgkXzUoqqTcxf5C0UsNfl13/VLhQLDa1T2hGmfbyMO2dbNiMc1eKrJqtdFc1+J1XIHXIC0uN3B8
-	VteVORmn
-X-Received: by 2002:a05:622a:1804:b0:50e:38f0:ccb2 with SMTP id
- d75a77b69052e-51a7097b73dmr6249471cf.15.1782381443129; Thu, 25 Jun 2026
- 02:57:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XUW8gAvd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F0B1F000E9;
+	Thu, 25 Jun 2026 10:36:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782383807;
+	bh=cWsRc7MdRTfjdlpUKPT9bAJCUmcDDpg9+U9SCGAGjJw=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=XUW8gAvdo3iOuxiz+MGgyMFo/1gdypGVQtl8VAOyRISgTiliNCjCdQMQo55HY/AlZ
+	 jocfZlcnMpkhK2DJ0KSAdf6cfoUNqanZWrSL7B95Og/fPszR9mnrpyMElfp6CfoBFI
+	 Dr1UFhBvdGjiC/N9J184kjivsbdlXYklES7rp+Lv9QYqH1B3ox2Vn6kwEwhWbO/Uje
+	 1IEOdgdhPZvJgdfdUyrddAE0/l4v+tutL8Z77OEfDMswxXzsFg8+lzIjc5wgS2rz6v
+	 XtrVTfi+GYksmJKuAB3cHavdtb+OhSCzM+PfI2LQ4tuVBVHT5hcCHmZKhfz2dqcvhR
+	 ikkbp5FTbNJnQ==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com> <20260618-gmem-inplace-conversion-v8-46-9d2959357853@google.com>
-In-Reply-To: <20260618-gmem-inplace-conversion-v8-46-9d2959357853@google.com>
-From: Fuad Tabba <tabba@google.com>
-Date: Thu, 25 Jun 2026 10:56:00 +0100
-X-Gm-Features: AVVi8Cdu5TEy7e9mOJQzpvO2gtGAQsCwELbue-J7rOmw4IFWddPVfZNy_ZtxEUs
-Message-ID: <CA+EHjTw3MrKXdOjC10Q6rrxehwYZjFv7J45wK2E2PBWtSBwCRQ@mail.gmail.com>
-Subject: Re: [PATCH v8 46/46] KVM: selftests: Update private memory exits test
- to work with per-gmem attributes
-To: ackerleytng@google.com
-Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
-	yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
-	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 1/3] fs, mm: add ->cachestat() file operation
+From: Christian Brauner <brauner@kernel.org>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>, 
+ Johannes Weiner <hannes@cmpxchg.org>, Miklos Szeredi <miklos@szeredi.hu>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, Nhat Pham <nphamcs@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>, linux-unionfs@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+In-Reply-To: <CAOQ4uxhras5YAr8_HBpuHSDwvfiEF8vAr0NDB0R_PXtGDhnqjQ@mail.gmail.com>
+References: <20260623111533.2285005-1-ptikhomirov@virtuozzo.com>
+ <20260623111533.2285005-2-ptikhomirov@virtuozzo.com>
+ <ajqOyIA8tPQsxfz6@cmpxchg.org>
+ <3f6392aa-c1f6-4263-8892-978dacbbd8ca@virtuozzo.com>
+ <CAOQ4uxhras5YAr8_HBpuHSDwvfiEF8vAr0NDB0R_PXtGDhnqjQ@mail.gmail.com>
+Date: Thu, 25 Jun 2026 12:36:42 +0200
+Message-Id: <20260625-lehrbuch-gehalt-wichen-1b2f3533efbe@brauner>
+X-Mailer: b4 0.16-dev-d9d01
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2061; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=sxA68pq5S5gKI8RjSDeZoQAs04oas8GQddQ+uQZURLY=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTZsuyON9+8ekfYzpun2WtXl25LeusVGcrEesFIrew8p
+ 0L9j9L9HaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABP57sTwP43riwPH4/RjwnGB
+ F2plTv5aH6Uy3Ujpo0vkico9lS2/kxkZ3u14sJ25VDdJ9fwDxV1Wk7uDNMW3T/3DuPXPbj73Ao0
+ ARgA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Fri, 19 Jun 2026 at 01:32, Ackerley Tng via B4 Relay
-<devnull+ackerleytng.google.com@kernel.org> wrote:
->
-> From: Sean Christopherson <seanjc@google.com>
->
-> Skip setting memory to private in the private memory exits test when using
-> per-gmem memory attributes, as memory is initialized to private by default
-> for guest_memfd, and using vm_mem_set_private() on a guest_memfd instance
-> requires creating guest_memfd with GUEST_MEMFD_FLAG_MMAP (which is totally
-> doable, but would need to be conditional and is ultimately unnecessary).
->
-> Expect an emulated MMIO instead of a memory fault exit when attributes are
-> per-gmem, as deleting the memslot effectively drops the private status,
-> i.e. the GPA becomes shared and thus supports emulated MMIO.
->
-> Skip the "memslot not private" test entirely, as private vs. shared state
-> for x86 software-protected VMs comes from the memory attributes themselves,
-> and so when doing in-place conversions there can never be a disconnect
-> between the expected and actual states.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On 2026-06-23 17:34:47+02:00, Amir Goldstein wrote:
+> On Tue, Jun 23, 2026 at 4:55 PM Pavel Tikhomirov
+> <ptikhomirov@virtuozzo.com> wrote:
+> 
+> > On 6/23/26 15:48, Johannes Weiner wrote:
+> >
+> > Yes, AFAIU in overlay when we use realfile we should always use it
+> > with_ovl_creds(), even though I don't think there is anything cred related
+> > in filemap_cachestat(), I still think we should follow the common pattern
+> > other overlay helpers use (similar to ovl_fadvise() and ovl_flush()).
+> >
+> > note: Actually some places get ovl_real_file() and use it without
+> > with_ovl_creds(), e.g.: ovl_read_iter, ovl_write_iter, ovl_splice_read,
+> > ovl_splice_write. But those look more of an exception than the general
+> > rule. All other instances use with_ovl_creds().
+> 
+> Use with_ovl_creds() is a good practice to keep the mental security model,
+> but it is useless if the security check (can_do_cachestat) is not in the
+> vfs helper (vfs_cachestat), so please move it there.
+> 
+> Also it kind of makes more sense to check (flags != 0) in sys_cachestats
+> before checking permissions.
+> 
+> > Also there are simingly no other file_operations which return "realfile"
+> > for further processing, mostly the operation from fsops simply replaces
+> > general operation with its own logic completely.
+> >
+> > Thanks for your review!
+> >
+> > ps: Hope overlay maintainers will correctly if I'm getting this wrong.
+> 
+> I don't think this is wrong per-se, except for can_do_cachestat().
+> 
+> Just be aware that the real file could change from one cachestat
+> call to the next (i.e. due to copy up).
 
-Reviewed-by: Fuad Tabba <tabba@google.com>
+I'm really grump about adding a new file operation just for a
+special-sauce system call which is under a CONFIG_* option even. We're
+not going to set the precedent of piling on custom file operations for a
+single filesystem everytime someone adds a new system call unless
+absolutely necessary. This looks like it could just use a new helper in
+fs/backing_file.c that the cachestat thing can call to use the correct
+file.
 
-Cheers,
-/fuad
-
-> ---
->  .../selftests/kvm/x86/private_mem_kvm_exits_test.c | 36 ++++++++++++++++++----
->  1 file changed, 30 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c b/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
-> index 10db9fe6d9063..70ed16066c63e 100644
-> --- a/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
-> +++ b/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
-> @@ -62,8 +62,9 @@ static void test_private_access_memslot_deleted(void)
->
->         virt_map(vm, EXITS_TEST_GVA, EXITS_TEST_GPA, EXITS_TEST_NPAGES);
->
-> -       /* Request to access page privately */
-> -       vm_mem_set_private(vm, EXITS_TEST_GPA, EXITS_TEST_SIZE);
-> +       /* Request to access page privately. */
-> +       if (!kvm_has_gmem_attributes)
-> +               vm_mem_set_private(vm, EXITS_TEST_GPA, EXITS_TEST_SIZE);
->
->         pthread_create(&vm_thread, NULL,
->                        (void *(*)(void *))run_vcpu_get_exit_reason,
-> @@ -74,10 +75,26 @@ static void test_private_access_memslot_deleted(void)
->         pthread_join(vm_thread, &thread_return);
->         exit_reason = (u32)(u64)thread_return;
->
-> -       TEST_ASSERT_EQ(exit_reason, KVM_EXIT_MEMORY_FAULT);
-> -       TEST_ASSERT_EQ(vcpu->run->memory_fault.flags, KVM_MEMORY_EXIT_FLAG_PRIVATE);
-> -       TEST_ASSERT_EQ(vcpu->run->memory_fault.gpa, EXITS_TEST_GPA);
-> -       TEST_ASSERT_EQ(vcpu->run->memory_fault.size, EXITS_TEST_SIZE);
-> +       /*
-> +        * If attributes are tracked per-gmem, deleting the memslot that points
-> +        * at the gmem instance effectively makes the memory shared, and so the
-> +        * read should trigger emulated MMIO.
-> +        *
-> +        * If attributes are tracked per-VM, deleting the memslot shouldn't
-> +        * affect the private attribute, and so KVM should generate a memory
-> +        * fault exit (emulated MMIO on private GPAs is disallowed).
-> +        */
-> +       if (kvm_has_gmem_attributes) {
-> +               TEST_ASSERT_EQ(exit_reason, KVM_EXIT_MMIO);
-> +               TEST_ASSERT_EQ(vcpu->run->mmio.phys_addr, EXITS_TEST_GPA);
-> +               TEST_ASSERT_EQ(vcpu->run->mmio.len, sizeof(u64));
-> +               TEST_ASSERT_EQ(vcpu->run->mmio.is_write, false);
-> +       } else {
-> +               TEST_ASSERT_EQ(exit_reason, KVM_EXIT_MEMORY_FAULT);
-> +               TEST_ASSERT_EQ(vcpu->run->memory_fault.flags, KVM_MEMORY_EXIT_FLAG_PRIVATE);
-> +               TEST_ASSERT_EQ(vcpu->run->memory_fault.gpa, EXITS_TEST_GPA);
-> +               TEST_ASSERT_EQ(vcpu->run->memory_fault.size, EXITS_TEST_SIZE);
-> +       }
->
->         kvm_vm_free(vm);
->  }
-> @@ -88,6 +105,13 @@ static void test_private_access_memslot_not_private(void)
->         struct kvm_vcpu *vcpu;
->         u32 exit_reason;
->
-> +       /*
-> +        * Accessing non-private memory as private with a software-protected VM
-> +        * isn't possible when doing in-place conversions.
-> +        */
-> +       if (kvm_has_gmem_attributes)
-> +               return;
-> +
->         vm = vm_create_shape_with_one_vcpu(protected_vm_shape, &vcpu,
->                                            guest_repeatedly_read);
->
->
-> --
-> 2.55.0.rc0.738.g0c8ab3ebcc-goog
->
->
