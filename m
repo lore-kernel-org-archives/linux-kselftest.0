@@ -1,63 +1,63 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64AE83DB964
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 16:07:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2379B3E51CB
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 16:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782403660; cv=none; b=FA9G8MDVtBrlYCtz7GWeTmULoLGihip5ozQ4/lOU7KPfmV/VMgnEwKeu5On5AYWKdb0gZ35Fv2uxB3IDrfFCqBZqrcbAnJfViFt3OYGtcLFPh0sjWvmanKzdH/RdUtPGo+BefkR0qT0pNBOX0gXhHh8ldE3d99pjLGuWAfKDqH4=
+	t=1782403663; cv=none; b=e+7VChA/S2/tDQnHiNkapEKdj0wyhm/XkBIl2VoS9xEhMTcr0Nn9vSM9P6HlTD2ZmfHjXWXNXlmVf74TfChZPiccIyZFCcx5dremmM2a3Nw3MBNMeDp1uH4Vhg9d6QM5kvNzl1FEeNhMW0Fiwak+wbG61ceFUjZ8FevLHh5ImdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782403660; c=relaxed/simple;
-	bh=xROy1Y0XmFv89eTwsOqpRjwNw/zTYKT/R8hDR+t8O7Q=;
+	s=arc-20240116; t=1782403663; c=relaxed/simple;
+	bh=h33sooVrCbTG5jJ44p3NjBGF+AChHF0yDgbpED9sCwM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sk68gai5VEesSuiAPxkvDGQ9QQjq2digE1OeY8M1BsTH4mXPE+sLSX3BQweLtUiwZouFRW8w/hH80PAWddsYA2GuQrSRXuWT4EYjh+0T9s4F6+KpCZf9MxTjVvlYCf8pX+KQmUn+WktURL4tUz++TE/ZpF3gZaEp+toE4mNckhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r6deDcJs; arc=none smtp.client-ip=209.85.128.47
+	 MIME-Version; b=mV2iSo9VKM3bOktrajmJNt8BO7D1qDLOPT/V1OsoQmJr+w2kZZ4SPktcDmdtJRmVW48TXrK9sOgmOhMkxOVPGreBGeBaQ0D/LH9eQ2JFZe4p0oSFfKku94rQOCPEgoZt+ertzWdkxQiwRx9iHuIgI1o3J9cGNNMPxDooT6xWMCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bVh2mKL+; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r6deDcJs"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-490cf322ed0so282215e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 09:07:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bVh2mKL+"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-490aaeabdb4so199325e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 09:07:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782403658; x=1783008458; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782403661; x=1783008461; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RukUpK2hqIlqtjKrnPXSEkZXvAhn4lqBD25H3vkwCjM=;
-        b=r6deDcJsYLfWofk8JN/2eBR17YYgl4MGW8dmQM9DOuxxCIs938K+uDudi9fVNRYsq6
-         f5yAqARTs3IZ2jsYM9D8nJZv5rglcRHeDkPPz0nmaYmC5zuJYteEit5B35UrvMSMMO0z
-         qcPdCmQGChLO6FGQwJ4F7a8Q5tQZDxo76vbjIVvr3IxQvlJ02ofRpTJE2EbjcnGiy0De
-         RZV9TbvYd2TwNkSfwrOCY8EHPHor3wSoz6JlQHspUStxUX6V80kvM4FJp5ZXL0A3tqxr
-         A79tHLgGBKoaZQs2bHbRRhJ12SHhAUa75YuzPRcIXADEw57QTBGiGOR+dqse5o9K/tJM
-         FktQ==
+        bh=9xlNMIqzkOijapT3trmKB36H51y0Q3Hatzee9XcmfXw=;
+        b=bVh2mKL+60lJLfbvQaVuYhDktryGa42/C14+Wbiamzi6YeDdSu0RAIE31iHEOWDC4u
+         nKDn6tvafYTBvAv5g0QQWH7X6u+yiW7IUKZkIqHidHFMnIrrX62Y0SgA+Vqmn5PoC/vl
+         g6Dj1A/XcVXwzRVwOr/weapVHvCijFzG3ellNp7jPCCYyPvIbqu9AKtPBeSlEmbbrWCq
+         P4Lqwtvej7WrdbmXjHSOEvLIYTBVPgPiiUYkFCFh0f4swOc0k7wrt8UK5FNVndhT8ORF
+         K9TWpsJwR8TvO62EpbhtiId5MxE+LL+UP3tdT0CvY2axu2U4TePijkVdsebhm+cEBhMN
+         A7qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782403658; x=1783008458;
+        d=1e100.net; s=20251104; t=1782403661; x=1783008461;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RukUpK2hqIlqtjKrnPXSEkZXvAhn4lqBD25H3vkwCjM=;
-        b=LCJdnPRsuB3Lko6Z1okcsQy2rE7wbDSTO+Tlj1MeQ3FoBjnVj1p0UGxsaDNlbfPKuk
-         M/SlZyd2gVe++oGETsjG+FM2Ye9mvNJRmHjEz2/ogXwItA91coDP4NQ0Nv2BLsqBafKX
-         +oR8OCqPX6a6agN1n68EtHrJi8xZ4ar73rzhUwfVU2KryqBfDzkoyQvSTUvdPbWX9IwF
-         Cjt95vpmA6Qs9E1Q3FGV4VCJU3CzNrv/dxKEFO+oNALKa7E2487HAJu9nnSn0gyk9c+N
-         6B9LBL0DT46uB8R/lu+2WP+/7Rdf+YXvO2JSyKZcrQTIUrZu4xchReRygKzEeuION+k/
-         gP3w==
-X-Forwarded-Encrypted: i=1; AFNElJ9t/oUgfmgs7/ekqwRlggJbGTayvawq7JvCuZzXEcbg7NMHaQNbLAIpoAZmyOn7Iufz5Bfg80mDIMb41yrgfxc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyh0EQvgdRFK9xgrz4me6QUiP+Z2GWSDrslzb29UMQVjGHx3uvi
-	51fMzD0MTgpvy/8ByZQUBDyGuPSpDGZO92GhG3K/6PD9ll3PJ5mpdqSL
-X-Gm-Gg: AfdE7cm404z04Sxi3hsq2it+A+4F+Y4KpXZWHm2zryVqjbnQ+5kLzsfPr24aSYGNbW2
-	/9wG0KtmsojWf2GgwVdsJ6wvXsotScIyO3NTlHI1lObWtxT0aVqggp4DM2aT3vllswUjH0VZayx
-	pkh0A/sIy6LICMAYHSs9QEAw7eV8vIO+x85R1SzqPAk1Qp+RFDTal8LQ1jCm2XYhpW3arJTMIpD
-	3brBjFPkQOA9DPpNwY7k8T7RkGxHPaz70hH6UFZ3YAq5e59Qs2wTuCV1w0R4i1AtNDZ3vQe7Edn
-	uR34fURKCUNHpMHuJASvDn9eETiZU2y2VfGhlM7O/u+cHHcnz2voqPBi9bQDCNbmWVW24BRYgrF
-	VoChG/f0RNzBWiq1biup9UbgAqT3UXb7i5aRj6JevnwDTu4wwg55cFGGx9njw08HB7ZeJjzSY9+
-	RfdnnPdHDgDTv+
-X-Received: by 2002:a05:600c:8b53:b0:490:9d1b:f086 with SMTP id 5b1f17b1804b1-49266864977mr45557685e9.14.1782403657634;
-        Thu, 25 Jun 2026 09:07:37 -0700 (PDT)
+        bh=9xlNMIqzkOijapT3trmKB36H51y0Q3Hatzee9XcmfXw=;
+        b=S+r6Po7uWIs0KsQH8OO5pxuCySGkaVQi01f4rPwzn4uetzLhL5QQUs2A9ZEwVvlxxG
+         ukZnxTy1tKdnb8qMVFz3KO8blzOnk/sJyBPO3pn9AF8v9Xf0N9Q+PfRDV65QghTgcrpX
+         sGDkju/iHCjI/EMNUv2SqSQ1e9rLOFHiOjzroIt1ASstt4biQH3x+6RaUbR9Lks9XXnt
+         /4bmXXio0mKG605Da3PqjjrB6c6XTr59H0sYnpA0+H0K6NvbWfyZlxsVRO7pN8HPF3pL
+         lXxyq05dnf2m4z1J59sMlpiFElypWrMZYDJT0bQFWT+lNtLluJYG/IT0LhLfzB1GCn1r
+         QR5g==
+X-Forwarded-Encrypted: i=1; AFNElJ/ZMUCGftt0ahb6owc04/bKAJc64u7MgcXcNenlcoWFE9GXwucUrZcD7fK+3chADogcZlrHEdzqLXyoryKnaKk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJ66XYoapcZYZ1XkWcKX+vteaU5OSnynxF0FrH1v1PfE5wwKTK
+	VOn6TX+Mgc0ywNR3sRPQian27D98FvNXNTEZPqru/e6QrOKRcylxIRvX
+X-Gm-Gg: AfdE7cmbyfjEH6Yk2vwW4mwCfWuWrV8uyZl0wjpSgK00kji4VKd/rjpojy2Q/MQby+c
+	GcNyLxXUCAhSy3yNCnMheEV/4FYYPOuc942sRpazz4yv08TUueGf8KIMeHWFoPPigQxqhCoyprj
+	tj7M+NTvvqfgdy3aW3htKrY/lDzNt44F48BXF7AekLnLLEGvwgk8Q2kpIIsPJ6Srai2I/jm8Nz6
+	KgIkonqM955LTsvE1q4r8AYNu4RT3cL2j8nVxRA/OvKq8rg9gTCkdrgi1BMpGTc3zoLL3K0xClP
+	oAFEakfi7JrjrEcVgBoFkH9lgdovO3sgPKHawI1+3uG09MEDCQO+4mA2SpwI7edyj6L41xRLXg4
+	BbIggfH2glIZrj3O86sRiCkuFwuN2Sd1WlLsjIFYEQ8CcGucstjftgD1KoKpiYPhDUlgTvLn2oF
+	Iy9qBB8Y9gNFYK
+X-Received: by 2002:a05:600c:609b:b0:490:e60b:6860 with SMTP id 5b1f17b1804b1-49266833cedmr44566275e9.7.1782403660449;
+        Thu, 25 Jun 2026 09:07:40 -0700 (PDT)
 Received: from beast.lan ([2a00:c281:1461:c400:bf16:e4f3:7fa:c2dc])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49268fef710sm12844515e9.7.2026.06.25.09.07.36
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49268fef710sm12844515e9.7.2026.06.25.09.07.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 09:07:37 -0700 (PDT)
+        Thu, 25 Jun 2026 09:07:40 -0700 (PDT)
 From: Boris Shtrasman <borissh1983@gmail.com>
 To: Sebastian Reichel <sre@kernel.org>,
 	Shuah Khan <shuah@kernel.org>
@@ -65,9 +65,9 @@ Cc: linux-pm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Boris Shtrasman <borissh1983@gmail.com>
-Subject: [PATCH v2 1/2] selftests: helpers: handle multi line in test_sysfs_prop_optional_list
-Date: Thu, 25 Jun 2026 19:05:54 +0300
-Message-ID: <20260625160556.54830-2-borissh1983@gmail.com>
+Subject: [PATCH v2 2/2] selftests: test possible usb type values from documentation
+Date: Thu, 25 Jun 2026 19:05:55 +0300
+Message-ID: <20260625160556.54830-3-borissh1983@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260625160556.54830-1-borissh1983@gmail.com>
 References: <20260625160556.54830-1-borissh1983@gmail.com>
@@ -79,47 +79,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Modify test_sysfs_prop_optional_list to allow multi line parameters, in
-order to comply with checkpatch output that limit line by 100 chars.
+modify kselftest to check for usb_types values from
+Documentation/ABI/testing/sysfs-class-power instead of only checking for
+property.
 
-Allow use cases like:
-
-test_sysfs_prop_optional_list \
-        property_name "value1","value2","val3","very_long_option"\
-        ,"extra_long_option" \
-	,"even_more_data"
+Added the
+"Unknown", "SDP", "DCP", "CDP", "ACA", "C", "PD",
+"PD_DRP", "PD_PPS", "BrickID", "PD_SPR_AVS",
+"PD_PPS_SPR_AVS" values from the
+ /sys/class/power_supply/<supply_name>/usb_type section.
 
 Signed-off-by: Boris Shtrasman <borissh1983@gmail.com>
 ---
- tools/testing/selftests/power_supply/helpers.sh | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ .../selftests/power_supply/test_power_supply_properties.sh   | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/power_supply/helpers.sh b/tools/testing/selftests/power_supply/helpers.sh
-index 1ec90d7c9108..ff1175aeed72 100644
---- a/tools/testing/selftests/power_supply/helpers.sh
-+++ b/tools/testing/selftests/power_supply/helpers.sh
-@@ -108,7 +108,7 @@ test_sysfs_prop_optional_range() {
+diff --git a/tools/testing/selftests/power_supply/test_power_supply_properties.sh b/tools/testing/selftests/power_supply/test_power_supply_properties.sh
+index a66b1313ed88..7bf76af4cfd5 100755
+--- a/tools/testing/selftests/power_supply/test_power_supply_properties.sh
++++ b/tools/testing/selftests/power_supply/test_power_supply_properties.sh
+@@ -58,7 +58,10 @@ for DEVNAME in $supplies; do
+ 	# This fails on kernels < 5.8 (needs 2ad3d74e3c69f)
+ 	test_uevent_prop TYPE "$SUPPLY_TYPE"
  
- test_sysfs_prop_optional_list() {
- 	PROP=$1
--	LIST=$2
-+	shift
+-	test_sysfs_prop_optional usb_type
++	test_sysfs_prop_optional_list \
++		usb_type "Unknown","SDP","DCP","CDP","ACA","C","PD"\
++			,"PD_DRP","PD_PPS","BrickID", "PD_SPR_AVS" \
++			,"PD_PPS_SPR_AVS"
  
- 	TEST_NAME="$DEVNAME".sysfs."$PROP"
- 
-@@ -118,9 +118,9 @@ test_sysfs_prop_optional_list() {
- 	valid=0
- 
- 	OLDIFS=$IFS
--	IFS=","
--	for item in $LIST; do
--		if [ "$DATA" = "$item" ]; then
-+	IFS=",$IFS"
-+	for item in $*; do
-+		if [ "$item" ] && [ "$DATA" = "$item" ]; then
- 			valid=1
- 			break
- 		fi
+ 	test_sysfs_prop_optional_range online 0 2
+ 	test_sysfs_prop_optional_range present 0 1
 -- 
 2.47.3
 
