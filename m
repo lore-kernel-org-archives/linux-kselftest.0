@@ -1,122 +1,180 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0685F23C4FF
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 15:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782402030; cv=none; b=MiD6HBi2dNgN/LdD/Fl+EDbEdoPTzYDB0mTUjwWte5b9QL1sBGjf5Ps26VxQhxtLCZGXl6c2y5PiFf3R8GlBfpkwamWx7brNxuZcYxRMX/dBiQMMj6fm+keWdadm1mxKsI+9bfDGvhXnMoTaDqQMuFWAiUmusE0nqaVkIor8yvw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782402030; c=relaxed/simple;
-	bh=wnycnk35ivpQHERfilV0c1wBVrlSSxbqgktgJps4HzY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=FPIo3XzGqVzfVlmXJ8eABd4bPxmUHMvahYLcQKP0AR0NH2w1HOHDg4EXSaqWcGecSlLoSgWNpzBclL09S6bs/L/oWtY43iBOwSwJFdP6dlMHisOIYXyXIKbl2sR19oqN1E9wZUgK7t6iDuZKZO9hPvY34jHZPy6lPqvBt1Jzce4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O1HkzZQI; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11498388E5A
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 16:06:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782403618; cv=pass; b=o8iPzdmlX69jsgMwTg5xHzGQUykdG3CH90PtQoJyPG3C6XovfxuMSErTGE1+Kc4qWZWnX7MYr3tzctL/vNTSCeQKONWkRL5hXFHdRk8ecuH/rR86PN5atZ4G8ktgKw9c3Nhrl0PdiCOtzcOjp77c7r9GXQ+ht+pK1H9Na/3e898=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782403618; c=relaxed/simple;
+	bh=agsr2jSOniKtJMF+X0oXwibByddxXJqtF6YncOKFIEU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JcK2qWTKP4G81i9awPTP0WMEztCNHYp52umsVUF5BvdR6eWe8pk20+IRtzjLqtXMOdrHc95yhXPQq9CWsSXSDZXV0tZlMq+Y7Iv7TD3Pr5ors53wKEWTwk6KTpuy1omX7xoq9OQY1hDJQ6mE3+wECnwkm0agYtl4vcD+y/2ZiNY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=QvSsjVPq; arc=pass smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O1HkzZQI"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c90101fb3deso1525284a12.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 08:40:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="QvSsjVPq"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-845b6f34873so757348b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 09:06:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782403616; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ANEtgL8Gfxg2cW4EJsQNOPKys9IFvW0cDBpPhpCMlyrkjQjsAXWd/gYV8BXDI/FqPM
+         9wt8D6m7v/t9FpvS380ycwu8GmWLJKSpggpZ12fnO/UBbGAaZNGtR41/gWg7FTcpupbl
+         j7S/fPnfSega5wwv4+PiaZN5scXlvH0jz1+cUkvNTY4rCM/jI56rBezG6VNCTNjLe0/7
+         aIZfpMnJTqDa7Bu0F6vQ0Enu3pmCU4FXL71YwXQvMZ37y8vsngu90qPqQVakp4UxxrzR
+         DiAa9pp5tYv54jwruafF/uND1k/fG9WP8EPKZIMzlaKQh5wgQvCRKLsCtHp5YArARbSl
+         KHLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=tj5Ca+YrVkSkclVchnHXzQO8ttUEujxWnJ/JyckdB0c=;
+        fh=EmqLHo8Hv46EyAlaOk/hHpip94Lj4efv/w7UF0J1gqo=;
+        b=kyPC0AZROLeQ/gwqZ0kAaTiYPK/Q4FuOnFZj85oaSwEHyA0CpU1EsYpJHG0z/GifZs
+         cYCHT5rMjSJP9BJ7bYbSy21oMh+LQz3of5bEcjRkkM+nmaLECjBtiGoZehmonx2RRwCb
+         +y02tNcLngFvAUGIxyMvpQkF9/DPzICgMGbNxv3rYp8kiYbKSXp1VlBN8AcF5uuZ0F5p
+         uD4kE2MamtwMOWJPhMiTo1ks3I7+6tkM0aRsR7kfHxtnILKSnBtJSzMjJ/3iMQdhSElp
+         83VPIbsjRs3y5bCXip/9mQNf15TcVDrdpXUQKZJagQLDkOM0eUTTg7rQEjuVJz4oyfsF
+         tyQw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782402028; x=1783006828; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Itjo2jMjkwhBM0k9+OlfOfXdIDoAWufeDNJNDd1hXfc=;
-        b=O1HkzZQIi+MnRkSybj5bbHuNPOdQm0Cmmkp8R2vnMeuw9GWpob8A+A/aD4CDhOrWgP
-         FJWl+84GxCOD51HXoVsHR9kMqxc0JN7hEHkV/ZXBReJ5S+BiDH5VKRRcuoOFAOyHvjlt
-         Q+IMC3Rx+3t+vBvSw0G+3Q+y5kUa5TeEfSfy8Bpsp0XtvORO3v5FaT7VZdS/Y7VFGLlX
-         0pg4Dshd8wn1n0dXEir7JeZzp6LGx1xIHBxPAZRpY//ieK0H6vF1eNPSDpUfyQ1vK1a5
-         Ve9TtzFxPu/KyrX0abS2rMpjTgJzrWKggNpa4IRUcEzwHDRqASoj5uZQ2pXXTguf7WNc
-         6thQ==
+        d=paul-moore.com; s=google; t=1782403616; x=1783008416; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tj5Ca+YrVkSkclVchnHXzQO8ttUEujxWnJ/JyckdB0c=;
+        b=QvSsjVPq3M1JY0gxDJT0dGWAhQEabdh6KoWw3JBpzBtI3rtnb3lWRsn8ta0q85U6l4
+         Ua9fc9jZSlTlQCTuDpP5pl3PJpzmygJREv8s5m4jjU/kpKu1yQeSbGs6Bu+QQmxV2ezi
+         e6NPDfevXKkBchG/zqVyPXc/kFOhBiI2W3jBrwdKpT5ZZaWOTSIRUKTJNjQJ0AbZcUec
+         vgdp30jAhElXeS5k7V28unI7eOz9LvmVrSUmQlBIQCVGaSXpNXiOqN/qFRoYC/XGgKOC
+         9iAuA/CZaq2dfEavbG5gNF2LFQUOsab5a9SZvIIiNeh6NvKgnQyIElT7hrMSadP+7MFu
+         n1Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782402028; x=1783006828;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Itjo2jMjkwhBM0k9+OlfOfXdIDoAWufeDNJNDd1hXfc=;
-        b=TUPsj2106iqMhEerz5+O4Tx1gkaAY7WadOpF1Qnj9LGTWRBIMdjvL0kSSTjG4T628I
-         8vpB4hhsZaG7J4Gp34LBk8JOIOccxCxZsNa63a+GOny80KE1EJb3q1OrW7sW9VnCd2yU
-         r3Fiz7emhqCbVpf2kGiJONWbfMaVH/wNYqHezh45PjvRoOAvIQGG8Cup5urS6gcBAx8m
-         IXZvpzFaoqV93nPQfvXbyqw3JfV0OwYBxrDFwoz1n2HXpEETK+A88m3/wf2gMhJyVl3C
-         55kd85fhOqybcQTr4MYFZu5m/Ept+Xv/KxkT0h0p3nUWljLeHRoEcGNnzBtIgcN4xdgF
-         iy5w==
-X-Forwarded-Encrypted: i=1; AFNElJ/z0Jt6lNnaTigHAOkbVDSLYm3w7Qfv44AQAtpiK4ffUZAsEz3cXDqTKwhdXpj85oOoqMlSYeGr+r6+cur4ofs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQNFXfxO9Lu4qJODLgu78ZiOE3geLU5CkC4ANuaS10lFoC/P+G
-	MuEIY+L2fsOE6qVnQ21v0B/avUDHKz8rzgOignRhocezdBN7RTHMKMJLXgB4AnRHutbymDBofda
-	ws0/HQg==
-X-Received: from pgbdk2.prod.google.com ([2002:a05:6a02:c82:b0:c85:9dd2:d11e])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:cc97:b0:3b4:5c6f:cf30
- with SMTP id adf61e73a8af0-3bd4b25b347mr3615613637.38.1782402027934; Thu, 25
- Jun 2026 08:40:27 -0700 (PDT)
-Date: Thu, 25 Jun 2026 08:40:27 -0700
-In-Reply-To: <6ed7d12a-c3a1-4572-8385-754e6d5b8b44@kernel.org>
+        d=1e100.net; s=20251104; t=1782403616; x=1783008416;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=tj5Ca+YrVkSkclVchnHXzQO8ttUEujxWnJ/JyckdB0c=;
+        b=CDmoGKTOwLnX/r/cNdZNIfhE96ZOHdVqTffoYid/lG7FL3DTsKLOJ31D7JCJnAy5Lt
+         MVFmwk0/sZl0vaBy3EdTV26fR1sMudpWXkKkAXm2OJHz6M6oR5XNzi4XhsKprei9O5jZ
+         eh8POwTZlVzt+dgWwU19eUSIx7RYoM0o1IOjruVIO/rE+lXbfwqXRZVRpZK1tmWeoJjr
+         VhqjHQqn+ODjTxhthG0TKSxo9bGTEBxmOOMojOrTp3DgrrEWiR6Ucx3Yc0maI8Pc1XCI
+         1MnMwpkrMr96xlpvvTaiykLnLveTO0aNgTAl7wPwyQr9k/Z74+v3ZoOPBnlJdIdsy1oc
+         2EMQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpvtI/zJbdgtlH5awKS1EeVWCZ0vWcYMq7ZNVIj/mxKqyI211vImoq2jPesomRElCKs5M2EwbWDj43m784SBHA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHXGmgiozhKlLe0kMHfVOXyUqv7wJReQxu2JGXIIkB9Uhgoynq
+	Qbn/oZc5PkPsaWb4/do7PrLzVU8iq6FtIAdOcYSkU56wBiYQ8nPwiv0qu57VsGqvhE/8/PulN8B
+	n+pM4zqDse90+u4hD+w34mxCpamrOhciSYq0uyvlw
+X-Gm-Gg: AfdE7cnCdZY3a4qg+NFHp2A4V7+ajKeua3JL77icZzn0MYDANhb4RIeI6HhasTz9bds
+	xwxPef7tqRilLQqsKz+eiKrYLPMsX00FSB7T4N5I0s/4UNT7Qzm4uaMNT6qMJFAz1sV+svCsPaT
+	/23Qy3SjVyzEfl9nHnH43y66PvN1v3Emzkiu3J7UzHgJ5EDehAZCMgBzgqOVfNugf/geLMwmudE
+	A3m+JdgJwZ+VOB/+n2kOvHNs0OWVIGrU03hIuKyA3XZ0h3YETiUAqIY1qZk0aUjUwJxi4QA
+X-Received: by 2002:a05:6a00:1a8e:b0:81f:5037:a317 with SMTP id
+ d2e1a72fcca58-845b39d39c6mr3865503b3a.11.1782403616175; Thu, 25 Jun 2026
+ 09:06:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-18-9d2959357853@google.com>
- <ajwMYCSrPlxg-Fok@google.com> <CAEvNRgE8HZDOnexMJeim6TjmxGG1AUXFY2+HH1YyKB=aM6D-DQ@mail.gmail.com>
- <ajx3vmNPRf-M9kR6@google.com> <6ed7d12a-c3a1-4572-8385-754e6d5b8b44@kernel.org>
-Message-ID: <aj1L626RI3Ty_hh3@google.com>
-Subject: Re: [PATCH v8 18/46] KVM: guest_memfd: Handle lru_add fbatch
- refcounts during conversion safety check
-From: Sean Christopherson <seanjc@google.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com, andrew.jones@linux.dev, 
-	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+References: <20260618203411.73917-2-dwindsor@gmail.com> <75d39fd9847cca915d704235264ab474@paul-moore.com>
+ <20260625-schnabel-rennmaschine-parieren-bcb352c3cf59@brauner>
+In-Reply-To: <20260625-schnabel-rennmaschine-parieren-bcb352c3cf59@brauner>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 25 Jun 2026 12:06:44 -0400
+X-Gm-Features: AVVi8CfVp_1nha_FxdKkksJCUmgb3NBLBVh62tn1q5iqee01wbI4MgNkgsJUBlQ
+Message-ID: <CAHC9VhSP54b9UZLJ5RRaWfnV5J6mD4iLCFXxwwv9pFqDrCAH3w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
+ inode labeling
+To: Christian Brauner <brauner@kernel.org>
+Cc: David Windsor <dwindsor@gmail.com>, viro@zeniv.linux.org.uk, jack@suse.cz, 
+	ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
+	emil@etsalapatis.com, kpsingh@kernel.org, mattbobrowski@google.com, 
+	jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
+	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
+	stephen.smalley.work@gmail.com, omosnace@redhat.com, casey@schaufler-ca.com, 
+	shuah@kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 25, 2026, David Hildenbrand (Arm) wrote:
-> On 6/25/26 02:35, Sean Christopherson wrote:
-> > One thought I had, to avoid the IPIs that draining all per-CPU caches requires,
-> > was to disallow putting guest_memfd pages in folio batches, e.g. by hacking
-> > something into folio_may_be_lru_cached().  But due to taking a per-lru lock,
-> > that would penalize the relatively hot path and definitely common operation of
-> > faulting in guest memory.  On the other hand, memory conversion is already a
-> > relatively slow operation and is relatively uncommon compared to page faults,
-> > (and likely very uncommon for real world setups).  I.e. having to drain all
-> > caches if conversion isn't safe penalizes a relatively slow, relatively uncommon
-> > path.
-> 
-> Yeah, the lru_add_drain_all is rather messy.
-> 
-> We have similar code in
-> 
-> collect_longterm_unpinnable_folios(), where we first try a lru_add_drain(), to
-> then escalate to a lru_add_drain_all().
-> 
-> Maybe we could factor that (suboptimal code) out to not have to reinvent the
-> same thing multiple times?
+On Thu, Jun 25, 2026 at 10:23=E2=80=AFAM Christian Brauner <brauner@kernel.=
+org> wrote:
+> On 2026-06-23 20:12:32-04:00, Paul Moore wrote:
+> > On Jun 18, 2026 David Windsor <dwindsor@gmail.com> wrote:
+> >
+> > > Add bpf_init_inode_xattr() kfunc for BPF LSM programs to atomically s=
+et
+> > > xattrs via the inode_init_security hook using lsm_get_xattr_slot().
+> > >
+> > > The inode_init_security hook previously took the xattr array and coun=
+t
+> > > as two separate output parameters (struct xattr *xattrs, int
+> > > *xattr_count), which BPF programs cannot write to. Pass the xattr sta=
+te
+> > > as a single context object (struct xattr_ctx) instead, and have
+> > > bpf_init_inode_xattr() take that context directly. Update the existin=
+g
+> > > in-tree callers of inode_init_security to take and forward the new
+> > > xattr_ctx.
+> > >
+> > > A previous attempt [1] required a kmalloc string output protocol for
+> > > the xattr name. Since commit 6bcdfd2cac55 ("security: Allow all LSMs =
+to
+> > > provide xattrs for inode_init_security hook") [2], the xattr name is =
+no
+> > > longer allocated; it is a static constant.
+> > >
+> > > Because we rely on the hook-specific ctx layout, the kfunc is
+> > > restricted to lsm/inode_init_security. Restrict the xattr names that
+> > > may be set via this kfunc to the bpf.* namespace.
+> > >
+> > > Link: https://kernsec.org/pipermail/linux-security-module-archive/202=
+2-October/034878.html [1]
+> > > Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
+git/commit/?id=3D6bcdfd2cac55 [2]
+> > > Suggested-by: Song Liu <song@kernel.org>
+> > > Signed-off-by: David Windsor <dwindsor@gmail.com>
+> > > ---
+> > >  fs/bpf_fs_kfuncs.c                | 106 ++++++++++++++++++++++++++++=
++-
+> > >  include/linux/bpf.h               |   1 +
+> > >  include/linux/bpf_lsm.h           |   3 +
+> > >  include/linux/evm.h               |   9 +--
+> > >  include/linux/lsm_hook_defs.h     |   4 +-
+> > >  include/linux/lsm_hooks.h         |  16 ++---
+> > >  include/linux/security.h          |   5 ++
+> > >  kernel/bpf/bpf_lsm.c              |  10 +++
+> > >  kernel/bpf/trampoline.c           |   3 +
+> > >  security/bpf/hooks.c              |   1 +
+> > >  security/integrity/evm/evm_main.c |   8 ++-
+> > >  security/security.c               |   7 +-
+> > >  security/selinux/hooks.c          |   4 +-
+> > >  security/smack/smack_lsm.c        |  27 ++++----
+> > >  14 files changed, 166 insertions(+), 38 deletions(-)
+> >
+> > I have a few specific comments below, inline with the patch, but I want=
+ed
+> > to make some general comments too.
+> >
+> > The kfunc additions really don't belong in the VFS kfunc file, please
+> > create a LSM kfunc file (call it security/bpf_lsm_kfuncs.c) and add the
+> > kfunc code to this new file.
+>
+> We expose a bunch of VFS heavy operations for various security modules
+> and this is really not different. For xattrs we have it all centralized
+> in the VFS and in general all VFS related bpf kfuncs should continue
+> living there and be registered there.
 
-As discussed in the guest_memfd call, we should do this straightaway, i.e. instead
-of merging this series as-is, so that we don't export lru_add_drain_all() only to
-drop the export a kernel or two later, and can instead export the helper to drain
-any batches for a folio (or set of folios/pages).
+This is really LSM specific code dealing with more LSM bits than
+anything else, it belongs in security/bpf_lsm_kfuncs.c.
 
+--=20
+paul-moore.com
