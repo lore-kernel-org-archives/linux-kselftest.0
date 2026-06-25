@@ -1,128 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA4A28C5CB;
-	Thu, 25 Jun 2026 19:22:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB7325771;
+	Thu, 25 Jun 2026 19:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782415353; cv=none; b=g2c3OC+Qel+ekbpm3S6PSZwXZB634OSm+7OqhKT+KRb9pvpT/ny815hKiubpwYauvk2PPys/Ha8ZVR3JPbUyTVTFPqmb6o1yp7hyXtuy3CJHniX4BwF/fzxoEby6n5++s+GEGTftepXlbEFnTXwHr0mnokLyTCFNoRPGU6979Wo=
+	t=1782416098; cv=none; b=q2TVRfPGduXd/o1rueGFhcBjXNrObm7Ui7fZt4tIx36LXMRtkUWDDyc5BgR4d6PiqXb22f4GoDnFmwHcJriwJ0d1B+gwsIM9GH2uMIP/b+9rZc+/8Dhsola5cquuSDHEkXzUT5XtIhUhXGeMl5dhLfQkPrGNM4E0ODNqlxTqRwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782415353; c=relaxed/simple;
-	bh=2Txf9qrtG9xFluLwOAAnwEEQ+9CPQg1+MFCaHyW7GqM=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=aFBCGwlvT2v1b81HGHCONrYWqIyYrwZZUeequMCA9FGdSKoY/xhIWqtVBN/F+WtwhAHM3qdsBczMmH0mTGpYF0anrN+gT47zz9vHvfIyaEfB3jCgdNtTNPO2eeHHFdJsgUEOqZnvMdi6sSsRvU3IRZJPJyMEobw6zL6wKD5ybGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VvKr3PZe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782416098; c=relaxed/simple;
+	bh=h/VJcPO5ZLOadJ5wysEz6lTyDoIeInuqp7ujvz9zGfo=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=ddfa/CrDE1rMeZbpivX4HaX7t/W69qy3nrqJyybPj4NQNIK/EauMhyfVvGiMDcq4vjHyUapkq7egwm8N2c3hvuTKNnKD351EZpbm+RI5eaETIUgmlXFZ51XNiM8fflmyNlSL5hvihXkyuPqJv17tDQ2DB/W21qfX9PVmpz889Sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=johnericson.me; spf=pass smtp.mailfrom=johnericson.me; dkim=pass (2048-bit key) header.d=johnericson.me header.i=@johnericson.me header.b=abF9ft4k; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bBu/Gwgz; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=johnericson.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=johnericson.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VvKr3PZe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A8091F000E9;
-	Thu, 25 Jun 2026 19:22:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782415352;
-	bh=WnDS5j6lyeaeZIOZYGNYA3yrK95KQ7qc6yGTXVrMjFQ=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References;
-	b=VvKr3PZeX7jSfkhBXvRZF/pGRa5yn+mG6BinaFVmuNzoQ5PhPIIWhy2/1UUxx1e1g
-	 kc5vWDc4yzRS3iqPBagZ6kt+mryJBa6c6Gr+x5/2dvJYbFU5dGGEQSg/8HiLTv1GDW
-	 gQgW/jfq93EA/bwYELdwuKiPnKE8CVEj0QvTe/DpTi4OhG3aeCJ+hGHBEy6JvK83Js
-	 eYCa9/XrW+ms5Zkk7zfGCiRE8yg19Ukp/UJASML/vLapC3b34btcAVjN9QeUE0byNz
-	 YQaoL0kpPKmuXoV+fLwuddQFTrdlDC9BLVlEVyrorHzQhGGNS7qrEPgL+uKfVrAGoG
-	 hwFrk9CFbEHaw==
-Date: Thu, 25 Jun 2026 13:22:29 -0600 (MDT)
-From: Paul Walmsley <pjw@kernel.org>
-To: Wang Han <wanghan@linux.alibaba.com>
-cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-    Albert Ou <aou@eecs.berkeley.edu>, Steven Rostedt <rostedt@goodmis.org>, 
-    Alexandre Ghiti <alex@ghiti.fr>, Masami Hiramatsu <mhiramat@kernel.org>, 
-    Mark Rutland <mark.rutland@arm.com>, 
-    Catalin Marinas <catalin.marinas@arm.com>, 
-    Chen Pei <cp0613@linux.alibaba.com>, Andy Chiu <andybnac@gmail.com>, 
-    =?ISO-8859-15?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>, 
-    Deepak Gupta <debug@rivosinc.com>, Puranjay Mohan <puranjay@kernel.org>, 
-    Conor Dooley <conor.dooley@microchip.com>, 
-    Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
-    Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
-    Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-    Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-    Arnaldo Carvalho de Melo <acme@kernel.org>, 
-    Namhyung Kim <namhyung@kernel.org>, oliver.yang@linux.alibaba.com, 
-    xueshuai@linux.alibaba.com, zhuo.song@linux.alibaba.com, 
-    jkchen@linux.alibaba.com, linux-riscv@lists.infradead.org, 
-    linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-    live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-    linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v3 1/8] scripts/sorttable: Handle RISC-V patchable ftrace
- entries
-In-Reply-To: <20260609063002.3943001-1-wanghan@linux.alibaba.com>
-Message-ID: <2a7abbb3-e2df-ab2a-087a-0e1604d188bb@kernel.org>
-References: <20260528082310.1994388-1-wanghan@linux.alibaba.com> <cover.194d76e3a15b.v3.riscv-livepatch.wanghan@linux.alibaba.com> <20260609063002.3943001-1-wanghan@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=johnericson.me header.i=@johnericson.me header.b="abF9ft4k";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bBu/Gwgz"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 7DF511400089;
+	Thu, 25 Jun 2026 15:34:55 -0400 (EDT)
+Received: from phl-imap-16 ([10.202.2.88])
+  by phl-compute-05.internal (MEProxy); Thu, 25 Jun 2026 15:34:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=johnericson.me;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
+	 t=1782416095; x=1782502495; bh=h/VJcPO5ZLOadJ5wysEz6lTyDoIeInuq
+	p7ujvz9zGfo=; b=abF9ft4kvzbIc8aYNSRz0Uofgjh8YFqyA9/pM+bt5o/HBqMd
+	4okZovNx0/iizQY8FKft+r2i8DryTUoRxIUAX8ds7Tdok2N24W8xkHwknJpPb1Vm
+	x8r9jNjGCoQoBAfB74vDxL6J7vUTAajWwChf05c2JkGjsqCzPc6cKtq4fZnPVYf9
+	kxzaVf1uT1Y+Koo+WChi2v+2Cmhhm5H5LI8evEH7BN/CvvQsf/JXn3vQ02Tg2qI0
+	JULBVvaoZXoV1hrRj6OcadKW5WX5t/1qDyV4aSKfiKSSq/eLtZNL4e6l5X9fvC8b
+	uzDpUJxuDPTGcT2BOJkKVncZL0xcF8XOGmqrxg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1782416095; x=
+	1782502495; bh=h/VJcPO5ZLOadJ5wysEz6lTyDoIeInuqp7ujvz9zGfo=; b=b
+	Bu/GwgzkIw4a0CO1b3uncymfOPA2SJFz7coLMCF7atUUPVfpyY8LP1Vo3w6PgLp0
+	nyPr9wRRn3euyM1NCzW8eF5ndc6+7K0pjC5dFccSVpfSwmmcqybpbFtMxbJqfSbw
+	0D6X7ul5btN1KzCrh9P/97HXMEn5UHb7WJN5GgHcoK10owrE9h4djD5PdpBt/N/4
+	FU7qtgz0mZrZ0+ZxDqBB0X6VbL8HAH0GsHv2ftnNHDW6NnLncBGHtbhUILkF1kY6
+	l7nRx+j+qOIjiS5EXVkTgs9NmS4wTOCNmhCtdUuU8xucAqb3caL+lX+xFV9w49QH
+	M/VohyQemObsOsQeMH7cw==
+X-ME-Sender: <xms:3oI9avA42e-F3q1SrOClqUqWIixerRxW2AEje3rRmqhlFGTUEDipPw>
+    <xme:3oI9agWyc8FIZ_4x3nqthL_THvhl4f8xq3kMCVgtAcBgNHI67aMmTz7HbnzOe44qy
+    CGicPCoVDQnkYVe4oh9jxozeaAfW_uTOtGWpfXQiBdNKU_hCgxYeOA>
+X-ME-Proxy-Cause: dmFkZTGwWfvxyF8Yo/MGgzR2q6tZRih46h6eDc0VHDJ2pRBK5ZLZ7SSxh8USlawBG3Ionz
+    nNzQIKNAseFIJbn9/qEnT2y+FMvZaCwCMcOwyKQPdpm1DZ+ASf5zJ4gKan2cNthkC2xyk1
+    z1TxDOQgUv6eBgvjksuIm72egj4axJgylhP6P2ON/VLtgPckdlJrpTsTBACxLImbcXljbD
+    D9cVHv/FqOWPuuevvbVEd5oUESfnpfVwHpgZXdOCR0WFPH9WnYY7VfQkinAZ2Bhe54I5Ca
+    y+pUtTjBGYbkJzfE9oqtsml4iTEu0b0V45H62UxjgnAhDNxkmwiyntx/Z9GKOwrAfce/R3
+    9mvE62nTjt5a9+aLLjK9LsmHeiMYmBBZW5urTSPEuQ7uuhdNU8RLF28NTmVKHV1C/cmudm
+    BWJZC/FRy7hL4hmt4N/jFjvZlp0lWwRBIj4LnVvE3wwEYQCqfz8dBdZOf8dLYGqUvf/tr8
+    B76qpzExCYCPJj9X0Kf1M+Jzqc0zKoudkh0D47IL4sSs/X1Wml/r+6emBi7OFWL3jLZeBX
+    R4Z4vDfMl9PsBUvkImElwRgxPHSKdUYdrRXcSgLQjYkjV0q+EcuxbcXzkDxRnFAAHRB3Cb
+    ewYDL8Pk/iPOnyjDpVyNatgBrpwZdV5K0lsqOQCfFafWvD6y8y/0tMsdtctw
+X-ME-Proxy: <xmx:3oI9asmTe8ZpTmoKswMGIu_WJAHRQhsWnnlOIIcWJuNJ0-U58aM_7w>
+    <xmx:3oI9antVlQs_UO-pk-WMpU2BhqzYnNWZ6MH4A5FVvhYHtGunFJKscA>
+    <xmx:3oI9anoCkWCOtPaCWyIvQtlLfb9jZvwQzyvrsGIFl7JOkdS2aFc31A>
+    <xmx:3oI9atcUoTee-0n0XVI2QpvkgIB0vJ5M7qGyeVgjjFGZmZP3rZUF5g>
+    <xmx:34I9apnPMV_xMBFsfpM-LU_FXjKvoFWzbXbRiuMH-WAevtXFRzElSmMY>
+Feedback-ID: ieb4144f1:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id BC6772CC0088; Thu, 25 Jun 2026 15:34:54 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-ThreadId: A1dANeNfTnWJ
+Date: Thu, 25 Jun 2026 15:34:14 -0400
+From: "John Ericson" <mail@johnericson.me>
+To: "Christian Brauner" <brauner@kernel.org>
+Cc: "Farid Zakaria" <farid.m.zakaria@gmail.com>, "Jan Kara" <jack@suse.cz>,
+ "Kees Cook" <kees@kernel.org>, "Al Viro" <viro@zeniv.linux.org.uk>,
+ shuah@kernel.org, linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+ linux-mm <linux-mm@kvack.org>,
+ linux-kselftest <linux-kselftest@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>
+Message-Id: <ea5dc2d9-9a90-450a-bbcc-8ae3429ae85c@app.fastmail.com>
+In-Reply-To: <20260625-atomkraftgegner-hunger-kursbuch-b452ff2becab@brauner>
+References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
+ <sfv7zc6jboy2oxv7zuyofysas4ncbzenwsuzveiyduisfr6i7q@mx23er7uxdbg>
+ <CACCo2jkDuwy5w_yhX8833m+s-rY736pk8xtKjxg3_y_7BCOHeg@mail.gmail.com>
+ <24420045-a6eb-4999-ab19-1e344eaba8a4@app.fastmail.com>
+ <20260625-atomkraftgegner-hunger-kursbuch-b452ff2becab@brauner>
+Subject: Re: [PATCH 0/2] fs: support $ORIGIN in ELF interpreter paths
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On Thu, Jun 25, 2026, at 4:50 AM, Christian Brauner wrote:
+> Also, we change long-standing kernel behavior which will be very
+> surprising for any userspace that might implicitly rely on the fact
+> that the system loader is used. So even if we were to do something
+> like this it would very likely have to be configurable in some way.
 
-On Tue, 9 Jun 2026, Wang Han wrote:
+Yes that's definitely something that worried me.
 
-> RISC-V uses -fpatchable-function-entry=8,4 when the compressed ISA is
-> enabled and -fpatchable-function-entry=4,2 otherwise. In both cases, the
-> patchable NOP area starts 8 bytes before the function symbol address.
-> The __mcount_loc entries therefore point at the patchable NOP area
-> associated with a function, while nm reports the function symbol at the
-> entry address used for the function range check.
-> 
-> After RISC-V selected HAVE_BUILDTIME_MCOUNT_SORT, sorttable started
-> applying that range check at build time. Without allowing entries just
-> before the reported function address, the mcount sorter treats valid
-> RISC-V ftrace callsites as invalid weak-function entries and writes
-> them back as zero. The resulting kernel boots with no ftrace entries,
-> breaking dynamic ftrace and users such as livepatch.
-> 
-> The failure is silent during the final link because zeroing weak-function
-> entries is an expected sorttable operation. At boot, those zero entries
-> are skipped by ftrace_process_locs(), so the only obvious symptom is that
-> the vmlinux ftrace table has lost valid callsites and ftrace users cannot
-> attach to them.
-> 
-> CONFIG_FTRACE_SORT_STARTUP_TEST also reports the table as sorted in this
-> state: it only checks that the __mcount_loc entries are in ascending
-> order, which a fully zeroed table trivially satisfies. The original
-> commit relied on this check and did not see the regression.
-> 
-> On an affected RISC-V QEMU boot with both CONFIG_FTRACE_SORT_STARTUP_TEST
-> and CONFIG_FTRACE_STARTUP_TEST enabled, the sort check still passes
-> while ftrace reports zero usable entries and the early selftests fail:
-> 
->   [    0.000000] ftrace section at ffffffff8101da98 sorted properly
->   [    0.000000] ftrace: allocating 0 entries in 128 pages
->   [    0.054999] Testing tracer function: .. no entries found ..FAILED!
->   [    0.172407] tracer: function failed selftest, disabling
->   [    0.178186] Failed to init function_graph tracer, init returned -19
-> 
-> Handle RISC-V like arm64 for the function-range check and allow
-> patchable entries up to 8 bytes before the function address.
-> 
-> With this fix, a RISC-V QEMU smoke boot with ftrace startup tests shows
-> the vmlinux ftrace table is populated and dynamic ftrace still works:
-> 
->   [    0.000000] ftrace: allocating 46749 entries in 184 pages
->   [    0.051115] Testing tracer function: PASSED
->   [    1.283782] Testing dynamic ftrace: PASSED
->   [    6.275456] Testing tracer function_graph: PASSED
-> 
-> Fixes: 0ca1724b56af ("riscv: ftrace: select HAVE_BUILDTIME_MCOUNT_SORT")
-> Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
-> Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Reviewed-by: Chen Pei <cp0613@linux.alibaba.com>
-> Link: https://lore.kernel.org/all/20260527113028.4b21a5de@fedora/
-> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
+> So I'm not enthusiastic about this. I want this to be consistent.
 
-Thanks, I'm going to pull this one out of the rest of your series since 
-this is clearly a fix and needs to go in sooner rather than later.  Queued 
-for v7.2-rc.
+For what it's worth, I somewhat wish the `PT_INTERP` field didn't exist
+at all. IMO the ELF spec is very weird for some parts of the same
+headers being for the kernel, and the other parts being for userspace.
+If there were separate data structures (think encapsulated packets) so
+it was crystal clear who was responsible for what, we wouldn't be in
+this situation.
 
+While I earlier complained that our
+<https://github.com/Mic92/wrap-buddy> work-around was likely to make
+some security analyses/policies go haywire, arguably it implements this
+behavior: from the kernel's perspective, everything is statically
+linked, and the program, entirely in userspace, takes responsibility for
+whatever loading it needs.
 
-- Paul
+Put that way, this is less of an ugly work-around than the way I wish
+things worked period in a world without `PT_INTERP`. Dynamic linking
+would be entirely a userspace concern and the kernel would not know or
+care.
+
+----
+
+What about shebangs? It's the same problem, with the same solutions and
+pitfalls. We can also make wrapper executables around them that do the
+right thing, but turning mere scripts into statically linked binaries is
+a bit heavier. I assume the answer is the same, but just want to double
+check before we close this off.
+
+Cheers,
+
+John
