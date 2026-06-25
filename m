@@ -1,41 +1,41 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB2530F924
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 21:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6703382F9
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 21:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782423049; cv=none; b=Kx3VS1NpQ1vceYGWMWZS6q+Xlk5d1YMMg8eDwiVo5bxEqQPpRroj84NXaJHzr2MPvgG2nUVL/W42pcDD3rSn89sE7HEzW9XeD0zdvZtDbHzyFjUruQHe44ShQ1J1wvlUBm8G4nP4kdG2IOs8QvHXusQn2VmKPmhhhP63JYpLqLc=
+	t=1782423578; cv=none; b=adqhIoie9j6N/RcnjVitqRn31iYO1ygupfjGIjzppLiUr52JhtReOY3sAUOTfzUoT1U9JIrCMBkab8kJyNXF0mLdDYV6I0KtF6aRCCgPczhpk3WpGRedKAsgDBk5yFUQmyl4QTiKlmKTHqiNzKjQFK6vFdKno9Dh3s03CP2QH/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782423049; c=relaxed/simple;
-	bh=FAfGsS/vKMjiqWjBITTAkt5g8m2FD7Lkq/gg8IRItFc=;
+	s=arc-20240116; t=1782423578; c=relaxed/simple;
+	bh=lsR19j1IBGECl1iTvnGDnFVZMGUdr970UxvcDFoKpdk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EYl30niLRUNpbz4qUlwx0m/7UQP87sXcd4Yn1tuCCM5HyxtGzcXTTc6qEVOpjmv0WckPC5oLSFRk7J8Zr1i8bclDZSD2q/hDYQTMSVh0llGF+NcvhO+TlphquZgknm2ngxN2yeYFON2uAs7gewun9n+v36Iba7oYp7bci4xT8Zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OUbTVyQ7; arc=none smtp.client-ip=91.218.175.172
+	 In-Reply-To:Content-Type; b=QXTG2pt1ddn39QI26DVemDgzyJEJSn274f4Xl+NhV3mwZ8WS02JBcwEzKbrEHOdSWwtmuN+TCk9PZuOmFZy86eymXkTmUyuNdqSyTPaD5GkdK8pVVcuda0wcRqzifM50y6hPedES6yn2jd9/v8IXcDo/kbFtZPe+shsSvxAYIP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sRbNF+/X; arc=none smtp.client-ip=95.215.58.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OUbTVyQ7"
-Message-ID: <eb9a74fe-bb22-4301-ba53-519463b4d117@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sRbNF+/X"
+Message-ID: <91fb97e6-f6da-49c0-bd0b-3dc8390ca3ee@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782423035;
+	t=1782423564;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FAfGsS/vKMjiqWjBITTAkt5g8m2FD7Lkq/gg8IRItFc=;
-	b=OUbTVyQ7WUf7GxwU7LhYcV1WsTM03Qc636p0aJn/vLvx5d4RJpXee9ZT0EqRdDt4usKmpv
-	+pYwuGaK6qZjb4alX7YIWgj3r6uhxzMYPyEtXaNo0HCLOwKssQdttKLcb4vO6CeQcE1ic/
-	zq9upf8gTjMB3Du+uHKWkLhyFHr/wE4=
-Date: Thu, 25 Jun 2026 14:30:17 -0700
+	bh=lsR19j1IBGECl1iTvnGDnFVZMGUdr970UxvcDFoKpdk=;
+	b=sRbNF+/XCdvmuy2b1AOxSuHwwTebFUephjd2GBUXM0gmLS1yeSrUSWhjV6SlHkqRfokKJn
+	LApeDhAisjTfViNbzajZUyQONMojdyZu9pZQNWEWcc559wWXqt22VtNh0AZdPy/zVhwFim
+	aCFYFJy1lQ02AOtR/FwVG2l4wiCl7k8=
+Date: Thu, 25 Jun 2026 14:39:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Reject offset refcount acquire
- arguments
+Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Cover refcount acquire
+ node offsets
 Content-Language: en-GB
 To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
  Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
@@ -49,10 +49,10 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <cover.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
- <2f894647f56f71838fdddeb97a3e057ed35ea92e.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
+ <bf2a2033ced272106292de4465b8ef3fb991c912.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <2f894647f56f71838fdddeb97a3e057ed35ea92e.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
+In-Reply-To: <bf2a2033ced272106292de4465b8ef3fb991c912.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
@@ -60,29 +60,14 @@ X-Migadu-Flow: FLOW_OUT
 
 
 On 6/22/26 11:11 PM, Yiyang Chen wrote:
-> bpf_refcount_acquire() increments the refcount at the caller-supplied
-> pointer plus the refcount field offset, then returns the caller-supplied
-> pointer unchanged.
+> Add regression coverage for bpf_refcount_acquire() on graph-node-derived
+> pointers.
 >
-> The verifier records the return value as a base pointer to the refcounted
-> object.
+> The rejected case passes a popped list node pointer directly to
+> bpf_refcount_acquire(), which must fail because the pointer carries a
+> non-zero fixed offset.
 >
-> bpf_list_pop_front() and bpf_rbtree_remove() can return embedded
-> graph-node pointers as PTR_TO_BTF_ID | MEM_ALLOC with a fixed offset equal
-> to the node field offset. Passing such a pointer directly to
-> bpf_refcount_acquire() currently passes the refcounted-kptr type check.
->
-> That makes the runtime operation start from base + node_off while the
-> verifier models the returned pointer as the object base.
->
-> Require refcount-acquire arguments to have zero fixed offset by carrying
-> the requirement through check_func_arg_reg_off() to __check_ptr_off_reg().
-> Programs can still acquire a refcount from a graph-node-derived pointer
-> after normalizing it with container_of().
->
-> Fixes: 7c50b1cb76aca ("bpf: Add bpf_refcount_acquire kfunc")
 > Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
 Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
