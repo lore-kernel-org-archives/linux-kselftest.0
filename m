@@ -1,180 +1,104 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11498388E5A
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 16:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782403618; cv=pass; b=o8iPzdmlX69jsgMwTg5xHzGQUykdG3CH90PtQoJyPG3C6XovfxuMSErTGE1+Kc4qWZWnX7MYr3tzctL/vNTSCeQKONWkRL5hXFHdRk8ecuH/rR86PN5atZ4G8ktgKw9c3Nhrl0PdiCOtzcOjp77c7r9GXQ+ht+pK1H9Na/3e898=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782403618; c=relaxed/simple;
-	bh=agsr2jSOniKtJMF+X0oXwibByddxXJqtF6YncOKFIEU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JcK2qWTKP4G81i9awPTP0WMEztCNHYp52umsVUF5BvdR6eWe8pk20+IRtzjLqtXMOdrHc95yhXPQq9CWsSXSDZXV0tZlMq+Y7Iv7TD3Pr5ors53wKEWTwk6KTpuy1omX7xoq9OQY1hDJQ6mE3+wECnwkm0agYtl4vcD+y/2ZiNY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=QvSsjVPq; arc=pass smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0FB37B030
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 16:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782403659; cv=none; b=Rvez6/EkNy14igFu3XHLxl55c5yyG5Z1VHsy3PPAu2RDWCmLq4pXkXrLF4uHtLl3hj8UYFLQk+Hld0IH5U7mhtkRgNTXri5ZCQYU+0UCJK27MfxjHDi6dGOXmfFLPfDMk55vaNKmI3MabXOjnCVnNQiMhRhiXl+q7ZwN3fJM4pg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782403659; c=relaxed/simple;
+	bh=Dr5pVOCfCtLgESp7BZBpALP9oXjjL95wrkaWuiXd0G8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TiaW3Uuzzq6UUCVAroYl4FY67WIKlFSmyofoJT9hXfqZLHsWQaxYIo6/QMT15hY/1U1vRF+duOxCGIX/L4nEYVdylSkwfwQhrBtd18mF2OMJbYY6e3bJzVG117Qu1PhuH0hed9QuWT4Y78ykrz6ib2+bJAEVC59DcT10qcFiMto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B9aKWmDP; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="QvSsjVPq"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-845b6f34873so757348b3a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 09:06:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782403616; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ANEtgL8Gfxg2cW4EJsQNOPKys9IFvW0cDBpPhpCMlyrkjQjsAXWd/gYV8BXDI/FqPM
-         9wt8D6m7v/t9FpvS380ycwu8GmWLJKSpggpZ12fnO/UBbGAaZNGtR41/gWg7FTcpupbl
-         j7S/fPnfSega5wwv4+PiaZN5scXlvH0jz1+cUkvNTY4rCM/jI56rBezG6VNCTNjLe0/7
-         aIZfpMnJTqDa7Bu0F6vQ0Enu3pmCU4FXL71YwXQvMZ37y8vsngu90qPqQVakp4UxxrzR
-         DiAa9pp5tYv54jwruafF/uND1k/fG9WP8EPKZIMzlaKQh5wgQvCRKLsCtHp5YArARbSl
-         KHLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tj5Ca+YrVkSkclVchnHXzQO8ttUEujxWnJ/JyckdB0c=;
-        fh=EmqLHo8Hv46EyAlaOk/hHpip94Lj4efv/w7UF0J1gqo=;
-        b=kyPC0AZROLeQ/gwqZ0kAaTiYPK/Q4FuOnFZj85oaSwEHyA0CpU1EsYpJHG0z/GifZs
-         cYCHT5rMjSJP9BJ7bYbSy21oMh+LQz3of5bEcjRkkM+nmaLECjBtiGoZehmonx2RRwCb
-         +y02tNcLngFvAUGIxyMvpQkF9/DPzICgMGbNxv3rYp8kiYbKSXp1VlBN8AcF5uuZ0F5p
-         uD4kE2MamtwMOWJPhMiTo1ks3I7+6tkM0aRsR7kfHxtnILKSnBtJSzMjJ/3iMQdhSElp
-         83VPIbsjRs3y5bCXip/9mQNf15TcVDrdpXUQKZJagQLDkOM0eUTTg7rQEjuVJz4oyfsF
-         tyQw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B9aKWmDP"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-490b211ee6aso131275e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 09:07:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1782403616; x=1783008416; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tj5Ca+YrVkSkclVchnHXzQO8ttUEujxWnJ/JyckdB0c=;
-        b=QvSsjVPq3M1JY0gxDJT0dGWAhQEabdh6KoWw3JBpzBtI3rtnb3lWRsn8ta0q85U6l4
-         Ua9fc9jZSlTlQCTuDpP5pl3PJpzmygJREv8s5m4jjU/kpKu1yQeSbGs6Bu+QQmxV2ezi
-         e6NPDfevXKkBchG/zqVyPXc/kFOhBiI2W3jBrwdKpT5ZZaWOTSIRUKTJNjQJ0AbZcUec
-         vgdp30jAhElXeS5k7V28unI7eOz9LvmVrSUmQlBIQCVGaSXpNXiOqN/qFRoYC/XGgKOC
-         9iAuA/CZaq2dfEavbG5gNF2LFQUOsab5a9SZvIIiNeh6NvKgnQyIElT7hrMSadP+7MFu
-         n1Mg==
+        d=gmail.com; s=20251104; t=1782403656; x=1783008456; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iyxSXNZjt2zGM3OkK+9ft4Li7aIHJEaVpQSWnGw8toA=;
+        b=B9aKWmDP4ufkcuDf3xFQHfVMt9H3ehrLiut7snjULzTw/snenis+a/C6Lf2eup7T/P
+         YGnYANOgf4Xk/c7p7nPHUT+HiUr7BzXcLj3en7p9U6oZNGrk/Kl3TSQtD30/Q64baOh9
+         qCyiPUTS8jj266ee5uAjpQM7WOERLWmEsKTKieZSev7tPITMD995tAGJ18sGmLXzxkaw
+         IdozAbcz0hH07k+4WvFqtSdJaJUuqGrJGyG12A5igS0aqX5aWK/o/Gjzn5QkwqNY8YJR
+         IKmxEnsWaE4Xf1Mwm9hEZgnbMlmP6vj5Z5SBWuRNwj7h1x3uXHJMcWbP9vTFBEbL1Rvz
+         feqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782403616; x=1783008416;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tj5Ca+YrVkSkclVchnHXzQO8ttUEujxWnJ/JyckdB0c=;
-        b=CDmoGKTOwLnX/r/cNdZNIfhE96ZOHdVqTffoYid/lG7FL3DTsKLOJ31D7JCJnAy5Lt
-         MVFmwk0/sZl0vaBy3EdTV26fR1sMudpWXkKkAXm2OJHz6M6oR5XNzi4XhsKprei9O5jZ
-         eh8POwTZlVzt+dgWwU19eUSIx7RYoM0o1IOjruVIO/rE+lXbfwqXRZVRpZK1tmWeoJjr
-         VhqjHQqn+ODjTxhthG0TKSxo9bGTEBxmOOMojOrTp3DgrrEWiR6Ucx3Yc0maI8Pc1XCI
-         1MnMwpkrMr96xlpvvTaiykLnLveTO0aNgTAl7wPwyQr9k/Z74+v3ZoOPBnlJdIdsy1oc
-         2EMQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpvtI/zJbdgtlH5awKS1EeVWCZ0vWcYMq7ZNVIj/mxKqyI211vImoq2jPesomRElCKs5M2EwbWDj43m784SBHA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHXGmgiozhKlLe0kMHfVOXyUqv7wJReQxu2JGXIIkB9Uhgoynq
-	Qbn/oZc5PkPsaWb4/do7PrLzVU8iq6FtIAdOcYSkU56wBiYQ8nPwiv0qu57VsGqvhE/8/PulN8B
-	n+pM4zqDse90+u4hD+w34mxCpamrOhciSYq0uyvlw
-X-Gm-Gg: AfdE7cnCdZY3a4qg+NFHp2A4V7+ajKeua3JL77icZzn0MYDANhb4RIeI6HhasTz9bds
-	xwxPef7tqRilLQqsKz+eiKrYLPMsX00FSB7T4N5I0s/4UNT7Qzm4uaMNT6qMJFAz1sV+svCsPaT
-	/23Qy3SjVyzEfl9nHnH43y66PvN1v3Emzkiu3J7UzHgJ5EDehAZCMgBzgqOVfNugf/geLMwmudE
-	A3m+JdgJwZ+VOB/+n2kOvHNs0OWVIGrU03hIuKyA3XZ0h3YETiUAqIY1qZk0aUjUwJxi4QA
-X-Received: by 2002:a05:6a00:1a8e:b0:81f:5037:a317 with SMTP id
- d2e1a72fcca58-845b39d39c6mr3865503b3a.11.1782403616175; Thu, 25 Jun 2026
- 09:06:56 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782403656; x=1783008456;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iyxSXNZjt2zGM3OkK+9ft4Li7aIHJEaVpQSWnGw8toA=;
+        b=PV9elx6T4RhDLLMn7NvnMTlEd0e3CphidFPRiqBCCaN8fyFBMuGSm0rwmOO6l+X4R8
+         t6TNO/yVgTHcHXXAfcR6D5Il40Nx6Nrb+N6N6UvBGHzlK30wMXT6ctmTIcAOiRweUwv6
+         oUCjZaZqWk9m4KxlIw1ovYV/RSXsPWjfQ3AmWz/8YTDrRRIpHcjJI4FWfJbTmNmQrJpp
+         pg8HojpjDOiwfu+06bV5b7aDdYSd4UDX9gNezKfnxJ4Ly8AL9ESMf81+S526ENcNI6/O
+         Zg7/bfdpzLXyijSNUbqkL9mjZhDIWllLN8Z9HWzv7Vusf+TFxJTFJCc2BbNcOeTCizfP
+         j23A==
+X-Forwarded-Encrypted: i=1; AFNElJ9wgcBzHdcddKKgJryrP20qSHj8wbedl1eH2ZI8NYVMrao8IuHPsNgObZJU14oOUbCfZ1VaqdpRQV7wlwHx3dI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzepG7KZ/BRO77cNjBSmmT3yf496QTzh5mePGOyix3Hbpwbb68B
+	gSRTSA+HOSOVa7+idKsXMkuKxjcBxRldld7BlFl3Eg77y5LAUVJeMOQX2KwRrkZ5ZR6cJw==
+X-Gm-Gg: AfdE7clHx+plx0qdJLvT1BOBnZ/7OvFdZGlsMKNuNxYgUuWzxIMiTKG/x4XCsM1pXv7
+	4JXjHLOvf4oyafrjnRbdbL6Q4l86SBpPNvarc1CvSawNg4Q45NhmGky57hZ4DidmmIxg0DaqqMe
+	+Mri6WKUEE/ZLf8EKmKZ/kNuujKinMbYLJVMsCWGTokjqZwwm8P5HiIXsEP22CBOolkQGU+kEpI
+	Kzz5roLvsdGtFeBs9JyXskbI6kuO+ahFrqdN/xqlXGkhK3mmkZZ79wvQ9p9DB18qWKZ8pMSLtjg
+	VK38mNLw8NFe+9OhWXOiuGwqLXYlnxXkfbboyvzw2BnB4Ieo2bWec7Mt91pLA2Q7VWJ24USC/1N
+	zPuftizH0BtQmHJzpPiZRgAOnn3sRTwUYotHLBIq7KsKuvxQMw8hIk6ECWRVdLxdJA625ZiTzBY
+	OGwNwaiF2wU9TP
+X-Received: by 2002:a05:600c:5296:b0:492:4a56:68fa with SMTP id 5b1f17b1804b1-4926688583amr44277695e9.24.1782403655390;
+        Thu, 25 Jun 2026 09:07:35 -0700 (PDT)
+Received: from beast.lan ([2a00:c281:1461:c400:bf16:e4f3:7fa:c2dc])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49268fef710sm12844515e9.7.2026.06.25.09.07.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jun 2026 09:07:34 -0700 (PDT)
+From: Boris Shtrasman <borissh1983@gmail.com>
+To: Sebastian Reichel <sre@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-pm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Boris Shtrasman <borissh1983@gmail.com>
+Subject: [PATCH v2 0/2] selftests: helpers: handle multi line in test_sysfs_prop_optional_list
+Date: Thu, 25 Jun 2026 19:05:53 +0300
+Message-ID: <20260625160556.54830-1-borissh1983@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260618203411.73917-2-dwindsor@gmail.com> <75d39fd9847cca915d704235264ab474@paul-moore.com>
- <20260625-schnabel-rennmaschine-parieren-bcb352c3cf59@brauner>
-In-Reply-To: <20260625-schnabel-rennmaschine-parieren-bcb352c3cf59@brauner>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 25 Jun 2026 12:06:44 -0400
-X-Gm-Features: AVVi8CfVp_1nha_FxdKkksJCUmgb3NBLBVh62tn1q5iqee01wbI4MgNkgsJUBlQ
-Message-ID: <CAHC9VhSP54b9UZLJ5RRaWfnV5J6mD4iLCFXxwwv9pFqDrCAH3w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
- inode labeling
-To: Christian Brauner <brauner@kernel.org>
-Cc: David Windsor <dwindsor@gmail.com>, viro@zeniv.linux.org.uk, jack@suse.cz, 
-	ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	emil@etsalapatis.com, kpsingh@kernel.org, mattbobrowski@google.com, 
-	jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
-	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
-	stephen.smalley.work@gmail.com, omosnace@redhat.com, casey@schaufler-ca.com, 
-	shuah@kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 25, 2026 at 10:23=E2=80=AFAM Christian Brauner <brauner@kernel.=
-org> wrote:
-> On 2026-06-23 20:12:32-04:00, Paul Moore wrote:
-> > On Jun 18, 2026 David Windsor <dwindsor@gmail.com> wrote:
-> >
-> > > Add bpf_init_inode_xattr() kfunc for BPF LSM programs to atomically s=
-et
-> > > xattrs via the inode_init_security hook using lsm_get_xattr_slot().
-> > >
-> > > The inode_init_security hook previously took the xattr array and coun=
-t
-> > > as two separate output parameters (struct xattr *xattrs, int
-> > > *xattr_count), which BPF programs cannot write to. Pass the xattr sta=
-te
-> > > as a single context object (struct xattr_ctx) instead, and have
-> > > bpf_init_inode_xattr() take that context directly. Update the existin=
-g
-> > > in-tree callers of inode_init_security to take and forward the new
-> > > xattr_ctx.
-> > >
-> > > A previous attempt [1] required a kmalloc string output protocol for
-> > > the xattr name. Since commit 6bcdfd2cac55 ("security: Allow all LSMs =
-to
-> > > provide xattrs for inode_init_security hook") [2], the xattr name is =
-no
-> > > longer allocated; it is a static constant.
-> > >
-> > > Because we rely on the hook-specific ctx layout, the kfunc is
-> > > restricted to lsm/inode_init_security. Restrict the xattr names that
-> > > may be set via this kfunc to the bpf.* namespace.
-> > >
-> > > Link: https://kernsec.org/pipermail/linux-security-module-archive/202=
-2-October/034878.html [1]
-> > > Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git/commit/?id=3D6bcdfd2cac55 [2]
-> > > Suggested-by: Song Liu <song@kernel.org>
-> > > Signed-off-by: David Windsor <dwindsor@gmail.com>
-> > > ---
-> > >  fs/bpf_fs_kfuncs.c                | 106 ++++++++++++++++++++++++++++=
-+-
-> > >  include/linux/bpf.h               |   1 +
-> > >  include/linux/bpf_lsm.h           |   3 +
-> > >  include/linux/evm.h               |   9 +--
-> > >  include/linux/lsm_hook_defs.h     |   4 +-
-> > >  include/linux/lsm_hooks.h         |  16 ++---
-> > >  include/linux/security.h          |   5 ++
-> > >  kernel/bpf/bpf_lsm.c              |  10 +++
-> > >  kernel/bpf/trampoline.c           |   3 +
-> > >  security/bpf/hooks.c              |   1 +
-> > >  security/integrity/evm/evm_main.c |   8 ++-
-> > >  security/security.c               |   7 +-
-> > >  security/selinux/hooks.c          |   4 +-
-> > >  security/smack/smack_lsm.c        |  27 ++++----
-> > >  14 files changed, 166 insertions(+), 38 deletions(-)
-> >
-> > I have a few specific comments below, inline with the patch, but I want=
-ed
-> > to make some general comments too.
-> >
-> > The kfunc additions really don't belong in the VFS kfunc file, please
-> > create a LSM kfunc file (call it security/bpf_lsm_kfuncs.c) and add the
-> > kfunc code to this new file.
->
-> We expose a bunch of VFS heavy operations for various security modules
-> and this is really not different. For xattrs we have it all centralized
-> in the VFS and in general all VFS related bpf kfuncs should continue
-> living there and be registered there.
+Modify test_sysfs_prop_optional_list to allow multi line parameters, in
+order to comply with checkpatch output that limit line by 100 chars.
 
-This is really LSM specific code dealing with more LSM bits than
-anything else, it belongs in security/bpf_lsm_kfuncs.c.
+Allow use cases like:
+       test_sysfs_prop_optional_list \
+               usb_type "Unknown","SDP","DCP","CDP","ACA","C","PD"\
+                       ,"PD_DRP","PD_PPS","BrickID", "PD_SPR_AVS" \
+                       ,"PD_PPS_SPR_AVS"
 
---=20
-paul-moore.com
+--
+Changes in v2:
+- correctped typo IFS vs $IFS.
+- Added the patch to treat usb_types
+
+--
+
+Boris Shtrasman (2):
+  selftests: helpers: handle multi line in test_sysfs_prop_optional_list
+  selftests: test possible usb type values from documentation
+
+ tools/testing/selftests/power_supply/helpers.sh           | 8 ++++----
+ .../power_supply/test_power_supply_properties.sh          | 5 ++++-
+ 2 files changed, 8 insertions(+), 5 deletions(-)
+
+-- 
+2.47.3
+
