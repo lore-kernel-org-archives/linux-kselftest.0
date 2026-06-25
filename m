@@ -1,126 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0BF0363084;
-	Thu, 25 Jun 2026 14:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933D31EA65;
+	Thu, 25 Jun 2026 14:24:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782397439; cv=none; b=SR2jORAgZGYM0r3eNoGHgnwTzCY5ioWuiH/b5cJKo4ebeh+ws4LD5GCSHAzJH/7fmgWTyxlf5YSd42gWcqO5tH6qyYrZKMgYeEN3bGIAXxPdlUii8ob2YzXG8RITyNLBnlewMgfNcMlMwF7ilBgZRUqUgDBu7oq5OSZgtKks39I=
+	t=1782397472; cv=none; b=F1BMfaYP2IdCOL9hYUfGc0PjHgYSDDzCRoO8cjKfc+oqHJVqp6uRrj6NoJZcO49atU55xOd8IWHM26CjdtFxDD7Cjovj4ARTPIKoxOQXA/MnFRymRIEFgn4gnAS2zHogHqizL/CDg2fsYhWeDTqBuTUIwXAqrDr/iWJ8dcEviVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782397439; c=relaxed/simple;
-	bh=NNO35ZyHK/r7ijYBDhwLPiIZ3wWD+t05OGJl+8ydVYA=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=UxnN9tR9EQr2G3rTkPSBW29VOWBzPoeNTsaPOP+FcUCIr0x7CIsOuyrsaLlKR5hzyDcZP3ETIh+0GxL1rIMuMMs2ZTa5RRLw9ZltyzNUlPdbfKKhefRdhpPZt6XCIKOj5vck5UGmfRz33KNEc3HWpU0w8fjdWtnaImXoq6sEOeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oz1c07kk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782397472; c=relaxed/simple;
+	bh=TtVvXUa4e83o2CSHr2VG8/v8m++SEzWD+87YWhkSHP0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bGVxoevx5sa/hAiIIDOKvSPK8wGmI+LVjR71pE4wuqU1KJL02MO9x4VKxcpwWLgNS49MqKnfQyRp42hFPsUtIW2gpFuIQkGOU3Y9029DCdXnqM9vesEqcuRDPRmVEILydXHp6/YS+YG5yxpOOQmJauHsMYcNxBb6TjWcofsNwjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nIUhv7+C; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oz1c07kk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2082F1F000E9;
-	Thu, 25 Jun 2026 14:23:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nIUhv7+C"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E131F00A3A;
+	Thu, 25 Jun 2026 14:24:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782397438;
-	bh=6atzj4kdhKh25A+taHkGxSsDJim9lth3hiEmW+J2u/Y=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=Oz1c07kkv4QRwYt9flB1pDhTg2X/Yep0XMYrVamssz5nW/L/I0I2xsAriiCamTvyG
-	 DoSc0tlA4uDhI5jTx20W+bwFWzW2wiHoUTwsQxNVT25/TX7NjVMiUAhVHcN1eH7NSh
-	 5vFKgIQXCYVpE6RssSuq4qedXvk7xgpIDyqja17KJsRcgpTzIxejiTxONeAUsEfN9r
-	 cA0BLfTMd2o1gexGnDumcsOvZymXoyDCjFrJaohj5rl+2C9LuRZhrJ6e0ou2hXKx95
-	 s87/RtdzKQmIbTx1UeZL21E9vDNZyzW39pUAiEGbfNBnetKsYblpPl+VDZhw3aeDsk
-	 cxUKss8Wb1Z2w==
+	s=k20260515; t=1782397471;
+	bh=LZrmGHo3vflvh1oEeSShAdbEXA+TKacvFO2pVZr+qWo=;
+	h=From:To:Cc:Subject:Date;
+	b=nIUhv7+C8biL1usYwmhv0V2C5fEWQ1cND8G5CDAa+tzyP3ZfsNzmqyV3F/4qInD/a
+	 FVGGWpQJiLeVueVbTK+oPwFmOmDNKChtSaANHgnd6FP0wqUH0/Qe0Mp8jMfDogYKUf
+	 zdn1mGgjwDF1tFnxTtpJgPxTzEB3Wy7Q8mc8OQiFM9GVENLCRehlO3cNzVkxfvYk1r
+	 swKx80fMe3iUaS6DUdeg3VgLLDMRKzgNwFzcpnejgE3bmMtL/0/RacN3jAawkktqmh
+	 +H2KUzGmn/srKA8+9GKHQpN61CKFx+3NwGV2cATlkic5oG7V3P97TVC7fM3ZvVEN7/
+	 LNCIGw0NIUHag==
+From: SeongJae Park <sj@kernel.org>
+To: 
+Cc: SeongJae Park <sj@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH v1.2 00/11] mm/damon: update, optimize, and clean up doc, tests, and code
+Date: Thu, 25 Jun 2026 07:23:45 -0700
+Message-ID: <20260625142357.103500-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v3 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
- inode labeling
-From: Christian Brauner <brauner@kernel.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: David Windsor <dwindsor@gmail.com>, viro@zeniv.linux.org.uk, 
- brauner@kernel.org, jack@suse.cz, ast@kernel.org, daniel@iogearbox.net, 
- john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, 
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
- kpsingh@kernel.org, mattbobrowski@google.com, jmorris@namei.org, 
- serge@hallyn.com, zohar@linux.ibm.com, roberto.sassu@huawei.com, 
- dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
- stephen.smalley.work@gmail.com, omosnace@redhat.com, casey@schaufler-ca.com, 
- shuah@kernel.org, linux-kernel@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
- selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
-In-Reply-To: <75d39fd9847cca915d704235264ab474@paul-moore.com>
-References: <20260618203411.73917-2-dwindsor@gmail.com>
- <75d39fd9847cca915d704235264ab474@paul-moore.com>
-Date: Thu, 25 Jun 2026 16:23:48 +0200
-Message-Id: <20260625-schnabel-rennmaschine-parieren-bcb352c3cf59@brauner>
-X-Mailer: b4 0.16-dev-d56bb
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3026; i=brauner@kernel.org;
- h=from:subject:message-id; bh=NNO35ZyHK/r7ijYBDhwLPiIZ3wWD+t05OGJl+8ydVYA=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTZWn7r1/j16eqjzRyrXL/MuK516rPLuUMmqvyFT8UvL
- D8YVd58oqOUhUGMi0FWTJHFod0kXG45T8Vmo0wNmDmsTCBDGLg4BWAidrUM/3SmyqvdtOr1PfGz
- /ZHvK1aPr7qz7VUuOB+IOG+wX+BZmywjwxYvIfmnnx+u0J5QfoX9++O0+Xf5efbf97NgZbT48X7
- 3PmYA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-On 2026-06-23 20:12:32-04:00, Paul Moore wrote:
-> On Jun 18, 2026 David Windsor <dwindsor@gmail.com> wrote:
-> 
-> > Add bpf_init_inode_xattr() kfunc for BPF LSM programs to atomically set
-> > xattrs via the inode_init_security hook using lsm_get_xattr_slot().
-> > 
-> > The inode_init_security hook previously took the xattr array and count
-> > as two separate output parameters (struct xattr *xattrs, int
-> > *xattr_count), which BPF programs cannot write to. Pass the xattr state
-> > as a single context object (struct xattr_ctx) instead, and have
-> > bpf_init_inode_xattr() take that context directly. Update the existing
-> > in-tree callers of inode_init_security to take and forward the new
-> > xattr_ctx.
-> > 
-> > A previous attempt [1] required a kmalloc string output protocol for
-> > the xattr name. Since commit 6bcdfd2cac55 ("security: Allow all LSMs to
-> > provide xattrs for inode_init_security hook") [2], the xattr name is no
-> > longer allocated; it is a static constant.
-> > 
-> > Because we rely on the hook-specific ctx layout, the kfunc is
-> > restricted to lsm/inode_init_security. Restrict the xattr names that
-> > may be set via this kfunc to the bpf.* namespace.
-> > 
-> > Link: https://kernsec.org/pipermail/linux-security-module-archive/2022-October/034878.html [1]
-> > Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6bcdfd2cac55 [2]
-> > Suggested-by: Song Liu <song@kernel.org>
-> > Signed-off-by: David Windsor <dwindsor@gmail.com>
-> > ---
-> >  fs/bpf_fs_kfuncs.c                | 106 +++++++++++++++++++++++++++++-
-> >  include/linux/bpf.h               |   1 +
-> >  include/linux/bpf_lsm.h           |   3 +
-> >  include/linux/evm.h               |   9 +--
-> >  include/linux/lsm_hook_defs.h     |   4 +-
-> >  include/linux/lsm_hooks.h         |  16 ++---
-> >  include/linux/security.h          |   5 ++
-> >  kernel/bpf/bpf_lsm.c              |  10 +++
-> >  kernel/bpf/trampoline.c           |   3 +
-> >  security/bpf/hooks.c              |   1 +
-> >  security/integrity/evm/evm_main.c |   8 ++-
-> >  security/security.c               |   7 +-
-> >  security/selinux/hooks.c          |   4 +-
-> >  security/smack/smack_lsm.c        |  27 ++++----
-> >  14 files changed, 166 insertions(+), 38 deletions(-)
-> 
-> I have a few specific comments below, inline with the patch, but I wanted
-> to make some general comments too.
-> 
-> The kfunc additions really don't belong in the VFS kfunc file, please
-> create a LSM kfunc file (call it security/bpf_lsm_kfuncs.c) and add the
-> kfunc code to this new file.
+Patches 1 and 2 update the design and ABI documents for recently added
+DAMON features.  Patches 3-7 add or update more unit and self tests for
+DAMON to cover recently changed or added functions and sysfs files.
+Patch 8 optimizes damon_commit_target_regions() to skip unnecessary
+adjacent ranges setup.  Patches 9-11 clean and fix up recently added
+DAMON sysfs interface code for readability.
 
-We expose a bunch of VFS heavy operations for various security modules
-and this is really not different. For xattrs we have it all centralized
-in the VFS and in general all VFS related bpf kfuncs should continue
-living there and be registered there. Anything that's just bpf infra
-specific can go to security/bpf/kfuncs.c instead. But anyway, it's a bpf
-specific helper so it's the bpf maintainer's call. 
+Changes from RFC v1.1
+- RFC v1.1: https://lore.kernel.org/20260625050756.91115-1-sj@kernel.org
+- Document nid requirement for node_eligible_mem_bp.
+- Fix typos: s/memmcg/memcg/, s/geets/gets/.
+- Drop damon_rnd() randomness test case; test boundness only.
+- Fixup dests dir selftest to do real test with correct file permission checks.
+Changes from RFC
+- RFC: https://lore.kernel.org/20260624142008.87180-1-sj@kernel.org
+- Rebase directly to latest mm-new.
 
+SeongJae Park (11):
+  Docs/mm/damon/design: update for DAMOS_QUOTA_NODE_ELIGIBLE_MEM_BP
+  Docs/ABI/damon: document probe files
+  mm/damon/tests/core-kunit: test damon_rand()
+  selftests/damon/sysfs.sh: test multiple probe dirs creation
+  selftests/damon/sysfs.sh: test {core,ops}_filters/ directories
+  selftests/damon/sysfs.sh: test dests dir
+  selftests/damon/sysfs.sh: test all files in quota goal dir
+  mm/damon/core: reduce range setup in damon_commit_target_regions()
+  mm/damon/sysfs: split probe setup function out
+  mm/damon/sysfs: split out filters setup function
+  mm/damon/sysfs: fix typos in probe_{add,rm}_dirs: s/attr/probe/
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  40 +++++++
+ Documentation/mm/damon/design.rst             |   6 +-
+ mm/damon/core.c                               |  22 +++-
+ mm/damon/sysfs.c                              | 102 ++++++++++--------
+ mm/damon/tests/core-kunit.h                   |  17 +++
+ tools/testing/selftests/damon/sysfs.sh        |  71 +++++++++++-
+ 6 files changed, 205 insertions(+), 53 deletions(-)
+
+
+base-commit: ada7832345164eed1bbca10543b0c46f13738215
+-- 
+2.47.3
