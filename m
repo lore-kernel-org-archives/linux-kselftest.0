@@ -1,142 +1,83 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C343DDDA8
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 12:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6903E44E9;
+	Thu, 25 Jun 2026 12:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782391623; cv=none; b=XcT5FMFb5X/kR9SGWuWNu0Ycm3MugQRK74e9NNbI6UXzfAMJZxwo0ngjljFenNCQOfr0AIsmFkGX/oApJDjWdd8xenVLtba63+cI0RjiUd7XCRIGDy3I4VAWiERszUa/aru8hI+D2z5yrbwiiDtHyq6iHiJNKbZglfzl8H2s5jQ=
+	t=1782392004; cv=none; b=DM60vC6cCti+U1mN7XH+VO+TO2mR00U24g9NZmlRtbIiqXROucVgfilSVw6E993AJoCeNAcxG1j1MD8PyTaBCy5iWeWY/5gvUSRpJUWFF6DY0rtHP2Zy3Bd3E8kZVYxxEB7PM1UOucsqbmkr7iBwm3LUUxW1dS9+ssf3sE6I+Ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782391623; c=relaxed/simple;
-	bh=r2P5eA48y32H1bZjwDFCkLFtTjDcfkfC5PzuTzTwAxQ=;
+	s=arc-20240116; t=1782392004; c=relaxed/simple;
+	bh=FJ/2sqPH3xnO/qDjRRGvaOhRiNhaCAXXfpe38vDvhMA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vk/gEWc0QvKg2/SeER1/SvgQWtxR8akMxyGPnbtQE5ADzuZrqh+u/A1iXHW+dPT+h65DGIrys3fI35qyBLXryj/MvCkpLTdhrVmebT9WHQYoeD9ph5pVIJTqGuORqTxwWZTF1bhBfX6f5tadSMTFn3WvTtyz4VrvSVI4gFcQKMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dRceQJNO; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=MYWOsP9ifzpH6L7wnSA+749PMKTYehhIsIC+fMI0oFAMHAtnXp9nMo0c5qe3IkOLE+DMp03g4PuIc7iS6P4thT/WeGKqJAS7XaDgiK2S+WLv7gbWL3rGwhilA5sv3JbVTOskwebW6YmjmCV+el8LRQyMR4LQDEy0g5/d8e0a9F4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=BfTacltp; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dRceQJNO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782391621;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=o1fn8ZVw+fDJI0KtIjS3k5qrVd64OuJrrFoJt8QAlek=;
-	b=dRceQJNOIXt6QLtwDltHPo8G4VfAWgpwLCFJOwTnU1aYgZjkRYvsaINleO14cyzorPvHFo
-	Q5vfhuEOWA75BobiMFGGaS+JZGgjlfGYY9AtZ8bXpkOQ2aL1k8/oEG0Ud85H24fa2YFt5W
-	6cgyrdzFZyMv6HvJVfZj0SyVu9yF6s4=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-670-mUjIHf6CPDiO-3HAL2RirQ-1; Thu,
- 25 Jun 2026 08:45:43 -0400
-X-MC-Unique: mUjIHf6CPDiO-3HAL2RirQ-1
-X-Mimecast-MFC-AGG-ID: mUjIHf6CPDiO-3HAL2RirQ_1782391541
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E509E195F16D;
-	Thu, 25 Jun 2026 12:45:40 +0000 (UTC)
-Received: from oak (unknown [10.22.88.172])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 605FB1800652;
-	Thu, 25 Jun 2026 12:45:39 +0000 (UTC)
-Date: Thu, 25 Jun 2026 08:45:32 -0400
-From: Joe Simmons-Talbott <josimmon@redhat.com>
-To: Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc: Joe Simmons-Talbott <joest@redhat.com>, Tejun Heo <tj@kernel.org>,
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BfTacltp"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=ZZDw2s9zWCThga9eYDfaH2QZEXuAsHn0UQSlAmnIq8U=; b=BfTacltpBMagNVXRF/YTZVepiI
+	EavhoY9X0cCWU1/Ern/Te8gkPdpP+fPcwzA4UWpCp0kGH3Vkvpg6sfAOwMU6wVF68ZP3IeFbwVdq6
+	T/yvy+eYqEvt+t5bGGHuvREHF3FdEWV0fgxFHruRvO1tcb8uRJv6JM+luAG5l61/JrVSZjVocjsTc
+	XXVkjOKCmNWlCxEU9aEfJLTJi0qcwqMBMDooDovRcR6A00yO4qn3aH4+gk8Epa+DIpd8kQ5X6lbro
+	KZJgcp3JxrEx/nNvlyzGth65EEQVG0yk7aIpeSqwGO/S4Qu0DqUshLPfCg2pw97blOUZA3bnyse0o
+	SXs1WN6Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wcjZz-00000009uyF-1S8Y;
+	Thu, 25 Jun 2026 12:53:15 +0000
+Date: Thu, 25 Jun 2026 13:53:15 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: Amir Goldstein <amir73il@gmail.com>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Andrew Morton <akpm@linux-foundation.org>,
 	Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>,
-	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] selftests/cgroup: Adjust cpu test duration based on HZ
-Message-ID: <20260625124532.GA19617@oak>
-References: <20260624160358.430354-1-joest@redhat.com>
- <ajzjLsBNS7rNZV2x@localhost.localdomain>
+	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/3] ovl: support cachestat() syscall on overlayfs files
+Message-ID: <aj0ku26XNT7Xc8x9@casper.infradead.org>
+References: <20260623111533.2285005-1-ptikhomirov@virtuozzo.com>
+ <20260623111533.2285005-3-ptikhomirov@virtuozzo.com>
+ <CAKEwX=OaKTfNqzwa=djLxZDeBbR1+DKdqDnxdfPfZFKB-K+ECA@mail.gmail.com>
+ <c390081b-7b2e-4b83-9bca-5f93eec6a939@virtuozzo.com>
+ <CAOQ4uxhPROaeEyYceKNsL5QVwVPkTjGtbRr1P_TYXTA0fHvRoA@mail.gmail.com>
+ <CAKEwX=MedyK8aDM=oe=Hbzo77mJOEp0Pmo0u8N4HhvikosVbSw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ajzjLsBNS7rNZV2x@localhost.localdomain>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+In-Reply-To: <CAKEwX=MedyK8aDM=oe=Hbzo77mJOEp0Pmo0u8N4HhvikosVbSw@mail.gmail.com>
 
-On Thu, Jun 25, 2026 at 10:23:22AM +0200, Michal Koutný wrote:
-> Hi.
+On Wed, Jun 24, 2026 at 12:06:54PM -0700, Nhat Pham wrote:
+> I'm more concerned with undocumented/unexpected behavior (error type
+> in this case). -EIO was an example that I saw in ovl_real_file()
+> itself, but I'm not familiar enough with overlayfs to know if that's
+> the extent of it.
 > 
-> On Wed, Jun 24, 2026 at 12:03:57PM -0400, Joe Simmons-Talbott <joest@redhat.com> wrote:
-> > +/*
-> > + * Best effort attempt to get the kernel's HZ value from the config.
-> > + * Return the HZ value if found otherwise return -1 to indicate failure.
-> > + */
-> > +static long
-> > +_get_config_hz(void)
-> 
-> drop underscore from the static function
-> 
-> > +{
-> > +	long hz = -1;
-> 
-> use the default 1000 here to simplify the callers
-> 
-> > +	FILE *f;
-> > +	char cmd[256] = "zcat /proc/config.gz 2>/dev/null | grep '^CONFIG_HZ='";
-> > +
-> > +	f = popen(cmd, "r");
-> > +
-> > +	if (!f)
-> > +		return hz;
-> > +
-> > +	if (fscanf(f, "CONFIG_HZ=%ld", &hz) == EOF)
-> > +		goto out;
-> > +
-> > +out:
-> > +	pclose(f);
-> > +	return hz;
-> > +}
-> > +
-> >  /*
-> >   * This test creates a cgroup with some maximum value within a period, and
-> >   * verifies that a process in the cgroup is not overscheduled.
-> > @@ -646,15 +670,21 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
-> >  static int test_cpucg_max(const char *root)
-> >  {
-> >  	int ret = KSFT_FAIL;
-> > +	long hz = _get_config_hz();
-> >  	long quota_usec = 1000;
-> >  	long default_period_usec = 100000; /* cpu.max's default period */
-> > -	long duration_seconds = 1;
-> > +	long duration_seconds;
-> >  
-> > -	long duration_usec = duration_seconds * USEC_PER_SEC;
-> > +	long duration_usec;
-> >  	long usage_usec, n_periods, remainder_usec, expected_usage_usec;
-> >  	char *cpucg;
-> >  	char quota_buf[32];
-> >  
-> > +	if (hz == -1)
-> > +		hz = 1000;
-> > +	duration_seconds = 1000 / hz;
-> > +	duration_usec = duration_seconds * USEC_PER_SEC;
-> 
-> I'd do the calculation in usecs
-> 
-> 	duration_usec = duration_seconds * USEC_PER_SEC * 1000 / hz;
-> 
-> so that actual duration is more precise (for hz=300 which is the only
-> that doesn't divide 1000)
-> 
-> All in all, make the adjustments for HZ with less code (since I expect
-> this will need adjustments for SMPs in future).
+> But I'm OK with just updating the documentation with a simple note
+> that other error maybe propagated from the underlying fs, if no one
+> else thinks it's a problem :)
 
-Hi Michal,
+That's ALWAYS true.  POSIX even says so explicitly in section 2.3:
 
-Thanks for your feedback.  I'll make the changes you have suggested in v4.
+  Implementations may support additional errors not included in this list,
+  may generate errors included in this list under circumstances other
+  than those described here, or may contain extensions or limitations
+  that prevent some errors from occurring.
 
-Thanks,
-Joe
-
+We don't generally bother to document that pretty much every syscall may
+return -ENOMEM if it can't allocate memory.  That's just ... expected.
+open(2) documents the possibility, but read(2) doesn't.  I think it's
+the same for EIO.  Any operation which accesses storage can return -EIO.
