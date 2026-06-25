@@ -1,83 +1,188 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB7D331222;
-	Thu, 25 Jun 2026 19:51:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782417104; cv=none; b=n+C1n5rpJMKLDXSoUsX6VkYP9lzZMffxwi2iNzoeACvnRvTHBLl0LRqe3m2QFTM1dyrFAm3cUJhjN2vXeYDYoRvlrQPm6BxFaDxIdinvonSus3soPlpSb0nWphy07bXV02YghlJ1nStwSn+slHnF8FYHqaEZhMsr05H+x36iaxM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782417104; c=relaxed/simple;
-	bh=ZMbRWDGYT2cMePAsL7p6001j/gyCaAcSvb+BhxpAgHo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W3rzp4LsaUaq78SmN11ey5Z+RfAjDyr4nfaLBfEuYocYAP4CiEuWA2XvzUIrW+3RzbsqZRYMGMUO+lBCor8kiU86Q+owAXz9zWKeeACcMPBURm5vCn0wjgPzuKdMRaYNVQtlp31EPqe9CHucrEDQZOD/qLwnN/7w3UgM5WFCQeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fGuCmW3D; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5681C346E56
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 19:58:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782417524; cv=pass; b=KJF7i5Hlld7kDv90CZ6qUEKzoAH4qV6bIbYPwl+8L/YlWO3IMkE9jIjX/jJB/n8t4+AioUfCKE3s88rppP2AVx1944EkPOiqpfYV3quch80tyn0hvtrrzL779pnQI2Ndqc59LHXchhBprItIBzELKueiTlSCveO7xkAfen8eh9k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782417524; c=relaxed/simple;
+	bh=t01HuVJS93Se9y/xJOr+SDSuCi2qkwkLjpWQtvIuIYY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B3fxGJbozHpxGCrSUqvo1kORTkU5aQnNyfVN8gNFjWEiJIP/bg6pfCzckluVTQsLD3QSwQLr7oUlWlM+rBPiAl9kkaB6GXvxzbcBH2RZvMzRC9k6SqgIbtIW4q4tNDl215vNfw3FtOln4QXHOWenGdlC4kqxGQoO4ziF5WjzhN8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eaESUM/3; arc=pass smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fGuCmW3D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02BE1F000E9;
-	Thu, 25 Jun 2026 19:51:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782417102;
-	bh=NVuojCEUe0/K2hHnFIrBmEZ2b/x4ky5BQMjFmpLmFuI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=fGuCmW3DsN0FWyW9BonBzgkdavVrvHUrJDWTaoAc/yyIkYvQljDnrLgSNBSp/TrKk
-	 p+2chAs7RvalD+HQ+Yc5/zot2qAPMx4VaWlRJYUMMmkLyqLxwwkOALyt5HzagS58Bh
-	 0ayHCvTPTSahDVD9lzCFij0JgXeZ3MbQNKVLKo05btntGQifLAqmLd8yUPg/0G3/d0
-	 g1RAqI9jKUdW4UoJpuEw60e/f2GeCQ3dmPairHGrdHG1JerqXZ8ET89XyXzH6iWY+B
-	 1y2QW+YI4V2pRFpEvRWiiXhsXmr6M0BP4ln70/MD2r4bw2rjCxEXz3wyeVE9yCug5J
-	 dz2zupudaEuNw==
-Message-ID: <bcc3414e-f3c4-40c1-b9e4-f864bd875a2a@kernel.org>
-Date: Thu, 25 Jun 2026 13:51:40 -0600
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eaESUM/3"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-845b6d9bf39so118723b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 12:58:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782417522; cv=none;
+        d=google.com; s=arc-20260327;
+        b=qVdxYcZWJWOrlXNpC4pp29VUAmlq0eZtNulVupV4lR6zPTt38XfaERQX71rrFvi8Vi
+         lXJc9M9a0HxXXhA3TOCyfvIvxG3rUul6uHyLsaoypahFZqDDG9iR36Ya6cG2EAXGVsk6
+         d+eDp8+YFmGZxuzdE5r+u4DeQB/oALfm7Aj4j6paNPqIE9Us5ExLiVFSFGe0a77D/cMY
+         piqbLNYg7EbWUpaiV/bJQLrFIvSVEPnnOXHrf8CefxuTL+JFYRp9oYXG5qQ+TovTrNGQ
+         Zr9D8voHtXWtYqMg4SivPMWbSOLPx1ArhikolKzDSVomYCExuTJrlj49AA2BeLcOdDmi
+         NtnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hPszu32IdAgDeUQ2X3Ei0AlLyibH0GB2lSQN/iu5tDY=;
+        fh=SCvotKixAklVahCuD96DF1Dr7Gew3vfAoavGglxALB8=;
+        b=SlB8GrUQLgvKgyzaLL9YMkoJjVUeUS5luJcM7bhImlJKMJXfO0Y9LIDdXgdlCCN8q7
+         xMrhpIcFuCdbDMa2bSLpd1gHmE5UE8jx2SQ0lQNK/5IjZ3azRB3VNDwy9StWIFmOQ1eA
+         aQpjBzS9mayNI+JLQ/W+1pQ/HE1Cpp910z2/EMiob4SlZZOP5Os8/LN8LrOCQktlfDD9
+         i/oV7hG0GNtAAP9eSjegd96aZcXFQ2q5/NG/kfVLsGAmGcUd3QXsk7DV3BM7o9d9xkyY
+         W2RG8iKd5jHxXjfevhk1lmh++mNRqi3jQqQVUthwF9MyxYzmHVYGHCWYro+jqA2G80eN
+         Ut0Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782417522; x=1783022322; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hPszu32IdAgDeUQ2X3Ei0AlLyibH0GB2lSQN/iu5tDY=;
+        b=eaESUM/3qu36XTQpaqOGJRjKaAGFJhqF0lkNADskUW0FZ5YSzZqmQQpCBGhGz/9CVZ
+         3yTqnvI+Bx7woEDhrV7jxG/KIq4nb7Ybwyq8STUCdKFcVOnEBgsqaZtgwLc4IwSrvR6x
+         gAVj749Xk0LvTdnJIO6EhVs1PAhCSbSiB88EoPgFP4UYmxz7F7Zyc0hoIl6K8xltNi+P
+         VBGRGMT9JCYv6vh+8ZsfDNDU1ezEF+k52IKQtYr/p85BMLcP+bDoMyrU8nbOl44doxbK
+         VBlYIdTR0xF5O9W/ojYmiA2Okz/K4cgU5uRDbSIknQxrKRIpZC0xQEeVGhJE8uHDz+mx
+         5bCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782417522; x=1783022322;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hPszu32IdAgDeUQ2X3Ei0AlLyibH0GB2lSQN/iu5tDY=;
+        b=o++SmDf3UZcuQONkUHYUYGt7ASEPZbu77gtb16GSYhoi6OfndWbGLv7ySIAImzZNu+
+         556//lfJozQGLqn+WQAyj9I7+W4vpaZ/tmLh11LIpWaCn2+DRFDnF5ZCvu+B1gavqQUY
+         /2tfM/MoGAA40Vkg5yrCyBGbzw+T4OCJWtRa8u7sLtmnE/nqt5BMi/zhb9VsXMoHxFi/
+         E3SkQChIPc9a80dwD7X9Hh08oplfGXEB+aOmR3pyDUafaV7h6ru/EYJCoasZHTvLzpox
+         J4+Sw97mzeX+2A8JHqtmcu67LNSajstt9cTVGCDxy3IWpLn2xTHGqH28lbmuMeO5Ro6v
+         WOgg==
+X-Forwarded-Encrypted: i=1; AHgh+RpJyKqVNJXVUQ4iwIvwo9bmgLaALGZ24v7DgkbAlAik1//Ka45THQ/d3H0UgTn7uDflhblhp6pNZJnU9u/Ip0I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+u8Ksce1DHzAIYLc2NZ2gIPm9J9CuUYDF1dqXRuLHWTnSGZUO
+	HlvVkED/F49sBfxq+OtvMxkVlMPP6PDAIHMbXOc6V/uUsUOqV/4/vQNIdiYzTmUWkqi0xaatUi0
+	+lE4q+WtTTnD1fX34JknlfYglDBakzW4=
+X-Gm-Gg: AfdE7ckcy5ATBCfLxF+433V4h6y2WXkMnYqWDZ5OP8Jm7m9bvlyahWUD2s6Z9i0XeUX
+	L2piX3VJ5fv0vO6eKyHundkbPz0XNmPZsp8AyWuzacDooykE3ctgJq0jSeblWKLMLTqhUVBzt9S
+	m2MpjTa/9VezqtP1yb48ZPk85ufOQbUwS30lzZE+v30fGLRHPp9lNYLqytS6DdiiMN7oLBYO7Uz
+	pPL8JfMDI0QOOCzgAtYWZhAsDBBJthuAKI/NUFm54TkH3S8v/nF9AJBlhKQNRO6zbvlF+Tt45JS
+	j7HYIyN26WdX1hxYbzt/pVNRtMtNtmyTLQSlIKMsbYq1Rg56jpvCw2petB3R+1Osz59boi6bESz
+	0vE5LpVIfmYR6
+X-Received: by 2002:a05:6a00:b44:b0:842:614b:50dc with SMTP id
+ d2e1a72fcca58-84591b767a3mr12823311b3a.13.1782417521452; Thu, 25 Jun 2026
+ 12:58:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/4] bpf: Initialize the l3mdev field for the
- fib lookup flow
-To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- Avinash Duduskar <avinash.duduskar@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>, Mykyta Yatsenko
- <yatsenko@meta.com>, Leon Hwang <leon.hwang@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>,
- Amery Hung <ameryhung@gmail.com>, Eyal Birger <eyal.birger@gmail.com>,
- Rong Tao <rongtao@cestc.cn>, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260616223426.3568080-1-avinash.duduskar@gmail.com>
- <20260616223426.3568080-2-avinash.duduskar@gmail.com>
- <87bjd9h6yh.fsf@toke.dk>
-Content-Language: en-US
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <87bjd9h6yh.fsf@toke.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260618203411.73917-2-dwindsor@gmail.com> <75d39fd9847cca915d704235264ab474@paul-moore.com>
+ <20260625-schnabel-rennmaschine-parieren-bcb352c3cf59@brauner>
+In-Reply-To: <20260625-schnabel-rennmaschine-parieren-bcb352c3cf59@brauner>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 25 Jun 2026 12:58:29 -0700
+X-Gm-Features: AVVi8CcGIc2g2XVMtMkmAY3eaT2U_sbyaP0UfCx7SkpWcEZUZelhXqYLRoruYRQ
+Message-ID: <CAADnVQKKr5cCYTj8qS7tU-Aeda1iexYUp5aquTjYXMEL656cJQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
+ inode labeling
+To: Christian Brauner <brauner@kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>, David Windsor <dwindsor@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, dmitry.kasatkin@gmail.com, 
+	eric.snowberg@oracle.com, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	linux-integrity <linux-integrity@vger.kernel.org>, selinux@vger.kernel.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/17/26 3:06 AM, Toke Høiland-Jørgensen wrote:
->> The helper already initializes the other flow fields the rules path
->> consumes (flowi4_mark, flowi4_tun_key.tun_id, flowi4_uid and the v6
->> counterparts); flowi*_l3mdev was added to that set afterwards and this
->> helper was never updated to match. ip_route_input_slow() likewise zeroes
->> the field before its input lookup. Do the same here.
-> 
-> So how about we explicitly zero-init the whole struct instead of adding
-> more fields ad-hoc like this? Otherwise this seems like something that
-> is likely to happen again if we ever add another field to the struct?
-> 
-> -Toke
-> 
+On Thu, Jun 25, 2026 at 7:23=E2=80=AFAM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
+> On 2026-06-23 20:12:32-04:00, Paul Moore wrote:
+> > On Jun 18, 2026 David Windsor <dwindsor@gmail.com> wrote:
+> >
+> > > Add bpf_init_inode_xattr() kfunc for BPF LSM programs to atomically s=
+et
+> > > xattrs via the inode_init_security hook using lsm_get_xattr_slot().
+> > >
+> > > The inode_init_security hook previously took the xattr array and coun=
+t
+> > > as two separate output parameters (struct xattr *xattrs, int
+> > > *xattr_count), which BPF programs cannot write to. Pass the xattr sta=
+te
+> > > as a single context object (struct xattr_ctx) instead, and have
+> > > bpf_init_inode_xattr() take that context directly. Update the existin=
+g
+> > > in-tree callers of inode_init_security to take and forward the new
+> > > xattr_ctx.
+> > >
+> > > A previous attempt [1] required a kmalloc string output protocol for
+> > > the xattr name. Since commit 6bcdfd2cac55 ("security: Allow all LSMs =
+to
+> > > provide xattrs for inode_init_security hook") [2], the xattr name is =
+no
+> > > longer allocated; it is a static constant.
+> > >
+> > > Because we rely on the hook-specific ctx layout, the kfunc is
+> > > restricted to lsm/inode_init_security. Restrict the xattr names that
+> > > may be set via this kfunc to the bpf.* namespace.
+> > >
+> > > Link: https://kernsec.org/pipermail/linux-security-module-archive/202=
+2-October/034878.html [1]
+> > > Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
+git/commit/?id=3D6bcdfd2cac55 [2]
+> > > Suggested-by: Song Liu <song@kernel.org>
+> > > Signed-off-by: David Windsor <dwindsor@gmail.com>
+> > > ---
+> > >  fs/bpf_fs_kfuncs.c                | 106 ++++++++++++++++++++++++++++=
++-
+> > >  include/linux/bpf.h               |   1 +
+> > >  include/linux/bpf_lsm.h           |   3 +
+> > >  include/linux/evm.h               |   9 +--
+> > >  include/linux/lsm_hook_defs.h     |   4 +-
+> > >  include/linux/lsm_hooks.h         |  16 ++---
+> > >  include/linux/security.h          |   5 ++
+> > >  kernel/bpf/bpf_lsm.c              |  10 +++
+> > >  kernel/bpf/trampoline.c           |   3 +
+> > >  security/bpf/hooks.c              |   1 +
+> > >  security/integrity/evm/evm_main.c |   8 ++-
+> > >  security/security.c               |   7 +-
+> > >  security/selinux/hooks.c          |   4 +-
+> > >  security/smack/smack_lsm.c        |  27 ++++----
+> > >  14 files changed, 166 insertions(+), 38 deletions(-)
+> >
+> > I have a few specific comments below, inline with the patch, but I want=
+ed
+> > to make some general comments too.
+> >
+> > The kfunc additions really don't belong in the VFS kfunc file, please
+> > create a LSM kfunc file (call it security/bpf_lsm_kfuncs.c) and add the
+> > kfunc code to this new file.
+>
+> We expose a bunch of VFS heavy operations for various security modules
+> and this is really not different. For xattrs we have it all centralized
+> in the VFS and in general all VFS related bpf kfuncs should continue
+> living there and be registered there. Anything that's just bpf infra
+> specific can go to security/bpf/kfuncs.c instead. But anyway, it's a bpf
+> specific helper so it's the bpf maintainer's call.
 
-+1. Piecemeal init of the flow struct has been a known source of bugs.
+Completely agree. This is vfs related kfunc and has to be
+in fs/bpf_fs_kfuncs.c to make sure vfs maintainers review it now
+and all future changes to it.
