@@ -1,257 +1,309 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 296BA2FB969;
-	Thu, 25 Jun 2026 22:14:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.13
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782425700; cv=fail; b=ZNPXu5W9/9SMUwGT60WemDgyOzlPn/LGxM2vQ0YeGrYqRi4KzTlDa2Y0Bgn6//pecAZj80sy9ozgg40g28UGv9LrnjfhLmTUpBrIqwQ52r5D13TX8/yO4z2yLlWOvzf0sR7j/zbTcby2dSBBNajf6Q+zkFU9c/eKBt12NRd9Y+k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782425700; c=relaxed/simple;
-	bh=DTayBRbtIy5Cz6AGdhNU2CXCrZu9vNXzUfThcnLMoB0=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=f4ahxT1/i6WJUcUBhGHdtb0zaTq9p+s2U9P+wGLy4mD2tXhBgMV4ytpDJ/pX2Yj4ZNnqnW5zGqPfqXqu9cA8j1taqVt/tONrslD4NufFz2wjjN0yh+1PtQNMBBeD0kx34MOlYg4AX9HPeYiA5TSXmfEONDmS2aJZAL/J5wvSCyQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dhlLJrUv; arc=fail smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53A82459E5
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 23:09:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782428973; cv=none; b=TJzD6A43AC22pSrVZi966liFWUFZp9rPuoD2ZpfKg7MvWtBOlW07ZYQgCVH885jvADqRdt66kQtrHtvrqALfBpKY7R7TOLW3n700Jl9VxWSNtANFKmFXtSOWb7Pa8Q68EtzMiHHDtphZzGQvCiKZxF8RVfCPNhBbzR2oePHuROk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782428973; c=relaxed/simple;
+	bh=aLo5j/Saxu4ChpJ9oH5we86JO4qrWCusP9y5SO8hk4g=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=EWLL6ewpgJBoYEgozXG9y5+N1BfbrapC276zQHTaHOVtkYKZ/k1fbjyqnBiMkaLdY7/Ey7+pgrdhWgZgq2gygP4EWzewJejbp/pOq1TewoAniQuR+d3KEN+rXteGDvtR97+oU5YaH0vPh9WCuaf3Wdi+lggp3EAHGlMZ9Cz6gT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=k7zRxdME; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dhlLJrUv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782425699; x=1813961699;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=DTayBRbtIy5Cz6AGdhNU2CXCrZu9vNXzUfThcnLMoB0=;
-  b=dhlLJrUv142VnD2ZdT0u3jqGrDNaHR+d5tbrXF4KvoL5Y8XM43Z8fw/h
-   HxIHJvMCUUN0kLe7+5bZFwP8IXriy6PtUdbv7YNg+F+P6QLSEc87qvHH1
-   HG7HpNimLdKqj4o54gQl1rQpO3k2tOu8/bF1ovieSRaSFwLVIYymX3tYU
-   q6fqyDItE+i+OkiYM1H7aNlQ9mjWTKXhGPVneguOtTKhWRxtMciI2vHjE
-   9aWNL0BszBbCSrOj6D3dj1gAyi8ph6gNeImeUBzIXTqYzZsFwUTQ6dHD+
-   dM5UGZAjcgajh6Irla2wN6X0g2NTwmry5BGjtDvJf3FHN1y3tvVXggFq7
-   A==;
-X-CSE-ConnectionGUID: 8N0txgbOTjG4rCO4kur13w==
-X-CSE-MsgGUID: eeTxV0UBSzWWV0am1msfQQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11828"; a="85771958"
-X-IronPort-AV: E=Sophos;i="6.24,225,1774335600"; 
-   d="scan'208";a="85771958"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2026 15:14:58 -0700
-X-CSE-ConnectionGUID: ZM+Wep8SSgSblobpFB2vGQ==
-X-CSE-MsgGUID: WdL28uO4QlmyauHnf0DxDQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,225,1774335600"; 
-   d="scan'208";a="255537528"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2026 15:14:58 -0700
-Received: from FMSMSX901.amr.corp.intel.com (10.18.126.90) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Thu, 25 Jun 2026 15:14:57 -0700
-Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Thu, 25 Jun 2026 15:14:57 -0700
-Received: from PH8PR06CU001.outbound.protection.outlook.com (40.107.209.33) by
- edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Thu, 25 Jun 2026 15:14:57 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LeJDkwXzJbzeghijPOQ/92v5Q5I/pDPyg57Fe1VCUzxQRS2iyPc/3LoQk1zwWd2qceQmhhBMEfR4H9P6X5whTyGdmxh1fd+hMqFAd2AEBvtkJ8QnbM2oR3+4Jq8H42kqFI0DRf1J+Y4gZuaW50EyJ7niwLLeNZ/li9QsH2+Sv1DxiEzhIzcm7cAmNZxr1CPaD0JT+23aFdUqHogccAtPrEP8XV7bboRQcjOkcpmeHgn3lzoQQRSSWNX2gyD2D7BbfMj0Gvin+8FGHScOGyTmX9cvxNbDTTV+tNoPbYHRIFwdODgaNZ+3dlfjRau/rGJMZaESnLrzWcZqwsY7Pn3PUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nkgmVaCaXqnJp9KuHVO6zlOwI94/Z1gx48v1z8E5lic=;
- b=RcG1h2ywSuPYaZzDq9yJiRhQvSgqjWSORYq97sC1MdGtxgd1p2chr54uDLv9xLFccWhPOKWUxnKtHboQw7LnOu5z/i5mzxgZotdtJG0Fmoe5M2QhCxYKCYipn9qxNZ94qy0ubaPT10YZAWhBWaarZ2fWXkXba33+lRks/b7TkZG7HrQ8NeS9rdEC9/AjBo2aGYldERpa+qWcYoxHU1RL3U48n11gpnjQj3fHcALj7VAapvtXjgk9o/v7OiC3dLCQz/TwNSoWsSI+BmvmtJY6CN6YjnAd3CeKsY7Kiz25wl/DIQfomHPuv/t+aXrc0QgsFhU1RUtc1ztGRMHXpZsYlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB8370.namprd11.prod.outlook.com (2603:10b6:a03:540::20)
- by SAWPR11MB9709.namprd11.prod.outlook.com (2603:10b6:806:4ca::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.17; Thu, 25 Jun
- 2026 22:14:56 +0000
-Received: from SJ2PR11MB8370.namprd11.prod.outlook.com
- ([fe80::b6cf:ce77:3cdf:7cc]) by SJ2PR11MB8370.namprd11.prod.outlook.com
- ([fe80::b6cf:ce77:3cdf:7cc%5]) with mapi id 15.21.0139.018; Thu, 25 Jun 2026
- 22:14:56 +0000
-Message-ID: <8b51dca5-d1fe-492d-8d54-7709aee4a6c5@intel.com>
-Date: Thu, 25 Jun 2026 15:14:53 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] selftests/resctrl: Enable dynamic management of
- IMC counters via linked list
-To: Yifan Wu <wuyifan50@huawei.com>, <tony.luck@intel.com>,
-	<Dave.Martin@arm.com>, <james.morse@arm.com>, <babu.moger@amd.com>,
-	<shuah@kernel.org>, <tan.shaopeng@fujitsu.com>, <fenghuay@nvidia.com>,
-	<ben.horgan@arm.com>, <zengheng4@huawei.com>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linuxarm@huawei.com>
-CC: <xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
-	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
-	<wangzhou1@hisilicon.com>
-References: <20260522090540.444554-1-wuyifan50@huawei.com>
- <20260522090540.444554-4-wuyifan50@huawei.com>
-From: Reinette Chatre <reinette.chatre@intel.com>
-Content-Language: en-US
-In-Reply-To: <20260522090540.444554-4-wuyifan50@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR03CA0089.namprd03.prod.outlook.com
- (2603:10b6:303:b6::34) To SJ2PR11MB8370.namprd11.prod.outlook.com
- (2603:10b6:a03:540::20)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k7zRxdME"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-845bc2f62c9so196363b3a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 16:09:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782428971; x=1783033771; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=m+4zjqfPBoSsvDtMuL3+4LY6xbszbSt+cGsYmfVXwWs=;
+        b=k7zRxdMEMU0fJe2ehVi/A8cXJWbi4K30/SByi9CApAcxl8IcYq2Vlq6zSsGQW5w932
+         veJ5OWmVss0Hww64vnUSQIDF68ZS/5YZtoiS5tNSmHNc3cGfucqYeOCdbK+pAocCv62r
+         AGP8NPbm42QxJCFX5bzj6rf6jWbHa9LqOQnvq0rT9pM83iC2IJN9EFFoHovpZN56Zn1D
+         W2GFPb0fpCEbiRwXM8lsjYUYqSqt/A7/vMdYQNuL34ilBuvcOjzjSGC50s9YxZ5/BMGc
+         crVL9bDF26myDm1UYObnec9CbxbAOS3me7C0NS77M869HsWib/eMFzfihbNNZorbqCUV
+         6Gag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782428971; x=1783033771;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m+4zjqfPBoSsvDtMuL3+4LY6xbszbSt+cGsYmfVXwWs=;
+        b=nYtRGU2rKEQXXvB4RROTpHMytX1eZoeITfIGNotq1kqUZ+BbG3+2kpXYthd2MYM8YF
+         MLWAPrgZ/+urB5WgmE6owcZGKe1zgfrjsDYUn7K5EEhdgpwirTPWIrsCkO0Pr0hYF6Xv
+         rU74QpIY87hhHvmVJf3dur7efovbeU0g8xWCB+wKwi5wfw2jBPgPjb245ibuhoLHS0sk
+         yBd7buGgUoQ9Lc9gcTLqU6hRkNRhkeU4FfnTGtcmBHCGQCOBf5smeLueBaj86nqeoK9l
+         OkUUSPsKbwR6aaQkUjnWIsaLIjP8sE1L6TPS5akX4GPgYxXpJO/JlLH/hGp22y0SJmrW
+         SCVw==
+X-Forwarded-Encrypted: i=1; AHgh+RqFP2emWxUGh9xxpMsmpUzBLsaZK1AMtKBewoC/AUHnNxHX8M6phSxDxFAWIOg883+WK5SVaZR3TUHilmGdxOw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMxzUOn8u4Zbwc3WIq6KN5dOZwQMp/h0IbgwfmFh6Fb1u2qI0T
+	Y/tT4DJexk2pOPMRLbXiJy6+hWTcxIIlxdI+N0uYkrJHxTPj9HrRhBJNE+fwBBmu5hRLhytIlGG
+	2F9CztA==
+X-Received: from pfbjf8.prod.google.com ([2002:a05:6a00:6e48:b0:845:b9e9:fcd1])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:22d4:b0:845:c799:3651
+ with SMTP id d2e1a72fcca58-845c79938a3mr333179b3a.16.1782428970385; Thu, 25
+ Jun 2026 16:09:30 -0700 (PDT)
+Date: Thu, 25 Jun 2026 16:09:29 -0700
+In-Reply-To: <c855535b4262ecd41f67734d19e8f48a7f014c2a.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB8370:EE_|SAWPR11MB9709:EE_
-X-MS-Office365-Filtering-Correlation-Id: fe12d93f-c6c2-4715-2fdc-08ded3073036
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|23010399003|376014|7416014|1800799024|366016|921020|22082099003|18002099003|3023799007|56012099006|6133799003|11063799006|4143699003;
-X-Microsoft-Antispam-Message-Info: MqI7YrIiZRXUIMyx6a3MF5fcR5pw7KMsMzSQU6cihdWtYtvxZVf3BTEwtnZAnfTuoecK+zgKAhkY4xhwgNgqwKRVB5nd1L9SgOiz206oOoAFhijTwH1D9js7H23rrheKb2BdAyWg5i43JApMunjkSJw7LjSbjVBOjorsYXBTRp0wi+DkNOp4efj0mkzMlfojrgYD1cBXBJIzSE2FclI3AnWI30AjkKQoGsEYefRo2AAyrk/jZ8pW5Evf82iGuIxsFOi1DpL9c3QsP/czY6NN73WdVYGYAL0/6yqFg2AziOa49FJ2A7XEK5TiyZafWVuWKJPnfTPot/6+P/oMPTf7Ufxiez3Nx2VvxS5MrIcp/gj09To5G8cQnimssi0u7NdEDReg3wTvomQesMpcxhtl+OQGBfp/XwhNIkmT0mFLmo9mh1+K4cmF34lsiCEFnw7jM6LZTyv4peGAYpQGp16gFpUOYJhToqZlWopymSjodYEORbJfurWkW762AzCjR1OYvylcg/L2CexkAiQrBWc3v15drfLDAJIrFWI+YfmOKelAHzsv5BMkZKPopPcamUbyUwAfLaotkCKPFdbp2rgXg9OcQk4thRlem9QNk4iTduNNzH+lyRV6Cypqu9OBJD1hU/Q4/vh3TL2Pu0zzEk7byFG+5pzZBJrQqRUnhUzylWayiT4hwFvuiqKPyPhRObPQjQyLAbSxl/tpjvkxB0x5dw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB8370.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(1800799024)(366016)(921020)(22082099003)(18002099003)(3023799007)(56012099006)(6133799003)(11063799006)(4143699003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OC9qdXF0dU0xZFdOUDl5WmdoNlBHd3JHSFFKWnpOcGxUK1ZyNkpZRDZ0azR6?=
- =?utf-8?B?V1B1SkduQWV3ZGUrZlRua3RqSkF6Y1p5WFJWL1B0RkNDU3J3OHR4R1F3SVpY?=
- =?utf-8?B?Rm9EaU1LWk5BNmJ2aXlXZFMzTnIzblRJVjQzWWxrS25jQTByMnFIZU5GSmdv?=
- =?utf-8?B?bldwOURweWRiRmxzWHh1WkZRSEpTNDBnb0h2YlpUK2dxUzByUzlQeHZwS083?=
- =?utf-8?B?N0Q2NjBSbWtPM2lMaDJRRXEvSTVKWURZNVJnNnpxV1hieWtSZ3NoSGZJRzM0?=
- =?utf-8?B?ZUxod0lPWjFDenhyN2dEMEtCNTZmTVU3RjRlMFhlaStNOFNDQUx1TjVORVJx?=
- =?utf-8?B?dzRTQ0dRU2d4cTdlQ2xEZXprYzZEeTJRYktieDR1TnVUKzQ5RVhJam1iRHBL?=
- =?utf-8?B?aGlMOGkvUG01dFl6VEg0UklyeUFhbWd3S3dEYjRjaHZta3BCM2RhTW5Odmg4?=
- =?utf-8?B?TUNzdkpPNlBCa2VKVkFrL3ZubmlGdVlKbW43K3o1NW9seVduYnI1R2hSTkc2?=
- =?utf-8?B?WlNtYXNvdGhpbGxrWkQ2SnhUTm9CdC9DdHpvdFJuTDlpL09DWTZjNGNYSWJF?=
- =?utf-8?B?alc1eW5FdVpnbW9QbnlzU3pCakd2Mk1kcUdXbGpkU2pGdEFZY21sYmNaMmla?=
- =?utf-8?B?QnJ2eHpNTW1XdERTL0ZJMHF5d1cxblJvNUFHWGNwZGNNMGt6VzY0bzZlVzQy?=
- =?utf-8?B?WGgxb2xZUGNzWTRNeXJkVEF5UzNiY2VwbS81cHYwU0k0bHQrZjRBdW9yNEFJ?=
- =?utf-8?B?NnE4VEF2ZjZ2eHFvWWUzNTc2TDBHVUJCMnpQak93TFlFdGt0UjhYamdHYjNo?=
- =?utf-8?B?YStqbXdoMWFsWEhTcUlxMlM0eEtqL2VOYjh5MlBkNTNqWmQzdHNUQ0tKRDN0?=
- =?utf-8?B?cVhjcFVFM3dHVTNueHJRRlBHaWR0dWpZdnBUbGZ0REJvVTVnMzJkb0M1cWZU?=
- =?utf-8?B?SSs1eFhUZWRCRCs2THBPQUpXNUpVYUtOK2RkdVZOdFRRRkw2Tmpha2lhOEZx?=
- =?utf-8?B?R2c1OHRRaGF3eW56WUZNRVBIRmkxSGRVK1gxL2RxQkp3Wnc3UG9XWFdmQ2lD?=
- =?utf-8?B?UDcxL0syYlloVXNqNXYweW9FWi9xT3VRa0VwaUVlZC9qWE16MlpmY0dTb2tS?=
- =?utf-8?B?MHAvOGZBZzRYVE9ndXV0cysyRzFsa2pxVkNiV1ArMjBka3Uza1gxQjdEME9X?=
- =?utf-8?B?T0RBRnkvdjNJeGRwSThVenZsZm03MG16TktxS3dCZHlLdk4xZU9wVXdtcC9o?=
- =?utf-8?B?ZWxIQXM3bUpBR2ZCQ0NyNWp1M1lrY3ArSW5lanEySGgrNlZOUHVTSFQyTHB3?=
- =?utf-8?B?RWQ0Zzk2RXZxUFZvMkJLbFFNZ0lLR1grMGxaM3k4TFJZRjVZNUE4UEpNMFdP?=
- =?utf-8?B?Ry9uUk5kdjZPRVVtWUQvbWIvMHN5R2JsSkp5WVBKdFpoSmszVUFpZlN1V0R3?=
- =?utf-8?B?OG1vV3RMYjZibXBNdGFuc2hQazBmcFliUW5sbHNKRnRFWVAvb2srZ01zM2oy?=
- =?utf-8?B?ZGJoUHZaclpPdDQxR0kxdUh4ZEdqYkZJRW5rS0x3b1dOUWNQbHZ2a0NRSDJr?=
- =?utf-8?B?c2RwdGN3QWlWU1JTa3BIYm9yaEsxYmxLcHEwTG1nbFJxa0FERFJ3bmJaNWhy?=
- =?utf-8?B?NlNSbHJlZXFkVmU4enFMeEE3ME0rZ3c2b2F4bnhrSzRsMFFHeFRtaDl0cXlZ?=
- =?utf-8?B?bWsweTZnSE52b1haeVhyOFFZQTBnK2ptclVTdGZvd2h4d1Z6cGFkdWJyK1J4?=
- =?utf-8?B?U0M4bWRzZ3ROekY5blhrcFdZK1JnNEdoeEtWM1YyS2VkQ3JCN25xc2djakRn?=
- =?utf-8?B?eE85VWJxczFlRHBTTGhkTG9hUExEaGs4R2Q5WGc3WUFoRnF1NngyZmJPRjlD?=
- =?utf-8?B?bnhHeXVGbkdGMmNSQlVtME5WVjE0Qmd3dlUybTlOamtSRWZLbU1HejFnNENT?=
- =?utf-8?B?TkhVMjZaUUlJRU1vYXQ3QW5jYmFxajlKNHh4eXMzNldlREZOdEdOUGZkZGJj?=
- =?utf-8?B?UkdoL2xiaTl5aUZRRHovNFBZakM2MHVjSEcyN01uQ0w0ZUxobFVRZ1E3TE1Q?=
- =?utf-8?B?bjhPczc1c2JNOUhneTVBRXVOWi9BSkVoaTh3OXMvclhaWllUeXZydE1Zd0VS?=
- =?utf-8?B?NWg5S1ROOC9VaGFEYU0rMTNpd1VoVERoTzdjdFU0OHIrUm1VTnEvU21kRE5E?=
- =?utf-8?B?Yys3T25KamlZWG5rRUtDZ3JXaDNERVZXQjM4NzN0bGlqLy96Qks3b1laV0VZ?=
- =?utf-8?B?NDFVZjc2TW5mTEREYk5OUUtJbW4wZUVUU2dMOGZjZjU0ZEwySjdybW5qdzQ0?=
- =?utf-8?B?aUZaZmpDRVFDdllJYnlBSG1oZXdDcyttTjI2M1VLRnkvY2RCdURxdTN2YTQy?=
- =?utf-8?Q?4p0NW2lBwi/lScvo=3D?=
-X-Exchange-RoutingPolicyChecked: J//Q5rjRgmcZ5q4d2kjgC6+6ByFIpm1luvrC4vpxpMRlX/UZ5ZSb+EtyRNqDCEbewxJJFdQCgBMdJUC+bzpU7IYqVbSduoWiTibaZVrOqDpbm2ZBnHrr1g3FQ9Qo9DIjWl24ABMc0prFc7tmsacm5dQYuWUEFZcUkJ5e4yvDMQEK2bduJOnT2OE/o/vc3tFttv+M33AFrq2YfOFC8ONZNDQOwVqkx5jhl5AzwJzqj+dmr6qdsZzrMpY3gQGCJJ0dkejxjPJ+gKYiNXEUydAQaRWR1PebJnEGUlpDLvYqxEKVHvs3gEhIcB8BXtUTj+zLbsi0gxNeoYlnYH0LMg+esw==
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe12d93f-c6c2-4715-2fdc-08ded3073036
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB8370.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2026 22:14:56.1559
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YMjSkAHIcl7qA07ivobubWu+Prsm+1dMCybbfknTsSpUKbyBBK8FzZLUCTX+5H5pVrwj4U+Z3oSQQusE8HjTWCAuEozcBZI3v+kFuOByMbI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SAWPR11MB9709
-X-OriginatorOrg: intel.com
+Mime-Version: 1.0
+References: <c855535b4262ecd41f67734d19e8f48a7f014c2a.camel@infradead.org>
+Message-ID: <aj21KctIXuf7b_5G@google.com>
+Subject: Re: [PATCH] KVM: x86/xen: Add KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Paul Durrant <paul@xen.org>, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Hi Yifan,
+On Tue, Apr 28, 2026, David Woodhouse wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> 
+> Commit 3617c0ee7decb ("KVM: x86/xen: Only write Xen hypercall page for
+> guest writes to MSR") blocked host-initiated writes from triggering the
+> Xen hypercall page setup, to fix an SRCU usage violation when the
+> hypercall MSR index collides with a real MSR written during vCPU reset.
+> 
+> However, some VMMs legitimately need to trigger hypercall page setup
+> from host context. For example, a VMM may intercept the guest's MSR
+> write to track an epoch (for kexec/crash recovery), and then replay the
+> write as a host-initiated KVM_SET_MSRS to populate the hypercall page.
+> The host_initiated check breaks this use case.
+> 
+> Add KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE as a new vcpu attribute
+> that explicitly invokes kvm_xen_write_hypercall_page() under proper
+> locking. This gives userspace a safe interface to trigger hypercall page
+> setup without going through the MSR write path, preserving the
+> host_initiated defence in depth while restoring the lost functionality.
 
-On 5/22/26 2:05 AM, Yifan Wu wrote:
-> @@ -242,14 +233,13 @@ static int read_from_imc_dir(char *imc_dir, unsigned int *count)
->   * counter's event and umask for the memory read events that will be
->   * measured.
->   *
-> - * Enumerate all these details into an array of structures.
-> + * Enumerate all these details into a linked list of structures.
->   *
->   * Return: >= 0 on success. < 0 on failure.
->   */
-> -static int num_of_imcs(void)
-> +static int enumerate_imcs(void)
+This is all kinda silly.  Userspace provides KVM a blob, then userspace intercepts
+the MSR write that triggers doing something with said blob, only to call back into
+KVM to consume the blob that userspace provided in the first place.
 
-The first sentence of this function's comments still describes the behavior being
-changed in this patch. How about a fixup like below:
+Any chance we can deprecate KVM's kvm_xen_write_hypercall_page(), and instead
+rely on userspace to fill the page?  This extra bit obviously isn't much code to
+carry, but it's yet one more Xen thing to maintain, and we've accumulated a lot
+of those over the years...
 
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 129e8d76222a..fe3b3517ae49 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -226,12 +226,10 @@ static int read_from_imc_dir(char *imc_dir)
+> diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+> index 91fd3673c09a..c16b4560c9e7 100644
+> --- a/arch/x86/kvm/xen.c
+> +++ b/arch/x86/kvm/xen.c
+> @@ -907,6 +907,13 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
+>  {
+>  	int idx, r = -ENOENT;
+>  
+> +	/*
+> +	 * kvm_xen_write_hypercall_page() manages its own locking.
+> +	 * Handle it before taking xen_lock to avoid a deadlock.
+
+Do we actually want the side effects that necessitate taking xen.xen_lock?  From
+a uAPI perspective, it's odd to effectively bundle KVM_XEN_ATTR_TYPE_LONG_MODE
+into KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE.
+
+The other question is, why does kvm_xen_write_hypercall_page() drop xen_lock
+when writing guest memory?  That seems odd and unnecessary.
+
+> +	 */
+> +	if (data->type == KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE)
+> +		return kvm_xen_write_hypercall_page(vcpu, data->u.gpa) ? -EIO : 0;
+
+-EIO is rather weird, wouldn't -EINVAL be more appropriate?  Ah, and both are
+wrong if copying the blob fails.
+
+> +
+>  	mutex_lock(&vcpu->kvm->arch.xen.xen_lock);
+>  	idx = srcu_read_lock(&vcpu->kvm->srcu);
+
+Speaking of writing memory, kvm_xen_write_hypercall_page() expects the caller
+to be in a read-side SRCU critical section (I didn't actually run this with
+PROVE_LOCKING=y, but I don't think I'm missing anything?)
+
+So, if this uAPI is unavoidable seems like we want something like the below.
+Either that or guard all of kvm_xen_write_hypercall_page() with a lock, and put
+the entire thing in a helper so that KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE
+can be handled in a case-statement and doesn't need to grab SRCU on its own.
+
+---
+ arch/x86/include/uapi/asm/kvm.h |  3 ++
+ arch/x86/kvm/x86.c              |  3 +-
+ arch/x86/kvm/xen.c              | 64 ++++++++++++++++++++-------------
+ 3 files changed, 44 insertions(+), 26 deletions(-)
+
+diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
+index 1585ec804066..7732b92a4db0 100644
+--- a/arch/x86/include/uapi/asm/kvm.h
++++ b/arch/x86/include/uapi/asm/kvm.h
+@@ -598,6 +598,7 @@ struct kvm_x86_mce {
+ #define KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG	(1 << 6)
+ #define KVM_XEN_HVM_CONFIG_PVCLOCK_TSC_UNSTABLE	(1 << 7)
+ #define KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA	(1 << 8)
++#define KVM_XEN_HVM_CONFIG_WRITE_HYPERCALL_PAGE	(1 << 9)
+ 
+ #define KVM_XEN_MSR_MIN_INDEX			0x40000000u
+ #define KVM_XEN_MSR_MAX_INDEX			0x4fffffffu
+@@ -706,6 +707,8 @@ struct kvm_xen_vcpu_attr {
+ #define KVM_XEN_VCPU_ATTR_TYPE_UPCALL_VECTOR	0x8
+ /* Available with KVM_CAP_XEN_HVM / KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA */
+ #define KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA	0x9
++/* Available with KVM_CAP_XEN_HVM / KVM_XEN_HVM_CONFIG_WRITE_HYPERCALL_PAGE */
++#define KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE 0xa
+ 
+ /* Secure Encrypted Virtualization command */
+ enum sev_cmd_id {
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 0626e835e9eb..ced19e84bf6c 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -2287,7 +2287,8 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 		    KVM_XEN_HVM_CONFIG_EVTCHN_2LEVEL |
+ 		    KVM_XEN_HVM_CONFIG_EVTCHN_SEND |
+ 		    KVM_XEN_HVM_CONFIG_PVCLOCK_TSC_UNSTABLE |
+-		    KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA;
++		    KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA |
++		    KVM_XEN_HVM_CONFIG_WRITE_HYPERCALL_PAGE;
+ 		if (sched_info_on())
+ 			r |= KVM_XEN_HVM_CONFIG_RUNSTATE |
+ 			     KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG;
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index db10f12d10cf..b72845aa67e2 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -904,6 +904,8 @@ int kvm_xen_hvm_get_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
+ 	return r;
  }
  
- /*
-- * A system can have 'n' number of iMC (Integrated Memory Controller)
-- * counters, get that 'n'. Discover the properties of the available
-- * counters in support of needed performance measurement via perf.
-- * For each iMC counter get it's type and config. Also obtain each
-- * counter's event and umask for the memory read events that will be
-- * measured.
-+ * Discover the properties of the available iMC (Integrated Memory Controller)
-+ * counters in support of needed performance measurement via perf. For each iMC
-+ * counter get it's type and config. Also obtain each counter's event and umask
-+ * for the memory read events that will be measured.
-  *
-  * Enumerate all these details into a linked list of structures.
-  *
++static int __kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data);
++
+ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
+ {
+ 	int idx, r = -ENOENT;
+@@ -1138,7 +1140,9 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
+ 			r = 0;
+ 		}
+ 		break;
+-
++	case KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE:
++		r = __kvm_xen_write_hypercall_page(vcpu, data->u.gpa);
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -1274,30 +1278,12 @@ int kvm_xen_vcpu_get_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
+ 	return r;
+ }
+ 
+-int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
++static int __kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
+ {
+-	struct kvm *kvm = vcpu->kvm;
+ 	u32 page_num = data & ~PAGE_MASK;
+ 	u64 page_addr = data & PAGE_MASK;
+ 	bool lm = is_long_mode(vcpu);
+-	int r = 0;
+-
+-	mutex_lock(&kvm->arch.xen.xen_lock);
+-	if (kvm->arch.xen.long_mode != lm) {
+-		kvm->arch.xen.long_mode = lm;
+-
+-		/*
+-		 * Re-initialize shared_info to put the wallclock in the
+-		 * correct place.
+-		 */
+-		if (kvm->arch.xen.shinfo_cache.active &&
+-		    kvm_xen_shared_info_init(kvm))
+-			r = 1;
+-	}
+-	mutex_unlock(&kvm->arch.xen.xen_lock);
+-
+-	if (r)
+-		return r;
++	struct kvm *kvm = vcpu->kvm;
+ 
+ 	/*
+ 	 * If Xen hypercall intercept is enabled, fill the hypercall
+@@ -1310,7 +1296,7 @@ int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
+ 		int i;
+ 
+ 		if (page_num)
+-			return 1;
++			return -EINVAL;
+ 
+ 		/* mov imm32, %eax */
+ 		instructions[0] = 0xb8;
+@@ -1329,7 +1315,7 @@ int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
+ 			if (kvm_vcpu_write_guest(vcpu,
+ 						 page_addr + (i * sizeof(instructions)),
+ 						 instructions, sizeof(instructions)))
+-				return 1;
++				return -EINVAL;
+ 		}
+ 	} else {
+ 		/*
+@@ -1344,7 +1330,7 @@ int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
+ 		int ret;
+ 
+ 		if (page_num >= blob_size)
+-			return 1;
++			return -EINVAL;
+ 
+ 		blob_addr += page_num * PAGE_SIZE;
+ 
+@@ -1355,11 +1341,39 @@ int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
+ 		ret = kvm_vcpu_write_guest(vcpu, page_addr, page, PAGE_SIZE);
+ 		kfree(page);
+ 		if (ret)
+-			return 1;
++			return -EINVAL;
+ 	}
+ 	return 0;
+ }
+ 
++
++int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
++{
++	struct kvm *kvm = vcpu->kvm;
++	bool lm = is_long_mode(vcpu);
++	int r = 0;
++
++	mutex_lock(&kvm->arch.xen.xen_lock);
++	if (kvm->arch.xen.long_mode != lm) {
++		kvm->arch.xen.long_mode = lm;
++
++		/*
++		 * Re-initialize shared_info to put the wallclock in the
++		 * correct place.
++		 */
++		if (kvm->arch.xen.shinfo_cache.active &&
++		    kvm_xen_shared_info_init(kvm))
++			r = 1;
++	}
++	mutex_unlock(&kvm->arch.xen.xen_lock);
++
++	if (r)
++		return r;
++
++
++	return __kvm_xen_write_hypercall_page(vcpu, data) ? 1 : 0;
++}
++
+ int kvm_xen_hvm_config(struct kvm *kvm, struct kvm_xen_hvm_config *xhc)
+ {
+ 	/* Only some feature flags need to be *enabled* by userspace */
 
-...  
->  int initialize_read_mem_bw_imc(void)
->  {
-> -	int imc;
-> +	struct imc_counter_config *imc_counter;
-> +	int ret;
->  
-> -	imcs = num_of_imcs();
-> -	if (imcs <= 0)
-> -		return imcs;
-> +	ret = enumerate_imcs();
-> +	if (ret < 0)
-> +		return ret;
->  
->  	/* Initialize perf_event_attr structures for all iMC's */
-> -	for (imc = 0; imc < imcs; imc++)
-> -		read_mem_bw_initialize_perf_event_attr(&imc_counters_config[imc]);
-> +	list_for_each_entry(imc_counter, &imc_counters_list, entry) {
-> +		read_mem_bw_initialize_perf_event_attr(imc_counter);
-> +	}
-
-nit: unnecessary braces
-
->  
->  	return 0;
->  }
-> @@ -328,11 +320,11 @@ void cleanup_read_mem_bw_imc(void)
->  
->  static void perf_close_imc_read_mem_bw(void)
->  {
-> -	int mc;
-> +	struct imc_counter_config *imc_counter;
->  
-> -	for (mc = 0; mc < imcs; mc++) {
-> -		if (imc_counters_config[mc].fd != -1)
-> -			close(imc_counters_config[mc].fd);
-> +	list_for_each_entry(imc_counter, &imc_counters_list, entry) {
-> +		if (imc_counter->fd != -1)
-> +			close(imc_counter->fd);
->  	}
->  }
->  
-With fixup applied and nit addressed:
-| Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-
-Reinette
-
+base-commit: 8867ab1259b34261eaa96f1f3a2a092cd03e5a17
+--
