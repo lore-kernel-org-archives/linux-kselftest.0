@@ -1,159 +1,178 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B4F37BE6F;
-	Fri, 26 Jun 2026 15:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782486538; cv=none; b=lQGZvmdp8jJm0YRvcwep1vLHHkC1+3G9ExaE2bepYck743lhoYB7+n3RCKedFGARY2CtoOCKeQ4GxIYk+d/qWMnsd7+XiaADM7G/fMe7LLvcomQF/M9T1H0TEsNS7dZjdv+IuwbvKB7efnHHFGRmnSEBaIU3iPqcOzd/RPKSb3g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782486538; c=relaxed/simple;
-	bh=W9StKkQ0/yj07eWoElZiv+n2VxDoLxnR18N0r893Esc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=FXi+/E58zSzsEFVoSlm6jlHLRwu3vDoR2LgBMA1mHMQa7Tfs6g171FelDNIvQuUp8qikX0hr94LJqnoqlbBocZCcTji8X5PlsT1LhhvskRGHb/KQKF75xCCxq9igQzY7hQXICmgDKkXq6QpcFsTT2dhqNgJ2rNdx5C3dCT8Lito=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BPvNDeEl; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355F438AC91
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 15:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782487127; cv=pass; b=GmWV6M+ZcF0pCrhUSRe4ivlDOdU4O/kzmFQ9hqms0v2KDeWZM7j9w9z0kh6ki+WQYB/+ACkBUdQ1vD/E6tYNnWzD6AvlNR7SMQylqcCqSCuucyWiZ5/Mo4H9JEACOsYTR8Vj4VJC6gMMhI00bAt8Srt/3Ugbva+v+KT39hda95g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782487127; c=relaxed/simple;
+	bh=mVP2TUHCeB/LjDfIFLuoRmoPYS8ySiFWCJ8p8DKBKuk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ATo6GtInrLhlN8g4eIU4ATzAIRitXwAayVM6d+tuoNw52RzMRBi2OCD0rgiHjsOV82GavDwZirC39aO5y+GFtA8RRtgZR76zlFshTQu8767iZ4eVFOIycHD0U6ivxrGoPK/oqNeGhEYbZeV50BvfFetJIWytpCICTOM+IwDvCgY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fmCqssLN; arc=pass smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BPvNDeEl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fmCqssLN"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-68852b58d87so2426904a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 08:18:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782487122; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ORyqWfb37zxXZXIeNX+bGQJNSg8Lm08Y0XJ7Y3AURIav4EkUgiFA9CdBnRFrwFe9T6
+         GBh2zgqXwes1EmE9LUVaxWs7LyfiTBES1zP9E07n15Kr9tCYeoGm5h7tfqGUDu6xiYbo
+         2g57G+xYVV7G6GInZ/8JYlmcyKWhqTe4clSNr8TBkWAfwQipR+6Sb6mxc8WD8vlmJgAN
+         /9aqDMyfgqq3XdUqd2tEQqhbYltfLCBmSZtDdi/xdx50lzb9juOL2acEKQ8Mumof2clY
+         qhMHoyUqbicE9+eQcMHujYModObmvl4dDfOEYo8CYs7oNi2+HdbfBjSAUUToKhv4UZkC
+         fgBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=mVP2TUHCeB/LjDfIFLuoRmoPYS8ySiFWCJ8p8DKBKuk=;
+        fh=eVW0221rsHmOqCMyV+7xoOR7Bs4Xhp5nFyffM+ysE44=;
+        b=IfxL+uQpg78FxTeiKC7Shu0OhpHi5AqHUo8f7g9yhZcYogl30dXZXzwLulnvOAcQNa
+         YZiPhlNsXnvEfpfs6wnco/RK5ReXsXkr4o5Se7nu6GSN6hWZjE4OaNFHhsqPA/sPkiKI
+         Sl4EnGUq0l+C5zSCZHOzOaFLw3A1/i9cHEogqojF3DW/jQZWIWoA1vAWKYiFWybYU1CI
+         YAWs6wsBbHI1PMEdA2mPeH9sXeAuM75kOrCDNf839h896pv/xH+tbbS0+J1kHNpfixIV
+         VaIV94paEZiv6gPMGG1e3BVblXkDi/Gwyo6bnoI2AXmGNZJTKZD7tN60r9Q9Z15yWX4r
+         kQTg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782487122; x=1783091922; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mVP2TUHCeB/LjDfIFLuoRmoPYS8ySiFWCJ8p8DKBKuk=;
+        b=fmCqssLNpl3dvJXUEdnuL6lGRzjspPiOg3xyAqpxVOrGRLmsGHPA+31ztFKyEaQ/Hb
+         IZa1LGFcsYdAcvpRdhphz0zZuFxPQpJ27Pkc+R4Td2csCiGE9tNRMzxcpQBHBu6Mu21M
+         2ek6yrcfdvzzygl5pZ7NAw+rSzZoGGcN5UW7gRof+nYf5bvpyigLVMV+yTqOsM5TjICX
+         KFhiPOxo9Ziv//E+pEVWPM75LCuupJPUjbJ4+/Cvs7GCFd7xm8ld1X9yJW/FD9bIEqLQ
+         eakiPIyd0CE7qu1kTqREy7qMixGuYdari40Kp8/wjuriTX7GyW9BYeoMQ5hYLVDkogPt
+         2NVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782487122; x=1783091922;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mVP2TUHCeB/LjDfIFLuoRmoPYS8ySiFWCJ8p8DKBKuk=;
+        b=alf4BALq5tkMylbNkc3qbhQGCOu7/JX/kclYfLlMgpDvO62uvCDp/s5FRJZaxqHrqN
+         zwNvjsr0RhB8RfSHDOOT1bkwi6kimz/SLGlfPLab2bzvDY9gK2lWz01eyQev6bYXJozK
+         5G5RpA+7bimJHPGJjdSEv5VbAo3yT1wLe88YC0lVFyiA7z2hMjx/DF0t2EmY12nbNxVe
+         r06MrW8TWqwI5ybpbJ5sJsIgp19BK/5DAaGt40WnhLAMjV4jKV+GJKjZgmU+OxhjjOpy
+         GpSrXaiu5jd1Q7xlQz3w/mhOMsUnHKvW4fzZDoscnO1yBRX2ziephkPWpFS4s4kbAOU4
+         yegg==
+X-Forwarded-Encrypted: i=1; AHgh+RoEhuCFwdc/XSvrwkuj6aqvDfqyk0u8ReiREC3lb2X5FudfpG1vAIHSoyIMmPVglHhsAktyVyuH1dtVGfAabb0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwddTvnc4V6oxEmyHgW2zHSHAtnxNOKjC41eWEj688udwhlRdoy
+	aScVROcbyY65fE/945mWJsfp+yTR+2BwsNgE4c9oKUOBOSRyajHZLMDNMZ9EeCOXwJbrDJ97rEk
+	+bc6m8/gO/D7wKPoj3uuia51SfjRMO1Q=
+X-Gm-Gg: AfdE7ckNvZsWfkT/eIY8dMTzUvhuLfnlFX2DLlZ+OdTdCEyfxae7dbSuCJ6Q5HtLyKf
+	fivjfjlvydsfek5CQE6Fsp5fF3BXEXBx8WUV+CoUjos/qAevvVfsxLndbvrNDvsnY3nlVOgUXul
+	8qpGECnQywea0DeKPlz8ikBnMl8GAwYdt04gzEA6I9Vx3qO087L9L6Kcgji6JSfKIfN09BzM4rU
+	l8bs+JGnYDRAS96uQeewlyHNv3JKMQCoJBF+nhF7eWbdJHdOwnPE7Iabsw99egYbR+8kGnTxv2M
+	lkSnYNI54gRpAh1ar3bmmJGoWGqXcmw=
+X-Received: by 2002:a05:6402:2551:b0:697:833b:845e with SMTP id
+ 4fb4d7f45d1cf-69810aefba7mr2419788a12.18.1782487122292; Fri, 26 Jun 2026
+ 08:18:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782486531;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=W9StKkQ0/yj07eWoElZiv+n2VxDoLxnR18N0r893Esc=;
-	b=BPvNDeElvRZEMwzggouWII2tofymA3pxu+5JfmGwK7CJp2impsOKKN+WsSGMrtCbjeGBPp
-	NozIkXctwbMzmWJYZfWlevw7VPXWSaOnPydN+auEoQa0orwMQ/6weJ5g1FizLIV7FLvrOU
-	M1Cmc9YYM8i84hgILpAHMIQo3kf7m7E=
+MIME-Version: 1.0
+References: <20260623111533.2285005-1-ptikhomirov@virtuozzo.com>
+ <20260623111533.2285005-2-ptikhomirov@virtuozzo.com> <ajqOyIA8tPQsxfz6@cmpxchg.org>
+ <3f6392aa-c1f6-4263-8892-978dacbbd8ca@virtuozzo.com> <CAOQ4uxhras5YAr8_HBpuHSDwvfiEF8vAr0NDB0R_PXtGDhnqjQ@mail.gmail.com>
+ <20260625-lehrbuch-gehalt-wichen-1b2f3533efbe@brauner>
+In-Reply-To: <20260625-lehrbuch-gehalt-wichen-1b2f3533efbe@brauner>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Fri, 26 Jun 2026 17:18:30 +0200
+X-Gm-Features: AVVi8Cc5EZwXlZ5GECvSYG7NzrqtiA5br21iMjGhuCiWGLWSPhjsckXvxs-eoOw
+Message-ID: <CAOQ4uxiNrEZ8rsRc11mdjkMWe3dfThE0DJ2vXuO0yiNemnpR6A@mail.gmail.com>
+Subject: Re: [PATCH 1/3] fs, mm: add ->cachestat() file operation
+To: Christian Brauner <brauner@kernel.org>
+Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Nhat Pham <nphamcs@gmail.com>, Shuah Khan <shuah@kernel.org>, linux-unionfs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 26 Jun 2026 15:08:42 +0000
-Message-Id: <DJJ2QJQQ73CM.2WHKW4AT6QT1D@linux.dev>
-Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-doc@vger.kernel.org"
- <linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, "linux-mm@kvack.org"
- <linux-mm@kvack.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
- <linux-riscv@lists.infradead.org>, "pbonzini@redhat.com"
- <pbonzini@redhat.com>, "corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org"
- <maz@kernel.org>, "oupton@kernel.org" <oupton@kernel.org>,
- "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
- <yuzenghui@huawei.com>, "will@kernel.org" <will@kernel.org>,
- "seanjc@google.com" <seanjc@google.com>, "mingo@redhat.com"
- <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
- "luto@kernel.org" <luto@kernel.org>, "willy@infradead.org"
- <willy@infradead.org>, "akpm@linux-foundation.org"
- <akpm@linux-foundation.org>, "lorenzo.stoakes@oracle.com"
- <lorenzo.stoakes@oracle.com>, "vbabka@kernel.org" <vbabka@kernel.org>,
- "rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com"
- <surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org"
- <ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
- "andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev"
- <martin.lau@linux.dev>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
- "song@kernel.org" <song@kernel.org>, "yonghong.song@linux.dev"
- <yonghong.song@linux.dev>, "john.fastabend@gmail.com"
- <john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>,
- "haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
- <jolsa@kernel.org>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
- "jannh@google.com" <jannh@google.com>, "pfalcato@suse.de"
- <pfalcato@suse.de>, "skhan@linuxfoundation.org"
- <skhan@linuxfoundation.org>, "riel@surriel.com" <riel@surriel.com>,
- "ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com"
- <jgross@suse.com>, "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
- "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
- "ackerleytng@google.com" <ackerleytng@google.com>, "yosry@kernel.org"
- <yosry@kernel.org>, "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
- "maobibo@loongson.cn" <maobibo@loongson.cn>, "prsampat@amd.com"
- <prsampat@amd.com>, "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>,
- "mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jthoughton@google.com"
- <jthoughton@google.com>, "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
- "alex@ghiti.fr" <alex@ghiti.fr>, "aou@eecs.berkeley.edu"
- <aou@eecs.berkeley.edu>, "borntraeger@linux.ibm.com"
- <borntraeger@linux.ibm.com>, "chenhuacai@kernel.org"
- <chenhuacai@kernel.org>, "baolu.lu@linux.intel.com"
- <baolu.lu@linux.intel.com>, "dev.jain@arm.com" <dev.jain@arm.com>,
- "gor@linux.ibm.com" <gor@linux.ibm.com>, "hca@linux.ibm.com"
- <hca@linux.ibm.com>, "palmer@dabbelt.com" <palmer@dabbelt.com>,
- "pjw@kernel.org" <pjw@kernel.org>, "shijie@os.amperecomputing.com"
- <shijie@os.amperecomputing.com>, "svens@linux.ibm.com"
- <svens@linux.ibm.com>, "thuth@redhat.com" <thuth@redhat.com>,
- "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com"
- <urezki@gmail.com>, "zhengqi.arch@bytedance.com"
- <zhengqi.arch@bytedance.com>, "pavel@kernel.org" <pavel@kernel.org>,
- "yangyicong@hisilicon.com" <yangyicong@hisilicon.com>,
- "vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
- <jackmanb@google.com>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
- "Thomson, Jack" <jackabt@amazon.co.uk>, "Itazuri, Takahiro"
- <itazur@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>
-Subject: Re: [PATCH v12 01/16] set_memory: set_direct_map_* to take address
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Brendan Jackman" <brendan.jackman@linux.dev>
-To: "David Hildenbrand (Arm)" <david@kernel.org>, "Brendan Jackman"
- <brendan.jackman@linux.dev>, "Lorenzo Stoakes" <ljs@kernel.org>, "Kalyazin,
- Nikita" <kalyazin@amazon.co.uk>
-References: <20260410151746.61150-1-kalyazin@amazon.com>
- <20260410151746.61150-2-kalyazin@amazon.com> <aeeDvpDnGnY5n69n@lucifer>
- <DJJ23EXF55VK.1EGQZS511HFB6@linux.dev>
- <f7a40359-a210-4711-acba-677e9c1d565c@kernel.org>
-In-Reply-To: <f7a40359-a210-4711-acba-677e9c1d565c@kernel.org>
-X-Migadu-Flow: FLOW_OUT
 
-On Fri Jun 26, 2026 at 2:58 PM UTC, David Hildenbrand (Arm) wrote:
-> On 6/26/26 16:38, Brendan Jackman wrote:
->> On Tue Apr 21, 2026 at 2:43 PM UTC, Lorenzo Stoakes wrote:
->>> On Fri, Apr 10, 2026 at 03:17:58PM +0000, Kalyazin, Nikita wrote:
->>>> From: Nikita Kalyazin <nikita.kalyazin@linux.dev>
->>>>
->>>> Let's convert set_direct_map_*() to take an address instead of a page =
-to
->>>> prepare for adding helpers that operate on folios; it will be more
->>>> efficient to convert from a folio directly to an address without going
->>>> through a page first.
->>=20
->> Why is this more efficient? Isn't it a purely compile-time conversion?
->>=20
->> Indeed in the current implementation folio_address() is
->> page_address(&folio->page) so it still goes through a page anyway, no?
->>=20
->> I might be missing context here about how this will look in the
->> memdesc future.
+On Thu, Jun 25, 2026 at 12:36=E2=80=AFPM Christian Brauner <brauner@kernel.=
+org> wrote:
 >
-> Good question. page_address() is really only complicated for highmem. For
-> non-highmem stuff it's simply derived from the page pfn.
+> On 2026-06-23 17:34:47+02:00, Amir Goldstein wrote:
+> > On Tue, Jun 23, 2026 at 4:55=E2=80=AFPM Pavel Tikhomirov
+> > <ptikhomirov@virtuozzo.com> wrote:
+> >
+> > > On 6/23/26 15:48, Johannes Weiner wrote:
+> > >
+> > > Yes, AFAIU in overlay when we use realfile we should always use it
+> > > with_ovl_creds(), even though I don't think there is anything cred re=
+lated
+> > > in filemap_cachestat(), I still think we should follow the common pat=
+tern
+> > > other overlay helpers use (similar to ovl_fadvise() and ovl_flush()).
+> > >
+> > > note: Actually some places get ovl_real_file() and use it without
+> > > with_ovl_creds(), e.g.: ovl_read_iter, ovl_write_iter, ovl_splice_rea=
+d,
+> > > ovl_splice_write. But those look more of an exception than the genera=
+l
+> > > rule. All other instances use with_ovl_creds().
+> >
+> > Use with_ovl_creds() is a good practice to keep the mental security mod=
+el,
+> > but it is useless if the security check (can_do_cachestat) is not in th=
+e
+> > vfs helper (vfs_cachestat), so please move it there.
+> >
+> > Also it kind of makes more sense to check (flags !=3D 0) in sys_cachest=
+ats
+> > before checking permissions.
+> >
+> > > Also there are simingly no other file_operations which return "realfi=
+le"
+> > > for further processing, mostly the operation from fsops simply replac=
+es
+> > > general operation with its own logic completely.
+> > >
+> > > Thanks for your review!
+> > >
+> > > ps: Hope overlay maintainers will correctly if I'm getting this wrong=
+.
+> >
+> > I don't think this is wrong per-se, except for can_do_cachestat().
+> >
+> > Just be aware that the real file could change from one cachestat
+> > call to the next (i.e. due to copy up).
 >
-> I suspect going page -> pfn will remain as efficient as it currently is (=
-with
-> vmemmap). For odd cases (SPARSEMEM without VMEMMAP) going through folio->=
-pfn [1]
-> might be slighty faster.
+> I'm really grump about adding a new file operation just for a
+> special-sauce system call which is under a CONFIG_* option even. We're
+> not going to set the precedent of piling on custom file operations for a
+> single filesystem everytime someone adds a new system call unless
+> absolutely necessary.
+
+I had a similar reaction.
+
+> This looks like it could just use a new helper in
+> fs/backing_file.c that the cachestat thing can call to use the correct
+> file.
 >
-> [1] https://kernelnewbies.org/MatthewWilcox/Memdescs/Path
 
-Ah sorry I raced with you and replied to myself:
+I was considering suggesting this as well.
+Having f_real_file() complement
 
-https://lore.kernel.org/all/DJJ2NKKPRANG.188CUADJO2CKK@linux.dev/
+but technically, can_do_cachestat() should be checked against
+the overlayfs file/inode AND also against the real file/inode with
+ovl_creds.
 
-The above makes me realise that if we really do want to avoid needing a
-struct page here, the "right" thing would be to make this API accept a
-PFN.
+I'd love to be able to provide a backing_file "template" for
+operations, but I don't have a good idea how to do that.
+Do you?
 
-The problem would be that our favourite programming language we use
-doesn't know the difference between `unsigned long addr` and `unsigned
-long pfn`... but I thiiiiink its unlikely those bugs will be latent,
-I've made that mistake a few times and my computer usually let me know
-about it.
-
-Still, I'm not really convinced we need to change anything here yet
-(modulo fuzziness about memdesc etc).
-
+Thanks,
+Amir.
