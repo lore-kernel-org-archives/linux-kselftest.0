@@ -1,248 +1,134 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9E838735A
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 20:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0CE39B4BF;
+	Fri, 26 Jun 2026 20:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782505779; cv=none; b=h0N9XT7O980m3b2YyQGoNWd/fHYOBV/GXNZ1Ne34/BBG4r9vXY1jK9PLPjI5hZcliG5lJ0NcK6cqH6rMNdorxRYrg+IyaakATUdVr0vj9ruWwZRxh+gkRXomIREXsNRnrEhKTaUG4lmp93jOaSkv38NBfUTuegOsAJGspRXKHlw=
+	t=1782506238; cv=none; b=aLRBT8UjBExYQqo6XguJoxr7uaN5MakRvfTjU8OLzun6T+6yNayzK1Az7Jlfqnqn1czn4qnRZASMQcVp0giGWMm11Yv4GccehhrR1Jtc7KQJSOn3Rbh8jHg/r8gFyYg+h+RwPzitr3z3V1aOror5Fk0XOrNcQdcJiv8gPiLZVXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782505779; c=relaxed/simple;
-	bh=NQjGG4zXSYU53w2K7bTqHGdIct742qU3+RBPftHQRyk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oPnRRmz+mLxTOElJ5c2L6D7XDXN8JCyz13vPCMeb6F9z2zOVM9N7oB7qUiL9Avid6ywELzKbD/uBZcUsqAayTBRtnNbKck60govESu8QKyKWbHWOXfCpQXKsrTjFGuL+Bn4t2hFIXUx8qaGHUSVRgXyg/uQkLaLCLyBMfpx2Xlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DhqEy0Mt; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=YgHL1zwo; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782506238; c=relaxed/simple;
+	bh=y3d2tRj3eLpPjwbyJgsYnyG6o2I6rzqFEpYVM6LwR/g=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=tdpKpf6Sq9ScBTLLtSLZCkoVpTI7bVUY4uGDzEePV7AoJg0DgAjhLwI4Q9BCgHD7RN3eGceCPAAhuX05CbSedo6abHhr3IyL6Xt6RG/n9ljbNQDT517z+mPOJx/4svMk2Q1qu/wak9WqdA4Taj89m1YXnSVuLY7y8HVRlpzwep0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=RX7Uf/Lg; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DhqEy0Mt";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="YgHL1zwo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782505777;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=5fmmows0Hr70L00v6YhaNR6PFpVRD5asct1gUksFqE8=;
-	b=DhqEy0MtmuPsHkJLwTa3eHCnqHJvybCKMX7mQDhv7Z+58WrGOOcwIlORBjAPow1rRdkjBf
-	nCDwelFWZNGa3lYMrmp1ntN8aYb+ME8rt/GDwcH+J4zzEs0Ht/M42Xlb8cE0BZS6leTBsh
-	Pb/PDPnK46obzecwA5PeFuz/aFbdEeU=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-613-bOdM8f_rMy66ZzwTXEYwpA-1; Fri, 26 Jun 2026 16:29:36 -0400
-X-MC-Unique: bOdM8f_rMy66ZzwTXEYwpA-1
-X-Mimecast-MFC-AGG-ID: bOdM8f_rMy66ZzwTXEYwpA_1782505776
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-92045e86763so488374885a.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 13:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782505776; x=1783110576; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5fmmows0Hr70L00v6YhaNR6PFpVRD5asct1gUksFqE8=;
-        b=YgHL1zwox7METT2exMJ+8lInwffMIWf3Ve58IVquTcACuGUkRUDFRdMVmLSonQFeaN
-         t+EB0I7h6avEx27gnVqKLwSghCQ3xchlbJLcdKAKhABEagEzwDJL/qfntmQKpQgQV6ZY
-         DLWJMX1YFBGmhbFwsVhT2DGXXtvLhXWR2tCuDZA44Z+biCJUqoEYty77A9v4frCXMQpl
-         HJRVHIPVVSScNB28T204NsfE092K5yFDgUs11iOZJIJ2o0zj/lFlDsiM3RwwD+Qge1sC
-         1QIi95blGB2SPF8e0YbXPKZR08t6KcOF1przzxerjVA15gTWx4QP37oAOaIVnB2h+kxy
-         RdQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782505776; x=1783110576;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5fmmows0Hr70L00v6YhaNR6PFpVRD5asct1gUksFqE8=;
-        b=AVtZ1XGoDVfs6uUfB8yyJg6rBOcroYuo50roseppBnaXUO36rDxuH4X5VpL0a79N1D
-         PgpdRLbMdyv0cGswg5wTvpJ7ABpmG2h9xk3FCbBgkGTByuNpXIJvZ0eVqNGjhqzoT/PB
-         JxFKJrJweiWJQAkiuR1w9I7vwP5QeGnmo2WPBB8bsevnw4pq6+5Lb98lOBtt8pGUiS0J
-         VcDJuXis3CB39H/Ee3oGjxd0CGmcgxH0OO5NaSyQFlAcQH72Pz7EoxXAFlTY1mivUngh
-         L8N7/XE5BBDv3l9hxUWwYXOxaMDscjFNjVkA677fNgJEdjEdoHWqxW/IJJMvclI8ELAC
-         B17Q==
-X-Forwarded-Encrypted: i=1; AFNElJ84tKAR7DaI62A3yoLJHqA0Z8nczn9WXtF4qpu3jb+0XkkeqKekOZzMKhPMbZ8AEBEGVk35wQ1HR/pRo0d2pJ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySOnonr6515Hhbvof3QvAjZlGsd31bn1ogpV03JHrxw3AfT7/U
-	21WtZUZvTwJ3JxV7ZyeNohDSa+eOzGj6OpBediqmqJB0Xtu8V67pRClL4HiJdaXsbYFnuFmH1nW
-	d4v+jhma9+WSdIJ2zxgKzAh08sWlJNrUJmDtlEOeHb+NYfzCGG1DHAAK70gzIQpnknZkAeQ==
-X-Gm-Gg: AfdE7cn4yyOC1sePKtMVxAmXzGWVZg2qZq7KcE4JgzPX0XnfDcJf/6LiP/zorDOvj3g
-	y82T8PaLNDhHclU/ewh9unZnLNJbAeCVj6CF7Nj1360DmGd1sK+cXtME4eJDWHKkN4LTwXtQ3zh
-	5r2JzWm4DK+or+i8iqEjSvv9TFZccWiHD/rtFnx82Cza9X1+mqdhVfZqYfnGN/3BwYQhVd4W4g8
-	wqP8QpqKfPtfBDsqRHTaYJOIqcJ2ffQPVJ28HvYrryhbrWpcxNWWDb8SIW18YgbsSKyQ4vrTh1/
-	IdBXWmRq+0JaDk4sk7ZUcsViJGx1XMb3X3nP6ps16lifgBZ1DlymPe5trXhkRJLdoJcw8+jOUMq
-	Xko6Rsas953Y55iBlkzyiDyB0fyBo52hlkCTPHhbRq/+L4msi
-X-Received: by 2002:a05:620a:1a20:b0:8cf:bad7:20c5 with SMTP id af79cd13be357-92927db2b88mr1121092885a.25.1782505775457;
-        Fri, 26 Jun 2026 13:29:35 -0700 (PDT)
-X-Received: by 2002:a05:620a:1a20:b0:8cf:bad7:20c5 with SMTP id af79cd13be357-92927db2b88mr1121087185a.25.1782505774892;
-        Fri, 26 Jun 2026 13:29:34 -0700 (PDT)
-Received: from oak.redhat.com (c-73-148-124-98.hsd1.va.comcast.net. [73.148.124.98])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-926004ab49csm1239563785a.34.2026.06.26.13.29.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2026 13:29:34 -0700 (PDT)
-From: Joe Simmons-Talbott <joest@redhat.com>
-To: Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Joe Simmons-Talbott <joest@redhat.com>,
-	cui.tao@linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nhat Pham <nphamcs@gmail.com>,
-	Waiman Long <longman@redhat.com>,
-	Li Wang <li.wang@linux.dev>,
-	Sebastian Chlad <sebastianchlad@gmail.com>,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>,
-	cgroups@vger.kernel.org (open list:CONTROL GROUP (CGROUP)),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v5] selftests/cgroup: Adjust cpu test duration based on HZ
-Date: Fri, 26 Jun 2026 16:29:22 -0400
-Message-ID: <20260626202925.1527524-1-joest@redhat.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="RX7Uf/Lg"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1wdDIJ-00AoOa-S3; Fri, 26 Jun 2026 22:36:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=YlCHFZHnuvGA17tuVPsSxdhDuw7YPvkItswTJ1C9Gug=; b=RX7Uf/Lgux1uTVa+8rWYi0dTOo
+	YXZ3nOZV/FXAZPiz36pu0HF1QzXgzSRbipzb9mwNTYQ29gK4cg2Lu5rKRiBseC25o+yhsS2oVjN+a
+	O5VKNXnsR0dRLaVxc1uofmqHZxye22Ik51LgLY1m478K9VnpYF6TbkEOm2MEh1NbTR3wzg06xDHnk
+	n8eopPCSyM8AbPHftcIs/oe8ZbgGc/SdpRCTVvFyxW8udZpToCyuwDppWK2VulkktxJj1jSkGGpO4
+	gJwgR3ksWqs+KQ/aSHO1mEo1aKqDSXABe1dR+Fw2Q4OOWKAmigAoHgAH6sAMIFJYHJqgFjYEVVeo4
+	IXoZ4cGw==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1wdDIH-0006SC-Dl; Fri, 26 Jun 2026 22:36:57 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1wdDI9-006anB-0b;
+	Fri, 26 Jun 2026 22:36:49 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Date: Fri, 26 Jun 2026 22:36:29 +0200
+Subject: [PATCH bpf v2 1/4] bpf, sockmap: Reject unhashed UDP sockets on
+ sockmap update
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260626-sockmap-lookup-udp-leak-v2-1-7e7e201c951a@rbox.co>
+References: <20260626-sockmap-lookup-udp-leak-v2-0-7e7e201c951a@rbox.co>
+In-Reply-To: <20260626-sockmap-lookup-udp-leak-v2-0-7e7e201c951a@rbox.co>
+To: Eric Dumazet <edumazet@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ Jiayuan Chen <jiayuan.chen@linux.dev>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Cong Wang <cong.wang@bytedance.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Michal Luczaj <mhal@rbox.co>
+X-Mailer: b4 0.15.2
 
-For lower HZ values a quota of 1000us is much lower than the amount
-of microseconds per tick which makes the tests test_cpucg_max and
-test_cpugc_max_nested fail. Increase the test duration to accommodate
-for lower HZ values.
+UDP sockets get SOCK_RCU_FREE set when (auto-)bound. This means
+sk_is_refcounted(unbound) = true, while sk_is_refcounted(bound) = false.
 
-Link: https://lore.kernel.org/lkml/20260625203307.1114538-1-joest@redhat.com/
-Signed-off-by: Joe Simmons-Talbott <joest@redhat.com>
+Because sockmap accepts unbound UDP sockets, a BPF program can increment a
+socket's refcount via lookup. If the socket is subsequently bound, the
+transition from unbound to bound causes bpf_sk_release() to skip the
+decrement of the refcount, causing a memory leak.
+
+unreferenced object 0xffff88810bc2eb40 (size 1984):
+  comm "test_progs", pid 2451, jiffies 4295320596
+  hex dump (first 32 bytes):
+    7f 00 00 01 7f 00 00 01 d2 04 1b b7 04 d2 00 00  ................
+    02 00 01 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
+  backtrace (crc bdee079d):
+    kmem_cache_alloc_noprof+0x557/0x660
+    sk_prot_alloc+0x69/0x240
+    sk_alloc+0x30/0x460
+    inet_create+0x2ce/0xf80
+    __sock_create+0x25b/0x5c0
+    __sys_socket+0x119/0x1d0
+    __x64_sys_socket+0x72/0xd0
+    do_syscall_64+0xa1/0x5f0
+    entry_SYSCALL_64_after_hwframe+0x76/0x7e
+
+Instead of special-casing for refcounted sockets, reject unhashed UDP
+sockets during sockmap updates, as there is no benefit to supporting those.
+This effectively reverts the commit under Fixes, with two exceptions:
+
+1. sock_map_sk_state_allowed() maintains a fall-through `return true`.
+2. In the spirit of commit b8b8315e39ff ("bpf, sockmap: Remove unhash
+   handler for BPF sockmap usage"), the proto::unhash BPF handler is not
+   reintroduced.
+
+Historical note: this issue is related to commit 67312adc96b5 ("bpf: reject
+unhashed sockets in bpf_sk_assign").
+
+Fixes: 0c48eefae712 ("sock_map: Lift socket state restriction for datagram sockets")
+Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
-CC: cui.tao@linux.dev
-v4 -> v5:
-- Get rid of added duration_XXX variables
+ net/core/sock_map.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-v3 -> v4:
-- Use usec for adjusting test duration for better accuracy.
-- Remove underscore from static function
-- Use 1000 as the fallback value for hz since it's the default.
-
-v2 -> v3:
-- Instead of changing cpu.max quota extend the test duration based on
-  the HZ value.
-- don't call pclose() if popen() fails.
-- check return value of fscanf().
-
-v1 -> v2:
-- Try checking /proc/config.gz to get the actual kernel HZ value and
-  fallback to 1000 if the value cannot be determined.
-
- .../cgroup/lib/include/cgroup_util.h          |  1 +
- tools/testing/selftests/cgroup/test_cpu.c     | 43 ++++++++++++++++---
- 2 files changed, 38 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-index febc1723d090..8ebb2b4d4ec0 100644
---- a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-+++ b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-@@ -8,6 +8,7 @@
- 
- #define MB(x) (x << 20)
- 
-+#define NSEC_PER_USEC	1000L
- #define USEC_PER_SEC	1000000L
- #define NSEC_PER_SEC	1000000000L
- 
-diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
-index 7a40d76b9548..a5eccfcabef5 100644
---- a/tools/testing/selftests/cgroup/test_cpu.c
-+++ b/tools/testing/selftests/cgroup/test_cpu.c
-@@ -639,6 +639,31 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
- 	return run_cpucg_nested_weight_test(root, false);
- }
- 
-+/*
-+ * Best effort attempt to get the kernel's HZ value from the config.
-+ * Return the HZ value if found otherwise return 1000 (the default) to
-+ * indicate failure.
-+ */
-+static long
-+get_config_hz(void)
-+{
-+	long hz = 1000;
-+	FILE *f;
-+	char cmd[256] = "zcat /proc/config.gz 2>/dev/null | grep '^CONFIG_HZ='";
-+
-+	f = popen(cmd, "r");
-+
-+	if (!f)
-+		return hz;
-+
-+	if (fscanf(f, "CONFIG_HZ=%ld", &hz) == EOF)
-+		goto out;
-+
-+out:
-+	pclose(f);
-+	return hz;
-+}
-+
- /*
-  * This test creates a cgroup with some maximum value within a period, and
-  * verifies that a process in the cgroup is not overscheduled.
-@@ -646,15 +671,18 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
- static int test_cpucg_max(const char *root)
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index c60ba6d292f9..9efbd8ca7db8 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -542,6 +542,8 @@ static bool sock_map_sk_state_allowed(const struct sock *sk)
  {
- 	int ret = KSFT_FAIL;
-+	long hz = get_config_hz();
- 	long quota_usec = 1000;
- 	long default_period_usec = 100000; /* cpu.max's default period */
- 	long duration_seconds = 1;
- 
--	long duration_usec = duration_seconds * USEC_PER_SEC;
-+	long duration_usec;
- 	long usage_usec, n_periods, remainder_usec, expected_usage_usec;
- 	char *cpucg;
- 	char quota_buf[32];
- 
-+	duration_usec = duration_seconds * USEC_PER_SEC * 1000 / hz;
-+
- 	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
- 
- 	cpucg = cg_name(root, "cpucg_test");
-@@ -670,8 +698,8 @@ static int test_cpucg_max(const char *root)
- 	struct cpu_hog_func_param param = {
- 		.nprocs = 1,
- 		.ts = {
--			.tv_sec = duration_seconds,
--			.tv_nsec = 0,
-+			.tv_sec = duration_usec / USEC_PER_SEC,
-+			.tv_nsec = duration_usec % USEC_PER_SEC * NSEC_PER_USEC,
- 		},
- 		.clock_type = CPU_HOG_CLOCK_WALL,
- 	};
-@@ -710,15 +738,18 @@ static int test_cpucg_max(const char *root)
- static int test_cpucg_max_nested(const char *root)
- {
- 	int ret = KSFT_FAIL;
-+	long hz = get_config_hz();
- 	long quota_usec = 1000;
- 	long default_period_usec = 100000; /* cpu.max's default period */
- 	long duration_seconds = 1;
- 
--	long duration_usec = duration_seconds * USEC_PER_SEC;
-+	long duration_usec;
- 	long usage_usec, n_periods, remainder_usec, expected_usage_usec;
- 	char *parent, *child;
- 	char quota_buf[32];
- 
-+	duration_usec = duration_seconds * USEC_PER_SEC * 1000 / hz;
-+
- 	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
- 
- 	parent = cg_name(root, "cpucg_parent");
-@@ -741,8 +772,8 @@ static int test_cpucg_max_nested(const char *root)
- 	struct cpu_hog_func_param param = {
- 		.nprocs = 1,
- 		.ts = {
--			.tv_sec = duration_seconds,
--			.tv_nsec = 0,
-+			.tv_sec = duration_usec / USEC_PER_SEC,
-+			.tv_nsec = duration_usec % USEC_PER_SEC * NSEC_PER_USEC,
- 		},
- 		.clock_type = CPU_HOG_CLOCK_WALL,
- 	};
+ 	if (sk_is_tcp(sk))
+ 		return (1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_LISTEN);
++	if (sk_is_udp(sk))
++		return sk_hashed(sk);
+ 	if (sk_is_stream_unix(sk))
+ 		return (1 << READ_ONCE(sk->sk_state)) & TCPF_ESTABLISHED;
+ 	if (sk_is_vsock(sk) &&
+
 -- 
 2.54.0
 
