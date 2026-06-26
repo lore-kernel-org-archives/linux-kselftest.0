@@ -1,127 +1,144 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1473C8C71
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 06:42:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB2E284B37;
+	Fri, 26 Jun 2026 07:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782456137; cv=none; b=XQ/bXCW3DjH4HeRty+2uILtMqg2V0yxLH86q/qIXt9v67j4XjuCRwvK70EU48GL+9k3CFK32CdRrjwmXE5dBEopWhlKrmPuWLtV9aPvmhijH708ffMlwk4Oehu8X0kS+qpkjFqZK9lyprXjvUwA8emP7T0pdmmCceLzNBo+eOD4=
+	t=1782457235; cv=none; b=lUaol41y4LcbVhqPPdXHSNea1pw7YrQ4MQSNARFuPTri3/GIKggKj7EDOtIgx8vb32t2gar38Ypn3LE+ukYi7eLm1unSuPwsQOADSCqBdAjiGAZ4arXRkOJG0zeZHDIE3mR2bKcD46LP6W/uzLGf91LwndxeMPhDpkf6F0dgVRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782456137; c=relaxed/simple;
-	bh=fje9UXyWv8yL9YNs3YAeiDc/M9FDtyBCWEc+3DeCnmc=;
-	h=From:To:Cc:Subject:Date:Message-ID:References:MIME-Version:
-	 Content-Type; b=bwkk6HPKA6CdPIoHAyD3v5aWPB62UmOJHvf1ATPImTpJgi/vQo4gwGpvOk5Z5IGH6V7UUH/eS11qaWo9m935Pkq2cCjTjxBesW4OgUT0ioaNYitLpJirit/bJLCu7CvlnfaDtfXn3bzRHASI+ELj+5t4BLwnFPvTTXHuvbm09jQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ISo2Ik0P; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ISo2Ik0P"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso7823505e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 23:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782456134; x=1783060934; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=56xRi217GtHBHYQHJbgA7YLUn0MAQQE1vLXLfDs7/8U=;
-        b=ISo2Ik0PSI7NsnY8GaQtAqk6chmMk1HDC/GMrq0RI6GawERtsBdrxDQ+szzbV+layS
-         73LWpPcLREOQEbyDilRwOHRDWY37V7Gyd2hL9ThFE0GaOPE+4kUGEjRRvPGf1U2xxd9B
-         AjUFPp9F6oDqlZgS+oKn8hCmaPeD/HYm36U14bs2GaKBdZr97uioB7p1eYDbnLVtUkJw
-         wDoMqlc4fb987E4NU6dg2xjkviiwPdP0WkSCbMxDmkFZ19I1vCjLSBWhwLrG9gqqcvAH
-         dXavnd6NIsqDGRFf+rCTZJOx8Q96vU34p6F69iN8xJhq8pi2HFKW4kIEW38k43nDXDCI
-         uRaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782456134; x=1783060934;
-        h=content-transfer-encoding:mime-version:references:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=56xRi217GtHBHYQHJbgA7YLUn0MAQQE1vLXLfDs7/8U=;
-        b=g4Qy/69L+ycNZBfer8DQSGlstISEj6NXSJt863o5M+Vv0r2FPJrnzrg1ZLOuaMP0V+
-         uHfH7FgSkiD32HekQNv9vqGnrMlcMaDrxojIk2akXVVcuGbvUx8lYGgGYacFJqid8rW6
-         Z6mFj1vFAaSDGpCywWneHcEJRWaV4RYKpxibLZ+tJoI6+yDaysZnZWDx5q8o+vVsrXTG
-         7FBytwEPWu741rh46ffLumVmSUOWtm5+QoicLfRCAvs1zi2z6FOkVzATYLbQaOinkDYU
-         Dmy6vvk7M/AF0tWFoeVkt2/J5cV9RuX8I2Xk8EcaWXLEJ0jTp4q+I6mfb2GAt4R1ss8T
-         FF+g==
-X-Forwarded-Encrypted: i=1; AFNElJ+G8ezOEfCHY1BcXVjbaMr1SrMyd6pQtgumhSnS1nZFVqE4TXJqWplAUD4Yp2qT2ekH3NcGw8lk6HyazzHa2h4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuATJvd3D3bfmlY11p9Lk3U+/S1ITzbg+dbh//5T1qrUdcrCAb
-	sNWE3Eb64Dw5OqBKuOG8np94FVbfDEGWSgqF9gR7D+P92mZbiuwCClF6F/Bk+t4rkWZnUQ==
-X-Gm-Gg: AfdE7ck35MQOwUuhrm6jQNWqCaQ5fEIWjk8SXNiATYYaqBjFuVA5yaGsya2+XXUS8rI
-	b+UC8pL6yzEsD3TYScJgXZexDXgWDfjowD98owcQ3oXKnbcXSUmq2YWcbFrTnt0xn139a2HT8Hh
-	RBsPJ5M4cR0snWSQAyMPUxBkYorvXEyP/Dzhjg/g/AR+gJYbm3NVvszp/cp7zjMASgwbWlPtPet
-	cy0RSThU/U4C+krAj1E4XnT5zkyWio8tNrGchWyPaTgspN1jIYSvMA+M0zEnZ2rNGxecDXMlYul
-	dubjRkgZ8nsLW3B/6OgNVVAG4gkKQfvmyvczwALULmbvWfDt2XuUcciMIo0YUNiJTKPH8zmlRTY
-	3P0pWv8WZbq7uc47jYVMiuKqOM6P7aOSkHQZgdoQ/ldjilYviXYM9cdEjNwUEy+cYkwjzM9aDzl
-	x+nDBsJ6POaVL7XRfAwAg=
-X-Received: by 2002:a05:600c:a55:b0:492:59fe:4a15 with SMTP id 5b1f17b1804b1-4926687e800mr77770015e9.24.1782456134354;
-        Thu, 25 Jun 2026 23:42:14 -0700 (PDT)
-Received: from beast.localnet ([2a00:c281:1461:c400:bf16:e4f3:7fa:c2dc])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46d86960991sm15326122f8f.6.2026.06.25.23.42.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 23:42:13 -0700 (PDT)
-From: borissh1983@gmail.com
-To: Sebastian Reichel <sre@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject:
- Re: [PATCH] selftests: helpers: handle multi line in
- test_sysfs_prop_optional_list
-Date: Fri, 26 Jun 2026 09:40:37 +0300
-Message-ID: <12928066.O9o76ZdvQC@beast>
-References: <20260625125237.36605-1-borissh1983@gmail.com>
+	s=arc-20240116; t=1782457235; c=relaxed/simple;
+	bh=c8RXj0I2/e3WFVbhYVrruUZugBFuE/lKMbhdYAeacIw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=glYiN6sJWL3NDpcn9R2F93xf1phWl7WwTSXbEHjI5Y1ZvhhiKzNBFNldldYboNgZsinGSD4j3cexEw4uotwQVhVKVnPRdB+4qxZhp8oZ0hM8oURKGPlRArl8BRC/DPYCinbkXCD7bsTCa0BV8Lhqfsh1VY4KFXAhcg/IFoUuYNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: b2c87434712c11f1aa26b74ffac11d73-20260626
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN
+	HR_FROM_NAME, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR
+	DN_TRUSTED, SRC_TRUSTED, SA_UNTRUSTED, SA_LOWREP, SA_EXISTED
+	SN_UNTRUSTED, SN_LOWREP, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:a54ae16f-c33a-46cf-bf5f-7487c510c1d7,IP:10,
+	URL:0,TC:0,Content:-25,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:10
+X-CID-INFO: VERSION:1.3.12,REQID:a54ae16f-c33a-46cf-bf5f-7487c510c1d7,IP:10,UR
+	L:0,TC:0,Content:-25,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:10
+X-CID-META: VersionHash:e7bac3a,CLOUDID:952585c279831a707051a69ca8c92066,BulkI
+	D:260626145735GM795IA3,BulkQuantity:1,Recheck:0,SF:17|19|38|66|78|102|127|
+	850|865|898|915,TC:nil,Content:0|15|50,EDM:5,IP:-2,URL:0,File:nil,RT:nil,B
+	ulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:
+	0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: b2c87434712c11f1aa26b74ffac11d73-20260626
+X-User: wangyan01@kylinos.cn
+Received: from localhost.localdomain [(39.144.194.184)] by mailgw.kylinos.cn
+	(envelope-from <wangyan01@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 2623302; Fri, 26 Jun 2026 15:00:21 +0800
+From: Wang Yan <wangyan01@kylinos.cn>
+To: mic@digikod.net,
+	gnoack@google.com,
+	shuah@kernel.org
+Cc: linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Wang Yan <wangyan01@kylinos.cn>,
+	Haofeng Li <lihaofeng@kylinos.cn>
+Subject: [PATCH] selftests/landlock: Fix snprintf truncation checks in test files
+Date: Fri, 26 Jun 2026 15:00:16 +0800
+Message-Id: <20260626070016.61049-1-wangyan01@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thursday, 25 June 2026 15:52:37 Israel Daylight Time Boris Shtrasman wrote:
-> Modify test_sysfs_prop_optional_list to allow multi line parameters, in
-> order to comply with checkpatch output that limit line by 100 chars.
-> 
-> Allow use cases like:
-> 
-> test_sysfs_prop_optional_list \
->         property_name "value1","value2","val3","very_long_option"\
->         ,"extra_long_option" \
-> 	,"even_more_data"
-> 
-> Signed-off-by: Boris Shtrasman <borissh1983@gmail.com>
-> ---
->  tools/testing/selftests/power_supply/helpers.sh | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/power_supply/helpers.sh b/tools/testing/selftests/power_supply/helpers.sh
-> index 1ec90d7c9108..8535cb7ed094 100644
-> --- a/tools/testing/selftests/power_supply/helpers.sh
-> +++ b/tools/testing/selftests/power_supply/helpers.sh
-> @@ -108,7 +108,7 @@ test_sysfs_prop_optional_range() {
->  
->  test_sysfs_prop_optional_list() {
->  	PROP=$1
-> -	LIST=$2
-> +	shift
->  
->  	TEST_NAME="$DEVNAME".sysfs."$PROP"
->  
-> @@ -118,9 +118,9 @@ test_sysfs_prop_optional_list() {
->  	valid=0
->  
->  	OLDIFS=$IFS
-> -	IFS=","
-> -	for item in $LIST; do
-> -		if [ "$DATA" = "$item" ]; then
-> +	IFS=",IFS"
-> +	for item in $*; do
-> +		if [ "$item" ] && [ "$DATA" = "$item" ]; then
->  			valid=1
->  			break
->  		fi
-> 
+Commit b566f7a4f0e4 ("selftests/landlock: Fix snprintf truncation checks
+in audit helpers") fixed the truncation detection in audit.h by changing
+the comparison from ">" to ">=" to correctly handle the edge case where
+snprintf returns a value equal to the buffer size.
 
-A new version of this patch now at 
-https://lore.kernel.org/linux-pm/20260625160556.54830-1-borissh1983@gmail.com/
+However, the same pattern exists in ptrace_test.c, audit_test.c, and
+net_test.c and was not fixed.  snprintf() returns the number of characters
+that would have been written, excluding the terminating NUL byte.  When
+the output is truncated, this return value equals or exceeds the buffer
+size. The existing ">" check therefore fails to detect truncation when
+the return value equals the buffer size.
 
+Fix these remaining instances to use ">=" for truncation detection,
+matching the fix in audit.h.
 
+Fixes: 6a500b22971c ("selftests/landlock: Add tests for audit flags and domain IDs")
+Signed-off-by: Haofeng Li <lihaofeng@kylinos.cn>
+Signed-off-by: Wang Yan <wangyan01@kylinos.cn>
+---
+ tools/testing/selftests/landlock/audit_test.c  | 2 +-
+ tools/testing/selftests/landlock/net_test.c    | 4 ++--
+ tools/testing/selftests/landlock/ptrace_test.c | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/landlock/audit_test.c b/tools/testing/selftests/landlock/audit_test.c
+index 72b5612375dd..4bea8c880a4d 100644
+--- a/tools/testing/selftests/landlock/audit_test.c
++++ b/tools/testing/selftests/landlock/audit_test.c
+@@ -31,7 +31,7 @@ static int matches_log_signal(struct __test_metadata *const _metadata,
+ 
+ 	log_match_len =
+ 		snprintf(log_match, sizeof(log_match), log_template, opid);
+-	if (log_match_len > sizeof(log_match))
++	if (log_match_len >= sizeof(log_match))
+ 		return -E2BIG;
+ 
+ 	return audit_match_record(audit_fd, AUDIT_LANDLOCK_ACCESS, log_match,
+diff --git a/tools/testing/selftests/landlock/net_test.c b/tools/testing/selftests/landlock/net_test.c
+index 2ed1f76b7a8b..aebeafd80466 100644
+--- a/tools/testing/selftests/landlock/net_test.c
++++ b/tools/testing/selftests/landlock/net_test.c
+@@ -2777,7 +2777,7 @@ static int matches_auditlog(const int audit_fd, const char *const blockers,
+ 		log_match_len = snprintf(log_match, sizeof(log_match),
+ 					 log_with_addrport_tmpl, blockers,
+ 					 dir_addr, addr, dir_port, port);
+-	if (log_match_len > sizeof(log_match))
++	if (log_match_len >= sizeof(log_match))
+ 		return -E2BIG;
+ 
+ 	return audit_match_record(audit_fd, AUDIT_LANDLOCK_ACCESS, log_match,
+@@ -3072,7 +3072,7 @@ static int matches_log_connect_bound(int audit_fd, const char *const blockers,
+ 
+ 	log_match_len = snprintf(log_match, sizeof(log_match), log_template,
+ 				 blockers, addr, lport, addr, dport);
+-	if (log_match_len > sizeof(log_match))
++	if (log_match_len >= sizeof(log_match))
+ 		return -E2BIG;
+ 
+ 	return audit_match_record(audit_fd, AUDIT_LANDLOCK_ACCESS, log_match,
+diff --git a/tools/testing/selftests/landlock/ptrace_test.c b/tools/testing/selftests/landlock/ptrace_test.c
+index 4f64c90583cd..65cf2d82f721 100644
+--- a/tools/testing/selftests/landlock/ptrace_test.c
++++ b/tools/testing/selftests/landlock/ptrace_test.c
+@@ -302,7 +302,7 @@ static int matches_log_ptrace(struct __test_metadata *const _metadata,
+ 
+ 	log_match_len =
+ 		snprintf(log_match, sizeof(log_match), log_template, opid);
+-	if (log_match_len > sizeof(log_match))
++	if (log_match_len >= sizeof(log_match))
+ 		return -E2BIG;
+ 
+ 	return audit_match_record(audit_fd, AUDIT_LANDLOCK_ACCESS, log_match,
+-- 
+2.25.1
 
