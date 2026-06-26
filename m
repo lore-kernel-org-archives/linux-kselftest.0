@@ -1,148 +1,201 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF77366DB5
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 13:34:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782480892; cv=pass; b=ElfcZsg1ELFAgFIPeqZXdFQvXlJX5WrmNOtxxoVjR5nRJMPgkaJcfpT0k9a0GZtGvjrv9StMCzEP2cbUT08hGhuOtSCNl8BfKO1u5IPYPLLoP44aAn/AcqfyMk/UqKR7qxB529gi8kKXFU88feaiDQMEcIWprqWcuJwpxlzNiV4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782480892; c=relaxed/simple;
-	bh=xaBlLFNTZl0kG4DGG0ss7wNRi4uRD8j3TezB5k4Epq0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bLp8/7KYAN6LGzE4b+Qx6qIH+2GVUvIio335BAGruK1SW3Bs0F9X0cEaUVsq+0PMG2ByZXaBaJJNpyTAbnuYDOGBFv/UP4r+Kj2JlP7C+fmdoPvaLxLKRxx1R+wBhx3/H6Vs0th/9GHUxk7ab/ik9oyZYyeLeWKiU9eKJmF86sA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TmuEXy8E; arc=pass smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A63C3F6C28
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 13:40:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782481228; cv=none; b=QLKAyMKgnM4kYkwUHjbsHzl9A3ecUdXA3qRgiJC2IkZ8w/6sFb8wYp+UQmAN0m7BKmGOE8yHe1J+zEnlNexpGgzg3zelhIpIEVopInG1/HWwhHNPeC2/dyB+hr1p+r6PVNiUJIe846ybyHQHviPZQfQk3HVuai7MQeUNzICn8nk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782481228; c=relaxed/simple;
+	bh=ZTYwDObvNITM63AQAcIL9oQn4r7n//7GEnMzPgbQTlQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Jicawn6ouACmY3K+vjazMzYWwWyGmFc3FFFN292hl3VXtl68pXvZiaBekNTOruyZhMObIDe3nx2Na/fSnk6LiT8gsbckoLSIE1jDLNe4671Auaf6uTGBBtTaoZ2VSm4ZTVK7kXe6GqLt1CnQevzfIe6viMotJMEW4qsrXVKrvV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EqDIJTKT; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TmuEXy8E"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6982f2dc01bso4803a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 06:34:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782480889; cv=none;
-        d=google.com; s=arc-20260327;
-        b=EQFMccT8qDV4KDOHGxnMCw4kHJimu7wE5uNGPyCVud3xTrnKKzJaYLvCwI7QuqWt/d
-         ASmxB2CMfLplNyPWqJdgen72b8+VhNljJTC5gIQ3ojl1j072V/dl149yl5rX3niAvcsF
-         FpTDVfkuzdqSjwVEtxiblY7QouUHYwFjzcd7X/KRF2EkZQAswfZRkJ7MjbOX1fg5RzZ2
-         V2CuT8JUdwViPM7UePoRjHvrK8KpB726z+dhe/r2cNIVzZd/1nwDjDitnCic1OJxfeoI
-         iizZ2BaEyMnA4KvXvNJIETLLSgNM8xY02336ag+I6DZoX8BRSOR758MDGxp7YR/e6rAU
-         gENw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OFusc4+4RUwOAF9njJqeKXVcmCxYVbDE1Q1t4UJqUMM=;
-        fh=phGvzlVaFTeXwqE6sM+px02oOsJTjOWM/dzAlol+F3w=;
-        b=Xy2/iY1J9ZhEyGO+E2bQhQDhM044NTjCpwHhE3TreitVEbnpQ0lRosckUgSuNoemws
-         YM/SAMTiRStsPzBw2/jSd7oWkTD52h+eT7esNoqR6Ty9pCXjy2oBt0zB98ToqjGJg9x9
-         icG853x66Q0Uu1cPupPAunFXY4R78nDIgH2K2nOei+eSYp8rP6nEGfj4K0SLUYjDstmO
-         +kTmPf52KKHBuTcfF+Mxl8X0KjquZZ62KAbwDUvbBRCXN1e8Q4UBh1ZxcZyFMR5ndQ74
-         +wkTPJf6onf1xRb0YXjBeBKomrrAzp3c8Sg36lxpudK514K0ed+jaQmCdya5d61uOQeH
-         nEWg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EqDIJTKT"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c88fc985a65so606257a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 06:40:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782480889; x=1783085689; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OFusc4+4RUwOAF9njJqeKXVcmCxYVbDE1Q1t4UJqUMM=;
-        b=TmuEXy8Eb+db6mjphTsb7e790vmENZW6HFlV9ROV0ZwDHfYHG/kYOoUJ/JA1b99BAR
-         lkhgHQE5lVBKWcRu/rZ78C/3AxFIp1+Ut+NrOa01pDclYWIdDyZFzO4t2GXkReiT/b12
-         RLBkhkCx+oRgti/XJfr6vpiu8EiROu/1maRCvhOYBr07p8dnX/1t09etuemiWhhehR8p
-         8KKo60hqhjcq1qmkmCfBNMpJ6hqC1n9zV6pXRXQceSXMlN7jVjV9gvh1RijYjsq39fyD
-         GdehePE8aqOljG77ufH3X1Aci6/xqsJ2Eq0R0NsK/53fR3PV+0XtrAvP6lrsOSJ8Zv08
-         nvkw==
+        d=google.com; s=20251104; t=1782481225; x=1783086025; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MlObcbngD1D37h11uAaHsV+lydVMU0QoTJkAdzqpBkQ=;
+        b=EqDIJTKT7BHiWsQC5Q1OnG23UHMY307OZA1VRbAU4X9t9CUkPGnK0maae4QqfJe85N
+         eGRTOukJzv1wriqPB/wg0iLU6lmmD5ZQLSeJATCX6d/nvbqR4cvC+n+CqEQnx9i3J3pj
+         WfdT4rWbpxojl00vWCTZu7PoB0pMW35d355O1Cy/cIdbTsi3VJIHx2u/fDjRKMMaEu7h
+         DRE2VUlK+gzJo0AzRggY6iPkxUrVAo/Jm3Xj2lpSmkKE5MtEWFSOb8qRfo2kZpFLJq35
+         e3yXsQbtJoZ4ju8/R+/ClGTYjG58i4b9jxGYaZIPN1bipl4yzTOaQA69m0xIb5V1sgCB
+         PsTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782480889; x=1783085689;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OFusc4+4RUwOAF9njJqeKXVcmCxYVbDE1Q1t4UJqUMM=;
-        b=CeZG7RUG1fZ6CExRvSkte504IDy3u4m+nrMau3jNsiqoxRO5VKTWuiW+YZCxQr0aPx
-         YiTU/k/nL3nXPGCW3dVZcsnvS7ugWFpZ/pX/EqWdXV0DLDpsH20m2IsMrQRwxRmqhFj9
-         quirqQeFEP9XDBQylDSnpj4M00nlY7oN8DWifDkcZRrDMx3Lw2qzbKRpRJoweyS7ebzp
-         zzqb7KD5rdvwGPVoLlkA1m+iuMjw7x0U6pyD8sT5Yl8H7V/5kFdtyDmRl8hJVi0tIDAA
-         8msbIED918P/gkH0ctATu6Vvgkx9lC7H1WJorf+RwH7uzcBUAo+DECfeGq2Va6KL0JOr
-         GE4g==
-X-Forwarded-Encrypted: i=1; AHgh+Rqk/8iJkukqdK62PnXFXgzJiTvPd+N+Y9ftcA7xh1cAZbUf3mCOCtlDlQHW4ZmdEZLP+FBjBt6cIrZJEAyeMR8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8y1o/kmz5ILL7/vbOU2eskCZzMbvDSE3G9ia06XFJggFXl6Hw
-	EJXtMCIetuo6IfkpjRvqwfK5ovOgXG5F2KzTPjmFk6+eHjHx94hMCUAeamVW4UuO/Ukx5kAODxw
-	8kfQCV0i//FmUv64ocQialksLUA0ozXdsSRE+NKIz
-X-Gm-Gg: AfdE7clcZAnNUaP3XNJ8cF/XNHZfUXZ+K30/+8uXGXfg7/5Wk3kzY027L8HlcMgZ/VJ
-	FpRMTssTDp2sgV8zJEPRNWRnCh8gXHqw4CEQWyBu+QhJcDSS4MxqupWjDSTMbVVVGgGD6tjuhDS
-	5Tk7HNkzVLExtrsPGJAvQYXldM/T3X+at3wHyc705gQfaAD686ZH85EPqJliDLqUK5uODTN5rjE
-	6O7vVDLUkXxW5sIOKkT/o26zEYskU0pbe0IvYXtIodSJSZ4ZRpWitDCBIQ2CecBKIWmKHKsbJiI
-	i6kA/5RAYqgNzB/Ip/fOmfEZ/XjrCSNuydZOv/v3VfkPGM9EaVxmP1ljlc4=
-X-Received: by 2002:a05:6402:305b:10b0:68f:d41d:ca5d with SMTP id
- 4fb4d7f45d1cf-69838079835mr4734a12.11.1782480889012; Fri, 26 Jun 2026
- 06:34:49 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782481225; x=1783086025;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MlObcbngD1D37h11uAaHsV+lydVMU0QoTJkAdzqpBkQ=;
+        b=srpBzpax8nO6wDvm2InIDwUJpCT0Nwsj8EOSQiwCFlWIwNsjLN1H0QsvWPYwpC0BHU
+         +axR4+t9T07lc0izxBFE09Khtgbu2f+K4ZrsroNEtw8cveD7+GBbrxiA3vpDbOR0QCIV
+         K9JG9i3HzK0RST1oxqmu/f7OztiWEJO+RR+WWYwf+mejR5X44s2ud36blZFBkdHtDKc6
+         3jCBNMFl+tdN5pVQOR7Q9WVc27Ydw6SkOPawYaJd4VoISZknHyOq2M+DktCEOCBAeVbO
+         wiVeSpNIuM5LAB0qWXIJEZveWB0aUuh5PyDiLnqMiHed+pBjA61p9i5rbklREWaF1z4h
+         PEqg==
+X-Forwarded-Encrypted: i=1; AFNElJ91BFEtUGChJbh6Gvs3tSargh860iwVV9WwZkwr1nLVA7AuEheHZkvccNCFymvM6xLlFLGxP2UW/uuovhcsNkI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLuLsHJU9pBMgZ87xQUCp5vcPJJ4lg08pLhbox5UXtdmbHBW/j
+	laVZQ8Ik5K8LDqsXVjQKIBboy3w//6RdvooqpCpscQ/z+Twl47Bj/j1BpmRzSGfhgpv4g5qQuk/
+	Sac4chQ==
+X-Received: from pgbcl7.prod.google.com ([2002:a05:6a02:987:b0:c93:e04b:d9ad])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:7487:b0:3bf:6c08:fb80
+ with SMTP id adf61e73a8af0-3bf6c0912edmr420142637.48.1782481224936; Fri, 26
+ Jun 2026 06:40:24 -0700 (PDT)
+Date: Fri, 26 Jun 2026 06:40:24 -0700
+In-Reply-To: <8edfdca645f691cb856e80ade830d78925fdc19d.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
- <sfv7zc6jboy2oxv7zuyofysas4ncbzenwsuzveiyduisfr6i7q@mx23er7uxdbg>
- <CACCo2jkDuwy5w_yhX8833m+s-rY736pk8xtKjxg3_y_7BCOHeg@mail.gmail.com>
- <24420045-a6eb-4999-ab19-1e344eaba8a4@app.fastmail.com> <20260625-atomkraftgegner-hunger-kursbuch-b452ff2becab@brauner>
- <CAG48ez2X1p5Nm2_sU=SK9wUusUO8c3_T-=FGrrOhkm7Kn9Y_7g@mail.gmail.com> <20260626142616.5232c61e@pumpkin>
-In-Reply-To: <20260626142616.5232c61e@pumpkin>
-From: Jann Horn <jannh@google.com>
-Date: Fri, 26 Jun 2026 15:34:12 +0200
-X-Gm-Features: AVVi8Ccjij95miiFuC4obt1ADtwSEC1vQNqAn1Ep-7UuHNcBNEBqHY3MBA-NbNA
-Message-ID: <CAG48ez3o1Mt59dWdyknh_SEaoi-cHv6pdmix+aOdBy3C0-LkYQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] fs: support $ORIGIN in ELF interpreter paths
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>, John Ericson <mail@johnericson.me>, 
-	Farid Zakaria <farid.m.zakaria@gmail.com>, Jan Kara <jack@suse.cz>, Kees Cook <kees@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, shuah@kernel.org, 
-	linux-fsdevel <linux-fsdevel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
-	linux-kselftest <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+References: <c855535b4262ecd41f67734d19e8f48a7f014c2a.camel@infradead.org>
+ <aj21KctIXuf7b_5G@google.com> <8edfdca645f691cb856e80ade830d78925fdc19d.camel@infradead.org>
+Message-ID: <aj6BSMT2LOd4JRpu@google.com>
+Subject: Re: [PATCH] KVM: x86/xen: Add KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Gerd Hoffmann <kraxel@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Paul Durrant <paul@xen.org>, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 26, 2026 at 3:26=E2=80=AFPM David Laight
-<david.laight.linux@gmail.com> wrote:
-> On Fri, 26 Jun 2026 14:39:22 +0200
-> Jann Horn <jannh@google.com> wrote:
->
-> > On Thu, Jun 25, 2026 at 10:50=E2=80=AFAM Christian Brauner <brauner@ker=
-nel.org> wrote:
-> > > The arguments I have heard from various people so far are:
-> > >
-> > > (1) Userspace would be able to clone a random chroot to /woot and run=
- a
-> > >     binary from it without having to set up a complicated sandbox
-> > >     effectively making dynamically linked binaries more like static
-> > >     binaries in a sense.
-> > >
-> > > (2) Quote:
-> > >     "If you debootstrap/dnf a chroot to some location in your
-> > >     home dir and try to run a binary from it, that it tries to load t=
-he
-> > >     libraries from your /usr is a pretty unintuitive and not at all
-> > >     useful behavior."
-> > >
-> > > (3) Quote:
-> > >     "[Various remote execution things run in locked down containers t=
-hat
-> > >     disable userns, which makes the sandbox impossible and hence our
-> > >     builds wouldn't work there."
-> >
-> > FWIW I think someone also mentioned to me that it would make things
-> > easier for them if they could build a piece of software in one
-> > environment and then bundle it up with all required libraries and such
-> > and run it in a very different environment, without
-> > container/sandboxing stuff and without static linking. But I guess
-> > that's kinda niche.
->
-> The problem with 'ship the shared libraries with the application' is
-> that you get all the problems of static linking.
-> If there is a bug in the library code you can't fix it without getting th=
-e
-> 3rd party to rebuild their application package.
+On Fri, Jun 26, 2026, David Woodhouse wrote:
+> On Thu, 2026-06-25 at 16:09 -0700, Sean Christopherson wrote:
+> > > diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+> > > index 91fd3673c09a..c16b4560c9e7 100644
+> > > --- a/arch/x86/kvm/xen.c
+> > > +++ b/arch/x86/kvm/xen.c
+> > > @@ -907,6 +907,13 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu,=
+ struct kvm_xen_vcpu_attr *data)
+> > > =C2=A0{
+> > > =C2=A0	int idx, r =3D -ENOENT;
+> > > =C2=A0
+> > > +	/*
+> > > +	 * kvm_xen_write_hypercall_page() manages its own locking.
+> > > +	 * Handle it before taking xen_lock to avoid a deadlock.
+> >=20
+> > Do we actually want the side effects that necessitate taking xen.xen_lo=
+ck?=C2=A0 From
+> > a uAPI perspective, it's odd to effectively bundle KVM_XEN_ATTR_TYPE_LO=
+NG_MODE
+> > into KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE.
+>=20
+> That's *guest* ABI, and it's derived from Xen behaviour. Xen will
+> 'latch' its idea of whether a guest VM is 32-bit or 64-bit, for the
+> purpose of shared data structures (shared_info page, vcpu_info,
+> runstate).
+>=20
+> Xen latches this from the current mode of the running vCPU in *two*
+> places:
+>  =E2=80=A2 When the hypercall MSR is invoked
+>  =E2=80=A2 When the guest sets the event channel GSI (HVM_PARAM_CALLBACK_=
+IRQ).
+>=20
+> Thus far, the former has been handled in the kernel (in the code you're
+> looking at), while the latter is why we have the ioctl to explicitly
+> latch the guest's long_mode from userspace too, as userspace handles
+> the HVMOP_set_param calls.
 
-Yes, it's appropriate for weird use cases like "I want to run this
-historical version of the software and its dependencies", it's not
-necessarily a good idea for normal application use.
+Right, and I'm pointing out that from a KVM uAPI perspective, bundling the =
+first
+one in a "write hypercall page" call is rather odd, especially since there'=
+s
+already uAPI to handle the latching.
+
+> > The other question is, why does kvm_xen_write_hypercall_page() drop xen=
+_lock
+> > when writing guest memory?=C2=A0 That seems odd and unnecessary.
+>=20
+> Huh? It takes the lock to do the thing that needs the lock, then drops
+> it. That is not "odd and unnecessary" at all.
+>
+> You've been spending too long with these scope-guarded locks.
+
+No, I'm asking why KVM doesn't serialize the writes to guest memory.  Usual=
+ly
+when KVM writes to guest memory, KVM is emulating something that is very mu=
+ch
+vCPU-specific, and so if there are races it's the guest's problem to deal w=
+ith.
+
+The Xen MSR here is clearly VM-scoped though, which is why it feels odd to =
+take
+a per-VM lock, and then deliberately drop the lock before completing the op=
+eration,
+In practice it shouldn't matter, since it sounds like the same repeating 16=
+ byte
+pattern will be written every time, but it was a bit head-scratching when r=
+eading
+the code.
+
+> > > +	if (data->type =3D=3D KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE)
+> > > +		return kvm_xen_write_hypercall_page(vcpu, data->u.gpa) ? -EIO : 0;
+> >=20
+> > -EIO is rather weird, wouldn't -EINVAL be more appropriate?=C2=A0 Ah, a=
+nd both are
+> > wrong if copying the blob fails.
+>=20
+> -EINVAL is more for "you asked me to do something that doesn't make sense=
+".
+> -EIO is for "something went wrong when I tried".
+
+Sure, but KVM returns EINVAL for pretty much every ioctl (or ioctl-like thi=
+ng)
+if userspace provides bad input, e.g. for the @data param.
+=20
+> Arguably, the thing that's most likely to go wrong is the
+> kvm_vcpu_write_guest() where it writes instructions[] to the guest, and
+> maybe that ought to be -EFAULT?
+
+Heh, ya, I just say that too when looking at the code again.
+
+> But I'm not sure that's quite the right semantic to return from the ioctl=
+?
+
+We can/should return whatever kvm_vcpu_write_guest() returns, i.e. literall=
+y
+return its result directly.  Which of course is only ever going to be -EFAU=
+LT,
+but in the extremely unlikely case that ever changes, we won't have to worr=
+y
+about creating misleading behavior in the Xen code.
+
+> > > =C2=A0	mutex_lock(&vcpu->kvm->arch.xen.xen_lock);
+> > > =C2=A0	idx =3D srcu_read_lock(&vcpu->kvm->srcu);
+> >=20
+> > Speaking of writing memory, kvm_xen_write_hypercall_page() expects the =
+caller
+> > to be in a read-side SRCU critical section (I didn't actually run this =
+with
+> > PROVE_LOCKING=3Dy, but I don't think I'm missing anything?)
+>=20
+> Yes, good catch. Thanks.
+>=20
+> > So, if this uAPI is unavoidable seems like we want something like the b=
+elow.
+> > Either that or guard all of kvm_xen_write_hypercall_page() with a lock,=
+ and put
+> > the entire thing in a helper so that KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPER=
+CALL_PAGE
+> > can be handled in a case-statement and doesn't need to grab SRCU on its=
+ own.
+>=20
+> Makes sense (with the test, of course). Want me to put them together
+> and resend?
+
+Yes please.
