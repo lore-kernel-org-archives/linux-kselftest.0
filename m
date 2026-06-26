@@ -1,98 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71EA23F928E;
-	Fri, 26 Jun 2026 16:25:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EBCA3BB673;
+	Fri, 26 Jun 2026 16:27:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782491128; cv=none; b=q1HpKcPwmxh/PSLstMcQeyDr1WNbv0WnawPxRY2hygFPVRIZcpGBskJgeU4qchCCEuTB+KX9WOlycw9U3TmRPBC/n7cEprP7U0pMv1g++qK5yZHa8a37OL1/fyhCLHce+taX5VTJdskTfbL5vXtkrkiWZQjnSUAVNLGxWKL63Ao=
+	t=1782491265; cv=none; b=INrdZO7wvd5Y1umRdinJuB46fj7kIz29o/JOQZcoNZhCxcuTnsFdNfE1dkJVOdtduugDM+aJcl2ehZgRo/PScOmFYUll6KYU1NvTFROQq/bZkEtg3ygGBl+hkoq55MAlm0/A2EEad3rcNZPrly/sfTpYzsfLmkz5dVpBUcp0qxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782491128; c=relaxed/simple;
-	bh=3KXriWTm2ItE45nHEMNaIyMG0lB1n9W8V05lNe5JJFo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RT/iH6HVIrhOehhWxE6S/s3ioytTynf5xBigP8d3ap76GgIfBf0RsMikJajbz0hYnEGe10/pKpB3KeaFYKKaqgSMB4n2rDww2Skn6KopIjN6iR/mNHPcuVFIKF/+eXjZHMKFG6Um6UOGd8nBxqXDWrxqJruobPii645AY0LuF2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fCNMDZ8L; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782491265; c=relaxed/simple;
+	bh=ImorTgLxdVBZ8KA+SoiC+IQN13SzOs8n+JsQl8npZi0=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=eYM4YETvcsRI+riLQCfY8bHNooqQ6aiflZ/L6THqVo3F/G+EnJch47x3xeBKAwtHvZ+ZmVsqZSrs+Msi+pHgW1jKila4VIMV5S1Q0lUP0HgVY+Ii7lNjfPePzshii3vvEbyfj5Zd0+o48S1poZjnM/SE+YCVosR7yqryx931h0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PQqM6y8Z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fCNMDZ8L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD0EF1F000E9;
-	Fri, 26 Jun 2026 16:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782491127;
-	bh=4BSSfz87ODDfFMwFWNy+I/fCJ15UtLSdQaLTscysvj8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=fCNMDZ8LLCHYAohaYSo3PRInAhAqfi99vvhXhVZQ+aBLnlcOyTa1kankbxgxIRCFo
-	 tfXaphB0BfalE1u9/dMZeCA7HtG6XkTeN/TQ63cyHTutVw7tj9OSh9Su2ZYGuljg3b
-	 hZ56n1Ksfdt4wgQ9As9+BGCk397fbKXCD8lFzvw4nGV6lEM4d/7RRvF0IYpCB1Q+PE
-	 Ts9KTaF89pcTjlOUIWC8SQizlAtXqJN9TUKFI8HXUXGv1DKoVR1zDKQQwJlqySj5g1
-	 9NboGixNjxgi/78f85JGPWu6f48Tt3EQy88C2ju35T4DbV5OFQ4A2teulFXdN+FOi4
-	 dn/YexJKhYi3Q==
-Message-ID: <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org>
-Date: Fri, 26 Jun 2026 10:25:24 -0600
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PQqM6y8Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 129131F000E9;
+	Fri, 26 Jun 2026 16:27:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1782491263;
+	bh=6xdhB1h20JevoCIK0FA3vdUPT1iU5NQ8QI9Cuj4CG3U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=PQqM6y8Zwq77LOJE9kupv7UIeWj6h/06JBTFkhuilrKOfhlxaX3dctYkVnn8BXe7h
+	 p4nJis+WgZhlJnu+H/F9D7juqnDnGg3pyP2kzyGY15N9xdJerS2x0e0oumg42fh6wU
+	 On9cS26zBQWDtUbm0SoX4z0UCj+TB8vYPO5u5xAE=
+Date: Fri, 26 Jun 2026 09:27:42 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Miaohe Lin <linmiaohe@huawei.com>, David Hildenbrand <david@kernel.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, Mike
+ Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal
+ Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Naoya Horiguchi
+ <nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>,
+ lance.yang@linux.dev, Steven Rostedt <rostedt@goodmis.org>, Masami
+ Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ kernel-team@meta.com
+Subject: Re: [PATCH v10 0/6] mm/memory-failure: add panic option for
+ unrecoverable pages
+Message-Id: <20260626092742.160c3c10196852f075b3f5e3@linux-foundation.org>
+In-Reply-To: <20260626-ecc_panic-v10-0-6dacb8ad024d@debian.org>
+References: <20260626-ecc_panic-v10-0-6dacb8ad024d@debian.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-Content-Language: en-US
-To: Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- toke@redhat.com
-References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
- <20260624030530.3342884-2-avinash.duduskar@gmail.com>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <20260624030530.3342884-2-avinash.duduskar@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 6/23/26 9:05 PM, Avinash Duduskar wrote:
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 89b36de5fdbb..e00f0392e728 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -3532,6 +3532,29 @@ union bpf_attr {
->   *			Use the mark present in *params*->mark for the fib lookup.
->   *			This option should not be used with BPF_FIB_LOOKUP_DIRECT,
->   *			as it only has meaning for full lookups.
-> + *		**BPF_FIB_LOOKUP_VLAN**
+On Fri, 26 Jun 2026 08:33:14 -0700 Breno Leitao <leitao@debian.org> wrote:
 
-This flag should not be needed. Patches for vlan support were never
-submitted (I have them in some old branch). Since the vlan params are
-initialized to 0, no new flag should be needed. Besides, these are
-output parameters.
+> A multi-bit ECC error on a kernel-owned page that the memory failure
+> handler cannot recover is currently swallowed: PG_hwpoison is set, the
+> event is logged, and the kernel keeps running.  The corrupted memory
+> remains accessible to the kernel and either drives silent data
+> corruption or surfaces seconds-to-minutes later as an apparently
+> unrelated crash.  In a large fleet that delayed, unattributable crash
+> turns into significant engineering effort to root-cause; in a kdump
+> configuration, by the time the crash happens the original error
+> context (faulting PFN, MCE/GHES record, page state) is long gone.
+> 
+> This series adds an opt-in sysctl,
+> vm.panic_on_unrecoverable_memory_failure, that converts an
+> unrecoverable kernel-page hwpoison event into an immediate panic with
+> a clean dmesg/vmcore that still contains the original failure
+> context.  The default is disabled so existing workloads see no
+> change.
 
-> + *			If the fib lookup resolves to a VLAN device whose
-> + *			parent is a real (non-VLAN) device, set
-> + *			*params*->h_vlan_proto and *params*->h_vlan_TCI from
-> + *			the VLAN device and replace *params*->ifindex with the
-> + *			parent's ifindex. *params*->h_vlan_TCI carries the VID
-> + *			only, with PCP and DEI bits zero; a consumer wanting to
-> + *			set egress priority writes PCP itself. *params*->smac is
-> + *			the VLAN device's own address, which can differ from the
-> + *			parent's. Only the immediate parent is resolved; if it
-> + *			is itself a VLAN device (QinQ) or in another namespace,
-> + *			the egress cannot be reduced to a physical device plus
-> + *			one tag and the lookup returns
-> + *			**BPF_FIB_LKUP_RET_VLAN_FAILURE** with *params*->ifindex
-> + *			left at the input. Re-issue without
-> + *			**BPF_FIB_LOOKUP_VLAN** to obtain the VLAN device's own
-> + *			ifindex. The swap and the vlan fields
-> + *			are written only on success; other output fields keep
-> + *			the helper's existing behaviour, so a frag-needed result
-> + *			still reports the route mtu in *params*->mtu_result.
-> + *			This flag is only valid for XDP programs; tc programs
-> + *			receive -EINVAL since they can redirect to the VLAN
-> + *			device directly.
+Cool, thanks.  I added this to mm.git's mm-new branch.  Next week I'll
+move it into the mm-unstable branch, where it will receive linux-next
+exposure.
 
+Sashiko identified a few possible things, some pre-existing:
+
+	https://sashiko.dev/#/patchset/20260626-ecc_panic-v10-0-6dacb8ad024d@debian.org
