@@ -1,138 +1,120 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766E63B893A
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 18:39:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510D93BAD99
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 19:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782499167; cv=none; b=JKLI4Ts6ixy9XYUdJfcelCCvAc2BVfdpLS0vWdm4PYLQpzd/oPwhXldSgNnYwTOUhiLXH9MVKYiO+fJxjCR+RyAtWGUmq/8iQAWgHrzN1Z1BOvnNFubqISfxvNMq63Cmz+7i22l7Rh4+F4evRPVPtlzJIdnd1JO5Hwa/2GbAwyQ=
+	t=1782500803; cv=none; b=ufWuGt5nY/CjSVGdHVcfBaemuUK9jmbGLj3Tzy0g7rJc2DhhqDZTT1gY3i/wziT8BUldz4NAGSaUVEcXHqp5hyYZ7spe9rA1imG3aAkXHtOfi+HVdrrzg62hi8duq0zP7jERRrKN3UBDEhzUbVo39VHhKwgcc7j+gx1unz+sJ6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782499167; c=relaxed/simple;
-	bh=Gs6mbfrdBmFcPfxIGQpGRYkRJypGTZA8RHJBoaD+4nk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i0Pz2ZA3SUrKG1pZiNOD6g0mT0+h2ZeOUxznMZLPc4FecnWYsI+1W5Psdq8nI0uTFGOa+3QvNpvGjPYshSBn/mwTKkw1bxH6EdCLQTXiCj9CpvURkJGojFcvaV5teO7bk+CrnUVvk+i8yEgCDeznZxj8rN9UgOGp2U278CN+Yqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CTPMqXpE; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782500803; c=relaxed/simple;
+	bh=yPh5VyRHofHYz39WBgZG1T4p4iniLMrobeV7zGwnRA0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=b76em3ZhJROWC4pMAoqf8aa5ugE6NZn+9GnWUNx43i4O/x4Tc2+Zrp3H9PN7Dbo68h1zgf/xCmFEdVH6Y8GGqewBoU+VBYWoEzFYMqCzG5Q9kzfrjmAXkGJwmE1Fpq8a0T2Fn1OYJxY8vZ+V8PtHP71XZGfA4E09pT9XfYAxuXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JluRTrRt; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CTPMqXpE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782499165;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FR85SqjTioxEOnr06yRon6rto8Olp0PTbmWX15TMEEU=;
-	b=CTPMqXpE2jl8onxolGVn9rNun19XEjbUtBYo7rkuwgDdzbRBscCLkTJE+r2C07/B8maucZ
-	15GaFBbZ2fSko36e1qlaFMCOV5AFSHgChzaOxbqr+h5hECekIKDB5wKIfQ4SlXNeN0g1Cs
-	PmMOORr6YZN84NnfljEPzeaomWpMSu0=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-447-gZz9MSDAMQiY_jRPd4egBA-1; Fri,
- 26 Jun 2026 14:37:58 -0400
-X-MC-Unique: gZz9MSDAMQiY_jRPd4egBA-1
-X-Mimecast-MFC-AGG-ID: gZz9MSDAMQiY_jRPd4egBA_1782499076
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 79B571954AE1;
-	Fri, 26 Jun 2026 18:37:56 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.2.16.156])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8C02619560A3;
-	Fri, 26 Jun 2026 18:37:52 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Ridong Chen <ridong.chen@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Farhad Alemi <farhad.alemi@berkeley.edu>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Gregory Price <gourry@gourry.net>,
-	David Hildenbrand <david@kernel.org>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH v8 07/11] cgroup/cpuset: Make attach_ctx.old_cs track task group leader
-Date: Fri, 26 Jun 2026 14:19:19 -0400
-Message-ID: <20260626181923.133658-8-longman@redhat.com>
-In-Reply-To: <20260626181923.133658-1-longman@redhat.com>
-References: <20260626181923.133658-1-longman@redhat.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JluRTrRt"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c88da04b71dso644908a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 12:06:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782500802; x=1783105602; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PNIeHjjlzgODJP9uSdZfrjN2ZSrm2/bid/6mJJUT1aA=;
+        b=JluRTrRtEKlVCS57b5K9WvO0eGGUpiu0l0n3sFC46cwCrIL2zDbwRbLWTF0DFSV//Z
+         fFWB5y72Exyoy+CBOB8lbTFxHp1kKAnzcDtXnZPi7yJoDhWdyuCktjdrgavuraj5rQ1Y
+         KvvKL50RvlVKyVUnnaPYGAd6r43KeHLACHEp6IkGQA+vnSldO9K8IhsR/xObdUROsh2x
+         MreSU4C3ZReW6Y64QDZxQcGAvZdfaSra4d73MBrtOUWlVelyHqnxI5O++k2VVwLl5oQD
+         p5h3T/B11LveUWCOrs/44TGXeQnpHyx5uZIJjbI7WUU1lIhdJ7BtcsyP/iDVT3yz7keU
+         VGCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782500802; x=1783105602;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PNIeHjjlzgODJP9uSdZfrjN2ZSrm2/bid/6mJJUT1aA=;
+        b=DJM4uZ+9KwsEmLcDlWNoO6a9Oxh78fP8wSQc+1VDKpBCvfo5O/LsOULsiI8DeGyCct
+         Y1vXzZ/tpP0cvY21GmDQ3AHbdH0ABefJUz/M0iDULHfPTAnYmxaW5RQuqxBCSTsSVeY8
+         WqHJG8VmNyywk5Q6GLKiloHGPTEIqbuhvPbVpDuQOIgDiLbrUxeOzRM7n4JXTDN5VBVB
+         bFDbOhmv+v4aY7rfU6Qji0rZEKxSw99Z7f8FvT0Lt8p9ayEAmnFtQr/RlYRL7Dpr9I/Q
+         iWk2niTrz8J5AXiMXxXSLvk5w0QEa/r7GOtZWUKhukQxPHFUU2Dk6SvIiYJwkNNCUbd2
+         TnFA==
+X-Forwarded-Encrypted: i=1; AFNElJ+Oakt9OlnqfWM1MYgExCQrmq2fAvNjIN9ifg2uvbJ/axnJ/WPr/7HqgecKYlW8kFXVV5pGnPGUulrvcrFciGM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZTXsJvMPfejmG+jBUuYC02DrzPDgVQXWo6fIY4aV95Bi4xMMH
+	s+IvUvV1v0vmQ1vdTIVYTSl+z+bC4MgahQxKQAumtRFHwbu+aa9YZlz/aqGR46K2VhxdG/5El9M
+	80A6SYw==
+X-Received: from pgbcu10.prod.google.com ([2002:a05:6a02:218a:b0:c79:7778:c050])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:b40b:b0:3b4:87c0:d7f
+ with SMTP id adf61e73a8af0-3bf69cca854mr1600938637.32.1782500801179; Fri, 26
+ Jun 2026 12:06:41 -0700 (PDT)
+Date: Fri, 26 Jun 2026 12:06:40 -0700
+In-Reply-To: <aj3H2sxymOYTWTnE@yzhao56-desk.sh.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Mime-Version: 1.0
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-24-9d2959357853@google.com>
+ <aji/2svhcc84rn5w@yzhao56-desk.sh.intel.com> <CAEvNRgHYTFnHbsLLgMTCSitmnp1_j9Pomikm9qmpGTh1w8YE5Q@mail.gmail.com>
+ <ajx5Vrz9ma--hrGH@google.com> <ajyJhZcgfYFtGfS2@yzhao56-desk.sh.intel.com>
+ <aj0Jf30PS2f7x1nt@yzhao56-desk.sh.intel.com> <aj087H1UWSFxbShR@google.com> <aj3H2sxymOYTWTnE@yzhao56-desk.sh.intel.com>
+Message-ID: <aj7NwCRwWEfLK-gQ@google.com>
+Subject: Re: [PATCH v8 24/46] KVM: guest_memfd: Make in-place conversion the default\
+From: Sean Christopherson <seanjc@google.com>
+To: Yan Zhao <yan.y.zhao@intel.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
+	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, forkloop@google.com, pratyush@kernel.org, 
+	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-There are two possible ways that migration of tasks from multiple source
-cpusets to a target cpuset can happen. Either a multithread application
-with threads in different cpusets is wholely migrated to a new cpuset
-or disabling of v2 cpuset controller will move all the tasks in child
-cpusets to the parent cpuset.
+On Fri, Jun 26, 2026, Yan Zhao wrote:
+> On Thu, Jun 25, 2026 at 07:36:28AM -0700, Sean Christopherson wrote:
+> > On Thu, Jun 25, 2026, Yan Zhao wrote:
+> > And I'm not remotely convinced that prepending allow_ to the param will help
+> > end users diagnose "unexpected" memory consumption, in quotes because anyone that
+> > is deploying a stack that utilizes out-of-place conversion absolutely needs to
+> > understand and plan for the additional memory consumption.  I.e. if the memory
+> > consumption is "unexpected" to the end user, they likely have far bigger problems.
+> My first impression of gmem_in_place_conversion=true was that it enforces gmem
+> in-place conversion. However, it actually only enforces per-gmem private/shared
+> attribute.
+> My worry was that people might think it's a kernel bug if userspace can still
+> have shared memory from other sources after they configured
+> gmem_in_place_conversion=true.
 
-In the former case, it is the mm setting of the group leader that
-really matters. So attach_ctx.old_cs should track the oldcs of the
-thread leader. In the latter case, effective_mems of child cpusets
-must always be a subset of the parent. So no real page migration
-will not be necessary no matter which child cpuset is selected as
-attach_ctx.old_cs.
+Ah, I see where you're coming from.  FWIW, truly enforcing in-place conversion
+is flat out impossible.  E.g. userspace can simply replace the memslot, at which
+point the memory effectively reverts to shared.
 
-IOW, attach_ctx.old_cs should be updated to match the latest task
-group leader in cpuset_can_attach(), but fall back to that of the first
-task if there is no group leader in the taskset.
+> However, I have no strong opinion if you think gmem_in_place_conversion is good,
+> and with the above documentation. :)
 
-Suggested-by: Ridong Chen <ridong.chen@linux.dev>
-Signed-off-by: Waiman Long <longman@redhat.com>
-Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
----
- kernel/cgroup/cpuset.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
-
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 05a81839966b..e830ba13be9b 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -3086,11 +3086,32 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- 	if (ret)
- 		goto out_unlock;
- 
-+	/*
-+	 * The attach_ctx.old_cs is used mainly by cpuset_migrate_mm() to get
-+	 * the old_mems_allowed value. There are two ways that many-to-one
-+	 * cpuset migration can happen:
-+	 * 1) A multithread application with threads in different cpusets is
-+	 *    wholely migrated to a new cpuset.
-+	 * 2) Disabling v2 cpuset controller will move all the tasks in child
-+	 *    cpusets to the parent cpuset.
-+	 *
-+	 * In the former case, it is the mm setting of the group leader that
-+	 * really matters. So attach_ctx.old_cs should track the oldcs of the
-+	 * group leader. It falls back to the oldcs of the first task if there
-+	 * is no group leader in the taskset. In the latter case, effective_mems
-+	 * of child cpusets must always be a subset of the parent. So no real
-+	 * page migration will be necessary no matter which child cpuset is
-+	 * selected as attach_ctx.old_cs.
-+	 */
- 	cgroup_taskset_for_each(task, css, tset) {
- 		ret = task_can_attach(task);
- 		if (ret)
- 			goto out_unlock;
- 
-+		/* Update attach_ctx.old_cs to the latest group leader */
-+		if (task == task->group_leader)
-+			attach_ctx.old_cs = task_cs(task);
-+
- 		if (setsched_check) {
- 			ret = security_task_setscheduler(task);
- 			if (ret)
--- 
-2.54.0
-
+Ya, I think this largely a documentation problem.  I agree that a param name
+like gmem_private_memory_attributes would be more precise, but I think it'd be
+far less informative for the vast majority of users that only care whether or
+not KVM can do in-place conversion, and don't care about how that is done.
