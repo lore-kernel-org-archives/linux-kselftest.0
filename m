@@ -1,139 +1,144 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEFC1400DF6;
-	Fri, 26 Jun 2026 14:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1578A3FA5F1;
+	Fri, 26 Jun 2026 14:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782485165; cv=none; b=IgZMBaS5VHhGRHXosE5sDGMEURBkSLqABQh43w0ns3NuBXx79rpYKAVZBGFW/TYc5+dUS/tU1w3sWZz253vjRkFhlor9rvET2LXS21UuZyFoJs/s6eEQK7LdHCiRSsX3I6klVWUJYz39XCiU3G1cr5ON12vjvYQFuJEjD1Y7fY4=
+	t=1782485329; cv=none; b=t1EMZ6uSfvsHKgYLaPWpHfc256cQjnjYRIx1bLBkVIaLLaXh0C/e1zL9jW0lHzu/RWzU4U5DLZ7ixaVIVjTWZ47Dva8miyKpcIm6I0zi2uaXXXsI7mDbxDC//tXvBQtU/FJjQ6D6LODKdqllToFAyC5p+RwXGHN2y6kbu3tuz8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782485165; c=relaxed/simple;
-	bh=BgssH8vCKDppnzbwBoJeH2HdO6TiCS4MwxNCxIwOGxg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=NRkKZrzMzo6f2ODnLC1PWAdbO/x/FWmXBZ7TYl6YjuCtY73BVsbR4pAxRrReeY1xeNhl8Nqi80i6BnPAIFvNHbWkCFoMhJErP/I71slWTTiOx4ttZ+tQwyp5+B1YySbKt6tWAdEKHfZGFTqt/478IYboU/cxxQn3AAkG0cQzmA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xBmLvvo9; arc=none smtp.client-ip=91.218.175.172
+	s=arc-20240116; t=1782485329; c=relaxed/simple;
+	bh=H+8vCl7B6p5AzDxtseBlTPX6djhQoxiScrhDCBotb98=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WecZbfPa+Wtl9JOQnb6k/ZLj9G7V5791XcL4GJn0ugfJqxAYyzNV/mi7gxH11+lMpZfAEsBAXWpCZme53+D479ByN3N6X7R3GP8Wf14xFrGrYOK2SQM5VI/LUdHpSZvwfjvqJuoPxBJacj/VEpZixhFQYUjnOLblIgqdOQ/L0lA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AULFV8Br; arc=none smtp.client-ip=95.215.58.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xBmLvvo9"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AULFV8Br"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782485323;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+d/7ra1oyDy8FyFgz7QVlu1h97UzmlQOCBPgAiPibmc=;
+	b=AULFV8BrKKN5qg0eXAyY3S0T2tsj5sBo1qe/+rhSgEyOxk9IOmvtAZUZSNWFEoOeIp3+7J
+	uV28C/FVYwy93EHn91SRI/KiWMilogWBQ1OobydKjwgkM0LhkmLCxXEV2u1wbtqmXx1RP9
+	yYiaj/nFzo6K/GXun1dSd3ogpt8KI+E=
+From: Usama Arif <usama.arif@linux.dev>
+To: Sayali Patil <sayalip@linux.ibm.com>
+Cc: Usama Arif <usama.arif@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Ritesh Harjani <ritesh.list@gmail.com>,
+	David Hildenbrand <david@kernel.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Oscar Salvador <osalvador@suse.de>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Dev Jain <dev.jain@arm.com>,
+	Liam.Howlett@oracle.com,
+	linuxppc-dev@lists.ozlabs.org,
+	Miaohe Lin <linmiaohe@huawei.com>,
+	Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Subject: Re: [PATCH 1/2] selftests/mm: handle EINVAL when configuring gigantic hugepages
+Date: Fri, 26 Jun 2026 07:48:34 -0700
+Message-ID: <20260626144835.3759976-1-usama.arif@linux.dev>
+In-Reply-To: <8bfa921e30eb94072685103f6496784aa23bb166.1782365671.git.sayalip@linux.ibm.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782485154;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hLoe9hgpuLGAv9HcjQXiuki+Z1Eo9W05Z+080Efe+Rc=;
-	b=xBmLvvo9VeLWl6aCPOHJfACC84T1J3BTjH51kQr8iuIJvUHkpL0TY/1jmfKt3pAIas6Dh6
-	hMKA2it5f7Povtcv7HNEPaX/tbq52whxslXQwIYDMnFdkUFHHwDlaTZMjI6N1SUuxeL0dB
-	Mk0ZoJAcKfnjrWev0iaDEvycix+RYjk=
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 26 Jun 2026 14:45:45 +0000
-Message-Id: <DJJ28Z81JTQI.1SI0CNIP7W1JQ@linux.dev>
-Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-doc@vger.kernel.org"
- <linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
- <kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
- <linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
- <linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
- <linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
- <loongarch@lists.linux.dev>, "linux-pm@vger.kernel.org"
- <linux-pm@vger.kernel.org>, "pbonzini@redhat.com" <pbonzini@redhat.com>,
- "corbet@lwn.net" <corbet@lwn.net>, "oupton@kernel.org" <oupton@kernel.org>,
- "joey.gouly@arm.com" <joey.gouly@arm.com>, "suzuki.poulose@arm.com"
- <suzuki.poulose@arm.com>, "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org"
- <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
- "tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
- "bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com"
- <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>,
- "hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>,
- "peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org"
- <willy@infradead.org>, "akpm@linux-foundation.org"
- <akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>,
- "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
- "vbabka@kernel.org" <vbabka@kernel.org>, "rppt@kernel.org"
- <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
- "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
- "daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
- <andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>,
- "eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org"
- <song@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
- "john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org"
- <kpsingh@kernel.org>, "sdf@fomichev.me" <sdf@fomichev.me>,
- "haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
- <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com"
- <jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>,
- "jannh@google.com" <jannh@google.com>, "pfalcato@suse.de"
- <pfalcato@suse.de>, "skhan@linuxfoundation.org"
- <skhan@linuxfoundation.org>, "riel@surriel.com" <riel@surriel.com>,
- "ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com"
- <jgross@suse.com>, "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
- "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
- "ackerleytng@google.com" <ackerleytng@google.com>, "yosry@kernel.org"
- <yosry@kernel.org>, "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
- "maobibo@loongson.cn" <maobibo@loongson.cn>, "tabba@google.com"
- <tabba@google.com>, "prsampat@amd.com" <prsampat@amd.com>,
- "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>,
- "mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jmattson@google.com"
- <jmattson@google.com>, "jthoughton@google.com" <jthoughton@google.com>,
- "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, "alex@ghiti.fr"
- <alex@ghiti.fr>, "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
- "chenhuacai@kernel.org" <chenhuacai@kernel.org>, "baolu.lu@linux.intel.com"
- <baolu.lu@linux.intel.com>, "dev.jain@arm.com" <dev.jain@arm.com>,
- "palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org"
- <pjw@kernel.org>, "shijie@os.amperecomputing.com"
- <shijie@os.amperecomputing.com>, "thuth@redhat.com" <thuth@redhat.com>,
- "yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
- "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
- "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
- "lenb@kernel.org" <lenb@kernel.org>, "pavel@kernel.org" <pavel@kernel.org>,
- "yangyicong@hisilicon.com" <yangyicong@hisilicon.com>,
- "vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
- <jackmanb@google.com>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
- "Itazuri, Takahiro" <itazur@amazon.co.uk>
-Subject: Re: [PATCH v12 09/16] KVM: arm64: define
- kvm_arch_gmem_supports_no_direct_map()
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Brendan Jackman" <brendan.jackman@linux.dev>
-To: "Marc Zyngier" <maz@kernel.org>, "Kalyazin, Nikita"
- <kalyazin@amazon.co.uk>
-References: <20260410151746.61150-1-kalyazin@amazon.com>
- <20260410151746.61150-10-kalyazin@amazon.com>
- <86fr4o1ceu.wl-maz@kernel.org>
-In-Reply-To: <86fr4o1ceu.wl-maz@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On Tue Apr 21, 2026 at 4:55 PM UTC, Marc Zyngier wrote:
-> On Fri, 10 Apr 2026 16:19:24 +0100,
-> "Kalyazin, Nikita" <kalyazin@amazon.co.uk> wrote:
->>=20
->> From: Patrick Roy <patrick.roy@linux.dev>
->>=20
->> Support for GUEST_MEMFD_FLAG_NO_DIRECT_MAP on arm64 depends on 1) direct
->> map manipulations at 4k granularity being possible, and 2) FEAT_S2FWB.
->>=20
->> 1) is met whenever the direct map is set up at 4k granularity (e.g. not
->>  with huge/gigantic pages) at boottime, as due to ARM's
->> break-before-make semantics, breaking huge mappings into 4k mappings in
->> the direct map is not possible (BBM would require temporary invalidation
->> of the entire huge mapping, even if only a 4k subrange should be zapped,
->> which will probably crash the kernel). However, the current default for
->> rodata_full is true, which forces a 4k direct map.
->
-> Where is this 4kB requirement enforced? Or is it that you means
-> "PAGE_SIZE"?
+On Thu, 25 Jun 2026 18:10:16 +0530 Sayali Patil <sayalip@linux.ibm.com> wrote:
 
-Yeah I believe this means PAGE_SIZE and that it's effectively enforced
-by checking can_set_direct_map() in
-kvm_arch_gmem_supports_no_direct_map().
+> Some MM selftests attempt to configure the amount of
+> HugeTLB pages of different sizes by writing to nr_hugepages.
+> 
+> PowerPC hash MMU pSeries systems advertise gigantic hugepage sizes 
+> but do not support runtime allocation of such pages, writes
+> to the corresponding nr_hugepages file fail with -EINVAL.
+> This causes the test to bail out even though the failure is due
+> to a platform limitation rather than the
+> functionality being tested.
+> 
+> Treat -EINVAL from the sysfs write as a skipped configuration request
+> and continue running the test instead of failing.
+> 
+> Before patch:
+>    -------------------------
+>    running ./hugetlb-madvise
+>    -------------------------
+>    TAP version 13
+>    1..1
+>      [INFO] detected hugetlb page size: 16777216 KiB
+>      [INFO] detected hugetlb page size: 16384 KiB
+>     ok 1 MADV_DONTNEED and MADV_REMOVE on hugetlb
+>     Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+>     Bail out! /sys/kernel/mm/hugepages/hugepages-16777216kB/nr_hugepages
+>     write(0) failed: Invalid argument
+>     Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+>     [FAIL]
+> 
+> After patch:
+>    -------------------------
+>    running ./hugetlb-madvise
+>    -------------------------
+>    TAP version 13
+>    1..1
+>     [INFO] detected hugetlb page size: 16777216 KiB
+>     [INFO] detected hugetlb page size: 16384 KiB
+>    ok 1 MADV_DONTNEED and MADV_REMOVE on hugetlb
+>    Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+>    /sys/kernel/mm/hugepages/hugepages-16777216kB/nr_hugepages
+>    write(0) failed: Invalid argument
+>    [PASS]
+> 
+> Fixes: 9d07250ea1eb ("selftests/mm: hugepage_settings: add APIs to get and set nr_hugepages")
+> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+> ---
+>  tools/testing/selftests/mm/vm_util.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index 311fc5b4513e..a8f16eef5c7c 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -735,6 +735,13 @@ void write_file(const char *path, const char *buf, size_t buflen)
+>  	saved_errno = errno;
+>  	close(fd);
+>  	errno = saved_errno;
+> +
+> +	if (numwritten < 0 && errno == EINVAL) {
+> +		ksft_print_msg("%s write(%.*s) failed: %s\n", path,
+> +			       (int)(buflen - 1), buf, strerror(errno));
+> +		return;
+> +	}
+> +
+This makes write_file() silently succeed for every EINVAL, not just the
+gigantic-hugetlb setup case. Several callers use this helper for writes where
+EINVAL is a real test failure, for example drop_caches or split huge page
+setup. Those tests can now continue after a failed setup and report misleading
+results.
+
+Please keep the common helper strict and ignore EINVAL only in the hugetlb
+path that is probing unsupported gigantic page runtime allocation.
+
+
+>  	if (numwritten < 0)
+>  		ksft_exit_fail_msg("%s write(%.*s) failed: %s\n", path, (int)(buflen - 1),
+>  				buf, strerror(errno));
+> -- 
+> 2.52.0
+> 
+> 
