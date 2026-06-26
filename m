@@ -1,167 +1,198 @@
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013056.outbound.protection.outlook.com [40.107.201.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400683FD94C;
-	Fri, 26 Jun 2026 14:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.56
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782485382; cv=fail; b=CtrDJXRX+p5PnDo0esdTzidazUQEzP3X+d396Zw56zaJiKykLg54BBEDCtqsMy62iHNNwbCi5SCZAvO2y6qoTzJud7uSvH6JtPuQYp6ESATe2pXGtFf+pBV6JswwQC81llSY+pbSluIciA884HlGGA5lwRteFTLYi9YhGWht2So=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782485382; c=relaxed/simple;
-	bh=2el/4BSnbCVPGnK6IouuS3pTaumCujWrvsmZu8NMiAE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=d34QIVhoycGNndxzpP9dZ7xaesknjoAysKtVsinSrN4cHh6IuMKTubfDoIb5Y9or9j4WH7PzxrYUc97ryXRba0QhS8hEaiIgvaCB5/eNWwX7SrHulZdomEcUbXX6cjIM/VIl9TaAuOEj7Nt4SpK0e+cn4o4FWrfcrc764Z7UqBo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Lor/uiPk; arc=fail smtp.client-ip=40.107.201.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF33C3F99E6;
+	Fri, 26 Jun 2026 14:58:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782485925; cv=none; b=HxsMPTsnonP2t28FwgykhEIirSt8906oV1VgARq4IJ2JsKmKLYAB+9XLLvf7B3uowH8S76Z+4m0IQpHJaFl9qV+8vw6quifb2xsWPla7KreosbuyngWdkNcDdE8dop4ghucwXt4oa0LsS+VhtyrJ97fw7PWIYTzNfhb/FaDpwvc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782485925; c=relaxed/simple;
+	bh=RBbs5ttu5HZ4vWiXFFONHRCPjB4mHfKSNgMF6aWKiZU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DcHOT4LS/cD0u5nhIsBGKhOyUFZuYYV8aBu7vVvbZgWXsmPx0npyQ/7Uf/0SZYYt5hz+HeolHkwIZINJAIsXnomK4ao2Fxcw3i+s8C1UT682+LkEe79AEbD1WwVxvPXqN9dOe8f5EUfy7sOT/DSRfQjNPrEkDCQZXmOEteaSdsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XGx0mk71; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Lor/uiPk"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ZpX77qq/I/pezLliAFF01XBYjOdeXnievymJYR/Aky5n6Gwi9TxjO9XRknsENv4RLIo7eU5/rBBSeNvblie2funwVCPOK7YYZ+BATKFJxh2bXozcay/FEX2aitLqNLjFsipBS723DXzrAM6FIBf1iNeh9SZX+w+rC9Q76GmoLncZ5KZ3rntmwW8wvqqQ0aPrc2u6QFXsksvGghN1/+IqWYpbg4XUPXvZRs+xxoNP30qmolPB06BWLKhyvRICSEwk84LYb/KtlWVGAVtFAm+Zmrtna23ARAZBqg5PLO/XCqRxXulMeqiVG4vPbcdTqL/1eMBSIeec61eMu6qSBVxjzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JF/L9eG6VKLkrq3rC39GxLpPmHsGXz2XN5aKGLq/lh4=;
- b=glZqK2hdyMg49Ie91tRTJT9bCn+KxJRy/VdEIu/ZrEUpMUcZQVc/N1yfcO+Tco0i9OjHPDmELhLlVWU1dLTukSG5aEa0LiOwt8iYr7rhI1656BKGiUSLWm9Z9QrKTGeFUVJK5oqCUhhjgZJS02M5F2hDQR0P9UnSA+d1yQipOuaCFyOev7FO0wSRLwd99xKcW21qU/zJFdK1yZgGmWE8e2YU35IA8/ieErE/2RMko0SxnZUWisTEPu/lzFd2Ubf5Vh5Q3jPks89eFAXi7pOI1ojb7Ayy8laLy63Bv9zRBGo8qfXVIB6HvHS9uu9L2oK3oD+Hqx9YhlTbbsrjcwAlTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JF/L9eG6VKLkrq3rC39GxLpPmHsGXz2XN5aKGLq/lh4=;
- b=Lor/uiPkCVRi24JbFpj9pFmAtUQFb3ANTzKNsGIHQpzgOslf7fX1pLfC6nGbIjbsGLLlQpKAh0IkvtkON5ecJsQgSXNChwYAM4hJr6YuwwsVuFg8wrUPwBqTg8oksMHZRu6e35nnobFyeHYbvVfkiNLnzh7KvNyFvh8Xe+yGhJuWJr5kTJ6EOiQ3z8grBuFVix4NMldR91HbkcKlPJZWVYqBVm91bXgU+cl9Iy8oV62baZl4GLmmklrs71PXmelyIwwpDUJV6N0moPI5OFrdr8VuCuNrbIAKkDGS4XOMWwI3iq4Pjm8qnjfWXv3BCE275oavu7dXKWRilLnkvbSRSQ==
-Received: from PH0PR07CA0101.namprd07.prod.outlook.com (2603:10b6:510:4::16)
- by MW4PR12MB7013.namprd12.prod.outlook.com (2603:10b6:303:218::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.17; Fri, 26 Jun
- 2026 14:49:32 +0000
-Received: from SN1PEPF00036F3D.namprd05.prod.outlook.com
- (2603:10b6:510:4:cafe::a) by PH0PR07CA0101.outlook.office365.com
- (2603:10b6:510:4::16) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.159.17 via Frontend Transport; Fri,
- 26 Jun 2026 14:49:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SN1PEPF00036F3D.mail.protection.outlook.com (10.167.248.21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.181.6 via Frontend Transport; Fri, 26 Jun 2026 14:49:31 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 26 Jun
- 2026 07:49:14 -0700
-Received: from 82875d6-lcedt.nvidia.com (10.126.231.37) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Fri, 26 Jun 2026 07:49:13 -0700
-From: Nirmoy Das <nirmoyd@nvidia.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-CC: <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<stable@vger.kernel.org>
-Subject: [PATCH net] selftests: net: make busywait timeout clock portable
-Date: Fri, 26 Jun 2026 07:49:02 -0700
-Message-ID: <20260626144902.3214350-1-nirmoyd@nvidia.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XGx0mk71"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD4C11F000E9;
+	Fri, 26 Jun 2026 14:58:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782485922;
+	bh=8cRwKyfFZJ0EQEF/mdND2222DVxVFFu/qyvWvBnTmHA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=XGx0mk71MoGFUASSSl3buSS7F0314DQL/VMMD/k7pfr9trKWTQrllQ2sXVdh3aYOY
+	 ANPzhJJsj5R2ZhQEM9A6l9eGujarHVCxjQnq8oP5RZvga5BcuuxDrJQKZOd1Mxr/56
+	 P5FDaT6+OZ4qMSnP1GIsKRaNbewajq8aLlOXUWkrLAuiMYfd2OYbF24M+AtHrNVDrL
+	 BN3hcEPLsHV4FLsQ3p8EnCV6n9+yoofM01oDHVmcU/LrS3CZ47xVKbERnEShMuKdVw
+	 cTT2MFiDf71KrPOBRT3r1Lx8wIpztwbzWzVjAIre6N0ydk0o2ZN9DjwUB4IkHiFONw
+	 NNDs2qsYd47zg==
+Message-ID: <f7a40359-a210-4711-acba-677e9c1d565c@kernel.org>
+Date: Fri, 26 Jun 2026 16:58:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF00036F3D:EE_|MW4PR12MB7013:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2766afe5-b29f-463e-7a72-08ded39221a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|23010399003|36860700016|82310400026|13003099007|6133799003|18002099003|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	V7uTBBVskuTK27DeV0tRRPqRRo0svzNotpMolTLbvrPJW6SUyh7X5rIxiPfynPcyt4SoKvjR2XbQIKix3eTdRMfuwNCwRHxeNl8lPAE/Y/3RYrlWaNswCBvyEXi77OUYVUKPs4XU9vFfD8pp40mFKWfYlsHeBsEs6pAKEYVgrtiNkfN066YPxKiMKeX0mjrbFTlwabO8tFtvsQplx6GhKJjEfvajF41R4Azrvfc8R7WnE8sIAR58z6k3KIiJ1MN0c1RztX1fU9CButnA9HljG7qi9+5PGQzt9jhi9Ic+Rtb3AL8mpAPGpUTU/pLDxCgZm0twqbsoGVI/cYsI3C6lQW/xmwGT4SXdnQqYWNVjK863pRadndImoVRXBFHapSbRn/wvbko9wfrIt5KpQEq2WWeL/P6jUjllNmLDOj0qWmmtt+agsEJzpe9xjtuLmJNvWPoq26iFU8fNedri9+5L9Ue9ot0jd3PL/Iw/cZIdqhzFpjU/GjuBGNzo1g72LWsq7XbSSG8zisb2hpvNnNcdArEjGezQICOq7W01O5xhszRppHxDbublkrbfzwamPCo45Zg5LvWDMf/xcrZ5+c/bAKFBDGBAVJfRhEnaW5MeYtOxHyGYFfxaoWVmFuG6gqL0Qx4ag3ojmx5qohf2uEwS8HXttyq1t5ZSCyfFEwdODJB2MfRauOh+cTHuRXtfXz8VZSJ+9o2iw3U0aa9u0j5VEw==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(1800799024)(23010399003)(36860700016)(82310400026)(13003099007)(6133799003)(18002099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	Tw9CnNB6YQgySXj8Al9HW79Wq8k+EzQdgLaEZ79darwv8y6sgjfBduZHn37PxzgNxAhqvCB1q5PDI8RyRH4zP2WLvjnDA7ZTjd7THEZryubCXsTYkr/Os8gXH5OFkVQJevONrk3X32MT0PtelS3EF6nmXwQz1/TtsNNN+qAW4IuelZsJGxXXjrbMOODnv7SDsPnc6I++XK32nfdnn37bC98R8cS312k9XfUF7HiO4Gh9q/Kenh63Q+MHPvbO6ogGLe13GzisB9xJ/gl5iDxfbqHAoun5j83YZEgxeB+5C5DBRReEVS84MSeYdvjwtd1uLFhdvy783H06akjY4ao0Bj7o8oI9vAkalJ19/ffon+51rjaFSptxh5r5v0tB3UVC19RT9q8Re1Iin2uiRhzNMDDVNIntulXBR11i7tcTDbhhvPr26sEXJmPDMIzBqd+I
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2026 14:49:31.4568
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2766afe5-b29f-463e-7a72-08ded39221a1
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF00036F3D.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7013
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v12 01/16] set_memory: set_direct_map_* to take address
+To: Brendan Jackman <brendan.jackman@linux.dev>,
+ Lorenzo Stoakes <ljs@kernel.org>, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
+Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-mm@kvack.org" <linux-mm@kvack.org>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "kernel@xen0n.name" <kernel@xen0n.name>,
+ "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+ "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
+ <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>,
+ "oupton@kernel.org" <oupton@kernel.org>,
+ "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+ "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
+ "will@kernel.org" <will@kernel.org>, "seanjc@google.com"
+ <seanjc@google.com>, "mingo@redhat.com" <mingo@redhat.com>,
+ "bp@alien8.de" <bp@alien8.de>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+ "luto@kernel.org" <luto@kernel.org>,
+ "willy@infradead.org" <willy@infradead.org>,
+ "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+ "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
+ "vbabka@kernel.org" <vbabka@kernel.org>, "rppt@kernel.org"
+ <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
+ "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
+ "daniel@iogearbox.net" <daniel@iogearbox.net>,
+ "andrii@kernel.org" <andrii@kernel.org>,
+ "martin.lau@linux.dev" <martin.lau@linux.dev>,
+ "eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org"
+ <song@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+ "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+ "kpsingh@kernel.org" <kpsingh@kernel.org>,
+ "haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
+ <jolsa@kernel.org>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
+ "jannh@google.com" <jannh@google.com>, "pfalcato@suse.de"
+ <pfalcato@suse.de>, "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+ "riel@surriel.com" <riel@surriel.com>,
+ "ryan.roberts@arm.com" <ryan.roberts@arm.com>,
+ "jgross@suse.com" <jgross@suse.com>,
+ "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
+ "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
+ "ackerleytng@google.com" <ackerleytng@google.com>,
+ "yosry@kernel.org" <yosry@kernel.org>,
+ "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
+ "maobibo@loongson.cn" <maobibo@loongson.cn>,
+ "prsampat@amd.com" <prsampat@amd.com>,
+ "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>,
+ "mlevitsk@redhat.com" <mlevitsk@redhat.com>,
+ "jthoughton@google.com" <jthoughton@google.com>,
+ "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+ "alex@ghiti.fr" <alex@ghiti.fr>,
+ "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+ "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+ "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+ "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+ "dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
+ <gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
+ "palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org"
+ <pjw@kernel.org>,
+ "shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
+ "svens@linux.ibm.com" <svens@linux.ibm.com>,
+ "thuth@redhat.com" <thuth@redhat.com>,
+ "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+ "urezki@gmail.com" <urezki@gmail.com>,
+ "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+ "pavel@kernel.org" <pavel@kernel.org>,
+ "yangyicong@hisilicon.com" <yangyicong@hisilicon.com>,
+ "vannapurve@google.com" <vannapurve@google.com>,
+ "jackmanb@google.com" <jackmanb@google.com>,
+ "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
+ "Thomson, Jack" <jackabt@amazon.co.uk>,
+ "Itazuri, Takahiro" <itazur@amazon.co.uk>,
+ "Manwaring, Derek" <derekmn@amazon.com>
+References: <20260410151746.61150-1-kalyazin@amazon.com>
+ <20260410151746.61150-2-kalyazin@amazon.com> <aeeDvpDnGnY5n69n@lucifer>
+ <DJJ23EXF55VK.1EGQZS511HFB6@linux.dev>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <DJJ23EXF55VK.1EGQZS511HFB6@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-loopy_wait() expects millisecond timestamps. However, Ubuntu Resolute
-can use uutils date, where `date -u +%s%3N` returns seconds plus full
-nanoseconds instead of a 3-digit millisecond field. This makes
-busywait expire too early and can make vlan_bridge_binding.sh read a
-stale operstate.
+On 6/26/26 16:38, Brendan Jackman wrote:
+> On Tue Apr 21, 2026 at 2:43 PM UTC, Lorenzo Stoakes wrote:
+>> On Fri, Apr 10, 2026 at 03:17:58PM +0000, Kalyazin, Nikita wrote:
+>>> From: Nikita Kalyazin <nikita.kalyazin@linux.dev>
+>>>
+>>> Let's convert set_direct_map_*() to take an address instead of a page to
+>>> prepare for adding helpers that operate on folios; it will be more
+>>> efficient to convert from a folio directly to an address without going
+>>> through a page first.
+> 
+> Why is this more efficient? Isn't it a purely compile-time conversion?
+> 
+> Indeed in the current implementation folio_address() is
+> page_address(&folio->page) so it still goes through a page anyway, no?
+> 
+> I might be missing context here about how this will look in the
+> memdesc future.
 
-Fixes: 25ae948b4478 ("selftests/net: add lib.sh")
-Cc: stable@vger.kernel.org # 6.8+
-Link: https://github.com/uutils/coreutils/issues/11658
-Signed-off-by: Nirmoy Das <nirmoyd@nvidia.com>
----
- tools/testing/selftests/net/lib.sh | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+Good question. page_address() is really only complicated for highmem. For
+non-highmem stuff it's simply derived from the page pfn.
 
-diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-index b40694573f4c7..fcaec058be6d0 100644
---- a/tools/testing/selftests/net/lib.sh
-+++ b/tools/testing/selftests/net/lib.sh
-@@ -70,12 +70,27 @@ ksft_exit_status_merge()
- 		$ksft_xfail $ksft_pass $ksft_skip $ksft_fail
- }
- 
-+timestamp_ms()
-+{
-+	local now=$(date -u +%s:%N)
-+	local seconds=${now%:*}
-+	local nanoseconds=${now#*:}
-+
-+	if [[ $nanoseconds =~ ^[0-9]+$ ]]; then
-+		nanoseconds=${nanoseconds:0:9}
-+	else
-+		nanoseconds=0
-+	fi
-+
-+	echo $((seconds * 1000 + 10#$nanoseconds / 1000000))
-+}
-+
- loopy_wait()
- {
- 	local sleep_cmd=$1; shift
- 	local timeout_ms=$1; shift
- 
--	local start_time="$(date -u +%s%3N)"
-+	local start_time=$(timestamp_ms)
- 	while true
- 	do
- 		local out
-@@ -84,7 +99,7 @@ loopy_wait()
- 			return 0
- 		fi
- 
--		local current_time="$(date -u +%s%3N)"
-+		local current_time=$(timestamp_ms)
- 		if ((current_time - start_time > timeout_ms)); then
- 			echo -n "$out"
- 			return 1
+I suspect going page -> pfn will remain as efficient as it currently is (with
+vmemmap). For odd cases (SPARSEMEM without VMEMMAP) going through folio->pfn [1]
+might be slighty faster.
+
+[1] https://kernelnewbies.org/MatthewWilcox/Memdescs/Path
 -- 
-2.43.0
+Cheers,
 
+David
