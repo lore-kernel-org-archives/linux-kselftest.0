@@ -1,185 +1,774 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CF63E7BA0;
-	Fri, 26 Jun 2026 08:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F833E9284;
+	Fri, 26 Jun 2026 09:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782464341; cv=none; b=jsepNd0/vP4pniK/9WnC065fNFzlDDLmYT4YsAdWifs7D5hNeA1vcwm/G+Anf5ifd62flJO+Rd2XPb2uhh4/6oqEgsrb0iXonaHiR9Ls+jm1dZ3r2N3v6hee20rcSmBVtP+1ZSEch9X9awXUOOCSICrEwwM6l+hyAXQGn98uEqI=
+	t=1782465343; cv=none; b=kuC9wg4nvlA5UFahJC+xYzx5UQrNmHZfwrJvT/CH2/XY6NuKnvF7b080kdFdz2rRCFp0xKX713JTy9TpTKKKiGs9gJgHfTePh5AvKv5M130aZkhccpEr8u18Sk/6arBYyaPbHXz0lSkRVmzvFEL2uQQf6L/rDi5fbHhOk+f7Xr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782464341; c=relaxed/simple;
-	bh=9+KOepVfHcgzyx1aoeHZk05QJnP0tYBRGnk+hf3cU+Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q8pe6LEzn7lnRJ/1rDqQluCf7ll5Ik4m6RPhvyvpIuHEPxXhaT3xHDZxRdR9xzoEr4GZ38aQj3zuyXoaWKFJBVasaF3dLgkXsx0DT7uXTbIfNScXFp2YhwzUV9z0w1gtcjmdOY9kDOCAbAH3e9lcFDAyJ6/nUEuIyaFhyTVj/jE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OSWTvxHd; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1782465343; c=relaxed/simple;
+	bh=oYRv5BqzFUql9T4GqRV+2BKjSlr0oGlI9t14zJot82c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=eHdVzJalhZCWQE7JpU7lJiTNmXPnA1XnumSFJEQYvDUTMP/Wuhhi2fr0TEYXFU4MRt7HZHfMJ9+oeJ29iUhXDkLaR7OsjjRT3Hn93FhIxhJhJ/np2gyCy81tegQR3wRESpyekbalt4rGvtnGlOsJl5SPzbLg0vYHMDX0rVyaJuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cb2ij0VL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OSWTvxHd"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65Q6nBfc2221391;
-	Fri, 26 Jun 2026 08:58:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=dq2iJH3ZBxy9MuvW6
-	3gPgQjNUyVQUQHN+hh9clQFrqw=; b=OSWTvxHdkeMs7oFspfn/vpBlKgW+OnZks
-	M/oIkwuW6s1B1MypgxPmffzhng2mZnG76ZFi2V60dO/jCYohpclcDJYabZIiXJAG
-	mvg+2aYyPnsX/Pi+tOCH18/FcuePoj7A2B+XghL18iGrrhvG81UOR806FRIEAFjo
-	Z1hk5Ikq53LKCKmOjKNAd89LqcBlmFDRvyc+vwRO/0SnuUBkN336oKRjJBaiDHff
-	SKiX9ZBbRITuvNxKFOzLy0Dxiu9azhBO7mfh7QI7aIEZ0fm3O7hyiZRyB1IjLbIp
-	2/cTeFOzrVA9s7GgBf0jXsTMW3ak+Z2miH2hCm4pl6MGm/j/Kk8Tw==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ewg9j62yj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Jun 2026 08:58:36 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65Q8njNO001484;
-	Fri, 26 Jun 2026 08:58:35 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ex56qthuw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Jun 2026 08:58:35 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65Q8wYvU32703216
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 26 Jun 2026 08:58:34 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 108FB5803F;
-	Fri, 26 Jun 2026 08:58:34 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 817B958056;
-	Fri, 26 Jun 2026 08:58:29 +0000 (GMT)
-Received: from vaibhav?linux.ibm.com (unknown [9.39.20.139])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with SMTP;
-	Fri, 26 Jun 2026 08:58:29 +0000 (GMT)
-Received: by vaibhav@linux.ibm.com (sSMTP sendmail emulation); Fri, 26 Jun 2026 14:28:28 +0530
-From: Vaibhav Jain <vaibhav@linux.ibm.com>
-To: linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Cc: Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>
-Subject: [PATCH v4 2/2] kunit: Add example of test suite that can be skipped at runtime
-Date: Fri, 26 Jun 2026 14:28:07 +0530
-Message-ID: <20260626085811.151133-3-vaibhav@linux.ibm.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260626085811.151133-1-vaibhav@linux.ibm.com>
-References: <20260626085811.151133-1-vaibhav@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cb2ij0VL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F13FA1F000E9;
+	Fri, 26 Jun 2026 09:15:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782465341;
+	bh=oPiuM4lok/Y2wMNEQbnxYMh2qQ5JE0oUxOye8Awa2/k=;
+	h=From:Date:Subject:To:Cc;
+	b=cb2ij0VLjNmVf0ANdiB7hAVXD9LNbw09RHjCpQ4xZl0nrI2c4Y9emQXFt6oq7v8kf
+	 AWsqv8THiXWnZwpztNr9qPD9lzWlM3jUy/i3m4qkvRi1GBbFss+gxvQWZxTx7OdUji
+	 H6glkozfYOAHbntnMZ9QU3hVHzDZENUQwyM8Ft8DlHdNhskM8ENKM4O7u0gPC+dYB2
+	 TKaG1i1pNGCXapKf9XMkCnM1HeSO6C4ekpvmxUT2ie/4jLn1yc4CMOUWXbzWkq+cza
+	 xCrleI6w1bl7UGazSVXm9jeWAiODTOcGKgGSq/voRLYp7X7uytr6zyy93Puy2Z+9U9
+	 zs7H0xHHLAjnw==
+From: Mike Rapoport <rppt@kernel.org>
+Date: Fri, 26 Jun 2026 12:15:36 +0300
+Subject: [PATCH v4] selftests/liveupdate: add end to end test
+ infrastructure and scripts
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: ZJ8nUWzOPibnE_4HGKDwr7KZD7-vjhPI
-X-Proofpoint-GUID: LSCqZt8pxDgpYvnHYkLVsI-2UQyVz1-N
-X-Authority-Analysis: v=2.4 cv=Y4XIdBeN c=1 sm=1 tr=0 ts=6a3e3f3d cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=nzuXsxulAAAA:8
- a=ER9KG9QWV2A1lhMn8r8A:9 a=Jn5cl5okm61iLnyvC_SE:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjI2MDA3MCBTYWx0ZWRfX+K4XeN0OChbK
- gsEfb8qxoF/2mD/0bpgiStMhEoLgIHejVSNd9iUpyTMT8tkHSUCFHPXgvli2gWSOcFdYQqIbhgf
- RnufnotmcvNkwn9B9UNNFqx8QhrcX/rPrpX9xw9Zcbc1r7/cnIU8UR013ZEg715qz4jGtZXr5zp
- ECecIP3JAzvBPE1GPtQo58v3aY2pA+ggvuqZF2cX86MVbB5DqFRSwO+fHCg+eNQa7T21rBvHg4F
- CCMc9npIaW9wq7u2LUj6EwYT9QIjHECio4cSptdiQYpD+/2UZpfRhk5CStVuQ9U8qvfwkmFR372
- yReHC2h21+FMyJJGKajb8Nj8y4XlVBDr39bYeCPjw2PlJRXvgvbRuDgHsOvepeU4Z5drpfyqUOQ
- tZlmon74vMDBVnZUK1D5XzVSCGKNdNy3xgddpAKqw5gydJaeZCwtDDTrsEZiLj+SIaECqlclzCX
- to7RE+wvoArjTYj7n7Q==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjI2MDA3MCBTYWx0ZWRfX2Y5pxUSuobM5
- LTziNjbjv8zx99Kqq67lxKSIE+RtLymWq5dlTCzAE2QnT2gv7/kB8VUAL+b0kpCmtMCmNLlJqBm
- kGSfbLmuD1f6Y8MCIncTBMGYlqBRYJ0=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-26_02,2026-06-24_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0 spamscore=0
- clxscore=1015 suspectscore=0 impostorscore=0 phishscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606260070
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260626-luo-vmtest-v0-v4-1-e7d3111cd5b3@kernel.org>
+X-B4-Tracking: v=1; b=H4sIADdDPmoC/yWMQQ6CMBBFr0Jm7cSGYAGvYli0dYQx0ppOaUwId
+ 7fV5fv57+0gFJkErs0OkTILB1+gOzXgFuNnQr4Xhla1WulW42sLmNdEkjArvOihG/uxN0oNUJx
+ 3pAd/fr3b9GfZ7JNcqpH6sEYIbTTeLXUKkWf259VIogjH8QWhJPPbkQAAAA==
+X-Change-ID: 20260626-luo-vmtest-v0-56849797a008
+To: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+ Pratyush Yadav <pratyush@kernel.org>
+Cc: Jordan Richards <jordanrichards@google.com>, 
+ Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Willy Tarreau <w@1wt.eu>, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kexec@lists.infradead.org
+X-Mailer: b4 0.15.2
 
-Add an example test suite name 'example_test_skip_suite' to
-'kunit-example-test.c' that shows how to skip an entire test suite based on
-runtime conditions.
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-The example suite 'example_skip_suite' provides a 'suite_init' callback
-named example_skip_suite_init() which marks the entire suite as skipped
-using kunit_mark_skipped().
+Add the end to end testing infrastructure required to verify the
+liveupdate feature. This includes a custom init process, a test
+orchestration script, and a batch runner.
 
-This demonstrates a way for conditionally skipping test suites when any
-prerequisites for kunit_suite execution are not met. The 'suite_init'
-callback can perform any necessary checks and mark the suite as skipped,
-preventing all test cases from executing while also indicating why the
-suite was skipped.
+The framework consists of:
 
-Reviewed-by: David Gow <david@davidgow.net>
-Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+init.c:
+A lightweight init process that manages the kexec lifecycle.
+It mounts necessary filesystems, determines the current execution
+stage (1 or 2) via the kernel command line, and handles the
+kexec_file_load() sequence to transition between kernels.
+
+vmtest.sh:
+The primary KTAP-compliant test driver. It handles:
+- Kernel configuration merging and building.
+- Cross-compilation detection for x86_64 and arm64.
+- Generation of the initrd containing the test binary and init.
+- QEMU execution with automatic accelerator detection (KVM, HVF,
+ or TCG).
+
+run-vmtests.sh:
+A wrapper that runs vmtest.sh for each LUO test across supported
+architectures, providing a summary of pass/fail/skip results.
+
+Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Co-developed-by: Jordan Richards <jordanrichards@google.com>
+Signed-off-by: Jordan Richards <jordanrichards@google.com>
+Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
-Changelog
-=========
-V3->V4:
-Link:
-https://lore.kernel.org/all/20260617121535.462459-4-vaibhav@linux.ibm.com
-* Updated patch index in the series
-* Added RB from David Gow
+v4 changes:
+* drop addition of ftruncate to nolibc, it is already merged
+* rename a single test runner to vmtest.sh and the wrapper to
+  run-vmtests.sh
+* revamp run-vmtests.sh:
+  - add luo_stress_files and luo_stress_files tests
+  - only keep result logs if explicitly requested
+  - replace chatty and colorful summary with use a single line print
 
-V2->V3:
-Link:
-https://lore.kernel.org/all/20260608090438.219497-3-vaibhav@linux.ibm.com
-* Updated patch index in the series
-
-V1->V2:
-Link:
-https://lore.kernel.org/all/20260604162805.556135-3-vaibhav@linux.ibm.com/
-* Added RB from 'David Gow'
+v3: https://lore.kernel.org/all/20260303010039.2969125-1-jordanrichards@google.com
 ---
- lib/kunit/kunit-example-test.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ tools/testing/selftests/liveupdate/.gitignore      |   1 +
+ tools/testing/selftests/liveupdate/config          |   1 +
+ tools/testing/selftests/liveupdate/config.aarch64  |   2 +
+ tools/testing/selftests/liveupdate/config.x86_64   |   2 +
+ tools/testing/selftests/liveupdate/init.c          | 179 ++++++++++++++
+ .../testing/selftests/liveupdate/luo_test_utils.c  |  15 +-
+ tools/testing/selftests/liveupdate/run-vmtests.sh  |  97 ++++++++
+ tools/testing/selftests/liveupdate/vmtest.sh       | 263 +++++++++++++++++++++
+ 8 files changed, 551 insertions(+), 9 deletions(-)
 
-diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-index 0bae7b7ca0b0..b8ded54fa46d 100644
---- a/lib/kunit/kunit-example-test.c
-+++ b/lib/kunit/kunit-example-test.c
-@@ -591,5 +591,34 @@ static struct kunit_suite example_init_test_suite = {
-  */
- kunit_test_init_section_suites(&example_init_test_suite);
- 
+diff --git a/tools/testing/selftests/liveupdate/.gitignore b/tools/testing/selftests/liveupdate/.gitignore
+index 661827083ab6..cb08ddb0dfee 100644
+--- a/tools/testing/selftests/liveupdate/.gitignore
++++ b/tools/testing/selftests/liveupdate/.gitignore
+@@ -6,4 +6,5 @@
+ !*.sh
+ !.gitignore
+ !config
++!config.*
+ !Makefile
+diff --git a/tools/testing/selftests/liveupdate/config b/tools/testing/selftests/liveupdate/config
+index 91d03f9a6a39..016d009dba13 100644
+--- a/tools/testing/selftests/liveupdate/config
++++ b/tools/testing/selftests/liveupdate/config
+@@ -1,4 +1,5 @@
+ CONFIG_BLK_DEV_INITRD=y
++CONFIG_DEVTMPFS=y
+ CONFIG_KEXEC_FILE=y
+ CONFIG_KEXEC_HANDOVER=y
+ CONFIG_KEXEC_HANDOVER_ENABLE_DEFAULT=y
+diff --git a/tools/testing/selftests/liveupdate/config.aarch64 b/tools/testing/selftests/liveupdate/config.aarch64
+new file mode 100644
+index 000000000000..445716403925
+--- /dev/null
++++ b/tools/testing/selftests/liveupdate/config.aarch64
+@@ -0,0 +1,2 @@
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+diff --git a/tools/testing/selftests/liveupdate/config.x86_64 b/tools/testing/selftests/liveupdate/config.x86_64
+new file mode 100644
+index 000000000000..810d9c9d213e
+--- /dev/null
++++ b/tools/testing/selftests/liveupdate/config.x86_64
+@@ -0,0 +1,2 @@
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
+diff --git a/tools/testing/selftests/liveupdate/init.c b/tools/testing/selftests/liveupdate/init.c
+new file mode 100644
+index 000000000000..fb08bd58b9b9
+--- /dev/null
++++ b/tools/testing/selftests/liveupdate/init.c
+@@ -0,0 +1,179 @@
++// SPDX-License-Identifier: GPL-2.0
++
 +/*
-+ * This test should always be skipped.
++ * Copyright (c) 2025, Google LLC.
++ * Pasha Tatashin <pasha.tatashin@soleen.com>
 + */
-+static void example_skip_suite_test(struct kunit *test)
-+{
-+	/* This line should never be seen */
-+	KUNIT_FAIL(test, "You should not see a this.");
-+}
++#include <fcntl.h>
++#include <linux/kexec.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/mount.h>
++#include <sys/reboot.h>
++#include <sys/syscall.h>
++#include <sys/wait.h>
++#include <unistd.h>
 +
-+static struct kunit_case  example_skip_suite_test_cases[] = {
-+	KUNIT_CASE(example_skip_suite_test),
-+	{}
-+};
++#define COMMAND_LINE_SIZE 2048
++#define KERNEL_IMAGE "/kernel"
++#define INITRD_IMAGE "/initrd.img"
++#define TEST_BINARY "/test_binary"
 +
-+static int example_skip_suite_init(struct kunit_suite *suite)
++static int mount_filesystems(void)
 +{
-+	kunit_mark_skipped(suite, "Test suite expected to be skipped");
++	if (mount("devtmpfs", "/dev", "devtmpfs", 0, NULL) < 0) {
++		fprintf(stderr, "INIT: Warning: Failed to mount devtmpfs\n");
++		return -1;
++	}
++
++	if (mount("debugfs", "/debugfs", "debugfs", 0, NULL) < 0) {
++		fprintf(stderr, "INIT: Failed to mount debugfs\n");
++		return -1;
++	}
++
++	if (mount("proc", "/proc", "proc", 0, NULL) < 0) {
++		fprintf(stderr, "INIT: Failed to mount proc\n");
++		return -1;
++	}
++
 +	return 0;
 +}
 +
-+static struct kunit_suite example_test_skip_suite = {
-+	.name = "example_skip_suite",
-+	.suite_init = example_skip_suite_init,
-+	.test_cases = example_skip_suite_test_cases,
-+};
++static long kexec_file_load(int kernel_fd, int initrd_fd,
++			    unsigned long cmdline_len, const char *cmdline,
++			    unsigned long flags)
++{
++	return syscall(__NR_kexec_file_load, kernel_fd, initrd_fd, cmdline_len,
++		       cmdline, flags);
++}
 +
-+/* This registers a test suite that will be skipped */
-+kunit_test_suite(example_test_skip_suite);
++static int kexec_load(void)
++{
++	char cmdline[COMMAND_LINE_SIZE];
++	int kernel_fd, initrd_fd, err;
++	ssize_t len;
++	int fd;
 +
- MODULE_DESCRIPTION("Example KUnit test suite");
- MODULE_LICENSE("GPL v2");
--- 
-2.54.0
++	fd = open("/proc/cmdline", O_RDONLY);
++	if (fd < 0) {
++		fprintf(stderr, "INIT: Failed to read /proc/cmdline\n");
++
++		return -1;
++	}
++
++	len = read(fd, cmdline, sizeof(cmdline) - 1);
++	close(fd);
++	if (len < 0)
++		return -1;
++
++	cmdline[len] = 0;
++	if (len > 0 && cmdline[len - 1] == '\n')
++		cmdline[len - 1] = 0;
++
++	strncat(cmdline, " luo_stage=2", sizeof(cmdline) - strlen(cmdline) - 1);
++
++	kernel_fd = open(KERNEL_IMAGE, O_RDONLY);
++	if (kernel_fd < 0) {
++		fprintf(stderr, "INIT: Failed to open kernel image\n");
++		return -1;
++	}
++
++	initrd_fd = open(INITRD_IMAGE, O_RDONLY);
++	if (initrd_fd < 0) {
++		fprintf(stderr, "INIT: Failed to open initrd image\n");
++		close(kernel_fd);
++		return -1;
++	}
++
++	err = kexec_file_load(kernel_fd, initrd_fd, strlen(cmdline) + 1,
++			      cmdline, 0);
++
++	close(initrd_fd);
++	close(kernel_fd);
++
++	return err;
++}
++
++static int run_test(int stage)
++{
++	char stage_arg[32];
++	int status;
++	pid_t pid;
++
++	snprintf(stage_arg, sizeof(stage_arg), "%d", stage);
++
++	pid = fork();
++	if (pid < 0)
++		return -1;
++
++	if (!pid) {
++		char *const argv[] = {TEST_BINARY, "-s", stage_arg, NULL};
++
++		execve(TEST_BINARY, argv, NULL);
++		fprintf(stderr, "INIT: execve failed\n");
++		_exit(1);
++	}
++
++	waitpid(pid, &status, 0);
++
++	return (WIFEXITED(status) && WEXITSTATUS(status) == 0) ? 0 : -1;
++}
++
++static int get_current_stage(void)
++{
++	char cmdline[COMMAND_LINE_SIZE];
++	ssize_t len;
++	int fd;
++
++	fd = open("/proc/cmdline", O_RDONLY);
++	if (fd < 0)
++		return -1;
++
++	len = read(fd, cmdline, sizeof(cmdline) - 1);
++	close(fd);
++
++	if (len < 0)
++		return -1;
++
++	cmdline[len] = 0;
++
++	return strstr(cmdline, "luo_stage=2") ? 2 : 1;
++}
++
++int main(int argc, char *argv[])
++{
++	int current_stage;
++	int err;
++
++	if (mount_filesystems())
++		goto err_reboot;
++
++	current_stage = get_current_stage();
++	if (current_stage < 0) {
++		fprintf(stderr, "INIT: Failed to read cmdline");
++		goto err_reboot;
++	}
++
++	printf("INIT: Starting Stage %d\n", current_stage);
++
++	if (current_stage == 1 && kexec_load()) {
++		fprintf(stderr, "INIT: Failed to load kexec kernel\n");
++		goto err_reboot;
++	}
++
++	if (run_test(current_stage)) {
++		fprintf(stderr, "INIT: Test binary returned failure\n");
++		goto err_reboot;
++	}
++
++	printf("INIT: Stage %d completed successfully.\n", current_stage);
++	reboot(current_stage == 1 ? RB_KEXEC : RB_AUTOBOOT);
++
++	return 0;
++
++err_reboot:
++	reboot(RB_AUTOBOOT);
++
++	return -1;
++}
+diff --git a/tools/testing/selftests/liveupdate/luo_test_utils.c b/tools/testing/selftests/liveupdate/luo_test_utils.c
+index 333a3530051b..1439b2b48ed0 100644
+--- a/tools/testing/selftests/liveupdate/luo_test_utils.c
++++ b/tools/testing/selftests/liveupdate/luo_test_utils.c
+@@ -21,6 +21,7 @@
+ #include <sys/stat.h>
+ #include <errno.h>
+ #include <stdarg.h>
++#include <linux/unistd.h>
+ 
+ #include "luo_test_utils.h"
+ 
+@@ -81,7 +82,7 @@ int luo_retrieve_session(int luo_fd, const char *name)
+ int create_and_preserve_memfd(int session_fd, int token, const char *data)
+ {
+ 	struct liveupdate_session_preserve_fd arg = { .size = sizeof(arg) };
+-	long page_size = sysconf(_SC_PAGE_SIZE);
++	long page_size = getpagesize();
+ 	void *map = MAP_FAILED;
+ 	int mfd = -1, ret = -1;
+ 
+@@ -117,7 +118,7 @@ int restore_and_verify_memfd(int session_fd, int token,
+ 			     const char *expected_data)
+ {
+ 	struct liveupdate_session_retrieve_fd arg = { .size = sizeof(arg) };
+-	long page_size = sysconf(_SC_PAGE_SIZE);
++	long page_size = getpagesize();
+ 	void *map = MAP_FAILED;
+ 	int mfd = -1, ret = -1;
+ 
+@@ -228,16 +229,11 @@ void daemonize_and_wait(void)
+ 
+ static int parse_stage_args(int argc, char *argv[])
+ {
+-	static struct option long_options[] = {
+-		{"stage", required_argument, 0, 's'},
+-		{0, 0, 0, 0}
+-	};
+-	int option_index = 0;
+ 	int stage = 1;
+ 	int opt;
+ 
+ 	optind = 1;
+-	while ((opt = getopt_long(argc, argv, "s:", long_options, &option_index)) != -1) {
++	while ((opt = getopt(argc, argv, "s:")) != -1) {
+ 		switch (opt) {
+ 		case 's':
+ 			stage = atoi(optarg);
+@@ -248,6 +244,7 @@ static int parse_stage_args(int argc, char *argv[])
+ 			fail_exit("Unknown argument");
+ 		}
+ 	}
++
+ 	return stage;
+ }
+ 
+@@ -275,7 +272,7 @@ int luo_test(int argc, char *argv[],
+ 		fail_exit("Failed to check for state session");
+ 
+ 	if (target_stage != detected_stage) {
+-		ksft_exit_fail_msg("Stage mismatch Requested --stage %d, but system is in stage %d.\n"
++		ksft_exit_fail_msg("Stage mismatch Requested stage %d, but system is in stage %d.\n"
+ 				   "(State session %s: %s)\n",
+ 				   target_stage, detected_stage, state_session_name,
+ 				   (detected_stage == 2) ? "EXISTS" : "MISSING");
+diff --git a/tools/testing/selftests/liveupdate/run-vmtests.sh b/tools/testing/selftests/liveupdate/run-vmtests.sh
+new file mode 100755
+index 000000000000..d656ce58c5a7
+--- /dev/null
++++ b/tools/testing/selftests/liveupdate/run-vmtests.sh
+@@ -0,0 +1,97 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++SCRIPT_DIR=$(dirname "$(realpath "$0")")
++TEST_RUNNER="$SCRIPT_DIR/vmtest.sh"
++
++TARGETS=("x86_64" "aarch64")
++
++GREEN='\033[0;32m'
++RED='\033[0;31m'
++YELLOW='\033[1;33m'
++NC='\033[0m'
++
++passed=0
++failed=0
++skipped=0
++
++TEST_NAMES=(
++	"luo_kexec_simple"
++	"luo_multi_session"
++	"luo_stress_files"
++	"luo_stress_sessions"
++)
++
++function usage() {
++	cat <<EOF
++$0 [-k] [-o output_dir] [-h]
++Options:
++	-k)	keep logs
++	-o)	specify output directory
++	-h)	display this help
++EOF
++}
++
++function pass() {
++	echo -e "${GREEN}PASS${NC}"
++	((passed++))
++}
++
++function skip() {
++	echo -e "${YELLOW}SKIP${NC}"
++	((skipped++))
++}
++
++function fail() {
++	echo -e "${RED}FAIL${NC}"
++	((failed++))
++}
++
++function main() {
++	while getopts 'hko:' opt; do
++		case $opt in
++		k) keep_logs=1 ;;
++		o) output_dir=$OPTARG ;;
++		h) usage; exit 0 ;;
++		*) echo Unknown argument "$opt"
++		   usage; exit 1 ;;
++		esac
++	done
++
++	if [ -n "$keep_logs" ]; then
++		if [ -z "$output_dir" ]; then
++			output_dir="$SCRIPT_DIR/results_$(date +%Y%m%d_%H%M%S)"
++		fi;
++		mkdir -p "$output_dir"
++	else
++		output_dir=$(mktemp -d /tmp/luo.XXXXXXXX)
++		trap 'rm -fr "$output_dir"' EXIT
++	fi
++
++	for arch in "${TARGETS[@]}"; do
++		for test_name in "${TEST_NAMES[@]}"; do
++			log="$output_dir/${arch}_${test_name}.log"
++
++			printf "  -> %-8s %-24s ... " "$arch" "$test_name"
++
++			"$TEST_RUNNER" -t "$arch" -T "$test_name" &> "$log"
++			exit_code=$?
++
++			case $exit_code in
++			0) pass;;
++			4) skip;;
++			*) fail;;
++			esac
++		done
++		echo ""
++	done
++
++	echo "SUMMARY: PASS=$passed SKIP=$skipped FAIL=$failed"
++	if [ -n "$keep_logs" ]; then
++		echo "Logs: $output_dir"
++	fi
++
++	exit $((failed != 0))
++}
++
++main "$@"
+diff --git a/tools/testing/selftests/liveupdate/vmtest.sh b/tools/testing/selftests/liveupdate/vmtest.sh
+new file mode 100755
+index 000000000000..b0000fae1461
+--- /dev/null
++++ b/tools/testing/selftests/liveupdate/vmtest.sh
+@@ -0,0 +1,263 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++set -ue
++
++CROSS_COMPILE="${CROSS_COMPILE:-""}"
++
++test_dir=$(realpath "$(dirname "$0")")
++kernel_dir=$(realpath "$test_dir/../../../..")
++
++workspace_dir=""
++headers_dir=""
++initrd=""
++KEEP_WORKSPACE=0
++
++source "$test_dir/../kselftest/ktap_helpers.sh"
++
++function get_arch_conf() {
++	local arch=$1
++	if [[ "$arch" == "arm64" ]]; then
++		QEMU_CMD="qemu-system-aarch64 -M virt -cpu max"
++		KERNEL_IMAGE="Image"
++		KERNEL_CMDLINE="console=ttyAMA0"
++	elif [[ "$arch" == "x86" ]]; then
++		QEMU_CMD="qemu-system-x86_64"
++		KERNEL_IMAGE="bzImage"
++		KERNEL_CMDLINE="console=ttyS0"
++	else
++		echo "Unsupported architecture: $arch"
++		exit 1
++	fi
++}
++
++function usage() {
++	cat <<EOF
++$0 [-d build_dir] [-j jobs] [-t target_arch] [-T test_name] [-w workspace_dir] [-k] [-h]
++Options:
++	-d)	path to the kernel build directory (default: .luo_test_build.<arch>)
++	-j)	number of jobs for compilation
++	-t)	run test for target_arch (aarch64, x86_64)
++	-T)	test name to run (default: luo_kexec_simple)
++	-w)	custom workspace directory (default: creates temp dir)
++	-k)	keep workspace directory after successful test
++	-h)	display this help
++EOF
++}
++
++function cleanup() {
++	if [ "$KEEP_WORKSPACE" -eq 1 ]; then
++		echo "# Workspace preserved at: $workspace_dir"
++	else
++		rm -fr "$workspace_dir"
++	fi
++
++	ktap_finished
++}
++
++function skip() {
++	local msg=${1:-""}
++	ktap_test_skip "$msg"
++	exit "$KSFT_SKIP"
++}
++
++function fail() {
++	local msg=${1:-""}
++	ktap_test_fail "$msg"
++	exit "$KSFT_FAIL"
++}
++
++function detect_cross_compile() {
++	local target=$1
++	local host=$(uname -m)
++
++	[[ "$host" == "arm64" ]] && host="aarch64"
++	[[ "$target" == "arm64" ]] && target="aarch64"
++
++	if [[ "$host" == "$target" ]]; then
++		CROSS_COMPILE=""
++		return
++	fi
++
++	if [[ -n "$CROSS_COMPILE" ]]; then
++		return
++	fi
++
++	local candidate=""
++	case "$target" in
++		aarch64) candidate="aarch64-linux-gnu-" ;;
++		x86_64)  candidate="x86_64-linux-gnu-" ;;
++		*)       skip "Auto-detection for target '$target' not supported. Please set CROSS_COMPILE manually." ;;
++	esac
++
++	if command -v "${candidate}gcc" &> /dev/null; then
++		CROSS_COMPILE="$candidate"
++	else
++		skip "Compiler '${candidate}gcc' not found. Please install it (e.g., 'apt install gcc-aarch64-linux-gnu') or set CROSS_COMPILE."
++	fi
++}
++
++function build_kernel() {
++	local build_dir=$1
++	local make_cmd=$2
++	local kimage=$3
++	local target_arch=$4
++
++	local luo_config="$build_dir/luo.config"
++	local kconfig="$build_dir/.config"
++	local common_conf="$test_dir/config"
++	local arch_conf="$test_dir/config.$target_arch"
++
++	echo "# Building kernel in: $build_dir"
++
++	cat "$arch_conf" "$common_conf" | tee "$kconfig" > "$luo_config"
++	$make_cmd olddefconfig
++
++	# verify that kernel confiration has all necessary options
++	while read -r opt ; do
++		grep "$opt" "$kconfig" &>/dev/null || skip "$opt is missing"
++	done < "$luo_config"
++
++	$make_cmd "$kimage"
++	$make_cmd headers_install INSTALL_HDR_PATH="$headers_dir"
++}
++
++function mkinitrd() {
++	local build_dir=$1
++	local kernel_path=$2
++	local test_name=$3
++
++	# Compile the test binary and the init process
++	"$CROSS_COMPILE"gcc -static -O2 -nostdinc -nostdlib \
++		-I "$headers_dir/include" \
++		-I "$kernel_dir/tools/include/nolibc" \
++		-I "$test_dir" \
++		-o "$workspace_dir/test_binary" \
++		"$test_dir/$test_name.c" "$test_dir/luo_test_utils.c"
++
++	"$CROSS_COMPILE"gcc -s -static -Os -nostdinc -nostdlib		\
++			-fno-asynchronous-unwind-tables -fno-ident	\
++			-fno-stack-protector				\
++			-I "$headers_dir/include"			\
++			-I "$kernel_dir/tools/include/nolibc"		\
++			-o "$workspace_dir/init" "$test_dir/init.c"
++
++	cat > "$workspace_dir/cpio_list_inner" <<EOF
++dir /dev 0755 0 0
++dir /proc 0755 0 0
++dir /debugfs 0755 0 0
++nod /dev/console 0600 0 0 c 5 1
++file /init $workspace_dir/init 0755 0 0
++file /test_binary $workspace_dir/test_binary 0755 0 0
++EOF
++
++	# Generate inner_initrd.cpio
++	"$build_dir/usr/gen_init_cpio" "$workspace_dir/cpio_list_inner" > "$workspace_dir/inner_initrd.cpio"
++
++	cat > "$workspace_dir/cpio_list" <<EOF
++dir /dev 0755 0 0
++dir /proc 0755 0 0
++dir /debugfs 0755 0 0
++nod /dev/console 0600 0 0 c 5 1
++file /init $workspace_dir/init 0755 0 0
++file /kernel $kernel_path 0644 0 0
++file /test_binary $workspace_dir/test_binary 0755 0 0
++file /initrd.img $workspace_dir/inner_initrd.cpio 0644 0 0
++EOF
++
++	# Generate the final initrd
++	"$build_dir/usr/gen_init_cpio" "$workspace_dir/cpio_list" > "$initrd"
++}
++
++function run_qemu() {
++	local qemu_cmd=$1
++	local cmdline=$2
++	local kernel_path=$3
++	local serial="$workspace_dir/qemu.serial"
++
++	cmdline="$cmdline liveupdate=on panic=-1"
++
++	echo "# Serial Log: $serial"
++	timeout 30s \
++	$qemu_cmd -m 1G -smp 2 -no-reboot -nographic -nodefaults \
++		  -accel tcg -accel hvf -accel kvm \
++		  -serial file:"$serial" \
++		  -append "$cmdline" \
++		  -kernel "$kernel_path" \
++		  -initrd "$initrd"
++
++	grep "TEST PASSED" "$serial" &> /dev/null || fail "Liveupdate failed"
++}
++
++function target_to_arch() {
++	local target=$1
++	case $target in
++	     aarch64) echo "arm64" ;;
++	     x86_64) echo "x86" ;;
++	     *) skip "architecture $target is not supported"
++	esac
++}
++
++function main() {
++	local build_dir=""
++	local jobs=$(nproc)
++	local target="$(uname -m)"
++	local test_name="luo_kexec_simple"
++	local workspace_arg=""
++
++	set -o errtrace
++	trap fail ERR
++
++	while getopts 'hd:j:t:T:w:k' opt; do
++		case $opt in
++		d) build_dir="$OPTARG" ;;
++		j) jobs="$OPTARG" ;;
++		t) target="$OPTARG" ;;
++		T) test_name="$OPTARG" ;;
++		w) workspace_arg="$OPTARG" ;;
++		k) KEEP_WORKSPACE=1 ;;
++		h) usage; exit 0 ;;
++		*) echo "Unknown argument $opt"; usage; exit 1 ;;
++		esac
++	done
++
++	ktap_print_header
++	ktap_set_plan 1
++	trap cleanup EXIT
++
++	if [ -n "$workspace_arg" ]; then
++		workspace_dir="$(realpath -m "$workspace_arg")"
++		mkdir -p "$workspace_dir"
++	else
++		workspace_dir=$(mktemp -d /tmp/luo-test.XXXXXXXX)
++	fi
++
++	echo "# Workspace created at: $workspace_dir"
++	headers_dir="$workspace_dir/usr"
++	initrd="$workspace_dir/initrd.cpio"
++
++	detect_cross_compile "$target"
++
++	local arch=$(target_to_arch "$target")
++
++	if [ -z "$build_dir" ]; then
++		build_dir="$kernel_dir/.luo_test_build.$arch"
++	fi
++
++	mkdir -p "$build_dir"
++	build_dir=$(realpath "$build_dir")
++	get_arch_conf "$arch"
++
++	local make_cmd="make -s ARCH=$arch CROSS_COMPILE=$CROSS_COMPILE -j$jobs"
++	local make_cmd_build="$make_cmd -C $kernel_dir O=$build_dir"
++
++	build_kernel "$build_dir" "$make_cmd_build" "$KERNEL_IMAGE" "$target"
++
++	local final_kernel="$build_dir/arch/$arch/boot/$KERNEL_IMAGE"
++	mkinitrd "$build_dir" "$final_kernel" "$test_name"
++
++	run_qemu "$QEMU_CMD" "$KERNEL_CMDLINE" "$final_kernel"
++	ktap_test_pass "$test_name succeeded"
++}
++
++main "$@"
+
+---
+base-commit: 962528fef90253aeded29cee20a9b6ff3595fed4
+change-id: 20260626-luo-vmtest-v0-56849797a008
+
+Best regards,
+--  
+Sincerely yours,
+Mike.
 
