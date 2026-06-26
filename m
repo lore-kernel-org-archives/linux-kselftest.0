@@ -1,133 +1,99 @@
-Received: from va-2-113.ptr.blmpb.com (va-2-113.ptr.blmpb.com [209.127.231.113])
+Received: from va-1-115.ptr.blmpb.com (va-1-115.ptr.blmpb.com [209.127.230.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16FD03EBF01
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 12:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.231.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6B43F5BED
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 12:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.230.115
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782478759; cv=none; b=aFSemqvjF1FaNRqQpJ+Um3FE1zmBhWokduqxwdMSydNhTZSjMRBTdGJSgW6zVfIWmgSHcmsrUtLhaYyJLzJ2/koqD6B73aHabfXXwEYcj+2xc65JRc4i+6IGvYQwACjyCXAvlvDJGHIeIrMT9pX1bOOrc3z7zAzsGTva5rNhooM=
+	t=1782478804; cv=none; b=n3DW6VM5j6LPFyCRypMQj4UOkZEQ5qzopj6Ao7QioR/+ofz70895QHaJYP2YAPIva+vN1gL7KiVfUtvKdDvYNtLl/0v0HPWqDudZeE1HTUueFoiJz6iq0V6exjsAB5Coo8MDfknAg3+eMy5qR8HVmMbigaV0qezjFRhFGRnqoHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782478759; c=relaxed/simple;
-	bh=0cnsTb5+xBoPRXoxwwiSBtug3i2DuzJKpZ9g80ZbfBw=;
-	h=To:Cc:From:Date:Message-Id:Mime-Version:Content-Type:Subject; b=UXukjGi8J0OyRlzEPUMcWdU1yZuJP2ccEKmyb+8gz8cJEwWw/6Usf5eWLiruUfUsb1RZ0EKZKBOtFLOHAUO5ymgL9EAcdi3+/IoD+Be1lOCpgkGZqZst69Ep1foKqNkpgDJQGBYTl0OVnHT8Azxf7vje52J2ASZ3I9hLUCfhQIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=cXV2aLWt; arc=none smtp.client-ip=209.127.231.113
+	s=arc-20240116; t=1782478804; c=relaxed/simple;
+	bh=ZI5hlcZuATeNvade6rLrhYipntrypvLyDovguUE985I=;
+	h=Message-Id:From:Mime-Version:Cc:Subject:Date:Content-Type:To; b=Gd+Invy7h3VcMvwNLa8Xbw04ygA2CG8fH4cmfxWB4GogIAYu2i79q3e+VwcVQVUbYLxQpba5EyrXYqkd29u6/m2tz1p29u9zkTTSYMjWM6M3+qmfwWQw9/pRDlj/thhBLzIetvoNIFOTuV4/faAn1RFWvcC5/To9oPxRjgThYgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=olHFBq+U; arc=none smtp.client-ip=209.127.230.115
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="cXV2aLWt"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="olHFBq+U"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=2212171451; d=bytedance.com; t=1782478753; h=from:subject:
+ s=2212171451; d=bytedance.com; t=1782478794; h=from:subject:
  mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
  mime-version:in-reply-to:message-id;
- bh=AL6ByXhQdtUtH0hlRBpSnP6WApmmsj9bwOb+UcTFFBE=;
- b=cXV2aLWtGSdMFkqfvPa9DJuV9Ru0iFpapq/VaMDvMGuPRRmTHDOihyCyWRjK8zOlr5I61+
- R+7NktbvmC6+YD3tsNorBkh5EWk2TZR7IPoxyvn9hHf4m/psk7g+zTmmZBoH2ZJTsNTPfk
- FRDwIfT16xWq8vBwpK6csTMZPe27H6nrhjX/H7nziES/JuCDFhyJjPw3yTQsXE3SugfDX+
- vBAna8ZgHLQZehENGe1kGiKNNzRMtxrM0h9LkLq9aM+yOnNOdivUGyUlzDCW7XqcLoAMan
- zTDd1FjdFNJbDvc6oIr0iNacnzqagWv/LrRY70TpZKcL5bM3mZ1KcbjmSTpJMg==
-Content-Transfer-Encoding: 7bit
-To: <linux-kselftest@vger.kernel.org>
+ bh=bjAzTl7d+Kl4TVionb8E/T68k19GosyQDohWsclNhM0=;
+ b=olHFBq+U7L0i8Q72NXXM/afF1eDWA5TGUApsQAOTRDRb2PVSsl3k5OAFqIeaiWkc+CNTkW
+ 44JSDrLgn+uO1+3XMSsR2kTJ5RpUrvisyLHKLBGFM5k2CprrUDhi+AvraYgFyL8iPlwcfD
+ bs172XOOgwQh3GHerBzAx4/4+jouLWF6O9t5HvHc+WcWGx8712L71Ijx8L3EnytirKH2nL
+ PIprGuUol3iwa4DmXm8nUIsUHdgkWkVxtbl40jZxoyR530pFRCOed7f16mqfe2s6VPsch4
+ 7hOvYWxQnCzOaj/tCYzHdkMyPhSdWecwvaB0xxhSnbCSYkzy4wX/cSGyaDE3xA==
+X-Lms-Return-Path: <lba+26a3e77c8+b0991c+vger.kernel.org+wangyijia.yeah@bytedance.com>
+Message-Id: <20260626-b4-arm64-515-preview-clean-v1-1-ad19e286e322@bytedance.com>
+X-B4-Tracking: v=1; b=H4sIALx3PmoC/x2MQQ6DIBAAv2L23DWAQGq/YnpAWNtNKhpIrMb4d 9HjZDKzQ6bElOFV7ZBo4cxTLCAfFfivix9CDoVBCWWFVRZ7jS6NVqORBucroT/6H7mIrRZP34Q +NEpAGRQ78HrPOzC1NPUG7+M4AcOZvIZ0AAAA
 X-Mailer: b4 0.13.0
-X-B4-Tracking: v=1; b=H4sIAJV3PmoC/x2MQQqAIBAAvyJ7bsGsPPSV6KC21R7SUKhA/HvWc QZmMiSKTAlGkSHSxYmDr9A2Atxu/EbIS2VQUmmplUbb48HehUh4fgHdqAxJ1y16INtCDatf+fm n01zKC08V+qVkAAAA
-Cc: <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>, <shuah@kernel.org>, 
-	"Yijia Wang" <wangyijia.yeah@bytedance.com>
-X-Original-From: Yijia Wang <wangyijia.yeah@bytedance.com>
-X-Lms-Return-Path: <lba+26a3e779f+930abc+vger.kernel.org+wangyijia.yeah@bytedance.com>
+Content-Transfer-Encoding: 7bit
 From: "Yijia Wang" <wangyijia.yeah@bytedance.com>
-Date: Fri, 26 Jun 2026 20:59:02 +0800
-Message-Id: <20260626-b4-mincore-preview-v1-1-5f07aa02ab32@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+X-Original-From: Yijia Wang <wangyijia.yeah@bytedance.com>
+Cc: <shuah@kernel.org>, <linux-kernel@vger.kernel.org>, <will@kernel.org>, 
+	<catalin.marinas@arm.com>, <broonie@kernel.org>, 
+	<linux-arm-kernel@lists.infradead.org>, 
+	<linux-kselftest@vger.kernel.org>, <cristian.marussi@arm.com>, 
+	"Yijia Wang" <wangyijia.yeah@bytedance.com>
+Subject: [PATCH 5.15.y] selftests: arm64: signal: skip SVE VL change test with single VL
+Date: Fri, 26 Jun 2026 20:59:41 +0800
 Content-Type: text/plain; charset=UTF-8
-Subject: [PATCH] selftests: mincore: use default huge page size for hugetlb test
+To: <sashal@kernel.org>, <stable@vger.kernel.org>, 
+	<gregkh@linuxfoundation.org>
 
-The hugetlb mincore test passes the base page size as the MAP_HUGETLB
-mapping length.  This works on systems where the default huge page size
-is the same as the base page size, but mmap() can fail with EINVAL before
-mincore() is exercised when the default huge page size is larger, such as
-on arm64 systems with 64K base pages and 2M huge pages.
+[ Upstream commit 78c09c0f4df89fabdcfb3e5e53d3196cf67f64ef ]
 
-Use the default huge page size from /proc/meminfo for the hugetlb mapping
-and unmap length.  Keep the mincore() check scoped to one base page since
-the test only needs to verify the residency state before and after the
-mapping is touched.  This also avoids changing the mincore() length to the
-whole huge page, which would require a larger residency vector because
-mincore() reports one byte per base page.
+The fake_sigreturn_sve_change_vl test needs at least two SVE vector
+lengths so it can attempt to modify the VL in a signal frame.  On systems
+that support SVE but expose only one VL, the test initialization returns
+false and the signal test harness reports the case as a failure.
+
+Mark the testcase result as KSFT_SKIP before returning false when fewer
+than two VLs are available.  This preserves the old bool init callback
+contract while reporting the unsupported configuration correctly.
+
+This is a minimal backport of the behavior used by newer selftests, where
+the same single-VL configuration is reported as SKIP instead of FAIL.  The
+5.15.y selftest still uses a bool init callback here, so keep returning
+false after setting td->result to KSFT_SKIP.
 
 Signed-off-by: Yijia Wang <wangyijia.yeah@bytedance.com>
 ---
- tools/testing/selftests/mincore/mincore_selftest.c | 29 ++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+ .../selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c     | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
-index cdd022c1c..cd51420d5 100644
---- a/tools/testing/selftests/mincore/mincore_selftest.c
-+++ b/tools/testing/selftests/mincore/mincore_selftest.c
-@@ -22,6 +22,27 @@
- #define MB (1UL << 20)
- #define FILE_SIZE (4 * MB)
+diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c
+index bb50b5adb..915821375 100644
+--- a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c
++++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c
+@@ -6,6 +6,7 @@
+  * supported and is expected to segfault.
+  */
  
-+static unsigned long default_huge_page_size(void)
-+{
-+	FILE *f = fopen("/proc/meminfo", "r");
-+	unsigned long hps = 0;
-+	size_t linelen = 0;
-+	char *line = NULL;
-+
-+	if (!f)
-+		return 0;
-+	while (getline(&line, &linelen, f) > 0) {
-+		if (sscanf(line, "Hugepagesize:       %lu kB", &hps) == 1) {
-+			hps <<= 10;
-+			break;
-+		}
-+	}
-+
-+	free(line);
-+	fclose(f);
-+	return hps;
-+}
-+
- 
- /*
-  * Tests the user interface. This test triggers most of the documented
-@@ -139,14 +160,18 @@ TEST(check_anonymous_locked_pages)
- TEST(check_huge_pages)
- {
- 	unsigned char vec[1];
-+	unsigned long hpage_size;
- 	char *addr;
- 	int retval;
- 	int page_size;
- 
- 	page_size = sysconf(_SC_PAGESIZE);
-+	hpage_size = default_huge_page_size();
-+	if (!hpage_size)
-+		hpage_size = page_size;
- 
- 	errno = 0;
--	addr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
-+	addr = mmap(NULL, hpage_size, PROT_READ | PROT_WRITE,
- 		MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
- 		-1, 0);
- 	if (addr == MAP_FAILED) {
-@@ -170,7 +195,7 @@ TEST(check_huge_pages)
++#include <kselftest.h>
+ #include <signal.h>
+ #include <ucontext.h>
+ #include <sys/prctl.h>
+@@ -40,6 +41,7 @@ static bool sve_get_vls(struct tdescr *td)
+ 	/* We need at least two VLs */
+ 	if (nvls < 2) {
+ 		fprintf(stderr, "Only %d VL supported\n", nvls);
++		td->result = KSFT_SKIP;
+ 		return false;
  	}
- 
- 	munlock(addr, page_size);
--	munmap(addr, page_size);
-+	munmap(addr, hpage_size);
- }
- 
  
 
 ---
-base-commit: 1d5dcaa3bd65f2e8c9baa14a393d3a2dc5db7524
-change-id: 20260626-b4-mincore-preview-2ae0c3d65eb1
+base-commit: eceeec79dbc646d6dace49ed1ba2f656683d5537
+change-id: 20260626-b4-arm64-515-preview-clean-9408c3dbd320
 
 Best regards,
 -- 
