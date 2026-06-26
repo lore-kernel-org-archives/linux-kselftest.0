@@ -1,120 +1,105 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510D93BAD99
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 19:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383A83B3C15
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 20:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782500803; cv=none; b=ufWuGt5nY/CjSVGdHVcfBaemuUK9jmbGLj3Tzy0g7rJc2DhhqDZTT1gY3i/wziT8BUldz4NAGSaUVEcXHqp5hyYZ7spe9rA1imG3aAkXHtOfi+HVdrrzg62hi8duq0zP7jERRrKN3UBDEhzUbVo39VHhKwgcc7j+gx1unz+sJ6s=
+	t=1782505177; cv=none; b=aA4dku/rqiLPRPuYdGS1W7qH6yPWY95bExex1cdGEDUf0h0OQIZUCE399cAUIakWfLwwMaWi6XJzY66LCKALeT5oU68FveqIVuBxeXueacaNeN0XA3YDdenAKyoGA+3K4PGg6oCKPhYU0gRx/5mHzJt58Z1b/T25j2u/TVCwvqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782500803; c=relaxed/simple;
-	bh=yPh5VyRHofHYz39WBgZG1T4p4iniLMrobeV7zGwnRA0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=b76em3ZhJROWC4pMAoqf8aa5ugE6NZn+9GnWUNx43i4O/x4Tc2+Zrp3H9PN7Dbo68h1zgf/xCmFEdVH6Y8GGqewBoU+VBYWoEzFYMqCzG5Q9kzfrjmAXkGJwmE1Fpq8a0T2Fn1OYJxY8vZ+V8PtHP71XZGfA4E09pT9XfYAxuXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JluRTrRt; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1782505177; c=relaxed/simple;
+	bh=SvCnu2Q5W9nMA9SSs3kS9DQruc5S26eBF1M5NEEytkk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SGTa+wcmDVB42gD3p5UR1Q3gKqlUZFfTxAMj4+hUffDvPXN7JIC0U8hfvqJlG+RpGDnO/S154JIxeAL5DN3/CbrSiZnAJFtAxHzGgxKmHoBQFwvbY1amG49RdyhcXO5SIY+OTMHkmaetZk7TY43Ad7W6v8vFJiKrLlWCZF9LnTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Zr6OSJAQ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JluRTrRt"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c88da04b71dso644908a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 12:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782500802; x=1783105602; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PNIeHjjlzgODJP9uSdZfrjN2ZSrm2/bid/6mJJUT1aA=;
-        b=JluRTrRtEKlVCS57b5K9WvO0eGGUpiu0l0n3sFC46cwCrIL2zDbwRbLWTF0DFSV//Z
-         fFWB5y72Exyoy+CBOB8lbTFxHp1kKAnzcDtXnZPi7yJoDhWdyuCktjdrgavuraj5rQ1Y
-         KvvKL50RvlVKyVUnnaPYGAd6r43KeHLACHEp6IkGQA+vnSldO9K8IhsR/xObdUROsh2x
-         MreSU4C3ZReW6Y64QDZxQcGAvZdfaSra4d73MBrtOUWlVelyHqnxI5O++k2VVwLl5oQD
-         p5h3T/B11LveUWCOrs/44TGXeQnpHyx5uZIJjbI7WUU1lIhdJ7BtcsyP/iDVT3yz7keU
-         VGCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782500802; x=1783105602;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PNIeHjjlzgODJP9uSdZfrjN2ZSrm2/bid/6mJJUT1aA=;
-        b=DJM4uZ+9KwsEmLcDlWNoO6a9Oxh78fP8wSQc+1VDKpBCvfo5O/LsOULsiI8DeGyCct
-         Y1vXzZ/tpP0cvY21GmDQ3AHbdH0ABefJUz/M0iDULHfPTAnYmxaW5RQuqxBCSTsSVeY8
-         WqHJG8VmNyywk5Q6GLKiloHGPTEIqbuhvPbVpDuQOIgDiLbrUxeOzRM7n4JXTDN5VBVB
-         bFDbOhmv+v4aY7rfU6Qji0rZEKxSw99Z7f8FvT0Lt8p9ayEAmnFtQr/RlYRL7Dpr9I/Q
-         iWk2niTrz8J5AXiMXxXSLvk5w0QEa/r7GOtZWUKhukQxPHFUU2Dk6SvIiYJwkNNCUbd2
-         TnFA==
-X-Forwarded-Encrypted: i=1; AFNElJ+Oakt9OlnqfWM1MYgExCQrmq2fAvNjIN9ifg2uvbJ/axnJ/WPr/7HqgecKYlW8kFXVV5pGnPGUulrvcrFciGM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZTXsJvMPfejmG+jBUuYC02DrzPDgVQXWo6fIY4aV95Bi4xMMH
-	s+IvUvV1v0vmQ1vdTIVYTSl+z+bC4MgahQxKQAumtRFHwbu+aa9YZlz/aqGR46K2VhxdG/5El9M
-	80A6SYw==
-X-Received: from pgbcu10.prod.google.com ([2002:a05:6a02:218a:b0:c79:7778:c050])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:b40b:b0:3b4:87c0:d7f
- with SMTP id adf61e73a8af0-3bf69cca854mr1600938637.32.1782500801179; Fri, 26
- Jun 2026 12:06:41 -0700 (PDT)
-Date: Fri, 26 Jun 2026 12:06:40 -0700
-In-Reply-To: <aj3H2sxymOYTWTnE@yzhao56-desk.sh.intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Zr6OSJAQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782505175;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DRAoRR6aNWHMFDorHMUqC0wG77MmrRwnzU9CV7RfZA0=;
+	b=Zr6OSJAQEy52y9ShCbDRODoCv+BZ3CcDh5TiYbIhpp+nluv0/0C5TW4NWzBoO2emruebQf
+	yUQPpR9IlFpTSHHMPnO/NYooaFOdofHRPGhVZlpCek6KxF+ZR7hkA3orG5HvV4B36bj2+M
+	ZHz3Ygdpsf0p0UDo3u7Dr2SyBMpk2wY=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-636-UK0yQW1INC2fCfkRSTPNhQ-1; Fri,
+ 26 Jun 2026 16:19:31 -0400
+X-MC-Unique: UK0yQW1INC2fCfkRSTPNhQ-1
+X-Mimecast-MFC-AGG-ID: UK0yQW1INC2fCfkRSTPNhQ_1782505169
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 83A221800A36;
+	Fri, 26 Jun 2026 20:19:28 +0000 (UTC)
+Received: from oak (unknown [10.22.88.172])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 530FA1956095;
+	Fri, 26 Jun 2026 20:19:25 +0000 (UTC)
+Date: Fri, 26 Jun 2026 16:19:18 -0400
+From: Joe Simmons-Talbott <josimmon@redhat.com>
+To: Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc: Joe Simmons-Talbott <joest@redhat.com>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>,
+	cui.tao@linux.dev, Li Wang <li.wang@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Nhat Pham <nphamcs@gmail.com>,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>,
+	Sebastian Chlad <sebastianchlad@gmail.com>,
+	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RESEND v4] selftests/cgroup: Adjust cpu test duration
+ based on HZ
+Message-ID: <20260626201918.GC19617@oak>
+References: <20260625203307.1114538-1-joest@redhat.com>
+ <aj6r_tUrPH8eTuQw@localhost.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-24-9d2959357853@google.com>
- <aji/2svhcc84rn5w@yzhao56-desk.sh.intel.com> <CAEvNRgHYTFnHbsLLgMTCSitmnp1_j9Pomikm9qmpGTh1w8YE5Q@mail.gmail.com>
- <ajx5Vrz9ma--hrGH@google.com> <ajyJhZcgfYFtGfS2@yzhao56-desk.sh.intel.com>
- <aj0Jf30PS2f7x1nt@yzhao56-desk.sh.intel.com> <aj087H1UWSFxbShR@google.com> <aj3H2sxymOYTWTnE@yzhao56-desk.sh.intel.com>
-Message-ID: <aj7NwCRwWEfLK-gQ@google.com>
-Subject: Re: [PATCH v8 24/46] KVM: guest_memfd: Make in-place conversion the default\
-From: Sean Christopherson <seanjc@google.com>
-To: Yan Zhao <yan.y.zhao@intel.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com, andrew.jones@linux.dev, 
-	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
-	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
-	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, forkloop@google.com, pratyush@kernel.org, 
-	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aj6r_tUrPH8eTuQw@localhost.localdomain>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Fri, Jun 26, 2026, Yan Zhao wrote:
-> On Thu, Jun 25, 2026 at 07:36:28AM -0700, Sean Christopherson wrote:
-> > On Thu, Jun 25, 2026, Yan Zhao wrote:
-> > And I'm not remotely convinced that prepending allow_ to the param will help
-> > end users diagnose "unexpected" memory consumption, in quotes because anyone that
-> > is deploying a stack that utilizes out-of-place conversion absolutely needs to
-> > understand and plan for the additional memory consumption.  I.e. if the memory
-> > consumption is "unexpected" to the end user, they likely have far bigger problems.
-> My first impression of gmem_in_place_conversion=true was that it enforces gmem
-> in-place conversion. However, it actually only enforces per-gmem private/shared
-> attribute.
-> My worry was that people might think it's a kernel bug if userspace can still
-> have shared memory from other sources after they configured
-> gmem_in_place_conversion=true.
+On Fri, Jun 26, 2026 at 06:44:46PM +0200, Michal Koutný wrote:
+> On Thu, Jun 25, 2026 at 04:33:04PM -0400, Joe Simmons-Talbott <joest@redhat.com> wrote:
+> >  static int test_cpucg_max_nested(const char *root)
+> >  {
+> >  	int ret = KSFT_FAIL;
+> > +	long hz = get_config_hz();
+> >  	long quota_usec = 1000;
+> >  	long default_period_usec = 100000; /* cpu.max's default period */
+> >  	long duration_seconds = 1;
+> >  
+> > -	long duration_usec = duration_seconds * USEC_PER_SEC;
+> > +	long duration_usec, duration_sec, duration_nsec;
+> >  	long usage_usec, n_periods, remainder_usec, expected_usage_usec;
+> >  	char *parent, *child;
+> >  	char quota_buf[32];
+> >  
+> > +	duration_usec = duration_seconds * USEC_PER_SEC * 1000 / hz;
+> > +	duration_sec = duration_usec / USEC_PER_SEC;
+> > +	duration_nsec = duration_usec % USEC_PER_SEC * NSEC_PER_USEC;
+> 
+> Oh, that's duration in so many units and the seconds is there twice. (I
+> understand why you did that for the rescale but) could you pick more
+> descriptive/distinctive names then and ideally keep it simple :-p
 
-Ah, I see where you're coming from.  FWIW, truly enforcing in-place conversion
-is flat out impossible.  E.g. userspace can simply replace the memslot, at which
-point the memory effectively reverts to shared.
+Thanks for the feedback.  I'll send a v5 with those intermediate
+variables removed and do the calculatons where they are used to setup
+the cpu hog's time values.
 
-> However, I have no strong opinion if you think gmem_in_place_conversion is good,
-> and with the above documentation. :)
+Thanks,
+Joe
 
-Ya, I think this largely a documentation problem.  I agree that a param name
-like gmem_private_memory_attributes would be more precise, but I think it'd be
-far less informative for the vast majority of users that only care whether or
-not KVM can do in-place conversion, and don't care about how that is done.
