@@ -1,309 +1,309 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53A82459E5
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 23:09:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782428973; cv=none; b=TJzD6A43AC22pSrVZi966liFWUFZp9rPuoD2ZpfKg7MvWtBOlW07ZYQgCVH885jvADqRdt66kQtrHtvrqALfBpKY7R7TOLW3n700Jl9VxWSNtANFKmFXtSOWb7Pa8Q68EtzMiHHDtphZzGQvCiKZxF8RVfCPNhBbzR2oePHuROk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782428973; c=relaxed/simple;
-	bh=aLo5j/Saxu4ChpJ9oH5we86JO4qrWCusP9y5SO8hk4g=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EWLL6ewpgJBoYEgozXG9y5+N1BfbrapC276zQHTaHOVtkYKZ/k1fbjyqnBiMkaLdY7/Ey7+pgrdhWgZgq2gygP4EWzewJejbp/pOq1TewoAniQuR+d3KEN+rXteGDvtR97+oU5YaH0vPh9WCuaf3Wdi+lggp3EAHGlMZ9Cz6gT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=k7zRxdME; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77FA03C1F;
+	Fri, 26 Jun 2026 00:04:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782432287; cv=fail; b=svlybC4WDHT58BczoL1YNxSeeOrC+CDFEoFPq4p28B0iln7xIbpJo/Be/wLhV0UzCXQhylzIgO0SMx9rEW4t7mJ9tS1VcXuRJVEfA9xHiSQdxiZ47u4xu5uWy8Gc4Qpt/89b+5I87b9okBNakUO24bOWdjyTbB+pbJFi7ekY0AM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782432287; c=relaxed/simple;
+	bh=4bIcno7nZL8O8LyckrjWiqFl6CDEJ0fxotEwlAcx+XI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Pn/BLMIs/Qm7VnCC0LDbhyDsXKNbGLW0ETRZ0qaFRco02GPrwBi+MF0AlTj/zRiUXNddc8t+fQ1ZhdWhRPZ754o3Re6u++Q+xfVf3Hq1EaewMUmNxaIpBIFVeNefNCnZVSmlSM0PlwzThI87cJHyKASMFkYYzMtfYGRstor/gXI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bHxAB+Ke; arc=fail smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k7zRxdME"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-845bc2f62c9so196363b3a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2026 16:09:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782428971; x=1783033771; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=m+4zjqfPBoSsvDtMuL3+4LY6xbszbSt+cGsYmfVXwWs=;
-        b=k7zRxdMEMU0fJe2ehVi/A8cXJWbi4K30/SByi9CApAcxl8IcYq2Vlq6zSsGQW5w932
-         veJ5OWmVss0Hww64vnUSQIDF68ZS/5YZtoiS5tNSmHNc3cGfucqYeOCdbK+pAocCv62r
-         AGP8NPbm42QxJCFX5bzj6rf6jWbHa9LqOQnvq0rT9pM83iC2IJN9EFFoHovpZN56Zn1D
-         W2GFPb0fpCEbiRwXM8lsjYUYqSqt/A7/vMdYQNuL34ilBuvcOjzjSGC50s9YxZ5/BMGc
-         crVL9bDF26myDm1UYObnec9CbxbAOS3me7C0NS77M869HsWib/eMFzfihbNNZorbqCUV
-         6Gag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782428971; x=1783033771;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m+4zjqfPBoSsvDtMuL3+4LY6xbszbSt+cGsYmfVXwWs=;
-        b=nYtRGU2rKEQXXvB4RROTpHMytX1eZoeITfIGNotq1kqUZ+BbG3+2kpXYthd2MYM8YF
-         MLWAPrgZ/+urB5WgmE6owcZGKe1zgfrjsDYUn7K5EEhdgpwirTPWIrsCkO0Pr0hYF6Xv
-         rU74QpIY87hhHvmVJf3dur7efovbeU0g8xWCB+wKwi5wfw2jBPgPjb245ibuhoLHS0sk
-         yBd7buGgUoQ9Lc9gcTLqU6hRkNRhkeU4FfnTGtcmBHCGQCOBf5smeLueBaj86nqeoK9l
-         OkUUSPsKbwR6aaQkUjnWIsaLIjP8sE1L6TPS5akX4GPgYxXpJO/JlLH/hGp22y0SJmrW
-         SCVw==
-X-Forwarded-Encrypted: i=1; AHgh+RqFP2emWxUGh9xxpMsmpUzBLsaZK1AMtKBewoC/AUHnNxHX8M6phSxDxFAWIOg883+WK5SVaZR3TUHilmGdxOw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMxzUOn8u4Zbwc3WIq6KN5dOZwQMp/h0IbgwfmFh6Fb1u2qI0T
-	Y/tT4DJexk2pOPMRLbXiJy6+hWTcxIIlxdI+N0uYkrJHxTPj9HrRhBJNE+fwBBmu5hRLhytIlGG
-	2F9CztA==
-X-Received: from pfbjf8.prod.google.com ([2002:a05:6a00:6e48:b0:845:b9e9:fcd1])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:22d4:b0:845:c799:3651
- with SMTP id d2e1a72fcca58-845c79938a3mr333179b3a.16.1782428970385; Thu, 25
- Jun 2026 16:09:30 -0700 (PDT)
-Date: Thu, 25 Jun 2026 16:09:29 -0700
-In-Reply-To: <c855535b4262ecd41f67734d19e8f48a7f014c2a.camel@infradead.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bHxAB+Ke"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782432283; x=1813968283;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=4bIcno7nZL8O8LyckrjWiqFl6CDEJ0fxotEwlAcx+XI=;
+  b=bHxAB+KeHqGX1GR+DePb1DodJngcDfSWlv1oZHKiI0co2MN6/9JwCyuh
+   i+tTUGyvT35vkP1mRL6vWclwLJoTGGfIvB1UKwLDgSOJj+k5CRD9koBM9
+   utlK6V/oyDfzuvwzidLu6sIYjW1lkafsD9XybPKxrwqA1B9YkQiyROqme
+   rE95xjOQUoAKssKPit9Fs4M3VbVeNLYwLiYhJrmVzc4TL04rR8v2xAQK6
+   +/FKYLTAvbGgPbd6LqPXUJr3SN13hlenEF5HAkkft+Hg735bDvXp4n3AX
+   jxKIQksojmKgq7WzzL4voOXoAjtNlOILoKOgOtZdxDIwKo1HBtMT7CVcd
+   Q==;
+X-CSE-ConnectionGUID: 43VEvmsnRSCi0B0xB+WPsw==
+X-CSE-MsgGUID: pXbuBj8VTtilElZg7nejfw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11828"; a="83231578"
+X-IronPort-AV: E=Sophos;i="6.24,225,1774335600"; 
+   d="scan'208";a="83231578"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2026 17:04:42 -0700
+X-CSE-ConnectionGUID: rzxDhC1lS66TH1t8+w8vNQ==
+X-CSE-MsgGUID: lH1gIchkSUu2unBTzB6jhA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,225,1774335600"; 
+   d="scan'208";a="289261963"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2026 17:04:41 -0700
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Thu, 25 Jun 2026 17:04:40 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Thu, 25 Jun 2026 17:04:40 -0700
+Received: from PH8PR06CU001.outbound.protection.outlook.com (40.107.209.32) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Thu, 25 Jun 2026 17:04:40 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JBMUB9cwtWSH4mfGMN5emSmOQcvxLPwUXC6HnfPYA1E/MkEudaLBsfXH88uGVUiP/PtcfQ3Y4dBzNDc7UrOsNhS2Q1GQnJUsdUlVHxuBGQEFuGsHjwmEBqymnfb+LP88uWK4G+QBiQLrOa8UdTum9m/WbNM4E/Pr9BTecslO7WYvulZZnCcxD+uGCa7bieUyaakxInvPfJpDMXgoiJmggXqz+a17GltGI2qvCFoAbVvJNq+kxhpo8e+k2cTJQntJrflyOE5SUfjQxJWvtD+q26DFuxk3GYjW/4YbiWT4XQyy9PHHlJ0GnOVdkrPtl/6iYCSvnsHE/JbBcS56Do7mZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8o9Ohs6Q9dYoo8Xm58GzjjDUChHFO7fAyOAyGIngCJY=;
+ b=sW71M1Kb3SESxC+1Vhx7pI1tqj4jhmUFWH5XMVDudHOlMH8cspMZ+QCO3OMcUJmkgxlfYfLo87KmStFsZ/wZDhp5UrTc9gY2h0e8yvNQXr3gljSwdJXT9HxJNLpH7VzxhshSb1m903Gwg/nn4oAXVAU2G5MjZ0UrGNWzRkj0lH3dSc1vhtSrvNzL13VcpyLQPJFtkHWSvWdwdslLz25kGkXKyVm+ohv/dzs7BqCYU1EFOBrLpGQqCXSXrt05UwwDcUupj3idFfz+80madcnbytRRMUvn9aaPq6m+c7nu42Kwnnh7EAaKkyg+zN4ZcZhqbm3IO1KFH7ORMh78eL8ZUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB7472.namprd11.prod.outlook.com (2603:10b6:510:28c::12)
+ by DM3PPF7C7D8332C.namprd11.prod.outlook.com (2603:10b6:f:fc00::f31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.17; Fri, 26 Jun
+ 2026 00:04:36 +0000
+Received: from PH0PR11MB7472.namprd11.prod.outlook.com
+ ([fe80::1bad:44dd:4e60:6475]) by PH0PR11MB7472.namprd11.prod.outlook.com
+ ([fe80::1bad:44dd:4e60:6475%5]) with mapi id 15.21.0159.013; Fri, 26 Jun 2026
+ 00:04:36 +0000
+Date: Fri, 26 Jun 2026 08:04:29 +0800
+From: Yan Zhao <yan.y.zhao@intel.com>
+To: Ackerley Tng <ackerleytng@google.com>
+CC: <aik@amd.com>, <andrew.jones@linux.dev>, <binbin.wu@linux.intel.com>,
+	<brauner@kernel.org>, <chao.p.peng@linux.intel.com>, <david@kernel.org>,
+	<jmattson@google.com>, <jthoughton@google.com>, <michael.roth@amd.com>,
+	<oupton@kernel.org>, <pankaj.gupta@amd.com>, <qperret@google.com>,
+	<rick.p.edgecombe@intel.com>, <rientjes@google.com>, <shivankg@amd.com>,
+	<steven.price@arm.com>, <tabba@google.com>, <willy@infradead.org>,
+	<wyihan@google.com>, <forkloop@google.com>, <pratyush@kernel.org>,
+	<suzuki.poulose@arm.com>, <aneesh.kumar@kernel.org>, <liam@infradead.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, "Borislav
+ Petkov" <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+	<x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt
+	<rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, "Mathieu
+ Desnoyers" <mathieu.desnoyers@efficios.com>, Jonathan Corbet
+	<corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan
+	<shuah@kernel.org>, "Vishal Annapurve" <vannapurve@google.com>, Andrew Morton
+	<akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, Kairui Song
+	<kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham
+	<nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, Axel Rasmussen
+	<axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu
+	<weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, Qi Zheng
+	<qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, Kiryl Shutsemau
+	<kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe
+	<jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, <kvm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-coco@lists.linux.dev>
+Subject: Re: [PATCH v8 24/46] KVM: guest_memfd: Make in-place conversion the
+ default
+Message-ID: <aj3CDdxADTduxPmz@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-24-9d2959357853@google.com>
+ <aji/2svhcc84rn5w@yzhao56-desk.sh.intel.com>
+ <CAEvNRgHYTFnHbsLLgMTCSitmnp1_j9Pomikm9qmpGTh1w8YE5Q@mail.gmail.com>
+ <ajyCn0PnFtQK+Nka@yzhao56-desk.sh.intel.com>
+ <CAEvNRgFfgV0FbQLzP8hhNH5hMGaQao6OFQin4cb3TAmC7SVhfA@mail.gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAEvNRgFfgV0FbQLzP8hhNH5hMGaQao6OFQin4cb3TAmC7SVhfA@mail.gmail.com>
+X-ClientProxiedBy: TP0P295CA0017.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:910:5::11) To PH0PR11MB7472.namprd11.prod.outlook.com
+ (2603:10b6:510:28c::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <c855535b4262ecd41f67734d19e8f48a7f014c2a.camel@infradead.org>
-Message-ID: <aj21KctIXuf7b_5G@google.com>
-Subject: Re: [PATCH] KVM: x86/xen: Add KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE
-From: Sean Christopherson <seanjc@google.com>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Paul Durrant <paul@xen.org>, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB7472:EE_|DM3PPF7C7D8332C:EE_
+X-MS-Office365-Filtering-Correlation-Id: fa4e1473-dca1-469e-f74d-08ded316820d
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|23010399003|366016|7416014|376014|18002099003|22082099003|4143699003|11063799006|56012099006|6133799003;
+X-Microsoft-Antispam-Message-Info: ombbUJ/DI1bKO4pKg2/GTG8aOM+UON+F2YGGJD8YjRKVYRrDqNdHa9Dd6CL/MMP0J2BYttc2bGFU66mdsiwFXlLoZmq3EGElJJ7Zo13eYB1XlxkEtqfkf2zWOFwhDWTUsnmk8o2mjXP1CHaOpz1osNvi3Rr1QRBVIR9JSyjY74NzhjFnbxVy4HTCtGQ84jOzgLwNjodoaJm6SKhexg1mfHIxYMIrGvWRMDDuMHk+16l677H1ZKP23VJwh0tdZF47ZgiB+CVgTfaE1flk7sxxnWhbKnpHoV04ZGeKDOcewbTfqCVYuRKgUQi+913beA9G83DrY82jm/yxHzGJeQMnJXi9Ks7nTWUiybRMP4czevqbC2SxjBM8zR/P4bhCqFyp6Rd/2Hovn6AVs38292uiaqpfxT+J9jq+v/TQHajGzgM+iWXMZlcNFuTv4MpKvn81uv6aDHwtcNZrspWqFiy7sKT6UgvRYzp+5zPu4nhcB+e2Zuer5p1oKPmH12QrCvY7Q6+MhSH07cQB0nY23UgSEj98ydFkfkaCtVVsHprEe2ALnGLHJ8asp82RVQv5vfTWm4+c3sYTsLqx7EvDrpvtnLOm8la3pyh6oyk9LfkXWmGJFUfGXewEzv6Tg+lfggpXdufPXMNraxzB1qfBmt5PpjyCc1fcPOKAzVw2RqDc+D4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB7472.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(366016)(7416014)(376014)(18002099003)(22082099003)(4143699003)(11063799006)(56012099006)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?y+wnaDBQbUDRF9F0e0hsYxpTN4zr2TywDkM4qqzQ37gLQRR++RiqmeQ8OxFK?=
+ =?us-ascii?Q?5iDd/31fWycKHuKDIs762z9toqZQYEQ6AZL12igSOUeg51DDLc7EZv/9vErH?=
+ =?us-ascii?Q?svxm8VuR77j32ybvXaTM0LhJfuHEoPcu4ZEby+tNyopduXMmYFJNN0nEKVw+?=
+ =?us-ascii?Q?Fy/qsAbiXv1ZNx/Bb4i1U9ih4USWKo1WCeEpsT5mApoBDtF5aIR2Cz2iyb3Z?=
+ =?us-ascii?Q?HP54vmFoyWzOGHuziAZyFZFcRMRfmEKPCa8pGVkghTAQdQjAgWwJfn78ZopI?=
+ =?us-ascii?Q?ZrT4/vvRIMlFLfPlhIHyfPR5ujd6A+eDtkh2iZQ7z/4xPOlAw77W6PSuSS1N?=
+ =?us-ascii?Q?lVJ6qEN0hXeBGCtpV1teSSGuzQbmkxvBNk+NVEkyeFy8Ms5d4taij20g6EZt?=
+ =?us-ascii?Q?RkL2I+FnN2K9lEGdWPOtn8bwnHknqTexqOdQaet2GR+UYzZ7X/dw2F5hdQ9m?=
+ =?us-ascii?Q?WBLyd06FjblNpASWkzajEN7BA92B0pcG9ZjLix79igszTdupd/riyMZFA4rc?=
+ =?us-ascii?Q?uF3wIj1my706JNTXswkrKfPAVuwsI8ZGQdD8dGMyV/xONtpRjfhIkZjHKiWI?=
+ =?us-ascii?Q?OWVXCmf15bX+ZhI7SGwV3cQMIqj7FK70Hc0byLjv5bCIgBEeCcCm44IrBJJW?=
+ =?us-ascii?Q?rB6vKHAsFPjTZYOqugsQvDBZsK6wbxRISX4mYLzJGewNGXxZ/g9cIYwPhTdu?=
+ =?us-ascii?Q?+s8sCLPEsHV0mcyHU0slTNH+7iCCUEaLEI5NcYydF1L2f9C1PdIGHMfHddqe?=
+ =?us-ascii?Q?009TqnZ+j4wUI/5EH01vC110N4CDzCCySfBcenVm6qm0gPLN7kfIXLEUwu61?=
+ =?us-ascii?Q?xWDR5iWUIATSwyXp0s/m0cUu9yHTosD1vwHvgfpAmfQQvpk5ughOObmQBIlI?=
+ =?us-ascii?Q?Pd96TNwzzYJaBlblmNgEQuLSGuYYG3BCikn1aGtp647u2CFgPeNHZWM6LO/R?=
+ =?us-ascii?Q?+b0reaqHS76VE6YgQ6YaUU0mhz89xYpzWrlRwqc7EtxO3okRG6pcrWNBtCxJ?=
+ =?us-ascii?Q?DXuF6lW44WgijrQYY4JJn/1Ih75EJMh/uMaEZtlefzSHs2A+h0OfBBvdyDVD?=
+ =?us-ascii?Q?kOJntcmhYlj3W2i0ungfnaMXQKlvozC9tJMdzUhNq1kzBLHn/+eXkjLeEw4D?=
+ =?us-ascii?Q?Ro+e1BYdQfcDLu/3qspMmmvAlSKbbh5jFbfCJx2A9wSWckZRRlzCF2KvUtyL?=
+ =?us-ascii?Q?ntoEWfcCTB4yN4vk9qaTr6cNxkkxZL8UdY0OEcnxjNnPfhv8xVb2Q4BRtk+m?=
+ =?us-ascii?Q?JN6h0Mt7AwpfT53fe9u7SJyn57i75i7hHYoax2Zra9DZBh53o1TqBVMx0C8z?=
+ =?us-ascii?Q?3A6bmLFHHpfGxe4utB3c27TQFd2YTjH+VXa2Rj4Y51dqnTcLUsn1plucAokw?=
+ =?us-ascii?Q?TdA1qfmWZTBctmyrocg2h+hSivj65AZWSPMfUvhckiFIgSq1MkJfa0+VBOAv?=
+ =?us-ascii?Q?LJYVzMf4tJ88nYT2gtJv1UDLSoSiK01A4jZ2NU9NNGnVihP3adY3nSpOGQLr?=
+ =?us-ascii?Q?7G6tGkFNlTSa5t2rYlATzNVArVjL+RVXJ+pMbyGsiGukZuNCuEO8EBLQXMaj?=
+ =?us-ascii?Q?RcvK9bTucTPRBOgF/ZYNWR+Rfbqj9k6MxBMPDhmjaLIvxlg0bot2lQsri2Hw?=
+ =?us-ascii?Q?LYw/qUNXUKtzAssNiDK4VThbe18gYAtxueCmu9vQNbLesLasVRHL44/MYYmN?=
+ =?us-ascii?Q?V/RvhfkhP6Dn5mp2mJYNMgIMQ6TPr8ViwuqZHfoDLUZW/PBNZZpW+Wudm9OF?=
+ =?us-ascii?Q?lNY9N9CrNQ=3D=3D?=
+X-Exchange-RoutingPolicyChecked: hWHfAq6yfJIYVGbbGNKvGTdr906zRDm2XXU6DbtChu3aQjmschdvQPOC4FN2lFLn4fEyet6be8xe9FAdxN5QCdfKx/eYTo26YrIJgoRULHzyV5HLboyqnFVhCXt5D+LYuogoTdQpiHVgBLpMH3wf2c49fC82SjCiqqj9UPePykgohUILTB+5DCVdxsXq4OW8uNdtzQHYb9ss3piew1HFHLOs98KrXG1SMn4mwYnXCkZXv915xr1Imwr9zBZlA6UqdYtSSRCzUZT3lgyt1GPGL4GFtZ+dGaTE5q7OzQqMke/58jCQx1G23dsiPMcBYWYuLkTGWl9FoPKZ+bcLO5EXXA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa4e1473-dca1-469e-f74d-08ded316820d
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB7472.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2026 00:04:35.9733
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /Uc5lmj4e5MhfvLdgzsHaA0rhhc+6pPjE0LhLqMFSWWvJOvjqrpNas7inWnFCL1J6Fv8hyTW6eKVENVABHhf6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PPF7C7D8332C
+X-OriginatorOrg: intel.com
 
-On Tue, Apr 28, 2026, David Woodhouse wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
+On Thu, Jun 25, 2026 at 11:20:30AM -0700, Ackerley Tng wrote:
+> Yan Zhao <yan.y.zhao@intel.com> writes:
 > 
-> Commit 3617c0ee7decb ("KVM: x86/xen: Only write Xen hypercall page for
-> guest writes to MSR") blocked host-initiated writes from triggering the
-> Xen hypercall page setup, to fix an SRCU usage violation when the
-> hypercall MSR index collides with a real MSR written during vCPU reset.
+> > On Wed, Jun 24, 2026 at 05:05:44PM -0700, Ackerley Tng wrote:
+> >> Yan Zhao <yan.y.zhao@intel.com> writes:
+> >>
+> >> >
+> >> > [...snip...]
+> >> >
+> >> >>
+> >> >>  #ifdef kvm_arch_has_private_mem
+> >> >> -bool __ro_after_init gmem_in_place_conversion = false;
+> >> >> +bool __ro_after_init gmem_in_place_conversion = !IS_ENABLED(CONFIG_KVM_VM_MEMORY_ATTRIBUTES);
+> >> >> +module_param(gmem_in_place_conversion, bool, 0444);
+> >> >
+> >> > With gmem_in_place_conversion=true, userspace can create guest_memfd without the
+> >> > MMAP flag. In such cases, shared memory is allocated from different backends.
+> >> > This means this module parameter only enables per-gmem memory attribute and does
+> >> > not guarantee that gmem in-place conversion will actually occur.
+> >> >
+> >> > To avoid confusion, could we rename this module parameter to something more
+> >> > accurate, such as gmem_memory_attribute?
+> >> >
+> >>
+> >> I asked Sean about this after getting some fixes off list. Sean said
+> >> gmem_in_place_conversion is named for a host admin to use, and something
+> >> like gmem_memory_attributes is too much implementation details for the
+> >> admin.
+> > Thanks for this background.
+> >
+> > Some more context on why I'm asking:
+> >
+> > Currently, I'm testing TDX huge pages with the following two gmem components:
+> > 1. The gmem memory attribute in this gmem in-place conversion v8.
+> > 2. The gmem 2MB from buddy allocator. (for development/testing only).
+> >
+> > The gmem 2MB from buddy allocator allocates 2MB folios from buddy for private
+> > memory, while shared memory is allocated from a different backend.
+> > (To avoid fragmentation, only private mappings are split during private-to-shared
+> > conversions. In this approach, the 2MB folios are always retained in the gmem
+> > inode filemap cache without splitting.)
+> >
+> > Since shared memory is not allocated from gmem, there're no in-place conversions.
+> > The reason I'm using "gmem memory attribute" is that the per-VM attribute is
+> > being deprecated, as suggested by Sean [1].
+> >
 > 
-> However, some VMMs legitimately need to trigger hypercall page setup
-> from host context. For example, a VMM may intercept the guest's MSR
-> write to track an epoch (for kexec/crash recovery), and then replay the
-> write as a host-initiated KVM_SET_MSRS to populate the hypercall page.
-> The host_initiated check breaks this use case.
+> v8 of conversions series changed that slightly, per-VM attributes is
+> going to stay around (because of work on RWX attributes, coming up) and
+> RWX will stay tracked at the VM level.
 > 
-> Add KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE as a new vcpu attribute
-> that explicitly invokes kvm_xen_write_hypercall_page() under proper
-> locking. This gives userspace a safe interface to trigger hypercall page
-> setup without going through the MSR write path, preserving the
-> host_initiated defence in depth while restoring the lost functionality.
+> For v8 and beyond, only tracking of private/shared in per-VM attributes
+> is being deprecated.
+> 
+> By extension the entire thing about using guest_memfd for private memory
+> and a different backing memory for shared memory is being deprecated.
+Thanks for the info. I was actually referring to the per-VM shared/private
+attribute, which is being deprecated. Sean hoped TDX huge page would be the
+first mandated user of the per-gmem shared/private attribute.
 
-This is all kinda silly.  Userspace provides KVM a blob, then userspace intercepts
-the MSR write that triggers doing something with said blob, only to call back into
-KVM to consume the blob that userspace provided in the first place.
 
-Any chance we can deprecate KVM's kvm_xen_write_hypercall_page(), and instead
-rely on userspace to fill the page?  This extra bit obviously isn't much code to
-carry, but it's yet one more Xen thing to maintain, and we've accumulated a lot
-of those over the years...
+> > Besides my current usage,
+> 
+> I think you can set up guest_memfd+2M for private memory and shared
+> memory from some other source, and that's the deprecated usage pattern.
 
-> diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-> index 91fd3673c09a..c16b4560c9e7 100644
-> --- a/arch/x86/kvm/xen.c
-> +++ b/arch/x86/kvm/xen.c
-> @@ -907,6 +907,13 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
->  {
->  	int idx, r = -ENOENT;
->  
-> +	/*
-> +	 * kvm_xen_write_hypercall_page() manages its own locking.
-> +	 * Handle it before taking xen_lock to avoid a deadlock.
+Yes, though this is the deprecated usage pattern, gmem_in_place_conversion=true
+allows it.
 
-Do we actually want the side effects that necessitate taking xen.xen_lock?  From
-a uAPI perspective, it's odd to effectively bundle KVM_XEN_ATTR_TYPE_LONG_MODE
-into KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE.
+In fact, even without huge pages, v8 allows userspace to have shared memory
+allocated from other source when gmem_in_place_conversion=true.
+(My default testing of this series for the 4KB setting is with this
+configuration).
 
-The other question is, why does kvm_xen_write_hypercall_page() drop xen_lock
-when writing guest memory?  That seems odd and unnecessary.
+> > there may be other scenarios where gmem memory
+> > attributes is preferred without allocating shared memory from gmem.
+> > (e.g., PAGE.ADD from a temp extra shared source memory).
+> >
+> 
+> Is this TDH.MEM.PAGE.ADD, used indirectly from
+> tdx_gmem_post_populate()? This use case isn't blocked. Even if
+> gmem_in_place_conversion=true, you can still set src_address to
+> non-guest_memfd memory and load from anywhere you like.
+> 
+> Please let me know if that is broken! I think I accidentally used that
+It's not broken. I tested it with my hacked-up QEMU.
 
-> +	 */
-> +	if (data->type == KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE)
-> +		return kvm_xen_write_hypercall_page(vcpu, data->u.gpa) ? -EIO : 0;
+> setup in selftests and it worked. The selftests are now defaulting to
+> in-place conversion.
+> 
+> > For such use cases, I'm concerns that the admins may find it confusing if they
+> > enable gmem_in_place_conversion but still observe extra memory consumptions for
+> > shared memory.
+> >
+> 
+> Hmm but I guess if someone enables gmem_in_place_conversion but still
+> allocates from elsewhere, they'd have to figure it out?
 
--EIO is rather weird, wouldn't -EINVAL be more appropriate?  Ah, and both are
-wrong if copying the blob fails.
+If gmem_in_place_conversion=true means gmem in place conversion is allowed (but
+not enforced), I agree.
 
-> +
->  	mutex_lock(&vcpu->kvm->arch.xen.xen_lock);
->  	idx = srcu_read_lock(&vcpu->kvm->srcu);
+I'm wondering if we could rename it to "allow_gmem_in_place_conversion":)
 
-Speaking of writing memory, kvm_xen_write_hypercall_page() expects the caller
-to be in a read-side SRCU critical section (I didn't actually run this with
-PROVE_LOCKING=y, but I don't think I'm missing anything?)
-
-So, if this uAPI is unavoidable seems like we want something like the below.
-Either that or guard all of kvm_xen_write_hypercall_page() with a lock, and put
-the entire thing in a helper so that KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE
-can be handled in a case-statement and doesn't need to grab SRCU on its own.
-
----
- arch/x86/include/uapi/asm/kvm.h |  3 ++
- arch/x86/kvm/x86.c              |  3 +-
- arch/x86/kvm/xen.c              | 64 ++++++++++++++++++++-------------
- 3 files changed, 44 insertions(+), 26 deletions(-)
-
-diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-index 1585ec804066..7732b92a4db0 100644
---- a/arch/x86/include/uapi/asm/kvm.h
-+++ b/arch/x86/include/uapi/asm/kvm.h
-@@ -598,6 +598,7 @@ struct kvm_x86_mce {
- #define KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG	(1 << 6)
- #define KVM_XEN_HVM_CONFIG_PVCLOCK_TSC_UNSTABLE	(1 << 7)
- #define KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA	(1 << 8)
-+#define KVM_XEN_HVM_CONFIG_WRITE_HYPERCALL_PAGE	(1 << 9)
- 
- #define KVM_XEN_MSR_MIN_INDEX			0x40000000u
- #define KVM_XEN_MSR_MAX_INDEX			0x4fffffffu
-@@ -706,6 +707,8 @@ struct kvm_xen_vcpu_attr {
- #define KVM_XEN_VCPU_ATTR_TYPE_UPCALL_VECTOR	0x8
- /* Available with KVM_CAP_XEN_HVM / KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA */
- #define KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA	0x9
-+/* Available with KVM_CAP_XEN_HVM / KVM_XEN_HVM_CONFIG_WRITE_HYPERCALL_PAGE */
-+#define KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE 0xa
- 
- /* Secure Encrypted Virtualization command */
- enum sev_cmd_id {
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 0626e835e9eb..ced19e84bf6c 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -2287,7 +2287,8 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 		    KVM_XEN_HVM_CONFIG_EVTCHN_2LEVEL |
- 		    KVM_XEN_HVM_CONFIG_EVTCHN_SEND |
- 		    KVM_XEN_HVM_CONFIG_PVCLOCK_TSC_UNSTABLE |
--		    KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA;
-+		    KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA |
-+		    KVM_XEN_HVM_CONFIG_WRITE_HYPERCALL_PAGE;
- 		if (sched_info_on())
- 			r |= KVM_XEN_HVM_CONFIG_RUNSTATE |
- 			     KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG;
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index db10f12d10cf..b72845aa67e2 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -904,6 +904,8 @@ int kvm_xen_hvm_get_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
- 	return r;
- }
- 
-+static int __kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data);
-+
- int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- {
- 	int idx, r = -ENOENT;
-@@ -1138,7 +1140,9 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 			r = 0;
- 		}
- 		break;
--
-+	case KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE:
-+		r = __kvm_xen_write_hypercall_page(vcpu, data->u.gpa);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -1274,30 +1278,12 @@ int kvm_xen_vcpu_get_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 	return r;
- }
- 
--int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
-+static int __kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
- {
--	struct kvm *kvm = vcpu->kvm;
- 	u32 page_num = data & ~PAGE_MASK;
- 	u64 page_addr = data & PAGE_MASK;
- 	bool lm = is_long_mode(vcpu);
--	int r = 0;
--
--	mutex_lock(&kvm->arch.xen.xen_lock);
--	if (kvm->arch.xen.long_mode != lm) {
--		kvm->arch.xen.long_mode = lm;
--
--		/*
--		 * Re-initialize shared_info to put the wallclock in the
--		 * correct place.
--		 */
--		if (kvm->arch.xen.shinfo_cache.active &&
--		    kvm_xen_shared_info_init(kvm))
--			r = 1;
--	}
--	mutex_unlock(&kvm->arch.xen.xen_lock);
--
--	if (r)
--		return r;
-+	struct kvm *kvm = vcpu->kvm;
- 
- 	/*
- 	 * If Xen hypercall intercept is enabled, fill the hypercall
-@@ -1310,7 +1296,7 @@ int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
- 		int i;
- 
- 		if (page_num)
--			return 1;
-+			return -EINVAL;
- 
- 		/* mov imm32, %eax */
- 		instructions[0] = 0xb8;
-@@ -1329,7 +1315,7 @@ int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
- 			if (kvm_vcpu_write_guest(vcpu,
- 						 page_addr + (i * sizeof(instructions)),
- 						 instructions, sizeof(instructions)))
--				return 1;
-+				return -EINVAL;
- 		}
- 	} else {
- 		/*
-@@ -1344,7 +1330,7 @@ int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
- 		int ret;
- 
- 		if (page_num >= blob_size)
--			return 1;
-+			return -EINVAL;
- 
- 		blob_addr += page_num * PAGE_SIZE;
- 
-@@ -1355,11 +1341,39 @@ int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
- 		ret = kvm_vcpu_write_guest(vcpu, page_addr, page, PAGE_SIZE);
- 		kfree(page);
- 		if (ret)
--			return 1;
-+			return -EINVAL;
- 	}
- 	return 0;
- }
- 
-+
-+int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
-+{
-+	struct kvm *kvm = vcpu->kvm;
-+	bool lm = is_long_mode(vcpu);
-+	int r = 0;
-+
-+	mutex_lock(&kvm->arch.xen.xen_lock);
-+	if (kvm->arch.xen.long_mode != lm) {
-+		kvm->arch.xen.long_mode = lm;
-+
-+		/*
-+		 * Re-initialize shared_info to put the wallclock in the
-+		 * correct place.
-+		 */
-+		if (kvm->arch.xen.shinfo_cache.active &&
-+		    kvm_xen_shared_info_init(kvm))
-+			r = 1;
-+	}
-+	mutex_unlock(&kvm->arch.xen.xen_lock);
-+
-+	if (r)
-+		return r;
-+
-+
-+	return __kvm_xen_write_hypercall_page(vcpu, data) ? 1 : 0;
-+}
-+
- int kvm_xen_hvm_config(struct kvm *kvm, struct kvm_xen_hvm_config *xhc)
- {
- 	/* Only some feature flags need to be *enabled* by userspace */
-
-base-commit: 8867ab1259b34261eaa96f1f3a2a092cd03e5a17
---
+> > [1] https://lore.kernel.org/kvm/aWmEegVP_A613WIr@google.com/
+> >
+> >> Sean, would you reconsider since Yan also asked? If the admin compiled
+> >> the kernel knowing what CONFIG_KVM_VM_MEMORY_ATTRIBUTES means, then the
+> >> admin would also be able to use a param like gmem_memory_attributes?
+> >>
+> >> There's the additional benefit that the similar naming aids in
+> >> understanding for both the admin and software engineers.
+> >>
+> >> Either way, in the next revision, I'll also add this documentation for
+> >> this module_param:
+> >>
+> >>   Setting the module parameter gmem_in_place_conversion to true will
+> >>   enable the KVM_SET_MEMORY_ATTRIBUTES2 guest_memfd ioctl and disables
+> >>   the KVM_SET_MEMORY_ATTRIBUTES VM ioctl. If gmem_in_place_conversion is
+> >>   true, the private/shared attribute will be tracked per-guest_memfd
+> >>   instead of per-VM.
+> >>
+> >> Let me know what y'all think of the wording!
+> >>
+> >> >>
+> >> >> [...snip...]
+> >> >>
