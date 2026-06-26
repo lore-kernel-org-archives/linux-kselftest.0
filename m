@@ -1,133 +1,98 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B813FD957
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 16:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71EA23F928E;
+	Fri, 26 Jun 2026 16:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782490323; cv=none; b=aZK39erw67SjG26JxNLcZrIs9TqR/E3rKzmYyGz753kDoU46kfWIm2fLIEFAynBhUgcxniaiZSULdgiQDsbGmvz01DlrtuqhVhzBePN9eR8/yfWeKUSepQMd7TNOsyZjmS29Pe6J6pSYPmnhAJl3NUS2jzOVy5QCaCGbvRUTojQ=
+	t=1782491128; cv=none; b=q1HpKcPwmxh/PSLstMcQeyDr1WNbv0WnawPxRY2hygFPVRIZcpGBskJgeU4qchCCEuTB+KX9WOlycw9U3TmRPBC/n7cEprP7U0pMv1g++qK5yZHa8a37OL1/fyhCLHce+taX5VTJdskTfbL5vXtkrkiWZQjnSUAVNLGxWKL63Ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782490323; c=relaxed/simple;
-	bh=Y4PMxRV/lSffT3HteTkkcI7dwsGpAYaiiTFTge2HJcU=;
+	s=arc-20240116; t=1782491128; c=relaxed/simple;
+	bh=3KXriWTm2ItE45nHEMNaIyMG0lB1n9W8V05lNe5JJFo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H3Pr1nSJ+I5pwzv8kwh5o94v0nW7rlWnqRduWczGwtlHm1FzRgPexh1DntZeN7JffY24++nPupYpOg7mV3gjlU1+sige2tynTt6dHnlWpsP4MkfQNHoZWXkebgjDsIFvHtSaKx3Qa43pBNkZXPE1QU3oiq5zL9QId/U7Id1ZqWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NJaZx8IT; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=RT/iH6HVIrhOehhWxE6S/s3ioytTynf5xBigP8d3ap76GgIfBf0RsMikJajbz0hYnEGe10/pKpB3KeaFYKKaqgSMB4n2rDww2Skn6KopIjN6iR/mNHPcuVFIKF/+eXjZHMKFG6Um6UOGd8nBxqXDWrxqJruobPii645AY0LuF2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fCNMDZ8L; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NJaZx8IT"
-Message-ID: <79ca7f6b-5cd5-4c23-8ea9-7867d44046c5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782490317;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VnzhTF71ierMPfAYewjD1O5YXJU+qgQcRlmaI9+cY1c=;
-	b=NJaZx8IT0tfR3yCLcKFKnwlQ+EMMRQTPNZk//KfGyevK34pjAkit2jcpxe+lhiNknqDHT7
-	HqL+/bfB7oYkFzh+ke4082Iz+rLgf+sxV/QVu8LRBHnQ4fYWJDY3PDjqB1DFPjIxuVqNkM
-	xaJ/A3ywa4N4jnrhX9UkzRTRglYQ5TE=
-Date: Sat, 27 Jun 2026 00:11:45 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fCNMDZ8L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD0EF1F000E9;
+	Fri, 26 Jun 2026 16:25:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782491127;
+	bh=4BSSfz87ODDfFMwFWNy+I/fCJ15UtLSdQaLTscysvj8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=fCNMDZ8LLCHYAohaYSo3PRInAhAqfi99vvhXhVZQ+aBLnlcOyTa1kankbxgxIRCFo
+	 tfXaphB0BfalE1u9/dMZeCA7HtG6XkTeN/TQ63cyHTutVw7tj9OSh9Su2ZYGuljg3b
+	 hZ56n1Ksfdt4wgQ9As9+BGCk397fbKXCD8lFzvw4nGV6lEM4d/7RRvF0IYpCB1Q+PE
+	 Ts9KTaF89pcTjlOUIWC8SQizlAtXqJN9TUKFI8HXUXGv1DKoVR1zDKQQwJlqySj5g1
+	 9NboGixNjxgi/78f85JGPWu6f48Tt3EQy88C2ju35T4DbV5OFQ4A2teulFXdN+FOi4
+	 dn/YexJKhYi3Q==
+Message-ID: <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org>
+Date: Fri, 26 Jun 2026 10:25:24 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH bpf 0/6] bpf: Disallow interpreter fallback for
- interpreter-unsupported insns
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>,
- Anton Protopopov <a.s.protopopov@gmail.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260626154330.33619-1-leon.hwang@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
+ bpf_fib_lookup() helper
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260626154330.33619-1-leon.hwang@linux.dev>
+To: Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org
+Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
+ yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
+ a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
+ eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ toke@redhat.com
+References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
+ <20260624030530.3342884-2-avinash.duduskar@gmail.com>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20260624030530.3342884-2-avinash.duduskar@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 2026/6/26 23:43, Leon Hwang wrote:
-> Sashiko reported two potential issues about interpreter fallback [1]
-> [2].
-> 
-> After verifying them by patch #7, I think they are real issues. With
+On 6/23/26 9:05 PM, Avinash Duduskar wrote:
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 89b36de5fdbb..e00f0392e728 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -3532,6 +3532,29 @@ union bpf_attr {
+>   *			Use the mark present in *params*->mark for the fib lookup.
+>   *			This option should not be used with BPF_FIB_LOOKUP_DIRECT,
+>   *			as it only has meaning for full lookups.
+> + *		**BPF_FIB_LOOKUP_VLAN**
 
-Sorry, it should be the patch #6.
+This flag should not be needed. Patches for vlan support were never
+submitted (I have them in some old branch). Since the vlan params are
+initialized to 0, no new flag should be needed. Besides, these are
+output parameters.
 
-> LLM assistance, the interpreter does not support the internal
-> BPF_PROBE_ATOMIC insn and the gotox insn (used for indirect jumps),
-> either.
-> 
-> 1) the user BPF_ADDR_SPACE_CAST insn
->    the interpreter just ignores it.
-> 
-> 2) the arena ST/STX/LDX insn
->    the interpreter could hit the BUG_ON() in ___bpf_prog_run().
-> 
-> 3) the BPF_MOV64_PERCPU_REG insn
->    the interpreter could hit page fault, due to loading memory from
->    invalid __percpu pointer.
-> 
-> 4) the internal BPF_PROBE_ATOMIC insn
->    the interpreter could hit the BUG_ON() in ___bpf_prog_run().
-> 
-> 5) the gotox insn used for indirect jumps
->    the interpreter could hit the BUG_ON() in ___bpf_prog_run(), too.
-> 
-> Reject these insns on interpreter fallback path in
-> __bpf_prog_select_runtime().
-> 
-> This series is built on
-> "bpf: Fix unaligned interpreter panic on JIT fallback path" [3]. The
-> patch #7 is also able to verify the issue of un-JITed helper.
-^ patch #6
-> 
-> However, The patch #7 aims to verify the issues. I think it is not
-             ^ patch #6
-
-> proper to be applied to upstream, because it adds a stub
-> 'bpf_jit_test_fail_task' to bpf_prog_jit_compile() for the tests.
-> 
-> I'd like to drop the patch #7 in the next revision.
-                      ^ patch #6
-
-Thanks,
-Leon
-
-> 
-> Link:
-> [1] https://lore.kernel.org/bpf/20260608151347.2C77D1F00893@smtp.kernel.org/
-> [2] https://lore.kernel.org/bpf/20260622150759.EC9071F000E9@smtp.kernel.org/
-> [3] https://lore.kernel.org/bpf/20260615025316.24429-1-yangtiezhu@loongson.cn/
-> 
-> Leon Hwang (6):
->   bpf: Disallow interpreter fallback for user BPF_ADDR_SPACE_CAST insn
->   bpf: Disallow interpreter fallback for arena insn
->   bpf: Disallow interpreter fallback for BPF_MOV64_PERCPU_REG insn
->   bpf: Disallow interpreter fallback for internal BPF_PROBE_ATOMIC insn
->   bpf: Disallow interpreter fallback for gotox insn
->   lib/test_bpf: Add interpreter-fallback tests
-> 
->  include/linux/bpf.h                      |   1 +
->  include/linux/filter.h                   |   4 +
->  kernel/bpf/core.c                        |  69 +-
->  lib/test_bpf.c                           | 800 ++++++++++++++++++++++-
->  tools/lib/bpf/skel_internal.h            |   2 +
->  tools/testing/selftests/bpf/test_kmod.sh |  39 +-
->  6 files changed, 903 insertions(+), 12 deletions(-)
-> 
-> --
-> 2.54.0
+> + *			If the fib lookup resolves to a VLAN device whose
+> + *			parent is a real (non-VLAN) device, set
+> + *			*params*->h_vlan_proto and *params*->h_vlan_TCI from
+> + *			the VLAN device and replace *params*->ifindex with the
+> + *			parent's ifindex. *params*->h_vlan_TCI carries the VID
+> + *			only, with PCP and DEI bits zero; a consumer wanting to
+> + *			set egress priority writes PCP itself. *params*->smac is
+> + *			the VLAN device's own address, which can differ from the
+> + *			parent's. Only the immediate parent is resolved; if it
+> + *			is itself a VLAN device (QinQ) or in another namespace,
+> + *			the egress cannot be reduced to a physical device plus
+> + *			one tag and the lookup returns
+> + *			**BPF_FIB_LKUP_RET_VLAN_FAILURE** with *params*->ifindex
+> + *			left at the input. Re-issue without
+> + *			**BPF_FIB_LOOKUP_VLAN** to obtain the VLAN device's own
+> + *			ifindex. The swap and the vlan fields
+> + *			are written only on success; other output fields keep
+> + *			the helper's existing behaviour, so a frag-needed result
+> + *			still reports the route mtu in *params*->mtu_result.
+> + *			This flag is only valid for XDP programs; tc programs
+> + *			receive -EINVAL since they can redirect to the VLAN
+> + *			device directly.
 
