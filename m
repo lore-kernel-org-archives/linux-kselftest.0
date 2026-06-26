@@ -1,201 +1,161 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A63C3F6C28
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 13:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61CAE3BB118;
+	Fri, 26 Jun 2026 13:59:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782481228; cv=none; b=QLKAyMKgnM4kYkwUHjbsHzl9A3ecUdXA3qRgiJC2IkZ8w/6sFb8wYp+UQmAN0m7BKmGOE8yHe1J+zEnlNexpGgzg3zelhIpIEVopInG1/HWwhHNPeC2/dyB+hr1p+r6PVNiUJIe846ybyHQHviPZQfQk3HVuai7MQeUNzICn8nk=
+	t=1782482345; cv=none; b=VvTGRE308Z/hiEKUzFWEvrnUcwqznS/+qMU39qloEB27m3RcPH1kazTgzln/XUApF9O27TTN7cf34DMM++umDaL+BwNuZ+2JE7p5Hwuwj2C9Bkp2j8kPS9vg6T13ZqVK2dySYFXKC/rmbBjM6fcqQPbOND/kAx3ZEFqA9DtdWek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782481228; c=relaxed/simple;
-	bh=ZTYwDObvNITM63AQAcIL9oQn4r7n//7GEnMzPgbQTlQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Jicawn6ouACmY3K+vjazMzYWwWyGmFc3FFFN292hl3VXtl68pXvZiaBekNTOruyZhMObIDe3nx2Na/fSnk6LiT8gsbckoLSIE1jDLNe4671Auaf6uTGBBtTaoZ2VSm4ZTVK7kXe6GqLt1CnQevzfIe6viMotJMEW4qsrXVKrvV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EqDIJTKT; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1782482345; c=relaxed/simple;
+	bh=VdLEWGecsKhQB/jEnJ084nlmiJhaw1qLKk9YkYhzqVk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oqRq9feL4/XsCvNcFzJCygp8Ext31VkLz5o9XDF5NKsXWVx4ZLbfgP5WQtZybEMuyKbuZBNUf8Rqa8eCWyIhStxdI+X0iYWzj4FtPacvSVuMKFpvjWZfOdvKV9i5mCZVI1cDP/Z9MUP68vxvVyvAbUFusYWEgMUP8TWT9G3U5N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=p/TfaK+r; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EqDIJTKT"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c88fc985a65so606257a12.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 06:40:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782481225; x=1783086025; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MlObcbngD1D37h11uAaHsV+lydVMU0QoTJkAdzqpBkQ=;
-        b=EqDIJTKT7BHiWsQC5Q1OnG23UHMY307OZA1VRbAU4X9t9CUkPGnK0maae4QqfJe85N
-         eGRTOukJzv1wriqPB/wg0iLU6lmmD5ZQLSeJATCX6d/nvbqR4cvC+n+CqEQnx9i3J3pj
-         WfdT4rWbpxojl00vWCTZu7PoB0pMW35d355O1Cy/cIdbTsi3VJIHx2u/fDjRKMMaEu7h
-         DRE2VUlK+gzJo0AzRggY6iPkxUrVAo/Jm3Xj2lpSmkKE5MtEWFSOb8qRfo2kZpFLJq35
-         e3yXsQbtJoZ4ju8/R+/ClGTYjG58i4b9jxGYaZIPN1bipl4yzTOaQA69m0xIb5V1sgCB
-         PsTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782481225; x=1783086025;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=MlObcbngD1D37h11uAaHsV+lydVMU0QoTJkAdzqpBkQ=;
-        b=srpBzpax8nO6wDvm2InIDwUJpCT0Nwsj8EOSQiwCFlWIwNsjLN1H0QsvWPYwpC0BHU
-         +axR4+t9T07lc0izxBFE09Khtgbu2f+K4ZrsroNEtw8cveD7+GBbrxiA3vpDbOR0QCIV
-         K9JG9i3HzK0RST1oxqmu/f7OztiWEJO+RR+WWYwf+mejR5X44s2ud36blZFBkdHtDKc6
-         3jCBNMFl+tdN5pVQOR7Q9WVc27Ydw6SkOPawYaJd4VoISZknHyOq2M+DktCEOCBAeVbO
-         wiVeSpNIuM5LAB0qWXIJEZveWB0aUuh5PyDiLnqMiHed+pBjA61p9i5rbklREWaF1z4h
-         PEqg==
-X-Forwarded-Encrypted: i=1; AFNElJ91BFEtUGChJbh6Gvs3tSargh860iwVV9WwZkwr1nLVA7AuEheHZkvccNCFymvM6xLlFLGxP2UW/uuovhcsNkI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLuLsHJU9pBMgZ87xQUCp5vcPJJ4lg08pLhbox5UXtdmbHBW/j
-	laVZQ8Ik5K8LDqsXVjQKIBboy3w//6RdvooqpCpscQ/z+Twl47Bj/j1BpmRzSGfhgpv4g5qQuk/
-	Sac4chQ==
-X-Received: from pgbcl7.prod.google.com ([2002:a05:6a02:987:b0:c93:e04b:d9ad])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:7487:b0:3bf:6c08:fb80
- with SMTP id adf61e73a8af0-3bf6c0912edmr420142637.48.1782481224936; Fri, 26
- Jun 2026 06:40:24 -0700 (PDT)
-Date: Fri, 26 Jun 2026 06:40:24 -0700
-In-Reply-To: <8edfdca645f691cb856e80ade830d78925fdc19d.camel@infradead.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="p/TfaK+r"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0866C1F60;
+	Fri, 26 Jun 2026 06:58:58 -0700 (PDT)
+Received: from [10.2.212.8] (e134344.arm.com [10.2.212.8])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 86BC23F632;
+	Fri, 26 Jun 2026 06:59:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1782482342; bh=VdLEWGecsKhQB/jEnJ084nlmiJhaw1qLKk9YkYhzqVk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=p/TfaK+r1wlzM19sxhx49VZPV+iVe8oV5+TCSnXDW0qnix/4iMjjSpJTphprWDCm/
+	 moQdZoiv7SvLu+v1njUQWNpdm4u45OGqHB1IOP2ZWKSDw8CiZ0Jru6BqtcrW4mdhu2
+	 qDgsYuSeK91wax7G5IJCYpnbJr8haG8wLLgf4doc=
+Message-ID: <f66fcb15-b33d-4bdd-b772-6109a213853a@arm.com>
+Date: Fri, 26 Jun 2026 14:58:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <c855535b4262ecd41f67734d19e8f48a7f014c2a.camel@infradead.org>
- <aj21KctIXuf7b_5G@google.com> <8edfdca645f691cb856e80ade830d78925fdc19d.camel@infradead.org>
-Message-ID: <aj6BSMT2LOd4JRpu@google.com>
-Subject: Re: [PATCH] KVM: x86/xen: Add KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE
-From: Sean Christopherson <seanjc@google.com>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Gerd Hoffmann <kraxel@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Paul Durrant <paul@xen.org>, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Thunderbird Daily
+Subject: Re: [PATCH v3 2/3] selftests/resctrl: Implement cl_flush() and sb()
+ for aarch64
+To: Reinette Chatre <reinette.chatre@intel.com>,
+ Richard Cheng <icheng@nvidia.com>, tony.luck@intel.com, shuah@kernel.org
+Cc: Dave.Martin@arm.com, james.morse@arm.com, babu.moger@amd.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ yu.c.chen@intel.com, fenghuay@nvidia.com, newtonl@nvidia.com,
+ kristinc@nvidia.com, kaihengf@nvidia.com, kobak@nvidia.com
+References: <20260529022352.8308-1-icheng@nvidia.com>
+ <20260529022352.8308-3-icheng@nvidia.com>
+ <8d5a7235-f75c-4266-9deb-44465ff3fe42@intel.com>
+Content-Language: en-US
+From: Ben Horgan <ben.horgan@arm.com>
+In-Reply-To: <8d5a7235-f75c-4266-9deb-44465ff3fe42@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jun 26, 2026, David Woodhouse wrote:
-> On Thu, 2026-06-25 at 16:09 -0700, Sean Christopherson wrote:
-> > > diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-> > > index 91fd3673c09a..c16b4560c9e7 100644
-> > > --- a/arch/x86/kvm/xen.c
-> > > +++ b/arch/x86/kvm/xen.c
-> > > @@ -907,6 +907,13 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu,=
- struct kvm_xen_vcpu_attr *data)
-> > > =C2=A0{
-> > > =C2=A0	int idx, r =3D -ENOENT;
-> > > =C2=A0
-> > > +	/*
-> > > +	 * kvm_xen_write_hypercall_page() manages its own locking.
-> > > +	 * Handle it before taking xen_lock to avoid a deadlock.
-> >=20
-> > Do we actually want the side effects that necessitate taking xen.xen_lo=
-ck?=C2=A0 From
-> > a uAPI perspective, it's odd to effectively bundle KVM_XEN_ATTR_TYPE_LO=
-NG_MODE
-> > into KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE.
->=20
-> That's *guest* ABI, and it's derived from Xen behaviour. Xen will
-> 'latch' its idea of whether a guest VM is 32-bit or 64-bit, for the
-> purpose of shared data structures (shared_info page, vcpu_info,
-> runstate).
->=20
-> Xen latches this from the current mode of the running vCPU in *two*
-> places:
->  =E2=80=A2 When the hypercall MSR is invoked
->  =E2=80=A2 When the guest sets the event channel GSI (HVM_PARAM_CALLBACK_=
-IRQ).
->=20
-> Thus far, the former has been handled in the kernel (in the code you're
-> looking at), while the latter is why we have the ioctl to explicitly
-> latch the guest's long_mode from userspace too, as userspace handles
-> the HVMOP_set_param calls.
+Hi Reinette, Richard,
 
-Right, and I'm pointing out that from a KVM uAPI perspective, bundling the =
-first
-one in a "write hypercall page" call is rather odd, especially since there'=
-s
-already uAPI to handle the latching.
+On 6/26/26 04:26, Reinette Chatre wrote:
+> +Ben
+> 
+> Hi Richard,
+> 
+> On 5/28/26 7:23 PM, Richard Cheng wrote:
+>> cl_flush() and sb() in fill_buf.c only have implementations for i386
+>> and x86_64, so on aarch64 both compile to empty functions. mem_flush()
+>> then walks the buffer calling a no-op cl_flush() per cache line and
+>> finishes with a no-op sb(), leaving any caller that expects a flushed
+>> buffer (e.g. CMT, L3_CAT) operating on unflushed state with no warning.
+>>
+>> Add an aarch64 code block using the ARM equivalents:
+>> * "dc civac, %0" for cl_flush()
+>> * "dsb sy"       for sb()
+> 
+> Calling on Arm experts here since my superficial check found sfence to
+> be used for __wmb() on x86 and the Arm equivalent per
+> arch/arm64/include/asm/barrier.h appears to be "dsb st"?
 
-> > The other question is, why does kvm_xen_write_hypercall_page() drop xen=
-_lock
-> > when writing guest memory?=C2=A0 That seems odd and unnecessary.
->=20
-> Huh? It takes the lock to do the thing that needs the lock, then drops
-> it. That is not "odd and unnecessary" at all.
->
-> You've been spending too long with these scope-guarded locks.
+Referring to the arm reference manual (DDI0487 version M.a.a):
+D7.5.9.15 Ordering and completion of data and instruction cache
+instructions
+This talks about using dsb for the synchronization and also states:
+"In all cases, where the text in this section refers to a DMB or a DSB,
+this means a DMB or DSB whose required access type is both loads and
+stores."
 
-No, I'm asking why KVM doesn't serialize the writes to guest memory.  Usual=
-ly
-when KVM writes to guest memory, KVM is emulating something that is very mu=
-ch
-vCPU-specific, and so if there are races it's the guest's problem to deal w=
-ith.
+Hence, in this case a "dsb st" is insufficient as the required access
+type is loads but not stores. A full "dsb sy" would work to synchronize
+the "dc civac".
 
-The Xen MSR here is clearly VM-scoped though, which is why it feels odd to =
-take
-a per-VM lock, and then deliberately drop the lock before completing the op=
-eration,
-In practice it shouldn't matter, since it sounds like the same repeating 16=
- byte
-pattern will be written every time, but it was a bit head-scratching when r=
-eading
-the code.
+However, I don't think "dc civac" fulfills the role of what is expected
+of cl_flush().
 
-> > > +	if (data->type =3D=3D KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE)
-> > > +		return kvm_xen_write_hypercall_page(vcpu, data->u.gpa) ? -EIO : 0;
-> >=20
-> > -EIO is rather weird, wouldn't -EINVAL be more appropriate?=C2=A0 Ah, a=
-nd both are
-> > wrong if copying the blob fails.
->=20
-> -EINVAL is more for "you asked me to do something that doesn't make sense=
-".
-> -EIO is for "something went wrong when I tried".
+> 
+> Even so, it looks like the changes below were considered by Ben during
+> a previous submission but I am not able to tell if his feedback was taken
+> into account here.
+> Please see:
+> https://lore.kernel.org/lkml/4449219d-186f-4b5e-9f72-958d1af80f58@arm.com/
+> https://lore.kernel.org/lkml/5aea412c-9c7f-4692-af3e-79937956ef8c@arm.com/
 
-Sure, but KVM returns EINVAL for pretty much every ioctl (or ioctl-like thi=
-ng)
-if userspace provides bad input, e.g. for the @data param.
-=20
-> Arguably, the thing that's most likely to go wrong is the
-> kvm_vcpu_write_guest() where it writes instructions[] to the guest, and
-> maybe that ought to be -EFAULT?
+My understanding is that the resctrl selftests want to use cl_flush(),
+to invalidate entries in a system level cache for testing the cache
+portion bitmaps. However, the mechanism to invalidate the system level
+cache is generally implementation defined.
 
-Heh, ya, I just say that too when looking at the code again.
+> 
+>>
+>> Both instructions are EL0-accessible on Linux aarch64.
+>>
+>> Signed-off-by: Richard Cheng <icheng@nvidia.com>
+>> ---
+>>  tools/testing/selftests/resctrl/fill_buf.c | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+>> index 19a01a52dc1a..a41d21e5a64e 100644
+>> --- a/tools/testing/selftests/resctrl/fill_buf.c
+>> +++ b/tools/testing/selftests/resctrl/fill_buf.c
+>> @@ -27,6 +27,9 @@ static void sb(void)
+>>  #if defined(__i386) || defined(__x86_64)
+>>  	asm volatile("sfence\n\t"
+>>  		     : : : "memory");
+>> +#elif defined(__aarch64__)
+>> +	asm volatile("dsb sy\n\t"
+>> +		     : : : "memory");
+>>  #endif
+>>  }
+>>  
+>> @@ -35,6 +38,9 @@ static void cl_flush(void *p)
+>>  #if defined(__i386) || defined(__x86_64)
+>>  	asm volatile("clflush (%0)\n\t"
+>>  		     : : "r"(p) : "memory");
+>> +#elif defined(__aarch64__)
+>> +	asm volatile("dc civac, %0\n\t"
+>> +		     : : "r"(p) : "memory");
 
-> But I'm not sure that's quite the right semantic to return from the ioctl=
-?
 
-We can/should return whatever kvm_vcpu_write_guest() returns, i.e. literall=
-y
-return its result directly.  Which of course is only ever going to be -EFAU=
-LT,
-but in the extremely unlikely case that ever changes, we won't have to worr=
-y
-about creating misleading behavior in the Xen code.
+This will only clean to the Point of Coherency (PoC).
 
-> > > =C2=A0	mutex_lock(&vcpu->kvm->arch.xen.xen_lock);
-> > > =C2=A0	idx =3D srcu_read_lock(&vcpu->kvm->srcu);
-> >=20
-> > Speaking of writing memory, kvm_xen_write_hypercall_page() expects the =
-caller
-> > to be in a read-side SRCU critical section (I didn't actually run this =
-with
-> > PROVE_LOCKING=3Dy, but I don't think I'm missing anything?)
->=20
-> Yes, good catch. Thanks.
->=20
-> > So, if this uAPI is unavoidable seems like we want something like the b=
-elow.
-> > Either that or guard all of kvm_xen_write_hypercall_page() with a lock,=
- and put
-> > the entire thing in a helper so that KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPER=
-CALL_PAGE
-> > can be handled in a case-statement and doesn't need to grab SRCU on its=
- own.
->=20
-> Makes sense (with the test, of course). Want me to put them together
-> and resend?
+To quote the arm reference manual (DDI0487 version M.a.a):
+D7.5.9.2 The data cache maintenance instruction (DC)
 
-Yes please.
+If there are caches after the Point of Coherency and FEAT_PoPS is not
+implemented, then the DC CIVAC and DC CIGDVAC instructions are not
+sufficient to remove all copies of a poisoned Location and it is
+IMPLEMENTATION DEFINED whether any IMPLEMENTATION DEFINED mechanism
+exists to remove poison from a Location.
+
+In most systems the slc, where your MPAM cache portions are likely to
+be, will be past the PoC and I'd not expect FEAT_PoPS to be implemented.
+
+Thanks,
+
+Ben
+
+
+>>  #endif
+>>  }
+>>  
+> 
+> Reinette
+
