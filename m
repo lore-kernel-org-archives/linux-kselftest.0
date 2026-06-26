@@ -1,144 +1,376 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB2E284B37;
-	Fri, 26 Jun 2026 07:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AAE63D88E3;
+	Fri, 26 Jun 2026 07:07:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782457235; cv=none; b=lUaol41y4LcbVhqPPdXHSNea1pw7YrQ4MQSNARFuPTri3/GIKggKj7EDOtIgx8vb32t2gar38Ypn3LE+ukYi7eLm1unSuPwsQOADSCqBdAjiGAZ4arXRkOJG0zeZHDIE3mR2bKcD46LP6W/uzLGf91LwndxeMPhDpkf6F0dgVRQ=
+	t=1782457676; cv=none; b=rcbQGJTn5A257eN9NxvkWyaxfWYVbWZ3OobKw7oZg3C09Lv1RL9JezwPVd60yb9sSgNqfeHom0xyJ1Tb+riLjqN36oxupDVyv321LBMJYp+jBCUmF+u0QQdWhj/CyQkn7xloBp8CAGNiOUcRm8eamzQgsnQWt4MjSMq4kwoL00I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782457235; c=relaxed/simple;
-	bh=c8RXj0I2/e3WFVbhYVrruUZugBFuE/lKMbhdYAeacIw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=glYiN6sJWL3NDpcn9R2F93xf1phWl7WwTSXbEHjI5Y1ZvhhiKzNBFNldldYboNgZsinGSD4j3cexEw4uotwQVhVKVnPRdB+4qxZhp8oZ0hM8oURKGPlRArl8BRC/DPYCinbkXCD7bsTCa0BV8Lhqfsh1VY4KFXAhcg/IFoUuYNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: b2c87434712c11f1aa26b74ffac11d73-20260626
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN
-	HR_FROM_NAME, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR
-	DN_TRUSTED, SRC_TRUSTED, SA_UNTRUSTED, SA_LOWREP, SA_EXISTED
-	SN_UNTRUSTED, SN_LOWREP, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
-	AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:a54ae16f-c33a-46cf-bf5f-7487c510c1d7,IP:10,
-	URL:0,TC:0,Content:-25,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:10
-X-CID-INFO: VERSION:1.3.12,REQID:a54ae16f-c33a-46cf-bf5f-7487c510c1d7,IP:10,UR
-	L:0,TC:0,Content:-25,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:10
-X-CID-META: VersionHash:e7bac3a,CLOUDID:952585c279831a707051a69ca8c92066,BulkI
-	D:260626145735GM795IA3,BulkQuantity:1,Recheck:0,SF:17|19|38|66|78|102|127|
-	850|865|898|915,TC:nil,Content:0|15|50,EDM:5,IP:-2,URL:0,File:nil,RT:nil,B
-	ulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:
-	0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: b2c87434712c11f1aa26b74ffac11d73-20260626
-X-User: wangyan01@kylinos.cn
-Received: from localhost.localdomain [(39.144.194.184)] by mailgw.kylinos.cn
-	(envelope-from <wangyan01@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 2623302; Fri, 26 Jun 2026 15:00:21 +0800
-From: Wang Yan <wangyan01@kylinos.cn>
-To: mic@digikod.net,
-	gnoack@google.com,
-	shuah@kernel.org
-Cc: linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Wang Yan <wangyan01@kylinos.cn>,
-	Haofeng Li <lihaofeng@kylinos.cn>
-Subject: [PATCH] selftests/landlock: Fix snprintf truncation checks in test files
-Date: Fri, 26 Jun 2026 15:00:16 +0800
-Message-Id: <20260626070016.61049-1-wangyan01@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1782457676; c=relaxed/simple;
+	bh=L+5GKchJyDgqP+33tzuTcSYqc3P0CGN+TSIZNIjTtJE=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=o0GMTWKgMr594MVHUHlSAYwloPH6y/jHMhq/G2xDV8CiCYGfpKnzED/th2Yy/d+pKZQ1BVCneRBeqTCiK4THJVqANm7z1IoaQcMHY+LGD4MoEts8eEUcqd4VxcOjTyZ7AxlKnSwRgBF2XIRLYRQHwXTLHKpfzmJQm9JiA4mrq3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=T74Qi6xA; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="T74Qi6xA"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=D2/QFfIJp4/32GGiKH+24p2DarJlOeahIHOo3GA0odQ=;
+	b=T74Qi6xAmaQTqEJzHgjrX4aNuSD26S9wDsgNEw5ahnoYNGkT2YKYqMYgM6CAVuF9WkbRSW92s
+	kUuiGw4l02oiiVvX0w9xI96/exF4CEzpn9HHhoJ4nbWdYuM8LRlbz9tFwYPnF3loud/jN8Fk/49
+	E2QY+iDAq1i+4nlfCSUOtrA=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4gmmjQ62PBz1prmc;
+	Fri, 26 Jun 2026 14:58:34 +0800 (CST)
+Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5625C40571;
+	Fri, 26 Jun 2026 15:07:43 +0800 (CST)
+Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
+ dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 26 Jun 2026 15:07:43 +0800
+Received: from [10.173.124.160] (10.173.124.160) by
+ kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 26 Jun 2026 15:07:41 +0800
+Subject: Re: [PATCH v9 6/6] selftests/mm: add hwpoison-panic destructive test
+To: Breno Leitao <leitao@debian.org>
+CC: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <kernel-team@meta.com>, Andrew Morton
+	<akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, "Lorenzo
+ Stoakes" <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport
+	<rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
+	<mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Naoya Horiguchi
+	<nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+	<skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>,
+	<lance.yang@linux.dev>, Steven Rostedt <rostedt@goodmis.org>, "Masami
+ Hiramatsu" <mhiramat@kernel.org>, Mathieu Desnoyers
+	<mathieu.desnoyers@efficios.com>
+References: <20260609-ecc_panic-v9-0-432a74002e74@debian.org>
+ <20260609-ecc_panic-v9-6-432a74002e74@debian.org>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <40150c86-68a4-aa1e-185e-f24f78595650@huawei.com>
+Date: Fri, 26 Jun 2026 15:07:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <20260609-ecc_panic-v9-6-432a74002e74@debian.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemq500010.china.huawei.com (7.202.194.235)
 
-Commit b566f7a4f0e4 ("selftests/landlock: Fix snprintf truncation checks
-in audit helpers") fixed the truncation detection in audit.h by changing
-the comparison from ">" to ">=" to correctly handle the edge case where
-snprintf returns a value equal to the buffer size.
+On 2026/6/9 18:57, Breno Leitao wrote:
+> Add a destructive selftest that verifies
+> vm.panic_on_unrecoverable_memory_failure actually panics when a
+> hwpoison error hits a kernel-owned page.
+> 
+> Three "kinds" of kernel-owned page can be targeted, selectable via
+> the script's first positional argument (default: rodata):
+> 
+>   rodata  - a PG_reserved page in the kernel rodata range, sourced
+>             from the "Kernel rodata" sub-resource of "System RAM" in
+>             /proc/iomem.  That entry is reported on every major
+>             architecture and guarantees the chosen PFN is backed by
+>             struct page (an online System RAM range, not a firmware
+>             hole), is PG_reserved, and is read-only -- so even if
+>             the panic fails to fire for some reason, the resulting
+>             PG_hwpoison marker on rodata does not corrupt writable
+>             kernel state.
+> 
+>   slab    - a slab page found by walking /proc/kpageflags for the
+>             first PFN with KPF_SLAB set (and KPF_HWPOISON / KPF_NOPAGE
+>             / KPF_COMPOUND_TAIL clear).  Exercises the get_any_page()
+>             path on a non PG_reserved kernel-owned page and so
+>             catches regressions where get_any_page() collapses
+>             kernel-owned pages into a transient -EIO instead of
+>             -ENOTRECOVERABLE.
+> 
+>   pgtable - same as slab, but the PFN is selected via KPF_PGTABLE.
+> 
+> PageLargeKmalloc, the fourth page type matched by
+> HWPoisonKernelOwned(), is intentionally not covered: it is a
+> PAGE_TYPE_OPS flag with no /proc/kpageflags bit, so selecting such
+> a PFN from userspace is not feasible.  The slab and pgtable
+> variants already exercise the same get_any_page() positive-check
+> branch.
+> 
+> The script enables the sysctl and writes the selected physical
+> address to /sys/devices/system/memory/hard_offline_page.  A
+> successful run crashes the kernel with
+> 
+>   Memory failure: <pfn>: unrecoverable page
+> 
+> A return from the inject means the panic did not fire and the test
+> fails.  Test outcome is therefore observed externally (serial
+> console, kdump) rather than from the script's own exit code.
+> 
+> The script is intentionally NOT wired into run_vmtests.sh: every
+> successful run panics the kernel, which is incompatible with the
+> sequential "run each category in the same VM" model that
+> run_vmtests.sh assumes.  It is also not registered as a TEST_PROGS /
+> ksft_* wrapper so a default kselftest run does not opt itself into
+> a panic.  The script is meant to be executed manually inside a
+> disposable VM (e.g. virtme-ng), one variant per VM boot, and
+> requires RUN_DESTRUCTIVE=1 in the environment as a safety net.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
-However, the same pattern exists in ptrace_test.c, audit_test.c, and
-net_test.c and was not fixed.  snprintf() returns the number of characters
-that would have been written, excluding the terminating NUL byte.  When
-the output is truncated, this return value equals or exceeds the buffer
-size. The existing ">" check therefore fails to detect truncation when
-the return value equals the buffer size.
+Looks good to me with two comments below.
 
-Fix these remaining instances to use ">=" for truncation detection,
-matching the fix in audit.h.
+> ---
+>  tools/testing/selftests/mm/Makefile          |   4 +
+>  tools/testing/selftests/mm/hwpoison-panic.sh | 208 +++++++++++++++++++++++++++
+>  2 files changed, 212 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index e6df968f0971..ed321ae709da 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -174,6 +174,10 @@ TEST_PROGS += ksft_userfaultfd.sh
+>  TEST_PROGS += ksft_vma_merge.sh
+>  TEST_PROGS += ksft_vmalloc.sh
+>  
+> +# Destructive: every successful run panics the kernel.  Installed and
+> +# kept executable, but not run from a default kselftest invocation.
+> +TEST_PROGS_EXTENDED += hwpoison-panic.sh
+> +
+>  TEST_FILES := test_vmalloc.sh
+>  TEST_FILES += test_hmm.sh
+>  TEST_FILES += va_high_addr_switch.sh
+> diff --git a/tools/testing/selftests/mm/hwpoison-panic.sh b/tools/testing/selftests/mm/hwpoison-panic.sh
+> new file mode 100755
+> index 000000000000..fe58e7638a8b
+> --- /dev/null
+> +++ b/tools/testing/selftests/mm/hwpoison-panic.sh
+> @@ -0,0 +1,208 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Verify vm.panic_on_unrecoverable_memory_failure by injecting a hwpoison
+> +# error on a kernel-owned page and confirming the kernel panics.
+> +#
+> +# Three "kinds" of kernel-owned page can be targeted, selectable via the
+> +# first positional argument (default: rodata):
+> +#
+> +#   rodata  - a PG_reserved page in the kernel rodata range
+> +#             (sourced from /proc/iomem "Kernel rodata").  Exercises
+> +#             memory_failure() -> get_any_page() on a PageReserved page.
+> +#
+> +#   slab    - a slab page found via /proc/kpageflags (KPF_SLAB).
+> +#             Exercises memory_failure() -> get_any_page() on a non
+> +#             PG_reserved kernel-owned page.  This path is what catches
+> +#             regressions where get_any_page() collapses kernel-owned
+> +#             pages into a transient -EIO instead of -ENOTRECOVERABLE.
+> +#
+> +#   pgtable - a page-table page found via /proc/kpageflags (KPF_PGTABLE).
+> +#             Same path as slab, different page type.
+> +#
+> +# This test is DESTRUCTIVE: a successful run crashes the kernel.  It is
+> +# meant to be executed inside a disposable VM (e.g. virtme-ng) with a
+> +# serial console captured by the harness.  It is skipped unless the
+> +# caller opts in via RUN_DESTRUCTIVE=1.
+> +#
+> +# Test passes externally: the kernel must panic with
+> +#   "Memory failure: <pfn>: unrecoverable page"
+> +# A return from the inject means the panic did not fire and the test
+> +# fails.
+> +#
+> +# Author: Breno Leitao <leitao@debian.org>
+> +
+> +set -u
+> +
+> +ksft_skip=4
+> +sysctl_path=/proc/sys/vm/panic_on_unrecoverable_memory_failure
+> +inject_path=/sys/devices/system/memory/hard_offline_page
+> +kpageflags_path=/proc/kpageflags
+> +
+> +# /proc/kpageflags bit positions (see include/uapi/linux/kernel-page-flags.h)
+> +KPF_SLAB=7
+> +KPF_COMPOUND_TAIL=16
+> +KPF_HWPOISON=19
+> +KPF_NOPAGE=20
+> +KPF_PGTABLE=26
+> +
+> +kind=${1:-rodata}
+> +
+> +ksft_print() { echo "# $*"; }
+> +ksft_exit_skip() { ksft_print "$*"; exit "$ksft_skip"; }
+> +ksft_exit_fail() { echo "not ok 1 $*"; exit 1; }
+> +
+> +if [ "$(id -u)" -ne 0 ]; then
+> +	ksft_exit_skip "must run as root"
+> +fi
+> +
+> +if [ ! -w "$sysctl_path" ]; then
+> +	ksft_exit_skip "$sysctl_path not present (kernel without the sysctl?)"
+> +fi
+> +
+> +if [ ! -w "$inject_path" ]; then
+> +	ksft_exit_skip "$inject_path not present (no MEMORY_HOTPLUG?)"
+> +fi
+> +
+> +if [ "${RUN_DESTRUCTIVE:-0}" != "1" ]; then
+> +	ksft_exit_skip "destructive test; re-run with RUN_DESTRUCTIVE=1 inside a disposable VM"
+> +fi
+> +
+> +# Pick a PFN inside the kernel image rodata region of /proc/iomem.
+> +# This is preferred over a top-level "Reserved" entry because top-level
+> +# Reserved ranges are often firmware holes that have no backing struct
+> +# page; pfn_to_online_page() returns NULL on those and memory_failure()
+> +# bails out with -ENXIO before reaching the panic path.
+> +#
+> +# "Kernel rodata" is reported as a sub-resource of "System RAM" on every
+> +# major architecture, which guarantees:
+> +#   - the PFN is backed by struct page (within an online memory range);
+> +#   - PG_reserved is set on the page (kernel image area);
+> +#   - the memory is read-only, so setting PG_hwpoison on it does not
+> +#     corrupt writable kernel state if the panic somehow does not fire.
+> +#
+> +# /proc/iomem entries look like (indented for sub-resources):
+> +#     "  02500000-02ffffff : Kernel rodata"
+> +pick_rodata_phys_addr() {
+> +	awk -v pagesize="$(getconf PAGE_SIZE)" '
+> +	# Convert a hex string to a number without relying on the gawk-only
+> +	# strtonum().  mawk lacks it and would otherwise spuriously skip
+> +	# this test on distros that ship mawk as /usr/bin/awk.
+> +	function hex2num(s,   n, i, c, v) {
+> +		n = 0
+> +		for (i = 1; i <= length(s); i++) {
+> +			c = tolower(substr(s, i, 1))
+> +			v = index("0123456789abcdef", c) - 1
+> +			if (v < 0)
+> +				return -1
+> +			n = n * 16 + v
+> +		}
+> +		return n
+> +	}
+> +	/: Kernel rodata[[:space:]]*$/ {
+> +		sub(/^[[:space:]]+/, "")
+> +		n = split($0, a, /[- ]/)
+> +		start = hex2num(a[1])
+> +		end   = hex2num(a[2])
+> +		if (end <= start)
+> +			next
+> +		# Page-align upward and emit the first byte of that page.
+> +		pfn = int((start + pagesize - 1) / pagesize)
+> +		printf "0x%x\n", pfn * pagesize
+> +		exit 0
+> +	}
+> +	' /proc/iomem
+> +}
+> +
+> +# Walk /proc/kpageflags and return the phys addr of the first PFN that
+> +# has bit $1 set, with KPF_HWPOISON, KPF_NOPAGE and KPF_COMPOUND_TAIL
+> +# all clear (so we attack a real, non-tail, not-already-poisoned page).
+> +#
+> +# We skip the first 16 MiB of PFNs to step past low-memory special
+> +# ranges (BIOS/EFI/ACPI/etc.) that often are PG_reserved and would not
+> +# exhibit the slab/pgtable type we are looking for.
+> +pick_kpageflags_phys_addr() {
+> +	local want_bit=$1
+> +	local pagesize skip_pfn
+> +
+> +	[ -r "$kpageflags_path" ] || return
+> +
+> +	pagesize=$(getconf PAGE_SIZE)
+> +	skip_pfn=$(((16 * 1024 * 1024) / pagesize))
+> +
+> +	od -An -tx8 -v -w8 -j "$((skip_pfn * 8))" "$kpageflags_path" 2>/dev/null | \
+> +	awk -v want_bit="$want_bit" \
+> +	    -v hwp_bit="$KPF_HWPOISON" \
+> +	    -v nopage_bit="$KPF_NOPAGE" \
+> +	    -v tail_bit="$KPF_COMPOUND_TAIL" \
+> +	    -v base_pfn="$skip_pfn" \
+> +	    -v pagesize="$pagesize" '
+> +	# Test whether bit "b" is set in the 16-hex-digit value "hex".
+> +	# Done with substring + per-digit lookup so we never rely on awk
+> +	# bitwise operators (mawk lacks them), 64-bit FP precision or the
+> +	# gawk-only strtonum().
+> +	function bit_set(hex, b,    di, bi, c, v) {
+> +		di = int(b / 4)
+> +		bi = b - di * 4
+> +		c = substr(hex, length(hex) - di, 1)
+> +		v = index("0123456789abcdef", tolower(c)) - 1
+> +		if (bi == 0) return (v % 2) == 1
+> +		if (bi == 1) return int(v / 2) % 2 == 1
+> +		if (bi == 2) return int(v / 4) % 2 == 1
+> +		return int(v / 8) % 2 == 1
+> +	}
+> +	{
+> +		gsub(/^[[:space:]]+/, "")
+> +		h = $1
+> +		if (bit_set(h, want_bit) &&
+> +		    !bit_set(h, hwp_bit) &&
+> +		    !bit_set(h, nopage_bit) &&
+> +		    !bit_set(h, tail_bit)) {
+> +			pfn = base_pfn + NR - 1
+> +			printf "0x%x\n", pfn * pagesize
+> +			exit 0
+> +		}
+> +	}
+> +	'
+> +}
+> +
+> +case "$kind" in
+> +rodata)
+> +	phys_addr=$(pick_rodata_phys_addr)
+> +	missing_msg='no "Kernel rodata" entry in /proc/iomem'
+> +	;;
+> +slab)
+> +	phys_addr=$(pick_kpageflags_phys_addr "$KPF_SLAB")
+> +	missing_msg="no usable slab PFN found in $kpageflags_path"
+> +	;;
+> +pgtable)
+> +	phys_addr=$(pick_kpageflags_phys_addr "$KPF_PGTABLE")
+> +	missing_msg="no usable page-table PFN found in $kpageflags_path"
+> +	;;
+> +*)
+> +	ksft_exit_fail "unknown kind '$kind' (expected: rodata|slab|pgtable)"
+> +	;;
+> +esac
+> +
+> +if [ -z "$phys_addr" ]; then
+> +	ksft_exit_skip "$missing_msg"
+> +fi
+> +
+> +ksft_print "enabling $sysctl_path"
+> +prior=$(cat "$sysctl_path")
+> +echo 1 > "$sysctl_path" || ksft_exit_fail "failed to enable sysctl"
+> +
+> +ksft_print "injecting hwpoison at phys 0x$(printf '%x' "$phys_addr") (kind=$kind)"
+> +ksft_print "expecting kernel panic: 'Memory failure: <pfn>: unrecoverable page'"
+> +
+> +# If this returns, the kernel did not panic → test failed.  Restore the
+> +# sysctl before reporting so the system is left as we found it.
+> +if echo "$phys_addr" > "$inject_path"; then
+> +	echo "$prior" > "$sysctl_path"
+> +	ksft_exit_fail "inject returned without panic; sysctl ineffective"
 
-Fixes: 6a500b22971c ("selftests/landlock: Add tests for audit flags and domain IDs")
-Signed-off-by: Haofeng Li <lihaofeng@kylinos.cn>
-Signed-off-by: Wang Yan <wangyan01@kylinos.cn>
----
- tools/testing/selftests/landlock/audit_test.c  | 2 +-
- tools/testing/selftests/landlock/net_test.c    | 4 ++--
- tools/testing/selftests/landlock/ptrace_test.c | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+In case of failure, should we recheck the page type? There is a window between
+we get the phys_addr and inject the hwpoison.
 
-diff --git a/tools/testing/selftests/landlock/audit_test.c b/tools/testing/selftests/landlock/audit_test.c
-index 72b5612375dd..4bea8c880a4d 100644
---- a/tools/testing/selftests/landlock/audit_test.c
-+++ b/tools/testing/selftests/landlock/audit_test.c
-@@ -31,7 +31,7 @@ static int matches_log_signal(struct __test_metadata *const _metadata,
- 
- 	log_match_len =
- 		snprintf(log_match, sizeof(log_match), log_template, opid);
--	if (log_match_len > sizeof(log_match))
-+	if (log_match_len >= sizeof(log_match))
- 		return -E2BIG;
- 
- 	return audit_match_record(audit_fd, AUDIT_LANDLOCK_ACCESS, log_match,
-diff --git a/tools/testing/selftests/landlock/net_test.c b/tools/testing/selftests/landlock/net_test.c
-index 2ed1f76b7a8b..aebeafd80466 100644
---- a/tools/testing/selftests/landlock/net_test.c
-+++ b/tools/testing/selftests/landlock/net_test.c
-@@ -2777,7 +2777,7 @@ static int matches_auditlog(const int audit_fd, const char *const blockers,
- 		log_match_len = snprintf(log_match, sizeof(log_match),
- 					 log_with_addrport_tmpl, blockers,
- 					 dir_addr, addr, dir_port, port);
--	if (log_match_len > sizeof(log_match))
-+	if (log_match_len >= sizeof(log_match))
- 		return -E2BIG;
- 
- 	return audit_match_record(audit_fd, AUDIT_LANDLOCK_ACCESS, log_match,
-@@ -3072,7 +3072,7 @@ static int matches_log_connect_bound(int audit_fd, const char *const blockers,
- 
- 	log_match_len = snprintf(log_match, sizeof(log_match), log_template,
- 				 blockers, addr, lport, addr, dport);
--	if (log_match_len > sizeof(log_match))
-+	if (log_match_len >= sizeof(log_match))
- 		return -E2BIG;
- 
- 	return audit_match_record(audit_fd, AUDIT_LANDLOCK_ACCESS, log_match,
-diff --git a/tools/testing/selftests/landlock/ptrace_test.c b/tools/testing/selftests/landlock/ptrace_test.c
-index 4f64c90583cd..65cf2d82f721 100644
---- a/tools/testing/selftests/landlock/ptrace_test.c
-+++ b/tools/testing/selftests/landlock/ptrace_test.c
-@@ -302,7 +302,7 @@ static int matches_log_ptrace(struct __test_metadata *const _metadata,
- 
- 	log_match_len =
- 		snprintf(log_match, sizeof(log_match), log_template, opid);
--	if (log_match_len > sizeof(log_match))
-+	if (log_match_len >= sizeof(log_match))
- 		return -E2BIG;
- 
- 	return audit_match_record(audit_fd, AUDIT_LANDLOCK_ACCESS, log_match,
--- 
-2.25.1
+> +fi
+> +
+> +# Write failed (e.g. -EINVAL on offlining a non-online region): also a
+> +# failure for this test, since we expected the panic path.
+> +echo "$prior" > "$sysctl_path"
+> +ksft_exit_fail "inject failed before reaching the panic path"
+
+Should we unpoison the pfn in case of failure?
+
+Thanks.
+.
+
 
