@@ -1,80 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46BDD37D124;
-	Fri, 26 Jun 2026 21:14:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6333A3C0607
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 21:43:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782508492; cv=none; b=QlNfiVmE4OE/N/yGtRr2MpMeNlJE2PPNqt/NWn9xztoCoXW/UKbWuVbzQPEvPKtioM3qQiKGwMO3E7UQFDZ/zJfyuLTFIrVl9G8tcPEgDYhMuOpxXQfBPN9T15arU66Q8zSmFIzjony8cOeSNlJqH404MODd3JyD7I38HdDfNDI=
+	t=1782510193; cv=none; b=FxGyPjZkZylAQW3cGCpGudKZa3j0mz7bpspRdO6ZSjhZ+3QWHqUY0MNx2w6u/8klGXeDd8uGZggNMwg1C1yFgD3Qrq37x35Ocm5+bdE20CPWPf1mSE9ThyoqYy0PzhUecm/oq6LRnnI++M8zh6BJ91ttz8g8RjlGgxQ54eW0KUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782508492; c=relaxed/simple;
-	bh=eg52iwAq7d9bopUm/H/1bFhrLyhHwFFRH6aGL8XZYHI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=sjKFBEsKEZ1JCoiCDwXGYY4S6rvoofKiiFqUor3XL+UgmtLYaIeYQ5ZP/TjQNVDUWjwTQVFhGVjzExVCaMU0Jx3xIlrIFVETbCsV30oMooj4c+zIeEGi7V3k6zVAryYX19pSORUkaO22TfM6TkA6yD896dpvV2B42Ka5/y4UBok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oJhyeRc4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782510193; c=relaxed/simple;
+	bh=ojAE35OYkjQ5Ta8z6j4eofFJGg/eZvKv0lvdydmDurE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jnc1a5Za396gK5wBXRkguLbvG9MtD6WdDvthOQeZDsP43hhLPYtxndVao5HjBH4zRlDOFdaD6KaJqaSNfcJkwABP0inGkujVf0FI7s8u8OWQU4rGmanHRxgY9O9mCx/xm4GUc+wsXq9aTyf4te3MHyVJw/XFXofD7QPS63y0Joo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HcneWN+f; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oJhyeRc4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 804B61F000E9;
-	Fri, 26 Jun 2026 21:14:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782508491;
-	bh=lbXYKsCuCUgf0KVI/EIkHjtTOP4QQd0BPQJ4Ova8GN0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=oJhyeRc4Lx869y39oZDLx+tylyZrZ7x1Wfm4rIrbH1/MEPHYgQ7j+LemeaI/ZVoRB
-	 +eeLoXyukK5xRF4ySo1uoLtEJWZndIS1Ku1iUceg+7wR80PzY00J0FJ4jtIKfoBC/F
-	 m72kVTTO6SM8BFvvNLOVW3hkKKqjIiZn8IyAuRYVMOLb5CN4pVqe42DGwWgwwyQ+X5
-	 e3d88OvH+P+ftBM1+ysIpmsAt4D9tFtwD1dFDoS2MKT/skskDdG0x25wOVMV2wsjdd
-	 3p4wGknD8comUWBz9AhL2czwBQv0+CW9BJKQrvpu2YwjKS58PGcxP3sT0n4sr2n/rA
-	 XPo4E4sGeuWCg==
-Content-Type: multipart/mixed; boundary="===============5848927899764250450=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HcneWN+f"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2c6bdb8a8bdso9796115ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 14:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782510191; x=1783114991; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=87C0TqpdzgkT/i/TbUSL1BACHUANW3mTasT2WjTMKNM=;
+        b=HcneWN+fJdEfejOPPPUTcHeKO/vUZ9Guakon5GWvyWePOGM5IErTddkOzEO74lcBHx
+         NMpjuWUaCLc5RT9aSkJX7V47104iURHwxtkfu47J/FoLJjdBhh2VfbiK9HHTdGvMXL6J
+         tyoNc9aoYgqTe7GZoGjUrQE/Jl0LSE1Nu9WNAtOUgfoYSr0wFyhR2PSMPDzAqPl5Yk8c
+         Tlyw/yE+YRcISrKvpDeO7t13k1xHJm19emABGmf3WSY4M7Q6bS7Oiz8lUgvMA9nSeXBS
+         B2DODMNF8JmPnEm6z38Eyu3B3/vXIJsLlsuR2dutgKqR2XmgNK5wrxWe3y5IDR5zf8P5
+         Z9Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782510191; x=1783114991;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=87C0TqpdzgkT/i/TbUSL1BACHUANW3mTasT2WjTMKNM=;
+        b=nl1WX5NK7A0fsVQqv4kLJeWOfzjJXXZhJp+VicE6d/oHvGuoheb5wkUW9+HFiio7we
+         cSRiW4QRxTRa33Ncrd99+3a/yOFZE8Y03KD192U75JTRYNha9CeAlliBfffSe9UX/z/g
+         keHJ1crPGRmUcPnxFtUsioyzWOUCsd3naYM12mmbNbRVI5viHPbC51FXFRmU8sd7Qjl/
+         kgaQzKQ1TMC0Y2GeH4Qg7RyaYFZDeYv9Xg/fzvTrB3BnKdsjdnVhMU6nx8ImywlKKmS5
+         5jFvtxQX8RZ0woH+x5SP6YeZDQqH68AVYlgFa61n2+M7dLK9eawdTqMGMXoIxCtDmoN/
+         SDRQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrlrM9MfUbkjx2VK8eT2DbS2HoAR9Zb9Od0qIBANrbIk7FI/kYciAyffH60wu+TR523iQLzoJnLs3cjAr0B7W8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzloEOPqbjwT8GOXlZNWaIF6T0vVClwZWSHkWiYZ4ULW/oF0E7K
+	/ka1u+ec36w9aEXodUPy90F0V0QSDhGLjrEu2OodAwJNCtVqH7HAYKXF
+X-Gm-Gg: AfdE7clXziBtdHNxb3nZsX4imj/1AoAjxGF2pxAMhZ3Cv+l0a0sKTlI+LZz1Befm1CE
+	yrHfQ5yzsuj68atIPsWM8gixw29qDfRJ5g/7CY4m1M0mnpVjOgC2M/JUKDdXNUE0RTZah4nmk65
+	XFBNViUze/1vmfhgDabKT53twZwPw0kAJ3r6Pi9ZKK5YJdjVN/C3BIC/NShplo7bXFXMuyWFBCU
+	lWAPHS8GS10vqE2ttXvNdCOguDNnn15Armur7bQr+7cnYcmgfm7/2ZYmA2fkATitZGFTkdEVzAB
+	cdpOKj4cZAGCgPjaYyknckoduH7bm79Ef+4gTAVvHRgsDlyOjiw6iUGAOz6ghVg1w1VtCrO+hNU
+	ES5Az2R+jKKaFNdrQ6ro+o5REWR3N9oI8vLVJ0IzVpxsxJIjsAnzPkhYiQTJuixvdlHDqRWtVsz
+	t516akQHEglnw=
+X-Received: by 2002:a17:902:e78e:b0:2c4:608:167c with SMTP id d9443c01a7336-2c7fc663951mr79432975ad.6.1782510191468;
+        Fri, 26 Jun 2026 14:43:11 -0700 (PDT)
+Received: from john-p8 ([98.97.43.120])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7f5ae2092sm46078615ad.20.2026.06.26.14.43.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jun 2026 14:43:10 -0700 (PDT)
+Date: Fri, 26 Jun 2026 14:43:08 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Kuniyuki Iwashima <kuniyu@google.com>, Michal Luczaj <mhal@rbox.co>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Cong Wang <cong.wang@bytedance.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Don't leak UDP socks on
+ lookup-bind-release
+Message-ID: <aj7ySF4F-s4oLaoY@john-p8>
+References: <20260623-sockmap-lookup-udp-leak-v1-0-05804f9308e4@rbox.co>
+ <20260623-sockmap-lookup-udp-leak-v1-1-05804f9308e4@rbox.co>
+ <87wlvoxdq1.fsf@cloudflare.com>
+ <willemdebruijn.kernel.24d11e11d5dc0@gmail.com>
+ <dd065bfb-52ce-48fd-b1ef-9c6166f714ed@rbox.co>
+ <CAAVpQUBHMrSiWqn0Zo_D7sUCLFdkKggduoijRdFtHx5CPiSpsg@mail.gmail.com>
+ <CAAVpQUAy=EVZcZRmXJPr=neJh7Q+UbYML5L4+nBynVrDPidUkw@mail.gmail.com>
+ <87o6gyyjxk.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2503796768ba9b066c1ff1591c1a2d91c30a30af45823d5739b0ed251b2472ee@mail.kernel.org>
-In-Reply-To: <20260626-sockmap-lookup-udp-leak-v2-3-7e7e201c951a@rbox.co>
-References: <20260626-sockmap-lookup-udp-leak-v2-3-7e7e201c951a@rbox.co>
-Subject: Re: [PATCH bpf v2 3/4] selftests/bpf: Adapt sockmap update error handling
-From: bot+bpf-ci@kernel.org
-To: mhal@rbox.co,edumazet@google.com,kuniyu@google.com,pabeni@redhat.com,willemb@google.com,john.fastabend@gmail.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,davem@davemloft.net,kuba@kernel.org,horms@kernel.org,ast@kernel.org,cong.wang@bytedance.com,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
-Cc: netdev@vger.kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,mhal@rbox.co,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 26 Jun 2026 21:14:50 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87o6gyyjxk.fsf@cloudflare.com>
 
---===============5848927899764250450==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, Jun 25, 2026 at 12:48:55PM +0200, Jakub Sitnicki wrote:
+>On Wed, Jun 24, 2026 at 02:39 PM -07, Kuniyuki Iwashima wrote:
+>> On Wed, Jun 24, 2026 at 2:33 PM Kuniyuki Iwashima <kuniyu@google.com> wrote:
+>>>
+>>> On Wed, Jun 24, 2026 at 2:26 PM Michal Luczaj <mhal@rbox.co> wrote:
+>>> >
+>>> > On 6/24/26 22:01, Willem de Bruijn wrote:
+>>> > > Jakub Sitnicki wrote:
+>>> > >> On Tue, Jun 23, 2026 at 08:03 PM +02, Michal Luczaj wrote:
+>>> > >>> UDP sockets get SOCK_RCU_FREE set when (auto-)bound. This means
+>>> > >>> sk_is_refcounted(unbound) = true, while sk_is_refcounted(bound) = false.
+>>> > >>>
+>>> > >>> Because sockmap accepts unbound UDP sockets, a BPF program can increment a
+>>> > >>> socket's refcount via lookup. If the socket is subsequently bound, the
+>>> > >>> transition from unbound to bound causes bpf_sk_release() to skip the
+>>> > >>> decrement of the refcount, causing a memory leak.
+>>> > >>>
+>>> > >>> unreferenced object 0xffff88810bc2eb40 (size 1984):
+>>> > >>>   comm "test_progs", pid 2451, jiffies 4295320596
+>>> > >>>   hex dump (first 32 bytes):
+>>> > >>>     7f 00 00 01 7f 00 00 01 d2 04 1b b7 04 d2 00 00  ................
+>>> > >>>     02 00 01 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
+>>> > >>>   backtrace (crc bdee079d):
+>>> > >>>     kmem_cache_alloc_noprof+0x557/0x660
+>>> > >>>     sk_prot_alloc+0x69/0x240
+>>> > >>>     sk_alloc+0x30/0x460
+>>> > >>>     inet_create+0x2ce/0xf80
+>>> > >>>     __sock_create+0x25b/0x5c0
+>>> > >>>     __sys_socket+0x119/0x1d0
+>>> > >>>     __x64_sys_socket+0x72/0xd0
+>>> > >>>     do_syscall_64+0xa1/0x5f0
+>>> > >>>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>> > >>>
+>>> > >>> Maintain balanced refcounts across sk lookup/release: (re-)set
+>>> > >>> SOCK_RCU_FREE on proto update to treat the socket (whether bound or
+>>> > >>> unbound) as not requiring a refcount increment on (a RCU protected) lookup.
+>>> > >>>
+>>> > >>> Fixes: 0c48eefae712 ("sock_map: Lift socket state restriction for datagram sockets")
+>>> > >>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
 
->     selftests/bpf: Adapt sockmap update error handling
->
->     Update sockmap_listen to accommodate the recent change in sockmap that
->     rejects unbound UDP sockets.
->
->     TCP: Reject unbound and bound (unless established or listening).
->     UDP: Accept only bound sockets.
->
->     Signed-off-by: Michal Luczaj <mhal@rbox.co>
+[...]
 
-This adjusts the test expectations that commit 0c48eefae712 ("sock_map:
-Lift socket state restriction for datagram sockets") had introduced, the
-per-sotype branching in test_insert_opened() along with the matching
-changes in test_insert_bound() and test_ops().
+>Rejecting unhashed UDP sockets on insert to sockmap SGTM.
+>It is also in line with disable-problematic-cases strategy.
 
-The companion kernel fix 77a34848a723 ("bpf, sockmap: Reject unhashed UDP
-sockets on sockmap update") already carries:
-
-  Fixes: 0c48eefae712 ("sock_map: Lift socket state restriction for datagram sockets")
-
-Should this selftest commit carry the same Fixes: tag?
-
-  Fixes: 0c48eefae712 ("sock_map: Lift socket state restriction for datagram sockets")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28264556257
---===============5848927899764250450==--
+Agree ACK just disallow it.
