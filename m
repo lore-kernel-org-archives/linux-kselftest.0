@@ -1,63 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B445F3AEF21;
-	Fri, 26 Jun 2026 17:55:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A843B7B71
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 18:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782496513; cv=none; b=HmpodTtkwUDHpPoAfeyzDnlbm/zjqRGxb6U6ONFqofHeo+wee6FFKlCFuHwBrM9348O6uZ68Yq3TjkW+BzfMyX/bBQ1Z8GaZxsYRSqpqUC58PEkmhZ4MRaCWJp/AYagzLZaqOaz8+5r9ZroXY0H0wBbC9cECvhz9h5NENbT2Wok=
+	t=1782499056; cv=none; b=ni9DtjpYZ9ojSl8kqWxthgGyGPothfZQ2Lhnhb1mK3IjHhilguvsLeTn50de9eICtpqX7iF3MIvRrkgFYl8POMg1WlHAeYR5Rzk+xzm2ez+7YwSmpV+gv6bEp01RcffvMeVWlgFs5uJFqsUfH2Rgap+M51xgvtyhnsBrxif2D4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782496513; c=relaxed/simple;
-	bh=IUhNWIgpjRgv1iTrQJwpKyLWt/jk18U4zmaqfR7xr20=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Re90B2/tb9MbFNO6XdGwssZ530L9HRNqxaPNcovld8u7WjSBMJu5M3MwFf+i4+EB6wYJ/1t8J5x9jLfp2VwaFQS4+/IxyWQCq+urfvVdL+M9Zy/A7iXvOhCOp9+AKr26C/5ihehFOR8IfexWOla1RsaVJH/EXLIuoP/8s2HWbc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hnv6DS5V; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782499056; c=relaxed/simple;
+	bh=6dDnymeCyAIjxRoJW74PZ/gV2/Qm9iNCg2yVKleCGx0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=n3Vr5SVDORAWrdBru0zCe3Rv4k/HJPiGtke3BrStvYlX5mE5sSQ7ypr8w89IH4aFFVs0K9/CFxmBVNlmwbt0Lzoq/1uwI8LtRMWo0Lwp2Aiw+KKoR5zcvG8/JCzgH4ZSYfixos7Wh3CO+j8KvQZiv/uUiOW2ZVoYlIoFyCcDTnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dvXlvvE1; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hnv6DS5V"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B30351F00A3A;
-	Fri, 26 Jun 2026 17:55:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782496511;
-	bh=vYlgsN9Z4AbjSHyymQFtlqN19ZbyPZhF2fYXASOTKeE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Hnv6DS5V3l7VxROMr6+6TE9utD8/wVjwlubrWA/K+8Bsyx5L3pfTWw+WzGxmTL7/a
-	 dyXDE+kI5y3o6imS7Nk2s894HMRpbSHRus8RD1/CbFBgmE/Ky+lRMRML/Lc6U4wj6p
-	 ZRDkW4tCRWqXAn7V8EELCUacRYF5VFjzu6UcAV40jeN8PTPc1kxdUNzjAHDyU65nbX
-	 5/0kihAiyUUXRC2IK2/5LJ1woUwwuMsg+cZnYLNdfQ86iTYl99nDy8qpzaTcdLPKcZ
-	 95q7izOkwRSdwkimsz2E/4Fm+ilciL8tFOmpG5H2WaIYoXR0aqRqVxiyfbZ4w3EFka
-	 VDQoeZnYDkrng==
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org,
-	gregkh@linuxfoundation.org
-Cc: Sasha Levin <sashal@kernel.org>,
-	shuah@kernel.org,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dvXlvvE1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782499054;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Xg+gfZZRw6uxD4/DdDYAkO88l6qr/2Ph391mNIOILd4=;
+	b=dvXlvvE11pbRR9XkpOcOL3mFofnUgQ/jd0FNFa4d0ajWnxDUG77OEbLN0zN5mCRf4vMExf
+	gIFHVDzE3qgO0ZZd1GySuD1JAj0eQ6FOUDjAKzx6T3G0/kl8uyLYuQiGLwbi2jnrB3pwQY
+	O1rPwXGCotZUhWPukaFUjjMBJRYMMfM=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-638-vKbXLotSONuCiEMUmwOrWQ-1; Fri,
+ 26 Jun 2026 14:37:30 -0400
+X-MC-Unique: vKbXLotSONuCiEMUmwOrWQ-1
+X-Mimecast-MFC-AGG-ID: vKbXLotSONuCiEMUmwOrWQ_1782499048
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 077271955DC9;
+	Fri, 26 Jun 2026 18:37:28 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.2.16.156])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E358619560A3;
+	Fri, 26 Jun 2026 18:37:23 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Ridong Chen <ridong.chen@linux.dev>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Farhad Alemi <farhad.alemi@berkeley.edu>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	will@kernel.org,
-	catalin.marinas@arm.com,
-	broonie@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
-	cristian.marussi@arm.com,
-	Yijia Wang <wangyijia.yeah@bytedance.com>
-Subject: Re: [PATCH 5.15.y] selftests: arm64: signal: skip SVE VL change test with single VL
-Date: Fri, 26 Jun 2026 13:54:36 -0400
-Message-ID: <stable-reply-item017-arm64-sve-resend-20260626@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260626-b4-arm64-515-preview-clean-v1-1-ad19e286e322@bytedance.com>
-References: <20260626-b4-arm64-515-preview-clean-v1-1-ad19e286e322@bytedance.com>
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Guopeng Zhang <guopeng.zhang@linux.dev>,
+	Gregory Price <gourry@gourry.net>,
+	David Hildenbrand <david@kernel.org>,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH v8 00/11] cgroup/cpuset: Support multiple source/destination cpusets for cpuset_*attach()
+Date: Fri, 26 Jun 2026 14:19:12 -0400
+Message-ID: <20260626181923.133658-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-> [PATCH 5.15.y] selftests: arm64: signal: skip SVE VL change test with single VL
+ v8:
+  - Update patch 3 to make attach_in_progress a global flag which block
+    all cpuset write operations until the attach is done.
+  - Add a new patch 4 to collect most of the attach related variables
+    into a attach_ctx structure as suggested by Ridong.
+  - Add a test_cpuset selftest patch contributed by Michal Koutný.
+  - Keep the existing Reviewed-by tags as there is no functional change
+    to the other patches other than rename of some variables. Also add
+    some new tags.
 
-Can we keep the commit message the same as upstream? Is there a reason to
-rewrite it?
+ v7: https://lore.kernel.org/lkml/20260621032816.1806773-1-longman@redhat.com/
+  - Include the fix patch from Farhad Alemi to fix a div/0 crash that
+    was part of the old patch 1.
+  - Integrated v6 patch 7 into earlier patches.
+  - Add a new "cgroup/cpuset: Prevent race between task attach and
+    cpuset state change" patch to ensure that there will be no cpuset
+    state change between cpuset_can_attach() and cpuset_attach() or
+    cpuset_cancel_attach().
+  - Break v6 patch 6 into 2 separate patches for supporting multiple
+    source cpusets and multiple destination cpusets respectively and
+    further simplify and streamline the code.
+
+ v6:
+  - Make guarantee_online_mems() to only return cs->effective_mems with v2
+    in patch 1.
+  - Remove obsolete commit description text from patch 3.
+  - Add Reviewed-by tags.
+  - In patch 6, add WARN_ON_ONCE() test in cpuset_can_attach() to
+    confirm that cs != oldcs.
+
+Sashiko AI review of another cpuset patch had found that cpuset_attach()
+and cpuset_can_attach() can be passed a cgroup_taskset with tasks
+migrating from one source cpuset to multiple destination cpusets and
+vice versa.  Further testing of the cpuset code indicates that this is
+indeed the case when the v2 cpuset controller is enabled or disabled.
+
+Unfortunately, cpuset_attach() and cpuset_can_attach() still assume that
+there will be one source and one destinaton cpuset which may result in
+inocrrect behavior.
+
+This patch series is created to fix this issue.
+
+Patch 1 is a fix that fix a cgroup v2 div/0 crash due to bug in
+cpuset_update_tasks_nodemask().
+
+Patch 2 is to fix an inconsistency in the way node mask update is being
+handled in cpuset_update_tasks_nodemask() and cpuset_attach() so that
+they match each other.
+
+Patch 3 makes any cpuset state change to wait for the completion of the
+pending cpuset attach operation, if any.
+
+Patch 4 collects task attach related data into a common attach_ctx
+structure.
+
+Patches 5 and 6 are just preparatory patches to make the remaining
+patches easier to review.
+
+Patch 7 makes attach_ctx.old_cs track group leader for use by
+cpuset_migrate_mm().
+
+Patch 8 moves mpol_rebind_mm() and cpuset_migrate_mm() inside
+cpuset_attach_task() to make CLONE_INTO_CGROUP flag of clone(2) works
+more like moving task from one cpuset to another one, while also make
+supporting multiple source and destination cpusets easier.
+
+Patch 9 makes the necessary changes to enable the support of multiple
+source cpusets by keeping all the source cpusets found during task
+iterations in a singly linked lists.
+
+Patch 10 enables the support of multiple destination cpusets during the
+the enabling of cpuset v2 controller.
+
+Patch 11 adds new test case to test_cpuset to test disabling of cpuset
+controller.
+
+Farhad Alemi (1):
+  cgroup/cpuset: rebind mm mempolicy to effective_mems, not mems_allowed
+
+Michal Koutný (1):
+  selftests/cgroup: Add test for cpuset affinity on controller disable
+
+Waiman Long (9):
+  cgroup/cpuset: Fix node inconsistencies between
+    cpuset_update_tasks_nodemask() and cpuset_attach()
+  cgroup/cpuset: Prevent race between task attach and cpuset state
+    change
+  cgroup/cpuset: Put all task attach related variables into attach_ctx
+  cgroup/cpuset: Add a cpuset_reserve_dl_bw() helper
+  cgroup/cpuset: Expand the scope of cpuset_can_attach_check()
+  cgroup/cpuset: Make attach_ctx.old_cs track task group leader
+  cgroup/cpuset: Move mpol_rebind_mm/cpuset_migrate_mm() calls inside
+    cpuset_attach_task()
+  cgroup/cpuset: Support multiple source cpusets for cpuset_*attach()
+  cgroup/cpuset: Support multiple destination cpusets for
+    cpuset_*attach()
+
+ kernel/cgroup/cpuset-internal.h              |  11 +-
+ kernel/cgroup/cpuset.c                       | 442 ++++++++++++-------
+ tools/testing/selftests/cgroup/test_cpuset.c | 243 ++++++++++
+ 3 files changed, 541 insertions(+), 155 deletions(-)
 
 -- 
-Thanks,
-Sasha
+2.54.0
+
