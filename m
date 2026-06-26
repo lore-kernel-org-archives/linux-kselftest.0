@@ -1,81 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EBCA3BB673;
-	Fri, 26 Jun 2026 16:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7458A3FA5E6
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 16:28:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782491265; cv=none; b=INrdZO7wvd5Y1umRdinJuB46fj7kIz29o/JOQZcoNZhCxcuTnsFdNfE1dkJVOdtduugDM+aJcl2ehZgRo/PScOmFYUll6KYU1NvTFROQq/bZkEtg3ygGBl+hkoq55MAlm0/A2EEad3rcNZPrly/sfTpYzsfLmkz5dVpBUcp0qxY=
+	t=1782491317; cv=none; b=aTHU/51Mkd6tLvXEahu13QMilThahTqXPJ5gU2LqCOnZLkv242s6r9VG4iceqjNWYsq9G2hGQT508kKZ8oSW67FZ5hmhgj7jTkjVDojxVdHgFjYkbvlGtQJZJK3UKaU+MVrTjnF5I7vWviMTJU57ogDsT4C3BNJ1O8OU2L2xnF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782491265; c=relaxed/simple;
-	bh=ImorTgLxdVBZ8KA+SoiC+IQN13SzOs8n+JsQl8npZi0=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=eYM4YETvcsRI+riLQCfY8bHNooqQ6aiflZ/L6THqVo3F/G+EnJch47x3xeBKAwtHvZ+ZmVsqZSrs+Msi+pHgW1jKila4VIMV5S1Q0lUP0HgVY+Ii7lNjfPePzshii3vvEbyfj5Zd0+o48S1poZjnM/SE+YCVosR7yqryx931h0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PQqM6y8Z; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782491317; c=relaxed/simple;
+	bh=KS9JDiMhOnF4fRXZe5BIB4cOnctYse4A9043O0yGgoA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EU+C4NBe1FBkl9cfENoSSyK66E0+PTRxCEV1GnDQvEYOya/CKvRvvU1iUZGuCPtwJyPVXUTz+4ET5gR2Sw+g8FUPlQae80jksl+ghdmdEv+ZNqwoabHPjP9aZgmLdfWgj6vofr2P0h3GnQUji6WmAoJ5Lee+OxR7jpnWXFyBA60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ip3Nd0kf; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PQqM6y8Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 129131F000E9;
-	Fri, 26 Jun 2026 16:27:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ip3Nd0kf"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-490c0c92cffso9323945e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 09:28:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1782491263;
-	bh=6xdhB1h20JevoCIK0FA3vdUPT1iU5NQ8QI9Cuj4CG3U=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=PQqM6y8Zwq77LOJE9kupv7UIeWj6h/06JBTFkhuilrKOfhlxaX3dctYkVnn8BXe7h
-	 p4nJis+WgZhlJnu+H/F9D7juqnDnGg3pyP2kzyGY15N9xdJerS2x0e0oumg42fh6wU
-	 On9cS26zBQWDtUbm0SoX4z0UCj+TB8vYPO5u5xAE=
-Date: Fri, 26 Jun 2026 09:27:42 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Miaohe Lin <linmiaohe@huawei.com>, David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, Mike
- Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal
- Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Naoya Horiguchi
- <nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>,
- lance.yang@linux.dev, Steven Rostedt <rostedt@goodmis.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- kernel-team@meta.com
-Subject: Re: [PATCH v10 0/6] mm/memory-failure: add panic option for
- unrecoverable pages
-Message-Id: <20260626092742.160c3c10196852f075b3f5e3@linux-foundation.org>
-In-Reply-To: <20260626-ecc_panic-v10-0-6dacb8ad024d@debian.org>
-References: <20260626-ecc_panic-v10-0-6dacb8ad024d@debian.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        d=gmail.com; s=20251104; t=1782491315; x=1783096115; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7yRRCllVxAYk/OchgnjQ6W/17oLwF8I+OCpCxDAKNow=;
+        b=ip3Nd0kfsDq88G0BrlUATAD3LgdXdfcLXNH1lnnEGb2ROx4WmGKwSPowstFc3MGqNS
+         M64Tblsr1zllJ+ZF7rCimeybRazS9WNlo35q+15klX76gXnVwX4sRYDRU5uVRTKXrpyV
+         uadbijvckMan9BbGlG/uUV5/+pegASl2FsVvAQbDHXOR1OTPKKfFhPXSOP0/xbxyoDNp
+         QDw9bUAI5yjOcXKEIX85Xkev3ED21tVbNJETxKSqN3X84yWwTvyZu9Q41pdt3N8kS0bG
+         WAY1GHgzceboJNdlq3HcGw7/fA1csz8ab1WDQMg8RfP5aJUuEBNzBzijVJciXq9HfG/G
+         qGUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782491315; x=1783096115;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7yRRCllVxAYk/OchgnjQ6W/17oLwF8I+OCpCxDAKNow=;
+        b=qrmYOpDw2yIz57dk7vB4SP3RgpVtaaKGeTueoZwwH2bgfhrro1i5ZFWqjct9fUbilI
+         ia/ffYUmHxsm2BYiFTROLahA+TyjrPEyr5xcA+1FwaBBD65gos3iy17XPTj7/rDwPngx
+         cgqnDdqkm2D6s57e+6p4rHoecEUjOCF2br0S6cSRec+x/hcQRVIds7e3xo+9dO+jvUCf
+         7fiHCYD+uyOeRQD94UqSIZAjxGDaedlvh2N1k06uNOChqIKUDOsxGHjgPu/g4sD4fqi+
+         HPo35FAmu40cftJE4HSSYqQDGT8qesXeyRnp637ZLeM3kNAWRyi1rMe6idO9GXFAV83G
+         JLVQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/63sH7raosSYDZ34Nxf5X8/7KC6PhWJafLM0/gxBNLK3Ob2M4Err+KKIyimjs/kMf2rgGmGcMhn2ZxkCvucdY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxitfaH4QrjLiLKdbunmDL0ooaFN0p9YN9FNmY7Ix7dpF0ozg07
+	KdHrxmfRKYYVvhS7M7BX85dE6lrbLdDlzPPIsR515+LOjtar6aycJvi9
+X-Gm-Gg: AfdE7cmZ4PaiqYBMGtk4aGmDpraihPYviPkF/OnXR1k7HTn1MPafAXlB4f79QJtuoob
+	/jnn37SGw3GgBFfZ7fgNAZ0oMU483BA2/dPGUbJsRpMjPRn6FfdVicnbWIhEize3hw+Dxj/mi/z
+	FIlcCYgaBBvS9VvaM7K2P8BlIvds/Dcemk7/z8KkhO7LCqcgib+0I8002k+REhVClhyTjWWMm6g
+	Uot/sg20vFHGr6Imm7vcCasq2z5tnb5YddwsUIhPChATDT2Q/pot6xmljKdlsPJ0BuR+MeRgbZU
+	6Zjc44AoGZFY0Pq7wE0nGzbHUvc6nRzP25mFvyKOJuOsw9DfsFHQ/aCGazvnMFvjjCcumf+QdC8
+	9WVGYqv36bNQIhzTSea5PgThf8Gg0bakZ9GZDgGwW05TGlj1aQDB7+7Oc+auJieFicZ3hbW52RK
+	EO8k0VBNBBU/e/gOViC5kxZWAT8Lc5YkjX2D2b6KDd8XmsYa1/ww==
+X-Received: by 2002:a05:600c:8518:b0:492:62d8:2da8 with SMTP id 5b1f17b1804b1-49266884adfmr116414295e9.29.1782491314555;
+        Fri, 26 Jun 2026 09:28:34 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49271465f35sm952455e9.9.2026.06.26.09.28.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jun 2026 09:28:34 -0700 (PDT)
+Date: Fri, 26 Jun 2026 17:28:32 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Jann Horn <jannh@google.com>
+Cc: Christian Brauner <brauner@kernel.org>, John Ericson
+ <mail@johnericson.me>, Farid Zakaria <farid.m.zakaria@gmail.com>, Jan Kara
+ <jack@suse.cz>, Kees Cook <kees@kernel.org>, Al Viro
+ <viro@zeniv.linux.org.uk>, shuah@kernel.org, linux-fsdevel
+ <linux-fsdevel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+ linux-kselftest <linux-kselftest@vger.kernel.org>, LKML
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/2] fs: support $ORIGIN in ELF interpreter paths
+Message-ID: <20260626172832.366deaac@pumpkin>
+In-Reply-To: <CAG48ez3o1Mt59dWdyknh_SEaoi-cHv6pdmix+aOdBy3C0-LkYQ@mail.gmail.com>
+References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
+	<sfv7zc6jboy2oxv7zuyofysas4ncbzenwsuzveiyduisfr6i7q@mx23er7uxdbg>
+	<CACCo2jkDuwy5w_yhX8833m+s-rY736pk8xtKjxg3_y_7BCOHeg@mail.gmail.com>
+	<24420045-a6eb-4999-ab19-1e344eaba8a4@app.fastmail.com>
+	<20260625-atomkraftgegner-hunger-kursbuch-b452ff2becab@brauner>
+	<CAG48ez2X1p5Nm2_sU=SK9wUusUO8c3_T-=FGrrOhkm7Kn9Y_7g@mail.gmail.com>
+	<20260626142616.5232c61e@pumpkin>
+	<CAG48ez3o1Mt59dWdyknh_SEaoi-cHv6pdmix+aOdBy3C0-LkYQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 26 Jun 2026 08:33:14 -0700 Breno Leitao <leitao@debian.org> wrote:
+On Fri, 26 Jun 2026 15:34:12 +0200
+Jann Horn <jannh@google.com> wrote:
 
-> A multi-bit ECC error on a kernel-owned page that the memory failure
-> handler cannot recover is currently swallowed: PG_hwpoison is set, the
-> event is logged, and the kernel keeps running.  The corrupted memory
-> remains accessible to the kernel and either drives silent data
-> corruption or surfaces seconds-to-minutes later as an apparently
-> unrelated crash.  In a large fleet that delayed, unattributable crash
-> turns into significant engineering effort to root-cause; in a kdump
-> configuration, by the time the crash happens the original error
-> context (faulting PFN, MCE/GHES record, page state) is long gone.
-> 
-> This series adds an opt-in sysctl,
-> vm.panic_on_unrecoverable_memory_failure, that converts an
-> unrecoverable kernel-page hwpoison event into an immediate panic with
-> a clean dmesg/vmcore that still contains the original failure
-> context.  The default is disabled so existing workloads see no
-> change.
+> On Fri, Jun 26, 2026 at 3:26=E2=80=AFPM David Laight
+> <david.laight.linux@gmail.com> wrote:
+> > On Fri, 26 Jun 2026 14:39:22 +0200
+> > Jann Horn <jannh@google.com> wrote:
+> > =20
+> > > On Thu, Jun 25, 2026 at 10:50=E2=80=AFAM Christian Brauner <brauner@k=
+ernel.org> wrote: =20
+> > > > The arguments I have heard from various people so far are:
+> > > >
+> > > > (1) Userspace would be able to clone a random chroot to /woot and r=
+un a
+> > > >     binary from it without having to set up a complicated sandbox
+> > > >     effectively making dynamically linked binaries more like static
+> > > >     binaries in a sense.
+> > > >
+> > > > (2) Quote:
+> > > >     "If you debootstrap/dnf a chroot to some location in your
+> > > >     home dir and try to run a binary from it, that it tries to load=
+ the
+> > > >     libraries from your /usr is a pretty unintuitive and not at all
+> > > >     useful behavior."
+> > > >
+> > > > (3) Quote:
+> > > >     "[Various remote execution things run in locked down containers=
+ that
+> > > >     disable userns, which makes the sandbox impossible and hence our
+> > > >     builds wouldn't work there." =20
+> > >
+> > > FWIW I think someone also mentioned to me that it would make things
+> > > easier for them if they could build a piece of software in one
+> > > environment and then bundle it up with all required libraries and such
+> > > and run it in a very different environment, without
+> > > container/sandboxing stuff and without static linking. But I guess
+> > > that's kinda niche. =20
+> >
+> > The problem with 'ship the shared libraries with the application' is
+> > that you get all the problems of static linking.
+> > If there is a bug in the library code you can't fix it without getting =
+the
+> > 3rd party to rebuild their application package. =20
+>=20
+> Yes, it's appropriate for weird use cases like "I want to run this
+> historical version of the software and its dependencies", it's not
+> necessarily a good idea for normal application use.
 
-Cool, thanks.  I added this to mm.git's mm-new branch.  Next week I'll
-move it into the mm-unstable branch, where it will receive linux-next
-exposure.
+That's what LD_LIBRARY_PATH is for ...
 
-Sashiko identified a few possible things, some pre-existing:
+And if you want to use a different elf interpreter just run it and pass the
+program name and arguments to it. eg:
+	/lib64/ld-linux-x64-64.so.2 /bin/echo fubar
+Last time I did that I was trying to run non-linux ppc elf program.
+I got part way there, but needed to build a lot more of libc.
 
-	https://sashiko.dev/#/patchset/20260626-ecc_panic-v10-0-6dacb8ad024d@debian.org
+	David
