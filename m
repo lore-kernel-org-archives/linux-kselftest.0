@@ -1,71 +1,55 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5E2374726
-	for <linux-kselftest@vger.kernel.org>; Sat, 27 Jun 2026 06:51:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7893B25B0A2;
+	Sat, 27 Jun 2026 07:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782543062; cv=none; b=NcEQg3vDWyleMFl5ethUzvPP9o9EJ6cS2zUucsb7UYtHqGGNpPmNji3huALt+pRu22gxog7KAFywLz8n1QF00zVrIw9sUt4WbpVK80Gc8GY6EdYK4+uKbg6O4oebKhL/v0+f2Ot8r/IZ5QC6JumToZq1Ww01LCmPeiJxn+kv/Tg=
+	t=1782546774; cv=none; b=Op4GGnz8fBRoDX9v4ggVr9qaimFGYg3M8FHpVXJ+8JMSgHnmeC0TzjWv97sOMKYMxPeN2W5XCMbz9mqozCislB/XdI6nhy7PJxDoIDBwtZ4AM19DW0BzkOyrWL4pQZPoKwrkxWg6CeOLa1AyRuk0TTS8b5BBjEnoZRJ0DEiDzSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782543062; c=relaxed/simple;
-	bh=w+gdOzcxRWSaMSeUWEpZmPQvNkjoo5XWgynt8DUZ3FQ=;
+	s=arc-20240116; t=1782546774; c=relaxed/simple;
+	bh=RVlQtCvZvvv1cGr13Nszm1cfhyX21UVNw/O9V+ZI294=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oJfZzRjgfW3M1f4BmZwgx/8B/TJcukLQWwQ3+Sx+l7mB+iWH0JpXqSlhVG1RxqSmJ+BmMZoCgen68S5+8CYkuPNVain9l1bpCVsAQdydNqj52i5plvyv9+nWAt8Xbu3cFVGu8b5+ksojxQlRpsKWeVNSmxRcWlTFil2NJmSaptg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cxb4FmAk; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=oG7gdmUTFhYeIq+xeBwNViSznbgsMbxwIOlYgwMfyk32H7sDH2oIwwT/4aToNsd2b7/BZpZbRwHfVnBvPJBUFVw7uYbX1eYVWvCMBBTk0oP1W2YXzpNC4x1BjH+DBpiOf/a9nXT9tAz6XWjPyzJdTyUG0Dj7ieBrMgEXmQij+20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eoVc6vc8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cxb4FmAk"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2c9b8e3797eso19685ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2026 23:51:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782543060; x=1783147860; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=w+gdOzcxRWSaMSeUWEpZmPQvNkjoo5XWgynt8DUZ3FQ=;
-        b=Cxb4FmAkQzELBSsn1A/KFH2gm9OpTnwbmB4LaKvltazHPOH3kTzYg0gs6u+y5a5Neh
-         s6slStDt1MzxNhghC4YXAmSYFZWPIvy9zh9uBF72DRBB85HsixNbY0hBTteHvpqPqhPp
-         wW/bXdbKWkdUqPZnjXeClWUa2p7v0ef3l0FxegEjAvpdVlD/oyr1gZVw0Ei/jTHqqZYW
-         z7zwrbkXmncKlrxvScaafJJ06fXU8rc5YpPmhnu1JRt9obnH47PhUMzENf+dtXNEHC6O
-         zAI89umd5r/k+HafLA/oHJhjws+Ilhi3Gp3SWVa/5IZBF3nEGh/r/4x6mHTeEcrJtMjO
-         KWrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782543060; x=1783147860;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=w+gdOzcxRWSaMSeUWEpZmPQvNkjoo5XWgynt8DUZ3FQ=;
-        b=N0IPzLUNq2BGHXOeG1Eslnpyv7Wlx98qn2DX412Z31SYr/HMhmICaBOHqCBtKk+IK4
-         7vd+RLRQmfBfmysUTbYEOihjsr5ouXqJM68R1i38t/bl/kcDoaZYPuzxtEEraovxjObq
-         YSaMVB1SLHBvbfbco8TgL6fn4DzheAzPN9CAmG7YDxtEWMOTkZGxOpWSiGdNJJx2mxr7
-         y13SZEqv5M0L0UDRU+3RqZ4b7+Eo6dobeGz1yzcBnfeXETT7MVS80jgJ2WpZJi+A86uC
-         o3YjaGpEcGsR7gBNjZPDKhXJRqTTOhJwK3mU0mEKVoCOmm/o/Qcs8A/nYlfpkuhRVJi1
-         +3BA==
-X-Forwarded-Encrypted: i=1; AHgh+Rq/2WUn1h6xgWwZc7zcINL0MRuX/UrUMj+lRoCpVOcJjc73XkPg1amP3LGPXMBYcXDHsbp+t63jwi8JbHj4QLU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyBGCjaADthpOm9R3nlCAfEHrSx067NGTC4eycbibDlfeS/JW5
-	WVrhWwX1hqVJx0My6TkvyhrYkoyCTFmMtAsyeNSgRYhQX38XYRG69NDmekkr7l8f
-X-Gm-Gg: AfdE7clnWQkwiGn/S/OiEjM6eDGbtQUmWjRQQE0SUwR74eCABu+n+kGGb+Ssmjpr9A5
-	ppwc3s9K8hm49Guk4bFmLxkcKYLDKUrJHsWcpBPO6mveVl7SWnWjt/draree72S8qDMljzekNlz
-	AC9aYKE4iiu4weFx7KN/0HAswPDYU7Wl9DjsdFXkS3FUNkloNhH6qS8uuniJKFKZfjHJL1xrBdH
-	FWWvOnvTSNsBMbT5+K8LKbYAWp7pW3/QFUGo8hSmjghOy7JFkyrIMPqdeWfYtNXS0z/NqqWfsUS
-	Tl2zII71ggqIG/C/ILXio2EiGrjIyNn+FSUqJPhW5ScH7LPP1rT8Xur1Z6027lkSOEklxe+1AF5
-	kVfthZ92hpSUWfT831x32TK/UKbPnlXl0LuD0Gx8fmDAUrRkfbocTu4HlBwwY1NLum1a2j5oc0a
-	AUS+3zo1Ve7v0=
-X-Received: by 2002:a17:903:1b2e:b0:2c9:8287:fd0d with SMTP id d9443c01a7336-2c98287fd72mr20884195ad.3.1782543059830;
-        Fri, 26 Jun 2026 23:50:59 -0700 (PDT)
-Received: from elitemini ([2400:4050:d860:9700:75bf:9e2e:8ac9:3001])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7f63d0dc7sm52055845ad.57.2026.06.26.23.50.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2026 23:50:59 -0700 (PDT)
-Date: Sat, 27 Jun 2026 15:50:56 +0900
-From: Masaharu Noguchi <nogunix@gmail.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: filelock: add .gitignore for ofdlocks
-Message-ID: <aj9y0CaM2Uq21eEd@elitemini>
-References: <20260621-selftests-filelock-gitignore-v1-1-119da1a4ee27@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eoVc6vc8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 460311F000E9;
+	Sat, 27 Jun 2026 07:52:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782546773;
+	bh=S0znFcK8j0MuvFWz2pu1AoWSdjFNtXQNpSRnuMwlEzE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=eoVc6vc8yM9DIkM5Wo0O2t6uxw0sx2GB1/c2P9l0zVF+KOXagAc6gIrZVyliop+Qd
+	 7nfZY0dAkzYyVw8jAvnHGx5geA4y/4CXYLq06OXBuKn3reSfTXhObbuHe9gQ5ZaFuT
+	 lnyo5uaI8nyu5VAEtD/9IkEBv0GcC2DfWs3wxxr/6FtTbubs4oHPPXIVELVf4K+7VY
+	 WgmFy2isk/o9L4WzXu/02pEIqSp8VuH6m8O3I3FqFMTgIE1ochTNLkzHylHG1NO/Nm
+	 hlANvs76XOjLm23eV7mDwVjSLPNJUEtln/VbUrO/GiOuNH50gJRqnGhSm+ufJ+CDu7
+	 A0lMLVpLMK2aA==
+Date: Sat, 27 Jun 2026 10:52:42 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Miaohe Lin <linmiaohe@huawei.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Naoya Horiguchi <nao.horiguchi@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	"Liam R. Howlett" <liam@infradead.org>, lance.yang@linux.dev,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v10 6/6] selftests/mm: add hwpoison-panic destructive test
+Message-ID: <aj-BShkN6BXex_ku@kernel.org>
+References: <20260626-ecc_panic-v10-0-6dacb8ad024d@debian.org>
+ <20260626-ecc_panic-v10-6-6dacb8ad024d@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,10 +58,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260621-selftests-filelock-gitignore-v1-1-119da1a4ee27@gmail.com>
+In-Reply-To: <20260626-ecc_panic-v10-6-6dacb8ad024d@debian.org>
 
-Please drop this - it's a duplicate of commit b3c726f9f466
-("kselftest/filelock: add a .gitignore file"), already in mainline.
+Hi Breno,
 
-Thanks,
-Masaharu
+On Fri, Jun 26, 2026 at 08:33:20AM -0700, Breno Leitao wrote:
+> Add a destructive selftest that verifies
+> vm.panic_on_unrecoverable_memory_failure actually panics when a
+> hwpoison error hits a kernel-owned page.
+
+> +ksft_skip=4
+
+...
+
+> +ksft_print() { echo "# $*"; }
+> +ksft_exit_skip() { ksft_print "$*"; exit "$ksft_skip"; }
+> +ksft_exit_fail() { echo "not ok 1 $*"; exit 1; }
+
+There is tools/testing/selftests/kselftest/ktap_helpers.sh that already
+implements this :)
+
+-- 
+Sincerely yours,
+Mike.
