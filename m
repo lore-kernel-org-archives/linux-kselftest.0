@@ -1,140 +1,168 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC7A319617;
-	Sat, 27 Jun 2026 08:29:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1DC211466;
+	Sat, 27 Jun 2026 09:28:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782548985; cv=none; b=T3kByLnoxLgKBGMkzirbv37e+DaxPVfMRm8sC4e4+GBga01IlaLajaHMSAIZgr63YhX9mybQOvfspT0TDNU5m/kJWg/Y41rZR1g+gV0TPSwIB47y8wM4aU4z2/ujTZbwYPym6kufBWURSKCupy3CH9H7E2GUa6kPK99vAgABZdo=
+	t=1782552528; cv=none; b=LfI7PAG2348PSrOUwpc/lorTtvVcXsbwkc1Wv8j6Y/7hufOVOLahpMuRm21QX3K9RidblOXiYrXywOsBOjdRAkrzuaSrk6yiDPGs5c/CXgrQLAvR4Wyo9uXZV8Zt8GBPU7FHl3XKl+bxwUo1Ca8zNS3a2rUcgw+iybgQQ8eLc7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782548985; c=relaxed/simple;
-	bh=JNgVhYn+yTtQINkYxKJl/hkk3DbKEukK6zkc2/BP5zo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QTqQGSuIvaVifXa8zbvXwA5hlAbj0gfL85aWV7hUAlq2q0euUyqDrWoETl2N9iZG+kSP3OAyeNvbSITJ7P/GbAR08CquTcqf5N/s8wUGPCXU0/lWkDChGU/Dyv8w9Do5pIKKwWoISJZiZk9daIoi8KGerQVLoRR1rkQj0Vc69E8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id C26241D283A; Sat, 27 Jun 2026 16:29:35 +0800 (AWST)
-X-Spam-Level: 
-Received: from sparky.lan (unknown [IPv6:2001:8003:8810:ea00::9c4])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 2F4F81CD587;
-	Sat, 27 Jun 2026 16:29:31 +0800 (AWST)
-From: David Gow <david@davidgow.net>
-To: Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <raemoar63@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: David Gow <david@davidgow.net>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH 2/2] Documentation: kunit: Fix outdated FAQ entries
-Date: Sat, 27 Jun 2026 16:29:20 +0800
-Message-ID: <20260627082921.1709181-2-david@davidgow.net>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260627082921.1709181-1-david@davidgow.net>
-References: <20260627082921.1709181-1-david@davidgow.net>
+	s=arc-20240116; t=1782552528; c=relaxed/simple;
+	bh=aF47iLMPZHY8ikZj0/3fPMH5Q4mRqmYCLQexdlk5/mo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=gpNkYLfuBY0Qex4lGk0agh2UM+QZfUF17aNErYAofdhk77PPxS66PmwLC02V6I7OoG5EOPZc+bYo1W0zhb7itHhJf0u+5nvWELJHzXrMxDiUJWOiClbwo8dXHVNVaRxl3lqKehUPC0i23SWlmd2xxuZ84QGFaAsBFf25w0Yzn6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TsWvUQMt; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TsWvUQMt"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BA97AC2BCF4;
+	Sat, 27 Jun 2026 09:28:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
+	t=1782552527; bh=aF47iLMPZHY8ikZj0/3fPMH5Q4mRqmYCLQexdlk5/mo=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=TsWvUQMt62wgvD+ef+UVGOqHtKVfLbwtduFNfuSabHEs0UrZfg2NB048fs4EnTH47
+	 IyBXPPvoPmzKjxGu0DOzlihUKYk/pHITmJb2ozXO8ZmBw6mJz+/CHablDhSUftGImD
+	 ulkY+iqbXG6A0X82GkvfDMPCAV0ObG/Wicl4DkP0=
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA646C43602;
+	Sat, 27 Jun 2026 09:28:47 +0000 (UTC)
+From: Alvin Sun <alvin.sun@linux.dev>
+Date: Sat, 27 Jun 2026 17:28:40 +0800
+Subject: [PATCH v7 02/10] rust: module: add `THIS_MODULE` const to
+ `ModuleMetadata` trait
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260627-fix-fops-owner-v7-2-33cd3990edf0@linux.dev>
+References: <20260627-fix-fops-owner-v7-0-33cd3990edf0@linux.dev>
+In-Reply-To: <20260627-fix-fops-owner-v7-0-33cd3990edf0@linux.dev>
+To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+ Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
+ Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>, 
+ Igor Korotin <igor.korotin@linux.dev>, 
+ FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+ =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, 
+ Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
+ Carlos Llamas <cmllamas@google.com>
+Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
+ driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org, 
+ nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+ kunit-dev@googlegroups.com, linux-block@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-pci@vger.kernel.org, Alvin Sun <alvin.sun@linux.dev>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782552525; l=3594;
+ i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
+ bh=aF47iLMPZHY8ikZj0/3fPMH5Q4mRqmYCLQexdlk5/mo=;
+ b=7R/uNBFs1pvnOfA6/pe6CcnnqKBFT1zKiiahnOmqWa6q1JXz/QYMu5TA8HTmfpXdXZwymQcLc
+ qYCInzcENwBC5nnEPgxrUZrDd5pO/3oLK3qm3nWWEBIShkmRXUCzaor
+X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
+ pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
+X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
+ auth_id=684
 
-The KUnit FAQ was written when KUnit in general, and kunit.py in
-particular, were very heavily focused on UML. While they were updated
-slightly when qemu support was added, they've not really kept pace with
-changes to KUnit or the structure of the rest of the documentation.
+Since `const_refs_to_static` has been stable as of the MSRV bump, a
+`ThisModule` pointer can now be used in const contexts.
 
-Update them to describe how to run kunit.py with non-UML architectures, and
-to point to the run_manual.rst page for further detail on how to run KUnit
-without kunit.py, as it's the authoratative documentation on that subject.
+Add a `THIS_MODULE` const to the `ModuleMetadata` trait so that modules
+can provide their `ThisModule` pointer in const contexts such as static
+`file_operations`.
 
-Signed-off-by: David Gow <david@davidgow.net>
+Add a `this_module()` helper to retrieve the `THIS_MODULE` pointer of a
+given module type, and update `__init` to use it instead of the
+`THIS_MODULE` static generated by the `module!` macro.
+
+The `static THIS_MODULE` generated by the `module!` macro is retained
+for backwards compatibility with existing users and removed in a later
+patch once all references have been migrated.
+
+Assisted-by: opencode:glm-5.2
+Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
+Reviewed-by: Gary Guo <gary@garyguo.net>
+Acked-by: Danilo Krummrich <dakr@kernel.org>
+Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 ---
- Documentation/dev-tools/kunit/faq.rst | 43 +++++++++++++++------------
- 1 file changed, 24 insertions(+), 19 deletions(-)
+ rust/kernel/module.rs |  9 +++++++++
+ rust/macros/module.rs | 18 +++++++++++++++++-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/dev-tools/kunit/faq.rst b/Documentation/dev-tools/kunit/faq.rst
-index fae426f2634a..b1341c1a62d9 100644
---- a/Documentation/dev-tools/kunit/faq.rst
-+++ b/Documentation/dev-tools/kunit/faq.rst
-@@ -25,19 +25,21 @@ disqualifying any of them from being considered unit testing frameworks.
- Does KUnit support running on architectures other than UML?
- ===========================================================
+diff --git a/rust/kernel/module.rs b/rust/kernel/module.rs
+index be242a82e86d2..d713705984477 100644
+--- a/rust/kernel/module.rs
++++ b/rust/kernel/module.rs
+@@ -42,6 +42,15 @@ fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, crate::erro
+ pub trait ModuleMetadata {
+     /// The name of the module as specified in the `module!` macro.
+     const NAME: &'static crate::str::CStr;
++
++    /// The module's `THIS_MODULE` pointer.
++    const THIS_MODULE: ThisModule;
++}
++
++/// Returns a reference to the `THIS_MODULE` of the given module type.
++#[inline]
++pub const fn this_module<M: ModuleMetadata>() -> &'static ThisModule {
++    &M::THIS_MODULE
+ }
  
--Yes, mostly.
-+Yes. KUnit can run on any architecture, though the kunit.py tool can only
-+build and run kernels for some architectures (of which UML is the default).
+ /// Equivalent to `THIS_MODULE` in the C API.
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 06c18e2075083..aa9a618d5d19e 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -519,6 +519,22 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
  
--For the most part, the KUnit core framework (what we use to write the tests)
--can compile to any architecture. It compiles like just another part of the
--kernel and runs when the kernel boots, or when built as a module, when the
--module is loaded.  However, there is infrastructure, like the KUnit Wrapper
--(``tools/testing/kunit/kunit.py``) that might not support some architectures
--(see :ref:`kunit-on-qemu`).
-+You can build and run tests without kunit.py at all on any architecture by
-+enabling ``CONFIG_KUNIT=y`` and booting the kernel.
-+See Documentation/dev-tools/kunit/run_manual.rst for more details.
+         impl ::kernel::ModuleMetadata for #type_ {
+             const NAME: &'static ::kernel::str::CStr = #name_cstr;
++
++            #[cfg(MODULE)]
++            const THIS_MODULE: ::kernel::ThisModule = {
++                extern "C" {
++                    static __this_module: ::kernel::types::Opaque<::kernel::bindings::module>;
++                }
++
++                // SAFETY: `__this_module` is constructed by the kernel at load time
++                // and lives until the module is unloaded.
++                unsafe { ::kernel::ThisModule::from_ptr(__this_module.get()) }
++            };
++
++            #[cfg(not(MODULE))]
++            const THIS_MODULE: ::kernel::ThisModule = unsafe {
++                ::kernel::ThisModule::from_ptr(::core::ptr::null_mut())
++            };
+         }
  
--In short, yes, you can run KUnit on other architectures, but it might require
--more work than using KUnit on UML.
-+Alternatively, kunit.py supports many common architectures using
-+cross-compilers and the qemu emulator. This can be done using the ``--arch``
-+parameter when running the tests, and the ``--cross_compile`` parameter
-+when building (if the architecture is not supported by the host compiler).
-+See :ref:`kunit-on-qemu` for more details.
- 
--For more information, see :ref:`kunit-on-non-uml`.
-+When writing tests targeting other architectures, it's worth keeping the tips
-+on the :ref:`kunit-on-non-uml` page in mind.
- 
- .. _kinds-of-tests:
- 
-@@ -78,27 +80,30 @@ things to try.
-    down where an issue is occurring. (If you think the parser is at fault, you
-    can run it manually against ``stdin`` or a file with ``kunit.py parse``.)
- 3. Running the UML kernel directly can often reveal issues or error messages,
--   ``kunit_tool`` ignores. This should be as simple as running ``./vmlinux``
--   after building the UML kernel (for example, by using ``kunit.py build``).
-+   ``kunit_tool`` ignores. This should be as simple as runningi the ``vmlinux``
-+   binary in the output directory (by default ``./.kunit/vmlinux``) after
-+   building the UML kernel (for example, by using ``kunit.py build``).
-    Note that UML has some unusual requirements (such as the host having a tmpfs
-    filesystem mounted), and has had issues in the past when built statically and
-    the host has KASLR enabled. (On older host kernels, you may need to run
-    ``setarch `uname -m` -R ./vmlinux`` to disable KASLR.)
--4. Make sure the kernel .config has ``CONFIG_KUNIT=y`` and at least one test
-+4. Try running KUnit on a different architecture by using the ``--arch``
-+   option. On an x86_64 host, using ``--arch=x86_64`` is a good first step.
-+5. Make sure the kernel .config has ``CONFIG_KUNIT=y`` and at least one test
-    (e.g. ``CONFIG_KUNIT_EXAMPLE_TEST=y``). kunit_tool will keep its .config
-    around, so you can see what config was used after running ``kunit.py run``.
-    It also preserves any config changes you might make, so you can
-    enable/disable things with ``make ARCH=um menuconfig`` or similar, and then
-    re-run kunit_tool.
--5. Try to run ``make ARCH=um defconfig`` before running ``kunit.py run``. This
-+6. Try to run ``make ARCH=um defconfig`` before running ``kunit.py run``. This
-    may help clean up any residual config items which could be causing problems.
--6. Finally, try running KUnit outside UML. KUnit and KUnit tests can be
--   built into any kernel, or can be built as a module and loaded at runtime.
--   Doing so should allow you to determine if UML is causing the issue you're
--   seeing. When tests are built-in, they will execute when the kernel boots, and
-+7. Finally, try running KUnit manually, instead of via ``kunit.py``. KUnit can
-+   be built into any kernel, or can be built as a module and loaded at runtime.
-+   When tests are built-in, they will execute when the kernel boots, and
-    modules will automatically execute associated tests when loaded. Test results
-    can be collected from ``/sys/kernel/debug/kunit/<test suite>/results``, and
--   can be parsed with ``kunit.py parse``. For more details, see :ref:`kunit-on-qemu`.
-+   can be parsed with ``kunit.py parse``. For more details, see
-+   Documentation/dev-tools/kunit/run_manual.rst
- 
- If none of the above tricks help, you are always welcome to email any issues to
- kunit-dev@googlegroups.com.
+         // Double nested modules, since then nobody can access the public items inside.
+@@ -616,7 +632,7 @@ pub extern "C" fn #ident_exit() {
+                 /// This function must only be called once.
+                 unsafe fn __init() -> ::kernel::ffi::c_int {
+                     let initer = <super::super::LocalModule as ::kernel::InPlaceModule>::init(
+-                        &super::super::THIS_MODULE
++                        ::kernel::module::this_module::<super::super::LocalModule>()
+                     );
+                     // SAFETY: No data race, since `__MOD` can only be accessed by this module
+                     // and there only `__init` and `__exit` access it. These functions are only
+
 -- 
-2.54.0
+2.43.0
+
 
