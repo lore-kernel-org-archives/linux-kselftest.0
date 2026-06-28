@@ -1,82 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9812D9484;
-	Sun, 28 Jun 2026 18:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7C42C1788;
+	Sun, 28 Jun 2026 18:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782669612; cv=none; b=k0WMDcUYRS9KgqQFO5Pi/aA7TAeN56v5YrIFTGgrPYwUmPoI/zgzZ1C7llUv5TGD2JQf5h4/BxVWfa4MZqYwTZSDyeZJPJ7fijYOEkTBCsdgQTXhvlmDCZlLjw49SCq45k9FiI6Uc0C9yr8EbBXnAjyeQZ/slVlWWaNVokw1RTg=
+	t=1782670412; cv=none; b=ckfmcq2KBlFfVslkjtYm000h5lnMfoI4+BmUe7kGM4VdPSOsZkyF9w3TYPgC2KA6AGkrnnO5nNCdDaE3qOnRdLieggsU2ZkD01Mv0xUS/vy+kwaC6g/nQJZSiWqFDs2vZWYfwIPHrLZOHFNrDgioNGFmYnUacvOqLoANH5URcWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782669612; c=relaxed/simple;
-	bh=6fYTUS5K2aiqi9gethG95Bw4Ab0tPoP0XerX2NFOF5g=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=WWQUj47OiXVqWg0wDF/bMMTgVfVUXXs1PVXVssgthYhrXMgzvUDlOee1HlGJeyBq/hVyIyZPV9gRsXOvkwFRO0bYvWxz482AOqt3AZPk2IcpTDXMjODRuBxR9nAGrFRhJAiQbDq1YICDB8pZjCSmC3JML2WJWQrQXe1blfHbBhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PWwU0FSJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782670412; c=relaxed/simple;
+	bh=1ax+CZP9CJKkG2RB2qrA9fNZy3WgxRNlD6mlypObbFo=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=ZqXZ5kFR3SHfbTzAIO+NRURfZSvt5C7CacSQ8Ke65AdpjnpFmLO/I5NyEzZxzEk1o3N1kXyR9k0iy4PS/PkggBPEtDgMTh3gt4tusKt3G7sK61UXOpczsUCLlbu+4W5D7cwFU6JzKUq7KLEm9de4MYCBpkgAPrtxQonmMYf++mM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Oqd3Y8q4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PWwU0FSJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EDB91F000E9;
-	Sun, 28 Jun 2026 18:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782669611;
-	bh=m4w2zYR4pkagcbFIWL/+If5a2G2VCWitoOLDB2Gmh/k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=PWwU0FSJCwADrUnl65r7aAB8aO+AHlVhiUTDhA4AjNIFZzLKYFZyHjFl5A9THhBHq
-	 jT+T6RxfNu1zxBa2mqatTEUgTYHl1YsU24Xvh5llzdCK7nbU6FTywcMfPLAaq8O9Wi
-	 jU4HQZ7WT30xvzqUyK23nXwABnwdzuGF4UM2aRc9Wks1q75/8lpxfGAa2o9I3tAaYD
-	 bEWtY51EvttcdtZEvNdz9EoV5NlnjtzvnM9lEpPxs8eFKDToSJm1z3qPe0LmUultfH
-	 m4a0uENHG+OvE/l49mJdqBiZXB9SXhBhT2ZUMmIMUYuwpYHv7lmC/5H6Hd/P6BlA5Z
-	 zaxzk6H7yxdew==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Varun R Mallya <varunrmallya@gmail.com>, pjw@kernel.org,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, pulehui@huawei.com
-Cc: alex@ghiti.fr, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- puranjay@kernel.org, shuah@kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, varunrmallya@gmail.com
-Subject: Re: [PATCH bpf-next v2 3/3] riscv, bpf: Remove BPF exceptions from
- BPF CI denylist
-In-Reply-To: <20260628081710.113333-4-varunrmallya@gmail.com>
-References: <20260628081710.113333-1-varunrmallya@gmail.com>
- <20260628081710.113333-4-varunrmallya@gmail.com>
-Date: Sun, 28 Jun 2026 11:00:07 -0700
-Message-ID: <878q7yy28o.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Oqd3Y8q4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B4E51F000E9;
+	Sun, 28 Jun 2026 18:13:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1782670411;
+	bh=nG0zSS7NrnTDyRmwSClrih85J+cAN99dOSGVHcRqmTk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Oqd3Y8q44w53p5dPo+HSiY+O789+71l/eF/6i7QZfQma4KphYiwC0JJKlq1aMcGeM
+	 RZYQ6NH17VeitoTeIR37DA64FdYdQBrwCzoZe9FPWnCOo5hnK87os5SneLHh8NwYnp
+	 q3sx3xVAWLXtLz3rIqiGIht0I1/0vy7n6ebfiKWo=
+Date: Sun, 28 Jun 2026 11:13:29 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Zenghui Yu <zenghui.yu@linux.dev>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, david@kernel.org, ljs@kernel.org,
+ liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
+ mhocko@suse.com, shuah@kernel.org, usama.anjum@arm.com
+Subject: Re: [PATCH] selftests/mm: pagemap_ioctl: use the correct page size
+ for transact_test()
+Message-Id: <20260628111329.9cfcd9c67925869307020aba@linux-foundation.org>
+In-Reply-To: <20260628101118.35861-1-zenghui.yu@linux.dev>
+References: <20260628101118.35861-1-zenghui.yu@linux.dev>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Varun R Mallya <varunrmallya@gmail.com> writes:
+On Sun, 28 Jun 2026 18:11:18 +0800 Zenghui Yu <zenghui.yu@linux.dev> wrote:
 
-> This patch removes BPF exceptions from riscv64 denylist on
-> BPF selftests since support for exceptions has been added now.
->
-> Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
-> Reviewed-by: Pu Lehui <pulehui@huawei.com>
-> ---
->  tools/testing/selftests/bpf/DENYLIST.riscv64 | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/DENYLIST.riscv64 b/tools/testing=
-/selftests/bpf/DENYLIST.riscv64
-> index 4fc4dfdde293..9268351ce4c1 100644
-> --- a/tools/testing/selftests/bpf/DENYLIST.riscv64
-> +++ b/tools/testing/selftests/bpf/DENYLIST.riscv64
-> @@ -1,3 +1,2 @@
->  # riscv64 deny list for BPF CI and local vmtest
-> -exceptions					# JIT does not support exceptions
+> There are several places in transact_test() where we use the hardcoded
+> 0x1000 (4k) as page size, which is not always correct for architectures
+> supporting multiple page sizes.
 
-Hmm, reading your cover the kselftest run still says "#113
-exceptions:FAIL", so from a CI perspective this is not much help. ;-)
-Can we restructure/split so that we're not bitten by the lack of
-BPF-to-BPF calls and tail calls?
+doh.
 
+> Switch to use the correct page size. Otherwise ./ksft_pagemap.sh on a
+> 16k-page-size arm64 box fails with
+> 
+>  $ ./ksft_pagemap.sh
+>  [...]
+>  # ok 96 mprotect_tests Both pages written after remap and mprotect
+>  # ok 97 mprotect_tests Clear and make the pages written
+>  # Bail out! ioctl failed
+>  # # Planned tests != run tests (117 != 97)
+>  # # Totals: pass:97 fail:0 xfail:0 xpass:0 skip:0 error:0
+>  # [FAIL]
+>  not ok 1 pagemap_ioctl # exit=1
+>  # SUMMARY: PASS=0 SKIP=0 FAIL=1
+>  1..1
 
-Thanks,
-Bj=C3=B6rn
+Thanks.  I'll add a cc:stable to this.
+
+>  tools/testing/selftests/mm/pagemap_ioctl.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+
+I'd like to see this code initialize page_size and hpage_size before
+calling init_uffd(), hugetlb_setup_default(), etc.  That won't fix
+anything but it's safer and saner to get these globals set up before
+doing other things.
+
