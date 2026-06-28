@@ -1,45 +1,45 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D133AC0C2
-	for <linux-kselftest@vger.kernel.org>; Sun, 28 Jun 2026 21:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC853BED31;
+	Sun, 28 Jun 2026 22:00:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782683959; cv=none; b=uQzRiBoHlGhfMTFQkWAF0pqM0rZk/BOFkBvRqLzf8tM0HcsjgxGqcT007RhUZE5JgEXRk9yXVxaJ1EfUEYrTm690rP/OktbRdcWHTwBJiLvK8A0lo9WydVdqjHEPwLYk1bGnJAighVy3V8Pk9lX82X17iLYN6ugr80SxMjVKLj8=
+	t=1782684006; cv=none; b=etSKrKDOG+N99cz1bAAqZpEOZ1TxD+5kvaP8JscUsLGJBxd6lWBxUQ3w3a6c9pzZFkeXETF/9dnAhXrraz/PN493dl7io/fbUSwupVqSd6XP/ZWiSH974fr+4E9Xll5t3GUX7QjmjxkbIgmzaTfkBibn8UTdFWO3vzwJrdKqGd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782683959; c=relaxed/simple;
-	bh=ANvYV3bj+Y4afWXCh7EYSGpmbUPz6qEbChgwaakvHt8=;
+	s=arc-20240116; t=1782684006; c=relaxed/simple;
+	bh=Jo0XcOlZi0WxtmDMP0w4xh35b8lphoShPRqDWBSKrgs=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=l9pskTssXsoWtF4ZgObaZax8uYuq2h2WqoFGuyxqrolWWOcfbSfnar4rHFMHhjf3j7tp0Nb1zC4c2DuoN0ayqY5ka5zS+sPcyXG0BgS2vF+fJ4aYcs82kfX32BmeMVV/VNcK3DN46/H4W8RgJUJNT7A7MQzPUmZsJthAgu0AguA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=OIP5T3+J; arc=none smtp.client-ip=185.226.149.37
+	 In-Reply-To:Content-Type; b=G93u9bKFnMRMksGKioDtq+bhvoPDKhB/xK2WQYh27Brjl9gOZ9EnbUuM7FTNFJTCBKLLvKGJra8gGq6bToIazeBEYzh+GANUEFJdr9oCZ8olk783lktVnZKpQBZtv3jnIbhXrC5J/9nxq6zglIbAoHEQWzyawmNmzQDGKLlBZIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=jUeyx9BU; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="OIP5T3+J"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="jUeyx9BU"
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1wdxWq-00Gg4g-LJ; Sun, 28 Jun 2026 23:59:04 +0200
+	id 1wdxXc-001ZMo-QO; Sun, 28 Jun 2026 23:59:52 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
 	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=YPw84bxPaC1tOS8Jb9NaP4dSqs1KHqksSKnTohhbvZE=; b=OIP5T3+JAnIfc9UzzXT5hJA1Bt
-	BCDcflZLTMOHo9fq2CZDMqy+CHCMYgHDEnMJZjDQigmgxhOCT1BTmsQi3DJaaFCTpcuEg7eZrmJCU
-	71ThnihZG7mp6lR//Rto5AqDFsZD5B9peOno+G326PxVrPWagWzb5qQusEydPxuXyTjybhUrHoG0Z
-	a737li/PfGAnAj3fk/Hn4k138wR2Daq9Svs+/b06aRS08eX3s2lVdONYvN9QODnswIsYlhIquzyc8
-	ErM0KedoLQik3KfpDCGlm8koaCbiVfLHM+3RtR1DxgzjdfI64/d0t8uH2VpTRYIFOqq9p5yLYg7rv
-	jw99QK+Q==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
+	bh=iFfN33bXCoFIYJH0PyNERYalk6o6fo/Q09tESzrMJ8Y=; b=jUeyx9BU9C8cxydkEfZ06ftnW5
+	Oc2aaCx+Jl8DE7/dSZoFKdRzVZEe5/ij0peydwKHsuGYmIRwmH8oF2Tto1HBoqKZrJgerj4QTwRAm
+	Ix2+ppm/d1shknjKRgH9BCTZEJ5ikLcCeU12tOOlbiatmpzKMUtdTmAIhDWz31ZhKyHXtn8D0rzO6
+	O46tWVimS5LlihaRciqC6V6LPVJ15JMzlkEhhTdqrGoElf7p0Ord48+cvPkxWwdzzvJcdGCtI/F1y
+	axvqTLqF30et/lrfHVIbh4+hICZ1X75j734rBbX7/K1N/eUNvePkEwdCJAXX4EimK+nYcAp+JyoT5
+	STtp5nuQ==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1wdxWp-0005zI-Ft; Sun, 28 Jun 2026 23:59:03 +0200
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	id 1wdxXc-00060k-H5; Sun, 28 Jun 2026 23:59:52 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1wdxWn-00DOhE-Cl;
-	Sun, 28 Jun 2026 23:59:01 +0200
-Message-ID: <a5615598-9740-4bda-8ace-e6704b97d17b@rbox.co>
-Date: Sun, 28 Jun 2026 23:58:59 +0200
+	id 1wdxXY-00Bg9h-58;
+	Sun, 28 Jun 2026 23:59:48 +0200
+Message-ID: <06bb709d-54e2-4515-8ea6-33163ba8d510@rbox.co>
+Date: Sun, 28 Jun 2026 23:59:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,7 +48,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH bpf v2 2/4] selftests/bpf: Ensure UDP sockets are bound
+Subject: Re: [PATCH bpf v2 3/4] selftests/bpf: Adapt sockmap update error
+ handling
 To: Kuniyuki Iwashima <kuniyu@google.com>
 Cc: Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
  Willem de Bruijn <willemb@google.com>,
@@ -66,24 +67,46 @@ Cc: Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
  netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
 References: <20260626-sockmap-lookup-udp-leak-v2-0-7e7e201c951a@rbox.co>
- <20260626-sockmap-lookup-udp-leak-v2-2-7e7e201c951a@rbox.co>
- <CAAVpQUCGpSWuei+cX9LL1WG=-14_FJU75G2njvvWCugsSMWDqQ@mail.gmail.com>
+ <20260626-sockmap-lookup-udp-leak-v2-3-7e7e201c951a@rbox.co>
+ <CAAVpQUDULzZh58oKkRaYqgM9bRToGb7wHrzT+cZNpRmAtM12Ow@mail.gmail.com>
 Content-Language: pl-PL, en-GB
-In-Reply-To: <CAAVpQUCGpSWuei+cX9LL1WG=-14_FJU75G2njvvWCugsSMWDqQ@mail.gmail.com>
+In-Reply-To: <CAAVpQUDULzZh58oKkRaYqgM9bRToGb7wHrzT+cZNpRmAtM12Ow@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 6/26/26 22:47, Kuniyuki Iwashima wrote:
+On 6/26/26 22:58, Kuniyuki Iwashima wrote:
 > On Fri, Jun 26, 2026 at 1:37 PM Michal Luczaj <mhal@rbox.co> wrote:
 >>
->> Update sockmap_basic tests to bind sockets before they are used. This
->> accommodates the recent change in sockmap that rejects unbound UDP sockets.
+>> Update sockmap_listen to accommodate the recent change in sockmap that
+>> rejects unbound UDP sockets.
+>>
+>> TCP: Reject unbound and bound (unless established or listening).
+>> UDP: Accept only bound sockets.
 >>
 >> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>> ---
+>>  tools/testing/selftests/bpf/prog_tests/sockmap_listen.c | 17 +++++++++--------
+>>  1 file changed, 9 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+>> index cc0c68bab907..6ee1bc6b3b23 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+>> @@ -63,11 +63,8 @@ static void test_insert_opened(struct test_sockmap_listen *skel __always_unused,
+>>         errno = 0;
+>>         value = s;
+>>         err = bpf_map_update_elem(mapfd, &key, &value, BPF_NOEXIST);
+>> -       if (sotype == SOCK_STREAM) {
+>> -               if (!err || errno != EOPNOTSUPP)
+>> -                       FAIL_ERRNO("map_update: expected EOPNOTSUPP");
+>> -       } else if (err)
+>> -               FAIL_ERRNO("map_update: expected success");
 > 
-> nit: this should be patch 1.
+> Initially I thought AF_UNIX still exercised this path but it was removed
+> in f3de1cf621f7.  The leftover in family_str() was a bit confusing, so please
+> follow up on bpf-next.
 
-OK, I'll push it up.
+Sure, will do.
 
 thanks,
 Michal
