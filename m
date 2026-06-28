@@ -1,145 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7366D190462;
-	Sun, 28 Jun 2026 16:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BAB175A69
+	for <linux-kselftest@vger.kernel.org>; Sun, 28 Jun 2026 16:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782662600; cv=none; b=kJMGptrOMF3k2U1IlEjTBiwOwEqztKVZztXKEFQ6M6WRsId7bLuHz65LwWUWtai6npp6CWBXXMXkxwIf5XIVXdimwoJ7Jddpz0airsJH7/cV5DD1RxfaoY7ZO2sQ/8Us/+MTn613Tv6U8h8wRoMtK3AYRy2kjI0jabe62Aup7fU=
+	t=1782665918; cv=none; b=QndCQbll3N8SWSAe76iiZfh+eedxxSNR1P9E6q8YYC1Blq3c7BDr0DxZJ4rX5waIaBoqWd8oRoSXIsNTIqpT2naFX95qF0BY3jeqnMsYAP0CYX/vSuKmmwkS2ah42BNWFUGORlK8NAfTOmDrt5x3RdoIZoiuUhaRlFUyGDQJZUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782662600; c=relaxed/simple;
-	bh=Bg7ATLfq06nhMAvgzIEIchQ4wjP8NHZa4leLVfF2GrI=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=aHgmSZ7khvqrPeeY1ejrlTrO+K+dZWKJWJONzqFGpZakNTbpqW30OUL7m1DCvCT6NO/SwTBpJpFLmXjuqFv01x3GuijWVibA6uGgLSlrDi+HwQac+GWpGRKOo/4KTqExN4wvWkhHmznmfjBuFodeMmbWAuNiPjhTHhC31i8phEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4Ylx3G9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782665918; c=relaxed/simple;
+	bh=I+JW7Xgh6wva88wNr7W+Hwn84kFCifHvze3rlIHjxy8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YbJz1t8NryMSx3ZnXBD+jZcE7W+xzcujQoYWbk+D4W+CjIWFjzFFToPZgVbL4R+ZycNJYwTbLhmOgsDHqhTNqylI/Vihgp+QPMRjBKisoTFobTuUqzblDLlPkTG7Pkz4jlwV874mWWk0jc4VddRFTvJzp4oRd6vu3SWYQAS6fKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TorGlB9i; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4Ylx3G9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D69A51F000E9;
-	Sun, 28 Jun 2026 16:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782662599;
-	bh=vStoMMAuf3Habph9ryA7GqWRgnEHB2CaISdV5isqMNQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=j4Ylx3G9Q7SS5Lo1fqaA+jDwdjRMFYrQTd9Kuh7kGwIHAMqfyX8F6MY2zh6BraVKm
-	 ReOTxCEb2MsClBG+hNJrUCN/O7v6WhzINBLDw4+gTsqZTrLnjtWbTcxpsi5PZXZJtS
-	 h8K56Fq/ba7ZUOIz3xwrLim7O0hvzmE35KwM26ckmJexw/UWYMgSkDMAeJ7nF1Lp8y
-	 y7PM+Xyxr3TO9VMInnWX4TAgEnXnUAlWNPHF2EKCkLniDWyX0KUqQKnFhitsXjh4Pq
-	 TXdQ9VoRul47oVODsgA6Lw10FW0QsZW1nipnZbzSr6UgNVBOzow8QKJR7aSisu3R+F
-	 EP2/QC0xrIBdQ==
-Date: Mon, 29 Jun 2026 01:03:14 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, Shuah
- Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v11 11/11] tracing/probes: Add a new testcase for BTF
- typecasts
-Message-Id: <20260629010314.0c6563c5022c1c973788464d@kernel.org>
-In-Reply-To: <178248336390.841606.1695444929833877704.stgit@devnote2>
-References: <178248325671.841606.17344906774310339507.stgit@devnote2>
-	<178248336390.841606.1695444929833877704.stgit@devnote2>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TorGlB9i"
+Message-ID: <5ca104ab-cffb-4090-9af6-06d173e8069f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782665913;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Lmf685DUmEukjJHRwKH+fFWXRVCKj+jIzM0foUW6Vh8=;
+	b=TorGlB9iWyZIxFdfUWrx9/Pyp5gQHLhQ6sH0/9YQMS1T+8dSSQnEv6cJyekHd1soMUkMxo
+	g/7l9Ise4N/ipQGpDg9YcyiP6Db0/6SkecS6T8mf4sU4rcLPwiWf+hIspQaUS61WpQsn98
+	FAOsuFNYSGHBWg4UICZMK2/nnKotnkI=
+Date: Mon, 29 Jun 2026 00:58:13 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+Subject: Re: [PATCH v3 17/17] selftests/verification: Add selftests for
+ deadline and stall monitors
+To: Gabriele Monaco <gmonaco@redhat.com>, linux-trace-kernel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Cc: Nam Cao <namcao@linutronix.de>,
+ Thomas Weissschuh <thomas.weissschuh@linutronix.de>,
+ Tomas Glozar <tglozar@redhat.com>, John Kacur <jkacur@redhat.com>
+References: <20260625121440.116317-1-gmonaco@redhat.com>
+ <20260625121440.116317-18-gmonaco@redhat.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Wen Yang <wen.yang@linux.dev>
+In-Reply-To: <20260625121440.116317-18-gmonaco@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-This has a problem and needs some updates.
 
-On Fri, 26 Jun 2026 23:16:04 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
+On 6/25/26 20:14, Gabriele Monaco wrote:
+> Add selftests to verify deadline monitors don't fail under expected
+> conditions and the stall monitor report violations only when expected.
+> 
+> Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
+> ---
+>   .../verification/test.d/rv_deadline.tc        | 21 ++++++++++++
+>   .../selftests/verification/test.d/rv_stall.tc | 33 +++++++++++++++++++
+>   2 files changed, 54 insertions(+)
+>   create mode 100644 tools/testing/selftests/verification/test.d/rv_deadline.tc
+>   create mode 100644 tools/testing/selftests/verification/test.d/rv_stall.tc
+> 
+> diff --git a/tools/testing/selftests/verification/test.d/rv_deadline.tc b/tools/testing/selftests/verification/test.d/rv_deadline.tc
 > new file mode 100644
-> index 000000000000..96791e120b7d
+> index 0000000000..b583096bed
 > --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
-> @@ -0,0 +1,51 @@
+> +++ b/tools/testing/selftests/verification/test.d/rv_deadline.tc
+> @@ -0,0 +1,21 @@
 > +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: BTF event with typecast and percpu access
-> +# requires: dynamic_events "this_cpu_read(<fetcharg>)":README "[(structname[,field])]<argname>[->field[->field|.field...]]":README
+> +# SPDX-License-Identifier: GPL-2.0-or-later
+> +# description: Test deadline monitors trigger no reaction
+> +# requires: available_reactors deadline:monitor printk:reactor stress-ng:program
 > +
-> +# Check if the sample module is loaded
-> +if ! lsmod | grep -q trace_events_sample; then
-> +  modprobe trace-events-sample || exit_unsupported
-
-I think this should be exit_unresolved.
-
-> +fi
-[...]
-> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/btf_typecast_accepted.tc b/tools/testing/selftests/ftrace/test.d/dynevent/btf_typecast_accepted.tc
+> +load() { # returns true if there was a reaction
+> +	local lines_before
+> +	lines_before=$(dmesg | wc -l)
+> +	stress-ng --cpu 2 --sched deadline --sched-period 100000000 --sched-deadline 100000000 --sched-runtime 20000000 -t 5 &
+> +	stress-ng --cpu 2 --sched rr --sched-prio 50 --cyclic 1 --cyclic-policy rr --cyclic-prio 50 -t 5 &
+> +	wait
+> +	dmesg | tail -n +$((lines_before + 1)) | grep -q "rv: monitor [a-z]\+ does not allow event"
+> +}
+> +
+> +echo 1 > monitors/deadline/enable
+> +echo printk > monitors/deadline/reactors
+> +
+> +! load || false
+> +
+> +echo nop > monitors/deadline/reactors
+> +echo 0 > monitors/deadline/enable
+> diff --git a/tools/testing/selftests/verification/test.d/rv_stall.tc b/tools/testing/selftests/verification/test.d/rv_stall.tc
 > new file mode 100644
-> index 000000000000..acf0b5a917d3
+> index 0000000000..8e9bcbb441
 > --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/btf_typecast_accepted.tc
-> @@ -0,0 +1,107 @@
+> +++ b/tools/testing/selftests/verification/test.d/rv_stall.tc
+> @@ -0,0 +1,33 @@
 > +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: BTF typecast and percpu access syntax validation
-> +# requires: dynamic_events "this_cpu_read(<fetcharg>)":README "[(structname[,field])]<argname>[->field[->field|.field...]]":README
+> +# SPDX-License-Identifier: GPL-2.0-or-later
+> +# description: Test stall monitor
+> +# requires: available_reactors stall:monitor printk:reactor stress-ng:program
 > +
-> +KPROBES=
-> +FPROBES=
+> +THRESHOLD=/sys/module/stall/parameters/threshold_jiffies
 > +
-> +if grep -qF "p[:[<group>/][<event>]] <place> [<args>]" README ; then
-> +  KPROBES=yes
-> +fi
-> +if grep -qF "f[:[<group>/][<event>]] <func-name>[%return] [<args>]" README ; then
-> +  FPROBES=yes
-> +fi
+> +load() { # returns true if there was a reaction
+> +	local lines_before cpu
+> +	cpu=$(($(nproc) - 1))
+> +	lines_before=$(dmesg | wc -l)
+> +	stress-ng --cpu 1 --taskset "$cpu" --sched rr --sched-prio 1 -t 3 &
+> +	stress-ng --cpu 5 --taskset "$cpu" -t 3 &
+> +	wait
+> +	dmesg | tail -n +$((lines_before + 1)) | grep -q "rv: monitor stall does not allow event"
+> +}
 > +
-> +if [ -z "$KPROBES" -a -z "$FPROBES" ] ; then
-> +  exit_unsupported
-> +fi
+> +echo 5000 > $THRESHOLD
+> +echo 1 > monitors/stall/enable
+> +echo printk > monitors/stall/reactors
 > +
-> +echo 0 > events/enable
-> +echo > dynamic_events
+> +! load || false
 > +
-> +# Load trace-events-sample module if available to have per-CPU counter structure defined
-> +if ! lsmod | grep -q trace_events_sample; then
-> +  modprobe trace-events-sample || true
+> +echo 0 > monitors/stall/enable
+> +echo 70 > $THRESHOLD
+> +echo 1 > monitors/stall/enable
+> +
+> +load
+> +
+> +echo nop > monitors/stall/reactors
+> +echo 0 > monitors/stall/enable
+> +
+> +echo 1000 > $THRESHOLD
 
-I think this must be tested, and if the module is not found,
-the test must return UNRESOLVED error.
+A little worried:
+If the system had a different value configured before the test ran,
+this silently changes system state for anything running after it.
 
-> +fi
-[...]
-> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-> index 0e65e787e426..1d6d1cf94f16 100644
-> --- a/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-> @@ -21,8 +21,17 @@ check_error 'e:foo/^bar.1 syscalls/sys_enter_openat'	# BAD_EVENT_NAME
->  
->  check_error 'e:foo/bar syscalls/sys_enter_openat arg=^$foo'	# BAD_ATTACH_ARG
->  
-> +check_error 'e:foo/bar syscalls/sys_enter_openat arg=^COMM'	# NO_EVENT_FIELD
-> +if grep -q '\\$current' README; then
 
-Sashiko found a problem here. Indeed. this is wrong. See below:
+--
+Best wishes,
+Wen
 
-> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-> index c817158b99db..e12dc967ec76 100644
-> --- a/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-> @@ -28,4 +28,9 @@ if grep -q ".*symstr.*" README; then
->  check_error 'p /bin/sh:10 $stack0:^symstr'	# BAD_TYPE
->  fi
->  
-> +# $current is not supported by uprobe
-> +if grep -q "\$current.*" README; then
 
-This is correct check.
 
-Let me fix those.
 
-Thanks,
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
