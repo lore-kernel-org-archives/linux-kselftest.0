@@ -1,61 +1,63 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89FB1531C8
-	for <linux-kselftest@vger.kernel.org>; Sun, 28 Jun 2026 08:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479C2218845
+	for <linux-kselftest@vger.kernel.org>; Sun, 28 Jun 2026 08:17:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782634646; cv=none; b=mfhcvgIcvZ1e1C0GVk10AG8GX1rQu29ozK9pupqhGrdCNt21GYipAtv0fR89XUWdndZJFGKq7RMhQmHdHVQZGBpC3xlFeHATsSjIRcQBl5sXVC7B4kiRQOInkCDrtZiZLKEBHsP9MadLyKmWEdLaKAlYZm9CsDqgrLpPs9QQryc=
+	t=1782634655; cv=none; b=j6oFy2fkIOj93NX2PSAO3tvqKrdQR6UCtLL5DVKmeft8Fozhj6kZKLWMWSD5OxV5pT0fhU8uP3R/l+m2TLjDUW0ILHImWX09Ol504bXagG4cFvs0jmWhpAiFeT10XGLCc5grHt72xpC5a5MzxB52aO8aI+L/jpAXaIvPhr1b7cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782634646; c=relaxed/simple;
-	bh=ZVJSgxqjHxIaagSegdJMGLIo9Z+AcJ6RU1r0rFT3VW8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mxJkrxEqLWPS0Il85PyUNV2cRUInVEGwfVUyNgRAtg8v/8jl9G0ZePf3lICThRQWkRcBggZo+Na0uh1xXvQy6MJ+ynrzcU5wjRQ1fgwV8zM2zlolKy4Tv3Uw0jVrg79tDOHGxeUaXqB3R3jUCgMfUc13jsaSS1Je8Szo37NaBCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BAe40TeV; arc=none smtp.client-ip=209.85.215.182
+	s=arc-20240116; t=1782634655; c=relaxed/simple;
+	bh=8oz1uGZk3lbQ9sRGCHA97Ci5HM6VCopXGCtIAJIYbsw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PXX9TnthVSt8RjM0t65EAoL6z5zdOG0gwqKWRtFytW4Fs1al7g+yYHP6xwNwh1zmSnxXIFtW7Ix/j8qyxDZpXWXXabQOTYs73/Fn5MddM7eg9HVutvJiukPEFPGmWju256qH9WAaSML9JROsiPKYPHvV7AtlqwwKgYQITTvrBJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nIjUqGbk; arc=none smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BAe40TeV"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c85822059d8so1575046a12.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 28 Jun 2026 01:17:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nIjUqGbk"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c966b9ee9cbso226615a12.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 28 Jun 2026 01:17:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782634644; x=1783239444; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TMZJ3bc/HOOdrYFXeaDGp5Mr01fg5cOybXiq3cNrcV0=;
-        b=BAe40TeVR1z5QPqwv92yz5CyYKgX4gErYs+lVD/O3cmjOnjIz4UdP8kbP3oNuDQU56
-         9nq+NBTgscDSFus1B4oUC4hD495nIx3EXtE+l6p3EaU3kLCoX8Bb60bR2Z0bzIX4u6jM
-         DDeXZpQau0qrq32kyophPiOjTRlQDuIlNxrGAmMsulivcIIJaHDwMfggs15aokPP1eBo
-         UCnBYtQJkafenC9C/KDhxbxDWlMDCPcVqrhfkYnfP5HMFwwQucE4r7b/dFAWSykp1H+H
-         UK9Mo3z99zczJWqam1o1KCiLp1wwKF5Jgo7/wcjYc4L5gOdcKRmvc5XaR1FSFPe779nz
-         XP1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782634644; x=1783239444;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1782634653; x=1783239453; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TMZJ3bc/HOOdrYFXeaDGp5Mr01fg5cOybXiq3cNrcV0=;
-        b=Wgp2vevDezki9LO7xeFVG115EizboJbNEnFhPNjJXBMbcr/dzjKkHywB1KNY/XCgju
-         GCLgTvI1xc5l2GdNPy86BFgNFAxy9sivya9ejtEGX45lPPnAyu4CdzVIC1ecttBnrwHT
-         yp8SgRKhmzL9m+oAYHIqtkPppSTB3cW2lKXZDbej/GtDPDHdDWRt+NbX8EJCsFWSsg8k
-         JZs6IIJZ/Ah2tBVYxezfVLrkVJ9AfogbRePKsHfYrbfVYqeji9JoKX9I+gKMqwTpyWrp
-         XnVPFvqZVV5rpFJYts+3m8Q/vpQGa0ZTukh4g/e9bgoPxVqUoyZv01cFYYeW1a++D+ZH
-         +tUw==
-X-Forwarded-Encrypted: i=1; AFNElJ8GI8xYiI4Bv1240VK6KRNuMlhvOSHS838+IqT6RXGiMDH3bNECGu9k5efJNH/gIrldECY1hHWDUBAgm0+vxqA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPL/fSxGsLl/Xx7sg+r7nkaDJ3j7khv/hAbUIXoi0DWjLqoe7o
-	NnYpjPVtdjgA9tnF7sJ+/pgsSIgdmnEhXGYVBE6zZRonw1CVkzzsqgjp
-X-Gm-Gg: AfdE7ckzhnpqFYdH6dIZEC2tOJchdCxZwjtsQ3orAt5w98VGG48b7CzniP3LZiNZ5Su
-	1Px38AVgsBLf0IQ0sGBL3/XZ3iQdDFIaUT5BWU0VLs3RpvOnG/FZqWwEJ6YHL71c2QaX8VNhmD9
-	TZU7QzHyqiiXHzdnuhJQv3IXxkHkwzPSqeJ/6GRxLRseDkfoeTzqaNHirFeivyy0vvTfQlKvIky
-	RfhZybQeDhN2Dx0czvMYyWD8pLaZFtNsaFac31737lkJsuUDe6rFSedbvrkz6QsmYpoNx/C5UYR
-	dM7MiTup34CmR04PzcJmQ54Zq5n6RfjtRutRPsWT4YefICfXtrVPVZwlAiy8ocDFKO9R+lpnC1o
-	qVGGnn/HbWJe/UdA2EsC0lDC/J2RyC8OoUjMGp6amg2vx0HtRdxoXSNDDy/C5nIOVY0Z94g9jS1
-	6TnsM28bWhyrpeK+jVLagG0HHdRaE/NFHxSnnY0+zwYvrgqoD8UFLOQWE=
-X-Received: by 2002:a05:6300:6bc2:20b0:3b3:1c7b:ff0 with SMTP id adf61e73a8af0-3bd4af033acmr7744492637.32.1782634643791;
-        Sun, 28 Jun 2026 01:17:23 -0700 (PDT)
+        bh=fS2yJRct07pRe6n4SB8fXurYRNSLUTRVGluVVDIlUMc=;
+        b=nIjUqGbkF4L/V02HTSBd/YbDPQxBntd5OnlM/dEuuuNxRoHgHJiufElmjdWuhp1Xhn
+         WheTuffoFr9vg5riykBVjQlGCqCTzlDHln3w3KmHlPUVR8q98QpkMcnZDFdgUmwE/FET
+         CAHf+QBKzT6ku6F5M4Kvin3cFwGPGgJGZhKze6U9fNdk2MmOT5g1+vphG6TJLJbk5lMr
+         xxR2oXsPvsIAt6BmYIeFpG4UBIRcx8XjiW3J/fy7i3XgkCmmisFAaNzIhlbDivxanQQC
+         PZHkkCGNbN7WfAOfvcgyMGLW3Aeoe1uvB7tduHblXjpQIYN/+KCmoete0C0fbfP/zk/7
+         KpMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782634653; x=1783239453;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=fS2yJRct07pRe6n4SB8fXurYRNSLUTRVGluVVDIlUMc=;
+        b=Z/NyUn9Z6XxEyxdo4orYCUP4koWVkJaYuIB9TZOVnhT4umS3NB+WGwU7SUGXen2CnF
+         73ed04ZCPM2t0OeHYb8ktsDdxvkq03qUSlFOxSfE925LSHfpJMYiFr/NWv6IZOGg6WYh
+         +0uzYScZVwbpAfDePYKKqgz4c1oPKCCHenWqjYqQsyeHhuMfRMjTCt6043BURGO/lY9e
+         6Sh+cDriE6MfrWR9UPM/Q2W9qDNm4EgUmhbyp9eNu4etm4k4laOYM38XXKHb367jjoAL
+         sTjMLzQfzQ+oZ5OvAgput0jn0GoqBZabLfvJ0JHeKIkxKDolFb+kiSfC9zhfjBc45v4S
+         70dw==
+X-Forwarded-Encrypted: i=1; AFNElJ81V/FwSJb6bO2fTa9+FF3/VhGrnl3/AeztGNReC2g6Y3eqyyhCOXLKodOy4HdquVhy+tA1+2LbJA0AKMo8V0Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEdBjF+zDUa2q58QPAyMmjPUlm9TJrNt+I0RP+NSlk7pHBbBMe
+	G8eQbCRyaafodFc0rZiDw57sNSQUXiHz530ij71tWPcc/PhgK+3Bpzu9
+X-Gm-Gg: AfdE7cnAmENXURQaLz/nokp2fRZ7hif6SlkFokP9G/04lCGz9+umKtZr/o21LSEjIU9
+	qjugXcQXVQQUi0rYC1tk1nGb6c3iD9mo+9Fj+ZZ4o52r75o7e5T9P/suKL+7T0w+O114lpz/3Yz
+	0CNaDvNQTeB8A84S/nJ12cj1nDCXZfJBC79ME6xbCZzyMKms3zv/yLD90sSlX/bHkkA6pPY1LJd
+	NCWGXb4plu+mk2LIb3jItYZSScYmo3HBf9sVgvr71gUpuLG5kpPF850zKqx7faudZdluLWpO0Lq
+	knHAv+V1+UxLjvycDekdTAWXjdsgfzOQCYlw6dNNLLDxI2lLIOfMQd7TQ6/8oR319cCw5urIDdr
+	Px1Nb/gtiORx8ePoiVDSytTljuGMCwO19Adxnt7c+U2UBZoNUMNaFuBP8a+efUqY/kCNz3h8A0c
+	zKqBwRj/Uu3PKClFDO3gEXNbqT2URBywrySgsG5cLPrq6NX0Rw/7QcpLQ=
+X-Received: by 2002:a05:6a20:7289:b0:3bf:82b4:4b47 with SMTP id adf61e73a8af0-3bf82b44e32mr2761238637.18.1782634653395;
+        Sun, 28 Jun 2026 01:17:33 -0700 (PDT)
 Received: from computer.goose-salary.ts.net ([2a09:bac5:3b4a:8aa::dd:15])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c92bd55985asm6020434a12.31.2026.06.28.01.17.14
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c92bd55985asm6020434a12.31.2026.06.28.01.17.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jun 2026 01:17:23 -0700 (PDT)
+        Sun, 28 Jun 2026 01:17:33 -0700 (PDT)
 From: Varun R Mallya <varunrmallya@gmail.com>
 To: pjw@kernel.org,
 	palmer@dabbelt.com,
@@ -80,10 +82,12 @@ Cc: alex@ghiti.fr,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	varunrmallya@gmail.com
-Subject: [PATCH bpf-next v2 0/3] Add BPF Exceptions support for RISC-V
-Date: Sun, 28 Jun 2026 13:47:07 +0530
-Message-ID: <20260628081710.113333-1-varunrmallya@gmail.com>
+Subject: [PATCH bpf-next v2 1/3] riscv: stacktrace: Implement arch_bpf_stack_walk() for BPF
+Date: Sun, 28 Jun 2026 13:47:08 +0530
+Message-ID: <20260628081710.113333-2-varunrmallya@gmail.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260628081710.113333-1-varunrmallya@gmail.com>
+References: <20260628081710.113333-1-varunrmallya@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,171 +96,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patchset aims to add BPF exceptions supports for riscv64 by
-implementing the arch_bpf_stack_walk function and then updating the
-prologue and epilogue for BPF JIT on riscv. Also,
-bpf_jit_supports_exceptions() returns true now so that the verifier does
-not reject programs containing BPF exceptions on riscv64. 
+This will be used by bpf_throw() to unwind till the program marked as
+exception boundary and run the callback with the stack of the main
+program.
+This is required for supporting BPF exceptions on RISC-V.
+This depends on the frame pointer unwinder, so it is only built under
+CONFIG_FRAME_POINTER, else falls back to the weak no-op.
 
-On riscv the unwinder used by arch_bpf_stack_walk() is the frame-pointer
-unwinder, so exception support is gated on CONFIG_FRAME_POINTER.
+Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
+Reviewed-by: Pu Lehui <pulehui@huawei.com>
+---
+ arch/riscv/kernel/stacktrace.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-In the prologue and epilogue of the RISC-V JIT, I saved the
-return address and then the frame-pointer according to [1]. Also,
-according to [2], s0 to s11 are callee saved registers, which is why a
-new array (rv_exception_csave_regs) has been created to save these
-registers which contains all the required registers along with the frame
-pointer as well as return address.
-
-The following demonstrates that all the selftests for BPF exceptions
-apart from the ones that mix bpf-to-bpf calls and tailcalls pass.
-This patch was tested using vmtest.sh to run the selftests.
-
-test_exceptions_success:PASS:exceptions__open 0 nsec
-libbpf: prog 'exception_tail_call': BPF program load failed: -EINVAL
-libbpf: prog 'exception_tail_call': -- BEGIN PROG LOAD LOG --
-0: R1=ctx() R10=fp0
-; volatile int ret = 0; @ exceptions.c:106
-0: (b4) w2 = 0                        ; R2=0
-1: (63) *(u32 *)(r10 -4) = r2         ; R2=0 R10=fp0
-; ret = exception_tail_call_subprog(ctx); @ exceptions.c:108
-2: (85) call pc+4
-caller:
- R10=fp0
-callee:
- frame1: R1=ctx() R2=0 R10=fp0
-7: frame1: R1=ctx() R10=fp0
-; int exception_tail_call_subprog(struct __sk_buff *ctx) @ exceptions.c:96
-7: (bf) r6 = r1                       ; frame1: R1=ctx() R6=ctx()
-; volatile int ret = 10; @ exceptions.c:98
-8: (b4) w1 = 10                       ; frame1: R1=10
-9: (63) *(u32 *)(r10 -4) = r1         ; frame1: R1=10 R10=fp0 fp-8=mmmm????
-; asm volatile("r1 = %[ctx]\n\t" @ bpf_helpers.h:169
-10: (18) r7 = 0xff60000080df1800      ; frame1: R7=map_ptr(map=jmp_table,ks=4,vs=4)
-12: (bf) r1 = r6                      ; frame1: R1=ctx() R6=ctx()
-13: (bf) r2 = r7                      ; frame1: R2=map_ptr(map=jmp_table,ks=4,vs=4) R7=map_ptr(map=jmp_table,ks=4,vs=4)
-14: (b7) r3 = 0                       ; frame1: R3=0
-15: (85) call bpf_tail_call#12
-mixing of tail_calls and bpf-to-bpf calls is not supported
-processed 11 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
--- END PROG LOAD LOG --
-libbpf: prog 'exception_tail_call': failed to load: -EINVAL
-libbpf: failed to load object 'exceptions'
-libbpf: failed to load BPF skeleton 'exceptions': -EINVAL
-test_exceptions_success:FAIL:exceptions__load unexpected error: -22 (errno 22)
-tester_init:PASS:tester_log_buf 0 nsec
-process_subtest:PASS:obj_open_mem 0 nsec
-process_subtest:PASS:specs_alloc 0 nsec
-tester_init:PASS:tester_log_buf 0 nsec
-process_subtest:PASS:obj_open_mem 0 nsec
-process_subtest:PASS:specs_alloc 0 nsec
-#113/1   exceptions/reject_exception_cb_type_1:OK
-#113/2   exceptions/reject_exception_cb_type_2:OK
-#113/3   exceptions/reject_exception_cb_type_3:OK
-#113/4   exceptions/reject_exception_cb_type_4:OK
-#113/5   exceptions/reject_exception_cb_type_5:OK
-#113/6   exceptions/reject_async_callback_throw:OK
-#113/7   exceptions/reject_with_lock:OK
-#113/8   exceptions/reject_subprog_with_lock:OK
-#113/9   exceptions/reject_with_rcu_read_lock:OK
-#113/10  exceptions/reject_subprog_with_rcu_read_lock:OK
-#113/11  exceptions/reject_with_rbtree_add_throw:OK
-#113/12  exceptions/reject_with_reference:OK
-#113/13  exceptions/reject_global_subprog_throw_with_reference:OK
-#113/14  exceptions/reject_with_cb_reference:OK
-#113/15  exceptions/reject_with_cb:OK
-#113/16  exceptions/reject_with_subprog_reference:OK
-#113/17  exceptions/reject_throwing_exception_cb:OK
-#113/18  exceptions/reject_exception_cb_call_global_func:OK
-#113/19  exceptions/reject_exception_cb_call_static_func:OK
-#113/20  exceptions/reject_multiple_exception_cb:OK
-#113/21  exceptions/reject_exception_throw_cb:OK
-#113/22  exceptions/reject_exception_throw_cb_diff:OK
-#113/23  exceptions/reject_subprog_rcu_lock_throw:OK
-#113/24  exceptions/reject_subprog_throw_preempt_lock:OK
-#113/25  exceptions/reject_subprog_throw_irq_lock:OK
-#113/26  exceptions/reject_set_exception_cb_bad_ret1:OK
-#113/27  exceptions/reject_set_exception_cb_bad_ret2:OK
-#113/28  exceptions/reject_out_of_range_global_throw:OK
-#113/29  exceptions/check_assert_eq_int_min:OK
-#113/30  exceptions/check_assert_eq_int_max:OK
-#113/31  exceptions/check_assert_eq_zero:OK
-#113/32  exceptions/check_assert_eq_llong_min:OK
-#113/33  exceptions/check_assert_eq_llong_max:OK
-#113/34  exceptions/check_assert_lt_pos:OK
-#113/35  exceptions/check_assert_lt_zero:OK
-#113/36  exceptions/check_assert_lt_neg:OK
-#113/37  exceptions/check_assert_le_pos:OK
-#113/38  exceptions/check_assert_le_zero:OK
-#113/39  exceptions/check_assert_le_neg:OK
-#113/40  exceptions/check_assert_gt_pos:OK
-#113/41  exceptions/check_assert_gt_zero:OK
-#113/42  exceptions/check_assert_gt_neg:OK
-#113/43  exceptions/check_assert_ge_pos:OK
-#113/44  exceptions/check_assert_ge_zero:OK
-#113/45  exceptions/check_assert_ge_neg:OK
-#113/46  exceptions/check_assert_range_s64:OK
-#113/47  exceptions/check_assert_range_u64:OK
-#113/48  exceptions/check_assert_single_range_s64:OK
-#113/49  exceptions/check_assert_single_range_u64:OK
-#113/50  exceptions/check_assert_generic:OK
-#113/51  exceptions/check_assert_with_return:OK
-#113     exceptions:FAIL
-
-All error logs:
-test_exceptions_success:PASS:exceptions__open 0 nsec
-libbpf: prog 'exception_tail_call': BPF program load failed: -EINVAL
-libbpf: prog 'exception_tail_call': -- BEGIN PROG LOAD LOG --
-0: R1=ctx() R10=fp0
-; volatile int ret = 0; @ exceptions.c:106
-0: (b4) w2 = 0                        ; R2=0
-1: (63) *(u32 *)(r10 -4) = r2         ; R2=0 R10=fp0
-; ret = exception_tail_call_subprog(ctx); @ exceptions.c:108
-2: (85) call pc+4
-caller:
- R10=fp0
-callee:
- frame1: R1=ctx() R2=0 R10=fp0
-7: frame1: R1=ctx() R10=fp0
-; int exception_tail_call_subprog(struct __sk_buff *ctx) @ exceptions.c:96
-7: (bf) r6 = r1                       ; frame1: R1=ctx() R6=ctx()
-; volatile int ret = 10; @ exceptions.c:98
-8: (b4) w1 = 10                       ; frame1: R1=10
-9: (63) *(u32 *)(r10 -4) = r1         ; frame1: R1=10 R10=fp0 fp-8=mmmm????
-; asm volatile("r1 = %[ctx]\n\t" @ bpf_helpers.h:169
-10: (18) r7 = 0xff60000080df1800      ; frame1: R7=map_ptr(map=jmp_table,ks=4,vs=4)
-12: (bf) r1 = r6                      ; frame1: R1=ctx() R6=ctx()
-13: (bf) r2 = r7                      ; frame1: R2=map_ptr(map=jmp_table,ks=4,vs=4) R7=map_ptr(map=jmp_table,ks=4,vs=4)
-14: (b7) r3 = 0                       ; frame1: R3=0
-15: (85) call bpf_tail_call#12
-mixing of tail_calls and bpf-to-bpf calls is not supported
-processed 11 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
--- END PROG LOAD LOG --
-libbpf: prog 'exception_tail_call': failed to load: -EINVAL
-libbpf: failed to load object 'exceptions'
-libbpf: failed to load BPF skeleton 'exceptions': -EINVAL
-test_exceptions_success:FAIL:exceptions__load unexpected error: -22 (errno 22)
-
-Changes in v1->v2:
-v1: https://lore.kernel.org/bpf/20260621144259.288135-1-varunrmallya@gmail.com/
-- resolve the ftrace trampoline address with ftrace_graph_ret_addr()
-  inside arch_bpf_stack_walk()
-- Remove duplicated code in bpf_jit_build_prologue()
-
-[1]: https://riscv-non-isa.github.io/riscv-elf-psabi-doc/#_frame_pointer_convention
-[2]: https://riscv-non-isa.github.io/riscv-elf-psabi-doc/#_integer_register_convention
-
-
-Varun R Mallya (3):
-  riscv: stacktrace: Implement arch_bpf_stack_walk() for BPF
-  riscv, bpf: Add support for BPF exceptions
-  riscv, bpf: Remove BPF exceptions from BPF CI denylist
-
- arch/riscv/kernel/stacktrace.c               |  31 +++++
- arch/riscv/net/bpf_jit_comp64.c              | 115 ++++++++++++++++---
- tools/testing/selftests/bpf/DENYLIST.riscv64 |   1 -
- 3 files changed, 133 insertions(+), 14 deletions(-)
-
+diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
+index c7555447149b..64929381bb30 100644
+--- a/arch/riscv/kernel/stacktrace.c
++++ b/arch/riscv/kernel/stacktrace.c
+@@ -5,6 +5,7 @@
+  */
+ 
+ #include <linux/export.h>
++#include <linux/filter.h>
+ #include <linux/kallsyms.h>
+ #include <linux/sched.h>
+ #include <linux/sched/debug.h>
+@@ -102,6 +103,36 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
+ 	}
+ }
+ 
++void notrace arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp),
++				 void *cookie)
++{
++	unsigned long fp, sp, pc;
++	int graph_idx = 0;
++
++	fp = (unsigned long)__builtin_frame_address(0);
++	sp = current_stack_pointer;
++	pc = (unsigned long)arch_bpf_stack_walk;
++
++	for (;;) {
++		struct stackframe *frame;
++
++		if (unlikely(!__kernel_text_address(pc)))
++			break;
++		/* pc belongs to the function whose frame pointer is fp */
++		if (!consume_fn(cookie, pc, sp, fp))
++			break;
++		if (unlikely(!fp_is_valid(fp, sp)))
++			break;
++
++		frame = (struct stackframe *)fp - 1;
++		sp = fp;
++		fp = READ_ONCE_TASK_STACK(current, frame->fp);
++		pc = READ_ONCE_TASK_STACK(current, frame->ra);
++		pc = ftrace_graph_ret_addr(current, &graph_idx, pc,
++					   &frame->ra);
++	}
++}
++
+ #else /* !CONFIG_FRAME_POINTER */
+ 
+ void notrace walk_stackframe(struct task_struct *task,
 -- 
 2.54.0
 
