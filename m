@@ -1,124 +1,95 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF05437C0E1
-	for <linux-kselftest@vger.kernel.org>; Sun, 28 Jun 2026 10:11:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DDD3A4F34;
+	Sun, 28 Jun 2026 12:36:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782641500; cv=none; b=gMS2UsWIMSQxVEAGFH/E6sXH06n76oraNMuwH3FcPmLKUP6gv01M7MhFZ2UgZSSFbRhunruhulUdCam3fo8c8nSfDR/+ogmWA8KsaezCyPOzTWHfBUB6S30fcmHdTlt6MTk67px0ehGpTnETLMEU+HcM+YpKB/5tl7USlbybZ8E=
+	t=1782650219; cv=none; b=ULhIfyMnbhse42c4wKlh+9ioAoDDy6WdmGd+4HuD3aDLU5vUzSEi5W7plBaRF8O6Svq8PCZyzhxColOz2R+2daSRzLs0qIpQEPtZuGd9ozuOvgKTo9m+asgD0mWe0n65fFjxue7M3MfU1oF9oSEfnlRBThAyiCjz/BGz0h/j+3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782641500; c=relaxed/simple;
-	bh=dSZWz9FIl6aPrgUrsayXFU6WSGYEr171lxYJ4FOgsnc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FPMqxqVJih9bQ96klu/pMM5uDi+9zRkLWeYmF88JRbmCNg/x1Wfgk2PkhR3slaN+yoNtAcOy1Clp6HplnGE87kDz5/w9FpUApvOTsQc/kJrF6VKvcpGolbhqckzJyg4IRp6ScoXMAqjNZB1gR0RkwysxXMuoPN+BbrcpeK/iBUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Gu4G3yKs; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782650219; c=relaxed/simple;
+	bh=daLM/ZW51+ewMtf63TpPiJQTUHWuDIo2vu2nO/XI3Ug=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=rdIenP0rS90/KDA8vEUbjkt9xvbUQ5fbzR9F5E6XVS26dMPMjcfN3/2Fev2irZxznxoBZ2MslZI8YKgHczRM8uGuDb1Ar3g2BIdWWaAKfVQ0U0PoXI7HdvwBag/sDrRBOxFzEH4uE6+WV7AyX6D7LGrMX1NzhZaTxv4XoajXGkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dXKkGtWb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Gu4G3yKs"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782641494;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/FXxFOl7E9feXzC4XdYQEI/BCMSekolzWSRC+gy20uU=;
-	b=Gu4G3yKs1r17iq2hxE0V5jXT5++Q//mG7LBNPjGv/CTGvDVFMn2quqRpaQjMAFG3bhY/4J
-	GUlD12Yw4i9gUAc+mo8AXwjlVz1Vksd9gHEJ2ZGXGuQ/aCPwolM3H3pJWwT58ypVh/1DFu
-	4cTYLLyAGQlAwsyjfMbvcgzlPkgpdLE=
-From: Zenghui Yu <zenghui.yu@linux.dev>
-To: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	usama.anjum@arm.com,
-	Zenghui Yu <zenghui.yu@linux.dev>
-Subject: [PATCH] selftests/mm: pagemap_ioctl: use the correct page size for transact_test()
-Date: Sun, 28 Jun 2026 18:11:18 +0800
-Message-ID: <20260628101118.35861-1-zenghui.yu@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dXKkGtWb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADFE01F000E9;
+	Sun, 28 Jun 2026 12:36:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782650217;
+	bh=ztrWcsNGICf3RSZiXTbSvoqRkMmVhds5bTffah+JQMs=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=dXKkGtWbbZCPACYW7rD8yxoTgQOXUnMyCnbu4Fek5ZGBj9ZOUQr7J+7+4J2u6bQ6X
+	 dR5Hkn2JB4GxOQ/EhPOedNPOqlpXUZ2MCzWea6PxHFxAd3RYElpmuEmkld79wmceW4
+	 8HPrCMHtN4SeG5aT4l+kmvmXO+sIB9JErsSkJWHJFQqdTlW4XmVMVgK9tojOCda4C7
+	 SyIF0/QcluewB4kHjXB121z51QWT7Ax6FD9yxaz6J3aeT43jttEWrhlHfF/jhb+3bM
+	 y6uWVs5iMPfXyUtC4xfEyVEkuurO9t8Qi9rya8gzrtB5jiYbA8Tp6RcJSo0k5GEwO7
+	 5yBa+VOIi6+zQ==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 0/2] fs: support $ORIGIN in ELF interpreter paths
+From: Christian Brauner <brauner@kernel.org>
+To: Jann Horn <jannh@google.com>
+Cc: Christian Brauner <brauner@kernel.org>, 
+ John Ericson <mail@johnericson.me>, 
+ Farid Zakaria <farid.m.zakaria@gmail.com>, Jan Kara <jack@suse.cz>, 
+ Kees Cook <kees@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+ shuah@kernel.org, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
+ linux-mm <linux-mm@kvack.org>, 
+ linux-kselftest <linux-kselftest@vger.kernel.org>, 
+ LKML <linux-kernel@vger.kernel.org>
+In-Reply-To: <CAG48ez2X1p5Nm2_sU=SK9wUusUO8c3_T-=FGrrOhkm7Kn9Y_7g@mail.gmail.com>
+References: <20260622043934.179879-1-farid.m.zakaria@gmail.com>
+ <sfv7zc6jboy2oxv7zuyofysas4ncbzenwsuzveiyduisfr6i7q@mx23er7uxdbg>
+ <CACCo2jkDuwy5w_yhX8833m+s-rY736pk8xtKjxg3_y_7BCOHeg@mail.gmail.com>
+ <24420045-a6eb-4999-ab19-1e344eaba8a4@app.fastmail.com>
+ <20260625-atomkraftgegner-hunger-kursbuch-b452ff2becab@brauner>
+ <CAG48ez2X1p5Nm2_sU=SK9wUusUO8c3_T-=FGrrOhkm7Kn9Y_7g@mail.gmail.com>
+Date: Sun, 28 Jun 2026 14:36:52 +0200
+Message-Id: <20260628-ungeordnet-orgel-stechen-36dd64038541@brauner>
+X-Mailer: b4 0.16-dev-4217c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1421; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=daLM/ZW51+ewMtf63TpPiJQTUHWuDIo2vu2nO/XI3Ug=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQ5iqbNq5C4vPXSKpuDZvsdF3W7STy/4f4pTP32o87EZ
+ +3VThMNOkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACZiE8HIcDCg6t2lg2qW60Wr
+ t/yyWpX/WMi/WP5v+5y1U5e8m33k6y+G/0m5S6SW2AsVcSSd+7ZYL/vUqwkHzreuU+YK/xr1/dG
+ 0JiYA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-There are several places in transact_test() where we use the hardcoded
-0x1000 (4k) as page size, which is not always correct for architectures
-supporting multiple page sizes.
+> > Ignoring AT_SECURE, LSMs likely will need a say in whether that ORIGIN
+> > thing gets honored or not introducing yet another vector where this can
+> > be overriden or ignored.
+> >
+> > Also, we change long-standing kernel behavior which will be very
+> > surprising for any userspace that might implicitly rely on the fact that
+> > the system loader is used. So even if we were to do something like this
+> > it would very likely have to be configurable in some way.
+> 
+> I think the proposed patch will only change behavior if the
+> interpreter path starts with "$ORIGIN"? That wouldn't work on existing
+> kernels unless you have a directory literally named "$ORIGIN" in the
+> cwd, because "$ORIGIN/..." would be interpreted as a normal relative
+> path.
 
-Switch to use the correct page size. Otherwise ./ksft_pagemap.sh on a
-16k-page-size arm64 box fails with
+I was thinking:
 
- $ ./ksft_pagemap.sh
- [...]
- # ok 96 mprotect_tests Both pages written after remap and mprotect
- # ok 97 mprotect_tests Clear and make the pages written
- # Bail out! ioctl failed
- # # Planned tests != run tests (117 != 97)
- # # Totals: pass:97 fail:0 xfail:0 xpass:0 skip:0 error:0
- # [FAIL]
- not ok 1 pagemap_ioctl # exit=1
- # SUMMARY: PASS=0 SKIP=0 FAIL=1
- 1..1
+You download a bunch of $ORIGIN binaries into /woot on a kernel that
+doesn't support $ORIGIN. You forget about /woot and update your kernel.
+You have no idea that kernel behavior has changed to allow $ORIGIN to
+work for the loader. You remember /woot exists and are starting to
+execute binaries under the assumption that $ORIGIN is purely a userspace
+concept applicable to shared libraries.
 
-Fixes: 46fd75d4a3c9 ("selftests: mm: add pagemap ioctl tests")
-Signed-off-by: Zenghui Yu <zenghui.yu@linux.dev>
----
- tools/testing/selftests/mm/pagemap_ioctl.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index 762306177ad8..6f8971d5b3ce 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -1368,7 +1368,7 @@ void *thread_proc(void *mem)
- 			ksft_exit_fail_msg("pthread_barrier_wait\n");
- 
- 		for (i = 0; i < access_per_thread; ++i)
--			__atomic_add_fetch(m + i * (0x1000 / sizeof(*m)), 1, __ATOMIC_SEQ_CST);
-+			__atomic_add_fetch(m + i * (page_size / sizeof(*m)), 1, __ATOMIC_SEQ_CST);
- 
- 		ret = pthread_barrier_wait(&end_barrier);
- 		if (ret && ret != PTHREAD_BARRIER_SERIAL_THREAD)
-@@ -1403,15 +1403,15 @@ static void transact_test(int page_size)
- 	if (pthread_barrier_init(&end_barrier, NULL, nthreads + 1))
- 		ksft_exit_fail_msg("pthread_barrier_init\n");
- 
--	mem = mmap(NULL, 0x1000 * nthreads * pages_per_thread, PROT_READ | PROT_WRITE,
-+	mem = mmap(NULL, page_size * nthreads * pages_per_thread, PROT_READ | PROT_WRITE,
- 		   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
- 	if (mem == MAP_FAILED)
- 		ksft_exit_fail_msg("Error mmap %s.\n", strerror(errno));
- 
--	wp_init(mem, 0x1000 * nthreads * pages_per_thread);
--	wp_addr_range(mem, 0x1000 * nthreads * pages_per_thread);
-+	wp_init(mem, page_size * nthreads * pages_per_thread);
-+	wp_addr_range(mem, page_size * nthreads * pages_per_thread);
- 
--	memset(mem, 0, 0x1000 * nthreads * pages_per_thread);
-+	memset(mem, 0, page_size * nthreads * pages_per_thread);
- 
- 	count = get_dirty_pages_reset(mem, nthreads * pages_per_thread, 1, page_size);
- 	ksft_test_result(count > 0, "%s count %u\n", __func__, count);
-@@ -1420,7 +1420,7 @@ static void transact_test(int page_size)
- 
- 	finish = 0;
- 	for (i = 0; i < nthreads; ++i)
--		pthread_create(&th, NULL, thread_proc, mem + 0x1000 * i * pages_per_thread);
-+		pthread_create(&th, NULL, thread_proc, mem + page_size * i * pages_per_thread);
- 
- 	extra_pages = 0;
- 	for (i = 0; i < iter_count; ++i) {
--- 
-2.53.0
+/woot came with a malicious loader and it suddenly gets used - if that
+happens in a sandbox noboday cares. Now that $ORIGIN works and no
+sandbox might be needed I think enabling $ORIGIN might still end up with
+funny surprises.
 
