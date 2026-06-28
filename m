@@ -1,99 +1,152 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06EFE3BA23F;
-	Sun, 28 Jun 2026 22:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0835F40D58E;
+	Sun, 28 Jun 2026 23:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782684115; cv=none; b=nB+0dEUdJUnLToqMSRsnAGd+vaoVPvHdyl3U7TuI3l61nmIhzeNoaIk84/qp/mNmB7bw0EXhPvyPQ4BGZ/+mqN7pahho1+gavtftBB+RfwTQSD0tBifCjMfucE7a+LDHzh5YfQF9Z6LHKaMPHaSi9u945XF07SCej7IXzyQ7SB0=
+	t=1782690690; cv=none; b=AWO55FBlFKuPwMSfToHAm2fB5sKMvpno9N+a0QXsbmmOerXyw2/mcUGVBswEg3bZvh0ausL3l6OvhL/tG1dBVQezK4Te2SKfJq4IEvzIV4N9UTMXZSv9hlBsJXlNyT25TELmMSDrvlcrqENqYLN7uWEq1muF7iq25Appwa72zWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782684115; c=relaxed/simple;
-	bh=lT5FBYAGjucFu5IEMRieLs1JdvAq/UPoD1SUZqini1o=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=h2COOYiGHsjZHA0sBwXjITE0UDKvcp+CaAv9QbZ0xCY0I88bOGK2wJjfrHMj5q95ga1WYWBBrsheLl71FX0LGRd4ZLv8dVtP6Br4P4iZTQL8oTQKy7lS5NM0YuZEVU/CLrQ/6nWGtndQdUvqGNxxrc3tlakNNZSxBWuvf48UAEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=Aa9aIpBr; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1782690690; c=relaxed/simple;
+	bh=qQCNNGLYeR/jXweBmpy6EHwOfbcMhIMwCLT/3beJgtc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aom3brtc1OvjIzqgG++ja0TGM3MA1V5qv9LvRl4C9IkGGDM13mgMUsObrwsGMyDg3oEPD3D/52qUibDjJkCj6WoCAYwLC+ZBkK8zEJna9bG/fLxJASzy+548/7pD0RmkfJE5UobSdpye3ModJhQmSgT0cy/g0B8J4bf9ssd4rSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GptQmB01; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="Aa9aIpBr"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1wdxZP-001Zgd-9t; Mon, 29 Jun 2026 00:01:43 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=7KBuH7EGbpc9g/eKId5Y5zgz4rib6zGTEjTk3SZENN4=; b=Aa9aIpBragsjTme7+DfSy+pe60
-	pA2xIFAx3fUAi1r9kt22g5wog062YJOLi98DN01HOOdLMXoP3Fkli9qMM75bLzjLyfSUhhMrPGjuI
-	yA5oCA7wa0Hlvf4s+s0KMA96MkwZDIZFfDExzKT5/RRfSk66tSyiJ+9dm59tDOIeW9oQU/HCLyBd4
-	fMVmiGEDkmH8rw5cT9/nif93h09feT56GOyBr/j/qSSLq/0AaUE/YpJoKIDocG22X3n03iR3KOTeP
-	UF9I2X5svDsn1QTRk++6uFJSSeUVnGN01I/Q2rZSP0oAlNHtTmYvM6Lm3D9wM4JIbg6N9WUEwtaZ5
-	BsH7jIhQ==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1wdxYa-0005bC-He; Mon, 29 Jun 2026 00:01:43 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.95)
-	id 1wdxY0-00BgFH-TU;
-	Mon, 29 Jun 2026 00:00:16 +0200
-Message-ID: <ea367ec7-cc4a-4809-8f03-be3dc24d0440@rbox.co>
-Date: Mon, 29 Jun 2026 00:00:15 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GptQmB01"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62C651F000E9;
+	Sun, 28 Jun 2026 23:51:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782690688;
+	bh=IyzMFlWQGSxklRlwcoQbpnKOpH3OPh44AKZK7XAjx2g=;
+	h=From:To:Cc:Subject:Date;
+	b=GptQmB01urtRCsETvls97SGTW4cnjfAnOZjI+0HAVvBuk+VBqdCeaDhHIyNbd/n4y
+	 tQ4SUCeH7P+wT5JTTQrHN1Bn5jkVwb+YYAjMwt3Ctps9MAS1o97H56RM2m4kHJs+yn
+	 oy1Av5aQVNqPIrFJAteEQ2ZGv2RppiO/dHuI4SOZrMSJeBN0RTmqRuLw3rGBt2xDJj
+	 i289YpZLLvBFMju0Wj9z9XhLIab1VjJrXIXUODWYpCW2lu5q5BWd1VOBj3ZRpvZH8/
+	 B8KIJitMThHkvYl5oBSGUFkPgCnGwP6O5F8ZP81OOFV9uRFH8/Y1WP3kY1KgTc/9Wa
+	 utfFbqtAfg92g==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v12 00/11] tracing/probes: Add more typecast features
+Date: Mon, 29 Jun 2026 08:51:23 +0900
+Message-ID: <178269068329.1161310.17763177188897860801.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH bpf v2 0/4] bpf, sockmap: Fix sockmap leaking UDP socks
-To: sun jian <sun.jian.kdev@gmail.com>
-Cc: Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima
- <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Willem de Bruijn <willemb@google.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen
- <jiayuan.chen@linux.dev>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Cong Wang <cong.wang@bytedance.com>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260626-sockmap-lookup-udp-leak-v2-0-7e7e201c951a@rbox.co>
- <CABFUUZGg1B0vaw9DFX3uTHxpRyyGtvn04Ae=Ob-VmnuVJB4KLg@mail.gmail.com>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <CABFUUZGg1B0vaw9DFX3uTHxpRyyGtvn04Ae=Ob-VmnuVJB4KLg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On 6/27/26 19:34, sun jian wrote:
-> On Sat, Jun 27, 2026 at 4:37 AM Michal Luczaj <mhal@rbox.co> wrote:
->>
->> Fix for UDP sockets getting leaked during sockmap lookup/release.
->> Accompanied by selftests updates.
->> ...
-> 
-> Hi Michal,
-> 
-> I tested this series on bpf.git base commit:
->   26490a375cb9be9bac96b5171610fd85ca6c2305
-> The test environment was virtme-ng x86_64.
+Hi,
 
-Great, thank you.
+Here is the 12th version of series to introduce more typecast features
+to probe events. The previous version is here:
 
-> However, I can reproduce the same timeout in three consecutive
-> runs on the unmodified base commit, so this looks pre-existing or
-> environmental in my virtme-ng setup rather than a regression from
-> this series.
+ https://lore.kernel.org/all/178248325671.841606.17344906774310339507.stgit@devnote2/
 
-Yup, same for me. Good thing bpf-next appears to have this fixed.
+This version just updates the test cases according to the comment
+in last version[11/11].
 
-thanks,
-Michal
+This series extends BTF typecast feature and add more options:
+
+1. Expanding BTF typecast to kprobe and fprobe.
+   (currently only function entry/exit)
+
+2. Introduce container_of like typecast. This adds a "assigned
+   member" option to the typecast.
+
+   (STRUCT,MEMBER)VAR->ANOTHER_MEMBER
+
+   This casts VAR to STRUCT type but the VAR is as the address
+   of STRUCT.MEMBER. In C, it is:
+
+   container_of(VAR, STRUCT, MEMBER)->ANOTHER_MEMBER
+
+3. Support nested typecast, e.g.
+
+   (STRUCT)((STRUCT2)VAR->MEMBER2)->MEMBER
+
+   the nest level must be smaller than 3.
+
+4. Add $current variable to point "current" task_struct.
+   This is useful with typecast, e.g.
+
+   (task_struct)$current->pid
+
+5. per-cpu dereference support.
+
+   Intrdouce this_cpu_read(VAR) and this_cpu_ptr(VAR) to
+   access per-cpu data on the current CPU (accessing other CPU
+   data is not stable, because it can be changed.)
+
+   You can access the member of per-cpu data structure using
+   typecast like:
+
+   (STRUCT)this_cpu_ptr(VAR)->MEMBER
+
+6. Support event fields without $ prefix on eprobes.
+
+   Now eprobe events can access its event fields.
+
+And added fetcharg dump feature (for debug) and updated test scripts
+to test part of them.
+
+Thanks,
+
+---
+base-commit: c69b5f959286395e94c237ce6d7d4970bad7f6e3
+
+Masami Hiramatsu (Google) (11):
+      tracing/probes: Allow eprobe to use variable without $ prefix
+      tracing/probes: Support dumping fetcharg program for debugging dynamic events
+      tools/bootconfig: Ignore comment lines in dynamic_events/kprobe_events file
+      perf/probe: Ignore comment lines in dynamic_events/kprobe_events file
+      tracing/probes: Support typecast for various probe events
+      tracing/probes: Support nested typecast
+      tracing/probes: Type casting always involves nested calls
+      tracing/probes: Support field specifier option for typecast
+      tracing/probes: Add $current variable support
+      tracing/probes: Add this_cpu_read() and this_cpu_ptr() dereference method to fetcharg
+      tracing/probes: Add a new testcase for BTF typecasts
+
+
+ Documentation/trace/eprobetrace.rst                |    7 
+ Documentation/trace/fprobetrace.rst                |   10 
+ Documentation/trace/kprobetrace.rst                |   11 
+ kernel/trace/Kconfig                               |   12 
+ kernel/trace/trace.c                               |    8 
+ kernel/trace/trace_eprobe.c                        |    2 
+ kernel/trace/trace_fprobe.c                        |    2 
+ kernel/trace/trace_kprobe.c                        |    2 
+ kernel/trace/trace_probe.c                         |  585 ++++++++++++++++----
+ kernel/trace/trace_probe.h                         |  100 ++-
+ kernel/trace/trace_probe_tmpl.h                    |   25 +
+ kernel/trace/trace_uprobe.c                        |    3 
+ samples/trace_events/trace-events-sample.c         |   40 +
+ samples/trace_events/trace-events-sample.h         |   34 +
+ tools/bootconfig/scripts/ftrace2bconf.sh           |    2 
+ tools/perf/util/probe-file.c                       |    2 
+ .../ftrace/test.d/dynevent/btf_probe_event.tc      |   51 ++
+ .../test.d/dynevent/btf_typecast_accepted.tc       |  103 ++++
+ .../test.d/dynevent/eprobes_syntax_errors.tc       |   12 
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   12 
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   12 
+ .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    5 
+ 22 files changed, 886 insertions(+), 154 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/btf_typecast_accepted.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
