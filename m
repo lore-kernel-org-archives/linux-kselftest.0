@@ -1,212 +1,166 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5297431F98F
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 20:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52F3332EB1
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 20:36:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782764793; cv=pass; b=cL+e0k7xz5uobWQMfA7UX9BWmYw0NtFqr4Z/I8KUIv4RrVL2RqOAcaZugDO8yUZXFHvVZCPi26cmsu4Yw9AEMKdNvlBNizyV9PwAa96qGe3iDJ58j5nsGbACntqZwBvYqwLQpbhopOsahiT6fRjO4V4TWFqXHdV0Paq8MYz1OuE=
+	t=1782765422; cv=pass; b=PJ7AJ3P0a1/Rln33p/ZqxXIR6YgYip+fsCFACV7CeSsvTuOHCzFc1BT8B5p/TmzBvh+rw5tis0GP7N91k8EWqKkCls6jCUYcRFxpdhXcrmzSykz3nHgGDONZhwsCOop+0wY8ruEH08YqRUHvhcgRF8QSoCxcuHpyBNYUsx53lgA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782764793; c=relaxed/simple;
-	bh=MY09JxyG9hMdQzyhoPmIVD3awpBb1JpfMGTAFRP/ZJ4=;
+	s=arc-20240116; t=1782765422; c=relaxed/simple;
+	bh=rqL5Z0h2rCevncTGlgklxBt0211rUyUNLOZJCKCfihY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DELYYStu9bTFqWpHHFVPCpuOrOKI73b6EKaRlWQadDHcPIscglMoUNQ4sNpDgEJ+0Jp4fNYpUyqtmffqNcc6apX7JR8jwlhcZsHTkdq50Q3CRlimmLZ1uoFIf7MSAn2SH5hHHzVQDWliqDfr9dXo/Nv3FloPzQzehu5AURo+G/M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ahs/IiZA; arc=pass smtp.client-ip=209.85.128.43
+	 To:Cc:Content-Type; b=MQeQeA+mxmSmByytZZUYjm3fqDPJQ2uAzxFaiZbla9WCkoRyKA616wkA7Fn3A4EZUU0Fj0SEPsNe2VY+hBlZAt59CQGUBlK2dtCtM9nUwUy91yTscxC+DtS8Y3pWR6iwKfcOCugZKE0bkZxGlSmZj0sAy5zW7wTTiiv+FkArnoQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y4i4mMAO; arc=pass smtp.client-ip=209.85.160.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ahs/IiZA"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-493b29be0d6so10855755e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 13:26:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782764790; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y4i4mMAO"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-51af8fda4c0so11994551cf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 13:36:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782765414; cv=none;
         d=google.com; s=arc-20260327;
-        b=ZYLng0XINSjuHAMgyfToHcjfJLdCOEKpp3RkqSd78lR0+bKicMXqRVPfIR0aq6IeuO
-         97vgfDffH3W4V/pkK41hPhvD/AKl0o6Daj0y623sHuGBp20BCafjUG5/EUesYsMhJ0QI
-         Q3auNdC+ItRAmQqAvSjM5Hwl3Pu313moYnpqvDS9NtcWSNRjSSMwDXJIpW4X5j6f5hzL
-         YpBXrKucHWwjHAgOiqdGQrWYEyt10TLi3uZGd4p/DYq4IlOFsFEyKYVV4gSLS1r93n4N
-         dBxhsN/Lat3PNIlAp8/WyF4cJuKZwYjOonARX2U5p3aP4E87U0OTg+sjo1vTH6CEQa3W
-         XpAQ==
+        b=c1rKadE8aiWL16VhRolnimud0ZRoY1PPSCueaBQ1dQzxjzdKZctTA6DaG4Ac9EpA1r
+         kVBkWaC+yg0qkd0yYdQYHXJR5QwvH1zKEh71rH0PkvrRWKdHLnXvBbKMufzwNFnKdxlE
+         YfTEM4d3PoDPst9OhPq8YTBKhqFz2MEssSSXIjNbaPMEUundsqGHbHajsvIW0lxObA6T
+         PBlnuvYb4s5wzrvyvO4HbARydMUp9pKDTycg4ATcivODGxJMYbdfhwMBY7ghopzf+uMa
+         nat/F8MB1CGiuNub1aoZco2nVfeGZ5Pw/WTfXhQPh20Alc1TjGPvn+sJa4/jtTYRRxTt
+         uzpw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=RDrF/yyIMpS6ZA2Riz+vcoNoOC8Zd0lhJXN7Go9GtGA=;
-        fh=8MsRn6tapsuDBAGh4PVQWO9s99O+3aUr3n28WIK9fMs=;
-        b=DRjVggrW3yWBbfGzdULceUAejWepWo5bQ1jaO/kZXgB2b94rdtwTNkUJuWiuReHBV3
-         HSPQZ6WX131mJO3Sizjs4vc38gQ3vro5IyDEUvlfBf3EQjTfYSiyonAQvfAngPrqyeJB
-         Bc0pQl0LN0PdShXeoLOOO82oaHg5pP0WPcIoiHHbzlVZ4s3C+iIIjGpwpXCyhmJQ9NX7
-         d8DLnbYBwZxNuD99+Xi7640sJUPWEaxfqC6XwXZrUUUl8q+eUFhSRzMEq2z0jN+6C4sM
-         Vgnk9D3R0dkS2sWIOobHlyo0YI5CIVakOs6piuM8CDg5gpSZLXOZWHB90IKLU6wBNzJh
-         qgMw==;
+        bh=9YIu+7FU1VHtbqvxCn7BGYzQvkGTmNtaVEMjWe5+3hY=;
+        fh=3pEJAwNV37LC+o9PtRM6gB7sAfJacL9u/2dz1DBxSgE=;
+        b=kG5IFKIucKjCQkWiDWP97vLOAVdh44fq8NW8/aq5PriXR2YXokND8ezIf7+Hnd3JaU
+         W4lr7qLwsMu95VkQRugnvTXtbmzq4tFpKtIzcgg6+Bk21sGzzah8m9IyyMzFlxZm4jwh
+         letHEMg81uUc30q9j0PYrdjYZPCSynh9i5MJdkl579/EMqp3v2hf5xf+GfaeRu8rb6R+
+         n0wlk38l9Fw8siEPjEQwv+Haes8XP9GoadZMxF7tYT8Dd2Vdiwk9QVU/ZtvBSlGO8Hcu
+         fELVtKjktfqjKPmLyRV4UmmgSz4E8H1Xa7hJmRKSKTaXoEYtG7TLB02GH0VataK4aPJL
+         HxxA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782764790; x=1783369590; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782765414; x=1783370214; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RDrF/yyIMpS6ZA2Riz+vcoNoOC8Zd0lhJXN7Go9GtGA=;
-        b=ahs/IiZAT1D4ZUNH/eo0GWK7kkSLcG30YWdjLvpvKRlhFLHNx8pQ7jsJ8lgR3pyXUQ
-         ePkT6RuKgnzJU8onOjEhSJrC7swN9PkGMMDEAZGVJMa8gki7kXb+PyG7245asH0WivrR
-         bvZ0+34PnqR/ItfCVNmC9rwTXYoJKI21uoPpMPs1hrEdxZJxUtSDvtz+ykjjgSpjiUoj
-         yP37fv4DTPqj7Wpx4VMnF7nnf9otAxcQkxLjjGAJSb7G/qin/PXt4ybL4gQiSxvy+XJ0
-         h9LLfb3yIxpC+0ffQ/ycbu/rcLcN6GzyqPrbFBhbkok5xFTkN1t9X+uMYHn4vIjShjAt
-         Bonw==
+        bh=9YIu+7FU1VHtbqvxCn7BGYzQvkGTmNtaVEMjWe5+3hY=;
+        b=Y4i4mMAO4HFGOj70muULFSSzhbwu3OOk6CXHdcrdku+pvdRhmr/TTjvJ6NXVUHZeEx
+         RucGWbqu7R9EgjwLd5ZS2qep+Tbcp+oCWl69K97IPqBk0/RYhbFj3gxL09I5P63Q95sw
+         FYTd0GGoAJy0Xnix4Sx8XVPv6nRjHjH0c5TeE72uc9sqO3pdJ58IWOYBWgl+TOZjAF/E
+         J2DYmd4AcRhKBgLU3C+sJcynlcwJnDCg1+SDmuR2fnYVqqQKzpptvTWnIGfKV+H2oH4q
+         6WIcvyqbyom4elmmgUnpQICULHKmkY5zA5uZVsrZ7JaAE4yHyH6uyTDFWFz6syBKrsXH
+         GVRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782764790; x=1783369590;
+        d=1e100.net; s=20251104; t=1782765414; x=1783370214;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RDrF/yyIMpS6ZA2Riz+vcoNoOC8Zd0lhJXN7Go9GtGA=;
-        b=qlrJjVWB3eH21fCilkmySn0GVwA5VolyWnQve/zKjh/HzK3xiQTNovFYmbqc6FnTy4
-         N9mVooopbcGf/+G7ckw2q5nq+tA3FQVR1Ysyn0wxzqj7dLV/frTmCBHi3FGzCDESElfY
-         8G+w/hkXmH01k2lyow4HfLWa8gJUzxZhPIfF/dg+yJWYAJtnAOFTodJwO+KCyB1zI6ik
-         1hcYqpjvsGnAs/b7NP8hk8Gu9XRMXHb7jB7KCvX3W6pwlQTpYz+/NLxfqFPQ+AjQihJk
-         Uay0OzXwvrZEW7CrG5cLwwq+W/cSyhb/GKl1NuTVyJWw5cQLYvbwN5qL+o/6nTsMbqbX
-         5Hhw==
-X-Forwarded-Encrypted: i=1; AFNElJ9aI69O4sCbpyTCLhz0/m7uw7pgPR2aZ5s7dTT3Wf9wiR4Z9CMXmRNZZFdWHtzyAPAimtFz/tieBfvp9Vlpem0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yybtu52nnYjVB3z26nyigxw/EZZqFLaECHeNkZZBGVYRAhnuh9K
-	XP/2k3twgVVTFJkEjzvPVtl8VIXCnqkWMXs6BF+LYPPz6CMwO4mJ21fXW6UNqkrVm/8Dvq9N0F2
-	xS9x1GFVtF6phL77CnVUr0E2Bqagy7wg=
-X-Gm-Gg: AfdE7clSx+Ol58R+7dO5vknOPzuZQvQzXjWT30RPzJVFWNWQoeDIYgA0D5IDQNw6OLY
-	H+Jg8WCCbmePdFyOU2b8xBtNs0DG33LF3W7LpjI9vxlDaAkziufr2yOox+24k63B3awrYNItljj
-	TBd9knWPThxZJqL29tUZwKfdGIi+B7FdKkmqGzpWm2z2s9Tg1mX1eohpFHNzoDLGZmTXpaBtlrY
-	pMKiuGH7K4dGPujY00FjTrythf9Cp5QO9DDD5m7vWzKD1rJJ4jL6MFptpNs4uhR4n/ynByiUEC7
-	UATnJD4sI9TB0WQMddTyyCeEDAkZASj7xZjq5XmX
-X-Received: by 2002:a05:600c:2307:b0:47d:52ef:c572 with SMTP id
- 5b1f17b1804b1-493b8c362f0mr8930275e9.1.1782764789542; Mon, 29 Jun 2026
- 13:26:29 -0700 (PDT)
+        bh=9YIu+7FU1VHtbqvxCn7BGYzQvkGTmNtaVEMjWe5+3hY=;
+        b=QnaDuMXQrNbM9HUnjqRX51I1qkgOmMUOt4Xe7J5BCn7/InkCtaCsTZY9OEA+QAlvzv
+         8XwdF511lM3Uw/as31Bl6/gRFQuOAnR2Qo1keDfCbTITOjopmsy42/g371XRyYNWW7SO
+         n8BKZ+YwKk6yBuznPJ2Tasy97I0bJERR5kk94bs5jw53Qn1v9+AOOgYD3bXXDSxwRrMF
+         mUf3KThSlxhbuh1Q268hAGXL3yjlds8XNa5AHtyrIknXstGD6u+qysJ44d3cYgX5nd7X
+         qAzOfyLTHGWesY0hplYXhFa0gdGZ+bSxIZM6qdYqU2YED43I+VNE27D8RBmYi3U2Q0+N
+         WShQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/QnSicUXbEXFjvYxHagA+nNVfuV1a4bDRq6wjF38aZaxO2muNlv2vjKGDSmw14oUe/aVkE0fXbkk3grnVTnGg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiG9aKPkwwrQIe+Qk6emDt9Rh0pQSWn9auUPrRAhm9YTt0ra37
+	DdbAj/FNyTpPLbulKzj39I+GEc8evTS/0r78ctMrAvbLsY7cWK17ZJGWCfbnMsLH4h3coqq9kPs
+	VujIqAzrRci72iDZdUiJtIO74K/+rUfQ=
+X-Gm-Gg: AfdE7cl2YYAYuY9p2yoAn3Gk5DoiVn2PLqiylBJJEU6/SvC9r0aiVyVxiyMID/mO1jx
+	b1SlI1d/G3EOMEbnSSFj+yWajK2X6zG6TDYVxyoZcltphF62UHwDWcB7d4atQFe9eCYwxE3ncSM
+	TA3mi9Nm3gNgbXBWDXB6PfcY2U7EcX4wXcWIS10T40wd2HMQ2kMIIMvN7NmWaZli51WyxF5IbJw
+	ZZ2FqjXPxyZRvNdm8mbY+PXYfG+Bx8gs4plAPpqzNV7z9pSPumRWkQd6vJELuI6MVzRY3SuwO3D
+	3yZFfESGwNdVG1Gx5msH0a8M+io=
+X-Received: by 2002:ac8:7f4b:0:b0:517:146d:2db5 with SMTP id
+ d75a77b69052e-51c10716dfcmr13137691cf.2.1782765413909; Mon, 29 Jun 2026
+ 13:36:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260621-riscv_insn_table-v2-0-7f0810ee2274@gmail.com> <20260621-riscv_insn_table-v2-8-7f0810ee2274@gmail.com>
-In-Reply-To: <20260621-riscv_insn_table-v2-8-7f0810ee2274@gmail.com>
-From: Jesse T <mr.bossman075@gmail.com>
-Date: Mon, 29 Jun 2026 16:25:53 -0400
-X-Gm-Features: AVVi8CfcJ5_Gyn04QD1uaVCzrs31IcTfWuPBgWH8Bbn0CKPr59m0ofaAdOQj3Go
-Message-ID: <CAJFTR8T33Yw-wqPFVLe8it2cWjXCz_xPpRCRmoVMQyn7_=UBqw@mail.gmail.com>
-Subject: Re: [PATCH v2 08/16] riscv: kvm: Use generated instruction headers
- for csr code
-To: thecharlesjenkins@gmail.com
-Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Nam Cao <namcao@linutronix.de>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, 
-	Conor Dooley <conor@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	=?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <radim.krcmar@oss.qualcomm.com>, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org
+References: <20260622183109.1137245-1-dwindsor@gmail.com> <ajqBkKE8TpQL1mIG@redhat.com>
+ <20260623125725.GW48970@noisy.programming.kicks-ass.net> <ajqJNju6MY3B0S2F@redhat.com>
+ <CAEXv5_gFBvtP9HZrQ14VAYpFbrY44o0+Qw9i=c6GM1Mnp4R83A@mail.gmail.com>
+In-Reply-To: <CAEXv5_gFBvtP9HZrQ14VAYpFbrY44o0+Qw9i=c6GM1Mnp4R83A@mail.gmail.com>
+From: David Windsor <dwindsor@gmail.com>
+Date: Mon, 29 Jun 2026 16:36:41 -0400
+X-Gm-Features: AVVi8CfuqcgWf9PxadWlEONY5GAlf5DL137qARv7peK2GzjuWzY2x-_h44kqHGg
+Message-ID: <CAEXv5_isBBk7FJhuzv4n_WWHtseiiA5JM4AwZAsTBdRpx_L4fQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] x86/uprobes: Keep shadow stack in sync for emulated CALLs
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, mhiramat@kernel.org, tglx@linutronix.de, 
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, 
+	shuah@kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 22, 2026 at 1:08=E2=80=AFAM Charlie Jenkins via B4 Relay
-<devnull+thecharlesjenkins.gmail.com@kernel.org> wrote:
+On Sat, Jun 27, 2026 at 1:14=E2=80=AFPM David Windsor <dwindsor@gmail.com> =
+wrote:
 >
-> From: Charlie Jenkins <thecharlesjenkins@gmail.com>
+> On Tue, Jun 23, 2026 at 9:25=E2=80=AFAM Oleg Nesterov <oleg@redhat.com> w=
+rote:
+> >
+> > On 06/23, Peter Zijlstra wrote:
+> > >
+> > > On Tue, Jun 23, 2026 at 02:52:32PM +0200, Oleg Nesterov wrote:
+> > > > On 06/22, David Windsor wrote:
+> > > > >
+> > > > > --- a/arch/x86/kernel/uprobes.c
+> > > > > +++ b/arch/x86/kernel/uprobes.c
+> > > > > @@ -1246,8 +1246,12 @@ static int default_post_xol_op(struct arch=
+_uprobe *auprobe, struct pt_regs *regs
+> > > > >           long correction =3D utask->vaddr - utask->xol_vaddr;
+> > > > >           regs->ip +=3D correction;
+> > > > >   } else if (auprobe->defparam.fixups & UPROBE_FIX_CALL) {
+> > > > > +         unsigned long retaddr =3D utask->vaddr + auprobe->defpa=
+ram.ilen;
+> > > > > +
+> > > > >           regs->sp +=3D sizeof_long(regs); /* Pop incorrect retur=
+n address */
+> > > > > -         if (emulate_push_stack(regs, utask->vaddr + auprobe->de=
+fparam.ilen))
+> > > > > +         if (emulate_push_stack(regs, retaddr))
+> > > > > +                 return -ERESTART;
+> > > > > +         if (shstk_update_last_frame(retaddr))
+> > > > >                   return -ERESTART;
+> > > >
+> > > > Well, if shstk_update_last_frame() fails after emulate_push_stack()=
+, we should
+> > > > probably return another error, so that the caller handle_singlestep=
+() will kill
+> > > > this task?
+> > >
+> > > Makes sense, the other user has a force_sig(SIGSEGV) on failure.
+> >
+> > Offtopic question... both shstk_update_last_frame() and shstk_push() ar=
+e only
+> > used by arch/x86/kernel/uprobes.c. But they are not symmetric in that
+> > shstk_update_last_frame() returns 0 if !features_enabled(ARCH_SHSTK_SHS=
+TK),
+> > while shstk_push() returns -ENOTSUPP in this case.
+> >
+> > That is why the users can't just do "if (shstk_push(xxx)) ...". This is=
+ really
+> > minor, but perhaps it makes sense to change shstk_push() to return 0 in=
+ this
+> > case too? I don't think -ENOTSUPP is actually useful...
+> >
 >
-> Migrate the csr parsing code to use the generated instruction headers
-> instead of the hand-written instruction composition functions.
+> Agreed, will send a follow-up patch changing shstk_push() to return 0
+> rather than -ENOTSUPP.
 >
-> Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
+> I'll send v2 shortly with the additional call to force_sig(SIGSEGV) to
+> balance out the callers.
 >
-> ---
->
-> This is a simple transformation that I have again validated through
-> brute force.
-> ---
->  arch/riscv/kvm/vcpu_insn.c | 47 +++++++++++++++++++++++-----------------=
-------
->  1 file changed, 24 insertions(+), 23 deletions(-)
->
-> diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
-> index f09f9251d1f0..8ccf6ec722f0 100644
-> --- a/arch/riscv/kvm/vcpu_insn.c
-> +++ b/arch/riscv/kvm/vcpu_insn.c
-> @@ -146,43 +146,44 @@ int kvm_riscv_vcpu_csr_return(struct kvm_vcpu *vcpu=
-, struct kvm_run *run)
->
->  static int csr_insn(struct kvm_vcpu *vcpu, struct kvm_run *run, ulong in=
-sn)
->  {
-> +       #define GET_REG(_rd) (*((unsigned long *)(&vcpu->arch.guest_conte=
-xt) + _rd))
-> +
 
-IMO it would be better to make this a static inline function, otherwise.
+Actually, we don't need to force_sig() ourselves in this case, the
+handle_singlestep() path will take care of that. We just need to
+return something that's not -ERESTART. You may have meant that in your
+reply, but just noting it for the record for when I send v2.
 
-Reviewed-by: Jesse Taube <jtaubepe@redhat.com>
-
->         int i, rc =3D KVM_INSN_ILLEGAL_TRAP;
-> -       unsigned int csr_num =3D insn >> SH_RS2;
-> -       unsigned int rs1_num =3D (insn >> SH_RS1) & MASK_RX;
-> -       ulong rs1_val =3D GET_RS1(insn, &vcpu->arch.guest_context);
-> +       unsigned int csr_num;
->         const struct csr_func *tcfn, *cfn =3D NULL;
->         ulong val =3D 0, wr_mask =3D 0, new_val =3D 0;
->
->         /* Decode the CSR instruction */
-> -       switch (GET_FUNCT3(insn)) {
-> -       case GET_FUNCT3(INSN_MATCH_CSRRW):
-> +       if (riscv_insn_is_csrrw(insn)) {
->                 wr_mask =3D -1UL;
-> -               new_val =3D rs1_val;
-> -               break;
-> -       case GET_FUNCT3(INSN_MATCH_CSRRS):
-> -               wr_mask =3D rs1_val;
-> +               new_val =3D GET_REG(riscv_insn_csrrw_extract_xs1(insn));
-> +               csr_num =3D riscv_insn_csrrw_extract_csr(insn);
-> +       } else if (riscv_insn_is_csrrs(insn)) {
-> +               wr_mask =3D GET_REG(riscv_insn_csrrs_extract_xs1(insn));
->                 new_val =3D -1UL;
-> -               break;
-> -       case GET_FUNCT3(INSN_MATCH_CSRRC):
-> -               wr_mask =3D rs1_val;
-> +               csr_num =3D riscv_insn_csrrs_extract_csr(insn);
-> +       } else if (riscv_insn_is_csrrc(insn)) {
-> +               wr_mask =3D GET_REG(riscv_insn_csrrs_extract_xs1(insn));
->                 new_val =3D 0;
-> -               break;
-> -       case GET_FUNCT3(INSN_MATCH_CSRRWI):
-> +               csr_num =3D riscv_insn_csrrc_extract_csr(insn);
-> +       } else if (riscv_insn_is_csrrwi(insn)) {
->                 wr_mask =3D -1UL;
-> -               new_val =3D rs1_num;
-> -               break;
-> -       case GET_FUNCT3(INSN_MATCH_CSRRSI):
-> -               wr_mask =3D rs1_num;
-> +               new_val =3D riscv_insn_csrrwi_extract_imm(insn);
-> +               csr_num =3D riscv_insn_csrrwi_extract_csr(insn);
-> +       } else if (riscv_insn_is_csrrsi(insn)) {
-> +               wr_mask =3D riscv_insn_csrrwi_extract_imm(insn);
->                 new_val =3D -1UL;
-> -               break;
-> -       case GET_FUNCT3(INSN_MATCH_CSRRCI):
-> -               wr_mask =3D rs1_num;
-> +               csr_num =3D riscv_insn_csrrsi_extract_csr(insn);
-> +       } else if (riscv_insn_is_csrrci(insn)) {
-> +               wr_mask =3D GET_REG(riscv_insn_csrrwi_extract_imm(insn));
->                 new_val =3D 0;
-> -               break;
-> -       default:
-> +               csr_num =3D riscv_insn_csrrwi_extract_csr(insn);
-> +       } else {
->                 return rc;
->         }
->
-> +       #undef GET_REG
-> +
->         /* Save instruction decode info */
->         vcpu->arch.csr_decode.insn =3D insn;
->         vcpu->arch.csr_decode.return_handled =3D 0;
->
-> --
-> 2.54.0
->
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> > Oleg.
+> >
