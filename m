@@ -1,91 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8515035E926;
-	Mon, 29 Jun 2026 15:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD3743C065;
+	Mon, 29 Jun 2026 15:51:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782748169; cv=none; b=gIbeBdV8Huj+HcNzoapIUT19LRgntrbRAb3/eZ/nEYwX2AZND3vF9HCD8xTBkxEDvQryiHpPd46MbR0wWPyWa9w7v8zWNFu7KHAiauO9sOB+xVSnPqFRfKWaDjD4XdLZLZMeNl/RIBk3+UHb3GiLYUMiBMcP4Qb2+la0riIho4M=
+	t=1782748297; cv=none; b=agSu0zYrWKX6N+EusJq92XdDyEVrgjbJKmVQKAW6+isTSciFBLidYJWt+nov2gI906hPaLoelmoFRGeuQund7ReqQul5GU/pEqKxDvxacymZSiC0ulHc33ZV8VEDfXDYZmNxUDGIsG7Lv6yfBrpIRJQIgCyUvRpPLNLhBxdAvTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782748169; c=relaxed/simple;
-	bh=a7gjJjimoCo2/e9mYDjktdyqawDyzH083Zsq1hR6j+c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tHlbxeO9yT1n9WRshFxGPrXt7OGmr85aiQeH9giO7dmXWZylipIkyuvFWqxQCLdQsIox+z51bdyxXQCXNa1DkJke8rXV9M6HXVTGmjWNO+kr3TslooCngqBJukNl0K+nfkT0Ss/p4sD4c4bsYDZMYZTvQzw/YO1Kn4KcF2o9jNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m5VDrsyt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782748297; c=relaxed/simple;
+	bh=Jfpbh1KLhwtXc+BxstE95MlO6t2jjL+Fd0+Ww72x8xc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HSBjdfpWEqKzppjZw+4+zXzs4QvcSRrhq9FRMGTtwZ/Ykt1+1BZ1+tOViKjtxN5Xbauq9czSs60h6M9SFgCyYtHVfc036FhieGPr9/7hWe1gy1/OvKgyBgsgpYv7FWTx3Voaje0RNf5HPj4nP+wktdGK85QW8KNgwxNwRneCnS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=mqqMcK/S; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m5VDrsyt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB581F000E9;
-	Mon, 29 Jun 2026 15:49:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782748168;
-	bh=hXl4dJbP3FOa6+eSSAvZZMi6VNC2jfLpdmSwqcoEoNM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=m5VDrsytbDBfEN1nGXcsOCcU+kmYtf7Ai+/MPDbMTAT0mG4iwc+/f0L0F9tS+Wu5/
-	 e+1db566e+YEuCJxdMmTArGz6ciB7Yyu/2I0lQmGmHCcwm+WToCFod1K6V9lnwudQw
-	 iodPcQJVkIw2mqAIqoBF6AiSc2tFAFPT+aoB7Br2A2LBouymE0Ns7I3wT9+0/vHcxK
-	 nBKxOD7cgKLbQUkZDGAu84qI3XuDVD7ghhaB49beoRPZ+O7zgPmoevw5artZjRr3Lo
-	 Ifx2ddFGDPYJfgJtulX70MQdmfwzE3LNMph7q5n2Of5xFQ6IF3npcNCHP8JZavflH6
-	 M9jv8OCZaTk4A==
-Message-ID: <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org>
-Date: Mon, 29 Jun 2026 09:49:26 -0600
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="mqqMcK/S"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=VeejG0MGjUvD4AhkLMN95MQ3Dsdsxp52TnuJQNelYwA=; b=mqqMcK/S0ffTfirKJEMqcC/Ija
+	8MScC4GpriSuke5cvw9W89OocMlePAkwIX6hRqRBAOBICl/Jk24xJEReCepneIo9AsQ6T64BsTEuU
+	KJ7v6x86URFpLL6v0b35ayfP3ksScr/ZCwY+9RFl7FSivLEKwP1HPvd4T3Ky0pLFbp0Emy+LGVbAT
+	pa+V0JFJJnN0R/VjabN8iyidZewJxzgorjpeRhG+v4WZV/eUD+Er5X0mQ+KbBMLPuVhOWukCRRPkg
+	UOfYtf/pIAn+/y4sWQEsSlib+rJMDZxTPoWNtksRVS/9IjviHEnjRXOIgnK+lHrm7PpeaF8mwBgHD
+	xA9VFsaQ==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1weEGA-006Ojz-0e;
+	Mon, 29 Jun 2026 15:50:58 +0000
+Date: Mon, 29 Jun 2026 08:50:51 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Miaohe Lin <linmiaohe@huawei.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>, lance.yang@linux.dev, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v10 6/6] selftests/mm: add hwpoison-panic destructive test
+Message-ID: <akKUDDtww19NVra4@gmail.com>
+References: <20260626-ecc_panic-v10-0-6dacb8ad024d@debian.org>
+ <20260626-ecc_panic-v10-6-6dacb8ad024d@debian.org>
+ <aj-BShkN6BXex_ku@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-Content-Language: en-US
-To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
- <20260624030530.3342884-2-avinash.duduskar@gmail.com>
- <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <87se65bd04.fsf@toke.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aj-BShkN6BXex_ku@kernel.org>
+X-Debian-User: leitao
 
-On 6/29/26 9:08 AM, Toke Høiland-Jørgensen wrote:
-> David Ahern <dsahern@kernel.org> writes:
+On Sat, Jun 27, 2026 at 10:52:42AM +0300, Mike Rapoport wrote:
+> Hi Breno,
 > 
->> On 6/23/26 9:05 PM, Avinash Duduskar wrote:
->>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->>> index 89b36de5fdbb..e00f0392e728 100644
->>> --- a/include/uapi/linux/bpf.h
->>> +++ b/include/uapi/linux/bpf.h
->>> @@ -3532,6 +3532,29 @@ union bpf_attr {
->>>   *			Use the mark present in *params*->mark for the fib lookup.
->>>   *			This option should not be used with BPF_FIB_LOOKUP_DIRECT,
->>>   *			as it only has meaning for full lookups.
->>> + *		**BPF_FIB_LOOKUP_VLAN**
->>
->> This flag should not be needed. Patches for vlan support were never
->> submitted (I have them in some old branch). Since the vlan params are
->> initialized to 0, no new flag should be needed. Besides, these are
->> output parameters.
+> On Fri, Jun 26, 2026 at 08:33:20AM -0700, Breno Leitao wrote:
+> > Add a destructive selftest that verifies
+> > vm.panic_on_unrecoverable_memory_failure actually panics when a
+> > hwpoison error hits a kernel-owned page.
 > 
-> There's no enforcement from the kernel side of the parameters being
-> zero, though? So we do need the flag for feature detection; unless we
-> expect applications to do that out of band? But then we'd need a
-> mechanism to do that which could be... the presence of the flag in the
-> ENUM (and thus in BTF)? :)
+> > +ksft_skip=4
 > 
+> ...
+> 
+> > +ksft_print() { echo "# $*"; }
+> > +ksft_exit_skip() { ksft_print "$*"; exit "$ksft_skip"; }
+> > +ksft_exit_fail() { echo "not ok 1 $*"; exit 1; }
+> 
+> There is tools/testing/selftests/kselftest/ktap_helpers.sh that already
+> implements this :)
 
-This is output direction - return from the fib lookup. It does not make
-sense to require a flag to get lookup output. vlan proto of 0 is not
-valid, so it is a clear indication that the vlan output parameters were
-not set during the lookup.
+Ack, let me source that file in my selftest.
 
+	DIR="$(dirname "$(readlink -f "$0")")"
+	source "${DIR}"/../kselftest/ktap_helpers.sh
+
+I will update, thanks for the review,
+--breno
