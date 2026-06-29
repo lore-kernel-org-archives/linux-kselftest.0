@@ -1,83 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015D12609FD;
-	Tue, 30 Jun 2026 14:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23E712F8E98;
+	Tue, 30 Jun 2026 15:10:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782831453; cv=none; b=sGSvzPQeAQyT+qvZVs8zU+mQkCZKKXpoIpymnobhE6setlfhxbL6kA+wxDDkffGqh0t4TFimgpxjkcuCoE0WpO5xDRtQd4K7JcLU53m7rQfL8DzLJcDU59ZDh9ZUQAnnWAicrXhRZZf4ATyzg7mbb/3krURnr+++jpY1ZG8OHi4=
+	t=1782832244; cv=none; b=fifNcf0Ahu2Wdfuqw5wfa1rVH/cbrOT6EPc8pKOT3ikpG9OgXYx3Eci2k2oTiatnMrPlpBObw8rhkZJ4T9ODqryt0XvjKZTWifQhi5QsoHXVZcP9svvXLhEO74qBMPbAYu0Rh1yPEov6TivVGNFVs6dO7BOWggrAJaqKnsc+8Vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782831453; c=relaxed/simple;
-	bh=wCS3CGlTAPFqjpzIeJR1CFEGc4FBDpqHNkDW/1nY3eI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ESt4s5RW05eZoBj/9cjnXc0nU888CPwh+HNakVPf+HVlfN354DKN2vjjrK1DJQOH64FMIhgqXaEkqE24dj6X5ddRizaVEINyavHJFgdITxv8dgTbYbt+I3Pw5SfXEaugJqd6P6cLP3vwj73KoL3xIqsS1wymsQkrEfunAKUGUJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mKqN86No; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782832244; c=relaxed/simple;
+	bh=IJN8GCa75tXNOusahS2SS6FLKbmYA/g4TDhS1/Bnexs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r91qeY0AnnUge0EOT1SB9Wr5BI2XbOEaLwfU39mY4jbdhY8peRdjTx8mdv2CBdn9CRvNHwLXcGGsnknue9870ifMQSWUdLuKH93hFY26RD1luVphqVpBU1SS1kd/ZX8b9hvgs4GVHww5R6NQxLOEDb1DWx9nRzZvbotP/OF7fz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.arm.com; spf=pass smtp.mailfrom=foss.arm.com; dkim=pass (1024-bit key) header.d=foss.arm.com header.i=@foss.arm.com header.b=N4rTq1+X; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mKqN86No"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E35631F000E9;
-	Tue, 30 Jun 2026 14:57:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782831452;
-	bh=Rt/iGbOFCZMV9bCDf5rxqRe3XsLLEE61YR1XtIhNQok=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=mKqN86NodSgPmPa0daU/LTKKagv0DcFCeGMhS6MgVwObdnzmatyb5UisR30Aa67Xk
-	 UF8Yikd4V0jvra1ltipSVud//K1T/IbdgT0XbO+HgUp9mX4tyeXS3/nNd0FXWYurSb
-	 GeFtNYI1dABj6rRvj/tn6uBv7VbcA+YNI+vCD04myI1Sg6Svkd0+P2ENuvY//ghV1i
-	 0uW5zDuVnefztjVi8KSuS5DqaDXi1RgNx+np4UHs+Lcj4U/Rl1ywlHHxoKE+EnF5/d
-	 HyQ1jyi3BzKD6JnuwYd9olgGQdLoHVj/hjNNwDE1tSYfGEocOE4Vgnc4fNc/dJMZAB
-	 LHuQYbCiN4W6A==
-From: SJ Park <sj@kernel.org>
-To: SJ Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	David Hildenbrand <david@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 00/11] mm/damon: update, optimize, and clean up doc, tests, and code
-Date: Tue, 30 Jun 2026 07:57:24 -0700
-Message-ID: <20260630145724.93141-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260630141726.92246-1-sj@kernel.org>
-References: 
+	dkim=pass (1024-bit key) header.d=foss.arm.com header.i=@foss.arm.com header.b="N4rTq1+X"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2599E2F27;
+	Tue, 30 Jun 2026 08:10:38 -0700 (PDT)
+Received: from [10.211.55.246] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EEB233F66F;
+	Tue, 30 Jun 2026 08:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=foss.arm.com; s=main;
+	t=1782832242; bh=IJN8GCa75tXNOusahS2SS6FLKbmYA/g4TDhS1/Bnexs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=N4rTq1+XJ5MZWK5epRjs6xByi4TTG70VNWthnJlC8jJwI278e2E1e/fm+cNZq3Pft
+	 L/NAG87p9H2OJSj9kmTzGAcN40zWWlYJEdxtMCi/744noD9aXOZHYMM0wOHhVMN+iZ
+	 WtxMPaMyFplX6WXbGMItHU3P+/VcJG1TikDZ00+Q=
+Message-ID: <9e3ca6bd-bd05-40b3-9b6f-85552009537a@foss.arm.com>
+Date: Mon, 29 Jun 2026 12:09:27 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] selftest/x86: test ARCH_SHSTK_UNLOCK
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+ "x86@kernel.org" <x86@kernel.org>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "shuah@kernel.org" <shuah@kernel.org>, "mingo@redhat.com"
+ <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+ "tglx@kernel.org" <tglx@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20260615195156.257950-1-bill.roberts@arm.com>
+ <20260615195156.257950-2-bill.roberts@arm.com>
+ <67e700c8bed2e082efaf68de33ee2c46d16033f3.camel@intel.com>
+Content-Language: en-US
+From: Bill Roberts <bill.roberts@foss.arm.com>
+In-Reply-To: <67e700c8bed2e082efaf68de33ee2c46d16033f3.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 30 Jun 2026 07:17:14 -0700 SJ Park <sj@kernel.org> wrote:
 
-> Patches 1 and 2 update the design and ABI documents for recently added
-> DAMON features.  Patches 3-7 add or update more unit and self tests for
-> DAMON to cover recently changed or added functions and sysfs files.
-> Patch 8 optimizes damon_commit_target_regions() to skip unnecessary
-> adjacent ranges setup.  Patches 9-11 clean and fix up recently added
-> DAMON sysfs interface code for readability.
+On 6/29/26 4:46 PM, Edgecombe, Rick P wrote:
+> On Mon, 2026-06-15 at 14:51 -0500, Bill Roberts wrote:
+>> One should not be able to use ARCH_SHSTK_UNLOCK via arch_prctl to twiddle
+>> feature bits, test that this is the case.
+>>
+>> Signed-off-by: Bill Roberts <bill.roberts@arm.com>
+>> ---
+>>   tools/testing/selftests/x86/test_shadow_stack.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
+>> index 21af54d5f4ea..82a5fefa9df5 100644
+>> --- a/tools/testing/selftests/x86/test_shadow_stack.c
+>> +++ b/tools/testing/selftests/x86/test_shadow_stack.c
+>> @@ -979,6 +979,14 @@ int main(int argc, char *argv[])
+>>   {
+>>   	int ret = 0;
+>>   
+>> +	/* test that we can't use unlock to set shadow stack */
+>> +	if (!ARCH_PRCTL(ARCH_SHSTK_UNLOCK, ARCH_SHSTK_SHSTK)) {
+>> +		printf("[SKIP]\tCould enable Shadow stack via UNLOCK\n");
+>> +		return 1;
+>> +	}
+> More generally, we should not be able to use ARCH_SHSTK_UNLOCK here. Can we make
+> the comment generic and not checking for a specific bug? Because it does more
+> than that.
 
-Sashiko found a few things that could be good future works, but none of those
-is a blocker of this series, in my opinion.  Please read the full thread [1] in
-lore.kernel.org if you want more details of Sashiko findings and my replies.
+Hey Rick, not really sure how I could make the git commit message and 
+the comment
+more generic, as they seem really generic, can you please be more 
+specific or give me
+a blurb you're looking for here?
 
-[1] https://lore.kernel.org/20260630141726.92246-1-sj@kernel.org
-
-
-THanks,
-SJ
-
-[...]
+>
+>> +
+>> +	printf("[OK]\tCouldn't enable Shadow stack via UNLOCK\n");
+>> +
+>>   	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
+>>   		printf("[SKIP]\tCould not enable Shadow stack\n");
+>>   		return 1;
