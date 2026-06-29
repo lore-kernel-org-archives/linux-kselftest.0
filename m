@@ -1,130 +1,96 @@
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B023403FA
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 09:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782726235; cv=pass; b=uzXx26IMWFnlWLJE2G06HrieiBsCczCTtEmp9Kbj999MrkVpmO09cbtwri2YgGJOwMlmN85BVuKTK1vSX71fStUq3WWF7nKIRw35wE2Dl88v0wfKXVH6Jskhh+fO9xarz5Iw52pK1orB332bb6ju20mBV+rkH01Oby36aLaDT4k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782726235; c=relaxed/simple;
-	bh=JfkKFegQY1WhQWdK5D9ZTbBKn2OYqD8jwYnp6jmR+xk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T3yjimEpJiDQ/iUjlsqy7qHnr1K0pbmkALinyt7HZ6pH9aPg9CNGktf9wWoEu1x5zAAJJ/du1MjRhE4a95Vi1V7oWTOeGePhPXE3q8FcR+EwAAE+A1K/DqgYL0c3uIiz/ijHL54HQUbU7hh2ZNj6buKcv8IN66v2jYPR7B2dag0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MCj8O26y; arc=pass smtp.client-ip=74.125.82.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E653C456D;
+	Mon, 29 Jun 2026 10:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782728434; cv=none; b=nZIX42NLhGdTulJHIs2Qx5bkQIWLjPrt0bNxdz1VEZJYnEs9G0WEnVMbFSEE7PPAWQ8T/ADgevmZkGsmIL/86wgpGNJBeGk22Zq4Bs88PuLcXMwVplpPmqa8L1yohxc6UdBJrtN1qZ5m7NYS/4Lkr9BIMJn5MM61FYRqOOj3Qjw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782728434; c=relaxed/simple;
+	bh=cX/lEYrd4XkWUUtxxcYkbRW8f1wmK3umwBxhcHuSF2Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tKQd2pvu7ugqs8q38D+b1I/5utuyJ5G0XQPozP7zX9hxRA95Km0dI/td17cHsV94/EexQZ+dHCpy4K8oLF3dG71BIwvUnEb1E7AidQLOpumfBm2/dia3vS89j/Au+C1XaR99XWl57DnvtnXGWQ7AQ3H6CU8yFlqJMPXMVyxWhOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MriwyfA1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MCj8O26y"
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-30bb87c90deso362083eec.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 02:43:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782726234; cv=none;
-        d=google.com; s=arc-20260327;
-        b=eT3VMBn4xrkxQgEJOv17gSkCtEgHWFMQsPgki247NphEy2Y6CqglHHx7+ybG/S+Wzw
-         pt7rCgl+BCcp76PKjujj6idHeO4DceQ4hQTk7Xtm+wE0IfQJxl6iP/3MPE+e+IAhf+Oe
-         1+WX+PMc+NtFzIXIIvwNyAH/nPFX8YbIXMoyY1fKuVaxrH9O35nZsPQ+8+LNMbePpeMN
-         H2Sdm1t+KPcQt0mV+GUf4qEqsFaei/+Gyra1EjSPzVaN1wmWfjGZfVmU7ozLrtNdfYjw
-         WWQPlOB0oUcdjI8Ck6vN4r48tJyoIEP7tc35QS14EaCWVlZ59ltg45Nu/+qCCmnn5lpS
-         FbTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0VUrCflsEpPc8IznCfEN9hlFAeMr5Dc+AV1DM4Uw7YA=;
-        fh=C/gBSitWnBE2SqtEkxBM3RijXiil9xqOEZmTF/gAwxY=;
-        b=GcTLWBe7GDbzDMsfL60ol6Dl4p8+PrHtdd96v9ZZyGsNQb+mB+yrPwf4EXp0r9Difd
-         WWFuNKGccvt3c2qde4Se5kzw85Ews1jZb4OMC3ikrPp7B/SuBgc0JCBXeVNKqmKtetij
-         o+hD89qQwpgTQjONO3zt3FefARBv6PNDKboOAzgUg9ld+CIssHzJyFN8SGJMwu0GU635
-         GnCofN9iJI5V7KvZL+6CNVY9FIaKMmcU+279ti9shNGpHk0pMDrvxfqool0gL0fJeoy2
-         ewJUAmvIwb2dxbY6fIvn2RI27H63L4kKJjs0zkmAXN1wgm/jc6MaARPAX5XRNoSo+V3F
-         N/HA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782726234; x=1783331034; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=0VUrCflsEpPc8IznCfEN9hlFAeMr5Dc+AV1DM4Uw7YA=;
-        b=MCj8O26yWjEu59btNiqnbSihshsamziT41w0Ia2THHgQHn/vJ5OGdLNmQxnD7osd/B
-         LyoUfaUJiIyUiWqBg8iydygpO7CeWuWocj3RczbApBC45nE3x6oxucKu3tts/uacv+ef
-         61ffeuy0Ww0qz2GLsL86ztPeiNUsp+ZU1i5RVSrN7CuOmtvE6WGoQly1xhrt+ynpHqGt
-         J608LcAtVWbcZ9lbGdQonii2TAF4VRVL5rcc+y4rn50EoEy5bMg06g7/4gyioHJknHhh
-         wutGzs+zvSR+NIEPLulqii4o9M1fz0HHtZBehlePICHb27rJI/qhJpFdVLEjaOEian4j
-         /nbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782726234; x=1783331034;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0VUrCflsEpPc8IznCfEN9hlFAeMr5Dc+AV1DM4Uw7YA=;
-        b=NQvdlmvxE84V00sTMbk0OKy7gqVmHjBbDKWZRK+ilIC63unctWr30+vBTpwd0hGX5k
-         H+w27WjaF0x3KQWtqzn3YEN+HegfNFlva5GM6QwjPnbwwr/srll+KqrEQGDzTCQ56mIi
-         BuVtb33LE2560WwoIS7+R3pM68osUnizrClORph1HqAcGlF7mzPCRhf9Qb9u5KzqMwAx
-         PGYtCjedB41fpixX7gA1DIG0Kghg2FwwO79yE7obg1RVJtIhrRwlfpLXnAUUwV6shPjU
-         2FrRv1uTNyqPhSx9sp4W+G+7lzEoHoubWAnmnX9JMFY49Yuh+5g8DN2zoSVeqit5Q4We
-         nkSw==
-X-Forwarded-Encrypted: i=1; AHgh+Rrr6bh5kSSW43JQIXj5Zwbjn6P7awC1jnK9EoaZ6FkxM6nkak3IHogJNjyS0e8XDq+9FTg3AnE8B4+qTFPVEWo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWq2qLruLjcw9KRR7/05OKPH/YaJjyAYf7bLD6nSivPPVd7tB0
-	0PmUxcjwoQkxeGUcDJ+mK5EvLTX/1C7e41E7k5K/bVvsxBn3EWEciD1+tG4eqGteY6JG4if4x6i
-	Z/5Lrb2c2g/WQRXP/y2kdJT/6m6Z3GC8=
-X-Gm-Gg: AfdE7cl2P3Nzmkgx9+bVuoV9OqvhMgZkCP1jfZWHqw4VsSX93/yu5H7pHzU9MGKN6Ul
-	UKOGvUYnBZzjv3+gmyZxDik2Jv89RwMzn0FxOUnIJq1DJs+assygvTGIz+MfmKhtvady1oKHbfG
-	8Nx3ZcBju4ZDYmipUdsMhZZPNj0etn17ENJYWktbM/2HwMl/eGUKpjG5pXRKuD+5Tls+wE+C2C1
-	EPK/WknBiILoMOjbOc8DcAMdzPwZSXD7S3RO8eWWvVpFtOHRnT84+TKqmJyM1Uzs88s8xBrHTNs
-	mgcbIpqqwDOxWvfES1F4VSZbasbxd4SsOwCTJH/LiMDDo7b2FrHlUyBZ16fDDChkGbn6u4hKc42
-	X8/Xm1bHweAoq
-X-Received: by 2002:a05:7300:2327:b0:30e:cb91:657d with SMTP id
- 5a478bee46e88-30ecb9169efmr1264901eec.5.1782726233809; Mon, 29 Jun 2026
- 02:43:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MriwyfA1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 435D11F000E9;
+	Mon, 29 Jun 2026 10:20:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782728433;
+	bh=HpGoUDIQQyxm8nXczBO7uDgFlJUnSsbppjIImZsuh64=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=MriwyfA1WkY6hiHd3yFjQ4ooJ3k5caOhTZ6fELGfsJHjiUBQOmtiRJva60TGrJYbz
+	 GTaofAmjQy6vFPTWAgrEeTLgvtQf4Ktg20+JDQSE/ab4SM85mRj2ErV5y56DOeSlYN
+	 VmBI0ST/NteiA80irAI67Cu/MISTaDEG9LIAGCivmlxsQ7ZazpcC2ACmwKZRiUBZc7
+	 9u4EKhr3tx7qWt6xSEnnOTZovMVkpieLFG52lpdmEYfj9+hBcLccD4SwW2T9tjiU7w
+	 T+eQrhTmkHlrFSTl48r2K+dKe4heyGAlxbFcyfZk4LkRfw5kwfkm/bRi0S/5vi+Rwv
+	 ymyOaZKRBQlNQ==
+Date: Mon, 29 Jun 2026 11:20:24 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Zenghui Yu <zenghui.yu@linux.dev>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, jgg@ziepe.ca, leon@kernel.org, akpm@linux-foundation.org, 
+	david@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, 
+	surenb@google.com, mhocko@suse.com, shuah@kernel.org, dev.jain@arm.com
+Subject: Re: [PATCH] selftests/mm: hmm-tests: include linux/mman.h to access
+ MADV_COLLAPSE
+Message-ID: <akJGyxHtbA0lvPNa@lucifer>
+References: <20260628143111.36863-1-zenghui.yu@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260629-backport-cfg_select-v1-0-388d5d31d9d4@nikableh.moe> <CANiq72kG8k3mk+Xjr6q7aKg212QUNtZk5w4rxV=UGR5UXKE_ng@mail.gmail.com>
-In-Reply-To: <CANiq72kG8k3mk+Xjr6q7aKg212QUNtZk5w4rxV=UGR5UXKE_ng@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 29 Jun 2026 11:43:40 +0200
-X-Gm-Features: AVVi8CfGwENSw9fJYhMjSNirdJAC6-UBxvIKkCSq6p_t1bQ99ZdvDWf23-Hp31g
-Message-ID: <CANiq72mDsKVs7rE6XYJ6iQ=h7=HFfparWzn-xMcJD++p_HLq6g@mail.gmail.com>
-Subject: Re: [PATCH 0/2] rust: kernel: add cfg_select! and use it for
- config-based selection
-To: Nika Krasnova <nika@nikableh.moe>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Yury Norov <yury.norov@gmail.com>, 
-	Lorenzo Stoakes <ljs@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260628143111.36863-1-zenghui.yu@linux.dev>
 
-On Mon, Jun 29, 2026 at 11:38=E2=80=AFAM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
+On Sun, Jun 28, 2026 at 10:31:11PM +0800, Zenghui Yu wrote:
+> The following compilation error occurs with an old version of glibc due to
+> a recent commit adding MADV_COLLAPSE testing:
 >
-> For instance, instead of waiting for the MSRV bump, could we already
-> use the upstream one since Rust 1.91.0? That means that we are already
-> sure we are using the upstream one as-is.
+>  [root@localhost mm]# getconf GNU_LIBC_VERSION
+>  glibc 2.34
+>  [root@localhost mm]# make
+>    CC       hmm-tests
+>  hmm-tests.c: In function 'hmm_migrate_anon_huge_fault':
+>  hmm-tests.c:2355:27: error: 'MADV_COLLAPSE' undeclared (first use in this function); did you mean 'MADV_COLD'?
+>   2355 |  ret = madvise(map, size, MADV_COLLAPSE);
+>        |                           ^~~~~~~~~~~~~
+>        |                           MADV_COLD
+>  hmm-tests.c:2355:27: note: each undeclared identifier is reported only once for each function it appears in
+>  make: *** [../lib.mk:225: /root/code/linux/tools/testing/selftests/mm/hmm-tests] Error 1
+>
+> Include linux/mman.h (which provides the definition of MADV_COLLAPSE) to
+> fix the build error.
+>
+> Fixes: e3d8707358ea ("selftests/mm/hmm-tests: test pagemap reads of PMD device-private entries")
+> Signed-off-by: Zenghui Yu <zenghui.yu@linux.dev>
 
-By the way, this also applies for the docs -- we will eventually use
-upstream's, and thus it is best to try to match the docs too.
+LGTM, so:
 
-It also means we probably want to put this into `std_vendor.rs` if we
-are going to copy-paste the docs verbatim, even if it is not code as
-such (no implementation upstream since it is a built-in).
+Reviewed-by: Lorenzo Stoakes <ljs@kernel.org>
 
-E.g. for a similar case, please see:
+> ---
+>  tools/testing/selftests/mm/hmm-tests.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+> index e4c49699f3f7..2f2b9879d100 100644
+> --- a/tools/testing/selftests/mm/hmm-tests.c
+> +++ b/tools/testing/selftests/mm/hmm-tests.c
+> @@ -23,6 +23,7 @@
+>  #include <time.h>
+>  #include <pthread.h>
+>  #include <limits.h>
+> +#include <linux/mman.h>
+>  #include <sys/types.h>
+>  #include <sys/stat.h>
+>  #include <sys/mman.h>
+> --
+> 2.53.0
+>
 
-  https://lore.kernel.org/rust-for-linux/20260406095820.465994-2-ojeda@kern=
-el.org/
-
-Cheers,
-Miguel
+Cheers, Lorenzo
