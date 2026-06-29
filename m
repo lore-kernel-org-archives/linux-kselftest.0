@@ -1,126 +1,106 @@
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09B730EF9B
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 09:01:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C413F9294
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 09:31:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782723719; cv=none; b=SGjbaLonvbb/aVKulGTVnQsrw95L2npekG0+550bk7/XADz0cuxwm+P3wLW3Yls/Xi2GeMyUMrOSKiw3xXEHHcMAQBz01y5rdynBy38wstoIdiqP0kbhKEUJ7uPAnS9pvH1IlFKPzOOhLHoKXZX2EF0EhUt01CEvpoiEGN89ivM=
+	t=1782725483; cv=none; b=ZM3kS6WhrvY8nFhe2eBYspda9nBFVaCGq6dwJM3QQiTcqJfZpcxvt/DEBgnhEV08NHI6fuvmRixlpJyE9bb9vxkkZeMaN03W0b7tZrwPT7INM3dqOzurYWjUJRs8HoAP9iUs6l0TJMT66qI99xFlLZNRVyFCzbcZQlYM4+RkliI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782723719; c=relaxed/simple;
-	bh=3VKl3iFU5RbwK3KYk3lekBeyfpcYW9UDaDcy6rBp9dE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fUo9bCklPU/ZI/WKqZ6hBhSI2xTiIcmEWqYay+5mCR+3lGTRP10yqax5vCv0xoI8B2yjdsvhcfy5VFrTfdF/5g0OIuG1SZ1+g1CRlNr8tF0biDtgLtEr5VL6cWKYU+nHjPUBbdCoCqix33ri3MYbyqRPfkhfVO2K5p0g+mD8Wpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1782725483; c=relaxed/simple;
+	bh=tn6wJlpjZISGvOpBbSSmHynVckiSkF93YB8fHRf0Xag=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gjRMPGcSNk5975M1jc926hhsqrfTa4RtUDX9CMVE9Qr5TDHa9rWY77LdLJmXAeSkn8cL6G2IAzvUza+UbqtRGVbEc9u/R7CqR9f5irQZllx75or6w7GNUYvqUkL3/twwjnhX0vLPPcEaTEx8gYqt6+Y8vDX1oItdmFcUVT/rz1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qQW6l7sZ; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-59c627b53a0so1556848e0c.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 02:01:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782723717; x=1783328517;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qQW6l7sZ"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8478fe07ebbso268023b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 02:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782725481; x=1783330281; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LWCa9Iijq4T0FbxC+lA9KqSW7TbKNleAvoiJYHgYTME=;
-        b=stWszFjBbxFM8e5oNL6rPsceoI4reUIvt3IecHTYuO0N9ilgxBGRnl+6g19pN9gNWS
-         qSp0DrblMNuWxSoHJKW2vzAIov0jPf0AnJnxcWqETsGi/CE8H12qLEpu8EUoZ2nsqzgr
-         OKhdElsVFqVZxV+e8lvzTHsnDKVTzkEWJu38BtPdwYZMcKLSM04eZgsALajx8J8kX0np
-         vOU56KDTQPpdbDGVR+8jFNn3VyFcTfs1pqaMSowqfODx1wg64yVjsLXYgHGJCdd9XLr9
-         IqHIZQWeEwJNdyv9YMwxTE1YcxINNNuWUBOa7pQyOGDH+iJIuGsQ7RQDyjA5jGD+GY3a
-         Hn2g==
-X-Forwarded-Encrypted: i=1; AHgh+RorFIIsid0bl4/8xLhtRD8RRMQuoKXm4qEAv2cq4a0IZiDw54U0wb0S0JWk7sPNLuLLAgBMhvUAW6N1N4tj7oI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwW2yQH+IJKg2ayWeuX8Xzs/+kRmPiEqAe9FdgZ+vWBjDdS4w+q
-	PpOK9PZAjf72M/jVaZMsDzWbdJuPLWqUMiJ/PEaCViHAJmeelsemsJ89SteOUzFL
-X-Gm-Gg: AfdE7cnkbs/q4h+fcy3lPtnsvvT0avGkzt3+mHbpupDkjb3AOOzNtAkI0ANqGGJYCEi
-	AQ1ApT6epRvBRMOFc6cL/2njW2jtRKx4nhooG5PtaMUZzbq5OeWb7JEilW9LAz5v5EYhUUM5rhT
-	lLfPN1Fu/oO178OXeAsTrMqi4l4GH79XeMyh2mS6R48ZbTWj2Q9X30o4eCaCTQrdfc4BX3an2bt
-	ItZvgvmz5lKspNedlHhu20HrsUlmnTcpa1AXaHW0trT/zxOK0FDS8ntmkcC2B54j32nOePRP4Fs
-	1tjedzmqPJaccxocTAAtdPH+ILJvjXrqM/g7bZIcD3Df9Xj66Pv+EXwFjtEP3+Gb3QAljnv8Z+o
-	ZCEdNK8i03xf3C2r1YHMTImQ8IA57DOGyY5vhQ7Xi2u2iwbI/0t7LqaBtv1a15mF6XPF4xYnZE4
-	kkx+l9uOtgLvEHQw+9gYI4/lamYZGihF+gyZ33RP1xj04DIWtkvg==
-X-Received: by 2002:a05:6102:c10:b0:739:18ea:565f with SMTP id ada2fe7eead31-73918ea5a95mr500425137.21.1782723716910;
-        Mon, 29 Jun 2026 02:01:56 -0700 (PDT)
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-735638689dcsm5514845137.0.2026.06.29.02.01.54
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jun 2026 02:01:55 -0700 (PDT)
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-73703f19c06so363614137.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 02:01:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RraJCEzGL+V4jyGWotB7LvWVKA41Ets8Z8JTfYkENpurl2X8GfjSTrV4b0IT0yrNwQnaN7Ng0OEVe3KuSn9+rI=@vger.kernel.org
-X-Received: by 2002:a05:6102:2b95:b0:632:29a5:2b28 with SMTP id
- ada2fe7eead31-73433b204abmr8037345137.6.1782723714413; Mon, 29 Jun 2026
- 02:01:54 -0700 (PDT)
+        bh=FFPmiZ4Mjv6BXhEHcS9Bb7V7+aPBk2CMtzf4Gc+B054=;
+        b=qQW6l7sZxtbT6keh/A7OhO54//TcAI4QgGsgBKlAwtEa8ZlQUfM0C7jUzrQOF+8DyB
+         YXvSGF2GSgC9RBCj7XrAASZyaSBh+bMA+/KT3nWTWaYYfAlebLLZAtQp7wi527yhPzrZ
+         +5FhGT3dha8VRc6RfWHPCF40+sD0LUSv3E7+atJqEBGcPvaM+rNr6VzAQPmM/PPEACQT
+         ZZ9zv9R3XtwUburNnNDeo3TjHYRJldG/vtnfwwW2LlQfY26ezI79rIg0Q3K52f9Jo82C
+         CJSDVZhf3d33rft+LQsLsqbtEHlz5OO4Xyb+Smoe6JUtW092Xi2Ib+YKQnEM/sRr7ODU
+         Dcuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782725481; x=1783330281;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=FFPmiZ4Mjv6BXhEHcS9Bb7V7+aPBk2CMtzf4Gc+B054=;
+        b=rPPa5jGjgKOMkA4+gM8Xe2+fotzdJnEmQ4sxLD1FQQsunmO/daBh4Kkxcb9StNmbnv
+         8HzLNqNPwwXKxa4ttuZqMpIX/JAoCxCAhd5VbGbxuZT8HgXL5qaLa2KYpigVBQOV6u/O
+         YhR3o3EO8ltNG+mCy5MyFGtlx01qDJwdx8CBEEJQ9nV7mTPZbbHPd2OOkdzDCjVU1Goo
+         KH3PYoB0i0qqudGP+1x6P8F7bj8J21N14vcrh0l/5mERzU+Q2KpVRz53sDoRW6N/R8+e
+         ZsElPBVFCvmXP7LyJA1K3CAUWmmoSKXVhOtiCZVPU811RB/onPlUPyXicVQ0Ujka+xmC
+         Ncow==
+X-Forwarded-Encrypted: i=1; AHgh+RptAp3ZSr6gh9Ta+j0ZyvW1hNSoXl/C7GpblLufkAc0K5u5xFo1dGOi49587ob+a82IJUSxST7bp7hd2DdU2EM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnBAE9EQlVFBheYxgFqyWQuELjSCPPtYrcq99DG8LWwjRLmO6n
+	vMkbBSebiWrSfXWAQiJAIDZ5jUf666QJoaQyIm+RKevwFXmAX0EV35Py
+X-Gm-Gg: AfdE7clWOhUG+jV2tCsIHYbLgjOvgrhc7Et8hZRbKxt7RsycmCd8yDxvKTTeS4841wz
+	ItEdKgtcGWxFNEMjFHxqedNyHfRgJ1MvrIkjaooamghHRm/GYF8yEdH40OZhRj2uqrFGc2r6rKj
+	VM+kw+hwJS5eViWOvycGR81uKlKM9Aa/2nbuneSfhRcxNBcDTiiTNC0sBRNPtENM0/jxokA9+bR
+	h8L9vUwslSp1kPSwwrpxpY+kePk3rRIEbUlF/Y9ifLjrmGITuOThVgFBHtSfe2kJ/nxpmV35+l2
+	DT7jeUj07i0iNfRKs/j6AcFn9fxrE8GFPPCw2zc05sOxa6348xcUD3uCbSm0IGkuesIc8Go8aIf
+	VFt3F7Z6Tb/uFUDgabboHW+K3qnDVe2zqvu/hUa0jHHK7vSHJHv9Fcc56un+PNzfEWsn1T8vl+9
+	zMqtim
+X-Received: by 2002:a05:6a00:b53:b0:847:8bd0:1b96 with SMTP id d2e1a72fcca58-8478bd026dbmr1380804b3a.23.1782725481265;
+        Mon, 29 Jun 2026 02:31:21 -0700 (PDT)
+Received: from martin ([2405:9800:b862:14dc:12ff:e0ff:fecd:7ddc])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845a3feb769sm11591198b3a.17.2026.06.29.02.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2026 02:31:20 -0700 (PDT)
+From: Martin Weiss <martin.githubacc@gmail.com>
+X-Google-Original-From: Martin Weiss <Martin.weiss2410@gmail.com>
+To: linux-kernel@vger.kernel.org
+Cc: Martin Weiss <Martin.weiss2410@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+	Andrei Vagin <avagin@gmail.com>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Bhavik Sachdev <b.sachdev1904@gmail.com>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 2/4] selftests: filesystems: fix spelling mistake in statmount test
+Date: Mon, 29 Jun 2026 16:30:52 +0700
+Message-ID: <20260629093056.591498-2-Martin.weiss2410@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260629093056.591498-1-Martin.weiss2410@gmail.com>
+References: <20260629093056.591498-1-Martin.weiss2410@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260629054143.7737-1-note351@hotmail.com>
-In-Reply-To: <20260629054143.7737-1-note351@hotmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 29 Jun 2026 11:01:43 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWMx1zAgnzkoYqDB8TOu7s93L4f1PoeXVpYm1n4=dESnA@mail.gmail.com>
-X-Gm-Features: AVVi8Cfdpu83rU3NuQjfbLCIaCqIS0USSfuVxDZTaim0eb6Wn6uZrpMkmnArI4g
-Message-ID: <CAMuHMdWMx1zAgnzkoYqDB8TOu7s93L4f1PoeXVpYm1n4=dESnA@mail.gmail.com>
-Subject: Re: [PATCH v3] lib/random32: convert selftest to KUnit
-To: Kir Chou <note351@hotmail.com>
-Cc: akpm@linux-foundation.org, thomas.weissschuh@linutronix.de, 
-	davidgow@google.com, visitorckw@gmail.com, brendan.higgins@linux.dev, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Kir,
+Signed-off-by: Martin Weiss <Martin.weiss2410@gmail.com>
+---
+ tools/testing/selftests/filesystems/statmount/statmount_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for the update!
-
-On Mon, 29 Jun 2026 at 07:42, Kir Chou <note351@hotmail.com> wrote:
-> This patch converts the existing prandom selftest (lib/random32.c) to use
-> the KUnit framework (lib/tests/random32_kunit.c). Unlike typical KUnit
-> tests, this file is directly #included into lib/random32.c.
->
-> The new test:
-> - Removes the legacy CONFIG_RANDOM32_SELFTEST from lib/random32.c.
-> - Adds CONFIG_PRANDOM_KUNIT_TEST (defaulting to KUNIT_ALL_TESTS).
-> - Moves the test logic to lib/tests/random32_kunit.c.
->
-> v2:
-
-The changelog belongs under the "---" under your SoB.
-
-> - Removes the legacy CONFIG_RANDOM32_SELFTEST from lib/Kconfig.
-> - Add const to arrays in lib/tests/random32_kunit.c.
->
-> v3:
-> - Changes from tristate to bool in lib/Kconfig.debug.
-
-That's (IMHO very) unfortunate...
-
-> --- a/lib/random32.c
-> +++ b/lib/random32.c
-
-> -core_initcall(prandom_state_selftest);
-> +#ifdef CONFIG_PRANDOM_KUNIT_TEST
-> +#include "tests/random32_kunit.c"
->  #endif
-
-I guess that is the reason?
-
-Any reason why the actual test code cannot be spun-off into a separate
-module, so it can become modular?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/tools/testing/selftests/filesystems/statmount/statmount_test.c b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+index 8dc018d47a93..9d963e09e510 100644
+--- a/tools/testing/selftests/filesystems/statmount/statmount_test.c
++++ b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+@@ -515,7 +515,7 @@ static void test_statmount_mnt_opts(void)
+ 		return;
+ 	}
+ 
+-	ksft_test_result_fail("didnt't find mount entry\n");
++	ksft_test_result_fail("didn't find mount entry\n");
+ 	free(sm);
+ 	free(line);
+ }
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.54.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
