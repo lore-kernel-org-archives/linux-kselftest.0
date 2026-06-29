@@ -1,315 +1,431 @@
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1DC72DC765;
-	Mon, 29 Jun 2026 03:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CDA2D3A7C
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 03:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782702126; cv=none; b=tZ45dxGS2SY82t+k4mDXXocW6i04S17FGS81xeXr7ySOPfzaO1cXCrcqBT3alpsW8+s6EX6grlDkz9kBf/fRvWpwT+WZa7+3oLe2VWWInDnw7J3feLbPFBCl8aMuMmCmNzbE9ZDOP4RURSiLAX1LYN8JJzXNGpwf+l6NR7FUgeg=
+	t=1782705126; cv=none; b=b3zZJneCbn5nxTbYxVfxH0/uejN3tj1rohnfF2z8jxFvmsMklk1AHoA5WcLQterON4TnVIGzwDaPMl3aK00XxTBxPydjetjoMzGbSuD/GIJObhQ2ZpVvy1jfnI3mP9ZK7wEc6iLoIv2TDo69G1EjyfVZvcEhCg0He9RQ86IowLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782702126; c=relaxed/simple;
-	bh=f37dCe31UwM+YOHunzbthCzd0XpSLIanHy8i5ro/bR4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=KujT66nyas/W+8LDOqBHEcOJTUSuKXvNsXbACisken9Sfdlg0FIZNhtX4Ru2ZJwE4nhUhd0DaxagHjuzZkdZd+Wa2LS/B0bD5AJBz4S9kxLAp0xUmOzZYfBwE6oN2rp7ABuIpkv1f4J34oT6+fWjPgzWk3F7TJ4q2yP4me5cGlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=OKNAQ7G1; arc=none smtp.client-ip=113.46.200.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1782705126; c=relaxed/simple;
+	bh=7xgu4A20PivwFilI54b95ebc9EqN69/TkGemPxwiejQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=SFUcti1kv91xJuOs8ne2ANtnXcQEmq3Msy/7aG7SE4od39evhisZ+TSJIZY2iQMln5CfVBc+Oma8+uIyypBPJM+jF5RnNB5/KS2FmRbaRsjIrVYS36o1zI0T7TP2OlOKBRzuZHNASRsWcYnIDFdtyMg4ygMC96hQtjdpFCNPiQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nikableh.moe; spf=pass smtp.mailfrom=nikableh.moe; dkim=pass (2048-bit key) header.d=nikableh.moe header.i=@nikableh.moe header.b=HtarRKH6; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=ZArmANdn; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nikableh.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nikableh.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="OKNAQ7G1"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=tLVvbcRwEo0C336MrkU8DScQrVuot9mll/VCNs0s9Dk=;
-	b=OKNAQ7G1OZRyLQd5vPCs1WSrnebr+AslVGjSE6z+069iWIzc5ia7moMmUzUs/8O926FFGrf8t
-	RoVWXQu3n9LGYocU7qECEjKbPNR/PvgaG2kCot4WPkh0RMv8E9aoE5Sl0eW9FiGYWuBttlsFDfC
-	kWiWS4gnLQO1xsP1oXTS1ZU=
-Received: from mail.maildlp.com (unknown [172.19.163.200])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4gpW6Y187tz1K96m;
-	Mon, 29 Jun 2026 10:52:53 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3273E4056A;
-	Mon, 29 Jun 2026 11:02:00 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Mon, 29 Jun
- 2026 11:01:59 +0800
-Message-ID: <2b02c39e-d7fe-4381-8e80-f5fb78d11ee0@huawei.com>
-Date: Mon, 29 Jun 2026 11:01:58 +0800
+	dkim=pass (2048-bit key) header.d=nikableh.moe header.i=@nikableh.moe header.b="HtarRKH6";
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="ZArmANdn"
+Authentication-Results: purelymail.com; auth=pass
+DKIM-Signature: a=rsa-sha256; b=HtarRKH6v2fcy693NbAeAZvkgh3dvTeCW1cFtSs5GvFM5Cw88dpa0wvRdKIU0jy/GBrl9ITlFJU4EWT2SvUPSrM8Y0+XC/lWU0EhV0Vq6ByWpozjmpJqYjwVkbsnNy6GpTx994AxwhU8jKnOCGhvPJTLKeE5xs6VGPur9gfmCZENcnNUdaetScEmNrMBajXLXqjpkXcH+wUtQL5zJMPIunsce+mywtjERhy1oYrxk8h+yJO1JX8x0y0+UnNX31CZG52TslI8/6pUvIkEZXJQM6QfzJ37szM61jX43hWQJkFyaiRcRODs9iP33TMJjg1f4qTBWajOWytVPdPczqmxtQ==; s=purelymail2; d=nikableh.moe; v=1; bh=7xgu4A20PivwFilI54b95ebc9EqN69/TkGemPxwiejQ=; h=Received:From:Date:Subject:To;
+DKIM-Signature: a=rsa-sha256; b=ZArmANdnH/UwW/JJI1CBRkK/1kptuQ2NH1ArvEF/3BOft5T5eRgrV/tYSngD6J78+SwMfOP0zBiwc4LiLrSQ0tNeTwMcNEXz+YKkJmSusJUSUUmg5QnxE83L5Lizqzbx+vWL3R27wdy9JiJgk8mewgsUH/gamsu4KnxkdGJSbCOTPD9+qnmTbuEYqcz2Hn2NMK0XUnHcmvO0tkvB9p18Uzqbls05QqVvuBDm1YS35FOEQxdVox3fITZ0btiVoq+mogJSlnvUJUOYlYjqK6zv6nn+YXD9SDet8CGB6Wp2F8FJAkNXUuO9reTnridrZTE29FRrliMw0aVLyMejavDDNQ==; s=purelymail2; d=purelymail.com; v=1; bh=7xgu4A20PivwFilI54b95ebc9EqN69/TkGemPxwiejQ=; h=Feedback-ID:Received:From:Date:Subject:To;
+Feedback-ID: 209604:18551:null:purelymail
+X-Pm-Original-To: linux-kselftest@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1530718721;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Mon, 29 Jun 2026 03:51:39 +0000 (UTC)
+From: Nika Krasnova <nika@nikableh.moe>
+Date: Mon, 29 Jun 2026 05:51:06 +0200
+Subject: [PATCH 1/2] rust: kernel: add cfg_select! backport for
+ config-based selection
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 2/3] riscv, bpf: Add support for BPF
- exceptions
-Content-Language: en-US
-To: Varun R Mallya <varunrmallya@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
-	<bjorn@kernel.org>, <pjw@kernel.org>, <palmer@dabbelt.com>,
-	<aou@eecs.berkeley.edu>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>
-CC: <alex@ghiti.fr>, <martin.lau@linux.dev>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
-	<puranjay@kernel.org>, <shuah@kernel.org>, <linux-riscv@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20260628081710.113333-1-varunrmallya@gmail.com>
- <20260628081710.113333-3-varunrmallya@gmail.com>
- <87bjcuy2o7.fsf@all.your.base.are.belong.to.us>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <87bjcuy2o7.fsf@all.your.base.are.belong.to.us>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260629-backport-cfg_select-v1-1-388d5d31d9d4@nikableh.moe>
+References: <20260629-backport-cfg_select-v1-0-388d5d31d9d4@nikableh.moe>
+In-Reply-To: <20260629-backport-cfg_select-v1-0-388d5d31d9d4@nikableh.moe>
+To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>
+Cc: Daniel Almeida <daniel.almeida@collabora.com>, 
+ Tamir Duberstein <tamird@kernel.org>, 
+ Alexandre Courbot <acourbot@nvidia.com>, 
+ =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, Yury Norov <yury.norov@gmail.com>, 
+ Lorenzo Stoakes <ljs@kernel.org>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+ Rae Moar <raemoar63@gmail.com>, rust-for-linux@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-kselftest@vger.kernel.org, Nika Krasnova <nika@nikableh.moe>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11980; i=nika@nikableh.moe;
+ h=from:subject:message-id; bh=7xgu4A20PivwFilI54b95ebc9EqN69/TkGemPxwiejQ=;
+ b=owJ4nJvAy8zAJTZhNXuihihnHuNptSSGLMfXh9SLH6xK3flhbswUD40/K02Mt9w7xynf+WlKY
+ 0HCt7TbQa4dpSwMYlwMsmKKLGVpWiGVbd8v+Zguz4eZw8oEMoSBi1MAJjLzNyND5yUB5s3vjny/
+ a9z//Eu+oLvdjXxbAaEv5mfC7a8meMbKMjIc3vDOSDtMhodp2s69/E5G3JXTpOVPffK3KGYri45
+ uYeYHAO7rQsA=
+X-Developer-Key: i=nika@nikableh.moe; a=openpgp;
+ fpr=D6F05A682D63EA3D6C771A8F4448A49D9CF79732
 
+Conditional compilation in the kernel's Rust code is currently expressed
+with paired #[cfg(CONFIG_FOO)] / #[cfg(not(CONFIG_FOO))] attributes,
+which is verbose and easy to get out of sync when selecting between two
+or more implementations of an item.
 
+The standard library gained core::cfg_select! for exactly this (stable
+since Rust 1.95.0): a single macro that emits the first arm whose cfg
+predicate holds. The kernel's minimum supported Rust version is 1.85.0,
+so that macro is not yet available. Add a macro_rules! backport under
+the same name and arm syntax so call sites can be written today and
+migrate to the standard library macro unchanged once the minimum version
+reaches 1.95.0.
 
-On 2026/6/29 1:50, Björn Töpel wrote:
-> Varun R Mallya <varunrmallya@gmail.com> writes:
-> 
->> Add the JIT support required for BPF exceptions (bpf_throw()) on riscv64.
->>
->> Two kinds of program need special prologue/epilogue handling:
->>
->>    - A program acting as an exception boundary must save the full set of
->>      riscv callee-saved GP registers (ra, s0-s11), not just the ones it
->>      happens to clobber, so that the exception callback can restore the
->>      state that was live at the boundary. ra and fp are stored first so
->>      the saved ra/fp pair forms a valid stackframe record for the
->>      unwinder.
->>
->>    - The exception callback (exception_cb) does not allocate its own
->>      frame. It reuses the boundary program's frame, whose frame pointer
->>      is passed in a2, by setting SP = FP - stack_adjust. This lines the
->>      epilogue's loads up with the registers the boundary saved, so both
->>      paths restore the same order.
->>
->> Wire up bpf_jit_support to be true only when CONFIG_FRAME_POINTER is
->> enabled.
->>
->> Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
->> Reviewed-by: Pu Lehui <pulehui@huawei.com>
+The upstream macro is a compiler built-in, which lets it be used in
+expression position with a single pair of braces and accept bare
+"PREDICATE => EXPR," arms. A macro_rules! macro cannot place #[cfg] on a
+bare expression without the unstable stmt_expr_attributes feature, so
+this backport requires brace-delimited arms and an extra pair of braces
+in expression position (cfg_select! {{ ... }}). Item and statement
+position are syntactically identical to core::cfg_select!, which covers
+the common case of selecting an item based on a CONFIG_* symbol.
 
-not yet Reviewed-by
+Link: https://github.com/Rust-for-Linux/linux/issues/1183
+Assisted-by: Claude:claude-opus-4-8
+Suggested-by: Benno Lossin <lossin@kernel.org>
+Signed-off-by: Nika Krasnova <nika@nikableh.moe>
+---
+ rust/kernel/cfg.rs     | 297 +++++++++++++++++++++++++++++++++++++++++++++++++
+ rust/kernel/lib.rs     |   1 +
+ rust/kernel/prelude.rs |   1 +
+ 3 files changed, 299 insertions(+)
 
->> ---
->>   arch/riscv/net/bpf_jit_comp64.c | 115 ++++++++++++++++++++++++++++----
->>   1 file changed, 102 insertions(+), 13 deletions(-)
->>
->> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
->> index c03c1de16b79..c6e2f852e854 100644
->> --- a/arch/riscv/net/bpf_jit_comp64.c
->> +++ b/arch/riscv/net/bpf_jit_comp64.c
->> @@ -56,6 +56,30 @@ static const int pt_regmap[] = {
->>   	[RV_REG_T0] = offsetof(struct pt_regs, t0),
->>   };
->>   
->> +/*
->> + * Full set of RISC-V callee-saved GP registers (ra, s0-s11) saved by a program
->> + * acting as an exception boundary, in the order they are stored on the stack.
->> + * RA and FP come first so the saved ra/fp pair forms a valid stackframe record
->> + * at [FP-8]/[FP-16] for the unwinder. The exception callback reuses the
->> + * boundary program's frame and restores this same set in its epilogue, so both
->> + * paths must agree on the contents and ordering of this list.
->> + */
-> 
-> nit: Please use netdev style multi-line comments (/* Blah, vs /*\n)
-> 
->> +static const int rv_exception_csave_regs[] = {
->> +	RV_REG_RA,
->> +	RV_REG_FP,
->> +	RV_REG_S1,
->> +	RV_REG_S2,
->> +	RV_REG_S3,
->> +	RV_REG_S4,
->> +	RV_REG_S5,
->> +	RV_REG_S6,
->> +	RV_REG_S7,
->> +	RV_REG_S8,
->> +	RV_REG_S9,
->> +	RV_REG_S10,
->> +	RV_REG_S11,
->> +};
->> +
->>   enum {
->>   	RV_CTX_F_SEEN_TAIL_CALL =	0,
->>   	RV_CTX_F_SEEN_CALL =		RV_REG_RA,
->> @@ -231,6 +255,22 @@ static void emit_imm(u8 rd, s64 val, struct rv_jit_context *ctx)
->>   static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
->>   {
->>   	int stack_adjust = ctx->stack_size, store_offset = stack_adjust - 8;
->> +	struct bpf_prog_aux *aux = ctx->prog->aux;
->> +	int i;
->> +
->> +	if (aux->exception_boundary || aux->exception_cb) {
->> +		/*
-> 
-> nit: Comment again.
-> 
->> +		 * An exception boundary saved the full callee-saved register
->> +		 * set and the exception callback restores it from the boundary's
->> +		 * frame. Both restore the same fixed set, in the same order it
->> +		 * was stored by bpf_jit_build_prologue().
->> +		 */
->> +		for (i = 0; i < ARRAY_SIZE(rv_exception_csave_regs); i++) {
->> +			emit_ld(rv_exception_csave_regs[i], store_offset, RV_REG_SP, ctx);
->> +			store_offset -= 8;
->> +		}
->> +		goto epilogue_tail;
->> +	}
->>   
->>   	if (seen_reg(RV_REG_RA, ctx)) {
->>   		emit_ld(RV_REG_RA, store_offset, RV_REG_SP, ctx);
->> @@ -267,6 +307,7 @@ static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
->>   		store_offset -= 8;
->>   	}
->>   
->> +epilogue_tail:
->>   	emit_addi(RV_REG_SP, RV_REG_SP, stack_adjust, ctx);
->>   	/* Set return value. */
->>   	if (!is_tail_call)
->> @@ -2002,11 +2043,61 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->>   void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
->>   {
->>   	int i, stack_adjust = 0, store_offset, bpf_stack_adjust;
->> +	struct bpf_prog_aux *aux = ctx->prog->aux;
->>   
->>   	bpf_stack_adjust = round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
->>   	if (bpf_stack_adjust)
->>   		mark_fp(ctx);
->>   
->> +	/* emit kcfi type preamble immediately before the first insn */
->> +	emit_kcfi(is_subprog ? cfi_bpf_subprog_hash : cfi_bpf_hash, ctx);
->> +
->> +	/* nops reserved for auipc+jalr pair */
->> +	for (i = 0; i < RV_FENTRY_NINSNS; i++)
->> +		emit(rv_nop(), ctx);
->> +
->> +	/* First instruction is always setting the tail-call-counter
->> +	 * (TCC) register. This instruction is skipped for tail calls.
->> +	 * Force using a 4-byte (non-compressed) instruction.
->> +	 */
->> +	emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
->> +
->> +	if (aux->exception_boundary || aux->exception_cb) {
->> +		/*
->> +		 * A program acting as an exception boundary saves the full set
->> +		 * of riscv callee saved registers (ra, s0-s11).
->> +		 */
->> +		stack_adjust = round_up(ARRAY_SIZE(rv_exception_csave_regs) * 8,
->> +					STACK_ALIGN);
->> +		stack_adjust += bpf_stack_adjust;
->> +		store_offset = stack_adjust - 8;
->> +
->> +		if (!aux->exception_cb && aux->exception_cb) {
+diff --git a/rust/kernel/cfg.rs b/rust/kernel/cfg.rs
+new file mode 100644
+index 000000000000..20463701482e
+--- /dev/null
++++ b/rust/kernel/cfg.rs
+@@ -0,0 +1,297 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Compile-time configuration selection.
++//!
++//! This module provides [`cfg_select!`](macro@crate::cfg_select), a backport of the
++//! standard library's [`core::cfg_select`] macro (stable since Rust 1.95.0). It selects
++//! between several blocks of code based on `cfg` predicates, which is most useful for
++//! choosing an implementation depending on a kernel configuration option, i.e. a `CONFIG_*`
++//! symbol.
++//!
++//! Once the kernel's minimum supported Rust version reaches 1.95.0, this module should be
++//! deleted and `cfg_select!` taken from the prelude / [`core`] instead. In item and statement
++//! position the syntax is identical, so those uses migrate unchanged; see
++//! [`cfg_select!`](macro@crate::cfg_select) for the (small) differences that apply in expression
++//! position.
++//!
++//! [`core::cfg_select`]: https://doc.rust-lang.org/core/macro.cfg_select.html
++
++#[doc(inline)]
++pub use crate::cfg_select;
++
++/// Selects code at compile time based on `cfg` predicates.
++///
++/// This is a backport of the standard library's [`core::cfg_select`] macro (stable since Rust
++/// 1.95.0). Each arm has the form `PREDICATE => { CODE }`, where `PREDICATE` is any [`cfg`]
++/// predicate (for example a `CONFIG_*` symbol). The arms are evaluated top to bottom and the `CODE`
++/// of the first arm whose predicate holds is emitted; all other arms are discarded. An optional
++/// final `_ => { CODE }` arm is used as a fallback when no predicate matches.
++///
++/// # Differences from `core::cfg_select`
++///
++/// The standard library macro is a compiler built-in and can therefore be used in expression
++/// position with a single pair of braces. This backport is a `macro_rules!` macro, so two
++/// restrictions apply:
++///
++/// - Arms must be brace-delimited (`PREDICATE => { ... }`); the bare `PREDICATE => EXPR,` form
++///   accepted by [`core::cfg_select`] is not supported (a `macro_rules!` macro cannot place
++///   `#[cfg]` on a bare expression without the unstable [`stmt_expr_attributes`] feature).
++/// - In expression position the whole invocation must be wrapped in an extra pair of braces, i.e.
++///   `cfg_select! {{ ... }}`.
++///
++/// In item and statement position the syntax is identical to [`core::cfg_select`], so those uses
++/// will migrate unchanged once the minimum Rust version reaches 1.95.0.
++///
++/// # Examples
++///
++/// Item position -- select an implementation based on a `CONFIG` option:
++///
++/// ```
++/// use kernel::cfg_select;
++///
++/// cfg_select! {
++///     CONFIG_64BIT => {
++///         fn ptr_bytes() -> usize { 8 }
++///     }
++///     _ => {
++///         fn ptr_bytes() -> usize { 4 }
++///     }
++/// }
++/// # assert!(ptr_bytes() == 8 || ptr_bytes() == 4);
++/// ```
++///
++/// Expression position (note the extra braces):
++///
++/// ```
++/// use kernel::cfg_select;
++///
++/// let bits = cfg_select! {{
++///     CONFIG_64BIT => { 64 }
++///     _            => { 32 }
++/// }};
++/// # assert!(bits == 64 || bits == 32);
++/// ```
++///
++/// [`core::cfg_select`]: https://doc.rust-lang.org/core/macro.cfg_select.html
++/// [`cfg`]: https://doc.rust-lang.org/reference/conditional-compilation.html
++/// [`stmt_expr_attributes`]: https://doc.rust-lang.org/beta/unstable-book/language-features/stmt-expr-attributes.html
++#[macro_export]
++#[doc(hidden)]
++macro_rules! cfg_select {
++    ({ $($tt:tt)* }) => {{
++        $crate::cfg_select! { $($tt)* }
++    }};
++    (_ => { $($output:tt)* }) => {
++        $($output)*
++    };
++    (
++        $cfg:meta => $output:tt
++        $($( $rest:tt )+)?
++    ) => {
++        #[cfg($cfg)]
++        $crate::cfg_select! { _ => $output }
++        $(
++            #[cfg(not($cfg))]
++            $crate::cfg_select! { $($rest)+ }
++        )?
++    };
++}
++
++#[macros::kunit_tests(rust_kernel_cfg)]
++mod tests {
++    use super::*;
++
++    #[test]
++    fn expr_true_arm_selected() {
++        // Expression position (double braces): the first arm is true, so its value wins.
++        let v = cfg_select! {{
++            all() => { 64 }
++            _ => { 32 }
++        }};
++        assert_eq!(v, 64);
++    }
++
++    #[test]
++    fn expr_fallback_when_false() {
++        // The only predicate is false, so the `_` fallback value is selected.
++        let v = cfg_select! {{
++            any() => { 64 }
++            _ => { 32 }
++        }};
++        assert_eq!(v, 32);
++    }
++
++    #[test]
++    fn expr_first_match_wins() {
++        // Two true arms: the first one wins, the second one is discarded (top-to-bottom, first
++        // match).
++        let v = cfg_select! {{
++            all() => { 1 }
++            all() => { 2 }
++            _ => { 3 }
++        }};
++        assert_eq!(v, 1);
++    }
++
++    #[test]
++    fn expr_fallthrough_false_to_true() {
++        // The false first arm is skipped and selection falls through to the later true arm, not to
++        // the `_` fallback.
++        let v = cfg_select! {{
++            any() => { 1 }
++            all() => { 2 }
++            _ => { 3 }
++        }};
++        assert_eq!(v, 2);
++    }
++
++    #[test]
++    fn expr_no_fallback_true_arm() {
++        // No `_` arm: the chain may terminate on a true arm and still emit it.
++        let v = cfg_select! {{
++            any() => { 1 }
++            all() => { 2 }
++        }};
++        assert_eq!(v, 2);
++    }
++
++    #[test]
++    fn expr_not_predicate() {
++        // `not()` in both polarities: `not(all())` is false (skipped), `not(any())` is true
++        // (selected).
++        let v = cfg_select! {{
++            not(all()) => { 1 }
++            not(any()) => { 2 }
++            _ => { 3 }
++        }};
++        assert_eq!(v, 2);
++    }
++
++    #[test]
++    fn expr_all_predicate() {
++        // `all(a, b)`: one false operand makes it false (skipped); all true makes it true
++        // (selected).
++        let v = cfg_select! {{
++            all(all(), any()) => { 1 }
++            all(all(), all()) => { 2 }
++            _ => { 3 }
++        }};
++        assert_eq!(v, 2);
++    }
++
++    #[test]
++    fn expr_any_predicate() {
++        // `any(a, b)`: all-false operands make it false (skipped); one true operand makes it true
++        // (selected).
++        let v = cfg_select! {{
++            any(any(), any()) => { 1 }
++            any(any(), all()) => { 2 }
++            _ => { 3 }
++        }};
++        assert_eq!(v, 2);
++    }
++
++    #[test]
++    fn expr_nested_select() {
++        // A `cfg_select!` nested inside an output block: the outer picks its true arm, the inner
++        // falls back (`any()` is false) to 2.
++        let v = cfg_select! {{
++            all() => {
++                cfg_select! {{
++                    any() => { 1 }
++                    _ => { 2 }
++                }}
++            }
++            _ => { 3 }
++        }};
++        assert_eq!(v, 2);
++    }
++
++    #[test]
++    fn item_true_arm_wins_over_fallback() {
++        // Item position: the true arm's `fn` is emitted, the `_` fallback stripped.
++        cfg_select! {
++            all() => {
++                fn pick() -> u32 {
++                    1
++                }
++            }
++            _ => {
++                fn pick() -> u32 {
++                    2
++                }
++            }
++        }
++        assert_eq!(pick(), 1);
++    }
++
++    #[test]
++    fn item_fallback_when_false() {
++        // Item position: the only predicate is false, so the `_` fallback supplies the item.
++        cfg_select! {
++            any() => {
++                fn pick() -> u32 {
++                    1
++                }
++            }
++            _ => {
++                fn pick() -> u32 {
++                    2
++                }
++            }
++        }
++        assert_eq!(pick(), 2);
++    }
++
++    #[test]
++    fn item_no_fallback_all_false_emits_nothing() {
++        // No `_` fallback and the sole predicate is false: the invocation must expand to nothing.
++        // If the false arm were wrongly emitted, the duplicate definition would fail to compile.
++        // Compiling at all shows the arm was dropped, and the assert confirms the surviving `pick`
++        // is this outer one.
++        fn pick() -> u32 {
++            5
++        }
++        cfg_select! {
++            any() => {
++                fn pick() -> u32 {
++                    1
++                }
++            }
++        }
++        assert_eq!(pick(), 5);
++    }
++
++    #[test]
++    fn stmt_true_arm_selected() {
++        // Statement position: the `v = 10` assignment is a `#[cfg(all())]`-gated statement, proving
++        // the true arm's statements run. `let v;` defers initialization so the single surviving
++        // assignment leaves no dead store.
++        let v;
++        cfg_select! {
++            all() => {
++                v = 10;
++            }
++            _ => {
++                v = 20;
++            }
++        }
++        assert_eq!(v, 10);
++    }
++
++    #[test]
++    fn stmt_fallback_when_false() {
++        // Statement position with the predicate false: the `_` fallback statement is the one
++        // emitted.
++        let v;
++        cfg_select! {
++            any() => {
++                v = 1;
++            }
++            _ => {
++                v = 2;
++            }
++        }
++        assert_eq!(v, 2);
++    }
++}
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 9512af7156df..cdcbb34047c0 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -51,6 +51,7 @@
+ pub mod block;
+ pub mod bug;
+ pub mod build_assert;
++pub mod cfg;
+ pub mod clk;
+ #[cfg(CONFIG_CONFIGFS_FS)]
+ pub mod configfs;
+diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+index ca396f1f78a6..c7d5439da28e 100644
+--- a/rust/kernel/prelude.rs
++++ b/rust/kernel/prelude.rs
+@@ -91,6 +91,7 @@
+         const_assert,
+         static_assert, //
+     },
++    cfg_select,
+     current,
+     dev_alert,
+     dev_crit,
 
-A nit, `if (!aux->exception_cb)` is enough, as aux->exception_cb and 
-aux->exception_cb progs are independent.
+-- 
+2.54.0
 
->> +			/*
->> +			 * Boundary program: allocate the frame and save the
->> +			 * full callee-saved set, capturing the caller's values.
->> +			 */
->> +			emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
->> +			for (i = 0; i < ARRAY_SIZE(rv_exception_csave_regs); i++) {
->> +				emit_sd(RV_REG_SP, store_offset,
->> +					rv_exception_csave_regs[i], ctx);
->> +				store_offset -= 8;
->> +			}
->> +			emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
->> +		} else {
->> +			/*
->> +			 * Exception callback, reuse the boundary program's
->> +			 * frame, whose frame pointer is passed in a2. Setting
->> +			 * SP = FP - stack_adjust lines the epilogue's loads up
->> +			 * with the registers the boundary saved.
->> +			 */
->> +			emit_mv(RV_REG_FP, RV_REG_A2, ctx);
->> +			emit_addi(RV_REG_SP, RV_REG_FP, -stack_adjust, ctx);
->> +		}
->> +
->> +		goto tail_setup;
->> +	}
->> +
-> 
-> This function is getting large... I tend do forget details, so having it
-> in smaller helpers would be good. Let's try to refactor a bit.
-> 
-> The special case is really just:
->    * exception boundary: allocate frame and save full layout
->    * exception_cb: reuse boundary FP from a2 and derive SP from it
->    * both: restore the same fixed layout
-> 
-> So helpers like is_exception_prog(), exception_stack_adjust(),
-> emit_exception_boundary_prologue(), emit_exception_cb_prologue(), and
-> emit_exception_restore() would make the prologue/epilogue changes much
-> easier to review and also reduce churn in bpf_jit_build_prologue().
-> 
->>   	if (seen_reg(RV_REG_RA, ctx))
->>   		stack_adjust += 8;
->>   	stack_adjust += 8; /* RV_REG_FP */
->> @@ -2030,19 +2121,6 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
->>   
->>   	store_offset = stack_adjust - 8;
->>   
->> -	/* emit kcfi type preamble immediately before the  first insn */
->> -	emit_kcfi(is_subprog ? cfi_bpf_subprog_hash : cfi_bpf_hash, ctx);
->> -
->> -	/* nops reserved for auipc+jalr pair */
->> -	for (i = 0; i < RV_FENTRY_NINSNS; i++)
->> -		emit(rv_nop(), ctx);
->> -
->> -	/* First instruction is always setting the tail-call-counter
->> -	 * (TCC) register. This instruction is skipped for tail calls.
->> -	 * Force using a 4-byte (non-compressed) instruction.
->> -	 */
->> -	emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
->> -
->>   	emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
->>   
->>   	if (seen_reg(RV_REG_RA, ctx)) {
->> @@ -2082,6 +2160,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
->>   
->>   	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
->>   
->> +tail_setup:
-> 
-> Hmm, thinking more about it, maybe folding the "normal_prologue()" in as
-> pre-commit, so we can avoid more gotos.
-> 
->    | if (is_exception_prog(aux))
->    |     emit_exception_restore(ctx, stack_adjust);
->    | else
->    |     emit_normal_restore(ctx, stack_adjust);
-
-agree this too
-
->    |
->    | emit_addi(RV_REG_SP, RV_REG_SP, stack_adjust, ctx);
->    | ...
-> 
-> or smth.
-> 
->>   	if (bpf_stack_adjust) emit_addi(RV_REG_S5, RV_REG_SP,
->>   	bpf_stack_adjust, ctx);
->>   
->> @@ -2157,3 +2236,13 @@ bool bpf_jit_supports_fsession(void)
->>   {
->>   	return true;
->>   }
->> +
->> +bool bpf_jit_supports_exceptions(void)
->> +{
->> +	/*
->> +	 * bpf_throw() unwinds by walking the frame-pointer chain from inside
->> +	 * the kernel back into the BPF frames (see arch_bpf_stack_walk()), so
->> +	 * exceptions require the frame-pointer unwinder to be enabled.
->> +	 */
-> 
-> nit: Comments...
-> 
-> 
-> Thanks,
-> Björn
