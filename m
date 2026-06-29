@@ -1,108 +1,221 @@
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3EC63E9580
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 15:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2B441169A;
+	Mon, 29 Jun 2026 15:42:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782747289; cv=none; b=Bm3cJmvyVJmT8kMaGE1rlCGPjSGsq+QCNnZe00XUTeqSUe7DjFrzoPS0ua/xYVg9qolnEUW2HDVND5ipvqk5Qx6HDsjPFT97yo7kVa9LgKlnkmQKy2YaZUfyh2xjz42ndJkH3rJMTQeKrn4rnsNy7pGm3VRaXdCAXR2/2zAxTPE=
+	t=1782747753; cv=none; b=nh/s3GkIs3g0x7i/NyS+Eoyc9aPMNYE09vxIbF1UXQnlvZFmDcEXrm/S1gXqYk05rDyptnHjiwdtZFF8xZXEJWtQ/dPFhonDwW12dBRBJY6pAXcIj3AN6dyFvpoKoC1t18EndLiiDiOTvC4LZWkLqg++X+N8bPmUlGUMzhwGWCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782747289; c=relaxed/simple;
-	bh=S7TtvWhOVIWhfqpCK7B2X7FblWRLReT9XRQLHAKUMyo=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=ZaqNa+V5DtqSVQfrPGYwmCRLWXLwHgeB2H2JZoTfGtKPn/PAtjWGMZuUeKQnqd+cr1NZQWElFyMyodxhE1HcbUeyDuFe6djuR3YxZX13NVHG/xAHEZUR54iZhgnB3DhZcE8i7wpvv4tsuwvv0gRuMVWDkfCF39VozOa952lPXkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nikableh.moe; spf=pass smtp.mailfrom=nikableh.moe; dkim=pass (2048-bit key) header.d=nikableh.moe header.i=@nikableh.moe header.b=bRixWq0x; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=lvTVUOMX; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nikableh.moe
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nikableh.moe
+	s=arc-20240116; t=1782747753; c=relaxed/simple;
+	bh=ysWvzBMEdR3mUroLwDVNAsSve67+hNkhz+NHSicxT08=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bN9R7hy2HnTqLEzCmu+/knO+CQyHZFzB4IMsMWIY0fikaHvBAbK0XoN0G6vZ7nYB2qahdP7s1W8q0Ct9G/Xibj31BzTW780n6uxjbO3TKnIPpeY4L9+FOAYrs3NX4ar5gH+UNPivWYOjlcbgKbIweELvQbNhq4tXLGod2nPSvT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LKLXyRqH; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nikableh.moe header.i=@nikableh.moe header.b="bRixWq0x";
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="lvTVUOMX"
-DKIM-Signature: a=rsa-sha256; b=bRixWq0xdzgpzdZlLatle0utxt2jwGjTDhANCrztTzqPcrfC9cApUnAwWInde58tDYgNJk9i86LKfYSNM+7DMcfgzK0ExLlxibM7TTRsx5Tvv7VbU54NXS+xZEV541nwB1S2+15q5eJO93WFNGfDhkJZOLvfcjhfvXV9nnTaoXW8lUNBAt9f0N1o80vdFuNAS/8X6Dd98fyKJF2JyONmY7KKvilFJ6jVVmxvhaVLorJ3YP0J+tJb0LuU8dewSx14D+yD8PR+hF4zKW35LMLAErapA7Q6h338FcKPdGu29NMgkapf5kfkuPbHp2ETNf8OoNkpLYMYKl/wRFSrTbUNug==; s=purelymail2; d=nikableh.moe; v=1; bh=S7TtvWhOVIWhfqpCK7B2X7FblWRLReT9XRQLHAKUMyo=; h=Received:Date:From:To:Subject;
-DKIM-Signature: a=rsa-sha256; b=lvTVUOMX1azv+iSUixL82x7EqkugX7ZvPmEwpZWq5AqWXWDcKfXzYKuvQInLqJY5dJuzXCC6to/cn/c4YErs8f1CaivsvhpRYlxxzZUN3MGQVEyzKD1yglZxHwpVUaaSKGcCGzwysyNxzdTlYVUv1skqTqAGBgAeP68b2YVfkIVlgKAHDeTJGuAf/mKbqon3V6aTWXoJ//e30LzaaQEeu18wPdOtTq2JohHAjL6Zs+igPRwiu12FhHC7+8iMQPeRioNmdPiRVWak2qDb/4IcseJLRqZoceNdYDklOZelQo5yevw0Ncb1dwDVnEBAiBEeLT3o78B6r62iGeFwqVATnA==; s=purelymail2; d=purelymail.com; v=1; bh=S7TtvWhOVIWhfqpCK7B2X7FblWRLReT9XRQLHAKUMyo=; h=Feedback-ID:Received:Date:From:To:Subject;
-Feedback-ID: 209604:18551:null:purelymail
-X-Pm-Original-To: linux-kselftest@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPA id -1921897467;
-          Mon, 29 Jun 2026 15:34:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LKLXyRqH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782747752; x=1814283752;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ysWvzBMEdR3mUroLwDVNAsSve67+hNkhz+NHSicxT08=;
+  b=LKLXyRqHqZgbmdSWNgvAmyChc7YWH1zy7KPlACa58mifMhBiMhmEfVnd
+   MYLTKis6HNxVCtGuMAXM3JjVd4Q1ZrznodjmzNqaflhZWAUr5YZ1Mbm+C
+   1CZKAcrpt6emsaxoZAe79X+9urDmEkmrltlz5Xhb1Jv5QjcjkeXNO3GyR
+   VQ+wBicQQk0N5DJCC9Wtmwc3eZDldiR1hrR/ar+zlEI+COSnvLTGAtSke
+   0TYolkLtWRMWV+JDr5fVfiyLH3paMvtOxmGiubDKi2pIwtWHk4WSszKYV
+   zUEWaPkyRAQvE2hx0OSfCBxE5XG6DxsbSgLlqw1I06M+WGyWBnzSFFcTc
+   Q==;
+X-CSE-ConnectionGUID: 9XUy9+jFQgmO4OJUNfTX4A==
+X-CSE-MsgGUID: 9qXJ4kzVQLyv3vIipvFujw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11832"; a="85988838"
+X-IronPort-AV: E=Sophos;i="6.24,232,1774335600"; 
+   d="scan'208";a="85988838"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 08:42:31 -0700
+X-CSE-ConnectionGUID: bh/olGCDTnWxrxhKDnJA9A==
+X-CSE-MsgGUID: Nm0odYGcTBy5w+oQuhtAug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,232,1774335600"; 
+   d="scan'208";a="252140130"
+Received: from kniemiec-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.207])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 08:42:26 -0700
+Date: Mon, 29 Jun 2026 18:42:24 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+	Herve Codina <herve.codina@bootlin.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Linus Walleij <linusw@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, linux-acpi@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 2/5] software node: add fw_devlink support
+Message-ID: <akKSYKH2vyXMVcox@ashevche-desk.local>
+References: <20260629-swnode-fw-devlink-v1-0-b90058b41839@oss.qualcomm.com>
+ <20260629-swnode-fw-devlink-v1-2-b90058b41839@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 29 Jun 2026 17:34:05 +0200
-From: Nika Krasnova <nika@nikableh.moe>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo
- <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Andreas
- Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor
- Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Daniel
- Almeida <daniel.almeida@collabora.com>, Tamir Duberstein
- <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
- =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, Viresh Kumar
- <viresh.kumar@linaro.org>, Yury Norov <yury.norov@gmail.com>, Lorenzo
- Stoakes <ljs@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David
- Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/2] rust: kernel: add cfg_select! and use it for
- config-based selection
-In-Reply-To: <CANiq72kG8k3mk+Xjr6q7aKg212QUNtZk5w4rxV=UGR5UXKE_ng@mail.gmail.com>
-References: <20260629-backport-cfg_select-v1-0-388d5d31d9d4@nikableh.moe>
- <CANiq72kG8k3mk+Xjr6q7aKg212QUNtZk5w4rxV=UGR5UXKE_ng@mail.gmail.com>
-User-Agent: Purely Mail via Roundcube/1.6.16
-Message-ID: <0eb77f4b7199e9af01d61e0c1ac03c99@purelymail.com>
-X-Sender: nika@nikableh.moe
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260629-swnode-fw-devlink-v1-2-b90058b41839@oss.qualcomm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On 2026-06-29 11:38:22 +0200, Miguel Ojeda wrote:
-> For instance, instead of waiting for the MSRV bump, could we already
-> use the upstream one since Rust 1.91.0? That means that we are already
-> sure we are using the upstream one as-is.
++Cc: Herve, to just ask the situation with one series that adds nice helper.
+
+On Mon, Jun 29, 2026 at 12:52:07PM +0200, Bartosz Golaszewski wrote:
+> Software nodes can be used to describe supplier-consumer relationships
+> between devices they represent using reference property entries. Unlike
+> for OF-nodes, driver core cannot yet use these references to create a
+> probe order that avoids needless probe deferrals on missing providers.
 > 
-> Or is there a reason to avoid that?
+> Implement software_node_add_links() modelled on of_fwnode_add_links().
+> For every DEV_PROP_REF property we resolve each referenced supplier and
+> create an fwnode link from the node to it. The driver core later promotes
+> these to device links and defers the consumer until the suppliers are
+> ready.
+> 
+> There's no allowlist like the one DT needs - devicetree phandles appear
+> in plenty of non-supplier contexts, but a software node only carries a
+> reference property when its author explicitly points at another node, so
+> we treat every reference as an intentional supplier dependency and link
+> all of them. Graph "remote-endpoint" references are skipped for now: they
+> go 2-ways between endpoint nodes and would create graph cycles without
+> the port-parent lifting DT does via get_con_dev(). References to
+> suppliers that aren't registered yet and self-references are ignored.
+> 
+> fw_devlink resolves the supplier device through fwnode->dev but the core
+> only records the owning device on the primary fwnode. When the software
+> node is a device's secondary fwnode, mirror the device pointer onto it in
+> software_node_notify() so the consumer can actually find the supplier
+> instead of deferring forever.
+> 
+> While at it: purge the fwnode links in software_node_release() now that
+> software nodes can own them.
 
-There is one, yes. First the toolchain picture (tested with
-RUSTC_BOOTSTRAP=1):
+...
 
-  - 1.85.0 (current MSRV): core::cfg_select does not exist -- only the 
-older
-    core::cfg_match (old `cfg(...)` arm syntax).
-  - 1.94.1: core::cfg_select present behind #![feature(cfg_select)], with
-    the final builtin behavior (single-brace expression position works).
-  - 1.95.0: core::cfg_select stable.
+> +static int software_node_add_links(struct fwnode_handle *fwnode)
+> +{
+> +	const struct software_node_ref_args *ref, *ref_array;
+> +	struct swnode *swnode = to_swnode(fwnode);
+> +	const struct property_entry *prop;
+> +	struct fwnode_handle *refnode;
+> +	unsigned int count, i;
 
-A gate (upstream when available, fallback when not) is possible, but 
-unlike
-the cold_path case the fallback isn't a drop-in replacement. In item and
-statement position the two are identical (single braces), but in pure
-expression-operand position they are mutually exclusive: the builtin 
-takes
-single braces, while the macro_rules needs an extra pair
-(cfg_select! {{ ... }}), since it cannot put #[cfg] on a bare expression
-without stmt_expr_attributes. No single spelling compiles on both.
+'i' is local to the loop.
 
-That means a gate would force prohibiting expression-operand position
-entirely (no portable spelling), which I would rather not do. I would
-prefer to keep the macro_rules everywhere -- one consistent macro on 
-every
-toolchain, expression position included -- and switch wholesale to
-core::cfg_select once the MSRV reaches a version that has it. The switch 
-is
-cheap: item/statement call sites are unchanged, and the only edit is
-dropping the extra braces at any expression-position sites (there are 
-none
-in the tree today).
+> +	if (!swnode || !swnode->node->properties)
+> +		return 0;
+> +
+> +	/*
+> +	 * Unlike Device Tree, where phandles appear in many non-supplier
+> +	 * contexts and a curated allowlist is required, a software node only
+> +	 * carries a DEV_PROP_REF property when the author explicitly describes
+> +	 * a reference to another node. Every such reference is therefore an
+> +	 * intentional supplier dependency, so we create fwnode links for all
+> +	 * of them.
+> +	 */
+> +	for (prop = swnode->node->properties; prop->name; prop++) {
+> +		if (prop->type != DEV_PROP_REF || prop->is_inline)
+> +			continue;
+> +
+> +		/*
+> +		 * TODO: Graph "remote-endpoint" references go both ways
+> +		 * between endpoint child nodes and would create endpoint
+> +		 * cycles. Let's leave it out for now until we have potential
+> +		 * users.
+> +		 */
+> +		if (!strcmp(prop->name, "remote-endpoint"))
+> +			continue;
+> +
+> +		ref_array = prop->pointer;
+> +		count = prop->length / sizeof(*ref_array);
 
-I will still move it into std_vendor.rs and align the docs with 
-upstream's,
-keeping the expression-position note since that is the one real 
-difference.
+Seems we are going to have more of a such, perhaps make a helper for counting
+(which will do that division beneath).
 
-Does that work for you, or would you rather take the gate and drop
-expression-operand support?
+> +		for (i = 0; i < count; i++) {
+
+		for (unsigned int i = 0; i < count; i++) {
+
+> +
+
+Redundant blank line?
+
+> +			if (ref->swnode)
+> +				refnode = software_node_fwnode(ref->swnode);
+> +			else if (ref->fwnode)
+> +				refnode = ref->fwnode;
+> +			else
+> +				continue;
+> +
+> +			/* Supplier not registered yet, or self-reference. */
+> +			if (!refnode || refnode == &swnode->fwnode)
+> +				continue;
+> +
+> +			fwnode_link_add(&swnode->fwnode, refnode, 0);
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+
+...
+
+> +	/*
+> +	 * When the software node is the device's secondary firmware node, the
+> +	 * core only records the owning device on the primary fwnode (see
+> +	 * device_add()). fw_devlink resolves a supplier device through
+> +	 * fwnode->dev, so without this a consumer referencing the software
+> +	 * node could never find the supplier device and would defer forever.
+> +	 * Make fwnode.dev point to its owner in that case.
+
+The below seems more balanced in terms of line lengths.
+
+	 * When the software node is the device's secondary firmware node,
+	 * the core only records the owning device on the primary fwnode
+	 * (see device_add()). fw_devlink resolves a supplier device through
+	 * fwnode->dev, so without this a consumer referencing the software
+	 * node could never find the supplier device and would defer forever.
+	 * Make fwnode.dev point to its owner in that case.
+
+> +	 */
+> +	if (dev_fwnode(dev) != &swnode->fwnode && !swnode->fwnode.dev)
+> +		swnode->fwnode.dev = dev;
+
+Doesn't Herve's patch(es) add some helpers for this?
+https://lore.kernel.org/lkml/20260511155930.34604-2-herve.codina@bootlin.com/
+
+Ah, still not applied :-( Perhaps it can be applied as just part that brings
+fw_devlink_set_device()?
+
+> +	/*
+> +	 * Drop the device pointer mirrored onto a secondary software node in
+> +	 * software_node_notify(). For a primary software node the core owns
+> +	 * fwnode->dev and clears it in device_del().
+> +	 */
+> +	if (dev_fwnode(dev) != &swnode->fwnode && swnode->fwnode.dev == dev)
+> +		swnode->fwnode.dev = NULL;
 
 -- 
-Nika Krasnova
+With Best Regards,
+Andy Shevchenko
+
+
