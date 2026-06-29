@@ -1,251 +1,135 @@
-Received: from mail.aminvakil.com (mail.aminvakil.com [178.63.189.195])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A8A423A7E;
-	Mon, 29 Jun 2026 14:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.189.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901AE42848F
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 15:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782745026; cv=none; b=YesMvIcDtdmiyzn2xakfP8jL4p2I5YtwoGfuUV7QfFQZt7/OuW7wfJalfY2Jk6JNpT2GIopoxDre1sNHTL5RYT8gWXBUDjtVem9nKs/p6C7uEZy94wCCED2z2h4yfwIA/9wy3RgPa1eHfIuLPto6Rqq+TkvpYDDMcJ7hZwpPhRY=
+	t=1782745718; cv=none; b=vGYGNMUSHdVciXal+qmCwZr+0/7OIPZOTcRHiZ3ivY6REuG1JQzYrQn+Bb+Al8aeIftl4dIqLx3SB4kzp3KhnOY4h5W8DVhcaZ2XSoMXVOeGYIb9zQ6CpxLIJCFc7pg1mkLX6W1hP7Z09qEDAmzOH4gpbHLo9QyfcqSAseI0Pyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782745026; c=relaxed/simple;
-	bh=m/Q4f/ZHm3qzMThUroIwKT/142ELsSlKuECekM/+nQ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R52uXiueU7pzg/4s5tURXqaUsh70tXRMErQIfW90myM/IiqjkxSzN48gA4P6ymZD/DtdI0P15uYxDZCH4bumqFX3f2K2JPRDpsYU2dfBFidUDNbqgYjxVDhRBQb7IALzsx9b7YuG1gz78QhfjX1Z21r2FpUkNjrbpJZusvwJ33g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aminvakil.com; spf=pass smtp.mailfrom=aminvakil.com; dkim=pass (2048-bit key) header.d=aminvakil.com header.i=@aminvakil.com header.b=TaX7x3Mm; arc=none smtp.client-ip=178.63.189.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aminvakil.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aminvakil.com
+	s=arc-20240116; t=1782745718; c=relaxed/simple;
+	bh=lMco64SlCp2iFk0E6dTwrSjmt/kwqJaHvhyZAbJrpBw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=dnK7wc+peXHbkFZOQ17yhuW6JUcHx51c1zL3aTpG0mck2r6+Q9zxOGVIjCd2a8TVrY01Cavovc57JEeHKHSr9QVVJCxqkMQwzUph2ZtSHjUBF1fKDiHNas9bRPVCgIc7EeograG4rYCaKPbCF9XgkUv7wa2us4WmsCGR2Mf+avI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b5ZbIrUt; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=s4+DPnR8; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aminvakil.com header.i=@aminvakil.com header.b="TaX7x3Mm"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 48536452A5;
-	Mon, 29 Jun 2026 18:17:29 +0330 (+0330)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aminvakil.com;
-	s=dkim; t=1782744450;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-language:in-reply-to:references:autocrypt;
-	bh=m/Q4f/ZHm3qzMThUroIwKT/142ELsSlKuECekM/+nQ8=;
-	b=TaX7x3MmG50lc4PAOHi4jg1e1becMhVx4uHwB5qORdbSerRqN/dWphmd6h1qFmYbZZi3AM
-	cKlctzi/i8ngDQiwKAxoyAsJyN/jBjVaBDXu/DYGkZy8QIfOm2FbnSqs9eRqbe5rcahFHb
-	IV3599CgZOznY/schVc2G2HpHFlZz0+7GCOflT4MiMX3USL27hwareQznM5bHX78qGhJlR
-	AK3TWY3xqwNfArak11L6wjpg1bb+B/g1jFqvYsNnTgOZhcquuyhyX29nTxnAcAXhaM6twV
-	ClJuHzQFwW4TY+xSgB3g73eVShidllGz11Txuw3hcFiORtaFGx/c/DOdsprYKg==
-Message-ID: <7221b38a-4a97-4282-ba91-4fb47028cb79@aminvakil.com>
-Date: Mon, 29 Jun 2026 18:17:26 +0330
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b5ZbIrUt";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="s4+DPnR8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782745713;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HnLlIWAqKGkYvHzL3qLHQR1QHqWY2RRH9mZcPadrEj8=;
+	b=b5ZbIrUtJ2KPwudBIEZBC+5T1uJzJV6MXH0jNRtzanYo17gfx1U1molluh9joC2z87eE2s
+	aAYoxC2kalUKGhUIpnNdnFcRfMMw3cgDTollCteWnE/qxSmKn0feKkLP/VhAXhw9kZCY/4
+	P1Zz2gM08ndW8sM37VMzL2rQcEe24hQ=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-388-rtsTT7nGNiKr49-SMCIstA-1; Mon, 29 Jun 2026 11:08:31 -0400
+X-MC-Unique: rtsTT7nGNiKr49-SMCIstA-1
+X-Mimecast-MFC-AGG-ID: rtsTT7nGNiKr49-SMCIstA_1782745710
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-c1276292eb9so68005366b.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 08:08:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1782745710; x=1783350510; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HnLlIWAqKGkYvHzL3qLHQR1QHqWY2RRH9mZcPadrEj8=;
+        b=s4+DPnR83b0302ZQ/XbDG9FJWKm66/FR0E2Tlg9H3b/w4BTuI2Frim1fxSaFIG8ztP
+         smo+AVNGR2y9gq2sZJHoFVpRho5ocPMZPsmJwGD+xNvT806U8gZSwZr6ZYH4GHstRyi5
+         4TeBlPCHo6UuCveZkGsP1lNtqaB1F6JTyptugqFfBpo4SGbb1tCm+7Hf/Tk2QWgbIH0v
+         OrSyhPwG/r+Qivl5s0AvVzNIzlqwP+DnTHjCqR/ptzC8Tyovsb868vWwiO2YFNa9dlpS
+         yYGzOpY/vY3O8rYWWe6kd8X3R0R4gnq6Eg9T8cJag66dYR1PPvEi+ovmv7ddEGiMk71K
+         fekA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782745710; x=1783350510;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HnLlIWAqKGkYvHzL3qLHQR1QHqWY2RRH9mZcPadrEj8=;
+        b=DB3chwxYRkt5Io0p+NJ1mxcDlKz4/pvFCM4PnoPAUoatf1k+LJXu8UoKg4qpuje8vi
+         Ke7vPOcAfitl6ZgWv9Y6PFLwqWM4KlC1MmlpGfHcWjOn/PXt090EJzzyVeLiLykCCELP
+         gZG3vEbATpLwdacrWDZNirAIOuq8fpuqFXD7xPsXndn5K5Qpe0FaXkNVqfKkQklHZsx5
+         5wPgBlcaTf80nyqhaeCZf1a6QktwG99FGra+FmKFrIRWDd52Uo2JYBNFdQPNpiI30MZY
+         X7CJ3Se2uVmolMYowlvKvC8a/2mCc5TykeAK+vNCCqlQOyXayLeDKGaYpv/YsZBH4fiK
+         EaxQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqJhbKhr/A5yFfnN41UM4LyOpT8BNFVFyFV+iIo0KStlEgFx4eMuJ4CRm1s+VF4wcL5vlVzPuyjwQOX4RyJD+o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPfmlRSFWHqt4gAgl46GiupXz2mWoJuBIeonSIZy8LYOYcHNjm
+	MPdCwfbzTxGY+aYxnlKmQMhpkJwmpC3ordDBvUm4MStoQAgwLgo7eScKV8d9wFWfEi3BvRcxPiP
+	6eL0RVxdd+irbisdU6PfG3nVyX24s24Ef8xMAzYbXeLM99WN+6m9CWFISyAhpwTSyS/fQ+w==
+X-Gm-Gg: AfdE7cnTHZOrcGU34+w/4CR9FU3P+uLQniv24NdBQufc8unFMzfhUxw1b8pnhPOjj4J
+	6o+9dOqdj3r2Q/UI0iT4k2XjtddJLjkyNCR0tEhgLMQI74K0uJFiM5l9P8aftq3KHJ51SdY9dbE
+	ODCRONKbkWDEmFoxx+w6zOtvrORyIo/wcCHgbeSUVZrThQvS5xCI3o9jiNwJfRp32AUpOm9pjJF
+	PJLNDRiJThcxdfVl/0PbAvU0Yk83yYtnDFr0hqieaW2gWOs4SMsdZjxcVWgRNTsHBprjYLrdn5M
+	9g7JiXwFy+SzftVB0oVOozySxyupHo6UD8fdS0usY5vWAh2O3QEa6GQh3AeWfrGpXajfGohRpkq
+	jG/k3anBsxhVmE5qoKGH0q+7bERwNJdiQMD8EuA==
+X-Received: by 2002:a05:6402:d0e:b0:697:f70f:8238 with SMTP id 4fb4d7f45d1cf-698774b8165mr465864a12.4.1782745710428;
+        Mon, 29 Jun 2026 08:08:30 -0700 (PDT)
+X-Received: by 2002:a05:6402:d0e:b0:697:f70f:8238 with SMTP id 4fb4d7f45d1cf-698774b8165mr465847a12.4.1782745709965;
+        Mon, 29 Jun 2026 08:08:29 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-69848e5ebc0sm3512223a12.3.2026.06.29.08.08.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2026 08:08:28 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 639C280A267; Mon, 29 Jun 2026 17:08:27 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: David Ahern <dsahern@kernel.org>, Avinash Duduskar
+ <avinash.duduskar@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org
+Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
+ yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
+ a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
+ eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
+ bpf_fib_lookup() helper
+In-Reply-To: <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org>
+References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
+ <20260624030530.3342884-2-avinash.duduskar@gmail.com>
+ <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Mon, 29 Jun 2026 17:08:27 +0200
+Message-ID: <87se65bd04.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: proc: include fcntl.h in proc-pidns
-To: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Aleksa Sarai <cyphar@cyphar.com>, linux-kselftest@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260618151444.124739-1-info@aminvakil.com>
- <20260623-visier-zulauf-morgen-50e686cc03fe@brauner>
-Content-Language: en-US
-From: Amin Vakil <info@aminvakil.com>
-Autocrypt: addr=info@aminvakil.com; keydata=
- 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
- +78sXChAfE9n44i0gJHzV8BhCsQG4+k=
-In-Reply-To: <20260623-visier-zulauf-morgen-50e686cc03fe@brauner>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------aDWejSLUC35YBTxNEkCPQh0i"
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------aDWejSLUC35YBTxNEkCPQh0i
-Content-Type: multipart/mixed; boundary="------------PgVV1uouVkLyK3I7qLfEUw3L";
- protected-headers="v1"; hp="clear"
-Message-ID: <7221b38a-4a97-4282-ba91-4fb47028cb79@aminvakil.com>
-Date: Mon, 29 Jun 2026 18:17:26 +0330
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: proc: include fcntl.h in proc-pidns
-To: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Aleksa Sarai <cyphar@cyphar.com>, linux-kselftest@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260618151444.124739-1-info@aminvakil.com>
- <20260623-visier-zulauf-morgen-50e686cc03fe@brauner>
-Content-Language: en-US
-From: Amin Vakil <info@aminvakil.com>
-Autocrypt: addr=info@aminvakil.com; keydata=
- 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
- +78sXChAfE9n44i0gJHzV8BhCsQG4+k=
-In-Reply-To: <20260623-visier-zulauf-morgen-50e686cc03fe@brauner>
+David Ahern <dsahern@kernel.org> writes:
 
---------------PgVV1uouVkLyK3I7qLfEUw3L
-Content-Type: multipart/mixed; boundary="------------2t0mGFheBo9TIu38HnO6zQfY"
+> On 6/23/26 9:05 PM, Avinash Duduskar wrote:
+>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>> index 89b36de5fdbb..e00f0392e728 100644
+>> --- a/include/uapi/linux/bpf.h
+>> +++ b/include/uapi/linux/bpf.h
+>> @@ -3532,6 +3532,29 @@ union bpf_attr {
+>>   *			Use the mark present in *params*->mark for the fib lookup.
+>>   *			This option should not be used with BPF_FIB_LOOKUP_DIRECT,
+>>   *			as it only has meaning for full lookups.
+>> + *		**BPF_FIB_LOOKUP_VLAN**
+>
+> This flag should not be needed. Patches for vlan support were never
+> submitted (I have them in some old branch). Since the vlan params are
+> initialized to 0, no new flag should be needed. Besides, these are
+> output parameters.
 
---------------2t0mGFheBo9TIu38HnO6zQfY
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+There's no enforcement from the kernel side of the parameters being
+zero, though? So we do need the flag for feature detection; unless we
+expect applications to do that out of band? But then we'd need a
+mechanism to do that which could be... the presence of the flag in the
+ENUM (and thus in BTF)? :)
 
-T24gNi8yMy8yNiAxOjQzIFBNLCBDaHJpc3RpYW4gQnJhdW5lciB3cm90ZToNCj4gT24gVGh1
-LCAxOCBKdW4gMjAyNiAxODo0NDo0NCArMDMzMCwgQW1pbiBWYWtpbCB3cm90ZToNCj4+IHNl
-bGZ0ZXN0czogcHJvYzogaW5jbHVkZSBmY250bC5oIGluIHByb2MtcGlkbnMNCj4gDQo+IEFw
-cGxpZWQgdG8gdGhlIHZmcy03LjMubWlzYyBicmFuY2ggb2YgdGhlIHZmcy92ZnMuZ2l0IHRy
-ZWUuDQo+IFBhdGNoZXMgaW4gdGhlIHZmcy03LjMubWlzYyBicmFuY2ggc2hvdWxkIGFwcGVh
-ciBpbiBsaW51eC1uZXh0IHNvb24uDQo+IA0KPiBQbGVhc2UgcmVwb3J0IGFueSBvdXRzdGFu
-ZGluZyBidWdzIHRoYXQgd2VyZSBtaXNzZWQgZHVyaW5nIHJldmlldyBpbiBhDQo+IG5ldyBy
-ZXZpZXcgdG8gdGhlIG9yaWdpbmFsIHBhdGNoIHNlcmllcyBhbGxvd2luZyB1cyB0byBkcm9w
-IGl0Lg0KPiANCj4gSXQncyBlbmNvdXJhZ2VkIHRvIHByb3ZpZGUgQWNrZWQtYnlzIGFuZCBS
-ZXZpZXdlZC1ieXMgZXZlbiB0aG91Z2ggdGhlDQo+IHBhdGNoIGhhcyBub3cgYmVlbiBhcHBs
-aWVkLiBJZiBwb3NzaWJsZSBwYXRjaCB0cmFpbGVycyB3aWxsIGJlIHVwZGF0ZWQuDQo+IA0K
-PiBOb3RlIHRoYXQgY29tbWl0IGhhc2hlcyBzaG93biBiZWxvdyBhcmUgc3ViamVjdCB0byBj
-aGFuZ2UgZHVlIHRvIHJlYmFzZSwNCj4gdHJhaWxlciB1cGRhdGVzIG9yIHNpbWlsYXIuIElm
-IGluIGRvdWJ0LCBwbGVhc2UgY2hlY2sgdGhlIGxpc3RlZCBicmFuY2guDQo+IA0KPiB0cmVl
-OiAgIGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3Zm
-cy92ZnMuZ2l0DQo+IGJyYW5jaDogdmZzLTcuMy5taXNjDQo+IA0KPiBbMS8xXSBzZWxmdGVz
-dHM6IHByb2M6IGluY2x1ZGUgZmNudGwuaCBpbiBwcm9jLXBpZG5zDQo+ICAgICAgICBodHRw
-czovL2dpdC5rZXJuZWwub3JnL3Zmcy92ZnMvYy8wM2ViZWRlYTAwMGUNCj4gDQoNClNvcnJ5
-IGZvciB0aGUgZm9sbG93LXVwIGVtYWlsLCBJIGRvIG5vdCBrbm93IGlmIHRoZXJlIGlzIHNv
-bWV0aGluZyB0aGF0IA0Kc2hvdWxkIGJlIGRvbmUgZnJvbSBtZS4NCg0KUGF0Y2ggaXMgbm90
-IHByZXNlbnQgd2hlcmV2ZXIgSSBsb29rZWQgYXQuDQoNCmh0dHBzOi8vZ2l0Lmtlcm5lbC5v
-cmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3Zmcy92ZnMuZ2l0L2xvZy90b29scy90ZXN0
-aW5nL3NlbGZ0ZXN0cy9wcm9jL3Byb2MtcGlkbnMuYz9oPXZmcy03LjMubWlzYw0KDQpkb2Vz
-IG5vdCBzaG93IHRoZSBwYXRjaC4NCg0KaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2Nt
-L2xpbnV4L2tlcm5lbC9naXQvdmZzL3Zmcy5naXQvY29tbWl0Lz9pZD0wM2ViZWRlYTAwMGUN
-Cg0Kc2F5cyBCYWQgb2JqZWN0IGlkICh3aGljaCBJIHRoaW5rIGlzIG5vdCBhIGNvbmNlcm4g
-YXMgeW91J3ZlIHNhaWQgY29tbWl0IA0KaGFzaGVzIG1heSBjaGFuZ2UpDQoNCmh0dHBzOi8v
-Z2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3Zmcy92ZnMuZ2l0L3Bs
-YWluL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Byb2MvcHJvYy1waWRucy5jP2g9dmZzLTcu
-My5taXNjDQoNCmRvZXMgbm90IHNob3cNCiNpbmNsdWRlIDxmY250bC5oPg0KYXMgd2VsbC4N
-Cg0KQWdhaW4gcGxlYXNlIGFjY2VwdCBteSBhcG9sb2dpZXMgaWYgSSBzaG91bGQndmUgd2Fp
-dGVkIG1vcmUgb3IgSSANCnNob3VsZCd2ZSBkb25lIHNvbWV0aGluZyBlbHNlLCB0aGlzIGlz
-IG15IGZpcnN0IHBhdGNoIHRvIGtlcm5lbCBtYWlsaW5nIA0KbGlzdHMuIFRoYW5rIHlvdSBm
-b3IgeW91ciBwYXRpZW5jZS4NCg0KQmVzdCBSZWdhcmRzLA0KQW1pbiBWYWtpbA0K
---------------2t0mGFheBo9TIu38HnO6zQfY
-Content-Type: application/pgp-keys; name="OpenPGP_0x1EFC1864E9D9E56B.asc"
-Content-Disposition: attachment; filename="OpenPGP_0x1EFC1864E9D9E56B.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+-Toke
 
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-+78sXChAfE9n44i0gJHzV8BhCsQG4+k=3D
-=3DGHsk
------END PGP PUBLIC KEY BLOCK-----
-
---------------2t0mGFheBo9TIu38HnO6zQfY--
-
---------------PgVV1uouVkLyK3I7qLfEUw3L--
-
---------------aDWejSLUC35YBTxNEkCPQh0i
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsD5BAABCAAjFiEEhGrABIXlXG/0vJ9THvwYZOnZ5WsFAmpChX4FAwAAAAAACgkQHvwYZOnZ5WsS
-JAv8DPDyAshBXj8MGOps3LbyjH0k32MDBAogKxNcpzALYe1l/WJV+cfbxpM8kJ3wOkhw54PSDkll
-Pc3MVyZGVBADEjDP9YL7TQrAAf6nVr6yiXHhJGgmyUSAByOUlhULqFBuWlIPv9SZcggaM9L/U1+V
-oULnPXjC8+cdKHJ3Rg2jd6cR1fPjcqF0ZbTvaL4J8Zt8os1QGQn4BkyDag82SNGFmSdfi9iyD1WW
-bqtMCamh3opk5QtQKasD8b/+HnuUEFkX3Wa7n+zRTGnsu7RZZqTGiqNA5WU04ZMqAmAYGJzDaiKB
-nrsKoT3KpnGLXS0uuR5JIxVYSFLw9NIyB1J5zebRqFdq3kpIFF11rS97EA/Siakfwj9va+UxO4uq
-IPzfTJaPB5ooAXxruINPiMkqSlzpVr4Y4P6C4v8drX7bNf81PBFprPU/SbwQMcvDkYAAA6jylVmr
-QTyn8Xi/jY1zPcSEkxNlLFmrARRcfchC0Je0WhLC3Wv14xAbXIpVCZylGpjI
-=Rp7Z
------END PGP SIGNATURE-----
-
---------------aDWejSLUC35YBTxNEkCPQh0i--
