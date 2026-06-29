@@ -1,81 +1,37 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out198-10.us.a.mail.aliyun.com (out198-10.us.a.mail.aliyun.com [47.90.198.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19B123FF889
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 12:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0F0402422;
+	Mon, 29 Jun 2026 12:58:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782737871; cv=none; b=rCkOmfXgurMxAK+Feoc32HhmB54jxN6KqwvcVeZ+vxdYImyFWBHSO3L+4UID1UzO0L/V8UCNrEuJwKiddjf77yYBHrL+jWEmd9tK38WzE2ThaBR8+nW5Y7c1wc0ZOURAxUZgLe2zcCEQa0p6swq5IFZIFftd1jR7MUltrFzMfrE=
+	t=1782737883; cv=none; b=E4CwGDULeyiWl1MKZKvaNps9W0OUyDiMN3y17yttS+vcTLGJyQfEiukwS4q2Pb8LAUyjH8jFVyK8dYo29wUogpyRNJwIsKzVIvG0RpsdDZNlT7QHMyDGyI3JrCR5TQDe7TlhT4tjIVxO9xJY64i0hJ+HTIgHB96Xfht8t6NtEAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782737871; c=relaxed/simple;
-	bh=zfksjw+XRBPxiZB4Kl4ufA4nXVLgzGFz2c+17Fn6Yn4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I+I6KMAE1mq0uPQPKJE7e9hlcE4/7+V243B2VMQj90pDOGn43404aGblb5/rlT/z07Y3CUuXz4+zunHJniRltqWrOJrabkZj/q+m3UES3KR26kc3z0zGbnLVRaDMD411b/gN7ajMZ+EJzBkM3TO/W72D8IIvwn75ANM+H1gOM9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LTV6djWo; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LTV6djWo"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso42309835e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 05:57:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782737868; x=1783342668; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zS6INqnnyC03KYKAIS5NHsKTWgAmbX4KvTkfnH8Dlis=;
-        b=LTV6djWorcvP7cu6Zcqhf48TrEgrSu0/pH/34I66LZYBvNn2QtaGhC7BuJd3+EZD72
-         sYmJE8qKrNPzU8Fmq8VsDlLSiZl/Jho5ZFmqfeYg6uLlBa7Lwt8B73NLhq9Blu6XjaRs
-         k4h0viYx2bQ6hctjh83/6reD0J2lTVF2GudD194HQYP2KhoU28hsKFybd/sL5STTFylx
-         HKgy6eKtEp2q0QKTKVCLtNdWd8pzsywzSr+62myrcotcdZ75dyeNKah2+RSyn/ytZB43
-         NfVNjp8wfh7gMc4dGLQHroVkA4dXSlkHh9NOgF2s70WI/H1STAVfsRzmu3d3G96f2Kkd
-         Cu2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782737868; x=1783342668;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zS6INqnnyC03KYKAIS5NHsKTWgAmbX4KvTkfnH8Dlis=;
-        b=OD+3/YdEdnmZoqhQPOBmqyaSJMhHwxRE/rNHJvT+MIVseRGZs+CZhrf1of9iIqvdJh
-         ec3h6FRWEddFDZKn4RldgSBiCbOe+0r42XcpAs1gGigPNTVcDLrVK3wHCb23WTmmKxfi
-         AUrB7PdhhO6KG+N4G/uCXXzu/syjX0SVWczuFlc5GkC2qmIYFGzQS/HMslJ0QjdoltHL
-         2eG1Ci//aJ95dSRutlwCriJJAv+hBzzlF6MmAbmU0mL6jeQy1Wb5JdklHt80Kty5W5Mr
-         qkkl3/WXOu3c2wXHnDr6cV99EpLflyK06E6DN2EBPvMKeBYJQRY97b6zlghk4WPYRrR9
-         J7aw==
-X-Forwarded-Encrypted: i=1; AFNElJ++eMSEbVHgd6CYbAeFZaScFEVxR3MWPIBan89wHDoC8kcRSFl7pqTdvPI1ydTxhKiGhow3fHnXXDoYj68GO5I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQ5vnkm6WZJaJ15t69dsUOJSABiOBzRKzsUtvTvLemR/cj5AmD
-	OcKjhC2l3XXcR67AYKLcB+RcgJAspoCrKHglROtqSO89i5zIjEpTyQEi
-X-Gm-Gg: AfdE7cmMXk6Ft0ZtenkKldIG99V/qnH89GZuJ211cZLH4fErMiyYPheA2mEZwTfaq8a
-	BMTTmwHokrcrdI7F9POEsV5kYlnAZIsyFjEz80AS2gchBhitZDx4pQZ9svuVcipSIe0zYPNjinR
-	KfucgexjJIrE8FTRWP5bFajGpwVdQwLN3wn0E9QwbsB9QVvS1ezBtKBvOoSA76AsWiuuq9FYIHK
-	kbMzE9Z/NyALsoXaLy7pu3cm9SmL86vG1dGZiM59UNBsSpi11MzMJi8hWpGThF0K7do3USDB3Gj
-	R8rtTjwlqufm42qRXsAUrrDrm1xJNsMoZtGe4wMsfH5ndLN6Z3/jSAIF+imqlTPmMfY8W1Qg82s
-	WzF75unvWDEJ2dpXF4nOYU8tnKa8hmu/dySyhFo+UTTigLHs2dHiV23ImlLOHPqcpwn182FkWE7
-	Ke4GyaL5pkxVAYulkhizY2vA==
-X-Received: by 2002:a05:600c:3acd:b0:492:6da2:5f0e with SMTP id 5b1f17b1804b1-4926da25f4dmr177134215e9.32.1782737868462;
-        Mon, 29 Jun 2026 05:57:48 -0700 (PDT)
-Received: from uberwald.home ([2a02:a03f:635d:6701:d6a2:6d4:bf93:c1b7])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-492690a1a85sm546336835e9.15.2026.06.29.05.57.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2026 05:57:47 -0700 (PDT)
-From: "Guillaume @layus Maudoux" <layus.on@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	mptcp@lists.linux.dev,
-	netdev@vger.kernel.org,
+	s=arc-20240116; t=1782737883; c=relaxed/simple;
+	bh=L+3z5OBW8Tqq5z5OhOgHrkPOoAIE8vrLsS9nHz3N0LE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LwAIG+AfMdCurekOBacr6lKdBoiTGbc0h04max5H1CVrSNLYmiop0HuLV1avtVIyBlbSIOwotunpRKGEOt9HDd49onNyH5C670LM6+YKH1U7Xxddph+BcI7HUxCvjKVCYDNYBhGV2VTeJGWDIsnYbJBaapiRZ+qR+gBnzwYeXSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=47.90.198.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.0747187|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00377912-3.63415e-05-0.996185;FP=12594999332404137915|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033032053168;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=7;RT=7;SR=0;TI=SMTPD_---.i8gsqO3_1782737537;
+Received: from tina-home.taild49858.ts.net(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.i8gsqO3_1782737537 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Mon, 29 Jun 2026 20:52:18 +0800
+From: Tina Zhang <zhang_wei@open-hieco.net>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	kvm@vger.kernel.org
+Cc: Shuah Khan <shuah@kernel.org>,
+	zhouyanjing@hygon.cn,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Guillaume @layus Maudoux" <layus.on@gmail.com>
-Subject: [PATCH] selftests/bpf: Mask socket type flags in mptcpify prog
-Date: Mon, 29 Jun 2026 14:56:37 +0200
-Message-ID: <20260629125637.384923-1-layus.on@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] KVM: selftests: Add nested SVM DecodeAssists test
+Date: Mon, 29 Jun 2026 20:52:05 +0800
+Message-ID: <20260629125205.52394-3-zhang_wei@open-hieco.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260629125205.52394-1-zhang_wei@open-hieco.net>
+References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,176 +40,160 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The mptcpify BPF prog hooks update_socket_protocol() to rewrite
-eligible TCP socket() calls to IPPROTO_MPTCP. It only does so when the
-socket type is exactly SOCK_STREAM:
+Add a selftest for nested SVM DecodeAssists virtualization.
 
-	type == SOCK_STREAM
+Run L2 with a non-present NPT mapping to trigger a nested page fault, then
+verify that L1 sees non-zero DecodeAssist state in VMCB12 and that the
+reported instruction bytes match the instruction at L2's RIP.  This covers
+the path that copies hardware-provided decode information from VMCB02 to
+VMCB12.
 
-The problem is that update_socket_protocol() in __sys_socket() is
-called on the raw type argument as passed from userspace, before
-__sys_socket_create() strips the flag bits with
-"type &= SOCK_TYPE_MASK". The type argument may therefore carry
-SOCK_CLOEXEC and/or SOCK_NONBLOCK in its upper bits, and the equality
-check above then fails.
+Re-enter L2 at a VMMCALL after the #NPF and verify that any reported bytes
+match the new RIP.  KVM reuses VMCB02 across nested runs, so the second
+exit checks that DecodeAssist state from the earlier #NPF is not leaked
+into an unrelated nested VM-Exit.
 
-As a result, any socket created with e.g.
-socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0) -- which is what common
-libraries do by default -- is silently left as plain TCP instead of
-being upgraded to MPTCP. This was observed in practice with curl,
-whose connections were not upgraded to MPTCP despite the prog being
-attached.
+Also verify that KVM exposes DecodeAssists in L1's SVM CPUID leaf when the
+feature is supported by the host.
 
-The impact reaches beyond the test, because mptcpify.c is referenced
-as example code for users who want to transparently enable MPTCP. The
-same mistake is therefore likely to be copied into real deployments,
-where it fails the same way and is hard to diagnose.
-
-The fix is to mask off the flag bits before comparing, mirroring what
-the socket core does:
-
-	(type & SOCK_TYPE_MASK) == SOCK_STREAM
-
-Since SOCK_TYPE_MASK is not exposed through vmlinux.h, define it in
-bpf_tracing_net.h.
-
-To exercise the regression directly, extend the mptcpify test to also
-create the server socket with SOCK_CLOEXEC and SOCK_NONBLOCK set.
-Routing a flagged type through start_server() then revealed a second
-instance of the same pattern: start_server_addr() compared the type
-against SOCK_STREAM for equality to decide whether to set SO_REUSEADDR
-and call listen(), and so would skip listening for a flagged type.
-Mask the type there as well. As SOCK_TYPE_MASK is not exposed by
-glibc's <sys/socket.h> either, define it in network_helpers.h,
-mirroring prog_tests/socket_helpers.h.
-
-Fixes: ddba122428a7 ("selftests/bpf: Add mptcpify test")
-Signed-off-by: Guillaume @layus Maudoux <layus.on@gmail.com>
+Tested-by: Yongwei Xu <xuyongwei@hygon.cn>
+Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
 ---
- tools/testing/selftests/bpf/network_helpers.c |  4 ++--
- tools/testing/selftests/bpf/network_helpers.h |  5 +++++
- .../testing/selftests/bpf/prog_tests/mptcp.c  | 20 +++++++++++++++----
- .../selftests/bpf/progs/bpf_tracing_net.h     |  3 +++
- tools/testing/selftests/bpf/progs/mptcpify.c  |  2 +-
- 5 files changed, 27 insertions(+), 7 deletions(-)
+ tools/testing/selftests/kvm/Makefile.kvm      |  1 +
+ .../selftests/kvm/include/x86/processor.h     |  1 +
+ .../kvm/x86/svm_nested_decode_assists_test.c  | 99 +++++++++++++++++++
+ 3 files changed, 101 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86/svm_nested_decode_assists_test.c
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index b82f572641b7..db935a9d9fc1 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -111,7 +111,7 @@ int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t a
- 	if (settimeo(fd, opts->timeout_ms))
- 		goto error_close;
- 
--	if (type == SOCK_STREAM &&
-+	if ((type & SOCK_TYPE_MASK) == SOCK_STREAM &&
- 	    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on))) {
- 		log_err("Failed to enable SO_REUSEADDR");
- 		goto error_close;
-@@ -128,7 +128,7 @@ int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t a
- 		goto error_close;
- 	}
- 
--	if (type == SOCK_STREAM) {
-+	if ((type & SOCK_TYPE_MASK) == SOCK_STREAM) {
- 		if (listen(fd, opts->backlog ? MAX(opts->backlog, 0) : 1) < 0) {
- 			log_err("Failed to listed on socket");
- 			goto error_close;
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 79a010c88e11..75133119c04a 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -25,6 +25,11 @@ typedef __u16 __sum16;
- #define VIP_NUM 5
- #define MAGIC_BYTES 123
- 
-+/* include/linux/net.h */
-+#ifndef SOCK_TYPE_MASK
-+#define SOCK_TYPE_MASK 0xf
-+#endif
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 9118a5a51b89..23bf51074392 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -114,6 +114,7 @@ TEST_GEN_PROGS_x86 += x86/vmx_preemption_timer_test
+ TEST_GEN_PROGS_x86 += x86/svm_vmcall_test
+ TEST_GEN_PROGS_x86 += x86/svm_int_ctl_test
+ TEST_GEN_PROGS_x86 += x86/svm_nested_clear_efer_svme
++TEST_GEN_PROGS_x86 += x86/svm_nested_decode_assists_test
+ TEST_GEN_PROGS_x86 += x86/svm_nested_shutdown_test
+ TEST_GEN_PROGS_x86 += x86/svm_nested_soft_inject_test
+ TEST_GEN_PROGS_x86 += x86/svm_nested_vmcb12_gpa
+diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
+index 77f576ee7789..ee4520ff2f89 100644
+--- a/tools/testing/selftests/kvm/include/x86/processor.h
++++ b/tools/testing/selftests/kvm/include/x86/processor.h
+@@ -201,6 +201,7 @@ struct kvm_x86_cpu_feature {
+ #define	X86_FEATURE_LBRV		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 1)
+ #define	X86_FEATURE_NRIPS		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 3)
+ #define X86_FEATURE_TSCRATEMSR          KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 4)
++#define X86_FEATURE_DECODEASSISTS       KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 7)
+ #define X86_FEATURE_PAUSEFILTER         KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 10)
+ #define X86_FEATURE_PFTHRESHOLD         KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 12)
+ #define	X86_FEATURE_V_VMSAVE_VMLOAD	KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 15)
+diff --git a/tools/testing/selftests/kvm/x86/svm_nested_decode_assists_test.c b/tools/testing/selftests/kvm/x86/svm_nested_decode_assists_test.c
+new file mode 100644
+index 000000000000..6b5d38d9d36c
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86/svm_nested_decode_assists_test.c
+@@ -0,0 +1,99 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include "test_util.h"
++#include "kvm_util.h"
++#include "processor.h"
++#include "svm_util.h"
 +
- struct network_helper_opts {
- 	int timeout_ms;
- 	int proto;
-diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-index 8fade8bdc451..faa001ea84ab 100644
---- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-@@ -264,7 +264,7 @@ static int verify_mptcpify(int server_fd, int client_fd)
- 	return err;
- }
- 
--static int run_mptcpify(int cgroup_fd)
-+static int run_mptcpify(int cgroup_fd, int type)
- {
- 	int server_fd, client_fd, err = 0;
- 	struct mptcpify *mptcpify_skel;
-@@ -280,7 +280,7 @@ static int run_mptcpify(int cgroup_fd)
- 		goto out;
- 
- 	/* without MPTCP */
--	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
-+	server_fd = start_server(AF_INET, type, NULL, 0, 0);
- 	if (!ASSERT_GE(server_fd, 0, "start_server")) {
- 		err = -EIO;
- 		goto out;
-@@ -307,7 +307,18 @@ static int run_mptcpify(int cgroup_fd)
- static void test_mptcpify(void)
- {
- 	struct netns_obj *netns = NULL;
--	int cgroup_fd;
-+	int cgroup_fd, i;
-+	int types[] = {
-+		SOCK_STREAM,
-+		/* userspace sets these flags together with the type, and the
-+		 * BPF prog must still upgrade the socket to MPTCP. See
-+		 * update_socket_protocol() in net/socket.c, which runs before
-+		 * the type is masked with SOCK_TYPE_MASK.
-+		 */
-+		SOCK_STREAM | SOCK_CLOEXEC,
-+		SOCK_STREAM | SOCK_NONBLOCK,
-+		SOCK_STREAM | SOCK_CLOEXEC | SOCK_NONBLOCK,
-+	};
- 
- 	cgroup_fd = test__join_cgroup("/mptcpify");
- 	if (!ASSERT_GE(cgroup_fd, 0, "test__join_cgroup"))
-@@ -317,7 +328,8 @@ static void test_mptcpify(void)
- 	if (!ASSERT_OK_PTR(netns, "netns_new"))
- 		goto fail;
- 
--	ASSERT_OK(run_mptcpify(cgroup_fd), "run_mptcpify");
-+	for (i = 0; i < ARRAY_SIZE(types); i++)
-+		ASSERT_OK(run_mptcpify(cgroup_fd, types[i]), "run_mptcpify");
- 
- fail:
- 	netns_free(netns);
-diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-index d8dacef37c16..c4b438854565 100644
---- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-@@ -8,6 +8,9 @@
- #define AF_INET			2
- #define AF_INET6		10
- 
-+/* include/linux/net.h */
-+#define SOCK_TYPE_MASK		0xf
++#define L2_GUEST_STACK_SIZE 64
 +
- #define SOL_SOCKET		1
- #define SO_REUSEADDR		2
- #define SO_SNDBUF		7
-diff --git a/tools/testing/selftests/bpf/progs/mptcpify.c b/tools/testing/selftests/bpf/progs/mptcpify.c
-index cbdc730c3a47..e3f8cb54dbe9 100644
---- a/tools/testing/selftests/bpf/progs/mptcpify.c
-+++ b/tools/testing/selftests/bpf/progs/mptcpify.c
-@@ -15,7 +15,7 @@ int BPF_PROG(mptcpify, int family, int type, int protocol)
- 		return protocol;
- 
- 	if ((family == AF_INET || family == AF_INET6) &&
--	    type == SOCK_STREAM &&
-+	    (type & SOCK_TYPE_MASK) == SOCK_STREAM &&
- 	    (!protocol || protocol == IPPROTO_TCP)) {
- 		return IPPROTO_MPTCP;
- 	}
++static uint64_t npf_target __aligned(PAGE_SIZE);
++
++static void l2_guest_code(void)
++{
++	asm volatile("mov (%0), %%rax" : : "r"(&npf_target) : "rax", "memory");
++	GUEST_FAIL("L2 access did not cause a nested page fault");
++}
++
++static void l2_vmmcall_code(void)
++{
++	asm volatile("vmmcall");
++	GUEST_FAIL("L2 did not exit on VMMCALL");
++}
++
++/*
++ * Whenever hardware reports DecodeAssist information (insn_len != 0), the bytes
++ * KVM reflects into VMCB12 must be the instruction at the current RIP, never
++ * stale bytes carried over from a previous L2 exit.
++ */
++static void assert_decode_assists_sane(struct vmcb *vmcb)
++{
++	GUEST_ASSERT(vmcb->control.insn_len <=
++		     sizeof(vmcb->control.insn_bytes));
++	if (vmcb->control.insn_len)
++		GUEST_ASSERT(!memcmp(vmcb->control.insn_bytes,
++				     (void *)vmcb->save.rip,
++				     vmcb->control.insn_len));
++}
++
++static void l1_guest_code(struct svm_test_data *svm)
++{
++	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
++	struct vmcb *vmcb = svm->vmcb;
++
++	GUEST_ASSERT(this_cpu_has(X86_FEATURE_DECODEASSISTS));
++
++	generic_svm_setup(svm, l2_guest_code,
++			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
++
++	/* A real nested #NPF must reflect valid decode information to L1. */
++	run_guest(vmcb, svm->vmcb_gpa);
++
++	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_NPF);
++	GUEST_ASSERT(vmcb->control.insn_len);
++	assert_decode_assists_sane(vmcb);
++
++	/*
++	 * Redirect L2 past the still-faulting access to a VMMCALL.  KVM reuses
++	 * its internal VMCB02, which now holds the #NPF's decode bytes, so this
++	 * exercises the path that must clear DecodeAssist state and ensures the
++	 * prior exit's bytes are not leaked into a subsequent exit.
++	 */
++	vmcb->save.rip = (u64)l2_vmmcall_code;
++	run_guest(vmcb, svm->vmcb_gpa);
++
++	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
++	assert_decode_assists_sane(vmcb);
++
++	GUEST_DONE();
++}
++
++int main(int argc, char *argv[])
++{
++	gva_t svm_gva, npf_gva;
++	gpa_t npf_gpa;
++	struct kvm_vcpu *vcpu;
++	struct kvm_vm *vm;
++	u64 *pte;
++
++	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
++	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_NPT));
++	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_DECODEASSISTS));
++
++	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
++	vm_enable_npt(vm);
++	vcpu_alloc_svm(vm, &svm_gva);
++	npf_gva = (gva_t)&npf_target;
++	npf_gpa = addr_gva2gpa(vm, npf_gva);
++
++	tdp_identity_map_default_memslots(vm);
++	pte = tdp_get_pte(vm, npf_gpa);
++	*pte &= ~PTE_PRESENT_MASK(&vm->stage2_mmu);
++
++	vcpu_args_set(vcpu, 1, svm_gva);
++	vcpu_run(vcpu);
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
++	TEST_ASSERT_EQ(get_ucall(vcpu, NULL), UCALL_DONE);
++
++	kvm_vm_free(vm);
++	return 0;
++}
 -- 
-2.54.0
+2.43.0
 
