@@ -1,102 +1,117 @@
-Received: from flow-a6-smtp.messagingengine.com (flow-a6-smtp.messagingengine.com [103.168.172.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37FA444102B;
-	Mon, 29 Jun 2026 16:02:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A37F3F1AA6
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 16:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782748965; cv=none; b=lUkz8JscVfb5M5HOxwp5tAfQc0iWSG6sCIQIfWsAClrqUHDrKh4OnYivbE/r4zKmf/HmEfUwnLdkSJzr+JIDounBbnrAOXGhxcziRrfjeG79YyqVZLlwDcmUNGlVbA9LNvZJP3NflSfgdnbE9yCUHgPGFeP7exTXe2Vbft5Cwrg=
+	t=1782749519; cv=none; b=ViH1pSecDpIp4F+0By2lWNGY97ml+Ox2gfzAfn9FficwqU+chxwtbWJiXk26LFSpJaWeQIE3tYGGJEeSwuvyC64+vDsMHV6eu2xEZCSmuR8SIUj6uAS73f0PCRgdHT5TmLmcDbNCm1NUO5PqndrBy1L3aBLrP8CXtQCNfEug0bM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782748965; c=relaxed/simple;
-	bh=xUf6430MUJDHSC5orAznw95bP/KW4glg9syvaE6YZhY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KAULuRLcPFYjcm9RT9YF/CULLYC0uDcnM4aY6VQdYcNh9jqoFUcygD9bvQhNgMZHsXuFef7jo8i6cuFyOkG+estHDr9CY6u/Tgg442MP2oaNHghvbTTjAGcw/BAJgI6NKz/yY6+oZjRVVzpTCdQtGolzWoYyAUAmjCzRDGAfYYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=lterjNH4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=f4Prm+vx; arc=none smtp.client-ip=103.168.172.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="lterjNH4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="f4Prm+vx"
-Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
-	by mailflow.phl.internal (Postfix) with ESMTP id 6FBBF138037E;
-	Mon, 29 Jun 2026 12:02:43 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-07.internal (MEProxy); Mon, 29 Jun 2026 12:02:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1782748963; x=
-	1782756163; bh=5M7UrWTmU2fnWKZojvoJwc5RGoqcaVVltooaRFZSbD8=; b=l
-	terjNH4SS6dbm7ZLR3cT8v0CQWM6BYPp7JwJx5JHs6wYmDrskeL9eFpXHU7x5FP9
-	i7ovNMukFffN45qrCtjS5pVHdrUWJQuIsxug6mnYgJ8XN1PRNJw/yVQufVv8vV7W
-	X25/eoFjgyFoGvv/DplYNLrPAV5fdPTMfp9adZ+5bzKIyTk6uVbaMcXvodkORq9m
-	rFz7oNrgxuYOPK4a5gD+/YhYEfqASmYZVM2laU8bM5n3xGFrX7mIEaj+7sRV+yIr
-	P9fS3RowK9esq9C4O+4JY6c03GlWm9STey+km/jkknM04NQGoy79z8VBAilMDjli
-	3ISCnhaa/y/MXCmTkojQg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1782748963; x=1782756163; bh=5M7UrWTmU2fnWKZojvoJwc5RGoqcaVVltoo
-	aRFZSbD8=; b=f4Prm+vxw0uPrjIauItnXpWZWosjcyK5uKoXRf3h8MOxc0RK/TQ
-	NxeUehuXq0dAp9HeDS6CARmGeyw6ESQNFvu11X8Zdy7XaU2nr0Jrwzc/+0s9c3RN
-	wnIGjqIIwd5En4IDHPFOA8jE6kMWpN5/L0zoZZEhliNp7YEioZGAM2trxB4bnNZX
-	UK6BlFw63n7yRsTEeZVRMNsD9gl9y4+lLXuC19yw09hvfS5RdqrC3SJT2ARSuID1
-	froiUydCH9CNMUaEOr+hXtUy87hkEW1knryg4vVMfH/cZfHcAeZs7azys99Izkgs
-	TnnqGCY/NaiYRZVVYMArKRvnHBoCtfUsQ8Q==
-X-ME-Sender: <xms:I5dCahmrywK2XmKKrXi34cxfd-7jZ5vYqMOZDLC0dONzWjSgGWB0IA>
-    <xme:I5dCalPY2ZqO546gF66vI4g5nJZD3yjlQCs-aNCcJMfRorFAHAyrva09ADxB68QqJ
-    WCZoneYSMMDZwQWA9yDBJYZiAI2vmZ_lYZdxTAl_oSAtJhs39SZai0>
-X-ME-Received: <xmr:I5dCah7z1q6CBoH2evDYJLFJ126BboKdoqYET9eu2yv8roOyvjPZ_-Mbc0P7Ow>
-X-ME-Proxy-Cause: dmFkZTFDlTNK+FNohJg4noCYbW5VpwAEJ/3lhl31ZFTIvh6wOi6MwAQn2pdhCP1fDqPjSp
-    DThp5HlJoStLNnqS7NKN1XFUvrVLCFaaDrqKHocOP7Q0yFfyk9vYJwPjD4MtZnSSU+huSE
-    0bkQ4ZIkzUfj30WTfAyH257AFUsdMzCDhw0NoGAJUakjPmDj4VwuK9ibUEs2fq3McnGv78
-    Nh2JYbn4djoiaQDuiejPXLoPHxDQPhQeipCwDaQnTK65xBeDKRnJz9LO1G0ubz+7ygczav
-    kf9ymsjv6R0e7EpJWlgyVS12qRilACHu4La+l0bLD0/MxAsnjj+YIo73t+IxeqDILoe3aI
-    EGi5XfI/jWveDG9g4WL+5X/HQPKMnj5RRBtKX05jMG7+yCi7C450Ue3g9/WkhfbZVE1DD+
-    BXn09yMHPghVteggvBz2uHm+ayYXAy4SInb/5Q8CrS2AiPIChqLo/yfuVTLXhZg9UKdLu2
-    BK7bij7g/xg9IyuQmHAsF2svJoFNX+gKUlLyXZVTwg0oU9NpZFhqZIhetDbTjdDqIw6FxV
-    NDL+Jg024Pzi/8xay+OtYIKFSFiKHP9C82afWChq9YWh8ws9G8Mxn40tP1FMgFeJw3igq/
-    7iPc6nh1nX/NB32lxDYrSzQ1mF4YU4WilWmhoSLeg78JloBwBmC45O+6h4XA
-X-ME-Proxy: <xmx:I5dCamKBecsIvHRTs86s7_UMNMQyF4VfTO6wv8sfOFicnMvOAY836Q>
-    <xmx:I5dCatKhWeWhuybIyaV1aL_pZOF0pD_VdovgDw0lObYC_lxqQBUnww>
-    <xmx:I5dCam1ygCErQMLo99_D0L_5-34w1LIlYTQEGpJyn4JSFaCCkqubHQ>
-    <xmx:I5dCatyNiRsJqyMNLB5UB_39zZ8g0COnUVokKpTu8WxgXOfpBZtTqA>
-    <xmx:I5dCam1Ngh67dJljnvhol0Oi168Rb156u1MIFMAysA-Umwqcqk0HfOvm>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 29 Jun 2026 12:02:42 -0400 (EDT)
-Date: Mon, 29 Jun 2026 17:02:41 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: sashiko-reviews@lists.linux.dev, akpm@linux-foundation.org, 
-	rppt@kernel.org, peterx@redhat.com, david@kernel.org
-Cc: kvm@vger.kernel.org, ljs@kernel.org, surenb@google.com, 
-	vbabka@kernel.org, Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net, 
-	skhan@linuxfoundation.org, seanjc@google.com, pbonzini@redhat.com, jthoughton@google.com, 
-	aarcange@redhat.com, sj@kernel.org, usama.arif@linux.dev, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com
-Subject: Re: [PATCH v7 07/15] mm: preserve RWP marker across PTE rewrites
-Message-ID: <akKWzol3mExZhVYq@thinkstation>
-References: <20260629120749.566063-1-kirill@shutemov.name>
- <20260629120749.566063-8-kirill@shutemov.name>
- <20260629123320.1EF891F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1782749519; c=relaxed/simple;
+	bh=sYueyQ3bw2pc9KLgyJ1cpdzkyAoFGk1EpCG2FN7G3E4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E/2ZEKeBfvBkDvccfpmEIRkhgsUvZdeh3ZbW/GglGw5CI7wNKJnsSnuRIJwvPjg2uQ8SW+rrJ9AaM2+GmxSBn/CFD6qWOZozaS94IJKOkvQhiUIvXZZ7YTypq0mGjOFrB3owQtIsTQPLeglnvqvNxd7WGmasLH21UyiRhtf/U64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-5bbe617d624so2586907e0c.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 09:11:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782749517; x=1783354317;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7cc1AtD90QbYvJ0NtvKbjq/dL60nodyrS0aRkp51E1w=;
+        b=EI1Q/9leYQMZAEnG46YHGlrLNRYqLAP1pnHv1572Fzy8peJ0jCeryTpIFzQNvQ66M2
+         fZZCK830WK7A6KGlVEVs6slLvSh+JLUqrDMTEOpaHVlZPk95rQzBmBzK72Md1pCYE1jU
+         I8JmnJqtIWdsi72rZ4Yyxn8PzUZ2LEzE4VZd5J6vkbAOz+bgtzEp94Jj6up85FZvUKe4
+         Lsw4QFQEU9HyQMpnWtYUGqRR2cNvyQvf8RnTTm6tQE4yrTXxD0f4fyhEkmBTcILpOA/f
+         ejc3mvunPF5bNw19DnLTeSYSkBOZtH6QtVBLJYR1JSeYxIIPLw/C5Xpw6NZqzt5uZ+sN
+         GTXw==
+X-Forwarded-Encrypted: i=1; AHgh+RribCfQuNmpIw/G0NvhfVGs8r/6pQjLSDFGkC/gE5w9sUMrQzEhXmwcshhdqzUDvjf0/evN1HekHW+vDf/GBp0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsobBU6kiKLgX/pSZocI2aE64KSJuftdy9/7GFe/hxOoyI/eCi
+	5lW9TcKnCCDhn8boeXB8sY2XKNl1aIb+Mmsv243hKrcos7W+/4vyuplMAInWzaSw9Ew=
+X-Gm-Gg: AfdE7cnUE5ouQm9TcRwKXK+SOZn7ncdNl1AkHUTT+uwmGYR+ljePRNV3JyljzW+NRhv
+	uSIrnwU3L2iCcKteTwOgFIjpLkLnVXZQ0R10PnyXszLwz4RqG2LZCV4AyJnNYTPk5GHWaAmhudz
+	NUQvs/CEfAd6WqNT6Yz3gh/SoApsbBFw8cuEISjtcyJC7CeXSO+mCPm7Jrz83YvnE9f9s5yGaKG
+	ScVF9xG3wS3kUgipASZxoWTLLhl3Rz0mUNBeZFClIIfYb+wvDPkJsxp1mA9R/OEqGc5LCcYcdwR
+	8zvYgiIZZZWFRq1hkacAPq5gAmtVHe3E+By7AxL568HbMYXUfznjTZKmY7SWzt1nGN79Wp9I2Bi
+	dFX6WRDlWuB+oQWOdqpmlxyJh3i8xvauujGLTmicBqRBgz1iJcC1kjpkLNRZrkTSPspM1tyKu1F
+	lZL5m2d/MlSwZHlLnmAYTZU4zE+9ukwPZ3HfFcZ02ygUR/Avr4A25k6A==
+X-Received: by 2002:a05:6122:c458:10b0:5bd:a6a3:3066 with SMTP id 71dfb90a1353d-5bdbfd3eb93mr40574e0c.2.1782749517211;
+        Mon, 29 Jun 2026 09:11:57 -0700 (PDT)
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5bda2dd64c3sm2287821e0c.1.2026.06.29.09.11.56
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jun 2026 09:11:56 -0700 (PDT)
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-5bbfc48715fso3658610e0c.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 09:11:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+Rr95w4XQAe1qzn2qa7aicm4qa3X79dRBlHPUXFD561heCCCYY6iYGrcu3dRXlBO8wJO3+rfEEQEOmUK1KmGe90=@vger.kernel.org
+X-Received: by 2002:a67:f887:0:b0:6c8:c356:16c9 with SMTP id
+ ada2fe7eead31-72f860dfb7fmr8915583137.20.1782749516783; Mon, 29 Jun 2026
+ 09:11:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260629123320.1EF891F000E9@smtp.kernel.org>
+References: <20260627082921.1709181-1-david@davidgow.net>
+In-Reply-To: <20260627082921.1709181-1-david@davidgow.net>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 29 Jun 2026 18:11:43 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUfUWBQqsErAA9KAv_ReBEKVjXq-eSpYxvjd7k=HYtDMg@mail.gmail.com>
+X-Gm-Features: AVVi8CcD94Y5dYPobw9El3FE0Lv2yFLbfnthke_J1JTWNkKZe4jIUyESMzVEK-g
+Message-ID: <CAMuHMdUfUWBQqsErAA9KAv_ReBEKVjXq-eSpYxvjd7k=HYtDMg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] Documentation: kunit: Test Kconfig entries shouldn't
+ select other configs
+To: David Gow <david@davidgow.net>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jun 29, 2026 at 12:33:19PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
-> - [Critical] do_swap_page bypasses RWP tracking on non-exclusive private pages by resolving COW faults internally, dropping the RWP marker.
+Hi David,
 
-Okay, this one is real. I will add test-case for it and fix in v8.
+On Sat, 27 Jun 2026 at 10:29, David Gow <david@davidgow.net> wrote:
+> Add a note to the Kconfig section of style.rst to use 'depends on' rather
+> than 'selects' for dependencies, as this can cause users of
+> CONFIG_KUNIT_ALL_TESTS to suddenly grow unexpected dependencies.
+>
+> Signed-off-by: David Gow <david@davidgow.net>
+
+Thanks for your patch!
+
+> --- a/Documentation/dev-tools/kunit/style.rst
+> +++ b/Documentation/dev-tools/kunit/style.rst
+> @@ -164,9 +164,10 @@ This Kconfig entry must:
+>  * be visible only if ``CONFIG_KUNIT_ALL_TESTS`` is not enabled.
+>  * have a default value of ``CONFIG_KUNIT_ALL_TESTS``.
+>  * have a brief description of KUnit in the help text.
+> -
+> -If we are not able to meet above conditions (for example, the test is unable to
+> -be built as a module), Kconfig entries for tests should be tristate.
+> +* depend on the feature being tested, rather than selecting it (so that
+> +  enabling ``CONFIG_KUNIT_ALL_TESTS`` does not enable unrelated functionality).
+> +* be ``tristate``, unless there is a specific reason that the test cannot be
+> +  built as a module.
+
+The addition of the second bullet is not mentioned in the commit message
+(but I strongly agree with adding it ;-)
+
+>
+>  For example, a Kconfig entry might look like:
+>
+\
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
