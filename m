@@ -1,114 +1,251 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.aminvakil.com (mail.aminvakil.com [178.63.189.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D79B4218B2;
-	Mon, 29 Jun 2026 14:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A8A423A7E;
+	Mon, 29 Jun 2026 14:57:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.189.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782745003; cv=none; b=ZGXeSV9B1DfVNKiL23cwdS0MoF420P14GysxhkkPgVebaxTmp2x1MIgMJiG+03rQaI0uADJq5y9KPjFf6xByo5DUXw6y7SOXyMsxVaW68ujO7odc7AJe8wx72NprJrPBsgwcFdoQjS+67xjf0XhsHE5yXga5OGhJA0Q69qYtvSQ=
+	t=1782745026; cv=none; b=YesMvIcDtdmiyzn2xakfP8jL4p2I5YtwoGfuUV7QfFQZt7/OuW7wfJalfY2Jk6JNpT2GIopoxDre1sNHTL5RYT8gWXBUDjtVem9nKs/p6C7uEZy94wCCED2z2h4yfwIA/9wy3RgPa1eHfIuLPto6Rqq+TkvpYDDMcJ7hZwpPhRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782745003; c=relaxed/simple;
-	bh=J1SN97frnM0cvePHU+aIOz6O82hGuKWE7VcRFGEPkSk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=foeCxflDp7QUKcIa97M33Mhj6Q7waI+dmIl2o5SGKdkvvh3Q38n8U2Gb8BTiJbhMZjILge8O4QjkoEB+PD898cfGV8c7HKMiISKxP/yWVNw8cKq0ZlEeYsUwW2VzCpcgdCUcs8iYFzsDLRjLa7gCGU92H86yAvpCQXkPE/j1Qqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eU/k2Zti; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782745026; c=relaxed/simple;
+	bh=m/Q4f/ZHm3qzMThUroIwKT/142ELsSlKuECekM/+nQ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R52uXiueU7pzg/4s5tURXqaUsh70tXRMErQIfW90myM/IiqjkxSzN48gA4P6ymZD/DtdI0P15uYxDZCH4bumqFX3f2K2JPRDpsYU2dfBFidUDNbqgYjxVDhRBQb7IALzsx9b7YuG1gz78QhfjX1Z21r2FpUkNjrbpJZusvwJ33g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aminvakil.com; spf=pass smtp.mailfrom=aminvakil.com; dkim=pass (2048-bit key) header.d=aminvakil.com header.i=@aminvakil.com header.b=TaX7x3Mm; arc=none smtp.client-ip=178.63.189.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aminvakil.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aminvakil.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eU/k2Zti"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 666941F00A3F;
-	Mon, 29 Jun 2026 14:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782744998;
-	bh=UzWU4Me4IIb1YZ7xC+da7RUfQPj8e+Q+gI/W5LlD530=;
-	h=From:To:Cc:Subject:Date;
-	b=eU/k2ZtiggJzLKB6N/h3ekSHuXEFvvxTuHsNUCvt3BMkKk34KwIqJyXFjA2cxdjFM
-	 08yP2tYQM7ByK4lzFUmUQzVEUpSoqHh+Mttcr5hxyk1899yibNC7OHdq9oHJ/7aXcS
-	 065uWXUqfgwULYoaXHSPuMF08GEV83YlaR9uF3SvrHb2zKv8U27CiYiTpFtY7vsLum
-	 8yo6sJAj92rzTYuTjWlCjDSzQS/BDsjhKLe0GXz5yFqOsoMYLhYLizQZXFzw0+0a3i
-	 dNRaHs+ZyR+D7PwOzmqIhD8TFly4EL49TkqW0vQSJOx3/0l4IOea16f9fyDJC6nNzb
-	 EAkspDiPbx5Rw==
-From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SJ Park <sj@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Shu Anzai <shu17az@gmail.com>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH v3 0/2] mm/damon/core: detect internal variation above max_nr_regions/2
-Date: Mon, 29 Jun 2026 07:56:27 -0700
-Message-ID: <20260629145630.134891-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=aminvakil.com header.i=@aminvakil.com header.b="TaX7x3Mm"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 48536452A5;
+	Mon, 29 Jun 2026 18:17:29 +0330 (+0330)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aminvakil.com;
+	s=dkim; t=1782744450;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-language:in-reply-to:references:autocrypt;
+	bh=m/Q4f/ZHm3qzMThUroIwKT/142ELsSlKuECekM/+nQ8=;
+	b=TaX7x3MmG50lc4PAOHi4jg1e1becMhVx4uHwB5qORdbSerRqN/dWphmd6h1qFmYbZZi3AM
+	cKlctzi/i8ngDQiwKAxoyAsJyN/jBjVaBDXu/DYGkZy8QIfOm2FbnSqs9eRqbe5rcahFHb
+	IV3599CgZOznY/schVc2G2HpHFlZz0+7GCOflT4MiMX3USL27hwareQznM5bHX78qGhJlR
+	AK3TWY3xqwNfArak11L6wjpg1bb+B/g1jFqvYsNnTgOZhcquuyhyX29nTxnAcAXhaM6twV
+	ClJuHzQFwW4TY+xSgB3g73eVShidllGz11Txuw3hcFiORtaFGx/c/DOdsprYKg==
+Message-ID: <7221b38a-4a97-4282-ba91-4fb47028cb79@aminvakil.com>
+Date: Mon, 29 Jun 2026 18:17:26 +0330
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: proc: include fcntl.h in proc-pidns
+To: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Aleksa Sarai <cyphar@cyphar.com>, linux-kselftest@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260618151444.124739-1-info@aminvakil.com>
+ <20260623-visier-zulauf-morgen-50e686cc03fe@brauner>
+Content-Language: en-US
+From: Amin Vakil <info@aminvakil.com>
+Autocrypt: addr=info@aminvakil.com; keydata=
+ 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
+ +78sXChAfE9n44i0gJHzV8BhCsQG4+k=
+In-Reply-To: <20260623-visier-zulauf-morgen-50e686cc03fe@brauner>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------aDWejSLUC35YBTxNEkCPQh0i"
+X-Last-TLS-Session-Version: TLSv1.3
 
-kdamond_split_regions() bails out early when nr_regions is already
-above max_nr_regions / 2.  A large region that picks up new internal
-variation after that point never gets split, so we lose visibility
-into its hot/cold structure.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------aDWejSLUC35YBTxNEkCPQh0i
+Content-Type: multipart/mixed; boundary="------------PgVV1uouVkLyK3I7qLfEUw3L";
+ protected-headers="v1"; hp="clear"
+Message-ID: <7221b38a-4a97-4282-ba91-4fb47028cb79@aminvakil.com>
+Date: Mon, 29 Jun 2026 18:17:26 +0330
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: proc: include fcntl.h in proc-pidns
+To: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Aleksa Sarai <cyphar@cyphar.com>, linux-kselftest@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260618151444.124739-1-info@aminvakil.com>
+ <20260623-visier-zulauf-morgen-50e686cc03fe@brauner>
+Content-Language: en-US
+From: Amin Vakil <info@aminvakil.com>
+Autocrypt: addr=info@aminvakil.com; keydata=
+ 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
+ +78sXChAfE9n44i0gJHzV8BhCsQG4+k=
+In-Reply-To: <20260623-visier-zulauf-morgen-50e686cc03fe@brauner>
 
-We hit this with damon-paddr on hugepage workloads and damon-vaddr
-on processes that mmap a large anonymous range.
+--------------PgVV1uouVkLyK3I7qLfEUw3L
+Content-Type: multipart/mixed; boundary="------------2t0mGFheBo9TIu38HnO6zQfY"
 
-Example with max_nr_regions == 1500.  A target ends up with 799
-small hot/cold regions plus one big region (an earlier merge
-collapsed a uniformly-accessed range into a single piece):
+--------------2t0mGFheBo9TIu38HnO6zQfY
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-H:hot
-C:cold
+T24gNi8yMy8yNiAxOjQzIFBNLCBDaHJpc3RpYW4gQnJhdW5lciB3cm90ZToNCj4gT24gVGh1
+LCAxOCBKdW4gMjAyNiAxODo0NDo0NCArMDMzMCwgQW1pbiBWYWtpbCB3cm90ZToNCj4+IHNl
+bGZ0ZXN0czogcHJvYzogaW5jbHVkZSBmY250bC5oIGluIHByb2MtcGlkbnMNCj4gDQo+IEFw
+cGxpZWQgdG8gdGhlIHZmcy03LjMubWlzYyBicmFuY2ggb2YgdGhlIHZmcy92ZnMuZ2l0IHRy
+ZWUuDQo+IFBhdGNoZXMgaW4gdGhlIHZmcy03LjMubWlzYyBicmFuY2ggc2hvdWxkIGFwcGVh
+ciBpbiBsaW51eC1uZXh0IHNvb24uDQo+IA0KPiBQbGVhc2UgcmVwb3J0IGFueSBvdXRzdGFu
+ZGluZyBidWdzIHRoYXQgd2VyZSBtaXNzZWQgZHVyaW5nIHJldmlldyBpbiBhDQo+IG5ldyBy
+ZXZpZXcgdG8gdGhlIG9yaWdpbmFsIHBhdGNoIHNlcmllcyBhbGxvd2luZyB1cyB0byBkcm9w
+IGl0Lg0KPiANCj4gSXQncyBlbmNvdXJhZ2VkIHRvIHByb3ZpZGUgQWNrZWQtYnlzIGFuZCBS
+ZXZpZXdlZC1ieXMgZXZlbiB0aG91Z2ggdGhlDQo+IHBhdGNoIGhhcyBub3cgYmVlbiBhcHBs
+aWVkLiBJZiBwb3NzaWJsZSBwYXRjaCB0cmFpbGVycyB3aWxsIGJlIHVwZGF0ZWQuDQo+IA0K
+PiBOb3RlIHRoYXQgY29tbWl0IGhhc2hlcyBzaG93biBiZWxvdyBhcmUgc3ViamVjdCB0byBj
+aGFuZ2UgZHVlIHRvIHJlYmFzZSwNCj4gdHJhaWxlciB1cGRhdGVzIG9yIHNpbWlsYXIuIElm
+IGluIGRvdWJ0LCBwbGVhc2UgY2hlY2sgdGhlIGxpc3RlZCBicmFuY2guDQo+IA0KPiB0cmVl
+OiAgIGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3Zm
+cy92ZnMuZ2l0DQo+IGJyYW5jaDogdmZzLTcuMy5taXNjDQo+IA0KPiBbMS8xXSBzZWxmdGVz
+dHM6IHByb2M6IGluY2x1ZGUgZmNudGwuaCBpbiBwcm9jLXBpZG5zDQo+ICAgICAgICBodHRw
+czovL2dpdC5rZXJuZWwub3JnL3Zmcy92ZnMvYy8wM2ViZWRlYTAwMGUNCj4gDQoNClNvcnJ5
+IGZvciB0aGUgZm9sbG93LXVwIGVtYWlsLCBJIGRvIG5vdCBrbm93IGlmIHRoZXJlIGlzIHNv
+bWV0aGluZyB0aGF0IA0Kc2hvdWxkIGJlIGRvbmUgZnJvbSBtZS4NCg0KUGF0Y2ggaXMgbm90
+IHByZXNlbnQgd2hlcmV2ZXIgSSBsb29rZWQgYXQuDQoNCmh0dHBzOi8vZ2l0Lmtlcm5lbC5v
+cmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3Zmcy92ZnMuZ2l0L2xvZy90b29scy90ZXN0
+aW5nL3NlbGZ0ZXN0cy9wcm9jL3Byb2MtcGlkbnMuYz9oPXZmcy03LjMubWlzYw0KDQpkb2Vz
+IG5vdCBzaG93IHRoZSBwYXRjaC4NCg0KaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2Nt
+L2xpbnV4L2tlcm5lbC9naXQvdmZzL3Zmcy5naXQvY29tbWl0Lz9pZD0wM2ViZWRlYTAwMGUN
+Cg0Kc2F5cyBCYWQgb2JqZWN0IGlkICh3aGljaCBJIHRoaW5rIGlzIG5vdCBhIGNvbmNlcm4g
+YXMgeW91J3ZlIHNhaWQgY29tbWl0IA0KaGFzaGVzIG1heSBjaGFuZ2UpDQoNCmh0dHBzOi8v
+Z2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3Zmcy92ZnMuZ2l0L3Bs
+YWluL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Byb2MvcHJvYy1waWRucy5jP2g9dmZzLTcu
+My5taXNjDQoNCmRvZXMgbm90IHNob3cNCiNpbmNsdWRlIDxmY250bC5oPg0KYXMgd2VsbC4N
+Cg0KQWdhaW4gcGxlYXNlIGFjY2VwdCBteSBhcG9sb2dpZXMgaWYgSSBzaG91bGQndmUgd2Fp
+dGVkIG1vcmUgb3IgSSANCnNob3VsZCd2ZSBkb25lIHNvbWV0aGluZyBlbHNlLCB0aGlzIGlz
+IG15IGZpcnN0IHBhdGNoIHRvIGtlcm5lbCBtYWlsaW5nIA0KbGlzdHMuIFRoYW5rIHlvdSBm
+b3IgeW91ciBwYXRpZW5jZS4NCg0KQmVzdCBSZWdhcmRzLA0KQW1pbiBWYWtpbA0K
+--------------2t0mGFheBo9TIu38HnO6zQfY
+Content-Type: application/pgp-keys; name="OpenPGP_0x1EFC1864E9D9E56B.asc"
+Content-Disposition: attachment; filename="OpenPGP_0x1EFC1864E9D9E56B.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-      r1     r2     r3                 r800
-    HHHHHH|CCCCCC|HHHHHH|...|HHHHHH..........................|
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-    nr_regions = 800  >  max_nr_regions / 2 = 750
+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
++78sXChAfE9n44i0gJHzV8BhCsQG4+k=3D
+=3DGHsk
+-----END PGP PUBLIC KEY BLOCK-----
 
-Now a cold subarea shows up inside r800:
+--------------2t0mGFheBo9TIu38HnO6zQfY--
 
-      r1     r2     r3                 r800
-    HHHHHH|CCCCCC|HHHHHH|...|HHHHHH........CCCCCC.............|
+--------------PgVV1uouVkLyK3I7qLfEUw3L--
 
-The small regions can't merge with each other (their access counts
-differ), so budget never frees up.  r800 can't be split because
-nr_regions > max_nr_regions / 2 returns early.  The cold subarea
-stays invisible.
+--------------aDWejSLUC35YBTxNEkCPQh0i
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-Patch 1 keeps refining on this path: when nr_regions is above
-max_nr_regions / 2 but still under the maximum, it splits a fraction
-of the regions instead of returning.  The fraction shrinks as the
-remaining budget shrinks, so the count approaches max_nr_regions
-smoothly.  A useless split is undone by the next merge cycle.
+-----BEGIN PGP SIGNATURE-----
 
-Patch 2 adds a KUnit test for the case where nr_regions is already
-above max_nr_regions / 2.
+wsD5BAABCAAjFiEEhGrABIXlXG/0vJ9THvwYZOnZ5WsFAmpChX4FAwAAAAAACgkQHvwYZOnZ5WsS
+JAv8DPDyAshBXj8MGOps3LbyjH0k32MDBAogKxNcpzALYe1l/WJV+cfbxpM8kJ3wOkhw54PSDkll
+Pc3MVyZGVBADEjDP9YL7TQrAAf6nVr6yiXHhJGgmyUSAByOUlhULqFBuWlIPv9SZcggaM9L/U1+V
+oULnPXjC8+cdKHJ3Rg2jd6cR1fPjcqF0ZbTvaL4J8Zt8os1QGQn4BkyDag82SNGFmSdfi9iyD1WW
+bqtMCamh3opk5QtQKasD8b/+HnuUEFkX3Wa7n+zRTGnsu7RZZqTGiqNA5WU04ZMqAmAYGJzDaiKB
+nrsKoT3KpnGLXS0uuR5JIxVYSFLw9NIyB1J5zebRqFdq3kpIFF11rS97EA/Siakfwj9va+UxO4uq
+IPzfTJaPB5ooAXxruINPiMkqSlzpVr4Y4P6C4v8drX7bNf81PBFprPU/SbwQMcvDkYAAA6jylVmr
+QTyn8Xi/jY1zPcSEkxNlLFmrARRcfchC0Je0WhLC3Wv14xAbXIpVCZylGpjI
+=Rp7Z
+-----END PGP SIGNATURE-----
 
-Thanks to SJ for the suggestion to drive the split fraction
-from the remaining budget rather than an age-based filter.
-
-Changes from v2
-- v2: https://lore.kernel.org/20260626085851.70754-1-jiayuan.chen@linux.dev
-- Collect R-b: from SJ.
-- Rebase to latest mm-new.
-Changes from v1
-- v1: https://lore.kernel.org/damon/20260521045236.115749-1-jiayuan.chen@linux.dev/
-- Some feedback from SJ.
-
-Jiayuan Chen (2):
-  mm/damon/core: split a fraction of regions when nr_regions exceeds
-    max/2
-  mm/damon/tests/core-kunit: test split above max_nr_regions/2
-
- mm/damon/core.c             | 49 +++++++++++++++++++++++++---
- mm/damon/tests/core-kunit.h | 64 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 108 insertions(+), 5 deletions(-)
-
-
-base-commit: 86100fb7e27ebb5da22fc8a2810eebcf8cc897e8
--- 
-2.47.3
+--------------aDWejSLUC35YBTxNEkCPQh0i--
