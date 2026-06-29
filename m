@@ -1,159 +1,151 @@
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320DB2773D3
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 18:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782757494; cv=none; b=IS3RHZUkytJs00WIg6gieK+ANt8JaRpg2IlGWCBeWDfRvytBz16hGMu5x1MhJEnxqIkwpdSloJqEaetGocSr6PgdpQcxgcyLtxCuYqS/DC+pFCfs1RNmfv6St0Ru+GMcEbfdCZBks2/tGaWT7QIpHp3yAZDbxtNxu/hL0o26zoM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782757494; c=relaxed/simple;
-	bh=wD3MZbsN9jzINnVXN3GY8//2NKqq+BM9+4wJqBbMpj8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=mryoYLRu06oIaTdgJaYTRnKVpDFK9SBEs42Ev4g+fXdYyee0PcoPZT+vAOqVd7TeklGooEZ1Zjq0Cgijp+AcOou7mOuZqo/QzlF/qHUW5fdg8woUyQz4oWVBebq/GQBxLiJFsCQYq2o1u7tfi+E8XyLfagA83zShhJzkhdwToRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fBso08I/; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAB21EA65
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 19:07:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782760069; cv=pass; b=XrSWwPxtGfqvS0KDRAukICKhHC45YtDVw9axyxaGCWbykaIe7xAZq/r8A1O0p2Uxlr4Acn4lmwidmpEyxKXepWHdBYWOQD8sJN1cD+Tz9JiwcHDqj3at+VHgCNTmQ/aJjU/utajqzTDjwvH5NSij4+FfW8mAsRSH9/taSnu48hE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782760069; c=relaxed/simple;
+	bh=Vn0pg41Ip/7hPwtecElePnY3XYE30363BA8w/pBNKkI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lD2W+wfl+iNDCRSPuuDNbaDkD8TcbrOsocW7NQaxqY+QGucCy+TblpNX3YJ/7W+z4IQtEDuk7cX9wcK//er8itov9jVQbzadz0stHg/XsaHR+UjngHB1byCkWHLGQzjFPrW+xD/Smodkj7u0kNuEy/7vupWXT9G/S8z93VsGiCc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B9TRSBHP; arc=pass smtp.client-ip=74.125.82.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fBso08I/"
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-6a116bd18ebso2120848eaf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 11:24:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B9TRSBHP"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-30c7ec13248so210988eec.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 12:07:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782760067; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gB7cPyxNrRuIlSK6JeCM9goEclAhiQIW57C5JQKZNjoGZn4WqcKqc6qkbzmuqIr/D7
+         cRtJHs8b2qQ8GD1IP7Rtn6KUbMBiS/IHsENB4h3MGSI7EMxZ5snd8m88zA+0aNrDPu8L
+         FNPuqPsqak9Sab8J0hjawNrJze1QycFlZzPIG/5BRjrpaYJj+lOntB0gijUCVx7MmT4Y
+         GzmH1Y6uodl8x9ZP1xymO6y2SKX1eHacQt+UaffOFBWaaf3X2RyI+YFmZ8aPMfQfgPZR
+         DOwA0OZA7Fq895Uh8VCmmM4Itb8nyAFcRM82zSjV5SqpRCKSLHnI/3hyBmI/A/orJYPS
+         DKHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=tHSIGtbVhVftBU1P0PUwzTUvU0nuyEEXJ1gCHih1CyQ=;
+        fh=HdtAiQU61XpjN8YN9IFJ67NYXSDeh7cHa9P6qegb7nI=;
+        b=hOxX7/0UwgTjjQF0TAWXPfaTCZoKQ8legn7QFhmMgefitJEowo/OFTUS75OGecfIrt
+         k5LwLsjxMBi8rjYf+wbAV5W+qOG+B430jE3S/bStwYGVDZVzK/UHJAUk0S2iwOmLBAoU
+         axfbxUJPvNjuKiPeXMf76tDt1+Pdn9NfwcNcESWewyGBr01UK/t2zHTD4rZh+ZjOO4sW
+         mlymM4c/HHMBZV+7TX+zxsEhBCBfbFzLbd8VYB4gR0WkZy15wrnz6lney4kA6LmmKTQQ
+         SKjYJ7hlqW8m6S9QDBD1sNRx+lmD994oWKLGa4TzZGMIOysUmHpxZBr5omWGagCDMjcl
+         JQsw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782757491; x=1783362291; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=VgWBPgkIFq0GJmdrKvHCFz2V403YOlZzIZlCfT1y164=;
-        b=fBso08I/obKfJVGigsaL/vbX5hEhW8hanNE2ztUwdOCwzJwbxm8RCiFve4x5RG5aX+
-         W1zP8ZjhaZQ1nuPmkSM5EL8GOI/ONNbOF16mSdKxkUmHvdpA3cYXpeaSU12eqGmREzGE
-         a8nNYNwWGXA/vY1hMfFSbLgMb5yDRp0S+cXnEZhLKZY1so4vjagix6hb57+jqAh96lPn
-         iY1FQIIbHsvgRwXWk321L2+bUdgzBS8KoQWCSsg9Tex2/58dEv9Kt2cx4PmABREnXugf
-         eg7yadeV0sM2mL80e9Hio8tMusU6vunmUaEtT3NqgsnxciixeZ14DMBkAzI7I+GnA6c8
-         2nlw==
+        d=gmail.com; s=20251104; t=1782760067; x=1783364867; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=tHSIGtbVhVftBU1P0PUwzTUvU0nuyEEXJ1gCHih1CyQ=;
+        b=B9TRSBHPHGR9PcIrZjNwibDjUzyLRNUDSPsEYhj2MJI+0OU1+8pEKFgMb7P2vtskEa
+         2xErZHlRo0vYNEZrMdsUN0iJJwv14zcbxMVYaWM2609W/SUW16wnuIJVs/1YYif0EMto
+         ByyQhYj5WzvHNHRpBmNvAXjK7HwK5TvEO7cr5s7VNGK/zlJAvhoVcrX8O0eGM8+ZRR+o
+         o++x6590HjS3WSfXUnSlCzTBcE/sRrwRhIywGCn2QJe0kCj5oFsMOFvSZrxckpncuI+v
+         9tmFamA6n1kWvmWhrnMIMz/LuCMsMhREmXv4zNp3zX9qB6TJO9arrZCWTdpFhYIsa+gp
+         jMjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782757491; x=1783362291;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1782760067; x=1783364867;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=VgWBPgkIFq0GJmdrKvHCFz2V403YOlZzIZlCfT1y164=;
-        b=dcPPkzo0XcufPf0A47y6b5h8Mut1HSHGRhTe8Gv7aiCeH6NrSeQRKF2PSdXeoWVlsA
-         DJ8zkPvAMaJFbqVPIinpI+zgpSpzoGUn3dyO58gC9DmsaJzKbBcvUtAtBZNlU3k+Zswk
-         SXM1aNyFQYtXQQcS9un8dR2y0Jr5rzMHssf5pl+FoeAiQhCRuxzEnpjGUaCVw1g1Mq5b
-         oPyF3CFO885K21hsQyoGWS4hpu67TP8tmZZiRytrkSZxIR2P0i6U2o0hPLBAe+pckAzy
-         AfuSAlGWCklS2xKgshK4nuMMG8OEpLpEiq4DcPLyGKag2TMMLzO/4qOt+LW2POCtAOXu
-         Nfow==
-X-Forwarded-Encrypted: i=1; AFNElJ+C9wt2hfpIPVLj1Zu6WUVZ936RoysYKmrZLpHEOYijV16oY5/47HSPGkT6Ttk6AlVExJk6Ii2tEtgS8kxh4M4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQxlMDhLNe9ehDXPjExWpCJrTJCtExJTQHTnC76ECaqENkcz1B
-	wBSW7O1ZuS49KKWQELFBBDZw+RRg6fMu1P0n/gdCyRRuNpmf1PiQbnqR
-X-Gm-Gg: AfdE7cmb2b7JHT9z93dGcwwexOFua5GJWMGfQd2H98um1y0FzldOID/uqObeTGMlGvq
-	q33O7uCu15L5RTfLSIRz3M3Xgam12y+2omx/wvfD4d/KJJ7s71OJo6lRJVRw5ngP/jssIlrEI55
-	Zso3+45sLcTLAJ3gZp+FEhOXLPSABDfGO8niYNH8RnAkhxFRpSdhDPYFKcA3ewOxWKlHvuqixAE
-	LNb9a7/5lp5s2/qHFWXd2gtJBgnaFXX00vBxbWIsyiidVqlyftLEQMnvZfv19FxELktpUEDh1lU
-	WwgtVxhJ2qE2Jeeu8tezg7izRgOgQrSrLsQowyqtb5PqkbHF2pQeiUIfq0Nb/Nqeedbj1PjnYOf
-	XVpOrE/aBT+vN7ItEsccKs34flUz2InCdIuwEJu/dTDXvGGfzQ54kMfANeHOHS79bHxKims0rLz
-	EcySOGCxKfUWUpXj/Z6O1zM6M+L2MogrRt1qrrgcAf+tHtEQvMpCzaJrmBMEP9r9TGrS20S5wT+
-	b1E7LI=
-X-Received: by 2002:a05:6820:620:b0:6a1:5cd7:226f with SMTP id 006d021491bc7-6a1893f6428mr479536eaf.66.1782757491124;
-        Mon, 29 Jun 2026 11:24:51 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:4f::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6a18917194csm371263eaf.2.2026.06.29.11.24.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jun 2026 11:24:50 -0700 (PDT)
+        bh=tHSIGtbVhVftBU1P0PUwzTUvU0nuyEEXJ1gCHih1CyQ=;
+        b=Pmam7UFfAoIShCrIPmtI/1nO+PteNCICQOy/tgjQ+5E4SYgilpup7pk1hzHly1RsJL
+         O4CYsICCllg4xV43JIIbz1hEwfQx9ciZASfLAybNpAYTecUvNXkF4kbCrR1Jxtx0OF/f
+         oHK5lMOmNUd/H768YKR+20C+M2X85lSeBFRMDRxN1z7C9N36Ol0fEZuqYIla5Hl5ZcvW
+         vubzfk7bvF8V4Kfq12sJAUwrWVaAeRDsvWGsSbHIkHvseYAiUDo/FImKjGQ3MSoWoucl
+         6iqa5f/38IUNrgiQKz/ywrr1SPoLXDO4WwFKySdpCh3OY3tuMPjLe1NTE9+29AeYkV9c
+         OxjQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rr/GRVVr2GWt7R6Q+Ckazd60Ri/POuzRWapN1JH7anBiYt55kt4ww/5J2OxLBkLqq51bDedtOf5qnYw4SxrnsI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxz51ojOkQ9mXMefdAaoYkEXs8dS6uqGvUKew1K/kig5yJflcFv
+	Am/sE2QXNeURYeEh7eiQnwhAo2tqdu3qFxbLLU8BdclexRNy7QncfastQU9EDGmhr8bBvuz0bHE
+	bPjVfE31CQvNFJNFw/M2CMirvVqEZ3OE=
+X-Gm-Gg: AfdE7cmUVYQ9/MB5sdqBl/jaPD6SlUqPnvlfhApe3iMP918ws58oDfvO3BuqSvhwd1G
+	s4TU+PvkxV6KvIRzQ6nkr5OdyDcBwWLxAJw3YA8sMQnO/7pWyMwpBfkc1fab6NGyC3a+qpbuZeK
+	Dxz4yx5I28mcmgPNeJ8hXjLuzJsEAzqFRh6kR1BSF2shVVwiCLyEfmedcV5qH+7fddvT9bVoqSp
+	Rv7NxhSIdo1x2ULr4G9dUdVbDlS0xq0r/em4uX9AvyNlJCzwyJLKEfNGFCLfkloswnur/SWqTB0
+	wMGFxmU9Kn1SGJEJHpeePxOu6TxLd3/WW5tdPp1XjXKv098De/mZJhvfc+WnEkfiv5AueROTgD7
+	IPtBltlPuyeOBRupnIgjL7jk=
+X-Received: by 2002:a05:7300:fd11:b0:304:f860:3ae3 with SMTP id
+ 5a478bee46e88-30ee11982a3mr233258eec.1.1782760067448; Mon, 29 Jun 2026
+ 12:07:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260629-backport-cfg_select-v1-0-388d5d31d9d4@nikableh.moe>
+ <CANiq72kG8k3mk+Xjr6q7aKg212QUNtZk5w4rxV=UGR5UXKE_ng@mail.gmail.com> <0eb77f4b7199e9af01d61e0c1ac03c99@purelymail.com>
+In-Reply-To: <0eb77f4b7199e9af01d61e0c1ac03c99@purelymail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 29 Jun 2026 21:07:34 +0200
+X-Gm-Features: AVVi8CdkymgZKdU1srNb6pWvis0Oy0nhiasvmXiP9Euz5OiXsHZXZZwi28ERi7w
+Message-ID: <CANiq72nVwM_OF4yz1rB4Q-atDgZ9Oywbuhu830jfQe7npt0FeQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] rust: kernel: add cfg_select! and use it for
+ config-based selection
+To: Nika Krasnova <nika@nikableh.moe>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Yury Norov <yury.norov@gmail.com>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 29 Jun 2026 11:24:49 -0700
-Message-Id: <DJLQSC87KCSV.314DTZAWRNA8C@gmail.com>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, "Lorenz Bauer" <lmb@isovalent.com>, "Jakub
- Sitnicki" <jakub@cloudflare.com>, "Jiayuan Chen" <jiayuan.chen@linux.dev>,
- "Shuah Khan" <shuah@kernel.org>, <bpf@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf, sockmap: disallow update and
- delete from tc, xdp and flow_dissector
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "David S . Miller" <davem@davemloft.net>, "Jakub
- Kicinski" <kuba@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>
-X-Mailer: aerc
-References: <20260629172704.1302218-1-rhkrqnwk98@gmail.com>
- <20260629172704.1302218-2-rhkrqnwk98@gmail.com>
-In-Reply-To: <20260629172704.1302218-2-rhkrqnwk98@gmail.com>
 
-On Mon Jun 29, 2026 at 10:27 AM PDT, Sechang Lim wrote:
-> sock_map_update_common() and __sock_map_delete() hold stab->lock and call
-> sock_map_unref() -> sock_map_del_link(), which takes sk_callback_lock for
-> write. That gives the order stab->lock -> sk_callback_lock.
+On Mon, Jun 29, 2026 at 5:34=E2=80=AFPM Nika Krasnova <nika@nikableh.moe> w=
+rote:
 >
-> The reverse order comes from the SK_SKB stream parser.
-> sk_psock_strp_data_ready() holds sk_callback_lock for read, and after the
-> verdict tcp_bpf_strp_read_sock() acks the consumed data inline via
-> __tcp_cleanup_rbuf(). The ACK goes out egress, where a sched_cls program
-> deletes from the sockmap and takes stab->lock:
->
->   WARNING: possible circular locking dependency detected
->   ------------------------------------------------------
->   syz.9.8824 is trying to acquire lock:
->   (&stab->lock){+.-.}-{3:3}, at: __sock_map_delete net/core/sock_map.c:42=
-1
->   but task is already holding lock:
->   (clock-AF_INET){++.-}-{3:3}, at: sk_psock_strp_data_ready net/core/skms=
-g.c:1173
->
->   -> #1 (clock-AF_INET){++.-}-{3:3}:
->          _raw_write_lock_bh
->          sock_map_del_link net/core/sock_map.c:167
->          sock_map_unref net/core/sock_map.c:184
->          sock_map_update_common net/core/sock_map.c:509
->          sock_map_update_elem_sys net/core/sock_map.c:588
->          map_update_elem kernel/bpf/syscall.c:1805
->
->   -> #0 (&stab->lock){+.-.}-{3:3}:
->          _raw_spin_lock_bh
->          __sock_map_delete net/core/sock_map.c:421
->          sock_map_delete_elem net/core/sock_map.c:452
->          bpf_prog_06044d24140080b6
->          tcx_run net/core/dev.c:4451
->          sch_handle_egress net/core/dev.c:4541
->          __dev_queue_xmit net/core/dev.c:4808
->          ...
->          tcp_bpf_strp_read_sock net/ipv4/tcp_bpf.c:701
->          strp_data_ready net/strparser/strparser.c:402
->          sk_psock_strp_data_ready net/core/skmsg.c:1174
->          tcp_data_queue net/ipv4/tcp_input.c:5661
->
->   Possible unsafe locking scenario:
->
->          CPU0                    CPU1
->          ----                    ----
->     rlock(clock-AF_INET);
->                                  lock(&stab->lock);
->                                  lock(clock-AF_INET);
->     lock(&stab->lock);
->
->    *** DEADLOCK ***
->
-> A tc, xdp or flow_dissector program has no reason to update or delete a
-> sockmap, and redirect does not go through here. Drop them from
-> may_update_sockmap() so the verifier rejects it. It also closes the
-> matching sockhash inversion.
->
-> Suggested-by: John Fastabend <john.fastabend@gmail.com>
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+>   - 1.94.1: core::cfg_select present behind #![feature(cfg_select)], with
+>     the final builtin behavior (single-brace expression position works).
 
-John,
+The tracking issue says the latest change was in Rust 1.91.0. Did it
+not work there? Were there changes after that?
 
-please ack.
+> Does that work for you, or would you rather take the gate and drop
+> expression-operand support?
 
+Hmm... The end goal would to use `core::cfg_select`, so in general it
+is a good idea to use the "real one" as soon as possible. In addition,
+we can always wait for any case that doesn't work in the fallback (as
+long as the behavior is the same for the cases that do work).
+
+Therefore, we could limit ourselves to what would work today with the
+fallback. If I understand you correctly, you are saying that even with
+the conversion here, we wouldn't even need the expression case, no?
+
+What is annoying about that is that there is definitely a risk of
+someone using one of the cases that don't work on the fallback but
+never actually testing on the minimum version -- even if we don't have
+those today, someone may add it. And while it is "just" a compile
+error that we would likely catch early in linux-next (like similar
+things we need to handle), it is still painful.
+
+So, yeah, I appreciate the advantage of having just a single compile
+path, and if we can make it so that people cannot fall into cases that
+would require extra cleanups/migration later on when we move to
+`core`'s (even if `core` supports those), then that should be good,
+i.e. if we want to go with this one in all versions, then we should
+make sure we only allow that subset that cleanly maps to the future.
+
+Now, to be honest, the easiest is to just wait a year and then start
+using `core`'s directly... i.e. it is not like we are in a rush to
+start using it anyway...
+
+Cheers,
+Miguel
