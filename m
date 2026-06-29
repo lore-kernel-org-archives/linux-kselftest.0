@@ -1,221 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010057.outbound.protection.outlook.com [52.101.84.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2B441169A;
-	Mon, 29 Jun 2026 15:42:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782747753; cv=none; b=nh/s3GkIs3g0x7i/NyS+Eoyc9aPMNYE09vxIbF1UXQnlvZFmDcEXrm/S1gXqYk05rDyptnHjiwdtZFF8xZXEJWtQ/dPFhonDwW12dBRBJY6pAXcIj3AN6dyFvpoKoC1t18EndLiiDiOTvC4LZWkLqg++X+N8bPmUlGUMzhwGWCI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782747753; c=relaxed/simple;
-	bh=ysWvzBMEdR3mUroLwDVNAsSve67+hNkhz+NHSicxT08=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bN9R7hy2HnTqLEzCmu+/knO+CQyHZFzB4IMsMWIY0fikaHvBAbK0XoN0G6vZ7nYB2qahdP7s1W8q0Ct9G/Xibj31BzTW780n6uxjbO3TKnIPpeY4L9+FOAYrs3NX4ar5gH+UNPivWYOjlcbgKbIweELvQbNhq4tXLGod2nPSvT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LKLXyRqH; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB89D436371;
+	Mon, 29 Jun 2026 15:45:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782747903; cv=fail; b=DyRcC4+XmtibHjbZxyVUa1sqbaHr2t1u1EqRLUamId/b6O026UnkQai7ZCRKsu7CCsHw8/xcGpMaR7MtmOhi0gKu2yLwwbjerLGKuireudeOZoPJ5c52xMSVW//hAmo6FPLdWp2iuf450FlIlloi9XPKNodjhqKdHC/gqI6pSCA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782747903; c=relaxed/simple;
+	bh=V9Q0ok/1rX3waEUxj89jVzj0ih/KDdCqVx+xqckLKKk=;
+	h=From:To:CC:Subject:Message-ID:Date:MIME-Version:Content-Type; b=chhFVvgcg9iHcckuV2MehEybvHVurk13tgsoJE8vWLxg4v7uOQPLoLUUFnMctx1htw4onull+NLgROIni0gPLC0D8zM/taLr7qxf8iHrPiQlX9tQCPPjc2uBQINFbZ2/tkFvz3HPWHhqi+2hMq69AVzduvvxNS66Lz3GvlKRqeU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=K5NR0Sob; arc=fail smtp.client-ip=52.101.84.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LKLXyRqH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782747752; x=1814283752;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ysWvzBMEdR3mUroLwDVNAsSve67+hNkhz+NHSicxT08=;
-  b=LKLXyRqHqZgbmdSWNgvAmyChc7YWH1zy7KPlACa58mifMhBiMhmEfVnd
-   MYLTKis6HNxVCtGuMAXM3JjVd4Q1ZrznodjmzNqaflhZWAUr5YZ1Mbm+C
-   1CZKAcrpt6emsaxoZAe79X+9urDmEkmrltlz5Xhb1Jv5QjcjkeXNO3GyR
-   VQ+wBicQQk0N5DJCC9Wtmwc3eZDldiR1hrR/ar+zlEI+COSnvLTGAtSke
-   0TYolkLtWRMWV+JDr5fVfiyLH3paMvtOxmGiubDKi2pIwtWHk4WSszKYV
-   zUEWaPkyRAQvE2hx0OSfCBxE5XG6DxsbSgLlqw1I06M+WGyWBnzSFFcTc
-   Q==;
-X-CSE-ConnectionGUID: 9XUy9+jFQgmO4OJUNfTX4A==
-X-CSE-MsgGUID: 9qXJ4kzVQLyv3vIipvFujw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11832"; a="85988838"
-X-IronPort-AV: E=Sophos;i="6.24,232,1774335600"; 
-   d="scan'208";a="85988838"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 08:42:31 -0700
-X-CSE-ConnectionGUID: bh/olGCDTnWxrxhKDnJA9A==
-X-CSE-MsgGUID: Nm0odYGcTBy5w+oQuhtAug==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,232,1774335600"; 
-   d="scan'208";a="252140130"
-Received: from kniemiec-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.207])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 08:42:26 -0700
-Date: Mon, 29 Jun 2026 18:42:24 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Herve Codina <herve.codina@bootlin.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Linus Walleij <linusw@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-acpi@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 2/5] software node: add fw_devlink support
-Message-ID: <akKSYKH2vyXMVcox@ashevche-desk.local>
-References: <20260629-swnode-fw-devlink-v1-0-b90058b41839@oss.qualcomm.com>
- <20260629-swnode-fw-devlink-v1-2-b90058b41839@oss.qualcomm.com>
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="K5NR0Sob"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=habmh/+tvmCdD/Cm0Ws6R6qrp12oPWhwwKWgQ1/XKUSRcPrMvsvBffZ6nhr1T45drGO2bKvTH49mHuTsg1w05ui1BM6n849WoMsRohekZe9YuqoFEqcOCZQjrupfyzP47qfpv40Ayz3HN3mkRx0mhDCLlQG+SUUXoP6erEa4MUpnbR85Dxi6dJVludixFSAhy1+cfJgd6/ivIao3BDR0zqVAuHDY/jK0k8/dMpB+VbHqqWLMlVSosLf6+8Z6n/x4KMGOwWoZOsWq8kFLQdwGxTRhH4jdlnzN1To+pbjW3HiJL7yoKNzdDQWsDjn90tJeaLrSzoElBOTsIoGldju2Fw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8VOnPHrygGZCuje/eN9WSFDcyVgRiWj1138XZQRhm0o=;
+ b=CC/UoTbXJ41j7u9Df/AdH3VJ3DoJbfQXgHfdTp5axBWmb1Nbkz7mLzbD1wZgbTo6vuiVEozOfuoAVrBFWi+u1vji2qQSWleIsyJyDp94x9wrKT6Do+SvUq2cpMp6SX3IehGcUtaVbxUy/8ljilZm4ey08DRNeHouLTYKQ3czOrPy8h5hshN03Ish3dwkfdZx+kqzKHX1WrscELHQnKGTQmbESEKycNmGsl6YvT85hiqjfQFeYMggwDLQ/ysYtrQiw//uqfZXYPu35j/7pg5b9MhKjZfhHHwItorfJ9v5fAg/MOd9NBGrgJnKokmV0IVQTadtX+iwvGbyKAAuy7QKBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=axis.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8VOnPHrygGZCuje/eN9WSFDcyVgRiWj1138XZQRhm0o=;
+ b=K5NR0SobX27rxpx00uDZUge/7iUQbG+5P1BgloyDHWuJm3FIY6m8K9Aj9SXx1SXdKR9e2b5XlHRaHHkpQVwg0xyfQcfUiK0IKWPpbBpseVJit9i5CWglD+XgFIO4oKZr76woMbjSPGXsKenbDWkbzC7zaRlm25CmDpH3oEs8aW8=
+Received: from DU6P191CA0025.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:53f::25)
+ by PR3PR02MB6378.eurprd02.prod.outlook.com (2603:10a6:102:72::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.19; Mon, 29 Jun
+ 2026 15:44:57 +0000
+Received: from DB1PEPF000509E5.eurprd03.prod.outlook.com
+ (2603:10a6:10:53f:cafe::a5) by DU6P191CA0025.outlook.office365.com
+ (2603:10a6:10:53f::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.159.19 via Frontend Transport; Mon,
+ 29 Jun 2026 15:44:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=axis.com;
+Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
+ 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com; pr=C
+Received: from mail.axis.com (195.60.68.100) by
+ DB1PEPF000509E5.mail.protection.outlook.com (10.167.242.55) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.181.6 via Frontend Transport; Mon, 29 Jun 2026 15:44:57 +0000
+Received: from pc67007-2609 (10.4.0.13) by se-mail10w.axis.com (10.20.40.10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.39; Mon, 29 Jun
+ 2026 17:44:56 +0200
+From: Waqar Hameed <waqar.hameed@axis.com>
+To: Sebastian Reichel <sre@kernel.org>, Shuah Khan <shuah@kernel.org>
+CC: <kernel@axis.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH 00/10] Add sysfs entry for system load control
+User-Agent: a.out
+Message-ID: <cover.1782746851.git.waqar.hameed@axis.com>
+Date: Mon, 29 Jun 2026 17:44:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260629-swnode-fw-devlink-v1-2-b90058b41839@oss.qualcomm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Type: text/plain
+X-ClientProxiedBy: se-mail11w.axis.com (10.20.40.11) To se-mail10w.axis.com
+ (10.20.40.10)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB1PEPF000509E5:EE_|PR3PR02MB6378:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1764f4e7-748f-4137-9fc3-08ded5f55f2e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|23010399003|376014|82310400026|36860700016|13003099007|18002099003|56012099006|11063799006;
+X-Microsoft-Antispam-Message-Info:
+	rPVU9mKCOtybnVzkR7+vq0BFJDgEITYAgwThF8glZqtm5DvOQaF09y+mIl/NYfRA/YhHIUHelyOf1wgboZHM4T4KG1rHDyjQI8uk590UUYrhMdbP2gdUHUyvrK8ZGQ62hv2snQ7IGnCxX/njuxK9yQ2GimQELkKzSqous2n4ju9644Y4OISdcCxawIGEU2t+5oyffTgBhwq1auGCfL9L+cs6cKpk5zsPgNLHcNEc5dMiEE4jpoL/KP4P57WRMx2Rz1yyU9eyaRpuF5fHe1/o4ZaiwpRhuGCrfnLKyZrSomnDlwhtxc5Z0n2GZDm/5TKC24eikjxFLQ5p2Aj3T5T8z4mQB8gEP6qtJseuc0Bg0iotggWj+fjY7QNCMDEX7of5fCWQJ3Y61D2AQLlFB7C3nTCgxixzZBUCgb0eAcJS3MWMipcYmxT5WgqBcHPmxppmaekAVxL0opznTfli/Im7zZP6zxMhMVqGCaTp7lFgGCOxY37j4rvqzbBHdnp/W+Ku/CwqZy6BT+T6ZdCuAMJolC9vPYQp88/zgO7DGu0dG0crL7UIdA6BxhQ0E9Y9cVsQ+tTwI3PXWWm7i4YB2z0YkdQQeyNXig7J7sdh76dxZkpcHrNUJif9KGJ9o2quakzNVaXv64hnPNOsVLVEKuLPJzANJcYCo2vhmhsZhRLByHKJ/LlVfCpKWz0bkbhg28Snz9GaoTDouVFgEgZEsubkUw==
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(376014)(82310400026)(36860700016)(13003099007)(18002099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	dj7RoofVzS4n/Ao1WReGWvCyQORZjtlWf4kb8yiW2MiP10c2HZ+9SNasMPPspnxjiLk4S6lAsOwbH/2DUhfCNKHdSs3bF2+BHTuw9LXX+Lb3WNrIWUtsfULHnk1lkotta484Hw/px9y+ePeDf0Wfjw7ZiBdxAjwMtUA+yzTOukFrYCjKj67vu5z7E4ZkTf/CivdYpEcpfWTPC+aSgWGuqxo+IEvKPHrlApvOh86cstcKLQV6mWVbh0IyC9xka4hiauCbBfQV+8oAxXXYAFUqvV1t8PUS2ki377S57D3LdOhhPbY7BzUJNHq0+kXkY0DEXSAhQeC6q6ViI4F6AMNr3PrehMHC/ipWtJDG30Jlj+BeTsZ6CNZwuFtjA7f3zreYprPgZ2MoSC42t3R5GigdCLIbCW60CJ8esgJk0mECJzSb3wuUo5GQRoX0gfbVqQQl
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2026 15:44:57.3288
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1764f4e7-748f-4137-9fc3-08ded5f55f2e
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB1PEPF000509E5.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR02MB6378
 
-+Cc: Herve, to just ask the situation with one series that adds nice helper.
+During discussions of the development of a new driver [1], it was
+concluded that a new `sysfs` ABI for controlling the connection from
+power to system load is wanted (often called BATFET). This patchset
+introduces such one.
 
-On Mon, Jun 29, 2026 at 12:52:07PM +0200, Bartosz Golaszewski wrote:
-> Software nodes can be used to describe supplier-consumer relationships
-> between devices they represent using reference property entries. Unlike
-> for OF-nodes, driver core cannot yet use these references to create a
-> probe order that avoids needless probe deferrals on missing providers.
-> 
-> Implement software_node_add_links() modelled on of_fwnode_add_links().
-> For every DEV_PROP_REF property we resolve each referenced supplier and
-> create an fwnode link from the node to it. The driver core later promotes
-> these to device links and defers the consumer until the suppliers are
-> ready.
-> 
-> There's no allowlist like the one DT needs - devicetree phandles appear
-> in plenty of non-supplier contexts, but a software node only carries a
-> reference property when its author explicitly points at another node, so
-> we treat every reference as an intentional supplier dependency and link
-> all of them. Graph "remote-endpoint" references are skipped for now: they
-> go 2-ways between endpoint nodes and would create graph cycles without
-> the port-parent lifting DT does via get_con_dev(). References to
-> suppliers that aren't registered yet and self-references are ignored.
-> 
-> fw_devlink resolves the supplier device through fwnode->dev but the core
-> only records the owning device on the primary fwnode. When the software
-> node is a device's secondary fwnode, mirror the device pointer onto it in
-> software_node_notify() so the consumer can actually find the supplier
-> instead of deferring forever.
-> 
-> While at it: purge the fwnode links in software_node_release() now that
-> software nodes can own them.
+There are already several drivers that are controlling this, but with
+their own custom `sysfs` entries. The drivers in this patchset were find
+with a simple `grep` for `bat\s?fet` (there might be more?), and then
+converted to use this new `sysfs` ABI. The old custom ABIs are left
+untouched of course, for backward compatibility.
 
-...
+[1] https://lore.kernel.org/lkml/cover.1772201049.git.waqar.hameed@axis.com/
 
-> +static int software_node_add_links(struct fwnode_handle *fwnode)
-> +{
-> +	const struct software_node_ref_args *ref, *ref_array;
-> +	struct swnode *swnode = to_swnode(fwnode);
-> +	const struct property_entry *prop;
-> +	struct fwnode_handle *refnode;
-> +	unsigned int count, i;
+Waqar Hameed (10):
+  power: supply: Add sysfs entry for system load control
+  selftests: power_supply: Add tests for load_switch ABI
+  power: supply: ltc4162-l: Use POWER_SUPPLY_PROP_LOAD_SWITCH
+  power: supply: rt9471: Remove superfluous unpacking of propval
+  power: supply: rt9471: Use POWER_SUPPLY_PROP_LOAD_SWITCH
+  power: supply: rt9467: Use POWER_SUPPLY_PROP_LOAD_SWITCH
+  power: supply: bq24257: Use POWER_SUPPLY_PROP_LOAD_SWITCH
+  power: supply: bq24190: Remove unused watchdog struct field
+  power: supply: bq24190: Disable watchdog with bq24190_write_mask()
+  power: supply: bq24190: Use POWER_SUPPLY_PROP_LOAD_SWITCH
 
-'i' is local to the loop.
+ Documentation/ABI/testing/sysfs-class-power   |  24 +++++
+ .../ABI/testing/sysfs-class-power-ltc4162l    |   2 +
+ .../ABI/testing/sysfs-class-power-rt9467      |   2 +
+ .../ABI/testing/sysfs-class-power-rt9471      |   2 +
+ drivers/power/supply/bq24190_charger.c        |  74 +++++++++++--
+ drivers/power/supply/bq24257_charger.c        |  41 ++++++-
+ drivers/power/supply/ltc4162-l-charger.c      |  54 ++++++++--
+ drivers/power/supply/power_supply_sysfs.c     |   9 ++
+ drivers/power/supply/rt9467-charger.c         |  52 +++++++--
+ drivers/power/supply/rt9471.c                 | 101 +++++++++++++-----
+ include/linux/power_supply.h                  |   9 ++
+ .../test_power_supply_properties.sh           |   2 +
+ 12 files changed, 322 insertions(+), 50 deletions(-)
 
-> +	if (!swnode || !swnode->node->properties)
-> +		return 0;
-> +
-> +	/*
-> +	 * Unlike Device Tree, where phandles appear in many non-supplier
-> +	 * contexts and a curated allowlist is required, a software node only
-> +	 * carries a DEV_PROP_REF property when the author explicitly describes
-> +	 * a reference to another node. Every such reference is therefore an
-> +	 * intentional supplier dependency, so we create fwnode links for all
-> +	 * of them.
-> +	 */
-> +	for (prop = swnode->node->properties; prop->name; prop++) {
-> +		if (prop->type != DEV_PROP_REF || prop->is_inline)
-> +			continue;
-> +
-> +		/*
-> +		 * TODO: Graph "remote-endpoint" references go both ways
-> +		 * between endpoint child nodes and would create endpoint
-> +		 * cycles. Let's leave it out for now until we have potential
-> +		 * users.
-> +		 */
-> +		if (!strcmp(prop->name, "remote-endpoint"))
-> +			continue;
-> +
-> +		ref_array = prop->pointer;
-> +		count = prop->length / sizeof(*ref_array);
 
-Seems we are going to have more of a such, perhaps make a helper for counting
-(which will do that division beneath).
-
-> +		for (i = 0; i < count; i++) {
-
-		for (unsigned int i = 0; i < count; i++) {
-
-> +
-
-Redundant blank line?
-
-> +			if (ref->swnode)
-> +				refnode = software_node_fwnode(ref->swnode);
-> +			else if (ref->fwnode)
-> +				refnode = ref->fwnode;
-> +			else
-> +				continue;
-> +
-> +			/* Supplier not registered yet, or self-reference. */
-> +			if (!refnode || refnode == &swnode->fwnode)
-> +				continue;
-> +
-> +			fwnode_link_add(&swnode->fwnode, refnode, 0);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-
-...
-
-> +	/*
-> +	 * When the software node is the device's secondary firmware node, the
-> +	 * core only records the owning device on the primary fwnode (see
-> +	 * device_add()). fw_devlink resolves a supplier device through
-> +	 * fwnode->dev, so without this a consumer referencing the software
-> +	 * node could never find the supplier device and would defer forever.
-> +	 * Make fwnode.dev point to its owner in that case.
-
-The below seems more balanced in terms of line lengths.
-
-	 * When the software node is the device's secondary firmware node,
-	 * the core only records the owning device on the primary fwnode
-	 * (see device_add()). fw_devlink resolves a supplier device through
-	 * fwnode->dev, so without this a consumer referencing the software
-	 * node could never find the supplier device and would defer forever.
-	 * Make fwnode.dev point to its owner in that case.
-
-> +	 */
-> +	if (dev_fwnode(dev) != &swnode->fwnode && !swnode->fwnode.dev)
-> +		swnode->fwnode.dev = dev;
-
-Doesn't Herve's patch(es) add some helpers for this?
-https://lore.kernel.org/lkml/20260511155930.34604-2-herve.codina@bootlin.com/
-
-Ah, still not applied :-( Perhaps it can be applied as just part that brings
-fw_devlink_set_device()?
-
-> +	/*
-> +	 * Drop the device pointer mirrored onto a secondary software node in
-> +	 * software_node_notify(). For a primary software node the core owns
-> +	 * fwnode->dev and clears it in device_del().
-> +	 */
-> +	if (dev_fwnode(dev) != &swnode->fwnode && swnode->fwnode.dev == dev)
-> +		swnode->fwnode.dev = NULL;
-
+base-commit: ab9de95c9cf952332ab79453b4b5d1bfca8e514f
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.0
 
