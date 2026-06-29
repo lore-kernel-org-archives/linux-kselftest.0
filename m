@@ -1,412 +1,143 @@
-Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B55D3FFFA7;
-	Mon, 29 Jun 2026 12:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D52C40913B
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 12:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782734904; cv=none; b=H1WX3lDAp7KevrtKyZJ5ydH/zasNJKO5wuipheNuZJxhkfvKmM3HeW/+20OuWvZ+ZqHy93vV3GZkWjpprMkgzMeIQ2nGzS2YzGAth3cGmcigjuLHkdl4opTpjPrsgUw92NA2LIY5jtYe7yAWLiUL+abVlzHoXH3nLMiQf+wqpLc=
+	t=1782736975; cv=none; b=LGF1knFibZ0atv4rZaSo3UKGZW8RyUewlmIn1UZvqlVIIGRMQV6QqTysYqgrhSHglZeQjSFsPjpeEYbbUdBFQsjzwuZYpj/FHT5p7MOxI1nhwQ7MjuYEEXx9vGtxEfn3kfc984kIb/7PtfQneGsljevikQWJWkpStuNq0LnVA3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782734904; c=relaxed/simple;
-	bh=2NPve1KRjr0p/FUQL5Cb/drJdYb9dSUJe1Ri1shzig8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LUqHi5LZI2qUhFegjn4fRFcQte4uMRNdpb4IXMfRsx+l9KWnFQ9hnSOwmSRLqv6wtes3ab3h48AxOFPXByVHLKh15HrjzCxmR8sLWhsWpXWPNH3nCM3/366wkCS4se/dLuDD4zhKWpOJVBr/pQpkkAZerfWzNiQALakltO6Q3YU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=LulCwlLr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=f9PGnMkn; arc=none smtp.client-ip=103.168.172.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	s=arc-20240116; t=1782736975; c=relaxed/simple;
+	bh=GJxYaevdkuwc2WMWIkCt/pc6OVxaEO1J+q7xuzP6NHc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NMSHaHMwxsHqfPgGL3po6wgH++Et4txVlHAsQMEtiu4V2VENuc3CeZgXR/JdmZKWyz3FEVMf9+Gy6OP3eINltVf6HkfJArI8AGujNUHf/hafZpqLgda7Grrbu0RQWoOYIz5PoARYGfFrxbeZrUAMoaOiYIcC5q2axcLDKsP0mnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Y89AtyGg; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=FqRQDmII; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="LulCwlLr";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="f9PGnMkn"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id C59B114000AE;
-	Mon, 29 Jun 2026 08:08:19 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Mon, 29 Jun 2026 08:08:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
-	 t=1782734899; x=1782821299; bh=yCFrzMqg51uEweo7qE/Vf7NHVXEc3DaI
-	oqP0PFpFxNI=; b=LulCwlLrp0i5DwUfaVngU3Junj0hbmj/esA8gmgH0s+1f8/T
-	9lTXDfVdm7tivJ8imZI9kGvPYriTbiAuPjM7aQ1uhLvgKslKipwLZNlSGrFGslBP
-	MDVQ7vkGr0fuWuf0klis+EHSiNOXixlq4do8VwyXbDlxyD01pic4t+QIUreow0Km
-	TZ6TZPMjFMosDd/l+980+RBIzdY0OS/9cogXQycYgLCEJrgK7ybvZpDIpNWMNBJt
-	40c3IcgnPLa8q5GL+mZzUiErIw9NOCxiN0JH2GBv2pHGGkZtSgBWxOWpaWXYkrXn
-	T05/z8bE93geG9mKN1Y7Fa0QT4hN3anGOsSJKw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1782734899; x=
-	1782821299; bh=yCFrzMqg51uEweo7qE/Vf7NHVXEc3DaIoqP0PFpFxNI=; b=f
-	9PGnMknecthM/xH6R6zSaUxtJIU+j5fThXYpF5MpL31xSVQXjf4ErE4+q9+O4Ibp
-	KvmzMHtQcUEmnIgKKV8UFPpsoNESYAwtjiu9MsLubXJGI00SWaT3D8hMVCMyU3b8
-	gPLqqmVDilx4g/ocAiMdOYPLEuhpaGHAryqiYDaN/mAo6mWzkjhkAkOIepSpUie1
-	dNbFJgFPkkuB6z7TVvXS/EsEAsY9UZzihmGABEjJ7aJ0LFe0MqsSh/4c8Ve/LauE
-	KHBO8j2S8aUdGFCxNVWSJ6Kgp+gCUYXOBYHxBdR3+StILwRSNSTkw9onTEEbp4T6
-	mMi0IDerW51yROD9rNEwA==
-X-ME-Sender: <xms:M2BCanufdcIm6SoJMGwENmf_6sN6Rs1h2HYi9B6XOpP7bltWjnLfSA>
-    <xme:M2BCasaw6_alwf7HstkH68M3AAIw0wZqhFNLN9FKfV5UX2rlvyNMAnwf-aTdX3A0x
-    pxS7twBbHfSuJwznY7Z7Lu34ZdMH4wM9FZrcysdRYKS28XzeHNqtw4>
-X-ME-Received: <xmr:M2BCajRocdZYZN8KdmgzYRVbpiPydoK1NiS-6FDoCM3WVkC3X8aU4W5DcpmLjw>
-X-ME-Proxy-Cause: dmFkZTEbeJVw6LHQweWhVxV6YsjHAMw/x6M6i2UioCpAmsrJGMnjm7JCfk5Nb4aoCqvKnN
-    91tRPzQkxIdfhn03N0ZpwuVqidXzNPJfeGWLvbpIh0Vb/OxkWky2JSYOHrAYJQLLSAB7AL
-    toy2cpnq5TVKX0zNbh0LHZsT2sTwF0477WE69g5lswYPot14j81Ea+hOFPxysMYC/MWVnR
-    3Dzoy9inuC75prIkon2ncihK+vG72WjpEkuux2GDIB97l3OQISzMRmmuo/8ZARgSjSwpQ+
-    UM6vUvaQCbvfx0vplMOYjWf6ufp0BqVYgaIkGB0rpNNA+DKzK1TUU+7BMGyDUwBoGP6vPR
-    n1rc6DtkgBAvysbSQ3E2eTULm3Fc1KACLScvgdGMFwMuBeAK4pVUlEgldp7c8FURq4EA8c
-    SK7chA+9eNFKioMNs1mFZAU+LE1Mq18j/tBgFyJA3AmEPItCj14yzvuD1FbShZUWh9y1iB
-    OsUGnSTGZjKOKDKtntwuZ7TJLrmKXgCcX2Cw1O4p+sjIknja/yaRjKCB7ZQUOO7FxzU1ca
-    jWFcv6SX+GMXKP9d6B9JxyFiy+9jlP+3t8TS8AJzW+/E9e6QSgZib+68fuez2xXuLdlv7L
-    8Fsce8Ucr63jn6XQVKa+KDc/ojbOkxsSaF9cfIqbAbd72gDrn3kJnAHxYFeg
-X-ME-Proxy: <xmx:M2BCavwmtMv-NKDijDInXlo4FzkJhI0mMDzlSrhZBzSgxYcZVUF7dA>
-    <xmx:M2BCavdT091fJV0iPDO7YCE6qvlTjKW32XDO8IcPpVKJngVjG2TeJQ>
-    <xmx:M2BCagq8Z-kfwDS2zleW3UaK8xTCJTeav7yifIkiorqekWJSrBTrPw>
-    <xmx:M2BCanMyRemIQUWhprOItnyerfOlbRbIUt2DqNmh-irh5B0baxrD-A>
-    <xmx:M2BCaurZiiEAwZVNyc7bWxTWuei9Ry_iZY79DHMFo3DjZCr6LTIlCylF>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 29 Jun 2026 08:08:19 -0400 (EDT)
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: akpm@linux-foundation.org,
-	rppt@kernel.org,
-	peterx@redhat.com,
-	david@kernel.org
-Cc: ljs@kernel.org,
-	surenb@google.com,
-	vbabka@kernel.org,
-	Liam.Howlett@oracle.com,
-	ziy@nvidia.com,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	seanjc@google.com,
-	pbonzini@redhat.com,
-	jthoughton@google.com,
-	aarcange@redhat.com,
-	sj@kernel.org,
-	usama.arif@linux.dev,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kernel-team@meta.com,
-	kas@kernel.org
-Subject: [PATCH v7 15/15] Documentation/userfaultfd: document RWP working set tracking
-Date: Mon, 29 Jun 2026 13:07:46 +0100
-Message-ID: <20260629120749.566063-16-kirill@shutemov.name>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260629120749.566063-1-kirill@shutemov.name>
-References: <20260629120749.566063-1-kirill@shutemov.name>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Y89AtyGg";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="FqRQDmII"
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65TASxVR2641503
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 12:42:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=0bxdEsuO97otjVeelamY3bjFlltCdEm5Mfb
+	irwZ8RWw=; b=Y89AtyGgltTsoPEYG/x3plcubyVgjXLLcycoARbRMehVq3iWAMO
+	Oh0h99mDv/4k5T/jpTGG+0HHLQw19JBDUxNzTalEVDqaHT5VlQDn62ap8vtgTxkJ
+	6RgKAiX9MTb2UWTakvoOKX/770UyccwaRd9995B58QBUMhI+C20KGn8PyYvsdy9h
+	h1u2/zIBqOFqeR7Jfw2T7a2MODNLjaABKMT8OcO3NFVeJ87x8VEPu37CcB3hHiRs
+	YXah0ramkm3jNNrEhr7LMSLP9K/p0qQTJTyRhu+gJ0WRq6qvrwwKskkwIwzSR38+
+	L3d2DjkLKuNb03CPIbVDGvWFHuEmlp/GdQg==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4f3nperu5e-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 12:42:53 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-92b8fc5cc89so481021685a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 05:42:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1782736973; x=1783341773; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0bxdEsuO97otjVeelamY3bjFlltCdEm5MfbirwZ8RWw=;
+        b=FqRQDmIIDbbVFwIou4e2oiUaODSgz+RLULKaVDBC3UDlr6PdGEm+BLsHN6yqaPf/Ml
+         +MO0E27ZsasUAZYBFZur1Qzf1VaKkeiT5FcXEZ7B3fK7jQ9Jnflegy+xlOL31RkPJ6vj
+         QeOfUVGjTpGtNxtSTEC0hRJB6yDKL1OBskZrURKbYy0z1F13uMDu84ryWHy30XPzNMsH
+         GCvBpAGMlya+1f6toI0hCWFqsVmXKzvDX2C2XV1zzwjR9tA6RFJ0HftDxEkPi/ssafNR
+         F3TuwI05K0ot5xkgDAUDTjPqAL99xZPALm/X7EVE8LvwJOwyCWS4SDBdhf7apN4gXSSH
+         enOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782736973; x=1783341773;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0bxdEsuO97otjVeelamY3bjFlltCdEm5MfbirwZ8RWw=;
+        b=psPS3GPABBYP6lelMdKiVnXpD9evvmztWtYy1WydAxLkHSEQXQvFL1w+eHGncjtx3/
+         Q0eeBoCXwFJ+GRVwO7m941DViutNU8R/lNiE6HVyPT6+oo1jxZ7sBnp+xxudwey1uoIz
+         lsHhUNcoKWxYxn72Pw0RiFzQi91OG4WpxD0OcMWQbPI2ua1GR7lmqZd4OM0lnwB2SuHB
+         92qV0hQ6I4kviSB1s47cLl094EXpc0Lpl94Z28ZCOap+ahzfQ1LZGPXKk5AQ3k51/Xou
+         xtGnUVscw1TADb4gIURL5SaA7m+Lxsj7FkYgfu/lj/bHEsZ4k5G/llDEISufVtXQw4an
+         8AuA==
+X-Gm-Message-State: AOJu0YwZ8HAkFTc42JQByKiR8NHo9mE/qPKitzA5+d73sedl3lY7cPfe
+	3MyZ84vC/hR6/saPbOMiiGtaIa6xj4gtJeAeP05rkWa0u7YHwC/SdXm/39sOB1uJf4GqmOIGpgr
+	50s9a4XL4M9Q4YVgkUmsHTySQLQWw21SFO36bVTCFA+hd5fHK8Tx26nZ4a4O0gQbegYFqZ/0=
+X-Gm-Gg: AfdE7cmIDhLARDb5Ees+q+p9SfR0GrWaqnfnEStbAZleNgaTAjbK4GwuT676BQSEeBg
+	5QRANkAjvUxqy+koNFW78Zgwt2fNB/2xG48mXUvQB6LZwhpCBAy5NxC0CcT9ExaBkUTgqRnpYd9
+	ZXiK8RYxyLWSG9qNihp67GaQoUbPhHPH7Bdo5s5X9WeM5l4+I1L8sZoMCh/+N1nFJNBGplGZ8ew
+	QeSTT2u8AUOKTEhRU3Xalep3JjLnjv69mPR1ZcuUC6z7XcMLSZ2TNBP3amoNvRiw6hIHJr3GaGb
+	aObPOvd3ITEeN00Gbo+d35ySaNw+xX02+jNoml+ngg/P2tDN/nu+6RW2fPLYCsDN2X1XvrHWWtT
+	J/G80EGp/tMCiYdqlyTxWaJAKTP9EoCE34/ioeAs=
+X-Received: by 2002:a05:620a:6192:b0:92b:67e6:8abd with SMTP id af79cd13be357-92e5f4c4d8dmr81540785a.71.1782736972824;
+        Mon, 29 Jun 2026 05:42:52 -0700 (PDT)
+X-Received: by 2002:a05:620a:6192:b0:92b:67e6:8abd with SMTP id af79cd13be357-92e5f4c4d8dmr81534985a.71.1782736972311;
+        Mon, 29 Jun 2026 05:42:52 -0700 (PDT)
+Received: from brgl-qcom.home ([2a01:cb1d:dc:7e00:4640:d76a:6126:9b65])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49268ff9f40sm288236885e9.6.2026.06.29.05.42.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2026 05:42:51 -0700 (PDT)
+From: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+To: Rae Moar <raemoar63@gmail.com>, Eric Biggers <ebiggers@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, brgl@kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: [PATCH] kunit: configs: enable GPIO kunit test cases in all_tests.config
+Date: Mon, 29 Jun 2026 14:42:45 +0200
+Message-ID: <20260629124245.27674-1-bartosz.golaszewski@oss.qualcomm.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjI5MDEwNCBTYWx0ZWRfXwzUbuQk9BMEe
+ DIUnJlpnXKvtoyLMt5arOJQ7VMUkPFGM8qizIYlHJZbjawjecy2SkV+3PxD1O0qWWjT1xzwNiFy
+ pqdJNnbHj6dvNlu3tJ1cVt1Q8a101PhRJA34gwsPzK3XP5S6Do3fDRfmZXYqPx6aOXhg702m9aF
+ NCer0lslQbNG09K/Ln+24DBp+XUzLzZFCxcg3uoYCzLWzQ9XHPSy+plXttXP2gw5cydfPyI5//U
+ XM6Z+nwYjxwKGlSYvCbHZ4K4itcrZQhH6OqrX+rSnxILQNIxV1YF3eYoHTswc7olx+VEEJtaTH6
+ g3n+mBycf92rSnHUjlPC3fOOhjrHIMVfHrL5tiMkLbwefMRU6c+85koaYDkX7ue4TjfkhzLVFHx
+ pvRQYQ9WsjgSSgph+2uU8cxXx5UMXXoZzZp+3QKV7FZcjM1522GvCivihgL3wsWvT+lhaBPJhGl
+ J6rgCqRXTEp/TuPNQkg==
+X-Proofpoint-ORIG-GUID: 52u63MikGJ9ClrCtip9PaKpV1-X2Jagm
+X-Authority-Analysis: v=2.4 cv=T6q8ifKQ c=1 sm=1 tr=0 ts=6a42684d cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=FelO9ux0wxsA:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
+ a=yOCtJkima9RkubShWh1s:22 a=EUspDBNiAAAA:8 a=-2JGltqoQDAwLqohOssA:9
+ a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjI5MDEwNCBTYWx0ZWRfX5bRt8wIWqL8q
+ o8oEH7ZhiN1LxXmn2WAphQQQ2oGIuak778wqklsAWMO3fSwD6XPkkocX8lpjTtE4mk0EeVYVsfP
+ sJnVIxQnWSkepbFR+g2IyEYIzCwDqao=
+X-Proofpoint-GUID: 52u63MikGJ9ClrCtip9PaKpV1-X2Jagm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-29_03,2026-06-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 priorityscore=1501 suspectscore=0 clxscore=1015 adultscore=0
+ lowpriorityscore=0 malwarescore=0 impostorscore=0 phishscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606290104
 
-From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+Enable CONFIG_GPIOLIB in all_tests.config to ensure the kunit test cases
+for GPIO core can be built with this config.
 
-Add an admin-guide section covering UFFDIO_REGISTER_MODE_RWP:
-
-  - sync and async fault models;
-  - UFFDIO_RWPROTECT semantics;
-  - UFFD_FEATURE_RWP_ASYNC;
-  - UFFDIO_SET_MODE runtime mode flips.
-
-It also covers typical VMM working-set-tracking workflow from detection
-loop through sync-mode eviction and back to async.
-
-Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
-Assisted-by: Claude:claude-opus-4-6
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 ---
- Documentation/admin-guide/mm/userfaultfd.rst | 259 ++++++++++++++++++-
- 1 file changed, 253 insertions(+), 6 deletions(-)
+ tools/testing/kunit/configs/all_tests.config | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-index 1e533639fd50..69836e39aa0b 100644
---- a/Documentation/admin-guide/mm/userfaultfd.rst
-+++ b/Documentation/admin-guide/mm/userfaultfd.rst
-@@ -275,16 +275,16 @@ tracking and it can be different in a few ways:
-   - Dirty information will not get lost if the pte was zapped due to
-     various reasons (e.g. during split of a shmem transparent huge page).
+diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
+index bccc2c77196d5..6825c2e855a55 100644
+--- a/tools/testing/kunit/configs/all_tests.config
++++ b/tools/testing/kunit/configs/all_tests.config
+@@ -21,6 +21,7 @@ CONFIG_VFAT_FS=y
+ CONFIG_PCI=y
+ CONFIG_USB4=y
+ CONFIG_I2C=y
++CONFIG_GPIOLIB=y
  
--  - Due to a reverted meaning of soft-dirty (page clean when uffd-wp bit
--    set; dirty when uffd-wp bit cleared), it has different semantics on
--    some of the memory operations.  For example: ``MADV_DONTNEED`` on
-+  - Due to a reverted meaning of soft-dirty (page clean when the uffd bit
-+    is set; dirty when the uffd bit is cleared), it has different semantics
-+    on some of the memory operations.  For example: ``MADV_DONTNEED`` on
-     anonymous (or ``MADV_REMOVE`` on a file mapping) will be treated as
--    dirtying of memory by dropping uffd-wp bit during the procedure.
-+    dirtying of memory by dropping the uffd bit during the procedure.
- 
- The user app can collect the "written/dirty" status by looking up the
--uffd-wp bit for the pages being interested in /proc/pagemap.
-+uffd bit for the pages being interested in /proc/pagemap.
- 
--The page will not be under track of uffd-wp async mode until the page is
-+The page will not be under track of userfaultfd-wp async mode until the page is
- explicitly write-protected by ``ioctl(UFFDIO_WRITEPROTECT)`` with the mode
- flag ``UFFDIO_WRITEPROTECT_MODE_WP`` set.  Trying to resolve a page fault
- that was tracked by async mode userfaultfd-wp is invalid.
-@@ -307,6 +307,253 @@ transparent to the guest, we want that same address range to act as if it was
- still poisoned, even though it's on a new physical host which ostensibly
- doesn't have a memory error in the exact same spot.
- 
-+Read-Write Protection
-+---------------------
-+
-+``UFFDIO_REGISTER_MODE_RWP`` enables read-write protection tracking on a
-+memory range. It is similar to (but faster than) ``mprotect(PROT_NONE)``
-+combined with a signal handler; unlike ``mprotect(PROT_NONE)``, RWP only
-+traps accesses to *present* PTEs, so accesses to unpopulated addresses in a
-+protected range fall through to the normal missing-page path. It uses the
-+PROT_NONE hinting mechanism (same as NUMA balancing) to make pages
-+inaccessible while keeping them resident in memory. Works on anonymous,
-+shmem, and hugetlbfs memory.
-+
-+RWP is designed for VM memory managers that need to track the working set
-+of guest memory for cold page eviction to tiered or remote storage.
-+
-+**Setup:**
-+
-+1. Open a userfaultfd and enable ``UFFD_FEATURE_RWP`` via ``UFFDIO_API``.
-+   Optionally request ``UFFD_FEATURE_RWP_ASYNC`` as well — it requires
-+   ``UFFD_FEATURE_RWP`` to be set in the same ``UFFDIO_API`` call.
-+
-+2. Register the guest memory range with ``UFFDIO_REGISTER_MODE_RWP``
-+   (and ``UFFDIO_REGISTER_MODE_MISSING`` if evicted pages will need to be
-+   fetched back from storage).
-+
-+**Feature availability:**
-+
-+RWP is built on top of two kernel primitives: a spare PTE bit owned by
-+userfaultfd (``CONFIG_HAVE_ARCH_USERFAULTFD_WP``) and architecture support
-+for present-but-inaccessible PTEs (``CONFIG_ARCH_HAS_PTE_PROTNONE``). When both
-+are available on a 64-bit kernel, the build selects
-+``CONFIG_USERFAULTFD_RWP=y`` and the ``VM_UFFD_RWP`` VMA flag becomes
-+available.
-+
-+``UFFD_FEATURE_RWP`` and ``UFFD_FEATURE_RWP_ASYNC`` are unavailable when
-+the running kernel or architecture does not support them — for example
-+32-bit kernels (where ``VM_UFFD_RWP`` is unavailable), kernels built
-+without ``CONFIG_USERFAULTFD_RWP``, and architectures whose ptes cannot
-+carry the uffd bit at runtime (e.g. riscv without the ``SVRSW60T59B``
-+extension). Requesting an unsupported feature in
-+``uffdio_api.features`` makes ``UFFDIO_API`` fail with ``EINVAL`` and
-+leaves the userfaultfd context uninitialized; the bitmask returned in
-+``uffdio_api.features`` then advertises the features the kernel does
-+support. The recommended probe sequence is therefore to open a
-+throwaway userfaultfd, call ``UFFDIO_API`` once with ``features = 0``,
-+inspect the returned bitmask, close that fd, then open the real one
-+and call ``UFFDIO_API`` again with only the supported features set.
-+
-+**Protecting and Unprotecting:**
-+
-+Use ``UFFDIO_RWPROTECT`` to protect or unprotect a range, mirroring the
-+``UFFDIO_WRITEPROTECT`` interface::
-+
-+    struct uffdio_rwprotect rwp = {
-+        .range = { .start = addr, .len = len },
-+        .mode = UFFDIO_RWPROTECT_MODE_RWP,  /* protect */
-+    };
-+    ioctl(uffd, UFFDIO_RWPROTECT, &rwp);
-+
-+Setting ``UFFDIO_RWPROTECT_MODE_RWP`` sets PROT_NONE on present PTEs in the
-+range. Pages stay resident and their physical frames are preserved — only
-+access permissions are removed.
-+
-+Clearing ``UFFDIO_RWPROTECT_MODE_RWP`` restores normal VMA permissions and
-+wakes any faulting threads (unless ``UFFDIO_RWPROTECT_MODE_DONTWAKE`` is set).
-+
-+**Scope of protection:**
-+
-+RWP protection is a property of *present* PTEs. ``UFFDIO_RWPROTECT`` only
-+affects entries that are already populated. Unpopulated addresses within
-+the range remain unpopulated; when first accessed they fault through the
-+normal missing path (``do_anonymous_page()``, ``do_swap_page()``,
-+``finish_fault()``) and the resulting PTE is not RWP-protected. To observe
-+the population itself, co-register the range with
-+``UFFDIO_REGISTER_MODE_MISSING``.
-+
-+Protection is preserved across page reclaim: a page swapped out while
-+RWP-protected carries the marker on its swap entry, and swap-in restores
-+the PROT_NONE state so the first access after swap-in still faults. The
-+same applies to pages temporarily replaced by migration entries.
-+
-+Operations that drop the PTE entirely — ``MADV_DONTNEED`` on anonymous
-+memory, hole-punch on shmem, truncation of a file mapping — also drop the
-+RWP marker: the next access re-populates the range without protection.
-+Unlike WP (which persists via ``PTE_MARKER_UFFD_WP``), there is no
-+persistent RWP marker today. The user needs to re-arm the range with
-+``UFFDIO_RWPROTECT`` after any operation that explicitly frees PTEs.
-+
-+**Fault Handling:**
-+
-+When a protected page is accessed:
-+
-+- **Sync mode** (default): The faulting thread blocks and a
-+  ``UFFD_PAGEFAULT_FLAG_RWP`` message is delivered to the userfaultfd
-+  handler. The handler resolves the fault with ``UFFDIO_RWPROTECT``
-+  (clearing ``MODE_RWP``), which restores the PTE permissions and wakes
-+  the faulting thread.
-+
-+- **Async mode** (``UFFD_FEATURE_RWP_ASYNC``): The kernel automatically
-+  restores PTE permissions and the thread continues without blocking. No
-+  message is delivered to the handler.
-+
-+**Runtime Mode Switching:**
-+
-+``UFFDIO_SET_MODE`` toggles ``UFFD_FEATURE_RWP_ASYNC`` at runtime, allowing
-+the VMM to switch between lightweight async detection and safe sync
-+eviction without re-registering. The toggle takes ``mmap_write_lock()``
-+and calls ``vma_start_write()`` on each UFFD-armed VMA, draining
-+in-flight per-VMA-locked faults before the new mode takes effect.
-+
-+**Working-set detection with PAGEMAP_SCAN:**
-+
-+RWP-protected PTEs carry the uffd PTE bit; an access (and, in async mode, its
-+auto-resolution) clears it. ``PAGEMAP_SCAN`` reports ``PAGE_IS_ACCESSED`` once
-+the bit is clear on a ``VM_UFFD_RWP`` VMA, so a *non-inverted* scan reports the
-+pages that were touched during the interval -- the hot set::
-+
-+    struct pm_scan_arg arg = {
-+        .size = sizeof(arg),
-+        .start = guest_mem_start,
-+        .end = guest_mem_end,
-+        .vec = (uint64_t)regions,
-+        .vec_len = regions_len,
-+        .category_mask = PAGE_IS_ACCESSED,
-+        .return_mask = PAGE_IS_ACCESSED,
-+    };
-+    long n = ioctl(pagemap_fd, PAGEMAP_SCAN, &arg);
-+
-+The returned ``page_region`` array lists the hot ranges. ``PAGE_IS_ACCESSED``
-+is set on an accessed page whether it is still present or has since been
-+swapped out, so the hot scan needs no ``PAGE_IS_PRESENT`` filter -- unpopulated
-+holes carry neither bit and are excluded on their own.
-+
-+Track the hot set and reclaim everything else from the backing file (see the
-+workflow below). Do **not** invert the scan to enumerate "cold" pages
-+directly: an inverted scan reports only the ``VM_UFFD_RWP`` PTEs that are still
-+protected, i.e. the resident portion of *this* VMA. For a file mapping the
-+working set spans the whole file -- pages that live in the page cache but are
-+not mapped into this VMA (a pre-populated tmpfs file, or memory populated
-+through another mapping) are ``pte_none`` here, never appear in the scan, and
-+would never be considered for eviction even though they occupy memory. Driving
-+eviction from "file offsets minus the hot set" avoids that blind spot; a cold
-+PTE scan cannot. To additionally record the *first* access to a cached but
-+unmapped page (e.g. pre-populated content) as hot, co-register the range with
-+``UFFDIO_REGISTER_MODE_MINOR``: such accesses then fault as minor faults
-+instead of mapping the page silently.
-+
-+**Cleanup:**
-+
-+When the userfaultfd is closed or the range is unregistered, all PROT_NONE
-+PTEs are automatically restored to their normal VMA permissions. This
-+prevents pages from becoming permanently inaccessible.
-+
-+**VMM Working Set Tracking Workflow:**
-+
-+A typical VMM lifecycle for cold page eviction to tiered storage. Two
-+mappings of the same shmem (or hugetlbfs) file are used: ``guest_mem`` is
-+the RWP-registered mapping that vCPUs access through, and ``io_mem`` is a
-+private mapping for VMM-side I/O. Reading ``io_mem`` does not go through
-+the RWP-protected PTEs of ``guest_mem``, so the VMM's own ``pwrite()``
-+never traps on its own ::
-+
-+    /* One-time setup */
-+    fd = memfd_create("guest", MFD_CLOEXEC);
-+    ftruncate(fd, guest_size);
-+    guest_mem = mmap(NULL, guest_size, PROT_READ | PROT_WRITE,
-+                     MAP_SHARED, fd, 0);  /* vCPU view, RWP-registered */
-+    io_mem    = mmap(NULL, guest_size, PROT_READ | PROT_WRITE,
-+                     MAP_SHARED, fd, 0);  /* VMM I/O view, unprotected */
-+
-+    uffd = userfaultfd(O_CLOEXEC | O_NONBLOCK);
-+    struct uffdio_api api = {
-+        .api = UFFD_API,
-+        .features = UFFD_FEATURE_RWP | UFFD_FEATURE_RWP_ASYNC,
-+    };
-+    ioctl(uffd, UFFDIO_API, &api);
-+    if (!(api.features & UFFD_FEATURE_RWP))
-+        /* RWP unavailable on this kernel/arch -- fall back. */
-+    ioctl(uffd, UFFDIO_REGISTER, &(struct uffdio_register){
-+        .range = { guest_mem, guest_size },
-+        .mode = UFFDIO_REGISTER_MODE_RWP |
-+                UFFDIO_REGISTER_MODE_MISSING,
-+    });
-+
-+    /* Tracking loop */
-+    while (vm_running) {
-+        /* 1. Detection phase (async -- no vCPU stalls) */
-+        ioctl(uffd, UFFDIO_RWPROTECT, &(struct uffdio_rwprotect){
-+            .range = full_range,
-+            .mode = UFFDIO_RWPROTECT_MODE_RWP });
-+        sleep(tracking_interval);
-+
-+        /*
-+         * 2. Switch to sync BEFORE scanning. In async mode a vCPU
-+         * access races eviction: it would auto-resolve and mark the
-+         * page hot just as the VMM writes it out and punches it,
-+         * losing the update. Sync mode makes such accesses block and
-+         * be delivered, freezing the hot snapshot for the rest of the
-+         * iteration.
-+         */
-+        ioctl(uffd, UFFDIO_SET_MODE,
-+              &(struct uffdio_set_mode){
-+                  .disable = UFFD_FEATURE_RWP_ASYNC });
-+
-+        /* 3. Read the hot set: pages touched this interval. */
-+        ioctl(pagemap_fd, PAGEMAP_SCAN, &(struct pm_scan_arg){
-+            .category_mask = PAGE_IS_ACCESSED,
-+            .return_mask = PAGE_IS_ACCESSED,
-+            ...
-+        });
-+
-+        /*
-+         * 4. Reclaim the file offsets that are NOT in the hot set.
-+         * Driving this from the file's offset space (rather than from a
-+         * cold PTE scan) also reclaims pages that are cached but not
-+         * mapped into guest_mem, e.g. pre-populated content.
-+         */
-+        for each non-hot offset range:
-+            /* Read from io_mem -- bypasses RWP, no fault. */
-+            pwrite(storage_fd, (char *)io_mem + off, len, off);
-+            /* Drop the page from the shared file. */
-+            fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-+                      off, len);
-+            /*
-+             * Wake any vCPU blocked on the RWP fault for this range:
-+             * fallocate() does not iterate ctx->fault_pending_wqh.
-+             */
-+            ioctl(uffd, UFFDIO_WAKE, &(struct uffdio_range){
-+                .start = (uintptr_t)guest_mem + off, .len = len });
-+
-+        /* 5. Resume async tracking */
-+        ioctl(uffd, UFFDIO_SET_MODE,
-+              &(struct uffdio_set_mode){
-+                  .enable = UFFD_FEATURE_RWP_ASYNC });
-+    }
-+
-+During step 4, a vCPU that accesses a ``guest_mem`` offset being evicted
-+blocks with a ``UFFD_PAGEFAULT_FLAG_RWP`` fault while the eviction is in
-+progress. After ``fallocate()`` punches the page out and ``UFFDIO_WAKE``
-+fires, the vCPU retries the access, faults as ``MISSING``, and the
-+handler resolves it with ``UFFDIO_COPY`` from storage.
-+
-+This workflow targets shmem and hugetlbfs (both support a private
-+``io_mem`` mapping over the same fd). Anonymous-memory backings need a
-+different inner-loop strategy because the VMM has no way to read the
-+page without going through the RWP-protected mapping.
-+
- QEMU/KVM
- ========
- 
+ CONFIG_NET=y
+ CONFIG_MCTP=y
 -- 
-2.54.0
+2.47.3
 
