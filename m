@@ -1,175 +1,108 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07CE43635A
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 15:25:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3EC63E9580
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 15:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782746749; cv=none; b=Iwxds7Wt+k14NjOz5DgX9P3ZtZ+9+WNHUyDpshpw03L6alYPeYSzprRptcPHz/oK4o0KQh3Bn4A2qQVsBPxIlHXn/I2I4wDKZrAfBK8VSgUviHdXX7V3e5JM6774+sjG3mGsRhBbTxpk+AHenF/Z3jNUOJXWyEfphhyJpFpALic=
+	t=1782747289; cv=none; b=Bm3cJmvyVJmT8kMaGE1rlCGPjSGsq+QCNnZe00XUTeqSUe7DjFrzoPS0ua/xYVg9qolnEUW2HDVND5ipvqk5Qx6HDsjPFT97yo7kVa9LgKlnkmQKy2YaZUfyh2xjz42ndJkH3rJMTQeKrn4rnsNy7pGm3VRaXdCAXR2/2zAxTPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782746749; c=relaxed/simple;
-	bh=6gBGNZLrBmc/S21s3y/lFjCFobz+qu9WjXPsM1S2pr4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JiuWM8ImG9vS0wIqlNruav/gI264mlJl34ZQW8vFI0/DYv3jv0RLxiyeNKWaYbJTI0uwPg+kktZfx3/+EDupyv5OOJdEgiLNYn/MHMRDd62m7CuAWYH/jBffak5c/lC6PwT/EBi7XZsIRzhwRZJpatAUtg8wx89qJSRMjNgeurg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U9E17cuK; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782747289; c=relaxed/simple;
+	bh=S7TtvWhOVIWhfqpCK7B2X7FblWRLReT9XRQLHAKUMyo=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=ZaqNa+V5DtqSVQfrPGYwmCRLWXLwHgeB2H2JZoTfGtKPn/PAtjWGMZuUeKQnqd+cr1NZQWElFyMyodxhE1HcbUeyDuFe6djuR3YxZX13NVHG/xAHEZUR54iZhgnB3DhZcE8i7wpvv4tsuwvv0gRuMVWDkfCF39VozOa952lPXkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nikableh.moe; spf=pass smtp.mailfrom=nikableh.moe; dkim=pass (2048-bit key) header.d=nikableh.moe header.i=@nikableh.moe header.b=bRixWq0x; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=lvTVUOMX; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nikableh.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nikableh.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U9E17cuK"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782746744;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=75AL2HqEXwixghDnpQ3La/XvnP8pIxdroiuRqeB2Hp4=;
-	b=U9E17cuK1teMmeWCt3kZBzudY+2fmkYP1NTS67wCN0R+JrqOzev+pQ8KvYRexk8ZdjZ4ks
-	kH+SFou3jrIeLN4KhF1cNVhMgNmsSQDQFBNZ6PVF8BG0fD4rFD8FV3TzjV2AGqrBLPGYdj
-	cJV2cfuryh0P0zaadmwaJOOsKThJOg4=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v8 9/9] selftests/bpf: Verify bpf_iter for global percpu data
-Date: Mon, 29 Jun 2026 23:24:06 +0800
-Message-ID: <20260629152406.52582-10-leon.hwang@linux.dev>
-In-Reply-To: <20260629152406.52582-1-leon.hwang@linux.dev>
-References: <20260629152406.52582-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=nikableh.moe header.i=@nikableh.moe header.b="bRixWq0x";
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="lvTVUOMX"
+DKIM-Signature: a=rsa-sha256; b=bRixWq0xdzgpzdZlLatle0utxt2jwGjTDhANCrztTzqPcrfC9cApUnAwWInde58tDYgNJk9i86LKfYSNM+7DMcfgzK0ExLlxibM7TTRsx5Tvv7VbU54NXS+xZEV541nwB1S2+15q5eJO93WFNGfDhkJZOLvfcjhfvXV9nnTaoXW8lUNBAt9f0N1o80vdFuNAS/8X6Dd98fyKJF2JyONmY7KKvilFJ6jVVmxvhaVLorJ3YP0J+tJb0LuU8dewSx14D+yD8PR+hF4zKW35LMLAErapA7Q6h338FcKPdGu29NMgkapf5kfkuPbHp2ETNf8OoNkpLYMYKl/wRFSrTbUNug==; s=purelymail2; d=nikableh.moe; v=1; bh=S7TtvWhOVIWhfqpCK7B2X7FblWRLReT9XRQLHAKUMyo=; h=Received:Date:From:To:Subject;
+DKIM-Signature: a=rsa-sha256; b=lvTVUOMX1azv+iSUixL82x7EqkugX7ZvPmEwpZWq5AqWXWDcKfXzYKuvQInLqJY5dJuzXCC6to/cn/c4YErs8f1CaivsvhpRYlxxzZUN3MGQVEyzKD1yglZxHwpVUaaSKGcCGzwysyNxzdTlYVUv1skqTqAGBgAeP68b2YVfkIVlgKAHDeTJGuAf/mKbqon3V6aTWXoJ//e30LzaaQEeu18wPdOtTq2JohHAjL6Zs+igPRwiu12FhHC7+8iMQPeRioNmdPiRVWak2qDb/4IcseJLRqZoceNdYDklOZelQo5yevw0Ncb1dwDVnEBAiBEeLT3o78B6r62iGeFwqVATnA==; s=purelymail2; d=purelymail.com; v=1; bh=S7TtvWhOVIWhfqpCK7B2X7FblWRLReT9XRQLHAKUMyo=; h=Feedback-ID:Received:Date:From:To:Subject;
+Feedback-ID: 209604:18551:null:purelymail
+X-Pm-Original-To: linux-kselftest@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPA id -1921897467;
+          Mon, 29 Jun 2026 15:34:06 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Date: Mon, 29 Jun 2026 17:34:05 +0200
+From: Nika Krasnova <nika@nikableh.moe>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo
+ <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Andreas
+ Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor
+ Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Daniel
+ Almeida <daniel.almeida@collabora.com>, Tamir Duberstein
+ <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
+ =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, Viresh Kumar
+ <viresh.kumar@linaro.org>, Yury Norov <yury.norov@gmail.com>, Lorenzo
+ Stoakes <ljs@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David
+ Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 0/2] rust: kernel: add cfg_select! and use it for
+ config-based selection
+In-Reply-To: <CANiq72kG8k3mk+Xjr6q7aKg212QUNtZk5w4rxV=UGR5UXKE_ng@mail.gmail.com>
+References: <20260629-backport-cfg_select-v1-0-388d5d31d9d4@nikableh.moe>
+ <CANiq72kG8k3mk+Xjr6q7aKg212QUNtZk5w4rxV=UGR5UXKE_ng@mail.gmail.com>
+User-Agent: Purely Mail via Roundcube/1.6.16
+Message-ID: <0eb77f4b7199e9af01d61e0c1ac03c99@purelymail.com>
+X-Sender: nika@nikableh.moe
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add a test to verify that it is OK to iter the percpu_array map used for
-global percpu data.
+On 2026-06-29 11:38:22 +0200, Miguel Ojeda wrote:
+> For instance, instead of waiting for the MSRV bump, could we already
+> use the upstream one since Rust 1.91.0? That means that we are already
+> sure we are using the upstream one as-is.
+> 
+> Or is there a reason to avoid that?
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../bpf/prog_tests/global_data_init.c         | 52 +++++++++++++++++++
- .../bpf/progs/test_global_percpu_data.c       | 25 +++++++++
- 2 files changed, 77 insertions(+)
+There is one, yes. First the toolchain picture (tested with
+RUSTC_BOOTSTRAP=1):
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index ed085e2eb956..a5d87768f6ee 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -281,6 +281,56 @@ static void test_global_percpu_data_verifier_log(void)
- 	RUN_TESTS(test_global_percpu_data);
- }
- 
-+static void test_global_percpu_data_iter(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct test_global_percpu_data *skel;
-+	union bpf_iter_link_info linfo = {};
-+	struct bpf_link *link = NULL;
-+	int fd, num_cpus, len, err;
-+	char buf[16];
-+
-+	num_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	skel = test_global_percpu_data__open();
-+	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-+		return;
-+
-+	skel->rodata->num_cpus = num_cpus;
-+	skel->rodata->offsetof_num = offsetof(struct test_global_percpu_data__percpu, struct_data);
-+	skel->rodata->offsetof_num += sizeof(skel->percpu->struct_data) - sizeof(int);
-+	skel->rodata->elem_sz = roundup(sizeof(struct test_global_percpu_data__percpu), 8);
-+	skel->percpu->struct_data.nums[6] = 0xc0de;
-+
-+	err = test_global_percpu_data__load(skel);
-+	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-+		goto out;
-+
-+	linfo.map.map_fd = bpf_map__fd(skel->maps.percpu);
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(skel->progs.dump_percpu_data, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto out;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
-+		goto out;
-+
-+	while ((len = read(fd, buf, sizeof(buf))) > 0)
-+		do { } while (0);
-+	ASSERT_EQ(len, 0, "read iter");
-+	ASSERT_TRUE(skel->bss->run_iter, "run_iter");
-+	ASSERT_EQ(skel->bss->percpu_data_sum, 0xc0de * num_cpus, "percpu_data_sum");
-+
-+	close(fd);
-+out:
-+	bpf_link__destroy(link);
-+	test_global_percpu_data__destroy(skel);
-+}
-+
- void test_global_percpu_data(void)
- {
- 	if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
-@@ -297,4 +347,6 @@ void test_global_percpu_data(void)
- 	if (test__start_subtest("rdonly_direct_write"))
- 		test_global_percpu_data_rdonly_direct_write();
- 	test_global_percpu_data_verifier_log();
-+	if (test__start_subtest("iter"))
-+		test_global_percpu_data_iter();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index a6109e835948..eef88fd61af5 100644
---- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -51,4 +51,29 @@ int verifier_snprintf(void *ctx)
- 	return 0;
- }
- 
-+volatile const __u32 num_cpus = 0;
-+volatile const int offsetof_num;
-+volatile const int elem_sz;
-+__u32 percpu_data_sum = 0;
-+bool run_iter = false;
-+
-+SEC("iter/bpf_map_elem")
-+__auxiliary
-+int dump_percpu_data(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	void *pptr = ctx->value;
-+	int i;
-+
-+	if (!pptr)
-+		return 0;
-+
-+	run_iter = true;
-+
-+	for (i = 0; i < num_cpus; i++) {
-+		percpu_data_sum += *(int *) (pptr + offsetof_num);
-+		pptr += elem_sz;
-+	}
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
+  - 1.85.0 (current MSRV): core::cfg_select does not exist -- only the 
+older
+    core::cfg_match (old `cfg(...)` arm syntax).
+  - 1.94.1: core::cfg_select present behind #![feature(cfg_select)], with
+    the final builtin behavior (single-brace expression position works).
+  - 1.95.0: core::cfg_select stable.
+
+A gate (upstream when available, fallback when not) is possible, but 
+unlike
+the cold_path case the fallback isn't a drop-in replacement. In item and
+statement position the two are identical (single braces), but in pure
+expression-operand position they are mutually exclusive: the builtin 
+takes
+single braces, while the macro_rules needs an extra pair
+(cfg_select! {{ ... }}), since it cannot put #[cfg] on a bare expression
+without stmt_expr_attributes. No single spelling compiles on both.
+
+That means a gate would force prohibiting expression-operand position
+entirely (no portable spelling), which I would rather not do. I would
+prefer to keep the macro_rules everywhere -- one consistent macro on 
+every
+toolchain, expression position included -- and switch wholesale to
+core::cfg_select once the MSRV reaches a version that has it. The switch 
+is
+cheap: item/statement call sites are unchanged, and the only edit is
+dropping the extra braces at any expression-position sites (there are 
+none
+in the tree today).
+
+I will still move it into std_vendor.rs and align the docs with 
+upstream's,
+keeping the expression-position note since that is the one real 
+difference.
+
+Does that work for you, or would you rather take the gate and drop
+expression-operand support?
+
 -- 
-2.54.0
-
+Nika Krasnova
