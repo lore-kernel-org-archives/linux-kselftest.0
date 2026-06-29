@@ -1,127 +1,318 @@
-Received: from out199-13.us.a.mail.aliyun.com (out199-13.us.a.mail.aliyun.com [47.90.199.13])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8EE33AE188;
-	Mon, 29 Jun 2026 06:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.199.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF0F3C061C
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 07:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782715706; cv=none; b=DYJRO4Gl8o9TkXNP6PvOiJ0ea4JDSWgFf/J8SoPHntOtJZNk9z0JGeVSDUBvjV0RKlam3tsB5XbiajwM6AeQhy0lPGR5A0/hrDHP68q9f+2Quep+xHDU7R2O78osymf8TLobh79QOaIzdoLisp9QBVy/Y5j9nEDM908knO3F6Xo=
+	t=1782717343; cv=none; b=Ni6Hc8lT91fQ3GetQU7mvHKREpzO/XpiiF3xQaUbk66zBy78bVukLKGI1llIVBmhOqsWa9mU8cwpv/IdP4UHrS1k6wohOz48eO9YpISEP9SHGE5Izcw12AkCFkKS+w1Jtr/zN29RAOISZVkDhce3ELlO2gQOwbm4FO78S8L0/0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782715706; c=relaxed/simple;
-	bh=S9PPBd03nshTXdebHu0IRlNHz4qa/HrTIvMxXIyLevQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A0phZaABrFuQ2vyfkMFzFj5jj7RARkvACAPK7TnGpsWeHTZPkrXgskbT/JYvGg9Xut2NMv2Xvnn9jgTHjKFro9sZAJFVofjn2DKu2aTft2XYTmd+ETCDflBu6wf1P4S/tkq+RatFZYCnM01t1IbsQSor2f5yaSbkJ85O680QNzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=RMnGm7bG; arc=none smtp.client-ip=47.90.199.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1782717343; c=relaxed/simple;
+	bh=MYaqEaysKP46BpS2btGZP46vesfc6sQogd1OFwtbopM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iTOKkD64jvu7LC183LD5yIg93bjH1gcfN/IDc1r1ygDB6OFYRb9hWSFE37+5D8e2S9uOg4eSzYpaGPpGs3xKBFkcz3sQ7iW802i4XxmjLbR2Zg5e3MHbWHvgVYmFdj0Okk9uYdhPrjhnkR9xsfbUx3pFsGZGKtnxJTOiCOmL66g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aByoCzyh; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="RMnGm7bG"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1782715689; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=cs5txbx9bpKaRI7bmx5ga6+SdBKGKPqwgmoXTwT+GtE=;
-	b=RMnGm7bGVVXeA52sHPH5YIYUBBBDtE6zrwfryltfVAt1PtVhGj0UefGc9IlY4gSyg3iQ2T1udaWTPKFqHDQxAe0EtD6Ic9nJfoJKeo6rAuJ8/ePC35kMOQL5QqsFeZdLKrZNHCfw+ANQZnnEpqtyfaIh4iVtImo5rksqyltPo+k=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X5nWtcO_1782715355;
-Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X5nWtcO_1782715355 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 29 Jun 2026 14:42:36 +0800
-From: Wang Han <wanghan@linux.alibaba.com>
-To: Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: Alexandre Ghiti <alex@ghiti.fr>,
-	linux-riscv@lists.infradead.org,
-	Oleg Nesterov <oleg@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	oliver.yang@linux.alibaba.com,
-	xueshuai@linux.alibaba.com,
-	zhuo.song@linux.alibaba.com,
-	jkchen@linux.alibaba.com,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 3/7] riscv: ftrace: always preserve s0 in dynamic ftrace register frame
-Date: Mon, 29 Jun 2026 14:42:24 +0800
-Message-ID: <20260629064228.3195856-4-wanghan@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aByoCzyh"
+Message-ID: <e856149c-e4cf-430f-80e0-a6f402faec99@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782717329;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=P/Spr3uHJDXm8nUfAmFnApQAMVX8PvaQ+FFwn3/Z1Sc=;
+	b=aByoCzyhYyplBlrBYJzeK1dw/7QbQI+nIbiAYJQwXfj7C3snAHQ0PdmkM4WllqSJV4mi0K
+	Xp4N3IMs64BUQdLgiULOgSe/3ky1FjgSDSjod0IvQDjoYA/Mh4vWcY4vMUpM91vjCfdOZt
+	TvZ3d5o9LrSd1T3I04EoLzIRNHiUza0=
+Date: Mon, 29 Jun 2026 15:14:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v8 03/11] cgroup/cpuset: Prevent race between task attach
+ and cpuset state change
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Farhad Alemi <farhad.alemi@berkeley.edu>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
+ Guopeng Zhang <guopeng.zhang@linux.dev>, Gregory Price <gourry@gourry.net>,
+ David Hildenbrand <david@kernel.org>
+References: <20260626181923.133658-1-longman@redhat.com>
+ <20260626181923.133658-4-longman@redhat.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <20260626181923.133658-4-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-struct __arch_ftrace_regs declares s0 unconditionally, and both
-ftrace_regs_get_frame_pointer() and ftrace_partial_regs() read it
-unconditionally. But the SAVE_ABI_REGS / RESTORE_ABI_REGS macros in
-mcount-dyn.S only stored s0 under HAVE_FUNCTION_GRAPH_FP_TEST
-(CONFIG_FUNCTION_GRAPH_TRACER && CONFIG_FRAME_POINTER). With
-CONFIG_FRAME_POINTER=n the slot held whatever was on the stack before,
-so any callback going through ftrace_partial_regs() saw a garbage
-regs->s0. RISC-V kernels default to FRAME_POINTER=y, which is why this
-has not bitten in practice.
 
-Save and restore s0 unconditionally in the dynamic ftrace ABI register
-frame. This fixes the latent garbage-s0 case, brings the dynamic ftrace
-path in line with the static _mcount path (mcount.S SAVE_ABI_STATE
-already saves s0 unconditionally), and matches the frame layout already
-documented in the comment above SAVE_ABI_REGS. It is also a prerequisite
-for the upcoming reliable unwinder, which reads
-ftrace_regs_get_frame_pointer(fregs) directly.
 
-The cost is one extra REG_S/REG_L pair per traced call, negligible
-compared to the overall ftrace cost; the existing FREGS_SIZE_ON_STACK
-already reserved the slot, so no extra stack space is used.
+On 6/27/2026 2:19 AM, Waiman Long wrote:
+> Commit e44193d39e8d ("cpuset: let hotplug propagation work wait for
+> task attaching") was introduced to let hotplug operation to wait
+> until the completion of task attach operation. However, it is still
+> possible that the states of the source or destination cpuset can
+> be changed between the cpuset_can_attach() call and the subsequent
+> cpuset_attach()/cpuset_cacnel_attach() call.
+> 
+> As a result, data gathered during cpuset_can_attach() cannot be reliably
+> used in the subsequent cpuset_attach()/cpuset_cacnel_attach()
+> call at all. Make the task attach operation more robust
+> and allow the sharing of data between cpuset_can_attach() and
+> cpuset_attach()/cpuset_cacnel_attach() by making cpuset_write_resmask()
+> and cpuset_partition_write() wait for the completion of task attach
+> as well.
+> 
+> Ideally, an ongoing task attach operation should block any cpuset write
+> operation that can change its internal state until the operation is
+> completed. However, the attach_in_progress flag is currently per cpuset
+> and only the destination cpuset will have this flag set. The flag is not
+> set in the source cpuset where the tasks will be moved from. Even if we
+> extend the scope to include the source cpuset, it will not block cpuset
+> operation that changes the state of one of its ancestor cpuset which may
+> indirectly impact the state of the source or destination cpuset. It may
+> be too costly to set the flag for the whole subtree, it is far easier
+> to just make the flag global and block all the cpuset write operation
+> whenever a task attach operation is in progress. Make that change by
+> creating a new cpuset attach context (attach_ctx) structure to hold the
+> global in_progress flag and use it for blocking cpuset write operation
+> if a cpuset attach operation is in progress.
+> 
+> The comments about validate_change() are no longer valid as it won't
+> be called at all if an attach operation is in progress. So the comments
+> can be removed.
+> 
+> The per-cpuset attach_in_progress flag is also currently used in
+> partition_is_populated() and cpuset_is_populated() to determine if
+> an empty cpuset will have incoming task. This check will no longer be
+> needed as this function will not be called when there is a task attach
+> in progress. So the flag check is now removed.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>   kernel/cgroup/cpuset-internal.h | 11 +-----
+>   kernel/cgroup/cpuset.c          | 68 +++++++++++++++++++++------------
+>   2 files changed, 44 insertions(+), 35 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
+> index f7aaf01f7cd5..817b86ba7019 100644
+> --- a/kernel/cgroup/cpuset-internal.h
+> +++ b/kernel/cgroup/cpuset-internal.h
+> @@ -145,12 +145,6 @@ struct cpuset {
+>   	 */
+>   	nodemask_t old_mems_allowed;
+>   
+> -	/*
+> -	 * Tasks are being attached to this cpuset.  Used to prevent
+> -	 * zeroing cpus/mems_allowed between ->can_attach() and ->attach().
+> -	 */
+> -	int attach_in_progress;
+> -
+>   	/* partition root state */
+>   	int partition_root_state;
+>   
+> @@ -269,10 +263,7 @@ static inline int nr_cpusets(void)
+>   static inline bool cpuset_is_populated(struct cpuset *cs)
+>   {
+>   	lockdep_assert_cpuset_lock_held();
+> -
+> -	/* Cpusets in the process of attaching should be considered as populated */
+> -	return cgroup_is_populated(cs->css.cgroup) ||
+> -		cs->attach_in_progress;
+> +	return cgroup_is_populated(cs->css.cgroup);
+>   }
+>   
+>   /**
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index d108c2083e86..dec9785d0271 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -356,6 +356,14 @@ static struct workqueue_struct *cpuset_migrate_mm_wq;
+>   
+>   static DECLARE_WAIT_QUEUE_HEAD(cpuset_attach_wq);
+>   
+> +/*
+> + * Cpuset task attach context
+> + * Protected by cpuset_mutex
+> + */
+> +static struct {
+> +	int in_progress;
+> +} attach_ctx;
+> +
+>   static inline void check_insane_mems_config(nodemask_t *nodes)
+>   {
+>   	if (!cpusets_insane_config() &&
+> @@ -368,22 +376,22 @@ static inline void check_insane_mems_config(nodemask_t *nodes)
+>   }
+>   
+>   /*
+> - * decrease cs->attach_in_progress.
+> - * wake_up cpuset_attach_wq if cs->attach_in_progress==0.
+> + * decrease attach_ctx.in_progress.
+> + * wake_up cpuset_attach_wq if attach_ctx.in_progress==0.
+>    */
+> -static inline void dec_attach_in_progress_locked(struct cpuset *cs)
+> +static inline void dec_attach_in_progress_locked(void)
+>   {
+>   	lockdep_assert_cpuset_lock_held();
+>   
+> -	cs->attach_in_progress--;
+> -	if (!cs->attach_in_progress)
+> +	attach_ctx.in_progress--;
+> +	if (!attach_ctx.in_progress)
+>   		wake_up(&cpuset_attach_wq);
+>   }
+>   
+> -static inline void dec_attach_in_progress(struct cpuset *cs)
+> +static inline void dec_attach_in_progress(void)
+>   {
+>   	mutex_lock(&cpuset_mutex);
+> -	dec_attach_in_progress_locked(cs);
+> +	dec_attach_in_progress_locked();
+>   	mutex_unlock(&cpuset_mutex);
+>   }
+>   
+> @@ -432,8 +440,7 @@ static inline bool partition_is_populated(struct cpuset *cs,
+>   	 * nr_populated_domain_children may include populated
+>   	 * csets from descendants that are partitions.
+>   	 */
+> -	if (cgroup_has_tasks(cs->css.cgroup) ||
+> -	    cs->attach_in_progress)
+> +	if (cgroup_has_tasks(cs->css.cgroup))
+>   		return true;
+>   
+>   	rcu_read_lock();
+> @@ -3091,11 +3098,7 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
+>   	cs->dl_bw_cpu = cpu;
+>   
+>   out_success:
+> -	/*
+> -	 * Mark attach is in progress.  This makes validate_change() fail
+> -	 * changes which zero cpus/mems_allowed.
+> -	 */
+> -	cs->attach_in_progress++;
+> +	attach_ctx.in_progress++;
+>   
+>   out_unlock:
+>   	if (ret)
+> @@ -3113,7 +3116,7 @@ static void cpuset_cancel_attach(struct cgroup_taskset *tset)
+>   	cs = css_cs(css);
+>   
+>   	mutex_lock(&cpuset_mutex);
+> -	dec_attach_in_progress_locked(cs);
+> +	dec_attach_in_progress_locked();
+>   
+>   	if (cs->dl_bw_cpu >= 0)
+>   		dl_bw_free(cs->dl_bw_cpu, cs->sum_migrate_dl_bw);
+> @@ -3226,7 +3229,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
+>   		reset_migrate_dl_data(cs);
+>   	}
+>   
+> -	dec_attach_in_progress_locked(cs);
+> +	dec_attach_in_progress_locked();
+>   
+>   	mutex_unlock(&cpuset_mutex);
+>   }
+> @@ -3246,10 +3249,19 @@ ssize_t cpuset_write_resmask(struct kernfs_open_file *of,
+>   		return -EACCES;
+>   
+>   	buf = strstrip(buf);
+> +retry:
+> +	wait_event(cpuset_attach_wq, attach_ctx.in_progress == 0);
+> +
+>   	cpuset_full_lock();
+>   	if (!is_cpuset_online(cs))
+>   		goto out_unlock;
+>   
+> +	/* Don't race with task attach */
+> +	if (attach_ctx.in_progress) {
+> +		cpuset_full_unlock();
+> +		goto retry;
+> +	}
+> +
+>   	trialcs = dup_or_alloc_cpuset(cs);
+>   	if (!trialcs) {
+>   		retval = -ENOMEM;
+> @@ -3377,7 +3389,17 @@ static ssize_t cpuset_partition_write(struct kernfs_open_file *of, char *buf,
+>   	else
+>   		return -EINVAL;
+>   
+> +retry:
+> +	wait_event(cpuset_attach_wq, attach_ctx.in_progress == 0);
+> +
+>   	cpuset_full_lock();
+> +
+> +	/* Don't race with task attach */
+> +	if (attach_ctx.in_progress) {
+> +		cpuset_full_unlock();
+> +		goto retry;
+> +	}
+> +
 
-Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
----
- arch/riscv/kernel/mcount-dyn.S | 4 ----
- 1 file changed, 4 deletions(-)
+Would it make sense to add a helper like wait_attach_done_locked()?
 
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index 082fe0b0e3c0..26c55fba8fec 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -85,9 +85,7 @@
- 	addi	sp, sp, -FREGS_SIZE_ON_STACK
- 	REG_S	t0,  FREGS_EPC(sp)
- 	REG_S	x1,  FREGS_RA(sp)
--#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
- 	REG_S	x8,  FREGS_S0(sp)
--#endif
- 	REG_S	x6,  FREGS_T1(sp)
- #ifdef CONFIG_CC_IS_CLANG
- 	REG_S	x7,  FREGS_T2(sp)
-@@ -113,9 +111,7 @@
- 	.macro RESTORE_ABI_REGS
- 	REG_L	t0, FREGS_EPC(sp)
- 	REG_L	x1, FREGS_RA(sp)
--#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
- 	REG_L	x8, FREGS_S0(sp)
--#endif
- 	REG_L	x6,  FREGS_T1(sp)
- #ifdef CONFIG_CC_IS_CLANG
- 	REG_L	x7,  FREGS_T2(sp)
+>   	if (is_cpuset_online(cs))
+>   		retval = update_prstate(cs, val);
+>   	cpuset_update_sd_hk_unlock();
+> @@ -3616,11 +3638,7 @@ static int cpuset_can_fork(struct task_struct *task, struct css_set *cset)
+>   	if (ret)
+>   		goto out_unlock;
+>   
+> -	/*
+> -	 * Mark attach is in progress.  This makes validate_change() fail
+> -	 * changes which zero cpus/mems_allowed.
+> -	 */
+> -	cs->attach_in_progress++;
+> +	attach_ctx.in_progress++;
+>   out_unlock:
+>   	mutex_unlock(&cpuset_mutex);
+>   	return ret;
+> @@ -3638,7 +3656,7 @@ static void cpuset_cancel_fork(struct task_struct *task, struct css_set *cset)
+>   	if (same_cs)
+>   		return;
+>   
+> -	dec_attach_in_progress(cs);
+> +	dec_attach_in_progress();
+>   }
+>   
+>   /*
+> @@ -3670,7 +3688,7 @@ static void cpuset_fork(struct task_struct *task)
+>   	guarantee_online_mems(cs, &cpuset_attach_nodemask_to);
+>   	cpuset_attach_task(cs, task);
+>   
+> -	dec_attach_in_progress_locked(cs);
+> +	dec_attach_in_progress_locked();
+>   	mutex_unlock(&cpuset_mutex);
+>   }
+>   
+> @@ -3775,7 +3793,7 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
+>   	int partcmd = -1;
+>   	struct cpuset *parent;
+>   retry:
+> -	wait_event(cpuset_attach_wq, cs->attach_in_progress == 0);
+> +	wait_event(cpuset_attach_wq, attach_ctx.in_progress == 0);
+>   
+>   	mutex_lock(&cpuset_mutex);
+>   
+> @@ -3783,7 +3801,7 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
+>   	 * We have raced with task attaching. We wait until attaching
+>   	 * is finished, so we won't attach a task to an empty cpuset.
+>   	 */
+> -	if (cs->attach_in_progress) {
+> +	if (attach_ctx.in_progress) {
+>   		mutex_unlock(&cpuset_mutex);
+>   		goto retry;
+>   	}
+
 -- 
-2.43.0
+Best regards
+Ridong
+
