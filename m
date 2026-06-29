@@ -1,112 +1,76 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E4993B775E;
-	Mon, 29 Jun 2026 23:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94C53CF1FB;
+	Mon, 29 Jun 2026 23:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782776367; cv=none; b=sxpsXRFph7lLTTDH3IxGhh4bgt+eeGN/FiuYuUDdVfkBr4B1OxLfO8a9US9N1fTXumVXcppEXADkZEDMcouuB2x/1R0mS1AOFrxu/i5d59HmB3Zx4uWIVFV+QcAfz4vsZVBr7YD/FRrwGhRJ4lDf3dNX3l8+hqPplD9NpTn9iaU=
+	t=1782776546; cv=none; b=cgsEgPrGIjcV4T2zO6nRM5xVCS9P1oQ9orcSxmPqz6tKfEX7f40UIOj4M4x6CkJVTK0m0WZ9mLbAgcum7gpAx5p2QGf4MajQTGY+mnOuoi9vIVJ1VdOVYerONam8BwkJckGb7J44lWKmcA3uIF48lNXxBx0c6rIwGs7ZH/oobSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782776367; c=relaxed/simple;
-	bh=k+iYdOEYm8ajI9FFUUI9J2YdBkGW8M5C42/TMvXJXdA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M2iQ+VUvO0fAoPl7TUVm6GTS5vDhyrJzIj1LHcA40ZV3ozqPzf7Sv4PiUYjoGL0y0Olf6Oszh7tVzeTFa0OyF/rWmTbXZeJhM0M/1VUQMz5Rx6QvrFNkrRvXWFzvZmrqeaFjpue5k15HvIUpzbXQwdyz70MxCM0KLlMyVpQIT68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CtoNbnST; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782776546; c=relaxed/simple;
+	bh=76vj7y1QhK3nQwm/PBKr3J92323Kfo+S9KABwejg9Zw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=KJExTqngajr4F6nMUkl+i5RASBqVzx1RD1t9eluzGBdj7bDNPd2+tp95nsGX0+U8YzDaoJXtOHpZ0LF8iDXGHQm5S8My5hDmZVaf8vSdnRmR6ZDixcUerBzyJ4omb2ViAbb9ORy25A71QVhjrfsEpEi590jydT0lFUkdXmg1f68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=pqMC9wV/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CtoNbnST"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A30EC1F000E9;
-	Mon, 29 Jun 2026 23:39:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782776366;
-	bh=67dpFiB0kL9pIl9TBkme+FUeDED8hep10aAU/lEUSbo=;
-	h=From:To:Cc:Subject:Date;
-	b=CtoNbnSTnfabIKnUEU7HEINZIj7AXriYLm0QMB/Q4wfAVsqrnpdYeO1PmIc6Xi+oH
-	 uXeves6Bq0qoPpUOAR4eps1iheedv5tA3s0rJVuGep4UKMpboEgmCKgeuEhX7K6L/g
-	 /Row6B1TVTYZW70AwzYdZKmEeM65y5FFEifxxhByQ91NbYfhDkOQLUOVIU/BccIFaV
-	 G4XSHiCGJKe7YPOoEDF1B8qDlQn0iN4OkS4y0QLeP7at0id41QD9/Q3ZKHIJ2gO3rq
-	 R0BN4ffw/fi8RSVNkn/Qn0LQtFgJDmjRuBc92my8ItA5cjSuUrKxUwF/530YNKrxK5
-	 L+3kOpSZzJ6bQ==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
-	daniel.zahka@gmail.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net] selftests: drv-net: tso: don't touch dangerous feature bits
-Date: Mon, 29 Jun 2026 16:39:23 -0700
-Message-ID: <20260629233923.2151144-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="pqMC9wV/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D51601F000E9;
+	Mon, 29 Jun 2026 23:42:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1782776545;
+	bh=LvOP6KyTa1cQF7RqDicaH/PT+XmQi8wUo+CgFxHTDUk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=pqMC9wV/3Vm7XRL0AP/0vXNIhfNVVwi+hiUC33rtZT0VnJByFxdPl7sGZ85pHKE1f
+	 sbDErgIokbNUmPq92rH1vgCFRAbBzT8ZHcmxazXBAwc+YjbN2suKMYexFXhYEWc83Z
+	 2x8UPPTvrzQ6mQNwafNncEx7E1EXMK/Ad5WyaIMQ=
+Date: Mon, 29 Jun 2026 16:42:24 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Hongfu Li <lihongfu@kylinos.cn>
+Cc: david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, hongfu.li@linux.dev
+Subject: Re: [PATCH v7 0/5] selftests/mm: refactor pkey helpers and fix mmap
+ error handling
+Message-Id: <20260629164224.ba45dc18cdef2848950631e4@linux-foundation.org>
+In-Reply-To: <20260629103234.3240178-1-lihongfu@kylinos.cn>
+References: <20260629103234.3240178-1-lihongfu@kylinos.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-query_nic_features() detects which offloads depend on tx-gso-partial
-by enabling everything, turning tx-gso-partial off, and seeing which
-active features drop out. Enabling all hw features is dangerous:
-we may end up enabling rx-fcs and loopback for example. For the
-ice driver we end up getting into problems with feature dependencies
-so the cleanup isn't successful either, and the test exits with
-rx-fcs and loopback enabled.
+On Mon, 29 Jun 2026 18:32:29 +0800 Hongfu Li <lihongfu@kylinos.cn> wrote:
 
-Scope the feature probing just to segmentation bits.
+> The main changes in this series are to refactor shared tracing and assertion
+> helpers into a common file, unify both pkey selftests on pkey_assert() and 
+> per-test tracing for consistent diagnostics, and add missing mmap() return 
+> checks with MAP_FAILED used throughout for readability and consistency.
 
-Fixes: 266b835e5e84 ("selftests: drv-net: tso: enable test cases based on hw_features")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: shuah@kernel.org
-CC: daniel.zahka@gmail.com
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/drivers/net/hw/tso.py | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+Thanks.
 
-diff --git a/tools/testing/selftests/drivers/net/hw/tso.py b/tools/testing/selftests/drivers/net/hw/tso.py
-index 1b789fea8929..802bb4868046 100755
---- a/tools/testing/selftests/drivers/net/hw/tso.py
-+++ b/tools/testing/selftests/drivers/net/hw/tso.py
-@@ -187,28 +187,24 @@ from lib.py import bkg, cmd, defer, ethtool, ip, rand_port, wait_port_listen
-         cfg.wanted_features.add(f["name"])
- 
-     cfg.hw_features = set()
--    hw_all_features_cmd = ""
-     for f in features["hw"]["bits"]["bit"]:
-         if f.get("value", False):
--            feature = f["name"]
--            cfg.hw_features.add(feature)
--            hw_all_features_cmd += f" {feature} on"
--    try:
--        ethtool(f"-K {cfg.ifname} {hw_all_features_cmd}")
--    except Exception as e:
--        ksft_pr(f"WARNING: failure enabling all hw features: {e}")
--        ksft_pr("partial gso feature detection may be impacted")
-+            cfg.hw_features.add(f["name"])
- 
-     # Check which features are supported via GSO partial
-     cfg.partial_features = set()
-     if 'tx-gso-partial' in cfg.hw_features:
-+        seg_features = {f for f in cfg.hw_features if "segmentation" in f}
-+        ethtool(f"-K {cfg.ifname} " +
-+                " ".join(f"{f} on" for f in seg_features))
-+
-         ethtool(f"-K {cfg.ifname} tx-gso-partial off")
- 
-         no_partial = set()
-         features = cfg.ethnl.features_get({"header": {"dev-index": cfg.ifindex}})
-         for f in features["active"]["bits"]["bit"]:
-             no_partial.add(f["name"])
--        cfg.partial_features = cfg.hw_features - no_partial
-+        cfg.partial_features = seg_features - no_partial
-         ethtool(f"-K {cfg.ifname} tx-gso-partial on")
- 
-     restore_wanted_features(cfg)
--- 
-2.54.0
+>
+> ...
+> 
+>  tools/testing/selftests/mm/pkey-helpers.h     |  4 +-
+>  tools/testing/selftests/mm/pkey-powerpc.h     |  2 +-
+>  .../selftests/mm/pkey_sighandler_tests.c      | 81 ++++++++--------
+>  tools/testing/selftests/mm/pkey_util.c        | 86 +++++++++++++++++
+>  tools/testing/selftests/mm/protection_keys.c  | 95 ++-----------------
+>  5 files changed, 141 insertions(+), 127 deletions(-)
 
+Unfortunately MAINTAINERS and get_maintainer are often useless in
+selftests.  In this case, I expect the people who wrote and work on the
+pkey tests don't know that this patchset exists!
+
+Poking around with git-blame or git-log
+tools/testing/selftests/mm/pkey* will show who should be cc'ed.
+
+So can I ask that you figure that out and send out a v8?
+
+(Sashiko likes the patchset, btw)
