@@ -1,126 +1,296 @@
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013021.outbound.protection.outlook.com [40.107.159.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8E4366823;
-	Mon, 29 Jun 2026 15:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.21
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782747906; cv=fail; b=QzX+XgbW+ONAH/+2qbqLFhrWooYbslGLIiQtZ9fb1PXL/SDn3olmyysnH29EdUQSoGCOKly+SNSUjB0eGYXq+qWTmyf7WCv02OhUP9ZSDXFXt9LxbI4moXgqGj/oILX7RBrk3LqZqDaexhBjItLU/hErVuv5vjBKXIrQjOJIyqI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782747906; c=relaxed/simple;
-	bh=76IeTS1rmYVdQAbkdA+EDKcA8GG2mzuIJQ3mp6HAzj4=;
-	h=From:To:CC:Subject:In-Reply-To:References:Message-ID:Date:
-	 MIME-Version:Content-Type; b=o9AZqTzwsx11JMVWQL+Jjl6mZk8O6UWRKqzJ1a3plIJVhNUzcFlC2/Eod/kIlBFtktcn//3+PTJWsfTHE2ZeDunnbNbOf7rsONyliXoWXpB8tGfgDBdRye67Bm3aOntw1I9L1+X1xWM7eyD2zt5Qd3E03TwZ0dVgUBDGA3HFemk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=pdnRL+x/; arc=fail smtp.client-ip=40.107.159.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7A043C07D;
+	Mon, 29 Jun 2026 15:49:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782748154; cv=none; b=RTm6o9wokvPeE3rDQDYXQEKeoh9CX7fYiRl72CKBOEcWEXtzF/l57zxAtzGMhz3zkozt4wpwULPM79IO71goTGAcV4km8Utybt4iJ7wizCkKpPFM+SPQsxZS/KxmCqwmb1eKK4FGnjk1PKGY6+g69MWen0psV8BpZJwriYnlNe8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782748154; c=relaxed/simple;
+	bh=Ag/eJAqyGGN2jk5s2m6mqJmP8X5lDT8ty8B5rzYFAzk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p44q5eyIcsqR8aZRAHZmvm5q9lJXnSf+pYhKp8Tp6FrpxxrWrshLpijFW1WK9p8gtabP3Xyb1DskWgmk0jH/8+I/V1/h5MoQ+ORrS+Ja6Dr1nIsftIMazvUuWpGfnFGFryS2UqPYrG5SoPlm/A+CbqWeDs8cZI/9dO1s8N1oGp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d7uv2OAu; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="pdnRL+x/"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=V/NprQRrVFwwMUTYW04NB2EQC/QyGyKrNzY7i7LJG6BSwu9PCEJnwb039r4a3UdyEbdJ8XdMEsqESWD5093rhoUTf7tPYEaNd1SKcKb1rL1kXSXRjQ0CkbbyYpHqK8WzuFq1NLew9vMGpUWVq6970v8xIg9TtQFpiIHlC1EBFdXJ9ukdvBVdEtfGlggh5HqEO4jlmc27o661RRzldZzTTTy0onbpO1Ri44dNCQ0AFwpKnn7UJ7P7sP+R4LZgVTba+P242hbnAMaNOWW1cxBhkFCWSYNXTp0dK8QmlEBDvpMpxRH5mwtLpdp0/mdbKym9tzQgywYhb48k74KzCY0kpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ca9BcygwwZ88tsBuo9XsndLkXmww46DBP7ve9tEJkUQ=;
- b=yW7CJp6h3eOT4WKOZ6MbmhykLfwGWypRlwFxKXoFfTwiTqpPbpz6GZeCgqee4phzzL2GNbyXVvh5twViqwVTfl5NSSFF9uAxO9UHj8+8IZRxGBp0NV2QI9Ymn8Bf/dvw4EbF0bO4AI7IFFnLaaJL8lpcGh3VlWsweZ+RV1/EjCxrFQasofXeVCe1vvb6QVebbmZJFw0+ojOFJcFZaUqtnUra/5i6XH38Sv6ZUx9omFZ08MxzG4+B9J5x/woquWRl3u8pP26jvlEwL5qrcHmID70DTZ2Ztq2bnJPobixbr/Uan5/EBn1Te1sfp90FW+U9slGSVhJdQOMMt6ejHfExjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 195.60.68.100) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=axis.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ca9BcygwwZ88tsBuo9XsndLkXmww46DBP7ve9tEJkUQ=;
- b=pdnRL+x/g4tsDB5d6YwMRKlUwM9ztTQL57lrXJUSMPal/kDKmPa5cTLXSsSZe13mqWJeADTQyRoSD+J3xv931NYNo0iChOBFyi9ECI3k3UyeHkQm0/AJfwwx+/9tAm6sWr6t43EdG6TzoWJjUiZ20sgyufikabzH5ohR8f44a9U=
-Received: from DU6P191CA0026.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:53f::17)
- by GV2PR02MB9520.eurprd02.prod.outlook.com (2603:10a6:150:d7::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.19; Mon, 29 Jun
- 2026 15:44:58 +0000
-Received: from DB1PEPF000509E5.eurprd03.prod.outlook.com
- (2603:10a6:10:53f:cafe::73) by DU6P191CA0026.outlook.office365.com
- (2603:10a6:10:53f::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.159.19 via Frontend Transport; Mon,
- 29 Jun 2026 15:44:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
- smtp.mailfrom=axis.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=axis.com;
-Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
- 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
- client-ip=195.60.68.100; helo=mail.axis.com; pr=C
-Received: from mail.axis.com (195.60.68.100) by
- DB1PEPF000509E5.mail.protection.outlook.com (10.167.242.55) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.181.6 via Frontend Transport; Mon, 29 Jun 2026 15:44:58 +0000
-Received: from pc67007-2609 (10.4.0.13) by se-mail10w.axis.com (10.20.40.10)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.39; Mon, 29 Jun
- 2026 17:44:57 +0200
-From: Waqar Hameed <waqar.hameed@axis.com>
-To: Sebastian Reichel <sre@kernel.org>, Shuah Khan <shuah@kernel.org>
-CC: <kernel@axis.com>, <linux-pm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 02/10] selftests: power_supply: Add tests for load_switch ABI
-In-Reply-To: <cover.1782746851.git.waqar.hameed@axis.com>
-References: <cover.1782746851.git.waqar.hameed@axis.com>
-User-Agent: a.out
-Message-ID: <ba5b6b47c4114a183e1729f98a653fdce7abfaf4.1782746851.git.waqar.hameed@axis.com>
-Date: Mon, 29 Jun 2026 17:44:57 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d7uv2OAu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782748154; x=1814284154;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ag/eJAqyGGN2jk5s2m6mqJmP8X5lDT8ty8B5rzYFAzk=;
+  b=d7uv2OAu/LeiGU5p0gqNl3IXGjEOrvbE0mSjNSnLkKzK1eqTc72oERxB
+   kn4idgf+MqIsKi4QEsFc7LoKhq5vX08HcrP2SDUUgtIMk2AxHkM1w3cne
+   oQ4P1R5BqbKfJwmHcFtUZqX1ED7pIwWC5VXMgDcMPkDiD6UH+R2fMjYKF
+   Uea5M0Fe08Nc3YnBvICEeYcFzu+zkxMEPEYVuiGV02B6dKWerNs0HeC08
+   v+loXKxuH8tiKWfWZIbiUgsFa6xuFN70fWNNEtnJ12nw2o6rh6uU+aeRZ
+   7QpY5YSqfwjLCMej7eNlcYDvHVeOUrkOeeWVdbpOxmo9Eg1t1Rn/guvCK
+   w==;
+X-CSE-ConnectionGUID: q+4NgxrITQKIGNM1DLQGNQ==
+X-CSE-MsgGUID: 3x1S+t/rQimB8er04oY43Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11832"; a="94934703"
+X-IronPort-AV: E=Sophos;i="6.24,232,1774335600"; 
+   d="scan'208";a="94934703"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 08:49:13 -0700
+X-CSE-ConnectionGUID: O3ZfXutsRSmdIJ7hbEEtqg==
+X-CSE-MsgGUID: wti4M/4/SgWgrQDz+5m2yA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,232,1774335600"; 
+   d="scan'208";a="249364328"
+Received: from kniemiec-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.207])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 08:49:09 -0700
+Date: Mon, 29 Jun 2026 18:49:06 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Linus Walleij <linusw@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, linux-acpi@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 3/5] software node: add kunit tests for fw_devlink support
+Message-ID: <akKT8q5TjkMkZkmB@ashevche-desk.local>
+References: <20260629-swnode-fw-devlink-v1-0-b90058b41839@oss.qualcomm.com>
+ <20260629-swnode-fw-devlink-v1-3-b90058b41839@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: se-mail11w.axis.com (10.20.40.11) To se-mail10w.axis.com
- (10.20.40.10)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB1PEPF000509E5:EE_|GV2PR02MB9520:EE_
-X-MS-Office365-Filtering-Correlation-Id: f1fe2eb2-3d31-4ef8-20df-08ded5f55ff9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|82310400026|36860700016|1800799024|22082099003|18002099003|11063799006|6133799003|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	S33IH39vcfG0Csa68fKOzkg/kalyLzLGCbBNkij7wtB4CKYMAeBRWuNXM+UXK4KJ9LAUVM6wgm0KkUqXa3GLTvvCujZg/jDfZnEo2Xz3K6Zf0NzQGUGNhBjqnqSGlmrv3lUwcSQkV5vJ4TGn6wrtTHsCUBKpD+2OkUbiWqzyaFnJavk725YBPQ5Y/5llPHIbI8G29vxDWFLLRCAXI3Y3L0rIzsoeQG+LArPcniN1jPpdjXcc27KBzDzzJbR0Kd1yU2F15fYWkEjs0OCUeC16e044GFlt4voGjVXTisSCtGU+BftzYbj3rmb+GwI74fOND9DgUFaEGo6RF7ujBAd3KRANoG2keiHOCBBQS7xLpPEfWGQcFfttOZXzuNFXZtdHzCx/Jj1CII4lwfZFpN3LWEPEn5r6wHF7miencIZF9aKOGX9GnsZcLR7xyJnU02IQ5gKK20YraIGzkkMn815bBXdhV7CFMbibOXRbp8wFZzhykRt2/yJ2Th4eyOIzuibdRFH1Lfdhb/hpTIXwjwIjsy58U5ACZ5+T6p9ncquFTs5yP9kpsrQzep3kC7qBF0YOG9lOGRB0sK31OYq3pe52GB6rrKSnfqKbJ9cr13siInx9uIXnvtZKNcrbW/wy7UYsM/6ArXjKlHv+PDIlC/Pd85nt1qV8hXFko/mUoO3ty9X2z7OHxTvD3jE0I5mv5HfZJn6o2dVmJ+hb487MHha79g==
-X-Forefront-Antispam-Report:
-	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(376014)(82310400026)(36860700016)(1800799024)(22082099003)(18002099003)(11063799006)(6133799003)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	m7Qs7aDojIesgdGTtBuuRvsRothEFg96WUQPoeRNqL7sxWMh8ZAL4Z0l5Tnb3u8H7asa3+tFGz/dt+gj/P4bwxbppqgXiXAzCn05/qeC5xUIs69n44cizK1AqQfqtGeHmq6m3L8bO2EGHvBmpiHhrlrsYyMiBINJ5pW9/4jcRBOiYE8eVYpdk+6HboB4y8tWrFBjnpz3mEsiXWV+d/OSeckpnKpZFE7+CDQWf7u2MYyg5bbhTwHhp/PEEGEIJx/zBg6UtDy8GbxUmnX8E1TpM1rwnpVUGj/ms6z2pk7Hy+KZEp9jQqswZzOlkk98hBTq4m21tYSK6/US+7hRwUVMiopWHspHxVmt3qfmvKzf15O8m1VkV4iwhrEeKDHnxE0ypuSgtUj2YYO1I4B4Vp4yhISK9Ex+kcj5V8swC3ss4t/GAQg8wTCUPxVeyV8FR7hi
-X-OriginatorOrg: axis.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2026 15:44:58.6550
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1fe2eb2-3d31-4ef8-20df-08ded5f55ff9
-X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DB1PEPF000509E5.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR02MB9520
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260629-swnode-fw-devlink-v1-3-b90058b41839@oss.qualcomm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Test the different valid values for the property.
+On Mon, Jun 29, 2026 at 12:52:08PM +0200, Bartosz Golaszewski wrote:
+> Add a kunit test suite for fw_devlink support for software nodes.
+> 
+> Most cases call add_links() directly and inspect the resulting fwnode
+> supplier/consumer lists: a single reference, multiple references, a
+> reference to an unregistered node, a "remote-endpoint" reference and a
+> reference array. The last case is end-to-end - it registers real consumer
+> and supplier platform devices together with their drivers, adds the
+> consumer first and checks that fw_devlink defers its probe until the
+> supplier has been bound.
 
-Signed-off-by: Waqar Hameed <waqar.hameed@axis.com>
----
- .../selftests/power_supply/test_power_supply_properties.sh      | 2 ++
- 1 file changed, 2 insertions(+)
+...
 
-diff --git a/tools/testing/selftests/power_supply/test_power_supply_properties.sh b/tools/testing/selftests/power_supply/test_power_supply_properties.sh
-index a66b1313ed882..d3a546f95ae67 100755
---- a/tools/testing/selftests/power_supply/test_power_supply_properties.sh
-+++ b/tools/testing/selftests/power_supply/test_power_supply_properties.sh
-@@ -80,6 +80,8 @@ for DEVNAME in $supplies; do
- 
- 	test_sysfs_prop_optional_list scope "Unknown","System","Device"
- 
-+    test_sysfs_prop_optional_list load_switch "Unknown","On","Off","Standby","Ship"
-+
- 	test_sysfs_prop_optional input_current_limit "uA"
- 	test_sysfs_prop_optional input_voltage_limit "uV"
- 
+> ---
+>  drivers/base/test/Kconfig               |   5 +
+>  drivers/base/test/Makefile              |   3 +
+>  drivers/base/test/swnode-devlink-test.c | 336 ++++++++++++++++++++++++++++++++
+
++ MAINTAINERS.
+
+...
+
+
+>  CFLAGS_property-entry-test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+> +
+> +obj-$(CONFIG_DRIVER_SWNODE_KUNIT_TEST) += swnode-devlink-test.o
+> +CFLAGS_swnode-devlink-test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+
+Is it the case for this?
+
+...
+
+> +#include <linux/device.h>
+> +#include <linux/fwnode.h>
+
++ list.h
+
+> +#include <linux/platform_device.h>
+> +#include <linux/property.h>
+> +#include <linux/types.h>
+> +#include <linux/wait.h>
+
+...
+
+> +static int swnode_count_suppliers(struct fwnode_handle *fwnode)
+> +{
+> +	struct fwnode_link *link;
+> +	int ret = 0;
+
+Why signed? Also it's not 'ret' semantically it's 'count'.
+
+> +	/*
+> +	 * The suppliers and consumers lists should typically only be accessed
+> +	 * with the fwnode_link_lock taken but it's private to the driver core.
+> +	 *
+> +	 * These are tests and at this point nobody should be modifying them so
+> +	 * let's just access the list.
+> +	 */
+> +	list_for_each_entry(link, &fwnode->suppliers, c_hook)
+> +		ret++;
+> +
+> +	return ret;
+> +}
+
+...
+
+> +/* A single reference creates exactly one supplier link, on both list ends. */
+> +static void swnode_devlink_test_single_ref(struct kunit *test)
+> +{
+> +	static const struct software_node supp_swnode = {
+> +		.name = "swnode-devlink-test-supplier"
+
+Keep trailing comma.
+
+> +	};
+
+> +
+
+Redundant blank line.
+
+> +	struct fwnode_handle *cons_fwnode, *supp_fwnode;
+> +	int ret;
+> +
+> +	const struct property_entry props[] = {
+> +		PROPERTY_ENTRY_REF("supplier", &supp_swnode),
+> +		{ }
+> +	};
+> +
+> +	supp_fwnode = kunit_software_node_register(test, &supp_swnode);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, supp_fwnode);
+> +
+> +	cons_fwnode = kunit_fwnode_create_software_node(test, props, NULL);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, cons_fwnode);
+> +
+> +	ret = fwnode_call_int_op(cons_fwnode, add_links);
+> +	KUNIT_EXPECT_EQ(test, ret, 0);
+> +
+> +	KUNIT_EXPECT_EQ(test, swnode_count_suppliers(cons_fwnode), 1);
+> +	KUNIT_EXPECT_TRUE(test, swnode_has_link(cons_fwnode, supp_fwnode));
+> +}
+
+...
+
+> +/* Multiple distinct references create multiple supplier links. */
+> +static void swnode_devlink_test_multiple_refs(struct kunit *test)
+> +{
+> +	static const struct software_node supp1_swnode = {
+> +		.name = "swnode-devlink-test-supplier-1"
+
+Keep comma.
+
+> +	};
+> +	static const struct software_node supp2_swnode = {
+> +		.name = "swnode-devlink-test-supplier-2"
+
+Ditto.
+
+> +	};
+> +	static const struct software_node *supp_nodes[] = {
+> +		&supp1_swnode, &supp2_swnode, NULL
+
+Here it's fine.
+
+> +	};
+
+> +
+
+Redundant blank line.
+
+> +	const struct property_entry props[] = {
+> +		PROPERTY_ENTRY_REF("foo", &supp1_swnode),
+> +		PROPERTY_ENTRY_REF("bar", &supp2_swnode),
+> +		{ }
+> +	};
+> +
+> +	struct fwnode_handle *fwnode;
+> +	int ret;
+> +
+> +	ret = kunit_software_node_register_node_group(test, supp_nodes);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	fwnode = kunit_fwnode_create_software_node(test, props, NULL);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, fwnode);
+> +
+> +	ret = fwnode_call_int_op(fwnode, add_links);
+> +	KUNIT_EXPECT_EQ(test, ret, 0);
+> +
+> +	KUNIT_EXPECT_EQ(test, swnode_count_suppliers(fwnode), 2);
+> +	KUNIT_EXPECT_TRUE(test, swnode_has_link(fwnode, software_node_fwnode(&supp1_swnode)));
+> +	KUNIT_EXPECT_TRUE(test, swnode_has_link(fwnode, software_node_fwnode(&supp2_swnode)));
+> +}
+
+...
+
+> +static void swnode_devlink_test_unregistered_ref(struct kunit *test)
+
+Same comments as per above.
+
+...
+
+> +static void swnode_devlink_test_remote_endpoint_excluded(struct kunit *test)
+
+Ditto.
+
+...
+
+> +static void swnode_devlink_test_ref_array(struct kunit *test)
+
+Ditto.
+
+...
+
+> +#define SWNODE_DEVLINK_TEST_TIMEOUT_MS	2000
+
+(2 * MSEC_PER_SEC) ?
+(will require time.h).
+
+...
+
+> +static int swnode_test_record_probe(struct platform_device *pdev)
+> +{
+> +	struct swnode_test_probe_order *order = platform_get_drvdata(pdev);
+> +
+> +	if (order && order->count < ARRAY_SIZE(order->probed)) {
+
++ array_size.h
+
+> +		order->probed[order->count++] = dev_name(&pdev->dev);
+> +		wake_up_interruptible(&order->wq);
+> +	}
+> +
+> +	return 0;
+> +}
+
+...
+
+> +static void swnode_devlink_test_probe_order(struct kunit *test)
+
+As per above comments.
+
+...
+
+> +static struct kunit_suite swnode_test_suite = {
+> +	.name = "software-node-links",
+> +	.test_cases = swnode_test_cases,
+> +};
+
+> +
+
+Redundant blank line.
+
+> +kunit_test_suite(swnode_test_suite);
+
 -- 
-2.43.0
+With Best Regards,
+Andy Shevchenko
+
 
