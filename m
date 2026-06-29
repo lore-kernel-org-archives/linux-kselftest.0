@@ -1,174 +1,283 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EEE93C1984
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 07:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B303CFF58;
+	Mon, 29 Jun 2026 07:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782717400; cv=none; b=Yw1Ny6kZ7K/pzWtfKEzkEKr7iRBulHByF33d2MR6zDL9imZ1tzQOVsnZP1rmk4e6Y/OKi8N3hlzjbqThp6pVt2oMjaKeB80a9fafOKxmK7WMIOA+WWvuqydkLE6LUPnKcZMFRM1Ciyox0Bv0689ShtIYn1UEwZ4ac3TsAnA7Q5Q=
+	t=1782718109; cv=none; b=pXl35GdWs+WwMs2f402EQwA9M7wk8xrYHb9QXUvNkzfLEOzklUH5nCKINOidTaIUYmJlhoLlTnQhYtu2HyijW5stamCNDRIoqJ/p8TVDl+yBl8xTOoysb6Xxj9huscTDJMd+y/kuFwd+vqSk71yVVPVmHPh+DrYx1XIlqTrVimU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782717400; c=relaxed/simple;
-	bh=irI66T1YvoEyiRNdxiF39BA6qTdeYPFLhfyWCNHKzf4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZLsvsygD1EkjWo8VrtNF32rG69kXmz4zIYt9glQ9A9pn1tCTSd7TeclB0a9Ht+NYlerTNWj6TLmsESJchRBU5MiHeYKlCQXgMzvPtxhTWtWQhFWEFE3rwYqnB7giYnU405NAq8xGoZ3jwxpDXVg+oJHizUc6QVTkIAgI1MhGjZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KqLs4GIN; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782718109; c=relaxed/simple;
+	bh=mPs9vQQPcVELk+RDxwTkbDt8rSkSxrOkAReJFhYrAAE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=N4ZxEBrCMwiGqEZ89AY+NeNPlaybAP4fmqMTXYeXh2lSxF4tD5ptME8AQtRhzrJQq+V5XtzWQb9jgUcxosNNQAMzatdBtw02T4dOuaBYqvxuKKjXlA+VGB7g02C6TgM6JScjrSwVkBzC6GZwcT1JrZO5oydO/zXaVJFw96Ynt/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=pJzpYRYW; arc=none smtp.client-ip=115.124.30.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KqLs4GIN"
-Message-ID: <a37d6336-8f67-405c-b6fa-796a4348d676@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782717393;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rYt6huZCPhtTAV11Wes2eBLleTRAaiagsI+kEZZZ7uo=;
-	b=KqLs4GINfOWotsKpxzl4TsSwhRaykiaiFiOiWxJmMxU+c/7vD8iiSbWzpDVeygnefz0uuE
-	P8N+nMRY27BdUvpb8E0vhuXqcXjuVcqTkVHFAN4aB74nTde3+pz2W0alZchB5WuXE+0T71
-	d8Ocf3fViOPiaDyIt3TkGI/HAMWs9gU=
-Date: Mon, 29 Jun 2026 15:16:04 +0800
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="pJzpYRYW"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1782718101; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=pw2kzY2F6KU+khx86jC+uRtX2TajkZSRy94F+JyoD3I=;
+	b=pJzpYRYWZOI2F0Rd71CKVV2P/61ASKHwYkMhpwXAicQMXczxI6naMDQgXq861JPDqZ7rut2gAY++MPX11gyKXiHZzzLnr03E8dR5z/4giejDiD5ym3BTnKrjDESN3OgvXGQWX8Ykb7+Mh7/dq3KfZhGij7ha9KRXh1RJTKUgzEE=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X5oo1Go_1782718097;
+Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X5oo1Go_1782718097 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 29 Jun 2026 15:28:19 +0800
+From: Wang Han <wanghan@linux.alibaba.com>
+To: Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexandre Ghiti <alex@ghiti.fr>,
+	linux-riscv@lists.infradead.org,
+	Oleg Nesterov <oleg@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	oliver.yang@linux.alibaba.com,
+	xueshuai@linux.alibaba.com,
+	zhuo.song@linux.alibaba.com,
+	jkchen@linux.alibaba.com,
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 RESEND 0/7] riscv: Add reliable stack unwinding for livepatch
+Date: Mon, 29 Jun 2026 15:27:06 +0800
+Message-ID: <20260629072713.3273743-1-wanghan@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v8 04/11] cgroup/cpuset: Put all task attach related
- variables into attach_ctx
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Farhad Alemi <farhad.alemi@berkeley.edu>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
- Guopeng Zhang <guopeng.zhang@linux.dev>, Gregory Price <gourry@gourry.net>,
- David Hildenbrand <david@kernel.org>
-References: <20260626181923.133658-1-longman@redhat.com>
- <20260626181923.133658-5-longman@redhat.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <20260626181923.133658-5-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+Hi,
 
+Sorry for the noise and inconvenience caused by the previous unthreaded
+v4 submission.
 
-On 6/27/2026 2:19 AM, Waiman Long wrote:
-> Put the task attach related cpuset_attach_old_cs and
-> cpuset_attach_nodemask_to static variables into the new attach_ctx
-> structure to improve readability and ease maintanence.
-> 
-> No functional change is expected.
-> 
-> Suggested-by: Ridong Chen <ridong.chen@linux.dev>
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->   kernel/cgroup/cpuset.c | 21 ++++++++++-----------
->   1 file changed, 10 insertions(+), 11 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index dec9785d0271..1f31f340e0ec 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -362,6 +362,8 @@ static DECLARE_WAIT_QUEUE_HEAD(cpuset_attach_wq);
->    */
->   static struct {
->   	int in_progress;
-> +	struct cpuset *old_cs;	/* Source cpuset */
-> +	nodemask_t nodemask_to;
->   } attach_ctx;
->   
->   static inline void check_insane_mems_config(nodemask_t *nodes)
-> @@ -2996,8 +2998,6 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->   	return 0;
->   }
->   
-> -static struct cpuset *cpuset_attach_old_cs;
-> -
->   /*
->    * Check to see if a cpuset can accept a new task
->    * For v1, cpus_allowed and mems_allowed can't be empty.
-> @@ -3029,8 +3029,8 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
->   	int cpu, ret;
->   
->   	/* used later by cpuset_attach() */
-> -	cpuset_attach_old_cs = task_cs(cgroup_taskset_first(tset, &css));
-> -	oldcs = cpuset_attach_old_cs;
-> +	attach_ctx.old_cs = task_cs(cgroup_taskset_first(tset, &css));
-> +	oldcs = attach_ctx.old_cs;
->   	cs = css_cs(css);
->   
->   	mutex_lock(&cpuset_mutex);
-> @@ -3133,7 +3133,6 @@ static void cpuset_cancel_attach(struct cgroup_taskset *tset)
->    * allocate from cpuset_init().
->    */
->   static cpumask_var_t cpus_attach;
-> -static nodemask_t cpuset_attach_nodemask_to;
->   
->   static void cpuset_attach_task(struct cpuset *cs, struct task_struct *task)
->   {
-> @@ -3150,7 +3149,7 @@ static void cpuset_attach_task(struct cpuset *cs, struct task_struct *task)
->   	 */
->   	WARN_ON_ONCE(set_cpus_allowed_ptr(task, cpus_attach));
->   
-> -	cpuset_change_task_nodemask(task, &cpuset_attach_nodemask_to);
-> +	cpuset_change_task_nodemask(task, &attach_ctx.nodemask_to);
->   	cpuset1_update_task_spread_flags(cs, task);
->   }
->   
-> @@ -3160,7 +3159,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
->   	struct task_struct *leader;
->   	struct cgroup_subsys_state *css;
->   	struct cpuset *cs;
-> -	struct cpuset *oldcs = cpuset_attach_old_cs;
-> +	struct cpuset *oldcs = attach_ctx.old_cs;
->   	bool cpus_updated, mems_updated;
->   	bool queue_task_work = false;
->   
-> @@ -3172,7 +3171,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
->   	cpus_updated = !cpumask_equal(cs->effective_cpus,
->   				      oldcs->effective_cpus);
->   	mems_updated = !nodes_equal(cs->effective_mems, oldcs->effective_mems);
-> -	guarantee_online_mems(cs, &cpuset_attach_nodemask_to);
-> +	guarantee_online_mems(cs, &attach_ctx.nodemask_to);
->   
->   	/*
->   	 * In the default hierarchy, enabling cpuset in the child cgroups
-> @@ -3211,7 +3210,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
->   			 */
->   			if (is_memory_migrate(cs)) {
->   				cpuset_migrate_mm(mm, &oldcs->old_mems_allowed,
-> -						  &cpuset_attach_nodemask_to);
-> +						  &attach_ctx.nodemask_to);
->   				queue_task_work = true;
->   			} else
->   				mmput(mm);
-> @@ -3221,7 +3220,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
->   out:
->   	if (queue_task_work)
->   		schedule_flush_migrate_mm();
-> -	cs->old_mems_allowed = cpuset_attach_nodemask_to;
-> +	cs->old_mems_allowed = attach_ctx.nodemask_to;
->   
->   	if (cs->nr_migrate_dl_tasks) {
->   		cs->nr_deadline_tasks += cs->nr_migrate_dl_tasks;
-> @@ -3685,7 +3684,7 @@ static void cpuset_fork(struct task_struct *task)
->   
->   	/* CLONE_INTO_CGROUP */
->   	mutex_lock(&cpuset_mutex);
-> -	guarantee_online_mems(cs, &cpuset_attach_nodemask_to);
-> +	guarantee_online_mems(cs, &attach_ctx.nodemask_to);
->   	cpuset_attach_task(cs, task);
->   
->   	dec_attach_in_progress_locked();
+This is a resend of v4 only to fix mail threading. The patch contents
+are unchanged from the previous v4.
 
-LGTM.
+Previous unthreaded v4:
+  https://lore.kernel.org/r/20260629064228.3195856-1-wanghan@linux.alibaba.com
 
-Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+This series adds the RISC-V architecture pieces needed by livepatch:
+dynamic ftrace must preserve the frame pointer context that livepatch
+uses for redirection, and the stack unwinder must be reliable enough for
+the livepatch consistency model.
 
+The reliable unwinder is based on frame records and explicit metadata at
+task and exception boundaries. It is intentionally conservative: it
+rejects ambiguous states instead of trying to unwind through them. The
+series then enables HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH for
+64-bit RISC-V with dynamic ftrace.
+
+The first patch from v3, "scripts/sorttable: Handle RISC-V patchable
+ftrace entries", has been picked up by Paul and is already present in
+riscv/for-next as commit 57ad674d032b. It is therefore dropped from this
+v4. The remaining patches are rebased on the latest riscv/for-next.
+
+Base:
+  riscv/for-next 798246e5edfb ("riscv: acpi: Enable ARCH_HAS_ACPI_TABLE_UPGRADE")
+
+Previous versions:
+  v3: https://lore.kernel.org/r/cover.194d76e3a15b.v3.riscv-livepatch.wanghan@linux.alibaba.com
+  v2: https://lore.kernel.org/r/20260528082310.1994388-1-wanghan@linux.alibaba.com
+  v1: https://lore.kernel.org/r/20260527123530.2593918-1-wanghan@linux.alibaba.com
+
+Changes since v3:
+  * Drop the accepted sorttable fix, now commit 57ad674d032b in
+    riscv/for-next.
+  * Rebase the remaining 7 patches on the latest riscv/for-next.
+  * Adapt the frame metadata patch to the existing call_on_irq_stack()
+    RV32 frame-pointer ABI fix by keeping metadata frame-record offsets
+    distinct from the s0-relative STACKFRAME_* offsets.
+  * Adapt the livepatch syscall selftest prefix change to the current
+    CONFIG_ARCH_HAS_SYSCALL_WRAPPER wrapper logic.
+
+Validation:
+  * Built with riscv64-unknown-linux-gnu-gcc 15.2.0 and the existing
+    configs/riscv_livepatch_config, including RISCV_ISA_C=y, EFI=y and
+    ACPI=y.
+  * make -C linux O=$PWD/build/linux/riscv ARCH=riscv \
+      CROSS_COMPILE=riscv64-unknown-linux-gnu- -j$(nproc) Image modules
+    passed.
+  * make kernel-debug ARCH=riscv GDB=riscv64-unknown-linux-gnu-gdb
+    passed.
+  * livepatch selftest modules built successfully via ./test-livepatch.sh
+    riscv.
+  * QEMU RISC-V livepatch selftests passed with PASS: 7, SKIP: 1,
+    FAIL: 0. The only skip is test-kprobe.sh because this config does
+    not enable CONFIG_KPROBES_ON_FTRACE.
+  * The ftrace function graph subset passed with 3 passed, 0 failed and
+    3 unsupported tests.
+
+Wang Han (7):
+  riscv: stacktrace: Add frame record metadata
+  riscv: stacktrace: disable KASAN and KCOV instrumentation for
+    stacktrace.o
+  riscv: ftrace: always preserve s0 in dynamic ftrace register frame
+  riscv: stacktrace: introduce stack-bound tracking helpers
+  riscv: stacktrace: switch to frame-pointer based unwinder
+  riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
+  selftests/livepatch: Add RISC-V syscall wrapper prefix
+
+ arch/riscv/Kconfig                            |   4 +
+ arch/riscv/include/asm/ptrace.h               |   9 +
+ arch/riscv/include/asm/stacktrace.h           |  65 +-
+ arch/riscv/include/asm/stacktrace/common.h    | 159 +++++
+ arch/riscv/include/asm/stacktrace/frame.h     |  53 ++
+ arch/riscv/kernel/Makefile                    |   6 +
+ arch/riscv/kernel/asm-offsets.c               |   6 +
+ arch/riscv/kernel/entry.S                     |  39 +-
+ arch/riscv/kernel/ftrace.c                    |   6 +-
+ arch/riscv/kernel/head.S                      |  23 +
+ arch/riscv/kernel/mcount-dyn.S                |   4 -
+ arch/riscv/kernel/perf_callchain.c            |   2 +-
+ arch/riscv/kernel/process.c                   |  33 +-
+ arch/riscv/kernel/stacktrace.c                | 559 +++++++++++++++---
+ .../livepatch/test_modules/test_klp_syscall.c |   2 +
+ 15 files changed, 864 insertions(+), 106 deletions(-)
+ create mode 100644 arch/riscv/include/asm/stacktrace/common.h
+ create mode 100644 arch/riscv/include/asm/stacktrace/frame.h
+
+Range-diff against v3:
+1:  8cef363cfed7 ! 1:  efd99ce56c1e riscv: stacktrace: Add frame record metadata
+    @@ Commit message
+             the secondary CPU path sets up s0 before smp_callin() so idle-task
+             unwinding does not inherit an undefined caller frame;
+           * copy_thread creates matching final metadata records for new kernel
+    -        and user tasks, and keeps s0 available for the frame-pointer chain;
+    -      * call_on_irq_stack still reserves an aligned stack slot, but links the
+    -        saved {fp, ra} with the raw frame-record size so s0 points at the
+    -        RISC-V frame record rather than past the alignment padding.
+    +        and user tasks, and keeps s0 available for the frame-pointer chain.
+     
+    -    The call_on_irq_stack adjustment fixes a latent RV32 issue. On RV64,
+    -    sizeof(struct stackframe) is equal to the stack alignment, so the old
+    -    s0 value happened to point just above the saved {fp, ra}. On RV32, the
+    -    raw frame record is 8 bytes while the reserved stack slot is 16-byte
+    -    aligned, so the old s0 value pointed into the padding. Using the raw
+    -    record size makes s0 point above the saved frame record on both RV32
+    -    and RV64 while still reserving the aligned slot.
+    +    Keep the embedded metadata-record field offsets distinct from the
+    +    s0-relative STACKFRAME_* offsets used by call_on_irq_stack(), because
+    +    the latter describe a frame record relative to s0 rather than to the
+    +    record base.
+     
+         These changes keep s0 reserved for the frame-pointer chain at task and
+    -    stack-switch boundaries.
+    +    exception boundaries.
+     
+         Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
+     
+    @@ arch/riscv/kernel/asm-offsets.c: void asm_offsets(void)
+      
+      	OFFSET(HIBERN_PBE_ADDR, pbe, address);
+     @@ arch/riscv/kernel/asm-offsets.c: void asm_offsets(void)
+    - 	OFFSET(SBI_HART_BOOT_STACK_PTR_OFFSET, sbi_hart_boot_data, stack_ptr);
+    - 
+      	DEFINE(STACKFRAME_SIZE_ON_STACK, ALIGN(sizeof(struct stackframe), STACK_ALIGN));
+    + 	DEFINE(STACKFRAME_FP, offsetof(struct stackframe, fp) - sizeof(struct stackframe));
+    + 	DEFINE(STACKFRAME_RA, offsetof(struct stackframe, ra) - sizeof(struct stackframe));
+     +	DEFINE(STACKFRAME_RECORD_SIZE, sizeof(struct stackframe));
+    - 	OFFSET(STACKFRAME_FP, stackframe, fp);
+    - 	OFFSET(STACKFRAME_RA, stackframe, ra);
+    ++	OFFSET(FRAME_RECORD_FP, frame_record, fp);
+    ++	OFFSET(FRAME_RECORD_RA, frame_record, ra);
+      #ifdef CONFIG_FUNCTION_TRACER
+    + 	DEFINE(FTRACE_OPS_FUNC,		offsetof(struct ftrace_ops, func));
+    + #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+     
+      ## arch/riscv/kernel/entry.S ##
+     @@
+    @@ arch/riscv/kernel/entry.S: SYM_CODE_START(handle_exception)
+     +	 * Create a metadata frame record. The unwinder will use this to
+     +	 * identify and unwind exception boundaries.
+     +	 */
+    -+	REG_S zero, (S_STACKFRAME + STACKFRAME_FP)(sp) /* stackframe.record.fp = 0 */
+    -+	REG_S zero, (S_STACKFRAME + STACKFRAME_RA)(sp) /* stackframe.record.ra = 0 */
+    ++	REG_S zero, (S_STACKFRAME + FRAME_RECORD_FP)(sp) /* stackframe.record.fp = 0 */
+    ++	REG_S zero, (S_STACKFRAME + FRAME_RECORD_RA)(sp) /* stackframe.record.ra = 0 */
+     +#ifdef CONFIG_RISCV_M_MODE
+     +	li t0, SR_MPP
+     +	and t0, s1, t0
+    @@ arch/riscv/kernel/entry.S: SYM_CODE_START_LOCAL(handle_kernel_stack_overflow)
+     +	 * pt_regs boundary and the unwinder can resume from the pre-overflow
+     +	 * frame pointer saved in PT_S0.
+     +	 */
+    -+	REG_S zero, (S_STACKFRAME + STACKFRAME_FP)(sp)
+    -+	REG_S zero, (S_STACKFRAME + STACKFRAME_RA)(sp)
+    ++	REG_S zero, (S_STACKFRAME + FRAME_RECORD_FP)(sp)
+    ++	REG_S zero, (S_STACKFRAME + FRAME_RECORD_RA)(sp)
+     +	li t0, FRAME_META_TYPE_PT_REGS
+     +	REG_S t0, S_STACKFRAME_TYPE(sp)
+     +	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
+    @@ arch/riscv/kernel/entry.S: ASM_NOKPROBE(handle_kernel_stack_overflow)
+      	move a2, sp /* pt_regs */
+      	call ret_from_fork_kernel
+      	j ret_from_exception
+    -@@ arch/riscv/kernel/entry.S: SYM_FUNC_START(call_on_irq_stack)
+    - 	addi	sp, sp, -STACKFRAME_SIZE_ON_STACK
+    - 	REG_S	ra, STACKFRAME_RA(sp)
+    - 	REG_S	s0, STACKFRAME_FP(sp)
+    --	addi	s0, sp, STACKFRAME_SIZE_ON_STACK
+    -+	addi	s0, sp, STACKFRAME_RECORD_SIZE
+    - 
+    - 	/* Switch to the per-CPU shadow call stack */
+    - 	scs_save_current
+    -@@ arch/riscv/kernel/entry.S: SYM_FUNC_START(call_on_irq_stack)
+    - 	scs_load_current
+    - 
+    - 	/* Switch back to the thread stack and restore ra and s0 */
+    --	addi	sp, s0, -STACKFRAME_SIZE_ON_STACK
+    -+	addi	sp, s0, -STACKFRAME_RECORD_SIZE
+    - 	REG_L	ra, STACKFRAME_RA(sp)
+    - 	REG_L	s0, STACKFRAME_FP(sp)
+    - 	addi	sp, sp, STACKFRAME_SIZE_ON_STACK
+     
+      ## arch/riscv/kernel/head.S ##
+     @@
+    @@ arch/riscv/kernel/head.S: SYM_CODE_START(_start_kernel)
+     +	 * fp/s0 points above the metadata record (RISC-V
+     +	 * convention).
+     +	 */
+    -+	REG_S zero, (S_STACKFRAME + STACKFRAME_FP)(sp)
+    -+	REG_S zero, (S_STACKFRAME + STACKFRAME_RA)(sp)
+    ++	REG_S zero, (S_STACKFRAME + FRAME_RECORD_FP)(sp)
+    ++	REG_S zero, (S_STACKFRAME + FRAME_RECORD_RA)(sp)
+     +	li t0, FRAME_META_TYPE_FINAL
+     +	REG_S t0, S_STACKFRAME_TYPE(sp)
+     +	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
+2:  237864b66d78 = 2:  bc0af8ec1976 riscv: stacktrace: disable KASAN and KCOV instrumentation for stacktrace.o
+3:  e6035966a35a = 3:  ab3fbed66fff riscv: ftrace: always preserve s0 in dynamic ftrace register frame
+4:  d132087ea01e = 4:  856d1e31408a riscv: stacktrace: introduce stack-bound tracking helpers
+5:  02adea3ece82 = 5:  58aa4435e2ee riscv: stacktrace: switch to frame-pointer based unwinder
+6:  c7d7dbe7a8a1 = 6:  500f9d9eeac0 riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
+7:  ae94a234b34a < -:  ------------ selftests/livepatch: Add RISC-V syscall wrapper prefix
+-:  ------------ > 7:  3dcfa694c207 selftests/livepatch: Add RISC-V syscall wrapper prefix
+
+base-commit: 798246e5edfb3aa0b2d6dca46f41014d0b99b209
 -- 
-Best regards
-Ridong
-
+2.43.0
