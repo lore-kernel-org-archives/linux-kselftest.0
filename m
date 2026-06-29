@@ -1,76 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94C53CF1FB;
-	Mon, 29 Jun 2026 23:42:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5921315D53;
+	Mon, 29 Jun 2026 23:44:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782776546; cv=none; b=cgsEgPrGIjcV4T2zO6nRM5xVCS9P1oQ9orcSxmPqz6tKfEX7f40UIOj4M4x6CkJVTK0m0WZ9mLbAgcum7gpAx5p2QGf4MajQTGY+mnOuoi9vIVJ1VdOVYerONam8BwkJckGb7J44lWKmcA3uIF48lNXxBx0c6rIwGs7ZH/oobSY=
+	t=1782776642; cv=none; b=uC31KNvg1Yt7LdQDscI1nOhkHuDeopvC7ErBb9Qo6lhVX3zruyB9bTji1InmXn5XnN4Kcu6Fwy/woTAAXQs6yZIx0G3Jr4/XlTi7v21Nqq8CYuOZnI8l0ptkw3KmqkjmoWpdsRJ0ycDR3io5ZdoSQQpUrCkAVdWcNmwEINbZXtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782776546; c=relaxed/simple;
-	bh=76vj7y1QhK3nQwm/PBKr3J92323Kfo+S9KABwejg9Zw=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=KJExTqngajr4F6nMUkl+i5RASBqVzx1RD1t9eluzGBdj7bDNPd2+tp95nsGX0+U8YzDaoJXtOHpZ0LF8iDXGHQm5S8My5hDmZVaf8vSdnRmR6ZDixcUerBzyJ4omb2ViAbb9ORy25A71QVhjrfsEpEi590jydT0lFUkdXmg1f68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=pqMC9wV/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782776642; c=relaxed/simple;
+	bh=GuvpCbu50DBNfx8I8chhCLKBnTpo0Ix0KPThigpcnZI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VpD554Cu+soK7qCRTuK0dBFsrHSCQgh/7Q+7RNxMJkjMI1bhtdqvbO63iQ972TTtI5m8AcK4TLN/iJN5Mi72v593bzk7Pxhq1KQxbpsdfCns5c2Dik1MWEBwEt0lteL0a0aOcG2goOKqQEVqYV/BJrXeTN0mupzYMczBE6AYVeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ljZD2O29; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="pqMC9wV/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D51601F000E9;
-	Mon, 29 Jun 2026 23:42:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1782776545;
-	bh=LvOP6KyTa1cQF7RqDicaH/PT+XmQi8wUo+CgFxHTDUk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=pqMC9wV/3Vm7XRL0AP/0vXNIhfNVVwi+hiUC33rtZT0VnJByFxdPl7sGZ85pHKE1f
-	 sbDErgIokbNUmPq92rH1vgCFRAbBzT8ZHcmxazXBAwc+YjbN2suKMYexFXhYEWc83Z
-	 2x8UPPTvrzQ6mQNwafNncEx7E1EXMK/Ad5WyaIMQ=
-Date: Mon, 29 Jun 2026 16:42:24 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Hongfu Li <lihongfu@kylinos.cn>
-Cc: david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, hongfu.li@linux.dev
-Subject: Re: [PATCH v7 0/5] selftests/mm: refactor pkey helpers and fix mmap
- error handling
-Message-Id: <20260629164224.ba45dc18cdef2848950631e4@linux-foundation.org>
-In-Reply-To: <20260629103234.3240178-1-lihongfu@kylinos.cn>
-References: <20260629103234.3240178-1-lihongfu@kylinos.cn>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ljZD2O29"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED0701F000E9;
+	Mon, 29 Jun 2026 23:44:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782776641;
+	bh=cCu28Oqp3v+nkAEEj0O7HDK4BbeHiWvXWR/C++HBTO8=;
+	h=From:To:Cc:Subject:Date;
+	b=ljZD2O29pLci+XtGOGvPK0tgdYPShCqJDiDbo7f5LQxgZBIBuUMYpjSHZZ/0RFX5B
+	 uyOcSM8vsA57rAR6XvkR8u7eTPqyq80eV0EdM9GbHEThbSYdn3JOQEuC3Qhkd4d1gw
+	 z/iJo1ylbTvdiXpZbAQ8H6lGTVUe8yxf82kNwCgIKVS7BJEJk0vralWLS9AsKUiAyd
+	 JJjFoa6BSTWRMHwrwH3IWPTS21cJtyx05LF4CotbD9Q11KmHwJflWwxAXWRwNS/SdS
+	 DjkkSUVMoQBRUyhWVGOXvC7fZr9Ru465YCobSUaa18U4p9NYyq5bjPGPAxm8nu6JSV
+	 PTKlrrnmefXVA==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	shuah@kernel.org,
+	willemb@google.com,
+	noren@nvidia.com,
+	gal@nvidia.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: drv-net: toeplitz: cap the Rx queue count
+Date: Mon, 29 Jun 2026 16:43:53 -0700
+Message-ID: <20260629234354.2154541-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 29 Jun 2026 18:32:29 +0800 Hongfu Li <lihongfu@kylinos.cn> wrote:
+The RPS test needs a free CPU within the first RPS_MAX_CPUS (16)
+cores. This is easily violated if the NIC or env allocates the
+IRQs to cores linearly.
 
-> The main changes in this series are to refactor shared tracing and assertion
-> helpers into a common file, unify both pkey selftests on pkey_assert() and 
-> per-test tracing for consistent diagnostics, and add missing mmap() return 
-> checks with MAP_FAILED used throughout for readability and consistency.
+Cap the Rx queues at 8, we don't need more. This makes the test
+pass on CX7 in NIPA.
 
-Thanks.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: shuah@kernel.org
+CC: willemb@google.com
+CC: noren@nvidia.com
+CC: gal@nvidia.com
+CC: linux-kselftest@vger.kernel.org
+---
+ .../selftests/drivers/net/hw/toeplitz.py      | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
->
-> ...
-> 
->  tools/testing/selftests/mm/pkey-helpers.h     |  4 +-
->  tools/testing/selftests/mm/pkey-powerpc.h     |  2 +-
->  .../selftests/mm/pkey_sighandler_tests.c      | 81 ++++++++--------
->  tools/testing/selftests/mm/pkey_util.c        | 86 +++++++++++++++++
->  tools/testing/selftests/mm/protection_keys.c  | 95 ++-----------------
->  5 files changed, 141 insertions(+), 127 deletions(-)
+diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.py b/tools/testing/selftests/drivers/net/hw/toeplitz.py
+index cd7e080e6f84..571732198b93 100755
+--- a/tools/testing/selftests/drivers/net/hw/toeplitz.py
++++ b/tools/testing/selftests/drivers/net/hw/toeplitz.py
+@@ -21,6 +21,8 @@ from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx, KsftFailEx
+ ETH_RSS_HASH_TOP = 1
+ # Must match RPS_MAX_CPUS in toeplitz.c
+ RPS_MAX_CPUS = 16
++# Cap Rx queues so IRQ pinning leaves free CPUs in the RPS_MAX_CPUS range
++QUEUE_CAP = 8
+ 
+ 
+ def _check_rps_and_rfs_not_configured(cfg):
+@@ -48,6 +50,25 @@ RPS_MAX_CPUS = 16
+         return int(data)
+ 
+ 
++def _cap_queue_count(cfg):
++    ehdr = {"header": {"dev-index": cfg.ifindex}}
++    chans = cfg.ethnl.channels_get(ehdr)
++
++    config = {}
++    restore = {}
++    for key in ("combined-count", "rx-count"):
++        cur = chans.get(key, 0)
++        if cur > QUEUE_CAP:
++            config[key] = QUEUE_CAP
++            restore[key] = cur
++
++    if not config:
++        return
++
++    cfg.ethnl.channels_set(ehdr | config)
++    defer(cfg.ethnl.channels_set, ehdr | restore)
++
++
+ def _get_irq_cpus(cfg):
+     """
+     Read the list of IRQs for the device Rx queues.
+@@ -177,6 +198,7 @@ RPS_MAX_CPUS = 16
+     ]
+ 
+     if grp:
++        _cap_queue_count(cfg)
+         _check_rps_and_rfs_not_configured(cfg)
+     if grp == "rss":
+         irq_cpus = ",".join([str(x) for x in _get_irq_cpus(cfg)])
+-- 
+2.54.0
 
-Unfortunately MAINTAINERS and get_maintainer are often useless in
-selftests.  In this case, I expect the people who wrote and work on the
-pkey tests don't know that this patchset exists!
-
-Poking around with git-blame or git-log
-tools/testing/selftests/mm/pkey* will show who should be cc'ed.
-
-So can I ask that you figure that out and send out a v8?
-
-(Sashiko likes the patchset, btw)
