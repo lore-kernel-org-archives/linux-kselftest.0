@@ -1,307 +1,310 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8813D32AAC5
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 18:13:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC6D387347
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 18:22:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782756790; cv=pass; b=pm1tX6pJPgcshJ0Z9nUrPGr/L55++K73Ox4WhV6xJeAKiBjGwQ4P1Oni+Et4bxqJ2bEFSL0yQo2x2VTQp/Ga+rCZmn3KyOS5QUYZ/ZHGVTEBA6LpFp3ORK8vDdcaGvFw23kAU9dds+o/gIkuGb5B5pXfR8AZWBQRbKMkJfURzI0=
+	t=1782757328; cv=pass; b=PVTqAQz9Yo2c50X1jIyIy0zJLYOFiTri8SBroOaDZNT+YCThThuhBgjOMJyHYBhHTpB+mjuAMJul8lgstC3RY0JhZ8ExHyX32qsT9ryLh6SrgsApjUKxAKetMqKSJGHpxWFl1FuPQ3P+Qf9qgQ8Fuk6eaO4HLhzHHQo6rhDafcs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782756790; c=relaxed/simple;
-	bh=YsBJ5rLzCHNROrpoUXAG2+olo/jg6vCTJlr1rdi8LKo=;
+	s=arc-20240116; t=1782757328; c=relaxed/simple;
+	bh=rTCC+Q2QI/RNZdcYErq5nB4Tg1Xxg7Ybj1fhnVetaOY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z6lo3bylONKltWwIu0LW4frEfuP2JN3KgGATSedViIdLMMcQhNHNzXdWsw5XW3SJWEQM8VWN1xfGCb2pXwobXFKCBpFr/V4BMdJBdHBm5eOHYn2Omjo36SamL3NKrYik3p0HFmDButqM+xjVWoQ144j+7glGkwc/ubdSvOUXx0g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r3ngRI7J; arc=pass smtp.client-ip=209.85.128.169
+	 To:Cc:Content-Type; b=iRLtq7dFHYBY19chKZ0YbFbB0XSH06yvmYWEzTtRhWQAmM7q0uf5g3T9s3v8P/z+NTFDP6KKXLPGR8LYzm+tZoyYazZPyLO40+7T120lqC7c7aX5BEy/qWhvk/sMmoLNkS6CGleSku5TMzuZ2aUEMZ5rmA1EGnZGuXsj9A2a9fQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZVlrTnH; arc=pass smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r3ngRI7J"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-80a123ef90aso41010157b3.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 11:13:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782756787; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZVlrTnH"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-47231f1f8f3so2815626f8f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 11:22:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782757321; cv=none;
         d=google.com; s=arc-20260327;
-        b=ELmTU7a1Ys8Ob0Nz/JkXWWuOcxpR8jcQPNOAmZEFJGau0GJ9cL9xtbTS6QlbH9Fz8j
-         YKuI1i8XX60vqY2fqwyu4ea9JgImAPhoe0yD9ajdEKCNpQVDy+rNqURuSx6diB7swEKS
-         NPnVnn+6wjL6BhLP5E9jubaP3TVbY8aybtBfAofbfTgfFoIynutXRpJWA0HaaWdc6CMW
-         9JudUAIji+JND9nafCjvYbxv48CJphKFxlRo9cmaWL+WdLCOF0HmeH7HFEj/lPumbixs
-         L4xB5GfjVMMRxwCeOmTWDteoOShPgjncjYcdTI3j9cXzhFss9gKAHwDv16qPX2YtZX2o
-         RGdg==
+        b=pBb3meHmuZOYWnotb7on+0uCOELFNU8CDpp5mQ2jQQ7fRgK/vZdp+JuQwsg3qRV0Al
+         2oz71P9o1Zr4vQz4gzfkSv2fo0UGgZ8ca3KLP1jzVBv73GfXw+Vp4uINfSUVNGE72K+c
+         QEGGFMGWgdZs7z8PB+fnlMcEq9FfTmDguTDWT5TRM2zaUJ5zKBH/yuHQ9g4FYVpMUi+8
+         uN0nRAEYaGzd1v7po4Ss+P4reZrHIiTP3TeyIgqsYP3ifh2vFKzR8m3iceQNwB20L5ZE
+         CUe8OTmC1Gkrob7nXD4ad8GW00Awo3Gxg7HQf1lNftWjIpglFFBE2Pe6rHl4lfOMYrDT
+         uOew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=SmmYAil1f9hLMNCPLSvS+Czx4YqCWUlhWfkBPgyh9NY=;
-        fh=YYsARTp4j6Rw2hpSGuU3XnlTiRzDGOaQiQy72wv7WhQ=;
-        b=Xp6QNoXo4KBiaPAg+f5x4t4DqHFz5/Zhn7IHuZWodYLw9QLK4Wv8pQTeuDLwiMY9m2
-         /xowPANmayIFf5h4jl4KPawqpwUykMU+dk5hV9jg0hsLQkjkKtXYlEJExc4QfvOF7SaE
-         O7W1MLf84VSd9zv45LYLDzh6AEW78FHVeEKm7Kwteqf9zfow2eHeMNXd17GFfAoZX+pb
-         Z/kURbLUQUs+af3XBcOzkw4pOlSrSI4Ffcvyz8/AMvVhcYwlb2B6ExWsWtTxdcVXSQ/Y
-         E1fARYHa89KTay/eknSuZ4fXULvHCVCitQfOklpdG0G+SnGmAYIhCtynVzcviTwouDvI
-         6X2w==;
+        bh=5NfKOjNU6srylE75C2adpej95bKtXYvziT0LYJSnVds=;
+        fh=WRPCFmKvxAg2neCGLxZtyrsGIxJl1cjknHP1WvVsWnk=;
+        b=eMxLjO7Q+DYbUxT87qPyFcbh7UHIHRH7IuJz/oRTd4wtbo/A2nn3Dtsyw0+nBHcUq1
+         87C/VasF48AFm7d0oskprEIgDhXjY6CFv1ZkcsHyC/E9XOs3XDXRQBV3kNVl51Bjh5m6
+         snc3h4Da8rEWBRUcUi7nRCrExItdXKpTMN+1SyUI8r83mZih1Y+R1Ot0Iv2DnOLxa4Md
+         01MvhCJGRNRQlxqptqW/sJtWmty/wM6QqGcDJGj4q/FzxQNsTKpzp9Jipz8jQy8uy+mF
+         x2wvX5MnBzunhTQlGmpkFOrtoiduRpnE9pZ0eOrxOo3/P3zABsXKRNw4zWFCdAfrvZUP
+         gbCw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782756787; x=1783361587; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SmmYAil1f9hLMNCPLSvS+Czx4YqCWUlhWfkBPgyh9NY=;
-        b=r3ngRI7Jw9a9T4fPzceGvzHGZRZZq6wE0N8XjsH5UPH5hLeo0brp789qCVWuxAnoS0
-         gS3TMV/Cw6nuiR1WzZM/2N31gOX/7iUcSOu5g7v0WcTy6bmtuy5mq0DGSCWwRtreNS7X
-         TysAfKHcBqNz1ud1PETZI/DUHiAb+js5G5s7xqEjK3LjYFhDoDHzJ+BGJRFBY9CPuzsz
-         eGj6HqkRitxTwvykDsc694jyWxXtSsaHYkKS6F+X2098lujKa0HRsxnJOTfFr9g0IOoX
-         ptSWKhC+6uoAzRb3d06nLra+bLdT7lRdQnRzvqxGNOOH5dYygTcgBJZFoExKIir97Gjx
-         KS2w==
+        d=gmail.com; s=20251104; t=1782757321; x=1783362121; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=5NfKOjNU6srylE75C2adpej95bKtXYvziT0LYJSnVds=;
+        b=lZVlrTnHAIE6MHhnr76cv5+Q9ab3WEF37l1jXtbCTR0zXFkwPQGjAcZs9ooF4TN2HA
+         0zv3vLRXJ/Z4ZopSsJuTeilRNAlXpdGx3QyUDpnwM2wLstJ3OzCQas6HEMKgpo0BeKYJ
+         qj7xeSFA26oJJb7ArIsLKQ8MBfTpLrvdPRsvqW2zDgjdJLFbP4TP+j14v/s7S+CqLrcc
+         8O0IDAPaVGDl2vZiXU9ZFXkSR/oXnO0+fTzcGsoxpCfMkTGKGgQauqdKcH0ChPVIRWEr
+         tD9o1Y7MPxLmN+a05ofn6At1meODNOzZbpa3hAkbYofXv4rW3ruTPeITd8d1GbJVn0wM
+         sevQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782756787; x=1783361587;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=SmmYAil1f9hLMNCPLSvS+Czx4YqCWUlhWfkBPgyh9NY=;
-        b=KIhWgA7pGW+aSvRxuxi5Z2kBldlCxnX+Su5YsZzFTenxtlnm7YLjhNJajrowrOfPag
-         h8/mRifvqUsCh7w4AT9V89U2NG9KQZbUhTsV+ZxsRGihi9HXFPydT6fmcJ2R1KDyHh/a
-         7c52uFAu7Ey0GxAfGYMmHLWL9kU3E8E+7n41WGdiruIYWYsRbnKq3dEjSVxBufPd+h8Z
-         ODvGOb2PDKlnTnGYJ+Qybbg+SkVrBX3xKY7icbidcjtxYKuA3P6Nv8LgvIggVEQ86+J8
-         ILwiu2BGzdtEFpnNxJ6J2VLdyzAUkJXZI/BzkW3gDxB1aU3GuZmJ6Cza0ZzgfMOBUki5
-         +a4Q==
-X-Forwarded-Encrypted: i=1; AHgh+Rq3hF/JV+93/oiPwm4OH3+9UBo12XqVlgpSgG3KIcDd0BqPv29ZDX/B5Lr1hjBnmigozJ/OqYHRfPl2vX9VATY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxepmELx+2sK65fqLho6h+WuG+2l0vIRLI2ivItNbGlHGcKmf/b
-	qgsX7BMpvh52Tx+q7bDkPkLNBaPq43lmejkwrUz0E397C2PgD1piZn2rRwEZJnc8em82au5/jiu
-	7kYKMRlG4pLsjVWIdE7PA5ZcEVutw9Fk=
-X-Gm-Gg: AfdE7cnR/F1+qmoDQiOc3n/V/NNjIpksrtCfuud/8ye0AqficLAettT5HT4EOvDewHr
-	Dcx3FQT1ekz+4vBGzsTPUTMOze0Ps5c/c1zzxUMM6mJ3llqQJF+/g1fHFKtqEoelpQyYeo1IVzh
-	Rh6eZAXK32IkwbKDZ0gIhp6nX8/1B4K3oG/DvwtCVjxtrikQmSo+LbFDCbrnprDZo0Zni8DHHex
-	L8mmKPxN+gq62lpW8d8Kkweff9GsdZhFOov3ieEWe8XM0uMQoBSynjr7CDZU7Z86HiiPKiqH0j8
-	1B1lM2HEp9LJ
-X-Received: by 2002:a05:690c:dcd:b0:80b:1616:5c0e with SMTP id
- 00721157ae682-810e984a566mr3240827b3.20.1782756787534; Mon, 29 Jun 2026
- 11:13:07 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782757321; x=1783362121;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5NfKOjNU6srylE75C2adpej95bKtXYvziT0LYJSnVds=;
+        b=gAE/qS+uFt9JgNFIF0FYU1Xx/8iZjRRZrk/ABeesFWN79PhbAej+pTDd2MXMwj8l/S
+         7paYwDb9QAG6ec8q2pTNjqqC19N8LeYVbjFOIRXQfrFrZII+rvCtUvRYwyRw7cpdNkkJ
+         CR+6Wlmn4ohesbdozsNXpOsuT20WCXBhvSt3k+eWMMrWWfW0770wDNlbhHbD1iOoRVDi
+         HhTqdxtU6RUDRNkqrZpARsLR/ne+s4eoj+u52NFi1wuFdMauE3T1vIKs7kx9ky2jXJCM
+         wN6sOMsxpcu5aqexKAV+az8Qhix08MTMtG+RwRpxZ4ZCiyF240+Y9V0qgqzVnw4l71sh
+         9z2A==
+X-Forwarded-Encrypted: i=1; AHgh+RoHFi5kGOvFoT7wfWWu/L9Y7Tg82wWLTQ1ZTGPlMWc/TDp2j7kxakM/Dd+df0c05cQKYOPhj5JA+dXU1MLgzqg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yya31jrpYIxG1Ndu4yX20KTh/szx3230PCbr9SfQIhzay2Zge08
+	Kyu1rAp5QHH+humPnHK8iR+P/8+8d3ZeRDMdztp/BFBkY0D24Jsh0db3AvPQGqiSb0hNswLHqbF
+	2esiT/mmqSV3MRuzRkeS80FnmWQxb/zY=
+X-Gm-Gg: AfdE7cnpE6bqejCHSh2/0nmJYvxUMZREDMx8JAMfnZZts2wByy7rXrLDchguhg0clt4
+	wceF2XW31Eug+WgtnF782e0qr/XTh0fy2CUSQBN0+lzu9TcbqXBkCui9+hCTfi43wyqTzy//XVq
+	WqmXnaPnaM3zjs0m7B2PwijRYqc4782eN22ims/xUc3cvWKV3r4zG2LZJn4tuiASDHRw/HcdJgc
+	30zX0afgUnrxduMgWQRJj8IIa9ysn/RXZ32IgLEA9Rv6wDDjQXvPfsgMMnCGc9cEpZ8QDqkcdvm
+	4zGc1mVKw0J9hKGUrR10FbD1ouwksw==
+X-Received: by 2002:a05:6000:460d:b0:473:6e8d:7f3 with SMTP id
+ ffacd0b85a97d-475506e96a8mr558778f8f.1.1782757321163; Mon, 29 Jun 2026
+ 11:22:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260629125637.384923-1-layus.on@gmail.com>
-In-Reply-To: <20260629125637.384923-1-layus.on@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Mon, 29 Jun 2026 11:12:54 -0700
-X-Gm-Features: AVVi8CdW3Ek5fAOq0hw_26M9hi49cDbrZRotwx5VJpI7hZNDTSnWdF5fckFOukc
-Message-ID: <CAMB2axM=utfi11L1e2-yMgCiSEZ=QrZAPrcFLwk44hNqyT1qJQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Mask socket type flags in mptcpify prog
-To: "Guillaume @layus Maudoux" <layus.on@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Matthieu Baerts <matttbe@kernel.org>, 
-	Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, mptcp@lists.linux.dev, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260611-rva23u64-hwprobe-v2-v4-0-3f01a2449488@gmail.com> <20260611-rva23u64-hwprobe-v2-v4-6-3f01a2449488@gmail.com>
+In-Reply-To: <20260611-rva23u64-hwprobe-v2-v4-6-3f01a2449488@gmail.com>
+From: Jesse T <mr.bossman075@gmail.com>
+Date: Mon, 29 Jun 2026 14:21:24 -0400
+X-Gm-Features: AVVi8CeVJe5kDV9ivsXrbK-CzxJfU-Om1AQNkB7-XLVhzZDb1etpOuW05CkKE0c
+Message-ID: <CAJFTR8RK2sR88ePKREmZw-9FRkWEpV_FH6s7M9TegaObqU1cwA@mail.gmail.com>
+Subject: Re: [PATCH v4 06/16] riscv: Add Ziccamoa, Ziccif, Ziccrse, and Za64rs
+ to cpufeature and hwprobe
+To: Guodong Xu <docular.xu@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Zong Li <zong.li@sifive.com>, Deepak Gupta <debug@rivosinc.com>, 
+	Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Yixun Lan <dlan@kernel.org>, Chen Wang <unicorn_wang@outlook.com>, 
+	Inochi Amaoto <inochiama@gmail.com>, linux-doc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Conor Dooley <conor@kernel.org>, devicetree@vger.kernel.org, 
+	spacemit@lists.linux.dev, sophgo@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, Palmer Dabbelt <palmer@sifive.com>, 
+	Andrew Jones <andrew.jones@oss.qualcomm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 29, 2026 at 6:19=E2=80=AFAM Guillaume @layus Maudoux
-<layus.on@gmail.com> wrote:
+On Thu, Jun 11, 2026 at 4:14=E2=80=AFPM Guodong Xu <docular.xu@gmail.com> w=
+rote:
 >
-> The mptcpify BPF prog hooks update_socket_protocol() to rewrite
-> eligible TCP socket() calls to IPPROTO_MPTCP. It only does so when the
-> socket type is exactly SOCK_STREAM:
+> From: Andrew Jones <andrew.jones@oss.qualcomm.com>
 >
->         type =3D=3D SOCK_STREAM
+> Add Ziccamoa, Ziccif, and Za64rs to riscv_isa_ext[] so they can be
+> parsed from devicetree/ACPI ISA strings. Ziccrse is already present
+> in cpufeature; this patch only adds its hwprobe exposure.
 >
-> The problem is that update_socket_protocol() in __sys_socket() is
-> called on the raw type argument as passed from userspace, before
-> __sys_socket_create() strips the flag bits with
-> "type &=3D SOCK_TYPE_MASK". The type argument may therefore carry
-> SOCK_CLOEXEC and/or SOCK_NONBLOCK in its upper bits, and the equality
-> check above then fails.
+> Expose all four extensions via hwprobe through new bits in
+> RISCV_HWPROBE_KEY_IMA_EXT_1 (RISCV_HWPROBE_EXT_ZICCAMOA, _ZICCIF,
+> _ZICCRSE, _ZA64RS), so userspace can probe each of these
+> RVA23U64-mandatory extensions individually.
 >
-> As a result, any socket created with e.g.
-> socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0) -- which is what common
-> libraries do by default -- is silently left as plain TCP instead of
-> being upgraded to MPTCP. This was observed in practice with curl,
-> whose connections were not upgraded to MPTCP despite the prog being
-> attached.
+> Rationale for the validation dependencies added for Ziccamoa and Za64rs:
 >
-> The impact reaches beyond the test, because mptcpify.c is referenced
-> as example code for users who want to transparently enable MPTCP. The
-> same mistake is therefore likely to be copied into real deployments,
-> where it fails the same way and is hard to diagnose.
+> 1) Ziccamoa depends on Zaamo.  The RVA23 profile prose was updated
+> post-ratification to spell out the Zaamo reference: commit
+> 2b218613752d in riscv/riscv-profiles ("Improve description of
+> Ziccamoa (#224)") reworded the rva23-profile.adoc (and other profiles
+> that include Ziccamoa) text from "must support all atomics in A" to
+> "must support all atomics in the Zaamo extension" [1].
 >
-> The fix is to mask off the flag bits before comparing, mirroring what
-> the socket core does:
+> 2) Za64rs depends on Zalrsc. The unprivileged ISA manual src/zars.adoc,
+> integrated in commit ebe06adc22cd ("Integrate profiles as Volume III
+> (#2771)"), defines Za64rs as: "The Za64rs extension requires that the
+> reservation sets used by the instructions in the Zalrsc extension be
+> contiguous, naturally aligned, and at most 64 bytes in size" [2].
 >
->         (type & SOCK_TYPE_MASK) =3D=3D SOCK_STREAM
->
-> Since SOCK_TYPE_MASK is not exposed through vmlinux.h, define it in
-> bpf_tracing_net.h.
->
-> To exercise the regression directly, extend the mptcpify test to also
-> create the server socket with SOCK_CLOEXEC and SOCK_NONBLOCK set.
-> Routing a flagged type through start_server() then revealed a second
-> instance of the same pattern: start_server_addr() compared the type
-> against SOCK_STREAM for equality to decide whether to set SO_REUSEADDR
-> and call listen(), and so would skip listening for a flagged type.
-> Mask the type there as well. As SOCK_TYPE_MASK is not exposed by
-> glibc's <sys/socket.h> either, define it in network_helpers.h,
-> mirroring prog_tests/socket_helpers.h.
->
-> Fixes: ddba122428a7 ("selftests/bpf: Add mptcpify test")
-> Signed-off-by: Guillaume @layus Maudoux <layus.on@gmail.com>
+> Link: https://github.com/riscv/riscv-profiles/commit/2b218613752d63287286=
+b5ae801b820cbd8cc10c [1]
+> Link: https://github.com/riscv/riscv-isa-manual/blob/main/src/unpriv/zars=
+.adoc [2]
+> Signed-off-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
+> Signed-off-by: Guodong Xu <docular.xu@gmail.com>
 
-Hello,
-
-You will need to use your real name in the SOB. At least "@" caused
-some problems when I downloaded the patch.
-
-Please also include "bpf-next" in your subject prefix so that the CI
-can properly test it.
+Reviewed-by: Jesse Taube <jtaubepe@redhat.com>
 
 > ---
->  tools/testing/selftests/bpf/network_helpers.c |  4 ++--
->  tools/testing/selftests/bpf/network_helpers.h |  5 +++++
->  .../testing/selftests/bpf/prog_tests/mptcp.c  | 20 +++++++++++++++----
->  .../selftests/bpf/progs/bpf_tracing_net.h     |  3 +++
->  tools/testing/selftests/bpf/progs/mptcpify.c  |  2 +-
->  5 files changed, 27 insertions(+), 7 deletions(-)
+> v4: No change.
+> v3: Indent the added hwprobe.rst entries to match the normalized style; n=
+o other change.
+> v2:
+> - Rebased to v7.1-rc2.
+> - Reworded subject and expanded commit message.
+> - Validation added for Ziccamoa depending on Zaamo and Za64rs depending
+>   on Zalrsc.
+> ---
+>  Documentation/arch/riscv/hwprobe.rst  | 16 ++++++++++++++++
+>  arch/riscv/include/asm/hwcap.h        |  3 +++
+>  arch/riscv/include/uapi/asm/hwprobe.h |  4 ++++
+>  arch/riscv/kernel/cpufeature.c        | 21 +++++++++++++++++++++
+>  arch/riscv/kernel/sys_hwprobe.c       |  4 ++++
+>  5 files changed, 48 insertions(+)
 >
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testin=
-g/selftests/bpf/network_helpers.c
-> index b82f572641b7..db935a9d9fc1 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
-> @@ -111,7 +111,7 @@ int start_server_addr(int type, const struct sockaddr=
-_storage *addr, socklen_t a
->         if (settimeo(fd, opts->timeout_ms))
->                 goto error_close;
->
-> -       if (type =3D=3D SOCK_STREAM &&
-> +       if ((type & SOCK_TYPE_MASK) =3D=3D SOCK_STREAM &&
->             setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on))) {
->                 log_err("Failed to enable SO_REUSEADDR");
->                 goto error_close;
-> @@ -128,7 +128,7 @@ int start_server_addr(int type, const struct sockaddr=
-_storage *addr, socklen_t a
->                 goto error_close;
->         }
->
-> -       if (type =3D=3D SOCK_STREAM) {
-> +       if ((type & SOCK_TYPE_MASK) =3D=3D SOCK_STREAM) {
->                 if (listen(fd, opts->backlog ? MAX(opts->backlog, 0) : 1)=
- < 0) {
->                         log_err("Failed to listed on socket");
->                         goto error_close;
-> diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testin=
-g/selftests/bpf/network_helpers.h
-> index 79a010c88e11..75133119c04a 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.h
-> +++ b/tools/testing/selftests/bpf/network_helpers.h
-> @@ -25,6 +25,11 @@ typedef __u16 __sum16;
->  #define VIP_NUM 5
->  #define MAGIC_BYTES 123
->
-> +/* include/linux/net.h */
-> +#ifndef SOCK_TYPE_MASK
-> +#define SOCK_TYPE_MASK 0xf
-> +#endif
+> diff --git a/Documentation/arch/riscv/hwprobe.rst b/Documentation/arch/ri=
+scv/hwprobe.rst
+> index 49d9fb68632d0..893e1a1215d23 100644
+> --- a/Documentation/arch/riscv/hwprobe.rst
+> +++ b/Documentation/arch/riscv/hwprobe.rst
+> @@ -405,3 +405,19 @@ The following keys are defined:
+>    * :c:macro:`RISCV_HWPROBE_EXT_ZICCLSM`: The Zicclsm extension is suppo=
+rted,
+>      as defined in the RISC-V Profiles specification starting from commit
+>      b1d80660 ("Updated to ratified state.")
 > +
->  struct network_helper_opts {
->         int timeout_ms;
->         int proto;
-> diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testi=
-ng/selftests/bpf/prog_tests/mptcp.c
-> index 8fade8bdc451..faa001ea84ab 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-> @@ -264,7 +264,7 @@ static int verify_mptcpify(int server_fd, int client_=
-fd)
->         return err;
+> +  * :c:macro:`RISCV_HWPROBE_EXT_ZICCAMOA`: The Ziccamoa extension is sup=
+ported,
+> +    as defined in the RISC-V Profiles specification starting from commit
+> +    b1d80660 ("Updated to ratified state.")
+> +
+> +  * :c:macro:`RISCV_HWPROBE_EXT_ZICCIF`: The Ziccif extension is support=
+ed,
+> +    as defined in the RISC-V Profiles specification starting from commit
+> +    b1d80660 ("Updated to ratified state.")
+> +
+> +  * :c:macro:`RISCV_HWPROBE_EXT_ZICCRSE`: The Ziccrse extension is suppo=
+rted,
+> +    as defined in the RISC-V Profiles specification starting from commit
+> +    b1d80660 ("Updated to ratified state.")
+> +
+> +  * :c:macro:`RISCV_HWPROBE_EXT_ZA64RS`: The Za64rs extension is support=
+ed,
+> +    as defined in the RISC-V Profiles specification starting from commit
+> +    b1d80660 ("Updated to ratified state.")
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwca=
+p.h
+> index e8f4a7dd96a93..0acb7a01ecc0f 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -113,6 +113,9 @@
+>  #define RISCV_ISA_EXT_ZICFILP          104
+>  #define RISCV_ISA_EXT_ZICFISS          105
+>  #define RISCV_ISA_EXT_ZICCLSM          106
+> +#define RISCV_ISA_EXT_ZICCAMOA         107
+> +#define RISCV_ISA_EXT_ZICCIF           108
+> +#define RISCV_ISA_EXT_ZA64RS           109
+>
+>  #define RISCV_ISA_EXT_XLINUXENVCFG     127
+>
+> diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/u=
+api/asm/hwprobe.h
+> index 6819df159c51e..58d1e86e47ae7 100644
+> --- a/arch/riscv/include/uapi/asm/hwprobe.h
+> +++ b/arch/riscv/include/uapi/asm/hwprobe.h
+> @@ -117,6 +117,10 @@ struct riscv_hwprobe {
+>  #define RISCV_HWPROBE_KEY_IMA_EXT_1            16
+>  #define                RISCV_HWPROBE_EXT_ZICFISS       (1ULL << 0)
+>  #define                RISCV_HWPROBE_EXT_ZICCLSM       (1ULL << 1)
+> +#define                RISCV_HWPROBE_EXT_ZICCAMOA      (1ULL << 2)
+> +#define                RISCV_HWPROBE_EXT_ZICCIF        (1ULL << 3)
+> +#define                RISCV_HWPROBE_EXT_ZICCRSE       (1ULL << 4)
+> +#define                RISCV_HWPROBE_EXT_ZA64RS        (1ULL << 5)
+>
+>  /* Increase RISCV_HWPROBE_MAX_KEY when adding items. */
+>
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
+e.c
+> index 1fb595581adcf..b9538e69fa1b3 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -90,6 +90,24 @@ static int riscv_ext_f_depends(const struct riscv_isa_=
+ext_data *data,
+>         return -EPROBE_DEFER;
 >  }
 >
-> -static int run_mptcpify(int cgroup_fd)
-> +static int run_mptcpify(int cgroup_fd, int type)
->  {
->         int server_fd, client_fd, err =3D 0;
->         struct mptcpify *mptcpify_skel;
-> @@ -280,7 +280,7 @@ static int run_mptcpify(int cgroup_fd)
->                 goto out;
->
->         /* without MPTCP */
-> -       server_fd =3D start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
-> +       server_fd =3D start_server(AF_INET, type, NULL, 0, 0);
->         if (!ASSERT_GE(server_fd, 0, "start_server")) {
->                 err =3D -EIO;
->                 goto out;
-> @@ -307,7 +307,18 @@ static int run_mptcpify(int cgroup_fd)
->  static void test_mptcpify(void)
->  {
->         struct netns_obj *netns =3D NULL;
-> -       int cgroup_fd;
-> +       int cgroup_fd, i;
-> +       int types[] =3D {
-> +               SOCK_STREAM,
-> +               /* userspace sets these flags together with the type, and=
- the
-> +                * BPF prog must still upgrade the socket to MPTCP. See
-> +                * update_socket_protocol() in net/socket.c, which runs b=
-efore
-> +                * the type is masked with SOCK_TYPE_MASK.
-> +                */
-> +               SOCK_STREAM | SOCK_CLOEXEC,
-> +               SOCK_STREAM | SOCK_NONBLOCK,
-> +               SOCK_STREAM | SOCK_CLOEXEC | SOCK_NONBLOCK,
-> +       };
->
->         cgroup_fd =3D test__join_cgroup("/mptcpify");
->         if (!ASSERT_GE(cgroup_fd, 0, "test__join_cgroup"))
-> @@ -317,7 +328,8 @@ static void test_mptcpify(void)
->         if (!ASSERT_OK_PTR(netns, "netns_new"))
->                 goto fail;
->
-> -       ASSERT_OK(run_mptcpify(cgroup_fd), "run_mptcpify");
-> +       for (i =3D 0; i < ARRAY_SIZE(types); i++)
-> +               ASSERT_OK(run_mptcpify(cgroup_fd, types[i]), "run_mptcpif=
-y");
-
-nit: testing all four type combinations adds little value here. I'd
-drop array+loop and keep two. For example:
-
-  ASSERT_OK(run_mptcpify(cgroup_fd, SOCK_STREAM), "run_mptcpify");
-  ASSERT_OK(run_mptcpify(cgroup_fd, SOCK_STREAM | SOCK_CLOEXEC),
-"run_mptcpify_cloexec");
-
->
->  fail:
->         netns_free(netns);
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/=
-testing/selftests/bpf/progs/bpf_tracing_net.h
-> index d8dacef37c16..c4b438854565 100644
-> --- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-> +++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-> @@ -8,6 +8,9 @@
->  #define AF_INET                        2
->  #define AF_INET6               10
->
-> +/* include/linux/net.h */
-> +#define SOCK_TYPE_MASK         0xf
+> +static int riscv_ext_zaamo_depends(const struct riscv_isa_ext_data *data=
+,
+> +                                  const unsigned long *isa_bitmap)
+> +{
+> +       if (__riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_ZAA=
+MO))
+> +               return 0;
 > +
->  #define SOL_SOCKET             1
->  #define SO_REUSEADDR           2
->  #define SO_SNDBUF              7
-> diff --git a/tools/testing/selftests/bpf/progs/mptcpify.c b/tools/testing=
-/selftests/bpf/progs/mptcpify.c
-> index cbdc730c3a47..e3f8cb54dbe9 100644
-> --- a/tools/testing/selftests/bpf/progs/mptcpify.c
-> +++ b/tools/testing/selftests/bpf/progs/mptcpify.c
-> @@ -15,7 +15,7 @@ int BPF_PROG(mptcpify, int family, int type, int protoc=
-ol)
->                 return protocol;
->
->         if ((family =3D=3D AF_INET || family =3D=3D AF_INET6) &&
-> -           type =3D=3D SOCK_STREAM &&
-> +           (type & SOCK_TYPE_MASK) =3D=3D SOCK_STREAM &&
->             (!protocol || protocol =3D=3D IPPROTO_TCP)) {
->                 return IPPROTO_MPTCP;
+> +       return -EPROBE_DEFER;
+> +}
+> +
+> +static int riscv_ext_zalrsc_depends(const struct riscv_isa_ext_data *dat=
+a,
+> +                                   const unsigned long *isa_bitmap)
+> +{
+> +       if (__riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_ZAL=
+RSC))
+> +               return 0;
+> +
+> +       return -EPROBE_DEFER;
+> +}
+> +
+>  static int riscv_ext_zicbom_validate(const struct riscv_isa_ext_data *da=
+ta,
+>                                      const unsigned long *isa_bitmap)
+>  {
+> @@ -502,6 +520,8 @@ const struct riscv_isa_ext_data riscv_isa_ext[] =3D {
+>         __RISCV_ISA_EXT_SUPERSET_VALIDATE(zicbom, RISCV_ISA_EXT_ZICBOM, r=
+iscv_xlinuxenvcfg_exts, riscv_ext_zicbom_validate),
+>         __RISCV_ISA_EXT_DATA_VALIDATE(zicbop, RISCV_ISA_EXT_ZICBOP, riscv=
+_ext_zicbop_validate),
+>         __RISCV_ISA_EXT_SUPERSET_VALIDATE(zicboz, RISCV_ISA_EXT_ZICBOZ, r=
+iscv_xlinuxenvcfg_exts, riscv_ext_zicboz_validate),
+> +       __RISCV_ISA_EXT_DATA_VALIDATE(ziccamoa, RISCV_ISA_EXT_ZICCAMOA, r=
+iscv_ext_zaamo_depends),
+> +       __RISCV_ISA_EXT_DATA(ziccif, RISCV_ISA_EXT_ZICCIF),
+>         __RISCV_ISA_EXT_DATA(zicclsm, RISCV_ISA_EXT_ZICCLSM),
+>         __RISCV_ISA_EXT_DATA(ziccrse, RISCV_ISA_EXT_ZICCRSE),
+>         __RISCV_ISA_EXT_SUPERSET_VALIDATE(zicfilp, RISCV_ISA_EXT_ZICFILP,=
+ riscv_xlinuxenvcfg_exts,
+> @@ -516,6 +536,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] =3D {
+>         __RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+>         __RISCV_ISA_EXT_DATA(zihpm, RISCV_ISA_EXT_ZIHPM),
+>         __RISCV_ISA_EXT_DATA(zimop, RISCV_ISA_EXT_ZIMOP),
+> +       __RISCV_ISA_EXT_DATA_VALIDATE(za64rs, RISCV_ISA_EXT_ZA64RS, riscv=
+_ext_zalrsc_depends),
+>         __RISCV_ISA_EXT_DATA(zaamo, RISCV_ISA_EXT_ZAAMO),
+>         __RISCV_ISA_EXT_DATA(zabha, RISCV_ISA_EXT_ZABHA),
+>         __RISCV_ISA_EXT_DATA(zacas, RISCV_ISA_EXT_ZACAS),
+> diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwpr=
+obe.c
+> index 9cf62266f1890..b15ac9adf7920 100644
+> --- a/arch/riscv/kernel/sys_hwprobe.c
+> +++ b/arch/riscv/kernel/sys_hwprobe.c
+> @@ -206,6 +206,10 @@ static void hwprobe_isa_ext1(struct riscv_hwprobe *p=
+air,
+>                  */
+>                 EXT_KEY(isainfo->isa, ZICFISS, pair->value, missing);
+>                 EXT_KEY(isainfo->isa, ZICCLSM, pair->value, missing);
+> +               EXT_KEY(isainfo->isa, ZICCAMOA, pair->value, missing);
+> +               EXT_KEY(isainfo->isa, ZICCIF, pair->value, missing);
+> +               EXT_KEY(isainfo->isa, ZICCRSE, pair->value, missing);
+> +               EXT_KEY(isainfo->isa, ZA64RS, pair->value, missing);
 >         }
+>
+>         /* Now turn off reporting features if any CPU is missing it. */
+>
 > --
-> 2.54.0
+> 2.43.0
 >
 >
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
