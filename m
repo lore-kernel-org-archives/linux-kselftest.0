@@ -1,296 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7A043C07D;
-	Mon, 29 Jun 2026 15:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8515035E926;
+	Mon, 29 Jun 2026 15:49:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782748154; cv=none; b=RTm6o9wokvPeE3rDQDYXQEKeoh9CX7fYiRl72CKBOEcWEXtzF/l57zxAtzGMhz3zkozt4wpwULPM79IO71goTGAcV4km8Utybt4iJ7wizCkKpPFM+SPQsxZS/KxmCqwmb1eKK4FGnjk1PKGY6+g69MWen0psV8BpZJwriYnlNe8=
+	t=1782748169; cv=none; b=gIbeBdV8Huj+HcNzoapIUT19LRgntrbRAb3/eZ/nEYwX2AZND3vF9HCD8xTBkxEDvQryiHpPd46MbR0wWPyWa9w7v8zWNFu7KHAiauO9sOB+xVSnPqFRfKWaDjD4XdLZLZMeNl/RIBk3+UHb3GiLYUMiBMcP4Qb2+la0riIho4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782748154; c=relaxed/simple;
-	bh=Ag/eJAqyGGN2jk5s2m6mqJmP8X5lDT8ty8B5rzYFAzk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p44q5eyIcsqR8aZRAHZmvm5q9lJXnSf+pYhKp8Tp6FrpxxrWrshLpijFW1WK9p8gtabP3Xyb1DskWgmk0jH/8+I/V1/h5MoQ+ORrS+Ja6Dr1nIsftIMazvUuWpGfnFGFryS2UqPYrG5SoPlm/A+CbqWeDs8cZI/9dO1s8N1oGp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d7uv2OAu; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1782748169; c=relaxed/simple;
+	bh=a7gjJjimoCo2/e9mYDjktdyqawDyzH083Zsq1hR6j+c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tHlbxeO9yT1n9WRshFxGPrXt7OGmr85aiQeH9giO7dmXWZylipIkyuvFWqxQCLdQsIox+z51bdyxXQCXNa1DkJke8rXV9M6HXVTGmjWNO+kr3TslooCngqBJukNl0K+nfkT0Ss/p4sD4c4bsYDZMYZTvQzw/YO1Kn4KcF2o9jNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m5VDrsyt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d7uv2OAu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782748154; x=1814284154;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ag/eJAqyGGN2jk5s2m6mqJmP8X5lDT8ty8B5rzYFAzk=;
-  b=d7uv2OAu/LeiGU5p0gqNl3IXGjEOrvbE0mSjNSnLkKzK1eqTc72oERxB
-   kn4idgf+MqIsKi4QEsFc7LoKhq5vX08HcrP2SDUUgtIMk2AxHkM1w3cne
-   oQ4P1R5BqbKfJwmHcFtUZqX1ED7pIwWC5VXMgDcMPkDiD6UH+R2fMjYKF
-   Uea5M0Fe08Nc3YnBvICEeYcFzu+zkxMEPEYVuiGV02B6dKWerNs0HeC08
-   v+loXKxuH8tiKWfWZIbiUgsFa6xuFN70fWNNEtnJ12nw2o6rh6uU+aeRZ
-   7QpY5YSqfwjLCMej7eNlcYDvHVeOUrkOeeWVdbpOxmo9Eg1t1Rn/guvCK
-   w==;
-X-CSE-ConnectionGUID: q+4NgxrITQKIGNM1DLQGNQ==
-X-CSE-MsgGUID: 3x1S+t/rQimB8er04oY43Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11832"; a="94934703"
-X-IronPort-AV: E=Sophos;i="6.24,232,1774335600"; 
-   d="scan'208";a="94934703"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 08:49:13 -0700
-X-CSE-ConnectionGUID: O3ZfXutsRSmdIJ7hbEEtqg==
-X-CSE-MsgGUID: wti4M/4/SgWgrQDz+5m2yA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,232,1774335600"; 
-   d="scan'208";a="249364328"
-Received: from kniemiec-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.207])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 08:49:09 -0700
-Date: Mon, 29 Jun 2026 18:49:06 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Linus Walleij <linusw@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-acpi@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 3/5] software node: add kunit tests for fw_devlink support
-Message-ID: <akKT8q5TjkMkZkmB@ashevche-desk.local>
-References: <20260629-swnode-fw-devlink-v1-0-b90058b41839@oss.qualcomm.com>
- <20260629-swnode-fw-devlink-v1-3-b90058b41839@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m5VDrsyt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB581F000E9;
+	Mon, 29 Jun 2026 15:49:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782748168;
+	bh=hXl4dJbP3FOa6+eSSAvZZMi6VNC2jfLpdmSwqcoEoNM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=m5VDrsytbDBfEN1nGXcsOCcU+kmYtf7Ai+/MPDbMTAT0mG4iwc+/f0L0F9tS+Wu5/
+	 e+1db566e+YEuCJxdMmTArGz6ciB7Yyu/2I0lQmGmHCcwm+WToCFod1K6V9lnwudQw
+	 iodPcQJVkIw2mqAIqoBF6AiSc2tFAFPT+aoB7Br2A2LBouymE0Ns7I3wT9+0/vHcxK
+	 nBKxOD7cgKLbQUkZDGAu84qI3XuDVD7ghhaB49beoRPZ+O7zgPmoevw5artZjRr3Lo
+	 Ifx2ddFGDPYJfgJtulX70MQdmfwzE3LNMph7q5n2Of5xFQ6IF3npcNCHP8JZavflH6
+	 M9jv8OCZaTk4A==
+Message-ID: <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org>
+Date: Mon, 29 Jun 2026 09:49:26 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260629-swnode-fw-devlink-v1-3-b90058b41839@oss.qualcomm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
+ bpf_fib_lookup() helper
+Content-Language: en-US
+To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org
+Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
+ yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
+ a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
+ eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
+ <20260624030530.3342884-2-avinash.duduskar@gmail.com>
+ <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <87se65bd04.fsf@toke.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 29, 2026 at 12:52:08PM +0200, Bartosz Golaszewski wrote:
-> Add a kunit test suite for fw_devlink support for software nodes.
+On 6/29/26 9:08 AM, Toke Høiland-Jørgensen wrote:
+> David Ahern <dsahern@kernel.org> writes:
 > 
-> Most cases call add_links() directly and inspect the resulting fwnode
-> supplier/consumer lists: a single reference, multiple references, a
-> reference to an unregistered node, a "remote-endpoint" reference and a
-> reference array. The last case is end-to-end - it registers real consumer
-> and supplier platform devices together with their drivers, adds the
-> consumer first and checks that fw_devlink defers its probe until the
-> supplier has been bound.
+>> On 6/23/26 9:05 PM, Avinash Duduskar wrote:
+>>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>>> index 89b36de5fdbb..e00f0392e728 100644
+>>> --- a/include/uapi/linux/bpf.h
+>>> +++ b/include/uapi/linux/bpf.h
+>>> @@ -3532,6 +3532,29 @@ union bpf_attr {
+>>>   *			Use the mark present in *params*->mark for the fib lookup.
+>>>   *			This option should not be used with BPF_FIB_LOOKUP_DIRECT,
+>>>   *			as it only has meaning for full lookups.
+>>> + *		**BPF_FIB_LOOKUP_VLAN**
+>>
+>> This flag should not be needed. Patches for vlan support were never
+>> submitted (I have them in some old branch). Since the vlan params are
+>> initialized to 0, no new flag should be needed. Besides, these are
+>> output parameters.
+> 
+> There's no enforcement from the kernel side of the parameters being
+> zero, though? So we do need the flag for feature detection; unless we
+> expect applications to do that out of band? But then we'd need a
+> mechanism to do that which could be... the presence of the flag in the
+> ENUM (and thus in BTF)? :)
+> 
 
-...
-
-> ---
->  drivers/base/test/Kconfig               |   5 +
->  drivers/base/test/Makefile              |   3 +
->  drivers/base/test/swnode-devlink-test.c | 336 ++++++++++++++++++++++++++++++++
-
-+ MAINTAINERS.
-
-...
-
-
->  CFLAGS_property-entry-test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
-> +
-> +obj-$(CONFIG_DRIVER_SWNODE_KUNIT_TEST) += swnode-devlink-test.o
-> +CFLAGS_swnode-devlink-test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
-
-Is it the case for this?
-
-...
-
-> +#include <linux/device.h>
-> +#include <linux/fwnode.h>
-
-+ list.h
-
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/types.h>
-> +#include <linux/wait.h>
-
-...
-
-> +static int swnode_count_suppliers(struct fwnode_handle *fwnode)
-> +{
-> +	struct fwnode_link *link;
-> +	int ret = 0;
-
-Why signed? Also it's not 'ret' semantically it's 'count'.
-
-> +	/*
-> +	 * The suppliers and consumers lists should typically only be accessed
-> +	 * with the fwnode_link_lock taken but it's private to the driver core.
-> +	 *
-> +	 * These are tests and at this point nobody should be modifying them so
-> +	 * let's just access the list.
-> +	 */
-> +	list_for_each_entry(link, &fwnode->suppliers, c_hook)
-> +		ret++;
-> +
-> +	return ret;
-> +}
-
-...
-
-> +/* A single reference creates exactly one supplier link, on both list ends. */
-> +static void swnode_devlink_test_single_ref(struct kunit *test)
-> +{
-> +	static const struct software_node supp_swnode = {
-> +		.name = "swnode-devlink-test-supplier"
-
-Keep trailing comma.
-
-> +	};
-
-> +
-
-Redundant blank line.
-
-> +	struct fwnode_handle *cons_fwnode, *supp_fwnode;
-> +	int ret;
-> +
-> +	const struct property_entry props[] = {
-> +		PROPERTY_ENTRY_REF("supplier", &supp_swnode),
-> +		{ }
-> +	};
-> +
-> +	supp_fwnode = kunit_software_node_register(test, &supp_swnode);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, supp_fwnode);
-> +
-> +	cons_fwnode = kunit_fwnode_create_software_node(test, props, NULL);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, cons_fwnode);
-> +
-> +	ret = fwnode_call_int_op(cons_fwnode, add_links);
-> +	KUNIT_EXPECT_EQ(test, ret, 0);
-> +
-> +	KUNIT_EXPECT_EQ(test, swnode_count_suppliers(cons_fwnode), 1);
-> +	KUNIT_EXPECT_TRUE(test, swnode_has_link(cons_fwnode, supp_fwnode));
-> +}
-
-...
-
-> +/* Multiple distinct references create multiple supplier links. */
-> +static void swnode_devlink_test_multiple_refs(struct kunit *test)
-> +{
-> +	static const struct software_node supp1_swnode = {
-> +		.name = "swnode-devlink-test-supplier-1"
-
-Keep comma.
-
-> +	};
-> +	static const struct software_node supp2_swnode = {
-> +		.name = "swnode-devlink-test-supplier-2"
-
-Ditto.
-
-> +	};
-> +	static const struct software_node *supp_nodes[] = {
-> +		&supp1_swnode, &supp2_swnode, NULL
-
-Here it's fine.
-
-> +	};
-
-> +
-
-Redundant blank line.
-
-> +	const struct property_entry props[] = {
-> +		PROPERTY_ENTRY_REF("foo", &supp1_swnode),
-> +		PROPERTY_ENTRY_REF("bar", &supp2_swnode),
-> +		{ }
-> +	};
-> +
-> +	struct fwnode_handle *fwnode;
-> +	int ret;
-> +
-> +	ret = kunit_software_node_register_node_group(test, supp_nodes);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	fwnode = kunit_fwnode_create_software_node(test, props, NULL);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, fwnode);
-> +
-> +	ret = fwnode_call_int_op(fwnode, add_links);
-> +	KUNIT_EXPECT_EQ(test, ret, 0);
-> +
-> +	KUNIT_EXPECT_EQ(test, swnode_count_suppliers(fwnode), 2);
-> +	KUNIT_EXPECT_TRUE(test, swnode_has_link(fwnode, software_node_fwnode(&supp1_swnode)));
-> +	KUNIT_EXPECT_TRUE(test, swnode_has_link(fwnode, software_node_fwnode(&supp2_swnode)));
-> +}
-
-...
-
-> +static void swnode_devlink_test_unregistered_ref(struct kunit *test)
-
-Same comments as per above.
-
-...
-
-> +static void swnode_devlink_test_remote_endpoint_excluded(struct kunit *test)
-
-Ditto.
-
-...
-
-> +static void swnode_devlink_test_ref_array(struct kunit *test)
-
-Ditto.
-
-...
-
-> +#define SWNODE_DEVLINK_TEST_TIMEOUT_MS	2000
-
-(2 * MSEC_PER_SEC) ?
-(will require time.h).
-
-...
-
-> +static int swnode_test_record_probe(struct platform_device *pdev)
-> +{
-> +	struct swnode_test_probe_order *order = platform_get_drvdata(pdev);
-> +
-> +	if (order && order->count < ARRAY_SIZE(order->probed)) {
-
-+ array_size.h
-
-> +		order->probed[order->count++] = dev_name(&pdev->dev);
-> +		wake_up_interruptible(&order->wq);
-> +	}
-> +
-> +	return 0;
-> +}
-
-...
-
-> +static void swnode_devlink_test_probe_order(struct kunit *test)
-
-As per above comments.
-
-...
-
-> +static struct kunit_suite swnode_test_suite = {
-> +	.name = "software-node-links",
-> +	.test_cases = swnode_test_cases,
-> +};
-
-> +
-
-Redundant blank line.
-
-> +kunit_test_suite(swnode_test_suite);
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+This is output direction - return from the fib lookup. It does not make
+sense to require a flag to get lookup output. vlan proto of 0 is not
+valid, so it is a clear indication that the vlan output parameters were
+not set during the lookup.
 
