@@ -1,1041 +1,525 @@
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C30F379C2C
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 03:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F131BD9D0
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 05:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782705141; cv=none; b=npxWaGqckuUpfwXaCn9JNqMDTyRGXrjxVUPQnOu17bzZlRFDIJ1NGalms4vbabq66srtGmv2KcaLsvbBU7ZHxTslpm6Wuw26cQc9eZ62yv+zGwq5QxJGMsZHigNXvq3WG47dr2UCFCcA8tn9jjV67Xo4ZAa9sYeY5RBGyMVa8TY=
+	t=1782711720; cv=none; b=dSefhxYqoSGr+FxV3sElVl6na94voMSs+Oj9HjcxQUWxLVnWNPD4k39qJre19ktNF/JTp9/b2+CHcGdAltJ7Q2cc83RFXTlvFwijAF4n0Lcp6azTHRNnJI99FjhbU73b62zkADr9FsrMPRShrMezay500Q/987toetTxmyd8dYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782705141; c=relaxed/simple;
-	bh=rLImL6TcDUIMjJjIGfo3y8BFVCKFL5prgcC+p/ww62A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Myf+L9qc4LbhpIa2OeXre3aJdF0WOlJXntkqGSCozbeS/9olM7cYFFXymH/3Ducj2PuJ+AfP7++UnC/jWufESKBCLmgD4jcUHkdIGY5W7X/cgX5Ur06E89+FUr8WZ+mq/FVqInY08mktySaYX5Pj5dS/g6z0KFT+EAfFV5oxrU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nikableh.moe; spf=pass smtp.mailfrom=nikableh.moe; dkim=pass (2048-bit key) header.d=nikableh.moe header.i=@nikableh.moe header.b=FjBWXfhJ; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=e43reqCI; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nikableh.moe
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nikableh.moe
+	s=arc-20240116; t=1782711720; c=relaxed/simple;
+	bh=uhjBh41DxIo5vLVsU+SIauIddKXQrq5SMv4M/DXGVzQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZLhCCsXFJhh19upT5QPxMi5CvEm5jlV1rMPq4U4YaUVwmL8r1WPfoRvpRffSurAHAEjhU/LGR+XoHpuFb4DSLxwQnUoaIAORwOL54QihldaiARbAxqyEMIsOr0w7aoe7Tz2iLmpVME2wMMVPkQTtqc46en1f2H6bU2mi9DSiuIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r1A2HToE; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=hotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nikableh.moe header.i=@nikableh.moe header.b="FjBWXfhJ";
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="e43reqCI"
-Authentication-Results: purelymail.com; auth=pass
-DKIM-Signature: a=rsa-sha256; b=FjBWXfhJ+Io2iILmfeCMA5SRPBtKfWq1tyBttK09Fj0bRe+ZxrTLORrqaacCpFWTwwLvn+z4Snc5H3JfSoPw+mULvxpPOWxsoifUupRNzQ2OtcdfDDccdzMWYngkTMNEiQLrLxvLLLc5h+agADr5bsbxwDKGsWBEM6JIEMpQjyTmPXsylI8pSpoeQSYln1+gCDSCbcI5xwXeKcWgAsHntlxPJFRlRFKHI/6qjK277OZSZ9qrellozpb0YsFam1cQK8vz7zSOlSg65LX/vegoZFoJfMtroSm+jUqgspBhppmYNR1CP4uvBFLZys04Lsl1ah90H0JpTff7WYH5QiSk3Q==; s=purelymail2; d=nikableh.moe; v=1; bh=rLImL6TcDUIMjJjIGfo3y8BFVCKFL5prgcC+p/ww62A=; h=Received:From:Date:Subject:To;
-DKIM-Signature: a=rsa-sha256; b=e43reqCIAr6A1C9Bs+1ga1ebp89LFqqWkxHsRFsXnS6Il3Ls3Fce3Tzxrko2MCs0nG1UCWjIOUaSDeiWMDN4I4rwvpgz7wLTeof6IUEl6gdZcYH+pqlXZtPPCsoJ25gjJ5LzAbLLhc95dOVGJOQYm3Z1zWeD5B01d5XVXgpNz73IQV5/3vlrCjsA4dGLcj1AsCt8qZT3h0rpEMNt0E4PGyVRbmx8lfEdw7yzc42drUsrcYy1odnNI00huns9FrVV27hHDbqW2Ij9NLlFobF5VEbdc/MrZDaBEbv0nkp7d38WwhbGTqgvy8zIkgxLCD7+yDjtSz/3wnJICgVBpFDo5g==; s=purelymail2; d=purelymail.com; v=1; bh=rLImL6TcDUIMjJjIGfo3y8BFVCKFL5prgcC+p/ww62A=; h=Feedback-ID:Received:From:Date:Subject:To;
-Feedback-ID: 209604:18551:null:purelymail
-X-Pm-Original-To: linux-kselftest@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1530718721;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Mon, 29 Jun 2026 03:51:44 +0000 (UTC)
-From: Nika Krasnova <nika@nikableh.moe>
-Date: Mon, 29 Jun 2026 05:51:07 +0200
-Subject: [PATCH 2/2] rust: kernel: migrate to cfg_select! for config-based
- selection
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r1A2HToE"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-37ff8e0ad0fso299711a91.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 28 Jun 2026 22:41:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782711717; x=1783316517; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=70pb87F25LFPf8xlmQiDVTlP75a0hwYXQXDgdivM2Ks=;
+        b=r1A2HToE0hgH/V3oMDXammHncfi21fmUeaSMq2iy1AyHs9Jph3SVp79N+ha8hFL2rG
+         4RenLsMpe9bxs+nk93J5tjv84WAx/4YylfaIWX2GXv0PZQjW97Ergs3/CFaCc6o5DxUE
+         qXzZLyXaKEugJDmmgvlSorZbTXO+vDC1LPyOYX+xxwaMM8QmZg/gmdxjGAe08QEoSyVo
+         BH2DkT02zDfFxEz7rlvxVe3kjeHkwwDCydan9vvPSsLWn7BJ6iO26w0+WJwg/iC8t9Hz
+         OYn9MRJNirRKbVvsUJUjvz4n6tllqr5JoBVKSIBq7VJA9rtdCvMtcorXsVe09G4QMOwW
+         Wo4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782711717; x=1783316517;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=70pb87F25LFPf8xlmQiDVTlP75a0hwYXQXDgdivM2Ks=;
+        b=qWjm3DFN3pu8cG76RWpxsf8ZKKSWmHyrmAJajAM7AoI2s9xasyILo3IaElvVEr3jnl
+         3KK763cMyTc49lLXCRH0xJV71g2u9SRFmqoRyze/f1IELDw8/z6pfc0oGypPuKHnTjUH
+         gZ6bsESCwbY9fkgaJTRmEz5g5OnFqZhThb8TPIQuamDNQ42e10/8XgZ/u/ENyxYAkIbD
+         buiV023X+ztgPDRj4m3mtleYP+Gr92VN10C6o2ogS8YlQv0eHk/KxRXsYXfkgCSZaSqj
+         4Ksjx1cfwtff1gXckWaVJ2kTwarnH8neYQnJJ9bmrKqhvC1KKAPC0vSybL2XOB+zEKOu
+         MwEQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrwW9ikC+LOBFwNqKKZ6uHOU0L3vmqFxkBtVq49Gz4iy9E0yuSCBfh/Ey1bvUI+52eOWJiS8FJiuhaIh2NRBSw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzk5RJjpRXeEPu2KzB4o1TCRyKcZD6euJeIHSoBnMcpbwzVefmo
+	LCGYFuLu5m7KaoANgvwtfom8YDnuYdFIB2MJDbtx4Jx/nkLrT9vCfT7K
+X-Gm-Gg: AfdE7clRowME5/0uBwBgafOoFhNjzHcdY7XEG+f3i1zUAU+T+/UooAHtqS/MBHnzJ7u
+	kuVoJfFT6hLeU4Pa2Gs6MJT6vC1wA3M284rN1vYwZC6n2kT8Ld4rE7UY94OqhT8RGzxd1kfRcrJ
+	OQwjx1I9gPKzCxXlaXIQZ6i24nLlHoAFQ/dfTcK5iWp4RjAQOWffrxeLNhZVVNnk0EFgo++OYGY
+	cAjO/kzYn/ifzcQMa29zo1ykSLX1+AsUti17bwdqJL/iQQ8bEAExbyk+33LuQuXpgzekWY+X24S
+	UTfSj4rXfP7moBnsIuL066fpiKLJ+pB6Y2UxiZPlUKlu9ag+HRvXLB92OEV45JxK/zjy7DEL69L
+	OFpSbSDsFgkpa5k349aEX3h9SssEFgJnRVAM3luS4jE2SMjDOJ3ibKvfNrMXQPV6aeNBbWgTVZx
+	fr8XegPrFVtT48amza3JwWxzdvsC8Q/g85mkqYLzkdWzrR1fphkQECf+lCDX7Bb0LjsSZmVbgAE
+	p78WCtfKL6pwMC4nG9NerMS7lEcdjKAFIE=
+X-Received: by 2002:a17:90b:3f10:b0:37f:db06:2299 with SMTP id 98e67ed59e1d1-37fdb062e8amr4540135a91.21.1782711716828;
+        Sun, 28 Jun 2026 22:41:56 -0700 (PDT)
+Received: from kirchou-macbookpro2.roam.corp.google.com ([2a00:79e0:2031:7:44f0:f54c:ad99:28ed])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c9992a586csm44739245ad.21.2026.06.28.22.41.53
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 28 Jun 2026 22:41:56 -0700 (PDT)
+Sender: kir <610548@gmail.com>
+From: Kir Chou <note351@hotmail.com>
+To: akpm@linux-foundation.org
+Cc: thomas.weissschuh@linutronix.de,
+	davidgow@google.com,
+	geert@linux-m68k.org,
+	visitorckw@gmail.com,
+	brendan.higgins@linux.dev,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	Kir Chou <note351@hotmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	linux-kernel@vger.kernel.org (open list),
+	netdev@vger.kernel.org (open list:NETWORKING [GENERAL])
+Subject: [PATCH v3] lib/random32: convert selftest to KUnit
+Date: Mon, 29 Jun 2026 14:41:42 +0900
+Message-ID: <20260629054143.7737-1-note351@hotmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260629-backport-cfg_select-v1-2-388d5d31d9d4@nikableh.moe>
-References: <20260629-backport-cfg_select-v1-0-388d5d31d9d4@nikableh.moe>
-In-Reply-To: <20260629-backport-cfg_select-v1-0-388d5d31d9d4@nikableh.moe>
-To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>
-Cc: Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
- Viresh Kumar <viresh.kumar@linaro.org>, Yury Norov <yury.norov@gmail.com>, 
- Lorenzo Stoakes <ljs@kernel.org>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Rae Moar <raemoar63@gmail.com>, rust-for-linux@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
- linux-kselftest@vger.kernel.org, Nika Krasnova <nika@nikableh.moe>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=34735; i=nika@nikableh.moe;
- h=from:subject:message-id; bh=rLImL6TcDUIMjJjIGfo3y8BFVCKFL5prgcC+p/ww62A=;
- b=owJ4nJvAy8zAJTZhNXuihihnHuNptSSGLMfXhyY8vx7dJCh2ta3B2s/C8mLcA3tlTq2S/v78k
- ++b7c5nHe4oZWEQ42KQFVNkKUvTCqls+37Jx3R5PswcViaQIQxcnAIwkVvsjAyPM8R3nnoTepaX
- V9Ps+bJz+14U79zw4+v0Tb2eexx2fl6dx/DfY/7Ufsfc7NccMQ/aC2NlHPbfmPvq0f+1vtz5fnt
- tb3lyAwC8oklL
-X-Developer-Key: i=nika@nikableh.moe; a=openpgp;
- fpr=D6F05A682D63EA3D6C771A8F4448A49D9CF79732
+Content-Transfer-Encoding: 8bit
 
-Convert the paired #[cfg(CONFIG_FOO)] / #[cfg(not(CONFIG_FOO))]
-selections in the kernel crate to cfg_select!. These sites each choose
-one of several mutually-exclusive implementations, which is exactly what
-cfg_select! expresses as a single construct.
+This patch converts the existing prandom selftest (lib/random32.c) to use
+the KUnit framework (lib/tests/random32_kunit.c). Unlike typical KUnit
+tests, this file is directly #included into lib/random32.c.
 
-One case is deliberately left as #[cfg]: a #[macro_export] macro_rules!
-that is referred to by an absolute path ($crate::/crate::) cannot be
-wrapped in cfg_select!, because a macro produced by macro expansion may
-not be named that way (see rust-lang/rust#52234). print_macro in
-print.rs hits this and is kept as paired #[cfg]; macros invoked only by
-their bare name, such as the asm! wrapper in lib.rs, are unaffected and
-are converted.
+The new test:
+- Removes the legacy CONFIG_RANDOM32_SELFTEST from lib/random32.c.
+- Adds CONFIG_PRANDOM_KUNIT_TEST (defaulting to KUNIT_ALL_TESTS).
+- Moves the test logic to lib/tests/random32_kunit.c.
 
-Link: https://github.com/Rust-for-Linux/linux/issues/1183
-Assisted-by: Claude:claude-opus-4-8
-Signed-off-by: Nika Krasnova <nika@nikableh.moe>
+v2:
+- Removes the legacy CONFIG_RANDOM32_SELFTEST from lib/Kconfig.
+- Add const to arrays in lib/tests/random32_kunit.c.
+
+v3:
+- Changes from tristate to bool in lib/Kconfig.debug.
+
+This commit is verified by `./tools/testing/kunit/kunit.py run`
+with the .kunit/.kunitconfig:
+
+```
+CONFIG_KUNIT=y
+CONFIG_PRANDOM_KUNIT_TEST=y
+```
+
+Reviewed-by: David Gow <davidgow@google.com>
+Signed-off-by: Kir Chou <note351@hotmail.com>
 ---
- rust/kernel/cpu.rs                   |  21 ++---
- rust/kernel/cpumask.rs               |  42 +++++-----
- rust/kernel/debugfs.rs               | 145 ++++++++++++++++++-----------------
- rust/kernel/driver.rs                |  44 ++++++-----
- rust/kernel/drm/device.rs            |  53 +++++++------
- rust/kernel/error.rs                 |  47 ++++++------
- rust/kernel/kunit.rs                 |  54 +++++++------
- rust/kernel/lib.rs                   |  77 ++++++++++---------
- rust/kernel/mm.rs                    |  36 +++++----
- rust/kernel/sync/atomic.rs           |  54 +++++++------
- rust/kernel/sync/atomic/predefine.rs |  35 +++++----
- rust/kernel/time.rs                  |  82 ++++++++++----------
- 12 files changed, 366 insertions(+), 324 deletions(-)
+ lib/Kconfig                |   6 --
+ lib/Kconfig.debug          |   9 ++
+ lib/random32.c             | 173 +-----------------------------------
+ lib/tests/random32_kunit.c | 174 +++++++++++++++++++++++++++++++++++++
+ 4 files changed, 185 insertions(+), 177 deletions(-)
+ create mode 100644 lib/tests/random32_kunit.c
 
-diff --git a/rust/kernel/cpu.rs b/rust/kernel/cpu.rs
-index cb6c0338ef5a..b6730331fda8 100644
---- a/rust/kernel/cpu.rs
-+++ b/rust/kernel/cpu.rs
-@@ -4,20 +4,21 @@
- //!
- //! C header: [`include/linux/cpu.h`](srctree/include/linux/cpu.h)
+diff --git a/lib/Kconfig b/lib/Kconfig
+index 2923924be..5f185e9f1 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -156,12 +156,6 @@ config AUDIT_COMPAT_GENERIC
+ 	depends on AUDIT_GENERIC && AUDIT_ARCH_COMPAT_GENERIC && COMPAT
+ 	default y
  
--use crate::{bindings, device::Device, error::Result, prelude::ENODEV};
-+use crate::{bindings, cfg_select, device::Device, error::Result, prelude::ENODEV};
- 
- /// Returns the maximum number of possible CPUs in the current system configuration.
- #[inline]
- pub fn nr_cpu_ids() -> u32 {
--    #[cfg(any(NR_CPUS_1, CONFIG_FORCE_NR_CPUS))]
--    {
--        bindings::NR_CPUS
--    }
+-config RANDOM32_SELFTEST
+-	bool "PRNG perform self test on init"
+-	help
+-	  This option enables the 32 bit PRNG library functions to perform a
+-	  self test on initialization.
 -
--    #[cfg(not(any(NR_CPUS_1, CONFIG_FORCE_NR_CPUS)))]
--    // SAFETY: `nr_cpu_ids` is a valid global provided by the kernel.
--    unsafe {
--        bindings::nr_cpu_ids
-+    cfg_select! {
-+        any(NR_CPUS_1, CONFIG_FORCE_NR_CPUS) => {
-+            bindings::NR_CPUS
-+        }
-+        _ => {
-+            // SAFETY: `nr_cpu_ids` is a valid global provided by the kernel.
-+            unsafe {
-+                bindings::nr_cpu_ids
-+            }
-+        }
-     }
- }
+ #
+ # compression support is select'ed if needed
+ #
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index ba36939fd..ef1600600 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -3354,6 +3354,15 @@ config PRIME_NUMBERS_KUNIT_TEST
  
-diff --git a/rust/kernel/cpumask.rs b/rust/kernel/cpumask.rs
-index 44bb36636ee3..f86ec96acfe2 100644
---- a/rust/kernel/cpumask.rs
-+++ b/rust/kernel/cpumask.rs
-@@ -307,28 +307,34 @@ pub fn try_clone(cpumask: &Cpumask) -> Result<Self> {
- impl Deref for CpumaskVar {
-     type Target = Cpumask;
+ 	  If unsure, say N
  
--    #[cfg(CONFIG_CPUMASK_OFFSTACK)]
--    fn deref(&self) -> &Self::Target {
--        // SAFETY: The caller owns CpumaskVar, so it is safe to deref the cpumask.
--        unsafe { &*self.ptr.as_ptr() }
--    }
--
--    #[cfg(not(CONFIG_CPUMASK_OFFSTACK))]
--    fn deref(&self) -> &Self::Target {
--        &self.mask
-+    cfg_select! {
-+        CONFIG_CPUMASK_OFFSTACK => {
-+            fn deref(&self) -> &Self::Target {
-+                // SAFETY: The caller owns CpumaskVar, so it is safe to deref the cpumask.
-+                unsafe { &*self.ptr.as_ptr() }
-+            }
-+        }
-+        _ => {
-+            fn deref(&self) -> &Self::Target {
-+                &self.mask
-+            }
-+        }
-     }
- }
- 
- impl DerefMut for CpumaskVar {
--    #[cfg(CONFIG_CPUMASK_OFFSTACK)]
--    fn deref_mut(&mut self) -> &mut Cpumask {
--        // SAFETY: The caller owns CpumaskVar, so it is safe to deref the cpumask.
--        unsafe { self.ptr.as_mut() }
--    }
--
--    #[cfg(not(CONFIG_CPUMASK_OFFSTACK))]
--    fn deref_mut(&mut self) -> &mut Cpumask {
--        &mut self.mask
-+    cfg_select! {
-+        CONFIG_CPUMASK_OFFSTACK => {
-+            fn deref_mut(&mut self) -> &mut Cpumask {
-+                // SAFETY: The caller owns CpumaskVar, so it is safe to deref the cpumask.
-+                unsafe { self.ptr.as_mut() }
-+            }
-+        }
-+        _ => {
-+            fn deref_mut(&mut self) -> &mut Cpumask {
-+                &mut self.mask
-+            }
-+        }
-     }
- }
- 
-diff --git a/rust/kernel/debugfs.rs b/rust/kernel/debugfs.rs
-index d7b8014a6474..39657bfd1714 100644
---- a/rust/kernel/debugfs.rs
-+++ b/rust/kernel/debugfs.rs
-@@ -75,22 +75,22 @@
- impl Dir {
-     /// Create a new directory in DebugFS. If `parent` is [`None`], it will be created at the root.
-     fn create(name: &CStr, parent: Option<&Dir>) -> Self {
--        #[cfg(CONFIG_DEBUG_FS)]
--        {
--            let parent_entry = match parent {
--                // If the parent couldn't be allocated, just early-return
--                Some(Dir(None)) => return Self(None),
--                Some(Dir(Some(entry))) => Some(entry.clone()),
--                None => None,
--            };
--            Self(
--                // If Arc creation fails, the `Entry` will be dropped, so the directory will be
--                // cleaned up.
--                Arc::new(Entry::dynamic_dir(name, parent_entry), GFP_KERNEL).ok(),
--            )
-+        cfg_select! {
-+            CONFIG_DEBUG_FS => {
-+                let parent_entry = match parent {
-+                    // If the parent couldn't be allocated, just early-return
-+                    Some(Dir(None)) => return Self(None),
-+                    Some(Dir(Some(entry))) => Some(entry.clone()),
-+                    None => None,
-+                };
-+                Self(
-+                    // If Arc creation fails, the `Entry` will be dropped, so the directory will be
-+                    // cleaned up.
-+                    Arc::new(Entry::dynamic_dir(name, parent_entry), GFP_KERNEL).ok(),
-+                )
-+            }
-+            _ => { Self() }
-         }
--        #[cfg(not(CONFIG_DEBUG_FS))]
--        Self()
-     }
- 
-     /// Creates a DebugFS file which will own the data produced by the initializer provided in
-@@ -360,19 +360,19 @@ pub fn write_callback_file<'a, T, E: 'a, W>(
-     // Unless you also extract the `entry` later and schedule it for `Drop` at the appropriate
-     // time, a `ScopedDir` with a `Dir` parent will never be deleted.
-     fn scoped_dir<'data>(&self, name: &CStr) -> ScopedDir<'data, 'static> {
--        #[cfg(CONFIG_DEBUG_FS)]
--        {
--            let parent_entry = match &self.0 {
--                None => return ScopedDir::empty(),
--                Some(entry) => entry.clone(),
--            };
--            ScopedDir {
--                entry: ManuallyDrop::new(Entry::dynamic_dir(name, Some(parent_entry))),
--                _phantom: PhantomData,
-+        cfg_select! {
-+            CONFIG_DEBUG_FS => {
-+                let parent_entry = match &self.0 {
-+                    None => return ScopedDir::empty(),
-+                    Some(entry) => entry.clone(),
-+                };
-+                ScopedDir {
-+                    entry: ManuallyDrop::new(Entry::dynamic_dir(name, Some(parent_entry))),
-+                    _phantom: PhantomData,
-+                }
-             }
-+            _ => { ScopedDir::empty() }
-         }
--        #[cfg(not(CONFIG_DEBUG_FS))]
--        ScopedDir::empty()
-     }
- 
-     /// Creates a new scope, which is a directory associated with some data `T`.
-@@ -430,47 +430,50 @@ pub struct File<T> {
-     scope: Scope<T>,
- }
- 
--#[cfg(not(CONFIG_DEBUG_FS))]
--impl<'b, T: 'b> Scope<T> {
--    fn new<E: 'b, F>(data: impl PinInit<T, E> + 'b, init: F) -> impl PinInit<Self, E> + 'b
--    where
--        F: for<'a> FnOnce(&'a T) + 'b,
--    {
--        try_pin_init! {
--            Self {
--                data <- data,
--                _pin: PhantomPinned
--            } ? E
--        }
--        .pin_chain(|scope| {
--            init(&scope.data);
--            Ok(())
--        })
--    }
--}
-+cfg_select! {
-+    CONFIG_DEBUG_FS => {
-+        impl<'b, T: 'b> Scope<T> {
-+            fn entry_mut(self: Pin<&mut Self>) -> &mut Entry<'static> {
-+                // SAFETY: _entry is not structurally pinned.
-+                unsafe { &mut Pin::into_inner_unchecked(self)._entry }
-+            }
- 
--#[cfg(CONFIG_DEBUG_FS)]
--impl<'b, T: 'b> Scope<T> {
--    fn entry_mut(self: Pin<&mut Self>) -> &mut Entry<'static> {
--        // SAFETY: _entry is not structurally pinned.
--        unsafe { &mut Pin::into_inner_unchecked(self)._entry }
-+            fn new<E: 'b, F>(data: impl PinInit<T, E> + 'b, init: F) -> impl PinInit<Self, E> + 'b
-+            where
-+                F: for<'a> FnOnce(&'a T) -> Entry<'static> + 'b,
-+            {
-+                try_pin_init! {
-+                    Self {
-+                        _entry: Entry::empty(),
-+                        data <- data,
-+                        _pin: PhantomPinned
-+                    } ? E
-+                }
-+                .pin_chain(|scope| {
-+                    *scope.entry_mut() = init(&scope.data);
-+                    Ok(())
-+                })
-+            }
-+        }
-     }
--
--    fn new<E: 'b, F>(data: impl PinInit<T, E> + 'b, init: F) -> impl PinInit<Self, E> + 'b
--    where
--        F: for<'a> FnOnce(&'a T) -> Entry<'static> + 'b,
--    {
--        try_pin_init! {
--            Self {
--                _entry: Entry::empty(),
--                data <- data,
--                _pin: PhantomPinned
--            } ? E
-+    _ => {
-+        impl<'b, T: 'b> Scope<T> {
-+            fn new<E: 'b, F>(data: impl PinInit<T, E> + 'b, init: F) -> impl PinInit<Self, E> + 'b
-+            where
-+                F: for<'a> FnOnce(&'a T) + 'b,
-+            {
-+                try_pin_init! {
-+                    Self {
-+                        data <- data,
-+                        _pin: PhantomPinned
-+                    } ? E
-+                }
-+                .pin_chain(|scope| {
-+                    init(&scope.data);
-+                    Ok(())
-+                })
-+            }
-         }
--        .pin_chain(|scope| {
--            *scope.entry_mut() = init(&scope.data);
--            Ok(())
--        })
-     }
- }
- 
-@@ -702,12 +705,16 @@ fn empty() -> Self {
-             _phantom: PhantomData,
-         }
-     }
--    #[cfg(CONFIG_DEBUG_FS)]
--    fn into_entry(self) -> Entry<'dir> {
--        ManuallyDrop::into_inner(self.entry)
-+    cfg_select! {
-+        CONFIG_DEBUG_FS => {
-+            fn into_entry(self) -> Entry<'dir> {
-+                ManuallyDrop::into_inner(self.entry)
-+            }
-+        }
-+        _ => {
-+            fn into_entry(self) {}
-+        }
-     }
--    #[cfg(not(CONFIG_DEBUG_FS))]
--    fn into_entry(self) {}
- }
- 
- impl<'data> ScopedDir<'data, 'static> {
-diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
-index bf5ba0d27553..871ea9e04804 100644
---- a/rust/kernel/driver.rs
-+++ b/rust/kernel/driver.rs
-@@ -328,29 +328,31 @@ pub trait Adapter {
-     ///
-     /// If this returns `None`, it means there is no match with an entry in the [`acpi::IdTable`].
-     fn acpi_id_info(dev: &device::Device) -> Option<&'static Self::IdInfo> {
--        #[cfg(not(CONFIG_ACPI))]
--        {
--            let _ = dev;
--            None
--        }
-+        cfg_select! {
-+            CONFIG_ACPI => {
-+                let table = Self::acpi_id_table()?;
- 
--        #[cfg(CONFIG_ACPI)]
--        {
--            let table = Self::acpi_id_table()?;
--
--            // SAFETY:
--            // - `table` has static lifetime, hence it's valid for read,
--            // - `dev` is guaranteed to be valid while it's alive, and so is `dev.as_raw()`.
--            let raw_id = unsafe { bindings::acpi_match_device(table.as_ptr(), dev.as_raw()) };
--
--            if raw_id.is_null() {
-+                // SAFETY:
-+                // - `table` has static lifetime, hence it's valid for read,
-+                // - `dev` is guaranteed to be valid while it's alive, and so is `dev.as_raw()`.
-+                let raw_id = unsafe { bindings::acpi_match_device(table.as_ptr(), dev.as_raw()) };
++config PRANDOM_KUNIT_TEST
++	bool "KUnit test for prandom" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  Enable this option to test the prandom functions at runtime.
 +
-+                if raw_id.is_null() {
-+                    None
-+                } else {
-+                    // SAFETY: `DeviceId` is a `#[repr(transparent)]` wrapper of
-+                    // `struct acpi_device_id` and does not add additional invariants, so
-+                    // it's safe to transmute.
-+                    let id = unsafe { &*raw_id.cast::<acpi::DeviceId>() };
++	  If unsure, say N
 +
-+                    Some(table.info(
-+                        <acpi::DeviceId as crate::device_id::RawDeviceIdIndex>::index(id),
-+                    ))
-+                }
-+            }
-+            _ => {
-+                let _ = dev;
-                 None
--            } else {
--                // SAFETY: `DeviceId` is a `#[repr(transparent)]` wrapper of `struct acpi_device_id`
--                // and does not add additional invariants, so it's safe to transmute.
--                let id = unsafe { &*raw_id.cast::<acpi::DeviceId>() };
--
--                Some(table.info(<acpi::DeviceId as crate::device_id::RawDeviceIdIndex>::index(id)))
-             }
-         }
-     }
-diff --git a/rust/kernel/drm/device.rs b/rust/kernel/drm/device.rs
-index 477cf771fb10..61a184241d55 100644
---- a/rust/kernel/drm/device.rs
-+++ b/rust/kernel/drm/device.rs
-@@ -41,33 +41,36 @@
-     },
- };
+ endif # RUNTIME_TESTING_MENU
  
--#[cfg(CONFIG_DRM_LEGACY)]
--macro_rules! drm_legacy_fields {
--    ( $($field:ident: $val:expr),* $(,)? ) => {
--        bindings::drm_driver {
--            $( $field: $val ),*,
--            firstopen: None,
--            preclose: None,
--            dma_ioctl: None,
--            dma_quiescent: None,
--            context_dtor: None,
--            irq_handler: None,
--            irq_preinstall: None,
--            irq_postinstall: None,
--            irq_uninstall: None,
--            get_vblank_counter: None,
--            enable_vblank: None,
--            disable_vblank: None,
--            dev_priv_size: 0,
-+cfg_select! {
-+    CONFIG_DRM_LEGACY => {
-+        macro_rules! drm_legacy_fields {
-+            ( $($field:ident: $val:expr),* $(,)? ) => {
-+                bindings::drm_driver {
-+                    $( $field: $val ),*,
-+                    firstopen: None,
-+                    preclose: None,
-+                    dma_ioctl: None,
-+                    dma_quiescent: None,
-+                    context_dtor: None,
-+                    irq_handler: None,
-+                    irq_preinstall: None,
-+                    irq_postinstall: None,
-+                    irq_uninstall: None,
-+                    get_vblank_counter: None,
-+                    enable_vblank: None,
-+                    disable_vblank: None,
-+                    dev_priv_size: 0,
-+                }
-+            }
-         }
-     }
+ config ARCH_USE_MEMTEST
+diff --git a/lib/random32.c b/lib/random32.c
+index 24e7acd93..0aab36792 100644
+--- a/lib/random32.c
++++ b/lib/random32.c
+@@ -126,175 +126,6 @@ void prandom_seed_full_state(struct rnd_state __percpu *pcpu_state)
+ }
+ EXPORT_SYMBOL(prandom_seed_full_state);
+ 
+-#ifdef CONFIG_RANDOM32_SELFTEST
+-static struct prandom_test1 {
+-	u32 seed;
+-	u32 result;
+-} test1[] = {
+-	{ 1U, 3484351685U },
+-	{ 2U, 2623130059U },
+-	{ 3U, 3125133893U },
+-	{ 4U,  984847254U },
+-};
+-
+-static struct prandom_test2 {
+-	u32 seed;
+-	u32 iteration;
+-	u32 result;
+-} test2[] = {
+-	/* Test cases against taus113 from GSL library. */
+-	{  931557656U, 959U, 2975593782U },
+-	{ 1339693295U, 876U, 3887776532U },
+-	{ 1545556285U, 961U, 1615538833U },
+-	{  601730776U, 723U, 1776162651U },
+-	{ 1027516047U, 687U,  511983079U },
+-	{  416526298U, 700U,  916156552U },
+-	{ 1395522032U, 652U, 2222063676U },
+-	{  366221443U, 617U, 2992857763U },
+-	{ 1539836965U, 714U, 3783265725U },
+-	{  556206671U, 994U,  799626459U },
+-	{  684907218U, 799U,  367789491U },
+-	{ 2121230701U, 931U, 2115467001U },
+-	{ 1668516451U, 644U, 3620590685U },
+-	{  768046066U, 883U, 2034077390U },
+-	{ 1989159136U, 833U, 1195767305U },
+-	{  536585145U, 996U, 3577259204U },
+-	{ 1008129373U, 642U, 1478080776U },
+-	{ 1740775604U, 939U, 1264980372U },
+-	{ 1967883163U, 508U,   10734624U },
+-	{ 1923019697U, 730U, 3821419629U },
+-	{  442079932U, 560U, 3440032343U },
+-	{ 1961302714U, 845U,  841962572U },
+-	{ 2030205964U, 962U, 1325144227U },
+-	{ 1160407529U, 507U,  240940858U },
+-	{  635482502U, 779U, 4200489746U },
+-	{ 1252788931U, 699U,  867195434U },
+-	{ 1961817131U, 719U,  668237657U },
+-	{ 1071468216U, 983U,  917876630U },
+-	{ 1281848367U, 932U, 1003100039U },
+-	{  582537119U, 780U, 1127273778U },
+-	{ 1973672777U, 853U, 1071368872U },
+-	{ 1896756996U, 762U, 1127851055U },
+-	{  847917054U, 500U, 1717499075U },
+-	{ 1240520510U, 951U, 2849576657U },
+-	{ 1685071682U, 567U, 1961810396U },
+-	{ 1516232129U, 557U,    3173877U },
+-	{ 1208118903U, 612U, 1613145022U },
+-	{ 1817269927U, 693U, 4279122573U },
+-	{ 1510091701U, 717U,  638191229U },
+-	{  365916850U, 807U,  600424314U },
+-	{  399324359U, 702U, 1803598116U },
+-	{ 1318480274U, 779U, 2074237022U },
+-	{  697758115U, 840U, 1483639402U },
+-	{ 1696507773U, 840U,  577415447U },
+-	{ 2081979121U, 981U, 3041486449U },
+-	{  955646687U, 742U, 3846494357U },
+-	{ 1250683506U, 749U,  836419859U },
+-	{  595003102U, 534U,  366794109U },
+-	{   47485338U, 558U, 3521120834U },
+-	{  619433479U, 610U, 3991783875U },
+-	{  704096520U, 518U, 4139493852U },
+-	{ 1712224984U, 606U, 2393312003U },
+-	{ 1318233152U, 922U, 3880361134U },
+-	{  855572992U, 761U, 1472974787U },
+-	{   64721421U, 703U,  683860550U },
+-	{  678931758U, 840U,  380616043U },
+-	{  692711973U, 778U, 1382361947U },
+-	{  677703619U, 530U, 2826914161U },
+-	{   92393223U, 586U, 1522128471U },
+-	{ 1222592920U, 743U, 3466726667U },
+-	{  358288986U, 695U, 1091956998U },
+-	{ 1935056945U, 958U,  514864477U },
+-	{  735675993U, 990U, 1294239989U },
+-	{ 1560089402U, 897U, 2238551287U },
+-	{   70616361U, 829U,   22483098U },
+-	{  368234700U, 731U, 2913875084U },
+-	{   20221190U, 879U, 1564152970U },
+-	{  539444654U, 682U, 1835141259U },
+-	{ 1314987297U, 840U, 1801114136U },
+-	{ 2019295544U, 645U, 3286438930U },
+-	{  469023838U, 716U, 1637918202U },
+-	{ 1843754496U, 653U, 2562092152U },
+-	{  400672036U, 809U, 4264212785U },
+-	{  404722249U, 965U, 2704116999U },
+-	{  600702209U, 758U,  584979986U },
+-	{  519953954U, 667U, 2574436237U },
+-	{ 1658071126U, 694U, 2214569490U },
+-	{  420480037U, 749U, 3430010866U },
+-	{  690103647U, 969U, 3700758083U },
+-	{ 1029424799U, 937U, 3787746841U },
+-	{ 2012608669U, 506U, 3362628973U },
+-	{ 1535432887U, 998U,   42610943U },
+-	{ 1330635533U, 857U, 3040806504U },
+-	{ 1223800550U, 539U, 3954229517U },
+-	{ 1322411537U, 680U, 3223250324U },
+-	{ 1877847898U, 945U, 2915147143U },
+-	{ 1646356099U, 874U,  965988280U },
+-	{  805687536U, 744U, 4032277920U },
+-	{ 1948093210U, 633U, 1346597684U },
+-	{  392609744U, 783U, 1636083295U },
+-	{  690241304U, 770U, 1201031298U },
+-	{ 1360302965U, 696U, 1665394461U },
+-	{ 1220090946U, 780U, 1316922812U },
+-	{  447092251U, 500U, 3438743375U },
+-	{ 1613868791U, 592U,  828546883U },
+-	{  523430951U, 548U, 2552392304U },
+-	{  726692899U, 810U, 1656872867U },
+-	{ 1364340021U, 836U, 3710513486U },
+-	{ 1986257729U, 931U,  935013962U },
+-	{  407983964U, 921U,  728767059U },
+-};
+-
+-static void prandom_state_selftest_seed(struct rnd_state *state, u32 seed)
+-{
+-#define LCG(x)	 ((x) * 69069U)	/* super-duper LCG */
+-	state->s1 = __seed(LCG(seed),        2U);
+-	state->s2 = __seed(LCG(state->s1),   8U);
+-	state->s3 = __seed(LCG(state->s2),  16U);
+-	state->s4 = __seed(LCG(state->s3), 128U);
 -}
 -
--#[cfg(not(CONFIG_DRM_LEGACY))]
--macro_rules! drm_legacy_fields {
--    ( $($field:ident: $val:expr),* $(,)? ) => {
--        bindings::drm_driver {
--            $( $field: $val ),*
-+    _ => {
-+        macro_rules! drm_legacy_fields {
-+            ( $($field:ident: $val:expr),* $(,)? ) => {
-+                bindings::drm_driver {
-+                    $( $field: $val ),*
-+                }
-+            }
-         }
-     }
- }
-diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
-index a56ba6309594..733c2d08c5e6 100644
---- a/rust/kernel/error.rs
-+++ b/rust/kernel/error.rs
-@@ -8,7 +8,7 @@
- 
- use crate::{
-     alloc::{layout::LayoutError, AllocError},
--    fmt,
-+    cfg_select, fmt,
-     str::CStr,
- };
- 
-@@ -173,29 +173,32 @@ pub fn to_ptr<T>(self) -> *mut T {
-         unsafe { bindings::ERR_PTR(self.0.get() as crate::ffi::c_long).cast() }
-     }
- 
--    /// Returns a string representing the error, if one exists.
--    #[cfg(not(testlib))]
--    pub fn name(&self) -> Option<&'static CStr> {
--        // SAFETY: Just an FFI call, there are no extra safety requirements.
--        let ptr = unsafe { bindings::errname(-self.0.get()) };
--        if ptr.is_null() {
--            None
--        } else {
--            use crate::str::CStrExt as _;
+-static int __init prandom_state_selftest(void)
+-{
+-	int i, j, errors = 0, runs = 0;
+-	bool error = false;
 -
--            // SAFETY: The string returned by `errname` is static and `NUL`-terminated.
--            Some(unsafe { CStr::from_char_ptr(ptr) })
-+    cfg_select! {
-+        testlib => {
-+            /// Returns a string representing the error, if one exists.
-+            ///
-+            /// When `testlib` is configured, this always returns `None` to avoid
-+            /// the dependency on a kernel function so that tests that use this
-+            /// (e.g., by calling [`Result::unwrap`]) can still run in userspace.
-+            pub fn name(&self) -> Option<&'static CStr> {
-+                None
-+            }
-         }
--    }
-+        _ => {
-+            /// Returns a string representing the error, if one exists.
-+            pub fn name(&self) -> Option<&'static CStr> {
-+                // SAFETY: Just an FFI call, there are no extra safety requirements.
-+                let ptr = unsafe { bindings::errname(-self.0.get()) };
-+                if ptr.is_null() {
-+                    None
-+                } else {
-+                    use crate::str::CStrExt as _;
- 
--    /// Returns a string representing the error, if one exists.
--    ///
--    /// When `testlib` is configured, this always returns `None` to avoid the dependency on a
--    /// kernel function so that tests that use this (e.g., by calling [`Result::unwrap`]) can still
--    /// run in userspace.
--    #[cfg(testlib)]
--    pub fn name(&self) -> Option<&'static CStr> {
--        None
-+                    // SAFETY: The string returned by `errname` is static and `NUL`-terminated.
-+                    Some(unsafe { CStr::from_char_ptr(ptr) })
-+                }
-+            }
-+        }
-     }
- }
- 
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index cdee5f27bd7f..5ec15bfbfee6 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -14,18 +14,21 @@
- /// Public but hidden since it should only be used from KUnit generated code.
- #[doc(hidden)]
- pub fn err(args: fmt::Arguments<'_>) {
--    // `args` is unused if `CONFIG_PRINTK` is not set - this avoids a build-time warning.
--    #[cfg(not(CONFIG_PRINTK))]
--    let _ = args;
+-	for (i = 0; i < ARRAY_SIZE(test1); i++) {
+-		struct rnd_state state;
 -
--    // SAFETY: The format string is null-terminated and the `%pA` specifier matches the argument we
--    // are passing.
--    #[cfg(CONFIG_PRINTK)]
--    unsafe {
--        bindings::_printk(
--            c"\x013%pA".as_char_ptr(),
--            core::ptr::from_ref(&args).cast::<c_void>(),
--        );
-+    cfg_select! {
-+        CONFIG_PRINTK => {
-+            // SAFETY: The format string is null-terminated and the `%pA` specifier matches the
-+            // argument we are passing.
-+            unsafe {
-+                bindings::_printk(
-+                    c"\x013%pA".as_char_ptr(),
-+                    core::ptr::from_ref(&args).cast::<c_void>(),
-+                );
-+            }
-+        }
-+        _ => {
-+            // `args` is unused if `CONFIG_PRINTK` is not set - this avoids a build-time warning.
-+            let _ = args;
-+        }
-     }
- }
- 
-@@ -34,18 +37,21 @@ pub fn err(args: fmt::Arguments<'_>) {
- /// Public but hidden since it should only be used from KUnit generated code.
- #[doc(hidden)]
- pub fn info(args: fmt::Arguments<'_>) {
--    // `args` is unused if `CONFIG_PRINTK` is not set - this avoids a build-time warning.
--    #[cfg(not(CONFIG_PRINTK))]
--    let _ = args;
+-		prandom_state_selftest_seed(&state, test1[i].seed);
+-		prandom_warmup(&state);
 -
--    // SAFETY: The format string is null-terminated and the `%pA` specifier matches the argument we
--    // are passing.
--    #[cfg(CONFIG_PRINTK)]
--    unsafe {
--        bindings::_printk(
--            c"\x016%pA".as_char_ptr(),
--            core::ptr::from_ref(&args).cast::<c_void>(),
--        );
-+    cfg_select! {
-+        CONFIG_PRINTK => {
-+            // SAFETY: The format string is null-terminated and the `%pA` specifier matches the
-+            // argument we are passing.
-+            unsafe {
-+                bindings::_printk(
-+                    c"\x016%pA".as_char_ptr(),
-+                    core::ptr::from_ref(&args).cast::<c_void>(),
-+                );
-+            }
-+        }
-+        _ => {
-+            // `args` is unused if `CONFIG_PRINTK` is not set - this avoids a build-time warning.
-+            let _ = args;
-+        }
-     }
- }
- 
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index cdcbb34047c0..ba233a037fe6 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -276,30 +276,34 @@ macro_rules! concat_literals {
-     };
- }
- 
--/// Wrapper around `asm!` configured for use in the kernel.
--///
--/// Uses a semicolon to avoid parsing ambiguities, even though this does not match native `asm!`
--/// syntax.
--// For x86, `asm!` uses intel syntax by default, but we want to use at&t syntax in the kernel.
--#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
--#[macro_export]
--macro_rules! asm {
--    ($($asm:expr),* ; $($rest:tt)*) => {
--        ::core::arch::asm!( $($asm)*, options(att_syntax), $($rest)* )
--    };
+-		if (test1[i].result != prandom_u32_state(&state))
+-			error = true;
+-	}
+-
+-	if (error)
+-		pr_warn("prandom: seed boundary self test failed\n");
+-	else
+-		pr_info("prandom: seed boundary self test passed\n");
+-
+-	for (i = 0; i < ARRAY_SIZE(test2); i++) {
+-		struct rnd_state state;
+-
+-		prandom_state_selftest_seed(&state, test2[i].seed);
+-		prandom_warmup(&state);
+-
+-		for (j = 0; j < test2[i].iteration - 1; j++)
+-			prandom_u32_state(&state);
+-
+-		if (test2[i].result != prandom_u32_state(&state))
+-			errors++;
+-
+-		runs++;
+-		cond_resched();
+-	}
+-
+-	if (errors)
+-		pr_warn("prandom: %d/%d self tests failed\n", errors, runs);
+-	else
+-		pr_info("prandom: %d self tests passed\n", runs);
+-	return 0;
 -}
--
--/// Wrapper around `asm!` configured for use in the kernel.
--///
--/// Uses a semicolon to avoid parsing ambiguities, even though this does not match native `asm!`
--/// syntax.
--// For non-x86 arches we just pass through to `asm!`.
--#[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
--#[macro_export]
--macro_rules! asm {
--    ($($asm:expr),* ; $($rest:tt)*) => {
--        ::core::arch::asm!( $($asm)*, $($rest)* )
--    };
-+cfg_select! {
-+    any(target_arch = "x86", target_arch = "x86_64") => {
-+        /// Wrapper around `asm!` configured for use in the kernel.
-+        ///
-+        /// Uses a semicolon to avoid parsing ambiguities, even though this does
-+        /// not match native `asm!` syntax.
-+        // For x86, `asm!` uses intel syntax by default, but we want to use at&t
-+        // syntax in the kernel.
-+        #[macro_export]
-+        macro_rules! asm {
-+            ($($asm:expr),* ; $($rest:tt)*) => {
-+                ::core::arch::asm!( $($asm)*, options(att_syntax), $($rest)* )
-+            };
-+        }
-+    }
-+    _ => {
-+        /// Wrapper around `asm!` configured for use in the kernel.
-+        ///
-+        /// Uses a semicolon to avoid parsing ambiguities, even though this does
-+        /// not match native `asm!` syntax.
-+        // For non-x86 arches we just pass through to `asm!`.
-+        #[macro_export]
-+        macro_rules! asm {
-+            ($($asm:expr),* ; $($rest:tt)*) => {
-+                ::core::arch::asm!( $($asm)*, $($rest)* )
-+            };
-+        }
-+    }
- }
- 
- /// Gets the C string file name of a [`Location`].
-@@ -334,19 +338,16 @@ macro_rules! asm {
- /// ```
- #[inline]
- pub fn file_from_location<'a>(loc: &'a core::panic::Location<'a>) -> &'a core::ffi::CStr {
--    #[cfg(CONFIG_RUSTC_HAS_FILE_AS_C_STR)]
--    {
--        loc.file_as_c_str()
--    }
--
--    #[cfg(all(CONFIG_RUSTC_HAS_FILE_WITH_NUL, not(CONFIG_RUSTC_HAS_FILE_AS_C_STR)))]
--    {
--        loc.file_with_nul()
--    }
--
--    #[cfg(not(CONFIG_RUSTC_HAS_FILE_WITH_NUL))]
--    {
--        let _ = loc;
--        c"<Location::file_as_c_str() not supported>"
-+    cfg_select! {
-+        CONFIG_RUSTC_HAS_FILE_AS_C_STR => {
-+            loc.file_as_c_str()
-+        }
-+        all(CONFIG_RUSTC_HAS_FILE_WITH_NUL, not(CONFIG_RUSTC_HAS_FILE_AS_C_STR)) => {
-+            loc.file_with_nul()
-+        }
-+        not(CONFIG_RUSTC_HAS_FILE_WITH_NUL) => {
-+            let _ = loc;
-+            c"<Location::file_as_c_str() not supported>"
-+        }
-     }
- }
-diff --git a/rust/kernel/mm.rs b/rust/kernel/mm.rs
-index 4764d7b68f2a..b3937d37b3a2 100644
---- a/rust/kernel/mm.rs
-+++ b/rust/kernel/mm.rs
-@@ -12,7 +12,7 @@
- //! C header: [`include/linux/mm.h`](srctree/include/linux/mm.h)
- 
- use crate::{
--    bindings,
-+    bindings, cfg_select,
-     sync::aref::{ARef, AlwaysRefCounted},
-     types::{NotThreadSafe, Opaque},
- };
-@@ -174,25 +174,27 @@ pub unsafe fn from_raw<'a>(ptr: *const bindings::mm_struct) -> &'a MmWithUser {
-     /// When per-vma locks are disabled, this always returns `None`.
-     #[inline]
-     pub fn lock_vma_under_rcu(&self, vma_addr: usize) -> Option<VmaReadGuard<'_>> {
--        #[cfg(CONFIG_PER_VMA_LOCK)]
--        {
--            // SAFETY: Calling `bindings::lock_vma_under_rcu` is always okay given an mm where
--            // `mm_users` is non-zero.
--            let vma = unsafe { bindings::lock_vma_under_rcu(self.as_raw(), vma_addr) };
--            if !vma.is_null() {
--                return Some(VmaReadGuard {
--                    // SAFETY: If `lock_vma_under_rcu` returns a non-null ptr, then it points at a
--                    // valid vma. The vma is stable for as long as the vma read lock is held.
--                    vma: unsafe { VmaRef::from_raw(vma) },
--                    _nts: NotThreadSafe,
--                });
-+        cfg_select! {
-+            CONFIG_PER_VMA_LOCK => {
-+                // SAFETY: Calling `bindings::lock_vma_under_rcu` is always okay given an mm where
-+                // `mm_users` is non-zero.
-+                let vma = unsafe { bindings::lock_vma_under_rcu(self.as_raw(), vma_addr) };
-+                if !vma.is_null() {
-+                    return Some(VmaReadGuard {
-+                        // SAFETY: If `lock_vma_under_rcu` returns a non-null ptr, then it
-+                        // points at a valid vma. The vma is stable for as long as the vma
-+                        // read lock is held.
-+                        vma: unsafe { VmaRef::from_raw(vma) },
-+                        _nts: NotThreadSafe,
-+                    });
-+                }
-+            }
-+            _ => {
-+                // Silence warnings about unused variables.
-+                let _ = vma_addr;
-             }
-         }
- 
--        // Silence warnings about unused variables.
--        #[cfg(not(CONFIG_PER_VMA_LOCK))]
--        let _ = vma_addr;
--
-         None
-     }
- 
-diff --git a/rust/kernel/sync/atomic.rs b/rust/kernel/sync/atomic.rs
-index 9cd009d57e35..d67dc44e8b2e 100644
---- a/rust/kernel/sync/atomic.rs
-+++ b/rust/kernel/sync/atomic.rs
-@@ -26,6 +26,7 @@
- pub(crate) use internal::{AtomicArithmeticOps, AtomicBasicOps, AtomicExchangeOps};
- 
- use crate::build_error;
-+use crate::cfg_select;
- use internal::AtomicRepr;
- use ordering::OrderingType;
- 
-@@ -620,25 +621,28 @@ pub fn fetch_sub<Rhs, Ordering: ordering::Ordering>(&self, v: Rhs, _: Ordering)
-     }
- }
- 
--#[cfg(any(CONFIG_X86_64, CONFIG_UML, CONFIG_ARM, CONFIG_ARM64))]
--#[repr(C)]
--#[derive(Clone, Copy)]
--struct Flag {
--    bool_field: bool,
--}
--
--/// # Invariants
--///
--/// `padding` must be all zeroes.
--#[cfg(not(any(CONFIG_X86_64, CONFIG_UML, CONFIG_ARM, CONFIG_ARM64)))]
--#[repr(C, align(4))]
--#[derive(Clone, Copy)]
--struct Flag {
--    #[cfg(target_endian = "big")]
--    padding: [u8; 3],
--    bool_field: bool,
--    #[cfg(target_endian = "little")]
--    padding: [u8; 3],
-+cfg_select! {
-+    any(CONFIG_X86_64, CONFIG_UML, CONFIG_ARM, CONFIG_ARM64) => {
-+        #[repr(C)]
-+        #[derive(Clone, Copy)]
-+        struct Flag {
-+            bool_field: bool,
-+        }
-+    }
-+    _ => {
-+        /// # Invariants
-+        ///
-+        /// `padding` must be all zeroes.
-+        #[repr(C, align(4))]
-+        #[derive(Clone, Copy)]
-+        struct Flag {
-+            #[cfg(target_endian = "big")]
-+            padding: [u8; 3],
-+            bool_field: bool,
-+            #[cfg(target_endian = "little")]
-+            padding: [u8; 3],
-+        }
-+    }
- }
- 
- impl Flag {
-@@ -656,10 +660,14 @@ const fn new(b: bool) -> Self {
- // SAFETY: `Flag` and `Repr` have the same size and alignment, and `Flag` is round-trip
- // transmutable to the selected representation (`i8` or `i32`).
- unsafe impl AtomicType for Flag {
--    #[cfg(any(CONFIG_X86_64, CONFIG_UML, CONFIG_ARM, CONFIG_ARM64))]
--    type Repr = i8;
--    #[cfg(not(any(CONFIG_X86_64, CONFIG_UML, CONFIG_ARM, CONFIG_ARM64)))]
--    type Repr = i32;
-+    cfg_select! {
-+        any(CONFIG_X86_64, CONFIG_UML, CONFIG_ARM, CONFIG_ARM64) => {
-+            type Repr = i8;
-+        }
-+        _ => {
-+            type Repr = i32;
-+        }
-+    }
- }
- 
- /// An atomic flag type intended to be backed by performance-optimal integer type.
-diff --git a/rust/kernel/sync/atomic/predefine.rs b/rust/kernel/sync/atomic/predefine.rs
-index 3d63f40791fa..7156e9b67c8c 100644
---- a/rust/kernel/sync/atomic/predefine.rs
-+++ b/rust/kernel/sync/atomic/predefine.rs
-@@ -76,23 +76,24 @@ fn rhs_into_delta(rhs: i64) -> i64 {
- // Defines an internal type that always maps to the integer type which has the same size alignment
- // as `isize` and `usize`, and `isize` and `usize` are always bi-directional transmutable to
- // `isize_atomic_repr`, which also always implements `AtomicImpl`.
--#[allow(non_camel_case_types)]
--#[cfg(not(testlib))]
--#[cfg(not(CONFIG_64BIT))]
--type isize_atomic_repr = i32;
--#[allow(non_camel_case_types)]
--#[cfg(not(testlib))]
--#[cfg(CONFIG_64BIT)]
--type isize_atomic_repr = i64;
--
--#[allow(non_camel_case_types)]
--#[cfg(testlib)]
--#[cfg(target_pointer_width = "32")]
--type isize_atomic_repr = i32;
--#[allow(non_camel_case_types)]
--#[cfg(testlib)]
--#[cfg(target_pointer_width = "64")]
--type isize_atomic_repr = i64;
-+cfg_select! {
-+    all(not(testlib), not(CONFIG_64BIT)) => {
-+        #[allow(non_camel_case_types)]
-+        type isize_atomic_repr = i32;
-+    }
-+    all(not(testlib), CONFIG_64BIT) => {
-+        #[allow(non_camel_case_types)]
-+        type isize_atomic_repr = i64;
-+    }
-+    all(testlib, target_pointer_width = "32") => {
-+        #[allow(non_camel_case_types)]
-+        type isize_atomic_repr = i32;
-+    }
-+    all(testlib, target_pointer_width = "64") => {
-+        #[allow(non_camel_case_types)]
-+        type isize_atomic_repr = i64;
-+    }
+-core_initcall(prandom_state_selftest);
++#ifdef CONFIG_PRANDOM_KUNIT_TEST
++#include "tests/random32_kunit.c"
+ #endif
+diff --git a/lib/tests/random32_kunit.c b/lib/tests/random32_kunit.c
+new file mode 100644
+index 000000000..13c657b00
+--- /dev/null
++++ b/lib/tests/random32_kunit.c
+@@ -0,0 +1,174 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test cases for random32 functions.
++ */
++
++#include <kunit/test.h>
++
++static const struct prandom_test1 {
++	u32 seed;
++	u32 result;
++} test1[] = {
++	{ 1U, 3484351685U },
++	{ 2U, 2623130059U },
++	{ 3U, 3125133893U },
++	{ 4U,  984847254U },
++};
++
++static const struct prandom_test2 {
++	u32 seed;
++	u32 iteration;
++	u32 result;
++} test2[] = {
++	/* Test cases against taus113 from GSL library. */
++	{  931557656U, 959U, 2975593782U },
++	{ 1339693295U, 876U, 3887776532U },
++	{ 1545556285U, 961U, 1615538833U },
++	{  601730776U, 723U, 1776162651U },
++	{ 1027516047U, 687U,  511983079U },
++	{  416526298U, 700U,  916156552U },
++	{ 1395522032U, 652U, 2222063676U },
++	{  366221443U, 617U, 2992857763U },
++	{ 1539836965U, 714U, 3783265725U },
++	{  556206671U, 994U,  799626459U },
++	{  684907218U, 799U,  367789491U },
++	{ 2121230701U, 931U, 2115467001U },
++	{ 1668516451U, 644U, 3620590685U },
++	{  768046066U, 883U, 2034077390U },
++	{ 1989159136U, 833U, 1195767305U },
++	{  536585145U, 996U, 3577259204U },
++	{ 1008129373U, 642U, 1478080776U },
++	{ 1740775604U, 939U, 1264980372U },
++	{ 1967883163U, 508U,   10734624U },
++	{ 1923019697U, 730U, 3821419629U },
++	{  442079932U, 560U, 3440032343U },
++	{ 1961302714U, 845U,  841962572U },
++	{ 2030205964U, 962U, 1325144227U },
++	{ 1160407529U, 507U,  240940858U },
++	{  635482502U, 779U, 4200489746U },
++	{ 1252788931U, 699U,  867195434U },
++	{ 1961817131U, 719U,  668237657U },
++	{ 1071468216U, 983U,  917876630U },
++	{ 1281848367U, 932U, 1003100039U },
++	{  582537119U, 780U, 1127273778U },
++	{ 1973672777U, 853U, 1071368872U },
++	{ 1896756996U, 762U, 1127851055U },
++	{  847917054U, 500U, 1717499075U },
++	{ 1240520510U, 951U, 2849576657U },
++	{ 1685071682U, 567U, 1961810396U },
++	{ 1516232129U, 557U,    3173877U },
++	{ 1208118903U, 612U, 1613145022U },
++	{ 1817269927U, 693U, 4279122573U },
++	{ 1510091701U, 717U,  638191229U },
++	{  365916850U, 807U,  600424314U },
++	{  399324359U, 702U, 1803598116U },
++	{ 1318480274U, 779U, 2074237022U },
++	{  697758115U, 840U, 1483639402U },
++	{ 1696507773U, 840U,  577415447U },
++	{ 2081979121U, 981U, 3041486449U },
++	{  955646687U, 742U, 3846494357U },
++	{ 1250683506U, 749U,  836419859U },
++	{  595003102U, 534U,  366794109U },
++	{   47485338U, 558U, 3521120834U },
++	{  619433479U, 610U, 3991783875U },
++	{  704096520U, 518U, 4139493852U },
++	{ 1712224984U, 606U, 2393312003U },
++	{ 1318233152U, 922U, 3880361134U },
++	{  855572992U, 761U, 1472974787U },
++	{   64721421U, 703U,  683860550U },
++	{  678931758U, 840U,  380616043U },
++	{  692711973U, 778U, 1382361947U },
++	{  677703619U, 530U, 2826914161U },
++	{   92393223U, 586U, 1522128471U },
++	{ 1222592920U, 743U, 3466726667U },
++	{  358288986U, 695U, 1091956998U },
++	{ 1935056945U, 958U,  514864477U },
++	{  735675993U, 990U, 1294239989U },
++	{ 1560089402U, 897U, 2238551287U },
++	{   70616361U, 829U,   22483098U },
++	{  368234700U, 731U, 2913875084U },
++	{   20221190U, 879U, 1564152970U },
++	{  539444654U, 682U, 1835141259U },
++	{ 1314987297U, 840U, 1801114136U },
++	{ 2019295544U, 645U, 3286438930U },
++	{  469023838U, 716U, 1637918202U },
++	{ 1843754496U, 653U, 2562092152U },
++	{  400672036U, 809U, 4264212785U },
++	{  404722249U, 965U, 2704116999U },
++	{  600702209U, 758U,  584979986U },
++	{  519953954U, 667U, 2574436237U },
++	{ 1658071126U, 694U, 2214569490U },
++	{  420480037U, 749U, 3430010866U },
++	{  690103647U, 969U, 3700758083U },
++	{ 1029424799U, 937U, 3787746841U },
++	{ 2012608669U, 506U, 3362628973U },
++	{ 1535432887U, 998U,   42610943U },
++	{ 1330635533U, 857U, 3040806504U },
++	{ 1223800550U, 539U, 3954229517U },
++	{ 1322411537U, 680U, 3223250324U },
++	{ 1877847898U, 945U, 2915147143U },
++	{ 1646356099U, 874U,  965988280U },
++	{  805687536U, 744U, 4032277920U },
++	{ 1948093210U, 633U, 1346597684U },
++	{  392609744U, 783U, 1636083295U },
++	{  690241304U, 770U, 1201031298U },
++	{ 1360302965U, 696U, 1665394461U },
++	{ 1220090946U, 780U, 1316922812U },
++	{  447092251U, 500U, 3438743375U },
++	{ 1613868791U, 592U,  828546883U },
++	{  523430951U, 548U, 2552392304U },
++	{  726692899U, 810U, 1656872867U },
++	{ 1364340021U, 836U, 3710513486U },
++	{ 1986257729U, 931U,  935013962U },
++	{  407983964U, 921U,  728767059U },
++};
++
++static void prandom_state_test_seed(struct rnd_state *state, u32 seed)
++{
++#define LCG(x)	 ((x) * 69069U)	/* super-duper LCG */
++	state->s1 = __seed(LCG(seed),        2U);
++	state->s2 = __seed(LCG(state->s1),   8U);
++	state->s3 = __seed(LCG(state->s2),  16U);
++	state->s4 = __seed(LCG(state->s3), 128U);
 +}
- 
- // Ensure size and alignment requirements are checked.
- static_assert!(size_of::<isize>() == size_of::<isize_atomic_repr>());
-diff --git a/rust/kernel/time.rs b/rust/kernel/time.rs
-index 363e93cbb139..5cca5b9d111e 100644
---- a/rust/kernel/time.rs
-+++ b/rust/kernel/time.rs
-@@ -27,6 +27,8 @@
- use core::marker::PhantomData;
- use core::ops;
- 
-+use crate::cfg_select;
 +
- pub mod delay;
- pub mod hrtimer;
- 
-@@ -360,15 +362,14 @@ impl ops::Div for Delta {
- 
-     #[inline]
-     fn div(self, rhs: Self) -> Self::Output {
--        #[cfg(CONFIG_64BIT)]
--        {
--            self.nanos / rhs.nanos
--        }
--
--        #[cfg(not(CONFIG_64BIT))]
--        {
--            // SAFETY: This function is always safe to call regardless of the input values
--            unsafe { bindings::div64_s64(self.nanos, rhs.nanos) }
-+        cfg_select! {
-+            CONFIG_64BIT => {
-+                self.nanos / rhs.nanos
-+            }
-+            _ => {
-+                // SAFETY: This function is always safe to call regardless of the input values
-+                unsafe { bindings::div64_s64(self.nanos, rhs.nanos) }
-+            }
-         }
-     }
- }
-@@ -441,30 +442,32 @@ pub const fn as_nanos(self) -> i64 {
-     /// to the value in the [`Delta`].
-     #[inline]
-     pub fn as_micros_ceil(self) -> i64 {
--        #[cfg(CONFIG_64BIT)]
--        {
--            self.as_nanos().saturating_add(NSEC_PER_USEC - 1) / NSEC_PER_USEC
--        }
--
--        #[cfg(not(CONFIG_64BIT))]
--        // SAFETY: It is always safe to call `ktime_to_us()` with any value.
--        unsafe {
--            bindings::ktime_to_us(self.as_nanos().saturating_add(NSEC_PER_USEC - 1))
-+        cfg_select! {
-+            CONFIG_64BIT => {
-+                self.as_nanos().saturating_add(NSEC_PER_USEC - 1) / NSEC_PER_USEC
-+            }
-+            _ => {
-+                // SAFETY: It is always safe to call `ktime_to_us()` with any value.
-+                unsafe {
-+                    bindings::ktime_to_us(self.as_nanos().saturating_add(NSEC_PER_USEC - 1))
-+                }
-+            }
-         }
-     }
- 
-     /// Return the number of milliseconds in the [`Delta`].
-     #[inline]
-     pub fn as_millis(self) -> i64 {
--        #[cfg(CONFIG_64BIT)]
--        {
--            self.as_nanos() / NSEC_PER_MSEC
--        }
--
--        #[cfg(not(CONFIG_64BIT))]
--        // SAFETY: It is always safe to call `ktime_to_ms()` with any value.
--        unsafe {
--            bindings::ktime_to_ms(self.as_nanos())
-+        cfg_select! {
-+            CONFIG_64BIT => {
-+                self.as_nanos() / NSEC_PER_MSEC
-+            }
-+            _ => {
-+                // SAFETY: It is always safe to call `ktime_to_ms()` with any value.
-+                unsafe {
-+                    bindings::ktime_to_ms(self.as_nanos())
-+                }
-+            }
-         }
-     }
- 
-@@ -474,22 +477,21 @@ pub fn as_millis(self) -> i64 {
-     /// limited to 32 bit dividends.
-     #[inline]
-     pub fn rem_nanos(self, dividend: i32) -> Self {
--        #[cfg(CONFIG_64BIT)]
--        {
--            Self {
--                nanos: self.as_nanos() % i64::from(dividend),
-+        cfg_select! {
-+            CONFIG_64BIT => {
-+                Self {
-+                    nanos: self.as_nanos() % i64::from(dividend),
-+                }
-             }
--        }
--
--        #[cfg(not(CONFIG_64BIT))]
--        {
--            let mut rem = 0;
-+            _ => {
-+                let mut rem = 0;
- 
--            // SAFETY: `rem` is in the stack, so we can always provide a valid pointer to it.
--            unsafe { bindings::div_s64_rem(self.as_nanos(), dividend, &mut rem) };
-+                // SAFETY: `rem` is in the stack, so we can always provide a valid pointer to it.
-+                unsafe { bindings::div_s64_rem(self.as_nanos(), dividend, &mut rem) };
- 
--            Self {
--                nanos: i64::from(rem),
-+                Self {
-+                    nanos: i64::from(rem),
-+                }
-             }
-         }
-     }
-
++static void test_prandom_seed_boundary(struct kunit *test)
++{
++	int i;
++	struct rnd_state state;
++
++	for (i = 0; i < ARRAY_SIZE(test1); i++) {
++		prandom_state_test_seed(&state, test1[i].seed);
++		prandom_warmup(&state);
++		KUNIT_EXPECT_EQ(test, test1[i].result, prandom_u32_state(&state));
++	}
++}
++
++static void test_prandom_taus113(struct kunit *test)
++{
++	int i, j;
++	struct rnd_state state;
++
++	for (i = 0; i < ARRAY_SIZE(test2); i++) {
++		prandom_state_test_seed(&state, test2[i].seed);
++		prandom_warmup(&state);
++
++		for (j = 0; j < test2[i].iteration - 1; j++)
++			prandom_u32_state(&state);
++
++		KUNIT_EXPECT_EQ(test, test2[i].result, prandom_u32_state(&state));
++	}
++}
++
++static struct kunit_case prandom_test_cases[] = {
++	KUNIT_CASE(test_prandom_seed_boundary),
++	KUNIT_CASE(test_prandom_taus113),
++	{}
++};
++
++static struct kunit_suite prandom_test_suite = {
++	.name = "prandom",
++	.test_cases = prandom_test_cases,
++};
++
++kunit_test_suite(prandom_test_suite);
 -- 
-2.54.0
+2.52.0
 
