@@ -1,37 +1,81 @@
-Received: from out28-221.mail.aliyun.com (out28-221.mail.aliyun.com [115.124.28.221])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C9C402453;
-	Mon, 29 Jun 2026 12:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19B123FF889
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 12:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782737552; cv=none; b=VzgoFije1aFA1cAQmIpL6IPirBV0RNiNAeZeRmP3uX92YyByKZhyabEuAzSaPvSvIf8yfMPpNKr7DcNpn1EZgqLlYdpx09hrPQADtrPOiE9rHDDGFNm5PhdGXX4kZaE44eI5vP2zPvHxY8s8/HwVrdWeF3BM4A/1Bic1OVovwu0=
+	t=1782737871; cv=none; b=rCkOmfXgurMxAK+Feoc32HhmB54jxN6KqwvcVeZ+vxdYImyFWBHSO3L+4UID1UzO0L/V8UCNrEuJwKiddjf77yYBHrL+jWEmd9tK38WzE2ThaBR8+nW5Y7c1wc0ZOURAxUZgLe2zcCEQa0p6swq5IFZIFftd1jR7MUltrFzMfrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782737552; c=relaxed/simple;
-	bh=gff3RsnB8GN2QYEdD6g1t+yshP46mb/BFqUXFY3MN6s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E24Gks6edoc0n1dI94+F2p8ZtUFN32Ax/gpcrzV10zb/N181OHzMEgmKqSQrRyScLzisfftLJbqJwwc5oeXY7NeRqnw2oBxjT5XPIzWchI+VEc/3VX6uBZvua2Z1CB7GQPRx8U4k1G6kUR1GNeBR3z7MJC2P74ue/EQokpzEaAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.0746412|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00200947-0.00103341-0.996957;FP=12567415814603082931|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033068016216;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=7;RT=7;SR=0;TI=SMTPD_---.i8gsqKP_1782737534;
-Received: from tina-home.taild49858.ts.net(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.i8gsqKP_1782737534 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Mon, 29 Jun 2026 20:52:17 +0800
-From: Tina Zhang <zhang_wei@open-hieco.net>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	kvm@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>,
-	zhouyanjing@hygon.cn,
+	s=arc-20240116; t=1782737871; c=relaxed/simple;
+	bh=zfksjw+XRBPxiZB4Kl4ufA4nXVLgzGFz2c+17Fn6Yn4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I+I6KMAE1mq0uPQPKJE7e9hlcE4/7+V243B2VMQj90pDOGn43404aGblb5/rlT/z07Y3CUuXz4+zunHJniRltqWrOJrabkZj/q+m3UES3KR26kc3z0zGbnLVRaDMD411b/gN7ajMZ+EJzBkM3TO/W72D8IIvwn75ANM+H1gOM9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LTV6djWo; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LTV6djWo"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso42309835e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 05:57:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782737868; x=1783342668; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zS6INqnnyC03KYKAIS5NHsKTWgAmbX4KvTkfnH8Dlis=;
+        b=LTV6djWorcvP7cu6Zcqhf48TrEgrSu0/pH/34I66LZYBvNn2QtaGhC7BuJd3+EZD72
+         sYmJE8qKrNPzU8Fmq8VsDlLSiZl/Jho5ZFmqfeYg6uLlBa7Lwt8B73NLhq9Blu6XjaRs
+         k4h0viYx2bQ6hctjh83/6reD0J2lTVF2GudD194HQYP2KhoU28hsKFybd/sL5STTFylx
+         HKgy6eKtEp2q0QKTKVCLtNdWd8pzsywzSr+62myrcotcdZ75dyeNKah2+RSyn/ytZB43
+         NfVNjp8wfh7gMc4dGLQHroVkA4dXSlkHh9NOgF2s70WI/H1STAVfsRzmu3d3G96f2Kkd
+         Cu2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782737868; x=1783342668;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zS6INqnnyC03KYKAIS5NHsKTWgAmbX4KvTkfnH8Dlis=;
+        b=OD+3/YdEdnmZoqhQPOBmqyaSJMhHwxRE/rNHJvT+MIVseRGZs+CZhrf1of9iIqvdJh
+         ec3h6FRWEddFDZKn4RldgSBiCbOe+0r42XcpAs1gGigPNTVcDLrVK3wHCb23WTmmKxfi
+         AUrB7PdhhO6KG+N4G/uCXXzu/syjX0SVWczuFlc5GkC2qmIYFGzQS/HMslJ0QjdoltHL
+         2eG1Ci//aJ95dSRutlwCriJJAv+hBzzlF6MmAbmU0mL6jeQy1Wb5JdklHt80Kty5W5Mr
+         qkkl3/WXOu3c2wXHnDr6cV99EpLflyK06E6DN2EBPvMKeBYJQRY97b6zlghk4WPYRrR9
+         J7aw==
+X-Forwarded-Encrypted: i=1; AFNElJ++eMSEbVHgd6CYbAeFZaScFEVxR3MWPIBan89wHDoC8kcRSFl7pqTdvPI1ydTxhKiGhow3fHnXXDoYj68GO5I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQ5vnkm6WZJaJ15t69dsUOJSABiOBzRKzsUtvTvLemR/cj5AmD
+	OcKjhC2l3XXcR67AYKLcB+RcgJAspoCrKHglROtqSO89i5zIjEpTyQEi
+X-Gm-Gg: AfdE7cmMXk6Ft0ZtenkKldIG99V/qnH89GZuJ211cZLH4fErMiyYPheA2mEZwTfaq8a
+	BMTTmwHokrcrdI7F9POEsV5kYlnAZIsyFjEz80AS2gchBhitZDx4pQZ9svuVcipSIe0zYPNjinR
+	KfucgexjJIrE8FTRWP5bFajGpwVdQwLN3wn0E9QwbsB9QVvS1ezBtKBvOoSA76AsWiuuq9FYIHK
+	kbMzE9Z/NyALsoXaLy7pu3cm9SmL86vG1dGZiM59UNBsSpi11MzMJi8hWpGThF0K7do3USDB3Gj
+	R8rtTjwlqufm42qRXsAUrrDrm1xJNsMoZtGe4wMsfH5ndLN6Z3/jSAIF+imqlTPmMfY8W1Qg82s
+	WzF75unvWDEJ2dpXF4nOYU8tnKa8hmu/dySyhFo+UTTigLHs2dHiV23ImlLOHPqcpwn182FkWE7
+	Ke4GyaL5pkxVAYulkhizY2vA==
+X-Received: by 2002:a05:600c:3acd:b0:492:6da2:5f0e with SMTP id 5b1f17b1804b1-4926da25f4dmr177134215e9.32.1782737868462;
+        Mon, 29 Jun 2026 05:57:48 -0700 (PDT)
+Received: from uberwald.home ([2a02:a03f:635d:6701:d6a2:6d4:bf93:c1b7])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-492690a1a85sm546336835e9.15.2026.06.29.05.57.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2026 05:57:47 -0700 (PDT)
+From: "Guillaume @layus Maudoux" <layus.on@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	mptcp@lists.linux.dev,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] KVM: nSVM: Virtualize DecodeAssists for nested guests
-Date: Mon, 29 Jun 2026 20:52:04 +0800
-Message-ID: <20260629125205.52394-2-zhang_wei@open-hieco.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260629125205.52394-1-zhang_wei@open-hieco.net>
-References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
+	linux-kernel@vger.kernel.org,
+	"Guillaume @layus Maudoux" <layus.on@gmail.com>
+Subject: [PATCH] selftests/bpf: Mask socket type flags in mptcpify prog
+Date: Mon, 29 Jun 2026 14:56:37 +0200
+Message-ID: <20260629125637.384923-1-layus.on@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,146 +84,176 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hardware records DecodeAssist information, i.e. the instruction length and
-bytes, in the VMCB for exits such as #NPF.  KVM does not currently expose
-that information when an L2 exit is reflected to L1, so a nested hypervisor
-cannot consume the hardware-provided decode state and may need to fetch and
-decode the L2 instruction itself.
+The mptcpify BPF prog hooks update_socket_protocol() to rewrite
+eligible TCP socket() calls to IPPROTO_MPTCP. It only does so when the
+socket type is exactly SOCK_STREAM:
 
-Advertise DecodeAssists to L1 when the host supports it, and copy
-insn_len/insn_bytes from VMCB02 to VMCB12 for nested VM-Exits that
-reflect a real hardware exit.  Gate the copy on L1's guest CPUID so the
-advertised feature and the propagated state stay in sync.
+	type == SOCK_STREAM
 
-Report decode information only for exits that actually have fresh hardware
-state.  KVM synthesizes several nested VM-Exits, e.g. VMRUN failures,
-synthetic #NPF exits, reflected exceptions, and interrupt/NMI windows, that
-do not carry VMCB02 DecodeAssist output.  Track only the verbatim VMCB02
-reflection path with nested.decode_assists_valid, clear VMCB02's decode
-fields before VMRUN, and clear VMCB12's fields for ineligible exits.  Use
-insn_len == 0 to tell L1 that no decode information is available, and avoid
-exposing stale bytes from a previous L2 exit.
+The problem is that update_socket_protocol() in __sys_socket() is
+called on the raw type argument as passed from userspace, before
+__sys_socket_create() strips the flag bits with
+"type &= SOCK_TYPE_MASK". The type argument may therefore carry
+SOCK_CLOEXEC and/or SOCK_NONBLOCK in its upper bits, and the equality
+check above then fails.
 
-Tested-by: Yongwei Xu <xuyongwei@hygon.cn>
-Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
+As a result, any socket created with e.g.
+socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0) -- which is what common
+libraries do by default -- is silently left as plain TCP instead of
+being upgraded to MPTCP. This was observed in practice with curl,
+whose connections were not upgraded to MPTCP despite the prog being
+attached.
+
+The impact reaches beyond the test, because mptcpify.c is referenced
+as example code for users who want to transparently enable MPTCP. The
+same mistake is therefore likely to be copied into real deployments,
+where it fails the same way and is hard to diagnose.
+
+The fix is to mask off the flag bits before comparing, mirroring what
+the socket core does:
+
+	(type & SOCK_TYPE_MASK) == SOCK_STREAM
+
+Since SOCK_TYPE_MASK is not exposed through vmlinux.h, define it in
+bpf_tracing_net.h.
+
+To exercise the regression directly, extend the mptcpify test to also
+create the server socket with SOCK_CLOEXEC and SOCK_NONBLOCK set.
+Routing a flagged type through start_server() then revealed a second
+instance of the same pattern: start_server_addr() compared the type
+against SOCK_STREAM for equality to decide whether to set SO_REUSEADDR
+and call listen(), and so would skip listening for a flagged type.
+Mask the type there as well. As SOCK_TYPE_MASK is not exposed by
+glibc's <sys/socket.h> either, define it in network_helpers.h,
+mirroring prog_tests/socket_helpers.h.
+
+Fixes: ddba122428a7 ("selftests/bpf: Add mptcpify test")
+Signed-off-by: Guillaume @layus Maudoux <layus.on@gmail.com>
 ---
- arch/x86/kvm/svm/nested.c | 47 ++++++++++++++++++++++++++++++++++++++-
- arch/x86/kvm/svm/svm.c    |  3 +++
- arch/x86/kvm/svm/svm.h    |  6 +++++
- 3 files changed, 55 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/network_helpers.c |  4 ++--
+ tools/testing/selftests/bpf/network_helpers.h |  5 +++++
+ .../testing/selftests/bpf/prog_tests/mptcp.c  | 20 +++++++++++++++----
+ .../selftests/bpf/progs/bpf_tracing_net.h     |  3 +++
+ tools/testing/selftests/bpf/progs/mptcpify.c  |  2 +-
+ 5 files changed, 27 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index b340dc9991ad..50e9ffa5f9fd 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -33,6 +33,33 @@
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index b82f572641b7..db935a9d9fc1 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -111,7 +111,7 @@ int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t a
+ 	if (settimeo(fd, opts->timeout_ms))
+ 		goto error_close;
  
- #define CC KVM_NESTED_VMENTER_CONSISTENCY_CHECK
+-	if (type == SOCK_STREAM &&
++	if ((type & SOCK_TYPE_MASK) == SOCK_STREAM &&
+ 	    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on))) {
+ 		log_err("Failed to enable SO_REUSEADDR");
+ 		goto error_close;
+@@ -128,7 +128,7 @@ int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t a
+ 		goto error_close;
+ 	}
  
-+static void nested_svm_clear_decode_assists(struct vmcb *vmcb)
-+{
-+	vmcb->control.insn_len = 0;
-+	memset(vmcb->control.insn_bytes, 0,
-+	       sizeof(vmcb->control.insn_bytes));
-+}
-+
-+static void nested_svm_copy_decode_assists(struct vmcb *to, struct vmcb *from)
-+{
-+	u8 insn_len = from->control.insn_len;
-+
-+	nested_svm_clear_decode_assists(to);
-+
-+	/*
-+	 * Hardware leaves insn_len zero when no DecodeAssist data is available.
-+	 * Keep that as the nested-visible "no decode info" marker.
-+	 */
-+	if (!insn_len)
-+		return;
-+
-+	if (WARN_ON_ONCE(insn_len > sizeof(from->control.insn_bytes)))
-+		return;
-+
-+	to->control.insn_len = insn_len;
-+	memcpy(to->control.insn_bytes, from->control.insn_bytes, insn_len);
-+}
-+
- static void nested_svm_inject_npf_exit(struct kvm_vcpu *vcpu,
- 				       struct x86_exception *fault)
- {
-@@ -838,7 +865,10 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
- 	/*
- 	 * Filled at exit: exit_code, exit_info_1, exit_info_2, exit_int_info,
- 	 * exit_int_info_err, next_rip, insn_len, insn_bytes.
-+	 * Clear stale DecodeAssist data before L2 runs.
- 	 */
-+	nested_svm_clear_decode_assists(vmcb02);
-+	svm->nested.decode_assists_valid = false;
+-	if (type == SOCK_STREAM) {
++	if ((type & SOCK_TYPE_MASK) == SOCK_STREAM) {
+ 		if (listen(fd, opts->backlog ? MAX(opts->backlog, 0) : 1) < 0) {
+ 			log_err("Failed to listed on socket");
+ 			goto error_close;
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 79a010c88e11..75133119c04a 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -25,6 +25,11 @@ typedef __u16 __sum16;
+ #define VIP_NUM 5
+ #define MAGIC_BYTES 123
  
- 	if (guest_cpu_cap_has(vcpu, X86_FEATURE_VGIF) &&
- 	    (vmcb12_ctrl->int_ctl & V_GIF_ENABLE_MASK))
-@@ -1251,6 +1281,18 @@ static int nested_svm_vmexit_update_vmcb12(struct kvm_vcpu *vcpu)
- 	if (guest_cpu_cap_has(vcpu, X86_FEATURE_NRIPS))
- 		vmcb12->control.next_rip  = vmcb02->control.next_rip;
- 
-+	/*
-+	 * Copy DecodeAssist data only for real VMCB02 exits.  KVM-synthesized
-+	 * exits report no decode info to L1.
-+	 */
-+	if (svm->nested.decode_assists_valid &&
-+	    guest_cpu_cap_has(vcpu, X86_FEATURE_DECODEASSISTS))
-+		nested_svm_copy_decode_assists(vmcb12, vmcb02);
-+	else
-+		nested_svm_clear_decode_assists(vmcb12);
++/* include/linux/net.h */
++#ifndef SOCK_TYPE_MASK
++#define SOCK_TYPE_MASK 0xf
++#endif
 +
-+	svm->nested.decode_assists_valid = false;
-+
- 	if (nested_vmcb12_has_lbrv(vcpu))
- 		svm_copy_lbrs(&vmcb12->save, &vmcb02->save);
- 
-@@ -1593,8 +1635,11 @@ int nested_svm_exit_handled(struct vcpu_svm *svm)
- 
- 	vmexit = nested_svm_intercept(svm);
- 
--	if (vmexit == NESTED_EXIT_DONE)
-+	if (vmexit == NESTED_EXIT_DONE) {
-+		/* This path reflects a real VMCB02 exit directly to L1. */
-+		svm->nested.decode_assists_valid = true;
- 		nested_svm_vmexit(svm);
-+	}
- 
- 	return vmexit;
+ struct network_helper_opts {
+ 	int timeout_ms;
+ 	int proto;
+diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+index 8fade8bdc451..faa001ea84ab 100644
+--- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
++++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+@@ -264,7 +264,7 @@ static int verify_mptcpify(int server_fd, int client_fd)
+ 	return err;
  }
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index e02a38da5296..366e7ef787b2 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -5470,6 +5470,9 @@ static __init void svm_set_cpu_caps(void)
- 		 */
- 		kvm_cpu_cap_set(X86_FEATURE_FLUSHBYASID);
  
-+		if (boot_cpu_has(X86_FEATURE_DECODEASSISTS))
-+			kvm_cpu_cap_set(X86_FEATURE_DECODEASSISTS);
+-static int run_mptcpify(int cgroup_fd)
++static int run_mptcpify(int cgroup_fd, int type)
+ {
+ 	int server_fd, client_fd, err = 0;
+ 	struct mptcpify *mptcpify_skel;
+@@ -280,7 +280,7 @@ static int run_mptcpify(int cgroup_fd)
+ 		goto out;
+ 
+ 	/* without MPTCP */
+-	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
++	server_fd = start_server(AF_INET, type, NULL, 0, 0);
+ 	if (!ASSERT_GE(server_fd, 0, "start_server")) {
+ 		err = -EIO;
+ 		goto out;
+@@ -307,7 +307,18 @@ static int run_mptcpify(int cgroup_fd)
+ static void test_mptcpify(void)
+ {
+ 	struct netns_obj *netns = NULL;
+-	int cgroup_fd;
++	int cgroup_fd, i;
++	int types[] = {
++		SOCK_STREAM,
++		/* userspace sets these flags together with the type, and the
++		 * BPF prog must still upgrade the socket to MPTCP. See
++		 * update_socket_protocol() in net/socket.c, which runs before
++		 * the type is masked with SOCK_TYPE_MASK.
++		 */
++		SOCK_STREAM | SOCK_CLOEXEC,
++		SOCK_STREAM | SOCK_NONBLOCK,
++		SOCK_STREAM | SOCK_CLOEXEC | SOCK_NONBLOCK,
++	};
+ 
+ 	cgroup_fd = test__join_cgroup("/mptcpify");
+ 	if (!ASSERT_GE(cgroup_fd, 0, "test__join_cgroup"))
+@@ -317,7 +328,8 @@ static void test_mptcpify(void)
+ 	if (!ASSERT_OK_PTR(netns, "netns_new"))
+ 		goto fail;
+ 
+-	ASSERT_OK(run_mptcpify(cgroup_fd), "run_mptcpify");
++	for (i = 0; i < ARRAY_SIZE(types); i++)
++		ASSERT_OK(run_mptcpify(cgroup_fd, types[i]), "run_mptcpify");
+ 
+ fail:
+ 	netns_free(netns);
+diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+index d8dacef37c16..c4b438854565 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
++++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+@@ -8,6 +8,9 @@
+ #define AF_INET			2
+ #define AF_INET6		10
+ 
++/* include/linux/net.h */
++#define SOCK_TYPE_MASK		0xf
 +
- 		if (nrips)
- 			kvm_cpu_cap_set(X86_FEATURE_NRIPS);
+ #define SOL_SOCKET		1
+ #define SO_REUSEADDR		2
+ #define SO_SNDBUF		7
+diff --git a/tools/testing/selftests/bpf/progs/mptcpify.c b/tools/testing/selftests/bpf/progs/mptcpify.c
+index cbdc730c3a47..e3f8cb54dbe9 100644
+--- a/tools/testing/selftests/bpf/progs/mptcpify.c
++++ b/tools/testing/selftests/bpf/progs/mptcpify.c
+@@ -15,7 +15,7 @@ int BPF_PROG(mptcpify, int family, int type, int protocol)
+ 		return protocol;
  
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 5137416be593..be7fdcd124b7 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -238,6 +238,12 @@ struct svm_nested_state {
- 	 * on its side.
- 	 */
- 	bool force_msr_bitmap_recalc;
-+
-+	/*
-+	 * True only while reflecting a real VMCB02 exit whose DecodeAssist
-+	 * fields may be copied to VMCB12.  KVM-synthesized exits leave it clear.
-+	 */
-+	bool decode_assists_valid;
- };
- 
- struct vcpu_sev_es_state {
+ 	if ((family == AF_INET || family == AF_INET6) &&
+-	    type == SOCK_STREAM &&
++	    (type & SOCK_TYPE_MASK) == SOCK_STREAM &&
+ 	    (!protocol || protocol == IPPROTO_TCP)) {
+ 		return IPPROTO_MPTCP;
+ 	}
 -- 
-2.43.0
+2.54.0
 
