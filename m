@@ -1,19 +1,20 @@
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A77318EE6;
-	Tue, 30 Jun 2026 07:34:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A3E3B52F1;
+	Tue, 30 Jun 2026 07:34:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782804852; cv=none; b=PToXPiGOed/BZctJFa6NAkXXr5qEryCQCqeuXBifLv7+4Hv6MEXBN5lLD5kdoxRDE7jdYavZoq+xyqlcGa7bkyooXD+jZhmQsnwVlDaXqGf8W1pv5kMJAnyAop+IlilmQxpBlagvv+NwE1zvpmAnKAAIp4konbMNeC2ltlyzzYM=
+	t=1782804855; cv=none; b=Q5MxPDe5jjG8PjKNImlKt6QWku/2DJygHKoJPGMc/IQnnkOEeTx0YGiEa4GskSTE34uhzoXiwdb2XUzQTQrfOrGF4iDMtjWp3U6V8DQtA/jxmstVlcpVr7IZch6MGgliVwPhRl9IJNV2Um9qwGxXKzVBy2ofGqtIfMVNd709mio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782804852; c=relaxed/simple;
-	bh=M6ayROjgOX2Fd5fgBNBZmnEnhIV1OzvXoSXW3RpbeuU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oWd8142wZo3jY75uxQgdzoeZCfA7NqF3BIMsiwHLKG1W/ROxFdOKX5aRXTgAnEKwHhuD4UHMTnqxj2L3yrsihCahZlAKsyL9cFfqgatUddYJfmBOqFTyjGBj3MYRYObb/YJKAlGf2LPQe3O8lDRLdaJ5EUB8paWhbaRw50qbnVU=
+	s=arc-20240116; t=1782804855; c=relaxed/simple;
+	bh=68ELSLPiUyrmTUaH9Gjuo1ot1n1XpfsuDMD2bk4JqNE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=OdayNJAJEZsk9sH4l3+QwtaT895G0hoNV6aeDypNq8NYs9bqP2q4+y8mSnPNEUy2aK7+iBQehepRhJcwvbeUcpASOK593hWJJJJcSidbd+10wSBeKwowbJchc59z+5SQe1tcFHNUxFmhfprnm2kdrD58k79IdOYhA07NjokVhlk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 1237ed92745611f1aa26b74ffac11d73-20260630
+X-UUID: 154e039a745611f1aa26b74ffac11d73-20260630
 X-CTIC-Tags:
 	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
 	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
@@ -24,27 +25,27 @@ X-CTIC-Tags:
 	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
 	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:7cc4df48-54d6-40eb-a1ef-372245fde000,IP:10,
-	URL:0,TC:0,Content:-25,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,AC
-	TION:release,TS:-35
-X-CID-INFO: VERSION:1.3.12,REQID:7cc4df48-54d6-40eb-a1ef-372245fde000,IP:10,UR
-	L:0,TC:0,Content:-25,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:NOTI_GNA5D1EA,AC
-	TION:release,TS:-35
-X-CID-META: VersionHash:e7bac3a,CLOUDID:579fe322386de05c17de66cccb557374,BulkI
-	D:2606301534044XVORWWH,BulkQuantity:0,Recheck:0,SF:10|38|66|78|102|127|136
-	|850|865|898,TC:nil,Content:0|15|50,EDM:-19|2,IP:-2,URL:99|1,File:nil,RT:n
-	il,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0
-	,BRR:0,BRE:0,ARC:0
+X-CID-O-INFO: VERSION:1.3.12,REQID:1e956fa8-1768-4118-86dd-68b515bb06fa,IP:10,
+	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:5
+X-CID-INFO: VERSION:1.3.12,REQID:1e956fa8-1768-4118-86dd-68b515bb06fa,IP:10,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:5
+X-CID-META: VersionHash:e7bac3a,CLOUDID:c0fa7c94f2ac2e8733081d8bea0e71d7,BulkI
+	D:260629183419Q7ASPG4J,BulkQuantity:1,Recheck:0,SF:10|38|66|78|81|82|102|1
+	27|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,B
+	ulk:41,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:
+	0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 1237ed92745611f1aa26b74ffac11d73-20260630
+X-UUID: 154e039a745611f1aa26b74ffac11d73-20260630
 X-User: lihongfu@kylinos.cn
 Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
 	(envelope-from <lihongfu@kylinos.cn>)
 	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 677204135; Tue, 30 Jun 2026 15:34:04 +0800
+	with ESMTP id 1082027364; Tue, 30 Jun 2026 15:34:09 +0800
 From: Hongfu Li <lihongfu@kylinos.cn>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -68,10 +69,12 @@ Cc: linux-mm@kvack.org,
 	zwisler@google.com,
 	hongfu.li@linux.dev,
 	Hongfu Li <lihongfu@kylinos.cn>
-Subject: [PATCH v8 0/5] selftests/mm: refactor pkey helpers and fix mmap error handling
-Date: Tue, 30 Jun 2026 15:32:30 +0800
-Message-Id: <20260630073235.3802271-1-lihongfu@kylinos.cn>
+Subject: [PATCH v8 1/5] selftests/mm: move pkey selftest helpers to pkey_util.c
+Date: Tue, 30 Jun 2026 15:32:31 +0800
+Message-Id: <20260630073235.3802271-2-lihongfu@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260630073235.3802271-1-lihongfu@kylinos.cn>
+References: <20260630073235.3802271-1-lihongfu@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,59 +83,225 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The main changes in this series are to refactor shared tracing and assertion
-helpers into a common file, unify both pkey selftests on pkey_assert() and 
-per-test tracing for consistent diagnostics, and add missing mmap() return 
-checks with MAP_FAILED used throughout for readability and consistency.
+Move pkey selftest debugging helpers into shared code so both pkey
+selftests can use the same tracing and abort-hook logic.
 
-Hongfu Li (5):
-  selftests/mm: move pkey selftest helpers to pkey_util.c
-  selftests/mm: unify pkey sighandler selftest assertions and tracing
-  selftests/mm: use pkey_assert on clone_raw failure in pkey test
-  selftests/mm: add missing mmap() return checks in pkey tests
-  selftests/mm: add missing pthread_create() return checks in pkey tests
-
- tools/testing/selftests/mm/pkey-helpers.h     |  4 +-
- tools/testing/selftests/mm/pkey-powerpc.h     |  2 +-
- .../selftests/mm/pkey_sighandler_tests.c      | 81 ++++++++--------
- tools/testing/selftests/mm/pkey_util.c        | 86 +++++++++++++++++
- tools/testing/selftests/mm/protection_keys.c  | 95 ++-----------------
- 5 files changed, 141 insertions(+), 127 deletions(-)
-
+Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
 ---
-v8:
-- No code changes (relative to v7).
-- Updated Cc list: added developers identified via `git blame` and
-  `git log` on tools/testing/selftests/mm/pkey*
-v7:
-- As previously suggested, wait for v7.2-rc1 and rebased the whole series
-  on top of it. No functional code changes.
-v6:
-- Add missing pthread_create() return checks (new patch 5/5).
-- In patch 2/5, call tracing_off() at the start of test_pkru_sigreturn
-  before the SIGSEGV handler is reset to SIG_DFL, to avoid leaving ftrace
-  enabled on crash.
-v5:
-- Use ret instead of child_pid to hold the return value of clone_raw().
-- Make tracing_on(), tracing_off() non-static.
-  Remove cat_into_file() declaration from pkey-helpers.h.
-v4:
-- Base changes on top of the latest mm-unstable branch.
-- Split the first patch into three:
-  patch 1: move pkey selftest helpers to shared code;
-  patch 2: unify sighandler selftest assertions and per-test tracing;
-  patch 3: use pkey_assert() on clone_raw() failure.
-- Use ksft_exit_fail_perror() in main() for mmap() failure.
-v3:
-- Use pkey_assert() for remaining sigaction() and clone_raw() error
-  checks for consistency.
-v2:
-- Update commit message
-- Move shared tracing and assertion helpers to a common file,
-  replace assert() with pkey_assert() in sighandler tests
-- Drop assert() from main() in protection_keys.c and add a proper error
-  message instead.
-- Link to v1: https://lore.kernel.org/all/20260518082120.3890552-1-lihongfu@kylinos.cn/
+ tools/testing/selftests/mm/pkey-helpers.h    |  4 +-
+ tools/testing/selftests/mm/pkey_util.c       | 86 ++++++++++++++++++++
+ tools/testing/selftests/mm/protection_keys.c | 83 -------------------
+ 3 files changed, 89 insertions(+), 84 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
+index 2c377f4e9df1..46a8a1878dc1 100644
+--- a/tools/testing/selftests/mm/pkey-helpers.h
++++ b/tools/testing/selftests/mm/pkey-helpers.h
+@@ -68,7 +68,9 @@ static inline void sigsafe_printf(const char *format, ...)
+ #define dprintf3(args...) dprintf_level(3, args)
+ #define dprintf4(args...) dprintf_level(4, args)
+ 
+-extern void abort_hooks(void);
++void tracing_on(void);
++void tracing_off(void);
++void abort_hooks(void);
+ #define pkey_assert(condition) do {		\
+ 	if (!(condition)) {			\
+ 		dprintf0("# assert() at %s::%d test_nr: %d iteration: %d\n", \
+diff --git a/tools/testing/selftests/mm/pkey_util.c b/tools/testing/selftests/mm/pkey_util.c
+index 255b332f7a08..abf708d6575e 100644
+--- a/tools/testing/selftests/mm/pkey_util.c
++++ b/tools/testing/selftests/mm/pkey_util.c
+@@ -2,9 +2,95 @@
+ #define __SANE_USERSPACE_TYPES__
+ #include <sys/syscall.h>
+ #include <unistd.h>
++#include <fcntl.h>
++#include <stdio.h>
++#include <string.h>
+ 
+ #include "pkey-helpers.h"
+ 
++#if CONTROL_TRACING > 0
++static void cat_into_file(char *str, char *file)
++{
++	int fd = open(file, O_RDWR);
++	int ret;
++
++	dprintf2("%s(): writing '%s' to '%s'\n", __func__, str, file);
++	/*
++	 * these need to be raw because they are called under
++	 * pkey_assert()
++	 */
++	if (fd < 0) {
++		fprintf(stderr, "error opening '%s'\n", str);
++		perror("error: ");
++		exit(__LINE__);
++	}
++
++	ret = write(fd, str, strlen(str));
++	if (ret != strlen(str)) {
++		perror("write to file failed");
++		fprintf(stderr, "filename: '%s' str: '%s'\n", file, str);
++		exit(__LINE__);
++	}
++	close(fd);
++}
++
++static int warned_tracing;
++static int tracing_root_ok(void)
++{
++	if (geteuid() != 0) {
++		if (!warned_tracing)
++			fprintf(stderr, "WARNING: not run as root, "
++					"can not do tracing control\n");
++		warned_tracing = 1;
++		return 0;
++	}
++	return 1;
++}
++#endif
++
++void tracing_on(void)
++{
++#if CONTROL_TRACING > 0
++#define TRACEDIR "/sys/kernel/tracing"
++	char pidstr[32];
++
++	if (!tracing_root_ok())
++		return;
++
++	sprintf(pidstr, "%d", getpid());
++	cat_into_file("0", TRACEDIR "/tracing_on");
++	cat_into_file("\n", TRACEDIR "/trace");
++	if (1) {
++		cat_into_file("function_graph", TRACEDIR "/current_tracer");
++		cat_into_file("1", TRACEDIR "/options/funcgraph-proc");
++	} else {
++		cat_into_file("nop", TRACEDIR "/current_tracer");
++	}
++	cat_into_file(pidstr, TRACEDIR "/set_ftrace_pid");
++	cat_into_file("1", TRACEDIR "/tracing_on");
++	dprintf1("enabled tracing\n");
++#endif
++}
++
++void tracing_off(void)
++{
++#if CONTROL_TRACING > 0
++	if (!tracing_root_ok())
++		return;
++	cat_into_file("0", "/sys/kernel/tracing/tracing_on");
++#endif
++}
++
++void abort_hooks(void)
++{
++	fflush(stdout);
++	fprintf(stderr, "running %s()...\n", __func__);
++	tracing_off();
++#ifdef SLEEP_ON_ABORT
++	sleep(SLEEP_ON_ABORT);
++#endif
++}
++
+ int sys_pkey_alloc(unsigned long flags, unsigned long init_val)
+ {
+ 	int ret = syscall(SYS_pkey_alloc, flags, init_val);
+diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
+index 9a6d954ee371..e504544e2197 100644
+--- a/tools/testing/selftests/mm/protection_keys.c
++++ b/tools/testing/selftests/mm/protection_keys.c
+@@ -62,89 +62,6 @@ noinline int read_ptr(int *ptr)
+ 	return *ptr;
+ }
+ 
+-#if CONTROL_TRACING > 0
+-static void cat_into_file(char *str, char *file)
+-{
+-	int fd = open(file, O_RDWR);
+-	int ret;
+-
+-	dprintf2("%s(): writing '%s' to '%s'\n", __func__, str, file);
+-	/*
+-	 * these need to be raw because they are called under
+-	 * pkey_assert()
+-	 */
+-	if (fd < 0) {
+-		fprintf(stderr, "error opening '%s'\n", str);
+-		perror("error: ");
+-		exit(__LINE__);
+-	}
+-
+-	ret = write(fd, str, strlen(str));
+-	if (ret != strlen(str)) {
+-		perror("write to file failed");
+-		fprintf(stderr, "filename: '%s' str: '%s'\n", file, str);
+-		exit(__LINE__);
+-	}
+-	close(fd);
+-}
+-
+-static int warned_tracing;
+-static int tracing_root_ok(void)
+-{
+-	if (geteuid() != 0) {
+-		if (!warned_tracing)
+-			fprintf(stderr, "WARNING: not run as root, "
+-					"can not do tracing control\n");
+-		warned_tracing = 1;
+-		return 0;
+-	}
+-	return 1;
+-}
+-#endif
+-
+-static void tracing_on(void)
+-{
+-#if CONTROL_TRACING > 0
+-#define TRACEDIR "/sys/kernel/tracing"
+-	char pidstr[32];
+-
+-	if (!tracing_root_ok())
+-		return;
+-
+-	sprintf(pidstr, "%d", getpid());
+-	cat_into_file("0", TRACEDIR "/tracing_on");
+-	cat_into_file("\n", TRACEDIR "/trace");
+-	if (1) {
+-		cat_into_file("function_graph", TRACEDIR "/current_tracer");
+-		cat_into_file("1", TRACEDIR "/options/funcgraph-proc");
+-	} else {
+-		cat_into_file("nop", TRACEDIR "/current_tracer");
+-	}
+-	cat_into_file(pidstr, TRACEDIR "/set_ftrace_pid");
+-	cat_into_file("1", TRACEDIR "/tracing_on");
+-	dprintf1("enabled tracing\n");
+-#endif
+-}
+-
+-static void tracing_off(void)
+-{
+-#if CONTROL_TRACING > 0
+-	if (!tracing_root_ok())
+-		return;
+-	cat_into_file("0", "/sys/kernel/tracing/tracing_on");
+-#endif
+-}
+-
+-void abort_hooks(void)
+-{
+-	fflush(stdout);
+-	fprintf(stderr, "running %s()...\n", __func__);
+-	tracing_off();
+-#ifdef SLEEP_ON_ABORT
+-	sleep(SLEEP_ON_ABORT);
+-#endif
+-}
+-
+ /*
+  * This attempts to have roughly a page of instructions followed by a few
+  * instructions that do a write, and another page of instructions.  That
 -- 
 2.25.1
 
