@@ -1,87 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4F1142980A;
-	Tue, 30 Jun 2026 14:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159F81A0BF3;
+	Tue, 30 Jun 2026 14:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782829068; cv=none; b=RwdyctfzB3LLqwzTY+i1Bvu9sSLAnKWYtwf88AlI9dynZ64PCUk+q7PYYFFZfg8vEguswcMy7QAXF1/xl/Rh1AZhwrbaEnTZZt4eWZUrdZzYiAKttcgFmICo7GK1otm+wxEYkyHooAd3soulJh1BceXF+T/zV1wUtvNnIODafm8=
+	t=1782829091; cv=none; b=tpIPWjp/O7M8fG5rbrJPOmfmd1bAB6n98Acjn3l8mYkoZuS/93XHNUoBqrRXFaz0bUoWXVqL1xSJj8CfG2vhZCh/T/FevJcPZqO8cUiK7+EgYiCropqMPVIFYoPISYgrVT298ffj5r+a9hqnQdMw940iAd1vV2J4H/TizpA1tvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782829068; c=relaxed/simple;
-	bh=XIWpcFIHixSvYXZQ+SKpLh2H3jFB0SEZDqNLf57i9nc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j7NpgvKJu9ZMp7q+bN3C0dAuxXSA/1c8EiumnDVjF3r0v09RpfhqUvB/TVsNqWmUueiOZCC/ZgM21QkyQKduDzNfIYrYy4VYAE2xKyWjWBb+4eFfXeQc3Uhj/xi0C2YYtcqzrx35KebFBCIotr1FPJHlVv4UbZXE4Zz0GhT7ms8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WGDSF9eW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782829091; c=relaxed/simple;
+	bh=B8Y0dTMlB+oB9s7duvm7DhqDyHlJZoxRIu7q/l43pzc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L8imXBJh/C01TMsDpNM4o4NQ4i7l+DjSf+tigGqyDa5LfrHrM3QExEVfo/vwJPYJbFJQNwBLRsg2Lzb58DHcCG1WW242wShg4+q5Z4XCOm1bl7lvZ3sBLWZrAFbjAYx8WqyJ8tjl3ca6WoRW5dCuF6dOBd01NDMXbhal54B/eco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=czOvN6MP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WGDSF9eW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 887781F000E9;
-	Tue, 30 Jun 2026 14:17:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="czOvN6MP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A6491F00A3A;
+	Tue, 30 Jun 2026 14:18:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782829066;
-	bh=TdcCZC5+16+6AUY31I6DEOKh1l2S9+UDKyW2frHuiC4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=WGDSF9eWezY7AOmV3hce+Aatjtmmvb4UhJ4cNMn+ahNooClledOIQVYD5XakxAxU0
-	 jrGkvaDMtG++MkZw21q1GjavHnrDLzgzRmdWbcjF2nnL1mD6UQMiWUYvplegTiBNIC
-	 TOvSzhjzn216+x3N+Jn1TjsAKlAFzqGqvu9O7t4AKK95IyDHblhteFOEi0KZ4DG9UX
-	 uI7MRNuj/nwASfjt4c6jmnAX94f/8cubbslUAq9RTppXcNYMXhhnJZzIppT2e/ahZi
-	 ymIplfq0Zexz9H5UhbzjplxYKWOQShp6dBtdQ0ONner488g7z0NvmwUxGgRaFSG+Oq
-	 C/Vb2R2Kbu/KQ==
-From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SJ Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 07/11] selftests/damon/sysfs.sh: test all files in quota goal dir
-Date: Tue, 30 Jun 2026 07:17:21 -0700
-Message-ID: <20260630141726.92246-8-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260630141726.92246-1-sj@kernel.org>
-References: <20260630141726.92246-1-sj@kernel.org>
+	s=k20260515; t=1782829090;
+	bh=nJE7z6y+b0729BtKGMZ7zs0Yot0Hv1XhxgGW0/v1JZc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=czOvN6MPHetgLKJr5rLG6WWWF2AgkQQu5eBvJsJ5Yt9XG/CkpJu012K4kYCMEmjhI
+	 4y+VvaQY1M81JIrE9e0akdnw63N8atIg83+q2d23SSmfhcjoi4giHM+aMJMRvPWyaT
+	 y0dgHzWvwh9pCQIsK2MTRRFAxmlYSIbSJ542/LL5+05w6s5clcKLi82csRNiMgBUPx
+	 fim/GrOlNnCOZaDrf6+O5NPI3DJgw2owkORlK77Y0c4sPGgJ722AuYSOVxedB+973h
+	 4RdfQWcQBo8KurgCe1FP+gvQeAlCDe2eFNB/VAYbdvvmHQVXEu2cXuQpucrg+aTtbT
+	 EMSWmRA6izxyw==
+Message-ID: <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org>
+Date: Tue, 30 Jun 2026 08:18:07 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
+ bpf_fib_lookup() helper
+Content-Language: en-US
+To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org
+Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
+ yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
+ a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
+ eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
+ <20260624030530.3342884-2-avinash.duduskar@gmail.com>
+ <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
+ <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org> <87echobb5h.fsf@toke.dk>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <87echobb5h.fsf@toke.dk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-DAMON sysfs interface for DAMOS quota has quite extended since its
-initial introduction.  The test case for that in DAMON sysfs interface
-essential file operations test (sysfs.sh) has not accordingly extended,
-though.  Extend the test case to test all existing files.
+On 6/30/26 4:00 AM, Toke Høiland-Jørgensen wrote:
+>> It does not make sense to require a flag to get lookup output. vlan
+>> proto of 0 is not valid, so it is a clear indication that the vlan
+>> output parameters were not set during the lookup.
+> 
+> Okay, so we could just unconditionally set the VLAN fields, but if we
+> start rewriting the ifindex that would be a change of the existing
+> behaviour that could break existing applications, no?
 
-Signed-off-by: SJ Park <sj@kernel.org>
----
- tools/testing/selftests/damon/sysfs.sh | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Consistently dealing with upper devices is one of the reasons I never
+sent patches for vlan support.
 
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-index f8d2092be004d..b43deee60fe95 100755
---- a/tools/testing/selftests/damon/sysfs.sh
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -199,6 +199,20 @@ test_goal()
- 	ensure_dir "$goal_dir" "exist"
- 	ensure_file "$goal_dir/target_value" "exist" "600"
- 	ensure_file "$goal_dir/current_value" "exist" "600"
-+	ensure_file "$goal_dir/target_metric" "exist" "600"
-+	local fpath="$goal_dir/target_metric"
-+	ensure_write_succ "$fpath" "user_input" "valid input"
-+	ensure_write_succ "$fpath" "some_mem_psi_us" "valid input"
-+	ensure_write_succ "$fpath" "node_mem_used_bp" "valid input"
-+	ensure_write_succ "$fpath" "node_mem_free_bp" "valid input"
-+	ensure_write_succ "$fpath" "node_memcg_used_bp" "valid input"
-+	ensure_write_succ "$fpath" "node_memcg_free_bp" "valid input"
-+	ensure_write_succ "$fpath" "active_mem_bp" "valid input"
-+	ensure_write_succ "$fpath" "inactive_mem_bp" "valid input"
-+	ensure_write_succ "$fpath" "node_eligible_mem_bp" "valid input"
-+	ensure_write_fail "$fpath" "foo" "invalid input"
-+	ensure_file "$goal_dir/nid" "exist" "600"
-+	ensure_file "$goal_dir/path" "exist" "600"
- }
- 
- test_goals()
--- 
-2.47.3
+xdp support is at the driver layer for real (physical) devices. The fib
+lookup is going to return the vlan device index - a virtual device.
+Support for xdp should not be propagated to virtual devices; it goes
+against the intent of xdp. Any trip down this path will have to decide
+how to handle vlan-in-vlan use cases. Where is the line drawn for fast
+networking?
+
+> 
+> Specifically, if an XDP application has a table of the interfaces it
+> forwards between, today they'd get a VLAN interface ifindex, which would
+> not be in that table, and the application would return XDP_PASS. Whereas
+> if we change the ifindex and populate the VLAN tag, suddenly the
+> interface would be in the table, but because the application doesn't
+> read the returned VLAN tag, it will end up sending packets out without
+> tagging them, leading to broken forwarding.
+
+I have not followed developments over the past few years. Does XDP have
+support for vlan acceleration in the Tx path now? You really want that
+to deal with vlans and not replicating s/w processing in ebpf.
+
+> 
+> So if we don't want the flag, we'd need some other mechanism to resolve
+> the parent ifindex, AFAICT? Maybe a xdp_get_parent_ifindex() kfunc, say?
+> That could also be made generic for other stacked interface types, I
+> suppose.
+> 
+> WDYT?
+
+dealing with stacked devices is hard :-)
+
+What is the return is a bond device or a vlan on a bond device?
+
