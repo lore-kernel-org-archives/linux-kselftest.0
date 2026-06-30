@@ -1,167 +1,489 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA74A1DDC2B
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 05:47:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8382B330650
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 06:14:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782798467; cv=none; b=V4kvHGixATPOZM9Xs7ZDRS6IjkJ045XMsZdfIAacsEDTUPxiI12qjj8srp9HnFOJCFsFxhntryk4q0C9QG+VAtA5o4+OU+valtnkJHrbHptfdPUxK/OcwX+nYesFBNb3PdC4HGtqY+O+OONZTlq4Uo4CaVgffNJkOImvFXm9Czw=
+	t=1782800055; cv=none; b=VaM7VaD3sHCoxzO64WYM6gxSH8VJ9wyC5oGVxi9bjg5+hCZyOraEQH1JsOXMeiIGo7HS4i3Hg3M+oy0rlerMeT2u9gsVLPY+2VHLrEuHG1YsZ1hlj879wRQXhzb4zsYf+zexvawQwAFcBCYvCErgOaSYelPGa9BSC1UhVI7PCis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782798467; c=relaxed/simple;
-	bh=3jrehyctvMEc3MHJHTIPowI90prvv9QUFRWeHO+jwj8=;
+	s=arc-20240116; t=1782800055; c=relaxed/simple;
+	bh=BCX2akkhmmnaIZWDdudQQH9BULKqJHzDvO2oUnBo4gM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dQK623LjNKCOf49rbfJC4332LvM1rqNzGY8JtT1OxVr3Qc99bgNAIPoPWMzSHhWxtoYRjUIPM7Xq7xkig7pFFtRHhpm4GkxvNeLSc5qJW74wTfXsjMh/2WXzIVrVDiK4hPhFV7lDJN160yMlt9Vaejqs6mWWo2ib4UxqxZWARWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BxJ9UAEA; arc=none smtp.client-ip=209.85.210.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=ryOsW+KyEWXiF4rjZmrRG1VbIB+9r4jqKwFQ49HPGA3g5A+3v2xeBkiVa/jFyRjC9BXxj2X6n2f8RsipK0/HPmB2H6fy+N89/JO6D1DnWrPmq9PrafD5HTaZHTGVFETmwSBFzOSMW7dNWDsuz6nCB/DII5lcAKEXebM6RSlzbOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W/VvzIea; arc=none smtp.client-ip=74.125.82.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BxJ9UAEA"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-845f2909cd4so1174007b3a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 22:47:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W/VvzIea"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-139e498e428so150113c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 23:14:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782798464; x=1783403264; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zlu0CX51xYkZya/YVR32N8ij8qBdC/uMMOc3z2Ovtgg=;
-        b=BxJ9UAEAZmUvff0zkVEkd0xO67tHkjgehmNJfCfdYo3CVTyRvR/u1q+3JtFT0Mz5wR
-         dSTDYH0NmQE+Dk8m2opMkxvJDJipkcYrwg1biV1GpMpc0mAJwYWd7YAMECniekzDgz4+
-         apBXO0JLrGC5yDWKajm4bg/1gPYYgfrgb4e5VTe7AuFOGRONKO4HeQrY44+muECxwUDm
-         gQ0ElAW/Szi2OZ+I+6bVSKGoU7VLn/Hs3SSalQMX1NWzhxU/K5FBq7mtTgSDaC4WPEn0
-         IGSXbwrIwp+YOIoyTeIwpZDm/3KJc+BXtE7/n2x54k50afErwCqy6Bt6oeNK8BIsZ5Lb
-         itjg==
+        d=gmail.com; s=20251104; t=1782800053; x=1783404853; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kQ4pwxtyxCm1G5M66xxdmEUDpbEAdNwzhoPavDK6tNs=;
+        b=W/VvzIeaDL5z/x4oWJH9DmLoCBvoKVdXFEo54vs7MKd7DG4eVXfaYAviGkbLa1Uf1k
+         LJ/XaPkIw/5Zke3cW2L9EqRWOMsIbbMMEt3GHXA04jp4s4Gt2CmguXuMIybMyrC1GXkL
+         /R88k2NYAPsdPMKmBNZOBZjuGCaqIiFtJbLFKJsXeNMF4g34w7eO2zvI4z5itZNY1kCJ
+         SvxprX9Uq2jIvIUQk7bmJ4sb2TIAZH237u0cCzy2BkpomGKc0p0MLwUQuYDtLk5YMw6m
+         Tc5Svu27E6abYzzAzlW0c2mKxnlwhgiDDOwcyuhd3gOR1rZ2xCV1paDVihKer6BCOTag
+         eZlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782798464; x=1783403264;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zlu0CX51xYkZya/YVR32N8ij8qBdC/uMMOc3z2Ovtgg=;
-        b=CGRbFbhCNMVXFDWGyJTtfE527kbsA120TEkxSYSr8Wp0VvTHpzc1e5SmXFYv+5tu6N
-         AXXDVeriojxU+CBPbh/Evl9XSotjDmxTzBx4YzgEIGuEM8zQzuaLE7uDS9fD05yy7hd3
-         GEHtAnX2slwFneBqD7Gf28kVKj2gejjtL8W4saGGAmoINgbk0tQlUgU9+6AVSdlFj5vB
-         QpFP//mqg3NkSkKEOTLJMBLWNEfL5QHW0Av4yYvvjgMu7rRicZQStZWCnb1RF9bwSaMG
-         7cg4duLTewwnXgUGy8OQxj3Yf/pxT4GIhAjUQBSeNmgu+Hso+5ljts6pvcCEyPXzpHrC
-         asIQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rq4m8L2nXFSWJ03hSvxfsNO640/VVRH0cBpR+TC0ssLHrF1gNOQmXNiQo731N3qNRtqZzX1z4fooJQDD6Slr5s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8j4h4klN4c/4F/2FRhw6gQFGTC5LUeyJgoDBjJKUM1wGvalsP
-	jRK7MPImSKUMBg6+BfngMfcjD2lvz3VlR6lC3AzxGOiHk3rdOre8MqY+
-X-Gm-Gg: AfdE7clIvZI+5hd5zteyca3DcBd+hv0Wh+m1yfuXwfAna/OK0qPxGEEldoeRl/c6sxr
-	Ue8QagMSisr1YUbAN4Av7At3G62Skpseqhg1vOziPIcq2J+HCANWLlVEHr3BlZGq40hV6ywCLBq
-	HtnhIkEvJeFlilfA3K9wxHHcFq7PZsRYmyb7DC8AEI1anMdgGp8E3+FwMqiZcFOfG9vbT0Lae6o
-	RSWP0NwT+z1NbFi916mIRWIAS8WvtKLBDahndPj5htuQQG0Kr7MdpNlwKJNsLk/Xiy0rirtoF3b
-	D6yPtYdbg1hdrxIZxeTNfh3f7ZsiqVDmEjYep3ZWQDeW8W1wnPYQIyzQ/I33Z9eQ+vYAHo9v+91
-	xPnWlOZaf3YMQySgBZ700+ula4j2PduW5J8wGfii2DapV4ox45ZFNhBkYXXjW+IjL7z/+BsfI2b
-	rwaGVH4AFk14Q=
-X-Received: by 2002:a05:6a00:1ca1:b0:845:d286:1fb4 with SMTP id d2e1a72fcca58-8479f3fe9c1mr1760758b3a.50.1782798464051;
-        Mon, 29 Jun 2026 22:47:44 -0700 (PDT)
-Received: from john-p8 ([98.97.43.212])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847a037b015sm1064984b3a.50.2026.06.29.22.47.42
+        d=1e100.net; s=20251104; t=1782800053; x=1783404853;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kQ4pwxtyxCm1G5M66xxdmEUDpbEAdNwzhoPavDK6tNs=;
+        b=Sjpz8fLAetZ0FA8z7DReY61d+wriCHE7uZDvwJZG/fNKma5S8I3ke/bzK0FQkNRa6G
+         Fvlz+iaADmzoa8l6kZDkmkKc15XOFH2d/JgrxzvCIdLmSq0PtDK4V+1Hrh1srtKG7+kG
+         ERw+nic579nSgOo2VYhmao6HDJL5i4Ii1Lb0sCPuWR9B9x/kIgwv4fB52Wqy24jrT42o
+         2rSPHv2GNdWOmIiUEOHPmc5Fd+PKrjCR7xyZDt2XeWYJJnqoo4eRJ3bn6HOEHDuvRF3V
+         F1apwPWY2cib4p3m7gCDbtpZV9J8sRC7kM9Zfz//7gHWBFfRKQuVlJMjw5nuV9xQmKh+
+         hgNg==
+X-Forwarded-Encrypted: i=1; AHgh+RqZQbBSpvRaWzvQE6tSd4JRDql/qa1wSjvQyq0dhu4YwbrbGC2zm7gSFxY1ESYrGBvaeAfbAh6y5QB20QFAb4M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrasLmyeVR9jiG2qajEveBwAOfKuBOsoWy3BhFl/rawCi9+5Nk
+	OhS5Z0ybK+XYy3z/5rogWK/A4t7HpDL9kydbGV1tWVsJGgEPrSlUFB2q
+X-Gm-Gg: AfdE7cmxPUxujZ8O+P8r3WfISi+U6ZfZqENhsTQD8ugH/nSbJ1dX+17zGqlQm9jlcK0
+	dd/Xt70bms69ygOhcumxaf72HX4+JKBm+LHXAg2MJGOzdLH6LFSUa2pQ5xdpp8F5eCWOixuXdtq
+	JCUb4XckA+j2IDKNnIuHliTaseg0jrGyQf02LLPaLgiKxFSkC1LheOyrg2nVhsY42RAu4zkCIWb
+	ABVgl8DvY4vowZxnXXJT2lzO1Ugx3epvpXh/hTepLdhLMKiaaJukc+dU3Aj58NZbXb+7JO44LN0
+	D+XzSHfAJyXcrludc157nDRO78kC1nG/+DaHX78LdMiwgMJyFI6NpKCaywGB18twA8YglbORpMI
+	0XqIuXSxQDL46hnAD2UzaEP/svVFY0Y+rQ8Yu57GIHnMFJUJlG7XBg97YCCnPuNNB/4ggLUB8ld
+	FW0p/wop30Prm89dRuviXqV8SO9SH6gYZi
+X-Received: by 2002:a05:7300:6115:b0:30c:9ca4:5cd0 with SMTP id 5a478bee46e88-30ee9f63cdamr444602eec.4.1782800052515;
+        Mon, 29 Jun 2026 23:14:12 -0700 (PDT)
+Received: from blinky ([2601:647:6700:64d0::94ac])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30ee326c7a7sm4344373eec.29.2026.06.29.23.14.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2026 22:47:43 -0700 (PDT)
-Date: Mon, 29 Jun 2026 22:47:41 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Sechang Lim <rhkrqnwk98@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Lorenz Bauer <lmb@isovalent.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Jiayuan Chen <jiayuan.chen@linux.dev>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/2] bpf, sockmap: disallow update and delete
- from tc, xdp and flow_dissector
-Message-ID: <akNXhg5K7aV7Opdr@john-p8>
-References: <20260629172704.1302218-1-rhkrqnwk98@gmail.com>
- <20260629172704.1302218-2-rhkrqnwk98@gmail.com>
- <DJLQSC87KCSV.314DTZAWRNA8C@gmail.com>
+        Mon, 29 Jun 2026 23:14:11 -0700 (PDT)
+Date: Mon, 29 Jun 2026 23:14:09 -0700
+From: Charlie Jenkins <thecharlesjenkins@gmail.com>
+To: Jesse T <mr.bossman075@gmail.com>
+Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Nam Cao <namcao@linutronix.de>, Alexandre Ghiti <alex@ghiti.fr>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	Conor Dooley <conor@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Radim =?utf-8?B?S3LEjW3DocWZ?= <radim.krcmar@oss.qualcomm.com>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 07/16] riscv: Use generated instruction headers for
+ misaligned loads/stores
+Message-ID: <akNesSDbmi89Y1Cw@blinky>
+References: <20260621-riscv_insn_table-v2-0-7f0810ee2274@gmail.com>
+ <20260621-riscv_insn_table-v2-7-7f0810ee2274@gmail.com>
+ <CAJFTR8Tb54YPUQXiPCRq4XsX-P_vSyS2W=HThvEzb=BLn2Cy8Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <DJLQSC87KCSV.314DTZAWRNA8C@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJFTR8Tb54YPUQXiPCRq4XsX-P_vSyS2W=HThvEzb=BLn2Cy8Q@mail.gmail.com>
 
-On Mon, Jun 29, 2026 at 11:24:49AM -0700, Alexei Starovoitov wrote:
->On Mon Jun 29, 2026 at 10:27 AM PDT, Sechang Lim wrote:
->> sock_map_update_common() and __sock_map_delete() hold stab->lock and call
->> sock_map_unref() -> sock_map_del_link(), which takes sk_callback_lock for
->> write. That gives the order stab->lock -> sk_callback_lock.
->>
->> The reverse order comes from the SK_SKB stream parser.
->> sk_psock_strp_data_ready() holds sk_callback_lock for read, and after the
->> verdict tcp_bpf_strp_read_sock() acks the consumed data inline via
->> __tcp_cleanup_rbuf(). The ACK goes out egress, where a sched_cls program
->> deletes from the sockmap and takes stab->lock:
->>
->>   WARNING: possible circular locking dependency detected
->>   ------------------------------------------------------
->>   syz.9.8824 is trying to acquire lock:
->>   (&stab->lock){+.-.}-{3:3}, at: __sock_map_delete net/core/sock_map.c:421
->>   but task is already holding lock:
->>   (clock-AF_INET){++.-}-{3:3}, at: sk_psock_strp_data_ready net/core/skmsg.c:1173
->>
->>   -> #1 (clock-AF_INET){++.-}-{3:3}:
->>          _raw_write_lock_bh
->>          sock_map_del_link net/core/sock_map.c:167
->>          sock_map_unref net/core/sock_map.c:184
->>          sock_map_update_common net/core/sock_map.c:509
->>          sock_map_update_elem_sys net/core/sock_map.c:588
->>          map_update_elem kernel/bpf/syscall.c:1805
->>
->>   -> #0 (&stab->lock){+.-.}-{3:3}:
->>          _raw_spin_lock_bh
->>          __sock_map_delete net/core/sock_map.c:421
->>          sock_map_delete_elem net/core/sock_map.c:452
->>          bpf_prog_06044d24140080b6
->>          tcx_run net/core/dev.c:4451
->>          sch_handle_egress net/core/dev.c:4541
->>          __dev_queue_xmit net/core/dev.c:4808
->>          ...
->>          tcp_bpf_strp_read_sock net/ipv4/tcp_bpf.c:701
->>          strp_data_ready net/strparser/strparser.c:402
->>          sk_psock_strp_data_ready net/core/skmsg.c:1174
->>          tcp_data_queue net/ipv4/tcp_input.c:5661
->>
->>   Possible unsafe locking scenario:
->>
->>          CPU0                    CPU1
->>          ----                    ----
->>     rlock(clock-AF_INET);
->>                                  lock(&stab->lock);
->>                                  lock(clock-AF_INET);
->>     lock(&stab->lock);
->>
->>    *** DEADLOCK ***
->>
->> A tc, xdp or flow_dissector program has no reason to update or delete a
->> sockmap, and redirect does not go through here. Drop them from
->> may_update_sockmap() so the verifier rejects it. It also closes the
->> matching sockhash inversion.
->>
->> Suggested-by: John Fastabend <john.fastabend@gmail.com>
->> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
->
->John,
->
->please ack.
+On Mon, Jun 29, 2026 at 04:20:15PM -0400, Jesse T wrote:
+> On Mon, Jun 22, 2026 at 12:08 AM Charlie Jenkins via B4 Relay
+> <devnull+thecharlesjenkins.gmail.com@kernel.org> wrote:
+> >
+> > From: Charlie Jenkins <thecharlesjenkins@gmail.com>
+> >
+> > Migrate the misaligned loads/store code to use the generated instruction
+> > headers instead of the hand-written instruction composition functions.
+> >
+> > Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
+> >
+> > ---
+> >
+> > Similar to the other patches of this series, I extracted out the logic
+> > of this function and brute forced all possible inputs to validate that
+> > the outputs are the same. To verify this change in the kernel, I booted
+> > on Spike and used the misaligned access checker which does some
+> > misaligned accesses.
+> > ---
+> >  arch/riscv/kernel/traps_misaligned.c | 183 ++++++++++++++++-------------------
+> >  1 file changed, 83 insertions(+), 100 deletions(-)
+> >
+> > diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
+> > index 81b7682e6c6d..4d2a2432e0c4 100644
+> > --- a/arch/riscv/kernel/traps_misaligned.c
+> > +++ b/arch/riscv/kernel/traps_misaligned.c
+> > @@ -22,15 +22,11 @@
+> >
+> >  #ifdef CONFIG_FPU
+> >
+> > -#define FP_GET_RD(insn)                (insn >> 7 & 0x1F)
+> > -
+> >  extern void put_f32_reg(unsigned long fp_reg, unsigned long value);
+> >
+> > -static int set_f32_rd(unsigned long insn, struct pt_regs *regs,
+> > +static int set_f32_rd(unsigned long fp_reg, struct pt_regs *regs,
+> >                       unsigned long val)
+> >  {
+> > -       unsigned long fp_reg = FP_GET_RD(insn);
+> > -
+> >         put_f32_reg(fp_reg, val);
+> >         regs->status |= SR_FS_DIRTY;
+> >
+> > @@ -39,9 +35,8 @@ static int set_f32_rd(unsigned long insn, struct pt_regs *regs,
+> >
+> >  extern void put_f64_reg(unsigned long fp_reg, unsigned long value);
+> >
+> > -static int set_f64_rd(unsigned long insn, struct pt_regs *regs, u64 val)
+> > +static int set_f64_rd(unsigned long fp_reg, struct pt_regs *regs, u64 val)
+> >  {
+> > -       unsigned long fp_reg = FP_GET_RD(insn);
+> >         unsigned long value;
+> >
+> >  #if __riscv_xlen == 32
+> > @@ -58,10 +53,8 @@ static int set_f64_rd(unsigned long insn, struct pt_regs *regs, u64 val)
+> >  #if __riscv_xlen == 32
+> >  extern void get_f64_reg(unsigned long fp_reg, u64 *value);
+> >
+> > -static u64 get_f64_rs(unsigned long insn, u8 fp_reg_offset,
+> > -                     struct pt_regs *regs)
+> > +static u64 get_f64_rs(unsigned long fp_reg, struct pt_regs *regs)
+> >  {
+> > -       unsigned long fp_reg = (insn >> fp_reg_offset) & 0x1F;
+> >         u64 val;
+> >
+> >         get_f64_reg(fp_reg, &val);
+> > @@ -73,10 +66,8 @@ static u64 get_f64_rs(unsigned long insn, u8 fp_reg_offset,
+> >
+> >  extern unsigned long get_f64_reg(unsigned long fp_reg);
+> >
+> > -static unsigned long get_f64_rs(unsigned long insn, u8 fp_reg_offset,
+> > -                               struct pt_regs *regs)
+> > +static unsigned long get_f64_rs(unsigned long fp_reg, struct pt_regs *regs)
+> >  {
+> > -       unsigned long fp_reg = (insn >> fp_reg_offset) & 0x1F;
+> >         unsigned long val;
+> >
+> >         val = get_f64_reg(fp_reg);
+> > @@ -89,10 +80,8 @@ static unsigned long get_f64_rs(unsigned long insn, u8 fp_reg_offset,
+> >
+> >  extern unsigned long get_f32_reg(unsigned long fp_reg);
+> >
+> > -static unsigned long get_f32_rs(unsigned long insn, u8 fp_reg_offset,
+> > -                               struct pt_regs *regs)
+> > +static unsigned long get_f32_rs(unsigned long fp_reg, struct pt_regs *regs)
+> >  {
+> > -       unsigned long fp_reg = (insn >> fp_reg_offset) & 0x1F;
+> >         unsigned long val;
+> >
+> >         val = get_f32_reg(fp_reg);
+> > @@ -107,28 +96,18 @@ static void set_f32_rd(unsigned long insn, struct pt_regs *regs,
+> >
+> >  static void set_f64_rd(unsigned long insn, struct pt_regs *regs, u64 val) {}
+> >
+> > -static unsigned long get_f64_rs(unsigned long insn, u8 fp_reg_offset,
+> > -                               struct pt_regs *regs)
+> > +static unsigned long get_f64_rs(unsigned long fp_reg, struct pt_regs *regs)
+> >  {
+> >         return 0;
+> >  }
+> >
+> > -static unsigned long get_f32_rs(unsigned long insn, u8 fp_reg_offset,
+> > -                               struct pt_regs *regs)
+> > +static unsigned long get_f32_rs(unsigned long fp_reg, struct pt_regs *regs)
+> >  {
+> >         return 0;
+> >  }
+> >
+> >  #endif
+> >
+> > -#define GET_F64_RS2(insn, regs) (get_f64_rs(insn, 20, regs))
+> > -#define GET_F64_RS2C(insn, regs) (get_f64_rs(insn, 2, regs))
+> > -#define GET_F64_RS2S(insn, regs) (get_f64_rs(RVC_RS2S(insn), 0, regs))
+> > -
+> > -#define GET_F32_RS2(insn, regs) (get_f32_rs(insn, 20, regs))
+> > -#define GET_F32_RS2C(insn, regs) (get_f32_rs(insn, 2, regs))
+> > -#define GET_F32_RS2S(insn, regs) (get_f32_rs(RVC_RS2S(insn), 0, regs))
+> > -
+> >  #define __read_insn(regs, insn, insn_addr, type)       \
+> >  ({                                                     \
+> >         int __ret;                                      \
+> > @@ -217,13 +196,13 @@ static int handle_vector_misaligned_load(struct pt_regs *regs)
+> >  }
+> >  #endif
+> >
+> > -static int handle_scalar_misaligned_load(struct pt_regs *regs)
+> > +static noinline int handle_scalar_misaligned_load(struct pt_regs *regs)
+> >  {
+> >         union reg_data val;
+> >         unsigned long epc = regs->epc;
+> >         unsigned long insn;
+> >         unsigned long addr = regs->badaddr;
+> > -       int fp = 0, shift = 0, len = 0;
+> > +       int fp = 0, shift = 0, len = 0, rd = 0;
+> >
+> >         perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, addr);
+> >
+> > @@ -240,68 +219,71 @@ static int handle_scalar_misaligned_load(struct pt_regs *regs)
+> >
+> >         regs->epc = 0;
+> >
+> > -       if ((insn & INSN_MASK_LW) == INSN_MATCH_LW) {
+> > +       if (riscv_insn_is_lw(insn)) {
+> >                 len = 4;
+> >                 shift = 8 * (sizeof(unsigned long) - len);
+> > -#if defined(CONFIG_64BIT)
+> > -       } else if ((insn & INSN_MASK_LD) == INSN_MATCH_LD) {
+> > +               rd = riscv_insn_lw_extract_xd(insn);
+> > +       } else if (riscv_insn_is_ld(insn)) {
+> >                 len = 8;
+> >                 shift = 8 * (sizeof(unsigned long) - len);
+> > -       } else if ((insn & INSN_MASK_LWU) == INSN_MATCH_LWU) {
+> > +               rd = riscv_insn_ld_extract_xd(insn);
+> > +       } else if (riscv_insn_is_lwu(insn)) {
+> >                 len = 4;
+> > -#endif
+> > -       } else if ((insn & INSN_MASK_FLD) == INSN_MATCH_FLD) {
+> > +               rd = riscv_insn_lwu_extract_xd(insn);
+> > +       } else if (riscv_insn_is_fld(insn)) {
+> >                 fp = 1;
+> >                 len = 8;
+> > -       } else if ((insn & INSN_MASK_FLW) == INSN_MATCH_FLW) {
+> > +               rd = riscv_insn_fld_extract_fd(insn);
+> > +       } else if (riscv_insn_is_flw(insn)) {
+> >                 fp = 1;
+> >                 len = 4;
+> > -       } else if ((insn & INSN_MASK_LH) == INSN_MATCH_LH) {
+> > +               rd = riscv_insn_flw_extract_fd(insn);
+> > +       } else if (riscv_insn_is_lh(insn)) {
+> >                 len = 2;
+> >                 shift = 8 * (sizeof(unsigned long) - len);
+> > -       } else if ((insn & INSN_MASK_LHU) == INSN_MATCH_LHU) {
+> > +               rd = riscv_insn_lh_extract_xd(insn);
+> > +       } else if (riscv_insn_is_lhu(insn)) {
+> >                 len = 2;
+> > -#if defined(CONFIG_64BIT)
+> > -       } else if ((insn & INSN_MASK_C_LD) == INSN_MATCH_C_LD) {
+> > +               rd = riscv_insn_lhu_extract_xd(insn);
+> > +       } else if (riscv_insn_is_c_ld(insn)) {
+> >                 len = 8;
+> >                 shift = 8 * (sizeof(unsigned long) - len);
+> > -               insn = RVC_RS2S(insn) << SH_RD;
+> > -       } else if ((insn & INSN_MASK_C_LDSP) == INSN_MATCH_C_LDSP &&
+> > -                  ((insn >> SH_RD) & 0x1f)) {
+> > +               rd = (8 + riscv_insn_c_ld_extract_xd(insn));
+> > +       } else if (riscv_insn_is_c_ldsp(insn)) {
+> >                 len = 8;
+> >                 shift = 8 * (sizeof(unsigned long) - len);
+> > -#endif
+> > -       } else if ((insn & INSN_MASK_C_LW) == INSN_MATCH_C_LW) {
+> > +               rd = riscv_insn_c_ldsp_extract_xd(insn);
+> > +       } else if (riscv_insn_is_c_lw(insn)) {
+> >                 len = 4;
+> >                 shift = 8 * (sizeof(unsigned long) - len);
+> > -               insn = RVC_RS2S(insn) << SH_RD;
+> > -       } else if ((insn & INSN_MASK_C_LWSP) == INSN_MATCH_C_LWSP &&
+> > -                  ((insn >> SH_RD) & 0x1f)) {
+> > +               rd = (8 + riscv_insn_c_lw_extract_xd(insn));
+> > +       } else if (riscv_insn_is_c_lwsp(insn)) {
+> >                 len = 4;
+> >                 shift = 8 * (sizeof(unsigned long) - len);
+> > -       } else if ((insn & INSN_MASK_C_FLD) == INSN_MATCH_C_FLD) {
+> > +               rd = riscv_insn_c_lwsp_extract_xd(insn);
+> > +       } else if (riscv_insn_is_c_fld(insn)) {
+> >                 fp = 1;
+> >                 len = 8;
+> > -               insn = RVC_RS2S(insn) << SH_RD;
+> > -       } else if ((insn & INSN_MASK_C_FLDSP) == INSN_MATCH_C_FLDSP) {
+> > +               rd = (8 + riscv_insn_c_fld_extract_fd(insn));
+> > +       } else if (riscv_insn_is_c_fldsp(insn)) {
+> >                 fp = 1;
+> >                 len = 8;
+> > -#if defined(CONFIG_32BIT)
+> > -       } else if ((insn & INSN_MASK_C_FLW) == INSN_MATCH_C_FLW) {
+> > +               rd = riscv_insn_c_fldsp_extract_fd(insn);
+> > +       } else if (riscv_insn_is_c_flw(insn)) {
+> >                 fp = 1;
+> >                 len = 4;
+> > -               insn = RVC_RS2S(insn) << SH_RD;
+> > -       } else if ((insn & INSN_MASK_C_FLWSP) == INSN_MATCH_C_FLWSP) {
+> > +               rd = (8 + riscv_insn_c_flw_extract_fd(insn));
+> > +       } else if (riscv_insn_is_c_flwsp(insn)) {
+> >                 fp = 1;
+> >                 len = 4;
+> > -#endif
+> > -       } else if ((insn & INSN_MASK_C_LHU) == INSN_MATCH_C_LHU) {
+> > +               rd = riscv_insn_c_flwsp_extract_fd(insn);
+> > +       } else if (riscv_insn_is_c_lhu(insn)) {
+> >                 len = 2;
+> > -               insn = RVC_RS2S(insn) << SH_RD;
+> > -       } else if ((insn & INSN_MASK_C_LH) == INSN_MATCH_C_LH) {
+> > +               rd = (8 + riscv_insn_c_lhu_extract_xd(insn));
+> > +       } else if (riscv_insn_is_c_lh(insn)) {
+> >                 len = 2;
+> > -               shift = 8 * (sizeof(ulong) - len);
+> > -               insn = RVC_RS2S(insn) << SH_RD;
+> > +               shift = 8 * (sizeof(unsigned long) - len);
+> > +               rd = (8 + riscv_insn_c_lh_extract_xd(insn));
+> >         } else {
+> >                 regs->epc = epc;
+> >                 return -1;
+> > @@ -319,11 +301,11 @@ static int handle_scalar_misaligned_load(struct pt_regs *regs)
+> >         }
+> >
+> >         if (!fp)
+> > -               SET_RD(insn, regs, (long)(val.data_ulong << shift) >> shift);
+> > +               *(unsigned long *)((unsigned long *)regs + rd) = val.data_ulong << shift;
+> >         else if (len == 8)
+> > -               set_f64_rd(insn, regs, val.data_u64);
+> > +               set_f64_rd(rd, regs, val.data_u64);
+> >         else
+> > -               set_f32_rd(insn, regs, val.data_ulong);
+> > +               set_f32_rd(rd, regs, val.data_ulong);
+> >
+> >         regs->epc = epc + INSN_LEN(insn);
+> >
+> > @@ -336,7 +318,7 @@ static int handle_scalar_misaligned_store(struct pt_regs *regs)
+> >         unsigned long epc = regs->epc;
+> >         unsigned long insn;
+> >         unsigned long addr = regs->badaddr;
+> > -       int len = 0, fp = 0;
+> > +       int fp = 0, len = 0, rd = 0;
+> >
+> >         perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, addr);
+> >
+> > @@ -351,67 +333,68 @@ static int handle_scalar_misaligned_store(struct pt_regs *regs)
+> >
+> >         regs->epc = 0;
+> >
+> > -       val.data_ulong = GET_RS2(insn, regs);
+> > -
+> > -       if ((insn & INSN_MASK_SW) == INSN_MATCH_SW) {
+> > +       if (riscv_insn_is_sw(insn)) {
+> >                 len = 4;
+> > -#if defined(CONFIG_64BIT)
+> > -       } else if ((insn & INSN_MASK_SD) == INSN_MATCH_SD) {
+> > +               rd = riscv_insn_sw_extract_xs2(insn);
+> > +       } else if (riscv_insn_is_sd(insn)) {
+> >                 len = 8;
+> > -#endif
+> > -       } else if ((insn & INSN_MASK_FSD) == INSN_MATCH_FSD) {
+> > +               rd = riscv_insn_sd_extract_xs2(insn);
+> > +       } else if (riscv_insn_is_fsd(insn)) {
+> >                 fp = 1;
+> >                 len = 8;
+> > -               val.data_u64 = GET_F64_RS2(insn, regs);
+> > -       } else if ((insn & INSN_MASK_FSW) == INSN_MATCH_FSW) {
+> > +               rd = riscv_insn_fsd_extract_fs2(insn);
+> > +       } else if (riscv_insn_is_fsw(insn)) {
+> >                 fp = 1;
+> >                 len = 4;
+> > -               val.data_ulong = GET_F32_RS2(insn, regs);
+> > -       } else if ((insn & INSN_MASK_SH) == INSN_MATCH_SH) {
+> > +               rd = riscv_insn_fsw_extract_fs2(insn);
+> > +       } else if (riscv_insn_is_sh(insn)) {
+> >                 len = 2;
+> > -#if defined(CONFIG_64BIT)
+> > -       } else if ((insn & INSN_MASK_C_SD) == INSN_MATCH_C_SD) {
+> > +               rd = riscv_insn_sh_extract_xs2(insn);
+> > +       } else if (riscv_insn_is_c_sd(insn)) {
+> >                 len = 8;
+> > -               val.data_ulong = GET_RS2S(insn, regs);
+> > -       } else if ((insn & INSN_MASK_C_SDSP) == INSN_MATCH_C_SDSP) {
+> > +               rd = riscv_insn_c_sd_extract_xs2(insn);
+> > +       } else if (riscv_insn_is_c_sdsp(insn)) {
+> >                 len = 8;
+> > -               val.data_ulong = GET_RS2C(insn, regs);
+> > -#endif
+> > -       } else if ((insn & INSN_MASK_C_SW) == INSN_MATCH_C_SW) {
+> > +               rd = riscv_insn_c_sdsp_extract_xs2(insn);
+> > +       } else if (riscv_insn_is_c_sw(insn)) {
+> >                 len = 4;
+> > -               val.data_ulong = GET_RS2S(insn, regs);
+> > -       } else if ((insn & INSN_MASK_C_SWSP) == INSN_MATCH_C_SWSP) {
+> > +               rd = riscv_insn_c_sw_extract_xs2(insn);
+> > +       } else if (riscv_insn_is_c_swsp(insn)) {
+> >                 len = 4;
+> > -               val.data_ulong = GET_RS2C(insn, regs);
+> > -       } else if ((insn & INSN_MASK_C_FSD) == INSN_MATCH_C_FSD) {
+> > +               rd = riscv_insn_c_swsp_extract_xs2(insn);
+> > +       } else if (riscv_insn_is_c_fsd(insn)) {
+> >                 fp = 1;
+> >                 len = 8;
+> > -               val.data_u64 = GET_F64_RS2S(insn, regs);
+> > -       } else if ((insn & INSN_MASK_C_FSDSP) == INSN_MATCH_C_FSDSP) {
+> > +               rd = riscv_insn_c_fsd_extract_fs2(insn);
+> > +       } else if (riscv_insn_is_c_fsdsp(insn)) {
+> >                 fp = 1;
+> >                 len = 8;
+> > -               val.data_u64 = GET_F64_RS2C(insn, regs);
+> > -#if !defined(CONFIG_64BIT)
+> 
+> Shouldn't we keep this?
 
-Hi Sechang,
+The ifdef doesn't matter anymore because the new riscv_insn_is_*() have
+are all ifdef'd out so unconditionally return false if they are not
+supported on CONFIG_64BIT/CONFIG_32BIT.
 
-I think we additionally need to also block BPF_PROG_TYPE_SOCKET_FILTER? 
-Did you check this case I guess the same case is possible there?
+> 
+> > -       } else if ((insn & INSN_MASK_C_FSW) == INSN_MATCH_C_FSW) {
+> > +               rd = riscv_insn_c_fsdsp_extract_fs2(insn);
+> > +       } else if (riscv_insn_is_c_fsw(insn)) {
+> >                 fp = 1;
+> >                 len = 4;
+> > -               val.data_ulong = GET_F32_RS2S(insn, regs);
+> > -       } else if ((insn & INSN_MASK_C_FSWSP) == INSN_MATCH_C_FSWSP) {
+> > +               rd = riscv_insn_c_fsw_extract_fs2(insn);
+> > +       } else if (riscv_insn_is_c_fswsp(insn)) {
+> >                 fp = 1;
+> >                 len = 4;
+> > -               val.data_ulong = GET_F32_RS2C(insn, regs);
+> > -#endif
+> > -       } else if ((insn & INSN_MASK_C_SH) == INSN_MATCH_C_SH) {
+> > +               rd = riscv_insn_c_fswsp_extract_fs2(insn);
+> > +       } else if (riscv_insn_is_c_sh(insn)) {
+> >                 len = 2;
+> > -               val.data_ulong = GET_RS2S(insn, regs);
+> > +               rd = riscv_insn_c_sh_extract_xs2(insn);
+> >         } else {
+> > -               regs->epc = epc;
+> 
+> This line should be kept.
 
-Then another patch needs to restrict BPF_SOCK_OPS users. For that
-we need to block BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_*.
-Let me know if you want to do those as well. Let me know if you want
-to do both patches or just the prog blocking above with the possible
-addition of SOCKET_FILTER. I didn't search very hard so probably need
-to check all the BPF_SOCK_OPS_* to find the valid cases.
+Oh huh I wonder why I got rid of this. Good catch, thank you!
 
-Thanks,
-John
+- Charlie
+
+> 
+> Thanks,
+> Jesse Taube
+> 
+> >                 return -1;
+> >         }
+> >
+> >         if (!IS_ENABLED(CONFIG_FPU) && fp)
+> >                 return -EOPNOTSUPP;
+> >
+> > +       if (!fp)
+> > +               val.data_ulong = *(unsigned long *)((unsigned long *)regs + rd);
+> > +       else if (len == 8)
+> > +               val.data_u64 = get_f64_rs(rd, regs);
+> > +       else
+> > +               val.data_ulong = get_f32_rs(rd, regs);
+> > +
+> >         if (user_mode(regs)) {
+> >                 if (copy_to_user((u8 __user *)addr, &val, len))
+> >                         return -1;
+> >
+> > --
+> > 2.54.0
+> >
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
