@@ -1,154 +1,143 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C0D1DC1AB
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 00:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782779752; cv=none; b=pmnwuCxzDDHLQmh0UJVkuK7nsonrluuvCD/FaHSkSBLDMeIKA8dky9P55R1fQbGgHUe8GXlhVLtYuJkFA6J8SSMNdiD2+tWyGQlBNUaY5peBKHky/f2Lup37Nj8x+wnOI3exuWTf2y9o+UADtal1dU/lnZJzga1Ohjb5HRe8m4c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782779752; c=relaxed/simple;
-	bh=7M+rMoTWxaTD/6h79/TOwhCZDLAteUyb3KP56APKsSs=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=HHGdU/KnLf624MXOoxQvSUGoD5aWxxGg7649NmsDrjw077dHzo/JB8QLoeIjFO1dcfqGHAZN42voW1GTbZ6dcPcu6jTqR6dDYq4xX6BmEHfRuKLzeoo2BPnfgqJ0ig/6cbFfojBuitnkBBloHzVz+Omr91w2LgLE64SITbmwzS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=khZ0YABF; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E2B1FF7C8
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 00:47:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782780438; cv=pass; b=nktP0Tx7sbwG8QVj04hW77p7MC0zUlFfYNlxBp5C75TUuC14+lLCowvW6mmRKk/BcrCTAR8Lz2SftlJ+7zokGiM+pBuYPKcfWxsHJ4xehaogzfzaYCKFqcDAHPwFrjSrajp3W9WY5LqpkKBn5SVEcdInxrxaQdKBS0R4r80ApSY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782780438; c=relaxed/simple;
+	bh=VSIZSjyLVSUbgNMmTj7rlDvbYCLAbV38QomywhLV1Rw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kYVFvgtaiRxNxnJEX+RstUZl2cdiMnTWCviCTgf49khtzMieHdJJk7r+3XaLXMXhhefn/0DYVIEvaRbsT7kajbIZABeV2NsT4InMdnoTBKSEeu9c/iC3LYnLBmZVjwrgbDeHePleI354vzcjxXZ79YgwInR5BtTM2MOqAUamorU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IF9utlaC; arc=pass smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="khZ0YABF"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c98775daee6so1258626a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 17:35:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IF9utlaC"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6981fefb9easo2575a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 17:47:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782780435; cv=none;
+        d=google.com; s=arc-20260327;
+        b=D/6pHMcgYS5QqdmfLQ+mchI7uf3RX8WY8X053/IQ1mPgveg9L/WK9pVrGGcOnYavhT
+         ecOE4+8mL+7J77VTsbJfry0Z9u+T+uY7FG/hhEsblFQsFAv7S9+2CAFMYRXkjVb9Js4I
+         U8g5Byn7quMHNSGg8Jcb427ynoMUmMNfHNq7+vZZF0FXdfp/4ijMda9/rOn6/HTG4Lq3
+         Qs83TsWYIvUYtIWrYkBQ61YHSmvzGp1P9z96ZJ+2Jysu27XOOgzRBkdVDnUnSUu59I+V
+         jmfzXYmJlvsaefKynCOgCqqhEy5bC7FRb4nP+4gnEZSPatCGnYXxpCHZ9ZXXRLmZmzEc
+         NMpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=VSIZSjyLVSUbgNMmTj7rlDvbYCLAbV38QomywhLV1Rw=;
+        fh=sXwLNKl29FGtnueJjGfTHG2t5QZOKifwdg7oYcC7lj0=;
+        b=YtsbW/3oU38pPVP9LHjxTFTIYs1z1XVDmFviz8KWZXzKKREdHAJqawx/g0ZH0PZAEQ
+         hzIuHh0y6+0c9AOthykGjYNI+O8CshRQK+feUjhDL97XvWEdeSF4S6/p0yioISwYPzgg
+         Ej0jAK/8vvz4cqSCQ6wD8xHXTYFzlbgaKJTp571Myjn6oqKhoTIpbftqoylNbaOPcaWE
+         qNNhpoVzpJssBiJKpUOP7IQZZ5iv8ELmFQmLbIF+WSNouskf0wSUF0SZ43oJWJOSgguJ
+         rbcEwCJhc5HxbA5BIuuwHU7Fhs2/VBnQ+KK8oMoy5Ma1a+Bou1LhJm9VivkGe5/1Aj05
+         iW+A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782779751; x=1783384551; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mG7UMEOa4l/HjKEvkoTYx4SxOpxm9xemhK9kHyjngUI=;
-        b=khZ0YABFAycRoG+rXhFYJVrqcfsJQ2pqE+vtrMgXtat3mBzunEdy0fqGnaq2OU5u+j
-         CnOS9XtI5gB3yqmc0ooekokBSx16w5aH8rhc3IIlGOuQWo3bZ5u9xuMv4Rv20Cx51YpC
-         KSkyq4/jeQmZ8zaICnERrDr9QufXJXdScu+3bbsGU1q/cT8HJlF8grDx84vFYoQ6k2+y
-         a2K7XES+SjqGqsS9voN7GghEVtgB2URUbhP69nd+CalXpddR2LL/smRHwvgyVygAvj4j
-         +AmpUv4bTeYkOeNYX7qnGlsyBvdTjUKOkRh4fW3oDzNA5W+Y2Egj7myB3eyE/vlpJCnZ
-         6MKA==
+        d=google.com; s=20251104; t=1782780435; x=1783385235; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=VSIZSjyLVSUbgNMmTj7rlDvbYCLAbV38QomywhLV1Rw=;
+        b=IF9utlaCafmp8o33CXrw8CQxGfmWH1KaO0gqJaT4bnbBTB5fxlmQ1b5/r4N/TvVueI
+         6ppPBMRdzvGvpLfDyOOJ9l2kXoYCBAN6l11AJJuABFehnmVESkeb8AIdwfEUkA0CGQlW
+         gvEluCslD96fPTNg5zLlMqmYGIjoFJFeavctmbIdsxlvExWK7yAB+pKzS79U7GbQ6M6m
+         KmJz04+o4zR56K/AjJM678FCnwrPgXgH7D7yd1PNltrH8my6Q1sLEtv+E7goJDkKQRes
+         kFzMXxXxEpQdpEr2qsZ/Z8eN54Pk2PwxPgjnwg57rjJSg85ABT+XvxGRMAilh53szrfa
+         GXjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782779751; x=1783384551;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mG7UMEOa4l/HjKEvkoTYx4SxOpxm9xemhK9kHyjngUI=;
-        b=CNPCGOW/5r2zgeIcM/uOzUvDR1uP+doZGp2ggy4oUT86z2FpTgZoM/u8hic6Dw2J3m
-         e4c87smzL2t3EWSpihcmqIhB7bZO7sFsLaOw6I1C/zv5Znd2n3TmAI4gKY7iS1ALE0+i
-         j5FphW8s+el6ZH7lPw5ywedq++SmWrK5HwaRm2G+X2zdVp+TRVMWovgV0hnxW7iFoO+5
-         nYUFU3bcOndQz3BUXMGDMsyRdE2sidNsZN9N81MTRxvpdCrawqNX7CKORDQfFNmnahdt
-         dmh+HGzEx1x2U1ZjlENahPjUnPcGAT2+4jhwjfcoNnRvkud3EiHz4laCAX+Ax6aBz+5l
-         3wJQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8zYZQYzUG9pbkjlOLhRY76lJqwhUgsEEPkq1rWUQ5r6dxCqProWsrJOnHeU8r8U3PE9iIysND6ym4P0UWdBjw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykjwMykTZiFOnpFkxCoqsztAkgP4DuDIegyQW2LbgtS/t9/NAD
-	x2TpmtoK0Z4Tq8rQG80B3za0gaoHkMIbjGCKi+dr5kI2RnDIcpN7VOJIQwkaIge4388+PSVF1+/
-	V9gJP1Q==
-X-Received: from pgvq1.prod.google.com ([2002:a65:6241:0:b0:c89:2504:2df5])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6300:6713:b0:3bf:b3d5:ce2d
- with SMTP id adf61e73a8af0-3bfc50b8944mr1254419637.7.1782779750525; Mon, 29
- Jun 2026 17:35:50 -0700 (PDT)
-Date: Mon, 29 Jun 2026 17:35:49 -0700
-In-Reply-To: <akI9m02jgKAdi4gX@yzhao56-desk.sh.intel.com>
+        d=1e100.net; s=20251104; t=1782780435; x=1783385235;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VSIZSjyLVSUbgNMmTj7rlDvbYCLAbV38QomywhLV1Rw=;
+        b=Ih788FCzgGi41wJaamdFPkCNEIwMfL2K1SZqE19UmcGrWJvVeJABZJUMnt/6mKe9MT
+         XJEHJkMvxPSETBkyJWHNb+OAf6KVe3/csAgt9zH/6edsVjV/GaV4jL7NE6kj+NtqczVg
+         Z11GZj9MK7M0G4/6VSXsIfoGWaQwJNozBOtZmWFPZGbpbMp/BPYxjKjYJ0CLBg4+4cuQ
+         7fLnkxmd2DxQ5zFK6Kv5WN2NvHt3Lc+FIl4Kkp5HfCC0qY3wgrptH1tml2/VgcxuaQdQ
+         rJ4tunCND8vq5+gOpnYjJkIgasXmpbX8mkjWiUr6Ax3nGEWE0cbvB4zneqtPv3MmpqwR
+         eY0Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqsmYSiCsAVpo9PE0xhFwtqkcHcWtgZRUmWPxZuXZxZOjUQl0EvKBKa/KIfYzd1SAJDGE6DkZuNgsJJ0SO0bTA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8Q4E630mbuqCIXolmYCKwy9fVc9CJ9rvOP6Ik8EvhVzLi+Q6M
+	9wNT0FVjKLmR1muWGcBVmYPdCF1nJNoISTy7Z+9soNNj1Yyl+IMLtmXywZFRknLLIxNlL0szu/Q
+	sDbqUA3wYilKiiO8DHi3td6lCrcLj76XrYkEze/xD
+X-Gm-Gg: AfdE7cndhhnH2CZDHbyYYxS5xuMvh6qmqzOS8BWLGkaocz38RC07bdMqBg/P2/4ABiu
+	hS10orQfssNUBtdo5tD2uIcwBzLiVaDC9joYAcrnmBV7tYDQVAqqMniFxqPJ7J4ZWWKruC9RwQg
+	fYCuITWovk0UwAmvqHypMK7F8NcXtV2SeJqhTLJFzlmYMUBlNbQuFRP2Zdtoz4LDFXzjgvyjZ5S
+	V2ZByN56dI8R7TkTa9QXOpFfa2I7JQPg3FvPy911XQYBWeY0R6hYP2dA15RhZmKP0nR9rPpPYiw
+	CaacXCbzriR1quTX6FWOkLqU3Jc=
+X-Received: by 2002:aa7:cc06:0:b0:697:e82f:e4f2 with SMTP id
+ 4fb4d7f45d1cf-6987c8c6b20mr12507a12.4.1782780434872; Mon, 29 Jun 2026
+ 17:47:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <ajnf5Z9nWZxoLS4x@google.com> <ajoWngKaZ+wfIyR+@yzhao56-desk.sh.intel.com>
- <ajpGxu2uQys+S2F8@yzhao56-desk.sh.intel.com> <ajxasFBzp_9KnQLq@google.com>
- <CAEvNRgG1nHipzw4=eBgwhvyXi8xYo7FQD_sy9Ax6FDf7YDu3Og@mail.gmail.com>
- <ajyRg3BwGu5dCfOn@yzhao56-desk.sh.intel.com> <CAEvNRgH5KOHoemnC9QOn_oK97=KeAH1XuX3ps36-pJ0Fn0aBHQ@mail.gmail.com>
- <aj3TGLGWT1kMFIVH@yzhao56-desk.sh.intel.com> <CAEvNRgHb6WmOha6Pct_Tn8Ucuov95L=fj5=2R9gcHfx=b2V_+A@mail.gmail.com>
- <akI9m02jgKAdi4gX@yzhao56-desk.sh.intel.com>
-Message-ID: <akMPZePBdwQlD74H@google.com>
-Subject: Re: [PATCH v8 23/46] KVM: TDX: Make source page optional for KVM_TDX_INIT_MEM_REGION
-From: Sean Christopherson <seanjc@google.com>
-To: Yan Zhao <yan.y.zhao@intel.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com, andrew.jones@linux.dev, 
-	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
-	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
-	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, forkloop@google.com, pratyush@kernel.org, 
-	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+References: <20260629192029.4013794-1-tanshuhao@google.com> <20260629162619.55297244@kernel.org>
+In-Reply-To: <20260629162619.55297244@kernel.org>
+From: Shuhao Tan <tanshuhao@google.com>
+Date: Mon, 29 Jun 2026 17:47:03 -0700
+X-Gm-Features: AVVi8CeyPv_HP2xk8ySnhnc0pqyT64kuNUxCMJ35qQdjLil091krpfhQ9C5nrWU
+Message-ID: <CAABY+HEcNnh+ATyA_JMg4LnVpP=egprTTi4UXxV9CfW2+71z+g@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 0/2] Reuse threaded NAPI kthread across napi_del()/napi_add().
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, 
+	Mina Almasry <almasrymina@google.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Gah, I thought I had sent this out this morning, long before Ackerley's response.
-But I got distracted by a meeting and forgot to get back to this... *sigh*
+On Mon, Jun 29, 2026 at 4:26=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> On Mon, 29 Jun 2026 12:20:25 -0700 Shuhao Tan wrote:
+> > These drivers destroy and recreate queues during configuration
+> > changes. If a NAPI was threaded before destruction, during the
+> > creation, a new kthread will be spawned for the NAPI.
+> >
+> > Some drivers do not have this problem, e.g. netdevsim. But these
+> > drivers and the drivers mentioned above will still lose kthread
+> > during link flap (ndo_stop/ndo_open).
+> >
+> > Because the kthreads before and after these configuration changes are
+> > different, all the attributes associated with the kthread are lost.
+> > These include CPU mask, priority, scheduler policy, etc.. If the
+> > threaded state is preserved for a NAPI, it makes sense to want to
+> > preserve the attributes of the thread as well.
+>
+> Send a netdev Netlink notification when NAPI is re-created and
+> let the userspace re-apply the settings?
 
-Sending what I already wrote, even though there's a lot of overlap with Ackerley's
-mail.
+It feels surprising that the userspace needs to reconfigure thread
+properties when changing NIC configurations unrelated to threading.
+Another downside is that when userspace configures NIC configurations
+in quick succession, re-application becomes messy because a previous
+re-application might still be in progress when the thread is gone.
 
-On Mon, Jun 29, 2026, Yan Zhao wrote:
-> On Fri, Jun 26, 2026 at 08:28:32AM -0700, Ackerley Tng wrote:
-> > Yan Zhao <yan.y.zhao@intel.com> writes:
-> > > But if a user configures 0 uaddr as valid, writes to it, and then passes 0 as
-> > > source_addr(not from gmem), I'm not sure if it's good for the kernel to silently
-> > > treat 0 uaddr as an identifier for in-place copy from the private PFN in gmem.
-> > >
-> > 
-> > I'd say the original uAPI perhaps just didn't document 0 as an
-> > unsupported uaddr. Given that commit 2a62345b3052 already merged, uAPI
-> > was perhaps accidentally changed and no customer complained, I think we
-> > can move forward with 0 as an invalid src_address? I wouldn't think
-> > anyone relies on 0 intentionally being a valid address.
-> > 
-> > I could document that, if it helps?
-> What about just documenting that 0 is an unsupported uaddr which will be
-> re-purposed as an indicator to use the target pfn as the source, regardless of
-> whether gmem_in_place_conversion is true? i.e.,
-> 
-> if (!src_page) 
-> 	src_page = pfn_to_page(pfn);
+> Keeping a few u32s
+> around is one thing but keeping a thread running and visible
+> in /procfs for the lifetime of a machine feels a little bit much.
+> IDK.
 
-Because KVM can't generally use the target page as the source without in-place
-conversion, it's not supported today, and out-of-place conversion is being
-deprecated.
-
-> I don't get why the two scenarios should be treated differently:
-> 1. gmem_in_place_conversion==true, shared memory is not from gmem 
-> 2. gmem_in_place_conversion==false, shared memory is not from gmem
-> 
-> In both case, a 0 uaddr could be mapped to a valid page not from gmem.
-
-That's immaterial.  KVM's ABI (that we're solidifying) is that an address of '0'
-for the source means NULL.  The fact that userspace could have a valid mapping
-at virtual address '0' is irrelevant.
-
-Again, just because something is technically possible doesn't mean it needs to
-be supported by every piece of KVM's uAPI.
-
-> So why not update the uAPI to handle both cases consistently? :)
-
-Because retroactively adding support for out-of-place conversion is pointless
-(requires a userspace update for a feature that's being deprecated), KVM can't
-generally support using the source for out-of-place conversion (it's effectively
-an obscure zero-page optimization), and IMO rejecting the out-of-place conversion
-scenario is valuable for KVM developers, e.g. to help newcomers understand what
-exactly is and isn't possible.
-
-Side topic, isn't TDX broken if target page has already been added to the TD?
-IIUC, kvm_tdp_mmu_map_private_pfn() will be a glorified nop due to the page
-already having a valid S-EPT mapping, and so KVM will incorrectly allow a double
-add.  Ahhh, no, because KVM will return RET_PF_SPURIOUS and
-kvm_tdp_mmu_map_private_pfn() will then return -EIO.
+The thread will be parked, so at least it will not eat CPU cycles.
+Regarding visibility, the only case that I am aware of where a thread
+can be unwantedly visible requires first setting the device/queue to
+be threaded and then reducing the number of queues. If certain
+configurations are applied before the reduction, it makes sense to
+want to restore those stuff when the queues get added back (like
+irq_affinity today). Moreover, the user can stop the stale thread and
+completely remove it by disabling threaded NAPI on the device. So the
+thread is not completely tied to the machine's lifetime, and there is
+a way to get rid of it.
