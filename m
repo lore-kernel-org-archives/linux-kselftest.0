@@ -1,146 +1,109 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE91F29B8CF;
-	Tue, 30 Jun 2026 08:42:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D36630EF9A;
+	Tue, 30 Jun 2026 08:43:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782808943; cv=none; b=NWgPbFppnhMtQWcLMdO2LE1Azea2UJ9Z+cIOjFfEXkqqeLOjhxQ/eIaUxiDWmfAoDf3RZaUOyIXnHY9iOWuUEw2qlZoi3JnkebCX0PJFIDuqBFxK4x2MvITBTG9f4tmsBfDvfF53WV/cmC2SQhCtA2j2uNJ69HSlkoEGXKxuPXk=
+	t=1782809016; cv=none; b=WLiBkLAKywa02Io069ZUz+cEEylvB94oOzChltYB0eAahss9YyDAFlbPg6mlTISNSavBB3XR/1AyRGPmwgpFlLAdakZbrYUXIg0PskIjGkZwCMIAyCHKIIRYxqfEdROolY2A9fyhypOiYv6FBxvIOPjz2K5uPjI7i44JdqGjgpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782808943; c=relaxed/simple;
-	bh=X0mL+MCWFGQ8o3bjWYJPdAks9bEruodMkT8VS1n2P7w=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XcqO7fAr6eGopxPtgZz/Lbkk9KV5z+Wh3CxRORjhR4eo5wnkBTNWLLTTXfWJg53RpIh+jDnHiaszVdOaC43suQAWpfm0aDaksGlQH7ia4STA4pwSTNZmhTXRJm/1Rbdp81cEbnIHaG9e6qeJytEVR2iGCtE4sTGYDNIBrbZTltg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=R/QaHGUH; arc=none smtp.client-ip=52.229.168.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1782809016; c=relaxed/simple;
+	bh=9sx7l64WGHsPkBboTe8uKvWo6a/EHJ2glwN/ZqCls/w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dVGVyys/Z3vkwhZcWI2bd4b/dzawbq1cpp7FC6j7sAFbecNBdIvQlquJtftYBJS4nM9un1nxxDaoM/yP+3Afao0p7ueBBpkt+t5fFlk7FreDGKwbtjwbDCa7+3k+7f9z7Akfv3thryINXIM/3tLjJjAAjHFiQ26pBpWKyP/1k+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=GveY/WIM; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="R/QaHGUH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=UfDTMYjnftXRRhLuKDKW3+ZZLn8Bg6qoGh
-	/+Kq2sSmI=; b=R/QaHGUHz7qsdsf07Gsa6BJzEHzW+zhhT8sjum7hJ5x0dyw+33
-	NJiDxXvZ/zOLjBaSQ+3l6RrQWqzH2T10fyj8ROC0ilHd/BbV6C3bo2RZMnS8O5II
-	W6+vtroi0eTmz8Iqm5ybReDLTo/rnL3ZxKSg74lRuRkV8sbC+qlTj3UEI=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web4 (Coremail) with SMTP id ywQGZQCnbKE5gUNqiZafAg--.37989S4;
-	Tue, 30 Jun 2026 16:41:56 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Cover MEM_ALLOC access past object bounds
-Date: Tue, 30 Jun 2026 08:41:27 +0000
-Message-Id: <e36fd5d2f4047809f0e5da46a7077083297e64db.1782807039.git.chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1782807039.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1782807039.git.chenyy23@mails.tsinghua.edu.cn>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="GveY/WIM"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=/gW6w8U/WCaarQjB+76b8mzfBR2xiHvXJCYHZYl81Qo=; b=GveY/WIMBM8ZWTvFxQvsy/zTA0
+	lcj9zY+LDuBKIgTx+xf1B+fKVQVueeKtm94MicTrcwxB0HQxqdn1hUlQBm6Sj4zqDfOsDFByPzmGb
+	ypZI2zV7mvNZHVs40RrGlJHkV2BUABJmL5vgYuxShmZlmJnyMZVxJW5fRbYAjOlQ868D6n5iWi24D
+	Tn0fdQMaMq1t0ueVkIfpMRCZh1ivTEpY8yc4VoYLsr1uB0B9wCfICVWCHVwWMPpZ01ulJVEADgEBt
+	bjqLFfDzbPS+bwdpZbSlYO3HbpAn1TEaoazTfKJ6RSW9iNhCXhXUeQ75wSDFY3rPWzER/0gfKI5SU
+	6Da3o0cg==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1weU3u-006wWk-0w;
+	Tue, 30 Jun 2026 08:43:22 +0000
+Date: Tue, 30 Jun 2026 01:43:16 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, "Liam R. Howlett" <liam@infradead.org>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v3 1/2] mm/kmemleak: dedupe verbose scan output by
+ allocation backtrace
+Message-ID: <akOAzZkWRzQtIeyI@gmail.com>
+References: <20260506-kmemleak_dedup-v3-0-2d36aafc34da@debian.org>
+ <20260506-kmemleak_dedup-v3-1-2d36aafc34da@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ywQGZQCnbKE5gUNqiZafAg--.37989S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFyxuFykCw4rZF1fuF17Jrb_yoW5JFy5p3
-	WkK34Yya4fKr42qF9xWF47Wr4rWa1vqrySy345CryUAr43XryDXr4xWFW0vF1fArZa9rn3
-	Za4IgF9xWr4UJ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAa
-	c4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
-	Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
-	6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxw
-	ACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE14v_GFyl
-	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F
-	4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-	6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUnpBTDUUUU
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260506-kmemleak_dedup-v3-1-2d36aafc34da@debian.org>
+X-Debian-User: leitao
 
-Add a linked_list negative loader case for a program-BTF type whose last
-member is a zero-length flexible array. The program writes through the
-first flexible-array element of an object allocated by bpf_obj_new().
+On Wed, May 06, 2026 at 05:58:24AM -0700, Breno Leitao wrote:
+> Dedupe within each scan using stackdepot's trace_handle as the key: for
+> every leaked object with a recorded stack trace, look up the
+> representative kmemleak_object in a per-scan xarray keyed by
+> trace_handle.
 
-The verifier should reject the access when the BTF walk reaches beyond the
-static size of the allocated object.
+Just to circle back to this patch that now it is upstream and deployed to
+production.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
----
- .../selftests/bpf/prog_tests/linked_list.c    |  1 +
- .../selftests/bpf/progs/linked_list_fail.c    | 23 +++++++++++++++++++
- 2 files changed, 24 insertions(+)
+I've got this feature enabled in Meta's kernel "debug" tier (which runs with
+kmemleak enabled), and this is being very helpful. For instance, this is the
+kmemleak reports (instead of 330 similar reports).
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/linked_list.c b/tools/testing/selftests/bpf/prog_tests/linked_list.c
-index 8defea025..c3d133c6a 100644
---- a/tools/testing/selftests/bpf/prog_tests/linked_list.c
-+++ b/tools/testing/selftests/bpf/prog_tests/linked_list.c
-@@ -68,6 +68,7 @@ static struct {
- 	{ "obj_type_id_oor", "local type ID argument must be in range [0, U32_MAX]" },
- 	{ "obj_new_no_composite", "bpf_obj_new/bpf_percpu_obj_new type ID argument must be of a struct" },
- 	{ "obj_new_no_struct", "bpf_obj_new/bpf_percpu_obj_new type ID argument must be of a struct" },
-+	{ "obj_new_flex_array", "access beyond struct obj_new_flex" },
- 	{ "obj_drop_non_zero_off", "R1 must have zero offset when passed to release func" },
- 	{ "new_null_ret", "R0 invalid mem access 'ptr_or_null_'" },
- 	{ "obj_new_acq", "Unreleased reference id=" },
-diff --git a/tools/testing/selftests/bpf/progs/linked_list_fail.c b/tools/testing/selftests/bpf/progs/linked_list_fail.c
-index ddd26d1a0..031e77a28 100644
---- a/tools/testing/selftests/bpf/progs/linked_list_fail.c
-+++ b/tools/testing/selftests/bpf/progs/linked_list_fail.c
-@@ -167,6 +167,16 @@ CHECK_OP(push_back);
- #undef CHECK_OP
- #undef INIT
- 
-+struct obj_new_flex_elem {
-+	int lo;
-+	int hi;
-+};
-+
-+struct obj_new_flex {
-+	int hdr;
-+	struct obj_new_flex_elem cells[];
-+};
-+
- SEC("?kprobe/xyz")
- int map_compat_kprobe(void *ctx)
- {
-@@ -230,6 +240,19 @@ int obj_new_no_struct(void *ctx)
- 	return 0;
- }
- 
-+SEC("?tc")
-+int obj_new_flex_array(void *ctx)
-+{
-+	struct obj_new_flex *p;
-+
-+	p = bpf_obj_new_impl(bpf_core_type_id_local(struct obj_new_flex), NULL);
-+	if (!p)
-+		return 0;
-+	p->cells[0].hi = 42;
-+	bpf_obj_drop_impl(p, NULL);
-+	return 0;
-+}
-+
- SEC("?tc")
- int obj_drop_non_zero_off(void *ctx)
- {
--- 
-2.34.1
+         kmemleak: unreferenced object 0xffff0000c3b5ca00 (size 96):
+           kmemleak:   comm "swapper/0", pid 1, jiffies 4294748185
+           kmemleak:   backtrace (crc 22d8f576):
+           kmemleak:     kmemleak_alloc+0x3c/0xc8
+           kmemleak:     __kmalloc_node_noprof+0x42c/0x7c0
+           kmemleak:     __alloc+0x160/0x3a8
+           kmemleak:     alloc_bulk+0x3d8/0x7b0
+           kmemleak:     bpf_mem_alloc_init+0x3f8/0xd48
+           kmemleak:     cpumask_kfunc_init+0x88/0x158
+           kmemleak:     __initstub__kmod_cpumask__654_534_cpumask_kfunc_init7+0x14/0x28
+           kmemleak:     do_one_initcall+0xe0/0x9f8
+           kmemleak:     do_initcall_level+0x12c/0x1d0
+           kmemleak:     do_initcalls+0x60/0x108
+           kmemleak:     do_basic_setup+0x80/0x98
+           kmemleak:     kernel_init_freeable+0x280/0x400
+           kmemleak:     kernel_init+0x24/0x170
+           kmemleak:     ret_from_fork+0x10/0x20
+           kmemleak:   ... and 1 more object(s) with the same backtrace
+           kmemleak: unreferenced object 0xffff0000c3b57080 (size 96):
+           kmemleak:   comm "hardirq", pid 0, jiffies 4298468258
+           kmemleak:   backtrace (crc 85619951):
+           kmemleak:     kmemleak_alloc+0x3c/0xc8
+           kmemleak:     __kmalloc_node_noprof+0x42c/0x7c0
+           kmemleak:     __alloc+0x160/0x3a8
+           kmemleak:     alloc_bulk+0x3d8/0x7b0
+           kmemleak:     bpf_mem_refill+0xb4/0x8a0
+           kmemleak:     irq_work_single+0x9c/0x178
+           kmemleak:     irq_work_run+0x12c/0x208
+           kmemleak:     ipi_handler+0x1cc/0x900
+           kmemleak:     handle_percpu_devid_irq+0x3bc/0x4f8
+           kmemleak:     generic_handle_domain_irq+0xa0/0x100
+           kmemleak:     gic_handle_irq+0x364/0x688
+           kmemleak:   ... and 331 more object(s) with the same backtrace
 
+I've haven't investigate the leak itself, and that is not the reason of this
+email, it is just to share that this is being quite useful at real production
+environments.
