@@ -1,115 +1,69 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAA83A7F5D
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 17:56:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168353DE421;
+	Tue, 30 Jun 2026 17:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782842205; cv=none; b=T5MWtgrsJuns5bLnCl9RpYriFB4yLDgP1q+hYL6lwfHfoEDQdzs5+9rNGf0cZGzixQWyCOXTkvL31g/zV3AiTI1+71iRXdB1ju7xSaImZTSEG5EJx6pWfqWJHWznz0OxwsZE8wL3Y8AoYwBFBDp0iD9/yatEwnQfENJe8ts9Tq4=
+	t=1782842229; cv=none; b=cWUcgqhCimwPiiJDI5MAUQ0stTkP/btgeEFlvkipY9bo9mARvhW1ugwGUJcwVYboi5s0SOCO837cDRI3piGRMjxoWCsmJpt0lGkXii1qtiDGjl9nWQftHk/R8gX//sfu58LOW5T5lorPwgosaoBTle2jo15YA8f7UtbUQynEyuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782842205; c=relaxed/simple;
-	bh=z64Zvugew+P1MInglJmh7Jam4FjCF1L/n6yrx55KL8c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jpCifJJMBDNg6E/1/YDhXxRLpnv5G8uM+0G1ny6W8gx//b8gUw8UEvFCcZqp3uCcTCp3CBrF5lTHSOwQDlPNY41U+HW3X+a74Ap7Nxs1StC+Fl1vHX7rkVqGmBrtBWj42DKrNiFXpaQr1n9MyTe1wyX/dfBl19BV2CdYF1VYHNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SP14efyY; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782842229; c=relaxed/simple;
+	bh=ijlhaFpjVXfdeJ7dktwH/b2mvPfCuj27FM/h4/1WQps=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=icoawVKoma3zuL2jevxdz91LGMXQupZEh4WV5HEB1//KeDrnuIWnqBgmVpfAJklU/TgAYm+N1WSk5VvM000XSNi4RlK1gCr09UBqRWwTLMSU1jlPvGAmFevxj0JitHrO40CXFjvYCFTprmnlHfx7Ih5Bv0yFQchFkA1dGRop5vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T5+VtVYo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SP14efyY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782842202;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y5XIm2s2oESgGUDdl7rh3Y8K1wz6Jr9u+0+fQyisStw=;
-	b=SP14efyY/NUoEL1qOleDQ4uSy1Xiy8/ehYsXhMr+f19FAX0oTbkO7qwWdnL9z8HZrn0+AZ
-	uoScmJE0MZRlTgRj1pxBbzXViIrJ0Id9zwtb27Wp9CnlRoAO7WrvDw6HbaRqmersVQRH08
-	8I+acdwXaWK2lNg7Q7j/WCoALssYdLA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-657-IM9iqbr9OZuDB3leHEwJKw-1; Tue,
- 30 Jun 2026 13:56:39 -0400
-X-MC-Unique: IM9iqbr9OZuDB3leHEwJKw-1
-X-Mimecast-MFC-AGG-ID: IM9iqbr9OZuDB3leHEwJKw_1782842197
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 01DFE18009E3;
-	Tue, 30 Jun 2026 17:56:37 +0000 (UTC)
-Received: from [10.2.17.12] (unknown [10.2.17.12])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C00E21956088;
-	Tue, 30 Jun 2026 17:56:33 +0000 (UTC)
-Message-ID: <e4ab9944-4687-45be-9935-4ad29f2a923c@redhat.com>
-Date: Tue, 30 Jun 2026 13:56:32 -0400
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T5+VtVYo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 113EC1F000E9;
+	Tue, 30 Jun 2026 17:57:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782842227;
+	bh=IeLcavi7+C47UiyNVjxiH3+XvcthVRlneDG4R02Z5UU=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=T5+VtVYoHgNKPKYInKQGaNlTZqH30N+6nGAnDXzg+udBxvZMp0T3c1pgTB+jLrDQA
+	 /MhtPSoxrAoYrs8XDhmAPOZRE8E+d2bg6pTHhHry4MakeJOVTvqbFPAzndAkFq/UX8
+	 eZBwydAcUX2DkQyXXBuqwdrLUI/uzsj/2sxZlZ5wCaX55LyT/yzQsxDHYWAI76ZDKb
+	 5IYmq50jjECPLovS3ny6Xnsl0AAZXTb3zvNharrhuJu2KNs7sRywaaws17Pnu22lnO
+	 ik8OunmXxDb0rMjrzoFBWFrc/Q2aGmXZGRTqYojAUPVVKc3PxNETmfMoLrd7sKVtcN
+	 61SteYKIa2upg==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v9 01/11] cgroup/cpuset: Make nr_deadline_tasks an
- atomic_t
-To: Juri Lelli <juri.lelli@redhat.com>
-Cc: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Aaron Tomlin <atomlin@atomlin.com>, Guopeng Zhang <guopeng.zhang@linux.dev>
-References: <20260630033344.352702-1-longman@redhat.com>
- <20260630033344.352702-2-longman@redhat.com>
- <akPMKXppWM74-m9a@jlelli-thinkpadt14gen4.remote.csb>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <akPMKXppWM74-m9a@jlelli-thinkpadt14gen4.remote.csb>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Subject: Re: [PATCH v8 0/5] selftests/mm: refactor pkey helpers and fix
+ mmap error handling
+From: Mike Rapoport <rppt@kernel.org>
+To: Hongfu Li <lihongfu@kylinos.cn>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+ liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
+ mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ keith.lucas@oracle.com, kevin.brodsky@arm.com, maddy@linux.ibm.com, 
+ usama.anjum@collabora.com, yury.khrustalev@arm.com, jhubbard@nvidia.com, 
+ joey.gouly@arm.com, zwisler@google.com, hongfu.li@linux.dev
+In-Reply-To: <20260630073235.3802271-1-lihongfu@kylinos.cn>
+References: <20260630073235.3802271-1-lihongfu@kylinos.cn>
+Date: Tue, 30 Jun 2026 20:56:59 +0300
+Message-Id: <178284221941.1178528.16877203101562630238.b4-review@b4>
+X-Mailer: b4 0.15.2
 
+On Tue, 30 Jun 2026 15:32:30 +0800, Hongfu Li <lihongfu@kylinos.cn> wrote:
+> selftests/mm: refactor pkey helpers and fix mmap error handling
+> 
+> The main changes in this series are to refactor shared tracing and assertion
+> helpers into a common file, unify both pkey selftests on pkey_assert() and
+> per-test tracing for consistent diagnostics, and add missing mmap() return
+> checks with MAP_FAILED used throughout for readability and consistency.
+> 
+> [...]
 
-On 6/30/26 10:01 AM, Juri Lelli wrote:
-> Hi Waiman,
->
-> On 29/06/26 23:33, Waiman Long wrote:
->> The nr_deadline_tasks variable in the cpuset structure was introduced by
->> commit 6c24849f5515 ("sched/cpuset: Keep track of SCHED_DEADLINE task
->> in cpusets"). It is reported by sashiko [1] that nr_deadline_tasks
->> can currently be modified by inc_dl_tasks_cs() under rq->lock and
->> by cpuset_attach() under cpuset_mutex. So if both updates happen
->> simultaneously, the nr_deadline_tasks variable can be corrupted leading
->> to incorrect operations down the road.
->>
->> Fix that by changing its type to atomic_t so that nr_deadline_tasks are
->> always atomically updated.
->>
->> [1] https://sashiko.dev/#/patchset/20260626181923.133658-1-longman%40redhat.comk
->>
->> Fixes: 6c24849f5515 ("sched/cpuset: Keep track of SCHED_DEADLINE task in cpusets")
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
-> Looks like Sashiko is yet not completely happy with this:
->
-> https://sashiko.dev/#/patchset/20260630033344.352702-1-longman%40redhat.com
->
-> I actually wondered the same and couldn't convince myself we don't
-> actually have that problem with the window between sched_setscheduler()
-> and cpuset_attach(). If issue is confirmed, not sure if wait_attach_
-> done_lock() could help here as well? It's kind of a big lock for the
-> scheduler, but maybe only affecting DEADLINE tasks and if migrations
-> are ongoing.
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Yes, I am aware of that. This patch can only partially close the race 
-window. It doesn't completely eliminate it.
-
-My current thought is for inc_dl_tasks_cs() to check if the in_progress 
-flag is set. If so, it sets another flag for cpuset_attach() to double 
-check the DL data for consistency. It will be a rather complicated 
-solution in order to eliminate the race window. So I am postponing it to 
-a later time when I have more free time to think about it.
-
-Cheers,
-Longman
+-- 
+Sincerely yours,
+Mike.
 
