@@ -1,225 +1,170 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92014332637
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 09:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7602B3E8347
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 10:00:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782813471; cv=none; b=OV/lP5zftbWclqhao2cRX9DsV+5rGtwN2z8Hmg9be9VCvphBMULdLrrvUyz+cyxY2+SWle2BfMYbt1onmGt39pqA3JMEhW7dnm61u+dIQGFuic+dpIKA8F26jLquooCNOeerNDGJ/eB9Q/xemzhR7+qtWTRQhwz0k/hGinWlnn8=
+	t=1782813649; cv=none; b=eXsUDnmDJ6+gFQvbJqNnD9db63h0vZsmG7O4boTT6LsBVEtnO0gQSsQaS2MP0UNA94dBU+NvZrEd/AExzuHIO9H2/enybT07wVMsbZvh7FeheggDCT6ZT0sS671+F59LPIq5glretcW4RxUKx1JX7oFGtVzljn/d89I7ZouBGj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782813471; c=relaxed/simple;
-	bh=4hJQrgpMeqRnFVSEa0vN+hj8YtQw8WE/6vL0/gydX+w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nTacUPeaTsws+4SNSkh0cBCE8WgflJ7LG7s1kEZdY9dWLc+5bmowW6vixZClR40kVAHM12RWxcXwtyJkkLEw+V0UghU35B2i5ga4Db0CncMbvlSRSU3/VRdfMVQl/jnoqLJ7/TS/2rQwenFpBQgOevo4Q70gv0YF+M2Z/C6hdWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cm58d5uL; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782813649; c=relaxed/simple;
+	bh=ekEo5LipZXYEpZ0QMIrZZq+nxmDsIJiQlfi8Av3DFSk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ER040e76WBS9yonpzgya97NPCM34h5V/Hw6Xpt1I2TTI8dDuKFzizpbFyu4htJ3ywtBmY/ja2XzJdrU/Ufo7zrRddWSvqGlMowLBY1dcsZrwkSw2kzd1n7BIfR/+RDhfwhviQR/LGVN7Y86JyJjuSD8F4yf8VaoVUvtMmKCSgms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eC/cqAsc; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=P7u9WppL; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cm58d5uL"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-475881b9a4bso710680f8f.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 02:57:49 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eC/cqAsc";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="P7u9WppL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782813647;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tefDvr2JHzbWEvM4BvoT6FRVVef0ZkWyx7gPNMbvFYo=;
+	b=eC/cqAscQePQlMf/xlYzTn7uTRg7EetoGDKMCSP8ZBom3HyPY2UMDp1iqk66kvCXAO/v1V
+	k3atPUSmTz08OAatfQ1klM7hBJy4LE4R0pHFdTNm9tcVJ3G3YJjxZmeNDZgOE5E2LMkSgy
+	/Ue8hxIvvga3Bo8OO/OCWu/NPbO8ztA=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-663-Uyyshkm-NDGOjowrSljksA-1; Tue, 30 Jun 2026 06:00:46 -0400
+X-MC-Unique: Uyyshkm-NDGOjowrSljksA-1
+X-Mimecast-MFC-AGG-ID: Uyyshkm-NDGOjowrSljksA_1782813645
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c1273e18eebso164667866b.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 03:00:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782813468; x=1783418268; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ddcFhHxm7zIEGmo7ovTKRtISnHGWBs3nbrT2TAxpK5k=;
-        b=Cm58d5uLB/LPD1fyJWAdI+AJK3kaakxeBVSz/MfTqSzDBHcyC4xk1KIlVymmTm2CNX
-         tV5vJIkUVYxykH2aesqks/nMvEkK0u3FL91WHU4r3Oc1PflzxkgRiwPFx/uJ1MgqKsBk
-         u5fAoK2JxWZloKTS5sNxBYXVI6zWAStIbq85Yv/nEcUuHUq43IAnDjolCVQmEkMG2/y4
-         tV0ZOtsMZ4wB3jgDF6qMBNWXGiLL4nXGeQ5PvTD5n1bm9xGFoZaU0KjWTz+jjF8bnz1Z
-         lPP74hp9T3UytJn+/WU7+/C9NDWokaygXhz+qImYYCX91yDPpc5EPEFRZfhn1MxAa8H7
-         Hxsw==
+        d=redhat.com; s=google; t=1782813645; x=1783418445; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tefDvr2JHzbWEvM4BvoT6FRVVef0ZkWyx7gPNMbvFYo=;
+        b=P7u9WppLkBb4rrfp1yN1yKpbuOHGh+y21mkW1u9yK6WEUwxyH6iZ7JpeOXX0WFCK0X
+         xExGz0i+2LytbXcYM36Xc8kHJGwvT7R6WocbdeIcS4d0qh9zxiG70urYz4UiWQy/wc5F
+         dKkYSjAli4QSqJz7VXDyJ++zqRYo9Be1YNcQ7wfPpLfjmEE99MalBp4HG3GDFUCfais1
+         tl/PCbKKiucEmlgKK+BGKCtng4BbTdEdfN+LpLGgOtTzZeuozveQjicRs1ILN02zU/uv
+         uQBq3Pa55qDYdDcUuS3oc4Sg0Le/qIkMRgAeIRg3WDiG6Zqe1oG92qoL++SpiakSOU+P
+         vmFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782813468; x=1783418268;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ddcFhHxm7zIEGmo7ovTKRtISnHGWBs3nbrT2TAxpK5k=;
-        b=hYvnOPeGUj/O805urOaopbchgqjSKLJ5NYlVjp/9SoK11M/1DBe/XDpqCyK0yvp05e
-         ivRXYJF1RkQtYNwG/lv/aNvLe0VCs1aRRi75eaAUq0DorwO4G3cEIXW01PRow22yV5h+
-         UhvHH269lBLd9nQV5B2iXsquSMlKvojp/I6j3YaF2xMxziUdlLo/pJdr4PhB+qTUU7+P
-         2GKeBilQc9XTBKqHsb0JWUVxoyCBdDI8OXNTSAyRnZ5zcNNuyeoh3asJ8ZEFVjwJqtvF
-         OqK4Ihl69KjPjo4XAgPDPQJvISTeNXkE1rBNo4duTqqwRmpxxAGFERV/Wb5WPl2mrvz7
-         1Ahg==
-X-Forwarded-Encrypted: i=1; AHgh+Rp1Nd/jHO7guYhUaBYd2FHR5z3rmffatF3qSWlreOu1PgeVIHZ8l8+f9s/fUsimSUGhseTcrDvUXmFiuBz5HIM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSMXY7fbVY0FR7izcIm6uT/A0NUGiYCFrt4pqrT/YmF+41w5MX
-	cz3IkMotdqKKXJa193R1o1qpor20kB2JuckdEdlZ0Ax7VmCM/gOp591X
-X-Gm-Gg: AfdE7cmh9UMtS2OJ3DBfybDPXC2Ule9hWTSE8VyBX7dRGrb+X/UrC9PJHN8bKbPDXao
-	2cqp8Zbn8WmlWjPWn2gFQId7Zc6t+p9BhnOzTw+Z1LSy9LT2EyxT/LtebHHWz+jJ6HBwcL+qOZY
-	jNsA6C0VR98j3J4OHEJkGDfCNwmIbN6z69T5MfTKaVrYMA9ssgUZ7EB4VEehkik30/Ig0BBxUKT
-	CktJEi5s6zmgpb4M4IKp0QVrQr9JvKEbrR+QiG2Uf5gnKAkuowQd3FwEAnd4WtM0wf2Vn2lo2Jd
-	UfNlgG/QG4oGMfFspzAewyGA+8D+oSsPMApja2dqfZtU2FXTnNs7rQOpdNQKuUNhV9eiccSwu2l
-	LkhTC7oX24L6sg8B0D0B7lf1QKkpDqQ9KWWJe7WMrH8Evl8mF/8Hrp/k1rJqSxflLP2kz
-X-Received: by 2002:a05:6000:24c7:b0:462:7add:607 with SMTP id ffacd0b85a97d-475523b35afmr4107813f8f.25.1782813467863;
-        Tue, 30 Jun 2026 02:57:47 -0700 (PDT)
-Received: from uberwald ([5.149.140.238])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-475641e4618sm6111708f8f.9.2026.06.30.02.57.46
+        d=1e100.net; s=20251104; t=1782813645; x=1783418445;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tefDvr2JHzbWEvM4BvoT6FRVVef0ZkWyx7gPNMbvFYo=;
+        b=HidRcjZJKPGFYw32AlkmhXVYzpNe2DJ4FHiprXaqBYC+oLWY3uxQRM8DuG+WvRUHf3
+         3vUzOJ1EGqO7FsqAXDgGCUdmqVZ3poLljRZ2p1Z/+ojQ7aapGqXGYjkIqJ6N48zaWKRf
+         t3Om+97hPXdllQ3eYn2IodgY8x1nvwcTcyrGxxu+M9iCBabt0tu0o9Y+6Z896/tDI2yN
+         ypWmRZ8bknlMIPqggnFj/x85krvrijWpW/GSWKMig4jAPWb27+TrF7gUlXe1PRzTW6ty
+         Zg/NW22F6WsQQYx4A93wVB0qXfE8hGl/56ZoOOKxQUbMIuWAY3awLhdFLH+ZrgcpHM2j
+         b0tg==
+X-Forwarded-Encrypted: i=1; AHgh+RrieLYIVUafDcMxPG7x4S5FQBZwSz9KvITGXGw3rMRurk7xR8v2Dg+IID2PJYfUIgUA0TTV4Z9PQjh6UQpg1jQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBKxyfgt6qCIwT5fpxK3VkesxgZHE3yCBgzbmXk9iUSm6b+ooD
+	EhSPBDPL2F91cv7nKZv2v00rHDpRZyYDDL1XwrinvV96mVVv88Ze3YRC27UCotISxm10V71R1e3
+	tNJKVdAHN91MoG5k+305j1h1k6kyirF9Es5ybXcmBsUsehoIHWZpxt5PuN2CvYQyTEOs+aw==
+X-Gm-Gg: AfdE7cm1AbJ915KVMKa31zb79T7bDOAV3HTS/3UYrvVxyPONldxuqpdqrvCkkOsgciK
+	dkF9fHJwkKO/Lrc31xHNtIyL38n+YnJW/20j9+r7SEpqXka0pDpfLsWWJvhmjDPdwHkL5PUuNxP
+	kefNYKvdAh+aQF3SFlZtt5M/rqCfyzOvmQJeu7c96O/lpm709X0e2f+LujE1LKIHoYTzvMnKQhP
+	RXgB+flfq8K3qNkKAhvYiUVVGTOleWebgac9S4xiVrcG3UNgem9pKrej5RxuTdqKnIns6XgqCso
+	A7NdcpnnIOXS+Z4aLmomDDgX5LOFDBR9I3nf+dLWifses1qjF+4QHXwJGNRlDqcL98YdSpcgZbg
+	kG+ped92nHo+qNG50TmKkpcCkugtcUMlYBSs=
+X-Received: by 2002:a17:907:97d2:b0:c07:fcdd:7043 with SMTP id a640c23a62f3a-c1287168408mr137279066b.16.1782813644584;
+        Tue, 30 Jun 2026 03:00:44 -0700 (PDT)
+X-Received: by 2002:a17:907:97d2:b0:c07:fcdd:7043 with SMTP id a640c23a62f3a-c1287168408mr137275166b.16.1782813644021;
+        Tue, 30 Jun 2026 03:00:44 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c1288d1abbdsm98502166b.9.2026.06.30.03.00.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 02:57:46 -0700 (PDT)
-From: Guillaume Maudoux <layus.on@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	mptcp@lists.linux.dev,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guillaume Maudoux <layus.on@gmail.com>
-Subject: [PATCH bpf-next v2] selftests/bpf: Mask socket type flags in mptcpify prog
-Date: Tue, 30 Jun 2026 11:57:23 +0200
-Message-ID: <20260630095723.564392-1-layus.on@gmail.com>
-X-Mailer: git-send-email 2.54.0
+        Tue, 30 Jun 2026 03:00:43 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id A672D80A53A; Tue, 30 Jun 2026 12:00:42 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: David Ahern <dsahern@kernel.org>, Avinash Duduskar
+ <avinash.duduskar@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org
+Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
+ yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
+ a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
+ eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
+ bpf_fib_lookup() helper
+In-Reply-To: <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org>
+References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
+ <20260624030530.3342884-2-avinash.duduskar@gmail.com>
+ <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
+ <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Tue, 30 Jun 2026 12:00:42 +0200
+Message-ID: <87echobb5h.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The mptcpify BPF prog upgrades eligible TCP sockets to MPTCP, but only
-when the socket type is exactly SOCK_STREAM. Its update_socket_protocol()
-hook runs on the raw type from userspace, before the socket core masks
-it with SOCK_TYPE_MASK, so the type may still carry SOCK_CLOEXEC or
-SOCK_NONBLOCK in its upper bits and the equality check fails.
+David Ahern <dsahern@kernel.org> writes:
 
-As a result, a socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0) -- what
-common libraries do by default -- is silently left as plain TCP. This
-was hit in practice with curl. Since mptcpify.c is referenced as example
-code for enabling MPTCP transparently, the same mistake is likely to be
-copied into real deployments where it fails the same way and is hard to
-diagnose.
+> On 6/29/26 9:08 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> David Ahern <dsahern@kernel.org> writes:
+>>=20
+>>> On 6/23/26 9:05 PM, Avinash Duduskar wrote:
+>>>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>>>> index 89b36de5fdbb..e00f0392e728 100644
+>>>> --- a/include/uapi/linux/bpf.h
+>>>> +++ b/include/uapi/linux/bpf.h
+>>>> @@ -3532,6 +3532,29 @@ union bpf_attr {
+>>>>   *			Use the mark present in *params*->mark for the fib lookup.
+>>>>   *			This option should not be used with BPF_FIB_LOOKUP_DIRECT,
+>>>>   *			as it only has meaning for full lookups.
+>>>> + *		**BPF_FIB_LOOKUP_VLAN**
+>>>
+>>> This flag should not be needed. Patches for vlan support were never
+>>> submitted (I have them in some old branch). Since the vlan params are
+>>> initialized to 0, no new flag should be needed. Besides, these are
+>>> output parameters.
+>>=20
+>> There's no enforcement from the kernel side of the parameters being
+>> zero, though? So we do need the flag for feature detection; unless we
+>> expect applications to do that out of band? But then we'd need a
+>> mechanism to do that which could be... the presence of the flag in the
+>> ENUM (and thus in BTF)? :)
+>>=20
+>
+> This is output direction - return from the fib lookup.
 
-Mask the type before comparing, mirroring the socket core. Extend the
-test to also create the server with SOCK_CLOEXEC set; the same masking
-is applied to start_server_addr() so a flagged type still listens.
+Ah, right, silly me.
 
-Fixes: ddba122428a7 ("selftests/bpf: Add mptcpify test")
-Signed-off-by: Guillaume Maudoux <layus.on@gmail.com>
----
-Changes in v2:
-- Use my real name in the Signed-off-by (the "@" broke git am).
-- Add "bpf-next" to the subject prefix so the CI tests it.
-- Simplify the test: drop the type[] array and loop, keep two
-  explicit run_mptcpify() calls (plain and SOCK_CLOEXEC).
-- Tighten the commit message.
+> It does not make sense to require a flag to get lookup output. vlan
+> proto of 0 is not valid, so it is a clear indication that the vlan
+> output parameters were not set during the lookup.
 
- tools/testing/selftests/bpf/network_helpers.c       |  4 ++--
- tools/testing/selftests/bpf/network_helpers.h       |  5 +++++
- tools/testing/selftests/bpf/prog_tests/mptcp.c      | 13 ++++++++++---
- tools/testing/selftests/bpf/progs/bpf_tracing_net.h |  3 +++
- tools/testing/selftests/bpf/progs/mptcpify.c        |  2 +-
- 5 files changed, 21 insertions(+), 6 deletions(-)
+Okay, so we could just unconditionally set the VLAN fields, but if we
+start rewriting the ifindex that would be a change of the existing
+behaviour that could break existing applications, no?
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index b82f572641b7..db935a9d9fc1 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -111,7 +111,7 @@ int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t a
- 	if (settimeo(fd, opts->timeout_ms))
- 		goto error_close;
- 
--	if (type == SOCK_STREAM &&
-+	if ((type & SOCK_TYPE_MASK) == SOCK_STREAM &&
- 	    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on))) {
- 		log_err("Failed to enable SO_REUSEADDR");
- 		goto error_close;
-@@ -128,7 +128,7 @@ int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t a
- 		goto error_close;
- 	}
- 
--	if (type == SOCK_STREAM) {
-+	if ((type & SOCK_TYPE_MASK) == SOCK_STREAM) {
- 		if (listen(fd, opts->backlog ? MAX(opts->backlog, 0) : 1) < 0) {
- 			log_err("Failed to listed on socket");
- 			goto error_close;
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 79a010c88e11..75133119c04a 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -25,6 +25,11 @@ typedef __u16 __sum16;
- #define VIP_NUM 5
- #define MAGIC_BYTES 123
- 
-+/* include/linux/net.h */
-+#ifndef SOCK_TYPE_MASK
-+#define SOCK_TYPE_MASK 0xf
-+#endif
-+
- struct network_helper_opts {
- 	int timeout_ms;
- 	int proto;
-diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-index 8fade8bdc451..32dfc1c511af 100644
---- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-@@ -264,7 +264,7 @@ static int verify_mptcpify(int server_fd, int client_fd)
- 	return err;
- }
- 
--static int run_mptcpify(int cgroup_fd)
-+static int run_mptcpify(int cgroup_fd, int type)
- {
- 	int server_fd, client_fd, err = 0;
- 	struct mptcpify *mptcpify_skel;
-@@ -280,7 +280,7 @@ static int run_mptcpify(int cgroup_fd)
- 		goto out;
- 
- 	/* without MPTCP */
--	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
-+	server_fd = start_server(AF_INET, type, NULL, 0, 0);
- 	if (!ASSERT_GE(server_fd, 0, "start_server")) {
- 		err = -EIO;
- 		goto out;
-@@ -317,7 +317,14 @@ static void test_mptcpify(void)
- 	if (!ASSERT_OK_PTR(netns, "netns_new"))
- 		goto fail;
- 
--	ASSERT_OK(run_mptcpify(cgroup_fd), "run_mptcpify");
-+	ASSERT_OK(run_mptcpify(cgroup_fd, SOCK_STREAM), "run_mptcpify");
-+	/* userspace sets flags such as SOCK_CLOEXEC together with the type;
-+	 * the BPF prog must still upgrade the socket to MPTCP. See
-+	 * update_socket_protocol() in net/socket.c, which runs before the
-+	 * type is masked with SOCK_TYPE_MASK.
-+	 */
-+	ASSERT_OK(run_mptcpify(cgroup_fd, SOCK_STREAM | SOCK_CLOEXEC),
-+		  "run_mptcpify_cloexec");
- 
- fail:
- 	netns_free(netns);
-diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-index d8dacef37c16..c4b438854565 100644
---- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-@@ -8,6 +8,9 @@
- #define AF_INET			2
- #define AF_INET6		10
- 
-+/* include/linux/net.h */
-+#define SOCK_TYPE_MASK		0xf
-+
- #define SOL_SOCKET		1
- #define SO_REUSEADDR		2
- #define SO_SNDBUF		7
-diff --git a/tools/testing/selftests/bpf/progs/mptcpify.c b/tools/testing/selftests/bpf/progs/mptcpify.c
-index cbdc730c3a47..e3f8cb54dbe9 100644
---- a/tools/testing/selftests/bpf/progs/mptcpify.c
-+++ b/tools/testing/selftests/bpf/progs/mptcpify.c
-@@ -15,7 +15,7 @@ int BPF_PROG(mptcpify, int family, int type, int protocol)
- 		return protocol;
- 
- 	if ((family == AF_INET || family == AF_INET6) &&
--	    type == SOCK_STREAM &&
-+	    (type & SOCK_TYPE_MASK) == SOCK_STREAM &&
- 	    (!protocol || protocol == IPPROTO_TCP)) {
- 		return IPPROTO_MPTCP;
- 	}
--- 
-2.54.0
+Specifically, if an XDP application has a table of the interfaces it
+forwards between, today they'd get a VLAN interface ifindex, which would
+not be in that table, and the application would return XDP_PASS. Whereas
+if we change the ifindex and populate the VLAN tag, suddenly the
+interface would be in the table, but because the application doesn't
+read the returned VLAN tag, it will end up sending packets out without
+tagging them, leading to broken forwarding.
+
+So if we don't want the flag, we'd need some other mechanism to resolve
+the parent ifindex, AFAICT? Maybe a xdp_get_parent_ifindex() kfunc, say?
+That could also be made generic for other stacked interface types, I
+suppose.
+
+WDYT?
+
+-Toke
 
