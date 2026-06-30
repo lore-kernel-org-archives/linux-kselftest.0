@@ -1,142 +1,188 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EBA3E0223
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 18:11:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782843085; cv=none; b=eTAROrOujJGYrJ8A2mVtFt3u9KByox+46DiKDYZukwRSKa0JYKPwglyGV3OQbmpNvUkhgDwWgB8Ws5JZu5fAnVgnu3nfL6zGo5iwoajNAxKQwPOT1CWHk6VysM5bHbs0LC5RPVfLXXSXB4odXWbHFTztQdyakg609ssz+HIbcMg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782843085; c=relaxed/simple;
-	bh=GmiSEyyNB7x0aLtv4lpKAHOSN/63+9+ZgW63VVm+7/o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i9Qyxzs9Fa2lNYatJrkjULCY6+iAg8KZ9wUCZvMnWOTQ6ASw0L8en8pmDePtwAws0X49HgX/t8iQveiKlQqWvnodtgQO9R2lXstmFPGTVxotMCXd32CECLGLKzOY/E0IXiuJMjf8km/18ZvSjLeaU6cd5EWyUULo3ji2pVa/1oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CBHuX4I/; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333933DB651
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 18:18:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782843498; cv=pass; b=nqfpnpM+7CjZ5pifBoi5je8hwbxqAAqhPAU+XD9adzzv+5ZfH2ztAAiYOOPdswLxamM0QQdP3Sd5WEUzknAnzlc7Ja442tS1fJP1f0JdThEpCLWpvBh72QwoC8J3Xpk5VKNL9wQ9gvtQVE8oGdQUncM4/gggGS15c2PIyTS7qCI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782843498; c=relaxed/simple;
+	bh=uyUPA3g5JaVFIdW6+eNaI4XKeB9g+sCUKwxpwq7LcqY=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Y7KgSMaIjC23TQHHmgjzCQNcTymFCuGSwKp1adZHGvyo1FjyCv37Oj/HX/nc8YYVHZPdboTH3ajjcWLjrU7GgF5BhQOuPCBKJkRIndeZ6FYcBxzonDxA7jpcrdHc0dWgxXbh3C9P0CaHiiGnH51KqR7TuRuJaUcO3uepQOHlCCc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YUz7YJfX; arc=pass smtp.client-ip=74.125.82.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CBHuX4I/"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-493be1b9682so2245225e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 11:11:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YUz7YJfX"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-137dd4cc208so975309c88.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 11:18:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782843496; cv=none;
+        d=google.com; s=arc-20260327;
+        b=LfmLofHLd4o7h8/PH2WR/GyYKB2S4UIWQsb8o/yFTzIyJWjWHkgURedWlWKWUQoTQe
+         FyptlXIhbEFSIqXaIi7SQaL+SdYDDPGpeWlCcKfT6xxAEqI/BJKAacX+EThAty2HAcpZ
+         raU5/x7J6jY+vC9pkXHH2tNqer24n3TMFpyiZijSIX4lc/ZEw1v8x0HbtjKViDKUWBR/
+         JqmcGnyWBMnRXchGWfXgF77bD8aELh3OStncNls3saG23DYB7tF35wb0JfZ0Q0t7GDpt
+         ItcVlHjyYrQ/e+Jv67+BTqHzf0/DxhKS6bbsrUSSVpjc2UxQRLtLd3NXSNWkwhcVYUQ8
+         S6GQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=70nUlSqxu0vMKYHD8svN4B2jvX9LwngvnuRYACmSwYQ=;
+        fh=6Ia++BCAv8DhAmLxA4IsYdzfHQnYiwm0/gNAgrJSRCw=;
+        b=mC0FGQwCJ+lV2pfizNOhki5HFxoi6SvBvzFQHy1OyUq8tXTEV7OVKhV9y8gPAsxBU5
+         3oDdj3Tja2s/wS3yNpVAi8iFAdYbGrxSPwxQQOzja6VnS4ukN2rB6F9aYs5Oz462QfcU
+         NdOgR91qBGOk+QzZnviD6TACotHxnoQkJEF4bRxtCTse5mRjzgd+RT+dPaN6pMNWvtjK
+         5K18rO0w3PsIvXWq2T8T7f6X+OUYdI0y5hHDMeVZlQli3SRKnY8kI+W5GEZnIAjkEqmp
+         itCApG6zFKEqYD+B0QPNHRQ231S/6r1HxoMDp8tPmzLWbHJNgj6tiq8NkJzpGU9Y+fax
+         DYLg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782843083; x=1783447883; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tkvmyfnD6mRHr9hwmtmQjGJkaKe6zFgifbRb8CeRxNc=;
-        b=CBHuX4I/Y6/XEbcw2lE8Utt+ncjgKRcBEpOkTbNHApttQiimI73cUQ5E8s+FMGTnam
-         0QNo+u5CGinuvmEBOGyNHmNvdEKHrfkJsRNhYilTAEtwEMrXzKd7aak+p8xvGlGFzfT2
-         aEJ/tqBMtJZrwEOq2nCUgZQz6dWpEIKK0m89cx/5SgYJ1beHV/XWM/vIQU+7+bM+rnD0
-         4+cPwU9Ptduh+uvIiMf8LbKj/p2DVY/dP/hX2inG0cw59CYLq8Bhri6Awyg5beHgHh5U
-         fJZyJHlLU6s1S1Ogs/fsgghh4AF37+dys1yCNxWjSG8qsZ5UFBP6B10M6jQhXMQ5zJxZ
-         glww==
+        d=google.com; s=20251104; t=1782843496; x=1783448296; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=70nUlSqxu0vMKYHD8svN4B2jvX9LwngvnuRYACmSwYQ=;
+        b=YUz7YJfX6QzZR9ZBo8+MHcecOsGyowlpNmxVzmeDm9v58r78WAp7m6qqrrVQehiUeF
+         Ik/Bz7+ZfLFKddgPJ/LVNkk6kn4DMvPNmCykweE895LX1Rwa9YtfMyHSQuuo7xYQkbOX
+         TVCqHzTBvv226aqGnqphBwVE7ZPgkC0B33SzPd76p9ilpSS9APCkeziauYHYoTxM+PX0
+         0GQwXqd5/yUq/HzmqWe8iOOOQh8m8N6uFeaC1YjzlYDsyTtbdGSvo8dQLfsTpcd+E6NO
+         4KFl+P9BCOsNpUR5RdcWfN1id7ONug/A2+/u7PrmXe2/vlI5+/jphrjptdfscQF43Ze4
+         +8kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782843083; x=1783447883;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tkvmyfnD6mRHr9hwmtmQjGJkaKe6zFgifbRb8CeRxNc=;
-        b=B0vVFt1lSu5sUu8kmik/uzRB1xi046ERNfsm5ZSbmUjnMeJ+7wLiUk4bsYaH/m4m6/
-         1655ucCenH6ZkTXcspLu/lFyfdGFOtzaxCJXFTYsBieyGQUm2BctDOeWwGkvDNbMtWHY
-         4oWuwY55T98gtBbtDlpt70ra2Ydsk7I9RUPrWWSoTVrNFkACg0F0mL8ReiOrnQA1HOF1
-         /wF1BsKKcbChV81IGOTzgYaoT8Dlnv+j46XYexiOJLxY/Y7pOy9O8ijs5zK4RytGLdAy
-         5QQzqnKOGlKD3ckV4rUf2dctkEJaLQSG+uDk9hLpdFjKrjB/93FKH0sxc2BxZRXUjrtK
-         U7oQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+I3ay+SJYLDRgwcIHvINGYGgqWh0JDF/NHQjws9jLSPE7BD0xc9ZTcd2kaknUDYAV5mL4DFGupqvHgy6E4pg8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxkk9psgmbYHpcEt1jBUDjb3r8rpjN6HukY6YwaELFZlRsV+p86
-	DG4MU0yeG9VtJ2BBIiwPqvJySNwVHottemkjqVD5oXkII/gr/Bx0KZgD
-X-Gm-Gg: AfdE7cmstQpBRWtF4iejMkaHCjTTmFh1yCfZQdOXIeOGhVvFHRv4iti8bNbj3aLRYuM
-	mQ9xaAMSvnvExRXn4bHDnm8pe9sGb0oBESGELV/lD7XAYtIAyEua/X5TQDFCyk4C+LgJ+mpsmLY
-	0sW1E05iLKaQr9l6bUJf6ejXVJ5xYy37HZR3jo4vss7B77enbi/UWlwC4eELnG2MLjgXHjUaXga
-	pVtQLCmsvxBNJSsvdpUDtlSDWesIpe8l5gGUUWhW0aYuX3qsii3dIaTYLwmHPyJTal8Rvjmq5nA
-	RGhHNohEuh2aB8giM2q0nw3JeU/jNbDoPoLqYakOb0up9bA7K7SsSW+cvnTUlMcVC3hpK5+22vn
-	KvAOqfO3lr5gNs9MtyFLUjSYLX61T5HaDu7TsbAwiZCMm2RJsSyqGKrnKb68xJ+0eJywOkWlfhb
-	kuqpMUDS0bU3Q9wBGNqRvYcN6TM6mZb4i4
-X-Received: by 2002:a05:600c:6994:b0:493:bb6b:5bda with SMTP id 5b1f17b1804b1-493bb6b6372mr47286425e9.29.1782843082488;
-        Tue, 30 Jun 2026 11:11:22 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493bef248b7sm2760925e9.2.2026.06.30.11.11.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 11:11:21 -0700 (PDT)
-Date: Tue, 30 Jun 2026 18:21:22 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 0/2] bpf: Enforce gotox targets against
- subprog bounds
-Message-ID: <akQJIsYbSx/8ZpE1@mail.gmail.com>
-References: <20260628-f01-03-gotox-bpf-next-v3-0-b744432e1361@mails.tsinghua.edu.cn>
+        d=1e100.net; s=20251104; t=1782843496; x=1783448296;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=70nUlSqxu0vMKYHD8svN4B2jvX9LwngvnuRYACmSwYQ=;
+        b=Yn17LrijDLAOshY2Aku+Yhtc1McaECeXXV5GZ3L0WXOCGXfKSWz2Hk8BOo5bXmSq1g
+         7TzqMx0fuszxalQxkI4ScurEVn6JPST1a/I5dMAv3nAnCMrNUCd3BVdfBaT7jCBhq8fd
+         1RA3i2r1yzHfijsfpnixx1h9Ha/EzHL95KNcYI0lbpcQKQ3ZzWSi3vCD6Hyiq+pgctqg
+         m32QUDMjpDwTOVLCwipAAka+cfdqZKOG/HyntxBt2UqYVOYSD06TQTDC+MjLIsRMsHds
+         tBnRJjyVBGDWr5GouifA4BS7JCPHi1asN2p8N6Xujurxye0snHs3B7R4cnXk9DQnmrB4
+         MpBA==
+X-Forwarded-Encrypted: i=1; AFNElJ+1LdFjp3PNdqREVjRBnrftaZb2CsEnCqFM/HBTwE/OpG/TZWkkUYPQjfZ7TFf0WVuuVSn1KvzkSemiWWqwtL8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZaomF4KlgNkFk6ro3xBcIg0d4AYzyp/9My8Qo9hWWCMFWeVbk
+	tF4uhBOGgG5M1c9A/jLcB/zhu8kDj+xR4DMb6N1NbatQpwB60rmMbgzSj+DK0CBjem/aAs3puqw
+	/Vo6XmQurKoZyzfp6xYXzIRvA1PkByXeFFCgpxF+Y
+X-Gm-Gg: AfdE7ckfJeoynA0jj1FPHjOD+SkDYGaeme6tkv894SEfbjGyiRZNcc1wUrV7XJs+PQ6
+	3g02Ijz1Pxy56zi64vpj174pISWWW3GFZXsJqz6Z21pHrvR9SvUvLUmmvakCEuxYiwwqTfL4Hgc
+	ZPTNtdrLA6hIJ1qa2tD6MtIV1Q5T0wPA1qLqsSLCdbD8zf4Xtk4629t5D35MamDFdi8Yi3Ot7gE
+	tQVsG+ENQsiKrZrnneYRh585GFNjkKAUODLdmgzOtifZYA7nLocHRodcksM7rksScy5FsdYAhPv
+	OBRgx48/koJWP1s2u3fr8EMaRTo2FCGyFwbgD97Aqjy8eOTFQ2rZSw1D5RI=
+X-Received: by 2002:a05:7022:69a8:b0:134:d3bc:b4b4 with SMTP id
+ a92af1059eb24-13b2e297d9cmr2024216c88.4.1782843495523; Tue, 30 Jun 2026
+ 11:18:15 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 30 Jun 2026 11:18:14 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 30 Jun 2026 11:18:14 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <f8937d16-4aed-44d9-a058-beff56eac4ad@intel.com>
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-13-6983ae4c3a4d@google.com>
+ <CAEvNRgEBiivp9tOHZnFmWvF6ek-Ar-m2B+hb=-H0dgAcM2=z8Q@mail.gmail.com> <f8937d16-4aed-44d9-a058-beff56eac4ad@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260628-f01-03-gotox-bpf-next-v3-0-b744432e1361@mails.tsinghua.edu.cn>
+Date: Tue, 30 Jun 2026 11:18:14 -0700
+X-Gm-Features: AVVi8Cem8-UowhLlk7c1ovclqrg2M3qRhpAj-mMpux06fGqtT2DmMJG-urIjBYo
+Message-ID: <CAEvNRgFLjt+-cO-XT0s8uW2xXgyd+VVZ0g0Os6V0+LBFQzx8cQ@mail.gmail.com>
+Subject: Re: [PATCH v13 13/22] KVM: selftests: Set first memory region as
+ shared if guest_memfd
+To: Xiaoyao Li <xiaoyao.li@intel.com>, Lisa Wang <wyihan@google.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
+	Chao Gao <chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Erdem Aktas <erdemaktas@google.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
+	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
+	Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 26/06/28 09:59PM, Nuoqi Gui wrote:
-> For gotox, CFG construction models the indirect-jump target set in
-> insn_aux_data->jt, while do_check() later follows targets from the runtime
-> PTR_TO_INSN register's own INSN_ARRAY map. If the same gotox can be
-> reached with PTR_TO_INSN values from different maps, do_check() can accept
-> a target outside the calling subprog.
+Xiaoyao Li <xiaoyao.li@intel.com> writes:
 
-Can we use some human-readable description here? Please just explain that maps
-considered during the config stage must be a super-set of maps checked runtime.
+> On 6/16/2026 7:46 AM, Ackerley Tng wrote:
+>> Lisa Wang <wyihan@google.com> writes:
+>>
+>>> Set the initial state of the first memory region as shared if it is
+>>> backed by guest_memfd, so that the KVM selftest framework functions can
+>>> populate mmap()-ed guest_memfd memory the same way memory from other
+>>> memory providers are populated.
+>>>
+>>> For CoCo VMs, pages that need to be private are explicitly set to
+>>> private before executing the VM.
+>>>
+>>>
+>>> [...snip...]
+>>>
+>>> @@ -495,14 +497,16 @@ struct kvm_vm *__vm_create(struct vm_shape shape, u32 nr_runnable_vcpus,
+>>>   	vm = ____vm_create(shape);
+>>>
+>>>   	/*
+>>> -	 * Force GUEST_MEMFD for the primary memory region if necessary, e.g.
+>>> -	 * for CoCo VMs that require GUEST_MEMFD backed private memory.
+>>> +	 * Force GUEST_MEMFD for the primary memory region if necessary, and
+>>> +	 * initialize it as shared so the selftest framework can populate it
+>>> +	 * exactly like other memory providers.
+>>>   	 */
+>>> -	flags = 0;
+>>> -	if (is_guest_memfd_required(shape))
+>>> +	if (is_guest_memfd_required(shape)) {
+>>>   		flags |= KVM_MEM_GUEST_MEMFD;
+>>> +		gmem_flags |= GUEST_MEMFD_FLAG_INIT_SHARED;
+>>> +	}
+>>>
+>>
+>> Just noticed this while hacking some SNP tests.
+>>
+>>> -	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, flags);
+>>> +	vm_mem_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, flags, -1, 0, gmem_flags);
+>>>   	for (i = 0; i < NR_MEM_REGIONS; i++)
+>>>   		vm->memslots[i] = 0;
+>>>
+>>>
+>>> --
+>>> 2.54.0.746.g67dd491aae-goog
+>>
+>> I think this patch should fully buy into in-place conversions, so we
+>> need to also set GUEST_MEMFD_FLAG_MMAP:
+>>
+>> @@ -483,6 +483,7 @@ struct kvm_vm *__vm_create(struct vm_shape shape,
+>> u32 nr_runnable_vcpus,
+>>   {
+>>   	u64 nr_pages = vm_nr_pages_required(shape.mode, nr_runnable_vcpus,
+>>   						 nr_extra_pages);
+>> +	enum vm_mem_backing_src_type src_type = VM_MEM_SRC_ANONYMOUS;
+>>   	struct userspace_mem_region *slot0;
+>>   	u64 gmem_flags = 0;
+>>   	struct kvm_vm *vm;
+>> @@ -503,10 +504,16 @@ struct kvm_vm *__vm_create(struct vm_shape
+>> shape, u32 nr_runnable_vcpus,
+>>   	 */
+>>   	if (is_guest_memfd_required(shape)) {
+>>   		flags |= KVM_MEM_GUEST_MEMFD;
+>> -		gmem_flags |= GUEST_MEMFD_FLAG_INIT_SHARED;
+>> +		gmem_flags |= GUEST_MEMFD_FLAG_INIT_SHARED | GUEST_MEMFD_FLAG_MMAP;
+>
+> GUEST_MEMFD_FLAG_INIT_SHARED is valid only when the memory attributes is
+> per-gmem.
+>
 
-> The observed x86 JIT case can then enter another subprog without a matching
-> BPF call frame and crash when the program is run.
+GUEST_MEMFD_FLAG_INIT_SHARED was introduced before guest_memfd in-place
+conversions, so I think it's orthogonal to whether memory attributes is
+per-gmem.
 
-Sorry, but why the x86 is still here?
+> we need to check KVM_CAP_GUEST_MEMFD_FLAGS or kvm_has_gmem_attributes.
 
-> 
-> Fix this by rejecting gotox map targets outside the current gotox subprog.
-> Add a regression test covering the two-map cross-subprog case.
-> 
-> v1 -> v2:
->   - Validate gotox runtime targets against the current subprog bounds instead
->     of scanning the CFG jump table.
->   - Fix the selftest expected error from -EACCES to -EINVAL.
-> 
-> v2 -> v3:
->   - Drop the Validation section from the cover letter.
->   - Clarify that the crash was observed through the x86 JIT path while the
->     verifier invariant is generic.
->   - Simplify the cover letter and commit message.
->   - Remove the unused skel argument from the raw-insn selftest.
->   - Move the raw-insn selftest to the end of test_bpf_gotox().
-> 
-> v1:
->   https://lore.kernel.org/bpf/20260609-f01-03-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn/
-> 
-> v2:
->   https://lore.kernel.org/bpf/20260613-f01-03-gotox-bpf-next-v2-send-v2-0-7c883b43f3c3@mails.tsinghua.edu.cn/
-> 
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> ---
-> Nuoqi Gui (2):
->       bpf: Enforce gotox targets against subprog bounds
->       selftests/bpf: Add cross-subprog gotox target coverage
-> 
->  kernel/bpf/verifier.c                              | 19 ++++++
->  tools/testing/selftests/bpf/prog_tests/bpf_gotox.c | 73 ++++++++++++++++++++++
->  2 files changed, 92 insertions(+)
-> ---
-> base-commit: 7bfb93e3475be9de894f1cecd3a727d3e1649b03
-> change-id: 20260628-f01-03-gotox-bpf-next-1a7af91d2c82
-> 
-> Best regards,
-> --  
-> Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> 
+I think we do want to deprecate the non-in-place-conversions setup, so
+how about inserting a TEST_REQIRE(kvm_has_gmem_attributes) here?
