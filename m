@@ -1,63 +1,63 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA346408622
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 11:02:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07F240960F
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 11:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782817345; cv=none; b=iqVe/s0cKG6HA4Bd7NolGCm4gkgfA6NHHTezsBdhSaT9mElv8unZT2wLbJqveykkx20UoT57UJKlL00V9lsK2Pmk2nwZlW0hwoWWzeGue71GAalaeYXsZakx7IxbFAsoR7MY78qRKHWIu3BJwUlzLq0rrmcAVcZJIBjWnZQzr7Q=
+	t=1782817351; cv=none; b=Ks87Ts8mVZ65UOHtTqw/MSGNzRYkO0qS1BPiBBPOzRoBv8fBi3YWJQ91hvj+khWMQRQwy8ktM+JsqJ9wpKTKEDvAZQVSEz7nQoBh+05cuErmaDt7w5L4u1MGYg3lNs70lwkx0OE6+OpM/rAnHB1hhhEWLSsfddtiCkB3H5msCm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782817345; c=relaxed/simple;
-	bh=l4DTzAgHPxhvW2gusDgE+0UeVs6H4ewTxAuzQ0FO/jg=;
+	s=arc-20240116; t=1782817351; c=relaxed/simple;
+	bh=8wZAl9dIq90GZLioFiUpzFcU9diyNdRhpnpQypxIlwA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LIuRrRJtp/zV6uzlrbGBUnMjmrtkR/pIl9Z5/vidBLWe0oy1+7rPM0fDA0tdI9ODYkfOFzrl8Z41PU9uKyhyHsKei+X26hnm1UB2hZ+0dMD92bGDeYRuvSEBqQzvLCsvMsutK8i1cKx4Rlwa5J21Jt0alnVW0QhtFRKl+fzZWGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rT48Z0NJ; arc=none smtp.client-ip=209.85.214.178
+	 MIME-Version; b=Zx3KWo9Lpoc9I6XmgUPdZFGTklEwtlsVHkLQnwrIKWYcwR1rnLZLGIpuZj+S41eSu/yyOk5nHPR7FhAklvx+Ix+vZepIGtgORTzXNnNbT06i9FsXOAYERFK/KqadfPtCfxFr1DKzSfLmp/owD+lLP4w0eQXdbFulW5G0qf9dhyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fOqY/0CC; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rT48Z0NJ"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2c9f44ddf26so8538325ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 04:02:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fOqY/0CC"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2c9b42be8feso25212095ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 04:02:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782817344; x=1783422144; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782817349; x=1783422149; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3R/tR4ScCUpju7FMZyh8+yuGH4uE1rv2T5rn90jmRLM=;
-        b=rT48Z0NJCpyqbw5HWpb89HcGw7SfX2P2GjtHFe++aRT1XLRfJaTcc/3QvDiMswDNhJ
-         73uLAX9qkbcJCOfLx4wCjepoOGOeQo1UKmixSLjORHXSju1j3OzQfMGo7luFxWuLqrNQ
-         mYaRdpPr2TIIrolHtLcNn6kc8V5UWWmQvkZroTyr9lQ35Y94x8LpagD5Wzj7sh+hkr8+
-         KlLBqp0AG8S9/jQ7YnXIhX5+yEcVttfIYlhVlw0TF6EttJDWavJHbfp6tRAT/JkqAkal
-         dZV3hsbDXyh+96mOJI7LRomVp3zcvtTHuQGPtqN2zbS0BrQRKM5RCjGiETKJGqD7RYDX
-         8oGg==
+        bh=710DEh42/SxcOGjoC0hzcAfTSmEIF90NLkpYChDQKCY=;
+        b=fOqY/0CCbio+7XRNKbwvkNQ0tt5ObisYqS/+D6LvltV0Lr2egGZJKkUPRyoa94YJb7
+         rOeV5e9VSwaLUAYjyCxiWZSzh5Qu4hn7VxN23Xqf3NaZbmD9zDdJjaEizKuJHsDXuYhJ
+         xddvtCjL+UpB+vmHW2+9cmKn3tjmAAX0N4Mzh3gy/+d+DK1NwsHVMATDzkyQxUKWuL7F
+         bBwcD9Ff1Tat8XQKHYv6KlZC4dD5CO4zvTTrn1zbGLSU9AU2ztT0BXPeQHoIdkdB5otJ
+         w4oL8i75Fwd9bs+oU+og107VD/qozD2+xKTOvz65j09vACl4TR8cz520SUF2yVT9oAZb
+         cLmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782817344; x=1783422144;
+        d=1e100.net; s=20251104; t=1782817349; x=1783422149;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=3R/tR4ScCUpju7FMZyh8+yuGH4uE1rv2T5rn90jmRLM=;
-        b=SkGBttKFsihWlTh+ZJ3a/RTTCQNzT31eI4KYEl3oiL9zLzcJmuCtfO2fTXLlWpxCUF
-         LZxBHr2pyHqo79zjog4AfdCAGWtLVH5b4OGsIQaKYrgIpQTkErGHb6hvNhmv0IEwv/F1
-         U4brG5n/lj0jqIWw+ZybztPzugR3h+/YR6qtZjDgWpa0c1fq4cVAtqU2ZkF+A9YcjHu8
-         HNSvgpYGlFm9GeWBnm6eL98VcAlztbHGOJYvOAy8x4+EREes7TMU5FnXqVg0k+EWxUxo
-         WANAPujW6EZV0Ra7bgMrIgwJ90vVJmkrGV+sqVMavtweCI+N/CYOo5Uvu2F8Sc/Watdw
-         zhWA==
-X-Forwarded-Encrypted: i=1; AHgh+RpIMIrBKVB3wt1tmtaU+BAM0f3Hp1RGD/KYuDMbVNGpmNUYC+dupu935WLPnhWMOoqpRZCV/PjM1Xu9Pe/VAhA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMXE/bJoVN9odRRDKtTgayvgsh7pph6PT+dIxQg8ySmIGd11r8
-	S8vsAZAVMd8PCx4O3+fQfy6RvQhxCu2+HAQTwtklzQy8i53bHWFie9Te
-X-Gm-Gg: AfdE7cnbDL7J6evC/fBlofOUgp51+647amfiMMTnkJya6/fHybokmfOOWLditQEa+BT
-	52FoQNf4YmZe9qp7CBxK08472yy3Q9bgHDzJJa7QgaIC1Kb0iLdGdQ4aFIi59KR/zOXN6buCzxF
-	AlNQBmpbVFVYyQLR3zAwmwSxmmUNZQ10CeyUib6C1Ougu9G7Yx9j5B6jELX3+J2tWwid9gi/eNW
-	dlSdOJr4k45dISdvGsuHqN2qxFex+UKYsZgNUGsox7K910uo9LOjqC53IUCpqBUbm+0ss5SNi45
-	BNdWzAQiB+kl67JaWPQQnG5uia37BmRx3C8lMY3aPcqpStu/WUvOloO5hm4oHdKjsitBELWQHTS
-	RVVyoWd23t4nB4pHujTTOgddn8Czmdvt/fZZa07C1G+0itDYppHEdoDO/bFsneWH2Hb/p7bsZWn
-	Hg7TZpI5HXEgRjWAwNDUhgouWTjPoAdw==
-X-Received: by 2002:a17:903:46d0:b0:2c9:97a7:b1ec with SMTP id d9443c01a7336-2ca5a623ff8mr129935ad.43.1782817343702;
-        Tue, 30 Jun 2026 04:02:23 -0700 (PDT)
+        bh=710DEh42/SxcOGjoC0hzcAfTSmEIF90NLkpYChDQKCY=;
+        b=jHDb0UknGm9cn0mwTPSlcD35KMXXzlwl6/6gYw243fZlFQUKuh+6BiCw0gTKI2ZWJx
+         cktTiV5X6AifoVg1ZLk8HO50P0Ze6zQmwVbELuOcmVtcPmzSkr2tdQCr03/Nevt2ZLLn
+         MYsaKNel2ZPQT6mewFMccoUC+ntd13EUW/OxLtQB9oIgpIPA9h5udTjlxZ8Z2QGvSaEo
+         o56/qLwMVRfrpzALUmN6hevJr3ORvWcBSlTePgj/Qapyc8R0AREBRFfhKMldI9Dtp83b
+         Go4y4e6xiAfs78o3uXx0PnX5ToxgzePgNqTiSZPYdMB/B7iGmsUG5bnEQ4iMaRopNs+x
+         q2uQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrEPCzR1080BVFNbE7WsnEmgglFbERnOCFK1MmqtCO6M4vrtm74ahj+HatHkP6paN3PMuKGNPv0j3/nb7kK1LM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfGIA+kPchzu7NeTvIpS4S2tvpeSTMP1NMucfDmYtd5d7qUnp1
+	M61INdsjSK4V9RU7WkrAMSo9VUHW4gGiDB/fCYPwk5raA9J3TOf/jJ29
+X-Gm-Gg: AfdE7cmHJ6sQdkCs+2Jrydb07MZnfXxn1RLPxoi1kSk5wtzU4qJxPIl+5bCv5Ij8t3k
+	ypjZbVsTdL2Uw2Bt1c0++92H2fWcdU9r0sI6+HLA/3kPEPAsz3kFX2zlrzIplhGzATQb1GUoJj1
+	M+q8OD0BoCUi4h566bxAZAfuAnh3GK8VhwPwBSZDWtK0xLovjlEaGVQ0QLKIFPaiftBEyEIR52Q
+	NEwaRMcisxdAs4O59PYLoJVZMq3G+lfVIRvG1Efjm3ZA2HPsR6UHhSslEDj56/v1expfgjy88rq
+	IT5qhg6Udwlt/DbRQe9Ti8QmXahuB01gdKXeea0pJDtM3uJgIvJJsbHEPSceTJj6rXob/6yubyE
+	NsIEOAoTLncLbeEiHvnm8L6oyzthwef5ZgXSy3LOiRnYtNfL3FNS7ATld2HSFGTxSk9mmH/ewyA
+	hQHIsYFu1eFA3VHc59/NcQ1DqPc54cZb4/n74aGmHU
+X-Received: by 2002:a17:902:f645:b0:2c6:ad70:d870 with SMTP id d9443c01a7336-2ca2d54457emr24425215ad.13.1782817348784;
+        Tue, 30 Jun 2026 04:02:28 -0700 (PDT)
 Received: from m-upc-A520M-HDV.lan ([2400:2410:3f60:500:ae0d:35d1:dac9:a0e9])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca37a701b5sm11455265ad.17.2026.06.30.04.02.20
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca37a701b5sm11455265ad.17.2026.06.30.04.02.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 04:02:22 -0700 (PDT)
+        Tue, 30 Jun 2026 04:02:28 -0700 (PDT)
 From: Yuyang Huang <sigefriedhyy@gmail.com>
 To: Yuyang Huang <sigefriedhyy@gmail.com>
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -73,9 +73,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH net-next 2/3] net: ipv6: report multicast group user count
-Date: Tue, 30 Jun 2026 20:02:06 +0900
-Message-ID: <20260630110207.37841-3-sigefriedhyy@gmail.com>
+Subject: [PATCH net-next 3/3] selftests: net: check multicast group user count
+Date: Tue, 30 Jun 2026 20:02:07 +0900
+Message-ID: <20260630110207.37841-4-sigefriedhyy@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260630110207.37841-1-sigefriedhyy@gmail.com>
 References: <20260630110207.37841-1-sigefriedhyy@gmail.com>
@@ -87,44 +87,149 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The previous patch added IFA_MC_USERS and emits it for IPv4 multicast
-groups. Add the same snapshot attribute to IPv6 RTM_GETMULTICAST
-replies and entry-lifecycle notifications, carrying
-ifmcaddr6::mca_users.
+Extend the RTM_GETMULTICAST dump test to verify IFA_MC_USERS for both
+IPv4 and IPv6 multicast groups.
 
-This makes the multicast rtnetlink ABI symmetric across IPv4 and IPv6
-and gives userspace the same user count that /proc/net/igmp6 exposes.
+Run each protocol test in a fresh network namespace to avoid changing
+host-network state or racing with unrelated multicast users. Join a
+fixed multicast group twice using separate sockets and check that the
+reported user count increases by two.
 
 Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
 ---
- net/ipv6/addrconf.c | 1 +
- net/ipv6/mcast.c    | 1 +
- 2 files changed, 2 insertions(+)
+ tools/testing/selftests/net/rtnetlink.py | 101 ++++++++++++++++++++---
+ 1 file changed, 90 insertions(+), 11 deletions(-)
 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index cbe681de3818..f1fe9ede1edb 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -5264,6 +5264,7 @@ int inet6_fill_ifmcaddr(struct sk_buff *skb,
+diff --git a/tools/testing/selftests/net/rtnetlink.py b/tools/testing/selftests/net/rtnetlink.py
+index 3622413d793d..0c67c7c00d84 100755
+--- a/tools/testing/selftests/net/rtnetlink.py
++++ b/tools/testing/selftests/net/rtnetlink.py
+@@ -2,27 +2,106 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- 	put_ifaddrmsg(nlh, 128, IFA_F_PERMANENT, scope, ifindex);
- 	if (nla_put_in6_addr(skb, IFA_MULTICAST, &ifmca->mca_addr) < 0 ||
-+	    nla_put_u32(skb, IFA_MC_USERS, READ_ONCE(ifmca->mca_users)) < 0 ||
- 	    put_cacheinfo(skb, ifmca->mca_cstamp, READ_ONCE(ifmca->mca_tstamp),
- 			  INFINITY_LIFE_TIME, INFINITY_LIFE_TIME) < 0) {
- 		nlmsg_cancel(skb, nlh);
-diff --git a/net/ipv6/mcast.c b/net/ipv6/mcast.c
-index 04b811b3be97..774f4c72a6fa 100644
---- a/net/ipv6/mcast.c
-+++ b/net/ipv6/mcast.c
-@@ -908,6 +908,7 @@ static void inet6_ifmcaddr_notify(struct net_device *dev,
+ import socket
++import struct
+ import time
+-from lib.py import bkg, ip, ksft_exit, ksft_run, ksft_ge, ksft_true, KsftSkipEx
++from lib.py import bkg, ip, ksft_exit, ksft_run, ksft_eq, ksft_ge, ksft_true, KsftSkipEx
+ from lib.py import CmdExitFailure, NetNS, NetNSEnter, RtnlAddrFamily
  
- 	skb = nlmsg_new(NLMSG_ALIGN(sizeof(struct ifaddrmsg)) +
- 			nla_total_size(sizeof(struct in6_addr)) +
-+			nla_total_size(sizeof(u32)) +
- 			nla_total_size(sizeof(struct ifa_cacheinfo)),
- 			GFP_KERNEL);
- 	if (!skb)
+ IPV4_ALL_HOSTS_MULTICAST = b'\xe0\x00\x00\x01'
++IPV4_TEST_MULTICAST = b'\xef\x01\x01\x01'
++IPV6_TEST_MULTICAST = bytes.fromhex('ff020000000000000000000000000123')
++
++
++def _users_for(rtnl: RtnlAddrFamily, family: int, grp: bytes, ifindex: int):
++    """Return mc-users for grp on ifindex, or 0 if absent."""
++
++    addrs = rtnl.getmulticast({"ifa-family": family}, dump=True)
++    matches = [addr for addr in addrs
++               if addr['multicast'] == grp and addr['ifa-index'] == ifindex]
++    if not matches:
++        return 0
++    if 'mc-users' not in matches[0]:
++        return None
++
++    return matches[0]['mc-users']
++
+ 
+ def dump_mcaddr_check() -> None:
+     """
+-    Verify that at least one interface has the IPv4 all-hosts multicast address.
+-    At least the loopback interface should have this address.
++    Verify IPv4 multicast addresses and their user counts in RTM_GETMULTICAST.
++    """
++
++    with NetNS() as ns:
++        with NetNSEnter(str(ns)):
++            ip("link set lo up")
++            rtnl = RtnlAddrFamily()
++            lo_idx = socket.if_nametoindex('lo')
++            addresses = rtnl.getmulticast({"ifa-family": socket.AF_INET}, dump=True)
++
++            all_host_multicasts = [
++                addr for addr in addresses
++                if addr['multicast'] == IPV4_ALL_HOSTS_MULTICAST
++            ]
++
++            ksft_ge(len(all_host_multicasts), 1,
++                    "No interface found with the IPv4 all-hosts multicast address")
++
++            mreq = IPV4_TEST_MULTICAST + socket.inet_aton('127.0.0.1')
++            before = _users_for(rtnl, socket.AF_INET, IPV4_TEST_MULTICAST, lo_idx)
++            if before is None:
++                raise KsftSkipEx("kernel does not expose IFA_MC_USERS")
++
++            s1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
++            s2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
++            try:
++                s1.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
++                s2.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
++
++                after_join = _users_for(rtnl, socket.AF_INET,
++                                        IPV4_TEST_MULTICAST, lo_idx)
++                if after_join is None:
++                    raise KsftSkipEx("kernel does not expose IFA_MC_USERS")
++                ksft_eq(after_join - before, 2,
++                        f"users delta != 2 after two joins "
++                        f"(before={before}, after={after_join})")
++            finally:
++                s1.close()
++                s2.close()
++
++
++def dump_mcaddr6_check() -> None:
++    """
++    Verify IPv6 multicast addresses and their user counts in RTM_GETMULTICAST.
+     """
+ 
+-    rtnl = RtnlAddrFamily()
+-    addresses = rtnl.getmulticast({"ifa-family": socket.AF_INET}, dump=True)
++    with NetNS() as ns:
++        with NetNSEnter(str(ns)):
++            ip("link set lo up")
++            rtnl = RtnlAddrFamily()
++            lo_idx = socket.if_nametoindex('lo')
++            before = _users_for(rtnl, socket.AF_INET6,
++                                IPV6_TEST_MULTICAST, lo_idx)
++            if before is None:
++                raise KsftSkipEx("kernel does not expose IFA_MC_USERS for IPv6")
++
++            mreq = IPV6_TEST_MULTICAST + struct.pack('=I', lo_idx)
++            s1 = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
++            s2 = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
++            try:
++                s1.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_JOIN_GROUP, mreq)
++                s2.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_JOIN_GROUP, mreq)
+ 
+-    all_host_multicasts = [
+-        addr for addr in addresses if addr['multicast'] == IPV4_ALL_HOSTS_MULTICAST
+-    ]
++                after_join = _users_for(rtnl, socket.AF_INET6,
++                                        IPV6_TEST_MULTICAST, lo_idx)
++                if after_join is None:
++                    raise KsftSkipEx("kernel does not expose IFA_MC_USERS for IPv6")
++                ksft_eq(after_join - before, 2,
++                        f"IPv6 users delta != 2 after two joins "
++                        f"(before={before}, after={after_join})")
++            finally:
++                s1.close()
++                s2.close()
+ 
+-    ksft_ge(len(all_host_multicasts), 1,
+-            "No interface found with the IPv4 all-hosts multicast address")
+ 
+ def ipv4_devconf_notify() -> None:
+     """
+@@ -56,7 +135,7 @@ def ipv4_devconf_notify() -> None:
+               f"No 'forwarding on' notificiation found for interface {ifname}")
+ 
+ def main() -> None:
+-    ksft_run([dump_mcaddr_check, ipv4_devconf_notify])
++    ksft_run([dump_mcaddr_check, dump_mcaddr6_check, ipv4_devconf_notify])
+     ksft_exit()
+ 
+ if __name__ == "__main__":
 -- 
 2.43.0
 
