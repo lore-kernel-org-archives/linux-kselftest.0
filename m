@@ -1,152 +1,207 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA81E3DE44B
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 18:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF0F3DE44B
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 18:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782844670; cv=none; b=mbzOkiz0wbZc+aymvRipe9GdC3RzkrwsHoM00isr4UkTKLvYqvYTWqlvBixI8F26ycPn278SQ1YAcnTMmVLlVQ0JE/Qg4576r2YN74aScOINLmA9eEJXpd0KCNeH2RE8RRmIrHsVJZUoJMSRahy1XiwUxcjH0BGR1K7+jhI8iEE=
+	t=1782844764; cv=none; b=YCTmw95lEY8XUsyHiXzsfs/ne7w0+Pu3F8KEi2CBqKmZRSHoK0r+HMoL9d3FKwvPM6hoU9cdwhWt7NKMlCbvq/pSqkRHUhdO4x7E5nvqXXFZG55fK//nPhluKvQ2EVHaKtbdBm7+uu3nYD7us084rbIdmfCpWv0Ekh7RsVZ1h44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782844670; c=relaxed/simple;
-	bh=YEzjTaQBibg82naQrx8wYRELkM2GgBKDfMPzgkCv/68=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=O5fQJ9REvhkeFl3DcDA21Oi//s6c9Xei1NbKsQ6lxXu3cTTmkjwXQny/mXabSiFOZb0g2UD4KR2UE3DrksAVYF1cZ4wlOkIMelyz7nrH0JZq5Www7z7Kqjor9bbsZvDvzVCLmebbkvqhWDF3RR57IE5XgpZ2m9OT6d2c343CqMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Iccfd43a; arc=none smtp.client-ip=74.125.82.176
+	s=arc-20240116; t=1782844764; c=relaxed/simple;
+	bh=H70csWnjwhvHsTTiICrOOEO4ULSD24owVdAdOs71oew=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qdhFhH2b1CtfGlDkK4/laKNQB5ApdQIr5bUNfLEj1TLLFGBZKbObNBw+jj4dCgPgsFj78BOlXufSn4cy5s6/gQZ0B1Qp9QNQ8Niy2zs26cDYADGMlDdxuCPUnpxjijehNHxbU0hLwssEH9NqCEOfmOxKIWF7ipOrmZEfq5sqnw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PHYc1cpq; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Iccfd43a"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-30edbb0dc5fso3715175eec.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 11:37:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PHYc1cpq"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-493a54b80a5so41874735e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 11:39:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782844668; x=1783449468; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ES4kCJ/i10bD1lFE1QxrqtkTCTeoqYvCpnKF0vygSpE=;
-        b=Iccfd43a+CCH17kOjZG1phFkTveNCf/fMBYoula3s1GA245dsNSm9aeRgfQ+UiHTVe
-         Em6aQINfEKzgk2ZG3e6UPIEIYQ2sPjc0GxWZZ+XRPsCN6i2Ttg/5ZeXcyzqKg8F6us3D
-         8MPjbAYAGHkBaf5m8AiqhdwzyMIeEaZp07FVJzUgcnugdKrZKDJyj42n3lgml8UGaeU0
-         2TBT52Ng1u2iH/du6MLYaRQJu4vhmVevGtj0huBQXP2sOaNya+7Ddb+CPFsOq2nW9QN1
-         M/mgKuLWDQ2txVCPtio6bIGisFZRu6iZ6F8fPq5MGv38iMe6Rm0bU+8Sj2uZ4lUAqgMA
-         ySaA==
+        d=gmail.com; s=20251104; t=1782844761; x=1783449561; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=C2ZeRAV1Zm9EVHndjVQcGurctctXfH0NpsD2sgmvkVo=;
+        b=PHYc1cpqDiVD8/LSCd69n5+VmZvKKvQ2nRqps2nErwodg24EuzuAaIqLPMARu2qqPj
+         eqWdnkOhv3iDNvXzfPA80X7ErtZFbpfihBknw8NbDePP1UGm4h3bjXNr2ZDczQ8T7m1v
+         b0mWaB2lDzK7SxzURCd97OkFuvVteIVqOdPoAvVDavbP5iEeAfna/qJL42ijPQ0DY+b8
+         7W6FxQHCEuG1ugheBAhkkaGSgqHTMSqXaODAxP4um6383YTHpfeKiNK1fRRNjn8M+oi/
+         Q/39LOU6/LGkVtFwQPJczTJiCotOlQW/wtAcqYcX5DOQ2rwOHN+Ny6rWENyoW6t+IlOY
+         d+ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782844668; x=1783449468;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ES4kCJ/i10bD1lFE1QxrqtkTCTeoqYvCpnKF0vygSpE=;
-        b=c7czn0iBjSQ6URSyNWGDJ3YMNlOLdDPdl48nO8lEQ0rGQrO/lgvPsQI/DfrAKPheCv
-         DOXyQSPLJXiWDBLpiekF+6e1UV30NG5yOndiHRYLmTmwpHXrHN+7m/9K55x6qRZ23/Tp
-         krdcAbyWPw0xU+bE3bTDT+lMZ+7oUvgfJGMrCsNnmlJoG8ueZiHFbn7FKE8a0pnfxARZ
-         GonPfUv0JxIhnT+OQu/BqqarOnxH+LAM6rDBQ9FLW+gsaZWnZRqgZrNFZsiWNNkqfO61
-         TCgwYuWLAcy0R7gPS/beYRhTkv485LjQTOtIkiRKMy8cxtxOux1HWaIQjiwEs7fh2DFk
-         Ct0A==
-X-Forwarded-Encrypted: i=1; AHgh+Rohj8XdywUgtIZjqSRc0AJsOYbLd1Pf+3MCoVF2mlG6gM11xtkquVGpFdzCJndlu1JDzXZhyi7MdzIIKzIsLnE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTEreIpHheQtQ/+xMfYMsP/CEsKkoUpsZZD6AXNSA4cgLxLxtk
-	EVqdgdcHGcd0soquYIWrnoHwwCbRjXbRY+Gndk7I95L4J234wRYn/CKk
-X-Gm-Gg: AfdE7cm4e5sLAESOIpgVMTlDZ/itA4bAM/XJ3ELKJ103W/vmJ8n2Wc3VhfGLdMNickL
-	zDhJuhL/zhMIa4RF8LIWPnxq0qaN/3CAIlv2x+Xl1dx8MAfFE6hxFOppKCNIXlseSQsGWSx8fzu
-	Ph5Pio1vEl9PmRM7maNkEvF99XfoCTK5CwWSwCAGId2syN99OCtY0iojJ7J0qgGSlVytcQRavCt
-	JvJlzR53p+SFDB/ZQzlRGQTD+viqHTtemxGz4nvbQkXMikRUDaJkKPrawaclq02WEKR/ZW8TXP/
-	8v2mmIBwyvyHq8XvqGawAIOltMBGuc+YfmwZ71nByWcVQtrER27WwDqRIRxVX/YiYDTKSpO4Ovg
-	N0ZW6AtVPTcLLkzhTeFPcbSQSWbxxoJSnSDySjFw/pxp17jwp7j4+idBl4dPO1/eRhNyjqucQCE
-	P5N2VK9/Wqs4y5KzOl1Z8AqUDLnK8=
-X-Received: by 2002:a05:7300:509:b0:30c:38ed:46a5 with SMTP id 5a478bee46e88-30ee147e97emr3855167eec.30.1782844668077;
-        Tue, 30 Jun 2026 11:37:48 -0700 (PDT)
-Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:b5a1:965b:86fd:756])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30ee3205993sm10888191eec.24.2026.06.30.11.37.42
+        d=1e100.net; s=20251104; t=1782844761; x=1783449561;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C2ZeRAV1Zm9EVHndjVQcGurctctXfH0NpsD2sgmvkVo=;
+        b=f0PYBWhNK5AqwvanD9LaVlBnCDUBMSDmNBG2d5Y+pieOzbK4yFkFVzE4q7XSJF2jx2
+         I1/tFV8ywrfNincdL/AzR94LftSOTC1ERM8djpPBSQ5RRPSBiwqXoD4u2ECe4wdytPj5
+         uSx/Q4APEa8YYeEK28lEXJPw/jcoNrmhoRNiBijDhW6pGmsZ4V02YFnbkiMTJqCYHHdu
+         jdQydBxsvx9+PFVVd9CwB+CovCZDGJCpusTokWZfCIuvLhCR3XLV4IOvmpi33aMFsh7f
+         pqfc/qhlGnEhbd4zJ8RTGUaV++be2ikz6zH4HDGV1UvsUUYLYcjoesX5+wYuUTkmzMaS
+         cJbQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8jgKLffF2a3qfDhub84zk5EaFIJ6QUAcE2Jprqjvc9xmI0G68RPm3knLGA8Qkwrs9+Xo+YDU+pPFOUMJ7ZNFQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRi0UtKe7tKxuRaJARqX3dUo+OJvgk8u7QY9IU3zqF3UbE0z+C
+	HH/fKqt6N5xpB0oDKr7icSM0L4ey5n+/1ay8fV9BJBHSj2M4M2UqoDj5MZ6ORA==
+X-Gm-Gg: AfdE7cmPjSSm5NGsrGm+t6toEEW5XploOP2mbCjfgcPxLVJum2SojEGSANCIwX5JeFM
+	oTXj66diR9hnJiQjd2uFjGfQh2cmWunJwJdO32pWDfSj0ue72ZG5IwfkheUIHMZCLk+pEiWyIfF
+	FpoMTkBrBd9ZwIeIi0SdMl3vWLxLI15XTpbejQbM73G+T5OZVYtCRIrhodAe7g56u8771PTrm35
+	a4MjwU81bZ8eMu5/SGw61uu60NbY2vVinvYIBAhCM0rkFQ02GHleN7XlVG4mXWY4vqrJS2NpeTj
+	sw9jX0q7w+hc0jOv4NLGeSm93zdGYu8uDHHMDho2SQlNOw7vTjFVlp/J1RGF5q3HUA+8jDOElC5
+	J3so2PydTwIc8MvukVo0GvIP2BNf3kKDljyIbJDSOuH01wZG4DGU8VMbSuKX6Tddm1xQFb3Ejcy
+	Z+gjze/mkPJP9QYmE91ZzYQw==
+X-Received: by 2002:a05:600c:1f84:b0:493:8391:919a with SMTP id 5b1f17b1804b1-493b828ebb1mr71769745e9.16.1782844761240;
+        Tue, 30 Jun 2026 11:39:21 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493be81df2asm21496495e9.12.2026.06.30.11.39.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 11:37:47 -0700 (PDT)
-From: "Hemendra M. Naik" <hemendranaik@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	jiri@resnulli.us,
-	jhs@mojatatu.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	vishy0777@gmail.com,
-	tahiliani@nitk.edu.in,
-	"Hemendra M. Naik" <hemendranaik@gmail.com>
-Subject: [PATCH net-next v3 2/2] selftests: tc-testing: add fq_pie per-flow class stats test
-Date: Wed,  1 Jul 2026 00:07:02 +0530
-Message-Id: <20260630183702.170798-3-hemendranaik@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260630183702.170798-1-hemendranaik@gmail.com>
-References: <20260630183702.170798-1-hemendranaik@gmail.com>
+        Tue, 30 Jun 2026 11:39:20 -0700 (PDT)
+Date: Tue, 30 Jun 2026 18:49:23 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Cc: bpf@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add cross-subprog gotox
+ target coverage
+Message-ID: <akQPsxoMVYx8+9Ap@mail.gmail.com>
+References: <20260628-f01-03-gotox-bpf-next-v3-0-b744432e1361@mails.tsinghua.edu.cn>
+ <20260628-f01-03-gotox-bpf-next-v3-2-b744432e1361@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260628-f01-03-gotox-bpf-next-v3-2-b744432e1361@mails.tsinghua.edu.cn>
 
-Add a tc-testing entry (id: 83c0) to verify the fq_pie class ops
-wired up in the previous patch do not crash and integrate cleanly
-with the tc class show path.
+On 26/06/28 09:59PM, Nuoqi Gui wrote:
+> Add a gotox regression test with two one-entry INSN_ARRAY maps. CFG can
+> model a map whose target stays in the main subprog, while the verified path
+> can load a different map whose target is the first instruction of another
+> subprog.
+> 
+> That second target is outside the subprog that contains this gotox
+> instruction, so program load must be rejected with -EINVAL.
+> 
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/bpf_gotox.c | 73 ++++++++++++++++++++++
+>  1 file changed, 73 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c b/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
+> index 73dc63882b7d..997724c61c8b 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
+> @@ -255,6 +255,30 @@ static int create_jt_map(__u32 max_entries)
+>  			      key_size, value_size, max_entries, NULL);
+>  }
+>  
+> +static int create_jt_map_with_target(__u32 target)
+> +{
+> +	struct bpf_insn_array_value val = { .orig_off = target };
+> +	__u32 key = 0;
+> +	int map_fd;
+> +
+> +	map_fd = create_jt_map(1);
+> +	if (!ASSERT_GE(map_fd, 0, "create_jt_map"))
+> +		return -1;
+> +
+> +	if (!ASSERT_EQ(bpf_map_update_elem(map_fd, &key, &val, 0),
+> +		       0, "bpf_map_update_elem")) {
+> +		close(map_fd);
+> +		return -1;
+> +	}
+> +
+> +	if (!ASSERT_EQ(bpf_map_freeze(map_fd), 0, "bpf_map_freeze")) {
+> +		close(map_fd);
+> +		return -1;
+> +	}
+> +
+> +	return map_fd;
+> +}
+> +
+>  static int prog_load(struct bpf_insn *insns, __u32 insn_cnt)
+>  {
+>  	return bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT, NULL, "GPL", insns, insn_cnt, NULL);
+> @@ -393,6 +417,52 @@ reject_offsets(struct bpf_insn *insns, __u32 insn_cnt, int off1, int off2, int o
+>  		close(prog_fd);
+>  }
+>  
+> +static void
+> +check_cross_subprog_gotox_target(void)
+> +{
+> +	struct bpf_insn insns[] = {
+> +		/* main subprog [0,14) */
+> +		BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
+> +		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_CALL, 0, 12),
+> +		BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6, 0),
+> +		BPF_JMP_IMM(BPF_JEQ, BPF_REG_7, 0, 4),
+> +		BPF_LD_IMM64_RAW(BPF_REG_2, BPF_PSEUDO_MAP_VALUE, 0),
+> +		BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_2, 0),
+> +		BPF_JMP_A(3),
+> +		BPF_LD_IMM64_RAW(BPF_REG_2, BPF_PSEUDO_MAP_VALUE, 0),
+> +		BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_2, 0),
+> +		BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X, BPF_REG_2, 0, 0, 0),
+> +		BPF_MOV64_IMM(BPF_REG_0, 1),
+> +		BPF_EXIT_INSN(),
+> +
+> +		/* static subprog [14,16) */
+> +		BPF_MOV64_IMM(BPF_REG_0, 42),
+> +		BPF_EXIT_INSN(),
+> +	};
+> +	int good_fd, bad_fd, prog_fd;
+> +
+> +	good_fd = create_jt_map_with_target(12);
+> +	if (!ASSERT_GE(good_fd, 0, "create_good_jt_map"))
+> +		return;
+> +
+> +	bad_fd = create_jt_map_with_target(14);
+> +	if (!ASSERT_GE(bad_fd, 0, "create_bad_jt_map")) {
+> +		close(good_fd);
+> +		return;
+> +	}
+> +
+> +	insns[4].imm = bad_fd;
+> +	insns[8].imm = good_fd;
+> +
+> +	prog_fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL",
+> +				insns, ARRAY_SIZE(insns), NULL);
+> +	if (!ASSERT_EQ(prog_fd, -EINVAL, "cross_subprog_gotox_prog_load"))
+> +		close(prog_fd);
+> +
+> +	close(bad_fd);
+> +	close(good_fd);
+> +}
+> +
+>  /*
+>   * Verify a bit more complex programs which include indirect jumps
+>   * and with jump tables loaded with a non-zero offset
+> @@ -541,5 +611,8 @@ void test_bpf_gotox(void)
+>  	if (test__start_subtest("check-ldimm64-off-gotox-llvm"))
+>  		__subtest(skel, check_ldimm64_off_gotox_llvm);
+>  
+> +	if (test__start_subtest("check-cross-subprog-gotox-target"))
+> +		check_cross_subprog_gotox_target();
+> +
+>  	bpf_gotox__destroy(skel);
+>  }
 
-The test creates an fq_pie root qdisc on a dummy interface and runs
-'tc -s class show'.
+LGTM now. Please add another selftests as was mentioned in the main patch.
 
-Signed-off-by: Hemendra M. Naik <hemendranaik@gmail.com>
-Signed-off-by: Vishal Kamath <vishy0777@gmail.com>
-Signed-off-by: Mohit P. Tahiliani <tahiliani@nitk.edu.in>
----
+Also, v3 lost the ack from Yonghong Song for this patch.
 
-Changelog:
-
-v3: 
- - No changes since v2.
- - Resending as the previous submission was deferred when the net-next tree closed during review.
- - Corresponding iproute2 patch updated in response to review comments; no changes required for this patch.
-
-v2: 
- - No changes since v1. (https://lore.kernel.org/netdev/20260614125000.6058-3-hemendranaik@gmail.com/)
-
-v1: 
- - https://lore.kernel.org/netdev/20260531125314.22492-3-hemendranaik@gmail.com/
----
- .../tc-testing/tc-tests/qdiscs/fq_pie.json    | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-index 229fe1bf4a90..88139f429430 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-@@ -40,5 +40,27 @@
-         "matchPattern": "qdisc fq_pie 1: root refcnt [0-9]+ limit 1p",
-         "matchCount": "1",
-         "teardown": ["$TC qdisc del dev $DEV1 handle 1: root"]
-+    },
-+    {
-+        "id": "83c0",
-+        "name": "FQ-PIE class stats accessible via tc class show",
-+        "category": [
-+            "qdisc",
-+            "fq_pie"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DUMMY handle 1: root fq_pie"
-+        ],
-+        "cmdUnderTest": "$TC -s class show dev $DUMMY",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC -s class show dev $DUMMY",
-+        "matchPattern": "class fq_pie",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root"
-+        ]
-     }
- ]
--- 
-2.34.1
-
+> -- 
+> 2.34.1
+> 
