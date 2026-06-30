@@ -1,168 +1,140 @@
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41FC330B11
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 17:11:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854A333F5A2;
+	Tue, 30 Jun 2026 17:13:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782839479; cv=none; b=mi8qrVQ3dbq+yp3IoZ8cjGF25rrRm5eQunqFspnp/pabRNegcUj/gYBedCxJAiexAkMI8YYUGIsST1OFvGZx+8Hx5bSmbUQ+Gn96+x3JQWtNfe9BlHlg6M1ZDosIdCD3bNG/MLW5qCu06119FK3oUbnCOC6QwJUlsQhxV1sREV0=
+	t=1782839612; cv=none; b=NdHx5yEsMZdsDJKkCWalscBDqisWfJITYI+PNlU21+gJm53ZRlfhnVyiGvobj/yHZmmgMuPogN8Y9r4oRoW88kpG/KWQ/ogqDABOteGZEwdnMumNL0AQD+mAp97VTpESH21QGqMscIRNNxg5PWpIaf3MgZXFkDVQIkCOuxavY0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782839479; c=relaxed/simple;
-	bh=BxM8tCRL/LY3p016q2G8x8d9hhF+S3sM1Ssibu3JnEE=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=DZlZtbbTvmH9hAy3UpJgUlPF/572/Qrw6OOwUywy5mqhvX6ltHWF2cNxhseOzh2kctctuZqCM9Ur3MMUTDDg2HSmqhASxYdLrLTRa8lxCRZIABBPNUyHblcHSfHv/k7bWcKDxx13MJrDt17z2x0/0DbIFcIhF3/qO3NCgWCcrBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rMoPlz4p; arc=none smtp.client-ip=74.125.224.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782839612; c=relaxed/simple;
+	bh=maSROVvHwhT23x4mQIVE1Dg1TnQPMeYsWHJf9xXF/nQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kIqihWJHWH9AXvtKeLWzUc/YMH9qjWEcfi5HNNCpf1XF8FQteTOZLM68baBtA+igL7UHGixfaP0zcNTZMiLAKBslaMpo5LpqeQRGuZU5rpOqSgkHO+s9u3Yhy7GLGJsO4XOX4jVAa4Lb+kDjBipFMgXk0o8Ry4PYVDjI2Zk3hjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bfT3adCg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rMoPlz4p"
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-664c1406f91so3222593d50.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 10:11:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782839477; x=1783444277; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pPJiBM1HvdVkRkqn01nRJ7T3toL0q0YlzVSn5/uUYBE=;
-        b=rMoPlz4pAyQWbl0n7yhI0B5GyLcDUDnr3dck10vphqCX7Xn669qXR3THCo9euZHSUl
-         MT9ZJZdx31+ODp1lsixkclpG8aell+0YG5p05XcL5JEtGCXssMjOhH938x0q/fM3WcsQ
-         cF+PIzWkbNOMDzOJA9/cyg7QNrkPWDRXhMWBUim3NiDjHX9GWUHhdp4qfAHHU/yNt2JK
-         24bFDUtnum0TbESHQVPhXPsHXNFCS6C++eMpW7IE9bbH9O5xicmtF7Mq8OEP4U5aXYtP
-         1rmtrMn+jU3ydBRS2EmRI1QX/5WRepvFMwEyQd7mEq0rq/3NmHP4PPjxP9rvbKkWNKtZ
-         7tdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782839477; x=1783444277;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pPJiBM1HvdVkRkqn01nRJ7T3toL0q0YlzVSn5/uUYBE=;
-        b=i/iImNuvRuN8ojENdNx7qhxdhAieXDUWuoT8VeBaYK1nWs+5R2/ktD+tvBNQVODHob
-         TJTepZWQeQxmrCTj0+vdRbyqtcB1Fzx3aFE0M7eomUY5yqGrtmtyjEx2mqwBW9tMnByc
-         taRrRqagsCLCjlKJhJmVEIi1VcPzGQU8R/2HTUJ7RSORwMew9ENdAc5vN2doVEnZDtjw
-         6lm8bPDM0TYM5ozQdRfWUd5GxJilmvp6okrHdxz6fnQN8EHdJZLrzdmzCPZF8FXZa0cH
-         jEG3TQn7ALMmpwoePNhKcoLQQS//P7TxF7cO5kMbw4YN2Cer+hni4WabV1CrLX41SxJb
-         7P5g==
-X-Forwarded-Encrypted: i=1; AHgh+RrAoQMkI8W67YbFklN4aouefjJjdE78fnRb9wynW+nmp5D6IGJ1DINyH8BThC8I35hNOTH9E7Lgk4DHZnYhvxM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWejclBQZqoz0VCc0d3ET7pRfUX6gp+cPA7ZKWiZU0eOhc1cPM
-	QO4VzJu3GgkmIHx4hiZEclbrD6M09lq2+tRo/YsrPUOMJt9x0Cs1qSHy
-X-Gm-Gg: AfdE7ck9K27mVHvmhUuG9kbwVWRzNxcsl8P6kORpihysPEbRMKRTt/pKk0whoBkpfZ8
-	fTkGFDeXNCFsmJSmkJSSguWoK9HkGpx0CQ9Pwy2p/7USDEHXLvzEOSJWWU5HrPABYm0vu6QQCgh
-	Ps9mSOUgFNfuXMSGR7L5qizfmcdClPc7/e2H7mkVSA94wfViRiZ42QNMenl4xc5UPA/+V0S+zK7
-	4+8hACHk33rGS+jOF6/rM324nlsg+k6/CO0NAa5SJPk4jD/Bpv3dMJKiDeiowkntvQcIjy+dGQM
-	MCvUzMaCyxRlMrcfJ0N3FltBndqENXadownqwp7J1ey5YhpqO9G275GSQ0x4zy58h3l2L/gWL7E
-	9Ga1PUfKxLZtFxhUbMGfWSoqPWnGarqAAsni87yi67Ej+cMaW3qAmKP5FJjrs8F2LaqHJ+L+OnS
-	aZU/feMLwY59IzSD00vQce0sgXPHUSUsqgu/MYLjtSWjx24pT4Mqg0cdILIwwmdxUwDMNx
-X-Received: by 2002:a05:690e:43da:b0:664:77d8:ffc0 with SMTP id 956f58d0204a3-66510b067d5mr829578d50.39.1782839476992;
-        Tue, 30 Jun 2026 10:11:16 -0700 (PDT)
-Received: from gmail.com (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6650168a556sm1140056d50.18.2026.06.30.10.11.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 10:11:16 -0700 (PDT)
-Date: Tue, 30 Jun 2026 13:11:15 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- Jakub Kicinski <kuba@kernel.org>, 
- shuah@kernel.org, 
- willemb@google.com, 
- noren@nvidia.com, 
- gal@nvidia.com, 
- linux-kselftest@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.23684913d1fd4@gmail.com>
-In-Reply-To: <20260629234354.2154541-1-kuba@kernel.org>
-References: <20260629234354.2154541-1-kuba@kernel.org>
-Subject: Re: [PATCH net-next] selftests: drv-net: toeplitz: cap the Rx queue
- count
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bfT3adCg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB9471F000E9;
+	Tue, 30 Jun 2026 17:13:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782839611;
+	bh=+ZgEUdCFZUTdRl6MEpNeqgPGG+C6npsAloU8d/7L74M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=bfT3adCgYcdsxhBEaYSuU0/Mp/u5+XTWkNMTF6tWRDtxujGQoU48LtyEDE5Kbndec
+	 BJBbd4JnL0YjQ27/v6bcJCmb8fnCVGRusjdjuKs1HbX5YHDeqteRvEtc/0vknB0O2F
+	 dudA0orCmQqKdGpNSwMf5vXS6AN13Ta+6FHfzcnOGifPR9saBu/qrw8uiELOp3Dq2X
+	 xf5RSrEabpbFEeUVfYRLoY/jfZFwyI/qi88EBqj7Zdz1mscQmP/yxINZQwZY6X9ZQl
+	 e5a6nEtqXGHS+okEIW8BogO/EBzihZp/CPxUN8YIgpe+Dh9PSwRy7Fm/mit1Wgkv4w
+	 b5iEIpaZFmaQg==
+Message-ID: <916191fc-2e10-4449-b82b-c086d90283ae@kernel.org>
+Date: Tue, 30 Jun 2026 11:13:29 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
+ bpf_fib_lookup() helper
+Content-Language: en-US
+To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org
+Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
+ yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
+ a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
+ eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
+ <20260624030530.3342884-2-avinash.duduskar@gmail.com>
+ <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
+ <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org> <87echobb5h.fsf@toke.dk>
+ <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org> <874iik2ew4.fsf@toke.dk>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <874iik2ew4.fsf@toke.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Jakub Kicinski wrote:
-> The RPS test needs a free CPU within the first RPS_MAX_CPUS (16)
-> cores. This is easily violated if the NIC or env allocates the
-> IRQs to cores linearly.
+On 6/30/26 10:04 AM, Toke Høiland-Jørgensen wrote:
+> David Ahern <dsahern@kernel.org> writes:
 > 
-> Cap the Rx queues at 8, we don't need more. This makes the test
-> pass on CX7 in NIPA.
+>> On 6/30/26 4:00 AM, Toke Høiland-Jørgensen wrote:
+>>>> It does not make sense to require a flag to get lookup output. vlan
+>>>> proto of 0 is not valid, so it is a clear indication that the vlan
+>>>> output parameters were not set during the lookup.
+>>>
+>>> Okay, so we could just unconditionally set the VLAN fields, but if we
+>>> start rewriting the ifindex that would be a change of the existing
+>>> behaviour that could break existing applications, no?
+>>
+>> Consistently dealing with upper devices is one of the reasons I never
+>> sent patches for vlan support.
+>>
+>> xdp support is at the driver layer for real (physical) devices. The fib
+>> lookup is going to return the vlan device index - a virtual device.
+>> Support for xdp should not be propagated to virtual devices; it goes
+>> against the intent of xdp. Any trip down this path will have to decide
+>> how to handle vlan-in-vlan use cases. Where is the line drawn for fast
+>> networking?
 > 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-
-> ---
-> CC: shuah@kernel.org
-> CC: willemb@google.com
-> CC: noren@nvidia.com
-> CC: gal@nvidia.com
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  .../selftests/drivers/net/hw/toeplitz.py      | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
+> Right, which is why we need building blocks that makes it possible for
+> XDP programs to do the right thing in the BPF code :)
 > 
-> diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.py b/tools/testing/selftests/drivers/net/hw/toeplitz.py
-> index cd7e080e6f84..571732198b93 100755
-> --- a/tools/testing/selftests/drivers/net/hw/toeplitz.py
-> +++ b/tools/testing/selftests/drivers/net/hw/toeplitz.py
-> @@ -21,6 +21,8 @@ from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx, KsftFailEx
->  ETH_RSS_HASH_TOP = 1
->  # Must match RPS_MAX_CPUS in toeplitz.c
->  RPS_MAX_CPUS = 16
-> +# Cap Rx queues so IRQ pinning leaves free CPUs in the RPS_MAX_CPUS range
-> +QUEUE_CAP = 8
->  
->  
->  def _check_rps_and_rfs_not_configured(cfg):
-> @@ -48,6 +50,25 @@ RPS_MAX_CPUS = 16
->          return int(data)
->  
->  
-> +def _cap_queue_count(cfg):
-> +    ehdr = {"header": {"dev-index": cfg.ifindex}}
-> +    chans = cfg.ethnl.channels_get(ehdr)
-> +
-> +    config = {}
-> +    restore = {}
-> +    for key in ("combined-count", "rx-count"):
-
-This assumes that combined and rx are not set at the same time.
-SGTM, not expected in real devices. But technically they could be.
-
-> +        cur = chans.get(key, 0)
-> +        if cur > QUEUE_CAP:
-> +            config[key] = QUEUE_CAP
-> +            restore[key] = cur
-> +
-> +    if not config:
-> +        return
-> +
-> +    cfg.ethnl.channels_set(ehdr | config)
-> +    defer(cfg.ethnl.channels_set, ehdr | restore)
-> +
-> +
->  def _get_irq_cpus(cfg):
->      """
->      Read the list of IRQs for the device Rx queues.
-> @@ -177,6 +198,7 @@ RPS_MAX_CPUS = 16
->      ]
->  
->      if grp:
-> +        _cap_queue_count(cfg)
->          _check_rps_and_rfs_not_configured(cfg)
->      if grp == "rss":
->          irq_cpus = ",".join([str(x) for x in _get_irq_cpus(cfg)])
-> -- 
-> 2.54.0
+> A helper that resolves the parent could be used for stacked VLANs as
+> well (just calling the helper multiple times).
+> 
+>>> Specifically, if an XDP application has a table of the interfaces it
+>>> forwards between, today they'd get a VLAN interface ifindex, which would
+>>> not be in that table, and the application would return XDP_PASS. Whereas
+>>> if we change the ifindex and populate the VLAN tag, suddenly the
+>>> interface would be in the table, but because the application doesn't
+>>> read the returned VLAN tag, it will end up sending packets out without
+>>> tagging them, leading to broken forwarding.
+>>
+>> I have not followed developments over the past few years. Does XDP have
+>> support for vlan acceleration in the Tx path now? You really want that
+>> to deal with vlans and not replicating s/w processing in ebpf.
+> 
+> It does not, no. There's TX metadata for AF_XDP, but VLAN support is not
+> in there (see include/uapi/linux/if_xdp.h).
+> 
+> Doesn't mean software VLAN handling can't be useful, though; there are
+> use cases other than the very high end where XDP can speed things up
+> even if it has to write a VLAN tag or two...
+> 
+>>> So if we don't want the flag, we'd need some other mechanism to resolve
+>>> the parent ifindex, AFAICT? Maybe a xdp_get_parent_ifindex() kfunc, say?
+>>> That could also be made generic for other stacked interface types, I
+>>> suppose.
+>>>
+>>> WDYT?
+>>
+>> dealing with stacked devices is hard :-)
+>>
+>> What is the return is a bond device or a vlan on a bond device?
+> 
+> Well, bond devices have XDP support, so you can just redirect to those :)
+> 
+> But yeah, each type of stacked device would need to pass different
+> information through to the XDP program, and the program would need to
+> support those. Building a single XDP program that supports all of them
+> will require quite a bit of code, and would probably not perform super
+> well. But most deployments have distinct subsets of features they need,
+> so this does not have to be a blocker, IMO?
 > 
 
+Seems to me the fib_lookup for xdp needs to return the bottom device,
+not the vlan device, for forwarding to work. That's why I added the
+fields to the struct. That allows the program to push the vlan header if
+required. My preference (dream?) was that Tx path had support to tell
+the redirect the vlan and h/w added it on send.
+
+But really, once stacked devices come into play, I just wanted to make
+sure thought is given to different use cases. As you know the lookup
+struct if hard bound to 64B and it is trying to cover a lot of use cases.
 
