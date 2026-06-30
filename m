@@ -1,136 +1,162 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6440B17B506
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 14:01:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E98317A2E8;
+	Tue, 30 Jun 2026 14:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782828084; cv=none; b=PEkG7Ge8HPXkq9o2zbmdCZ167fgMU4e0TNZRA0yI6hPQkXARBUM7lzmQpB7VXHbmOnlj80BcAIjXRe5zaAEww+6Mqjc2guVXy8ziLLfjGydaWpkn/GzCT4D7loGCpB9STfivgVYHZzdK/X3vO5DWa8GA+EcohG/jHg9N4Heowc8=
+	t=1782828111; cv=none; b=gqBwkSBAajWM8SSZsnpJ4nqBTX6Nfcf76+YgoQeEtH+oOI/4wsn2l6KQzQICkrhMdpoWfbl2+HvJby+xqnNErcBLAUP63YOiGd7sXsH7mx20NMxbWv7Q2aF2jt0M0Umv/kLZncck6i5d8SWaoSpSaBXvzAduXySslAdsdwW84vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782828084; c=relaxed/simple;
-	bh=QF5ZIU+eSuGBSWH3Y7w253rOOR0PTkKglaTKtKLVVAE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Lxt5JicOnJgpKwirsGki8mAJXfAxhJMDuO1r+TR5IJhMK3NR+LXG1f/TLyJ4gvo0kNY14yd7Z50Tf07pHBjpvOSHTD4MeR5kRqkm0AQ17hBGM3truo0ncq7ajsa1sEFJjqjqVksRKuVVA4BcqEaO/pqnwx1LhzF7U4TGUBoGcxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QX5rhFas; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qwmym29C; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782828111; c=relaxed/simple;
+	bh=pqnDmfpozQdLF8X8/+ihJJg8y6+oqORe18JZB+lF7Sk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CkFh0x8t22wjd3jk8BZIMCMxiKxplfShd3KlFalNByYHvTAVqPuMrEOLO3ej87leis0AN/nYatqposs36FXPDUzEDwuP2WrcxOFGiEuiBr52GBeNsKupOVNplDXTs4ZU2CUWz86EFvKzUsvcMgNeCGdzwmNDU8DZ2FDKfIQwA5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=tcnMLnZo; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QX5rhFas";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qwmym29C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782828082;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vL1cQBm4V9bkdhZZPfpOnFBHfOM80jV2SOxmu4s9TC8=;
-	b=QX5rhFasJEQNnxIOVKQ2mM/ixkop1ZkWQZ1ROt6fqtEfQPerUZtLPtRn2tAvUjabDc0oeV
-	w9CwdYkm08v+rIbZfap5W9yODccG8b/Y4QaiQxgjIBjPM9dSM+tpQxX5+1HgHSFxzb8RNc
-	e8VzFMc6GR8yCs65QhOI57USu8rr0VM=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-647-gknCqE06OQ-p0HJuvQvRbg-1; Tue, 30 Jun 2026 10:01:19 -0400
-X-MC-Unique: gknCqE06OQ-p0HJuvQvRbg-1
-X-Mimecast-MFC-AGG-ID: gknCqE06OQ-p0HJuvQvRbg_1782828079
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-49246459bc4so34958925e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 07:01:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782828079; x=1783432879; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vL1cQBm4V9bkdhZZPfpOnFBHfOM80jV2SOxmu4s9TC8=;
-        b=qwmym29CyP+h3fOQ8tIEup66dg01JUbrSru3fxr/duYo8bzCywfumNIoKkVHbD9oLC
-         OzakTdGQiAprqrDuc8Tkv0mz6aWa0H222ZhZvxGPfygqBMkxxd8E29L7m99yewADVMxb
-         v3tp8yl0cjaaKj/nTj1fDikyM+h0VxyTTToP7W7HaoaT45Kp+XU18R5QqXg/awqYRzwu
-         lksCqdNtCmqQIQyqJrGOGR4kg1x6XO3NUKorKUBmu+R0w8lGER9MhqsjjSALLGMXK6Xg
-         lEIF05KLWGWdSvaXA53qurjuDnVgak+HUfcSq4YClpjvdPxHip7vHt8UJVdMV9uscXgm
-         cSDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782828079; x=1783432879;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vL1cQBm4V9bkdhZZPfpOnFBHfOM80jV2SOxmu4s9TC8=;
-        b=jY2DJv7+PkBUmY7DAQ23uHJ+o9tcXlSthmuLzYDIqWBGZ/cZCqKv5VCEBcaaKzHrdI
-         4RWJL3/y5Im+78bX7F58qRrBb9oKojfq0BgvOoUYocPzOlILq3cIT++PoHEr7hw2L4VV
-         rP10Lpec7SxaP51gmm2lUtVsNObA7Q/iMd2F6Nnmb6ZBtslOW2xkwtvhhloKaGyvhOab
-         e5j9uC2OQGzFiKcDfqtFz6/PQ1LclXVbcH6t1hZPL9ayLn3eeA5t7nWCdE9vjg+Xom/G
-         FABfuJeHS1Cz0hMS38HsRL73aoySxvziliC45a4Y5tsnIXNSKd29TTNP536aKqsILYa2
-         6zhw==
-X-Forwarded-Encrypted: i=1; AFNElJ+hcBpP5GED96pNrfveRDk+XcICC+PFqlcvJynPPgQYuWCu3awAVdReKkKb2MalhRUmF7sjCHF13Q7EcwW/DBk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywst52IolCslcxuzV8dplx+uAKAYiIvx8CZyM93A12rtwK4UhPQ
-	p+1mHw6a6khwCJa4w0lI4hQeKNMmr+ieulKxwZ8ZM7G0p1CKtONGc49Vd+h3h1UsMKmmoTVeMMk
-	Cz6leupqwF+IqEpG8INrgWb0Dq2cPpMVIjPA4P7m6/0eQGjwkMxJJ/vU9QXZp3OqqNhyXTw==
-X-Gm-Gg: AfdE7ck+F2thg3OZ7L7L80L1h3yjZz6rsYn3colHsWOaLVVBgO8cBtixOWP/6HGjIPa
-	vHBJH0ZZspacWhouVFPLyTMjFj8mn0FHv1EQy8quiBCAG2cpmbhaHerEfQ9MP/32486D4LSF7PT
-	oXvOIe5tXFdMCghaQXijEbnEdEgKM0Kg4nMu02KdOUTvpQCGYZLT8bj/NqsmyU/oL4D5/bKBbLj
-	uPeBaml8lCNCcXqv7qmZ8LF3CtdrC8naYTPxsw7MWzItT2UePwMrLY/Mk9d9yN/oY5mLybJOojz
-	JS2x1qoTCY1xWZjnbv8/wAHbzV5bYymQmAaZvHDeJKBXKJ2kslW1NheEGK+CQVE4rOgrEQLG+S7
-	CGg0r+MS0HvPY18X9Xh4psxxtjkRgVIJUbMc6NGvTRw==
-X-Received: by 2002:a05:600c:a317:b0:493:ae5d:8c40 with SMTP id 5b1f17b1804b1-493b82b63c2mr55410565e9.27.1782828078332;
-        Tue, 30 Jun 2026 07:01:18 -0700 (PDT)
-X-Received: by 2002:a05:600c:a317:b0:493:ae5d:8c40 with SMTP id 5b1f17b1804b1-493b82b63c2mr55407775e9.27.1782828076370;
-        Tue, 30 Jun 2026 07:01:16 -0700 (PDT)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.133.86])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493b8d0afacsm79749845e9.12.2026.06.30.07.01.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 07:01:15 -0700 (PDT)
-Date: Tue, 30 Jun 2026 16:01:13 +0200
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Guopeng Zhang <guopeng.zhang@linux.dev>
-Subject: Re: [PATCH-next v9 01/11] cgroup/cpuset: Make nr_deadline_tasks an
- atomic_t
-Message-ID: <akPMKXppWM74-m9a@jlelli-thinkpadt14gen4.remote.csb>
-References: <20260630033344.352702-1-longman@redhat.com>
- <20260630033344.352702-2-longman@redhat.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="tcnMLnZo"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=Ca/FumOWBkJcXOWzWEakZyxu696nHwSgTRatAghd7bM=; b=tcnMLnZo1zT2w98/2Lv+/WI0sm
+	g2HxXI+ZnW4lw/6rVjS9TJIP5QOaREBZk0cQuV6+2fespMblZ71N4tIMcR7yFnZ25gjPB5B1rllAI
+	ByQWyYDbyTR8EnOiakV82H6Q+0se5fbxaF2lngaOqJpwK6X3ehAATjvhfk5H39q+Hb9vAemPSkC3P
+	1wgKp4cn4NPK7OsDa8AzvvzV96gTtyin8Rp17uKkdLNVYGyXTr4/5DbPLD8wAHuj5KBVJ7Fs6dqrj
+	i9f/KQORUclRzxjb2sZwZhxqf7y7rQA0SmLj+mJCuZhnUMKEWmWrmTB8+tgTCN+o/C5s0JMmvAJb2
+	FTFlgYoQ==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1weZ20-0077Hy-1z;
+	Tue, 30 Jun 2026 14:01:45 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v2 0/4] net: convert UDP getsockopt to sockopt_t
+Date: Tue, 30 Jun 2026 07:01:25 -0700
+Message-Id: <20260630-getsockopt_phase2-v2-0-193335f3d4d1@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260630033344.352702-2-longman@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADXMQ2oC/23NQQrDIBBA0avIrGNxpLE0q96jhGJ0kgwFDSqSE
+ nL3gnTZ9Yf3D8iUmDIM4oBElTPHAIPQnQC32rCQZA+DAK20UQZRLlRydO+4lde22kxaOn+991Y
+ h9s5CJ2BLNPPezCcEKjLQXmDsBKycS0yfNqvY+s/Vf9yKUsnbpHDGufeozMPTxDZcYlpgPM/zC
+ +00dPK9AAAA
+X-Change-ID: 20260611-getsockopt_phase2-cd495a0115ca
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>, sdf.kernel@gmail.com
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
+ kernel-team@meta.com
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3168; i=leitao@debian.org;
+ h=from:subject:message-id; bh=pqnDmfpozQdLF8X8/+ihJJg8y6+oqORe18JZB+lF7Sk=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqQ8xERMBLGdeZMILVm3ay3dia6rPwvBwoBMDLk
+ w2GOpG7MT2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCakPMRAAKCRA1o5Of/Hh3
+ beIiD/wKZ/JZU554uvDXqBEL/LW39HuLgqfAlvGd4S/ktwXjLN3GCNBWfxpIAd8a3kyk2KRVODF
+ 7TKA+12x5XOkzmjzfBMY/Fs4LHTQTIrXAtnq5VTv50VnYXY9hqVYsqR3/ggbKwHrLQaYS752uAo
+ wmlMjaeXowPvZuz/ZGrUfJy2xdP80EkaQ7wcJtjuF40R38RKsS22R4QxX9iZuHsJbIKWVi8Qk15
+ j2Qk7MC6t3AL3/4Fcy2/Owyunnul6+RcPHlRaoOrmHqqiGWaGi13mbcfI9A9cVmCU8GpZdAJVNa
+ GyeggOq+OSbwCKOtQXeDmjNupzBFuJ0f8POn8kn2auQb5Z54RT3DNQ0htsBRlwWPMGGK/exGIp/
+ YraS6caKEJ5VekRSNuMxGkMvig3f972dzQBffP08L8MjlPj+vBOxwTilRLK1eKvWzBNdHvHr6Vw
+ /quarvSoatGA+hHQoV7aNtkp78wZDQsK2MEK/h/Vh/uz3j4dQHkHGOD1tRxN7WrQNI/V3nkNWQ1
+ vn+VjtJQHwEICuSvHNA5Du6ned2Qtpjg+vUm8WY8bMIK7VjL5SObpvD13rLFhndpsyeSa90X3Mk
+ kJJKwVdW6FGfp805MJ/WK9GXWe4JaY/BDSx6h8c2mXl1LAtDFlObIrI0fy/aJo/t2OzmjIL1zbD
+ AEZX+PIrySSFY/g==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-Hi Waiman,
+The leaf proto_ops getsockopt callbacks have been moving to the new
+getsockopt_iter()/sockopt_t interface.
 
-On 29/06/26 23:33, Waiman Long wrote:
-> The nr_deadline_tasks variable in the cpuset structure was introduced by
-> commit 6c24849f5515 ("sched/cpuset: Keep track of SCHED_DEADLINE task
-> in cpusets"). It is reported by sashiko [1] that nr_deadline_tasks
-> can currently be modified by inc_dl_tasks_cs() under rq->lock and
-> by cpuset_attach() under cpuset_mutex. So if both updates happen
-> simultaneously, the nr_deadline_tasks variable can be corrupted leading
-> to incorrect operations down the road.
-> 
-> Fix that by changing its type to atomic_t so that nr_deadline_tasks are
-> always atomically updated.
-> 
-> [1] https://sashiko.dev/#/patchset/20260626181923.133658-1-longman%40redhat.comk
-> 
-> Fixes: 6c24849f5515 ("sched/cpuset: Keep track of SCHED_DEADLINE task in cpusets")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
+I was trying to get SMC into getsockop and retire .getsockopt, but,
+I found the best approach is to keep converting other protocols.
 
-Looks like Sashiko is yet not completely happy with this:
+This series starts the same conversion one layer down, at the struct proto
+getsockopt path, beginning with UDP.
 
-https://sashiko.dev/#/patchset/20260630033344.352702-1-longman%40redhat.com
+Example of the current code.
 
-I actually wondered the same and couldn't convince myself we don't
-actually have that problem with the window between sched_setscheduler()
-and cpuset_attach(). If issue is confirmed, not sure if wait_attach_
-done_lock() could help here as well? It's kind of a big lock for the
-scheduler, but maybe only affecting DEADLINE tasks and if migrations
-are ongoing.
+	static int udp_getsockopt(struct sock *sk, int level, int optname,
+				char __user *optval, int __user *optlen)
+	{
+		if (level == SOL_UDP)
+			return udp_lib_getsockopt(sk, level, optname, optval, optlen);
+		return ip_getsockopt(sk, level, optname, optval, optlen);
+	}
 
-Thanks,
-Juri
+We want udp_getsockopt to go to .getsockopt_iter, and there are two
+approaches in this case:
+
+1) Create a patchset that moves both of them to getsockopt_iter, which
+   is will be a huge change (ip_getsockopt() is used in many places)
+
+2) Break this down, and transform from bottoms up. First
+   udp_lib_getsockopt() up to the point we can easily convert
+   others, such as ip_getsockopt().
+
+I am taking the approach 2), so, the intermediate code will be something
+like:
+
+static int udp_getsockopt(struct sock *sk, int level, int optname,
+                          char __user *optval, int __user *optlen)
+{
+        sockopt_t opt;
+        int err;
+
+        if (level != SOL_UDP)
+                return ip_getsockopt(sk, level, optname, optval, optlen);
+
+	// Convert optlen/optval in sockopt // (first patch)
+
+        err = udp_lib_getsockopt(sk, level, optname, &opt);
+}
+
+The work is bottom-up and mergeable in small steps: a protocol's inner
+getsockopt helper is switched to sockopt_t behind its existing thin
+__user wrapper, one patch at a time.
+
+Once every inner helper speaks sockopt_t, a later series flips the shared
+struct proto.getsockopt and inet_connection_sock_af_ops.getsockopt signatures
+and drops the transitional wrappers.
+
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v2:
+- Check for invalid `len` at call site (Stanlislav)
+- Do not rewrite `optlen` on error path (Sashiko)
+- Converted ipv4 raw
+- Expanded the selftest to test this new helper.
+- Link to v1: https://lore.kernel.org/r/20260612-getsockopt_phase2-v1-0-7b01f1f5d106@debian.org
+
+---
+Breno Leitao (4):
+      net: add sockopt_init_user() for getsockopt conversion
+      udp: convert udp_lib_getsockopt to sockopt_t
+      ipv4: raw: convert do_raw_getsockopt to sockopt_t
+      selftests: net: getsockopt_iter: add raw ICMP_FILTER coverage
+
+ include/linux/net.h                           | 23 +++++++
+ include/net/udp.h                             |  2 +-
+ net/ipv4/raw.c                                | 41 ++++++-----
+ net/ipv4/udp.c                                | 39 ++++++++---
+ net/ipv6/udp.c                                | 19 +++++-
+ tools/testing/selftests/net/getsockopt_iter.c | 97 +++++++++++++++++++++++++++
+ 6 files changed, 191 insertions(+), 30 deletions(-)
+---
+base-commit: c8459ee2fef502d6ef6c063751c33d9ac7943eab
+change-id: 20260611-getsockopt_phase2-cd495a0115ca
+
+Best regards,
+-- 
+Breno Leitao <leitao@debian.org>
 
