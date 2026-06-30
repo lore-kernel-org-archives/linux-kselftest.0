@@ -1,152 +1,164 @@
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041533264D0
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 23:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782861656; cv=none; b=oUMqrxoxu82+xKJOWorH4sNWMt40f3+w4/xfkLdKFTb8lHOAnX3ziWMFbbeLNuXP444YL1Qh8eKzupv43DimMuQeKr1Lf3MiX9Ma/scZGX6jHD2BCPahBwqLRHLIVBkNyhOYsi2/3zj3vbP4iTHGoxxDk8Hs9q0jYekyNnMUmLQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782861656; c=relaxed/simple;
-	bh=MyCniKPbL+Lqz0L65ltscAhVa5RtLJou0ccIhfIbqqM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:
-	 References:In-Reply-To; b=LJizQ9jjLgDuSr5Rm0cTDLcOrxl9H7XSSSN3W4Hi25/3pa6oi6jZMxiR3vQr9XRSUyZvD1GkKXRupdgjayyfdG+AZbLsd7fQMvho83Vwd/Cqe8E5fwEWPleXRuQmVB6bCI+bvfpHKECz/DWgsEW5Ks2rqSCFQOWMMJBziTbJ6t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VzNNrkAt; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5BC31E834
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 23:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782862921; cv=pass; b=QFnkQWzZP2WrNcqwlqT3nOkXxlfQuZ+CmvvqfprUcqipxlZg5+Zi2mtOoCUEFPxO9MvR4X3wyomZf5woJQh8IXq3ujNZPze/1gfuf1qG+quIPcV2n/98JcADJMd9N9wx5z4klAEfdX4XwqH8NFOhBHLltbVQi7v0O/pNyaWOJ3Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782862921; c=relaxed/simple;
+	bh=vlJ9P6Yf0TzbOdLo22fAK014xrjqys16n3eCVcXt3jE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qScGCVW0n7y22z7iA+peRRdt8Kq+KwygumyykrzB0CAzwm6OmywlxTXG5dF/EedwTcSQC+lE3FFQ058chRneeOt3gdV6moHvi7OLShz4p/PaLQ7vr/Wt6Lh52pkErNsPQtUMwbGuW9qI6VeQrlqAbPPDbfAEN2hEkQ7Bl3P2d14=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=prSaK7ni; arc=pass smtp.client-ip=74.125.82.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VzNNrkAt"
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6a1888969ddso22790eaf.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 16:20:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="prSaK7ni"
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-133362c30cfso4284c88.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 16:41:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782862919; cv=none;
+        d=google.com; s=arc-20260327;
+        b=FpPy0FfvDQWmPlKAbNCInEA0HB0SDYTjm78qAs+HsOVCSuO9HDSsMBzeyhVYnKbkL9
+         d6eyQJ2SF7WDUDZK4EBs4qhvV2xxW0GSMcKso3H7OuoVYQbF860wL/4mVdin3ts1ex6h
+         fPa3iUtH/7WMFOhx0LpnfpwptgkjMkKiP7syttrHDMYZH0akqQzoYHEFSmdKB/1XIh7h
+         eaf4g86buMiXPWYdWyZkeZHyBEuTlgkbFRRgiOu34FoifEvSrrWR/JpUzonDXjqM/brZ
+         ABsIDRIGe8TMMRUU4050wriQZBOv+phjbk93GX97GYJvVz2xGUTZ++XmVi1dKovz6nvp
+         Jlzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=vlJ9P6Yf0TzbOdLo22fAK014xrjqys16n3eCVcXt3jE=;
+        fh=5ZZF3I6FBtaQPLg2r3Rg/KQ0irUusT/U5GxzIkL5Vio=;
+        b=m4rPYgMqZD048wlipzGOylEWFBN6U3v/iCFC0xXJzEjSeJkaVF2RrndTH+jhBBRL23
+         O7Ai1FJFHAbn6q2ZVRudS1jQha3aNYhwY/BIrYLBU1h799PayTj4pasZCt2xeQjQL7W7
+         dOZFITMS3px5czkVVxBxM0JuXY805iHQiRnzAidzGJGPYdYpkp3DfB6pCt5UhV0+EXZ7
+         mW1C0oowQZ8yC2UNU0FNvWNqICIqrk2rR1xGoZ1HEVsLn/bvSShXsXtKOoHD4N6WJ6yB
+         qy3qQWU2vM9GVB4Fliidiw2/rByB1I4jw+O/M4KoylK78TIJ5xbNBhBXeIbtZPk3Hnyr
+         hsGQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782861653; x=1783466453; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cB/ZP5ypFx7PVtX4ppcUb1XeE8gYOmi+BvjetO5FJh0=;
-        b=VzNNrkAtr3vorUdKjBcmEOX/USgnVzzkhlPWtka584Vgz/IoNRu1z9NPYEmrCdpGoD
-         T/goRJRJtuLRDQJ2EAvmoLQh3tMkw/G/tHpRw6xVpA7ym1ntBYQd0YAYJZduCLLA5VrP
-         oW47bR1oNIrvTTNdZHhQq85wj+x26Tm/yvBdiT3dBR4Q8ChN85UwYC9qd7euygesn8nM
-         4XZyxkg3fbj4Dvgj+dobyXV4jCXMZZsNsOvVigmzhpcvqVOadGDCOKLX8PS6m2+QjSCp
-         hTlfcPGqoXltU5VRQDdgMB3p7VSyP38DaHsSm+sFnTx7Q28Tzs7LoN+UCuGR9gxrjEAY
-         VuYg==
+        d=google.com; s=20251104; t=1782862919; x=1783467719; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=vlJ9P6Yf0TzbOdLo22fAK014xrjqys16n3eCVcXt3jE=;
+        b=prSaK7nipRBa+aCXGeW/rei8RuG1WqbtjDqwI4K3tspChm40n8lFXdhS6FJX7TOVuh
+         0TmW2c9JQu3lHKyAnRviB74iGzM8j4Wnt+TD5sB6fQPTCopzkTR3QSTJMkZm8UvjqWRV
+         8bimQ6mRhJXVWA5VOxggFpsJngTjZuBLFxM90Rw1bE1+SrLVQPqDviEWIkArDfGA+a+X
+         5hbMGJxGOqgpV5hDlTHm/s/27+M9PEGEkpj6hHGzhfsrC5Ht4SXxkWfIah6AvUrv+3z2
+         DgE7BBc2X3b0MxMofLJnzZImU3BzSE2e2MNcXYbF4ercjvSz7JshE76JHx7FckCx1MTl
+         tHPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782861653; x=1783466453;
-        h=in-reply-to:references:subject:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cB/ZP5ypFx7PVtX4ppcUb1XeE8gYOmi+BvjetO5FJh0=;
-        b=LcgyZaR1mCL1WSWmCQnDeFQNSHVxF6mitLifOJv4Vk3q8gEooX74HCJixuXboWfOKL
-         LOyNhQ0/Z8ABAdRUYSsjZ0lSWDEV0tghGbkKYMFvLNldt0j7rSKRM4HpkihcPfpmmYPw
-         g03P8mt5rKqdAFx/TLwNEY140ZLBgqJni4RAqM6u8uZcVFMTVPCJyy1OWiy+oX1y1zDD
-         tn5w1P6wFBsFNpimtJRagqYiwe8B7T1IA9InDZWL90YdeFgAvC/qQht7+aGx/SUxgziL
-         xbuj5cE3N4+0QhDnhnZoGAaCCrN0fo5INYXKjEHpGe2NY2OP58sO7jzL7O7h3kvJQ17/
-         6zNQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/WmJvk/ckLtaqX3coqfMnuEx4X0nnYbxqigUbzcyz3dEMCngxcVeP0ZiGKUuBogJmKcmeB/XFuK7VNJJKTnZg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvapG/hmDilnWhkiDPoMGwVtfgZDOk1Wdxk+BziJ5ILAHA15GD
-	fV4c3LsquPSg61VifRwB9KyYit8G7F+jXrZCCFtxQJ3IcFoW1Pw/ne2h
-X-Gm-Gg: AfdE7ckKQdSfHQuCUEeXtTxJv2hHf9hYLUBla7XVYb7bUh4CQnKlc+j3/WKUcyN1SQT
-	ZGBdbM+EWbfPAzXEUXkezJqBLTARli0weMCOQEcip4uAbK4EEOaYPBAslZk4la2C4BNrabzVcps
-	1Rxk8sw2T3XUqsbudfym3wGjFK+KDYTW03Jz8v9uZJeElpUfq7jO3eePdpxYK1bsFABi7B7ojQ8
-	clZK3h6bgwLGo4vAymHLK4+8dl8XZwv8gNUsZQyLIU/jg655a52CPUzRiRVdOWGGln9W5ZloIsC
-	4JCoTQwYORAcKJKorTE1jCcKUUzed0DyyQBoNvvHSN9AuJndU6iFcQl14oVH+paP28mvc7SYBt9
-	224PS4fGtsL9uapd6B7Ph1Pk2wAICQfHDddkJuHlZHwDI/t7IZdQ5cIC9XTXLs6sGsJzDaqdK2b
-	uTYf9lMhuM8vWh/9YjDUauoEQ9zFth9LMFd+D9BYlEZEZTfxFXHM5XfdMFneyFvcvaKy8TPn5w5
-	PtQ4XE=
-X-Received: by 2002:a05:6820:4df3:b0:6a1:4592:eded with SMTP id 006d021491bc7-6a188e2a5efmr3936292eaf.0.1782861652634;
-        Tue, 30 Jun 2026 16:20:52 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:56::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6a18949b384sm2986584eaf.15.2026.06.30.16.20.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jun 2026 16:20:52 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782862919; x=1783467719;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vlJ9P6Yf0TzbOdLo22fAK014xrjqys16n3eCVcXt3jE=;
+        b=a1d+Aax4zkzujabTSXSeCfrYx4oG4FoAgjF4ux4c88cMgnsEktdLakXPsDYSLHSG9g
+         lomkuIes4GawND0grnHGB2/xYWPbHmQQPTUfOwWRcXx933FrXyQFWvfwVmyxDIaEEHuI
+         kXVE6lqQA61yKrxWsTfrXTNbwEPgFlnkvpuqRiGIMAHcVGuayBZM4NmJf9NUWQNHPhcG
+         fuU25lSkbrjaCtukw/4ClmzKHf1csrnGL/dM39jWSbxAZga8waQsWLtQ3K1byr8NFUvA
+         d0o7MDy7V6N1n1fHPq2e9aOqe3vvJyK5n1GPzp3u8R0+h+KlrPBc6qAnYfoN0aLyRspg
+         gjhg==
+X-Forwarded-Encrypted: i=1; AFNElJ/Lz0Buj9P8aaUbgHXB6rVkuiRswc8luE8vVk2ve+hNg3Z3VESXPGavakQUcY8Q2iEqlESfD4iZaX4IG9Cu5/E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJ9HHXvJ3psrp9ZwmwnzWaF+Wuo8Bsx28bBNnXUfxU/4sEoE8N
+	dLTNRyspzHDMyHnIQQdcwaBxR1rflX9w8uV2Q5U+RY24w8R7WWeLM5TrSAQgT+cNAbnyvGLxO6L
+	/I0Aka/e0f0m3nYWQavODx4huxJmj4XSPUFbDOXSt
+X-Gm-Gg: AfdE7cm4UWPORZEycQjfIU0bwBU1fi4eLMg7C1oefr51SIn5GnDQ/+rajyLxHbr3zQG
+	AttXrgZtY/hj+sgW/bK63100Jx8FI+gQ3TQzsaa0/FJhgMDVZo0wOpa62FQIgIJ+foAcGtvGQFw
+	2t7Up5xVLcqbeM7W9JJ0vh9Uga4O1MMsVmx86gcJ6zjcAKpbUxT5QqH/2SvGueL7FkGSXidWJHy
+	bzZ+JbwY9F5bHf+eRzNYWCUBFRob4hYfbglGG9Mk4uGbEVtXqdUNZ4BY5akMrcnU6Ge7LAL
+X-Received: by 2002:a05:7022:6198:b0:138:2d13:e32f with SMTP id
+ a92af1059eb24-13b343eb79fmr69628c88.8.1782862918097; Tue, 30 Jun 2026
+ 16:41:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260629192029.4013794-1-tanshuhao@google.com>
+ <20260629162619.55297244@kernel.org> <CAABY+HEcNnh+ATyA_JMg4LnVpP=egprTTi4UXxV9CfW2+71z+g@mail.gmail.com>
+ <20260629181955.00e63b61@kernel.org> <CAHS8izNeoJiLyoyiPgzmX5CGcyivYqBpVxOcFnoxeOX_zzFd4Q@mail.gmail.com>
+ <20260630160555.3736f900@kernel.org>
+In-Reply-To: <20260630160555.3736f900@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 30 Jun 2026 16:41:44 -0700
+X-Gm-Features: AVVi8CfnFtYhKpxegXLc5RW0mc09RJliOI2LMhKi1X1iPmW5YTsm6Mudb1KYxmU
+Message-ID: <CAHS8izOc7OPrspPfo-6eAwPscQzk6ZzHQd10MFrRvzuPXU9WjA@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 0/2] Reuse threaded NAPI kthread across napi_del()/napi_add().
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Harshitha Ramamurthy <hramamurthy@google.com>, Jordan Rhee <jordanrhee@google.com>, 
+	Shuhao Tan <tanshuhao@google.com>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, 
+	Samiullah Khawaja <skhawaja@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 30 Jun 2026 16:20:50 -0700
-Message-Id: <DJMRPJEUTY5G.30HYOMPLBGZOJ@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <chia-yu.chang@nokia-bell-labs.com>, <jolsa@kernel.org>,
- <yonghong.song@linux.dev>, <song@kernel.org>,
- <linux-kselftest@vger.kernel.org>, <memxor@gmail.com>, <shuah@kernel.org>,
- <martin.lau@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <andrii@kernel.org>, <eddyz87@gmail.com>, <horms@kernel.org>,
- <dsahern@kernel.org>, <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
- <pabeni@redhat.com>, <jhs@mojatatu.com>, <kuba@kernel.org>,
- <stephen@networkplumber.org>, <davem@davemloft.net>, <edumazet@google.com>,
- <andrew+netdev@lunn.ch>, <donald.hunter@gmail.com>, <kuniyu@google.com>,
- <ij@kernel.org>, <ncardwell@google.com>,
- <koen.de_schepper@nokia-bell-labs.com>, <g.white@cablelabs.com>,
- <ingemar.s.johansson@ericsson.com>, <mirja.kuehlewind@ericsson.com>,
- <cheshire@apple.com>, <rs.ietf@gmx.at>, <Jason_Livingood@comcast.com>,
- <vidhi_goel@apple.com>
-Subject: Re: [PATCH v3 net-next 1/1] tcp: Replace min_tso_segs() with
- tso_segs() CC callback
-X-Mailer: aerc
-References: <20260630120145.286497-1-chia-yu.chang@nokia-bell-labs.com>
-In-Reply-To: <20260630120145.286497-1-chia-yu.chang@nokia-bell-labs.com>
 
-On Tue Jun 30, 2026 at 5:01 AM PDT, chia-yu.chang wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+On Tue, Jun 30, 2026 at 4:06=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
 >
-> This patch replaces existing min_tso_segs() with tso_segs() CC callbak
-> for CC algorithm to provides explicit tso segment number of each data
-> burst and overrides tcp_tso_autosize().
+> On Tue, 30 Jun 2026 10:38:01 -0700 Mina Almasry wrote:
+> > > > It feels surprising that the userspace needs to reconfigure thread
+> > > > properties when changing NIC configurations unrelated to threading.
+> > > > Another downside is that when userspace configures NIC configuratio=
+ns
+> > > > in quick succession, re-application becomes messy because a previou=
+s
+> > > > re-application might still be in progress when the thread is gone.
+> > >
+> > > Can you explain more about your deployment and system configuration
+> > > flow? We may be adding micro optimizations when the problem is that
+> > > we recreate the NAPIs in the first place.
+> >
+> > We have an AF_XDP application with extremely low latency and jitter
+> > requirements running on our servers. Sami developed busypolling
+> > threaded napi for them. Since it's an AF_XDP application, they attach
+> > their umem to specific RX queues, and then configure threaded NAPI
+> > busypolling to achieve low latency. That involves using the Netlink
+> > API to set the threaded/busypolling property, grabbing the kthread
+> > PID, and setting some properties on the kthread.
 >
-> This change provides below impacts on BPF struct_ops users:
-> - The callback is renamed from min_tso_segs to tso_segs
-> - The signature gains an extra u32 mss_now argument
-> - The return value semantics is changed from "floor value passed into
->   tcp_tso_autosize()" to "final tso_segs value", bypassing autosizing
+> What I don't understand is how you have an "application with extremely
+> low latency and jitter requirements" and at the same time "user runs
+> an unrelated ethtool command" reallocating NAPIs and disrupting that
+> application.
 >
-> As a result, BPF programs shall be updated, beccause retuning a small
-> constans will now directly limit tso_segs instead of the minimum.
->
-> Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
-> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> ---
->  include/net/tcp.h                                | 13 +++++++++++--
->  net/ipv4/bpf_tcp_ca.c                            |  8 +++++---
->  net/ipv4/tcp_bbr.c                               | 13 ++++++++++---
->  net/ipv4/tcp_output.c                            | 13 +++++++------
->  tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c |  8 ++++----
->  5 files changed, 37 insertions(+), 18 deletions(-)
->
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 6d376ea4d1c0..7fb42a0ce7da 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -824,6 +824,9 @@ unsigned int tcp_sync_mss(struct sock *sk, u32 pmtu);
->  unsigned int tcp_current_mss(struct sock *sk);
->  u32 tcp_clamp_probe0_to_user_timeout(const struct sock *sk, u32 when);
-> =20
-> +u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
-> +		     int min_tso_segs);
-> +
->  /* Bound MSS / TSO packet size with the half of the window */
->  static inline int tcp_bound_to_half_wnd(struct tcp_sock *tp, int pktsize=
-)
->  {
-> @@ -1361,8 +1364,14 @@ struct tcp_congestion_ops {
->  	/* hook for packet ack accounting (optional) */
->  	void (*pkts_acked)(struct sock *sk, const struct ack_sample *sample);
-> =20
-> -	/* override sysctl_tcp_min_tso_segs (optional) */
-> -	u32 (*min_tso_segs)(struct sock *sk);
-> +	/*
-> +	 * Override tcp_tso_autosize (optional)
-> +	 *
-> +	 * If provided, this callback returns the final TSO segment number
-> +	 * and will bypass tcp_tso_autosize() entirely. The implementation
-> +	 * must derive an appropriate value and ensure the result is valid.
-> +	 */
-> +	u32 (*tso_segs)(struct sock *sk, u32 mss_now);
 
-I don't like this interface change.
-It introduces churn for no good reason.
-At least I don't see why you cannot live with the existing api.
+It is unlikely. However, if someone intentionally or accidentally
+triggers a NAPI reallocation, it should only be disruptive while it is
+happening, not leave the application running in a degraded state for
+the rest of the workload run. Right now it feels like the user must be
+very careful. There are also link down/up events outside the user's
+control, which should not happen, but if they do, minimizing their
+impact would be nice.
 
+> Honestly, the last two times y'all were touching NAPI it was a major
+> effort to get the code into acceptable shape. I don't have the cycles
+> right now to help another unknown-upstream (intern?) get their patches
+> into shape.
+>
+
+My sincere apologies. I also did not do a good job of not taxing your
+time with the devmem stuff. FWIW I reviewed this before it was sent,
+but I didn't think my Reviewed-by would move the needle much. We can
+block future iterations until we get reviewed-bys from Willem or
+Kuniyuki.
+
+> Can y'all not open a pidfs fd for the NAPI thread? You'll get a
+> notification when the existing kthread dies?
+
+Let me take a look, but I think we need a notification when the
+kthread is back up to reconfigure it. I guess if we're trying very
+hard not to touch the current code we can always monitor the running
+napi kthreads and their affinity and work around it like that.
+
+--=20
+Thanks,
+Mina
