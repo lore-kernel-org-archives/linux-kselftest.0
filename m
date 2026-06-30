@@ -1,105 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159F81A0BF3;
-	Tue, 30 Jun 2026 14:18:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD93A374A07;
+	Tue, 30 Jun 2026 14:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782829091; cv=none; b=tpIPWjp/O7M8fG5rbrJPOmfmd1bAB6n98Acjn3l8mYkoZuS/93XHNUoBqrRXFaz0bUoWXVqL1xSJj8CfG2vhZCh/T/FevJcPZqO8cUiK7+EgYiCropqMPVIFYoPISYgrVT298ffj5r+a9hqnQdMw940iAd1vV2J4H/TizpA1tvg=
+	t=1782829785; cv=none; b=q5SU0oCfa7A9GB5fEs4QxaagFFoIeaxNlnYwxvqofTUjMsCjoF4+PPpP5WX3Kkpu0M+TSZ35AwiwXXbK2XxiS7FmyOq+t8MgNjtNsyVL6aei093mBALlis1jF+mNax3LcPjIj9jmPOfW8btJLr0A4Quf/1JTVqqoRfDG2SDzGYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782829091; c=relaxed/simple;
-	bh=B8Y0dTMlB+oB9s7duvm7DhqDyHlJZoxRIu7q/l43pzc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L8imXBJh/C01TMsDpNM4o4NQ4i7l+DjSf+tigGqyDa5LfrHrM3QExEVfo/vwJPYJbFJQNwBLRsg2Lzb58DHcCG1WW242wShg4+q5Z4XCOm1bl7lvZ3sBLWZrAFbjAYx8WqyJ8tjl3ca6WoRW5dCuF6dOBd01NDMXbhal54B/eco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=czOvN6MP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782829785; c=relaxed/simple;
+	bh=XB5/HxhQqdQ8YGB3UdBFx2vnW3DyNGk60DM94fj1OVY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ffbxsx+sdt2le9rBdRuPPgh3HynNCzvYolqDq3/nsT573PxhlN2J66f2xPioVvTr+GKPWH6RnJVcLO8Zs5xFYRzYaI/okpFcVAxMxL1UpJycFfxi6NjTayyOO8LHlXj/3bFSUxJlvcjEuVdBwfNobdMTmV+QGvvjd4KQahSW3gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ltr0NDD4; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="czOvN6MP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A6491F00A3A;
-	Tue, 30 Jun 2026 14:18:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782829090;
-	bh=nJE7z6y+b0729BtKGMZ7zs0Yot0Hv1XhxgGW0/v1JZc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=czOvN6MPHetgLKJr5rLG6WWWF2AgkQQu5eBvJsJ5Yt9XG/CkpJu012K4kYCMEmjhI
-	 4y+VvaQY1M81JIrE9e0akdnw63N8atIg83+q2d23SSmfhcjoi4giHM+aMJMRvPWyaT
-	 y0dgHzWvwh9pCQIsK2MTRRFAxmlYSIbSJ542/LL5+05w6s5clcKLi82csRNiMgBUPx
-	 fim/GrOlNnCOZaDrf6+O5NPI3DJgw2owkORlK77Y0c4sPGgJ722AuYSOVxedB+973h
-	 4RdfQWcQBo8KurgCe1FP+gvQeAlCDe2eFNB/VAYbdvvmHQVXEu2cXuQpucrg+aTtbT
-	 EMSWmRA6izxyw==
-Message-ID: <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org>
-Date: Tue, 30 Jun 2026 08:18:07 -0600
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ltr0NDD4"
+Message-ID: <e279c9a7ca6b16e52dc261560513b0eafdd70f87.camel@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782829781;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OtWf0SqbB9bSY/lhkVPg6AA2VUz0YkcfJVPgbQc4rzI=;
+	b=Ltr0NDD46BEL0kYiNym8LlFqxJSzvmjEL3zaCMBHnMdLuKxESASy1+k+R7FMY6XW0Ywg4r
+	veWI0jsiiZifcklQ3RtT8v7CfC7FTpSeYkaN52Vt3VG3qORQub4YmScTsnXdjLAmngErFG
+	KnyAISyLLFv59egNJE7F+yl4h2Ug410=
+Subject: Re: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user
+ BPF_ADDR_SPACE_CAST insn
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  John Fastabend <john.fastabend@gmail.com>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>,  Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Andrew Morton <akpm@linux-foundation.org>, Shuah
+ Khan <shuah@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, Anton
+ Protopopov <a.s.protopopov@gmail.com>,  linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Date: Tue, 30 Jun 2026 22:29:21 +0800
+In-Reply-To: <20260626154330.33619-2-leon.hwang@linux.dev>
+References: <20260626154330.33619-1-leon.hwang@linux.dev>
+	 <20260626154330.33619-2-leon.hwang@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-Content-Language: en-US
-To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
- <20260624030530.3342884-2-avinash.duduskar@gmail.com>
- <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
- <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org> <87echobb5h.fsf@toke.dk>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <87echobb5h.fsf@toke.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 6/30/26 4:00 AM, Toke Høiland-Jørgensen wrote:
->> It does not make sense to require a flag to get lookup output. vlan
->> proto of 0 is not valid, so it is a clear indication that the vlan
->> output parameters were not set during the lookup.
-> 
-> Okay, so we could just unconditionally set the VLAN fields, but if we
-> start rewriting the ifindex that would be a change of the existing
-> behaviour that could break existing applications, no?
+On Fri, 2026-06-26 at 23:43 +0800, Leon Hwang wrote:
+> The interpreter is unable to handle the user BPF_ADDR_SPACE_CAST insn,
+> whose '->off' is 1:
+>=20
+> static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+> {
+> 	ALU64_MOV_X:
+> 		switch (OFF) {
+> 		case 0:
+> 			DST =3D SRC;
+> 			break;
+> 		case 8:
+> 			DST =3D (s8) SRC;
+> 			break;
+> 		case 16:
+> 			DST =3D (s16) SRC;
+> 			break;
+> 		case 32:
+> 			DST =3D (s32) SRC;
+> 			break;
+> 		}
+> 		CONT;
+> }
+>=20
+> On the fallback path from JIT in __bpf_prog_select_runtime(), reject
+> the insn to avoid being ignored by interpreter.
+>=20
+> Fixes: 142fd4d2dcf5 ("bpf: Add x86-64 JIT support for bpf_addr_space_cast=
+ instruction.")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+> =C2=A0kernel/bpf/core.c | 29 +++++++++++++++++++++++------
+> =C2=A01 file changed, 23 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 0db6e55bad52..e92eb8b7f945 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2608,23 +2608,37 @@ static struct bpf_prog *bpf_prog_jit_compile(stru=
+ct bpf_verifier_env *env,
+> struc
+> =C2=A0	return prog;
+> =C2=A0}
+> =C2=A0
+> +static bool bpf_insn_requires_jit(struct bpf_insn *insn)
+> +{
+> +	if (insn_is_cast_user(insn))
+> +		return true;
+> +
+> +	return false;
+> +}
+> +
+> =C2=A0/* Fix up helper call offsets on JIT fallback path. */
+> -static void bpf_fixup_fallback_helpers(struct bpf_verifier_env *env, str=
+uct bpf_prog *fp)
+> +static int bpf_fixup_fallback_helpers(struct bpf_verifier_env *env, stru=
+ct bpf_prog *fp)
+> =C2=A0{
+> =C2=A0	struct bpf_insn *insn =3D fp->insnsi;
+> =C2=A0	const struct bpf_func_proto *fn;
+> =C2=A0	int i;
+> =C2=A0
+> -	if (!env || !env->ops->get_func_proto)
+> -		return;
+> +	if (!env)
+> +		return 0;
+> =C2=A0
+> =C2=A0	for (i =3D 0; i < fp->len; i++, insn++) {
+> -		if (bpf_helper_call(insn) && bpf_jit_inlines_helper_call(insn->imm)) {
+> +		if (env->ops->get_func_proto && bpf_helper_call(insn) &&
+> +		=C2=A0=C2=A0=C2=A0 bpf_jit_inlines_helper_call(insn->imm)) {
+> =C2=A0			fn =3D env->ops->get_func_proto(insn->imm, env->prog);
+> =C2=A0			if (fn && fn->func)
+> =C2=A0				insn->imm =3D fn->func - __bpf_call_base;
+It might be better to use the BPF_CALL_IMM macro. insn->imm =3D BPF_CALL_IM=
+M(fn->func);
+> =C2=A0		}
+> +
+> +		if (bpf_insn_requires_jit(insn))
+> +			return -EOPNOTSUPP;
+> =C2=A0	}
+> +
+> +	return 0;
+> =C2=A0}
+> =C2=A0
+> =C2=A0struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env =
+*env, struct bpf_prog *fp,
+> @@ -2663,8 +2677,11 @@ struct bpf_prog *__bpf_prog_select_runtime(struct =
+bpf_verifier_env *env,
+> struct
+> =C2=A0			return fp;
+> =C2=A0		}
+> =C2=A0
+> -		if (!fp->jited)
+> -			bpf_fixup_fallback_helpers(env, fp);
+> +		if (!fp->jited) {
+> +			*err =3D bpf_fixup_fallback_helpers(env, fp);
+> +			if (*err)
+> +				return fp;
+> +		}
+> =C2=A0	} else {
+> =C2=A0		*err =3D bpf_prog_offload_compile(fp);
+> =C2=A0		if (*err)
 
-Consistently dealing with upper devices is one of the reasons I never
-sent patches for vlan support.
-
-xdp support is at the driver layer for real (physical) devices. The fib
-lookup is going to return the vlan device index - a virtual device.
-Support for xdp should not be propagated to virtual devices; it goes
-against the intent of xdp. Any trip down this path will have to decide
-how to handle vlan-in-vlan use cases. Where is the line drawn for fast
-networking?
-
-> 
-> Specifically, if an XDP application has a table of the interfaces it
-> forwards between, today they'd get a VLAN interface ifindex, which would
-> not be in that table, and the application would return XDP_PASS. Whereas
-> if we change the ifindex and populate the VLAN tag, suddenly the
-> interface would be in the table, but because the application doesn't
-> read the returned VLAN tag, it will end up sending packets out without
-> tagging them, leading to broken forwarding.
-
-I have not followed developments over the past few years. Does XDP have
-support for vlan acceleration in the Tx path now? You really want that
-to deal with vlans and not replicating s/w processing in ebpf.
-
-> 
-> So if we don't want the flag, we'd need some other mechanism to resolve
-> the parent ifindex, AFAICT? Maybe a xdp_get_parent_ifindex() kfunc, say?
-> That could also be made generic for other stacked interface types, I
-> suppose.
-> 
-> WDYT?
-
-dealing with stacked devices is hard :-)
-
-What is the return is a bond device or a vlan on a bond device?
-
+--=20
+Thanks,
+KaFai
