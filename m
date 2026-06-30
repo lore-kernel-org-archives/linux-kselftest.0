@@ -1,93 +1,158 @@
-Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6648046AF38
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 18:21:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EBB23E0749
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 18:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782843670; cv=none; b=u1V/HG3ssFFmrPojHk5/q6jImUZb2hK/wBciU23YE3s79AJPs2eHecjeNWSHmbaZNQfmiCNF/iZxorae7BjNgxzM+5MYNbtxUdEMK8mEHxycLBEpT5v85kDx6zrqHT2xU8ivGJVIHZVnDVQ0DEpY+VaM5thiwRT1jCkqH8E4xd4=
+	t=1782844357; cv=none; b=X0sm4+o6SrbWGTPtLspZIdwucORMJHvZYl7+VVaGXcviJIg+X3eRK89vWYSDWK7t0jgOOOeBZKEEPZZ7+4orgSEOG/hhP1oxwHoPyOdMgNcMdAoBVkt7F1AG7jVyAi/xlCH/IERm+bBEEszMYiW4LSNoRKq8MFCH29uHGz7Cono=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782843670; c=relaxed/simple;
-	bh=LG6NzYs5Iqdc+uyXM3LEjlhw3/x7FgRsHNRGsVg08ww=;
+	s=arc-20240116; t=1782844357; c=relaxed/simple;
+	bh=sM1wz5EArOoQdUNowIBU8vl6ByIPfqhEp+Lh4HvpLMM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vmud5TxblAdwoJ0SGzIcPBRFhq5VueIyvgDoXiF5rA+uCNB1KRYns8hWMbqE65XMfK3aOjNYAS97jonblJEGugKxxmWlxyFzqZBEmrGiQUv/T8lmumAvZBlYp7wV/iM9tzdZi5RA8pU7DKrBCzFoSKjhgxeazYjsJuBlRP5+e0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jxNeq4v8; arc=none smtp.client-ip=209.85.216.66
+	 Content-Type:Content-Disposition:In-Reply-To; b=kxPi459QAtyAOBx2ntHR8rW1SoluIBcfvNCTLSmbhe+seDfFnYy8iogTacPdO7NYIUEDh4AhOJAimPzN98pK9MA8XgpcNaT6Ms6PS/ZifBDsPCH/SziOq3N2N3uAYn9u721Yvq4Opl3u8BK1Gfln5eEsiSdVT8JkkvEkp1ZfF3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FjShgunx; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jxNeq4v8"
-Received: by mail-pj1-f66.google.com with SMTP id 98e67ed59e1d1-37dedd62b90so633588a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 11:21:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FjShgunx"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-47248615e4dso3179526f8f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 11:32:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782843669; x=1783448469; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782844353; x=1783449153; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+W2G2Vb2hslBefBgUbN0qp/RlNIGAjXyAoAJisoHDfI=;
-        b=jxNeq4v8M05GUutye3tLMAT2mKNVHhb0ahGSa+7mCaNpf0OHaCfzx196rLodHqTWJA
-         XmJrZW3GUiUSt2dSMLHVjTH+dv8Im3VY3Ggv2oaUQngAewd/6VJgCBONd7bctiHGjDSI
-         fuJDed6/zA852B/qwiVwYfRmbOCs3EZrea5b6HWvT9C/CtxuyGicR88OgxhTcb9W0KNE
-         gtAiHkRi/EGeEURz0jNhk1+QDtRuItZ9VerihZigmAxYzbC0W9qeVuAZ2QEnabCYLiak
-         AvWhD/bOH9Ck59mR8E9tPPtJ5ebYTGOsfQZurCEIw5fHikvgqO0sjyvu8Iv+ifpDJ3sI
-         RigQ==
+        bh=jwGaSJfvXwwi2gmvOZ6+HNHrcdSzXT1GIfb82HOsI6I=;
+        b=FjShgunx0rnygnd8vY1QHIr8hMlq22Qo8pyuDUlGBGaExZJ+TMQROApZw641UlX+v5
+         PWIIt9mlUeuxnbX9Q/QanKZtSL2Slv/nz0awTKbtO2e4o6aZ6v8dOfbkdwaBI/gKrBAo
+         PGwhhQJMKh3AqywpFinQAye/yk7G13Ue61W7HUoyLe03jfyIMMnQGBiZSwAMjVRwXIem
+         /URS/z/Khmb5o8/vEgCZGULAyMInXwqZDJS7FsKAEkur2aMhAzu4H3xDfeGed/35VUs/
+         qdFL+7jLGVzmDO+xlnYlLNkiNebBPoSizpKq8L7ybFFq4VE92hzsKI4/Sy7YCGRs6hd9
+         2Pdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782843669; x=1783448469;
+        d=1e100.net; s=20251104; t=1782844353; x=1783449153;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+W2G2Vb2hslBefBgUbN0qp/RlNIGAjXyAoAJisoHDfI=;
-        b=DAjq8JGaoNKBTJjOAIYXU28JtSa7t++WRNu/5P6HU2eHgpY4RnoLgE/Tc8X9cksaul
-         gw3g9Y9eXU7QAMpwhzMVag2w71TzhIncLTqhJrF2YKk3cQNayHqHacdXOKVN/9YUtcyI
-         L546eo1Ujk/Lqd7ZMNcrddy+is8+EvFDbYg9MtHvPbqFuRXzG+bfxR+MRy40AtsxOAKq
-         IdG6mpmedCp1V130fdxooGjiAAK0cG5QDO7HpmAK2dybGA0ySi9oDjZukXp5q4ZWe0DE
-         aNelUfYaCxDGk4oClDQ3QiBMW5+4qFx/iDveiM1iwy2mAlAzr5NuAlkM0bXYWbUAs1iw
-         iO1A==
-X-Forwarded-Encrypted: i=1; AHgh+RrCQovJ0Foy2hv8IKqFGCVseYrNslIopPaz9ugTbJHXstuYnmaddSE/HZz7t1JlKDLxmfcLwIL7J6K4S7VE1A4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywpebt9kbRD3YZFIVfi71DoagL0x5TzLHjtfLK306Ao5WjVeA2h
-	emcih052q3eDA5sOQOr7gjMBzzIdH/mCMfXyKghuftLTIDERUs205zoD
-X-Gm-Gg: AfdE7cnSKMz/Sri+l7AQkslT94NRK4XxpbqTtPTcrZcOJdkzDb+GXr7G/RndGLdX220
-	PttCMeYDrLTxv+jcskwwL10mkQK8/VyriMVbCgksng3140R/LopAAhM5POyVfGGcVcNHUDeyLO8
-	od9CrYq/0y23+Rpw4eiPzZfDxiXAWoBXmwZ1LYAr6ZI/oRShgqfV7dDwYlQFcNZ1RgTAOQiwL3H
-	OrWf9Kc/dRViHxRMMQN5A4k5mxk4J4p/BsllSEkMbOQGO1psqafAwwGhVvIVieJzWSgmCHu3V79
-	8q09a7o+WK8FSCSLL0W/8CAJJ2QLYf2ZbDofnQ8L36KdOTJcG+PkX8WwUTrILDL+2xE+nNWltQv
-	BWjboKsst5wXqJeKEO64TD9z9PMUAbbA+P1l7awJ32TLWry/lynGLe0q1DMJlF6tuOE04hSmQhb
-	nGAW5IOEVSe2hUE2sP
-X-Received: by 2002:a17:90b:2d85:b0:36d:b12b:f57d with SMTP id 98e67ed59e1d1-380695869c3mr2140132a91.12.1782843668649;
-        Tue, 30 Jun 2026 11:21:08 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:45::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3809644a387sm331786a91.13.2026.06.30.11.21.08
+        bh=jwGaSJfvXwwi2gmvOZ6+HNHrcdSzXT1GIfb82HOsI6I=;
+        b=j2SS11vhSVDO3JltjPL8ZDBt6KYlZPJI85lllfbN9+3BldkdyteHj0QjAy75eUGUL8
+         mX+T9Yzi6bBXpMsMaKHHFyYoYxz4tV/ZO13mhrgfRnVhUMF+ihBpWymf0mUXY0Q3zbQb
+         /kqgz5WRSI5qdhOIPKKH9sHj3VbXNN9f5D2iySABpCRFW9yE1Ls/ME/A7IObNfJ24v0U
+         zybPw7qwNaqjtYrWb3n0fYO1cvb/ohm/ZvAoxCl1zIXeFftqpY4K4W8iZMGsaITZ4B+t
+         HNR8tB+Euosf4JwuJCTRYibPFfd2scbvjbKmmM/0r6X9nBOTMRrYS8Idp/SfnluCGRG1
+         9Lww==
+X-Forwarded-Encrypted: i=1; AHgh+Rr7bTE+nWZ0i2Q2cSYUsXXiLCfyWpVGvQZemMoJglVeh0nQr0mt36OZs+RRO/JNvxHo5RK5E8aIf9iotvOgcHQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynogEat+Pvi5/CJOCwE39MYwDuok50DTXNDCLztG9VF1LfVB7y
+	txPmgbICw5VG0hsVpQXpRAuKtrgDCZogFhii+XyJvzht1PySpV/ChSNt
+X-Gm-Gg: AfdE7cm5CHQWngMQ2QTEwz2GuX+SfIAcNx4AUh4JwyhgOrdS5+JsqRWPsXPqvgiT7Q7
+	5YlYyObA9S7+oYhHI2PVkqa73LxC8VyzF6jrtE53F4/5bGGY878hIORqJdEIshjaNKBNKbo/0tG
+	4TICw9D+YlZWhpNPCDJOeeNnojTgx6EdoTGWG5qvhGOCwDjPNnW5OfZhOWeYIbnCuP8DeMPEajS
+	3763HI94GvMAbxYs7kLFuYiRt4XN1wZ2aIYO6yyQpZ4fqbFWn3aEEY4uaKvkEuUU5H7H3nlY06A
+	xU5nHkEhZ/BlPGbZjEl+fchX6W3QF5rkjm3H211RZFDi7eNXpaiONADFdvrEokMXc2MA4sxaXGU
+	YSXwVapE6sW00ZccEx7hiP6wZLQfho16vHUbHIcx9ZmQ+GAr0Ctn97ta14ObA4W461NSf4aK1Z/
+	y53PJG2TeTf2UoYonS9X7fLeo7KI+bhCyl
+X-Received: by 2002:a05:6000:61e:b0:475:f0c2:75a3 with SMTP id ffacd0b85a97d-4765ac65bb6mr2639928f8f.52.1782844353412;
+        Tue, 30 Jun 2026 11:32:33 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47567884770sm10323552f8f.33.2026.06.30.11.32.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 11:21:08 -0700 (PDT)
-Date: Tue, 30 Jun 2026 11:20:53 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next v2 4/4] selftests: net: getsockopt_iter: add raw
- ICMP_FILTER coverage
-Message-ID: <akQI_XA0GrLhcBxS@devvm7509.cco0.facebook.com>
-References: <20260630-getsockopt_phase2-v2-0-193335f3d4d1@debian.org>
- <20260630-getsockopt_phase2-v2-4-193335f3d4d1@debian.org>
+        Tue, 30 Jun 2026 11:32:32 -0700 (PDT)
+Date: Tue, 30 Jun 2026 18:42:35 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Cc: bpf@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Enforce gotox targets against
+ subprog bounds
+Message-ID: <akQOG9jAypDZCjHV@mail.gmail.com>
+References: <20260628-f01-03-gotox-bpf-next-v3-0-b744432e1361@mails.tsinghua.edu.cn>
+ <20260628-f01-03-gotox-bpf-next-v3-1-b744432e1361@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260630-getsockopt_phase2-v2-4-193335f3d4d1@debian.org>
+In-Reply-To: <20260628-f01-03-gotox-bpf-next-v3-1-b744432e1361@mails.tsinghua.edu.cn>
 
-On 06/30, Breno Leitao wrote:
-> Exercise the raw getsockopt path now backed by sockopt_t. ICMP_FILTER
-> returns a fixed-size struct and, unlike the int/u64 options already
-> covered, clamps the length down to the user buffer on a short read
-> instead of failing, so check that semantic explicitly along with the
-> exact and oversized cases, the -EOPNOTSUPP path on a non-ICMP raw
-> socket, and an unknown optname.
+On 26/06/28 09:59PM, Nuoqi Gui wrote:
+> During CFG construction, the verifier records the modeled gotox target set
+> in insn_aux_data->jt. Later, check_indirect_jump() follows targets from
+> the runtime PTR_TO_INSN register's actual INSN_ARRAY map.
 > 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+> This lets one gotox instruction observe different INSN_ARRAY maps on
+> different paths and accept a target outside the calling subprog. The
+> observed x86 JIT case can then enter another subprog without a matching
+> BPF call frame and crash when executed.
+> 
+> Reject every target copied from the actual PTR_TO_INSN map if it is
+> outside the calling subprog.
+> 
+> Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> ---
+>  kernel/bpf/verifier.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index eb46a81a8c51..05a996a5ecdd 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -17145,9 +17145,11 @@ static int indirect_jump_min_max_index(struct bpf_verifier_env *env,
+>  static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  {
+>  	struct bpf_verifier_state *other_branch;
+> +	struct bpf_subprog_info *subprog;
+>  	struct bpf_reg_state *dst_reg;
+>  	struct bpf_map *map;
+>  	u32 min_index, max_index;
+> +	int subprog_start, subprog_end;
+>  	int err = 0;
+>  	int n;
+>  	int i;
+> @@ -17188,6 +17190,23 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
+>  		return -EINVAL;
+>  	}
+>  
+> +	subprog = bpf_find_containing_subprog(env, env->insn_idx);
+> +	if (verifier_bug_if(!subprog, env,
+> +			    "gotox insn %d is outside subprog bounds\n",
+> +			    env->insn_idx))
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Can this actually happen?
+
+> +		return -EFAULT;
+> +	subprog_start = subprog->start;
+> +	subprog_end = (subprog + 1)->start;
+> +
+> +	for (i = 0; i < n; i++) {
+> +		u32 target = env->gotox_tmp_buf->items[i];
+> +
+> +		if (target < subprog_start || target >= subprog_end) {
+> +			verbose(env, "gotox target %u outside subprog\n", target);
+
+In the previous patch there was more info printed (at least, subprog
+boundaries looked ok, not 100% sure about map id).
+
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+>  	for (i = 0; i < n - 1; i++) {
+>  		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
+>  		other_branch = push_stack(env, env->gotox_tmp_buf->items[i],
+> 
+> -- 
+> 2.34.1
+> 
