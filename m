@@ -1,63 +1,63 @@
-Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
+Received: from mail-pj2-f0.google.com (mail-pj2-f0.google.com [74.125.227.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4673E3E1680
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 18:21:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB3E419300
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 18:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782843668; cv=none; b=G2bdqtzOg7oVxel2AE8fADvUKD2C6l2QgudQnjbAN9Hj+HYvf7WDM8r/T2tOOT7L8KTXjk0szAO+vxJ1Vg6zwuIstFU8LqecdhBb1XM/46AB7Byukbh4tPmYgQBoEl5Gc8pjH3kjJQzBmXUuDQa73W6U/pOIBqPf3yDfLbwAdjo=
+	t=1782843669; cv=none; b=SZjVIH8URIiRFmiK0/NRya7JRxm6LiyvHlYrJ50nSl+EWKtPrKPrtn+bpbqGnNpYtDFx2njbG1xzre7c19080gXL+X/xNdI7fUbfWaFSeumGPaaX9c7uae6Fohtuh9jx6ILJEG/zNJCYNpobDjohdqrcbEVD7r+bmEoI6T8QeuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782843668; c=relaxed/simple;
-	bh=g43NaWyhe1XuAPy4jqKeoCd531sV5r17tjhHt+p3rjY=;
+	s=arc-20240116; t=1782843669; c=relaxed/simple;
+	bh=S+bs5YY8NX9MFni5ePZnk3auDFAdp7FktKQwrUCbjzk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AMllZIDa+A8jBcbaGdyRWGSF9I11tzOoYEC5ygmpc6QBDYBQTG8CyQL+fYJffHcH/RsZ9CxPvDVFAoL1C0cvhMSOay5BGSOR0JfQygj3WqrP6TGuJqOG5YTzrFU1wiAnIr0+5SeyhRurQpJI6wDPCKuQAdGT/X11gRHKYL996o8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CRUcd/lH; arc=none smtp.client-ip=209.85.210.194
+	 Content-Type:Content-Disposition:In-Reply-To; b=bMpK5ygAmrmfcWDpev0gUNB7ikOYqPfSPPNFWudFqp4CZiqAnBgNjTPO2xHjHYUICPtK+THpNuZ5G5skptR01tDmKtiqeSi/Bdagnr+CDlDqIEzvOaGhYLYMG7fqYc5+6hQ73tM2PuL4M4DLxnq3B4HW5SVY1p+qU9Mai2feXAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JWSEllub; arc=none smtp.client-ip=74.125.227.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CRUcd/lH"
-Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-84794e800f4so1045834b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 11:21:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JWSEllub"
+Received: by mail-pj2-f0.google.com with SMTP id d9443c01a7336-2c99784b434so4092425ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 11:21:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782843666; x=1783448466; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782843667; x=1783448467; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nFxEXyhb9tJmWz/i7QeGFdi/A69GIy+FQV1JP5U8zsc=;
-        b=CRUcd/lHrDDmexhaKmwcwmoiXu+yiyRriJVR+aKDo4YfXp+kUOJ3mqPqdcAS0yVHAa
-         JHnTJGe2Pdvd5qE6u8WFew524giql5NxXCZnPvjS/PwqFt2VKZdXyGZEUpP9EzwNmRsr
-         hwcAzTRVmfu99MreLsO2D/MIn/Ts1Y/Ls7W8Q5q73EjVpKKlCD0LBjniJFai6wSKjGYa
-         RXblHQU5ciL0RGMKlXdoWzsbXHrHtg3OqQW13VY0gI4Yd4r2YGmAUKYEpvJoWPORQLnK
-         c3LYw5ReaBVTUCPXOitag1vsZkqCACANIo2FGmSUe8xCSncm29HILyOg33VpsyoWBC1l
-         k4Bw==
+        bh=moTdohrP+sT6ghuoSBO6hBwLx93Lg4139OZjTwnLapA=;
+        b=JWSEllub/oy0geh1hNIMvNZxLHNkAdSvzdKjzioSVyU8h3ZxU5iUx2JZlqDCbZRA2T
+         wcHHuUsDnGb/BcEqwqxVB6hUYkohbSGwGUCvGIaVx3Y8OA84SRyRwmNqJfE2157DqHdD
+         0Kkbzo7lEpcOTObenhEND3Bhgo9mxvvYF0xad42yLVs1PBNg6Y0qcLUOi2VGABST724a
+         2fl0iF/pIZNcBMNzu+CSKiSAkEd6s9zgVOpkHnJXqHc+DQi+6coP8wA5xxNHoavnweK6
+         CY/J6r6q85EduTGZmbub5jMni7zUuQw5q2XUurGkgLWoCrPI+zrWSVowQb9SgIq9tnsg
+         XKRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782843666; x=1783448466;
+        d=1e100.net; s=20251104; t=1782843667; x=1783448467;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nFxEXyhb9tJmWz/i7QeGFdi/A69GIy+FQV1JP5U8zsc=;
-        b=sVXTYhHaO/Whh+d2ZODLYG8V554R1AAU2xwWpMDzky6mrUbiuxf4bU57/NJOBYaPcU
-         6pA70AhvT+nfAjDAHeFb8qP07u3Ybt/QNs5B0Zj1BlZBv8sProC7K/+1mpUkcXJCzWH1
-         lEEzPDcr/WqcwGtpoyPFZL6BG8DptOLhn2oFWA0G/owbr+XmXdQ59CptZVH2rGsdmd+y
-         GFw6IBtSstAdmCqABbSWAjf1EzLGJtjbV7W0CzRsMY6DWEB19fAJfWT1RSMgoL3MrXJu
-         HpxSjqD/9LQoVXV4qiAG0aN8COn8BG2AtNWk4DFRpTNrraXTSmEexkqaPNYQyV/EaVjc
-         F3tw==
-X-Forwarded-Encrypted: i=1; AHgh+RoJM+3Y9eljfn+bLhF7KfuiFJ70KETXpc5k9k+SZflO7HczAU3BiEUEX9mr8VzfRfkwhU53DpVWNeiAgUu5A1w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywg8tRz7ze8eOKBPbo9WEkdEzzSWGaUFU6aH4opYdnsfH+ygqwl
-	8ERxHV1NqV4R0qcEAeHcIWq1vNtMcPg2CDh8uOgpk96veR864PYjNmmT
-X-Gm-Gg: AfdE7cmmRwqGsTdnMTdETgLkdye+V7Do6Ap4w8UepVrx0t0/N5v+tlkPb/iA8rRfKnV
-	yc2mHn/M8aEmry1z8LWkWxD2+AKYsSa9KU1ISFcYBgUQOCdmgjbTrs77B2bYrj76s97yvuWv2td
-	TJSUGCpLFpSpPQ893GzUVWGIIsBAMTpUWQYyy+NmmJVvSCIu3RTW8/p/49YpbDIr4qvsdCP94dA
-	C/KFhmAkMaXjV94khN/vEAF1AwFFSGfpLxgSRHFwKQ2XsNdaScwEbEl4o0Iif4976AsJIuSEGuN
-	kHCXA7TLvnixfAJ0xywnc+BHANuNW/4Mnv7c9yp2Sa5dfZbyrNrTpBKr5BFJJhXBoPKagxBUpUR
-	Agp+UwSFo5BJnlzrcuWtvWNlVLVAn/emosnZqQhsWAGiBlFfSR9MdAus4IQyAWKaeDnM9PqdDJe
-	MnYjoU9w==
-X-Received: by 2002:a05:6a00:190c:b0:847:94bb:30db with SMTP id d2e1a72fcca58-8479f26f662mr3744838b3a.49.1782843666539;
-        Tue, 30 Jun 2026 11:21:06 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4d::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847a03b9ffasm2523447b3a.59.2026.06.30.11.21.05
+        bh=moTdohrP+sT6ghuoSBO6hBwLx93Lg4139OZjTwnLapA=;
+        b=o+Q0BILMc1WK6VgEDvqID5kuhP2/VBkvpXdUaiQcmbujIxAxdyE4IJNqCRFxTL9jgM
+         4jxYvf1AmmuNJ9qpcKjbEoJpeicGkaZmMOP7CCz26mHC0OHZDNiSIUscpaoN3Zr3pvrs
+         LBYZBXk1dKujJtuF8FarRybea9uXGTzmD/goO/revYIc0k1IfyZIZsSTVbjT1HQFOQRM
+         uQg5nsJSGkZM9S/nfJY3wiS36JH5CuZPMH/DKSed4hToQxZA3trj8Kx2/LChJtBVzwTq
+         4pH8RJ/DJZrlg4tAHSTaQ6sKIttPIRiv5x5Kr5zm7uunc2c/BF7vgZsokB6OldpcFmev
+         lKWQ==
+X-Forwarded-Encrypted: i=1; AHgh+Ro6duRrbCEkqjvYyPxw39o0hKanXl/p1J+FYuVt/32jEqjpmC/VM3N69K3kLG9WCJfQuQogbE4dMGlWSVyqRlw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQn8/PAD4HxvtT9d35iRlJopd1KGNYWXpfFpQJO0EbiZqORpFh
+	ZPVYBGUCFrOoD9/4gJM7CrrXNfZMY6IfV25D6Ncm7gO26JsRirtJoXrx
+X-Gm-Gg: AfdE7cnYvWrniYUn/aHHtC16+Bm5/QR6tr91/ATGcVpa859glIo5wodQKxd6ffp/CrQ
+	sTGffSDR/ArFDZmgfbNUwKxs3kUqfC+qgSkcp8hDxLtF7YyagwSW1cx59rtlvXpHZZfQDqRhqEB
+	ysq/dM6bz7fHwOfzgfzKxN3+g/taZecU9TlIso95wtL+se/fAY0oXI9vrop79xx5/ySlo+YRfVs
+	bE7qoS3zWmN+r9lVdUnMMDlmAdcPYEp6is0j0X5B+Y1Ol0Go/eF9W2sCH3ymUqdnEakhWBgT8ba
+	f76rWQFxd9zZRgO5hfOxtiBFgbJXF7MQjOUV7yxeApIBx5rFBQ2ai3JFDqqNJAmCbGl0RMUY6Qm
+	YvwLvJsxWas39wYg9dUSyrOUs2cQaty717XNVwRqvKHKgRMgFgLHRXsow+vA+ZJh7t4curDzvl6
+	GTfJ/MoUXNAYZrywg+
+X-Received: by 2002:a17:902:cece:b0:2c6:beeb:d7db with SMTP id d9443c01a7336-2ca2d55fb55mr39847525ad.16.1782843667531;
+        Tue, 30 Jun 2026 11:21:07 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:40::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca37a71053sm19735655ad.8.2026.06.30.11.21.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 11:21:06 -0700 (PDT)
-Date: Tue, 30 Jun 2026 11:20:17 -0700
+        Tue, 30 Jun 2026 11:21:07 -0700 (PDT)
+Date: Tue, 30 Jun 2026 11:20:39 -0700
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
 To: Breno Leitao <leitao@debian.org>
 Cc: "David S. Miller" <davem@davemloft.net>, 
@@ -65,11 +65,11 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next v2 2/4] udp: convert udp_lib_getsockopt to
+Subject: Re: [PATCH net-next v2 3/4] ipv4: raw: convert do_raw_getsockopt to
  sockopt_t
-Message-ID: <akQI2pqFqSLztw35@devvm7509.cco0.facebook.com>
+Message-ID: <akQI8dwSsRcok272@devvm7509.cco0.facebook.com>
 References: <20260630-getsockopt_phase2-v2-0-193335f3d4d1@debian.org>
- <20260630-getsockopt_phase2-v2-2-193335f3d4d1@debian.org>
+ <20260630-getsockopt_phase2-v2-3-193335f3d4d1@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,17 +78,17 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260630-getsockopt_phase2-v2-2-193335f3d4d1@debian.org>
+In-Reply-To: <20260630-getsockopt_phase2-v2-3-193335f3d4d1@debian.org>
 
 On 06/30, Breno Leitao wrote:
-> In preparation for converting the proto-layer getsockopt callbacks to the
-> sockopt_t interface, switch udp_lib_getsockopt() to take a sockopt_t.
+> Continue converting the proto-layer getsockopt callbacks to the sockopt_t
+> interface, switching do_raw_getsockopt() and its raw_geticmpfilter()
+> helper to take a sockopt_t.
 > 
-> The thin udp_getsockopt()/udpv6_getsockopt() wrappers keep their __user
-> signature for now: they build a user-backed sockopt_t with
-> sockopt_init_user(), call the helper, and write the returned length back
-> to optlen. The helper uses copy_to_iter() instead of copy_to_user().
-> No functional change.
+> The thin raw_getsockopt() wrapper keeps its __user signature for now: it
+> builds a user-backed sockopt_t with sockopt_init_user(), calls the helper,
+> and writes the returned length back to optlen. The helper uses
+> copy_to_iter() instead of copy_to_user(). No functional change.
 > 
 > Signed-off-by: Breno Leitao <leitao@debian.org>
 
