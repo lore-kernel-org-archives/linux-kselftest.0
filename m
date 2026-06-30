@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF3C3CF211
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 03:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264291A0BD0
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 03:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782790479; cv=none; b=Ka/7nxNMMV+SC+nr2EcUQ8wKzpw/aYjCJVGNYD4wGKiHFR/T1OmM0DkYp9kbksWWnu4BfxTBLez52DFk9rftjNR+LaVjrRLLZyZXzIKJ51Xu45Pa8aKQ8FuLIpaDU4YWG27C2g2TDIc2ntUKR7rZB0F7R5JqtkxSyYo1XOOxpQM=
+	t=1782790480; cv=none; b=dBkUvp2upgUWfQxagSD1U3h7Y7aqF1JxYwR4sXnwlyda0Shh1ZEy+U/13D2es1B9FhSImvgrukFI2aBzNN0iugM2/QI0Vnbi5lG6qzo0IPjzLwUWvAfbH3+6cHAN1GKxIgTVaeDrdg80k9Kli35vMYtdT7TwmYi0zD9pObSUQlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782790479; c=relaxed/simple;
-	bh=4q/NEw5WT6Acwn3NuDWTYx7slkyAylnoUlmazUnmlCE=;
+	s=arc-20240116; t=1782790480; c=relaxed/simple;
+	bh=leklCxnmsWA6J4xXUKnEH5z3UunR3XJtmt0ZgRGI4Z0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=caXfcwH8dy1nNIvqM5vj5MEhiRiIhvp/kzNP3wZL2o5UAt/OXkljHzFOtRA+5iVdCKoTW2JKB3cDF6FM2DzhfJ4YhPneU1en+CTj8ZvaZDUefIaO1k50N6n9Bl2DzuhuGNbeHFl+/+lSeTnF1V6IJ/kslhjRQMd1WP4YyuGBsu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ew2a9/iM; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=AslJ82Xf3d4wKPWmkM5XliPieqE+jWKEiHe0GOQTVUy1qvYYQ5eP+mbeEQkhmF7TUo4qAmZrMc/i2RBhIRL3EHlukW/Ed4RniyP1HYcvmhJa0kx398XLrVcTRUqwAJ7pWm7zUfg+N/Smx6rwc1WLJsER0q1g0NgJ/1RrGebQM+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eCvacDcZ; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ew2a9/iM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eCvacDcZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782790477;
+	s=mimecast20190719; t=1782790478;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+P0n6eh3tQM4yrtA4Z0WxFBGLLq339JFASZ7owHr8Lg=;
-	b=Ew2a9/iMGauNQPONezllAaBBlpnVYQgOpuSLW9dHHQQXX4NemG+VEtorQEeJg5aFk/szvA
-	D43suntKfWV5aoJIBgX/HW4SE1v/mGhnFf6T+S0NUfGVY3QSvQ5On7FbfcVMMhYWKeneBV
-	5sY9iU87QZC1FKFyihhHHgsGdRH8HeA=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=5CY/s46uaKqXduHfIhr3cOpz/+5SmQeMBlIxx+QTeTI=;
+	b=eCvacDcZaHTBeQ2RB6WeawmtZ2G6MoydooA3pl8EtArj4qDhbanPzwKgKTNcHbaDQOBH8L
+	SVhswQNyB6sxpEy0lNNvV9tRMDn+5Bg/kJbH6iGrjVxrfAfFrMPT9v826E6Ceq375n69HG
+	tpngv4DFmJzbrCibcy67SRdYUQokxzE=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-683-VXs-JTZAPoGFor-PiGV8pg-1; Mon,
- 29 Jun 2026 23:34:33 -0400
-X-MC-Unique: VXs-JTZAPoGFor-PiGV8pg-1
-X-Mimecast-MFC-AGG-ID: VXs-JTZAPoGFor-PiGV8pg_1782790471
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-216-YaUNr6eUPlOaTq88Ehhtbw-1; Mon,
+ 29 Jun 2026 23:34:36 -0400
+X-MC-Unique: YaUNr6eUPlOaTq88Ehhtbw-1
+X-Mimecast-MFC-AGG-ID: YaUNr6eUPlOaTq88Ehhtbw_1782790475
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 87DC91955DCD;
-	Tue, 30 Jun 2026 03:34:31 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2381418052E9;
+	Tue, 30 Jun 2026 03:34:35 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.2.16.200])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CF457195608D;
-	Tue, 30 Jun 2026 03:34:27 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DBC10195608D;
+	Tue, 30 Jun 2026 03:34:31 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Ridong Chen <ridong.chen@linux.dev>,
 	Tejun Heo <tj@kernel.org>,
@@ -54,11 +54,10 @@ Cc: cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Aaron Tomlin <atomlin@atomlin.com>,
 	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Waiman Long <longman@redhat.com>,
-	Gregory Price <gourry@gourry.net>
-Subject: [PATCH-next v9 05/11] cgroup/cpuset: Add a cpuset_reserve_dl_bw() helper
-Date: Mon, 29 Jun 2026 23:33:38 -0400
-Message-ID: <20260630033344.352702-6-longman@redhat.com>
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH-next v9 06/11] cgroup/cpuset: Expand the scope of cpuset_can_attach_check()
+Date: Mon, 29 Jun 2026 23:33:39 -0400
+Message-ID: <20260630033344.352702-7-longman@redhat.com>
 In-Reply-To: <20260630033344.352702-1-longman@redhat.com>
 References: <20260630033344.352702-1-longman@redhat.com>
 Precedence: bulk
@@ -70,89 +69,102 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Extract the DL bandwidth allocation code in cpuset_attach() to a new
-cpuset_reserve_dl_bw() helper to simplify code.
-
-No functional change is expected.
+Expand the scope of cpuset_can_attach_check() by including the setting
+of setsched flag inside cpuset_can_attach_check() with the new @oldcs
+and @psetsched argument. As cpuset_can_attach_check() is also called
+from cpuset_can_fork(), set the new arguments to NULL from that caller.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
-Reviewed-by: Gregory Price <gourry@gourry.net>
 ---
- kernel/cgroup/cpuset.c | 42 ++++++++++++++++++++++++------------------
- 1 file changed, 24 insertions(+), 18 deletions(-)
+ kernel/cgroup/cpuset.c | 52 ++++++++++++++++++++++++------------------
+ 1 file changed, 30 insertions(+), 22 deletions(-)
 
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 47aa8f2fdfdc..c3c354ab61db 100644
+index c3c354ab61db..4a3e2972884c 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -3031,6 +3031,25 @@ static int cpuset_can_attach_check(struct cpuset *cs)
+@@ -3022,12 +3022,39 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+  * For v1, cpus_allowed and mems_allowed can't be empty.
+  * For v2, effective_cpus can't be empty.
+  * Note that in v1, effective_cpus = cpus_allowed.
++ *
++ * Also set the boolean flag passed in by @psetsched depending on if
++ * security_task_setscheduler() call is needed and @oldcs is not NULL.
+  */
+-static int cpuset_can_attach_check(struct cpuset *cs)
++static int cpuset_can_attach_check(struct cpuset *cs, struct cpuset *oldcs,
++				   bool *psetsched)
+ {
+ 	if (cpumask_empty(cs->effective_cpus) ||
+ 	   (!is_in_v2_mode() && nodes_empty(cs->mems_allowed)))
+ 		return -ENOSPC;
++
++	if (!oldcs)
++		return 0;
++
++	/*
++	 * Skip rights over task setsched check in v2 when nothing changes,
++	 * migration permission derives from hierarchy ownership in
++	 * cgroup_procs_write_permission()).
++	 */
++	*psetsched = !cpuset_v2() ||
++		!cpumask_equal(cs->effective_cpus, oldcs->effective_cpus) ||
++		!nodes_equal(cs->effective_mems, oldcs->effective_mems);
++
++	/*
++	 * A v1 cpuset with tasks will have no CPU left only when CPU hotplug
++	 * brings the last online CPU offline as users are not allowed to empty
++	 * cpuset.cpus when there are active tasks inside. When that happens,
++	 * we should allow tasks to migrate out without security check to make
++	 * sure they will be able to run after migration.
++	 */
++	if (!is_in_v2_mode() && cpumask_empty(oldcs->effective_cpus))
++		*psetsched = false;
++
  	return 0;
  }
  
-+static int cpuset_reserve_dl_bw(struct cpuset *cs)
-+{
-+	int cpu, ret;
-+
-+	if (!cs->sum_migrate_dl_bw)
-+		return 0;
-+
-+	cpu = cpumask_any_and(cpu_active_mask, cs->effective_cpus);
-+	if (unlikely(cpu >= nr_cpu_ids))
-+		return -EINVAL;
-+
-+	ret = dl_bw_alloc(cpu, cs->sum_migrate_dl_bw);
-+	if (ret)
-+		return ret;
-+
-+	cs->dl_bw_cpu = cpu;
-+	return 0;
-+}
-+
- static void reset_migrate_dl_data(struct cpuset *cs)
- {
- 	cs->nr_migrate_dl_tasks = 0;
-@@ -3045,7 +3064,7 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- 	struct cpuset *cs, *oldcs;
- 	struct task_struct *task;
- 	bool setsched_check;
--	int cpu, ret;
-+	int ret;
+@@ -3074,29 +3101,10 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
+ 	mutex_lock(&cpuset_mutex);
  
- 	/* used later by cpuset_attach() */
- 	attach_ctx.old_cs = task_cs(cgroup_taskset_first(tset, &css));
-@@ -3101,27 +3120,14 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- 		}
- 	}
- 
--	if (!cs->sum_migrate_dl_bw)
--		goto out_success;
--
--	cpu = cpumask_any_and(cpu_active_mask, cs->effective_cpus);
--	if (unlikely(cpu >= nr_cpu_ids)) {
--		ret = -EINVAL;
--		goto out_unlock;
--	}
--
--	ret = dl_bw_alloc(cpu, cs->sum_migrate_dl_bw);
--	if (ret)
--		goto out_unlock;
--
--	cs->dl_bw_cpu = cpu;
--
--out_success:
--	attach_ctx.in_progress++;
-+	ret = cpuset_reserve_dl_bw(cs);
- 
- out_unlock:
+ 	/* Check to see if task is allowed in the cpuset */
+-	ret = cpuset_can_attach_check(cs);
++	ret = cpuset_can_attach_check(cs, oldcs, &setsched_check);
  	if (ret)
- 		reset_migrate_dl_data(cs);
-+	else
-+		attach_ctx.in_progress++;
-+
- 	mutex_unlock(&cpuset_mutex);
- 	return ret;
- }
+ 		goto out_unlock;
+ 
+-	/*
+-	 * Skip rights over task setsched check in v2 when nothing changes,
+-	 * migration permission derives from hierarchy ownership in
+-	 * cgroup_procs_write_permission()).
+-	 */
+-	setsched_check = !cpuset_v2() ||
+-		!cpumask_equal(cs->effective_cpus, oldcs->effective_cpus) ||
+-		!nodes_equal(cs->effective_mems, oldcs->effective_mems);
+-
+-	/*
+-	 * A v1 cpuset with tasks will have no CPU left only when CPU hotplug
+-	 * brings the last online CPU offline as users are not allowed to empty
+-	 * cpuset.cpus when there are active tasks inside. When that happens,
+-	 * we should allow tasks to migrate out without security check to make
+-	 * sure they will be able to run after migration.
+-	 */
+-	if (!is_in_v2_mode() && cpumask_empty(oldcs->effective_cpus))
+-		setsched_check = false;
+-
+ 	cgroup_taskset_for_each(task, css, tset) {
+ 		ret = task_can_attach(task);
+ 		if (ret)
+@@ -3639,7 +3647,7 @@ static int cpuset_can_fork(struct task_struct *task, struct css_set *cset)
+ 	mutex_lock(&cpuset_mutex);
+ 
+ 	/* Check to see if task is allowed in the cpuset */
+-	ret = cpuset_can_attach_check(cs);
++	ret = cpuset_can_attach_check(cs, NULL, NULL);
+ 	if (ret)
+ 		goto out_unlock;
+ 
 -- 
 2.54.0
 
