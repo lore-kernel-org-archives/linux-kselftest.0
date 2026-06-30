@@ -1,246 +1,195 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012051.outbound.protection.outlook.com [40.107.209.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6ECB3955D2
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 19:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F245374735;
+	Tue, 30 Jun 2026 19:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782847252; cv=pass; b=e5F8no2Pkqxywkag9RMPGnEIA4h7Hjp9HgcBmAXzDhzDeZpAetpygRgqnawMRtQEWFAO5P6ydoVZncEtfk1Y11KoKsQqRv6pOnvFdVE4YZT67ccdg3IBCsEd1xux7m1AiwOhoiV/pbOByk5IOQ/dFek47HVR+ruHIGFLMxI2KNw=
+	t=1782849586; cv=fail; b=kLwy+S+KrAjr3pDhJ1MYXSUh2lJ1ILwvthiZpIU0e6b7Qhd54io96PzCaS2YuXoKXodDyMOO22CM2q3k26doVruaU6g7EE1VDxtpCGtRsZM51jpxhXUkxjx/B1eWKCtJwpbaJjRnvzm0hCt0nfZ7kLvA+82nbbHDM4yH4xnS7Vo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782847252; c=relaxed/simple;
-	bh=65J+i3G6p5lcoZBTC4phByocAAxY190VmOFW7omB01o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vnrl4P8tROSjmOy96LEMWrSdErUalRcDH60mTomCm04NEQJRuKmO9wf21tQ0/ji2yHE4rHZCLpGjH0YTOSE50xRdWOX1r9lR4s/katfFeEx+hAXRSiRMw8qrF1ZZ5tmZ26qa6WiAmltGtncBs8fyeZeMoQAZ9IYLo3qisd5HMBw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=X5MxhvYP; arc=pass smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1782849586; c=relaxed/simple;
+	bh=gI/6QAxlaH9fRXzSqJtsNtxPGd8cu/h3hdUwmlWFpGw=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=o0BFOkGq1aEoK/1XP+gG860Xa2cdzBCQaHJP/rkGq5Jb+KOmq9sAcYmthWWCQrGK/VQEPmPFRbky0zR+Cr9Bj5RW0DG3STOhJpO7uwa8H1OnINLgycNBnwjF0vMFTCyMlYM4nhD3T608QMA+9swNz26XujTo9GbxTf3RCY1jvJY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=XqG5s2Vq; arc=fail smtp.client-ip=40.107.209.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="X5MxhvYP"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-37f72212544so4628222a91.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 12:20:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782847250; cv=none;
-        d=google.com; s=arc-20260327;
-        b=iRibgXClrGnvK7y+vX7Zl5Pg5Gzd7D+XI2K4elbS/tRwzo0s6JYqTB8I1yMWrcQBqN
-         coAd+xmGC39y5Ytk+1tTpd7hqIidhaXlJCg70xE8al2e5GQ16TA+t88/hpbdlrhoSQZ6
-         k63UldOXoiPyt6OTdqs/osZ5PQd0piuN+4r935qsY9k/IJ5RbSpkMGkS2O7Y5Rwj9lWd
-         JCs7Y2mFwQ+YsQ/7mChVFbNv26g4kO3+EUQtLssA7NhQPUkwKZi7e48/BBVklEz10QyI
-         rVYzeIdvQdmJsQL8WlLEUY+O+1vJ4oj0BAOYQ4uz91u2V8YPYdd8eOnDiFjtCvH7hIUA
-         yReA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=HnheX6+q3F7lhzv+8WY9jgB+q1sOgaN80kpX4FHTGh8=;
-        fh=SwnrCEYlMLg2pojtWABOXlffwsxsyAOV7oThJCds1RU=;
-        b=FNiiM2fVbOh63H6lxvLfWW1DC7g09K7g1lNgLxiwNSSgUUQb4Rqcvev286CTD7ykOd
-         A/LoJn3HHI+AjiFpGf0EWu8xhnWa1j4pNc1xCvV/sN2LO1f80EFSHHHMEyTo34lWnZl8
-         zNqCVO10nmeItf1dB30SbajggDBfrz37Dm1TsZQc7TwRtWiiRub/pirMmvEvi3ZxNi+4
-         lZPdkSGGkoUdSBdixgdAjZ+DUg8OioSnBhNZpdirYRfVT/h2icmiUS6ikRzVZjxLqdrP
-         3+a8u6J3XR+URJXP/NTFN3LJSxIP12uVCTvva9ekejaxl1Brf0l4Kaz/VEdeNVRcdiqA
-         84SQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1782847250; x=1783452050; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HnheX6+q3F7lhzv+8WY9jgB+q1sOgaN80kpX4FHTGh8=;
-        b=X5MxhvYPRN3WA2wN8tL/ZYk9NZEiQbt3zp7jjJgltzxvrPhMcgDbMg5S+ghGO6JFrV
-         O1yiHUL8HLKhu//+JGJnCXi8eneIZaFMBhsfmu5xEyywT94F+72Bu6ykex5UZwL8hC7Y
-         x9DHn2EONIrEHKr+zJRocw3ZO6DRVypGamAqAhU47sT6463F2xW51r6rTRektZ8qZs58
-         e7c7/MJZFGQ2SLMW7XGcoPsGAHxHtixGOMzTpbI6bkqY+TSgjJ8aoDaBdqw5170xOh/K
-         C7n1uxfzAR1/ftJDft78tixUKOMmdPxBEu5FgTwR1H8tgsPowu45eEy5Gat235dRyPTg
-         EeIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782847250; x=1783452050;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HnheX6+q3F7lhzv+8WY9jgB+q1sOgaN80kpX4FHTGh8=;
-        b=qLbqnOsVtnbUkK9W69sIvvxNqatKf4pMhu7v7hTkAaPh3Q1ZbSfnvrZm6mXWbxtfwf
-         GJ9l7BvUzYrJK4j7HKYleHtkeuNVignmcAmUSJUBI+YuY4efGvo8ccTsvW9c/rzdU6WS
-         +qVIXk2hnMIAi2B3d81XOGa0FlxC8L+2f8wgSpTUrzLIIgMQ/Z6Ozv1lI0XlzrV9jS/n
-         vNFhsvcHuerNFO0iS6CU6v2dkPXMNwIt4k7i9JnVT8x+391zE6AmVg3HdGOdEWP+Y0dD
-         akR/TqvdibrboRmIwJZIREkFS+Pytl9PY7x53dHE40gKCe37HuSEtbs5gx+bQiftFWnr
-         Ro9w==
-X-Forwarded-Encrypted: i=1; AFNElJ8dHichTGBoPlZSdyguUpcVFu6DHDMzHt7Kxa4VCDox430it8gIGBBxEJIwzV/fuDC1YFVBCZ+pCtUlhmlIimE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMXfx15yZlNRo+gaDG+KtJDR7VdVl5tmlyeaKUMI6Zwmp+2QkQ
-	EWHONS4WDELseH/aJveXHVr57rIEzwypo12CLyaJljxx5i8hps+uhpsukZaUbh+kQbch6KD+B5W
-	cyzO3kEh7jeUe5TYb8w0mt6+HhUyvwD4VGn8Ilo9n
-X-Gm-Gg: AfdE7cnJMRcgSa+f0UL+hywALm/coICF25tHOn1Axik3wuY/wyvYoPrFZ2rEV7NhW/n
-	rwbAo7pWLHMJ8LjCon0XZJLM9/Lei4SlgMjykQs5NzJVTeexuMmC2r5huZVDci0dfXtoGtCi0ef
-	yOvPwu1S1bs2bkk6waUJE3gSZ224Mw2a2lVDgUreFDFrkDL0VRwolusUhd8vT4dLo0jED5e2c/i
-	D9b8YrOzibTRYhIPI6TTlHh1vR781HVOSNgrryZus62w995kXB+doYpB6TdnG5qXpF+oeqI
-X-Received: by 2002:a05:6a21:62c2:b0:3ba:cd5b:3dcd with SMTP id
- adf61e73a8af0-3bfdc69589emr1376925637.36.1782847249974; Tue, 30 Jun 2026
- 12:20:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="XqG5s2Vq"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZOtaa3CjYnSFypjSam/PNQzFv+GLc+atkBSB7tNGFXFlnxcs1sfomkN0kAIab2UbdNPY8IraXvo+sa7k4MHRW5aJh8CDNTRQ8hbKXLZSd6QZF9VzUjn4kiPj8HnytC8hLz/mJsb7Hid3q56ULPLfgYjfbpi/Xd3VwLz/aTaoqhp7OM43erXZH1uiF7/2ZubwlxQzhSauPCjy+Lfz3cghy3AhLMpY8A8oMcESAQjdIJLIeTHhkFFghQX414ZEV7DmH7lrf0m6LhUPK8GvPQkwBl4ZT6ZfOJgP3TuoneFpq0xFvCc2quiOA5j+nPJ8zqVRZk0XJ3JwP00RK9pv3c9/lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4B00NnSUMaoz9VTGt+4HL7l0Lz6+ZG3gHM8U3eCcnpE=;
+ b=cGV6Fcf/Nyorav8yKROvaXriYU10h3IkxTGdDxm8R2je2Qcv+NXFdA+xvX7iAOob3Gpp64OC0Bz8S+xlDhZauxGOBXecIyYQjqWLtiwaGs4WNeI21f1CENjm7+v92YfhBjMH9tYYrn5nbXqAYQ0eKM9OqmknpoFEH5bRNHpuFdiePdMWBxTqmXUIKpsCSyMZe9sGwwSi6ZGGMpM/UJ81nLa6gvEGJY2CARMnfF251hQQldhjvmYoYqO86168W84wjZ7sgtAFiXeRub1J+DYTYZMFk4ImAVI+sFulteRYLO3QVUdsMViDzbyn3B5bYGNM+fIcL8phweclnJMgYI21SQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4B00NnSUMaoz9VTGt+4HL7l0Lz6+ZG3gHM8U3eCcnpE=;
+ b=XqG5s2VqRJCzb3utH7kVOFxognP6EbPRmx7XuOfauFRNyt44EihhXGUUeccqPzmZZ7tPk+e8/3oVNgSWs8LjJ61rYK5DlQbK3fmUOBB/GorVn3rl+jUnLbaPr/eG2Dg47vcmse+QenO23+u8v7hm3A+d6GEaMoacgKudiV5RhpHea3KjN8G6/rSz4D6sF3njuCxGkrA3HhhOYZKzLwLdR63BbJ8vcO7p8R6q/8H1mgBQkSDwUnGG8QRBQrEDI+0NEsk/dZpL7cgrZROMlLQaATwoEX5EqOaw3glwx2fKZ3ofN7TpMKRmnmxu1ZYyXfoZYQVl2xa+yKk25aa5+JpK1A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MW4PR12MB6802.namprd12.prod.outlook.com (2603:10b6:303:20f::19)
+ by DS7PR12MB5816.namprd12.prod.outlook.com (2603:10b6:8:78::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.19; Tue, 30 Jun
+ 2026 19:59:40 +0000
+Received: from MW4PR12MB6802.namprd12.prod.outlook.com
+ ([fe80::51f4:a3d9:b44e:9587]) by MW4PR12MB6802.namprd12.prod.outlook.com
+ ([fe80::51f4:a3d9:b44e:9587%5]) with mapi id 15.21.0159.018; Tue, 30 Jun 2026
+ 19:59:40 +0000
+Message-ID: <275f8738-51d5-488d-9934-3018fbe7a899@nvidia.com>
+Date: Tue, 30 Jun 2026 22:59:33 +0300
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] selftests: net: bump default cmd() timeout to 20
+ seconds
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ shuah@kernel.org, petrm@nvidia.com, leitao@debian.org, dw@davidwei.uk,
+ gal@nvidia.com, linux-kselftest@vger.kernel.org
+References: <20260629233348.2145841-1-kuba@kernel.org>
+Content-Language: en-US
+From: Nimrod Oren <noren@nvidia.com>
+In-Reply-To: <20260629233348.2145841-1-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0083.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1f::21) To MW4PR12MB6802.namprd12.prod.outlook.com
+ (2603:10b6:303:20f::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260630183956.281293-1-dwindsor@gmail.com> <20260630183956.281293-3-dwindsor@gmail.com>
-In-Reply-To: <20260630183956.281293-3-dwindsor@gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 30 Jun 2026 15:20:36 -0400
-X-Gm-Features: AVVi8CeUWBZtqtU3wWufhJ35rf7KN-O35V57TZRDwEyvAO9h530GFJE7-OayBpg
-Message-ID: <CAHC9VhSYNF=_Tfe-D99rHy70EXQVr1ES0arxT09Bidey4zOFdg@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 2/3] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: David Windsor <dwindsor@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW4PR12MB6802:EE_|DS7PR12MB5816:EE_
+X-MS-Office365-Filtering-Correlation-Id: d0632495-4422-4305-5d08-08ded6e21f01
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|7416014|23010399003|376014|6133799003|3023799007|11063799006|56012099006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	Ib0MnkpAjxBYFZ0DBab4IUkoy/Ww7Xc1zGWlMxtTl5ZNFEWmAu0UDNp45Vq++kDkqdsiZ7eoobW7nS4dRcwbKckDp3vgAGgglyd/80DFc7oTXq89stBO4lmC5J3ZFWC2NaWs3QnVF2eyJOL6gvwkfiK9euPj8iVw+Cn4Z/adQhYya7dazzfabzwn5NHVXEYIpiR/m8x+vTz8xXhV3l/1WUvr9vKQZgEq8/Lc+Jr0bNvhvaUlucaAewvUs8YMPfU3GM82IJro6I+LekcKriCxjFrA0r4DzwMLaNXfMYz7C3jQzwYRzreE7Qv4p1TR9YsKw0BbrlUeelPx6UbIhTDMpnkihNqyY4xQA8Tqk0OYkQv5LjX1cQtIM+G5Og2/N7P/NoO5BhwuvatVLfZzYlcU1LxjqikZfh4+TtlFUEzMU0m0rUcQOZkB6Lk5Iil4gvQH5QCa6RfiDtD7w846Def3Rv237O3+PIv91wOqk2pY0e3OP6ONXhxK9jhr7n0uxidYUAqnKFeirZdeiDXZC0P2Nzay8vW76XAAVh5uGDxsCsA7MswukZNS80YaEk567u0LbgZGPiDn4kY2g80nf46Kdgd8qx3y4sLWHdwilxLCeSaoqcVihICmqViOEjC+7l2KmRY3oqoJ7t2IxOZXfr/+pC8z6EhxsFGKhWsr84ID9J4=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB6802.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(23010399003)(376014)(6133799003)(3023799007)(11063799006)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Q1FEYVQvVVVyUXorMUN6Q2toREs5WkFWS3ByN3ZRRC9HVVFIa0J2M0hYdVRY?=
+ =?utf-8?B?azJTbVdsdkNoVHZDSnY2YktxaTRHbWtrOGNTclJuL3NuV0ZwRHRlVzNzSU50?=
+ =?utf-8?B?bG0xa3FmaWhxVVB6TnRXOHF3akZwUG5Zck0yelBEcEtVbitkbFpUYXFscTFu?=
+ =?utf-8?B?b3A0U1NDV2VKdEl1SE9nSEZkOGU1dzVic0lVMU9heFNMMVlWdEQrT0o3YmlE?=
+ =?utf-8?B?R1FhQmdGa0FTUkN6RTAxTnQyWWRBQ3RrVkVQNmVwS1BJR0lSUXN3T2UwZkZX?=
+ =?utf-8?B?WWIreC9pVzIwcTkwL2Q5eXdkNmFLWE51TklpSDFYdjV6UE5zekZRSjlXM2F0?=
+ =?utf-8?B?M3c2dlhuemZrYkk5SUlqOFIxeFMzVVR0Ykt3WmpXVUFPMXRnNkhJWWQyRm1T?=
+ =?utf-8?B?M2dIUU9SVGJMcUd1dFR4bWxQNkY5UlZPVnYvQ3NHUmxSOFdWeHFvRU9seldv?=
+ =?utf-8?B?K0puRSthaEJvcW1mT3pRenlRa3BmL3FnTjg0ajgrK2tETEQ2SXJGSDh5dDRP?=
+ =?utf-8?B?eGRleDFaMjlySFNYZVFyUGlWQjlOTUJTN2tsdlowUWZJQmdmOEgva2Y3cmw0?=
+ =?utf-8?B?N1R4enRRczRVQmc4RHlBSm1YREpqTDFPM2pVWXRmWERqUi9JZm9YNFlDaW5O?=
+ =?utf-8?B?ejRHcUF2VTJ5YVB1VmFvR0tFODJha0pCcTNIbDVyb05NV3lLVHNWV1pRaFJx?=
+ =?utf-8?B?RmdKZUpON2M4cG5RbXVqeHF1dUpxVzl4Y3BNK2RpTHRKQTdGNVIxaDdpd0tw?=
+ =?utf-8?B?TVZmaWh6Vi8zb2pCSFNKdTJBd2ZEUURnNWhIekcxb0dsK2tYZnltOEZYbWE4?=
+ =?utf-8?B?a29MQjlqNEVaK1UwRFFjc2oydGN0ckhEa1FrRy95WU1CSTRXSENnY01ER21h?=
+ =?utf-8?B?K1VZNzUzVFgrZkl0TWdwS2FRTzRRQlpwd05NOUhzU0h2WHIxTy9sd2NUbWpT?=
+ =?utf-8?B?R2lUTUhkL0d0YW9MbnRwQVdvbGNNMnB0bzhpZ1RjVC9rSDJSNFYzRFRXc1Z2?=
+ =?utf-8?B?cE5tbmZXQThlZEVJR05YcTRqODRBdzh3UmZIbGhTTXYxSkhxOGJ3NWl3WDVY?=
+ =?utf-8?B?ODNZQ0FLQkZpKzdKNFpqL2pKc0hmak8ybEt4Q1pxeTVCamFXMElGMngxM3or?=
+ =?utf-8?B?VUNUckdwRWd4N1ZISUhXejhJV1Y0MEo4ZEp1ODduc2RsbjNuRjdINHZhWTJ0?=
+ =?utf-8?B?ZjV0Zk9Za2tUdUZaS1lTYW9KMkliRVMyZExEQVV6NGs5UWlvSFY2RHEveTND?=
+ =?utf-8?B?QlFIMFkvNDJIMHorUU1NWWUzai8rSkNTWm1VTk5FeWxVZ0lVbHkwSFl3Nmt1?=
+ =?utf-8?B?cEt4TDFESkhMcDdoRUxUT0IreU4xMlpkYTh4ZzNZcVRUQjVKcEZNTGpaUm9V?=
+ =?utf-8?B?WE5WNVlJUDhyQVFtNDdmKzJJNm1RS1hrajRNUXVsOEpSK1c0Zk9FR0sxTkUy?=
+ =?utf-8?B?L1N5TThLMG50Ky83Y21Rc1A3eWY4TXMvQlRSMy9tQVpRZEtjM1ZrdHY4S1VF?=
+ =?utf-8?B?YWFaT3JvdEkvWkI3dEQ4MnJoeFd0YWRsc0NHQ1FEOFl5MkVDMW1vbTRkZFNE?=
+ =?utf-8?B?SnV3Vmh4V3N3NHFSNURFY0o0M1RGVnRxemplSnNXSUN3aisxazRkZ3N4WFhn?=
+ =?utf-8?B?dTNESG1DK1NiYVBWR0s3UGlIT2RyeFdoRmhqalJWeHpMNUpPNnRRZlNRc3FQ?=
+ =?utf-8?B?SnRDR3pnS1JBMWVBS01OY3crZWxtaFowV095SHdLZytncE9kU0ljT0Q1MVc5?=
+ =?utf-8?B?KzQvRTVHSTMxU1hxWTU2S2NKZ3A3L2t1VW4yYWdJSm9xVW1sa0c4WkUzYlNL?=
+ =?utf-8?B?RklwbHArZ3NwY3F2bjBWNytDdE1UUFhaaVhnWXJaekJ3QUcrMml4OUlxeWNJ?=
+ =?utf-8?B?VXFySnZzNC9lN3d4U2FZdU45TWZ0SGE1K092UTNCRjdqWjBVTlZZSllTUS8y?=
+ =?utf-8?B?c1F2MU1jbmZxZUxrSXZWd1dUSzROazBKZVd0aWR5dUNmMW1rZ01lWlUwWDBm?=
+ =?utf-8?B?QllNTVBHTjAxSlcyY3I3RWFHMWpRRkhlbVVYTDBBUXZYbTU1WGV3VkdKek9E?=
+ =?utf-8?B?dWw1SGloN1BUQ1Q0VUhXOEJyTktabU5SY0ZoK3J3VTBIYlZIam5VL3JmVnVM?=
+ =?utf-8?B?RXRRMDY5Nk5TcXl1bDBKRHZ5dmJRMHJJZHV3TTRvaDkvcWt1eWkxbDNVMkVD?=
+ =?utf-8?B?WStnUW5HL1pqSTduWm5pbXdxcFYzMm9IODZHZnJ5eklGK0dqMXRxSGlwTjV4?=
+ =?utf-8?B?UjZkN3dZT2h6N21QdVZLYkFCQjJxK1ZLTVBJV2RZQ3FidFM4STVwOUhQbDRG?=
+ =?utf-8?Q?LYTm5mQ5YdgN1Y611f?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0632495-4422-4305-5d08-08ded6e21f01
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB6802.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2026 19:59:40.6376
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EkkktMWDrZzURWc3lzFm8HTq/Ux6xjfyMW9TFWPBVbITf9j77MnlU7JcgMJg20/CLfYiciS6l50MmS+dzM+pDQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5816
 
-On Tue, Jun 30, 2026 at 2:40=E2=80=AFPM David Windsor <dwindsor@gmail.com> =
-wrote:
->
-> Add bpf_init_inode_xattr() kfunc for BPF LSM programs to atomically set
-> xattrs via the inode_init_security hook using lsm_get_xattr_slot(). The
-> hook now passes its xattr state as a single struct lsm_xattrs object,
-> which the kfunc takes directly.
->
-> The kfunc is only usable from lsm/inode_init_security programs: no other
-> hook exposes a struct lsm_xattrs argument, so the verifier rejects calls
-> from elsewhere. Restrict the xattr names that may be set via this kfunc
-> to the bpf.* namespace.
->
-> BPF reserves BPF_LSM_INODE_INIT_XATTRS slots via lbs_xattr_count, and the
-> kfunc enforces that BPF never consumes more slots than it reserved,
-> returning -ENOSPC once the budget is exhausted.
->
-> A previous attempt [1] required a kmalloc string output protocol for
-> the xattr name. Since commit 6bcdfd2cac55 ("security: Allow all LSMs to
-> provide xattrs for inode_init_security hook") [2], the xattr name is no
-> longer allocated; it is a static constant.
->
-> Link: https://kernsec.org/pipermail/linux-security-module-archive/2022-Oc=
-tober/034878.html [1]
-> Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
-commit/?id=3D6bcdfd2cac55 [2]
-> Signed-off-by: David Windsor <dwindsor@gmail.com>
+On 30/06/2026 2:33, Jakub Kicinski wrote:
+> We always used 5 sec as the default command timeout. But soon after
+> it was introduced, David effectively made us ignore the timeout
+> (it was passed to process.communicate() as the wrong argument).
+> Gal recently fixed that, but turns out the 5 sec is not enough
+> for a lot of tests and setups. The fix regressed regressions.
+> 
+> In particular running reconfig commands (e.g. XDP attach) on mlx5
+> with 32 rings and 9k MTU, on a heavily-debug-enabled kernel takes
+> more than 5 sec. The XDP installation command will time out after
+> 5 sec but since the sleeps in the kernel are non interruptible
+> the command finishes anyway, leaving the XDP program attached,
+> but with non-zero exit code. defer()ed cleanups are not installed,
+> breaking the environment for subsequent tests.
+> 
+> Since "install XDP" is a pretty normal command a "point fix"
+> does not seem appropriate. 32 rings is a fairly reasonable
+> config, too, so we should just increase the timeout to 20 sec.
+> 
+> There's no real reason behind the value of 20.
+> 
+> Fixes: 1cf270424218 ("net: selftest: add test for netdev netlink queue-get API")
+> Fixes: f0bd19316663 ("selftests: net: fix timeout passed as positional argument to communicate()")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 > ---
->  fs/bpf_fs_kfuncs.c      | 79 +++++++++++++++++++++++++++++++++++++++++
->  include/linux/bpf_lsm.h |  3 ++
->  kernel/bpf/bpf_lsm.c    |  1 +
->  security/bpf/hooks.c    |  1 +
->  4 files changed, 84 insertions(+)
->
-> diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
-> index 768aca2dc0f0..c4023c82f21e 100644
-> --- a/fs/bpf_fs_kfuncs.c
-> +++ b/fs/bpf_fs_kfuncs.c
-> @@ -10,6 +10,7 @@
->  #include <linux/fsnotify.h>
->  #include <linux/file.h>
->  #include <linux/kernfs.h>
-> +#include <linux/lsm_hooks.h>
->  #include <linux/mm.h>
->  #include <linux/xattr.h>
->
-> @@ -374,6 +375,83 @@ __bpf_kfunc struct inode *bpf_real_inode(struct dent=
-ry *dentry)
->         return d_real_inode(dentry);
->  }
->
-> +static int bpf_xattrs_used(const struct lsm_xattrs *ctx)
-> +{
-> +       const size_t prefix_len =3D sizeof(XATTR_BPF_LSM_SUFFIX) - 1;
-> +       unsigned int i, n =3D 0;
-> +
-> +       for (i =3D 0; i < ctx->xattr_count; i++) {
-> +               const char *name =3D ctx->xattrs[i].name;
-> +
-> +               if (name && !strncmp(name, XATTR_BPF_LSM_SUFFIX, prefix_l=
-en))
-> +                       n++;
-> +       }
-> +       return n;
-> +}
-> +
-> +/**
-> + * bpf_init_inode_xattr - set an xattr on a new inode from inode_init_se=
-curity
-> + * @xattrs: inode_init_security xattr state from the hook context
-> + * @name__str: xattr name (e.g., "bpf.file_label")
-> + * @value_p: dynptr containing the xattr value
-> + *
-> + * Only callable from lsm/inode_init_security programs.
-> + *
-> + * Return: 0 on success, negative error on failure.
-> + */
-> +__bpf_kfunc int bpf_init_inode_xattr(struct lsm_xattrs *xattrs,
-> +                                    const char *name__str,
-> +                                    const struct bpf_dynptr *value_p)
-> +{
-> +       struct bpf_dynptr_kern *value_ptr =3D (struct bpf_dynptr_kern *)v=
-alue_p;
-> +       size_t name_len;
-> +       void *xattr_value;
-> +       struct xattr *xattr;
-> +       const void *value;
-> +       u32 value_len;
-> +
-> +       if (!xattrs || !xattrs->xattrs || !name__str)
-> +               return -EINVAL;
-> +       if (bpf_xattrs_used(xattrs) >=3D BPF_LSM_INODE_INIT_XATTRS)
-> +               return -ENOSPC;
-> +
-> +       name_len =3D strlen(name__str);
-> +       if (name_len =3D=3D 0 || name_len > XATTR_NAME_MAX)
-> +               return -EINVAL;
-> +       if (strncmp(name__str, XATTR_BPF_LSM_SUFFIX,
-> +                   sizeof(XATTR_BPF_LSM_SUFFIX) - 1))
-> +               return -EPERM;
-> +
-> +       value_len =3D __bpf_dynptr_size(value_ptr);
-> +       if (value_len =3D=3D 0 || value_len > XATTR_SIZE_MAX)
-> +               return -EINVAL;
-> +
-> +       value =3D __bpf_dynptr_data(value_ptr, value_len);
-> +       if (!value)
-> +               return -EINVAL;
-> +
-> +       /* Combine xattr value + name into one allocation. */
-> +       xattr_value =3D kmalloc(value_len + name_len + 1, GFP_NOFS);
-> +       if (!xattr_value)
-> +               return -ENOMEM;
-> +
-> +       memcpy(xattr_value, value, value_len);
-> +       memcpy(xattr_value + value_len, name__str, name_len);
-> +       ((char *)xattr_value)[value_len + name_len] =3D '\0';
-> +
-> +       xattr =3D lsm_get_xattr_slot(xattrs);
-> +       if (!xattr) {
-> +               kfree(xattr_value);
-> +               return -ENOSPC;
-> +       }
-> +
-> +       xattr->value =3D xattr_value;
-> +       xattr->name =3D (const char *)xattr_value + value_len;
-> +       xattr->value_len =3D value_len;
-> +
-> +       return 0;
-> +}
+> CC: shuah@kernel.org
+> CC: petrm@nvidia.com
+> CC: leitao@debian.org
+> CC: dw@davidwei.uk
+> CC: noren@nvidia.com
+> CC: gal@nvidia.com
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/net/lib/py/utils.py | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
 
-This is not a generic VFS function, it is a LSM specific function, it
-belongs under security/, please move the code as discussed previously.
+Reviewed-by: Nimrod Oren <noren@nvidia.com>
 
---
-paul-moore.com
+> diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+> index 308c91833239..9b40049e2dbb 100644
+> --- a/tools/testing/selftests/net/lib/py/utils.py
+> +++ b/tools/testing/selftests/net/lib/py/utils.py
+> @@ -44,7 +44,7 @@ import time
+>      Use bkg() instead to run a command in the background.
+>      """
+>      def __init__(self, comm, shell=None, fail=True, expect_fail=False, ns=None,
+> -                 background=False, host=None, timeout=5, ksft_ready=None,
+> +                 background=False, host=None, timeout=20, ksft_ready=None,
+>                   ksft_wait=None):
+>          if ns:
+>              if hasattr(ns, 'user_ns_path'):
+> @@ -113,7 +113,7 @@ import time
+>  
+>          return stdout, stderr
+>  
+> -    def process(self, terminate=True, fail=None, expect_fail=False, timeout=5):
+> +    def process(self, terminate=True, fail=None, expect_fail=False, timeout=20):
+>          if fail is None:
+>              fail = not terminate
+>  
+
