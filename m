@@ -1,61 +1,63 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239B443D4FA
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 14:54:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D97822370A
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 14:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782831266; cv=none; b=VJX4iThE0S5UfFF8zmaT4OTUp4mirxQJ+KuCiX3HIfGD1Lgyeg4652rbqhE5EleOaRZpg51onMMyMbBSkgXX0nUiJuJadLcVVkxmadO73B+Thv+X3BgKS1u1JmBx/BRyyTq2aQn7biLCLAJLeyzWB8olIUVsB/F4vmJKNZdXoTA=
+	t=1782831272; cv=none; b=DiLK0vjoRYRX7c8v5CyHvSA5MKu72gFvP+JwpL+0UYKiRqea2A0SdzTcWYzQZ0w+CrdjEZY1N8G2pMxhvziDlH4zNbXMUglge/DH026wWO4A7Dgru+3IcBJe5B6RXmdQftmWuI1mRLp7gxs+4+pyFI8ny7/NsTkZBjR2ZgTTVNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782831266; c=relaxed/simple;
-	bh=mvMluMulz8TsazPI0k8zL2aMZtsqN5Gi7GN9fqtNkKE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DrIomC7hnagJxNa28ffwFT9kMVAuIfuv4gSiQ4YW0Z54miJfXkCfpa4kZ+T5xWCE2FwOx6yNHqISSAi23hEB3K7XNc/XhLZAlTNTziodmkNvgB4iE873DnxNZzrIeJnyfg/2u2xFEetFAEPX2QW/mhQP70Wdbfq30oGlGDN3z30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zo5H2nrT; arc=none smtp.client-ip=209.85.216.53
+	s=arc-20240116; t=1782831272; c=relaxed/simple;
+	bh=pl4s/6iqG4iSWxDnqowahuLLtVqCMT3nY7wajXCTXiA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=SsOF0/u7qi3/6ySmhPKy5xpwlC1IpqWiBWFiwYSxJIm94Fcn6L33gwDMWLF7LR7VXEydRW2u4CsX0LGzSBNjGThNbd/sepjZj2KEulZj/GpQOzD3nyviO7vcoPf+Np5v2HA2j/suVZNY9FNClKh9w+SAZPrmjoVdeJZiQZe8Gzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o6hsTLBS; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zo5H2nrT"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-37ff436a048so1282555a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 07:54:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o6hsTLBS"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-37f72212544so4358805a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 07:54:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782831264; x=1783436064; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=px0Wcp6VhD6xZWRvmlTtSAYT6tdeg+tqH+zTVPz9ZEg=;
-        b=Zo5H2nrTXqjMYGMdJPP50uZUExrQFXD75XRkt7ocVE6oac4J4tN2zkkf9h8s5ty3oK
-         xcKO3yH5g6VpqT92aZgPdQ81KxtbW4Mc86s9h75HzFqRZkmIgX7HZLdyqWf9kaDI+QRy
-         kslQlRdZIQY3AKaPbViHeYasYakmEJEpXzy+LAFPMXfLVgDphgMbu53cncAWEbPLiV6p
-         3zBglHAqZA9vq2XSUBos1c+YGOixmSDBe6USxnDxmsq99x4wOSbjTrCXvBdMxnUF4zyg
-         B8W8uXwQN+YJoMIW65UdV8fZQ39SMHU16WOSJW8apPnUwg1YxFLg0ePJLOOZBYNjUsMp
-         CzNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782831264; x=1783436064;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1782831270; x=1783436070; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=px0Wcp6VhD6xZWRvmlTtSAYT6tdeg+tqH+zTVPz9ZEg=;
-        b=GwLYQfU7sagztZYW5Por+MFFbNWarCMcTjP3C+Rfyf7qOTjOXGcwvWoW50FUlVaZJZ
-         7wFRpCFVtOZjC7raoaJxNY32wSDoQtZL5Rsibbb8a+ShkB/jiqx99DFaxqrLPxffGknM
-         cNDLJN3L8rZL7ta0BkPmORJrXcDq9THlFY32OCo1rWdtIheoowGVpta4+n6ZecBIHaEU
-         rT4zEgUomRqLpa5L5LwtexLBPLZgGFmuD18mMo1R3Avazs8Q8oaKXElNZDHeWDZd1hEs
-         ZkX8ZmyH7YFNtyYbEUllZ6vcdkf5zueCno+0MzYYyEU7uu9EwcFigRYYSv3ugqEJiDLP
-         i/1g==
-X-Forwarded-Encrypted: i=1; AHgh+RpeX4Xv0WDNdj9ZqM7l6byCcAgqNtpKCDGiiWFmU0pR1UuzcWVaVPkJfZMZvUFQCu5DZH1dGVFpSdGideCgkTM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFVHrQtlXPtzsRvPABE4DA6cO46k8K/tK+bYQQOj/JEQJYdoGW
-	Nb6dsIh63Ns5bDgHBFHxq1aVCnh4uKNH/E7izHd/0TmsZ/77jJR9zdUR
-X-Gm-Gg: AfdE7cnAJlje/NeDrUE5pjdagreGRfpdyx0pewsEte5ekePRb89fc58Fj6kuAmoGXGP
-	mw3yz8G8STvntiIsLoV73XA1CCQbmWvLtHvrEZeK3pXNivp8pnIiCrCc3P0o00gH+I0Uxkpu5Dr
-	UPgqL6QPzAbzuKDgOt/3frYreeCUZzl8O702yBb85ilL5ScpXnTNxW0OwtToBPV2zr6KkSEMirD
-	ASUwzFO589+YDqQflMFl54wOsbfqSAQcJ20Vuk9tHdACwnkWDsTFSva0Nt7MHa8I48I3g8F0oXw
-	0glepLoS87TEVPP8csM6GNfRvHE3Le2omBk+/GFOuRX3heqoBuGESiod9Gl66ByrEPDPXF0LltW
-	4yJVdGaOmBfRwPtJub5YsCBFRqp1ws6d/f1zmkDeR8vHVRyZpsftU66BZ4C/jVQIPgitlnpi1BV
-	HOV3LWtDRucKRNqh4X99w8JbLTuTN3yge/TmU6yLcZXqPUar6Ck0W88Ud3k/DAGQ==
-X-Received: by 2002:a17:90b:3c08:b0:368:78da:803 with SMTP id 98e67ed59e1d1-38052583a4emr2912925a91.12.1782831264127;
-        Tue, 30 Jun 2026 07:54:24 -0700 (PDT)
+        bh=Ggz9EBjbp7saeRSZLMYqE+cKP+mv7VKgG7WqG3xg4y4=;
+        b=o6hsTLBSx4Kr7qQlWoowecnZW6X34nK5jfp9LxOj2H9xf/5ikM9Ck4wytu0PbO368G
+         nEvftZ+DcoZmYuPU0Vw6S3JSUz9FhEQ/+FxIVJJtGyyeWR+a2SisTQhar99oqDBhPTw0
+         w/RTr/Wt70COEN0raSChw0gRDXFPp5X/WUE+I8lH7bL+Zdwzk+fbo+1eTYO6N2dKrjPz
+         6Yk1iKbQWOaEB2Tmniea0LPJkgZmM4XEXNTdZ87Ds8CQCjU1sieT6s+3x1VI1HNd5SLI
+         xJDdaRv9unuEoXXrNKB7zMhVZDLwlbWVqfkLq833AmNo2tKGkKgNiRpv56RlUUimva2T
+         UbXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782831270; x=1783436070;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Ggz9EBjbp7saeRSZLMYqE+cKP+mv7VKgG7WqG3xg4y4=;
+        b=pUvmMZZAEynuxEsC/SlFpr3RugBpOntjtsbuBg0Dwooy2KI+l61YahKV6n+rZbfp9M
+         wc9kZQ20sdXYIFJKAc2MCxzyU2suX3agW82BMoaXzZFPpuFlt99lK5FczTC1vo2Dkzf4
+         Rn9QoiLa8BhbAGYU4cBb1awR1PtLQ0PSqdPxRG31gLY+8LeBvMgkvDLT5+CB4y6htLEV
+         5lyXZbf7ROmEYAvOwCSycKsvn2LqSH/Sg1ySfx69AG2ga5IKWDiEHfslR2UIVU65PTQL
+         d6rIkl7SCKD1dUymBIuJy+PyAdq5R/le3kuXjElPIS7UnqYEDBd4jFZqXrErkxrb3g+v
+         t2hw==
+X-Forwarded-Encrypted: i=1; AHgh+RruLimA7EjnqHnhYJcdiA+bfRjldDXnAAZ2se9Vsf3YEbYY7VbEAyIjvR3rh4LOZ/4Ij8lvOj8m9gT2z/NlLl0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1Fa2SDvQzo/Gwj+5nItRRgtW3zXu1IL0TEzVvAZzkusE/RkQG
+	4kRsAyS4bwsTTBEb7ILUAGSVPBQ6IWuoRUjF/TssfikowqWpydiPsumY
+X-Gm-Gg: AfdE7clSrANEXNqxPCvWfw9S8+zWwB3AfXu53W43hIVBSH/ZhtywjZrBVWiMmQmm8rG
+	73+zubr1j63fHpH7lk23az0lVoB1qqz0zrZxMQXurtp4J/QLYOlD6fGygXy5Vlj5XA4OKHYA8sH
+	7GIo/AiDzGsozmQqA3ZXYU9DuvIxsK8GG/Y7fRr0+gtWFVI7oIAD05D6nDXDHB5g1wxjlPN7XGX
+	GLYFjAZDDSrZd3BKXjOp3iaqRYNQCHD3KEvKFVYGyWIk1iXNfXdednhaRvEUM2fUBttacgS4uPO
+	Bi2ifbOeiuY7btQ/C8YUnB66m/MAqdHdRQlq7jU9lLHkcX2cdnLjR+s5baaIq/gimV72kkq/fBp
+	3aq1NFOt/qcTEhjXKhTodXEWpC5LvLDusTi8gBp7uMlDknCQoZYJKUeofFmxMLj/bC3InQ+bpDe
+	fGNuqtNYGEqFRa9qiIz3IOoM8SPbYfw2aFej0eXylcebHVOlv6ikQ=
+X-Received: by 2002:a17:90b:3dce:b0:37f:9ce1:cdb1 with SMTP id 98e67ed59e1d1-3808c1035e3mr705579a91.31.1782831270257;
+        Tue, 30 Jun 2026 07:54:30 -0700 (PDT)
 Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38095b684basm20122a91.1.2026.06.30.07.54.17
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38095b684basm20122a91.1.2026.06.30.07.54.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 07:54:23 -0700 (PDT)
+        Tue, 30 Jun 2026 07:54:29 -0700 (PDT)
 From: Sechang Lim <rhkrqnwk98@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -80,10 +82,12 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v4 0/2] bpf, sockmap: disallow sockmap mutation from tc, xdp, socket_filter and flow_dissector
-Date: Tue, 30 Jun 2026 14:54:04 +0000
-Message-ID: <20260630145410.3648099-1-rhkrqnwk98@gmail.com>
+Subject: [PATCH bpf-next v4 1/2] bpf, sockmap: disallow update and delete from tc, xdp, socket_filter and flow_dissector
+Date: Tue, 30 Jun 2026 14:54:05 +0000
+Message-ID: <20260630145410.3648099-2-rhkrqnwk98@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260630145410.3648099-1-rhkrqnwk98@gmail.com>
+References: <20260630145410.3648099-1-rhkrqnwk98@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,39 +96,84 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A tc, xdp, socket_filter or flow_dissector program updating or deleting
-a sockmap deadlocks on stab->lock vs sk_callback_lock and has no reason
-to. Patch 1 disallows it in may_update_sockmap(); patch 2 drops the
-selftests that exercised it.
+sock_map_update_common() and __sock_map_delete() hold stab->lock and call
+sock_map_unref() -> sock_map_del_link(), which takes sk_callback_lock for
+write. That gives the order stab->lock -> sk_callback_lock.
 
-v4:
- - also drop BPF_PROG_TYPE_SOCKET_FILTER (John Fastabend)
+The reverse order comes from the SK_SKB stream parser.
+sk_psock_strp_data_ready() holds sk_callback_lock for read, and after the
+verdict tcp_bpf_strp_read_sock() acks the consumed data inline via
+__tcp_cleanup_rbuf(). The ACK goes out egress, where a sched_cls program
+deletes from the sockmap and takes stab->lock:
 
-v3:
- - https://lore.kernel.org/all/20260629172704.1302218-1-rhkrqnwk98@gmail.com/
+  WARNING: possible circular locking dependency detected
+  ------------------------------------------------------
+  syz.9.8824 is trying to acquire lock:
+  (&stab->lock){+.-.}-{3:3}, at: __sock_map_delete net/core/sock_map.c:421
+  but task is already holding lock:
+  (clock-AF_INET){++.-}-{3:3}, at: sk_psock_strp_data_ready net/core/skmsg.c:1173
 
-v2:
- - https://lore.kernel.org/all/20260620034632.2308-1-rhkrqnwk98@gmail.com/
+  -> #1 (clock-AF_INET){++.-}-{3:3}:
+         _raw_write_lock_bh
+         sock_map_del_link net/core/sock_map.c:167
+         sock_map_unref net/core/sock_map.c:184
+         sock_map_update_common net/core/sock_map.c:509
+         sock_map_update_elem_sys net/core/sock_map.c:588
+         map_update_elem kernel/bpf/syscall.c:1805
 
-v1:
- - https://lore.kernel.org/all/20260616091153.2966617-1-rhkrqnwk98@gmail.com/
+  -> #0 (&stab->lock){+.-.}-{3:3}:
+         _raw_spin_lock_bh
+         __sock_map_delete net/core/sock_map.c:421
+         sock_map_delete_elem net/core/sock_map.c:452
+         bpf_prog_06044d24140080b6
+         tcx_run net/core/dev.c:4451
+         sch_handle_egress net/core/dev.c:4541
+         __dev_queue_xmit net/core/dev.c:4808
+         ...
+         tcp_bpf_strp_read_sock net/ipv4/tcp_bpf.c:701
+         strp_data_ready net/strparser/strparser.c:402
+         sk_psock_strp_data_ready net/core/skmsg.c:1174
+         tcp_data_queue net/ipv4/tcp_input.c:5661
 
-Sechang Lim (2):
-  bpf, sockmap: disallow update and delete from tc, xdp, socket_filter
-    and flow_dissector
-  selftests/bpf: drop tc/xdp/flow_dissector/socket_filter sockmap
-    mutation tests
+  Possible unsafe locking scenario:
 
- kernel/bpf/verifier.c                         |  5 --
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 13 -----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 52 -------------------
- .../bpf/progs/freplace_cls_redirect.c         | 34 ------------
- .../selftests/bpf/progs/test_sockmap_update.c | 48 -----------------
- .../bpf/progs/verifier_sockmap_mutate.c       | 12 ++---
- 6 files changed, 6 insertions(+), 158 deletions(-)
- delete mode 100644 tools/testing/selftests/bpf/progs/freplace_cls_redirect.c
- delete mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_update.c
+         CPU0                    CPU1
+         ----                    ----
+    rlock(clock-AF_INET);
+                                 lock(&stab->lock);
+                                 lock(clock-AF_INET);
+    lock(&stab->lock);
 
+   *** DEADLOCK ***
+
+A tc, xdp, socket_filter or flow_dissector program has no reason to
+update or delete a sockmap, and redirect does not go through here. Drop
+them from may_update_sockmap() so the verifier rejects it. It also
+closes the matching sockhash inversion.
+
+Suggested-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+---
+ kernel/bpf/verifier.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 25aea4271cd0..83ea3b33ff67 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -8488,12 +8488,7 @@ static bool may_update_sockmap(struct bpf_verifier_env *env, int func_id)
+ 		if (func_id == BPF_FUNC_map_delete_elem)
+ 			return true;
+ 		break;
+-	case BPF_PROG_TYPE_SOCKET_FILTER:
+-	case BPF_PROG_TYPE_SCHED_CLS:
+-	case BPF_PROG_TYPE_SCHED_ACT:
+-	case BPF_PROG_TYPE_XDP:
+ 	case BPF_PROG_TYPE_SK_REUSEPORT:
+-	case BPF_PROG_TYPE_FLOW_DISSECTOR:
+ 	case BPF_PROG_TYPE_SK_LOOKUP:
+ 		return true;
+ 	default:
 -- 
 2.43.0
 
