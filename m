@@ -1,94 +1,166 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47E0E2980A8;
-	Tue, 30 Jun 2026 08:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7EF8382290;
+	Tue, 30 Jun 2026 09:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782809996; cv=none; b=LuGGUiVxwrzFiq6XJ9SZK+/I8IfXwNjyEC7L+6CJ0la+XEKSI7nYcMhSU5dvCfDKP2NV3ui1AevEUppm0z2cWKsBCbT6Zl1LGzGcmAb8N0GFAxTEOdFw5owBe4vU+7/hjMDvjBdRyvUAOsisu1LW0zm8ExCXPWeJBT7FfD1j7AM=
+	t=1782811996; cv=none; b=sHkjmu83Ve+/Ihv9gZEaIvcBoxGunrML09pajknv9XG74vAEK/hGajLstfB/n3yS6cSZcEeljaMdmKx7+uLD72T3SuEZhN8BLpqDmtHl8J/IWasiYWgO2Y4Vc564GLw/jwBMucGkG5QscfNDrdkCfuaBcyYP0DqVDNHG+4TsIOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782809996; c=relaxed/simple;
-	bh=3AqJp5i7XIK+jRB+gWzzbQTkxN1da8ybVT+nch5RbIk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MXJdaLcD9JscYyU1W81PRWMZcxZ9Qf6dTFJuhXqEwLRzB3bKJBT9hG2op7bvVuik3qDR8if5qoYlpKRlh2u8qbRPTgkL0lLhTc3lT7M8xz3BcVXWJ0YO/sK97bAIfZMSmxokJpEDmBfrLehdqVT4hbbZO4sO0IUQQDQQU/Oj6lQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=efH2a60X; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1782811996; c=relaxed/simple;
+	bh=R80YOGQyD16qHqCbRdw6pZbD8Au7QEJAnxR/JZfo57k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WUHBUZIT5VlupPufO70cQp+dtf46NSnB4p6bih3tLnNl17V3SqRqcAkGyLCqLfUVIDZAPeSmFVTAxOEs3EaNr7DXhfFmtaR3OzN6xDKsPS6n8P402FNPKMKwq33E4X4QHrqFMCzdxsAh754vqxTNcXbPlZ58BQFjXbNp+ygQ078=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lfXw4+sK; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="efH2a60X"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E31FD2C1C;
-	Tue, 30 Jun 2026 01:59:48 -0700 (PDT)
-Received: from [10.164.19.15] (unknown [10.164.19.15])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8055D3F905;
-	Tue, 30 Jun 2026 01:59:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1782809993; bh=3AqJp5i7XIK+jRB+gWzzbQTkxN1da8ybVT+nch5RbIk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=efH2a60XTMLqXCin030aJfgiBIrLDjzaEAGTvIuHMIxezgFdlj/vhszDkAoTvyvr9
-	 SuuU8ohtWyZDhewEGi60YBBMw8nakSWsmsr+eNWPayC7fveSjZuZlobeLjNTC8V/Ig
-	 pA/O46kRhBqwq5NjpKC99EwbVh5wWlc+np71zIeo=
-Message-ID: <5d72fce2-5acf-44ce-bf5e-3ee74611c6e5@arm.com>
-Date: Tue, 30 Jun 2026 14:29:46 +0530
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lfXw4+sK"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65U5mD451137062;
+	Tue, 30 Jun 2026 09:32:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=D8Xum+/XKl8zuM90nMa1ZrI3HjGlq/7zbVgI4GO/d
+	ys=; b=lfXw4+sKDRkVo+yZf75uJXb6Yx6FSRAoMkVzN+fSqX5sSjqD1dqcYpxzb
+	FH82lEG6x3wfot5KAhHvVIlaTTCBFlqk4LuLzG5EjK2kJ7kBBm4MZEawlXYpAcnd
+	Lc3lQ86eqfViEDL81KlepwRp5LIN9gUS9xf0i1s80Qtd6Z3kE1fT99QdsxFuifvP
+	cqWHq0icMrGIhKn0Z7mgqAE9HmcMxot6zTWQW1vX58OrsZljFG0E5EvZb1FFa0p1
+	7DP3/JXy1OB48AIIFSbllHmVikeBvYAi2qNXEZr8Eu3BdQE/QL8UNDPgAyoReYMv
+	ySeOw/B9yha9KAQDe738DAnhW5Lng==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4f26n5nxmc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Jun 2026 09:32:52 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65U9Jg64008817;
+	Tue, 30 Jun 2026 09:32:51 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4f2ruq9nsu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Jun 2026 09:32:51 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65U9Wm4E59703592
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 30 Jun 2026 09:32:48 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 29F5D20043;
+	Tue, 30 Jun 2026 09:32:48 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EAE4920040;
+	Tue, 30 Jun 2026 09:32:43 +0000 (GMT)
+Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.ibm.com.com (unknown [9.39.22.200])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 30 Jun 2026 09:32:43 +0000 (GMT)
+From: Sayali Patil <sayalip@linux.ibm.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
+        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
+        linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
+        Sayali Patil <sayalip@linux.ibm.com>
+Subject: [PATCH v2 0/3] selftests/mm: avoid false failures in hugetlb and KSM tests
+Date: Tue, 30 Jun 2026 15:02:32 +0530
+Message-ID: <cover.1782811071.git.sayalip@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: hmm-tests: include linux/mman.h to access
- MADV_COLLAPSE
-To: Zenghui Yu <zenghui.yu@linux.dev>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: jgg@ziepe.ca, leon@kernel.org, akpm@linux-foundation.org,
- david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org
-References: <20260628143111.36863-1-zenghui.yu@linux.dev>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <20260628143111.36863-1-zenghui.yu@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjMwMDA4MyBTYWx0ZWRfXy+goAH0TvE1k
+ dfbVd+MWgW4+3teakz3eH/cFcTfeDvfr339/fZD0qX4NglDCWZKNFd50QHSkjJPbVA4mKIGKiQh
+ SL7hnOnqoc8c16NT1araFZMDufPWiQ09sF+1xmXL8wyqfPaJaN4WU8sneXJJmKi2go4y6CbyUpk
+ OAxfDAIocMBzGvNT7LbqXT2w1o4jjoKB+9OQn7kCkiA5EAg6FguedYBjv7upZ78lzVp02AJBQYb
+ pa8zZByKgf2R5tc4WcaOnPYrmHTGXgn8AoltbnVPSO4m68uDMy3JnLFBp8CIaAyA2xpanQiSkcd
+ B8fkiSshTwwl7k3CKCEN7hGT1cEVyGrotdTrPUVCS+thCWliUpPfgzFpd6VN4G5C37DZjdaiocM
+ vZkYaIjpWH31IZ0o1MFauXWc1Cy4JyHfgmqwWl6AeacOVZACAtbwnSEh7dCpMz4SIkkUzX3dwwW
+ dhaCYaXTTCzAWRMHMAA==
+X-Authority-Analysis: v=2.4 cv=V45NF+ni c=1 sm=1 tr=0 ts=6a438d45 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=_V4-DM0ed6H3iwi1ae8A:9
+X-Proofpoint-ORIG-GUID: sWru1B2hQQYViISMjebu6H-eIuuJ2fJd
+X-Proofpoint-GUID: ggRZ1wWx35-VpUVVZk4dSDPgik26JuYV
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjMwMDA4MyBTYWx0ZWRfXzVAooNWIk4RR
+ 15AfbStBvgsQaDxH97Z1TZ0BXl7i4mUJTyzDu5OGb7tXHyHNExLTeIO+17rwTTRu40wTNPsYy6L
+ Ewiw+hr6ijfQOYzwGuTI26aXttKkv9w=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-30_02,2026-06-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0 priorityscore=1501
+ adultscore=0 clxscore=1015 impostorscore=0 malwarescore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606300083
 
+Hi all,
 
+This series fixes issues in the hugetlb and KSM MM selftest categories
+that can report failures when the prerequisites for the tests are not
+satisfied.
 
-On 28/06/26 8:01 pm, Zenghui Yu wrote:
-> The following compilation error occurs with an old version of glibc due to
-> a recent commit adding MADV_COLLAPSE testing:
-> 
->  [root@localhost mm]# getconf GNU_LIBC_VERSION
->  glibc 2.34
->  [root@localhost mm]# make
->    CC       hmm-tests
->  hmm-tests.c: In function 'hmm_migrate_anon_huge_fault':
->  hmm-tests.c:2355:27: error: 'MADV_COLLAPSE' undeclared (first use in this function); did you mean 'MADV_COLD'?
->   2355 |  ret = madvise(map, size, MADV_COLLAPSE);
->        |                           ^~~~~~~~~~~~~
->        |                           MADV_COLD
->  hmm-tests.c:2355:27: note: each undeclared identifier is reported only once for each function it appears in
->  make: *** [../lib.mk:225: /root/code/linux/tools/testing/selftests/mm/hmm-tests] Error 1
-> 
-> Include linux/mman.h (which provides the definition of MADV_COLLAPSE) to
-> fix the build error.
-> 
-> Fixes: e3d8707358ea ("selftests/mm/hmm-tests: test pagemap reads of PMD device-private entries")
-> Signed-off-by: Zenghui Yu <zenghui.yu@linux.dev>
-> ---
+Patch 1 updates the hugetlb selftest helpers to handle -EINVAL when
+attempting to configure gigantic HugeTLB pages via nr_hugepages. 
+PowerPC hash MMU pSeries systems expose gigantic hugepage sizes 
+but do not allow runtime allocation of such pages,
+causing the sysfs write to fail. Handle this case gracefully and
+continue running the test instead of aborting.
 
-Reviewed-by: Dev Jain <dev.jain@arm.com>
+Patch 2 fixes the KSM NUMA merge test on systems with memoryless NUMA
+nodes. The test currently relies on the number of configured NUMA nodes
+and may attempt allocations on nodes that have no memory, resulting in
+spurious failures. Use the existing helpers to identify
+NUMA nodes that contain memory and skip the test when fewer than two
+such nodes are available.
 
->  tools/testing/selftests/mm/hmm-tests.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
-> index e4c49699f3f7..2f2b9879d100 100644
-> --- a/tools/testing/selftests/mm/hmm-tests.c
-> +++ b/tools/testing/selftests/mm/hmm-tests.c
-> @@ -23,6 +23,7 @@
->  #include <time.h>
->  #include <pthread.h>
->  #include <limits.h>
-> +#include <linux/mman.h>
->  #include <sys/types.h>
->  #include <sys/stat.h>
->  #include <sys/mman.h>
+Patch 3 fixes a pre-existing operator precedence issue in ksm_tests,
+where a ternary expression combined with logical OR operators could be
+evaluated differently than intended. Added parentheses to ensure the
+correct evaluation order.
+
+These changes improve handling of unsupported test configurations and
+unmet test prerequisites, avoiding spurious failures.
+
+Thanks,
+Sayali
+---
+
+V1 -> V2:
+- For "selftests/mm: handle EINVAL when configuring gigantic hugepages":
+  Added a dedicated hugetlb_write_num() helper to handle the expected EINVAL
+  returned by gigantic hugepage configuration, in the 
+  hugepage setup code rather than modifying the generic write_file() helper.
+- For "selftests/mm: fix ksm NUMA merge test for systems with memoryless NUMA nodes":
+  Updated implementation as per David's review comment to build upon 
+  existing helpers get_next_mem_node().
+- Added new patch "selftests/mm: fix ternary operator precedence in ksm_tests"
+  to address a pre-existing issue identified during Sahiko's review.
+
+V1: https://lore.kernel.org/all/cover.1782365671.git.sayalip@linux.ibm.com/
+
+---
+
+Sayali Patil (3):
+  selftests/mm: handle EINVAL when configuring gigantic hugepages
+  selftests/mm: fix ksm NUMA merge test for systems with memoryless NUMA
+    nodes
+  selftests/mm: fix ternary operator precedence in ksm_tests
+
+ .../testing/selftests/mm/hugepage_settings.c  | 32 ++++++++++++++++++-
+ .../testing/selftests/mm/hugepage_settings.h  |  1 +
+ tools/testing/selftests/mm/ksm_tests.c        | 28 ++++++++--------
+ 3 files changed, 47 insertions(+), 14 deletions(-)
+
+-- 
+2.52.0
 
