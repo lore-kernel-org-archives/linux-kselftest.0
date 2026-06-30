@@ -1,52 +1,71 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CA3D3ED13E;
-	Tue, 30 Jun 2026 10:13:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275433ED105
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 10:22:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782814390; cv=none; b=M8o3edt7zecUFrWrfStn2l78QXOe/MlryX6tzGbcI3OUFbEUZUewH7rl36dhHyWSVjGSXkiSEskNYQiLWrrJ2oRD63SSKpxfx51ooFGJTj3L8l0TZ3KVI3FqvfMfBy3VTjQqkFMMWSrknCO+OxVeG9qKgVsnctebzWgSco/TaPQ=
+	t=1782814935; cv=none; b=NJT9FI+/cJSR/Oa3jHg/sWR0M1F/GsrkdKFV2qGwOx0SpB3/FIIRnj/iiJI1TEcnrO+fiKyHqJfP1hy9ZoTji/eoLVlOpshAtc4hO4Kw12IhqWzJ1cCXhL44vKIP5jiJdYoMphEC9vzv2kcXa08zfUazzQ3YZ6B2VJAJrhwm9jI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782814390; c=relaxed/simple;
-	bh=zc1xQmsmBHsJi4ZFND+KX9b4FpFMT+MbuJwV7MHnugY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Upq1nnLuo3nedX+T/I6v79nSsCCamPAIYJBONxHkj43acdbKIBSwXK3ZsbP4jOCOiyOTToNlYLMl9TA+6JW8CsuBXqjBUXrktT5X8hq4STVVqAjelUzrZ3zlwvT07GFOv5Ie05gVUK+NLbfnbU+s5aJ1Lmpd/GOUX8dFVsSDWXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=ObWX+cqS; arc=none smtp.client-ip=207.46.229.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1782814935; c=relaxed/simple;
+	bh=3B4mgEkMMg1k+RH7odWpE7epbKwExfi7ZwW6SF4mnhw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fP13x6HKCLzL9+kB2BDX8bUm2sVymOdVohHNDnjZHpx/Do5WVMvN18c3PJLIHVfO0is0KrIqqy00IKBc8xvN8cUpm2lgSbJvZfGWD9lVSW6dLYP24qZdmPI8dFdlrMTwzxWweloJy7nfGgMEoJjYetOyEQq+vHVuPG6K6ShvfRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ilETqyQe; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="ObWX+cqS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ilETqyQe"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2c825c88744so26246815ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 03:22:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=oL/C1uCD3DxHjdBVwzs2ZTvbPEkHoXdCkC
-	gsaeoqEdw=; b=ObWX+cqS/GunePXwqRRqbnsgtKwIRZ2B4kX3OS+CT85IWnHBPf
-	qVP6ATPe9sOFAmraRtDFZNnCS3SJDw//6srJaXHrn7Hk2fER7T94vNUywCd2G7lZ
-	NuKuAPdhr9ZoYfgzHBqjcclswl8qo+ODXMmCkXcsPfSDasYeE8cldAc5w=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web2 (Coremail) with SMTP id yQQGZQD3z5eGlkNqxZukAg--.37667S4;
-	Tue, 30 Jun 2026 18:12:49 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Cover scalar arena frees below the base
-Date: Tue, 30 Jun 2026 10:12:20 +0000
-Message-Id: <e4226ac143315bb584dfedc79693ccf813ac56b0.1782813442.git.chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1782813442.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1782813442.git.chenyy23@mails.tsinghua.edu.cn>
+        d=gmail.com; s=20251104; t=1782814933; x=1783419733; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/t9kcr2j0sJat9b7E1mstFc45YE/VNCBoHjz8KUyS8Y=;
+        b=ilETqyQeYMMc6wd3zO9se+Y8+lxLjXTyQDc6FfgiQnmQR58T+oNy5CBfQL2zaog1mz
+         hoxBeb8WdGJANiH9vNAmrUOEBbxtRhe/568qTG4vrwuMK1xOhfAqdUWQ723Cc9K7g7aF
+         U3jCufWY/y1nkT6xH5PKyYYAHz0KUikRNRMmbnUXF8rYX6n1jI7Iev21Xfx8BvUhqyEv
+         6KMhLT6riQXecUh1P2z8WqLLa5Lk3MUzpTzDqOXN4UsmoRiWofEwzAu81KrVgKV0ErSx
+         acYf1gaU4bHCLQaX6xafuxQAGtTKxwi83bejOQuIyakxRzgd7yEazbqZASdRPEtmUhA/
+         3hkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782814933; x=1783419733;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/t9kcr2j0sJat9b7E1mstFc45YE/VNCBoHjz8KUyS8Y=;
+        b=sIQ/2sWE9etXDdPOQ/AnSkGnEBkdWegO0M9ODYsnC9MbiCR5E6aDFvlXHpZztfWf4M
+         d/LcJ2+N1v+2x8W6No6KiG9/1TGev6dCwm4zhEiWOOvbD4H9yUGjL50M46oy5ri+sOAq
+         X4D810kRmVKjFJ05W0UFECg1rPtNlClE3s+q802yK0/rMX9S6kY8WwTSmciG/hBA2yMs
+         9MvlGBkdbuXThfjPQzFhKGATNwT46hNsSphmUFdBMkb3ym3JNeotapYqYsBHvHZTwlI1
+         CQX3QK5FOOj3xYA6+PmRymTlyxgjYK8q3B22xOJCw4+00CVH27j0brfYY7C6b0Ks/nzX
+         S0FQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrVKF/T7Xc/nFOEfJQSDJyIY48n0zYgWBtFeN4Bgv14D9T1vL7cxNCYK7QZ53oyiYUOBWfvnRSEwRHzlsvXBFk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqOCJ8zvsUbYx6jfS1FJiNi0L4QdmAs6EajtlEhT4OBetMOqRv
+	7oWJ/TjVJuq0yJ7Kzcf0LW3x+xXa9MHhmN25x5DXT9ItBidWMHygV6r0
+X-Gm-Gg: AfdE7clUTDfrB7kGY9z4HY9PZH6B1G3dBm7nO/AXpBDWY1wZ03d64Sv8OIw4vVl6FeW
+	9CTSNAKJV5qHyITHbMqgQZ+TGWNXCd7OgeyDpgv3bTJYpUfQDbZPkjcxAf5U1FSOKmQ8VPfo7zR
+	C7UKXFTeXwKhgA93HPB8hy37pcdVW6kmDMT7ui8OPS1Hssk20uzCQJFny8Z43SYjyCkE6A7oAuJ
+	ZbOCMK2t+PGAaTmIwfF8N0a2BTp6tJIf6T1QiLbL/tPf1OS7NcQ998lt0B2XIT9zcZRmf8A5k8M
+	QEWVHVYav1D4SlqJGsF2xfN6MTLWhLV70e7sOINlb3apnmTsydVqKoFrz09rBLzL++Tm6lW673f
+	LitsicUGmNqC/y8yQL7hlCfKZr3xFx6R5kd+ja1VV9cl1pXQd1J16F+sJln1Sk7fCXpxYOep9cA
+	pNM4+D
+X-Received: by 2002:a17:903:234d:b0:2c9:a9c0:80b6 with SMTP id d9443c01a7336-2ca2ea10374mr23824275ad.34.1782814933036;
+        Tue, 30 Jun 2026 03:22:13 -0700 (PDT)
+Received: from houminxi ([166.0.188.190])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca37c7456bsm10696285ad.25.2026.06.30.03.22.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2026 03:22:12 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Minxi Hou <houminxi@gmail.com>,
+	aconole@redhat.com,
+	echaudro@redhat.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v2] selftests/net/openvswitch: add output truncation test
+Date: Tue, 30 Jun 2026 18:22:08 +0800
+Message-ID: <20260630102208.29140-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,101 +73,108 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yQQGZQD3z5eGlkNqxZukAg--.37667S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw47uFWfXryrJr1fXr1rtFb_yoW5JF4xpa
-	yIg3s0yayrJry7urWfCa4DuF1ruanavr4Uua1j934IvrsxXr97tr4IkF15JF13WrZ8ZFWF
-	gr42qa1fCF4UA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAa
-	c4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
-	Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
-	6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxw
-	ACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE14v_Gw1l
-	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F
-	4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-	6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOo7NUUUUU
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Add a verifier_arena case that fills a two-page arena, calls
-bpf_arena_free_pages() with a scalar address one page below the arena
-base, and then verifies that another allocation is still rejected.
+Add test_trunc exercising the OVS_ACTION_ATTR_TRUNC action. The test
+verifies truncation in three steps: first confirm normal forwarding
+works, then apply trunc(14) which truncates packets to the Ethernet
+header and verify ping fails, then restore normal forwarding and
+verify connectivity recovers.
 
-Before the runtime guard, the invalid free can repopulate the free
-tree with an out-of-domain offset and the final allocation succeeds.
+The trunc action sets OVS_CB(skb)->cutlen, causing pskb_trim at
+output time. With trunc(14) the IP payload is stripped, so the
+receiver drops the frame and ICMP echo reply is never generated.
 
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Signed-off-by: Minxi Hou <houminxi@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_arena.c      | 41 ++++++++++++++++---
- 1 file changed, 36 insertions(+), 5 deletions(-)
+ .../selftests/net/openvswitch/openvswitch.sh  | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index 62e282f4448aa..b4bd134646607 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -12,15 +12,17 @@
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index 2954245129a2..fef21eb4a129 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -32,6 +32,7 @@ tests="
+ 	dec_ttl					ttl: dec_ttl decrements IP TTL
+ 	flow_set				flow-set: Flow modify
+ 	action_set				set: SET action rewrites fields
++	trunc					trunc: output truncation
+ 	psample					psample: Sampling packets with psample"
  
- #define private(name) SEC(".bss." #name) __hidden __attribute__((aligned(8)))
- 
-+#ifdef __TARGET_ARCH_arm64
-+#define ARENA_VM_START ((1ull << 32) | (~0u - __PAGE_SIZE * 2 + 1))
-+#else
-+#define ARENA_VM_START ((1ull << 44) | (~0u - __PAGE_SIZE * 2 + 1))
-+#endif
-+
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARENA);
- 	__uint(map_flags, BPF_F_MMAPABLE);
- 	__uint(max_entries, 2); /* arena of two pages close to 32-bit boundary*/
--#ifdef __TARGET_ARCH_arm64
--        __ulong(map_extra, (1ull << 32) | (~0u - __PAGE_SIZE * 2 + 1)); /* start of mmap() region */
--#else
--        __ulong(map_extra, (1ull << 44) | (~0u - __PAGE_SIZE * 2 + 1)); /* start of mmap() region */
--#endif
-+	__ulong(map_extra, ARENA_VM_START); /* start of mmap() region */
- } arena SEC(".maps");
- 
- SEC("socket")
-@@ -93,6 +95,35 @@ int basic_alloc1(void *ctx)
- 	return 0;
+ info() {
+@@ -443,6 +444,71 @@ test_action_set() {
+ 	return 0
  }
  
-+SEC("syscall")
-+__success __retval(0)
-+int free_scalar_below_arena(void *ctx)
-+{
-+	void __arena *page1, *page2, *page3;
-+	__u64 bad_addr = ARENA_VM_START - __PAGE_SIZE;
++test_trunc() {
++	sbx_add "test_trunc" || return $?
++	ovs_add_dp "test_trunc" trunctest || return 1
 +
-+	page1 = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (!page1)
-+		return 1;
++	info "create namespaces"
++	for ns in client server; do
++		ovs_add_netns_and_veths "test_trunc" "trunctest" "$ns" \
++			"${ns:0:1}0" "${ns:0:1}1" || return 1
++	done
 +
-+	page2 = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (!page2)
-+		return 2;
++	ip netns exec client ip addr add 10.0.0.1/24 dev c1
++	ip netns exec client ip link set c1 up
++	ip netns exec server ip addr add 10.0.0.2/24 dev s1
++	ip netns exec server ip link set s1 up
 +
-+	page3 = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (page3)
-+		return 3;
++	ovs_add_flow "test_trunc" trunctest \
++		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
++	ovs_add_flow "test_trunc" trunctest \
++		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
 +
-+	asm volatile("" : "+r"(bad_addr));
-+	bpf_arena_free_pages(&arena, (void __arena *)bad_addr, 1);
++	ovs_add_flow "test_trunc" trunctest \
++		'in_port(1),eth(),eth_type(0x0800),ipv4()' '2' || return 1
++	ovs_add_flow "test_trunc" trunctest \
++		'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return 1
 +
-+	page3 = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (page3)
-+		return 4;
++	info "verify connectivity without truncation"
++	ovs_sbx "test_trunc" ip netns exec client ping -c 1 -W 2 \
++		10.0.0.2 || return 1
 +
-+	return 0;
++	ovs_del_flows "test_trunc" trunctest
++	ovs_add_flow "test_trunc" trunctest \
++		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
++	ovs_add_flow "test_trunc" trunctest \
++		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
++
++	info "add truncated forwarding flow"
++	ovs_add_flow "test_trunc" trunctest \
++		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
++		'trunc(14),2' || return 1
++	ovs_add_flow "test_trunc" trunctest \
++		'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return 1
++
++	info "verify ping fails with truncation"
++	ovs_sbx "test_trunc" ip netns exec client ping -c 1 -W 2 \
++		10.0.0.2 >/dev/null 2>&1 \
++		&& { info "FAIL: ping should fail with trunc(14)"
++		     return 1; }
++
++	ovs_del_flows "test_trunc" trunctest
++	ovs_add_flow "test_trunc" trunctest \
++		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
++	ovs_add_flow "test_trunc" trunctest \
++		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
++	ovs_add_flow "test_trunc" trunctest \
++		'in_port(1),eth(),eth_type(0x0800),ipv4()' '2' || return 1
++	ovs_add_flow "test_trunc" trunctest \
++		'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return 1
++
++	info "verify connectivity restored without truncation"
++	ovs_sbx "test_trunc" ip netns exec client ping -c 1 -W 2 \
++		10.0.0.2 || return 1
++
++	return 0
 +}
 +
- SEC("socket")
- __success __retval(0)
- int basic_alloc2_nosleep(void *ctx)
+ # psample test
+ # - use psample to observe packets
+ test_psample() {
+
+base-commit: cef9d6804030793cf8b8796fd6936197d065dd3e
 -- 
-2.34.1
+2.54.0
 
