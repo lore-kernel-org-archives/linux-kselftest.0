@@ -1,137 +1,97 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424093C943F
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 10:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BB4D3EB10F;
+	Tue, 30 Jun 2026 10:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782814289; cv=none; b=ld/NSVNaR327JkWghJrdEhDoykQ4vSJwoxshFXPySTtwdEq45+vNHWY9MwemVrYhKzk6uMlzSdrOhB82NkPN5R2Y6fDAxNEZ+voMt/sXL3pw2m/gGanZAOM28kA1ZnG6ycuaiOqSuh3Jd53jOwTTo1bYxCOOlMuLy7Q2QPl9Sus=
+	t=1782814382; cv=none; b=ui/Y1pebnIsNOeHE6E9cxuXemkb2jVRRYOZUmBELaiG+iuJcglPPtGv/HDCyuSUkMH3SWrbeM/aakRKjDbiHQ1ft2lvjoETEn1mIXEtbAZ0vTmYxeQ3zUXncjiYMTqXr+smrcXwvBvfK/TZ4WG6JiigFVzDMjrqamXfTgmaz54o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782814289; c=relaxed/simple;
-	bh=S7AI+YFxLu2eH+drottiu3LDKyfzmbZsb6AyqgvPOSE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vx8H9SboWfOMnM1Rz2+5x7Iq8Hs4jEVCU1zIoe00j2zatHMZxYDcEjl7oyKEg9GFlG1HyIqNSyJpYVem1Ms+ZhBJ7cDQC0KKmxzKt3CSnlVTff81QOEAN+bwBNk4R7LsN5p8f6/Am4ZAC+f8xpOsztCYfCkGtiuzo4wIjGf3u5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X4BeYHAO; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=IW16Uj/m; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782814382; c=relaxed/simple;
+	bh=eA3bXjTF6F+3nD2VnPOck/hFRANZj1VbTZPf5V6Ecwo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pv6kRdUc/Tgj7rUeMjbxLUlFdMNx4QUcYI5izez9XPI3JqeOp/XmfwCO6wHw0EPVDAkkDxSIfXCwaGMY9v7D6+3fuZBdfGn1BZ8rBCpN7PF5ya6TMkIOfvSUrliUgveDkXDS7l+aMtdoWe0bEuP7FhsBkcIJZVPftvTpVphhlg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=XoJny02D; arc=none smtp.client-ip=13.75.44.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X4BeYHAO";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="IW16Uj/m"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782814287;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KAnQNF/BG2hzcnpQlhZdj2/19/pQbi7MYSIKu9RdeiU=;
-	b=X4BeYHAOcGmecbETh3FcjK4VBd/kA5+gl2qdyzESbdnlaKEtF2zD4YBfnMDOJyS2dfcqI5
-	K3+vwqwXqEjE+x4UgXYERcWFimAjhKHHgeSysQSC0BAGoCaCEDTq1kx+m+DW4BIadG6p0l
-	rxBcjbD4ma/IBWNYd/btDbmnCnGqi58=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-86-7pUihXVHM5C1Cp-LNaN_Qg-1; Tue, 30 Jun 2026 06:11:25 -0400
-X-MC-Unique: 7pUihXVHM5C1Cp-LNaN_Qg-1
-X-Mimecast-MFC-AGG-ID: 7pUihXVHM5C1Cp-LNaN_Qg_1782814284
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-493b0a5e636so16784265e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 03:11:25 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="XoJny02D"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782814284; x=1783419084; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KAnQNF/BG2hzcnpQlhZdj2/19/pQbi7MYSIKu9RdeiU=;
-        b=IW16Uj/mgrPaWGXQz+65l4gIZRF6EwG1EIpJd6BXfxI/FfoGes+lv4y4NfHYgH9LF1
-         AiidRFtKqzxMLz1NuhxSldcOhRYBurXAtaY2Rax3MrfHvWrxvp06kB78lX4jGuyxlCQ4
-         lZ1EBOm2xD5IDndlgTISSpqfs5ZRayBNIUBrpqpldLZMLJY8DzhKTac5z9jssHS0TF4w
-         /h/3sfUkrh+pmXfvnhhXVClU3oQMKeqCji9Lv1byP9AVMpklbFrtvQ4lBg45KB9nI/JH
-         5T0x9mbmAtKlSrvuwyUexnprcF8gfh/2JC7/YZKTHBdvACJoh1WKSDlm/7Sxv969Coum
-         sF5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782814284; x=1783419084;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KAnQNF/BG2hzcnpQlhZdj2/19/pQbi7MYSIKu9RdeiU=;
-        b=BfaSbqhH5mD4a16WGwhkn0UccQotEHPqtQ+tN81Sck1UUo+j0erzmZXW1+SyUcXUAn
-         8LLQdBXdHp0bnfHgTkS3u34t8chS4TePtpMvVypC8AIaCvuV/1Vs+Qx1uSmYJl9YvUTG
-         l1cxDcwaS7H3YR97IPxjrqc6yMioRU4QC7BUZxNfe3K2ZUDLhs6PfoqaTg2ACiEpr0fh
-         FxS0tkJtR2vuTrbmjhdG5VbPAQBZipzHvIyNHNyQZ3DAlBm4IaguOTEKpKjb2OmkS35R
-         6ZtQHADkqK6rCzQTjPqI5tOX/ZGq9qw/bX98ZT026wu3EVgiEGyvCZ7D0wK8hEUKL5l2
-         LJyw==
-X-Forwarded-Encrypted: i=1; AHgh+RoRSrDGePdi3NRkQAlv88ejxTXIMt6t6Qm9np7uxFPdTA+lmrwJgOBJuCA8yVHCmSb/gxrErrbvqaIcvE7r80E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhYPCj5AZYIX/uUiOaDOflQWwotPKDthQBoq2tJM3zbGxuupz8
-	hGVYOxT20hveiIyJBl3n3V4OXwpIa8KgWXHQWg5vmj1nwRKJwC0+ltnfgD8IALGI2NY1bLV0OC2
-	lQAjljFkjMjDlETUuyyK8Bqjjq4r/Bd9nIzIFo0XZy7icWdWfW/itafVy9x5sFPkkDrEqiQ==
-X-Gm-Gg: AfdE7cm8ZbESkJuGKC7KHOYsZ8Y968xjbdWipIJGfrWxD1t5g7DOIGExC5nrJt2qxA7
-	QJbchZ1qpJLc4/G774Z+vai847tXbWQ07KdjK9PERnCept7kmjMVeBvqPUjATmU1FfQCTsona0y
-	XPopkFLffadY5VRLNu9v7IfNA0wE3xPvsaWJu1tjxhSMciq2cbSl9CruNcK6z7Jn0ZpHHzXlL2n
-	O6wSk5UO7R96uG6w+TOAFJSiAOfNq5t0cj5sBytlNWkLkhEPjEXBKnEJzivPjNeiKuKk8W6PDAQ
-	cBOy/iVeroJGB6jhRunlNp/4kCMDLOtydb0CwCz575GTGNrrL/tyDZvl2lsB+uQJuY98yO7FNhZ
-	gUAP4jSlv6YVkYfjBnlHjKBxn2G24laZFwKVMc/ZSOpiUCSSaH3qCrIjZkYz1odSMQ9g26gQQ1O
-	Znls08A7OCgw==
-X-Received: by 2002:a05:6000:25e3:b0:46f:7d90:8128 with SMTP id ffacd0b85a97d-47551737cf2mr3519496f8f.14.1782814284109;
-        Tue, 30 Jun 2026 03:11:24 -0700 (PDT)
-X-Received: by 2002:a05:6000:25e3:b0:46f:7d90:8128 with SMTP id ffacd0b85a97d-47551737cf2mr3519449f8f.14.1782814283688;
-        Tue, 30 Jun 2026 03:11:23 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:5521:6b10:2eb7:f61a:75:4534? ([2a0d:3344:5521:6b10:2eb7:f61a:75:4534])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47563d194b0sm6739249f8f.1.2026.06.30.03.11.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jun 2026 03:11:22 -0700 (PDT)
-Message-ID: <2a1c4eb4-a4ba-4fc7-9bda-6a7a8d0be2f1@redhat.com>
-Date: Tue, 30 Jun 2026 12:11:21 +0200
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=jf881
+	FndgVC5Slh4ACwJOS6E6mVzWtVGt3B8LMK7D/w=; b=XoJny02Dep+Pqyfa4eadO
+	/wKE7Z16tJa2/hqSFftxPQ5L/7MniVAp69xEEt+nZ1IAj8tDRDt5ye9gc7iBJGJB
+	Nw+Rm+OhwUbeVTYRXPIgTUwkRbTTvo2+ff6RjYBY5LS1KCW4ABawvx1U/xzfWHkl
+	pZP4Qa85AYxG5gDCRKklps=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web2 (Coremail) with SMTP id yQQGZQD3z5eGlkNqxZukAg--.37667S2;
+	Tue, 30 Jun 2026 18:12:45 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] bpf: Reject arena frees below the arena base
+Date: Tue, 30 Jun 2026 10:12:18 +0000
+Message-Id: <cover.1782813442.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] selftests: net: make busywait timeout clock portable
-To: Nirmoy Das <nirmoyd@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- stable@vger.kernel.org
-References: <20260626144902.3214350-1-nirmoyd@nvidia.com>
-From: Paolo Abeni <pabeni@redhat.com>
-Content-Language: en-US
-In-Reply-To: <20260626144902.3214350-1-nirmoyd@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:yQQGZQD3z5eGlkNqxZukAg--.37667S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw43XFyrZr47XF1xZFWUArb_yoWfXrX_ur
+	4kKa4DWw4UCFs2ga43Aw1fZryxuFWjgry3Zr1v9FW7Xry5XFnrCrs3Ar1YvryxJa1Y9r95
+	JF1ayFn7trZ3ZjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbD8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+	Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+	0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
+	YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxEwVAFwV
+	W8twCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
+	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
+	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
+	Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
+	IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQID7UUUUU
+	=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-On 6/26/26 4:49 PM, Nirmoy Das wrote:
-> loopy_wait() expects millisecond timestamps. However, Ubuntu Resolute
-> can use uutils date, where `date -u +%s%3N` returns seconds plus full
-> nanoseconds instead of a 3-digit millisecond field. This makes
-> busywait expire too early and can make vlan_bridge_binding.sh read a
-> stale operstate.
-> 
-> Fixes: 25ae948b4478 ("selftests/net: add lib.sh")
-> Cc: stable@vger.kernel.org # 6.8+
-> Link: https://github.com/uutils/coreutils/issues/11658
-> Signed-off-by: Nirmoy Das <nirmoyd@nvidia.com>
-> ---
->  tools/testing/selftests/net/lib.sh | 19 +++++++++++++++++--
->  1 file changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-> index b40694573f4c7..fcaec058be6d0 100644
-> --- a/tools/testing/selftests/net/lib.sh
-> +++ b/tools/testing/selftests/net/lib.sh
-> @@ -70,12 +70,27 @@ ksft_exit_status_merge()
->  		$ksft_xfail $ksft_pass $ksft_skip $ksft_fail
->  }
->  
-> +timestamp_ms()
-> +{
-> +	local now=$(date -u +%s:%N)
+bpf_arena_free_pages() can be called with a scalar arena address. The
+runtime reconstructs a full user address from the arena base and the low
+32 bits before returning the range to the arena free tree. A scalar one
+page below the arena base can otherwise produce an out-of-domain free-tree
+offset and make a later allocation return an address below the arena
+mapping.
 
-shellcheck says:
+Patch 1 rejects frees whose reconstructed full user address is below
+user_vm_start. Patch 2 adds verifier_arena coverage for the
+scalar-below-base case.
 
- ^-^ SC2155 (warning): Declare and assign separately to avoid masking
-return values.
+Yiyang Chen (2):
+  bpf: Reject arena frees below the arena base
+  selftests/bpf: Cover scalar arena frees below the base
 
-/P
+ kernel/bpf/arena.c                            |  2 +
+ .../selftests/bpf/progs/verifier_arena.c      | 41 ++++++++++++++++---
+ 2 files changed, 38 insertions(+), 5 deletions(-)
+
+
+base-commit: 7feeed42d8b97d0db0eab2c1c30aa86f110fe49c
+-- 
+2.34.1
 
