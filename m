@@ -1,174 +1,115 @@
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4801E3DCDB8
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 17:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782841097; cv=pass; b=FurIJSUp/4oGZ5A1dtoZj7e8yzsxYLhEVJfUlacY6kYcsgn0chwh5TpoKIQkD0j4w93ISCWFeS0pLYoV91pKlpjI+11eveytuGc9WLOGsdwmKbEG0qfWRBLIyoMCbQZYERI0yJPMHC7k2ryHdeTyeP5fQ+WbSfKYADwSaBmylMw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782841097; c=relaxed/simple;
-	bh=5/krHcBHI1JSub7aw/+IBY1ssuiydpPt3+zadRH9bUg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SQn5ACvrv6tu3afXy9HcKz5lJaZ5/OT3zpnlBYDpDGxEE/yJk2y1DMWguSTQ3ncVQ8Hp3y122KOSxex4WAJ0I5GeNqN2dy4zABlggrp4QUf7c5v+lAqok08gy/g1Cn5P/UAj+fhdONB3n566BLaP2ACWh14S3N/zp0FD259kc9M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ttUGDkqk; arc=pass smtp.client-ip=74.125.82.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAA83A7F5D
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 17:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782842205; cv=none; b=T5MWtgrsJuns5bLnCl9RpYriFB4yLDgP1q+hYL6lwfHfoEDQdzs5+9rNGf0cZGzixQWyCOXTkvL31g/zV3AiTI1+71iRXdB1ju7xSaImZTSEG5EJx6pWfqWJHWznz0OxwsZE8wL3Y8AoYwBFBDp0iD9/yatEwnQfENJe8ts9Tq4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782842205; c=relaxed/simple;
+	bh=z64Zvugew+P1MInglJmh7Jam4FjCF1L/n6yrx55KL8c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jpCifJJMBDNg6E/1/YDhXxRLpnv5G8uM+0G1ny6W8gx//b8gUw8UEvFCcZqp3uCcTCp3CBrF5lTHSOwQDlPNY41U+HW3X+a74Ap7Nxs1StC+Fl1vHX7rkVqGmBrtBWj42DKrNiFXpaQr1n9MyTe1wyX/dfBl19BV2CdYF1VYHNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SP14efyY; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ttUGDkqk"
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-133362c30cfso699c88.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 10:38:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782841095; cv=none;
-        d=google.com; s=arc-20260327;
-        b=BbPVFcSGuZOmBLdgASlCLcx7weH4VIsx3Pw986dRgf6Y20WdPbDQf4Zzl4/FpO3z1E
-         Qp6o5nsfD8Ym1jtleBRFaMpiHpkxmLNTFJ9XWKg2kSkfvbAl9hlpbUDRXav7TrF9GERl
-         Atx44zS6sex2iXusHs0NUK0LqGWYWTzpgRno+cChQsa7jSw/vAsunQK7Z9HgbL0431w0
-         nmBF3NznQpCvIn3//L6dDUK882prFcf4vdiaKFfsyS1FKVdQwMa+0htLR79jj05lhB4U
-         1Si6/EsuNTkoKW2i+Gkx3/lL9nRUPkpATcpoE97c7vqTnNj3jgk/b237aYmNSuDcK5ur
-         BWow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=PhNh1O8KJd77HVRv00phfDVEbbQW7UcJOtJ0dSSwrLo=;
-        fh=IfQ7HMl9eJkzn0EUmb15TxmJolCbiX1wxxJqTVhuUt8=;
-        b=gro/FDVHFVBHn+TxZwFn2V5nphDCJQKysKXAx7XPcroZYmbJsHlORawAe01JoTa4V2
-         j80KYkrFvP+HpmAVMB5Bi70n5c4ifO3w/hZ+s2fdxxOrQEur051913HhwtnGISe8snu4
-         w7TtpgJ/6tvwBTX6qp73n1h6DcEvgHGZsnbWOXX6Dk9bpU2UGhC0XXKrdjhuvxBHmSnB
-         4gHOBRlhtTmZG22WFVDd0p0+NzquWLBPAxPnw20eutm4tAaYRhqfMua2vPbrWjqy1UFH
-         qdGWkCJVWA14YQBFKk0zNRVp0yK6IMinbi7fOK1nOlNExgIWRSKDm5tYviIc+9svkXGN
-         Lb1w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782841095; x=1783445895; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PhNh1O8KJd77HVRv00phfDVEbbQW7UcJOtJ0dSSwrLo=;
-        b=ttUGDkqkp91LfVvWBcqkb9cgcxwOJlHBKScZcl5r94kpA3V3atVGFyFt7Itdab0C3Z
-         /XtGiNSsfec5Ofk3JPJ4iIhs4/Byzt0SDGMCgFnRd9PXhQzfctFo5ynF8kEpz/v/qEuh
-         QDXYvZ2vAwDXkKg+xgwm5315lr5hLoaswz9CyoM8ZSGOFz/eye86NEdNFrNHkm0kJtbZ
-         /EEkBBEZrq/K7voUqznwPkM2x/aQIsL8Obvf8ruK1YS52W/5fk2I9pdiW3+7i9+lT2Q7
-         7Aw3MXt2GY3gKhFTOJoMdMcZXmAiK/YC/8DYBxjZjBiYd+CHcaxqF2vv4gQYi83pN24b
-         dTxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782841095; x=1783445895;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PhNh1O8KJd77HVRv00phfDVEbbQW7UcJOtJ0dSSwrLo=;
-        b=h12j8WdMs9bqhuhfF+5ALqP6aXj0xaqpTVoQJCwXcWqjtn4igptGUMDcEraf7s8Id/
-         /GvVXF06nNZnjcpykNwxeiwU/l1SNG99eQbbofR4JGsTgW65cQhlAnE13TpvyCirVjJ+
-         RoiyOn6WeL2X2t00FU1bQBywEXNrg/eGD8Q+mLjKn1BmkSNQnehZPumZZSiAQdNbsLAh
-         /jCs3Dub+1qipfbVPbfw6/vNzc5uns0CqmkAo7nAabHRvcERrxQ3yLKQ3VRTUk0ZTlxC
-         Q5sjc//P/RoT8scVf3Z8IC3sHWhlJXy/5EZbByfVJnl9E0krSUQcpHyHoHT7p0DjVtA1
-         XO1w==
-X-Forwarded-Encrypted: i=1; AFNElJ8Ra4ZU81sYgRQaRsf+j/vKrfzprJWdpfmujSHimQSPdAPZi0eiqdnJAtH5tS+t4PZ5Z0tJqTIkFJhICfyXpRw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyN8yQBYnETy1ugZlIHZ2BeStsaqXD0h8sxVrhPwTi1DYbMbyuF
-	ebBBMLMeWpeKzOo5vYSrJUT0Nue5+B6J5hMxAP1iMl6iNYQqLcaaq4Th62E1Rg8E/kZl3N+JAdd
-	/RFa/dVRcOrTyN1VoV1/NW+UpYo27i+/L0u2d3r6r
-X-Gm-Gg: AfdE7clg4DukqiM/0/34TVhbWML68zHEJC2Uj0tRXmY+icJtV2iPhXQUv1tS6+TjHrc
-	9pAcdEj706fICPA6ZVKwD42wLfO2ekDjfVtacD31njl7+OieYowXAoYkc2YVsVUo7GsmAQMds7y
-	9dnordp7E4nxNyPiydnJkLuMnLWIGaj9i0v8C8LqasFWFq3Iph5tJuQ93U5D5FBVggigqVwgPmb
-	0MihTaC3Iuy29TNA6GF0s2rYVVBr/uXQkBmitYWFVJkFkhzDNUR/oZBr5OV9RXADxXGvDLXnzRY
-	OFKhDKKJ00JKsoTzXOQjFLZ09E54X1YJOplE
-X-Received: by 2002:a05:7022:689c:b0:133:52da:cb5f with SMTP id
- a92af1059eb24-13b33aefda3mr11573c88.21.1782841094527; Tue, 30 Jun 2026
- 10:38:14 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SP14efyY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782842202;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Y5XIm2s2oESgGUDdl7rh3Y8K1wz6Jr9u+0+fQyisStw=;
+	b=SP14efyY/NUoEL1qOleDQ4uSy1Xiy8/ehYsXhMr+f19FAX0oTbkO7qwWdnL9z8HZrn0+AZ
+	uoScmJE0MZRlTgRj1pxBbzXViIrJ0Id9zwtb27Wp9CnlRoAO7WrvDw6HbaRqmersVQRH08
+	8I+acdwXaWK2lNg7Q7j/WCoALssYdLA=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-657-IM9iqbr9OZuDB3leHEwJKw-1; Tue,
+ 30 Jun 2026 13:56:39 -0400
+X-MC-Unique: IM9iqbr9OZuDB3leHEwJKw-1
+X-Mimecast-MFC-AGG-ID: IM9iqbr9OZuDB3leHEwJKw_1782842197
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 01DFE18009E3;
+	Tue, 30 Jun 2026 17:56:37 +0000 (UTC)
+Received: from [10.2.17.12] (unknown [10.2.17.12])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C00E21956088;
+	Tue, 30 Jun 2026 17:56:33 +0000 (UTC)
+Message-ID: <e4ab9944-4687-45be-9935-4ad29f2a923c@redhat.com>
+Date: Tue, 30 Jun 2026 13:56:32 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260629192029.4013794-1-tanshuhao@google.com>
- <20260629162619.55297244@kernel.org> <CAABY+HEcNnh+ATyA_JMg4LnVpP=egprTTi4UXxV9CfW2+71z+g@mail.gmail.com>
- <20260629181955.00e63b61@kernel.org>
-In-Reply-To: <20260629181955.00e63b61@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 30 Jun 2026 10:38:01 -0700
-X-Gm-Features: AVVi8CfIDRCEEftMp-9OYUT7tFXjHknuuH7nu2ohdOSy-r7PQmXeshFnOquXIA0
-Message-ID: <CAHS8izNeoJiLyoyiPgzmX5CGcyivYqBpVxOcFnoxeOX_zzFd4Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 0/2] Reuse threaded NAPI kthread across napi_del()/napi_add().
-To: Jakub Kicinski <kuba@kernel.org>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Jordan Rhee <jordanrhee@google.com>
-Cc: Shuhao Tan <tanshuhao@google.com>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, 
-	Samiullah Khawaja <skhawaja@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v9 01/11] cgroup/cpuset: Make nr_deadline_tasks an
+ atomic_t
+To: Juri Lelli <juri.lelli@redhat.com>
+Cc: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Aaron Tomlin <atomlin@atomlin.com>, Guopeng Zhang <guopeng.zhang@linux.dev>
+References: <20260630033344.352702-1-longman@redhat.com>
+ <20260630033344.352702-2-longman@redhat.com>
+ <akPMKXppWM74-m9a@jlelli-thinkpadt14gen4.remote.csb>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <akPMKXppWM74-m9a@jlelli-thinkpadt14gen4.remote.csb>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Mon, Jun 29, 2026 at 6:19=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
+
+On 6/30/26 10:01 AM, Juri Lelli wrote:
+> Hi Waiman,
 >
-> On Mon, 29 Jun 2026 17:47:03 -0700 Shuhao Tan wrote:
-> > > Send a netdev Netlink notification when NAPI is re-created and
-> > > let the userspace re-apply the settings?
-> >
-> > It feels surprising that the userspace needs to reconfigure thread
-> > properties when changing NIC configurations unrelated to threading.
-> > Another downside is that when userspace configures NIC configurations
-> > in quick succession, re-application becomes messy because a previous
-> > re-application might still be in progress when the thread is gone.
+> On 29/06/26 23:33, Waiman Long wrote:
+>> The nr_deadline_tasks variable in the cpuset structure was introduced by
+>> commit 6c24849f5515 ("sched/cpuset: Keep track of SCHED_DEADLINE task
+>> in cpusets"). It is reported by sashiko [1] that nr_deadline_tasks
+>> can currently be modified by inc_dl_tasks_cs() under rq->lock and
+>> by cpuset_attach() under cpuset_mutex. So if both updates happen
+>> simultaneously, the nr_deadline_tasks variable can be corrupted leading
+>> to incorrect operations down the road.
+>>
+>> Fix that by changing its type to atomic_t so that nr_deadline_tasks are
+>> always atomically updated.
+>>
+>> [1] https://sashiko.dev/#/patchset/20260626181923.133658-1-longman%40redhat.comk
+>>
+>> Fixes: 6c24849f5515 ("sched/cpuset: Keep track of SCHED_DEADLINE task in cpusets")
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+> Looks like Sashiko is yet not completely happy with this:
 >
-> Can you explain more about your deployment and system configuration
-> flow? We may be adding micro optimizations when the problem is that
-> we recreate the NAPIs in the first place.
+> https://sashiko.dev/#/patchset/20260630033344.352702-1-longman%40redhat.com
+>
+> I actually wondered the same and couldn't convince myself we don't
+> actually have that problem with the window between sched_setscheduler()
+> and cpuset_attach(). If issue is confirmed, not sure if wait_attach_
+> done_lock() could help here as well? It's kind of a big lock for the
+> scheduler, but maybe only affecting DEADLINE tasks and if migrations
+> are ongoing.
 
-We have an AF_XDP application with extremely low latency and jitter
-requirements running on our servers. Sami developed busypolling
-threaded napi for them. Since it's an AF_XDP application, they attach
-their umem to specific RX queues, and then configure threaded NAPI
-busypolling to achieve low latency. That involves using the Netlink
-API to set the threaded/busypolling property, grabbing the kthread
-PID, and setting some properties on the kthread. Concretely, something
-like:
+Yes, I am aware of that. This patch can only partially close the race 
+window. It doesn't completely eliminate it.
 
-```
-  local napi_id
-  napi_id=3D$(call_ynl --output-json --do queue-get \
-    --json "{\"ifindex\": ${ifindex}, \"id\": ${q_id}, \"type\": \"rx\"}" |=
- \
-    jq -r '."napi-id"')
+My current thought is for inc_dl_tasks_cs() to check if the in_progress 
+flag is set. If so, it sets another flag for cpuset_attach() to double 
+check the DL data for consistency. It will be a rather complicated 
+solution in order to eliminate the race window. So I am postponing it to 
+a later time when I have more free time to think about it.
 
-  echo "Enabling busypolling for queue ${q_id} (NAPI ${napi_id}) on CPU ${c=
-pu}"
-  call_ynl --do napi-set --json "{\"id\": \"${napi_id}\",
-\"threaded\": \"busy-poll\"}" >/dev/null
+Cheers,
+Longman
 
-  local napi_kthread_pid
-  napi_kthread_pid=3D$(call_ynl --do napi-get --output-json \
-    --json "{\"id\": \"${napi_id}\"}" | jq -r '."pid" // empty')
-
-  taskset -pc "${cpu}" "${napi_kthread_pid}" >/dev/null
-```
-
-The bug is that the taskset configurations disappear when the user
-runs an unrelated ethtool command. Yes, the root cause is that an
-unrelated ethtool driver config on GVE, gve_adjust_config() will
-recreate the NAPIs. My understanding is that NAPIs are recreated on
-ethtool commands as WAI and standard upstream driver behavior; is that
-not correct? If we held onto the same NAPIs during driver reconfigs,
-this issue would indeed be fixed. Is holding onto the same NAPI during
-driver reconfigurations an appropriate/feasible fix here?
-
-Other ideas, FWIW:
-
-1. We could add an optional netlink argument, "remember_napi_kthread,"
-that customizes this behavior for users who want to remember thread
-config.
-
-2. We add an optional netlink argument: "bind_napi_kthread_to_cpu"
-that not only sets threaded but also binds the created thread to a
-specific cpu set, and then include that cpu set as part of the
-napi_config so that's it's remembered on reconfigs.
-
-But I think the best options are (a) not recreating napis during
-driver configs or (b) this patch to park/unpark the thread, TBH.
-
---=20
-Thanks,
-Mina
