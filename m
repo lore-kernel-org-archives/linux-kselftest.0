@@ -1,110 +1,149 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 434CE5B1EB
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 21:33:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FDA131F997
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 22:14:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782855234; cv=none; b=jN76gBV3iWN+vtv9GLngBdKlcJgNbwDPydOrhAkkG90ZfLeWgPR/3ErcVZWIMGwRCEDra2L4mAlGh1CVqIqVac76cXDp4tN55iMmNpiPC+yKGqbn1PFADEirlztvYlRd1+XZ108dr3IoGuYmI51dzAV6Z6OH096joDMZkvLs63Y=
+	t=1782857684; cv=none; b=gimUkfCfhL7Kbv9stWDbUoKZ9fxZI2jglfmdmTdPKabdrlI52BkUPFpgXpZJuEZrksSFZdiS2io0WY4rIRE9meQBdBm1cAm4XHq76qbhgzOHvboIt7U1jemQ+i+N54uByddsf30+hKZZG7odqov1x3vQmRE4s12B1ETDk3gK4xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782855234; c=relaxed/simple;
-	bh=7P5AGdyX9U2FgOtXbK8aoEINUpNsnYeYDub1cigFpDU=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=pDHZDsa0QXMUIRAPIxRlDEM4iftsp3cVa7qXOd1ua1bSMYPzPyvxbuZGeVF09Uom1cm/H9qVxGJHihpXr4b9MjmPGiYM5RZSUB4nZ6yi7Pf3vF3hwJgXb0RmdyvTZjMhDgnSepYn60tO1fUgudJeXYyLYIvnWFYwtKozeFM7/lU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gtE+6SVw; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
+	s=arc-20240116; t=1782857684; c=relaxed/simple;
+	bh=OHho8xisLBkXPsux52lTSAnNEXH9FZ3N849yTj8opFU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hWfAiGlVTl+rFWGV5/9GwufYV/mSB0Ag5v6Bd98qV9a5ZKSmE9YE4wPegMfFzfh3g1kVTTpUt6HMTkuePLgbEOXvjCtrE2ws9GCo+3Ijqo3tQIzZWnuyH5kcutbWv1WcmOVfqmV+7zdsDS5wnoVCtoil2YLseIhmIkEcUIoAJk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=iJuRD3X5; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gtE+6SVw"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c88da04b71dso2598790a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 14:33:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="iJuRD3X5"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-92e6a434cabso326085a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 15:14:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782855231; x=1783460031; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=z7X3kTpmZ4bguf8y7uJQ1FnujZXkLnCFBhY8iEZTYJQ=;
-        b=gtE+6SVwUzeLEpi8b+ZV493kdeKgKE99DnJHqUuKh5Z7KV+jLv8i2mqYOt32pn9cV0
-         uCIakkUMf8Y4EBFrEfA4ltbPTxqRH4XRUAjCUQgj8VIt68lxuiL/XNQhjp6cxOSiUMcK
-         QCDemXOaxjlcQVcR17oqfXd9y34coCIP2g0ubPR8EeHCmLFAzp62ENMKs3RoXpGjmRjG
-         mQ/u8+Mx3wlC5s71z4RduH20Zo4h//HKspymIn0nC1fPB2QZ8Il98QDxOAVL+FrGv2//
-         3fcYxD5Vf1ISGwGcoeYlkIMAdv1KVKv9NIjFMnOsK+lI5IUVX1JATkWuTJQr+Ctb7NcY
-         lyaQ==
+        d=gourry.net; s=google; t=1782857681; x=1783462481; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zvvq7XwN+0vU39EaqWqw5+H08MVeyEUcwD3F1pdYD7Y=;
+        b=iJuRD3X5LQ9ohMnkNlThLBpo+UQ9qaC0RrFMo9qr3Kmk4KwTm4/WYQOHwCwAJ52nlx
+         8tkMbRNtk/jB0fGP7+MMlzX+g22mriw3rAFTh/AR5j3U7aY6Bi2a7EGE5VxoetPTLfU5
+         1vhZcPsiMO/cGhW5krAdqO3TN4vs7dmncABS9OI4weB9/202nDHDJ86tF1Njr4sPARQv
+         Bf1k6bml2tBVGk/df9rPXOuDywaIk8j7U8/JtX/Ymf8biiCxFBe0KP274D9Su/ZQ9OPF
+         8PEA+2gVslEOmg5e1PvmQX3rK9CLX1PSV94fxD5Wg5iA7ze+T4Sn0S0MKssgyTkhJjXf
+         irKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782855231; x=1783460031;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z7X3kTpmZ4bguf8y7uJQ1FnujZXkLnCFBhY8iEZTYJQ=;
-        b=Td8P8DqmumliMjWt6y4zLzj00aYWr7ID6mO4rgEGbqNAPn6xpqX01xMT45tJi23Xcw
-         vL15Hd4tv7uv+9L4LHpxoK1yYFOhE863HfSesmjseJRUFtZKLPrK8vRULNO1mLRm+sJ5
-         74bpnRov5qavj4OYfcAmyp0MS6vkD7MJJyB1q92WmGmyu2zJ/Hd67Zw6zt4HXYjtl6FZ
-         2F+bqMVc7aUSX4JJLnpxa4J7iWTQxrY4wpvdO6jQsiC3RX91zNij7MlnHckLHxAEaZb/
-         LmZJztL3+ww6Xt1lJRqZI2a6k1211OL9aHjJelBR8h/cUMLOViwSuX2eeFgtmbxZmVj5
-         8Efw==
-X-Forwarded-Encrypted: i=1; AFNElJ993Hg+4kylvwHJGeFQ8F+vPr8DJCKPJxqcb+3+mHUlRlkvuETatu29oq7xYevyvjqJ/X2xz5AtaOSDrmbuTfw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8gmp5vYhkFBbS6VvztPqyWWOB7Bb9ghJvRmsI7a1CeHfPqB1l
-	Bhxv2qF/QbIAw2njYSql+L0r7bFoXET8PaoHgNhLolSi+4zZCLFeVQjSUqIJ8ZMvyBlRYXQejYm
-	LkKzKALRfDq9M1Q==
-X-Received: from pgq38.prod.google.com ([2002:a63:1066:0:b0:c86:5f41:8c94])
- (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:62c4:b0:3bf:49c8:f73 with SMTP id adf61e73a8af0-3bfc52b1d7emr4595479637.35.1782855231357;
- Tue, 30 Jun 2026 14:33:51 -0700 (PDT)
-Date: Tue, 30 Jun 2026 21:33:41 +0000
+        d=1e100.net; s=20251104; t=1782857681; x=1783462481;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zvvq7XwN+0vU39EaqWqw5+H08MVeyEUcwD3F1pdYD7Y=;
+        b=CP7DPWGW7d+5eAYbid1mpL/Bw9PnxrzbnLZhdPxZLd2EFu7+duoh+3zGDRdE4Esfhj
+         GZFfBCmi29jz9XsPTFAFajv8Q530UPG+BfDcBcfvC8V5a0Ive0CJxKIasSsPtBKoAjhg
+         prgWqams5EkZerXlqCav+eJ4w+qtjC6pFsLpLSrHOa1YyT4YLukIaGPeuS94u1U5LALR
+         PDOYuEXOYgY5TNJnUwLEPItyCBMt9nI9QzWVurYtnwz5DIpzJVeGAB0ejzTBDxQq0F4U
+         eCsllClFhOMJ3odSqr+N5lCRmYrDZ3PpGQfl5sxbIJ4qD5+exBupISiGbNwDTSb1xQ4n
+         8bKw==
+X-Forwarded-Encrypted: i=1; AFNElJ9m6izsH35njZ4CuDSD2dDCgutQ8zIk9LMVhvhigy9ktavzAwDiPthvV9dFJfltsDHtW9KfcctZvFCfcZ1FkAA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YysMI8k95pNHF53qO1PlkyQ39IEVn6rSvseWgLXPG09fS68emqk
+	eVkEGzkkfLlMtMPQGO1C9MdLbUEVCtVovhPZRatyMtf8xkFS8qSV87U8aOY589PaNXg=
+X-Gm-Gg: AfdE7cl5TTdOJ/6hSacb21kAKc8qxW6WaskCM2ZmVsH54tgOaFDVJBazlF63zP4Mx+D
+	OJnmp25oBAAWzJP9xgt9axfB8WpCJ8o27akP9IoHoHvy1SZ7kchSyVqXPGYQPkLcAeRBymo/UO/
+	VZXHjUB/js+PiJtL/MF8CauJ40lz8L7uaAHrjTnVoUcbiLcmtmVdgnlyf2VVD2WL43c5mW4GtJU
+	FJKbwUrZ9MJZ4YVee5MctO4bULRvLujQreOjwtsgf04OBXLRM0aGm7q7e6VIJLtOiaB7nepoEAG
+	Ohj74boMTZHFvrxz/INSG9lxwTFdhc6iJJnMlWGyXqgh1RhRDnDoeQvGuftggKg3SiWsu3GDJ4P
+	4mZUIJJ4E8BGul6qW2pol+kXZ65R++iISGsbH9sb1yCm6tDCMug1E148iSjEk+gfGjiSI/mJbLv
+	ixbTTh2Cdda0VO8C9VdFLJEpS833iCp14d/EW91v5odVHhCfc09nflE4VgplxxX1pSg6zbmo4MK
+	D8rc3c=
+X-Received: by 2002:a05:620a:6cc6:b0:915:b852:4361 with SMTP id af79cd13be357-92e624e3088mr975087285a.20.1782857681333;
+        Tue, 30 Jun 2026 15:14:41 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-92e6213b953sm346810685a.2.2026.06.30.15.14.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2026 15:14:40 -0700 (PDT)
+Date: Tue, 30 Jun 2026 18:14:30 -0400
+From: Gregory Price <gourry@gourry.net>
+To: linux-mm@kvack.org
+Cc: nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-cxl@vger.kernel.org, driver-core@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com,
+	david@kernel.org, osalvador@suse.de, gregkh@linuxfoundation.org,
+	rafael@kernel.org, dakr@kernel.org, djbw@kernel.org,
+	vishal.l.verma@intel.com, dave.jiang@intel.com,
+	alison.schofield@intel.com, akpm@linux-foundation.org,
+	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+	shuah@kernel.org, iweiny@kernel.org,
+	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com,
+	Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH v6 09/10] dax/kmem: add sysfs interface for atomic
+ whole-device hotplug
+Message-ID: <akQ_xlJtXNgnGUdf@gourry-fedora-PF4VCD3F>
+References: <20260630211842.2252800-1-gourry@gourry.net>
+ <20260630211842.2252800-10-gourry@gourry.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.rc0.799.gd6f94ed593-goog
-Message-ID: <20260630213341.1664345-1-dmatlack@google.com>
-Subject: [PATCH] selftests: harness: Mark test fixture objects __maybe_unused
-From: David Matlack <dmatlack@google.com>
-To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	llvm@lists.linux.dev
-Cc: Alex Williamson <alex@shazbot.org>, Andy Lutomirski <luto@amacapital.net>, 
-	Bill Wendling <morbo@google.com>, David Matlack <dmatlack@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Raghavendra Rao Ananta <rananta@google.com>, Shuah Khan <shuah@kernel.org>, Vipin Sharma <vipinsh@google.com>, 
-	Will Drewry <wad@chromium.org>, Aaron Lewis <aaronlewis@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="Ha7M+e+kLoFbO4pS"
+Content-Disposition: inline
+In-Reply-To: <20260630211842.2252800-10-gourry@gourry.net>
 
-Mark test fixture objects __maybe_unused since they will not be used
-when there are fixture variants (the variants will be used instead).
 
-This fixes the VFIO selftest build with clang and -Werror:
+--Ha7M+e+kLoFbO4pS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-vfio_dma_mapping_mmio_test.c:106:1: error: variable '_vfio_dma_mapping_mmio_test_map_full_bar_object' set but not used [-Werror,-Wunused-but-set-global]
-  106 | TEST_F(vfio_dma_mapping_mmio_test, map_full_bar)
-      | ^
-./../kselftest_harness.h:398:2: note: expanded from macro 'TEST_F'
-  398 |         __TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEOUT_DEFAULT)
-      |         ^
-./../kselftest_harness.h:470:33: note: expanded from macro '__TEST_F_IMPL'
-  470 |         static struct __test_metadata *_##fixture_name##_##test_name##_object; \
-      |
+On Tue, Jun 30, 2026 at 05:18:41PM -0400, Gregory Price wrote:
+> There is no atomic mechanism to offline and remove an entire
+> multi-block DAX kmem device.  This is presently done in two steps:
 
-Fixes: ff556bd98348 ("vfio: selftests: Add -Wall and -Werror to the Makefile")
-Reported-by: Aaron Lewis <aaronlewis@google.com>
-Signed-off-by: David Matlack <dmatlack@google.com>
+... snip snip snip ...
+
+Sashiko pointed out a false-positive, but adding a fixup patch
+here that adds additional consistency.
+
+On total failure - release all resources.  This makes the sysfs
+interface consistent with the probe failure path.
+
+Just attaching a fixup here, since technically it's not a bug,
+could fold in separately
+
+~Gregory
+
+--Ha7M+e+kLoFbO4pS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment;
+	filename=0001-fixup-dax-kmem-add-sysfs-interface-for-atomic-whole-.patch
+
+From e341860c83fd5d5e8549d8adbf71a484c8990c5f Mon Sep 17 00:00:00 2001
+From: Gregory Price <gourry@gourry.net>
+Date: Tue, 30 Jun 2026 14:49:06 -0700
+Subject: [PATCH] fixup! dax/kmem: add sysfs interface for atomic whole-device
+ hotplug
+
 ---
- tools/testing/selftests/kselftest_harness.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dax/kmem.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 261e4df94d9d..29a19bc87084 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -467,7 +467,7 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
- 				!__atomic_test_and_set(_metadata->no_teardown, __ATOMIC_RELAXED)) \
- 			fixture_name##_teardown(_metadata, self, variant); \
- 	} \
--	static struct __test_metadata *_##fixture_name##_##test_name##_object; \
-+	static struct __test_metadata *_##fixture_name##_##test_name##_object __maybe_unused; \
- 	static void __attribute__((constructor(KSELFTEST_PRIO_TEST))) \
- 			_register_##fixture_name##_##test_name(void) \
- 	{ \
-
-base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
+diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+index 19effe0da3dc..f597d8a99c1f 100644
+--- a/drivers/dax/kmem.c
++++ b/drivers/dax/kmem.c
+@@ -380,8 +380,11 @@ static ssize_t state_store(struct device *dev, struct device_attribute *attr,
+ 		return rc;
+ 
+ 	rc = dax_kmem_do_hotplug(dev_dax, data, online_type);
+-	if (rc < 0)
++	if (rc < 0) {
++		/* Total failure, drop the reservations we took. */
++		dax_kmem_cleanup_resources(dev_dax, data);
+ 		return rc;
++	}
+ 
+ 	data->state = online_type;
+ 	return len;
 -- 
-2.55.0.rc0.799.gd6f94ed593-goog
+2.53.0-Meta
 
+
+--Ha7M+e+kLoFbO4pS--
