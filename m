@@ -1,140 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854A333F5A2;
-	Tue, 30 Jun 2026 17:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A173DCD8B
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 17:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782839612; cv=none; b=NdHx5yEsMZdsDJKkCWalscBDqisWfJITYI+PNlU21+gJm53ZRlfhnVyiGvobj/yHZmmgMuPogN8Y9r4oRoW88kpG/KWQ/ogqDABOteGZEwdnMumNL0AQD+mAp97VTpESH21QGqMscIRNNxg5PWpIaf3MgZXFkDVQIkCOuxavY0U=
+	t=1782840645; cv=none; b=IvzhvQCaTbVPJjiX/8i1N5sQv6A21DbVAmzUAJJjCeMPIdm11OoHu7kmtDoaqb/rvPYRrns2qiLE8IQvq3DxNcV6IDbttVS9J6LNXRyzX/NCr/+kXRrpLzE+3Yfw2dUHpobB2qzps0ac27+/BwpyybFZCfLrLVkTNvfjVkB7fHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782839612; c=relaxed/simple;
-	bh=maSROVvHwhT23x4mQIVE1Dg1TnQPMeYsWHJf9xXF/nQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kIqihWJHWH9AXvtKeLWzUc/YMH9qjWEcfi5HNNCpf1XF8FQteTOZLM68baBtA+igL7UHGixfaP0zcNTZMiLAKBslaMpo5LpqeQRGuZU5rpOqSgkHO+s9u3Yhy7GLGJsO4XOX4jVAa4Lb+kDjBipFMgXk0o8Ry4PYVDjI2Zk3hjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bfT3adCg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782840645; c=relaxed/simple;
+	bh=z6KmvGsEhliMX2kFxBWlW+oEtiV14/kK8zifG4u1OSc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=kSsy6APeFKFpE/F6xqEHdWdORDbKZyKbc94R/pmheWEFqwpZtiiOBu/np28pmiyg9SIa8ATPsVw4M9iZ5PqfQrSiG5P/FWsobDtE+XisBPuIK0yZcs/ndOcoRtqxGwvTdKA2GiQaJb8EAu52FEMwlnXE23++tRyMGKcwBHGhaBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=va8T1XPx; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bfT3adCg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB9471F000E9;
-	Tue, 30 Jun 2026 17:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782839611;
-	bh=+ZgEUdCFZUTdRl6MEpNeqgPGG+C6npsAloU8d/7L74M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=bfT3adCgYcdsxhBEaYSuU0/Mp/u5+XTWkNMTF6tWRDtxujGQoU48LtyEDE5Kbndec
-	 BJBbd4JnL0YjQ27/v6bcJCmb8fnCVGRusjdjuKs1HbX5YHDeqteRvEtc/0vknB0O2F
-	 dudA0orCmQqKdGpNSwMf5vXS6AN13Ta+6FHfzcnOGifPR9saBu/qrw8uiELOp3Dq2X
-	 xf5RSrEabpbFEeUVfYRLoY/jfZFwyI/qi88EBqj7Zdz1mscQmP/yxINZQwZY6X9ZQl
-	 e5a6nEtqXGHS+okEIW8BogO/EBzihZp/CPxUN8YIgpe+Dh9PSwRy7Fm/mit1Wgkv4w
-	 b5iEIpaZFmaQg==
-Message-ID: <916191fc-2e10-4449-b82b-c086d90283ae@kernel.org>
-Date: Tue, 30 Jun 2026 11:13:29 -0600
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="va8T1XPx"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-845317fa7e6so6875894b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 10:30:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782840643; x=1783445443; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KxXDGdZP36dVSNVXo6OGlh08WQ4jD0j+gPBa9WDdARQ=;
+        b=va8T1XPx241WJZyMEqRecMsZNoozWVV3DSK3GRDxwRDu8pb+FaUDxvQ5brfllHB2mb
+         dAnUKRoC0cNaUKbLGVwrhM4GjxwMAoB02Px6M8cmBBwMJ1w/7SIOscdj4QoNkv7a23sB
+         g/ixTI7xYfEOSc2Gi1Gpci3vR1Eg0bbdHXY0zfCwAuV3prfmSphh+nVFeYU4aK61ivib
+         FQODMfShZw8A/MhhSqcIpUTuE86h4GiWe5K/5gu7IACEP5E+aUzCLA2lNaezL2VKC473
+         B2x9HYz2ebDgFjVz4Y340jix0kBpJyCBYdZgixQL84fEjsu/AUySgEyhHcv2MyYhwqbA
+         Gwug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782840643; x=1783445443;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KxXDGdZP36dVSNVXo6OGlh08WQ4jD0j+gPBa9WDdARQ=;
+        b=Y0/g0iiN0xUjYLDzRxtl0xcwlA3CWpmmtXlPSMjKWX5bDuFMORQ7Tj+9nq8H0QN56A
+         IFB/AFev3iglol5BL/xhZVOz8cPXGfL9z4MsjeHFxFLGnrpmv/2h4KrE7DtL+L5unLVy
+         2ECzabzEld22j5OrHTeZHwnGdO4E7vG4ZW2SOAMgFI3Wi6AZ6WGwN7u5s4to25N1Sl5Z
+         h3QGeEQQ2dCiNAF5Qx52cF6QTz8VFYZ81kTnojHq1jQNCwyaTG8XONj5vFDRm0muMBRB
+         t+hRbumlHRutqYsZU7SrB2C9Kn4uGvR/54+n/Ct7X42ybAhD2/rD739xACCQ1wxbg1fq
+         hTqw==
+X-Forwarded-Encrypted: i=1; AHgh+RqXlwzOM5tYKQG1LtjWfg+2Db0AviKlkOA1ej2FqwQQxtaEU0wwTRymPKlbL8KmnTedPvIxgsXChQk2QmAMfGc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMCF1FdHdw0/KGRuA9KccvmQihzAsG9yaTzkD0OnUjC8v7XCNs
+	4U5wheZbPP/GZJfHwLkdx8xlsSeb3/Tg0maSjOlMrkgpSyfzUmCeTMS026xhpmmS2KVPPMjSvr0
+	cnc1fVQ==
+X-Received: from pfbfb9.prod.google.com ([2002:a05:6a00:2d89:b0:847:84b8:2dcf])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:b84:b0:842:6004:3fcf
+ with SMTP id d2e1a72fcca58-847adeaa420mr1564771b3a.29.1782840642918; Tue, 30
+ Jun 2026 10:30:42 -0700 (PDT)
+Date: Tue, 30 Jun 2026 10:30:42 -0700
+In-Reply-To: <a1b06afb-af6e-4666-8c7d-990e7fa150fa@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-Content-Language: en-US
-To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
- <20260624030530.3342884-2-avinash.duduskar@gmail.com>
- <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
- <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org> <87echobb5h.fsf@toke.dk>
- <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org> <874iik2ew4.fsf@toke.dk>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <874iik2ew4.fsf@toke.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-7-9d2959357853@google.com> <a1b06afb-af6e-4666-8c7d-990e7fa150fa@intel.com>
+Message-ID: <akP9Qv_IPVEh7GAB@google.com>
+Subject: Re: [PATCH v8 07/46] KVM: Rename memory attribute APIs to prepare for
+ in-place gmem conversion
+From: Sean Christopherson <seanjc@google.com>
+To: Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
+	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-On 6/30/26 10:04 AM, Toke Høiland-Jørgensen wrote:
-> David Ahern <dsahern@kernel.org> writes:
+On Tue, Jun 30, 2026, Xiaoyao Li wrote:
+> On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
+> > -bool kvm_range_has_memory_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
+> > -				     unsigned long mask, unsigned long attrs);
+> > +bool kvm_range_has_vm_memory_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
+> > +					unsigned long mask, unsigned long attrs);
+> >   bool kvm_arch_pre_set_memory_attributes(struct kvm *kvm,
+> >   					struct kvm_gfn_range *range);
+> >   bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
 > 
->> On 6/30/26 4:00 AM, Toke Høiland-Jørgensen wrote:
->>>> It does not make sense to require a flag to get lookup output. vlan
->>>> proto of 0 is not valid, so it is a clear indication that the vlan
->>>> output parameters were not set during the lookup.
->>>
->>> Okay, so we could just unconditionally set the VLAN fields, but if we
->>> start rewriting the ifindex that would be a change of the existing
->>> behaviour that could break existing applications, no?
->>
->> Consistently dealing with upper devices is one of the reasons I never
->> sent patches for vlan support.
->>
->> xdp support is at the driver layer for real (physical) devices. The fib
->> lookup is going to return the vlan device index - a virtual device.
->> Support for xdp should not be propagated to virtual devices; it goes
->> against the intent of xdp. Any trip down this path will have to decide
->> how to handle vlan-in-vlan use cases. Where is the line drawn for fast
->> networking?
+> We have
 > 
-> Right, which is why we need building blocks that makes it possible for
-> XDP programs to do the right thing in the BPF code :)
-> 
-> A helper that resolves the parent could be used for stacked VLANs as
-> well (just calling the helper multiple times).
-> 
->>> Specifically, if an XDP application has a table of the interfaces it
->>> forwards between, today they'd get a VLAN interface ifindex, which would
->>> not be in that table, and the application would return XDP_PASS. Whereas
->>> if we change the ifindex and populate the VLAN tag, suddenly the
->>> interface would be in the table, but because the application doesn't
->>> read the returned VLAN tag, it will end up sending packets out without
->>> tagging them, leading to broken forwarding.
->>
->> I have not followed developments over the past few years. Does XDP have
->> support for vlan acceleration in the Tx path now? You really want that
->> to deal with vlans and not replicating s/w processing in ebpf.
-> 
-> It does not, no. There's TX metadata for AF_XDP, but VLAN support is not
-> in there (see include/uapi/linux/if_xdp.h).
-> 
-> Doesn't mean software VLAN handling can't be useful, though; there are
-> use cases other than the very high end where XDP can speed things up
-> even if it has to write a VLAN tag or two...
-> 
->>> So if we don't want the flag, we'd need some other mechanism to resolve
->>> the parent ifindex, AFAICT? Maybe a xdp_get_parent_ifindex() kfunc, say?
->>> That could also be made generic for other stacked interface types, I
->>> suppose.
->>>
->>> WDYT?
->>
->> dealing with stacked devices is hard :-)
->>
->> What is the return is a bond device or a vlan on a bond device?
-> 
-> Well, bond devices have XDP support, so you can just redirect to those :)
-> 
-> But yeah, each type of stacked device would need to pass different
-> information through to the XDP program, and the program would need to
-> support those. Building a single XDP program that supports all of them
-> will require quite a bit of code, and would probably not perform super
-> well. But most deployments have distinct subsets of features they need,
-> so this does not have to be a blocker, IMO?
-> 
+>  - kvm_pre_set_memory_attributes()
+>  - kvm_arch_pre_set_memory_attributes()
+>  - kvm_arch_post_set_memory_attributes()
 
-Seems to me the fib_lookup for xdp needs to return the bottom device,
-not the vlan device, for forwarding to work. That's why I added the
-fields to the struct. That allows the program to push the vlan header if
-required. My preference (dream?) was that Tx path had support to tell
-the redirect the vlan and h/w added it on send.
+Yeah, that's probably for the best.
 
-But really, once stacked devices come into play, I just wanted to make
-sure thought is given to different use cases. As you know the lookup
-struct if hard bound to 64B and it is trying to cover a lot of use cases.
+> left, do they need to be renamed as well?
+> 
+> then the interesting one is kvm_vm_set_mem_attributes(), which contains "vm"
+> already while it means "vm ioctl". Do we need to rename it to
+> kvm_vm_set_vm_mem_attributes()?
 
+I say "no" on this last one, the fact that the function is scoped to a VM ioctl
+is enough to communicate that it applies to per-VM attributes.
+
+Actually, since it's a local helper, we could go with kvm_set_vm_mem_attributes()
+to be consistent with the other functions.  That just leaves
+kvm_vm_ioctl_set_mem_attributes(), which I think it appropriately scoped.
