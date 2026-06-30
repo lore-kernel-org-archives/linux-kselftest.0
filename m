@@ -1,277 +1,582 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9A9225788;
-	Tue, 30 Jun 2026 02:21:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782786091; cv=fail; b=Sg4g8L8xugh8S7z3pTD5pPO5QKKmeEFuTW6ebhL507tlHA0j0CviNQr4ZaLqlxvhvoi97bVPn4lYjJIf33cJenQn49mFJtPrZV3/c4k7+ii1eRSN6E3Up2LcArKgtcL1JzodZ7kwH6bW3ubuZuiENaJpsK0o7t9891KOtxW/8ac=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782786091; c=relaxed/simple;
-	bh=OeXFCOpxuYVdmjKJWctR5cT5Y83hW2sOiocKJmETyw0=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=fFr5yvOS/F1GQpHhCWpUO+kx3ZkHQC6TpKWgUU6sYWTLucdRMi7Ub3kq3PnWSMYuUjHbs3P56uSnjjEg5M61r8A66BrRgiz+YAQwl4ltoM4N+2MNyfz9r9ZvFbRiVa2X02DDOFp8+c74vq9W22zRMBTgjCogpuYB2FqLQTWSSNw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OEfihwJO; arc=fail smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11CEF3C4162
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 02:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782788136; cv=none; b=DO9d0D2yy4Wz+0FfmZn4EjJJ5krwgAWhId7+sZ4t4yok+22/cpCqF1WYRNZekIwpFFRe66S9BSYgEAV3ECH49WIee2iX+8hY9CIAl3ukNUgx5p7AdBGM5p6OytAVQtOt6RsSACjs8SBNq9YjABnzYBp+TqIrXaFEI8sT0QTuuLE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782788136; c=relaxed/simple;
+	bh=k5S+EwGXo9wnJiy2kG7WcDaC9hH1KidHn90rcM3xm5U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SVX21Ga/PCXOq4LezAWEMZD2pi6NxwzbWU+j7CPFTdRWOcmMvzcGXSOPY9xJOXS+1ZaampvRGqpa+aXsYOVNODD2FfdvtCVoVZZMfQXPv4RaCDQCTHRPuaWogVJBYUQs2oKKgnJOZJxXEm7DoE2rGrRVmDjy/+LoQhLeke7yD58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o0CHDKJg; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=hotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OEfihwJO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782786090; x=1814322090;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   in-reply-to:mime-version;
-  bh=OeXFCOpxuYVdmjKJWctR5cT5Y83hW2sOiocKJmETyw0=;
-  b=OEfihwJO/50BZeieeiMMizGQvm8RDEZkHjWSDdp/1N3EviFxTeFXjIEK
-   bQJ6a+vH06g6v5aaHcCKXKOIxC4EeAGnxm0oSX7w0kgZNXb1pKlUB4Yhh
-   rVjPksNxSxVBoE9d9j6ycbbIUjhdQft8tvTOedGKN3ndMJG8TcarzNaF0
-   Cs2vzA72QiKOvVBGIuV80XDrMxXmQR6Q/XwQYySXbMu8sXxrNfXid44qj
-   wkttZVgwZmn21xdjyRgXa8vomjSygoZ2xIb4BeDaJIGLNnG105inQvdd6
-   dkZSh88Nd1vONB9+0dm+GqsDcrxQfNQ5ZyzPiSVCH7+mERSg++/80Re0A
-   A==;
-X-CSE-ConnectionGUID: Y5aExdpPTsGEmfNy1zoByg==
-X-CSE-MsgGUID: 7L/q7pozS4KkahFzqygkLw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11832"; a="82602062"
-X-IronPort-AV: E=Sophos;i="6.24,233,1774335600"; 
-   d="scan'208";a="82602062"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 19:21:29 -0700
-X-CSE-ConnectionGUID: yQmuN8J/QeGCoCoBiJbCEg==
-X-CSE-MsgGUID: 1B4GDCdvS/ibCJ/h4w0HrQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,233,1774335600"; 
-   d="scan'208";a="254030383"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 19:21:27 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43; Mon, 29 Jun 2026 19:21:26 -0700
-Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43 via Frontend Transport; Mon, 29 Jun 2026 19:21:26 -0700
-Received: from PH7PR06CU001.outbound.protection.outlook.com (52.101.201.63) by
- edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43; Mon, 29 Jun 2026 19:21:26 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wnwIa4zoVRjFX7spqpzQwfbd0MqRWsH9ttSwvgFkUwaOfz9bZMRe2tsL84rvQ6WW9A8o46s4VbjegFPlxK5zgN/tTgD1PzrvUYWilU/skASftUF1jwH6KcK2dU4F3CNqwVAh43MnjwIkps90QfiS8pCWeDejC4TEb7QMb1lv4cUBDzV8a1IHbExtS0yg8DY3TqZaZlgAVVrakgIloIgr6JxJ5eSNnBDxjX61oRFlv7QcAysDn090fe42Ao92PmfCT89jy/Q1aCwdRtQLRXGHr4K26y/RpkQRHMs20eNammxUb5ySjVCg79A1ViMtbBJJ5/P9TEt35HITOIoIKtIMEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r2RjIIIuo9a+iMDxS0z4pQaj1HZQRRRauX+nbGaNtSk=;
- b=sxvLC3uJhK+aKqFMToZ0H4EoqakZVnxylxViwKqG4bTTBEB6Z1xtW5VZKgHZEbo24fXmD3hSf4PEn20L+41fxe/93AuI3+iQnMTxYOZZJ/n+ydvqX+1c9K+BPboaN7qHQu7LZWeHr3Ilf0+DudDrI7/+NKnxoRMJu5r9kdAAIqTWzxPEMmb+mxCIEtjBqVdjAyNDuVMGXz7pVv36uF2PIr4MVaKQO3n9q30oo5nd88cLNb/JV1ebAkeDlkSE+Ty1XbDu/ePA10N7Qg9qzgXGUDdY5Ke3VTJmtWhINk7ITRZDRWz85vR83QS3k6geriu1LFfn+WgZ8F/sTDTd+WHdTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB7472.namprd11.prod.outlook.com (2603:10b6:510:28c::12)
- by DM4PR11MB5245.namprd11.prod.outlook.com (2603:10b6:5:388::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.18; Tue, 30 Jun
- 2026 02:21:21 +0000
-Received: from PH0PR11MB7472.namprd11.prod.outlook.com
- ([fe80::1bad:44dd:4e60:6475]) by PH0PR11MB7472.namprd11.prod.outlook.com
- ([fe80::1bad:44dd:4e60:6475%5]) with mapi id 15.21.0159.018; Tue, 30 Jun 2026
- 02:21:21 +0000
-Date: Tue, 30 Jun 2026 10:21:10 +0800
-From: Yan Zhao <yan.y.zhao@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-CC: Ackerley Tng <ackerleytng@google.com>, "aik@amd.com" <aik@amd.com>,
-	"andrew.jones@linux.dev" <andrew.jones@linux.dev>,
-	"binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>, "brauner@kernel.org"
-	<brauner@kernel.org>, "chao.p.peng@linux.intel.com"
-	<chao.p.peng@linux.intel.com>, "david@kernel.org" <david@kernel.org>,
-	"jmattson@google.com" <jmattson@google.com>, "jthoughton@google.com"
-	<jthoughton@google.com>, "michael.roth@amd.com" <michael.roth@amd.com>,
-	"oupton@kernel.org" <oupton@kernel.org>, "pankaj.gupta@amd.com"
-	<pankaj.gupta@amd.com>, "qperret@google.com" <qperret@google.com>,
-	"Edgecombe, Rick P" <rick.p.edgecombe@intel.com>, "rientjes@google.com"
-	<rientjes@google.com>, "shivankg@amd.com" <shivankg@amd.com>,
-	"steven.price@arm.com" <steven.price@arm.com>, "tabba@google.com"
-	<tabba@google.com>, "willy@infradead.org" <willy@infradead.org>,
-	"wyihan@google.com" <wyihan@google.com>, "forkloop@google.com"
-	<forkloop@google.com>, "pratyush@kernel.org" <pratyush@kernel.org>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "aneesh.kumar@kernel.org"
-	<aneesh.kumar@kernel.org>, "liam@infradead.org" <liam@infradead.org>, "Paolo
- Bonzini" <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo
- Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, "H. Peter
- Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, "Masami
- Hiramatsu" <mhiramat@kernel.org>, Mathieu Desnoyers
-	<mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, "Shuah
- Khan" <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, "Annapurve,
- Vishal" <vannapurve@google.com>, Andrew Morton <akpm@linux-foundation.org>,
-	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, Kemeng Shi
-	<shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Barry Song
-	<baohua@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie
-	<yuanchu@google.com>, Wei Xu <weixugc@google.com>, Youngjun Park
-	<youngjun.park@lge.com>, Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt
-	<shakeel.butt@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, Baoquan He
-	<baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka
-	<vbabka@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-coco@lists.linux.dev"
-	<linux-coco@lists.linux.dev>
-Subject: Re: [PATCH v8 23/46] KVM: TDX: Make source page optional for
- KVM_TDX_INIT_MEM_REGION
-Message-ID: <akMoFqj/8Af2i/Al@yzhao56-desk.sh.intel.com>
-Reply-To: Yan Zhao <yan.y.zhao@intel.com>
-References: <ajoWngKaZ+wfIyR+@yzhao56-desk.sh.intel.com>
- <ajpGxu2uQys+S2F8@yzhao56-desk.sh.intel.com>
- <ajxasFBzp_9KnQLq@google.com>
- <CAEvNRgG1nHipzw4=eBgwhvyXi8xYo7FQD_sy9Ax6FDf7YDu3Og@mail.gmail.com>
- <ajyRg3BwGu5dCfOn@yzhao56-desk.sh.intel.com>
- <CAEvNRgH5KOHoemnC9QOn_oK97=KeAH1XuX3ps36-pJ0Fn0aBHQ@mail.gmail.com>
- <aj3TGLGWT1kMFIVH@yzhao56-desk.sh.intel.com>
- <CAEvNRgHb6WmOha6Pct_Tn8Ucuov95L=fj5=2R9gcHfx=b2V_+A@mail.gmail.com>
- <akI9m02jgKAdi4gX@yzhao56-desk.sh.intel.com>
- <akMPZePBdwQlD74H@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <akMPZePBdwQlD74H@google.com>
-X-ClientProxiedBy: PS2PR02CA0029.apcprd02.prod.outlook.com
- (2603:1096:300:59::17) To PH0PR11MB7472.namprd11.prod.outlook.com
- (2603:10b6:510:28c::12)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o0CHDKJg"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84347ad88edso3321334b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 19:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782788132; x=1783392932; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=70RtwANMmvYdnz+RAS7YeHJdWbaLKfaEZdfOGz52FmU=;
+        b=o0CHDKJg2jI7XLiqXpHbyA+nTVX95g1cXIqmliMT6gpTkCc0t1JuzikK5jAraHwTiN
+         msbCxbSCwwjNXWsm06qTRCYTzmJv7WzY7pHIFDyXknCuGo22dXURWA3evnHz3mhBkqCG
+         VLXSOWJNTyQjFQsQR1D/TcjcuLod/DdGYRajh6ZRLmC7/Om5IYyJtq/U0jMIiYxIL6DZ
+         V2Clmqs6saa6e71IVOYytaGU/gosbFnSfu++oz7NHHo0vbZU5uAz1+K1dbMaHL1997qt
+         VCOQwsYCOcdEJC+uu8ydAEfqeZ/Zg+mixidnc9PLt1Ezl7eG5O53hu0aAX45Za6o2SN4
+         w+Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782788132; x=1783392932;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=70RtwANMmvYdnz+RAS7YeHJdWbaLKfaEZdfOGz52FmU=;
+        b=ZBqKoi4mtFqb8FqxqXQvbrh/yznWMPJSLoRjNUHiMgQ0Ewk3aUVCC5chVyOn+YPJ/k
+         ksmJ/0MI6iWyYbLYURyfZMNZsr+ZRnRiOSdmgQ+HDuroP3k5rczY3+9WhxgMc+Be59q2
+         1y+iLvj6cu46zDN07x42R4CyOkA44GfjtkiZNzkKqJ83N+MAfLDsZPEJSU1kuCk7JU95
+         T1s7W3yZaFFuqda9h48xScG1s6GB42f6EoWoFCtSnQDeqm+j3tDqAOhV5zUDu2w+g35W
+         9Fbgi7wR7M8JHUo517cWFK5qeXuRxvRdobuI3R2VlAyQJ2JhHGcCnH7JOkRvRSNpTuaY
+         sQ3w==
+X-Forwarded-Encrypted: i=1; AHgh+RrOm7VETW7tCsK4Dk6nJWCjDFUG4cdQ9Dq2k3JpUMUkzyJQ+iIGAdLV8OsYUw+R7fZTME9NNFxjSSiqbeKPFb8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN8sNYCoJf9q7gLJtzCdw4yjEz9Yu+yC/CKSC6vMio8zi6bSR+
+	QHypUiozhs7b06MRTghLfp0ExuzSpnNAic23k6ha+GfUREbDAc5YpBeD
+X-Gm-Gg: AfdE7cnBlLrVfP1FrqRHExg9MyNhaB8GBM71tfq6eZruECKygLGShE3fkkcZMct0EQn
+	yG7JpFEXG3x5LEqEIWCN9sbMCr3iF7VqzXzURmAaBUKVkQGT6p8E5setit+NLQseJrIgWDwGtmF
+	lBbC1nLpvMDdC3WTGXgyGFeIprn8SbEGlgqwCBHAJ9se1j5GhmOy4HZT4fIH0RHDrP7f+mDMf2Y
+	rgHzLmNQQJ0zSh78JmqcU/ejcNu5dmnWT+jY70hQ1sVQLAsbmAXQSbKd1QIjlAgghqIuT2Ou9ID
+	4/xLkekBlcWJe5U1MKHT5BMv3Aga7h9oM/5J0J/btX95mZpei+jZd8Oej5T++WaXxWm4ZfeRJEv
+	RhofW11/QwkcxJe+mrKHKhzqrXYgkEfxVvNpUG7IfRgLmeZ11gSKLGGyw2yfanDS8b9mAPMkdDW
+	AbJg8+NJG2SZMuqFbY6bdTQ+KW0tCCwKP++6eYwmFE1GY1u9ZC0ANsnpq2ifJ2BjtWW2nAksNfN
+	+SyMWpqFmVgX54myfgGNfWCkyLQopUsSlr1
+X-Received: by 2002:a05:6a00:94e1:b0:847:8dec:141c with SMTP id d2e1a72fcca58-8479f297813mr1546557b3a.51.1782788132162;
+        Mon, 29 Jun 2026 19:55:32 -0700 (PDT)
+Received: from kirchou-macbookpro2.roam.corp.google.com (softbank126051115229.bbtec.net. [126.51.115.229])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847a033c884sm789453b3a.45.2026.06.29.19.55.29
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 29 Jun 2026 19:55:31 -0700 (PDT)
+Sender: kir <610548@gmail.com>
+From: Kir Chou <note351@hotmail.com>
+To: akpm@linux-foundation.org
+Cc: thomas.weissschuh@linutronix.de,
+	davidgow@google.com,
+	geert@linux-m68k.org,
+	visitorckw@gmail.com,
+	brendan.higgins@linux.dev,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	Kir Chou <note351@hotmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	linux-kernel@vger.kernel.org (open list),
+	netdev@vger.kernel.org (open list:NETWORKING [GENERAL])
+Subject: [PATCH] lib/random32: convert selftest to KUnit
+Date: Tue, 30 Jun 2026 11:55:23 +0900
+Message-ID: <20260630025524.75747-1-note351@hotmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB7472:EE_|DM4PR11MB5245:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5618e017-2c11-4a84-4b18-08ded64e4685
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|23010399003|1800799024|7416014|376014|11063799006|22082099003|18002099003|4143699003|56012099006;
-X-Microsoft-Antispam-Message-Info: RaJ2BUiKKzMaA623CrrMKqT4CSSbx3B3DKXpkE+O8HVdh5gQXds/F5HyBA/YJ9z231F0+aKH/JEe7psPcBUuRT91S0ixntUZoXPPuy/mJJ5K3CrxIG0thItMUuncumCH9YL4vq8hoCi5b8EBiPmXNGl+DC/eMa5+Z7GCb6NhHBhVeRuJdo8hFow1Pq8CrxD6Tn+Eg2TjxQ3q3a/NcAeWU2loX37fLpfD6/Q5/9XkpaXWEQnMYw9iMxOqqdogJgLEusvL4DnayfEa7SEOajctjSUbbbMB7EvEPlyq7Ucx4nw3oCO9FngLLuKFWYCu4JlRzIP7QFf0uBb7nWODAggHS1npadtC6VLnfHI0w2mUtX8dzpnruQJ3sAw6/wH8yCTJvCVAaWWfx6NdWrh9bu3r7s3P8y/wJjJt8a/aJ3E/2LB+oBUnVgJDKZVh8To10ux5ZBhax6ab7O8Dp/lcNH0EyXOmFlr9fNPIZunEFs1uPraI4PqKnftzQTSKVHBlPB7+SJFp07qyrQudy9bObqWHw9d1/LBjOdm8buxXhA0TttNPVX8WvUYxZNRbA4/W1KcUYFvcZfTFWe+mSn653iix/GA5c7r0qaJkcVb1ZCVQ67c0ri0hS3YXco/+ZkwNzh2Ou9RS3nmdXbnJMJGh1Y3BNeHYRGwd98X5jsdjHOatnA8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB7472.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(7416014)(376014)(11063799006)(22082099003)(18002099003)(4143699003)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OtBL3Ojn+se11+1OLUU3K8ftRCpghdGdnfzL1dTqkvMDXgTz4RiXdMuZn+Pg?=
- =?us-ascii?Q?jHn8fypjSPM3bp5SeMNc89WHaSrvAHGsMengj3dyamR5kcGyDHWebSsaE/qH?=
- =?us-ascii?Q?iij0GJ1zoD5e+ipI3YuqGSebf08NT3nF4z+P9y/8Ie8FI94o/MoZ1a4E9Xu8?=
- =?us-ascii?Q?vV7He6quPvwx9ysWa1lm3n4AZ6S3LcAO3+OzLl+0n2wHF69XPtDXc8ZV5lyd?=
- =?us-ascii?Q?JvcxuK1l7kr5gEqWmLHOEDRKnMf8QtkIMdn5FPMhGRkr/hyPl9BJKlJKOFag?=
- =?us-ascii?Q?6JPxTu6kwhagfgruom18+Zxdn8t6pMn1tOYTKKAoezHVeFKxYLkqDtwF+ThA?=
- =?us-ascii?Q?/yqI5MIwr9V1WKWnjFyx8v6yuTEhJHbVZqF6jLpbD11hcP6tpRVYm8jJ7ssy?=
- =?us-ascii?Q?Dvw1OXrj6J2xPvFLZfUQg8BA9+UTh3mCAsheuSAIQqDIRHtZfAfwaDM83X3I?=
- =?us-ascii?Q?YbXPtUmbbW3Ro4zyfZQR/u8h5EiY8chq+pOgAOX9pErVxe1zdy7ckVndcDVI?=
- =?us-ascii?Q?EQP/BRax/yBBZK/XFFEntMye3mlY8O+s5X08h7lrBjCC+doMUbF3oaD3wk61?=
- =?us-ascii?Q?TFcAQuWTYBhjKIUE+0w/7HTFxCQAai+WWhc5scWU1uUGNry5/wy6S5logjFe?=
- =?us-ascii?Q?1vj1ie5kM5cQKtigBrssMQBE9Q+zS+jG6UBM3aNCgBnjQSl0vH//qEFaJXmS?=
- =?us-ascii?Q?fUumy4JkSVvUFP6lcZ9E/9aXBEq5T6G1uoouH70e7RKjlOhGUWb3Fpql9GTh?=
- =?us-ascii?Q?gi6FxlHn7ky4qUS34SCerNOZKiDPvCSvbycToQdrn0kKXbbZXeVz4nxshMfR?=
- =?us-ascii?Q?GR5G42gGJ0FT8TbLOfbQ3anj3Asoe/4lnpGMIX9RlxpHTB9fbeZ2kq+JgsRw?=
- =?us-ascii?Q?2OPL/yq+EDGc9Syn5wirQQE+wrtpUy2IsjggpYPMnvXnPuE5F/HSNUhni7E/?=
- =?us-ascii?Q?j4P+vtVqK31D69tKm4hMBxMcPmrlS1dqNsuQO56Omv/bn+2qf4fp6ZRJBuFW?=
- =?us-ascii?Q?8DwABSwBDUxT6pCS8hwbECo+GX0kgUxrO1jFY98+XxPS82bvr55Q1eF2GoHB?=
- =?us-ascii?Q?9W9NgGcAgnZmK9BXgfvU84eNI6n+u9BD8Bo5fHSSXUvgo2n8FILJP1iOzu5k?=
- =?us-ascii?Q?TA41TrMJqmwDebK1NUKpost/sB9p2OKXH66YPGYftvOnGCQiVzE1yaNM5aIt?=
- =?us-ascii?Q?rtPTWV5RUHSJMEOg7oL3AYvTt/+UTF3GkJnBmX5HwOmlYF0tBpbFixyIQ609?=
- =?us-ascii?Q?xIQVJU+mbnLZ/Z+DF6wLPeTr21NWfZSUpiy4+HU0vVtROxTpNtcazpD0nfBd?=
- =?us-ascii?Q?VjblrQv0W9tee5PTwjO0KWLl01Pkm4w02S92fIHQuTmLs2P2pdFCkfeakAoT?=
- =?us-ascii?Q?Uh9W8/Kb4dud6sa4OzJ8znyunRhXrCQPa4foUazJu62q3XxcAhPxB/m1x1D+?=
- =?us-ascii?Q?HM3Z1v8fmUdCQmCai+jBoBZbGzXQUAUmplxmqhj711eU4gpMW0faIzr99sp+?=
- =?us-ascii?Q?4LowItEC2n7cknFzaAN6WTN7PbW8aIYjsa/xAVaSKP/Fcodb3n5kKuYJk8yE?=
- =?us-ascii?Q?o5eTZWICOBXegvTppJ9Xa9EObxXf+xByshZnftUhfTLr6frdb0C8VH2bXbw6?=
- =?us-ascii?Q?KQgnBIXHDO9EwqDbMzLSLe03Ez4h3QSpL/TBmKdQjuR1jCmGCGi39onEykV+?=
- =?us-ascii?Q?sFHs6iDer+SFGZcCnqB1tJaOzXPrgRv70rFCuc2/6v1uO29LthKhyaAANsUe?=
- =?us-ascii?Q?ory66W5e4Q=3D=3D?=
-X-Exchange-RoutingPolicyChecked: i4zSehp2cGyE/9XTjyMc0iNJhaGVwhqBTcEPF87fHLp/jQlIZ4iBjE9koRWmmApUbt00giHL2lQZP6n2W1woi/aUSwRY4BMkdcU37r6kFi/5WL0q5vbmKj0Snd45TGvh3+fr7r7vPVGUaW6Mun5yP4Yv8LPyc1qdjVF4Pyok2CC176i7Q+QSrmdn7jpC+/pXGScznipB1dBk0k/kmbd3PYEvNv7mscAMLlW8yXjvIPNvsM0/soPHg9vUF/Q9D8Wt0nmsWm+4gH3DpegDv6CjH7FT76fZyXmLqD+Wq6dBem4HLGoYHK3uTI7M7dYr0qElTq0XiFNuSUnxnoHI8OTJKQ==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5618e017-2c11-4a84-4b18-08ded64e4685
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB7472.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2026 02:21:21.3458
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lmB9Fjrp36SKpRzxKOQPH88BWUGNQEL3HOBO67Mgmf7SNoeOoyPUhCQMHLa5SAnAUa28cnfol6HacBqoUF5PPg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5245
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 30, 2026 at 08:35:49AM +0800, Sean Christopherson wrote:
-> Gah, I thought I had sent this out this morning, long before Ackerley's response.
-> But I got distracted by a meeting and forgot to get back to this... *sigh*
-> 
-> Sending what I already wrote, even though there's a lot of overlap with Ackerley's
-> mail.
-> 
-> On Mon, Jun 29, 2026, Yan Zhao wrote:
-> > On Fri, Jun 26, 2026 at 08:28:32AM -0700, Ackerley Tng wrote:
-> > > Yan Zhao <yan.y.zhao@intel.com> writes:
-> > > > But if a user configures 0 uaddr as valid, writes to it, and then passes 0 as
-> > > > source_addr(not from gmem), I'm not sure if it's good for the kernel to silently
-> > > > treat 0 uaddr as an identifier for in-place copy from the private PFN in gmem.
-> > > >
-> > > 
-> > > I'd say the original uAPI perhaps just didn't document 0 as an
-> > > unsupported uaddr. Given that commit 2a62345b3052 already merged, uAPI
-> > > was perhaps accidentally changed and no customer complained, I think we
-> > > can move forward with 0 as an invalid src_address? I wouldn't think
-> > > anyone relies on 0 intentionally being a valid address.
-> > > 
-> > > I could document that, if it helps?
-> > What about just documenting that 0 is an unsupported uaddr which will be
-> > re-purposed as an indicator to use the target pfn as the source, regardless of
-> > whether gmem_in_place_conversion is true? i.e.,
-> > 
-> > if (!src_page) 
-> > 	src_page = pfn_to_page(pfn);
-> 
-> Because KVM can't generally use the target page as the source without in-place
-> conversion, it's not supported today, and out-of-place conversion is being
-> deprecated.
-By "out-of-place conversion", do you mean using per-VM memory attribute
-conversion?
+This patch converts the existing prandom selftest (lib/random32.c) to use
+the KUnit framework (lib/tests/random32_kunit.c). Unlike typical KUnit
+tests, this file is directly #included into lib/random32.c.
 
-> > I don't get why the two scenarios should be treated differently:
-> > 1. gmem_in_place_conversion==true, shared memory is not from gmem 
-> > 2. gmem_in_place_conversion==false, shared memory is not from gmem
-> > 
-> > In both case, a 0 uaddr could be mapped to a valid page not from gmem.
-> 
-> That's immaterial.  KVM's ABI (that we're solidifying) is that an address of '0'
-> for the source means NULL.  The fact that userspace could have a valid mapping
-> at virtual address '0' is irrelevant.
-So, I'm wondering if we can document that 0 uaddr could always mean using target
-PFN.
-i.e., for both scenarios 1 and 2, al long as 0 uaddr is specified, we always
-use target PFN as source for in-place add.
+The new test:
+- Removes the legacy CONFIG_RANDOM32_SELFTEST from lib/random32.c.
+- Adds CONFIG_PRANDOM_KUNIT_TEST (defaulting to KUNIT_ALL_TESTS).
+- Moves the test logic to lib/tests/random32_kunit.c.
 
-> Again, just because something is technically possible doesn't mean it needs to
-> be supported by every piece of KVM's uAPI.
-> 
-> > So why not update the uAPI to handle both cases consistently? :)
-> 
-> Because retroactively adding support for out-of-place conversion is pointless
-> (requires a userspace update for a feature that's being deprecated), KVM can't
-> generally support using the source for out-of-place conversion (it's effectively
-> an obscure zero-page optimization), and IMO rejecting the out-of-place conversion
-> scenario is valuable for KVM developers, e.g. to help newcomers understand what
-> exactly is and isn't possible.
-Ok. You mean per-VM memory attribute is deprecating, and source page from !gmem
-backend is also deprecating, so we don't want to change uAPI for scenarios under
-gmem_in_place_conversion==false. Right?
+v2:
+- Removes the legacy CONFIG_RANDOM32_SELFTEST from lib/Kconfig.
+- Add const to arrays in lib/tests/random32_kunit.c.
 
-> Side topic, isn't TDX broken if target page has already been added to the TD?
-> IIUC, kvm_tdp_mmu_map_private_pfn() will be a glorified nop due to the page
-> already having a valid S-EPT mapping, and so KVM will incorrectly allow a double
-Not sure if my understand out-of-place conversion correctly.
-Given target PFNs and GFNs are not duplicated, what would cause double add? :)
+v3:
+- Changes from tristate to bool in lib/Kconfig.debug.
 
-> add.  Ahhh, no, because KVM will return RET_PF_SPURIOUS and
-> kvm_tdp_mmu_map_private_pfn() will then return -EIO.
-My asking was if we could document uaddr always means using target PFN, since
-TDX's in-place add does not rely on gmem in-place conversion.
+v4:
+- Changes from bool to tristate in lib/Kconfig.debug.
+- Spins off the test into its own module under lib/tests/.
+- Adds a prototype for prandom_warmup() to avoid a warning.
+- Makes prandom_warmup() visible to the test in lib/random32.c.
+- Adds the build rule for random32_kunit.o to lib/tests/Makefile.
 
+This commit is verified by `./tools/testing/kunit/kunit.py run`
+with the .kunit/.kunitconfig:
 
+```
+CONFIG_KUNIT=y
+CONFIG_PRANDOM_KUNIT_TEST=y
+```
 
+Reviewed-by: David Gow <davidgow@google.com>
+Signed-off-by: Kir Chou <note351@hotmail.com>
+---
+ lib/Kconfig                |   6 --
+ lib/Kconfig.debug          |   9 ++
+ lib/random32.c             | 184 ++-----------------------------------
+ lib/tests/Makefile         |   1 +
+ lib/tests/random32_kunit.c | 181 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 201 insertions(+), 180 deletions(-)
+ create mode 100644 lib/tests/random32_kunit.c
+
+diff --git a/lib/Kconfig b/lib/Kconfig
+index 2923924be..5f185e9f1 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -156,12 +156,6 @@ config AUDIT_COMPAT_GENERIC
+ 	depends on AUDIT_GENERIC && AUDIT_ARCH_COMPAT_GENERIC && COMPAT
+ 	default y
+ 
+-config RANDOM32_SELFTEST
+-	bool "PRNG perform self test on init"
+-	help
+-	  This option enables the 32 bit PRNG library functions to perform a
+-	  self test on initialization.
+-
+ #
+ # compression support is select'ed if needed
+ #
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index ba36939fd..0214a5859 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -3354,6 +3354,15 @@ config PRIME_NUMBERS_KUNIT_TEST
+ 
+ 	  If unsure, say N
+ 
++config PRANDOM_KUNIT_TEST
++	tristate "KUnit test for prandom" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  Enable this option to test the prandom functions at runtime.
++
++	  If unsure, say N
++
+ endif # RUNTIME_TESTING_MENU
+ 
+ config ARCH_USE_MEMTEST
+diff --git a/lib/random32.c b/lib/random32.c
+index 24e7acd93..dad90219c 100644
+--- a/lib/random32.c
++++ b/lib/random32.c
+@@ -41,6 +41,7 @@
+ #include <linux/bitops.h>
+ #include <linux/slab.h>
+ #include <linux/unaligned.h>
++#include <kunit/visibility.h>
+ 
+ /**
+  *	prandom_u32_state - seeded pseudo-random number generator.
+@@ -92,7 +93,14 @@ void prandom_bytes_state(struct rnd_state *state, void *buf, size_t bytes)
+ }
+ EXPORT_SYMBOL(prandom_bytes_state);
+ 
+-static void prandom_warmup(struct rnd_state *state)
++/*
++ * Only declared here so that it has a prototype when made
++ * non-static for KUnit testing (avoids -Wmissing-prototypes).
++ */
++#if IS_ENABLED(CONFIG_KUNIT)
++void prandom_warmup(struct rnd_state *state);
++#endif
++VISIBLE_IF_KUNIT void prandom_warmup(struct rnd_state *state)
+ {
+ 	/* Calling RNG ten times to satisfy recurrence condition */
+ 	prandom_u32_state(state);
+@@ -106,6 +114,7 @@ static void prandom_warmup(struct rnd_state *state)
+ 	prandom_u32_state(state);
+ 	prandom_u32_state(state);
+ }
++EXPORT_SYMBOL_IF_KUNIT(prandom_warmup);
+ 
+ void prandom_seed_full_state(struct rnd_state __percpu *pcpu_state)
+ {
+@@ -125,176 +134,3 @@ void prandom_seed_full_state(struct rnd_state __percpu *pcpu_state)
+ 	}
+ }
+ EXPORT_SYMBOL(prandom_seed_full_state);
+-
+-#ifdef CONFIG_RANDOM32_SELFTEST
+-static struct prandom_test1 {
+-	u32 seed;
+-	u32 result;
+-} test1[] = {
+-	{ 1U, 3484351685U },
+-	{ 2U, 2623130059U },
+-	{ 3U, 3125133893U },
+-	{ 4U,  984847254U },
+-};
+-
+-static struct prandom_test2 {
+-	u32 seed;
+-	u32 iteration;
+-	u32 result;
+-} test2[] = {
+-	/* Test cases against taus113 from GSL library. */
+-	{  931557656U, 959U, 2975593782U },
+-	{ 1339693295U, 876U, 3887776532U },
+-	{ 1545556285U, 961U, 1615538833U },
+-	{  601730776U, 723U, 1776162651U },
+-	{ 1027516047U, 687U,  511983079U },
+-	{  416526298U, 700U,  916156552U },
+-	{ 1395522032U, 652U, 2222063676U },
+-	{  366221443U, 617U, 2992857763U },
+-	{ 1539836965U, 714U, 3783265725U },
+-	{  556206671U, 994U,  799626459U },
+-	{  684907218U, 799U,  367789491U },
+-	{ 2121230701U, 931U, 2115467001U },
+-	{ 1668516451U, 644U, 3620590685U },
+-	{  768046066U, 883U, 2034077390U },
+-	{ 1989159136U, 833U, 1195767305U },
+-	{  536585145U, 996U, 3577259204U },
+-	{ 1008129373U, 642U, 1478080776U },
+-	{ 1740775604U, 939U, 1264980372U },
+-	{ 1967883163U, 508U,   10734624U },
+-	{ 1923019697U, 730U, 3821419629U },
+-	{  442079932U, 560U, 3440032343U },
+-	{ 1961302714U, 845U,  841962572U },
+-	{ 2030205964U, 962U, 1325144227U },
+-	{ 1160407529U, 507U,  240940858U },
+-	{  635482502U, 779U, 4200489746U },
+-	{ 1252788931U, 699U,  867195434U },
+-	{ 1961817131U, 719U,  668237657U },
+-	{ 1071468216U, 983U,  917876630U },
+-	{ 1281848367U, 932U, 1003100039U },
+-	{  582537119U, 780U, 1127273778U },
+-	{ 1973672777U, 853U, 1071368872U },
+-	{ 1896756996U, 762U, 1127851055U },
+-	{  847917054U, 500U, 1717499075U },
+-	{ 1240520510U, 951U, 2849576657U },
+-	{ 1685071682U, 567U, 1961810396U },
+-	{ 1516232129U, 557U,    3173877U },
+-	{ 1208118903U, 612U, 1613145022U },
+-	{ 1817269927U, 693U, 4279122573U },
+-	{ 1510091701U, 717U,  638191229U },
+-	{  365916850U, 807U,  600424314U },
+-	{  399324359U, 702U, 1803598116U },
+-	{ 1318480274U, 779U, 2074237022U },
+-	{  697758115U, 840U, 1483639402U },
+-	{ 1696507773U, 840U,  577415447U },
+-	{ 2081979121U, 981U, 3041486449U },
+-	{  955646687U, 742U, 3846494357U },
+-	{ 1250683506U, 749U,  836419859U },
+-	{  595003102U, 534U,  366794109U },
+-	{   47485338U, 558U, 3521120834U },
+-	{  619433479U, 610U, 3991783875U },
+-	{  704096520U, 518U, 4139493852U },
+-	{ 1712224984U, 606U, 2393312003U },
+-	{ 1318233152U, 922U, 3880361134U },
+-	{  855572992U, 761U, 1472974787U },
+-	{   64721421U, 703U,  683860550U },
+-	{  678931758U, 840U,  380616043U },
+-	{  692711973U, 778U, 1382361947U },
+-	{  677703619U, 530U, 2826914161U },
+-	{   92393223U, 586U, 1522128471U },
+-	{ 1222592920U, 743U, 3466726667U },
+-	{  358288986U, 695U, 1091956998U },
+-	{ 1935056945U, 958U,  514864477U },
+-	{  735675993U, 990U, 1294239989U },
+-	{ 1560089402U, 897U, 2238551287U },
+-	{   70616361U, 829U,   22483098U },
+-	{  368234700U, 731U, 2913875084U },
+-	{   20221190U, 879U, 1564152970U },
+-	{  539444654U, 682U, 1835141259U },
+-	{ 1314987297U, 840U, 1801114136U },
+-	{ 2019295544U, 645U, 3286438930U },
+-	{  469023838U, 716U, 1637918202U },
+-	{ 1843754496U, 653U, 2562092152U },
+-	{  400672036U, 809U, 4264212785U },
+-	{  404722249U, 965U, 2704116999U },
+-	{  600702209U, 758U,  584979986U },
+-	{  519953954U, 667U, 2574436237U },
+-	{ 1658071126U, 694U, 2214569490U },
+-	{  420480037U, 749U, 3430010866U },
+-	{  690103647U, 969U, 3700758083U },
+-	{ 1029424799U, 937U, 3787746841U },
+-	{ 2012608669U, 506U, 3362628973U },
+-	{ 1535432887U, 998U,   42610943U },
+-	{ 1330635533U, 857U, 3040806504U },
+-	{ 1223800550U, 539U, 3954229517U },
+-	{ 1322411537U, 680U, 3223250324U },
+-	{ 1877847898U, 945U, 2915147143U },
+-	{ 1646356099U, 874U,  965988280U },
+-	{  805687536U, 744U, 4032277920U },
+-	{ 1948093210U, 633U, 1346597684U },
+-	{  392609744U, 783U, 1636083295U },
+-	{  690241304U, 770U, 1201031298U },
+-	{ 1360302965U, 696U, 1665394461U },
+-	{ 1220090946U, 780U, 1316922812U },
+-	{  447092251U, 500U, 3438743375U },
+-	{ 1613868791U, 592U,  828546883U },
+-	{  523430951U, 548U, 2552392304U },
+-	{  726692899U, 810U, 1656872867U },
+-	{ 1364340021U, 836U, 3710513486U },
+-	{ 1986257729U, 931U,  935013962U },
+-	{  407983964U, 921U,  728767059U },
+-};
+-
+-static void prandom_state_selftest_seed(struct rnd_state *state, u32 seed)
+-{
+-#define LCG(x)	 ((x) * 69069U)	/* super-duper LCG */
+-	state->s1 = __seed(LCG(seed),        2U);
+-	state->s2 = __seed(LCG(state->s1),   8U);
+-	state->s3 = __seed(LCG(state->s2),  16U);
+-	state->s4 = __seed(LCG(state->s3), 128U);
+-}
+-
+-static int __init prandom_state_selftest(void)
+-{
+-	int i, j, errors = 0, runs = 0;
+-	bool error = false;
+-
+-	for (i = 0; i < ARRAY_SIZE(test1); i++) {
+-		struct rnd_state state;
+-
+-		prandom_state_selftest_seed(&state, test1[i].seed);
+-		prandom_warmup(&state);
+-
+-		if (test1[i].result != prandom_u32_state(&state))
+-			error = true;
+-	}
+-
+-	if (error)
+-		pr_warn("prandom: seed boundary self test failed\n");
+-	else
+-		pr_info("prandom: seed boundary self test passed\n");
+-
+-	for (i = 0; i < ARRAY_SIZE(test2); i++) {
+-		struct rnd_state state;
+-
+-		prandom_state_selftest_seed(&state, test2[i].seed);
+-		prandom_warmup(&state);
+-
+-		for (j = 0; j < test2[i].iteration - 1; j++)
+-			prandom_u32_state(&state);
+-
+-		if (test2[i].result != prandom_u32_state(&state))
+-			errors++;
+-
+-		runs++;
+-		cond_resched();
+-	}
+-
+-	if (errors)
+-		pr_warn("prandom: %d/%d self tests failed\n", errors, runs);
+-	else
+-		pr_info("prandom: %d self tests passed\n", runs);
+-	return 0;
+-}
+-core_initcall(prandom_state_selftest);
+-#endif
+diff --git a/lib/tests/Makefile b/lib/tests/Makefile
+index 601dba4b7..39d283b26 100644
+--- a/lib/tests/Makefile
++++ b/lib/tests/Makefile
+@@ -49,5 +49,6 @@ obj-$(CONFIG_STRING_HELPERS_KUNIT_TEST) += string_helpers_kunit.o
+ obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
+ obj-$(CONFIG_UTIL_MACROS_KUNIT) += util_macros_kunit.o
+ obj-$(CONFIG_RATELIMIT_KUNIT_TEST) += test_ratelimit.o
++obj-$(CONFIG_PRANDOM_KUNIT_TEST) += random32_kunit.o
+ 
+ obj-$(CONFIG_TEST_RUNTIME_MODULE)		+= module/
+diff --git a/lib/tests/random32_kunit.c b/lib/tests/random32_kunit.c
+new file mode 100644
+index 000000000..436435026
+--- /dev/null
++++ b/lib/tests/random32_kunit.c
+@@ -0,0 +1,181 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test cases for random32 functions.
++ */
++
++#include <linux/prandom.h>
++#include <kunit/test.h>
++
++/* prandom_warmup() is static in lib/random32.c; exposed for testing only. */
++void prandom_warmup(struct rnd_state *state);
++
++static const struct prandom_test1 {
++	u32 seed;
++	u32 result;
++} test1[] = {
++	{ 1U, 3484351685U },
++	{ 2U, 2623130059U },
++	{ 3U, 3125133893U },
++	{ 4U,  984847254U },
++};
++
++static const struct prandom_test2 {
++	u32 seed;
++	u32 iteration;
++	u32 result;
++} test2[] = {
++	/* Test cases against taus113 from GSL library. */
++	{  931557656U, 959U, 2975593782U },
++	{ 1339693295U, 876U, 3887776532U },
++	{ 1545556285U, 961U, 1615538833U },
++	{  601730776U, 723U, 1776162651U },
++	{ 1027516047U, 687U,  511983079U },
++	{  416526298U, 700U,  916156552U },
++	{ 1395522032U, 652U, 2222063676U },
++	{  366221443U, 617U, 2992857763U },
++	{ 1539836965U, 714U, 3783265725U },
++	{  556206671U, 994U,  799626459U },
++	{  684907218U, 799U,  367789491U },
++	{ 2121230701U, 931U, 2115467001U },
++	{ 1668516451U, 644U, 3620590685U },
++	{  768046066U, 883U, 2034077390U },
++	{ 1989159136U, 833U, 1195767305U },
++	{  536585145U, 996U, 3577259204U },
++	{ 1008129373U, 642U, 1478080776U },
++	{ 1740775604U, 939U, 1264980372U },
++	{ 1967883163U, 508U,   10734624U },
++	{ 1923019697U, 730U, 3821419629U },
++	{  442079932U, 560U, 3440032343U },
++	{ 1961302714U, 845U,  841962572U },
++	{ 2030205964U, 962U, 1325144227U },
++	{ 1160407529U, 507U,  240940858U },
++	{  635482502U, 779U, 4200489746U },
++	{ 1252788931U, 699U,  867195434U },
++	{ 1961817131U, 719U,  668237657U },
++	{ 1071468216U, 983U,  917876630U },
++	{ 1281848367U, 932U, 1003100039U },
++	{  582537119U, 780U, 1127273778U },
++	{ 1973672777U, 853U, 1071368872U },
++	{ 1896756996U, 762U, 1127851055U },
++	{  847917054U, 500U, 1717499075U },
++	{ 1240520510U, 951U, 2849576657U },
++	{ 1685071682U, 567U, 1961810396U },
++	{ 1516232129U, 557U,    3173877U },
++	{ 1208118903U, 612U, 1613145022U },
++	{ 1817269927U, 693U, 4279122573U },
++	{ 1510091701U, 717U,  638191229U },
++	{  365916850U, 807U,  600424314U },
++	{  399324359U, 702U, 1803598116U },
++	{ 1318480274U, 779U, 2074237022U },
++	{  697758115U, 840U, 1483639402U },
++	{ 1696507773U, 840U,  577415447U },
++	{ 2081979121U, 981U, 3041486449U },
++	{  955646687U, 742U, 3846494357U },
++	{ 1250683506U, 749U,  836419859U },
++	{  595003102U, 534U,  366794109U },
++	{   47485338U, 558U, 3521120834U },
++	{  619433479U, 610U, 3991783875U },
++	{  704096520U, 518U, 4139493852U },
++	{ 1712224984U, 606U, 2393312003U },
++	{ 1318233152U, 922U, 3880361134U },
++	{  855572992U, 761U, 1472974787U },
++	{   64721421U, 703U,  683860550U },
++	{  678931758U, 840U,  380616043U },
++	{  692711973U, 778U, 1382361947U },
++	{  677703619U, 530U, 2826914161U },
++	{   92393223U, 586U, 1522128471U },
++	{ 1222592920U, 743U, 3466726667U },
++	{  358288986U, 695U, 1091956998U },
++	{ 1935056945U, 958U,  514864477U },
++	{  735675993U, 990U, 1294239989U },
++	{ 1560089402U, 897U, 2238551287U },
++	{   70616361U, 829U,   22483098U },
++	{  368234700U, 731U, 2913875084U },
++	{   20221190U, 879U, 1564152970U },
++	{  539444654U, 682U, 1835141259U },
++	{ 1314987297U, 840U, 1801114136U },
++	{ 2019295544U, 645U, 3286438930U },
++	{  469023838U, 716U, 1637918202U },
++	{ 1843754496U, 653U, 2562092152U },
++	{  400672036U, 809U, 4264212785U },
++	{  404722249U, 965U, 2704116999U },
++	{  600702209U, 758U,  584979986U },
++	{  519953954U, 667U, 2574436237U },
++	{ 1658071126U, 694U, 2214569490U },
++	{  420480037U, 749U, 3430010866U },
++	{  690103647U, 969U, 3700758083U },
++	{ 1029424799U, 937U, 3787746841U },
++	{ 2012608669U, 506U, 3362628973U },
++	{ 1535432887U, 998U,   42610943U },
++	{ 1330635533U, 857U, 3040806504U },
++	{ 1223800550U, 539U, 3954229517U },
++	{ 1322411537U, 680U, 3223250324U },
++	{ 1877847898U, 945U, 2915147143U },
++	{ 1646356099U, 874U,  965988280U },
++	{  805687536U, 744U, 4032277920U },
++	{ 1948093210U, 633U, 1346597684U },
++	{  392609744U, 783U, 1636083295U },
++	{  690241304U, 770U, 1201031298U },
++	{ 1360302965U, 696U, 1665394461U },
++	{ 1220090946U, 780U, 1316922812U },
++	{  447092251U, 500U, 3438743375U },
++	{ 1613868791U, 592U,  828546883U },
++	{  523430951U, 548U, 2552392304U },
++	{  726692899U, 810U, 1656872867U },
++	{ 1364340021U, 836U, 3710513486U },
++	{ 1986257729U, 931U,  935013962U },
++	{  407983964U, 921U,  728767059U },
++};
++
++static void prandom_state_test_seed(struct rnd_state *state, u32 seed)
++{
++#define LCG(x)	 ((x) * 69069U)	/* super-duper LCG */
++	state->s1 = __seed(LCG(seed),        2U);
++	state->s2 = __seed(LCG(state->s1),   8U);
++	state->s3 = __seed(LCG(state->s2),  16U);
++	state->s4 = __seed(LCG(state->s3), 128U);
++}
++
++static void test_prandom_seed_boundary(struct kunit *test)
++{
++	int i;
++	struct rnd_state state;
++
++	for (i = 0; i < ARRAY_SIZE(test1); i++) {
++		prandom_state_test_seed(&state, test1[i].seed);
++		prandom_warmup(&state);
++		KUNIT_EXPECT_EQ(test, test1[i].result, prandom_u32_state(&state));
++	}
++}
++
++static void test_prandom_taus113(struct kunit *test)
++{
++	int i, j;
++	struct rnd_state state;
++
++	for (i = 0; i < ARRAY_SIZE(test2); i++) {
++		prandom_state_test_seed(&state, test2[i].seed);
++		prandom_warmup(&state);
++
++		for (j = 0; j < test2[i].iteration - 1; j++)
++			prandom_u32_state(&state);
++
++		KUNIT_EXPECT_EQ(test, test2[i].result, prandom_u32_state(&state));
++	}
++}
++
++static struct kunit_case prandom_test_cases[] = {
++	KUNIT_CASE(test_prandom_seed_boundary),
++	KUNIT_CASE(test_prandom_taus113),
++	{}
++};
++
++static struct kunit_suite prandom_test_suite = {
++	.name = "prandom",
++	.test_cases = prandom_test_cases,
++};
++
++kunit_test_suite(prandom_test_suite);
++
++MODULE_DESCRIPTION("KUnit test for prandom");
++MODULE_LICENSE("GPL");
+-- 
+2.52.0
 
