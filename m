@@ -1,224 +1,172 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C4F395DBF
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 03:22:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782789772; cv=pass; b=iowLY0Zpc8ORnz3PeWFoPVnIZQNAD8StdOS6nHhTqstc8Io/Jfllu2ZGiTlgOiPdzvWnO3qwSIDK3HyTZ4NWABj8GiJfnIdBmRezSbinOF9s0goG056B14nNY05S+sR4jSTQLVZKL6J0pKH5Ppv+fbFcd3GdCvuCEDpleg9wJVs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782789772; c=relaxed/simple;
-	bh=exeKnUHavp/OKrHftRTzlqh9NDuuC1kbg/uZzf/tCB0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A3alCkF2lhaCaN9Hfx9nYLXx7MP5oAegd0cGNxZ3DjgGmNK3PCIZjnKvWUVb0l610Z6jA8+ZIr9arvOeSeflLgkxzuaLhEpiBu/mOia7aPV340K/ycYZDE3Z1vPrKok3d4IzZzR7PHNkBksvhKMBSAOLCNb3WBWsE/U+Hua8huU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KKZBjU08; arc=pass smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61185280329
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 03:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782790459; cv=none; b=MGHpWJK7pPJpOsYcPr60hNbqaBjMeLMDHVlWJVrAu6Baw+6wtHq8I7vC6yezDqt2VbG17sxHrDATuBR5Nc529pMV60QmlfFa75+rjZPfTA3xgHQyTFHecg+UDStychkgsFxb1r5Qm9c5tVUUg6CGkcPjhV4BORGF2nN5bT6CcpY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782790459; c=relaxed/simple;
+	bh=ugfWSrFiPleG+ghQzQN67OwO5CmNudRh6qTqW6E+gRg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=iksEKsziUHY+kjtfeDLRg3xA+RcZrODbB4Tw0JojG3tDuOM+Ge9wme7yGFU88WJIx/QKH1d3IXLlZqBTd/gk1GXyJv4Z0EcY3Ip8tc8Z8HULg47E1TnEZcjY0XLsMTjL+G3vnFRwfpLXb7rs7YJc4a0SIptj/9SSAYqqp4nobQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZOVFTCOF; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KKZBjU08"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c125bcfd9a1so239050166b.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2026 20:22:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782789764; cv=none;
-        d=google.com; s=arc-20260327;
-        b=KoT+eHXPrzCN5OAE4yjhs7QKpEy5/tNZ1C84/iq/P7E0ItdjStdDup+tFy1vMJKeey
-         VYfYb9EKVZRcW5Rkirj7QuJnu1UZdxzArOcRZN+CJdIO1QTjK304qCPknTRNetz2AN0U
-         DZH/3Y9kImlXNZzZ3S8c4NzzczSXL3657Ny9JTjivGEZNN5w3ThKtIGMrZ7tUtDityaH
-         ey0qsM++0E+zfHuS+qkClBrz+zCpiBFY5dayeHJ9KpLbm0I5gA4ET7ySwtRWn7EL3yJj
-         zj7bzk+1IEK+A6nYowy5318tecxjfgRfrjmi3s21Zvti/1lcYxnlZWfMa/ZGmsNTPB3P
-         t9lA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5t0Z8YH1W6ojWYQbuId+EJuIef6/fECfTrP9ygzO3Us=;
-        fh=p0MG/ZCfpBnyI4KpsukZBxB6pEEiB4WL+IJsXswz3oQ=;
-        b=MFffHr50EbsdIgWTedTb/WtaOQdW6xwIVEoKq96EmIDQbwVkJ+o8lbSzfxNaGV6tKK
-         yt5pYXhCculN/m8wL2GbxRxmiZZJgDdCQ2hQvjzJBPidUXqORG+NdR2mECTSswyL4pfC
-         eLapYdeP7kxznmhnN4v/RxxOmQZk9q4x8pwV5b4/jXLMnhnqZwOaOe03s5wb3ScARBSu
-         a/euUjhXcrRrcSYgrus/wTRutnh1m00Mu+xo9sbaCOgm/1ZD6yHiuT24un9n2FwBca0x
-         uXhRFHKnDnA6oZMPivLQRkJguNWkot5IBq4HtNkAby3lgJTf/z2zc0EcFJAf3xn+ZXRK
-         dTPA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782789764; x=1783394564; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5t0Z8YH1W6ojWYQbuId+EJuIef6/fECfTrP9ygzO3Us=;
-        b=KKZBjU08ki+m75JYuFallJjK1SVF4oL3LQd63eE7arBAhbPTHBWorc9XCoG4rx1HsU
-         4jdhFYf33l2h3R1A+eyBL6sBbHdPOD9mb4i4UlB9dmNAv6vQNfY98ki5vJzw7Jgj9m0p
-         iPQD24K6EXvbV+tNtN3l+kMsfGnbkqMnYrrgXLTAg1uRpJ7ziZNI3Zwj+PfZ6f/ZpOqh
-         xF+H9lRRW/q4HN4jexSIOnFGbbNaF7ySiWyFT9Ud7MTBcv01I2AbEHeg97KchOqtIo3H
-         FB18R8VueODaFGN4P2ITXl+GfRqFjzORIv43PFpmA3yFlEPqa9qNylLhpkq/lPC/hakj
-         1vuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782789764; x=1783394564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5t0Z8YH1W6ojWYQbuId+EJuIef6/fECfTrP9ygzO3Us=;
-        b=h0vYInuXyaTRnBMRjuWZ9ytZthBPp+mglLSEuR60vNFlqAll9omYm50hqMrZIwbMXZ
-         CjEdCHzAXwn8sCfSeqf8MaD5ut9nEmbYjKsf5FzXXjokVRsj4bzy7//71S2TUey+rKlo
-         JVfefl2phqRt0vJS2bqEtLuRYPFZVLCzyW9jc8iBTpsxIydP7Id7Ap0c8A5lsIqumVfc
-         Mkmcxubwjg2s6Tp0eDEzkVrek9IIoO4nklIdt52l8V54M3v8DrVFPz+ko+vUQN4NCVtk
-         nHfyEZbjimtaCgWHRpW+kMamY5nbbigQkumSMdnnOWVlmZ/pYQ/ditBlJJ0R8tDhJMQK
-         frBw==
-X-Forwarded-Encrypted: i=1; AHgh+RpCOSgQsy8w7GJdjIUl/WqsIl5fPVQMfHsCzhEjqNccmq4IoIP+VDUGfWm/RObo2X5ZiacWtILcADkzJp0dyCM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTKJSJOnF5OW+IxzgcSfi981rbavJHMcqeAUTu5J0FCbLn0on2
-	6uuzXKlcKyW5OJyYSyBBF4hkQAO3JG0kJsM0kBRXPTjPHk0m6q9xqugciGtuJdAy+vTcjeXnF/9
-	CUd/5D8TDX3DFq1sg5q8tmOlip0VvNEM=
-X-Gm-Gg: AfdE7ckMk82cHgavCXKXoUGwt52383j5dfFx7B18DSggY9rWpoMBf9RgCUJ1Lx990wk
-	PoMxb05Jji8TbrBq5M/xOZBE7s0gI7l8/K0hVpDCpzcXxeckhgkd2c0CxsWS9CbJXMDSx9BiUoQ
-	jCK7Lt3aJC5Jf2FDAx3CxFlHmuuMISXyeHEsUfRHdpmL8lf2yZdQCbE+mMFYY2+H496yn3CFgZZ
-	u0fR+KvskTBRGEqzJGYCf0BO71JoT0IOad2td0V0DEo1EmcCgp4e2h4EaMgBolfFmTt9vj07zoA
-	WoO7AWr3Zn1xJDFyl8fwYpQbRm6b
-X-Received: by 2002:a17:907:c9a0:b0:c12:696b:dd78 with SMTP id
- a640c23a62f3a-c1287289985mr52985166b.39.1782789763503; Mon, 29 Jun 2026
- 20:22:43 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZOVFTCOF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782790456;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tRBBu3ZIXmcqdE061SpizXf8XoM1oYM+ieGMsu0EF8k=;
+	b=ZOVFTCOFBRfz4LyL1JyoHjiUbTIyfabSBxxIUA3iY69IQ0fkiZJNRh3fCd21m3ZGavUQwH
+	4eNtqqHTCdsDFoq7A/sVP2+LoMOjPb2F2scpRrf+wKG+eV0VHackvPQ0BQOw0EjDBX8wvK
+	U9EqbmdZjW2NZNW5GAWxY7CAl615M7s=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-80-3-FrZpR9MBa3MJZMIwDSCw-1; Mon,
+ 29 Jun 2026 23:34:13 -0400
+X-MC-Unique: 3-FrZpR9MBa3MJZMIwDSCw-1
+X-Mimecast-MFC-AGG-ID: 3-FrZpR9MBa3MJZMIwDSCw_1782790451
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 02C19195604C;
+	Tue, 30 Jun 2026 03:34:11 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.2.16.200])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4C506195608D;
+	Tue, 30 Jun 2026 03:34:06 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Ridong Chen <ridong.chen@linux.dev>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Juri Lelli <juri.lelli@redhat.com>
+Cc: cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Guopeng Zhang <guopeng.zhang@linux.dev>,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH-next v9 00/11] cgroup/cpuset: Support multiple source/destination cpusets for cpuset_*attach()
+Date: Mon, 29 Jun 2026 23:33:33 -0400
+Message-ID: <20260630033344.352702-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260616173240.3665059-1-bestswngs@gmail.com> <DU0PR10MB538744C92335756B7F125867E0E42@DU0PR10MB5387.EURPRD10.PROD.OUTLOOK.COM>
- <CANgPUi24wvQ4CLMozb3EBAC-5QKWiMHWpoCQgsBHkG+vZjHALg@mail.gmail.com> <DU0PR10MB5387B831C4F2240AC3B03984E0E22@DU0PR10MB5387.EURPRD10.PROD.OUTLOOK.COM>
-In-Reply-To: <DU0PR10MB5387B831C4F2240AC3B03984E0E22@DU0PR10MB5387.EURPRD10.PROD.OUTLOOK.COM>
-From: Weiming Shi <bestswngs@gmail.com>
-Date: Tue, 30 Jun 2026 11:22:05 +0800
-X-Gm-Features: AVVi8CfJQcYoiMZR5w6DvUVzxIeWsToljnaZvTXs1mfyEV4ivv6qkONI3rTb7GA
-Message-ID: <CANgPUi1ZWrv2ahDcPjWKsgaZikYMLntCxR9cV7TAVHpXxQFwxQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] tty: n_gsm: fix gsm_queue() UAF and add a base
- regression test
-To: "Starke, Daniel" <daniel.starke@siemens.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Xiang Mei <xmei5@asu.edu>, 
-	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Starke, Daniel <daniel.starke@siemens.com> =E4=BA=8E2026=E5=B9=B46=E6=9C=88=
-19=E6=97=A5=E5=91=A8=E4=BA=94 15:14=E5=86=99=E9=81=93=EF=BC=9A
->
-> > > > The receive worker walks gsm->dlci[] without gsm->mutex while a
-> > > > concurrent GSMIOC_SETCONF -> gsm_cleanup_mux() frees the DLCIs, so =
-the
-> > > > control handlers can dereference a freed gsm_dlci. v1's NULL check =
-only
-> > > > narrowed the window; v2 fixes the use-after-free itself.
-> > > >
-> > > > The fix pins each DLCI the dispatch dereferences with its existing
-> > > > tty_port reference (option 2), so the data path stays lock-free. Se=
-e the
-> > > > patch 1 commit message for details, including why the late destruct=
-or
-> > > > uses cmpxchg() so it cannot wipe a re-created mux (Daniel's teardow=
-n
-> > > > concern).
-> > > >
-> > > > Changes since v1:
-> > > >  - Fix the UAF by reference-pinning instead of a NULL check in the
-> > > >    handlers; no gsm->mutex in the data path (Greg, Daniel).
-> > > >  - Pin every DLCI the dispatch touches, not just the addressed one:
-> > > >    MSC/RLS/PN operate on gsm->dlci[k] named in the payload.
-> > > >  - Add a base selftest (patch 2), as Greg asked.
-> > > >
-> > > > Verification (KASAN, panic_on_warn=3D1): the originally reported sp=
-lat is
-> > > > the gsm_control_reply() / CMD_TEST path (see the Link in patch 1). =
-A
-> > > > reproducer targeting the MSC handler crashes the unpatched kernel a=
-nd
-> > > > survives 270 race rounds on v2. The selftest passes on both the cle=
-an
-> > > > and patched kernel (pass:3 fail:0 skip:0).
-> > > >
-> > > > Weiming Shi (2):
-> > > >   tty: n_gsm: fix use-after-free in gsm_queue() control frame dispa=
-tch
-> > > >   selftests: tty: add base regression test for n_gsm line disciplin=
-e
-> > >
-> > > So now there is a race on device node level. We have the old virtual
-> > > gsmttys still waiting for the current pending operations to finish wh=
-ile
-> > > the reconfiguration of the ldisc triggers a recreation of these. How =
-is
-> > > this handled?
-> > >
-> > A pending gsmtty operation stays bound to the old object. gsmtty_instal=
-l()
-> > takes a dlci_get() and the gsmtty ops use tty->driver_data, not gsm->dl=
-ci[],
-> > so an open fd keeps its own reference and never reaches the recreated d=
-lci
-> > (a fresh gsm_dlci_alloc()). On teardown gsm_dlci_release() does
-> > tty_vhangup(), which unblocks the pending ops, and sets DLCI_CLOSED, wh=
-ich
-> > every gsmtty op checks first.
-> >
-> > This is the existing tty_port refcount, and the receive path here uses =
-the
-> > same dlci_get/put, so I don't think the pin adds a device-node race. Bu=
-t
-> > you know this hardware better than I do; if there's a path I'm missing,
-> > point me at it.
->
-> Sounds right. Thank you for the explanation. My tty internals understandi=
-ng
-> is rather shallow.
->
-> > > PATCH 1/2:
-> > >
-> > > > -     if (addr =3D=3D 0 || addr >=3D NUM_DLCI || gsm->dlci[addr] =
-=3D=3D NULL)
-> > > > +     if (addr =3D=3D 0)
-> > > >               return;
-> > > > -     dlci =3D gsm->dlci[addr];
-> > >
-> > > Control octets can be transmitted on non-control DLCIs in convergence=
- layer
-> > > type 2. You do not guard against invalid DLCIs anymore. Same for para=
-meter
-> > > negotiation and RLS.
-> > >
-> >
-> > The checks aren't dropped, just folded into gsm_dlci_open_get(), which
-> > returns NULL for addr >=3D NUM_DLCI and for an empty slot. But hiding t=
-hem
-> > in the lookup makes the diff read like the guard is gone, which was a b=
-ad
-> > call. For v4, maybe we should keep the addr checks at the call sites an=
-d
-> > et the helper only do the locked lookup and pin, so the guard stays
-> > visible where the DLCI is used? Does that match what you'd expect?
->
-> Let's revisit the code for gsm_control_modem for example:
->         len =3D gsm_read_ea_val(&addr, data, cl);
->         if (len < 1)
->                 return;
->
->         addr >>=3D 1;
->         /* Closed port, or invalid ? */
->         if (addr =3D=3D 0 || addr >=3D NUM_DLCI || gsm->dlci[addr] =3D=3D=
- NULL)
->                 return;
->         dlci =3D gsm->dlci[addr];
-> Without the addr >=3D NUM_DLCI part you access the dlci array at a possib=
-le
-> out of bounds index if the received data was broken. Let us keep input da=
-ta
-> validation at system boundaries. You also risk dereferencing a null
-> pointer if the requested DLCI has not been allocated, i.e. opened, yet.
-> Hence, both checks should be kept in place.
->
-> Best regards,
-> Daniel Starke
+ v9:
+  - Drop Farhad's mm mempolicy rebind fix patch as it has been merged to
+    linux-next via the mm tree.
+  - Add a new patch to make nr_deadline_tasks an atomic_t to prevent
+    data corruption due to concurrent update & adjust some later patches
+    accordingly.
+  - Add a new wait_attach_done_lock() helper for waiting ongoing task
+    operation as suggested by Ridong.
 
-HI,
-v3 has been sent. If there are any issues, please let me know.
+ v8: https://lore.kernel.org/lkml/20260626181923.133658-1-longman@redhat.com/
+  - Update patch 3 to make attach_in_progress a global flag which block
+    all cpuset write operations until the attach is done.
+  - Add a new patch 4 to collect most of the attach related variables
+    into a attach_ctx structure as suggested by Ridong.
+  - Add a test_cpuset selftest patch contributed by Michal Koutný.
+  - Keep the existing Reviewed-by tags as there is no functional change
+    to the other patches other than rename of some variables. Also add
+    some new tags.
 
-Best regards,
-Weiming Shi
+ v7: https://lore.kernel.org/lkml/20260621032816.1806773-1-longman@redhat.com/
+  - Include the fix patch from Farhad Alemi to fix a div/0 crash that
+    was part of the old patch 1.
+  - Integrated v6 patch 7 into earlier patches.
+  - Add a new "cgroup/cpuset: Prevent race between task attach and
+    cpuset state change" patch to ensure that there will be no cpuset
+    state change between cpuset_can_attach() and cpuset_attach() or
+    cpuset_cancel_attach().
+  - Break v6 patch 6 into 2 separate patches for supporting multiple
+    source cpusets and multiple destination cpusets respectively and
+    further simplify and streamline the code.
+
+Sashiko AI review of another cpuset patch had found that cpuset_attach()
+and cpuset_can_attach() can be passed a cgroup_taskset with tasks
+migrating from one source cpuset to multiple destination cpusets and
+vice versa.  Further testing of the cpuset code indicates that this is
+indeed the case when the v2 cpuset controller is enabled or disabled.
+
+Unfortunately, cpuset_attach() and cpuset_can_attach() still assume that
+there will be one source and one destinaton cpuset which may result in
+inocrrect behavior.
+
+This patch series is created to fix this issue.
+
+Patch 1 is to fix another nr_deadline_tasks data corruption problem
+reported by sashiko by making it an atomic_t data type.
+
+Patch 2 is to fix an inconsistency in the way node mask update is being
+handled in cpuset_update_tasks_nodemask() and cpuset_attach() so that
+they match each other.
+
+Patch 3 makes any cpuset state change to wait for the completion of the
+pending cpuset attach operation, if any.
+
+Patch 4 collects task attach related data into a common attach_ctx
+structure.
+
+Patches 5 and 6 are just preparatory patches to make the remaining
+patches easier to review.
+
+Patch 7 makes attach_ctx.old_cs track group leader for use by
+cpuset_migrate_mm().
+
+Patch 8 moves mpol_rebind_mm() and cpuset_migrate_mm() inside
+cpuset_attach_task() to make CLONE_INTO_CGROUP flag of clone(2) works
+more like moving task from one cpuset to another one, while also make
+supporting multiple source and destination cpusets easier.
+
+Patch 9 makes the necessary changes to enable the support of multiple
+source cpusets by keeping all the source cpusets found during task
+iterations in a singly linked lists.
+
+Patch 10 enables the support of multiple destination cpusets during the
+the enabling of cpuset v2 controller.
+
+Patch 11 adds a new test case to test_cpuset to test disabling of cpuset
+controller.
+
+Michal Koutný (1):
+  selftests/cgroup: Add test for cpuset affinity on controller disable
+
+Waiman Long (10):
+  cgroup/cpuset: Make nr_deadline_tasks an atomic_t
+  cgroup/cpuset: Fix node inconsistencies between
+    cpuset_update_tasks_nodemask() and cpuset_attach()
+  cgroup/cpuset: Prevent race between task attach and cpuset state
+    change
+  cgroup/cpuset: Put all task attach related variables into attach_ctx
+  cgroup/cpuset: Add a cpuset_reserve_dl_bw() helper
+  cgroup/cpuset: Expand the scope of cpuset_can_attach_check()
+  cgroup/cpuset: Make attach_ctx.old_cs track task group leader
+  cgroup/cpuset: Move mpol_rebind_mm/cpuset_migrate_mm() calls inside
+    cpuset_attach_task()
+  cgroup/cpuset: Support multiple source cpusets for cpuset_*attach()
+  cgroup/cpuset: Support multiple destination cpusets for
+    cpuset_*attach()
+
+ kernel/cgroup/cpuset-internal.h              |  13 +-
+ kernel/cgroup/cpuset.c                       | 468 ++++++++++++-------
+ tools/testing/selftests/cgroup/test_cpuset.c | 243 ++++++++++
+ 3 files changed, 553 insertions(+), 171 deletions(-)
+
+-- 
+2.54.0
+
