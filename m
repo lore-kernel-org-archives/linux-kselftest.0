@@ -1,374 +1,188 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB25E3D4127
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 03:35:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E215D385D9D;
+	Tue, 30 Jun 2026 04:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782790502; cv=none; b=LIuSCiNoSimxw6/oL1ZQv52vQGzpHK0JJlS21ohxpJNAwjyC36jABRr1xBcJAUAVz4WI+J9N00uAlEGQcCKVP59jP6bJSKHX0tf9SHXIg2EKehhBCrOA4EmDcl9Hat/ZacUsi3+dDExQVShQ1DPo1WnMiVaTbgYc0yNlYUkbYeo=
+	t=1782792505; cv=none; b=fprdDWyeLqhBb7mwsolMPwBZGxOKPPYRrUPi/l6JIUjwu0q4Vu8x8TNC+XAZddnLom3BmrJp8CWpWFmPThZidhGQW4PM2T/XRVYIAU/5Gmj0eaGt+hklmkodvz9r8t1mvxk3SAfgHCvEWwS3KoYDjkQ4sR+rSDn7DlvY4isl7js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782790502; c=relaxed/simple;
-	bh=ENYk6GNS43dprULP01JVzS2aHnkL+qdWkw6ys9fzHig=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HFzv96GjFBiAOWsQ8pkWX/DfQoyp6u5sSLbSJojc0S+6nYAgO7qfU2W/38ijC4ayJCal+CjCE7axVdWJ0vIujObGojBG/0jwRLubIWeXC87d5Ur2+nmJFBIeIqY/qB3KBaJJC4YWEJ0XmGOGzCQ8oCHV4Mih1B44bTwDNZNyKVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SiQ2mpRi; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782792505; c=relaxed/simple;
+	bh=3LphVwVPtpVRlk3FzEgwH6Td+zJzjF86FNpR8CFWPZk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C96igO130XcA0WzGCA+GnlNjMPOiS/tTzcNsaco3HiOcBrnqEHEYWmWJwAEPYmLjd5ajGGpM5zFxsLiPOFDmRyPIyRoMdAz5B1jRDOvh474Suvdu3zxhCObvg0uxuFXTLdWxy/PCD4O67HqjbdmjRg0uU8SjmX8s1QU3ZjX6qGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WQXXX8vo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SiQ2mpRi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782790499;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GhQadWWbyJNoWjy2SCoPtNuWLEk15QTFYZ61Hy14GqU=;
-	b=SiQ2mpRi57P9C0KU2ihtT5Ed18QbXYffYZlxm6JdAdGnzZT4Mktt1J1H+z7LXWpuiQkrcS
-	U+my35UEiRkL9ytJPoU9CF6rbFEbZmuCqskJt18EPva6XaZW60Oge/9bH0gmu47yvANcQM
-	uVvTyGKebFeBGoELBPmfJ2ee3oZCeHs=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-612-MD09YqGRNQCMPIfQL7zP0g-1; Mon,
- 29 Jun 2026 23:34:54 -0400
-X-MC-Unique: MD09YqGRNQCMPIfQL7zP0g-1
-X-Mimecast-MFC-AGG-ID: MD09YqGRNQCMPIfQL7zP0g_1782790493
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 47CEE18052F5;
-	Tue, 30 Jun 2026 03:34:53 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.2.16.200])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3E5C0195608D;
-	Tue, 30 Jun 2026 03:34:50 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Ridong Chen <ridong.chen@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WQXXX8vo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 119801F000E9;
+	Tue, 30 Jun 2026 04:08:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782792503;
+	bh=xbDQiekMgO/KFya5RKRP9Live6IJ6QFxvQeuI2/y3bM=;
+	h=From:To:Cc:Subject:Date;
+	b=WQXXX8voRMwhZsrn4r0dr2n/sgzaxhek7sKjB+Fz8GP1KKjI+oMS0gt5wvz9fMWH1
+	 d0eirhGW0NqVn6ThgyCXuoxtW2xpfsaOZkwM6W77a8nvfr5WOJaM8vvPu4ITECnbgp
+	 id1FK7KTwEE5hMEBDXcb9xShQQws2IJOZAXcJ1g42fiVLe+SHJl3DHNlmNOspguKpS
+	 RGEgnTfNtEfL2Uag26TZv4b/nwuv+93MGHDkDsCvWsNrlVK5fsQlJqtTpUeMo2oaZD
+	 CCKssA3H46Jib9CQdPnIcc+AJhhJDsqWaqbNSZt4DpZY8ogU0SVt43se8wfBFywhVr
+	 QOha/uAvsBmjQ==
+From: SJ Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SJ Park <sj@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Juri Lelli <juri.lelli@redhat.com>
-Cc: cgroups@vger.kernel.org,
+	Steven Rostedt <rostedt@goodmis.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v9 11/11] selftests/cgroup: Add test for cpuset affinity on controller disable
-Date: Mon, 29 Jun 2026 23:33:44 -0400
-Message-ID: <20260630033344.352702-12-longman@redhat.com>
-In-Reply-To: <20260630033344.352702-1-longman@redhat.com>
-References: <20260630033344.352702-1-longman@redhat.com>
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCH 00/18] mm/damon: optimize out nr_accesses_bp
+Date: Mon, 29 Jun 2026 21:07:53 -0700
+Message-ID: <20260630040812.149729-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-From: Michal Koutný <mkoutny@suse.com>
+TLDR: Replace damon_region->nr_accesses_bp, which is easy to be wrong,
+with a simpler on-demand moving sum function, damon_nr_accesses_mvsum().
 
-Add a new selftest that exposes a bug in cpuset_attach() where thread
-CPU affinity is not properly updated when the cpuset controller is
-disabled in a threaded cgroup hierarchy.
+Background
+==========
 
-The test creates a threaded cgroup hierarchy with two child cgroups
-(A and B) having different cpuset.cpus constraints:
-- Parent: cpuset.cpus=0-1
-- Child A: cpuset.cpus=0-1
-- Child B: cpuset.cpus=1 (restricted to CPU 1 only)
+DAMON's monitoring output (access pattern snapshot, or more technically
+speaking, damon_region->nr_accesses) is completed once per aggregation
+interval, which is 100 ms by default.  Users can arbitrarily increase
+the interval for demand.  Under the suggested intervals auto-tuning
+setup, it can span up to 200 seconds.  If the aggregation interval is
+too long, the snapshot users cannot use it in reasonable time.  To
+mitigate this, we introduced a new field of damon_region, namely
+nr_accesses_bp.  It contains a pseudo moving sum of nr_accesses in bp
+units and is updated for each sampling interval.
 
-A multithreaded process is created with threads placed in different
-cgroups. When the cpuset controller is disabled on the parent, thread
-affinities should be updated to match the parent's cpuset.
+It turned out keeping it correctly updated every sampling interval is
+not that easy.  From online parameter update feature development and
+more experimental hacks, we found it is easy to be corrupted.  Once it
+is corrupted, DAMON's monitoring outputs become quite insane.  Hence we
+added a few validation checks.  It is easy  to be corrupted because it
+requires every update per sampling interval to be correct.
 
-Expected behavior:
-- thread_a affinity: {0-1} before and after (unchanged)
-- thread_b affinity: {1} before, {0-1} after (expanded)
+Solution
+========
 
-Current buggy behavior:
-- thread_b affinity remains {1} after controller disable
+There is no real reason to keep it updated every sampling interval.  Due
+to the simple pseudo-moving sum mechanism and existing helper field
+(last_nr_accesses), we can also calculate the pseudo moving sum on
+demand in a much simpler way.
 
-Assisted-by: Claude:claude-sonnet-4-5
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
-Acked-by: Waiman Long <longman@redhat.com>
----
- tools/testing/selftests/cgroup/test_cpuset.c | 243 +++++++++++++++++++
- 1 file changed, 243 insertions(+)
+Implement a function for getting the pseudo moving sum on demand, and
+replace nr_accessses_bp uses with the new function.  Also remove no more
+needed tests for nr_accesses_bp and the per-sampling interval update
+functions.  Finally, remove the nr_accesses_bp.  The new function is
+quite simple.
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
-index c5cf8b56ceb8..8b4c4a9dd78b 100644
---- a/tools/testing/selftests/cgroup/test_cpuset.c
-+++ b/tools/testing/selftests/cgroup/test_cpuset.c
-@@ -1,7 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#define _GNU_SOURCE
-+#include <assert.h>
- #include <linux/limits.h>
-+#include <pthread.h>
-+#include <sched.h>
- #include <signal.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
- 
- #include "kselftest.h"
- #include "cgroup_util.h"
-@@ -232,6 +238,242 @@ static int test_cpuset_perms_subtree(const char *root)
- 	return ret;
- }
- 
-+static int get_cpu_affinity(cpu_set_t *mask)
-+{
-+	CPU_ZERO(mask);
-+	return sched_getaffinity(0, sizeof(*mask), mask);
-+}
-+
-+static int cpu_set_equal(cpu_set_t *dst, unsigned long mask)
-+{
-+	cpu_set_t expected;
-+
-+	CPU_ZERO(&expected);
-+	assert(sizeof(mask) < CPU_SETSIZE);
-+
-+	for (int cpu = 0; cpu < sizeof(mask); ++cpu)
-+		if ((1UL << cpu) & mask)
-+			CPU_SET(cpu, &expected);
-+
-+	return CPU_EQUAL(&expected, dst);
-+}
-+
-+enum test_phase {
-+	AFFINITY_SETUP,
-+	AFFINITY_THREAD_A_READY,
-+	AFFINITY_THREADS_READY,
-+	AFFINITY_CONTROLLER_DISABLED,
-+	AFFINITY_COMPLETE,
-+	AFFINITY_ERROR
-+};
-+
-+struct thread_args {
-+	const char *cgroup;
-+	cpu_set_t *affinity_before;
-+	cpu_set_t *affinity_after;
-+	enum test_phase ready_phase;
-+};
-+
-+static pthread_mutex_t test_mutex = PTHREAD_MUTEX_INITIALIZER;
-+static pthread_cond_t test_cond = PTHREAD_COND_INITIALIZER;
-+static enum test_phase test_phase;
-+
-+static void *affinity_thread_fn(void *arg)
-+{
-+	struct thread_args *args = (struct thread_args *)arg;
-+
-+	if (cg_enter_current_thread(args->cgroup))
-+		goto fail;
-+
-+	if (get_cpu_affinity(args->affinity_before) != 0)
-+		goto fail;
-+
-+	pthread_mutex_lock(&test_mutex);
-+	if (test_phase < args->ready_phase)
-+		test_phase = args->ready_phase;
-+	pthread_cond_broadcast(&test_cond);
-+
-+	while (test_phase < AFFINITY_CONTROLLER_DISABLED)
-+		pthread_cond_wait(&test_cond, &test_mutex);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (get_cpu_affinity(args->affinity_after) != 0)
-+		goto fail;
-+
-+
-+	return NULL;
-+
-+fail:
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_ERROR;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+	return NULL;
-+}
-+
-+/*
-+ * Test that disabling cpuset controller properly updates thread affinity.
-+ *
-+ * This test exposes a bug in cpuset_attach() where threads in child cgroups
-+ * don't get their affinity updated when the cpuset controller is disabled.
-+ *
-+ * Setup:
-+ * - Create parent cgroup with cpuset.cpus=0-1
-+ * - Create child A with cpuset.cpus=0-1
-+ * - Create child B with cpuset.cpus=1
-+ * - Place multithreaded process: group leader + thread_a in A, thread_b in B
-+ * - Disable cpuset controller on parent
-+ *
-+ * Expected: thread_b's affinity should expand from {1} to {0-1}
-+ * Buggy: thread_b's affinity remains {1}
-+ */
-+static int test_cpuset_affinity_on_controller_disable(const char *root)
-+{
-+	char *parent = NULL, *child_a = NULL, *child_b = NULL;
-+	pthread_t thread_a, thread_b;
-+	int thread_a_created = 0, thread_b_created = 0;
-+	cpu_set_t affinity_a_before, affinity_a_after;
-+	cpu_set_t affinity_b_before, affinity_b_after;
-+	int ret = KSFT_FAIL;
-+
-+	parent = cg_name(root, "cpuset_affinity_test");
-+	if (!parent)
-+		goto cleanup;
-+	if (cg_create(parent))
-+		goto cleanup;
-+	if (cg_write(parent, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	child_a = cg_name(parent, "A");
-+	if (!child_a)
-+		goto cleanup;
-+	if (cg_create(child_a))
-+		goto cleanup;
-+	if (cg_write(child_a, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	child_b = cg_name(parent, "B");
-+	if (!child_b)
-+		goto cleanup;
-+	if (cg_create(child_b))
-+		goto cleanup;
-+	if (cg_write(child_b, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	/* Now enable cpuset controller in parent */
-+	if (cg_write(parent, "cgroup.subtree_control", "+cpuset")) {
-+		ret = KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	/* Set CPU affinity constraints */
-+	if (cg_write(parent, "cpuset.cpus", "0-1"))
-+		goto cleanup;
-+	if (cg_write(child_a, "cpuset.cpus", "0-1"))
-+		goto cleanup;
-+	if (cg_write(child_b, "cpuset.cpus", "1"))
-+		goto cleanup;
-+
-+	/* Move group leader (main thread) to child A */
-+	if (cg_enter_current(child_a))
-+		goto cleanup;
-+
-+	/* Create threads - they will move themselves to their respective cgroups */
-+	test_phase = AFFINITY_SETUP;
-+
-+	struct thread_args args_a = {
-+		.cgroup = child_a,
-+		.affinity_before = &affinity_a_before,
-+		.affinity_after = &affinity_a_after,
-+		.ready_phase = AFFINITY_THREAD_A_READY,
-+	};
-+	if (pthread_create(&thread_a, NULL, affinity_thread_fn, &args_a))
-+		goto cleanup;
-+	thread_a_created = 1;
-+
-+	struct thread_args args_b = {
-+		.cgroup = child_b,
-+		.affinity_before = &affinity_b_before,
-+		.affinity_after = &affinity_b_after,
-+		.ready_phase = AFFINITY_THREADS_READY,
-+	};
-+	if (pthread_create(&thread_b, NULL, affinity_thread_fn, &args_b))
-+		goto cleanup_threads;
-+	thread_b_created = 1;
-+
-+	pthread_mutex_lock(&test_mutex);
-+	while (test_phase < AFFINITY_THREADS_READY)
-+		pthread_cond_wait(&test_cond, &test_mutex);
-+
-+	/* If a thread failed during setup, bail out */
-+	if (test_phase == AFFINITY_ERROR) {
-+		pthread_mutex_unlock(&test_mutex);
-+		goto cleanup_threads;
-+	}
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (!cpu_set_equal(&affinity_a_before, 0x3)) {
-+		ksft_print_msg("FAIL: thread_a initial affinity incorrect\n");
-+		goto cleanup_threads;
-+	}
-+
-+	if (!cpu_set_equal(&affinity_b_before, 0x2)) {
-+		ksft_print_msg("FAIL: thread_b initial affinity incorrect\n");
-+		goto cleanup_threads;
-+	}
-+
-+	/* Disable cpuset controller - this should trigger affinity update */
-+	if (cg_write(parent, "cgroup.subtree_control", "-cpuset"))
-+		goto cleanup_threads;
-+
-+	/* Signal threads to save their final affinity and exit */
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_CONTROLLER_DISABLED;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	pthread_join(thread_a, NULL);
-+	pthread_join(thread_b, NULL);
-+
-+	/* Verify thread affinities AFTER disabling controller */
-+	if (!cpu_set_equal(&affinity_a_after, 0x3)) {
-+		ksft_print_msg("FAIL: thread_a final affinity incorrect\n");
-+		goto cleanup;
-+	}
-+
-+	if (!cpu_set_equal(&affinity_b_after, 0x3)) {
-+		ksft_print_msg("FAIL: thread_b affinity did not expand to {0-1}\n");
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+	goto cleanup;
-+
-+cleanup_threads:
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_COMPLETE;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (thread_a_created)
-+		pthread_join(thread_a, NULL);
-+	if (thread_b_created)
-+		pthread_join(thread_b, NULL);
-+
-+cleanup:
-+	/* Move back to root before cleanup */
-+	cg_enter_current(root);
-+
-+	cg_destroy(child_b);
-+	free(child_b);
-+	cg_destroy(child_a);
-+	free(child_a);
-+	cg_destroy(parent);
-+	free(parent);
-+
-+	return ret;
-+}
-+
- 
- #define T(x) { x, #x }
- struct cpuset_test {
-@@ -241,6 +483,7 @@ struct cpuset_test {
- 	T(test_cpuset_perms_object_allow),
- 	T(test_cpuset_perms_object_deny),
- 	T(test_cpuset_perms_subtree),
-+	T(test_cpuset_affinity_on_controller_disable),
- };
- #undef T
- 
+Discussion
+==========
+
+Depending on the use case, multiple nr_accesses readers could be
+executed in the same kdamond_fn() main loop iteration, which is executed
+once per sampling interval.  Such readers include DAMON region exporting
+tracepoints (damon_[region_]aggregated and damos_before_apply), DAMOS,
+and DAMON sysfs interface logic for update_schemes_tried_regions
+command.  In this case, the new function will be called multiple times
+and this could be overhead compared to the old logic, which simply reads
+the field without any additional work.  Nonetheless, the new function is
+quite simple.  And the new approach does nothing while there is no need
+to read.  The old approach had to execute its update function for each
+region for every sampling interval.  Hence the new approach is believed
+to be even more lightweight in common case, and the overhead is anyway
+negligible.
+
+One more advantage of this change is that one field from the
+damon_region struct is removed.  On setups that uses a high number of
+DAMON regions, this could be a potential memory space benefit.
+
+Patches Sequence
+================
+
+Patch 1 introduces the new function for getting the pseudo moving sum of
+nr_accesses on demands.  Patch 2 implements a unit test for the new
+function's internal logic.  Patch 3 and 4 update monitoring logic and
+the new function to ready for safe use on the existing logic.  Patches
+5-7 replace uses of nr_accesses_bp in DAMOS, tracepoints and DAMON sysfs
+interface with the new function, respectively.  Patches 8-10 removes
+nr_accesses_bp validation functions in DAMON core, one by one.  Patches
+11 and 12 further remove tests and test helper for nr_accesses_bp,
+respectively.  Patches 13 removes the setups and updates or
+nr_accesses_bp field.  Patches 14-16 cleans up function parameters that
+are no more being used due to the previous patch.  Patch 17 removes the
+function that was used for updating nr_accesses_bp field with its unit
+test, which is the single remaining caller of the function.  Finally,
+patch 18 removes damon_region->nr_accesses_bp field.
+
+Changes from RFC v1.3
+- RFC v1.3: https://lore.kernel.org/20260622142139.30269-1-sj@kernel.org
+- Wordsmith and fixup commit subjects.
+- Drop RFC tag.
+- Rebase to latest mm-new.
+Changes from RFC v1.2
+- RFC v1.2: https://lore.kernel.org/20260621155715.87932-1-sj@kernel.org
+- Explicitly ignore nr_accesses from mvsum at the beginning of
+  aggregation.
+- Fix a typo in a commit message.
+Changes from RFC v1.1
+- RFC v1.1: https://lore.kernel.org/20260620172244.90953-1-sj@kernel.org
+- Handle next_aggregation_sis < passed_sample_intervals in
+  nr_accesses_mvsum().
+- Always rescale ->last_nr_accesss for parameter changes.
+- Remove unused attrs params from damon_update_region_access_rate() and
+  its callers.
+Changes from RFC v1
+- RFC v1: https://lore.kernel.org/20260619193415.73833-1-sj@kernel.org
+- Avoid divide-by-zero from zero aggregation interval.
+- Call damon_nr_accesses_mvsum() for damos tracing only when it is enabled.
+- Remove obsolete mentions of nr_accesses_bp in comments.
+
+SJ Park (18):
+  mm/damon/core: introduce damon_nr_accesses_mvsum()
+  mm/damon/tests/core-kunit: test damon_mvsum()
+  mm/damon/core: always update ->last_nr_accesses for intervals change
+  mm/damon/core: handle unreset nr_accesses in damon_nr_accesses_mvsum()
+  mm/damon/core: use damon_nr_accesses_mvsum() in __damos_valid_target()
+  mm/damon/core: use damon_nr_accesses_mvsum() for damos region tracing
+  mm/damon/sysfs-schemes: use damon_nr_accesses_mvsum() for damo regions
+  mm/damon/core: remove damon_warn_fix_nr_accesses_corruption()
+  mm/damon/core: remove damon_verify_reset_aggregated()
+  mm/damon/core: remove damon_verify_merge_regions_of()
+  mm/damon/tests/core-kunit: remove nr_accesses_bp setup and tests
+  selftests/damon/drgn_dump_damon_status: do not dump nr_accesses_bp
+  mm/damon/core: remove nr_accesses_bp setups and updates
+  mm/damon/core: remove attrs param from
+    damon_update_region_access_rate()
+  mm/damon/paddr: remove attrs param from __damon_pa_check_access()
+  mm/damon/vaddr: remove attrs param from __damon_va_check_access()
+  mm/damon/core: remove damon_moving_sum() and its unit test
+  mm/damon/core: remove damon_region->nr_accesses_bp
+
+ include/linux/damon.h                         |  15 +-
+ include/trace/events/damon.h                  |   8 +-
+ mm/damon/core.c                               | 201 +++++++-----------
+ mm/damon/paddr.c                              |   9 +-
+ mm/damon/sysfs-schemes.c                      |   6 +-
+ mm/damon/tests/core-kunit.h                   |  37 ++--
+ mm/damon/vaddr.c                              |  12 +-
+ .../selftests/damon/drgn_dump_damon_status.py |   1 -
+ 8 files changed, 119 insertions(+), 170 deletions(-)
+
+
+base-commit: d74f4c01f930b32580e172a786efbcb352c312f1
 -- 
-2.54.0
-
+2.47.3
