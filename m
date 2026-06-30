@@ -1,192 +1,198 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4FF472776
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 20:51:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E32D3793C2;
+	Tue, 30 Jun 2026 20:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782852671; cv=none; b=uqCpXi4db+vFxzfiSYijXckfhU/gL03gr0yQFVj6Hg7BN0//CA9haIPIZbKVaMig0XSswqoff08NeutIvMfWfMUpT7d3ChIVW6afyzZ9ZoHvm4Hvwhlk9XNeIB0y/16J/Mq4HQXQIT5NDACwV6XxewpR5NC/MjAfDxjFcf4/WIs=
+	t=1782852922; cv=none; b=bXRRh2m2UQuPOm2JJG/JztukbhDdV1/pXYeWPFCslIuvu+tfTcATNilO4qVkscepNvyPBw5qGl/pxJk+VB3UWlG0/y3Ee4ZwGM4f6Q7qwzvsdykQ/A3hDo7f7g2aiV0Hs6xz5OrfHxqLetrLehp0m3PT3v9h+EO9yP798rfbFjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782852671; c=relaxed/simple;
-	bh=vIZVPtoekYXA97ar0f3RVpNBTUnPvEkA2N5XD+HOG7c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JnCDN4g/WvhYIWOBINUACzq5GIi8x5X3ZMEa3CgcqPe5jX+cN4cbnEq5Y3ltAszue+M3TG28DZqFfPne7sKOhqEeVMIqtTTTGnDeII6gJsgXwg2/V4RXlGrf8wM6AzPofwzqc9nfg7SHfqfzaUPrjkNiZHg7hXHulTjgUhKjFbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k0hIWX4p; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782852922; c=relaxed/simple;
+	bh=7sJKF/xH/OZnhgj123YyTtu81KiJuyu6J7CCCg5dllM=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=k1AKXtn9zwWXNY8j7dojtzKEM0+ni9dhBtsFA/xz3D1zveSiooHSpPGjY4qihKH500Licf57j7LRSirPCF6L0rOYdZ6U4nBghdvlwL1touRxM97Rq8Z5Y5NjZXP2W6BI42d1QRJ7paHLrioEIkGEWMI2Ant2WALk+03cAHlOLLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=nIdg9WVc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k0hIWX4p"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2c9cb97e178so29710085ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 13:51:10 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="nIdg9WVc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C2A1F000E9;
+	Tue, 30 Jun 2026 20:55:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782852669; x=1783457469; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F+9mrYL3HnxDWYVBXM/qgCi1xc+LI25f9+ZzQtFcgdQ=;
-        b=k0hIWX4pvkl2yOfEqWeywoYdPHqAdSHQYqwJT7PGfZ7lxZwb2N/nD/tkBHHZgbjNv2
-         TK2B/Zj1UHEvtRpuBtnREbHJnA92RKNFpYAXgM7T6HoSoyLmj7uosYMbi7PBNg56KfSr
-         mvbkrKHo0PgBpVNMUH7+zd4nuH97Y1J3biLUCeKtPJ/tsr0BemKev+gP4YDOxZLRc25l
-         +PeWHc0Xdi6O1QzaTBeCuWAmW64EX3OuEzyty8m5bW8tsUbcWN8Q526fRe1uF0CjWKTK
-         PSEEGGGqpVKe05nkEJ0wjqJ0nM7Q2AyVbq749RYRDLu/Q0nuhK8kIcItYSlvH30Chrs8
-         9x7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782852669; x=1783457469;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=F+9mrYL3HnxDWYVBXM/qgCi1xc+LI25f9+ZzQtFcgdQ=;
-        b=c2s7l/ldO/0GGOSVsjcpwIK55/WHROcG9ytJpMaodhA5HA2OPuZnQVgzp/5tFt47bO
-         Wyx6gI17bRWziJULxlZRvMvjO8kRUhdFt912GoHwd1HPn4AvEZ/wV0q8CNlH44aD+T8U
-         4RnAlSPq4jedbwvdTcRE/LndQOXVP+AhaYd96zMCD15sQThcOnZfkA7Cl9RI0RJny4rO
-         Q0/q2aY2WAonBRCUgxW3NY29GPAKd5GhGNh2IiVOjF+QNXD8N1SB6ACpfrZ6RyZngSYC
-         nuSQMHCCFQvXM+tLHa9vkajhBAsgFVgpuZ12dc5Fh1V1iEOnziTfzNXIs6+CSJjbnS5E
-         sUkA==
-X-Forwarded-Encrypted: i=1; AHgh+Rq/Pk3iC/L1If7NIry9AYXzsfN31FwNxUIJ3Yoj+AcFiTVWsVJuG5RB6K2BcVWbDJtX4v0J1JytUtqbj8iO0j8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQHaIou8TMk+YW/PMipxXWuInjWtACxBTerM3c0LywPVndsWa5
-	7YXtdnXTlIYhKG2Yi6erI8meAjmJcCtb3gJXUKJEiZRgQ5Tzu1OonI4K
-X-Gm-Gg: AfdE7ckLway5ag9H1htTFRzlutcJ395kAHE6BpERw9rmzFb5Ttxc0CtQ2Bh0rjh+upo
-	U+hVoMKP8rJVeYLsCAMG/eDLM07TiZXq28Su+21YBXS8/ZKUaDa5Gqxlecqg1CqPwULroilXPBb
-	Pmbf775rrvRZepJ47azmwitNzVb7XyvHISZeO+7+xSCsCXcxdQVB64MgvQ+xT1O9YYYrUzMt5NE
-	B5sUl+I8SpD/YhH1KZYBB+xo76mx7naiMwJk9eLelxPFCuCrNtWDEo72whddlaRu3+Vl8g31eB1
-	UYjfLXZ/0t05BGlHU6sQDkwYz4OjtQMDhT1c591wDWiGKOsPggTDPvlgxRo5PcYYhHAo5dN+Kwt
-	zb/XMCh9BJyL+gHMnr/HktjE1lbColyIJHIPRvREZLgtIY2ArgwEsT2Ot+1rNFU+909RptWhyVJ
-	n8JjTVPKk/rDvoRxVJ1CFsuR7Dz/Pf8W9Qa+P+IUb/ASCOxmZ68xo=
-X-Received: by 2002:a17:903:1b03:b0:2c8:1c05:16bb with SMTP id d9443c01a7336-2ca2e71bf72mr41313975ad.24.1782852669354;
-        Tue, 30 Jun 2026 13:51:09 -0700 (PDT)
-Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca382ba1ccsm20322305ad.66.2026.06.30.13.51.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 13:51:08 -0700 (PDT)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: Eric Dumazet <edumazet@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>,
-	Simon Horman <horms@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 2/2] selftests/bpf: test sockmap strparser recover with undelivered ingress
-Date: Tue, 30 Jun 2026 20:50:35 +0000
-Message-ID: <20260630205043.184894-3-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260630205043.184894-1-rhkrqnwk98@gmail.com>
-References: <20260630205043.184894-1-rhkrqnwk98@gmail.com>
+	d=linux-foundation.org; s=korg; t=1782852920;
+	bh=PqXMviszUJ70wdko7x9w/HLJnkvQD9s/VmU8YDU8zkI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=nIdg9WVcgKuztuJWZsgQgB8qhrK7N0juK0z53//izV+A18lotNu+7Pz/5jMQGMLFy
+	 kVKPTUdFinPIsjTZAmG634V62nO9lUIJFNJsmgFSOE7zu2L0AlpVuQSpq2gCxmhvzG
+	 /hh3A1WHx/9z1qQaUHx9JqA99cUwh+egfdsAqxGA=
+Date: Tue, 30 Jun 2026 13:55:19 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Miaohe Lin <linmiaohe@huawei.com>, David Hildenbrand <david@kernel.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, Mike
+ Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal
+ Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Naoya Horiguchi
+ <nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>,
+ lance.yang@linux.dev, Steven Rostedt <rostedt@goodmis.org>, Masami
+ Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ kernel-team@meta.com
+Subject: Re: [PATCH v10 0/6] mm/memory-failure: add panic option for
+ unrecoverable pages
+Message-Id: <20260630135519.404f3be5cb3850a0208f1791@linux-foundation.org>
+In-Reply-To: <20260630-ecc_panic-v10-0-c6ed5b62eea2@debian.org>
+References: <20260630-ecc_panic-v10-0-c6ed5b62eea2@debian.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Park SK_PASS data on a stream-parser socket's ingress_msg queue, drop the
-socket from the sockmap without reading it, then check the native stack
-still delivers data queued afterwards. Without the fix copied_seq is left
-behind sk_receive_queue and tcp_recvmsg_locked() warns instead of
-delivering.
+On Tue, 30 Jun 2026 05:46:03 -0700 Breno Leitao <leitao@debian.org> wrote:
 
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
+> A multi-bit ECC error on a kernel-owned page that the memory failure
+> handler cannot recover is currently swallowed: PG_hwpoison is set, the
+> event is logged, and the kernel keeps running.  The corrupted memory
+> remains accessible to the kernel and either drives silent data
+> corruption or surfaces seconds-to-minutes later as an apparently
+> unrelated crash.  In a large fleet that delayed, unattributable crash
+> turns into significant engineering effort to root-cause; in a kdump
+> configuration, by the time the crash happens the original error
+> context (faulting PFN, MCE/GHES record, page state) is long gone.
+> 
+> This series adds an opt-in sysctl,
+> vm.panic_on_unrecoverable_memory_failure, that converts an
+> unrecoverable kernel-page hwpoison event into an immediate panic with
+> a clean dmesg/vmcore that still contains the original failure
+> context.  The default is disabled so existing workloads see no
+> change.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index cb3229711f93..86b584f5491e 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -1292,6 +1292,63 @@ static int wait_for_fionread(int fd, int expected, unsigned int timeout_ms)
- 	return avail;
- }
+Updated, thanks.
+
+Sashiko said things:
+	https://sashiko.dev/#/patchset/20260630-ecc_panic-v10-0-c6ed5b62eea2@debian.org
+
+
+> Changes in v10:
+> - Reuse kselftest declarations
+> - Residual race harmless documentation
+> - Link to v9: https://lore.kernel.org/r/20260609-ecc_panic-v9-0-432a74002e74@debian.org
+
+Here's how v10 altered mm.git:
+
+
+ mm/memory-failure.c                          |    6 +-
+ tools/testing/selftests/mm/hwpoison-panic.sh |   42 +++++++++--------
+ 2 files changed, 28 insertions(+), 20 deletions(-)
+
+--- a/mm/memory-failure.c~b
++++ a/mm/memory-failure.c
+@@ -1366,8 +1366,10 @@ static inline bool is_kernel_owned_page(
+ 	 * Page-type bits live only on the head page, so resolve any tail
+ 	 * first.  The check takes no refcount; recheck the head afterwards
+ 	 * so a concurrent split or compound free cannot leave us trusting
+-	 * a stale view.  A free->alloc->free in the same window is still
+-	 * possible but closing it would require taking a reference here.
++	 * a stale view.  A residual free->alloc->free cannot be closed here
++	 * (frozen slab and large-kmalloc pages cannot be pinned), but is
++	 * harmless: where a wrong verdict could panic, memory_failure() has
++	 * already set PageHWPoison, which bars the page from the allocator.
+ 	 */
+ retry:
+ 	head = compound_head(page);
+--- a/tools/testing/selftests/mm/hwpoison-panic.sh~b
++++ a/tools/testing/selftests/mm/hwpoison-panic.sh
+@@ -35,7 +35,11 @@
  
-+static void test_sockmap_strp_recover_undelivered(void)
-+{
-+	struct test_sockmap_pass_prog *skel = NULL;
-+	int c0 = -1, p0 = -1, c1 = -1, p1 = -1;
-+	char buf[10] = "0123456789", rcv[11];
-+	int err, map, verdict, parser, sent, recvd, avail, zero = 0;
+ set -u
+ 
+-ksft_skip=4
++# KTAP output helpers (ktap_print_msg, ktap_skip_all, ktap_exit_fail_msg, ...).
++DIR="$(dirname "$(readlink -f "$0")")"
++# shellcheck source=../kselftest/ktap_helpers.sh
++source "${DIR}"/../kselftest/ktap_helpers.sh
 +
-+	skel = test_sockmap_pass_prog__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1))
-+		goto out;
-+
-+	map = bpf_map__fd(skel->maps.sock_map_rx);
-+
-+	verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
-+	err = bpf_prog_attach(verdict, map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto out;
-+
-+	parser = bpf_program__fd(skel->progs.prog_skb_verdict_ingress_strp);
-+	err = bpf_prog_attach(parser, map, BPF_SK_SKB_STREAM_PARSER, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto out;
-+
-+	err = bpf_map_update_elem(map, &zero, &p1, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update(p1)"))
-+		goto out;
-+
-+	sent = xsend(c1, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c1) bpf"))
-+		goto out;
-+
-+	avail = wait_for_fionread(p1, sizeof(buf), 1000);
-+	if (!ASSERT_EQ(avail, sizeof(buf), "fionread"))
-+		goto out;
-+
-+	err = bpf_map_delete_elem(map, &zero);
-+	if (!ASSERT_OK(err, "map_delete(p1)"))
-+		goto out;
-+
-+	sent = xsend(c1, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c1) native"))
-+		goto out;
-+	recvd = recv_timeout(p1, rcv, sizeof(buf), MSG_DONTWAIT, 1);
-+	ASSERT_EQ(recvd, sent, "recv(p1) native after drop");
-+
-+out:
-+	close(c0);
-+	close(p0);
-+	close(c1);
-+	close(p1);
-+
-+	test_sockmap_pass_prog__destroy(skel);
-+}
-+
- /* it is used to send data to via native stack and BPF redirecting */
- static void test_sockmap_multi_channels(int sotype)
- {
-@@ -1447,6 +1504,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_copied_seq(false);
- 	if (test__start_subtest("sockmap recover with strp"))
- 		test_sockmap_copied_seq(true);
-+	if (test__start_subtest("sockmap strp recover undelivered"))
-+		test_sockmap_strp_recover_undelivered();
- 	if (test__start_subtest("sockmap tcp multi channels"))
- 		test_sockmap_multi_channels(SOCK_STREAM);
- 	if (test__start_subtest("sockmap udp multi channels"))
--- 
-2.43.0
+ sysctl_path=/proc/sys/vm/panic_on_unrecoverable_memory_failure
+ inject_path=/sys/devices/system/memory/hard_offline_page
+ kpageflags_path=/proc/kpageflags
+@@ -53,24 +57,24 @@ pagesize=$(getconf PAGE_SIZE)
+ 
+ kind=${1:-rodata}
+ 
+-ksft_print() { echo "# $*"; }
+-ksft_exit_skip() { ksft_print "$*"; exit "$ksft_skip"; }
+-ksft_exit_fail() { echo "not ok 1 $*"; exit 1; }
+-
+ if [ "$(id -u)" -ne 0 ]; then
+-	ksft_exit_skip "must run as root"
++	ktap_skip_all "must run as root"
++	exit "$KSFT_SKIP"
+ fi
+ 
+ if [ ! -w "$sysctl_path" ]; then
+-	ksft_exit_skip "$sysctl_path not present (kernel without the sysctl?)"
++	ktap_skip_all "$sysctl_path not present (kernel without the sysctl?)"
++	exit "$KSFT_SKIP"
+ fi
+ 
+ if [ ! -w "$inject_path" ]; then
+-	ksft_exit_skip "$inject_path not present (no MEMORY_HOTPLUG?)"
++	ktap_skip_all "$inject_path not present (no MEMORY_HOTPLUG?)"
++	exit "$KSFT_SKIP"
+ fi
+ 
+ if [ "${RUN_DESTRUCTIVE:-0}" != "1" ]; then
+-	ksft_exit_skip "destructive test; re-run with RUN_DESTRUCTIVE=1 inside a disposable VM"
++	ktap_skip_all "destructive test; re-run with RUN_DESTRUCTIVE=1 inside a disposable VM"
++	exit "$KSFT_SKIP"
+ fi
+ 
+ # Pick a PFN inside the kernel image rodata region of /proc/iomem.
+@@ -208,21 +212,22 @@ pgtable)
+ 	missing_msg="no usable page-table PFN found in $kpageflags_path"
+ 	;;
+ *)
+-	ksft_exit_fail "unknown kind '$kind' (expected: rodata|slab|pgtable)"
++	ktap_exit_fail_msg "unknown kind '$kind' (expected: rodata|slab|pgtable)"
+ 	;;
+ esac
+ 
+ if [ -z "$phys_addr" ]; then
+-	ksft_exit_skip "$missing_msg"
++	ktap_skip_all "$missing_msg"
++	exit "$KSFT_SKIP"
+ fi
+ 
+-ksft_print "enabling $sysctl_path"
++ktap_print_msg "enabling $sysctl_path"
+ prior=$(cat "$sysctl_path")
+-echo 1 > "$sysctl_path" || ksft_exit_fail "failed to enable sysctl"
++echo 1 > "$sysctl_path" || ktap_exit_fail_msg "failed to enable sysctl"
+ 
+ pfn=$((phys_addr / pagesize))
+-ksft_print "injecting hwpoison at phys 0x$(printf '%x' "$phys_addr") (pfn 0x$(printf '%x' "$pfn"), kind=$kind)"
+-ksft_print "expecting kernel panic: 'Memory failure: <pfn>: unrecoverable page'"
++ktap_print_msg "injecting hwpoison at phys 0x$(printf '%x' "$phys_addr") (pfn 0x$(printf '%x' "$pfn"), kind=$kind)"
++ktap_print_msg "expecting kernel panic: 'Memory failure: <pfn>: unrecoverable page'"
+ 
+ # A successful run never returns from the inject -- it panics the kernel.
+ # Reaching the code below therefore means no panic fired.  Note whether
+@@ -243,7 +248,8 @@ try_unpoison "$pfn"
+ # if it raced to another type the run is inconclusive, so skip instead.
+ kpageflags_bit_set "$pfn" "$recheck_bit"
+ case $? in
+-0)	ksft_exit_fail "$verdict (page still $kind)" ;;
+-1)	ksft_exit_skip "target PFN no longer $kind; raced before inject, inconclusive" ;;
+-*)	ksft_exit_fail "$verdict (could not reconfirm page type via $kpageflags_path)" ;;
++0)	ktap_exit_fail_msg "$verdict (page still $kind)" ;;
++1)	ktap_skip_all "target PFN no longer $kind; raced before inject, inconclusive"
++	exit "$KSFT_SKIP" ;;
++*)	ktap_exit_fail_msg "$verdict (could not reconfirm page type via $kpageflags_path)" ;;
+ esac
+_
 
