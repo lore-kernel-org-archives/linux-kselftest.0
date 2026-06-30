@@ -1,111 +1,138 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341223D348E
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 07:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A77318EE6;
+	Tue, 30 Jun 2026 07:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782803684; cv=none; b=j6OEN5LWZTq0oXHVOtSmu8HgEk31mwtjE0OJEEPW1SVxYardO0TG4zrQaiFYeLz67lxVmQc1i2CLtuDl4jt3e0hzrmZ5PuLifusqPhf95ORgoqXNZd+Uieec3BOSWinKGurKgpppQdV131JCgz59mP79tHTKVrNMy3mGBp/Gv2Q=
+	t=1782804852; cv=none; b=PToXPiGOed/BZctJFa6NAkXXr5qEryCQCqeuXBifLv7+4Hv6MEXBN5lLD5kdoxRDE7jdYavZoq+xyqlcGa7bkyooXD+jZhmQsnwVlDaXqGf8W1pv5kMJAnyAop+IlilmQxpBlagvv+NwE1zvpmAnKAAIp4konbMNeC2ltlyzzYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782803684; c=relaxed/simple;
-	bh=XL23FZIFV8lgtowgc1D3LIn4aqMyxN0Pts3G4jOCcZI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BnhOdt3S2J4BUkCdfi07977B2uUL0Iw/alwfiXa8YCswgl/hdYiT4xcV4Rt9r2LHsAIj+YyTXGCfR+z7wB4C0JopknA+X7uhVxKQM/Yo2NvOKVPNw1e6zOn7JV4hsrruxHyCzbt5JK4abv46toZiGBxd0YvfaBU4POLdbfyTS60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fgN5FXQE; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fgN5FXQE"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-37d82f3a244so1794307a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 00:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782803682; x=1783408482; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2bDQGREITe91mNJKLkfaBft7iY0zy1ezAMTmaONILis=;
-        b=fgN5FXQEFp7ODVTlb5EKin3jjBuoNcnuY813a8+INqGJD5QCMSObTCqWfspj6cY8ma
-         e+CSpiBPZz5LxN6QtnVJBNgCE3gFD2r/CTnSo3N0Ib7M7oLJVpt10Krm+HIwJb5SclPg
-         4rj8Anq4Lg4dSYXs9bVx4bdr1xQ43iPyYmTNjb+32ccty2ZGU+tfIdHDVxc/8zSxh1Y8
-         KyfXqQQYpgaznKXfD6L8u5YDVX44XB7uj4AI+O4+EhBWlqDzFKCRRhgH2m70ZZEVLg3t
-         ATC8nct5RdNwm1Uz13EGl+tyzlsLdSgiIfPJLJ1Ngx76lH7MQrzx6y94lX6unE9i7CR+
-         9APQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782803682; x=1783408482;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2bDQGREITe91mNJKLkfaBft7iY0zy1ezAMTmaONILis=;
-        b=IT/rMSXs0iPj8CQw1SC3/m+KMNwqUW8jl4jA/0Y0hlsNqfrn4l895Xq5Bt3mcdUQ6W
-         vqePkHBJ2nC4dpbgIfBO/h1RbVca3t744r9MqvKDe06ooRc1m6kN49RPok1RYtDwX8pj
-         HAxO1oQWXYtqf0xIYY3SWuH/nI5Of+B0wZPxu5mV8vWc3jytCabYY/gtBonM2E4C4wgG
-         8Bejr3HmPryyJGZckQUI0yFWZX0wdO9i6bXH+zwfLsQ+dBHliWwCP8zx9U8e+I/xhWBz
-         2/Yvuq8UuDmIqvqk3HGMdwMB3DJBGqP/NuL1BxPczxNYNGaG0HrBAmjr4IhbThKe0wLF
-         UUxw==
-X-Forwarded-Encrypted: i=1; AHgh+RpwL35zE0wsHbd3zgDzRftIqpT9Seczd4CkfKi93WyFS+Jdwx6BaQzvKRPceK2kcZcshlB9mmMfeRhEJLKXksM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywz8cPGbz2g3rSdennlxwFJiwTsA+0brenBldg/aLGTBVJvGaDW
-	heoIDR/RAs8L5B44+s3y6iuaEtBf1XWOZs0sRzagqeYichbGYn806bcX
-X-Gm-Gg: AfdE7clqlRkPd+t9q6YW3KQxCi6VioNIIFy6q4W+B+woMyklnZzVg0bCgoVUW0XDTxQ
-	nKwup8Bb2R96RKNU4gOKT3unIKkknAQsovpYaY8FLRR+0PDwTjXUpBLphUOVFJIUSxW3AbKlV9A
-	v+EyQGWRoPlvmx345vUdFOuMlceiYpg9nTBSP/Bc10DlcUl7bCt3IFrMtrVYEMtuOYSFPayNH2d
-	4kaSPIb9Q4iwhptadu7WO3iou1SSY1LmL/SNPetHT0GLcQ3/bRy7xqCVaruIc3P3Q+8WL/rmy8g
-	e0pzQuBNSzz/kHiPU/nMjK7ruFDGoc7jzlkb+o0AARZ4lSjz/m7CYR6KvHX3JVIsImalGfliqRt
-	0swXCAQLHpJC4muJB8+8SFHGK8eDbB7g88pEpXm+fIXRhuhjZ436gtcloKlp92OeaSL6zOMlNLA
-	zaaQwmwAsIFZf5zsG4CXFkYJwzOMfShGW9AL6oXUiiY3QoZJS8aAkGuhc1bnE=
-X-Received: by 2002:a17:90b:2e48:b0:37f:9cdf:f0ad with SMTP id 98e67ed59e1d1-3805281b8d0mr1773163a91.28.1782803682352;
-        Tue, 30 Jun 2026 00:14:42 -0700 (PDT)
-Received: from cps-manycore-1 ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3805bf2c5absm285378a91.2.2026.06.30.00.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 00:14:41 -0700 (PDT)
-Date: Tue, 30 Jun 2026 07:14:32 +0000
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: John Fastabend <john.fastabend@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Lorenz Bauer <lmb@isovalent.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Jiayuan Chen <jiayuan.chen@linux.dev>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/2] bpf, sockmap: disallow update and delete
- from tc, xdp and flow_dissector
-Message-ID: <3speqrvxsx25cbyronbm4jatlhkawkjiki7j2b7clrtkbwgpn6@x2gx7rwvpho7>
-References: <20260629172704.1302218-1-rhkrqnwk98@gmail.com>
- <20260629172704.1302218-2-rhkrqnwk98@gmail.com>
- <DJLQSC87KCSV.314DTZAWRNA8C@gmail.com>
- <akNXhg5K7aV7Opdr@john-p8>
+	s=arc-20240116; t=1782804852; c=relaxed/simple;
+	bh=M6ayROjgOX2Fd5fgBNBZmnEnhIV1OzvXoSXW3RpbeuU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oWd8142wZo3jY75uxQgdzoeZCfA7NqF3BIMsiwHLKG1W/ROxFdOKX5aRXTgAnEKwHhuD4UHMTnqxj2L3yrsihCahZlAKsyL9cFfqgatUddYJfmBOqFTyjGBj3MYRYObb/YJKAlGf2LPQe3O8lDRLdaJ5EUB8paWhbaRw50qbnVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 1237ed92745611f1aa26b74ffac11d73-20260630
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
+	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
+	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:7cc4df48-54d6-40eb-a1ef-372245fde000,IP:10,
+	URL:0,TC:0,Content:-25,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,AC
+	TION:release,TS:-35
+X-CID-INFO: VERSION:1.3.12,REQID:7cc4df48-54d6-40eb-a1ef-372245fde000,IP:10,UR
+	L:0,TC:0,Content:-25,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:NOTI_GNA5D1EA,AC
+	TION:release,TS:-35
+X-CID-META: VersionHash:e7bac3a,CLOUDID:579fe322386de05c17de66cccb557374,BulkI
+	D:2606301534044XVORWWH,BulkQuantity:0,Recheck:0,SF:10|38|66|78|102|127|136
+	|850|865|898,TC:nil,Content:0|15|50,EDM:-19|2,IP:-2,URL:99|1,File:nil,RT:n
+	il,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0
+	,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 1237ed92745611f1aa26b74ffac11d73-20260630
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 677204135; Tue, 30 Jun 2026 15:34:04 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	keith.lucas@oracle.com,
+	kevin.brodsky@arm.com,
+	maddy@linux.ibm.com,
+	usama.anjum@collabora.com,
+	yury.khrustalev@arm.com,
+	jhubbard@nvidia.com,
+	joey.gouly@arm.com,
+	zwisler@google.com,
+	hongfu.li@linux.dev,
+	Hongfu Li <lihongfu@kylinos.cn>
+Subject: [PATCH v8 0/5] selftests/mm: refactor pkey helpers and fix mmap error handling
+Date: Tue, 30 Jun 2026 15:32:30 +0800
+Message-Id: <20260630073235.3802271-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <akNXhg5K7aV7Opdr@john-p8>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 29, 2026 at 10:47:41PM -0700, John Fastabend wrote:
->I think we additionally need to also block 
->BPF_PROG_TYPE_SOCKET_FILTER? Did you check this case I guess the same 
->case is possible there?
->
+The main changes in this series are to refactor shared tracing and assertion
+helpers into a common file, unify both pkey selftests on pkey_assert() and 
+per-test tracing for consistent diagnostics, and add missing mmap() return 
+checks with MAP_FAILED used throughout for readability and consistency.
 
-Yes, same inversion. I'll block BPF_PROG_TYPE_SOCKET_FILTER in v4.
+Hongfu Li (5):
+  selftests/mm: move pkey selftest helpers to pkey_util.c
+  selftests/mm: unify pkey sighandler selftest assertions and tracing
+  selftests/mm: use pkey_assert on clone_raw failure in pkey test
+  selftests/mm: add missing mmap() return checks in pkey tests
+  selftests/mm: add missing pthread_create() return checks in pkey tests
 
->Then another patch needs to restrict BPF_SOCK_OPS users. For that
->we need to block BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_*.
->Let me know if you want to do those as well. Let me know if you want
->to do both patches or just the prog blocking above with the possible
->addition of SOCKET_FILTER. I didn't search very hard so probably need
->to check all the BPF_SOCK_OPS_* to find the valid cases.
->
+ tools/testing/selftests/mm/pkey-helpers.h     |  4 +-
+ tools/testing/selftests/mm/pkey-powerpc.h     |  2 +-
+ .../selftests/mm/pkey_sighandler_tests.c      | 81 ++++++++--------
+ tools/testing/selftests/mm/pkey_util.c        | 86 +++++++++++++++++
+ tools/testing/selftests/mm/protection_keys.c  | 95 ++-----------------
+ 5 files changed, 141 insertions(+), 127 deletions(-)
 
-Just the prog blocking with BPF_PROG_TYPE_SOCKET_FILTER added. I'll
-leave SOCK_OPS out of this series.
+---
+v8:
+- No code changes (relative to v7).
+- Updated Cc list: added developers identified via `git blame` and
+  `git log` on tools/testing/selftests/mm/pkey*
+v7:
+- As previously suggested, wait for v7.2-rc1 and rebased the whole series
+  on top of it. No functional code changes.
+v6:
+- Add missing pthread_create() return checks (new patch 5/5).
+- In patch 2/5, call tracing_off() at the start of test_pkru_sigreturn
+  before the SIGSEGV handler is reset to SIG_DFL, to avoid leaving ftrace
+  enabled on crash.
+v5:
+- Use ret instead of child_pid to hold the return value of clone_raw().
+- Make tracing_on(), tracing_off() non-static.
+  Remove cat_into_file() declaration from pkey-helpers.h.
+v4:
+- Base changes on top of the latest mm-unstable branch.
+- Split the first patch into three:
+  patch 1: move pkey selftest helpers to shared code;
+  patch 2: unify sighandler selftest assertions and per-test tracing;
+  patch 3: use pkey_assert() on clone_raw() failure.
+- Use ksft_exit_fail_perror() in main() for mmap() failure.
+v3:
+- Use pkey_assert() for remaining sigaction() and clone_raw() error
+  checks for consistency.
+v2:
+- Update commit message
+- Move shared tracing and assertion helpers to a common file,
+  replace assert() with pkey_assert() in sighandler tests
+- Drop assert() from main() in protection_keys.c and add a proper error
+  message instead.
+- Link to v1: https://lore.kernel.org/all/20260518082120.3890552-1-lihongfu@kylinos.cn/
+-- 
+2.25.1
 
-Bests,
-Sechang
