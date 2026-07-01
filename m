@@ -1,81 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795BF3BB67F;
-	Wed,  1 Jul 2026 20:10:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CC63BB67F
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 20:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782936626; cv=none; b=SXM7PykTpUuiRqrHxUyP6dM8TVGWo2WspnLDzBPHou3u2txDddEanojaTjHO1DvWuYb4FK7mzTRpMjJxUVvMVvyRSfRhzpJKX0GrR6XTsXfcm3xDnDvUOks85OLmWw2dqdZ6Ykc9wCkI0xwAo6Bpux70jYadz+p4A8Y5YLSR8lo=
+	t=1782937162; cv=none; b=daVpFfvZozJtmJ5j6C176KsHlhG7iNU0M9IVZqMGDDEU8dkhbGPrEJKHQDL8ckL4jzVWu9AEI737aHWpoONS8c50KojxuZsieo3AMHUgkBhdZRVOId9Trxc7lvU1cCwlY3ZfhyUv0NJiaHPcXhc8TIhyO3A1C0QVO5zvjuDU6fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782936626; c=relaxed/simple;
-	bh=0noMDwCMu34Lz/ngTph0vgLOeRVJ7GlIHp5vQZl68Aw=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cQ/401gMt/M+dlU/GgWG1DkiMrrs57nwKokyYvb4YfMsFDtUyw/ysRzfaD6oBhnE8MUKMPP8zpnih20Q0BRSdzLldlsPsk9Jb3op89U26Q0sLKFpdLWMRz7EmY548LQdLbVxOwEENZ0QQIluf81MS3tG69GznPiaYe5NFEHqplY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GgFnXSxW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782937162; c=relaxed/simple;
+	bh=P2XaUmrl//82i1qJCceBWozgG8tYQzAsnfdiZDbolvE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uuFyFFZ3cibLLXYbMOuwTnM1mcziteU8pTgvhMptVeCXZjbiOaQ7XnYdNbzuTLx1V+Mxz+s3IrhzAYD18bWQxHeH3uAYNcm18mYMEK26ljkyQr+5pXqogmWDYqlgdjWqWO49V70F9uJa2c3zAiFS92pamKg+bJP5SwN9sP8D9UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TlmPhlo4; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GgFnXSxW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A72F1F000E9;
-	Wed,  1 Jul 2026 20:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782936625;
-	bh=yZeyX8nbUrPFd0IWDwrGEth1c6tK16aRA+fBBBONStM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=GgFnXSxWXC0i1wuOBmJ76cdbJbbLnK4WbqLMGxJAukDMSrHV3UoNj5ohEVL3kKVN4
-	 gaaFXXnu54eprwJ8apC8BAZx5RKOdpKtwIOeFpXRutFPOjm0hf4WU73e4JRhuEj05q
-	 q0N8sWfWZMhrOwUYP5R57occVAkVKsP0skwp5lo/lDBXK759WZQmMGHiZWzVwrQKl8
-	 8E9wr6OJ0TnmVwTaZz2kPuER17pYfnlObS+BG42c6iNpzQdVfWX+FWDC6N6Q9oq7G5
-	 keo9cUecJ5QDjBwKJ4JICsGbx1m3Ha21UVhkZJlLnU5oVae+1vmam10rGge0xhpTL3
-	 XJCJohuqJanfw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9398C383BA30;
-	Wed,  1 Jul 2026 20:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TlmPhlo4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782937159;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=79DoWJeAeXloYm2n+Rci/dmY81HSXAaiftH5DSNv554=;
+	b=TlmPhlo4V4JHpJYFF8KkVgzNzfGzkqS+GPYi3lsBQMGLf7xVnN/P9Lb1RXM3Tv0hUeLANi
+	Nyi+6rlPfGgjE0S5UpKXOMvcvWqymFMUwC9Q9qx6JCQXeaysP41NUenEs+N0aV7CCaoSDR
+	YOu2LkLX+2Ia+XsU4IBBWTF3/TayLrk=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-272-kZQShflBM2mh9OFVBVp14A-1; Wed,
+ 01 Jul 2026 16:19:16 -0400
+X-MC-Unique: kZQShflBM2mh9OFVBVp14A-1
+X-Mimecast-MFC-AGG-ID: kZQShflBM2mh9OFVBVp14A_1782937155
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 53DF41926B8F;
+	Wed,  1 Jul 2026 20:19:14 +0000 (UTC)
+Received: from [10.2.16.170] (unknown [10.2.16.170])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 019B630001BE;
+	Wed,  1 Jul 2026 20:19:10 +0000 (UTC)
+Message-ID: <fbab6706-12b2-4d97-afa1-5bcd5d943095@redhat.com>
+Date: Wed, 1 Jul 2026 16:19:09 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v9 03/11] cgroup/cpuset: Prevent race between task
+ attach and cpuset state change
+To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Juri Lelli <juri.lelli@redhat.com>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
+ Guopeng Zhang <guopeng.zhang@linux.dev>
+References: <20260630033344.352702-1-longman@redhat.com>
+ <20260630033344.352702-4-longman@redhat.com>
+ <e28a38fa-5998-4e73-886c-2cbbd26ae98f@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <e28a38fa-5998-4e73-886c-2cbbd26ae98f@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v1] selftests/bpf: Fix test_maps sockmap failure
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178293660813.1278318.4274170682804829324.git-patchwork-notify@kernel.org>
-Date: Wed, 01 Jul 2026 20:10:08 +0000
-References: <20260701071501.39628-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260701071501.39628-1-jiayuan.chen@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, ihor.solodrai@linux.dev, andrii@kernel.org,
- eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, shuah@kernel.org, axboe@kernel.dk,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+On 6/30/26 9:41 PM, Ridong Chen wrote:
+>> @@ -3246,7 +3268,12 @@ ssize_t cpuset_write_resmask(struct 
+>> kernfs_open_file *of,
+>>           return -EACCES;
+>>         buf = strstrip(buf);
+>> -    cpuset_full_lock();
+>> +
+>> +    /* cpuset_mutex acquired in wait_attach_done_lock() */
+>> +    mutex_lock(&cpuset_top_mutex);
+>> +    cpus_read_lock();
+>> +    wait_attach_done_lock();
+>> +
+>
+> Would it be cleaner to just pass this into cpuset_full_lock() as a flag?
+>
+> void cpuset_full_lock(bool wait_attach)
+> {
+>       mutex_lock(&cpuset_top_mutex);
+>       cpus_read_lock();
+>       if (wait_attach)
+>               wait_attach_done_lock();
+>       else
+>               mutex_lock(&cpuset_mutex);
+> }
+> Then the two write paths become a single cpuset_full_lock(true). The
+> downside is the other 6 callers would need cpuset_full_lock(false). 
+> Not sure it's worth it â what do you think?
 
-On Wed,  1 Jul 2026 15:14:22 +0800 you wrote:
-> test_maps fails in the sockmap test because sockmap_verdict_prog.c
-> drops the packet when the first 8 bytes are not directly accessible:
-> 	  if (data + 8 > data_end)
-> 			  return SK_DROP;
-> 
-> The blamed commit removed bpf_skb_pull_data() from the stream parser
-> program so that the parser no longer modifies the skb. That was needed,
-> but it also removed an implicit side effect: bpf_skb_pull_data()
-> linearized enough of the skb for later direct packet access.
-> 
-> [...]
+I would like to put wait_attach_done_lock() at places where it will wait 
+for the completion of the attach operation. Putting it inside 
+cpuset_full_lock() will make it harder to find out which operations will 
+need to wait for task attach. So I will keep the code as is.
 
-Here is the summary with links:
-  - [bpf,v1] selftests/bpf: Fix test_maps sockmap failure
-    https://git.kernel.org/bpf/bpf-next/c/27a0f3635d86
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Cheers,
+Longman
 
