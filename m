@@ -1,79 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C531D219FC;
-	Wed,  1 Jul 2026 01:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38953352032
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 01:39:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782869423; cv=none; b=XG4FCFG6xg5Zsq5DKJ6I/UldAO4HRUdb9eDN7ufgJWofOpDsW0gANGAB3c1TY0oMbv83LQfqn87mbAwXB0NlXPynLGSTw8YW0JQ5zhlkxmVqFWgbnzc8QlCHns9S4i23/+oeP3VlqsYo0X00FPQOh0ILUH8/iJuqlvHyC8Rc9SE=
+	t=1782869997; cv=none; b=JNd4Yam+CJzW115Mr7MuYjLlRcqwAqphxOLIfQ0nxoTCmyhRSR7aMl9C2HgdILycbz4r0kCkJSm9W2vujOEFPEIfhRm0kH0bELWjftzf6GUeeOv+9aj1MqO8fITVXlTk1XkJWYpkQHbLDnfiWUASDSK3zAmF7BcUWBDpJ/C8P/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782869423; c=relaxed/simple;
-	bh=/gtJdKvYgbzRj2+uqGEETzTMoRBRDQDKx2iYQsbAUEA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=SwseYwMQyRg0DZK1K9jG/W9JJLGO5ygewLmS0ez2GvItL+XlkbMxA6JXjm124msPkDg/2Liv+5uU+Up+yl3eOk/M93fb1Rgx7ErS21Ssp7qpdx+oa9bUXz3WYmyVEyiHrUujg9EnewPdkCppvQYatHCeVlo4rPud5ncKU+vaOMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R+g3eJj6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782869997; c=relaxed/simple;
+	bh=r6P87TDBgKgJToiem87UMdiReewt6xr/ohCDs11d6e0=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=b6neM8YTypVpWlw+H+u25Hn85iTPpVYe+sxyBav5nH6+MrGd+g4mLV41ic0E8jk5m1zADXkUqRPiueLrNOQeo7uPCQECpRjW3Y7gzacSkXIjz0FSAelox/R/QqLYxqF4Hn2nh8zyA5mZUz5s7QfvtBf3i4UarsLlYIVlnASB/Jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nikableh.moe; spf=pass smtp.mailfrom=nikableh.moe; dkim=pass (2048-bit key) header.d=nikableh.moe header.i=@nikableh.moe header.b=ty5pyvCd; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=cXfYuPB4; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nikableh.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nikableh.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R+g3eJj6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 574061F000E9;
-	Wed,  1 Jul 2026 01:30:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782869422;
-	bh=ZwEtI25Be4x8jFHmzmuzNGcOJgHpbFrTly80xZQwmtU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=R+g3eJj6DolaGvkdDHNA8GOieVPVRCIChwxzzxv8VvvpsTyhInCNkbSOdhoM2HMQH
-	 wWDy/wA7srtDBAisdU/7Y5iwFSHu1DDkLMvrG3zDpbR2HlTCHbyYDbAdPtI8lPkvOo
-	 1kgT8T2iJOHa5sAFxG/gdatAoIWIj6wyJGX5rWwX9n0od1sHI5/HOq2vqr/vc1l2yX
-	 ovvZGVKn2d0ghoVqVnLZP5EJdfhzkPsXlAvo8jYMz1jwv67ZtWUwiUVU38yL9oL/LR
-	 Jpbr1EJnlT4uTox1CmxncDt76/FYrVNu4eWcxkQREV86wIx+7Qg8/U/E0Axt2se45M
-	 VfsqEIB4PoJ0Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56727393A964;
-	Wed,  1 Jul 2026 01:30:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=nikableh.moe header.i=@nikableh.moe header.b="ty5pyvCd";
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="cXfYuPB4"
+DKIM-Signature: a=rsa-sha256; b=ty5pyvCdiB/gXT7reCiVKRSn3vu7aH/IhQvFoLbPIB3r7ppaeCkpOWjPN0MeFU3kWYBS5zTh5s8HiPWB3dwvcfhHpJTtOZUZtd+KD0wiYl5M/D4JGV+8zP4t5pBb9ciB7lxbgTJt1mOxsgi3daUbKpaIM6S7vv4d9LNMv4xsYSmNCc5ODIq2R10vfz474i15b+GYQ/kgPar9/t8OhotFiigOgfMxuwhR4ZOmzgSpNPzLaepX6NzO5Ot7eF/hXU7pYF3Q67+ipHKfndOC8PMd65uYLduTN2Yk3c/1X9PGoNRPKqGjPxZEnBWC2ydadAhSsJb2YE4xVhNgVljHXA53lA==; s=purelymail2; d=nikableh.moe; v=1; bh=r6P87TDBgKgJToiem87UMdiReewt6xr/ohCDs11d6e0=; h=Received:Date:From:To:Subject;
+DKIM-Signature: a=rsa-sha256; b=cXfYuPB4yzP89CYdlinsWzT50XBgh81sg1gycldmpe8ukBWcEVVXULtTkXSZafY8m6doiJ+cdhVmWAmaMp8pRFq5dINIl+Vbj6h5Kw/AR1JNRsbJMKkGaae3fCFawwRRdlRIE9XlYYrec+U/B08zRskekq0+XdhCoIQSWd0NJn4Nfp0YuGEHk3FzgMAxJJB618bQAYGO6IxzzlflU72NHuAJUtTuLS22KkY+haSyf7SkxVMqheQo2Eidl91074JZRqiZCM97TifVrBfLhYklqnSBkV5903kgM3jPp+Y+Bu0/Fc0/0Qwi7XpN7joY9i0RakQhDpyHyeGZIxp/9bdeAg==; s=purelymail2; d=purelymail.com; v=1; bh=r6P87TDBgKgJToiem87UMdiReewt6xr/ohCDs11d6e0=; h=Feedback-ID:Received:Date:From:To:Subject;
+Feedback-ID: 209604:18551:null:purelymail
+X-Pm-Original-To: linux-kselftest@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPA id 2143755734;
+          Wed, 01 Jul 2026 01:39:12 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] selftests: drv-net: tso: don't touch dangerous
- feature
- bits
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178286940589.367336.12422566739924603469.git-patchwork-notify@kernel.org>
-Date: Wed, 01 Jul 2026 01:30:05 +0000
-References: <20260629233923.2151144-1-kuba@kernel.org>
-In-Reply-To: <20260629233923.2151144-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
- daniel.zahka@gmail.com, linux-kselftest@vger.kernel.org
+Date: Wed, 01 Jul 2026 03:39:12 +0200
+From: Nika Krasnova <nika@nikableh.moe>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo
+ <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Andreas
+ Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor
+ Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Daniel
+ Almeida <daniel.almeida@collabora.com>, Tamir Duberstein
+ <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
+ =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, Viresh Kumar
+ <viresh.kumar@linaro.org>, Yury Norov <yury.norov@gmail.com>, Lorenzo
+ Stoakes <ljs@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David
+ Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 0/2] rust: kernel: add cfg_select! and use it for
+ config-based selection
+In-Reply-To: <CANiq72nVwM_OF4yz1rB4Q-atDgZ9Oywbuhu830jfQe7npt0FeQ@mail.gmail.com>
+References: <20260629-backport-cfg_select-v1-0-388d5d31d9d4@nikableh.moe>
+ <CANiq72kG8k3mk+Xjr6q7aKg212QUNtZk5w4rxV=UGR5UXKE_ng@mail.gmail.com>
+ <0eb77f4b7199e9af01d61e0c1ac03c99@purelymail.com>
+ <CANiq72nVwM_OF4yz1rB4Q-atDgZ9Oywbuhu830jfQe7npt0FeQ@mail.gmail.com>
+User-Agent: Purely Mail via Roundcube/1.6.16
+Message-ID: <4b9622008ce92cfb5da5d96397ce4c36@purelymail.com>
+X-Sender: nika@nikableh.moe
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On 2026-06-29 21:07:34 +0200, Miguel Ojeda wrote:
+> The tracking issue says the latest change was in Rust 1.91.0. Did it
+> not work there? Were there changes after that?
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Checked 1.91.0 directly: core::cfg_select is there behind
+#![feature(cfg_select)] and behaves the same as 1.94.1 -- single-brace
+expression position included. So 1.91.0 is the cutoff (RUSTC_VERSION >=
+109100), nothing changed between 1.91.0 and 1.94.1.
 
-On Mon, 29 Jun 2026 16:39:23 -0700 you wrote:
-> query_nic_features() detects which offloads depend on tx-gso-partial
-> by enabling everything, turning tx-gso-partial off, and seeing which
-> active features drop out. Enabling all hw features is dangerous:
-> we may end up enabling rx-fcs and loopback for example. For the
-> ice driver we end up getting into problems with feature dependencies
-> so the cleanup isn't successful either, and the test exits with
-> rx-fcs and loopback enabled.
-> 
-> [...]
+> [...] If I understand you correctly, you are saying that even with
+> the conversion here, we wouldn't even need the expression case, no?
 
-Here is the summary with links:
-  - [net] selftests: drv-net: tso: don't touch dangerous feature bits
-    https://git.kernel.org/netdev/net/c/2f7f2e311106
+That is correct. Everything in this series is item or statement 
+position;
+nothing uses the expression-operand form.
 
-You are awesome, thank you!
+> [...] if we want to go with this one in all versions, then we should
+> make sure we only allow that subset that cleanly maps to the future.
+
+Agreed. I'll restrict the fallback to exactly that subset
+(item/statement, single braces) by dropping the expression-operand form.
+Everyone hits the fallback until the MSRV bump, so a non-portable use
+fails uniformly instead of compiling locally and breaking in linux-next.
+The accepted subset is a strict subset of core::cfg_select, so the
+eventual switch needs no call-site changes. (I'll also have the fallback
+emit compile_error! on no-match, to match core.)
+
+> Now, to be honest, the easiest is to just wait a year and then start
+> using `core`'s directly... i.e. it is not like we are in a rush to
+> start using it anyway...
+
+Fair, I'm fine with dropping it. The counterargument is that the 
+fallback
+is small and self-contained, and the conversion removes a chunk of
+easy-to-desync pairs of #[cfg] now rather than in a year. Happy to send 
+a
+v2 if you want it.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Nika Krasnova
