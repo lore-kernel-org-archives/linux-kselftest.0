@@ -1,64 +1,65 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0EE3803F1
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 21:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8343A4F30
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 21:47:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782941938; cv=none; b=KskHvX7b5QeO8HJcgHkLHkK8nB2GE3tes8PQcB776ULYVgEMW5WBLOe7NxyPDdfmsloNObc/EMp4IoZH6hcxFKCBFfhRRcn1i63LzZjnNcBYizERv/Z4sMQEPQKwAjcZwoycywywTPVYOZQuzudW3vUM4hCY+FQWUKdTPI0pcrs=
+	t=1782942465; cv=none; b=KkO8ek98GFl+6R73GLWRblb/AlZfjt5ffHFzF+YnjFlG4KRwc0vpRGTGzVqEebm745A5yFBUXnroMw4b6gs5ThWgU+zrE7baQgqrxwxp416cnnFYPbbkQEcpitNx5JXnjkLQGfD5cuHd319BiJk4IfECJb8tsl2ov3iNRsKS438=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782941938; c=relaxed/simple;
-	bh=s3SRCVocvxtBq/BBjpyMKtPRDxFAsPXDOITHXqUnO4o=;
+	s=arc-20240116; t=1782942465; c=relaxed/simple;
+	bh=s6Cr8zkyzrstP1cxKPxKWWNP4yvLxKRkyvcOWVE4+90=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=jupPeUjviMjOgjJ1aGwLBJUHekiFDIugqMGbwGtP1lClDJMZLXOCkBPYccoO6Lm/O5oaUE/UADHVBZ28EcX797nsOSG0nhS3AzsHyJxCZ9I+o7yq2rOjOlrgoZh2jETXZgPSV9V1M6+KmzHIi7tcukMFDlvG2IuEg/RSuc0QEj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jYZHQ0FZ; arc=none smtp.client-ip=209.85.215.202
+	 To:Cc:Content-Type; b=PDSUwS2ut3yEv3k5lyebIvvZRqEYqlqOgYqa4NCvaD5OHl39f7qAvzrAnRyDMD2lqA7XEjh6/tGn+sr+pkcz5/FdDrteI5dkuaXV0MsPLQPNSNXMGbxG9pNhDRwSmggNpOH+O3fG7pPzyye5sH0Q3xU9RCz2V+OiLmr1HaVVTiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rVpsp6AZ; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jYZHQ0FZ"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c88aab7c1d4so794462a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 14:38:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rVpsp6AZ"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2ca0331d0b1so20808945ad.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 14:47:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782941937; x=1783546737; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1782942463; x=1783547263; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GRkq9jmjNuS5m4BJgbbAEXZCpunnA1N0v1XvrStDBgY=;
-        b=jYZHQ0FZXAGO1JEGSty/T2GCc1OXGTQApUcOJesNOIlH8l85iNchenlCCV/1DZdGoT
-         ksIP9vNV78wNEvoOdkfuVCk6HMJpet5vE+JYsUm2vMRnZSVKK+VjR8H5InwAYOPHBbc1
-         aaJNkmEDURJ64lc302othmdm5JZAy42dA9ZCFHGr9qu9CrPaRnRwtS3P9Atu6psHqXVV
-         JrnvTWDS98Y8L0Ll9o+oukfL5b0Id9i/dljxhUWkxi5cia+UxSpSDi9ntkDAhZMITm4O
-         WOAVy5C64JRZJT5tOn8mcx2DNNJSYvpif1Q3nkBbkuEKGWAOgnzxXw/pAWQrh3tafiBr
-         L2oQ==
+        bh=zcs7QN5Kd/BsLm+PUgFcojzf1bXkoGYIJwLkqkM7zHA=;
+        b=rVpsp6AZSOy/NLznGTKp2Pw0DZ0B+eF94ddmhpHVgoxEcys5CrnXYKghzp3ABlufZF
+         1g5AedcwCOYpu8w4IjF2J9wDkww5bJFp6KEUHRuqyno36Noz4OAjLa8DUFJL8n/YdrqU
+         a8VxfcQAbUtpiBel3y07+M6myY0PYPjLlRtpS8nLFQbkUYuL94DgIpp475jnWAjq+Wdh
+         hUizv2HLC1hdwRwlSccQzYDddIQjKqlMWg17WvSQvPMQZhz3F5Pr6qdiD6wVTVYXpSk1
+         fOzpNm89My0UVP3OTI+55vYxTZqldejdJeDdcz8IT1pm2o6o1txbfhCvM9OzVmeDxkME
+         bf/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782941937; x=1783546737;
+        d=1e100.net; s=20251104; t=1782942463; x=1783547263;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GRkq9jmjNuS5m4BJgbbAEXZCpunnA1N0v1XvrStDBgY=;
-        b=hMmGJioR9JntAZTnzyVTbYXFNsYmSHf97++H24EridmiemPM4z62qd4nVNH5ukOksv
-         5Leo5AwUeqdQMCQ016dMjOFOha/EbB1qzDQb/gTD8Z3zshh9ZBpK9rL1nGsHx0qTqcHs
-         QUAcxwFiFaM7Uzf2+iE5GsEopNCX7K986Nc926qbg+VTlO1JoZQyiQbSEv5BUyJ8n7Ae
-         XketypFbX8TJeTbO6gconexzJHiuXJihF+BXQL1ErVpwhHaed0RT1gmvECaGBtunrbnW
-         lFpSGlqDfZbY1D87z8OnzdnnkdPQw6qgWo27Aco+xfltXKWOI48mF9Xl8n3IDdKgINOt
-         PJmQ==
-X-Forwarded-Encrypted: i=1; AHgh+RosxH8iF7p5o3ETyziT1i3fglynMYXOiHpGWmvCLiWxzGfsoMyDrus/3Cw+hj3VnCinnaBAqW4zidnYpWTbwSg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydE/cM41k9OgQOQKIVR34gwf3+TLLj0RiFG7XTwIc/f0k/XF3n
-	QRWzxP8/QRKu7uDDdlCs2s2gw0kJWVUosiq+dUjwAFry3glDpiLzsrtMtmWf9lAgznru/U/B5M4
-	QmhQ9BA==
-X-Received: from plbka15.prod.google.com ([2002:a17:903:334f:b0:2bd:9574:2958])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d2c2:b0:2c9:fa36:ab73
- with SMTP id d9443c01a7336-2ca7e6f0b6emr36500665ad.8.1782941936636; Wed, 01
- Jul 2026 14:38:56 -0700 (PDT)
-Date: Wed, 1 Jul 2026 14:38:55 -0700
-In-Reply-To: <20260608145455.89187-7-dwmw2@infradead.org>
+        bh=zcs7QN5Kd/BsLm+PUgFcojzf1bXkoGYIJwLkqkM7zHA=;
+        b=Lf1EOP+ARq2n842/V/PTSrnbernzHpi61nC4L8YSaRA3q7sPfh1LduibVhYm8CM3Mm
+         fXXUiLZz8g0Xiy5TSCTDL3VsJO4arDS+mioJBa/EqARB//DAQXqDWJtsI0htjPeR5Joa
+         p4LspWJCipz+x8zWUZaylSPkdUxH2VszZvW2MYtMWweVJgzsVE1mUdSZ80Wk57darCgb
+         0by/z9GrS+eTJ4XPtpTWd0zZWS5yOcpbyPTObaj6lu3ZTCRanPKm9aRwyeMGiV/7hmtz
+         R/n2VO4dIN4XdbPthor1xHBJ575/CUYTpMfQeSdO2Y6hXKEqJafushKs/KDB+SvEKX1Y
+         NPdA==
+X-Forwarded-Encrypted: i=1; AHgh+Rqtc/jxyaNMvyQ0eSNWloUyQRagf3i1axnvH0xMIS8gWI4jfXQ48ESHfHto7cUczvi0/kTZzUP0svA7QXNmxOk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4wg+FtzJoRtaA/RnPlgifZtvHjOOYPE1AYRIeek441S+WeB1R
+	5oAPal2mxa0qQx2igaRXITKyS9T9rkamiwDUyKb0yVUwd/SyhSDR0ysQAgF+XsRfeM+57BkMQ9T
+	oY1YOSg==
+X-Received: from plzv3.prod.google.com ([2002:a17:902:b7c3:b0:2c8:7fe:29ac])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:32cc:b0:2c9:c083:cd49
+ with SMTP id d9443c01a7336-2ca7e69dfe3mr34635215ad.14.1782942462488; Wed, 01
+ Jul 2026 14:47:42 -0700 (PDT)
+Date: Wed, 1 Jul 2026 14:47:41 -0700
+In-Reply-To: <20260608145455.89187-9-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260608145455.89187-1-dwmw2@infradead.org> <20260608145455.89187-7-dwmw2@infradead.org>
-Message-ID: <akWI72WrPKy-PBqo@google.com>
-Subject: Re: [PATCH v5 06/34] KVM: x86: Explicitly disable TSC scaling without CONSTANT_TSC
+References: <20260608145455.89187-1-dwmw2@infradead.org> <20260608145455.89187-9-dwmw2@infradead.org>
+Message-ID: <akWK_duG7ZsIekt7@google.com>
+Subject: Re: [PATCH v5 08/34] KVM: x86: Add KVM_VCPU_TSC_SCALE and fix the
+ documentation on TSC migration
 From: Sean Christopherson <seanjc@google.com>
 To: David Woodhouse <dwmw2@infradead.org>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
@@ -75,69 +76,66 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
 Content-Type: text/plain; charset="us-ascii"
 
 On Mon, Jun 08, 2026, David Woodhouse wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
-> 
-> KVM does make an attempt to cope with non-constant TSC, and has
-> notifiers to handle host TSC frequency changes. However, it *only*
-> adjusts the KVM clock, and doesn't adjust TSC frequency scaling when
-> the host changes.
-> 
-> This is presumably because non-constant TSCs were fixed in hardware
-> long before TSC scaling was implemented, so there should never be real
-> CPUs which have TSC scaling but *not* CONSTANT_TSC.
-> 
-> Such a combination could potentially happen in some odd L1 nesting
-> environment, but it isn't worth trying to support it. Just make the
-> dependency explicit.
-> 
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-> Reviewed-by: Paul Durrant <paul@xen.org>
-> ---
->  arch/x86/kvm/svm/svm.c | 3 ++-
->  arch/x86/kvm/vmx/vmx.c | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index e7fdd7a9c280..7817752533fe 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -5546,7 +5546,8 @@ static __init int svm_hardware_setup(void)
->  				     XFEATURE_MASK_BNDCSR);
->  
->  	if (tsc_scaling) {
-> -		if (!boot_cpu_has(X86_FEATURE_TSCRATEMSR)) {
-> +		if (!boot_cpu_has(X86_FEATURE_TSCRATEMSR) ||
-> +		    !boot_cpu_has(X86_FEATURE_CONSTANT_TSC)) {
->  			tsc_scaling = false;
->  		} else {
->  			pr_info("TSC scaling supported\n");
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index a29896a9ef14..ed207cc7692d 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -8672,7 +8672,7 @@ __init int vmx_hardware_setup(void)
->  	if (!enable_apicv || !cpu_has_vmx_ipiv())
->  		enable_ipiv = false;
->  
-> -	if (cpu_has_vmx_tsc_scaling())
-> +	if (cpu_has_vmx_tsc_scaling() && boot_cpu_has(X86_FEATURE_CONSTANT_TSC))
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index c1897d939da9..6337f9b9d7ac 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -5930,6 +5930,9 @@ static int kvm_arch_tsc_has_attr(struct kvm_vcpu *vcpu,
+>  	case KVM_VCPU_TSC_OFFSET:
+>  		r = 0;
+>  		break;
+> +	case KVM_VCPU_TSC_SCALE:
+> +		r = kvm_caps.has_tsc_control ? 0 : -ENXIO;
+> +		break;
+>  	default:
+>  		r = -ENXIO;
+>  	}
+> @@ -5950,6 +5953,22 @@ static int kvm_arch_tsc_get_attr(struct kvm_vcpu *vcpu,
+>  			break;
+>  		r = 0;
+>  		break;
+> +	case KVM_VCPU_TSC_SCALE: {
+> +		struct kvm_vcpu_tsc_scale scale;
+> +
+> +		if (!kvm_caps.has_tsc_control) {
+> +			r = -ENXIO;
+> +			break;
+> +		}
 
-We should clear SECONDARY_EXEC_TSC_SCALING in setup_vmcs_config().  Failure to
-clear the vmcs_config bit will advertise the feature to L2 and allow it to be
-enabled in vmcs12, but KVM will ultimately not honor the scaling in vmcs02:
+Uber nit.  For consistency with KVM's bizarre pattern here:
 
-	if (kvm_caps.has_tsc_control)
-		vmcs_write64(TSC_MULTIPLIER, vcpu->arch.tsc_scaling_ratio);
+		r = -ENXIO;
+		if (!kvm_caps.has_tsc_control)
+			break;
 
-This series kinda sorta gets there with "KVM: x86: Remove pvclock_gtod_data and
-private timekeeping code", but that change looks misplaced?  And I think clearing
-the bit this late will lead to false failures in vmx_check_processor_compat() due
-to the golden config clearing the bit, but the local config having it set.
+> +
+> +		scale.tsc_ratio = vcpu->arch.l1_tsc_scaling_ratio;
+> +		scale.tsc_frac_bits = kvm_caps.tsc_scaling_ratio_frac_bits;
+> +		r = -EFAULT;
+> +		if (copy_to_user(uaddr, &scale, sizeof(scale)))
+> +			break;
+> +		r = 0;
+> +		break;
+> +	}
+>  	default:
+>  		r = -ENXIO;
+>  	}
+> @@ -5989,6 +6008,9 @@ static int kvm_arch_tsc_set_attr(struct kvm_vcpu *vcpu,
+>  		r = 0;
+>  		break;
+>  	}
+> +	case KVM_VCPU_TSC_SCALE:
 
+Another stupid consistency nit.  Probably do this?
 
->  		kvm_caps.has_tsc_control = true;
->  
->  	kvm_caps.max_tsc_scaling_ratio = KVM_VMX_TSC_MULTIPLIER_MAX;
-> -- 
-> 2.54.0
-> 
+		/*
+		 * TSC scaling information is read-only (it's a reflection of
+		 * the TSC frequency, which can be set by userspace).
+		 */
+		r = kvm_caps.has_tsc_control ? -EINVAL : -ENXIO;
+
+> +		r = -EINVAL; /* Read only */
+> +		break;
+>  	default:
+>  		r = -ENXIO;
+>  	}
