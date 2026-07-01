@@ -1,67 +1,61 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A92F48AE28;
-	Wed,  1 Jul 2026 12:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E29C47CC85;
+	Wed,  1 Jul 2026 12:44:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782909363; cv=none; b=lBIgOi0v2tTYQV1YgpO6HFfXAD8b6kH6iBcNSVkBqAP67fiLvdn5HRWXGMllwPMa5GP62z0A8rPq7g3TYNAGE7oNDvO6/IKEQ5Rl3P9S7r/HO+z+xu5T510ZrDLfmNJGp68Qj9IsN6c1Nppin/P32OFfQbe17IamQcbAzZDTThE=
+	t=1782909874; cv=none; b=Aw2wQss5UgQ3mj3ZPe8ckJi+jbKsrG72Np5E+mRO9zc68peKveZzDDTBc62YzdXYntfFdvN4Ttm6chbaK+/Zw1X2049be+UUNXBRIzDOwz+ZDPvFf6YT4RiRJFo8do1XvCMN5sTW9rgkAf4h3rMpCzT44LqXv0TSW1Ph39LFAgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782909363; c=relaxed/simple;
-	bh=KSYHkV8Y4pKi4twqfYjJvxeefOLDLLhmak2aswDI7kw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FEewXAbJusnaPzOO/sCX3BInmAybAux+iNSvUvcVAJuxIATuf9FkBealkswdlWObmrK3SDlyfg5r1bciW++HQ7UM1vZC0HHfuz85/7PNXli/4G7hlK+LerJjvqR42X9TDSa46iDd+HkUZkaZOpYRPdjEanPsIfUm1N56gB8UucU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 65f38664754911f1aa26b74ffac11d73-20260701
-X-CTIC-Tags:
-	HR_CC_AS_FROM, HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN
-	HR_FROM_NAME, HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER
-	HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NAME, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED
-	DN_TRUSTED, SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:bf6aa7eb-c6be-4800-b028-9e96df855f36,IP:15,
-	URL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:40
-X-CID-INFO: VERSION:1.3.12,REQID:bf6aa7eb-c6be-4800-b028-9e96df855f36,IP:15,UR
-	L:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:40
-X-CID-META: VersionHash:e7bac3a,CLOUDID:84bc37e833540559da5696d077a9fe87,BulkI
-	D:260701203554XPBJRPLK,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
-	2|127|136|850|865|898,TC:nil,Content:0|15|50,EDM:5,IP:-2,URL:0,File:nil,RT
-	:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP
-	:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 65f38664754911f1aa26b74ffac11d73-20260701
-X-User: wangyan01@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.171)] by mailgw.kylinos.cn
-	(envelope-from <wangyan01@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1205726795; Wed, 01 Jul 2026 20:35:52 +0800
-From: Wang Yan <wangyan01@kylinos.cn>
-To: Shuah Khan <shuah@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	linuxppc-dev@lists.ozlabs.org,
+	s=arc-20240116; t=1782909874; c=relaxed/simple;
+	bh=PmBlIxOnIAWiTT1dMB+k1GJBW3L+i3rVcq5Pvr4YNcM=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=KgPf0P/8H4bbTcGCbHZwNHCnHOQPXHyv2f28vqvY+TrFV9QcauW3W/J2HfX9NfByzGlobv70L/+lqlJk76+QNyW+0O6FQqPYq3QQoHpLw3L8MqKEC2jfQaG9PtNq2KnkFdPn2RWIZgQR3SWLZsvu3NOQ8GlQ6yuBob6E9cHd/9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=PDHnvyYM; arc=none smtp.client-ip=203.205.221.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="PDHnvyYM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1782909863; bh=2T9UvrmrdIZ1TA3mbiBS9R/xpVn5slOrRYqYeNWpCkQ=;
+	h=From:To:Cc:Subject:Date;
+	b=PDHnvyYMkk4P8zc/7lOsRgApm+tiH12dWXbH3BYKvvZYMZm+gDcl2qujUVzhj50hb
+	 ih/eg7y5kdwdvrT63LXfSsx1I+XOpM+MUz7cdQsAios1rBjKC2lgpTXUFHCB7b9hCK
+	 RXQrfOnbkgI/7UwdsEJ8VGcQXKgbs16V6L+s+B1I=
+Received: from LAPTOP-KNA43L24 ([2409:895a:38f6:dd00:f937:a83c:6bd9:7270])
+	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
+	id AE71F824; Wed, 01 Jul 2026 20:43:39 +0800
+X-QQ-mid: xmsmtpt1782909819tpsapueyo
+Message-ID: <tencent_4780DB9DBAA4CFF241D9A4840EEF9B0B3D06@qq.com>
+X-QQ-XMAILINFO: OATpkVjS499usFhVinfmLlowlLd1WvZ2WY+OVxVco5WYAaVL5QBZ9lSEIzBIpb
+	 x9s+SSfhzVwbR+MJ9u4pDH0hSnWJ0wLvhzRDx+zLzHnc4mlorqma2/tiBH3KwLlHI38G+cx3a1nD
+	 6W+HkRw9H7xYKOD9Z4g4HfrwOOORydHF+kl9fV6qqV8VBSrXmDzKKGyTCDR5XQcvAZaqKc4l8c4K
+	 rx2PMpz2XqdoPUgEgZUH2HZxF3oKLtyOcPOxDFvPV07b/qWwtfgv2cJTydh0NkplKgqDT2Q0Ep5m
+	 1MLVzyCTdrXM/fbp4fbqKvYYwsbntkR+KsVo4gHiSNF+VDg5kebXBnDKY5xbujJgwuW0Ks5v8fWF
+	 PSu5jrVXFEtpS43Kk+pIJuiOuRJ/jjaXzE7IGdHnYz3ALp3ZmUk+6RBVy2KYJfSw2VQM5NWIBwJr
+	 YMBo0dwweA9vklw36gyQL73b8pKDJW0lMllJxf1603RcHj1ZZV4X0pducqbaDSfatlv5ch/9ilVM
+	 6mN1/m8omC9JH70P5IIh/ZOjGFyTAY3reRHvQW9ZDINaFPBzs7Lj3Xlfg7Fvv8SoGl3fQgHBYhuw
+	 OxaXPJwO3gvrNJEI4l5Yv4EQ8bwdYnPeN8TGSXrVFWdr09/qDe/67+1GV2m9W8Ta0Bl8V9fI0cPC
+	 yh2zqgJEGQybheNRI7AHDyKb7YWJJ0YK7FFB0G7/YWbg8Mjn49iTYxPNIgNUPhRJcwD7FNy14hJL
+	 XiptrQqnOhEjN95k7en+FkeFWMgbq9WBxlIfZWkFuqG5mEfnEBqUiZUOqD3CVY9F1OLQpdWtwwh6
+	 2u7WX4scgjnBoRJSElggM91tT4EzI+VLiYp2Wp100UsnjSvlKmLTn5EoN6D4t2mt/xeONezNKtwG
+	 b59SzhchoecSG74HAPGAmUMKfJf1JPIZf1kKUkNWnGvTaFKOTFc6ilS10bHg+yiA706Zq+BIFdTA
+	 9YksdF0rjRbvWwCiokDS3kbTJfkbkoqKfycLbHohP/M/iBVwbAyLxSuBPjI3p1949lbAYcja1Tf3
+	 jpNP9jEG9iY067qvUWBwjpTe8LgMsHG2FyF44UKQ==
+X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
+From: Old-Ding <1746193727@qq.com>
+To: mathieu.desnoyers@efficios.com,
+	peterz@infradead.org,
+	paulmck@kernel.org,
+	boqun@kernel.org
+Cc: shuah@kernel.org,
+	skhan@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Wang Yan <wangyan01@kylinos.cn>
-Subject: [PATCH 6/6] selftests/powerpc/tm: fix spelling errors in comments
-Date: Wed,  1 Jul 2026 20:35:20 +0800
-Message-Id: <20260701123520.271580-7-wangyan01@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260701123520.271580-1-wangyan01@kylinos.cn>
-References: <20260701123520.271580-1-wangyan01@kylinos.cn>
+	Old-Ding <1746193727@qq.com>
+Subject: [PATCH] selftests/rseq: Fix spelling of accommodate
+Date: Wed,  1 Jul 2026 20:43:24 +0800
+X-OQ-MSGID: <20260701124324.696-1-1746193727@qq.com>
+X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,57 +64,28 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix three spelling mistakes in powerpc TM selftest comments:
-  - "delievery" -> "delivery" (powerpc/tm/tm-signal-stack.c)
-  - "sucess" -> "success" (powerpc/tm/tm-tar.c)
-  - "becuase" -> "because" (powerpc/tm/tm-signal-msr-resv.c)
+The comment contains a spelling error listed in scripts/spelling.txt.
 
-Signed-off-by: Wang Yan <wangyan01@kylinos.cn>
+Fix it.
+
+Signed-off-by: Old-Ding <1746193727@qq.com>
 ---
- tools/testing/selftests/powerpc/tm/tm-signal-msr-resv.c | 2 +-
- tools/testing/selftests/powerpc/tm/tm-signal-stack.c    | 2 +-
- tools/testing/selftests/powerpc/tm/tm-tar.c             | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/rseq/rseq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/powerpc/tm/tm-signal-msr-resv.c b/tools/testing/selftests/powerpc/tm/tm-signal-msr-resv.c
-index 4a61e9bd12b4..8aee18819603 100644
---- a/tools/testing/selftests/powerpc/tm/tm-signal-msr-resv.c
-+++ b/tools/testing/selftests/powerpc/tm/tm-signal-msr-resv.c
-@@ -42,7 +42,7 @@ void signal_usr1(int signum, siginfo_t *info, void *uc)
- #else
- 	ucp->uc_mcontext.uc_regs->gregs[PT_MSR] |= (7ULL);
- #endif
--	/* Should segv on return becuase of invalid context */
-+	/* Should segv on return because of invalid context */
- 	segv_expected = 1;
- }
+diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
+index be0d0a97031e..1cd633923b1d 100644
+--- a/tools/testing/selftests/rseq/rseq.c
++++ b/tools/testing/selftests/rseq/rseq.c
+@@ -73,7 +73,7 @@ static int rseq_ownership;
+ #define ORIG_RSEQ_ALLOC_SIZE		32
  
-diff --git a/tools/testing/selftests/powerpc/tm/tm-signal-stack.c b/tools/testing/selftests/powerpc/tm/tm-signal-stack.c
-index 68807aac8dd3..7b323679437d 100644
---- a/tools/testing/selftests/powerpc/tm/tm-signal-stack.c
-+++ b/tools/testing/selftests/powerpc/tm/tm-signal-stack.c
-@@ -52,7 +52,7 @@ int tm_signal_stack()
- 
- 	/*
- 	 * The flow here is:
--	 * 1) register a signal handler (so signal delievery occurs)
-+	 * 1) register a signal handler (so signal delivery occurs)
- 	 * 2) make stack pointer (r1) = NULL
- 	 * 3) start transaction
- 	 * 4) cause segv
-diff --git a/tools/testing/selftests/powerpc/tm/tm-tar.c b/tools/testing/selftests/powerpc/tm/tm-tar.c
-index f2a9137f3c1e..ea420caa3961 100644
---- a/tools/testing/selftests/powerpc/tm/tm-tar.c
-+++ b/tools/testing/selftests/powerpc/tm/tm-tar.c
-@@ -50,7 +50,7 @@ int test_tar(void)
- 			"bne	2b;"
- 			"tend.;"
- 
--			/* Transaction sucess! TAR should be 3 */
-+			/* Transaction success! TAR should be 3 */
- 			"mfspr  7, %[tar];"
- 			"ori	%[res], 7, 4;"  // res = 3|4 = 7
- 			"b	4f;"
+ /*
+- * Use a union to ensure we allocate a TLS area of 1024 bytes to accomodate an
++ * Use a union to ensure we allocate a TLS area of 1024 bytes to accommodate an
+  * rseq registration that is larger than the current rseq ABI.
+  */
+ union rseq_tls {
 -- 
-2.25.1
+2.50.1.windows.1
 
