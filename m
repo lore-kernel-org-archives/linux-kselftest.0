@@ -1,64 +1,64 @@
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E3A366575
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 18:47:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7080239B972
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 18:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782931655; cv=none; b=JYC/TBLXH7BPdctd+Ne/peMZkDwgJXFWT5qUQIu3J8qBkS/HNRag2qvwWyXNdNgH+WLU45h4ARoTQt8Gu/McSoOK1dBVCUMZBYbqU78wT/1vUWJ5VQgjaMEF3uE1ZO3iUN7gxXxBFe5NdyCHJCsh36DuBMmD7ncIjI73kKKVuqQ=
+	t=1782932008; cv=none; b=ZblyrZSUETyKrMHyJDNIl6k5MdpCMHbyHFrVStNX816pRNsKsI8fIGDkSYCgABXboTCx2VpTF4OWYDTzemBbp5N+FSz0+GI4yOasF4K8EzDaKpn2qTcYprbW9bjf/8R+Nf2WgIFNTh1nFYJOZqIYYz+8wfqCcnKM2GeK6Zw18Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782931655; c=relaxed/simple;
-	bh=UMZ/oHufdmLrRebJhJdd4z9UveNzoktn4s6GK0qVg9Q=;
+	s=arc-20240116; t=1782932008; c=relaxed/simple;
+	bh=zpZx/8GKHBXgDfwh+pwBktW/ySFc9U22KLT7noierXA=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=E8RfsIvv++gAGV6m9bi1iXxjgfN6qNeMY2v3KcYuFQrVC1ZQxUFl3Vm7BEEcZbl9TZqadyKk3oSzIJ2SetUNrzHxoVQDH8SKu0p7M+jZeT4Sz8Zweiuk77dmcf11MDksBwgTMrSPTCCkzQpBbkQEdQGrULCvKBGT8FS+QgPX894=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DQgLZEaz; arc=none smtp.client-ip=209.85.210.51
+	 References:In-Reply-To; b=Lt2JuiUAvUIJYc5DB0OhGoElPej3C3bAodWz+DUKtI+veKgHDu9XAwoPkYvoWKHmb/NMFNXXSfY3WNqf7SllgucZfgp+5QrQLItxP8+E14fAehtM7YEp13ZiZuUvR16O7/MwRoAhEonFDvYetJzEib1PMoblfpOu+M4ZGnVJi6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gk+5JXqu; arc=none smtp.client-ip=209.85.161.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQgLZEaz"
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-7e9f1f24cbcso742981a34.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 11:47:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gk+5JXqu"
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-6a3110f34d1so90427eaf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 11:53:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782931652; x=1783536452; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782932006; x=1783536806; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lTi92KcO4t4fC4vzqRv/t15HFT0DQF/tdlE/UMVxiuQ=;
-        b=DQgLZEazr0mccZDrCefhzMX27C6s+NaL/n4WJoSQI9JspxndrjwG5PgNvqCkFMTLUd
-         WSGbXgL/OcPpHCBcUgeUD9Slv1EJdvypcFE09QKvxEQIV4f/WVvJY3p8LEItwlyab7IK
-         U0U0u/wd3Iw5Byl4FqTPHtqDu80cUkcoVnm4U+8O0w7FrriUJuyuoPG6YcLWGOaOHBTO
-         5mFEmaGHMkN9twoEh4Q6/NPz75EKSAuPJ0WpN090KIrK4oyJrEH2OYiEsFxGDvUkjnqh
-         SPNn7O7IQ8VzMK43KAF7VwGsblY+vCO5DE1cKuvtKVwYooqIgpuTBt8sq9mCSgSyo2ib
-         LVxg==
+        bh=zpZx/8GKHBXgDfwh+pwBktW/ySFc9U22KLT7noierXA=;
+        b=Gk+5JXquQ6SVEb/naOIAnJ5/7tCBaMvlp7ke8fR7pl08Vhl9PlK4yk9LWS78WAKawD
+         eu+T0fXLFZ/IItR+f28tKvEXhDobK/dOtP4LJrjwnXMpD1vDUoDFP1ssHGp6ALzlena3
+         Sf5s/5wD7yBDi/hjsrt2GgRLZ1E7MuS6DQSn4/curbmLWDpt+Vs8t0TxA85+3kJm9Vjn
+         23YLHRbyQGPVrrNMfGFW8ht7Cij44nDXRxJUBvEKPqmDcEVn4AAWALIwGjdzQZXD+VHg
+         hqi1IJSIQlaWuXCQ/+TZ3pOblQrFUy2OTVe8yt4Ggw0tL5uWbEKke3T6x3f5QAQl1Q4x
+         tQpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782931652; x=1783536452;
+        d=1e100.net; s=20251104; t=1782932006; x=1783536806;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lTi92KcO4t4fC4vzqRv/t15HFT0DQF/tdlE/UMVxiuQ=;
-        b=Yl5I4VEzaCj8f/LlZGZaHyiL4UHeVkn+2nqb3I4itphn7DGe377LsWKy7Wtxh+sark
-         NfDXftkWGy4R0tnpULOwGsEr+fxASEvTiK46PYhgtiD40w3gkzvZRwQ6cRBVZ/czG2jh
-         23WjEAWQ8KPd+fq3JWaZ3dMvThZ/JIoB14EvZH0MsaSavyM1khCfeRuRUA1W/Vzj5ZN5
-         9tCQ9EHNNTG4iaZBxEgBY5iy+U+ETeBLBiG63Fbb/OxNWrdr2DBGHPiuVQgwUf2u64VC
-         9GjouTQREwhddHtvBET9t96/xHzv0Mw8t6D2RUumAKRDO8iadK//952FLxcaZSSSgNDa
-         fKSg==
-X-Forwarded-Encrypted: i=1; AFNElJ/XNU/vTk1fwXCmMi0ilqURr2Tu+Do5+NBPgsg5nN/F9Pqkqy417wNdlZl7ngtfbvklI0s5jVtxurKJfDENHz0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPSrpIBw3giehQI/BK+3leHKhWqezIVKXp9W0euacCBQ3VprTw
-	J8T0ULb6FYEXFJKzettZvOhnS2o8il6biFaSK3eGxZwW+hSN4RlxRUW6
-X-Gm-Gg: AfdE7clZjx/7tFqp3ktPHsgl7g1ugRmP5JubHgHypuKr/IMV51N8IzbOcHEWrdN0h4v
-	nj3QwOMPBMHFx0Or9q4++SPNz5nfqnRcUnDMu66dGLVpdNcB/do3nyH9e5qMmUmlRQYKtLevwdQ
-	rnSvPOOngrNVP1RpV5pY60LwBGeuKHp2aN1H1Y9uXj4UT7TGWWdhZXxHkOgeN2n1c7otWtx83IE
-	9UJDKsqzGsPfato01yCXxeJkf6InQL5ZEqkMZ5wVmG9ZS69OTt9YzCR1s1rTUbMkDJGgISSjS7j
-	OtU8O9j5M3WPjKwJLskAvB9hwbnszlOrN5H6RtQmjjiJERQRVW4VQN2HPEaMjkanu5U5eHhx0BH
-	cQSz9ApDfKm3qJKltD6X8ipntfTgydAsC+0d39oUGovNC4jnUz2te5XpLSMtPqdEMYLvvrEpil/
-	AwM/s+rocXASobenFyLqomQELCN2WesJTs4AuZrgK/q0W3JTaF4jG0Wl8XLmuI0ie/zjPx7P6uF
-	jXPIw==
-X-Received: by 2002:a05:6830:1d63:b0:7e9:e9f3:266c with SMTP id 46e09a7af769-7e9f5f28f4cmr3112378a34.14.1782931652500;
-        Wed, 01 Jul 2026 11:47:32 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:e::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7eb544a109fsm696811a34.14.2026.07.01.11.47.31
+        bh=zpZx/8GKHBXgDfwh+pwBktW/ySFc9U22KLT7noierXA=;
+        b=nG4vcp3eDK2CRwq/OLiEdWw8GppOld9X8t0+HOaDPQuA+Wpg9gHvIy/lI7eA/BvUFM
+         GduyBY1reBxrD6TotPs56YJAUqpalHcTc3pHc7wubzjefJsPcSRLgIqi129C8SSRE4za
+         grY5r5lraDbiPlJJJ6I3j1g4S1x4YEk5Vp13iLR0YtbLFBT3hBxMpgTRyYkuEr/9eh4y
+         40SkiEq58QbyZ8YL0krQBwioXwXolPr9UbNOlAWz4UwndLjm5FpbI8WsROOnWNXSeWmE
+         sajtDxz0i5pK3H1GjPEHYC23H4vpchGcHqfczMe2Ncly0yTdh0Ejd+bsyboetncwO+Y+
+         8q2w==
+X-Forwarded-Encrypted: i=1; AFNElJ94o2Muj1mKW//VcgjXwSb5gSxRiyO38RT7mPCD6128AM1AtGTOUfCw/OwmRv3YtrSYuvKOBphxrFswGxPJdto=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzp4LvbpXXvIIKkmHOcAqmEXi16ixR/peLQHt+CNpqdXo4N28gN
+	nYt7zjl9JPgvj+svQ28tHbdEmBxMEZ+IE1Tk9zUjozPLBdWYMZ3De3Vt8ZzijA==
+X-Gm-Gg: AfdE7clYuNyQ+EwApN9jkB3bDm1QlRrDh1lXwaKaGw5Gqyjf0QDyeV1ED+iIR/GuJQ8
+	WE4l7BGaYIVKlMWQZFM7CRFHx3CvWf5LT8arkGcg7nd/rgTN4HHMGMyHFAznQ+5SGhiKeJVs9+K
+	/PvxK+bhC48X4IIioAZMVFPNO+Cv6yv30HpoxaO73n+ftf1IDiBXGIL99pvBKj0T68qFnjPc2Tf
+	5DwU0xw6UBQF5EmjXLfd/8EANrH8Hb6Y4HXrwySrn0rJLyNmz/CG3pmtKDlwre4PxOwEHl4ohTl
+	zJCrAPb6SCCG+pgvsJOBKdfsgFHM03V256KzoPNw2COpiksVsKQ6JOg+fOxnM3agBk6bV5vUWfJ
+	/vr4OKGs6OCmfVoBmZULgBYy7EzCnsBccGPDRE/QmAjfaKhuSE1pc8OrLcZDaS9sw3dam4ssKOs
+	ieW8YQUX3LsVJH7772GIlCmmEz+lQY0GhVPvfEaiKySIPdow2S6+Ju0BjMdUK1xi2d063rHGs/A
+	ZbMdo0=
+X-Received: by 2002:a4a:ee0a:0:b0:6a1:57aa:289d with SMTP id 006d021491bc7-6a309a031e0mr1581503eaf.30.1782932006353;
+        Wed, 01 Jul 2026 11:53:26 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:49::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-44cbe841573sm582006fac.4.2026.07.01.11.53.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2026 11:47:31 -0700 (PDT)
+        Wed, 01 Jul 2026 11:53:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,142 +67,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 01 Jul 2026 11:47:30 -0700
-Message-Id: <DJNGIT00SJG4.3LBZ5DHQDHLHU@gmail.com>
-Cc: "Leon Hwang" <leon.hwang@linux.dev>, "KaFai Wan" <kafai.wan@linux.dev>,
- <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "John Fastabend"
- <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Andrew
- Morton" <akpm@linux-foundation.org>, "Shuah Khan" <shuah@kernel.org>,
- "Puranjay Mohan" <puranjay@kernel.org>, "Anton Protopopov"
- <a.s.protopopov@gmail.com>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user
- BPF_ADDR_SPACE_CAST insn
+Date: Wed, 01 Jul 2026 11:53:25 -0700
+Message-Id: <DJNGNBR6I841.3Q0PGODYNDSFK@gmail.com>
+Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>, "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ <linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [RFC PATCH 2/4] tracing/probes: Compile all fetchargs into a
+ single BPF program per event
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Tiezhu Yang" <yangtiezhu@loongson.cn>, "Leon Huang Fu"
- <leon.huangfu@shopee.com>
+To: "Steven Rostedt" <rostedt@goodmis.org>
 X-Mailer: aerc
-References: <20260626154330.33619-1-leon.hwang@linux.dev>
- <20260626154330.33619-2-leon.hwang@linux.dev>
- <e279c9a7ca6b16e52dc261560513b0eafdd70f87.camel@linux.dev>
- <a2aaa21d-4cf9-48a4-839f-dd152bda8185@linux.dev>
- <af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn>
- <d55e10b1-d883-4fcf-8fb3-8210db935e4a@linux.dev>
- <1c07a34f-b050-a281-6a7b-542a9bfa30b3@loongson.cn>
- <bfb432db-bd29-419a-8147-78ff6fac07ad@linux.dev>
- <7438f087-7fb4-4991-a095-1d24d6d09895@loongson.cn>
- <20260701080524.194326-1-leon.huangfu@shopee.com>
- <d369317a-e695-7b56-2efd-f53ec76c6688@loongson.cn>
-In-Reply-To: <d369317a-e695-7b56-2efd-f53ec76c6688@loongson.cn>
+References: <178291352217.1566898.14481561093843379745.stgit@devnote2>
+ <178291354144.1566898.14374948740441958770.stgit@devnote2>
+ <DJNGE5JG5ZY4.FEO5DZ21TL7Z@gmail.com>
+ <20260701144726.0a5f2204@gandalf.local.home>
+In-Reply-To: <20260701144726.0a5f2204@gandalf.local.home>
 
-On Wed Jul 1, 2026 at 2:07 AM PDT, Tiezhu Yang wrote:
-> On 2026/7/1 =E4=B8=8B=E5=8D=884:04, Leon Huang Fu wrote:
->> On Wed, 1 Jul 2026 15:29:28 +0800, Tiezhu Yang <yangtiezhu@loongson.cn> =
-wrote:
->>> On 2026/7/1 =C3=A4=C2=B8=E2=80=B9=C3=A5=C2=8D=CB=863:02, Leon Hwang wro=
-te:
->>>> On 1/7/26 14:49, Tiezhu Yang wrote:
->>>> [...]
->>>>>>
->>>>>> It is a real issue.
->>>>>>
->>>>>> Instead of fixing up helper calls, it seems better to prevent
->>>>>> interpreter fallback if the prog has any JIT-inlineable helper call.
->>>>>
->>>>> Hi Alexei and Leon,
->>>>>
->>>>> What about the following: (not tested yet, if it is good, I can test =
-it)
->>>>>
->>>>> [...]
->>>>>
->>>>> If you are OK with the above changes, I will test it again and send
->>>>> a new version later.
->>>>>
->>>>
->>>> If you don't mind, I think I can disallow the interpreter fallback by
->>>> the below diff in the next revision of this series.
->>>>
->>>> The 'aux->jit_required' is introduced by following Alexei's suggestion=
-.
->>>
->>> I am not sure if introducing a new aux->jit_required member is necessar=
-y,
->>> as we already have a local jit_needed flag in the current logic.
->>=20
->> A 'must_jit'-like member was suggested by Alexei [1].
->>=20
->> Probably, the commits in [2] could help to understand 'aux->jit_required=
-'.
->>=20
->> [1] https://lore.kernel.org/bpf/DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com/
->> [2] https://github.com/Asphaltt/bpf/commits/bpf/fix-interpreter-fallback=
-/v2/
->>=20
->>>
->>> Additionally, the issue reported in my patch [1] is fundamentally tied
->>> to bpf_jit_inlines_helper_call(). Maybe we can simply reuse jit_needed
->>> by checking bpf_prog_has_inline_helpers() right before JITing, and then
->>> reject fallback with -ENOTSUPP if JIT compilation fails.
->>=20
->> Correct. Reusing jit_needed is preferred.
+On Wed Jul 1, 2026 at 11:47 AM PDT, Steven Rostedt wrote:
+> On Wed, 01 Jul 2026 11:41:26 -0700
+> "Alexei Starovoitov" <alexei.starovoitov@gmail.com> wrote:
 >
-> I agree.
+>> Nack.
+>> I really don't like it.
 >
-> To avoid bloating struct bpf_prog_aux and to keep the refactoring
-> minimal, I suggest that you submit a patch to introduce a centralized
-> bpf_prog_requires_jit() helper in kernel/bpf/core.c.
+> So the nack is mostly your opinion and not technical?
 >
-> This will cleanly bundle bpf_prog_has_kfunc_call() and other JIT-only
-> instructions (like user cast, arena, etc.) together, like this:
+>> There were days in the past when the kernel generating bpf directly was =
+appealing.
+>> These days are gone. Performance improvements for fetchargs is not a goo=
+d reason
 >
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 649cce41e13f..4e96272f7377 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2608,6 +2608,24 @@ static struct bpf_prog=20
-> *bpf_prog_jit_compile(struct bpf_verifier_env *env, struc
->          return prog;
->   }
+> Why is performance *not* a good reason?
 >
-> +static bool bpf_prog_requires_jit(const struct bpf_prog *fp)
-> +{
-> +       struct bpf_insn *insn =3D fp->insnsi;
-> +       int i;
-> +
-> +       if (bpf_prog_has_kfunc_call(fp))
-> +               return true;
-> +
-> +       for (i =3D 0; i < fp->len; i++, insn++) {
-> +               if (insn_is_cast_user(insn) ||
-> +                   insn_is_arena_load_store(insn) ||
-> +                   insn_is_indirect_jump(insn))
-> +                       return true;
-> +       }
-> +
-> +       return false;
-> +}
+>> to add all this complexity and bypass verifier checks.
+>
+> The code lives in the kernel. What reason is there to add verification
+> checks? The point of verification is because we don't trust user space. W=
+hy
+> do we not trust the kernel?
+>
+>> bpf insns should come from user space.
+>
+> Why?
 
-No. I already explained that this forking of the logic is not ok.
+because I see this patchset as pointless kernel bloat with the "help" of bp=
+f.
+Hence the nack to avoid dragging bpf into this.
 
-> +
->   struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env=20
-> *env, struct bpf_prog *fp,
->                                             int *err)
->   {
-> @@ -2620,7 +2638,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct=
-=20
-> bpf_verifier_env *env, struct
->                  goto finalize;
->
->          if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
-> -           bpf_prog_has_kfunc_call(fp))
-> +           bpf_prog_requires_jit(fp))
-
-This has to be fp->jit_required and
-the verifier has to set it when necessary.
+Call it philosophical disagreement if you like.
