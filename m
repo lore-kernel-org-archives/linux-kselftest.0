@@ -1,33 +1,33 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9013655E2
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 03:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 286411A3166
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 03:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782874805; cv=none; b=jDFONuOUkvpiL7jRtv+lKRp76dWrtcR+fI3ZvBc/nwyIpkBjOHyKS4Yqb6Ya/yS0k6hf59L7YCJOux0l2I3HNf+G8fFCyWgkevjM8r9Pfaoj+d6Q9jol58Jf+kgUJjANycupSUhsfYGj4bBaePPbnpKVrx2FxxDjrbB7JADQ4Oo=
+	t=1782875157; cv=none; b=mslnE2Mrzduwoe7xNKrr5xdoJnDJVavmT/nGUaXj1gE9BUyscnh3YyrhUGfzc5aUBNkXrQwJFbQTIjYIa67Z/Ym9vNNV4DZCU1e/+/LY9MiAhWSgXcdQpgxzJIppFZF6/o+goxZux2P0aoU/jNfdcQu8nNQdzoIRUyH10u/HJ2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782874805; c=relaxed/simple;
-	bh=5P83V6vWgCImeuynuBzSptrpGhtSREd+l0Jf7NPHkdU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IUBQ7p2M9wgbjLJ1wRiaBq1lWabZbkO+ula1AAmtm3eNqpuLdIZck9oGt455gehs+i+cquQfLmTzNRMzvMx+fjJocHwG3naaAtT/DpmcDjS9wjmbmO7HJAq/ybu+yQDcyAJArg6DDF2AdqvbxuqbDhttBPG7aFVtXOo3gIidTtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gMvHvSMV; arc=none smtp.client-ip=91.218.175.178
+	s=arc-20240116; t=1782875157; c=relaxed/simple;
+	bh=MYfIfv5sA2j2ZR1qxs4rUMsP9wT5v/lsb+MQsfSaJjg=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=ZTDw/IYJsU2IKwrHPpbiOYMMKK1PAyo/dZnLF5xSbEKObUmS/8QEXpxk/5lR1Vf/bpyroCLxnZ1n/k03HSvVNf5VGSP7UWepApQX9zAqHYCR+NPaU7eI34pH5iWdIFk2GsBXtRlsDJwKupF2Y6HYu0nffYCRp1c4HibMC9JLRww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KZ+R2IGP; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gMvHvSMV"
-Message-ID: <18678d0c-f878-4d7b-bf7e-ffca4967dec5@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KZ+R2IGP"
+Message-ID: <75fb9794-938e-4341-ae43-fdf0bdfc48f6@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782874790;
+	t=1782875154;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=yIRhfH8+QW0w2xHkvd0rrvEbPs85DF8cJWcE4hy3pGU=;
-	b=gMvHvSMVqV1rHUalg0OUAEOBUdoh823uJP1FBuzITK7d4DZRrsOdr/9k/m3eplcH7TM4bz
-	XqQTHIE8GaZmdZdFqgkR/QtCLt/Ed/ifR/Ta1tbGSYIEGTq68aY7ugPyVDbcxeWQgtL6l4
-	YEoCC17J9W2KMxldSMAOE7tFhxcWrLc=
-Date: Wed, 1 Jul 2026 10:59:40 +0800
+	bh=5va4XwV5vfWNlbm7XiNFDbaDpwHzr9Lkk4cpeHFVto4=;
+	b=KZ+R2IGPW6Iwf5TqLOttN86vQX8yQx0YifyL1jM4R7IT9njYNnjf0+fb+263+PwVN/O5im
+	P3VkO431GXlKw6B+SMNUjwL6St29hWSfGloiLaLYkfI973GF8HAxyxn1fOnh9RvQWuViwy
+	w7xtFEojrdoPA7H+3i+6A+Xp4Vu4bpg=
+Date: Wed, 1 Jul 2026 11:05:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,6 +37,8 @@ MIME-Version: 1.0
 Subject: Re: [RFC PATCH bpf 0/6] bpf: Disallow interpreter fallback for
  interpreter-unsupported insns
 Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>,
@@ -52,50 +54,61 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
  linux-kselftest@vger.kernel.org
 References: <20260626154330.33619-1-leon.hwang@linux.dev>
  <DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com>
+ <18678d0c-f878-4d7b-bf7e-ffca4967dec5@linux.dev>
+In-Reply-To: <18678d0c-f878-4d7b-bf7e-ffca4967dec5@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-On 1/7/26 07:12, Alexei Starovoitov wrote:
-> On Fri Jun 26, 2026 at 8:43 AM PDT, Leon Hwang wrote:
-[...]
-> 
-> I don't think we need such fallback in patch [3].
+On 1/7/26 10:59, Leon Hwang wrote:
+> On 1/7/26 07:12, Alexei Starovoitov wrote:
+>> On Fri Jun 26, 2026 at 8:43 AM PDT, Leon Hwang wrote:
+> [...]
+>>
+>> I don't think we need such fallback in patch [3].
 
-Do you mean we can add the internal BPF_ADDR_PERCPU insn support to the
-interpreter?
+Sorry, it seems I misunderstood the 'patch [3]' as the patch #3 of this
+series.
 
-See my reply in "PROBLEM: BPF interpreter fallback after JIT compilation
-of BPF_ADDR_PERCPU leads to kernel panic" thread [1].
-
-[1]
-https://lore.kernel.org/bpf/90c32de0-feac-4e63-9757-2a1d115be08c@linux.dev/
-
-> 
-> And approach taken by this set also doesn't scale, since it splits
-> the verifier/JIT logic into core.c which will be hard to keep consistent.
-> I think we need another bit like jit_requested in prog like 'must_jit'
-> that the verifier set for addr_space_cast, kfuncs and the rest.
-> 
-> Then the core.c change will be:
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 649cce41e13f..5126a43c1b81 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2620,7 +2620,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
->                 goto finalize;
-> 
->         if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
-> -           bpf_prog_has_kfunc_call(fp))
-> +           fp->must_jit)
->                 jit_needed = true;
-> 
-
-Got it. Will follow your suggestion.
+Will discuss the fallback further in the sibling thread:
+https://lore.kernel.org/bpf/af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn/.
 
 Thanks,
 Leon
+
+> 
+> Do you mean we can add the internal BPF_ADDR_PERCPU insn support to the
+> interpreter?
+> 
+> See my reply in "PROBLEM: BPF interpreter fallback after JIT compilation
+> of BPF_ADDR_PERCPU leads to kernel panic" thread [1].
+> 
+> [1]
+> https://lore.kernel.org/bpf/90c32de0-feac-4e63-9757-2a1d115be08c@linux.dev/
+> 
+>>
+>> And approach taken by this set also doesn't scale, since it splits
+>> the verifier/JIT logic into core.c which will be hard to keep consistent.
+>> I think we need another bit like jit_requested in prog like 'must_jit'
+>> that the verifier set for addr_space_cast, kfuncs and the rest.
+>>
+>> Then the core.c change will be:
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> index 649cce41e13f..5126a43c1b81 100644
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+>> @@ -2620,7 +2620,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
+>>                 goto finalize;
+>>
+>>         if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
+>> -           bpf_prog_has_kfunc_call(fp))
+>> +           fp->must_jit)
+>>                 jit_needed = true;
+>>
+> 
+> Got it. Will follow your suggestion.
+> 
+> Thanks,
+> Leon
+> 
 
