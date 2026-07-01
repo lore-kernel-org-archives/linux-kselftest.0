@@ -1,40 +1,41 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8F0349CC2
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 20:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852293793C1
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 20:56:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782939313; cv=none; b=UT0dvZd+0Ya5kSxICOQqgh8kEyM3XO7YydAFbM9xYcIknmJa51iVRis8UiHpya6GrTjICU6Uvd5QdWz4OL1gahMbTdQBjM7CuPN4eq6+PsfTIEmYD1oHhPF9cIlXsHQfPKkVfrDcfyniupFe+c7Ud4Cp840G/qy7YF8shriZp1Y=
+	t=1782939374; cv=none; b=U8M2aPU3DffdQgSZj59ArDgmgA9kclnZcB2ExgvSJ5u8eZB9keLxAAd/FmVOTNVL1+HadKpNmcQJFTdX89Yuf0GVoQWT3HDeV1xxPfLPbyXWWsBu6O3k0OqsO35XNacvRb7F/ot+g9YnLIILMxeTeE/JMPbUy4gAfVsGcHIePSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782939313; c=relaxed/simple;
-	bh=LB6UO3uezZpO6it+CrKAe8HgcrZ0JiGiz98PKAPxh4U=;
+	s=arc-20240116; t=1782939374; c=relaxed/simple;
+	bh=K+VK7byg5S8cMNYoHj9J69XbRyDkz0NV05GFcO0pyAs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i3eo39+ubuk/CDoF+I7mMv2CQTbz1zTmdVrL1eRRHSFS1WOpfiYVy1dMwEvj+nf65mLUZ5WIG31NIJu3nQ3mNI3yI5wSwvzjX9usdA9mZ6tlcmwCEPozDxRc2Y2IGGFcxicAHDjLtLtOvLZ7rJynYjD2iWSPmvyeVc5A1P4iIo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BYxWeL6n; arc=none smtp.client-ip=91.218.175.180
+	 In-Reply-To:Content-Type; b=eP8iMYJGuDVZsv67V5wSF6i4HbZ59NT3v4yyj3N+Yna8w4C9N7XnuGdY7pD2Mm5PRBkF288sA8DElF0T2MHbiCV9VYM9TkyQDzXd3SAZNARcLr4jDLaCUQlUm0MIi9ENo+gLfkCpcJJ/x1xz5ankta3Kpt+ce+KRw5e8y1ZMbFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XwZhNVxB; arc=none smtp.client-ip=95.215.58.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BYxWeL6n"
-Message-ID: <045799ad-5e9f-4053-97b9-be78e8dfa8f3@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XwZhNVxB"
+Message-ID: <7ea61c14-3b43-4e5a-b0d0-4ea69bbe0097@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782939309;
+	t=1782939361;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=IKuLmZ2IJLArE5GjcIWFvuYskuJbGafICyJK3gU7OZQ=;
-	b=BYxWeL6n9DykFUvm+8RXBJvEC7f40rgCWc0a/kXSseB0ngCNOw9Zu9ZreZyoFmKn+H00mA
-	Ni9NczkR0+Y6EJnQtzsDRJycH3L2qMtaPObviRr0tQ/NF/dMgVPAmRH7X5sguztIRedCgB
-	UaO5+Vqbuh5PapeT3NOV2OCYoTqNZKo=
-Date: Wed, 1 Jul 2026 21:55:00 +0100
+	bh=F6FBu8HceUpdw44ysEgYmeU2G+E3tC7Rf63pXIGOv3E=;
+	b=XwZhNVxBTG8b2as5/ffLC3DPj6ELrYjk/9ael7uI7kRXDAEx6i6smzZRKlxqQdjhB2hcFZ
+	LaZuqDfj4LsDrdI6+vxzQ8XEhR0msMfdMa3OqGsu92D4zyna6dZtbJW1PTxpeBfnO01o1r
+	5IhwWvGqpp8qGd9Ovc/rmWeR6arrzhA=
+Date: Wed, 1 Jul 2026 21:55:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next 2/3] net: ipv6: report multicast group user count
+Subject: Re: [PATCH net-next 3/3] selftests: net: check multicast group user
+ count
 To: Yuyang Huang <sigefriedhyy@gmail.com>
 Cc: "David S. Miller" <davem@davemloft.net>,
  Andrew Lunn <andrew+netdev@lunn.ch>, David Ahern <dsahern@kernel.org>,
@@ -44,24 +45,28 @@ Cc: "David S. Miller" <davem@davemloft.net>,
  Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
 References: <20260630110207.37841-1-sigefriedhyy@gmail.com>
- <20260630110207.37841-3-sigefriedhyy@gmail.com>
+ <20260630110207.37841-4-sigefriedhyy@gmail.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
-In-Reply-To: <20260630110207.37841-3-sigefriedhyy@gmail.com>
+In-Reply-To: <20260630110207.37841-4-sigefriedhyy@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 On 30/06/2026 12:02, Yuyang Huang wrote:
-> The previous patch added IFA_MC_USERS and emits it for IPv4 multicast
-> groups. Add the same snapshot attribute to IPv6 RTM_GETMULTICAST
-> replies and entry-lifecycle notifications, carrying
-> ifmcaddr6::mca_users.
+> Extend the RTM_GETMULTICAST dump test to verify IFA_MC_USERS for both
+> IPv4 and IPv6 multicast groups.
 > 
-> This makes the multicast rtnetlink ABI symmetric across IPv4 and IPv6
-> and gives userspace the same user count that /proc/net/igmp6 exposes.
+> Run each protocol test in a fresh network namespace to avoid changing
+> host-network state or racing with unrelated multicast users. Join a
+> fixed multicast group twice using separate sockets and check that the
+> reported user count increases by two.
 > 
 > Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
+> ---
+>   tools/testing/selftests/net/rtnetlink.py | 101 ++++++++++++++++++++---
+>   1 file changed, 90 insertions(+), 11 deletions(-)
+> 
 
 Reviewed-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
