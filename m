@@ -1,151 +1,122 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B1C3E92BD
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 09:01:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7702634CFC6;
+	Wed,  1 Jul 2026 09:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782896472; cv=none; b=Ly2OBonAJVcRFoabzZ1wag2ZbjXtsEfFPZh1Je0t8Cv4D1fKMDqAqjCW+1Tb4gi28yGJOWbpsWQVI6BFMttnUk86LKLNeG+WxK8N2uk3H77Nj/MVRJJ9TL9jGnLxaHXKhqMBFzW0nQHLVBhvJ1yPoQAWYaaCMJoigVj4W6Cz1QI=
+	t=1782896665; cv=none; b=eP+KWhs1O56ye7sBBU0Pb+cTF3pjNKoufvrxYiYg7m6MYm0oWfRiCr90Nu0mQORQYR1jznRq5tYAxtqfaVOa9vU30E9T9wKSc9WHF8NelrItJ/1oB2HaY6BoXj5M9aIPFFZf27uYSYyYio+BSGyF6ZP1un8qqWZIJGagwMbg3Z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782896472; c=relaxed/simple;
-	bh=H2yu1v4BLA1CXFpBBWR+UOBqEFBs+Yl1kR9v6PncV2w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EfwFMYF+QB4vw5U4CSRoYcZV8vC4PVeaaOoHovvBiIAWl4UdS3dKQJX2yJHc6WmaFpty7j8o0JF7fndsooTKeAoAjLoYwBZVh+c//JM2SkN4IM/7DGpMTMiS1odpnPxL9GAl73kcuP23yl7fHYfi9lEZCFtsLgFlO9ELoHMagXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U3iUoSrd; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Fvyvrm7s; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782896665; c=relaxed/simple;
+	bh=o6HO5yighH0lbPMGOWuebg9WNrWtRExEVC5nSB71uk4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GVxEBjr45GS+l+TKj+HN1DoT3OygeFeZX3TxTGAsNS6nzsktiD0/8W+CnHjluw3xh9wO0iHZHFZhdGiUgsm+xJKHVHKfCWVtPv3RJjxY5fwSs5s4XfwOt7cUf7sn/GPvtHBiy3iB4RGqnIv/2WDPkYx0YCDvLGSfP/qNU0ZIFyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bkktkk3L; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U3iUoSrd";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fvyvrm7s"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782896470;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aun8Zor665Yj5HaVE7uoEpAdyksulZLzu/u1QogbXXQ=;
-	b=U3iUoSrdRZp3loWWwxN+d3ht1X4KfLzwVsdu+v9Z7Ox7M3OMM1y8rZ67pA+4GFLjc8Pm7I
-	RgkEmj9q5g+k/ynzf9RiTKDMWbVa6mBFeN7c/hZQxK4pxUV7y13bxLCwNg4Ap5xyHhjHul
-	/FKH62R7D4UcEGpXeAA9QTxK6WyYuDQ=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-80-vaJ6MiVnP-ur0r8Q8x-AVw-1; Wed, 01 Jul 2026 05:01:09 -0400
-X-MC-Unique: vaJ6MiVnP-ur0r8Q8x-AVw-1
-X-Mimecast-MFC-AGG-ID: vaJ6MiVnP-ur0r8Q8x-AVw_1782896468
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-47162f83c75so1108723f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 02:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782896468; x=1783501268; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aun8Zor665Yj5HaVE7uoEpAdyksulZLzu/u1QogbXXQ=;
-        b=Fvyvrm7suS5GoNG4n/3K+ZvTPyj28o6ckplHNLvdAdlirvGvxV8DddUOL4xUnSZYfy
-         BEvz0HL32PkCPKkzxuL74FqUNVEdqddLCbte/I0RZuhcBCi+yxn9e9dMIwxcGWXeKNrt
-         O4jaclIz/tfQFQTwZblmS6Geh52/Q3XA7V6FZKEa5PitJFf+iv981rfFXO4lJQOPoq8k
-         BIc5MfggskPUS66Zx8YlehS+CsbQOZS2xduMAMLx5TqN9iV5MQ3DvRmKVO1NfBrBuCTF
-         aA6wXtYsDIaBq34X01YVzfcqGOcUMfIGzcOCwJRndhrxDa37xuRZGAMT5e32QTdWy4zl
-         SKWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782896468; x=1783501268;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aun8Zor665Yj5HaVE7uoEpAdyksulZLzu/u1QogbXXQ=;
-        b=Gi9cKvlpSdA4LJD7pduW86gKbmM5lX2yM2iwZpC8iwYdoUzCIGZkKfYB/ZQ/a9H9Xt
-         XxPZdXC8kTk4B8HJrXj2gF9Ejn5xVaWs883H0rghHw41iM/lPuNAq/cplcsL5Q4XVbLG
-         ZmnRPDSYXQvI0LUoWqLyX91auZhZU/BauwtJsnQvb6NVw8MHfxJahbhsbBP/0fDKgO2J
-         0ypBq0SPjLCwZr+KAJInK+C/X5lT8n+MpOkDckWT3jSoMacdma8z9+AQyLc7QRQp7WU/
-         +6oBU5vzVzj3N6PSJ0cwD7aaMCv5Ex6Mfwiktbk3RwqoqWYGBLqwEAcRFrgxTspzTraY
-         k42Q==
-X-Forwarded-Encrypted: i=1; AHgh+RriZmUcYq3k5NCsFKi9ZBpKs/2z9pBSf+mrDheXte3tNKaasO531RE93lfFFrmZoTH1VqP4U440Ss4LTfpefz0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYeHgjmxgb+uEWorN+CcSg4kWWxyDDFe1S/+TBaTFnOoOlPWgQ
-	sIgW6KGuHCD05kbcAycFZoug4lo95fsgsh5QwPT0jemcEajBiwo6W45huKKEroj4aJRmUJ6sofo
-	NGOHGGoGd7grE6jNHzeHALmGHy7em7UYZiVXcunwj+HJlF/L/sSKk58sKvITxMUnT/WLqmg==
-X-Gm-Gg: AfdE7cmAf2bwZW5LzX/5YSC68NNsUtXZUn7Gvjb0UFRqfrlSxV/z7az4hZ7U59CwwJU
-	8ovoZIHlv9HbvnH+N/7fUUUWbKqvWpgwBOP1tAlv3ia2UfrNo4cPtUm4FFOCEO+/8hSDudrypF3
-	Irdr3btToafmsfXG4ULXDuiLtrjHx4cRLJ22wt07AXRi9OQ2/PDka/14mBD6WHQckedF5QrolBJ
-	SmU/L5WeqhLMWXzq2AVbJ2V88vD7U9+NLpRgk+zcGSiWRadqEzpL6jNf8pp3G6WFtn2Q/pxz7kz
-	ux3Vct868b/m3DsjeC3U0Hvq5jISRFfn4y4kL4Glca65iWd0Yzo105GGOl6hSL6dHBfHwTlHfO3
-	l/IICBEkWVQFc9qFji+XP0Et0ZXSE/ZTJcRAFiCevSQ==
-X-Received: by 2002:a05:6000:2c04:b0:475:f0c2:75b3 with SMTP id ffacd0b85a97d-477469108dfmr1356078f8f.30.1782896449031;
-        Wed, 01 Jul 2026 02:00:49 -0700 (PDT)
-X-Received: by 2002:a05:6000:2c04:b0:475:f0c2:75b3 with SMTP id ffacd0b85a97d-477469108dfmr1353851f8f.30.1782896433637;
-        Wed, 01 Jul 2026 02:00:33 -0700 (PDT)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.133.86])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-475643ce016sm15420805f8f.16.2026.07.01.02.00.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2026 02:00:32 -0700 (PDT)
-Date: Wed, 1 Jul 2026 11:00:31 +0200
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Guopeng Zhang <guopeng.zhang@linux.dev>
-Subject: Re: [PATCH-next v9 01/11] cgroup/cpuset: Make nr_deadline_tasks an
- atomic_t
-Message-ID: <akTXLwtz_pYM79wk@jlelli-thinkpadt14gen4.remote.csb>
-References: <20260630033344.352702-1-longman@redhat.com>
- <20260630033344.352702-2-longman@redhat.com>
- <akPMKXppWM74-m9a@jlelli-thinkpadt14gen4.remote.csb>
- <e4ab9944-4687-45be-9935-4ad29f2a923c@redhat.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bkktkk3L"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782896664; x=1814432664;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=o6HO5yighH0lbPMGOWuebg9WNrWtRExEVC5nSB71uk4=;
+  b=Bkktkk3Lltr2ttw4gghBuNxutlTWIbHY6gy2R8pRdO9Lr7piUso5vbCh
+   r10RPrPai4Nygl/oIVkmHkiq/r/ENtfy58rcC1AEma/Rehuycd7I189UJ
+   8YdTrE+dty0QDKGYMk7rzUmoPmTbUt8d72zanjJWpC6KiMFCadmx1iA0x
+   yqyJhsJvnYgAjGe2kQrHQtaRyy/05hNyG1bUDiu4iShc1uFAxz1fd3t6/
+   qd8f7yUGUk0ZKBUYbVpzIvwCYOMy1MxJaoUuLGzGaUNAK23Wb7Kp8bNyv
+   0yNW7nRCDyLGYYabOfpSVM6972pD7GS0264xKhvt76hfEI6eHFAO2KS2I
+   g==;
+X-CSE-ConnectionGUID: 2/u/KVVpQYClfO2eAZzqZQ==
+X-CSE-MsgGUID: qaXHPnuLRMa/+1Gh4I1ECw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11833"; a="71146239"
+X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
+   d="scan'208";a="71146239"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 02:04:23 -0700
+X-CSE-ConnectionGUID: RfVhV5zfSDWv+vMwhlsJyA==
+X-CSE-MsgGUID: bSAPRm+uSA+mXv3+cFiw0Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
+   d="scan'208";a="252641956"
+Received: from unknown (HELO [10.239.158.49]) ([10.239.158.49])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 02:04:02 -0700
+Message-ID: <584a8f9a-1538-4f8b-b576-75ef0fa961c7@intel.com>
+Date: Wed, 1 Jul 2026 17:03:59 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e4ab9944-4687-45be-9935-4ad29f2a923c@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 17/46] KVM: guest_memfd: Advertise
+ KVM_SET_MEMORY_ATTRIBUTES2 ioctl
+To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
+ binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
+ david@kernel.org, jmattson@google.com, jthoughton@google.com,
+ michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
+ qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
+ shivankg@amd.com, steven.price@arm.com, tabba@google.com,
+ willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
+ forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
+ aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-17-9d2959357853@google.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20260618-gmem-inplace-conversion-v8-17-9d2959357853@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 30/06/26 13:56, Waiman Long wrote:
-> 
-> On 6/30/26 10:01 AM, Juri Lelli wrote:
-> > Hi Waiman,
-> > 
-> > On 29/06/26 23:33, Waiman Long wrote:
-> > > The nr_deadline_tasks variable in the cpuset structure was introduced by
-> > > commit 6c24849f5515 ("sched/cpuset: Keep track of SCHED_DEADLINE task
-> > > in cpusets"). It is reported by sashiko [1] that nr_deadline_tasks
-> > > can currently be modified by inc_dl_tasks_cs() under rq->lock and
-> > > by cpuset_attach() under cpuset_mutex. So if both updates happen
-> > > simultaneously, the nr_deadline_tasks variable can be corrupted leading
-> > > to incorrect operations down the road.
-> > > 
-> > > Fix that by changing its type to atomic_t so that nr_deadline_tasks are
-> > > always atomically updated.
-> > > 
-> > > [1] https://sashiko.dev/#/patchset/20260626181923.133658-1-longman%40redhat.comk
-> > > 
-> > > Fixes: 6c24849f5515 ("sched/cpuset: Keep track of SCHED_DEADLINE task in cpusets")
-> > > Signed-off-by: Waiman Long <longman@redhat.com>
-> > > ---
-> > Looks like Sashiko is yet not completely happy with this:
-> > 
-> > https://sashiko.dev/#/patchset/20260630033344.352702-1-longman%40redhat.com
-> > 
-> > I actually wondered the same and couldn't convince myself we don't
-> > actually have that problem with the window between sched_setscheduler()
-> > and cpuset_attach(). If issue is confirmed, not sure if wait_attach_
-> > done_lock() could help here as well? It's kind of a big lock for the
-> > scheduler, but maybe only affecting DEADLINE tasks and if migrations
-> > are ongoing.
-> 
-> Yes, I am aware of that. This patch can only partially close the race
-> window. It doesn't completely eliminate it.
-> 
-> My current thought is for inc_dl_tasks_cs() to check if the in_progress flag
-> is set. If so, it sets another flag for cpuset_attach() to double check the
-> DL data for consistency. It will be a rather complicated solution in order
-> to eliminate the race window. So I am postponing it to a later time when I
-> have more free time to think about it.
+On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
+> @@ -4969,6 +4973,11 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+>   		return 1;
+>   	case KVM_CAP_GUEST_MEMFD_FLAGS:
+>   		return kvm_gmem_get_supported_flags(kvm);
+> +	case KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES:
+> +		if (!gmem_in_place_conversion || !kvm_supports_private_mem(kvm))
+> +			return 0;
+> +
+> +		return KVM_MEMORY_ATTRIBUTE_PRIVATE;
+>   #endif
+>   	default:
+>   		break;
 
-Ah yes of course, makes sense.
+this looks inconsistent with the
 
-Thanks!
-Juri
+	case KVM_SET_MEMORY_ATTRIBUTES2:
+		if (!gmem_in_place_conversion)
+			return -ENOTTY;
 
+Well, the check of
+
+	if (!kvm_arch_has_private_mem(f->kvm))
+		return -EINVAL;
+
+is buried in the following kvm_gmem_set_attributes(). How about moving 
+of kvm_arch_has_private_mem() check to put it along with 
+gmem_in_place_conversion check in kvm_gmem_ioctl() in Patch 13?
