@@ -1,173 +1,166 @@
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EF5399352
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 06:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083F832B118
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 06:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782886198; cv=none; b=j7/iXiC60tQEdFZj0NkgE+zr82Bn/zA2zlN7TUQmprObLv7CG6TPuiJYSXzgcNk+XqxAaKvfnUknScz0/DMmk5K0RJTLT5ce2a451wvAsV9Uk+xlmfVHJ3Csj5kz4RhuoDDpM6E1XfG53ohP/u7GmZxc1fkiOri5RLzhxswG42U=
+	t=1782886412; cv=none; b=Xj8vFJYc1hOGckzp3m6V6bLOAsHNyT6g/ncfKSYyspB2lzPqrpu7THuHxDX2JRv6pN7upy4U+WmZ99f9zp6YMPEtfFalpNFu6dnU0osr7RJedTALypj2MOaNuqREkcMNOA1hKzChbGnMBG6TUTK88HXg+uM56KI4gurn9bTJJzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782886198; c=relaxed/simple;
-	bh=6KbUYY4Kud4/SPqyi3x2WMVAQjlqAWpfU8+H8Iqg4wE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=hXefBCKG4W4W/aeDUjtZWU2ig4liCCe1KyHKccATvSmGPfhLA/PdtGDi2aVjEQEuAbwEHFlMOOjKa09uvgXzZqx5lm7ZH1aN/VqfjO6Tynk3Xb4su+MBET34U49Y4CHMQKrkXExpoIY7J4ki1ZC2xxtMqHvp/CwcACHw92ax06s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qPALaJxL; arc=none smtp.client-ip=209.85.160.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782886412; c=relaxed/simple;
+	bh=5IugnX6ei1qX95xqi+Dab5Sz2YMHXwt1aK+XcCyrIao=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aRMWh3OpAYCDaQsKVA3GuZirqidCSWnDy7O77vHKv+e9okv2TaKA+0nkLq9R5/nsbSHZ7S7TS2EXR/YEO1L1yRMjcDM7bTCxqRC2U6ERMK1zEFsKgSfEu19FdXBoBIDmp9EB95pv9Ne3BxVAxqeA3dpxFF77ESYcfpI1sDv0abA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nVkPquKq; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=IgLbW7hT; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nVkPquKq; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=IgLbW7hT; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qPALaJxL"
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-448de0cc236so131203fac.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 23:09:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782886195; x=1783490995; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qHk2CYv9CFjND1DA8+37qjWHNRV+096bhWS2yVE+OC0=;
-        b=qPALaJxL49eCojqqTZcH7dHmncs/Z/anbHriboVoEHKtv72PkXZU0V5uGQaQ2N9wWZ
-         nMp/GCLkq7cY2sl+E5E/scOov1FYElc45jgJ27fx6ejdC8pkUVS1a/0+34DLXzVHEM5j
-         piCjbnymC6RWYRuQmTy/BpHobJ8E4w9cdxFYAabB6zrcMKc/kSO0n/f7+SvPDQPZrjiS
-         pUgYH2ZRd2f4sWpr4eWfGsC7+k7w/cp+wVhGIBw7zI2zt8gmGpcuA03TsTLaqDTNoMN6
-         JI/BEfzJp4aZSNpJ4DG0p4FeEjjnBQ+gDPdZU1OefWVPcZssIrAYOwE5xiQxMiILwdyY
-         urUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782886195; x=1783490995;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qHk2CYv9CFjND1DA8+37qjWHNRV+096bhWS2yVE+OC0=;
-        b=LbPrfzlD7LLtC0c73gh5m8+1y0H4B4EhZDefE2ysZhxEIvKDdLZwzzBoGVaaw7kiPq
-         x1zGNrWZE2k3Xa9jU11tjWoIr8Ga+qddCz8Gd1/FMDpG/fz3HGg+eOXIqNsVgZqusIFY
-         UwzMWspDlMrDJCfC9z/C+UhdzA93vdILQr+H3Mx8lLmjlSDznUTB1kAxX0uigxN+uosG
-         D+grhU7OInLn3aKm7PITh+tiOvWrnnAKB6sFga03b7Rn8YMWk2kAEjf3syhZq5B0EZfJ
-         37PmtEllVq+kHX+PLM4cHni8SFeZfAqxC38s49rvKlu4P3oi3cNYHsaYIkR8tEcVOBOv
-         OKwA==
-X-Forwarded-Encrypted: i=1; AHgh+RptvYYGJnL9nQ8P6e83W7LbcT3ZnyVFAHWDF0no/U/C2Va26VwW4Lq5VcDXAWqzvgZ0anUHokhu0JG7z2MypFU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHg2NPrmAG7QMD22mpY18RZvsFwE2SZuPH66+25oxSe0Z/UKuK
-	vQzOqu2iaJIk+mQDMAS0FjKy3K+LpFU7ZzirEZzH5APN25fp6mtoAKjw
-X-Gm-Gg: AfdE7ckkj6itszdyN1G4rEvqQzJAXjjL+aYOKK6y14bFrBoUrvOBJBXd22G5Zgq4efQ
-	K5EKZ3SXHqsN6dFpFfbvA5DPH9MK4ovaaj6XhTrGTOkwMuB3qQyxk19G88zdmGt7URY3pKHpB8q
-	dbVhXvMdCzeNi/HywpUwrILCaDVXJTUJWih72t4ivdX9dH+DjE347nUNnRaYtzg3hae+wuhFi1/
-	T+lodbEoQLwJ4OOaOivXivSJ+9Z8RA+kw4cduVQ0ralmDywYIhSb2YegnTiahneQ2Td3FhMHrK/
-	V70GA0nBBgxbwiQyGnHywscuGztgGRxbs2tPWvtz/nald/K9Damrwlodj6Pb6i3GNG/uXsqu4He
-	a1V1dIy0Zm2drxTM3CG8ZNC6mrnj3B8RCy/3WgLSaSHZStgTpnVPgIPr2lhmMXpM+j0kTQnkMQx
-	vuqR9KXWvrpnXRk51j/qLTgjCG35XNyp3OoqP6uQc9PTVlWZgD1ZKvirDApnQeeSJdLEKHEpwyR
-	z1QjmZuwlAe7g==
-X-Received: by 2002:a05:6870:9e83:b0:43d:5d22:4719 with SMTP id 586e51a60fabf-44cab961fa0mr69097fac.22.1782886195152;
-        Tue, 30 Jun 2026 23:09:55 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-44c62027e5esm886593fac.9.2026.06.30.23.09.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jun 2026 23:09:54 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nVkPquKq";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="IgLbW7hT";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nVkPquKq";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="IgLbW7hT"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 386CC75FA2;
+	Wed,  1 Jul 2026 06:13:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1782886409; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KYQUm/ch17JGjQTwSu+BBLhvek6prevgXa6ce8KlIcw=;
+	b=nVkPquKqfnuglwRA64kO/65FlsWtnZVcUr3tQjW84mZEt5kIK1Id+IAvCnd8COFWAMIdCN
+	A+LLI/gXRqAumQ6m6nZvELRBDLiulChfZexd6Z8RaTTDRKPx8SMbetsUAzw04D6Lu6YrUo
+	3Tt20D3L669qjQts1PWJhNHngCyL2zI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1782886409;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KYQUm/ch17JGjQTwSu+BBLhvek6prevgXa6ce8KlIcw=;
+	b=IgLbW7hT3Aoo3CqPjJU1FBDZYQCfBqX2sBw4KqeELLYrzoJwo6zrbQBzA6udP+eNK09Hw4
+	2Irk1zJbX7sxlFAg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1782886409; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KYQUm/ch17JGjQTwSu+BBLhvek6prevgXa6ce8KlIcw=;
+	b=nVkPquKqfnuglwRA64kO/65FlsWtnZVcUr3tQjW84mZEt5kIK1Id+IAvCnd8COFWAMIdCN
+	A+LLI/gXRqAumQ6m6nZvELRBDLiulChfZexd6Z8RaTTDRKPx8SMbetsUAzw04D6Lu6YrUo
+	3Tt20D3L669qjQts1PWJhNHngCyL2zI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1782886409;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KYQUm/ch17JGjQTwSu+BBLhvek6prevgXa6ce8KlIcw=;
+	b=IgLbW7hT3Aoo3CqPjJU1FBDZYQCfBqX2sBw4KqeELLYrzoJwo6zrbQBzA6udP+eNK09Hw4
+	2Irk1zJbX7sxlFAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 88874779AA;
+	Wed,  1 Jul 2026 06:13:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 9virHwiwRGoNTQAAD6G6ig
+	(envelope-from <hare@suse.de>); Wed, 01 Jul 2026 06:13:28 +0000
+Message-ID: <abde41f0-7d40-42ba-a232-cc0538cd0e4b@suse.de>
+Date: Wed, 1 Jul 2026 08:13:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 30 Jun 2026 23:09:52 -0700
-Message-Id: <DJN0EPROS056.3RY0R6W1XZHNZ@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "John Fastabend" <john.fastabend@gmail.com>, "KP Singh"
- <kpsingh@kernel.org>, "Jiri Olsa" <jolsa@kernel.org>, "Kumar Kartikeya
- Dwivedi" <memxor@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- "Matt Bobrowski" <mattbobrowski@google.com>, "James Morris"
- <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>, "Casey
- Schaufler" <casey@schaufler-ca.com>, "Stephen Smalley"
- <stephen.smalley.work@gmail.com>, "Ondrej Mosnacek" <omosnace@redhat.com>,
- "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
- <roberto.sassu@huawei.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
- "Eric Snowberg" <eric.snowberg@oracle.com>, "Alexander Viro"
- <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>, "Jan
- Kara" <jack@suse.cz>, "Shuah Khan" <shuah@kernel.org>,
- <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
- <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 bpf-next 2/3] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Paul Moore" <paul@paul-moore.com>, "David Windsor" <dwindsor@gmail.com>
-X-Mailer: aerc
-References: <20260630183956.281293-1-dwindsor@gmail.com>
- <20260630183956.281293-3-dwindsor@gmail.com>
- <CAHC9VhSYNF=_Tfe-D99rHy70EXQVr1ES0arxT09Bidey4zOFdg@mail.gmail.com>
-In-Reply-To: <CAHC9VhSYNF=_Tfe-D99rHy70EXQVr1ES0arxT09Bidey4zOFdg@mail.gmail.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 09/10] dax/kmem: add sysfs interface for atomic
+ whole-device hotplug
+To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org
+Cc: nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-cxl@vger.kernel.org, driver-core@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, kernel-team@meta.com, david@kernel.org,
+ osalvador@suse.de, gregkh@linuxfoundation.org, rafael@kernel.org,
+ dakr@kernel.org, djbw@kernel.org, vishal.l.verma@intel.com,
+ dave.jiang@intel.com, alison.schofield@intel.com, akpm@linux-foundation.org,
+ ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
+ surenb@google.com, mhocko@suse.com, shuah@kernel.org, iweiny@kernel.org,
+ Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
+References: <20260630211842.2252800-1-gourry@gourry.net>
+ <20260630211842.2252800-10-gourry@gourry.net>
+ <akQ_xlJtXNgnGUdf@gourry-fedora-PF4VCD3F>
+Content-Language: en-US
+From: Hannes Reinecke <hare@suse.de>
+In-Reply-To: <akQ_xlJtXNgnGUdf@gourry-fedora-PF4VCD3F>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RL7dfuuh4jrqtijtc3c3mfetss)];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid]
+X-Spam-Level: 
 
-On Tue Jun 30, 2026 at 12:20 PM PDT, Paul Moore wrote:
->> +__bpf_kfunc int bpf_init_inode_xattr(struct lsm_xattrs *xattrs,
->> +                                    const char *name__str,
->> +                                    const struct bpf_dynptr *value_p)
->> +{
->> +       struct bpf_dynptr_kern *value_ptr =3D (struct bpf_dynptr_kern *)=
-value_p;
->> +       size_t name_len;
->> +       void *xattr_value;
->> +       struct xattr *xattr;
->> +       const void *value;
->> +       u32 value_len;
->> +
->> +       if (!xattrs || !xattrs->xattrs || !name__str)
->> +               return -EINVAL;
->> +       if (bpf_xattrs_used(xattrs) >=3D BPF_LSM_INODE_INIT_XATTRS)
->> +               return -ENOSPC;
->> +
->> +       name_len =3D strlen(name__str);
->> +       if (name_len =3D=3D 0 || name_len > XATTR_NAME_MAX)
->> +               return -EINVAL;
->> +       if (strncmp(name__str, XATTR_BPF_LSM_SUFFIX,
->> +                   sizeof(XATTR_BPF_LSM_SUFFIX) - 1))
->> +               return -EPERM;
->> +
->> +       value_len =3D __bpf_dynptr_size(value_ptr);
->> +       if (value_len =3D=3D 0 || value_len > XATTR_SIZE_MAX)
->> +               return -EINVAL;
->> +
->> +       value =3D __bpf_dynptr_data(value_ptr, value_len);
->> +       if (!value)
->> +               return -EINVAL;
->> +
->> +       /* Combine xattr value + name into one allocation. */
->> +       xattr_value =3D kmalloc(value_len + name_len + 1, GFP_NOFS);
->> +       if (!xattr_value)
->> +               return -ENOMEM;
->> +
->> +       memcpy(xattr_value, value, value_len);
->> +       memcpy(xattr_value + value_len, name__str, name_len);
->> +       ((char *)xattr_value)[value_len + name_len] =3D '\0';
->> +
->> +       xattr =3D lsm_get_xattr_slot(xattrs);
->> +       if (!xattr) {
->> +               kfree(xattr_value);
->> +               return -ENOSPC;
->> +       }
->> +
->> +       xattr->value =3D xattr_value;
->> +       xattr->name =3D (const char *)xattr_value + value_len;
->> +       xattr->value_len =3D value_len;
->> +
->> +       return 0;
->> +}
->
-> This is not a generic VFS function, it is a LSM specific function, it
-> belongs under security/, please move the code as discussed previously.
+On 7/1/26 12:14 AM, Gregory Price wrote:
+> On Tue, Jun 30, 2026 at 05:18:41PM -0400, Gregory Price wrote:
+>> There is no atomic mechanism to offline and remove an entire
+>> multi-block DAX kmem device.  This is presently done in two steps:
+> 
+> ... snip snip snip ...
+> 
+> Sashiko pointed out a false-positive, but adding a fixup patch
+> here that adds additional consistency.
+> 
+> On total failure - release all resources.  This makes the sysfs
+> interface consistent with the probe failure path.
+> 
 
-Paul,
-Not quite. It's all about xattrs.
-Having "struct lsm_xattrs" in the arguments doesn't make it lsm related.
-You needs to study existing kfuncs and tracepoints.
-A bunch of them have "*lsm*" in the arguments.
+Speaking of which ...
+With this patch we now have _two_ interfaces to do the same thing.
+And both will be generating uevents.
+Which is far from ideal (one could easily envision _conflicting_
+udev rules, one set doing an 'online' on the old interface,
+and another set doing an 'offline' on the new interface...)
+Is there a way to not sending uevents for the old interface
+or to make it configurable?
+The old interface had the nasty side effect of generating
+_tons_ of uevents during booting, and on larger machines we
+even had seen udev acting as a fork-bomb during booting,
+taking down the entire machine (we had to restrict udev
+to 512 threads max to avoid that from happening).
+So if we could disable uevents for the old interface
+things would be _so_ much easier ...
 
-All,
-CI found issues, so this set needs another respin.
-After that it's hopefully good to go.
+Cheers,
 
-David,
-you're on the right track. The patchset is getting close.
-Thank you for working on it.
-
+Hannes
+-- 
+Dr. Hannes Reinecke                  Kernel Storage Architect
+hare@suse.de                                +49 911 74053 688
+SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
+HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
