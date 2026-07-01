@@ -1,114 +1,136 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 286411A3166
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 03:05:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FFDB313E1B
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 04:49:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782875157; cv=none; b=mslnE2Mrzduwoe7xNKrr5xdoJnDJVavmT/nGUaXj1gE9BUyscnh3YyrhUGfzc5aUBNkXrQwJFbQTIjYIa67Z/Ym9vNNV4DZCU1e/+/LY9MiAhWSgXcdQpgxzJIppFZF6/o+goxZux2P0aoU/jNfdcQu8nNQdzoIRUyH10u/HJ2A=
+	t=1782881355; cv=none; b=tSYMpDXsnPhk0dOsqLXU87rRnTWlpGf8L8V/tAoY37ip6SlKep9eYBrFWT7nQuie2eAC1ZF/YJBlRnS8Dn6JBd45qy+rLUz0V2jhN/iH+SxiF0XiljMJEU8GL1mgN+rnJsFx9rPsds7U+b33b+yAX/88LDR5Lwb/Igk9Q7kS+DA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782875157; c=relaxed/simple;
-	bh=MYfIfv5sA2j2ZR1qxs4rUMsP9wT5v/lsb+MQsfSaJjg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ZTDw/IYJsU2IKwrHPpbiOYMMKK1PAyo/dZnLF5xSbEKObUmS/8QEXpxk/5lR1Vf/bpyroCLxnZ1n/k03HSvVNf5VGSP7UWepApQX9zAqHYCR+NPaU7eI34pH5iWdIFk2GsBXtRlsDJwKupF2Y6HYu0nffYCRp1c4HibMC9JLRww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KZ+R2IGP; arc=none smtp.client-ip=91.218.175.185
+	s=arc-20240116; t=1782881355; c=relaxed/simple;
+	bh=nV9x2pjJRXiBjCIQsQELDTPsQRdqyJhMYg9qsBaOT4U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SwNbGJ/VNUd3/f8ljYSbQ1n0bX0wBR0NVRMMU+beqFeawEWtXbABi6c5jFAuFnzVif86YZJloZgM0VDDrKDBf4ji4YWGH3F53plnXT++Zuyuee62XoNqtKlit48qtscEJKwHQ8dwTDQWGnlB00vnArb8IlUzd59AGWzuPgnZC/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=T1oaSd8c; arc=none smtp.client-ip=91.218.175.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KZ+R2IGP"
-Message-ID: <75fb9794-938e-4341-ae43-fdf0bdfc48f6@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="T1oaSd8c"
+Message-ID: <e3a91acd-2b4d-4e93-a3bb-a0e9ee5ede0f@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782875154;
+	t=1782881342;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=5va4XwV5vfWNlbm7XiNFDbaDpwHzr9Lkk4cpeHFVto4=;
-	b=KZ+R2IGPW6Iwf5TqLOttN86vQX8yQx0YifyL1jM4R7IT9njYNnjf0+fb+263+PwVN/O5im
-	P3VkO431GXlKw6B+SMNUjwL6St29hWSfGloiLaLYkfI973GF8HAxyxn1fOnh9RvQWuViwy
-	w7xtFEojrdoPA7H+3i+6A+Xp4Vu4bpg=
-Date: Wed, 1 Jul 2026 11:05:43 +0800
+	bh=VzfTSU/LJugefpT+9c9ezhpJItWxOxPIKamlZ67+v3Q=;
+	b=T1oaSd8cWqVw0VwHzXfYohvE3+w2XmfwdGfq9TMtAvb/zib51tCRZo1R2nLwLRA9BelXIa
+	3RcEztCcj9VeBSZ+Pa3i7MTkt99HN3+YiEIN8Lu628puVZMwuyKbot0tbIWomwjvEGtH4A
+	tEm+4cQeQcTjLsb4vORPAsJENqizilk=
+Date: Tue, 30 Jun 2026 21:48:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH bpf 0/6] bpf: Disallow interpreter fallback for
- interpreter-unsupported insns
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
+Subject: Re: [PATCH bpf-next v5 0/3] bpf, sockmap: reject a packet-modifying
+ SK_SKB stream parser
+To: Sechang Lim <rhkrqnwk98@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
  John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Eduard Zingerman <eddyz87@gmail.com>
+Cc: Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima
+ <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, "David S . Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
  Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
  Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>,
- Anton Protopopov <a.s.protopopov@gmail.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260626154330.33619-1-leon.hwang@linux.dev>
- <DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com>
- <18678d0c-f878-4d7b-bf7e-ffca4967dec5@linux.dev>
-In-Reply-To: <18678d0c-f878-4d7b-bf7e-ffca4967dec5@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Jiayuan Chen <jiayuan.chen@linux.dev>,
+ Bobby Eshleman <bobby.eshleman@bytedance.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260620024423.4141004-1-rhkrqnwk98@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260620024423.4141004-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-On 1/7/26 10:59, Leon Hwang wrote:
-> On 1/7/26 07:12, Alexei Starovoitov wrote:
->> On Fri Jun 26, 2026 at 8:43 AM PDT, Leon Hwang wrote:
-> [...]
->>
->> I don't think we need such fallback in patch [3].
+On 2026-06-19 7:44 p.m., Sechang Lim wrote:
+> A BPF_PROG_TYPE_SK_SKB stream parser runs on strparser's message head,
+> which can chain skbs through frag_list. A parser that resizes the skb
+> frees the frag_list segments that strparser still tracks through
+> skb_nextp, leading to a use-after-free.
+> 
+> A stream parser is only meant to measure the next message, not to modify
+> the packet, so reject a packet-modifying parser at attach time.
+> 
+> v5:
+>   - target bpf-next instead of bpf
+>   - add Reviewed-by tag (Jiayuan Chen)
+> 
+> v4:
+>   - https://lore.kernel.org/all/20260619062959.3277612-1-rhkrqnwk98@gmail.com/
+> 
+> v3:
+>   - https://lore.kernel.org/all/20260618102718.2331468-1-rhkrqnwk98@gmail.com/
+> 
+> v2:
+>   - https://lore.kernel.org/all/20260612123553.2724240-1-rhkrqnwk98@gmail.com/
+> 
+> v1:
+>   - https://lore.kernel.org/all/20260609112316.3685738-1-rhkrqnwk98@gmail.com/
+> 
+> Sechang Lim (3):
+>    selftests/bpf: don't modify the skb in the strparser parser prog
+>    bpf, sockmap: reject a packet-modifying SK_SKB stream parser
+>    selftests/bpf: test rejection of a packet-modifying SK_SKB stream
+>      parser
 
-Sorry, it seems I misunderstood the 'patch [3]' as the patch #3 of this
-series.
 
-Will discuss the fallback further in the sibling thread:
-https://lore.kernel.org/bpf/af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn/.
+Hi Sechang, all,
 
-Thanks,
-Leon
+This series broke test_maps (test_sockmap subtest) on the bpf
+tree. Currently on BPF CI the test fails on bpf, but passes on
+bpf-next (it doesn't have the series yet).
+
+test_maps fails with:
+
+     + taskset 0xF ./test_maps
+     [    8.352378] clocksource: Watchdog remote CPU 2 read timed out
+     Failed sockmap unexpected timeout
+
+See test_maps.c:995 in test_sockmap(): the 30s select() times out and
+test_maps exits 1. Note there is no "Failed stream parser bpf prog
+attach" message, the parser attaches fine.
+
+The series was merged into bpf on 2026-06-26 00:42 UTC
+
+CI runs:
+   last good (pre-merge, 06-25): 
+https://github.com/kernel-patches/bpf/actions/runs/28158326456
+   first bad (post-merge, 06-26): 
+https://github.com/kernel-patches/bpf/actions/runs/28210181858
+   recent bad (06-30): 
+https://github.com/kernel-patches/bpf/actions/runs/28475936023
+
+Confirmed locally reverting the 3 commits and rebuilding makes
+test_sockmap pass again.
+
+Could you please help investigate?
+
+Thanks!
+
 
 > 
-> Do you mean we can add the internal BPF_ADDR_PERCPU insn support to the
-> interpreter?
-> 
-> See my reply in "PROBLEM: BPF interpreter fallback after JIT compilation
-> of BPF_ADDR_PERCPU leads to kernel panic" thread [1].
-> 
-> [1]
-> https://lore.kernel.org/bpf/90c32de0-feac-4e63-9757-2a1d115be08c@linux.dev/
-> 
->>
->> And approach taken by this set also doesn't scale, since it splits
->> the verifier/JIT logic into core.c which will be hard to keep consistent.
->> I think we need another bit like jit_requested in prog like 'must_jit'
->> that the verifier set for addr_space_cast, kfuncs and the rest.
->>
->> Then the core.c change will be:
->> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
->> index 649cce41e13f..5126a43c1b81 100644
->> --- a/kernel/bpf/core.c
->> +++ b/kernel/bpf/core.c
->> @@ -2620,7 +2620,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
->>                 goto finalize;
->>
->>         if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
->> -           bpf_prog_has_kfunc_call(fp))
->> +           fp->must_jit)
->>                 jit_needed = true;
->>
-> 
-> Got it. Will follow your suggestion.
-> 
-> Thanks,
-> Leon
+>   net/core/sock_map.c                           | 20 ++++++++++++
+>   .../selftests/bpf/prog_tests/sockmap_strp.c   | 31 +++++++++++++++++++
+>   .../selftests/bpf/progs/sockmap_parse_prog.c  | 22 -------------
+>   .../selftests/bpf/progs/test_sockmap_strp.c   |  7 +++++
+>   4 files changed, 58 insertions(+), 22 deletions(-)
 > 
 
