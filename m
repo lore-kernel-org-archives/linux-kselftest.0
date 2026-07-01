@@ -1,49 +1,49 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CC63BB67F
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 20:19:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A32331EB2
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 20:30:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782937162; cv=none; b=daVpFfvZozJtmJ5j6C176KsHlhG7iNU0M9IVZqMGDDEU8dkhbGPrEJKHQDL8ckL4jzVWu9AEI737aHWpoONS8c50KojxuZsieo3AMHUgkBhdZRVOId9Trxc7lvU1cCwlY3ZfhyUv0NJiaHPcXhc8TIhyO3A1C0QVO5zvjuDU6fE=
+	t=1782937847; cv=none; b=Yxy3t7mCLaSmKw8QL1/UBzuU5eRqJAi3DcLlLgvcelulBJC9H9q0vpOOvxnjU3FE+RMPdPcyg/Flcd6JOFaEJ8nin+hWfW3Wk7oB816yfThij/u6wIOyZwx87vWHdgWvBkocSyQIpnhquzBKki48sQPRjmu4/kU5LZwXUcskCNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782937162; c=relaxed/simple;
-	bh=P2XaUmrl//82i1qJCceBWozgG8tYQzAsnfdiZDbolvE=;
+	s=arc-20240116; t=1782937847; c=relaxed/simple;
+	bh=wKpkyg2rj5Bbgk6AEbRgRm8ERuS54oR0GxIAL83Q7U4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uuFyFFZ3cibLLXYbMOuwTnM1mcziteU8pTgvhMptVeCXZjbiOaQ7XnYdNbzuTLx1V+Mxz+s3IrhzAYD18bWQxHeH3uAYNcm18mYMEK26ljkyQr+5pXqogmWDYqlgdjWqWO49V70F9uJa2c3zAiFS92pamKg+bJP5SwN9sP8D9UA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TlmPhlo4; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=joHwFBkwrFxNXnGWkP/HPNw7UEGG7seRDN+esVQcl1Q7mmwM42vBJvb6PotQj+uVeiquL/5+AgHTj3CnET3la7ZDHC5N0ZHToxu+L0Hu6mnGTxZowXfw/wOjmB+P/luFpwhExe3PC4Y2qJxGzVG787SlL69kUgmHkxGiLP4+cxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EqWkMjCn; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TlmPhlo4"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EqWkMjCn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782937159;
+	s=mimecast20190719; t=1782937845;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=79DoWJeAeXloYm2n+Rci/dmY81HSXAaiftH5DSNv554=;
-	b=TlmPhlo4V4JHpJYFF8KkVgzNzfGzkqS+GPYi3lsBQMGLf7xVnN/P9Lb1RXM3Tv0hUeLANi
-	Nyi+6rlPfGgjE0S5UpKXOMvcvWqymFMUwC9Q9qx6JCQXeaysP41NUenEs+N0aV7CCaoSDR
-	YOu2LkLX+2Ia+XsU4IBBWTF3/TayLrk=
+	bh=X/tArGLFi8BdH+snXh7UUnvSHk84IWILjNGqMvVoWlU=;
+	b=EqWkMjCnw69xCrdKtxYvxvyZ5vyHSkLRGTOGadfdQPPc+OobeC7wwJHR14ykzgClqGFqAe
+	OsAKwZwXVnmU2S5wz36NEBpDCY6LZ4MTOJyzILQXHn5s51A2FyeXXGLaHJbAo5hxPRiszX
+	IQiy/NvJxfHppLZ6ROaXwGQhw8SuawY=
 Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-272-kZQShflBM2mh9OFVBVp14A-1; Wed,
- 01 Jul 2026 16:19:16 -0400
-X-MC-Unique: kZQShflBM2mh9OFVBVp14A-1
-X-Mimecast-MFC-AGG-ID: kZQShflBM2mh9OFVBVp14A_1782937155
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-460-dc30iPoUNP-CKPzFP4s-MQ-1; Wed,
+ 01 Jul 2026 16:30:42 -0400
+X-MC-Unique: dc30iPoUNP-CKPzFP4s-MQ-1
+X-Mimecast-MFC-AGG-ID: dc30iPoUNP-CKPzFP4s-MQ_1782937840
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 53DF41926B8F;
-	Wed,  1 Jul 2026 20:19:14 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 20B131933358;
+	Wed,  1 Jul 2026 20:30:40 +0000 (UTC)
 Received: from [10.2.16.170] (unknown [10.2.16.170])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 019B630001BE;
-	Wed,  1 Jul 2026 20:19:10 +0000 (UTC)
-Message-ID: <fbab6706-12b2-4d97-afa1-5bcd5d943095@redhat.com>
-Date: Wed, 1 Jul 2026 16:19:09 -0400
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EFE5218007E7;
+	Wed,  1 Jul 2026 20:30:36 +0000 (UTC)
+Message-ID: <eef00e6d-8947-4028-addd-ebfe82036445@redhat.com>
+Date: Wed, 1 Jul 2026 16:30:35 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,8 +51,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v9 03/11] cgroup/cpuset: Prevent race between task
- attach and cpuset state change
+Subject: Re: [PATCH-next v9 08/11] cgroup/cpuset: Move
+ mpol_rebind_mm/cpuset_migrate_mm() calls inside cpuset_attach_task()
 To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
  Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
  <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
@@ -61,48 +61,42 @@ Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
  Guopeng Zhang <guopeng.zhang@linux.dev>
 References: <20260630033344.352702-1-longman@redhat.com>
- <20260630033344.352702-4-longman@redhat.com>
- <e28a38fa-5998-4e73-886c-2cbbd26ae98f@linux.dev>
+ <20260630033344.352702-9-longman@redhat.com>
+ <33151a98-3d3d-4a11-9919-2bf38aa83f76@linux.dev>
 Content-Language: en-US
 From: Waiman Long <longman@redhat.com>
-In-Reply-To: <e28a38fa-5998-4e73-886c-2cbbd26ae98f@linux.dev>
+In-Reply-To: <33151a98-3d3d-4a11-9919-2bf38aa83f76@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-
-On 6/30/26 9:41 PM, Ridong Chen wrote:
->> @@ -3246,7 +3268,12 @@ ssize_t cpuset_write_resmask(struct 
->> kernfs_open_file *of,
->>           return -EACCES;
->>         buf = strstrip(buf);
->> -    cpuset_full_lock();
+On 6/30/26 10:14 PM, Ridong Chen wrote:
+>> @@ -3203,28 +3208,60 @@ static void cpuset_attach_task(struct cpuset 
+>> *cs, struct task_struct *task)
+>>        */
+>>       WARN_ON_ONCE(set_cpus_allowed_ptr(task, cpus_attach));
+>>   +    if (cpuset_v2() && !attach_ctx.mems_updated)
+>> +        return;
 >> +
->> +    /* cpuset_mutex acquired in wait_attach_done_lock() */
->> +    mutex_lock(&cpuset_top_mutex);
->> +    cpus_read_lock();
->> +    wait_attach_done_lock();
+>>       cpuset_change_task_nodemask(task, &attach_ctx.nodemask_to);
+>>       cpuset1_update_task_spread_flags(cs, task);
+>> +
+>> +    if ((task != task->group_leader) ||
+>> +        (!is_memory_migrate(cs) && !attach_ctx.mems_updated))
+>> +        return;
 >> +
 >
-> Would it be cleaner to just pass this into cpuset_full_lock() as a flag?
+> Nit.
 >
-> void cpuset_full_lock(bool wait_attach)
-> {
->       mutex_lock(&cpuset_top_mutex);
->       cpus_read_lock();
->       if (wait_attach)
->               wait_attach_done_lock();
->       else
->               mutex_lock(&cpuset_mutex);
-> }
-> Then the two write paths become a single cpuset_full_lock(true). The
-> downside is the other 6 callers would need cpuset_full_lock(false). 
-> Not sure it's worth it â what do you think?
+> IIUC, the !is_memory_migrate(cs) check may be unnecessary. Previously, 
+> placing this condition outside could prevent an unnecessary loop, but 
+> in its current position, it appears redundant.
+>
+>     if (task != task->group_leader ||
+>         !attach_ctx.mems_updated)
 
-I would like to put wait_attach_done_lock() at places where it will wait 
-for the completion of the attach operation. Putting it inside 
-cpuset_full_lock() will make it harder to find out which operations will 
-need to wait for task attach. So I will keep the code as is.
+You are right. The is_memory_migrate(cs) check is unnecessary. Will 
+remove it in the next version.
 
 Cheers,
 Longman
