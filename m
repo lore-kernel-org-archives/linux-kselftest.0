@@ -1,63 +1,63 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35FCD3624DE
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 02:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A21F36A35E
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 02:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782871712; cv=none; b=TuYkqrflwOYT5XOUU+IYEdKE3wVvDwIDkPu/2vbGADBaDYO/A1mtworkyvMOqTMZFxV7G0uhpM0eAW7NjI1rmt8/9NHB7rpS2aYjkaQLRHVkB1cx9kUzV8HVRJ/Tt9+BrmYGHQti0VzsdUyZ/ZsAXaDeavXsqvXV3NK63jcIPgM=
+	t=1782871715; cv=none; b=r0DhgmOya+X9zGQyS69DFTd5NkQjny+y9fDFS37ad3jAkjEnR3Ux8Sj0Zv9bHKByjLJvoZ553/J1BionNcuM1RXrZEE1rb57GsYjxbhwai99jTM4r2Us7Cpoei21MJw8FG+DptrMswEY6mFsv3A8l74wRn24FgRzYFYLprBnQlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782871712; c=relaxed/simple;
-	bh=EeYfw6IhI8uGLEKTdQeOo32Is4ccTkKVpfjBqOZYgRU=;
+	s=arc-20240116; t=1782871715; c=relaxed/simple;
+	bh=Snq43EZiqkG/pdRD1SOZH5YvHYsezwtyIDqRKqEgFtk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZBy4UrW4JcJnKV4u89FyjedDwmjcL6LO1E13pCJk+l8wNnAJ6dSwOW/zKb0uhf+7iKGfwRXSQJTlMcW+WHH1IpSjilAoSTRDnjuRnahuOEa25KOgq9ipF6xok5F0J38irwQdCj15j6+YVJYSl+eargc0UAPEMaLUoV7YnWjO4HI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f1Gh9bnH; arc=none smtp.client-ip=209.85.216.47
+	 MIME-Version; b=mGUUBLgs/vOu34tN0axLmAx9U0yhn0TnY8Gc48/zFR+ubKwYvCRg6KwO7XsrZfuhwNxrP3mrQ2du89RZAbFicPPZOW3VR4VcOAQlgd/WiACYRunkR3XX2cbdpZkOIrChaw4WpFO/gp6wDnG9s4xRuj/WKkPD0Wh8zl8GrjDyxiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q2+Qj1Dv; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f1Gh9bnH"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-37de8008910so92909a91.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 19:08:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q2+Qj1Dv"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ca64989e64so1147965ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 19:08:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782871710; x=1783476510; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782871713; x=1783476513; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GGZz7zKK7YB2BzQhv1X8PZ94iNsskXKsVTHTOVc0QYQ=;
-        b=f1Gh9bnHT6tL9Yyzn97vzRoZqP6kVCHuGHIEfknQhEg6rKdn6Hi8eMyhFCkiJcp5yB
-         xkiAmUMnJprTuXzs7Ulna3tXvvAZVX/OUgUVEDRmdsFTrdJK/Sdvj2ZMXzQwnk9OScgi
-         oJMr7xi8paEeOKuMBB+61lNZJO8dN4uCOvQk8TS4qNMj6TB3zyW0S0VUhyP1NBWjPEfB
-         Pzxr7JIYOW2brzTii50lqenjJOUimD3N8ZLUPm9BXRY68+dSkyVxyO/9sV3RZEU8QqTi
-         ArE3ts5uwYGQLNrsmy1SkPyTx/a3LBTc1TG8EF1tqGR9GYmwJ+1uKNMyOhc6o2/zKnBz
-         W/UQ==
+        bh=xNDnGLVvnD4tmjeYRO+s6FPAGzn4En+qXlh/M6ZOC2c=;
+        b=Q2+Qj1DvLw7DQQ58cXouM5IdvhpgvmjYsx27kNpys89v//YajOzpenpSjw4T5B5+ra
+         GmsoUVHyNVoslDcLOhPcPMVcGgpDCB7ECZq1dML7AWrjO+blG2p+Ofv/jVfFo98EnXO+
+         AWLKSeRJtCo5S0vzaQzqhY+9AqDdgw8aqeKzYyJ7Z7VNcJNdWH1fV40LUZhj0THFXi6L
+         FY0jlDHv1E0SMo0zr3dmha/JGVaVld2WIoqduJ+YVdNzPjQbLHwP+wVQ1o7JIYEdl/Pv
+         D7ooL1RpiCyXHzMsm/UwspxWKRtNqbOQrPmBf9W2Z5vywnogaUlC6bteWm42sSgKPymZ
+         BD/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782871710; x=1783476510;
+        d=1e100.net; s=20251104; t=1782871713; x=1783476513;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=GGZz7zKK7YB2BzQhv1X8PZ94iNsskXKsVTHTOVc0QYQ=;
-        b=MtepeS9N5NIobSPlN66ZvBus1BdwvrjsbKQ4IHnmBLxxjXjoVqLNGYvQOG7Ib0YUPB
-         5q0TeFxNEzOZtD9LumPBIEGnYmKunj9hMcVxUZuGgnu0tItnU5C9xE5DpvsDI3yfkV5c
-         4fzhXpC5bkRzkXWivH+x/T+b20hMiuHwiAr0nsz1lT+S2Lafsgk2iKbUjosuF7m48tpk
-         +352M8Fy4Xgkgykz5WFU+DHpgohMMJkquQL7OHT2bqPu0pp5OqDuffbeR/aFYGrd7MQM
-         hZqj5zruxxMSzZjipYA9/rhP+krenNDsEzVOxch01LMxXBWOPcNYhkbjw75RXhUmLovC
-         1mBw==
-X-Forwarded-Encrypted: i=1; AHgh+RpGyODfqCye3vXtPmuj9hkpIgr7g8ogvDZurXpxy747/vsDBDspb3//IRrDk3J0ccouK2qV3T0/wa0mj7lldXY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyO2cfGmRMUrU4UC15tVHE5aOIN20AZfqXQNhcjvvmTenWfc18P
-	a77IM5wXwLy5SmhOQUvAazZUSVabxtNLsMbWaXwPEIeEAqwPt68TW4or
-X-Gm-Gg: AfdE7cm2lAULnzy0GtCHBBMIMGG/KoL9gnG80Hv7bgT1vpRn7dRsSo8a1JLprCoNj9T
-	a0CNjMCJRAcsPvbAkFyps1nkpOIfB5muO8nBlYU0UEJ+sOMxQAlUrPGXaGWH+UFSotSTMNCNzKA
-	1Gj4l2OSTNcprLG5AcdT9vRiNPM1Jnvh3yItApW1jUSRYpUS8Y4ZMGBtPaMPdoqew9UbIEDybLE
-	kzxsD+BEw/TxlBwprr6iO/+EagtfSl2ioWqiUXATGl5wZGUlVEgY03HJZpcRWHJ1XmUd0U8+tVt
-	ERaCur5pM7z008GO3ykRM12tXYmsu3+N03xUiuG+kCJcNC7H6sHkiTGrM7C2dE1R1BfUqcNaKcm
-	uhi7ezQF4rCVTA3TE56X60+95+q7KI0wPMN9KHc8ZHlFqpXy3vYTafrElBwy1xkpEIK20BfZWCL
-	fhkNNRwaqXG+z6SH36mm0E3g==
-X-Received: by 2002:a17:90b:2249:b0:380:83fc:4315 with SMTP id 98e67ed59e1d1-38083fc45e0mr2967850a91.21.1782871710420;
-        Tue, 30 Jun 2026 19:08:30 -0700 (PDT)
+        bh=xNDnGLVvnD4tmjeYRO+s6FPAGzn4En+qXlh/M6ZOC2c=;
+        b=nXWbj8+8xTZ85l+8xuu35QPAAC+BBC88+sDQyWS0+BjDbgJe9RvNWrqGarv1X1H/Sd
+         YfDvk89PGR4b7yhhGC8i6fZYA6nS3Gn/cni/K0WQ2vaZGEoG2Kde2GuQM2ZXb7s7o6RG
+         EYktU6cYpL5v4Qm5BVOm0A3jfzlYRGNtWT0whoPiUyMtblqaWWgbpFvuLCBVDdJkrmxZ
+         ZtBNMaz+HiuZfcuhmvSxD1ztqz7q8uOufjS9yWUzGdAuHhW9QUx7/rS5qmU94W+Zot8F
+         sMIe9UixTVdO52OOyUqlxlcdpJFk2J9O8ktUREul5w39KbyzA6CPxTuNUoNdJjIJwIrO
+         9VxQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9mOtRNXIiCx8/cSS+0C0ZoywCGy6VSbxCooCHNLazVlmu3wI9v7ZP+6YTeBNNknTrHfiFTcGcJZH7Qv2rd0W0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsXATGWvilNlDBN8VpLsHGyt1DcQpmQg2hlIaUkvms+T4BH0g1
+	HkFVAeyJHgJrl7C/ZfK8di41K2JOjff96O8iGr4JHVDZ4KPf7OLhrK7W
+X-Gm-Gg: AfdE7clkRzKnjkPYqLy4mMJ3a2nE5FNK7s48nSf5qf/wX+GoutguAEofzMp+e72ltEo
+	ls0lOE6ui86JKOH973TW/AJYGHdKrblKWo0FrCJUWHW1dzR+uNMdW0t0IDYTWLc6LcGIyf2Dwkc
+	CkA5FX3ES/Ylhgwncc3gghui26kU9Qrd/CVB668NI4ZbqbygGWtgdRvQ+C4t298m1E6XE0z5b/q
+	WcvkqX8lWcxtPewCSUpWl1l4RvfOOMVbYOjAgC8YCYci8ibmZGnKdX8qj3vaCSkMdK5hBeiEg1Y
+	wYE7vVQUCMH4l9xClolVaiTSmnm5UHPIfp69T8GvkGsmMk8CsfsnMGkODKxWSfrIYs5k69a/wTX
+	EKHU5B/feDc0usiDDWqm6YVPxPxyD6fVwTbXaMvWjKZzcHyFGW9MCeF4SEkoRfn2HGwgKWl6SNH
+	tCWKvvjTEKo71sqYe1BglqAA==
+X-Received: by 2002:a17:902:e806:b0:2c9:ff29:3f91 with SMTP id d9443c01a7336-2ca5a55b720mr28253325ad.6.1782871713354;
+        Tue, 30 Jun 2026 19:08:33 -0700 (PDT)
 Received: from localhost ([2001:19f0:8000:3e6e:5400:6ff:fe38:3d01])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-380964613a3sm803133a91.16.2026.06.30.19.08.29
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca382a3863sm22650065ad.57.2026.06.30.19.08.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 19:08:30 -0700 (PDT)
+        Tue, 30 Jun 2026 19:08:33 -0700 (PDT)
 From: Inochi Amaoto <inochiama@gmail.com>
 To: Paul Walmsley <pjw@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -78,10 +78,11 @@ Cc: linux-riscv@lists.infradead.org,
 	kvm-riscv@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
 	Yixun Lan <dlan@gentoo.org>,
-	Longbin Li <looong.bin@gmail.com>
-Subject: [PATCH v4 6/8] RISC-V: KVM: Delegate SPELP bit to VS/VU mode if landing pad is enabled.
-Date: Wed,  1 Jul 2026 10:07:43 +0800
-Message-ID: <20260701020746.170157-7-inochiama@gmail.com>
+	Longbin Li <looong.bin@gmail.com>,
+	Quan Zhou <zhouquan@iscas.ac.cn>
+Subject: [PATCH v4 7/8] RISC-V: KVM: Add support for control-flow integrity FWFT features
+Date: Wed,  1 Jul 2026 10:07:44 +0800
+Message-ID: <20260701020746.170157-8-inochiama@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260701020746.170157-1-inochiama@gmail.com>
 References: <20260701020746.170157-1-inochiama@gmail.com>
@@ -93,31 +94,158 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Delegate the newly added SPELP bit from Zicfilp extension to VS/VU mode
-if it enables landing pad support.
+Control-flow integrity is controlled through a WARL field in henvcfg.
+Expose the feature only if the Zicfilp/Zicfiss is supported for VS-mode.
+Allow the VMM to block access to the feature by disabling the ISA
+extension in the guest.
 
+Assisted-by: YuanSheng:claude-4.7-opus
+Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
+Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
 Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
 ---
- arch/riscv/kvm/vcpu_exit.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/riscv/include/uapi/asm/kvm.h |   2 +
+ arch/riscv/kvm/vcpu_sbi_fwft.c    | 107 ++++++++++++++++++++++++++++++
+ 2 files changed, 109 insertions(+)
 
-diff --git a/arch/riscv/kvm/vcpu_exit.c b/arch/riscv/kvm/vcpu_exit.c
-index 12eebeabdf14..61305da5256d 100644
---- a/arch/riscv/kvm/vcpu_exit.c
-+++ b/arch/riscv/kvm/vcpu_exit.c
-@@ -154,6 +154,12 @@ void kvm_riscv_vcpu_trap_redirect(struct kvm_vcpu *vcpu,
- 	/* Clear Guest SSTATUS.SIE bit */
- 	vsstatus &= ~SR_SIE;
+diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
+index fd4c81697617..20d9959ca44f 100644
+--- a/arch/riscv/include/uapi/asm/kvm.h
++++ b/arch/riscv/include/uapi/asm/kvm.h
+@@ -248,6 +248,8 @@ struct kvm_riscv_sbi_fwft {
+ 	struct kvm_riscv_sbi_fwft_feature misaligned_deleg;
+ 	struct kvm_riscv_sbi_fwft_feature pointer_masking;
+ 	struct kvm_riscv_sbi_fwft_feature pte_ad_hw_updating;
++	struct kvm_riscv_sbi_fwft_feature landing_pad;
++	struct kvm_riscv_sbi_fwft_feature shadow_stack;
+ };
  
-+	/* Change Guest SSTATUS.SPELP bit */
-+	if (vcpu->arch.cfg.henvcfg & ENVCFG_LPE) {
-+		vsstatus &= ~SR_SPELP;
-+		vsstatus |= vcpu->arch.guest_context.sstatus & SR_SPELP;
+ /* If you need to interpret the index values, here is the key: */
+diff --git a/arch/riscv/kvm/vcpu_sbi_fwft.c b/arch/riscv/kvm/vcpu_sbi_fwft.c
+index 7192c229a19e..cb9b9721ec88 100644
+--- a/arch/riscv/kvm/vcpu_sbi_fwft.c
++++ b/arch/riscv/kvm/vcpu_sbi_fwft.c
+@@ -176,6 +176,95 @@ static long kvm_sbi_fwft_get_misaligned_delegation(struct kvm_vcpu *vcpu,
+ 	return SBI_SUCCESS;
+ }
+ 
++static long kvm_sbi_fwft_set_cfi(struct kvm_vcpu *vcpu,
++				 struct kvm_sbi_fwft_config *conf,
++				 bool one_reg_access, unsigned long value,
++				 u64 flag)
++{
++	struct kvm_vcpu_config *cfg = &vcpu->arch.cfg;
++
++	if (value == 0)
++		cfg->henvcfg &= ~flag;
++	else if (value == 1)
++		cfg->henvcfg |= flag;
++	else
++		return SBI_ERR_INVALID_PARAM;
++
++	if (cfg->henvcfg & (ENVCFG_LPE | ENVCFG_SSE))
++		cfg->hedeleg |= EXC_SOFTWARE_CHECK;
++	else
++		cfg->hedeleg &= ~EXC_SOFTWARE_CHECK;
++
++	if (!one_reg_access) {
++		csr_write(CSR_HEDELEG, cfg->hedeleg);
++		/*
++		 * Both Bit LPE and SSE are in the lower part, so it is safe
++		 * to only write the henvcfg
++		 */
++		csr_write(CSR_HENVCFG, vcpu->arch.cfg.henvcfg);
 +	}
 +
- 	/* Update Guest SSTATUS */
- 	ncsr_write(CSR_VSSTATUS, vsstatus);
- 
++	return SBI_SUCCESS;
++}
++
++static bool kvm_sbi_fwft_landing_pad_supported(struct kvm_vcpu *vcpu)
++{
++	return riscv_isa_extension_available(vcpu->arch.isa, ZICFILP);
++}
++
++static void kvm_sbi_fwft_reset_landing_pad(struct kvm_vcpu *vcpu)
++{
++	struct kvm_vcpu_config *cfg = &vcpu->arch.cfg;
++
++	kvm_sbi_fwft_env_flag_reset_helper(vcpu, ENVCFG_LPE);
++	if ((cfg->henvcfg & (ENVCFG_LPE | ENVCFG_SSE)) == 0)
++		cfg->hedeleg &= ~EXC_SOFTWARE_CHECK;
++}
++
++static long kvm_sbi_fwft_set_landing_pad(struct kvm_vcpu *vcpu,
++					 struct kvm_sbi_fwft_config *conf,
++					 bool one_reg_access, unsigned long value)
++{
++	return kvm_sbi_fwft_set_cfi(vcpu, conf, one_reg_access, value, ENVCFG_LPE);
++}
++
++static long kvm_sbi_fwft_get_landing_pad(struct kvm_vcpu *vcpu,
++					 struct kvm_sbi_fwft_config *conf,
++					 bool one_reg_access, unsigned long *value)
++{
++	return kvm_sbi_fwft_env_flag_get_helper(vcpu, conf, one_reg_access,
++						value, ENVCFG_LPE);
++}
++
++static bool kvm_sbi_fwft_shadow_stack_supported(struct kvm_vcpu *vcpu)
++{
++	return riscv_isa_extension_available(vcpu->arch.isa, ZICFISS);
++}
++
++static void kvm_sbi_fwft_reset_shadow_stack(struct kvm_vcpu *vcpu)
++{
++	struct kvm_vcpu_config *cfg = &vcpu->arch.cfg;
++
++	kvm_sbi_fwft_env_flag_reset_helper(vcpu, ENVCFG_SSE);
++	if ((cfg->henvcfg & (ENVCFG_LPE | ENVCFG_SSE)) == 0)
++		cfg->hedeleg &= ~EXC_SOFTWARE_CHECK;
++}
++
++static long kvm_sbi_fwft_set_shadow_stack(struct kvm_vcpu *vcpu,
++					  struct kvm_sbi_fwft_config *conf,
++					  bool one_reg_access, unsigned long value)
++{
++	return kvm_sbi_fwft_set_cfi(vcpu, conf, one_reg_access, value, ENVCFG_SSE);
++}
++
++static long kvm_sbi_fwft_get_shadow_stack(struct kvm_vcpu *vcpu,
++					  struct kvm_sbi_fwft_config *conf,
++					  bool one_reg_access, unsigned long *value)
++{
++	return kvm_sbi_fwft_env_flag_get_helper(vcpu, conf, one_reg_access,
++						value, ENVCFG_SSE);
++}
++
+ static bool kvm_sbi_fwft_pte_ad_hw_updating_supported(struct kvm_vcpu *vcpu)
+ {
+ 	return riscv_isa_extension_available(vcpu->arch.isa, SVADU) &&
+@@ -312,6 +401,24 @@ static const struct kvm_sbi_fwft_feature features[] = {
+ 		.set = kvm_sbi_fwft_set_misaligned_delegation,
+ 		.get = kvm_sbi_fwft_get_misaligned_delegation,
+ 	},
++	{
++		.id = SBI_FWFT_LANDING_PAD,
++		.first_reg_num = offsetof(struct kvm_riscv_sbi_fwft, landing_pad.enable) /
++				 sizeof(unsigned long),
++		.supported = kvm_sbi_fwft_landing_pad_supported,
++		.reset = kvm_sbi_fwft_reset_landing_pad,
++		.set = kvm_sbi_fwft_set_landing_pad,
++		.get = kvm_sbi_fwft_get_landing_pad,
++	},
++	{
++		.id = SBI_FWFT_SHADOW_STACK,
++		.first_reg_num = offsetof(struct kvm_riscv_sbi_fwft, shadow_stack.enable) /
++				 sizeof(unsigned long),
++		.supported = kvm_sbi_fwft_shadow_stack_supported,
++		.reset = kvm_sbi_fwft_reset_shadow_stack,
++		.set = kvm_sbi_fwft_set_shadow_stack,
++		.get = kvm_sbi_fwft_get_shadow_stack,
++	},
+ 	{
+ 		.id = SBI_FWFT_PTE_AD_HW_UPDATING,
+ 		.first_reg_num = offsetof(struct kvm_riscv_sbi_fwft, pte_ad_hw_updating.enable) /
 -- 
 2.55.0
 
