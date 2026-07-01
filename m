@@ -1,117 +1,115 @@
-Received: from localhost.localdomain (unknown [147.136.157.0])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8A239448F;
-	Wed,  1 Jul 2026 08:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7ACD38656D;
+	Wed,  1 Jul 2026 08:30:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782893461; cv=none; b=TCklem+Ym26K1+WlNNf1GQfidovN5Jh53q4/TvjDYICa7zIKsFMcW5dzt4mzFaUKSTCdD+hJhC9b2YhYGDKrhxuKmvNJL8ZOscd/b+itm17O/Ysbo2ya2oSJM49+u8L/RgyIEpz4P9bMB6FKHkudyBNAXCjT/kmLFfGCDk0guwU=
+	t=1782894642; cv=none; b=m06hJCRStOsodYfkIcM2I+ClbFhlM3EzPkJALnHzVrB7ZyiDMNECkggc77rWFM7tA15p3i7NxEMtNTl1WYzK3gdpemBQKuW/e6Kl9W9ciXOMU6iBGlnKvtVyIML3wJxjoOSVtGG4v5F5/4a4S1LTwp3Ex/juRpU6XahB362tvAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782893461; c=relaxed/simple;
-	bh=A71KniBxj6AqbKjBGpQsPVKmK3p0wYzdL3smoRNFjQo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qiMpu0RR5QTjAvIEYvnsi64J6QJ0UeOWyvdrVGvsb8+hF2IjEBG/IM75WqtfT6YgycMOhAXstw4m1wpme89w0GD6MXjPxXAjywxdrFKkq1Ya6gzcCTrFzEvXOaEnRcghvBUkLDUD8QvBgRMXryOA/WOc0fU3reYKjk4k8kxZy+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=shopee.com; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.0
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=shopee.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
-Received: by localhost.localdomain (Postfix, from userid 1007)
-	id 640AB27E725; Wed,  1 Jul 2026 16:05:51 +0800 (+08)
-From: Leon Huang Fu <leon.huangfu@shopee.com>
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Leon Huang Fu <leon.huangfu@shopee.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	KaFai Wan <kafai.wan@linux.dev>,
-	bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user BPF_ADDR_SPACE_CAST insn
-Date: Wed,  1 Jul 2026 16:04:38 +0800
-Message-ID: <20260701080524.194326-1-leon.huangfu@shopee.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <7438f087-7fb4-4991-a095-1d24d6d09895@loongson.cn>
-References: <20260626154330.33619-1-leon.hwang@linux.dev>  <20260626154330.33619-2-leon.hwang@linux.dev>  <e279c9a7ca6b16e52dc261560513b0eafdd70f87.camel@linux.dev>  <a2aaa21d-4cf9-48a4-839f-dd152bda8185@linux.dev>  <af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn>  <d55e10b1-d883-4fcf-8fb3-8210db935e4a@linux.dev>  <1c07a34f-b050-a281-6a7b-542a9bfa30b3@loongson.cn>  <bfb432db-bd29-419a-8147-78ff6fac07ad@linux.dev>  <7438f087-7fb4-4991-a095-1d24d6d09895@loongson.cn>
+	s=arc-20240116; t=1782894642; c=relaxed/simple;
+	bh=fWH1wSgX08TW4O7VsaDF0cxPKrZ5+BCRV5QxNbilXUk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MwgTaP91nWfsRIRyxxrCbbEX2Rq+8+DDQUXBh/aJatoYipFqB+qraiL9XzsbG9qndJepRwu60IwzSrNdseGFD0J7lZButG/OLumg3K78qPj0tFLIG2VW5CUSr66sUa7ECovm+wdphOVwzqxQZeoj9oglWamV2ULB741fms2HAY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nsi0F+Yg; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nsi0F+Yg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B7D1F000E9;
+	Wed,  1 Jul 2026 08:30:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782894641;
+	bh=EitmsFYTKYnE/CMQXtoyKcbW9g8e44qIXAGKtiQio+M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Nsi0F+Ygx4oP2aOkquf50Ol5J/VKGlycgqaighAmg0TKSVZ3PKlnCmJ3MBwTCK0Ee
+	 ittaRsMuJbzHBRg9UCOcFaAvAwD/Gc11ZfEl5JM5wpMQz54Nb74/Bmo7RJKX8G9rkb
+	 +ULTndpI7UoV7aKeOWd8GamVyOwzLNgQFACq7gH4rd2AUpOCoZXYyI7uV84iywtoCK
+	 JXAFtNwd9RZ0sezEXaMXBopxgfiGPI1exZOp6hLMBfQqO3PPtLqIQGNABMlHg28Vqo
+	 cuQ9X3V7kFC1+jyIi6qyLoa/chLQdbTKZeWvFZo9cg9nTn4HBctwKqX1beZyEs6tDU
+	 F0DjNs/kuDEjw==
+Message-ID: <cfeb9b58-be6d-417f-8040-5e7e66158a64@kernel.org>
+Date: Wed, 1 Jul 2026 10:30:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 02/10] mm/memory_hotplug: add mhp_online_type_to_str()
+ and export string helpers
+To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org
+Cc: nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-cxl@vger.kernel.org, driver-core@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, kernel-team@meta.com, osalvador@suse.de,
+ gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
+ djbw@kernel.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
+ alison.schofield@intel.com, akpm@linux-foundation.org, ljs@kernel.org,
+ liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
+ mhocko@suse.com, shuah@kernel.org, iweiny@kernel.org,
+ Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
+References: <20260630211842.2252800-1-gourry@gourry.net>
+ <20260630211842.2252800-3-gourry@gourry.net>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260630211842.2252800-3-gourry@gourry.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, 1 Jul 2026 15:29:28 +0800, Tiezhu Yang <yangtiezhu@loongson.cn> wro=
-te:=0D
-> On 2026/7/1 =E4=B8=8B=E5=8D=883:02, Leon Hwang wrote:=0D
->> On 1/7/26 14:49, Tiezhu Yang wrote:=0D
->> [...]=0D
->>>>=0D
->>>> It is a real issue.=0D
->>>>=0D
->>>> Instead of fixing up helper calls, it seems better to prevent=0D
->>>> interpreter fallback if the prog has any JIT-inlineable helper call.=0D
->>>=0D
->>> Hi Alexei and Leon,=0D
->>>=0D
->>> What about the following: (not tested yet, if it is good, I can test it=
-)=0D
->>>=0D
->>> [...]=0D
->>>=0D
->>> If you are OK with the above changes, I will test it again and send=0D
->>> a new version later.=0D
->>>=0D
->>=0D
->> If you don't mind, I think I can disallow the interpreter fallback by=0D
->> the below diff in the next revision of this series.=0D
->>=0D
->> The 'aux->jit_required' is introduced by following Alexei's suggestion.=
-=0D
->=0D
-> I am not sure if introducing a new aux->jit_required member is necessary,=
-=0D
-> as we already have a local jit_needed flag in the current logic.=0D
-=0D
-A 'must_jit'-like member was suggested by Alexei [1].=0D
-=0D
-Probably, the commits in [2] could help to understand 'aux->jit_required'.=
-=0D
-=0D
-[1] https://lore.kernel.org/bpf/DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com/=0D
-[2] https://github.com/Asphaltt/bpf/commits/bpf/fix-interpreter-fallback/v2=
-/=0D
-=0D
->=0D
-> Additionally, the issue reported in my patch [1] is fundamentally tied=0D
-> to bpf_jit_inlines_helper_call(). Maybe we can simply reuse jit_needed=0D
-> by checking bpf_prog_has_inline_helpers() right before JITing, and then=0D
-> reject fallback with -ENOTSUPP if JIT compilation fails.=0D
-=0D
-Correct. Reusing jit_needed is preferred.=0D
-=0D
-Thanks,=0D
-Leon=0D
-=0D
->=0D
-> Let us wait for Alexei's comments on the overall direction before=0D
-> respinning.=0D
->=0D
-> [1] bpf: Fix unaligned interpreter panic on JIT fallback path=0D
-> https://lore.kernel.org/bpf/20260615025316.24429-1-yangtiezhu@loongson.cn=
-/=0D
->=0D
-> Thanks,=0D
-> Tiezhu=0D
+On 6/30/26 23:18, Gregory Price wrote:
+> Add mhp_online_type_to_str() as the inverse of mhp_online_type_from_str(),
+> and export both so a driver can render and parse the memory online type
+> through its own sysfs interface.
+> 
+> Signed-off-by: Gregory Price <gourry@gourry.net>
+> ---
+
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+
+-- 
+Cheers,
+
+David
