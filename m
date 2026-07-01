@@ -1,121 +1,760 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C7D03B19D4;
-	Wed,  1 Jul 2026 07:29:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782890979; cv=none; b=mu+3ZXYkVKhyTjfsh5ccXJwpiVkVXCIUamhwcqWRSt1K0jO/OFwplGjwya5FVLN2i6kOJWMahv+1BJIErpaBAV3wsl5Y8jcgrgdhSVGBp9XvsdXPxZbvu+k4yiAnkjm05zi/17XKrawgpWh84+OPTXVbl4Vr6Bp4TKLG5NIjYyo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782890979; c=relaxed/simple;
-	bh=8+RfCRlbq6ZsembJaCyFQ89yuFcyl3EwhjDVzCRsEd8=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=klLKfjrTaW/wLERvz6Xpda/Qb4ZTsej0tUXC72WJERrs3beS5lkaARmx9FRu5cNNDNdFqNvWba9h/d9lvQ40zYOSbj/QQORmspnQh8ea7CSSxcrkq+Rqk4C6TT8uqhJrDSfCjx/RMJWmL/v5oDByU+dI3kTqxl9cYSKj0WPI2bk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8BxCfHdwURqbGIAAA--.2324S3;
-	Wed, 01 Jul 2026 15:29:33 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJDxTMLYwURqXSK6AA--.22818S3;
-	Wed, 01 Jul 2026 15:29:29 +0800 (CST)
-Subject: Re: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user
- BPF_ADDR_SPACE_CAST insn
-To: Leon Hwang <leon.hwang@linux.dev>, KaFai Wan <kafai.wan@linux.dev>,
- bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>,
- Anton Protopopov <a.s.protopopov@gmail.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260626154330.33619-1-leon.hwang@linux.dev>
- <20260626154330.33619-2-leon.hwang@linux.dev>
- <e279c9a7ca6b16e52dc261560513b0eafdd70f87.camel@linux.dev>
- <a2aaa21d-4cf9-48a4-839f-dd152bda8185@linux.dev>
- <af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn>
- <d55e10b1-d883-4fcf-8fb3-8210db935e4a@linux.dev>
- <1c07a34f-b050-a281-6a7b-542a9bfa30b3@loongson.cn>
- <bfb432db-bd29-419a-8147-78ff6fac07ad@linux.dev>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <7438f087-7fb4-4991-a095-1d24d6d09895@loongson.cn>
-Date: Wed, 1 Jul 2026 15:29:28 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011048.outbound.protection.outlook.com [40.93.194.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DBF83009F6;
+	Wed,  1 Jul 2026 07:33:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782891239; cv=fail; b=iBt/OEnDSE7YWkxZtfowsoxS1QqRsD5oCtY2jfoG5DGfkPLmwGAnBCbG6JSP1fUuXeOLvqGwIx6rsTwhDYRDA5+zs5kKxDZFouSlxD7se0J4qyauy/2wsEObWi7AUwvJOvP0h+84+NTzPpuAFtEHyyOXhEhJzJ8Uul83P07oNKg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782891239; c=relaxed/simple;
+	bh=+aZcsrGh+SBMyA8f6UMK8lP/vx/mBYxblsumo6wH0+c=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eTwOgP6VvGzlb43JWE26iTyz5u9XaOdYXMWEpr3rbGLQ5HOFfeaXompW2/1nqjft7Cr3UnlCkgifBGqzIjUCkmKocF5orMgARVObpNieqr2AvU6ZVZ+Zd2eJRhk9qY3hBAOeYHkbYROHndPezS8coQKSH1StvIY+6MwVg443cZI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mdonv5tD; arc=fail smtp.client-ip=40.93.194.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mdonv5tD"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Vlrr9rgZ3CU3xlwLejNLBJjDqRkk0Kzz+V2LXrySVFvKqlSbkoMgdY+NiDyw4pgTcp4+dvDA7jXw/pKxeneTyrjLImaVnFndvPKtJxKEyNGc7qUmlinWn9mzKZah6HtfGK1X6usWxQ2likXg9DgHrW8hCOMBp9h8IVR/DGO/JSYhkW6y1fWBFbL5Qm7kHLE4gyBUNyzI15GzGirVB2znVtvlP25SxNsXRnl9rciZxPEV3Kw7kaVFzCi+pJrmM3/3Q3E26DEd0EP/HtbBgMQvV4KAO3xnaD9Qm78RBfg4zXZIynhO3VYmwf3H9li/qJ793G4DO/g/yZCqaJ1SL6PPJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AZju8gqC19syWpSyCaF5JiYgTB84dHvVv84SZip3LG8=;
+ b=lEePD2yOOIl05ZPbcFOi+SovREC/sROlL1/mGSXcp4Iba9LABRazgqM4cTbSoyes7MBg1I5MjGrV+YtDlarurvLCsKJrwW71sppTZoTaWVQwE1H3UR+cJZcXyIw9Wc/5RebHq3YNS/PYN8W6wAt1sGd9+cJgQp1VQk98CxkAgQUFTix2PFqlEv+Of6u75k77xUwYNLEJqW0zSxCPb2/5hRnzTMciNJ15CJpuffLfuc14bQFi+OhCqSSTRZBWXtBHIhCW41hFrJ0njsuOPZmU8u+841YI40G0pw45BN9+plPnQDhe9kEW1wjqpUkj9+yOI47j4jJCLSuxLHxHd42/Yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=lunn.ch smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AZju8gqC19syWpSyCaF5JiYgTB84dHvVv84SZip3LG8=;
+ b=mdonv5tDAiRPztRMMSVt+q54LKX+v+bw9n4+9x1yQZ1tnvQ77vKTxosEZ2c+QUY/uXflzKYO7tocxoeBu2c8q79XiHfGXFkJa4h2sbF1SOUbgXNHjaoGlZrsOi2oUYIo0JCWHE2RCeXv4cSwN2ZosWPslZEHXTaQKaQaYHkkTOVIrgewx4abgocAopUMwtQF68kL0vEcVN9cgchqHv1W9hfF/37Mwil/wZQioL0ypFjt3OMEFOkerNOqLvzwoRdejxnp7G/fVRJ9SPm07EV71YSl6uNS0KfRb53XXTv/NvpkQAkZ8tudZ8+68Zik0EmHb9ivCGKMdDNbZ9h/deQBJQ==
+Received: from DS7PR03CA0191.namprd03.prod.outlook.com (2603:10b6:5:3b6::16)
+ by DS7PR12MB6165.namprd12.prod.outlook.com (2603:10b6:8:9a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.8; Wed, 1 Jul 2026
+ 07:33:45 +0000
+Received: from DS1PEPF00017092.namprd03.prod.outlook.com
+ (2603:10b6:5:3b6:cafe::b) by DS7PR03CA0191.outlook.office365.com
+ (2603:10b6:5:3b6::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.181.8 via Frontend Transport; Wed, 1
+ Jul 2026 07:33:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS1PEPF00017092.mail.protection.outlook.com (10.167.17.135) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.181.6 via Frontend Transport; Wed, 1 Jul 2026 07:33:44 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 1 Jul
+ 2026 00:33:23 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 1 Jul
+ 2026 00:33:22 -0700
+Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Wed, 1 Jul
+ 2026 00:33:13 -0700
+From: Tariq Toukan <tariqt@nvidia.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>
+CC: Adithya Jayachandran <ajayachandra@nvidia.com>, Bobby Eshleman
+	<bobbyeshleman@meta.com>, Carolina Jubran <cjubran@nvidia.com>, Cosmin Ratiu
+	<cratiu@nvidia.com>, Daniel Borkmann <daniel@iogearbox.net>, Daniel Jurgens
+	<danielj@nvidia.com>, Daniel Zahka <daniel.zahka@gmail.com>, David Wei
+	<dw@davidwei.uk>, Donald Hunter <donald.hunter@gmail.com>, Dragos Tatulea
+	<dtatulea@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, Jiri Pirko
+	<jiri@resnulli.us>, Joe Damato <joe@dama.to>, Jonathan Corbet
+	<corbet@lwn.net>, Kees Cook <kees@kernel.org>, Leon Romanovsky
+	<leon@kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-rdma@vger.kernel.org>, Mark Bloch <mbloch@nvidia.com>, Moshe Shemesh
+	<moshe@nvidia.com>, Or Har-Toov <ohartoov@nvidia.com>, Parav Pandit
+	<parav@nvidia.com>, Petr Machata <petrm@nvidia.com>, Ratheesh Kannoth
+	<rkannoth@marvell.com>, Saeed Mahameed <saeedm@nvidia.com>, Shahar Shitrit
+	<shshitrit@nvidia.com>, Shay Drori <shayd@nvidia.com>, Shuah Khan
+	<shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Simon Horman
+	<horms@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Tariq Toukan
+	<tariqt@nvidia.com>, Willem de Bruijn <willemb@google.com>, Gal Pressman
+	<gal@nvidia.com>
+Subject: [PATCH net-next V10 00/14] devlink and mlx5: Support cross-function rate scheduling
+Date: Wed, 1 Jul 2026 10:32:40 +0300
+Message-ID: <20260701073254.754518-1-tariqt@nvidia.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <bfb432db-bd29-419a-8147-78ff6fac07ad@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxTMLYwURqXSK6AA--.22818S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7CFWUtr47uF1DZw15AF4UKFX_yoW8Gr4xpF
-	W8Gay7tr4DAa4xJasFkw4ruF42g3yrJr48Ww18WrZ5urn8Wr1fuFy5Kw43uFy3ury09ryS
-	vrsIqw1xuFy0kagCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-	6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
-	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07joc_-UUU
-	UU=
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF00017092:EE_|DS7PR12MB6165:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f2e555d-1939-4e04-c8b9-08ded74314d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|30052699003|23010399003|82310400026|7416014|376014|1800799024|36860700016|18002099003|13003099007|5023799004|11063799006|3023799007|6133799003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	SHLoxC+SPh0RpZUyNYCd3dLlsNATh9WQSRdx0wkS46aetgAyLAmsatlfaaAqwsugP/avOoc032ycGZzpprcyRmJdXPKsMojRNiVOt1Bhj5zOg4YQvD+stmGioiKQcL9GtyNvI02ZE9K+Bo1ewVCAMH+G5a4ctBaITZ3U93lKPYEEHkTQsgb9NZPooBwnEMdKQysXrHfDgf5vPrhcUuIv4qBTXwKnAxFQtUF76rUUK3PCUm6AAcDY2tQhFTVJSmfG7K+C3eao72Vv7TJgW5lPwl7swdoPySWB7FMy6XAisYmn2/wTixJo9IlZ+uG/bdQPDmTB8SHaikT4h/yN4+5pz8z62b/fUs/jJzU3c2HWTy1YDGXFKHfSQKeP7bVqsV3Pn/uQ96q/j6cH54Bns2XWdI+HBsEKnP85Vyitkw5q21ARODDtYU6GUMuzWHSJ5XgQcFtm359T5xV13UXGHnKbgVdsjBXYpXyaL7uqKfnIZ7Wejlxw45dXPR/s6DQDrTsE6BrfcKbCmBuwWQNp21dOz53N38vPrM5R6g0SXf3B9rQOGCxP5NMrtH4DLc6d73gUyLzte+DCmJC/cfWeYg4rBGm5TzJQNXUXKXdVVHso2SPokvxoTKHWQnH6rr4lAgkmYfb3CZIjcqGRFB6kv4WIosQ+XJu1D6OIPZM0mL6YC2b/dCfSM1gAs7S18ewWxXaT/PPTp3jR4Cgz6KBDYLA/Ag==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(30052699003)(23010399003)(82310400026)(7416014)(376014)(1800799024)(36860700016)(18002099003)(13003099007)(5023799004)(11063799006)(3023799007)(6133799003)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	a4VlWFtCOShOWL5AKcm/oMtXi2x7suICIJRW6YCNOL90piUVH17GgYaI0eWynSDbnvrFLaXTPFjbG1dZiuTY1ojxYrnmmoiSCrf6KhOdODv4IOToT5a8QAVVb4/kpUzzA+DxxXrulOhZ6YwLsVP6W2p4PNohwBUmABYZopVyq0sb6f722wrwsTp055pGkhLAoFVx8WxtZPCScdpIkwBL4c2fWU3WBQJFCWKz9Do5lZBtOkimCEATa3X5ZCC92OhCcIsiySxj82KZopp4GCaNLxx0KouUMRnCihiDAczCZqrA0F05jMLXZ3ngI0fEOD65yAs3sorSupce9ljKGlMNKoe/vMVM19mo9TTBZjWAxlnbWc/VE/ZEq9LolHSNT+NCD9/1s0hSR3nJJUM881mBbttiLxSmkf41awUyf3Lg9mPwsRj3fK0YI9ETPRuyb4Ej
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2026 07:33:44.2981
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f2e555d-1939-4e04-c8b9-08ded74314d5
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS1PEPF00017092.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6165
 
-On 2026/7/1 下午3:02, Leon Hwang wrote:
-> On 1/7/26 14:49, Tiezhu Yang wrote:
-> [...]
->>>
->>> It is a real issue.
->>>
->>> Instead of fixing up helper calls, it seems better to prevent
->>> interpreter fallback if the prog has any JIT-inlineable helper call.
->>
->> Hi Alexei and Leon,
->>
->> What about the following: (not tested yet, if it is good, I can test it)
->>
->> [...]
->>
->> If you are OK with the above changes, I will test it again and send
->> a new version later.
->>
-> 
-> If you don't mind, I think I can disallow the interpreter fallback by
-> the below diff in the next revision of this series.
-> 
-> The 'aux->jit_required' is introduced by following Alexei's suggestion.
+Hi,
 
-I am not sure if introducing a new aux->jit_required member is necessary,
-as we already have a local jit_needed flag in the current logic.
+This series by Cosmin adds support for cross-function rate scheduling in
+devlink and mlx5.
+See detailed explanation by Cosmin below [0].
 
-Additionally, the issue reported in my patch [1] is fundamentally tied
-to bpf_jit_inlines_helper_call(). Maybe we can simply reuse jit_needed
-by checking bpf_prog_has_inline_helpers() right before JITing, and then
-reject fallback with -ENOTSUPP if JIT compilation fails.
+Regards,
+Tariq
 
-Let us wait for Alexei's comments on the overall direction before
-respinning.
+[0]
+devlink objects support rate management for TX scheduling, which
+involves maintaining a tree of rate nodes that corresponds to TX
+schedulers in hardware. 'man devlink-rate' has the full details.
 
-[1] bpf: Fix unaligned interpreter panic on JIT fallback path
-https://lore.kernel.org/bpf/20260615025316.24429-1-yangtiezhu@loongson.cn/
+The tree of rate nodes is maintained per devlink object, protected by
+the devlink lock.
 
-Thanks,
-Tiezhu
+There exists hardware capable of instantiating TX scheduling trees
+spanning multiple functions of the same physical device (and thus
+devlink objects) and therefore the current API and locking scheme is
+insufficient.
+
+This patch series changes the devlink rate implementation and API to
+allow supporting such hardware and managing TX scheduling trees across
+multiple functions of a physical device.
+
+Modeling this requires having devlink rate nodes with parents in other
+devlink objects. A naive approach that relies on the current
+one-lock-per-devlink model is impossible, as it would require in some
+cases acquiring multiple devlink locks in the correct order.
+
+The solution proposed in this patch series makes use of the recently
+introduced shared devlink instance [1] to manage rate hierarchy changes
+across multiple functions.
+
+V1 of this patch series was sent a long time ago [2], using a different
+approach of storing rates in a shared rate domain with special locking
+rules. This new approach uses standard devlink instances and nesting.
+
+The first part of the series adds support to devlink rates for
+maintaining the rate tree across multiple functions.
+
+The second part changes the mlx5 implementation to make use of this (and
+cleans up remnants of the previous approach, involving rate domains).
+
+The neat part about using the shared devlink object is that it works for
+SFs as well, which are already nested in their parent PF instances. So
+with this series, complex scheduling trees spanning multiple SFs across
+multiple PFs of the same NIC can now be supported.
+
+---
+
+[1] https://lore.kernel.org/all/20260312100407.551173-1-jiri@resnulli.us/T/#u
+[2] https://lore.kernel.org/netdev/20250213180134.323929-1-tariqt@nvidia.com/
+[3] https://lore.kernel.org/netdev/20260325152801.236343-1-jiri@resnulli.us/
+
+Comments from internal Sashiko review:
+> When a rate node is linked to a parent on a different devlink device, should
+> the rate-get reply and dump operations also include the parent's device
+> information?
+> Currently, parent-dev is only added to the request attributes for rate-set
+> and rate-new, but it appears to be omitted from the serialization logic and
+> the rate-get reply definition. Does this render the cross-device
+> relationship invisible to user space monitoring tools?
+
+[CR] Preexisting problem with devlink rate API, the rate-get command
+specifies only a subset of output attributes. May be fixed separately.
+
+> > diff --git a/net/devlink/rate.c b/net/devlink/rate.c
+> > index 5436811cfbbd..2b30329a1394 100644
+> > --- a/net/devlink/rate.c
+> > +++ b/net/devlink/rate.c
+> > @@ -660,9 +660,11 @@ int devlink_nl_rate_set_doit(struct sk_buff *skb, struct genl_info *info)
+> >
+> >  int devlink_nl_rate_new_doit(struct sk_buff *skb, struct genl_info *info)
+> >  {
+> > -	struct devlink *rate_devlink, *devlink = devlink_nl_ctx(info)->devlink;
+> > +	struct devlink_nl_ctx *ctx = devlink_nl_ctx(info);
+> > +	struct devlink *devlink = ctx->devlink;
+> While ctx is now retrieved, does the rest of the function ignore
+> ctx->parent_devlink?
+
+> It looks like the command handlers never retrieve or use the parent devlink,
+> and unconditionally use the child's devlink for lookups and assignments. Will
+> this cause cross-device parent assignments to silently fail or return -ENODEV
+> since they search for the parent node exclusively on the child's device?
+
+[CR] False positive, it's used in devlink_nl_rate_parent_node_set().
+
+> Additionally, looking at how the parent devlink is prepared in
+> __devlink_nl_pre_doit() (which is called via
+> DEVLINK_NL_FLAG_OPTIONAL_PARENT_DEV):
+> __devlink_nl_pre_doit()
+>     if (parent_dev && attrs[DEVLINK_ATTR_PARENT_DEV]) {
+>         parent_devlink = devlink_get_parent_from_attrs_lock(net, attrs);
+>         ...
+>         devlink_nl_ctx(info)->parent_devlink = parent_devlink;
+>         /* Drop the parent devlink lock but don't release the reference.
+>          * This will keep it alive until the end of the request.
+>          */
+>         devl_unlock(parent_devlink);
+>     }
+> To actually implement the cross-device feature in the command handlers, the
+> parent's rate list would need to be accessed. Since the parent devlink lock
+> is explicitly dropped here, wouldn't accessing the parent's rate list
+> without its lock violate devlink locking rules and lead to data races?
+
+[CR] Locking changes are intentional. All rate changes for anything in
+the rate group now acquire the root devlink lock, where rates are
+stored.
+
+> >   * devl_rate_nodes_destroy - destroy all devlink rate nodes on device
+> >   * @devlink: devlink instance
+> >   *
+> > - * Unset parent for all rate objects and destroy all rate nodes
+> > - * on specified device.
+> > + * Unset parent for all rate objects involving this device and destroy all rate
+> > + * nodes on it.
+> >   */
+> >  void devl_rate_nodes_destroy(struct devlink *devlink)
+> >  {
+> > -	const struct devlink_ops *ops = devlink->ops;
+> >  	struct devlink_rate *devlink_rate, *tmp;
+> > +	const struct devlink_ops *ops;
+> > +	struct devlink *rate_devlink;
+> >
+> >  	devl_assert_locked(devlink);
+> > +	rate_devlink = devl_rate_lock(devlink);
+> >
+> > -	list_for_each_entry(devlink_rate, &devlink->rate_list, list) {
+> > -		if (!devlink_rate->parent)
+> > +	list_for_each_entry(devlink_rate, &rate_devlink->rate_list, list) {
+> > +		if (!devlink_rate->parent ||
+> > +		    (devlink_rate->devlink != devlink &&
+> > +		     devlink_rate->parent->devlink != devlink))
+> >  			continue;
+> >
+> > +		/* This could destroy rate objects on other devlinks in the
+> > +		 * same hierarchy under 'rate_devlink'. This is safe because
+> > +		 * the shared common ancestor is locked so there can be no
+> > +		 * other concurrent rate operations on devlink_rate->devlink.
+> > +		 */
+> > +		ops = devlink_rate->devlink->ops;
+> Does this code invoke devlink_ops callbacks on other devlink instances
+> without holding their instance lock?
+> While the comment indicates the shared common ancestor lock prevents concurrent
+> rate operations, the child device's instance lock (devlink_rate->devlink) is
+> not held.
+> Could this violate the devlink locking contract if the driver is executing
+> concurrent non-rate operations on the child instance? Because devlink
+> drivers rely on the instance lock to serialize access to their internal
+> structures, could invoking these callbacks unlocked cause data corruption or
+> trigger lockdep splats if the driver asserts devl_assert_locked()?
+
+[CR] As mentioned in the comment, concurrent ops which touch rates
+_will_ eventually acquire the shared devlink lock, so they're safe. We
+don't care about other ops, since we only touching rates here.
+
+> > @@ -321,22 +307,19 @@ static int esw_qos_create_rate_limit_element(struct mlx5_esw_sched_node *node,
+> >  	return esw_qos_node_create_sched_element(node, sched_ctx, extack);
+> >  }
+> >
+> > -static u32 esw_qos_calculate_min_rate_divider(struct mlx5_eswitch *esw,
+> > -					      struct mlx5_esw_sched_node *parent)
+> > +static u32
+> > +esw_qos_calculate_min_rate_divider(struct mlx5_esw_sched_node *parent)
+> >  {
+> > -	struct list_head *nodes = parent ? &parent->children : &esw->qos.domain->nodes;
+> > -	u32 fw_max_bw_share = MLX5_CAP_QOS(esw->dev, max_tsar_bw_share);
+> > +	u32 fw_max_bw_share = MLX5_CAP_QOS(parent->esw->dev, max_tsar_bw_share);
+> This is a pre-existing issue, but does this division risk a divide-by-zero
+> panic regression?
+> If the hardware does not support bandwidth sharing, max_tsar_bw_share
+> could be 0. If a user subsequently sets a non-zero tx_share (minimum rate
+> guarantee), max_guarantee becomes greater than 0, resulting in
+> max_guarantee / fw_max_bw_share.
+> Should we validate whether fw_max_bw_share is non-zero before performing
+> the division?
+
+[CR] Preexisting, also not really possible for fw to give a value of 0
+for the divisor.
+
+> > @@ -665,7 +631,6 @@ static int esw_qos_create_tc_arbiter_sched_elem(
+> >  		struct netlink_ext_ack *extack)
+> >  {
+> >  	u32 tsar_ctx[MLX5_ST_SZ_DW(scheduling_context)] = {};
+> > -	u32 tsar_parent_ix;
+> >  	void *attr;
+> This is a pre-existing issue, but is there a hardware scheduling element
+> leak when transitioning a node to a TC arbiter?
+> When esw_qos_tc_arbiter_scheduling_setup() calls
+> esw_qos_create_tc_arbiter_sched_elem(node, extack), it provisions a new
+> hardware element and immediately overwrites node->ix with its ID.
+> If the subsequent step esw_qos_create_vports_tc_nodes(node, extack) fails,
+> it jumps to err_tc_node_create and restores node->ix = curr_ix, but it
+> doesn't appear to tear down the newly created scheduling element. Does this
+> permanently leak the newly provisioned hardware element in the firmware?
+
+[CR] False alarm, the call to esw_qos_node_destroy_sched_element()
+destroys the new temporary scheduling element on failure.
+
+> > @@ -1319,11 +1288,9 @@ static int esw_qos_switch_tc_arbiter_node_to_vports(
+> >  	struct mlx5_esw_sched_node *node,
+> >  	struct netlink_ext_ack *extack)
+> >  {
+> This is a pre-existing issue, but what happens if the rollback path fails
+> during vport migration in esw_qos_switch_vports_node_to_tc_arbiter()?
+> If an error occurs, it attempts to rollback by calling
+> esw_qos_switch_vport_tcs_to_vport(). If this rollback fails internally
+> (e.g. due to ENOMEM in esw_qos_vport_update()), the vport is
+> successfully restored to the doomed TC arbiter node, and the error
+> is silently ignored.
+> Then, the caller esw_qos_node_enable_tc_arbitration() executes
+> esw_qos_tc_arbiter_scheduling_teardown(), which frees the TC arbiter's
+> VPORTS_TC_TSAR nodes without freeing the attached vport VPORT_TC nodes.
+> Does this leak the vport TC nodes and leave them holding use-after-free
+> pointers to their freed parents, leading to memory corruption when the
+> vport is later disabled?
+
+[CR] Preexisting, also hard to hit. Requires a failure mid-way when
+switching nodes to TC arbitration AND a failure during rollback. Fixing
+it outside the scope of this series.
+
+> > @@ -1888,7 +1855,9 @@ mlx5_esw_qos_vport_update_parent(struct mlx5_vport *vport,
+> >  		err = mlx5_esw_qos_vport_enable(vport, type, parent, 0, 0,
+> >  						extack);
+> >  	} else if (vport->qos.sched_node) {
+> > -		err = esw_qos_vport_update_parent(vport, parent, extack);
+> > +		err = esw_qos_vport_update_parent(vport,
+> > +						  parent ? : esw->qos.root,
+> > +						  extack);
+> Can this sequence cause a use-after-free regression on esw->qos.root
+> when updating a vport's QoS configuration?
+> If a vport is the only QoS user in the E-Switch, esw->qos.refcnt is 1.
+> If its QoS configuration is updated, esw_qos_vport_update() is called
+> with the parent argument pointing to esw->qos.root (since this patch
+> changes the default parent from NULL to esw->qos.root).
+> Inside esw_qos_vport_update(), mlx5_esw_qos_vport_disable_locked() drops
+> the vport's QoS reference, decrementing esw->qos.refcnt to 0. This
+> triggers esw_qos_destroy(), freeing esw->qos.root.
+> The function then calls mlx5_esw_qos_vport_enable(..., parent, ...) passing
+> the stale parent pointer. Because parent is no longer NULL, it doesn't
+> fetch the newly re-allocated root node, and instead passes the freed
+> pointer to __esw_qos_alloc_node(), resulting in a use-after-free.
+
+[CR] False alarm. The finding confuses esw_qos_vport_disable() and
+mlx5_esw_qos_vport_disable_locked(). esw_qos_vport_disable() doesn't
+touch the refcnt.
+
+> > @@ -1859,13 +1840,15 @@ mlx5_esw_qos_vport_update_parent(struct mlx5_vport *vport,
+> >  						  extack);
+> >  	}
+> > -	esw_qos_unlock(esw);
+> > +
+> >  	return err;
+> >  }
+> >
+> >  void mlx5_esw_qos_vport_clear_parent(struct mlx5_vport *vport)
+> >  {
+> > +	esw_qos_lock(vport->dev);
+> >  	mlx5_esw_qos_vport_update_parent(vport, NULL, NULL);
+> > +	esw_qos_unlock(vport->dev);
+> >  }
+> Could this lead to a recursive mutex deadlock during VF teardown on older
+> hardware where shd is NULL?
+> In the teardown path, mlx5_eswitch_unload_pf_vf_vport() already acquires
+> esw->state_lock. It then proceeds to call:
+> mlx5_eswitch_unload_pf_vf_vport()
+>   mlx5_eswitch_unload_vport()
+>     mlx5_esw_offloads_unload_rep()
+>       mlx5_esw_offloads_devlink_port_unregister()
+>         mlx5_esw_qos_vport_clear_parent()
+> Since this patch changes mlx5_esw_qos_vport_clear_parent() to
+> unconditionally call esw_qos_lock(), which falls back to acquiring
+> esw->state_lock when dev->shd is NULL, won't this result in an attempt to
+> re-acquire the non-recursive state_lock that is already held by the
+> teardown process?
+
+[CR] False alarm. state_lock isn't held during VF teardown.
+
+> > @@ -839,13 +940,17 @@ void devl_rate_nodes_destroy(struct devlink *devlink)
+> >  		refcount_dec(&devlink_rate->parent->refcnt);
+> >  		devlink_rate->parent = NULL;
+> When unsetting the parent of a rate object in devl_rate_nodes_destroy(),
+> this patch allows it to happen to cross-device child nodes (where
+> devlink_rate->devlink != devlink). Since the child's devlink instance is
+> still active, shouldn't its state change (losing its parent) be
+> communicated to user space?
+> Omitting devlink_rate_notify(devlink_rate, DEVLINK_CMD_RATE_NEW) here might
+> leave user space monitors out of sync, incorrectly believing the active child
+> is still attached to the deleted parent node.
+
+[CR] Preexisting, devl_rate_nodes_destroy() didn't send notifications.
+
+> > +static struct devlink *devl_rate_lock(struct devlink *devlink)
+> >  {
+> > -	return devlink;
+> > +	struct devlink *rate_devlink = devlink, *parent;
+> > +
+> > +	devl_assert_locked(devlink);
+> > +
+> > +	while (rate_devlink->ops &&
+> > +	       rate_devlink->ops->supported_cross_device_rate_nodes) {
+> > +		parent = devlink_nested_in_get_lock(rate_devlink);
+> > +		if (!parent)
+> > +			break;
+> Can this lead to list corruption if the parent devlink is unregistered?
+> If the parent is unregistered concurrently (for example, a PF is unregistered
+> before VF teardown), devlink_nested_in_get_lock() will return NULL because of
+> this internal check:
+> devlink_nested_in_get_lock() {
+>     ...
+>     if (devl_is_registered(devlink))
+>         return devlink;
+>     ...
+>     return NULL;
+> }
+> Since parent is NULL, this loop breaks and returns the child devlink lock
+> instead of the parent's lock. Later, in functions like devl_rate_leaf_destroy(),
+> list_del(&devlink_rate->list) is called on the rate node.
+> Because the rate node is chained into the parent's rate_list, does this
+> modify the parent's list concurrently without holding its lock?
+
+[CR] This misunderstands the nesting hierarchy. VFs are not nested in
+PFs, PFs are nested in shd, which is reference counted (=> outlives all
+PFs) and keeps all rate nodes for all PFs.
+
+> This is a pre-existing issue, but does devlink_nl_rate_del_doit()
+> unconditionally free rate nodes even if the driver rejects the deletion?
+> Looking at devlink_nl_rate_del_doit() in net/devlink/rate.c:
+> devlink_nl_rate_del_doit() {
+>     ...
+>     err = devlink->ops->rate_node_del(rate_node, rate_node->priv,
+>                                       info->extack);
+>     if (rate_node->parent)
+>         refcount_dec(&rate_node->parent->refcnt);
+>     list_del(&rate_node->list);
+>     kfree(rate_node->name);
+>     kfree(rate_node);
+>     ...
+> }
+> If the hardware or driver cannot fulfill the request and ops->rate_node_del()
+> returns an error like -EBUSY, the function ignores the error regarding memory
+> management and proceeds to kfree() the rate node.
+> Could this leave the driver with a dangling pointer to the freed rate node,
+> triggering a use-after-free later?
+
+[CR] Preexisting, it is intentional that the node is removed no matter
+what the rate_node_del op manages to do.
+
+> > @@ -243,7 +243,29 @@ devlink_get_from_attrs_lock(struct net *net, struct nlattr **attrs,
+> > +	err = nla_parse_nested(tb, maxtype, attrs[DEVLINK_ATTR_PARENT_DEV],
+> > +			       devlink_dl_parent_dev_nl_policy, NULL);
+> Could this nla_parse_nested() call pass down an extended ACK pointer instead
+> of NULL?
+> When passing NULL for the extack parameter, if the nested attribute is
+> malformed (such as a missing NLA_F_NESTED flag), userspace will receive a
+> silent -EINVAL without a descriptive error message.
+> Because devlink_get_parent_from_attrs_lock() is called by
+> __devlink_nl_pre_doit() which has access to the genl_info structure and
+> its extack pointer, passing it down to this function would allow for
+> reporting accurate validation errors to userspace.
+
+[CR] Valid, but quite a lot of plumbing is necessary for extack to be
+used here. Out of scope of the series.
+
+> This is a pre-existing issue, but does the error path in
+> devlink_nl_rate_new_doit() leak the parent's reference count?
+> If devlink_nl_rate_set() successfully sets the parent (which increments
+> parent->refcnt) but fails on a subsequent attribute validation like tc_bw,
+> it returns an error.
+> The cleanup path in devlink_nl_rate_new_doit() handles the error:
+> err_rate_set:
+>     ops->rate_node_del(rate_node, rate_node->priv, info->extack);
+> err_node_new:
+>     kfree(rate_node->name);
+> err_strdup:
+>     kfree(rate_node);
+> Because this path frees the node but never decrements the parent's refcnt,
+> does this permanently elevate the parent's refcount, falsely indicating it
+> has children and preventing it from ever being deleted?
+
+[CR] Preexisting, will be fixed separately with a net patch.
+
+> > @@ -30,14 +30,42 @@ devlink_rate_leaf_get_from_info(struct devlink *devlink, struct genl_info *info)
+> >  	return devlink_rate ?: ERR_PTR(-ENODEV);
+> >  }
+> >
+> > +/* Repeatedly walks the nested devlink chain while cross device rate nodes are
+> > + * supported and finds the topmost instance where rates should be stored.
+> > + * That instance is locked, referenced and returned.
+> > + * When cross device rate nodes aren't supported the original devlink instance
+> > + * is returned.
+> > + */
+> >  static struct devlink *devl_rate_lock(struct devlink *devlink)
+> >  {
+> > -	return devlink;
+> > +	struct devlink *rate_devlink = devlink, *parent;
+> > +
+> > +	devl_assert_locked(devlink);
+> > +
+> > +	while (rate_devlink->ops &&
+> > +	       rate_devlink->ops->supported_cross_device_rate_nodes) {
+> > +		parent = devlink_nested_in_get_lock(rate_devlink);
+> > +		if (!parent)
+> > +			break;
+> > +		if (rate_devlink != devlink) {
+> > +			/* Unlock intermediate instances. */
+> > +			devl_unlock(rate_devlink);
+> > +			devlink_put(rate_devlink);
+> > +		}
+> > +		rate_devlink = parent;
+> > +	}
+> > +	return rate_devlink;
+> >  }
+> Now that devl_rate_lock() returns the shared ancestor, does this cause
+> devlink_rates_check() to skip child rate nodes?
+> In net/devlink/rate.c:devlink_rates_check(), the loop filters nodes by the
+> devlink pointer:
+> 	rate_devlink = devl_rate_lock(devlink);
+> 	list_for_each_entry(devlink_rate, &rate_devlink->rate_list, list)
+> 		if (devlink_rate->devlink == devlink &&
+> 		    (!rate_filter || rate_filter(devlink_rate))) {
+> 			...
+> 			err = -EBUSY;
+> 			break;
+> 		}
+> Because of this check, if a user creates an SF rate node and then triggers an
+> eswitch mode change to legacy on the PF devlink, devlink_rates_check() skips
+> the SF node and returns 0 instead of -EBUSY.
+> Could this allow mlx5_devlink_eswitch_mode_set() to proceed and unconditionally
+> free the QoS domain in mlx5_esw_qos_cleanup(), while the child SF devlink and
+> its software rate node remain active?
+> If so, a subsequent operation on the active child SF rate node (like
+> DEVLINK_CMD_RATE_DEL) would invoke mlx5_esw_devlink_rate_node_del() and call
+> esw_qos_lock(), leading to a NULL pointer dereference when accessing
+> esw->qos.domain->lock.
+
+[CR] False alarm, no driver uses supported_cross_device_rate_nodes yet
+so this code path isn't taken. QoS domains are removed in a later patch
+in the series before the cross device flag is enabled, so this finding
+is moot.
+
+> >  static int mlx5_esw_qos_max_link_speed_get(struct mlx5_core_dev *mdev, u32 *link_speed_max,
+> > -					   bool take_rtnl,
+> >  					   struct netlink_ext_ack *extack)
+> >  {
+> >  	int err;
+> >
+> > -	if (!mlx5_lag_is_active(mdev))
+> > +	if (!mlx5_lag_is_active(mdev) ||
+> > +	    mlx5_lag_query_bond_speed(mdev, link_speed_max) < 0 ||
+>         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> This is a pre-existing issue, but does mlx5_lag_query_bond_speed() have a race
+> condition when accessing the ldev->tracker structure?
+> The mlx5_lag_query_bond_speed() function reads ldev->tracker.bond_speed_mbps
+> while holding lag_lock. However, mlx5_lag_netdev_event() modifies
+> ldev->tracker holding only rtnl_lock, without holding lag_lock:
+> drivers/net/ethernet/mellanox/mlx5/core/lag/lag.c:mlx5_lag_netdev_event() {
+>     ...
+>     ldev->tracker = tracker;
+>     ...
+> }
+> Concurrently, mlx5_ldev_add_netdev() modifies fields inside it under lag_lock,
+> meaning its updates can be overwritten and lost by the read-modify-write in
+> mlx5_lag_netdev_event().
+> Since this patch now heavily relies on mlx5_lag_query_bond_speed() for QoS
+> max link speed, could this expose readers to observing torn or inconsistent
+> tracker states?
+
+[CR] Preexisting, no impact. Either a value of 0 is read, or the correct one.
+
+> > @@ -458,10 +461,17 @@ esw_qos_vport_create_sched_element(struct mlx5_esw_sched_node *vport_node,
+> >  	MLX5_SET(scheduling_context, sched_ctx, max_average_bw,
+> >  		 vport_node->max_rate);
+> > +	if (vport->dev != dev) {
+> > +		/* The port is assigned to a node on another eswitch. */
+> > +		MLX5_SET(vport_element, attr, eswitch_owner_vhca_id_valid,
+> > +			 true);
+> > +		MLX5_SET(vport_element, attr, eswitch_owner_vhca_id,
+> > +			 MLX5_CAP_GEN(vport->dev, vhca_id));
+> Does this code silently truncate the vhca_id if it is >= 2048?
+> The hardware structure mlx5_ifc_vport_element_bits defines
+> eswitch_owner_vhca_id as an 11-bit field, but MLX5_CAP_GEN(..., vhca_id)
+> returns a 16-bit identifier. The MLX5_SET macro will silently apply a
+> mask of 0x7ff. Should there be a bounds check returning an error like
+> -EOVERFLOW here, or does the hardware actually support a 16-bit field?
+
+[CR] vhca_id >= 2048 would imply a NIC with that many physical ports,
+which is only possible in theory. Not worth addressing.
+
+> > @@ -1221,8 +1260,15 @@ static int esw_qos_vport_update(struct mlx5_vport *vport,
+> >  	if (err)
+> >  		return err;
+> >
+> > -	if (curr_type == SCHED_NODE_TYPE_TC_ARBITER_TSAR && curr_type == type)
+> > +	if (curr_type == SCHED_NODE_TYPE_TC_ARBITER_TSAR && curr_type == type) {
+> >  		esw_qos_tc_arbiter_get_bw_shares(vport_node, curr_tc_bw);
+> Does this condition skip the preservation and restoration of TC bandwidth
+> shares when transitioning between different node types?
+> When a vport transitions away from SCHED_NODE_TYPE_TC_ARBITER_TSAR
+> (e.g., to a regular SCHED_NODE_TYPE_VPORT), curr_type != type evaluates to
+> true, causing the function to skip saving the current tc_bw shares.
+> esw_qos_vport_disable() then unconditionally clears vport_node->tc_bw to
+> zero.
+> If the subsequent esw_qos_vport_enable() fails, the rollback path attempts
+> to restore the old TC_ARBITER_TSAR state.
+> However, because curr_type != type, the code skips restoring the bandwidth
+> shares via esw_qos_set_tc_arbiter_bw_shares().
+> Are the vport's bandwidth guarantees permanently erased in this failure
+> scenario?
+
+[CR] Pre-existing, unlikely and low-impact: If tc-bw settings fail,
+there will be an error and an opportunity for the user to retry.
+
+> > @@ -1990,6 +1990,13 @@ void mlx5_eswitch_disable_sriov(struct mlx5_eswitch *esw, bool clear_vf)
+> >  		 esw->esw_funcs.num_vfs, esw->esw_funcs.num_ec_vfs, esw->enabled_vports);
+> >
+>  	mlx5_eswitch_invalidate_wq(esw);
+> > +
+> > +	if (esw->mode == MLX5_ESWITCH_OFFLOADS) {
+> > +		struct devlink *devlink = priv_to_devlink(esw->dev);
+> > +
+> > +		devl_rate_nodes_destroy(devlink);
+> > +	}
+> > +
+> Can this reordering cause a use-after-free if leaf unparenting fails?
+> Devlink's devl_rate_nodes_destroy() calls ops->rate_leaf_parent_set(..., NULL)
+> which maps to mlx5_esw_qos_vport_update_parent(). Devlink ignores the return
+> value of this callback.
+> If the hardware operation fails (e.g., due to a firmware timeout), the driver
+> leaves vport->qos.sched_node->parent pointing to the original parent node.
+> Devlink then unconditionally proceeds to destroy and free the rate node.
+> Later, when mlx5_eswitch_unload_vf_vports() executes, it calls
+> mlx5_esw_qos_vport_disable(), which reaches esw_qos_vport_disable():
+> drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c:esw_qos_vport_disable() {
+>     ...
+> 	list_del_init(&vport_node->entry);
+> 	esw_qos_normalize_min_rate(vport_node->esw, vport_node->parent, extack);
+>     ...
+> }
+> Will this dereference the freed vport_node->parent, resulting in list
+> corruption or a use-after-free?
+
+[CR] This is a preexisting problem, brought to light by the reordering
+of group destruction before leaf destruction. It's extremely unlikely,
+requiring the firmware command to reparent a vport to its root to fail.
+Fixing this properly requires multiple patches and will be pursued after
+this series.
+
+> > @@ -2039,6 +2040,9 @@ void mlx5_eswitch_disable_locked(struct mlx5_eswitch *esw)
+> >  		 esw->mode == MLX5_ESWITCH_LEGACY ? "LEGACY" : "OFFLOADS",
+> >  		 esw->esw_funcs.num_vfs, esw->esw_funcs.num_ec_vfs, esw->enabled_vports);
+> >
+> > +	if (esw->mode == MLX5_ESWITCH_OFFLOADS)
+> > +		devl_rate_nodes_destroy(devlink);
+> > +
+> Does this identical reordering in the locked disable path suffer from the
+> same unparenting failure use-after-free described above?
+
+[CR] Same comment as above. QoS improvements for the error paths will
+follow.
+
+V10:
+- Added a comment in devl_rate_nodes_destroy clarifying locking.
+- Expanded 'supported_cross_device_rate_nodes' comment with locking
+  expectations.
+- Simplified rate locking by only keeping the common ancestor locked.
+- Removed devlink_nested_in_get_locked and devlink_nested_in_put_unlock.
+- devlink_nl_rate_parent_node_set iterates over the proper rate list.
+- Refactored mlx5 locking given dev->shd is now optional (after [3]).
+- Fixed a bug in pruning introduced by the root node patch.
+- Fixed a bug on failure when detaching a node from parent.
+- Clarified expectations for shared devlink rate storage.
+- Fixed incorrect net namespace when listing shared instances.
+
+V9:
+https://lore.kernel.org/netdev/20260326065949.44058-1-tariqt@nvidia.com/
+
+Cosmin Ratiu (14):
+  devlink: Update nested instance locking comment
+  devlink: Add a helper for getting a nested-in instance
+  devlink: Migrate from info->user_ptr to info->ctx
+  devlink: Decouple rate storage from associated devlink object
+  devlink: Add parent dev to devlink API
+  devlink: Allow parent dev for rate-set and rate-new
+  devlink: Allow rate node parents from other devlinks
+  net/mlx5: qos: Use mlx5_lag_query_bond_speed to query LAG speed
+  net/mlx5: qos: Refactor vport QoS cleanup
+  net/mlx5: qos: Model the root node in the scheduling hierarchy
+  net/mlx5: qos: Remove qos domains and use shd
+  net/mlx5: qos: Support cross-device tx scheduling
+  selftests: drv-net: Add test for cross-esw rate scheduling
+  net/mlx5: Document devlink rates
+
+ Documentation/netlink/specs/devlink.yaml      |  30 +-
+ .../networking/devlink/devlink-port.rst       |   2 +
+ Documentation/networking/devlink/index.rst    |   8 +-
+ Documentation/networking/devlink/mlx5.rst     |  33 +
+ .../net/ethernet/mellanox/mlx5/core/devlink.c |   1 +
+ .../mellanox/mlx5/core/esw/devlink_port.c     |   1 -
+ .../net/ethernet/mellanox/mlx5/core/esw/qos.c | 605 +++++++++---------
+ .../net/ethernet/mellanox/mlx5/core/esw/qos.h |   3 -
+ .../net/ethernet/mellanox/mlx5/core/eswitch.c |  27 +-
+ .../net/ethernet/mellanox/mlx5/core/eswitch.h |  18 +-
+ include/net/devlink.h                         |   9 +
+ include/uapi/linux/devlink.h                  |   2 +
+ net/devlink/core.c                            |  20 +-
+ net/devlink/dev.c                             |  16 +-
+ net/devlink/devl_internal.h                   |  20 +
+ net/devlink/dpipe.c                           |  14 +-
+ net/devlink/health.c                          |  12 +-
+ net/devlink/linecard.c                        |   4 +-
+ net/devlink/netlink.c                         |  82 ++-
+ net/devlink/netlink_gen.c                     |  24 +-
+ net/devlink/netlink_gen.h                     |   8 +
+ net/devlink/param.c                           |   4 +-
+ net/devlink/port.c                            |  18 +-
+ net/devlink/rate.c                            | 331 +++++++---
+ net/devlink/region.c                          |   6 +-
+ net/devlink/resource.c                        |  14 +-
+ net/devlink/sb.c                              |  22 +-
+ net/devlink/trap.c                            |  12 +-
+ .../testing/selftests/drivers/net/hw/Makefile |   1 +
+ .../drivers/net/hw/devlink_rate_cross_esw.py  | 296 +++++++++
+ 30 files changed, 1132 insertions(+), 511 deletions(-)
+ create mode 100755 tools/testing/selftests/drivers/net/hw/devlink_rate_cross_esw.py
+
+
+base-commit: 1c664ec4b9ea827b609d296921ed5bad8a40a158
+-- 
+2.44.0
 
