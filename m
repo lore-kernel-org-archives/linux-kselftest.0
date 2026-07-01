@@ -1,145 +1,125 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D23DA125AA
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 01:19:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CD87233149;
+	Wed,  1 Jul 2026 01:26:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782868782; cv=none; b=Jf31VdT9C87+qwGBvhiTJedoqx9QMCk997xvqXJbFrJA+bpnMQy3bviUdMX3qzgv+qM4l4u1qROLX7JJFccGEDmXbNHQNg64R1GS4os/dy4loc2lL7fEsIDR0Hv8f2Ffs0GzWKm1xc6VUrLjukl5xircz3FpaPG1lZsm61mXdmw=
+	t=1782869186; cv=none; b=IU7HHqDTtg8HUdg7EXQTdmhUxPj7tcmthgjzoVxf0tCQZ2o0e2RGtzuxHNEH3E3gEWwZPstq170PGN9zeWhgQaiugSQCRjhm62WyIHsOoaAAwd0q8qP+om3PxeTzaRgut0IkUtqN69daVi8vBkq4DTaJILvC287CXTK7DFqHBI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782868782; c=relaxed/simple;
-	bh=W1bWpj+RMbOGf+7d4x1OMI6JvzMSGe7yfBpPQdoXE8Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=afpSL8oOK+2PMjFMGKYexIVtDoZk2W5bK410tRz3IQiI9HTym2EfJ0cTb6byhznFDMMV8P6fabo/SzAbN0UtcCL99yCNVqNJ5AEWxoThNrZsdphtoaPOAm2Hitr9Z3ji6IVY6UYkKG4XyDys4qI3+gm2Nf6xX7F+QwmmAmqDOr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SP2i7GV3; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SP2i7GV3"
-Message-ID: <12864df2-f907-4971-8c8a-dde55723ef84@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782868776;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fc4QRqqQl58r08u5WVjzg9H56/Sf/FkhuFOyq+QQcmk=;
-	b=SP2i7GV3nntPnW15PeJcdyxvfIxIhc49hYulxGqR8uALsjlXgPLsTL9tqi27/A95ZyMCH+
-	9/WUERGOR4c+bLMOsi4RW8jivtUENR+pQlys8Fc1FLfx47vgzdPQZlUnO+TL67Nab7p9ms
-	41GqMutHScsGZxd+YVoRigWN5slkF0o=
-Date: Wed, 1 Jul 2026 09:19:29 +0800
+	s=arc-20240116; t=1782869186; c=relaxed/simple;
+	bh=vOZvYU0esS1V5wkbMA84p3qKEBj4oZEgoABvRH4fKiM=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=Pyq6HJ88ScE5W1DirjUQ8yY36jp63MjkEj5rUctDw6kq6M6EgTSdJBbSgafyRsz5VrxSIXMy3ywPK7UK9pLUd+gSIUgU8DHwxzgZ75EH7ttyXobpSAHH2kDzQbolpkOJyRYpBdqPVJFoprz0TzPnN1i9hxyLW5XfPLyXLLtLvL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8Ax+fC5bERqjUwAAA--.1871S3;
+	Wed, 01 Jul 2026 09:26:17 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJCxHOGybERqHcq5AA--.24623S3;
+	Wed, 01 Jul 2026 09:26:11 +0800 (CST)
+Subject: Re: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user
+ BPF_ADDR_SPACE_CAST insn
+To: Leon Hwang <leon.hwang@linux.dev>, KaFai Wan <kafai.wan@linux.dev>,
+ bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260626154330.33619-1-leon.hwang@linux.dev>
+ <20260626154330.33619-2-leon.hwang@linux.dev>
+ <e279c9a7ca6b16e52dc261560513b0eafdd70f87.camel@linux.dev>
+ <a2aaa21d-4cf9-48a4-839f-dd152bda8185@linux.dev>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn>
+Date: Wed, 1 Jul 2026 09:26:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH-next v9 01/11] cgroup/cpuset: Make nr_deadline_tasks an
- atomic_t
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
- Juri Lelli <juri.lelli@redhat.com>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
- Guopeng Zhang <guopeng.zhang@linux.dev>
-References: <20260630033344.352702-1-longman@redhat.com>
- <20260630033344.352702-2-longman@redhat.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <20260630033344.352702-2-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <a2aaa21d-4cf9-48a4-839f-dd152bda8185@linux.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxHOGybERqHcq5AA--.24623S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7AFW5tFWkAr18JFyrWFyDurX_yoW8WF4xpF
+	4rAFyjkF4UXws7W347Kw1Y93W5t3y5W3y7G393Ga4FkFsIqrn3GF1jgrs09rs0kw4xCF12
+	yr4avFW5CFyrKwcCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l
+	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2-VyUUUUU
 
-
-
-On 6/30/2026 11:33 AM, Waiman Long wrote:
-> The nr_deadline_tasks variable in the cpuset structure was introduced by
-> commit 6c24849f5515 ("sched/cpuset: Keep track of SCHED_DEADLINE task
-> in cpusets"). It is reported by sashiko [1] that nr_deadline_tasks
-> can currently be modified by inc_dl_tasks_cs() under rq->lock and
-> by cpuset_attach() under cpuset_mutex. So if both updates happen
-> simultaneously, the nr_deadline_tasks variable can be corrupted leading
-> to incorrect operations down the road.
+On 2026/6/30 下午10:36, Leon Hwang wrote:
+> On 2026/6/30 22:29, KaFai Wan wrote:
+>> On Fri, 2026-06-26 at 23:43 +0800, Leon Hwang wrote:
+> [...]
+>>>   /* Fix up helper call offsets on JIT fallback path. */
+>>> -static void bpf_fixup_fallback_helpers(struct bpf_verifier_env *env, struct bpf_prog *fp)
+>>> +static int bpf_fixup_fallback_helpers(struct bpf_verifier_env *env, struct bpf_prog *fp)
+>>>   {
+>>>   	struct bpf_insn *insn = fp->insnsi;
+>>>   	const struct bpf_func_proto *fn;
+>>>   	int i;
+>>>   
+>>> -	if (!env || !env->ops->get_func_proto)
+>>> -		return;
+>>> +	if (!env)
+>>> +		return 0;
+>>>   
+>>>   	for (i = 0; i < fp->len; i++, insn++) {
+>>> -		if (bpf_helper_call(insn) && bpf_jit_inlines_helper_call(insn->imm)) {
+>>> +		if (env->ops->get_func_proto && bpf_helper_call(insn) &&
+>>> +		    bpf_jit_inlines_helper_call(insn->imm)) {
+>>>   			fn = env->ops->get_func_proto(insn->imm, env->prog);
+>>>   			if (fn && fn->func)
+>>>   				insn->imm = fn->func - __bpf_call_base;
+>> It might be better to use the BPF_CALL_IMM macro. insn->imm = BPF_CALL_IMM(fn->func);
 > 
-> Fix that by changing its type to atomic_t so that nr_deadline_tasks are
-> always atomically updated.
 > 
-> [1] https://sashiko.dev/#/patchset/20260626181923.133658-1-longman%40redhat.comk
+> Makes sense.
 > 
+> This might be applied to Tiezhu's patch.
 
-Nit.
+Hi all,
 
-The link you provided has an extra 'k' at the end. Please remove it.
+Alexei said in another thread like this:
 
-https://sashiko.dev/#/patchset/20260626181923.133658-1-longman%40redhat.com
+```
+ > [3] 
+https://lore.kernel.org/bpf/20260615025316.24429-1-yangtiezhu@loongson.cn/
 
-> Fixes: 6c24849f5515 ("sched/cpuset: Keep track of SCHED_DEADLINE task in cpusets")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->   kernel/cgroup/cpuset-internal.h |  2 +-
->   kernel/cgroup/cpuset.c          | 10 +++++-----
->   2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
-> index f7aaf01f7cd5..140700e5e236 100644
-> --- a/kernel/cgroup/cpuset-internal.h
-> +++ b/kernel/cgroup/cpuset-internal.h
-> @@ -165,7 +165,7 @@ struct cpuset {
->   	 * number of SCHED_DEADLINE tasks attached to this cpuset, so that we
->   	 * know when to rebuild associated root domain bandwidth information.
->   	 */
-> -	int nr_deadline_tasks;
-> +	atomic_t nr_deadline_tasks;
->   	int nr_migrate_dl_tasks;
->   	/* DL bandwidth that needs destination reservation for this attach. */
->   	u64 sum_migrate_dl_bw;
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 49d8564d1a48..c22e55d798cf 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -222,14 +222,14 @@ void inc_dl_tasks_cs(struct task_struct *p)
->   {
->   	struct cpuset *cs = task_cs(p);
->   
-> -	cs->nr_deadline_tasks++;
-> +	atomic_inc(&cs->nr_deadline_tasks);
->   }
->   
->   void dec_dl_tasks_cs(struct task_struct *p)
->   {
->   	struct cpuset *cs = task_cs(p);
->   
-> -	cs->nr_deadline_tasks--;
-> +	atomic_dec(&cs->nr_deadline_tasks);
->   }
->   
->   static inline bool is_partition_valid(const struct cpuset *cs)
-> @@ -918,7 +918,7 @@ static void dl_update_tasks_root_domain(struct cpuset *cs)
->   	struct css_task_iter it;
->   	struct task_struct *task;
->   
-> -	if (cs->nr_deadline_tasks == 0)
-> +	if (atomic_read(&cs->nr_deadline_tasks) == 0)
->   		return;
->   
->   	css_task_iter_start(&cs->css, 0, &it);
-> @@ -3215,8 +3215,8 @@ static void cpuset_attach(struct cgroup_taskset *tset)
->   	cs->old_mems_allowed = cpuset_attach_nodemask_to;
->   
->   	if (cs->nr_migrate_dl_tasks) {
-> -		cs->nr_deadline_tasks += cs->nr_migrate_dl_tasks;
-> -		oldcs->nr_deadline_tasks -= cs->nr_migrate_dl_tasks;
-> +		atomic_add(cs->nr_migrate_dl_tasks, &cs->nr_deadline_tasks);
-> +		atomic_sub(cs->nr_migrate_dl_tasks, &oldcs->nr_deadline_tasks);
->   		reset_migrate_dl_data(cs);
->   	}
->   
+I don't think we need such fallback in patch [3].
+```
+https://lore.kernel.org/bpf/DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com/
 
-Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+Should I just drop my previous patch? To be honest, I'm not sure how to 
+solve the issue mentioned in it. Is that a real problem, and does it 
+need to be fixed? What is the next step?
 
--- 
-Best regards
-Ridong
+Thanks,
+Tiezhu
 
