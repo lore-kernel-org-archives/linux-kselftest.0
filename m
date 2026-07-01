@@ -1,265 +1,275 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ADCB36BCCA
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 02:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2867F362120
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 02:15:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782871718; cv=none; b=oBsfhGIEg0udwsvNj4oC3laaadoQfbIQBOQwQo1UFQPwov3jqScBB2fUqdVun5LB+LBA96mDjRiYPhWIu1InahwKEpln9mArn60aRGjUSmpR61rpce/XnJss8VwFlEfjdK37Tl2Oh3KoH5IiGzxqCbh73xFHF6jMRl0cbBU/b3g=
+	t=1782872107; cv=none; b=UxJRO2sH86rj3yhQY4jxWWoMxqzVUgXQLGZ2OaAmYDjzMipCc44mQpE4HrVBidYNDoqt+z609xUOrHvsnaOeOlkTl6O6o0f56V19S+aArrnEZoQWLeC2nrUXCnW4LbMLCkQHql8CDMVChz9WHcBPlEJ0/wmgJck7jtxoH1AC+14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782871718; c=relaxed/simple;
-	bh=bZin68adSLrpZI0KZqP2/zuGsDUh2YexqFf1HBhTj7c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nRyKbycU/j1uSavQzmyugl1kAhhm2XUpFlz2nm9Cn1Sfvy7ZJwpx0/lYYOaVuryLEDf0vzAkTyi4YkJlKLC0AfS27I7dSLIVZI89vo0buFNHCnJlDqTx/zbF9BROcphBdpdtwJmBr8saBK3Qi5iprlVBuIRW+4aMhL7YQYwvXJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LhhnmPvZ; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782872107; c=relaxed/simple;
+	bh=k+p9RmRy1A4Z81AQb7jwx/P+CY94fuGejI8VtyS6C74=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OSqOdaAxTfn19sn4jk1Esncyd68g7v2QlLLQNDFtjn7V6qnonLRGECyoMp6QXvI5wea8TQRRSUIsUiGjQMIaMUQRxLriDdglH4kBZ/i9ME/b/iTRm/xP0KRK18vf8ehRnrKGdM2AGm12Q84+unruixZR4fMDXDZ5r6DTlM2HC0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IsWrkHPE; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LhhnmPvZ"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2c9abe1c505so856925ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 19:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782871716; x=1783476516; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qhdCAK8Ch1XqCGyBcma9cRiJ3Otd0/96sNi9GFez2w0=;
-        b=LhhnmPvZq/CPnEy/KInF08tin/7OdbxoiAORdR/MVyfAt7efoxUegbJEm+lAQF2ge6
-         QrDgzxU0Fi5oFM/WSCw2CtM9kW71dSEX91iKdRLRExQNSaOeVg8V4eSiywhhdOQM7qMX
-         mLw4+Ihxqhi+C330lGGYSNM6yIIqtXjqCzAk+y58KX6e+lAUZMxA0piYdsHsxA7YljS3
-         XZ/eWUa614u5l9tbBLBfRFpfaR4tZKMj3ABJ+56Gv853dktUF962uGwGYSOS0X8FoabX
-         DuQEvJOFIhAoR7cgdXhcRyxasRi/6Ae0gzpTva3B/LcmIaSbC9N/1SVIhMB4p0+cyh9T
-         Qo4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782871716; x=1783476516;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qhdCAK8Ch1XqCGyBcma9cRiJ3Otd0/96sNi9GFez2w0=;
-        b=c1vS2mKF2ZjXEbjWUGrAi+qqJB89/nPNjZlHUZZ4/oA0AMmlIzVf9Ogi43+pXpv2CY
-         DVttxCt/5hcQ1K2o3AsRobz4eL1rUGJyimMW8DHm+G/ntuYHdkElrCdjV+OILHnIB0we
-         EaTwME/lNFuGTjGLCnRzBkvbCEwkJ2HRU5S0CTToInt0eFG7ExjOGltUtS/+dmxvwe7n
-         VOsvbDRlYmojet+pLSo2co3sLx4CTo9q3IGsq5pBLOQUwSSQIc97U9Py/gyRtV0kJW+o
-         7brlISD2eF3ctjlXGehVtW5wOAnbfLxR2K7p9gXuo+HoRYN2Y3tdeQDCXbI4rTRxrAj6
-         wRdw==
-X-Forwarded-Encrypted: i=1; AHgh+RryjKsaf3qROmdCULgtag8aup0uQygXRnm+1q1jBMFS6fBYjEGTMUJGzEUWpCA1+TBjZZAqFDjmDhtrcwH6az0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJZz4N1672MerGnh/+q10vePsMT3Y5fnaPzkEnymZnpq+PIg9w
-	fJBnemKP9r39lY8qGNWPEc1cWDH7HmWoyT5Rv4ulk2RHTUrTAVPDb5vN
-X-Gm-Gg: AfdE7cmFZEeVrfdGPCJ0hQ7b+MA0dD9LXk4DZMQNE8hCAgUjYKRw/UHCr+nvitw9y5H
-	vRnv+vY3OAsByg7dsQ/kQ6oNta1Thz8AlC31mab+i/Gm8HvGA5MqEyDFj8xtdC0Acuo4lhJb5ZE
-	5n0+cySKNa6eyGFXuJtf1hHNvI2pYqCtekfiAmOXEZcf8QVoFVRUErKgGJ5TqCMl5qxhpsepEdd
-	fX5yofSSUKVOGQKYLeyLwUPXWGtjbM5BAmza94UOkxHZDMODkDVxFhdPNi2MTTP5F3ypwxkFiDC
-	OaZgAn6y43sNBN1tlzscR82CEX7cU8E7/VzqvK9reb7HfAlwGZbX376VBhIwhmqeCj5g1a+D84v
-	STHntF6R5Mns2FJoXwmUiP/QmcbSbvFLt35uaIcMJLt8PzMC2zDru/v4lL5CUCgU5OrlcX1BeIF
-	j6BKp7CbmYUpk=
-X-Received: by 2002:a17:902:d48f:b0:2ca:75b1:e1eb with SMTP id d9443c01a7336-2ca75b1e4f2mr4118735ad.10.1782871716385;
-        Tue, 30 Jun 2026 19:08:36 -0700 (PDT)
-Received: from localhost ([2001:19f0:8000:3e6e:5400:6ff:fe38:3d01])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca3828c2e8sm22880055ad.43.2026.06.30.19.08.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 19:08:36 -0700 (PDT)
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atish.patra@linux.dev>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Thomas Huth <thuth@redhat.com>,
-	Sergey Matyukevich <geomatsi@gmail.com>,
-	Inochi Amaoto <inochiama@gmail.com>,
-	Andy Chiu <andybnac@gmail.com>,
-	Deepak Gupta <debug@rivosinc.com>
-Cc: linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	Yixun Lan <dlan@gentoo.org>,
-	Longbin Li <looong.bin@gmail.com>,
-	Quan Zhou <zhouquan@iscas.ac.cn>
-Subject: [PATCH v4 8/8] KVM: riscv: selftests: add Zicfiss/Zicfilp extension to get-reg-list test
-Date: Wed,  1 Jul 2026 10:07:45 +0800
-Message-ID: <20260701020746.170157-9-inochiama@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260701020746.170157-1-inochiama@gmail.com>
-References: <20260701020746.170157-1-inochiama@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IsWrkHPE"
+Message-ID: <33151a98-3d3d-4a11-9919-2bf38aa83f76@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782872091;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z0fpQae9+H0z3yf8NaJ71qIOg3xUmfB2m91dIE9eL0I=;
+	b=IsWrkHPE3OWPCi94xEiMBhtH+KYCbnFqdyGb51HIc4wtPIuHRJoTXCqR3ptZ0O7G4Ebkxj
+	Hk0Ou50Fx+1qqEyNo8T1a+nqcqBLWArrUY9K+9DZ10AXPbOUQwpWQB3iZaoqO7SxBkBXfl
+	VHlDD3+BSSvZ/Uj0o0nh+rq1OC2rFY4=
+Date: Wed, 1 Jul 2026 10:14:39 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH-next v9 08/11] cgroup/cpuset: Move
+ mpol_rebind_mm/cpuset_migrate_mm() calls inside cpuset_attach_task()
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Juri Lelli <juri.lelli@redhat.com>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
+ Guopeng Zhang <guopeng.zhang@linux.dev>
+References: <20260630033344.352702-1-longman@redhat.com>
+ <20260630033344.352702-9-longman@redhat.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <20260630033344.352702-9-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-The KVM RISC-V allows Zicfiss/Zicfilp extensions for Guest/VM so
-add these extensions to get-reg-list test.
 
-Assisted-by: YuanSheng:claude-4.7-opus
-Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
----
- .../selftests/kvm/riscv/get-reg-list.c        | 67 +++++++++++++++++++
- 1 file changed, 67 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index 94e33b2ee796..5963f62ce730 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -90,6 +90,8 @@ bool filter_reg(__u64 reg)
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICBOP:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICBOZ:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICCRSE:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICFILP:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICFISS:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICNTR:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICOND:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICSR:
-@@ -358,6 +360,8 @@ static const char *core_id_to_str(const char *prefix, __u64 id)
- 	"KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_REG(" #csr ")"
- #define RISCV_CSR_SMSTATEEN(csr) \
- 	"KVM_REG_RISCV_CSR_SMSTATEEN | KVM_REG_RISCV_CSR_REG(" #csr ")"
-+#define RISCV_CSR_ZICFISS(csr) \
-+	"KVM_REG_RISCV_CSR_ZICFISS | KVM_REG_RISCV_CSR_REG(" #csr ")"
- 
- static const char *general_csr_id_to_str(__u64 reg_off)
- {
-@@ -425,6 +429,18 @@ static const char *smstateen_csr_id_to_str(__u64 reg_off)
- 	return NULL;
- }
- 
-+static const char *zicfiss_csr_id_to_str(__u64 reg_off)
-+{
-+	/* reg_off is the offset into struct kvm_riscv_cfi_csr */
-+	switch (reg_off) {
-+	case KVM_REG_RISCV_CSR_ZICFISS_REG(ssp):
-+		return RISCV_CSR_ZICFISS(ssp);
-+	}
-+
-+	TEST_FAIL("Unknown zicfiss csr reg: 0x%llx", reg_off);
-+	return NULL;
-+}
-+
- static const char *csr_id_to_str(const char *prefix, __u64 id)
- {
- 	__u64 reg_off = id & ~(REG_MASK | KVM_REG_RISCV_CSR);
-@@ -441,6 +457,8 @@ static const char *csr_id_to_str(const char *prefix, __u64 id)
- 		return aia_csr_id_to_str(reg_off);
- 	case KVM_REG_RISCV_CSR_SMSTATEEN:
- 		return smstateen_csr_id_to_str(reg_off);
-+	case KVM_REG_RISCV_CSR_ZICFISS:
-+		return zicfiss_csr_id_to_str(reg_off);
- 	}
- 
- 	return strdup_printf("%lld | %lld /* UNKNOWN */", reg_subtype, reg_off);
-@@ -585,6 +603,8 @@ static const char *isa_ext_single_id_to_str(__u64 reg_off)
- 		KVM_ISA_EXT_ARR(ZICBOP),
- 		KVM_ISA_EXT_ARR(ZICBOZ),
- 		KVM_ISA_EXT_ARR(ZICCRSE),
-+		KVM_ISA_EXT_ARR(ZICFILP),
-+		KVM_ISA_EXT_ARR(ZICFISS),
- 		KVM_ISA_EXT_ARR(ZICNTR),
- 		KVM_ISA_EXT_ARR(ZICOND),
- 		KVM_ISA_EXT_ARR(ZICSR),
-@@ -748,6 +768,12 @@ static const char *sbi_fwft_id_to_str(__u64 reg_off)
- 	case 6: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pte_ad_hw_updating.enable)";
- 	case 7: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pte_ad_hw_updating.flags)";
- 	case 8: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pte_ad_hw_updating.value)";
-+	case 9: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(landing_pad.enable)";
-+	case 10: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(landing_pad.flags)";
-+	case 11: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(landing_pad.value)";
-+	case 12: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(shadow_stack.enable)";
-+	case 13: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(shadow_stack.flags)";
-+	case 14: return "KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(shadow_stack.value)";
- 	}
- 	return strdup_printf("KVM_REG_RISCV_SBI_FWFT | %lld /* UNKNOWN */", reg_off);
- }
-@@ -954,6 +980,18 @@ static __u64 sbi_fwft_pte_ad_hw_updating_regs[] = {
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pte_ad_hw_updating.value),
- };
- 
-+static __u64 sbi_fwft_landing_pad_regs[] = {
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(landing_pad.enable),
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(landing_pad.flags),
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(landing_pad.value),
-+};
-+
-+static __u64 sbi_fwft_shadow_stack_regs[] = {
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(shadow_stack.enable),
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(shadow_stack.flags),
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(shadow_stack.value),
-+};
-+
- static __u64 zicbom_regs[] = {
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_CONFIG | KVM_REG_RISCV_CONFIG_REG(zicbom_block_size),
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICBOM,
-@@ -969,6 +1007,11 @@ static __u64 zicboz_regs[] = {
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICBOZ,
- };
- 
-+static __u64 zicfiss_regs[] = {
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_ZICFISS | KVM_REG_RISCV_CSR_ZICFISS_REG(ssp),
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICFISS,
-+};
-+
- static __u64 aia_regs[] = {
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(siselect),
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(iprio1),
-@@ -1220,6 +1263,8 @@ KVM_ISA_EXT_SUBLIST_CONFIG(zicbom, ZICBOM);
- KVM_ISA_EXT_SUBLIST_CONFIG(zicbop, ZICBOP);
- KVM_ISA_EXT_SUBLIST_CONFIG(zicboz, ZICBOZ);
- KVM_ISA_EXT_SIMPLE_CONFIG(ziccrse, ZICCRSE);
-+KVM_ISA_EXT_SIMPLE_CONFIG(zicfilp, ZICFILP);
-+KVM_ISA_EXT_SUBLIST_CONFIG(zicfiss, ZICFISS);
- KVM_ISA_EXT_SIMPLE_CONFIG(zicntr, ZICNTR);
- KVM_ISA_EXT_SIMPLE_CONFIG(zicond, ZICOND);
- KVM_ISA_EXT_SIMPLE_CONFIG(zicsr, ZICSR);
-@@ -1279,6 +1324,24 @@ static struct vcpu_reg_list config_sbi_fwft_pte_ad_hw_updating = {
- 	},
- };
- 
-+static struct vcpu_reg_list config_sbi_fwft_landing_pad = {
-+	.sublists = {
-+		SUBLIST_BASE,
-+		SUBLIST_ISA(zicfilp, ZICFILP),
-+		SUBLIST_SBI(fwft_landing_pad, FWFT),
-+		{0},
-+	},
-+};
-+
-+static struct vcpu_reg_list config_sbi_fwft_shadow_stack = {
-+	.sublists = {
-+		SUBLIST_BASE,
-+		SUBLIST_ISA(zicfiss, ZICFISS),
-+		SUBLIST_SBI(fwft_shadow_stack, FWFT),
-+		{0},
-+	},
-+};
-+
- struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_sbi_base,
- 	&config_sbi_sta,
-@@ -1289,6 +1352,8 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_sbi_fwft_misaligned_deleg,
- 	&config_sbi_fwft_pointer_masking,
- 	&config_sbi_fwft_pte_ad_hw_updating,
-+	&config_sbi_fwft_landing_pad,
-+	&config_sbi_fwft_shadow_stack,
- 	&config_aia,
- 	&config_fp_f,
- 	&config_fp_d,
-@@ -1332,6 +1397,8 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_zicbop,
- 	&config_zicboz,
- 	&config_ziccrse,
-+	&config_zicfilp,
-+	&config_zicfiss,
- 	&config_zicntr,
- 	&config_zicond,
- 	&config_zicsr,
+On 6/30/2026 11:33 AM, Waiman Long wrote:
+> The cpuset_attach_task() was introduced in commit 42a11bf5c543
+> ("cgroup/cpuset: Make cpuset_fork() handle CLONE_INTO_CGROUP properly")
+> to enable the CLONE_INTO_CGROUP flag of clone(2) to behave more like
+> moving a task from one cpuset into another one. That commits didn't
+> move the mpol_rebind_mm() and cpuset_migrate_mm() calls for group leader
+> into cpuset_attach_task().
+> 
+> When the CLONE_INTO_CGROUP flag is used without CLONE_THREAD, the new
+> task is its own group leader. So it is still not equivalent to moving
+> task between cpusets in this case. Make CLONE_INTO_CGROUP behaves
+> more close to cpuset_attach() by moving the mpol_rebind_mm() and
+> cpuset_migrate_mm() calls inside cpuset_attach_task().
+> 
+> Also move the stack local cpus_updated, mems_updated and queue_task_work
+> flags into attach_ctx so that these flags can be accessed inside and
+> outside of cpuset_attach_task(). The cpuset_fork() function is updated
+> to set up these flags and do memory migration if necessary.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>   kernel/cgroup/cpuset.c | 104 ++++++++++++++++++++++++-----------------
+>   1 file changed, 60 insertions(+), 44 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 55cd580373b7..0b9df38e9a63 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -362,6 +362,9 @@ static DECLARE_WAIT_QUEUE_HEAD(cpuset_attach_wq);
+>    */
+>   static struct {
+>   	int in_progress;
+> +	bool cpus_updated;
+> +	bool mems_updated;
+> +	bool task_work_queued;
+>   	struct cpuset *old_cs;	/* Source cpuset */
+>   	nodemask_t nodemask_to;
+>   } attach_ctx;
+> @@ -3190,6 +3193,8 @@ static cpumask_var_t cpus_attach;
+>   
+>   static void cpuset_attach_task(struct cpuset *cs, struct task_struct *task)
+>   {
+> +	struct mm_struct *mm;
+> +
+>   	lockdep_assert_cpuset_lock_held();
+>   
+>   	if (cs != &top_cpuset)
+> @@ -3203,28 +3208,60 @@ static void cpuset_attach_task(struct cpuset *cs, struct task_struct *task)
+>   	 */
+>   	WARN_ON_ONCE(set_cpus_allowed_ptr(task, cpus_attach));
+>   
+> +	if (cpuset_v2() && !attach_ctx.mems_updated)
+> +		return;
+> +
+>   	cpuset_change_task_nodemask(task, &attach_ctx.nodemask_to);
+>   	cpuset1_update_task_spread_flags(cs, task);
+> +
+> +	if ((task != task->group_leader) ||
+> +	    (!is_memory_migrate(cs) && !attach_ctx.mems_updated))
+> +		return;
+> +
+
+Nit.
+
+IIUC, the !is_memory_migrate(cs) check may be unnecessary. Previously, 
+placing this condition outside could prevent an unnecessary loop, but in 
+its current position, it appears redundant.
+
+	if (task != task->group_leader ||
+	    !attach_ctx.mems_updated)
+
+> +	/*
+> +	 * Change mm for threadgroup leader. This is expensive and may
+> +	 * sleep and should be moved outside migration path proper.
+> +	 */
+> +	mm = get_task_mm(task);
+> +	if (mm) {
+> +		struct cpuset *oldcs = attach_ctx.old_cs;
+> +
+> +		mpol_rebind_mm(mm, &cs->effective_mems);
+> +
+> +		/*
+> +		 * old_mems_allowed is the same with mems_allowed
+> +		 * here, except if this task is being moved
+> +		 * automatically due to hotplug.  In that case
+> +		 * @mems_allowed has been updated and is empty, so
+> +		 * @old_mems_allowed is the right nodesets that we
+> +		 * migrate mm from.
+> +		 */
+> +		if (is_memory_migrate(cs)) {
+> +			cpuset_migrate_mm(mm, &oldcs->old_mems_allowed,
+> +					  &attach_ctx.nodemask_to);
+> +			attach_ctx.task_work_queued = true;
+> +		} else {
+> +			mmput(mm);
+> +		}
+> +	}
+>   }
+>   
+>   static void cpuset_attach(struct cgroup_taskset *tset)
+>   {
+>   	struct task_struct *task;
+> -	struct task_struct *leader;
+>   	struct cgroup_subsys_state *css;
+>   	struct cpuset *cs;
+>   	struct cpuset *oldcs = attach_ctx.old_cs;
+> -	bool cpus_updated, mems_updated;
+> -	bool queue_task_work = false;
+>   
+>   	cgroup_taskset_first(tset, &css);
+>   	cs = css_cs(css);
+>   
+>   	lockdep_assert_cpus_held();	/* see cgroup_attach_lock() */
+>   	mutex_lock(&cpuset_mutex);
+> -	cpus_updated = !cpumask_equal(cs->effective_cpus,
+> -				      oldcs->effective_cpus);
+> -	mems_updated = !nodes_equal(cs->effective_mems, oldcs->effective_mems);
+> +	attach_ctx.task_work_queued = false;
+> +
+> +	attach_ctx.cpus_updated = !cpumask_equal(cs->effective_cpus, oldcs->effective_cpus);
+> +	attach_ctx.mems_updated = !nodes_equal(cs->effective_mems, oldcs->effective_mems);
+>   	guarantee_online_mems(cs, &attach_ctx.nodemask_to);
+>   
+>   	/*
+> @@ -3233,46 +3270,14 @@ static void cpuset_attach(struct cgroup_taskset *tset)
+>   	 * and mems. In that case, we can optimize out by skipping the task
+>   	 * iteration and update.
+>   	 */
+> -	if (cpuset_v2() && !cpus_updated && !mems_updated)
+> +	if (cpuset_v2() && !attach_ctx.cpus_updated && !attach_ctx.mems_updated)
+>   		goto out;
+>   
+>   	cgroup_taskset_for_each(task, css, tset)
+>   		cpuset_attach_task(cs, task);
+>   
+> -	/*
+> -	 * Change mm for all threadgroup leaders. This is expensive and may
+> -	 * sleep and should be moved outside migration path proper. Skip it
+> -	 * if there is no change in effective_mems and CS_MEMORY_MIGRATE is
+> -	 * not set.
+> -	 */
+> -	if (!is_memory_migrate(cs) && !mems_updated)
+> -		goto out;
+> -
+> -	cgroup_taskset_for_each_leader(leader, css, tset) {
+> -		struct mm_struct *mm = get_task_mm(leader);
+> -
+> -		if (mm) {
+> -			mpol_rebind_mm(mm, &cs->effective_mems);
+> -
+> -			/*
+> -			 * old_mems_allowed is the same with mems_allowed
+> -			 * here, except if this task is being moved
+> -			 * automatically due to hotplug.  In that case
+> -			 * @mems_allowed has been updated and is empty, so
+> -			 * @old_mems_allowed is the right nodesets that we
+> -			 * migrate mm from.
+> -			 */
+> -			if (is_memory_migrate(cs)) {
+> -				cpuset_migrate_mm(mm, &oldcs->old_mems_allowed,
+> -						  &attach_ctx.nodemask_to);
+> -				queue_task_work = true;
+> -			} else
+> -				mmput(mm);
+> -		}
+> -	}
+> -
+>   out:
+> -	if (queue_task_work)
+> +	if (attach_ctx.task_work_queued)
+>   		schedule_flush_migrate_mm();
+>   	cs->old_mems_allowed = attach_ctx.nodemask_to;
+>   
+> @@ -3708,15 +3713,14 @@ static void cpuset_cancel_fork(struct task_struct *task, struct css_set *cset)
+>    */
+>   static void cpuset_fork(struct task_struct *task)
+>   {
+> -	struct cpuset *cs;
+> -	bool same_cs;
+> +	struct cpuset *cs, *oldcs;
+>   
+>   	rcu_read_lock();
+>   	cs = task_cs(task);
+> -	same_cs = (cs == task_cs(current));
+> +	oldcs = task_cs(current);
+>   	rcu_read_unlock();
+>   
+> -	if (same_cs) {
+> +	if (cs == oldcs) {
+>   		if (cs == &top_cpuset)
+>   			return;
+>   
+> @@ -3728,7 +3732,19 @@ static void cpuset_fork(struct task_struct *task)
+>   	/* CLONE_INTO_CGROUP */
+>   	mutex_lock(&cpuset_mutex);
+>   	guarantee_online_mems(cs, &attach_ctx.nodemask_to);
+> +	cs->old_mems_allowed = attach_ctx.nodemask_to;
+> +
+> +	/*
+> +	 * Assume CPUs and memory nodes are updated
+> +	 * A CLONE_INTO_CGROUP operation should have taken the cgroup mutex
+> +	 * and so there shouldn't be a competing cpuset_attach() operation.
+> +	 */
+> +	attach_ctx.cpus_updated = attach_ctx.mems_updated = true;
+> +	attach_ctx.task_work_queued = false;
+> +	attach_ctx.old_cs = oldcs;
+>   	cpuset_attach_task(cs, task);
+> +	if (attach_ctx.task_work_queued)
+> +		schedule_flush_migrate_mm();
+>   
+>   	dec_attach_in_progress_locked();
+>   	mutex_unlock(&cpuset_mutex);
+
+Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+
 -- 
-2.55.0
+Best regards
+Ridong
 
