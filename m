@@ -1,131 +1,111 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9193B442F;
-	Wed,  1 Jul 2026 07:02:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330E61A9F97
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 07:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782889333; cv=none; b=NuIyOQ29F08W5RrZzl6qCKWyU+Q7axHjdfcaESY6tQH/Sff3mMqDx40UhjO90MYpEver9LEFGqARQ4J2OXMwQOAYYjcx3Naqng+7n4dwYyzgtPKabuBmoxT6Akeac4htXOVcWRTrvdaV9I3E/61PR8flRv/fD3iM4V+ZRu/v45Q=
+	t=1782889373; cv=none; b=lLPO2DCUBCBDqiT8AzzIEYhUsxGXfoRkivP7BLltG3Lv+9HTCRgKiDatfTXFnZmyOIcnl8GxKmsZ6aX+CqROLVsoAcSe70ArnFoy+SJv0jYuPGTRlAUllBAg+K10+xPANMtNMjwEXR2LoPEjYipsMjApnMij6CrtASarolpa4f8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782889333; c=relaxed/simple;
-	bh=uTemCS9hJuZwaBtUWAiWvpe3nJ0DnwAEJpllNENNMkc=;
+	s=arc-20240116; t=1782889373; c=relaxed/simple;
+	bh=mYmmAQSde6F7Y/E1QWGy1zeR+da/doe1A8t8muctFB0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jq3J8AfXnHTCleVp+J51yzBfn7pUq4WOTICxEVg7OmRXEqP/OeHCTig/oA4ON+RuiiFiRepxj+kPLEyAsdq+CEJV9683ybnMzwl6aEWvk++2FITgAGBRWPq8vobEFE1210GAOtmdPEltGHv4VZPQHlK4JQlT0sF19dRAigCvayo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BsZxu9in; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 In-Reply-To:Content-Type; b=n2ngSuqUCz/oZKERpQJfyivxHEpvi2JsT1qbMmbuoWezoAdmo5hobskL9/qcX8+DSlOTyAgOk3FP74cU7emOEH2nQhbXUmXopx5RgxiNlEQDeSlJu+FNfn/ogW89Nm2wLVm+ZhTR1iSdsqFoHLiqClZv9Y1XtfYNW22/UGhcy/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hHa7k8Kk; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BsZxu9in"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782889332; x=1814425332;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uTemCS9hJuZwaBtUWAiWvpe3nJ0DnwAEJpllNENNMkc=;
-  b=BsZxu9inLJyO6hlBjk+JmUAqD7xGtSvRyNfHKsI/QE1xmwSDjJpZiEoT
-   /AxOz6NWKW2Y2ybAphGGoyBRYDO8eN36V81zzLHkukAjqbit35Nl6WG7+
-   7eIGJ5zACZJc1fuEtFzkwJSYVTaOhjPX5LbByr/u2fr3g5kd72BXXoPVj
-   579v6TzS8Re53L1Uo7x2S11U2uLxo0CczUA/djVJ73F5zHsNyX2/zoHIo
-   KJjaTmUu28JOWlcQC++i1qvFNW7lQBi/pIfu9SNLfs/7hFZZERwlbxc5G
-   VwSbs6A+IS7ygR72cyh+HaUP9QDjEupaSx1c01W2kPc3Qu8z0+KQ12ZuG
-   A==;
-X-CSE-ConnectionGUID: E51+qz05Q1i+YHbwnYFRSw==
-X-CSE-MsgGUID: qNcvIzXzQa2qFKuW0EbqMQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11833"; a="82728594"
-X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
-   d="scan'208";a="82728594"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 00:02:11 -0700
-X-CSE-ConnectionGUID: IOyXLa5dSF2JqjSse/2n1w==
-X-CSE-MsgGUID: JbKqh+eBRZqdMAtXHVxILg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
-   d="scan'208";a="275705575"
-Received: from unknown (HELO [10.239.158.49]) ([10.239.158.49])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 00:01:53 -0700
-Message-ID: <e5876e41-a11a-4d5e-958f-9e247c19d387@intel.com>
-Date: Wed, 1 Jul 2026 15:01:35 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hHa7k8Kk"
+Message-ID: <bfb432db-bd29-419a-8147-78ff6fac07ad@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782889360;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2YHZ7VeExib9bwMl0hMRMS3DxaFLnavLkPtqkc6DdGk=;
+	b=hHa7k8KkncHcXNYwNh7nMxCdcxfZ3P0OQrLgq3ymz66x4F86OrXag/T4CKo4bm7Cn/Y1ZT
+	GxRfGYCmBG2UjR3EQ9Cb+1c6+2LNvIRjRuSfN/CmOG5XuHYrhodAMK/ZeqMda2RbaJ6iOM
+	h9DOhM8MMN6SkXZny8bnhF5ALXkBcAU=
+Date: Wed, 1 Jul 2026 15:02:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 07/46] KVM: Rename memory attribute APIs to prepare for
- in-place gmem conversion
-To: Sean Christopherson <seanjc@google.com>
-Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- david@kernel.org, jmattson@google.com, jthoughton@google.com,
- michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
- qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
- shivankg@amd.com, steven.price@arm.com, tabba@google.com,
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
- forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
- aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>,
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-7-9d2959357853@google.com>
- <a1b06afb-af6e-4666-8c7d-990e7fa150fa@intel.com>
- <akP9Qv_IPVEh7GAB@google.com>
+Subject: Re: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user
+ BPF_ADDR_SPACE_CAST insn
 Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <akP9Qv_IPVEh7GAB@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, KaFai Wan <kafai.wan@linux.dev>,
+ bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260626154330.33619-1-leon.hwang@linux.dev>
+ <20260626154330.33619-2-leon.hwang@linux.dev>
+ <e279c9a7ca6b16e52dc261560513b0eafdd70f87.camel@linux.dev>
+ <a2aaa21d-4cf9-48a4-839f-dd152bda8185@linux.dev>
+ <af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn>
+ <d55e10b1-d883-4fcf-8fb3-8210db935e4a@linux.dev>
+ <1c07a34f-b050-a281-6a7b-542a9bfa30b3@loongson.cn>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <1c07a34f-b050-a281-6a7b-542a9bfa30b3@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 7/1/2026 1:30 AM, Sean Christopherson wrote:
-> On Tue, Jun 30, 2026, Xiaoyao Li wrote:
->> On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
->>> -bool kvm_range_has_memory_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
->>> -				     unsigned long mask, unsigned long attrs);
->>> +bool kvm_range_has_vm_memory_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
->>> +					unsigned long mask, unsigned long attrs);
->>>    bool kvm_arch_pre_set_memory_attributes(struct kvm *kvm,
->>>    					struct kvm_gfn_range *range);
->>>    bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
+On 1/7/26 14:49, Tiezhu Yang wrote:
+[...]
 >>
->> We have
+>> It is a real issue.
 >>
->>   - kvm_pre_set_memory_attributes()
->>   - kvm_arch_pre_set_memory_attributes()
->>   - kvm_arch_post_set_memory_attributes()
+>> Instead of fixing up helper calls, it seems better to prevent
+>> interpreter fallback if the prog has any JIT-inlineable helper call.
 > 
-> Yeah, that's probably for the best.
+> Hi Alexei and Leon,
 > 
->> left, do they need to be renamed as well?
->>
->> then the interesting one is kvm_vm_set_mem_attributes(), which contains "vm"
->> already while it means "vm ioctl". Do we need to rename it to
->> kvm_vm_set_vm_mem_attributes()?
+> What about the following: (not tested yet, if it is good, I can test it)
 > 
-> I say "no" on this last one, the fact that the function is scoped to a VM ioctl
-> is enough to communicate that it applies to per-VM attributes.
+> [...]
 > 
-> Actually, since it's a local helper, we could go with kvm_set_vm_mem_attributes()
-> to be consistent with the other functions.  That just leaves
-> kvm_vm_ioctl_set_mem_attributes(), which I think it appropriately scoped.
+> If you are OK with the above changes, I will test it again and send
+> a new version later.
+> 
 
-If we finally choose to rename kvm_vm_set_mem_attributes() to 
-kvm_set_vm_mem_attributes(), I think the trace 
-trace_kvm_vm_set_mem_attributes() needs to be renamed to keep it consistent?
+If you don't mind, I think I can disallow the interpreter fallback by
+the below diff in the next revision of this series.
+
+The 'aux->jit_required' is introduced by following Alexei's suggestion.
+
+Thanks,
+Leon
+
+---
+
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index b5a273a5f944..677b6d2a6ba4 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1841,8 +1841,10 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+                }
+
+                /* Skip inlining the helper call if the JIT does it. */
+-               if (bpf_jit_inlines_helper_call(insn->imm))
++               if (bpf_jit_inlines_helper_call(insn->imm)) {
++                       prog->aux->jit_required = true;
+                        goto next_insn;
++               }
+
+                if (insn->imm == BPF_FUNC_get_route_realm)
+                        prog->dst_needed = 1;
