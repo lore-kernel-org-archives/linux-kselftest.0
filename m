@@ -1,101 +1,353 @@
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38953352032
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 01:39:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8CF352032
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 01:41:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782869997; cv=none; b=JNd4Yam+CJzW115Mr7MuYjLlRcqwAqphxOLIfQ0nxoTCmyhRSR7aMl9C2HgdILycbz4r0kCkJSm9W2vujOEFPEIfhRm0kH0bELWjftzf6GUeeOv+9aj1MqO8fITVXlTk1XkJWYpkQHbLDnfiWUASDSK3zAmF7BcUWBDpJ/C8P/A=
+	t=1782870093; cv=none; b=JidI+L/4p/TS9Y3GdCCgnBculs3uF+z8FXryGhbdYOlEdkuiYGnYE42stFF1d9J2qKD6aJqkOrRIbC1CWSV6isYULVNSh57z+v87HTu9P4Dx0X4zhivagsN8CspisFpKI4GtwiczvnP7CiyB14axwXX2qpzs57Shl5YTefhy4hY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782869997; c=relaxed/simple;
-	bh=r6P87TDBgKgJToiem87UMdiReewt6xr/ohCDs11d6e0=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=b6neM8YTypVpWlw+H+u25Hn85iTPpVYe+sxyBav5nH6+MrGd+g4mLV41ic0E8jk5m1zADXkUqRPiueLrNOQeo7uPCQECpRjW3Y7gzacSkXIjz0FSAelox/R/QqLYxqF4Hn2nh8zyA5mZUz5s7QfvtBf3i4UarsLlYIVlnASB/Jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nikableh.moe; spf=pass smtp.mailfrom=nikableh.moe; dkim=pass (2048-bit key) header.d=nikableh.moe header.i=@nikableh.moe header.b=ty5pyvCd; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=cXfYuPB4; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nikableh.moe
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nikableh.moe
+	s=arc-20240116; t=1782870093; c=relaxed/simple;
+	bh=fISSsi9q4ppHTxE9gVxjH6ipPm9PXHZfo6xwDLK8fjk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aeyv+PZVupkQDp/uqkTqxh/+bxl1pvDuaZcSY7+HbtZ2Suc1czHgIsdLsOBSD0ATc+cpohmOdIe+XiQenAvSD13hbIQoH0GXALUDiFRZXqIkfKj09sSyJIRKg9/dur4uAgW0h0CNoeUbcI3nMZiIKCwhWkvnp6GY7lz7aLdVkSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XX7VMDvS; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nikableh.moe header.i=@nikableh.moe header.b="ty5pyvCd";
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="cXfYuPB4"
-DKIM-Signature: a=rsa-sha256; b=ty5pyvCdiB/gXT7reCiVKRSn3vu7aH/IhQvFoLbPIB3r7ppaeCkpOWjPN0MeFU3kWYBS5zTh5s8HiPWB3dwvcfhHpJTtOZUZtd+KD0wiYl5M/D4JGV+8zP4t5pBb9ciB7lxbgTJt1mOxsgi3daUbKpaIM6S7vv4d9LNMv4xsYSmNCc5ODIq2R10vfz474i15b+GYQ/kgPar9/t8OhotFiigOgfMxuwhR4ZOmzgSpNPzLaepX6NzO5Ot7eF/hXU7pYF3Q67+ipHKfndOC8PMd65uYLduTN2Yk3c/1X9PGoNRPKqGjPxZEnBWC2ydadAhSsJb2YE4xVhNgVljHXA53lA==; s=purelymail2; d=nikableh.moe; v=1; bh=r6P87TDBgKgJToiem87UMdiReewt6xr/ohCDs11d6e0=; h=Received:Date:From:To:Subject;
-DKIM-Signature: a=rsa-sha256; b=cXfYuPB4yzP89CYdlinsWzT50XBgh81sg1gycldmpe8ukBWcEVVXULtTkXSZafY8m6doiJ+cdhVmWAmaMp8pRFq5dINIl+Vbj6h5Kw/AR1JNRsbJMKkGaae3fCFawwRRdlRIE9XlYYrec+U/B08zRskekq0+XdhCoIQSWd0NJn4Nfp0YuGEHk3FzgMAxJJB618bQAYGO6IxzzlflU72NHuAJUtTuLS22KkY+haSyf7SkxVMqheQo2Eidl91074JZRqiZCM97TifVrBfLhYklqnSBkV5903kgM3jPp+Y+Bu0/Fc0/0Qwi7XpN7joY9i0RakQhDpyHyeGZIxp/9bdeAg==; s=purelymail2; d=purelymail.com; v=1; bh=r6P87TDBgKgJToiem87UMdiReewt6xr/ohCDs11d6e0=; h=Feedback-ID:Received:Date:From:To:Subject;
-Feedback-ID: 209604:18551:null:purelymail
-X-Pm-Original-To: linux-kselftest@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPA id 2143755734;
-          Wed, 01 Jul 2026 01:39:12 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XX7VMDvS"
+Message-ID: <e28a38fa-5998-4e73-886c-2cbbd26ae98f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782870089;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DdZreJfJHlBP0nrfmNEqS6amNcZzmZOjYNZtIjg7/YQ=;
+	b=XX7VMDvSMCX3922YR0mgMXuFneJyJcIUcAtg0e68VK2dRBtEE5FmWM8qNLbwi5ck3o97sA
+	NQzzGZi2/HjyVDdT8p+E9vsF56bDWu5oKA90fvqDHIfMFlS/kQgkIfG2qlZUqGGC2DFfLU
+	mqedHyGqzhT4ycHmlBfSwkVbImHvL8s=
+Date: Wed, 1 Jul 2026 09:41:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 01 Jul 2026 03:39:12 +0200
-From: Nika Krasnova <nika@nikableh.moe>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo
- <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Andreas
- Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor
- Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Daniel
- Almeida <daniel.almeida@collabora.com>, Tamir Duberstein
- <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
- =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, Viresh Kumar
- <viresh.kumar@linaro.org>, Yury Norov <yury.norov@gmail.com>, Lorenzo
- Stoakes <ljs@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David
- Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/2] rust: kernel: add cfg_select! and use it for
- config-based selection
-In-Reply-To: <CANiq72nVwM_OF4yz1rB4Q-atDgZ9Oywbuhu830jfQe7npt0FeQ@mail.gmail.com>
-References: <20260629-backport-cfg_select-v1-0-388d5d31d9d4@nikableh.moe>
- <CANiq72kG8k3mk+Xjr6q7aKg212QUNtZk5w4rxV=UGR5UXKE_ng@mail.gmail.com>
- <0eb77f4b7199e9af01d61e0c1ac03c99@purelymail.com>
- <CANiq72nVwM_OF4yz1rB4Q-atDgZ9Oywbuhu830jfQe7npt0FeQ@mail.gmail.com>
-User-Agent: Purely Mail via Roundcube/1.6.16
-Message-ID: <4b9622008ce92cfb5da5d96397ce4c36@purelymail.com>
-X-Sender: nika@nikableh.moe
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH-next v9 03/11] cgroup/cpuset: Prevent race between task
+ attach and cpuset state change
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Juri Lelli <juri.lelli@redhat.com>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
+ Guopeng Zhang <guopeng.zhang@linux.dev>
+References: <20260630033344.352702-1-longman@redhat.com>
+ <20260630033344.352702-4-longman@redhat.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <20260630033344.352702-4-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 2026-06-29 21:07:34 +0200, Miguel Ojeda wrote:
-> The tracking issue says the latest change was in Rust 1.91.0. Did it
-> not work there? Were there changes after that?
 
-Checked 1.91.0 directly: core::cfg_select is there behind
-#![feature(cfg_select)] and behaves the same as 1.94.1 -- single-brace
-expression position included. So 1.91.0 is the cutoff (RUSTC_VERSION >=
-109100), nothing changed between 1.91.0 and 1.94.1.
 
-> [...] If I understand you correctly, you are saying that even with
-> the conversion here, we wouldn't even need the expression case, no?
+On 6/30/2026 11:33 AM, Waiman Long wrote:
+> Commit e44193d39e8d ("cpuset: let hotplug propagation work wait for
+> task attaching") was introduced to let hotplug operation to wait
+> until the completion of task attach operation. However, it is still
+> possible that the states of the source or destination cpuset can
+> be changed between the cpuset_can_attach() call and the subsequent
+> cpuset_attach()/cpuset_cacnel_attach() call.
+> 
+> As a result, data gathered during cpuset_can_attach() cannot be reliably
+> used in the subsequent cpuset_attach()/cpuset_cacnel_attach()
+> call at all. Make the task attach operation more robust
+> and allow the sharing of data between cpuset_can_attach() and
+> cpuset_attach()/cpuset_cacnel_attach() by making cpuset_write_resmask()
+> and cpuset_partition_write() wait for the completion of task attach
+> as well.
+> 
 
-That is correct. Everything in this series is item or statement 
-position;
-nothing uses the expression-operand form.
+Nit.
 
-> [...] if we want to go with this one in all versions, then we should
-> make sure we only allow that subset that cleanly maps to the future.
+s/cpuset_cacnel_attach/cpuset_cancel_attach/
 
-Agreed. I'll restrict the fallback to exactly that subset
-(item/statement, single braces) by dropping the expression-operand form.
-Everyone hits the fallback until the MSRV bump, so a non-portable use
-fails uniformly instead of compiling locally and breaking in linux-next.
-The accepted subset is a strict subset of core::cfg_select, so the
-eventual switch needs no call-site changes. (I'll also have the fallback
-emit compile_error! on no-match, to match core.)
+> Ideally, an ongoing task attach operation should block any cpuset write
+> operation that can change its internal state until the operation is
+> completed. However, the attach_in_progress flag is currently per cpuset
+> and only the destination cpuset will have this flag set. The flag is not
+> set in the source cpuset where the tasks will be moved from. Even if we
+> extend the scope to include the source cpuset, it will not block cpuset
+> operation that changes the state of one of its ancestor cpuset which may
+> indirectly impact the state of the source or destination cpuset. It may
+> be too costly to set the flag for the whole subtree, it is far easier
+> to just make the flag global and block all the cpuset write operation
+> whenever a task attach operation is in progress.
+> 
+> Make that change by creating a new cpuset attach context (attach_ctx)
+> structure to hold the global in_progress flag and use it for blocking
+> cpuset write operation if a cpuset attach operation is in progress. Also
+> add a new wait_attach_done_lock() helper to do the waiting for an
+> ongoing attach operation and acquire the cpuset_mutex.
+> 
+> The comments about validate_change() are no longer valid as it won't
+> be called at all if an attach operation is in progress. So the comments
+> can be removed.
+> 
+> The per-cpuset attach_in_progress flag is also currently used in
+> partition_is_populated() and cpuset_is_populated() to determine if
+> an empty cpuset will have incoming task. This check will no longer be
+> needed as this function will not be called when there is a task attach
+> in progress. So the flag check is now removed.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>   kernel/cgroup/cpuset-internal.h | 11 +---
+>   kernel/cgroup/cpuset.c          | 90 +++++++++++++++++++--------------
+>   2 files changed, 53 insertions(+), 48 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
+> index 140700e5e236..df662c7fd1a4 100644
+> --- a/kernel/cgroup/cpuset-internal.h
+> +++ b/kernel/cgroup/cpuset-internal.h
+> @@ -145,12 +145,6 @@ struct cpuset {
+>   	 */
+>   	nodemask_t old_mems_allowed;
+>   
+> -	/*
+> -	 * Tasks are being attached to this cpuset.  Used to prevent
+> -	 * zeroing cpus/mems_allowed between ->can_attach() and ->attach().
+> -	 */
+> -	int attach_in_progress;
+> -
+>   	/* partition root state */
+>   	int partition_root_state;
+>   
+> @@ -269,10 +263,7 @@ static inline int nr_cpusets(void)
+>   static inline bool cpuset_is_populated(struct cpuset *cs)
+>   {
+>   	lockdep_assert_cpuset_lock_held();
+> -
+> -	/* Cpusets in the process of attaching should be considered as populated */
+> -	return cgroup_is_populated(cs->css.cgroup) ||
+> -		cs->attach_in_progress;
+> +	return cgroup_is_populated(cs->css.cgroup);
+>   }
+>   
+>   /**
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 431bf210aa52..1a78d0590737 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -356,6 +356,33 @@ static struct workqueue_struct *cpuset_migrate_mm_wq;
+>   
+>   static DECLARE_WAIT_QUEUE_HEAD(cpuset_attach_wq);
+>   
+> +/*
+> + * Cpuset task attach context
+> + * Protected by cpuset_mutex
+> + */
+> +static struct {
+> +	int in_progress;
+> +} attach_ctx;
+> +
+> +/*
+> + * Wait if task attach is in progress until it is done and then acquire
+> + * cpuset_mutex before returning.
+> + */
+> +static void wait_attach_done_lock(void)
+> +	    __acquires(&cpuset_mutex)
+> +{
+> +	for (;;) {
+> +		mutex_lock(&cpuset_mutex);
+> +		if (!attach_ctx.in_progress)
+> +			return;
+> +
+> +		mutex_unlock(&cpuset_mutex);
+> +
+> +		/* Wait until attach operation is done to prevent racing */
+> +		wait_event(cpuset_attach_wq, attach_ctx.in_progress == 0);
+> +	}
+> +}
+> +
+>   static inline void check_insane_mems_config(nodemask_t *nodes)
+>   {
+>   	if (!cpusets_insane_config() &&
+> @@ -368,22 +395,22 @@ static inline void check_insane_mems_config(nodemask_t *nodes)
+>   }
+>   
+>   /*
+> - * decrease cs->attach_in_progress.
+> - * wake_up cpuset_attach_wq if cs->attach_in_progress==0.
+> + * decrease attach_ctx.in_progress.
+> + * wake_up cpuset_attach_wq if attach_ctx.in_progress==0.
+>    */
+> -static inline void dec_attach_in_progress_locked(struct cpuset *cs)
+> +static inline void dec_attach_in_progress_locked(void)
+>   {
+>   	lockdep_assert_cpuset_lock_held();
+>   
+> -	cs->attach_in_progress--;
+> -	if (!cs->attach_in_progress)
+> +	attach_ctx.in_progress--;
+> +	if (!attach_ctx.in_progress)
+>   		wake_up(&cpuset_attach_wq);
+>   }
+>   
+> -static inline void dec_attach_in_progress(struct cpuset *cs)
+> +static inline void dec_attach_in_progress(void)
+>   {
+>   	mutex_lock(&cpuset_mutex);
+> -	dec_attach_in_progress_locked(cs);
+> +	dec_attach_in_progress_locked();
+>   	mutex_unlock(&cpuset_mutex);
+>   }
+>   
+> @@ -432,8 +459,7 @@ static inline bool partition_is_populated(struct cpuset *cs,
+>   	 * nr_populated_domain_children may include populated
+>   	 * csets from descendants that are partitions.
+>   	 */
+> -	if (cgroup_has_tasks(cs->css.cgroup) ||
+> -	    cs->attach_in_progress)
+> +	if (cgroup_has_tasks(cs->css.cgroup))
+>   		return true;
+>   
+>   	rcu_read_lock();
+> @@ -3091,11 +3117,7 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
+>   	cs->dl_bw_cpu = cpu;
+>   
+>   out_success:
+> -	/*
+> -	 * Mark attach is in progress.  This makes validate_change() fail
+> -	 * changes which zero cpus/mems_allowed.
+> -	 */
+> -	cs->attach_in_progress++;
+> +	attach_ctx.in_progress++;
+>   
+>   out_unlock:
+>   	if (ret)
+> @@ -3113,7 +3135,7 @@ static void cpuset_cancel_attach(struct cgroup_taskset *tset)
+>   	cs = css_cs(css);
+>   
+>   	mutex_lock(&cpuset_mutex);
+> -	dec_attach_in_progress_locked(cs);
+> +	dec_attach_in_progress_locked();
+>   
+>   	if (cs->dl_bw_cpu >= 0)
+>   		dl_bw_free(cs->dl_bw_cpu, cs->sum_migrate_dl_bw);
+> @@ -3226,7 +3248,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
+>   		reset_migrate_dl_data(cs);
+>   	}
+>   
+> -	dec_attach_in_progress_locked(cs);
+> +	dec_attach_in_progress_locked();
+>   
+>   	mutex_unlock(&cpuset_mutex);
+>   }
+> @@ -3246,7 +3268,12 @@ ssize_t cpuset_write_resmask(struct kernfs_open_file *of,
+>   		return -EACCES;
+>   
+>   	buf = strstrip(buf);
+> -	cpuset_full_lock();
+> +
+> +	/* cpuset_mutex acquired in wait_attach_done_lock() */
+> +	mutex_lock(&cpuset_top_mutex);
+> +	cpus_read_lock();
+> +	wait_attach_done_lock();
+> +
 
-> Now, to be honest, the easiest is to just wait a year and then start
-> using `core`'s directly... i.e. it is not like we are in a rush to
-> start using it anyway...
+Would it be cleaner to just pass this into cpuset_full_lock() as a flag?
 
-Fair, I'm fine with dropping it. The counterargument is that the 
-fallback
-is small and self-contained, and the conversion removes a chunk of
-easy-to-desync pairs of #[cfg] now rather than in a year. Happy to send 
-a
-v2 if you want it.
+void cpuset_full_lock(bool wait_attach)
+{
+       mutex_lock(&cpuset_top_mutex);
+       cpus_read_lock();
+       if (wait_attach)
+               wait_attach_done_lock();
+       else
+               mutex_lock(&cpuset_mutex);
+}
+Then the two write paths become a single cpuset_full_lock(true). The
+downside is the other 6 callers would need cpuset_full_lock(false). Not 
+sure it's worth it â what do you think?
+
+>   	if (!is_cpuset_online(cs))
+>   		goto out_unlock;
+>   
+> @@ -3377,7 +3404,10 @@ static ssize_t cpuset_partition_write(struct kernfs_open_file *of, char *buf,
+>   	else
+>   		return -EINVAL;
+>   
+> -	cpuset_full_lock();
+> +	mutex_lock(&cpuset_top_mutex);
+> +	cpus_read_lock();
+> +	wait_attach_done_lock();
+> +
+>   	if (is_cpuset_online(cs))
+>   		retval = update_prstate(cs, val);
+>   	cpuset_update_sd_hk_unlock();
+> @@ -3616,11 +3646,7 @@ static int cpuset_can_fork(struct task_struct *task, struct css_set *cset)
+>   	if (ret)
+>   		goto out_unlock;
+>   
+> -	/*
+> -	 * Mark attach is in progress.  This makes validate_change() fail
+> -	 * changes which zero cpus/mems_allowed.
+> -	 */
+> -	cs->attach_in_progress++;
+> +	attach_ctx.in_progress++;
+>   out_unlock:
+>   	mutex_unlock(&cpuset_mutex);
+>   	return ret;
+> @@ -3638,7 +3664,7 @@ static void cpuset_cancel_fork(struct task_struct *task, struct css_set *cset)
+>   	if (same_cs)
+>   		return;
+>   
+> -	dec_attach_in_progress(cs);
+> +	dec_attach_in_progress();
+>   }
+>   
+>   /*
+> @@ -3670,7 +3696,7 @@ static void cpuset_fork(struct task_struct *task)
+>   	guarantee_online_mems(cs, &cpuset_attach_nodemask_to);
+>   	cpuset_attach_task(cs, task);
+>   
+> -	dec_attach_in_progress_locked(cs);
+> +	dec_attach_in_progress_locked();
+>   	mutex_unlock(&cpuset_mutex);
+>   }
+>   
+> @@ -3774,20 +3800,8 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
+>   	bool remote;
+>   	int partcmd = -1;
+>   	struct cpuset *parent;
+> -retry:
+> -	wait_event(cpuset_attach_wq, cs->attach_in_progress == 0);
+> -
+> -	mutex_lock(&cpuset_mutex);
+> -
+> -	/*
+> -	 * We have raced with task attaching. We wait until attaching
+> -	 * is finished, so we won't attach a task to an empty cpuset.
+> -	 */
+> -	if (cs->attach_in_progress) {
+> -		mutex_unlock(&cpuset_mutex);
+> -		goto retry;
+> -	}
+>   
+> +	wait_attach_done_lock();
+>   	parent = parent_cs(cs);
+>   	compute_effective_cpumask(&new_cpus, cs, parent);
+>   	compute_effective_nodemask(&new_mems, cs, parent);
+
+Overall this looks good to me.
+
+Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
 
 -- 
-Nika Krasnova
+Best regards
+Ridong
+
