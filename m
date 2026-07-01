@@ -1,166 +1,90 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083F832B118
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 06:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F9A224AF2
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 06:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782886412; cv=none; b=Xj8vFJYc1hOGckzp3m6V6bLOAsHNyT6g/ncfKSYyspB2lzPqrpu7THuHxDX2JRv6pN7upy4U+WmZ99f9zp6YMPEtfFalpNFu6dnU0osr7RJedTALypj2MOaNuqREkcMNOA1hKzChbGnMBG6TUTK88HXg+uM56KI4gurn9bTJJzk=
+	t=1782886872; cv=none; b=nfiayg0q1Gw1daOsjIHhtBkj9G0RC5tVW9z5zSUi4FFZkbSqXRuo7+gevHYlN9JcixliByRneeQ2EeYm8npuuu3yBefqaIyaUhqKgBUB2cHUrpVH95p4zjPpQ/IVMtHvsugHciDH+dCa3kfoLzmrHORGM1D/XUqW0AaQ+57ZC5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782886412; c=relaxed/simple;
-	bh=5IugnX6ei1qX95xqi+Dab5Sz2YMHXwt1aK+XcCyrIao=;
+	s=arc-20240116; t=1782886872; c=relaxed/simple;
+	bh=T6VVV/sZwKH2UqabUKP3L89K2WchKWmMle57esVdtyM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aRMWh3OpAYCDaQsKVA3GuZirqidCSWnDy7O77vHKv+e9okv2TaKA+0nkLq9R5/nsbSHZ7S7TS2EXR/YEO1L1yRMjcDM7bTCxqRC2U6ERMK1zEFsKgSfEu19FdXBoBIDmp9EB95pv9Ne3BxVAxqeA3dpxFF77ESYcfpI1sDv0abA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nVkPquKq; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=IgLbW7hT; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nVkPquKq; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=IgLbW7hT; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	 In-Reply-To:Content-Type; b=UoLnfA/yTGV6OC+oBhPbfzVhzVC5ZcX2WZl41x2zcLUydIep9hanh7N0L0MAwdodnpHrHemysLOevRsdjQ6eumRCvjuvPQow5sVhhq+Xrmn6hodDNVoTwfb7OXTk3eRB7VntKjsiXkne2JmDmEG1AmcwMA71RvFOQNrxNTNNKWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hqhY1jAB; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nVkPquKq";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="IgLbW7hT";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nVkPquKq";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="IgLbW7hT"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 386CC75FA2;
-	Wed,  1 Jul 2026 06:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1782886409; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hqhY1jAB"
+Message-ID: <945b57b1-c2ed-44d2-8fa7-07300930783c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782886869;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=KYQUm/ch17JGjQTwSu+BBLhvek6prevgXa6ce8KlIcw=;
-	b=nVkPquKqfnuglwRA64kO/65FlsWtnZVcUr3tQjW84mZEt5kIK1Id+IAvCnd8COFWAMIdCN
-	A+LLI/gXRqAumQ6m6nZvELRBDLiulChfZexd6Z8RaTTDRKPx8SMbetsUAzw04D6Lu6YrUo
-	3Tt20D3L669qjQts1PWJhNHngCyL2zI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1782886409;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KYQUm/ch17JGjQTwSu+BBLhvek6prevgXa6ce8KlIcw=;
-	b=IgLbW7hT3Aoo3CqPjJU1FBDZYQCfBqX2sBw4KqeELLYrzoJwo6zrbQBzA6udP+eNK09Hw4
-	2Irk1zJbX7sxlFAg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1782886409; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KYQUm/ch17JGjQTwSu+BBLhvek6prevgXa6ce8KlIcw=;
-	b=nVkPquKqfnuglwRA64kO/65FlsWtnZVcUr3tQjW84mZEt5kIK1Id+IAvCnd8COFWAMIdCN
-	A+LLI/gXRqAumQ6m6nZvELRBDLiulChfZexd6Z8RaTTDRKPx8SMbetsUAzw04D6Lu6YrUo
-	3Tt20D3L669qjQts1PWJhNHngCyL2zI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1782886409;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KYQUm/ch17JGjQTwSu+BBLhvek6prevgXa6ce8KlIcw=;
-	b=IgLbW7hT3Aoo3CqPjJU1FBDZYQCfBqX2sBw4KqeELLYrzoJwo6zrbQBzA6udP+eNK09Hw4
-	2Irk1zJbX7sxlFAg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 88874779AA;
-	Wed,  1 Jul 2026 06:13:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 9virHwiwRGoNTQAAD6G6ig
-	(envelope-from <hare@suse.de>); Wed, 01 Jul 2026 06:13:28 +0000
-Message-ID: <abde41f0-7d40-42ba-a232-cc0538cd0e4b@suse.de>
-Date: Wed, 1 Jul 2026 08:13:28 +0200
+	bh=T6VVV/sZwKH2UqabUKP3L89K2WchKWmMle57esVdtyM=;
+	b=hqhY1jABygfGs3qJ4+bHhAwOBA3a0eSaaDMrYfEat8rIkzElEg1iXPu5WsneIzWRyIype+
+	+E1mm5yk3AOrTdw28j3EHl+WnHj8uosW136zpVjjCXpiEqJsh5A/2TTiKHrTGipD5S15Lw
+	xweA96yn808zBEJ0mfRl7k4OfX9SNJk=
+Date: Wed, 1 Jul 2026 14:20:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 09/10] dax/kmem: add sysfs interface for atomic
- whole-device hotplug
-To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org
-Cc: nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-cxl@vger.kernel.org, driver-core@lists.linux.dev,
- linux-kselftest@vger.kernel.org, kernel-team@meta.com, david@kernel.org,
- osalvador@suse.de, gregkh@linuxfoundation.org, rafael@kernel.org,
- dakr@kernel.org, djbw@kernel.org, vishal.l.verma@intel.com,
- dave.jiang@intel.com, alison.schofield@intel.com, akpm@linux-foundation.org,
- ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, shuah@kernel.org, iweiny@kernel.org,
- Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
-References: <20260630211842.2252800-1-gourry@gourry.net>
- <20260630211842.2252800-10-gourry@gourry.net>
- <akQ_xlJtXNgnGUdf@gourry-fedora-PF4VCD3F>
+Subject: Re: [RFC PATCH bpf 0/6] bpf: Disallow interpreter fallback for
+ interpreter-unsupported insns
 Content-Language: en-US
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <akQ_xlJtXNgnGUdf@gourry-fedora-PF4VCD3F>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[28];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RL7dfuuh4jrqtijtc3c3mfetss)];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid]
-X-Spam-Level: 
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260626154330.33619-1-leon.hwang@linux.dev>
+ <DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com>
+ <18678d0c-f878-4d7b-bf7e-ffca4967dec5@linux.dev>
+ <DJN001X0S57Y.18CKUS4NDDQT1@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <DJN001X0S57Y.18CKUS4NDDQT1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 7/1/26 12:14 AM, Gregory Price wrote:
-> On Tue, Jun 30, 2026 at 05:18:41PM -0400, Gregory Price wrote:
->> There is no atomic mechanism to offline and remove an entire
->> multi-block DAX kmem device.  This is presently done in two steps:
-> 
-> ... snip snip snip ...
-> 
-> Sashiko pointed out a false-positive, but adding a fixup patch
-> here that adds additional consistency.
-> 
-> On total failure - release all resources.  This makes the sysfs
-> interface consistent with the probe failure path.
-> 
+On 1/7/26 13:50, Alexei Starovoitov wrote:
+> On Tue Jun 30, 2026 at 7:59 PM PDT, Leon Hwang wrote:
+>> On 1/7/26 07:12, Alexei Starovoitov wrote:
+>>> On Fri Jun 26, 2026 at 8:43 AM PDT, Leon Hwang wrote:
+>> [...]
+>>>
+>>> I don't think we need such fallback in patch [3].
+>>
+>> Do you mean we can add the internal BPF_ADDR_PERCPU insn support to the
+>> interpreter?
+>
+> No. See why CONFIG_BPF_JIT_ALWAYS_ON was introduced.
+> The interpreter is a security hole.
 
-Speaking of which ...
-With this patch we now have _two_ interfaces to do the same thing.
-And both will be generating uevents.
-Which is far from ideal (one could easily envision _conflicting_
-udev rules, one set doing an 'online' on the old interface,
-and another set doing an 'offline' on the new interface...)
-Is there a way to not sending uevents for the old interface
-or to make it configurable?
-The old interface had the nasty side effect of generating
-_tons_ of uevents during booting, and on larger machines we
-even had seen udev acting as a fork-bomb during booting,
-taking down the entire machine (we had to restrict udev
-to 512 threads max to avoid that from happening).
-So if we could disable uevents for the old interface
-things would be _so_ much easier ...
+Got it. The commit message of
+290af86629b2 ("bpf: introduce BPF_JIT_ALWAYS_ON config") has explained
+the security concern.
 
-Cheers,
+> It has to be _compiled out_ of the kernel.
+> Hence all patches that improve fallback to interpreter are misguided.
+> The interpreter has to be removed completely... sooner or later.
 
-Hannes
--- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+Will disallow interpreter fallback for the internal BPF_ADDR_PERCPU
+insn.
+
+Thanks,
+Leon
