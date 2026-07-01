@@ -1,213 +1,122 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68364342514;
-	Wed,  1 Jul 2026 15:19:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB91282F36
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 15:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782919196; cv=none; b=S5uoFxJUxlcSktsNzKpDOKkl5d5wnBZSmwGZuTcJZSo2RW7yyCfPanhcET+bdvD0AHjIVFyjjkmKR03A3Ezfi+GkXDawvQnFnwLGNCHpmLBlnBeKIs+8WQxCvDJKwBDs4svzzEs5y3CUvGunNfRQNbpzZK/7q/XFqhaCzHemfms=
+	t=1782919590; cv=none; b=DPCkAeiV+jbT/FgQVCDBHdjPmphSE7fYHWdh0LO04KjSm1kY802+UBMVVpCqGvi4YD6uVMDDUaJjqLcA7eXWsZ41ERncv4yp2mN2Y+SH+MBySAbmW2CrAPSFhqsYOBQ3Y7FEZDFRm06Lz2jGRnhCgS7xjh2gSHaxpF5w8luWDwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782919196; c=relaxed/simple;
-	bh=Va1WsMw6g8CID4aKmdFlMtmgVQRP2YCIPPta56rnnw4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TykWNyLcQIIO8vVCmPobVPAQj7i8Uor4mRT9ktcV8Ra4RzFQW7Lh+Yw9aEmc6EvelHC6ABC383gJBACEF31p4eWDuyazzUQwlVo3Kv9QBf+rAH7K3A0joBVXQPGjvudhThKe+gSqZZa+eiUR162zfCmWy9/0JNRDFJuVEW46mB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=y3IsDuT9; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2iLDdrhv; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1782919590; c=relaxed/simple;
+	bh=x9xXwvlw18vCoKHShyoev5PrZsEHYltpf+5WkK6WbJ4=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=l58hzd2M2DU51CWmdLD4Ly11+GG2a/apKiYhSJsSJVXIR8N/xEzPZCUDWFkFmmdS8iSTNsD3DabjxP9cbDSPdm8OvGL/Z/EJLLelYpzvV1QXxdhbQjOiRc2di52cAT2UIniiBnul/FF5kjK4pF5pxNYEZ8LsD8NFCs5zHyrxf4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Y/J7xCio; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="y3IsDuT9";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2iLDdrhv"
-Date: Wed, 1 Jul 2026 17:19:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1782919192;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IuB/NFXI2ywL2Wt3asGMBPy8oadX8xY2jSEUGl9P02I=;
-	b=y3IsDuT9yxbotxD/voDHf63AsceXixR4RT+dwnGV/f9yshLh8VjKHEOEe1+LMBRUbZjmcx
-	PvWHkL43f/a1+T7VIVaU0Z+ZOPYaOCygwirqRfrBOrZrQj0wtfHcPTXR4YLoxIYrgJY0MG
-	HXRq5JXBHrT5eiHogWhkO+Unogli/PvMh73km97jvxgdcjWWHEkJLeO/ZXj6IqIQV+4tAS
-	A/RJvhtR8fIviV9QXmFqa3Cfn/I9TctAX4i508WsQzR4IqYxZL1WSGifvQwaoMOyFlLc15
-	D8Z02XpuDO/AU38iy4AHtwfdSSUFjcrQ8s8mkoiOJVpihejTc9bD9ZZ1IN7zcQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1782919192;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IuB/NFXI2ywL2Wt3asGMBPy8oadX8xY2jSEUGl9P02I=;
-	b=2iLDdrhvJcE4vYrFknYpd6wLnXLCFJyykBVjAixtMCO/NJ9xGsI6e4fa4T5GM5fZ9aM5nj
-	W8H3NQIR00zm2KDQ==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Petr Mladek <pmladek@suse.com>
-Cc: Zelin Deng <zelin.deng@linux.alibaba.com>, 
-	Miroslav Benes <mbenes@suse.cz>, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	live-patching@vger.kernel.org, mpdesouza@suse.com, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] selftests: livepatch: unset sub_make_done in case top
- level Makefile be overwritten
-Message-ID: <20260701171713-7dd2f65f-abe2-4ae6-bcd4-e0bcdada6bed@linutronix.de>
-References: <20260525083721.27857-1-zelin.deng@linux.alibaba.com>
- <alpine.LSU.2.21.2606191638540.26638@pobox.suse.cz>
- <ccfed9b6-9a73-4299-b305-da7b593a52fd@linux.alibaba.com>
- <akPTcJjrIAI1ZNyH@pathway.suse.cz>
- <20260630181125-a7a41726-4270-4bb7-92fe-17ec28cbe176@linutronix.de>
- <akUu0DEYrhd9cLCL@pathway.suse.cz>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Y/J7xCio"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 5C5BF4E40B64;
+	Wed,  1 Jul 2026 15:26:27 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 2790A60288;
+	Wed,  1 Jul 2026 15:26:27 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E22CE104C9645;
+	Wed,  1 Jul 2026 17:26:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1782919585; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=X1P6Uopi1no2c62h+MDbAYiRELSK5xbROG23T7VO3RQ=;
+	b=Y/J7xCiowcvhxBMaTKEl0M+9uAOYyD5/+LJc+ZWLo44LKYCjXfEuNrkZcxW4dU6JVfBA/B
+	XMezNwv/dUf82pifFTi3+uX0ST1IcLizmnsxT352HHFBRLF4M0TODHwdGeuB1Dub1F7i4V
+	A28kddgmauKV3URWxMLF3HHtU+ulniL4u+KpXB6BhTbC4e7XF7lxHMwPn0SWf742hSFM5R
+	nhiiSL27BoNgG38DUsMyLPKk1Po03CYL0OhHNl38JxpgRw6PBVgygruYFbua7xHK7YNXQR
+	P9x4pJa4+eBFKsii5wcsAA2thbPXqv/MVx8aFUNrIbjfL9X4Z0b8doJrGo5gNA==
+Message-ID: <8419863d-1e0f-4343-acca-ad75c66092cf@bootlin.com>
+Date: Wed, 1 Jul 2026 17:26:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] bpf/selftests: remove lirc test
+From: Bastien Curutchet <bastien.curutchet@bootlin.com>
+To: Sean Young <sean@mess.org>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Alexis Lothore <alexis.lothore@bootlin.com>,
+ LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ bpf <bpf@vger.kernel.org>
+References: <20260605-remove-lirc-test-v1-1-ee3f1ea5f3ae@bootlin.com>
+ <CAADnVQJWBN2wohM8PM4rNGqtgGWQH__sgjrUv7h8SmWE7Px0FA@mail.gmail.com>
+ <aiLpfQze1msH8ubd@extorris.mess.org>
+ <8cc9e60a-4935-437b-ae79-36658223defa@bootlin.com>
+Content-Language: en-US
+In-Reply-To: <8cc9e60a-4935-437b-ae79-36658223defa@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <akUu0DEYrhd9cLCL@pathway.suse.cz>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, Jul 01, 2026 at 05:14:24PM +0200, Petr Mladek wrote:
-> On Tue 2026-06-30 18:12:46, Thomas Weißschuh wrote:
-> > Hi Zelin,
-> > 
-> > On Tue, Jun 30, 2026 at 04:32:16PM +0200, Petr Mladek wrote:
-> > > Added some people involved in "filechk_makefile" feature into Cc.
-> > > 
-> > > For the new people, see the whole thread at
-> > > https://lore.kernel.org/all/20260525083721.27857-1-zelin.deng@linux.alibaba.com/
-> > 
-> > Thanks for the report and forwarding it.
-> > 
-> > > On Sun 2026-06-21 22:36:24, Zelin Deng wrote:
-> > > > 
-> > > > 在 2026/6/19 22:42, Miroslav Benes 写道:
-> > > > > On Mon, 25 May 2026, Zelin Deng wrote:
-> > > > Here're how I reproduce the issue:
-> > > > 
-> > > > 1. pull linux-next, reset to HEAD, for example
-> > > > 3ce97bd3c4f18608335e709c24d6a40e7036cab8 (tag next-20260619)
-> > > > 
-> > > > 2. at linux-next tree: make all -j$(nproc) && make modules_install
-> > > > headers_install -j$(nproc) && make install && reboot
-> > > > 
-> > > > 3. at linux-next tree: make kselftest-all
-> > > > 
-> > > > 4. top level Makefile in linux-next has been overwritten by
-> > > > 
-> > > >     export KBUILD_OUTPUT = .
-> > > >     export KBUILD_EXTMOD = /home/shiyu.dzl/linux-next
-> > > >     export KBUILD_EXTMOD_OUTPUT = /home/shiyu.dzl/linux-next
-> > > >     include /home/shiyu.dzl/linux-next/Makefile
-> > > > 
-> > > > it is a stub generated by filechk_makefile.
-> > > 
-> > > It seems that "filechk_makefile" has reached mainline in v7.1-rc1,
-> > > see the commit c9bb03ac2c66bc5aa81b ("kbuild: reduce output spam when
-> > > building out of tree").
-> > > 
-> > > The commit message says:
-> > > 
-> > > <paste>
-> > >     The Makefile is now created even if the build is aborted due to an
-> > >     unclean working tree. That should not make a difference in practice.
-> > >  </paste>
-> > > 
-> > > It seems that is actually makes a difference in the livepatch selftest
-> > > case.
-> > > 
-> > > Sigh, the Makefile rules are a maze to me. It is possible that
-> > > we do something wrong in
-> > > tools/testing/selftests/livepatch/test_modules/Makefile. Namely
-> > > with:
-> > > 
-> > > ifneq ("$(wildcard $(KDIR))", "")
-> > > 	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
-> > > endif
-> > > 
-> > > But I see "$(MAKE) -C ..." called in many other makefiles.
-> > > 
-> > > Best Regards,
-> > > Petr
-> > > 
-> > > > I'm not quite sure that it could be related to my toolchain (like make
-> > > > version ?), I briefed analysis the root cause on my environment (KDIR
-> > > > '/lib/modules/7.1.0-next-20260619/build' which actually a symbol link to my
-> > > > kernel source -> '/home/shiyu.dzl/linux-next'):
-> > > > 
-> > > >   1. sub_make_done leaks via environment. The top-level Makefile sets export
-> > > > sub_make_done := 1 after its first-pass initialization.
-> > > >   Because it is exported, every child make process inherits it.
-> > > >   2. livepatch test_modules re-invokes the top-level Makefile. The call
-> > > > chain is: top-level Makefile → kselftest-% pattern rule →
-> > > >   tools/testing/selftests/ → livepatch test_modules/Makefile → $(MAKE) -C
-> > > > $(KDIR) modules KBUILD_EXTMOD=..., which re-enters the top-level Makefile to
-> > > >   build an external module.
-> > > >   3. The inherited sub_make_done=1 skips critical initialization. The
-> > > > top-level Makefile's first-pass block (ifneq ($(sub_make_done),1)) is
-> > > >   skipped entirely. This block is responsible for correctly parsing
-> > > > command-line variables and setting up KBUILD_EXTMOD-related paths.
-> > > >   4. Path mismatch triggers false out-of-tree detection. With the
-> > > > initialization skipped, srcroot and CURDIR end up with mismatched values
-> > > > (e.g.,
-> > > >   absolute vs. relative). The comparison (ifeq ($(srcroot),$(CURDIR)))
-> > > > fails, so building_out_of_srctree is incorrectly set to 1.
-> > > >   5. outputmakefile overwrites the source tree's Makefile. Because
-> > > > building_out_of_srctree is set, the filechk_makefile rule fires and replaces
-> > > > the
-> > > >   real top-level Makefile with a generated stub containing KBUILD_OUTPUT,
-> > > > KBUILD_EXTMOD, and an include directive.
-> > > > 
-> > > >   Why make -C tools/testing/selftests/ all is unaffected: it enters the
-> > > > selftests directory directly without ever executing the top-level Makefile
-> > > >   first, so sub_make_done is never exported into the environment. When
-> > > > livepatch test_modules later invokes $(MAKE) -C $(KDIR), the top-level
-> > > > Makefile
-> > > >   runs its full initialization normally.
-> > 
-> > Can you try this:
-> > 
-> > diff --git a/Makefile b/Makefile
-> > index b9c5792c79e0..f717a4dc96d6 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1591,10 +1591,10 @@ tools/%: FORCE
-> >  
-> >  PHONY += kselftest
-> >  kselftest: headers
-> > -	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
-> > +	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests run_tests
-> >  
-> >  kselftest-%: headers FORCE
-> > -	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
-> > +	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests $*
-> >  
-> >  PHONY += kselftest-merge
-> >  kselftest-merge:
+Hi Sean,
+
+On 6/8/26 2:51 PM, Bastien Curutchet wrote:
+> Hi Sean,
 > 
-> Heh, this is exactly the same change which Zelin Deng proposed as
-> well, see
-> https://lore.kernel.org/all/20260525083721.27857-1-zelin.deng@linux.alibaba.com/
-
-The difference is that my proposal is in the toplevel Makefile while
-Zelin's is in the selftest one. The toplevel one should fix all selftests at
-the same time.
-
-> > The same is done for cmd_install.
+> On 6/5/26 5:21 PM, Sean Young wrote:
+>> On Fri, Jun 05, 2026 at 06:39:51AM -0700, Alexei Starovoitov wrote:
+>>> On Fri, Jun 5, 2026 at 12:58 AM Bastien Curutchet (eBPF Foundation)
+>>> <bastien.curutchet@bootlin.com> wrote:
+>>>>
+>>>> test_lirc_mode.sh fails with the following when run from the vmtest VM:
+>>>> root@(none):/root/bpf# ./test_lirc_mode2.sh
+>>>> Failed to read decoded IR: Resource temporarily unavailable
+>>>> FAIL: lirc_mode2
+>>>>
+>>>> As part of the ongoing effort to get rid of any standalone test, this
+>>>> script should either be fixed and converted to test_progs or removed.
+>>>>
+>>>> Remove it.
+>>>
+>>> cc Sean
+>>
+>> I've sent a fix to for the test in a separate email.
+>>
+>> This regressed a long time ago; is anyone running these tests? There is
+>> not much point to selftests if they're not run by anyone. I should add
+>> them to linux-media CI, but is anyone in bpf running them?
+>>
+>> I am not familiar with test_progs, what's that?
+>>
+> test_progs is the selftest's application run by the BPF CI for every 
+> patch series sent to bpf@vger.kernel.org (or PR done to the BPF github). 
+> It's made out of the C files located in tools/testing/selftests/bpf/ 
+> prog_tests/.
 > 
-> I guess that this is related to the commit 14ccc638b02f9ec ("kbuild:
-> cancel sub_make_done for the install target to fix DKMS"). Which
-> is related to the commit bcf637f54f6d2515d ("kbuild: parse C= and M=
-> before changing the working directory").
+> The shell scripts under tools/testing/selftests/bpf aren't run 
+> automatically anywhere (to my knowledge at least). The goal of the 'on- 
+> going effort' I mentioned is to get rid of these scripts by either 
+> integrating them to the 'test_progs infra' or removing them.
 > 
-> Honestly, it all looks like a wild magic to me. I would need much
-> better understanding of the Makefile maze to get on top of it.
-
-I was not able to reproduce the issue yet. My proposal is just a guess.
-We'll need feedback from Zelin.
-
-> But it seems that it is a reasonable fix after all. It solves the
-> original problem. It does not break my workflow. So, I tend to add:
+> If you're going to add this script to the linux-media CI, maybe we could 
+> remove it from here ?
 > 
-> Acked-by: Petr Mladek <pmladek@suse.com>
+> 
+Gentle ping: would it be OK for you if we remove the test from here ? 
+I've seen your fix, the bug was introduced in 5.17, which means no one 
+had run it for 4 years. Given that, I'm not sure it's worth the effort 
+of porting it to the test_progs infra.
 
 
-Thomas
+Best regards,
+Bastien
