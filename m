@@ -1,256 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AF7438FE4
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 11:02:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91D240BCCE;
+	Wed,  1 Jul 2026 11:07:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782903778; cv=none; b=pPryQFxU6SjpX5dz9ToELvfhLqVSYZVOFeNxR2uRqDTZkbf4OfsdB8DGluKt8AnYZF2aKIoa8Okj0GjMUBKvNcC7TurHDFAdWw18xKKSL9jql0Yw0xxcSoeFPlCpAsFvj1wHsGkDXPuqAwIBT01M95t7PHX6tuBGYSfyr5430GQ=
+	t=1782904070; cv=none; b=iAiCYDOwdMC5Fk8lvbbDtVzSIV843u61DFo5MU77MF+OFGnaIbGVBUFvbrmQBkQYFtoSAKpii1qkYCRBjuXpQjqgohTdjDiMlODhcAptRsnKh4uy6jmQp4iXoIf5wKEPoAcWuOFQOgtidp+5V90yfUyxLLK98vpTo0wDV9kJhRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782903778; c=relaxed/simple;
-	bh=fRGiZtTZwPpQ+e62B55nkzc896Y8lcB1tI5y3I/MMEM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=jIL7MVqPLn/qie/S7W7mjxcgv/va+XGqcff1SwZcS1O6RC/5n69uP+WwZsqLc9AwGpQwjJYufwT5Ur6BnfvH0cJyfWL7+3MaguVYayd3VobF+CJL5qYhrnwiw0hW24n7qefL+bB8lIJAPl7EFIuHVrIG9onF9JYZIbUqsXKnrPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LBBSvDjt; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=iVlhmPBb; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782904070; c=relaxed/simple;
+	bh=hCvnNk/pEx9Q3BuA3GT3urPlvNsb9ZGbJEO+TxrHDhk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ISrNKXq/pgcspmDOaD6vqghancW5wO0j1g1oXIIcH7YQ7L6uw0liZdMNqwM/8jb+ys7O1IL+d1alxdidV6SBxUwBgeJAFTfi+7XXNdcU58nWX3UFtu4OlG+Tu8Ky/okdRC3R+mvLVlNw85S1s1sUG+4KOtZwKW2R/uEFm8KVhbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LNtiPidL; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LBBSvDjt";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="iVlhmPBb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782903775;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NnOYvPIZlJQwQJ6FFCiD44nqFh2+p0us6zgjeQu6Qjg=;
-	b=LBBSvDjt6fqmoL5JEZmxIpa+A3xuVgYvXj+mhbHe7y6r6D3W4kbVZuxbTJlo1PLI8aku81
-	eAz1an6iVf3vefwLHWfMPYdD38dk6E07byXFT5MQpfZxOGpwklVOmmnshrYcrw8E9F2oPP
-	CxuUl3uiW4hWU0GAjzd5qJ0PgqhxNCE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-39-LeKVOIieMtmvh03UDXpdCQ-1; Wed, 01 Jul 2026 07:02:54 -0400
-X-MC-Unique: LeKVOIieMtmvh03UDXpdCQ-1
-X-Mimecast-MFC-AGG-ID: LeKVOIieMtmvh03UDXpdCQ_1782903773
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-49244130073so4281245e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 04:02:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782903773; x=1783508573; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NnOYvPIZlJQwQJ6FFCiD44nqFh2+p0us6zgjeQu6Qjg=;
-        b=iVlhmPBb+7k3Oe8KP9Kuo4PtvFA/amoJy/Roa6Li2TUU85OxztmbFdgUYhvobwqSMf
-         dfI3UoYJ4Ni/uLB6V8RfQ3kyECcKr+TC717efOlkGT7bSIEKtYvlVKneF9I4oGBv2Haf
-         jOJsz9lIRQ2M2lVV8X3LIV9t76TqCHQTOFNTIt801FEYriIAKIZ3FnHE4PMupeVCb+Eq
-         NdwuzoaCYfyecxr+KaNRPYdx1XL8DMZNeCZhWB5+tlvlW8rnm8t6meEKG1RZiK/q6ZL0
-         CqWuVLrPPWMyDQRY4HnmUKwk9+zou93XO/SV/7uaY1xVWmFIkyiDYVNmTLJed2CTYzT0
-         9F1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782903773; x=1783508573;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NnOYvPIZlJQwQJ6FFCiD44nqFh2+p0us6zgjeQu6Qjg=;
-        b=AsDfSYrSrpvGid1lM3eXrrFFARljbpjboMrjWU04ZdoRYfwxHbs3XoRbbl1g8ERk1P
-         8k36y1vPnxXXrSxhTUWUNc2KtdB4Vr55mpulV20Xafohqzn66kSsRx2SbGUjAxjbK/ld
-         V4b9yJoI8HqKxkkBNBvPGNJ71VYHRLqdA69t33vsNv11c792N1LdZFmRRlxVeU8ZyWih
-         A5afCAdafrqu7HC/NYoCRaVhlzw6EBv3h5j3N1HYnYVItYlS3jo9woTj43dtUyb2Mi0J
-         8DujbWHSHclakRxTTxn8ikr1aWqnZ5m1xyXZP8U5ZPsMhVdkKneD2cHLlGjxbIA8DpHE
-         pQCg==
-X-Forwarded-Encrypted: i=1; AFNElJ8VufK/4whaOAbAmx98XDBzeWmvJPyPLRTIJqeIcG1GQmpXSlyQsO5gjqU0zyl5dT4j9jlnzKd3otb+8tVc3oU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHx+pMZba4altEip+9XFeDHLE3YZgYGtn7lGjG9MdPiThB2vdM
-	phmrbAAtxWlurKWli4UfsrCf4XsuC01f7oWMGlChb9yxVs1FRl3yWsXsdSPA1mfP9fFxEzFaolB
-	DXcuMQwW04zc2dz8TRDw2UKAlcfz6lEL45fuPWtssrzd95faSlTP3Y3ZhJcksHXdl+7TpRw==
-X-Gm-Gg: AfdE7cn4Pjg9s4wfoUlR6ylrtoU7tgHs28+8FviBIPmFwVohpGljkeO2EL6yKBmxfvG
-	Gl3MxZ5zJXhciA04lF1OQ7xC4/hmS+Us3/8YHOhgLvNAE4ZPZOcZHNe3jYl0R/KwDoXqgcurkz8
-	6Nw+kjyYh3ySZH0B4esDbpJJYNlWv+o+Ebvi4NupBwRWP8sosq0bZ6dn07iNJzvp1TnGhgeByMQ
-	p9chxRLC3qNqmxC59eX9UwyJOh02hym+CBJ4t2gSqH/6lyIJhnwH5oseDBmAF+twPkVAvCGZCD/
-	Lz3WdlUYYjiosLFTMs89BSyf4f4pjbzkoHs4evF1d1Lc3CxKu6DNnatAlKHhFWVRsgiCootSJu8
-	7Ggq9Uxq39qyaou5Muv0t5LKjWWhtqdAMFlNPRg==
-X-Received: by 2002:a05:600c:5297:b0:493:a5da:e5d2 with SMTP id 5b1f17b1804b1-493c2b93614mr16386315e9.26.1782903772847;
-        Wed, 01 Jul 2026 04:02:52 -0700 (PDT)
-X-Received: by 2002:a05:600c:5297:b0:493:a5da:e5d2 with SMTP id 5b1f17b1804b1-493c2b93614mr16385385e9.26.1782903772259;
-        Wed, 01 Jul 2026 04:02:52 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493be4d8f5asm99969285e9.8.2026.07.01.04.02.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2026 04:02:51 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 9C78480A7F7; Wed, 01 Jul 2026 13:02:50 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: David Ahern <dsahern@kernel.org>, Avinash Duduskar
- <avinash.duduskar@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-In-Reply-To: <916191fc-2e10-4449-b82b-c086d90283ae@kernel.org>
-References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
- <20260624030530.3342884-2-avinash.duduskar@gmail.com>
- <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
- <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org> <87echobb5h.fsf@toke.dk>
- <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org> <874iik2ew4.fsf@toke.dk>
- <916191fc-2e10-4449-b82b-c086d90283ae@kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Wed, 01 Jul 2026 13:02:50 +0200
-Message-ID: <87y0fv0y79.fsf@toke.dk>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LNtiPidL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782904069; x=1814440069;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hCvnNk/pEx9Q3BuA3GT3urPlvNsb9ZGbJEO+TxrHDhk=;
+  b=LNtiPidLDPr2cCEfm6nmkpfeRNI4QV3/W9S1PF5JTllnEv0I5stLmP7R
+   qJuecNfxVWxxeXE1ZFI90KMcIRSlQa2fjEy+w3ivHinUaseH7HJYePVui
+   YMP73yvTHQM8rC+OltN8X/9K5IctoVX+GfNQFQi/Aa0Ib0PIFcGVluWQZ
+   fs3D5IUYSOR+IoI313VcgY4t4gi/6mrajCQ33iaotHUCevuI03XwGAUs8
+   iXhqpbLpaR7r6hCZIdOhv9n2w1m/MV0nytJ+yUQykx+VtdMs5KWiGNLoR
+   /bEUEmcL4nrfExvkAcvK50aiXyP87Y2TJO1Fl2xhVQYMZJTtOPxRBC6oo
+   w==;
+X-CSE-ConnectionGUID: hFZnprObTNePX2nhndIJYw==
+X-CSE-MsgGUID: SfODCpYrQSa2FJ7OeXRYNg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11833"; a="87546077"
+X-IronPort-AV: E=Sophos;i="6.25,141,1779174000"; 
+   d="scan'208";a="87546077"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 04:07:48 -0700
+X-CSE-ConnectionGUID: qj8BVJ/XRI6zgtwRVeHuag==
+X-CSE-MsgGUID: hj6+vDsNStmOM/iX4E14dg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,141,1779174000"; 
+   d="scan'208";a="248074941"
+Received: from unknown (HELO [10.239.158.49]) ([10.239.158.49])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 04:07:34 -0700
+Message-ID: <25fdb77d-20f6-4b3a-8b3a-dbba0dc47046@intel.com>
+Date: Wed, 1 Jul 2026 19:07:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 24/46] KVM: guest_memfd: Make in-place conversion the
+ default\
+To: Sean Christopherson <seanjc@google.com>, Yan Zhao <yan.y.zhao@intel.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com,
+ andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org,
+ chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
+ jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
+ pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
+ rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
+ tabba@google.com, willy@infradead.org, wyihan@google.com,
+ forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
+ aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>,
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-24-9d2959357853@google.com>
+ <aji/2svhcc84rn5w@yzhao56-desk.sh.intel.com>
+ <CAEvNRgHYTFnHbsLLgMTCSitmnp1_j9Pomikm9qmpGTh1w8YE5Q@mail.gmail.com>
+ <ajx5Vrz9ma--hrGH@google.com> <ajyJhZcgfYFtGfS2@yzhao56-desk.sh.intel.com>
+ <aj0Jf30PS2f7x1nt@yzhao56-desk.sh.intel.com> <aj087H1UWSFxbShR@google.com>
+ <aj3H2sxymOYTWTnE@yzhao56-desk.sh.intel.com> <aj7NwCRwWEfLK-gQ@google.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <aj7NwCRwWEfLK-gQ@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-David Ahern <dsahern@kernel.org> writes:
+On 6/27/2026 3:06 AM, Sean Christopherson wrote:
+> On Fri, Jun 26, 2026, Yan Zhao wrote:
+>> My first impression of gmem_in_place_conversion=true was that it enforces gmem
+>> in-place conversion. However, it actually only enforces per-gmem private/shared
+>> attribute.
+>> My worry was that people might think it's a kernel bug if userspace can still
+>> have shared memory from other sources after they configured
+>> gmem_in_place_conversion=true.
+> Ah, I see where you're coming from.  FWIW, truly enforcing in-place conversion
+> is flat out impossible.  E.g. userspace can simply replace the memslot, at which
+> point the memory effectively reverts to shared.
 
-> On 6/30/26 10:04 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->> David Ahern <dsahern@kernel.org> writes:
->>=20
->>> On 6/30/26 4:00 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->>>>> It does not make sense to require a flag to get lookup output. vlan
->>>>> proto of 0 is not valid, so it is a clear indication that the vlan
->>>>> output parameters were not set during the lookup.
->>>>
->>>> Okay, so we could just unconditionally set the VLAN fields, but if we
->>>> start rewriting the ifindex that would be a change of the existing
->>>> behaviour that could break existing applications, no?
->>>
->>> Consistently dealing with upper devices is one of the reasons I never
->>> sent patches for vlan support.
->>>
->>> xdp support is at the driver layer for real (physical) devices. The fib
->>> lookup is going to return the vlan device index - a virtual device.
->>> Support for xdp should not be propagated to virtual devices; it goes
->>> against the intent of xdp. Any trip down this path will have to decide
->>> how to handle vlan-in-vlan use cases. Where is the line drawn for fast
->>> networking?
->>=20
->> Right, which is why we need building blocks that makes it possible for
->> XDP programs to do the right thing in the BPF code :)
->>=20
->> A helper that resolves the parent could be used for stacked VLANs as
->> well (just calling the helper multiple times).
->>=20
->>>> Specifically, if an XDP application has a table of the interfaces it
->>>> forwards between, today they'd get a VLAN interface ifindex, which wou=
-ld
->>>> not be in that table, and the application would return XDP_PASS. Where=
-as
->>>> if we change the ifindex and populate the VLAN tag, suddenly the
->>>> interface would be in the table, but because the application doesn't
->>>> read the returned VLAN tag, it will end up sending packets out without
->>>> tagging them, leading to broken forwarding.
->>>
->>> I have not followed developments over the past few years. Does XDP have
->>> support for vlan acceleration in the Tx path now? You really want that
->>> to deal with vlans and not replicating s/w processing in ebpf.
->>=20
->> It does not, no. There's TX metadata for AF_XDP, but VLAN support is not
->> in there (see include/uapi/linux/if_xdp.h).
->>=20
->> Doesn't mean software VLAN handling can't be useful, though; there are
->> use cases other than the very high end where XDP can speed things up
->> even if it has to write a VLAN tag or two...
->>=20
->>>> So if we don't want the flag, we'd need some other mechanism to resolve
->>>> the parent ifindex, AFAICT? Maybe a xdp_get_parent_ifindex() kfunc, sa=
-y?
->>>> That could also be made generic for other stacked interface types, I
->>>> suppose.
->>>>
->>>> WDYT?
->>>
->>> dealing with stacked devices is hard :-)
->>>
->>> What is the return is a bond device or a vlan on a bond device?
->>=20
->> Well, bond devices have XDP support, so you can just redirect to those :)
->>=20
->> But yeah, each type of stacked device would need to pass different
->> information through to the XDP program, and the program would need to
->> support those. Building a single XDP program that supports all of them
->> will require quite a bit of code, and would probably not perform super
->> well. But most deployments have distinct subsets of features they need,
->> so this does not have to be a blocker, IMO?
->>=20
->
-> Seems to me the fib_lookup for xdp needs to return the bottom device,
-> not the vlan device, for forwarding to work. That's why I added the
-> fields to the struct. That allows the program to push the vlan header if
-> required. My preference (dream?) was that Tx path had support to tell
-> the redirect the vlan and h/w added it on send.
+would something like below enforce the in-place conversion?
 
-Sure, returning the bottom device index with the VLAN tag makes sense,
-and that's basically what this series does (but bails out on stacked
-VLANs). However, that's not what the helper does today, which is why the
-flag is there, to opt-in to the new behaviour. I don't think we can just
-change the ifindex without breaking existing applications (as noted
-up-thread).
+Userspace can create a memslot without gmem fd, but that memslot can 
+only serve as shared memory and cannot be converted. So it doesn't 
+violate the in-place conversion.
 
-> But really, once stacked devices come into play, I just wanted to make
-> sure thought is given to different use cases. As you know the lookup
-> struct if hard bound to 64B and it is trying to cover a lot of use cases.
-
-Agreed, I don't think we can handle stacked devices in this helper. But
-we could split it out into a new one. Something like:
-
-struct lower_device_info {
-	enum device_type type;
-	struct {
-		__be16	h_vlan_proto;
-		__be16	h_vlan_TCI;
-	} vlan;
-        /* add other types here */
-};
-
-int xdp_get_lower_device(int ifindex, struct lower_device_info *info);
-
-called like:
-
-int xdp_program(struct xdp_md *ctx)
-{
-        struct lower_device_info dev_info =3D {};
-	int ifindex, ret;
-
-        ifindex =3D find_destination(ctx); /* does fib lookup, or something=
- else */
-
-        while ((ret =3D xdp_get_lower_device_info(ifindex, &dev_info)) > 0)=
- {
-        	if (dev_info.type =3D=3D VLAN) {
-                      	push_vlan_tag(ctx, &dev_info.vlan);
-                        ifindex =3D ret;
-                } else {
-                	return XDP_PASS; /* we only handle VLAN devices */
-                }
-        }
-
-        return bpf_redirect(ifindex, 0);
-}
-
-
-With a helper like this, we obviously don't strictly speaking need to
-change the fib lookup helper at all. However, for the single-tagged VLAN
-case, I think supporting it directly in the fib lookup could still have
-value, as an optimisation: it saves an extra call for resolving the
-ifindex, and the fields are already there. So I think my preference
-would be to merge this series as-is, and then follow up with a new kfunc
-to handle the stacked case. But we could also just drop this series and
-go straight to the new kfunc.
-
-WDYT?
-
--Toke
-
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2122,6 +2122,8 @@ static int kvm_set_memory_region(struct kvm *kvm,
+         new->flags = mem->flags;
+         new->userspace_addr = mem->userspace_addr;
+         if (mem->flags & KVM_MEM_GUEST_MEMFD) {
++               if (gmem_in_place_conversion)
++                       new->flags |= KVM_MEMSLOT_GMEM_ONLY;
+                 r = kvm_gmem_bind(kvm, new, mem->guest_memfd, 
+mem->guest_memfd_offset);
+                 if (r)
+                         goto out;
