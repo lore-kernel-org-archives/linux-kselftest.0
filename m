@@ -1,111 +1,225 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D113F6C3D;
-	Wed,  1 Jul 2026 15:12:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954C73BADB1
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 15:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782918775; cv=none; b=aZuwUWfhnyJ41h3u0ODSjWhZR96UGwRTJrO8ORld6DFzItNDb7f9KEiNwtG1K9EoKbUU2zHKNI1PnfCvZy7vrBkf/WRilTWG3yDqRds+KUG6/POhT2Z4KmC4tC5M3d6HxwlC2mm55zBo+LecQIPkm2mut4CxUopIqw4NWj0e+Og=
+	t=1782918870; cv=none; b=cT2Dcewg3AqdgTQukvgQ+dYayZrNUP3U/tPgBk6gdYhIG2IvO3JQCYXv07iXlgFk00Z82Eepz0d3Qht8LDKabD8ZWlNsB8yXTmb8a98xpqlwdXRCA0epRj3K9yDUSqy6Gfg6c/DSQRkG+Btb0DQKWU4t69TslFFh3ClurwPowdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782918775; c=relaxed/simple;
-	bh=w1BNEJPXIDy9algqgCKAxD3B5zfQNFh2VUrM/S84y8g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W24VbCGzthxcH0jzwW6hyCpdeCW7mCmC/32VkSJht6irll/nslF2yfnwnidPBKBiTdWL3zKWm2KzDbcTm+Fpo48oJrYRbzfPyyWLf1yvpE2ZMy9L8vzkhdmiaDIRpO1+WNIPFgzatJjX4a2IdpkElYl9dPjGA1bWOJf3JRlkf/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=s81qyGVj; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1782918870; c=relaxed/simple;
+	bh=usd6Og46zgL8OHwYEQAfxolvwYRP5G/TAyvCg/TextU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ptYFeetrAUTg8kW86f+ocFVw8jtAyTHUa32x6ZH0k9HUOsLeTb1RkHC5Up5C3EmNuQonWY0ZGldxnkT6/NcY1XWRjTn8VBlmSrwaQUc3K8ViylxQirPFrJC78mcLd5TT3qhBq1I8U1deCnK/ck+YkWJV63YU/y9CVgieYP+d3BQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OnD1l4rK; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="s81qyGVj"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F7082309;
-	Wed,  1 Jul 2026 08:12:46 -0700 (PDT)
-Received: from [10.57.81.2] (unknown [10.57.81.2])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 08EDF3F85F;
-	Wed,  1 Jul 2026 08:12:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1782918770; bh=w1BNEJPXIDy9algqgCKAxD3B5zfQNFh2VUrM/S84y8g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=s81qyGVjJ0IVzVYP6kgfRrvQWpL9l+uqqZm7X+9jKd1w+D7OUr1SGKAKVhYBxXyYZ
-	 ABq8+8QLSHBgSAHpKgBQPiyFEnYv7x0xspwb9aG9eXz7fswyMYB/DrWoyWqEOXw7Z6
-	 gw1tLyTU4RaNk2fMGekvwKRKsUuFaykZSz/rRAGY=
-Message-ID: <fd31a9bc-f2be-4be7-ac4d-c79f2a117683@arm.com>
-Date: Wed, 1 Jul 2026 17:12:44 +0200
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OnD1l4rK"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493b779003fso4020165e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 08:14:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1782918867; x=1783523667; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4uOOS0i9hpZWdGU1QnLKFN1aQHTMiBN/08DuR6TYPb0=;
+        b=OnD1l4rK4mZyoVxa93LfsPS4E0YOaE4GkT/euRQ0MWfe4pBifO067RaEUeOiCuWmm+
+         533D4X78VpJ63v2ujCsqXFAheGavUSXfWS2YdZ3aWmvPJpWaQkyCQwknOyByDy54RAsf
+         DiNrgCyNGCBVD+P/yM3KiQgq7SDinGDzCIQH5BrH0h5XlborLavNps4apouMiDbRA8G4
+         jydSYYN7A2QXHVkpgylH2VWFDfU4ndk9D38AfRgUBPHim79ESYzE79bAx8DLx5Y3ubjM
+         0xONr2EQ+x6u18DdKd9ww6+307x10UsXksPn5IusnKkaPpI9qCHqeFfrDLYb8uLlXqBz
+         J1Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782918867; x=1783523667;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4uOOS0i9hpZWdGU1QnLKFN1aQHTMiBN/08DuR6TYPb0=;
+        b=T+/uKVJ18ffEGb+cqfdR4ROOxTFHcC3WVMcz+oCCy2yM+GpEvb9CzlmkMUPKjjNUTq
+         v9TIVQVeoW1zLbo2tT+GCtpWoxyGyRfCs6V9EZEPI8v9Vq6o9qW6Enqbl4u2MsC2WHgQ
+         5dmYztsM5Bu16qYOu/4b8dP6Vhy/MprAr8cP8wXnf/m7xyU4VlLj5PfotRsh6NLbpDgW
+         WyEp/yaqx0V1B3YS1TPwTbfiopq2o02UKuv5+ve3mAkzSnQtHRV5KrYcR1jRprs7hLPJ
+         nsORznEXNtK4VXCdfsf0Nc+0SJk+spbbLOL4mmaV5xdqO7/jRfXZtx5w2wsfVDYBZVKN
+         X3/A==
+X-Forwarded-Encrypted: i=1; AFNElJ9aAdrcw8uOZIDuxwSOicKVgwZe/G7ZqY4RrU/hXMi+OJbqV3fzDsOnNN2us+XUWxhLzCIQE+oAe4ZWAoMP/7M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQuZZsi5Adv7j+hJYhJ8Qa7y0Ad8JzBTOo94PfhUoaCC5OrOqI
+	9TVHXONoKztdol++kzh3H/VX469bmD9mMxVUrj3bw3NbAG365YJvg5dP00u4EIvhv7E=
+X-Gm-Gg: AfdE7cnxQUrk6TtP5DsMX/T1FYaoUBtSa/fhHBGjauBD5IfMYFINy/tG5ZiIKkrtmKr
+	cr+XGEhN4hroSk/LRug0nUInSGt9r/YCKNP9z6usnht4mFJUJCfmzFM8kGl6HBKLaca4OJ3Qlif
+	s+QnUb7Jx6Svd60SHkJxrcYnkhviZqBLkSvR9SBUyVBfBuE3m/l+wX/v5syifEZoqEEVez6AVmI
+	V+b4Cg9LLiZNS4rTHyL0SaAKNw+Uc3x68ZV7CXbuc3Ev+pTUdKia6qSbjDcHIKLw5B9AUk7p2dW
+	DzvuVNbyr0is/fQgfAtsDpZKoJqmSELQm8bt8YHAW463jRAx2vLR0oydnuC40/QWlpd7I+dh/mR
+	jXmEvQhZ0ZN28T3AakJ+7MOtt96n1VwN1GesnYTqzJK2kxQ/mH2K/L54Tw6T00KFgDhTeE0FmCh
+	PRDu1djzv7usHSPJw=
+X-Received: by 2002:a05:600c:35d0:b0:493:c3cb:409e with SMTP id 5b1f17b1804b1-493c3cb42d9mr20649135e9.15.1782918867006;
+        Wed, 01 Jul 2026 08:14:27 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493be810be8sm78287565e9.9.2026.07.01.08.14.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jul 2026 08:14:26 -0700 (PDT)
+Date: Wed, 1 Jul 2026 17:14:24 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Zelin Deng <zelin.deng@linux.alibaba.com>,
+	Miroslav Benes <mbenes@suse.cz>, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org,
+	mpdesouza@suse.com, Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH] selftests: livepatch: unset sub_make_done in case top
+ level Makefile be overwritten
+Message-ID: <akUu0DEYrhd9cLCL@pathway.suse.cz>
+References: <20260525083721.27857-1-zelin.deng@linux.alibaba.com>
+ <alpine.LSU.2.21.2606191638540.26638@pobox.suse.cz>
+ <ccfed9b6-9a73-4299-b305-da7b593a52fd@linux.alibaba.com>
+ <akPTcJjrIAI1ZNyH@pathway.suse.cz>
+ <20260630181125-a7a41726-4270-4bb7-92fe-17ec28cbe176@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 0/5] selftests/mm: refactor pkey helpers and fix mmap
- error handling
-To: Hongfu Li <lihongfu@kylinos.cn>, akpm@linux-foundation.org,
- david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, keith.lucas@oracle.com, maddy@linux.ibm.com,
- usama.anjum@collabora.com, yury.khrustalev@arm.com, jhubbard@nvidia.com,
- joey.gouly@arm.com, zwisler@google.com, hongfu.li@linux.dev
-References: <20260630073235.3802271-1-lihongfu@kylinos.cn>
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Content-Language: en-GB
-In-Reply-To: <20260630073235.3802271-1-lihongfu@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260630181125-a7a41726-4270-4bb7-92fe-17ec28cbe176@linutronix.de>
 
-On 30/06/2026 09:32, Hongfu Li wrote:
-> The main changes in this series are to refactor shared tracing and assertion
-> helpers into a common file, unify both pkey selftests on pkey_assert() and 
-> per-test tracing for consistent diagnostics, and add missing mmap() return 
-> checks with MAP_FAILED used throughout for readability and consistency.
->
-> Hongfu Li (5):
->   selftests/mm: move pkey selftest helpers to pkey_util.c
->   selftests/mm: unify pkey sighandler selftest assertions and tracing
->   selftests/mm: use pkey_assert on clone_raw failure in pkey test
->   selftests/mm: add missing mmap() return checks in pkey tests
->   selftests/mm: add missing pthread_create() return checks in pkey tests
+On Tue 2026-06-30 18:12:46, Thomas Weißschuh wrote:
+> Hi Zelin,
+> 
+> On Tue, Jun 30, 2026 at 04:32:16PM +0200, Petr Mladek wrote:
+> > Added some people involved in "filechk_makefile" feature into Cc.
+> > 
+> > For the new people, see the whole thread at
+> > https://lore.kernel.org/all/20260525083721.27857-1-zelin.deng@linux.alibaba.com/
+> 
+> Thanks for the report and forwarding it.
+> 
+> > On Sun 2026-06-21 22:36:24, Zelin Deng wrote:
+> > > 
+> > > 在 2026/6/19 22:42, Miroslav Benes 写道:
+> > > > On Mon, 25 May 2026, Zelin Deng wrote:
+> > > Here're how I reproduce the issue:
+> > > 
+> > > 1. pull linux-next, reset to HEAD, for example
+> > > 3ce97bd3c4f18608335e709c24d6a40e7036cab8 (tag next-20260619)
+> > > 
+> > > 2. at linux-next tree: make all -j$(nproc) && make modules_install
+> > > headers_install -j$(nproc) && make install && reboot
+> > > 
+> > > 3. at linux-next tree: make kselftest-all
+> > > 
+> > > 4. top level Makefile in linux-next has been overwritten by
+> > > 
+> > >     export KBUILD_OUTPUT = .
+> > >     export KBUILD_EXTMOD = /home/shiyu.dzl/linux-next
+> > >     export KBUILD_EXTMOD_OUTPUT = /home/shiyu.dzl/linux-next
+> > >     include /home/shiyu.dzl/linux-next/Makefile
+> > > 
+> > > it is a stub generated by filechk_makefile.
+> > 
+> > It seems that "filechk_makefile" has reached mainline in v7.1-rc1,
+> > see the commit c9bb03ac2c66bc5aa81b ("kbuild: reduce output spam when
+> > building out of tree").
+> > 
+> > The commit message says:
+> > 
+> > <paste>
+> >     The Makefile is now created even if the build is aborted due to an
+> >     unclean working tree. That should not make a difference in practice.
+> >  </paste>
+> > 
+> > It seems that is actually makes a difference in the livepatch selftest
+> > case.
+> > 
+> > Sigh, the Makefile rules are a maze to me. It is possible that
+> > we do something wrong in
+> > tools/testing/selftests/livepatch/test_modules/Makefile. Namely
+> > with:
+> > 
+> > ifneq ("$(wildcard $(KDIR))", "")
+> > 	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
+> > endif
+> > 
+> > But I see "$(MAKE) -C ..." called in many other makefiles.
+> > 
+> > Best Regards,
+> > Petr
+> > 
+> > > I'm not quite sure that it could be related to my toolchain (like make
+> > > version ?), I briefed analysis the root cause on my environment (KDIR
+> > > '/lib/modules/7.1.0-next-20260619/build' which actually a symbol link to my
+> > > kernel source -> '/home/shiyu.dzl/linux-next'):
+> > > 
+> > >   1. sub_make_done leaks via environment. The top-level Makefile sets export
+> > > sub_make_done := 1 after its first-pass initialization.
+> > >   Because it is exported, every child make process inherits it.
+> > >   2. livepatch test_modules re-invokes the top-level Makefile. The call
+> > > chain is: top-level Makefile → kselftest-% pattern rule →
+> > >   tools/testing/selftests/ → livepatch test_modules/Makefile → $(MAKE) -C
+> > > $(KDIR) modules KBUILD_EXTMOD=..., which re-enters the top-level Makefile to
+> > >   build an external module.
+> > >   3. The inherited sub_make_done=1 skips critical initialization. The
+> > > top-level Makefile's first-pass block (ifneq ($(sub_make_done),1)) is
+> > >   skipped entirely. This block is responsible for correctly parsing
+> > > command-line variables and setting up KBUILD_EXTMOD-related paths.
+> > >   4. Path mismatch triggers false out-of-tree detection. With the
+> > > initialization skipped, srcroot and CURDIR end up with mismatched values
+> > > (e.g.,
+> > >   absolute vs. relative). The comparison (ifeq ($(srcroot),$(CURDIR)))
+> > > fails, so building_out_of_srctree is incorrectly set to 1.
+> > >   5. outputmakefile overwrites the source tree's Makefile. Because
+> > > building_out_of_srctree is set, the filechk_makefile rule fires and replaces
+> > > the
+> > >   real top-level Makefile with a generated stub containing KBUILD_OUTPUT,
+> > > KBUILD_EXTMOD, and an include directive.
+> > > 
+> > >   Why make -C tools/testing/selftests/ all is unaffected: it enters the
+> > > selftests directory directly without ever executing the top-level Makefile
+> > >   first, so sub_make_done is never exported into the environment. When
+> > > livepatch test_modules later invokes $(MAKE) -C $(KDIR), the top-level
+> > > Makefile
+> > >   runs its full initialization normally.
+> 
+> Can you try this:
+> 
+> diff --git a/Makefile b/Makefile
+> index b9c5792c79e0..f717a4dc96d6 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1591,10 +1591,10 @@ tools/%: FORCE
+>  
+>  PHONY += kselftest
+>  kselftest: headers
+> -	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+> +	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+>  
+>  kselftest-%: headers FORCE
+> -	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
+> +	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests $*
+>  
+>  PHONY += kselftest-merge
+>  kselftest-merge:
 
-Ran the tests on both arm64/POE and x86/PKU without issue, so FWIW:
+Heh, this is exactly the same change which Zelin Deng proposed as
+well, see
+https://lore.kernel.org/all/20260525083721.27857-1-zelin.deng@linux.alibaba.com/
 
-Tested-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> The same is done for cmd_install.
 
->  tools/testing/selftests/mm/pkey-helpers.h     |  4 +-
->  tools/testing/selftests/mm/pkey-powerpc.h     |  2 +-
->  .../selftests/mm/pkey_sighandler_tests.c      | 81 ++++++++--------
->  tools/testing/selftests/mm/pkey_util.c        | 86 +++++++++++++++++
->  tools/testing/selftests/mm/protection_keys.c  | 95 ++-----------------
->  5 files changed, 141 insertions(+), 127 deletions(-)
->
-> ---
-> v8:
-> - No code changes (relative to v7).
-> - Updated Cc list: added developers identified via `git blame` and
->   `git log` on tools/testing/selftests/mm/pkey*
-> v7:
-> - As previously suggested, wait for v7.2-rc1 and rebased the whole series
->   on top of it. No functional code changes.
-> v6:
-> - Add missing pthread_create() return checks (new patch 5/5).
-> - In patch 2/5, call tracing_off() at the start of test_pkru_sigreturn
->   before the SIGSEGV handler is reset to SIG_DFL, to avoid leaving ftrace
->   enabled on crash.
-> v5:
-> - Use ret instead of child_pid to hold the return value of clone_raw().
-> - Make tracing_on(), tracing_off() non-static.
->   Remove cat_into_file() declaration from pkey-helpers.h.
-> v4:
-> - Base changes on top of the latest mm-unstable branch.
-> - Split the first patch into three:
->   patch 1: move pkey selftest helpers to shared code;
->   patch 2: unify sighandler selftest assertions and per-test tracing;
->   patch 3: use pkey_assert() on clone_raw() failure.
-> - Use ksft_exit_fail_perror() in main() for mmap() failure.
-> v3:
-> - Use pkey_assert() for remaining sigaction() and clone_raw() error
->   checks for consistency.
-> v2:
-> - Update commit message
-> - Move shared tracing and assertion helpers to a common file,
->   replace assert() with pkey_assert() in sighandler tests
-> - Drop assert() from main() in protection_keys.c and add a proper error
->   message instead.
-> - Link to v1: https://lore.kernel.org/all/20260518082120.3890552-1-lihongfu@kylinos.cn/
+I guess that this is related to the commit 14ccc638b02f9ec ("kbuild:
+cancel sub_make_done for the install target to fix DKMS"). Which
+is related to the commit bcf637f54f6d2515d ("kbuild: parse C= and M=
+before changing the working directory").
+
+Honestly, it all looks like a wild magic to me. I would need much
+better understanding of the Makefile maze to get on top of it.
+
+But it seems that it is a reasonable fix after all. It solves the
+original problem. It does not break my workflow. So, I tend to add:
+
+Acked-by: Petr Mladek <pmladek@suse.com>
+
+Best Regards,
+Petr
