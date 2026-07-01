@@ -1,228 +1,111 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00DC1481FA3
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 15:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782918580; cv=pass; b=Qy3Ffe75fFCgtR4dAPrJF3wYWFNFw4pb176DkZUUYCunX3wKGl+xwhgBbM8ANrUb5RFy5QmS+96vvkZPxYypoxm1Wb+I9WPWgDkBwFmlJ6vtRwaYbrcHIEsZcds7s69F9ArPMuRxbVihuQyNOagRbGS6OTSkH6hASi32peWIwos=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782918580; c=relaxed/simple;
-	bh=7M2c8VTJCknMV3dlvitg2YbEGnXAzIGFFQtNc7mfEiw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kxzYhMGGLeN/hVVY4Ndpf+LaH7xa/32NWepNsE910gPy7bQA/5g9vCquavvR4PcmExZyxIbN+9bpnSz5hSD2mBwx0DE4nBlCcqSqILk9rQgoTOBLVs3hNYCxBuBGb4iUuScdqx0gR8d4M53M8douoaQCoaB2ZWDiDI8hGTCCigk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=EA1350GK; arc=pass smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D113F6C3D;
+	Wed,  1 Jul 2026 15:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782918775; cv=none; b=aZuwUWfhnyJ41h3u0ODSjWhZR96UGwRTJrO8ORld6DFzItNDb7f9KEiNwtG1K9EoKbUU2zHKNI1PnfCvZy7vrBkf/WRilTWG3yDqRds+KUG6/POhT2Z4KmC4tC5M3d6HxwlC2mm55zBo+LecQIPkm2mut4CxUopIqw4NWj0e+Og=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782918775; c=relaxed/simple;
+	bh=w1BNEJPXIDy9algqgCKAxD3B5zfQNFh2VUrM/S84y8g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W24VbCGzthxcH0jzwW6hyCpdeCW7mCmC/32VkSJht6irll/nslF2yfnwnidPBKBiTdWL3zKWm2KzDbcTm+Fpo48oJrYRbzfPyyWLf1yvpE2ZMy9L8vzkhdmiaDIRpO1+WNIPFgzatJjX4a2IdpkElYl9dPjGA1bWOJf3JRlkf/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=s81qyGVj; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="EA1350GK"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-37ff436a048so363793a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 08:09:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782918576; cv=none;
-        d=google.com; s=arc-20260327;
-        b=RZMftCPJh8yy/tsKZbwZgTRus0aQsYcLXI70MrICwiQ/hVT2kOmaKl8ki3iU8VFE4Y
-         JYaZ7DLn06PPCRoxyJtXeSj3wdlGA46lTWENs1dAvzgZqZQkiiF9S37l7mTCTM891Kf0
-         tz/iwOdfVeG4/DgT5XHbAwEfrm/9lvdulW4RIJNIUBEHth659t6oBG+oU01fiXHdg/RQ
-         r6ssaOaOuaVU8CdHczRQ//YdOxjwf6a0Ef04dJxtpp8BOOR2oVcAAFTmpW/1ut0/pUZH
-         vYowRJkCsqTyxhif1aciOYLSj995TDe/Pvd5GP3EoJnbX1aoddZ9zNIrt637A2XkeXUp
-         DMlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=EiDHBob2ABPUTvdRmOeqDRgvjmRDWIfShl42n0T52g0=;
-        fh=UcA4uBpZpTYuRHcCKLfX8+gULUNVzIBpigrcNWJ+lU8=;
-        b=TltT4r3/qJIh0xrGTDq1dfr8EaCXtQ1uTngsvSdsJWRbfEayaAV2oeLz6t2q5RCMfG
-         iHJfVWWldTEvRvg2YmhkF6/BksvII10PZ5YgBo59yk4tFG7VyBHZWlVp5lObBWfR/bDo
-         PG/P7BRwSyz9VPGH+AAKNhcrbcj0y7hqXjntPU8/P3J1bZoyRG1oh0hdLjxkfjkuYdtb
-         FEqk/oiK4HahdNf4UZ+rvpAS4cfJOz07b4/Dp63qOrZ0NPwu0oa4XBZl7eWzn75twInO
-         wujUpZgcewZ2KQcjlC8cqw/DRKGxh2nbIQ29jjZG51BBnWDG282qZ9E21LAdXV/qO8zO
-         TGyw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1782918576; x=1783523376; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EiDHBob2ABPUTvdRmOeqDRgvjmRDWIfShl42n0T52g0=;
-        b=EA1350GK7TBvwQjRPxtTmy0xOLK6+1ocpKMN/s3yCUZoPqzoI1izrKktlLbr4iMk9r
-         xbGaco5NJ8ZuRerWfuse4SrvNb5yFm8Wo/2Nt+QWaXbdqQjFqLgl3ZG3z89t5q1tM7o7
-         0IqWZQtts8lxFuW1JoOO0sQAvVCB9VnGnXrUUdj1qf7/5lyF8yBzIHENte4XHZ0sFsGw
-         t5xrgXNaYYtAD/T8Mes8p8dOs2aTw6uMpS5uQpHKMHLxOohxaGfh2f6ImPT4LrHlT69m
-         HgLjt1hlyv5scAn6JaJA0j0yiAc8615T+lyCM/MV+UVxx94HslHRYXLMzviaxTXuIwQG
-         reow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782918576; x=1783523376;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EiDHBob2ABPUTvdRmOeqDRgvjmRDWIfShl42n0T52g0=;
-        b=nIuwbhQKm4yhCOjONXMOq0XYov3dpisQS0KUvsK2IhbBHo1A1MxmMaKuQs11xk7lFN
-         8khFldkOXoOAiy+KFaHh84vzGnLsLy/C6aMbEI/izc91bKj1kuHz9CE1MH48PMYGrLU8
-         8x4sk3xMayC45BDnfeQ1d7ruSREyXm50C9RB3tU2f36K9fn+X9yr3djV9GHySYEEBl4o
-         no1RpzfVuIcO/44YzcUtq9CX8YlsQ0zMOG/fYmj4xGJIUZYQxJnpprXsSjF9li58bxXT
-         WwwfFyzUlkWX67oYBk7Jycsgq3iha998pW3GcUpwdQmP3Kx3Q8RR7Cazl5dqa/Rgxet9
-         xcpw==
-X-Forwarded-Encrypted: i=1; AHgh+RqNomtFsp6RgnqMVC0eaMYyfGbsKa6P84Vj72rZWkFdF/sJEUHmYjDGD9CHchBidmo6PjCw+hDYt+TMOIJPGcE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7VOHPPWSk2RTQyqf7DrCrxRGWNfds7II70SDJuQ3n9r+bYQHm
-	C95G8hgQNxsFuoM2ujnik9Q+7pzhqxcJRmMJ/aSQGVj4prOw13+ugBzGxayzq38IdC5dhTyK9sn
-	x2PVXNZztDU+aoKioAysVPvpHPEOQgqzk02/m8BRB
-X-Gm-Gg: AfdE7ckLiQlck6uLez5yC9r4LbZmB6v3aW8YMPCIKpNYxkD+6Rim3/1uATnlDzIZNj+
-	114/th+S0rl7EiinXa4s2dbocjlYYjnrQIGSZfdRbc6wfA9d+Wpp18INSSjHeENpVvaQE+IqJ5n
-	B/Kryy2RDb1BxjgDZqQEcX52r/UAPJFIhBhD8CjN7zZezxAEodJ+ZWKdwrBGwok0ivaY7LIIEN7
-	K6SwJDOZlTKauTtowyM/ypSMwZk7G9jYFQ+2ib03NaWd5gnpavJIF5+NbUJHxHdewUzcWZU
-X-Received: by 2002:a17:90b:4f4b:b0:37f:fb1d:63fa with SMTP id
- 98e67ed59e1d1-380aa1427e9mr2152660a91.15.1782918575927; Wed, 01 Jul 2026
- 08:09:35 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="s81qyGVj"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F7082309;
+	Wed,  1 Jul 2026 08:12:46 -0700 (PDT)
+Received: from [10.57.81.2] (unknown [10.57.81.2])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 08EDF3F85F;
+	Wed,  1 Jul 2026 08:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1782918770; bh=w1BNEJPXIDy9algqgCKAxD3B5zfQNFh2VUrM/S84y8g=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=s81qyGVjJ0IVzVYP6kgfRrvQWpL9l+uqqZm7X+9jKd1w+D7OUr1SGKAKVhYBxXyYZ
+	 ABq8+8QLSHBgSAHpKgBQPiyFEnYv7x0xspwb9aG9eXz7fswyMYB/DrWoyWqEOXw7Z6
+	 gw1tLyTU4RaNk2fMGekvwKRKsUuFaykZSz/rRAGY=
+Message-ID: <fd31a9bc-f2be-4be7-ac4d-c79f2a117683@arm.com>
+Date: Wed, 1 Jul 2026 17:12:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260630183956.281293-1-dwindsor@gmail.com> <20260630183956.281293-3-dwindsor@gmail.com>
- <CAHC9VhSYNF=_Tfe-D99rHy70EXQVr1ES0arxT09Bidey4zOFdg@mail.gmail.com>
- <DJN0EPROS056.3RY0R6W1XZHNZ@gmail.com> <CAHC9VhT37f5TwgksE_i0Yttpy3i7niBr6QrNVVmpwe_eGX428g@mail.gmail.com>
-In-Reply-To: <CAHC9VhT37f5TwgksE_i0Yttpy3i7niBr6QrNVVmpwe_eGX428g@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 1 Jul 2026 11:09:24 -0400
-X-Gm-Features: AVVi8CcBAyyRDQX1axrqRUEsD0mhbBnmDeJwn8TvqCnNRpyrxWdbtlabDC-kdt0
-Message-ID: <CAHC9VhQd0-N1g=g8gspeV7bhLz0LA6DF5HZyB7mW6VW_7oSt2w@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 2/3] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: David Windsor <dwindsor@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 0/5] selftests/mm: refactor pkey helpers and fix mmap
+ error handling
+To: Hongfu Li <lihongfu@kylinos.cn>, akpm@linux-foundation.org,
+ david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, keith.lucas@oracle.com, maddy@linux.ibm.com,
+ usama.anjum@collabora.com, yury.khrustalev@arm.com, jhubbard@nvidia.com,
+ joey.gouly@arm.com, zwisler@google.com, hongfu.li@linux.dev
+References: <20260630073235.3802271-1-lihongfu@kylinos.cn>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <20260630073235.3802271-1-lihongfu@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 1, 2026 at 8:55=E2=80=AFAM Paul Moore <paul@paul-moore.com> wro=
-te:
-> On Wed, Jul 1, 2026 at 2:09=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> > On Tue Jun 30, 2026 at 12:20 PM PDT, Paul Moore wrote:
-> > >> +__bpf_kfunc int bpf_init_inode_xattr(struct lsm_xattrs *xattrs,
-> > >> +                                    const char *name__str,
-> > >> +                                    const struct bpf_dynptr *value_=
-p)
-> > >> +{
-> > >> +       struct bpf_dynptr_kern *value_ptr =3D (struct bpf_dynptr_ker=
-n *)value_p;
-> > >> +       size_t name_len;
-> > >> +       void *xattr_value;
-> > >> +       struct xattr *xattr;
-> > >> +       const void *value;
-> > >> +       u32 value_len;
-> > >> +
-> > >> +       if (!xattrs || !xattrs->xattrs || !name__str)
-> > >> +               return -EINVAL;
-> > >> +       if (bpf_xattrs_used(xattrs) >=3D BPF_LSM_INODE_INIT_XATTRS)
-> > >> +               return -ENOSPC;
-> > >> +
-> > >> +       name_len =3D strlen(name__str);
-> > >> +       if (name_len =3D=3D 0 || name_len > XATTR_NAME_MAX)
-> > >> +               return -EINVAL;
-> > >> +       if (strncmp(name__str, XATTR_BPF_LSM_SUFFIX,
-> > >> +                   sizeof(XATTR_BPF_LSM_SUFFIX) - 1))
-> > >> +               return -EPERM;
-> > >> +
-> > >> +       value_len =3D __bpf_dynptr_size(value_ptr);
-> > >> +       if (value_len =3D=3D 0 || value_len > XATTR_SIZE_MAX)
-> > >> +               return -EINVAL;
-> > >> +
-> > >> +       value =3D __bpf_dynptr_data(value_ptr, value_len);
-> > >> +       if (!value)
-> > >> +               return -EINVAL;
-> > >> +
-> > >> +       /* Combine xattr value + name into one allocation. */
-> > >> +       xattr_value =3D kmalloc(value_len + name_len + 1, GFP_NOFS);
-> > >> +       if (!xattr_value)
-> > >> +               return -ENOMEM;
-> > >> +
-> > >> +       memcpy(xattr_value, value, value_len);
-> > >> +       memcpy(xattr_value + value_len, name__str, name_len);
-> > >> +       ((char *)xattr_value)[value_len + name_len] =3D '\0';
-> > >> +
-> > >> +       xattr =3D lsm_get_xattr_slot(xattrs);
-> > >> +       if (!xattr) {
-> > >> +               kfree(xattr_value);
-> > >> +               return -ENOSPC;
-> > >> +       }
-> > >> +
-> > >> +       xattr->value =3D xattr_value;
-> > >> +       xattr->name =3D (const char *)xattr_value + value_len;
-> > >> +       xattr->value_len =3D value_len;
-> > >> +
-> > >> +       return 0;
-> > >> +}
-> > >
-> > > This is not a generic VFS function, it is a LSM specific function, it
-> > > belongs under security/, please move the code as discussed previously=
-.
-> >
-> > Paul,
-> > Not quite. It's all about xattrs.
-> > Having "struct lsm_xattrs" in the arguments doesn't make it lsm related=
-.
-> > You needs to study existing kfuncs and tracepoints.
-> > A bunch of them have "*lsm*" in the arguments.
+On 30/06/2026 09:32, Hongfu Li wrote:
+> The main changes in this series are to refactor shared tracing and assertion
+> helpers into a common file, unify both pkey selftests on pkey_assert() and 
+> per-test tracing for consistent diagnostics, and add missing mmap() return 
+> checks with MAP_FAILED used throughout for readability and consistency.
 >
-> Alexei,
->
-> I'm sorry you don't understand the basics of the LSM concept, but
-> please look at evm_inode_init_security(), xattr_dupval(), and
-> selinux_inode_init_security() for some background.  There should not
-> be any usage of lsm_get_xattr_slot() or BPF_LSM_INODE_INIT_XATTRS
-> outside of security/; you argued a similar idea to justify your NACK
-> of Hornet, I'm simply applying the same logic here.  We also have the
-> very recent security issue caused by the BPF subsystem which failed to
-> acknowledge that the admin disabled the BPF LSM and then walked all
-> over kernel memory when it shouldn't.  Moving LSM internals outside of
-> the LSM creates an environment where flaws like this can go
-> undetected.
->
-> As I said previously, if you absolutely insist on the kfunc being in
-> the VFS kfunc file, the LSM specific bits need to be abstracted out
-> into an LSM function.
->
->   kfunc bpf_init_inode_xattr(...)
->   {
->     /* sanity check params */
->     if (!xattrs ...)
->       return -EINVAL;
->
->    /* get value/len from bpf dynptr */
->
->    /* hook will check for LSM specific xattr count/limits, allocate,
-> copy value*/
->    rc =3D security_lsmxattr_add(xattrs, LSM_ID_BPF, value, value_len);
->    if (rc)
->      return rc;
->   }
->
-> David, if you like I can provide you a patch that implements the
-> security_lsmxattr_add() hook above if you aren't comfortable writing
-> that, but if you want to give it a shot that's all the better :)
+> Hongfu Li (5):
+>   selftests/mm: move pkey selftest helpers to pkey_util.c
+>   selftests/mm: unify pkey sighandler selftest assertions and tracing
+>   selftests/mm: use pkey_assert on clone_raw failure in pkey test
+>   selftests/mm: add missing mmap() return checks in pkey tests
+>   selftests/mm: add missing pthread_create() return checks in pkey tests
 
-One other thing - as this patchset is primarily LSM related, it needs
-to be merged via the LSM tree.  If Alexei can't tolerate the LSM tree
-merging a minor BPF patch he can either choose to pull from an LSM
-tree topic branch or we can merge the LSM infrastructure bits now and
-he can merge the BPF changes when the LSM bits hit Linus' tree.
+Ran the tests on both arm64/POE and x86/PKU without issue, so FWIW:
 
---=20
-paul-moore.com
+Tested-by: Kevin Brodsky <kevin.brodsky@arm.com>
+
+>  tools/testing/selftests/mm/pkey-helpers.h     |  4 +-
+>  tools/testing/selftests/mm/pkey-powerpc.h     |  2 +-
+>  .../selftests/mm/pkey_sighandler_tests.c      | 81 ++++++++--------
+>  tools/testing/selftests/mm/pkey_util.c        | 86 +++++++++++++++++
+>  tools/testing/selftests/mm/protection_keys.c  | 95 ++-----------------
+>  5 files changed, 141 insertions(+), 127 deletions(-)
+>
+> ---
+> v8:
+> - No code changes (relative to v7).
+> - Updated Cc list: added developers identified via `git blame` and
+>   `git log` on tools/testing/selftests/mm/pkey*
+> v7:
+> - As previously suggested, wait for v7.2-rc1 and rebased the whole series
+>   on top of it. No functional code changes.
+> v6:
+> - Add missing pthread_create() return checks (new patch 5/5).
+> - In patch 2/5, call tracing_off() at the start of test_pkru_sigreturn
+>   before the SIGSEGV handler is reset to SIG_DFL, to avoid leaving ftrace
+>   enabled on crash.
+> v5:
+> - Use ret instead of child_pid to hold the return value of clone_raw().
+> - Make tracing_on(), tracing_off() non-static.
+>   Remove cat_into_file() declaration from pkey-helpers.h.
+> v4:
+> - Base changes on top of the latest mm-unstable branch.
+> - Split the first patch into three:
+>   patch 1: move pkey selftest helpers to shared code;
+>   patch 2: unify sighandler selftest assertions and per-test tracing;
+>   patch 3: use pkey_assert() on clone_raw() failure.
+> - Use ksft_exit_fail_perror() in main() for mmap() failure.
+> v3:
+> - Use pkey_assert() for remaining sigaction() and clone_raw() error
+>   checks for consistency.
+> v2:
+> - Update commit message
+> - Move shared tracing and assertion helpers to a common file,
+>   replace assert() with pkey_assert() in sighandler tests
+> - Drop assert() from main() in protection_keys.c and add a proper error
+>   message instead.
+> - Link to v1: https://lore.kernel.org/all/20260518082120.3890552-1-lihongfu@kylinos.cn/
