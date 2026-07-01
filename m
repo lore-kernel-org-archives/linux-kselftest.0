@@ -1,141 +1,117 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8343A4F30
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 21:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842473BD62F
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 21:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782942465; cv=none; b=KkO8ek98GFl+6R73GLWRblb/AlZfjt5ffHFzF+YnjFlG4KRwc0vpRGTGzVqEebm745A5yFBUXnroMw4b6gs5ThWgU+zrE7baQgqrxwxp416cnnFYPbbkQEcpitNx5JXnjkLQGfD5cuHd319BiJk4IfECJb8tsl2ov3iNRsKS438=
+	t=1782942650; cv=none; b=MyVrkGcn1Mxtw6qhyUjulYNQUf5p5m3pQIp5zkhJ6mCpvwPog4f4hQe13e4/fGg7Nm9I+fH1jL+nA0y57M82g28cCocXgJha6p/XnQlZhrUzT7wqwLzeD09yhQuWlUZ7737KWlt9PO8zZWzlg5CZQ81k+CFkh9WpqI0PIc8HkZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782942465; c=relaxed/simple;
-	bh=s6Cr8zkyzrstP1cxKPxKWWNP4yvLxKRkyvcOWVE4+90=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PDSUwS2ut3yEv3k5lyebIvvZRqEYqlqOgYqa4NCvaD5OHl39f7qAvzrAnRyDMD2lqA7XEjh6/tGn+sr+pkcz5/FdDrteI5dkuaXV0MsPLQPNSNXMGbxG9pNhDRwSmggNpOH+O3fG7pPzyye5sH0Q3xU9RCz2V+OiLmr1HaVVTiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rVpsp6AZ; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1782942650; c=relaxed/simple;
+	bh=lPY2QwEF/A4RrFxmeDEXKjTC7yfbOe2FA4byDLUu4XE=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=Ak9JPNRPj8ib1XBOvzD9r+KT4VA+Zr9TVgK3ul5qX+WE/mpypLzxTa127VLkifOSkLrO/QRfBqjOWp3BXn9NFnL/95An5X/T/ZkfVtjkRZ8lTBYmIfGqaJXsUlW+0+6lOTXALyDS7UUFhEUHVNg2iKJQgcg+m/PyhNjKf9rvnvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mf5Hgkaj; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rVpsp6AZ"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2ca0331d0b1so20808945ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 14:47:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mf5Hgkaj"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-8114a4542b2so14402167b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 14:50:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782942463; x=1783547263; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zcs7QN5Kd/BsLm+PUgFcojzf1bXkoGYIJwLkqkM7zHA=;
-        b=rVpsp6AZSOy/NLznGTKp2Pw0DZ0B+eF94ddmhpHVgoxEcys5CrnXYKghzp3ABlufZF
-         1g5AedcwCOYpu8w4IjF2J9wDkww5bJFp6KEUHRuqyno36Noz4OAjLa8DUFJL8n/YdrqU
-         a8VxfcQAbUtpiBel3y07+M6myY0PYPjLlRtpS8nLFQbkUYuL94DgIpp475jnWAjq+Wdh
-         hUizv2HLC1hdwRwlSccQzYDddIQjKqlMWg17WvSQvPMQZhz3F5Pr6qdiD6wVTVYXpSk1
-         fOzpNm89My0UVP3OTI+55vYxTZqldejdJeDdcz8IT1pm2o6o1txbfhCvM9OzVmeDxkME
-         bf/g==
+        d=gmail.com; s=20251104; t=1782942648; x=1783547448; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mUzJS7YLrMLTfDgictXRy5FJUzML23tRi1dxlFAvrIc=;
+        b=mf5HgkajPVjoDVxVCRqCI4eKZ4iV3Cb1EJ0KoEbSjg8t/9XZlJ2H4EG3vJ01WY6QPk
+         AqgJoQDA5065f0mrnn0z4WsF0X5dRrE+O5ZorV/lCpxp6Dnq0pg15GhgRce4QlkdDKPn
+         KfBQHbpxa4duBPofSeFX8TZ18oHm/kXQBmZNBQJm2GBMkiKkTQPOfiTh+ZPFYWU/QKML
+         zfQ5OxG8btuD+HOGNna1QcHPz3fCJThjYAIZ172hoRFOLSiGO+ALsggSjZEKc7nllxHg
+         yhGj4NSUw9zbgfOnTMu3piBwhmo4HLBbKSOP0+nCEaZfC21UBw8w8hF5MdfRtxVL3fY8
+         bYAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782942463; x=1783547263;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zcs7QN5Kd/BsLm+PUgFcojzf1bXkoGYIJwLkqkM7zHA=;
-        b=Lf1EOP+ARq2n842/V/PTSrnbernzHpi61nC4L8YSaRA3q7sPfh1LduibVhYm8CM3Mm
-         fXXUiLZz8g0Xiy5TSCTDL3VsJO4arDS+mioJBa/EqARB//DAQXqDWJtsI0htjPeR5Joa
-         p4LspWJCipz+x8zWUZaylSPkdUxH2VszZvW2MYtMWweVJgzsVE1mUdSZ80Wk57darCgb
-         0by/z9GrS+eTJ4XPtpTWd0zZWS5yOcpbyPTObaj6lu3ZTCRanPKm9aRwyeMGiV/7hmtz
-         R/n2VO4dIN4XdbPthor1xHBJ575/CUYTpMfQeSdO2Y6hXKEqJafushKs/KDB+SvEKX1Y
-         NPdA==
-X-Forwarded-Encrypted: i=1; AHgh+Rqtc/jxyaNMvyQ0eSNWloUyQRagf3i1axnvH0xMIS8gWI4jfXQ48ESHfHto7cUczvi0/kTZzUP0svA7QXNmxOk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4wg+FtzJoRtaA/RnPlgifZtvHjOOYPE1AYRIeek441S+WeB1R
-	5oAPal2mxa0qQx2igaRXITKyS9T9rkamiwDUyKb0yVUwd/SyhSDR0ysQAgF+XsRfeM+57BkMQ9T
-	oY1YOSg==
-X-Received: from plzv3.prod.google.com ([2002:a17:902:b7c3:b0:2c8:7fe:29ac])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:32cc:b0:2c9:c083:cd49
- with SMTP id d9443c01a7336-2ca7e69dfe3mr34635215ad.14.1782942462488; Wed, 01
- Jul 2026 14:47:42 -0700 (PDT)
-Date: Wed, 1 Jul 2026 14:47:41 -0700
-In-Reply-To: <20260608145455.89187-9-dwmw2@infradead.org>
+        d=1e100.net; s=20251104; t=1782942648; x=1783547448;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mUzJS7YLrMLTfDgictXRy5FJUzML23tRi1dxlFAvrIc=;
+        b=cg2r7xDpaZqoiWRqiczHjsqIc9RJL3Wo/T3VoyJuGxdSX+jVhso6ZzWbdNYMQoydqo
+         9jimkyCb/u0Jy5o5Gxj+D4qY8TrNH5PJK4M9Ggv+P6QItfvsqP3yDpvS4lAOTtWcCB+z
+         rDSUhm9+hPZXZq+bcgZAJLjLcoQRyzPWkG/MF5KE3Neyef5c7fmQL9UK7VMTRVX/1j81
+         Zc3K6PFglbArhsCu9yFIXTXhgNrANdVLiyOsihoy73y9mPFcYLGBFWMJLEuIcozRF8Mb
+         9Do9HY8usDg65MocqxAa2QM0TaswY2PZidh8vM87zh7XjqwFevKRnZ2/QWEwwHZH9Wbq
+         muEA==
+X-Forwarded-Encrypted: i=1; AHgh+Rp6CZoPqn9Sg1yjR1+uo/hhlr0zPCjl25Ch1W4adhHyM3zjNhrlKjBpWi7XJxPrqGuOdwo1WyPEt6S3IrFL/PU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKlzAYDww8Afe78wX9vNSKdqFo5HE+zuFMUXQuk9HJPZFENurS
+	LZDGCZGcTIIULnJuUMWxXh6ZXW2j0Ed09xX0m7zj95sJ7IiwQmT2Ssct
+X-Gm-Gg: AfdE7cmIcxuDK+FALfqqGAJGo7L/qPz5eAMudU5FV8JLiqHWWMFdUEJt+yD2w1I/pBq
+	wd6jF1E8ZapjCSVcCwQxCGDItAmYn0M+uPu+Ve8+rlKaKblIF49EJrx2cpEhY8sbuwhpBQ2JXSE
+	MT814EjFEP7KidsISgl9L6hMvKAoBU94oWk8siucVeOSQ5RBRoaaaoeVBSTcadA1yXegPw7pb9f
+	f+JukdBeTozAyTVcCvsR2w0jxaBs9ksjQqDYpYDW+CuGdETBv/olDhdvKVwAYozZyMeZ/qPxBPj
+	hwucAVoVLibAnwzjYhbe3LACsXkIjryAgJg2hqAXGlf5czYFNuppOMiKMCU7tGNrTIuZJMHpfuP
+	MmGAs5KBG7c2zB529aqcymqbL33vPVYP3VCE9gAot4eve2KgdVMyxQCaMGQtgAD2biQ0a+kpDec
+	SsawWpMvJEU6x2jV/lfjky9XxI0nq4M4gF8JYqTKB9PLT3+tN/wOSYHxKsxqfgTaaqWw==
+X-Received: by 2002:a05:690c:4c06:b0:808:f9bb:3848 with SMTP id 00721157ae682-812e8dfa30cmr38172297b3.13.1782942648546;
+        Wed, 01 Jul 2026 14:50:48 -0700 (PDT)
+Received: from gmail.com (172.235.85.34.bc.googleusercontent.com. [34.85.235.172])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8144af4f427sm5173057b3.29.2026.07.01.14.50.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jul 2026 14:50:47 -0700 (PDT)
+Date: Wed, 01 Jul 2026 17:50:47 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Breno Leitao <leitao@debian.org>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ sdf.kernel@gmail.com
+Cc: netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Breno Leitao <leitao@debian.org>, 
+ kernel-team@meta.com
+Message-ID: <willemdebruijn.kernel.14619b0e23d1f@gmail.com>
+In-Reply-To: <20260630-getsockopt_phase2-v2-1-193335f3d4d1@debian.org>
+References: <20260630-getsockopt_phase2-v2-0-193335f3d4d1@debian.org>
+ <20260630-getsockopt_phase2-v2-1-193335f3d4d1@debian.org>
+Subject: Re: [PATCH net-next v2 1/4] net: add sockopt_init_user() for
+ getsockopt conversion
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260608145455.89187-1-dwmw2@infradead.org> <20260608145455.89187-9-dwmw2@infradead.org>
-Message-ID: <akWK_duG7ZsIekt7@google.com>
-Subject: Re: [PATCH v5 08/34] KVM: x86: Add KVM_VCPU_TSC_SCALE and fix the
- documentation on TSC migration
-From: Sean Christopherson <seanjc@google.com>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
-	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
-	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 08, 2026, David Woodhouse wrote:
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index c1897d939da9..6337f9b9d7ac 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -5930,6 +5930,9 @@ static int kvm_arch_tsc_has_attr(struct kvm_vcpu *vcpu,
->  	case KVM_VCPU_TSC_OFFSET:
->  		r = 0;
->  		break;
-> +	case KVM_VCPU_TSC_SCALE:
-> +		r = kvm_caps.has_tsc_control ? 0 : -ENXIO;
-> +		break;
->  	default:
->  		r = -ENXIO;
->  	}
-> @@ -5950,6 +5953,22 @@ static int kvm_arch_tsc_get_attr(struct kvm_vcpu *vcpu,
->  			break;
->  		r = 0;
->  		break;
-> +	case KVM_VCPU_TSC_SCALE: {
-> +		struct kvm_vcpu_tsc_scale scale;
-> +
-> +		if (!kvm_caps.has_tsc_control) {
-> +			r = -ENXIO;
-> +			break;
-> +		}
+Breno Leitao wrote:
+> Add a helper that initializes a user-backed sockopt_t from the (optval,=
 
-Uber nit.  For consistency with KVM's bizarre pattern here:
+> optlen) __user pair passed to a getsockopt() callback.
+> =
 
-		r = -ENXIO;
-		if (!kvm_caps.has_tsc_control)
-			break;
+> It is used by transitional __user getsockopt wrappers while the
+> proto-layer getsockopt callbacks are converted to take a sockopt_t, and=
 
-> +
-> +		scale.tsc_ratio = vcpu->arch.l1_tsc_scaling_ratio;
-> +		scale.tsc_frac_bits = kvm_caps.tsc_scaling_ratio_frac_bits;
-> +		r = -EFAULT;
-> +		if (copy_to_user(uaddr, &scale, sizeof(scale)))
-> +			break;
-> +		r = 0;
-> +		break;
-> +	}
->  	default:
->  		r = -ENXIO;
->  	}
-> @@ -5989,6 +6008,9 @@ static int kvm_arch_tsc_set_attr(struct kvm_vcpu *vcpu,
->  		r = 0;
->  		break;
->  	}
-> +	case KVM_VCPU_TSC_SCALE:
+> is removed once the conversion is complete.
+> =
 
-Another stupid consistency nit.  Probably do this?
+> The goal is to help to convert leafs. Example:
+> =
 
-		/*
-		 * TSC scaling information is read-only (it's a reflection of
-		 * the TSC frequency, which can be set by userspace).
-		 */
-		r = kvm_caps.has_tsc_control ? -EINVAL : -ENXIO;
+>  sock_common_getsockopt(... char __user *optval, int __user *optlen)
+>       =E2=86=92 udp_getsockopt(sk, level, optname, optval__user, optlen=
+__user)
+>                =E2=86=92 udp_lib_getsockopt(sk, level, optname, &opt)  =
+ /* needs a sockopt_t */
+> =
 
-> +		r = -EINVAL; /* Read only */
-> +		break;
->  	default:
->  		r = -ENXIO;
->  	}
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+
+Acked-by: Willem de Bruijn <willemb@google.com>=
