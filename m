@@ -1,115 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from localhost.localdomain (unknown [147.136.157.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1BE3B14C6;
-	Wed,  1 Jul 2026 08:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8A239448F;
+	Wed,  1 Jul 2026 08:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.0
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782893142; cv=none; b=uqiyMRH76Ku3aB67QkH5z2Bbsy4O+airmFZvIIe+d9eaNZ4MVsNXzVlzxk6Qn1yd+KFbaLRs3Vgi+JMqEgZmZQpmMhjFInLdFAz90Ib/Mt2p0thW7iWYO0wNdoH4pdnmG/w/KhR+ELLMSZPT2ZXkMXS0GKmOYUr5HEv99ScYkbA=
+	t=1782893461; cv=none; b=TCklem+Ym26K1+WlNNf1GQfidovN5Jh53q4/TvjDYICa7zIKsFMcW5dzt4mzFaUKSTCdD+hJhC9b2YhYGDKrhxuKmvNJL8ZOscd/b+itm17O/Ysbo2ya2oSJM49+u8L/RgyIEpz4P9bMB6FKHkudyBNAXCjT/kmLFfGCDk0guwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782893142; c=relaxed/simple;
-	bh=DP0eg4B0OM8TO8XnS8C6gHlWxSavTjQl03mk/DOj9RE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X3ZIxQPx92l8bZuMB158lw1IPu0mq715AjPCOzWV7Yn8XkIZoLgw2ULu2wsXaZXJG6fbtZpeTXoGdOB+BJzZWqqDpUgajsY/SkQaxzrfq8hs0iro4/1fni0e0hbvEzT4Zcd7stP6k23/dKszWQSGJpgF3Q7985uI0qU5z+iusSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FQnMfZY0; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FQnMfZY0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782893139; x=1814429139;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DP0eg4B0OM8TO8XnS8C6gHlWxSavTjQl03mk/DOj9RE=;
-  b=FQnMfZY00VYPxz8UpUgTtZallSt5HLZjXvQLkIj4CZE9Xhaj6rSkI5e5
-   lvSBLjLLeDzMpZcP/8RaPMx1reZKbmKqxCH4QmCOcyM3WNzRKZUzBc1i+
-   IWNo1OIo0QXVyHQnVEayNSfOIg+cp/5Bxn2NNcqSQnpAwLCaMWmugIdvu
-   HRP0kNWN+3qiU5D+6h2lejaHT8Hf0eiBIP8Vwj6AZ0bavlZR/NOHmcmok
-   q/c5JnE1/PWTJid4Bj8sAVi5A8/gOx+DkmgCX5tg1O96fizfOVNbvReFa
-   KlMckIPpFNf92j7LsSH+1zoR35IorV2anSD1/iscz8HnJqIjyPS1n+rsO
-   A==;
-X-CSE-ConnectionGUID: l98uhD6OSMS9e2lcfhniWg==
-X-CSE-MsgGUID: 5TgCtMTJSB2FxG9MwSPVyw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11833"; a="94217852"
-X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
-   d="scan'208";a="94217852"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 01:05:26 -0700
-X-CSE-ConnectionGUID: lVWuAtoZRb+S8bw6cD6rzw==
-X-CSE-MsgGUID: G3cj1NKaRzaUjG0LX4qnIg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
-   d="scan'208";a="257401196"
-Received: from unknown (HELO [10.239.158.49]) ([10.239.158.49])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 01:05:04 -0700
-Message-ID: <3b64e897-93a8-4f9c-88a9-f416ff44b09d@intel.com>
-Date: Wed, 1 Jul 2026 16:05:00 +0800
+	s=arc-20240116; t=1782893461; c=relaxed/simple;
+	bh=A71KniBxj6AqbKjBGpQsPVKmK3p0wYzdL3smoRNFjQo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qiMpu0RR5QTjAvIEYvnsi64J6QJ0UeOWyvdrVGvsb8+hF2IjEBG/IM75WqtfT6YgycMOhAXstw4m1wpme89w0GD6MXjPxXAjywxdrFKkq1Ya6gzcCTrFzEvXOaEnRcghvBUkLDUD8QvBgRMXryOA/WOc0fU3reYKjk4k8kxZy+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=shopee.com; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.0
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=shopee.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
+Received: by localhost.localdomain (Postfix, from userid 1007)
+	id 640AB27E725; Wed,  1 Jul 2026 16:05:51 +0800 (+08)
+From: Leon Huang Fu <leon.huangfu@shopee.com>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Leon Huang Fu <leon.huangfu@shopee.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	KaFai Wan <kafai.wan@linux.dev>,
+	bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user BPF_ADDR_SPACE_CAST insn
+Date: Wed,  1 Jul 2026 16:04:38 +0800
+Message-ID: <20260701080524.194326-1-leon.huangfu@shopee.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <7438f087-7fb4-4991-a095-1d24d6d09895@loongson.cn>
+References: <20260626154330.33619-1-leon.hwang@linux.dev>  <20260626154330.33619-2-leon.hwang@linux.dev>  <e279c9a7ca6b16e52dc261560513b0eafdd70f87.camel@linux.dev>  <a2aaa21d-4cf9-48a4-839f-dd152bda8185@linux.dev>  <af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn>  <d55e10b1-d883-4fcf-8fb3-8210db935e4a@linux.dev>  <1c07a34f-b050-a281-6a7b-542a9bfa30b3@loongson.cn>  <bfb432db-bd29-419a-8147-78ff6fac07ad@linux.dev>  <7438f087-7fb4-4991-a095-1d24d6d09895@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 12/46] KVM: guest_memfd: Only prepare folios for
- private pages
-To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- david@kernel.org, jmattson@google.com, jthoughton@google.com,
- michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
- qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
- shivankg@amd.com, steven.price@arm.com, tabba@google.com,
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
- forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
- aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-12-9d2959357853@google.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20260618-gmem-inplace-conversion-v8-12-9d2959357853@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
-> 
-> All-shared guest_memfd used to be only supported for non-CoCo VMs where
-> preparation doesn't apply. INIT_SHARED is about to be supported for CoCo
-> VMs in a later patch in this series.
-> 
-> In addition, KVM_SET_MEMORY_ATTRIBUTES2 is about to be supported in
-> guest_memfd in a later patch in this series.
-> 
-> This means that the kvm fault handler may now call kvm_gmem_get_pfn() on a
-> shared folio for a CoCo VM where preparation applies.
-
-I don't get it clear why preparation isn't needed or should not be 
-performed for shared folio.
-
-Before this patch, userspace VMM can create the gmem with FLAG_MMAP and 
-FLAG_INIT_SHARED. And KVM always faultin the pfn from gmem. In this 
-case, the gmem is always shared, and kvm_gmem_prepare_folio() is always 
-called when faultin from gmem. So it's OK to call preparation for shared 
-folio, right? Then what is the actual reason we cannot do it now?
+On Wed, 1 Jul 2026 15:29:28 +0800, Tiezhu Yang <yangtiezhu@loongson.cn> wro=
+te:=0D
+> On 2026/7/1 =E4=B8=8B=E5=8D=883:02, Leon Hwang wrote:=0D
+>> On 1/7/26 14:49, Tiezhu Yang wrote:=0D
+>> [...]=0D
+>>>>=0D
+>>>> It is a real issue.=0D
+>>>>=0D
+>>>> Instead of fixing up helper calls, it seems better to prevent=0D
+>>>> interpreter fallback if the prog has any JIT-inlineable helper call.=0D
+>>>=0D
+>>> Hi Alexei and Leon,=0D
+>>>=0D
+>>> What about the following: (not tested yet, if it is good, I can test it=
+)=0D
+>>>=0D
+>>> [...]=0D
+>>>=0D
+>>> If you are OK with the above changes, I will test it again and send=0D
+>>> a new version later.=0D
+>>>=0D
+>>=0D
+>> If you don't mind, I think I can disallow the interpreter fallback by=0D
+>> the below diff in the next revision of this series.=0D
+>>=0D
+>> The 'aux->jit_required' is introduced by following Alexei's suggestion.=
+=0D
+>=0D
+> I am not sure if introducing a new aux->jit_required member is necessary,=
+=0D
+> as we already have a local jit_needed flag in the current logic.=0D
+=0D
+A 'must_jit'-like member was suggested by Alexei [1].=0D
+=0D
+Probably, the commits in [2] could help to understand 'aux->jit_required'.=
+=0D
+=0D
+[1] https://lore.kernel.org/bpf/DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com/=0D
+[2] https://github.com/Asphaltt/bpf/commits/bpf/fix-interpreter-fallback/v2=
+/=0D
+=0D
+>=0D
+> Additionally, the issue reported in my patch [1] is fundamentally tied=0D
+> to bpf_jit_inlines_helper_call(). Maybe we can simply reuse jit_needed=0D
+> by checking bpf_prog_has_inline_helpers() right before JITing, and then=0D
+> reject fallback with -ENOTSUPP if JIT compilation fails.=0D
+=0D
+Correct. Reusing jit_needed is preferred.=0D
+=0D
+Thanks,=0D
+Leon=0D
+=0D
+>=0D
+> Let us wait for Alexei's comments on the overall direction before=0D
+> respinning.=0D
+>=0D
+> [1] bpf: Fix unaligned interpreter panic on JIT fallback path=0D
+> https://lore.kernel.org/bpf/20260615025316.24429-1-yangtiezhu@loongson.cn=
+/=0D
+>=0D
+> Thanks,=0D
+> Tiezhu=0D
