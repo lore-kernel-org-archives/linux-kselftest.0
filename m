@@ -1,46 +1,47 @@
 Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFF53CB2C7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7593DB655;
 	Wed,  1 Jul 2026 23:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782948554; cv=none; b=ER7rrBnuabjspnhTJc7bfGSeEmYBf2n5EIrqxq7pBVYhySCs/YkSaDHT57pRfNmm5Gx3sL5ZB4IRh3+JjqOmG27a9xn7WhCULxQwY9Qxuccg8SjTvnqRf0m9/YVENbTv9oU4hvJv9QuPYa7IeDU/TQgpuRpC7CXsHI8jrVuZvM4=
+	t=1782948558; cv=none; b=sNKF9MHkq02/uMa590Vq60l1l/1rzAnTcbGnt2OsGgYzCC0AtqgEfIEnB1w0dnOm7JeULYIwxeyx9ySWZHB1i+hU4+clay5Yql4wrpmjOTC2+RFb66mpfesixmjpiFFBO2Zf4Aid70835Zx5PlAIzDgmY5ESR8H9O9mPllVPVck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782948554; c=relaxed/simple;
-	bh=18ormh6WpaMUFkWy+F/eMepCNoe1mF1rQb/Pfxtm6Ec=;
+	s=arc-20240116; t=1782948558; c=relaxed/simple;
+	bh=68nog/yWG7CnzJhBQNjr76kwELBHhfJEkbThzQ5L6Sk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JVh6qtftZuvOR4qUKz3g/FTBm3WxMxe9j6y2rYFJg4oVt7XuBnxq1iGpEfCGWXbRmE8POez+3k6g2oKov/6sq0PeETCU7Vnva0Fn+sfj9Dy/k1CQVQVSA9DJcW24NlBzbPA/vSYhK++FY9BhOMLuLgz86cEI0U0+c189Nh87aVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=fdx1MEod; arc=none smtp.client-ip=185.226.149.38
+	 In-Reply-To:To:Cc; b=NY9unABkrHexhqi94rXraCYFvu9jQJjESjBRANuJalepBl8ljPYylbXlYRcgeYApbvgqCCM6nYBWrUkG0e8mDG3pK7wzUqd1rXG57xgQXsEHCdXA/ZvrH0DlxGIbLi944kYb7hIsrwunjAcDngPLGIzU1qLKdv2k5X9WRVyOZFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=Kd21nBnl; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="fdx1MEod"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="Kd21nBnl"
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1wf4Md-00APZh-1U; Thu, 02 Jul 2026 01:29:07 +0200
+	id 1wf4Md-00APa4-VY; Thu, 02 Jul 2026 01:29:07 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=rus+5ion3oWjiPDrvUa7w2H85YbXoAhjJ5vWpwXdoNk=; b=fdx1MEodxUTHSpOMuPNzHDEciN
-	10hDphWWuROcgYdIdX6dgmDcZkYg2fhfbYiIeXD1MrgX3OHyQe+3nu4aFUb5HAvHjgFB7jZ70G6Dv
-	wzXAkdEb1Kqux+CmRMfjPKVMg+dQlN1YgDo22q3+5dbhYqyhQ6sS1OwI98+Bo1hGqQ2NrtEmUYJsl
-	z5Vl+VFiP3tTtKAiBHAFSMdy2nsJeLdNn1oaGC4yIECPmJ+KHlT0pcimMcfwUcJuCPISyeoYmYBO8
-	qtPDXJzeBtVcShAHYm2mnnVkibIUokiVCP+dlyuMeUv55+tQXi6f0BvBcplrAJHsp6L3VOJs6vuAb
-	FCeHNeRg==;
+	bh=MlIBowz2hjZvMC4jobVQ2h3VtaQHdZIYSQ5rZe6eF+w=; b=Kd21nBnlUAJIuJ0KLnIvhsIoC/
+	HQcFDxoIE4UwmucEtfZmXQHfTfVY7gwIMBlciHdO6wzRHVkz7hdMozdEPTVcdrt+eQWwtwkcYov7/
+	ROZveS/0Z6WGaK+TQNV2W45onNgJdI6INJ2XGXJNnWcjJKGCjv23aClGMCAUt73XfEgwGFDpcMo/6
+	s1WOVhSU6netwCsTDi0vxglVHJJiUbxlNA/630drdczB0h9kiSFGH9LBEdYC4QYCAYxaVKTGnlmm8
+	daUj+KMP74ng3aXP4tROBE3C9NOM1tP06jUCcD4lc17sLibRIBJRi2zUeQbTOXCruP6hWL1/fDdrO
+	kCJSofNA==;
 Received: from [10.9.9.73] (helo=submission02.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1wf4MX-0005G2-Et; Thu, 02 Jul 2026 01:29:01 +0200
+	id 1wf4MY-0005GF-BE; Thu, 02 Jul 2026 01:29:02 +0200
 Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1wf4MO-00467f-3L;
-	Thu, 02 Jul 2026 01:28:52 +0200
+	id 1wf4MS-00467f-F4;
+	Thu, 02 Jul 2026 01:28:56 +0200
 From: Michal Luczaj <mhal@rbox.co>
-Date: Thu, 02 Jul 2026 01:28:19 +0200
-Subject: [PATCH bpf v3 1/4] selftests/bpf: Ensure UDP sockets are bound
+Date: Thu, 02 Jul 2026 01:28:22 +0200
+Subject: [PATCH bpf v3 4/4] selftests/bpf: Fail unbound UDP on sockmap
+ update
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,7 +50,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260702-sockmap-lookup-udp-leak-v3-1-ff8de8782468@rbox.co>
+Message-Id: <20260702-sockmap-lookup-udp-leak-v3-4-ff8de8782468@rbox.co>
 References: <20260702-sockmap-lookup-udp-leak-v3-0-ff8de8782468@rbox.co>
 In-Reply-To: <20260702-sockmap-lookup-udp-leak-v3-0-ff8de8782468@rbox.co>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -71,46 +72,45 @@ Cc: Michal Luczaj <mhal@rbox.co>, bpf@vger.kernel.org,
  netdev@vger.kernel.org
 X-Mailer: b4 0.15.2
 
-Update sockmap_basic tests to bind sockets before they are used. This
-accommodates the recent change in sockmap that rejects unbound UDP sockets.
+sockmap now rejects unbound UDP sockets. Adjust test_maps. While at it,
+check socket()'s return value.
+
+This effectively reverts commit c39aa2159974 ("bpf, selftests: Fix
+test_maps now that sockmap supports UDP").
 
 Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- tools/testing/selftests/bpf/prog_tests/sockmap_basic.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/test_maps.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index cb3229711f93..2d22a9058a8e 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -853,7 +853,7 @@ static void test_sockmap_many_socket(void)
- 		return;
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index c32da7bd8be2..6a2641ee7897 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -759,16 +759,15 @@ static void test_sockmap(unsigned int tasks, void *data)
+ 		goto out_sockmap;
  	}
  
--	udp = xsocket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
-+	udp = socket_loopback(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK);
- 	if (udp < 0) {
- 		close(dgram);
- 		close(tcp);
-@@ -922,7 +922,7 @@ static void test_sockmap_many_maps(void)
- 		return;
+-	/* Test update with unsupported UDP socket */
++	/* Test update with unsupported unbound UDP socket */
+ 	udp = socket(AF_INET, SOCK_DGRAM, 0);
+-	i = 0;
+-	err = bpf_map_update_elem(fd, &i, &udp, BPF_ANY);
+-	if (err) {
+-		printf("Failed socket update SOCK_DGRAM '%i:%i'\n",
+-		       i, udp);
++	CHECK(udp < 0, "socket(AF_INET, SOCK_DGRAM)", "errno:%d\n", errno);
++	err = bpf_map_update_elem(fd, &(int){0}, &udp, BPF_ANY);
++	close(udp);
++	if (!err) {
++		printf("Unexpectedly succeeded unbound UDP update '0:%i'\n", udp);
+ 		goto out_sockmap;
  	}
+-	close(udp);
  
--	udp = xsocket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
-+	udp = socket_loopback(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK);
- 	if (udp < 0) {
- 		close(dgram);
- 		close(tcp);
-@@ -993,7 +993,7 @@ static void test_sockmap_same_sock(void)
- 		return;
- 	}
- 
--	udp = xsocket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
-+	udp = socket_loopback(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK);
- 	if (udp < 0) {
- 		close(dgram);
- 		close(tcp);
+ 	/* Test update without programs */
+ 	for (i = 0; i < 6; i++) {
 
 -- 
 2.54.0
