@@ -1,151 +1,143 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8660D3B71B0
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 21:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0EE3803F1
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 21:38:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782940630; cv=none; b=FkQpdXX4J1BP1fG4zHfMVQTjUeKdC+kjOjovDUHo0eMKLH1x0Bhrhp9bTqV2R2pXJOgAUrK5wkXShOZOlEw97m9E8W1yt4UKeai9XCGVBh289hOOOZ8m+8kvzVA+E89MwRFAEMdIZfQe+zY3mzG0L3zGE0S/rASvgRirabjtBh8=
+	t=1782941938; cv=none; b=KskHvX7b5QeO8HJcgHkLHkK8nB2GE3tes8PQcB776ULYVgEMW5WBLOe7NxyPDdfmsloNObc/EMp4IoZH6hcxFKCBFfhRRcn1i63LzZjnNcBYizERv/Z4sMQEPQKwAjcZwoycywywTPVYOZQuzudW3vUM4hCY+FQWUKdTPI0pcrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782940630; c=relaxed/simple;
-	bh=z7sD9qm1NrouLVBCMAJ5P949KnGJiopF5DHVhKLrWGs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BB/9TzsybIeM5P0LWC4xkE3t8xIO0RZDy9PyhgrugXhB/rIexgfXT4WQm1pn+jqrl+j985M9fRm3ThPt7YplcwuRfo7L+y9q8HlVafaa/IKlUCJNRTIQv1MI5R1UFxsw2A453dPvObbwKRUHkGVQ57aFk3FcaH3V5RmQpmCSxfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FHxYaZ07; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782941938; c=relaxed/simple;
+	bh=s3SRCVocvxtBq/BBjpyMKtPRDxFAsPXDOITHXqUnO4o=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=jupPeUjviMjOgjJ1aGwLBJUHekiFDIugqMGbwGtP1lClDJMZLXOCkBPYccoO6Lm/O5oaUE/UADHVBZ28EcX797nsOSG0nhS3AzsHyJxCZ9I+o7yq2rOjOlrgoZh2jETXZgPSV9V1M6+KmzHIi7tcukMFDlvG2IuEg/RSuc0QEj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jYZHQ0FZ; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FHxYaZ07"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782940626;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5rK4YoeHXeXS+tnBBON6Vk/DP3tREC5UQRlEL6C7Tas=;
-	b=FHxYaZ07ojzaufaPh/QryzBfPFZsYiQeqwHSCkY15C0Zy5R+M4+Eo6SxhrMnOUJafcAxzG
-	IM51haxIiGKL7s/TxI+2xz8YtjtOty18U5jpojpNu4Vscfj8ZpcyYHcb16X/P8dRkSnYEL
-	eUhLo4yFoGoSPWAo+7k48S7jRDwYjTA=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-600-m2yWXDg5PdK8Mb4coGFcKQ-1; Wed,
- 01 Jul 2026 17:17:03 -0400
-X-MC-Unique: m2yWXDg5PdK8Mb4coGFcKQ-1
-X-Mimecast-MFC-AGG-ID: m2yWXDg5PdK8Mb4coGFcKQ_1782940621
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 251E9188E6DA;
-	Wed,  1 Jul 2026 21:17:01 +0000 (UTC)
-Received: from [10.2.16.170] (unknown [10.2.16.170])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E212B195E483;
-	Wed,  1 Jul 2026 21:16:57 +0000 (UTC)
-Message-ID: <c5aa5b20-754d-4216-b7f3-1327b6926513@redhat.com>
-Date: Wed, 1 Jul 2026 17:16:56 -0400
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jYZHQ0FZ"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c88aab7c1d4so794462a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 14:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782941937; x=1783546737; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GRkq9jmjNuS5m4BJgbbAEXZCpunnA1N0v1XvrStDBgY=;
+        b=jYZHQ0FZXAGO1JEGSty/T2GCc1OXGTQApUcOJesNOIlH8l85iNchenlCCV/1DZdGoT
+         ksIP9vNV78wNEvoOdkfuVCk6HMJpet5vE+JYsUm2vMRnZSVKK+VjR8H5InwAYOPHBbc1
+         aaJNkmEDURJ64lc302othmdm5JZAy42dA9ZCFHGr9qu9CrPaRnRwtS3P9Atu6psHqXVV
+         JrnvTWDS98Y8L0Ll9o+oukfL5b0Id9i/dljxhUWkxi5cia+UxSpSDi9ntkDAhZMITm4O
+         WOAVy5C64JRZJT5tOn8mcx2DNNJSYvpif1Q3nkBbkuEKGWAOgnzxXw/pAWQrh3tafiBr
+         L2oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782941937; x=1783546737;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GRkq9jmjNuS5m4BJgbbAEXZCpunnA1N0v1XvrStDBgY=;
+        b=hMmGJioR9JntAZTnzyVTbYXFNsYmSHf97++H24EridmiemPM4z62qd4nVNH5ukOksv
+         5Leo5AwUeqdQMCQ016dMjOFOha/EbB1qzDQb/gTD8Z3zshh9ZBpK9rL1nGsHx0qTqcHs
+         QUAcxwFiFaM7Uzf2+iE5GsEopNCX7K986Nc926qbg+VTlO1JoZQyiQbSEv5BUyJ8n7Ae
+         XketypFbX8TJeTbO6gconexzJHiuXJihF+BXQL1ErVpwhHaed0RT1gmvECaGBtunrbnW
+         lFpSGlqDfZbY1D87z8OnzdnnkdPQw6qgWo27Aco+xfltXKWOI48mF9Xl8n3IDdKgINOt
+         PJmQ==
+X-Forwarded-Encrypted: i=1; AHgh+RosxH8iF7p5o3ETyziT1i3fglynMYXOiHpGWmvCLiWxzGfsoMyDrus/3Cw+hj3VnCinnaBAqW4zidnYpWTbwSg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YydE/cM41k9OgQOQKIVR34gwf3+TLLj0RiFG7XTwIc/f0k/XF3n
+	QRWzxP8/QRKu7uDDdlCs2s2gw0kJWVUosiq+dUjwAFry3glDpiLzsrtMtmWf9lAgznru/U/B5M4
+	QmhQ9BA==
+X-Received: from plbka15.prod.google.com ([2002:a17:903:334f:b0:2bd:9574:2958])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d2c2:b0:2c9:fa36:ab73
+ with SMTP id d9443c01a7336-2ca7e6f0b6emr36500665ad.8.1782941936636; Wed, 01
+ Jul 2026 14:38:56 -0700 (PDT)
+Date: Wed, 1 Jul 2026 14:38:55 -0700
+In-Reply-To: <20260608145455.89187-7-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v9 10/11] cgroup/cpuset: Support multiple destination
- cpusets for cpuset_*attach()
-To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
- Juri Lelli <juri.lelli@redhat.com>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
- Guopeng Zhang <guopeng.zhang@linux.dev>
-References: <20260630033344.352702-1-longman@redhat.com>
- <20260630033344.352702-11-longman@redhat.com>
- <e4608f5d-d569-4796-b0f6-55956a6b341c@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <e4608f5d-d569-4796-b0f6-55956a6b341c@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Mime-Version: 1.0
+References: <20260608145455.89187-1-dwmw2@infradead.org> <20260608145455.89187-7-dwmw2@infradead.org>
+Message-ID: <akWI72WrPKy-PBqo@google.com>
+Subject: Re: [PATCH v5 06/34] KVM: x86: Explicitly disable TSC scaling without CONSTANT_TSC
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
+	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
+	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On 6/30/26 10:51 PM, Ridong Chen wrote:
->
->
-> On 6/30/2026 11:33 AM, Waiman Long wrote:
->> The only case where the cgroup_taskset structure requires task migration
->> to multiple cpusets is when enabling a cpuset controller in cgroup v2
->> where the newly created child cpusets inherits the same effective CPUs
->> and memory nodes from the parent. In that case, task migration can 
->> happen
->> directly with no update to tasks' CPU and memory nodes assignment and no
->> further work needed from the cpuset side except updating 
->> nr_deadline_tasks
->> when DL tasks are involved and setting old_mems_allowed in the child
->> cpusets.
->>
->> Do that by tracking all the destination cpusets with a new dst_cs_head
->> singly linked list. The reset_migrate_dl_data() function is integrated
->> into clear_attach_data() so that it can be used for both source and
->> destination cpusets.
->>
->> It is assumed that a given cpuset cannot be both a source and a
->> destination cpuset. If such condition happens or when there are multiple
->> destination cpusets with CPU or memory nodes changes, the current code
->> will not handle it correctly. So it will print a warning and fail the
->> attach operation in these unexpected cases as we will have to enhance 
->> the
->> code to support this if such use cases are valid and not coding errors.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   kernel/cgroup/cpuset-internal.h |   1 +
->>   kernel/cgroup/cpuset.c          | 115 ++++++++++++++++++++------------
->>   2 files changed, 72 insertions(+), 44 deletions(-)
->>
->> diff --git a/kernel/cgroup/cpuset-internal.h 
->> b/kernel/cgroup/cpuset-internal.h
->> index e7d010661fd3..d1161b0a3d85 100644
->> --- a/kernel/cgroup/cpuset-internal.h
->> +++ b/kernel/cgroup/cpuset-internal.h
->> @@ -149,6 +149,7 @@ struct cpuset {
->>        * For linking impacted cpusets during an attach operation.
->>        */
->>       struct llist_node attach_node;
->> +    bool attach_source;
->>         /* partition root state */
->>       int partition_root_state;
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index b201f4ba18b6..1591d6dca66a 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -366,10 +366,12 @@ static struct {
->>       bool cpus_updated;
->>       bool mems_updated;
->>       bool task_work_queued;
->> +    bool many_dest_cs;    /* Have many destination cpusets */
->>       struct cpuset *old_cs;    /* Source cpuset */
->>       nodemask_t nodemask_to;
->>   } attach_ctx;
->>   static LLIST_HEAD(src_cs_head);
->> +static LLIST_HEAD(dst_cs_head);
->
-> This looks a lot like the 'struct list_head mg_src_preload_node' and
-> 'struct list_head mg_dst_preload_node' in struct css_set. Is there a
-> better way to reuse those instead of adding a separate tracking list 
-> here? 
+On Mon, Jun 08, 2026, David Woodhouse wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> 
+> KVM does make an attempt to cope with non-constant TSC, and has
+> notifiers to handle host TSC frequency changes. However, it *only*
+> adjusts the KVM clock, and doesn't adjust TSC frequency scaling when
+> the host changes.
+> 
+> This is presumably because non-constant TSCs were fixed in hardware
+> long before TSC scaling was implemented, so there should never be real
+> CPUs which have TSC scaling but *not* CONSTANT_TSC.
+> 
+> Such a combination could potentially happen in some odd L1 nesting
+> environment, but it isn't worth trying to support it. Just make the
+> dependency explicit.
+> 
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> Reviewed-by: Paul Durrant <paul@xen.org>
+> ---
+>  arch/x86/kvm/svm/svm.c | 3 ++-
+>  arch/x86/kvm/vmx/vmx.c | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index e7fdd7a9c280..7817752533fe 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -5546,7 +5546,8 @@ static __init int svm_hardware_setup(void)
+>  				     XFEATURE_MASK_BNDCSR);
+>  
+>  	if (tsc_scaling) {
+> -		if (!boot_cpu_has(X86_FEATURE_TSCRATEMSR)) {
+> +		if (!boot_cpu_has(X86_FEATURE_TSCRATEMSR) ||
+> +		    !boot_cpu_has(X86_FEATURE_CONSTANT_TSC)) {
+>  			tsc_scaling = false;
+>  		} else {
+>  			pr_info("TSC scaling supported\n");
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index a29896a9ef14..ed207cc7692d 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -8672,7 +8672,7 @@ __init int vmx_hardware_setup(void)
+>  	if (!enable_apicv || !cpu_has_vmx_ipiv())
+>  		enable_ipiv = false;
+>  
+> -	if (cpu_has_vmx_tsc_scaling())
+> +	if (cpu_has_vmx_tsc_scaling() && boot_cpu_has(X86_FEATURE_CONSTANT_TSC))
 
-The cgroup_mgctx is a cgroup internal data structure which is not 
-exposed to individual controllers. Sharing it will have some risks if it 
-is accidentally modified.
+We should clear SECONDARY_EXEC_TSC_SCALING in setup_vmcs_config().  Failure to
+clear the vmcs_config bit will advertise the feature to L2 and allow it to be
+enabled in vmcs12, but KVM will ultimately not honor the scaling in vmcs02:
 
-Conversion of css_set iteration to cpuset iteration is a bit more 
-complicated as 2 or more css_sets may point to the same cpuset. So we 
-still have to track if a cpuset has been visited before.
+	if (kvm_caps.has_tsc_control)
+		vmcs_write64(TSC_MULTIPLIER, vcpu->arch.tsc_scaling_ratio);
 
-It is doable, but I doubt it is worth the effort.
+This series kinda sorta gets there with "KVM: x86: Remove pvclock_gtod_data and
+private timekeeping code", but that change looks misplaced?  And I think clearing
+the bit this late will lead to false failures in vmx_check_processor_compat() due
+to the golden config clearing the bit, but the local config having it set.
 
-Cheers,
-Longman
 
+>  		kvm_caps.has_tsc_control = true;
+>  
+>  	kvm_caps.max_tsc_scaling_ratio = KVM_VMX_TSC_MULTIPLIER_MAX;
+> -- 
+> 2.54.0
+> 
