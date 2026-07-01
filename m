@@ -1,64 +1,64 @@
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493B01531E8
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 05:50:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3413139478B
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 05:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782885048; cv=none; b=Tsl1SerPH1Ije9EpFOzoFsCM9t3rnJBTjSY/c6YiLbuAMgSUR7lFPx5RSQOoO3oNqXAj890ITYPOuqAV5vcUhhyHuB03uUaUxelflWSNinbmmDpgAX0nVJAAeDHTXmCmk0g4Ud0W7YCH4m1Akdvttek6BIYQsM46XENvZDam2Qg=
+	t=1782885378; cv=none; b=Kw2rKZ7oJ2izF6ANrEJLe29pwIbtVBSXLunrCTxmt/+wDO6ZCqdPW4iD8yYouSN56GHxeVC1lZCgTelLYQK/c95qU29HMtqFUp0KArX19mrxj+lxetGfuM5o+eZ/E3MZ5ff62dw5CFBJGgkRnQoBVBCsFJ6OOoS7fCStrbPeU6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782885048; c=relaxed/simple;
-	bh=mmSPShkq+yvykn3QSSoYndfepKyvD4UBvw09Q5s8Op8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Jw4X9TCYncJh6pKt1puQ9Af6NME7wMKMWlk3F0oz6hT/21lDHbVVnR6Xs7/17pIp6PshCNrGTpV3V1LFOZJZNPgA+/u7EHnUDFiEMihvA75DlD900IbyQF6Plz3r/N6F36F5x7qIENY5IUq8wo7ynpLDeFKfU70NT/LkkUnGaAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AadCTgFi; arc=none smtp.client-ip=209.85.167.182
+	s=arc-20240116; t=1782885378; c=relaxed/simple;
+	bh=du69GUw1EIX5aANGYtoDtWVpbMocCveU908JccD8Dt8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:
+	 References:In-Reply-To; b=cQ6xbHEjXyiS6lcXk3JTvfLMPkWREE4fGC0iH/zKc4j5Sfq0UfpAgDsIwJAqZuw2uOCaRU9Sx2zCB04bgGRCOHv1fBC5GtnMt0BuuKeV4XZW0rKAe303WTRpkQSxKMxBTF4fjn2i+vYYgVYJutkO4vejqnBVkszsdf9ZlOBiDK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xzx0XDdn; arc=none smtp.client-ip=209.85.210.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AadCTgFi"
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-488b3fd8d0dso125419b6e.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 22:50:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xzx0XDdn"
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7e9f5637634so186918a34.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 22:56:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782885046; x=1783489846; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=gmail.com; s=20251104; t=1782885374; x=1783490174; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mmSPShkq+yvykn3QSSoYndfepKyvD4UBvw09Q5s8Op8=;
-        b=AadCTgFit7sT/VtgVFpehM+5mgXLJAKMhgCOoUKG/KIu2NymltMY+pJ755FfriEydr
-         vnTHdzDzmRuiEgImtBZkytaXNREfCaezA7ebWsR9zRbi7w7bL7YVC5D8yfvbvZ/n70TO
-         kKuQfAPHK6bcdIrDf8i6Dxum3Kn7w/fU14/TQ/WmhPzwef40TeihhVAi8nvw5E6EgqJK
-         k5Yojg3gheZJctU2KkaGeZLhuM61KMEslVyGRhswr8agm+R8vyrVM7pbUyOKPZcY0OIA
-         542mj1EIIfiqG8jHRIYsVWjllMVIONL5FCnodoMZ/LF49repMXsqomkfNCIL8KuEHLrY
-         XiZw==
+        bh=PMHc6VjC8zpAtFBxLHo9uqSmcB6QkUimxcvK+ODJl3o=;
+        b=Xzx0XDdnzBkey9K1juzhg7Occmgf7fcUA4KNpLpW/FRtUI1gHOIRWCZRKKY5aTLfp+
+         yTnon9oOc7eddpfQECZVqIKIiWi6M0hgBJyjaCcBcvqHFbDlZdx74RBGKJ16PhMpnpi3
+         3D8OZkuZlQPZRmbDbTufJ9ZsWtaX5kXl1meWq2aIXqN/7pwZZ8/FoPpxWBDQwnKH5FHe
+         rixh0B26doerafmmBgfiT9sBnYTZPag5f7WoxzwzePOayo/tHRa0rJCP85D19QPmFClW
+         EU1CpJgF3MNSVQFrwMgwY0R7dW0MIPUc1bg2Pynaki1tQH2PbAF4RmCURaMAo/MqqIZk
+         YuRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782885046; x=1783489846;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1782885374; x=1783490174;
+        h=in-reply-to:references:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=mmSPShkq+yvykn3QSSoYndfepKyvD4UBvw09Q5s8Op8=;
-        b=VOAoerCLSM2PGksTkUOgk2JeXxAlNxxiLHU49tchrmN8H2h+IWnrRH01bVMU9Rh7R2
-         9RjhAGdzdbvkAuEAwbO/rXQkLD494BZMpp/uhV6GWlfP2+2YqE1l39eppYNJHSslcs3G
-         76Z1XqwNeaI6mWNzjsEPxDRTzpIEQuwvOVMxwfNLpNMdylsHrS4UolhUZ1H8dh9xR3YM
-         HeyK1aggiuOjwFE/P/2+TNFtcdBDuEKhXYwIGoEnw8LsofZCF2sGSBOr/NvEZgL10rrG
-         adgKAHQMc6OPkWW+llTHec9cNDKKKlTaURUtayAbaA7kQ7h1z3Fk/HNGgb5pRPwZNq7H
-         qB4A==
-X-Forwarded-Encrypted: i=1; AFNElJ/RTn0Kna9FGHs//RqX19P1B5uMcH9XUAsYOvvYrFY+mP+lgMi5aU1mDkM41U7udzPIdI0xR9c7Gq1IjJTWknI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQiDVkBDpC/M+zc9SWpw5sIogWOoEStxzaT7LLcWolSUsXe8m1
-	vKkyfXc6FDDCPA9xVudYju1UkcrEPb3Iqzl5RNNdedw+fq1yT650T5MW
-X-Gm-Gg: AfdE7clEyEi6KIdj5OHPU2ptV0FLBRIcq2djx8TFbZZZJQdhYQiRYrCQDLYDQamH/wB
-	TNV2pjQitp8KHBu74yPjk6JqT7CJBClh7aqIW54m5wwuZuWE9JSoTfZ1cyqyIvLFQJwj0SRQLoi
-	jVWeUmcHEcI4MS7n0HT79c1k1UmyznqIaO78Tp86yAJujDzpfuWey8FxFbZ5tJtVfByEDnROPCa
-	pAZcblyb9UFsktv7w+ZjStlVudHmXnE9qhxcV31em9POZGe9t7VVViGpcA3X0g396QATut4SJ0P
-	Ozy8EYI0HgP9bY1OoFuPAZRTSE9lvPPXq4Ym+SiGlkjn2E6Y2kgc/a1ezVBYhqWtRuF5ef+3ykP
-	fR0ObeJ+XpAuXtSii54bqLtnYXdt4wwfUS+xS585/B4T+DBEutsOFRVrzdBUvMhe3dUfuiaBOwM
-	KMJe2CvmL4NV+X5wGooXtU1QPF/RN+DzDlTSNjLSrw+4jXF/bky1Ngb3GKSsmMYIkFObpKLQs00
-	yUoKA==
-X-Received: by 2002:a05:6808:198e:b0:495:e16d:5d03 with SMTP id 5614622812f47-4960efea9ddmr138876b6e.21.1782885046122;
-        Tue, 30 Jun 2026 22:50:46 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:5::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-49606b18bc9sm705829b6e.15.2026.06.30.22.50.43
+        bh=PMHc6VjC8zpAtFBxLHo9uqSmcB6QkUimxcvK+ODJl3o=;
+        b=YUAxCZ7ougVZwgaeWtwEqyV/r84rIyC7zBNCBXuzhNj7j3SAU6tlORqupLIz1sUGoX
+         3hUO9lF2y8Rb1cN/fDqlBEpVcmz0DWVhxAoFcE8LbuWxBRSWPP8kZhqvQXhb8wWdTXg9
+         /3EsPz9fRpE2LjtFYCCp7FWLBKQ1kWYNuaNu6X4hi63yG4tpPPqJKIEym28vgCGy6HJM
+         +OFFiB90ClWqeK4c9teVsV1VGgoS5oDdTXPr0Vil3AUZC0lx1rdVlkmGpFfoDmieL3bp
+         Ad2woNbd3DIYfNqdgE1q4grSTWcbJ1Ut2Bz5cbFm+g4Mog/T+fOkgBLPJRFPYBaGOAbV
+         8Z8Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9t0xDbcPjOaFmIgCj04cFoyotnjtltobuxwNC1IAoIqOFwvoQUdk79zASH7TSKgb5WYSs8IRQ47htdjZ3D6TE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3BDF4W4f9bnnTx08VnOz0oo4yc0N9g9T91BYSHJRTmfJ+DcQQ
+	K8ycWu+smZXR36ubj4szfw2N37kXl4Vhnlgi4dwUi7NHmutWgaNNnJ2P
+X-Gm-Gg: AfdE7ckP6aIkf0ZarxDQS0jTGece69g/S7QmhkoPVIeZJs4e/OwR0LICZCsmVc8BBwH
+	Yg2zKTjAeHr/dbX2PQD73qlQ90HPLCwAliPaFHhIhn/o9la56qZf8kmTYLJ5/Uv/PDRTMqL6h2d
+	l1/vF2ZRNPH4eL0icGCarMezxyq+Nl8xMdqHKawRG+U09bam57yqrsLCqdTklnzb3P4OUaoOhpP
+	UdK5vRkeQz9xPTMSTReeDNaquGxs1UBsTiRHlGt8Yq0S/HOWp2zzbiTy1odrLEPyKUzfxoYijmH
+	kJwexpMBhZiARp59LQfivxvPARmgg0GP+pmT57SZtFjtLuRE0iAEIA/MLHHi7h4Or5Tx2LTPET4
+	7OblYFMoqtu9FaBnJGHM1Cm8udkMKo0h2Qnx5EsRCJks7vMTLl94UBx8Ds1eppQ+LF6+2xpDDBY
+	Kswz6Jtjr2NcygVBQJDZxhGYAlt1mqhueTwYUDK0zRz2fzoCkpV5HjvOsrSiJ9masxhQOV1AQBe
+	1De5BA=
+X-Received: by 2002:a05:6830:81d2:b0:7e9:eaf2:edff with SMTP id 46e09a7af769-7eb4cc4cb36mr45738a34.26.1782885374015;
+        Tue, 30 Jun 2026 22:56:14 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5f::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e9ec2e353fsm4114877a34.20.2026.06.30.22.56.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jun 2026 22:50:45 -0700 (PDT)
+        Tue, 30 Jun 2026 22:56:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,41 +67,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 30 Jun 2026 22:50:43 -0700
-Message-Id: <DJN001X0S57Y.18CKUS4NDDQT1@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Shuah Khan" <shuah@kernel.org>, "Puranjay
- Mohan" <puranjay@kernel.org>, "Anton Protopopov"
- <a.s.protopopov@gmail.com>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [RFC PATCH bpf 0/6] bpf: Disallow interpreter fallback for
- interpreter-unsupported insns
+Date: Tue, 30 Jun 2026 22:56:11 -0700
+Message-Id: <DJN048GYRBCZ.M83AO0MXTKSV@gmail.com>
+Subject: Re: [PATCH v3 net-next 1/1] tcp: Replace min_tso_segs() with
+ tso_segs() CC callback
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>,
+ "jolsa@kernel.org" <jolsa@kernel.org>, "yonghong.song@linux.dev"
+ <yonghong.song@linux.dev>, "song@kernel.org" <song@kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "memxor@gmail.com" <memxor@gmail.com>, "shuah@kernel.org"
+ <shuah@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>,
+ "ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net"
+ <daniel@iogearbox.net>, "andrii@kernel.org" <andrii@kernel.org>,
+ "eddyz87@gmail.com" <eddyz87@gmail.com>, "horms@kernel.org"
+ <horms@kernel.org>, "dsahern@kernel.org" <dsahern@kernel.org>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
+ <netdev@vger.kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>,
+ "jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
+ "stephen@networkplumber.org" <stephen@networkplumber.org>,
+ "davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
+ <edumazet@google.com>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+ "donald.hunter@gmail.com" <donald.hunter@gmail.com>, "kuniyu@google.com"
+ <kuniyu@google.com>, "ij@kernel.org" <ij@kernel.org>,
+ "ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
+ <koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
+ <g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
+ <ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
+ <mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
+ "rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+ <Jason_Livingood@comcast.com>, "vidhi_goel@apple.com"
+ <vidhi_goel@apple.com>
 X-Mailer: aerc
-References: <20260626154330.33619-1-leon.hwang@linux.dev>
- <DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com>
- <18678d0c-f878-4d7b-bf7e-ffca4967dec5@linux.dev>
-In-Reply-To: <18678d0c-f878-4d7b-bf7e-ffca4967dec5@linux.dev>
+References: <20260630120145.286497-1-chia-yu.chang@nokia-bell-labs.com>
+ <DJMRPJEUTY5G.30HYOMPLBGZOJ@gmail.com>
+ <PAXPR07MB7984443B70E713F016EAA550A3F62@PAXPR07MB7984.eurprd07.prod.outlook.com>
+In-Reply-To: <PAXPR07MB7984443B70E713F016EAA550A3F62@PAXPR07MB7984.eurprd07.prod.outlook.com>
 
-On Tue Jun 30, 2026 at 7:59 PM PDT, Leon Hwang wrote:
-> On 1/7/26 07:12, Alexei Starovoitov wrote:
->> On Fri Jun 26, 2026 at 8:43 AM PDT, Leon Hwang wrote:
-> [...]
+On Tue Jun 30, 2026 at 10:46 PM PDT, Chia-Yu Chang (Nokia) wrote:
+>> > -     /* override sysctl_tcp_min_tso_segs (optional) */
+>> > -     u32 (*min_tso_segs)(struct sock *sk);
+>> > +     /*
+>> > +      * Override tcp_tso_autosize (optional)
+>> > +      *
+>> > +      * If provided, this callback returns the final TSO segment numb=
+er
+>> > +      * and will bypass tcp_tso_autosize() entirely. The implementati=
+on
+>> > +      * must derive an appropriate value and ensure the result is val=
+id.
+>> > +      */
+>> > +     u32 (*tso_segs)(struct sock *sk, u32 mss_now);
 >>=20
->> I don't think we need such fallback in patch [3].
+>> I don't like this interface change.
+>> It introduces churn for no good reason.
+>> At least I don't see why you cannot live with the existing api.
 >
-> Do you mean we can add the internal BPF_ADDR_PERCPU insn support to the
-> interpreter?
+> Hi Alexei,
+>
+> This patch was part of TCP Prague preparation series: https://lore.kernel=
+.org/all/20260611161504.228319-4-chia-yu.chang@nokia-bell-labs.com/
+> Our original patch is to add an extra tso_segs, and after discussion it's=
+ recommended to replace exisiting min_tso_segs.
+>
+> This is needed because TCP Prague would set the exact TSO size rather tha=
+n using autosizing from TCP.
+> The TCP Prague itself is planned to be submitted after all preparation co=
+mmits are accepted.
+> You can find its current stauts: https://github.com/L4STeam/linux-net-nex=
+t/blob/upstream_l4steam/net/ipv4/tcp_prague.c
 
-No. See why CONFIG_BPF_JIT_ALWAYS_ON was introduced.
-The interpreter is a security hole.
-It has to be _compiled out_ of the kernel.
-Hence all patches that improve fallback to interpreter are misguided.
-The interpreter has to be removed completely... sooner or later.
+You have to explain why Prague CC cannot rely on autosizing.
+To me it sounds like a red flag. autosizing logic was there for a decade, i=
+f not more.
+And now you're arguing that your CC logic is special and it deserves new AP=
+I
+and breakage of existing convention.
+Maybe you should step back and reconsider.
+
