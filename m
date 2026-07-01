@@ -1,134 +1,71 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2D22253FC
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 05:03:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865022E7F17;
+	Wed,  1 Jul 2026 05:20:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782882229; cv=none; b=HnnL6/rJCZMp0OsUQ2IMNBzHVFFOL0fAyAMo/VlnvJ2Scz8vKax0Z7kz1uQaPK/VYwLOKStQrxv4tAHsy1siYz/TDKybjug43EQhD2TQgpaGdB0UhMadzJusIC3XfxbKOM3V1As6pZcIPGia7911fXjiGCWR+7xYf6O+7BmQd0w=
+	t=1782883225; cv=none; b=Zt0HbPwYUn63bj4EJ8rsXlnafs39GRaHdOldWGKFxbMPH8xlRAgPDWP4L683Gp2mdBSRudqcZLIqa+5/eLzb7ZjWqiwo+aJKqUB4Bp4ItZOu33zpHNuvUXXW3Z0J5yw2PWd7Lk14X5KE9HQqOcnj41JmFx+Pdp2SY+sjdTPQ8Qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782882229; c=relaxed/simple;
-	bh=oxbMbODushhC7pgEE9L6PR2gFzNlyiACUXcfsuicEIs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZCZj8PPFFGLS97CcAxBbdvuK+q7wNpA0wtql3VC28aIQANEyg7TXT6fbe+1mqTdavuFJJgcSUkb3plPpvvziXrkpYNHLNYKSCkQg5qfn/usBxzcB/vOdpM985UpUyqkYb6UWcbU4CcMoW5zF78zR4xIlcMztSlmTpEDb0H1Ah4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=K9pGLR0V; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782883225; c=relaxed/simple;
+	bh=LGbYR/e/HflN+FJj4t3lTxsXUx35eeyQy0mQPEIHVyU=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=twPofdzVcdpGBr4XayN7GVILQVRrK5Bk2ImNxgrNwgsZl/qCJgcl+nndZr1+34QSCEYQ7YMZ+rVkcK+mFHqax3Fl+W6RHrd1lObIg5cfMut7No1gTN07C+i8W7SsDBjyjJKxwGgWReIxce9jBxIk9cyIcKVE5FmlJX3Xe0BO5Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=toX5mJSD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="K9pGLR0V"
-Message-ID: <b24d5fa0-81c0-4690-b9a7-f29b79740272@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782882216;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=icl4iM8H8kjQY8I0E4w6SCKCBCCsjMFSCKrymXKcac8=;
-	b=K9pGLR0VqRXVIaZtsgJfO00PbLThrU3L1kVvL3dD2Pw4mqEHie36a5V+LK7kwZNv4P5DKt
-	m7pYZ0FFkhDQP8frdwKpKMBA9lPUrAvgaOmQ37kJ5Er/XLliB/A3B4wcqfSoxxuSmFcFMi
-	0gcVmdXm6rxJAdanEqceqRiZ9NBpYow=
-Date: Wed, 1 Jul 2026 13:03:08 +0800
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="toX5mJSD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F9871F000E9;
+	Wed,  1 Jul 2026 05:20:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1782883224;
+	bh=BiRROp2Ck0Qkb07LLqpzBl/VkKQ724vUCdYfSeyPwHs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=toX5mJSDYiUmElynFgLq3f4b9XllfqQFbjfK23hHhukTmMF9ik0uooWJKpqXTrXnG
+	 Zg72KCViAfcmbtkfoRbTpkJBI0ETtVodN/1WL5MtLKkaMbRhSdgXeeQYkBgstdiOKv
+	 xWXccyv1k9W19S6znNmndr0pLOwT/wGVXjAUBBqo=
+Date: Tue, 30 Jun 2026 22:20:22 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Hongfu Li <lihongfu@kylinos.cn>
+Cc: david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, keith.lucas@oracle.com,
+ kevin.brodsky@arm.com, maddy@linux.ibm.com, usama.anjum@collabora.com,
+ yury.khrustalev@arm.com, jhubbard@nvidia.com, joey.gouly@arm.com,
+ zwisler@google.com, hongfu.li@linux.dev
+Subject: Re: [PATCH v8 0/5] selftests/mm: refactor pkey helpers and fix mmap
+ error handling
+Message-Id: <20260630222022.60d0951b90af8857971ad10c@linux-foundation.org>
+In-Reply-To: <20260630073235.3802271-1-lihongfu@kylinos.cn>
+References: <20260630073235.3802271-1-lihongfu@kylinos.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 0/3] bpf, sockmap: reject a packet-modifying
- SK_SKB stream parser
-To: Ihor Solodrai <ihor.solodrai@linux.dev>,
- Sechang Lim <rhkrqnwk98@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, Eduard Zingerman <eddyz87@gmail.com>
-Cc: Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima
- <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Willem de Bruijn <willemb@google.com>, "David S . Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Bobby Eshleman
- <bobby.eshleman@bytedance.com>, netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260620024423.4141004-1-rhkrqnwk98@gmail.com>
- <e3a91acd-2b4d-4e93-a3bb-a0e9ee5ede0f@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <e3a91acd-2b4d-4e93-a3bb-a0e9ee5ede0f@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Tue, 30 Jun 2026 15:32:30 +0800 Hongfu Li <lihongfu@kylinos.cn> wrote:
 
-On 7/1/26 12:48 PM, Ihor Solodrai wrote:
-> On 2026-06-19 7:44 p.m., Sechang Lim wrote:
->> A BPF_PROG_TYPE_SK_SKB stream parser runs on strparser's message head,
->> which can chain skbs through frag_list. A parser that resizes the skb
->> frees the frag_list segments that strparser still tracks through
->> skb_nextp, leading to a use-after-free.
->>
->> A stream parser is only meant to measure the next message, not to modify
->> the packet, so reject a packet-modifying parser at attach time.
->>
->> v5:
->>   - target bpf-next instead of bpf
->>   - add Reviewed-by tag (Jiayuan Chen)
->>
->> v4:
->>   - 
->> https://lore.kernel.org/all/20260619062959.3277612-1-rhkrqnwk98@gmail.com/
->>
->> v3:
->>   - 
->> https://lore.kernel.org/all/20260618102718.2331468-1-rhkrqnwk98@gmail.com/
->>
->> v2:
->>   - 
->> https://lore.kernel.org/all/20260612123553.2724240-1-rhkrqnwk98@gmail.com/
->>
->> v1:
->>   - 
->> https://lore.kernel.org/all/20260609112316.3685738-1-rhkrqnwk98@gmail.com/
->>
->> Sechang Lim (3):
->>    selftests/bpf: don't modify the skb in the strparser parser prog
->>    bpf, sockmap: reject a packet-modifying SK_SKB stream parser
->>    selftests/bpf: test rejection of a packet-modifying SK_SKB stream
->>      parser
->
->
-> Hi Sechang, all,
->
-> This series broke test_maps (test_sockmap subtest) on the bpf
-> tree. Currently on BPF CI the test fails on bpf, but passes on
-> bpf-next (it doesn't have the series yet).
->
-> test_maps fails with:
->
->     + taskset 0xF ./test_maps
->     [    8.352378] clocksource: Watchdog remote CPU 2 read timed out
->     Failed sockmap unexpected timeout
->
-> See test_maps.c:995 in test_sockmap(): the 30s select() times out and
-> test_maps exits 1. Note there is no "Failed stream parser bpf prog
-> attach" message, the parser attaches fine.
->
-> The series was merged into bpf on 2026-06-26 00:42 UTC
->
-> CI runs:
->   last good (pre-merge, 06-25): 
-> https://github.com/kernel-patches/bpf/actions/runs/28158326456
->   first bad (post-merge, 06-26): 
-> https://github.com/kernel-patches/bpf/actions/runs/28210181858
->   recent bad (06-30): 
-> https://github.com/kernel-patches/bpf/actions/runs/28475936023
->
-> Confirmed locally reverting the 3 commits and rebuilding makes
-> test_sockmap pass again.
->
-> Could you please help investigate?
+> The main changes in this series are to refactor shared tracing and assertion
+> helpers into a common file, unify both pkey selftests on pkey_assert() and 
+> per-test tracing for consistent diagnostics, and add missing mmap() return 
+> checks with MAP_FAILED used throughout for readability and consistency.
+> 
 
-I'll work on this.
+Thanks, I'll get this into mm.git for testing.
 
+AI review read the pthread_create() manpage and didn't like
+pkey_assert().  Please take a look?
 
+	https://sashiko.dev/#/patchset/20260630073235.3802271-1-lihongfu@kylinos.cn
+
+> v8:
+> - No code changes (relative to v7).
+> - Updated Cc list: added developers identified via `git blame` and
+>   `git log` on tools/testing/selftests/mm/pkey*
+
+Kevin, if you have the time, please.
