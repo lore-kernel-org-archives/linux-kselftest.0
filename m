@@ -1,248 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3FE34BCAA2
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 17:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6ED3B3894;
+	Wed,  1 Jul 2026 17:44:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782927617; cv=none; b=LTPj5VqW+OKG3haX/E7+99Dt++meTt2hKLmzh5IPxJ//cJsDIl617UQcPpNzmTCGCNzKIjZzll5fdcSNQVfDQpILYUArX3pIpcyg8gHZHhllnrKdBzj6EPl9yHb+39TN66YaijJEOcCM1fcsElFicuzWN/TnSsVGyaE81P13JzM=
+	t=1782927866; cv=none; b=qP9jdg8IodBvc6H5FjfAzbzkmAv4C53djd7AuiXLhc2BeO8fvtGELB6IFXUI5nq8XQhvSdKJXdV2bxxEoI6y+l24xp1hTuLfL6kvkpqVJCXfuU4K2S+c9hnRUICppKby2oiG9mwmERG61Q6pLzsLpTWQ3omdN84shQk33ou8GN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782927617; c=relaxed/simple;
-	bh=HtEoO8puJDn1x+DdOZFVc1EwtFYgvDtjIjaPkFBTH7U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=V4aFgTDkeUplhEHNdUyNzqdMBvD/v5OiqnAm8frZlkejyTkMZzJUugduWV2XthRTPavp/UHylx7eL5169gzqhYY/qE8jl0EM2DKLjxufp8a59beNa9i63xkFvJDxSXuZ+eZjjPbFWo+RtEbN83K7w6UTS5+JiilS7Gi5ZgzppAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZEi8YnYI; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782927866; c=relaxed/simple;
+	bh=y9izET4NOx8LcJvUhAZwHHb0PC2pE68DEeGvgFjPY1o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=utJlfi3vdTuoaszCs5DyN/nBdRDWUkW/+gmlXEEKNpdOQTUk8A/sm1ZL8QotCpMWBg5ljWHRxi2XAouz3KmMWkVkOBNyLFhapyWBT+rXPSF5V2kGKFZRq/dSi0uIst4WwuwbYwXEgCXT+JDSKHsG38Vp+D8KCH6t9jZzxvnV77s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mCbtCvze; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZEi8YnYI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782927615;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ePpki7oPuPpClYdSE3/Mi/uFeMHFSZG0G7HVQhPQ0BU=;
-	b=ZEi8YnYIWnzCQQX/cVxdrF/SaU++BI349tWB8L4ewjkbW2owIJO1VXkweUKqET4maT7iax
-	8gGg7vi05f1IT6SjSSZZBCGPMuIl25jieQREmvbKxddckApLZJwE9cNb7T0Z9VY/yJ1C0y
-	x4iQlUTvM01/Zjz06QOninUd3Byl21w=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-113-SEeXv8pTP4SHtbcypUlXXA-1; Wed,
- 01 Jul 2026 13:40:11 -0400
-X-MC-Unique: SEeXv8pTP4SHtbcypUlXXA-1
-X-Mimecast-MFC-AGG-ID: SEeXv8pTP4SHtbcypUlXXA_1782927611
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E9FBF1926B55;
-	Wed,  1 Jul 2026 17:40:10 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.81.35])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3823F1800592;
-	Wed,  1 Jul 2026 17:40:10 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Minxi Hou <houminxi@gmail.com>
-Cc: netdev@vger.kernel.org,  echaudro@redhat.com,
-  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3] selftests/net/openvswitch: add ICMPv6 echo type
- match test
-In-Reply-To: <20260630102225.29733-1-houminxi@gmail.com> (Minxi Hou's message
-	of "Tue, 30 Jun 2026 18:22:25 +0800")
-References: <20260630102225.29733-1-houminxi@gmail.com>
-Date: Wed, 01 Jul 2026 13:40:08 -0400
-Message-ID: <f7techm4nif.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mCbtCvze"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB7091F000E9;
+	Wed,  1 Jul 2026 17:44:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782927865;
+	bh=AZUtVGDi2E1uDHHozjSVNvV+vNTQLZohC8EXeeFcY9g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=mCbtCvzedxySlWRFDyqnWlbxwuEQgDPW/qZSCpQjl9D2UmFZV8L4YDIfm4RSS9vod
+	 I7GYVulM7S8po8qeeOqLoavXuSJVdOqckDiKY0ejfbrvcLzdYsgXuKu+kG5ATFtEay
+	 4BqhcGHZVM2rO/M2b+zldnjMviI076o2E/1q0h8YLge52bwWr6MsYCPLIkElbJKGjw
+	 BvESDCIUL2e7w3Z0IEMvYKqNZssJLmN48bAEZXhShjCXHywWfFK49ju2V2cbH9PmPc
+	 aVcoWJ9mfWbCdMsERUV9iorNGnf5dC5tJvh0QzeAfIPipBSf3TfVTZWA5YWht22anG
+	 gLoqFOGCu9l+g==
+Date: Wed, 1 Jul 2026 10:44:22 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v13 04/11] perf/probe: Ignore comment lines in
+ dynamic_events/kprobe_events file
+Message-ID: <akVR9oUGIjmheePT@google.com>
+References: <178271357142.1176915.7193483024740701480.stgit@devnote2>
+ <178271361825.1176915.16095297120719039761.stgit@devnote2>
+ <20260630073211.2a505d1f31e5fae1bf03b81a@kernel.org>
+ <akMO53eG_4YKJH0j@google.com>
+ <20260701073939.81842d6f6bd139a329c45c7f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260701073939.81842d6f6bd139a329c45c7f@kernel.org>
 
-Minxi Hou <houminxi@gmail.com> writes:
+On Wed, Jul 01, 2026 at 07:39:39AM +0900, Masami Hiramatsu wrote:
+> On Mon, 29 Jun 2026 17:33:43 -0700
+> Namhyung Kim <namhyung@kernel.org> wrote:
+> 
+> > Hi Masami,
+> > 
+> > On Tue, Jun 30, 2026 at 07:32:11AM +0900, Masami Hiramatsu wrote:
+> > > Hi Arnaldo, Namhyung,
+> > > 
+> > > I forgot to CC this. Can I pick this patch via linux-trace tree,
+> > > or would you pick this?
+> > > This is a part of typecast series [1] only for debugging.
+> > 
+> > Thanks for letting me know.
+> > 
+> > I think it's better to route this through the perf tree as we're seeing
+> > a lot of cleanups all around the code base.  Having this together would
+> > reduce chances of future conflicts.  Does that sound ok to you?
+> 
+> OK, thanks for confirmation. Then I'll drop it from probes/for-next (and probes/core).
 
-> Register OVS_KEY_ATTR_ICMPV6 in the flow key parser so that
-> icmpv6(type=...) can be used in flow specifications. Without this
-> registration the parser silently drops the token and the kernel
-> rejects the flow with EINVAL because the expected ICMPv6 key
-> attribute is missing.
->
-> While here, add convert_int() to the ovs_key_ipv6 and ovs_key_icmp
-> fields_map entries so that specifying a field value produces the
-> correct wildcard mask. The IPv6 flow label uses convert_int(20) to
-> produce a 20-bit mask (0x000FFFFF), matching the kernel constraint in
-> flow_netlink.c that rejects masks with bits 20-31 set; byte-wide
-> fields use convert_int(8). The ipv4 counterpart already does this via
-> convert_int(); the ipv6 and icmp classes were simply missing the fifth
-> tuple element. Existing callers that pass empty parentheses are
-> unaffected because convert_int("") returns (0, 0).
->
-> Add test_icmpv6 exercising the ICMPv6 echo flow key. The test uses
-> static neighbour entries to bypass NDP, then verifies in three steps:
-> install icmpv6(type=128) and icmpv6(type=129) flows and confirm ping
-> works, remove the flows and confirm ping fails, reinstall and confirm
-> recovery.
->
-> Signed-off-by: Minxi Hou <houminxi@gmail.com>
-> ---
+Thanks, I've applied it to perf-tools-next.
 
-Same as other, I think this should have had the 'net-next' specifier.
-
-Also, I see that dev@openvswitch.org and Ilya weren't CC'd.  Next
-version should do that.
-
->  .../selftests/net/openvswitch/openvswitch.sh  | 63 +++++++++++++++++++
->  .../selftests/net/openvswitch/ovs-dpctl.py    | 26 +++++---
->  2 files changed, 82 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> index 2954245129a2..2de01137bb50 100755
-> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> @@ -32,6 +32,7 @@ tests="
->  	dec_ttl					ttl: dec_ttl decrements IP TTL
->  	flow_set				flow-set: Flow modify
->  	action_set				set: SET action rewrites fields
-> +	icmpv6					icmpv6: ICMPv6 echo type match
->  	psample					psample: Sampling packets with psample"
->  
->  info() {
-> @@ -443,6 +444,68 @@ test_action_set() {
->  	return 0
->  }
->  
-
-Please document this test case
-
-> +test_icmpv6() {
-> +	sbx_add "test_icmpv6" || return $?
-> +	ovs_add_dp "test_icmpv6" icmpv6 || return 1
-> +
-> +	info "create namespaces"
-> +	for ns in client server; do
-> +		ovs_add_netns_and_veths "test_icmpv6" "icmpv6" \
-> +			"$ns" "${ns:0:1}0" "${ns:0:1}1" || return 1
-> +	done
-> +
-
-===
-
-> +	ip netns exec client ip addr add fd00::1/64 dev c1 nodad
-> +	ip netns exec client ip link set c1 up
-> +	ip netns exec server ip addr add fd00::2/64 dev s1 nodad
-> +	ip netns exec server ip link set s1 up
-> +
-> +	local cl_mac sl_mac
-> +	cl_mac=$(ip netns exec client \
-> +		ip link show c1 | awk '/link\/ether/ {print $2}')
-> +	[ -z "$cl_mac" ] && \
-> +		{ info "failed to get c1 hwaddr"; return 1; }
-> +	sl_mac=$(ip netns exec server \
-> +		ip link show s1 | awk '/link\/ether/ {print $2}')
-> +	[ -z "$sl_mac" ] && \
-> +		{ info "failed to get s1 hwaddr"; return 1; }
-> +	ip netns exec client \
-> +		ip -6 neigh add fd00::2 lladdr "$sl_mac" dev c1
-> +	ip netns exec server \
-> +		ip -6 neigh add fd00::1 lladdr "$cl_mac" dev s1
-
-===
-
-Should there be some error detection / bailing here?  I think we should
-do the same as in the vlan case and set the unreachability detection to
-'permanent' to prevent possible issues with racy neighbor discovery.
-
-> +
-> +	ovs_add_flow "test_icmpv6" icmpv6 \
-> +	  'in_port(1),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6(type=128)' \
-> +	  '2' || return 1
-> +	ovs_add_flow "test_icmpv6" icmpv6 \
-> +	  'in_port(2),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6(type=129)' \
-> +	  '1' || return 1
-> +
-> +	info "verify ICMPv6 echo with type-specific flows"
-> +	ovs_sbx "test_icmpv6" ip netns exec client \
-> +		ping -6 -c 1 -W 2 fd00::2 || return 1
-> +
-> +	ovs_del_flows "test_icmpv6" icmpv6
-> +
-> +	info "verify ping fails without echo flows"
-> +	ovs_sbx "test_icmpv6" ip netns exec client \
-> +		ping -6 -c 1 -W 2 fd00::2 >/dev/null 2>&1 \
-> +		&& { info "FAIL: ping should fail without flows"
-> +		     return 1; }
-> +
-> +	ovs_add_flow "test_icmpv6" icmpv6 \
-> +	  'in_port(1),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6(type=128)' \
-> +	  '2' || return 1
-> +	ovs_add_flow "test_icmpv6" icmpv6 \
-> +	  'in_port(2),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6(type=129)' \
-> +	  '1' || return 1
-> +
-> +	info "verify connectivity restored"
-> +	ovs_sbx "test_icmpv6" ip netns exec client \
-> +		ping -6 -c 1 -W 2 fd00::2 || return 1
-> +
-> +	return 0
-> +}
-> +
->  # psample test
->  # - use psample to observe packets
->  test_psample() {
-> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> index e1ecfad2c03e..f3edd198223f 100644
-> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> @@ -1255,11 +1255,16 @@ class ovskey(nla):
->                  lambda x: ipaddress.IPv6Address(x).packed if x else 0,
->                  convert_ipv6,
->              ),
-> -            ("label", "label", "%d", lambda x: int(x) if x else 0),
-> -            ("proto", "proto", "%d", lambda x: int(x) if x else 0),
-> -            ("tclass", "tclass", "%d", lambda x: int(x) if x else 0),
-> -            ("hlimit", "hlimit", "%d", lambda x: int(x) if x else 0),
-> -            ("frag", "frag", "%d", lambda x: int(x) if x else 0),
-> +            ("label", "label", "%d", lambda x: int(x) if x else 0,
-> +                convert_int(20)),
-> +            ("proto", "proto", "%d", lambda x: int(x) if x else 0,
-> +                convert_int(8)),
-> +            ("tclass", "tclass", "%d", lambda x: int(x) if x else 0,
-> +                convert_int(8)),
-> +            ("hlimit", "hlimit", "%d", lambda x: int(x) if x else 0,
-> +                convert_int(8)),
-> +            ("frag", "frag", "%d", lambda x: int(x) if x else 0,
-> +                convert_int(8)),
->          )
->  
->          def __init__(
-> @@ -1344,8 +1349,10 @@ class ovskey(nla):
->          )
->  
->          fields_map = (
-> -            ("type", "type", "%d", lambda x: int(x) if x else 0),
-> -            ("code", "code", "%d", lambda x: int(x) if x else 0),
-> +            ("type", "type", "%d", lambda x: int(x) if x else 0,
-> +                convert_int(8)),
-> +            ("code", "code", "%d", lambda x: int(x) if x else 0,
-> +                convert_int(8)),
->          )
->  
->          def __init__(
-> @@ -1982,6 +1989,11 @@ class ovskey(nla):
->                  "icmp",
->                  ovskey.ovs_key_icmp,
->              ),
-> +            (
-> +                "OVS_KEY_ATTR_ICMPV6",
-> +                "icmpv6",
-> +                ovskey.ovs_key_icmpv6,
-> +            ),
->              (
->                  "OVS_KEY_ATTR_TCP_FLAGS",
->                  "tcp_flags",
->
-> base-commit: cef9d6804030793cf8b8796fd6936197d065dd3e
-
+Best regards,
+Namhyung
