@@ -1,166 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB58262FD0;
-	Wed,  1 Jul 2026 16:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCCA37C936
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 16:55:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782924565; cv=none; b=JJcWI5uloHmdBku6oNUUi5x2KxRlBpiTChqwM/lxakbFcCsZbmd845mpl6/AQTSfpJciUw8Hb+RtXG13ch6IClrKfhK5nDKQY4iOjcjqCf1vN6yHi2pQ2ASR9HTYaQsobG4WuT+GGYGE0HdPcuZ3NdCaYNggIcdPY890/riGIlo=
+	t=1782924903; cv=none; b=lR7/qJRDfss2lO2CMmwftI18DNZV2kazikMP4BUiZNgUao/2u2SnYwAArUzzs4XtdrbMBfpAjrgdD70y6LpTCEeje0ZEHorz1e0DqUvDgodBXi5QqT+SRczKyOjBK3CXB72Yhq2L5TfjHIzryTOSkcoO4cDMMPedkgo0+B+VjOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782924565; c=relaxed/simple;
-	bh=USEPYHB8LwBiHckQmNbw5YP32KSNTBalZeLwPbG4KWM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V4YsRCtTKjY4fCkWRSPWSEHoSwmLak1BUZmInC9cP2H8epv3CRS+YmMmJCKxrGnS0xEp7LaFkzJDVGdKlKqDJzbhwfLEdsmdUuQQVau96k1amlikFzMktTD9VMVaItUhhoTb40lfGPiSrtYDyrWSecJ/IHOiGI5uxzOhRu3qxJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eSW3YN2P; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782924903; c=relaxed/simple;
+	bh=L5c3o9vgdgjXHGOQSuIW9q3/2N3iJk6DLv8bljpS7DA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=WA/uFBcUSOMLXBc8gc9cSCrHRqxKhYE7r7QvJYMm6NKaJrasRjhhZ3mplibSBETP8LOQJxWEbvyzsnTohfvACWpQcPWltmJCecEJ0y+Eg3MT+x0gyZsTHMg8WsM42Gr3tNqk6/hyFa3uPJa7Vhzk/b3Azv2H91yIyB+EzkWmmuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Bm16Jk10; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eSW3YN2P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B88C51F000E9;
-	Wed,  1 Jul 2026 16:49:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782924564;
-	bh=LeUbiEYr/eWPX+TzArV2IAHL5tIiQ6N/e8d/0mq4lT0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=eSW3YN2P8PoI0Ft+AQ9aDBwt3pFpXhVKLJ7cDB6tvjV4Ral6qUfMSpTmFV0LDoHy4
-	 ZWyp4dOTKROQl96Sc43XI3+DDFaOBmyZH3KSxqTxuU94C/SeboE92nu8VBUnAo+LjP
-	 2dTAWKvJ1SSsy+0dPOhQZcTY//R5FVOCS5J8hr0or5HmQD65sfIsJHpG6/eqVm6v+I
-	 uXT5b1r6CuiLn2A7zaRZABUyiRHmPeEyRls4MZXn2OD+h+ccJ9Yqr36gNzbPOhJhqM
-	 v7BPKKqMHQ+n5PwXBxntWSRVtC6HHH+2wmM4K/veEIhLuAVwyXxoQNF7k1ysEoKlJv
-	 V7jW0I6eLtS6Q==
-Message-ID: <a4e4adfe-4b2e-49c4-a708-89276514f930@kernel.org>
-Date: Wed, 1 Jul 2026 17:49:20 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Bm16Jk10"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c8620ee0971so804570a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 09:55:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782924901; x=1783529701; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lbVYdv7/FNdOOvrw/bcfsmdKoQ369BNbAkiBiKDICVU=;
+        b=Bm16Jk10DzFwFM1c7L4fhwdbnVfS0QXzyMzWyFobsZ2zse54L5EUYVd/71MHkeSFHj
+         KO50Lstmu5WUaTKkOpNvDhN544ttzDQhhydyddDJJB3vI2q8CnNVUX0LvodCKgB2r/ON
+         WlIi271UjYatvD6h1k3itEZwUQUUsJxdOvwekCs1tgd8LZ7rVLPbargP99LeV7LtI9q2
+         w+7CnH/Un7Qa9TMiL/hb+t4YlX9LnzrYuIwvc5e61wC+rtzAy8nozGPD0HriOIhqfpLb
+         vDY094LXpJ432U4I3O2M6nbsCzPKbRKqfC/xXGmdm2OXVsrOSL6cDSS9LAK/BYlbHv7r
+         XRCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782924901; x=1783529701;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lbVYdv7/FNdOOvrw/bcfsmdKoQ369BNbAkiBiKDICVU=;
+        b=guSd6BpKKyISsbI0audiKuO9O+5QEehonSVZF0eX3Gq43SDoBi1/rUYwnhqgKPg6Ow
+         9rAfJ2WRpaeG+MbLGhzLYANxuVXJaR0ITABqSBS0DmWM5Lv0sjJVveDXjhv+L49RscTu
+         6Q6dCyUdQDnw9yGwdkfhb1R3sYo4MoNJI+y0wAsiakRR5dcqWQ1k8a8WUKawLc5Kziq/
+         acRzFNn0+YHzbiYCill79Nthfw4894PZuN1uKm8lleJIYXaJZdkyO1lylHKOs39wjGtg
+         AyOrQIZeNLHn6lAf/K4nIFJLE7v5zwzvubOUxK1LsHq4pnmXDD81fg5Y8Ls6vDqFmVK/
+         OB/g==
+X-Forwarded-Encrypted: i=1; AFNElJ8ApE/ranaR3vboSIwrsMjasM6JDwSS9Oh1q2E4++nXinhe/gymE7ELsnBzrL8QHt4X+/RSIa/GYcZHPUXUpeA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxrbhy6oXdfUuAMNTftWj1gRsEJ2cBUQeeUg9JxSnIGSjQ+iZp9
+	AXitl7gO10hERFySdoNhwGfORw8a/plWdv+h4t69op5FxDnRKpKfaXZ2AB/TZPHRv6xZIKfFeFM
+	cbp9IVQ==
+X-Received: from pgja21.prod.google.com ([2002:a63:cd55:0:b0:c82:7761:9936])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:a49:b0:3b3:bf95:f7e3
+ with SMTP id adf61e73a8af0-3bfed477967mr2785820637.43.1782924900819; Wed, 01
+ Jul 2026 09:55:00 -0700 (PDT)
+Date: Wed, 1 Jul 2026 09:55:00 -0700
+In-Reply-To: <739e6834-40b3-405b-ada4-d31c38d8416a@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v8 5/9] bpftool: Generate skeleton for global
- percpu data
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260629152406.52582-1-leon.hwang@linux.dev>
- <20260629152406.52582-6-leon.hwang@linux.dev>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260629152406.52582-6-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-6-9d2959357853@google.com> <739e6834-40b3-405b-ada4-d31c38d8416a@intel.com>
+Message-ID: <akVGZOeR1ytfkamK@google.com>
+Subject: Re: [PATCH v8 06/46] KVM: Enumerate support for PRIVATE memory iff
+ kvm_arch_has_private_mem is defined
+From: Sean Christopherson <seanjc@google.com>
+To: Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
+	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-2026-06-29 23:24 UTC+0800 ~ Leon Hwang <leon.hwang@linux.dev>
-> Enhance bpftool to generate skeletons that properly handle global percpu
-> variables. The generated skeleton now includes a dedicated structure for
-> percpu data, allowing users to initialize and access percpu variables more
-> efficiently.
+On Wed, Jul 01, 2026, Xiaoyao Li wrote:
+> On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
+> > From: Ackerley Tng <ackerleytng@google.com>
+> > 
+> > Explicitly guard reporting support for KVM_MEMORY_ATTRIBUTE_PRIVATE based
+> > on kvm_arch_has_private_mem being #defined in anticipation of decoupling
+> > kvm_supported_mem_attributes() from CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
 > 
-> For global percpu variables, the skeleton now includes a nested
-> structure, e.g.:
+> Well, after this series, kvm_supported_mem_attributes() is renamed to
+> kvm_supported_vm_mem_attributes(), and it's still under
+> CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
 > 
-> struct test_global_percpu_data {
-> 	struct bpf_object_skeleton *skeleton;
-> 	struct bpf_object *obj;
-> 	struct {
-> 		struct bpf_map *percpu;
-> 	} maps;
-> 	// ...
-> 	struct test_global_percpu_data__percpu {
-> 		int data;
-> 		char run;
-> 		struct {
-> 			char set;
-> 			int i;
-> 			int nums[7];
-> 		} struct_data;
-> 		int nums[7];
-> 	} *percpu;
+> > guest_memfd support for memory attributes will be unconditional to avoid
+> > yet more macros (all architectures that support guest_memfd are expected to
+> > use per-gmem attributes at some point), at which point enumerating support
+> > KVM_MEMORY_ATTRIBUTE_PRIVATE based solely on memory attributes being
+> > supported _somewhere_ would result in KVM over-reporting support on arm64.
 > 
-> 	// ...
-> };
-> 
->   * The "struct test_global_percpu_data__percpu *percpu" points to
->     initialized data, which is actually "maps.percpu->mmaped".
->   * Before loading the skeleton, updating the
->     "struct test_global_percpu_data__percpu *percpu" modifies the initial
->     value of the corresponding global percpu variables.
->   * After loading the skeleton, "maps.percpu->mmaped" has been marked as
->     read-only in libbpf. If users want to update the global percpu
->     variables, they have to update the "maps.percpu" map instead.
->   * For lightweight skeleton, "lskel->percpu" will be protected by
->     "mprotect(p, sz, PROT_READ)".
->   * For subskeleton, those variables of global percpu data will be
->     skipped.
-> 
-> Assisted-by: Codex:gpt-5.5-xhigh
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  tools/bpf/bpftool/gen.c       | 49 +++++++++++++++++++++++++++++++----
->  tools/lib/bpf/skel_internal.h | 24 +++++++++++++++--
->  2 files changed, 66 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> index 6ae7262ebe0c..2e60296358db 100644
-> --- a/tools/bpf/bpftool/gen.c
-> +++ b/tools/bpf/bpftool/gen.c
-> @@ -92,7 +92,7 @@ static void get_header_guard(char *guard, const char *obj_name, const char *suff
->  
->  static bool get_map_ident(const struct bpf_map *map, char *buf, size_t buf_sz)
->  {
-> -	static const char *sfxs[] = { ".data", ".rodata", ".bss", ".kconfig" };
-> +	static const char *sfxs[] = { ".data", ".rodata", ".bss", ".percpu", ".kconfig" };
->  	const char *name = bpf_map__name(map);
->  	int i, n;
->  
-> @@ -117,7 +117,7 @@ static bool get_map_ident(const struct bpf_map *map, char *buf, size_t buf_sz)
->  
->  static bool get_datasec_ident(const char *sec_name, char *buf, size_t buf_sz)
->  {
-> -	static const char *pfxs[] = { ".data", ".rodata", ".bss", ".kconfig" };
-> +	static const char *pfxs[] = { ".data", ".rodata", ".bss", ".percpu", ".kconfig" };
->  	int i, n;
->  
->  	/* recognize hard coded LLVM section name */
-> @@ -254,6 +254,20 @@ static const struct btf_type *find_type_for_map(struct btf *btf, const char *map
->  	return NULL;
->  }
->  
-> +static bool bpf_map_is_skel_data(const struct bpf_map *map)
-> +{
-> +	if (!bpf_map__is_internal(map))
-> +		return false;
-> +
-> +	if (bpf_map__map_flags(map) & BPF_F_MMAPABLE)
-> +		return true;
-> +
-> +	if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY)
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
->  static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
->  {
->  	size_t tmp_sz;
-> @@ -263,7 +277,7 @@ static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
->  		return true;
->  	}
->  
-> -	if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF_F_MMAPABLE))
-> +	if (!bpf_map_is_skel_data(map))
->  		return false;
->  
->  	if (!get_map_ident(map, buf, sz))
+> I don't understand it. This patch only changes the behavior of
+> kvm_supported_mem_attributes(), the usage of which is guarded by
+> CONFIG_KVM_VM_MEMORY_ATTRIBUTESq. This is config is only visible to x86 due
+> to patch 03. How does it affect arm64?
 
+Hrm, yeah, this is messed up.  Ahh, I think Ackerley shuffled things around and
+"broke" stuff in the process.  In v7[1] and earlier, the diff was this:
 
-Thanks! The bpftool patch looks good, with one reservation: after this
-patch, I believe "is_mmapable_map(map, ...)" will return true if map is
-a percpu map, although percpu maps aren't mmap-able, so we should
-probably update the name of that function to avoid any confusion?
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 091f201251159..68142bc962953 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -722,7 +722,7 @@ static inline int kvm_arch_vcpu_memslots_id(struct kvm_vcpu *vcpu)
+ }
+ #endif
+ 
+-#ifndef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
++#ifndef kvm_arch_has_private_mem
+ static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
+ {
+ 	return false;
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 306153abbafa5..abb9cfa3eb04d 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2421,8 +2421,10 @@ static int kvm_vm_ioctl_clear_dirty_log(struct kvm *kvm,
+ #ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+ static u64 kvm_supported_mem_attributes(struct kvm *kvm)
+ {
++#ifdef kvm_arch_has_private_mem
+ 	if (!kvm || kvm_arch_has_private_mem(kvm))
+ 		return KVM_MEMORY_ATTRIBUTE_PRIVATE;
++#endif
+ 
+ 	return 0;
+ }
 
-Quentin
+which makes a *lot* more sense given the changelog (and IMO for the ordering in
+general).  In v8 here, Ackerley combined part of a change[2] (that I provided
+off-list) with part of this commit, to create patch 4, "KVM: Decouple
+kvm_has_arch_private_mem from CONFIG_KVM_VM_MEMORY_ATTRIBUTESthe".
+
+Ackerley, the cover letter says:
+
+  + Reshuffled the earlier commits that deal with preparing KVM to stop
+    seeing VM memory attributes as the only source of attributes.
+
+but there's no explanation for *why* the reshuffling was done.  Reorganizing
+code like this at v8 of a series this size is a big "no-no" unless there's a
+*really* good reason to do so.  In addition to the resulting confusion, changes
+like this invalidate Fuad's Reviewed-by.  And since it's obviously quite difficult
+to tease out exactly what changed, it's not realistic to re-review things without
+doing a deep audit of the series, which no one wants to do for a series that is/was
+so close to being fully ready.  And without such an audit, I can't accept the
+patches, because I can't trust that what I am accepting is what I and others have
+reviewed.
+
+So, except where there is/was a *need* to shuffle things around relative to v7,
+I think we should revert back to the v7 ordering for v9.  And where there is a
+need to rework things, each and every one of those needs to be explicitly
+documented, because "Reshuffled the earlier commits" is grossly insufficient.
+
+[1] https://lore.kernel.org/all/20260522-gmem-inplace-conversion-v7-3-2f0fae496530@google.com
+[2] https://github.com/sean-jc/linux/commit/8a475b1bcf89f1cf776ed9ce7d6bb587aab0d421
