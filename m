@@ -1,63 +1,63 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24BB634F270
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 21:12:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15332C11E4
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 21:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782940349; cv=none; b=KBeHgAajqvlzGpvlUdWGsFG9f0rLTTDRuju8ZqyUhuLpJak8S04tBLdKI1n/mL9LsKsoBKhWKrvVQj4IAjDqcNYzd1YnnJWe+b2ZBRycNjZagNx7P7xRj4zgoYee2VmDFXFp8TxB2FRnOYPnHgEbM1UXT7DRRwyuQR/FfbjPj3c=
+	t=1782940415; cv=none; b=RRDv5GmxUp3ITCw48jTdGZaLitj79v+Mt/d/FU/8rgDWAG6fkL1JPEXP9lSEwXyo3Md+xSqDW9dsIM+QnyPX5/qcjx4cYGnf+fvklsp1eE9SC+kjB99f58su8OvNO/IfyygV1i+Kgp5XjUnxVnneWOrYxZnkPROwAwYrItBbLMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782940349; c=relaxed/simple;
-	bh=PhWu0asTybkDcO/nIytv29/vVGV777oc+iv+YZCX3Po=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=r+FSy+AElv/q3yhhQsUCsO6LJWdGKiwPg4IpdYCK6Np8F4lS+uD1UHAFLCbbWWAQ+37XOwBjfXIV6vMhTC1GyaD9b10ueNtp/vEWoJDFxD8mjErH5IZtuHtiwMWvF7zTaFy+oq90bS6rCyOhx1kPwX53AjVJ/ncK53/bBGqfDcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=SwZgnm1t; arc=none smtp.client-ip=209.85.160.179
+	s=arc-20240116; t=1782940415; c=relaxed/simple;
+	bh=ixq5iPSr6lESeemFDQZAkXkMKmcyRqci45TX352zPc0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=bPQcxFRNbzYZJsciRG1o1n5DeUjv8YhhsipOJclKkj1NwJlo+66gW4BsyH30PT+ICljtzzO/betS5YaULz2AK5N4qshw38/99gheW8gnJpOs1ZCsXlns3nY/el+0MPNQK04rdKdcUYSgR7B86DOlQdfSuvcOHCv/3YL5EDbuWAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ziCf3MT1; arc=none smtp.client-ip=209.85.160.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="SwZgnm1t"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-51c2a449c57so4819601cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 14:12:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ziCf3MT1"
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-51c2a449c57so4825251cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 14:13:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782940346; x=1783545146; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782940413; x=1783545213; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7ugCTwUEiFWSOAAZ9ZKycXOr74BRTGYQOGuhcwzpQp4=;
-        b=SwZgnm1tgjFNxo71Eue/RFSsHyXq3hPx14AyQX0VUjI4dXZF4r3HZYh4difEpEgD3v
-         Klr0/hMYwH+nvH6ZZynZB268vrAmHi0v3/mLoHiJm5Q/bSFVteJnqnbbePryaYvTcwrc
-         Eu7vWzKHWa8jXS5REikkFPf1SQtaPtpY+4JcQn2yg/RarcCO96o/x6+/g5Ahy/2nzB3i
-         mhuam+HAAFE1kEfFz7+hFXwjAFd082DpimT/bW8xoZj8V5Dwaz2limMOKLUcOisv6WxS
-         wp2UprUB6lZaUDGBAEeC4ez0amVd1x4K48QUa212AQDTvllZYbB5lzEzFqavaIh8zpKy
-         Fnjg==
+        bh=gjeDKyLKBZcUrNcouKdVLuX/5CVGzH0NAqcX61nIrwU=;
+        b=ziCf3MT1mC6t3eZjzKPwBOQhxxXNVyCAXHfuW7yuekhEovINnoB67ExFfaPgT0An2F
+         n18q59b2weTI6L3JWBH0zmm/Ux9/t2uVpEfB5t8+uaIfpazYhZFEmU5GB+TxrGbjklsF
+         6WksxwEAJKGe+yO5WCY2OpO+UxJ2srJnCB1iAN3Ih02yyZ3hi2hHw0F6O6/AvqIvCiYE
+         J7N/g2dLwGM1uUsaTpWBIng3GqNOoi+/y1xptCo8SJ1WUL/+Dtl/SLTt0erAPChx8zm0
+         oWc4k6Ri0pcjdRDbs0E7TrPm2XyoFYXkTZwu2+grBCrLDp02i4g+DzVb2SJYQW7fvC2W
+         0Bww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782940346; x=1783545146;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=1e100.net; s=20251104; t=1782940413; x=1783545213;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7ugCTwUEiFWSOAAZ9ZKycXOr74BRTGYQOGuhcwzpQp4=;
-        b=Mj+RJ6tCau18DdzCAutsttlQEEj/AYhheFvmY6JjS0l++f0Ej7ms8ohLbrl5HsVhmP
-         FjCoeqgQuu2MeHSgtdT7rebHxg/se2p694URBvh4mAjAWTJh1cZOFGHe7i+4OwX1J8VR
-         zQGQa6rUdMUIguCHROE/00ufLgx6H/ERf3F2gpr1OP3XYtg+yrcb5GL5w1VeSvlpZsPV
-         Mxtn9OdfjaRugasuNrXJmNSFzPpPZIoQlER1gVeTOxM9gTIBor2Rqg3I8J4mMpHwwD7b
-         v/Iz/1zkQNhJXty/sTR1HhqNTP1vkGJtEAvMVHJb1DbnQG6aCw6wfcS+dpqsQX6zmhsJ
-         OWSQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9bIlZ2zm055h60T5f8+wj0CYeaOKI1ZUBWw61hKAugqXZN8oKnPLnbywX7nMiHR7jNFZQVKJ/ikvkvgsCbf7k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyA+nWQ1i/HGjcLxVayGSTh8dfJuNnLMYmiJ+1a/VIY8nabIcy1
-	gsVq/Vocf5asW1Od1ZhDcEVXhQXyPkypRWGB05CsxHUD2+AL/vdKhIgbeXqZj3BFTyo=
-X-Gm-Gg: AfdE7cnO2zS5zqwzvZ5uCJTz6hETbdkzUhqQiuccq0s5tcwfFbGIhH2knu8iEvO+WCr
-	6bS6S6tnBoNZg4YxceJZtteUBlEs9DrJjtLElMiJt5JlioOlLmGqd4I1LLVPhKHA3rSNMtGjvG8
-	dGv/cbCHnQh/63YX/PlGpXDDt4rDyfZqZOLWEA/Fc1IzVeuu/qDp61yO6DHHvNBKkUlEydEdFPJ
-	FYXVKB3QJhMpx6xtqLuYvjLzcBwMz4Qbb2AJL+pHCsAbx5P63K6qfsUjF5ZC6nsbWfW9ip57UN0
-	kFow2J0T+wMIq9g4MvE/ZLaUi0nbhWeQC/WoWOhMG+xZ+wI4l8pPwvQx9qy648OLKCqLhw7iAIP
-	0KJMgFk9MfM0C7YfQzkPFJsmnsavMrVoEn1QQTNe7BWkdwmxAhJfNm9AclJY8EkDJW+ie/lQvRR
-	v14QPwA3ySxTU=
-X-Received: by 2002:ac8:5c81:0:b0:51c:161e:25a9 with SMTP id d75a77b69052e-51c26b5023emr46891721cf.62.1782940346045;
-        Wed, 01 Jul 2026 14:12:26 -0700 (PDT)
+        bh=gjeDKyLKBZcUrNcouKdVLuX/5CVGzH0NAqcX61nIrwU=;
+        b=HEaoOyCq02TZ59lXjN7/d72iis00Lku8LEBM6Q+zEt0690gdaEURHFT+1KoEjzzHG3
+         7mQZhc7N+0DUZHCUgY/hohEvS2U6V6Z7K/+L+Gr3ZmQ3lkoTdCxwfu2ARX4o65h4xIua
+         rlCuXXSC96OOS4LzRaqtybNGn0AbC+rRHrjfgdv0j9ZxnDd6X/VAGrq+i6DhG+4vr8yq
+         SwKufQqsqvX+VxNpL1lJ/iyctAYtQ+hhe472YTNfi+CPaUJANzR/sfTkuwk/IbR7DSvb
+         zvsBxeZgA0dwqSJRCm3zSadLPqUREWg09y4aCQXIP19Jc3LARKe7LjwHnsJdPFXbfUAc
+         vAtg==
+X-Forwarded-Encrypted: i=1; AFNElJ8rEgzoBrg5V7eSYT6qqIYlGk4c2ihfaM/bkflNxt4CTn3tKKjEwFzflFISEAR1ZKtQAwPyKMPbKznxPnPBWzU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3iBG1ZD9poFcwDCRzo/VeKU/oyiRzlOyhIg9FShSKwlcqA8f7
+	to5XBf04+f3pyebWu5gCrzI205R6of1oPQ2L+QRN2Gx+Glw7uurN0CCUc8vJ81Ov7pA=
+X-Gm-Gg: AfdE7cm5qE5n0683PY7qZtMktn6Ot5gC2+t31vo1bIboOiJlOBX5hrsVTlE5vTAovKD
+	qEAdWEz/MoJvbyUuVvcw2QBoXwfI+esewzwJpiw64lO3jS4TQtOj1eQgWKOOxZIZDMmyWhNvuv4
+	OTnysUZtEVteLwJwFTSPgts4b0paVIyEOzQoqhNvUsDTLIA0aEEnJoP2LvLKikIAvxlyX6dACeL
+	hNDEg/3naKUZ2qEDunAn0k/wtRuRTLfzsRtm/IsTiKz7JDveiqd5bnfIXZcjMYESpRtWGpJNG/p
+	te2XSlhuf8acXKXB/E96klyMdvik1Z7dMjXk6qSqWGX5BIlwgMdqQ+OC65X+4nDfJv5dbyYscyi
+	ayEDOv4K/0+LoFxyskfzZ4LVsTqZ6A12PC5o6r7OLyAdRdnGrbQjHBWFbMrzaczuBcK9CNmjo3g
+	FbxBCqUbME8VY=
+X-Received: by 2002:a05:622a:116:b0:516:e152:7a59 with SMTP id d75a77b69052e-51c26b14343mr45276931cf.42.1782940412547;
+        Wed, 01 Jul 2026 14:13:32 -0700 (PDT)
 Received: from localhost ([198.58.242.173])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f4724be503sm7479146d6.45.2026.07.01.14.12.25
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f46e27d53fsm8562786d6.5.2026.07.01.14.13.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2026 14:12:25 -0700 (PDT)
+        Wed, 01 Jul 2026 14:13:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,69 +66,113 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 01 Jul 2026 17:12:24 -0400
-Message-Id: <DJNJLQZIR0N9.2V69YW14LMS49@etsalapatis.com>
-To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Date: Wed, 01 Jul 2026 17:13:31 -0400
+Message-Id: <DJNJMLHHX9UQ.PEYCIU5HPCR2@etsalapatis.com>
 Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
  "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
  "Shuah Khan" <shuah@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>,
  "Puranjay Mohan" <puranjay@kernel.org>, <bpf@vger.kernel.org>,
  <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Reject arena frees below the arena
- base
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover scalar arena frees
+ below the base
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <cover.1782813442.git.chenyy23@mails.tsinghua.edu.cn>
- <2a3747e64898cc7dda6578279cb5688f7029f658.1782813442.git.chenyy23@mails.tsinghua.edu.cn>
-In-Reply-To: <2a3747e64898cc7dda6578279cb5688f7029f658.1782813442.git.chenyy23@mails.tsinghua.edu.cn>
+ <e4226ac143315bb584dfedc79693ccf813ac56b0.1782813442.git.chenyy23@mails.tsinghua.edu.cn>
+In-Reply-To: <e4226ac143315bb584dfedc79693ccf813ac56b0.1782813442.git.chenyy23@mails.tsinghua.edu.cn>
 
 On Tue Jun 30, 2026 at 6:12 AM EDT, Yiyang Chen wrote:
-> bpf_arena_free_pages() accepts scalar arena addresses. The runtime
-> masks the address to the low 32 bits and reconstructs a full user
-> address from the arena base before returning the range to the arena
-> free tree.
+> Add a verifier_arena case that fills a two-page arena, calls
+> bpf_arena_free_pages() with a scalar address one page below the arena
+> base, and then verifies that another allocation is still rejected.
 >
-> When the scalar value is below the low 32 bits of the arena base,
-> full_uaddr falls below user_vm_start. The existing upper-end clipping
-> then turns this into an out-of-range free-tree offset. A later
-> allocation can reuse that offset and return an address below the arena
-> mapping.
+> Before the runtime guard, the invalid free can repopulate the free
+> tree with an out-of-domain offset and the final allocation succeeds.
 >
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 
-This seems reasonable, my understanding is that this happens because
-neither arena start nor end actually has to be aligned at a 4GiB
-boundary, while the underlying kernel mapping does span the full
-32 bits. AFAICT this bug returns an address that is not actually
-mapped into userspace and is inaccessible from it, correct?
-
-If the above is correct, feel free to add:
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
+Nit/question below.
 
-> Reject such frees before computing the clipped range.
->
-> Fixes: 317460317a02a ("bpf: Introduce bpf_arena.")
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 > ---
->  kernel/bpf/arena.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../selftests/bpf/progs/verifier_arena.c      | 41 ++++++++++++++++---
+>  1 file changed, 36 insertions(+), 5 deletions(-)
 >
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 49a8f7b1beef5..e28e83bed8c51 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-> @@ -693,6 +693,8 @@ static void arena_free_pages(struct bpf_arena *arena,=
- long uaddr, long page_cnt,
->  	uaddr &=3D PAGE_MASK;
->  	kaddr =3D bpf_arena_get_kern_vm_start(arena) + uaddr;
->  	full_uaddr =3D clear_lo32(arena->user_vm_start) + uaddr;
-> +	if (full_uaddr < arena->user_vm_start)
-> +		return;
->  	uaddr_end =3D min(arena->user_vm_end, full_uaddr + (page_cnt << PAGE_SH=
-IFT));
->  	if (full_uaddr >=3D uaddr_end)
->  		return;
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/t=
+esting/selftests/bpf/progs/verifier_arena.c
+> index 62e282f4448aa..b4bd134646607 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+> @@ -12,15 +12,17 @@
+> =20
+>  #define private(name) SEC(".bss." #name) __hidden __attribute__((aligned=
+(8)))
+> =20
+> +#ifdef __TARGET_ARCH_arm64
+> +#define ARENA_VM_START ((1ull << 32) | (~0u - __PAGE_SIZE * 2 + 1))
+> +#else
+> +#define ARENA_VM_START ((1ull << 44) | (~0u - __PAGE_SIZE * 2 + 1))
+> +#endif
+> +
+>  struct {
+>  	__uint(type, BPF_MAP_TYPE_ARENA);
+>  	__uint(map_flags, BPF_F_MMAPABLE);
+>  	__uint(max_entries, 2); /* arena of two pages close to 32-bit boundary*=
+/
+> -#ifdef __TARGET_ARCH_arm64
+> -        __ulong(map_extra, (1ull << 32) | (~0u - __PAGE_SIZE * 2 + 1)); =
+/* start of mmap() region */
+> -#else
+> -        __ulong(map_extra, (1ull << 44) | (~0u - __PAGE_SIZE * 2 + 1)); =
+/* start of mmap() region */
+> -#endif
+> +	__ulong(map_extra, ARENA_VM_START); /* start of mmap() region */
+>  } arena SEC(".maps");
+> =20
+>  SEC("socket")
+> @@ -93,6 +95,35 @@ int basic_alloc1(void *ctx)
+>  	return 0;
+>  }
+> =20
+> +SEC("syscall")
+> +__success __retval(0)
+> +int free_scalar_below_arena(void *ctx)
+> +{
+> +	void __arena *page1, *page2, *page3;
+> +	__u64 bad_addr =3D ARENA_VM_START - __PAGE_SIZE;
+> +
+> +	page1 =3D bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
+> +	if (!page1)
+> +		return 1;
+> +
+> +	page2 =3D bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
+> +	if (!page2)
+> +		return 2;
+> +
+> +	page3 =3D bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
+> +	if (page3)
+> +		return 3;
+> +
+> +	asm volatile("" : "+r"(bad_addr));
+
+Why the asm volatile? We use it right underneath, what does this give
+us.
+
+> +	bpf_arena_free_pages(&arena, (void __arena *)bad_addr, 1);
+> +
+> +	page3 =3D bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
+> +	if (page3)
+> +		return 4;
+> +
+> +	return 0;
+> +}
+> +
+>  SEC("socket")
+>  __success __retval(0)
+>  int basic_alloc2_nosleep(void *ctx)
 
