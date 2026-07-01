@@ -1,164 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B25E1F0E25;
-	Wed,  1 Jul 2026 07:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C7D03B19D4;
+	Wed,  1 Jul 2026 07:29:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782890570; cv=none; b=O4nWUDe9PFE4unk8NSpvZQ8fLDW24F9Mj05kU7PUpupdaQIxVzj+LPNRaSRtcdkZLjvAMWwM+vVGFwlZT4GhIehJzxugQlsSD2Q+H9ynKnQnBqp2Xc72ywJMSGt0Si3TKy5vcy+MHk+ZUSTEMeDEQXtA2vuZqgsv8FQhvHmOnm4=
+	t=1782890979; cv=none; b=mu+3ZXYkVKhyTjfsh5ccXJwpiVkVXCIUamhwcqWRSt1K0jO/OFwplGjwya5FVLN2i6kOJWMahv+1BJIErpaBAV3wsl5Y8jcgrgdhSVGBp9XvsdXPxZbvu+k4yiAnkjm05zi/17XKrawgpWh84+OPTXVbl4Vr6Bp4TKLG5NIjYyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782890570; c=relaxed/simple;
-	bh=O95arKx9T5MkaZlIQszzS6sq+z6RycCRVDU6C6dp8F8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Yr25LtyF628Aa5zMjfOH+Bt+vOSF5tKP4QewZsoy/MMnBVkueSU6n4n+8IMBciP59gQ0Rehj9U+aw75IKH5bhvIMx9n2XiM9J6Bxakm1NApEGaUgsXR9nRAsuPZ8brnP+wRR5ROj/UFzM7brtuiFj4BLNN2fR7sfMBuP2ds86rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XQmGOI1f; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XQmGOI1f"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782890567; x=1814426567;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=O95arKx9T5MkaZlIQszzS6sq+z6RycCRVDU6C6dp8F8=;
-  b=XQmGOI1fJisTrg7QqbBAO/xiwGnKkd1huBRxe1AKF615REyyy1lZYgn5
-   9ECRIcrn/+vXKoNax2f5TBSz6GllKCbXP9mRd6LqUs0hkz5WFNCYypylo
-   fP3gtFtBa1ZbF0hUOp2KKLcy+jyI6q0OK/Yr3jH6UhlGtEBS6hpag5mQT
-   b0utK7oDUy1cRC9KOgfIoRml+t6ontylDeqstUWXIpkO1MOsMQnqaMMze
-   7qdLsZZ/1Dlphn1YWZkKj+QlH3ndCd+aee45inRzj8WSXKTqph49CiaUA
-   ujun+HAEp57zcZrTIoKyYNX508ngEWRqUasF8aRN37SNoeWOsGpeH4JZO
-   g==;
-X-CSE-ConnectionGUID: GrWMUMXgRCeihJM3gMGeww==
-X-CSE-MsgGUID: QNDaZU24SEiAlOB9gOE5jw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11833"; a="94212705"
-X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
-   d="scan'208";a="94212705"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 00:22:46 -0700
-X-CSE-ConnectionGUID: OCgLTDNcQc+i2MkkRhnhSQ==
-X-CSE-MsgGUID: ze+nbZzkTA6u9tCtlTgwPQ==
-X-ExtLoop1: 1
-Received: from unknown (HELO [10.239.158.49]) ([10.239.158.49])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 00:22:29 -0700
-Message-ID: <8494b247-64b5-4a04-b964-1f778c17acc3@intel.com>
-Date: Wed, 1 Jul 2026 15:22:26 +0800
+	s=arc-20240116; t=1782890979; c=relaxed/simple;
+	bh=8+RfCRlbq6ZsembJaCyFQ89yuFcyl3EwhjDVzCRsEd8=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=klLKfjrTaW/wLERvz6Xpda/Qb4ZTsej0tUXC72WJERrs3beS5lkaARmx9FRu5cNNDNdFqNvWba9h/d9lvQ40zYOSbj/QQORmspnQh8ea7CSSxcrkq+Rqk4C6TT8uqhJrDSfCjx/RMJWmL/v5oDByU+dI3kTqxl9cYSKj0WPI2bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8BxCfHdwURqbGIAAA--.2324S3;
+	Wed, 01 Jul 2026 15:29:33 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJDxTMLYwURqXSK6AA--.22818S3;
+	Wed, 01 Jul 2026 15:29:29 +0800 (CST)
+Subject: Re: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user
+ BPF_ADDR_SPACE_CAST insn
+To: Leon Hwang <leon.hwang@linux.dev>, KaFai Wan <kafai.wan@linux.dev>,
+ bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260626154330.33619-1-leon.hwang@linux.dev>
+ <20260626154330.33619-2-leon.hwang@linux.dev>
+ <e279c9a7ca6b16e52dc261560513b0eafdd70f87.camel@linux.dev>
+ <a2aaa21d-4cf9-48a4-839f-dd152bda8185@linux.dev>
+ <af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn>
+ <d55e10b1-d883-4fcf-8fb3-8210db935e4a@linux.dev>
+ <1c07a34f-b050-a281-6a7b-542a9bfa30b3@loongson.cn>
+ <bfb432db-bd29-419a-8147-78ff6fac07ad@linux.dev>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <7438f087-7fb4-4991-a095-1d24d6d09895@loongson.cn>
+Date: Wed, 1 Jul 2026 15:29:28 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 08/46] KVM: Provide generic interface for checking
- memory private/shared status
-To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- david@kernel.org, jmattson@google.com, jthoughton@google.com,
- michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
- qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
- shivankg@amd.com, steven.price@arm.com, tabba@google.com,
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
- forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
- aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-8-9d2959357853@google.com>
+In-Reply-To: <bfb432db-bd29-419a-8147-78ff6fac07ad@linux.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20260618-gmem-inplace-conversion-v8-8-9d2959357853@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJDxTMLYwURqXSK6AA--.22818S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7CFWUtr47uF1DZw15AF4UKFX_yoW8Gr4xpF
+	W8Gay7tr4DAa4xJasFkw4ruF42g3yrJr48Ww18WrZ5urn8Wr1fuFy5Kw43uFy3ury09ryS
+	vrsIqw1xuFy0kagCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07joc_-UUU
+	UU=
 
-On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
-> From: Sean Christopherson <seanjc@google.com>
+On 2026/7/1 下午3:02, Leon Hwang wrote:
+> On 1/7/26 14:49, Tiezhu Yang wrote:
+> [...]
+>>>
+>>> It is a real issue.
+>>>
+>>> Instead of fixing up helper calls, it seems better to prevent
+>>> interpreter fallback if the prog has any JIT-inlineable helper call.
+>>
+>> Hi Alexei and Leon,
+>>
+>> What about the following: (not tested yet, if it is good, I can test it)
+>>
+>> [...]
+>>
+>> If you are OK with the above changes, I will test it again and send
+>> a new version later.
+>>
 > 
-> Introduce a generic kvm_mem_is_private() interface using a static call to
-> determine if a GFN is private. This allows the implementation for checking
-> a GFN's private/shared status to be set at runtime.
+> If you don't mind, I think I can disallow the interpreter fallback by
+> the below diff in the next revision of this series.
 > 
-> In preparation for choosing implementations between a guest_memfd lookup
-> and the existing VM attribute lookup, rename the existing
-> VM-attribute-based check to kvm_vm_mem_is_private to emphasize that it
-> looks up VM attributes.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> The 'aux->jit_required' is introduced by following Alexei's suggestion.
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+I am not sure if introducing a new aux->jit_required member is necessary,
+as we already have a local jit_needed flag in the current logic.
 
-One nit below.
+Additionally, the issue reported in my patch [1] is fundamentally tied
+to bpf_jit_inlines_helper_call(). Maybe we can simply reuse jit_needed
+by checking bpf_prog_has_inline_helpers() right before JITing, and then
+reject fallback with -ENOTSUPP if JIT compilation fails.
 
-> ---
->   include/linux/kvm_host.h | 12 +++++++++++-
->   virt/kvm/kvm_main.c      | 15 +++++++++++++++
->   2 files changed, 26 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index eb26d4ea8945a..3915da2a61778 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -2546,7 +2546,7 @@ bool kvm_arch_pre_set_memory_attributes(struct kvm *kvm,
->   bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
->   					 struct kvm_gfn_range *range);
->   
-> -static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
-> +static inline bool kvm_vm_mem_is_private(struct kvm *kvm, gfn_t gfn)
->   {
->   	return kvm_get_vm_memory_attributes(kvm, gfn) & KVM_MEMORY_ATTRIBUTE_PRIVATE;
->   }
-> @@ -2557,6 +2557,16 @@ static inline bool kvm_mem_range_is_private(struct kvm *kvm, gfn_t start,
->   						  KVM_MEMORY_ATTRIBUTE_PRIVATE,
->   						  KVM_MEMORY_ATTRIBUTE_PRIVATE);
->   }
-> +#endif  /* CONFIG_KVM_VM_MEMORY_ATTRIBUTES */
+Let us wait for Alexei's comments on the overall direction before
+respinning.
 
-Since it stops the original #define scope of 
-CONFIG_KVM_VM_MEMORY_ATTRIBUTES here, ...
+[1] bpf: Fix unaligned interpreter panic on JIT fallback path
+https://lore.kernel.org/bpf/20260615025316.24429-1-yangtiezhu@loongson.cn/
 
-> +#ifdef kvm_arch_has_private_mem
-> +typedef bool (kvm_mem_is_private_t)(struct kvm *kvm, gfn_t gfn);
-> +DECLARE_STATIC_CALL(__kvm_mem_is_private, kvm_mem_is_private_t);
-> +
-> +static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
-> +{
-> +	return static_call(__kvm_mem_is_private)(kvm, gfn);
-> +}
->   #else
->   static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
->   {
+Thanks,
+Tiezhu
 
-... we need to update the comment of #endif to match with the new scope 
-kvm_arch_has_private_mem as below. Or just delete the comment.
-
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -2572,7 +2572,7 @@ static inline bool kvm_mem_is_private(struct kvm 
-*kvm, gfn_t gfn)
-  {
-         return false;
-  }
--#endif /* CONFIG_KVM_VM_MEMORY_ATTRIBUTES */
-+#endif /* kvm_arch_has_private_mem */
-
-  #ifdef CONFIG_KVM_GUEST_MEMFD
-  int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
