@@ -1,121 +1,155 @@
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2BE3A48F7
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 06:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ADDA3AF676;
+	Wed,  1 Jul 2026 06:49:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782887040; cv=none; b=OtQG9rJdJjaxcTsidN0G7udY5/OXSkYLTNzzki1lsB34ZUJ7TrX4VeoQ1JXNZtsvueaK0ICiCldk7pXnbaCsbn5YRneisIwJqy9ZWFudz5QIT6he2XdOcCVXFlhEkJHuM4UW09vmSjqd01NAqJf24GRH+6yIhJde71wCxgL2+Ts=
+	t=1782888562; cv=none; b=Q/H07l1XFIsYGc5ieP/pMggOobn9vxe8M8YrBjMnpgxcz3NN0aX5OhloKyygGNFmmiYCpkktG8DmNEPrLPVDe6UQUhcWNrXe91f/JGM/03oJOGAogTy9Aiu3QDOd6pARzihUt/f6d9Uno4bV+JdcNiokC4AT0pHtA9mQ64hnn1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782887040; c=relaxed/simple;
-	bh=hP4nlPGIrqeNY9wpwr+srgGK8bvJUTL6djQnXyZwy5c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HOwaof1xwNA6IOEoc8JcIfHOTOULdUpd1dzKNSmMzxP5UgrMp57gddu6hhv+ilHT5Fglzn5dtM6iyJ1wnLcDd+QxPbseEEKGN2Yyi4tNIIVEs6jSKCm1N75fuFZE56C3jR1lk2uo27OQQyQZWwJRIyRsXhykXdc45mU83dPArgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=XqUw/zD3; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="XqUw/zD3"
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8eff5ce3b95so3314266d6.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2026 23:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1782887038; x=1783491838; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5xWJ7lGSS4cy1ExwRI73Ip42ktEi6AnmleUk+CzcRsY=;
-        b=XqUw/zD3iq+eGg0QalMkPbgj1OT8YwYSgzm4d+KIM/UXNeWVBlWIgHyp6WSh9pvADJ
-         7NoipYiINTQR1vT2gpfcrH7hGdNXntTMmhUvLl+UjIFF9d+yPNdJ/KuWBwSNJGL+5vjM
-         NfCow4Egn9Ekz4VUpS4Lu4oA6JUBLm986MYCSuro5QTOb0SlS/Pj4/mXXFwwTNFbjqjX
-         k6IRHz/nggG36ohWpJQb46AWsx4B4ZsLUZojLu9tt3LqMj3Cmx4+FznBsGkomigX48ky
-         HJI38PZ10RB9oNDzy4xt9Wh2JwYYcg7FloV2seOTuDbGiUrdqZyXn8PZzJ00N+NL8CM5
-         f9Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782887038; x=1783491838;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5xWJ7lGSS4cy1ExwRI73Ip42ktEi6AnmleUk+CzcRsY=;
-        b=Ur19waUCJYfA6f9J96u8ZWP+3vN0gqpp6EM+2JMuAw+99PS54pH9Z4jU0azb/WT0FD
-         Romko+IcGDhmsI9RnVd8O8R3P5YqsLZumchllK4nm+Et7TQ4h5w2Orm+vgLGxLaa0mbx
-         2kMeLBoX1L/sy+FPZWOvF9w9AuEP2CHbp4xrUvOlu+tCQuXR1MvkzMSuenG3Qgygfeav
-         qJMwv9gcExVYJI5vzLXxfnR1/oBdXSbh9y36zA1pFwEcwTuoKdNQz+lK7ecxm3Io1LU+
-         gBotCirU0V4Y4O4uoI6P/JOYipxkHuueEbK9+H/lj+0MXVK964g0Sbhsk1xvMJr2EKez
-         +1Ug==
-X-Forwarded-Encrypted: i=1; AHgh+Rpog4wJvFsBE3ZfI90sNA1k6u3GPb+V7awFrLwJ3yuVsI+HHxW3nqz+3ClwL4LQFKL+i1B64TuXrwomLQMREi0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2/tF14fvkrGhlcv1Rmw6k97DDI0j4CDEusmGXKeowkhjIcj0o
-	7RcvpVxbH0HaYYashKVNvabZ/f005x4G7rBLiqQnGAP9d2jgmNCAzyh9wqmQo9mhShk=
-X-Gm-Gg: AfdE7clxb8lLzHsoeFiJiboniGnrufwT11CEfbQjPY1ae20Ngz2jqGqIqyb8u4tTuvY
-	vLwXlH1EWc0dgOU+5OJ4DhGKAZYBkkwsN4xwLIuiVHIW78vk65IiKhzmcXanHYrGD738EOlnTrH
-	FfcJ3TxnVc7iQKHNosTI02IDSmMu+jt223jG/jVeG5P9LB/6C0ilzhblmOrvqPNUpuK5CZwhsql
-	CM+xbDteQ7RfNAiag6E16f1pMVrvSMXIL9j+2fy8vdF2daTibWZthk0TwdIa84MTpkimNUUFK4+
-	MS/bPxyXlrDu0RL/ltBruii2JiKau55yghzWA2yBFRORJOE7NvwRiG48vikVS74r11DI5tVSpPm
-	c3XeKBXhFbftkohhmUkEjpisr1Fh4HB2dRnppeI0ft1SiLoE8LrKcbQ/Bk6RttC/4ues2q+s4G6
-	jyHySjyv+Ze8eE4AXr31UL10bXFzV0nSubpRp9hDKKSe0wvQutFgWr4k9mb7J+TiEYrbxe
-X-Received: by 2002:a05:6214:2dca:b0:8e4:d2ba:d677 with SMTP id 6a1803df08f44-8f3c7e708demr3649096d6.29.1782887037749;
-        Tue, 30 Jun 2026 23:23:57 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f361ba3efdsm12323456d6.39.2026.06.30.23.23.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 23:23:57 -0700 (PDT)
-Date: Wed, 1 Jul 2026 02:23:52 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Hannes Reinecke <hare@suse.de>
-Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com, david@kernel.org, osalvador@suse.de,
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
-	djbw@kernel.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, akpm@linux-foundation.org,
-	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	shuah@kernel.org, iweiny@kernel.org,
-	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
-Subject: Re: [PATCH v6 09/10] dax/kmem: add sysfs interface for atomic
- whole-device hotplug
-Message-ID: <akSyeHnfcDmxnCSz@gourry-fedora-PF4VCD3F>
-References: <20260630211842.2252800-1-gourry@gourry.net>
- <20260630211842.2252800-10-gourry@gourry.net>
- <akQ_xlJtXNgnGUdf@gourry-fedora-PF4VCD3F>
- <abde41f0-7d40-42ba-a232-cc0538cd0e4b@suse.de>
+	s=arc-20240116; t=1782888562; c=relaxed/simple;
+	bh=1h5+A7fGGRbsOGbZcEKDqm4L+EdU05qwaM8k80pNZjU=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=uqdwG3V5snL/A3+iRvH0euAJmTj5gMpmjYh2o9UYXxtVtBz55pxKlq3Dxo5yjJ8w/dY1RMQe6NoVK7Oh9gSBKo6O1/gHJEEDgGNQnwcHigMCDBeHWXt+NDokyOoxXmQ7SajjN5y+q4mCKgrl657racm1IlvpbEP7xW09mLKcKr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8AxOvFsuERqe18AAA--.2306S3;
+	Wed, 01 Jul 2026 14:49:16 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJCxfcJnuERqjhm6AA--.23063S3;
+	Wed, 01 Jul 2026 14:49:12 +0800 (CST)
+Subject: Re: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user
+ BPF_ADDR_SPACE_CAST insn
+To: Leon Hwang <leon.hwang@linux.dev>, KaFai Wan <kafai.wan@linux.dev>,
+ bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260626154330.33619-1-leon.hwang@linux.dev>
+ <20260626154330.33619-2-leon.hwang@linux.dev>
+ <e279c9a7ca6b16e52dc261560513b0eafdd70f87.camel@linux.dev>
+ <a2aaa21d-4cf9-48a4-839f-dd152bda8185@linux.dev>
+ <af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn>
+ <d55e10b1-d883-4fcf-8fb3-8210db935e4a@linux.dev>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <1c07a34f-b050-a281-6a7b-542a9bfa30b3@loongson.cn>
+Date: Wed, 1 Jul 2026 14:49:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abde41f0-7d40-42ba-a232-cc0538cd0e4b@suse.de>
+In-Reply-To: <d55e10b1-d883-4fcf-8fb3-8210db935e4a@linux.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxfcJnuERqjhm6AA--.23063S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7tFWfGrWrWFy5ArWkJw15Jrc_yoW8ZF1kpF
+	ZIy3sFyr4DKw40q3srJw42y3W5Kw1jgas7GFZ5G34F9FZ0qrn3WF109FsayFZ8WryUKr1I
+	vw4Sqryq9Fy7ArXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07joc_-UUU
+	UU=
 
-On Wed, Jul 01, 2026 at 08:13:28AM +0200, Hannes Reinecke wrote:
-> On 7/1/26 12:14 AM, Gregory Price wrote:
-> > On Tue, Jun 30, 2026 at 05:18:41PM -0400, Gregory Price wrote:
-> > > There is no atomic mechanism to offline and remove an entire
-> > > multi-block DAX kmem device.  This is presently done in two steps:
-> > 
-> > ... snip snip snip ...
-> > 
-> > Sashiko pointed out a false-positive, but adding a fixup patch
-> > here that adds additional consistency.
-> > 
-> > On total failure - release all resources.  This makes the sysfs
-> > interface consistent with the probe failure path.
-> > 
+On 2026/7/1 下午2:21, Leon Hwang wrote:
+> On 1/7/26 09:26, Tiezhu Yang wrote:
+> [...]
+>>
+>> Hi all,
+>>
+>> Alexei said in another thread like this:
+>>
+>> ```
+>>> [3] https://lore.kernel.org/bpf/20260615025316.24429-1-
+>> yangtiezhu@loongson.cn/
+>>
+>> I don't think we need such fallback in patch [3].
+>> ```
+>> https://lore.kernel.org/bpf/DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com/
+>>
+>> Should I just drop my previous patch? To be honest, I'm not sure how to
+>> solve the issue mentioned in it. Is that a real problem, and does it
+>> need to be fixed? What is the next step?
+>>
 > 
-> Speaking of which ...
-> With this patch we now have _two_ interfaces to do the same thing.
-> And both will be generating uevents.
-> Which is far from ideal (one could easily envision _conflicting_
-> udev rules, one set doing an 'online' on the old interface,
-> and another set doing an 'offline' on the new interface...)
-> Is there a way to not sending uevents for the old interface
-> or to make it configurable?
+> It is a real issue.
+> 
+> Instead of fixing up helper calls, it seems better to prevent
+> interpreter fallback if the prog has any JIT-inlineable helper call.
 
-We do not allow "offline" in the new interface.
+Hi Alexei and Leon,
 
-That fixes the entire issue - the blocks are gone, nothing to poke.
+What about the following: (not tested yet, if it is good, I can test it)
 
-~Gregory
+----->8-----
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 649cce41e13f..806e1ec85ff4 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2608,6 +2608,19 @@ static struct bpf_prog 
+*bpf_prog_jit_compile(struct bpf_verifier_env *env, struc
+         return prog;
+  }
+
++static bool bpf_prog_has_inline_helpers(const struct bpf_prog *fp)
++{
++       struct bpf_insn *insn = fp->insnsi;
++       int i;
++
++       for (i = 0; i < fp->len; i++, insn++) {
++               if (bpf_helper_call(insn) && 
+bpf_jit_inlines_helper_call(insn->imm))
++                       return true;
++       }
++
++       return false;
++}
++
+  struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env 
+*env, struct bpf_prog *fp,
+                                            int *err)
+  {
+@@ -2620,7 +2633,8 @@ struct bpf_prog *__bpf_prog_select_runtime(struct 
+bpf_verifier_env *env, struct
+                 goto finalize;
+
+         if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
+-           bpf_prog_has_kfunc_call(fp))
++           bpf_prog_has_kfunc_call(fp) ||
++           bpf_prog_has_inline_helpers(fp))
+                 jit_needed = true;
+
+         if (!bpf_prog_select_interpreter(fp))
+----->8-----
+
+If you are OK with the above changes, I will test it again and send
+a new version later.
+
+Thanks,
+Tiezhu
+
