@@ -1,216 +1,120 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855274968E2
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 12:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782910534; cv=pass; b=GYi+uyqbV+FHtLDLiuAcYhcTYGSqVO2jreLsXtI1VWgdIadZvViHvN2UAA4YQRcqVIxmdpzxO9lt7TIhWjSsIWe5pvP7oh+GRCf1sBS0h9cVSjh6m+P+++OfrovNw6TT9MU/3ebVOq33p/QBZROTaF1bq0QXi/ZnLHYx3tlqGPM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782910534; c=relaxed/simple;
-	bh=wA34yog5D3zzm0E4fzCRQgoVkgu33TRvDEqJe+rugrM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xc9yjA1+5sqA55wPPgZNgblk6p7wZaukClLL/MuNvXbbYGm3KPeo+NJgDGL2PZVe4+nlcP9ZbKzninLTC5FZLIwFsc1u+GEI799urDPpzf/J40fHgrlstM1VjJnXDV7NpIJ3aLQszsLYLy+cI75XDFVeaJaZm+m6gmzDKaCK8iI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=XJOeGYL2; arc=pass smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1995F492507;
+	Wed,  1 Jul 2026 13:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782912989; cv=none; b=FOguTGBH2yf+8kw5WgJx9gfua99ZndRNAUlLttPLqcg+wdxDAgIJaPCpm93IXYttFR4kX76rt71nTSN3dzMsiXaKWQZ3hTEPfva9WJ5IZBN8IJ0EIVIlkNwLCRKMal/AoU5h8tb2UZKvWmq97qG5bHljV6RijhO4J3e8UxSEiHA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782912989; c=relaxed/simple;
+	bh=kj8tVAMeyk2zaR0NgWiJc61AewxzrxHInMMw+uxN4yE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LTmDIy6VO+hIuctCTYyP/dgI5TWlRxfj77+IXM0dYReWWVvPqHJuDGRCYsahKwwfUAMAWL48Ti9JXVTM62qmMBWFguuhgC3Y1wLYoJlrEPYW1hS+3DrEpcB2I4BdnRRDzuP9OW7U4deoT1To/NlvhZzzpCd0+3XC7VCa0aJJbKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T6uV0JT5; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="XJOeGYL2"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3804e42ad5fso496006a91.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 05:55:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782910532; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ccc0L3fsU4a9fKG0qbY1d9MEVq2MxAB5n+aQP1rPQz7g9CR4Yp7QxSwXR14qvmLXAt
-         lyc/FhkgDjiU1BbZvruJfglF4nZcLf5KPbazgfn25aNXNNuKUisVHQl8LTSpnfqwDj1m
-         1bySE+M5iX4CoRTZ7LsOdJD7E46Scx9IhuH+dE7CRq9hcEZ6Y8iDXUFvd81S0/Jt0ahc
-         GfSvPUYVC7/WJmWQsjzVxXj3ac++pU2do8UsEngX9HPj0TFRelxAlFgkz6LOwx7RpxdG
-         lKu+UJ+SPJNd44f8yKgS7VMTl1kIN7qJCBNbCBmpmhhsiJuh+eeq0iAe9uKseJe8yjc/
-         A7Ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=h90qlgRkzmvvEIOKUZmmGycJu0XT3aZbSOeN9EPvQ6Q=;
-        fh=sKFWpg11gLx3RP3Gumdp0rap9ElPp+IKtJsKYNPc9DY=;
-        b=DUVSA60Idi1szZ26/39o6oxiX0ujKWgUHbwKi/utX9M/vnenORJBrm8LpjfbPbsZL0
-         uk+QUzhWptfcOVR8LSm9gIlnsZdWtUDcY17idfQZje7saEPPkJcTJUg2EiSHW8mSP6gw
-         KNOHSJwkenDzA0iZmXvrUEKbFESfdaxv/1DG0oTVvD5/+E18YeMleWMKt2Nz6LGNlKfI
-         xn/nwhwej2Ph7C1Q/s4IZhuUVGSAppFAjOgQgxo3XCIOPEVNyWBqU37VLZhVAy3SZYdm
-         OeF8gzkN+a0utwZbBfL1ZKbw+Mu1RE3z58GyNGzmF377qicy18Eo116wditW0HCTzuLZ
-         Sh8A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1782910532; x=1783515332; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h90qlgRkzmvvEIOKUZmmGycJu0XT3aZbSOeN9EPvQ6Q=;
-        b=XJOeGYL2vnZ3JRE/Es/sxl+AEl6mmciMEHV8WocRMoqDSpvCRiZLTHCKfagxX0jsjp
-         rZ1/Pgg440tx5WIodjMLHp7WFDhpKee6Cw3+MyK+IVYRb5y4DJnUwVWwH2Ykvu0mYEMa
-         UuS9z2EawbiuzRBLbcZfqMtjyEMAQ5o9EFYqKgmvlM7vjk1h0rNIvCKNT9iTouvpeSO/
-         Ix89Eab4y1vxTcJV/c3YpT8YkT5/p3wXGdYJ8OsgLpf1ypdvzdGRwpjDjpeFcm3F9OxG
-         ZrGRMLWMXUdNaN6PvZXcRLBPym5egq3X+PWeqsoM+e4sTqOxKToNcgGXWhzthx5NPnD6
-         BdHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782910532; x=1783515332;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=h90qlgRkzmvvEIOKUZmmGycJu0XT3aZbSOeN9EPvQ6Q=;
-        b=RC8eofddixzkVe/5yAwZG1IMMA3J28O8r+wO7ifsHUEncPLTWI1p4x/l6AgLol4KdU
-         NzbXscAO/oKB6HAWgCG/Ap+sGqxfSv3qNqilhh/Yb2ip7TrdISuoOiwgFwyUOkQ38fes
-         YIvX+gmCiDf8sNYXP7jk1AQ6Gb7/54Vd+IXtKyaLmRxhClS3RmXsND1heUYU6IGx5tjK
-         JozqpG/Krbsb7lBmrwv6WJ3EmyzdRjJib14A4mzo5azYQD3WqIXotG0VuHHNAGmLHeuw
-         yyVZB7yhIIlp9I5F2/NwxxiC4q+Eh3fglniscSPuy3HHcvlpMUFo1JCsgI1bObPdqXGD
-         WrAQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqHo4nFk4e2OI5ma0feEdr6ka/UXGhrRk8InTL4tlhBzNDCD4MEFNPlyOB4F3GlFuxeJHcqw1xOWEim53cI7uQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXfLZcA7gA5NANZKRecoliar2WriWs6JYtCaR9rrvXSvXJeJ95
-	mYvw1euHxk+mCo6cRaUo04CHr+3irdhBEjbQGKGNucWuJP44d3thL/bmhzkpORMgOKPba9ZQMYY
-	99NW0aKTBvVvQBwiJ90SrdG2XqOZ+a5AOuHcx1lL5
-X-Gm-Gg: AfdE7cl21aMLo07lIv7VlggZiGu4mcHyLMlC66WFeeX7sHf/LD/EGF/FSbNib9YXpAE
-	D4OJb3asNN/Xp85PnqqTY7SwyHCOR9TcdJLlOBdrsevTOmrVFGtgwQhG1DV5HEWe8LS1Ozl/a4V
-	Dbk1N5xyp0zFnyrpfR8miS2IgJY7zlhFkqZ08zcgq+MDCJzTejrURVtEJehGkCA4zAO41CcR1BK
-	ZN+/hq/RZcPf7+TBDrKJ7u9zUyvoTKyxAf3lmMbds2bVpQXEVkARf1B8bt9rbVnKUMwn3ZI
-X-Received: by 2002:a17:90b:2d90:b0:380:9d0d:7af4 with SMTP id
- 98e67ed59e1d1-380ba86979fmr662539a91.12.1782910531759; Wed, 01 Jul 2026
- 05:55:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T6uV0JT5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782912986; x=1814448986;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=kj8tVAMeyk2zaR0NgWiJc61AewxzrxHInMMw+uxN4yE=;
+  b=T6uV0JT5b3ZMcCiBRUQ9GVZzCFZCQ1aNjHGeYnaTKo5zAYrFCQ9fIM01
+   h6h2de9aN320b69eHvSjfYO4XHOiGJKK18UlEWfkhF4Hs/Cwzo0IGH4ZN
+   sJgvOixwyDJZB9mzjkcRa/g7jnont94L8d9EGHy5G0VRNbrfFWUVe2Dt6
+   KsYCh+Irx5R9jk0G0Db+Vvq1m+IoycLIMaxibau+ewlWBOe3ijrZijwuL
+   3+EXmeHCzHS2dccOzv7Y0hT5eQ7MIyQzrKigohkKWFEfMINu87N2AAbV1
+   bB+P8ysE3izUfvJS1KJJ+t/dljzd4ZvjB7poX7yCualHw/ah/zRP6+L9L
+   Q==;
+X-CSE-ConnectionGUID: EWnkm5C1SaK2jq1ha+4vVg==
+X-CSE-MsgGUID: o43ckQgBQru8c7v5OIrlZw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11833"; a="83517676"
+X-IronPort-AV: E=Sophos;i="6.25,141,1779174000"; 
+   d="scan'208";a="83517676"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 06:36:25 -0700
+X-CSE-ConnectionGUID: 1lEryM2mToWTiZ6o+ouDzw==
+X-CSE-MsgGUID: n+BqvtQaR46j02XAnkeYnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,141,1779174000"; 
+   d="scan'208";a="249205453"
+Received: from meihao-mobl1.amr.corp.intel.com (HELO [10.124.240.18]) ([10.124.240.18])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 06:36:17 -0700
+Message-ID: <81caa42d-9d07-4bed-892d-c24e0b298a1d@intel.com>
+Date: Wed, 1 Jul 2026 21:36:14 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260630183956.281293-1-dwindsor@gmail.com> <20260630183956.281293-3-dwindsor@gmail.com>
- <CAHC9VhSYNF=_Tfe-D99rHy70EXQVr1ES0arxT09Bidey4zOFdg@mail.gmail.com> <DJN0EPROS056.3RY0R6W1XZHNZ@gmail.com>
-In-Reply-To: <DJN0EPROS056.3RY0R6W1XZHNZ@gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 1 Jul 2026 08:55:19 -0400
-X-Gm-Features: AVVi8CflgdtI8eLFled3oYp6VOVsv_lBHqIjUE5-aLf2A4hxkcukFfwR6m0D7v8
-Message-ID: <CAHC9VhT37f5TwgksE_i0Yttpy3i7niBr6QrNVVmpwe_eGX428g@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 2/3] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: David Windsor <dwindsor@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 13/22] KVM: selftests: Set first memory region as
+ shared if guest_memfd
+To: Ackerley Tng <ackerleytng@google.com>, Lisa Wang <wyihan@google.com>,
+ Andrew Jones <ajones@ventanamicro.com>, Binbin Wu
+ <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+ linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-13-6983ae4c3a4d@google.com>
+ <CAEvNRgEBiivp9tOHZnFmWvF6ek-Ar-m2B+hb=-H0dgAcM2=z8Q@mail.gmail.com>
+ <f8937d16-4aed-44d9-a058-beff56eac4ad@intel.com>
+ <CAEvNRgFLjt+-cO-XT0s8uW2xXgyd+VVZ0g0Os6V0+LBFQzx8cQ@mail.gmail.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <CAEvNRgFLjt+-cO-XT0s8uW2xXgyd+VVZ0g0Os6V0+LBFQzx8cQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 1, 2026 at 2:09=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-> On Tue Jun 30, 2026 at 12:20 PM PDT, Paul Moore wrote:
-> >> +__bpf_kfunc int bpf_init_inode_xattr(struct lsm_xattrs *xattrs,
-> >> +                                    const char *name__str,
-> >> +                                    const struct bpf_dynptr *value_p)
-> >> +{
-> >> +       struct bpf_dynptr_kern *value_ptr =3D (struct bpf_dynptr_kern =
-*)value_p;
-> >> +       size_t name_len;
-> >> +       void *xattr_value;
-> >> +       struct xattr *xattr;
-> >> +       const void *value;
-> >> +       u32 value_len;
-> >> +
-> >> +       if (!xattrs || !xattrs->xattrs || !name__str)
-> >> +               return -EINVAL;
-> >> +       if (bpf_xattrs_used(xattrs) >=3D BPF_LSM_INODE_INIT_XATTRS)
-> >> +               return -ENOSPC;
-> >> +
-> >> +       name_len =3D strlen(name__str);
-> >> +       if (name_len =3D=3D 0 || name_len > XATTR_NAME_MAX)
-> >> +               return -EINVAL;
-> >> +       if (strncmp(name__str, XATTR_BPF_LSM_SUFFIX,
-> >> +                   sizeof(XATTR_BPF_LSM_SUFFIX) - 1))
-> >> +               return -EPERM;
-> >> +
-> >> +       value_len =3D __bpf_dynptr_size(value_ptr);
-> >> +       if (value_len =3D=3D 0 || value_len > XATTR_SIZE_MAX)
-> >> +               return -EINVAL;
-> >> +
-> >> +       value =3D __bpf_dynptr_data(value_ptr, value_len);
-> >> +       if (!value)
-> >> +               return -EINVAL;
-> >> +
-> >> +       /* Combine xattr value + name into one allocation. */
-> >> +       xattr_value =3D kmalloc(value_len + name_len + 1, GFP_NOFS);
-> >> +       if (!xattr_value)
-> >> +               return -ENOMEM;
-> >> +
-> >> +       memcpy(xattr_value, value, value_len);
-> >> +       memcpy(xattr_value + value_len, name__str, name_len);
-> >> +       ((char *)xattr_value)[value_len + name_len] =3D '\0';
-> >> +
-> >> +       xattr =3D lsm_get_xattr_slot(xattrs);
-> >> +       if (!xattr) {
-> >> +               kfree(xattr_value);
-> >> +               return -ENOSPC;
-> >> +       }
-> >> +
-> >> +       xattr->value =3D xattr_value;
-> >> +       xattr->name =3D (const char *)xattr_value + value_len;
-> >> +       xattr->value_len =3D value_len;
-> >> +
-> >> +       return 0;
-> >> +}
-> >
-> > This is not a generic VFS function, it is a LSM specific function, it
-> > belongs under security/, please move the code as discussed previously.
->
-> Paul,
-> Not quite. It's all about xattrs.
-> Having "struct lsm_xattrs" in the arguments doesn't make it lsm related.
-> You needs to study existing kfuncs and tracepoints.
-> A bunch of them have "*lsm*" in the arguments.
+On 7/1/2026 2:18 AM, Ackerley Tng wrote:
+>>> I think this patch should fully buy into in-place conversions, so we
+>>> need to also set GUEST_MEMFD_FLAG_MMAP:
+>>>
+>>> @@ -483,6 +483,7 @@ struct kvm_vm *__vm_create(struct vm_shape shape,
+>>> u32 nr_runnable_vcpus,
+>>>    {
+>>>    	u64 nr_pages = vm_nr_pages_required(shape.mode, nr_runnable_vcpus,
+>>>    						 nr_extra_pages);
+>>> +	enum vm_mem_backing_src_type src_type = VM_MEM_SRC_ANONYMOUS;
+>>>    	struct userspace_mem_region *slot0;
+>>>    	u64 gmem_flags = 0;
+>>>    	struct kvm_vm *vm;
+>>> @@ -503,10 +504,16 @@ struct kvm_vm *__vm_create(struct vm_shape
+>>> shape, u32 nr_runnable_vcpus,
+>>>    	 */
+>>>    	if (is_guest_memfd_required(shape)) {
+>>>    		flags |= KVM_MEM_GUEST_MEMFD;
+>>> -		gmem_flags |= GUEST_MEMFD_FLAG_INIT_SHARED;
+>>> +		gmem_flags |= GUEST_MEMFD_FLAG_INIT_SHARED | GUEST_MEMFD_FLAG_MMAP;
+>> GUEST_MEMFD_FLAG_INIT_SHARED is valid only when the memory attributes is
+>> per-gmem.
+>>
+> GUEST_MEMFD_FLAG_INIT_SHARED was introduced before guest_memfd in-place
+> conversions, so I think it's orthogonal to whether memory attributes is
+> per-gmem.
 
-Alexei,
+But before gmem in-place conversion, i.e., per-gmem attribute, 
+GUEST_MEMFD_FLAG_INIT_SHARED is not supported/valid for Coco VMs.
+>> we need to check KVM_CAP_GUEST_MEMFD_FLAGS or kvm_has_gmem_attributes.
+> I think we do want to deprecate the non-in-place-conversions setup, so
+> how about inserting a TEST_REQIRE(kvm_has_gmem_attributes) here?
 
-I'm sorry you don't understand the basics of the LSM concept, but
-please look at evm_inode_init_security(), xattr_dupval(), and
-selinux_inode_init_security() for some background.  There should not
-be any usage of lsm_get_xattr_slot() or BPF_LSM_INODE_INIT_XATTRS
-outside of security/; you argued a similar idea to justify your NACK
-of Hornet, I'm simply applying the same logic here.  We also have the
-very recent security issue caused by the BPF subsystem which failed to
-acknowledge that the admin disabled the BPF LSM and then walked all
-over kernel memory when it shouldn't.  Moving LSM internals outside of
-the LSM creates an environment where flaws like this can go
-undetected.
+Well, then all the TDX and SNP selftest will be skipped on the kernel 
+with gmem_in_place_conversion=false.
 
-As I said previously, if you absolutely insist on the kfunc being in
-the VFS kfunc file, the LSM specific bits need to be abstracted out
-into an LSM function.
-
-  kfunc bpf_init_inode_xattr(...)
-  {
-    /* sanity check params */
-    if (!xattrs ...)
-      return -EINVAL;
-
-   /* get value/len from bpf dynptr */
-
-   /* hook will check for LSM specific xattr count/limits, allocate,
-copy value*/
-   rc =3D security_lsmxattr_add(xattrs, LSM_ID_BPF, value, value_len);
-   if (rc)
-     return rc;
-  }
-
-David, if you like I can provide you a patch that implements the
-security_lsmxattr_add() hook above if you aren't comfortable writing
-that, but if you want to give it a shot that's all the better :)
-
---=20
-paul-moore.com
+I don't object it. But we still need to get Sean's answer.
