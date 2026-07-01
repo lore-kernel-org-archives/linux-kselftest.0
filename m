@@ -1,343 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B7639A7FD
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 20:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782938689; cv=none; b=eAZup8O4oZwwXiRLUM3FIYhk9lbpZDsfekiXt1QQUmrZOXOid1CtnOYuoykfjHGzytmhnUqBMbCF/1mEhtMI1KhFOC9LnDiKWZ6neULX6vD0k2kPxqvJYOiokbGq0juylaWmLLYbV1H9U8Dv3NyJcJK3h3K6hCDd481SZuntZ4c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782938689; c=relaxed/simple;
-	bh=CbvMGXv5SyeMYZvvmuCVAtSWv5tCo6rVBOoU5rp3Aa8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TnkMmZJjFovu+Eb/c0+EEnmFtOgZdNjSNRVJENswjZTKLJEkrNzeBhvv8FEcKhmnytCa9M66hDA3oGbuPAudzwYW+JVMMmjB0qjh12KR3TlV80xpHpv/UIBO9BcctQ8chzqUgb7KHHZ6uUlmqP5rGmxUmxjlKlHnakZA4l9QBFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A6jfwYCn; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF5C3815E8
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2026 20:46:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782938800; cv=pass; b=c7Hg7/+nLi9LDS2ZC498cflCpJTT0e6bJD1+ON8cA1FhpBp2EwXLPUUjVa74qNQDK5ge/p7atPz17kbpVim54HcwCnh65rPnGv1DXSTLJB6g1lgl9YUX/n5zv+8wHVCAdNYpPvxxSl445UPCjRQIlpzXvR/oeaXI2oNvRfihVyc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782938800; c=relaxed/simple;
+	bh=RojmrvKSHS5LSmtFILF0XQmAa/5JCgo7nPteL3bNh9Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Mzu/ZhFizvq2uTGQD2N2yYaCbcsNJyqz/Lvva+J2iJ1HNxQIrEcwsXiQrG1LLEoAwGIkVZnJlQyowVazMgfCH3YY2nnfQJ0PzxIzuNZTMRU+PqWnIN9Tnd6cyEpCfisOXY4M3mkzVk9eEnNOej3P6wPiYsK1LbGtQt9ckI5vKMg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n22tdaLG; arc=pass smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A6jfwYCn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782938686;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wRMsvwXq87Xjf9W6QWXCn/whLTFqYvPi9nlinAuu45A=;
-	b=A6jfwYCn9YuesAYkVU7ZSK7AQv6TjsEzQBm+0IW40y7HgRRwjlQqXn1Y50KMMO9Vi9ALci
-	gnVr56AYF7RvKbocKZyDpYN9QyzG55i0jzj2AE87YrJ8+uW72jRxIr0TMuAZAruokA042f
-	LHoKrP/CvqA5AZ63HsSKPV1VGnMOzm0=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-173-kIAwBoPcMGm_VoTBe0laLA-1; Wed,
- 01 Jul 2026 16:44:43 -0400
-X-MC-Unique: kIAwBoPcMGm_VoTBe0laLA-1
-X-Mimecast-MFC-AGG-ID: kIAwBoPcMGm_VoTBe0laLA_1782938681
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6E7D8196C415;
-	Wed,  1 Jul 2026 20:44:41 +0000 (UTC)
-Received: from [10.2.16.170] (unknown [10.2.16.170])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4874118007E7;
-	Wed,  1 Jul 2026 20:44:37 +0000 (UTC)
-Message-ID: <c326d1c8-3407-47d5-9851-c91e05836c7b@redhat.com>
-Date: Wed, 1 Jul 2026 16:44:36 -0400
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n22tdaLG"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2c821a50615so7744655ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 13:46:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782938798; cv=none;
+        d=google.com; s=arc-20260327;
+        b=p5/B1jyFBE8c9a6enSXxPV0nqyZ5SMVBssbIbsJKsW8SbwQK++jig7e9rpR/U3+rus
+         T4T5oodASQ558FkedbtUoJdFy3Wi8r8EajT/HXxNQJ3io42pIkTyxZ8qty7sKwih/sE/
+         Fmy/PeIw6iiY/F+HRAknhuTXFqPaKC8j630dt3TAQJH4fCWF0naTbwueruDBpwebFjW2
+         BToNlIS0xpLpDsGUcSogxtMDSL2KXabnwHX4ufSANVRErFhNuZylf8sUhJ8m3BgcSgPT
+         vgoWYi803D/2JvkqtV8ugDR4fF89iBvkPurPL7fWK0SyHVGQcTWna5PLAxCNqeAGZWeu
+         c/qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=yjZxD1cg1vS2nweGbuL1y88ux4bBRWVLVkOZtd7axm0=;
+        fh=IY6qt7scx+VJLk/ToAnt270JIIz+CDU97NWpxg4moVw=;
+        b=ADcs6jfVL+0GQtFQVop4A80oggUmCv4htrjjq1Cl6CnGGyhIXFW4FiM119JpXwu/9B
+         Cr8hZQCxaTGpJRARUgc0zk4yeC+jdBjM3nGVblBB4g7pRLF4Y8mayoCwjYUXUrediHk4
+         vVf6PzULUy3FktDLX5USA9VpRFerUu3bEsjw1BpjDZW0P8uKZOOSSPwjVECUbbwpWp9O
+         rCgOYqb50l81GcEjm0pbVe3OpoENL3TCde/uUr6mSuiWiMsz58/aynWk5wGE64g0UCR3
+         FbPbNVaD0SVVvW5+3ccn5U0iLNWaE9wIZLU2eNAqa/jRLF9eukWuW31JnTUrPjXAd/PO
+         iqrw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782938798; x=1783543598; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yjZxD1cg1vS2nweGbuL1y88ux4bBRWVLVkOZtd7axm0=;
+        b=n22tdaLGEdT8Udmh9bzmeau9F9cPB4YL4x/3TwFelAAWtPbDx6v0gWXcoQWmEz/DyB
+         MpRKMbqXWVTrNaWNuABsrhZxb097xVqjSMQYoWwJ4ap28iNFzU7b6AtVDJqByFzWRhjJ
+         Io1TxMad138E9WXN0dRc16jONOdzlglDnUC41b/ndLbA8L48CzBjeqmhO44mKb8IpO5g
+         vjVEqteeRQL8t8Ki5TIk9epFWR1Vg53A4rOY1VxSUtk7lSNgZPSVp1GklBCbaxtzmEom
+         oohm+o3gVX/CeoC4sgdIcJq9NdhxT3AusSieKzz1x16QYhI8nlsJB8mx++2HpHKpQncY
+         EENQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782938798; x=1783543598;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yjZxD1cg1vS2nweGbuL1y88ux4bBRWVLVkOZtd7axm0=;
+        b=qxaL5OHK3D7F0UiOaX1V8UO9FH8zVGcph8HG7+Y9hcUw5by5AhZnCzEm9i2btl7Rv9
+         9qeLBEAEVMgcTftGUiluTUl691Rkf0jj1q/n3f2fiqv7PnYm4O/QaUrbegC7smF+m6v+
+         Qpvp3QPIovctc49zzGnlsqgl9JBNaBx7MZKPzCZ+k/d15mNCgAqZx3zunYy9IT5mmZQg
+         Fvmtg7qb4N9F1pq1ryVlX+NEHA5T4ma/wr+XSyhIF68EFFHUzrkJ3m8ISODcq781hVqI
+         lS6ym20FB/syYBbCE/qrfQzIxS4dtQvoz9/2gjyjSXYDdkrtkJYK4tpwZ6f12dOPilkN
+         EMBA==
+X-Forwarded-Encrypted: i=1; AHgh+Rqfxp0YA4vWHL+omr1OFAsHJQAlPHr0e6ZtPYv0iMlTFOag96EVGY3Kj91G7ZxMnwQeiTA5xhNjcX2B0vUlB94=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgpQ8ha8wV/Uo8jYmLOy+LE6SqRPDTB+OTSvPHLj461SElQp2i
+	MKwn3C482TW2gr8rxk8wOB3Yd2t1xlpeCugK+NKp2zQz13+Dm3TNLIeZazLBDpQIaOARqYXra8l
+	Uh23QljkjWmhoUeXuG8ECk60j8cFJ72U=
+X-Gm-Gg: AfdE7cnM7zsKFGjQhCzk0/yabNH/cn9KE2SnwlNtENzZTbChI2PwjfoUBUoedusUbUC
+	OzB+cmkP4NUxofalxaTwqRKJvJxqnmAbhCHhiwbGLoX2otA+6ROKsznpdTLoKjPwqTHBeDsi6gi
+	IS5MZYnO8XSthV+K5p0SYCLgF729V6PAzGPUTyWCKjf7mrQDT9r9gtqxQ1XFuKqIcFYj3gNYm9a
+	IT3OfIoqpFE4yTOIqIcL3CE0p0FUYKfxWkHzRoi9DXHKYC8b7SRLp1D2EC5idZ5kR3HaIFXFr0O
+	hNP2iSQ+ge2WUTpcfEz70BGEHNrRvcecXzQORA9ETMpho7Yoz1XMuQ==
+X-Received: by 2002:a17:902:d4ce:b0:2ca:1bbe:c3d0 with SMTP id
+ d9443c01a7336-2ca91227efcmr21654735ad.43.1782938798277; Wed, 01 Jul 2026
+ 13:46:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v9 09/11] cgroup/cpuset: Support multiple source
- cpusets for cpuset_*attach()
-To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
- Juri Lelli <juri.lelli@redhat.com>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
- Guopeng Zhang <guopeng.zhang@linux.dev>
-References: <20260630033344.352702-1-longman@redhat.com>
- <20260630033344.352702-10-longman@redhat.com>
- <47092d49-5187-4162-9d46-e9d2fd0f31a2@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <47092d49-5187-4162-9d46-e9d2fd0f31a2@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+References: <20260604031033.806727-1-chenyuan_fl@163.com> <20260610145059.113412-1-chenyuan_fl@163.com>
+ <20260610145059.113412-3-chenyuan_fl@163.com>
+In-Reply-To: <20260610145059.113412-3-chenyuan_fl@163.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 1 Jul 2026 13:46:25 -0700
+X-Gm-Features: AVVi8Cc048TcgqKW0BWdZFzEbi25RateWHAZYZuQD3fYS1IrrzOUzGBWw3yq46M
+Message-ID: <CAEf4BzZ849OG1XP6ZO351or3wqUViKtWHAii9vFyEZhu=4QS8w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/2] libbpf: fetch probeable prog type from
+ token for feature probes
+To: chenyuan_fl@163.com
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	chenyuan@kylinos.cn, daniel@iogearbox.net, eddyz87@gmail.com, 
+	linux-kselftest@vger.kernel.org, shuah@kernel.org, mykyta.yatsenko5@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/30/26 10:35 PM, Ridong Chen wrote:
+On Wed, Jun 10, 2026 at 7:51=E2=80=AFAM <chenyuan_fl@163.com> wrote:
 >
+> From: Yuan Chen <chenyuan@kylinos.cn>
 >
-> On 6/30/2026 11:33 AM, Waiman Long wrote:
->> There are 2 possible scenarios where the cgroup_taskset structure
->> passed into the cgroup can_attach() and attach() methods can contain
->> task migration data with multiple source cpusets.
->>
->>   - A multithread application with threads in different cpusets is
->>     fully migrated into a new cpuset.
->>   - Disabling v2 cpuset controller will move all the tasks in child
->>     cpusets to the parent cpuset.
->>
->> The current cpuset_can_attach() and cpuset_attach() functions still
->> expect task migration is from one source cpuset to one destination
->> cpuset.
->>
->> Fix that by tracking the set of source (old) cpusets in singly linked
->> lists. The list will be iterated when necessary to properly update
->> internal data.
->>
->> To ensure proper DL tasks accounting, the nr_migrate_dl_tasks in both
->> the source and destination cpusets are decremented/incremented with
->> their values added to nr_deadline_tasks when the migration is 
->> successful.
->>
->> The setting of the global attach_ctx.cpus_updated and
->> attach_ctx.mems_updated flags are also moved from cpuset_attach()
->> to cpuset_can_attach() as the correct source cpuset can no longer be
->> determined in cpuset_attach() and cpuset states will not be changed
->> between cpuset_attach() and cpuset_can_attach() with an earlier patch.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   kernel/cgroup/cpuset-internal.h |  5 +++
->>   kernel/cgroup/cpuset.c          | 65 ++++++++++++++++++++++++++++-----
->>   2 files changed, 60 insertions(+), 10 deletions(-)
->>
->> diff --git a/kernel/cgroup/cpuset-internal.h 
->> b/kernel/cgroup/cpuset-internal.h
->> index df662c7fd1a4..e7d010661fd3 100644
->> --- a/kernel/cgroup/cpuset-internal.h
->> +++ b/kernel/cgroup/cpuset-internal.h
->> @@ -145,6 +145,11 @@ struct cpuset {
->>        */
->>       nodemask_t old_mems_allowed;
->>   +    /*
->> +     * For linking impacted cpusets during an attach operation.
->> +     */
->> +    struct llist_node attach_node;
->> +
->>       /* partition root state */
->>       int partition_root_state;
->>   diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index 0b9df38e9a63..b201f4ba18b6 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -37,6 +37,7 @@
->>   #include <linux/wait.h>
->>   #include <linux/workqueue.h>
->>   #include <linux/task_work.h>
->> +#include <linux/llist.h>
->>     DEFINE_STATIC_KEY_FALSE(cpusets_pre_enable_key);
->>   DEFINE_STATIC_KEY_FALSE(cpusets_enabled_key);
->> @@ -368,6 +369,7 @@ static struct {
->>       struct cpuset *old_cs;    /* Source cpuset */
->>       nodemask_t nodemask_to;
->>   } attach_ctx;
->> +static LLIST_HEAD(src_cs_head);
->>     /*
->>    * Wait if task attach is in progress until it is done and then 
->> acquire
->> @@ -615,6 +617,7 @@ static struct cpuset *dup_or_alloc_cpuset(struct 
->> cpuset *cs)
->>           return NULL;
->>         trial->dl_bw_cpu = -1;
->> +    init_llist_node(&trial->attach_node);
->>         /* Setup cpumask pointer array */
->>       cpumask_var_t *pmask[4] = {
->> @@ -3032,6 +3035,8 @@ static int update_prstate(struct cpuset *cs, 
->> int new_prs)
->>   static int cpuset_can_attach_check(struct cpuset *cs, struct cpuset 
->> *oldcs,
->>                      bool *psetsched)
->>   {
->> +    bool cpus_updated, mems_updated;
->> +
+> Feature probes (FEAT_GLOBAL_DATA, FEAT_PROG_NAME, etc.) hardcode
+> SOCKET_FILTER or TRACEPOINT as the program type for their test
+> loads.  When a BPF token restricts program types, these loads
+> fail and the features are incorrectly reported as missing.
 >
-> These local vaviables are unnecessary, we can just use 
-> attach_ctx.cpus_updated adn attach_ctx.mems_updated
-These local variables are needed because I want the setsched flag to be 
-depend on the current oldcs/cs pair only instead of on the global 
-setting. So cpus_updated and mems_updated can be false even if the ones 
-in attach_ctx can be true.
+> Fetch the first probeable program type from the token's allowed_progs
+> mask.  A new helper, token_probeable_prog_type(), queries the token
+> and returns the first match from an 18-type list of program types
+> known to accept trivial "return 0" programs without specific
+> expected_attach_type.  Types requiring expected_attach_type
+> (CGROUP_SOCK, CGROUP_SOCK_ADDR, LWT_*, NETFILTER, etc.) are
+> intentionally excluded.  Without a token, defaults to SOCKET_FILTER.
 >
->>       if (cpumask_empty(cs->effective_cpus) ||
->>          (!is_in_v2_mode() && nodes_empty(cs->mems_allowed)))
->>           return -ENOSPC;
->> @@ -3039,14 +3044,23 @@ static int cpuset_can_attach_check(struct 
->> cpuset *cs, struct cpuset *oldcs,
->>       if (!oldcs)
->>           return 0;
->>   +    if (!llist_on_list(&oldcs->attach_node))
->> +        llist_add(&oldcs->attach_node, &src_cs_head);
->> +
->> +    cpus_updated = !cpumask_equal(cs->effective_cpus, 
->> oldcs->effective_cpus);
->> +    mems_updated = !nodes_equal(cs->effective_mems, 
->> oldcs->effective_mems);
->> +
->> +    if (cpus_updated)
->> +        attach_ctx.cpus_updated = true;
->> +    if (mems_updated)
->> +        attach_ctx.mems_updated = true;
->> +
+> When the token has no probeable type (e.g. only STRUCT_OPS),
+> conservatively assume the feature is supported: token creation
+> proves the BPF subsystem works, and real issues will be caught
+> during actual program/map loading.
 >
-> attach_ctx.cpus_updated = !cpumask_equal(cs->effective_cpus, 
-> oldcs->effective_cpus);
-> attach_ctx.mems_updated = !nodes_equal(cs->effective_mems, 
-> oldcs->effective_mems);
->
->>       /*
->>        * Skip rights over task setsched check in v2 when nothing 
->> changes,
->>        * migration permission derives from hierarchy ownership in
->>        * cgroup_procs_write_permission()).
->>        */
->> -    *psetsched = !cpuset_v2() ||
->> -        !cpumask_equal(cs->effective_cpus, oldcs->effective_cpus) ||
->> -        !nodes_equal(cs->effective_mems, oldcs->effective_mems);
->> +    *psetsched = !cpuset_v2() || cpus_updated || mems_updated;
->>         /*
->>        * A v1 cpuset with tasks will have no CPU left only when CPU 
->> hotplug
->> @@ -3087,6 +3101,25 @@ static void reset_migrate_dl_data(struct 
->> cpuset *cs)
->>       cs->dl_bw_cpu = -1;
->>   }
->>   +/*
->> + * Clear and optionally apply (@cancel is false) the attach related 
->> data in the
->> + * source cpusets.
->> + */
->> +static void clear_attach_data(struct llist_head *head, bool cancel)
->> +{
->> +    struct cpuset *cs, *next;
->> +    struct llist_node *lnode = __llist_del_all(head);
->> +
->> +    llist_for_each_entry_safe(cs, next, lnode, attach_node) {
->> +        init_llist_node(&cs->attach_node);
->> +        if (cs->nr_migrate_dl_tasks) {
->> +            if (!cancel)
->> +                atomic_add(cs->nr_migrate_dl_tasks, 
->> &cs->nr_deadline_tasks);
->> +            cs->nr_migrate_dl_tasks = 0;
->> +        }
->> +    }
->> +}
->> +
->>   /* Called by cgroups to determine if a cpuset is usable; 
->> cpuset_mutex held */
->>   static int cpuset_can_attach(struct cgroup_taskset *tset)
->>   {
->> @@ -3102,6 +3135,8 @@ static int cpuset_can_attach(struct 
->> cgroup_taskset *tset)
->>       cs = css_cs(css);
->>         mutex_lock(&cpuset_mutex);
->> +    attach_ctx.cpus_updated = false;
->> +    attach_ctx.mems_updated = false;
->>         /* Check to see if task is allowed in the cpuset */
->>       ret = cpuset_can_attach_check(cs, oldcs, &setsched_check);
->> @@ -3126,6 +3161,15 @@ static int cpuset_can_attach(struct 
->> cgroup_taskset *tset)
->>        * selected as attach_ctx.old_cs.
->>        */
->>       cgroup_taskset_for_each(task, css, tset) {
->> +        struct cpuset *new_oldcs = task_cs(task);
->> +
->> +        if (new_oldcs != oldcs) {
->> +            oldcs = new_oldcs;
->> +            ret = cpuset_can_attach_check(cs, oldcs, &setsched_check);
->> +            if (ret)
->> +                goto out_unlock;
->> +        }
->> +
->>           ret = task_can_attach(task);
->>           if (ret)
->>               goto out_unlock;
->> @@ -3147,6 +3191,7 @@ static int cpuset_can_attach(struct 
->> cgroup_taskset *tset)
->>                * contribute to sum_migrate_dl_bw.
->>                */
->>               cs->nr_migrate_dl_tasks++;
->> +            oldcs->nr_migrate_dl_tasks--;
->>               if (dl_task_needs_bw_move(task, cs->effective_cpus))
->>                   cs->sum_migrate_dl_bw += task->dl.dl_bw;
->>           }
->> @@ -3155,10 +3200,12 @@ static int cpuset_can_attach(struct 
->> cgroup_taskset *tset)
->>       ret = cpuset_reserve_dl_bw(cs);
->>     out_unlock:
->> -    if (ret)
->> +    if (ret) {
->>           reset_migrate_dl_data(cs);
->> -    else
->> +        clear_attach_data(&src_cs_head, true);
->
-> This doesn't seem right, because clear_attach_data uses 
-> cs->nr_migrate_dl_tasks, which has already been cleared by 
-> reset_migrate_dl_data earlier, hasn't it?
-
-At this point, reset_migration_dl_data() is for the destination cpuset 
-while clear_attach_data() is for the source cpusets only. In the next 
-patch, reset_migration_dl_data() will be replaced by another call to 
-clear_attach_data().
-
-Cheers,
-Longman
-
->
->
->> +    } else {
->>           attach_ctx.in_progress++;
->> +    }
->>         mutex_unlock(&cpuset_mutex);
->>       return ret;
->> @@ -3174,6 +3221,7 @@ static void cpuset_cancel_attach(struct 
->> cgroup_taskset *tset)
->>         mutex_lock(&cpuset_mutex);
->>       dec_attach_in_progress_locked();
->> +    clear_attach_data(&src_cs_head, true);
->>         if (cs->dl_bw_cpu >= 0)
->>           dl_bw_free(cs->dl_bw_cpu, cs->sum_migrate_dl_bw);
->> @@ -3251,7 +3299,6 @@ static void cpuset_attach(struct cgroup_taskset 
->> *tset)
->>       struct task_struct *task;
->>       struct cgroup_subsys_state *css;
->>       struct cpuset *cs;
->> -    struct cpuset *oldcs = attach_ctx.old_cs;
->>         cgroup_taskset_first(tset, &css);
->>       cs = css_cs(css);
->> @@ -3259,9 +3306,6 @@ static void cpuset_attach(struct cgroup_taskset 
->> *tset)
->>       lockdep_assert_cpus_held();    /* see cgroup_attach_lock() */
->>       mutex_lock(&cpuset_mutex);
->>       attach_ctx.task_work_queued = false;
->> -
->> -    attach_ctx.cpus_updated = !cpumask_equal(cs->effective_cpus, 
->> oldcs->effective_cpus);
->> -    attach_ctx.mems_updated = !nodes_equal(cs->effective_mems, 
->> oldcs->effective_mems);
->>       guarantee_online_mems(cs, &attach_ctx.nodemask_to);
->>         /*
->> @@ -3283,10 +3327,10 @@ static void cpuset_attach(struct 
->> cgroup_taskset *tset)
->>         if (cs->nr_migrate_dl_tasks) {
->>           atomic_add(cs->nr_migrate_dl_tasks, &cs->nr_deadline_tasks);
->> -        atomic_sub(cs->nr_migrate_dl_tasks, &oldcs->nr_deadline_tasks);
->>           reset_migrate_dl_data(cs);
->>       }
->>   +    clear_attach_data(&src_cs_head, false);
->>       dec_attach_in_progress_locked();
->>         mutex_unlock(&cpuset_mutex);
->> @@ -3793,6 +3837,7 @@ int __init cpuset_init(void)
->>       cpumask_setall(top_cpuset.effective_xcpus);
->>       cpumask_setall(top_cpuset.exclusive_cpus);
->>       nodes_setall(top_cpuset.effective_mems);
->> +    init_llist_node(&top_cpuset.attach_node);
->>         cpuset1_init(&top_cpuset);
+> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+> ---
+>  tools/lib/bpf/features.c | 97 ++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 89 insertions(+), 8 deletions(-)
 >
 
+This seems a bit too extreme. I've applied the first patch as it's
+reasonable and small. For this one, we'll need to find a better
+solution.
+
+Can you explain the problems you are running into in practice with tokens?
+
+> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> index b7e388f99d0b..f008ee50e246 100644
+> --- a/tools/lib/bpf/features.c
+> +++ b/tools/lib/bpf/features.c
+> @@ -19,6 +19,57 @@ int probe_fd(int fd)
+>         return fd >=3D 0;
+>  }
+
+[...]
