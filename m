@@ -1,89 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB707367B9A;
-	Thu,  2 Jul 2026 05:27:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A7438333B
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Jul 2026 06:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782970047; cv=none; b=WrU1zERSKQxilsdTdGUGCb8BnLBbixwr1UWJazOgcgsq4ypNCmQNMT5pbIdmWobcSyNc2Nd2vDMW+CGAREPopZ9K5I+pVlrDZIQKMaKQMgM0P7fQRKL1dzSPtHh6hRmn4rP/BEAF+RHAT84X3/oFSF+mL7dOBJj2suHHAjAPgfc=
+	t=1782972952; cv=none; b=MqQ0AjWSaRMfihp0r5fomP1iXQLYUuwBj5rw4EAUO3+SvLV4F4Ym8SbxJ91T+bdly0/9243IbuddPHWKJTazQ76935eVzieP27Zmewcurn3oIduTjmygDm7qc3nETCNhxVIENWpfe+fLCcLeseIlTM8O+2JIiHFwp3stzR20pKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782970047; c=relaxed/simple;
-	bh=WYDR0nQQ1bdl3MUtYKvzO6cTcuQ2+fkyJfr8u94NEJo=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=J37wFTHjMJQqO+ei286HzcGw9oWxHbG5ZvblS2PqkNFwCl37eYpNwjzgfM3oBQoSFfm7azWZgDVHa5SomANIfQTgt8vdkG5ah+8W+/Nv7XWAsXtlnw/l/nNZM21kx+pnDNUkPPWoPxIBxHwBd+wfUkYda4e2xG8DqWCDPILqMcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iW6U1SrF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782972952; c=relaxed/simple;
+	bh=gZataAktdZqFVOQNF9xTx4XhlvCz1HfP5FRQulEDopw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oWT1sWoCHDmvVDhz7XrLpli5SnqYYRzLlYi+QC/lgZVnsgTvXg3XngCHWK/Zop4BodUP24Ax9fe6A0dwTSOmHaRmYwbOCdc/9y9UZHaDW74ZokhTDgMHapl+BbzZQWWwLsOu1nWSlQP3CcCIq3ITzg7OnIpCkxnGUFdGkOYW+84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xXTx/Fja; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iW6U1SrF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF93F1F000E9;
-	Thu,  2 Jul 2026 05:27:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782970042;
-	bh=C08jKJ6czF3m0nwfNL9580hMVdmD6MmeDKsgUpPlyUQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=iW6U1SrFEGDToeoRfh9ZTksJNRQGEavWuHdRCAHuV4G6G4Cn/qLLkYtckwmZgwgOl
-	 Y3iLCnoB07UPwRPnvR2MuYo53YX7n6ue32cdXPgn1SzDDnm4+3B0nJhfjJr4DQ0/3K
-	 VQeRJw0F3rjz7c63b6Qnv9vZiuviYrRrG74FWaDB1yv1gvcIJVMRs8zldp7OTJmQ5Z
-	 JcZrirodr+1lNGLO2l6r9Ag583OEt5Tej+jAdwaC3E7KbCcnSnBoMh5duw6uDKG24U
-	 5AqSMTDkRA9rgq9Cof18yT7fjr3WQsTg6C9AUqn8q0XDNKIYWpjx/eZtizuAZKa/VF
-	 SDF91+lHxV0uQ==
-Date: Thu, 2 Jul 2026 14:27:19 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: shuah@kernel.org, Wang Yan <wangyan01@kylinos.cn>
-Cc: rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/ftrace: fix spelling error in poll test
- comment
-Message-Id: <20260702142719.4e5f6ed1691c6dedaf2a0cd6@kernel.org>
-In-Reply-To: <20260702015634.366201-1-wangyan01@kylinos.cn>
-References: <20260702015634.366201-1-wangyan01@kylinos.cn>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xXTx/Fja"
+Message-ID: <b9413abf-0735-4acc-8770-e0582436b2f5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782972939;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uI8ueJO3T3j9lODHWCIaJNjGSGrgbiCEdlasJRUkOPI=;
+	b=xXTx/FjabfNJXkzPXAZj4AElGy9w+AF0b4T/v6NN8HfY5JhlqOsb8k82jeqMoAvzaD5QHL
+	A/89zeKn/7+jJJNh0ug3btdpQxgbsLeiKqTmQifGRBbPtm39KJxcj9ILFvWldDNBAJxTz2
+	qVppmoC9eDOo7KSwU1LJ91wkUM7vQ+0=
+Date: Thu, 2 Jul 2026 14:15:20 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v8 2/9] bpf: Introduce global percpu data
+Content-Language: en-US
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com
+References: <20260629152406.52582-1-leon.hwang@linux.dev>
+ <20260629152406.52582-3-leon.hwang@linux.dev>
+ <CAEf4BzbLDna2j_yNniZ8gW6Um4AzWd6xYS4N8hp7hk879phgug@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4BzbLDna2j_yNniZ8gW6Um4AzWd6xYS4N8hp7hk879phgug@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi,
-
-This looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Shuah, can you pick this through your tree?
-
-Thank you,
-
-On Thu,  2 Jul 2026 09:56:34 +0800
-Wang Yan <wangyan01@kylinos.cn> wrote:
-
-> Fix typo "happned" -> "happened" in ftrace poll test comment.
+On 2/7/26 03:31, Andrii Nakryiko wrote:
+> On Mon, Jun 29, 2026 at 8:24 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+[...]
+>> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+>> index 3cf2cc6e3ab6..4f84d087ca69 100644
+>> --- a/kernel/bpf/fixups.c
+>> +++ b/kernel/bpf/fixups.c
+>> @@ -1819,6 +1819,38 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+>>                         goto next_insn;
+>>                 }
+>>
+>> +               if (env->prog->jit_requested &&
+>> +                   bpf_jit_supports_percpu_insn() &&
+>> +                   insn->code == (BPF_LD | BPF_IMM | BPF_DW) &&
+>> +                   (insn->src_reg == BPF_PSEUDO_MAP_VALUE ||
+>> +                    insn->src_reg == BPF_PSEUDO_MAP_IDX_VALUE)) {
+>> +                       struct bpf_map *map;
+>> +
+>> +                       aux = &env->insn_aux_data[i + delta];
+>> +                       map = env->used_maps[aux->map_index];
+>> +                       if (map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY)
+>> +                               goto next_insn;
+>> +
+>> +                       /*
+>> +                        * Reuse the original ld_imm64 insn, and add one
+>> +                        * mov64_percpu_reg insn.
+>> +                        */
+>> +
+>> +                       insn_buf[0] = insn[1];
+>> +                       insn_buf[1] = BPF_MOV64_PERCPU_REG(insn->dst_reg, insn->dst_reg);
+>> +                       cnt = 2;
+>> +
+>> +                       i++;
 > 
-> Signed-off-by: Wang Yan <wangyan01@kylinos.cn>
-> ---
->  tools/testing/selftests/ftrace/poll.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> oof, this was a subtle head scratcher for me.. that i++ is easy to
+> miss. let's update the comment to be more explicit: we are *skipping*
+> first half of ld_imm64, patching over second half of it with that same
+> half + percpu mov. All because bpf_patch_insn_data() can only replace
+> one 8-byte instruction, which doesn't work well for ldimm64.
 > 
-> diff --git a/tools/testing/selftests/ftrace/poll.c b/tools/testing/selftests/ftrace/poll.c
-> index 53258f7515e7..4da86a20dc85 100644
-> --- a/tools/testing/selftests/ftrace/poll.c
-> +++ b/tools/testing/selftests/ftrace/poll.c
-> @@ -66,7 +66,7 @@ int main(int argc, char *argv[])
->  	}
->  	close(pfd.fd);
->  
-> -	/* If timeout happned (ret == 0), exit code is 1 */
-> +	/* If timeout happened (ret == 0), exit code is 1 */
->  	if (ret == 0)
->  		return 1;
->  
-> -- 
-> 2.25.1
+> Anyways, this looks correct, it just took me a bit to figure this out
+> and while the above comment warned me about this, it didn't really
+> make it any easier for figure out what's going on.
 > 
 
+Ack. Will update the comment.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks,
+Leon
+
