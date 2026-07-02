@@ -1,101 +1,86 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E56AB3955C0
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Jul 2026 10:36:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C336528F5;
+	Thu,  2 Jul 2026 10:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782988564; cv=none; b=N1LhZrCrDT5V7K6uXASJvfqZp+/815W058D5FGB5ClHWzpQp2JcLRlyibwb2Qa+U5YsPx9Nxosup/jw7LxhNT7bJAj+pp/XEy6L+Ji0XDf8UlX2SuqWgBKteqOn4uvSuCCPWYQGe+E3yEefrWHo5Grr2023fLMwQrbzJ5uGVJ5o=
+	t=1782988829; cv=none; b=Or2ndP2aQ7B2OlJWbkdmNtRd8i9iVxMA1+UVVxBHvhalLeaVhwdmfV9I7I5rNS6MLLAOBUXMDYpj3AHML7iNyR3Nr0sDvrGYGAu0wofn/96xalucPyF01eh4BQVV+Dr/1My0AcLjLbQWyUU90DfX6wC2wvxQEzzPMr0XpY+p74I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782988564; c=relaxed/simple;
-	bh=u78F4QdlrR7C1BYI5zDtdJCtyxUfspZXfPNBzuyN/eM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=NDT5PXLVAw4ok31B03QZEXGicqPf+xhpfay0Iay7jVzLm5nKXEbs2eRYrAr5q3svcYHQV0hQsuYMROKj57vIZULoyHtjF0VZZ0/e1OwUmrvzQaKTPNHArZOxNMbeuR7+BptFRRFwpBVSiIjELGx7O4tfE+E9vU8EGOBCMxEJsPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=NOKtO6Ls; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1782988829; c=relaxed/simple;
+	bh=ES8cj/orM4NXXZMvj/sxRlVF2TccpkoaMsHEZyjwu/4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=UIxSU2Db5kW/3cvuG9pmLCj1T3wfWcMrf5/czSe8rgdC3jx9j8FDRFBOkBxhD3EpV76SP6MyHRQzfPhhEDt3SjDovL2GzvGqvsVw3Jqld29wTjcrr/K5GDg7q8WW1PIe6M5DAM8DX5HLEQuZsVG8H32rlX8xf0XF99ilIw3el3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lWOYqJcT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="NOKtO6Ls"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c1276b8c7e2so179528966b.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Jul 2026 03:36:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1782988559; x=1783593359; darn=vger.kernel.org;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=u78F4QdlrR7C1BYI5zDtdJCtyxUfspZXfPNBzuyN/eM=;
-        b=NOKtO6LsvoIK3dwQteCncaPJ+g6OcppeqhO2+Xa7XrRrDnbeZvy5DdHH2UutfGIVCr
-         S/qkYU3bKmUr2e32gAzY1EhNJD8B1nrnHdcCz6BEJ1cC3R4fjw7FpukTx86ePzDS0BaC
-         buJ0EfBWH4I4bGQKG07nN8TzsvEgrmylGq9sqUt0AfEgTX8OAMM0b/F7QMtZeCvjPWb8
-         RDXgFFbgwrYUPQnNlgkipCiSMg/+5h3Y1DBUcKl3wG5ILjHi7di+v5NwxvmiCUWE8OCE
-         Kr5Nt6+UAcMs3o0pbMx7lWiXQAiJgcyuiWJl64+r/UifjbmQCzoUtnuK+4n4jV6bSlRg
-         71Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782988559; x=1783593359;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=u78F4QdlrR7C1BYI5zDtdJCtyxUfspZXfPNBzuyN/eM=;
-        b=RFGvwlbvSGSeJcR1zcVUZ2BQmT/eEKddA1roi+0PYJziZevgokZbs7COSwIdUifQ7O
-         XhkNwDhEPeR4V7pFfD4ePQXLbjwcG81WKvuMHRjSGVH2f0uLgHobc1spVh/EHAEJqYsc
-         56qk/pmHbiYPMhW5nraYSgyKJq39yN/U/XXFRLATWBtUypTfXO9aD5TgMxl0q5qhqRQO
-         0wNS+QcZRlAG9LSFiFWCn5V52wa89dAmc/nZj+Y6yKFn1P8j91zmOwiQyoHUHbtweF/d
-         ruVSbKWK1yyAw/K07uk3Vvk1LZWZhgPHtFIPw2/3XD4l90PYYo0XPQA0j59orbbIYRKR
-         WiNw==
-X-Forwarded-Encrypted: i=1; AHgh+RrKEivmMrKlrgDuF2lGu2LmeYRgKuPGPTeUhRyCBvYC1/G3E/l6mAqNeQYqB5I/SCvzdPVu/ydTkcKJwkaFitE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfDoTLXvbFhvOO5Gf/luoJlqNsGFsehAm7NoJ1L5Z6EKMdVfes
-	JUJz83+RE3CmmBM1ONR2kFSXQN4szzK+gF5S/QANa0ErQ6pFQeXFlVoArNNlfkddGAM=
-X-Gm-Gg: AfdE7cm0GOGBWdCn8/1q/eZdRK3j+s5ykoxB8JIF0z9j5WfVv8EY5v7vpaqR38MNaLm
-	SYhY2g4mlStwkgBbGXqjBb+Jov68xThBa+kPtjmdM0sHBYh0gJSnoU4L/wB5sKuy8QMU7ue4YCe
-	f+prC5E2RhVJ7Lx6XB18TCccFrj7UQQaU9SpNyjyGInwiaHyXhNfaRZB1kW/IlGu9haRu+gsBDN
-	y2zBqsg1IB4hymrMhjf5cVmyrQsXqk6RsKY4v7KufC99ssWVSHFH0U9wOinhu0P2OzXDm/fayZM
-	IfGHWWrrIBWvVt5zjy2s6Pu4Zl5TqdMuoNNXTU/twGBgZTiwjNUG8iYKNAneQgJj7blG0Lkxkfx
-	sPxBNBwtKhoKkLVj9jvJToU1qp9RNAjkihDNkSKV3wPmJe8gvRxS9KSYYgEdQASyxPlPHVoUzWV
-	Fa66Kf6ow2lKgn0b8=
-X-Received: by 2002:a17:906:44f:b0:c12:4f19:fad5 with SMTP id a640c23a62f3a-c12ae77c901mr167169566b.59.1782988559046;
-        Thu, 02 Jul 2026 03:35:59 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c12b62907ffsm107708366b.40.2026.07.02.03.35.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2026 03:35:58 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Eduard
- Zingerman <eddyz87@gmail.com>,  Kumar Kartikeya Dwivedi
- <memxor@gmail.com>,  Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
- <song@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,  Jiri Olsa
- <jolsa@kernel.org>,  Emil Tsalapatis <emil@etsalapatis.com>,  Shuah Khan
- <shuah@kernel.org>,  John Fastabend <john.fastabend@gmail.com>,  Jiayuan
- Chen <jiayuan.chen@linux.dev>,  Eric Dumazet <edumazet@google.com>,
-  Kuniyuki Iwashima <kuniyu@google.com>,  Paolo Abeni <pabeni@redhat.com>,
-  Willem de Bruijn <willemb@google.com>,  "David S. Miller"
- <davem@davemloft.net>,  Jakub Kicinski <kuba@kernel.org>,  Simon Horman
- <horms@kernel.org>,  Cong Wang <cong.wang@bytedance.com>,
-  bpf@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  netdev@vger.kernel.org
-Subject: Re: [PATCH bpf v3 1/4] selftests/bpf: Ensure UDP sockets are bound
-In-Reply-To: <20260702-sockmap-lookup-udp-leak-v3-1-ff8de8782468@rbox.co>
-	(Michal Luczaj's message of "Thu, 02 Jul 2026 01:28:19 +0200")
-References: <20260702-sockmap-lookup-udp-leak-v3-0-ff8de8782468@rbox.co>
-	<20260702-sockmap-lookup-udp-leak-v3-1-ff8de8782468@rbox.co>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Thu, 02 Jul 2026 12:35:57 +0200
-Message-ID: <878q7t3che.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lWOYqJcT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6104F1F000E9;
+	Thu,  2 Jul 2026 10:40:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782988828;
+	bh=595aEYbItmYoIcHU9S1ZQN86v5EGSuTLO5+D2/okL8s=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=lWOYqJcTHnNxayIJSB6fOQNAsZTnI8jqf5wHkONvZQWh6jW3PXaR3R9JElCr8G5Kp
+	 KMpnhWSpCYTAn0TcoqP5+UKDuFEcSPVbZHujRmmY2zlu2mkFpxmDyMX1GjVlyumr1d
+	 Njegwv8Dsdz+I5tjVr0bfUJr4pHXvBUnlJM6YBkpyU5pEMVynpR2cy3C/oWcfqBrfy
+	 QFMBlHS0J+zm11xSieynLKzI2o85Ym5qWNNN2QEVs2a8r+g0mxVF66x3WoVBPkW3tc
+	 dWRsQV2utxn/I4lQ3cAZggBdRfWmZ1pJ0iNCekrBn54oszf7o8xZlOvsLwKoDZvLE6
+	 Q9t2JB4ELCmGQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93975392721B;
+	Thu,  2 Jul 2026 10:40:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/4] net: convert UDP getsockopt to sockopt_t
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178298881139.1583217.15443135093169536299.git-patchwork-notify@kernel.org>
+Date: Thu, 02 Jul 2026 10:40:11 +0000
+References: <20260630-getsockopt_phase2-v2-0-193335f3d4d1@debian.org>
+In-Reply-To: <20260630-getsockopt_phase2-v2-0-193335f3d4d1@debian.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, willemdebruijn.kernel@gmail.com,
+ shuah@kernel.org, sdf.kernel@gmail.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@meta.com
 
-On Thu, Jul 02, 2026 at 01:28 AM +02, Michal Luczaj wrote:
-> Update sockmap_basic tests to bind sockets before they are used. This
-> accommodates the recent change in sockmap that rejects unbound UDP sockets.
->
-> Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> ---
+Hello:
 
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+This series was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Tue, 30 Jun 2026 07:01:25 -0700 you wrote:
+> The leaf proto_ops getsockopt callbacks have been moving to the new
+> getsockopt_iter()/sockopt_t interface.
+> 
+> I was trying to get SMC into getsockop and retire .getsockopt, but,
+> I found the best approach is to keep converting other protocols.
+> 
+> This series starts the same conversion one layer down, at the struct proto
+> getsockopt path, beginning with UDP.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v2,1/4] net: add sockopt_init_user() for getsockopt conversion
+    https://git.kernel.org/netdev/net-next/c/b5997f911eec
+  - [net-next,v2,2/4] udp: convert udp_lib_getsockopt to sockopt_t
+    https://git.kernel.org/netdev/net-next/c/f99d7065a4d4
+  - [net-next,v2,3/4] ipv4: raw: convert do_raw_getsockopt to sockopt_t
+    https://git.kernel.org/netdev/net-next/c/9588d5da17ce
+  - [net-next,v2,4/4] selftests: net: getsockopt_iter: add raw ICMP_FILTER coverage
+    https://git.kernel.org/netdev/net-next/c/f4d5e3a5c7bc
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
