@@ -1,80 +1,146 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013009.outbound.protection.outlook.com [40.93.201.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2C837BE87
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Jul 2026 06:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782972995; cv=none; b=GLwvlRIlQ5BMA5bsjnP76O4wDq5/yQ1qK0Utgv/ch15DpYThnzKXUwMKzdHNlHXB/GjQ2AJ2m1pnU2xvZaLrKz+JIh6FaKASrFf8aBb/BePgslb3Xx2fJpKxzJmuc1vMCRATcdoqGpiX5KatqC0/fux5ryO6WNUi4zLq6bvCT6Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782972995; c=relaxed/simple;
-	bh=y2lWQetm/SsebnOJSE3QoRjhYBxQyq/0WamEDnjb4yY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PSConPD+872uVtHAxEawz0VeonyQnamqDpH6t7mTABxM6DcArewl/6F7KXIpzDI0SVeFA3nREO4qn/0OMFPN8VtzRwO3SajFNyaiuUAT6/PwzkVg1Nve0NNpiLvv4kTEVqBQ0gItIcnVfder4rGHbcd7SGWFao2Iy1ETghJZNls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BTMExvYC; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3BED363C51;
+	Thu,  2 Jul 2026 06:24:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782973458; cv=fail; b=teuldTYiroWbSlc59piOxJ+J0bYTVCjnDJozOQ4ORE1rypzxFcd7K2nghAcbIwQ7wcLUwChKGOgWf1E4L35fJTAKhVyCv8mk7tDmVA0eAl0AopO+OmRsJAquyTWBGqA4guqsHXLgik10Y3UOaQJ+AwQn0tJ0C7VTTDJsOIqyye8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782973458; c=relaxed/simple;
+	bh=oSQM7i113ZuE1wqdvlKp1zs3slcl9CgSPCuBzzHD5g4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=igH0UCQa4XiIY4wv59j/zU3esiu/85ZuaN5iJvyIBi5bVmbaPDlHYykvX7Vpauj71z3xEPq7kInb/67wg8aHV7KoDA9LZKrYn+yg/dGIiD8Y1LEi0MBpDxdSBL1luZ+6n99VEGJ3Lblm1k1H0RG/JUjbJyVv999HTeVZaEi+Wbo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=WE2qNO7B; arc=fail smtp.client-ip=40.93.201.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BTMExvYC"
-Message-ID: <9b3f954f-fe5f-4aef-b290-30c4f92d4c11@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782972982;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XDYLqf+Bz2afmlLc3wTUZI08nGC+yoHSsm0rrmj/GnI=;
-	b=BTMExvYCDuKm8tK3Te+da/XTfM+JPnBCEoiuOEjNspBRj1loKE65JDPq/sZ7LXx7FA64KU
-	SavO6eKU9mU15zAR0hlhTdwkggiNTQC3wUuwzjvEx4xY9lqJUQw4cTtN2pZgeu75T6TOjg
-	Ayq5vl38f8mubywdBYLymr9gLQs5/8E=
-Date: Thu, 2 Jul 2026 14:16:08 +0800
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WE2qNO7B"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oAM0qofUmwfTgLL6UNXfAVVKkBM3MnrlvdwOfmbF7sZOa/V80wXOn9x7zE4GHefiUQH5jAmnLNR5rsg2wksQpnm8jY2qhun3fucfGdt51w0L382OEtUuu+kc+F5o3CA5QMIB4w1JThu2Gmj+txfyG0jfWTQka/wbLNH4k0GiL+2eme5o1O37WVX3/Qe3RMhr1NA7gttHhm3sNJxai4+QVGspnYV2p9uZXvaaD3ulYX7VWQNX4j3y0mNjk/E5Mvdi5voASLO29DsmMHgsjLqq5Lc1YSBakqrve51JGG6ckLCpDcMXi1ij/siOvC/Nk/KoFssviu7wikiibKA0XELoHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C2P55EZO9qWdrbWmXUYa0EeYRT4i2zbzoevwoCSa11g=;
+ b=mgKPrpsvYPD/UfKf4oumqb+hgJXXyzmzwRSg6gOLwcw1/P7sz2MLpXAp893oqEPLhyoqEEsjwcpjAl0wTBqdhXXzymlSKyf42EmIRMVmHItWVGPNL5yvCX6ah/sTiG0/rM/JoL3O+Dva2d/4kVkskEAlvUbfUlXKb/wXd1S/B0k3sHM/K29Rpv4q1ZyAQw6cR7n9I4wpYMW7MLc2O36+CBQ9nI9ogD+g+viqGXx70LzxCmZbwnvW5Q6C1WjLcTQl9yhUT+1oJ28+rGAQM2cYAPdHbB3NeyEu6jAqapbS33l+iVTMBmQ4mKpLBaXaN2hbzC6zJGUo2t1CEH5BOkIQhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=lunn.ch smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=C2P55EZO9qWdrbWmXUYa0EeYRT4i2zbzoevwoCSa11g=;
+ b=WE2qNO7BOtYQwhF9FCDNiTENJr4wSgvbdVwAemw4yE68Qa3GyTzUxiJfn9tlS3lXExOXKjQeyVTpBCOtEm8nFjEAC8lihR0OdtRv/MPiwHimHAwN/EG3X7kGCgv+jxkF3+poPpCE3EKlEy13KYRu3F6S1naXRDjYACmTVIJc8UYZjrmjZSBqSqEKZmNa7QfZ3nUEb5st/u0v/JJmG1l4B3gjI5IDxGgxu72fgLph9fqW4i0mGxa1jxmDEPkYOHqaak3A7TwzSBjkkDxOqeih086fZdk6+eHva7ToTE4sjAGR9LfeKhNArekLpsCyTSHNtMHkIf3qnm1mhU+i9wpcOg==
+Received: from DM6PR07CA0082.namprd07.prod.outlook.com (2603:10b6:5:337::15)
+ by CH3PR12MB8458.namprd12.prod.outlook.com (2603:10b6:610:155::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.10; Thu, 2 Jul
+ 2026 06:24:10 +0000
+Received: from DS1PEPF0001708F.namprd03.prod.outlook.com
+ (2603:10b6:5:337:cafe::ae) by DM6PR07CA0082.outlook.office365.com
+ (2603:10b6:5:337::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.181.10 via Frontend Transport; Thu, 2
+ Jul 2026 06:24:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ DS1PEPF0001708F.mail.protection.outlook.com (10.167.17.139) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.181.6 via Frontend Transport; Thu, 2 Jul 2026 06:24:09 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 1 Jul
+ 2026 23:23:50 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Wed, 1 Jul 2026 23:23:49 -0700
+Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Wed, 1 Jul 2026 23:23:44 -0700
+From: Nimrod Oren <noren@nvidia.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+	<shuah@kernel.org>
+CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>, Willem de Bruijn
+	<willemb@google.com>, Wei Wang <weibunny@fb.com>, David Wei <dw@davidwei.uk>,
+	Cosmin Ratiu <cratiu@nvidia.com>, <netdev@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>, Nimrod Oren <noren@nvidia.com>
+Subject: [PATCH net-next 0/2] selftests: drv-net: run XDP tests with both IP versions
+Date: Thu, 2 Jul 2026 09:23:46 +0300
+Message-ID: <20260702062348.2123960-1-noren@nvidia.com>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v8 4/9] libbpf: Add support for global percpu
- data
-Content-Language: en-US
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com
-References: <20260629152406.52582-1-leon.hwang@linux.dev>
- <20260629152406.52582-5-leon.hwang@linux.dev>
- <CAEf4BzYVdP23ASHtAAzpuGH2Agx+aXRRxTsy6MZx0OgE+OffjA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4BzYVdP23ASHtAAzpuGH2Agx+aXRRxTsy6MZx0OgE+OffjA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0001708F:EE_|CH3PR12MB8458:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8b220315-7178-4698-12eb-08ded80286a5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|1800799024|82310400026|23010399003|376014|7416014|18002099003|13003099007|6133799003|56012099006|11063799006;
+X-Microsoft-Antispam-Message-Info:
+	N+Li3xpjkCc1ia6kcII4Cj1mllY0SGx5zmwSrZQdps0jE8DvwhfM6W3jXjSzs6JWYqzbyx3PZBRZaqLdBEzPGjVWoWGhY5Uq6yf9yxxev7XYEC4eKFPVu20L2CPslsZu+W9XBETE2kJBpypZAS6bpBTj8EDwa/eLa6WQiNmswjuD19eZ1uxD70KgGdalDpo4f3wfHxN4sxpRw1DwHsUsM/iMsoxaKiIcL0nPwFFHtJafCBWi8jE3x3yw8kYa2NLYECJ+OtE1IIC3QZUOXGPglaTlWsV4rm1FjVODqfVvvAwcLLGoz94YC7zP2mfJzFus6ST5hfX9Kp7kTV5EV/jp1VLeVuFacQDkqmmvHsqUxjTt3n9fgBhELMbMGn4aOJ+X+YYTXUyy5bd7PHGAW5v5AWtm3uq3Mr7EohDAA3/tozTxfWpFRP+QaUJ1LN6zjAZYZSv9RQg2ePIfdx/5yx2OpxBBDp8UDfR03Edozd+lEtzHzA83lCu6T07Q8+bCburY17r/hSQZHT5Gqrk8OPAfv5ek6ZDfSSSZcFQ3Fr0DNhWfkQ7CMGlZYKu1WI2qwXiJ2mEZyNA1dEMDQFY7FQr251yiFkCokgKCMoToIg37Gddm1Kd0BgZ8R2LoWktNdmmmicIe1Dvq5yvE4uFALiviaULcXX/2QgWqkvbw2qv5WN1IUmHoJoMQoFU7y1vvjH5LSFkuXdKeURmqX2+0tsMvHw==
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(1800799024)(82310400026)(23010399003)(376014)(7416014)(18002099003)(13003099007)(6133799003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	znSRV2wVC4wrqvaXRA07PtDLRDJGFXN18KYVM+IxZS3HKJuC/Kv3XXngvgYhSHRaOdBaP8lQdqTkDObgYbFA+Z09DwcQRnHyzfDVUOfQkIXussxLFHHCutwG2iDtv5Tn1IRoJG1AjhIv2Iahtz6k6W8SCZployh40Q5HtQOP5VkoTn2UyPcMrneDJv/xd1ZfvKlnjqTXgp6Fyo8Oo6DoOMFp0ssvQOOevitUag5/1BsRmeNhbJ/bAWD0W3upTBU6fYvMHiAAv62WqB0mCscHvJCjVJelH1UYW4LfrMKU9mjwgND/zPGDpr8uqVIU5eFekmi5/YLoJ1FH0f9MfV09ZZN6XCt67zgUQCTzS3zyE64raDQIwLFz+f0Uc2BIlvRWBTyAIdUcLwcDKDHTT8nuykvrm2groL2puu2QpyuiAwkaelExUFWOQQakXeVrexxQ
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2026 06:24:09.2057
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b220315-7178-4698-12eb-08ded80286a5
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS1PEPF0001708F.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8458
 
-On 2/7/26 03:32, Andrii Nakryiko wrote:
-> On Mon, Jun 29, 2026 at 8:25 AM Leon Hwang <leon.hwang@linux.dev> wrote:
-[...]
->> @@ -1975,7 +1981,7 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
->>         map->sec_idx = sec_idx;
->>         map->sec_offset = 0;
->>         map->real_name = strdup(real_name);
->> -       map->name = internal_map_name(obj, real_name);
->> +       map->name = is_percpu ? strdup(real_name) : internal_map_name(obj, real_name);
-> 
-> nit: I'd probably pass type into internal_map_name() and let it handle
-> all this in one place, consider that for follow up
-> 
-hmm, it is a true issue that 'map->name' must have the tail '\0'. And
-strdup(real_name) does not guarantee the tail '\0'.
+The driver selftest environment picks a single address family for tests
+which use the generic address fields. When both IPv4 and IPv6 are
+available it prefers IPv6, which can leave IPv4 paths untested and hide
+IPv4-only bugs.
 
-Will pass type into internal_map_name() instead.
+This happened recently in the XDP selftest, where an IPv4 checksum bug
+was missed when IPv6 was also configured. XDP traffic handling has
+IP-version-specific code paths, and the follow-up discussion concluded
+that the XDP tests should run against both IP versions [1].
 
-Thanks,
-Leon
+This series changes NetDrvEpEnv from exposing only the initially selected
+address family to allowing tests to switch the generic address fields
+between IP versions. xdp.py uses this to run the XDP traffic cases over
+both IPv4 and IPv6. Test variants whose required IP version is not
+configured are skipped.
+
+[1] https://lore.kernel.org/20260518143138.74839bf9@kernel.org/
+
+Nimrod Oren (2):
+  selftests: drv-net: allow switching env IP version
+  selftests: drv-net: xdp: run with both IP versions
+
+ .../selftests/drivers/net/lib/py/env.py       | 27 ++++--
+ tools/testing/selftests/drivers/net/xdp.py    | 94 +++++++++++++++----
+ 2 files changed, 97 insertions(+), 24 deletions(-)
+
+-- 
+2.45.0
 
