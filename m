@@ -1,61 +1,35 @@
-Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4664C1EFFA1;
-	Thu,  2 Jul 2026 08:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73AFF42E8EF;
+	Thu,  2 Jul 2026 08:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782980653; cv=none; b=uxNrssQI5PS57IRKsRX4+XVsbNBa27+JymAwgTtsxixIQ7OSJpFsQCpzmKlD52JIUOmJgi8VsU/GjpvsA8rEmhfPDYJVidoEEzRLaOgDoouqJ54OePFekQgnARRwuRHmUFIEx3ex5RNNy0jiR8Ox3Z8dNGqdy4IxwRAjephHkZM=
+	t=1782981029; cv=none; b=LGbYjN4RROxruFvDpwd9cybijCxzSalgYR6XR3+ooMvf0M777LSV2SvYEL68l5AuM4hk9aV+WE3z9sCO5QX5s5XlggbfAc6KhBbuU/ORLUfLzVovLoI2hVRHrNXAWEwHZLaDA3zlUwvFRH5ToqByYByQt04cj4l01Kd28bs19sg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782980653; c=relaxed/simple;
-	bh=PmBlIxOnIAWiTT1dMB+k1GJBW3L+i3rVcq5Pvr4YNcM=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=C8gXGscJgftuHiZs5Gl5gYicSZYRG5qV+ARA4YTTJyjC4t7cFdtytldNQ1g/OSao0Dobnw+XzFL07o+kMHqf7WG8KcQvjBjHoDGQK5iPqxiF8iYOd5HTYOcg2Ml0NaAut5wb3oxbUlqZtCB/aebJFXUNfEXPPrfB0UdcDqfUjC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=dN6Y2hCY; arc=none smtp.client-ip=203.205.221.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	s=arc-20240116; t=1782981029; c=relaxed/simple;
+	bh=2bw4igrpyVtfYaTd0hz65BxwFOe7o8+X73iYDYgqe28=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=iZbzmAat9rBxDXCqfWFkVyrA9gJmr+70i1yVzt5A4I0wXZL4MzJIbe7i1dvMze6ovjFotShz9aY9QVJHuGL8WfyvivEOfAoCwVbDazE7lq700jkaERd+8EmJl2SjIaJXukgb5Ng81/Sa5G7oR/018kDof+QtETnwhfOgHUD7tWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZ9kBmzV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="dN6Y2hCY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1782980649; bh=2T9UvrmrdIZ1TA3mbiBS9R/xpVn5slOrRYqYeNWpCkQ=;
-	h=From:To:Cc:Subject:Date;
-	b=dN6Y2hCYxx2WUG1xPIcWRC4QmjuTUwyxyyE+dGO9+/zJeyTXGSnHC+c54UorboOuz
-	 FZ2RYuNXpKfYc3gwRMkkn9nsZeirGh6FmyRDOA4qnjnpRCcpeHdfTwVgxSv+Rybbcj
-	 dODJfYT8giqmjL1wvhyL28S/nUxy395GIdwaNgFo=
-Received: from LAPTOP-KNA43L24 ([2409:895a:38f6:dd00:11e:7a1f:21b4:a990])
-	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
-	id 6018E8EF; Thu, 02 Jul 2026 16:24:01 +0800
-X-QQ-mid: xmsmtpt1782980641tlx60hzex
-Message-ID: <tencent_A20EAF9C0B2AC0D6DD97A4C2F250D9970406@qq.com>
-X-QQ-XMAILINFO: MeukCuWaRbQlz6bEgdzsKK+YcRokjFvPiFOGQtnc5fF6xT+mRYvmxTqrszm5HI
-	 bxQWpO1n4+/6Ibmpy/eFR1+rm6muujnC2UmLMKytL9JsLThPUO3lWRKGANgDqA7ZUjuwCbzqE64H
-	 RNq2Gva4FaIlnEKdZ2juFaZtHY1vJsnPaDFgLY+8UytdRFZlASQ9UwXMGa8weVNCqzlfFjv+kMtp
-	 0Tkt93S4owfrQC3H/eM0CfogluC3SBFNhxyRgg0FZT7CZH6PA6/u5YWnVPLR3Vupd7vHYRdOdrIe
-	 cE1rdKJxpjYurND2G2KnQP+eyNgAR3zceOOU99yM2O5/Tkk1dFb5wC4huNlbrBwTdWepDclNoyBI
-	 FW7xAw93VvzYZRAoVXyff4qfGniCocutwJ0DL/0+iKb5xoPdysQNqKn71g3taAZs0ZMpNeYg+caT
-	 t7FNgAORe/9A6Un2QESKMKwH/feFfUeexdBuq8RSxu4KaEymz2WJgYAyoVJUjf9/bhGijhAssk3n
-	 TfFqi+VYqlX4sGjvpJ1XCPh2ayx5+tfGb0ZrHDfcoGpxwI3z1nrifE0oWMDN6iPlb+lpETeMiGj2
-	 PG0yYtIad6BbmdgQroUAr6D9tcz479+qECJ0NawEP0YRKM16MOdt36zD6A49toMchfR/a4xlSTbW
-	 r2pR/UuWAuCAEfMnEQTb/KQMnAOY5+38X9EwQe/rMvxLCM+JoPw2ouKu7pj1PBqdVbaNYONNUtIG
-	 XHeGMqa5wna2v64LgH32laX2COabIm49PBiZ/vYZYDu5nLXtSqD63gd4DupndobYut2+YosqEQx/
-	 +iw4FLChOWTGmr3FqRC9BlbxdeSPHahWjZOLFYBZFuwBsIkK1OgZkPz0myTVTUgj4Ux7DJ8MSq/g
-	 5m4NWHbiq9qXkqVMZJI2aKBONgak/uCB8XS/TXbsWu2/poPTQa59Tk0jBu+YT2yh+rE3bJETE0BN
-	 JuF0O8bDDE7NL2PquvrkYzxyRWp9b9W41cn09pS46uRRki1QQm9zUviHqj4fiAyttRXGpJv7LXLg
-	 WTM3/EkFbznvRv1w0sG4yANQM2hERbucecnC/xVnFF+AMjyGeKdosHAchp2u/78ZOw6wRVBQ==
-X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
-From: Old-Ding <1746193727@qq.com>
-To: mathieu.desnoyers@efficios.com,
-	peterz@infradead.org,
-	paulmck@kernel.org,
-	boqun@kernel.org
-Cc: shuah@kernel.org,
-	skhan@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Old-Ding <1746193727@qq.com>
-Subject: [PATCH] selftests/rseq: Fix spelling of accommodate
-Date: Thu,  2 Jul 2026 16:23:53 +0800
-X-OQ-MSGID: <20260702082354.1728-1-1746193727@qq.com>
-X-Mailer: git-send-email 2.50.1.windows.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TZ9kBmzV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577FA1F000E9;
+	Thu,  2 Jul 2026 08:30:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782981028;
+	bh=9vg0GTfChhCKZvm+cnRjJqJAGTBXlNMHOD0tSCmhl0k=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=TZ9kBmzVb0wnkHwyoIwysyqSoauLx+Yk7L8H60ATyCFaNYQTWTWS+MHETYRcavWy2
+	 OXugWfJQttS8W1OLJ+DwW/vbhffMTpnuv7CBYoG4SHcTu9SLjOG1t2rsrpqAI6ayI3
+	 Cl9eCtYyJJk9Q1PvTqE9kKge+lTx7Lunz4ElLSidHcjaxURl49rLJ/NMM4IGbzPbJB
+	 NcUqemCmfXeVIXGEIQVR+KBner/zDCRYZ1fN0KwmGMuYYtJa9xsE7ljAIAV075Y3ND
+	 mym41dmX/s+j7Iadh+AYvRjifubBMnd0yoVedz8qzPMg3Jkezdx9OCTQqzhrt1BbvA
+	 Br3PbOPmDBf2w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A07392665C;
+	Thu,  2 Jul 2026 08:30:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,29 +37,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: drv-net: toeplitz: cap the Rx queue
+ count
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178298101114.1518480.3634582587156593531.git-patchwork-notify@kernel.org>
+Date: Thu, 02 Jul 2026 08:30:11 +0000
+References: <20260629234354.2154541-1-kuba@kernel.org>
+In-Reply-To: <20260629234354.2154541-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
+ willemb@google.com, noren@nvidia.com, gal@nvidia.com,
+ linux-kselftest@vger.kernel.org
 
-The comment contains a spelling error listed in scripts/spelling.txt.
+Hello:
 
-Fix it.
+This patch was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Signed-off-by: Old-Ding <1746193727@qq.com>
----
- tools/testing/selftests/rseq/rseq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, 29 Jun 2026 16:43:53 -0700 you wrote:
+> The RPS test needs a free CPU within the first RPS_MAX_CPUS (16)
+> cores. This is easily violated if the NIC or env allocates the
+> IRQs to cores linearly.
+> 
+> Cap the Rx queues at 8, we don't need more. This makes the test
+> pass on CX7 in NIPA.
+> 
+> [...]
 
-diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
-index be0d0a97031e..1cd633923b1d 100644
---- a/tools/testing/selftests/rseq/rseq.c
-+++ b/tools/testing/selftests/rseq/rseq.c
-@@ -73,7 +73,7 @@ static int rseq_ownership;
- #define ORIG_RSEQ_ALLOC_SIZE		32
- 
- /*
-- * Use a union to ensure we allocate a TLS area of 1024 bytes to accomodate an
-+ * Use a union to ensure we allocate a TLS area of 1024 bytes to accommodate an
-  * rseq registration that is larger than the current rseq ABI.
-  */
- union rseq_tls {
+Here is the summary with links:
+  - [net-next] selftests: drv-net: toeplitz: cap the Rx queue count
+    https://git.kernel.org/netdev/net-next/c/07d3aaa046ce
+
+You are awesome, thank you!
 -- 
-2.50.1.windows.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
