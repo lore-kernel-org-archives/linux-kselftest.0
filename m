@@ -1,158 +1,133 @@
-Received: from pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.13.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CD2F3859EF;
-	Thu,  2 Jul 2026 19:04:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.13.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5BB33F8CA
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Jul 2026 20:53:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783019088; cv=none; b=IHg9FfiD/JbfeG0xX4DQxObylaPWJWloDHYomVk1rHZRXoM9LuvusNO3FMS3JwM7NLFDZ/5vpXG/Fg9uNYRMZkw3QtUenOGkKUJ7wseFt58UGjm55Zs3Wd99njPzji/z+KbL+rorfTZbazOUYOPZT1nghdqGIWlB1pphuL+pCQQ=
+	t=1783025586; cv=none; b=r9DOWuHN9GE4Z99RyDFl5g6P6FLyzhb+NK1S8syiDthwW5Vw9lKCT9nIWfOqCQ4SM7g5Ku01cXyMhG+/8SggVio4ngldJu7EP0JOUGj+jIIoaeph7FHNblnIQ00Fsp+UedKIQWyjjwFdB4ZRt0uOec1xuabQKoH4rjhlHLzrpw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783019088; c=relaxed/simple;
-	bh=8tuJxCNBOWXuUagNrDc+bjsm5o3QNE9mkekLHhRL+ko=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=naur8rH3e9JKj12R5sKP6DHImzouZtExOj2xOR+cCdKuLclzCHFssGRIBeQz6Age+sgsX1dRT+FIkTrPdhCi0CZzf9KBno5BpMc49Z54now62DAL79lpMe1+qLimxfm/8blYq0bBRo2ZiEDsX91NuyIMKvQqkdM+eVsvGpgPy1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=OcojYJ+Z; arc=none smtp.client-ip=52.13.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1783025586; c=relaxed/simple;
+	bh=90X6nwoMcrMyfEKMt542bHgq7hQLvNHeiApFXnkbcls=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JQv4+pUKDgTDNAOcmbwvzgIcGQh0jSArbV88Drf+6zTlU5tsdpLpREWEeJgvr2N/RBeHi5pbuaSPvQXR9QPlrKhWnr4lJP8mIyGLbk/jJW4sIQnviQUNukcBiHscaIprR0MnUEDVHkXZw93xPLRUb23nAJAgLvEP0g6O398LiDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ej8i8WDa; arc=none smtp.client-ip=209.85.161.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="OcojYJ+Z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ej8i8WDa"
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-69dead44101so1537478eaf.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Jul 2026 13:53:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1783019086; x=1814555086;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=28PbrJsue24gxCxFzMj1TZNmDll7upM8xjPIwGE2HHc=;
-  b=OcojYJ+Zrz3hbG5Igv5SQqgb2YDwHiU7GMjzim+wovUgOrSwk8pdzRwW
-   MMjMQYdPXlG2dmsmj+bTHTRPdpP80yMEJVha/VuJuQShPcBPBtlC7q5dZ
-   cie6wiF3AqxAcgIuVOP07tUK+9x1xne6No6wWxi31hezg9wt7JDyj2POG
-   UMfOaBvwpUF9gN/lZRbzuAigLkKKQTBb9TQ2Z96qRVPTYIGXdG3LWq/x8
-   3+Qo9Kgj+6n0faYsfPiBg+UefYYtbEkWRS3EM9ZjwGFOPbcUsFHYab0Fy
-   Nf7/CagFUHfWqpKAtZ+pu8AiRozWng2ru/rJ5jOSYbwthLaEzxcWMoDbr
-   g==;
-X-CSE-ConnectionGUID: Z1BcOmIYQYKK6k3LUBa7pQ==
-X-CSE-MsgGUID: 3IFZy54RQYaqxgK0r4k1gA==
-X-IronPort-AV: E=Sophos;i="6.25,144,1779148800"; 
-   d="scan'208";a="22933538"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2026 19:04:43 +0000
-Received: from EX19MTAUWB001.ant.amazon.com [205.251.233.104:32053]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.43.112:2525] with esmtp (Farcaster)
- id 8a338137-edab-4456-8313-f0c7488aa835; Thu, 2 Jul 2026 19:04:42 +0000 (UTC)
-X-Farcaster-Flow-ID: 8a338137-edab-4456-8313-f0c7488aa835
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43;
- Thu, 2 Jul 2026 19:04:42 +0000
-Received: from dev-dsk-congkai-2a-df9e8fab.us-west-2.amazon.com
- (172.23.251.204) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43; Thu, 2 Jul 2026
- 19:04:42 +0000
-From: Congkai Tan <congkai@amazon.com>
-To: Oliver Upton <oupton@kernel.org>, <kvmarm@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>
-CC: Congkai Tan <congkai@amazon.com>, Marc Zyngier <maz@kernel.org>, "Joey
- Gouly" <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, "Jonathan
- Corbet" <corbet@lwn.net>, Haris Okanovic <harisokn@amazon.com>, Geoff Blake
-	<blakgeof@amazon.com>, Stanislav Spassov <stanspas@amazon.de>,
-	<kvm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 3/3] KVM: arm64: Advertise STALL_SLOT* in PMCEID1 under strict PMUv3 UAPI
-Date: Thu, 2 Jul 2026 19:04:21 +0000
-Message-ID: <20260702190421.420992-4-congkai@amazon.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260702190421.420992-1-congkai@amazon.com>
-References: <20260702190421.420992-1-congkai@amazon.com>
+        d=gmail.com; s=20251104; t=1783025584; x=1783630384; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OUUT9U/zE34DOVJLI19IRKYtBuKLwinorFscWJ3YAUg=;
+        b=Ej8i8WDaiCF8QhuUucg46HRkTgyDFK4XLMMhz07Cm/BDxjqAARpU6kiy4uYGFbePiy
+         13fccyYoGUCd8x8B9Wqt/mGFU2Uct7Ziqb3LYsMULCp43t7x9DBk6l8ywKglfw+X5iAh
+         ExNFilcHLxiL08I/TXkUyOywfdcsFTKNtzznRLZL7CszwsLf+4mAvZ8yo+hIEEWgQ+n4
+         Mj6FbJLqmvsGSR9GDc6klI92qQ45FlTuqUCt3qASMNr6q/W0R78sjlwPa33JYX+LGeT1
+         4SEQRqO8RC9oxDFqol6XErRaaNvPaiys0p1oxmpG3C/LlAN1jFrevh38PtuXnK9+S+ay
+         a0VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783025584; x=1783630384;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OUUT9U/zE34DOVJLI19IRKYtBuKLwinorFscWJ3YAUg=;
+        b=e2ai5f7/+wv6rZlTRlXfI6Ao9Q1mUXFHife4OooOiOYQpi08p5/t7IJA+sPVOkwFj7
+         JBa0TdMlkUpNSrCFwTSyV2bK2x5bo/0K+hN7GefGp4I82bg7YHg4z81RJ7y96OjCsF98
+         DiVHOEEjrbhm2M4uJzLT27a1h6w85Z5XhdNz3fVwRkxVl+uMW8r9/ckz+91hB5mAnZqV
+         KDTEngyaHIIrT7/zSQNxTlEjdTLVQ5sRKcBZu4+jMszMuiWQVnw36H6ZRjGY+NnE3qhf
+         hfFhi34ERdOh0XDi77IqUqc+YEpl2a/6albfovXLNos6bfTUHMzN8NRxnzgykBKiBblh
+         fOOA==
+X-Forwarded-Encrypted: i=1; AFNElJ+//XnoyHsBiPptU+lAd7hZXVeIH9MYuAEzxBzkmKqfesJypWKhlQ17g4QXUYq+64vXfaU/rZ7tNedsR0bEMn0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4ExVGwivUhpyGJihwKrZHgeEP6PmeKqRq0ithf6Vjj2GGualq
+	SqTckCuf67SBbY2fHMBRUZClTSgBTYFRMVbMRiJpeV12IG1CzKxpVbs8
+X-Gm-Gg: AfdE7cmJ5bA33dkroJ4tjmQmlzgwHSHrlqzL8QELo5X9ZWMHyQ4dn3oX4AqtNCrzxRs
+	WKUynt7EjaZ67tt03hSvS/sMYc6z0+J/KioYI+xZwZsEGzt8j3dvuc0taiwXU5TUN/FZlGmLkzl
+	NLCA5zUd3ePgrZAyQELN929155Nx7STipp/ZkFwvu9UnEFUy6ddH13K4h5+T5bigCXdi+d4Gwvc
+	eJgdBsPmd96pRWiPTkfWtldhg0bm/F+vxAQhV/RyFvkav7JES6sXpiALsCVTIVO/90kVjjn+zl8
+	VF8dUYKjuVcnOCfdQmFC4u458Zh6EwNg1fETlQpCaYKZFT+ASQQyTQCqksgGIMWk10lrvcNLKr+
+	ho9zEUtQcY+hKU2DA4tzQxl5RS7FoOaxeLscYc4C68bgMP8L/NnEGIks5yzw2MbMQZbgjaWncLG
+	g2SVGYCgzkIeBIhFto0YDYhYrCuTksftAm
+X-Received: by 2002:a05:6820:1512:b0:6a1:50eb:2110 with SMTP id 006d021491bc7-6a309b831e1mr4672517eaf.69.1783025584368;
+        Thu, 02 Jul 2026 13:53:04 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:8::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7eb54534789sm3393061a34.26.2026.07.02.13.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2026 13:53:03 -0700 (PDT)
+Date: Thu, 2 Jul 2026 13:53:00 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: kraxel@redhat.com, vivek.kasireddy@intel.com, kuba@kernel.org,
+	Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: Open /dev/udmabuf O_RDONLY
+Message-ID: <akbPrI67h5btdI44@devvm29614.prn0.facebook.com>
+References: <20260701192210.2997769-1-tjmercier@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D045UWC004.ant.amazon.com (10.13.139.203) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260701192210.2997769-1-tjmercier@google.com>
 
-Skip masking STALL_SLOT, STALL_SLOT_FRONTEND and STALL_SLOT_BACKEND out
-of PMCEID1 when KVM_ARM_VCPU_PMU_V3_STRICT is set, because this is when
-PMMIR_EL1.SLOTS is exposed to guests, making these events meaningful for
-collection.
+On Wed, Jul 01, 2026 at 12:22:08PM -0700, T.J. Mercier wrote:
+> Write permissions on the /dev/udmabuf device file are not required to
+> issue ioctls and allocate udmabufs. Applications should be opening this
+> file as O_RDONLY. The BPF dmabuf_iter selftest already does this. [1]
+> 
+> Users are pointing to these selftests as examples of how use udmabuf,
+> and encountering permission errors on systems where write permissions
+> are not available on /dev/udmabuf. Apply the principle of least
+> privilege to selftests which use udmabuf by removing the write access
+> mode from drivers/dma-buf/udmabuf.c and drivers/net/hw/ncdevmem.c.
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c?h=v7.1#n49
+> 
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> ---
+>  tools/testing/selftests/drivers/dma-buf/udmabuf.c | 2 +-
+>  tools/testing/selftests/drivers/net/hw/ncdevmem.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> index d78aec662586..ced0b95c876c 100644
+> --- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> +++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> @@ -140,7 +140,7 @@ int main(int argc, char *argv[])
+>  	ksft_print_header();
+>  	ksft_set_plan(7);
+>  
+> -	devfd = open("/dev/udmabuf", O_RDWR);
+> +	devfd = open("/dev/udmabuf", O_RDONLY);
+>  	if (devfd < 0) {
+>  		ksft_print_msg(
+>  			"%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
+> diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> index e098d6534c3c..8114a29692fd 100644
+> --- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> +++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> @@ -149,7 +149,7 @@ static struct memory_buffer *udmabuf_alloc(size_t size)
+>  
+>  	ctx->size = size;
+>  
+> -	ctx->devfd = open("/dev/udmabuf", O_RDWR);
+> +	ctx->devfd = open("/dev/udmabuf", O_RDONLY);
+>  	if (ctx->devfd < 0) {
+>  		pr_err("[skip,no-udmabuf: Unable to access DMA buffer device file]");
+>  		goto err_free_ctx;
+> 
+> base-commit: fbb7ad31ab376c5101b2ac7205fad0344fd2de60
+> -- 
+> 2.55.0.rc0.799.gd6f94ed593-goog
+> 
 
-Change the parameter of compute_pmceid1() from arm_pmu to kvm_vcpu, to
-check if KVM_ARM_VCPU_PMU_V3_STRICT is set. Also updated the signature of
-compute_pmceid0() for consistency.
-
-Signed-off-by: Congkai Tan <congkai@amazon.com>
-Reviewed-by: Geoff Blake <blakgeof@amazon.com>
-Reviewed-by: Haris Okanovic <harisokn@amazon.com>
-Reviewed-by: Stanislav Spassov <stanspas@amazon.de>
----
- arch/arm64/kvm/pmu-emul.c | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
-
-diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-index 9595bce6519f..89eec5a1a499 100644
---- a/arch/arm64/kvm/pmu-emul.c
-+++ b/arch/arm64/kvm/pmu-emul.c
-@@ -851,9 +851,9 @@ static u64 __compute_pmceid(struct arm_pmu *pmu, bool pmceid1)
- 	return ((u64)hi[pmceid1] << 32) | lo[pmceid1];
- }
- 
--static u64 compute_pmceid0(struct arm_pmu *pmu)
-+static u64 compute_pmceid0(struct kvm_vcpu *vcpu)
- {
--	u64 val = __compute_pmceid(pmu, 0);
-+	u64 val = __compute_pmceid(vcpu->kvm->arch.arm_pmu, 0);
- 
- 	/* always support SW_INCR */
- 	val |= BIT(ARMV8_PMUV3_PERFCTR_SW_INCR);
-@@ -862,32 +862,33 @@ static u64 compute_pmceid0(struct arm_pmu *pmu)
- 	return val;
- }
- 
--static u64 compute_pmceid1(struct arm_pmu *pmu)
-+static u64 compute_pmceid1(struct kvm_vcpu *vcpu)
- {
--	u64 val = __compute_pmceid(pmu, 1);
-+	u64 val = __compute_pmceid(vcpu->kvm->arch.arm_pmu, 1);
- 
- 	/*
--	 * Don't advertise STALL_SLOT*, as PMMIR_EL0 is handled
--	 * as RAZ
-+	 * If KVM_ARM_VCPU_PMU_V3_STRICT is not set, PMMIR_EL1 is
-+	 * unconditionally RAZ, so don't advertise STALL_SLOT* events.
- 	 */
--	val &= ~(BIT_ULL(ARMV8_PMUV3_PERFCTR_STALL_SLOT - 32) |
--		 BIT_ULL(ARMV8_PMUV3_PERFCTR_STALL_SLOT_FRONTEND - 32) |
--		 BIT_ULL(ARMV8_PMUV3_PERFCTR_STALL_SLOT_BACKEND - 32));
-+	if (!kvm_vcpu_has_pmuv3_strict(vcpu))
-+		val &= ~(BIT_ULL(ARMV8_PMUV3_PERFCTR_STALL_SLOT - 32) |
-+			 BIT_ULL(ARMV8_PMUV3_PERFCTR_STALL_SLOT_FRONTEND - 32) |
-+			 BIT_ULL(ARMV8_PMUV3_PERFCTR_STALL_SLOT_BACKEND - 32));
-+
- 	return val;
- }
- 
- u64 kvm_pmu_get_pmceid(struct kvm_vcpu *vcpu, bool pmceid1)
- {
--	struct arm_pmu *cpu_pmu = vcpu->kvm->arch.arm_pmu;
- 	unsigned long *bmap = vcpu->kvm->arch.pmu_filter;
- 	u64 val, mask = 0;
- 	int base, i, nr_events;
- 
- 	if (!pmceid1) {
--		val = compute_pmceid0(cpu_pmu);
-+		val = compute_pmceid0(vcpu);
- 		base = 0;
- 	} else {
--		val = compute_pmceid1(cpu_pmu);
-+		val = compute_pmceid1(vcpu);
- 		base = 32;
- 	}
- 
--- 
-2.50.1
-
+Reviewed-by: Bobby Eshleman <bobbyeshleman@meta.com>
