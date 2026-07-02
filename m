@@ -1,139 +1,91 @@
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012003.outbound.protection.outlook.com [40.107.209.3])
+Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50AF412269;
-	Thu,  2 Jul 2026 08:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.3
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782979955; cv=fail; b=Ti7IlGBi2UfVysDms+vRffqLhoZ8nUk1NfINHy2GVnWtqti/hMemXiM/NisX7xXs5FxKAhkrKUzAxtlGR8xDtF/zc2BEZUn9OeoZT0XqqGu52oZtUM+AaCnggrLTQoDe576AJBFSUmHHcUOf/hzDuObnPzQSkCRIpoTlekVFUO0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782979955; c=relaxed/simple;
-	bh=L02+5G1PvUJCwJokOIda/qhg/1cvJB+3xI9Wx6q4UDI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=YnH4MqcfxH2PokJIJaLYR8OJLZG8oozd/nSmJJU+RlyKc2O+lyJcDnpfnzCB4hsw/9gM8ThZIbVhYuR1sIliqWUwScwGDgUAg9ya8tMqdx8+x90GLQ1K6n19L8ZyXSpMkadNN8XAWUlX24jT8JRu6f1+d9tuVknrCZk0TmelfYo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Zu16EyJ6; arc=fail smtp.client-ip=40.107.209.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4664C1EFFA1;
+	Thu,  2 Jul 2026 08:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.239
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782980653; cv=none; b=uxNrssQI5PS57IRKsRX4+XVsbNBa27+JymAwgTtsxixIQ7OSJpFsQCpzmKlD52JIUOmJgi8VsU/GjpvsA8rEmhfPDYJVidoEEzRLaOgDoouqJ54OePFekQgnARRwuRHmUFIEx3ex5RNNy0jiR8Ox3Z8dNGqdy4IxwRAjephHkZM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782980653; c=relaxed/simple;
+	bh=PmBlIxOnIAWiTT1dMB+k1GJBW3L+i3rVcq5Pvr4YNcM=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=C8gXGscJgftuHiZs5Gl5gYicSZYRG5qV+ARA4YTTJyjC4t7cFdtytldNQ1g/OSao0Dobnw+XzFL07o+kMHqf7WG8KcQvjBjHoDGQK5iPqxiF8iYOd5HTYOcg2Ml0NaAut5wb3oxbUlqZtCB/aebJFXUNfEXPPrfB0UdcDqfUjC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=dN6Y2hCY; arc=none smtp.client-ip=203.205.221.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Zu16EyJ6"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tTcwadpT3Od+KFbU4wRJxVEgmnzncm1Kx3EHVpT8CtwHxiVaYbSVXReIlEfEnDn/BzxnNHTzrXblyPS7uyzIaAiA/+KhFCRlGoF1aTMb9MpswoqY/+EaADQ6cMdNwOR3ZQHr6MX8LU8Mcf9NCgu6Drp6qOglgKtBnYMLzO1dG5TMYHuA46HhymkqMgfvDgAn5PPC45hgYF2/2CaXZUsHf5hyhMnz64z3od6OjGIyrxKivgTz8DtD94IwVM/JnS30FPEe1ZeSfw5i/E3Oj4Df8Jl5vTcJXo9L83BfxzH5YGbJfa2cuFEeeb1EuE8AcV72dBT7ze0dtq2J4M6kYqiDgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uhY0waaxDWzDgxXwPRnhHtzMu8t+q8zwtA7spP7KSvw=;
- b=LDRk1/qDSRRyFYQNdakmiXYS4Gv8U0FYb3klxnfQbP1eXJN6I/sLG5rgPD4Z2khjTYbPuOm/nmR2SgpaNAaSE498pn+wY/LqhoVQAiy1b8E94W5fm1ZL/qCcw1f05je/e9OzW7DtDC5L1i6ouRZplr7uWRpcqdiyP0Ot4KWu20fcyaHga15cKxa1wmyZTDxwHKurDdoi6nMzQzHPstS5vbG8Wpkjznow3Y9Tpa5S+doe1oh5XXAs71b2E4FI9P2MPjvSG1W2aMH9tSMlHypWZHFI88ikvY6CUulajt5KMykTB0B5ZMl/ph5d6ndduBB8su0gC7ZYxsiE5Vdo0PFhHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uhY0waaxDWzDgxXwPRnhHtzMu8t+q8zwtA7spP7KSvw=;
- b=Zu16EyJ6PB0Na87Ir3pU+X7SHrU9y8K91iFqzMJJvUMQk9zwjtft2QCRZaiMlJ8e5RqNZTHYurOty8SWPQAwZ16yxPOvcpGRVZOVFe+awLXjlQTtdUh4oShNaYlbyMk9UPPQ9sTyK5loiuZ54YxexFa5o4z8T2g9m6MtrcEggMb3a5vGXAAuSUhEm+pFDs3epQ1SfOZZXfj83+i2H4yqbffO0rHeC7s/FMN4+6v/z9zA3co6XhWo/ZFBtCZMASsZS62MC8zKcUP2cH3/stUB0KB0RGUMOTsQfSIFvntwUrBIAyqBBBTJOpX4Fm4tIxRDenQsrjpiLpEuHWCIBhKdPg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
- by PH0PR12MB7485.namprd12.prod.outlook.com (2603:10b6:510:1e9::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.10; Thu, 2 Jul
- 2026 08:12:31 +0000
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2%6]) with mapi id 15.21.0181.009; Thu, 2 Jul 2026
- 08:12:31 +0000
-Date: Thu, 2 Jul 2026 11:12:21 +0300
-From: Ido Schimmel <idosch@nvidia.com>
-To: Yuyang Huang <sigefriedhyy@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	David Ahern <dsahern@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 2/3] net: ipv6: report multicast group user count
-Message-ID: <20260702081221.GB1574313@shredder>
-References: <20260630110207.37841-1-sigefriedhyy@gmail.com>
- <20260630110207.37841-3-sigefriedhyy@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260630110207.37841-3-sigefriedhyy@gmail.com>
-X-ClientProxiedBy: FR5P281CA0034.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f3::13) To SA3PR12MB7901.namprd12.prod.outlook.com
- (2603:10b6:806:306::12)
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="dN6Y2hCY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1782980649; bh=2T9UvrmrdIZ1TA3mbiBS9R/xpVn5slOrRYqYeNWpCkQ=;
+	h=From:To:Cc:Subject:Date;
+	b=dN6Y2hCYxx2WUG1xPIcWRC4QmjuTUwyxyyE+dGO9+/zJeyTXGSnHC+c54UorboOuz
+	 FZ2RYuNXpKfYc3gwRMkkn9nsZeirGh6FmyRDOA4qnjnpRCcpeHdfTwVgxSv+Rybbcj
+	 dODJfYT8giqmjL1wvhyL28S/nUxy395GIdwaNgFo=
+Received: from LAPTOP-KNA43L24 ([2409:895a:38f6:dd00:11e:7a1f:21b4:a990])
+	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
+	id 6018E8EF; Thu, 02 Jul 2026 16:24:01 +0800
+X-QQ-mid: xmsmtpt1782980641tlx60hzex
+Message-ID: <tencent_A20EAF9C0B2AC0D6DD97A4C2F250D9970406@qq.com>
+X-QQ-XMAILINFO: MeukCuWaRbQlz6bEgdzsKK+YcRokjFvPiFOGQtnc5fF6xT+mRYvmxTqrszm5HI
+	 bxQWpO1n4+/6Ibmpy/eFR1+rm6muujnC2UmLMKytL9JsLThPUO3lWRKGANgDqA7ZUjuwCbzqE64H
+	 RNq2Gva4FaIlnEKdZ2juFaZtHY1vJsnPaDFgLY+8UytdRFZlASQ9UwXMGa8weVNCqzlfFjv+kMtp
+	 0Tkt93S4owfrQC3H/eM0CfogluC3SBFNhxyRgg0FZT7CZH6PA6/u5YWnVPLR3Vupd7vHYRdOdrIe
+	 cE1rdKJxpjYurND2G2KnQP+eyNgAR3zceOOU99yM2O5/Tkk1dFb5wC4huNlbrBwTdWepDclNoyBI
+	 FW7xAw93VvzYZRAoVXyff4qfGniCocutwJ0DL/0+iKb5xoPdysQNqKn71g3taAZs0ZMpNeYg+caT
+	 t7FNgAORe/9A6Un2QESKMKwH/feFfUeexdBuq8RSxu4KaEymz2WJgYAyoVJUjf9/bhGijhAssk3n
+	 TfFqi+VYqlX4sGjvpJ1XCPh2ayx5+tfGb0ZrHDfcoGpxwI3z1nrifE0oWMDN6iPlb+lpETeMiGj2
+	 PG0yYtIad6BbmdgQroUAr6D9tcz479+qECJ0NawEP0YRKM16MOdt36zD6A49toMchfR/a4xlSTbW
+	 r2pR/UuWAuCAEfMnEQTb/KQMnAOY5+38X9EwQe/rMvxLCM+JoPw2ouKu7pj1PBqdVbaNYONNUtIG
+	 XHeGMqa5wna2v64LgH32laX2COabIm49PBiZ/vYZYDu5nLXtSqD63gd4DupndobYut2+YosqEQx/
+	 +iw4FLChOWTGmr3FqRC9BlbxdeSPHahWjZOLFYBZFuwBsIkK1OgZkPz0myTVTUgj4Ux7DJ8MSq/g
+	 5m4NWHbiq9qXkqVMZJI2aKBONgak/uCB8XS/TXbsWu2/poPTQa59Tk0jBu+YT2yh+rE3bJETE0BN
+	 JuF0O8bDDE7NL2PquvrkYzxyRWp9b9W41cn09pS46uRRki1QQm9zUviHqj4fiAyttRXGpJv7LXLg
+	 WTM3/EkFbznvRv1w0sG4yANQM2hERbucecnC/xVnFF+AMjyGeKdosHAchp2u/78ZOw6wRVBQ==
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
+From: Old-Ding <1746193727@qq.com>
+To: mathieu.desnoyers@efficios.com,
+	peterz@infradead.org,
+	paulmck@kernel.org,
+	boqun@kernel.org
+Cc: shuah@kernel.org,
+	skhan@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Old-Ding <1746193727@qq.com>
+Subject: [PATCH] selftests/rseq: Fix spelling of accommodate
+Date: Thu,  2 Jul 2026 16:23:53 +0800
+X-OQ-MSGID: <20260702082354.1728-1-1746193727@qq.com>
+X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|PH0PR12MB7485:EE_
-X-MS-Office365-Filtering-Correlation-Id: efbc0ac4-0436-470a-961e-08ded811aa40
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|7416014|376014|1800799024|366016|6133799003|56012099006|11063799006|4143699003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	Q8W1Vrrlxw19ztUAP4eE83lBabzwg4WmvR4TrObSSRSO/7x0ygRKcuINyH043FxQhpzR3mXF3LrGZb7NDs787LnKm8ZA397Eev/h6MpHktOHbSc9rwgtvOtXB05u+VMixv2xRAomky+cUmOcKCdNbg2mIH74rxoHu1JSpDuytSaHnannGn5+o+lI2N3icm4AhMbu0z3x/pu/nZNUiUwydVpTJZ89DEfxYoKhGa3f84Q/pgYkUZZhEGv7Pa5ixnW9QLIYXbKyXdiLBc0qHrASfpPcYBXo+eHFCOD4G22yRaBY3SmJyFF9mjHn9E9jcPxsSsOnh28fEFLKDco/ApjixMCMUGFoUAGiR6VmqddWfZfNXf0NUJ1gULOZi08HxqUWVSAKjn1A5zQsi1eXvr2ZkLH4TBecI5Rb9koEEm/Vb3bMrD6W32C0koiKRcxPpYeiuoRylFjxwVMlx9K/bwPbq4WbED1I8G3H5d6SDvXDgJrC8TCt5JAj3WBNorjMTua3Rve8U6IEgwb2khL4PEL6s6R5dr2F+8WGQmppIHHa6hYGD6QmwQZXHAt/GPbzr0OBPZAGcFmX0MimOB5DFa3SO5AEiWQkZLz3zlIhk3aR5qa3SqVZadVnPP9eNENGZzBbJxjYZTYQe7LfCmAlDEg81KU2iaEXylEeuOSWNHaeZfo=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(1800799024)(366016)(6133799003)(56012099006)(11063799006)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?7GXB5Ym6HKoWZXaExw4dsV8MPJRa7mnbllND/xZZ+8v0EljZWVI/KOHQ4Cn1?=
- =?us-ascii?Q?CAcWnmyphy3hQU5UvMk5q5xQvjqWKQ/5nGu8PJv1X0G3HOee1MKMXTCo+qa0?=
- =?us-ascii?Q?0gF5HFc4X0BUED3X5vQ1cIV5tyQR4ZLgjuvRCK+ahHPQ0Lv8WZUGpueeGZo7?=
- =?us-ascii?Q?GzJZxDZVoElHW1YBKXFJIn6REZiwRPIrmH5MG0qKt8gWT9ZPqHxRMfblyBjp?=
- =?us-ascii?Q?Hi5TWfJKJs6oje0sN/gzw+B3sA7egCxlrAxABDTRb/kUuF0ZOOWAWojLSMEq?=
- =?us-ascii?Q?mxNthIO4bQyZ2RfxE3x8YXHNPjnxX7m5+tEyB5MCybimsWSkquHVvxUmW8VB?=
- =?us-ascii?Q?SgiUUwP1C/Ilcw/26Rhn2BpL5f76Vv174QPNMm/DqRQ5pS2wQxmWvps1nzod?=
- =?us-ascii?Q?ap004xFF8cVVx7TRkljNewSTQ8pWvKC6DtIQ++GkWd6+WYp1S+cRNp5i8Zvo?=
- =?us-ascii?Q?zU7Bug72C3bQwNpjfvGcyqwJPp+G3hbowYxDyKJylDVPi2Bs/D2+2GgdUxHO?=
- =?us-ascii?Q?8KLXkyyxR8+0nXLpRrBC7kNmengXmmiac6zjAn5FzkeB/lzU5FmCVYO4Qaos?=
- =?us-ascii?Q?fMK4t/vPAQdkD0u/EDNAMnaoLdzHTeZaEbD4LlnuqXUQqQE55ZuOVe3fja6a?=
- =?us-ascii?Q?mYJAKuw0va5TkLVpG8dNX2Tv6MsVyT0H+lGEqD2fXU5J3pUeuTXL77TcQbYu?=
- =?us-ascii?Q?XS9Fz4VznHpg+t5W7+8EdDwifeOZKUu4OAKVxikHS/XY5BxCD53MFPoJIQje?=
- =?us-ascii?Q?C1iz4KkuFMrUg4h9dQgysMvqaRsy4gJk6GlBiEkeNVbxgh3T9wD/tz4OdeT+?=
- =?us-ascii?Q?xxE1GBMTb75jkH/KLuUOyF33E3Uj8SWMI4NeQhO6d7MigDnWvvvdgazlAksG?=
- =?us-ascii?Q?t8lHIbPyq3mSTxAu1GAUjzslBsKkelZ6I0jCV6G3bejMAzueQwz8dVMmE6VZ?=
- =?us-ascii?Q?w1sI0Q5ryIXklVUTiyDsdwO4WxExiEcu7u7iDhPhrf66zvYaiz9Q2sBw01R7?=
- =?us-ascii?Q?abAYtSDHpe0xyD3VqPB8eAQlqGZdGOzCevpnVghLXaD4dqO4tx6P18aq11S4?=
- =?us-ascii?Q?EEZHJGnt67xGttply+/nLSVKAWIP7yYUMLEJgv5OxRVrMq2AE7zE26Lr06ok?=
- =?us-ascii?Q?r+aNefQH5m2ZNS1BPqfUvDvxHXsFQwjt0FXmMiwqEN0EVc9KCSRpO4WIAF5A?=
- =?us-ascii?Q?vLItHxDgySw5mu3fsVewgB4/CDLfhdKf2KEOqnl/yqQLJWwvIM8bsb+d/XrS?=
- =?us-ascii?Q?mDebycPVc9QQxNqwGCZflgy8wbSPsatvhU7OSU1u6QV5gZ+pFLhO9hVIGjr9?=
- =?us-ascii?Q?TBf8KhPh0e6fPvJZnRNoCmDFm0wvW4X3gxL0M8mpQaz9IHI34vj1ey7Ou3P1?=
- =?us-ascii?Q?4jAmFw6GPsCroTqk5GNQdBq08oTSK0R55jQ2cTDeSzrIljzh1d7rYa3c/o3Q?=
- =?us-ascii?Q?VQfjRAKoGTmy/wupGJ/fo6/l/vcbKiQYo7Xnx5D9l/ReL7aGQThKFU+WVt3F?=
- =?us-ascii?Q?iBAj7K4E6a3crsNUZADk60SSZ01Y4ml4sZXS6Rc3hl50sBcaO+CS3rnNA34D?=
- =?us-ascii?Q?2iE/kACjx4yXMGklQbWYi4V0vXQT7nD8Et97rRjFA+epMamtGy4WJtiKgb45?=
- =?us-ascii?Q?HMeUGrHMt0eUmtNnyeBJqZmPm3XMIDps1H1fPBsz9Kz5MlK46rEyEl+oxICC?=
- =?us-ascii?Q?dkq2e/iQ5axnaXuDtwowZPrjmqeAMD+k6Hs7iSSFEp3z5urCcA7nPb4Q6/Qj?=
- =?us-ascii?Q?c7LBjLb2mg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: efbc0ac4-0436-470a-961e-08ded811aa40
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2026 08:12:31.7350
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7Wgg6W26hdEFAb6Ua8PoIm1GwKJpiScdw+uU1UMqocflMZGqQqoBl69I+FS7OGy0O9MPL96k3yLY6SEyeZC/4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7485
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 30, 2026 at 08:02:06PM +0900, Yuyang Huang wrote:
-> The previous patch added IFA_MC_USERS and emits it for IPv4 multicast
-> groups. Add the same snapshot attribute to IPv6 RTM_GETMULTICAST
-> replies and entry-lifecycle notifications, carrying
-> ifmcaddr6::mca_users.
-> 
-> This makes the multicast rtnetlink ABI symmetric across IPv4 and IPv6
-> and gives userspace the same user count that /proc/net/igmp6 exposes.
-> 
-> Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
+The comment contains a spelling error listed in scripts/spelling.txt.
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Fix it.
+
+Signed-off-by: Old-Ding <1746193727@qq.com>
+---
+ tools/testing/selftests/rseq/rseq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
+index be0d0a97031e..1cd633923b1d 100644
+--- a/tools/testing/selftests/rseq/rseq.c
++++ b/tools/testing/selftests/rseq/rseq.c
+@@ -73,7 +73,7 @@ static int rseq_ownership;
+ #define ORIG_RSEQ_ALLOC_SIZE		32
+ 
+ /*
+- * Use a union to ensure we allocate a TLS area of 1024 bytes to accomodate an
++ * Use a union to ensure we allocate a TLS area of 1024 bytes to accommodate an
+  * rseq registration that is larger than the current rseq ABI.
+  */
+ union rseq_tls {
+-- 
+2.50.1.windows.1
+
