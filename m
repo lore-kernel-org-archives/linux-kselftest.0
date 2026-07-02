@@ -1,374 +1,63 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1130F3C1098
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Jul 2026 21:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159B73AB466;
+	Thu,  2 Jul 2026 22:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783028959; cv=none; b=NYfe1ACvF2zXnnnz0xnR43kDhh3uWhvCzhd5C9a9L9p9ubKhEgG6uDRz+uR0GRqsVrhwjI9b9yDAsDSUP4hkyl5OJ3QK7B0PD0rCce8CqDmq360YkY3fuylBQ59aRS/jK7iiS9pG6Gs3Cu5mjPpMQ9SpOHJKQjhEO4lHuVUu6iU=
+	t=1783030340; cv=none; b=cyJARrXeXqC8g4gqr/TqDcVR1ZjVPPDzyNKPY+wOhtiivRaHoWAcFNYKqNUgxsXdhw4GDwroZKJIOpTKdbiC2OQAWgoKPNxNXTywazL2K5f2kDQwh5BSpC01hdbQbF38y/60yBaiEZT25Uv1jtUjWDE8SslfPuvIe47pcxouyHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783028959; c=relaxed/simple;
-	bh=ENYk6GNS43dprULP01JVzS2aHnkL+qdWkw6ys9fzHig=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Vtah/V0dv/0CmE6rCiwUH1Z7AFBjSmhXYVLGUAy6/PiJ8TrzGupYArjezencMvHLs2xrYYdCIFmzWbL6cL9f6alpJG+52KZNafZWExLRf4JY0lpc2UBLYyk9Bl10Me5Se2nI6mwN28xO1nNx0D/G8fsOntXfTVeCR1X8jPWUdIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Mu1I2dDw; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783030340; c=relaxed/simple;
+	bh=jJxRosfOkkpgImi1WIyQeCuH/Lf7mbMg7/RCUJJSwA4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=gqCF0OZL67MBP+Rtat24RtTGooWSnDNS75048vs8zXKDSHJHW3bz7Ds2G0GR6+LrwprGwsgDq/t17tMrWzv/BcjU+SlSCrN3kI9nt5Qz2eH8fwdwKucvBjNc+VT/O7+lueOgNRDpkN2kkQCV/h1T1NWr5UKOWjvTFOqgvum8D1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P6maidtP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Mu1I2dDw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783028957;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GhQadWWbyJNoWjy2SCoPtNuWLEk15QTFYZ61Hy14GqU=;
-	b=Mu1I2dDwrwNzipQ9Vk9v6akU9HdJg6AJns4mC7ugYp9AoYokTU6l0IIfG2RJF8pkYyRNqD
-	pJnKde10gaKxWucVDmfq97hgOIJg9cIK+QRZZoCmqQvTDqYSVZ2btzFq8nFVtLDeW7I7i6
-	W0DRqjCxcJucrUPOnA0fVAKK7ZawBls=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-265-5IvAPH0iP8aAy_iZBm_6cg-1; Thu,
- 02 Jul 2026 17:49:11 -0400
-X-MC-Unique: 5IvAPH0iP8aAy_iZBm_6cg-1
-X-Mimecast-MFC-AGG-ID: 5IvAPH0iP8aAy_iZBm_6cg_1783028949
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5EA1619792EB;
-	Thu,  2 Jul 2026 21:49:09 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.2.16.58])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7683136F24;
-	Thu,  2 Jul 2026 21:49:06 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Ridong Chen <ridong.chen@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Juri Lelli <juri.lelli@redhat.com>
-Cc: cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v10 11/11] selftests/cgroup: Add test for cpuset affinity on controller disable
-Date: Thu,  2 Jul 2026 17:47:57 -0400
-Message-ID: <20260702214757.579012-12-longman@redhat.com>
-In-Reply-To: <20260702214757.579012-1-longman@redhat.com>
-References: <20260702214757.579012-1-longman@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P6maidtP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33CCA1F000E9;
+	Thu,  2 Jul 2026 22:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783030339;
+	bh=VhVz2E5EEE1ju7wxSJdrHiJ47qGtNUBPYGfeIuv/K2w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=P6maidtPkdFbpeVXavSf9kHqqeQ7ldKxr9bRJ6BF6G76zThu3DyaC3eDpl2VngihL
+	 LrY1NVEosv9PC6ATdaaTGfLLHam7NskWmIQZauKiytd3afIcrfovynFnidlCU1YB2k
+	 8Wlhrxl4kGz3z0Oe1q51g2v3njIrpdGHPv1pPtz1n2uBuQ4Dpe1AAuqFGdHa6zdtPm
+	 3lxPudXYwHK8fg6nRmUIIWJ9rLJt+FlctxOVBjdoY4UoFCPG01IwBeO4R2/1wYxzf9
+	 0Mfep4/5mCoCFO8V//GWbjQEFGbILFNO+wlmqh5rBpNSfKD1lSkdy7+lLsyVpuNgBC
+	 7ylFeyS1HtLFw==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Old-Ding <1746193727@qq.com>, mathieu.desnoyers@efficios.com,
+ peterz@infradead.org, paulmck@kernel.org, boqun@kernel.org
+Cc: shuah@kernel.org, skhan@linuxfoundation.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Old-Ding
+ <1746193727@qq.com>
+Subject: Re: [PATCH] selftests/rseq: Fix spelling of accommodate
+In-Reply-To: <tencent_A20EAF9C0B2AC0D6DD97A4C2F250D9970406@qq.com>
+References: <tencent_A20EAF9C0B2AC0D6DD97A4C2F250D9970406@qq.com>
+Date: Fri, 03 Jul 2026 00:12:15 +0200
+Message-ID: <87zf09m474.ffs@fw13>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+Content-Type: text/plain
 
-From: Michal Koutný <mkoutny@suse.com>
+On Thu, Jul 02 2026 at 16:23, Old-Ding wrote:
 
-Add a new selftest that exposes a bug in cpuset_attach() where thread
-CPU affinity is not properly updated when the cpuset controller is
-disabled in a threaded cgroup hierarchy.
+Please don't resend the same patch within 24 hours. 
 
-The test creates a threaded cgroup hierarchy with two child cgroups
-(A and B) having different cpuset.cpus constraints:
-- Parent: cpuset.cpus=0-1
-- Child A: cpuset.cpus=0-1
-- Child B: cpuset.cpus=1 (restricted to CPU 1 only)
+See Documentation/process/
 
-A multithreaded process is created with threads placed in different
-cgroups. When the cpuset controller is disabled on the parent, thread
-affinities should be updated to match the parent's cpuset.
+> The comment contains a spelling error listed in scripts/spelling.txt.
+>
+> Fix it.
+>
+> Signed-off-by: Old-Ding <1746193727@qq.com>
 
-Expected behavior:
-- thread_a affinity: {0-1} before and after (unchanged)
-- thread_b affinity: {1} before, {0-1} after (expanded)
+You have to provide a real name and not some made up nickname.
 
-Current buggy behavior:
-- thread_b affinity remains {1} after controller disable
-
-Assisted-by: Claude:claude-sonnet-4-5
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
-Acked-by: Waiman Long <longman@redhat.com>
----
- tools/testing/selftests/cgroup/test_cpuset.c | 243 +++++++++++++++++++
- 1 file changed, 243 insertions(+)
-
-diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
-index c5cf8b56ceb8..8b4c4a9dd78b 100644
---- a/tools/testing/selftests/cgroup/test_cpuset.c
-+++ b/tools/testing/selftests/cgroup/test_cpuset.c
-@@ -1,7 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#define _GNU_SOURCE
-+#include <assert.h>
- #include <linux/limits.h>
-+#include <pthread.h>
-+#include <sched.h>
- #include <signal.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
- 
- #include "kselftest.h"
- #include "cgroup_util.h"
-@@ -232,6 +238,242 @@ static int test_cpuset_perms_subtree(const char *root)
- 	return ret;
- }
- 
-+static int get_cpu_affinity(cpu_set_t *mask)
-+{
-+	CPU_ZERO(mask);
-+	return sched_getaffinity(0, sizeof(*mask), mask);
-+}
-+
-+static int cpu_set_equal(cpu_set_t *dst, unsigned long mask)
-+{
-+	cpu_set_t expected;
-+
-+	CPU_ZERO(&expected);
-+	assert(sizeof(mask) < CPU_SETSIZE);
-+
-+	for (int cpu = 0; cpu < sizeof(mask); ++cpu)
-+		if ((1UL << cpu) & mask)
-+			CPU_SET(cpu, &expected);
-+
-+	return CPU_EQUAL(&expected, dst);
-+}
-+
-+enum test_phase {
-+	AFFINITY_SETUP,
-+	AFFINITY_THREAD_A_READY,
-+	AFFINITY_THREADS_READY,
-+	AFFINITY_CONTROLLER_DISABLED,
-+	AFFINITY_COMPLETE,
-+	AFFINITY_ERROR
-+};
-+
-+struct thread_args {
-+	const char *cgroup;
-+	cpu_set_t *affinity_before;
-+	cpu_set_t *affinity_after;
-+	enum test_phase ready_phase;
-+};
-+
-+static pthread_mutex_t test_mutex = PTHREAD_MUTEX_INITIALIZER;
-+static pthread_cond_t test_cond = PTHREAD_COND_INITIALIZER;
-+static enum test_phase test_phase;
-+
-+static void *affinity_thread_fn(void *arg)
-+{
-+	struct thread_args *args = (struct thread_args *)arg;
-+
-+	if (cg_enter_current_thread(args->cgroup))
-+		goto fail;
-+
-+	if (get_cpu_affinity(args->affinity_before) != 0)
-+		goto fail;
-+
-+	pthread_mutex_lock(&test_mutex);
-+	if (test_phase < args->ready_phase)
-+		test_phase = args->ready_phase;
-+	pthread_cond_broadcast(&test_cond);
-+
-+	while (test_phase < AFFINITY_CONTROLLER_DISABLED)
-+		pthread_cond_wait(&test_cond, &test_mutex);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (get_cpu_affinity(args->affinity_after) != 0)
-+		goto fail;
-+
-+
-+	return NULL;
-+
-+fail:
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_ERROR;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+	return NULL;
-+}
-+
-+/*
-+ * Test that disabling cpuset controller properly updates thread affinity.
-+ *
-+ * This test exposes a bug in cpuset_attach() where threads in child cgroups
-+ * don't get their affinity updated when the cpuset controller is disabled.
-+ *
-+ * Setup:
-+ * - Create parent cgroup with cpuset.cpus=0-1
-+ * - Create child A with cpuset.cpus=0-1
-+ * - Create child B with cpuset.cpus=1
-+ * - Place multithreaded process: group leader + thread_a in A, thread_b in B
-+ * - Disable cpuset controller on parent
-+ *
-+ * Expected: thread_b's affinity should expand from {1} to {0-1}
-+ * Buggy: thread_b's affinity remains {1}
-+ */
-+static int test_cpuset_affinity_on_controller_disable(const char *root)
-+{
-+	char *parent = NULL, *child_a = NULL, *child_b = NULL;
-+	pthread_t thread_a, thread_b;
-+	int thread_a_created = 0, thread_b_created = 0;
-+	cpu_set_t affinity_a_before, affinity_a_after;
-+	cpu_set_t affinity_b_before, affinity_b_after;
-+	int ret = KSFT_FAIL;
-+
-+	parent = cg_name(root, "cpuset_affinity_test");
-+	if (!parent)
-+		goto cleanup;
-+	if (cg_create(parent))
-+		goto cleanup;
-+	if (cg_write(parent, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	child_a = cg_name(parent, "A");
-+	if (!child_a)
-+		goto cleanup;
-+	if (cg_create(child_a))
-+		goto cleanup;
-+	if (cg_write(child_a, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	child_b = cg_name(parent, "B");
-+	if (!child_b)
-+		goto cleanup;
-+	if (cg_create(child_b))
-+		goto cleanup;
-+	if (cg_write(child_b, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	/* Now enable cpuset controller in parent */
-+	if (cg_write(parent, "cgroup.subtree_control", "+cpuset")) {
-+		ret = KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	/* Set CPU affinity constraints */
-+	if (cg_write(parent, "cpuset.cpus", "0-1"))
-+		goto cleanup;
-+	if (cg_write(child_a, "cpuset.cpus", "0-1"))
-+		goto cleanup;
-+	if (cg_write(child_b, "cpuset.cpus", "1"))
-+		goto cleanup;
-+
-+	/* Move group leader (main thread) to child A */
-+	if (cg_enter_current(child_a))
-+		goto cleanup;
-+
-+	/* Create threads - they will move themselves to their respective cgroups */
-+	test_phase = AFFINITY_SETUP;
-+
-+	struct thread_args args_a = {
-+		.cgroup = child_a,
-+		.affinity_before = &affinity_a_before,
-+		.affinity_after = &affinity_a_after,
-+		.ready_phase = AFFINITY_THREAD_A_READY,
-+	};
-+	if (pthread_create(&thread_a, NULL, affinity_thread_fn, &args_a))
-+		goto cleanup;
-+	thread_a_created = 1;
-+
-+	struct thread_args args_b = {
-+		.cgroup = child_b,
-+		.affinity_before = &affinity_b_before,
-+		.affinity_after = &affinity_b_after,
-+		.ready_phase = AFFINITY_THREADS_READY,
-+	};
-+	if (pthread_create(&thread_b, NULL, affinity_thread_fn, &args_b))
-+		goto cleanup_threads;
-+	thread_b_created = 1;
-+
-+	pthread_mutex_lock(&test_mutex);
-+	while (test_phase < AFFINITY_THREADS_READY)
-+		pthread_cond_wait(&test_cond, &test_mutex);
-+
-+	/* If a thread failed during setup, bail out */
-+	if (test_phase == AFFINITY_ERROR) {
-+		pthread_mutex_unlock(&test_mutex);
-+		goto cleanup_threads;
-+	}
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (!cpu_set_equal(&affinity_a_before, 0x3)) {
-+		ksft_print_msg("FAIL: thread_a initial affinity incorrect\n");
-+		goto cleanup_threads;
-+	}
-+
-+	if (!cpu_set_equal(&affinity_b_before, 0x2)) {
-+		ksft_print_msg("FAIL: thread_b initial affinity incorrect\n");
-+		goto cleanup_threads;
-+	}
-+
-+	/* Disable cpuset controller - this should trigger affinity update */
-+	if (cg_write(parent, "cgroup.subtree_control", "-cpuset"))
-+		goto cleanup_threads;
-+
-+	/* Signal threads to save their final affinity and exit */
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_CONTROLLER_DISABLED;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	pthread_join(thread_a, NULL);
-+	pthread_join(thread_b, NULL);
-+
-+	/* Verify thread affinities AFTER disabling controller */
-+	if (!cpu_set_equal(&affinity_a_after, 0x3)) {
-+		ksft_print_msg("FAIL: thread_a final affinity incorrect\n");
-+		goto cleanup;
-+	}
-+
-+	if (!cpu_set_equal(&affinity_b_after, 0x3)) {
-+		ksft_print_msg("FAIL: thread_b affinity did not expand to {0-1}\n");
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+	goto cleanup;
-+
-+cleanup_threads:
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_COMPLETE;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (thread_a_created)
-+		pthread_join(thread_a, NULL);
-+	if (thread_b_created)
-+		pthread_join(thread_b, NULL);
-+
-+cleanup:
-+	/* Move back to root before cleanup */
-+	cg_enter_current(root);
-+
-+	cg_destroy(child_b);
-+	free(child_b);
-+	cg_destroy(child_a);
-+	free(child_a);
-+	cg_destroy(parent);
-+	free(parent);
-+
-+	return ret;
-+}
-+
- 
- #define T(x) { x, #x }
- struct cpuset_test {
-@@ -241,6 +483,7 @@ struct cpuset_test {
- 	T(test_cpuset_perms_object_allow),
- 	T(test_cpuset_perms_object_deny),
- 	T(test_cpuset_perms_subtree),
-+	T(test_cpuset_affinity_on_controller_disable),
- };
- #undef T
- 
--- 
-2.54.0
+See Documentation/process/
 
