@@ -1,86 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C336528F5;
-	Thu,  2 Jul 2026 10:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 404013C2B8F;
+	Thu,  2 Jul 2026 10:52:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782988829; cv=none; b=Or2ndP2aQ7B2OlJWbkdmNtRd8i9iVxMA1+UVVxBHvhalLeaVhwdmfV9I7I5rNS6MLLAOBUXMDYpj3AHML7iNyR3Nr0sDvrGYGAu0wofn/96xalucPyF01eh4BQVV+Dr/1My0AcLjLbQWyUU90DfX6wC2wvxQEzzPMr0XpY+p74I=
+	t=1782989544; cv=none; b=RtmYXHiXnDrnPJ+7t36rH+L+ZxyTTiCSVQ/1L6HUZlo7zTnYjTDSbD6asvcdjg4arrmleaF3iexaleQrzumb0tNbqayCgLZvxppqbkGEjuU1jn9FyDvRE+P/RNyimiYNaj0b/velI53gHvP3nj24zR3tSTsBRFSqOnigjnEgrUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782988829; c=relaxed/simple;
-	bh=ES8cj/orM4NXXZMvj/sxRlVF2TccpkoaMsHEZyjwu/4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UIxSU2Db5kW/3cvuG9pmLCj1T3wfWcMrf5/czSe8rgdC3jx9j8FDRFBOkBxhD3EpV76SP6MyHRQzfPhhEDt3SjDovL2GzvGqvsVw3Jqld29wTjcrr/K5GDg7q8WW1PIe6M5DAM8DX5HLEQuZsVG8H32rlX8xf0XF99ilIw3el3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lWOYqJcT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782989544; c=relaxed/simple;
+	bh=Tgt4hhMcByBvGKOTB4ie6cqyN7pvf1X8oWW3X+m/fC8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lusDGBetqqU+N6AYRa9rmhPrwKeCrIK6UTY5Ed1tfGOjVVszr6DI/ZYCj62CYieA5f4dHLN+kIqaUmonK32jTljK6hHQ34Ugx5hln5HRLF7Kt8Wa9UxF2uKrASWj44t1EI6J0SE7D9U0wHajg2D/7/3Wpp72/sjzzoWK55cwIu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WTcgxXBi; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lWOYqJcT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6104F1F000E9;
-	Thu,  2 Jul 2026 10:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782988828;
-	bh=595aEYbItmYoIcHU9S1ZQN86v5EGSuTLO5+D2/okL8s=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=lWOYqJcTHnNxayIJSB6fOQNAsZTnI8jqf5wHkONvZQWh6jW3PXaR3R9JElCr8G5Kp
-	 KMpnhWSpCYTAn0TcoqP5+UKDuFEcSPVbZHujRmmY2zlu2mkFpxmDyMX1GjVlyumr1d
-	 Njegwv8Dsdz+I5tjVr0bfUJr4pHXvBUnlJM6YBkpyU5pEMVynpR2cy3C/oWcfqBrfy
-	 QFMBlHS0J+zm11xSieynLKzI2o85Ym5qWNNN2QEVs2a8r+g0mxVF66x3WoVBPkW3tc
-	 dWRsQV2utxn/I4lQ3cAZggBdRfWmZ1pJ0iNCekrBn54oszf7o8xZlOvsLwKoDZvLE6
-	 Q9t2JB4ELCmGQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93975392721B;
-	Thu,  2 Jul 2026 10:40:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WTcgxXBi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782989544; x=1814525544;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Tgt4hhMcByBvGKOTB4ie6cqyN7pvf1X8oWW3X+m/fC8=;
+  b=WTcgxXBi+65sNoPmVSFNOMdw9c0jmKFqzuJWGvv8zAAzlxEFuXD1xJ2Q
+   0rFANfbOZniroBy/acnataEM+q+Yh9cC+k4tILdoZZ+nnuACyPVbCY42N
+   sn3O0bzYXnkDoUqVmHqrPDD9B6/xzIK14YjB1J24geHTFAuz3VvGezN/7
+   0LrMzkclEOLUS9nzEIvEP3rw8VPVpW6BvzPK2DChO0vfLdtXJrYFn5ob1
+   CG6zfH0DIz2dmohf88muSCM3cRPwTkk+EPVRYoN48hpFlQRXzPdqp2IVH
+   zL5+KdM0i2arW8ouWNeWyPQX3wuoMwrVRuO2pDU1t5d16fXvTGstxBTvj
+   Q==;
+X-CSE-ConnectionGUID: wGoCylRLTJq37RpQoZeLQA==
+X-CSE-MsgGUID: AiFwafKvTDOG/Yf7BvGXfA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11834"; a="94341064"
+X-IronPort-AV: E=Sophos;i="6.25,143,1779174000"; 
+   d="scan'208";a="94341064"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2026 03:52:23 -0700
+X-CSE-ConnectionGUID: I7qt9/olRoyxa2x0VmcfeQ==
+X-CSE-MsgGUID: Yp1EvDSzRoq8GXy7mZVstQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,143,1779174000"; 
+   d="scan'208";a="282905050"
+Received: from unknown (HELO [10.239.158.38]) ([10.239.158.38])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2026 03:52:09 -0700
+Message-ID: <c0e2df0a-19b2-4234-b0f7-41e010452b06@intel.com>
+Date: Thu, 2 Jul 2026 18:51:46 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/4] net: convert UDP getsockopt to sockopt_t
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178298881139.1583217.15443135093169536299.git-patchwork-notify@kernel.org>
-Date: Thu, 02 Jul 2026 10:40:11 +0000
-References: <20260630-getsockopt_phase2-v2-0-193335f3d4d1@debian.org>
-In-Reply-To: <20260630-getsockopt_phase2-v2-0-193335f3d4d1@debian.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, willemdebruijn.kernel@gmail.com,
- shuah@kernel.org, sdf.kernel@gmail.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@meta.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 17/46] KVM: guest_memfd: Advertise
+ KVM_SET_MEMORY_ATTRIBUTES2 ioctl
+To: Sean Christopherson <seanjc@google.com>
+Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
+ binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
+ david@kernel.org, jmattson@google.com, jthoughton@google.com,
+ michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
+ qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
+ shivankg@amd.com, steven.price@arm.com, tabba@google.com,
+ willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
+ forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
+ aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>,
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-17-9d2959357853@google.com>
+ <584a8f9a-1538-4f8b-b576-75ef0fa961c7@intel.com>
+ <akU7uAKb5E_Tklx-@google.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <akU7uAKb5E_Tklx-@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Tue, 30 Jun 2026 07:01:25 -0700 you wrote:
-> The leaf proto_ops getsockopt callbacks have been moving to the new
-> getsockopt_iter()/sockopt_t interface.
+On 7/2/2026 12:09 AM, Sean Christopherson wrote:
+> On Wed, Jul 01, 2026, Xiaoyao Li wrote:
+>> On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
+>>> @@ -4969,6 +4973,11 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+>>>    		return 1;
+>>>    	case KVM_CAP_GUEST_MEMFD_FLAGS:
+>>>    		return kvm_gmem_get_supported_flags(kvm);
+>>> +	case KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES:
+>>> +		if (!gmem_in_place_conversion || !kvm_supports_private_mem(kvm))
+>>> +			return 0;
+>>> +
+>>> +		return KVM_MEMORY_ATTRIBUTE_PRIVATE;
+>>>    #endif
+>>>    	default:
+>>>    		break;
+>>
+>> this looks inconsistent with the
+>>
+>> 	case KVM_SET_MEMORY_ATTRIBUTES2:
+>> 		if (!gmem_in_place_conversion)
+>> 			return -ENOTTY;
+>>
+>> Well, the check of
+>>
+>> 	if (!kvm_arch_has_private_mem(f->kvm))
+>> 		return -EINVAL;
+>>
+>> is buried in the following kvm_gmem_set_attributes(). How about moving of
+>> kvm_arch_has_private_mem() check to put it along with
+>> gmem_in_place_conversion check in kvm_gmem_ioctl() in Patch 13?
 > 
-> I was trying to get SMC into getsockop and retire .getsockopt, but,
-> I found the best approach is to keep converting other protocols.
+> Me confused, patch 13 already adds the kvm_arch_has_private_mem() in
+> kvm_gmem_set_attributes().
+
+I wanted to make the check in KVM_SET_MEMORY_ATTRIBUTES2 in Patch 13 
+like something below:
+
+	case KVM_SET_MEMORY_ATTRIBUTES2:
+		if (!gmem_in_place_conversion || !kvm_arch_has_private_mem(f->kvm))
+		return -EXXX;
+
+and finally, with the introduction of kvm_supports_private_mem() in this 
+patch, it becomes:
+
+	case KVM_SET_MEMORY_ATTRIBUTES2:
+		if (!gmem_in_place_conversion || !kvm_supports_private_mem(f->kvm))
+		return -EXXX;
+
+So that the guard for KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES and 
+KVM_SET_MEMORY_ATTRIBUTES2 is consistent.
+
+> That said, the ordering here is wonky and misleading.  A cursory read of the series
+> would make one think that waiting to advertise KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES
+> makes it safe/ok for KVM to plumb in support for KVM_SET_MEMORY_ATTRIBUTES2 over
+> multiple patches.  But that's not actually true, because the ioctl becomes live
+> the instant the code exists, userspace doesn't need to wait for KVM to formally
+> advertise support.
 > 
-> This series starts the same conversion one layer down, at the struct proto
-> getsockopt path, beginning with UDP.
+> To further confuse matters, it is actually safe/ok to iteratively add support,
+> because it's all effectively dead code until "Let userspace disable per-VM mem
+> attributes, enable per-gmem attributes".
+
+yeah, before patch 24, gmem_in_place_conversion is always false. So 
+KVM_SET_MEMORY_ATTRIBUTES2 on gmem fd always return -ENOTTY.
+
+> So, I think we should go a step further than what I think Xiaoyao is suggesting,
+> and fully squash patch 17 into patch 13.  That way the reader doesn't have to jump
+> through as many mental hoops to piece together what is happening.  It'll obviously
+> be a bigger patch, but should be easier to review/understand overall.
 > 
-> [...]
+> Oh, and that combined patch should carve out error_offset straightaway, so that
+> the full uAPI can be reviewed in a single patch.
 
-Here is the summary with links:
-  - [net-next,v2,1/4] net: add sockopt_init_user() for getsockopt conversion
-    https://git.kernel.org/netdev/net-next/c/b5997f911eec
-  - [net-next,v2,2/4] udp: convert udp_lib_getsockopt to sockopt_t
-    https://git.kernel.org/netdev/net-next/c/f99d7065a4d4
-  - [net-next,v2,3/4] ipv4: raw: convert do_raw_getsockopt to sockopt_t
-    https://git.kernel.org/netdev/net-next/c/9588d5da17ce
-  - [net-next,v2,4/4] selftests: net: getsockopt_iter: add raw ICMP_FILTER coverage
-    https://git.kernel.org/netdev/net-next/c/f4d5e3a5c7bc
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+It sounds good.
