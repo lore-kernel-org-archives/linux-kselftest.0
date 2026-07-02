@@ -1,73 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D1C390C89;
-	Thu,  2 Jul 2026 00:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782950419; cv=none; b=C86JTFLIz4JDnQj/ziEOnA7wLkCM+r9ZBCpSR51f34zVnczIC8E/EWj0m6L/vupv9Dao+SVCQvqn5b07+fYp9pc1I133FR6T6cipA7j2x+RqWI3RUaqmOQ8PT6wXQU4MFBzOexXV9mnOf1fsTT6AmMwN4HWkKJ5gCQls4GyFlCQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782950419; c=relaxed/simple;
-	bh=jqjbeFdIpVRXhFcW3JHkxpTxn2W1/ZUCXSwYSed7u3E=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=XdgI/g9gQ39CucrxkJSlReLciunrrSvE3A0nf559YF+OEyje7lTSAx5nKtWOOaBtx7aV74pW2gRikT+qjQsBD767rzLKc1lkW9wCGvRhn+Zdqz4sOp3y6PlTAImcebkAaSAdeQcVxRELeaCnLcRDLqC5xI/kr+vOf1Tt/UtXISM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QMT4kgVW; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E50C191
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Jul 2026 00:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782950475; cv=pass; b=ddNrSSC9Vt6l3iH32dUDVAIK1XMbysmsvF2skx79mWOg+A/hrrUc6VkHSa8dEPnSirmaky+RFnuIoODRV49w7i6/clpvDcqxpCWAg4+SLDBcQnAj5szD3NJROZeql4RQjsSF9BFzDsUbdZz6zInweQsktumC1xVV5KzxVt2rwh0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782950475; c=relaxed/simple;
+	bh=h7F8Hea6IuFuXhEfwJYVnVQjGYALLY6z0SeCgrb7pFE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=T12vbgIlRXvTMcK9BSco9jn4JMVkhd5MSZ4EE5yTXIoY1MxkT9bLYU017UxMOwpLFuwS4z1YyGp+7b5zlM1Hg8NK4B3lWRjMWxKdvHMuLUfulFeRaSja+3lFSiceu5Bj9+8eMlLF0ZFdHUMiIGPa3YBV1P69zH+bp7eRSX2ifQ8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lyoXQ1EE; arc=pass smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QMT4kgVW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A5DC1F00ACF;
-	Thu,  2 Jul 2026 00:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782950418;
-	bh=jqjbeFdIpVRXhFcW3JHkxpTxn2W1/ZUCXSwYSed7u3E=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=QMT4kgVWFI7QkeYtoq9/QtdxTQy6Tq1TAnZHIL2FV1UXIHs9mMQmLu/6QoslqWFyZ
-	 tR0QsRtp1v1Pz/uvQwEm35yQzZGF/d/FrXXH11OtuCoSFlVTyky0OtiaFA5UxfESHV
-	 3W/UB0QBxqKJsVfQNwrTFkwKx72MsqmbAKDFNZ1mUSRsENGiQ2hRVZkP+7nTQ5S7VC
-	 tprrtUY7X2qJnatmnTOhplRhUKrziu8PVGlej2FB8hVL7wWKBsX4PKTtCuO0BB/UcF
-	 iB2PrRWhHlVFyz+d4iVA8fXdyiHjMhI1kCFGg+nzURDA1gHan8N+eQqIGkOGdlN85P
-	 abQV2U+cDZxdw==
-Content-Type: multipart/mixed; boundary="===============4278333573925749137=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lyoXQ1EE"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c95d0a54ea5so583339a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2026 17:01:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782950473; cv=none;
+        d=google.com; s=arc-20260327;
+        b=kHWmljSkver/aMQXnJXBcNHk5uN13VImQsVRpj3xQle7CVc2CYqkRnpSTUvTLEXqGf
+         r65ZVABG8zzt5v7W3sK1yy0Iny2B9oHiFuuVnQhvaXLZppWKnlaA8goVH/6ymcQZ4RIv
+         tpkKaf4+tzbd+Uq31djjEitrjyNJxxwFz5aQdlUei/V5r/DdaRmI8c8YkvgXb78pm+NZ
+         ZQcaLb82X0yBCt1c0eEK7ct4gpWo2J9XWqrmovelLhg1764be+MV3NJORujyvxeD0ytC
+         M02dOTccWUgZwjh0TNW6h2Uo6+6UWNU4qf0otB7EZQjJ2AdTzWpTCOCbMs7WuJtLtnEh
+         QnZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=h7F8Hea6IuFuXhEfwJYVnVQjGYALLY6z0SeCgrb7pFE=;
+        fh=OUBiKzd9cNsrB+QaYhvz5k+2FfDeHszqIO/VXcb84nQ=;
+        b=OUnuWZA5qogCBZtHY4MqUxsY1vHulp5X1WRqJdlyAVVdeIOncCeiCOL46rxmbQt5RH
+         NxRiMlVroNJDdzZaA5TkaltIb3JEwfano5gVbFCOAocYIiT+443J14PFLrhMPqZGRbOs
+         SzIAs+uhieKklhBArm0EwxfwKK3TV7GP9f5g9VTjuhizHktjBrqJpfYrocTtOum9LWoj
+         vBowO2d/EeGYBnL/jlE1hHQFc/KqUullC9uLGwHJtbeHDkLJr5O2S+y+Gihqc8XACURI
+         nXjMWZC6ftbIpjy5NFqwu6HRNzuYbTNGqN5czS18GONlG22H5pA0wqmrw97IRt5LN8qF
+         2YYw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782950473; x=1783555273; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h7F8Hea6IuFuXhEfwJYVnVQjGYALLY6z0SeCgrb7pFE=;
+        b=lyoXQ1EErjH7PjP3Ijggvk+B4EADZpMT4ykcRN6Eo7bLcgve7oHwh53RNh+YVSEUvd
+         huK1Snljy7Drp51UsgxlrMyKd8lpnxAppnUnqVwDjsHfyyhE7/FDuKe6eFj1w9eTH2E+
+         DRbeSNlwp6kat59q2oWWWXPQPUMlwkI7MB61So3K+GalUrsj8s2wlvkcVJ/XSFI8rsEs
+         FtF029G1RE13rtcXrVqSW2BdRsYT6DPSj/zB95rhS1HohKdT05C+uxkvoTfh+FD05QcN
+         Sop1OLHXBJykSsQkybEz13ixvi/b4+CqlgeSF7bfVpCRLR9cCfCzwv1IJXUUNK0CAdnm
+         amww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782950473; x=1783555273;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=h7F8Hea6IuFuXhEfwJYVnVQjGYALLY6z0SeCgrb7pFE=;
+        b=pwdbIEbhPKpJivrHirSx5s8UxmYLUjxk2Q5RyH/IHzkuMgyq29qWJATFohiIkpygYj
+         PBW3aqS+sf8FmJEBaqm3pCzs+3trG90sY0wdfz0nKKuAUPIYs5vnzCBNuuB4/9YbXH+P
+         fzfA0lxA5Wkouf8eLUbyBkZdisY/QUiADT5rN0+gpSoQMsnQqUstwUS39YlIqszbhZ/S
+         eb31PeetIWvDpnOvQA4g4Aur2lnzr844nU2VSe1kqJHOqvewSfIcWdtfs4KopJUYl8PS
+         eHUzdCK7qfq1bFicvakl7p5QU8VimH62fOZy16pL9N7DIr9tCi2+q4qbU00bI0QREfcm
+         h1LA==
+X-Forwarded-Encrypted: i=1; AFNElJ9cwE/BxBWV7Xhng38GUHELrupK4fPvsDjrMXtYj7iQntUGzKPijFiuDIAJ/GJrl+GNaw8+DgbcL/okM4g0+Ws=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVhGgm5Aohlz0fMIgoMBoJd4B4PNdrW1kmJt2yqMied2ng3L3p
+	/ha74DmH2Cz9x3EXMpEUZo6HFDPfcosAubSnb9SjyJI1K/EvSZkTsYJDxcq0qYtbgQSn7wGKWtH
+	rfW1DYcgc4ufHPSqSED95YASc5a2bpZc=
+X-Gm-Gg: AfdE7cm9fLsYnH7Q6M45b62oZ2lffaQb8meZh+LRHGJEBrR+FiXtWFDWlF8UJN1Zu+7
+	jjFuvpKYi8hdZT6ZJakpHSwgyshj0JxAT8XN5ic5HQLATvcrQU3D22onqK7ZuWUBmPcarQ4ZXOW
+	pKGrM5/yIJZOY/kKEPZz9cWInIpEdzuU0IOyzqfAAjmYcLaFBi6xQ5Nlul39tbp+2hDcTu4mpyp
+	yu0u5t6CCn/ISACG2H9tJ92OJOzAd9DvQZ+fe14KUsPlV3qIj4JMN7DSxiKA1rf9ei2kO5tF5lq
+	V/znaPK5ptkqDceau8/Hpqsi9IEyLiw9owwPUAbH6mfaqfpAptvz8aqJeQ/x9PAMjlGX2IWNbJ5
+	6Hys4fAn1duf4uw==
+X-Received: by 2002:a05:6a21:6f8b:b0:3b3:26aa:5455 with SMTP id
+ adf61e73a8af0-3bfed15c303mr4004694637.13.1782950473171; Wed, 01 Jul 2026
+ 17:01:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <03d8ce102b71c68c30e98be36feaebe539055195c2323ec3b3fd84f157487afd@mail.kernel.org>
-In-Reply-To: <20260702-sockmap-lookup-udp-leak-v3-3-ff8de8782468@rbox.co>
-References: <20260702-sockmap-lookup-udp-leak-v3-3-ff8de8782468@rbox.co>
-Subject: Re: [PATCH bpf v3 3/4] selftests/bpf: Adapt sockmap update error handling
-From: bot+bpf-ci@kernel.org
-To: mhal@rbox.co,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,john.fastabend@gmail.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,edumazet@google.com,kuniyu@google.com,pabeni@redhat.com,willemb@google.com,davem@davemloft.net,kuba@kernel.org,horms@kernel.org,cong.wang@bytedance.com
-Cc: mhal@rbox.co,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  2 Jul 2026 00:00:18 +0000 (UTC)
+References: <178291352217.1566898.14481561093843379745.stgit@devnote2>
+ <178291354144.1566898.14374948740441958770.stgit@devnote2>
+ <DJNGE5JG5ZY4.FEO5DZ21TL7Z@gmail.com> <20260702074007.e1047c9d66cbcecc7d4ab3a9@kernel.org>
+In-Reply-To: <20260702074007.e1047c9d66cbcecc7d4ab3a9@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 1 Jul 2026 17:01:01 -0700
+X-Gm-Features: AVVi8CeNxG3GffX-OwXo6mb147DD5vMthLu_C49lWR5Of1AKIMhyjJfW9B4eScU
+Message-ID: <CAADnVQLUniyTM64gHrLzgjWiNZTB82tT0LCxh8D29YfXG7cZ6w@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/4] tracing/probes: Compile all fetchargs into a
+ single BPF program per event
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============4278333573925749137==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+On Wed, Jul 1, 2026 at 3:40=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.or=
+g> wrote:
+>
+> On Wed, 01 Jul 2026 11:41:26 -0700
+> "Alexei Starovoitov" <alexei.starovoitov@gmail.com> wrote:
+>
+> >
+> > Nack.
+> > I really don't like it.
+> > There were days in the past when the kernel generating bpf directly was=
+ appealing.
+> > These days are gone. Performance improvements for fetchargs is not a go=
+od reason
+> > to add all this complexity and bypass verifier checks.
+> > bpf insns should come from user space.
+>
+> Thanks for your comment!
+> OK, I don't mind because this is a kind of investigation project. And som=
+e
+> people had asked me about the same idea, now I can tell them the result.
+>
+> I'm satisfied with the current outcome, as this development process gave =
+me
+> insight into the implementation of BPF and demonstrated the potential for
+> optimization via JIT. :)
+>
+> And also, as noted in the cover letter, the current performance of fetcha=
+rg
+> is better than I thought, and is good enough for debugging. :)
+>
+> BTW, I'm also interested in calling the verifier on this generated code.
+> Even it it is not merged, I think showing the correct way to implement it
+> will be useful in the future.
 
-PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvc29j
-a21hcF9saXN0ZW4uYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3Nv
-Y2ttYXBfbGlzdGVuLmMKPiBpbmRleCBjYzBjNjhiYWI5MDcuLmI4NzExOGFhYjdjNCAxMDA2NDQK
-PiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9zb2NrbWFwX2xp
-c3Rlbi5jCj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvc29j
-a21hcF9saXN0ZW4uYwoKWyAuLi4gXQoKPiBAQCAtOTMsOCArOTAsMTIgQEAgc3RhdGljIHZvaWQg
-dGVzdF9pbnNlcnRfYm91bmQoc3RydWN0IHRlc3Rfc29ja21hcF9saXN0ZW4gKnNrZWwgX19hbHdh
-eXNfdW51c2VkLAo+ICAJZXJybm8gPSAwOwo+ICAJdmFsdWUgPSBzOwo+ICAJZXJyID0gYnBmX21h
-cF91cGRhdGVfZWxlbShtYXBmZCwgJmtleSwgJnZhbHVlLCBCUEZfTk9FWElTVCk7Cj4gLQlpZiAo
-IWVyciB8fCBlcnJubyAhPSBFT1BOT1RTVVBQKQo+IC0JCUZBSUxfRVJSTk8oIm1hcF91cGRhdGU6
-IGV4cGVjdGVkIEVPUE5PVFNVUFAiKTsKPiArCWlmIChzb3R5cGUgPT0gU09DS19TVFJFQU0pIHsK
-PiArCQlBU1NFUlRfRVJSKGVyciwgIm1hcF91cGRhdGUiKTsKPiArCQlBU1NFUlRfRVEoZXJybm8s
-IEVPUE5PVFNVUFAsICJlcnJubyIpOwo+ICsJfSBlbHNlIGlmIChlcnIpIHsKPiArCQlBU1NFUlRf
-T0soZXJyLCAibWFwX3VwZGF0ZSIpOwo+ICsJfQoKVGhpcyBpc24ndCBhIGJ1ZywgYnV0IGNvdWxk
-IHRoZSBVRFAgYnJhbmNoIGp1c3QgYmUgYGVsc2UgQVNTRVJUX09LKGVyciwKIm1hcF91cGRhdGUi
-KTtgIOKAlCB0aGUgYGlmIChlcnIpYCBndWFyZCBsb29rcyByZWR1bmRhbnQgc2luY2UgQVNTRVJU
-X09LIGlzCmEgbm8tb3Agb24gc3VjY2Vzcz8KCj4gIGNsb3NlOgo+ICAJeGNsb3NlKHMpOwo+ICB9
-CgpbIC4uLiBdCgoKLS0tCkFJIHJldmlld2VkIHlvdXIgcGF0Y2guIFBsZWFzZSBmaXggdGhlIGJ1
-ZyBvciBlbWFpbCByZXBseSB3aHkgaXQncyBub3QgYSBidWcuClNlZTogaHR0cHM6Ly9naXRodWIu
-Y29tL2tlcm5lbC1wYXRjaGVzL3ZtdGVzdC9ibG9iL21hc3Rlci9jaS9jbGF1ZGUvUkVBRE1FLm1k
-CgpDSSBydW4gc3VtbWFyeTogaHR0cHM6Ly9naXRodWIuY29tL2tlcm5lbC1wYXRjaGVzL2JwZi9h
-Y3Rpb25zL3J1bnMvMjg1NTQ5MTExOTI=
-
---===============4278333573925749137==--
+The whole feature you're trying to do is imo reinvention of the wheel.
+bpf could do that kind of filtering years ago.
+I don't buy the excuse that embedded environments without any
+kind of user space needs this facility.
