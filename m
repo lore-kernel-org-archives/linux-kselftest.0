@@ -1,142 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A482C3C8C7C
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 10:02:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B419357CF3
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 10:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783072971; cv=none; b=tNseNiA3Q8plzWUs7IfnGM0JEChGMM+uwDYqfsoq/Xn+h5vpM2+nVkq9RFkmq0qXopbSIc5kGwO+AxaIUqxxPENGEammkVUq8PF9bxc32GTP8k1HecymYSm32TMg69+AjfDaqbptJFswmq7DGeEy9v2q4Ez3OesCbU8dhZu3yC8=
+	t=1783073212; cv=none; b=LbTxbix3S3QbfplkTBz8DLXgHqyVzlqhSvnsEiBYvBaioGxTJqdWodLEGBdZeqEdxOK2RRD3rOQch2w8m6FBgmLcoWgpGw+1YyD1V9qfaqhyrfSCU12DTvLejOVqtEy7zppDKQYazoEvP3LwbsTONjNlTHYS3fZyBk4ZCNBPrfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783072971; c=relaxed/simple;
-	bh=P9QJK2xz/jdfVnMlUFOmfxp+TBzPlMUUfk9wzKX/jwE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lJLDDS4Uy6ZrjpYAERgz7Z9eiH9jLkS9n16nj7Cqiq0ARzW/V1ejq3JeyuAbH9AUJqGhDEWoaClcNmHqazwQ4CVuDGINE5ryide6o7P8tqzNPnNOPcpuFPEYjK5W8hsPnRMdsnqh6t1jawdb0JYzbcitDkX+zoin8ZTgQTO7C4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQ7Q04KK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783073212; c=relaxed/simple;
+	bh=laBEFR0I3RWvs1+Is2iqG1fnTejy7x7hXOUjl6aoww4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fCSOaS2knsKmlIRZo/KUkMZvM9pCSrm48Z2IWiGTxTHLRZS+B0tJ5ELc/ZIaUtg168xsEGcR36oYIOneBo8PfC0XoQ7U3utZVPjAzSL3l6wFEd32eBbt2iouMVnW2MaozMhSkyFI+0XXO6y+e0Dqvcj2c1pL+Uj7oIAqZHP5ti0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AXSqgqyP; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQ7Q04KK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8577D1F00A3E
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 10:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783072969;
-	bh=GxICZniZLiTs1zHK8UE4JL2NE8iCjWZD2BK5CrwX6M8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=gQ7Q04KKbVll2/T84XVbDiCdXpC0k671DQfMVJp+FzCxGj72PckPhFYoQan8Bj2yx
-	 TiGWTRS9294/uNQZLrOSRjg2tLj9/vpgQddHMcd5C3YsEITdmZbyNi+jlLF1+yWJ/E
-	 CYDkUdRLQCl12TzMRa4lJKLA5Bp084C7nwUAVCgRZeUudcEonglNjFYYEo9UX873xQ
-	 BPElgHL99gOhXkuIKTLNv62MytWbZhBEUtjDcyDUS691K7UA4PyLUT32ckctbR3+Lj
-	 uIGewKGLdb3tFqZstiWIq8v1RrWhFqeVmsi54wBC4hTdMm2Qcpc2eSpfccRfrru3ux
-	 GhUbLtSXMaifA==
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6976b0c5adbso713909a12.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Jul 2026 03:02:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+Rq9Rg0SGuURuGZo3ZIePw6FMrE3k2fBSYJZ6N045w0KWr09H2BtpwqHYZPcxMQqiiij5DQD1Km1m+krrzE8i1Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJSYIhW7TkPB0zYvSn6hSI+Xd353BTHkNC1comkz635Tj7C7Rv
-	r8jE6TSYHgSBX6thjwaNnjKi7Cm60MitfBXz6ilBUwM6Fa2s+T01vQUCwC0OpyUJLkp0LxeW9ZP
-	RFMEDiMlsNN8rqnU9qHKQT+fTHmLe8no=
-X-Received: by 2002:a05:6402:51cc:b0:698:9ea5:d195 with SMTP id
- 4fb4d7f45d1cf-6989f38e7d2mr4357031a12.23.1783072968125; Fri, 03 Jul 2026
- 03:02:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AXSqgqyP"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-493c2b3dc8bso2411705e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Jul 2026 03:06:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1783073208; x=1783678008; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yYQ94JtDIgj0sKRw/RmLXkJVierqwHbIhkMFu0H0wXY=;
+        b=AXSqgqyPkphxZTpDJjdfE/o0kG7+xOXP741IGKwTN9NxNBPQaNgzZ9tesMhVLMQb4b
+         zn7mvGPDPSpB4EhOQBUSwSZpzM/uodes4u2rr0ewOgkNuCnAVrOFapNFvdUSJMrHsvTU
+         TjZp4qmoJPME64API5/BTz1uKPR5sYwcW0x83JLycC7vFcm7puBQ/ZhDjVXFobcc+aTi
+         7yaHP3V3njXIqPG7Veb6yxmrVnPO1wiJIr7W0BuAs5GhVzdTiSlfytvmjDwLcmdH0r9s
+         LRZdvhpzo0gnCDkuxRDwh/JIOc96x2bFCJ5PNsFUMx0tFVbPiDx/osMGur4B2MBNfRjO
+         itnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783073208; x=1783678008;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yYQ94JtDIgj0sKRw/RmLXkJVierqwHbIhkMFu0H0wXY=;
+        b=Uk4O/abybG20fVkL7UjtBbekeSHCweEsEsOlqB+57BHHeFXxk7sRYbpa4HYdfktzk8
+         cXCzHbRtWB8L+hkDa0fYnbCXuRY0KGkzsTmh8pl+vDkWTZMk7DFrgrEanCC2Ff9ltEv6
+         PpVl5eh2VdpCfjh8MWoagVEiq6lwmG2ZrAWbhEe9o2FM4VGnYYI3ogH6of8JEMTJJGQG
+         PFoEFhQGfays02Ijyi7Z+aMHFravsOTEqs0tPvkLmmtHoJaKGLuXanfFkNnIdglU3THy
+         SFWBgSqQy04inGSkNx1ttmnKG+yPWHYW+D5SG0pSWHS0epb4Toel5LXgQJYzOpwRcmSr
+         AohA==
+X-Forwarded-Encrypted: i=1; AFNElJ/Uq3XBv/t8x6PCcLLkgv0XUbtSU/O3kmc+FfpnRrrP5yUoWvozBv33HuLMdjt1qyS2PJlL9CSYFxQTji6I8Nk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMGjnrU30oAItYrTWdgJ8NdarqsiHlVxi/sAbpFRU77O6syZ/a
+	qPqurkxKRqDHljIjx86jaiXK1NPVg3hqNeAAnEC+cHlTR3EoQs6tlrhnZ8Wb1kzFHJI=
+X-Gm-Gg: AfdE7clVwcAEbQ1tytMaH9xiRk0UOxXyQcl5jLLnNQLTAth3tabFY4S5PU+ILX8zipT
+	YG3Hea/S+Zu2ye66Hn82Qo555ZpiTqg2S06iek423XuZLIsJsinZRlJhspLSnLwGZQvj8kZERiB
+	FkbdsXTEkD6HhzZtAw+gTktPxPA+sGO5JZQ6PZwUUvsnnn/xlZsx4uM/ahCKv/j9SIK2yk56Q7i
+	AJIGNFQDVdFX7pHClrW0m+1rmcBVxB0ricmgZXE+fbZ87JOxKypiLc9KRdE0W9G+l0H7vmg9kfC
+	9JPgnBxrr909HOVVBYXXqwDBHgllYSwO+kZayZExLeXo/TtrXPrA/iN2hrO0iIXbcrgQWpMe4S0
+	emd6bP79ZNBSgULpHLEogiNfsCDefYKjUQWb+j7GRlks5Y6HFUyXgWsjC7MLDh7RFZrKIJpegP/
+	lKWD71UJDUdTn6uPs=
+X-Received: by 2002:a05:600c:350f:b0:490:b8c0:d470 with SMTP id 5b1f17b1804b1-493c2b6e607mr144501925e9.19.1783073208553;
+        Fri, 03 Jul 2026 03:06:48 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493bef183e7sm222444665e9.2.2026.07.03.03.06.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jul 2026 03:06:48 -0700 (PDT)
+Date: Fri, 3 Jul 2026 12:06:46 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: sashiko-reviews@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, live-patching@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Miroslav Benes <mbenes@suse.cz>, shuah@kernel.org,
+	Zelin Deng <zelin.deng@linux.alibaba.com>,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH] kbuild: unset sub_make_done before calling kselftest
+ build system
+Message-ID: <akeJto1TC2CSs4Yw@pathway.suse.cz>
+References: <20260703-makefile-unset-submake-done-v1-1-6899248f3d6a@linutronix.de>
+ <20260703061449.246801F000E9@smtp.kernel.org>
+ <akdyH7rRV1WHtBJ3@pathway.suse.cz>
+ <20260703113019-678f1eb6-a061-435e-91a4-c0d76794b2cf@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1782119051687451.15056.seg@mailgw.kylinos.cn>
-In-Reply-To: <1782119051687451.15056.seg@mailgw.kylinos.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Fri, 3 Jul 2026 18:03:13 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4zaPuBjfsujbW2QiYMMDhy3G+0eLOn_DbdHMmGitGEZQ@mail.gmail.com>
-X-Gm-Features: AVVi8CciMHHIh2DiT8jHK9TEKRaAsAY0P6iPzY60Z8u1moayozVW4gt-jf4mfsI
-Message-ID: <CAAhV-H4zaPuBjfsujbW2QiYMMDhy3G+0eLOn_DbdHMmGitGEZQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] LoongArch bpf kptr xchg inline support
-To: Chenguang Zhao <zhaochenguang@kylinos.cn>
-Cc: kernel@xen0n.name, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
-	yangtiezhu@loongson.cn, hengqi.chen@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org, 
-	loongarch@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260703113019-678f1eb6-a061-435e-91a4-c0d76794b2cf@linutronix.de>
 
-Hi, Tiezhu and Hengqi,
+On Fri 2026-07-03 11:32:30, Thomas Weiﬂschuh wrote:
+> On Fri, Jul 03, 2026 at 10:26:07AM +0200, Petr Mladek wrote:
+> > On Fri 2026-07-03 06:14:48, sashiko-bot@kernel.org wrote:
+> > > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> > > - [Medium] Incomplete fix and inconsistent state: The patch correctly unsets `sub_make_done` for the `kselftest` targets to allow Kbuild command-line reevaluation when building external kernel modules. However, it fails to apply the same logic to the `tools/` and `tools/%` targets, introducing a discrepancy between build entry points.
+> > > --
+> > > 
+> > > commit 06c418388d65deb3d8494a6e8e7071c0e709186b
+> > > Author: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> > > 
+> > > kbuild: unset sub_make_done before calling kselftest build system
+> > > 
+> > > This commit unsets sub_make_done before invoking the kselftest build system to
+> > > ensure Kbuild reevaluates command-line flags when building test modules. It
+> > > mirrors a previous fix done for scripts/install.sh.
+> > > 
+> > > > diff --git a/Makefile b/Makefile
+> > > > index b9c5792c79e01..f717a4dc96d6a 100644
+> > > > --- a/Makefile
+> > > > +++ b/Makefile
+> > > > @@ -1591,10 +1591,10 @@ tools/%: FORCE
+> > > >  
+> > > >  PHONY += kselftest
+> > > >  kselftest: headers
+> > > > -	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+> > > > +	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+> > > 
+> > > [Severity: Medium]
+> > > Will make tools/selftests still fail after this change?
+> > > 
+> > > The tools/ and tools/% targets in Makefile delegate to the tools build
+> > > system, which can also trigger external kernel module builds (like bpf_testmod).
+> > > 
+> > > Because sub_make_done is not unset for these targets, invoking commands like
+> > > make tools/selftests or make tools/all will skip Kbuild's M= argument parsing.
+> > > 
+> > > Should sub_make_done also be unset in the tools/ and tools/% targets to maintain
+> > > consistency across the build entry points?
+> > 
+> > This might make sense. I see that the tools: and tools/%: targets are
+> > defined right above the kselftest*: ones. And they are even advertised
+> > in "make help" or "make tools/help".
+> 
+> I am not sure how the tools/ targets can reach back into kbuild.
+> The example with bpf_testmod above is bogus, as tools/* is only for
+> top-level tools directories. Subdirectories in tools/testing/selftests/
+> don't seem to be reachable.
 
-Could you please pay some time to review this series?
+I see.
 
-Huacai
+> > Well it probably should be done in a separate patch. It would be better
+> > for bisecting potential regressions. Thomas, Zelin, what do you think, please?
+> 
+> If we do it for consistency it should be its own patch, agreed.
 
-On Mon, Jun 22, 2026 at 5:04=E2=80=AFPM Chenguang Zhao <zhaochenguang@kylin=
-os.cn> wrote:
->
-> This series enables the BPF verifier to inline bpf_kptr_xchg() into BPF_X=
-CHG
-> on LoongArch64, and fixes the underlying JIT atomic ordering that makes s=
-uch
-> inlining safe.
-> The BPF verifier can lower bpf_kptr_xchg() to a single BPF_XCHG atomic wh=
-en
-> the JIT advertises ptr xchg support via bpf_jit_supports_ptr_xchg(). This
-> removes helper-call overhead from the kptr exchange fast path. Inlining i=
-s
-> only correct when the JITed exchange provides the same sequentially consi=
-stent
-> ordering as the bpf_kptr_xchg() helper.
-> Patch 1 fixes memory ordering for all value-returning BPF atomic RMW oper=
-ations
-> emitted by the LoongArch bpf JIT. Per LKMM, value-returning atomic RMW mu=
-st
-> provide sequentially consistent ordering. Plain AMO instructions and bare
-> ll/sc loops on LoongArch do not satisfy this by themselves:
->  - BPF_FETCH (ADD/AND/OR/XOR): switch to am*_db.{b,h,w,d}
->  - BPF_XCHG: switch to amswap_db.{b,h,w,d}
->  - BPF_CMPXCHG: emit dbar 0x700 after the ll/sc loop, matching
->    __WEAK_LLSC_MB in cmpxchg.h
-> Non-value-returning RMW ops (plain BPF_ADD, BPF_AND, etc.) remain weakly
-> ordered, consistent with LKMM. This fix is independent of kptr inlining a=
-nd
-> benefits all BPF programs using value-returning atomics on LoongArch.
-> Patch 2 implements bpf_jit_supports_ptr_xchg() so the verifier may inline
-> bpf_kptr_xchg() on LoongArch64.
-> Patches 3 and 4 extend bpf selftests: functional coverage via kptr_xchg_i=
-nline,
-> and an optional kptr-xchg benchmark to compare helper vs inlined paths.
->
-> Chenguang Zhao (4):
->   LoongArch: bpf: Fix memory ordering for value-returning atomics
->   LoongArch: bpf: Advertise JIT support for kptr xchg inline
->   selftests/bpf: Enable kptr_xchg_inline test on LoongArch
->   selftests/bpf: Add kptr-xchg benchmark
->
->  arch/loongarch/include/asm/inst.h             | 18 ++++
->  arch/loongarch/net/bpf_jit.c                  | 37 ++++---
->  tools/testing/selftests/bpf/Makefile          |  2 +
->  tools/testing/selftests/bpf/bench.c           |  2 +
->  .../selftests/bpf/benchs/bench_kptr_xchg.c    | 96 +++++++++++++++++++
->  .../bpf/prog_tests/kptr_xchg_inline.c         |  3 +-
->  .../selftests/bpf/progs/kptr_xchg_bench.c     | 49 ++++++++++
->  7 files changed, 192 insertions(+), 15 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
->  create mode 100644 tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
->
-> ---
-> v3:
->  - Expand the JIT ordering fix beyond BPF_XCHG w/d to all value-returning
->    atomic RMW ops (BPF_FETCH, BPF_XCHG, BPF_CMPXCHG), using barrier-carry=
-ing
->    AMO variants and dbar after ll/sc as required by LKMM.
->  - Add __btf_root() in the benchmark BPF program so bpf_obj_drop() remain=
-s
->    visible to libbpf's kfunc linker when bpf_kptr_xchg() is inlined.
->
-> v2:
->  - https://lore.kernel.org/all/20260603100438.2177817-1-zhaochenguang@kyl=
-inos.cn/
->
-> v1:
->  - https://lore.kernel.org/all/20260602021515.214560-1-zhaochenguang@kyli=
-nos.cn/
->
-> --
-> 2.25.1
->
->
+I would keep it as is until anyone reports a real problem.
+
+Thanks a lot for explanation.
+
+Best Regards,
+Petr
